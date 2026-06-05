@@ -1,10 +1,12 @@
 # RNA Velocity with veloVI
 
-This reference covers RNA velocity analysis using veloVI, a deep learning approach that improves upon traditional velocity methods.
+This reference covers RNA velocity analysis using veloVI, a deep learning approach that improves
+upon traditional velocity methods.
 
 ## Overview
 
 RNA velocity estimates the future state of cells by modeling:
+
 - **Unspliced RNA**: Newly transcribed, contains introns
 - **Spliced RNA**: Mature mRNA, introns removed
 
@@ -13,11 +15,13 @@ The ratio of unspliced to spliced indicates whether a gene is being upregulated 
 ## Why veloVI?
 
 Traditional methods (velocyto, scVelo) have limitations:
+
 - Assume steady-state or dynamical model
 - Sensitive to noise
 - Don't handle batch effects
 
 veloVI addresses these with:
+
 - Probabilistic modeling
 - Better uncertainty quantification
 - Integration with scVI framework
@@ -195,7 +199,7 @@ scv.tl.velocity_graph(adata)
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
 scv.pl.velocity_embedding_stream(
-    adata, basis="umap", ax=axes[0], 
+    adata, basis="umap", ax=axes[0],
     title="scVelo", show=False
 )
 
@@ -229,7 +233,7 @@ scv.pl.velocity(
 # Plot expression over latent time
 for gene in genes:
     fig, ax = plt.subplots(figsize=(6, 4))
-    
+
     sc.pl.scatter(
         adata,
         x="veloVI_latent_time",
@@ -289,7 +293,7 @@ def run_velocity_analysis(
 ):
     """
     Complete RNA velocity analysis with veloVI.
-    
+
     Parameters
     ----------
     adata : AnnData
@@ -302,7 +306,7 @@ def run_velocity_analysis(
         Number of velocity genes
     max_epochs : int
         Training epochs
-        
+
     Returns
     -------
     AnnData with velocity and model
@@ -310,42 +314,42 @@ def run_velocity_analysis(
     import scvi
     import scvelo as scv
     import scanpy as sc
-    
+
     adata = adata.copy()
-    
+
     # Preprocessing
     scv.pp.filter_and_normalize(
         adata,
         min_shared_counts=20,
         n_top_genes=n_top_genes
     )
-    
+
     # Compute moments (needed for some visualizations)
     scv.pp.moments(adata, n_pcs=30, n_neighbors=30)
-    
+
     # Setup veloVI
     scvi.model.VELOVI.setup_anndata(
         adata,
         spliced_layer=spliced_layer,
         unspliced_layer=unspliced_layer
     )
-    
+
     # Train
     model = scvi.model.VELOVI(adata)
     model.train(max_epochs=max_epochs, early_stopping=True)
-    
+
     # Get results
     adata.obs["latent_time"] = model.get_latent_time(n_samples=25)
     adata.layers["velocity"] = model.get_velocity(n_samples=25)
-    
+
     # Compute velocity graph for visualization
     scv.tl.velocity_graph(adata, vkey="velocity")
-    
+
     # Compute UMAP if not present
     if "X_umap" not in adata.obsm:
         sc.pp.neighbors(adata)
         sc.tl.umap(adata)
-    
+
     return adata, model
 
 # Usage
@@ -396,15 +400,17 @@ model.train()
 
 ## Troubleshooting
 
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| No velocity signal | Low unspliced counts | Check sequencing depth, use kb-python |
-| Reversed direction | Wrong root assignment | Manually set root cells |
-| Noisy streamlines | Too many genes | Reduce n_top_genes |
-| Memory error | Large dataset | Reduce batch_size |
+| Issue              | Cause                 | Solution                              |
+| ------------------ | --------------------- | ------------------------------------- |
+| No velocity signal | Low unspliced counts  | Check sequencing depth, use kb-python |
+| Reversed direction | Wrong root assignment | Manually set root cells               |
+| Noisy streamlines  | Too many genes        | Reduce n_top_genes                    |
+| Memory error       | Large dataset         | Reduce batch_size                     |
 
 ## Key References
 
-- Gayoso et al. (2023) "Deep generative modeling of transcriptional dynamics for RNA velocity analysis in single cells"
+- Gayoso et al. (2023) "Deep generative modeling of transcriptional dynamics for RNA velocity
+  analysis in single cells"
 - La Manno et al. (2018) "RNA velocity of single cells"
-- Bergen et al. (2020) "Generalizing RNA velocity to transient cell states through dynamical modeling"
+- Bergen et al. (2020) "Generalizing RNA velocity to transient cell states through dynamical
+  modeling"

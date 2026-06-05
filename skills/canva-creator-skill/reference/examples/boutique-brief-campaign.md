@@ -23,18 +23,18 @@ Voice: Warm, conversational, light humor. No corporate copy.
 
 ## Stage 1: Posting calendar (presented for approval)
 
-| Date | Channel | Theme | Asset type | Caption angle |
-|------|---------|-------|------------|---------------|
-| Jun 2 | Instagram feed | Linen dresses launch | Square post | Product intro — "finally, a dress you can wear to both places" |
-| Jun 4 | Facebook feed | Linen dresses | Landscape post | Social proof — "our most-reached-for item this spring" |
-| Jun 6 | Instagram story | Buy 2 get 1 offer | Story (16:9) | Offer urgency — swipe up |
-| Jun 9 | Instagram feed | Linen styling tip | Square post | Education — "3 ways to style the linen midi" |
-| Jun 11 | Facebook feed | Behind the scenes | Landscape post | Brand story — how they're made |
-| Jun 13 | Instagram story | Weekend outfit inspo | Story (16:9) | Lifestyle — "your Saturday, sorted" |
-| … | … | … | … | … |
+| Date   | Channel         | Theme                | Asset type     | Caption angle                                                  |
+| ------ | --------------- | -------------------- | -------------- | -------------------------------------------------------------- |
+| Jun 2  | Instagram feed  | Linen dresses launch | Square post    | Product intro — "finally, a dress you can wear to both places" |
+| Jun 4  | Facebook feed   | Linen dresses        | Landscape post | Social proof — "our most-reached-for item this spring"         |
+| Jun 6  | Instagram story | Buy 2 get 1 offer    | Story (16:9)   | Offer urgency — swipe up                                       |
+| Jun 9  | Instagram feed  | Linen styling tip    | Square post    | Education — "3 ways to style the linen midi"                   |
+| Jun 11 | Facebook feed   | Behind the scenes    | Landscape post | Brand story — how they're made                                 |
+| Jun 13 | Instagram story | Weekend outfit inspo | Story (16:9)   | Lifestyle — "your Saturday, sorted"                            |
+| …      | …               | …                    | …              | …                                                              |
 
-*Owner approved — "move Jun 11 to Jun 12, I'm posting about the sale that day. Otherwise great."*  
-*(Calendar updated; proceeding to Stage 2.)*
+_Owner approved — "move Jun 11 to Jun 12, I'm posting about the sale that day. Otherwise great."_  
+_(Calendar updated; proceeding to Stage 2.)_
 
 ---
 
@@ -56,9 +56,10 @@ Claude: Got it. I'll use "Boutique Square - Cream" for all feed posts.
         the product photos and text in Canva, then come back so I can export.
 ```
 
-*[Designs created; owner fills in Canva; returns design IDs]*
+_[Designs created; owner fills in Canva; returns design IDs]_
 
 **Export output:**
+
 ```
 Exporting previews...
 ✓ Jun 2 feed post    → https://canva.com/export/abc123.png
@@ -67,13 +68,14 @@ Exporting previews...
 […]
 ```
 
-*Owner: "These look great. Go ahead."*
+_Owner: "These look great. Go ahead."_
 
 ---
 
 ## Stage 3: Caption drafts
 
 **Jun 2 — Instagram feed (linen dresses launch)**
+
 ```
 Finally, a dress you can wear to the farmer's market *and* to dinner. 🌿
 
@@ -86,6 +88,7 @@ Grab yours before the sizes go → link in bio.
 ```
 
 **Jun 4 — Facebook feed (social proof)**
+
 ```
 "I've worn it four times this week and I'm not even sorry."
 
@@ -94,6 +97,7 @@ you and us, we're not surprised. Shop the collection at the link below.
 ```
 
 **Jun 6 — Instagram story (offer)**
+
 ```
 👗 Buy 2 dresses → get 1 accessory FREE
 
@@ -102,14 +106,15 @@ Offer runs June 1–July 31. Don't sleep on it.
 Swipe up to shop →
 ```
 
-*Owner approved with one change: "Jun 4 caption — add the price at the end. '$88, link below.'"*  
-*Caption updated.*
+_Owner approved with one change: "Jun 4 caption — add the price at the end. '$88, link below.'"_  
+_Caption updated._
 
 ---
 
 ## Stage 4: HubSpot staging
 
 **Campaign created:**
+
 ```
 Campaign: "Bloom & Thread — Summer Linen 2026"
 Start: Jun 2, 2026 | End: Jul 31, 2026
@@ -118,13 +123,14 @@ Campaign ID: 8a72c1f4...
 
 **Scheduled queue (first 3):**
 
-| Scheduled | Channel | Caption preview | Status |
-|-----------|---------|-----------------|--------|
-| Jun 2, 10:00 AM ET | Instagram | "Finally, a dress you can wear…" | SCHEDULED |
-| Jun 4, 10:00 AM ET | Facebook | '"I've worn it four times…"' | SCHEDULED |
+| Scheduled          | Channel         | Caption preview                         | Status    |
+| ------------------ | --------------- | --------------------------------------- | --------- |
+| Jun 2, 10:00 AM ET | Instagram       | "Finally, a dress you can wear…"        | SCHEDULED |
+| Jun 4, 10:00 AM ET | Facebook        | '"I've worn it four times…"'            | SCHEDULED |
 | Jun 6, 10:00 AM ET | Instagram Story | "Buy 2 dresses → get 1 accessory FREE…" | SCHEDULED |
 
 **Final message to owner:**
+
 ```
 Your campaign is staged in HubSpot:
 https://app.hubspot.com/content/12345/social/campaigns/8a72c1f4
@@ -137,15 +143,14 @@ any post in HubSpot before it goes out. Anything to change before we're done?
 
 ## Email content example (text-only — no Canva)
 
-Email rows skip Canva entirely. Claude writes the email subject, preheader,
-and body as plain prose in Stage 3, and the owner copies the content into
-their email tool when they're ready to send.
+Email rows skip Canva entirely. Claude writes the email subject, preheader, and body as plain prose
+in Stage 3, and the owner copies the content into their email tool when they're ready to send.
 
 **Calendar row:**
 
-| Date | Channel | Theme | Asset type | Angle |
-|------|---------|-------|------------|-------|
-| Jun 5 | Email | Summer linen launch | Email (text) | Hero customer benefit + offer |
+| Date  | Channel | Theme               | Asset type   | Angle                         |
+| ----- | ------- | ------------------- | ------------ | ----------------------------- |
+| Jun 5 | Email   | Summer linen launch | Email (text) | Hero customer benefit + offer |
 
 **Stage 3 output (inline, no Canva involved):**
 

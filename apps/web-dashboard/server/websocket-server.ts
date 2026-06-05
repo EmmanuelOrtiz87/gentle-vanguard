@@ -5,6 +5,16 @@ import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { getBridge } from './mcp-bridge.js';
 import { getStateBridge } from './shared-state-bridge.js';
+import { getGlobalHealth } from './global-health-api.js';
+import {
+  getListings,
+  getListing,
+  createListing,
+  addReview,
+  incrementDownloads,
+  validateSkillStructure,
+  getSkillContent,
+} from './marketplace-api.js';
 import type {
   AgentSession,
   AgentMessage,
@@ -135,11 +145,11 @@ function generateMetrics() {
       },
       performance: {
         avgResponseTime: 150 + Math.floor(Math.random() * 50),
-        errorRate: Math.random() * 0.02,
-      },
+      errorRate: Math.random() * 0.02,
     },
-  };
-}
+  },
+  globalHealth: getGlobalHealth(),
+};
 
 // --- Agent Session Management ---
 
@@ -402,6 +412,12 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
     return;
   }
 
+  if (url.pathname === '/api/health/global') {
+    res.writeHead(200, headers);
+    res.end(JSON.stringify(getGlobalHealth()));
+    return;
+  }
+
   if (url.pathname === '/api/agent/tools') {
     const bridge = getBridge();
     res.writeHead(200, headers);
@@ -470,6 +486,142 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
     }
     res.writeHead(200, headers);
     res.end(JSON.stringify({ session }));
+    return;
+  }
+
+  // --- Marketplace Routes ---
+
+  if (url.pathname === '/api/marketplace' && req.method === 'GET') {
+    const listings = getListings();
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ success: true, data: listings, total: listings.length }));
+    return;
+  }
+
+  if (url.pathname === '/api/marketplace' && req.method === 'POST') {
+    let body = '';
+    req.on('data', (chunk) => { body += chunk; });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body);
+        const missingFields: string[] = [];
+        if (!payload.name) missingFields.push('name');
+        if (!payload.description) missingFields.push('description');
+        if (!payload.author) missingFields.push('author');
+        if (!payload.skillContent) missingFields.push('skillContent');
+
+        if (missingFields.length > 0) {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ success: false, error: `Missing required fields: ${missingFields.join(', ')}` }));
+          return;
+        }
+
+        const validation = validateSkillStructure(payload.skillContent);
+        if (!validation.valid) {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ success: false, error: 'Skill structure validation failed', details: validation.errors }));
+          return;
+        }
+
+        const listing = createListing({
+          name: payload.name,
+          description: payload.description,
+          author: payload.author,
+          version: payload.version,
+          tags: payload.tags,
+          triggers: payload.triggers,
+          agentType: payload.agentType,
+          skillContent: payload.skillContent,
+        });
+        res.writeHead(201, headers);
+        res.end(JSON.stringify({ success: true, data: listing, message: `Skill '${payload.name}' created successfully` }));
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Failed to create listing';
+        const status = message.includes('already exists') ? 409 : 500;
+        res.writeHead(status, headers);
+        res.end(JSON.stringify({ success: false, error: message }));
+      }
+    });
+    return;
+  }
+
+  if (url.pathname === '/api/marketplace/validate/structure' && req.method === 'POST') {
+    let body = '';
+    req.on('data', (chunk) => { body += chunk; });
+    req.on('end', () => {
+      try {
+        const { skillContent } = JSON.parse(body);
+        if (!skillContent) {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ success: false, error: 'Missing required field: skillContent' }));
+          return;
+        }
+        const result = validateSkillStructure(skillContent);
+        res.writeHead(200, headers);
+        res.end(JSON.stringify({ success: true, data: result }));
+      } catch {
+        res.writeHead(400, headers);
+        res.end(JSON.stringify({ success: false, error: 'Invalid JSON' }));
+      }
+    });
+    return;
+  }
+
+  // Match /api/marketplace/:id/review and /api/marketplace/:id/download
+  const marketplaceMatch = url.pathname.match(/^\/api\/marketplace\/([^/]+)(?:\/(review|download))?$/);
+  if (marketplaceMatch) {
+    const listingId = marketplaceMatch[1];
+    const action = marketplaceMatch[2];
+
+    if (!action && req.method === 'GET') {
+      const listing = getListing(listingId);
+      if (!listing) {
+        res.writeHead(404, headers);
+        res.end(JSON.stringify({ success: false, error: 'Listing not found' }));
+        return;
+      }
+      const content = listing.skillPath ? getSkillContent(listing.skillPath) : null;
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ success: true, data: { ...listing, content } }));
+      return;
+    }
+
+    if (action === 'review' && req.method === 'POST') {
+      let body = '';
+      req.on('data', (chunk) => { body += chunk; });
+      req.on('end', () => {
+        try {
+          const { user, rating, comment } = JSON.parse(body);
+          if (!user || rating == null || !comment) {
+            res.writeHead(400, headers);
+            res.end(JSON.stringify({ success: false, error: 'Missing required fields: user, rating, comment' }));
+            return;
+          }
+          if (typeof rating !== 'number' || rating < 1 || rating > 5) {
+            res.writeHead(400, headers);
+            res.end(JSON.stringify({ success: false, error: 'Rating must be a number between 1 and 5' }));
+            return;
+          }
+          const review = addReview(listingId, { user, rating, comment });
+          res.writeHead(201, headers);
+          res.end(JSON.stringify({ success: true, data: review }));
+        } catch {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ success: false, error: 'Invalid JSON' }));
+        }
+      });
+      return;
+    }
+
+    if (action === 'download' && req.method === 'POST') {
+      const downloads = incrementDownloads(listingId);
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ success: true, data: { id: listingId, downloads } }));
+      return;
+    }
+
+    res.writeHead(404, headers);
+    res.end(JSON.stringify({ success: false, error: 'Route not found' }));
     return;
   }
 

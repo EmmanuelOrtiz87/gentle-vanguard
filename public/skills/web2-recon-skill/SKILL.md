@@ -1,11 +1,16 @@
 ---
 name: web2-recon-skill
 description: >
-  Web2 recon pipeline — subdomain enumeration (subfinder, Chaos API, assetfinder), live host discovery (dnsx, httpx), URL crawling (katana, waybackurls, gau), directory fuzzing (ffuf), JS analysis (LinkFinder, SecretFinder), continuous monitoring (new subdomain alerts, JS change detection, GitHub commit watch). Use when starting recon on any web2 target or when asked about asset discovery, subdomain enum, or attack surface mapping.
+  Web2 recon pipeline — subdomain enumeration (subfinder, Chaos API, assetfinder), live host
+  discovery (dnsx, httpx), URL crawling (katana, waybackurls, gau), directory fuzzing (ffuf), JS
+  analysis (LinkFinder, SecretFinder), continuous monitoring (new subdomain alerts, JS change
+  detection, GitHub commit watch). Use when starting recon on any web2 target or when asked about
+  asset discovery, subdomain enum, or attack surface mapping.
 metadata:
   source: claude-bughunter
   original-name: web2-recon
 ---
+
 # WEB2 RECON PIPELINE
 
 Full asset discovery from nothing to a prioritized URL list ready for hunting.
@@ -42,9 +47,11 @@ which subfinder httpx dnsx nuclei katana waybackurls gau dalfox ffuf anew gf int
 
 ## THE 5-MINUTE RULE
 
-> If a target shows nothing interesting after 5 minutes of recon, move on. Don't burn hours on dead surface.
+> If a target shows nothing interesting after 5 minutes of recon, move on. Don't burn hours on dead
+> surface.
 
 **5-minute kill signals:**
+
 - All subdomains return 403 or static marketing pages
 - No API endpoints visible in URLs
 - No JavaScript bundles with interesting endpoint paths
@@ -222,22 +229,20 @@ ffuf -request /tmp/req.txt \
 
 Score before spending time. Skip if score < 4.
 
-| Criterion | Points |
-|---|---|
-| Max bounty >= $5K | +2 |
-| Large user base (>100K) or handles money | +2 |
-| Program launched < 60 days ago | +2 |
-| Complex features: API, OAuth, file upload, GraphQL | +1 |
-| Recent code/feature changes (GitHub, changelog) | +1 |
-| Private program (less competition) | +1 |
-| Tech stack you know | +1 |
-| Source code available | +1 |
-| Prior disclosed reports to study | +1 |
+| Criterion                                          | Points |
+| -------------------------------------------------- | ------ |
+| Max bounty >= $5K                                  | +2     |
+| Large user base (>100K) or handles money           | +2     |
+| Program launched < 60 days ago                     | +2     |
+| Complex features: API, OAuth, file upload, GraphQL | +1     |
+| Recent code/feature changes (GitHub, changelog)    | +1     |
+| Private program (less competition)                 | +1     |
+| Tech stack you know                                | +1     |
+| Source code available                              | +1     |
+| Prior disclosed reports to study                   | +1     |
 
-**< 4:** Skip
-**4-5:** Only if nothing better available
-**6-8:** Good — spend 1-3 days
-**>= 9:** Excellent — spend up to 1 week
+**< 4:** Skip **4-5:** Only if nothing better available **6-8:** Good — spend 1-3 days **>= 9:**
+Excellent — spend up to 1 week
 
 ### Pre-Dive Hard Kill Signals
 
@@ -271,18 +276,18 @@ curl -sI https://target.com | grep -iE "server|x-powered-by|x-aspnet|x-runtime|x
 
 ### Stack → Primary Bug Class Map
 
-| Stack | Hunt First | Hunt Second |
-|---|---|---|
-| Ruby on Rails | Mass assignment | IDOR (`:id` routes) |
-| Django | IDOR (ModelViewSet, no object perms) | SSTI (mark_safe) |
-| Flask | SSTI (render_template_string) | SSRF (requests lib) |
-| Laravel | Mass assignment ($fillable) | IDOR (Eloquent, no ownership) |
-| Express (Node.js) | Prototype pollution | Path traversal |
-| Spring Boot | Actuator endpoints (/actuator/env) | SSTI (Thymeleaf) |
-| ASP.NET | ViewState deserialization | Open redirect (ReturnUrl) |
-| Next.js | SSRF via Server Actions | Open redirect via redirect() |
-| GraphQL | Introspection → auth bypass on mutations | IDOR via node(id:) |
-| WordPress | Plugin SQLi | REST API auth bypass |
+| Stack             | Hunt First                               | Hunt Second                   |
+| ----------------- | ---------------------------------------- | ----------------------------- |
+| Ruby on Rails     | Mass assignment                          | IDOR (`:id` routes)           |
+| Django            | IDOR (ModelViewSet, no object perms)     | SSTI (mark_safe)              |
+| Flask             | SSTI (render_template_string)            | SSRF (requests lib)           |
+| Laravel           | Mass assignment ($fillable)              | IDOR (Eloquent, no ownership) |
+| Express (Node.js) | Prototype pollution                      | Path traversal                |
+| Spring Boot       | Actuator endpoints (/actuator/env)       | SSTI (Thymeleaf)              |
+| ASP.NET           | ViewState deserialization                | Open redirect (ReturnUrl)     |
+| Next.js           | SSRF via Server Actions                  | Open redirect via redirect()  |
+| GraphQL           | Introspection → auth bypass on mutations | IDOR via node(id:)            |
+| WordPress         | Plugin SQLi                              | REST API auth bypass          |
 
 ---
 
@@ -412,6 +417,7 @@ Run gf patterns and the interesting-params grep above.
 ### Minutes 25-30: Manual Exploration
 
 Open Burp Suite. Browse the app with proxy on:
+
 1. Register an account
 2. Perform main user actions (create/read/update/delete resources)
 3. Note all API calls in Burp history
@@ -431,7 +437,11 @@ Priority 5: Admin/debug endpoints → auth bypass candidates
 
 ## Toolchain fallback (when `dnsx` / `httpx` crash)
 
-The projectdiscovery Go binaries (`dnsx`, `httpx`, `naabu`) occasionally `SIGSEGV` on macOS arm64 due to a cgo / system-resolver interaction. The crash signature is identical regardless of install method — both `brew install` and `go install github.com/projectdiscovery/<tool>@latest` produce binaries that segfault at the same address. Smoke-test once before relying on them in a real engagement:
+The projectdiscovery Go binaries (`dnsx`, `httpx`, `naabu`) occasionally `SIGSEGV` on macOS arm64
+due to a cgo / system-resolver interaction. The crash signature is identical regardless of install
+method — both `brew install` and `go install github.com/projectdiscovery/<tool>@latest` produce
+binaries that segfault at the same address. Smoke-test once before relying on them in a real
+engagement:
 
 ```bash
 dnsx -version   # if SIGSEGV: use the dig fallback below
@@ -466,7 +476,9 @@ while read s; do
 done < subs.txt
 ```
 
-**Trade-off:** Serial vs. concurrent. The fallback handles ~24 subdomains in 14 seconds; the same workload on `httpx` with default 50 threads finishes in 2-3 seconds. For VDP-scale recon (< 100 subdomains) the fallback is fine. For mass recon (1000+) fix the toolchain first.
+**Trade-off:** Serial vs. concurrent. The fallback handles ~24 subdomains in 14 seconds; the same
+workload on `httpx` with default 50 threads finishes in 2-3 seconds. For VDP-scale recon (< 100
+subdomains) the fallback is fine. For mass recon (1000+) fix the toolchain first.
 
 Verified against HackerOne's own VDP in `docs/verification/recon-hackerone-vdp.md`.
 
@@ -474,7 +486,11 @@ Verified against HackerOne's own VDP in `docs/verification/recon-hackerone-vdp.m
 
 ## API Spec / Swagger / OpenAPI Discovery (2024-2026 surface)
 
-API spec endpoints are the single highest-leverage recon target on any modern .NET / Node / Python / Java backend. The spec discloses every endpoint, HTTP methods, parameter names + types + formats, models, validation rules — a complete attack-map in JSON. Default routes are commonly left enabled in production. **Add this wordlist to the directory-fuzzing phase** (after the standard `common.txt` pass).
+API spec endpoints are the single highest-leverage recon target on any modern .NET / Node / Python /
+Java backend. The spec discloses every endpoint, HTTP methods, parameter names + types + formats,
+models, validation rules — a complete attack-map in JSON. Default routes are commonly left enabled
+in production. **Add this wordlist to the directory-fuzzing phase** (after the standard `common.txt`
+pass).
 
 ### Default discovery path wordlist (paste into `swagger-paths.txt`)
 
@@ -586,10 +602,15 @@ jq '.components.schemas' swagger.json > schemas.json   # mass-assignment field c
 
 ### Why this matters for recon-to-hunting handoff
 
-- **Spec → mass IDOR/BOLA** — `jq '.paths | keys' swagger.json` becomes the input list for `Autorize`/`ffuf` per-user testing.
-- **Spec → mass-assignment payload construction** — `components.schemas.UserUpdateDto` enumerates `isAdmin`, `emailVerified`, `tenantId`, `role`.
-- **Spec → hidden endpoint discovery** — `/internal/*`, `/debug/*`, `/v0/*`, `/legacy/*` routes documented but never auth-gated.
-- **Spec → injection-class seeding** — every parameter's type + format + enum + max-length means payloads pass validation before reaching the sink. Especially valuable against ASP.NET Core where the model binder rejects malformed input before any controller logic.
+- **Spec → mass IDOR/BOLA** — `jq '.paths | keys' swagger.json` becomes the input list for
+  `Autorize`/`ffuf` per-user testing.
+- **Spec → mass-assignment payload construction** — `components.schemas.UserUpdateDto` enumerates
+  `isAdmin`, `emailVerified`, `tenantId`, `role`.
+- **Spec → hidden endpoint discovery** — `/internal/*`, `/debug/*`, `/v0/*`, `/legacy/*` routes
+  documented but never auth-gated.
+- **Spec → injection-class seeding** — every parameter's type + format + enum + max-length means
+  payloads pass validation before reaching the sink. Especially valuable against ASP.NET Core where
+  the model binder rejects malformed input before any controller logic.
 
 ### Tools
 
@@ -601,7 +622,9 @@ jq '.components.schemas' swagger.json > schemas.json   # mass-assignment field c
 
 ### Anti-pattern reminder
 
-A 404/403 on `/swagger` does NOT mean no spec is exposed. Many .NET projects route the spec under `/api/swagger/v1/swagger.json` rather than `/swagger`. Always test the full path list, not just the root.
+A 404/403 on `/swagger` does NOT mean no spec is exposed. Many .NET projects route the spec under
+`/api/swagger/v1/swagger.json` rather than `/swagger`. Always test the full path list, not just the
+root.
 
 Full attack-chain analysis is in `hunt-api-misconfig` → `NSwag / Swagger / OpenAPI Spec Exposure`.
 
@@ -609,24 +632,36 @@ Full attack-chain analysis is in `hunt-api-misconfig` → `NSwag / Swagger / Ope
 
 ## Related Skills & Chains
 
-- **`offensive-osint`** — When recon needs concrete probes / wordlists / regexes beyond the basic pipeline. Workflow primitive: this skill produces the URL set; `offensive-osint` provides the secret regexes, GraphQL/Swagger paths, and identity-fabric probes you apply to that URL set.
-- **`osint-methodology`** — When you need a severity rubric for what you discovered. Workflow primitive: after recon outputs `subdomains.txt` / `live-hosts.txt` / `urls.txt`, score each asset against `osint-methodology`'s findings rubric to decide what gets a finding versus what stays in the asset graph.
-- **`hunt-subdomain`** — When recon surfaces stale CNAMEs / dangling DNS. Workflow primitive: any subdomain in `subdomains.txt` whose CNAME points to S3 / GitHub Pages / Heroku / Shopify / Azure should auto-route to `hunt-subdomain` for takeover validation.
-- **`security-arsenal`** — When the URL set is classified by `gf` and ready for active testing. Workflow primitive: `gf xss/ssrf/sqli/idor` output names become payload-class queries against `security-arsenal`'s payload library.
-- **`bb-methodology`** — When recon completes and Phase 1 transitions to Phase 2 (Mapping). Workflow primitive: hand the live host + URL set back to `bb-methodology` Phase 2 for endpoint mapping and Phase 3 vulnerability discovery routing.
+- **`offensive-osint`** — When recon needs concrete probes / wordlists / regexes beyond the basic
+  pipeline. Workflow primitive: this skill produces the URL set; `offensive-osint` provides the
+  secret regexes, GraphQL/Swagger paths, and identity-fabric probes you apply to that URL set.
+- **`osint-methodology`** — When you need a severity rubric for what you discovered. Workflow
+  primitive: after recon outputs `subdomains.txt` / `live-hosts.txt` / `urls.txt`, score each asset
+  against `osint-methodology`'s findings rubric to decide what gets a finding versus what stays in
+  the asset graph.
+- **`hunt-subdomain`** — When recon surfaces stale CNAMEs / dangling DNS. Workflow primitive: any
+  subdomain in `subdomains.txt` whose CNAME points to S3 / GitHub Pages / Heroku / Shopify / Azure
+  should auto-route to `hunt-subdomain` for takeover validation.
+- **`security-arsenal`** — When the URL set is classified by `gf` and ready for active testing.
+  Workflow primitive: `gf xss/ssrf/sqli/idor` output names become payload-class queries against
+  `security-arsenal`'s payload library.
+- **`bb-methodology`** — When recon completes and Phase 1 transitions to Phase 2 (Mapping). Workflow
+  primitive: hand the live host + URL set back to `bb-methodology` Phase 2 for endpoint mapping and
+  Phase 3 vulnerability discovery routing.
 
 ---
 
 ## Operator Notes (Claude-BugHunter)
 
-> Engagement-derived + 2026-specific additions to the vendored foundation.
-> Wisdom from real authorized engagements + Phase 2 verification across
-> this repo's 31+ skill-area live tests. The upstream pipeline covers the WHAT;
-> this layer covers the WHEN-IT-WORKS-vs-WHEN-IT-DOESN'T.
+> Engagement-derived + 2026-specific additions to the vendored foundation. Wisdom from real
+> authorized engagements + Phase 2 verification across this repo's 31+ skill-area live tests. The
+> upstream pipeline covers the WHAT; this layer covers the WHEN-IT-WORKS-vs-WHEN-IT-DOESN'T.
 
 ### Cross-TLD pivot discipline
 
-Phase 2C's HackerOne VDP recon walked from `hackerone.com` (24 subdomains) into a sister TLD `hacker.one` (12 more subdomains found in JS bundle references). Operators who only enumerate `*.target.com` miss attack surface that the target legitimately operates on a different domain.
+Phase 2C's HackerOne VDP recon walked from `hackerone.com` (24 subdomains) into a sister TLD
+`hacker.one` (12 more subdomains found in JS bundle references). Operators who only enumerate
+`*.target.com` miss attack surface that the target legitimately operates on a different domain.
 
 Always grep JS bundles for plausible sibling TLDs:
 
@@ -642,7 +677,10 @@ for j in $(cat js-urls.txt); do
 done | sort -u > sibling-tld-candidates.txt
 ```
 
-Common sibling-TLD patterns: `target.com → target.io / target.app / target.one / target.dev / target.test / target-corp.com / target-cdn.net`. Always validate via WHOIS or by checking if the cert chain trusts the same internal CA before treating the sister TLD as in-scope.
+Common sibling-TLD patterns:
+`target.com → target.io / target.app / target.one / target.dev / target.test / target-corp.com / target-cdn.net`.
+Always validate via WHOIS or by checking if the cert chain trusts the same internal CA before
+treating the sister TLD as in-scope.
 
 ### Subdomain wordlist priorities by 2026
 
@@ -658,7 +696,10 @@ employee-*         hr.*               jobs.*
 sso.*              auth.*             id.*
 ```
 
-Internal-looking subdomains often expose more surface than the marketing site — `partner.target.com` and `vendor-portal.target.com` frequently have weaker auth than the main app because they're scoped for "trusted" external users. Always send a probe to the long-tail wordlist after the standard subfinder run completes.
+Internal-looking subdomains often expose more surface than the marketing site — `partner.target.com`
+and `vendor-portal.target.com` frequently have weaker auth than the main app because they're scoped
+for "trusted" external users. Always send a probe to the long-tail wordlist after the standard
+subfinder run completes.
 
 ### Live-host probe: how to fingerprint stack quickly
 
@@ -669,7 +710,8 @@ Internal-looking subdomains often expose more surface than the marketing site �
 - `X-Drupal-Cache`, `X-Generator: Drupal 9` — Drupal
 - `X-Generator: WordPress` — WordPress
 - `Via:` — CDN chain (1.1 varnish, 1.1 cloudfront)
-- `Set-Cookie:` names — `JSESSIONID` (Java), `PHPSESSID` (PHP), `ASP.NET_SessionId` (.NET), `connect.sid` (Express), `laravel_session` (Laravel)
+- `Set-Cookie:` names — `JSESSIONID` (Java), `PHPSESSID` (PHP), `ASP.NET_SessionId` (.NET),
+  `connect.sid` (Express), `laravel_session` (Laravel)
 
 JS bundle filename patterns:
 
@@ -679,7 +721,9 @@ JS bundle filename patterns:
 - `/static/js/main.*.chunk.js` = Create React App
 - `runtime.*.js + polyfills.*.js + main.*.js` = Angular CLI
 
-The first 10s of recon should yield a stack guess; the rest is targeting. If your fingerprint contradicts itself (Server says nginx, Set-Cookie says ASP.NET) you've found a reverse proxy front-end — note the origin app for later smuggling/cache attacks.
+The first 10s of recon should yield a stack guess; the rest is targeting. If your fingerprint
+contradicts itself (Server says nginx, Set-Cookie says ASP.NET) you've found a reverse proxy
+front-end — note the origin app for later smuggling/cache attacks.
 
 ### GitHub Pages 404 vs takeover signal
 
@@ -690,11 +734,17 @@ Critical distinction operators get wrong:
 
 Same distinction for CloudFront:
 
-- **"Error - 404"** with `Server: CloudFront` = distribution exists, origin returned 404 — NOT a takeover.
-- **"The request could not be satisfied"** with `X-Cache: Error from cloudfront` = origin missing entirely — potential takeover.
+- **"Error - 404"** with `Server: CloudFront` = distribution exists, origin returned 404 — NOT a
+  takeover.
+- **"The request could not be satisfied"** with `X-Cache: Error from cloudfront` = origin missing
+  entirely — potential takeover.
 
-Phase 2C verified both patterns live. Always check the EXACT response body string before filing a takeover finding — the takeover-scanner tools (subzy, subjack) match on multiple fingerprints and frequently false-positive on the "still owned, just empty" case.
+Phase 2C verified both patterns live. Always check the EXACT response body string before filing a
+takeover finding — the takeover-scanner tools (subzy, subjack) match on multiple fingerprints and
+frequently false-positive on the "still owned, just empty" case.
 
 ### Toolchain fallback
 
-Already covered in this file's Phase 2C addition. Quick reminder: dnsx/httpx may segfault on macOS arm64; the dig+curl fallback works for < 100-host runs in ~14 seconds. Don't burn an hour debugging Go binary panics when the fallback gets you to the same URL set.
+Already covered in this file's Phase 2C addition. Quick reminder: dnsx/httpx may segfault on macOS
+arm64; the dig+curl fallback works for < 100-host runs in ~14 seconds. Don't burn an hour debugging
+Go binary panics when the fallback gets you to the same URL set.

@@ -108,7 +108,8 @@ writing tools. All content was reviewed and verified by the author(s).
 
 ## APA 7.0 Template (`apa7` Class) — Preferred for APA Output
 
-When APA 7.0 format is requested, use the `apa7` document class instead of `article`. This ensures correct running heads, title page layout, and heading levels.
+When APA 7.0 format is requested, use the `apa7` document class instead of `article`. This ensures
+correct running heads, title page layout, and heading levels.
 
 ```latex
 \documentclass[man,12pt,natbib]{apa7}
@@ -176,32 +177,34 @@ When APA 7.0 format is requested, use the `apa7` document class instead of `arti
 
 ### Key Differences: `apa7` vs `article`
 
-| Feature | `apa7` class | `article` class |
-|---------|-------------|-----------------|
-| Running head | Automatic (`\shorttitle`) | Manual (`fancyhdr`) |
-| Title page | Built-in (`\maketitle`) | Manual (`titlepage`) |
-| Abstract | `\abstract{}` in preamble | `\begin{abstract}` in body |
-| Heading levels | APA 5-level automatic | Manual formatting |
-| Double spacing | Automatic in `man` mode | Requires `\doublespacing` |
-| Text alignment | **Ragged-right (must override!)** | Justified by default |
+| Feature        | `apa7` class                      | `article` class            |
+| -------------- | --------------------------------- | -------------------------- |
+| Running head   | Automatic (`\shorttitle`)         | Manual (`fancyhdr`)        |
+| Title page     | Built-in (`\maketitle`)           | Manual (`titlepage`)       |
+| Abstract       | `\abstract{}` in preamble         | `\begin{abstract}` in body |
+| Heading levels | APA 5-level automatic             | Manual formatting          |
+| Double spacing | Automatic in `man` mode           | Requires `\doublespacing`  |
+| Text alignment | **Ragged-right (must override!)** | Justified by default       |
 
 ### Table Column Width Formula (Mandatory)
 
-**NEVER** use bare `p{0.25\linewidth}` in longtable — this ignores inter-column padding and causes overflow.
+**NEVER** use bare `p{0.25\linewidth}` in longtable — this ignores inter-column padding and causes
+overflow.
 
 **Correct formula**: `p{(\linewidth - N\tabcolsep) * \real{proportion}}`
 
 Where N = `(number_of_columns - 1) × 2`
 
-| Columns | N (tabcolseps) | Example |
-|---------|---------------|---------|
-| 3 | 4 | `(\linewidth - 4\tabcolsep) * \real{0.3333}` |
-| 4 | 6 | `(\linewidth - 6\tabcolsep) * \real{0.2500}` |
-| 5 | 8 | `(\linewidth - 8\tabcolsep) * \real{0.2000}` |
+| Columns | N (tabcolseps) | Example                                      |
+| ------- | -------------- | -------------------------------------------- |
+| 3       | 4              | `(\linewidth - 4\tabcolsep) * \real{0.3333}` |
+| 4       | 6              | `(\linewidth - 6\tabcolsep) * \real{0.2500}` |
+| 5       | 8              | `(\linewidth - 8\tabcolsep) * \real{0.2000}` |
 
 ## BibTeX Entry Formats
 
 ### Journal Article
+
 ```bibtex
 @article{Smith2024,
   author  = {Smith, John A. and Jones, Betty C.},
@@ -216,6 +219,7 @@ Where N = `(number_of_columns - 1) × 2`
 ```
 
 ### Book
+
 ```bibtex
 @book{Brown2023,
   author    = {Brown, Alice},
@@ -228,6 +232,7 @@ Where N = `(number_of_columns - 1) × 2`
 ```
 
 ### Book Chapter
+
 ```bibtex
 @incollection{Lee2024,
   author    = {Lee, David},
@@ -241,6 +246,7 @@ Where N = `(number_of_columns - 1) × 2`
 ```
 
 ### Conference Paper
+
 ```bibtex
 @inproceedings{Chen2024,
   author    = {Chen, Wei and Wang, Ming},
@@ -254,6 +260,7 @@ Where N = `(number_of_columns - 1) × 2`
 ```
 
 ### Report / Technical Report
+
 ```bibtex
 @techreport{MOE2024,
   author      = {{Ministry of Education}},
@@ -266,6 +273,7 @@ Where N = `(number_of_columns - 1) × 2`
 ```
 
 ### Thesis / Dissertation
+
 ```bibtex
 @phdthesis{Wang2024,
   author = {Wang, Mei-Ling},
@@ -277,6 +285,7 @@ Where N = `(number_of_columns - 1) × 2`
 ```
 
 ### Website
+
 ```bibtex
 @misc{WHO2024,
   author       = {{World Health Organization}},
@@ -290,21 +299,23 @@ Where N = `(number_of_columns - 1) × 2`
 ## Citation Commands
 
 ### natbib Commands
-| Command | Output | Use For |
-|---------|--------|---------|
-| `\citet{Smith2024}` | Smith (2024) | Narrative citation |
-| `\citep{Smith2024}` | (Smith, 2024) | Parenthetical citation |
-| `\citep{Smith2024,Jones2023}` | (Jones, 2023; Smith, 2024) | Multiple |
-| `\citeauthor{Smith2024}` | Smith | Author only |
-| `\citeyear{Smith2024}` | 2024 | Year only |
-| `\citep[p.~45]{Smith2024}` | (Smith, 2024, p. 45) | With page |
+
+| Command                       | Output                     | Use For                |
+| ----------------------------- | -------------------------- | ---------------------- |
+| `\citet{Smith2024}`           | Smith (2024)               | Narrative citation     |
+| `\citep{Smith2024}`           | (Smith, 2024)              | Parenthetical citation |
+| `\citep{Smith2024,Jones2023}` | (Jones, 2023; Smith, 2024) | Multiple               |
+| `\citeauthor{Smith2024}`      | Smith                      | Author only            |
+| `\citeyear{Smith2024}`        | 2024                       | Year only              |
+| `\citep[p.~45]{Smith2024}`    | (Smith, 2024, p. 45)       | With page              |
 
 ### biblatex Commands (Alternative)
-| Command | Output |
-|---------|--------|
-| `\textcite{Smith2024}` | Smith (2024) |
-| `\parencite{Smith2024}` | (Smith, 2024) |
-| `\autocite{Smith2024}` | (Smith, 2024) — adapts to style |
+
+| Command                 | Output                          |
+| ----------------------- | ------------------------------- |
+| `\textcite{Smith2024}`  | Smith (2024)                    |
+| `\parencite{Smith2024}` | (Smith, 2024)                   |
+| `\autocite{Smith2024}`  | (Smith, 2024) — adapts to style |
 
 ## XeLaTeX for Chinese Content
 
@@ -321,6 +332,7 @@ When the paper includes zh-TW content:
 ```
 
 ### Bilingual Abstract in LaTeX
+
 ```latex
 \begin{abstract}
 \noindent
@@ -342,23 +354,25 @@ Chinese abstract content...
 
 ## Common LaTeX Compilation Issues
 
-| Issue | Solution |
-|-------|---------|
-| Chinese characters not showing | Use XeLaTeX instead of pdfLaTeX |
-| Bibliography not appearing | Run: latex → bibtex → latex → latex |
-| Citations showing [?] | Run bibtex and recompile |
-| Hyperlinks not working | Ensure `hyperref` is loaded last |
-| Table/figure placement wrong | Use `[H]` from `float` package |
-| UTF-8 encoding errors | Ensure `\usepackage[utf8]{inputenc}` |
+| Issue                          | Solution                             |
+| ------------------------------ | ------------------------------------ |
+| Chinese characters not showing | Use XeLaTeX instead of pdfLaTeX      |
+| Bibliography not appearing     | Run: latex → bibtex → latex → latex  |
+| Citations showing [?]          | Run bibtex and recompile             |
+| Hyperlinks not working         | Ensure `hyperref` is loaded last     |
+| Table/figure placement wrong   | Use `[H]` from `float` package       |
+| UTF-8 encoding errors          | Ensure `\usepackage[utf8]{inputenc}` |
 
 ## Pandoc Conversion Commands
 
 ### Markdown → LaTeX
+
 ```bash
 pandoc paper.md -o paper.tex --bibliography=references.bib --csl=apa.csl
 ```
 
 ### Markdown → PDF (via LaTeX)
+
 ```bash
 pandoc paper.md -o paper.pdf --pdf-engine=xelatex \
   --bibliography=references.bib --csl=apa.csl \
@@ -366,6 +380,7 @@ pandoc paper.md -o paper.pdf --pdf-engine=xelatex \
 ```
 
 ### Markdown → PDF (with Chinese)
+
 ```bash
 pandoc paper.md -o paper.pdf --pdf-engine=xelatex \
   -V CJKmainfont="Noto Sans CJK TC" \
@@ -373,6 +388,7 @@ pandoc paper.md -o paper.pdf --pdf-engine=xelatex \
 ```
 
 ### Markdown → DOCX
+
 ```bash
 pandoc paper.md -o paper.docx --bibliography=references.bib --csl=apa.csl
 ```

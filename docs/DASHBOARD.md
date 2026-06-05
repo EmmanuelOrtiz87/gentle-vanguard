@@ -2,7 +2,8 @@
 
 ## Overview
 
-The Gentle-Vanguard Dashboard Ultimate v2.0 is an enterprise-grade live metrics dashboard with 9 sections, real-time updates, comprehensive analytics, and WCAG 2.1 AA accessibility compliance.
+The Gentle-Vanguard Dashboard Ultimate v2.0 is an enterprise-grade live metrics dashboard with 9
+sections, real-time updates, comprehensive analytics, and WCAG 2.1 AA accessibility compliance.
 
 ---
 
@@ -23,7 +24,8 @@ The Gentle-Vanguard Dashboard Ultimate v2.0 is an enterprise-grade live metrics 
 
 ### Core Features
 
-- **9 Interactive Sections**: Executive, Operations, Development, Cost & ROI, Governance, Health, Live, SLA, Performance
+- **9 Interactive Sections**: Executive, Operations, Development, Cost & ROI, Governance, Health,
+  Live, SLA, Performance
 - **Real-time Updates**: Auto-refresh every 30s (charts) and 10s (live data)
 - **TV Mode**: Auto-rotation every 30s for monitoring displays
 - **Export**: PDF and PNG export per section
@@ -84,15 +86,15 @@ The Gentle-Vanguard Dashboard Ultimate v2.0 is an enterprise-grade live metrics 
 
 ### Components
 
-| Component | File | Purpose |
-|-----------|------|---------|
-| Collector | `scripts/metrics/collector.ps1` | Aggregates metrics from all sources |
-| Log Analyzer | `scripts/metrics/log-analyzer.ps1` | Analyzes session logs for productivity |
-| Dashboard Render | `scripts/metrics/dashboard-render.ps1` | Generates HTML dashboard |
-| Health Check | `scripts/metrics/dashboard-health-check.ps1` | Monitors dashboard health |
-| Validator | `scripts/tests/dashboard-validator.ps1` | Validates dashboard integrity |
-| Service Worker | `reports/sw.js` | Caching and offline support |
-| Analytics | `reports/analytics.js` | Usage tracking |
+| Component        | File                                         | Purpose                                |
+| ---------------- | -------------------------------------------- | -------------------------------------- |
+| Collector        | `scripts/metrics/collector.ps1`              | Aggregates metrics from all sources    |
+| Log Analyzer     | `scripts/metrics/log-analyzer.ps1`           | Analyzes session logs for productivity |
+| Dashboard Render | `scripts/metrics/dashboard-render.ps1`       | Generates HTML dashboard               |
+| Health Check     | `scripts/metrics/dashboard-health-check.ps1` | Monitors dashboard health              |
+| Validator        | `scripts/tests/dashboard-validator.ps1`      | Validates dashboard integrity          |
+| Service Worker   | `reports/sw.js`                              | Caching and offline support            |
+| Analytics        | `reports/analytics.js`                       | Usage tracking                         |
 
 ---
 
@@ -139,56 +141,74 @@ The Gentle-Vanguard Dashboard Ultimate v2.0 is an enterprise-grade live metrics 
 ## Sections
 
 ### 1. Executive Overview
+
 KPIs principales con sparklines y tendencias.
+
 - Traffic Light status
 - Token usage and budget
 - Cost metrics
 - Session statistics
 
 ### 2. Operations
+
 Session management and usage metrics.
+
 - Active sessions
 - Session history
 - Duration statistics
 
 ### 3. Development
+
 Git and PR activity tracking.
+
 - Commit statistics
 - Author contributions
 - PR lifecycle metrics
 
 ### 4. Cost & ROI
+
 Financial metrics and projections.
+
 - Actual costs
 - Forecasts
 - Savings analysis
 
 ### 5. Governance
+
 Compliance and benchmark tracking.
+
 - Routing accuracy
 - Benchmark results
 
 ### 6. Health
+
 System health monitoring.
+
 - Latest session
 - Active sessions
 - Performance metrics
 
 ### 7. Live
+
 Real-time event stream.
+
 - Live tokens
 - Traffic light
 - Routing status
 - Event log
 
 ### 8. SLA
+
 Service Level Agreement compliance.
+
 - Uptime metrics
 - Incident tracking
 - SLO compliance table
 
 ### 9. Performance
+
 Productivity analytics.
+
 - Sessions analyzed
 - Peak activity hours
 - Velocity trends
@@ -264,6 +284,7 @@ The dashboard tracks:
 ### Data Collection
 
 Analytics data is:
+
 - Stored in localStorage
 - Sent via Beacon API on page unload
 - Aggregated for reporting
@@ -281,11 +302,13 @@ Analytics data is:
 ### Dashboard Not Loading
 
 1. Check if files exist:
+
    ```powershell
    Test-Path "reports/dashboard.html"
    ```
 
 2. Validate JSON files:
+
    ```powershell
    .\scripts\tests\dashboard-validator.ps1
    ```
@@ -345,12 +368,12 @@ if ($files -match "\.runtime/metrics") {
 
 ## Performance Targets
 
-| Metric | Target | Current |
-|--------|--------|---------|
-| First Contentful Paint | < 1.5s | ✅ |
-| Time to Interactive | < 3s | ✅ |
-| Largest Contentful Paint | < 2.5s | ✅ |
-| Cumulative Layout Shift | < 0.1 | ✅ |
+| Metric                   | Target | Current |
+| ------------------------ | ------ | ------- |
+| First Contentful Paint   | < 1.5s | ✅      |
+| Time to Interactive      | < 3s   | ✅      |
+| Largest Contentful Paint | < 2.5s | ✅      |
+| Cumulative Layout Shift  | < 0.1  | ✅      |
 
 ---
 

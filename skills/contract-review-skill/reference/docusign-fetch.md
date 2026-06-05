@@ -11,11 +11,13 @@ Tool: getEnvelopes
 Params: { status: "sent" }  // or "delivered"
 ```
 
-Returns a list of envelopes with: `envelopeId`, `emailSubject`, `createdDateTime`, `status`, `recipients`.
+Returns a list of envelopes with: `envelopeId`, `emailSubject`, `createdDateTime`, `status`,
+`recipients`.
 
 ## Download document from envelope
 
-Use `getEnvelope` with the `envelopeId` to get the full envelope details, then download the document for reading.
+Use `getEnvelope` with the `envelopeId` to get the full envelope details, then download the document
+for reading.
 
 ## What NOT to do
 

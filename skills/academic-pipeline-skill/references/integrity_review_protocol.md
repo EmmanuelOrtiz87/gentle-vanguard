@@ -2,8 +2,8 @@
 
 ## Stage 2.5: First Integrity Check (Pre-Review Integrity)
 
-**Trigger**: After Stage 2 (WRITE) completion, before Stage 3 (REVIEW)
-**Purpose**: Ensure all references and data are not fabricated or erroneous before submission for review
+**Trigger**: After Stage 2 (WRITE) completion, before Stage 3 (REVIEW) **Purpose**: Ensure all
+references and data are not fabricated or erroneous before submission for review
 
 ```
 Execution steps:
@@ -23,8 +23,8 @@ Execution steps:
 
 ## Stage 4.5: Final Integrity Check (Post-Revision Final Check)
 
-**Trigger**: After Stage 4' (RE-REVISE) or Stage 3' (RE-REVIEW, Accept) completion, before Stage 5 (FINALIZE)
-**Purpose**: Confirm the revised paper is 100% correct and ready for publication
+**Trigger**: After Stage 4' (RE-REVISE) or Stage 3' (RE-REVIEW, Accept) completion, before Stage 5
+(FINALIZE) **Purpose**: Confirm the revised paper is 100% correct and ready for publication
 
 ```
 Execution steps:
@@ -46,4 +46,6 @@ Execution steps:
 
 Reference: `academic-pipeline/references/score_trajectory_protocol.md`
 
-At Stage 3' (RE-REVIEW), the `pipeline_orchestrator_agent` tracks per-dimension score deltas and triggers a MANDATORY checkpoint on regressions. Results stored in Integrity Report `score_trajectory` field (Schema 5).
+At Stage 3' (RE-REVIEW), the `pipeline_orchestrator_agent` tracks per-dimension score deltas and
+triggers a MANDATORY checkpoint on regressions. Results stored in Integrity Report
+`score_trajectory` field (Schema 5).

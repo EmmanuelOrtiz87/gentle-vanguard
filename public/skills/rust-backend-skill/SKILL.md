@@ -2,7 +2,7 @@
 name: rust-backend-skill
 description: >
   Rust backend development with Axum, SQLx, and async patterns
-trigger: "rust,axum,async"
+trigger: 'rust,axum,async'
 metadata:
   source: GV-native
 ---

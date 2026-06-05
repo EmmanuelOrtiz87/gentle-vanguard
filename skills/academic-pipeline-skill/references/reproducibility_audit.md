@@ -4,13 +4,13 @@ v2.0 design ensures consistent quality assurance with each execution:
 
 ## Standardized Workflow
 
-| Guarantee Item | Mechanism |
-|---------------|-----------|
-| Integrity check every time | Stage 2.5 + Stage 4.5 are **mandatory** stages, cannot be skipped |
-| Consistent review angles | EIC + R1/R2/R3 + Devil's Advocate — five fixed perspectives |
-| Consistent verification methods | integrity_verification_agent uses standardized search templates |
-| Consistent quality thresholds | Integrity check PASS/FAIL criteria are explicit (zero SERIOUS + zero MEDIUM + zero MAJOR_DISTORTION + zero UNVERIFIABLE) |
-| Traceable workflow | Every stage's deliverables are recorded, enabling retrospective audit |
+| Guarantee Item                  | Mechanism                                                                                                                |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Integrity check every time      | Stage 2.5 + Stage 4.5 are **mandatory** stages, cannot be skipped                                                        |
+| Consistent review angles        | EIC + R1/R2/R3 + Devil's Advocate — five fixed perspectives                                                              |
+| Consistent verification methods | integrity_verification_agent uses standardized search templates                                                          |
+| Consistent quality thresholds   | Integrity check PASS/FAIL criteria are explicit (zero SERIOUS + zero MEDIUM + zero MAJOR_DISTORTION + zero UNVERIFIABLE) |
+| Traceable workflow              | Every stage's deliverables are recorded, enabling retrospective audit                                                    |
 
 ## Audit Trail
 
@@ -43,12 +43,13 @@ Integrity Summary:
 
 ## Computational reproducibility (v3.3.5+)
 
-This document defines PROCESS reproducibility — consistent stages, fixed reviewer angles,
-explicit pass/fail thresholds. That's one of two meanings of "reproducible."
+This document defines PROCESS reproducibility — consistent stages, fixed reviewer angles, explicit
+pass/fail thresholds. That's one of two meanings of "reproducible."
 
-The other is COMPUTATIONAL re-run — could a third party re-execute the same pipeline and
-produce the same (or near-same) output? For that, see [`../../shared/artifact_reproducibility_pattern.md`](../../shared/artifact_reproducibility_pattern.md).
+The other is COMPUTATIONAL re-run — could a third party re-execute the same pipeline and produce the
+same (or near-same) output? For that, see
+[`../../shared/artifact_reproducibility_pattern.md`](../../shared/artifact_reproducibility_pattern.md).
 
-Process reproducibility is enforced at the pipeline level. Computational documentation is
-captured in the Material Passport's optional `repro_lock` sub-block. Both are complementary;
-neither replaces the other.
+Process reproducibility is enforced at the pipeline level. Computational documentation is captured
+in the Material Passport's optional `repro_lock` sub-block. Both are complementary; neither replaces
+the other.

@@ -1,6 +1,7 @@
 # Editorial Decision Template
 
-This template is used by `editorial_synthesizer_agent` to produce the final Editorial Decision Package.
+This template is used by `editorial_synthesizer_agent` to produce the final Editorial Decision
+Package.
 
 ---
 
@@ -10,6 +11,7 @@ This template is used by `editorial_synthesizer_agent` to produce the final Edit
 # Editorial Decision
 
 ## Manuscript Information
+
 - **Title**: [Paper title]
 - **Manuscript ID**: [If available]
 - **Submission Date**: [Submission date]
@@ -18,56 +20,64 @@ This template is used by `editorial_synthesizer_agent` to produce the final Edit
 
 ---
 
-## Decision *
+## Decision \*
 
 ### [Accept / Minor Revision / Major Revision / Reject]
 
-[If Reject, indicate subtype: Out of Scope / Fundamental Flaw / Insufficient Contribution / Premature / Resubmit Encouraged]
+[If Reject, indicate subtype: Out of Scope / Fundamental Flaw / Insufficient Contribution /
+Premature / Resubmit Encouraged]
 
 ---
 
 ## Reviewer Summary
 
-| Reviewer | Role | Recommendation | Confidence |
-|----------|------|---------------|------------|
-| EIC | [Journal editor identity] | [Accept/Minor/Major/Reject] | [1-5] |
-| Reviewer 1 | [Methodology expert identity] | [Accept/Minor/Major/Reject] | [1-5] |
-| Reviewer 2 | [Domain expert identity] | [Accept/Minor/Major/Reject] | [1-5] |
-| Reviewer 3 | [Cross-disciplinary expert identity] | [Accept/Minor/Major/Reject] | [1-5] |
+| Reviewer   | Role                                 | Recommendation              | Confidence |
+| ---------- | ------------------------------------ | --------------------------- | ---------- |
+| EIC        | [Journal editor identity]            | [Accept/Minor/Major/Reject] | [1-5]      |
+| Reviewer 1 | [Methodology expert identity]        | [Accept/Minor/Major/Reject] | [1-5]      |
+| Reviewer 2 | [Domain expert identity]             | [Accept/Minor/Major/Reject] | [1-5]      |
+| Reviewer 3 | [Cross-disciplinary expert identity] | [Accept/Minor/Major/Reject] | [1-5]      |
 
 ---
 
-## Consensus Analysis *
+## Consensus Analysis \*
 
 ### Points of Agreement (Consensus)
 
 **[CONSENSUS-4]** (All reviewers agree):
+
 1. [Consensus content — cite relevant passages from each reviewer's report]
 2. [...]
 
 **[CONSENSUS-3]** (3/4 reviewers agree):
+
 1. [Consensus content — indicate which 3 agree and which 1 has a different view]
 2. [...]
 
 ### Points of Disagreement
 
 **Disagreement 1: [Issue name]**
+
 - **R[X] view**: [Specific viewpoint, citing report]
 - **R[Y] view**: [Specific viewpoint, citing report]
-- **Disagreement type**: [Perspective difference / Severity disagreement / Existence disagreement / Direction disagreement]
+- **Disagreement type**: [Perspective difference / Severity disagreement / Existence disagreement /
+  Direction disagreement]
 - **Editor's Resolution**: [Arbitration result]
-- **Resolution Rationale**: [Arbitration rationale — based on evidence/expertise/conservative principle]
+- **Resolution Rationale**: [Arbitration rationale — based on evidence/expertise/conservative
+  principle]
 
 **Disagreement 2: [Issue name]**
+
 - [Same format as above]
 
 ---
 
-## Decision Rationale *
+## Decision Rationale \*
 
 [200-300 words explaining the basis for this decision]
 
 Requirements:
+
 - Cite specific reviewer opinions
 - Explain how disagreements were resolved
 - Explain why this decision was chosen rather than a more or less strict one
@@ -75,57 +85,65 @@ Requirements:
 
 ---
 
-## Required Revisions * (Must Fix)
+## Required Revisions \* (Must Fix)
 
 [Only needed for Minor Revision and Major Revision]
 
-| # | Revision Item | Source Reviewer | Severity | Section | Estimated Effort |
-|---|--------------|----------------|----------|---------|-----------------|
-| R1 | [Description] | [EIC/R1/R2/R3] | Critical | [Section name] | [X days] |
-| R2 | [Description] | [Source] | Critical/Major | [Section name] | [X days] |
-| R3 | [Description] | [Source] | Major | [Section name] | [X days] |
+| #   | Revision Item | Source Reviewer | Severity       | Section        | Estimated Effort |
+| --- | ------------- | --------------- | -------------- | -------------- | ---------------- |
+| R1  | [Description] | [EIC/R1/R2/R3]  | Critical       | [Section name] | [X days]         |
+| R2  | [Description] | [Source]        | Critical/Major | [Section name] | [X days]         |
+| R3  | [Description] | [Source]        | Major          | [Section name] | [X days]         |
+
 ...
 
 ### Required Item Details
 
 **R1: [Title]**
+
 - **Problem**: [Specific description]
 - **Source**: [Which reviewer raised it, citing report passage]
 - **Requirement**: [Specifically how to fix it]
 - **Acceptance criteria**: [How to confirm the issue is resolved after fixing]
 
 **R2: [Title]**
+
 - [Same format as above]
 
 ---
 
 ## Suggested Revisions (Should Fix)
 
-| # | Revision Item | Source Reviewer | Priority | Section | Expected Improvement |
-|---|--------------|----------------|----------|---------|---------------------|
-| S1 | [Description] | [Source] | P2 | [Section name] | [What it improves] |
-| S2 | [Description] | [Source] | P2/P3 | [Section name] | [What it improves] |
+| #   | Revision Item | Source Reviewer | Priority | Section        | Expected Improvement |
+| --- | ------------- | --------------- | -------- | -------------- | -------------------- |
+| S1  | [Description] | [Source]        | P2       | [Section name] | [What it improves]   |
+| S2  | [Description] | [Source]        | P2/P3    | [Section name] | [What it improves]   |
+
 ...
 
 ---
 
-## Revision Roadmap *
+## Revision Roadmap \*
 
 ### Priority 1 — Structural Revisions (Estimated total effort: X days)
+
 - [ ] R1: [Task description — linked to Required Revisions above]
 - [ ] R2: [Task description]
 - [ ] R3: [Task description]
 
 ### Priority 2 — Content Supplementation (Estimated total effort: X days)
+
 - [ ] S1: [Task description]
 - [ ] S2: [Task description]
 
 ### Priority 3 — Text and Formatting (Estimated total effort: X days)
+
 - [ ] [Merged Minor Issues from all reviewers]
 - [ ] [Language polishing items]
 - [ ] [Citation format corrections]
 
 ### Total Estimated Effort
+
 - **Minor Revision**: [X-Y days]
 - **Major Revision**: [X-Y weeks]
 
@@ -141,9 +159,11 @@ Requirements:
 
 ## Response Letter Instructions
 
-Please use the format in `templates/revision_response_template.md` to respond to every reviewer comment item by item.
+Please use the format in `templates/revision_response_template.md` to respond to every reviewer
+comment item by item.
 
 **Must include**:
+
 1. Response and revision description for each Required Revision
 2. Response for each Suggested Revision (adopted or reason for not adopting)
 3. Change markup (mark all changes in the revised manuscript with color or track changes)
@@ -156,16 +176,25 @@ Please use the format in `templates/revision_response_template.md` to respond to
 [Formal closing, adjusting tone based on decision type]
 
 ### Accept Version
-We are pleased to accept your manuscript for publication in [Journal Name]. [If applicable, include minor suggestions]
+
+We are pleased to accept your manuscript for publication in [Journal Name]. [If applicable, include
+minor suggestions]
 
 ### Minor Revision Version
-We invite you to submit a revised version of your manuscript, addressing the points raised by the reviewers. We look forward to receiving your revision within [deadline].
+
+We invite you to submit a revised version of your manuscript, addressing the points raised by the
+reviewers. We look forward to receiving your revision within [deadline].
 
 ### Major Revision Version
-We encourage you to carefully consider the reviewers' comments and submit a substantially revised manuscript. Please note that the revised manuscript will undergo another round of review.
+
+We encourage you to carefully consider the reviewers' comments and submit a substantially revised
+manuscript. Please note that the revised manuscript will undergo another round of review.
 
 ### Reject Version
-After careful consideration, we are unable to accept your manuscript for publication in [Journal Name]. We appreciate the effort you have put into this work and hope the reviewers' comments will be helpful for future development of this research.
+
+After careful consideration, we are unable to accept your manuscript for publication in [Journal
+Name]. We appreciate the effort you have put into this work and hope the reviewers' comments will be
+helpful for future development of this research.
 
 [If appropriate, recommend alternative journals]
 
@@ -190,9 +219,9 @@ After careful consideration, we are unable to accept your manuscript for publica
 
 ### Severity-to-Priority Mapping
 
-| Severity | Priority | Revision Type |
-|----------|----------|--------------|
-| Critical | P1 | Required Revision |
-| Major | P1/P2 | Required / Strongly Suggested |
-| Minor | P2/P3 | Suggested |
-| Cosmetic | P3 | Optional |
+| Severity | Priority | Revision Type                 |
+| -------- | -------- | ----------------------------- |
+| Critical | P1       | Required Revision             |
+| Major    | P1/P2    | Required / Strongly Suggested |
+| Minor    | P2/P3    | Suggested                     |
+| Cosmetic | P3       | Optional                      |

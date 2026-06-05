@@ -1,15 +1,20 @@
 # Example: Generated Skill
 
-This is an example of what a generated skill looks like after the bootstrap process. This example is for a fictional e-commerce company called "ShopCo" using Snowflake.
+This is an example of what a generated skill looks like after the bootstrap process. This example is
+for a fictional e-commerce company called "ShopCo" using Snowflake.
 
 ---
 
 ## Example SKILL.md
 
-```markdown
+````markdown
 ---
 name: shopco-data-analyst
-description: "ShopCo data analysis skill for Snowflake. Provides context for querying e-commerce data including customer, order, and product analytics. Use when analyzing ShopCo data for: (1) Revenue and order metrics, (2) Customer behavior and retention, (3) Product performance, or any data questions requiring ShopCo-specific context."
+description:
+  'ShopCo data analysis skill for Snowflake. Provides context for querying e-commerce data including
+  customer, order, and product analytics. Use when analyzing ShopCo data for: (1) Revenue and order
+  metrics, (2) Customer behavior and retention, (3) Product performance, or any data questions
+  requiring ShopCo-specific context.'
 ---
 
 # ShopCo Data Analysis
@@ -29,11 +34,13 @@ description: "ShopCo data analysis skill for Snowflake. Provides context for que
 ## Entity Disambiguation
 
 **"Customer" can mean:**
+
 - **User**: A login account that can browse and save items (CORE.DIM_USERS: user_id)
 - **Customer**: A user who has made at least one purchase (CORE.DIM_CUSTOMERS: customer_id)
 - **Account**: A billing entity, can have multiple users in B2B (CORE.DIM_ACCOUNTS: account_id)
 
 **Relationships:**
+
 - User → Customer: 1:1 (customer_id = user_id for purchasers)
 - Account → User: 1:many (join on account_id)
 
@@ -41,13 +48,13 @@ description: "ShopCo data analysis skill for Snowflake. Provides context for que
 
 ## Business Terminology
 
-| Term | Definition | Notes |
-|------|------------|-------|
-| GMV | Gross Merchandise Value - total order value before returns/discounts | Use for top-line reporting |
-| NMV | Net Merchandise Value - GMV minus returns and discounts | Use for actual revenue |
-| AOV | Average Order Value - NMV / order count | Exclude $0 orders |
-| LTV | Lifetime Value - total NMV per customer since first order | Rolling calc, updates daily |
-| CAC | Customer Acquisition Cost - marketing spend / new customers | By cohort month |
+| Term | Definition                                                           | Notes                       |
+| ---- | -------------------------------------------------------------------- | --------------------------- |
+| GMV  | Gross Merchandise Value - total order value before returns/discounts | Use for top-line reporting  |
+| NMV  | Net Merchandise Value - GMV minus returns and discounts              | Use for actual revenue      |
+| AOV  | Average Order Value - NMV / order count                              | Exclude $0 orders           |
+| LTV  | Lifetime Value - total NMV per customer since first order            | Rolling calc, updates daily |
+| CAC  | Customer Acquisition Cost - marketing spend / new customers          | By cohort month             |
 
 ---
 
@@ -64,12 +71,14 @@ WHERE order_status != 'TEST'
 -- Exclude cancelled orders for revenue metrics
   AND order_status NOT IN ('CANCELLED', 'FRAUDULENT')
 ```
+````
 
 ---
 
 ## Key Metrics
 
 ### Gross Merchandise Value (GMV)
+
 - **Definition**: Total value of all orders placed
 - **Formula**: `SUM(order_total_gross)`
 - **Source**: `CORE.FCT_ORDERS.order_total_gross`
@@ -77,6 +86,7 @@ WHERE order_status != 'TEST'
 - **Caveats**: Includes orders that may later be cancelled or returned
 
 ### Net Revenue
+
 - **Definition**: Actual revenue after returns and discounts
 - **Formula**: `SUM(order_total_gross - return_amount - discount_amount)`
 - **Source**: `CORE.FCT_ORDERS`
@@ -86,17 +96,18 @@ WHERE order_status != 'TEST'
 
 ## Knowledge Base Navigation
 
-| Domain | Reference File | Use For |
-|--------|----------------|---------|
-| Orders | `references/orders.md` | Order tables, GMV/NMV calculations |
+| Domain    | Reference File            | Use For                              |
+| --------- | ------------------------- | ------------------------------------ |
+| Orders    | `references/orders.md`    | Order tables, GMV/NMV calculations   |
 | Customers | `references/customers.md` | User/customer entities, LTV, cohorts |
-| Products | `references/products.md` | Catalog, inventory, categories |
+| Products  | `references/products.md`  | Catalog, inventory, categories       |
 
 ---
 
 ## Common Query Patterns
 
 ### Daily GMV by Channel
+
 ```sql
 SELECT
     DATE_TRUNC('DAY', order_timestamp) AS order_date,
@@ -111,6 +122,7 @@ ORDER BY 1 DESC, 3 DESC
 ```
 
 ### Customer Cohort Retention
+
 ```sql
 WITH cohorts AS (
     SELECT
@@ -128,7 +140,8 @@ WHERE o.order_status NOT IN ('TEST', 'CANCELLED')
 GROUP BY 1, 2
 ORDER BY 1, 2
 ```
-```
+
+````
 
 ---
 
@@ -182,7 +195,8 @@ WHERE order_status NOT IN ('TEST', 'CANCELLED')
   AND order_date >= DATEADD(MONTH, -3, CURRENT_DATE())
 GROUP BY 1
 ORDER BY 1
-```
+````
+
 ```
 
 ---
@@ -196,3 +210,4 @@ This example demonstrates:
 - Metric definitions with formulas
 - Navigation to reference files
 - Real, runnable query examples
+```

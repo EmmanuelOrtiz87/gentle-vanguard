@@ -1,12 +1,16 @@
 # Label Transfer and Reference Mapping with scANVI
 
-This reference covers using scANVI for transferring cell type annotations from a reference atlas to query data.
+This reference covers using scANVI for transferring cell type annotations from a reference atlas to
+query data.
 
 ## Overview
 
-Reference mapping (also called "label transfer") uses a pre-trained model on annotated reference data to predict cell types in new, unannotated query data. This is faster than re-clustering and more consistent across studies.
+Reference mapping (also called "label transfer") uses a pre-trained model on annotated reference
+data to predict cell types in new, unannotated query data. This is faster than re-clustering and
+more consistent across studies.
 
 scANVI excels at this because it:
+
 - Jointly embeds reference and query in shared space
 - Transfers labels probabilistically
 - Handles batch effects between reference and query
@@ -100,10 +104,10 @@ if missing_genes:
     # Add missing genes with zero expression
     import numpy as np
     from scipy.sparse import csr_matrix
-    
+
     zero_matrix = csr_matrix((adata_query.n_obs, len(missing_genes)))
     # ... concat and reorder to match reference
-    
+
 # Store counts
 adata_query.layers["counts"] = adata_query.X.copy()
 ```
@@ -275,7 +279,7 @@ def transfer_labels(
 ):
     """
     Transfer cell type labels from reference to query.
-    
+
     Parameters
     ----------
     adata_ref : AnnData
@@ -290,18 +294,18 @@ def transfer_labels(
         Number of HVGs
     confidence_threshold : float
         Minimum confidence for predictions
-        
+
     Returns
     -------
     AnnData with predictions
     """
     import scvi
     import scanpy as sc
-    
+
     # Prepare reference
     adata_ref = adata_ref.copy()
     adata_ref.layers["counts"] = adata_ref.X.copy()
-    
+
     sc.pp.highly_variable_genes(
         adata_ref,
         n_top_genes=n_top_genes,
@@ -310,39 +314,39 @@ def transfer_labels(
         layer="counts"
     )
     adata_ref = adata_ref[:, adata_ref.var["highly_variable"]].copy()
-    
+
     # Train reference model
     scvi.model.SCVI.setup_anndata(adata_ref, layer="counts", batch_key=batch_key)
     scvi_ref = scvi.model.SCVI(adata_ref, n_latent=30)
     scvi_ref.train(max_epochs=200)
-    
+
     scanvi_ref = scvi.model.SCANVI.from_scvi_model(
         scvi_ref,
         labels_key=cell_type_key,
         unlabeled_category="Unknown"
     )
     scanvi_ref.train(max_epochs=50)
-    
+
     # Prepare query
     adata_query = adata_query[:, adata_ref.var_names].copy()
     adata_query.layers["counts"] = adata_query.X.copy()
-    
+
     # Map query
     scvi.model.SCANVI.prepare_query_anndata(adata_query, scanvi_ref)
     scanvi_query = scvi.model.SCANVI.load_query_data(adata_query, scanvi_ref)
     scanvi_query.train(max_epochs=100, plan_kwargs={"weight_decay": 0.0})
-    
+
     # Get predictions
     adata_query.obs["predicted_cell_type"] = scanvi_query.predict()
     soft = scanvi_query.predict(soft=True)
     adata_query.obs["prediction_score"] = soft.max(axis=1)
-    
+
     # Mark low confidence
     adata_query.obs["confident_prediction"] = adata_query.obs["prediction_score"] >= confidence_threshold
-    
+
     # Add latent representation
     adata_query.obsm["X_scANVI"] = scanvi_query.get_latent_representation()
-    
+
     return adata_query, scanvi_ref, scanvi_query
 
 # Usage
@@ -360,14 +364,15 @@ sc.pl.umap(adata_annotated, color=['predicted_cell_type', 'prediction_score'])
 
 ## Troubleshooting
 
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| Many low-confidence predictions | Query has novel cell types | Manually annotate low-confidence cells |
-| Wrong predictions | Reference doesn't match tissue | Use tissue-appropriate reference |
-| Gene mismatch | Different gene naming | Convert gene IDs |
-| All same prediction | Query too different | Check data quality, try different reference |
+| Issue                           | Cause                          | Solution                                    |
+| ------------------------------- | ------------------------------ | ------------------------------------------- |
+| Many low-confidence predictions | Query has novel cell types     | Manually annotate low-confidence cells      |
+| Wrong predictions               | Reference doesn't match tissue | Use tissue-appropriate reference            |
+| Gene mismatch                   | Different gene naming          | Convert gene IDs                            |
+| All same prediction             | Query too different            | Check data quality, try different reference |
 
 ## Key References
 
-- Xu et al. (2021) "Probabilistic harmonization and annotation of single-cell transcriptomics data with deep generative models"
+- Xu et al. (2021) "Probabilistic harmonization and annotation of single-cell transcriptomics data
+  with deep generative models"
 - Lotfollahi et al. (2022) "Mapping single-cell data to reference atlases by transfer learning"

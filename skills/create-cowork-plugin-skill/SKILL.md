@@ -7,13 +7,18 @@ metadata:
   original-name: create-cowork-plugin
   department: cowork-plugin-management
 ---
+
 # Create Cowork Plugin
 
-Build a new plugin from scratch through guided conversation. Walk the user through discovery, planning, design, implementation, and packaging — delivering a ready-to-install `.plugin` file at the end.
+Build a new plugin from scratch through guided conversation. Walk the user through discovery,
+planning, design, implementation, and packaging — delivering a ready-to-install `.plugin` file at
+the end.
 
 ## Overview
 
-A plugin is a self-contained directory that extends Claude's capabilities with skills, agents, hooks, and MCP server integrations. This skill encodes the full plugin architecture and a five-phase workflow for creating one conversationally.
+A plugin is a self-contained directory that extends Claude's capabilities with skills, agents,
+hooks, and MCP server integrations. This skill encodes the full plugin architecture and a five-phase
+workflow for creating one conversationally.
 
 The process:
 
@@ -23,7 +28,9 @@ The process:
 4. **Implementation** — create all plugin files
 5. **Review & Package** — deliver the `.plugin` file
 
-> **Nontechnical output**: Keep all user-facing conversation in plain language. Do not expose implementation details like file paths, directory structures, or schema fields unless the user asks. Frame everything in terms of what the plugin will do.
+> **Nontechnical output**: Keep all user-facing conversation in plain language. Do not expose
+> implementation details like file paths, directory structures, or schema fields unless the user
+> asks. Frame everything in terms of what the plugin will do.
 
 ## Plugin Architecture
 
@@ -44,7 +51,10 @@ plugin-name/
 └── README.md                 # Plugin documentation
 ```
 
-> **Legacy `commands/` format**: Older plugins may include a `commands/` directory with single-file `.md` slash commands. This format still works, but new plugins should use `skills/*/SKILL.md` instead — the Cowork UI presents both as a single "Skills" concept, and the skills format supports progressive disclosure via `references/`.
+> **Legacy `commands/` format**: Older plugins may include a `commands/` directory with single-file
+> `.md` slash commands. This format still works, but new plugins should use `skills/*/SKILL.md`
+> instead — the Cowork UI presents both as a single "Skills" concept, and the skills format supports
+> progressive disclosure via `references/`.
 
 **Rules:**
 
@@ -68,8 +78,8 @@ Located at `.claude-plugin/plugin.json`. Minimal required field is `name`.
 }
 ```
 
-**Name rules:** kebab-case, lowercase with hyphens, no spaces or special characters.
-**Version:** semver format (MAJOR.MINOR.PATCH). Start at `0.1.0`.
+**Name rules:** kebab-case, lowercase with hyphens, no spaces or special characters. **Version:**
+semver format (MAJOR.MINOR.PATCH). Start at `0.1.0`.
 
 Optional fields: `homepage`, `repository`, `license`, `keywords`.
 
@@ -96,27 +106,33 @@ Detailed schemas for each component type are in `references/component-schemas.md
 | Hooks (rarely used in Cowork)      | `hooks/hooks.json`  | JSON                        |
 | Commands (legacy)                  | `commands/*.md`     | Markdown + YAML frontmatter |
 
-This schema is shared with Claude Code's plugin system, but you're creating a plugin for Claude Cowork, a desktop app for doing knowledge work.
-Cowork users will usually find skills the most useful. **Scaffold new plugins with `skills/*/SKILL.md` — do not create `commands/` unless the user explicitly needs the legacy single-file format.**
+This schema is shared with Claude Code's plugin system, but you're creating a plugin for Claude
+Cowork, a desktop app for doing knowledge work. Cowork users will usually find skills the most
+useful. **Scaffold new plugins with `skills/*/SKILL.md` — do not create `commands/` unless the user
+explicitly needs the legacy single-file format.**
 
 ### Customizable plugins with `~~` placeholders
 
-> **Do not use or ask about this pattern by default.** Only introduce `~~` placeholders if the user explicitly says they want people outside their organization to use the plugin.
-> You can mention this is an option if it seems like the user wants to distribute the plugin externally, but do not proactively ask about this with AskUserQuestion.
+> **Do not use or ask about this pattern by default.** Only introduce `~~` placeholders if the user
+> explicitly says they want people outside their organization to use the plugin. You can mention
+> this is an option if it seems like the user wants to distribute the plugin externally, but do not
+> proactively ask about this with AskUserQuestion.
 
-When a plugin is intended to be shared with others outside their company, it might have parts that need to be adapted to individual users.
-You might need to reference external tools by category rather than specific product (e.g., "project tracker" instead of "Jira").
-When sharing is needed, use generic language and mark these as requiring customization with two tilde characters such as `create an issue in ~~project tracker`.
-If used any tool categories, write a `CONNECTORS.md` file at the plugin root to explain:
+When a plugin is intended to be shared with others outside their company, it might have parts that
+need to be adapted to individual users. You might need to reference external tools by category
+rather than specific product (e.g., "project tracker" instead of "Jira"). When sharing is needed,
+use generic language and mark these as requiring customization with two tilde characters such as
+`create an issue in ~~project tracker`. If used any tool categories, write a `CONNECTORS.md` file at
+the plugin root to explain:
 
 ```markdown
 # Connectors
 
 ## How tool references work
 
-Plugin files use `~~category` as a placeholder for whatever tool the user
-connects in that category. Plugins are tool-agnostic — they describe
-workflows in terms of categories rather than specific products.
+Plugin files use `~~category` as a placeholder for whatever tool the user connects in that category.
+Plugins are tool-agnostic — they describe workflows in terms of categories rather than specific
+products.
 
 ## Connectors for this plugin
 
@@ -128,11 +144,14 @@ workflows in terms of categories rather than specific products.
 
 ### ${CLAUDE_PLUGIN_ROOT} Variable
 
-Use `${CLAUDE_PLUGIN_ROOT}` for all intra-plugin path references in hooks and MCP configs. Never hardcode absolute paths.
+Use `${CLAUDE_PLUGIN_ROOT}` for all intra-plugin path references in hooks and MCP configs. Never
+hardcode absolute paths.
 
 ## Guided Workflow
 
-When you ask the user something, use AskUserQuestion. Don't assume "industry standard" defaults are correct. Note: AskUserQuestion always includes a Skip button and a free-text input box for custom answers, so do not include `None` or `Other` as options.
+When you ask the user something, use AskUserQuestion. Don't assume "industry standard" defaults are
+correct. Note: AskUserQuestion always includes a Skip button and a free-text input box for custom
+answers, so do not include `None` or `Other` as options.
 
 ### Phase 1: Discovery
 
@@ -155,10 +174,13 @@ Summarize understanding and confirm before proceeding.
 
 Based on the discovery answers, determine:
 
-- **Skills** — Does it need specialized knowledge that Claude should load on-demand, or user-initiated actions? (domain expertise, reference schemas, workflow guides, deploy/configure/analyze/review actions)
+- **Skills** — Does it need specialized knowledge that Claude should load on-demand, or
+  user-initiated actions? (domain expertise, reference schemas, workflow guides,
+  deploy/configure/analyze/review actions)
 - **MCP Servers** — Does it need external service integration? (databases, APIs, SaaS tools)
 - **Agents (uncommon)** — Are there autonomous multi-step tasks? (validation, generation, analysis)
-- **Hooks (rare)** — Should something happen automatically on certain events? (enforce policies, load context, validate operations)
+- **Hooks (rare)** — Should something happen automatically on certain events? (enforce policies,
+  load context, validate operations)
 
 Present a component plan table, including component types you decided not to create:
 
@@ -179,14 +201,16 @@ Get user confirmation or adjustments before proceeding.
 
 **Goal**: Specify each component in detail. Resolve all ambiguities before implementation.
 
-For each component type in the plan, ask targeted design questions. Present questions grouped by component type. Wait for answers before proceeding.
+For each component type in the plan, ask targeted design questions. Present questions grouped by
+component type. Wait for answers before proceeding.
 
 **Skills:**
 
 - What user queries should trigger this skill?
 - What knowledge domains does it cover?
 - Should it include reference files for detailed content?
-- If the skill represents a user-initiated action: what arguments does it accept, and what tools does it need? (Read, Write, Bash, Grep, etc.)
+- If the skill represents a user-initiated action: what arguments does it accept, and what tools
+  does it need? (Read, Write, Bash, Grep, etc.)
 
 **Agents:**
 
@@ -206,7 +230,8 @@ For each component type in the plan, ask targeted design questions. Present ques
 - What authentication method?
 - What tools should be exposed?
 
-If the user says "whatever you think is best," provide specific recommendations and get explicit confirmation.
+If the user says "whatever you think is best," provide specific recommendations and get explicit
+confirmation.
 
 **Output**: Detailed specification for every component.
 
@@ -223,10 +248,16 @@ If the user says "whatever you think is best," provide specific recommendations 
 
 **Implementation guidelines:**
 
-- **Skills** use progressive disclosure: lean SKILL.md body (under 3,000 words), detailed content in `references/`. Frontmatter description must be third-person with specific trigger phrases. Skill bodies are instructions FOR Claude, not messages to the user — write them as directives about what to do.
-- **Agents** need a description with `<example>` blocks showing triggering conditions, plus a system prompt in the markdown body.
-- **Hooks** config goes in `hooks/hooks.json`. Use `${CLAUDE_PLUGIN_ROOT}` for script paths. Prefer prompt-based hooks for complex logic.
-- **MCP configs** go in `.mcp.json` at plugin root. Use `${CLAUDE_PLUGIN_ROOT}` for local server paths. Document required env vars in README.
+- **Skills** use progressive disclosure: lean SKILL.md body (under 3,000 words), detailed content in
+  `references/`. Frontmatter description must be third-person with specific trigger phrases. Skill
+  bodies are instructions FOR Claude, not messages to the user — write them as directives about what
+  to do.
+- **Agents** need a description with `<example>` blocks showing triggering conditions, plus a system
+  prompt in the markdown body.
+- **Hooks** config goes in `hooks/hooks.json`. Use `${CLAUDE_PLUGIN_ROOT}` for script paths. Prefer
+  prompt-based hooks for complex logic.
+- **MCP configs** go in `.mcp.json` at plugin root. Use `${CLAUDE_PLUGIN_ROOT}` for local server
+  paths. Document required env vars in README.
 
 ### Phase 5: Review & Package
 
@@ -234,37 +265,52 @@ If the user says "whatever you think is best," provide specific recommendations 
 
 1. Summarize what was created — list each component and its purpose
 2. Ask if the user wants any adjustments
-3. Run `claude plugin validate <path-to-plugin-json>` to check the plugin structure. If this command is unavailable (e.g., when running inside Cowork), verify the structure manually:
+3. Run `claude plugin validate <path-to-plugin-json>` to check the plugin structure. If this command
+   is unavailable (e.g., when running inside Cowork), verify the structure manually:
    - `.claude-plugin/plugin.json` exists and contains valid JSON with at least a `name` field
    - The `name` field is kebab-case (lowercase letters, numbers, and hyphens only)
-   - Any component directories referenced by the plugin (`commands/`, `skills/`, `agents/`, `hooks/`) actually exist and contain files in the expected formats — `.md` for commands/skills/agents, `.json` for hooks
+   - Any component directories referenced by the plugin (`commands/`, `skills/`, `agents/`,
+     `hooks/`) actually exist and contain files in the expected formats — `.md` for
+     commands/skills/agents, `.json` for hooks
    - Each skill subdirectory contains a `SKILL.md`
    - Report what passed and what didn't, the same way the CLI validator would
 
    Fix any errors before proceeding.
+
 4. Package as a `.plugin` file:
 
 ```bash
 cd /path/to/plugin-dir && zip -r /tmp/plugin-name.plugin . -x "*.DS_Store" && cp /tmp/plugin-name.plugin /path/to/outputs/plugin-name.plugin
 ```
 
-> **Important**: Always create the zip in `/tmp/` first, then copy to the outputs folder. Writing directly to the outputs folder may fail due to permissions.
+> **Important**: Always create the zip in `/tmp/` first, then copy to the outputs folder. Writing
+> directly to the outputs folder may fail due to permissions.
 
-> **Naming**: Use the plugin name from `plugin.json` for the `.plugin` file (e.g., if name is `code-reviewer`, output `code-reviewer.plugin`).
+> **Naming**: Use the plugin name from `plugin.json` for the `.plugin` file (e.g., if name is
+> `code-reviewer`, output `code-reviewer.plugin`).
 
-The `.plugin` file will appear in the chat as a rich preview where the user can browse the files and accept the plugin by pressing a button.
+The `.plugin` file will appear in the chat as a rich preview where the user can browse the files and
+accept the plugin by pressing a button.
 
 ## Best Practices
 
-- **Start small**: Begin with the minimum viable set of components. A plugin with one well-crafted skill is more useful than one with five half-baked components.
-- **Progressive disclosure for skills**: Core knowledge in SKILL.md, detailed reference material in `references/`, working examples in `examples/`.
-- **Clear trigger phrases**: Skill descriptions should include specific phrases users would say. Agent descriptions should include `<example>` blocks.
-- **Skills are for Claude**: Write skill body content as instructions for Claude to follow, not documentation for the user to read.
-- **Imperative writing style**: Use verb-first instructions in skills ("Parse the config file," not "You should parse the config file").
+- **Start small**: Begin with the minimum viable set of components. A plugin with one well-crafted
+  skill is more useful than one with five half-baked components.
+- **Progressive disclosure for skills**: Core knowledge in SKILL.md, detailed reference material in
+  `references/`, working examples in `examples/`.
+- **Clear trigger phrases**: Skill descriptions should include specific phrases users would say.
+  Agent descriptions should include `<example>` blocks.
+- **Skills are for Claude**: Write skill body content as instructions for Claude to follow, not
+  documentation for the user to read.
+- **Imperative writing style**: Use verb-first instructions in skills ("Parse the config file," not
+  "You should parse the config file").
 - **Portability**: Always use `${CLAUDE_PLUGIN_ROOT}` for intra-plugin paths, never hardcoded paths.
-- **Security**: Use environment variables for credentials, HTTPS for remote servers, least-privilege tool access.
+- **Security**: Use environment variables for credentials, HTTPS for remote servers, least-privilege
+  tool access.
 
 ## Additional Resources
 
-- **`references/component-schemas.md`** — Detailed format specifications for every component type (skills, agents, hooks, MCP, legacy commands, CONNECTORS.md)
-- **`references/example-plugins.md`** — Three complete example plugin structures at different complexity levels
+- **`references/component-schemas.md`** — Detailed format specifications for every component type
+  (skills, agents, hooks, MCP, legacy commands, CONNECTORS.md)
+- **`references/example-plugins.md`** — Three complete example plugin structures at different
+  complexity levels

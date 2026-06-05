@@ -108,6 +108,7 @@ You're successful when:
 
 ---
 
-> **See also**: [content-strategy-skill](../content-strategy-skill/SKILL.md) (small-business), [content-creation-skill](../content-creation-skill/SKILL.md) (marketing execution)
+> **See also**: [content-strategy-skill](../content-strategy-skill/SKILL.md) (small-business),
+> [content-creation-skill](../content-creation-skill/SKILL.md) (marketing execution)
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)

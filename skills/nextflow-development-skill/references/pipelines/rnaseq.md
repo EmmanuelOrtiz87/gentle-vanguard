@@ -2,12 +2,15 @@
 
 **Version:** 3.22.2
 
-**Official Documentation:** https://nf-co.re/rnaseq/3.22.2/
-**GitHub:** https://github.com/nf-core/rnaseq
+**Official Documentation:** https://nf-co.re/rnaseq/3.22.2/ **GitHub:**
+https://github.com/nf-core/rnaseq
 
-> **Note:** When updating to a new version, check the [releases page](https://github.com/nf-core/rnaseq/releases) for breaking changes and update the version in commands below.
+> **Note:** When updating to a new version, check the
+> [releases page](https://github.com/nf-core/rnaseq/releases) for breaking changes and update the
+> version in commands below.
 
 ## Contents
+
 - [Test command](#test-command)
 - [Samplesheet format](#samplesheet-format)
 - [Parameters](#parameters)
@@ -31,14 +34,15 @@ CONTROL_REP2,/path/to/ctrl2_R1.fq.gz,/path/to/ctrl2_R2.fq.gz,auto
 TREATMENT_REP1,/path/to/treat1_R1.fq.gz,/path/to/treat1_R2.fq.gz,auto
 ```
 
-| Column | Required | Values |
-|--------|----------|--------|
-| sample | Yes | Alphanumeric, underscores allowed |
-| fastq_1 | Yes | Absolute path to R1 |
-| fastq_2 | No | Absolute path to R2 (empty for single-end) |
-| strandedness | Yes | `auto`, `forward`, `reverse`, `unstranded` |
+| Column       | Required | Values                                     |
+| ------------ | -------- | ------------------------------------------ |
+| sample       | Yes      | Alphanumeric, underscores allowed          |
+| fastq_1      | Yes      | Absolute path to R1                        |
+| fastq_2      | No       | Absolute path to R2 (empty for single-end) |
+| strandedness | Yes      | `auto`, `forward`, `reverse`, `unstranded` |
 
 **Strandedness guide:**
+
 - `auto`: Inferred from data (recommended)
 - `forward`: TruSeq Stranded, dUTP protocols
 - `reverse`: Ligation-based protocols
@@ -47,6 +51,7 @@ TREATMENT_REP1,/path/to/treat1_R1.fq.gz,/path/to/treat1_R2.fq.gz,auto
 ## Parameters
 
 ### Minimal run
+
 ```bash
 nextflow run nf-core/rnaseq -r 3.22.2 -profile docker \
     --input samplesheet.csv --outdir results --genome GRCh38
@@ -54,15 +59,16 @@ nextflow run nf-core/rnaseq -r 3.22.2 -profile docker \
 
 ### Common parameters
 
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `--aligner` | `star_salmon` | Options: `star_salmon`, `star_rsem`, `hisat2` |
-| `--genome` | - | `GRCh38`, `GRCh37`, `mm10`, `BDGP6` |
-| `--pseudo_aligner` | - | Set to `salmon` for pseudo-alignment only |
-| `--skip_trimming` | false | Skip adapter trimming |
-| `--skip_alignment` | false | Pseudo-alignment only |
+| Parameter          | Default       | Description                                   |
+| ------------------ | ------------- | --------------------------------------------- |
+| `--aligner`        | `star_salmon` | Options: `star_salmon`, `star_rsem`, `hisat2` |
+| `--genome`         | -             | `GRCh38`, `GRCh37`, `mm10`, `BDGP6`           |
+| `--pseudo_aligner` | -             | Set to `salmon` for pseudo-alignment only     |
+| `--skip_trimming`  | false         | Skip adapter trimming                         |
+| `--skip_alignment` | false         | Pseudo-alignment only                         |
 
 ### Custom reference
+
 ```bash
 --fasta /path/to/genome.fa \
 --gtf /path/to/annotation.gtf \
@@ -83,6 +89,7 @@ results/
 ```
 
 **Key outputs:**
+
 - `salmon.merged.gene_counts.tsv`: Input for DESeq2/edgeR
 - `salmon.merged.gene_tpm.tsv`: Normalized expression
 
@@ -105,7 +112,8 @@ res <- results(dds, contrast = c("condition", "treatment", "control"))
 
 ## Troubleshooting
 
-**STAR index fails**: Increase memory with `--max_memory '64.GB'` or provide pre-built `--star_index`.
+**STAR index fails**: Increase memory with `--max_memory '64.GB'` or provide pre-built
+`--star_index`.
 
 **Low alignment rate**: Verify genome matches species; check FastQC for adapter contamination.
 

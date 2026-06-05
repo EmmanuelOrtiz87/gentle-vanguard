@@ -76,11 +76,11 @@ nvcc --version
 
 ### PyTorch CUDA Versions
 
-| CUDA Version | PyTorch Install Command |
-|--------------|------------------------|
-| CUDA 11.8 | `pip install torch --index-url https://download.pytorch.org/whl/cu118` |
-| CUDA 12.1 | `pip install torch --index-url https://download.pytorch.org/whl/cu121` |
-| CPU only | `pip install torch --index-url https://download.pytorch.org/whl/cpu` |
+| CUDA Version | PyTorch Install Command                                                |
+| ------------ | ---------------------------------------------------------------------- |
+| CUDA 11.8    | `pip install torch --index-url https://download.pytorch.org/whl/cu118` |
+| CUDA 12.1    | `pip install torch --index-url https://download.pytorch.org/whl/cu121` |
+| CPU only     | `pip install torch --index-url https://download.pytorch.org/whl/cpu`   |
 
 ### Memory Management
 
@@ -97,12 +97,12 @@ print(f"Cached: {torch.cuda.memory_reserved() / 1e9:.2f} GB")
 
 ## Common Issues
 
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| `CUDA out of memory` | GPU memory exhausted | Reduce batch_size, use smaller model |
-| `No GPU detected` | CUDA not installed | Install CUDA toolkit matching PyTorch |
-| `Version mismatch` | PyTorch/CUDA incompatibility | Reinstall PyTorch with correct CUDA version |
-| `Import error scvi` | Missing dependencies | `pip install scvi-tools[all]` |
+| Issue                | Cause                        | Solution                                    |
+| -------------------- | ---------------------------- | ------------------------------------------- |
+| `CUDA out of memory` | GPU memory exhausted         | Reduce batch_size, use smaller model        |
+| `No GPU detected`    | CUDA not installed           | Install CUDA toolkit matching PyTorch       |
+| `Version mismatch`   | PyTorch/CUDA incompatibility | Reinstall PyTorch with correct CUDA version |
+| `Import error scvi`  | Missing dependencies         | `pip install scvi-tools[all]`               |
 
 ## Jupyter Setup
 
@@ -133,11 +133,11 @@ pip install \
 
 The 1.x release introduced breaking changes. Key differences:
 
-| Operation | 0.x API (deprecated) | 1.x API (current) |
-|-----------|---------------------|-------------------|
-| Setup data | `scvi.data.setup_anndata(adata, ...)` | `scvi.model.SCVI.setup_anndata(adata, ...)` |
-| Register data | `scvi.data.register_tensor_from_anndata(...)` | Built into `setup_anndata` |
-| View setup | `scvi.data.view_anndata_setup(adata)` | `scvi.model.SCVI.view_anndata_setup(adata)` |
+| Operation     | 0.x API (deprecated)                          | 1.x API (current)                           |
+| ------------- | --------------------------------------------- | ------------------------------------------- |
+| Setup data    | `scvi.data.setup_anndata(adata, ...)`         | `scvi.model.SCVI.setup_anndata(adata, ...)` |
+| Register data | `scvi.data.register_tensor_from_anndata(...)` | Built into `setup_anndata`                  |
+| View setup    | `scvi.data.view_anndata_setup(adata)`         | `scvi.model.SCVI.view_anndata_setup(adata)` |
 
 ### Migration from 0.x to 1.x
 
@@ -179,14 +179,14 @@ scvi.external.VELOVI.setup_anndata(adata, spliced_layer="spliced", unspliced_lay
 
 ### Minimum Version Requirements
 
-| Package | Minimum Version | Notes |
-|---------|-----------------|-------|
-| scvi-tools | 1.0.0 | Required for current API |
-| scanpy | 1.9.0 | HVG selection improvements |
-| anndata | 0.9.0 | Improved MuData support |
-| torch | 2.0.0 | Performance improvements |
-| mudata | 0.2.0 | Required for MultiVI |
-| scvelo | 0.2.5 | Required for veloVI |
+| Package    | Minimum Version | Notes                      |
+| ---------- | --------------- | -------------------------- |
+| scvi-tools | 1.0.0           | Required for current API   |
+| scanpy     | 1.9.0           | HVG selection improvements |
+| anndata    | 0.9.0           | Improved MuData support    |
+| torch      | 2.0.0           | Performance improvements   |
+| mudata     | 0.2.0           | Required for MultiVI       |
+| scvelo     | 0.2.5           | Required for veloVI        |
 
 ### Check Your Versions
 
@@ -210,12 +210,12 @@ else:
 
 ### Known Compatibility Issues
 
-| Issue | Affected Versions | Solution |
-|-------|-------------------|----------|
-| `setup_anndata` not found | scvi-tools < 1.0 | Upgrade to 1.0+ |
-| MuData errors | mudata < 0.2 | `pip install mudata>=0.2.0` |
-| CUDA version mismatch | Any | Reinstall PyTorch for your CUDA |
-| numpy 2.0 issues | Early 2024 builds | `pip install numpy<2.0` |
+| Issue                     | Affected Versions | Solution                        |
+| ------------------------- | ----------------- | ------------------------------- |
+| `setup_anndata` not found | scvi-tools < 1.0  | Upgrade to 1.0+                 |
+| MuData errors             | mudata < 0.2      | `pip install mudata>=0.2.0`     |
+| CUDA version mismatch     | Any               | Reinstall PyTorch for your CUDA |
+| numpy 2.0 issues          | Early 2024 builds | `pip install numpy<2.0`         |
 
 ### Upgrading scvi-tools
 

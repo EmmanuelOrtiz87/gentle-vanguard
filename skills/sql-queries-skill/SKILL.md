@@ -7,6 +7,7 @@ metadata:
   original-name: sql-queries
   department: data
 ---
+
 # SQL Queries Skill
 
 Write correct, performant, readable SQL across all major data warehouse dialects.
@@ -16,6 +17,7 @@ Write correct, performant, readable SQL across all major data warehouse dialects
 ### PostgreSQL (including Aurora, RDS, Supabase, Neon)
 
 **Date/time:**
+
 ```sql
 -- Current date/time
 CURRENT_DATE, CURRENT_TIMESTAMP, NOW()
@@ -36,6 +38,7 @@ TO_CHAR(created_at, 'YYYY-MM-DD')
 ```
 
 **String functions:**
+
 ```sql
 -- Concatenation
 first_name || ' ' || last_name
@@ -52,6 +55,7 @@ REGEXP_REPLACE(str, pattern, replacement)
 ```
 
 **Arrays and JSON:**
+
 ```sql
 -- JSON access
 data->>'key'  -- text
@@ -65,6 +69,7 @@ array_column @> ARRAY['value']
 ```
 
 **Performance tips:**
+
 - Use `EXPLAIN ANALYZE` to profile queries
 - Create indexes on frequently filtered/joined columns
 - Use `EXISTS` over `IN` for correlated subqueries
@@ -76,6 +81,7 @@ array_column @> ARRAY['value']
 ### Snowflake
 
 **Date/time:**
+
 ```sql
 -- Current date/time
 CURRENT_DATE(), CURRENT_TIMESTAMP(), SYSDATE()
@@ -96,6 +102,7 @@ TO_CHAR(created_at, 'YYYY-MM-DD')
 ```
 
 **String functions:**
+
 ```sql
 -- Case-insensitive by default (depends on collation)
 column ILIKE '%pattern%'
@@ -111,6 +118,7 @@ SELECT f.value FROM table, LATERAL FLATTEN(input => array_col) f
 ```
 
 **Semi-structured data:**
+
 ```sql
 -- VARIANT type access
 data:customer:name::STRING
@@ -126,6 +134,7 @@ LATERAL FLATTEN(input => t.data:items) item
 ```
 
 **Performance tips:**
+
 - Use clustering keys on large tables (not traditional indexes)
 - Filter on clustering key columns for partition pruning
 - Set appropriate warehouse size for query complexity
@@ -137,6 +146,7 @@ LATERAL FLATTEN(input => t.data:items) item
 ### BigQuery (Google Cloud)
 
 **Date/time:**
+
 ```sql
 -- Current date/time
 CURRENT_DATE(), CURRENT_TIMESTAMP()
@@ -161,6 +171,7 @@ FORMAT_TIMESTAMP('%Y-%m-%d %H:%M:%S', ts_column)
 ```
 
 **String functions:**
+
 ```sql
 -- No ILIKE, use LOWER()
 LOWER(column) LIKE '%pattern%'
@@ -173,6 +184,7 @@ ARRAY_TO_STRING(array, delimiter)
 ```
 
 **Arrays and structs:**
+
 ```sql
 -- Array operations
 ARRAY_AGG(column)
@@ -185,6 +197,7 @@ struct_column.field_name
 ```
 
 **Performance tips:**
+
 - Always filter on partition columns (usually date) to reduce bytes scanned
 - Use clustering for frequently filtered columns within partitions
 - Use `APPROX_COUNT_DISTINCT()` for large-scale cardinality estimates
@@ -197,6 +210,7 @@ struct_column.field_name
 ### Redshift (Amazon)
 
 **Date/time:**
+
 ```sql
 -- Current date/time
 CURRENT_DATE, GETDATE(), SYSDATE
@@ -214,6 +228,7 @@ DATE_PART('dow', created_at)
 ```
 
 **String functions:**
+
 ```sql
 -- Case-insensitive
 column ILIKE '%pattern%'
@@ -225,6 +240,7 @@ LISTAGG(column, ', ') WITHIN GROUP (ORDER BY column)
 ```
 
 **Performance tips:**
+
 - Design distribution keys for collocated joins (DISTKEY)
 - Use sort keys for frequently filtered columns (SORTKEY)
 - Use `EXPLAIN` to check query plan
@@ -237,6 +253,7 @@ LISTAGG(column, ', ') WITHIN GROUP (ORDER BY column)
 ### Databricks SQL
 
 **Date/time:**
+
 ```sql
 -- Current date/time
 CURRENT_DATE(), CURRENT_TIMESTAMP()
@@ -256,6 +273,7 @@ DAYOFWEEK(created_at)
 ```
 
 **Delta Lake features:**
+
 ```sql
 -- Time travel
 SELECT * FROM my_table TIMESTAMP AS OF '2024-01-15'
@@ -272,6 +290,7 @@ WHEN NOT MATCHED THEN INSERT *
 ```
 
 **Performance tips:**
+
 - Use Delta Lake's `OPTIMIZE` and `ZORDER` for query performance
 - Leverage Photon engine for compute-intensive queries
 - Use `CACHE TABLE` for frequently accessed datasets
@@ -423,9 +442,13 @@ SELECT * FROM ranked WHERE rn = 1;
 
 When a query fails:
 
-1. **Syntax errors**: Check for dialect-specific syntax (e.g., `ILIKE` not available in BigQuery, `SAFE_DIVIDE` only in BigQuery)
-2. **Column not found**: Verify column names against schema -- check for typos, case sensitivity (PostgreSQL is case-sensitive for quoted identifiers)
-3. **Type mismatches**: Cast explicitly when comparing different types (`CAST(col AS DATE)`, `col::DATE`)
+1. **Syntax errors**: Check for dialect-specific syntax (e.g., `ILIKE` not available in BigQuery,
+   `SAFE_DIVIDE` only in BigQuery)
+2. **Column not found**: Verify column names against schema -- check for typos, case sensitivity
+   (PostgreSQL is case-sensitive for quoted identifiers)
+3. **Type mismatches**: Cast explicitly when comparing different types (`CAST(col AS DATE)`,
+   `col::DATE`)
 4. **Division by zero**: Use `NULLIF(denominator, 0)` or dialect-specific safe division
 5. **Ambiguous columns**: Always qualify column names with table alias in JOINs
-6. **Group by errors**: All non-aggregated columns must be in GROUP BY (except in BigQuery which allows grouping by alias)
+6. **Group by errors**: All non-aggregated columns must be in GROUP BY (except in BigQuery which
+   allows grouping by alias)

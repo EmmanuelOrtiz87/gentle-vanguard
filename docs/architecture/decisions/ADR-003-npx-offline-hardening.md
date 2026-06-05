@@ -130,8 +130,9 @@ allow-git=none
 
 ### Layer 3: Conscious Update Procedure
 
-**Documented in [FIRST-TIME-SETUP-CHECKLIST.md](../../guides/FIRST-TIME-SETUP-CHECKLIST.md) §Step 3 — MCP Workspace
-and [STACK-OPTIMIZATION-ROADMAP.md](../../guides/STACK-OPTIMIZATION-ROADMAP.md) §Conscious Update Procedure**:
+**Documented in [FIRST-TIME-SETUP-CHECKLIST.md](../../guides/FIRST-TIME-SETUP-CHECKLIST.md) §Step 3
+— MCP Workspace and [STACK-OPTIMIZATION-ROADMAP.md](../../guides/STACK-OPTIMIZATION-ROADMAP.md)
+§Conscious Update Procedure**:
 
 ```powershell
 # 1. Review current status

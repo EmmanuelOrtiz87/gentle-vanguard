@@ -16,12 +16,14 @@ export function useMetrics(useWebSocketMode = false) {
   const [wsConnected, setWsConnected] = useState(false);
 
   const updateFromPayload = useCallback(
-    (payload: { tokens: any; sessions: any; git: any; health: any; timestamp?: string }) => {
+    (payload: { tokens: any; sessions: any; git: any; health: any; globalHealth?: any; mcp?: any; timestamp?: string }) => {
       setData({
         tokens: payload.tokens,
         sessions: payload.sessions,
         git: payload.git,
         health: payload.health,
+        globalHealth: payload.globalHealth,
+        mcp: payload.mcp,
       });
       setHistory((prev) => {
         const newEntry: MetricHistory = {

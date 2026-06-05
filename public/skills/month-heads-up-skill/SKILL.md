@@ -7,9 +7,12 @@ metadata:
   original-name: month-heads-up
   department: small-business
 ---
-Run the month-end heads-up. Pull forward-looking cash data and give the owner a clear "here's what the next 30 days look like" picture with specific things to watch.
+
+Run the month-end heads-up. Pull forward-looking cash data and give the owner a clear "here's what
+the next 30 days look like" picture with specific things to watch.
 
 Parse arguments:
+
 - `--horizon` (default: `30`) — forecast window in days (`30` or `60`)
 
 ## Step 1 — Current cash position
@@ -22,9 +25,11 @@ Using the `cash-flow-snapshot` skill workflow:
 
 ## Step 2 — Upcoming obligations
 
-1. Pull recurring expenses from QuickBooks (payroll, subscriptions, rent/lease) due in the next 30 days.
+1. Pull recurring expenses from QuickBooks (payroll, subscriptions, rent/lease) due in the next 30
+   days.
 2. Pull any outstanding invoices past due or due within 14 days.
-3. Flag any payment that would push the balance below a comfortable buffer (default: <$2,000 or owner's QB average monthly expense × 0.5).
+3. Flag any payment that would push the balance below a comfortable buffer (default: <$2,000 or
+   owner's QB average monthly expense × 0.5).
 
 ## Step 3 — Cash-flow forecast
 
@@ -35,6 +40,7 @@ Using the `cash-flow-snapshot` skill workflow:
 ## Step 4 — Two things to watch
 
 Surface no more than two specific, actionable watches:
+
 - Which invoice(s) to chase now
 - Which expense(s) to defer or negotiate
 
@@ -55,12 +61,16 @@ TWO THINGS TO WATCH
 
 ## Connector failures
 
-If QuickBooks is unreachable, stop — the cash forecast requires QB as the source of truth. If PayPal is missing, run the forecast from QB-only data and note "PayPal not connected — PayPal receivables excluded from forecast." Same for Stripe/Square if missing.
+If QuickBooks is unreachable, stop — the cash forecast requires QB as the source of truth. If PayPal
+is missing, run the forecast from QB-only data and note "PayPal not connected — PayPal receivables
+excluded from forecast." Same for Stripe/Square if missing.
 
 ## Approval gates
 
-- **Never initiate payments or send emails automatically.** Surface the data and actions for the owner to take.
-- **Never project revenue that hasn't been confirmed in QB or PayPal.** Use conservative estimates only.
+- **Never initiate payments or send emails automatically.** Surface the data and actions for the
+  owner to take.
+- **Never project revenue that hasn't been confirmed in QB or PayPal.** Use conservative estimates
+  only.
 
 ## Output
 

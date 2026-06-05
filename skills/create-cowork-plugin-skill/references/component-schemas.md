@@ -1,11 +1,11 @@
 # Component Schemas
 
-Detailed format specifications for every plugin component type. Reference this when implementing components in Phase 4.
+Detailed format specifications for every plugin component type. Reference this when implementing
+components in Phase 4.
 
 ## Skills
 
-**Location**: `skills/skill-name/SKILL.md`
-**Format**: Markdown with YAML frontmatter
+**Location**: `skills/skill-name/SKILL.md` **Format**: Markdown with YAML frontmatter
 
 ### Frontmatter Fields
 
@@ -21,19 +21,22 @@ Detailed format specifications for every plugin component type. Reference this w
 ---
 name: api-design
 description: >
-  This skill should be used when the user asks to "design an API",
-  "create API endpoints", "review API structure", or needs guidance
-  on REST API best practices, endpoint naming, or request/response design.
+  This skill should be used when the user asks to "design an API", "create API endpoints", "review
+  API structure", or needs guidance on REST API best practices, endpoint naming, or request/response
+  design.
 metadata:
-  version: "0.1.0"
+  version: '0.1.0'
 ---
 ```
 
 ### Writing Style Rules
 
-- **Frontmatter description**: Third-person ("This skill should be used when..."), with specific trigger phrases in quotes.
-- **Body**: Imperative/infinitive form ("Parse the config file," not "You should parse the config file").
-- **Length**: Keep SKILL.md body under 3,000 words (ideally 1,500-2,000). Move detailed content to `references/`.
+- **Frontmatter description**: Third-person ("This skill should be used when..."), with specific
+  trigger phrases in quotes.
+- **Body**: Imperative/infinitive form ("Parse the config file," not "You should parse the config
+  file").
+- **Length**: Keep SKILL.md body under 3,000 words (ideally 1,500-2,000). Move detailed content to
+  `references/`.
 
 ### Skill Directory Structure
 
@@ -57,8 +60,7 @@ skill-name/
 
 ## Agents
 
-**Location**: `agents/agent-name.md`
-**Format**: Markdown with YAML frontmatter
+**Location**: `agents/agent-name.md` **Format**: Markdown with YAML frontmatter
 
 ### Frontmatter Fields
 
@@ -100,7 +102,8 @@ color: blue
 tools: ["Read", "Grep", "Glob"]
 ---
 
-You are a code review specialist focused on identifying issues across security, performance, maintainability, and correctness.
+You are a code review specialist focused on identifying issues across security, performance,
+maintainability, and correctness.
 
 **Your Core Responsibilities:**
 
@@ -116,8 +119,7 @@ You are a code review specialist focused on identifying issues across security, 
 3. Categorize findings by severity
 4. Provide specific remediation suggestions
 
-**Output Format:**
-Present findings grouped by severity (Critical, Warning, Info) with:
+**Output Format:** Present findings grouped by severity (Critical, Warning, Info) with:
 
 - File path and line number
 - Description of the issue
@@ -141,8 +143,7 @@ Present findings grouped by severity (Critical, Warning, Info) with:
 
 ## Hooks
 
-**Location**: `hooks/hooks.json`
-**Format**: JSON
+**Location**: `hooks/hooks.json` **Format**: JSON
 
 ### Available Events
 
@@ -228,8 +229,7 @@ Decisions: `approve`, `block`, `ask_user` (ask for confirmation).
 
 ## MCP Servers
 
-**Location**: `.mcp.json` at plugin root
-**Format**: JSON
+**Location**: `.mcp.json` at plugin root **Format**: JSON
 
 ### Server Types
 
@@ -289,14 +289,17 @@ Document all required environment variables in the plugin README.
 
 ### Directory Servers Without a URL
 
-Some MCP directory entries have no `url` because the endpoint is dynamic. Plugins can reference these servers by **name** instead — if the server name in the plugin's MCP config matches the directory entry name, it is treated the same as a URL match.
+Some MCP directory entries have no `url` because the endpoint is dynamic. Plugins can reference
+these servers by **name** instead — if the server name in the plugin's MCP config matches the
+directory entry name, it is treated the same as a URL match.
 
 ## Commands (Legacy)
 
-> **Prefer `skills/*/SKILL.md` for new plugins.** The Cowork UI now presents commands and skills as a single "Skills" concept. The `commands/` format still works, but only use it if you specifically need the single-file format with `$ARGUMENTS`/`$1` substitution and inline bash execution.
+> **Prefer `skills/*/SKILL.md` for new plugins.** The Cowork UI now presents commands and skills as
+> a single "Skills" concept. The `commands/` format still works, but only use it if you specifically
+> need the single-file format with `$ARGUMENTS`/`$1` substitution and inline bash execution.
 
-**Location**: `commands/command-name.md`
-**Format**: Markdown with optional YAML frontmatter
+**Location**: `commands/command-name.md` **Format**: Markdown with optional YAML frontmatter
 
 ### Frontmatter Fields
 
@@ -329,9 +332,11 @@ Provide specific line numbers, severity ratings, and remediation suggestions.
 ### Key Rules
 
 - Commands are instructions FOR Claude, not messages for the user. Write them as directives.
-- `$ARGUMENTS` captures all arguments as a single string; `$1`, `$2`, `$3` capture positional arguments.
+- `$ARGUMENTS` captures all arguments as a single string; `$1`, `$2`, `$3` capture positional
+  arguments.
 - `@path` syntax includes file contents in the command context.
-- `!` backtick syntax executes bash inline for dynamic context (e.g., `` !`git diff --name-only` ``).
+- `!` backtick syntax executes bash inline for dynamic context (e.g.,
+  `` !`git diff --name-only` ``).
 - Use `${CLAUDE_PLUGIN_ROOT}` to reference plugin files portably.
 
 ### allowed-tools Patterns
@@ -349,8 +354,8 @@ allowed-tools: ["mcp__plugin_name_server__tool_name"]
 
 ## CONNECTORS.md
 
-**Location**: Plugin root
-**When to create**: When the plugin references external tools by category rather than specific product
+**Location**: Plugin root **When to create**: When the plugin references external tools by category
+rather than specific product
 
 ### Format
 
@@ -359,12 +364,12 @@ allowed-tools: ["mcp__plugin_name_server__tool_name"]
 
 ## How tool references work
 
-Plugin files use `~~category` as a placeholder for whatever tool the user
-connects in that category. For example, `~~project tracker` might mean
-Asana, Linear, Jira, or any other project tracker with an MCP server.
+Plugin files use `~~category` as a placeholder for whatever tool the user connects in that category.
+For example, `~~project tracker` might mean Asana, Linear, Jira, or any other project tracker with
+an MCP server.
 
-Plugins are tool-agnostic — they describe workflows in terms of categories
-rather than specific products.
+Plugins are tool-agnostic — they describe workflows in terms of categories rather than specific
+products.
 
 ## Connectors for this plugin
 
@@ -379,11 +384,12 @@ rather than specific products.
 In plugin files (skills, agents), reference tools generically:
 
 ```markdown
-Check ~~project tracker for open tickets assigned to the user.
-Post a summary to ~~chat in the team channel.
+Check ~~project tracker for open tickets assigned to the user. Post a summary to ~~chat in the team
+channel.
 ```
 
-During customization (via the cowork-plugin-customizer skill), these get replaced with specific tool names.
+During customization (via the cowork-plugin-customizer skill), these get replaced with specific tool
+names.
 
 ## README.md
 

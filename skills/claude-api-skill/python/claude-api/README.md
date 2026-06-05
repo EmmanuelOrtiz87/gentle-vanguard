@@ -111,11 +111,15 @@ response = client.messages.create(
 
 ## Prompt Caching
 
-Cache large context to reduce costs (up to 90% savings). **Caching is a prefix match** — any byte change anywhere in the prefix invalidates everything after it. For placement patterns, architectural guidance (frozen system prompt, deterministic tool order, where to put volatile content), and the silent-invalidator audit checklist, read `shared/prompt-caching.md`.
+Cache large context to reduce costs (up to 90% savings). **Caching is a prefix match** — any byte
+change anywhere in the prefix invalidates everything after it. For placement patterns, architectural
+guidance (frozen system prompt, deterministic tool order, where to put volatile content), and the
+silent-invalidator audit checklist, read `shared/prompt-caching.md`.
 
 ### Automatic Caching (Recommended)
 
-Use top-level `cache_control` to automatically cache the last cacheable block in the request — no need to annotate individual content blocks:
+Use top-level `cache_control` to automatically cache the last cacheable block in the request — no
+need to annotate individual content blocks:
 
 ```python
 response = client.messages.create(
@@ -164,14 +168,17 @@ print(response.usage.cache_read_input_tokens)      # tokens served from cache (~
 print(response.usage.input_tokens)                 # uncached tokens (full cost)
 ```
 
-If `cache_read_input_tokens` is zero across repeated identical-prefix requests, a silent invalidator is at work — `datetime.now()` or a UUID in the system prompt, unsorted `json.dumps()`, or a varying tool set. See `shared/prompt-caching.md` for the full audit table.
+If `cache_read_input_tokens` is zero across repeated identical-prefix requests, a silent invalidator
+is at work — `datetime.now()` or a UUID in the system prompt, unsorted `json.dumps()`, or a varying
+tool set. See `shared/prompt-caching.md` for the full audit table.
 
 ---
 
 ## Extended Thinking
 
-> **Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6:** Use adaptive thinking. `budget_tokens` is removed on Opus 4.8 and 4.7 (400 if sent); deprecated on Opus 4.6 and Sonnet 4.6.
-> **Older models:** Use `thinking: {type: "enabled", budget_tokens: N}` (must be < `max_tokens`, min 1024).
+> **Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6:** Use adaptive thinking. `budget_tokens` is
+> removed on Opus 4.8 and 4.7 (400 if sent); deprecated on Opus 4.6 and Sonnet 4.6. **Older
+> models:** Use `thinking: {type: "enabled", budget_tokens: N}` (must be < `max_tokens`, min 1024).
 
 ```python
 # Opus 4.8 / 4.7 / 4.6: adaptive thinking (recommended)
@@ -275,7 +282,10 @@ response2 = conversation.send("What's my name?")  # Claude remembers "Alice"
 
 ### Compaction (long conversations)
 
-> **Beta, Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6.** When conversations approach the 200K context window, compaction automatically summarizes earlier context server-side. The API returns a `compaction` block; you must pass it back on subsequent requests — append `response.content`, not just the text.
+> **Beta, Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6.** When conversations approach the 200K
+> context window, compaction automatically summarizes earlier context server-side. The API returns a
+> `compaction` block; you must pass it back on subsequent requests — append `response.content`, not
+> just the text.
 
 ```python
 import anthropic
@@ -313,14 +323,14 @@ print(chat("Now add rate limiting and error handling"))
 
 The `stop_reason` field in the response indicates why the model stopped generating:
 
-| Value | Meaning |
-|-------|---------|
-| `end_turn` | Claude finished its response naturally |
-| `max_tokens` | Hit the `max_tokens` limit — increase it or use streaming |
-| `stop_sequence` | Hit a custom stop sequence |
-| `tool_use` | Claude wants to call a tool — execute it and continue |
-| `pause_turn` | Model paused and can be resumed (agentic flows) |
-| `refusal` | Claude refused for safety reasons — output may not match your schema |
+| Value           | Meaning                                                              |
+| --------------- | -------------------------------------------------------------------- |
+| `end_turn`      | Claude finished its response naturally                               |
+| `max_tokens`    | Hit the `max_tokens` limit — increase it or use streaming            |
+| `stop_sequence` | Hit a custom stop sequence                                           |
+| `tool_use`      | Claude wants to call a tool — execute it and continue                |
+| `pause_turn`    | Model paused and can be resumed (agentic flows)                      |
+| `refusal`       | Claude refused for safety reasons — output may not match your schema |
 
 ---
 
@@ -384,7 +394,9 @@ print(f"Estimated input cost: ${estimated_input_cost:.4f}")
 
 ## Retry with Exponential Backoff
 
-> **Note:** The Anthropic SDK automatically retries rate limit (429) and server errors (5xx) with exponential backoff. You can configure this with `max_retries` (default: 2). Only implement custom retry logic if you need behavior beyond what the SDK provides.
+> **Note:** The Anthropic SDK automatically retries rate limit (429) and server errors (5xx) with
+> exponential backoff. You can configure this with `max_retries` (default: 2). Only implement custom
+> retry logic if you need behavior beyond what the SDK provides.
 
 ```python
 import time

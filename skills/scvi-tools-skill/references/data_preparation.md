@@ -5,6 +5,7 @@ This reference covers how to properly prepare AnnData objects for use with scvi-
 ## Overview
 
 Proper data preparation is critical for scvi-tools. Key requirements:
+
 1. **Raw counts** (not normalized)
 2. **Highly variable gene selection**
 3. **Proper setup_anndata() call**
@@ -36,7 +37,7 @@ if hasattr(adata, 'raw') and adata.raw is not None:
     print("Found adata.raw")
     # Use raw counts
     adata = adata.raw.to_adata()
-    
+
 # Or check layers
 if 'counts' in adata.layers:
     print("Found counts layer")
@@ -240,6 +241,7 @@ scvi.model.SCVI.setup_anndata(adata, layer="counts", batch_key="batch")
 ```
 
 This function handles:
+
 - Mitochondrial QC filtering
 - Cell and gene filtering
 - Storing counts in layer
@@ -259,13 +261,13 @@ scvi.model.SCVI.view_anndata_setup(adata)
 
 ## Common Issues and Solutions
 
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| "X should contain integers" | Normalized data in X | Use layer="counts" |
-| "batch_key not found" | Wrong column name | Check adata.obs.columns |
-| Sparse matrix errors | Incompatible format | Convert: adata.X = adata.X.toarray() |
-| Memory error | Too many genes | Subset to HVGs first |
-| NaN in data | Missing values | Filter or impute |
+| Issue                       | Cause                | Solution                             |
+| --------------------------- | -------------------- | ------------------------------------ |
+| "X should contain integers" | Normalized data in X | Use layer="counts"                   |
+| "batch_key not found"       | Wrong column name    | Check adata.obs.columns              |
+| Sparse matrix errors        | Incompatible format  | Convert: adata.X = adata.X.toarray() |
+| Memory error                | Too many genes       | Subset to HVGs first                 |
+| NaN in data                 | Missing values       | Filter or impute                     |
 
 ## Data Format Reference
 

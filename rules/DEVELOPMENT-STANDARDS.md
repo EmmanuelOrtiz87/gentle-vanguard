@@ -307,45 +307,45 @@ Violations result in:
 
 ## References
 
-| Resource                     | Path                                   |
-| ---------------------------- | -------------------------------------- |
-| AI Normatives                | `rules/AI-NORMATIVES.md`               |
-| AI Safety                    | `rules/NORMATIVAS-AI-SAFETY.md`        |
-| Cost Optimization            | `rules/NORMATIVAS-COST-OPTIMIZATION.md`|
-| Disaster Recovery            | `rules/NORMATIVAS-DISASTER-RECOVERY.md`|
-| Incident Management          | `rules/NORMATIVAS-INCIDENT-MANAGEMENT.md`|
-| Code Normatives              | `rules/NORMATIVAS-CODIGO.md`           |
-| Error Handling               | `rules/NORMATIVAS-ERROR-HANDLING.md`   |
-| Testing Normatives           | `docs/NORMATIVAS-TESTING.md`           |
-| Security Normatives          | `docs/NORMATIVAS-SEGURIDAD.md`         |
-| **Accessibility (WCAG 2.2)** | `docs/NORMATIVAS-ACCESIBILIDAD.md`     |
-| **I18n/L10n Standards**      | `docs/NORMATIVAS-I18N-L10N.md`         |
-| **ISO/IEC 25010 Quality**    | `docs/NORMATIVAS-ISO25010.md`          |
-| **ISO/IEC 27001 Controls**   | `docs/NORMATIVAS-ISO27001.md`          |
-| **SRE Practices**            | `docs/NORMATIVAS-SRE.md`               |
-| **Chaos Engineering**        | `docs/NORMATIVAS-CHAOS-ENGINEERING.md` |
-| **API Design Standards**     | `docs/NORMATIVAS-API-DESIGN.md`        |
-| **SBOM Validation**          | `docs/NORMATIVAS-SBOM.md`              |
-| C# Hardening                 | `rules/CI-HARDENING-STANDARDS.md`      |
-| Skill Style Guide            | `rules/SKILL-STYLE-GUIDE.md`           |
-| Orchestrator Config          | `config/orchestrator.json`             |
-| Quality Gates                | `config/quality-gates.json`            |
-| Structure Policy             | `config/structure-policy.json`         |
-| Testing Policy               | `config/testing-policy.json`           |
-| PSScriptAnalyzer Config      | `config/PSScriptAnalyzerSettings.psd1` |
-| ESLint Config                | `.eslintrc.json`                       |
-| TypeScript Config            | `tsconfig.json`                        |
-| JS/TS Quality CI             | `.github/workflows/js-ts-quality.yml`  |
-| Python Quality CI            | `.github/workflows/python-quality.yml` |
-| Coverage CI                  | `.github/workflows/coverage.yml`       |
-| Markdown Lint CI             | `.github/workflows/markdown-lint.yml`  |
-| npm Audit CI                 | `.github/workflows/npm-audit.yml`      |
-| Stale Issues CI              | `.github/workflows/stale.yml`          |
-| PR Labeler CI                | `.github/workflows/labeler.yml`        |
-| OpenAPI Validate CI          | `.github/workflows/openapi-validate.yml`|
-| Commit Lint CI               | `.github/workflows/commitlint.yml`     |
-| Devcontainer                 | `.devcontainer/devcontainer.json`      |
-| Coverage Tool                | `c8` (via `pnpm coverage`)             |
+| Resource                     | Path                                      |
+| ---------------------------- | ----------------------------------------- |
+| AI Normatives                | `rules/AI-NORMATIVES.md`                  |
+| AI Safety                    | `rules/NORMATIVAS-AI-SAFETY.md`           |
+| Cost Optimization            | `rules/NORMATIVAS-COST-OPTIMIZATION.md`   |
+| Disaster Recovery            | `rules/NORMATIVAS-DISASTER-RECOVERY.md`   |
+| Incident Management          | `rules/NORMATIVAS-INCIDENT-MANAGEMENT.md` |
+| Code Normatives              | `rules/NORMATIVAS-CODIGO.md`              |
+| Error Handling               | `rules/NORMATIVAS-ERROR-HANDLING.md`      |
+| Testing Normatives           | `docs/NORMATIVAS-TESTING.md`              |
+| Security Normatives          | `docs/NORMATIVAS-SEGURIDAD.md`            |
+| **Accessibility (WCAG 2.2)** | `docs/NORMATIVAS-ACCESIBILIDAD.md`        |
+| **I18n/L10n Standards**      | `docs/NORMATIVAS-I18N-L10N.md`            |
+| **ISO/IEC 25010 Quality**    | `docs/NORMATIVAS-ISO25010.md`             |
+| **ISO/IEC 27001 Controls**   | `docs/NORMATIVAS-ISO27001.md`             |
+| **SRE Practices**            | `docs/NORMATIVAS-SRE.md`                  |
+| **Chaos Engineering**        | `docs/NORMATIVAS-CHAOS-ENGINEERING.md`    |
+| **API Design Standards**     | `docs/NORMATIVAS-API-DESIGN.md`           |
+| **SBOM Validation**          | `docs/NORMATIVAS-SBOM.md`                 |
+| C# Hardening                 | `rules/CI-HARDENING-STANDARDS.md`         |
+| Skill Style Guide            | `rules/SKILL-STYLE-GUIDE.md`              |
+| Orchestrator Config          | `config/orchestrator.json`                |
+| Quality Gates                | `config/quality-gates.json`               |
+| Structure Policy             | `config/structure-policy.json`            |
+| Testing Policy               | `config/testing-policy.json`              |
+| PSScriptAnalyzer Config      | `config/PSScriptAnalyzerSettings.psd1`    |
+| ESLint Config                | `.eslintrc.json`                          |
+| TypeScript Config            | `tsconfig.json`                           |
+| JS/TS Quality CI             | `.github/workflows/js-ts-quality.yml`     |
+| Python Quality CI            | `.github/workflows/python-quality.yml`    |
+| Coverage CI                  | `.github/workflows/coverage.yml`          |
+| Markdown Lint CI             | `.github/workflows/markdown-lint.yml`     |
+| npm Audit CI                 | `.github/workflows/npm-audit.yml`         |
+| Stale Issues CI              | `.github/workflows/stale.yml`             |
+| PR Labeler CI                | `.github/workflows/labeler.yml`           |
+| OpenAPI Validate CI          | `.github/workflows/openapi-validate.yml`  |
+| Commit Lint CI               | `.github/workflows/commitlint.yml`        |
+| Devcontainer                 | `.devcontainer/devcontainer.json`         |
+| Coverage Tool                | `c8` (via `pnpm coverage`)                |
 
 ---
 

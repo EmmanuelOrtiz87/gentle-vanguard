@@ -7,9 +7,12 @@ metadata:
   original-name: call-list
   department: small-business
 ---
-Run the lead prioritization. Scan the pipeline, rank by urgency and opportunity, pull relevant email context, and get the owner ready to make calls.
+
+Run the lead prioritization. Scan the pipeline, rank by urgency and opportunity, pull relevant email
+context, and get the owner ready to make calls.
 
 Parse arguments:
+
 - `--n` (default: `5`) — number of leads to surface (1–10)
 - `--date` (default: today) — date to build the call list for (`YYYY-MM-DD`)
 
@@ -27,7 +30,8 @@ Using the `lead-triage` skill workflow:
 
 ## Step 2 — Rank and select top N
 
-Rank all scored leads and select the top `--n`. For ties, prefer leads with unanswered inbound signals.
+Rank all scored leads and select the top `--n`. For ties, prefer leads with unanswered inbound
+signals.
 
 For each selected lead, produce a call card:
 
@@ -49,6 +53,7 @@ GOAL FOR THIS CALL: {one sentence — advance to next stage / re-engage / close}
 For each lead on the list, offer to block 20 minutes on the owner's calendar for the target date.
 
 Show the proposed calendar entries:
+
 ```
 {time slot} — Call: {Contact Name} ({Company})
 ```
@@ -58,6 +63,7 @@ Wait for owner to confirm which calls to block before creating calendar events.
 ## Step 4 — Draft follow-ups
 
 For any lead that has an unanswered email older than 3 days, draft a brief follow-up:
+
 ```
 Subject: Re: {thread subject}
 
@@ -70,7 +76,10 @@ Hi {first name},
 
 ## Connector failures
 
-If HubSpot is unreachable, stop and tell the owner — lead scoring requires CRM data. If Mail is unreachable, skip Steps 3-4 (email context and follow-ups) and note "Mail not connected — email context and follow-up drafts skipped" in output. If Google Calendar is unreachable, skip calendar blocking and note it.
+If HubSpot is unreachable, stop and tell the owner — lead scoring requires CRM data. If Mail is
+unreachable, skip Steps 3-4 (email context and follow-ups) and note "Mail not connected — email
+context and follow-up drafts skipped" in output. If Google Calendar is unreachable, skip calendar
+blocking and note it.
 
 ## Approval gates
 
@@ -80,4 +89,5 @@ If HubSpot is unreachable, stop and tell the owner — lead scoring requires CRM
 
 ## Output
 
-Present the ranked call list with talk tracks. Then show proposed calendar blocks and ask for confirmation. Then show follow-up drafts and ask which to send.
+Present the ranked call list with talk tracks. Then show proposed calendar blocks and ask for
+confirmation. Then show follow-up drafts and ask which to send.

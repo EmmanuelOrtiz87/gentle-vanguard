@@ -7,9 +7,11 @@ metadata:
   original-name: daily-briefing
   department: sales
 ---
+
 # Daily Sales Briefing
 
-Get a clear view of what matters most today. This skill works with whatever you tell me, and gets richer when you connect your tools.
+Get a clear view of what matters most today. This skill works with whatever you tell me, and gets
+richer when you connect your tools.
 
 ## How It Works
 
@@ -37,13 +39,14 @@ Get a clear view of what matters most today. This skill works with whatever you 
 When you run this skill, I'll ask for what I need:
 
 **If no calendar connected:**
+
 > "What meetings do you have today? (Just paste your calendar or list them)"
 
 **If no CRM connected:**
+
 > "What deals are you focused on this week? Any that need attention?"
 
-**If you have connectors:**
-I'll pull everything automatically and just show you the briefing.
+**If you have connectors:** I'll pull everything automatically and just show you the briefing.
 
 ---
 
@@ -51,12 +54,12 @@ I'll pull everything automatically and just show you the briefing.
 
 Connect your tools to supercharge this skill:
 
-| Connector | What It Adds |
-|-----------|--------------|
-| **Calendar** | Today's meetings with attendees, times, and context |
-| **CRM** | Open pipeline, deals closing soon, overdue tasks, stale deals |
-| **Email** | Unread from opportunity contacts, emails waiting on replies |
-| **Enrichment** | Overnight signals: funding, hiring, news on your accounts |
+| Connector      | What It Adds                                                  |
+| -------------- | ------------------------------------------------------------- |
+| **Calendar**   | Today's meetings with attendees, times, and context           |
+| **CRM**        | Open pipeline, deals closing soon, overdue tasks, stale deals |
+| **Email**      | Unread from opportunity contacts, emails waiting on replies   |
+| **Enrichment** | Overnight signals: funding, hiring, news on your accounts     |
 
 > **No connectors?** No problem. Tell me your meetings and deals, and I'll create your briefing.
 
@@ -71,60 +74,62 @@ Connect your tools to supercharge this skill:
 
 ## #1 Priority
 
-**[Most important thing to do today]**
-[Why it matters and what to do about it]
+**[Most important thing to do today]** [Why it matters and what to do about it]
 
 ---
 
 ## Today's Numbers
 
 | Open Pipeline | Closing This Month | Meetings Today | Action Items |
-|---------------|-------------------|----------------|--------------|
-| $[X] | $[X] | [N] | [N] |
+| ------------- | ------------------ | -------------- | ------------ |
+| $[X]          | $[X]               | [N]            | [N]          |
 
 ---
 
 ## Today's Meetings
 
 ### [Time] — [Company] ([Meeting Type])
-**Attendees:** [Names]
-**Context:** [One-line: deal status, last touch, what's at stake]
-**Prep:** [Quick action before this meeting]
+
+**Attendees:** [Names] **Context:** [One-line: deal status, last touch, what's at stake] **Prep:**
+[Quick action before this meeting]
 
 ### [Time] — [Company] ([Meeting Type])
-**Attendees:** [Names]
-**Context:** [One-line context]
-**Prep:** [Quick action]
 
-*Run `call-prep [company]` for detailed meeting prep*
+**Attendees:** [Names] **Context:** [One-line context] **Prep:** [Quick action]
+
+_Run `call-prep [company]` for detailed meeting prep_
 
 ---
 
 ## Pipeline Alerts
 
 ### Needs Attention
-| Deal | Stage | Amount | Alert | Action |
-|------|-------|--------|-------|--------|
-| [Deal] | [Stage] | $[X] | [Why flagged] | [What to do] |
+
+| Deal   | Stage   | Amount | Alert         | Action       |
+| ------ | ------- | ------ | ------------- | ------------ |
+| [Deal] | [Stage] | $[X]   | [Why flagged] | [What to do] |
 
 ### Closing This Week
-| Deal | Close Date | Amount | Confidence | Blocker |
-|------|------------|--------|------------|---------|
-| [Deal] | [Date] | $[X] | [H/M/L] | [If any] |
+
+| Deal   | Close Date | Amount | Confidence | Blocker  |
+| ------ | ---------- | ------ | ---------- | -------- |
+| [Deal] | [Date]     | $[X]   | [H/M/L]    | [If any] |
 
 ---
 
 ## Email Priorities
 
 ### Needs Response
-| From | Subject | Received |
-|------|---------|----------|
-| [Name @ Company] | [Subject] | [Time] |
+
+| From             | Subject   | Received |
+| ---------------- | --------- | -------- |
+| [Name @ Company] | [Subject] | [Time]   |
 
 ### Waiting On Reply
-| To | Subject | Sent | Days Waiting |
-|----|---------|------|--------------|
-| [Name @ Company] | [Subject] | [Date] | [N] |
+
+| To               | Subject   | Sent   | Days Waiting |
+| ---------------- | --------- | ------ | ------------ |
+| [Name @ Company] | [Subject] | [Date] | [N]          |
 
 ---
 
@@ -136,8 +141,7 @@ Connect your tools to supercharge this skill:
 
 ---
 
-*Run `call-prep [company]` before your meetings*
-*Run `call-follow-up` after each call*
+_Run `call-prep [company]` before your meetings_ _Run `call-follow-up` after each call_
 ```
 
 ---
@@ -147,6 +151,7 @@ Connect your tools to supercharge this skill:
 ### Step 1: Gather Context
 
 **If connectors available:**
+
 ```
 1. Calendar → Get today's events
    - Filter to external meetings (non-company attendees)
@@ -166,6 +171,7 @@ Connect your tools to supercharge this skill:
 ```
 
 **If no connectors:**
+
 ```
 Ask user:
 1. "What meetings do you have today?"
@@ -220,6 +226,7 @@ Say "quick brief" or "tldr my day" for abbreviated version:
 **Meetings:** [N] — [Company 1], [Company 2], [Company 3]
 
 **Alerts:**
+
 - [Alert 1]
 - [Alert 2]
 
@@ -236,17 +243,21 @@ Say "wrap up my day" or "end of day summary" after your last meeting:
 # End of Day | [Date]
 
 **Completed:**
+
 - [Meeting 1] — [Outcome]
 - [Meeting 2] — [Outcome]
 
 **Pipeline Changes:**
+
 - [Deal] moved to [Stage]
 
 **Tomorrow's Focus:**
+
 - [Priority 1]
 - [Priority 2]
 
 **Open Loops:**
+
 - [ ] [Unfinished item needing follow-up]
 ```
 

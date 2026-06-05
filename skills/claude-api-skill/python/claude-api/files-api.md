@@ -1,15 +1,18 @@
 # Files API — Python
 
-The Files API uploads files for use in Messages API requests. Reference files via `file_id` in content blocks, avoiding re-uploads across multiple API calls.
+The Files API uploads files for use in Messages API requests. Reference files via `file_id` in
+content blocks, avoiding re-uploads across multiple API calls.
 
-**Beta:** Pass `betas=["files-api-2025-04-14"]` in your API calls (the SDK sets the required header automatically).
+**Beta:** Pass `betas=["files-api-2025-04-14"]` in your API calls (the SDK sets the required header
+automatically).
 
 ## Key Facts
 
 - Maximum file size: 500 MB
 - Total storage: 100 GB per organization
 - Files persist until deleted
-- File operations (upload, list, delete) are free; content used in messages is billed as input tokens
+- File operations (upload, list, delete) are free; content used in messages is billed as input
+  tokens
 - Not available on Amazon Bedrock or Google Vertex AI
 
 ---

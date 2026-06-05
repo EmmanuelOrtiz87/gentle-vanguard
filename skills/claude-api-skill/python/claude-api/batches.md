@@ -1,6 +1,7 @@
 # Message Batches API — Python
 
-The Batches API (`POST /v1/messages/batches`) processes Messages API requests asynchronously at 50% of standard prices.
+The Batches API (`POST /v1/messages/batches`) processes Messages API requests asynchronously at 50%
+of standard prices.
 
 ## Key Facts
 
@@ -69,7 +70,8 @@ print(f"Errored: {batch.request_counts.errored}")
 
 ## Retrieve Results
 
-> **Note:** Examples below use `match/case` syntax, requiring Python 3.10+. For earlier versions, use `if/elif` chains instead.
+> **Note:** Examples below use `match/case` syntax, requiring Python 3.10+. For earlier versions,
+> use `if/elif` chains instead.
 
 ```python
 for result in client.messages.batches.results(message_batch.id):

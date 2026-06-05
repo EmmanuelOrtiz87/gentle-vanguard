@@ -11,6 +11,7 @@ Todas las mejoras a mediano y largo plazo del roadmap han sido implementadas.
 ### Implementado
 
 #### OpenTelemetry Tracer
+
 - **Archivo**: `scripts/utilities/TRACING/opentelemetry-tracer.ps1`
 - **Features**:
   - Inicialización de tracer con config JSON
@@ -22,6 +23,7 @@ Todas las mejoras a mediano y largo plazo del roadmap han sido implementadas.
   - Batch export con queue
 
 #### Uso
+
 ```powershell
 # Inicializar
 opentelemetry-tracer.ps1 -Action init
@@ -43,6 +45,7 @@ opentelemetry-tracer.ps1 -Action status
 ### Implementado
 
 #### Skill Benchmark Suite
+
 - **Archivo**: `scripts/utilities/BENCHMARK/skill-benchmark-suite.ps1`
 - **Features**:
   - Benchmarks de latency, tokens, accuracy
@@ -54,13 +57,15 @@ opentelemetry-tracer.ps1 -Action status
   - Reportes HTML con visualización
 
 #### Métricas
-| Métrica | Descripción |
-|---------|-------------|
-| Latency | Tiempo de respuesta (ms) |
-| Tokens | Input/output/cost |
-| Accuracy | Score 0-1 con pass/fail |
+
+| Métrica  | Descripción              |
+| -------- | ------------------------ |
+| Latency  | Tiempo de respuesta (ms) |
+| Tokens   | Input/output/cost        |
+| Accuracy | Score 0-1 con pass/fail  |
 
 #### Uso
+
 ```powershell
 # Benchmark all skills
 skill-benchmark-suite.ps1 -Metric all -Output html
@@ -79,6 +84,7 @@ skill-benchmark-suite.ps1 -Schedule weekly
 ### Implementado
 
 #### Script de Refactor
+
 - **Archivo**: `config/orchestrator-refactor.ps1`
 - **Separación**:
   - `orchestrator.core.json` - Config principal
@@ -87,12 +93,14 @@ skill-benchmark-suite.ps1 -Schedule weekly
   - `orchestrator.response.json` - Response policies
 
 #### Beneficios
+
 - Configuración modular por dominio
 - Hot-reload de secciones individuales
 - Validación por módulo
 - Backup automático antes de cambios
 
 #### Uso
+
 ```powershell
 # Validar refactor
 orchestrator-refactor.ps1 -Validate
@@ -108,6 +116,7 @@ orchestrator-refactor.ps1 -Apply -Backup
 ### Implementado
 
 #### Auto-Update Script
+
 - **Archivo**: `scripts/utilities/DEPLOYMENT/auto-update.ps1`
 - **Features**:
   - Check de versiones vía GitHub API
@@ -118,11 +127,13 @@ orchestrator-refactor.ps1 -Apply -Backup
   - Scheduled task para updates automáticos
 
 #### Canales
+
 - `stable` - Releases probados
 - `beta` - Próximos releases
 - `alpha` - Development builds
 
 #### Uso
+
 ```powershell
 # Check updates
 auto-update.ps1 -Check
@@ -141,6 +152,7 @@ auto-update.ps1 -Schedule
 ### Implementado
 
 #### Docker Compose
+
 - **Archivo**: `docker-compose.test.yml`
 - **Servicios**:
   - `pwsh-tests` - PowerShell/Pester tests
@@ -148,11 +160,13 @@ auto-update.ps1 -Schedule
   - `python-tests` - Python/pytest tests (future)
 
 #### Matrix OS
+
 - Ubuntu 22.04 (PowerShell)
 - Alpine (Node.js)
 - Slim (Python)
 
 #### Uso
+
 ```bash
 # Run all tests
 docker-compose -f docker-compose.test.yml up
@@ -168,6 +182,7 @@ docker-compose -f docker-compose.test.yml up pwsh-tests
 ### Implementado
 
 #### S3 Distribution Script
+
 - **Archivo**: `scripts/utilities/DEPLOYMENT/s3-distribution.ps1`
 - **Features**:
   - Upload a S3 con cache headers
@@ -177,6 +192,7 @@ docker-compose -f docker-compose.test.yml up pwsh-tests
   - Multi-region support
 
 #### Uso
+
 ```powershell
 # Upload release
 s3-distribution.ps1 -Upload -Version 2.30.0
@@ -189,28 +205,28 @@ s3-distribution.ps1 -Upload -Invalidate -Version 2.30.0
 
 ## Archivos Creados
 
-| Archivo | Descripción |
-|---------|-------------|
-| `scripts/utilities/TRACING/opentelemetry-tracer.ps1` | OpenTelemetry tracer |
-| `scripts/utilities/BENCHMARK/skill-benchmark-suite.ps1` | Benchmark suite |
-| `config/orchestrator-refactor.ps1` | Refactor tool |
-| `scripts/utilities/DEPLOYMENT/auto-update.ps1` | Auto-update launcher |
-| `docker-compose.test.yml` | Docker test environment |
-| `scripts/utilities/DEPLOYMENT/s3-distribution.ps1` | S3 distribution |
-| `docs/MEDIUM-LONG-TERM-IMPROVEMENTS.md` | Documentación |
+| Archivo                                                 | Descripción             |
+| ------------------------------------------------------- | ----------------------- |
+| `scripts/utilities/TRACING/opentelemetry-tracer.ps1`    | OpenTelemetry tracer    |
+| `scripts/utilities/BENCHMARK/skill-benchmark-suite.ps1` | Benchmark suite         |
+| `config/orchestrator-refactor.ps1`                      | Refactor tool           |
+| `scripts/utilities/DEPLOYMENT/auto-update.ps1`          | Auto-update launcher    |
+| `docker-compose.test.yml`                               | Docker test environment |
+| `scripts/utilities/DEPLOYMENT/s3-distribution.ps1`      | S3 distribution         |
+| `docs/MEDIUM-LONG-TERM-IMPROVEMENTS.md`                 | Documentación           |
 
 ---
 
 ## Estado del Roadmap v2.29.0-alpha
 
-| Item | Status | Prioridad |
-|------|--------|-----------|
-| Agentes con fine-tuning | ✅ DONE | Very High |
-| Benchmarking automatizado | ✅ DONE | Medium |
-| Observabilidad distribuida | ✅ DONE | High |
-| Auto-update launcher | ✅ DONE | Medium |
-| Docker containerized tests | ✅ DONE | Medium |
-| S3 distribution | ✅ DONE | Low |
+| Item                       | Status  | Prioridad |
+| -------------------------- | ------- | --------- |
+| Agentes con fine-tuning    | ✅ DONE | Very High |
+| Benchmarking automatizado  | ✅ DONE | Medium    |
+| Observabilidad distribuida | ✅ DONE | High      |
+| Auto-update launcher       | ✅ DONE | Medium    |
+| Docker containerized tests | ✅ DONE | Medium    |
+| S3 distribution            | ✅ DONE | Low       |
 
 ---
 
@@ -224,4 +240,4 @@ s3-distribution.ps1 -Upload -Invalidate -Version 2.30.0
 
 ---
 
-*Completado: 2026-06-03*
+_Completado: 2026-06-03_

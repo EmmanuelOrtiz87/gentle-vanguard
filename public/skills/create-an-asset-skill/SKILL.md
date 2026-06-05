@@ -7,15 +7,18 @@ metadata:
   original-name: create-an-asset
   department: sales
 ---
+
 # Create an Asset
 
-Generate custom sales assets tailored to your prospect, audience, and goals. Supports interactive landing pages, presentation decks, executive one-pagers, and workflow/architecture demos.
+Generate custom sales assets tailored to your prospect, audience, and goals. Supports interactive
+landing pages, presentation decks, executive one-pagers, and workflow/architecture demos.
 
 ---
 
 ## Triggers
 
 Invoke this skill when:
+
 - User says `/create-an-asset` or `/create-an-asset [CompanyName]`
 - User asks to "create an asset", "build a demo", "make a landing page", "mock up a workflow"
 - User needs a customer-facing deliverable for a sales conversation
@@ -25,12 +28,14 @@ Invoke this skill when:
 ## Overview
 
 This skill creates professional sales assets by gathering context about:
+
 - **(a) The Prospect** — company, contacts, conversations, pain points
 - **(b) The Audience** — who's viewing, what they care about
 - **(c) The Purpose** — goal of the asset, desired next action
 - **(d) The Format** — landing page, deck, one-pager, or workflow demo
 
-The skill then researches, structures, and builds a polished, branded asset ready to share with customers.
+The skill then researches, structures, and builds a polished, branded asset ready to share with
+customers.
 
 ---
 
@@ -41,33 +46,36 @@ The skill then researches, structures, and builds a polished, branded asset read
 From the user's email domain, identify what company they work for.
 
 **Actions:**
+
 1. Extract domain from user's email
 2. Search: `"[domain]" company products services site:linkedin.com OR site:crunchbase.com`
 3. Determine seller context:
 
-| Scenario | Action |
-|----------|--------|
-| **Single-product company** | Auto-populate seller context |
-| **Multi-product company** | Ask: "Which product or solution is this asset for?" |
+| Scenario                             | Action                                               |
+| ------------------------------------ | ---------------------------------------------------- |
+| **Single-product company**           | Auto-populate seller context                         |
+| **Multi-product company**            | Ask: "Which product or solution is this asset for?"  |
 | **Consultant/agency/generic domain** | Ask: "What company or product are you representing?" |
-| **Unknown/startup** | Ask: "Briefly, what are you selling?" |
+| **Unknown/startup**                  | Ask: "Briefly, what are you selling?"                |
 
 **Store seller context:**
+
 ```yaml
 seller:
-  company: "[Company Name]"
-  product: "[Product/Service]"
+  company: '[Company Name]'
+  product: '[Product/Service]'
   value_props:
-    - "[Key value prop 1]"
-    - "[Key value prop 2]"
-    - "[Key value prop 3]"
+    - '[Key value prop 1]'
+    - '[Key value prop 2]'
+    - '[Key value prop 3]'
   differentiators:
-    - "[Differentiator 1]"
-    - "[Differentiator 2]"
-  pricing_model: "[If publicly known]"
+    - '[Differentiator 1]'
+    - '[Differentiator 2]'
+  pricing_model: '[If publicly known]'
 ```
 
-**Persist to knowledge base** for future sessions. On subsequent invocations, confirm: "I have your seller context from last time — still selling [Product] at [Company]?"
+**Persist to knowledge base** for future sessions. On subsequent invocations, confirm: "I have your
+seller context from last time — still selling [Product] at [Company]?"
 
 ---
 
@@ -75,15 +83,16 @@ seller:
 
 **Ask the user:**
 
-| Field | Prompt | Required |
-|-------|--------|----------|
-| **Company** | "Which company is this asset for?" | ✓ Yes |
-| **Key contacts** | "Who are the key contacts? (names, roles)" | No |
-| **Deal stage** | "What stage is this deal?" | ✓ Yes |
-| **Pain points** | "What pain points or priorities have they shared?" | No |
-| **Past materials** | "Upload any conversation materials (transcripts, emails, notes, call recordings)" | No |
+| Field              | Prompt                                                                            | Required |
+| ------------------ | --------------------------------------------------------------------------------- | -------- |
+| **Company**        | "Which company is this asset for?"                                                | ✓ Yes    |
+| **Key contacts**   | "Who are the key contacts? (names, roles)"                                        | No       |
+| **Deal stage**     | "What stage is this deal?"                                                        | ✓ Yes    |
+| **Pain points**    | "What pain points or priorities have they shared?"                                | No       |
+| **Past materials** | "Upload any conversation materials (transcripts, emails, notes, call recordings)" | No       |
 
 **Deal stage options:**
+
 - Intro / First meeting
 - Discovery
 - Evaluation / Technical review
@@ -97,20 +106,22 @@ seller:
 
 **Ask the user:**
 
-| Field | Prompt | Required |
-|-------|--------|----------|
-| **Audience type** | "Who's viewing this?" | ✓ Yes |
-| **Specific roles** | "Any specific titles to tailor for? (e.g., CTO, VP Engineering, CFO)" | No |
-| **Primary concern** | "What do they care most about?" | ✓ Yes |
-| **Objections** | "Any concerns or objections to address?" | No |
+| Field               | Prompt                                                                | Required |
+| ------------------- | --------------------------------------------------------------------- | -------- |
+| **Audience type**   | "Who's viewing this?"                                                 | ✓ Yes    |
+| **Specific roles**  | "Any specific titles to tailor for? (e.g., CTO, VP Engineering, CFO)" | No       |
+| **Primary concern** | "What do they care most about?"                                       | ✓ Yes    |
+| **Objections**      | "Any concerns or objections to address?"                              | No       |
 
 **Audience type options:**
+
 - Executive (C-suite, VPs)
 - Technical (Architects, Engineers, Developers)
 - Operations (Ops, IT, Procurement)
 - Mixed / Cross-functional
 
 **Primary concern options:**
+
 - ROI / Business impact
 - Technical depth / Architecture
 - Strategic alignment
@@ -123,12 +134,13 @@ seller:
 
 **Ask the user:**
 
-| Field | Prompt | Required |
-|-------|--------|----------|
-| **Goal** | "What's the goal of this asset?" | ✓ Yes |
-| **Desired action** | "What should the viewer do after seeing this?" | ✓ Yes |
+| Field              | Prompt                                         | Required |
+| ------------------ | ---------------------------------------------- | -------- |
+| **Goal**           | "What's the goal of this asset?"               | ✓ Yes    |
+| **Desired action** | "What should the viewer do after seeing this?" | ✓ Yes    |
 
 **Goal options:**
+
 - Intro / First impression
 - Discovery follow-up
 - Technical deep-dive
@@ -142,12 +154,12 @@ seller:
 
 **Ask the user:** "What format works best for this?"
 
-| Format | Description | Best For |
-|--------|-------------|----------|
-| **Interactive landing page** | Multi-tab page with demos, metrics, calculators | Exec alignment, intros, value prop |
-| **Deck-style** | Linear slides, presentation-ready | Formal meetings, large audiences |
-| **One-pager** | Single-scroll executive summary | Leave-behinds, quick summaries |
-| **Workflow / Architecture demo** | Interactive diagram with animated flow | Technical deep-dives, POC demos, integrations |
+| Format                           | Description                                     | Best For                                      |
+| -------------------------------- | ----------------------------------------------- | --------------------------------------------- |
+| **Interactive landing page**     | Multi-tab page with demos, metrics, calculators | Exec alignment, intros, value prop            |
+| **Deck-style**                   | Linear slides, presentation-ready               | Formal meetings, large audiences              |
+| **One-pager**                    | Single-scroll executive summary                 | Leave-behinds, quick summaries                |
+| **Workflow / Architecture demo** | Interactive diagram with animated flow          | Technical deep-dives, POC demos, integrations |
 
 ---
 
@@ -156,6 +168,7 @@ seller:
 #### If "Workflow / Architecture demo" selected:
 
 **First, parse from user's description.** Look for:
+
 - Systems and components mentioned
 - Data flows described
 - Human interaction points
@@ -163,13 +176,13 @@ seller:
 
 **Then ask for any gaps:**
 
-| If Missing... | Ask... |
-|---------------|--------|
-| Components unclear | "What systems or components are involved? (databases, APIs, AI, middleware, etc.)" |
-| Flow unclear | "Walk me through the step-by-step flow" |
-| Human touchpoints unclear | "Where does a human interact in this workflow?" |
-| Scenario vague | "What's a concrete example scenario to demo?" |
-| Integration specifics | "Any specific tools or platforms to highlight?" |
+| If Missing...             | Ask...                                                                             |
+| ------------------------- | ---------------------------------------------------------------------------------- |
+| Components unclear        | "What systems or components are involved? (databases, APIs, AI, middleware, etc.)" |
+| Flow unclear              | "Walk me through the step-by-step flow"                                            |
+| Human touchpoints unclear | "Where does a human interact in this workflow?"                                    |
+| Scenario vague            | "What's a concrete example scenario to demo?"                                      |
+| Integration specifics     | "Any specific tools or platforms to highlight?"                                    |
 
 ---
 
@@ -177,11 +190,11 @@ seller:
 
 ### Assess Context Richness
 
-| Level | Indicators | Research Depth |
-|-------|------------|----------------|
-| **Rich** | Transcripts uploaded, detailed pain points, clear requirements | Light — fill gaps only |
-| **Moderate** | Some context, no transcripts | Medium — company + industry |
-| **Sparse** | Just company name | Deep — full research pass |
+| Level        | Indicators                                                     | Research Depth              |
+| ------------ | -------------------------------------------------------------- | --------------------------- |
+| **Rich**     | Transcripts uploaded, detailed pain points, clear requirements | Light — fill gaps only      |
+| **Moderate** | Some context, no transcripts                                   | Medium — company + industry |
+| **Sparse**   | Just company name                                              | Deep — full research pass   |
 
 ### Always Research:
 
@@ -226,16 +239,17 @@ seller:
 
 ### Interactive Landing Page
 
-| Purpose | Recommended Sections |
-|---------|---------------------|
-| **Intro** | Company Fit → Solution Overview → Key Use Cases → Why Us → Next Steps |
-| **Discovery follow-up** | Their Priorities → How We Help → Relevant Examples → ROI Framework → Next Steps |
-| **Technical deep-dive** | Architecture → Security & Compliance → Integration → Performance → Support |
-| **Exec alignment** | Strategic Fit → Business Impact → ROI Calculator → Risk Mitigation → Partnership |
-| **POC proposal** | Scope → Success Criteria → Timeline → Team → Investment → Next Steps |
-| **Deal close** | Value Summary → Pricing → Implementation Plan → Terms → Sign-off |
+| Purpose                 | Recommended Sections                                                             |
+| ----------------------- | -------------------------------------------------------------------------------- |
+| **Intro**               | Company Fit → Solution Overview → Key Use Cases → Why Us → Next Steps            |
+| **Discovery follow-up** | Their Priorities → How We Help → Relevant Examples → ROI Framework → Next Steps  |
+| **Technical deep-dive** | Architecture → Security & Compliance → Integration → Performance → Support       |
+| **Exec alignment**      | Strategic Fit → Business Impact → ROI Calculator → Risk Mitigation → Partnership |
+| **POC proposal**        | Scope → Success Criteria → Timeline → Team → Investment → Next Steps             |
+| **Deal close**          | Value Summary → Pricing → Implementation Plan → Terms → Sign-off                 |
 
 **Audience adjustments:**
+
 - **Executive**: Lead with business impact, ROI, strategic alignment
 - **Technical**: Lead with architecture, security, integration depth
 - **Operations**: Lead with workflow impact, change management, support
@@ -257,6 +271,7 @@ N+3. Appendix (optional — detailed specs, pricing, etc.)
 ```
 
 **Slide principles:**
+
 - One key message per slide
 - Visual > text-heavy
 - Use prospect's metrics and language
@@ -288,11 +303,11 @@ Condense to single-scroll format:
 
 **Structure based on complexity:**
 
-| Complexity | Components | Structure |
-|------------|------------|-----------|
-| **Simple** | 3-5 | Single-view diagram with step annotations |
-| **Medium** | 5-10 | Zoomable canvas with step-by-step walkthrough |
-| **Complex** | 10+ | Multi-layer view (overview → detailed) with guided tour |
+| Complexity  | Components | Structure                                               |
+| ----------- | ---------- | ------------------------------------------------------- |
+| **Simple**  | 3-5        | Single-view diagram with step annotations               |
+| **Medium**  | 5-10       | Zoomable canvas with step-by-step walkthrough           |
+| **Complex** | 10+        | Multi-layer view (overview → detailed) with guided tour |
 
 **Standard elements:**
 
@@ -311,6 +326,7 @@ Condense to single-scroll format:
 ### General Principles
 
 All content should:
+
 - Reference **specific pain points** from user input or transcripts
 - Use **prospect's language** — their terminology, their stated priorities
 - Map **seller's product** → **prospect's needs** explicitly
@@ -322,6 +338,7 @@ All content should:
 ### Section Templates
 
 #### Hero / Intro
+
 ```
 Headline: "[Prospect's Goal] with [Seller's Product]"
 Subhead: Tie to their stated priority or top industry challenge
@@ -329,6 +346,7 @@ Metrics: 3-4 key facts about the prospect (shows we did homework)
 ```
 
 #### Their Priorities (if discovery follow-up)
+
 ```
 Reference specific pain points from conversation:
 - Use their exact words where possible
@@ -337,6 +355,7 @@ Reference specific pain points from conversation:
 ```
 
 #### Solution Mapping
+
 ```
 For each pain point:
 ├── The challenge (in their words)
@@ -346,6 +365,7 @@ For each pain point:
 ```
 
 #### Use Cases / Demos
+
 ```
 3-5 relevant use cases:
 ├── Visual mockup or interactive demo
@@ -355,6 +375,7 @@ For each pain point:
 ```
 
 #### ROI / Business Case
+
 ```
 Interactive calculator with:
 ├── Inputs relevant to their business (from research)
@@ -370,6 +391,7 @@ Interactive calculator with:
 ```
 
 #### Why Us / Differentiators
+
 ```
 ├── Differentiators vs. alternatives they might consider
 ├── Trust, security, compliance positioning
@@ -378,6 +400,7 @@ Interactive calculator with:
 ```
 
 #### Next Steps / CTA
+
 ```
 ├── Clear action aligned to Purpose (c)
 ├── Specific next step (not vague "let's chat")
@@ -396,15 +419,16 @@ For each system, define:
 
 ```yaml
 component:
-  id: "snowflake"
-  label: "Snowflake Data Warehouse"
-  type: "database"  # database | api | ai | middleware | human | document | output
-  icon: "database"
-  description: "Financial performance data"
-  brand_color: "#29B5E8"
+  id: 'snowflake'
+  label: 'Snowflake Data Warehouse'
+  type: 'database' # database | api | ai | middleware | human | document | output
+  icon: 'database'
+  description: 'Financial performance data'
+  brand_color: '#29B5E8'
 ```
 
 **Component types:**
+
 - `human` — Person initiating or receiving
 - `document` — PDFs, contracts, files
 - `ai` — AI/ML models, agents
@@ -420,13 +444,13 @@ For each step, define:
 ```yaml
 step:
   number: 1
-  from: "human"
-  to: "claude"
-  action: "Initiates performance review"
-  description: "Sarah, a Brand Analyst at [Prospect], kicks off the quarterly review..."
-  data_example: "Review request: Nike brand, Q4 2025"
-  duration: "~1 second"
-  value_note: "No manual data gathering required"
+  from: 'human'
+  to: 'claude'
+  action: 'Initiates performance review'
+  description: 'Sarah, a Brand Analyst at [Prospect], kicks off the quarterly review...'
+  data_example: 'Review request: Nike brand, Q4 2025'
+  duration: '~1 second'
+  value_note: 'No manual data gathering required'
 ```
 
 #### Scenario Narrative
@@ -467,31 +491,31 @@ margin performance...'"
 
 ```css
 :root {
-    /* === Prospect Brand (Primary) === */
-    --brand-primary: #[extracted from research];
-    --brand-secondary: #[extracted];
-    --brand-primary-rgb: [r, g, b]; /* For rgba() usage */
+  /* === Prospect Brand (Primary) === */
+  --brand-primary: #[extracted from research];
+  --brand-secondary: #[extracted];
+  --brand-primary-rgb: [r, g, b]; /* For rgba() usage */
 
-    /* === Dark Theme Base === */
-    --bg-primary: #0a0d14;
-    --bg-elevated: #0f131c;
-    --bg-surface: #161b28;
-    --bg-hover: #1e2536;
+  /* === Dark Theme Base === */
+  --bg-primary: #0a0d14;
+  --bg-elevated: #0f131c;
+  --bg-surface: #161b28;
+  --bg-hover: #1e2536;
 
-    /* === Text === */
-    --text-primary: #ffffff;
-    --text-secondary: rgba(255, 255, 255, 0.7);
-    --text-muted: rgba(255, 255, 255, 0.5);
+  /* === Text === */
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.5);
 
-    /* === Accent === */
-    --accent: var(--brand-primary);
-    --accent-hover: var(--brand-secondary);
-    --accent-glow: rgba(var(--brand-primary-rgb), 0.3);
+  /* === Accent === */
+  --accent: var(--brand-primary);
+  --accent-hover: var(--brand-secondary);
+  --accent-glow: rgba(var(--brand-primary-rgb), 0.3);
 
-    /* === Status === */
-    --success: #10b981;
-    --warning: #f59e0b;
-    --error: #ef4444;
+  /* === Status === */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
 }
 ```
 
@@ -516,6 +540,7 @@ small: 0.875rem, font-weight: 500
 ### Visual Elements
 
 **Cards:**
+
 - Background: `var(--bg-surface)`
 - Border: 1px solid rgba(255,255,255,0.1)
 - Border-radius: 12px
@@ -523,11 +548,13 @@ small: 0.875rem, font-weight: 500
 - Hover: slight elevation, border glow
 
 **Buttons:**
+
 - Primary: `var(--accent)` background, white text
 - Secondary: transparent, accent border
 - Hover: brightness increase, subtle scale
 
 **Animations:**
+
 - Transitions: 200-300ms ease
 - Tab switches: fade + slide
 - Hover states: smooth, not jarring
@@ -536,53 +563,56 @@ small: 0.875rem, font-weight: 500
 ### Workflow Demo Specific
 
 **Component Nodes:**
+
 ```css
 .node {
-    background: var(--bg-surface);
-    border: 2px solid var(--brand-primary);
-    border-radius: 12px;
-    padding: 16px;
-    min-width: 140px;
+  background: var(--bg-surface);
+  border: 2px solid var(--brand-primary);
+  border-radius: 12px;
+  padding: 16px;
+  min-width: 140px;
 }
 
 .node.active {
-    box-shadow: 0 0 20px var(--accent-glow);
-    border-color: var(--accent);
+  box-shadow: 0 0 20px var(--accent-glow);
+  border-color: var(--accent);
 }
 
 .node.human {
-    border-color: #f59e0b; /* Warm color for humans */
+  border-color: #f59e0b; /* Warm color for humans */
 }
 
 .node.ai {
-    background: linear-gradient(135deg, var(--bg-surface), var(--bg-elevated));
-    border-color: var(--accent);
+  background: linear-gradient(135deg, var(--bg-surface), var(--bg-elevated));
+  border-color: var(--accent);
 }
 ```
 
 **Flow Arrows:**
+
 ```css
 .arrow {
-    stroke: var(--text-muted);
-    stroke-width: 2;
-    fill: none;
-    marker-end: url(#arrowhead);
+  stroke: var(--text-muted);
+  stroke-width: 2;
+  fill: none;
+  marker-end: url(#arrowhead);
 }
 
 .arrow.active {
-    stroke: var(--accent);
-    stroke-dasharray: 8 4;
-    animation: flowDash 1s linear infinite;
+  stroke: var(--accent);
+  stroke-dasharray: 8 4;
+  animation: flowDash 1s linear infinite;
 }
 ```
 
 **Canvas:**
+
 ```css
 .canvas {
-    background:
-        radial-gradient(circle at center, var(--bg-elevated) 0%, var(--bg-primary) 100%),
-        url("data:image/svg+xml,..."); /* Subtle grid pattern */
-    overflow: auto;
+  background:
+    radial-gradient(circle at center, var(--bg-elevated) 0%, var(--bg-primary) 100%),
+    url('data:image/svg+xml,...'); /* Subtle grid pattern */
+  overflow: auto;
 }
 ```
 
@@ -590,7 +620,8 @@ small: 0.875rem, font-weight: 500
 
 ## Phase 5: Clarifying Questions (REQUIRED)
 
-**Before building any asset, always ask clarifying questions.** This ensures alignment and prevents wasted effort.
+**Before building any asset, always ask clarifying questions.** This ensures alignment and prevents
+wasted effort.
 
 ### Step 5.1: Summarize Understanding
 
@@ -611,32 +642,36 @@ First, show the user what you understood:
 
 ### Step 5.2: Ask Standard Questions (ALL formats)
 
-| Question | Why |
-|----------|-----|
-| "Does this match your vision?" | Confirm understanding |
-| "What's the ONE thing this must nail to succeed?" | Focus on priority |
-| "Tone preference? (Bold & confident / Consultative / Technical & precise)" | Style alignment |
-| "Focused and concise, or comprehensive?" | Scope calibration |
+| Question                                                                   | Why                   |
+| -------------------------------------------------------------------------- | --------------------- |
+| "Does this match your vision?"                                             | Confirm understanding |
+| "What's the ONE thing this must nail to succeed?"                          | Focus on priority     |
+| "Tone preference? (Bold & confident / Consultative / Technical & precise)" | Style alignment       |
+| "Focused and concise, or comprehensive?"                                   | Scope calibration     |
 
 ### Step 5.3: Ask Format-Specific Questions
 
 #### Interactive Landing Page:
+
 - "Which sections matter most for this audience?"
 - "Any specific demos or use cases to highlight?"
 - "Should I include an ROI calculator?"
 - "Any competitor positioning to address?"
 
 #### Deck-Style:
+
 - "How long is the presentation? (helps with slide count)"
 - "Presenting live, or a leave-behind?"
 - "Any specific flow or narrative arc in mind?"
 
 #### One-Pager:
+
 - "What's the single most important message?"
 - "Any specific proof point or stat to feature?"
 - "Will this be printed or digital?"
 
 #### Workflow / Architecture Demo:
+
 - "Let me confirm the components: [list]. Anything missing?"
 - "Here's the flow I understood: [steps]. Correct?"
 - "Should the demo show realistic sample data, or keep it abstract?"
@@ -657,7 +692,8 @@ Or, if still unclear:
 "One more quick question: [specific follow-up]"
 ```
 
-**Max 2 rounds of questions.** If still ambiguous, make a reasonable choice and note: "I went with X — easy to adjust if you prefer Y."
+**Max 2 rounds of questions.** If still ambiguous, make a reasonable choice and note: "I went with X
+— easy to adjust if you prefer Y."
 
 ---
 
@@ -666,6 +702,7 @@ Or, if still unclear:
 ### Build the Asset
 
 Following all specifications above:
+
 1. Generate structure based on Phase 2
 2. Create content based on Phase 3
 3. Apply visual design based on Phase 4
@@ -675,12 +712,14 @@ Following all specifications above:
 ### Output Format
 
 **All formats**: Self-contained HTML file
+
 - All CSS inline or in `<style>` tags
 - All JS inline or in `<script>` tags
 - No external dependencies (except Google Fonts)
 - Single file for easy sharing
 
 **File naming**: `[ProspectName]-[format]-[date].html`
+
 - Example: `CentricBrands-workflow-demo-2026-01-28.html`
 
 ### Delivery Message
@@ -693,6 +732,7 @@ Following all specifications above:
 ---
 
 **Summary**
+
 - **Format**: [Interactive Page / Deck / One-Pager / Workflow Demo]
 - **Audience**: [Type and roles]
 - **Purpose**: [Goal] → [Desired action]
@@ -703,6 +743,7 @@ Following all specifications above:
 **Deployment Options**
 
 To share this with your customer:
+
 - **Static hosting**: Upload to Netlify, Vercel, GitHub Pages, AWS S3, or any static host
 - **Password protection**: Most hosts offer this (e.g., Netlify site protection)
 - **Direct share**: Send the HTML file directly — it's fully self-contained
@@ -713,6 +754,7 @@ To share this with your customer:
 **Customization**
 
 Let me know if you'd like to:
+
 - Adjust colors or styling
 - Add, remove, or reorder sections
 - Refine any messaging or copy
@@ -727,17 +769,18 @@ Let me know if you'd like to:
 
 After delivery, be ready to iterate:
 
-| User Request | Action |
-|--------------|--------|
-| "Change the colors" | Regenerate with new palette, keep content |
-| "Add a section on X" | Insert new section, maintain flow |
-| "Make it shorter" | Condense, prioritize key points |
-| "The flow is wrong" | Rebuild architecture based on correction |
-| "Use our brand instead" | Switch from prospect brand to seller brand |
-| "Add more detail on step 3" | Expand that section specifically |
-| "Can I get this as a PDF?" | Provide print-optimized version |
+| User Request                | Action                                     |
+| --------------------------- | ------------------------------------------ |
+| "Change the colors"         | Regenerate with new palette, keep content  |
+| "Add a section on X"        | Insert new section, maintain flow          |
+| "Make it shorter"           | Condense, prioritize key points            |
+| "The flow is wrong"         | Rebuild architecture based on correction   |
+| "Use our brand instead"     | Switch from prospect brand to seller brand |
+| "Add more detail on step 3" | Expand that section specifically           |
+| "Can I get this as a PDF?"  | Provide print-optimized version            |
 
-**Remember**: Default to prospect's brand colors, but seller can adjust to their own brand or a neutral palette after initial build.
+**Remember**: Default to prospect's brand colors, but seller can adjust to their own brand or a
+neutral palette after initial build.
 
 ---
 
@@ -746,6 +789,7 @@ After delivery, be ready to iterate:
 Before delivering, verify:
 
 ### Content
+
 - [ ] Prospect company name spelled correctly throughout
 - [ ] Leadership names are current (not outdated)
 - [ ] Pain points accurately reflect input/transcripts
@@ -754,6 +798,7 @@ Before delivering, verify:
 - [ ] Proof points are accurate and sourced
 
 ### Visual
+
 - [ ] Brand colors applied correctly
 - [ ] All text readable (contrast)
 - [ ] Animations smooth, not distracting
@@ -761,6 +806,7 @@ Before delivering, verify:
 - [ ] Dark theme looks polished
 
 ### Functional
+
 - [ ] All tabs/sections load correctly
 - [ ] Interactive elements work (calculators, demos)
 - [ ] Workflow steps animate properly (if applicable)
@@ -768,6 +814,7 @@ Before delivering, verify:
 - [ ] CTA is clear and clickable
 
 ### Professional
+
 - [ ] Tone matches audience
 - [ ] Appropriate level of detail for purpose
 - [ ] No typos or grammatical errors
@@ -780,12 +827,14 @@ Before delivering, verify:
 ### Example 1: Executive Landing Page
 
 **Input:**
+
 - Prospect: Acme Corp (manufacturing)
 - Audience: C-suite
 - Purpose: Exec alignment after discovery
 - Format: Interactive landing page
 
 **Output structure:**
+
 ```
 [Tabs]
 Strategic Fit | Business Impact | ROI Calculator | Security & Trust | Next Steps
@@ -799,6 +848,7 @@ Strategic Fit | Business Impact | ROI Calculator | Security & Trust | Next Steps
 ### Example 2: Technical Workflow Demo
 
 **Input:**
+
 - Prospect: Centric Brands
 - Audience: IT architects
 - Purpose: POC proposal
@@ -806,6 +856,7 @@ Strategic Fit | Business Impact | ROI Calculator | Security & Trust | Next Steps
 - Components: Claude, Workato DataGenie, Snowflake, PDF contracts
 
 **Output structure:**
+
 ```
 [Interactive canvas with 5 nodes]
 Human → Claude → PDF Contracts → Workato → Snowflake
@@ -819,12 +870,14 @@ Human → Claude → PDF Contracts → Workato → Snowflake
 ### Example 3: Sales One-Pager
 
 **Input:**
+
 - Prospect: TechStart Inc
 - Audience: VP Engineering
 - Purpose: Leave-behind after first meeting
 - Format: One-pager
 
 **Output structure:**
+
 ```
 Hero: "Accelerate TechStart's Product Velocity"
 Point 1: [Dev productivity]
@@ -840,15 +893,15 @@ CTA: "Schedule technical deep-dive"
 
 For workflow demos, use these icon mappings:
 
-| Type | Icon | Example |
-|------|------|---------|
-| human | 👤 or person SVG | User, Analyst, Admin |
-| document | 📄 or file SVG | PDF, Contract, Report |
-| ai | 🤖 or brain SVG | Claude, AI Agent |
-| database | 🗄️ or cylinder SVG | Snowflake, Postgres |
-| api | 🔌 or plug SVG | REST API, GraphQL |
-| middleware | ⚡ or hub SVG | Workato, MCP Server |
-| output | 📊 or screen SVG | Dashboard, Report |
+| Type       | Icon               | Example               |
+| ---------- | ------------------ | --------------------- |
+| human      | 👤 or person SVG   | User, Analyst, Admin  |
+| document   | 📄 or file SVG     | PDF, Contract, Report |
+| ai         | 🤖 or brain SVG    | Claude, AI Agent      |
+| database   | 🗄️ or cylinder SVG | Snowflake, Postgres   |
+| api        | 🔌 or plug SVG     | REST API, GraphQL     |
+| middleware | ⚡ or hub SVG      | Workato, MCP Server   |
+| output     | 📊 or screen SVG   | Dashboard, Report     |
 
 ---
 
@@ -856,16 +909,17 @@ For workflow demos, use these icon mappings:
 
 If brand colors cannot be extracted:
 
-| Industry | Primary | Secondary |
-|----------|---------|-----------|
-| Technology | #2563eb | #7c3aed |
-| Finance | #0f172a | #3b82f6 |
-| Healthcare | #0891b2 | #06b6d4 |
-| Manufacturing | #ea580c | #f97316 |
-| Retail | #db2777 | #ec4899 |
-| Energy | #16a34a | #22c55e |
-| Default | #3b82f6 | #8b5cf6 |
+| Industry      | Primary | Secondary |
+| ------------- | ------- | --------- |
+| Technology    | #2563eb | #7c3aed   |
+| Finance       | #0f172a | #3b82f6   |
+| Healthcare    | #0891b2 | #06b6d4   |
+| Manufacturing | #ea580c | #f97316   |
+| Retail        | #db2777 | #ec4899   |
+| Energy        | #16a34a | #22c55e   |
+| Default       | #3b82f6 | #8b5cf6   |
 
 ---
 
-*Skill created for generalized sales asset generation. Works for any seller, any product, any prospect.*
+_Skill created for generalized sales asset generation. Works for any seller, any product, any
+prospect._

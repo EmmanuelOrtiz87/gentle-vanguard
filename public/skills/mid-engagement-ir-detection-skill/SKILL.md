@@ -1,14 +1,22 @@
 ---
 name: mid-engagement-ir-detection-skill
 description: >
-  Methodology for detecting client SOC patches, attacker activity, and security-state changes that occur DURING a red-team engagement — and converting those observations into deliverable findings. Built from authorized red-team work where the client patched a confirmed SQLi within 30 minutes of detection AND an external attacker locked multiple new accounts during a single test session. Use when (a) running ANY active engagement against a monitored target, (b) a previously-confirmed finding stops reproducing, (c) baseline timing shifts unexpectedly, or (d) you notice response patterns changing during testing.
+  Methodology for detecting client SOC patches, attacker activity, and security-state changes that
+  occur DURING a red-team engagement — and converting those observations into deliverable findings.
+  Built from authorized red-team work where the client patched a confirmed SQLi within 30 minutes of
+  detection AND an external attacker locked multiple new accounts during a single test session. Use
+  when (a) running ANY active engagement against a monitored target, (b) a previously-confirmed
+  finding stops reproducing, (c) baseline timing shifts unexpectedly, or (d) you notice response
+  patterns changing during testing.
 metadata:
   source: claude-bughunter
   original-name: mid-engagement-ir-detection
 ---
+
 ## When to use this skill
 
 Trigger when:
+
 - Running active testing against a target with active SOC monitoring
 - A confirmed-vulnerable finding stops reproducing on recheck
 - Baseline timing shifts unexpectedly (3× slower, sudden errors, new headers)
@@ -18,6 +26,7 @@ Trigger when:
 - Engagement is "assume breach" or "white box" — client knows you're testing
 
 DO NOT use for:
+
 - Bug bounty (client doesn't know you're there; no real-time IR)
 - Pure recon (no state-change happening)
 - One-off vulnerability scanning (no temporal dimension)
@@ -26,13 +35,15 @@ DO NOT use for:
 
 ## The core insight
 
-In a real red-team engagement against a competent SOC, the security state of the target is **not static**. It changes during your test in response to your traffic. These state changes are:
+In a real red-team engagement against a competent SOC, the security state of the target is **not
+static**. It changes during your test in response to your traffic. These state changes are:
 
 1. **Themselves valuable findings** (positive operational observations about IR responsiveness)
 2. **Confirmation evidence** (mid-engagement patch = the original vulnerability was real)
 3. **Classification signals** (WAF rule deployment vs code fix — different remediation depth)
 
-Anti-pattern: treating reproduction failure as evidence the original signal was a false positive. **Original PoC artifacts captured before the change are still the vulnerability finding.**
+Anti-pattern: treating reproduction failure as evidence the original signal was a false positive.
+**Original PoC artifacts captured before the change are still the vulnerability finding.**
 
 ---
 
@@ -57,7 +68,8 @@ Persist to `engagement_log/fingerprint_pre.json`.
 
 ### During the test:
 
-Log every test result with full context (timestamp, IP, payload, response code, response size, response time, headers if relevant) to JSONL append-only.
+Log every test result with full context (timestamp, IP, payload, response code, response size,
+response time, headers if relevant) to JSONL append-only.
 
 ### After the test session OR on first failed-recheck:
 
@@ -81,6 +93,7 @@ If any delta is significant — **investigate, don't retract**.
 ### Observation 1 — Mid-engagement WAF rule deployment
 
 **Symptoms:**
+
 - Original payloads return identical response → no signal at all on recheck
 - Body size identical to baseline (login page reflection)
 - Timing reverts to baseline regardless of payload
@@ -88,6 +101,7 @@ If any delta is significant — **investigate, don't retract**.
 - Specific keyword in URL/body now triggers different response code (403, 406, 429)
 
 **Confirmation:** retry with WAF-evasion variants:
+
 - URL-encode the payload differently (`%27` vs `%5cu0027`)
 - Change request method (POST → PUT, GET → POST)
 - Different content-type (form-urlencoded → multipart)
@@ -99,6 +113,7 @@ If WAF-evasion variants restore the signal, the mitigation is at the WAF layer (
 If even WAF-evasion variants stay blocked, the mitigation is likely in code.
 
 **Finding template:**
+
 ```
 Subject: Mid-engagement mitigation deployed for <vulnerability X>
 Observation: At engagement timestamp T0, vulnerability <X> on <endpoint> was
@@ -128,23 +143,29 @@ Recommendation:
 ### Observation 2 — Active concurrent attacker
 
 **Symptoms:**
+
 - Many `AADSTS50053` (LOCKED) responses despite your 1-attempt-per-user discipline
 - Lockouts cluster alphabetically or by some other sort key
 - New lockouts appear DURING your engagement (diff before/after)
 - LOCKED rate exceeds expected baseline (in our engagement: 11% of all attempts → red flag)
 
 **Math check:**
+
 - Your discipline: 1 attempt per user lifetime
 - Smart Lockout default: 10 fails / 10 min
 - Therefore: you cannot mathematically cause Smart Lockout
 - Therefore: every AADSTS50053 you see was caused by someone else
 
 **Confirmation:**
+
 - Sort locked accounts alphabetically; if they cluster, attacker is using sorted username list
-- Compare pre-session lockout count vs post-session — new locks during your session = attacker is active *right now*
-- Probe a known-active "system" account (`noreply@`, `info@`, `oc@`) — if it's locked, attacker is hitting service mailboxes too (typically MFA-exempt → high-value to attackers)
+- Compare pre-session lockout count vs post-session — new locks during your session = attacker is
+  active _right now_
+- Probe a known-active "system" account (`noreply@`, `info@`, `oc@`) — if it's locked, attacker is
+  hitting service mailboxes too (typically MFA-exempt → high-value to attackers)
 
 **Finding template:**
+
 ```
 Subject: Active external password-spray campaign detected during engagement
 
@@ -180,6 +201,7 @@ Evidence: engagement_log/poc/m365/locked_accounts.txt (<N> entries with timestam
 ### Observation 3 — Detection-induced rate limiting / IP blocks
 
 **Symptoms:**
+
 - Specific IP starts returning 403 / 429 / 451 after a window of normal responses
 - Specific IP starts seeing dramatically slower responses (3x+ baseline)
 - TLS handshake fails or RST mid-connection
@@ -187,11 +209,13 @@ Evidence: engagement_log/poc/m365/locked_accounts.txt (<N> entries with timestam
 - Some hosts work from one IP but not another
 
 **Confirmation:**
+
 - Rotate to a different IP and retry — if works, you got rate-limited/blocked
 - Compare TTL on DNS responses — sudden short TTL = active mitigation deployed
 - Check `Server:`, `Via:`, `CF-Cache-Status:` headers for CDN-introduced limits
 
 **Finding template (operational note, usually low/info severity):**
+
 ```
 Subject: Engagement traffic detected — IP <X> rate-limited at <timestamp>
 
@@ -237,6 +261,7 @@ Maintain three pieces of state:
 ### 2. `engagement_log/journal.jsonl` — append-only test log
 
 Every test logs:
+
 ```jsonl
 {"ts":"...","ip":"...","tool":"...","target":"...","payload":"...","resp_code":...,"resp_size":...,"resp_ms":...,"verdict":"...","notes":"..."}
 ```
@@ -244,8 +269,20 @@ Every test logs:
 ### 3. `engagement_log/state_changes.jsonl` — observed deltas
 
 When a state change is detected, append:
+
 ```jsonl
-{"ts_observed":"2026-05-08T14:30:00","change_type":"baseline_time_shift","target":"https://<employee-app-host>/<app>/login.php","baseline_pre_ms":24412,"baseline_post_ms":90403,"interpretation":"likely WAF rule deployed","actions_taken":["tested WAF-evasion variants — no signal restoration","documented as IR-mitigation finding"]}
+{
+  "ts_observed": "2026-05-08T14:30:00",
+  "change_type": "baseline_time_shift",
+  "target": "https://<employee-app-host>/<app>/login.php",
+  "baseline_pre_ms": 24412,
+  "baseline_post_ms": 90403,
+  "interpretation": "likely WAF rule deployed",
+  "actions_taken": [
+    "tested WAF-evasion variants — no signal restoration",
+    "documented as IR-mitigation finding"
+  ]
+}
 ```
 
 This third file is your finding evidence. Every entry is a candidate finding.
@@ -281,6 +318,7 @@ PY
 ```
 
 For lockout-count tracking on M365:
+
 ```bash
 # Run every 30 min during M365 spray
 LOCK_COUNT=$(grep -c '"AADSTS50053"' engagement_log/o365_results.jsonl)
@@ -294,36 +332,45 @@ echo "$(date -u +%FT%TZ) lockout_count $LOCK_COUNT" >> lockout_history.log
 
 If a confirmed-vulnerable finding stops reproducing:
 
-1. **DO NOT delete the original PoC.** Original timestamps + payloads + response captures are forever.
+1. **DO NOT delete the original PoC.** Original timestamps + payloads + response captures are
+   forever.
 2. **Capture the new state in detail.** What's the recheck response? What's different?
 3. **Try at least 3 alternative vectors** before declaring "indeterminate".
-4. **If none restore the signal**, document as "vulnerability confirmed at T0, mitigation observed at T0+<delta>, mitigation depth: [WAF | code]".
+4. **If none restore the signal**, document as "vulnerability confirmed at T0, mitigation observed
+   at T0+<delta>, mitigation depth: [WAF | code]".
 5. **Both states go in the report.** The original finding + the IR observation.
 
-This is the discipline that distinguishes professional red team from "hobbyist scanning". Your client wants the timeline of vulnerability + mitigation, not just the static state.
+This is the discipline that distinguishes professional red team from "hobbyist scanning". Your
+client wants the timeline of vulnerability + mitigation, not just the static state.
 
 ---
 
 ## Why this is a finding (selling it to the client)
 
-When you tell a client "I confirmed SQLi at 14:24, you deployed a mitigation by 14:55, here's the original PoC and here's why you should still verify the fix is in code":
+When you tell a client "I confirmed SQLi at 14:24, you deployed a mitigation by 14:55, here's the
+original PoC and here's why you should still verify the fix is in code":
 
 - **Confirmed the vulnerability existed** (auditor-grade evidence)
 - **Confirmed the mitigation was deployed** (positive ops finding for the SOC)
 - **Identified the depth question** (WAF vs code — different remediation cost)
 - **Demonstrated red-team value** (you proved both the bug AND the IR responsiveness)
 
-This is a more valuable deliverable than "I confirmed SQLi" alone, because it captures the engagement's full operational picture.
+This is a more valuable deliverable than "I confirmed SQLi" alone, because it captures the
+engagement's full operational picture.
 
 ---
 
 ## Anti-patterns to avoid
 
-- **"Recheck failed → false positive."** No. Recheck failed because the target changed. Investigate the change.
-- **"It's no longer vulnerable, drop the finding."** No. It WAS vulnerable. The finding stays. Add a "current state: mitigated" annotation.
+- **"Recheck failed → false positive."** No. Recheck failed because the target changed. Investigate
+  the change.
+- **"It's no longer vulnerable, drop the finding."** No. It WAS vulnerable. The finding stays. Add a
+  "current state: mitigated" annotation.
 - **"They patched it, mission accomplished."** No. WAF rule != code fix. Verify the depth.
-- **"Don't tell the client we observed their patch."** Yes, do. It's a positive finding about their IR.
-- **"Don't include the locked accounts list — they'll think we caused it."** No. Math + journaling discipline proves you didn't. Include the list with the math.
+- **"Don't tell the client we observed their patch."** Yes, do. It's a positive finding about their
+  IR.
+- **"Don't include the locked accounts list — they'll think we caused it."** No. Math + journaling
+  discipline proves you didn't. Include the list with the math.
 
 ---
 
@@ -339,14 +386,34 @@ This is a more valuable deliverable than "I confirmed SQLi" alone, because it ca
 
 ## One-line summary
 
-**Your engagement leaves a footprint. The footprint changes the target. Capture both states. Both are findings.**
+**Your engagement leaves a footprint. The footprint changes the target. Capture both states. Both
+are findings.**
 
 ---
 
 ## Related Skills & Chains
 
-- **`redteam-mindset`** — This skill is a specific application of the broader red-team discipline. Engagement flow: `redteam-mindset` loaded at engagement start → baseline-capture habit built in → when response patterns shift mid-test, `mid-engagement-ir-detection` activates to capture the SOC-patch state as a NEW finding (defensive-action observed = client capability metric, not "the bug got fixed so we lose the finding").
-- **`evidence-hygiene`** — Mid-engagement IR detection produces TWO states (pre-patch and post-patch); both need disciplined evidence capture or the second finding can't be defended. Engagement flow: baseline screenshots + timestamped request/response dumps at session start → response shift detected → second capture set with explicit timestamp delta → both packaged together.
-- **`m365-entra-attack`** — The single richest source of mid-engagement IR signal in modern engagements. Engagement flow: M365 spray triggers AADSTS50053 lockout → baseline lockout policy captured → if lockout window changes mid-test (e.g., from 60min to 24hr) → `mid-engagement-ir-detection` captures the policy change as a finding ("CA policy hardened mid-engagement; defensive response measured").
-- **`enterprise-vpn-attack`** + **`vmware-vcenter-attack`** — Critical-infrastructure CVE exploitation is the highest-noise activity; expect SOC to patch within hours. Engagement flow: confirmed VPN/vCenter CVE → baseline capture BEFORE exploitation attempt → if appliance updates mid-test, capture as defensive-action finding → report both the original CVE AND the IR-response.
-- **`redteam-report-template`** — IR-observation findings get their own Subject in the deliverable, framed differently from technical-vuln findings. Engagement flow: `mid-engagement-ir-detection` captures behavior-change event → `triage-validation` 7-Question Gate (specifically: "is the behavior-change attributable to my activity?") → `redteam-report-template` packages as a "client capability observation" with explicit timeline and detection-latency metric.
+- **`redteam-mindset`** — This skill is a specific application of the broader red-team discipline.
+  Engagement flow: `redteam-mindset` loaded at engagement start → baseline-capture habit built in →
+  when response patterns shift mid-test, `mid-engagement-ir-detection` activates to capture the
+  SOC-patch state as a NEW finding (defensive-action observed = client capability metric, not "the
+  bug got fixed so we lose the finding").
+- **`evidence-hygiene`** — Mid-engagement IR detection produces TWO states (pre-patch and
+  post-patch); both need disciplined evidence capture or the second finding can't be defended.
+  Engagement flow: baseline screenshots + timestamped request/response dumps at session start →
+  response shift detected → second capture set with explicit timestamp delta → both packaged
+  together.
+- **`m365-entra-attack`** — The single richest source of mid-engagement IR signal in modern
+  engagements. Engagement flow: M365 spray triggers AADSTS50053 lockout → baseline lockout policy
+  captured → if lockout window changes mid-test (e.g., from 60min to 24hr) →
+  `mid-engagement-ir-detection` captures the policy change as a finding ("CA policy hardened
+  mid-engagement; defensive response measured").
+- **`enterprise-vpn-attack`** + **`vmware-vcenter-attack`** — Critical-infrastructure CVE
+  exploitation is the highest-noise activity; expect SOC to patch within hours. Engagement flow:
+  confirmed VPN/vCenter CVE → baseline capture BEFORE exploitation attempt → if appliance updates
+  mid-test, capture as defensive-action finding → report both the original CVE AND the IR-response.
+- **`redteam-report-template`** — IR-observation findings get their own Subject in the deliverable,
+  framed differently from technical-vuln findings. Engagement flow: `mid-engagement-ir-detection`
+  captures behavior-change event → `triage-validation` 7-Question Gate (specifically: "is the
+  behavior-change attributable to my activity?") → `redteam-report-template` packages as a "client
+  capability observation" with explicit timeline and detection-latency metric.

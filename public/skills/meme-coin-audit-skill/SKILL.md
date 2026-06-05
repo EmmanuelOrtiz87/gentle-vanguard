@@ -1,11 +1,17 @@
 ---
 name: meme-coin-audit-skill
 description: >
-  Meme coin and token security audit — rug pull detection (honeypot, hidden mint, fee manipulation, LP lock bypass), Solana SPL token analysis (freeze authority, mint authority, metadata mutability), Token-2022 extension risks (transfer hooks, permanent delegate), DEX liquidity pool attacks (sandwich amplification, LP drain, bonding curve exploits), pump.fun/Raydium/Jupiter integration risks, token_scanner.py automation, and real exploit examples from 2024-2025. Use for any token audit, rug pull assessment, meme coin security review, or pre-investment due diligence.
+  Meme coin and token security audit — rug pull detection (honeypot, hidden mint, fee manipulation,
+  LP lock bypass), Solana SPL token analysis (freeze authority, mint authority, metadata
+  mutability), Token-2022 extension risks (transfer hooks, permanent delegate), DEX liquidity pool
+  attacks (sandwich amplification, LP drain, bonding curve exploits), pump.fun/Raydium/Jupiter
+  integration risks, token_scanner.py automation, and real exploit examples from 2024-2025. Use for
+  any token audit, rug pull assessment, meme coin security review, or pre-investment due diligence.
 metadata:
   source: claude-bughunter
   original-name: meme-coin-audit
 ---
+
 # MEME COIN & TOKEN SECURITY AUDIT
 
 Fast-kill rug pull detection and deep token security analysis for EVM and Solana meme coins.
@@ -14,9 +20,11 @@ Fast-kill rug pull detection and deep token security analysis for EVM and Solana
 
 ## PRE-DIVE KILL SIGNALS
 
-Check these BEFORE reading a single line of code. If any are true, skip the audit — the token is likely a rug or not worth the time.
+Check these BEFORE reading a single line of code. If any are true, skip the audit — the token is
+likely a rug or not worth the time.
 
 ### Hard Kills (Skip Immediately)
+
 - **Contract not verified** on Etherscan/Solscan → Cannot audit source = cannot trust
 - **Deployer wallet** has history of rug pulls (check Etherscan deployer page)
 - **Token age < 1 hour** AND no known team → Too early, wait for more data
@@ -26,6 +34,7 @@ Check these BEFORE reading a single line of code. If any are true, skip the audi
 - **Permanent delegate** extension (Token-2022) → Can steal all holder tokens
 
 ### Soft Kills (Proceed with Extreme Caution)
+
 - Top holder > 20% of supply (excluding DEX pools)
 - LP not burned or locked in verified contract
 - Contract is upgradeable / proxy with retained admin
@@ -38,21 +47,25 @@ Check these BEFORE reading a single line of code. If any are true, skip the audi
 
 > **"Check ALL authorities and owner functions. The retained authority IS the rug vector."**
 >
-> Every rug pull requires a privileged operation: mint, blacklist, fee change, LP removal, or authority abuse. If you find the privilege, you found the bug.
+> Every rug pull requires a privileged operation: mint, blacklist, fee change, LP removal, or
+> authority abuse. If you find the privilege, you found the bug.
 
 ---
 
 ## BUG CLASSES (8 TOKEN-SPECIFIC)
 
 ### 1. HIDDEN MINT / UNLIMITED SUPPLY
+
 > 35% of meme coin rugs. Deployer mints tokens post-launch, dumps on LP.
 
 **Quick grep (EVM):**
+
 ```bash
 grep -rn "function mint\|_mint(\|_balances\[.*\] +=" src/ --include="*.sol" | grep -v "test\|lib\|node_modules"
 ```
 
 **Quick grep (Solana):**
+
 ```bash
 grep -rn "MintTo\|mint_to\|mint_authority" src/ --include="*.rs" | grep -v "test\|target"
 ```
@@ -60,14 +73,17 @@ grep -rn "MintTo\|mint_to\|mint_authority" src/ --include="*.rs" | grep -v "test
 **Kill if:** MAX_SUPPLY enforced in every mint path, or mint function removed entirely.
 
 ### 2. HONEYPOT / TRANSFER RESTRICTION
+
 > 25% of meme coin scams. Buy works, sell blocked.
 
 **Quick grep:**
+
 ```bash
 grep -rn "blacklist\|isBlacklisted\|_bots\|maxTxAmount\|approve.*override\|tradingEnabled" src/ --include="*.sol"
 ```
 
 **Solana equivalent:**
+
 ```bash
 grep -rn "freeze_authority\|transfer_hook\|TransferHook\|permanent_delegate" src/ --include="*.rs"
 ```
@@ -75,9 +91,11 @@ grep -rn "freeze_authority\|transfer_hook\|TransferHook\|permanent_delegate" src
 **Kill if:** No blacklist mapping, no transfer hooks, no freeze authority.
 
 ### 3. FEE MANIPULATION
+
 > 20% of rugs. Sell fee set to 99% after initial buys.
 
 **Quick grep:**
+
 ```bash
 grep -rn "setFee\|setSellFee\|_taxFee\|_sellFee" src/ --include="*.sol"
 grep -rn "function set.*Fee" -A5 src/ --include="*.sol" | grep -v "require\|MAX\|<="
@@ -86,9 +104,11 @@ grep -rn "function set.*Fee" -A5 src/ --include="*.sol" | grep -v "require\|MAX\
 **Kill if:** Fee setter has `require(fee <= MAX_FEE)` with MAX_FEE <= 10%.
 
 ### 4. LIQUIDITY POOL DRAIN
+
 > LP removal, migration, or manipulation to crash price.
 
 **Quick grep:**
+
 ```bash
 grep -rn "migrateLP\|emergencyWithdraw\|\.sync()\|setPair\|setRouter" src/ --include="*.sol"
 ```
@@ -96,9 +116,11 @@ grep -rn "migrateLP\|emergencyWithdraw\|\.sync()\|setPair\|setRouter" src/ --inc
 **Kill if:** LP tokens burned to dead address, no migration function, no pair setter.
 
 ### 5. BONDING CURVE MANIPULATION
+
 > Exploits in pump.fun-style bonding curves.
 
 **Quick grep:**
+
 ```bash
 grep -rn "virtualReserve\|setCurve\|graduate\|bonding_curve" src/ --include="*.sol" --include="*.rs"
 ```
@@ -106,9 +128,11 @@ grep -rn "virtualReserve\|setCurve\|graduate\|bonding_curve" src/ --include="*.s
 **Kill if:** Curve parameters immutable, graduation permissionless.
 
 ### 6. AUTHORITY RETENTION (SOLANA)
+
 > Retained mint/freeze/update authorities on Solana tokens.
 
 **Quick grep:**
+
 ```bash
 grep -rn "mint_authority\|freeze_authority\|update_authority\|close_authority" src/ --include="*.rs"
 grep -rn "set_authority.*None" src/ --include="*.rs"  # Good sign: revocation
@@ -117,9 +141,11 @@ grep -rn "set_authority.*None" src/ --include="*.rs"  # Good sign: revocation
 **Kill if:** All authorities = None, verified on-chain.
 
 ### 7. FAKE RENOUNCE / HIDDEN OWNERSHIP
+
 > Ownership appears renounced but backdoor control retained.
 
 **Quick grep:**
+
 ```bash
 grep -rn "renounceOwnership.*override\|_shadowAdmin\|_backupOwner\|selfdestruct" src/ --include="*.sol"
 ```
@@ -127,9 +153,11 @@ grep -rn "renounceOwnership.*override\|_shadowAdmin\|_backupOwner\|selfdestruct"
 **Kill if:** renounceOwnership NOT overridden, no second admin role, no selfdestruct.
 
 ### 8. SANDWICH AMPLIFICATION BY DESIGN
+
 > Contract makes holders maximally sandwichable.
 
 **Quick grep:**
+
 ```bash
 grep -rn "swapExactTokensForETH" -A5 src/ --include="*.sol" | grep "0,"
 grep -rn "swapThreshold\|_rebase\|mandatoryPool" src/ --include="*.sol"
@@ -155,6 +183,7 @@ python3 tools/token_scanner.py src/ --recursive --output findings/token-report.m
 ```
 
 The scanner checks all 8 bug classes via regex patterns. It catches:
+
 - Direct mint/balance manipulation
 - Blacklist and transfer restriction patterns
 - Unbounded fee setters
@@ -165,6 +194,7 @@ The scanner checks all 8 bug classes via regex patterns. It catches:
 - Token-2022 dangerous extensions
 
 **Scanner does NOT check:**
+
 - On-chain state (use Etherscan/Solscan for authority verification)
 - Holder distribution (use DEXTools/Birdeye)
 - LP lock status (use Unicrypt/PinkLock/Solscan)
@@ -292,32 +322,48 @@ When you don't have source code, check on-chain:
 ## FULL REFERENCE FILES
 
 For deep dives into specific areas:
+
 - `web3/10-meme-coin-bugs.md` — All 8 bug classes with full code examples and variants
-- `web3/11-solana-token-audit.md` — Solana-specific: SPL authorities, Token-2022, pump.fun, Raydium, Jupiter
-- `web3/12-dex-lp-attacks.md` — DEX & LP manipulation patterns (sandwich, pool sniping, CL position attacks)
+- `web3/11-solana-token-audit.md` — Solana-specific: SPL authorities, Token-2022, pump.fun, Raydium,
+  Jupiter
+- `web3/12-dex-lp-attacks.md` — DEX & LP manipulation patterns (sandwich, pool sniping, CL position
+  attacks)
 
 ---
 
 ## Related Skills & Chains
 
-- **`web3-audit`** — When the target is a DeFi protocol (not just a token). Workflow primitive: this skill's 8 token-specific bug classes are a subset of `web3-audit`'s scope; if the target has lending / vault / oracle logic beyond the token contract itself, also load `web3-audit` for the broader 10 DeFi bug classes.
-- **`triage-validation`** — When deciding if a rug-pull finding qualifies as a bug bounty submission. Workflow primitive: many "rug vector" observations are pre-rug warnings, not exploitable bugs in a deployed protocol; run 7Q gate to distinguish "the deployer COULD rug" (informational) from "the contract IS exploitable now" (reportable).
-- **`report-writing`** — When writing up a confirmed token security finding for Immunefi / private bounty. Workflow primitive: Foundry PoC template here feeds into `report-writing`'s Immunefi body template.
-- **`offensive-osint`** — When the token has off-chain infrastructure (project website, Telegram, deployer doxxing). Workflow primitive: on-chain audit is this skill's domain; deployer wallet history, social presence, and project legitimacy checks route to `offensive-osint`.
-- **`bb-methodology`** — When confirming engagement mode. Workflow primitive: PART 0 separates "pre-investment due diligence" (this skill's primary use) from "Immunefi bug bounty submission" (different reporting + severity standards); the answer routes which post-audit handoff is correct.
+- **`web3-audit`** — When the target is a DeFi protocol (not just a token). Workflow primitive: this
+  skill's 8 token-specific bug classes are a subset of `web3-audit`'s scope; if the target has
+  lending / vault / oracle logic beyond the token contract itself, also load `web3-audit` for the
+  broader 10 DeFi bug classes.
+- **`triage-validation`** — When deciding if a rug-pull finding qualifies as a bug bounty
+  submission. Workflow primitive: many "rug vector" observations are pre-rug warnings, not
+  exploitable bugs in a deployed protocol; run 7Q gate to distinguish "the deployer COULD rug"
+  (informational) from "the contract IS exploitable now" (reportable).
+- **`report-writing`** — When writing up a confirmed token security finding for Immunefi / private
+  bounty. Workflow primitive: Foundry PoC template here feeds into `report-writing`'s Immunefi body
+  template.
+- **`offensive-osint`** — When the token has off-chain infrastructure (project website, Telegram,
+  deployer doxxing). Workflow primitive: on-chain audit is this skill's domain; deployer wallet
+  history, social presence, and project legitimacy checks route to `offensive-osint`.
+- **`bb-methodology`** — When confirming engagement mode. Workflow primitive: PART 0 separates
+  "pre-investment due diligence" (this skill's primary use) from "Immunefi bug bounty submission"
+  (different reporting + severity standards); the answer routes which post-audit handoff is correct.
 
 ---
 
 ## Operator Notes (Claude-BugHunter)
 
-> Engagement-derived + 2026-specific additions to the vendored foundation.
-> Wisdom from real authorized engagements + Phase 2 verification across
-> this repo's 31+ skill-area live tests. The upstream content covers the WHAT;
-> this layer covers the WHEN-IT-WORKS-vs-WHEN-IT-DOESN'T.
+> Engagement-derived + 2026-specific additions to the vendored foundation. Wisdom from real
+> authorized engagements + Phase 2 verification across this repo's 31+ skill-area live tests. The
+> upstream content covers the WHAT; this layer covers the WHEN-IT-WORKS-vs-WHEN-IT-DOESN'T.
 
 ### Solana-specific signals — 2025-2026 reality
 
-Token-2022 transfer hooks are the new rug-pull vector. Hook authority can be set to a single key; that key can pause / blacklist / fee-on-transfer arbitrary addresses post-launch. Always check hook authority + permanent-delegate authority for Token-2022 mints:
+Token-2022 transfer hooks are the new rug-pull vector. Hook authority can be set to a single key;
+that key can pause / blacklist / fee-on-transfer arbitrary addresses post-launch. Always check hook
+authority + permanent-delegate authority for Token-2022 mints:
 
 ```bash
 # get mint extensions for a Token-2022 mint
@@ -325,35 +371,47 @@ spl-token display <MINT_ADDRESS> --program-id TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBq
 # look for: TransferHook { authority: ... }, PermanentDelegate { delegate: ... }
 ```
 
-If TransferHook authority is non-null → the holder of that key can revoke transfer rights mid-trade. If PermanentDelegate is non-null → that delegate can move any holder's tokens at any time (effectively a built-in confiscation). Either alone is rug-class.
+If TransferHook authority is non-null → the holder of that key can revoke transfer rights mid-trade.
+If PermanentDelegate is non-null → that delegate can move any holder's tokens at any time
+(effectively a built-in confiscation). Either alone is rug-class.
 
-pump.fun bonding curves can be manipulated via the curve's K-parameter; mint authority retained beyond bonding-curve completion is the classic exit-scam shape. Check `mintAuthority` AFTER the curve completes — legitimate launches null it, scams retain it for the post-graduation dump.
+pump.fun bonding curves can be manipulated via the curve's K-parameter; mint authority retained
+beyond bonding-curve completion is the classic exit-scam shape. Check `mintAuthority` AFTER the
+curve completes — legitimate launches null it, scams retain it for the post-graduation dump.
 
 ### Honeypot detection — beyond the obvious
 
-`transfer()` succeeds in dry-run but fails on certain addresses (sender allowlist / blocklist). Test with: simulated buy → simulated transfer to a different address → simulated sell. If buy + transfer succeed but sell fails, it's a honeypot.
+`transfer()` succeeds in dry-run but fails on certain addresses (sender allowlist / blocklist). Test
+with: simulated buy → simulated transfer to a different address → simulated sell. If buy + transfer
+succeed but sell fails, it's a honeypot.
 
 Quick triage matrix:
 
-| Test | Honeypot Signal |
-|------|----------------|
-| Buy from random wallet | Succeeds (must — or no one would touch it) |
-| Transfer to second random wallet | Often fails on honeypot |
-| Sell from original wallet | Fails or applies > 50% tax |
-| Sell from team-controlled wallet | Succeeds (the giveaway) |
+| Test                             | Honeypot Signal                            |
+| -------------------------------- | ------------------------------------------ |
+| Buy from random wallet           | Succeeds (must — or no one would touch it) |
+| Transfer to second random wallet | Often fails on honeypot                    |
+| Sell from original wallet        | Fails or applies > 50% tax                 |
+| Sell from team-controlled wallet | Succeeds (the giveaway)                    |
 
-Cross-source verification: solana-rugcheck, rugcheck.xyz, dexscreener risk signals, honeypot.is (EVM). Never trust a single source — rug-checkers can be fooled by deferred-malice patterns (clean for first 7 days, hook activates later).
+Cross-source verification: solana-rugcheck, rugcheck.xyz, dexscreener risk signals, honeypot.is
+(EVM). Never trust a single source — rug-checkers can be fooled by deferred-malice patterns (clean
+for first 7 days, hook activates later).
 
 ### LP lock claims — verify, don't trust
 
-LP-lock badges on DexScreener mean nothing without on-chain verification. Check the actual lock contract (Unicrypt, TeamFinance, Bonkbot, PinkLock) for:
+LP-lock badges on DexScreener mean nothing without on-chain verification. Check the actual lock
+contract (Unicrypt, TeamFinance, Bonkbot, PinkLock) for:
 
 - **Unlock date** — the on-chain timestamp, not the badge text
 - **Lock owner** — is it the deployer's wallet? Are there multiple lockers fragmenting the LP?
-- **Extension / shortening permission** — some lock contracts allow the owner to SHORTEN the lock; that's an exit hatch dressed as a lock
+- **Extension / shortening permission** — some lock contracts allow the owner to SHORTEN the lock;
+  that's an exit hatch dressed as a lock
 - **Lock contract bytecode** — verify it's the canonical locker, not a fork with backdoors
 
-Some "locked" LPs are 1-day locks renewed weekly — visually the same as a year lock to the buyer, but the deployer can let it lapse on any Tuesday. Always read the lock contract source on the chain explorer.
+Some "locked" LPs are 1-day locks renewed weekly — visually the same as a year lock to the buyer,
+but the deployer can let it lapse on any Tuesday. Always read the lock contract source on the chain
+explorer.
 
 ### Pre-investment due diligence in under 5 minutes
 
@@ -366,11 +424,15 @@ The 6-question fast filter:
 5. Top 10 holders concentration < 30% (excluding pools/burn addresses)?
 6. Bonding curve completed (for pump.fun) AND post-completion mint authority null?
 
-Five "no"s = walk away. Three "no"s = high risk, only enter with size you'd walk away from. Two "no"s with strong narrative + thin liquidity = the canonical retail trap.
+Five "no"s = walk away. Three "no"s = high risk, only enter with size you'd walk away from. Two
+"no"s with strong narrative + thin liquidity = the canonical retail trap.
 
 ### MEV / sandwich amplification on illiquid mints
 
-Buying into a mint with < $50K liquidity guarantees you'll be sandwiched. The bot infrastructure on Solana and Ethereum is institutionalized in 2026 — Jito MEV-share, Flashbots SUAVE, Eden Network, private order-flow auctions. If your trade size > 1% of available liquidity, expect sandwich loss > 5%; > 5% of liquidity, expect > 20% slippage from sandwich alone.
+Buying into a mint with < $50K liquidity guarantees you'll be sandwiched. The bot infrastructure on
+Solana and Ethereum is institutionalized in 2026 — Jito MEV-share, Flashbots SUAVE, Eden Network,
+private order-flow auctions. If your trade size > 1% of available liquidity, expect sandwich loss >
+5%; > 5% of liquidity, expect > 20% slippage from sandwich alone.
 
 Mitigations (rank by 2026 effectiveness):
 
@@ -379,4 +441,5 @@ Mitigations (rank by 2026 effectiveness):
 3. **MEV-protected DEX aggregators** — Jupiter's slippage protection, 1inch Fusion, CoWSwap
 4. **Splitting orders** — N smaller trades vs 1 large; reduces sandwich profitability per trade
 
-If the mint is so illiquid that even split orders sandwich — that's the signal to skip the trade, not the signal to use better tooling.
+If the mint is so illiquid that even split orders sandwich — that's the signal to skip the trade,
+not the signal to use better tooling.

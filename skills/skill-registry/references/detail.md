@@ -10,4 +10,3 @@
 3. For non-index files (`.cursorrules`, `CLAUDE.md`, etc.): record the file directly.
 
 ---
-

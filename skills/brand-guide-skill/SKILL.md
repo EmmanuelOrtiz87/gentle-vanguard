@@ -114,7 +114,8 @@ Maintain brand consistency across all touchpoints.
 
 ---
 
-> **See also**: [brand-guidelines-skill](../brand-guidelines-skill/SKILL.md) for Anthropic-specific brand styling
+> **See also**: [brand-guidelines-skill](../brand-guidelines-skill/SKILL.md) for Anthropic-specific
+> brand styling
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
 ```

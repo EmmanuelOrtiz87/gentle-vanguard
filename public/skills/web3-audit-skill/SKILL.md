@@ -1,11 +1,16 @@
 ---
 name: web3-audit-skill
 description: >
-  Smart contract security audit — 10 DeFi bug classes (accounting desync, access control, incomplete path, off-by-one, oracle, ERC4626, reentrancy, flash loan, signature replay, proxy), pre-dive kill signals (TVL < $500K etc), Foundry PoC template, grep patterns for each class, and real Immunefi paid examples. Use for any Solidity/Rust contract audit or when deciding whether a DeFi target is worth hunting.
+  Smart contract security audit — 10 DeFi bug classes (accounting desync, access control, incomplete
+  path, off-by-one, oracle, ERC4626, reentrancy, flash loan, signature replay, proxy), pre-dive kill
+  signals (TVL < $500K etc), Foundry PoC template, grep patterns for each class, and real Immunefi
+  paid examples. Use for any Solidity/Rust contract audit or when deciding whether a DeFi target is
+  worth hunting.
 metadata:
   source: claude-bughunter
   original-name: web3-audit
 ---
+
 # WEB3 SMART CONTRACT AUDIT
 
 10 bug classes. Pre-dive kill signals. Foundry PoC template. Real paid examples.
@@ -14,16 +19,20 @@ metadata:
 
 ## PRE-DIVE KILL SIGNALS (check BEFORE any code review)
 
-> ZKsync lesson: $322M TVL + OZ audit + 750K LOC + 5 sessions = 0 findings. Large well-audited bridges are extremely hard.
+> ZKsync lesson: $322M TVL + OZ audit + 750K LOC + 5 sessions = 0 findings. Large well-audited
+> bridges are extremely hard.
 
 1. **TVL < $500K** → max payout capped too low for effort
-2. **2+ top-tier audits** (Halborn, ToB, Cyfrin, OpenZeppelin) on simple protocol → bugs already found
+2. **2+ top-tier audits** (Halborn, ToB, Cyfrin, OpenZeppelin) on simple protocol → bugs already
+   found
 3. **Protocol < 500 lines, single A→B→C flow** → minimal attack surface
 4. **Formula**: `max_realistic_payout = min(10% × TVL, program_cap)` — if < $10K, skip
 
-**Soft kill:** OZ/ToB/Cyfrin audit on current version + codebase > 500K LOC → expect 40+ hours for maybe 1 finding. Only proceed if bounty floor > $50K AND you have protocol-specific expertise.
+**Soft kill:** OZ/ToB/Cyfrin audit on current version + codebase > 500K LOC → expect 40+ hours for
+maybe 1 finding. Only proceed if bounty floor > $50K AND you have protocol-specific expertise.
 
 **Target scoring (go if >= 6/10):**
+
 - TVL > $10M: +2
 - Immunefi program with Critical >= $50K: +2
 - No top-tier audit on current version: +2
@@ -36,17 +45,21 @@ metadata:
 
 ## THE ONE RULE
 
-> "Read ALL sibling functions. If `vote()` has a modifier, check `poke()`, `reset()`, `harvest()`. The missing modifier on the sibling IS the bug."
+> "Read ALL sibling functions. If `vote()` has a modifier, check `poke()`, `reset()`, `harvest()`.
+> The missing modifier on the sibling IS the bug."
 
 This single rule explains 19% of all Critical findings.
 
 ---
 
 ## 1. ACCOUNTING STATE DESYNCHRONIZATION
+
 > #1 Critical bug class — 28% of all Criticals on Immunefi.
 
 ### What It Is
-Two state variables supposed to stay in sync. One code path updates A but forgets B. Later code reads both and makes decisions based on stale B.
+
+Two state variables supposed to stay in sync. One code path updates A but forgets B. Later code
+reads both and makes decisions based on stale B.
 
 ```
 Real Value = A - B
@@ -56,6 +69,7 @@ If A updated but B isn't → Real Value appears larger → phantom value
 ### Root Cause Patterns
 
 **Variant 1: Phantom Yield** (Yeet protocol — 35 duplicate reports)
+
 ```solidity
 function startUnstake(uint256 amount) external {
     totalSupply -= amount;  // decremented BEFORE transfer
@@ -65,6 +79,7 @@ function startUnstake(uint256 amount) external {
 ```
 
 **Variant 2: Fast Path Skips State Update** (Alchemix V3)
+
 ```solidity
 function claimRedemption(uint256 tokenId) external {
     if (transmuter.balance >= amount) {
@@ -78,6 +93,7 @@ function claimRedemption(uint256 tokenId) external {
 ```
 
 **Variant 3: Update Happens in Wrong Order** (Alchemix)
+
 ```solidity
 function deposit(uint256 amount) external {
     _shares = (amount * totalShares) / totalAssets;  // calculated BEFORE deposit
@@ -86,6 +102,7 @@ function deposit(uint256 amount) external {
 ```
 
 ### Grep Patterns
+
 ```bash
 # Find all accounting variables
 grep -rn "totalSupply\|totalShares\|totalAssets\|totalDebt\|cumulativeReward\|rewardPerShare" contracts/
@@ -99,9 +116,11 @@ grep -rn "\breturn\b" contracts/ -B3 | grep -B3 "if\b"
 ---
 
 ## 2. ACCESS CONTROL
+
 > #2 Critical — 19% of Criticals. $953M lost in 2024 alone.
 
 ### Variant 1: Missing Modifier on Sibling Function
+
 ```solidity
 function vote(uint256 tokenId) external onlyNewEpoch(tokenId) {  // guarded
 function reset(uint256 tokenId) external onlyNewEpoch(tokenId) { // guarded
@@ -110,6 +129,7 @@ function poke(uint256 tokenId) external {                         // NO GUARD �
 ```
 
 ### Variant 2: Wrong Check (Existence vs Ownership)
+
 ```solidity
 function split(uint256 tokenId, uint256 amount) external {
     _requireOwned(tokenId);  // checks if token EXISTS, not if caller OWNS it
@@ -119,6 +139,7 @@ function split(uint256 tokenId, uint256 amount) external {
 ```
 
 ### Variant 3: Silent Modifier (if vs require)
+
 ```solidity
 // VULNERABLE — non-admin silently gets through:
 modifier onlyAdmin() {
@@ -130,6 +151,7 @@ modifier onlyAdmin() {
 ```
 
 ### Variant 4: Uninitialized Proxy
+
 ```solidity
 function initialize(address _owner) public {  // MISSING: initializer modifier
     owner = _owner;  // anyone can call → become owner
@@ -138,6 +160,7 @@ function initialize(address _owner) public {  // MISSING: initializer modifier
 ```
 
 ### Grep Patterns
+
 ```bash
 # Find sibling function families — do ALL have the same modifier set?
 grep -rn "function vote\|function poke\|function reset\|function update\|function claim\|function harvest" contracts/ -A2
@@ -155,19 +178,21 @@ grep -rn "_disableInitializers()" contracts/
 
 ### Real Paid Examples
 
-| Protocol | Payout | Bug |
-|---|---|---|
-| Wormhole | $10M | Uninitialized UUPS proxy → anyone calls initialize() |
-| ZeroLend | n/a | split() uses existence check, not ownership check |
-| Alchemix | n/a | poke() missing onlyNewEpoch → infinite FLUX inflation |
-| Parity | $150M frozen | No access control on initWallet() in library |
+| Protocol | Payout       | Bug                                                   |
+| -------- | ------------ | ----------------------------------------------------- |
+| Wormhole | $10M         | Uninitialized UUPS proxy → anyone calls initialize()  |
+| ZeroLend | n/a          | split() uses existence check, not ownership check     |
+| Alchemix | n/a          | poke() missing onlyNewEpoch → infinite FLUX inflation |
+| Parity   | $150M frozen | No access control on initWallet() in library          |
 
 ---
 
 ## 3. INCOMPLETE CODE PATH
+
 > #3 Critical — 17% of Criticals.
 
 ### The Function Family Comparison Test
+
 ```
 1. List all state changes in function A (deposit/place/create)
 2. List all state changes in function B (withdraw/update/cancel)
@@ -177,6 +202,7 @@ If A does X but B doesn't do the reverse of X → BUG.
 ```
 
 ### Variant 1: Update Function Missing Refund (ThunderNFT)
+
 ```solidity
 function place_order(OrderInput calldata order) external {
     token.safeTransferFrom(msg.sender, address(this), order.price);  // takes tokens
@@ -189,6 +215,7 @@ function update_order(OrderInput calldata updatedOrder) external {
 ```
 
 ### Variant 2: Partial Fill Token Stuck (Plume)
+
 ```solidity
 function swapForETH(uint256 amountIn) external {
     token.safeTransferFrom(msg.sender, address(this), amountIn);
@@ -198,6 +225,7 @@ function swapForETH(uint256 amountIn) external {
 ```
 
 ### Variant 3: mint() Bypasses Check That deposit() Has (MetaPool)
+
 ```solidity
 function deposit(uint256 assets, address receiver) public override {
     shares = _deposit(assets, receiver);  // includes receipt validation
@@ -209,6 +237,7 @@ function mint(uint256 shares, address receiver) public override {
 ```
 
 ### Grep Patterns
+
 ```bash
 grep -rn "function place_\|function create_\|function add_\|function open_" contracts/ -A5
 grep -rn "function update_\|function modify_\|function cancel_" contracts/ -A5
@@ -220,9 +249,11 @@ grep -rn "function deposit\|function mint\|function withdraw\|function redeem" c
 ---
 
 ## 4. OFF-BY-ONE & BOUNDARY CONDITIONS
+
 > #4 High — 22% of Highs. Single character change. Massive impact.
 
 ### Root Cause
+
 ```solidity
 // VeChain Stargate — post-exit reward drain:
 function _claimableDelegationPeriods(address delegator) internal view returns (uint256) {
@@ -234,9 +265,11 @@ function _claimableDelegationPeriods(address delegator) internal view returns (u
 ```
 
 ### Mental Test for Every Comparison
+
 > For every `if (A > B)`: "What happens when A == B?" Is that correct?
 
 ### 6 Boundary Locations to Check
+
 1. Period/Epoch boundaries: `>` vs `>=` at period end
 2. Time-based locks: does `block.timestamp == deadline` lock or unlock?
 3. Loop break conditions: `break` with `>` vs `>=`
@@ -245,6 +278,7 @@ function _claimableDelegationPeriods(address delegator) internal view returns (u
 6. Rounding/precision: can any input produce 0 output that should be non-zero?
 
 ### Grep Patterns
+
 ```bash
 # Boundaries in comparisons
 grep -rn "Period\|Epoch\|Round\|Deadline\|period\|epoch\|deadline" contracts/ -A3 | grep "[<>][^=]"
@@ -259,9 +293,11 @@ grep -rn "\.length\s*-\s*1\|i\s*<=\s*.*\.length\b" contracts/
 ---
 
 ## 5. ORACLE / PRICE MANIPULATION
+
 > 12% of all reports. Largest individual payouts. $117M Mango, $70M Curve.
 
 ### Bug A: Missing Staleness Check (most common)
+
 ```solidity
 // VULNERABLE:
 (, int256 price,,,) = priceFeed.latestRoundData();
@@ -274,6 +310,7 @@ require(price > 0, "Invalid price");
 ```
 
 ### Bug B: Missing Confidence Interval (Pyth)
+
 ```solidity
 // VULNERABLE:
 PythStructs.Price memory p = pyth.getPriceUnsafe(priceFeed);
@@ -285,6 +322,7 @@ require(p.conf * 10 <= uint64(p.price), "Price too uncertain");
 ```
 
 ### Bug C: TWAP Too Short (flash loan manipulatable)
+
 ```solidity
 // VULNERABLE: 60-second TWAP
 uint32[] memory secondsAgos = new uint32[](2);
@@ -295,6 +333,7 @@ secondsAgos[0] = 60; secondsAgos[1] = 0;
 ```
 
 ### Bug D: Single-Source Oracle
+
 ```solidity
 // VULNERABLE: only Uniswap spot price
 uint price = getUniswapSpotPrice(token);  // flash loan manipulatable
@@ -303,6 +342,7 @@ uint price = getUniswapSpotPrice(token);  // flash loan manipulatable
 ```
 
 ### Grep Patterns
+
 ```bash
 # Missing staleness check
 grep -rn "latestRoundData" contracts/ -A5 | grep -v "updatedAt\|timestamp"
@@ -319,6 +359,7 @@ grep -rn "secondsAgo\|TWAP\|cardinality" contracts/ -A5
 ## 6. ERC4626 VAULT ATTACKS
 
 ### Exchange Rate Manipulation (near-empty vault)
+
 ```solidity
 // VULNERABLE — first depositor attack:
 // 1. Attacker deposits 1 wei → gets 1 share
@@ -333,6 +374,7 @@ function _decimalsOffset() internal view virtual override returns (uint8) {
 ```
 
 ### ERC4626 Transfer (moves shares but not stake/lock records)
+
 ```solidity
 // VULNERABLE: shares transferred, but lock records stay with original owner
 // → shares stuck, can't redeem → permanent freeze (Belong pattern)
@@ -343,6 +385,7 @@ function transfer(address to, uint256 amount) external override {
 ```
 
 ### Grep Patterns
+
 ```bash
 grep -rn "function transfer\|function transferFrom" contracts/ -A15
 grep -rn "function deposit\|function mint\|function withdraw\|function redeem" contracts/ -A10
@@ -351,15 +394,18 @@ grep -rn "function deposit\|function mint\|function withdraw\|function redeem" c
 ---
 
 ## 7. REENTRANCY
+
 > 2016–present. CEI pattern prevents it. Still found in DeFi.
 
 ### Variants
+
 - **Single-function**: attacker re-enters same function before state updated
 - **Cross-function**: re-enters a sibling function with stale state
 - **Cross-contract**: re-enters via a callback to another protocol
 - **Read-only**: re-enters a view function that returns stale data used by attacker
 
 ### Root Cause Pattern
+
 ```solidity
 // VULNERABLE (effects after interaction):
 function withdraw(uint256 amount) external {
@@ -379,6 +425,7 @@ function withdraw(uint256 amount) external {
 ```
 
 ### Grep Patterns
+
 ```bash
 # External calls before state updates
 grep -rn "\.call{value\|safeTransfer\|transfer(" contracts/ -B10 | grep -v "require\|revert"
@@ -395,6 +442,7 @@ grep -rn "nonReentrant\|ReentrancyGuard\|_notEntered" contracts/
 ## 8. FLASH LOAN ATTACKS
 
 ### Oracle Manipulation via Flash Loan
+
 ```solidity
 // Attack flow:
 // 1. Borrow $100M from Aave flash loan
@@ -405,6 +453,7 @@ grep -rn "nonReentrant\|ReentrancyGuard\|_notEntered" contracts/
 ```
 
 ### Price Oracle Sanity Checks (what to look for)
+
 ```bash
 grep -rn "getReserves\|getAmountsOut\|slot0\b" contracts/ -A5
 # spot price from reserves = manipulatable with flash loan
@@ -416,6 +465,7 @@ grep -rn "getReserves\|getAmountsOut\|slot0\b" contracts/ -A5
 ## 9. SIGNATURE REPLAY
 
 ### Missing Nonce
+
 ```solidity
 // VULNERABLE:
 function permit(address owner, address spender, uint256 value,
@@ -427,6 +477,7 @@ function permit(address owner, address spender, uint256 value,
 ```
 
 ### Missing Chain ID
+
 ```solidity
 // VULNERABLE: signature valid on mainnet AND testnet AND all forks
 bytes32 hash = keccak256(abi.encodePacked(params));
@@ -434,6 +485,7 @@ bytes32 hash = keccak256(abi.encodePacked(params));
 ```
 
 ### Grep Patterns
+
 ```bash
 grep -rn "ecrecover\|ECDSA\.recover" contracts/ -B20
 # Check: does the signed hash include nonce + chainId + contract address?
@@ -446,6 +498,7 @@ grep -rn "nonce\|_nonces\|nonces\[" contracts/
 ## 10. PROXY / UPGRADE ISSUES
 
 ### Storage Collision
+
 ```solidity
 // Implementation and proxy share storage layout
 // Proxy slot 0: _owner
@@ -454,12 +507,14 @@ grep -rn "nonce\|_nonces\|nonces\[" contracts/
 ```
 
 ### Uninitialized Implementation
+
 ```solidity
 // If implementation can be initialized directly → anyone becomes owner of implementation
 // Attack: call initialize() on implementation contract → call upgradeTo() → replace logic
 ```
 
 ### delegatecall to User-Controlled Address
+
 ```solidity
 function execute(address target, bytes calldata data) external onlyOwner {
     target.delegatecall(data);  // target is validated, but what if owner is compromised?
@@ -467,6 +522,7 @@ function execute(address target, bytes calldata data) external onlyOwner {
 ```
 
 ### Grep Patterns
+
 ```bash
 # UUPS initialization protection
 grep -rn "function initialize\b\|_disableInitializers\|initializer" contracts/
@@ -524,6 +580,7 @@ contract ExploitTest is Test {
 ```
 
 ### Key Foundry Cheatcodes
+
 ```solidity
 vm.prank(address)           // next call from address
 vm.startPrank(address)      // all calls from address until stopPrank()
@@ -538,6 +595,7 @@ vm.assume(condition)        // fuzz: discard inputs where false
 ```
 
 ### Running Tests
+
 ```bash
 # Run specific test
 forge test --match-test test_exploit -vvvv
@@ -556,53 +614,96 @@ forge coverage --report summary
 
 ## Related Skills & Chains
 
-- **`meme-coin-audit`** — When the target is a meme coin / SPL token rather than a DeFi protocol. Workflow primitive: pre-dive kill signals diverge — this skill's "TVL < $500K skip" doesn't apply to meme coins where the rug check (mint authority, freeze authority, LP lock) is the entire audit; route to `meme-coin-audit` instead.
-- **`triage-validation`** — When a contract finding is ready to be filed on Immunefi. Workflow primitive: Immunefi has its own report format, but the impact-validated, chain-end-to-end discipline of `triage-validation` still applies; run the 7Q gate against the Foundry PoC before submitting.
-- **`report-writing`** — When writing the Immunefi report body. Workflow primitive: `report-writing`'s Immunefi template (with Foundry PoC, root cause code snippet, quantified economic impact) is the body skeleton this skill's findings feed into.
-- **`offensive-osint`** — When auditing a protocol's off-chain attack surface (frontend, admin API, RPC gateways). Workflow primitive: on-chain audit is this skill's job; any web2 component of the protocol (web-frontend, admin panel, indexer API) routes to `offensive-osint` for recon.
-- **`bb-methodology`** — When deciding whether to dive at all. Workflow primitive: PART 0 of `bb-methodology` confirms engagement (web3 bug bounty / private audit / smart-contract review); this skill's pre-dive kill signals replace the standard scoring rubric for that engagement type.
+- **`meme-coin-audit`** — When the target is a meme coin / SPL token rather than a DeFi protocol.
+  Workflow primitive: pre-dive kill signals diverge — this skill's "TVL < $500K skip" doesn't apply
+  to meme coins where the rug check (mint authority, freeze authority, LP lock) is the entire audit;
+  route to `meme-coin-audit` instead.
+- **`triage-validation`** — When a contract finding is ready to be filed on Immunefi. Workflow
+  primitive: Immunefi has its own report format, but the impact-validated, chain-end-to-end
+  discipline of `triage-validation` still applies; run the 7Q gate against the Foundry PoC before
+  submitting.
+- **`report-writing`** — When writing the Immunefi report body. Workflow primitive:
+  `report-writing`'s Immunefi template (with Foundry PoC, root cause code snippet, quantified
+  economic impact) is the body skeleton this skill's findings feed into.
+- **`offensive-osint`** — When auditing a protocol's off-chain attack surface (frontend, admin API,
+  RPC gateways). Workflow primitive: on-chain audit is this skill's job; any web2 component of the
+  protocol (web-frontend, admin panel, indexer API) routes to `offensive-osint` for recon.
+- **`bb-methodology`** — When deciding whether to dive at all. Workflow primitive: PART 0 of
+  `bb-methodology` confirms engagement (web3 bug bounty / private audit / smart-contract review);
+  this skill's pre-dive kill signals replace the standard scoring rubric for that engagement type.
 
 ---
 
 ## Operator Notes (Claude-BugHunter)
 
-> Engagement-derived + 2026-specific additions to the vendored foundation.
-> Wisdom from real authorized engagements + Phase 2 verification across
-> this repo's 31+ skill-area live tests. The upstream content covers the WHAT;
-> this layer covers the WHEN-IT-WORKS-vs-WHEN-IT-DOESN'T.
+> Engagement-derived + 2026-specific additions to the vendored foundation. Wisdom from real
+> authorized engagements + Phase 2 verification across this repo's 31+ skill-area live tests. The
+> upstream content covers the WHAT; this layer covers the WHEN-IT-WORKS-vs-WHEN-IT-DOESN'T.
 
 ### Bug classes still paying in 2026
 
-Flash-loan attacks remain top-paid on Immunefi (top 5 in 2024-2026 by bounty). The economic primitive — borrow $50M, manipulate price oracle, drain pool, repay — keeps reappearing because new protocols keep shipping with composability assumptions that don't hold under flash-loaned imbalance.
+Flash-loan attacks remain top-paid on Immunefi (top 5 in 2024-2026 by bounty). The economic
+primitive — borrow $50M, manipulate price oracle, drain pool, repay — keeps reappearing because new
+protocols keep shipping with composability assumptions that don't hold under flash-loaned imbalance.
 
-Reentrancy IS still paying because new protocols keep shipping with ERC-777 / hooks / callbacks. Don't assume the class is dead — the 2023-2025 paid corpus contains 40+ reentrancy bugs against post-Checks-Effects-Interactions codebases (cross-function reentrancy, read-only reentrancy via view functions called during state-mid-flight).
+Reentrancy IS still paying because new protocols keep shipping with ERC-777 / hooks / callbacks.
+Don't assume the class is dead — the 2023-2025 paid corpus contains 40+ reentrancy bugs against
+post-Checks-Effects-Interactions codebases (cross-function reentrancy, read-only reentrancy via view
+functions called during state-mid-flight).
 
-Oracle manipulation: still paid heavily but harder. Most projects use Chainlink price feeds now; the attack target is the SECONDARY oracle most projects also use (TWAP from a low-liquidity Uniswap V2 pair, the protocol's own internal oracle, a stale fallback path). Audit the failover chain, not just the primary feed.
+Oracle manipulation: still paid heavily but harder. Most projects use Chainlink price feeds now; the
+attack target is the SECONDARY oracle most projects also use (TWAP from a low-liquidity Uniswap V2
+pair, the protocol's own internal oracle, a stale fallback path). Audit the failover chain, not just
+the primary feed.
 
 ### What's new since the vendored content was written
 
-- **EIP-1153 (transient storage)** — introduced in 2024. New reentrancy classes: transient-storage reads cached across the same transaction can desync from persistent storage. Audit any `tload`/`tstore` usage for read-after-external-call.
-- **EIP-7702 (Pectra hard fork 2025)** — added EOA-to-smart-account upgrades. New ATO-like primitives via re-delegation: an EOA signed-once can delegate to a contract that the attacker controls, then signature replay across delegations.
-- **Account abstraction (ERC-4337 bundlers)** — paymaster sponsorship abuse and bundler griefing. Paymaster contracts that don't enforce strict sender allowlists drain on first call.
-- **ZK-rollup bridge bugs** — proof-replay across rollups, off-chain prover compromise, sequencer censorship leading to forced-inclusion edge cases.
-- **LST/LRT depeg dynamics** — liquid-staking and liquid-restaking tokens that assume 1:1 peg under loss conditions; oracle assumes peg, market reflects depeg, liquidation logic breaks.
+- **EIP-1153 (transient storage)** — introduced in 2024. New reentrancy classes: transient-storage
+  reads cached across the same transaction can desync from persistent storage. Audit any
+  `tload`/`tstore` usage for read-after-external-call.
+- **EIP-7702 (Pectra hard fork 2025)** — added EOA-to-smart-account upgrades. New ATO-like
+  primitives via re-delegation: an EOA signed-once can delegate to a contract that the attacker
+  controls, then signature replay across delegations.
+- **Account abstraction (ERC-4337 bundlers)** — paymaster sponsorship abuse and bundler griefing.
+  Paymaster contracts that don't enforce strict sender allowlists drain on first call.
+- **ZK-rollup bridge bugs** — proof-replay across rollups, off-chain prover compromise, sequencer
+  censorship leading to forced-inclusion edge cases.
+- **LST/LRT depeg dynamics** — liquid-staking and liquid-restaking tokens that assume 1:1 peg under
+  loss conditions; oracle assumes peg, market reflects depeg, liquidation logic breaks.
 
 ### Tool stack for 2026
 
-Foundry remains the test framework. `forge test --gas-report --debug` for invariant testing; `forge fuzz` for property-based testing; `forge inspect` for storage-layout audits. Slither + Echidna for static + fuzz. Mythril for symbolic execution on smaller contracts. tenderly.co for forking + simulation (best UX for replicating attacks against mainnet state).
+Foundry remains the test framework. `forge test --gas-report --debug` for invariant testing;
+`forge fuzz` for property-based testing; `forge inspect` for storage-layout audits. Slither +
+Echidna for static + fuzz. Mythril for symbolic execution on smaller contracts. tenderly.co for
+forking + simulation (best UX for replicating attacks against mainnet state).
 
-For Solana: anchor framework, sealevel-attacks corpus (curated PoCs by anchor maintainers), soteria-sec / sec3 scanner. For Move (Aptos, Sui): move-prover, aptos-cli `aptos move test`.
+For Solana: anchor framework, sealevel-attacks corpus (curated PoCs by anchor maintainers),
+soteria-sec / sec3 scanner. For Move (Aptos, Sui): move-prover, aptos-cli `aptos move test`.
 
-For cross-chain: hyperlane and LayerZero each have audit-tooling repos; bridge bugs require simulating both endpoints, not just one.
+For cross-chain: hyperlane and LayerZero each have audit-tooling repos; bridge bugs require
+simulating both endpoints, not just one.
 
 ### Where pre-dive kill signals matter
 
-TVL under $500K isn't worth the audit time unless the bounty floor is high. Audit firm already covered it = low ROI unless you find what they missed — look at the audit-report scope-exclusion section for what they EXPLICITLY didn't audit (oracles, governance, off-chain components, frontend, the admin path).
+TVL under $500K isn't worth the audit time unless the bounty floor is high. Audit firm already
+covered it = low ROI unless you find what they missed — look at the audit-report scope-exclusion
+section for what they EXPLICITLY didn't audit (oracles, governance, off-chain components, frontend,
+the admin path).
 
-Multisig signers > 5 + timelock > 48h = low rug-pull risk; if your finding requires team-malicious assumptions, it's low-impact and likely out of scope per Immunefi's "centralization risk" exclusion. Read the program brief — most Immunefi programs explicitly downgrade or reject findings that assume admin malice.
+Multisig signers > 5 + timelock > 48h = low rug-pull risk; if your finding requires team-malicious
+assumptions, it's low-impact and likely out of scope per Immunefi's "centralization risk" exclusion.
+Read the program brief — most Immunefi programs explicitly downgrade or reject findings that assume
+admin malice.
 
 ### Reporting discipline
 
-Immunefi requires Foundry PoC. Submission without PoC is auto-rejected. Submission with a PoC that requires manual setup ("first deploy this, then call that") usually gets downgraded — the PoC should be a single `forge test` invocation that proves the impact, with explicit `assertEq` on the drained balance / minted token / corrupted state.
+Immunefi requires Foundry PoC. Submission without PoC is auto-rejected. Submission with a PoC that
+requires manual setup ("first deploy this, then call that") usually gets downgraded — the PoC should
+be a single `forge test` invocation that proves the impact, with explicit `assertEq` on the drained
+balance / minted token / corrupted state.
 
-Severity claims must use Immunefi's severity matrix exactly; don't invent severities. The matrix gates on direct economic loss percentage of TVL — a critical against a $500K protocol pays differently than a critical against a $500M one. Read the program's specific severity assignment before claiming Critical.
+Severity claims must use Immunefi's severity matrix exactly; don't invent severities. The matrix
+gates on direct economic loss percentage of TVL — a critical against a $500K protocol pays
+differently than a critical against a $500M one. Read the program's specific severity assignment
+before claiming Critical.

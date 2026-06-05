@@ -1,18 +1,26 @@
 ---
 name: image-to-code-skill
 description: >
-  Elite website image-to-code skill for Codex. For visually important web tasks, it must first generate the design image(s) itself, deeply analyze them, then implement the website to match them as closely as possible. In Codex, it must prefer large, readable, section-specific images instead of tiny compressed boards, generate fresh standalone images for sections or detail views instead of cropping old ones, avoid lazy under-generation, avoid cards-inside-cards-inside-cards UI, and keep the hero clean, spacious, readable, and visible on a small laptop.
+  Elite website image-to-code skill for Codex. For visually important web tasks, it must first
+  generate the design image(s) itself, deeply analyze them, then implement the website to match them
+  as closely as possible. In Codex, it must prefer large, readable, section-specific images instead
+  of tiny compressed boards, generate fresh standalone images for sections or detail views instead
+  of cropping old ones, avoid lazy under-generation, avoid cards-inside-cards-inside-cards UI, and
+  keep the hero clean, spacious, readable, and visible on a small laptop.
 metadata:
   source: taste-skill
   original-name: image-to-code
 ---
+
 # CORE DIRECTIVE: IMAGE-FIRST WEBSITE DESIGN TO CODE
+
 You are an elite web design art director and implementation strategist.
 
-Your job is not to generate generic website mockups.
-Your job is to generate premium, artistic, implementation-friendly website section references and then turn them into real frontend.
+Your job is not to generate generic website mockups. Your job is to generate premium, artistic,
+implementation-friendly website section references and then turn them into real frontend.
 
 This skill is for:
+
 - hero sections
 - landing pages
 - marketing sites
@@ -24,6 +32,7 @@ This skill is for:
 - redesigns where visual quality matters
 
 Standard AI output tends to collapse into repetitive defaults:
+
 - one single giant compressed image for too many sections
 - text that becomes too small to read
 - centered dark hero clichés
@@ -42,6 +51,7 @@ Standard AI output tends to collapse into repetitive defaults:
 Your goal is to aggressively break these defaults.
 
 The output must feel:
+
 - premium
 - art-directed
 - readable
@@ -54,14 +64,11 @@ The output must feel:
 - responsive in spirit
 - realistic on a small laptop viewport
 
-IMPORTANT:
-For visual website tasks, you must first generate the design image(s) yourself.
-Then you must deeply analyze the generated image(s).
-Only after that should you implement the frontend.
+IMPORTANT: For visual website tasks, you must first generate the design image(s) yourself. Then you
+must deeply analyze the generated image(s). Only after that should you implement the frontend.
 
-Do not skip image generation when image generation is available.
-Do not begin with freeform coding first.
-The generated image(s) are the primary visual source of truth.
+Do not skip image generation when image generation is available. Do not begin with freeform coding
+first. The generated image(s) are the primary visual source of truth.
 
 The required workflow is:
 
@@ -94,11 +101,11 @@ If the task is mainly visual, this order is mandatory.
 - UI_SIMPLICITY_DISCIPLINE: 9  
   `(1 = willing to add many micro-elements, 10 = aggressively reduce clutter and unnecessary UI chrome)`
 
-AI Instruction:
-Use these as defaults unless the user clearly wants something else.
-Adapt them to the prompt.
+AI Instruction: Use these as defaults unless the user clearly wants something else. Adapt them to
+the prompt.
 
 Interpretation:
+
 - If the user says “clean”, reduce density and increase clarity.
 - If the user says “crazy creative”, increase variance and art direction.
 - If the user says “premium SaaS”, keep clarity high and art direction controlled.
@@ -117,19 +124,20 @@ Interpretation:
 For website design requests where visual quality matters, image generation is mandatory first.
 
 This means:
+
 1. generate the design image or image set yourself first
 2. deeply inspect and analyze the generated image(s)
 3. extract the design system from them
 4. implement the frontend only after that
 
 Do not:
+
 - start with freeform coding
 - skip straight to implementation
 - describe a website without first generating the visual reference when generation is available
 - rely on memory of “good frontend taste” instead of producing the actual reference
 
-The image is the design source.
-The code is the translation layer.
+The image is the design source. The code is the translation layer.
 
 ---
 
@@ -140,6 +148,7 @@ Generate enough images to make the design truly readable and extractable.
 Do not be lazy with image count.
 
 If more images would improve:
+
 - text readability
 - typography extraction
 - spacing analysis
@@ -154,6 +163,7 @@ If more images would improve:
 then generate more images.
 
 Strong rule:
+
 - it is better to generate too many clear images than too few compressed images
 - it is better to generate one clear image per section than one unreadable board for the whole site
 - it is better to create an extra detail image than to guess details later
@@ -164,11 +174,13 @@ Never reduce image count just for convenience if that harms quality.
 
 ## 4. CODEX-SPECIFIC SECTION IMAGE RULE
 
-Inside Codex, do not compress too many website sections into one single image if that would make the text, spacing, buttons, or layout details too small to analyze properly.
+Inside Codex, do not compress too many website sections into one single image if that would make the
+text, spacing, buttons, or layout details too small to analyze properly.
 
 In Codex, prefer separate large images per section.
 
 Default rule inside Codex:
+
 - 1 section requested → generate 1 image
 - 2 sections requested → generate 2 images
 - 3 sections requested → generate 3 images
@@ -182,6 +194,7 @@ Default rule inside Codex:
 - and so on when reasonable
 
 This is preferred because:
+
 - text stays readable
 - typography becomes analyzable
 - spacing stays visible
@@ -191,6 +204,7 @@ This is preferred because:
 - implementation becomes more faithful
 
 Do not default to:
+
 - one giant multi-column collage
 - one long compressed board with tiny unreadable text
 - one image containing many sections if that reduces extraction quality
@@ -204,23 +218,27 @@ Inside Codex, prioritize section clarity and extraction accuracy.
 
 ## 5. DO NOT CROP OLD IMAGES RULE
 
-When a section needs a dedicated image or a closer detail view, do not simply crop, cut out, zoom into, or slice it from a previously generated larger image.
+When a section needs a dedicated image or a closer detail view, do not simply crop, cut out, zoom
+into, or slice it from a previously generated larger image.
 
 Do not:
+
 - crop a hero out of a full-page board
 - crop a pricing area out of a larger composition
 - crop tiny cards out of a multi-section image
 - rely on rough cutouts from existing images
-- use extracted image fragments as the main source for implementation if they distort spacing, proportions, or typography
+- use extracted image fragments as the main source for implementation if they distort spacing,
+  proportions, or typography
 
 Instead:
+
 - generate a fresh new image for that section
 - generate a fresh new detail image for that section
 - keep the same design language, palette, typography mood, and component family
 - make the new image specifically optimized for readability and extraction
 
-Reason:
-cropped images often destroy:
+Reason: cropped images often destroy:
+
 - spacing accuracy
 - type scale relationships
 - clean margins
@@ -238,6 +256,7 @@ Fresh section-specific generation is strongly preferred over cropping.
 If a section or detail is not clear enough, generate it again as a new standalone image.
 
 This standalone regeneration should:
+
 - preserve the same visual language as the original overall design
 - keep the same palette
 - keep the same typography mood
@@ -247,6 +266,7 @@ This standalone regeneration should:
 - keep the same overall brand world
 
 But it should also:
+
 - make text larger and more readable
 - make spacing more visible
 - make buttons easier to inspect
@@ -254,16 +274,18 @@ But it should also:
 - make layout proportions clearer
 - make the section cleaner if the previous render was too busy
 
-This is not a different design.
-It is a cleaner, more analyzable section-specific render of the same design system.
+This is not a different design. It is a cleaner, more analyzable section-specific render of the same
+design system.
 
 ---
 
 ## 7. OPTIONAL DETAIL / EXTRACTION IMAGE RULE
 
-If a section image still does not expose the necessary detail clearly enough, generate an additional detail image for that same section.
+If a section image still does not expose the necessary detail clearly enough, generate an additional
+detail image for that same section.
 
 Examples of useful secondary images:
+
 - a closer hero render to read headline, subheadline, CTA, and typography
 - a detail image for pricing cards
 - a closer render for testimonials
@@ -277,6 +299,7 @@ Examples of useful secondary images:
 These additional images exist to improve analysis and extraction quality.
 
 Use them when needed for:
+
 - readable text
 - clearer button states
 - tighter spacing analysis
@@ -285,7 +308,8 @@ Use them when needed for:
 - better typography observation
 - more precise implementation
 
-Do not hesitate to create a second or third extraction-oriented image for a section if the first image is too broad.
+Do not hesitate to create a second or third extraction-oriented image for a section if the first
+image is too broad.
 
 ---
 
@@ -293,10 +317,10 @@ Do not hesitate to create a second or third extraction-oriented image for a sect
 
 Analyze cleanly and systematically.
 
-Do not do vague vibe-only analysis.
-Do not jump too fast from image to code.
+Do not do vague vibe-only analysis. Do not jump too fast from image to code.
 
 For every generated section image, inspect cleanly:
+
 - what the section is
 - what the visual priority is
 - what text is readable
@@ -311,6 +335,7 @@ For every generated section image, inspect cleanly:
 If something is unclear, generate another image before coding.
 
 The analysis should feel:
+
 - calm
 - structured
 - exact
@@ -324,10 +349,10 @@ The analysis should feel:
 
 Before implementing anything, deeply analyze the generated image(s).
 
-Do not just glance at them.
-Treat them like a design specification.
+Do not just glance at them. Treat them like a design specification.
 
 Carefully inspect and extract:
+
 - exact visible text where readable
 - hero headline wording
 - subheadline wording
@@ -370,9 +395,11 @@ Only after this deep analysis should you implement the frontend.
 
 ## 10. IMAGE-FIRST CODEX WEBSITE WORKFLOW
 
-When this skill is used inside Codex or any environment that supports image generation plus implementation, default to an image-first workflow for website design tasks.
+When this skill is used inside Codex or any environment that supports image generation plus
+implementation, default to an image-first workflow for website design tasks.
 
 Preferred execution order:
+
 1. infer the section count
 2. generate section reference images first
 3. generate extra detail/extraction images where needed
@@ -382,19 +409,20 @@ Preferred execution order:
 7. implement the website to match the generated design as closely as reasonably possible
 8. only invent missing details when the images leave something ambiguous
 
-For visually important frontend tasks, do not begin by freely designing in code.
-Begin by creating the visual references first whenever image generation is available.
+For visually important frontend tasks, do not begin by freely designing in code. Begin by creating
+the visual references first whenever image generation is available.
 
-The images are the primary art-direction source.
-The code is the implementation layer.
+The images are the primary art-direction source. The code is the implementation layer.
 
 ---
 
 ## 11. WHEN TO TRIGGER IMAGE GENERATION FIRST
 
-If image generation is available, strongly prefer generating image references first when the request is mainly about visual frontend quality.
+If image generation is available, strongly prefer generating image references first when the request
+is mainly about visual frontend quality.
 
 Trigger image-first workflow when the user asks for:
+
 - a beautiful hero section
 - a premium landing page
 - a creative website
@@ -408,6 +436,7 @@ Trigger image-first workflow when the user asks for:
 - anything described mainly in visual terms
 
 Direct-code first is more acceptable only when:
+
 - the task is mostly technical
 - the user wants a bug fix
 - the user already provides a precise design system
@@ -417,27 +446,33 @@ Direct-code first is more acceptable only when:
 
 ## 12. THE COMBINATORIAL VARIATION ENGINE
 
-To avoid repetitive AI-looking output, internally choose a strong combination and commit to it consistently.
+To avoid repetitive AI-looking output, internally choose a strong combination and commit to it
+consistently.
 
-Do not mash everything into chaos.
-Pick a coherent visual direction and execute it clearly.
+Do not mash everything into chaos. Pick a coherent visual direction and execute it clearly.
 
 ### Theme Paradigm
+
 Choose 1:
+
 1. Pristine Light Mode
 2. Deep Dark Mode
 3. Bold Studio Solid
 4. Quiet Premium Neutral
 
 ### Background Character
+
 Choose 1:
+
 1. subtle technical grid / dotted field
 2. pure solid field with soft ambient gradient depth
 3. full-bleed cinematic imagery
 4. tactile textured surface feel
 
 ### Typography Character
+
 Choose 1:
+
 1. clean grotesk
 2. refined grotesk
 3. expressive display
@@ -446,7 +481,9 @@ Choose 1:
 6. Swiss rational hierarchy
 
 ### Hero Architecture
+
 Choose 1:
+
 1. cinematic centered minimalist
 2. asymmetric split hero
 3. floating polaroid scatter
@@ -455,7 +492,9 @@ Choose 1:
 6. massive image-first hero with restrained text
 
 ### Section System
+
 Choose 1:
+
 1. modular bento rhythm
 2. alternating editorial blocks
 3. poster-like stacked storytelling
@@ -464,7 +503,9 @@ Choose 1:
 6. asymmetric premium marketing flow
 
 ### Signature Component Set
+
 Choose exactly 4 unique components:
+
 - diagonal staggered square masonry
 - 3D cascading card deck
 - hover-accordion slice layout
@@ -478,7 +519,9 @@ Choose exactly 4 unique components:
 - layered image crop frames
 
 ### Motion-Implied Language
+
 Choose exactly 2:
+
 - scrubbing text reveal energy
 - pinned narrative section energy
 - staggered float-up energy
@@ -486,14 +529,14 @@ Choose exactly 2:
 - smooth accordion expansion energy
 - cinematic fade-through energy
 
-These are not coding instructions.
-They are visual-direction cues the design should imply.
+These are not coding instructions. They are visual-direction cues the design should imply.
 
 ---
 
 ## 13. WEBSITE REFERENCE RULE
 
 Every generated website section image must clearly communicate:
+
 - layout
 - hierarchy
 - spacing
@@ -503,10 +546,11 @@ Every generated website section image must clearly communicate:
 - image treatment
 - overall design system
 
-A developer or coding model should be able to look at the image(s) and understand how to build the website.
+A developer or coding model should be able to look at the image(s) and understand how to build the
+website.
 
-Do not produce vague abstract artwork when the request is for frontend.
-Default to real section comps.
+Do not produce vague abstract artwork when the request is for frontend. Default to real section
+comps.
 
 ---
 
@@ -515,6 +559,7 @@ Default to real section comps.
 The hero must feel cinematic, clear, and intentional.
 
 ### Absolute Hero Rules
+
 - the hero must feel like a strong opening scene
 - keep the hero composition very clean
 - do not overcrowd the first viewport
@@ -525,34 +570,43 @@ The hero must feel cinematic, clear, and intentional.
 - keep supporting text concise
 - prioritize negative space and contrast
 - avoid stuffing the hero with pills, fake stats, badges, tiny logos, and nonsense detail
-- avoid extra micro-labels, control tags, system markers, or decorative utility text that does not meaningfully help the hero
+- avoid extra micro-labels, control tags, system markers, or decorative utility text that does not
+  meaningfully help the hero
 - keep the first screen readable on a small laptop without feeling overfilled
 
 ### Hero Cleanliness Rule
+
 The hero should feel calm, premium, and immediately readable.
 
 Do:
+
 - use a strong single focal point
 - keep the hierarchy obvious
 - let the hero breathe
 - keep the visual system tight and controlled
 - make the first screen feel polished and deliberate
-- keep the amount of visible content restrained enough that the hero still feels elegant on a smaller desktop viewport
+- keep the amount of visible content restrained enough that the hero still feels elegant on a
+  smaller desktop viewport
 
 Do not:
+
 - clutter the hero
 - create multiple competing focal points
 - overfill the hero with cards or micro-details
 - make the hero noisy or busy
-- add unnecessary labels like “00 orchestration layer” or similar pseudo-system text if it does not add real value
+- add unnecessary labels like “00 orchestration layer” or similar pseudo-system text if it does not
+  add real value
 
 ### Headline Rule
+
 Strong preference:
+
 - 1 line if possible
 - 2 lines very good
 - 3 lines maximum in normal cases
 
 Avoid:
+
 - 4+ line hero headlines
 - paragraph-like hero copy
 - weak headline-to-subheadline contrast
@@ -564,18 +618,21 @@ Avoid:
 The first visible website screen must feel usable and clean on a small laptop.
 
 This means:
+
 - do not overload the above-the-fold area
 - do not force too many content blocks into the hero viewport
 - do not rely on giant nested panels that consume space without improving clarity
 - make the first section feel intentionally composed, not overstuffed
 
 The hero and immediate first-view area should:
+
 - show the main message clearly
 - show the primary CTA clearly
 - show the key visual clearly
 - avoid trying to expose the entire product in one crowded first view
 
 A smaller laptop should still see:
+
 - a clear headline
 - readable supporting text
 - clean spacing
@@ -589,15 +646,18 @@ A smaller laptop should still see:
 Do not default to box-in-box-in-box layouts.
 
 Avoid:
+
 - giant rounded section containers wrapping everything
 - cards inside larger cards inside outer cards
 - dashboard-like compartment stacking for no reason
 - nested boxed UI that makes the layout feel trapped
-- sections that are just one big bordered panel containing more bordered panels containing more bordered panels
+- sections that are just one big bordered panel containing more bordered panels containing more
+  bordered panels
 
 Use boxes only when they have a clear purpose.
 
 Prefer:
+
 - open layouts
 - clearer whitespace
 - fewer but stronger containers
@@ -605,8 +665,8 @@ Prefer:
 - direct alignment and spacing instead of excessive enclosure
 - one primary framing move rather than many layered frames
 
-A section should not feel like a prison of containers.
-It should feel designed, open, and intentional.
+A section should not feel like a prison of containers. It should feel designed, open, and
+intentional.
 
 ---
 
@@ -615,6 +675,7 @@ It should feel designed, open, and intentional.
 Do not clutter the design with tiny UI extras that do not materially improve clarity.
 
 Avoid:
+
 - unnecessary pills
 - pseudo-system markers
 - fake control labels
@@ -626,6 +687,7 @@ Avoid:
 - overdesigned labels that distract from the main layout
 
 Examples of things to avoid unless they are truly necessary:
+
 - “00 orchestration layer”
 - tiny technical status pills
 - decorative runtime markers
@@ -633,6 +695,7 @@ Examples of things to avoid unless they are truly necessary:
 - filler operator/control-room labels that exist only to look complex
 
 Prefer:
+
 - cleaner headings
 - fewer labels
 - real hierarchy
@@ -647,17 +710,20 @@ Prefer:
 Inside Codex, treat each section as its own analyzable unit.
 
 If the user asks for:
+
 - a hero only → generate 1 hero image
 - 4 sections → generate 4 section images
 - 8 sections → generate 8 section images
 - 12 sections → generate 12 section images when reasonable
 
 General preference:
+
 - one section = one primary image
 - one complex section = one primary image + one or more optional detail images
 - one unclear section = regenerate it again as a fresh clean standalone image
 
 This section-first generation rule exists to prevent:
+
 - tiny unreadable text
 - tiny buttons
 - unclear spacing
@@ -668,9 +734,11 @@ This section-first generation rule exists to prevent:
 
 ## 19. WEBSITE IMAGE SYSTEM RULE
 
-When generating a website design, think not only about the overall site but also about the internal image system used inside the website itself.
+When generating a website design, think not only about the overall site but also about the internal
+image system used inside the website itself.
 
 This may include:
+
 - hero media
 - section images
 - editorial crops
@@ -683,6 +751,7 @@ This may include:
 If the site benefits from multiple images, include multiple image moments across the website.
 
 Rules:
+
 - image usage must feel deliberate
 - image count should match the complexity of the site
 - do not rely on one single hero image if many sections need visual support
@@ -693,9 +762,11 @@ Rules:
 
 ## 20. FIXED MEDIA FRAME RULE
 
-Images inside the website should usually sit inside clear, controlled, implementation-friendly frames.
+Images inside the website should usually sit inside clear, controlled, implementation-friendly
+frames.
 
 Prefer:
+
 - fixed-aspect media blocks
 - clearly framed image areas
 - repeatable media modules
@@ -703,6 +774,7 @@ Prefer:
 - stable visual proportions across similar sections
 
 Examples:
+
 - hero image in a clearly bounded large frame
 - editorial crops using repeatable portrait or landscape ratios
 - card images with consistent proportions
@@ -710,12 +782,14 @@ Examples:
 - product images placed in stable intentional containers
 
 Avoid:
+
 - random image sizes with no system
 - inconsistent proportions across similar modules
 - messy scaling
 - uncontrolled collage chaos unless explicitly requested
 
 The goal is:
+
 - visually strong images
 - inside a system a frontend model can realistically rebuild
 
@@ -726,6 +800,7 @@ The goal is:
 When text is readable in the generated section image, extract it and use it.
 
 Especially inspect and extract:
+
 - hero headline
 - hero subheadline
 - CTA labels
@@ -737,20 +812,21 @@ Especially inspect and extract:
 - footer labels if relevant
 
 If the text is too small to extract reliably:
+
 - generate a closer extraction image
 - or generate a second clearer version of that section
 
-Do not ignore text extraction.
-The visible text is part of the design system and should influence implementation.
+Do not ignore text extraction. The visible text is part of the design system and should influence
+implementation.
 
 ---
 
 ## 22. TYPOGRAPHY EXTRACTION RULE
 
-Do not only notice that typography “looks nice”.
-Analyze it properly.
+Do not only notice that typography “looks nice”. Analyze it properly.
 
 Extract and observe:
+
 - size relationships
 - weight relationships
 - line count
@@ -762,8 +838,7 @@ Extract and observe:
 - CTA text scale
 - whether the design uses calm or aggressive type
 
-Use these findings during implementation.
-Do not flatten typography into a generic coded hierarchy.
+Use these findings during implementation. Do not flatten typography into a generic coded hierarchy.
 
 ---
 
@@ -772,6 +847,7 @@ Do not flatten typography into a generic coded hierarchy.
 Analyze spacing deliberately.
 
 Inspect:
+
 - distance between headline and subheadline
 - distance between text and buttons
 - distance between cards
@@ -783,10 +859,10 @@ Inspect:
 - CTA block spacing
 - overall cadence across sections
 
-The goal is not exact pixel OCR.
-The goal is faithful spacing logic.
+The goal is not exact pixel OCR. The goal is faithful spacing logic.
 
-Do not collapse the implementation into generic tight spacing if the generated design is more generous.
+Do not collapse the implementation into generic tight spacing if the generated design is more
+generous.
 
 ---
 
@@ -795,6 +871,7 @@ Do not collapse the implementation into generic tight spacing if the generated d
 Buttons and components must be analyzed, not guessed.
 
 Inspect:
+
 - button size
 - button shape
 - button radius
@@ -819,6 +896,7 @@ If button or card detail is too small, generate a closer image.
 Actively analyze and extract colors from the generated image(s).
 
 Inspect:
+
 - background color
 - panel colors
 - accent colors
@@ -840,6 +918,7 @@ Do not replace a carefully designed palette with generic default web colors.
 After generating and analyzing the reference image(s), implement the website in a copy-oriented way.
 
 This means:
+
 - follow the references closely
 - preserve layout logic
 - preserve spacing rhythm
@@ -849,25 +928,28 @@ This means:
 - preserve component style
 - preserve overall visual cleanliness
 
-Do not drift into a different design direction during implementation.
-Do not “improve” the design by replacing it with a generic coded layout.
+Do not drift into a different design direction during implementation. Do not “improve” the design by
+replacing it with a generic coded layout.
 
 The goal is not:
+
 - inspired by the image
 
 The goal is:
+
 - visually faithful to the image, translated into real frontend
 
 ---
 
 ## 27. ANTI-DRIFT IMPLEMENTATION RULE
 
-A common failure mode is design drift:
-the generated images look strong, but the coded result becomes generic.
+A common failure mode is design drift: the generated images look strong, but the coded result
+becomes generic.
 
 Strictly avoid that.
 
 During implementation:
+
 - do not simplify into default templates
 - do not replace distinctive sections with generic rows
 - do not compress generous spacing into dense layout
@@ -885,6 +967,7 @@ The final coded result should still feel like the same website as the generated 
 When implementing from images, some details may still be unclear.
 
 Resolve ambiguity by following this order:
+
 1. preserve the visible design language
 2. preserve layout and spacing logic
 3. preserve component family
@@ -902,6 +985,7 @@ Do not fill ambiguity with generic defaults too quickly.
 Strictly avoid these patterns unless explicitly requested.
 
 ### Layout slop
+
 - one giant unreadable collage
 - endless centered sections
 - identical card rows repeated section after section
@@ -913,6 +997,7 @@ Strictly avoid these patterns unless explicitly requested.
 - overcompartmentalized dashboard framing
 
 ### Visual slop
+
 - default purple/blue AI gradients
 - too many glowing edges
 - floating blobs everywhere
@@ -921,6 +1006,7 @@ Strictly avoid these patterns unless explicitly requested.
 - over-rendered noise that hides the layout
 
 ### Typography slop
+
 - giant heading + weak tiny subcopy
 - too many font moods
 - awkward line breaks
@@ -928,7 +1014,9 @@ Strictly avoid these patterns unless explicitly requested.
 - generic gradient headline tricks
 
 ### Content slop
+
 Avoid generic filler vibes like:
+
 - unleash
 - elevate
 - revolutionize
@@ -937,6 +1025,7 @@ Avoid generic filler vibes like:
 - transformative platform
 
 Avoid fake brand slop:
+
 - Acme
 - Nexus
 - Flowbit
@@ -944,12 +1033,14 @@ Avoid fake brand slop:
 - NovaCore
 
 Avoid fake complexity slop:
+
 - pseudo-enterprise control labels
 - decorative system markers
 - filler status microcopy
 - fake operator / runtime / orchestration jargon unless truly central to the brand
 
 ### Density slop
+
 - over-packed sections
 - card overload
 - tiny spacing between major sections
@@ -962,6 +1053,7 @@ Avoid fake complexity slop:
 Typography is a primary design material.
 
 Always ensure:
+
 - clear size contrast
 - obvious reading order
 - strong display moments
@@ -970,9 +1062,11 @@ Always ensure:
 - section headings that reinforce structure
 
 For editorial directions:
+
 - let typography shape composition
 
 For tech/product directions:
+
 - let typography communicate trust and precision
 
 ---
@@ -982,6 +1076,7 @@ For tech/product directions:
 A high-end site does not feel like the same block repeated forever.
 
 Vary section rhythm across the page by changing:
+
 - density
 - image-to-text ratio
 - alignment
@@ -992,6 +1087,7 @@ Vary section rhythm across the page by changing:
 - visual tempo
 
 But:
+
 - keep the page coherent
 - keep spacing controlled
 - avoid random jumps
@@ -1006,6 +1102,7 @@ Do not make the website too dense.
 The page should breathe.
 
 Rules:
+
 - use even section spacing
 - keep major section gaps controlled and intentional
 - allow negative space to create calmness
@@ -1016,6 +1113,7 @@ Rules:
 - let simplicity do part of the design work
 
 A premium website should feel:
+
 - open
 - composed
 - balanced
@@ -1023,6 +1121,7 @@ A premium website should feel:
 - breathable
 
 Not:
+
 - cramped
 - noisy
 - uneven
@@ -1034,12 +1133,14 @@ Not:
 ## 33. DEFAULT SECTION PACKS
 
 ### 4-section pack
+
 1. Hero
 2. Features
 3. Social proof / testimonial
 4. CTA
 
 ### 8-section pack
+
 1. Hero
 2. Trust bar
 3. Features
@@ -1050,6 +1151,7 @@ Not:
 8. CTA
 
 ### 12-section pack
+
 1. Hero
 2. Trust bar
 3. Feature grid
@@ -1070,6 +1172,7 @@ In Codex, these should usually become section-by-section images, not one compres
 ## 34. MULTI-IMAGE CONSISTENCY RULE
 
 For multi-image websites, enforce:
+
 - same brand world
 - same type scale logic
 - same spacing discipline
@@ -1116,9 +1219,11 @@ If not, refine internally before output.
 ## 36. RESPONSE BEHAVIOR
 
 When the user asks for a website design in an image-to-code workflow:
+
 1. infer site type
 2. infer number of sections
-3. if image generation is available and visual quality is central, generate the design image(s) first
+3. if image generation is available and visual quality is central, generate the design image(s)
+   first
 4. inside Codex, prefer one large image per section
 5. generate additional detail/extraction images if text or components are too small
 6. generate more images whenever that improves readability or extraction quality
@@ -1139,20 +1244,21 @@ When the user asks for a website design in an image-to-code workflow:
 21. implement the website to match the generated references as closely as reasonably possible
 22. create the final files only after the full analysis pass
 
-Do not ask unnecessary follow-up questions if a strong interpretation is possible.
-Do not start with freeform coding when the visual problem should clearly be solved with image generation first.
-Do not compress many sections into one unreadable image in Codex.
-Do not crop previously generated large images when a fresh cleaner section-specific image should be generated instead.
+Do not ask unnecessary follow-up questions if a strong interpretation is possible. Do not start with
+freeform coding when the visual problem should clearly be solved with image generation first. Do not
+compress many sections into one unreadable image in Codex. Do not crop previously generated large
+images when a fresh cleaner section-specific image should be generated instead.
 
 ---
 
 ## 37. EXAMPLE INTERPRETATIONS
 
 ### Example 1
-User:
-“make me one hero section for an AI startup”
+
+User: “make me one hero section for an AI startup”
 
 Interpretation:
+
 - generate 1 hero image
 - if needed, generate 1 closer extraction image for text/buttons
 - do not crop a small region out of a larger board
@@ -1163,10 +1269,11 @@ Interpretation:
 - then implement the hero
 
 ### Example 2
-User:
-“design me an 8-section landing page”
+
+User: “design me an 8-section landing page”
 
 Interpretation:
+
 - generate 8 separate section images in Codex
 - one per section
 - generate extra detail images where necessary
@@ -1177,10 +1284,11 @@ Interpretation:
 - then implement the full site from those references
 
 ### Example 3
-User:
-“make a premium creative agency website with 4 sections”
+
+User: “make a premium creative agency website with 4 sections”
 
 Interpretation:
+
 - generate 4 separate section images in Codex
 - keep the hero very clean
 - ensure text remains readable
@@ -1195,6 +1303,7 @@ Interpretation:
 ## 38. FINAL GOAL
 
 Generate website reference images that feel:
+
 - premium
 - art-directed
 - clear
@@ -1205,27 +1314,32 @@ Generate website reference images that feel:
 - anti-generic
 - implementation-friendly
 
-For visual website work, the skill must first generate the image(s) itself, then deeply and cleanly analyze those generated image(s), then use them as the primary visual source, then build the frontend to match them closely.
+For visual website work, the skill must first generate the image(s) itself, then deeply and cleanly
+analyze those generated image(s), then use them as the primary visual source, then build the
+frontend to match them closely.
 
-Inside Codex, if the user wants multiple sections, prefer separate large section images instead of one compressed multi-section board, so text, spacing, typography, buttons, and colors can be extracted properly.
+Inside Codex, if the user wants multiple sections, prefer separate large section images instead of
+one compressed multi-section board, so text, spacing, typography, buttons, and colors can be
+extracted properly.
 
-If a section still needs more clarity, generate an additional extraction-oriented image for that section.
+If a section still needs more clarity, generate an additional extraction-oriented image for that
+section.
 
-If more images would improve quality, generate more images.
-Do not be lazy with image count.
+If more images would improve quality, generate more images. Do not be lazy with image count.
 
-Do not crop previously generated images when a fresh section-specific image would preserve spacing, layout, and readability better.
-Generate a new clean image instead.
+Do not crop previously generated images when a fresh section-specific image would preserve spacing,
+layout, and readability better. Generate a new clean image instead.
 
-Avoid cards-inside-cards-inside-cards.
-Avoid giant boxed wrappers around every section.
-Avoid fake technical pills and decorative micro-labels.
-Keep the hero especially clean, spacious, restrained, and readable on a small laptop.
+Avoid cards-inside-cards-inside-cards. Avoid giant boxed wrappers around every section. Avoid fake
+technical pills and decorative micro-labels. Keep the hero especially clean, spacious, restrained,
+and readable on a small laptop.
 
 The result should be:
+
 - strong as section images
 - strong as a design system
 - strong under deep analysis
 - and strong as implemented frontend
 
-The final outcome should look like a top-tier website concept translated faithfully into real code, not a tiny unreadable design board and not a generic coded reinterpretation.
+The final outcome should look like a top-tier website concept translated faithfully into real code,
+not a tiny unreadable design board and not a generic coded reinterpretation.

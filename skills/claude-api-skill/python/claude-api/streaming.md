@@ -30,7 +30,8 @@ async with async_client.messages.stream(
 
 Claude may return text, thinking blocks, or tool use. Handle each appropriately:
 
-> **Opus 4.8 / Opus 4.7 / Opus 4.6:** Use `thinking: {type: "adaptive"}`. On older models, use `thinking: {type: "enabled", budget_tokens: N}` instead.
+> **Opus 4.8 / Opus 4.7 / Opus 4.6:** Use `thinking: {type: "adaptive"}`. On older models, use
+> `thinking: {type: "enabled", budget_tokens: N}` instead.
 
 ```python
 with client.messages.stream(
@@ -57,7 +58,8 @@ with client.messages.stream(
 
 ## Streaming with Tool Use
 
-The Python tool runner currently returns complete messages. Use streaming for individual API calls within a manual loop if you need per-token streaming with tools:
+The Python tool runner currently returns complete messages. Use streaming for individual API calls
+within a manual loop if you need per-token streaming with tools:
 
 ```python
 with client.messages.stream(
@@ -159,4 +161,5 @@ except anthropic.APIStatusError as e:
 2. **Handle partial responses** — If the stream is interrupted, you may have incomplete content
 3. **Track token usage** — The `message_delta` event contains usage information
 4. **Use timeouts** — Set appropriate timeouts for your application
-5. **Default to streaming** — Use `.get_final_message()` to get the complete response even when streaming, giving you timeout protection without needing to handle individual events
+5. **Default to streaming** — Use `.get_final_message()` to get the complete response even when
+   streaming, giving you timeout protection without needing to handle individual events

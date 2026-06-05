@@ -342,7 +342,17 @@
     "reportPath": "reports/quality-gates-report.json",
     "dashboardUrl": "http://localhost:3000/dashboard"
   },
-  "requiredWorkflows": ["gentle-vanguard-quality-gate", "cross-platform-tests", "security-scan", "js-ts-quality", "commitlint", "python-quality", "coverage", "markdown-lint", "npm-audit"],
+  "requiredWorkflows": [
+    "gentle-vanguard-quality-gate",
+    "cross-platform-tests",
+    "security-scan",
+    "js-ts-quality",
+    "commitlint",
+    "python-quality",
+    "coverage",
+    "markdown-lint",
+    "npm-audit"
+  ],
   "feedbackCollection": {
     "enabled": true,
     "file": ".session/feedback/feedback.jsonl",

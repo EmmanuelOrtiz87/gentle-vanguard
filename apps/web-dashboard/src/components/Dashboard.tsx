@@ -5,6 +5,7 @@ import { MetricsCard } from './MetricsCard';
 import { LiveChart } from './LiveChart';
 import { SessionTable } from './SessionTable';
 import { AgentMessage } from './AgentMessage';
+import { GlobalHealth } from './GlobalHealth';
 import { useAgentStream } from '../hooks/useAgentStream';
 import type { Session } from '../types/dashboard';
 
@@ -32,6 +33,7 @@ export default function Dashboard() {
     document.documentElement.classList.toggle('dark');
   };
 
+  const globalHealthData = (data as any)?.globalHealth;
   const mcpData = (data as any)?.mcp;
   const totalSkills = mcpData?.skills?.total || 0;
   const totalCalls = mcpData?.calls?.total || 0;
@@ -130,6 +132,12 @@ export default function Dashboard() {
                 <p className="metric-value">{avgResponseTime.toFixed(0)}ms</p>
               </div>
             </div>
+          </div>
+        )}
+
+        {globalHealthData && (
+          <div className="mb-8">
+            <GlobalHealth data={globalHealthData} />
           </div>
         )}
 
