@@ -24,10 +24,15 @@ export function useSharedState(url: string = 'ws://localhost:8080') {
   const [connected, setConnected] = useState(false);
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectRef = useRef<NodeJS.Timeout | null>(null);
+  const urlRef = useRef(url);
+
+  useEffect(() => {
+    urlRef.current = url;
+  }, [url]);
 
   const connect = useCallback(() => {
     try {
-      const ws = new WebSocket(url);
+      const ws = new WebSocket(urlRef.current);
       wsRef.current = ws;
 
       ws.onopen = () => setConnected(true);
@@ -60,7 +65,7 @@ export function useSharedState(url: string = 'ws://localhost:8080') {
     } catch {
       setConnected(false);
     }
-  }, [url]);
+  }, []);
 
   const disconnect = useCallback(() => {
     if (reconnectRef.current) clearTimeout(reconnectRef.current);
