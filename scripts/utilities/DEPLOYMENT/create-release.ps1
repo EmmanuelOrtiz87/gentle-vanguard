@@ -1,8 +1,20 @@
 <#
+.DEPRECATED
+    This script is DEPRECATED. Use release-automation.ps1 instead.
+    
+    Reason: compile-ps2exe.ps1 takes -SourceScript, but this script passes -Version,
+    causing a silent parameter mismatch. The output path (releases/) also conflicts
+    with the canonical dist/Gentle-Vanguard.exe. The normative pipeline is:
+      release-automation.ps1 → build/create-installer.ps1 → dist/Gentle-Vanguard.exe → sync-to-public.ps1
+    
+    Superseded by: scripts/utilities/DEPLOYMENT/release-automation.ps1
+    Deprecated since: v3.2.0
+
 .SYNOPSIS
-    Create a new release for Gentle-Vanguard
+    [DEPRECATED] Create a new release for Gentle-Vanguard
 .DESCRIPTION
-    Automates the release process: version bump, changelog, tag, build, release notes.
+    [DEPRECATED] Use release-automation.ps1 instead. This script had parameter
+    mismatches and an outdated output path. Kept for reference only.
 .PARAMETER Version
     Version number (e.g., 3.1.0)
 .PARAMETER Build

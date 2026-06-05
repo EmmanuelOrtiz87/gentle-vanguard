@@ -1,4 +1,9 @@
 #!/usr/bin/env pwsh
+#
+# NOTE: This is a GENERAL-PURPOSE utility for compiling individual .ps1 → .exe.
+# It is NOT part of the release pipeline. For release builds use:
+#   build/create-installer.ps1 → dist/Gentle-Vanguard.exe
+#
 # Compile PowerShell scripts to .exe using PS2EXE
 
 param(
