@@ -1,1 +1,1 @@
-& 'scripts/utilities/resilience-handler.ps1' -ScriptBlock { & 'scripts/adaptive/auto-norm-enforcer.ps1' -Trigger karpathy } -TimeoutSeconds 30 -OperationName karpathy-enforcer -FallbackAction warn_skip
+& 'scripts/utilities/utils/resilience-handler.ps1' -ScriptBlock { & 'scripts/adaptive/auto-norm-enforcer.ps1' -Trigger karpathy } -TimeoutSeconds 30 -OperationName karpathy-enforcer -FallbackAction warn_skip

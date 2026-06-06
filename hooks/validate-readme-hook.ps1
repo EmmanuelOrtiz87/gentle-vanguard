@@ -45,7 +45,7 @@ Write-Host "=== README Governance Check ===" -ForegroundColor Cyan
 Write-Host "README.md changes detected - running governance validation..." -ForegroundColor Gray
 Write-Host ""
 
-$validateScript = Join-Path $repoRoot 'scripts/utilities/validate-readme.ps1'
+$validateScript = Join-Path $repoRoot 'scripts/utilities/validate/validate-readme.ps1'
 if (-not (Test-Path $validateScript)) {
     Write-Host "[WARN] validate-readme.ps1 not found - skipping governance check" -ForegroundColor Yellow
     exit 0

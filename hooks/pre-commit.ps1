@@ -94,9 +94,9 @@ foreach ($f in $stagedForCheck -split "`n") {
 }
 if ($readmeChanged) {
     Write-Host "[INFO] README.md changes detected - running governance validation..." -ForegroundColor Cyan
-    $validateScript = Join-Path $PSScriptRoot '..\scripts\utilities\validate-readme.ps1'
+    $validateScript = Join-Path $PSScriptRoot '..\scripts\utilities\validate\validate-readme.ps1'
     if (-not (Test-Path $validateScript)) {
-        $validateScript = Join-Path $GitRoot 'scripts\utilities\validate-readme.ps1'
+        $validateScript = Join-Path $GitRoot 'scripts\utilities\validate\validate-readme.ps1'
     }
     if (Test-Path $validateScript) {
         & pwsh -NoProfile -ExecutionPolicy Bypass -File $validateScript -Repo both
@@ -138,7 +138,7 @@ foreach ($file in $StagedFiles.Split("`n")) {
         'hooks/pre-commit.ps1',
         'hooks/pre-commit-privacy.ps1',
         'scripts/hooks/check-security.ps1',
-        'scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1',
+        'scripts/utilities/workflow/WORKFLOW-ORCHESTRATION/gv.ps1',
         'skills/docker-devops-skill/SKILL.md',
         'skills/security-expert-skill/references/security-patterns.md',
         'config/security-privacy.json',
