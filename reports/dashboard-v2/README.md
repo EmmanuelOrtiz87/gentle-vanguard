@@ -4,7 +4,7 @@ Real-time metrics dashboard with compact tooltip-style modal for metric informat
 
 ## Features
 
-- 9 sections: Executive, Operations, Development, Cost, Governance, Health, Live, SLA, Performance
+- 12 sections: Executive, Operations, Development, Cost, Governance, Health, Live, SLA, Performance, References, Trace, Fine-Tuning
 - Compact tooltip-style modal with metric details (what, why, how, unit, formula)
 - Real-time updates every 10 seconds
 - Multi-language support (EN, ES, PT)

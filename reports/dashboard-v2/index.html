@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gentle-Vanguard Dashboard v2</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="../analytics.js"></script>
 </head>
 <body>
     <header class="gv-header">
@@ -183,5 +184,18 @@
     <script src="i18n.js"></script>
     <script src="metric-info.js"></script>
     <script src="app.js"></script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').then(reg => {
+      console.log('SW registered:', reg.scope);
+    }).catch(err => {
+      console.warn('SW registration failed:', err);
+    });
+  });
+}
+</script>
+
 </body>
 </html>

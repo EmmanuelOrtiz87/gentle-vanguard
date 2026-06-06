@@ -2,6 +2,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { McpError, ErrorCode } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
+import { execSync } from "child_process";
 import { readFileSync, readdirSync, existsSync, statSync, mkdirSync, writeFileSync } from "fs";
 import { join, resolve, dirname } from "path";
 import { fileURLToPath } from "url";
@@ -63,7 +64,7 @@ function parseFrontmatter(filePath: string): { name?: string; description?: stri
     const descMatch = fm.match(/^description:\s*(.+)$/m);
     let description = descMatch?.[1]?.trim().replace(/^>\s*/, "");
     if (description === undefined) {
-      const multiMatch = fm.match(new RegExp("^description:\s*\n(?:^>\s*(.+))$", "m"));
+      const multiMatch = fm.match(new RegExp("^description:\\s*\n(?:^>\\s*(.+))$", "m"));
       description = multiMatch?.[1]?.trim();
     }
     return { name, description };
@@ -358,7 +359,7 @@ server.tool(
     name: z.string().describe("Skill name to execute"),
     params: z.record(z.string(), z.unknown()).optional().describe("Parameters"),
   },
-  async ({ name, params }) => {
+  async ({ name, params: _params }) => {
     try {
       trackCall(stats, "execute_skill", name);
       const skill = skills.get(name);
@@ -371,15 +372,47 @@ server.tool(
         throw new McpError(ErrorCode.InvalidRequest, `Skill "${name}" has no SKILL.md`);
       }
 
-      log("INFO", "execute_skill", { skill: name, params });
+      const skillContent = readFileSync(skillMdPath, "utf-8");
 
+      let commandField: string | undefined;
+      if (skillContent.startsWith("---")) {
+        const end = skillContent.indexOf("---", 3);
+        if (end !== -1) {
+          const fm = skillContent.slice(3, end).trim();
+          for (const field of ["command", "run", "script"]) {
+            const re = new RegExp(`^${field}:\\s*(.+)$`, "m");
+            const match = fm.match(re);
+            if (match?.[1]) {
+              commandField = match[1].trim();
+              break;
+            }
+          }
+        }
+      }
+
+      if (commandField) {
+        log("INFO", "execute_skill (running command)", { skill: name, command: commandField });
+        try {
+          const result = execSync(commandField, {
+            encoding: "utf-8",
+            timeout: 60000,
+            cwd: SKILLS_DIR,
+          });
+          return {
+            content: [{ type: "text", text: result }],
+          };
+        } catch (execErr) {
+          const msg = execErr instanceof Error ? execErr.message : String(execErr);
+          log("ERROR", "execute_skill command failed", { skill: name, error: msg });
+          return {
+            content: [{ type: "text", text: `Command execution failed:\n${msg}` }],
+          };
+        }
+      }
+
+      log("INFO", "execute_skill (docs only)", { skill: name });
       return {
-        content: [
-          {
-            type: "text",
-            text: `Skill "${name}" (${skill.agent}) execution requested.\n\nParams: ${JSON.stringify(params ?? {})}`,
-          },
-        ],
+        content: [{ type: "text", text: skillContent }],
       };
     } catch (err) {
       if (err instanceof McpError) throw err;
