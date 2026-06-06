@@ -1,1 +1,1 @@
-& 'scripts/utilities/resilience-handler.ps1' -ScriptBlock { & 'scripts/utilities/normative-audit-pipeline.ps1' -Mode pre-commit } -TimeoutSeconds 60 -OperationName normative-audit -FallbackAction warn_skip
+& 'scripts/utilities/utils/resilience-handler.ps1' -ScriptBlock { & 'scripts/utilities/utils/normative-audit-pipeline.ps1' -Mode pre-commit } -TimeoutSeconds 60 -OperationName normative-audit -FallbackAction warn_skip
