@@ -19,7 +19,11 @@ interface UseAgentStreamOptions {
 }
 
 export function useAgentStream(opts: UseAgentStreamOptions = {}) {
-  const { url = 'ws://localhost:8080', agent: defaultAgent = 'DEV' } = opts;
+  const defaultUrl =
+    typeof window !== 'undefined'
+      ? `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`
+      : 'ws://localhost:8080';
+  const { url = defaultUrl, agent: defaultAgent = 'DEV' } = opts;
 
   const [session, setSession] = useState<AgentSession | null>(null);
   const [connected, setConnected] = useState(false);
