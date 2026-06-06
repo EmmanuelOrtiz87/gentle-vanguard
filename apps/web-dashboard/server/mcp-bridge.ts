@@ -7,6 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT = resolve(__dirname, '../../..');
 const SERVER_SCRIPT = resolve(ROOT, 'scripts/mcp/skill-server.ts');
+const PACKAGE_ROOT = resolve(__dirname, '..');
 
 interface MCPRequest {
   jsonrpc: '2.0';
@@ -48,11 +49,26 @@ export class MCPBridge extends EventEmitter {
   }
 
   async start(): Promise<void> {
+    const candidates = [
+      resolve(PACKAGE_ROOT, 'node_modules/.bin/tsx'),
+      resolve(ROOT, 'node_modules/.bin/tsx'),
+      resolve(ROOT, 'node_modules/.bin/tsx.cmd'),
+      'npx',
+    ];
+    const tsnode =
+      candidates.find((p) => p === 'npx' || (existsSync(p) && statSync(p).isFile())) || 'npx';
+    const args = tsnode === 'npx' ? ['tsx', SERVER_SCRIPT] : [tsnode, SERVER_SCRIPT];
+    const cwd = existsSync(SERVER_SCRIPT) ? ROOT : undefined;
+    if (!cwd) {
+      this._tools = [];
+      this._connected = false;
+      return;
+    }
+
     return new Promise((resolve, reject) => {
-      const tsnode = resolve(ROOT, 'node_modules/.bin/tsx');
-      this.proc = spawn(process.execPath, [tsnode, SERVER_SCRIPT], {
+      this.proc = spawn(process.execPath, args, {
         stdio: ['pipe', 'pipe', 'pipe'],
-        cwd: ROOT,
+        cwd,
       });
 
       let started = false;

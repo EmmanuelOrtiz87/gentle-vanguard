@@ -18,17 +18,22 @@ interface AgentTask {
   execution_id?: string;
 }
 
-export function useSharedState(url: string = 'ws://localhost:8080') {
+export function useSharedState(url?: string) {
+  const defaultUrl =
+    typeof window !== 'undefined'
+      ? `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`
+      : 'ws://localhost:8080';
+  const resolvedUrl = url || defaultUrl;
   const [events, setEvents] = useState<TimelineEvent[]>([]);
   const [tasks, setTasks] = useState<AgentTask[]>([]);
   const [connected, setConnected] = useState(false);
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectRef = useRef<NodeJS.Timeout | null>(null);
-  const urlRef = useRef(url);
+  const urlRef = useRef(resolvedUrl);
 
   useEffect(() => {
-    urlRef.current = url;
-  }, [url]);
+    urlRef.current = resolvedUrl;
+  }, [resolvedUrl]);
 
   const connect = useCallback(() => {
     try {

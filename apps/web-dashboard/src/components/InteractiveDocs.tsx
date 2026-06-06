@@ -355,6 +355,31 @@ export function InteractiveDocs() {
   const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
   const [expandedTutorials, setExpandedTutorials] = useState<Set<string>>(new Set());
   const [activeArchLayer, setActiveArchLayer] = useState<string>('agents');
+  const [toast, setToast] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 2500);
+  };
+
+  const handleTryIt = () => {
+    if (!activeStepData?.code) {
+      showToast('No code to run for this step');
+      return;
+    }
+    navigator.clipboard.writeText(activeStepData.code).then(
+      () => showToast('Copied to clipboard!'),
+      () => showToast('Could not copy'),
+    );
+  };
+
+  const handleViewCode = () => {
+    if (!activeStepData?.code) {
+      showToast('No code to show for this step');
+      return;
+    }
+    showToast('Code shown in the terminal block above');
+  };
 
   const toggleTutorial = (id: string) => {
     const next = new Set(expandedTutorials);
@@ -387,6 +412,11 @@ export function InteractiveDocs() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 px-4 py-2 rounded-lg bg-gray-900 dark:bg-gray-700 text-white text-sm shadow-lg transition-all">
+          {toast}
+        </div>
+      )}
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -651,11 +681,17 @@ export function InteractiveDocs() {
 
               {/* Navigation */}
               <div className="flex items-center gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <button className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                <button
+                  onClick={handleTryIt}
+                  className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                >
                   <Play className="w-4 h-4" />
                   Try It
                 </button>
-                <button className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <button
+                  onClick={handleViewCode}
+                  className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                >
                   <Code className="w-4 h-4" />
                   View Code
                 </button>

@@ -24,7 +24,15 @@ export function useMetrics(useWebSocketMode = false) {
   }, [useWebSocketMode]);
 
   const updateFromPayload = useCallback(
-    (payload: { tokens: any; sessions: any; git: any; health: any; globalHealth?: any; mcp?: any; timestamp?: string }) => {
+    (payload: {
+      tokens: any;
+      sessions: any;
+      git: any;
+      health: any;
+      globalHealth?: any;
+      mcp?: any;
+      timestamp?: string;
+    }) => {
       setData({
         tokens: payload.tokens,
         sessions: payload.sessions,
@@ -56,7 +64,10 @@ export function useMetrics(useWebSocketMode = false) {
       wsRef.current.onclose = null;
       wsRef.current.onerror = null;
       wsRef.current.onmessage = null;
-      if (wsRef.current.readyState === WebSocket.OPEN || wsRef.current.readyState === WebSocket.CONNECTING) {
+      if (
+        wsRef.current.readyState === WebSocket.OPEN ||
+        wsRef.current.readyState === WebSocket.CONNECTING
+      ) {
         wsRef.current.close();
       }
       wsRef.current = null;
@@ -68,7 +79,9 @@ export function useMetrics(useWebSocketMode = false) {
 
     cleanupWebSocket();
 
-    const ws = new WebSocket('ws://localhost:8080');
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${protocol}//${window.location.host}/ws`;
+    const ws = new WebSocket(wsUrl);
     wsRef.current = ws;
 
     ws.onopen = () => {
