@@ -1,2 +1,2 @@
-& $PSScriptRoot\SESSION\session-manager.ps1 @args
+& $PSScriptRoot\session\session-manager.ps1 @args
 exit $LASTEXITCODE

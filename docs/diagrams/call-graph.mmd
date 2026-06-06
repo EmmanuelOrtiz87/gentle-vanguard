@@ -3,111 +3,152 @@ flowchart LR
   classDef func fill:#1a2035,stroke:#00ff88,color:#e0e0e0
   classDef method fill:#1a2035,stroke:#ffaa00,color:#e0e0e0
 
-  c40[buildSystemPrompt]
-  c23[cmdAdd]
-  c89[tick]
-  c94[getPluginTools]
-  c44[stop]
-  c104[ensureDir]
-  c47[add]
-  c85[nltimeparserjs]
-  c15[render]
-  c30[maingo]
+  c96[WriteAuditEntry]
   c0[grindts]
-  c92[truncate]
-  c103[checkOutbound]
-  c79[handleScheduleCommand]
-  c22[defaultDataPath]
-  c37[time]
-  c45[save]
-  c76[pluginloaderjs]
-  c32[errors]
-  c61[contextjs]
-  c14[buildDots]
-  c56[agentjs]
-  c52[executeTool]
-  c6[generateMissionYaml]
-  c88[executeTask]
+  c24[Apptsx]
+  c29[GlobalHealthtsx]
   c13[generateWindsurfConfig]
-  c7[adapterjs]
-  c46[processMessage]
-  c72[scanPlugins]
-  c73[getPluginDir]
-  c17[pad]
-  c5[generateAGENTSmd]
-  c74[getPluginExecutor]
-  c49[runReAct]
-  c101[nodecrypto]
-  c98[getFeedbackTrend]
-  c4[mapSkillToAgentRole]
-  c42[load]
-  c67[getSchedulesCount]
-  c87[parseCron]
-  c38[constructor]
-  c21[printHelp]
+  c140[handleEditAgentKey]
+  c47[cmdAdd]
+  c132[initialModel]
+  c93[getMacAddress]
+  c84[nodepath]
+  c36[render]
+  c26[reactrouterdom]
+  c85[handleScheduleCommand]
+  c45[printHelp]
+  c61[time]
+  c43[appjs]
+  c17[url]
+  c103[strings]
+  c31[HitlModaltsx]
+  c98[authgo]
+  c69[detectMechanismFromModel]
   c8[convertSkillToCodex]
-  c1[fs]
-  c51[callLLM]
-  c77[sched]
-  c48[handleIncomingMessage]
-  c64[sort]
-  c39[getProjectContext]
-  c16[updateChrome]
-  c75[reloadPlugins]
-  c34[fmt]
-  c82[removeTask]
-  c36[pathfilepath]
-  c20[main]
-  c90[cronMatches]
-  c93[buildToolDefs]
-  c68[getPlatformsActive]
-  c24[cmdList]
-  c95[listSupportedPatterns]
-  c80[formatScheduleList]
-  c50[get]
-  c53[callOpenAI]
-  c27[loadStore]
-  c33[flag]
-  c66[countJson]
-  c78[getScheduler]
-  c2[convertSkillToAntigravity]
-  c65[isRunning]
-  c83[addTask]
-  c54[callAnthropic]
-  c70[parseNLToCron]
-  c86[schedulerjs]
-  c9[generateToolsArray]
-  c10[generateProxyServer]
-  c63[getLastProcessedAt]
-  c59[toolsjs]
-  c99[pluginloaderjs]
-  c19[appjs]
-  c71[extractTime]
-  c25[cmdDone]
-  c60[systempromptjs]
-  c58[nodepath]
-  c18[cleanupTransitionClasses]
-  c62[schedulerintegrationjs]
-  c41[start]
-  c26[cmdStats]
-  c57[nodefs]
-  c96[submitFeedback]
-  c91[safeExec]
-  c28[checkErr]
-  c69[nodechild_process]
-  c29[saveStore]
-  c12[generateWindsurfInstructi..]
+  c112[TestLoadRouterConfig]
+  c139[handlePerAgentKey]
+  c59[os]
+  c57[flag]
+  c123[TestProviderList]
+  c21[countSkills]
+  c77[parseNLToCron]
+  c73[runGh]
+  c6[generateMissionYaml]
+  c131[testing]
+  c58[fmt]
+  c20[getRealMetrics]
+  c25[react]
+  c102[osexec]
+  c38[vitejspluginreact]
   c3[parseSkillMarkdown]
-  c31[encodingjson]
+  c10[generateProxyServer]
+  c37[viteconfigts]
+  c74[getCommitTimeline]
+  c15[child_process]
+  c48[cmdList]
+  c62[findStateInDir]
+  c114[TestLoadRouterConfig_Inva..]
+  c60[pathfilepath]
+  c129[TestLoadCloudAgents_Inval..]
+  c19[mcpmetricsapits]
+  c107[sort]
+  c82[pluginloaderjs]
+  c83[nodefs]
+  c118[TestResolveBinding_Defaul..]
+  c78[extractTime]
+  c23[realdatats]
+  c80[getPluginDir]
+  c72[runGit]
+  c117[SaveRouterConfig]
+  c113[LoadRouterConfig]
+  c124[ProviderList]
+  c53[saveStore]
+  c99[cryptosha256]
+  c101[net]
+  c34[TaskControltsx]
+  c14[globalhealthapits]
+  c143[handleAdminAuthKey]
+  c125[TestProviderEntryLabel]
+  c88[handleIncomingMessage]
+  c87[sched]
+  c50[cmdStats]
+  c28[AgentMessagetsx]
+  c64[getAgentModel]
+  c68[getLiveSession]
+  c142[handleTemperatureKey]
+  c115[TestLoadRouterConfig_Miss..]
+  c79[scanPlugins]
+  c120[TestHasCustomBindings]
+  c133[Init]
+  c54[maingo]
+  c119[TestResolveBinding_Overri..]
+  c4[mapSkillToAgentRole]
+  c55[encodingjson]
+  c5[generateAGENTSmd]
+  c66[readDir]
+  c9[generateToolsArray]
+  c95[IsTrustedPC]
+  c67[getCurrentSessionId]
+  c104[AllBindings]
+  c46[defaultDataPath]
+  c18[srctypesdashboardjs]
+  c76[watchSessionState]
+  c16[path]
+  c27[lucidereact]
+  c109[NormalizeFloat64]
+  c105[ResolveBinding]
+  c22[getGitStats]
+  c40[updateChrome]
+  c1[fs]
+  c92[getMachineGUID]
+  c145[showAdminOptions]
+  c108[TestNormalizeFloat64]
+  c63[readJson]
+  c39[buildDots]
+  c110[TestAgentCodesSorted]
+  c30[typesdashboard]
+  c35[maintsx]
+  c32[Marketplacetsx]
+  c128[LoadCloudAgents]
+  c134[Update]
+  c136[handleOverviewKey]
+  c41[pad]
+  c7[adapterjs]
+  c12[generateWindsurfInstructi..]
+  c33[SessionTimelinetsx]
+  c100[encodinghex]
+  c111[Error]
+  c94[getHostname]
+  c121[HasCustomBindings]
+  c2[convertSkillToAntigravity]
+  c86[formatScheduleList]
+  c71[getHistory]
+  c42[cleanupTransitionClasses]
+  c141[handleModelPickerKey]
+  c51[loadStore]
+  c144[handleAdminPasswordKey]
+  c81[reloadPlugins]
   c11[convertSkillToWindsurf]
-  c35[os]
-  c102[saveInbound]
-  c81[listTasks]
-  c100[feedbackstorejs]
-  c84[schedulerintegrationjs]
-  c55[toolDefinitions]
-  c97[getFeedbackStats]
-  c43[log]
+  c130[config_testgo]
+  c90[nltimeparserjs]
+  c65[collectSessions]
+  c137[handleAllSameKey]
+  c97[FindRepoRoot]
+  c75[generateMetrics]
+  c52[checkErr]
+  c116[TestSaveRouterConfig]
+  c56[errors]
+  c127[TestLoadCloudAgents]
+  c44[main]
+  c106[configgo]
+  c135[handleKey]
+  c138[handleChangeDefaultsKey]
+  c49[cmdDone]
+  c89[schedulerintegrationjs]
+  c122[TestAllBindingsCount]
+  c91[GetPcFingerprint]
+  c70[getMechanismHistory]
+  c126[Label]
 
   c0 -.-> c1
   c2 --> c3
@@ -128,185 +169,185 @@ flowchart LR
   c13 --> c3
   c7 --> c11
   c7 --> c13
-  c14 --> c15
-  c16 --> c17
-  c16 --> c17
-  c15 --> c16
-  c15 --> c18
-  c15 --> c16
-  c15 --> c18
-  c15 --> c18
-  c15 --> c18
-  c15 --> c18
-  c15 --> c16
-  c19 --> c14
-  c19 --> c15
+  c14 -.-> c15
+  c14 -.-> c16
+  c14 -.-> c17
+  c14 -.-> c1
+  c14 -.-> c18
+  c19 -.-> c1
+  c19 -.-> c16
   c20 --> c21
   c20 --> c22
-  c20 --> c23
-  c20 --> c24
-  c20 --> c25
-  c20 --> c26
-  c20 --> c21
-  c20 --> c21
-  c23 --> c27
-  c23 --> c28
-  c23 --> c28
-  c23 --> c29
-  c24 --> c27
-  c24 --> c28
-  c25 --> c27
-  c25 --> c28
-  c25 --> c28
-  c25 --> c29
-  c26 --> c27
-  c26 --> c28
-  c30 -.-> c31
-  c30 -.-> c32
-  c30 -.-> c33
-  c30 -.-> c34
-  c30 -.-> c35
-  c30 -.-> c36
-  c30 -.-> c37
-  c38 --> c39
-  c38 --> c40
-  c41 --> c42
-  c41 --> c43
+  c23 -.-> c1
+  c23 -.-> c16
+  c23 -.-> c17
+  c23 -.-> c15
+  c24 -.-> c25
+  c24 -.-> c26
+  c24 -.-> c27
+  c28 -.-> c27
+  c29 -.-> c27
+  c29 -.-> c30
+  c31 -.-> c27
+  c32 -.-> c25
+  c32 -.-> c27
+  c33 -.-> c27
+  c34 -.-> c27
+  c35 --> c36
+  c37 -.-> c38
+  c39 --> c36
+  c40 --> c41
+  c40 --> c41
+  c36 --> c40
+  c36 --> c42
+  c36 --> c40
+  c36 --> c42
+  c36 --> c42
+  c36 --> c42
+  c36 --> c42
+  c36 --> c40
+  c43 --> c39
+  c43 --> c36
   c44 --> c45
-  c44 --> c43
-  c46 --> c47
-  c46 --> c47
-  c46 --> c48
-  c46 --> c45
-  c46 --> c39
-  c46 --> c40
-  c46 --> c49
-  c46 --> c47
-  c46 --> c45
-  c49 --> c50
+  c44 --> c46
+  c44 --> c47
+  c44 --> c48
+  c44 --> c49
+  c44 --> c50
+  c44 --> c45
+  c44 --> c45
+  c47 --> c51
+  c47 --> c52
+  c47 --> c52
+  c47 --> c53
+  c48 --> c51
+  c48 --> c52
   c49 --> c51
   c49 --> c52
-  c51 --> c53
-  c51 --> c54
-  c51 --> c43
-  c51 --> c43
-  c53 --> c55
-  c54 --> c55
-  c56 -.-> c57
-  c56 -.-> c58
-  c56 -.-> c59
-  c56 -.-> c60
-  c56 -.-> c61
-  c56 -.-> c62
-  c63 --> c64
-  c39 --> c65
-  c39 --> c66
-  c39 --> c66
-  c39 --> c67
-  c39 --> c68
-  c39 --> c63
-  c61 -.-> c57
-  c61 -.-> c58
-  c61 -.-> c69
-  c70 --> c71
-  c72 --> c73
-  c74 --> c50
-  c75 --> c72
-  c76 -.-> c57
-  c76 -.-> c58
+  c49 --> c52
+  c49 --> c53
+  c50 --> c51
+  c50 --> c52
+  c54 -.-> c55
+  c54 -.-> c56
+  c54 -.-> c57
+  c54 -.-> c58
+  c54 -.-> c59
+  c54 -.-> c60
+  c54 -.-> c61
+  c62 --> c63
+  c64 --> c63
+  c65 --> c66
+  c65 --> c62
+  c65 --> c67
+  c67 --> c66
+  c68 --> c67
+  c68 --> c63
+  c68 --> c69
+  c70 --> c69
+  c70 --> c69
+  c70 --> c63
+  c71 --> c65
+  c22 --> c72
+  c22 --> c72
+  c22 --> c72
+  c22 --> c72
+  c22 --> c73
+  c22 --> c73
+  c22 --> c72
+  c22 --> c72
+  c74 --> c72
+  c75 --> c65
+  c75 --> c71
+  c75 --> c71
+  c75 --> c71
+  c75 --> c68
+  c75 --> c22
+  c75 --> c74
+  c76 --> c67
+  c76 --> c68
   c77 --> c78
   c79 --> c80
-  c79 --> c81
-  c79 --> c77
-  c79 --> c82
-  c79 --> c77
-  c79 --> c70
-  c79 --> c83
-  c79 --> c77
-  c79 --> c70
-  c79 --> c83
-  c79 --> c77
-  c79 --> c70
-  c79 --> c83
-  c79 --> c77
-  c48 --> c79
-  c84 -.-> c85
-  c84 -.-> c86
-  c42 --> c43
-  c42 --> c43
-  c45 --> c43
-  c83 --> c87
-  c83 --> c45
-  c82 --> c45
-  c88 --> c43
-  c88 --> c45
-  c88 --> c43
-  c88 --> c43
-  c89 --> c90
-  c89 --> c88
-  c41 --> c42
-  c41 --> c89
-  c41 --> c43
-  c44 --> c45
-  c44 --> c43
-  c78 --> c42
-  c86 -.-> c57
-  c86 -.-> c58
-  c86 -.-> c69
-  c40 --> c55
-  c60 -.-> c59
+  c81 --> c79
+  c82 -.-> c83
+  c82 -.-> c84
+  c85 --> c77
+  c85 --> c77
+  c85 --> c77
+  c85 --> c86
+  c85 --> c87
+  c85 --> c87
+  c85 --> c87
+  c85 --> c87
+  c85 --> c87
+  c88 --> c85
+  c89 -.-> c90
   c91 --> c92
-  c91 --> c92
-  c93 --> c94
-  c52 --> c91
-  c52 --> c91
-  c52 --> c91
-  c52 --> c39
-  c52 --> c64
-  c52 --> c39
-  c52 --> c70
-  c52 --> c78
-  c52 --> c83
-  c52 --> c78
-  c52 --> c81
-  c52 --> c78
-  c52 --> c82
-  c52 --> c70
-  c52 --> c95
-  c52 --> c96
-  c52 --> c97
-  c52 --> c98
-  c52 --> c74
-  c59 -.-> c69
-  c59 -.-> c57
-  c59 -.-> c58
-  c59 -.-> c61
-  c59 -.-> c86
-  c59 -.-> c85
-  c59 -.-> c99
-  c59 -.-> c100
-  c98 --> c97
-  c100 -.-> c57
-  c100 -.-> c58
-  c100 -.-> c101
-  c102 --> c43
-  c102 --> c46
-  c102 --> c43
-  c103 --> c104
-  c103 --> c43
-  c103 --> c43
-  c103 --> c43
-  c20 --> c43
-  c20 --> c43
-  c20 --> c104
-  c20 --> c43
-  c20 --> c75
-  c20 --> c43
-  c20 --> c43
-  c20 --> c102
-  c20 --> c43
-  c20 --> c43
-  c20 --> c41
-  c20 --> c43
-  c20 --> c78
+  c91 --> c93
+  c91 --> c94
+  c95 --> c91
+  c96 --> c97
+  c96 --> c91
+  c96 --> c94
+  c98 -.-> c99
+  c98 -.-> c100
+  c98 -.-> c58
+  c98 -.-> c101
+  c98 -.-> c59
+  c98 -.-> c102
+  c98 -.-> c103
+  c104 --> c105
+  c106 -.-> c55
+  c106 -.-> c58
+  c106 -.-> c59
+  c106 -.-> c107
+  c106 -.-> c103
+  c108 --> c109
+  c110 --> c111
+  c112 --> c113
+  c112 --> c111
+  c114 --> c113
+  c114 --> c111
+  c115 --> c113
+  c115 --> c111
+  c116 --> c117
+  c118 --> c105
+  c119 --> c105
+  c120 --> c121
+  c120 --> c111
+  c120 --> c121
+  c120 --> c111
+  c122 --> c104
+  c123 --> c124
+  c125 --> c126
+  c125 --> c126
+  c125 --> c126
+  c125 --> c126
+  c125 --> c126
+  c127 --> c128
+  c127 --> c111
+  c129 --> c128
+  c129 --> c111
+  c130 -.-> c55
+  c130 -.-> c59
+  c130 -.-> c107
+  c130 -.-> c131
+  c132 --> c97
+  c133 --> c113
+  c133 --> c128
+  c134 --> c135
+  c134 --> c104
+  c134 --> c124
+  c134 --> c95
+  c134 --> c121
+  c135 --> c136
+  c135 --> c137
+  c135 --> c138
+  c135 --> c139
+  c135 --> c140
+  c135 --> c141
+  c135 --> c142
+  c135 --> c143
+  c135 --> c144
+  c136 --> c145
 

@@ -5,69 +5,47 @@ flowchart TD
   classDef ps fill:#1a2035,stroke:#5391fe,color:#e0e0e0
   classDef go fill:#1a2035,stroke:#00add8,color:#e0e0e0
 
-  d11[deprecated/gateway/platforms/d..]
+  d18[components/HitlModal]
+  d12[.cursor/hooks/grind]
+  d5[scripts/utilities/model-router..]
+  d22[src/dashboard/dashboard-data]
+  d7[tests/unit/model-router.test]
+  d16[components/MetricsCard]
+  d17[components/LiveChart]
+  d8[scripts/utilities/model-router..]
+  d3[scripts/gateway/agent/nl-time-..]
+  d2[scripts/gateway/agent/schedule..]
+  d14[apps/web-dashboard/server/real..]
+  d21[tests/unit/dashboard.spec]
+  d19[components/SessionTimeline]
+  d15[components/GlobalHealth]
+  d20[components/TaskControl]
+  d9[apps/web-dashboard/server/glob..]
+  d0[main]
+  d11[apps/web-dashboard/server/mcp-..]
+  d13[templates/config/vitest.config]
   d6[scripts/utilities/model-router..]
-  d12[deprecated/gateway/platforms/t..]
-  d25[tests/unit/resilience.spec]
-  d16[model_router_test]
-  d24[demos/shared/task-tracker/main]
-  d2[deprecated/gateway/agent/syste..]
-  d13[deprecated/gateway/platforms/w..]
-  d4[deprecated/gateway/agent/sched..]
-  d23[src/architecture/resilience/Re..]
-  d5[deprecated/gateway/agent/tools]
-  d15[deprecated/rpc/rpc-tools]
-  d0[deprecated/gateway/agent/agent]
-  d1[deprecated/gateway/agent/conte..]
-  d14[deprecated/rpc/rpc-server]
-  d20[scripts/utilities/model-router..]
-  d19[scripts/gateway/agent/nl-time-..]
-  d17[tests/unit/model-router.test]
-  d26[tests/unit/dashboard.spec]
-  d18[scripts/gateway/agent/schedule..]
-  d8[deprecated/gateway/agent/nl-ti..]
-  d21[scripts/utilities/model-router..]
-  d3[deprecated/gateway/agent/sched..]
-  d9[deprecated/gateway/feedback/fe..]
-  d7[deprecated/gateway/agent/plugi..]
-  d22[scripts/utilities/model-router..]
-  d10[deprecated/gateway/gateway]
+  d10[apps/web-dashboard/server/mcp-..]
+  d4[scripts/utilities/model-router..]
+  d1[demos/from-chat-to-cognitive-s..]
 
-  d1 --> d6
-  d13 --> d3
-  d5 --> d7
-  d21 --> d6
-  d4 --> d3
-  d7 --> d1
-  d16 --> d17
-  d10 --> d3
-  d0 --> d5
-  d0 --> d3
-  d12 --> d3
-  d0 --> d2
-  d10 --> d0
-  d0 --> d4
-  d5 --> d8
-  d11 --> d3
-  d23 --> d1
-  d5 --> d3
-  d10 --> d12
-  d2 --> d5
-  d4 --> d8
-  d16 --> d24
-  d10 --> d7
-  d14 --> d15
-  d25 --> d26
-  d18 --> d19
-  d22 --> d6
+  d20 --> d16
+  d8 --> d4
+  d14 --> d10
+  d8 --> d5
+  d14 --> d11
+  d15 --> d16
+  d11 --> d12
+  d21 --> d22
   d0 --> d1
-  d21 --> d17
-  d10 --> d11
-  d5 --> d1
-  d20 --> d6
-  d15 --> d5
-  d10 --> d13
-  d5 --> d9
-  d5 --> d6
-  d22 --> d20
+  d11 --> d13
+  d19 --> d16
+  d18 --> d16
+  d4 --> d5
+  d15 --> d17
+  d9 --> d10
+  d9 --> d11
+  d2 --> d3
+  d6 --> d7
+  d6 --> d5
 

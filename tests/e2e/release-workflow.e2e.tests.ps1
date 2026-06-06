@@ -15,7 +15,7 @@
 BeforeAll {
     # Setup runs before all tests
     $script:repoRoot = (Get-Item "$PSScriptRoot\..\..").FullName
-    $script:gateScript = Join-Path $script:repoRoot "scripts\utilities\DEPLOYMENT\validate-release-homologation.ps1"
+    $script:gateScript = Join-Path $script:repoRoot "scripts\utilities\ops\DEPLOYMENT\validate-release-homologation.ps1"
     $script:tempBase = Join-Path $env:TEMP "fe2e-$(Get-Date -Format 'yyyyMMddHHmmss')"
     New-Item -ItemType Directory -Path $script:tempBase -Force | Out-Null
     
@@ -245,7 +245,7 @@ Describe "Homologation Gate - Error handling" {
 
 Describe "Release Workflow Integration - gv.ps1 wiring" {
     BeforeAll {
-        $script:gvPath = Join-Path $script:repoRoot "scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1"
+        $script:gvPath = Join-Path $script:repoRoot "scripts\utilities\workflow\WORKFLOW-ORCHESTRATION\gv.ps1"
         $script:gvExists = Test-Path $script:gvPath
         if ($script:gvExists) {
             $script:wfContent = Get-Content $script:gvPath -Raw

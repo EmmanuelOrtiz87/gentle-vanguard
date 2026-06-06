@@ -28,5 +28,5 @@
     "no-var": "error",
     "eqeqeq": ["error", "always"]
   },
-  "ignorePatterns": ["dist", "node_modules", "coverage", "templates", "*.js"]
+  "ignorePatterns": ["dist", "node_modules", "coverage", "templates"]
 }

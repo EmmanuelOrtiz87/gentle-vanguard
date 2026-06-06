@@ -6,11 +6,15 @@ const i18n = {
     else { this.currentLang = savedLang; }
     document.documentElement.lang = this.currentLang;
   },
-  t(key) {
+  t(key, ...args) {
     const keys = key.split('.');
     let value = this.translations[this.currentLang];
     for (const k of keys) { value = value?.[k]; }
-    return value || key;
+    let result = value || key;
+    if (args.length) {
+      args.forEach((arg, i) => { result = result.replace(`{${i}}`, arg); });
+    }
+    return result;
   },
   setLang(lang) {
     this.currentLang = lang; localStorage.setItem('gv-lang', lang); document.documentElement.lang = lang;

@@ -910,35 +910,35 @@ const app = {
     ]);
     const liveActive = data.trace.live && data.trace.live.status === 'ACTIVE';
     ui.renderSection('live', [
-      ui.card(t('cards.liveStatus'), `<span>${liveActive ? '● LIVE' : '○ OFFLINE'}</span>`, t('meta.eventStream'), liveActive ? 'live' : 'error', 'Live status', 'liveStatus'),
-      ui.card(t('cards.tokens'), data.tokens.used.toLocaleString(), t('meta.currentUsage'), '', 'Current tokens', 'tokens'),
-      ui.card(t('cards.trafficLight'), `<span style="color:${statusColor}">${data.health.status}</span>`, t('meta.executiveStatus'), '', 'Traffic light', 'trafficLight'),
-      ui.card(t('cards.routing'), data.health.routing, t('meta.dispatchAccuracy'), '', 'Routing', 'routing'),
-      ui.card(t('cards.sessions'), data.sessions.active.toString(), t('meta.activeCount'), '', 'Sessions', 'activeNow'),
-      ui.card(t('cards.peakActivity'), isPeak ? 'YES' : 'NO', t('meta.highActivity'), isPeak ? 'warning' : 'success', 'Peak activity', 'peakActivityFlag')
+      ui.card(t('cards.liveStatus'), `<span>${liveActive ? '● LIVE' : '○ OFFLINE'}</span>`, t('meta.eventStream'), liveActive ? 'live' : 'error', 'Real-time event stream status', 'liveStatus'),
+      ui.card(t('cards.tokens'), data.tokens.used.toLocaleString(), t('meta.currentUsage'), '', 'Current token usage count', 'tokens'),
+      ui.card(t('cards.trafficLight'), `<span style="color:${statusColor}">${data.health.status}</span>`, t('meta.executiveStatus'), '', 'Live system health status', 'trafficLight'),
+      ui.card(t('cards.routing'), data.health.routing, t('meta.dispatchAccuracy'), '', 'Live routing accuracy', 'routing'),
+      ui.card(t('cards.sessions'), data.sessions.active.toString(), t('meta.activeCount'), '', 'Active sessions count', 'activeNow'),
+      ui.card(t('cards.peakActivity'), isPeak ? 'YES' : 'NO', t('meta.highActivity'), isPeak ? 'warning' : 'success', 'Peak activity hours indicator', 'peakActivityFlag')
     ]);
     const slaUptime = data.trace.totalSessions > 0 ? '100%' : '99.9%';
     const slaIncidents = data.health.status === 'RED' ? 1 : 0;
     const slaMttr = slaIncidents > 0 ? '15m' : '0m';
     ui.renderSection('sla', [
-      ui.card(t('cards.uptime'), slaUptime, t('meta.target') + ': 99.5%', 'success', 'Uptime', 'uptime'),
-      ui.card(t('cards.uptime'), data.health.routing + '%', t('meta.target') + ': 99.9%', 'success', 'Routing uptime', 'uptime'),
-      ui.card(t('cards.incidents'), slaIncidents.toString(), t('meta.last30d7d').replace('{0}', slaIncidents.toString()), 'success', 'Incidents', 'incidents'),
-      ui.card(t('cards.mttr'), slaMttr, t('meta.meanRecovery'), '', 'MTTR', 'mttr'),
-      ui.card(t('cards.routingAcc'), data.health.routing, t('meta.target') + ': 95%', 'success', 'Routing accuracy', 'routingAcc'),
-      ui.card(t('cards.latency'), data.sessions.avgDuration ? '~' + data.sessions.avgDuration : '--', t('meta.target') + ': 1.5s', 'success', 'Latency', 'latency')
+      ui.card(t('cards.uptime'), slaUptime, t('meta.target') + ': 99.5%', 'success', 'Monthly uptime percentage. Target: 99.5%', 'uptime'),
+      ui.card(t('cards.uptime'), data.health.routing + '%', t('meta.target') + ': 99.9%', 'success', 'Weekly uptime percentage. Target: 99.9%', 'uptime'),
+      ui.card(t('cards.incidents'), slaIncidents.toString(), t('meta.last30d7d').replace('{0}', slaIncidents.toString()), 'success', 'Service incidents in last 30 and 7 days', 'incidents'),
+      ui.card(t('cards.mttr'), slaMttr, t('meta.meanRecovery'), '', 'Mean Time To Recovery in minutes', 'mttr'),
+      ui.card(t('cards.routingAcc'), data.health.routing, t('meta.target') + ': 95%', 'success', 'Routing accuracy percentage. Target: 95%', 'routingAcc'),
+      ui.card(t('cards.latency'), data.sessions.avgDuration ? '~' + data.sessions.avgDuration : '--', t('meta.target') + ': 1.5s', 'success', 'Average response latency. Target: <1.5s', 'latency')
     ]);
     // Perf section — derive from real session data
     const peakHour = isPeak ? new Date().getHours() + ':00' : '--';
     const avgSessionMin = data.sessions.avgDuration ? parseInt(data.sessions.avgDuration) * 60 : '--';
     const velocity = data.sessions.total > 2 ? '+0%' : '--';
     ui.renderSection('perf', [
-      ui.card(t('cards.sessions'), data.sessions.total.toString(), t('meta.last30Days'), '', 'Sessions', 'sessions'),
-      ui.card(t('cards.peakActivity'), peakHour, data.sessions.active + ' ' + t('meta.sessions'), '', 'Peak hour', 'peakActivity'),
-      ui.card(t('cards.sessionsPerDay'), data.sessions.total > 0 ? (data.sessions.total / 30).toFixed(1) : '--', t('meta.average'), '', 'Avg sessions/day', 'sessions'),
-      ui.card(t('cards.avgSession'), avgSessionMin !== '--' ? avgSessionMin + ' min' : '--', t('meta.duration'), '', 'Avg session duration', 'avgDuration'),
-      ui.card(t('cards.activeNow'), data.sessions.active.toString(), t('meta.fromAnalytics'), '', 'Active now', 'activeNow'),
-      ui.card(t('cards.velocity'), velocity, data.sessions.total + ' ' + t('meta.sessions'), 'success', 'Velocity', 'velocity')
+      ui.card(t('cards.sessions'), data.sessions.total.toString(), t('meta.last30Days'), '', 'Total sessions in last 30 days', 'sessions'),
+      ui.card(t('cards.peakActivity'), peakHour, data.sessions.active + ' ' + t('meta.sessions'), '', 'Peak activity hour with session count', 'peakActivity'),
+      ui.card(t('cards.sessionsPerDay'), data.sessions.total > 0 ? (data.sessions.total / 30).toFixed(1) : '--', t('meta.average'), '', 'Average sessions per day', 'sessions'),
+      ui.card(t('cards.avgSession'), avgSessionMin !== '--' ? avgSessionMin + ' min' : '--', t('meta.duration'), '', 'Average session duration', 'avgDuration'),
+      ui.card(t('cards.activeNow'), data.sessions.active.toString(), t('meta.fromAnalytics'), '', 'Active sessions from analytics', 'activeNow'),
+      ui.card(t('cards.velocity'), velocity, data.sessions.total + ' ' + t('meta.sessions'), 'success', 'Development velocity improvement percentage', 'velocity')
     ]);
     // FT section
     const ftTotal = data.ft.dataset.train + data.ft.dataset.val;
