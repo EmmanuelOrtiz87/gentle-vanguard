@@ -639,9 +639,69 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
   });
 });
 
+let prevMetrics: Record<string, unknown> | null = null;
+
 setInterval(() => {
-  const msg = JSON.stringify({ type: 'metrics', data: generateMetrics() });
+  const metrics = generateMetrics();
+  const msg = JSON.stringify({ type: 'metrics', data: metrics });
   clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(msg));
+
+  if (prevMetrics) {
+    const prev = prevMetrics as Record<string, any>;
+    const curr = metrics as Record<string, any>;
+    const currTokens = curr?.tokens?.used || 0;
+    const prevTokens = prev?.tokens?.used || 0;
+    const currSessions = curr?.sessions?.total || 0;
+    const prevSessions = prev?.sessions?.total || 0;
+    const currActive = curr?.sessions?.active || 0;
+    const prevActive = prev?.sessions?.active || 0;
+    const currEvents = curr?.events?.length || 0;
+    const prevEvents = prev?.events?.length || 0;
+
+    const notifications: Array<{ type: string; message: string; severity: string; timestamp: string }> = [];
+
+    if (currTokens > prevTokens) {
+      const delta = currTokens - prevTokens;
+      notifications.push({
+        type: 'token_usage',
+        message: `+${delta} tokens (${(currTokens / 1000).toFixed(1)}K total)`,
+        severity: 'info',
+        timestamp: curr.timestamp,
+      });
+    }
+    if (currSessions > prevSessions) {
+      notifications.push({
+        type: 'session_created',
+        message: `Nueva sesión creada (${currSessions} total)`,
+        severity: 'info',
+        timestamp: curr.timestamp,
+      });
+    }
+    if (currActive !== prevActive) {
+      notifications.push({
+        type: 'session_status',
+        message: `Sesiones activas: ${prevActive} → ${currActive}`,
+        severity: currActive > prevActive ? 'info' : 'warning',
+        timestamp: curr.timestamp,
+      });
+    }
+    if (currEvents > prevEvents) {
+      const delta = currEvents - prevEvents;
+      notifications.push({
+        type: 'new_events',
+        message: `${delta} nuevo(s) evento(s) en timeline`,
+        severity: 'info',
+        timestamp: curr.timestamp,
+      });
+    }
+
+    if (notifications.length > 0) {
+      const note = JSON.stringify({ type: 'notification', notifications });
+      clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(note));
+    }
+  }
+
+  prevMetrics = metrics;
 }, 5000);
 
 // --- Start ---
@@ -677,52 +737,8 @@ function initSharedState(): void {
   console.log('[STATE] Shared State Bridge started');
 }
 
-function startDemoActivity(): void {
-  const agents = ['DEV', 'QA', 'BA', 'DOC'];
-  const topics = [
-    'analizar requisitos',
-    'ejecutar tests unitarios',
-    'revisar documentación',
-    'validar esquema de datos',
-    'generar reporte de cobertura',
-    'refactorizar módulo de autenticación',
-  ];
-
-  let activityStep = 0;
-
-  setInterval(() => {
-    getStateBridge().emitEvent('dispatch.started', {
-      source: 'demo-generator',
-      step: activityStep,
-      timestamp: Date.now(),
-    });
-  }, 18000);
-
-  setInterval(() => {
-    const agent = agents[activityStep % agents.length];
-    const task = topics[(activityStep + 1) % topics.length];
-    activityStep++;
-    getStateBridge().emitEvent('agent.dispatched', {
-      agent,
-      task,
-      execution_id: `exec-demo-${Date.now()}-${activityStep}`,
-    });
-  }, 15000);
-
-  setInterval(() => {
-    const agent = agents[Math.floor(Math.random() * agents.length)];
-    const session = createSession(agent);
-    session.status = 'active';
-    const msg = JSON.stringify({ type: 'agent_session_created', session, demo: true });
-    clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(msg));
-  }, 25000);
-
-  console.log('[DEMO] Activity generator started');
-}
-
 server.listen(PORT, () => {
   console.log(`[WS] Server on port ${PORT}`);
   start();
   initSharedState();
-  startDemoActivity();
 });
