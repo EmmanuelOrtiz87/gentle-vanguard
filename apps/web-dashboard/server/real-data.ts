@@ -1,11 +1,7 @@
-import { readFileSync, existsSync, readdirSync } from 'fs';
-import { join, dirname, resolve } from 'path';
-import { fileURLToPath } from 'url';
+import { existsSync, readdirSync } from 'fs';
+import { join } from 'path';
 import { execSync } from 'child_process';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const ROOT = resolve(__dirname, '../../..');
+import { ROOT, readJson, countSkills as _countSkills } from './shared.js';
 
 const CONSOLIDATED_PATH = join(ROOT, '.runtime', 'metrics', 'consolidated.json');
 const METRICS_DB_PATH = join(ROOT, '.runtime', 'metrics.json');
@@ -21,37 +17,12 @@ const EVENT_HISTORY_PATH = join(ROOT, '.event-bus', 'history.json');
 const SESSIONS_HISTORY_PATH = join(ROOT, '.event-bus', 'sessions-history.json');
 const CONTEXT_LOG_DIR = join(ROOT, '.session', 'context-log');
 
-function readJson<T>(path: string): T | null {
-  try {
-    if (!existsSync(path)) return null;
-    return JSON.parse(readFileSync(path, 'utf-8'));
-  } catch { return null; }
-}
-
-export function countSkills(): { total: number; byAgent: Record<string, number> } {
-  try {
-    const content = readFileSync(REGISTRY_PATH, 'utf-8');
-    const lines = content.split('\n');
-    let count = 0;
-    const byAgent: Record<string, number> = {};
-    for (const line of lines) {
-      const match = line.match(/^\|\s*([^|]+)\|\s*([^|]+)\|/);
-      if (!match) continue;
-      const agent = match[1].trim();
-      if (agent === 'Agent' || agent.startsWith('---')) continue;
-      byAgent[agent] = (byAgent[agent] || 0) + 1;
-      count++;
-    }
-    return { total: count, byAgent };
-  } catch {
-    return { total: 0, byAgent: {} };
-  }
-}
-
 function execGit(args: string): string {
   try {
     return execSync(`git ${args}`, { cwd: ROOT, encoding: 'utf-8', timeout: 3000 }).trim();
-  } catch { return ''; }
+  } catch {
+    return '';
+  }
 }
 
 export function getGitStats(): { commits: number; prsMerged: number; contributors: number } {
@@ -66,24 +37,30 @@ export function getGitStats(): { commits: number; prsMerged: number; contributor
 
 export function getRealMetrics() {
   const consolidated = readJson<any>(CONSOLIDATED_PATH);
-  const tokenDb = readJson<{ token_usage?: Array<{ tokens_used: number; cost_usd: number; date: string }> }>(METRICS_DB_PATH);
-  const skillStats = readJson<{ totalCalls: number; callsByTool: Record<string, number>; callsBySkill: Record<string, number>; lastCall: string | null }>(STATS_PATH) || { totalCalls: 0, callsByTool: {}, callsBySkill: {}, lastCall: null };
+  const skillStats = readJson<{
+    totalCalls: number;
+    callsByTool: Record<string, number>;
+    callsBySkill: Record<string, number>;
+    lastCall: string | null;
+  }>(STATS_PATH) || { totalCalls: 0, callsByTool: {}, callsBySkill: {}, lastCall: null };
   const sessionsFile = readJson<{ events: unknown[] }>(EVENT_HISTORY_PATH);
-  const sessionsHistory = readJson<Array<{ id: string; agent: string; status: string; createdAt: string }>>(SESSIONS_HISTORY_PATH) || [];
+  const sessionsHistory =
+    readJson<Array<{ id: string; agent: string; status: string; createdAt: string }>>(
+      SESSIONS_HISTORY_PATH,
+    ) || [];
 
-  const skills = countSkills();
+  const skills = _countSkills(REGISTRY_PATH);
 
-  const t = consolidated?.token || readJson<any>(TOKEN_PATH) || { usedToday: 0, budget: 1000000, estCost: 0 };
-  const s = consolidated?.sessions || readJson<any>(SESSIONS_METRICS_PATH) || { total: 0, active: 0, today: 0 };
+  const t = consolidated?.token ||
+    readJson<any>(TOKEN_PATH) || { usedToday: 0, budget: 1000000, estCost: 0 };
+  const s = consolidated?.sessions ||
+    readJson<any>(SESSIONS_METRICS_PATH) || { total: 0, active: 0, today: 0 };
   const g = consolidated?.git || readJson<any>(GIT_METRICS_PATH) || {};
   const pr = consolidated?.pr || readJson<any>(PR_METRICS_PATH) || { merged: 0 };
   const live = consolidated?.live || readJson<any>(LIVE_PATH) || { trafficLight: 'GREEN' };
 
-  const tokenUsageHistory = tokenDb?.token_usage || [];
-  const totalTokensFromHistory = tokenUsageHistory.reduce((sum, r) => sum + (r.tokens_used || 0), 0);
-  const tokensUsed = Math.max(t.usedToday || 0, totalTokensFromHistory || 0);
-  const costFromHistory = tokenUsageHistory.reduce((sum, r) => sum + (r.cost_usd || 0), 0);
-  const tokenCost = Math.max(t.estCost || 0, costFromHistory || 0);
+  const tokensUsed = t.usedToday || 0;
+  const tokenCost = t.estCost || 0;
 
   const topSkills = Object.entries(skillStats.callsBySkill || {})
     .sort(([, a], [, b]) => b - a)
@@ -92,7 +69,9 @@ export function getRealMetrics() {
 
   const today = new Date().toISOString().slice(0, 10);
   const sessionsToday = sessionsHistory.filter((s) => (s.createdAt || '').startsWith(today)).length;
-  const activeSessions = sessionsHistory.filter((s) => s.status === 'active' || s.status === 'awaiting_input').length;
+  const activeSessions = sessionsHistory.filter(
+    (s) => s.status === 'active' || s.status === 'awaiting_input',
+  ).length;
 
   const gitLive = getGitStats();
 
@@ -110,8 +89,17 @@ export function getRealMetrics() {
     },
     git: gitLive,
     health: {
-      status: live.trafficLight === 'GREEN' ? 'healthy' : live.trafficLight === 'YELLOW' ? 'degraded' : 'critical',
-      routing: g.routingTotal ? Math.min(1, (g.routingTotal || 0) / 100) : skillStats.totalCalls > 0 ? Math.min(1, 0.5 + skillStats.totalCalls * 0.01) : 0,
+      status:
+        live.trafficLight === 'GREEN'
+          ? 'healthy'
+          : live.trafficLight === 'YELLOW'
+            ? 'degraded'
+            : 'critical',
+      routing: g.routingTotal
+        ? Math.min(1, (g.routingTotal || 0) / 100)
+        : skillStats.totalCalls > 0
+          ? Math.min(1, 0.5 + skillStats.totalCalls * 0.01)
+          : 0,
     },
     mcp: {
       skills: { total: skills.total, byAgent: skills.byAgent, recentlyUsed: topSkills },
@@ -200,16 +188,17 @@ export function getTraces(): { traces: Trace[]; stats: TraceStats } {
         }
       }
     }
-  } catch { /* best-effort */ }
+  } catch {
+    /* best-effort */
+  }
 
   const activeSpans = traces.filter((t) => {
-    return (Date.now() - t.startTime) < 3600000;
+    return Date.now() - t.startTime < 3600000;
   }).length;
 
   const durations = traces.filter((t) => t.duration).map((t) => t.duration!);
-  const avgDuration = durations.length > 0
-    ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length)
-    : 0;
+  const avgDuration =
+    durations.length > 0 ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length) : 0;
 
   return {
     traces,

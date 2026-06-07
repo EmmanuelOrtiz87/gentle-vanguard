@@ -139,6 +139,7 @@ export function TracingDashboard() {
                 <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">Name</th>
                 <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">Status</th>
                 <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">Duration</th>
+                <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">Date/Time (ART)</th>
                 <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">Attributes</th>
               </tr>
             </thead>
@@ -162,6 +163,9 @@ export function TracingDashboard() {
                     {trace.duration ? `${trace.duration}ms` : '-'}
                   </td>
                   <td className="py-2 px-4 text-sm text-gray-600 dark:text-gray-400">
+                    {new Date(trace.startTime).toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}
+                  </td>
+                  <td className="py-2 px-4 text-sm text-gray-600 dark:text-gray-400">
                     {Object.entries(trace.attributes).map(([k, v]) => `${k}=${v}`).join(', ')}
                   </td>
                 </tr>
@@ -183,7 +187,7 @@ export function TracingDashboard() {
             <p><strong>Parent Span:</strong> {selectedTrace.parentSpanId || 'None'}</p>
             <p><strong>Status:</strong> {selectedTrace.status}</p>
             <p><strong>Duration:</strong> {selectedTrace.duration}ms</p>
-            <p><strong>Start Time:</strong> {new Date(selectedTrace.startTime).toLocaleString()}</p>
+            <p><strong>Start Time:</strong> {new Date(selectedTrace.startTime).toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}</p>
             <div>
               <strong>Attributes:</strong>
               <pre className="mt-2 p-2 bg-gray-100 dark:bg-gray-800 rounded text-xs">

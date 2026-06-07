@@ -1,4 +1,5 @@
 import { spawn, ChildProcess } from 'child_process';
+import { existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { EventEmitter } from 'events';
@@ -39,6 +40,10 @@ export class MCPBridge extends EventEmitter {
   private buffer = '';
   private _connected = false;
   private _tools: ToolDefinition[] = [];
+  private retryCount = 0;
+  private maxRetries = 5;
+  private retryTimeout: ReturnType<typeof setTimeout> | null = null;
+  private _stopped = false;
 
   get connected(): boolean {
     return this._connected;
@@ -48,25 +53,27 @@ export class MCPBridge extends EventEmitter {
     return this._tools;
   }
 
+  private getBackoffDelay(): number {
+    const base = 1000;
+    const delay = base * Math.pow(2, this.retryCount);
+    return Math.min(delay, 30000);
+  }
+
   async start(): Promise<void> {
-    const candidates = [
-      resolve(PACKAGE_ROOT, 'node_modules/.bin/tsx'),
-      resolve(ROOT, 'node_modules/.bin/tsx'),
-      resolve(ROOT, 'node_modules/.bin/tsx.cmd'),
-      'npx',
-    ];
-    const tsnode =
-      candidates.find((p) => p === 'npx' || (existsSync(p) && statSync(p).isFile())) || 'npx';
-    const args = tsnode === 'npx' ? ['tsx', SERVER_SCRIPT] : [tsnode, SERVER_SCRIPT];
+    const tsxCli = resolve(
+      PACKAGE_ROOT,
+      'node_modules/.pnpm/tsx@4.22.4/node_modules/tsx/dist/cli.mjs',
+    );
+    const tsxBin = existsSync(tsxCli) ? tsxCli : null;
     const cwd = existsSync(SERVER_SCRIPT) ? ROOT : undefined;
-    if (!cwd) {
+    if (!cwd || !tsxBin) {
       this._tools = [];
       this._connected = false;
       return;
     }
 
     return new Promise((resolve, reject) => {
-      this.proc = spawn(process.execPath, args, {
+      this.proc = spawn(process.execPath, [tsxBin, SERVER_SCRIPT], {
         stdio: ['pipe', 'pipe', 'pipe'],
         cwd,
       });
@@ -82,6 +89,7 @@ export class MCPBridge extends EventEmitter {
         if (!started) {
           started = true;
           clearTimeout(timeout);
+          this.retryCount = 0;
           this._connected = true;
           this.emit('connected');
           this.discoverTools();
@@ -91,21 +99,34 @@ export class MCPBridge extends EventEmitter {
 
       this.proc.stderr?.on('data', (data: Buffer) => {
         this.emit('stderr', data.toString());
+        if (!started) {
+          started = true;
+          clearTimeout(timeout);
+          this.retryCount = 0;
+          this._connected = true;
+          this.emit('connected');
+          this.discoverTools();
+          resolve();
+        }
       });
 
       this.proc.on('exit', (code) => {
         this._connected = false;
-        this.emit('disconnected', code);
+        this.proc = null;
         this.rejectAll(new Error(`MCP process exited with code ${code}`));
+        this.emit('disconnected', code);
+        this.scheduleRestart();
       });
 
       this.proc.on('error', (err) => {
         this._connected = false;
+        this.proc = null;
         if (!started) {
           clearTimeout(timeout);
           reject(err);
         }
         this.emit('error', err);
+        this.scheduleRestart();
       });
     });
   }
@@ -167,7 +188,29 @@ export class MCPBridge extends EventEmitter {
     return this.request('tools/call', { name, arguments: args });
   }
 
+  private scheduleRestart(): void {
+    if (this._stopped) return;
+    if (this.retryCount >= this.maxRetries) {
+      console.warn(`[MCP] Max retries (${this.maxRetries}) reached, giving up`);
+      this.emit('max_retries_exceeded');
+      return;
+    }
+    const delay = this.getBackoffDelay();
+    this.retryCount++;
+    console.log(`[MCP] Restarting in ${delay}ms (attempt ${this.retryCount}/${this.maxRetries})`);
+    this.retryTimeout = setTimeout(() => {
+      this.start().catch((err) => {
+        console.warn('[MCP] Restart failed:', (err as Error).message);
+      });
+    }, delay);
+  }
+
   async stop(): Promise<void> {
+    this._stopped = true;
+    if (this.retryTimeout) {
+      clearTimeout(this.retryTimeout);
+      this.retryTimeout = null;
+    }
     if (this.proc) {
       this.proc.kill();
       this.proc = null;
