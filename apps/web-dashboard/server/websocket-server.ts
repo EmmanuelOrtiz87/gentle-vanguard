@@ -1,7 +1,7 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import { createServer, IncomingMessage, ServerResponse } from 'http';
-import { writeFileSync, existsSync, mkdirSync, watch } from 'fs';
-import { join } from 'path';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, watch } from 'fs';
+import { join, dirname } from 'path';
 import { getBridge } from './mcp-bridge.js';
 import { getStateBridge } from './shared-state-bridge.js';
 import { getGlobalHealth } from './global-health-api.js';

@@ -14,7 +14,7 @@ function connect() {
   )
     return;
   const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-  sharedWs = new WebSocket(`${protocol}//${window.location.host}/ws`);
+  sharedWs = new WebSocket(`${protocol}//localhost:8080`);
   sharedWs.onmessage = (event) => {
     try {
       const msg = JSON.parse(event.data);
