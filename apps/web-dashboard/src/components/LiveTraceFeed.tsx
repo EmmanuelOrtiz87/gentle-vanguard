@@ -20,7 +20,7 @@ export function LiveTraceFeed() {
           {traces.map((t) => (
             <div key={t.id} className="flex items-center gap-2 px-2 py-1 rounded bg-blue-50 dark:bg-blue-900/10 text-xs">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="font-mono text-gray-600 dark:text-gray-400 truncate max-w-[140px]">{t.id}</span>
+              <span className="font-mono text-gray-600 dark:text-gray-400 truncate min-w-0 flex-1">{t.id}</span>
               <span className="text-gray-500">{t.turnCount} turnos</span>
               <span className="text-gray-400 ml-auto">{t.model}</span>
             </div>

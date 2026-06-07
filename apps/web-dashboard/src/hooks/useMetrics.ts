@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import type { DashboardData, MetricHistory } from '../types/dashboard';
+import { useSharedWs } from './useSharedWs';
 
 export interface Notification {
   type: string;
@@ -20,16 +21,7 @@ export function useMetrics(useWebSocketMode = false) {
   const [history, setHistory] = useState<MetricHistory[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [wsConnected, setWsConnected] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
-
-  const wsRef = useRef<WebSocket | null>(null);
-  const reconnectRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const modeRef = useRef(useWebSocketMode);
-
-  useEffect(() => {
-    modeRef.current = useWebSocketMode;
-  }, [useWebSocketMode]);
 
   const updateFromPayload = useCallback(
     (payload: {
@@ -62,76 +54,28 @@ export function useMetrics(useWebSocketMode = false) {
     [],
   );
 
-  const cleanupWebSocket = useCallback(() => {
-    if (reconnectRef.current) {
-      clearTimeout(reconnectRef.current);
-      reconnectRef.current = null;
-    }
-    if (wsRef.current) {
-      wsRef.current.onopen = null;
-      wsRef.current.onclose = null;
-      wsRef.current.onerror = null;
-      wsRef.current.onmessage = null;
-      if (
-        wsRef.current.readyState === WebSocket.OPEN ||
-        wsRef.current.readyState === WebSocket.CONNECTING
-      ) {
-        wsRef.current.close();
-      }
-      wsRef.current = null;
-    }
-  }, []);
-
-  const connectWebSocket = useCallback(() => {
-    if (!modeRef.current) return;
-
-    cleanupWebSocket();
-
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}/ws`;
-    const ws = new WebSocket(wsUrl);
-    wsRef.current = ws;
-
-    ws.onopen = () => {
-      setWsConnected(true);
-      setError(null);
-    };
-
-    ws.onmessage = (event) => {
-      try {
-        const message = JSON.parse(event.data);
-        if (message.type === 'metrics') {
-          updateFromPayload(message.data);
-        } else if (message.type === 'notification') {
+  const { connected: wsConnected } = useSharedWs(
+    useCallback(
+      (msg: any) => {
+        if (msg.type === 'metrics') {
+          updateFromPayload(msg.data);
+        } else if (msg.type === 'notification') {
           setNotifications((prev) => {
-            const updated = [...(message.notifications || []), ...prev];
+            const notes: Notification[] = msg.notifications || [];
+            const updated = [...notes, ...prev];
             return updated.slice(0, 20);
           });
           setTimeout(() => {
             setNotifications((prev) => prev.slice(0, -1));
           }, 8000);
         }
-      } catch (err) {
-        console.error('[WS] Parse error:', err);
-      }
-    };
-
-    ws.onclose = () => {
-      setWsConnected(false);
-      if (wsRef.current === ws && modeRef.current) {
-        wsRef.current = null;
-        reconnectRef.current = setTimeout(connectWebSocket, 3000);
-      }
-    };
-
-    ws.onerror = () => {
-      setError('WebSocket connection failed');
-    };
-  }, [updateFromPayload, cleanupWebSocket]);
+      },
+      [updateFromPayload],
+    ),
+  );
 
   const fetchMetrics = useCallback(async () => {
-    if (modeRef.current && wsConnected) return;
-
+    if (wsConnected) return;
     setLoading(true);
     try {
       const res = await fetch('/api/metrics');
@@ -148,25 +92,31 @@ export function useMetrics(useWebSocketMode = false) {
     }
   }, [wsConnected, updateFromPayload]);
 
+  const modeRef = useRef(useWebSocketMode);
   useEffect(() => {
-    if (useWebSocketMode) {
-      cleanupWebSocket();
-      connectWebSocket();
-      return cleanupWebSocket;
-    } else {
-      cleanupWebSocket();
+    modeRef.current = useWebSocketMode;
+  }, [useWebSocketMode]);
+
+  useEffect(() => {
+    if (!useWebSocketMode) {
       fetchMetrics();
       const interval = setInterval(fetchMetrics, 5000);
-      return () => {
-        clearInterval(interval);
-        cleanupWebSocket();
-      };
+      return () => clearInterval(interval);
     }
-  }, [useWebSocketMode, connectWebSocket, fetchMetrics, cleanupWebSocket]);
+  }, [useWebSocketMode, fetchMetrics]);
 
   const dismissNotification = useCallback((index: number) => {
     setNotifications((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
-  return { data, history, loading, error, wsConnected, refetch: fetchMetrics, notifications, dismissNotification };
+  return {
+    data,
+    history,
+    loading,
+    error,
+    wsConnected,
+    refetch: fetchMetrics,
+    notifications,
+    dismissNotification,
+  };
 }

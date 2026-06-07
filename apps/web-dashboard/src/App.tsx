@@ -1,6 +1,6 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import { LayoutDashboard, Activity, Store, BookOpen, Bot, ListTodo, History } from 'lucide-react';
+import { LayoutDashboard, Activity, Store, BookOpen, Bot, ListTodo, History, Menu, X } from 'lucide-react';
 import { useSharedState } from './hooks/useSharedState';
 
 const Dashboard = lazy(() => import('./components/Dashboard'));
@@ -18,44 +18,45 @@ const PageLoader = () => (
 );
 
 function Navigation() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const links = [
+    { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
+    { to: '/tracing', icon: Activity, label: 'Tracing' },
+    { to: '/marketplace', icon: Store, label: 'Marketplace' },
+    { to: '/agents', icon: Bot, label: 'Agents' },
+    { to: '/tasks', icon: ListTodo, label: 'Tasks' },
+    { to: '/timeline', icon: History, label: 'Timeline' },
+    { to: '/docs', icon: BookOpen, label: 'Docs' },
+  ];
+
   return (
     <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <span className="text-xl font-bold text-gray-900 dark:text-white">GV Dashboard</span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Link to="/" className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-              <LayoutDashboard className="w-4 h-4" />
-              Dashboard
-            </Link>
-            <Link to="/tracing" className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-              <Activity className="w-4 h-4" />
-              Tracing
-            </Link>
-            <Link to="/marketplace" className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-              <Store className="w-4 h-4" />
-              Marketplace
-            </Link>
-            <Link to="/agents" className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-              <Bot className="w-4 h-4" />
-              Agents
-            </Link>
-            <Link to="/tasks" className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-              <ListTodo className="w-4 h-4" />
-              Tasks
-            </Link>
-            <Link to="/timeline" className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-              <History className="w-4 h-4" />
-              Timeline
-            </Link>
-            <Link to="/docs" className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-              <BookOpen className="w-4 h-4" />
-              Docs
-            </Link>
+          <span className="text-xl font-bold text-gray-900 dark:text-white">GV Dashboard</span>
+          <button onClick={() => setMenuOpen(!menuOpen)} className="lg:hidden p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">
+            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+          <div className="hidden lg:flex items-center space-x-1">
+            {links.map((l) => (
+              <Link key={l.to} to={l.to} className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <l.icon className="w-4 h-4" />
+                {l.label}
+              </Link>
+            ))}
           </div>
         </div>
+        {menuOpen && (
+          <div className="lg:hidden pb-3 space-y-1">
+            {links.map((l) => (
+              <Link key={l.to} to={l.to} onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <l.icon className="w-4 h-4" />
+                {l.label}
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </nav>
   );

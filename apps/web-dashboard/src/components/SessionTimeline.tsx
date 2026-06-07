@@ -86,22 +86,22 @@ export default function SessionTimeline({ events }: SessionTimelineProps) {
         }
 
         return (
-          <div key={`${evt.timestamp}-${i}`} className="flex gap-4">
+          <div key={`${evt.timestamp}-${i}`} className="flex gap-2 sm:gap-4">
             <div className="flex flex-col items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center bg-white dark:bg-gray-800 border-2 ${color.replace('text', 'border')} ${color}`}>
-                <Icon className="w-4 h-4" />
+              <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center bg-white dark:bg-gray-800 border-2 ${color.replace('text', 'border')} ${color}`}>
+                <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
               </div>
               {!isLast && <div className="w-0.5 flex-1 bg-gray-200 dark:bg-gray-700" />}
             </div>
-            <div className={`flex-1 pb-6 ${isLast ? 'pb-0' : ''}`}>
+            <div className={`flex-1 min-w-0 pb-6 ${isLast ? 'pb-0' : ''}`}>
               <button
                 onClick={() => setExpanded(isExpanded ? null : `${i}`)}
-                className="flex items-center gap-2 w-full text-left"
+                className="flex items-start sm:items-center gap-1 sm:gap-2 w-full text-left"
               >
-                <span className="text-sm font-medium text-gray-900 dark:text-white">{label}</span>
-                <span className={`text-[10px] font-mono ${color}`}>{evt.status}</span>
-                <span className="ml-auto flex items-center gap-2">
-                  <span className="text-[10px] text-gray-400">
+                <span className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white truncate">{label}</span>
+                <span className={`text-[10px] font-mono whitespace-nowrap ${color}`}>{evt.status}</span>
+                <span className="ml-auto flex items-center gap-1 sm:gap-2 shrink-0">
+                  <span className="text-[10px] text-gray-400 whitespace-nowrap">
                     {new Date(evt.timestamp).toLocaleTimeString()}
                   </span>
                   {payloadObj && (isExpanded ? <ChevronDown className="w-3 h-3 text-gray-400" /> : <ChevronRight className="w-3 h-3 text-gray-400" />)}

@@ -1,28 +1,20 @@
-import { readFileSync, existsSync, statSync } from 'fs';
-import { join, resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { existsSync, statSync } from 'fs';
+import { join } from 'path';
 import { execSync } from 'child_process';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const ROOT = resolve(__dirname, '../../..');
+import { ROOT, readJson } from './shared.js';
 
 const TOKEN_PATH = join(ROOT, '.runtime', 'metrics', 'token.json');
 const SESSIONS_PATH = join(ROOT, '.runtime', 'metrics', 'sessions.json');
 const SESSIONS_HISTORY_PATH = join(ROOT, '.event-bus', 'sessions-history.json');
 const CONTEXT_LOG_DIR = join(ROOT, '.session', 'context-log');
 
-function readJson<T>(path: string): T | null {
-  try {
-    if (!existsSync(path)) return null;
-    return JSON.parse(readFileSync(path, 'utf-8'));
-  } catch { return null; }
-}
-
 function execGit(args: string): string {
   try {
     return execSync(`git ${args}`, { cwd: ROOT, encoding: 'utf-8', timeout: 3000 }).trim();
-  } catch { return ''; }
+  } catch (e) {
+    console.warn('[validations] git failed:', (e as Error).message);
+    return '';
+  }
 }
 
 export interface Validation {
@@ -32,7 +24,11 @@ export interface Validation {
   value?: string | number;
 }
 
-export function runValidations(bridgeReady: boolean, bridgeTools: number, wsClients: number): Validation[] {
+export function runValidations(
+  bridgeReady: boolean,
+  bridgeTools: number,
+  wsClients: number,
+): Validation[] {
   const results: Validation[] = [];
 
   // MCP Bridge
@@ -46,7 +42,7 @@ export function runValidations(bridgeReady: boolean, bridgeTools: number, wsClie
   // Token Budget
   const tokenFile = readJson<{ usedToday?: number; budget?: number; pct?: number }>(TOKEN_PATH);
   if (tokenFile && tokenFile.budget && tokenFile.budget > 0) {
-    const pct = tokenFile.pct ?? ((tokenFile.usedToday ?? 0) / tokenFile.budget * 100);
+    const pct = tokenFile.pct ?? ((tokenFile.usedToday ?? 0) / tokenFile.budget) * 100;
     const status = pct > 80 ? 'warn' : 'ok';
     results.push({
       name: 'Token Budget',
@@ -61,18 +57,21 @@ export function runValidations(bridgeReady: boolean, bridgeTools: number, wsClie
   // Sesiones colgadas
   try {
     const sessionsFile = readJson<{ active?: number; latestStatus?: string }>(SESSIONS_PATH);
-    const sessionsHistory = readJson<Array<{ id: string; status: string; updatedAt: string }>>(SESSIONS_HISTORY_PATH) || [];
+    const sessionsHistory =
+      readJson<Array<{ id: string; status: string; updatedAt: string }>>(SESSIONS_HISTORY_PATH) ||
+      [];
     const staleSessions = sessionsHistory.filter((s) => {
       if (s.status !== 'active' && s.status !== 'awaiting_input') return false;
       const updated = new Date(s.updatedAt).getTime();
-      return (Date.now() - updated) > 7200000;
+      return Date.now() - updated > 7200000;
     });
     results.push({
       name: 'Sesiones',
       status: staleSessions.length > 0 ? 'warn' : 'ok',
-      message: staleSessions.length > 0
-        ? `${staleSessions.length} colgada(s) (>2h)`
-        : `${sessionsFile?.active ?? 0} activa(s), sin colgadas`,
+      message:
+        staleSessions.length > 0
+          ? `${staleSessions.length} colgada(s) (>2h)`
+          : `${sessionsFile?.active ?? 0} activa(s), sin colgadas`,
       value: sessionsFile?.active ?? 0,
     });
   } catch {
@@ -92,7 +91,9 @@ export function runValidations(bridgeReady: boolean, bridgeTools: number, wsClie
         message: [
           hasUncommitted ? 'archivos sin commit' : '',
           unpushedCount > 0 ? `${unpushedCount} commit(s) sin pushear` : '',
-        ].filter(Boolean).join(', '),
+        ]
+          .filter(Boolean)
+          .join(', '),
         value: unpushedCount,
       });
     } else {

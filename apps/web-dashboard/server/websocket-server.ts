@@ -1,8 +1,7 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import { createServer, IncomingMessage, ServerResponse } from 'http';
-import { readFileSync, writeFileSync, existsSync, mkdirSync, watch } from 'fs';
-import { join, resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { writeFileSync, existsSync, mkdirSync, watch } from 'fs';
+import { join } from 'path';
 import { getBridge } from './mcp-bridge.js';
 import { getStateBridge } from './shared-state-bridge.js';
 import { getGlobalHealth } from './global-health-api.js';
@@ -17,6 +16,7 @@ import {
 } from './marketplace-api.js';
 import { getRealMetrics, getTraces } from './real-data.js';
 import { runValidations } from './validations.js';
+import { ROOT, readJson, countSkills } from './shared.js';
 import type {
   AgentSession,
   AgentMessage,
@@ -24,9 +24,6 @@ import type {
   AgentMessage as AgentMessageType,
 } from '../src/types/agent.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const ROOT = resolve(__dirname, '../../..');
 const STATS_PATH = join(ROOT, '.atl', 'skill-stats.json');
 const REGISTRY_PATH = join(ROOT, '.atl', 'skill-registry.md');
 const SESSIONS_HISTORY_PATH = join(ROOT, '.event-bus', 'sessions-history.json');
@@ -44,34 +41,13 @@ let bridgeReady = false;
 let bridgeToolCount = 0;
 
 function loadStats() {
-  try {
-    const content = readFileSync(STATS_PATH, 'utf-8');
-    return JSON.parse(content);
-  } catch {
-    return { totalCalls: 0, callsByTool: {}, callsBySkill: {}, lastCall: null };
-  }
-}
-
-function countSkills() {
-  try {
-    const content = readFileSync(REGISTRY_PATH, 'utf-8');
-    const lines = content.split('\n');
-    let count = 0;
-    const byAgent: Record<string, number> = {};
-
-    for (const line of lines) {
-      const match = line.match(/^\|\s*([^|]+)\|\s*([^|]+)\|/);
-      if (match && match[1].trim() !== 'Agent') {
-        const agent = match[1].trim();
-        byAgent[agent] = (byAgent[agent] || 0) + 1;
-        count++;
-      }
-    }
-
-    return { total: count, byAgent };
-  } catch {
-    return { total: 0, byAgent: {} };
-  }
+  const content = readJson<{
+    totalCalls: number;
+    callsByTool: Record<string, number>;
+    callsBySkill: Record<string, number>;
+    lastCall: string | null;
+  }>(STATS_PATH);
+  return content || { totalCalls: 0, callsByTool: {}, callsBySkill: {}, lastCall: null };
 }
 
 function saveSessions(): void {
@@ -363,7 +339,12 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
 
   if (url.pathname === '/api/mcp/metrics') {
     res.writeHead(200, headers);
-    res.end(JSON.stringify({ type: 'mcp', data: { skills: countSkills(), calls: loadStats() } }));
+    res.end(
+      JSON.stringify({
+        type: 'mcp',
+        data: { skills: countSkills(REGISTRY_PATH), calls: loadStats() },
+      }),
+    );
     return;
   }
 
@@ -407,8 +388,17 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
 
   if (url.pathname === '/api/state/events') {
     res.writeHead(200, headers);
-    const bridge = getStateBridge();
-    res.end(JSON.stringify({ events: [] }));
+    try {
+      const historyPath = join(ROOT, '.event-bus', 'history.json');
+      if (existsSync(historyPath)) {
+        const history = JSON.parse(readFileSync(historyPath, 'utf-8'));
+        res.end(JSON.stringify({ events: history.events || [] }));
+      } else {
+        res.end(JSON.stringify({ events: [] }));
+      }
+    } catch {
+      res.end(JSON.stringify({ events: [] }));
+    }
     return;
   }
 
@@ -467,7 +457,9 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
 
   if (url.pathname === '/api/marketplace' && req.method === 'POST') {
     let body = '';
-    req.on('data', (chunk) => { body += chunk; });
+    req.on('data', (chunk) => {
+      body += chunk;
+    });
     req.on('end', () => {
       try {
         const payload = JSON.parse(body);
@@ -479,14 +471,25 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
 
         if (missingFields.length > 0) {
           res.writeHead(400, headers);
-          res.end(JSON.stringify({ success: false, error: `Missing required fields: ${missingFields.join(', ')}` }));
+          res.end(
+            JSON.stringify({
+              success: false,
+              error: `Missing required fields: ${missingFields.join(', ')}`,
+            }),
+          );
           return;
         }
 
         const validation = validateSkillStructure(payload.skillContent);
         if (!validation.valid) {
           res.writeHead(400, headers);
-          res.end(JSON.stringify({ success: false, error: 'Skill structure validation failed', details: validation.errors }));
+          res.end(
+            JSON.stringify({
+              success: false,
+              error: 'Skill structure validation failed',
+              details: validation.errors,
+            }),
+          );
           return;
         }
 
@@ -501,7 +504,13 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
           skillContent: payload.skillContent,
         });
         res.writeHead(201, headers);
-        res.end(JSON.stringify({ success: true, data: listing, message: `Skill '${payload.name}' created successfully` }));
+        res.end(
+          JSON.stringify({
+            success: true,
+            data: listing,
+            message: `Skill '${payload.name}' created successfully`,
+          }),
+        );
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Failed to create listing';
         const status = message.includes('already exists') ? 409 : 500;
@@ -514,13 +523,17 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
 
   if (url.pathname === '/api/marketplace/validate/structure' && req.method === 'POST') {
     let body = '';
-    req.on('data', (chunk) => { body += chunk; });
+    req.on('data', (chunk) => {
+      body += chunk;
+    });
     req.on('end', () => {
       try {
         const { skillContent } = JSON.parse(body);
         if (!skillContent) {
           res.writeHead(400, headers);
-          res.end(JSON.stringify({ success: false, error: 'Missing required field: skillContent' }));
+          res.end(
+            JSON.stringify({ success: false, error: 'Missing required field: skillContent' }),
+          );
           return;
         }
         const result = validateSkillStructure(skillContent);
@@ -535,7 +548,9 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
   }
 
   // Match /api/marketplace/:id/review and /api/marketplace/:id/download
-  const marketplaceMatch = url.pathname.match(/^\/api\/marketplace\/([^/]+)(?:\/(review|download))?$/);
+  const marketplaceMatch = url.pathname.match(
+    /^\/api\/marketplace\/([^/]+)(?:\/(review|download))?$/,
+  );
   if (marketplaceMatch) {
     const listingId = marketplaceMatch[1];
     const action = marketplaceMatch[2];
@@ -555,18 +570,27 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
 
     if (action === 'review' && req.method === 'POST') {
       let body = '';
-      req.on('data', (chunk) => { body += chunk; });
+      req.on('data', (chunk) => {
+        body += chunk;
+      });
       req.on('end', () => {
         try {
           const { user, rating, comment } = JSON.parse(body);
           if (!user || rating == null || !comment) {
             res.writeHead(400, headers);
-            res.end(JSON.stringify({ success: false, error: 'Missing required fields: user, rating, comment' }));
+            res.end(
+              JSON.stringify({
+                success: false,
+                error: 'Missing required fields: user, rating, comment',
+              }),
+            );
             return;
           }
           if (typeof rating !== 'number' || rating < 1 || rating > 5) {
             res.writeHead(400, headers);
-            res.end(JSON.stringify({ success: false, error: 'Rating must be a number between 1 and 5' }));
+            res.end(
+              JSON.stringify({ success: false, error: 'Rating must be a number between 1 and 5' }),
+            );
             return;
           }
           const review = addReview(listingId, { user, rating, comment });
@@ -599,7 +623,10 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
 // --- WebSocket ---
 
 wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
-  const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || req.socket.remoteAddress || 'unknown';
+  const ip =
+    (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ||
+    req.socket.remoteAddress ||
+    'unknown';
   const current = connPerIp.get(ip) || 0;
   if (current >= MAX_CONN_PER_IP) {
     console.log(`[WS] Blocked excessive connection from ${ip} (${current})`);
@@ -611,6 +638,21 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
   clients.add(ws);
   ws.send(JSON.stringify({ type: 'metrics', data: generateMetrics() }));
   ws.send(JSON.stringify({ type: 'bridge_status', connected: bridgeReady }));
+
+  // Send current state to newly connected client
+  const stateBridge = getStateBridge();
+  ws.send(JSON.stringify({ type: 'state_tasks', tasks: stateBridge.tasks }));
+  try {
+    const historyPath = join(ROOT, '.event-bus', 'history.json');
+    if (existsSync(historyPath)) {
+      const history = JSON.parse(readFileSync(historyPath, 'utf-8'));
+      ws.send(
+        JSON.stringify({ type: 'state_history', events: (history.events || []).slice(0, 20) }),
+      );
+    }
+  } catch (e) {
+    console.warn('[WS] Failed to send state history to new client:', (e as Error).message);
+  }
 
   ws.on('message', (raw: Buffer | string) => {
     try {
@@ -667,7 +709,12 @@ setInterval(() => {
     const currEvents = curr?.events?.length || 0;
     const prevEvents = prev?.events?.length || 0;
 
-    const notifications: Array<{ type: string; message: string; severity: string; timestamp: string }> = [];
+    const notifications: Array<{
+      type: string;
+      message: string;
+      severity: string;
+      timestamp: string;
+    }> = [];
 
     if (currTokens > prevTokens) {
       const delta = currTokens - prevTokens;
@@ -715,8 +762,42 @@ setInterval(() => {
 
 // --- Start ---
 
+function refreshTokenMetrics(): void {
+  const consolidatedPath = join(ROOT, '.runtime', 'metrics', 'consolidated.json');
+  const tokenPath = join(ROOT, '.runtime', 'metrics', 'token.json');
+  const tokenDir = dirname(tokenPath);
+  if (!existsSync(tokenDir)) mkdirSync(tokenDir, { recursive: true });
+  try {
+    let usedToday = 0,
+      budget = 1000000;
+    if (existsSync(consolidatedPath)) {
+      const c = JSON.parse(readFileSync(consolidatedPath, 'utf-8'));
+      usedToday = c?.token?.usedToday || 0;
+      budget = c?.token?.budget || 1000000;
+    }
+    writeFileSync(
+      tokenPath,
+      JSON.stringify(
+        {
+          usedToday,
+          budget,
+          estCost: 0,
+          pct: budget > 0 ? (usedToday / budget) * 100 : 0,
+          _refreshedAt: new Date().toISOString(),
+        },
+        null,
+        2,
+      ),
+    );
+    console.log('[METRICS] token.json refreshed');
+  } catch (e) {
+    console.warn('[METRICS] Could not refresh token.json:', (e as Error).message);
+  }
+}
+
 async function start() {
   loadSessions();
+  refreshTokenMetrics();
   try {
     const mcpBridge = getBridge();
     await mcpBridge.start();
@@ -759,9 +840,14 @@ function startTraceWatcher(): void {
       const statePath = join(ctxDir, filename);
       try {
         const state = JSON.parse(readFileSync(statePath, 'utf-8'));
-        const msg = JSON.stringify({ type: 'trace_update', session: { id: state.sessionId || filename.split(/[\\/]/)[0], state } });
+        const msg = JSON.stringify({
+          type: 'trace_update',
+          session: { id: state.sessionId || filename.split(/[\\/]/)[0], state },
+        });
         clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(msg));
-      } catch { /* ignore parse errors during write */ }
+      } catch (e) {
+        console.warn('[TRACE] Error parsing state file:', filename, (e as Error).message);
+      }
     });
     console.log('[TRACE] Context-log watcher started');
   } catch (err) {
@@ -775,3 +861,26 @@ server.listen(PORT, () => {
   initSharedState();
   startTraceWatcher();
 });
+
+// --- Graceful Shutdown ---
+
+function shutdown(signal: string) {
+  console.log(`[SHUTDOWN] Received ${signal}, closing gracefully...`);
+  const bridge = getBridge();
+  bridge.stop().catch(() => {});
+  getStateBridge().stop();
+  wss.close(() => {
+    console.log('[SHUTDOWN] WebSocket server closed');
+  });
+  server.close(() => {
+    console.log('[SHUTDOWN] HTTP server closed');
+    process.exit(0);
+  });
+  setTimeout(() => {
+    console.warn('[SHUTDOWN] Forced exit after timeout');
+    process.exit(1);
+  }, 5000);
+}
+
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
