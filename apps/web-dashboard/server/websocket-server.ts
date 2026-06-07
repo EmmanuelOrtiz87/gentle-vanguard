@@ -1,6 +1,6 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import { createServer, IncomingMessage, ServerResponse } from 'http';
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, watch } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { getBridge } from './mcp-bridge.js';
@@ -16,6 +16,7 @@ import {
   getSkillContent,
 } from './marketplace-api.js';
 import { getRealMetrics, getTraces } from './real-data.js';
+import { runValidations } from './validations.js';
 import type {
   AgentSession,
   AgentMessage,
@@ -40,6 +41,7 @@ const sessions = new Map<string, AgentSession>();
 const connPerIp = new Map<string, number>();
 const MAX_CONN_PER_IP = 5;
 let bridgeReady = false;
+let bridgeToolCount = 0;
 
 function loadStats() {
   try {
@@ -641,10 +643,17 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
 
 let prevMetrics: Record<string, unknown> | null = null;
 
+function broadcastValidations(): void {
+  const validations = runValidations(bridgeReady, bridgeToolCount, clients.size);
+  const msg = JSON.stringify({ type: 'validations', data: validations });
+  clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(msg));
+}
+
 setInterval(() => {
   const metrics = generateMetrics();
   const msg = JSON.stringify({ type: 'metrics', data: metrics });
   clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(msg));
+  broadcastValidations();
 
   if (prevMetrics) {
     const prev = prevMetrics as Record<string, any>;
@@ -712,10 +721,12 @@ async function start() {
     const mcpBridge = getBridge();
     await mcpBridge.start();
     bridgeReady = true;
-    console.log(`[MCP] Bridge connected — ${mcpBridge.tools.length} tools available`);
+    bridgeToolCount = mcpBridge.tools.length;
+    console.log(`[MCP] Bridge connected — ${bridgeToolCount} tools available`);
   } catch (err) {
     console.warn('[MCP] Bridge not available (MCP server not running)');
     bridgeReady = false;
+    bridgeToolCount = 0;
   }
 }
 
@@ -737,8 +748,30 @@ function initSharedState(): void {
   console.log('[STATE] Shared State Bridge started');
 }
 
+function startTraceWatcher(): void {
+  const ctxDir = join(ROOT, '.session', 'context-log');
+  if (!existsSync(ctxDir)) {
+    mkdirSync(ctxDir, { recursive: true });
+  }
+  try {
+    watch(ctxDir, { recursive: true }, (eventType, filename) => {
+      if (!filename || !filename.endsWith('.state.json')) return;
+      const statePath = join(ctxDir, filename);
+      try {
+        const state = JSON.parse(readFileSync(statePath, 'utf-8'));
+        const msg = JSON.stringify({ type: 'trace_update', session: { id: state.sessionId || filename.split(/[\\/]/)[0], state } });
+        clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(msg));
+      } catch { /* ignore parse errors during write */ }
+    });
+    console.log('[TRACE] Context-log watcher started');
+  } catch (err) {
+    console.warn('[TRACE] File watcher not available:', (err as Error).message);
+  }
+}
+
 server.listen(PORT, () => {
   console.log(`[WS] Server on port ${PORT}`);
   start();
   initSharedState();
+  startTraceWatcher();
 });
