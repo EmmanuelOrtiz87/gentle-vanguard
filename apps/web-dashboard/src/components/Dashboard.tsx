@@ -8,6 +8,8 @@ import { AgentMessage } from './AgentMessage';
 import { GlobalHealth } from './GlobalHealth';
 import { useAgentStream } from '../hooks/useAgentStream';
 import { NotificationToast } from './NotificationToast';
+import { ValidationPanel } from './ValidationPanel';
+import { LiveTraceFeed } from './LiveTraceFeed';
 import type { Session } from '../types/dashboard';
 
 const MOCK_SESSIONS: Session[] = [
@@ -135,6 +137,11 @@ export default function Dashboard() {
             </div>
           </div>
         )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <ValidationPanel />
+          <LiveTraceFeed />
+        </div>
 
         {globalHealthData && (
           <div className="mb-8">
