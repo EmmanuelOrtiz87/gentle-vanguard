@@ -1,4 +1,4 @@
-import { readFileSync, existsSync, writeFileSync, mkdirSync } from 'fs';
+import { readFileSync, existsSync, readdirSync } from 'fs';
 import { join, dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
@@ -6,127 +6,26 @@ import { execSync } from 'child_process';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT = resolve(__dirname, '../../..');
+
+const CONSOLIDATED_PATH = join(ROOT, '.runtime', 'metrics', 'consolidated.json');
+const METRICS_DB_PATH = join(ROOT, '.runtime', 'metrics.json');
+const TOKEN_PATH = join(ROOT, '.runtime', 'metrics', 'token.json');
+const SESSIONS_METRICS_PATH = join(ROOT, '.runtime', 'metrics', 'sessions.json');
+const COST_PATH = join(ROOT, '.runtime', 'metrics', 'cost.json');
+const LIVE_PATH = join(ROOT, '.runtime', 'metrics', 'live.json');
+const GIT_METRICS_PATH = join(ROOT, '.runtime', 'metrics', 'git.json');
+const PR_METRICS_PATH = join(ROOT, '.runtime', 'metrics', 'pr.json');
 const STATS_PATH = join(ROOT, '.atl', 'skill-stats.json');
 const REGISTRY_PATH = join(ROOT, '.atl', 'skill-registry.md');
 const EVENT_HISTORY_PATH = join(ROOT, '.event-bus', 'history.json');
 const SESSIONS_HISTORY_PATH = join(ROOT, '.event-bus', 'sessions-history.json');
+const CONTEXT_LOG_DIR = join(ROOT, '.session', 'context-log');
 
-interface SkillStats {
-  totalCalls: number;
-  callsByTool: Record<string, number>;
-  callsBySkill: Record<string, number>;
-  lastCall: string | null;
-}
-
-interface EventHistory {
-  events: unknown[];
-  version: string;
-  max_history: number;
-}
-
-interface SessionRecord {
-  id: string;
-  agent: string;
-  status: string;
-  messageCount: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-const AVG_TOKENS_PER_CALL = 1500;
-const TOKEN_COST_RATE = 0.000002;
-const DEFAULT_TOKEN_LIMIT = 1000000;
-const BASE_RESPONSE_TIME = 150;
-const RESPONSE_TIME_JITTER = 30;
-const BASE_ERROR_RATE = 0.02;
-const ERROR_RATE_JITTER = 0.015;
-const TOKENS_PER_SECOND = 0.5;
-const ACTIVE_TOKENS_PER_SECOND = 2.5;
-
-const serverStart = Date.now();
-let metricsCallCount = 0;
-
-const eventTemplates = [
-  { event: 'dispatch.started', status: 'running' },
-  { event: 'dispatch.completed', status: 'success' },
-  { event: 'agent.dispatched', status: 'running', agent: 'DEV' },
-  { event: 'agent.completed', status: 'success', agent: 'DEV' },
-  { event: 'workflow.checkpoint', status: 'running', stage: 'build' },
-  { event: 'workflow.publish', status: 'success', stage: 'deploy' },
-  { event: 'validation.started', status: 'running', dimension: 'security' },
-  { event: 'validation.completed', status: 'success', dimension: 'security' },
-  { event: 'session.started', status: 'running' },
-  { event: 'session.ended', status: 'completed' },
-];
-
-function jitter(base: number, range: number): number {
-  return Math.round((base + (Math.random() - 0.5) * 2 * range) * 100) / 100;
-}
-
-function generateLiveEvents(): unknown[] {
-  const events: unknown[] = [];
-  const now = Date.now();
-  for (let i = 0; i < 3; i++) {
-    const tpl = eventTemplates[(metricsCallCount + i) % eventTemplates.length];
-    const ts = new Date(now - i * 12000).toISOString();
-    events.push({
-      timestamp: ts,
-      event: tpl.event,
-      status: tpl.status,
-      execution_id: `exec-${Math.random().toString(36).slice(2, 8)}`,
-      payload: JSON.stringify({ source: 'demo-generator', cycle: metricsCallCount }),
-    });
-  }
-  return events;
-}
-
-function liveSessionCycle(sessions: SessionRecord[]): SessionRecord[] {
-  const now = Date.now();
-  const THIRTY_SECONDS = 30000;
-  const result = sessions.filter((s) => {
-    if (s.status === 'active' || s.status === 'awaiting_input') {
-      const updated = new Date(s.updatedAt).getTime();
-      return (now - updated) < THIRTY_SECONDS * 3;
-    }
-    return true;
-  });
-
-  const activeCount = result.filter((s) => s.status === 'active' || s.status === 'awaiting_input').length;
-  if (activeCount < 3 && Math.random() < 0.1) {
-    const agents = ['DEV', 'QA', 'BA', 'DOC'];
-    const agent = agents[Math.floor(Math.random() * agents.length)];
-    result.push({
-      id: `sess-${now}-${Math.random().toString(36).slice(2, 6)}`,
-      agent,
-      status: 'active',
-      messageCount: Math.floor(Math.random() * 10) + 1,
-      createdAt: new Date(now - Math.random() * 60000).toISOString(),
-      updatedAt: new Date(now).toISOString(),
-    });
-  }
-
-  for (const s of result) {
-    if ((s.status === 'active' || s.status === 'awaiting_input') && Math.random() < 0.05) {
-      s.status = Math.random() < 0.6 ? 'completed' : 'idle';
-      s.updatedAt = new Date(now).toISOString();
-    }
-  }
-
+function readJson<T>(path: string): T | null {
   try {
-    const dir = dirname(SESSIONS_HISTORY_PATH);
-    if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
-    writeFileSync(SESSIONS_HISTORY_PATH, JSON.stringify(result, null, 2), 'utf-8');
-  } catch { /* best-effort */ }
-
-  return result;
-}
-
-export function loadSkillStats(): SkillStats {
-  try {
-    return JSON.parse(readFileSync(STATS_PATH, 'utf-8'));
-  } catch {
-    return { totalCalls: 0, callsByTool: {}, callsBySkill: {}, lastCall: null };
-  }
+    if (!existsSync(path)) return null;
+    return JSON.parse(readFileSync(path, 'utf-8'));
+  } catch { return null; }
 }
 
 export function countSkills(): { total: number; byAgent: Record<string, number> } {
@@ -149,115 +48,171 @@ export function countSkills(): { total: number; byAgent: Record<string, number> 
   }
 }
 
-export function loadSessionsHistory(): SessionRecord[] {
-  try {
-    if (!existsSync(SESSIONS_HISTORY_PATH)) return [];
-    return JSON.parse(readFileSync(SESSIONS_HISTORY_PATH, 'utf-8'));
-  } catch {
-    return [];
-  }
-}
-
-export function loadEventHistory(): EventHistory {
-  try {
-    if (!existsSync(EVENT_HISTORY_PATH)) return { events: [], version: '1.0', max_history: 100 };
-    return JSON.parse(readFileSync(EVENT_HISTORY_PATH, 'utf-8'));
-  } catch {
-    return { events: [], version: '1.0', max_history: 100 };
-  }
-}
-
 function execGit(args: string): string {
   try {
     return execSync(`git ${args}`, { cwd: ROOT, encoding: 'utf-8', timeout: 3000 }).trim();
-  } catch {
-    return '';
-  }
+  } catch { return ''; }
 }
 
 export function getGitStats(): { commits: number; prsMerged: number; contributors: number } {
-  try {
-    const totalCommits = parseInt(execGit('rev-list --count HEAD'), 10) || 0;
-    const prLog = execGit('log --oneline --grep="Merge pull request" --all');
-    const prCount = prLog ? prLog.split('\n').filter(Boolean).length : 0;
-    const contributorOutput = execGit('shortlog -sn --all');
-    const contributorCount = contributorOutput ? contributorOutput.split('\n').filter(Boolean).length : 0;
-    return {
-      commits: totalCommits,
-      prsMerged: prCount,
-      contributors: contributorCount,
-    };
-  } catch {
-    return { commits: 0, prsMerged: 0, contributors: 0 };
-  }
+  const gitFile = readJson<{ totalCommits: number; authorCount: number }>(GIT_METRICS_PATH);
+  const prFile = readJson<{ merged: number }>(PR_METRICS_PATH);
+  return {
+    commits: gitFile?.totalCommits ?? (parseInt(execGit('rev-list --count HEAD'), 10) || 0),
+    prsMerged: prFile?.merged ?? 0,
+    contributors: gitFile?.authorCount ?? 0,
+  };
 }
 
 export function getRealMetrics() {
-  metricsCallCount++;
-  const elapsedSeconds = (Date.now() - serverStart) / 1000;
+  const consolidated = readJson<any>(CONSOLIDATED_PATH);
+  const tokenDb = readJson<{ token_usage?: Array<{ tokens_used: number; cost_usd: number; date: string }> }>(METRICS_DB_PATH);
+  const skillStats = readJson<{ totalCalls: number; callsByTool: Record<string, number>; callsBySkill: Record<string, number>; lastCall: string | null }>(STATS_PATH) || { totalCalls: 0, callsByTool: {}, callsBySkill: {}, lastCall: null };
+  const sessionsFile = readJson<{ events: unknown[] }>(EVENT_HISTORY_PATH);
+  const sessionsHistory = readJson<Array<{ id: string; agent: string; status: string; createdAt: string }>>(SESSIONS_HISTORY_PATH) || [];
 
-  const stats = loadSkillStats();
   const skills = countSkills();
-  const sessions = liveSessionCycle(loadSessionsHistory());
-  const gitStats = getGitStats();
 
-  const topSkills = Object.entries(stats.callsBySkill || {})
+  const t = consolidated?.token || readJson<any>(TOKEN_PATH) || { usedToday: 0, budget: 1000000, estCost: 0 };
+  const s = consolidated?.sessions || readJson<any>(SESSIONS_METRICS_PATH) || { total: 0, active: 0, today: 0 };
+  const g = consolidated?.git || readJson<any>(GIT_METRICS_PATH) || {};
+  const pr = consolidated?.pr || readJson<any>(PR_METRICS_PATH) || { merged: 0 };
+  const live = consolidated?.live || readJson<any>(LIVE_PATH) || { trafficLight: 'GREEN' };
+
+  const tokenUsageHistory = tokenDb?.token_usage || [];
+  const totalTokensFromHistory = tokenUsageHistory.reduce((sum, r) => sum + (r.tokens_used || 0), 0);
+  const tokensUsed = Math.max(t.usedToday || 0, totalTokensFromHistory || 0);
+  const costFromHistory = tokenUsageHistory.reduce((sum, r) => sum + (r.cost_usd || 0), 0);
+  const tokenCost = Math.max(t.estCost || 0, costFromHistory || 0);
+
+  const topSkills = Object.entries(skillStats.callsBySkill || {})
     .sort(([, a], [, b]) => b - a)
     .slice(0, 5)
     .map(([name]) => name);
 
-  const backgroundTokens = Math.round(elapsedSeconds * TOKENS_PER_SECOND);
-  const activeTokens = skills.total > 0
-    ? Math.round(elapsedSeconds * ACTIVE_TOKENS_PER_SECOND)
-    : 0;
-  const tokensUsed = stats.totalCalls > 0
-    ? stats.totalCalls * AVG_TOKENS_PER_CALL + Math.round(elapsedSeconds * 0.1)
-    : backgroundTokens + activeTokens + Math.floor(Math.random() * 200);
-
-  const uptimeHours = elapsedSeconds / 3600;
-  const tokenLimit = Math.max(DEFAULT_TOKEN_LIMIT, Math.round(DEFAULT_TOKEN_LIMIT * (1 + uptimeHours / 24)));
-
   const today = new Date().toISOString().slice(0, 10);
-  const sessionsToday = sessions.filter((s) => (s.createdAt || '').startsWith(today)).length;
-  const activeSessions = sessions.filter((s) => s.status === 'active' || s.status === 'awaiting_input').length;
+  const sessionsToday = sessionsHistory.filter((s) => (s.createdAt || '').startsWith(today)).length;
+  const activeSessions = sessionsHistory.filter((s) => s.status === 'active' || s.status === 'awaiting_input').length;
 
-  const hasCalls = stats.totalCalls > 0;
-  const routing = hasCalls
-    ? Math.min(1, 0.5 + stats.totalCalls * 0.01)
-    : Math.min(0.6, 0.3 + elapsedSeconds / 300000);
-  const avgResponseTime = hasCalls
-    ? jitter(BASE_RESPONSE_TIME, RESPONSE_TIME_JITTER)
-    : jitter(200, 50);
-  const errorRate = hasCalls
-    ? Math.max(0, Math.min(0.1, jitter(BASE_ERROR_RATE, ERROR_RATE_JITTER)))
-    : Math.max(0, Math.min(0.15, jitter(0.01, 0.02)));
-
-  const liveEvents = generateLiveEvents();
+  const gitLive = getGitStats();
 
   return {
     timestamp: new Date().toISOString(),
     tokens: {
       used: tokensUsed,
-      limit: tokenLimit,
-      cost: Math.round(tokensUsed * TOKEN_COST_RATE * 100000) / 100000,
+      limit: t.budget || 1000000,
+      cost: tokenCost,
     },
-    sessions: { total: sessions.length, active: activeSessions, today: sessionsToday },
-    git: gitStats,
-    health: { status: 'healthy', routing },
+    sessions: {
+      total: Math.max(s.total || 0, sessionsHistory.length),
+      active: Math.max(s.active || 0, activeSessions),
+      today: Math.max(s.today || 0, sessionsToday || 0),
+    },
+    git: gitLive,
+    health: {
+      status: live.trafficLight === 'GREEN' ? 'healthy' : live.trafficLight === 'YELLOW' ? 'degraded' : 'critical',
+      routing: g.routingTotal ? Math.min(1, (g.routingTotal || 0) / 100) : skillStats.totalCalls > 0 ? Math.min(1, 0.5 + skillStats.totalCalls * 0.01) : 0,
+    },
     mcp: {
       skills: { total: skills.total, byAgent: skills.byAgent, recentlyUsed: topSkills },
       calls: {
-        total: stats.totalCalls,
-        byTool: stats.callsByTool,
-        bySkill: stats.callsBySkill,
-        lastCall: stats.lastCall,
+        total: skillStats.totalCalls,
+        byTool: skillStats.callsByTool,
+        bySkill: skillStats.callsBySkill,
+        lastCall: skillStats.lastCall,
       },
-      performance: { avgResponseTime, errorRate },
+      performance: {
+        avgResponseTime: skillStats.totalCalls > 0 ? 150 : 0,
+        errorRate: 0,
+      },
     },
-    events: liveEvents,
+    events: sessionsFile?.events || [],
   };
 }
 
-export function getTraces() {
-  return { traces: [], stats: { totalTraces: 0, avgDuration: 0, errorRate: 0, activeSpans: 0 } };
+interface Trace {
+  traceId: string;
+  spanId: string;
+  parentSpanId?: string;
+  name: string;
+  startTime: number;
+  endTime?: number;
+  duration?: number;
+  status: 'running' | 'completed' | 'error';
+  attributes: Record<string, string>;
+}
+
+interface TraceStats {
+  totalTraces: number;
+  avgDuration: number;
+  errorRate: number;
+  activeSpans: number;
+}
+
+export function getTraces(): { traces: Trace[]; stats: TraceStats } {
+  const traces: Trace[] = [];
+
+  try {
+    if (existsSync(CONTEXT_LOG_DIR)) {
+      const dirs = readdirSync(CONTEXT_LOG_DIR, { withFileTypes: true });
+      for (const d of dirs) {
+        if (!d.isDirectory()) continue;
+        const stateFile = join(CONTEXT_LOG_DIR, d.name, '.state.json');
+        if (!existsSync(stateFile)) continue;
+        const state = readJson<any>(stateFile);
+        if (!state || !state.turns) continue;
+
+        const sessionId = state.sessionId || d.name;
+        const model = state.model || 'unknown';
+        const turns = state.turns as Array<{
+          label?: string;
+          timestamp?: string;
+          inputTokens?: number;
+          outputTokens?: number;
+          totalTokens?: number;
+          cost?: number;
+          contextChars?: number;
+        }>;
+
+        for (let i = 0; i < turns.length; i++) {
+          const turn = turns[i];
+          const startTime = turn.timestamp ? new Date(turn.timestamp).getTime() : Date.now();
+          const totalTokens = turn.totalTokens || 0;
+          const duration = totalTokens > 0 ? totalTokens : undefined;
+          traces.push({
+            traceId: sessionId,
+            spanId: `${sessionId}-turn-${i + 1}`,
+            parentSpanId: i > 0 ? `${sessionId}-turn-${i}` : sessionId,
+            name: turn.label || `Turn ${i + 1}`,
+            startTime,
+            endTime: duration ? startTime + duration : undefined,
+            duration,
+            status: 'completed',
+            attributes: {
+              model,
+              inputTokens: String(turn.inputTokens || 0),
+              outputTokens: String(turn.outputTokens || 0),
+              cost: String(turn.cost || 0),
+              contextChars: String(turn.contextChars || 0),
+              sessionId,
+            },
+          });
+        }
+      }
+    }
+  } catch { /* best-effort */ }
+
+  const activeSpans = traces.filter((t) => {
+    return (Date.now() - t.startTime) < 3600000;
+  }).length;
+
+  const durations = traces.filter((t) => t.duration).map((t) => t.duration!);
+  const avgDuration = durations.length > 0
+    ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length)
+    : 0;
+
+  return {
+    traces,
+    stats: { totalTraces: traces.length, avgDuration, errorRate: 0, activeSpans },
+  };
 }

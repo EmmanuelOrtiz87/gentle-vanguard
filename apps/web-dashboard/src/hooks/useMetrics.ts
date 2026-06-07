@@ -1,6 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import type { DashboardData, MetricHistory } from '../types/dashboard';
 
+export interface Notification {
+  type: string;
+  message: string;
+  severity: string;
+  timestamp: string;
+}
+
 const FALLBACK_DATA: DashboardData = {
   tokens: { used: 0, limit: 0, cost: 0 },
   sessions: { total: 0, active: 0, today: 0 },
@@ -14,6 +21,7 @@ export function useMetrics(useWebSocketMode = false) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [wsConnected, setWsConnected] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -94,6 +102,14 @@ export function useMetrics(useWebSocketMode = false) {
         const message = JSON.parse(event.data);
         if (message.type === 'metrics') {
           updateFromPayload(message.data);
+        } else if (message.type === 'notification') {
+          setNotifications((prev) => {
+            const updated = [...(message.notifications || []), ...prev];
+            return updated.slice(0, 20);
+          });
+          setTimeout(() => {
+            setNotifications((prev) => prev.slice(0, -1));
+          }, 8000);
         }
       } catch (err) {
         console.error('[WS] Parse error:', err);
@@ -148,5 +164,9 @@ export function useMetrics(useWebSocketMode = false) {
     }
   }, [useWebSocketMode, connectWebSocket, fetchMetrics, cleanupWebSocket]);
 
-  return { data, history, loading, error, wsConnected, refetch: fetchMetrics };
+  const dismissNotification = useCallback((index: number) => {
+    setNotifications((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
+  return { data, history, loading, error, wsConnected, refetch: fetchMetrics, notifications, dismissNotification };
 }

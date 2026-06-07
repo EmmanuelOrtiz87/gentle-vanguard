@@ -7,6 +7,7 @@ import { SessionTable } from './SessionTable';
 import { AgentMessage } from './AgentMessage';
 import { GlobalHealth } from './GlobalHealth';
 import { useAgentStream } from '../hooks/useAgentStream';
+import { NotificationToast } from './NotificationToast';
 import type { Session } from '../types/dashboard';
 
 const MOCK_SESSIONS: Session[] = [
@@ -19,7 +20,7 @@ const MOCK_SESSIONS: Session[] = [
 export default function Dashboard() {
   const [darkMode, setDarkMode] = useState(false);
   const [useWebSocket, setUseWebSocket] = useState(true);
-  const { data, history, loading, wsConnected, refetch } = useMetrics(useWebSocket);
+  const { data, history, loading, wsConnected, refetch, notifications, dismissNotification } = useMetrics(useWebSocket);
   const { session: agentSession, bridgeConnected, createSession } = useAgentStream();
 
   useEffect(() => {
@@ -178,6 +179,7 @@ export default function Dashboard() {
 
         <SessionTable sessions={MOCK_SESSIONS} />
       </main>
+      <NotificationToast notifications={notifications} onClose={dismissNotification} />
     </div>
   );
 }

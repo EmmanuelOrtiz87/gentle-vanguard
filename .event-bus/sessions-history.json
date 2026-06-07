@@ -2,10 +2,10 @@
   {
     "id": "sess-001",
     "agent": "DEV",
-    "status": "active",
-    "messageCount": 12,
-    "createdAt": "2026-06-05T10:00:00.000Z",
-    "updatedAt": "2026-06-05T12:30:00.000Z"
+    "status": "idle",
+    "messageCount": 5,
+    "createdAt": "2026-06-04T10:00:00.000Z",
+    "updatedAt": "2026-06-04T12:00:00.000Z"
   },
   {
     "id": "sess-002",
@@ -24,11 +24,35 @@
     "updatedAt": "2026-06-06T09:00:00.000Z"
   },
   {
-    "id": "sess-004",
+    "id": "sess-1780801610574-9px3",
+    "agent": "QA",
+    "status": "completed",
+    "messageCount": 1,
+    "createdAt": "2026-06-07T03:06:37.355Z",
+    "updatedAt": "2026-06-07T03:07:40.635Z"
+  },
+  {
+    "id": "sess-1780801625589-jh9c",
+    "agent": "BA",
+    "status": "idle",
+    "messageCount": 3,
+    "createdAt": "2026-06-07T03:06:13.320Z",
+    "updatedAt": "2026-06-07T03:08:05.658Z"
+  },
+  {
+    "id": "sess-1780801640605-9sm3",
     "agent": "DEV",
+    "status": "idle",
+    "messageCount": 6,
+    "createdAt": "2026-06-07T03:06:41.837Z",
+    "updatedAt": "2026-06-07T03:07:35.626Z"
+  },
+  {
+    "id": "sess-1780801670642-msbz",
+    "agent": "DOC",
     "status": "active",
-    "messageCount": 5,
-    "createdAt": "2026-06-06T11:00:00.000Z",
-    "updatedAt": "2026-06-06T11:30:00.000Z"
+    "messageCount": 8,
+    "createdAt": "2026-06-07T03:06:59.497Z",
+    "updatedAt": "2026-06-07T03:07:50.642Z"
   }
 ]
