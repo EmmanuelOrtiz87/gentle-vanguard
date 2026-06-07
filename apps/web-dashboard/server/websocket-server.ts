@@ -677,8 +677,52 @@ function initSharedState(): void {
   console.log('[STATE] Shared State Bridge started');
 }
 
+function startDemoActivity(): void {
+  const agents = ['DEV', 'QA', 'BA', 'DOC'];
+  const topics = [
+    'analizar requisitos',
+    'ejecutar tests unitarios',
+    'revisar documentación',
+    'validar esquema de datos',
+    'generar reporte de cobertura',
+    'refactorizar módulo de autenticación',
+  ];
+
+  let activityStep = 0;
+
+  setInterval(() => {
+    getStateBridge().emitEvent('dispatch.started', {
+      source: 'demo-generator',
+      step: activityStep,
+      timestamp: Date.now(),
+    });
+  }, 18000);
+
+  setInterval(() => {
+    const agent = agents[activityStep % agents.length];
+    const task = topics[(activityStep + 1) % topics.length];
+    activityStep++;
+    getStateBridge().emitEvent('agent.dispatched', {
+      agent,
+      task,
+      execution_id: `exec-demo-${Date.now()}-${activityStep}`,
+    });
+  }, 15000);
+
+  setInterval(() => {
+    const agent = agents[Math.floor(Math.random() * agents.length)];
+    const session = createSession(agent);
+    session.status = 'active';
+    const msg = JSON.stringify({ type: 'agent_session_created', session, demo: true });
+    clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(msg));
+  }, 25000);
+
+  console.log('[DEMO] Activity generator started');
+}
+
 server.listen(PORT, () => {
   console.log(`[WS] Server on port ${PORT}`);
   start();
   initSharedState();
+  startDemoActivity();
 });
