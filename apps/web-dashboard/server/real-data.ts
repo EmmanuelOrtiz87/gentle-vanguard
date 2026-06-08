@@ -35,6 +35,24 @@ export function getGitStats(): { commits: number; prsMerged: number; contributor
   };
 }
 
+export function getOSMetrics() {
+  const mem = process.memoryUsage();
+  const cpu = process.cpuUsage();
+  return {
+    memory: {
+      rss: Math.round(mem.rss / 1024 / 1024),
+      heapUsed: Math.round(mem.heapUsed / 1024 / 1024),
+      heapTotal: Math.round(mem.heapTotal / 1024 / 1024),
+    },
+    cpu: {
+      user: Math.round(cpu.user / 1000),
+      system: Math.round(cpu.system / 1000),
+    },
+    uptime: Math.round(process.uptime()),
+    pid: process.pid,
+  };
+}
+
 export function getRealMetrics() {
   const consolidated = readJson<any>(CONSOLIDATED_PATH);
   const skillStats = readJson<{
@@ -88,6 +106,7 @@ export function getRealMetrics() {
       today: Math.max(s.today || 0, sessionsToday || 0),
     },
     git: gitLive,
+    system: getOSMetrics(),
     health: {
       status:
         live.trafficLight === 'GREEN'

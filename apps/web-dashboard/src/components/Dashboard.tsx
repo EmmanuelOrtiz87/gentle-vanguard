@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Coins, Users, GitBranch, Activity, Moon, Sun, RefreshCw, Server, Zap, Bot } from 'lucide-react';
+import { Coins, Users, GitBranch, Activity, Moon, Sun, RefreshCw, Server, Zap, Bot, Cpu } from 'lucide-react';
 import { useMetrics } from '../hooks/useMetrics';
 import { MetricsCard } from './MetricsCard';
 import { LiveChart } from './LiveChart';
@@ -10,14 +10,6 @@ import { useAgentStream } from '../hooks/useAgentStream';
 import { NotificationToast } from './NotificationToast';
 import { ValidationPanel } from './ValidationPanel';
 import { LiveTraceFeed } from './LiveTraceFeed';
-import type { Session } from '../types/dashboard';
-
-const MOCK_SESSIONS: Session[] = [
-  { id: 'sess-001', agent: 'DEV', status: 'active', startTime: new Date(Date.now() - 3600000).toISOString(), tokensUsed: 5234 },
-  { id: 'sess-002', agent: 'QA', status: 'active', startTime: new Date(Date.now() - 1800000).toISOString(), tokensUsed: 3456 },
-  { id: 'sess-003', agent: 'BA', status: 'idle', startTime: new Date(Date.now() - 7200000).toISOString(), tokensUsed: 8901 },
-  { id: 'sess-004', agent: 'DEV', status: 'completed', startTime: new Date(Date.now() - 14400000).toISOString(), tokensUsed: 12345 },
-];
 
 export default function Dashboard() {
   const [darkMode, setDarkMode] = useState(false);
@@ -36,8 +28,8 @@ export default function Dashboard() {
     document.documentElement.classList.toggle('dark');
   };
 
-  const globalHealthData = (data as any)?.globalHealth;
-  const mcpData = (data as any)?.mcp;
+  const globalHealthData = data.globalHealth;
+  const mcpData = data.mcp;
   const totalSkills = mcpData?.skills?.total || 0;
   const totalCalls = mcpData?.calls?.total || 0;
   const avgResponseTime = mcpData?.performance?.avgResponseTime || 0;
@@ -90,7 +82,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {loading ? (
             <>
-              {[1,2,3,4].map(i => (
+              {[1,2,3,4,5].map(i => (
                 <div key={i} className="card animate-pulse">
                   <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24 mb-3" />
                   <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-16 mb-2" />
@@ -128,6 +120,15 @@ export default function Dashboard() {
                 icon={Activity}
                 color={data.health.status === 'healthy' ? 'green' : 'red'}
               />
+              {data.system && (
+                <MetricsCard
+                  title="System"
+                  value={`${data.system.uptime}s`}
+                  subtitle={`CPU ${data.system.cpu.user}ms · ${data.system.memory.rss}MB RSS`}
+                  icon={Cpu}
+                  color="purple"
+                />
+              )}
             </>
           )}
         </div>
@@ -198,7 +199,7 @@ export default function Dashboard() {
           <LiveChart data={history} />
         </div>
 
-        <SessionTable sessions={MOCK_SESSIONS} />
+        <SessionTable sessions={[]} />
       </main>
       <NotificationToast notifications={notifications} onClose={dismissNotification} />
     </div>
