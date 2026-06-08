@@ -37,7 +37,7 @@ $results = [System.Collections.ArrayList]@()
 $exitCode = 0
 
 function Add-Finding {
-  param([string]$Component, [string]$Check, [string]$Status, [string]$Detail, [string]$Action)
+  param([string]$Component, [string]$Check, [string]$Status, [string]$Detail, [string]$Action, [switch]$Critical)
   $null = $results.Add([PSCustomObject]@{
     component  = $Component
     check      = $Check
@@ -46,7 +46,7 @@ function Add-Finding {
     action     = $Action  # ok | rebuild | reindex | verify | manual
     timestamp  = (Get-Date -Format "o")
   })
-  if ($Status -eq "FAIL") { $script:exitCode++ }
+  if ($Status -eq "FAIL" -and $Critical) { $script:exitCode++ }
 }
 
 function Get-FileAgeHours {
@@ -107,7 +107,7 @@ function Check-MlEmbeddings {
       $skillCount = ($index.PSObject.Properties).Count
       Add-Finding "ml-embeddings" "ml-index content parseable" "PASS" "$skillCount skills indexed" "ok"
     } catch {
-      Add-Finding "ml-embeddings" "ml-index content parseable" "FAIL" "Parse error: $_" "rebuild"
+      Add-Finding "ml-embeddings" "ml-index content parseable" "FAIL" "Parse error: $_" "rebuild" -Critical
     }
   }
 }
@@ -160,7 +160,7 @@ function Check-EngramRag {
       Add-Finding "engram-rag" "engram doctor" "WARN" "Unhealthy" "verify"
     }
   } catch {
-    Add-Finding "engram-rag" "engram doctor" "FAIL" "Not accessible: $_" "manual"
+    Add-Finding "engram-rag" "engram doctor" "FAIL" "Not accessible: $_" "manual" -Critical
   }
 }
 
@@ -289,7 +289,7 @@ function Rebuild-MlEmbeddings {
       Write-Host "    $result" -ForegroundColor Gray
       Add-Finding "ml-embeddings" "rebuild" "PASS" "Rebuild completed" "ok"
     } catch {
-      Add-Finding "ml-embeddings" "rebuild" "FAIL" "Rebuild error: $_" "manual"
+      Add-Finding "ml-embeddings" "rebuild" "FAIL" "Rebuild error: $_" "manual" -Critical
     }
   } else {
     Add-Finding "ml-embeddings" "rebuild" "SKIP" "skill-embedder.ps1 not found" "manual"
@@ -305,7 +305,7 @@ function Reindex-EngramRag {
       Write-Host "    $result" -ForegroundColor Gray
       Add-Finding "engram-rag" "reindex" "PASS" "Reindex completed" "ok"
     } catch {
-      Add-Finding "engram-rag" "reindex" "FAIL" "Reindex error: $_" "manual"
+      Add-Finding "engram-rag" "reindex" "FAIL" "Reindex error: $_" "manual" -Critical
     }
   } else {
     Add-Finding "engram-rag" "reindex" "SKIP" "engram-rag-reindex.ps1 not found" "manual"
