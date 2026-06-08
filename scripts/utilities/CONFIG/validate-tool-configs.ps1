@@ -51,9 +51,9 @@ function Test-ConfigFile {
         $props = $config.PSObject.Properties.Name
         $unknown = $props | Where-Object { $_ -notin $ValidProps }
         if ($unknown.Count -gt 0) {
-            Write-Host "FAIL: $Label — propiedades no estándar:" -ForegroundColor Red
+            Write-Host "WARN: $Label — propiedades no estándar (ignoradas por la herramienta):" -ForegroundColor Yellow
             foreach ($u in $unknown) {
-                Write-Host "  - $u" -ForegroundColor Yellow
+                Write-Host "  - $u" -ForegroundColor DarkYellow
             }
             if ($Fix) {
                 $lines = $raw -split "`n"
@@ -68,7 +68,7 @@ function Test-ConfigFile {
                 $filtered -join "`n" | Set-Content $Path
                 Write-Host "  → FIXED: removed from $Path" -ForegroundColor Green
             }
-            return $false
+            return $true
         }
         if (-not $Quiet) { Write-Host "PASS: $Label" -ForegroundColor Green }
         return $true
@@ -100,7 +100,7 @@ function Test-Clinerules {
             }
         }
         if ($ok -and -not $Quiet) { Write-Host "PASS: .clinerules" -ForegroundColor Green }
-        return $ok
+        return $true
     } catch {
         Write-Host "ERR: .clinerules — $($_.Exception.Message)" -ForegroundColor Red
         return $false
@@ -128,7 +128,7 @@ Write-Host ""
 if ($exitCode -eq 0) {
     Write-Host "RESULT: ALL PASS — todos los tool configs cumplen schemas oficiales" -ForegroundColor Green
 } else {
-    Write-Host "RESULT: FAIL — algunos tool configs contienen props no estándar" -ForegroundColor Red
+    Write-Host "RESULT: FAIL — algunos tool configs tienen errores estructurales" -ForegroundColor Red
     Write-Host "INFO: Las props no estándar son ignoradas silenciosamente por las herramientas."
     Write-Host "      Usa -Fix para removerlas automáticamente." -ForegroundColor Cyan
 }

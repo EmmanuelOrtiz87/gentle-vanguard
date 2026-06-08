@@ -3,40 +3,61 @@
 post-commit:
   commands:
     codegraph-sync:
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/utilities/codegraph/codegraph-post-modification-sync.ps1" -Trigger post-commit -Force
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File
+        "scripts/utilities/codegraph/codegraph-post-modification-sync.ps1" -Trigger post-commit
+        -Force
     hashline-snapshot:
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/editing/hashline-snapshot-hook.ps1"
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/editing/hashline-snapshot-hook.ps1"
 
 post-merge:
   commands:
     codegraph-sync:
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/utilities/codegraph/codegraph-post-modification-sync.ps1" -Trigger post-merge -Force
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File
+        "scripts/utilities/codegraph/codegraph-post-modification-sync.ps1" -Trigger post-merge
+        -Force
     post-merge-session:
-      run: powershell -NoProfile -Command "& { if (Test-Path 'scripts/utilities/workflow/sync-after-merge.ps1') { .\scripts\utilities\workflow\sync-after-merge.ps1 } }"
+      run:
+        powershell -NoProfile -Command "& { if (Test-Path
+        'scripts/utilities/workflow/sync-after-merge.ps1') {
+        .\scripts\utilities\workflow\sync-after-merge.ps1 } }"
     post-merge-install:
       glob: 'package.json'
       run: pnpm install --ignore-scripts
     post-merge-update:
-      run: powershell -NoProfile -Command "& { if (Test-Path scripts/utilities/session-manager.ps1) { .\tools\session-manager.ps1 -Action update } }"
+      run:
+        powershell -NoProfile -Command "& { if (Test-Path scripts/utilities/session-manager.ps1) {
+        .\tools\session-manager.ps1 -Action update } }"
 
 pre-commit:
   commands:
     opencode-validation:
-      run: powershell -NoProfile -ExecutionPolicy Bypass -File "hooks/pre-commit-opencode-validation.ps1"
+      run:
+        powershell -NoProfile -ExecutionPolicy Bypass -File
+        "hooks/pre-commit-opencode-validation.ps1"
     validate-tool-configs:
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/utilities/config/validate-tool-configs.ps1" -Fix -Quiet
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File
+        "scripts/utilities/config/validate-tool-configs.ps1" -Quiet
     json-lint:
       run: pwsh -NoProfile -ExecutionPolicy Bypass -File "hooks/json-lint.ps1"
     workflow-lint:
       run: pwsh -NoProfile -ExecutionPolicy Bypass -File "hooks/workflow-lint.ps1"
     lockfile-lint:
       glob: 'package-lock.json'
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/lockfile-lint-pre-commit.ps1"
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/lockfile-lint-pre-commit.ps1"
     trufflehog-scan:
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -Command "trufflehog filesystem --no-verification --no-update . *>$null; exit 0"
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -Command "trufflehog filesystem --no-verification
+        --no-update . *>$null; exit 0"
     skill-scan:
       glob: 'skills/*/SKILL.md'
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -Command "& 'scripts/security/scan-skill-hook.ps1' -StagedFiles '{staged_files}'"
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -Command "& 'scripts/security/scan-skill-hook.ps1'
+        -StagedFiles '{staged_files}'"
     normative-audit:
       run: pwsh -NoProfile -ExecutionPolicy Bypass -File "hooks/normative-audit-hook.ps1"
     karpathy-enforcer:
@@ -49,27 +70,42 @@ pre-commit:
       run: pnpm prettier --check {staged_files}
     markdown-accent-check:
       glob: '*.md'
-      run: powershell -NoProfile -Command "& { if (Get-Content '{staged_files}' -Raw | Select-String -Pattern '[áéíóúñ]') { Write-Host '[OK] Spanish accents found' } else { Write-Host '[WARN] No Spanish accents detected' } }"
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "hooks/markdown-accent-check-hook.ps1"
+        -StagedFiles '{staged_files}'
     emoji-detector:
       glob: '*.ps1'
-      run: powershell -NoProfile -Command "& { if (Get-Content '{staged_files}' -Raw | Select-String -Pattern '[^\x00-\x7F]') { Write-Host '[FAIL] Emojis found in script'; exit 1 } else { Write-Host '[OK] No emojis in script' } }"
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "hooks/emoji-detector-hook.ps1" -StagedFiles
+        '{staged_files}'
     sensitive-files-check:
       glob: '*.json'
-      run: powershell -NoProfile -Command "Get-Content '{staged_files}' -Raw | ConvertFrom-Json; if ($?) { Write-Host '[OK] JSON valid' } else { Write-Host '[FAIL] JSON invalid'; exit 1 }"
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "hooks/sensitive-files-check-hook.ps1"
+        -StagedFiles '{staged_files}'
 
 pre-push:
   commands:
     audit-check:
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "skills/gentle-vanguard-audit-skill/scripts/audit-sweep.ps1" -Scope quick
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File
+        "skills/gentle-vanguard-audit-skill/scripts/audit-sweep.ps1" -Scope quick
     orchestrator-auto-fix:
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/orchestrate-auto-fix.ps1" -Fix
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/orchestrate-auto-fix.ps1" -Fix
     npm-audit:
       glob: 'package.json'
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/npm-audit-pre-push.ps1" -AuditLevel moderate
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/npm-audit-pre-push.ps1"
+        -AuditLevel moderate
 
 commit-msg:
   commands:
     commitlint:
       run: powershell -NoProfile -ExecutionPolicy Bypass -File "hooks/commitlint.ps1" {1}
     commit-msg-session-track:
-      run: powershell -NoProfile -Command "& { $msg = Get-Content '{commit_msg_file}' -Raw; if ($msg -match '^(feat|fix|docs|chore|refactor|test|style|perf|build|ci|revert)(\([a-z]+\))?:') { Write-Host '[OK] Conventional commit' } else { Write-Host '[FAIL] Not conventional commit'; exit 1 } }"
+      run:
+        powershell -NoProfile -Command "& { $msg = Get-Content '{commit_msg_file}' -Raw; if ($msg
+        -match '^(feat|fix|docs|chore|refactor|test|style|perf|build|ci|revert)(\([a-z]+\))?:') {
+        Write-Host '[OK] Conventional commit' } else { Write-Host '[FAIL] Not conventional commit';
+        exit 1 } }"
