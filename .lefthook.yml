@@ -105,7 +105,5 @@ commit-msg:
       run: powershell -NoProfile -ExecutionPolicy Bypass -File "hooks/commitlint.ps1" {1}
     commit-msg-session-track:
       run:
-        powershell -NoProfile -Command "& { $msg = Get-Content '{commit_msg_file}' -Raw; if ($msg
-        -match '^(feat|fix|docs|chore|refactor|test|style|perf|build|ci|revert)(\([a-z]+\))?:') {
-        Write-Host '[OK] Conventional commit' } else { Write-Host '[FAIL] Not conventional commit';
-        exit 1 } }"
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "hooks/commit-msg-session-track-hook.ps1"
+        -CommitMsgFile {1}
