@@ -14,7 +14,7 @@ import {
   validateSkillStructure,
   getSkillContent,
 } from './marketplace-api.js';
-import { getRealMetrics, getTraces } from './real-data.js';
+import { getRealMetrics, getTraces, getOSMetrics } from './real-data.js';
 import { runValidations } from './validations.js';
 import { ROOT, readJson, countSkills } from './shared.js';
 import type {
@@ -766,6 +766,69 @@ setInterval(() => {
   console.log('[METRICS] token.json auto-refreshed (5min cycle)');
 }, 300000);
 
+// --- Consolidation: escribe consolidated.json cada 30s ---
+const CONSOLIDATED_PATH = join(ROOT, '.runtime', 'metrics', 'consolidated.json');
+const TOKEN_PATH = join(ROOT, '.runtime', 'metrics', 'token.json');
+const METRICS_DIR = dirname(CONSOLIDATED_PATH);
+
+function consolidateMetrics(): void {
+  try {
+    if (!existsSync(METRICS_DIR)) mkdirSync(METRICS_DIR, { recursive: true });
+
+    const consolidated = readJson<any>(CONSOLIDATED_PATH) || {};
+    const skillStats = readJson<any>(STATS_PATH) || {};
+    const tokenData = readJson<any>(TOKEN_PATH) || {};
+    const liveData = readJson<any>(join(ROOT, '.runtime', 'metrics', 'live.json'));
+    const sessionsData = readJson<any>(join(ROOT, '.runtime', 'metrics', 'sessions.json'));
+
+    const realMetrics = getRealMetrics();
+    const os = getOSMetrics();
+    const gitLive = getRealMetrics().git || { commits: 0, prsMerged: 0, contributors: 0 };
+
+    const merged = {
+      token: {
+        used: tokenData.usedToday || consolidated?.token?.used || 0,
+        budget: tokenData.budget || consolidated?.token?.budget || 120000,
+        pct: tokenData.pct || consolidated?.token?.pct || 0,
+        usedToday: tokenData.usedToday || consolidated?.token?.used || 0,
+        estCost: tokenData.estCost || consolidated?.token?.estCost || 0,
+        status: consolidated?.token?.status || 'GREEN',
+      },
+      sessions: {
+        total:
+          sessionsData?.total ||
+          clients.size ||
+          sessions.size ||
+          consolidated?.sessions?.total ||
+          0,
+        active: sessionsData?.active || clients.size || consolidated?.sessions?.active || 0,
+        today: sessionsData?.today || consolidated?.sessions?.today || 0,
+      },
+      git: gitLive,
+      live: liveData || consolidated?.live || { trafficLight: 'GREEN', routingAcc: 1 },
+      cost: consolidated?.cost || { actualCost: 0, savingsPct: 0 },
+      mcp: {
+        totalSkills: skillStats?.totalSkills || consolidated?.mcp?.totalSkills || 0,
+        totalCalls: skillStats?.totalCalls || consolidated?.mcp?.totalCalls || 0,
+        lastCall: skillStats?.lastCall || consolidated?.mcp?.lastCall || null,
+      },
+      system: os,
+      _consolidatedAt: new Date().toISOString(),
+      _consolidationCount: (consolidated?._consolidationCount || 0) + 1,
+    };
+
+    writeFileSync(CONSOLIDATED_PATH, JSON.stringify(merged, null, 2));
+    console.log(`[CONSOLIDATE] consolidated.json written (#${merged._consolidationCount})`);
+  } catch (e) {
+    console.warn('[CONSOLIDATE] Error:', (e as Error).message);
+  }
+}
+
+setInterval(consolidateMetrics, 30000);
+
+// Consolidación inicial al arrancar (con pequeño delay para que otros servicios inicien)
+setTimeout(consolidateMetrics, 2000);
+
 // File watcher en .runtime/metrics/ — broadcast inmediato ante cambios reales
 const METRICS_WATCH_DIR = join(ROOT, '.runtime', 'metrics');
 if (existsSync(METRICS_WATCH_DIR)) {
@@ -790,42 +853,9 @@ if (existsSync(METRICS_WATCH_DIR)) {
 
 // --- Start ---
 
-function refreshTokenMetrics(): void {
-  const consolidatedPath = join(ROOT, '.runtime', 'metrics', 'consolidated.json');
-  const tokenPath = join(ROOT, '.runtime', 'metrics', 'token.json');
-  const tokenDir = dirname(tokenPath);
-  if (!existsSync(tokenDir)) mkdirSync(tokenDir, { recursive: true });
-  try {
-    let usedToday = 0,
-      budget = 1000000;
-    if (existsSync(consolidatedPath)) {
-      const c = JSON.parse(readFileSync(consolidatedPath, 'utf-8'));
-      usedToday = c?.token?.usedToday || 0;
-      budget = c?.token?.budget || 1000000;
-    }
-    writeFileSync(
-      tokenPath,
-      JSON.stringify(
-        {
-          usedToday,
-          budget,
-          estCost: 0,
-          pct: budget > 0 ? (usedToday / budget) * 100 : 0,
-          _refreshedAt: new Date().toISOString(),
-        },
-        null,
-        2,
-      ),
-    );
-    console.log('[METRICS] token.json refreshed');
-  } catch (e) {
-    console.warn('[METRICS] Could not refresh token.json:', (e as Error).message);
-  }
-}
-
 async function start() {
   loadSessions();
-  refreshTokenMetrics();
+  consolidateMetrics();
   try {
     const mcpBridge = getBridge();
     await mcpBridge.start();
