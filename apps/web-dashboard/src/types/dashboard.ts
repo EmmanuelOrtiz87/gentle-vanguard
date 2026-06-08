@@ -27,7 +27,22 @@ export interface DashboardData {
   git: { commits: number; prsMerged: number; contributors: number };
   health: { status: string; routing: number };
   globalHealth?: GlobalHealth;
-  mcp?: { skills: { total: number; byAgent: Record<string, number>; recentlyUsed: string[] }; calls: { total: number; byTool: Record<string, number>; bySkill: Record<string, number>; lastCall: string | null }; performance: { avgResponseTime: number; errorRate: number } };
+  mcp?: {
+    skills: { total: number; byAgent: Record<string, number>; recentlyUsed: string[] };
+    calls: {
+      total: number;
+      byTool: Record<string, number>;
+      bySkill: Record<string, number>;
+      lastCall: string | null;
+    };
+    performance: { avgResponseTime: number; errorRate: number };
+  };
+  system?: {
+    memory: { rss: number; heapUsed: number; heapTotal: number };
+    cpu: { user: number; system: number };
+    uptime: number;
+    pid: number;
+  };
 }
 
 export interface Session {

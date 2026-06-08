@@ -760,6 +760,34 @@ setInterval(() => {
   prevMetrics = metrics;
 }, 5000);
 
+// Auto-refresh token.json cada 5 minutos
+setInterval(() => {
+  refreshTokenMetrics();
+  console.log('[METRICS] token.json auto-refreshed (5min cycle)');
+}, 300000);
+
+// File watcher en .runtime/metrics/ — broadcast inmediato ante cambios reales
+const METRICS_WATCH_DIR = join(ROOT, '.runtime', 'metrics');
+if (existsSync(METRICS_WATCH_DIR)) {
+  try {
+    let watchTimer: ReturnType<typeof setTimeout> | null = null;
+    const DEBOUNCE_MS = 200;
+    watch(METRICS_WATCH_DIR, (eventType, filename) => {
+      if (!filename || !filename.endsWith('.json')) return;
+      if (watchTimer) clearTimeout(watchTimer);
+      watchTimer = setTimeout(() => {
+        const metrics = generateMetrics();
+        const msg = JSON.stringify({ type: 'metrics', data: metrics });
+        clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(msg));
+        console.log(`[WATCH] metrics file changed: ${filename} → broadcast`);
+      }, DEBOUNCE_MS);
+    });
+    console.log('[WATCH] .runtime/metrics/ watcher started');
+  } catch (err) {
+    console.warn('[WATCH] Could not start metrics watcher:', (err as Error).message);
+  }
+}
+
 // --- Start ---
 
 function refreshTokenMetrics(): void {

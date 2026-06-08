@@ -24,29 +24,21 @@ export function useMetrics(useWebSocketMode = false) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const updateFromPayload = useCallback(
-    (payload: {
-      tokens: any;
-      sessions: any;
-      git: any;
-      health: any;
-      globalHealth?: any;
-      mcp?: any;
-      timestamp?: string;
-    }) => {
-      setData({
-        tokens: payload.tokens,
-        sessions: payload.sessions,
-        git: payload.git,
-        health: payload.health,
-        globalHealth: payload.globalHealth,
-        mcp: payload.mcp,
-      });
+    (payload: Partial<DashboardData> & { timestamp?: string }) => {
+      setData((prev) => ({
+        ...prev,
+        ...payload,
+        system: payload.system ?? prev.system,
+      }));
       setHistory((prev) => {
+        const tokens = payload.tokens?.used ?? 0;
+        const sessions = payload.sessions?.active ?? 0;
+        const cost = payload.tokens?.cost ?? 0;
         const newEntry: MetricHistory = {
           timestamp: payload.timestamp || new Date().toISOString(),
-          tokens: payload.tokens.used,
-          sessions: payload.sessions.active,
-          cost: payload.tokens.cost,
+          tokens,
+          sessions,
+          cost,
         };
         return [...prev, newEntry].slice(-20);
       });
