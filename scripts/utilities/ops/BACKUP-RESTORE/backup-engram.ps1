@@ -363,7 +363,7 @@ function Invoke-Status {
     $csPath = Join-Path $_.FullName "checksums.sha256"
     if (Test-Path $mPath) {
       $mf = Get-Content $mPath -Raw | ConvertFrom-Json
-      $csStatus = if (Test-Path $csPath) { "checksums ✅" } else { "no checksums" }
+      $csStatus = if (Test-Path $csPath) { "checksums" } else { "no checksums" }
       Write-Host "  $($_.Name): $($mf.db_size_kb)KB DB, $($mf.sessions_backed_up) sessions, $csStatus" -ForegroundColor Gray
     } else {
       Write-Host "  $($_.Name): no manifest" -ForegroundColor Yellow
@@ -386,10 +386,10 @@ function Invoke-Status {
     $engramCli = Join-Path $env:USERPROFILE "bin\engram.exe"
     if (-not (Test-Path $engramCli)) { $engramCli = $null }
   }
-  Write-Host "Engram CLI: $(if($engramCli){"✅ $engramCli"}else{'❌ Not found'})" -ForegroundColor $(if($engramCli){"Green"}else{"Red"})
+  Write-Host "Engram CLI: $(if($engramCli){" $engramCli"}else{' Not found'})" -ForegroundColor $(if($engramCli){"Green"}else{"Red"})
 
   # Integrity check availability
-  Write-Host "Integrity script: $(if(Test-Path $integrityScript){"✅"}else{"❌"})" -ForegroundColor $(if(Test-Path $integrityScript){"Green"}else{"Red"})
+  Write-Host "Integrity script: $(if(Test-Path $integrityScript){""}else{""})" -ForegroundColor $(if(Test-Path $integrityScript){"Green"}else{"Red"})
 }
 
 switch ($Mode) {
