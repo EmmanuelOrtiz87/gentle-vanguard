@@ -95,9 +95,9 @@ Write-Output "[pre-process-input] Processing: $UserInput"
 
 $rules = @(
     @{ Keywords = @('abrir un pr', 'abrir un pull request', 'crear pr', 'open a pr', 'create pr', 'necesito abrir un pr'); Skill = 'branch-pr'; AgentCode = 'QA'; PlanMode = $false },
-    @{ Keywords = @('iniciar sessao', 'iniciar sessão', 'iniciar sesion', 'iniciar sesión', 'start session'); Skill = 'session-workflow-skill'; AgentCode = 'SESSION'; PlanMode = $false },
+    @{ Keywords = @('inicia sesion', 'inicia sesión', 'iniciar sesion', 'iniciar sesión', 'start session', 'iniciar sessao', 'iniciar sessão', 'iniciar sessao de trabalho', 'iniciar sessão de trabalho', 'guardar sesión', 'guardar sesion', 'guarda sesion', 'guarda sesión', 'continuar', 'continue', 'continuar sessao', 'continuar sessão', 'estado', 'status', 'status da sessao', 'status da sessão', 'cerrar sesion', 'cerrar sesión', 'close session', 'session end', 'encerrar sessao', 'encerrar sessão', 'fechar sessao', 'fechar sessão', 'fin de sesion', 'fin de sesión', 'finalizar sesion', 'finalizar sesión'); Skill = 'session-workflow-skill'; AgentCode = 'SESSION'; PlanMode = $false },
     @{ Keywords = @('deploy', 'kubernetes', 'docker', 'helm', 'terraform', 'ci/cd'); Skill = 'docker-devops-skill'; AgentCode = 'OPS'; PlanMode = $false },
-    @{ Keywords = @('dashboard', 'reporte', 'metrics', 'metricas', 'report', 'resumen ejecutivo'); Skill = 'reporting-skill'; AgentCode = 'DOC'; PlanMode = $false },
+    @{ Keywords = @('dashboard', 'reporte', 'metrics', 'metricas', 'report', 'resumen ejecutivo', 'informe', 'tokens', 'costos', 'telemetry', 'stats', 'telemetria', 'estadisticas'); Skill = 'reporting-skill'; AgentCode = 'DOC'; PlanMode = $false },
     @{ Keywords = @('fix bug', 'bug fix', 'error 401', 'bug'); Skill = 'sdd-lifecycle'; AgentCode = 'DEV'; PlanMode = $false },
     @{ Keywords = @('nuevo proyecto', 'novo projeto', 'criar projeto', 'create project', 'new project', 'crear proyecto', 'empezar proyecto', 'iniciar proyecto', 'bootstrap project', 'scaffold project'); Skill = 'sdd-lifecycle'; AgentCode = 'BA'; PlanMode = $true },
     @{ Keywords = @('crear componente', 'new component', 'nuevo componente', 'novo componente', 'criar componente', 'create component'); Skill = 'sdd-lifecycle'; AgentCode = 'BA'; PlanMode = $true },
