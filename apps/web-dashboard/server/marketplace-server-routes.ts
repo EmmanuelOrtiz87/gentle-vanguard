@@ -18,13 +18,18 @@ function json(res: ServerResponse, status: number, data: unknown): void {
 function readBody(req: IncomingMessage): Promise<string> {
   return new Promise((resolve, reject) => {
     let body = '';
-    req.on('data', (chunk: Buffer) => { body += chunk.toString(); });
+    req.on('data', (chunk: Buffer) => {
+      body += chunk.toString();
+    });
     req.on('end', () => resolve(body));
     req.on('error', reject);
   });
 }
 
-export async function handleMarketplaceRoutes(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
+export async function handleMarketplaceRoutes(
+  req: IncomingMessage,
+  res: ServerResponse,
+): Promise<boolean> {
   const url = new URL(req.url || '/', `http://${req.headers.host}`);
   const method = req.method || 'GET';
 
@@ -72,7 +77,11 @@ export async function handleMarketplaceRoutes(req: IncomingMessage, res: ServerR
 
       const validation = validateSkillStructure(payload.skillContent);
       if (!validation.valid) {
-        json(res, 400, { success: false, error: 'Skill structure validation failed', details: validation.errors });
+        json(res, 400, {
+          success: false,
+          error: 'Skill structure validation failed',
+          details: validation.errors,
+        });
         return true;
       }
 
@@ -119,7 +128,7 @@ export async function handleMarketplaceRoutes(req: IncomingMessage, res: ServerR
   if (reviewMatch && method === 'POST') {
     try {
       const body = JSON.parse(await readBody(req));
-      if (!body.user || body.rating == null || !body.comment) {
+      if (!body.user || body.rating === null || body.rating === undefined || !body.comment) {
         json(res, 400, { success: false, error: 'Missing required fields: user, rating, comment' });
         return true;
       }
@@ -127,7 +136,11 @@ export async function handleMarketplaceRoutes(req: IncomingMessage, res: ServerR
         json(res, 400, { success: false, error: 'Rating must be a number between 1 and 5' });
         return true;
       }
-      const review = addReview(reviewMatch[1], { user: body.user, rating: body.rating, comment: body.comment });
+      const review = addReview(reviewMatch[1], {
+        user: body.user,
+        rating: body.rating,
+        comment: body.comment,
+      });
       json(res, 201, { success: true, data: review });
     } catch {
       json(res, 500, { success: false, error: 'Failed to add review' });

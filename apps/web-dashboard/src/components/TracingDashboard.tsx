@@ -70,7 +70,7 @@ export function TracingDashboard() {
       }
     };
 
-    loadTraces();
+    void loadTraces();
     const interval = setInterval(loadTraces, 5000);
     return () => clearInterval(interval);
   }, []);

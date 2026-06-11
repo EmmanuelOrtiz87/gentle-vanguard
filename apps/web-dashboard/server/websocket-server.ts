@@ -17,12 +17,7 @@ import {
 import { getRealMetrics, getTraces, getOSMetrics } from './real-data.js';
 import { runValidations } from './validations.js';
 import { ROOT, readJson, countSkills } from './shared.js';
-import type {
-  AgentSession,
-  AgentMessage,
-  AgentToolCall,
-  AgentMessage as AgentMessageType,
-} from '../src/types/agent.js';
+import type { AgentSession, AgentMessage, AgentToolCall } from '../src/types/agent.js';
 
 const STATS_PATH = join(ROOT, '.atl', 'skill-stats.json');
 const REGISTRY_PATH = join(ROOT, '.atl', 'skill-registry.md');
@@ -179,7 +174,12 @@ async function handleAgentCommand(ws: WebSocket, msg: Record<string, unknown>): 
   }
 
   if (action === 'execute_skill') {
-    executeSkillAndStream(ws, session, skill as string, params as Record<string, unknown>);
+    void executeSkillAndStream(
+      ws,
+      session,
+      skill as string,
+      params as unknown as Record<string, unknown>,
+    );
     return;
   }
 
@@ -258,11 +258,12 @@ function subscribeToAgentSession(ws: WebSocket, sessionId: string): void {
   if (!agentSubscriptions.has(sessionId)) {
     agentSubscriptions.set(sessionId, new Set());
   }
-  agentSubscriptions.get(sessionId)!.add(ws);
+  const subs = agentSubscriptions.get(sessionId);
+  if (subs) subs.add(ws);
 }
 
 async function executeSkillAndStream(
-  ws: WebSocket,
+  _ws: WebSocket,
   session: AgentSession,
   skillName: string,
   params?: Record<string, unknown>,
@@ -576,7 +577,7 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
       req.on('end', () => {
         try {
           const { user, rating, comment } = JSON.parse(body);
-          if (!user || rating == null || !comment) {
+          if (!user || rating === null || !comment) {
             res.writeHead(400, headers);
             res.end(
               JSON.stringify({
@@ -664,7 +665,7 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
       }
 
       if (parsed.type === 'agent') {
-        handleAgentCommand(ws, parsed);
+        void handleAgentCommand(ws, parsed);
         return;
       }
     } catch {
@@ -762,7 +763,7 @@ setInterval(() => {
 
 // Auto-refresh token.json cada 5 minutos
 setInterval(() => {
-  refreshTokenMetrics();
+  consolidateMetrics();
   console.log('[METRICS] token.json auto-refreshed (5min cycle)');
 }, 300000);
 
@@ -781,7 +782,6 @@ function consolidateMetrics(): void {
     const liveData = readJson<any>(join(ROOT, '.runtime', 'metrics', 'live.json'));
     const sessionsData = readJson<any>(join(ROOT, '.runtime', 'metrics', 'sessions.json'));
 
-    const realMetrics = getRealMetrics();
     const os = getOSMetrics();
     const gitLive = getRealMetrics().git || { commits: 0, prsMerged: 0, contributors: 0 };
 
@@ -835,7 +835,7 @@ if (existsSync(METRICS_WATCH_DIR)) {
   try {
     let watchTimer: ReturnType<typeof setTimeout> | null = null;
     const DEBOUNCE_MS = 200;
-    watch(METRICS_WATCH_DIR, (eventType, filename) => {
+    watch(METRICS_WATCH_DIR, (_eventType, filename) => {
       if (!filename || !filename.endsWith('.json')) return;
       if (watchTimer) clearTimeout(watchTimer);
       watchTimer = setTimeout(() => {
@@ -862,7 +862,7 @@ async function start() {
     bridgeReady = true;
     bridgeToolCount = mcpBridge.tools.length;
     console.log(`[MCP] Bridge connected — ${bridgeToolCount} tools available`);
-  } catch (err) {
+  } catch {
     console.warn('[MCP] Bridge not available (MCP server not running)');
     bridgeReady = false;
     bridgeToolCount = 0;
@@ -893,7 +893,7 @@ function startTraceWatcher(): void {
     mkdirSync(ctxDir, { recursive: true });
   }
   try {
-    watch(ctxDir, { recursive: true }, (eventType, filename) => {
+    watch(ctxDir, { recursive: true }, (_eventType, filename) => {
       if (!filename || !filename.endsWith('.state.json')) return;
       const statePath = join(ctxDir, filename);
       try {
@@ -915,7 +915,7 @@ function startTraceWatcher(): void {
 
 server.listen(PORT, () => {
   console.log(`[WS] Server on port ${PORT}`);
-  start();
+  void start();
   initSharedState();
   startTraceWatcher();
 });

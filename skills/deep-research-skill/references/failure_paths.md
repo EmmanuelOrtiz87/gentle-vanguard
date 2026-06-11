@@ -140,8 +140,9 @@ strategy, preventing users from reaching a dead end.
 **User Notification Message**:
 
 > STOP — Devil's Advocate found a critical issue that must be resolved before continuing: [Specific
-> issue description] This is not an issue that can be ignored, as it fundamentally affects the
-> research's validity.
+>
+> > issue description] This is not an issue that can be ignored, as it fundamentally affects the
+> > research's validity.
 
 **Handling Steps**:
 

@@ -72,6 +72,23 @@
         "description": "Record session start for token budget tracking"
       },
       {
+        "id": "engram-integrity",
+        "enabled": true,
+        "script": "scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1",
+        "args": "-Mode status -Quiet",
+        "required": false,
+        "description": "Verificar integridad de Engram (SHA256 + SQLite + chunks) al inicio de sesion"
+      },
+      {
+        "id": "engram-backup",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/ops/BACKUP-RESTORE/backup-engram.ps1",
+        "args": "-Mode backup -Quiet",
+        "required": false,
+        "description": "Backup automatico de Engram (DB + sessions + SHA256 checksums) via backup-engram.ps1"
+      },
+      {
         "id": "engram-optimization",
         "enabled": true,
         "script": "scripts/utilities/OPTIMIZE/optimize-engram-usage.ps1",

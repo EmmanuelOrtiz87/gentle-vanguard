@@ -4,10 +4,8 @@ import { execSync } from 'child_process';
 import { ROOT, readJson, countSkills as _countSkills } from './shared.js';
 
 const CONSOLIDATED_PATH = join(ROOT, '.runtime', 'metrics', 'consolidated.json');
-const METRICS_DB_PATH = join(ROOT, '.runtime', 'metrics.json');
 const TOKEN_PATH = join(ROOT, '.runtime', 'metrics', 'token.json');
 const SESSIONS_METRICS_PATH = join(ROOT, '.runtime', 'metrics', 'sessions.json');
-const COST_PATH = join(ROOT, '.runtime', 'metrics', 'cost.json');
 const LIVE_PATH = join(ROOT, '.runtime', 'metrics', 'live.json');
 const GIT_METRICS_PATH = join(ROOT, '.runtime', 'metrics', 'git.json');
 const PR_METRICS_PATH = join(ROOT, '.runtime', 'metrics', 'pr.json');
@@ -74,7 +72,6 @@ export function getRealMetrics() {
   const s = consolidated?.sessions ||
     readJson<any>(SESSIONS_METRICS_PATH) || { total: 0, active: 0, today: 0 };
   const g = consolidated?.git || readJson<any>(GIT_METRICS_PATH) || {};
-  const pr = consolidated?.pr || readJson<any>(PR_METRICS_PATH) || { merged: 0 };
   const live = consolidated?.live || readJson<any>(LIVE_PATH) || { trafficLight: 'GREEN' };
 
   const tokensUsed = t.usedToday || 0;
@@ -215,7 +212,9 @@ export function getTraces(): { traces: Trace[]; stats: TraceStats } {
     return Date.now() - t.startTime < 3600000;
   }).length;
 
-  const durations = traces.filter((t) => t.duration).map((t) => t.duration!);
+  const durations = traces
+    .filter((t): t is typeof t & { duration: number } => t.duration !== undefined)
+    .map((t) => t.duration);
   const avgDuration =
     durations.length > 0 ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length) : 0;
 

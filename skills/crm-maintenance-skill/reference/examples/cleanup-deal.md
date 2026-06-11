@@ -77,8 +77,8 @@ date alone, she might be optimistic."_
 > - Logged Apr 18 email and Apr 20 call activities
 > - Updated next step to "wait for legal review sign-off"
 > - Created contact Maria Chen (maria.chen@acme.com) and added to deal Close date unchanged per your
->   call. Deal stage was flagged as consistent with reality — no change needed. [HubSpot: Acme Q2
->   Expansion]
+>   call. Deal stage was flagged as consistent with reality — no change needed. [HubSpot: Acme Q2 >
+>   > Expansion]
 
 ## What this example demonstrates
 

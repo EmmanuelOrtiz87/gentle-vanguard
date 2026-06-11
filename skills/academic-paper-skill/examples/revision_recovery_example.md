@@ -704,9 +704,9 @@ Reviewers. The re-reviewers accepted this status as reasonable.
 ### 3. Response to Reviewers Uses R-A-C Format
 
 Each response follows the Reviewer comment - Author response - Changes made structure. For accepted
-feedback, the response explains _what was done_ and _why_. For the DELIBERATE_LIMITATION, the
-response explains _what was done_ (14/17 paragraphs restructured), _what was not done_ (3 paragraphs
-retained), and _why_ (argumentative coherence justification).
+feedback, the response explains _what was done_ and _why_. For the DELIBERATE*LIMITATION, the
+response explains \_what was done* (14/17 paragraphs restructured), _what was not done_ (3
+paragraphs retained), and _why_ (argumentative coherence justification).
 
 ### 4. Score Improvements Track to Specific Revisions
 

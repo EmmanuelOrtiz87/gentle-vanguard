@@ -5,50 +5,45 @@ flowchart TD
   classDef ps fill:#1a2035,stroke:#5391fe,color:#e0e0e0
   classDef go fill:#1a2035,stroke:#00add8,color:#e0e0e0
 
+  d9[scripts/gateway/agent/nl-time-..]
+  d3[demos/from-chat-to-cognitive-s..]
+  d4[apps/web-dashboard/vite.config]
+  d12[scripts/utilities/model-router..]
+  d18[components/LiveChart]
+  d13[tests/unit/model-router.test]
+  d20[ppo_rlhf_search]
+  d16[search_popular_datasets]
+  d7[hf_dataset_search]
+  d14[scripts/utilities/model-router..]
+  d11[scripts/utilities/model-router..]
   d10[scripts/utilities/model-router..]
-  d8[scripts/utilities/model-router..]
-  d15[templates/config/vitest.config]
-  d2[apps/web-dashboard/vite.config]
-  d11[apps/web-dashboard/server/glob..]
-  d19[components/LiveChart]
-  d14[.cursor/hooks/grind]
-  d12[apps/web-dashboard/server/mcp-..]
-  d9[tests/unit/model-router.test]
+  d6[generate-from-template]
+  d22[src/dashboard/dashboard-data]
+  d0[App]
+  d8[scripts/gateway/agent/schedule..]
+  d21[tests/unit/dashboard.spec]
   d17[components/GlobalHealth]
-  d7[scripts/utilities/model-router..]
-  d18[components/MetricsCard]
-  d23[tests/unit/dashboard.spec]
-  d4[scripts/gateway/agent/schedule..]
-  d6[scripts/utilities/model-router..]
-  d16[apps/web-dashboard/server/real..]
-  d13[apps/web-dashboard/server/mcp-..]
-  d0[main]
-  d5[scripts/gateway/agent/nl-time-..]
-  d21[components/SessionTimeline]
-  d20[components/HitlModal]
-  d3[hooks/useAgentStream]
-  d24[src/dashboard/dashboard-data]
-  d22[components/TaskControl]
-  d1[demos/from-chat-to-cognitive-s..]
+  d2[main]
+  d15[search_more_datasets]
+  d5[hf_dataset_details]
+  d1[hooks/useSharedState]
+  d19[github_simpo_targeted_search]
 
-  d21 --> d18
-  d10 --> d7
-  d8 --> d7
-  d4 --> d5
-  d8 --> d9
-  d13 --> d14
-  d0 --> d1
-  d17 --> d18
-  d13 --> d15
-  d17 --> d19
-  d16 --> d13
-  d16 --> d12
-  d23 --> d24
-  d6 --> d7
-  d11 --> d12
-  d10 --> d6
+  d14 --> d10
+  d7 --> d20
   d2 --> d3
-  d11 --> d13
-  d22 --> d18
-  d20 --> d18
+  d10 --> d11
+  d17 --> d18
+  d14 --> d11
+  d19 --> d20
+  d7 --> d6
+  d21 --> d22
+  d8 --> d9
+  d15 --> d6
+  d12 --> d13
+  d4 --> d1
+  d16 --> d6
+  d0 --> d1
+  d5 --> d6
+  d12 --> d11
 

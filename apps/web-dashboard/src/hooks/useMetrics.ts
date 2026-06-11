@@ -91,7 +91,7 @@ export function useMetrics(useWebSocketMode = false) {
 
   useEffect(() => {
     if (!useWebSocketMode) {
-      fetchMetrics();
+      void fetchMetrics();
       const interval = setInterval(fetchMetrics, 5000);
       return () => clearInterval(interval);
     }
