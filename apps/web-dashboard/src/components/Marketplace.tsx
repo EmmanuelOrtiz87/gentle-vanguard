@@ -122,7 +122,7 @@ export function Marketplace() {
   }, []);
 
   useEffect(() => {
-    loadListings();
+    void loadListings();
   }, [loadListings]);
 
   const handleSubmit = async () => {
@@ -172,7 +172,7 @@ export function Marketplace() {
         agentType: 'any',
         skillContent: '',
       });
-      loadListings();
+      void loadListings();
       setTimeout(() => {
         setShowSubmitDialog(false);
         setSubmitSuccess(false);

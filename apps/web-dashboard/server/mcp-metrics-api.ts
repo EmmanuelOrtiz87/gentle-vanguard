@@ -1,9 +1,8 @@
 import { readFileSync } from 'fs';
-import { join, resolve } from 'path';
+import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = resolve(__dirname);
+const __dirname = resolve(dirname(fileURLToPath(import.meta.url)));
 const ROOT = resolve(__dirname, '../../..');
 const STATS_PATH = join(ROOT, '.atl', 'skill-stats.json');
 const REGISTRY_PATH = join(ROOT, '.atl', 'skill-registry.md');
@@ -103,7 +102,7 @@ export function getMCPMetrics(): MCPMetrics {
 }
 
 // Express-compatible handler
-export function metricsHandler(req: any, res: any) {
+export function metricsHandler(_req: any, res: any) {
   res.json(getMCPMetrics());
 }
 

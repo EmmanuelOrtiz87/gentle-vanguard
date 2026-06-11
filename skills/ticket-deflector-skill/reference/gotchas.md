@@ -41,8 +41,10 @@ transaction."
 
 Insert the gap notice inside the draft at the exact sentence where it matters:
 
-> Hi Sarah, thanks for reaching out. I've looked into your order _[Note: No PayPal transaction found
-> for this email — verify order ID before sending]_ and want to get this sorted.
+> Hi Sarah, thanks for reaching out. I've looked into your order \_[Note: No PayPal transaction
+> found
+>
+> > for this email — verify order ID before sending]\_ and want to get this sorted.
 
 The owner sees the problem before clicking send.
 

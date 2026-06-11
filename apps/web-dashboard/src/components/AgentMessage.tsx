@@ -63,7 +63,7 @@ function DataTableHint({ hint }: { hint: UIHint }) {
           <tbody>
             {hint.rows.map((row, i) => (
               <tr key={i} className="border-t border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/30">
-                {hint.columns!.map((col, j) => (
+                {(hint.columns ?? []).map((col, j) => (
                   <td key={j} className="px-3 py-1.5 text-gray-700 dark:text-gray-300">{String(row[col] ?? '')}</td>
                 ))}
               </tr>
@@ -76,19 +76,20 @@ function DataTableHint({ hint }: { hint: UIHint }) {
 }
 
 function ChartHint({ hint }: { hint: UIHint }) {
-  if (!hint.series || hint.series.length === 0) return null;
-  const maxVal = Math.max(...hint.series.flatMap(s => s.data));
+  const series = hint.series;
+  if (!series || series.length === 0) return null;
+  const maxVal = Math.max(...series.flatMap(s => s.data));
   const barColors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-yellow-500', 'bg-red-500'];
   return (
     <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-3">
       {hint.label && <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">{hint.label}</p>}
       <div className="flex items-end gap-2 h-32">
-        {hint.series[0].data.map((val, i) => (
+        {series[0].data.map((val, i) => (
           <div key={i} className="flex-1 flex flex-col items-center gap-1">
             <span className="text-[10px] text-gray-500">{val}</span>
             <div
-              className={`w-full rounded-t ${(hint.series![0].color ? `bg-[${hint.series![0].color}]` : barColors[i % barColors.length])}`}
-              style={{ height: `${(val / maxVal) * 100}%`, minHeight: '4px', backgroundColor: hint.series![0].color || undefined }}
+              className={`w-full rounded-t ${(series[0].color ? `bg-[${series[0].color}]` : barColors[i % barColors.length])}`}
+              style={{ height: `${(val / maxVal) * 100}%`, minHeight: '4px', backgroundColor: series[0].color || undefined }}
             />
           </div>
         ))}
@@ -184,7 +185,7 @@ function FormHint({ hint, onAction }: { hint: UIHint; onAction?: (action: string
       </div>
       {hint.action && onAction && (
         <button
-          onClick={() => onAction(hint.action!, values)}
+          onClick={() => hint.action && onAction(hint.action, values)}
           className="mt-3 w-full px-3 py-1.5 bg-purple-500 text-white rounded text-xs font-medium hover:bg-purple-600 transition-colors"
         >
           {hint.action.replace(/_/g, ' ')}

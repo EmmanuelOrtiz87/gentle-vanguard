@@ -92,7 +92,7 @@ export class MCPBridge extends EventEmitter {
           this.retryCount = 0;
           this._connected = true;
           this.emit('connected');
-          this.discoverTools();
+          void this.discoverTools();
           resolve();
         }
       });
@@ -105,7 +105,7 @@ export class MCPBridge extends EventEmitter {
           this.retryCount = 0;
           this._connected = true;
           this.emit('connected');
-          this.discoverTools();
+          void this.discoverTools();
           resolve();
         }
       });

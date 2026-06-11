@@ -1,11 +1,11 @@
-import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from "fs";
-import { join, basename } from "path";
-import { fileURLToPath } from "url";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
+import { join } from 'path';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = join(__filename, "..");
-const SKILLS_DIR = join(__dirname, "..", "..", "..", "skills");
-const DATA_PATH = join(__dirname, "..", "data", "marketplace.json");
+const __dirname = join(__filename, '..');
+const SKILLS_DIR = join(__dirname, '..', '..', '..', 'skills');
+const DATA_PATH = join(__dirname, '..', 'data', 'marketplace.json');
 
 export interface SkillListing {
   id: string;
@@ -48,7 +48,7 @@ function loadMarketplace(): SkillListing[] {
     return [];
   }
   try {
-    const data = readFileSync(DATA_PATH, "utf-8");
+    const data = readFileSync(DATA_PATH, 'utf-8');
     return JSON.parse(data);
   } catch {
     return [];
@@ -56,7 +56,7 @@ function loadMarketplace(): SkillListing[] {
 }
 
 function saveMarketplace(listings: SkillListing[]) {
-  const dir = join(DATA_PATH, "..");
+  const dir = join(DATA_PATH, '..');
   if (!existsSync(dir)) {
     mkdirSync(dir, { recursive: true });
   }
@@ -67,13 +67,13 @@ function parseFrontmatter(content: string): Record<string, unknown> {
   const match = content.match(/^---\s*\n([\s\S]*?)\n---/);
   if (!match) return {};
   const frontmatter: Record<string, unknown> = {};
-  const lines = match[1].split("\n");
+  const lines = match[1].split('\n');
   for (const line of lines) {
     const kvMatch = line.match(/^\s*(\w+):\s*(.*)/);
     if (kvMatch) {
       let value: unknown = kvMatch[2].trim();
-      if (value === "true") value = true;
-      else if (value === "false") value = false;
+      if (value === 'true') value = true;
+      else if (value === 'false') value = false;
       else if (/^\d+$/.test(value as string)) value = parseInt(value as string, 10);
       else if (/^\d+\.\d+$/.test(value as string)) value = parseFloat(value as string);
       frontmatter[kvMatch[1]] = value;
@@ -86,11 +86,11 @@ export function validateSkillStructure(skillContent: string): { valid: boolean; 
   const errors: string[] = [];
 
   if (!skillContent || skillContent.trim().length === 0) {
-    return { valid: false, errors: ["SKILL.md content is empty"] };
+    return { valid: false, errors: ['SKILL.md content is empty'] };
   }
 
   if (!/^---/.test(skillContent)) {
-    errors.push("Missing YAML frontmatter (must start with ---)");
+    errors.push('Missing YAML frontmatter (must start with ---)');
   }
 
   const frontmatter = parseFrontmatter(skillContent);
@@ -124,19 +124,20 @@ function scanSkillsDirectory(): SkillListing[] {
     const skillPath = join(SKILLS_DIR, entry);
     if (!statSync(skillPath).isDirectory()) continue;
 
-    const skillMdPath = join(skillPath, "SKILL.md");
+    const skillMdPath = join(skillPath, 'SKILL.md');
     if (!existsSync(skillMdPath)) continue;
 
     try {
-      const content = readFileSync(skillMdPath, "utf-8");
+      const content = readFileSync(skillMdPath, 'utf-8');
       const frontmatter = parseFrontmatter(content);
 
       listings.push({
         id: `skill-${entry}`,
         name: (frontmatter.name as string) || entry,
-        description: (frontmatter.description as string) || "",
-        author: ((frontmatter.metadata as Record<string, unknown>)?.author as string) || "community",
-        version: ((frontmatter.metadata as Record<string, unknown>)?.version as string) || "1.0.0",
+        description: (frontmatter.description as string) || '',
+        author:
+          ((frontmatter.metadata as Record<string, unknown>)?.author as string) || 'community',
+        version: ((frontmatter.metadata as Record<string, unknown>)?.version as string) || '1.0.0',
         downloads: 0,
         rating: 0,
         reviews: [],
@@ -144,7 +145,7 @@ function scanSkillsDirectory(): SkillListing[] {
         createdAt: (frontmatter.created as string) || new Date().toISOString(),
         updatedAt: (frontmatter.updated as string) || new Date().toISOString(),
         triggers: [],
-        agentType: (frontmatter.agent as string) || "any",
+        agentType: (frontmatter.agent as string) || 'any',
         skillPath: skillPath,
       });
     } catch {
@@ -167,7 +168,8 @@ export function getListings(): SkillListing[] {
 
   for (const l of dbListings) {
     if (merged.has(l.id)) {
-      const existing = merged.get(l.id)!;
+      const existing = merged.get(l.id);
+      if (!existing) continue;
       existing.downloads = l.downloads;
       existing.rating = l.rating;
       existing.reviews = l.reviews;
@@ -189,7 +191,7 @@ export function getListing(id: string): SkillListing | undefined {
 export function createListing(payload: CreateSkillPayload): SkillListing {
   const valid = validateSkillStructure(payload.skillContent);
   if (!valid.valid) {
-    throw new Error(`Validation failed: ${valid.errors.join("; ")}`);
+    throw new Error(`Validation failed: ${valid.errors.join('; ')}`);
   }
 
   const existing = getListings().find((l) => l.name === payload.name);
@@ -204,8 +206,8 @@ export function createListing(payload: CreateSkillPayload): SkillListing {
 
   mkdirSync(skillDir, { recursive: true });
 
-  const skillMdPath = join(skillDir, "SKILL.md");
-  writeFileSync(skillMdPath, payload.skillContent, "utf-8");
+  const skillMdPath = join(skillDir, 'SKILL.md');
+  writeFileSync(skillMdPath, payload.skillContent, 'utf-8');
 
   const now = new Date().toISOString();
   const newListing: SkillListing = {
@@ -213,7 +215,7 @@ export function createListing(payload: CreateSkillPayload): SkillListing {
     name: payload.name,
     description: payload.description,
     author: payload.author,
-    version: payload.version || "1.0.0",
+    version: payload.version || '1.0.0',
     downloads: 0,
     rating: 0,
     reviews: [],
@@ -221,7 +223,7 @@ export function createListing(payload: CreateSkillPayload): SkillListing {
     createdAt: now,
     updatedAt: now,
     triggers: payload.triggers || [],
-    agentType: payload.agentType || "any",
+    agentType: payload.agentType || 'any',
     skillPath: skillDir,
   };
 
@@ -232,14 +234,14 @@ export function createListing(payload: CreateSkillPayload): SkillListing {
   return newListing;
 }
 
-export function addReview(listingId: string, review: Omit<Review, "id" | "createdAt">): Review {
+export function addReview(listingId: string, review: Omit<Review, 'id' | 'createdAt'>): Review {
   const listings = loadMarketplace();
   let listing = listings.find((l) => l.id === listingId);
   if (!listing) {
     const fsListings = scanSkillsDirectory();
     const fsListing = fsListings.find((l) => l.id === listingId);
     if (!fsListing) {
-      throw new Error("Listing not found");
+      throw new Error('Listing not found');
     }
     listing = { ...fsListing };
     listings.push(listing);
@@ -279,10 +281,10 @@ export function incrementDownloads(listingId: string): number {
 }
 
 export function getSkillContent(skillPath: string): string | null {
-  const skillMdPath = join(skillPath, "SKILL.md");
+  const skillMdPath = join(skillPath, 'SKILL.md');
   if (!existsSync(skillMdPath)) return null;
   try {
-    return readFileSync(skillMdPath, "utf-8");
+    return readFileSync(skillMdPath, 'utf-8');
   } catch {
     return null;
   }

@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, existsSync, mkdirSync, watch } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { EventEmitter } from 'events';
@@ -8,8 +8,6 @@ const __dirname = dirname(__filename);
 const ROOT = resolve(__dirname, '../../..');
 const EVENT_BUS_DIR = join(ROOT, '.event-bus');
 const HISTORY_PATH = join(EVENT_BUS_DIR, 'history.json');
-const SUBSCRIPTIONS_PATH = join(EVENT_BUS_DIR, 'subscriptions.json');
-
 interface BusEvent {
   timestamp: string;
   event: string;
@@ -34,19 +32,6 @@ interface AgentTask {
   completedAt?: string;
   execution_id?: string;
 }
-
-const STANDARD_EVENTS = [
-  'dispatch.started',
-  'dispatch.completed',
-  'agent.dispatched',
-  'agent.completed',
-  'session.started',
-  'session.ended',
-  'workflow.checkpoint',
-  'workflow.publish',
-  'validation.started',
-  'validation.completed',
-];
 
 export class SharedStateBridge extends EventEmitter {
   private pollTimer: NodeJS.Timeout | null = null;

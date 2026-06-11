@@ -6,8 +6,6 @@ import { ROOT, readJson } from './shared.js';
 const TOKEN_PATH = join(ROOT, '.runtime', 'metrics', 'token.json');
 const SESSIONS_PATH = join(ROOT, '.runtime', 'metrics', 'sessions.json');
 const SESSIONS_HISTORY_PATH = join(ROOT, '.event-bus', 'sessions-history.json');
-const CONTEXT_LOG_DIR = join(ROOT, '.session', 'context-log');
-
 function execGit(args: string): string {
   try {
     return execSync(`git ${args}`, { cwd: ROOT, encoding: 'utf-8', timeout: 3000 }).trim();

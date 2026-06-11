@@ -94,7 +94,7 @@ Sincerely,
 I, [CANDIDATE FULL NAME], accept the offer of employment described in this letter under the terms
 and conditions stated above.
 
-Signature: **************\_\_\_************** Date: ******\_\_\_******
+Signature: **\*\***\*\***\*\***\_\_\_**\*\***\*\***\*\*** Date: **\*\***\_\_\_**\*\***
 
 [CANDIDATE FULL NAME] (printed)
 

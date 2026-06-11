@@ -1,11 +1,14 @@
 {
-  "version": "1.0.0",
-  "description": "Gentle-Vanguard Project - 28 Quality Gates Configuration",
+  "version": "2.0.0",
+  "description": "Gentle-Vanguard Project — 29 Quality Gates (real enforcement via lefthook + CI)",
+  "note": "Gates marked 'enforced: true' are actually run by lefthook or CI. Gates marked 'enforced: false' are aspirational/tools not installed.",
   "gates": [
     {
       "id": "pre-commit-format",
-      "name": "Code Formatting",
+      "name": "Code Formatting (prettier)",
       "stage": "pre-commit",
+      "enforced": true,
+      "enforcer": "lefthook - format-check",
       "tool": "prettier",
       "required": true,
       "description": "Validate code formatting standards",
@@ -13,274 +16,326 @@
       "failureAction": "block"
     },
     {
-      "id": "pre-commit-lint",
-      "name": "Linting",
+      "id": "pre-commit-json-lint",
+      "name": "JSON Lint",
       "stage": "pre-commit",
-      "tool": "eslint",
+      "enforced": true,
+      "enforcer": "lefthook - json-lint",
+      "tool": "json-lint.ps1",
       "required": true,
-      "description": "Check for code quality issues",
-      "command": "eslint . --max-warnings 0",
+      "description": "Validate JSON syntax",
+      "command": "pwsh hooks/json-lint.ps1",
       "failureAction": "block"
     },
     {
-      "id": "pre-commit-type-check",
-      "name": "Type Checking",
+      "id": "pre-commit-workflow-lint",
+      "name": "Workflow YAML Lint",
       "stage": "pre-commit",
+      "enforced": true,
+      "enforcer": "lefthook - workflow-lint",
+      "tool": "workflow-lint.ps1",
+      "required": true,
+      "description": "Validate GitHub Actions workflow syntax",
+      "command": "pwsh hooks/workflow-lint.ps1",
+      "failureAction": "block"
+    },
+    {
+      "id": "pre-commit-secretlint",
+      "name": "Secret Scanning",
+      "stage": "pre-commit",
+      "enforced": true,
+      "enforcer": "lefthook - secretlint",
+      "tool": "secretlint",
+      "required": true,
+      "description": "Scan staged files for exposed secrets",
+      "command": "secretlint --secretlintrc .secretlintrc.json {staged_files}",
+      "failureAction": "block"
+    },
+    {
+      "id": "pre-commit-trufflehog",
+      "name": "TruffleHog Secret Scan",
+      "stage": "pre-commit",
+      "enforced": true,
+      "enforcer": "lefthook - trufflehog-scan",
+      "tool": "trufflehog",
+      "required": false,
+      "description": "Deep secret scanning via trufflehog (best-effort, exit 0 always)",
+      "command": "trufflehog filesystem --no-verification --no-update .",
+      "failureAction": "warn"
+    },
+    {
+      "id": "pre-commit-opencode-validation",
+      "name": "OpenCode Validation",
+      "stage": "pre-commit",
+      "enforced": true,
+      "enforcer": "lefthook - opencode-validation",
+      "tool": "pre-commit-opencode-validation.ps1",
+      "required": true,
+      "description": "Validate opencode configuration compliance",
+      "command": "pwsh hooks/pre-commit-opencode-validation.ps1",
+      "failureAction": "block"
+    },
+    {
+      "id": "pre-commit-validate-tool-configs",
+      "name": "Tool Config Validation",
+      "stage": "pre-commit",
+      "enforced": true,
+      "enforcer": "lefthook - validate-tool-configs",
+      "tool": "validate-tool-configs.ps1",
+      "required": true,
+      "description": "Validate tool configuration files",
+      "command": "pwsh scripts/utilities/config/validate-tool-configs.ps1 -Quiet",
+      "failureAction": "block"
+    },
+    {
+      "id": "pre-commit-normative-audit",
+      "name": "Normative Audit",
+      "stage": "pre-commit",
+      "enforced": true,
+      "enforcer": "lefthook - normative-audit",
+      "tool": "normative-audit-hook.ps1",
+      "required": true,
+      "description": "Enforce normative compliance against rules/",
+      "command": "pwsh hooks/normative-audit-hook.ps1",
+      "failureAction": "block"
+    },
+    {
+      "id": "pre-commit-karpathy",
+      "name": "Karpathy Enforcer",
+      "stage": "pre-commit",
+      "enforced": true,
+      "enforcer": "lefthook - karpathy-enforcer",
+      "tool": "karpathy-enforcer-hook.ps1",
+      "required": true,
+      "description": "Enforce Karpathy coding guidelines",
+      "command": "pwsh hooks/karpathy-enforcer-hook.ps1",
+      "failureAction": "block"
+    },
+    {
+      "id": "pre-commit-accent-check",
+      "name": "Markdown Accent Check",
+      "stage": "pre-commit",
+      "enforced": true,
+      "enforcer": "lefthook - markdown-accent-check",
+      "tool": "markdown-accent-check-hook.ps1",
+      "required": true,
+      "description": "Check for accent/internationalization issues in markdown",
+      "command": "pwsh hooks/markdown-accent-check-hook.ps1 -StagedFiles {staged_files}",
+      "failureAction": "block"
+    },
+    {
+      "id": "pre-commit-emoji-detector",
+      "name": "Emoji Detector",
+      "stage": "pre-commit",
+      "enforced": true,
+      "enforcer": "lefthook - emoji-detector",
+      "tool": "emoji-detector-hook.ps1",
+      "required": true,
+      "description": "Detect emoji usage in PowerShell scripts",
+      "command": "pwsh hooks/emoji-detector-hook.ps1 -StagedFiles {staged_files}",
+      "failureAction": "block"
+    },
+    {
+      "id": "pre-commit-sensitive-files",
+      "name": "Sensitive Files Check",
+      "stage": "pre-commit",
+      "enforced": true,
+      "enforcer": "lefthook - sensitive-files-check",
+      "tool": "sensitive-files-check-hook.ps1",
+      "required": true,
+      "description": "Check for sensitive files being committed",
+      "command": "pwsh hooks/sensitive-files-check-hook.ps1 -StagedFiles {staged_files}",
+      "failureAction": "block"
+    },
+    {
+      "id": "pre-commit-skill-scan",
+      "name": "Skill Security Scan",
+      "stage": "pre-commit",
+      "enforced": true,
+      "enforcer": "lefthook - skill-scan",
+      "tool": "scan-skill-hook.ps1",
+      "required": true,
+      "description": "Security scan for skill files",
+      "command": "pwsh scripts/security/scan-skill-hook.ps1 -StagedFiles {staged_files}",
+      "failureAction": "block"
+    },
+    {
+      "id": "commit-msg-commitlint",
+      "name": "Commit Message Lint",
+      "stage": "commit-msg",
+      "enforced": true,
+      "enforcer": "lefthook - commitlint",
+      "tool": "commitlint.ps1",
+      "required": true,
+      "description": "Validate commit message format",
+      "command": "pwsh hooks/commitlint.ps1 {1}",
+      "failureAction": "block"
+    },
+    {
+      "id": "commit-msg-session-track",
+      "name": "Session Tracking",
+      "stage": "commit-msg",
+      "enforced": true,
+      "enforcer": "lefthook - commit-msg-session-track",
+      "tool": "commit-msg-session-track-hook.ps1",
+      "required": true,
+      "description": "Track sessions via commit messages",
+      "command": "pwsh hooks/commit-msg-session-track-hook.ps1 -CommitMsgFile {1}",
+      "failureAction": "warn"
+    },
+    {
+      "id": "post-commit-codegraph",
+      "name": "CodeGraph Sync",
+      "stage": "post-commit",
+      "enforced": true,
+      "enforcer": "lefthook - codegraph-sync",
+      "tool": "codegraph-post-modification-sync.ps1",
+      "required": true,
+      "description": "Sync codegraph index after commit",
+      "command": "pwsh scripts/utilities/codegraph/codegraph-post-modification-sync.ps1 -Trigger post-commit -Force",
+      "failureAction": "warn"
+    },
+    {
+      "id": "post-commit-hashline",
+      "name": "Hashline Snapshot",
+      "stage": "post-commit",
+      "enforced": true,
+      "enforcer": "lefthook - hashline-snapshot",
+      "tool": "hashline-snapshot-hook.ps1",
+      "required": false,
+      "description": "Snapshot hashline after commit",
+      "command": "pwsh scripts/editing/hashline-snapshot-hook.ps1",
+      "failureAction": "warn"
+    },
+    {
+      "id": "pre-push-audit",
+      "name": "Audit Sweep",
+      "stage": "pre-push",
+      "enforced": true,
+      "enforcer": "lefthook - audit-check",
+      "tool": "audit-sweep.ps1",
+      "required": true,
+      "description": "Quick audit sweep before push",
+      "command": "pwsh skills/gentle-vanguard-audit-skill/scripts/audit-sweep.ps1 -Scope quick",
+      "failureAction": "block"
+    },
+    {
+      "id": "pre-push-npm-audit",
+      "name": "npm Audit",
+      "stage": "pre-push",
+      "enforced": true,
+      "enforcer": "lefthook - npm-audit",
+      "tool": "npm-audit-pre-push.ps1",
+      "required": true,
+      "description": "Check dependency vulnerabilities",
+      "command": "pwsh scripts/hooks/npm-audit-pre-push.ps1 -AuditLevel moderate",
+      "failureAction": "warn"
+    },
+    {
+      "id": "pre-push-orchestrator",
+      "name": "Orchestrator Auto-Fix",
+      "stage": "pre-push",
+      "enforced": true,
+      "enforcer": "lefthook - orchestrator-auto-fix",
+      "tool": "orchestrate-auto-fix.ps1",
+      "required": false,
+      "description": "Auto-fix detected issues before push",
+      "command": "pwsh scripts/hooks/orchestrate-auto-fix.ps1 -Fix",
+      "failureAction": "warn"
+    },
+    {
+      "id": "ci-lint",
+      "name": "ESLint (root)",
+      "stage": "ci",
+      "enforced": true,
+      "enforcer": "CI via pnpm lint",
+      "tool": "eslint",
+      "required": true,
+      "description": "ESLint for root TypeScript files",
+      "command": "eslint scripts/**/*.ts src/**/*.ts --max-warnings 0",
+      "failureAction": "block"
+    },
+    {
+      "id": "ci-typecheck",
+      "name": "TypeScript Type Check (root)",
+      "stage": "ci",
+      "enforced": true,
+      "enforcer": "CI via pnpm typecheck",
       "tool": "typescript",
       "required": true,
-      "description": "Validate TypeScript types",
+      "description": "tsc --noEmit for root",
       "command": "tsc --noEmit",
       "failureAction": "block"
     },
     {
-      "id": "pre-commit-secrets",
-      "name": "Secret Scanning",
-      "stage": "pre-commit",
+      "id": "ci-format",
+      "name": "Code Format Check (root)",
+      "stage": "ci",
+      "enforced": true,
+      "enforcer": "CI via pnpm format:check",
+      "tool": "prettier",
+      "required": true,
+      "description": "Prettier format check for markdown/json/yml/yaml",
+      "command": "prettier --check **/*.{md,json,yml,yaml}",
+      "failureAction": "block"
+    },
+    {
+      "id": "ci-secretlint",
+      "name": "Secret Lint (root)",
+      "stage": "ci",
+      "enforced": true,
+      "enforcer": "CI via pnpm secretlint",
       "tool": "secretlint",
       "required": true,
-      "description": "Scan for exposed secrets",
-      "command": "secretlint '**/*'",
+      "description": "Full secret lint across repo",
+      "command": "secretlint **/*.{json,yml,yaml,md,env,toml,xml} --secretlintrc .secretlintrc.json",
       "failureAction": "block"
     },
     {
-      "id": "pre-commit-deps",
-      "name": "Dependency Audit",
-      "stage": "pre-commit",
-      "tool": "npm-audit",
+      "id": "ci-tests",
+      "name": "Test Suite (PowerShell)",
+      "stage": "ci",
+      "enforced": true,
+      "enforcer": "CI via pnpm test",
+      "tool": "Pester",
       "required": true,
-      "description": "Check for vulnerable dependencies",
-      "command": "npm audit --audit-level=moderate",
-      "failureAction": "warn"
-    },
-    {
-      "id": "build-compile",
-      "name": "Compilation",
-      "stage": "build",
-      "tool": "typescript",
-      "required": true,
-      "description": "Compile TypeScript to JavaScript",
-      "command": "tsc",
+      "description": "48 PowerShell tests (unit, integration, security, performance)",
+      "command": "pwsh scripts/run-tests-simple.ps1",
       "failureAction": "block"
     },
     {
-      "id": "build-artifacts",
-      "name": "Build Artifacts",
-      "stage": "build",
-      "tool": "webpack",
+      "id": "dashboard-ci-lint",
+      "name": "Dashboard ESLint",
+      "stage": "ci",
+      "enforced": true,
+      "enforcer": "dashboard-ts-ci.yml",
+      "tool": "eslint",
       "required": true,
-      "description": "Generate build artifacts",
-      "command": "webpack --mode production",
+      "description": "ESLint for apps/web-dashboard TypeScript",
+      "command": "pnpm lint",
       "failureAction": "block"
     },
     {
-      "id": "build-performance",
-      "name": "Build Performance",
-      "stage": "build",
-      "tool": "custom",
+      "id": "dashboard-ci-build",
+      "name": "Dashboard Build (vite + tsc)",
+      "stage": "ci",
+      "enforced": true,
+      "enforcer": "dashboard-ts-ci.yml",
+      "tool": "typescript + vite",
       "required": true,
-      "description": "Check build time performance",
-      "threshold": 300,
-      "unit": "seconds",
-      "failureAction": "warn"
-    },
-    {
-      "id": "build-size",
-      "name": "Artifact Size",
-      "stage": "build",
-      "tool": "custom",
-      "required": true,
-      "description": "Validate artifact size",
-      "threshold": 5,
-      "unit": "MB",
-      "failureAction": "warn"
-    },
-    {
-      "id": "build-reproducibility",
-      "name": "Build Reproducibility",
-      "stage": "build",
-      "tool": "custom",
-      "required": true,
-      "description": "Ensure reproducible builds",
-      "failureAction": "block"
-    },
-    {
-      "id": "build-deps",
-      "name": "Dependency Resolution",
-      "stage": "build",
-      "tool": "npm",
-      "required": true,
-      "description": "Verify all dependencies resolved",
-      "command": "npm ci",
-      "failureAction": "block"
-    },
-    {
-      "id": "test-unit",
-      "name": "Unit Tests",
-      "stage": "test",
-      "tool": "jest",
-      "required": true,
-      "description": "Execute unit tests",
-      "command": "jest --coverage",
-      "failureAction": "block"
-    },
-    {
-      "id": "test-integration",
-      "name": "Integration Tests",
-      "stage": "test",
-      "tool": "jest",
-      "required": true,
-      "description": "Execute integration tests",
-      "command": "jest --testPathPattern=integration",
-      "failureAction": "block"
-    },
-    {
-      "id": "test-e2e",
-      "name": "E2E Tests",
-      "stage": "test",
-      "tool": "cypress",
-      "required": true,
-      "description": "Execute end-to-end tests",
-      "command": "cypress run",
-      "failureAction": "block"
-    },
-    {
-      "id": "test-coverage",
-      "name": "Test Coverage",
-      "stage": "test",
-      "tool": "jest",
-      "required": true,
-      "description": "Verify test coverage threshold",
-      "threshold": 85,
-      "unit": "%",
-      "failureAction": "block"
-    },
-    {
-      "id": "test-performance",
-      "name": "Performance Tests",
-      "stage": "test",
-      "tool": "custom",
-      "required": true,
-      "description": "Run performance benchmarks",
-      "command": "npm run test:performance",
-      "failureAction": "warn"
-    },
-    {
-      "id": "test-security",
-      "name": "Security Tests",
-      "stage": "test",
-      "tool": "custom",
-      "required": true,
-      "description": "Run security tests",
-      "command": "npm run test:security",
-      "failureAction": "block"
-    },
-    {
-      "id": "test-accessibility",
-      "name": "Accessibility Tests",
-      "stage": "test",
-      "tool": "axe",
-      "required": true,
-      "description": "Check accessibility compliance",
-      "command": "npm run test:a11y",
-      "failureAction": "warn"
-    },
-    {
-      "id": "test-compatibility",
-      "name": "Compatibility Tests",
-      "stage": "test",
-      "tool": "custom",
-      "required": true,
-      "description": "Test cross-browser compatibility",
-      "command": "npm run test:compat",
-      "failureAction": "warn"
-    },
-    {
-      "id": "quality-complexity",
-      "name": "Code Complexity",
-      "stage": "quality",
-      "tool": "sonarqube",
-      "required": true,
-      "description": "Analyze code complexity",
-      "threshold": 15,
-      "unit": "cognitive complexity",
-      "failureAction": "warn"
-    },
-    {
-      "id": "quality-duplication",
-      "name": "Duplication Detection",
-      "stage": "quality",
-      "tool": "sonarqube",
-      "required": true,
-      "description": "Detect code duplication",
-      "threshold": 3,
-      "unit": "%",
-      "failureAction": "warn"
-    },
-    {
-      "id": "quality-deadcode",
-      "name": "Dead Code",
-      "stage": "quality",
-      "tool": "custom",
-      "required": true,
-      "description": "Remove dead code",
-      "failureAction": "warn"
-    },
-    {
-      "id": "quality-docs",
-      "name": "Documentation Coverage",
-      "stage": "quality",
-      "tool": "typedoc",
-      "required": true,
-      "description": "Verify documentation coverage",
-      "threshold": 90,
-      "unit": "%",
-      "failureAction": "warn"
-    },
-    {
-      "id": "quality-architecture",
-      "name": "Architecture Compliance",
-      "stage": "quality",
-      "tool": "custom",
-      "required": true,
-      "description": "Verify architecture rules",
-      "failureAction": "block"
-    },
-    {
-      "id": "security-scan",
-      "name": "Vulnerability Scanning",
-      "stage": "security",
-      "tool": "snyk",
-      "required": true,
-      "description": "Scan for vulnerabilities",
-      "command": "snyk test",
-      "failureAction": "block"
-    },
-    {
-      "id": "security-sast",
-      "name": "SAST Analysis",
-      "stage": "security",
-      "tool": "sonarqube",
-      "required": true,
-      "description": "Static application security testing",
-      "failureAction": "block"
-    },
-    {
-      "id": "security-deps",
-      "name": "Dependency Vulnerabilities",
-      "stage": "security",
-      "tool": "npm-audit",
-      "required": true,
-      "description": "Check dependency vulnerabilities",
-      "command": "npm audit",
+      "description": "TypeScript compile + Vite production build for web-dashboard",
+      "command": "tsc && vite build",
       "failureAction": "block"
     },
     {
       "id": "governance-sdd-spec-validation",
       "name": "SDD Spec Validation",
       "stage": "governance",
-      "tool": "custom",
-      "required": true,
-      "description": "Validate that SDD spec exists with validated/done status for feature branches",
+      "enforced": false,
+      "enforcer": "not enforced — script may not exist",
+      "tool": "check-sdd-gate.ps1",
+      "required": false,
+      "description": "Validate SDD spec status for feature branches",
       "command": "pwsh -NoProfile -File scripts/hooks/check-sdd-gate.ps1",
       "failureAction": "block"
     },
@@ -288,102 +343,66 @@
       "id": "deploy-readiness",
       "name": "Production Readiness",
       "stage": "deploy",
+      "enforced": false,
+      "enforcer": "not enforced — no deploy pipeline defined",
       "tool": "custom",
-      "required": true,
+      "required": false,
       "description": "Verify production readiness",
       "failureAction": "block"
     }
   ],
   "stages": {
     "pre-commit": {
-      "description": "Checks run before commit",
+      "description": "Checks run by lefthook before every commit",
       "order": 1,
       "required": true
     },
-    "build": {
-      "description": "Checks during build",
+    "commit-msg": {
+      "description": "Commit message validation by lefthook",
       "order": 2,
       "required": true
     },
-    "test": {
-      "description": "Checks during testing",
+    "post-commit": {
+      "description": "Post-commit tasks run by lefthook",
       "order": 3,
-      "required": true
+      "required": false
     },
-    "quality": {
-      "description": "Code quality checks",
-      "order": 4,
-      "required": true
-    },
-    "security": {
-      "description": "Security checks",
+    "pre-push": { "description": "Pre-push checks run by lefthook", "order": 4, "required": true },
+    "ci": {
+      "description": "CI checks via pnpm scripts (lint, typecheck, format, secretlint, tests, build)",
       "order": 5,
       "required": true
     },
     "governance": {
-      "description": "Governance and compliance checks (SDD, policies)",
+      "description": "Governance checks — currently not enforced",
       "order": 6,
-      "required": true
+      "required": false
     },
     "deploy": {
-      "description": "Deployment readiness checks",
+      "description": "Deployment readiness — currently not enforced",
       "order": 7,
-      "required": true
+      "required": false
     }
   },
-  "failureActions": {
-    "block": "Prevent progression to next stage",
-    "warn": "Log warning but allow progression",
-    "info": "Log info message"
+  "stats": {
+    "totalGates": 29,
+    "enforcedInLefthook": 19,
+    "enforcedInCI": 7,
+    "notEnforced": 3,
+    "lefthookVersion": "2.1.8",
+    "lastVerified": "2026-06-11"
   },
-  "reporting": {
-    "generateReport": true,
-    "reportFormat": "json",
-    "reportPath": "reports/quality-gates-report.json",
-    "dashboardUrl": "http://localhost:3000/dashboard"
-  },
-  "requiredWorkflows": [
-    "gentle-vanguard-quality-gate",
-    "cross-platform-tests",
-    "security-scan",
-    "js-ts-quality",
-    "commitlint",
-    "python-quality",
-    "coverage",
-    "markdown-lint",
-    "npm-audit"
-  ],
-  "feedbackCollection": {
-    "enabled": true,
-    "file": ".session/feedback/feedback.jsonl",
-    "collector": "scripts/utilities/FEEDBACK/feedback-collector.ps1",
-    "analyzer": "scripts/utilities/FEEDBACK/feedback-analyzer.ps1"
-  },
-  "proactiveDigest": {
-    "enabled": true,
-    "generator": "scripts/utilities/DIGEST/digest-generator.ps1",
-    "autostartStep": "digest-generator",
-    "outputDir": ".session/digests"
-  },
-  "requiredStatusChecks": [
-    "Gentle-Vanguard Quality Gate",
-    "Cross-Platform Tests",
-    "Security Scan",
-    "JS/TS Quality",
-    "Python Quality",
-    "Commit Lint",
-    "Markdown Lint",
-    "npm Audit",
-    "Code Coverage"
-  ],
-  "pullRequestRules": {
-    "requireStatusChecks": true,
-    "requireCodeReview": true,
-    "reviewerCount": 1,
-    "requireBranchUpdateBeforeMerge": true,
-    "dismissStaleReviews": true,
-    "restrictPushes": false,
-    "allowForcePushes": false,
-    "allowDeletions": false
+  "requiredWorkflows": {
+    "note": "All required CI workflows are defined in .github/workflows/. Workflows not present are aspirational.",
+    "gentle-vanguard-quality-gate": "exists — .github/workflows/quality-gate.yml",
+    "cross-platform-tests": "exists — .github/workflows/cross-platform-tests.yml",
+    "security-scan": "exists — .github/workflows/security-scan.yml",
+    "js-ts-quality": "exists — .github/workflows/js-ts-quality.yml",
+    "dashboard-ts-ci": "exists — .github/workflows/dashboard-ts-ci.yml (added 2026-06-10)",
+    "commitlint": "exists — .github/workflows/commitlint.yml",
+    "python-quality": "NOT FOUND in .github/workflows/",
+    "coverage": "NOT FOUND in .github/workflows/",
+    "markdown-lint": "NOT FOUND in .github/workflows/",
+    "npm-audit": "NOT FOUND in .github/workflows/"
   }
 }
