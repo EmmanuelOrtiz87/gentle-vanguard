@@ -30,7 +30,7 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
-$Root    = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$Root    = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
 $errors  = 0
 $warns   = 0
 
@@ -61,11 +61,11 @@ if (Test-Path $adPath) {
 
 # --- 3. Critical scripts exist -------------------------------------------------
 Write-Host "`n[3/6] Critical scripts" -ForegroundColor Cyan
-$autostartFile = if ([Environment]::OSVersion.Platform -eq 'Win32NT') { 'scripts/utilities/session-autostart.cmd' } else { 'scripts/utilities/session-autostart.sh' }
+$autostartFile = if ([Environment]::OSVersion.Platform -eq 'Win32NT') { 'tools/session-autostart.cmd' } else { 'tools/session-autostart.sh' }
 $criticalScripts = @(
     'scripts/utilities/pre-process-input.ps1',
     $autostartFile,
-    'scripts/utilities/install-hooks.ps1',
+    'scripts/utilities/setup/INSTALL/install-hooks.ps1',
     'hooks/pre-commit.ps1'
 )
 foreach ($rel in $criticalScripts) {

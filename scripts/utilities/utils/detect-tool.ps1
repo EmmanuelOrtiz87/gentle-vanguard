@@ -1,2 +1,2 @@
-& $PSScriptRoot\DETECT\detect-tool.ps1 @args
+& $PSScriptRoot\..\setup\DETECT\detect-tool.ps1 @args
 exit $LASTEXITCODE

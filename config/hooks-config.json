@@ -25,7 +25,7 @@
     },
     "post_session": {
       "enabled": true,
-      "script": "scripts/utilities/TELEMETRY-METRICS/generate-management-report.ps1",
+      "script": "scripts/utilities/telemetry/TELEMETRY-METRICS/generate-management-report.ps1",
       "timeout": 60000,
       "args": {
         "SessionId": "${session_id}",
@@ -44,7 +44,7 @@
     },
     "pre_commit": {
       "enabled": true,
-      "script": "scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1",
+      "script": "scripts/utilities/git/GIT-VERSION-CONTROL/pre-commit-validation.ps1",
       "timeout": 45000,
       "args": {
         "StagedFiles": "${staged_files}",
@@ -62,7 +62,7 @@
     },
     "post_merge": {
       "enabled": true,
-      "script": "scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1",
+      "script": "scripts/utilities/git/GIT-VERSION-CONTROL/post-merge-sync.ps1",
       "timeout": 60000,
       "args": {
         "MergeBranch": "${merge_branch}",
