@@ -28,9 +28,13 @@ function Write-HashLine {
 }
 function Read-Db {
     if (Test-Path $HashDb) {
-        try { return Get-Content $HashDb -Raw -Encoding UTF8 | ConvertFrom-Json -AsHashtable } catch { return @{} }
+        try {
+            $data = Get-Content $HashDb -Raw -Encoding UTF8 | ConvertFrom-Json -AsHashtable
+            if (-not $data.files) { $data.files = @{} }
+            return $data
+        } catch { return @{ files = @{} } }
     }
-    return @{}
+    return @{ files = @{} }
 }
 
 function Get-RelativePath {
@@ -42,6 +46,25 @@ function Get-RelativePath {
         return $fullFile.Substring($fullRepo.Length + 1)
     }
     return $fullFile
+}
+
+function Write-Db {
+    param([object]$Data)
+    $Data | ConvertTo-Json -Depth 10 | Set-Content $HashDb -Encoding UTF8 -Force
+}
+
+function Get-LineHash {
+    param([string]$Line)
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($Line)
+    $hash = [System.Security.Cryptography.SHA256]::HashData($bytes)
+    return ($hash | ForEach-Object { $_.ToString('x2') }) -join ''
+}
+
+function Get-FileLines {
+    param([string]$FilePath)
+    if (-not (Test-Path $FilePath)) { return @() }
+    $content = Get-Content $FilePath -Raw -Encoding UTF8
+    return $content -split '\r?\n'
 }
 
 # === ACTIONS ===
@@ -200,7 +223,7 @@ switch ($Action) {
         if (-not (Test-Path $Path)) {
             $db = Read-Db
             if ($db.files.$relPath) {
-                $db.files.PSObject.Properties.Remove($relPath)
+                $db.files.Remove($relPath)
                 Write-Db $db
                 Write-HashLine "[HASHLINE] Removed deleted file: $relPath" 'Yellow'
             }
@@ -234,12 +257,12 @@ switch ($Action) {
 
     'status' {
         $db = Read-Db
-        $fileCount = @($db.files.PSObject.Properties).Count
+        $fileCount = $db.files.Count
         $totalLines = 0
         $totalHashes = 0
-        foreach ($f in $db.files.PSObject.Properties) {
-            $totalLines += $f.Value.total_lines
-            $totalHashes += @($f.Value.line_hashes.PSObject.Properties).Count
+        foreach ($kv in $db.files.GetEnumerator()) {
+            $totalLines += $kv.Value.total_lines
+            $totalHashes += $kv.Value.line_hashes.Count
         }
         $dbSize = if (Test-Path $HashDb) { "{0:N2} KB" -f ((Get-Item $HashDb).Length / 1KB) } else { '0 KB' }
 
@@ -269,14 +292,14 @@ switch ($Action) {
         $db = Read-Db
         $removed = 0
         $toRemove = @()
-        foreach ($f in $db.files.PSObject.Properties) {
-            $absPath = Join-Path $repoRoot $f.Name
+        foreach ($kv in $db.files.GetEnumerator()) {
+            $absPath = Join-Path $repoRoot $kv.Key
             if (-not (Test-Path $absPath -ErrorAction SilentlyContinue)) {
-                $toRemove += $f.Name
+                $toRemove += $kv.Key
             }
         }
         foreach ($name in $toRemove) {
-            $db.files.PSObject.Properties.Remove($name)
+            $db.files.Remove($name)
             $removed++
         }
         Write-Db $db
@@ -284,23 +307,3 @@ switch ($Action) {
         if ($AsJson) { return (@{ status = 'pruned'; removed = $removed } | ConvertTo-Json) }
     }
 }
-
-function Write-Db {
-    param([object]$Data)
-    $Data | ConvertTo-Json -Depth 10 | Set-Content $HashDb -Encoding UTF8 -Force
-}
-
-function Get-LineHash {
-    param([string]$Line)
-    $bytes = [System.Text.Encoding]::UTF8.GetBytes($Line)
-    $hash = [System.Security.Cryptography.SHA256]::HashData($bytes)
-    return ($hash | ForEach-Object { $_.ToString('x2') }) -join ''
-}
-
-function Get-FileLines {
-    param([string]$FilePath)
-    if (-not (Test-Path $FilePath)) { return @() }
-    $content = Get-Content $FilePath -Raw -Encoding UTF8
-    return $content -split '\r?\n'
-}
-
