@@ -137,6 +137,30 @@
         "description": "Initialize session metrics tracking (tokens, tool calls, files)"
       },
       {
+        "id": "session-scoring-init",
+        "enabled": true,
+        "script": "scripts/adaptive/session-scoring.ps1",
+        "args": "-Action init",
+        "required": false,
+        "description": "Initialize quality scoring system with baseline metrics"
+      },
+      {
+        "id": "session-scoring-start",
+        "enabled": true,
+        "script": "scripts/adaptive/session-scoring.ps1",
+        "args": "-Action record -EventType session -Detail session-start -Success",
+        "required": false,
+        "description": "Record session-start event in quality scoring system"
+      },
+      {
+        "id": "session-scoring-close",
+        "enabled": false,
+        "script": "scripts/adaptive/session-scoring.ps1",
+        "args": "-Action record -EventType session -Detail session-close -Success",
+        "required": false,
+        "description": "Record session-close event in quality scoring system (enabled on session end)"
+      },
+      {
         "id": "token-metrics-init",
         "enabled": true,
         "script": "scripts/utilities/token/token-metrics-store.ps1",

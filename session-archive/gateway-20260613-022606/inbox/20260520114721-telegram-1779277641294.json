@@ -1,0 +1,13 @@
+﻿{
+    "id":  "20260520114721-telegram-1779277641294",
+    "platform":  "telegram",
+    "ts":  "2026-05-20T11:47:21.294Z",
+    "from":  "Emmanuel",
+    "text":  "Inicia sesion",
+    "raw":  {
+                "chatId":  930166823,
+                "messageId":  17,
+                "date":  1779277228
+            },
+    "processed":  true
+}

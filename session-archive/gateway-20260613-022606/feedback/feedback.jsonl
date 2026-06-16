@@ -1,0 +1,3 @@
+{"id":"f0d1d742-19a7-4a51-b29d-0df67c9dc1d7","timestamp":"2026-05-21T04:17:41.020Z","rating":4,"message":"Great tool","context":"","platform":"test","from":"unknown","agentResponse":""}
+{"id":"b31e61fa-2a69-4fee-a36b-400a53a4f8e6","timestamp":"2026-05-21T04:17:41.030Z","rating":2,"message":"Could be better","context":"","platform":"test","from":"unknown","agentResponse":""}
+{"id":"7045c220-f002-4c10-ac79-955b9c446ca5","timestamp":"2026-05-21T04:18:41.718Z","rating":5,"message":"RPC test feedback","context":"","platform":"rpc-test","from":"unknown","agentResponse":""}

@@ -320,30 +320,8 @@
       },
       "steps": 6
     },
-    "finance-agent": {
-      "description": "Financial analysis agent — modeling and calculations",
-      "mode": "subagent",
-      "hidden": true,
-      "model": "openrouter/z-ai/glm-5",
-      "options": {
-        "minTokens": 2000,
-        "maxTokens": 5000,
-        "temperature": 0.15
-      },
-      "permission": {
-        "websearch": "deny",
-        "webfetch": "deny"
-      },
-      "routing": {
-        "preProcess": "scripts/utilities/pre-process-input.ps1",
-        "mappings": "config/auto-delegation.json#keywordMappings",
-        "agentProfiles": "config/auto-delegation.json#agentProfiles",
-        "fallbackStrategy": "clarify-ba"
-      },
-      "steps": 6
-    },
-    "legal-agent": {
-      "description": "Legal compliance agent — regulatory and policy analysis",
+    "gov-agent": {
+      "description": "Governance agent — compliance, security, audit",
       "mode": "subagent",
       "hidden": true,
       "model": "openrouter/moonshot/kimi-k2.6",
@@ -351,72 +329,6 @@
         "minTokens": 2000,
         "maxTokens": 5000,
         "temperature": 0.1
-      },
-      "permission": {
-        "websearch": "deny",
-        "webfetch": "deny"
-      },
-      "routing": {
-        "preProcess": "scripts/utilities/pre-process-input.ps1",
-        "mappings": "config/auto-delegation.json#keywordMappings",
-        "agentProfiles": "config/auto-delegation.json#agentProfiles",
-        "fallbackStrategy": "clarify-ba"
-      },
-      "steps": 6
-    },
-    "mkt-agent": {
-      "description": "Marketing content agent — copywriting and SEO",
-      "mode": "subagent",
-      "hidden": true,
-      "model": "openrouter/qwen/qwen-3.6-plus",
-      "options": {
-        "minTokens": 2000,
-        "maxTokens": 5000,
-        "temperature": 0.5
-      },
-      "permission": {
-        "websearch": "deny",
-        "webfetch": "deny"
-      },
-      "routing": {
-        "preProcess": "scripts/utilities/pre-process-input.ps1",
-        "mappings": "config/auto-delegation.json#keywordMappings",
-        "agentProfiles": "config/auto-delegation.json#agentProfiles",
-        "fallbackStrategy": "clarify-ba"
-      },
-      "steps": 6
-    },
-    "sales-agent": {
-      "description": "Sales agent — pipeline and account management",
-      "mode": "subagent",
-      "hidden": true,
-      "model": "openrouter/qwen/qwen-3.6-plus",
-      "options": {
-        "minTokens": 2000,
-        "maxTokens": 5000,
-        "temperature": 0.3
-      },
-      "permission": {
-        "websearch": "deny",
-        "webfetch": "deny"
-      },
-      "routing": {
-        "preProcess": "scripts/utilities/pre-process-input.ps1",
-        "mappings": "config/auto-delegation.json#keywordMappings",
-        "agentProfiles": "config/auto-delegation.json#agentProfiles",
-        "fallbackStrategy": "clarify-ba"
-      },
-      "steps": 6
-    },
-    "hr-agent": {
-      "description": "HR agent — talent acquisition and people processes",
-      "mode": "subagent",
-      "hidden": true,
-      "model": "openrouter/qwen/qwen-3.6-plus",
-      "options": {
-        "minTokens": 2000,
-        "maxTokens": 5000,
-        "temperature": 0.4
       },
       "permission": {
         "websearch": "deny",

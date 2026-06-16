@@ -1,38 +1,9 @@
-<#
-.SYNOPSIS
-    Autonomous Norm Learner — queries Engram memory and session artifacts for patterns,
-    extracts learnings, and updates LEARNED-NORMS.md with new/updated norms.
-
-.DESCRIPTION
-    Runs at session start/close or on orchestrator demand.
-    - Queries Engram via `mem_search` for patterns
-    - Scans session summaries in .session/ and .local/session-artifacts/
-    - Identifies recurring patterns → creates/updates norms
-    - Promotes high-confidence (≥3 occurrences) norms
-    - Prunes stale norms (no validation in 30+ days)
-
-.PARAMETER Trigger
-    What triggered this run: session-start, session-close, orchestrator, manual
-
-.PARAMETER DryRun
-    Simulate without writing changes
-
-.PARAMETER VerboseOutput
-    Show detailed output
-
-.EXAMPLE
-    .\auto-norm-learner.ps1 -Trigger session-close -VerboseOutput
-
-.NOTES
-    Author: gentle-vanguard
-    Version: 2.0.0
-#>
-
 param(
     [ValidateSet("session-start", "session-close", "orchestrator", "manual")]
     [string]$Trigger = "manual",
     [switch]$DryRun,
-    [switch]$VerboseOutput
+    [switch]$VerboseOutput,
+    [switch]$ForceBaseline
 )
 
 $ErrorActionPreference = 'Continue'
@@ -42,12 +13,13 @@ $repoRoot = Resolve-Path (Join-Path $scriptDir '..\..') | Select-Object -ExpandP
 $adaptiveRulesPath = Join-Path $repoRoot "rules\adaptive"
 $learnedNormsPath = Join-Path $adaptiveRulesPath "LEARNED-NORMS.md"
 $sessionDir = Join-Path $repoRoot ".session"
-$artifactsDir = Join-Path $repoRoot ".local\session-artifacts"
+$rulesDir = Join-Path $repoRoot "rules"
 
 $NewNorms = [System.Collections.ArrayList]::new()
 $UpdatedNorms = [System.Collections.ArrayList]::new()
 $PromotedNorms = [System.Collections.ArrayList]::new()
 $StaleNorms = [System.Collections.ArrayList]::new()
+$UsedIDs = @{}  # track session-level IDs to avoid collisions
 
 function Write-Learn {
     param([string]$Message)
@@ -74,7 +46,6 @@ function Write-LearnStale {
     Write-Host "[STALE] $Message" -ForegroundColor DarkGray
 }
 
-# Load current learned norms from LEARNED-NORMS.md
 function Get-CurrentNorms {
     $norms = [System.Collections.ArrayList]::new()
     if (-not (Test-Path $learnedNormsPath)) { return $norms }
@@ -94,30 +65,30 @@ function Get-CurrentNorms {
     return $norms
 }
 
-# Generate next norm ID for a prefix
 function Get-NextNormID {
     param([string]$Prefix)
     $existing = Get-CurrentNorms | Where-Object { $_.ID -match "^$Prefix-\d+" } | ForEach-Object { [int]($_.ID -split '-')[1] }
-    if ($existing.Count -eq 0) { return "$Prefix-001" }
-    $max = ($existing | Measure-Object -Maximum).Maximum
-    return "$Prefix-$($max + 1).ToString('000')"
+    $allIds = @($existing) + @($UsedIDs.Keys | Where-Object { $_ -match "^$Prefix-\d+" } | ForEach-Object { [int]($_ -split '-')[1] })
+    if ($allIds.Count -eq 0) { $next = 1 } else { $next = (($allIds | Measure-Object -Maximum).Maximum) + 1 }
+    $newId = "$Prefix-$($next.ToString('000'))"
+    $UsedIDs[$newId] = $true
+    return $newId
 }
 
-# Query Engram for session observations
 function Get-EngramPatterns {
     Write-Learn "Querying Engram for session observations..."
     $patterns = [System.Collections.ArrayList]::new()
 
     $engramExe = Join-Path $repoRoot "tools\engram.exe"
     if (-not (Test-Path $engramExe)) {
-        Write-Learn "engram.exe not found at $engramExe — using file-based discovery"
+        Write-Learn "engram.exe not found — using file-based discovery"
         return Get-FileBasedPatterns
     }
 
     try {
-        $result = & $engramExe search --project gentle-vanguard --limit 20 --type session_summary 2>$null
+        $result = & $engramExe search --project gentle-vanguard --limit 20 --type session_summary 2>&1
         if ($LASTEXITCODE -eq 0 -and $result) {
-            $lines = $result | Where-Object { $_ -match '(?i)(learned|pattern|norm|recurring|always|never|fixed|bug|issue)' }
+            $lines = $result | Where-Object { $_ -is [string] -and $_ -match '(?i)(learned|pattern|norm|recurring|always|never|fixed|bug|issue)' }
             foreach ($line in $lines) {
                 [void]$patterns.Add([PSCustomObject]@{
                     Type = 'engram'
@@ -131,11 +102,15 @@ function Get-EngramPatterns {
         Write-Learn "Engram query failed: $_ — falling back to file scan"
     }
 
+    if ($patterns.Count -eq 0) {
+        Write-Learn "No engram patterns found — falling back to file scan"
+        return Get-FileBasedPatterns
+    }
+
     Write-Learn "Found $($patterns.Count) patterns from Engram"
     return $patterns
 }
 
-# Fallback: scan session summaries and artifact directories
 function Get-FileBasedPatterns {
     Write-Learn "Scanning session artifacts for patterns..."
     $patterns = [System.Collections.ArrayList]::new()
@@ -143,46 +118,160 @@ function Get-FileBasedPatterns {
 
     $searchPaths = @()
     if (Test-Path $sessionDir) { $searchPaths += $sessionDir }
-    if (Test-Path $artifactsDir) { $searchPaths += $artifactsDir }
 
     foreach ($dir in $searchPaths) {
-        $files = Get-ChildItem -Path $dir -Filter "*.md" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 20
+        $files = Get-ChildItem -Path $dir -Include "*.md", "*.json" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 30
         foreach ($f in $files) {
             $content = Get-Content $f.FullName -Raw -ErrorAction SilentlyContinue
             if (-not $content) { continue }
 
-            # Extract "## Discoveries" / "## Key Learnings" / "## Accomplished" sections
-            $sections = $content | Select-String -Pattern '(?<=## (Discoveries|Key Learnings|Accomplished|Learned))\s*[\s\S]*?(?=## |\z)' -AllMatches
-            foreach ($s in $sections.Matches) {
-                $lines = ($s.Value -split "`n") | Where-Object { $_ -match '^-\s+' }
-                foreach ($line in $lines) {
-                    $clean = $line -replace '^-\s+', '' -replace '\[(x| )\]\s*', '' -replace '`', ''
-                    if ($clean.Length -gt 15 -and -not $seen.ContainsKey($clean.Substring(0, 30))) {
-                        $seen[$clean.Substring(0, 30)] = $true
-                        [void]$patterns.Add([PSCustomObject]@{
-                            Type = if ($clean -match '(?i)(doc|docs|readme|md)') { 'documentation' } elseif ($clean -match '(?i)(bug|fix|error|crash)') { 'correction' } else { 'learning' }
-                            Pattern = $clean
-                            Source = $f.Name
-                            Frequency = 1
-                        })
+            if ($f.Extension -eq '.md') {
+                $sections = [regex]::Matches($content, '(?<=## (Discoveries|Key Learnings|Accomplished|Learned))\s*\n(.*?)(?=\n## |\z)', [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                foreach ($s in $sections) {
+                    $lines = ($s.Value -split "`n") | Where-Object { $_ -match '^-\s+' }
+                    foreach ($line in $lines) {
+                        $clean = $line -replace '^-\s+', '' -replace '\[(x| )\]\s*', '' -replace '`', ''
+                        if ($clean.Length -gt 15 -and -not $seen.ContainsKey($clean.Substring(0, 30))) {
+                            $seen[$clean.Substring(0, 30)] = $true
+                            [void]$patterns.Add([PSCustomObject]@{
+                                Type = if ($clean -match '(?i)(doc|docs|readme|md)') { 'documentation' } elseif ($clean -match '(?i)(bug|fix|error|crash)') { 'correction' } else { 'learning' }
+                                Pattern = $clean
+                                Source = $f.Name
+                                Frequency = 1
+                            })
+                        }
                     }
                 }
+            } elseif ($f.Extension -eq '.json') {
+                try {
+                    $json = $content | ConvertFrom-Json -ErrorAction SilentlyContinue
+                    $jsonText = $content
+                    $patternLines = [regex]::Matches($jsonText, '(?i)(learned|pattern|norm|recurring|always|never|fixed|bug|issue).{0,200}') | ForEach-Object { $_.Value }
+                    foreach ($pl in $patternLines) {
+                        $clean = $pl -replace '"', '' -replace '\{|\}', '' -replace '\[|\]', '' -replace '\\u\d+', ''
+                        if ($clean.Length -gt 20 -and -not $seen.ContainsKey($clean.Substring(0, 30))) {
+                            $seen[$clean.Substring(0, 30)] = $true
+                            [void]$patterns.Add([PSCustomObject]@{
+                                Type = 'learning'
+                                Pattern = $clean.Trim()
+                                Source = $f.Name
+                                Frequency = 1
+                            })
+                        }
+                    }
+                } catch { Write-Learn "Could not parse $($f.Name) as JSON" }
             }
         }
+    }
+
+    if ($patterns.Count -eq 0 -and $ForceBaseline) {
+        Write-Learn "No patterns found — generating baseline from existing rules..."
+        return Get-BaselinePatterns
     }
 
     Write-Learn "Found $($patterns.Count) patterns from file scan"
     return $patterns
 }
 
-# Match patterns against existing norms, create new ones
+function Get-BaselinePatterns {
+    $patterns = [System.Collections.ArrayList]::new()
+    $seen = @{}
+
+    $ruleFiles = Get-ChildItem -Path $rulesDir -Filter "*.md" -File -ErrorAction SilentlyContinue | Select-Object -First 20
+    foreach ($rf in $ruleFiles) {
+        $content = Get-Content $rf.FullName -Raw -ErrorAction SilentlyContinue
+        if (-not $content) { continue }
+        $fileName = $rf.Name
+
+        # Extract section headings (## or ###) followed by content as readable norms
+        $sections = [regex]::Matches($content, '(?m)^(#{2,3})\s+(.+?)$(?:\s*\n(.*?))?(?=\n#{2,3}\s|\z)')
+        foreach ($s in $sections) {
+            $heading = $s.Groups[2].Value.Trim()
+            $bodyText = if ($s.Groups[3].Success) { $s.Groups[3].Value.Trim() } else { '' }
+            $firstLine = ($bodyText -split "`n" | Where-Object { $_ -match '\S' } | Select-Object -First 1) -replace '^[-*\d.\[\]]+\s*', ''
+            $normText = if ($firstLine) { "${heading}: $firstLine" } else { $heading }
+            $dedupKey = $normText.Substring(0, [Math]::Min(60, $normText.Length))
+            $normText = $normText -replace "`n|`r", ' ' -replace '\s+', ' '
+
+            if ($normText.Length -gt 15 -and -not $seen.ContainsKey($dedupKey)) {
+                $seen[$dedupKey] = $true
+                [void]$patterns.Add([PSCustomObject]@{
+                    Type = if ($normText -match '(?i)(doc|docs|readme|documentación)') { 'documentation' } elseif ($normText -match '(?i)(bug|fix|error|crash|corregir)') { 'correction' } else { 'learning' }
+                    Pattern = $normText
+                    Source = $fileName
+                    Frequency = 1
+                })
+            }
+        }
+
+        # Also extract lines with "Rule:" or "NORM-XXX" patterns as actionable norms
+        $ruleLines = [regex]::Matches($content, '(?im)^\s*(?:[-*]\s*)?(?:Rule:|Norm[^\n]+?:\s*).*$')
+        foreach ($rl in $ruleLines) {
+            $normText = $rl.Value.Trim() -replace "^[-*\s]+", ''
+            $dedupKey = $normText.Substring(0, [Math]::Min(60, $normText.Length))
+            if ($normText.Length -gt 20 -and -not $seen.ContainsKey($dedupKey)) {
+                $seen[$dedupKey] = $true
+                [void]$patterns.Add([PSCustomObject]@{
+                    Type = 'learning'
+                    Pattern = $normText
+                    Source = $fileName
+                    Frequency = 1
+                })
+            }
+        }
+
+        # Extract "Always ..." and "Never ..." sentences as actionable norms
+        $actionLines = [regex]::Matches($content, '(?i)((?:Always|Never|MUST|SHOULD|Prohibido|Obligatorio|Required)\s+[^.]*\.)')
+        foreach ($al in $actionLines) {
+            $normText = $al.Value.Trim()
+            $dedupKey = $normText.Substring(0, [Math]::Min(60, $normText.Length))
+            if ($normText.Length -gt 15 -and -not $seen.ContainsKey($dedupKey)) {
+                $seen[$dedupKey] = $true
+                [void]$patterns.Add([PSCustomObject]@{
+                    Type = 'learning'
+                    Pattern = $normText
+                    Source = $fileName
+                    Frequency = 1
+                })
+            }
+        }
+    }
+
+    Write-Learn "Generated $($patterns.Count) baseline patterns from $($ruleFiles.Count) rule files"
+    return $patterns
+}
+
 function Invoke-Learning {
     Write-Host "`n[NORM-LEARNER] Trigger: $Trigger" -ForegroundColor Magenta
 
-    $patterns = Get-EngramPatterns
+    $patterns = if ($ForceBaseline) { Get-BaselinePatterns } else { Get-EngramPatterns }
     $currentNorms = Get-CurrentNorms
 
-    # Merge duplicate patterns
+    # Deduplicate IDs: keep last occurrence of each ID to fix corrupted files with duplicate IDs
+    if ($currentNorms.Count -gt 0) {
+        $seenIds = @{}
+        $deduped = [System.Collections.ArrayList]::new()
+        foreach ($n in $currentNorms) {
+            if (-not $seenIds.ContainsKey($n.ID)) {
+                $seenIds[$n.ID] = $true
+                [void]$deduped.Add($n)
+            } else {
+                Write-Learn "Dropping duplicate ID $($n.ID) from $($n.Source)"
+            }
+        }
+        $currentNorms = $deduped
+    }
+
+    # On ForceBaseline, write a fresh file (backup old first)
+    if ($ForceBaseline -and (Test-Path $learnedNormsPath)) {
+        $backup = $learnedNormsPath -replace '\.md$', ".bak.$(Get-Date -Format 'yyyyMMddHHmmss').md"
+        Copy-Item -Path $learnedNormsPath -Destination $backup -Force -ErrorAction SilentlyContinue
+        Write-Learn "Backed up existing norms to $backup"
+        Remove-Item -Path $learnedNormsPath -Force -ErrorAction SilentlyContinue
+        $currentNorms = [System.Collections.ArrayList]::new()
+        Write-Learn "ForceBaseline: starting clean (backup saved)"
+    }
+
     $merged = @{}
     foreach ($p in $patterns) {
         $key = $p.Pattern.Substring(0, [Math]::Min(40, $p.Pattern.Length))
@@ -196,8 +285,9 @@ function Invoke-Learning {
     foreach ($key in $merged.Keys) {
         $p = $merged[$key]
         Write-Learn "  Processing: $($p.Pattern.Substring(0, [Math]::Min(60, $p.Pattern.Length)))..."
-        $firstWords = ($p.Pattern -split ' ')[0..2] -join ' '
-        $existing = $currentNorms | Where-Object { $_.Norm -like "*$firstWords*" } | Select-Object -First 1
+        $matchWords = ($p.Pattern -split '\s+')[0..3] -join ' '
+        $matchEscaped = [regex]::Escape($matchWords)
+        $existing = $currentNorms | Where-Object { $_.Norm -match $matchEscaped } | Select-Object -First 1
 
         if ($existing) {
             $existing.ValidationCount++
@@ -219,7 +309,7 @@ function Invoke-Learning {
             $newNorm = [PSCustomObject]@{
                 ID = $newID
                 Norm = $p.Pattern
-                Confidence = 'low'
+                Confidence = if ($ForceBaseline) { 'medium' } else { 'low' }
                 Source = $p.Source
                 Date = Get-Date -Format 'yyyy-MM-dd'
             }
@@ -228,7 +318,6 @@ function Invoke-Learning {
         }
     }
 
-    # Prune stale norms (no validation in 30d)
     $thirtyDaysAgo = (Get-Date).AddDays(-30).ToString('yyyy-MM-dd')
     foreach ($n in $currentNorms) {
         if ($n.Date -lt $thirtyDaysAgo -and $n.Confidence -ne 'critical') {
@@ -238,7 +327,6 @@ function Invoke-Learning {
     }
 }
 
-# Write updated LEARNED-NORMS.md
 function Update-LearnedNorms {
     if ($DryRun) {
         Write-Host "`n[DRY-RUN] Would update LEARNED-NORMS.md" -ForegroundColor Yellow
@@ -246,7 +334,10 @@ function Update-LearnedNorms {
     }
 
     Write-Learn "Writing LEARNED-NORMS.md..."
-    $allNorms = Get-CurrentNorms
+    $current = Get-CurrentNorms
+    if ($null -eq $current) { $current = [System.Collections.ArrayList]::new() }
+    $allNorms = [System.Collections.ArrayList]::new()
+    foreach ($n in $current) { [void]$allNorms.Add($n) }
     foreach ($n in $NewNorms) { [void]$allNorms.Add($n) }
     $activeNorms = $allNorms | Where-Object { $_.ID -notin $StaleNorms.ID }
 
@@ -256,7 +347,6 @@ function Update-LearnedNorms {
     $lines.Add('Auto-maintained by auto-norm-learner.ps1 — last run: ' + (Get-Date -Format 'yyyy-MM-dd HH:mm'))
     $lines.Add('')
 
-    # Group by prefix
     $groups = $activeNorms | Group-Object { ($_.ID -split '-')[0] }
     foreach ($g in $groups) {
         $lines.Add("## $($g.Name) Norms")
@@ -264,7 +354,9 @@ function Update-LearnedNorms {
         $lines.Add('| ID | Norm | Confidence | Source | Date |')
         $lines.Add('|----|------|------------|--------|------|')
         foreach ($n in $g.Group | Sort-Object ID) {
-            $lines.Add("| $($n.ID) | $($n.Norm) | $($n.Confidence) | $($n.Source) | $($n.Date) |")
+            $normText = $n.Norm -replace '\|', '/' -replace "`n", ' '
+            if ($normText.Length -gt 2000) { $normText = $normText.Substring(0, 1997) + '...' }
+            $lines.Add("| $($n.ID) | $normText | $($n.Confidence) | $($n.Source) | $($n.Date) |")
         }
         $lines.Add('')
     }
