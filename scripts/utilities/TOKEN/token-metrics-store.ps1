@@ -26,7 +26,14 @@ $jsonDbPath = Join-Path $runtimeDir 'metrics.json'
 
 function Get-JsonDb() {
     if (Test-Path $jsonDbPath) {
-        return Get-Content $jsonDbPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        try {
+            return Get-Content $jsonDbPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        } catch {
+            Write-Host "[METRICS-STORE] Corrupted DB, reinitializing: $jsonDbPath" -ForegroundColor Yellow
+            $backup = $jsonDbPath -replace '\.json$', ".corrupted.$(Get-Date -Format 'yyyyMMddHHmmss').json"
+            Copy-Item $jsonDbPath $backup -ErrorAction SilentlyContinue
+            return @{ token_usage = @(); version = '1.0' }
+        }
     }
     return @{ token_usage = @(); version = '1.0' }
 }
