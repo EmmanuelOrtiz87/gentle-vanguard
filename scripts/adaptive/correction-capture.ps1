@@ -62,7 +62,7 @@ function Log-Correction {
         & $scoringScript -Action record -EventType correction -Detail $Correction.Type -Success:$true -DurationSeconds 0
     }
 
-    Write-Host "[CAPTURE] Correction detected: $($Correction.Type) (severity: $($Correction.Severity}))" -ForegroundColor Yellow
+    Write-Host "[CAPTURE] Correction detected: $($Correction.Type) (severity: $($Correction.Severity))" -ForegroundColor Yellow
 
     # For high-severity corrections, trigger immediate norm creation
     if ($Correction.Severity -eq 'high') {
