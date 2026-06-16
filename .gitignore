@@ -117,6 +117,9 @@ scripts/utilities/docs/sessions/
 # CodeGraph index (local-only, regenerated)
 .codegraph/
 
+# Graphify knowledge graph (auto-generated, rebuilt by hooks)
+graphify-out/
+
 # Fine-tuning auto-generated results (never commit runtime artifacts)
 .ft/
 

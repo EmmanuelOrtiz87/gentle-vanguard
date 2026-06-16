@@ -13,27 +13,22 @@ if (-not (Test-Path $sessionDir)) { New-Item -ItemType Directory -Path $sessionD
 $violations = [System.Collections.ArrayList]::new()
 $inputLower = $UserInput.ToLower()
 
-# Prohibited: secrets/passwords in plain text
 if ($UserInput -match '(?i)\b(?:password|secret|api.?key|token|credential|auth.?token)\s*[:=]\s*\S{8,}') {
     [void]$violations.Add([PSCustomObject]@{ Rule = 'SEC-001'; Severity = 'block'; Message = 'Plain-text secrets detected in input' })
 }
 
-# Prohibited: dangerous destructive commands
 if ($UserInput -match '(?i)\b(?:rm\s+-rf\s+[/\\]|format\s+|fdisk|dd\s+if=|shutdown\s+/s|rd\s+[/\\].+[/\\]/s)') {
     [void]$violations.Add([PSCustomObject]@{ Rule = 'OPS-001'; Severity = 'warn'; Message = 'Destructive command pattern detected' })
 }
 
-# Prohibited: git force push without explicit approval
 if ($UserInput -match '(?i)git\s+push\s+.*--force') {
     [void]$violations.Add([PSCustomObject]@{ Rule = 'GIT-001'; Severity = 'warn'; Message = 'Force push requires explicit approval' })
 }
 
-# Length guard: >5000 chars without clear purpose
 if ($UserInput.Length -gt 5000 -and $UserInput -notmatch '(?i)(test|pr|pull.request|review|document)') {
     [void]$violations.Add([PSCustomObject]@{ Rule = 'PERF-001'; Severity = 'info'; Message = "Input exceeds 5000 chars ($($UserInput.Length)) — consider delegating to subagent" })
 }
 
-# Log violations
 if ($violations.Count -gt 0) {
     $violationLog = Join-Path $sessionDir "input-violations.jsonl"
     foreach ($v in $violations) {
@@ -44,7 +39,6 @@ if ($violations.Count -gt 0) {
 }
 
 # ========== TOKEN TRACKING ==========
-# Report previous turn metrics
 $tokenUsageFile = Join-Path $sessionDir "token-usage.json"
 if (Test-Path $tokenUsageFile) {
     try {
@@ -77,7 +71,23 @@ if ($cache.ContainsKey($cacheKey)) {
     Write-Output "[CACHE] EXPIRED for input hash $cacheKey"
 }
 
-# ========== PRE-COMPACT HOOK (trigger if context > 15K tokens) ==========
+# ========== CORRECTION DETECTION (FASE 3: Feedback Loop) ==========
+$correctionCapture = Join-Path $repoRoot "scripts\adaptive\correction-capture.ps1"
+if (Test-Path $correctionCapture) {
+    $correctionResult = & $correctionCapture -UserInput $UserInput -VerboseOutput:$false 2>&1 | Out-String
+    if ($correctionResult -match 'CORRECTION_CAPTURED') {
+        Write-Output "[FEEDBACK] Correction pattern detected — logged and will trigger learning"
+    }
+}
+
+# ========== PATTERN DETECTION (FASE 4: Proactive Intelligence) ==========
+$patternDetector = Join-Path $repoRoot "scripts\adaptive\pattern-detector.ps1"
+if (Test-Path $patternDetector) {
+    $patternResult = & $patternDetector -Action detect -UserInput $UserInput 2>&1 | Out-String
+    $suggestResult = & $patternDetector -Action suggest -UserInput $UserInput 2>&1 | Out-String
+}
+
+# ========== PRE-COMPACT HOOK ==========
 $tokenFile = Join-Path $sessionDir "token-usage.json"
 if (Test-Path $tokenFile) {
     try {
@@ -90,7 +100,7 @@ if (Test-Path $tokenFile) {
     } catch { Write-Output "[HOOK] Pre-compact failed, continuing" }
 }
 
-# ========== KEYWORD ROUTING (logic intact) ==========
+# ========== KEYWORD ROUTING ==========
 Write-Output "[pre-process-input] Processing: $UserInput"
 
 $rules = @(
