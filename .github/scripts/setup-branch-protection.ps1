@@ -49,7 +49,7 @@ function New-Ruleset {
     }
 
     try {
-        $result = gh api --method POST $apiBase -H $accept -H $apiVer --input - $body 2>&1
+        $result = $body | gh api --method POST $apiBase -H $accept -H $apiVer --input - 2>&1
         if ($LASTEXITCODE -eq 0) {
             $id = ($result | ConvertFrom-Json).id
             Write-Output "Created ruleset '$name' (ID: $id)"
