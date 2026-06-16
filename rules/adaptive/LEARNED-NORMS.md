@@ -1,6 +1,6 @@
 # Learned Norms (Autonomous)
 
-Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-16 16:02
+Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-16 16:17
 
 ## DOC Norms
 
@@ -163,4 +163,4 @@ Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-16 16:02
 - Updated norms: 0
 - Promoted norms: 0
 - Pruned stale norms: 0
-- Last trigger: session-start
+- Last trigger: manual

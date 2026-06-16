@@ -22,10 +22,10 @@ function Write-Capture {
 }
 
 function Detect-Correction {
-    param([string]$Input)
+    param([string]$InputText)
 
     foreach ($cp in $correctionPatterns) {
-        $match = [regex]::Match($Input, $cp.Pattern)
+        $match = [regex]::Match($InputText, $cp.Pattern)
         if ($match.Success) {
             return @{
                 IsCorrection = $true
@@ -74,7 +74,7 @@ function Log-Correction {
     }
 }
 
-$result = Detect-Correction -Input $UserInput
+$result = Detect-Correction -InputText $UserInput
 
 if ($result.IsCorrection) {
     Log-Correction -Correction $result
