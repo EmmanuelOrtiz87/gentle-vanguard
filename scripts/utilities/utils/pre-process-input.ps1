@@ -83,8 +83,13 @@ if (Test-Path $correctionCapture) {
 # ========== PATTERN DETECTION (FASE 4: Proactive Intelligence) ==========
 $patternDetector = Join-Path $repoRoot "scripts\adaptive\pattern-detector.ps1"
 if (Test-Path $patternDetector) {
-    $patternResult = & $patternDetector -Action detect -UserInput $UserInput 2>&1 | Out-String
-    $suggestResult = & $patternDetector -Action suggest -UserInput $UserInput 2>&1 | Out-String
+    & $patternDetector -Action detect -UserInput $UserInput *>&1 | Out-Null
+    $suggestResult = & $patternDetector -Action suggest -UserInput $UserInput *>&1 | Out-String
+    if ($suggestResult -match '\[PROACTIVE\]') {
+        $suggestResult -split "`n" | Where-Object { $_ -match '\[PROACTIVE\]' } | ForEach-Object {
+            Write-Output $_
+        }
+    }
 }
 
 # ========== PRE-COMPACT HOOK ==========

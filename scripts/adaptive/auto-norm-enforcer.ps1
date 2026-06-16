@@ -36,7 +36,7 @@ param(
     [switch]$VerboseOutput
 )
 
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Continue'
 $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) { $env:GENTLE_VANGUARD_BASE_DIR } else {
     $root = Split-Path -Parent $PSScriptRoot
     while ($root -and -not (Test-Path (Join-Path $root 'config\orchestrator.json'))) { $root = Split-Path -Parent $root }
@@ -73,27 +73,21 @@ function Write-NormWarn {
 function Get-LearnedNorms {
     $norms = @()
     
-    # 1. Load from LEARNED-NORMS.md
     if (Test-Path $learnedNormsPath) {
         $content = Get-Content $learnedNormsPath -Raw
-        # Extract norms from markdown table (simplified parser)
-        if ($content -match '### Documentation Placement([\s\S]*?)###') {
-            $section = $matches[1]
-            foreach ($line in ($section -split "`n")) {
-                if ($line -match '\| (\w+-\d+) \| (.+?) \| (\w+) \| (.+?) \|') {
-                    $norms += [PSCustomObject]@{
-                        ID = $matches[1]
-                        Norm = $matches[2].Trim()
-                        Confidence = $matches[3].Trim()
-                        Source = $matches[4].Trim()
-                    }
-                }
+        $regex = [regex]::new('\| (\w+-\d+) \| (.+?) \| (\w+) \| (.+?) \| (\d{4}-\d{2}-\d{2}) \|')
+        $matches = $regex.Matches($content)
+        foreach ($m in $matches) {
+            $norms += [PSCustomObject]@{
+                ID = $m.Groups[1].Value
+                Norm = $m.Groups[2].Value.Trim()
+                Confidence = $m.Groups[3].Value.Trim()
+                Source = $m.Groups[4].Value.Trim()
+                Date = $m.Groups[5].Value.Trim()
             }
         }
+        Write-Norm "Loaded $($norms.Count) norms from LEARNED-NORMS.md"
     }
-    
-    # 2. Load from Engram memory (simulated - would call engram_mem_search)
-    # In real implementation, this would query Engram for documentation patterns
     
     return $norms
 }
@@ -188,34 +182,21 @@ function Test-DocumentationStandards {
 
 # Main execution
 function Invoke-NormEnforcement {
-    Write-Host "" -ForegroundColor Green
-    Write-Host "[SEARCH] NORM ENFORCER (Trigger: $Trigger)" -ForegroundColor Green
-    Write-Host "" -ForegroundColor Green
-    Write-Host ""
+    Write-Host "[NORM-ENFORCER] Trigger: $Trigger" -ForegroundColor Green
     
     Test-DocsStructure
     Test-DocumentationStandards
     
-    # Summary
-    Write-Host ""
-    Write-Host "" -ForegroundColor Cyan
-    Write-Host "[DATA] SUMMARY" -ForegroundColor Cyan
-    Write-Host "" -ForegroundColor Cyan
-    Write-Host "  Issues found: $($script:Issues.Count)" -ForegroundColor Yellow
-    Write-Host "  Fixes applied: $($script:Fixes.Count)" -ForegroundColor Green
-    Write-Host ""
+    Write-Host "[NORM-ENFORCER] Issues: $($script:Issues.Count), Fixes: $($script:Fixes.Count)" -ForegroundColor Cyan
     
     if ($script:Issues.Count -gt 0 -and -not $AutoFix) {
-        Write-Host "  Issues found (run with -AutoFix to correct):" -ForegroundColor Yellow
-        $script:Issues | ForEach-Object { Write-Host "   - $_" -ForegroundColor Gray }
+        $script:Issues | ForEach-Object { Write-Host "   - $_" -ForegroundColor Yellow }
     }
     
     if ($script:Fixes.Count -gt 0) {
-        Write-Host " Fixes applied:" -ForegroundColor Green
-        $script:Fixes | ForEach-Object { Write-Host "   - $_" -ForegroundColor Gray }
+        $script:Fixes | ForEach-Object { Write-Host "   - $_" -ForegroundColor Green }
     }
     
-    # Return status for orchestrator
     $result = @{
         Trigger = $Trigger
         Issues = $script:Issues
@@ -227,9 +208,4 @@ function Invoke-NormEnforcement {
     return $result
 }
 
-# Execute
 Invoke-NormEnforcement
-
-
-
-
