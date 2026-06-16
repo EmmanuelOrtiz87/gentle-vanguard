@@ -100,7 +100,7 @@ function Get-Suggestions {
         @{ Match = 'deploy|release|publicar'; Suggestion = 'Sueles hacer deploys. ¿Quieres que automatice el pipeline de release con validación pre-deploy?' }
         @{ Match = 'doc|documentar|readme'; Suggestion = 'Documentas frecuentemente. ¿Quieres que genere automáticamente docs a partir del código?' }
         @{ Match = 'refactor|mejorar|optimizar'; Suggestion = 'Haces refactors seguido. ¿Quieres que ejecute el analysis de code quality antes de empezar cada refactor?' }
-        @{ Match = 'bug|fix|error'; Suggestion = 'Corriges bugs frecuentemente. ¿Quiero sugerir: ejecutar diagnosis automática antes de proponer fix?' }
+        @{ Match = 'bug|fix|error'; Suggestion = 'Corriges bugs frecuentemente. ¿Quieres que ejecute diagnosis automática antes de proponer fix?' }
     )
 
     $inputLower = $UserText.ToLower()
