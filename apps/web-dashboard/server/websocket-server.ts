@@ -350,8 +350,33 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
   }
 
   if (url.pathname === '/api/health') {
+    const adaptiveNormsPath = join(ROOT, 'rules', 'adaptive', 'norms-registry.json');
+    const adaptiveNorms = existsSync(adaptiveNormsPath)
+      ? JSON.parse(readFileSync(adaptiveNormsPath, 'utf-8')).stats
+      : null;
+    const metricsReportPath = join(ROOT, '.session', 'metrics-report.json');
+    const sessionMetrics = existsSync(metricsReportPath)
+      ? JSON.parse(readFileSync(metricsReportPath, 'utf-8')).summary
+      : null;
     res.writeHead(200, headers);
-    res.end(JSON.stringify({ status: 'ok', uptime: process.uptime(), connections: clients.size }));
+    res.end(
+      JSON.stringify({
+        status: 'ok',
+        version: '3.3.0',
+        uptime: process.uptime(),
+        connections: clients.size,
+        components: {
+          websocket: { status: 'ok', clients: clients.size },
+          mcp: { status: bridgeReady ? 'ok' : 'degraded', tools: bridgeToolCount },
+          adaptive: {
+            status: adaptiveNorms ? 'ok' : 'unknown',
+            normsLoaded: adaptiveNorms?.totalNorms || 0,
+            sessionScore: sessionMetrics?.quality_score || 0,
+          },
+        },
+        timestamp: new Date().toISOString(),
+      }),
+    );
     return;
   }
 

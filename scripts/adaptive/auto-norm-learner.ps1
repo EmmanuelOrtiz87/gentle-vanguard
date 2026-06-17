@@ -10,8 +10,11 @@ $ErrorActionPreference = 'Continue'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = Resolve-Path (Join-Path $scriptDir '..\..') | Select-Object -ExpandProperty Path
 
+$loggerModule = Join-Path $scriptDir '..\common\Logger.psm1'
+if (Test-Path $loggerModule) { Import-Module $loggerModule -Force }
 $adaptiveRulesPath = Join-Path $repoRoot "rules\adaptive"
 $learnedNormsPath = Join-Path $adaptiveRulesPath "LEARNED-NORMS.md"
+$normsRegistryPath = Join-Path $adaptiveRulesPath "norms-registry.json"
 $sessionDir = Join-Path $repoRoot ".session"
 $rulesDir = Join-Path $repoRoot "rules"
 
@@ -24,26 +27,31 @@ $UsedIDs = @{}  # track session-level IDs to avoid collisions
 function Write-Learn {
     param([string]$Message)
     if ($VerboseOutput) { Write-Host "[LEARNER] $Message" -ForegroundColor Magenta }
+    try { Write-Log -Level DEBUG -Message $Message -Component 'norm-learner' } catch {}
 }
 
 function Write-LearnNew {
     param([string]$Message)
     Write-Host "[NEW-NORM] $Message" -ForegroundColor Green
+    try { Write-Log -Level INFO -Message "Norma aprendida: $Message" -Component 'norm-learner' } catch {}
 }
 
 function Write-LearnUpdate {
     param([string]$Message)
     Write-Host "[UPDATE-NORM] $Message" -ForegroundColor Yellow
+    try { Write-Log -Level INFO -Message "Norma actualizada: $Message" -Component 'norm-learner' } catch {}
 }
 
 function Write-LearnPromote {
     param([string]$Message)
     Write-Host "[PROMOTE] $Message" -ForegroundColor Cyan
+    try { Write-Log -Level INFO -Message "Norma promovida: $Message" -Component 'norm-learner' } catch {}
 }
 
 function Write-LearnStale {
     param([string]$Message)
     Write-Host "[STALE] $Message" -ForegroundColor DarkGray
+    try { Write-Log -Level WARN -Message "Norma obsoleta: $Message" -Component 'norm-learner' } catch {}
 }
 
 function Get-CurrentNorms {
@@ -243,6 +251,7 @@ function Get-BaselinePatterns {
 
 function Invoke-Learning {
     Write-Host "`n[NORM-LEARNER] Trigger: $Trigger" -ForegroundColor Magenta
+    Write-Log -Level INFO -Message "Iniciando norm learning" -Component 'norm-learner' -Data @{trigger=$Trigger;forceBaseline=$ForceBaseline.IsPresent;dryRun=$DryRun.IsPresent}
 
     $patterns = if ($ForceBaseline) { Get-BaselinePatterns } else { Get-EngramPatterns }
     $currentNorms = Get-CurrentNorms
@@ -372,9 +381,49 @@ function Update-LearnedNorms {
 
     Set-Content -Path $learnedNormsPath -Value ($lines -join "`n") -Encoding UTF8
     Write-Learn "LEARNED-NORMS.md updated"
+
+    # Dual-write: update norms-registry.json
+    $jsonNorms = [System.Collections.ArrayList]::new()
+    foreach ($n in $activeNorms) {
+        $jsonEntry = @{
+            id = $n.ID
+            text = ($n.Norm -replace '\|', '/' -replace "`n", ' ').Trim()
+            category = ($n.ID -split '-')[0]
+            source = $n.Source
+            confidence = $n.Confidence
+            createdAt = "$($n.Date)T00:00:00Z"
+            updatedAt = "$($n.Date)T00:00:00Z"
+            hitCount = 0
+            successRate = 0.0
+            status = 'active'
+            tags = @()
+        }
+        [void]$jsonNorms.Add($jsonEntry)
+    }
+    $catCount = @{}
+    foreach ($n in $jsonNorms) {
+        if (-not $catCount.ContainsKey($n.category)) { $catCount[$n.category] = 0 }
+        $catCount[$n.category]++
+    }
+    $registry = @{
+        version = 3
+        lastUpdated = (Get-Date -Format 'o')
+        stats = @{
+            totalNorms = $jsonNorms.Count
+            categories = $catCount
+            activeNorms = ($jsonNorms | Where-Object { $_.status -eq 'active' }).Count
+            deprecatedNorms = ($jsonNorms | Where-Object { $_.status -eq 'deprecated' }).Count
+        }
+        norms = $jsonNorms
+    }
+    try {
+        $registry | ConvertTo-Json -Depth 5 | Set-Content -Path $normsRegistryPath -Encoding UTF8
+        Write-Learn "norms-registry.json updated ($($jsonNorms.Count) normas)"
+    } catch { Write-Learn "Error escribiendo norms-registry.json: $_" }
 }
 
 Invoke-Learning
 Update-LearnedNorms
 
 Write-Host "`n[NORM-LEARNER] Summary: $($NewNorms.Count) new, $($UpdatedNorms.Count) updated, $($PromotedNorms.Count) promoted, $($StaleNorms.Count) pruned" -ForegroundColor Cyan
+Write-Log -Level INFO -Message "Learning completado" -Component 'norm-learner' -Data @{new=$NewNorms.Count;updated=$UpdatedNorms.Count;promoted=$PromotedNorms.Count;stale=$StaleNorms.Count}

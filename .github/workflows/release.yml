@@ -1,123 +1,44 @@
 name: Release
 
-# Automated release workflow: creates a GitHub Release with auto-generated
-# release notes whenever a semver tag (v*.*.*) is pushed.
-#
-# Conventional commit categories used for auto-notes:
-#   feat → New features
-#   fix  → Bug fixes
-#   perf → Performance improvements
-#   chore/refactor/ci/docs → Maintenance
-#
-# NORMATIVA: VERSION must match tag, README badges must match, and release
-# automation must be run locally before tag push (see NORMATIVAS-RELEASE.md).
-
-permissions:
-  contents: write # Required to create GitHub Releases
-  pull-requests: read
-
-concurrency:
-  group: release-${{ github.ref }}
-  cancel-in-progress: false # Never cancel a release in flight
-
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+' # semver tags only: v1.2.3
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  validate:
-    name: Validate Release Readiness
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    outputs:
-      tag: ${{ steps.version.outputs.tag }}
-      version: ${{ steps.version.outputs.version }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-        with:
-          fetch-depth: 0
-
-      - name: Read VERSION file
-        id: version
-        run: |
-          TAG="${GITHUB_REF_NAME}"
-          VERSION="${TAG#v}"
-          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
-          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
-          FILE_VERSION=$(cat VERSION 2>/dev/null | tr -d '[:space:]' || echo "unknown")
-          echo "file_version=${FILE_VERSION}" >> "$GITHUB_OUTPUT"
-
-      - name: Verify VERSION file matches tag
-        run: |
-          TAG_VER="${{ steps.version.outputs.tag }}"
-          FILE_VER="v${{ steps.version.outputs.file_version }}"
-          if [ "${TAG_VER}" != "${FILE_VER}" ]; then
-            echo "::error::Tag ${TAG_VER} does not match VERSION file (${FILE_VER}). Run release-automation.ps1 first."
-            exit 1
-          fi
-          echo "VERSION file matches tag: ${TAG_VER}"
-
-      - name: Verify README.md badge matches
-        run: |
-          V="${{ steps.version.outputs.version }}"
-          if grep -q "Version-${V}" README.md; then
-            echo "README.md badge Version-${V}: OK"
-          else
-            echo "::error::README.md badge does not show Version-${V}. Update README.md."
-            exit 1
-          fi
-
-      - name: Verify README-PUBLIC.md badge matches
-        run: |
-          V="${{ steps.version.outputs.version }}"
-          if [ -f README-PUBLIC.md ]; then
-            if grep -q "Version-${V}" README-PUBLIC.md; then
-              echo "README-PUBLIC.md badge Version-${V}: OK"
-            else
-              echo "::error::README-PUBLIC.md badge does not show Version-${V}. Update README-PUBLIC.md."
-              exit 1
-            fi
-          fi
-
-      - name: Verify CHANGELOG has entry
-        run: |
-          V="${{ steps.version.outputs.version }}"
-          if grep -q "^## \[${V}\]" CHANGELOG.md; then
-            echo "CHANGELOG.md has [${V}]: OK"
-          else
-            echo "::error::CHANGELOG.md missing entry for [${V}]. Add changelog entry."
-            exit 1
-          fi
-
   release:
-    name: Create GitHub Release
-    needs: validate
+    uses: ./.github/workflows/reusable-release.yml
+    with:
+      tag: ${{ github.ref_name }}
+    secrets: inherit
+
+  auto-update:
+    name: Auto-Update Manifest
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           fetch-depth: 0
-
-      - name: Extract CHANGELOG section
+      - name: Extract version
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+      - name: Generate manifest
         run: |
-          VERSION="${{ needs.validate.outputs.version }}"
-          NOTES=$(awk "/^## \[${VERSION}\]/{found=1; next} found && /^## \[/{exit} found{print}" CHANGELOG.md || echo "")
-          if [ -z "$NOTES" ]; then
-            NOTES="See [CHANGELOG.md](CHANGELOG.md) for details."
-          fi
-          printf '%s' "$NOTES" > /tmp/release_notes.md
-          echo "Release notes: $(wc -l < /tmp/release_notes.md) lines"
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v3
+          $manifest = @{
+            version = "${{ steps.version.outputs.VERSION }}"
+            date = (Get-Date -Format 'yyyy-MM-dd')
+            commits = (git log --oneline $(git describe --tags --abbrev=0 2>$null)..HEAD).Count
+          }
+          $manifest | ConvertTo-Json | Set-Content update-manifest.json
+      - uses: actions/upload-artifact@v4
         with:
-          tag_name: ${{ needs.validate.outputs.tag }}
-          name: '${{ needs.validate.outputs.tag }} — Gentle-Vanguard'
-          body_path: /tmp/release_notes.md
-          draft: false
-          prerelease: false
-          generate_release_notes: true
+          name: update-manifest
+          path: update-manifest.json
