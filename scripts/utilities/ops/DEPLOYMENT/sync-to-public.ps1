@@ -85,6 +85,9 @@ function Sync-FilesToBranch {
     }
     Copy-Item "$privateRepo\CHANGELOG.md" "$targetDir\CHANGELOG.md" -Force
     Copy-Item "$privateRepo\BUILD-README.md" "$targetDir\BUILD-README.md" -Force -ErrorAction SilentlyContinue
+    if (Test-Path "$privateRepo\INSTALLATION.md") {
+        Copy-Item "$privateRepo\INSTALLATION.md" "$targetDir\INSTALLATION.md" -Force
+    }
 
     # 2. Public docs dir
     Remove-Item "$targetDir\docs" -Recurse -Force -ErrorAction SilentlyContinue
@@ -154,9 +157,10 @@ function Sync-FilesToBranch {
         Copy-Item "$distDir\Gentle-Vanguard.exe" "$targetDir\Gentle-Vanguard.exe" -Force
     }
 
-    # 8. INSTALLATION.md check
-    if (-not (Test-Path "$targetDir\INSTALLATION.md")) {
-        Write-Output "  [WARN]  INSTALLATION.md missing"
+    # 8. Root infra files
+    foreach ($f in @('docker-compose.yml','docker-compose.test.yml','Dockerfile')) {
+        $src = "$privateRepo\$f"
+        if (Test-Path $src) { Copy-Item $src "$targetDir\$f" -Force }
     }
 
     # 9. Cleanup plain-text artifacts
@@ -185,7 +189,8 @@ function Sync-FilesToBranch {
         'scripts\diagnostics\validate-sdd-governance.ps1',
         'scripts\diagnostics\agent-process-alert.ps1',
         'scripts\utilities\UTILITIES\gentle-vanguard-sync.ps1',
-        'scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1'
+        'scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1',
+        'scripts\monitoring\aggregate-logs.ps1'
     )
     foreach ($rel in $ciScripts) {
         $src = Join-Path $privateRepo $rel
@@ -198,10 +203,15 @@ function Sync-FilesToBranch {
     }
 
     # 10b. CI root files
-    foreach ($f in @('.gitleaks.toml','package.json','.prettierrc','.prettierignore','VERSION')) {
+    foreach ($f in @('.gitleaks.toml','package.json','.prettierrc','.prettierignore','VERSION','INSTALLATION.md')) {
         $src = Join-Path $privateRepo $f
         $dst = Join-Path $targetDir $f
         if (Test-Path $src) { Copy-Item $src $dst -Force }
+    }
+    # Adapters
+    if (Test-Path "$privateRepo\adapters") {
+        Remove-Item "$targetDir\adapters" -Recurse -Force -ErrorAction SilentlyContinue
+        Copy-Item "$privateRepo\adapters" "$targetDir\adapters" -Recurse -Force
     }
     $pssaSrc = Join-Path $privateRepo 'config\PSScriptAnalyzerSettings.psd1'
     $pssaDst = Join-Path $targetDir 'config\PSScriptAnalyzerSettings.psd1'
@@ -211,9 +221,11 @@ function Sync-FilesToBranch {
     }
 
     # 10c. CI test files
-    if (Test-Path "$privateRepo\tests\unit") {
-        Remove-Item "$targetDir\tests\unit" -Recurse -Force -ErrorAction SilentlyContinue
-        Copy-Item "$privateRepo\tests\unit" "$targetDir\tests\unit" -Recurse -Force
+    foreach ($td in @('tests\unit','tests\smoke')) {
+        if (Test-Path "$privateRepo\$td") {
+            Remove-Item "$targetDir\$td" -Recurse -Force -ErrorAction SilentlyContinue
+            Copy-Item "$privateRepo\$td" "$targetDir\$td" -Recurse -Force
+        }
     }
 
     # 10d. CI workflows (adapted)
