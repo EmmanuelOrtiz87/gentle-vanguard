@@ -37,6 +37,9 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$loggerModule = Join-Path $scriptDir '..\common\Logger.psm1'
+if (Test-Path $loggerModule) { Import-Module $loggerModule -Force }
 $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) { $env:GENTLE_VANGUARD_BASE_DIR } else {
     $root = Split-Path -Parent $PSScriptRoot
     while ($root -and -not (Test-Path (Join-Path $root 'config\orchestrator.json'))) { $root = Split-Path -Parent $root }
@@ -57,6 +60,7 @@ function Write-Norm {
     if ($VerboseOutput) {
         Write-Host "[NORM-ENFORCER] $Message" -ForegroundColor Cyan
     }
+    try { Write-Log -Level DEBUG -Message $Message -Component 'norm-enforcer' } catch {}
 }
 
 function Write-NormFix {
@@ -183,11 +187,13 @@ function Test-DocumentationStandards {
 # Main execution
 function Invoke-NormEnforcement {
     Write-Host "[NORM-ENFORCER] Trigger: $Trigger" -ForegroundColor Green
+    Write-Log -Level INFO -Message "Iniciando validación de normas" -Component 'norm-enforcer' -Data @{trigger=$Trigger;autoFix=$AutoFix.IsPresent}
     
     Test-DocsStructure
     Test-DocumentationStandards
     
     Write-Host "[NORM-ENFORCER] Issues: $($script:Issues.Count), Fixes: $($script:Fixes.Count)" -ForegroundColor Cyan
+    Write-Log -Level INFO -Message "Validación completada: $($script:Fixes.Count) fixes, $($script:Issues.Count) issues" -Component 'norm-enforcer' -Data @{issuesCount=$script:Issues.Count;fixesCount=$script:Fixes.Count;normsApplied=$script:NormsApplied.Count}
     
     if ($script:Issues.Count -gt 0 -and -not $AutoFix) {
         $script:Issues | ForEach-Object { Write-Host "   - $_" -ForegroundColor Yellow }

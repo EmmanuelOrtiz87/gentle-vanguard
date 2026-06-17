@@ -8,6 +8,8 @@ param(
 $ErrorActionPreference = 'Continue'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = Resolve-Path (Join-Path $scriptDir '..\..') | Select-Object -ExpandProperty Path
+$loggerModule = Join-Path $scriptDir '..\common\Logger.psm1'
+if (Test-Path $loggerModule) { Import-Module $loggerModule -Force }
 $sessionDir = Join-Path $repoRoot ".session"
 $correctionLog = Join-Path $sessionDir "corrections-log.jsonl"
 $patternDb = Join-Path $sessionDir "pattern-frequency.json"
@@ -15,6 +17,7 @@ $patternDb = Join-Path $sessionDir "pattern-frequency.json"
 function Write-Detect {
     param([string]$Message)
     if ($VerboseOutput) { Write-Host "[DETECT] $Message" -ForegroundColor Cyan }
+    try { Write-Log -Level DEBUG -Message $Message -Component 'pattern-detector' } catch {}
 }
 
 function Load-PatternDb {
@@ -78,6 +81,8 @@ function Detect-Patterns {
     }
 
     Save-PatternDb $db
+    $topCount = ($db.patterns.GetEnumerator() | Where-Object { $_.Value -ge 2 } | Measure-Object).Count
+    Write-Log -Level INFO -Message "Patrones detectados en entrada" -Component 'pattern-detector' -Data @{phrases=$phrases.Count;categories=($detectedCategories | Select-Object -Unique -Join ',');topPatterns=$topCount}
 
     return @{
         Categories = ($detectedCategories | Select-Object -Unique)
@@ -125,6 +130,7 @@ function Show-Report {
     $db = Load-PatternDb
     Write-Host "`n=== PATTERN DETECTION REPORT ===" -ForegroundColor Cyan
     Write-Host "Known patterns: $($db.patterns.Count)" -ForegroundColor White
+    Write-Log -Level INFO -Message "Reporte de patrones: $($db.patterns.Count) conocidos" -Component 'pattern-detector' -Data @{totalPatterns=$db.patterns.Count;activeSuggestions=$db.suggestions.Count}
 
     if ($db.patterns.Count -gt 0) {
         Write-Host "`n--- Top Recurring Patterns ---" -ForegroundColor Yellow
