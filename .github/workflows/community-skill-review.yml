@@ -177,7 +177,7 @@ jobs:
 
       - name: Add review checklist comment (issue)
         if: github.event_name == 'issues'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const validationPassed = '${{ steps.validate_issue.outputs.validationPassed }}' === 'true';
@@ -241,7 +241,7 @@ jobs:
 
       - name: Add review checklist comment (PR)
         if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const validationPassed = '${{ steps.validate_pr.outputs.validationPassed }}' === 'true';
