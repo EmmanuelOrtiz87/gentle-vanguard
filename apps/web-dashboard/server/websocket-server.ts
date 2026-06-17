@@ -358,11 +358,15 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
     const sessionMetrics = existsSync(metricsReportPath)
       ? JSON.parse(readFileSync(metricsReportPath, 'utf-8')).summary
       : null;
+    const logAggregatePath = join(ROOT, '.session', 'logs', 'aggregate.json');
+    const logAggregate = existsSync(logAggregatePath)
+      ? JSON.parse(readFileSync(logAggregatePath, 'utf-8'))
+      : null;
     res.writeHead(200, headers);
     res.end(
       JSON.stringify({
         status: 'ok',
-        version: '3.3.0',
+        version: '3.3.1',
         uptime: process.uptime(),
         connections: clients.size,
         components: {
@@ -372,6 +376,9 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
             status: adaptiveNorms ? 'ok' : 'unknown',
             normsLoaded: adaptiveNorms?.totalNorms || 0,
             sessionScore: sessionMetrics?.quality_score || 0,
+            logEntries: logAggregate?.totals?.totalEntries || 0,
+            logErrorRate: logAggregate?.totals?.errorRate || 0,
+            logComponents: logAggregate?.componentCount || 0,
           },
         },
         timestamp: new Date().toISOString(),
