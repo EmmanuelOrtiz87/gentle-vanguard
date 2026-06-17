@@ -64,6 +64,22 @@ jobs:
         working-directory: apps/web-dashboard
         run: pnpm lint
 
+  smoke:
+    name: Smoke Tests
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - name: Install Pester
+        run: |
+          Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
+          Import-Module Pester -PassThru
+      - name: Run stack smoke tests
+        run: |
+          Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
+          Import-Module Pester -PassThru
+          Invoke-Pester -Path tests/smoke/ -Passthru -Output Detailed
+
   coverage:
     name: Coverage
     runs-on: ubuntu-latest
