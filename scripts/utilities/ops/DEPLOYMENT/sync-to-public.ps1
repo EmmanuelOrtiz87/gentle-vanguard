@@ -198,7 +198,7 @@ function Sync-FilesToBranch {
     }
 
     # 10b. CI root files
-    foreach ($f in @('.gitleaks.toml','package.json','.prettierrc','.prettierignore')) {
+    foreach ($f in @('.gitleaks.toml','package.json','.prettierrc','.prettierignore','VERSION')) {
         $src = Join-Path $privateRepo $f
         $dst = Join-Path $targetDir $f
         if (Test-Path $src) { Copy-Item $src $dst -Force }
