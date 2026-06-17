@@ -11,12 +11,15 @@ param(
 $ErrorActionPreference = 'Continue'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = Resolve-Path (Join-Path $scriptDir '..\..') | Select-Object -ExpandProperty Path
+$loggerModule = Join-Path $scriptDir '..\common\Logger.psm1'
+if (Test-Path $loggerModule) { Import-Module $loggerModule -Force }
 $metricsPath = Join-Path $repoRoot ".session" "metrics-report.json"
 $sessionTokenPath = Join-Path $repoRoot ".session" "token-usage.json"
 
 function Write-Score {
     param([string]$Message)
     if ($VerboseOutput) { Write-Host "[SCORE] $Message" -ForegroundColor Cyan }
+    try { Write-Log -Level DEBUG -Message $Message -Component 'session-scoring' } catch {}
 }
 
 function Get-MetricsData {
@@ -60,6 +63,7 @@ function Initialize-Metrics {
     $data.proactive_misses = 0
     Save-MetricsData $data
     Write-Host "[SCORE] Metrics initialized" -ForegroundColor Green
+    Write-Log -Level INFO -Message "Sistema de métricas inicializado" -Component 'session-scoring'
 }
 
 function Record-Event {
@@ -135,6 +139,7 @@ function Get-Report {
     Write-Host "Quality Score: $($summary.quality_score)/100" -ForegroundColor $(if ($summary.quality_score -ge 80) { 'Green' } elseif ($summary.quality_score -ge 50) { 'Yellow' } else { 'Red' })
     Write-Host "Delegations: $($summary.total_delegations) | Success Rate: $($summary.success_rate)%" -ForegroundColor White
     Write-Host "Corrections: $($summary.total_corrections) | Proactive: $($summary.total_proactive_suggestions) (hits: $($data.proactive_hits), misses: $($data.proactive_misses))" -ForegroundColor White
+    Write-Log -Level INFO -Message "Score calculado: $($summary.quality_score)/100" -Component 'session-scoring' -Data @{qualityScore=$summary.quality_score;delegations=$summary.total_delegations;corrections=$summary.total_corrections;proactiveHits=$data.proactive_hits;proactiveMisses=$data.proactive_misses}
 
     if ($data.delegations.Count -gt 0) {
         Write-Host "`n--- Per-Type Breakdown ---" -ForegroundColor Yellow

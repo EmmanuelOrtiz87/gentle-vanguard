@@ -7,6 +7,8 @@ param(
 $ErrorActionPreference = 'Continue'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = Resolve-Path (Join-Path $scriptDir '..\..') | Select-Object -ExpandProperty Path
+$loggerModule = Join-Path $scriptDir '..\common\Logger.psm1'
+if (Test-Path $loggerModule) { Import-Module $loggerModule -Force }
 $learnedNormsPath = Join-Path $repoRoot "rules\adaptive\LEARNED-NORMS.md"
 $correctionLog = Join-Path $repoRoot ".session" "corrections-log.jsonl"
 
@@ -19,6 +21,7 @@ $correctionPatterns = @(
 function Write-Capture {
     param([string]$Message)
     if ($VerboseOutput) { Write-Host "[CAPTURE] $Message" -ForegroundColor Cyan }
+    try { Write-Log -Level DEBUG -Message $Message -Component 'correction-capture' } catch {}
 }
 
 function Detect-Correction {
@@ -54,7 +57,8 @@ function Log-Correction {
 
     try {
         Add-Content -Path $correctionLog -Value (ConvertTo-Json $logEntry -Compress) -ErrorAction SilentlyContinue
-    } catch { Write-Capture "Could not write to correction log" }
+        Write-Log -Level INFO -Message "Corrección clasificada como $($Correction.Type)" -Component 'correction-capture' -Data @{type=$Correction.Type;severity=$Correction.Severity;match=$Correction.MatchText}
+    } catch { Write-Capture "Could not write to correction log"; Write-Log -Level ERROR -Message "Error en correction-capture" -Component 'correction-capture' -Data @{error=$_.Exception.Message} }
 
     # Score this correction
     $scoringScript = Join-Path $scriptDir "session-scoring.ps1"
@@ -62,13 +66,12 @@ function Log-Correction {
         & $scoringScript -Action record -EventType correction -Detail $Correction.Type -Success:$true -DurationSeconds 0
     }
 
-    Write-Host "[CAPTURE] Correction detected: $($Correction.Type) (severity: $($Correction.Severity))" -ForegroundColor Yellow
-
     # For high-severity corrections, trigger immediate norm creation
     if ($Correction.Severity -eq 'high') {
         $learnerScript = Join-Path $repoRoot "scripts\adaptive\auto-norm-learner.ps1"
         if (Test-Path $learnerScript) {
             Write-Host "[CAPTURE] High-severity correction — triggering norm learner" -ForegroundColor Magenta
+            Write-Log -Level INFO -Message "Corrección de alta severidad — ejecutando norm learner" -Component 'correction-capture' -Data @{severity='high'}
             & $learnerScript -Trigger manual -VerboseOutput:$VerboseOutput 2>&1 | Out-Null
         }
     }
