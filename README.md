@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-3.3.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-3.3.2-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Adaptive_System-%E2%9C%93-22C55E?style=flat-square&labelColor=0D1117" alt="Adaptive System">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
@@ -175,7 +175,7 @@ sequenceDiagram
 
 ## 🔄 Adaptive Feedback Loop
 
-New in **v3.3.0** — a self-improving system that learns from every interaction:
+New in **v3.3.1** — a self-improving system that learns from every interaction:
 
 ### Fase 1: auto-norm-learner
 
@@ -217,7 +217,7 @@ into one of 3 types:
 
 ---
 
-## 🐛 Bugs Fixed (v3.3.0 Cycle)
+## 🐛 Bugs Fixed (v3.3.x Cycle)
 
 | #   | Bug                                    | Root Cause                                                     | Fix                                                      |
 | --- | -------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------- |
@@ -267,25 +267,20 @@ mem_save --title "Auth pattern" --type architecture
 
 ---
 
-## 📦 Latest Release: v3.3.0
+## 📦 Latest Release: v3.3.2
 
 **Highlights:**
 
-- 🔄 Adaptive Feedback Loop — Fases 1-4 complete
-- 🐛 6 stability bugs fixed
-- 📊 Session scoring — 81/100 quality baseline
-- 📚 144 auto-learned norms + structured norms-registry.json
-- 🧠 Engram checksum repair
-- 💡 Proactive suggestions now visible
-- 🔧 auto-norm-enforcer parser fixed
-- 🏗️ **35 CI/CD workflows consolidated → 12 reusable** (workflow_call)
-- 🐳 **Docker Compose** raíz con 5 servicios (dashboard, MCP, WS, health, pwsh)
-- 📝 **Logger.psm1** — logging estructurado JSONL en todos los scripts adaptive
-- 🔀 **Adaptadores consolidados** (3 JS → 1 TypeScript: antigravity, codex, windsurf)
-- 🧹 **skills-archive/** eliminado (~1000 archivos dead code)
-- 📁 **22 scripts Python** movidos de raíz a `research/rlhf-dataset-search/`
-- 📦 **package.json** version sync v3.3.0
-- 🔬 **Health endpoint** multi-componente (websocket, MCP, adaptive)
+- 🌐 **Dashboard i18n** — 3 idiomas (en/es/pt-BR), 14 métricas localizadas
+- 🚨 **Alertas automáticos** — 8 reglas en dashboard-alerts.json
+- 🛡️ **Maintenance Watchtower** — 60 checks en 11 componentes, 6 modos
+- 📊 **Info Popups** — métricas con descripción animada (fade-in + scale)
+- 🔧 **Dashboard server refactor** — WebSocket + REST API resiliente
+- 🧩 **Dashboard utilities** — scripts de ciclo de vida con puertos dinámicos
+- 🐛 **Pre-process pipeline** — trace system, debug logging, health integration
+- 📄 **SECURITY.md** + .clinerules + .cursorrules — tool configs oficiales
+- 📚 **Nuevas normativas**: NORMATIVA-PNPM-SECURITY, NORMATIVAS-PERFORMANCE
+- 🗂️ **norms-registry.json** — 144 normas con schema versionado
 
 ---
 
@@ -402,5 +397,5 @@ MIT © 2026 Emmanuel Ortiz
 ---
 
 <p align="center">
-  <sub>Gentle-Vanguard v3.3.1 — Don't let your mellow hustle be faded.</sub>
+  <sub>Gentle-Vanguard v3.3.2 — Don't let your mellow hustle be faded.</sub>
 </p>
