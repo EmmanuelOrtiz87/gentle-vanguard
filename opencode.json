@@ -53,13 +53,13 @@
     "openrouter": {
       "options": {
         "setCacheKey": true,
-        "timeout": 600000
+        "timeout": 300000
       }
     },
     "anthropic": {
       "options": {
         "setCacheKey": true,
-        "timeout": 600000
+        "timeout": 300000
       }
     },
     "littellmott": {
@@ -120,7 +120,7 @@
           "*": "allow"
         }
       },
-      "steps": 12
+      "steps": 6
     },
     "sdd-explore": {
       "description": "BA exploration agent — requirements gathering and analysis",
@@ -307,28 +307,6 @@
         "minTokens": 2000,
         "maxTokens": 6000,
         "temperature": 0.5
-      },
-      "permission": {
-        "websearch": "deny",
-        "webfetch": "deny"
-      },
-      "routing": {
-        "preProcess": "scripts/utilities/pre-process-input.ps1",
-        "mappings": "config/auto-delegation.json#keywordMappings",
-        "agentProfiles": "config/auto-delegation.json#agentProfiles",
-        "fallbackStrategy": "clarify-ba"
-      },
-      "steps": 6
-    },
-    "gov-agent": {
-      "description": "Governance agent — compliance, security, audit",
-      "mode": "subagent",
-      "hidden": true,
-      "model": "openrouter/moonshot/kimi-k2.6",
-      "options": {
-        "minTokens": 2000,
-        "maxTokens": 5000,
-        "temperature": 0.1
       },
       "permission": {
         "websearch": "deny",
