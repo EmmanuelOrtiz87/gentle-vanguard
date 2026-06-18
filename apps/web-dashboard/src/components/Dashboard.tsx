@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Coins, Users, GitBranch, Activity, Moon, Sun, RefreshCw, Server, Zap, Bot, Cpu } from 'lucide-react';
+import { Coins, Users, Activity, Moon, Sun, RefreshCw, Server, Zap, Bot, Cpu, Clock, ThumbsUp, DollarSign, Shield, BarChart3, Gauge, TrendingUp, AlertTriangle, Bell, Info, Languages } from 'lucide-react';
 import { useMetrics } from '../hooks/useMetrics';
+import { useAlerts } from '../hooks/useAlerts';
+import { useSessions } from '../hooks/useSessions';
 import { MetricsCard } from './MetricsCard';
 import { LiveChart } from './LiveChart';
 import { SessionTable } from './SessionTable';
@@ -10,12 +12,44 @@ import { useAgentStream } from '../hooks/useAgentStream';
 import { NotificationToast } from './NotificationToast';
 import { ValidationPanel } from './ValidationPanel';
 import { LiveTraceFeed } from './LiveTraceFeed';
+import { InfoPopup } from './InfoPopup';
+import { LocaleContext, useLocale, LOCALE_NAMES, LOCALE_FLAGS, t } from '../hooks/useLocale';
+import type { Locale } from '../hooks/useLocale';
+import type { ModelCost, CostInsight } from '../types/dashboard';
 
-export default function Dashboard() {
+function SectionHeader({ title, infoKey }: { title: string; infoKey?: string }) {
+  const { locale } = useLocale();
+  const [showPopup, setShowPopup] = useState(false);
+  const info = infoKey ? t(locale, infoKey) : undefined;
+
+  return (
+    <>
+      <div className="flex items-center gap-2">
+        {info && (
+          <button
+            onClick={() => setShowPopup(true)}
+            className="p-0.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            title="More info"
+          >
+            <Info className="w-4 h-4" />
+          </button>
+        )}
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h2>
+      </div>
+      {showPopup && info && <InfoPopup info={info} onClose={() => setShowPopup(false)} />}
+    </>
+  );
+}
+
+function DashboardInner() {
   const [darkMode, setDarkMode] = useState(false);
   const [useWebSocket, setUseWebSocket] = useState(true);
   const { data, history, loading, wsConnected, refetch, notifications, dismissNotification } = useMetrics(useWebSocket);
   const { session: agentSession, bridgeConnected, createSession } = useAgentStream();
+  const { triggeredAlerts } = useAlerts();
+  const sessions = useSessions();
+  const { locale, setLocale } = useLocale();
+  const [showLangSelector, setShowLangSelector] = useState(false);
 
   useEffect(() => {
     if (bridgeConnected && !agentSession) {
@@ -34,6 +68,9 @@ export default function Dashboard() {
   const totalCalls = mcpData?.calls?.total || 0;
   const avgResponseTime = mcpData?.performance?.avgResponseTime || 0;
   const recentMessages = agentSession?.messages.slice(-5) || [];
+  const topModel = data.tokens.byModel?.length ? data.tokens.byModel.reduce((a: ModelCost, b: ModelCost) => a.cost > b.cost ? a : b) : null;
+
+  const locales: Locale[] = ['en', 'es', 'pt-BR'];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -46,9 +83,41 @@ export default function Dashboard() {
                 Real-time metrics and monitoring
                 {wsConnected && <span className="ml-2 text-green-500">● WS Connected</span>}
                 {!wsConnected && useWebSocket && <span className="ml-2 text-yellow-500">● WS Reconnecting...</span>}
+                {triggeredAlerts.length > 0 && <span className="ml-2 text-red-500 font-semibold">● {triggeredAlerts.length} alert(s)</span>}
               </p>
             </div>
             <div className="flex items-center gap-3">
+              <div className="relative">
+                <button
+                  onClick={() => setShowLangSelector(!showLangSelector)}
+                  className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                  title="Language / Idioma / Idioma"
+                >
+                  <Languages className="w-5 h-5" />
+                </button>
+                {showLangSelector && (
+                  <>
+                    <div className="fixed inset-0 z-10" onClick={() => setShowLangSelector(false)} />
+                    <div className="absolute right-0 mt-2 z-20 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 min-w-[180px]">
+                      {locales.map((l) => (
+                        <button
+                          key={l}
+                          onClick={() => { setLocale(l); setShowLangSelector(false); }}
+                          className={`w-full text-left px-4 py-2 text-sm flex items-center gap-2 transition-colors ${
+                            locale === l
+                              ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
+                              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                          }`}
+                        >
+                          <span>{LOCALE_FLAGS[l]}</span>
+                          <span>{LOCALE_NAMES[l]}</span>
+                          {locale === l && <span className="ml-auto text-xs">✓</span>}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
               <button
                 onClick={() => setUseWebSocket(!useWebSocket)}
                 className={`p-2 rounded-lg transition-colors ${
@@ -79,6 +148,7 @@ export default function Dashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Row 1: Core KPIs */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {loading ? (
             <>
@@ -98,20 +168,23 @@ export default function Dashboard() {
                 subtitle={`of ${data.tokens.limit.toLocaleString()} (${((data.tokens.used / data.tokens.limit) * 100).toFixed(1)}%)`}
                 icon={Coins}
                 color="blue"
+                infoKey="tokens_used"
               />
               <MetricsCard
                 title="Active Sessions"
                 value={data.sessions.active}
-                subtitle={`${data.sessions.today} today, ${data.sessions.total} total`}
+                subtitle={`${data.sessions.today} today, ${data.sessions.total} total · ${data.sessions.avgDuration.toFixed(0)}s avg`}
                 icon={Users}
                 color="green"
+                infoKey="active_sessions"
               />
               <MetricsCard
-                title="Git Activity"
-                value={data.git.commits}
-                subtitle={`${data.git.prsMerged} PRs merged, ${data.git.contributors} contributors`}
-                icon={GitBranch}
+                title="Latency (avg)"
+                value={data.latency ? `${data.latency.avg.toLocaleString()}ms` : 'N/A'}
+                subtitle={data.latency ? `p95: ${data.latency.p95.toLocaleString()}ms · ${data.latency.samples} samples` : ''}
+                icon={Clock}
                 color="yellow"
+                infoKey="latency"
               />
               <MetricsCard
                 title="Health Status"
@@ -119,23 +192,213 @@ export default function Dashboard() {
                 subtitle={`Routing: ${(data.health.routing * 100).toFixed(0)}%`}
                 icon={Activity}
                 color={data.health.status === 'healthy' ? 'green' : 'red'}
+                infoKey="health"
               />
-              {data.system && (
-                <MetricsCard
-                  title="System"
-                  value={`${data.system.uptime}s`}
-                  subtitle={`CPU ${data.system.cpu.user}ms · ${data.system.memory.rss}MB RSS`}
-                  icon={Cpu}
-                  color="purple"
-                />
-              )}
             </>
           )}
         </div>
 
+        {/* Row 2: Cost, Feedback, SLA, System */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <MetricsCard
+            title="Total Cost"
+            value={`$${data.tokens.cost.toFixed(4)}`}
+            subtitle={`Top model: ${topModel ? topModel.model : 'N/A'}`}
+            icon={DollarSign}
+            color="purple"
+            infoKey="total_cost"
+          />
+          <MetricsCard
+            title="Feedback Score"
+            value={data.feedback ? `${data.feedback.score}%` : 'N/A'}
+            subtitle={data.feedback ? `${data.feedback.thumbsUp}↑ ${data.feedback.thumbsDown}↓` : ''}
+            icon={ThumbsUp}
+            color={data.feedback && data.feedback.score >= 80 ? 'green' : 'yellow'}
+            infoKey="feedback"
+          />
+          <MetricsCard
+            title="SLA Compliance"
+            value={data.sla ? `${data.sla.sloCompliance}%` : 'N/A'}
+            subtitle={`Uptime: ${data.sla ? data.sla.uptime.toFixed(1) : 'N/A'}%`}
+            icon={Shield}
+            color={data.sla && data.sla.sloCompliance >= 99 ? 'green' : 'red'}
+            infoKey="sla"
+          />
+          {data.system && (
+            <MetricsCard
+              title="System"
+              value={`${data.system.uptime}s`}
+              subtitle={`CPU ${data.system.cpu.user}ms · ${data.system.memory.rss}MB RSS`}
+              icon={Cpu}
+              color="purple"
+              infoKey="system"
+            />
+          )}
+        </div>
+
+        {/* Row 3: Alerts */}
+        {triggeredAlerts.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+              <Bell className="w-5 h-5 text-red-500" />
+              Active Alerts ({triggeredAlerts.length})
+            </h2>
+            <div className="space-y-2">
+              {triggeredAlerts.map((alert) => (
+                <div key={alert.name} className={`card flex items-center gap-3 ${
+                  alert.severity === 'error' ? 'border-l-4 border-red-500 bg-red-50 dark:bg-red-900/10' :
+                  alert.severity === 'warning' ? 'border-l-4 border-yellow-500 bg-yellow-50 dark:bg-yellow-900/10' :
+                  'border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/10'
+                }`}>
+                  <AlertTriangle className={`w-5 h-5 ${
+                    alert.severity === 'error' ? 'text-red-500' :
+                    alert.severity === 'warning' ? 'text-yellow-500' : 'text-blue-500'
+                  }`} />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">{alert.rule}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {alert.actual}{alert.unit} exceeds threshold of {alert.threshold}{alert.unit}
+                    </p>
+                  </div>
+                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                    alert.severity === 'error' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' :
+                    alert.severity === 'warning' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300' :
+                    'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                  }`}>{alert.severity}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Row 4: Cost by Model */}
+        {data.tokens.byModel && data.tokens.byModel.length > 0 && (
+          <div className="mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <BarChart3 className="w-5 h-5 text-gray-500" />
+              <SectionHeader title="Cost by Model" infoKey="cost_by_model" />
+            </div>
+            <div className="card">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-200 dark:border-gray-700">
+                      <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Model</th>
+                      <th className="text-right py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Input Tokens</th>
+                      <th className="text-right py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Output Tokens</th>
+                      <th className="text-right py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Total Tokens</th>
+                      <th className="text-right py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Cost</th>
+                      <th className="text-right py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">%</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.tokens.byModel.map((m: ModelCost) => (
+                      <tr key={m.model} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800">
+                        <td className="py-3 px-4 text-sm font-medium text-gray-900 dark:text-white">{m.model}</td>
+                        <td className="py-3 px-4 text-sm text-right text-gray-600 dark:text-gray-400">{m.inputTokens.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-sm text-right text-gray-600 dark:text-gray-400">{m.outputTokens.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-sm text-right text-gray-600 dark:text-gray-400">{m.totalTokens.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-sm text-right text-gray-600 dark:text-gray-400">${m.cost.toFixed(4)}</td>
+                        <td className="py-3 px-4 text-sm text-right text-gray-600 dark:text-gray-400">{data.tokens.cost > 0 ? ((m.cost / data.tokens.cost) * 100).toFixed(1) : '0'}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Row 5: Cost Insights */}
+        {data.costInsights && data.costInsights.length > 0 && (
+          <div className="mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <TrendingUp className="w-5 h-5 text-gray-500" />
+              <SectionHeader title="Cost Optimization Insights" infoKey="cost_insights" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {data.costInsights.filter((ci: CostInsight) => ci.pct > 5).map((ci: CostInsight) => (
+                <div key={ci.model} className="card">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="metric-label">{ci.model}</p>
+                      <p className="metric-value mt-1">${ci.cost.toFixed(4)}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{ci.tokens.toLocaleString()} tokens ({ci.pct}%)</p>
+                    </div>
+                    <div className={`p-2 rounded-lg ${ci.pct > 30 ? 'bg-red-50 text-red-500' : 'bg-yellow-50 text-yellow-500'}`}>
+                      <AlertTriangle className="w-5 h-5" />
+                    </div>
+                  </div>
+                  {ci.suggestedAction && (
+                    <p className="mt-3 text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-2 rounded">
+                      💡 {ci.suggestedAction}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Row 6: Latency Detail */}
+        {data.latency && data.latency.samples > 0 && (
+          <div className="mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <Gauge className="w-5 h-5 text-gray-500" />
+              <SectionHeader title="Latency Percentiles" infoKey="latency_percentiles" />
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              {['avg', 'p50', 'p95', 'p99', 'max'].map((p) => {
+                const val = data.latency![p as keyof typeof data.latency] as number;
+                const pct = data.latency!.max > 0 ? (val / data.latency!.max) * 100 : 0;
+                return (
+                  <div key={p} className="card text-center">
+                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">{p}</p>
+                    <p className="text-xl font-bold text-gray-900 dark:text-white mt-1">{val.toLocaleString()}ms</p>
+                    <div className="mt-2 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div className={`h-full rounded-full ${pct > 80 ? 'bg-red-500' : pct > 50 ? 'bg-yellow-500' : 'bg-green-500'}`} style={{ width: `${pct}%` }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Row 7: SLA Detail */}
+        {data.sla && (
+          <div className="mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <Shield className="w-5 h-5 text-gray-500" />
+              <SectionHeader title="SLA & Reliability" infoKey="sla_reliability" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="card">
+                <p className="metric-label">Uptime</p>
+                <p className="metric-value">{data.sla.uptime.toFixed(2)}%</p>
+                <div className="mt-2 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                  <div className="h-full rounded-full bg-green-500" style={{ width: `${data.sla.uptime}%` }} />
+                </div>
+              </div>
+              <div className="card">
+                <p className="metric-label">SLO Compliance</p>
+                <p className="metric-value">{data.sla.sloCompliance}%</p>
+                <p className="text-xs text-gray-500 mt-1">Target: 99.9%</p>
+              </div>
+              <div className="card">
+                <p className="metric-label">Incidents</p>
+                <p className="metric-value">{data.sla.incidents}</p>
+                <p className="text-xs text-gray-500 mt-1">{data.sla.lastIncident ? `Last: ${new Date(data.sla.lastIncident).toLocaleDateString()}` : 'No recent incidents'}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {mcpData && (
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">MCP Server Metrics</h2>
+            <div className="flex items-center gap-2 mb-4">
+              <SectionHeader title="MCP Server Metrics" infoKey="mcp" />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="card">
                 <p className="metric-label">Total Skills</p>
@@ -166,7 +429,9 @@ export default function Dashboard() {
 
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Agent Activity</h2>
+            <div className="flex items-center gap-2">
+              <SectionHeader title="Agent Activity" infoKey="agent_activity" />
+            </div>
             <span className="flex items-center gap-1 text-xs text-gray-500">
               {bridgeConnected ? <Bot className="w-3.5 h-3.5 text-green-500" /> : <Bot className="w-3.5 h-3.5 text-gray-400" />}
               {bridgeConnected ? 'Bridge Online' : 'Bridge Offline'}
@@ -199,9 +464,19 @@ export default function Dashboard() {
           <LiveChart data={history} />
         </div>
 
-        <SessionTable sessions={[]} />
+        <SessionTable sessions={sessions} />
       </main>
       <NotificationToast notifications={notifications} onClose={dismissNotification} />
     </div>
+  );
+}
+
+export default function Dashboard() {
+  const [locale, setLocale] = useState<Locale>('en');
+
+  return (
+    <LocaleContext.Provider value={{ locale, setLocale }}>
+      <DashboardInner />
+    </LocaleContext.Provider>
   );
 }

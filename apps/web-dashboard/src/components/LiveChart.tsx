@@ -57,6 +57,24 @@ export function LiveChart({ data }: LiveChartProps) {
               dot={false}
               name="Sessions"
             />
+            <Line
+              type="monotone"
+              dataKey="cost"
+              stroke="#8b5cf6"
+              strokeWidth={2}
+              dot={false}
+              name="Cost ($)"
+            />
+            {data.some((d) => (d as any).latency) && (
+              <Line
+                type="monotone"
+                dataKey="latency"
+                stroke="#f59e0b"
+                strokeWidth={2}
+                dot={false}
+                name="Latency (ms)"
+              />
+            )}
           </LineChart>
         </ResponsiveContainer>
       </div>

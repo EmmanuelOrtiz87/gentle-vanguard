@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { DashboardData, MetricHistory } from '../types/dashboard';
 import { useSharedWs } from './useSharedWs';
 
@@ -10,13 +10,13 @@ export interface Notification {
 }
 
 const FALLBACK_DATA: DashboardData = {
-  tokens: { used: 0, limit: 0, cost: 0 },
-  sessions: { total: 0, active: 0, today: 0 },
+  tokens: { used: 0, limit: 0, cost: 0, byModel: [] },
+  sessions: { total: 0, active: 0, today: 0, avgDuration: 0 },
   git: { commits: 0, prsMerged: 0, contributors: 0 },
   health: { status: 'unknown', routing: 0 },
 };
 
-export function useMetrics(useWebSocketMode = false) {
+export function useMetrics(_useWebSocketMode = false) {
   const [data, setData] = useState<DashboardData>(FALLBACK_DATA);
   const [history, setHistory] = useState<MetricHistory[]>([]);
   const [loading, setLoading] = useState(false);
@@ -34,11 +34,13 @@ export function useMetrics(useWebSocketMode = false) {
         const tokens = payload.tokens?.used ?? 0;
         const sessions = payload.sessions?.active ?? 0;
         const cost = payload.tokens?.cost ?? 0;
+        const latency = payload.latency?.avg ?? 0;
         const newEntry: MetricHistory = {
           timestamp: payload.timestamp || new Date().toISOString(),
           tokens,
           sessions,
           cost,
+          latency,
         };
         return [...prev, newEntry].slice(-20);
       });
@@ -67,7 +69,6 @@ export function useMetrics(useWebSocketMode = false) {
   );
 
   const fetchMetrics = useCallback(async () => {
-    if (wsConnected) return;
     setLoading(true);
     try {
       const res = await fetch('/api/metrics');
@@ -82,20 +83,13 @@ export function useMetrics(useWebSocketMode = false) {
     } finally {
       setLoading(false);
     }
-  }, [wsConnected, updateFromPayload]);
-
-  const modeRef = useRef(useWebSocketMode);
-  useEffect(() => {
-    modeRef.current = useWebSocketMode;
-  }, [useWebSocketMode]);
+  }, [updateFromPayload]);
 
   useEffect(() => {
-    if (!useWebSocketMode) {
-      void fetchMetrics();
-      const interval = setInterval(fetchMetrics, 5000);
-      return () => clearInterval(interval);
-    }
-  }, [useWebSocketMode, fetchMetrics]);
+    void fetchMetrics();
+    const interval = setInterval(fetchMetrics, 5000);
+    return () => clearInterval(interval);
+  }, [fetchMetrics]);
 
   const dismissNotification = useCallback((index: number) => {
     setNotifications((prev) => prev.filter((_, i) => i !== index));
