@@ -1,7 +1,7 @@
 import { CheckCircle, AlertTriangle, AlertCircle, RefreshCw } from 'lucide-react';
 import { useValidations } from '../hooks/useValidations';
 
-const STATUS_ICONS: Record<string, JSX.Element> = {
+const STATUS_ICONS: Record<string, React.ReactNode> = {
   ok: <CheckCircle className="w-4 h-4 text-green-500" />,
   warn: <AlertTriangle className="w-4 h-4 text-yellow-500" />,
   error: <AlertCircle className="w-4 h-4 text-red-500" />,

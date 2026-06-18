@@ -229,21 +229,32 @@
       },
       {
         "id": "dashboard-render",
-        "enabled": true,
+        "enabled": false,
+        "deprecated": true,
         "lazy": true,
         "script": "scripts/metrics/dashboard-render.ps1",
         "args": "",
         "required": false,
-        "description": "Regenerate live HTML dashboard from latest metrics data"
+        "description": "[DEPRECATED] Static HTML dashboard — superseded by React dashboard (dashboard-ws-start). Kept for reference."
       },
       {
         "id": "live-feed-start",
-        "enabled": true,
+        "enabled": false,
+        "deprecated": true,
         "lazy": true,
         "script": "scripts/utilities/live-feed-manager.ps1",
         "args": "-Action start -RefreshSeconds 15 -ServerPort 8090 -OpenDashboard",
         "required": false,
-        "description": "Start live-feed + HTTP server + open dashboard in browser"
+        "description": "[DEPRECATED] Console live-feed HTTP server — superseded by dashboard-ws-start. Kept for reference."
+      },
+      {
+        "id": "dashboard-ws-start",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/dashboard/dashboard-ws-autostart.ps1",
+        "args": "-Quiet",
+        "required": false,
+        "description": "Start React WebSocket metrics server with watchdog auto-recovery — serves LLM observability dashboard on port 8080/5173"
       },
       {
         "id": "post-autostart-summary",
@@ -330,10 +341,11 @@
       {
         "id": "maintenance-watchtower",
         "enabled": true,
+        "lazy": true,
         "script": "scripts/maintenance/maintenance-watchtower.ps1",
-        "args": "-Action health",
+        "args": "-Action autoheal -Quiet",
         "required": false,
-        "description": "Auto-detect stale ML embeddings, RAG index, Dashboard, MCP Bridge — report status"
+        "description": "Health check completo + auto-healing de componentes caídos al inicio de sesión. Corre en background (lazy)."
       },
       {
         "id": "digest-generator",
