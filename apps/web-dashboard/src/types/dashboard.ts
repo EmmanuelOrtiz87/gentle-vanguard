@@ -21,12 +21,50 @@ export interface GlobalHealth {
   lastUpdated: string;
 }
 
+export interface ModelCost {
+  model: string;
+  inputTokens: number;
+  outputTokens: number;
+  totalTokens: number;
+  cost: number;
+  calls: number;
+}
+
+export interface LatencyMetrics {
+  avg: number;
+  p50: number;
+  p95: number;
+  p99: number;
+  max: number;
+  samples: number;
+}
+
+export interface FeedbackMetric {
+  thumbsUp: number;
+  thumbsDown: number;
+  total: number;
+  score: number;
+}
+
+export interface CostInsight {
+  model: string;
+  cost: number;
+  tokens: number;
+  pct: number;
+  estimatedCost?: number;
+  savingsPct?: number;
+  suggestedAction?: string;
+}
+
 export interface DashboardData {
-  tokens: { used: number; limit: number; cost: number };
-  sessions: { total: number; active: number; today: number };
+  tokens: { used: number; limit: number; cost: number; byModel: ModelCost[] };
+  sessions: { total: number; active: number; today: number; avgDuration: number };
   git: { commits: number; prsMerged: number; contributors: number };
   health: { status: string; routing: number };
   globalHealth?: GlobalHealth;
+  latency?: LatencyMetrics;
+  feedback?: FeedbackMetric;
+  costInsights?: CostInsight[];
   mcp?: {
     skills: { total: number; byAgent: Record<string, number>; recentlyUsed: string[] };
     calls: {
@@ -43,6 +81,12 @@ export interface DashboardData {
     uptime: number;
     pid: number;
   };
+  sla?: {
+    uptime: number;
+    incidents: number;
+    lastIncident: string | null;
+    sloCompliance: number;
+  };
 }
 
 export interface Session {
@@ -51,6 +95,8 @@ export interface Session {
   status: 'active' | 'idle' | 'completed';
   startTime: string;
   tokensUsed: number;
+  model?: string;
+  cost?: number;
 }
 
 export interface MetricHistory {
@@ -58,4 +104,5 @@ export interface MetricHistory {
   tokens: number;
   sessions: number;
   cost: number;
+  latency?: number;
 }
