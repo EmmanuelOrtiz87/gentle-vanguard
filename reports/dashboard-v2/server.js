@@ -13,22 +13,56 @@ const MODEL_ROUTING = path.join(ROOT, 'config', 'model-routing.json');
 const AGENT_PROFILES = path.join(ROOT, 'config', 'orchestrator.json');
 
 const MIME_TYPES = {
-  '.html': 'text/html', '.css': 'text/css', '.js': 'application/javascript', '.json': 'application/json'
+  '.html': 'text/html',
+  '.css': 'text/css',
+  '.js': 'application/javascript',
+  '.json': 'application/json',
 };
 
 const MECHANISM_PROFILES = {
-  'fast-cheap': { profile: 'optimized', thinking: 'off', description: 'Fast response, minimal reasoning' },
-  'strong-reasoning': { profile: 'deep', thinking: 'high', description: 'Deep reasoning, high compute' },
-  'strong-coding': { profile: 'focused', thinking: 'medium', description: 'Focused coding, balanced compute' },
-  'strong-review': { profile: 'thorough', thinking: 'high', description: 'Thorough review, full analysis' },
-  'inherit': { profile: 'default', thinking: 'default', description: 'Inherits from parent context' }
+  'fast-cheap': {
+    profile: 'optimized',
+    thinking: 'off',
+    description: 'Fast response, minimal reasoning',
+  },
+  'strong-reasoning': {
+    profile: 'deep',
+    thinking: 'high',
+    description: 'Deep reasoning, high compute',
+  },
+  'strong-coding': {
+    profile: 'focused',
+    thinking: 'medium',
+    description: 'Focused coding, balanced compute',
+  },
+  'strong-review': {
+    profile: 'thorough',
+    thinking: 'high',
+    description: 'Thorough review, full analysis',
+  },
+  inherit: { profile: 'default', thinking: 'default', description: 'Inherits from parent context' },
 };
 
 // Opencode runtime profiles — detected from CLAUDE.md or model metadata
 const OPENCODE_PROFILES = {
-  'ultra': { profile: 'ultra', thinking: 'off', chat: 'chat-compact', description: 'Ultra-compact response, max 4 lines' },
-  'lleno': { profile: 'lleno', thinking: 'medium', chat: 'chat-balanced', description: 'Full verbose, detailed responses' },
-  'balanced': { profile: 'balanced', thinking: 'low', chat: 'chat-balanced', description: 'Balanced verbosity mode' },
+  ultra: {
+    profile: 'ultra',
+    thinking: 'off',
+    chat: 'chat-compact',
+    description: 'Ultra-compact response, max 4 lines',
+  },
+  lleno: {
+    profile: 'lleno',
+    thinking: 'medium',
+    chat: 'chat-balanced',
+    description: 'Full verbose, detailed responses',
+  },
+  balanced: {
+    profile: 'balanced',
+    thinking: 'low',
+    chat: 'chat-balanced',
+    description: 'Balanced verbosity mode',
+  },
 };
 
 // SSE clients for push-based live updates
@@ -43,21 +77,28 @@ let serverMetrics = {
   startTime: Date.now(),
   virtualTokens: 1234,
   virtualCost: 0.0086,
-  sessionId: 'live-' + Date.now().toString(36)
+  sessionId: 'live-' + Date.now().toString(36),
 };
 
 function readJson(filePath) {
   try {
     if (!fs.existsSync(filePath)) return null;
     return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-  } catch { return null; }
+  } catch {
+    return null;
+  }
 }
 
 function readDir(dirPath) {
   try {
     if (!fs.existsSync(dirPath)) return [];
-    return fs.readdirSync(dirPath, { withFileTypes: true }).filter(d => d.isDirectory()).map(d => d.name);
-  } catch { return []; }
+    return fs
+      .readdirSync(dirPath, { withFileTypes: true })
+      .filter((d) => d.isDirectory())
+      .map((d) => d.name);
+  } catch {
+    return [];
+  }
 }
 
 function findStateInDir(dir) {
@@ -70,7 +111,9 @@ function getAgentModel(agentCode) {
   const routing = readJson(MODEL_ROUTING);
   if (!routing || !routing.agents) return 'inherit';
   const agent = routing.agents[agentCode];
-  return agent ? { model: agent.model, thinking: agent.thinking, rationale: agent.rationale } : null;
+  return agent
+    ? { model: agent.model, thinking: agent.thinking, rationale: agent.rationale }
+    : null;
 }
 
 function detectMechanismFromModel(model) {
@@ -79,12 +122,15 @@ function detectMechanismFromModel(model) {
 
   // Check opencode runtime profiles first
   if (lower.includes('ultra') || lower.includes('chat-compact')) return OPENCODE_PROFILES['ultra'];
-  if (lower.includes('lleno') || lower.includes('chat-balanced') && lower.includes('lleno')) return OPENCODE_PROFILES['lleno'];
-  if (lower.includes('balanced') || lower.includes('chat-balanced') && !lower.includes('lleno')) return OPENCODE_PROFILES['balanced'];
+  if (lower.includes('lleno') || (lower.includes('chat-balanced') && lower.includes('lleno')))
+    return OPENCODE_PROFILES['lleno'];
+  if (lower.includes('balanced') || (lower.includes('chat-balanced') && !lower.includes('lleno')))
+    return OPENCODE_PROFILES['balanced'];
 
   // Check agent/model-routing profiles
   if (lower.includes('fast') || lower.includes('cheap')) return MECHANISM_PROFILES['fast-cheap'];
-  if (lower.includes('reason') || lower.includes('deep')) return MECHANISM_PROFILES['strong-reasoning'];
+  if (lower.includes('reason') || lower.includes('deep'))
+    return MECHANISM_PROFILES['strong-reasoning'];
   if (lower.includes('code') || lower.includes('dev')) return MECHANISM_PROFILES['strong-coding'];
   if (lower.includes('review') || lower.includes('qa')) return MECHANISM_PROFILES['strong-review'];
   return MECHANISM_PROFILES['inherit'];
@@ -108,7 +154,7 @@ function collectSessions() {
       totalContextChars: state.totalContextChars || 0,
       model: state.model || '',
       status: isActive ? 'ACTIVE' : 'COMPLETED',
-      turns: state.turns || []
+      turns: state.turns || [],
     });
   }
   sessions.sort((a, b) => (b.startedAt || '').localeCompare(a.startedAt || ''));
@@ -118,8 +164,12 @@ function collectSessions() {
 function getCurrentSessionId() {
   const sessions = readDir(CONTEXT_LOG_DIR);
   if (sessions.length === 0) return 'none';
-  const sessionDirs = sessions.map(s => ({ name: s, stat: fs.statSync(path.join(CONTEXT_LOG_DIR, s), { throwIfNoEntry: false }) }))
-    .filter(s => s.stat);
+  const sessionDirs = sessions
+    .map((s) => ({
+      name: s,
+      stat: fs.statSync(path.join(CONTEXT_LOG_DIR, s), { throwIfNoEntry: false }),
+    }))
+    .filter((s) => s.stat);
   sessionDirs.sort((a, b) => b.stat.mtimeMs - a.stat.mtimeMs);
   return sessionDirs.length > 0 ? sessionDirs[0].name : sessions[sessions.length - 1];
 }
@@ -131,9 +181,10 @@ function getLiveSession() {
   if (!state) {
     // Virtual fallback when no real session state exists
     const elapsed = Math.floor((Date.now() - serverMetrics.startTime) / 1000);
-    const elapsedStr = elapsed >= 3600
-      ? `${Math.floor(elapsed / 3600)}h ${Math.floor((elapsed % 3600) / 60)}m`
-      : `${Math.floor(elapsed / 60)}m ${elapsed % 60}s`;
+    const elapsedStr =
+      elapsed >= 3600
+        ? `${Math.floor(elapsed / 3600)}h ${Math.floor((elapsed % 3600) / 60)}m`
+        : `${Math.floor(elapsed / 60)}m ${elapsed % 60}s`;
     const totalVTokens = serverMetrics.virtualTokens || 150;
     return {
       sessionId: serverMetrics.sessionId,
@@ -147,20 +198,22 @@ function getLiveSession() {
         output: Math.floor(totalVTokens * 0.35),
         total: totalVTokens,
         cost: parseFloat((totalVTokens * 0.000007).toFixed(6)) || 0.001,
-        contextChars: totalVTokens * 3
-      },
-      turns: [{
-        turn: 1,
-        label: 'Auto-tracked',
-        timestamp: new Date().toISOString(),
-        inputTokens: Math.floor(totalVTokens * 0.65),
-        outputTokens: Math.floor(totalVTokens * 0.35),
-        totalTokens: totalVTokens,
         contextChars: totalVTokens * 3,
-        cost: parseFloat((totalVTokens * 0.000007).toFixed(6)) || 0.001,
-        mechanism: MECHANISM_PROFILES['fast-cheap']
-      }],
-      lastUpdate: new Date().toISOString()
+      },
+      turns: [
+        {
+          turn: 1,
+          label: 'Auto-tracked',
+          timestamp: new Date().toISOString(),
+          inputTokens: Math.floor(totalVTokens * 0.65),
+          outputTokens: Math.floor(totalVTokens * 0.35),
+          totalTokens: totalVTokens,
+          contextChars: totalVTokens * 3,
+          cost: parseFloat((totalVTokens * 0.000007).toFixed(6)) || 0.001,
+          mechanism: MECHANISM_PROFILES['fast-cheap'],
+        },
+      ],
+      lastUpdate: new Date().toISOString(),
     };
   }
 
@@ -170,9 +223,10 @@ function getLiveSession() {
 
   const startTime = state.startedAt ? new Date(state.startedAt) : new Date();
   const elapsed = Math.floor((Date.now() - startTime.getTime()) / 1000);
-  const elapsedStr = elapsed >= 3600
-    ? `${Math.floor(elapsed / 3600)}h ${Math.floor((elapsed % 3600) / 60)}m`
-    : `${Math.floor(elapsed / 60)}m ${elapsed % 60}s`;
+  const elapsedStr =
+    elapsed >= 3600
+      ? `${Math.floor(elapsed / 3600)}h ${Math.floor((elapsed % 3600) / 60)}m`
+      : `${Math.floor(elapsed / 60)}m ${elapsed % 60}s`;
 
   return {
     sessionId: state.sessionId || currentId,
@@ -186,7 +240,7 @@ function getLiveSession() {
       output: totalOut,
       total: totalIn + totalOut,
       cost: state.totalCost || 0,
-      contextChars: state.totalContextChars || 0
+      contextChars: state.totalContextChars || 0,
     },
     turns: (state.turns || []).map((t, i) => ({
       turn: t.turn || i + 1,
@@ -197,9 +251,9 @@ function getLiveSession() {
       totalTokens: t.totalTokens || 0,
       contextChars: t.contextChars || 0,
       cost: t.cost || 0,
-      mechanism: mechanism
+      mechanism: mechanism,
     })),
-    lastUpdate: new Date().toISOString()
+    lastUpdate: new Date().toISOString(),
   };
 }
 
@@ -208,13 +262,16 @@ function getMechanismHistory(sessions) {
   let lastMechanism = null;
   for (const session of sessions) {
     const mechanism = detectMechanismFromModel(session.model);
-    if (lastMechanism && (lastMechanism.profile !== mechanism.profile || lastMechanism.thinking !== mechanism.thinking)) {
+    if (
+      lastMechanism &&
+      (lastMechanism.profile !== mechanism.profile || lastMechanism.thinking !== mechanism.thinking)
+    ) {
       changes.push({
         timestamp: session.startedAt,
         sessionId: session.id,
         from: lastMechanism,
         to: mechanism,
-        reason: `Model change: ${session.model}`
+        reason: `Model change: ${session.model}`,
       });
     }
     lastMechanism = mechanism;
@@ -222,14 +279,18 @@ function getMechanismHistory(sessions) {
     for (let i = 0; i < session.turns.length; i++) {
       const turn = session.turns[i];
       const turnMech = detectMechanismFromModel(session.model || '');
-      if (i > 0 && lastMechanism && (turnMech.profile !== lastMechanism.profile || turnMech.thinking !== lastMechanism.thinking)) {
+      if (
+        i > 0 &&
+        lastMechanism &&
+        (turnMech.profile !== lastMechanism.profile || turnMech.thinking !== lastMechanism.thinking)
+      ) {
         changes.push({
           timestamp: turn.timestamp || session.startedAt,
           sessionId: session.id,
           turn: turn.turn,
           from: lastMechanism,
           to: turnMech,
-          reason: `Turn ${turn.turn}: ${turn.label || ''}`
+          reason: `Turn ${turn.turn}: ${turn.label || ''}`,
         });
       }
       lastMechanism = turnMech;
@@ -246,7 +307,7 @@ function getMechanismHistory(sessions) {
           sessionId: 'config',
           from: { profile: lastAgent.model, thinking: lastAgent.thinking, agent: lastAgent.code },
           to: { profile: config.model, thinking: config.thinking, agent: code },
-          reason: config.rationale || `Agent transition: ${lastAgent.code}->${code}`
+          reason: config.rationale || `Agent transition: ${lastAgent.code}->${code}`,
         });
       }
       lastAgent = { code, ...config };
@@ -277,7 +338,7 @@ function getHistory(range) {
       cutoff = new Date(0);
   }
 
-  const filtered = sessions.filter(s => {
+  const filtered = sessions.filter((s) => {
     const isActive = s.status === 'ACTIVE' || s.status === 'active';
     if (isActive) return true;
     if (!s.startedAt) return false;
@@ -292,7 +353,7 @@ function getHistory(range) {
     totalTokens: 0,
     totalCost: 0,
     totalContextChars: 0,
-    activeCount: 0
+    activeCount: 0,
   };
 
   for (const s of filtered) {
@@ -310,29 +371,48 @@ function getHistory(range) {
 
 function runGit(cmd) {
   try {
-    return cp.execSync(`git ${cmd}`, { cwd: ROOT, encoding: 'utf-8', timeout: 5000 }).toString().trim();
-  } catch { return null; }
+    return cp
+      .execSync(`git ${cmd}`, { cwd: ROOT, encoding: 'utf-8', timeout: 5000 })
+      .toString()
+      .trim();
+  } catch {
+    return null;
+  }
 }
 
 function runGh(cmd) {
   try {
-    return cp.execSync(`gh ${cmd}`, { cwd: ROOT, encoding: 'utf-8', timeout: 5000 }).toString().trim();
-  } catch { return null; }
+    return cp
+      .execSync(`gh ${cmd}`, { cwd: ROOT, encoding: 'utf-8', timeout: 5000 })
+      .toString()
+      .trim();
+  } catch {
+    return null;
+  }
 }
 
 function getGitStats() {
   const totalStr = runGit('rev-list --count HEAD');
-  const monthStr = runGit(`rev-list --count --after="${new Date(Date.now() - 30*24*60*60*1000).toISOString().slice(0,10)}" HEAD`);
-  const weekStr = runGit(`rev-list --count --after="${new Date(Date.now() - 7*24*60*60*1000).toISOString().slice(0,10)}" HEAD`);
-  const todayStr = runGit(`rev-list --count --after="${new Date().toISOString().slice(0,10)}" HEAD`);
+  const monthStr = runGit(
+    `rev-list --count --after="${new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)}" HEAD`,
+  );
+  const weekStr = runGit(
+    `rev-list --count --after="${new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)}" HEAD`,
+  );
+  const todayStr = runGit(
+    `rev-list --count --after="${new Date().toISOString().slice(0, 10)}" HEAD`,
+  );
   const total = totalStr ? parseInt(totalStr) || 0 : 0;
   const prMergedStr = runGh('pr list --state merged --json number --jq length');
   const prAllStr = runGh('pr list --state all --json number --jq length');
   const contributorsStr = runGit('shortlog -sn HEAD');
-  const contributors = contributorsStr ? contributorsStr.split(/\r?\n/).filter(l => l.trim()).length : 0;
+  const contributors = contributorsStr
+    ? contributorsStr.split(/\r?\n/).filter((l) => l.trim()).length
+    : 0;
   // Lines added/removed from last 30 commits
   const diffStr = runGit('diff --shortstat HEAD~30..HEAD');
-  let linesAdded = 0, linesRemoved = 0;
+  let linesAdded = 0,
+    linesRemoved = 0;
   if (diffStr) {
     const ins = diffStr.match(/(\d+) insertion/);
     const del = diffStr.match(/(\d+) deletion/);
@@ -340,11 +420,15 @@ function getGitStats() {
     if (del) linesRemoved = parseInt(del[1]) || 0;
   }
   return {
-    commits: total, month: monthStr ? parseInt(monthStr) || 0 : 0,
-    week: weekStr ? parseInt(weekStr) || 0 : 0, today: todayStr ? parseInt(todayStr) || 0 : 0,
+    commits: total,
+    month: monthStr ? parseInt(monthStr) || 0 : 0,
+    week: weekStr ? parseInt(weekStr) || 0 : 0,
+    today: todayStr ? parseInt(todayStr) || 0 : 0,
     prsMerged: prMergedStr ? parseInt(prMergedStr) || 0 : 0,
     prsTotal: prAllStr ? parseInt(prAllStr) || 0 : 0,
-    contributors, linesAdded, linesRemoved
+    contributors,
+    linesAdded,
+    linesRemoved,
   };
 }
 
@@ -353,7 +437,9 @@ function getCommitTimeline() {
   for (let i = 6; i >= 0; i--) {
     const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
     const dateStr = d.toISOString().slice(0, 10);
-    const countStr = runGit(`rev-list --count --after="${dateStr}T00:00:00" --before="${dateStr}T23:59:59" HEAD`);
+    const countStr = runGit(
+      `rev-list --count --after="${dateStr}T00:00:00" --before="${dateStr}T23:59:59" HEAD`,
+    );
     days.push({ date: dateStr, count: countStr ? parseInt(countStr) || 0 : 0 });
   }
   return days;
@@ -371,7 +457,9 @@ function generateMetrics(sessions) {
   const totalTokens = totalIn + totalOut;
   const totalCost = allSessions.reduce((s, sess) => s + (sess.totalCost || 0), 0);
   const totalChars = allSessions.reduce((s, sess) => s + (sess.totalContextChars || 0), 0);
-  const activeCount = allSessions.filter(s => s.status === 'ACTIVE' || s.status === 'active').length;
+  const activeCount = allSessions.filter(
+    (s) => s.status === 'ACTIVE' || s.status === 'active',
+  ).length;
   const tokensLimit = 120000;
 
   const monthSessions = getHistory('month').sessions;
@@ -379,8 +467,9 @@ function generateMetrics(sessions) {
 
   const tokensToday = today.sessions.reduce((s, sess) => s + (sess.totalTokens || 0), 0);
   const liveSession = getLiveSession();
-  const routedSessions = allSessions.filter(s => s.model && s.model !== '').length;
-  const routingPct = allSessions.length > 0 ? Math.round((routedSessions / allSessions.length) * 100) : 100;
+  const routedSessions = allSessions.filter((s) => s.model && s.model !== '').length;
+  const routingPct =
+    allSessions.length > 0 ? Math.round((routedSessions / allSessions.length) * 100) : 100;
 
   const effectiveTokens = tokensToday || totalTokens || serverMetrics.virtualTokens;
   const effectiveCost = parseFloat(totalCost.toFixed(6)) || serverMetrics.virtualCost;
@@ -392,42 +481,49 @@ function generateMetrics(sessions) {
       limit: tokensLimit,
       cost: effectiveCost,
       forecast: parseFloat((effectiveCost * 30).toFixed(2)),
-      savings: parseFloat(((effectiveTokens * 0.00001) - (effectiveTokens * 0.000007)).toFixed(6)),
-      pct: parseFloat(((effectiveTokens / tokensLimit) * 100).toFixed(2))
+      savings: parseFloat((effectiveTokens * 0.00001 - effectiveTokens * 0.000007).toFixed(6)),
+      pct: parseFloat(((effectiveTokens / tokensLimit) * 100).toFixed(2)),
     },
     sessions: {
       total: allSessions.length || 1,
       active: activeCount || 1,
       today: today.sessions.length || 1,
-      avgDuration: allSessions.length > 0 ? `${(allSessions.reduce((s, sess) => {
-        if (!sess.startedAt) return s;
-        const st = new Date(sess.startedAt);
-        if (isNaN(st.getTime())) return s;
-        return s + (Math.max(0, (now.getTime() - st.getTime()) / 3600000));
-      }, 0) / allSessions.length).toFixed(1)}h` : '2.3h'
+      avgDuration:
+        allSessions.length > 0
+          ? `${(
+              allSessions.reduce((s, sess) => {
+                if (!sess.startedAt) return s;
+                const st = new Date(sess.startedAt);
+                if (isNaN(st.getTime())) return s;
+                return s + Math.max(0, (now.getTime() - st.getTime()) / 3600000);
+              }, 0) / allSessions.length
+            ).toFixed(1)}h`
+          : '2.3h',
     },
     git: { ...getGitStats(), timeline: getCommitTimeline() },
     health: {
       status: effectiveCost < 0.05 ? 'GREEN' : effectiveCost < 0.1 ? 'YELLOW' : 'RED',
       routing: routingPct + '%',
-      benchmark: `${routedSessions || 1}/${allSessions.length || 3}`
+      benchmark: `${routedSessions || 1}/${allSessions.length || 3}`,
     },
     live: {
       trafficLight: effectiveCost < 0.05 ? 'GREEN' : effectiveCost < 0.1 ? 'YELLOW' : 'RED',
       routingAcc: routingPct + '%',
-      isPeakHour: isPeakHour
+      isPeakHour: isPeakHour,
     },
     traceability: {
       live: liveSession,
       totalSessions: allSessions.length || 1,
-      totalTurns: allSessions.reduce((s, sess) => s + (sess.turnCount || 0), 0) || Math.floor(serverMetrics.requestCount / 2),
+      totalTurns:
+        allSessions.reduce((s, sess) => s + (sess.turnCount || 0), 0) ||
+        Math.floor(serverMetrics.requestCount / 2),
       totalTokens: totalTokens || serverMetrics.virtualTokens,
       totalCost: effectiveCost,
       totalContextChars: totalChars || serverMetrics.virtualTokens * 3,
       monthSessions: monthSessions.length || 1,
       weekSessions: weekSessions.length || 1,
-      todaySessions: today.sessions.length || 1
-    }
+      todaySessions: today.sessions.length || 1,
+    },
   };
 }
 
@@ -436,7 +532,7 @@ function parseUrlParams(url) {
   if (idx === -1) return {};
   const qs = url.substring(idx + 1);
   const params = {};
-  qs.split('&').forEach(p => {
+  qs.split('&').forEach((p) => {
     const [k, v] = p.split('=');
     params[decodeURIComponent(k)] = decodeURIComponent(v || '');
   });
@@ -454,7 +550,11 @@ function watchSessionState() {
     const live = getLiveSession();
     if (!live) return;
     const data = JSON.stringify({ type: 'live-update', data: live });
-    sseClients.forEach(c => { try { c.res.write(`data: ${data}\n\n`); } catch {} });
+    sseClients.forEach((c) => {
+      try {
+        c.res.write(`data: ${data}\n\n`);
+      } catch {}
+    });
   });
 }
 
@@ -469,8 +569,12 @@ setInterval(() => {
     const live = getLiveSession();
     if (live) {
       const payload = JSON.stringify({ type: 'live-update', data: live });
-      sseClients.forEach(c => {
-        try { c.res.write(`: tick\n\ndata: ${payload}\n\n`); } catch { sseClients = sseClients.filter(x => x.id !== c.id); }
+      sseClients.forEach((c) => {
+        try {
+          c.res.write(`: tick\n\ndata: ${payload}\n\n`);
+        } catch {
+          sseClients = sseClients.filter((x) => x.id !== c.id);
+        }
       });
     }
   }
@@ -481,11 +585,13 @@ setInterval(() => {
   if (sseClients.length === 0) return;
   const live = getLiveSession();
   if (!live) return;
-  sseClients.forEach(c => {
+  sseClients.forEach((c) => {
     try {
       c.res.write(`: heartbeat\n`);
       c.res.write(`data: ${JSON.stringify({ type: 'live-update', data: live })}\n\n`);
-    } catch { sseClients = sseClients.filter(x => x.id !== c.id); }
+    } catch {
+      sseClients = sseClients.filter((x) => x.id !== c.id);
+    }
   });
 }, 30000);
 
@@ -494,7 +600,11 @@ const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method === 'OPTIONS') { res.writeHead(200); res.end(); return; }
+  if (req.method === 'OPTIONS') {
+    res.writeHead(200);
+    res.end();
+    return;
+  }
 
   // Track request for live metrics
   serverMetrics.requestCount++;
@@ -514,7 +624,14 @@ const server = http.createServer((req, res) => {
   // Export endpoint
   if (url === '/api/export') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ status: 'ok', message: 'Export available', formats: ['pdf', 'png'], timestamp: new Date().toISOString() }));
+    res.end(
+      JSON.stringify({
+        status: 'ok',
+        message: 'Export available',
+        formats: ['pdf', 'png'],
+        timestamp: new Date().toISOString(),
+      }),
+    );
     return;
   }
 
@@ -542,7 +659,7 @@ const server = http.createServer((req, res) => {
   if (url.startsWith('/api/traceability/session/')) {
     const sessionId = decodeURIComponent(url.replace('/api/traceability/session/', ''));
     const sessions = collectSessions();
-    const session = sessions.find(s => s.id === sessionId);
+    const session = sessions.find((s) => s.id === sessionId);
     if (!session) {
       res.writeHead(404, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Session not found' }));
@@ -576,8 +693,8 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
-      'Access-Control-Allow-Origin': '*'
+      Connection: 'keep-alive',
+      'Access-Control-Allow-Origin': '*',
     });
     res.write('data: {"connected":true}\n\n');
 
@@ -589,7 +706,7 @@ const server = http.createServer((req, res) => {
     watchSessionState();
 
     req.on('close', () => {
-      sseClients = sseClients.filter(c => c.id !== clientId);
+      sseClients = sseClients.filter((c) => c.id !== clientId);
       if (sseClients.length === 0 && currentStateWatcher) {
         currentStateWatcher.close();
         currentStateWatcher = null;
@@ -607,10 +724,15 @@ const server = http.createServer((req, res) => {
       agentTotals[code] = (agentTotals[code] || 0) + (s.totalTokens || 0);
     }
     const labels = Object.keys(agentTotals).sort();
-    const data = labels.map(l => agentTotals[l]);
+    const data = labels.map((l) => agentTotals[l]);
     if (labels.length === 0) {
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ labels: ['BA','DEV','QA','OPS','GOV','DOC','MKT'], data: [42, 85, 38, 20, 55, 30, 15] }));
+      res.end(
+        JSON.stringify({
+          labels: ['BA', 'DEV', 'QA', 'OPS', 'GOV', 'DOC', 'MKT'],
+          data: [42, 85, 38, 20, 55, 30, 15],
+        }),
+      );
       return;
     }
     res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -626,30 +748,62 @@ const server = http.createServer((req, res) => {
     const bmPath = path.join(ftBase, 'benchmarks');
 
     const reg = readJson(regPath);
-    const adapters = reg && reg.adapters ? reg.adapters.map(a => ({
-      domain: a.domain, model: a.model, version: a.version, active: a.active,
-      trainedAt: a.trainedAt, path: a.path, accuracy: a.metrics?.accuracy || 0,
-      loss: a.metrics?.loss || 1.0
-    })) : [];
+    const adapters =
+      reg && reg.adapters
+        ? reg.adapters.map((a) => ({
+            domain: a.domain,
+            model: a.model,
+            version: a.version,
+            active: a.active,
+            trainedAt: a.trainedAt,
+            path: a.path,
+            accuracy: a.metrics?.accuracy || 0,
+            loss: a.metrics?.loss || 1.0,
+          }))
+        : [];
 
-    const domains = ['BA','SAD','DEV','QA'];
-    const trainCounts = {}; const valCounts = {};
-    let totalTrain = 0, totalVal = 0;
+    const domains = ['BA', 'SAD', 'DEV', 'QA'];
+    const trainCounts = {};
+    const valCounts = {};
+    let totalTrain = 0,
+      totalVal = 0;
     for (const d of domains) {
       const tf = path.join(dsPath, 'train', d + '.jsonl');
       const vf = path.join(dsPath, 'val', d + '.jsonl');
-      const tc = fs.existsSync(tf) ? fs.readFileSync(tf,'utf-8').trim().split(/\r?\n/).filter(l => l).length : 0;
-      const vc = fs.existsSync(vf) ? fs.readFileSync(vf,'utf-8').trim().split(/\r?\n/).filter(l => l).length : 0;
-      if (tc > 0 || vc > 0) { trainCounts[d] = tc; valCounts[d] = vc; }
-      totalTrain += tc; totalVal += vc;
+      const tc = fs.existsSync(tf)
+        ? fs
+            .readFileSync(tf, 'utf-8')
+            .trim()
+            .split(/\r?\n/)
+            .filter((l) => l).length
+        : 0;
+      const vc = fs.existsSync(vf)
+        ? fs
+            .readFileSync(vf, 'utf-8')
+            .trim()
+            .split(/\r?\n/)
+            .filter((l) => l).length
+        : 0;
+      if (tc > 0 || vc > 0) {
+        trainCounts[d] = tc;
+        valCounts[d] = vc;
+      }
+      totalTrain += tc;
+      totalVal += vc;
     }
     const rawDir = path.join(dsPath, 'raw');
-    const totalRaw = fs.existsSync(rawDir) ? fs.readdirSync(rawDir).filter(f => f.startsWith('ft-raw-')).length : 0;
+    const totalRaw = fs.existsSync(rawDir)
+      ? fs.readdirSync(rawDir).filter((f) => f.startsWith('ft-raw-')).length
+      : 0;
 
     // Latest benchmark
     let benchmark = null;
     if (fs.existsSync(bmPath)) {
-      const bmFiles = fs.readdirSync(bmPath).filter(f => f.startsWith('eval-')).sort().reverse();
+      const bmFiles = fs
+        .readdirSync(bmPath)
+        .filter((f) => f.startsWith('eval-'))
+        .sort()
+        .reverse();
       if (bmFiles.length > 0) {
         const bm = readJson(path.join(bmPath, bmFiles[0]));
         if (bm) benchmark = bm;
@@ -658,21 +812,96 @@ const server = http.createServer((req, res) => {
 
     // Script count
     const ftScriptDir = path.join(ROOT, 'scripts', 'utilities', 'FINE-TUNING');
-    const scriptCount = fs.existsSync(ftScriptDir) ? fs.readdirSync(ftScriptDir).filter(f => f.endsWith('.ps1')).length : 0;
+    const scriptCount = fs.existsSync(ftScriptDir)
+      ? fs.readdirSync(ftScriptDir).filter((f) => f.endsWith('.ps1')).length
+      : 0;
 
     // Test count
     const ftTestDir = path.join(ROOT, 'tests', 'unit', 'fine-tuning');
-    const testFiles = fs.existsSync(ftTestDir) ? fs.readdirSync(ftTestDir).filter(f => f.endsWith('.tests.ps1')).length : 0;
+    const testFiles = fs.existsSync(ftTestDir)
+      ? fs.readdirSync(ftTestDir).filter((f) => f.endsWith('.tests.ps1')).length
+      : 0;
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({
-      adapters,
-      dataset: { train: totalTrain, val: totalVal, raw: totalRaw, byDomain: { train: trainCounts, val: valCounts } },
-      benchmark: benchmark ? { evalDate: benchmark.evalDate, domains: benchmark.dataset } : null,
-      scripts: scriptCount,
-      tests: { files: testFiles },
-      registryUpdated: reg?.updated || null
-    }));
+    res.end(
+      JSON.stringify({
+        adapters,
+        dataset: {
+          train: totalTrain,
+          val: totalVal,
+          raw: totalRaw,
+          byDomain: { train: trainCounts, val: valCounts },
+        },
+        benchmark: benchmark ? { evalDate: benchmark.evalDate, domains: benchmark.dataset } : null,
+        scripts: scriptCount,
+        tests: { files: testFiles },
+        registryUpdated: reg?.updated || null,
+      }),
+    );
+    return;
+  }
+
+  // Trace health — reads .session/traces/preprocess.jsonl
+  if (url === '/api/trace/health') {
+    const traceFile = path.join(ROOT, '.session', 'traces', 'preprocess.jsonl');
+    const result = {
+      avgLatencyMs: 0,
+      errorCount: 0,
+      totalEntries: 0,
+      phases: [],
+      errors: [],
+      lastError: null,
+      healthy: true,
+    };
+    if (fs.existsSync(traceFile)) {
+      try {
+        const lines = fs
+          .readFileSync(traceFile, 'utf-8')
+          .trim()
+          .split(/\r?\n/)
+          .filter((l) => l);
+        result.totalEntries = lines.length;
+        const entries = lines
+          .map((l) => {
+            try {
+              return JSON.parse(l);
+            } catch {
+              return null;
+            }
+          })
+          .filter(Boolean);
+        const totalMs = entries.reduce((s, e) => s + (e.ElapsedMs || 0), 0);
+        result.avgLatencyMs = Math.round(totalMs / (entries.length || 1));
+        const errors = entries.filter((e) => e.Status === 'error' || e.Status === 'timeout');
+        result.errorCount = errors.length;
+        result.errors = errors.slice(-5).map((e) => ({
+          phase: e.Phase,
+          status: e.Status,
+          detail: e.Detail || '',
+          elapsedMs: e.ElapsedMs,
+        }));
+        result.lastError = errors.length > 0 ? errors[errors.length - 1] : null;
+        const phases = {};
+        entries.forEach((e) => {
+          if (e.Phase) {
+            phases[e.Phase] = phases[e.Phase] || { count: 0, totalMs: 0 };
+            phases[e.Phase].count++;
+            phases[e.Phase].totalMs += e.ElapsedMs || 0;
+          }
+        });
+        result.phases = Object.entries(phases).map(([name, d]) => ({
+          name,
+          count: d.count,
+          avgMs: Math.round(d.totalMs / d.count),
+        }));
+        result.healthy = result.errorCount === 0;
+      } catch (e) {
+        result.healthy = false;
+        result.error = e.message;
+      }
+    }
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(result));
     return;
   }
 
@@ -702,9 +931,9 @@ server.listen(PORT, () => {
   console.log(` Traceability Live: http://localhost:${PORT}/api/traceability/live`);
   console.log(` Traceability Sessions: http://localhost:${PORT}/api/traceability/sessions`);
   console.log(` Traceability History: http://localhost:${PORT}/api/traceability/history`);
-   console.log(` Traceability Mechanisms: http://localhost:${PORT}/api/traceability/mechanisms`);
-   console.log(` Traceability Agents: http://localhost:${PORT}/api/traceability/agents`);
-   console.log(` Traceability SSE Events: http://localhost:${PORT}/api/traceability/events`);
-   console.log(` Export API: http://localhost:${PORT}/api/export`);
+  console.log(` Traceability Mechanisms: http://localhost:${PORT}/api/traceability/mechanisms`);
+  console.log(` Traceability Agents: http://localhost:${PORT}/api/traceability/agents`);
+  console.log(` Traceability SSE Events: http://localhost:${PORT}/api/traceability/events`);
+  console.log(` Export API: http://localhost:${PORT}/api/export`);
   console.log(` Health: http://localhost:${PORT}/health`);
 });

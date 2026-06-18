@@ -1,15 +1,30 @@
 const originalConsoleError = console.error;
-console.error = function(...args) {
+console.error = function (...args) {
   const msg = args[0]?.toString() || '';
-  if (msg.includes('message channel closed') || msg.includes('asynchronous response') ||
-      msg.includes('chrome-extension') || msg.includes('Unchecked runtime.lastError')) return;
+  if (
+    msg.includes('message channel closed') ||
+    msg.includes('asynchronous response') ||
+    msg.includes('chrome-extension') ||
+    msg.includes('Unchecked runtime.lastError')
+  )
+    return;
   originalConsoleError.apply(console, args);
 };
 
 const data = {
   tokens: { used: 0, limit: 120000, cost: 0, forecast: 0, savings: 0, pct: 0 },
   sessions: { total: 0, active: 0, today: 0, avgDuration: '0h' },
-  git: { commits: 0, month: 0, week: 0, today: 0, prsMerged: 0, prsTotal: 0, contributors: 0, linesAdded: 0, linesRemoved: 0 },
+  git: {
+    commits: 0,
+    month: 0,
+    week: 0,
+    today: 0,
+    prsMerged: 0,
+    prsTotal: 0,
+    contributors: 0,
+    linesAdded: 0,
+    linesRemoved: 0,
+  },
   health: { status: 'GREEN', routing: '100%', benchmark: '0/3' },
   sla: { uptime: '99.9%', incidents: 0, mttr: '0m' },
   history: { tokens: [], cost: [] },
@@ -21,15 +36,24 @@ const data = {
     historyRange: 'all',
     historyData: null,
     selectedSession: null,
-    expandedTurn: null
+    expandedTurn: null,
   },
   ft: {
     adapters: [],
     dataset: { train: 0, val: 0, raw: 0 },
     benchmark: null,
     scripts: 0,
-    tests: { pass: 0, total: 0 }
-  }
+    tests: { pass: 0, total: 0 },
+  },
+  traceHealth: {
+    avgLatencyMs: 0,
+    errorCount: 0,
+    totalEntries: 0,
+    phases: [],
+    errors: [],
+    lastError: null,
+    healthy: true,
+  },
 };
 
 const t = (key) => i18n.t(key);
@@ -41,16 +65,37 @@ const api = {
       const resp = await fetch(`${this.baseUrl}${url}`);
       if (!resp.ok) throw new Error('Failed');
       return await resp.json();
-    } catch (e) { return null; }
+    } catch (e) {
+      return null;
+    }
   },
-  async fetchMetrics() { return this.fetch('/api/metrics'); },
-  async fetchTraceLive() { return this.fetch('/api/traceability/live'); },
-  async fetchTraceSessions() { return this.fetch('/api/traceability/sessions'); },
-  async fetchTraceHistory(range) { return this.fetch(`/api/traceability/history?range=${range}`); },
-  async fetchTraceMechanisms() { return this.fetch('/api/traceability/mechanisms'); },
-  async fetchAgentActivity() { return this.fetch('/api/traceability/agents'); },
-  async fetchTraceSession(id) { return this.fetch(`/api/traceability/session/${encodeURIComponent(id)}`); },
-  async fetchFt() { return this.fetch('/api/ft'); },
+  async fetchMetrics() {
+    return this.fetch('/api/metrics');
+  },
+  async fetchTraceLive() {
+    return this.fetch('/api/traceability/live');
+  },
+  async fetchTraceSessions() {
+    return this.fetch('/api/traceability/sessions');
+  },
+  async fetchTraceHistory(range) {
+    return this.fetch(`/api/traceability/history?range=${range}`);
+  },
+  async fetchTraceMechanisms() {
+    return this.fetch('/api/traceability/mechanisms');
+  },
+  async fetchAgentActivity() {
+    return this.fetch('/api/traceability/agents');
+  },
+  async fetchTraceSession(id) {
+    return this.fetch(`/api/traceability/session/${encodeURIComponent(id)}`);
+  },
+  async fetchFt() {
+    return this.fetch('/api/ft');
+  },
+  async fetchTraceHealth() {
+    return this.fetch('/api/trace/health');
+  },
   async updateData() {
     const metrics = await this.fetchMetrics();
     if (!metrics) return false;
@@ -75,7 +120,7 @@ const api = {
     }
     const hist = await this.fetchTraceHistory(data.trace.historyRange);
     if (hist) data.trace.historyData = hist;
-  }
+  },
 };
 
 const chartInstances = {};
@@ -84,7 +129,10 @@ const charts = {
   getCtx(id) {
     const c = document.getElementById(id);
     if (!c) return null;
-    if (chartInstances[id]) { chartInstances[id].destroy(); delete chartInstances[id]; }
+    if (chartInstances[id]) {
+      chartInstances[id].destroy();
+      delete chartInstances[id];
+    }
     return c;
   },
   defaults() {
@@ -106,26 +154,45 @@ const charts = {
       type: 'line',
       data: {
         labels,
-        datasets: [{
-          data: values,
-          borderColor: color,
-          backgroundColor: gradient,
-          fill: true,
-          tension: 0.35,
-          pointRadius: 3,
-          pointBackgroundColor: color,
-          pointBorderColor: '#0b161f',
-          pointBorderWidth: 1.5
-        }]
+        datasets: [
+          {
+            data: values,
+            borderColor: color,
+            backgroundColor: gradient,
+            fill: true,
+            tension: 0.35,
+            pointRadius: 3,
+            pointBackgroundColor: color,
+            pointBorderColor: '#0b161f',
+            pointBorderWidth: 1.5,
+          },
+        ],
       },
       options: {
-        responsive: true, maintainAspectRatio: true,
-        plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a2035', titleColor: '#d7e4ed', bodyColor: '#90a8b8', borderColor: '#274255', borderWidth: 1 } },
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1a2035',
+            titleColor: '#d7e4ed',
+            bodyColor: '#90a8b8',
+            borderColor: '#274255',
+            borderWidth: 1,
+          },
+        },
         scales: {
           x: { grid: { color: '#27425533' }, ticks: { color: '#90a8b8', font: { size: 9 } } },
-          y: { grid: { color: '#27425533' }, ticks: { color: '#90a8b8', font: { size: 9 }, callback: v => v >= 1000 ? (v/1000).toFixed(1)+'k' : v } }
-        }
-      }
+          y: {
+            grid: { color: '#27425533' },
+            ticks: {
+              color: '#90a8b8',
+              font: { size: 9 },
+              callback: (v) => (v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v),
+            },
+          },
+        },
+      },
     });
   },
   createBar(id, labels, values, color) {
@@ -135,16 +202,38 @@ const charts = {
       type: 'bar',
       data: {
         labels,
-        datasets: [{ data: values, backgroundColor: color + 'cc', borderColor: color, borderWidth: 1, borderRadius: 4 }]
+        datasets: [
+          {
+            data: values,
+            backgroundColor: color + 'cc',
+            borderColor: color,
+            borderWidth: 1,
+            borderRadius: 4,
+          },
+        ],
       },
       options: {
-        responsive: true, maintainAspectRatio: true,
-        plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a2035', titleColor: '#d7e4ed', bodyColor: '#90a8b8', borderColor: '#274255', borderWidth: 1 } },
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1a2035',
+            titleColor: '#d7e4ed',
+            bodyColor: '#90a8b8',
+            borderColor: '#274255',
+            borderWidth: 1,
+          },
+        },
         scales: {
           x: { grid: { display: false }, ticks: { color: '#90a8b8', font: { size: 9 } } },
-          y: { grid: { color: '#27425533' }, ticks: { color: '#90a8b8', font: { size: 9 } }, beginAtZero: true }
-        }
-      }
+          y: {
+            grid: { color: '#27425533' },
+            ticks: { color: '#90a8b8', font: { size: 9 } },
+            beginAtZero: true,
+          },
+        },
+      },
     });
   },
   createDoughnut(id, labels, values, colors) {
@@ -152,15 +241,30 @@ const charts = {
     if (!c || values.length === 0) return;
     chartInstances[id] = new Chart(c.getContext('2d'), {
       type: 'doughnut',
-      data: { labels, datasets: [{ data: values, backgroundColor: colors, borderColor: '#0b161f', borderWidth: 2 }] },
+      data: {
+        labels,
+        datasets: [
+          { data: values, backgroundColor: colors, borderColor: '#0b161f', borderWidth: 2 },
+        ],
+      },
       options: {
-        responsive: true, maintainAspectRatio: true,
+        responsive: true,
+        maintainAspectRatio: true,
         cutout: '65%',
         plugins: {
-          legend: { position: 'right', labels: { color: '#90a8b8', font: { size: 10 }, boxWidth: 12, padding: 8 } },
-          tooltip: { backgroundColor: '#1a2035', titleColor: '#d7e4ed', bodyColor: '#90a8b8', borderColor: '#274255', borderWidth: 1 }
-        }
-      }
+          legend: {
+            position: 'right',
+            labels: { color: '#90a8b8', font: { size: 10 }, boxWidth: 12, padding: 8 },
+          },
+          tooltip: {
+            backgroundColor: '#1a2035',
+            titleColor: '#d7e4ed',
+            bodyColor: '#90a8b8',
+            borderColor: '#274255',
+            borderWidth: 1,
+          },
+        },
+      },
     });
   },
   createRadar(id, labels, values, color) {
@@ -170,22 +274,40 @@ const charts = {
       type: 'radar',
       data: {
         labels,
-        datasets: [{
-          data: values,
-          borderColor: color,
-          backgroundColor: color + '33',
-          fill: true,
-          pointRadius: 3,
-          pointBackgroundColor: color
-        }]
+        datasets: [
+          {
+            data: values,
+            borderColor: color,
+            backgroundColor: color + '33',
+            fill: true,
+            pointRadius: 3,
+            pointBackgroundColor: color,
+          },
+        ],
       },
       options: {
-        responsive: true, maintainAspectRatio: true,
-        plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a2035', titleColor: '#d7e4ed', bodyColor: '#90a8b8', borderColor: '#274255', borderWidth: 1 } },
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1a2035',
+            titleColor: '#d7e4ed',
+            bodyColor: '#90a8b8',
+            borderColor: '#274255',
+            borderWidth: 1,
+          },
+        },
         scales: {
-          r: { grid: { color: '#27425544' }, angleLines: { color: '#27425544' }, pointLabels: { color: '#90a8b8', font: { size: 9 } }, ticks: { display: false }, min: 0 }
-        }
-      }
+          r: {
+            grid: { color: '#27425544' },
+            angleLines: { color: '#27425544' },
+            pointLabels: { color: '#90a8b8', font: { size: 9 } },
+            ticks: { display: false },
+            min: 0,
+          },
+        },
+      },
     });
   },
   createGauge(id, value, maxVal, color) {
@@ -196,21 +318,24 @@ const charts = {
       type: 'doughnut',
       data: {
         labels: ['Used', 'Remaining'],
-        datasets: [{
-          data: [pct * 100, (1 - pct) * 100],
-          backgroundColor: [color, '#27425544'],
-          borderColor: ['#0b161f', '#0b161f'],
-          borderWidth: 2
-        }]
+        datasets: [
+          {
+            data: [pct * 100, (1 - pct) * 100],
+            backgroundColor: [color, '#27425544'],
+            borderColor: ['#0b161f', '#0b161f'],
+            borderWidth: 2,
+          },
+        ],
       },
       options: {
-        responsive: true, maintainAspectRatio: true,
+        responsive: true,
+        maintainAspectRatio: true,
         cutout: '75%',
         plugins: {
           legend: { display: false },
-          tooltip: { enabled: false }
-        }
-      }
+          tooltip: { enabled: false },
+        },
+      },
     });
   },
   renderAll() {
@@ -218,36 +343,65 @@ const charts = {
 
     // Token trend line
     if (data.history.tokens.length > 0) {
-      this.createLine('chart-token', ['W1','W2','W3','W4','W5','W6'], data.history.tokens, '#37b8a8');
+      this.createLine(
+        'chart-token',
+        ['W1', 'W2', 'W3', 'W4', 'W5', 'W6'],
+        data.history.tokens,
+        '#37b8a8',
+      );
     }
     // Cost breakdown line
     if (data.history.cost.length > 0) {
-      this.createLine('chart-cost', ['W1','W2','W3','W4','W5','W6'], data.history.cost, '#6ea8ff');
+      this.createLine(
+        'chart-cost',
+        ['W1', 'W2', 'W3', 'W4', 'W5', 'W6'],
+        data.history.cost,
+        '#6ea8ff',
+      );
     }
     // Sessions bar
-    this.createBar('chart-sessions', ['Active','Today','Total'], [data.sessions.active, data.sessions.today, data.sessions.total], '#f5b800');
+    this.createBar(
+      'chart-sessions',
+      ['Active', 'Today', 'Total'],
+      [data.sessions.active, data.sessions.today, data.sessions.total],
+      '#f5b800',
+    );
 
     // Commits bar
-    const commitTimeline = data.git.timeline && data.git.timeline.length > 0 ? data.git.timeline : [];
-    const commitLabels = commitTimeline.length > 0 ? commitTimeline.map(d => d.date.slice(5)) : ['Today','Week','Month'];
-    const commitValues = commitTimeline.length > 0 ? commitTimeline.map(d => d.count) : [data.git.today, data.git.week, data.git.month];
+    const commitTimeline =
+      data.git.timeline && data.git.timeline.length > 0 ? data.git.timeline : [];
+    const commitLabels =
+      commitTimeline.length > 0
+        ? commitTimeline.map((d) => d.date.slice(5))
+        : ['Today', 'Week', 'Month'];
+    const commitValues =
+      commitTimeline.length > 0
+        ? commitTimeline.map((d) => d.count)
+        : [data.git.today, data.git.week, data.git.month];
     this.createBar('chart-commits', commitLabels, commitValues, '#45c77a');
 
     // Savings bar
-    this.createBar('chart-savings', ['Baseline','Actual','Saved'], [data.tokens.used * 1.4, data.tokens.cost, data.tokens.savings], '#37b8a8');
+    this.createBar(
+      'chart-savings',
+      ['Baseline', 'Actual', 'Saved'],
+      [data.tokens.used * 1.4, data.tokens.cost, data.tokens.savings],
+      '#37b8a8',
+    );
 
     // Cost comparison doughnut
-    this.createDoughnut('chart-cost-compare',
+    this.createDoughnut(
+      'chart-cost-compare',
       ['Actual', 'Baseline', 'Savings'],
       [data.tokens.cost, data.tokens.used * 1.4 * 0.00001, data.tokens.savings * 100],
-      ['#6ea8ff', '#274255', '#45c77a']
+      ['#6ea8ff', '#274255', '#45c77a'],
     );
 
     // Token distribution doughnut
-    this.createDoughnut('chart-token-dist',
+    this.createDoughnut(
+      'chart-token-dist',
       ['Input', 'Output'],
       [data.tokens.used * 0.6, data.tokens.used * 0.4],
-      ['#6ea8ff', '#37b8a8']
+      ['#6ea8ff', '#37b8a8'],
     );
 
     // Agent usage radar
@@ -266,37 +420,56 @@ const charts = {
     if (!data.trace.live || !data.trace.live.turns) return;
     const turns = data.trace.live.turns;
     if (turns.length < 2) return;
-    const labels = turns.map(t => `T${t.turn}`);
-    const inTokens = turns.map(t => t.inputTokens);
+    const labels = turns.map((t) => `T${t.turn}`);
+    const inTokens = turns.map((t) => t.inputTokens);
     this.createBar('chart-trace-tokens', labels, inTokens, '#6ea8ff');
-    const costs = turns.map(t => parseFloat((t.cost * 1000).toFixed(4)));
+    const costs = turns.map((t) => parseFloat((t.cost * 1000).toFixed(4)));
     this.createLine('chart-trace-costs', labels, costs.length > 0 ? costs : [0], '#37b8a8');
-  }
+  },
 };
 
 const ui = {
   card(label, value, meta, type = '', tooltip = '', metricKey = '') {
     const hasInfo = metricKey && metricInfo[metricKey];
-    const infoIcon = hasInfo ? `<span class="gv-card__info" data-metric="${metricKey}" onclick="event.stopPropagation(); app.showMetricInfo('${metricKey}', '${label}', event)">i</span>` : '';
+    const infoIcon = hasInfo
+      ? `<span class="gv-card__info" data-metric="${metricKey}" onclick="event.stopPropagation(); app.showMetricInfo('${metricKey}', '${label}', event)">i</span>`
+      : '';
     const titleAttr = tooltip ? `title="${tooltip}"` : '';
     return `<div class="gv-card" ${titleAttr} data-metric-key="${metricKey}">${infoIcon}<div class="gv-card__label">${label}</div><div class="gv-card__value ${type ? 'gv-card__value--' + type : ''}">${value}</div><div class="gv-card__meta">${meta}</div></div>`;
   },
   renderSection(id, cards) {
     const grid = document.getElementById(id + '-grid');
     if (grid) grid.innerHTML = cards.join('');
-  }
+  },
 };
 
 const app = {
-  tvMode: false, tvInterval: null,
-  sections: ['exec','ops','dev','cost','gov','health','live','sla','perf','refs','trace','ft'],
+  tvMode: false,
+  tvInterval: null,
+  sections: [
+    'exec',
+    'ops',
+    'dev',
+    'cost',
+    'gov',
+    'health',
+    'live',
+    'sla',
+    'perf',
+    'refs',
+    'trace',
+    'ft',
+  ],
   currentModalMetric: null,
   tracePollInterval: null,
   countdownInterval: null,
   traceSearchFilter: '',
 
   init() {
-    if (!localStorage.getItem('gv-lang')) { localStorage.setItem('gv-lang', 'en'); i18n.currentLang = 'en'; }
+    if (!localStorage.getItem('gv-lang')) {
+      localStorage.setItem('gv-lang', 'en');
+      i18n.currentLang = 'en';
+    }
     charts.defaults();
     this.bindNav();
     this.applyTranslations();
@@ -319,7 +492,7 @@ const app = {
   },
 
   applyTranslations() {
-    document.querySelectorAll('[data-i18n]').forEach(el => {
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
       const key = el.getAttribute('data-i18n');
       const translation = t(key);
       if (translation && translation !== key) {
@@ -342,7 +515,12 @@ const app = {
 
   connectTraceSSE() {
     const es = new EventSource('http://localhost:8080/api/traceability/events');
-    es.onopen = () => { if (this.tracePollInterval) { clearInterval(this.tracePollInterval); this.tracePollInterval = null; } };
+    es.onopen = () => {
+      if (this.tracePollInterval) {
+        clearInterval(this.tracePollInterval);
+        this.tracePollInterval = null;
+      }
+    };
     es.onmessage = (e) => {
       try {
         const msg = JSON.parse(e.data);
@@ -353,7 +531,10 @@ const app = {
         }
       } catch {}
     };
-    es.onerror = () => { es.close(); if (!this.tracePollInterval) this.startTraceabilityPolling(); };
+    es.onerror = () => {
+      es.close();
+      if (!this.tracePollInterval) this.startTraceabilityPolling();
+    };
   },
 
   async startTraceabilityPolling() {
@@ -362,7 +543,10 @@ const app = {
   },
 
   startOrConnectTrace() {
-    this.refreshTraceData().then(() => { this.updateTraceSection(); charts.renderAll(); });
+    this.refreshTraceData().then(() => {
+      this.updateTraceSection();
+      charts.renderAll();
+    });
     this.connectTraceSSE();
   },
 
@@ -384,10 +568,14 @@ const app = {
       if (data.ft.adapters.length === 0) {
         adaptersEl.innerHTML = '<p style="color:#90a8b8">' + t('ft.noData') + '</p>';
       } else {
-        adaptersEl.innerHTML = data.ft.adapters.map(a => {
-          const status = a.active ? '<span style="color:#45c77a">● ACTIVE</span>' : '<span style="color:#90a8b8">○ INACTIVE</span>';
-          return `<div class="ft-adapter-row"><span class="ft-adapter-domain">${a.domain}</span> ${a.model} v${a.version} ${status}<div class="ft-adapter-meta">Loss: ${a.loss} | Acc: ${a.accuracy} | ${a.trainedAt ? new Date(a.trainedAt).toLocaleDateString() : 'untrained'}</div></div>`;
-        }).join('');
+        adaptersEl.innerHTML = data.ft.adapters
+          .map((a) => {
+            const status = a.active
+              ? '<span style="color:#45c77a">● ACTIVE</span>'
+              : '<span style="color:#90a8b8">○ INACTIVE</span>';
+            return `<div class="ft-adapter-row"><span class="ft-adapter-domain">${a.domain}</span> ${a.model} v${a.version} ${status}<div class="ft-adapter-meta">Loss: ${a.loss} | Acc: ${a.accuracy} | ${a.trainedAt ? new Date(a.trainedAt).toLocaleDateString() : 'untrained'}</div></div>`;
+          })
+          .join('');
       }
     }
     // Render dataset summary
@@ -395,12 +583,20 @@ const app = {
     if (dsEl) {
       const ds = data.ft.dataset;
       const byDomain = ds.byDomain || { train: {}, val: {} };
-      const allDomains = [...new Set([...Object.keys(byDomain.train || {}), ...Object.keys(byDomain.val || {})])];
+      const allDomains = [
+        ...new Set([...Object.keys(byDomain.train || {}), ...Object.keys(byDomain.val || {})]),
+      ];
       if (allDomains.length === 0) {
         dsEl.innerHTML = '<p style="color:#90a8b8">' + t('ft.noData') + '</p>';
       } else {
-        dsEl.innerHTML = '<table class="ft-dataset-table"><tr><th>Domain</th><th>Train</th><th>Val</th><th>Raw</th></tr>' +
-          allDomains.map(d => `<tr><td><strong>${d}</strong></td><td>${byDomain.train[d] || 0}</td><td>${byDomain.val[d] || 0}</td><td>${ds.raw}</td></tr>`).join('') +
+        dsEl.innerHTML =
+          '<table class="ft-dataset-table"><tr><th>Domain</th><th>Train</th><th>Val</th><th>Raw</th></tr>' +
+          allDomains
+            .map(
+              (d) =>
+                `<tr><td><strong>${d}</strong></td><td>${byDomain.train[d] || 0}</td><td>${byDomain.val[d] || 0}</td><td>${ds.raw}</td></tr>`,
+            )
+            .join('') +
           `<tr class="ft-ds-total"><td><strong>Total</strong></td><td><strong>${ds.train}</strong></td><td><strong>${ds.val}</strong></td><td><strong>${ds.raw}</strong></td></tr></table>`;
       }
     }
@@ -413,6 +609,8 @@ const app = {
       data.agents.labels = agents.labels || [];
       data.agents.data = agents.data || [];
     }
+    const th = await this.fetchTraceHealth();
+    if (th) Object.assign(data.traceHealth, th);
     if (updated) {
       this.updateCardValuesOnly();
       charts.renderAll();
@@ -426,9 +624,18 @@ const app = {
   },
 
   updateCardValuesOnly() {
-    const statusColor = data.health.status === 'GREEN' ? '#45c77a' : data.health.status === 'YELLOW' ? '#f0b13a' : '#f26464';
+    const statusColor =
+      data.health.status === 'GREEN'
+        ? '#45c77a'
+        : data.health.status === 'YELLOW'
+          ? '#f0b13a'
+          : '#f26464';
     const isPeak = new Date().getHours() >= 17 && new Date().getHours() <= 20;
-    this.updateCardValue('exec', 0, `<span style="color:${statusColor}">${data.health.status}</span>`);
+    this.updateCardValue(
+      'exec',
+      0,
+      `<span style="color:${statusColor}">${data.health.status}</span>`,
+    );
     this.updateCardValue('exec', 1, data.tokens.pct < 50 ? 'PASS' : 'WARNING');
     this.updateCardValue('exec', 2, data.tokens.pct + '%');
     this.updateCardValue('exec', 3, '$' + data.tokens.cost.toFixed(4));
@@ -440,16 +647,35 @@ const app = {
     this.updateCardValue('ops', 1, data.sessions.active.toString());
     this.updateCardValue('ops', 2, data.sessions.today.toString());
     this.updateCardValue('ops', 3, data.sessions.avgDuration);
-    this.updateCardValue('ops', 4, data.trace.totalTokens ? `${Math.floor(data.trace.totalTokens / (data.trace.totalSessions || 1)).toLocaleString()} tk/ses` : '--');
-    this.updateCardValue('ops', 5, (data.trace.live && data.trace.live.sessionId) || 'session-' + new Date().toISOString().slice(0,10));
+    this.updateCardValue(
+      'ops',
+      4,
+      data.trace.totalTokens
+        ? `${Math.floor(data.trace.totalTokens / (data.trace.totalSessions || 1)).toLocaleString()} tk/ses`
+        : '--',
+    );
+    this.updateCardValue(
+      'ops',
+      5,
+      (data.trace.live && data.trace.live.sessionId) ||
+        'session-' + new Date().toISOString().slice(0, 10),
+    );
     this.updateCardValue('dev', 0, data.git.commits.toLocaleString());
     this.updateCardValue('dev', 1, data.git.month.toLocaleString());
     this.updateCardValue('dev', 2, data.git.week.toString());
     this.updateCardValue('dev', 3, data.git.today.toString());
     this.updateCardValue('dev', 4, data.git.prsMerged.toString());
     this.updateCardValue('dev', 5, data.git.contributors.toString());
-    this.updateCardValue('dev', 6, data.git.linesAdded ? '+' + data.git.linesAdded.toLocaleString() : '--');
-    this.updateCardValue('dev', 7, data.git.linesRemoved ? '-' + data.git.linesRemoved.toLocaleString() : '--');
+    this.updateCardValue(
+      'dev',
+      6,
+      data.git.linesAdded ? '+' + data.git.linesAdded.toLocaleString() : '--',
+    );
+    this.updateCardValue(
+      'dev',
+      7,
+      data.git.linesRemoved ? '-' + data.git.linesRemoved.toLocaleString() : '--',
+    );
     this.updateCardValue('cost', 0, '$' + data.tokens.cost.toFixed(4));
     this.updateCardValue('cost', 1, '$' + data.tokens.forecast.toFixed(2));
     this.updateCardValue('cost', 2, data.tokens.limit.toLocaleString());
@@ -458,7 +684,11 @@ const app = {
     this.updateCardValue('cost', 5, (data.tokens.used * 0.4).toFixed(0));
     this.updateCardValue('cost', 6, '$' + data.tokens.savings.toFixed(4));
     this.updateCardValue('cost', 7, data.health.status);
-    this.updateCardValue('gov', 0, `<span style="color:${statusColor}">${data.health.status}</span>`);
+    this.updateCardValue(
+      'gov',
+      0,
+      `<span style="color:${statusColor}">${data.health.status}</span>`,
+    );
     this.updateCardValue('gov', 1, 'PASS');
     this.updateCardValue('gov', 2, data.health.routing);
     this.updateCardValue('gov', 3, data.health.benchmark);
@@ -469,9 +699,25 @@ const app = {
     this.updateCardValue('health', 3, data.health.routing);
     this.updateCardValue('health', 4, data.git.contributors > 0 ? 'EmmanuelOrtiz87' : '--');
     this.updateCardValue('health', 5, '.session/context-log/');
-    this.updateCardValue('live', 0, `<span>${(data.trace.live && data.trace.live.status === 'ACTIVE') ? '● LIVE' : '○ OFFLINE'}</span>`);
+    const th = data.traceHealth;
+    this.updateCardValue(
+      'health',
+      6,
+      th.avgLatencyMs < 100 ? `${th.avgLatencyMs}ms` : `${th.avgLatencyMs}ms`,
+    );
+    this.updateCardValue('health', 7, th.errorCount > 0 ? th.errorCount.toString() : '0');
+    this.updateCardValue('health', 8, th.healthy ? 'PASS' : 'FAIL');
+    this.updateCardValue(
+      'live',
+      0,
+      `<span>${data.trace.live && data.trace.live.status === 'ACTIVE' ? '● LIVE' : '○ OFFLINE'}</span>`,
+    );
     this.updateCardValue('live', 1, data.tokens.used.toLocaleString());
-    this.updateCardValue('live', 2, `<span style="color:${statusColor}">${data.health.status}</span>`);
+    this.updateCardValue(
+      'live',
+      2,
+      `<span style="color:${statusColor}">${data.health.status}</span>`,
+    );
     this.updateCardValue('live', 3, data.health.routing);
     this.updateCardValue('live', 4, data.sessions.active.toString());
     this.updateCardValue('live', 5, isPeak ? 'YES' : 'NO');
@@ -487,10 +733,18 @@ const app = {
     this.updateCardValue('sla', 2, slaIncidents.toString());
     this.updateCardValue('sla', 3, slaMttr);
     this.updateCardValue('sla', 4, '100%');
-    this.updateCardValue('sla', 5, data.sessions.avgDuration ? '~' + data.sessions.avgDuration : '--');
+    this.updateCardValue(
+      'sla',
+      5,
+      data.sessions.avgDuration ? '~' + data.sessions.avgDuration : '--',
+    );
     this.updateCardValue('perf', 0, data.sessions.total.toString());
     this.updateCardValue('perf', 1, peakHr);
-    this.updateCardValue('perf', 2, data.sessions.total > 0 ? (data.sessions.total / 30).toFixed(1) : '--');
+    this.updateCardValue(
+      'perf',
+      2,
+      data.sessions.total > 0 ? (data.sessions.total / 30).toFixed(1) : '--',
+    );
     this.updateCardValue('perf', 3, avgMin !== '--' ? avgMin + ' min' : '--');
     this.updateCardValue('perf', 4, data.sessions.active.toString());
     this.updateCardValue('perf', 5, vel);
@@ -523,11 +777,11 @@ const app = {
   },
 
   bindNav() {
-    document.querySelectorAll('.gv-nav__btn[data-section]').forEach(btn => {
+    document.querySelectorAll('.gv-nav__btn[data-section]').forEach((btn) => {
       btn.addEventListener('click', (e) => this.showSection(e.target.dataset.section));
     });
     // Card click → metric detail modal
-    document.querySelectorAll('.gv-grid').forEach(grid => {
+    document.querySelectorAll('.gv-grid').forEach((grid) => {
       grid.addEventListener('click', (e) => {
         const card = e.target.closest('.gv-card');
         if (!card || e.target.closest('.gv-card__info')) return;
@@ -544,27 +798,39 @@ const app = {
 
   bindChartTooltips() {
     const tooltip = document.createElement('div');
-    tooltip.className = 'gv-chart-tooltip'; tooltip.id = 'chartTooltip';
+    tooltip.className = 'gv-chart-tooltip';
+    tooltip.id = 'chartTooltip';
     document.body.appendChild(tooltip);
-    const charts = ['chart-token', 'chart-cost', 'chart-sessions', 'chart-commits', 'chart-savings', 'chart-trace-tokens', 'chart-trace-costs'];
-    charts.forEach(id => {
+    const charts = [
+      'chart-token',
+      'chart-cost',
+      'chart-sessions',
+      'chart-commits',
+      'chart-savings',
+      'chart-trace-tokens',
+      'chart-trace-costs',
+    ];
+    charts.forEach((id) => {
       const c = document.getElementById(id);
       if (!c) return;
       c.addEventListener('mousemove', (e) => {
         const rect = c.getBoundingClientRect();
-        const x = e.clientX - rect.left, y = e.clientY - rect.top;
-        tooltip.style.left = (e.clientX + 12) + 'px';
-        tooltip.style.top = (e.clientY - 30) + 'px';
+        const x = e.clientX - rect.left,
+          y = e.clientY - rect.top;
+        tooltip.style.left = e.clientX + 12 + 'px';
+        tooltip.style.top = e.clientY - 30 + 'px';
         tooltip.className = 'gv-chart-tooltip visible';
-        tooltip.innerHTML = `<span class="gv-chart-tooltip__label">${id.replace('chart-','')}</span><span class="gv-chart-tooltip__value">x:${Math.round(x)}, y:${Math.round(y)}</span>`;
+        tooltip.innerHTML = `<span class="gv-chart-tooltip__label">${id.replace('chart-', '')}</span><span class="gv-chart-tooltip__value">x:${Math.round(x)}, y:${Math.round(y)}</span>`;
       });
-      c.addEventListener('mouseleave', () => { tooltip.className = 'gv-chart-tooltip'; });
+      c.addEventListener('mouseleave', () => {
+        tooltip.className = 'gv-chart-tooltip';
+      });
     });
   },
 
   showSection(id) {
-    document.querySelectorAll('.gv-section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.gv-nav__btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.gv-section').forEach((s) => s.classList.remove('active'));
+    document.querySelectorAll('.gv-nav__btn').forEach((b) => b.classList.remove('active'));
     document.getElementById(id)?.classList.add('active');
     document.querySelector(`[data-section="${id}"]`)?.classList.add('active');
     if (this.tracePollInterval && id !== 'trace') {
@@ -597,22 +863,33 @@ const app = {
 
   exportDashboard(format) {
     const section = document.querySelector('.gv-section.active');
-    if (!section) { this.showNotification('No section active', 'error'); return; }
+    if (!section) {
+      this.showNotification('No section active', 'error');
+      return;
+    }
     const sectionName = section.id;
-    const timestamp = new Date().toISOString().slice(0,19).replace(/:/g, '-');
+    const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
     const filename = `dashboard-${sectionName}-${timestamp}.${format}`;
     if (format === 'pdf') {
       const originalTitle = document.title;
-      document.title = filename; window.print(); document.title = originalTitle;
+      document.title = filename;
+      window.print();
+      document.title = originalTitle;
       this.showNotification(`Exported as ${filename}`, 'success');
     } else if (format === 'png') {
       this.showNotification('Generating PNG...', 'info');
       html2canvas(section, { backgroundColor: '#081016', scale: 2, useCORS: true, logging: false })
-        .then(canvas => {
+        .then((canvas) => {
           const link = document.createElement('a');
-          link.download = filename; link.href = canvas.toDataURL('image/png'); link.click();
+          link.download = filename;
+          link.href = canvas.toDataURL('image/png');
+          link.click();
           this.showNotification(`Exported as ${filename}`, 'success');
-        }).catch(err => { console.error('PNG export failed:', err); this.showNotification('PNG export failed', 'error'); });
+        })
+        .catch((err) => {
+          console.error('PNG export failed:', err);
+          this.showNotification('PNG export failed', 'error');
+        });
     }
   },
 
@@ -654,13 +931,17 @@ const app = {
       <div class="gv-modal__section"><div class="gv-modal__label">${t('modal.unit')}</div><div class="gv-modal__text">${info.unit}</div></div>
       <div class="gv-modal__section"><div class="gv-modal__label">${t('modal.formula')}</div><div class="gv-modal__formula">${info.formula}</div></div>`;
     if (event && event.target) {
-      const el = event.target.closest('.trace-hist-session, .gv-card, .gv-card__info') || event.target;
+      const el =
+        event.target.closest('.trace-hist-session, .gv-card, .gv-card__info') || event.target;
       const rect = el.getBoundingClientRect();
-      let left = rect.right + 8, top = rect.top;
+      let left = rect.right + 8,
+        top = rect.top;
       if (left + 280 > window.innerWidth) left = Math.max(8, rect.left - 288);
       if (top + 300 > window.innerHeight) top = Math.max(8, window.innerHeight - 316);
       if (top < 8) top = 8;
-      content.style.left = left + 'px'; content.style.top = top + 'px'; content.style.position = 'fixed';
+      content.style.left = left + 'px';
+      content.style.top = top + 'px';
+      content.style.position = 'fixed';
     }
     modal.classList.add('active');
     this.bindModalEvents();
@@ -675,7 +956,12 @@ const app = {
   bindModalEvents() {
     const modal = document.getElementById('gv-modal');
     modal.querySelector('.gv-modal__overlay').onclick = () => this.closeModal();
-    const escHandler = (e) => { if (e.key === 'Escape') { this.closeModal(); document.removeEventListener('keydown', escHandler); } };
+    const escHandler = (e) => {
+      if (e.key === 'Escape') {
+        this.closeModal();
+        document.removeEventListener('keydown', escHandler);
+      }
+    };
     document.addEventListener('keydown', escHandler);
   },
 
@@ -691,7 +977,8 @@ const app = {
     const livePanel = document.getElementById('trace-live-panel');
     if (livePanel && live) {
       const ts = live.elapsed || '0s';
-      const statusDot = live.status === 'ACTIVE' ? '#45c77a' : (live.status === 'COMPLETED' ? '#90a8b8' : '#f26464');
+      const statusDot =
+        live.status === 'ACTIVE' ? '#45c77a' : live.status === 'COMPLETED' ? '#90a8b8' : '#f26464';
       livePanel.innerHTML = `
         <div class="trace-live-header">
           <span class="trace-dot" style="background:${statusDot}"></span>
@@ -801,7 +1088,9 @@ const app = {
 
   switchHistoryRange(range) {
     data.trace.historyRange = range;
-    document.querySelectorAll('.trace-filter-btn').forEach(b => b.classList.toggle('active', b.dataset.range === range));
+    document
+      .querySelectorAll('.trace-filter-btn')
+      .forEach((b) => b.classList.toggle('active', b.dataset.range === range));
     this.refreshTraceData();
   },
 
@@ -813,11 +1102,20 @@ const app = {
       return;
     }
     const agg = hist.aggregate || { sessions: 0, turns: 0, totalTokens: 0, totalCost: 0 };
-    const rangeDisplay = { day: t('trace.history.rangeDisplay.day'), week: t('trace.history.rangeDisplay.week'), month: t('trace.history.rangeDisplay.month'), all: t('trace.history.rangeDisplay.all') };
+    const rangeDisplay = {
+      day: t('trace.history.rangeDisplay.day'),
+      week: t('trace.history.rangeDisplay.week'),
+      month: t('trace.history.rangeDisplay.month'),
+      all: t('trace.history.rangeDisplay.all'),
+    };
     let sessions = hist.sessions || [];
     if (filter) {
       const q = filter.toLowerCase();
-      sessions = sessions.filter(s => (s.id && s.id.toLowerCase().includes(q)) || (s.model && s.model.toLowerCase().includes(q)));
+      sessions = sessions.filter(
+        (s) =>
+          (s.id && s.id.toLowerCase().includes(q)) ||
+          (s.model && s.model.toLowerCase().includes(q)),
+      );
     }
     const filteredAgg = { ...agg, sessions: sessions.length };
     let html = `<div class="trace-hist-header">${rangeDisplay[hist.range] || t('trace.history.all')} <span class="trace-badge">${filteredAgg.sessions} ${t('trace.sessions')}${filter ? ' ' + t('trace.filtered') : ''}</span></div>
@@ -852,119 +1150,590 @@ const app = {
   },
 
   renderData() {
-    const statusColor = data.health.status === 'GREEN' ? '#45c77a' : data.health.status === 'YELLOW' ? '#f0b13a' : '#f26464';
+    const statusColor =
+      data.health.status === 'GREEN'
+        ? '#45c77a'
+        : data.health.status === 'YELLOW'
+          ? '#f0b13a'
+          : '#f26464';
     const isPeak = new Date().getHours() >= 17 && new Date().getHours() <= 20;
 
     ui.renderSection('exec', [
-      ui.card(t('cards.trafficLight'), `<span style="color:${statusColor}">${data.health.status}</span>`, t('meta.executiveStatus'), '', 'Overall system health status. GREEN=Healthy, YELLOW=Attention, RED=Critical', 'trafficLight'),
-      ui.card(t('cards.tokenStatus'), data.tokens.pct < 50 ? 'PASS' : 'WARNING', t('meta.budgetGuard'), data.tokens.pct < 50 ? 'success' : 'warning', 'Budget compliance check', 'tokenStatus'),
-      ui.card(t('cards.budgetUsed'), data.tokens.pct + '%', `${data.tokens.used.toLocaleString()} / ${data.tokens.limit.toLocaleString()} ${t('meta.tokens')}`, '', 'Percentage of daily token budget', 'budgetUsed'),
-      ui.card(t('cards.estCost'), '$' + data.tokens.cost.toFixed(4), t('meta.per1M'), '', 'Current cost in USD', 'estCost'),
-      ui.card(t('cards.forecast'), '$' + data.tokens.forecast.toFixed(2), t('meta.projected'), '', 'Projected month-end cost', 'forecast'),
-      ui.card(t('cards.savings'), '$' + data.tokens.savings.toFixed(4), t('meta.vsBaseline'), 'success', 'Cost savings achieved', 'savings'),
-      ui.card(t('cards.sessions'), data.sessions.total.toString(), `${data.sessions.active} ${t('meta.active')} - ${data.sessions.today} ${t('cards.today')}`, '', 'Total sessions', 'sessions'),
-      ui.card(t('cards.routing'), data.health.routing, t('meta.dispatches'), 'success', 'Task routing accuracy', 'routing')
+      ui.card(
+        t('cards.trafficLight'),
+        `<span style="color:${statusColor}">${data.health.status}</span>`,
+        t('meta.executiveStatus'),
+        '',
+        'Overall system health status. GREEN=Healthy, YELLOW=Attention, RED=Critical',
+        'trafficLight',
+      ),
+      ui.card(
+        t('cards.tokenStatus'),
+        data.tokens.pct < 50 ? 'PASS' : 'WARNING',
+        t('meta.budgetGuard'),
+        data.tokens.pct < 50 ? 'success' : 'warning',
+        'Budget compliance check',
+        'tokenStatus',
+      ),
+      ui.card(
+        t('cards.budgetUsed'),
+        data.tokens.pct + '%',
+        `${data.tokens.used.toLocaleString()} / ${data.tokens.limit.toLocaleString()} ${t('meta.tokens')}`,
+        '',
+        'Percentage of daily token budget',
+        'budgetUsed',
+      ),
+      ui.card(
+        t('cards.estCost'),
+        '$' + data.tokens.cost.toFixed(4),
+        t('meta.per1M'),
+        '',
+        'Current cost in USD',
+        'estCost',
+      ),
+      ui.card(
+        t('cards.forecast'),
+        '$' + data.tokens.forecast.toFixed(2),
+        t('meta.projected'),
+        '',
+        'Projected month-end cost',
+        'forecast',
+      ),
+      ui.card(
+        t('cards.savings'),
+        '$' + data.tokens.savings.toFixed(4),
+        t('meta.vsBaseline'),
+        'success',
+        'Cost savings achieved',
+        'savings',
+      ),
+      ui.card(
+        t('cards.sessions'),
+        data.sessions.total.toString(),
+        `${data.sessions.active} ${t('meta.active')} - ${data.sessions.today} ${t('cards.today')}`,
+        '',
+        'Total sessions',
+        'sessions',
+      ),
+      ui.card(
+        t('cards.routing'),
+        data.health.routing,
+        t('meta.dispatches'),
+        'success',
+        'Task routing accuracy',
+        'routing',
+      ),
     ]);
     ui.renderSection('ops', [
-      ui.card(t('cards.totalSessions'), data.sessions.total.toString(), t('meta.sinceInception'), '', 'Total sessions since inception', 'totalSessions'),
-      ui.card(t('cards.activeNow'), data.sessions.active.toString(), t('meta.currentOpen'), 'success', 'Currently open sessions', 'activeNow'),
-      ui.card(t('cards.today'), data.sessions.today.toString(), t('meta.started'), '', 'Sessions started today', 'today'),
-      ui.card(t('cards.avgDuration'), data.sessions.avgDuration, t('meta.perSession'), '', 'Average session duration', 'avgDuration'),
-      ui.card(t('cards.avgTokensPerSession'), (data.trace.totalTokens ? Math.floor(data.trace.totalTokens / (data.trace.totalSessions || 1)).toLocaleString() : '--'), t('meta.realData'), '', 'Average token consumption per session', 'tokens'),
-      ui.card(t('cards.latest'), (data.trace.live && data.trace.live.sessionId) || 'session-' + new Date().toISOString().slice(0,10), t('meta.active'), '', 'Latest active session', 'latest')
+      ui.card(
+        t('cards.totalSessions'),
+        data.sessions.total.toString(),
+        t('meta.sinceInception'),
+        '',
+        'Total sessions since inception',
+        'totalSessions',
+      ),
+      ui.card(
+        t('cards.activeNow'),
+        data.sessions.active.toString(),
+        t('meta.currentOpen'),
+        'success',
+        'Currently open sessions',
+        'activeNow',
+      ),
+      ui.card(
+        t('cards.today'),
+        data.sessions.today.toString(),
+        t('meta.started'),
+        '',
+        'Sessions started today',
+        'today',
+      ),
+      ui.card(
+        t('cards.avgDuration'),
+        data.sessions.avgDuration,
+        t('meta.perSession'),
+        '',
+        'Average session duration',
+        'avgDuration',
+      ),
+      ui.card(
+        t('cards.avgTokensPerSession'),
+        data.trace.totalTokens
+          ? Math.floor(data.trace.totalTokens / (data.trace.totalSessions || 1)).toLocaleString()
+          : '--',
+        t('meta.realData'),
+        '',
+        'Average token consumption per session',
+        'tokens',
+      ),
+      ui.card(
+        t('cards.latest'),
+        (data.trace.live && data.trace.live.sessionId) ||
+          'session-' + new Date().toISOString().slice(0, 10),
+        t('meta.active'),
+        '',
+        'Latest active session',
+        'latest',
+      ),
     ]);
     ui.renderSection('dev', [
-      ui.card(t('cards.totalCommits'), data.git.commits.toLocaleString(), t('meta.allTime'), '', 'Total commits', 'totalCommits'),
-      ui.card(t('cards.thisMonth'), data.git.month.toLocaleString(), t('meta.sinceInception'), 'success', 'Monthly commits', 'thisMonth'),
-      ui.card(t('cards.thisWeek'), data.git.week.toString(), t('meta.commits'), '', 'Weekly commits', 'thisWeek'),
-      ui.card(t('cards.today'), data.git.today.toString(), t('meta.commits'), '', 'Today commits', 'today'),
-      ui.card(t('cards.prsMerged'), data.git.prsMerged.toString(), `${t('meta.ofTotal').replace('{0}', data.git.prsTotal)}`, 'success', 'PRs merged', 'prsMerged'),
-      ui.card(t('cards.contributors'), data.git.contributors.toString(), t('meta.uniqueAuthors'), '', 'Contributors', 'contributors'),
-      ui.card(t('cards.linesAdded'), data.git.linesAdded ? '+' + data.git.linesAdded.toLocaleString() : '--', t('meta.last30Commits'), 'success', 'Lines added', 'linesAdded'),
-      ui.card(t('cards.linesRemoved'), data.git.linesRemoved ? '-' + data.git.linesRemoved.toLocaleString() : '--', t('meta.last30Commits'), 'error', 'Lines removed', 'linesRemoved')
+      ui.card(
+        t('cards.totalCommits'),
+        data.git.commits.toLocaleString(),
+        t('meta.allTime'),
+        '',
+        'Total commits',
+        'totalCommits',
+      ),
+      ui.card(
+        t('cards.thisMonth'),
+        data.git.month.toLocaleString(),
+        t('meta.sinceInception'),
+        'success',
+        'Monthly commits',
+        'thisMonth',
+      ),
+      ui.card(
+        t('cards.thisWeek'),
+        data.git.week.toString(),
+        t('meta.commits'),
+        '',
+        'Weekly commits',
+        'thisWeek',
+      ),
+      ui.card(
+        t('cards.today'),
+        data.git.today.toString(),
+        t('meta.commits'),
+        '',
+        'Today commits',
+        'today',
+      ),
+      ui.card(
+        t('cards.prsMerged'),
+        data.git.prsMerged.toString(),
+        `${t('meta.ofTotal').replace('{0}', data.git.prsTotal)}`,
+        'success',
+        'PRs merged',
+        'prsMerged',
+      ),
+      ui.card(
+        t('cards.contributors'),
+        data.git.contributors.toString(),
+        t('meta.uniqueAuthors'),
+        '',
+        'Contributors',
+        'contributors',
+      ),
+      ui.card(
+        t('cards.linesAdded'),
+        data.git.linesAdded ? '+' + data.git.linesAdded.toLocaleString() : '--',
+        t('meta.last30Commits'),
+        'success',
+        'Lines added',
+        'linesAdded',
+      ),
+      ui.card(
+        t('cards.linesRemoved'),
+        data.git.linesRemoved ? '-' + data.git.linesRemoved.toLocaleString() : '--',
+        t('meta.last30Commits'),
+        'error',
+        'Lines removed',
+        'linesRemoved',
+      ),
     ]);
     ui.renderSection('cost', [
-      ui.card(t('cards.actualCost'), '$' + data.tokens.cost.toFixed(4), `${data.tokens.used.toLocaleString()} ${t('meta.tokens')} @ $10/1M`, '', 'Current cost', 'actualCost'),
-      ui.card(t('cards.forecast'), '$' + data.tokens.forecast.toFixed(2), t('meta.projected'), '', 'Forecast', 'forecast'),
-      ui.card(t('cards.dailyBudget'), data.tokens.limit.toLocaleString(), t('meta.dayLimit'), '', 'Daily budget', 'dailyBudget'),
+      ui.card(
+        t('cards.actualCost'),
+        '$' + data.tokens.cost.toFixed(4),
+        `${data.tokens.used.toLocaleString()} ${t('meta.tokens')} @ $10/1M`,
+        '',
+        'Current cost',
+        'actualCost',
+      ),
+      ui.card(
+        t('cards.forecast'),
+        '$' + data.tokens.forecast.toFixed(2),
+        t('meta.projected'),
+        '',
+        'Forecast',
+        'forecast',
+      ),
+      ui.card(
+        t('cards.dailyBudget'),
+        data.tokens.limit.toLocaleString(),
+        t('meta.dayLimit'),
+        '',
+        'Daily budget',
+        'dailyBudget',
+      ),
       ui.card(t('cards.rate'), '$10', t('meta.per1M'), '', 'Rate per 1M tokens', 'rate'),
-      ui.card(t('cards.baselineWithoutOpt'), (data.tokens.used * 1.4).toFixed(0), t('meta.withoutOpt'), '', 'Estimated without optimization', 'baseline'),
-      ui.card(t('cards.tokensSaved'), (data.tokens.used * 0.4).toFixed(0), t('meta.reductionPct'), 'success', 'Tokens saved', 'tokensSaved'),
-      ui.card(t('cards.savings'), '$' + data.tokens.savings.toFixed(4), t('meta.usd') + ' ' + t('meta.active'), 'success', 'Savings', 'savings'),
-      ui.card(t('cards.roiSignal'), data.health.status, t('meta.executiveStatus'), data.health.status === 'GREEN' ? 'success' : 'warning', 'ROI signal', 'roiSignal')
+      ui.card(
+        t('cards.baselineWithoutOpt'),
+        (data.tokens.used * 1.4).toFixed(0),
+        t('meta.withoutOpt'),
+        '',
+        'Estimated without optimization',
+        'baseline',
+      ),
+      ui.card(
+        t('cards.tokensSaved'),
+        (data.tokens.used * 0.4).toFixed(0),
+        t('meta.reductionPct'),
+        'success',
+        'Tokens saved',
+        'tokensSaved',
+      ),
+      ui.card(
+        t('cards.savings'),
+        '$' + data.tokens.savings.toFixed(4),
+        t('meta.usd') + ' ' + t('meta.active'),
+        'success',
+        'Savings',
+        'savings',
+      ),
+      ui.card(
+        t('cards.roiSignal'),
+        data.health.status,
+        t('meta.executiveStatus'),
+        data.health.status === 'GREEN' ? 'success' : 'warning',
+        'ROI signal',
+        'roiSignal',
+      ),
     ]);
     ui.renderSection('gov', [
-      ui.card(t('cards.trafficLight'), `<span style="color:${statusColor}">${data.health.status}</span>`, t('meta.executiveStatus'), '', 'Governance status', 'trafficLight'),
-      ui.card(t('cards.tokenGuard'), 'PASS', t('meta.budgetCompliance'), 'success', 'Token guard', 'tokenGuard'),
-      ui.card(t('cards.routingAcc'), data.health.routing, t('meta.audited'), 'success', 'Routing accuracy', 'routingAcc'),
-      ui.card(t('cards.benchmark'), data.health.benchmark, t('meta.regressionChecks'), 'success', 'Benchmark', 'benchmark'),
-      ui.card(t('cards.status'), 'PASS', t('meta.overallGuard'), 'success', 'Status', 'status')
+      ui.card(
+        t('cards.trafficLight'),
+        `<span style="color:${statusColor}">${data.health.status}</span>`,
+        t('meta.executiveStatus'),
+        '',
+        'Governance status',
+        'trafficLight',
+      ),
+      ui.card(
+        t('cards.tokenGuard'),
+        'PASS',
+        t('meta.budgetCompliance'),
+        'success',
+        'Token guard',
+        'tokenGuard',
+      ),
+      ui.card(
+        t('cards.routingAcc'),
+        data.health.routing,
+        t('meta.audited'),
+        'success',
+        'Routing accuracy',
+        'routingAcc',
+      ),
+      ui.card(
+        t('cards.benchmark'),
+        data.health.benchmark,
+        t('meta.regressionChecks'),
+        'success',
+        'Benchmark',
+        'benchmark',
+      ),
+      ui.card(t('cards.status'), 'PASS', t('meta.overallGuard'), 'success', 'Status', 'status'),
     ]);
+    const th = data.traceHealth;
+    const ppLatency = `${th.avgLatencyMs}ms`;
+    const ppErrors = th.errorCount > 0 ? th.errorCount.toString() : '0';
+    const ppHealthy = th.healthy ? t('trace.pass') : t('trace.fail');
+    const ppPhaseInfo =
+      th.phases.length > 0 ? th.phases.map((p) => `${p.name}:${p.avgMs}ms`).join(' ') : '--';
     ui.renderSection('health', [
-      ui.card(t('cards.status'), `<span style="color:${statusColor}">HEALTHY</span>`, t('meta.allSystems'), '', 'Health status', 'status'),
-      ui.card(t('cards.sessions'), data.sessions.active.toString(), t('meta.currentlyRunning'), '', 'Active sessions', 'activeNow'),
-      ui.card(t('cards.benchmark'), data.health.benchmark, t('meta.passTotal'), 'success', 'Benchmark', 'benchmark'),
-      ui.card(t('cards.routing'), data.health.routing, t('meta.dispatchAccuracy'), 'success', 'Routing', 'routing'),
-      ui.card(t('cards.topAuthor'), data.git.contributors > 0 ? 'EmmanuelOrtiz87' : '--', data.git.commits.toLocaleString() + ' ' + t('meta.commits'), '', 'Top contributor', 'contributors'),
-      ui.card(t('cards.dataSource'), '.session/context-log/', t('meta.localStore'), '', 'Data source', 'dataSource')
+      ui.card(
+        t('cards.status'),
+        `<span style="color:${statusColor}">HEALTHY</span>`,
+        t('meta.allSystems'),
+        '',
+        'Health status',
+        'status',
+      ),
+      ui.card(
+        t('cards.sessions'),
+        data.sessions.active.toString(),
+        t('meta.currentlyRunning'),
+        '',
+        'Active sessions',
+        'activeNow',
+      ),
+      ui.card(
+        t('cards.benchmark'),
+        data.health.benchmark,
+        t('meta.passTotal'),
+        'success',
+        'Benchmark',
+        'benchmark',
+      ),
+      ui.card(
+        t('cards.routing'),
+        data.health.routing,
+        t('meta.dispatchAccuracy'),
+        'success',
+        'Routing',
+        'routing',
+      ),
+      ui.card(
+        t('cards.topAuthor'),
+        data.git.contributors > 0 ? 'EmmanuelOrtiz87' : '--',
+        data.git.commits.toLocaleString() + ' ' + t('meta.commits'),
+        '',
+        'Top contributor',
+        'contributors',
+      ),
+      ui.card(
+        t('cards.dataSource'),
+        '.session/context-log/',
+        t('meta.localStore'),
+        '',
+        'Data source',
+        'dataSource',
+      ),
+      ui.card(
+        'Pre-process Latency',
+        ppLatency,
+        ppPhaseInfo,
+        th.avgLatencyMs < 100 ? 'success' : 'warning',
+        'Average pre-process latency. Green <100ms',
+        'ppLatency',
+      ),
+      ui.card(
+        'Pre-process Errors',
+        ppErrors,
+        `Total entries: ${th.totalEntries}`,
+        th.errorCount === 0 ? 'success' : 'error',
+        'Pre-process error count. 0 = healthy',
+        'ppErrors',
+      ),
+      ui.card(
+        'Pre-process Health',
+        ppHealthy,
+        th.errorCount === 0 ? 'No errors' : `Last: ${th.lastError?.Phase || '--'}`,
+        th.healthy ? 'success' : 'error',
+        'Overall pre-process pipeline health',
+        'ppHealth',
+      ),
     ]);
     const liveActive = data.trace.live && data.trace.live.status === 'ACTIVE';
     ui.renderSection('live', [
-      ui.card(t('cards.liveStatus'), `<span>${liveActive ? '● LIVE' : '○ OFFLINE'}</span>`, t('meta.eventStream'), liveActive ? 'live' : 'error', 'Real-time event stream status', 'liveStatus'),
-      ui.card(t('cards.tokens'), data.tokens.used.toLocaleString(), t('meta.currentUsage'), '', 'Current token usage count', 'tokens'),
-      ui.card(t('cards.trafficLight'), `<span style="color:${statusColor}">${data.health.status}</span>`, t('meta.executiveStatus'), '', 'Live system health status', 'trafficLight'),
-      ui.card(t('cards.routing'), data.health.routing, t('meta.dispatchAccuracy'), '', 'Live routing accuracy', 'routing'),
-      ui.card(t('cards.sessions'), data.sessions.active.toString(), t('meta.activeCount'), '', 'Active sessions count', 'activeNow'),
-      ui.card(t('cards.peakActivity'), isPeak ? 'YES' : 'NO', t('meta.highActivity'), isPeak ? 'warning' : 'success', 'Peak activity hours indicator', 'peakActivityFlag')
+      ui.card(
+        t('cards.liveStatus'),
+        `<span>${liveActive ? '● LIVE' : '○ OFFLINE'}</span>`,
+        t('meta.eventStream'),
+        liveActive ? 'live' : 'error',
+        'Real-time event stream status',
+        'liveStatus',
+      ),
+      ui.card(
+        t('cards.tokens'),
+        data.tokens.used.toLocaleString(),
+        t('meta.currentUsage'),
+        '',
+        'Current token usage count',
+        'tokens',
+      ),
+      ui.card(
+        t('cards.trafficLight'),
+        `<span style="color:${statusColor}">${data.health.status}</span>`,
+        t('meta.executiveStatus'),
+        '',
+        'Live system health status',
+        'trafficLight',
+      ),
+      ui.card(
+        t('cards.routing'),
+        data.health.routing,
+        t('meta.dispatchAccuracy'),
+        '',
+        'Live routing accuracy',
+        'routing',
+      ),
+      ui.card(
+        t('cards.sessions'),
+        data.sessions.active.toString(),
+        t('meta.activeCount'),
+        '',
+        'Active sessions count',
+        'activeNow',
+      ),
+      ui.card(
+        t('cards.peakActivity'),
+        isPeak ? 'YES' : 'NO',
+        t('meta.highActivity'),
+        isPeak ? 'warning' : 'success',
+        'Peak activity hours indicator',
+        'peakActivityFlag',
+      ),
     ]);
     const slaUptime = data.trace.totalSessions > 0 ? '100%' : '99.9%';
     const slaIncidents = data.health.status === 'RED' ? 1 : 0;
     const slaMttr = slaIncidents > 0 ? '15m' : '0m';
     ui.renderSection('sla', [
-      ui.card(t('cards.uptime'), slaUptime, t('meta.target') + ': 99.5%', 'success', 'Monthly uptime percentage. Target: 99.5%', 'uptime'),
-      ui.card(t('cards.uptime'), data.health.routing + '%', t('meta.target') + ': 99.9%', 'success', 'Weekly uptime percentage. Target: 99.9%', 'uptime'),
-      ui.card(t('cards.incidents'), slaIncidents.toString(), t('meta.last30d7d').replace('{0}', slaIncidents.toString()), 'success', 'Service incidents in last 30 and 7 days', 'incidents'),
-      ui.card(t('cards.mttr'), slaMttr, t('meta.meanRecovery'), '', 'Mean Time To Recovery in minutes', 'mttr'),
-      ui.card(t('cards.routingAcc'), data.health.routing, t('meta.target') + ': 95%', 'success', 'Routing accuracy percentage. Target: 95%', 'routingAcc'),
-      ui.card(t('cards.latency'), data.sessions.avgDuration ? '~' + data.sessions.avgDuration : '--', t('meta.target') + ': 1.5s', 'success', 'Average response latency. Target: <1.5s', 'latency')
+      ui.card(
+        t('cards.uptime'),
+        slaUptime,
+        t('meta.target') + ': 99.5%',
+        'success',
+        'Monthly uptime percentage. Target: 99.5%',
+        'uptime',
+      ),
+      ui.card(
+        t('cards.uptime'),
+        data.health.routing + '%',
+        t('meta.target') + ': 99.9%',
+        'success',
+        'Weekly uptime percentage. Target: 99.9%',
+        'uptime',
+      ),
+      ui.card(
+        t('cards.incidents'),
+        slaIncidents.toString(),
+        t('meta.last30d7d').replace('{0}', slaIncidents.toString()),
+        'success',
+        'Service incidents in last 30 and 7 days',
+        'incidents',
+      ),
+      ui.card(
+        t('cards.mttr'),
+        slaMttr,
+        t('meta.meanRecovery'),
+        '',
+        'Mean Time To Recovery in minutes',
+        'mttr',
+      ),
+      ui.card(
+        t('cards.routingAcc'),
+        data.health.routing,
+        t('meta.target') + ': 95%',
+        'success',
+        'Routing accuracy percentage. Target: 95%',
+        'routingAcc',
+      ),
+      ui.card(
+        t('cards.latency'),
+        data.sessions.avgDuration ? '~' + data.sessions.avgDuration : '--',
+        t('meta.target') + ': 1.5s',
+        'success',
+        'Average response latency. Target: <1.5s',
+        'latency',
+      ),
     ]);
     // Perf section — derive from real session data
     const peakHour = isPeak ? new Date().getHours() + ':00' : '--';
-    const avgSessionMin = data.sessions.avgDuration ? parseInt(data.sessions.avgDuration) * 60 : '--';
+    const avgSessionMin = data.sessions.avgDuration
+      ? parseInt(data.sessions.avgDuration) * 60
+      : '--';
     const velocity = data.sessions.total > 2 ? '+0%' : '--';
     ui.renderSection('perf', [
-      ui.card(t('cards.sessions'), data.sessions.total.toString(), t('meta.last30Days'), '', 'Total sessions in last 30 days', 'sessions'),
-      ui.card(t('cards.peakActivity'), peakHour, data.sessions.active + ' ' + t('meta.sessions'), '', 'Peak activity hour with session count', 'peakActivity'),
-      ui.card(t('cards.sessionsPerDay'), data.sessions.total > 0 ? (data.sessions.total / 30).toFixed(1) : '--', t('meta.average'), '', 'Average sessions per day', 'sessions'),
-      ui.card(t('cards.avgSession'), avgSessionMin !== '--' ? avgSessionMin + ' min' : '--', t('meta.duration'), '', 'Average session duration', 'avgDuration'),
-      ui.card(t('cards.activeNow'), data.sessions.active.toString(), t('meta.fromAnalytics'), '', 'Active sessions from analytics', 'activeNow'),
-      ui.card(t('cards.velocity'), velocity, data.sessions.total + ' ' + t('meta.sessions'), 'success', 'Development velocity improvement percentage', 'velocity')
+      ui.card(
+        t('cards.sessions'),
+        data.sessions.total.toString(),
+        t('meta.last30Days'),
+        '',
+        'Total sessions in last 30 days',
+        'sessions',
+      ),
+      ui.card(
+        t('cards.peakActivity'),
+        peakHour,
+        data.sessions.active + ' ' + t('meta.sessions'),
+        '',
+        'Peak activity hour with session count',
+        'peakActivity',
+      ),
+      ui.card(
+        t('cards.sessionsPerDay'),
+        data.sessions.total > 0 ? (data.sessions.total / 30).toFixed(1) : '--',
+        t('meta.average'),
+        '',
+        'Average sessions per day',
+        'sessions',
+      ),
+      ui.card(
+        t('cards.avgSession'),
+        avgSessionMin !== '--' ? avgSessionMin + ' min' : '--',
+        t('meta.duration'),
+        '',
+        'Average session duration',
+        'avgDuration',
+      ),
+      ui.card(
+        t('cards.activeNow'),
+        data.sessions.active.toString(),
+        t('meta.fromAnalytics'),
+        '',
+        'Active sessions from analytics',
+        'activeNow',
+      ),
+      ui.card(
+        t('cards.velocity'),
+        velocity,
+        data.sessions.total + ' ' + t('meta.sessions'),
+        'success',
+        'Development velocity improvement percentage',
+        'velocity',
+      ),
     ]);
     // FT section
     const ftTotal = data.ft.dataset.train + data.ft.dataset.val;
-    const ftActive = data.ft.adapters.filter(a => a.active).length;
-    const ftDomainCount = data.ft.dataset.byDomain ? Object.keys(data.ft.dataset.byDomain.train || {}).length : 0;
+    const ftActive = data.ft.adapters.filter((a) => a.active).length;
+    const ftDomainCount = data.ft.dataset.byDomain
+      ? Object.keys(data.ft.dataset.byDomain.train || {}).length
+      : 0;
     ui.renderSection('ft', [
-      ui.card(t('cards.ftAdapters'), ftActive + '/' + data.ft.adapters.length, t('meta.active'), data.ft.adapters.length > 0 ? 'success' : '', 'Registered LoRA adapters', 'ftAdapters'),
-      ui.card(t('cards.ftDataset'), ftTotal.toString(), `${data.ft.dataset.raw} ${t('ft.total')} raw`, ftTotal > 0 ? 'success' : '', 'Dataset records for training', 'ftDataset'),
-      ui.card(t('cards.ftBenchmark'), data.ft.benchmark?.evalDate?.slice(0,10) || t('ft.noData'), ftDomainCount > 0 ? ftDomainCount + ' domains' : '', data.ft.benchmark ? 'success' : '', 'Latest evaluation', 'ftBenchmark'),
-      ui.card(t('cards.ftScripts'), data.ft.scripts.toString(), `${data.ft.tests.files} ${t('cards.ftTests')}`, data.ft.scripts > 0 ? 'success' : '', 'Pipeline scripts', 'ftScripts')
+      ui.card(
+        t('cards.ftAdapters'),
+        ftActive + '/' + data.ft.adapters.length,
+        t('meta.active'),
+        data.ft.adapters.length > 0 ? 'success' : '',
+        'Registered LoRA adapters',
+        'ftAdapters',
+      ),
+      ui.card(
+        t('cards.ftDataset'),
+        ftTotal.toString(),
+        `${data.ft.dataset.raw} ${t('ft.total')} raw`,
+        ftTotal > 0 ? 'success' : '',
+        'Dataset records for training',
+        'ftDataset',
+      ),
+      ui.card(
+        t('cards.ftBenchmark'),
+        data.ft.benchmark?.evalDate?.slice(0, 10) || t('ft.noData'),
+        ftDomainCount > 0 ? ftDomainCount + ' domains' : '',
+        data.ft.benchmark ? 'success' : '',
+        'Latest evaluation',
+        'ftBenchmark',
+      ),
+      ui.card(
+        t('cards.ftScripts'),
+        data.ft.scripts.toString(),
+        `${data.ft.tests.files} ${t('cards.ftTests')}`,
+        data.ft.scripts > 0 ? 'success' : '',
+        'Pipeline scripts',
+        'ftScripts',
+      ),
     ]);
     // Refs section — populate from metricInfo
     const refsGrid = document.getElementById('refs-grid');
     if (refsGrid) {
       const metricKeys = Object.keys(metricInfo);
-      refsGrid.innerHTML = metricKeys.map(key => {
-        const m = metricInfo[key];
-        const title = t('cards.' + key);
-        return `<div class="gv-ref-card">
+      refsGrid.innerHTML = metricKeys
+        .map((key) => {
+          const m = metricInfo[key];
+          const title = t('cards.' + key);
+          return `<div class="gv-ref-card">
           <div class="gv-ref-card__title">${title !== 'cards.' + key ? title : key}</div>
           <div class="gv-ref-card__purpose">${m.what}</div>
           <div class="gv-ref-card__meaning"><strong>${t('refs.why')}:</strong> ${m.why}<br><strong>${t('refs.unit')}:</strong> ${m.unit}<br><strong>${t('refs.formula')}:</strong> ${m.formula}</div>
         </div>`;
-      }).join('');
+        })
+        .join('');
     }
-  }
+  },
 };
 
 document.addEventListener('DOMContentLoaded', () => app.init());
