@@ -17,6 +17,9 @@ import {
 import { getRealMetrics, getTraces, getOSMetrics } from './real-data.js';
 import { runValidations } from './validations.js';
 import { ROOT, readJson, countSkills } from './shared.js';
+
+const FEEDBACK_PATH = join(ROOT, '.runtime', 'metrics', 'feedback.json');
+const ALERTS_CONFIG_PATH = join(ROOT, 'config', 'dashboard-alerts.json');
 import type { AgentSession, AgentMessage, AgentToolCall } from '../src/types/agent.js';
 
 const STATS_PATH = join(ROOT, '.atl', 'skill-stats.json');
@@ -390,6 +393,79 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
   if (url.pathname === '/api/traces') {
     res.writeHead(200, headers);
     res.end(JSON.stringify(getTraces()));
+    return;
+  }
+
+  if (url.pathname === '/api/feedback' && req.method === 'POST') {
+    let body = '';
+    req.on('data', (chunk) => {
+      body += chunk;
+    });
+    req.on('end', () => {
+      try {
+        const { traceId, spanId, type } = JSON.parse(body);
+        if (!traceId || !spanId || !type) {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ error: 'traceId, spanId, type required' }));
+          return;
+        }
+        const dir = dirname(FEEDBACK_PATH);
+        if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+        const existing = readJson<{
+          thumbsUp: number;
+          thumbsDown: number;
+          entries: Record<string, string>;
+        }>(FEEDBACK_PATH) || { thumbsUp: 0, thumbsDown: 0, entries: {} };
+        existing.entries[spanId] = type;
+        if (type === 'up') existing.thumbsUp++;
+        else existing.thumbsDown++;
+        writeFileSync(FEEDBACK_PATH, JSON.stringify(existing, null, 2));
+        res.writeHead(200, headers);
+        res.end(
+          JSON.stringify({
+            ok: true,
+            score: (existing.thumbsUp / (existing.thumbsUp + existing.thumbsDown)) * 100,
+          }),
+        );
+      } catch {
+        res.writeHead(400, headers);
+        res.end(JSON.stringify({ error: 'Invalid JSON' }));
+      }
+    });
+    return;
+  }
+
+  if (url.pathname === '/api/alerts') {
+    let alerts: Record<string, unknown>[] = [];
+    try {
+      if (existsSync(ALERTS_CONFIG_PATH)) {
+        const config = JSON.parse(readFileSync(ALERTS_CONFIG_PATH, 'utf-8'));
+        const metrics = generateMetrics();
+        alerts = Object.entries(config.rules || {}).map(([name, rule]: [string, any]) => {
+          const actual = rule.metric
+            .split('.')
+            .reduce((obj: any, key: string) => obj?.[key], metrics as any);
+          const below = rule.direction === 'below';
+          const triggered =
+            typeof actual === 'number' &&
+            typeof rule.threshold === 'number' &&
+            (below ? actual <= rule.threshold : actual >= rule.threshold);
+          return {
+            name,
+            rule: rule.label || name,
+            actual: actual ?? 0,
+            threshold: rule.threshold,
+            severity: rule.severity || 'info',
+            triggered,
+            unit: rule.unit || '',
+          };
+        });
+      }
+    } catch {
+      /* best-effort */
+    }
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ alerts }));
     return;
   }
 
