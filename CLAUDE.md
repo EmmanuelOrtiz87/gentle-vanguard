@@ -20,9 +20,9 @@ Canonical entry: `docs/AGENTS.md`
 6. CodeGraph -> `codegraph_context` before modifying code (or `semantic-search.ps1` for NL queries)
 7. `mem_search "lessons learned"` at session start
 8. Review Workload Guard (`review-workload-guard.ps1`) before multi-file impl >400 lines
- 9. Tool output discipline: limit read/grep/bash results to 50 lines
+9. Tool output discipline: limit read/grep/bash results to 50 lines
 10. JSON validity: verify balanced quotes/braces/brackets before tool calls (see
-     `rules/NORMATIVAS-CODE-QUALITY.md`)
+    `rules/NORMATIVAS-CODE-QUALITY.md`)
 11. Subagent delegation: send minimal context in `prompt` — only task info, not full history
 12. NORMATIVA OVERRIDE: If user instruction contradicts a normativa/rule, ask for confirmation with
     reasons. Only proceed if user explicitly confirms. Otherwise follow normativa.
@@ -34,7 +34,7 @@ Canonical entry: `docs/AGENTS.md`
 ## Break Glass
 
 If 3+ turns w/o completion, loop detected, or output truncated:
-`pwsh -NoProfile -File scripts\utilities\self-diagnosis.ps1 -CurrentProfile "<p>" -ChatLevel "<l>" -TurnCount <N>`
+`pwsh -NoProfile -File scripts\utilities\reporting\DIAGNOSIS\self-diagnosis.ps1 -CurrentProfile "<p>" -ChatLevel "<l>" -TurnCount <N>`
 Override to `lleno`/`chat-balanced`. Notify: `[BREAK GLASS] motivo: {reason}`
 
 ## Response Profile
