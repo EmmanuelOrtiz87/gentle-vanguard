@@ -97,6 +97,14 @@
         "description": "Optimize Engram memory usage"
       },
       {
+        "id": "engram-auto-sync",
+        "enabled": true,
+        "script": "scripts/utilities/memory/ENGRAM/engram-auto-sync.ps1",
+        "args": "-Mode sync -Quiet",
+        "required": false,
+        "description": "Auto-synchronize Engram checksums if DB was modified (prevents hash mismatches)"
+      },
+      {
         "id": "cross-workspace-validation",
         "enabled": true,
         "script": "scripts/monitoring/cross-workspace-validator.ps1",
@@ -364,6 +372,78 @@
         "args": "-Source all -Force",
         "required": false,
         "description": "Auto-colecta datos de sesiones, engram, skills para fine-tuning dataset"
+      },
+      {
+        "id": "judgment-day-correction",
+        "enabled": true,
+        "script": "scripts/adaptive/correction-rules-engine.ps1",
+        "args": "-Mode check -Quiet",
+        "required": false,
+        "lazy": true,
+        "description": "Execute auto-correction rules based on session quality scoring (Phase 1 v4.0)"
+      },
+      {
+        "id": "cloud-connectors-init",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1",
+        "args": "-SkillId __healthcheck__ -SkillInput @{action='ping'} -InvocationType DryRun -Quiet",
+        "required": false,
+        "description": "Initialize cloud connectors — validates config, checks circuit breaker states, pre-warms connections (Phase 1.2)"
+      },
+      {
+        "id": "cloud-connectors-metrics",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/telemetry/TELEMETRY-METRICS/token-budget-guard.ps1",
+        "args": "-Task cloud-metrics -Risk low -Record -ActualPromptTokens 0 -ActualCompletionTokens 0",
+        "required": false,
+        "description": "Ship cloud connector metrics (executions, cost, latency) to dashboard metrics pipeline (Phase 1.2)"
+      },
+      {
+        "id": "tracing-init",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/ops/TRACING/tracing-instrument.ps1",
+        "args": "-Action start -SpanName session-start -ServiceName gentle-vanguard -Quiet",
+        "required": false,
+        "description": "Initialize distributed tracing span for this session — sends OTLP to collector (Phase 1.3)"
+      },
+      {
+        "id": "checkpoint-auto-create",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1",
+        "args": "-Action create -Label autostart -Quiet",
+        "required": false,
+        "description": "Auto-create session state checkpoint at session start for rollback safety (Phase 2)"
+      },
+      {
+        "id": "audit-pipeline-init",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/security/audit-pipeline.ps1",
+        "args": "-Action log -EventType session.start -Component system -Operation autostart -Actor system -Status success -Message 'Session autostart pipeline initialized' -Quiet",
+        "required": false,
+        "description": "Log session start in the audit pipeline for SOC2/GDPR compliance (Phase 3)"
+      },
+      {
+        "id": "event-sourcing-init",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1",
+        "args": "-Action append -AggregateId session-autostart -EventType session.started -EventData '{}' -Quiet",
+        "required": false,
+        "description": "Record session start event in append-only event store for traceability (Phase 5)"
+      },
+      {
+        "id": "post-session-learning",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/post-autostart-summary.ps1",
+        "args": "-FinalReportMode",
+        "required": false,
+        "description": "Generate final session report + auto-learned patterns for next session"
       }
     ],
 

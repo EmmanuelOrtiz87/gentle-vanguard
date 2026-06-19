@@ -139,8 +139,10 @@ function Check-DashboardWs {
     } else {
       Add-Finding "dashboard-ws" "watchdog process" "FAIL" "PID $watchdogPid not running" "restart"
     }
+  } elseif ($httpOk -or $running) {
+    Add-Finding "dashboard-ws" "watchdog process" "PASS" "WS running standalone" "ok"
   } else {
-    Add-Finding "dashboard-ws" "watchdog process" "WARN" "No PID file" "start"
+    Add-Finding "dashboard-ws" "watchdog process" "WARN" "WS down and no watchdog" "start"
   }
 
   $wsPid = $null
@@ -354,6 +356,133 @@ function Check-Security {
   }
 }
 
+# ─── Component: Cloud Connectors (Phase 1.2) ────────────────────────────────
+
+function Check-CloudConnectors {
+  Log "  [Cloud Connectors] Checking..." Cyan
+  $cloudMetrics = Join-Path $repoRoot ".session" "cloud-metrics.json"
+  if (Test-Path $cloudMetrics) {
+    try {
+      $data = Get-Content $cloudMetrics -Raw | ConvertFrom-Json
+      $execs = $data.executions.Count
+      $successRate = if ($execs -gt 0) { ($data.executions | Where-Object { $_.success }).Count / $execs * 100 } else { 100 }
+      Add-Finding "cloud-connectors" "metrics file" "PASS" "$execs executions, ${successRate}% success" "ok"
+    } catch {
+      Add-Finding "cloud-connectors" "metrics file" "WARN" "Corrupted" "verify"
+    }
+  } else {
+    Add-Finding "cloud-connectors" "metrics file" "WARN" "No cloud metrics yet" "ok"
+  }
+
+  $hybridMetrics = Join-Path $repoRoot ".session" "hybrid-metrics.json"
+  if (Test-Path $hybridMetrics) {
+    Add-Finding "cloud-connectors" "hybrid metrics" "PASS" "Hybrid routing history available" "ok"
+  } else {
+    Add-Finding "cloud-connectors" "hybrid metrics" "WARN" "No hybrid routing yet" "ok"
+  }
+
+  $delegators = @("aws-delegator.ps1", "azure-delegator.ps1", "hybrid-executor.ps1")
+  $allPresent = $delegators | ForEach-Object { Test-Path (Join-Path $repoRoot "scripts/utilities/ops/CLOUD-CONNECTORS/$_") } | Where-Object { -not $_ } | Measure-Object | Select-Object -ExpandProperty Count
+  if ($allPresent -eq 0) {
+    Add-Finding "cloud-connectors" "delegator scripts" "PASS" "All 3 scripts present" "ok"
+  } else {
+    Add-Finding "cloud-connectors" "delegator scripts" "FAIL" "Missing delegator scripts" "verify"
+  }
+}
+
+# ─── Component: Tracing (Phase 1.3) ──────────────────────────────────────────
+
+function Check-Tracing {
+  Log "  [Tracing] Checking..." Cyan
+  $telemetryDir = Join-Path $repoRoot ".telemetry"
+  $tracesDir = Join-Path $telemetryDir "traces"
+  $metricsDir = Join-Path $telemetryDir "metrics"
+  $spansDir = Join-Path $telemetryDir "spans"
+
+  if (Test-Path $tracesDir) {
+    $traceFiles = (Get-ChildItem $tracesDir -Filter "*.jsonl" -ErrorAction SilentlyContinue).Count
+    Add-Finding "tracing" "trace files" "PASS" "$traceFiles trace file(s)" "ok"
+  } else { Add-Finding "tracing" "trace files" "WARN" "No traces directory" "ok" }
+
+  if (Test-Path $metricsDir) {
+    $promFile = Join-Path $metricsDir "prometheus-metrics.prom"
+    if (Test-Path $promFile) {
+      $age = Get-FileAgeHours -Path $promFile
+      Add-Finding "tracing" "prometheus metrics" "$(if($age -lt 24){'PASS'}elseif($age -lt 72){'WARN'}else{'FAIL'})" "last export $age hrs ago" "ok"
+    } else { Add-Finding "tracing" "prometheus metrics" "WARN" "No prometheus export" "ok" }
+  } else { Add-Finding "tracing" "metrics directory" "WARN" "Not initialized" "ok" }
+
+  $tracer = Join-Path $repoRoot "scripts/utilities/ops/TRACING/tracing-instrument.ps1"
+  if (Test-Path $tracer) {
+    Add-Finding "tracing" "instrumentation script" "PASS" "Available" "ok"
+  } else { Add-Finding "tracing" "instrumentation script" "FAIL" "Missing" "verify" }
+}
+
+# ─── Component: State Persistence (Phase 2) ──────────────────────────────────
+
+function Check-StatePersistence {
+  Log "  [State Persistence] Checking..." Cyan
+  $checkpointDir = Join-Path $repoRoot ".session" "checkpoints"
+  $manifestDir = Join-Path $repoRoot ".session" "manifests"
+  $snapshotDir = Join-Path $repoRoot ".session" "snapshots"
+
+  if (Test-Path $checkpointDir) {
+    $ckpts = (Get-ChildItem $checkpointDir -Directory -ErrorAction SilentlyContinue).Count
+    Add-Finding "state-persistence" "checkpoints" "PASS" "$ckpts checkpoint(s)" "ok"
+    $latest = Get-ChildItem $checkpointDir -Directory -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    if ($latest) {
+      $age = Get-FileAgeHours -Path $latest.FullName
+      if ($age -gt 72) { Add-Finding "state-persistence" "latest checkpoint" "WARN" "${age}hrs old" "verify" }
+    }
+  } else { Add-Finding "state-persistence" "checkpoints" "WARN" "No checkpoints directory" "ok" }
+
+  if (Test-Path $manifestDir) {
+    $manifests = (Get-ChildItem $manifestDir -Filter "*.json" -ErrorAction SilentlyContinue).Count
+    Add-Finding "state-persistence" "manifests" "PASS" "$manifests manifest(s)" "ok"
+  } else { Add-Finding "state-persistence" "manifests" "WARN" "No manifests" "ok" }
+
+  if (Test-Path $snapshotDir) {
+    $snaps = (Get-ChildItem $snapshotDir -Filter "*.json" -ErrorAction SilentlyContinue).Count
+    Add-Finding "state-persistence" "snapshots" "PASS" "$snaps snapshot(s)" "ok"
+  } else { Add-Finding "state-persistence" "snapshots" "WARN" "No snapshots" "ok" }
+
+  $ckptMgr = Join-Path $repoRoot "scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1"
+  $rollbackOrch = Join-Path $repoRoot "scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1"
+  $snapMgr = Join-Path $repoRoot "scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1"
+  $allScripts = (Test-Path $ckptMgr) -and (Test-Path $rollbackOrch) -and (Test-Path $snapMgr)
+  Add-Finding "state-persistence" "scripts" "$(if($allScripts){'PASS'}else{'FAIL'})" "$(if($allScripts){'All 3 scripts present'}else{'Missing scripts'})" "verify"
+}
+
+# ─── Component: Audit Pipeline (Phase 3) ─────────────────────────────────────
+
+function Check-AuditPipeline {
+  Log "  [Audit Pipeline] Checking..." Cyan
+  $auditDir = Join-Path $repoRoot ".session" "audit"
+  $logDir = Join-Path $auditDir "logs"
+  $indexFile = Join-Path $auditDir "index.json"
+
+  if (Test-Path $logDir) {
+    $logFiles = Get-ChildItem $logDir -Filter "*.jsonl" -ErrorAction SilentlyContinue
+    $totalEvents = 0
+    foreach ($f in $logFiles) { $totalEvents += (Get-Content $f.FullName -ErrorAction SilentlyContinue).Count }
+    Add-Finding "audit" "log files" "PASS" "$($logFiles.Count) file(s), $totalEvents events" "ok"
+  } else { Add-Finding "audit" "log files" "WARN" "No audit logs yet" "ok" }
+
+  if (Test-Path $indexFile) {
+    Add-Finding "audit" "index" "PASS" "Available" "ok"
+  } else { Add-Finding "audit" "index" "WARN" "No index" "ok" }
+
+  $auditPipe = Join-Path $repoRoot "scripts/security/audit-pipeline.ps1"
+  if (Test-Path $auditPipe) {
+    Add-Finding "audit" "pipeline script" "PASS" "Available" "ok"
+  } else { Add-Finding "audit" "pipeline script" "FAIL" "Missing" "verify" }
+
+  $rbacPath = Join-Path $repoRoot "config/rbac-policy.json"
+  $cspPath = Join-Path $repoRoot "config/security-csp.json"
+  $secConfigs = (Test-Path $rbacPath) -and (Test-Path $cspPath)
+  Add-Finding "audit" "security configs" "$(if($secConfigs){'PASS'}else{'FAIL'})" "$(if($secConfigs){'RBAC + CSP present'}else{'Missing configs'})" "verify"
+}
+
 # ─── Component: Governance ──────────────────────────────────────────────────
 
 function Check-Governance {
@@ -410,9 +539,18 @@ function AutoHeal {
   # Dashboard WS server restart
   $dashFail = $needsRestart + $needsStart | Where-Object { $_.component -eq "dashboard-ws" }
   if ($dashFail) {
-    Log "  [Heal] Restarting Dashboard WS server..." Yellow
+    $wsPort = 8080
+    $portsFile = Join-Path $repoRoot ".runtime" "dashboard-ports.json"
+    if (Test-Path $portsFile) { $ports = Get-Content $portsFile -Raw | ConvertFrom-Json; $wsPort = $ports.wsPort }
+    $wsRunning = Test-Port -Port $wsPort
     $wsAutostart = Join-Path $PSScriptRoot "..\utilities\dashboard\dashboard-ws-autostart.ps1"
-    if (Test-Path $wsAutostart) {
+
+    if ($wsRunning) {
+      Log "  [Heal] WS alive on port $wsPort, no action needed (watchdog optional)" Green
+      Add-Finding "dashboard-ws" "autoheal" "PASS" "WS alive, watchdog skipped" "ok"
+      $healed++
+    } elseif (Test-Path $wsAutostart) {
+      Log "  [Heal] Restarting Dashboard WS server..." Yellow
       try {
         $p = Start-Process -FilePath "pwsh" -ArgumentList "-NoProfile", "-File", $wsAutostart, "-Quiet" -WindowStyle Hidden -PassThru
         Start-Sleep -Seconds 5
@@ -502,6 +640,10 @@ function Run-AllChecks {
   Check-ToolConfigs
   Check-Security
   Check-Governance
+  Check-CloudConnectors
+  Check-Tracing
+  Check-StatePersistence
+  Check-AuditPipeline
 }
 
 # ─── Main ───────────────────────────────────────────────────────────────────

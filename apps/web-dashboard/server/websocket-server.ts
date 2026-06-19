@@ -1,6 +1,6 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import { createServer, IncomingMessage, ServerResponse } from 'http';
-import { readFileSync, writeFileSync, existsSync, mkdirSync, watch } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, watch, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { getBridge } from './mcp-bridge.js';
 import { getStateBridge } from './shared-state-bridge.js';
@@ -14,7 +14,7 @@ import {
   validateSkillStructure,
   getSkillContent,
 } from './marketplace-api.js';
-import { getRealMetrics, getTraces, getOSMetrics } from './real-data.js';
+import { getRealMetrics, getTraces, getOSMetrics, getCloudMetrics } from './real-data.js';
 import { runValidations } from './validations.js';
 import { ROOT, readJson, countSkills } from './shared.js';
 
@@ -365,6 +365,23 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
     const logAggregate = existsSync(logAggregatePath)
       ? JSON.parse(readFileSync(logAggregatePath, 'utf-8'))
       : null;
+    const cloudMetricsFile = join(ROOT, '.session', 'cloud-metrics.json');
+    const cloudMetrics = existsSync(cloudMetricsFile)
+      ? JSON.parse(readFileSync(cloudMetricsFile, 'utf-8'))
+      : null;
+    const checkpointDir = join(ROOT, '.session', 'checkpoints');
+    const checkpointCount = existsSync(checkpointDir)
+      ? readdirSync(checkpointDir).filter(d => !d.includes('.')).length
+      : 0;
+    const auditDir = join(ROOT, '.session', 'audit', 'logs');
+    const auditFileCount = existsSync(auditDir)
+      ? readdirSync(auditDir).filter(f => f.endsWith('.jsonl')).length
+      : 0;
+    const telemetryDir = join(ROOT, '.telemetry', 'traces');
+    const traceFileCount = existsSync(telemetryDir)
+      ? readdirSync(telemetryDir).filter(f => f.endsWith('.jsonl')).length
+      : 0;
+
     res.writeHead(200, headers);
     res.end(
       JSON.stringify({
@@ -382,6 +399,23 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
             logEntries: logAggregate?.totals?.totalEntries || 0,
             logErrorRate: logAggregate?.totals?.errorRate || 0,
             logComponents: logAggregate?.componentCount || 0,
+          },
+          cloud: {
+            status: cloudMetrics && cloudMetrics.executions?.length > 0 ? 'ok' : 'unknown',
+            executions: cloudMetrics?.executions?.length || 0,
+            totalCost: cloudMetrics?.executions?.reduce((s: number, e: any) => s + (e.cost || 0), 0) || 0,
+          },
+          tracing: {
+            status: traceFileCount > 0 ? 'ok' : 'unknown',
+            traceFiles: traceFileCount,
+          },
+          checkpoints: {
+            status: checkpointCount > 0 ? 'ok' : 'unknown',
+            total: checkpointCount,
+          },
+          audit: {
+            status: auditFileCount > 0 ? 'ok' : 'unknown',
+            logFiles: auditFileCount,
           },
         },
         timestamp: new Date().toISOString(),
@@ -472,6 +506,12 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
   if (url.pathname === '/api/health/global') {
     res.writeHead(200, headers);
     res.end(JSON.stringify(getGlobalHealth()));
+    return;
+  }
+
+  if (url.pathname === '/api/cloud/metrics') {
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ type: 'cloud', data: getCloudMetrics() }));
     return;
   }
 

@@ -397,5 +397,5 @@ MIT © 2026 Emmanuel Ortiz
 ---
 
 <p align="center">
-  <sub>Gentle-Vanguard v3.3.2 — Don't let your mellow hustle be faded.</sub>
+  <sub>Gentle-Vanguard v3.3.3 — Don't let your mellow hustle be faded.</sub>
 </p>

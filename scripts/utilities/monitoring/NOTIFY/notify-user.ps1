@@ -58,7 +58,7 @@ $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUA
     $root
 }
 
-$engramSafeScript = Join-Path $repoRoot 'scripts\utilities\engram-safe.ps1'
+$engramSafeScript = Join-Path $repoRoot 'scripts\utilities\memory\ENGRAM\engram-safe.ps1'
 if (Test-Path $engramSafeScript) {
     . $engramSafeScript
 }
@@ -173,4 +173,3 @@ catch {
     Write-Host "[ERROR] Notification failed: $_" -ForegroundColor Red
     exit 1
 }
-

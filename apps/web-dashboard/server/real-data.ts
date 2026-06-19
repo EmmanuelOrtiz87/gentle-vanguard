@@ -2,6 +2,7 @@ import { existsSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { execSync } from 'child_process';
 import { ROOT, readJson, countSkills as _countSkills } from './shared.js';
+import type { CloudMetrics } from '../src/types/dashboard.js';
 
 const CONSOLIDATED_PATH = join(ROOT, '.runtime', 'metrics', 'consolidated.json');
 const TOKEN_PATH = join(ROOT, '.runtime', 'metrics', 'token.json');
@@ -253,6 +254,25 @@ export function getRealMetrics() {
   const performanceAnalytics = readJson<any>(PERFORMANCE_PATH);
   const tokenUsage = readJson<{ totalTokens?: number }>(TOKEN_USAGE_PATH);
 
+  const cloudMetricsFile = readJson<{ executions: unknown[] }>(join(ROOT, '.session', 'cloud-metrics.json'));
+  const cloudExecutions = cloudMetricsFile?.executions?.length || 0;
+  const cloudTotalCost = cloudMetricsFile?.executions?.reduce((s: number, e: any) => s + (e.cost || 0), 0) || 0;
+
+  const checkpointDir = join(ROOT, '.session', 'checkpoints');
+  const checkpointCount = existsSync(checkpointDir)
+    ? readdirSync(checkpointDir).filter(d => existsSync(join(checkpointDir, d, d)) || !d.includes('.')).length
+    : 0;
+
+  const auditDir = join(ROOT, '.session', 'audit', 'logs');
+  const auditFileCount = existsSync(auditDir)
+    ? readdirSync(auditDir).filter(f => f.endsWith('.jsonl')).length
+    : 0;
+
+  const traceDir = join(ROOT, '.telemetry', 'traces');
+  const traceFileCount = existsSync(traceDir)
+    ? readdirSync(traceDir).filter(f => f.endsWith('.jsonl')).length
+    : 0;
+
   const skills = _countSkills(REGISTRY_PATH);
 
   const t = consolidated?.token ||
@@ -335,6 +355,10 @@ export function getRealMetrics() {
       },
     },
     events: sessionsFile?.events || [],
+    cloud: { executions: cloudExecutions, totalCost: cloudTotalCost },
+    checkpoints: checkpointCount,
+    auditLogs: auditFileCount,
+    traceFiles: traceFileCount,
   };
 }
 
@@ -355,6 +379,40 @@ interface TraceStats {
   avgDuration: number;
   errorRate: number;
   activeSpans: number;
+}
+
+export function getCloudMetrics(): CloudMetrics {
+  const cloudPath = join(ROOT, '.session', 'cloud-metrics.json');
+  const cloudData = readJson<{ executions: Array<{ provider: string; timestamp: string; duration: number; success: boolean; cost: number }> }>(cloudPath);
+  const execs = cloudData?.executions || [];
+
+  const byProvider: Record<string, { executions: number[]; costs: number[]; successes: boolean[] }> = {};
+  for (const ex of execs) {
+    if (!byProvider[ex.provider]) byProvider[ex.provider] = { executions: [], costs: [], successes: [] };
+    byProvider[ex.provider].executions.push(ex.duration);
+    byProvider[ex.provider].costs.push(ex.cost);
+    byProvider[ex.provider].successes.push(ex.success);
+  }
+
+  const stats = {
+    totalExecutions: execs.length,
+    totalCost: execs.reduce((s, e) => s + e.cost, 0),
+    successRate: execs.length > 0 ? execs.filter(e => e.success).length / execs.length : 1,
+    avgLatency: execs.length > 0 ? Math.round(execs.reduce((s, e) => s + e.duration, 0) / execs.length) : 0,
+    byProvider: {} as Record<string, { executions: number; cost: number; successRate: number; avgLatency: number }>,
+    circuitBreakerStates: { AWS: 'CLOSED', Azure: 'CLOSED' },
+  };
+
+  for (const [provider, data] of Object.entries(byProvider)) {
+    stats.byProvider[provider] = {
+      executions: data.executions.length,
+      cost: data.costs.reduce((s, c) => s + c, 0),
+      successRate: data.successes.filter(Boolean).length / data.successes.length,
+      avgLatency: Math.round(data.executions.reduce((s, d) => s + d, 0) / data.executions.length),
+    };
+  }
+
+  return { executions: execs, stats };
 }
 
 export function getTraces(): { traces: Trace[]; stats: TraceStats } {
