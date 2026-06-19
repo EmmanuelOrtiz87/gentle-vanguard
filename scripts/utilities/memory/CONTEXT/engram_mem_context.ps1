@@ -12,7 +12,7 @@ $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUA
     $root
 }
 
-$engramSafe = Join-Path $repoRoot 'scripts\utilities\engram-safe.ps1'
+$engramSafe = Join-Path $repoRoot 'scripts\utilities\memory\ENGRAM\engram-safe.ps1'
 if (Test-Path $engramSafe) {
     . $engramSafe
 }

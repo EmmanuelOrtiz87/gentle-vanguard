@@ -63,6 +63,9 @@ Write-Host " Gentle-Vanguard - Development Stack - Pre-commit" -ForegroundColor 
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host ""
 
+# Engram Integrity Check (prevent corrupted checksum commits)
+Write-Host "[PRE] Engram integrity verification..." -ForegroundColor Cyan
+& $PSScriptRoot/engram-integrity-hook.ps1 -Mode check -AutoFix || exit 1
 
 # 7 Dimensiones: Seguridad, Calidad, Arquitectura, Testing, API, Documentacin, Gitflow
 Write-Host "[INFO] Ejecutando chequeos automticos de las 7 dimensiones..." -ForegroundColor Cyan

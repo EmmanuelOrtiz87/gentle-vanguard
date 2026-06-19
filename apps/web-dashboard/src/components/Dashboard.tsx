@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Coins, Users, Activity, Moon, Sun, RefreshCw, Server, Zap, Bot, Cpu, Clock, ThumbsUp, DollarSign, Shield, BarChart3, Gauge, TrendingUp, AlertTriangle, Bell, Info, Languages } from 'lucide-react';
+import { Coins, Users, Activity, Moon, Sun, RefreshCw, Server, Zap, Bot, Cpu, Clock, ThumbsUp, DollarSign, Shield, BarChart3, Gauge, TrendingUp, AlertTriangle, Bell, Info, Languages, Cloud } from 'lucide-react';
 import { useMetrics } from '../hooks/useMetrics';
 import { useAlerts } from '../hooks/useAlerts';
 import { useSessions } from '../hooks/useSessions';
@@ -415,6 +415,31 @@ function DashboardInner() {
             </div>
           </div>
         )}
+
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <Cloud className="w-5 h-5 text-blue-500" />
+            <SectionHeader title="Cloud Connectors" infoKey="mcp" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="card">
+              <p className="metric-label">Cloud Executions</p>
+              <p className="metric-value">{(data as any).cloud?.executions ?? 0}</p>
+            </div>
+            <div className="card">
+              <p className="metric-label">Total Cost</p>
+              <p className="metric-value">${((data as any).cloud?.totalCost ?? 0).toFixed(4)}</p>
+            </div>
+            <div className="card">
+              <p className="metric-label">Checkpoints</p>
+              <p className="metric-value">{(data as any).checkpoints ?? 0}</p>
+            </div>
+            <div className="card">
+              <p className="metric-label">Audit Logs</p>
+              <p className="metric-value">{(data as any).auditLogs ?? 0}</p>
+            </div>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <ValidationPanel />

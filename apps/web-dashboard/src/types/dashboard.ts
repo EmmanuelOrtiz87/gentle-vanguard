@@ -65,6 +65,10 @@ export interface DashboardData {
   latency?: LatencyMetrics;
   feedback?: FeedbackMetric;
   costInsights?: CostInsight[];
+  cloud?: { executions: number; totalCost: number };
+  checkpoints?: number;
+  auditLogs?: number;
+  traceFiles?: number;
   mcp?: {
     skills: { total: number; byAgent: Record<string, number>; recentlyUsed: string[] };
     calls: {
@@ -97,6 +101,31 @@ export interface Session {
   tokensUsed: number;
   model?: string;
   cost?: number;
+}
+
+export interface CloudConnectorExecution {
+  provider: string;
+  timestamp: string;
+  duration: number;
+  success: boolean;
+  cost: number;
+}
+
+export interface CloudMetrics {
+  executions: CloudConnectorExecution[];
+  stats: {
+    totalExecutions: number;
+    totalCost: number;
+    successRate: number;
+    avgLatency: number;
+    byProvider: Record<string, {
+      executions: number;
+      cost: number;
+      successRate: number;
+      avgLatency: number;
+    }>;
+    circuitBreakerStates: Record<string, string>;
+  };
 }
 
 export interface MetricHistory {

@@ -183,6 +183,9 @@ function Invoke-Gentle-VanguardEngram {
         }
     }
 
+    $previousSkipUpdate = $env:ENGRAM_SKIP_UPDATE
+    $env:ENGRAM_SKIP_UPDATE = '1'
+
     try {
         $output = & $engramPath @Arguments 2>&1
         $exitCode = $LASTEXITCODE
@@ -196,6 +199,12 @@ function Invoke-Gentle-VanguardEngram {
             Success  = $false
             Output   = $_.Exception.Message
             ExitCode = 1
+        }
+    } finally {
+        if ($null -eq $previousSkipUpdate) {
+            Remove-Item Env:\ENGRAM_SKIP_UPDATE -ErrorAction SilentlyContinue
+        } else {
+            $env:ENGRAM_SKIP_UPDATE = $previousSkipUpdate
         }
     }
 }

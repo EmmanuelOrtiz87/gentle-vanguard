@@ -149,3 +149,106 @@ Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica
 - Pipeline session-autostart con `lazy: true` para steps no bloqueantes
 - `dashboard-stop.ps1` mata watchdog primero para evitar restart loops
 - Frontend HTTP polling tolera caídas temporales del WS server
+
+## v4.0-infrastructure
+
+Infraestructura de tracing, state persistence, auditoría, event sourcing, cloud connectors y health
+API integrados en la pipeline de sesión.
+
+### Distributed Tracing
+
+- Script: `scripts/utilities/ops/TRACING/tracing-instrument.ps1`
+- Acciones: `start`, `end`, `error`
+- Almacena spans en `.telemetry/spans/` y `.telemetry/traces/` (JSONL)
+- Exporta OTLP a `http://localhost:4318/v1/traces`
+- Pipeline: step `tracing-init` (lazy, session start) + cleanup close
+- Funciones helper: `Start-TracingSpan` / `Stop-TracingSpan` en cloud connectors
+
+### State Persistence
+
+| Componente | Script | Pipeline step |
+|-----------|--------|---------------|
+| Checkpoint | `scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1` | `checkpoint-auto-create` (lazy) |
+| Snapshot | `scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1` | — (manual) |
+| Rollback | `scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1` | — (manual) |
+
+- Checkpoint: create/list/diff/verify/prune — almacena en `.session/checkpoints/`
+- Snapshot: snapshot/list/prune — almacena en `.session/snapshots/`
+- Rollback: restaura desde checkpoint con dry-run validation
+
+### Audit Pipeline
+
+- Script: `scripts/security/audit-pipeline.ps1`
+- Acciones: `log`, `status`, `query`, `archive`, `prune`
+- Almacena en `.session/audit/logs/` (JSONL diario)
+- `$root` calculado con 2x `Split-Path -Parent` desde `scripts/security/` → repo root
+- Pipeline: step `audit-pipeline-init` (lazy, session start) + cleanup log
+
+### Event Sourcing + Saga
+
+| Componente | Script | Pipeline step |
+|-----------|--------|---------------|
+| Event Store | `scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1` | `event-sourcing-init` (lazy) |
+| Saga | `scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1` | — (manual) |
+
+- Event sourcing: append/project/snapshot/prune — almacena en `.session/event-store/`
+- Saga: create/register-step/complete/compensate/list — almacena en `.session/sagas/`
+
+### Cloud Connectors
+
+| Componente | Script | Pipeline step |
+|-----------|--------|---------------|
+| Hybrid Executor | `scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1` | `cloud-connectors-init` (lazy) |
+| AWS Delegator | `scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1` | — |
+| Azure Delegator | `scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1` | — |
+
+- Routing por costo/latencia/load con fallback automático
+- Circuit breaker pattern (5 failures → OPEN, 2 successes → HALF_OPEN → CLOSED)
+- Métricas en `.session/cloud-metrics.json` y `.session/hybrid-metrics.json`
+- SkillInput serializado como JSON para paso por CLI (hashtable splatting `@splat`)
+- Pipeline: step `cloud-connectors-init` (lazy, healthcheck ping al iniciar sesión)
+
+### Dashboard Health API
+
+`/api/health` retorna 7 componentes: `websocket`, `mcp`, `adaptive`, `cloud`, `tracing`,
+`checkpoints`, `audit`. Cada uno con status `ok`/`unknown`/`degraded` y métricas específicas.
+Verificado: 7/7 responden OK en entorno local.
+
+### Notes
+
+- **graphify update**: The npm package `graphify@1.0.0` installed globally is a different project
+  (Random Graph Generator) — NOT the opencode graphify CLI. It has no `bin` entry, so
+  `graphify update .` cannot run in this environment. The `graphify-out/` directory exists
+  from a prior external process. Skip `graphify update` — code changes are tracked via
+  `.codegraph/` index and git hooks.
+- **`$var:` syntax**: In PowerShell string interpolation, `$varname:` must be written as
+  `${varname}:` to avoid parser errors. All instances are fixed.
+
+### Autostart Pipeline (steps v4.0)
+
+Los siguientes steps se agregaron al `config/session-autostart.config.json`:
+
+| Step | Script | Lazy |
+|------|--------|------|
+| `judgment-day-correction` | `correction-rules-engine.ps1` | ✅ |
+| `cloud-connectors-init` | `hybrid-executor.ps1` | ✅ |
+| `cloud-connectors-metrics` | `token-budget-guard.ps1` | ✅ |
+| `tracing-init` | `tracing-instrument.ps1` | ✅ |
+| `checkpoint-auto-create` | `checkpoint-manager.ps1` | ✅ |
+| `audit-pipeline-init` | `audit-pipeline.ps1` | ✅ |
+| `event-sourcing-init` | `event-sourcing.ps1` | ✅ |
+| `post-session-learning` | `post-autostart-summary.ps1` | ✅ |
+
+### Verificación rápida
+
+```powershell
+# Probar todo el pipeline
+& "scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1" -SkillId __healthcheck__ -SkillInput @{action='ping'} -InvocationType DryRun -Quiet
+& "scripts/security/audit-pipeline.ps1" -Action status -Quiet
+& "scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1" -Action list -Quiet
+& "scripts/utilities/ops/TRACING/tracing-instrument.ps1" -Action start -SpanName test -Quiet
+& "scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1" -Action project -AggregateId test -Quiet
+& "scripts/maintenance/maintenance-watchtower.ps1" -Action health -Quiet
+# Dashboard build
+cd apps/web-dashboard && npm run build
+```
