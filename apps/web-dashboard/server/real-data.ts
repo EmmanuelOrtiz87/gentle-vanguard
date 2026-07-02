@@ -254,23 +254,37 @@ export function getRealMetrics() {
   const performanceAnalytics = readJson<any>(PERFORMANCE_PATH);
   const tokenUsage = readJson<{ totalTokens?: number }>(TOKEN_USAGE_PATH);
 
-  const cloudMetricsFile = readJson<{ executions: unknown[] }>(join(ROOT, '.session', 'cloud-metrics.json'));
+  const cloudMetricsFile = readJson<{ executions: unknown[] }>(
+    join(ROOT, '.session', 'cloud-metrics.json'),
+  );
   const cloudExecutions = cloudMetricsFile?.executions?.length || 0;
-  const cloudTotalCost = cloudMetricsFile?.executions?.reduce((s: number, e: any) => s + (e.cost || 0), 0) || 0;
+  const cloudTotalCost =
+    cloudMetricsFile?.executions?.reduce((s: number, e: any) => s + (e.cost || 0), 0) || 0;
 
   const checkpointDir = join(ROOT, '.session', 'checkpoints');
   const checkpointCount = existsSync(checkpointDir)
-    ? readdirSync(checkpointDir).filter(d => existsSync(join(checkpointDir, d, d)) || !d.includes('.')).length
+    ? readdirSync(checkpointDir).filter(
+        (d) => existsSync(join(checkpointDir, d, d)) || !d.includes('.'),
+      ).length
     : 0;
 
   const auditDir = join(ROOT, '.session', 'audit', 'logs');
   const auditFileCount = existsSync(auditDir)
-    ? readdirSync(auditDir).filter(f => f.endsWith('.jsonl')).length
+    ? readdirSync(auditDir).filter((f) => f.endsWith('.jsonl')).length
     : 0;
 
   const traceDir = join(ROOT, '.telemetry', 'traces');
   const traceFileCount = existsSync(traceDir)
-    ? readdirSync(traceDir).filter(f => f.endsWith('.jsonl')).length
+    ? readdirSync(traceDir).filter((f) => f.endsWith('.jsonl')).length
+    : 0;
+
+  const docAnalysisDir = join(ROOT, '.session', 'document-analysis');
+  const docAnalysisResults = existsSync(docAnalysisDir)
+    ? readdirSync(docAnalysisDir).filter((f) => f.startsWith('result-')).length
+    : 0;
+  const docAnalysisReports = existsSync(join(ROOT, 'docs', 'requirements-analysis'))
+    ? readdirSync(join(ROOT, 'docs', 'requirements-analysis')).filter((f) => f.endsWith('.md'))
+        .length
     : 0;
 
   const skills = _countSkills(REGISTRY_PATH);
@@ -359,6 +373,10 @@ export function getRealMetrics() {
     checkpoints: checkpointCount,
     auditLogs: auditFileCount,
     traceFiles: traceFileCount,
+    documentAnalysis: {
+      results: docAnalysisResults,
+      reports: docAnalysisReports,
+    },
   };
 }
 
@@ -383,12 +401,24 @@ interface TraceStats {
 
 export function getCloudMetrics(): CloudMetrics {
   const cloudPath = join(ROOT, '.session', 'cloud-metrics.json');
-  const cloudData = readJson<{ executions: Array<{ provider: string; timestamp: string; duration: number; success: boolean; cost: number }> }>(cloudPath);
+  const cloudData = readJson<{
+    executions: Array<{
+      provider: string;
+      timestamp: string;
+      duration: number;
+      success: boolean;
+      cost: number;
+    }>;
+  }>(cloudPath);
   const execs = cloudData?.executions || [];
 
-  const byProvider: Record<string, { executions: number[]; costs: number[]; successes: boolean[] }> = {};
+  const byProvider: Record<
+    string,
+    { executions: number[]; costs: number[]; successes: boolean[] }
+  > = {};
   for (const ex of execs) {
-    if (!byProvider[ex.provider]) byProvider[ex.provider] = { executions: [], costs: [], successes: [] };
+    if (!byProvider[ex.provider])
+      byProvider[ex.provider] = { executions: [], costs: [], successes: [] };
     byProvider[ex.provider].executions.push(ex.duration);
     byProvider[ex.provider].costs.push(ex.cost);
     byProvider[ex.provider].successes.push(ex.success);
@@ -397,9 +427,13 @@ export function getCloudMetrics(): CloudMetrics {
   const stats = {
     totalExecutions: execs.length,
     totalCost: execs.reduce((s, e) => s + e.cost, 0),
-    successRate: execs.length > 0 ? execs.filter(e => e.success).length / execs.length : 1,
-    avgLatency: execs.length > 0 ? Math.round(execs.reduce((s, e) => s + e.duration, 0) / execs.length) : 0,
-    byProvider: {} as Record<string, { executions: number; cost: number; successRate: number; avgLatency: number }>,
+    successRate: execs.length > 0 ? execs.filter((e) => e.success).length / execs.length : 1,
+    avgLatency:
+      execs.length > 0 ? Math.round(execs.reduce((s, e) => s + e.duration, 0) / execs.length) : 0,
+    byProvider: {} as Record<
+      string,
+      { executions: number; cost: number; successRate: number; avgLatency: number }
+    >,
     circuitBreakerStates: { AWS: 'CLOSED', Azure: 'CLOSED' },
   };
 
