@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-3.3.2-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-3.3.4-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Adaptive_System-%E2%9C%93-22C55E?style=flat-square&labelColor=0D1117" alt="Adaptive System">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
@@ -402,5 +402,5 @@ MIT © 2026 Emmanuel Ortiz
 ---
 
 <p align="center">
-  <sub>Gentle-Vanguard v3.3.3 — Don't let your mellow hustle be faded.</sub>
+  <sub>Gentle-Vanguard v3.3.4 — Don't let your mellow hustle be faded.</sub>
 </p>
