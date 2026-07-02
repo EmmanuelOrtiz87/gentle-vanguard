@@ -18,10 +18,21 @@ $runtimeDir = Join-Path $repoRoot '.runtime'
 
 if (-not (Test-Path $runtimeDir)) { New-Item -ItemType Directory -Path $runtimeDir -Force | Out-Null }
 
-"$(Get-Date -Format 'o') | [BOOT] Started dashboard-ws-autostart.ps1" | Out-File -FilePath $logFile -Force
-
-# Store watchdog own PID for clean shutdown by stop script
 $watchdogPidFile = Join-Path $repoRoot '.runtime' 'dashboard-ws-watchdog.pid'
+
+foreach ($f in @($pidFile, $watchdogPidFile, (Join-Path $repoRoot '.runtime' 'dashboard-ports.json'))) {
+    if (Test-Path $f) {
+        $c = (Get-Content $f -Raw -ErrorAction SilentlyContinue).Trim()
+        if ($c -match '^\d+$') { if (-not (Get-Process -Id ([int]$c) -ErrorAction SilentlyContinue)) { Remove-Item $f -Force -ErrorAction SilentlyContinue } }
+        elseif ($c -match '"wsPort"') {
+            try { $p = ($c | ConvertFrom-Json).wsPort; if ($p -and -not (Get-NetTCPConnection -LocalPort $p -ErrorAction SilentlyContinue)) { Remove-Item $f -Force -ErrorAction SilentlyContinue } } catch {}
+        }
+        else { Remove-Item $f -Force -ErrorAction SilentlyContinue }
+    }
+}
+
+"$(Get-Date -Format 'o') | [BOOT] Started dashboard-ws-autostart.ps1" | Out-File -FilePath $logFile -Append
+
 $PID | Out-File -FilePath $watchdogPidFile -Force
 
 if (-not (Test-Path $wsScript)) {

@@ -170,6 +170,12 @@ if ($SecretFound) {
     exit 1
 }
 
+# Document Analysis: detect new requirement docs in staged changes
+$docHook = Join-Path $PSScriptRoot 'pre-commit-document-analysis.ps1'
+if (Test-Path $docHook) {
+    try { & $docHook } catch { Write-Host "[WARN] Document analysis hook: $_" -ForegroundColor Yellow }
+}
+
 Write-Host "[OK] Pre-commit checks passed!" -ForegroundColor Green
 Write-Host ""
 

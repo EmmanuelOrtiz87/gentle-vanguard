@@ -315,6 +315,15 @@
         "description": "Refresca startup-summary.json como ultimo paso para asegurar datos actuales post-pipeline"
       },
       {
+        "id": "document-analysis-init",
+        "enabled": true,
+        "lazy": true,
+        "script": "skills/document-analysis-skill/invoke-document-analysis.ps1",
+        "args": "-Quiet",
+        "required": false,
+        "description": "Inicializar Document Analysis Skill - sidecar Python + conectores Jira/Confluence para analisis de requerimientos"
+      },
+      {
         "id": "token-notification-init",
         "enabled": true,
         "script": "scripts/utilities/token-usage-notifier.ps1",

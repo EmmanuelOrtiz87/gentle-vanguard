@@ -9,7 +9,7 @@
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
   <img src="https://img.shields.io/badge/Agents-18-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
-  <img src="https://img.shields.io/badge/Skills-385-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
+  <img src="https://img.shields.io/badge/Skills-386-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
   <img src="https://img.shields.io/badge/Validate_Stack-ALL_PASS-22C55E?style=flat-square&labelColor=0D1117" alt="Validate Stack">
   <img src="https://img.shields.io/badge/Session_Score-81/100-00BFFF?style=flat-square&labelColor=0D1117" alt="Session Score">
   <img src="https://img.shields.io/badge/CI/CD_Workflows-12-4DCFFF?style=flat-square&labelColor=0D1117" alt="CI/CD">
@@ -29,7 +29,7 @@
 </p>
 
 <p align="center">
-  <strong>AI-powered development orchestrator · 18 agents · 385 skills · 10 tool-compatible</strong><br>
+  <strong>AI-powered development orchestrator · 18 agents · 386 skills · 10 tool-compatible</strong><br>
   <em>Tool-agnostic · SDD Lifecycle · Hashline · Adaptive Feedback Loop · Engram Memory · Proactive Delivery</em>
 </p>
 
@@ -72,9 +72,9 @@ flowchart TB
     M2[mcp-bridge.ps1]
     M3[model-router.ts]
   end
-  subgraph L2["Layer 2: SKILLS — 385 Skills"]
+  subgraph L2["Layer 2: SKILLS — 386 Skills"]
     S1[Angular / React / Next.js]
-    S2[Go / Python / TypeScript]
+    S2[Go / Python / TypeScript / Document Analysis]
     S3[Docker / K8s / Playwright]
     S4[Security / API / Mobile]
   end
@@ -156,20 +156,20 @@ sequenceDiagram
 
 ## 🚀 Core Capabilities
 
-| Capability                   | Description                                                                                            |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------ |
-| **🧠 Intelligent Routing**   | `pre-process-input.ps1` → trigger matching → agent dispatch (inline, delegate, or SDD)                 |
-| **🤖 18 Specialized Agents** | Each with narrow role, model profile, enforcement rules                                                |
-| **📚 385 On-Demand Skills**  | Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s, Playwright, Security, API Design |
-| **💾 Engram Memory**         | Persistent memory — decisions, bugs, and patterns across sessions with hot/warm/cold tiers             |
-| **💰 Cost-Aware Router**     | Fast/cheap, strong-reasoning, or strong-coding profiles per agent                                      |
-| **📋 SDD Lifecycle**         | BA explore → SAD design → DEV implement → QA verify                                                    |
-| **🛡️ Governance**            | 7D validation, judgment-day adversarial review, pre-commit hooks, 34 CI/CD workflows                   |
-| **📊 Session Management**    | 10-phase autostart, orphan cleanup, token budget tracking                                              |
-| **🔒 Proactive Security**    | AES-256 encryption, TruffleHog scanning, Gitleaks integration                                          |
-| **🎯 Auto-Delegation**       | ML-based routing with 80%+ direct, 60%+ confirmation threshold                                         |
-| **🧪 Fine-Tuning**           | LoRA adapters for BA and DEV agents                                                                    |
-| **🔄 Adaptive Profiles**     | Auto-detect tool and adjust config per tool capabilities                                               |
+| Capability                   | Description                                                                                                               |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **📄 Document Analysis**     | Extrae texto de PDF/DOCX/XLSX/PPTX, detecta tecnologias, especialistas, dependencias, estima tiempos+costos USD           |
+| **🤖 18 Specialized Agents** | Each with narrow role, model profile, enforcement rules                                                                   |
+| **📚 386 On-Demand Skills**  | Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s, Playwright, Security, API Design, Document Analysis |
+| **💾 Engram Memory**         | Persistent memory — decisions, bugs, and patterns across sessions with hot/warm/cold tiers                                |
+| **💰 Cost-Aware Router**     | Fast/cheap, strong-reasoning, or strong-coding profiles per agent                                                         |
+| **📋 SDD Lifecycle**         | BA explore → SAD design → DEV implement → QA verify                                                                       |
+| **🛡️ Governance**            | 7D validation, judgment-day adversarial review, pre-commit hooks, 34 CI/CD workflows                                      |
+| **📊 Session Management**    | 10-phase autostart, orphan cleanup, token budget tracking                                                                 |
+| **🔒 Proactive Security**    | AES-256 encryption, TruffleHog scanning, Gitleaks integration                                                             |
+| **🎯 Auto-Delegation**       | ML-based routing with 80%+ direct, 60%+ confirmation threshold                                                            |
+| **🧪 Fine-Tuning**           | LoRA adapters for BA and DEV agents                                                                                       |
+| **🔄 Adaptive Profiles**     | Auto-detect tool and adjust config per tool capabilities                                                                  |
 
 ---
 
@@ -264,6 +264,7 @@ mem_save --title "Auth pattern" --type architecture
 | 🐳 Docker Compose (5 services, full stack)                               | ✅ CONFIGURED |
 | 📝 Structured logging (JSONL, auto-rotate)                               | ✅ ACTIVE     |
 | 🧩 Adapters consolidated (3→1 TypeScript)                                | ✅ COMPLETED  |
+| 📄 Document Analysis Skill (sidecar Python + conectores Jira/Confluence) | ✅ ACTIVE     |
 
 ---
 
@@ -318,11 +319,13 @@ pwsh -NoProfile -File scripts/utilities/session-start-optimized.ps1
 
 ### 📐 Diagrams
 
-| Diagram           | File                                  |
-| ----------------- | ------------------------------------- |
-| Call Graph        | `docs/diagrams/call-graph.mmd`        |
-| Data Flow         | `docs/diagrams/data-flow.mmd`         |
-| Module Dependency | `docs/diagrams/module-dependency.mmd` |
+| Diagram           | File                                       |
+| ----------------- | ------------------------------------------ |
+| Call Graph        | `docs/diagrams/call-graph.mmd`             |
+| Data Flow         | `docs/diagrams/data-flow.mmd`              |
+| Module Dependency | `docs/diagrams/module-dependency.mmd`      |
+| Document Analysis | `skills/document-analysis-skill/SKILL.md`  |
+| Document Pipeline | `docs/diagrams/document-analysis-flow.mmd` |
 
 ---
 
@@ -350,7 +353,8 @@ gentle-vanguard/
 │   └── monitoring/         # Monitoring and metrics
 ├── adapters/               # Tool adapters (consolidated TypeScript: antigravity, codex, windsurf)
 ├── research/               # RLHF dataset search scripts
-├── skills/                 # MCP skills (385)
+│   └── document-analysis-skill/ # Document Analysis: sidecar Python + conectores Jira/Confluence
+├── skills/                 # MCP skills (386)
 ├── reports/                # Generated dashboards & reports
 ├── docker-compose.yml      # Full stack (5 services)
 ├── tests/                  # Unit + integration tests
@@ -362,18 +366,19 @@ gentle-vanguard/
 
 Governed by [60+ normatives](rules/NORMATIVES.md):
 
-| Area           | Standard                          |
-| -------------- | --------------------------------- |
-| Architecture   | NORMATIVAS-ARCHITECTURE           |
-| Code           | NORMATIVAS-CODIGO                 |
-| Configuration  | NORMATIVAS-CONFIG + CONFIG-SAFETY |
-| Documentation  | NORMATIVAS-DOCS                   |
-| Security       | AI-SAFETY, SOC2, GDPR             |
-| DevOps         | NORMATIVAS-DEVOPS                 |
-| Performance    | NORMATIVAS-PERFORMANCE            |
-| Error Handling | NORMATIVAS-ERROR-HANDLING         |
-| Enforcement    | NORMATIVAS-ENFORCEMENT            |
-| Session        | NORMATIVAS-SESSION                |
+| Area              | Standard                                    |
+| ----------------- | ------------------------------------------- |
+| Architecture      | NORMATIVAS-ARCHITECTURE                     |
+| Code              | NORMATIVAS-CODIGO                           |
+| Configuration     | NORMATIVAS-CONFIG + CONFIG-SAFETY           |
+| Documentation     | NORMATIVAS-DOCS                             |
+| Document Analysis | SKILL.md en skills/document-analysis-skill/ |
+| Security          | AI-SAFETY, SOC2, GDPR                       |
+| DevOps            | NORMATIVAS-DEVOPS                           |
+| Performance       | NORMATIVAS-PERFORMANCE                      |
+| Error Handling    | NORMATIVAS-ERROR-HANDLING                   |
+| Enforcement       | NORMATIVAS-ENFORCEMENT                      |
+| Session           | NORMATIVAS-SESSION                          |
 
 Enforcement: pre-response hook (every turn) → pre-commit hooks (Lefthook) → CI/CD (12 reusable
 workflows) → adaptive enforcement (session start/close).
