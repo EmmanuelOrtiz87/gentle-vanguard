@@ -10,7 +10,7 @@ Describe "FT-DataCollector" {
     }
 
     It "Should create raw output directory" {
-        $rawDir = Join-Path $ProjectRoot ".ft" "dataset" "raw"
+        $rawDir = Join-Path (Join-Path (Join-Path $ProjectRoot ".ft") "dataset") "raw"
         $rawDir | Should -Exist
     }
 
@@ -33,8 +33,8 @@ Describe "FT-DatasetBuilder" {
     }
 
     It "Should have dataset directories" {
-        Join-Path $ProjectRoot ".ft" "dataset" "train" | Should -Exist
-        Join-Path $ProjectRoot ".ft" "dataset" "val" | Should -Exist
+        Join-Path (Join-Path (Join-Path $ProjectRoot ".ft") "dataset") "train" | Should -Exist
+        Join-Path (Join-Path (Join-Path $ProjectRoot ".ft") "dataset") "val" | Should -Exist
     }
 }
 

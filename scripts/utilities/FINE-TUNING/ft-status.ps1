@@ -18,10 +18,10 @@ function Resolve-ProjectRoot {
 }
 
 $ProjectRoot = Resolve-ProjectRoot
-if (-not $RegistryPath) { $RegistryPath = Join-Path $ProjectRoot ".ft" "registry.json" }
-if (-not $DatasetPath) { $DatasetPath = Join-Path $ProjectRoot ".ft" "dataset" }
+if (-not $RegistryPath) { $RegistryPath = Join-Path (Join-Path $ProjectRoot ".ft") "registry.json" }
+if (-not $DatasetPath) { $DatasetPath = Join-Path (Join-Path $ProjectRoot ".ft") "dataset" }
 if (-not $BenchmarkPath) {
-    $latest = Get-ChildItem (Join-Path $ProjectRoot ".ft" "benchmarks") -Filter "eval-*.json" -ErrorAction SilentlyContinue |
+    $latest = Get-ChildItem (Join-Path (Join-Path $ProjectRoot ".ft") "benchmarks") -Filter "eval-*.json" -ErrorAction SilentlyContinue |
         Sort-Object LastWriteTime -Descending | Select-Object -First 1
     if ($latest) { $BenchmarkPath = $latest.FullName }
 }

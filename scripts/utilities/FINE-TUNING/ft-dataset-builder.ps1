@@ -20,8 +20,8 @@ function Resolve-ProjectRoot {
 }
 
 $ProjectRoot = Resolve-ProjectRoot
-if (-not $RawPath) { $RawPath = Join-Path $ProjectRoot ".ft" "dataset" "raw" }
-if (-not $OutputPath) { $OutputPath = Join-Path $ProjectRoot ".ft" "dataset" }
+if (-not $RawPath) { $RawPath = Join-Path (Join-Path (Join-Path $ProjectRoot ".ft") "dataset") "raw" }
+if (-not $OutputPath) { $OutputPath = Join-Path (Join-Path $ProjectRoot ".ft") "dataset" }
 
 $trainDir = Join-Path $OutputPath "train"
 $valDir = Join-Path $OutputPath "val"

@@ -20,9 +20,9 @@ function Resolve-ProjectRoot {
 }
 
 $ProjectRoot = Resolve-ProjectRoot
-if (-not $RegistryPath) { $RegistryPath = Join-Path $ProjectRoot ".ft" "registry.json" }
-if (-not $ReportPath) { $ReportPath = Join-Path $ProjectRoot ".ft" "benchmarks" "eval-$(Get-Date -Format 'yyyyMMdd-HHmmss').json" }
-if (-not $DatasetPath) { $DatasetPath = Join-Path $ProjectRoot ".ft" "dataset" }
+if (-not $RegistryPath) { $RegistryPath = Join-Path (Join-Path $ProjectRoot ".ft") "registry.json" }
+if (-not $ReportPath) { $ReportPath = Join-Path (Join-Path (Join-Path $ProjectRoot ".ft") "benchmarks") "eval-$(Get-Date -Format 'yyyyMMdd-HHmmss').json" }
+if (-not $DatasetPath) { $DatasetPath = Join-Path (Join-Path $ProjectRoot ".ft") "dataset" }
 if (-not $MLRouterPath) { $MLRouterPath = Join-Path $ProjectRoot "scripts" "utilities" "AUTO-DELEGATION" "ml-router.ps1" }
 
 $domains = @("BA", "SAD", "DEV", "QA")

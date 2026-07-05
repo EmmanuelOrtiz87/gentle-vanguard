@@ -35,7 +35,7 @@ $ErrorActionPreference = "Stop"
 $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) { $env:GENTLE_VANGUARD_BASE_DIR }
   else { Split-Path -Parent (Split-Path -Parent $PSScriptRoot) }
 $sddDir = Join-Path $repoRoot ".sdd" $Feature
-$artifactsDir = Join-Path $repoRoot ".session" "sdd-pipeline"
+$artifactsDir = Join-Path (Join-Path $repoRoot ".session") "sdd-pipeline"
 $null = New-Item -ItemType Directory -Path $artifactsDir -Force
 
 function Write-PhaseGate {

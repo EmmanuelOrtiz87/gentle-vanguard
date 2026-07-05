@@ -13,8 +13,8 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = Resolve-Path (Join-Path $scriptDir '..\..') | Select-Object -ExpandProperty Path
 $loggerModule = Join-Path $scriptDir '..\common\Logger.psm1'
 if (Test-Path $loggerModule) { Import-Module $loggerModule -Force }
-$metricsPath = Join-Path $repoRoot ".session" "metrics-report.json"
-$sessionTokenPath = Join-Path $repoRoot ".session" "token-usage.json"
+$metricsPath = Join-Path (Join-Path $repoRoot ".session") "metrics-report.json"
+$sessionTokenPath = Join-Path (Join-Path $repoRoot ".session") "token-usage.json"
 
 function Write-Score {
     param([string]$Message)

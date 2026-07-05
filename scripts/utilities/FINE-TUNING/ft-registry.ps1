@@ -23,7 +23,7 @@ function Resolve-ProjectRoot {
 }
 
 $ProjectRoot = Resolve-ProjectRoot
-if (-not $RegistryPath) { $RegistryPath = Join-Path $ProjectRoot ".ft" "registry.json" }
+if (-not $RegistryPath) { $RegistryPath = Join-Path (Join-Path $ProjectRoot ".ft") "registry.json" }
 
 function Get-Registry {
     if (Test-Path $RegistryPath) {

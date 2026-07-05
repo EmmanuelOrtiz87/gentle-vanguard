@@ -17,7 +17,7 @@ $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) {
     $root
 }
 
-$nudgeDir = Join-Path $repoRoot ".session" "skill-nudges"
+$nudgeDir = Join-Path (Join-Path $repoRoot ".session") "skill-nudges"
 $skillsDir = Join-Path $repoRoot "skills"
 
 function Write-PatchLog {

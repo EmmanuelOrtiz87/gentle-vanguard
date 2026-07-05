@@ -25,8 +25,8 @@ function Resolve-ProjectRoot {
 }
 
 $ProjectRoot = Resolve-ProjectRoot
-if (-not $DatasetPath) { $DatasetPath = Join-Path $ProjectRoot ".ft" "dataset" }
-if (-not $OutputPath) { $OutputPath = Join-Path $ProjectRoot ".ft" "adapters" $Domain }
+if (-not $DatasetPath) { $DatasetPath = Join-Path (Join-Path $ProjectRoot ".ft") "dataset" }
+if (-not $OutputPath) { $OutputPath = Join-Path (Join-Path (Join-Path $ProjectRoot ".ft") "adapters") $Domain }
 
 $trainFile = Join-Path $DatasetPath "train" "$Domain.jsonl"
 $valFile = Join-Path $DatasetPath "val" "$Domain.jsonl"

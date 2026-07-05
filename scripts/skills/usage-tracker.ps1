@@ -25,8 +25,8 @@ $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) {
     $root
 }
 
-$usageDir = Join-Path $repoRoot ".session" "skill-usage"
-$nudgeDir = Join-Path $repoRoot ".session" "skill-nudges"
+$usageDir = Join-Path (Join-Path $repoRoot ".session") "skill-usage"
+$nudgeDir = Join-Path (Join-Path $repoRoot ".session") "skill-nudges"
 
 function Ensure-Directory {
     param([string]$Path)
@@ -50,7 +50,7 @@ function Get-InitialMetric {
 }
 
 function Get-SkillList {
-    $registry = Join-Path $repoRoot ".atl" "skill-registry.md"
+    $registry = Join-Path (Join-Path $repoRoot ".atl") "skill-registry.md"
     if (-not (Test-Path $registry)) {
         return @()
     }

@@ -19,7 +19,7 @@ function Resolve-ProjectRoot {
 }
 
 $ProjectRoot = Resolve-ProjectRoot
-if (-not $OutputPath) { $OutputPath = Join-Path $ProjectRoot ".ft" "dataset" "raw" }
+if (-not $OutputPath) { $OutputPath = Join-Path (Join-Path (Join-Path $ProjectRoot ".ft") "dataset") "raw" }
 
 $null = New-Item -ItemType Directory -Path $OutputPath -Force
 
@@ -40,7 +40,7 @@ function Add-Record {
 
 function Collect-SessionLogs {
     Write-Host "  [FT] Collecting session logs..." -ForegroundColor Gray
-    $ctxDir = Join-Path $ProjectRoot ".session" "context-log"
+    $ctxDir = Join-Path (Join-Path $ProjectRoot ".session") "context-log"
     if (-not (Test-Path $ctxDir)) { return }
 
     $sessions = Get-ChildItem $ctxDir -Directory | Where-Object { $_.Name -ne 'live-traceability-session' -and $_.Name -ne '__archive' }
@@ -98,8 +98,8 @@ function Collect-Engram {
 
 function Collect-Skills {
     Write-Host "  [FT] Collecting skills..." -ForegroundColor Gray
-    $regPath = Join-Path $ProjectRoot ".atl" "skill-registry.md"
-    $embedPath = Join-Path $ProjectRoot ".atl" "skill-embeddings.json"
+    $regPath = Join-Path (Join-Path $ProjectRoot ".atl") "skill-registry.md"
+    $embedPath = Join-Path (Join-Path $ProjectRoot ".atl") "skill-embeddings.json"
 
     if (Test-Path $regPath) {
         $content = Get-Content $regPath -Raw
@@ -126,7 +126,7 @@ function Collect-Skills {
 function Collect-RoutingLogs {
     Write-Host "  [FT] Collecting routing logs..." -ForegroundColor Gray
     $delPath = Join-Path $ProjectRoot "config" "auto-delegation.json"
-    $qualPath = Join-Path $ProjectRoot ".session" "routing-quality-last.json"
+    $qualPath = Join-Path (Join-Path $ProjectRoot ".session") "routing-quality-last.json"
 
     if (Test-Path $delPath) {
         $content = Get-Content $delPath -Raw
