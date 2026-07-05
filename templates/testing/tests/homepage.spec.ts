@@ -38,7 +38,7 @@ test.describe('API Integration', () => {
   });
 
   test('should handle API errors gracefully', async ({ page }) => {
-    await page.route('**/api/**', route => route.abort());
+    await page.route('**/api/**', (route) => route.abort());
     await page.goto('/');
     const errorMessage = page.locator('[data-testid="error-message"]');
     await expect(errorMessage).toBeVisible();

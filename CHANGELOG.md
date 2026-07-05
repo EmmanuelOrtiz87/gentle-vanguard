@@ -5,9 +5,9 @@
 ### Fixed
 
 - **Maintenance Watchtower**: Eliminado falso WARN por watchdog PID faltante cuando WS corre
-  standalone. El check ahora reporta PASS "WS running standalone" si el servidor responde, aunque
-  no haya watchdog. Autoheal optimizado: no reinicia el WS si ya está vivo (evita conflictos de
-  puerto y procesos duplicados). Resultado: 74/74 PASS, 0 WARN, 0 FAIL.
+  standalone. El check ahora reporta PASS "WS running standalone" si el servidor responde, aunque no
+  haya watchdog. Autoheal optimizado: no reinicia el WS si ya está vivo (evita conflictos de puerto
+  y procesos duplicados). Resultado: 74/74 PASS, 0 WARN, 0 FAIL.
 
 ### Changed
 
@@ -38,21 +38,26 @@
 
 - **Dashboard i18n**: 3 idiomas (en/es/pt-BR) con `useLocale.ts` — 14 métricas localizadas.
 - **Alert System**: 8 reglas configurables en `config/dashboard-alerts.json`, hook `useAlerts.ts`.
-- **Maintenance Watchtower**: 60 checks en 11 componentes, 6 modos (health/rebuild/report/autoheal/continuous/all).
-- **Info Popups**: Componente `InfoPopup.tsx` con animación fade-in + scale para descripción de métricas.
-- **Dashboard lifecycle scripts**: `dashboard-common.ps1` (puertos dinámicos), `dashboard-start.ps1`,
-  `dashboard-stop.ps1`, `dashboard-ws-autostart.ps1` (watchdog con auto-recovery).
-- **Security & Tool Configs**: `SECURITY.md`, `.clinerules`, `.cursorrules`, `NORMATIVA-PNPM-SECURITY.md`,
-  `NORMATIVAS-PERFORMANCE.md`.
+- **Maintenance Watchtower**: 60 checks en 11 componentes, 6 modos
+  (health/rebuild/report/autoheal/continuous/all).
+- **Info Popups**: Componente `InfoPopup.tsx` con animación fade-in + scale para descripción de
+  métricas.
+- **Dashboard lifecycle scripts**: `dashboard-common.ps1` (puertos dinámicos),
+  `dashboard-start.ps1`, `dashboard-stop.ps1`, `dashboard-ws-autostart.ps1` (watchdog con
+  auto-recovery).
+- **Security & Tool Configs**: `SECURITY.md`, `.clinerules`, `.cursorrules`,
+  `NORMATIVA-PNPM-SECURITY.md`, `NORMATIVAS-PERFORMANCE.md`.
 - **norms-registry.json**: Schema versionado con hitCount, successRate.
 - **Trace system**: `trace-logger.ps1` para depuración del pipeline pre-process-input.
 
 ### Changed
 
-- **Dashboard server refactor**: WebSocket + REST API resiliente con HTTP polling fallback en `useMetrics.ts`.
-- **Watchtower consolidation**: Unifica health-check.ps1, stack-health-check.ps1 y watchdog en un solo orquestador.
-- **Dashboard components**: TracingDashboard con waterfall view mejorado, SessionTable refactorizado,
-  MetricsCard con colores semánticos, ValidationPanel con info popups.
+- **Dashboard server refactor**: WebSocket + REST API resiliente con HTTP polling fallback en
+  `useMetrics.ts`.
+- **Watchtower consolidation**: Unifica health-check.ps1, stack-health-check.ps1 y watchdog en un
+  solo orquestador.
+- **Dashboard components**: TracingDashboard con waterfall view mejorado, SessionTable
+  refactorizado, MetricsCard con colores semánticos, ValidationPanel con info popups.
 
 ### Fixed
 

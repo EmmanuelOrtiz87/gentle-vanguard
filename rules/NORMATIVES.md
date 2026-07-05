@@ -107,6 +107,36 @@ See `rules/NORMATIVAS-SOC2.md` and `rules/NORMATIVAS-GDPR.md`.
 
 ---
 
+## Token Budget Normatives
+
+See `rules/TOKEN-BUDGET-POLICY.md`.
+
+---
+
+## Cost Attribution Normatives
+
+See `rules/COST-ATTRIBUTION.md`.
+
+---
+
+## Planning & Estimation Normatives
+
+See `rules/PLANNING-ESTIMATION-FRAMEWORK.md`.
+
+---
+
+## Observability & SLO Normatives
+
+See `rules/OBSERVABILITY-SLOS.md`.
+
+---
+
+## Human-in-the-Loop Normatives
+
+See `rules/HUMAN-IN-THE-LOOP.md`.
+
+---
+
 ## Enforcement & Governance
 
 See `rules/NORMATIVAS-ENFORCEMENT.md`.

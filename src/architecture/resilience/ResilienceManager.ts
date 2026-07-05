@@ -142,25 +142,25 @@ export class ResilienceManager {
   async failoverToSecondary(): Promise<boolean> {
     try {
       console.warn('Initiating failover to secondary tier...');
-      
+
       // Sync state from primary to secondary
       await this.syncState('primary', 'secondary');
-      
+
       // Activate secondary tier
       const secondaryConfig = this.tiers.get('secondary');
       if (secondaryConfig) {
         secondaryConfig.mode = 'active';
       }
-      
+
       // Deactivate primary tier
       const primaryConfig = this.tiers.get('primary');
       if (primaryConfig) {
         primaryConfig.mode = 'standby';
       }
-      
+
       this.activeTier = 'secondary';
       this.metrics.failoverCount++;
-      
+
       console.warn('Failover to secondary tier completed successfully');
       return true;
     } catch (error) {
@@ -176,25 +176,25 @@ export class ResilienceManager {
   async failoverToTertiary(): Promise<boolean> {
     try {
       console.warn('Initiating failover to tertiary tier...');
-      
+
       // Sync state from secondary to tertiary
       await this.syncState('secondary', 'tertiary');
-      
+
       // Activate tertiary tier
       const tertiaryConfig = this.tiers.get('tertiary');
       if (tertiaryConfig) {
         tertiaryConfig.mode = 'active';
       }
-      
+
       // Deactivate secondary tier
       const secondaryConfig = this.tiers.get('secondary');
       if (secondaryConfig) {
         secondaryConfig.mode = 'standby';
       }
-      
+
       this.activeTier = 'tertiary';
       this.metrics.failoverCount++;
-      
+
       console.warn('Failover to tertiary tier completed successfully');
       return true;
     } catch (error) {
@@ -243,7 +243,7 @@ export class ResilienceManager {
    */
   startMonitoring(): void {
     console.warn('Starting resilience monitoring...');
-    
+
     // Monitor primary tier
     setInterval(async () => {
       const status = await this.checkTierHealth('primary');
