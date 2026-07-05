@@ -73,9 +73,14 @@ foreach ($doc in $docs) {
     if ($Type -and $doc.type -ne $Type) { continue }
     $score = Get-Sim -QV $queryVec -DF $doc.features
     if ($score -ge $MinScore) {
+        $docTitle = if ($doc.PSObject.Properties.Name -contains 'title' -and $doc.title) { "$($doc.title)" } else { "(untitled)" }
+        $docType = if ($doc.PSObject.Properties.Name -contains 'type' -and $doc.type) { "$($doc.type)" } else { "unknown" }
+        $docProject = if ($doc.PSObject.Properties.Name -contains 'project' -and $doc.project) { "$($doc.project)" } else { "" }
+        $docPreview = if ($doc.PSObject.Properties.Name -contains 'content_preview' -and $doc.content_preview) { "$($doc.content_preview)" } else { "" }
+        $docCreated = if ($doc.PSObject.Properties.Name -contains 'created_at' -and $doc.created_at) { "$($doc.created_at)" } else { "" }
         $null = $results.Add([PSCustomObject]@{
-            id=$doc.id; title=$doc.title; type=$doc.type; project=$doc.project
-            score=[Math]::Round($score, 4); content_preview=$doc.content_preview; created_at=$doc.created_at
+            id=$doc.id; title=$docTitle; type=$docType; project=$docProject
+            score=[Math]::Round($score, 4); content_preview=$docPreview; created_at=$docCreated
         })
     }
 }
