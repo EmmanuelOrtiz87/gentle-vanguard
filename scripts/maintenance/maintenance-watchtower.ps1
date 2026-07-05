@@ -61,6 +61,8 @@ $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) { $env:GENTLE_VANGUARD_BASE_DIR }
   if (-not $root) { $root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot) }
   $root
 }
+$runtimeDir = Join-Path $repoRoot ".runtime"
+$sessionDir = Join-Path $repoRoot ".session"
 
 $results = [System.Collections.ArrayList]@()
 
@@ -113,11 +115,11 @@ function Test-Http {
 function Check-DashboardWs {
   Log "  [Dashboard WS] Checking..." Cyan
   $ports = $null
-  $portsFile = Join-Path $repoRoot ".runtime" "dashboard-ports.json"
+  $portsFile = Join-Path $runtimeDir "dashboard-ports.json"
   if (Test-Path $portsFile) { $ports = Get-Content $portsFile -Raw | ConvertFrom-Json }
 
   $wsPort = if ($ports -and $ports.wsPort) { $ports.wsPort } else { 8080 }
-  $pidFile = Join-Path $repoRoot ".runtime" "dashboard-ws.pid"
+  $pidFile = Join-Path $runtimeDir "dashboard-ws.pid"
   $running = Test-Port -Port $wsPort
   $httpOk = Test-Http -Url "http://127.0.0.1:$wsPort/api/metrics"
 
@@ -130,7 +132,7 @@ function Check-DashboardWs {
   }
 
   $watchdogPid = $null
-  $wPidFile = Join-Path $repoRoot ".runtime" "dashboard-ws-watchdog.pid"
+  $wPidFile = Join-Path $runtimeDir "dashboard-ws-watchdog.pid"
   if (Test-Path $wPidFile) {
     $watchdogPid = (Get-Content $wPidFile -Raw).Trim()
     $wAlive = Get-Process -Id $watchdogPid -ErrorAction SilentlyContinue
@@ -179,7 +181,8 @@ function Check-CodeGraph {
   } else {
     Add-Finding "codegraph" "server process" "WARN" "Not running (MCP mode)" "verify"
   }
-  $indexOk = Test-Path (Join-Path $repoRoot ".codegraph" "codegraph.db")
+  $cgDir = Join-Path $repoRoot ".codegraph"
+  $indexOk = Test-Path (Join-Path $cgDir "codegraph.db")
   Add-Finding "codegraph" "index database" "$(if($indexOk){'PASS'}else{'FAIL'})" "" "rebuild"
 }
 
@@ -360,7 +363,7 @@ function Check-Security {
 
 function Check-CloudConnectors {
   Log "  [Cloud Connectors] Checking..." Cyan
-  $cloudMetrics = Join-Path $repoRoot ".session" "cloud-metrics.json"
+  $cloudMetrics = Join-Path $sessionDir "cloud-metrics.json"
   if (Test-Path $cloudMetrics) {
     try {
       $data = Get-Content $cloudMetrics -Raw | ConvertFrom-Json
@@ -374,7 +377,7 @@ function Check-CloudConnectors {
     Add-Finding "cloud-connectors" "metrics file" "WARN" "No cloud metrics yet" "ok"
   }
 
-  $hybridMetrics = Join-Path $repoRoot ".session" "hybrid-metrics.json"
+  $hybridMetrics = Join-Path $sessionDir "hybrid-metrics.json"
   if (Test-Path $hybridMetrics) {
     Add-Finding "cloud-connectors" "hybrid metrics" "PASS" "Hybrid routing history available" "ok"
   } else {
@@ -422,9 +425,9 @@ function Check-Tracing {
 
 function Check-StatePersistence {
   Log "  [State Persistence] Checking..." Cyan
-  $checkpointDir = Join-Path $repoRoot ".session" "checkpoints"
-  $manifestDir = Join-Path $repoRoot ".session" "manifests"
-  $snapshotDir = Join-Path $repoRoot ".session" "snapshots"
+  $checkpointDir = Join-Path $sessionDir "checkpoints"
+  $manifestDir = Join-Path $sessionDir "manifests"
+  $snapshotDir = Join-Path $sessionDir "snapshots"
 
   if (Test-Path $checkpointDir) {
     $ckpts = (Get-ChildItem $checkpointDir -Directory -ErrorAction SilentlyContinue).Count
@@ -457,7 +460,7 @@ function Check-StatePersistence {
 
 function Check-AuditPipeline {
   Log "  [Audit Pipeline] Checking..." Cyan
-  $auditDir = Join-Path $repoRoot ".session" "audit"
+  $auditDir = Join-Path $sessionDir "audit"
   $logDir = Join-Path $auditDir "logs"
   $indexFile = Join-Path $auditDir "index.json"
 
@@ -540,7 +543,7 @@ function AutoHeal {
   $dashFail = $needsRestart + $needsStart | Where-Object { $_.component -eq "dashboard-ws" }
   if ($dashFail) {
     $wsPort = 8080
-    $portsFile = Join-Path $repoRoot ".runtime" "dashboard-ports.json"
+    $portsFile = Join-Path $runtimeDir "dashboard-ports.json"
     if (Test-Path $portsFile) { $ports = Get-Content $portsFile -Raw | ConvertFrom-Json; $wsPort = $ports.wsPort }
     $wsRunning = Test-Port -Port $wsPort
     $wsAutostart = Join-Path $PSScriptRoot "..\utilities\dashboard\dashboard-ws-autostart.ps1"
@@ -597,7 +600,7 @@ function AutoHeal {
 # ─── Summary ────────────────────────────────────────────────────────────────
 
 function Show-Summary {
-  Log "`n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" Magenta
+  Log "`n=======================================" Magenta
   $pass = ($results | Where-Object { $_.status -eq "PASS" }).Count
   $warn = ($results | Where-Object { $_.status -eq "WARN" }).Count
   $fail = ($results | Where-Object { $_.status -eq "FAIL" }).Count
@@ -648,10 +651,10 @@ function Run-AllChecks {
 
 # ─── Main ───────────────────────────────────────────────────────────────────
 
-Log "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" Magenta
+Log "===============================================" Magenta
 Log " [MW] Maintenance Watchtower (v2.0.0)" Magenta
 Log "    Action: $Action | Force: $Force | Interval: ${Interval}s" DarkGray
-Log "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" Magenta
+Log "===============================================" Magenta
 
 switch ($Action) {
   "health" { Run-AllChecks; Show-Summary }
@@ -702,5 +705,5 @@ switch ($Action) {
   }
 }
 
-Log "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" Magenta
+Log "===============================================" Magenta
 exit $script:exitCode
