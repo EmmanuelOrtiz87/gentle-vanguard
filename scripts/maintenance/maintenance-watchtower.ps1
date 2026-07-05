@@ -187,18 +187,18 @@ function Check-CodeGraph {
 
 function Check-MlEmbeddings {
   Log "  [ML Embeddings] Checking..." Cyan
-  $mlIndex = Join-Path $repoRoot ".atl\ml-index.json"
+  $mlIndex = Join-Path $repoRoot ".atl\skill-embeddings.json"
   $mlDir = Join-Path $repoRoot ".atl\ml-embeddings"
   $skillEmbedder = Join-Path $repoRoot "scripts\utilities\agents\AUTO-DELEGATION\skill-embedder.ps1"
   $mlRouter = Join-Path $repoRoot "scripts\utilities\agents\AUTO-DELEGATION\ml-router.ps1"
 
   $ageH = Get-FileAgeHours -Path $mlIndex
   if ($ageH -eq -1) {
-    Add-Finding "ml-embeddings" "ml-index.json" "FAIL" "Not found" "rebuild"
+    Add-Finding "ml-embeddings" "skill-embeddings.json" "FAIL" "Not found" "rebuild"
   } elseif ($ageH -gt 48) {
-    Add-Finding "ml-embeddings" "ml-index.json freshness" "WARN" "Stale: $ageH hours" "rebuild"
+    Add-Finding "ml-embeddings" "skill-embeddings.json freshness" "WARN" "Stale: $ageH hours" "rebuild"
   } else {
-    Add-Finding "ml-embeddings" "ml-index.json freshness" "PASS" "$ageH hours" "ok"
+    Add-Finding "ml-embeddings" "skill-embeddings.json freshness" "PASS" "$ageH hours" "ok"
   }
 
   if (Test-Path $mlDir) {
@@ -649,7 +649,7 @@ function Run-AllChecks {
 # ─── Main ───────────────────────────────────────────────────────────────────
 
 Log "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" Magenta
-Log " 🏗  Maintenance Watchtower (v2.0.0)" Magenta
+Log " [MW] Maintenance Watchtower (v2.0.0)" Magenta
 Log "    Action: $Action | Force: $Force | Interval: ${Interval}s" DarkGray
 Log "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" Magenta
 

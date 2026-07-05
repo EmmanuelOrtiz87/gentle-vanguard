@@ -70,3 +70,11 @@ if ($LASTEXITCODE -ne 0 -and $LASTEXITCODE -ne $null) {
 }
 
 Write-Log "Re-index complete" Green
+
+# Write freshness log for watchtower
+$ragLog = Join-Path $repoRoot '.atl' 'rag-reindex.log'
+$ragLogDir = Split-Path $ragLog -Parent
+if (-not (Test-Path $ragLogDir)) { New-Item -ItemType Directory -Path $ragLogDir -Force | Out-Null }
+$ts = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+"[RAG-REINDEX] $ts — completed — project=$($Project -replace '^$','all') — index=$indexFile" | Set-Content $ragLog -Encoding UTF8
+Write-Log "Freshness log: $ragLog" Green
