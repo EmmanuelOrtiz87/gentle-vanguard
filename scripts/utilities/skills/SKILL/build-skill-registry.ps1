@@ -160,10 +160,10 @@ $agentLabels = @{
 $userProfile = if ($env:USERPROFILE) { $env:USERPROFILE } elseif ($env:HOME) { $env:HOME } else { [Environment]::GetFolderPath("UserProfile") }
 $skillRoots = @(
     (Join-Path $WorkspaceRoot "skills"),
-    (Join-Path $WorkspaceRoot ".claude" "skills"),
-    (Join-Path $WorkspaceRoot ".gemini" "skills"),
-    (Join-Path $WorkspaceRoot ".agent" "skills"),
-    (Join-Path $WorkspaceRoot ".cursor" "skills"),
+    (Join-Path (Join-Path $WorkspaceRoot ".claude") "skills"),
+    (Join-Path (Join-Path $WorkspaceRoot ".gemini") "skills"),
+    (Join-Path (Join-Path $WorkspaceRoot ".agent") "skills"),
+    (Join-Path (Join-Path $WorkspaceRoot ".cursor") "skills"),
     (Join-Path (Join-Path $userProfile ".claude") "skills"),
     (Join-Path (Join-Path (Join-Path $userProfile ".config") "opencode") "skills"),
     (Join-Path (Join-Path $userProfile ".gemini") "skills"),

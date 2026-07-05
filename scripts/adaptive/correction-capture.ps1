@@ -10,7 +10,7 @@ $repoRoot = Resolve-Path (Join-Path $scriptDir '..\..') | Select-Object -ExpandP
 $loggerModule = Join-Path $scriptDir '..\common\Logger.psm1'
 if (Test-Path $loggerModule) { Import-Module $loggerModule -Force }
 $learnedNormsPath = Join-Path $repoRoot "rules\adaptive\LEARNED-NORMS.md"
-$correctionLog = Join-Path $repoRoot ".session" "corrections-log.jsonl"
+$correctionLog = Join-Path (Join-Path $repoRoot ".session") "corrections-log.jsonl"
 
 $correctionPatterns = @(
     @{ Pattern = '(?i)(no\s+es\s+(correcto|as[ií]|verdad|lo\s+que\s+ped[ií])|eso\s+no\s+es|mal|incorrecto|wrong|not\s+what\s+I\s+asked|no\s+era\s+eso|te\s+equivocaste|error|no\s+fue\s+lo\s+que\s+ped[ií])'; Type = 'correction'; Severity = 'high' }

@@ -44,7 +44,7 @@ $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) { $env:GENTLE_VANGUARD_BASE_DIR }
 $skillPath = Join-Path $repoRoot "skills" $Name
 $skillMdPath = Join-Path $skillPath "SKILL.md"
 $autoDelPath = Join-Path $repoRoot "config" "auto-delegation.json"
-$registryPath = Join-Path $repoRoot ".atl" "skill-registry.md"
+$registryPath = Join-Path (Join-Path $repoRoot ".atl") "skill-registry.md"
 
 # Validar nombre
 if ($Name -notmatch '^[a-z0-9][a-z0-9_-]+$') { Write-Host "[ERROR] Name must be lowercase alphanumeric with hyphens/underscores" -ForegroundColor Red; exit 1 }

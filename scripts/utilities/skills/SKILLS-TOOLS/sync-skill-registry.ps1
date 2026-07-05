@@ -30,7 +30,7 @@ function Write-Log {
 # Resolve paths
 $script:ProjectRoot = Resolve-Path (Join-Path $PSScriptRoot "..\..\..")
 $script:SkillsDir = Join-Path $ProjectRoot "skills"
-$script:RegistryPath = Join-Path $ProjectRoot ".atl" "skill-registry.md"
+$script:RegistryPath = Join-Path (Join-Path $ProjectRoot ".atl") "skill-registry.md"
 
 Write-Log "INFO" "Skill Registry Sync Tool"
 Write-Log "INFO" "Project: $ProjectRoot"
