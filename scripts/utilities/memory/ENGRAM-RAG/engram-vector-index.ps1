@@ -76,7 +76,13 @@ $globalDf = @{}
 $newVectors = @()
 
 foreach ($obs in $newObservations) {
-    $content = "$($obs.title) $($obs.content)"
+    $obsTitle = if ($obs.PSObject.Properties.Name -contains 'title' -and $obs.title) { "$($obs.title)" } else { "" }
+    $obsContent = if ($obs.PSObject.Properties.Name -contains 'content' -and $obs.content) { "$($obs.content)" } else { "" }
+    $obsType = if ($obs.PSObject.Properties.Name -contains 'type' -and $obs.type) { "$($obs.type)" } else { "unknown" }
+    $obsCreatedAt = if ($obs.PSObject.Properties.Name -contains 'created_at' -and $obs.created_at) { "$($obs.created_at)" } else { "" }
+    $obsUpdatedAt = if ($obs.PSObject.Properties.Name -contains 'updated_at' -and $obs.updated_at) { "$($obs.updated_at)" } else { "" }
+
+    $content = "$obsTitle $obsContent"
     $ngrams = Get-Ngrams -Text $content -Min $ngramMin -Max $ngramMax
     $totalNgrams = $ngrams.Count
     if ($totalNgrams -eq 0) { continue }
@@ -91,9 +97,9 @@ foreach ($obs in $newObservations) {
         $globalDf[$t] = if ($globalDf.ContainsKey($t)) { $globalDf[$t] + 1 } else { 1 }
     }
 
-    $proj = if ($obs.PSObject.Properties.Name -contains 'project') { "$($obs.project)" } else { "" }
-    $preview = $obs.content; if ($preview.Length -gt 300) { $preview = $preview.Substring(0, 300) + '...' }
-    $newVectors += @{ id=[int]$obs.id; title="$($obs.title)"; type="$($obs.type)"; project=$proj; content_preview=$preview; created_at="$($obs.created_at)"; updated_at="$($obs.updated_at)"; features=$vector }
+    $proj = if ($obs.PSObject.Properties.Name -contains 'project' -and $obs.project) { "$($obs.project)" } else { "" }
+    $preview = $obsContent; if ($preview.Length -gt 300) { $preview = $preview.Substring(0, 300) + '...' }
+    $newVectors += @{ id=[int]$obs.id; title=$obsTitle; type=$obsType; project=$proj; content_preview=$preview; created_at=$obsCreatedAt; updated_at=$obsUpdatedAt; features=$vector }
 }
 
 Write-Log "Built $($newVectors.Count) vectors, $($globalDf.Count) raw terms"

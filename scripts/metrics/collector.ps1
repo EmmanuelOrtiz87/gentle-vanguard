@@ -129,7 +129,12 @@ function Collect-TokenMetrics {
     if (Test-Path $liveObsPath) {
         try {
             $obs = Get-Content $liveObsPath -Raw | ConvertFrom-Json
-            if ($obs.token) { $tm.usedToday = $obs.token.used_today; $tm.budget = $obs.token.budget; $tm.pct = $obs.token.projected_pct; $tm.status = $obs.token.status }
+            if ($obs.token) {
+                $tm.usedToday = if ($obs.token.used_today) { $obs.token.used_today } else { 0 }
+                $tm.budget = if ($obs.token.budget) { $obs.token.budget } else { 120000 }
+                $tm.pct = if ($obs.token.projected_pct) { $obs.token.projected_pct } else { 0 }
+                $tm.status = if ($obs.token.status) { $obs.token.status } else { 'unknown' }
+            }
         } catch { $e = $_.Exception.Message; Write-Debug "Live obs token not read: $e" }
     }
     $ratePer1M = 10; $estCost = [math]::Round(($tm.usedToday / 1e6) * $ratePer1M, 4)
@@ -156,9 +161,15 @@ function Collect-LiveMetrics {
     if (Test-Path $liveObsPath) {
         try {
             $obs = Get-Content $liveObsPath -Raw | ConvertFrom-Json
-            $live.trafficLight = $obs.executive_traffic_light
-            if ($obs.routing) { $live.routingTotal = $obs.routing.total; $live.routingAcc = $obs.routing.accuracy }
-            if ($obs.benchmark) { $live.benchmarkPass = $obs.benchmark.pass; $live.benchmarkFail = $obs.benchmark.fail }
+            if ($obs.executive_traffic_light) { $live.trafficLight = $obs.executive_traffic_light }
+            if ($obs.routing) {
+                $live.routingTotal = if ($obs.routing.total) { $obs.routing.total } else { 0 }
+                $live.routingAcc = if ($obs.routing.accuracy) { $obs.routing.accuracy } else { '0%' }
+            }
+            if ($obs.benchmark) {
+                $live.benchmarkPass = if ($obs.benchmark.pass) { $obs.benchmark.pass } else { 0 }
+                $live.benchmarkFail = if ($obs.benchmark.fail) { $obs.benchmark.fail } else { 0 }
+            }
             $live.hasData = $true
         } catch { $e = $_.Exception.Message; Write-Debug "Live obs not read: $e" }
     }

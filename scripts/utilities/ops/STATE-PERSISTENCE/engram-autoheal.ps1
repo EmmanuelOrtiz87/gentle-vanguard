@@ -19,11 +19,11 @@ function Write-Log {
 
 function Test-EngramDb {
     param([string]$Path)
-    if (-not (Test-Path $Path)) { Write-Log "DB no encontrada" 'WARN'; return $false }
+    if (-not (Test-Path $Path)) { Write-Log "DB not found at: $Path" 'WARN'; return $false }
     try {
-        $r = sqlite3 $Path "SELECT 1;" 2>&1
-        return ($LASTEXITCODE -eq 0) -and ($r.Trim() -eq '1')
-    } catch { Write-Log "Excepción: $_" 'ERROR'; return $false }
+        $r = & sqlite3 $Path "SELECT 1;" 2>&1
+        return ($LASTEXITCODE -eq 0) -and ("$r".Trim() -eq '1')
+    } catch { Write-Log "Exception: $($_.Exception.Message)" 'ERROR'; return $false }
 }
 
 function Test-EngramSchema {
@@ -41,8 +41,8 @@ function Repair-EngramDb {
     $schema = Test-EngramSchema $Path
     if (-not $schema) { return $false }
     $ok = $false
-    if (-not $schema.HasData) { sqlite3 $Path "ALTER TABLE observations ADD COLUMN data TEXT;"; if ($LASTEXITCODE -eq 0) { Write-Log "data agregada" 'INFO'; $ok = $true } }
-    if (-not $schema.HasContent) { sqlite3 $Path "ALTER TABLE observations ADD COLUMN content TEXT;"; if ($LASTEXITCODE -eq 0) { Write-Log "content agregada" 'INFO'; $ok = $true } }
+    if (-not $schema.HasData) { & sqlite3 $Path "ALTER TABLE observations ADD COLUMN data TEXT;"; if ($LASTEXITCODE -eq 0) { Write-Log "data column added" 'INFO'; $ok = $true } }
+    if (-not $schema.HasContent) { & sqlite3 $Path "ALTER TABLE observations ADD COLUMN content TEXT;"; if ($LASTEXITCODE -eq 0) { Write-Log "content column added" 'INFO'; $ok = $true } }
     Get-ChildItem (Split-Path $Path -Parent) "*.bak.*" | Sort-Object LastWriteTime -Descending | Select-Object -Skip $MaxBackups | Remove-Item -Force
     return $ok
 }
@@ -51,7 +51,7 @@ try { New-Item -ItemType Directory -Path (Split-Path $logFile -Parent) -Force | 
 
 if ($Action -eq 'check') {
     $h = Test-EngramDb $DbPath
-    if ($h) { Write-Log "[PASS] DB OK" 'INFO'; exit 0 } else { Write-Log "[FAIL] DB caída" 'ERROR'; exit 1 }
+    if ($h) { Write-Log "[PASS] DB OK" 'INFO'; exit 0 } else { Write-Log "[FAIL] DB unreachable" 'ERROR'; exit 1 }
 }
 
 if ($Action -eq 'repair' -or $Action -eq 'full') {
