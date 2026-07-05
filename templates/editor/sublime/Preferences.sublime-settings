@@ -48,46 +48,46 @@
   "[JavaScript]": {
     "tab_size": 2,
     "quote_single": false,
-    "js_format_on_save": true
+    "js_format_on_save": true,
   },
 
   "[TypeScript]": {
     "tab_size": 2,
     "quote_single": false,
-    "js_format_on_save": true
+    "js_format_on_save": true,
   },
 
   "[Python]": {
     "tab_size": 4,
-    "auto_indent": false
+    "auto_indent": false,
   },
 
   "[Go]": {
     "tab_size": 4,
-    "translate_tabs_to_spaces": false
+    "translate_tabs_to_spaces": false,
   },
 
   "[JSON]": {
-    "tab_size": 2
+    "tab_size": 2,
   },
 
   "[YAML]": {
-    "tab_size": 2
+    "tab_size": 2,
   },
 
   "[Markdown]": {
     "tab_size": 2,
     "wrap_width": 80,
-    "trim_trailing_whitespace_on_save": false
+    "trim_trailing_whitespace_on_save": false,
   },
 
   "[HTML]": {
     "tab_size": 2,
-    "quote_single": false
+    "quote_single": false,
   },
 
   "[CSS]": {
     "tab_size": 2,
-    "quote_single": false
-  }
+    "quote_single": false,
+  },
 }

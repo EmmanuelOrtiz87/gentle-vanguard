@@ -371,15 +371,15 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
       : null;
     const checkpointDir = join(ROOT, '.session', 'checkpoints');
     const checkpointCount = existsSync(checkpointDir)
-      ? readdirSync(checkpointDir).filter(d => !d.includes('.')).length
+      ? readdirSync(checkpointDir).filter((d) => !d.includes('.')).length
       : 0;
     const auditDir = join(ROOT, '.session', 'audit', 'logs');
     const auditFileCount = existsSync(auditDir)
-      ? readdirSync(auditDir).filter(f => f.endsWith('.jsonl')).length
+      ? readdirSync(auditDir).filter((f) => f.endsWith('.jsonl')).length
       : 0;
     const telemetryDir = join(ROOT, '.telemetry', 'traces');
     const traceFileCount = existsSync(telemetryDir)
-      ? readdirSync(telemetryDir).filter(f => f.endsWith('.jsonl')).length
+      ? readdirSync(telemetryDir).filter((f) => f.endsWith('.jsonl')).length
       : 0;
 
     res.writeHead(200, headers);
@@ -403,7 +403,8 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
           cloud: {
             status: cloudMetrics && cloudMetrics.executions?.length > 0 ? 'ok' : 'unknown',
             executions: cloudMetrics?.executions?.length || 0,
-            totalCost: cloudMetrics?.executions?.reduce((s: number, e: any) => s + (e.cost || 0), 0) || 0,
+            totalCost:
+              cloudMetrics?.executions?.reduce((s: number, e: any) => s + (e.cost || 0), 0) || 0,
           },
           tracing: {
             status: traceFileCount > 0 ? 'ok' : 'unknown',

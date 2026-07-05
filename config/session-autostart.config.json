@@ -2,7 +2,6 @@
   "version": "1.0.0",
   "name": "session-autostart-config",
   "description": "Configuration for session autostart pipeline - controls which steps run and their parameters",
-
   "pipeline": {
     "steps": [
       {
@@ -215,7 +214,7 @@
         "script": "scripts/utilities/codegraph/codegraph-sync-autostart.ps1",
         "args": "",
         "required": false,
-        "description": "Verify CodeGraph index freshness and sync if stale (>30min old)"
+        "description": "Verify CodeGraph index freshness and sync if stale (\u003e30min old)"
       },
       {
         "id": "self-diagnosis",
@@ -271,6 +270,15 @@
         "args": "-TimeZone \"Argentina Standard Time\" -PeakStart 9 -PeakEnd 15 -Region \"Argentina\"",
         "required": false,
         "description": "Generate startup-summary.json with peak hour, session ID, workspace state"
+      },
+      {
+        "id": "knowledge-base-init",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/knowledge-base/knowledge-base-autoinit.ps1",
+        "args": "-Quiet",
+        "required": false,
+        "description": "Initialize Knowledge Base vault, validate structure, and run full sync with Engram/documents"
       },
       {
         "id": "skill-recommendation",
@@ -335,7 +343,7 @@
         "id": "json-validator-verify",
         "enabled": true,
         "script": "scripts/utilities/config/JSON/json-validator.ps1",
-        "args": "-JsonString '{\"test\": \"value\"}' -Context 'startup-verify'",
+        "args": "-JsonString \u0027{\"test\": \"value\"}\u0027 -Context \u0027startup-verify\u0027",
         "required": false,
         "description": "Verifica que el validador JSON esta operativo al inicio de sesion"
       },
@@ -396,7 +404,7 @@
         "enabled": true,
         "lazy": true,
         "script": "scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1",
-        "args": "-SkillId __healthcheck__ -SkillInput @{action='ping'} -InvocationType DryRun -Quiet",
+        "args": "-SkillId __healthcheck__ -SkillInput @{action=\u0027ping\u0027} -InvocationType DryRun -Quiet",
         "required": false,
         "description": "Initialize cloud connectors — validates config, checks circuit breaker states, pre-warms connections (Phase 1.2)"
       },
@@ -432,7 +440,7 @@
         "enabled": true,
         "lazy": true,
         "script": "scripts/security/audit-pipeline.ps1",
-        "args": "-Action log -EventType session.start -Component system -Operation autostart -Actor system -Status success -Message 'Session autostart pipeline initialized' -Quiet",
+        "args": "-Action log -EventType session.start -Component system -Operation autostart -Actor system -Status success -Message \u0027Session autostart pipeline initialized\u0027 -Quiet",
         "required": false,
         "description": "Log session start in the audit pipeline for SOC2/GDPR compliance (Phase 3)"
       },
@@ -441,7 +449,7 @@
         "enabled": true,
         "lazy": true,
         "script": "scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1",
-        "args": "-Action append -AggregateId session-autostart -EventType session.started -EventData '{}' -Quiet",
+        "args": "-Action append -AggregateId session-autostart -EventType session.started -EventData \u0027{}\u0027 -Quiet",
         "required": false,
         "description": "Record session start event in append-only event store for traceability (Phase 5)"
       },
@@ -453,24 +461,37 @@
         "args": "-FinalReportMode",
         "required": false,
         "description": "Generate final session report + auto-learned patterns for next session"
+      },
+      {
+        "id": "cost-tracker-init",
+        "enabled": true,
+        "script": "scripts/utilities/telemetry/TELEMETRY-METRICS/cost-tracker.ps1",
+        "args": "-Action status -Quiet",
+        "required": false,
+        "description": "Initialize cost tracking and show daily budget status at session start"
+      },
+      {
+        "id": "planning-estimator-verify",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/planning/planning-estimator.ps1",
+        "args": "-Action report -TaskType feature -Complexity 1 -FilesChanged 1 -LinesChanged 10 -Quiet",
+        "required": false,
+        "description": "Verify planning estimator is operational at session start"
       }
     ],
-
     "onStepFailure": "continue",
     "requiredStepFailureAction": "exit"
   },
-
   "notifications": {
     "timeZone": "Argentina Standard Time",
     "peakStart": 9,
     "peakEnd": 15,
     "region": "Argentina"
   },
-
   "sessionDirectory": ".session",
   "sessionFilePattern": "session-{date}-{number:D2}.json",
   "sessionExpiryHours": 8,
-
   "auth": {
     "integrateWithAutostart": false,
     "requireAuthForRestrictedOps": true,
@@ -479,11 +500,10 @@
     "lockoutFile": "config/owner-auth.json.lock",
     "encryptedAuthFile": "config/owner-auth.json.enc"
   },
-
   "orphanSessionCleanup": {
     "enabled": true,
     "maxAgeHours": 24,
     "statusesToClean": ["active", "orphaned", "ended"],
-    "description": "Clean up sessions left in 'active' status after maxAgeHours (crash recovery)"
+    "description": "Clean up sessions left in \u0027active\u0027 status after maxAgeHours (crash recovery)"
   }
 }

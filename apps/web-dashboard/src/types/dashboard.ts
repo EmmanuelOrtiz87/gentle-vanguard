@@ -118,12 +118,15 @@ export interface CloudMetrics {
     totalCost: number;
     successRate: number;
     avgLatency: number;
-    byProvider: Record<string, {
-      executions: number;
-      cost: number;
-      successRate: number;
-      avgLatency: number;
-    }>;
+    byProvider: Record<
+      string,
+      {
+        executions: number;
+        cost: number;
+        successRate: number;
+        avgLatency: number;
+      }
+    >;
     circuitBreakerStates: Record<string, string>;
   };
 }

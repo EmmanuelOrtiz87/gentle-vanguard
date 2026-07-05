@@ -6,7 +6,16 @@
   "roles": {
     "owner": {
       "description": "Full system access — can manage config, secrets, and all operations",
-      "permissions": ["read", "write", "admin", "delegate", "rollback", "delete", "configure", "audit"]
+      "permissions": [
+        "read",
+        "write",
+        "admin",
+        "delegate",
+        "rollback",
+        "delete",
+        "configure",
+        "audit"
+      ]
     },
     "developer": {
       "description": "Standard development access — can create, execute, and review",

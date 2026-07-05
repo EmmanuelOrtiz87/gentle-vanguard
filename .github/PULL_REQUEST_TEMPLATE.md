@@ -1,37 +1,82 @@
-## Summary
+## Description
 
-<!-- One sentence: what does this PR do and why? -->
+<!-- Brief description of what this PR does -->
+
+## Type
+
+<!-- Check one -->
+
+- [ ] Feature — New functionality
+- [ ] Bugfix — Fix existing behavior
+- [ ] Refactor — Improve without changing behavior
+- [ ] Documentation — Docs, comments, README
+- [ ] Test — Add or improve tests
+- [ ] Security — Security fix or audit
+- [ ] Performance — Optimization
+- [ ] Infrastructure — CI/CD, tooling, config
+
+## Complexity
+
+<!-- Score 1-5: 1=Trivial, 2=Simple, 3=Medium, 4=Complex, 5=Critical -->
+
+**Score:**
+
+### Complexity Factors (check all that apply)
+
+- [ ] External dependency (API, library, service)
+- [ ] Security impact (auth, PII, secrets)
+- [ ] Breaking change (public API/interface)
+- [ ] Cross-platform (Windows/Linux/Mac)
+- [ ] Performance critical (latency/throughput)
+- [ ] No tests exist (must create infrastructure)
+- [ ] Legacy code (old/untested)
+
+## Estimates
+
+| Metric           | Value               |
+| ---------------- | ------------------- |
+| Estimated Time   |                     |
+| Estimated Tokens |                     |
+| Estimated Cost   |                     |
+| PR Size          | XS / S / M / L / XL |
 
 ## Changes
 
-<!-- List key changes, files affected, and architectural decisions -->
+- [ ] Change 1
+- [ ] Change 2
+- [ ] Change 3
 
 ## Testing
 
-- [ ] Unit tests added/updated (>80% coverage on new code)
-- [ ] Integration tests added/updated (cheap LLM model)
+<!-- Check all that apply -->
+
+- [ ] Unit tests added/updated
+- [ ] Integration tests added/updated
 - [ ] Manual testing completed
-- [ ] CI checks pass (lint, unit, security scan)
-- [ ] Safety regressions checked
-- [ ] Format compliance verified
+- [ ] All existing tests pass
 
 ## Security
 
-- [ ] No secrets/credentials in code (gitleaks pass)
-- [ ] No PII in logs or outputs
-- [ ] No excessive tool permissions introduced
-- [ ] Input sanitization applied (if processing external data)
-- [ ] Human-in-the-loop for high-impact actions (if applicable)
+<!-- Check if applicable -->
 
-## Related
+- [ ] No secrets or credentials exposed
+- [ ] Input validation implemented
+- [ ] OWASP guidelines followed
+- [ ] Security review required
 
-<!-- Link to issues, ADRs, SDDs, or related PRs -->
+## Rollback Plan
 
-Closes #
+<!-- How to rollback if this causes issues -->
 
-## AI Contribution
+## Related Issues
 
-<!-- Mark if this PR was AI-assisted -->
+<!-- Link related issues: Closes #123, Fixes #456 -->
 
-- [ ] AI-generated code reviewed by human
-- [ ] AI-generated code tested and verified
+## Checklist
+
+- [ ] Code follows project style guidelines
+- [ ] Self-review completed
+- [ ] Comments added for complex logic
+- [ ] Documentation updated
+- [ ] No breaking changes (or documented above)
+- [ ] CI/CD pipeline passes

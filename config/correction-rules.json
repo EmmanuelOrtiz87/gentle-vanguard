@@ -36,11 +36,7 @@
       "action": {
         "type": "enable_safety_mode",
         "target": "orchestrator",
-        "actions": [
-          "enable_premortem",
-          "require_manual_review",
-          "enable_detailed_logging"
-        ],
+        "actions": ["enable_premortem", "require_manual_review", "enable_detailed_logging"],
         "description": "Activate premortem mode + manual review requirement"
       },
       "metadata": {
@@ -93,7 +89,7 @@
       },
       "metadata": {
         "pattern": "agent_misroute",
-        "confidence": 0.80,
+        "confidence": 0.8,
         "successRate": 0.78,
         "impactLevel": "medium",
         "estimatedRecoveryTime": "20s"
@@ -118,7 +114,7 @@
       "metadata": {
         "pattern": "cache_inefficiency",
         "confidence": 0.75,
-        "successRate": 0.70,
+        "successRate": 0.7,
         "impactLevel": "medium",
         "estimatedRecoveryTime": "60s"
       },
@@ -141,7 +137,7 @@
       },
       "metadata": {
         "pattern": "version_incompatibility",
-        "confidence": 0.90,
+        "confidence": 0.9,
         "successRate": 0.87,
         "impactLevel": "high",
         "estimatedRecoveryTime": "15s"
@@ -301,13 +297,13 @@
     "correctionTimeout": 30000,
     "rollbackEnabled": true,
     "autoMetricsRecording": true,
-    "minConfidenceToExecute": 0.70,
+    "minConfidenceToExecute": 0.7,
     "maxRollbackAttempts": 2
   },
   "learningMode": {
     "enabled": true,
     "updateInterval": 86400,
-    "successRateThreshold": 0.80,
+    "successRateThreshold": 0.8,
     "confidenceAdjustment": 0.02
   }
 }
