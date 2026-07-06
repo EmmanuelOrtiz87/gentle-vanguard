@@ -834,6 +834,7 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
 });
 
 let prevMetrics: Record<string, unknown> | null = null;
+let prevAlertState = new Map<string, boolean>();
 
 function broadcastValidations(): void {
   const validations = runValidations(bridgeReady, bridgeToolCount, clients.size);
@@ -841,11 +842,78 @@ function broadcastValidations(): void {
   clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(msg));
 }
 
+function evaluateAlerts(metrics: any): Array<{
+  name: string;
+  rule: string;
+  actual: number;
+  threshold: number;
+  severity: string;
+  triggered: boolean;
+  unit: string;
+  transition?: string;
+}> {
+  try {
+    if (!existsSync(ALERTS_CONFIG_PATH)) return [];
+    const config = JSON.parse(readFileSync(ALERTS_CONFIG_PATH, 'utf-8'));
+    return Object.entries(config.rules || {})
+      .map(([name, rule]: [string, any]) => {
+        if (rule.enabled === false) return null;
+        const actual = rule.metric
+          .split('.')
+          .reduce((obj: any, key: string) => obj?.[key], metrics as any);
+        const below = rule.direction === 'below';
+        const triggered =
+          typeof actual === 'number' &&
+          typeof rule.threshold === 'number' &&
+          (below ? actual <= rule.threshold : actual >= rule.threshold);
+        const wasTriggered = prevAlertState.get(name) || false;
+        let transition: string | undefined;
+        if (triggered && !wasTriggered) transition = 'fired';
+        else if (!triggered && wasTriggered) transition = 'resolved';
+        return {
+          name,
+          rule: rule.label || name,
+          actual: actual ?? 0,
+          threshold: rule.threshold,
+          severity: rule.severity || 'info',
+          triggered,
+          unit: rule.unit || '',
+          transition,
+        };
+      })
+      .filter(Boolean) as any[];
+  } catch {
+    return [];
+  }
+}
+
 setInterval(() => {
   const metrics = generateMetrics();
   const msg = JSON.stringify({ type: 'metrics', data: metrics });
   clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(msg));
   broadcastValidations();
+
+  // Broadcast alert state with transitions
+  const alerts = evaluateAlerts(metrics);
+  const transitions = alerts.filter((a) => a.transition);
+  alerts.forEach((a) => prevAlertState.set(a.name, a.triggered));
+  const alertMsg = JSON.stringify({ type: 'alerts', data: alerts });
+  clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(alertMsg));
+
+  // Broadcast alert transitions as notifications
+  if (transitions.length > 0) {
+    const transitionNotifications = transitions.map((a) => ({
+      type: a.transition === 'fired' ? 'alert_fired' : 'alert_resolved',
+      message:
+        a.transition === 'fired'
+          ? `Alert: ${a.rule} triggered (${a.actual}${a.unit} > ${a.threshold}${a.unit})`
+          : `Resolved: ${a.rule} (${a.actual}${a.unit})`,
+      severity: a.transition === 'fired' ? a.severity : 'info',
+      timestamp: new Date().toISOString(),
+    }));
+    const note = JSON.stringify({ type: 'notification', notifications: transitionNotifications });
+    clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(note));
+  }
 
   if (prevMetrics) {
     const prev = prevMetrics as Record<string, any>;
