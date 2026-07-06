@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
+import { useSharedWs } from './useSharedWs';
 
 export interface Alert {
   name: string;
@@ -8,26 +9,19 @@ export interface Alert {
   severity: string;
   triggered: boolean;
   unit: string;
+  transition?: string;
 }
 
 export function useAlerts() {
   const [alerts, setAlerts] = useState<Alert[]>([]);
 
-  const fetchAlerts = useCallback(async () => {
-    try {
-      const res = await fetch('/api/alerts');
-      const data = await res.json();
-      setAlerts(data.alerts || []);
-    } catch {
-      /* best-effort */
+  const handleMessage = useCallback((msg: Record<string, unknown>) => {
+    if (msg.type === 'alerts') {
+      setAlerts((msg.data as Alert[]) || []);
     }
   }, []);
 
-  useEffect(() => {
-    void fetchAlerts();
-    const interval = setInterval(fetchAlerts, 10000);
-    return () => clearInterval(interval);
-  }, [fetchAlerts]);
+  useSharedWs(handleMessage, [handleMessage]);
 
   const triggeredAlerts = alerts.filter((a) => a.triggered);
 

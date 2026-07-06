@@ -478,6 +478,22 @@
         "args": "-Action report -TaskType feature -Complexity 1 -FilesChanged 1 -LinesChanged 10 -Quiet",
         "required": false,
         "description": "Verify planning estimator is operational at session start"
+      },
+      {
+        "id": "engram-auto-compact",
+        "script": "scripts/utilities/memory/ENGRAM/engram-auto-compact.ps1",
+        "args": "-Quiet -RetentionDays 90",
+        "lazy": true,
+        "enabled": true,
+        "description": "Auto-compact old engram observations (>90 days)"
+      },
+      {
+        "id": "ml-embeddings-incremental",
+        "script": "scripts/utilities/agents/AUTO-DELEGATION/skill-embedder-incremental.ps1",
+        "args": "-Quiet",
+        "lazy": true,
+        "enabled": true,
+        "description": "Incrementally update skill embeddings on session start"
       }
     ],
     "onStepFailure": "continue",
