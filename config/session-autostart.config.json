@@ -494,6 +494,42 @@
         "lazy": true,
         "enabled": true,
         "description": "Incrementally update skill embeddings on session start"
+      },
+      {
+        "id": "tenant-context",
+        "enabled": true,
+        "script": "scripts/utilities/TENANT/tenant-context.ps1",
+        "args": "-Action get",
+        "lazy": true,
+        "required": false,
+        "description": "Resolve tenant context (multi-tenant isolation v5.1)"
+      },
+      {
+        "id": "eval-quality-gate",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/EVAL/eval-runner.ps1",
+        "args": "-Suite codegraph-search -Export",
+        "required": false,
+        "description": "Run eval quality gates on core skills (v5.1)"
+      },
+      {
+        "id": "self-heal-status",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/CI/ci-rollback-engine.ps1",
+        "args": "-Action status",
+        "required": false,
+        "description": "Check CI/CD self-healing status (v5.1)"
+      },
+      {
+        "id": "auto-code-review",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/EVOLVE/auto-code-review.ps1",
+        "args": "-Action pre-commit",
+        "required": false,
+        "description": "Autonomous code review on staged files (v6.0)"
       }
     ],
     "onStepFailure": "continue",

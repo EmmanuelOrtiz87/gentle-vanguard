@@ -1,0 +1,41 @@
+{
+  "name": "engram-memory",
+  "version": "1.0",
+  "description": "Test suite for engram memory skill — validates save, search, context retrieval",
+  "config": {
+    "timeout": 60,
+    "model": "current"
+  },
+  "cases": [
+    {
+      "id": "save-retrieve",
+      "input": { "action": "save", "title": "test-memory", "type": "manual" },
+      "expected": { "status": "ok" },
+      "scorer": "status-ok"
+    },
+    {
+      "id": "search-by-title",
+      "input": { "query": "test-memory" },
+      "expected": { "minResults": 1 },
+      "scorer": "min-results"
+    },
+    {
+      "id": "search-empty-query",
+      "input": { "query": "" },
+      "expected": { "maxResults": 0 },
+      "scorer": "max-results"
+    },
+    {
+      "id": "context-retrieval",
+      "input": { "action": "context" },
+      "expected": { "minResults": 1 },
+      "scorer": "min-results"
+    },
+    {
+      "id": "search-nonexistent",
+      "input": { "query": "zz_nonexistent_zz" },
+      "expected": { "maxResults": 0 },
+      "scorer": "max-results"
+    }
+  ]
+}
