@@ -1361,6 +1361,7 @@
             <button onclick="moveCarousel('comp', -1)">&larr;</button
             ><button onclick="moveCarousel('comp', 1)">&rarr;</button>
           </div>
+          <div class="carousel-dots" id="compDots"></div>
         </div>
       </div>
 
@@ -3855,7 +3856,7 @@
       });
       let countersAnimated = false;
       function animateCounters(slideIdx) {
-        if (slideIdx === 0) countersAnimated = false;
+        if (slideIdx !== 0) return;
         if (countersAnimated) return;
         countersAnimated = true;
         document.querySelectorAll('.counter').forEach((c) => {
@@ -3873,9 +3874,14 @@
           }, 30);
         });
       }
-      const carousels = { comp: { pos: 0, total: 2 }, agent: { pos: 0, total: 1 } };
+      const carousels = { comp: { pos: 0, total: 3 }, agent: { pos: 0, total: 1 } };
       function initCarousel(id, total) {
         const dots = document.getElementById(id + 'Dots');
+        if (!dots) return;
+        if (total <= 1) {
+          dots.style.display = 'none';
+          return;
+        }
         for (let i = 0; i < total; i++) {
           const d = document.createElement('div');
           d.className = 'cdot' + (i === 0 ? ' active' : '');
@@ -4067,13 +4073,77 @@
           title: 'Engram Autoheal',
           body: '<p>Automatic database recovery.</p><ul><li>Schema repair and validation</li><li>Backup rotation and fallback JSON</li></ul>',
         },
+        ag_orch: {
+          title: 'Orchestrator Agent',
+          body: '<p>Central coordinator.</p><ul><li>Routes tasks to right agent</li><li>Context and complexity based</li></ul>',
+        },
+        ag_ba: {
+          title: 'BA Explore Agent',
+          body: '<p>Business analysis.</p><ul><li>Requirements gathering</li><li>Stakeholder mapping</li><li>User stories</li></ul>',
+        },
+        ag_sad: {
+          title: 'SAD Design Agent',
+          body: '<p>System architecture.</p><ul><li>Component diagrams</li><li>API contracts</li><li>Data models</li></ul>',
+        },
+        ag_dev: {
+          title: 'DEV Implement Agent',
+          body: '<p>Code generation.</p><ul><li>Feature implementation</li><li>Bug fixes</li><li>Tests</li></ul>',
+        },
+        ag_qa: {
+          title: 'QA Verify Agent',
+          body: '<p>Quality assurance.</p><ul><li>Test planning</li><li>Validation</li><li>Regression analysis</li></ul>',
+        },
+        ag_gov: {
+          title: 'GOV Compliance Agent',
+          body: '<p>Governance.</p><ul><li>Normative enforcement</li><li>Audit trail</li><li>Compliance checking</li></ul>',
+        },
+        ag_ops: {
+          title: 'OPS Deploy Agent',
+          body: '<p>Operations.</p><ul><li>Deployment</li><li>CI/CD</li><li>Monitoring</li></ul>',
+        },
+        ag_audit: {
+          title: 'Audit Agent',
+          body: '<p>Security audit.</p><ul><li>Vulnerability scanning</li><li>Dependency checking</li><li>Compliance</li></ul>',
+        },
+        ag_mgr: {
+          title: 'Manager Agent',
+          body: '<p>Project management.</p><ul><li>Task tracking</li><li>Progress reporting</li><li>Resource allocation</li></ul>',
+        },
+        ag_adapt: {
+          title: 'Adaptive Router Agent',
+          body: '<p>Dynamic routing.</p><ul><li>Performance based</li><li>Cost optimized</li></ul>',
+        },
+        ag_jd: {
+          title: 'Judgment Day Agent',
+          body: '<p>Auto-correction.</p><ul><li>12 quality rules</li><li>Automatic fixes</li></ul>',
+        },
+        ag_ml: {
+          title: 'ML Router Agent',
+          body: '<p>ML-powered routing.</p><ul><li>TF-IDF similarity</li><li>Skill recommendation</li></ul>',
+        },
+        ag_compact: {
+          title: 'Compaction Agent',
+          body: '<p>Memory lifecycle.</p><ul><li>90-day TTL</li><li>Auto-merge</li><li>Integrity verification</li></ul>',
+        },
+        ag_predict: {
+          title: 'Predictive Agent',
+          body: '<p>Trend analysis.</p><ul><li>Metrics recording</li><li>Pattern detection</li><li>Forecasting</li></ul>',
+        },
+        ag_collab: {
+          title: 'Collaboration Agent',
+          body: '<p>Cross-agent messaging.</p><ul><li>Register</li><li>Discover</li><li>Delegate</li></ul>',
+        },
       };
 
       function openInfo(key) {
         const d = infoData[key];
         if (!d) return;
-        document.getElementById('infoTitle').textContent = d.title;
-        document.getElementById('infoBody').innerHTML = d.body;
+        const lang = document.documentElement.dataset.lang || 'en';
+        const i18n = I18N[lang] || I18N.en;
+        const titleKey = 'info_' + key + '_title';
+        const bodyKey = 'info_' + key + '_body';
+        document.getElementById('infoTitle').textContent = i18n[titleKey] || d.title;
+        document.getElementById('infoBody').innerHTML = i18n[bodyKey] || d.body;
         document.getElementById('infoOverlay').classList.add('active');
       }
       function closeInfo() {

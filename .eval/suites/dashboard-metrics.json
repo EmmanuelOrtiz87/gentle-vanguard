@@ -1,0 +1,41 @@
+{
+  "name": "dashboard-metrics",
+  "version": "1.0",
+  "description": "Test suite for dashboard metrics — validates API endpoints, response format, data integrity",
+  "config": {
+    "timeout": 30,
+    "model": "current"
+  },
+  "cases": [
+    {
+      "id": "health-endpoint",
+      "input": { "endpoint": "/api/health" },
+      "expected": { "status": 200 },
+      "scorer": "http-status"
+    },
+    {
+      "id": "metrics-endpoint",
+      "input": { "endpoint": "/api/metrics" },
+      "expected": { "minResults": 1 },
+      "scorer": "min-results"
+    },
+    {
+      "id": "traces-endpoint",
+      "input": { "endpoint": "/api/traces" },
+      "expected": { "status": 200 },
+      "scorer": "http-status"
+    },
+    {
+      "id": "alerts-endpoint",
+      "input": { "endpoint": "/api/alerts" },
+      "expected": { "status": 200 },
+      "scorer": "http-status"
+    },
+    {
+      "id": "feedback-endpoint",
+      "input": { "endpoint": "/api/feedback" },
+      "expected": { "status": 200 },
+      "scorer": "http-status"
+    }
+  ]
+}

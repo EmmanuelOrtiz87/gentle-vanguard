@@ -1,0 +1,41 @@
+{
+  "name": "codegraph-search",
+  "version": "1.0",
+  "description": "Test suite for codegraph search skill — validates basic search, edge cases, and performance",
+  "config": {
+    "timeout": 30,
+    "model": "current"
+  },
+  "cases": [
+    {
+      "id": "search-basic-function",
+      "input": { "query": "function" },
+      "expected": { "minResults": 1 },
+      "scorer": "min-results"
+    },
+    {
+      "id": "search-empty",
+      "input": { "query": "" },
+      "expected": { "maxResults": 0 },
+      "scorer": "max-results"
+    },
+    {
+      "id": "search-by-kind",
+      "input": { "query": "class", "kind": "class" },
+      "expected": { "minResults": 1, "kind": "class" },
+      "scorer": "contains-kind"
+    },
+    {
+      "id": "search-special-chars",
+      "input": { "query": "test_function" },
+      "expected": { "minResults": 0 },
+      "scorer": "min-results"
+    },
+    {
+      "id": "search-limit",
+      "input": { "query": "get", "limit": 3 },
+      "expected": { "maxResults": 3 },
+      "scorer": "max-results"
+    }
+  ]
+}
