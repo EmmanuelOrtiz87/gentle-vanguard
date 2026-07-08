@@ -1,1 +1,0 @@
-Describe "Homologation Gate - Script availability" {
