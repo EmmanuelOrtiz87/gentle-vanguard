@@ -91,6 +91,8 @@ export interface DashboardData {
     lastIncident: string | null;
     sloCompliance: number;
   };
+  tenantId?: string;
+  tenantName?: string;
 }
 
 export interface Session {

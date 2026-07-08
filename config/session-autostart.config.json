@@ -496,6 +496,15 @@
         "description": "Incrementally update skill embeddings on session start"
       },
       {
+        "id": "maintenance-auto-prune",
+        "script": "scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1",
+        "args": "-Action list -Quiet",
+        "lazy": true,
+        "enabled": true,
+        "required": false,
+        "description": "Auto-prune old checkpoints (>14 days), compact event store, clean graphify snapshots on session start"
+      },
+      {
         "id": "tenant-context",
         "enabled": true,
         "script": "scripts/utilities/TENANT/tenant-context.ps1",
@@ -530,6 +539,15 @@
         "args": "-Action pre-commit",
         "required": false,
         "description": "Autonomous code review on staged files (v6.0)"
+      },
+      {
+        "id": "mcp-gateway-init",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/MCP/mcp-gateway.ps1",
+        "args": "-Action start -Quiet",
+        "required": false,
+        "description": "Start MCP Native gateway at session start (v6.4)"
       }
     ],
     "onStepFailure": "continue",

@@ -109,6 +109,34 @@ switch ($Action) {
       return @{ status = "rate-limited"; mutationsToday = $todayMutations; maxPerDay = $config.global.maxMutationsPerDay }
     }
 
+    # v6.1 Safety Layer: validate before mutation
+    $safetyGuardrails = Join-Path (Split-Path -Parent $PSScriptRoot) "SAFETY\safety-guardrails.ps1"
+    $safetyScorer = Join-Path (Split-Path -Parent $PSScriptRoot) "SAFETY\mutation-safety-scorer.ps1"
+    $safetyEnabled = $config.safetyIntegration -and $config.safetyIntegration.enabled
+
+    if ($safetyEnabled -and (Test-Path $safetyGuardrails)) {
+      Write-Host "[EVOLVE] Running safety guardrails check..." -ForegroundColor Gray
+      $proposedMutation = @{ strategy = $strategy; changes = @("mutation-$strategy"); target = $AgentId; changeCount = 1 } | ConvertTo-Json -Compress
+      $guardrailResult = & $safetyGuardrails -Action validate -AgentId $AgentId -ProposedMutation $proposedMutation
+      if (-not $guardrailResult.allowed) {
+        Write-Host "[EVOLVE] BLOCKED by safety guardrails — $($guardrailResult.violationCount) violation(s)" -ForegroundColor Red
+        return @{ status = "blocked-safety"; reason = "guardrails"; violations = $guardrailResult.violations; agentId = $AgentId }
+      }
+    }
+
+    if ($safetyEnabled -and (Test-Path $safetyScorer)) {
+      Write-Host "[EVOLVE] Computing mutation safety score..." -ForegroundColor Gray
+      $scorerResult = & $safetyScorer -Action score -AgentId $AgentId -Mutation $proposedMutation
+      if ($scorerResult.riskLevel -eq "high") {
+        Write-Host "[EVOLVE] BLOCKED by safety scorer — risk level: high (score: $($scorerResult.score))" -ForegroundColor Red
+        return @{ status = "blocked-safety"; reason = "risk-score"; score = $scorerResult.score; agentId = $AgentId }
+      }
+      if ($scorerResult.riskLevel -eq "medium") {
+        Write-Host "[EVOLVE] ESCALATED — risk level: medium (score: $($scorerResult.score)), requires human approval" -ForegroundColor Yellow
+        return @{ status = "escalated"; reason = "medium-risk"; score = $scorerResult.score; agentId = $AgentId }
+      }
+    }
+
     $strategy = Select-MutationStrategy
     Write-Host "[EVOLVE] Mutating $AgentId (score: $currentScore, threshold: $threshold, strategy: $strategy)" -ForegroundColor Cyan
 
@@ -119,6 +147,7 @@ switch ($Action) {
       scoreBefore = $currentScore
       threshold = $threshold
       mutationsToday = $todayMutations + 1
+      safetyApproved = $true
     }
 
     try {
@@ -181,13 +210,21 @@ switch ($Action) {
     $score = if ($eval) { $eval.avgScore } else { "N/A" }
     $mutations = Get-ChildItem -Path $agentDir -Filter "*.json" | Sort-Object LastWriteTime -Descending
 
+    $safetyDir = Join-Path $repoRoot ".session\safety\audit"
+    $safetyBlocked = @(Get-ChildItem -Path $safetyDir -Filter "guardrail-*.json" -ErrorAction SilentlyContinue | Where-Object {
+      $d = $_ | Get-Content -Raw | ConvertFrom-Json; -not $d.allowed
+    }).Count
+
     Write-Host "[EVOLVE] Status for $AgentId:" -ForegroundColor Cyan
     Write-Host "  Eval suite: $($agentConfig.evalSuite)" -ForegroundColor Gray
     Write-Host "  Latest score: $score (threshold: $($agentConfig.minScore))" -ForegroundColor $(if ($eval -and $eval.avgScore -ge $agentConfig.minScore) { "Green" } else { "Yellow" })
     Write-Host "  Mutations: $($mutations.Count) total, $todayMutations today" -ForegroundColor Gray
     Write-Host "  Rate limit: $($todayMutations)/$($config.global.maxMutationsPerDay)" -ForegroundColor $(if ($todayMutations -ge $config.global.maxMutationsPerDay) { "Red" } else { "Gray" })
+    if ($config.safetyIntegration -and $config.safetyIntegration.enabled) {
+      Write-Host "  Safety: enabled (v6.1) — blocked: $safetyBlocked" -ForegroundColor $(if($safetyBlocked -gt 0){'Yellow'}else{'Green'})
+    }
 
-    return @{ agentId = $AgentId; score = $score; mutations = $mutations.Count; todayMutations = $todayMutations }
+    return @{ agentId = $AgentId; score = $score; mutations = $mutations.Count; todayMutations = $todayMutations; safetyBlocked = $safetyBlocked }
   }
 
   "log" {

@@ -10,8 +10,12 @@ import {
   History,
   Menu,
   X,
+  Cpu,
+  Library,
+  Globe,
 } from 'lucide-react';
 import { useSharedState } from './hooks/useSharedState';
+import { TenantSelector } from './components/TenantSelector';
 
 const Dashboard = lazy(() => import('./components/Dashboard'));
 const TracingDashboard = lazy(() => import('./components/TracingDashboard'));
@@ -20,6 +24,9 @@ const InteractiveDocs = lazy(() => import('./components/InteractiveDocs'));
 const AgentChat = lazy(() => import('./components/AgentChat'));
 const TaskControl = lazy(() => import('./components/TaskControl'));
 const SessionTimeline = lazy(() => import('./components/SessionTimeline'));
+const MCPServers = lazy(() => import('./components/MCPServers'));
+const KnowledgePanel = lazy(() => import('./components/KnowledgePanel'));
+const MultiRepoView = lazy(() => import('./components/MultiRepoView'));
 
 const PageLoader = () => (
   <div className="flex items-center justify-center h-screen">
@@ -38,13 +45,19 @@ function Navigation() {
     { to: '/tasks', icon: ListTodo, label: 'Tasks' },
     { to: '/timeline', icon: History, label: 'Timeline' },
     { to: '/docs', icon: BookOpen, label: 'Docs' },
+    { to: '/mcp', icon: Cpu, label: 'MCP' },
+    { to: '/knowledge', icon: Library, label: 'Knowledge' },
+    { to: '/multi-repo', icon: Globe, label: 'Multi-repo' },
   ];
 
   return (
     <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <span className="text-xl font-bold text-gray-900 dark:text-white">GV Dashboard</span>
+          <div className="flex items-center gap-3">
+            <span className="text-xl font-bold text-gray-900 dark:text-white">GV Dashboard</span>
+            <TenantSelector />
+          </div>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="lg:hidden p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -136,6 +149,9 @@ function App() {
             <Route path="/agents" element={<AgentChat />} />
             <Route path="/tasks" element={<TasksPage />} />
             <Route path="/timeline" element={<TimelinePage />} />
+            <Route path="/mcp" element={<MCPServers />} />
+            <Route path="/knowledge" element={<KnowledgePanel />} />
+            <Route path="/multi-repo" element={<MultiRepoView />} />
           </Routes>
         </Suspense>
       </div>

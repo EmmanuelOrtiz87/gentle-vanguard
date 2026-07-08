@@ -32,4 +32,11 @@ gv dashboard
 gv benchmark
 # Detect workspace drift
 gv sync-drift
+
+# MCP Native gateway
+.\scripts\utilities\MCP\mcp-manager.ps1 -Action list
+.\scripts\utilities\MCP\mcp-manager.ps1 -Action health
+.\scripts\utilities\MCP\mcp-manager.ps1 -Action register -Name sqlite -Command npx -Args @("@modelcontextprotocol/server-sqlite","--db","data.db") -Description "Local SQLite"
+.\scripts\utilities\MCP\mcp-gateway.ps1 -Action status
+.\scripts\utilities\MCP\mcp-gateway.ps1 -Action start -Quiet
 ```

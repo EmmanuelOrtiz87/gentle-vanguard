@@ -1,0 +1,32 @@
+{
+  "types": {
+    "project": {
+      "name": "Project",
+      "icon": "folder",
+      "description": "Active project notes",
+      "allowedFolders": ["01-projects"],
+      "template": "06-templates/project.md"
+    },
+    "session": {
+      "name": "Session",
+      "icon": "clock",
+      "description": "Coding session summaries",
+      "allowedFolders": ["04-sessions"],
+      "template": "06-templates/session.md"
+    },
+    "skill": {
+      "name": "Skill",
+      "icon": "wrench",
+      "description": "AI skill documentation",
+      "allowedFolders": ["03-skills"],
+      "template": "06-templates/skill.md"
+    },
+    "decision": {
+      "name": "Decision Record",
+      "icon": "checkmark",
+      "description": "Architecture Decision Records",
+      "allowedFolders": ["02-architecture"],
+      "template": "06-templates/decision.md"
+    }
+  }
+}
