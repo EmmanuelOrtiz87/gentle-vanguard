@@ -66,6 +66,24 @@
       "severity": "warning",
       "unit": "$",
       "enabled": true
+    },
+    "safety_blocked_mutations": {
+      "label": "Safety Blocks Detected",
+      "metric": "safety.blockedCount",
+      "threshold": 1,
+      "severity": "error",
+      "unit": "blocks",
+      "enabled": true,
+      "direction": "above"
+    },
+    "safety_low_score": {
+      "label": "Low Safety Score",
+      "metric": "safety.lastScore",
+      "threshold": 0.5,
+      "severity": "warning",
+      "unit": "score",
+      "enabled": true,
+      "direction": "below"
     }
   }
 }
