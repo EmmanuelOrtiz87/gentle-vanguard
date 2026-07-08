@@ -2,7 +2,7 @@
 
 <p align="center">
   <b>Gentle-Vanguard — AI-First Development Workspace</b><br>
-  <i>v6.7.0 · Updated 2026-07-07</i>
+  <i>v7.1.0 · Updated 2026-07-08</i>
 </p>
 
 ---
@@ -14,10 +14,11 @@ seguro, extensible, zero-drama.**
 
 ---
 
-## Current (v6.4 — v7.0)
+## Current (v6.4 — v7.1)
 
 | Area                     | Feature                                                   | Status      |
 | ------------------------ | --------------------------------------------------------- | ----------- |
+| **Dashboard UI**         | Knowledge Panel + Multi-repo View UX refinement, live updates (auto-refresh 30s), engram source, relevance colors | ✅ v7.1.0   |
 | **Multi-repo Mesh**      | Mesh API REST endpoints, cross-workspace MCP orchestration, dashboard MultiRepoView with real mesh data | ✅ v7.0.0   |
 | **Engram Integration**   | knowledge-query.ps1 queries mem_search CLI directly; fallback to file scan + context-log | ✅ v7.0.0   |
 | **MCP Native**           | MCP protocol as first-class citizen, local server registry, gateway, dashboard UI | ✅ v6.4.0   |
@@ -33,17 +34,17 @@ seguro, extensible, zero-drama.**
 | **Predictive Incidents** | Anomaly detection (3σ), preemptive heal, false-positive learning | ✅ v6.0 |
 | **Dashboard Multi-Tenant** | Per-tenant metrics, tenant selector in UI                | ✅ v6.3.0   |
 
-## Next (v7.0+)
-
-| Version | Feature                                                    | Priority | Descripción |
-| ------- | ---------------------------------------------------------- | -------- | ----------- |
-| v7.1    | **Dashboard UI**                                           | Medium   | Knowledge Panel + Multi-repo View UX refinement, live updates |
-
-## Future
+## Next
 
 | Version | Feature                                                    | Priority | Descripción |
 | ------- | ---------------------------------------------------------- | -------- | ----------- |
 | v8.0    | **Public Release**                                         | Low      | Auto-instalable, auto-configurable, zero-dependency |
+
+## Future
+
+| Area                         | Vision                                                          |
+| ---------------------------- | --------------------------------------------------------------- |
+| **Full AGI Safety**          | Alignment layer for autonomous code generation and deployment   |
 
 ## Long Term
 
@@ -58,6 +59,8 @@ seguro, extensible, zero-drama.**
 
 | Version | Date       | Highlights                                                                                      |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------- |
+| v7.1    | 2026-07-08 | Dashboard UI refinement: engram source in Knowledge Panel, auto-refresh 30s, relevance colors, error states |
+| v7.0    | 2026-07-08 | Multi-repo Mesh API + Engram mem_search integration in knowledge-query |
 | v6.7    | 2026-07-07 | Knowledge Persistence Layer: unified query engine (knowledge-query.ps1) cruza events, traces, feedback, checkpoints |
 | v6.6    | 2026-07-07 | MCP SDK Scaffolder: create action multi-lenguaje (ts, js, py, go, rs) con auto-build y auto-register |
 | v6.5    | 2026-07-07 | MCP Quickstart: pre-built server templates (sqlite, filesystem, browser, memory), 1-command enable via mcp-manager |

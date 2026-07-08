@@ -1,5 +1,13 @@
 # Changelog
 
+## [7.1.0] - 2026-07-08
+
+### Changed
+
+- **Dashboard UI (v7.1)**: UX refinements and live updates for Knowledge Panel and Multi-repo View.
+  - `apps/web-dashboard/src/components/KnowledgePanel.tsx` — Added "engram" source with red badge and Braces icon, auto-search on source toggle, relevance color bar (green/yellow/gray), Ctrl+Enter shortcut, error state with retry, Refresh button with spinner, loading skeleton.
+  - `apps/web-dashboard/src/components/MultiRepoView.tsx` — Auto-refresh every 30s with silent polling, "last checked" timestamp with Clock icon, error state with retry, connection status indicator.
+
 ## [7.0.0] - 2026-07-08
 
 ### Added
