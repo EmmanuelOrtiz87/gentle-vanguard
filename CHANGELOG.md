@@ -1,5 +1,20 @@
 # Changelog
 
+## [7.0.0] - 2026-07-08
+
+### Added
+
+- **Multi-repo Orchestration (v7.0)**: Mesh API REST endpoints for cross-workspace MCP orchestration.
+  - `apps/web-dashboard/server/mesh-api.ts` — REST handlers: `GET /api/mesh`, `POST /api/mesh/discover`, `POST /api/mesh/sync`. Reads federation-config.json + MCP registries + PID lock files across all mesh workspaces.
+  - `apps/web-dashboard/server/websocket-server.ts` — 3 new routes for mesh data.
+  - `apps/web-dashboard/src/components/MultiRepoView.tsx` — Full rewrite: consumes `/api/mesh` with real workspace data, Discover/Sync/Refresh controls, per-server start/stop, global status counters.
+- **Engram Integration (v7.2)**: knowledge-query.ps1 now queries `mem_search` CLI directly before falling back to file scan and context-log summaries.
+
+### Changed
+
+- **VERSION**: Updated from 6.7.0 to 7.0.0.
+- **ROADMAP**: v7.0 marked as completed, v7.2 moved from Future to Next.
+
 ## [6.7.0] - 2026-07-07
 
 ### Added

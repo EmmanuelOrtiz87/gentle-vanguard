@@ -40,29 +40,63 @@ function Score-Relevance($text) {
   return [math]::Round($matchCount / $words.Count, 2)
 }
 
-# Source: Engram (via .session/memories/ or engram CLI)
+# Source: Engram (via mem_search CLI, then file fallback)
 if ($Sources -contains 'engram') {
-  $engramDirs = @(
-    Join-Path $ROOT '.session' 'memories'
-    Join-Path $ROOT '.engram'
-  )
-  $found = $false
-  foreach ($ed in $engramDirs) {
-    if (Test-Path $ed) {
-      $found = $true
-      Get-ChildItem -Path $ed -Recurse -Include '*.json', '*.md' -ErrorAction SilentlyContinue | ForEach-Object {
-        $content = Get-Content $_.FullName -Raw -ErrorAction SilentlyContinue
-        if ($content) {
-          $txt = $content
-          if (-not $Query -or $txt.ToLower().Contains($Query.ToLower())) {
-            Add-Result -source 'engram' -id $_.BaseName -title $_.Name -content $txt.Substring(0, [Math]::Min(500, $txt.Length)) -timestamp $_.LastWriteTime.ToString('o') -relevance (Score-Relevance $txt)
+  $engramFound = $false
+
+  # Try mem_search CLI first
+  $memSearchOutput = & mem_search $Query 2>$null
+  if ($LASTEXITCODE -eq 0 -and $memSearchOutput) {
+    $engramFound = $true
+    $memSearchOutput -split "`n" | ForEach-Object {
+      if ($_ -match '^#(\d+)\s') {
+        $engramId = $matches[1]
+        $line = $_
+      } elseif ($_ -match '^\*\*(.+?)\*\*:\s(.+)' -and $engramId) {
+        Add-Result -source 'engram' -id "mem-$engramId" -title $matches[1] -content $matches[2].Substring(0, [Math]::Min(500, $matches[2].Length)) -timestamp (Get-Date).ToString('o') -relevance (Score-Relevance "$($matches[1]) $($matches[2])")
+      }
+    }
+  }
+
+  # Fallback: engram CLI via pwsh
+  if (-not $engramFound) {
+    $pwshMem = pwsh -NoProfile -Command "mem_search '$Query'" 2>$null
+    if ($LASTEXITCODE -eq 0 -and $pwshMem) {
+      $engramFound = $true
+      $pwshMem -split "`n" | ForEach-Object {
+        if ($_ -match '^#(\d+)\s') {
+          $engramId = $matches[1]
+        } elseif ($_ -match '^\*\*(.+?)\*\*:\s(.+)' -and $engramId) {
+          Add-Result -source 'engram' -id "mem-$engramId" -title $matches[1] -content $matches[2].Substring(0, [Math]::Min(500, $matches[2].Length)) -timestamp (Get-Date).ToString('o') -relevance (Score-Relevance "$($matches[1]) $($matches[2])")
+        }
+      }
+    }
+  }
+
+  # Final fallback: file-based engram data
+  if (-not $engramFound) {
+    $engramDirs = @(
+      Join-Path $ROOT '.session' 'memories'
+      Join-Path $ROOT '.engram'
+    )
+    foreach ($ed in $engramDirs) {
+      if (Test-Path $ed) {
+        $engramFound = $true
+        Get-ChildItem -Path $ed -Recurse -Include '*.json', '*.md' -ErrorAction SilentlyContinue | ForEach-Object {
+          $content = Get-Content $_.FullName -Raw -ErrorAction SilentlyContinue
+          if ($content) {
+            $txt = $content
+            if (-not $Query -or $txt.ToLower().Contains($Query.ToLower())) {
+              Add-Result -source 'engram' -id $_.BaseName -title $_.Name -content $txt.Substring(0, [Math]::Min(500, $txt.Length)) -timestamp $_.LastWriteTime.ToString('o') -relevance (Score-Relevance $txt)
+            }
           }
         }
       }
     }
   }
-  # Fallback: context-log summaries
-  if (-not $found) {
+
+  # Tertiary fallback: context-log summaries
+  if (-not $engramFound) {
     $ctxDir = Join-Path $ROOT '.session' 'context-log'
     if (Test-Path $ctxDir) {
       Get-ChildItem -Path $ctxDir -Recurse -Filter 'context-summary.md' -ErrorAction SilentlyContinue | ForEach-Object {
