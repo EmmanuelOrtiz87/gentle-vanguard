@@ -1,5 +1,20 @@
 # Changelog
 
+## [8.0.0] - 2026-07-08
+
+### Added
+
+- **Public Release (v8.0)**: Zero-dependency, auto-installable stack.
+  - `README.md` — Fully rewritten: version badges 8.0.0, Zero Dependency + Dashboard Ready badges, simplified Quick Start (2 commands), current architecture diagram, 12 capabilities matching actual features, real directory structure.
+  - `scripts/setup-complete.ps1` — Auto-install: checks PowerShell 7+/Git/Node.js, copies files, installs hooks, configures VS Code + PowerShell profile, runs tests, dashboard build.
+  - Dashboard WS server auto-recovery watchdog (up to 10 restarts) with port conflict resolution.
+  - Dynamic port allocation via `Get-FreePort()` — no port conflicts.
+
+### Changed
+
+- **VERSION**: Updated from 7.1.0 to 8.0.0.
+- **ROADMAP**: v8.0 marked as completed.
+
 ## [7.1.0] - 2026-07-08
 
 ### Changed

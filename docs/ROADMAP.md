@@ -2,7 +2,7 @@
 
 <p align="center">
   <b>Gentle-Vanguard — AI-First Development Workspace</b><br>
-  <i>v7.1.0 · Updated 2026-07-08</i>
+  <i>v8.0.0 · Updated 2026-07-08</i>
 </p>
 
 ---
@@ -14,10 +14,11 @@ seguro, extensible, zero-drama.**
 
 ---
 
-## Current (v6.4 — v7.1)
+## Current (v6.4 — v8.0)
 
 | Area                     | Feature                                                   | Status      |
 | ------------------------ | --------------------------------------------------------- | ----------- |
+| **Public Release**       | Zero-dependency, auto-installable stack. Updated README, badges, setup-complete.ps1, dynamic ports, watchdog auto-recovery | ✅ v8.0.0   |
 | **Dashboard UI**         | Knowledge Panel + Multi-repo View UX refinement, live updates (auto-refresh 30s), engram source, relevance colors | ✅ v7.1.0   |
 | **Multi-repo Mesh**      | Mesh API REST endpoints, cross-workspace MCP orchestration, dashboard MultiRepoView with real mesh data | ✅ v7.0.0   |
 | **Engram Integration**   | knowledge-query.ps1 queries mem_search CLI directly; fallback to file scan + context-log | ✅ v7.0.0   |
@@ -38,19 +39,12 @@ seguro, extensible, zero-drama.**
 
 | Version | Feature                                                    | Priority | Descripción |
 | ------- | ---------------------------------------------------------- | -------- | ----------- |
-| v8.0    | **Public Release**                                         | Low      | Auto-instalable, auto-configurable, zero-dependency |
-
-## Future
-
-| Area                         | Vision                                                          |
-| ---------------------------- | --------------------------------------------------------------- |
-| **Full AGI Safety**          | Alignment layer for autonomous code generation and deployment   |
+| v9.0    | **AGI Safety Layer**                                       | Low      | Alignment layer for autonomous code generation and deployment |
 
 ## Long Term
 
 | Area                         | Vision                                                          |
 | ---------------------------- | --------------------------------------------------------------- |
-| **Public Release**           | Auto-instalable, auto-configurable, zero-dependency setup       |
 | **Full AGI Safety**          | Alignment layer for autonomous code generation and deployment   |
 
 ---
@@ -59,6 +53,7 @@ seguro, extensible, zero-drama.**
 
 | Version | Date       | Highlights                                                                                      |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------- |
+| v8.0    | 2026-07-08 | Public Release: zero-dependency stack, auto-install, updated README, watchdog auto-recovery, dynamic ports |
 | v7.1    | 2026-07-08 | Dashboard UI refinement: engram source in Knowledge Panel, auto-refresh 30s, relevance colors, error states |
 | v7.0    | 2026-07-08 | Multi-repo Mesh API + Engram mem_search integration in knowledge-query |
 | v6.7    | 2026-07-07 | Knowledge Persistence Layer: unified query engine (knowledge-query.ps1) cruza events, traces, feedback, checkpoints |
