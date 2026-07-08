@@ -16,6 +16,7 @@ import {
 } from './marketplace-api.js';
 import { getRealMetrics, getTraces, getOSMetrics, getCloudMetrics, getTenantScopedMetrics } from './real-data.js';
 import { mcpServersHandler, mcpServerActionHandler, mcpServerRegisterHandler } from './mcp-gateway-api.js';
+import { meshHandler, meshDiscoverHandler, meshSyncHandler } from './mesh-api.js';
 import { runValidations } from './validations.js';
 import { ROOT, readJson, countSkills } from './shared.js';
 
@@ -621,6 +622,21 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
         })),
       }
     }));
+    return;
+  }
+
+  if (url.pathname === '/api/mesh') {
+    meshHandler(req, res, headers);
+    return;
+  }
+
+  if (url.pathname === '/api/mesh/discover' && req.method === 'POST') {
+    meshDiscoverHandler(req, res, headers);
+    return;
+  }
+
+  if (url.pathname === '/api/mesh/sync' && req.method === 'POST') {
+    meshSyncHandler(req, res, headers);
     return;
   }
 

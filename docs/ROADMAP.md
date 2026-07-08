@@ -14,10 +14,12 @@ seguro, extensible, zero-drama.**
 
 ---
 
-## Current (v6.4 — v6.7)
+## Current (v6.4 — v7.0)
 
 | Area                     | Feature                                                   | Status      |
 | ------------------------ | --------------------------------------------------------- | ----------- |
+| **Multi-repo Mesh**      | Mesh API REST endpoints, cross-workspace MCP orchestration, dashboard MultiRepoView with real mesh data | ✅ v7.0.0   |
+| **Engram Integration**   | knowledge-query.ps1 queries mem_search CLI directly; fallback to file scan + context-log | ✅ v7.0.0   |
 | **MCP Native**           | MCP protocol as first-class citizen, local server registry, gateway, dashboard UI | ✅ v6.4.0   |
 | **MCP Quickstart**       | Pre-built MCP server templates (sqlite, filesystem, browser, memory) — enable with 1 command | ✅ v6.5.0   |
 | **MCP SDK**              | Multi-language scaffold (ts, js, py, go, rs), auto-build, auto-register | ✅ v6.6.0   |
@@ -35,14 +37,12 @@ seguro, extensible, zero-drama.**
 
 | Version | Feature                                                    | Priority | Descripción |
 | ------- | ---------------------------------------------------------- | -------- | ----------- |
-| v7.0    | **Multi-repo Orchestration**                               | Medium   | mcp-mesh-scan creado, faltan dashboard MultiRepoView + endpoints REST |
+| v7.1    | **Dashboard UI**                                           | Medium   | Knowledge Panel + Multi-repo View UX refinement, live updates |
 
 ## Future
 
 | Version | Feature                                                    | Priority | Descripción |
 | ------- | ---------------------------------------------------------- | -------- | ----------- |
-| v7.1    | **Dashboard UI**                                           | Medium   | Knowledge Panel + Multi-repo View en dashboard |
-| v7.2    | **Engram Integration**                                     | Low      | Integrar mem_search directamente en knowledge-query |
 | v8.0    | **Public Release**                                         | Low      | Auto-instalable, auto-configurable, zero-dependency |
 
 ## Long Term
