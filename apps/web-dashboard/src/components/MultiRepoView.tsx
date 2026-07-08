@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Globe, Cpu, Play, Square, RefreshCw, AlertCircle, CheckCircle, PauseCircle, Plus, Server } from 'lucide-react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { Globe, Cpu, Play, Square, RefreshCw, AlertCircle, CheckCircle, PauseCircle, Plus, Server, Clock } from 'lucide-react';
 
 interface MeshServer {
   name: string;
@@ -17,35 +17,46 @@ interface MeshWorkspace {
   status: string;
 }
 
+const AUTO_REFRESH_MS = 30000;
+
 function MultiRepoViewInner() {
   const [workspaces, setWorkspaces] = useState<MeshWorkspace[]>([]);
   const [loading, setLoading] = useState(true);
+  const [pollError, setPollError] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [syncing, setSyncing] = useState(false);
   const [discovering, setDiscovering] = useState(false);
+  const [lastChecked, setLastChecked] = useState<string | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const fetchMesh = useCallback(async () => {
-    setLoading(true);
+  const fetchMesh = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true);
     try {
       const res = await fetch('/api/mesh');
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const msg = await res.json();
       if (msg.type === 'mesh') {
         setWorkspaces(msg.data.workspaces || []);
+        setPollError(false);
       }
     } catch {
-      setWorkspaces([]);
+      if (!silent) setPollError(true);
     }
-    setLoading(false);
+    if (!silent) setLoading(false);
+    setLastChecked(new Date().toLocaleTimeString());
   }, []);
 
-  useEffect(() => { void fetchMesh(); }, [fetchMesh]);
+  useEffect(() => {
+    void fetchMesh();
+    intervalRef.current = setInterval(() => void fetchMesh(true), AUTO_REFRESH_MS);
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+  }, [fetchMesh]);
 
   const handleDiscover = async () => {
     setDiscovering(true);
     try {
       await fetch('/api/mesh/discover', { method: 'POST' });
-      setTimeout(fetchMesh, 1000);
+      setTimeout(() => void fetchMesh(), 1000);
     } catch { /* ignore */ }
     setDiscovering(false);
   };
@@ -54,7 +65,7 @@ function MultiRepoViewInner() {
     setSyncing(true);
     try {
       await fetch('/api/mesh/sync', { method: 'POST' });
-      setTimeout(fetchMesh, 1000);
+      setTimeout(() => void fetchMesh(), 1000);
     } catch { /* ignore */ }
     setSyncing(false);
   };
@@ -62,7 +73,7 @@ function MultiRepoViewInner() {
   const toggleServer = async (name: string, action: 'start' | 'stop') => {
     try {
       await fetch(`/api/mcp/servers/${name}/${action}`, { method: 'POST' });
-      setTimeout(fetchMesh, 1000);
+      setTimeout(() => void fetchMesh(), 1000);
     } catch { /* ignore */ }
   };
 
@@ -102,6 +113,10 @@ function MultiRepoViewInner() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          {pollError && <span className="text-xs text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> API error</span>}
+          {lastChecked && !pollError && (
+            <span className="text-xs text-gray-400 flex items-center gap-1"><Clock className="w-3 h-3" /> {lastChecked}</span>
+          )}
           <span className="text-xs text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
             {totalServers} servers · {totalRunning} running
             {totalError > 0 && <span className="text-red-500 ml-1">· {totalError} errors</span>}
@@ -121,7 +136,7 @@ function MultiRepoViewInner() {
             <Server className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} /> Sync
           </button>
           <button
-            onClick={fetchMesh}
+            onClick={() => void fetchMesh()}
             className="flex items-center gap-1.5 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} /> Refresh
@@ -132,7 +147,14 @@ function MultiRepoViewInner() {
       <div className="space-y-4">
         {loading && workspaces.length === 0 ? (
           <div className="p-8 text-center text-gray-500 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <RefreshCw className="w-6 h-6 mx-auto mb-2 animate-spin" />
             Loading mesh workspaces...
+          </div>
+        ) : pollError && workspaces.length === 0 ? (
+          <div className="p-8 text-center bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <AlertCircle className="w-10 h-10 mx-auto mb-2 text-red-500" />
+            <p className="text-gray-500">Failed to load mesh data.</p>
+            <button onClick={() => void fetchMesh()} className="mt-2 text-sm text-blue-600 hover:underline">Retry</button>
           </div>
         ) : workspaces.length === 0 ? (
           <div className="p-8 text-center text-gray-500 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
