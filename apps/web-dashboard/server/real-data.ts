@@ -1,8 +1,8 @@
-import { existsSync, readdirSync } from 'fs';
+import { existsSync, readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { execSync } from 'child_process';
 import { ROOT, readJson, countSkills as _countSkills } from './shared.js';
-import type { CloudMetrics } from '../src/types/dashboard.js';
+import type { CloudMetrics, DashboardData } from '../src/types/dashboard.js';
 
 const CONSOLIDATED_PATH = join(ROOT, '.runtime', 'metrics', 'consolidated.json');
 const TOKEN_PATH = join(ROOT, '.runtime', 'metrics', 'token.json');
@@ -515,5 +515,44 @@ export function getTraces(): { traces: Trace[]; stats: TraceStats } {
       errorRate: traces.length > 0 ? errorCount / traces.length : 0,
       activeSpans,
     },
+  };
+}
+
+export function getTenantScopedMetrics(tenantId: string): DashboardData {
+  const registryPath = join(ROOT, 'config', 'tenant-registry.json');
+  let tenantName = tenantId;
+  try {
+    if (existsSync(registryPath)) {
+      const registry = JSON.parse(readFileSync(registryPath, 'utf-8'));
+      const found = (registry.tenants || []).find((t: any) => t.id === tenantId);
+      if (found) tenantName = found.name || tenantId;
+    }
+  } catch { /* fallback to tenantId */ }
+
+  const tenantSessionDir = join(ROOT, '.session', 'tenants', tenantId);
+  const tenantTokenPath = join(tenantSessionDir, 'token-usage.json');
+  const tenantTracesDir = join(ROOT, '.telemetry', 'tenants', tenantId, 'traces');
+  const tenantTokens = existsSync(tenantTokenPath)
+    ? readJson<{ totalTokens?: number }>(tenantTokenPath)
+    : null;
+  const traceCount = existsSync(tenantTracesDir)
+    ? readdirSync(tenantTracesDir).filter((f) => f.endsWith('.jsonl')).length
+    : 0;
+  const tenantSessionsPath = join(ROOT, '.session', 'context-log', tenantId);
+  const sessionDirs = existsSync(tenantSessionsPath)
+    ? readdirSync(tenantSessionsPath).filter((d) => {
+        const statePath = join(tenantSessionsPath, d, '.state.json');
+        return existsSync(statePath);
+      })
+    : [];
+  const base = getRealMetrics();
+  return {
+    ...base,
+    sessions: { ...base.sessions, total: sessionDirs.length },
+    traceFiles: traceCount,
+    tokens: { ...base.tokens, used: tenantTokens?.totalTokens ?? base.tokens.used },
+    health: { ...base.health, status: sessionDirs.length > 0 ? 'healthy' : 'degraded' },
+    tenantId,
+    tenantName,
   };
 }

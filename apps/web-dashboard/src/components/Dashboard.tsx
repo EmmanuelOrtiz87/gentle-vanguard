@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Coins,
   Users,
@@ -67,8 +68,10 @@ function SectionHeader({ title, infoKey }: { title: string; infoKey?: string }) 
 function DashboardInner() {
   const [darkMode, setDarkMode] = useState(false);
   const [useWebSocket, setUseWebSocket] = useState(true);
+  const [searchParams] = useSearchParams();
+  const urlTenantId = searchParams.get('tenantId') || undefined;
   const { data, history, loading, wsConnected, refetch, notifications, dismissNotification } =
-    useMetrics(useWebSocket);
+    useMetrics(useWebSocket, urlTenantId);
   const { session: agentSession, bridgeConnected, createSession } = useAgentStream();
   const { triggeredAlerts } = useAlerts();
   const sessions = useSessions();

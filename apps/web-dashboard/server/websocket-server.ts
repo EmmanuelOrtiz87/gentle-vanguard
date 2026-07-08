@@ -14,7 +14,8 @@ import {
   validateSkillStructure,
   getSkillContent,
 } from './marketplace-api.js';
-import { getRealMetrics, getTraces, getOSMetrics, getCloudMetrics } from './real-data.js';
+import { getRealMetrics, getTraces, getOSMetrics, getCloudMetrics, getTenantScopedMetrics } from './real-data.js';
+import { mcpServersHandler, mcpServerActionHandler, mcpServerRegisterHandler } from './mcp-gateway-api.js';
 import { runValidations } from './validations.js';
 import { ROOT, readJson, countSkills } from './shared.js';
 
@@ -81,9 +82,19 @@ function loadSessions(): void {
   }
 }
 
-function generateMetrics() {
-  const real = getRealMetrics();
+function generateMetrics(tenantId?: string) {
+  const real = tenantId ? getTenantScopedMetrics(tenantId) : getRealMetrics();
   return { ...real, globalHealth: getGlobalHealth() };
+}
+
+function readTenantRegistry() {
+  const registryPath = join(ROOT, 'config', 'tenant-registry.json');
+  try {
+    if (!existsSync(registryPath)) return { tenants: [] };
+    return JSON.parse(readFileSync(registryPath, 'utf-8'));
+  } catch {
+    return { tenants: [] };
+  }
 }
 
 // --- Agent Session Management ---
@@ -336,8 +347,17 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
   }
 
   if (url.pathname === '/api/metrics') {
+    const tenantId = typeof url.searchParams.get('tenantId') === 'string'
+      ? url.searchParams.get('tenantId')!
+      : undefined;
     res.writeHead(200, headers);
-    res.end(JSON.stringify({ type: 'metrics', data: generateMetrics() }));
+    res.end(JSON.stringify({ type: 'metrics', data: generateMetrics(tenantId) }));
+    return;
+  }
+
+  if (url.pathname === '/api/tenants') {
+    res.writeHead(200, headers);
+    res.end(JSON.stringify(readTenantRegistry()));
     return;
   }
 
@@ -349,6 +369,21 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
         data: { skills: countSkills(REGISTRY_PATH), calls: loadStats() },
       }),
     );
+    return;
+  }
+
+  if (url.pathname === '/api/mcp/servers' && req.method === 'POST') {
+    mcpServerRegisterHandler(req, res, headers);
+    return;
+  }
+
+  if (url.pathname === '/api/mcp/servers') {
+    mcpServersHandler(req, res, headers);
+    return;
+  }
+
+  if (url.pathname.match(/^\/api\/mcp\/servers\/([^/]+)\/(start|stop)$/)) {
+    mcpServerActionHandler(req, res, headers);
     return;
   }
 
@@ -507,6 +542,85 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
   if (url.pathname === '/api/health/global') {
     res.writeHead(200, headers);
     res.end(JSON.stringify(getGlobalHealth()));
+    return;
+  }
+
+  if (url.pathname === '/api/safety') {
+    const safetyAuditDir = join(ROOT, '.session', 'safety', 'audit');
+    const guardrailLogs = existsSync(safetyAuditDir) ? readdirSync(safetyAuditDir).filter(f => f.startsWith('guardrail-')) : [];
+    const scorerLogs = existsSync(safetyAuditDir) ? readdirSync(safetyAuditDir).filter(f => f.startsWith('scorer-')) : [];
+    const injectionLogs = existsSync(safetyAuditDir) ? readdirSync(safetyAuditDir).filter(f => f.startsWith('injection-')) : [];
+
+    let totalBlocked = 0;
+    let totalAllowed = 0;
+    for (const log of guardrailLogs.slice(-20)) {
+      try {
+        const data = JSON.parse(readFileSync(join(safetyAuditDir, log), 'utf-8'));
+        if (data.allowed === false) totalBlocked++;
+        else totalAllowed++;
+      } catch {}
+    }
+
+    let lastScored: any = null;
+    if (scorerLogs.length > 0) {
+      try {
+        lastScored = JSON.parse(readFileSync(join(safetyAuditDir, scorerLogs[scorerLogs.length - 1]), 'utf-8'));
+      } catch {}
+    }
+
+    const safetyConfigPath = join(ROOT, 'config', 'safety-layer.json');
+    const config = existsSync(safetyConfigPath) ? JSON.parse(readFileSync(safetyConfigPath, 'utf-8')) : null;
+
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({
+      type: 'safety',
+      data: {
+        enabled: config?.global?.enabled ?? false,
+        guardrailChecks: guardrailLogs.length,
+        scorerEvals: scorerLogs.length,
+        injectionScans: injectionLogs.length,
+        mutationsBlocked: totalBlocked,
+        mutationsAllowed: totalAllowed,
+        lastRiskScore: lastScored?.score ?? null,
+        lastRiskLevel: lastScored?.riskLevel ?? null,
+        constitutionalRules: config?.guardrails?.constitutional?.length ?? 0,
+        blockedPatterns: config?.guardrails?.blockedPatterns?.length ?? 0,
+        injectionPatterns: config?.injectionProtection?.knownPatterns?.length ?? 0,
+      }
+    }));
+    return;
+  }
+
+  if (url.pathname === '/api/federation') {
+    const fedRegistryPath = join(ROOT, '.session', 'federation', 'org-registry.json');
+    const fedConfigPath = join(ROOT, 'config', 'federation-config.json');
+    const fedConfig = existsSync(fedConfigPath) ? JSON.parse(readFileSync(fedConfigPath, 'utf-8')) : null;
+    const registry = existsSync(fedRegistryPath) ? JSON.parse(readFileSync(fedRegistryPath, 'utf-8')) : null;
+
+    const knownOrgs = registry?.knownOrgs ?? [];
+    const trustedOrgs = knownOrgs.filter((o: any) => o.trusted === true);
+    const handshakePending = knownOrgs.filter((o: any) => o.lastHandshake === null || o.lastHandshake === undefined);
+
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({
+      type: 'federation',
+      data: {
+        localOrg: fedConfig?.localOrg?.id ?? 'unknown',
+        displayName: fedConfig?.localOrg?.displayName ?? '',
+        knownOrgCount: knownOrgs.length,
+        trustedOrgCount: trustedOrgs.length,
+        handshakePendingCount: handshakePending.length,
+        requireSignedManifests: fedConfig?.auth?.requireSignedManifests ?? true,
+        tokenExpiryMinutes: fedConfig?.auth?.tokenExpiryMinutes ?? 60,
+        defaultMeshPort: fedConfig?.localOrg?.defaultMeshPort ?? 9091,
+        orgs: knownOrgs.map((o: any) => ({
+          id: o.id,
+          trusted: o.trusted ?? false,
+          lastHandshake: o.lastHandshake ?? 'never',
+          approvedCapabilities: o.approvedCapabilities ?? [],
+        })),
+      }
+    }));
     return;
   }
 

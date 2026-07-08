@@ -160,7 +160,9 @@ logs/.session-active
 
 # Tool-specific configs (local-only)
 .claude/
-.opencode/
+.opencode/agents/
+.opencode/*.json
+.opencode/.*.json
 
 # OpenCode generated
 config/opencode.schema.json
@@ -253,3 +255,7 @@ docs/technical/
 
 # Session archive (removed from public)
 session-archive/
+
+# Obsidian workspace layout (local-only, user-specific)
+knowledge-base/.obsidian/workspace.json
+knowledge-base/.obsidian/workspace/

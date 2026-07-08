@@ -275,6 +275,18 @@ function Check-Mcp {
     $healthOk = ($health -match 'OK|PASS|healthy|Bridge status: OK|^True$')
     Add-Finding "mcp" "bridge health" "$(if($healthOk){'PASS'}else{'WARN'})" "" "verify"
   } catch { Add-Finding "mcp" "bridge health" "WARN" "Not accessible" "verify" }
+
+  $mcpRegistry = Join-Path $repoRoot "config/mcp-registry.json"
+  $mcpManager = Join-Path $repoRoot "scripts/utilities/MCP/mcp-manager.ps1"
+  $mcpGateway = Join-Path $repoRoot "scripts/utilities/MCP/mcp-gateway.ps1"
+  $dashboardMcpApi = Join-Path $repoRoot "apps/web-dashboard/server/mcp-gateway-api.ts"
+  Add-Finding "mcp" "mcp-registry.json" "$(if(Test-Path $mcpRegistry){'PASS'}else{'FAIL'})" "" "config"
+  Add-Finding "mcp" "mcp-manager.ps1" "$(if(Test-Path $mcpManager){'PASS'}else{'WARN'})" "" "manual"
+  Add-Finding "mcp" "mcp-gateway.ps1" "$(if(Test-Path $mcpGateway){'PASS'}else{'WARN'})" "" "manual"
+  Add-Finding "mcp" "mcp-gateway-api.ts (dashboard)" "$(if(Test-Path $dashboardMcpApi){'PASS'}else{'WARN'})" "" "manual"
+
+  $mcpTemplates = Join-Path $repoRoot "config/mcp-templates.json"
+  Add-Finding "mcp" "mcp-templates.json" "$(if(Test-Path $mcpTemplates){'PASS'}else{'WARN'})" "" "config"
 }
 
 # ─── Component: Session Pipeline ────────────────────────────────────────────

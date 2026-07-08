@@ -2,7 +2,7 @@
 
 <p align="center">
   <b>Gentle-Vanguard — AI-First Development Workspace</b><br>
-  <i>v2.8.0 · Updated 2026-05-08</i>
+  <i>v6.7.0 · Updated 2026-07-07</i>
 </p>
 
 ---
@@ -14,36 +14,43 @@ seguro, extensible, zero-drama.**
 
 ---
 
-## Short Term (v2.9 — v2.10)
+## Current (v6.4 — v6.7)
 
-| Area          | Feature                                     | Status     |
-| ------------- | ------------------------------------------- | ---------- |
-| **Installer** | Auto-install Go + Engram via TUI wizard     | ✅ v2.8.0  |
-| **Quality**   | EditorConfig, Prettier CI check             | 🔜 Next    |
-| **Docs**      | Branch strategy, Release process documented | 🔜 Next    |
-| **Security**  | Secretlint pre-commit integration           | 📋 Planned |
-| **Testing**   | Coverage reporting (Pester CodeCoverage)    | 📋 Planned |
+| Area                     | Feature                                                   | Status      |
+| ------------------------ | --------------------------------------------------------- | ----------- |
+| **MCP Native**           | MCP protocol as first-class citizen, local server registry, gateway, dashboard UI | ✅ v6.4.0   |
+| **MCP Quickstart**       | Pre-built MCP server templates (sqlite, filesystem, browser, memory) — enable with 1 command | ✅ v6.5.0   |
+| **MCP SDK**              | Multi-language scaffold (ts, js, py, go, rs), auto-build, auto-register | ✅ v6.6.0   |
+| **Knowledge Layer**      | Unified query: events, traces, feedback, checkpoints with relevance scoring | ✅ v6.7.0   |
+| **Multi-Tenant**         | Tenant isolation: session, engram, codegraph, audit, RBAC | ✅ v5.1.0   |
+| **Eval/Benchmark**       | Eval runner, registry, A/B prompt testing, quality gates  | ✅ v5.1.0   |
+| **CI/CD Self-Healing**   | Retry engine, rollback, incident logger, GitHub Action    | ✅ v5.1.0   |
+| **Self-Evolving Agents** | Agent mutation via eval feedback with A/B safety guard    | ✅ v6.0     |
+| **Cross-Workspace Mesh** | Workspace discovery, manifest, task delegation            | ✅ v6.0     |
+| **Auto Code Review**     | Pre-commit + PR review, style/security/SDD checks, autofix| ✅ v6.0     |
+| **Predictive Incidents** | Anomaly detection (3σ), preemptive heal, false-positive learning | ✅ v6.0 |
+| **Dashboard Multi-Tenant** | Per-tenant metrics, tenant selector in UI                | ✅ v6.3.0   |
 
-## Mid Term (v3.0)
+## Next (v7.0+)
 
-| Area          | Feature                                                     | Priority |
-| ------------- | ----------------------------------------------------------- | -------- |
-| **DX**        | `gentle-vanguard init` — project scaffolding from templates | High     |
-| **CI/CD**     | Automated release workflow (tag → release)                  | High     |
-| **Security**  | SBOM generation (CycloneDX) via Trivy                       | Medium   |
-| **Docs**      | Architecture Decision Records process tooling               | Medium   |
-| **Quality**   | Cross-platform test matrix (Linux + macOS)                  | Medium   |
-| **Telemetry** | Token usage dashboard v2 with historical trends             | Low      |
+| Version | Feature                                                    | Priority | Descripción |
+| ------- | ---------------------------------------------------------- | -------- | ----------- |
+| v7.0    | **Multi-repo Orchestration**                               | Medium   | mcp-mesh-scan creado, faltan dashboard MultiRepoView + endpoints REST |
 
-## Long Term (v3.x+)
+## Future
+
+| Version | Feature                                                    | Priority | Descripción |
+| ------- | ---------------------------------------------------------- | -------- | ----------- |
+| v7.1    | **Dashboard UI**                                           | Medium   | Knowledge Panel + Multi-repo View en dashboard |
+| v7.2    | **Engram Integration**                                     | Low      | Integrar mem_search directamente en knowledge-query |
+| v8.0    | **Public Release**                                         | Low      | Auto-instalable, auto-configurable, zero-dependency |
+
+## Long Term
 
 | Area                         | Vision                                                          |
 | ---------------------------- | --------------------------------------------------------------- |
-| **Plugin Registry**          | Marketplace de skills comunitarios                              |
-| **MCP Native**               | Model Context Protocol como first-class citizen                 |
-| **Web UI**                   | Dashboard web para métricas en tiempo real                      |
-| **VS Code Extension**        | Integración nativa con editor                                   |
-| **Multi-repo Orchestration** | Gentle-Vanguard orquestando múltiples proyectos simultáneamente |
+| **Public Release**           | Auto-instalable, auto-configurable, zero-dependency setup       |
+| **Full AGI Safety**          | Alignment layer for autonomous code generation and deployment   |
 
 ---
 
@@ -51,7 +58,16 @@ seguro, extensible, zero-drama.**
 
 | Version | Date       | Highlights                                                                                      |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------- |
-| v2.8.0  | 2026-05-08 | CI/CD pipeline, Lefthook v2, security hardening, Go/Engram auto-install, workspace homologation |
-| v2.7.0  | 2026-05-06 | Marketing materials, documentation standards, 127 skills                                        |
-| v2.6.5  | 2026-05-05 | CI hardening, rules, PSScriptAnalyzer, release workflow                                         |
-| v2.6.0  | 2026-05-05 | SDD CI gate, metrics, sync drift prevention, benchmarks                                         |
+| v6.7    | 2026-07-07 | Knowledge Persistence Layer: unified query engine (knowledge-query.ps1) cruza events, traces, feedback, checkpoints |
+| v6.6    | 2026-07-07 | MCP SDK Scaffolder: create action multi-lenguaje (ts, js, py, go, rs) con auto-build y auto-register |
+| v6.5    | 2026-07-07 | MCP Quickstart: pre-built server templates (sqlite, filesystem, browser, memory), 1-command enable via mcp-manager |
+| v6.4    | 2026-07-07 | MCP Native: local MCP server registry, gateway, CLI manager (mcp-manager.ps1), dashboard management UI (MCPServers.tsx), 3 REST endpoints, session pipeline integration |
+| v6.3    | 2026-07-07 | Dashboard Multi-Tenant: per-tenant metrics filtering, tenant selector UI, /api/tenants endpoint, /api/metrics?tenantId= |
+| v6.2    | 2026-07-07 | Cross-Org Federation: federation auth with RSA handshake, org registry, capability-based authorization, /api/federation endpoint |
+| v6.1    | 2026-07-07 | AI Safety Layer: safety guardrails, prompt injection protection, mutation risk scoring, /api/safety endpoint |
+| v6.0    | 2026-07-07 | Self-evolving agents, cross-workspace mesh, auto code review, predictive incident response      |
+| v5.1    | 2026-07-07 | Multi-tenant isolation, eval/benchmark framework, CI/CD self-healing, 3 new configs, pipeline integration |
+| v3.3.3  | 2026-06-19 | Watchtower 74/74 PASS, RBAC + CSP, audit pipeline, tracing, cloud connectors, Engram auto-sync  |
+| v3.3.2  | 2026-06-18 | Dashboard i18n (3 idiomas), alert system, watchtower 60 checks, lifecycle scripts, trace system |
+| v3.3.1  | 2026-06-17 | CI/CD 35→12 workflows, structured logging, adapter consolidation, docker compose, health API   |
+| v3.3.0  | 2026-06-05 | Community skills, CI validation, real marketplace                                               |

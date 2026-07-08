@@ -37,6 +37,16 @@
     "blockedPatterns": ["delete.*file", "rm.*-rf", "drop.*table", "format.*disk"],
     "requireApprovalForPatterns": ["security.*policy", "permission.*change", "tenant.*config"]
   },
+  "safetyIntegration": {
+    "enabled": true,
+    "layer": "v6.1",
+    "configRef": "config/safety-layer.json",
+    "guardrailsScript": "scripts/utilities/SAFETY/safety-guardrails.ps1",
+    "scorerScript": "scripts/utilities/SAFETY/mutation-safety-scorer.ps1",
+    "injectionGuardScript": "scripts/utilities/SAFETY/prompt-injection-guard.ps1",
+    "blockOnViolation": true,
+    "escalateMediumRisk": true
+  },
   "agents": {
     "codegraph-search": {
       "enabled": true,

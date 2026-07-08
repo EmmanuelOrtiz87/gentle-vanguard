@@ -16,8 +16,9 @@ const FALLBACK_DATA: DashboardData = {
   health: { status: 'unknown', routing: 0 },
 };
 
-export function useMetrics(_useWebSocketMode = false) {
+export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) {
   const [data, setData] = useState<DashboardData>(FALLBACK_DATA);
+  const [tenantId, setTenantId] = useState<string | undefined>(initialTenantId);
   const [history, setHistory] = useState<MetricHistory[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -71,7 +72,8 @@ export function useMetrics(_useWebSocketMode = false) {
   const fetchMetrics = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/metrics');
+      const params = tenantId ? `?tenantId=${encodeURIComponent(tenantId)}` : '';
+      const res = await fetch(`/api/metrics${params}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const message = await res.json();
       if (message.type === 'metrics') {
@@ -83,7 +85,7 @@ export function useMetrics(_useWebSocketMode = false) {
     } finally {
       setLoading(false);
     }
-  }, [updateFromPayload]);
+  }, [updateFromPayload, tenantId]);
 
   useEffect(() => {
     void fetchMetrics();
@@ -104,5 +106,7 @@ export function useMetrics(_useWebSocketMode = false) {
     refetch: fetchMetrics,
     notifications,
     dismissNotification,
+    tenantId,
+    setTenantId,
   };
 }

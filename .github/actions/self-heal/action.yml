@@ -1,0 +1,91 @@
+name: "Self-Heal"
+description: "Composite action that wraps job steps with retry + rollback + incident logging"
+inputs:
+  max-retries:
+    description: "Maximum retry attempts for transient failures"
+    required: false
+    default: "3"
+  base-delay:
+    description: "Base delay in ms for exponential backoff"
+    required: false
+    default: "5000"
+  job-name:
+    description: "Job name for incident logging"
+    required: true
+  run:
+    description: "Shell command to execute with self-heal protection"
+    required: true
+  working-directory:
+    description: "Working directory for the command"
+    required: false
+    default: "."
+outputs:
+  status:
+    description: "Result status: success, failed, rolled-back, security"
+    value: ${{ steps.heal.outputs.status }}
+  attempts:
+    description: "Number of attempts made"
+    value: ${{ steps.heal.outputs.attempts }}
+runs:
+  using: "composite"
+  steps:
+    - name: Self-Heal Wrapper
+      id: heal
+      shell: pwsh
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        $maxRetries = [int]"${{ inputs.max-retries }}"
+        $baseDelay = [int]"${{ inputs.base-delay }}"
+        $jobName = "${{ inputs.job-name }}"
+        $command = "${{ inputs.run }}"
+
+        Write-Host "[SELF-HEAL] Job: $jobName (max retries: $maxRetries)"
+
+        $attempt = 0
+        $lastError = $null
+        $startTime = Get-Date
+
+        while ($attempt -le $maxRetries) {
+          if ($attempt -gt 0) {
+            $delay = [math]::Min($baseDelay * [math]::Pow(2, $attempt - 1) + (Get-Random -Maximum 2000), 60000)
+            Write-Host "[SELF-HEAL] Retry $attempt/$maxRetries — waiting ${delay}ms..."
+            Start-Sleep -Milliseconds $delay
+          }
+
+          $attempt++
+          Write-Host "[SELF-HEAL] Attempt $attempt/$($maxRetries + 1)..."
+          $output = Invoke-Expression $command 2>&1
+          $exitCode = $LASTEXITCODE
+
+          if ($exitCode -eq 0) {
+            Write-Host "[SELF-HEAL] Succeeded on attempt $attempt"
+            "status=success" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "attempts=$attempt" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            exit 0
+          }
+
+          $lastError = $output -join "`n"
+          $failureType = "PERMANENT"
+          if ($lastError -match 'timeout|rate limit|network error|connection refused|503|502|ECONNRESET|ETIMEDOUT') { $failureType = "TRANSIENT" }
+          if ($lastError -match 'unauthorized|forbidden|invalid token|CVE-|security vulnerability') { $failureType = "SECURITY" }
+
+          Write-Host "[SELF-HEAL] Attempt $attempt failed: $failureType"
+
+          if ($failureType -eq "SECURITY") {
+            Write-Host "[SELF-HEAL] SECURITY failure — halting!"
+            "status=security" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "attempts=$attempt" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            exit 1
+          }
+
+          if ($failureType -eq "PERMANENT" -or $attempt -gt $maxRetries) {
+            Write-Host "[SELF-HEAL] PERMANENT failure — recommending rollback"
+            "status=failed" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "attempts=$attempt" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            exit 1
+          }
+        }
+
+        "status=failed" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+        "attempts=$attempt" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+        exit 1

@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "type": "search",
+      "title": "Active Sessions",
+      "content": "path:\"04-sessions\" tag:#session",
+      "ctime": 1749268800
+    },
+    {
+      "type": "search",
+      "title": "Architecture Decisions",
+      "content": "path:\"02-architecture\" tag:#decision",
+      "ctime": 1749268800
+    },
+    {
+      "type": "search",
+      "title": "Active Projects",
+      "content": "path:\"01-projects\" tag:#project status:active",
+      "ctime": 1749268800
+    },
+    {
+      "type": "search",
+      "title": "Skills",
+      "content": "path:\"03-skills\" tag:#skill",
+      "ctime": 1749268800
+    }
+  ]
+}

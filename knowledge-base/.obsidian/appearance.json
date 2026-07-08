@@ -1,0 +1,12 @@
+{
+  "accentColor": "#6c63ff",
+  "cssTheme": "",
+  "enabledCssSnippets": [],
+  "theme": "obsidian",
+  "baseFontSize": 15,
+  "baseFontSizeAction": true,
+  "nativeMenus": true,
+  "showRibbon": true,
+  "showViewHeader": true,
+  "translucency": false
+}

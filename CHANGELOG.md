@@ -1,5 +1,201 @@
 # Changelog
 
+## [6.7.0] - 2026-07-07
+
+### Added
+
+- **Knowledge Persistence Layer (v6.7)**: Unified query engine for workspace memory.
+  - `scripts/utilities/knowledge/knowledge-query.ps1` — query CLI que cruza events, traces,
+    feedback y checkpoints con scoring de relevancia y filtro temporal (`-TimeRange`).
+  - `apps/web-dashboard/server/knowledge-api.ts` — REST endpoint `GET /api/knowledge?q=&sources=`.
+  - `apps/web-dashboard/src/components/KnowledgePanel.tsx` — React UI con search bar, source
+    checkboxes, resultados con badges color-coded y detalle expandible.
+  - `apps/web-dashboard/src/App.tsx` — nueva ruta `/knowledge`.
+- **SDD**: `docs/sdd/v6.7-knowledge-layer-sdd.md`.
+
+### Changed
+
+- **VERSION**: Updated from 6.6.0 to 6.7.0.
+- **ROADMAP**: v6.7 marked as completed.
+
+## [6.6.0] - 2026-07-07
+
+### Added
+
+- **MCP SDK / Scaffolder (v6.6)**: Multi-language MCP server generator.
+  - `mcp-manager.ps1` `-Action create` extendido con 5 lenguajes: `-Lang ts|js|py|go|rs`.
+  - Cada lenguaje genera boilerplate funcional con MCP hello world tool, package manager config
+    (package.json, pyproject.toml, go.mod, Cargo.toml) y entry point.
+  - Nuevos flags: `-Build` (npm install/pip install/go build/cargo build), `-Register` (auto-registro
+    en mcp-registry.json), `-Start` (inicia el server post-registro).
+  - TypeScript: tsconfig.json + src/index.ts con MCP SDK.
+  - JavaScript: index.js con MCP SDK (sin compilación).
+  - Python: pyproject.toml + server.py con MCP SDK Python.
+  - Go: go.mod + main.go con mcp-go.
+  - Rust: Cargo.toml + src/main.rs con rmcp.
+- **Multi-repo Orchestration (v7.0)**: MCP server mesh across workspaces.
+  - `scripts/utilities/MCP/mcp-mesh-scan.ps1` — 3 acciones: `discover` (escanea workspaces mesh
+    por MCP registries), `status` (health check multi-repo), `sync` (copia templates entre repos).
+- **SDDs**: `docs/sdd/v6.6-mcp-sdk-sdd.md`, `docs/sdd/v7.0-multi-repo-orchestration-sdd.md`.
+
+### Changed
+
+- **VERSION**: Updated from 6.5.0 to 6.6.0.
+- **ROADMAP**: v6.6 marked as completed, v7.0 in Next section.
+
+## [6.5.0] - 2026-07-07
+
+### Added
+
+- **MCP Quickstart (v6.5)**: Pre-built MCP server templates — enable any server with 1 command.
+  - `config/mcp-templates.json` — 5 templates: sqlite, filesystem, memory, browser, git.
+  - `mcp-manager.ps1` — 3 nuevas acciones: `quickstart` (registra + inicia desde template),
+    `list-templates` (lista templates disponibles), `create` (scaffold boilerplate de servidor MCP
+    con TypeScript SDK, tsconfig, package.json, src/index.ts hello world).
+  - `maintenance-watchtower.ps1` — nuevo check de integridad de templates.
+- **SDDs**: `docs/sdd/v6.4-mcp-native-sdd.md`, `docs/sdd/v6.5-mcp-quickstart-sdd.md`.
+
+### Changed
+
+- **VERSION**: Updated from 6.4.0 to 6.5.0.
+- **ROADMAP**: Refactorizado — reemplazado marketplace/vscode con v6.6 MCP SDK, v6.7 Knowledge
+  Layer, v7.0 Multi-repo Orchestration.
+- **docs/QUICK-COMMANDS.md**: Comandos MCP agregados.
+
+## [6.4.0] - 2026-07-07
+
+### Added
+
+- **MCP Native (v6.4)**: MCP (Model Context Protocol) como ciudadano de primera clase.
+  - `config/mcp-registry.json` — registro central de servidores MCP con built-in `skill-server`
+    y `engram-mcp`.
+  - `scripts/utilities/MCP/mcp-manager.ps1` — CLI completa: register, unregister, list, start,
+    stop, restart, health, reload.
+  - `scripts/utilities/MCP/mcp-gateway.ps1` — gateway de ciclo de vida: start/stop/status/reload
+    con salida JSON para APIs.
+  - `apps/web-dashboard/server/mcp-gateway-api.ts` — REST API con 3 endpoints:
+    `GET /api/mcp/servers` (listado con estado), `POST /api/mcp/servers` (registro),
+    `POST /api/mcp/servers/{name}/{start|stop}` (control).
+  - `apps/web-dashboard/src/components/MCPServers.tsx` — UI completa: tabla de servidores con
+    estado en tiempo real, botones start/stop, formulario Add Server, refresh.
+  - `apps/web-dashboard/src/types/mcp.ts` — interfaces TypeScript (MCPServerInfo, MCPServerStatus,
+    MCPRegistry).
+  - **Session pipeline**: nuevo step `mcp-gateway-init` (lazy) que inicia servidores MCP
+    automáticamente al iniciar sesión.
+  - **Dashboard nav**: nueva ruta `/mcp` con icono Cpu en la barra de navegación.
+
+### Changed
+
+- **VERSION**: Updated from 6.3.0 to 6.4.0.
+- **ROADMAP**: v6.4 marked as completed, moved to Current section.
+
+## [6.3.0] - 2026-07-07
+
+### Added
+
+- **Dashboard Multi-Tenant (v6.3)**: Per-tenant metrics filtering and tenant selector UI.
+  - `src/components/TenantSelector.tsx` — self-contained dropdown that fetches `/api/tenants` from
+    `config/tenant-registry.json`, writes `?tenantId=` to URL search params, shows colored indicator
+    per tenant.
+  - `server/real-data.ts:getTenantScopedMetrics(tenantId)` — reads tenant-scoped
+    `.session/tenants/<id>/` directories (tokens, traces, sessions) and returns filtered
+    `DashboardData`.
+  - `server/websocket-server.ts` — `/api/metrics` accepts `?tenantId=` query param;
+    `/api/tenants` endpoint returns `config/tenant-registry.json`.
+  - `src/hooks/useMetrics.ts` — accepts `initialTenantId`, passes `?tenantId=` to fetch URL,
+    exposes `tenantId`/`setTenantId` state.
+  - `src/types/tenant.ts` — `TenantInfo`, `TenantMetrics` interfaces.
+  - **Schema**: Added `tenantId?` and `tenantName?` to `DashboardData`.
+- **SDD**: `docs/sdd/v6.3-dashboard-multi-tenant-sdd.md` with full design, data flow, acceptance
+  criteria.
+
+### Changed
+
+- **VERSION**: Updated from 6.2.0 to 6.3.0.
+- **ROADMAP**: v6.3 marked as completed, moved to Current section.
+
+## [6.2.0] - 2026-07-07
+
+### Added
+
+- **Cross-Org Federation (v6.2)**: Multi-organization mesh with trust and auth boundaries.
+  - `scripts/utilities/FEDERATION/federation-auth.ps1` — RSA key pair generation, challenge-response
+    handshake protocol, signature verification, delegation tokens with configurable expiry.
+    Persists to `.session/federation/`.
+  - `scripts/utilities/FEDERATION/org-registry.ps1` — org registration with public key + approved
+    capabilities, seed-based discovery, trust status reporting, untrust/remove workflow.
+    Registry stored in `.session/federation/org-registry.json`.
+- **Mesh Extension**: `cross-workspace-mesh.ps1` updated with `-OrgId` parameter on all actions.
+  `discover` filters by org and includes org-registry peers. `delegate` validates capability approval
+  and trust before delegating. `status` shows known/trusted org count.
+- **Config**: `config/federation-config.json` — local org identity, discovery settings, auth
+  parameters, trust defaults (new orgs untrusted by default), capability tiers (public/protected/private).
+- **Dashboard endpoint**: `/api/federation` returns real-time federation metrics: known/trusted orgs,
+  pending handshakes, token expiry, per-org trust status and approved capabilities.
+
+### Changed
+
+- **VERSION**: Updated from 6.1.0 to 6.2.0.
+- **ROADMAP**: v6.2 marked as completed, moved to Recent Milestones.
+- **VERSION**: Updated from 6.1.0 to 6.2.0.
+
+## [6.1.0] - 2026-07-07
+
+### Added
+
+- **AI Safety Layer (v6.1)**: Comprehensive safety framework for self-evolving agents.
+  - `scripts/utilities/SAFETY/safety-guardrails.ps1` — validates mutations against 5 constitutional rules,
+    6 blocked patterns, and 3 resource limits. Logs all decisions to `.session/safety/audit/`.
+  - `scripts/utilities/SAFETY/prompt-injection-guard.ps1` — scans for prompt injection via pattern-based,
+    structural, and entropy-based detection. Supports sanitization at low/medium/high strictness.
+  - `scripts/utilities/SAFETY/mutation-safety-scorer.ps1` — multi-signal safety scoring (scope impact,
+    capability drift, pattern violations, historical risk, similarity to bad mutations). Outputs risk
+    level: low (auto-approve), medium (escalate), high (block).
+- **Integration**: `self-evolve-engine.ps1` now calls safety guardrails + scorer before every mutation.
+  Mutations violating constitutional rules or scoring high risk are blocked. Medium-risk mutations
+  are escalated for human approval. Safety-aware `status` output shows blocked count.
+- **Config**: `config/safety-layer.json` — full safety configuration. `config/evolution-config.json`
+  updated with `safetyIntegration` section referencing all v6.1 safety scripts.
+- **Dashboard endpoint**: `/api/safety` returns real-time safety metrics (guardrail checks, scorer
+  evaluations, injection scans, blocked/allowed counts, last risk score/level).
+
+### Changed
+
+- **VERSION**: Updated from 5.1.0 to 6.1.0.
+- **ROADMAP**: v6.1 marked as completed, moved to Recent Milestones.
+
+## [5.1.0] - 2026-07-07
+
+### Added
+
+- **Multi-Tenant Isolation (v5.1)**: `scripts/utilities/TENANT/tenant-context.ps1` — tenant ID
+  resolution via env var, workspace path, or config. Tenant-scoped `.session/`, `.codegraph/`,
+  `.telemetry/` directories with isolation validation. Single-tenant backward compatible.
+- **Eval/Benchmark Framework (v5.1)**: `scripts/utilities/EVAL/eval-runner.ps1` — test suite executor
+  with configurable scorers. `eval-registry.ps1` — versioned result storage with list/compare/prune.
+  `ab-prompt-runner.ps1` — A/B prompt variant testing with statistical delta. `eval-quality-gate.ps1`
+  — threshold-based pipeline blocking. 3 test suites in `.eval/suites/`.
+- **CI/CD Self-Healing (v5.1)**: `scripts/utilities/CI/ci-retry-engine.ps1` — exponential backoff
+  retry with failure classification (TRANSIENT/PERMANENT/SECURITY). `ci-rollback-engine.ps1` — git
+  revert + re-deploy with safe branch protection. `ci-incident-logger.ps1` — structured incident
+  logging to `.session/audit/incidents/` + dashboard alerts. `.github/actions/self-heal/action.yml`
+  — GitHub Actions composite action for workflow-level self-heal.
+- **Autonomous Evolution (v6.0)**: `scripts/utilities/EVOLVE/self-evolve-engine.ps1` — agent
+  self-mutation (prompt-tuning, skill-composition, tool-selection) based on eval feedback with A/B
+  safety guard. `cross-workspace-mesh.ps1` — workspace discovery via manifest + task delegation.
+  `auto-code-review.ps1` — pre-commit + PR review with style/security/performance/SDD checks and
+  auto-fix. `predictive-incident-response.ps1` — anomaly detection (moving average + 3σ) with
+  preemptive auto-heal and false-positive learning.
+- **Configs**: `config/evolution-config.json`, `config/ci-self-heal.json`,
+  `config/tenant-registry.json`, `config/eval-gates.json` — all with versioned schemas.
+
+### Changed
+
+- **Session pipeline**: `session-start-optimized.ps1` now resolves tenant context at startup and
+  exports `GENTLE_TENANT_*` env vars for downstream scripts.
+- **Pre-commit hooks**: `.lefthook.yml` added `auto-code-review` step for staged files.
+- **VERSION**: Updated from 3.3.3 to 5.1.0 reflecting full v5.1+v6.0 feature set.
+
 ## [3.3.3] - 2026-06-19
 
 ### Fixed
