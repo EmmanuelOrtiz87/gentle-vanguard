@@ -1,33 +1,33 @@
-name: "Self-Heal"
-description: "Composite action that wraps job steps with retry + rollback + incident logging"
+name: 'Self-Heal'
+description: 'Composite action that wraps job steps with retry + rollback + incident logging'
 inputs:
   max-retries:
-    description: "Maximum retry attempts for transient failures"
+    description: 'Maximum retry attempts for transient failures'
     required: false
-    default: "3"
+    default: '3'
   base-delay:
-    description: "Base delay in ms for exponential backoff"
+    description: 'Base delay in ms for exponential backoff'
     required: false
-    default: "5000"
+    default: '5000'
   job-name:
-    description: "Job name for incident logging"
+    description: 'Job name for incident logging'
     required: true
   run:
-    description: "Shell command to execute with self-heal protection"
+    description: 'Shell command to execute with self-heal protection'
     required: true
   working-directory:
-    description: "Working directory for the command"
+    description: 'Working directory for the command'
     required: false
-    default: "."
+    default: '.'
 outputs:
   status:
-    description: "Result status: success, failed, rolled-back, security"
+    description: 'Result status: success, failed, rolled-back, security'
     value: ${{ steps.heal.outputs.status }}
   attempts:
-    description: "Number of attempts made"
+    description: 'Number of attempts made'
     value: ${{ steps.heal.outputs.attempts }}
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: Self-Heal Wrapper
       id: heal

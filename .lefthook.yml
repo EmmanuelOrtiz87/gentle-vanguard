@@ -65,7 +65,8 @@ pre-commit:
     auto-code-review:
       glob: '*.{ps1,psm1,ts,tsx,js,jsx,py,go,rs,md,json}'
       run:
-        pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/utilities/EVOLVE/auto-code-review.ps1" -Action pre-commit
+        pwsh -NoProfile -ExecutionPolicy Bypass -File
+        "scripts/utilities/EVOLVE/auto-code-review.ps1" -Action pre-commit
     secretlint:
       glob: '*.{json,yml,yaml,md,env,toml,xml}'
       run: npx secretlint --secretlintrc .secretlintrc.json {staged_files} 2>&1

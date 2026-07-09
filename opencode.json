@@ -68,7 +68,7 @@
       "options": {
         "baseURL": "https://ftfnxnldtgioplze2xowa3s4na0gkgpu.lambda-url.us-east-1.on.aws/v1",
         "headers": {
-          "x-api-key": "7RnrzuVdkLWFdeY2LOMNfPE6Bok3bfOwvkWHE2YNJ3nPOVYlCt"
+          "x-api-key": "${env:LITTELMOTT_API_KEY}"
         }
       },
       "models": {

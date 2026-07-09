@@ -312,7 +312,7 @@
     "continuous_improvement": "rules/CONTINUOUS-IMPROVEMENT.md",
     "prompt_engineering": "rules/PROMPT-ENGINEERING.md",
     "ai_model_selection": "rules/AI-MODEL-SELECTION.md",
-    "model_routing": "config/model-routing.json",
+    "model_routing": "config/model-router.json",
     "delegation_rules": "rules/DELEGATION-RULES.md",
     "sdd_config": "openspec/config.yaml",
     "inter_agent_communication": "rules/INTER-AGENT-COMMUNICATION.md",

@@ -5,8 +5,11 @@
 ### Added
 
 - **Public Release (v8.0)**: Zero-dependency, auto-installable stack.
-  - `README.md` — Fully rewritten: version badges 8.0.0, Zero Dependency + Dashboard Ready badges, simplified Quick Start (2 commands), current architecture diagram, 12 capabilities matching actual features, real directory structure.
-  - `scripts/setup-complete.ps1` — Auto-install: checks PowerShell 7+/Git/Node.js, copies files, installs hooks, configures VS Code + PowerShell profile, runs tests, dashboard build.
+  - `README.md` — Fully rewritten: version badges 8.0.0, Zero Dependency + Dashboard Ready badges,
+    simplified Quick Start (2 commands), current architecture diagram, 12 capabilities matching
+    actual features, real directory structure.
+  - `scripts/setup-complete.ps1` — Auto-install: checks PowerShell 7+/Git/Node.js, copies files,
+    installs hooks, configures VS Code + PowerShell profile, runs tests, dashboard build.
   - Dashboard WS server auto-recovery watchdog (up to 10 restarts) with port conflict resolution.
   - Dynamic port allocation via `Get-FreePort()` — no port conflicts.
 
@@ -20,18 +23,28 @@
 ### Changed
 
 - **Dashboard UI (v7.1)**: UX refinements and live updates for Knowledge Panel and Multi-repo View.
-  - `apps/web-dashboard/src/components/KnowledgePanel.tsx` — Added "engram" source with red badge and Braces icon, auto-search on source toggle, relevance color bar (green/yellow/gray), Ctrl+Enter shortcut, error state with retry, Refresh button with spinner, loading skeleton.
-  - `apps/web-dashboard/src/components/MultiRepoView.tsx` — Auto-refresh every 30s with silent polling, "last checked" timestamp with Clock icon, error state with retry, connection status indicator.
+  - `apps/web-dashboard/src/components/KnowledgePanel.tsx` — Added "engram" source with red badge
+    and Braces icon, auto-search on source toggle, relevance color bar (green/yellow/gray),
+    Ctrl+Enter shortcut, error state with retry, Refresh button with spinner, loading skeleton.
+  - `apps/web-dashboard/src/components/MultiRepoView.tsx` — Auto-refresh every 30s with silent
+    polling, "last checked" timestamp with Clock icon, error state with retry, connection status
+    indicator.
 
 ## [7.0.0] - 2026-07-08
 
 ### Added
 
-- **Multi-repo Orchestration (v7.0)**: Mesh API REST endpoints for cross-workspace MCP orchestration.
-  - `apps/web-dashboard/server/mesh-api.ts` — REST handlers: `GET /api/mesh`, `POST /api/mesh/discover`, `POST /api/mesh/sync`. Reads federation-config.json + MCP registries + PID lock files across all mesh workspaces.
+- **Multi-repo Orchestration (v7.0)**: Mesh API REST endpoints for cross-workspace MCP
+  orchestration.
+  - `apps/web-dashboard/server/mesh-api.ts` — REST handlers: `GET /api/mesh`,
+    `POST /api/mesh/discover`, `POST /api/mesh/sync`. Reads federation-config.json + MCP
+    registries + PID lock files across all mesh workspaces.
   - `apps/web-dashboard/server/websocket-server.ts` — 3 new routes for mesh data.
-  - `apps/web-dashboard/src/components/MultiRepoView.tsx` — Full rewrite: consumes `/api/mesh` with real workspace data, Discover/Sync/Refresh controls, per-server start/stop, global status counters.
-- **Engram Integration (v7.2)**: knowledge-query.ps1 now queries `mem_search` CLI directly before falling back to file scan and context-log summaries.
+  - `apps/web-dashboard/src/components/MultiRepoView.tsx` — Full rewrite: consumes `/api/mesh` with
+    real workspace data, Discover/Sync/Refresh controls, per-server start/stop, global status
+    counters.
+- **Engram Integration (v7.2)**: knowledge-query.ps1 now queries `mem_search` CLI directly before
+  falling back to file scan and context-log summaries.
 
 ### Changed
 
@@ -43,8 +56,8 @@
 ### Added
 
 - **Knowledge Persistence Layer (v6.7)**: Unified query engine for workspace memory.
-  - `scripts/utilities/knowledge/knowledge-query.ps1` — query CLI que cruza events, traces,
-    feedback y checkpoints con scoring de relevancia y filtro temporal (`-TimeRange`).
+  - `scripts/utilities/knowledge/knowledge-query.ps1` — query CLI que cruza events, traces, feedback
+    y checkpoints con scoring de relevancia y filtro temporal (`-TimeRange`).
   - `apps/web-dashboard/server/knowledge-api.ts` — REST endpoint `GET /api/knowledge?q=&sources=`.
   - `apps/web-dashboard/src/components/KnowledgePanel.tsx` — React UI con search bar, source
     checkboxes, resultados con badges color-coded y detalle expandible.
@@ -64,16 +77,16 @@
   - `mcp-manager.ps1` `-Action create` extendido con 5 lenguajes: `-Lang ts|js|py|go|rs`.
   - Cada lenguaje genera boilerplate funcional con MCP hello world tool, package manager config
     (package.json, pyproject.toml, go.mod, Cargo.toml) y entry point.
-  - Nuevos flags: `-Build` (npm install/pip install/go build/cargo build), `-Register` (auto-registro
-    en mcp-registry.json), `-Start` (inicia el server post-registro).
+  - Nuevos flags: `-Build` (npm install/pip install/go build/cargo build), `-Register`
+    (auto-registro en mcp-registry.json), `-Start` (inicia el server post-registro).
   - TypeScript: tsconfig.json + src/index.ts con MCP SDK.
   - JavaScript: index.js con MCP SDK (sin compilación).
   - Python: pyproject.toml + server.py con MCP SDK Python.
   - Go: go.mod + main.go con mcp-go.
   - Rust: Cargo.toml + src/main.rs con rmcp.
 - **Multi-repo Orchestration (v7.0)**: MCP server mesh across workspaces.
-  - `scripts/utilities/MCP/mcp-mesh-scan.ps1` — 3 acciones: `discover` (escanea workspaces mesh
-    por MCP registries), `status` (health check multi-repo), `sync` (copia templates entre repos).
+  - `scripts/utilities/MCP/mcp-mesh-scan.ps1` — 3 acciones: `discover` (escanea workspaces mesh por
+    MCP registries), `status` (health check multi-repo), `sync` (copia templates entre repos).
 - **SDDs**: `docs/sdd/v6.6-mcp-sdk-sdd.md`, `docs/sdd/v7.0-multi-repo-orchestration-sdd.md`.
 
 ### Changed
@@ -105,17 +118,17 @@
 ### Added
 
 - **MCP Native (v6.4)**: MCP (Model Context Protocol) como ciudadano de primera clase.
-  - `config/mcp-registry.json` — registro central de servidores MCP con built-in `skill-server`
-    y `engram-mcp`.
-  - `scripts/utilities/MCP/mcp-manager.ps1` — CLI completa: register, unregister, list, start,
-    stop, restart, health, reload.
-  - `scripts/utilities/MCP/mcp-gateway.ps1` — gateway de ciclo de vida: start/stop/status/reload
-    con salida JSON para APIs.
+  - `config/mcp-registry.json` — registro central de servidores MCP con built-in `skill-server` y
+    `engram-mcp`.
+  - `scripts/utilities/MCP/mcp-manager.ps1` — CLI completa: register, unregister, list, start, stop,
+    restart, health, reload.
+  - `scripts/utilities/MCP/mcp-gateway.ps1` — gateway de ciclo de vida: start/stop/status/reload con
+    salida JSON para APIs.
   - `apps/web-dashboard/server/mcp-gateway-api.ts` — REST API con 3 endpoints:
     `GET /api/mcp/servers` (listado con estado), `POST /api/mcp/servers` (registro),
     `POST /api/mcp/servers/{name}/{start|stop}` (control).
-  - `apps/web-dashboard/src/components/MCPServers.tsx` — UI completa: tabla de servidores con
-    estado en tiempo real, botones start/stop, formulario Add Server, refresh.
+  - `apps/web-dashboard/src/components/MCPServers.tsx` — UI completa: tabla de servidores con estado
+    en tiempo real, botones start/stop, formulario Add Server, refresh.
   - `apps/web-dashboard/src/types/mcp.ts` — interfaces TypeScript (MCPServerInfo, MCPServerStatus,
     MCPRegistry).
   - **Session pipeline**: nuevo step `mcp-gateway-init` (lazy) que inicia servidores MCP
@@ -138,10 +151,10 @@
   - `server/real-data.ts:getTenantScopedMetrics(tenantId)` — reads tenant-scoped
     `.session/tenants/<id>/` directories (tokens, traces, sessions) and returns filtered
     `DashboardData`.
-  - `server/websocket-server.ts` — `/api/metrics` accepts `?tenantId=` query param;
-    `/api/tenants` endpoint returns `config/tenant-registry.json`.
-  - `src/hooks/useMetrics.ts` — accepts `initialTenantId`, passes `?tenantId=` to fetch URL,
-    exposes `tenantId`/`setTenantId` state.
+  - `server/websocket-server.ts` — `/api/metrics` accepts `?tenantId=` query param; `/api/tenants`
+    endpoint returns `config/tenant-registry.json`.
+  - `src/hooks/useMetrics.ts` — accepts `initialTenantId`, passes `?tenantId=` to fetch URL, exposes
+    `tenantId`/`setTenantId` state.
   - `src/types/tenant.ts` — `TenantInfo`, `TenantMetrics` interfaces.
   - **Schema**: Added `tenantId?` and `tenantName?` to `DashboardData`.
 - **SDD**: `docs/sdd/v6.3-dashboard-multi-tenant-sdd.md` with full design, data flow, acceptance
@@ -158,18 +171,19 @@
 
 - **Cross-Org Federation (v6.2)**: Multi-organization mesh with trust and auth boundaries.
   - `scripts/utilities/FEDERATION/federation-auth.ps1` — RSA key pair generation, challenge-response
-    handshake protocol, signature verification, delegation tokens with configurable expiry.
-    Persists to `.session/federation/`.
+    handshake protocol, signature verification, delegation tokens with configurable expiry. Persists
+    to `.session/federation/`.
   - `scripts/utilities/FEDERATION/org-registry.ps1` — org registration with public key + approved
-    capabilities, seed-based discovery, trust status reporting, untrust/remove workflow.
-    Registry stored in `.session/federation/org-registry.json`.
+    capabilities, seed-based discovery, trust status reporting, untrust/remove workflow. Registry
+    stored in `.session/federation/org-registry.json`.
 - **Mesh Extension**: `cross-workspace-mesh.ps1` updated with `-OrgId` parameter on all actions.
-  `discover` filters by org and includes org-registry peers. `delegate` validates capability approval
-  and trust before delegating. `status` shows known/trusted org count.
+  `discover` filters by org and includes org-registry peers. `delegate` validates capability
+  approval and trust before delegating. `status` shows known/trusted org count.
 - **Config**: `config/federation-config.json` — local org identity, discovery settings, auth
-  parameters, trust defaults (new orgs untrusted by default), capability tiers (public/protected/private).
-- **Dashboard endpoint**: `/api/federation` returns real-time federation metrics: known/trusted orgs,
-  pending handshakes, token expiry, per-org trust status and approved capabilities.
+  parameters, trust defaults (new orgs untrusted by default), capability tiers
+  (public/protected/private).
+- **Dashboard endpoint**: `/api/federation` returns real-time federation metrics: known/trusted
+  orgs, pending handshakes, token expiry, per-org trust status and approved capabilities.
 
 ### Changed
 
@@ -182,16 +196,18 @@
 ### Added
 
 - **AI Safety Layer (v6.1)**: Comprehensive safety framework for self-evolving agents.
-  - `scripts/utilities/SAFETY/safety-guardrails.ps1` — validates mutations against 5 constitutional rules,
-    6 blocked patterns, and 3 resource limits. Logs all decisions to `.session/safety/audit/`.
-  - `scripts/utilities/SAFETY/prompt-injection-guard.ps1` — scans for prompt injection via pattern-based,
-    structural, and entropy-based detection. Supports sanitization at low/medium/high strictness.
-  - `scripts/utilities/SAFETY/mutation-safety-scorer.ps1` — multi-signal safety scoring (scope impact,
-    capability drift, pattern violations, historical risk, similarity to bad mutations). Outputs risk
-    level: low (auto-approve), medium (escalate), high (block).
-- **Integration**: `self-evolve-engine.ps1` now calls safety guardrails + scorer before every mutation.
-  Mutations violating constitutional rules or scoring high risk are blocked. Medium-risk mutations
-  are escalated for human approval. Safety-aware `status` output shows blocked count.
+  - `scripts/utilities/SAFETY/safety-guardrails.ps1` — validates mutations against 5 constitutional
+    rules, 6 blocked patterns, and 3 resource limits. Logs all decisions to
+    `.session/safety/audit/`.
+  - `scripts/utilities/SAFETY/prompt-injection-guard.ps1` — scans for prompt injection via
+    pattern-based, structural, and entropy-based detection. Supports sanitization at low/medium/high
+    strictness.
+  - `scripts/utilities/SAFETY/mutation-safety-scorer.ps1` — multi-signal safety scoring (scope
+    impact, capability drift, pattern violations, historical risk, similarity to bad mutations).
+    Outputs risk level: low (auto-approve), medium (escalate), high (block).
+- **Integration**: `self-evolve-engine.ps1` now calls safety guardrails + scorer before every
+  mutation. Mutations violating constitutional rules or scoring high risk are blocked. Medium-risk
+  mutations are escalated for human approval. Safety-aware `status` output shows blocked count.
 - **Config**: `config/safety-layer.json` — full safety configuration. `config/evolution-config.json`
   updated with `safetyIntegration` section referencing all v6.1 safety scripts.
 - **Dashboard endpoint**: `/api/safety` returns real-time safety metrics (guardrail checks, scorer
@@ -209,10 +225,10 @@
 - **Multi-Tenant Isolation (v5.1)**: `scripts/utilities/TENANT/tenant-context.ps1` — tenant ID
   resolution via env var, workspace path, or config. Tenant-scoped `.session/`, `.codegraph/`,
   `.telemetry/` directories with isolation validation. Single-tenant backward compatible.
-- **Eval/Benchmark Framework (v5.1)**: `scripts/utilities/EVAL/eval-runner.ps1` — test suite executor
-  with configurable scorers. `eval-registry.ps1` — versioned result storage with list/compare/prune.
-  `ab-prompt-runner.ps1` — A/B prompt variant testing with statistical delta. `eval-quality-gate.ps1`
-  — threshold-based pipeline blocking. 3 test suites in `.eval/suites/`.
+- **Eval/Benchmark Framework (v5.1)**: `scripts/utilities/EVAL/eval-runner.ps1` — test suite
+  executor with configurable scorers. `eval-registry.ps1` — versioned result storage with
+  list/compare/prune. `ab-prompt-runner.ps1` — A/B prompt variant testing with statistical delta.
+  `eval-quality-gate.ps1` — threshold-based pipeline blocking. 3 test suites in `.eval/suites/`.
 - **CI/CD Self-Healing (v5.1)**: `scripts/utilities/CI/ci-retry-engine.ps1` — exponential backoff
   retry with failure classification (TRANSIENT/PERMANENT/SECURITY). `ci-rollback-engine.ps1` — git
   revert + re-deploy with safe branch protection. `ci-incident-logger.ps1` — structured incident

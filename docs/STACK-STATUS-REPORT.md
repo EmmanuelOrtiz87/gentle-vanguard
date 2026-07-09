@@ -297,7 +297,7 @@ Maintenance Watchtower:
 | CLI                   | `scripts/core/gv.ps1`                                    |
 | Orquestador principal | `config/orchestrator.json`                               |
 | Auto-delegación       | `config/auto-delegation.json`                            |
-| Routing de modelos    | `config/model-routing.json`                              |
+| Routing de modelos    | `config/model-router.json`                               |
 | SDD config            | `openspec/config.yaml`                                   |
 | Prompts de agentes    | `config/agent-prompts/` (10 roles)                       |
 | Normativas            | `rules/` (~60 archivos)                                  |

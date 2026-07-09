@@ -49,17 +49,17 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 
 ## Routing
 
-| Concept                  | Reference                                                                 |
-| ------------------------ | ------------------------------------------------------------------------- |
-| Trigger->skill mappings  | `config/auto-delegation.json#keywordMappings`                             |
-| Agent profiles + routing | `config/auto-delegation.json#agentProfiles` + `config/model-routing.json` |
-| SDD config + strict TDD  | `openspec/config.yaml`                                                    |
-| Strict TDD enforcement   | `rules/SDD-STRICT-TDD.md`                                                 |
-| Per-phase model routing  | `rules/PER-PHASE-MODEL-ROUTING.md`                                        |
-| Dependency automation    | `renovate.json` (Renovate) + `.github/dependabot.yml` (Dependabot)        |
-| Pre-processing hook      | `scripts/utilities/pre-process-input.ps1`                                 |
-| SDD FLOW                 | New feature -> BA/EXPLORE, no exceptions                                  |
-| Delegation Rules         | `rules/DELEGATION-RULES.md`                                               |
+| Concept                  | Reference                                                                |
+| ------------------------ | ------------------------------------------------------------------------ |
+| Trigger->skill mappings  | `config/auto-delegation.json#keywordMappings`                            |
+| Agent profiles + routing | `config/auto-delegation.json#agentProfiles` + `config/model-router.json` |
+| SDD config + strict TDD  | `openspec/config.yaml`                                                   |
+| Strict TDD enforcement   | `rules/SDD-STRICT-TDD.md`                                                |
+| Per-phase model routing  | `rules/PER-PHASE-MODEL-ROUTING.md`                                       |
+| Dependency automation    | `renovate.json` (Renovate) + `.github/dependabot.yml` (Dependabot)       |
+| Pre-processing hook      | `scripts/utilities/pre-process-input.ps1`                                |
+| SDD FLOW                 | New feature -> BA/EXPLORE, no exceptions                                 |
+| Delegation Rules         | `rules/DELEGATION-RULES.md`                                              |
 
 ## Hard Rules — Config Safety
 
@@ -134,7 +134,7 @@ See `docs/QUICK-COMMANDS.md` for full list.
 | AI normatives                | `rules/AI-NORMATIVES.md`                                |
 | Dev standards                | `rules/DEVELOPMENT-STANDARDS.md`                        |
 | Delegation rules             | `rules/DELEGATION-RULES.md`                             |
-| Model routing                | `config/model-routing.json`                             |
+| Model routing                | `config/model-router.json`                              |
 | SDD config                   | `openspec/config.yaml`                                  |
 | Context engineering          | `rules/CONTEXT-ENGINEERING.md`                          |
 | CodeGraph skill              | `skills/codegraph-skill/SKILL.md`                       |

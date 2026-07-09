@@ -14,9 +14,9 @@
     "signals": {
       "scopeImpactWeight": 0.25,
       "capabilityDriftWeight": 0.25,
-      "patternViolationsWeight": 0.30,
-      "historicalRiskWeight": 0.10,
-      "similarityToBadWeight": 0.10
+      "patternViolationsWeight": 0.3,
+      "historicalRiskWeight": 0.1,
+      "similarityToBadWeight": 0.1
     }
   },
   "guardrails": {

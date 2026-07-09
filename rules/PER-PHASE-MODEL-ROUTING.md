@@ -33,7 +33,7 @@ Model routing is configured in:
 
 1. **`config/orchestrator.json#agent.<name>.model`** — per-agent model assignment (primary)
 2. **`opencode.json#agent.<name>.model`** — OpenCode-specific overrides
-3. **`config/model-routing.json`** — routing rules (if exists)
+3. **`config/model-router.json`** — routing rules (if exists)
 
 ## Rules
 

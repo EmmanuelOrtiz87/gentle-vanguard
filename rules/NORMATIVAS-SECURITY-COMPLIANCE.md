@@ -39,7 +39,7 @@ MCP-SERVER, ENFORCEMENT
 
 ## System Integrity (Source: NORMATIVA-SISTEMA-INTEGRIDAD.md)
 
-- Health check must pass before commit: `health-check.ps1 -Quiet`
+- Health check must pass before commit: `npm run health:check:quiet`
 - Optimization stack verified: `verify-optimization-stack.ps1`
 - CodeGraph index < 7 days old; Engram backup post-session
 - Zero secrets in repo (Gitleaks + Trivy), PSScriptAnalyzer zero errors
@@ -48,7 +48,7 @@ MCP-SERVER, ENFORCEMENT
 
 - `pnpm build:mcp` after any change to skill-server.ts, SKILL.md, or skill-registry.md
 - All skills registered in `.atl/skill-registry.md`; backward compatibility for 1 version
-- `health-check.ps1 -Component mcp` pre-merge
+- `npm run mcp:test` pre-merge
 
 ## Enforcement (Source: NORMATIVAS-ENFORCEMENT.md)
 

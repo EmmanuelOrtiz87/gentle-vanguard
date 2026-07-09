@@ -89,20 +89,20 @@ flowchart TB
 
 ## Features
 
-| Capability | Description |
-|---|---|
-| **Multi-repo Mesh** | Cross-workspace MCP orchestration with auto-discovery and template sync |
-| **Dashboard UI** | Real-time observability: metrics, tracing, alerts, knowledge, multi-repo, MCP management |
-| **Knowledge Base** | Unified search across events, traces, feedback, checkpoints, and Engram memory |
-| **Engram Memory** | Persistent memory across sessions with hot/warm/cold tiers and auto-repair |
-| **MCP Ecosystem** | Gateway, bridge, registry, 8 pre-built templates, multi-language SDK scaffold |
-| **18 Specialized Agents** | BA, SAD, DEV, QA, OPS, GOV, DOC, SEC — each with model routing and enforcement |
-| **SDD Lifecycle** | BA explore → SAD design → DEV implement → QA verify |
-| **Adaptive Feedback** | Auto-learn norms from corrections, session scoring, pattern detection |
-| **Governance** | 60+ normatives, pre-commit hooks, CI/CD, audit pipeline, safety layer |
-| **Federation** | Cross-org auth with RSA handshake, capability-based authorization |
-| **Multi-tenant** | Per-tenant isolation across session, engram, codegraph, audit, RBAC |
-| **Zero-dependency** | Works with just PowerShell 7+ — no cloud, no API keys, no external services |
+| Capability                | Description                                                                              |
+| ------------------------- | ---------------------------------------------------------------------------------------- |
+| **Multi-repo Mesh**       | Cross-workspace MCP orchestration with auto-discovery and template sync                  |
+| **Dashboard UI**          | Real-time observability: metrics, tracing, alerts, knowledge, multi-repo, MCP management |
+| **Knowledge Base**        | Unified search across events, traces, feedback, checkpoints, and Engram memory           |
+| **Engram Memory**         | Persistent memory across sessions with hot/warm/cold tiers and auto-repair               |
+| **MCP Ecosystem**         | Gateway, bridge, registry, 8 pre-built templates, multi-language SDK scaffold            |
+| **18 Specialized Agents** | BA, SAD, DEV, QA, OPS, GOV, DOC, SEC — each with model routing and enforcement           |
+| **SDD Lifecycle**         | BA explore → SAD design → DEV implement → QA verify                                      |
+| **Adaptive Feedback**     | Auto-learn norms from corrections, session scoring, pattern detection                    |
+| **Governance**            | 60+ normatives, pre-commit hooks, CI/CD, audit pipeline, safety layer                    |
+| **Federation**            | Cross-org auth with RSA handshake, capability-based authorization                        |
+| **Multi-tenant**          | Per-tenant isolation across session, engram, codegraph, audit, RBAC                      |
+| **Zero-dependency**       | Works with just PowerShell 7+ — no cloud, no API keys, no external services              |
 
 ---
 
@@ -133,13 +133,13 @@ Start with one command: `.\scripts\utilities\dashboard\dashboard-start.ps1`
 
 ## Quick Commands
 
-| Command | Description |
-|---|---|
-| `.\scripts\setup-complete.ps1` | Auto-install: prerequisites, hooks, dashboard build |
-| `.\scripts\utilities\dashboard\dashboard-start.ps1` | Start dashboard (WS + Vite + browser) |
-| `.\scripts\utilities\dashboard\dashboard-stop.ps1` | Stop dashboard gracefully |
-| `.\scripts\maintenance\maintenance-watchtower.ps1 -Action health` | Run 79 health checks |
-| `.\scripts\maintenance\maintenance-watchtower.ps1 -Action autoheal` | Health + auto-restart failed processes |
+| Command                                                             | Description                                         |
+| ------------------------------------------------------------------- | --------------------------------------------------- |
+| `.\scripts\setup-complete.ps1`                                      | Auto-install: prerequisites, hooks, dashboard build |
+| `.\scripts\utilities\dashboard\dashboard-start.ps1`                 | Start dashboard (WS + Vite + browser)               |
+| `.\scripts\utilities\dashboard\dashboard-stop.ps1`                  | Stop dashboard gracefully                           |
+| `.\scripts\maintenance\maintenance-watchtower.ps1 -Action health`   | Run 79 health checks                                |
+| `.\scripts\maintenance\maintenance-watchtower.ps1 -Action autoheal` | Health + auto-restart failed processes              |
 
 See [docs/QUICK-COMMANDS.md](docs/QUICK-COMMANDS.md) for the full reference.
 
@@ -147,13 +147,13 @@ See [docs/QUICK-COMMANDS.md](docs/QUICK-COMMANDS.md) for the full reference.
 
 ## Documentation
 
-| Resource | Path |
-|---|---|
-| Agent Bootstrap | `docs/AGENTS.md` |
-| Quick Commands | `docs/QUICK-COMMANDS.md` |
-| Normatives Index | `rules/NORMATIVES.md` |
-| Changelog | `CHANGELOG.md` |
-| Roadmap | `docs/ROADMAP.md` |
+| Resource         | Path                     |
+| ---------------- | ------------------------ |
+| Agent Bootstrap  | `docs/AGENTS.md`         |
+| Quick Commands   | `docs/QUICK-COMMANDS.md` |
+| Normatives Index | `rules/NORMATIVES.md`    |
+| Changelog        | `CHANGELOG.md`           |
+| Roadmap          | `docs/ROADMAP.md`        |
 
 ---
 
