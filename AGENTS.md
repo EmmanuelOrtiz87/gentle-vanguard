@@ -239,6 +239,51 @@ Los siguientes steps se agregaron al `config/session-autostart.config.json`:
 | `event-sourcing-init`      | `event-sourcing.ps1`          | ✅   |
 | `post-session-learning`    | `post-autostart-summary.ps1`  | ✅   |
 
+## TypeScript Migrations
+
+Los scripts PS1 core han sido migrados a TypeScript en `src/`:
+
+| PS1 Original                                      | TS Replacement                              | Comando                                            |
+| ------------------------------------------------- | ------------------------------------------- | -------------------------------------------------- |
+| `scripts/health-check/health-check.ps1`           | `src/health-check.ts` (332 lines)           | `npm run health:check`                             |
+| `scripts/utilities/session/session-autostart.ps1` | `src/session-autostart.ts` (168 lines)      | `npx tsx src/session-autostart.ts`                 |
+| `scripts/maintenance/maintenance-watchtower.ps1`  | `src/maintenance-watchtower.ts` (834 lines) | `npm run watchtower` / `npm run watchtower:health` |
+
+Los PS1 originales fueron eliminados tras verificar que las versiones TS cubren toda la
+funcionalidad. Los comandos `npm run` apuntan exclusivamente a las versiones TS.
+
+## Research Scripts
+
+Los ~21 scripts Python duplicados en `research/rlhf-dataset-search/` fueron consolidados en un solo
+script:
+
+```bash
+python research/rlhf-dataset-search/search_datasets.py --source huggingface --query "RLHF" --max-results 20
+python research/rlhf-dataset-search/search_datasets.py --source arxiv --query "preference optimization" --csv
+python research/rlhf-dataset-search/search_datasets.py --source all --query "reward model" --categorize
+```
+
+## Configuration Consolidation
+
+- `config/model-router.json` ahora contiene los datos de routing policy, cost tracking y model
+  levels (antes en `config/model-routing.json`, eliminado)
+- 15 referencias a `model-routing.json` fueron actualizadas a `model-router.json` en toda la
+  codebase
+
+## CI/CD Pipeline
+
+- `.github/workflows/ci.yml` — 6 jobs: lint-typecheck, test, dashboard-build, docker-build,
+  python-lint, go-test
+- `.github/workflows/security.yml` — 3 jobs: gitleaks, secretlint, trivy
+
+## Testing
+
+| Suite             | Comando                  | Tests |
+| ----------------- | ------------------------ | ----- |
+| Config validation | `npm run test:config`    | 6     |
+| CI/CD workflows   | `npm run test:workflows` | 2     |
+| Research scripts  | `npm run test:research`  | 5     |
+
 ### Verificación rápida
 
 ```powershell
@@ -248,7 +293,11 @@ Los siguientes steps se agregaron al `config/session-autostart.config.json`:
 & "scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1" -Action list -Quiet
 & "scripts/utilities/ops/TRACING/tracing-instrument.ps1" -Action start -SpanName test -Quiet
 & "scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1" -Action project -AggregateId test -Quiet
-& "scripts/maintenance/maintenance-watchtower.ps1" -Action health -Quiet
+npx tsx src/maintenance-watchtower.ts --action health --quiet
+# Verificaciones TypeScript
+npm run typecheck
+npm run test:config
+npm run test:workflows
 # Dashboard build
 cd apps/web-dashboard && npm run build
 ```

@@ -68,7 +68,7 @@ data from 4 sessions (19 turns, 60K tokens, .026 cost). \\\
 All tasks completed: (1) Server running with 7 endpoints serving real session data, (2) Skill
 created at .opencode/skills/live-traceability/SKILL.md, (3) npm test passed (13/13), (4) All 3
 historical sessions + current live session returning real turn data via /api/traceability/\*, (5)
-Mechanism detection from config/model-routing.json with 16 agent profile transitions. \\\
+Mechanism detection from config/model-router.json with 16 agent profile transitions. \\\
 
 ---
 

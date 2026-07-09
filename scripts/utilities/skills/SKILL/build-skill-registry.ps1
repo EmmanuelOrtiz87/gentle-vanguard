@@ -305,7 +305,7 @@ if ($unassigned.Count -gt 0) {
 $conventionFiles = @(
     "docs/AGENTS.md", "CLAUDE.md", ".cursorrules",
     "config/orchestrator.json", "config/auto-delegation.json",
-    "config/model-routing.json", "rules/DELEGATION-RULES.md",
+    "config/model-router.json", "rules/DELEGATION-RULES.md",
     "rules/DEVELOPMENT-STANDARDS.md", "openspec/config.yaml"
 )
 foreach ($f in $conventionFiles) {

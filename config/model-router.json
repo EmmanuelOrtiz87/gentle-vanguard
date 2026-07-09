@@ -315,5 +315,57 @@
     "enabled": true,
     "logRetentionDays": 90,
     "logToJson": true
+  },
+  "routingPolicy": {
+    "description": "Routing thresholds and retry strategy (consolidated from model-routing.json v1.1.0)",
+    "fastCheapToStrongReasoning": {
+      "description": "Escalate to strong reasoning when task complexity exceeds threshold",
+      "textLengthChars": 10000,
+      "itemCount": 30,
+      "indicators": ["architectural decision", "security review", "data model design"]
+    },
+    "retryStrategy": {
+      "transientErrors": ["APIConnectionError", "RateLimitError", "InternalServerError"],
+      "failFastErrors": ["AuthenticationError", "BadRequestError", "NotFoundError"],
+      "maxRetries": 3,
+      "backoffMs": 1000
+    }
+  },
+  "costTracking": {
+    "enabled": true,
+    "immutable": true,
+    "budgetLimits": {
+      "dailyTokens": 30000,
+      "perSessionTokens": 15000,
+      "hardCapEnabled": true
+    },
+    "trackingLevel": "per_call"
+  },
+  "modelLevels": {
+    "description": "Abstract model capability levels used by routing policy (consolidated from model-routing.json v1.1.0)",
+    "fastCheap": {
+      "description": "Fast, low-cost model for deterministic/structured tasks",
+      "examples": ["qwen-3.6-plus"],
+      "thinking": "off",
+      "rationale": "Speed over reasoning — structured data, git ops, session tracking"
+    },
+    "strongCoding": {
+      "description": "Strong coding model for implementation tasks",
+      "examples": ["glm-5"],
+      "thinking": "medium",
+      "rationale": "Code generation needs robust tool-use model"
+    },
+    "strongReasoning": {
+      "description": "Strong reasoning model for architectural decisions",
+      "examples": ["kimi-k2.6"],
+      "thinking": "high",
+      "rationale": "Deep reasoning for architecture, design, risk analysis"
+    },
+    "strongReview": {
+      "description": "Strong review model for audits and validation",
+      "examples": ["glm-5", "kimi-k2.6"],
+      "thinking": "high",
+      "rationale": "Fresh-context model for thorough review and compliance"
+    }
   }
 }

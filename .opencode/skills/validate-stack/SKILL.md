@@ -1,11 +1,16 @@
 ---
 name: validate-stack
-description: "Use ONLY when the user requests post-fix verification, or after modifying session-related files in scripts/utilities/. Validates the full Gentle-Vanguard stack: pre-process-input triggers, session pipeline health, hashline 5 actions, session-autostart Wait-Job, tool detection, pre-commit/post-commit hooks. Run ALL verification steps, not just one."
+description:
+  'Use ONLY when the user requests post-fix verification, or after modifying session-related files
+  in scripts/utilities/. Validates the full Gentle-Vanguard stack: pre-process-input triggers,
+  session pipeline health, hashline 5 actions, session-autostart Wait-Job, tool detection,
+  pre-commit/post-commit hooks. Run ALL verification steps, not just one.'
 ---
 
 # Validate Stack
 
-Run these verifications in order after any fix to session, hashline, or pre-process-input files. Report the result of each step. Fail on first error — do not continue.
+Run these verifications in order after any fix to session, hashline, or pre-process-input files.
+Report the result of each step. Fail on first error — do not continue.
 
 ## 1. Parse validation
 
@@ -21,7 +26,8 @@ Expected output: database path, file count, line count. No error messages.
 pwsh -NoProfile -File scripts/utilities/pre-process-input.ps1 -UserInput "inicia sesion"
 ```
 
-Expected output: `HasMatch=True`, `AgentCode=SESSION`, `Skill=session-workflow-skill`, `PlanMode=False`
+Expected output: `HasMatch=True`, `AgentCode=SESSION`, `Skill=session-workflow-skill`,
+`PlanMode=False`
 
 ## 3. All 5 hashline actions
 

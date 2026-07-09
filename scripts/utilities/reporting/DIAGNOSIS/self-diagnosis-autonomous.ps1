@@ -43,7 +43,7 @@ $configFiles = @(
     @{ Path = "config\orchestrator.json"; Name = "Orchestrator" },
     @{ Path = "config\auto-delegation.json"; Name = "Auto-Delegation" },
     @{ Path = "config\session-autostart.config.json"; Name = "Session Autostart" },
-    @{ Path = "config\model-routing.json"; Name = "Model Routing" },
+    @{ Path = "config\model-router.json"; Name = "Model Router" },
     @{ Path = "config\workspace.config.json"; Name = "Workspace Config" }
 )
 

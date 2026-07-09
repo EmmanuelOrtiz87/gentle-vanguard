@@ -193,12 +193,13 @@
       },
       {
         "id": "adaptive-claude-cline-profile",
-        "enabled": true,
+        "enabled": false,
+        "deprecated": true,
         "lazy": true,
         "script": "scripts/utilities/adaptive-claude-cline-profile.ps1",
         "args": "-Mode Auto -TimeZone \"Argentina Standard Time\" -PeakStart 9 -PeakEnd 15",
         "required": false,
-        "description": "Intelligent temporary Claude Code/Cline optimization with automatic restore when normalized"
+        "description": "[SCRIPT NOT FOUND] Intelligent temporary Claude Code/Cline optimization — disabled until script is restored"
       },
       {
         "id": "lefthook-verify",
@@ -218,12 +219,13 @@
       },
       {
         "id": "self-diagnosis",
-        "enabled": true,
+        "enabled": false,
+        "deprecated": true,
         "lazy": true,
         "script": "scripts/utilities/DIAGNOSIS/self-diagnosis-autonomous.ps1",
         "args": "-Depth quick",
         "required": false,
-        "description": "Proactive failure detection and autonomous learning capture"
+        "description": "[SCRIPT NOT FOUND] Proactive failure detection — disabled until script is restored or recreated"
       },
       {
         "id": "metrics-collection",

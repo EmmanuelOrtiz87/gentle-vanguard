@@ -34,7 +34,7 @@ scripts/
   plugins/                             # Plugins extensibles (vía plugin-loader.ps1)
      example-hello-world/             # Plugin ejemplo con plugin.json + hello-world.ps1
   monitoring/                          # Scripts de monitoreo
-     health-check.ps1               # Verificación de salud
+      health-check.ts                # Verificación de salud (TS)
   utilities/                           # Scripts utilitarios
       setup.ps1                      # Setup inicial
       cleanup.ps1                    # Limpieza
@@ -221,9 +221,9 @@ Write-Log "Mensaje" "info"
 
 ### Monitoring (Scripts de Monitoreo)
 
-#### health-check.ps1
+#### health-check.ts (migrado desde PS1)
 
-**Propósito**: Verificación de salud del sistema
+**Propósito**: Verificación de salud del sistema (TypeScript)
 
 **Verifica**:
 
