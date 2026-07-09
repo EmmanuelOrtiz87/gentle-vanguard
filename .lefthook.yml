@@ -33,6 +33,8 @@ post-merge:
 
 pre-commit:
   commands:
+    prevent-merge-commit:
+      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "hooks/prevent-commit-during-merge.ps1"
     opencode-validation:
       run:
         powershell -NoProfile -ExecutionPolicy Bypass -File

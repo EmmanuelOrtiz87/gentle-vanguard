@@ -96,28 +96,28 @@ function Generate-IndexContent {
     param([hashtable]$ScriptsByCategory)
     
     $content = @"
-# [DOC] NDICE COMPLETO DE SCRIPTS
+# [DOC] ÍNDICE COMPLETO DE SCRIPTS
 
-**Versin:** 2.0.0  
-**ltima actualizacin:** $(Get-Date -Format 'yyyy-MM-dd')  
+**Versión:** 2.0.0  
+**Última actualización:** $(Get-Date -Format 'yyyy-MM-dd')  
 **Total de Scripts:** $($ScriptsByCategory.Values | Measure-Object -Sum | Select-Object -ExpandProperty Sum)
 
-ndice maestro de todos los scripts disponibles en el directorio `scripts/utilities/`. Generado automticamente.
+Índice maestro de todos los scripts disponibles en el directorio `scripts/utilities/`. Generado automáticamente.
 
 ---
 
 ## [LIST] Tabla de Contenidos
 
-- [Scripts por Categora](#scripts-por-categora)
-- [Bsqueda Rpida](#bsqueda-rpida)
+- [Scripts por Categoría](#scripts-por-categoria)
+- [Búsqueda Rápida](#busqueda-rapida)
 
 ---
 
-## [SEARCH] Bsqueda Rpida
+## [SEARCH] Búsqueda Rápida
 
 ### Por Directorio
 
-| Directorio | Scripts | Descripcin |
+| Directorio | Scripts | Descripción |
 |-----------|---------|-------------|
 "@
 
@@ -126,12 +126,12 @@ ndice maestro de todos los scripts disponibles en el directorio `scripts/utiliti
         $content += "`n| $category | $count | Consultar abajo |"
     }
     
-    $content += "`n`n---`n`n##  Scripts por Categora`n`n"
+    $content += "`n`n---`n`n##  Scripts por Categoría`n`n"
     
     foreach ($category in $ScriptsByCategory.Keys | Sort-Object) {
         $scripts = $ScriptsByCategory[$category]
         $content += "`n### $category`n`n"
-        $content += "| Script | Descripcin | Tipo |`n"
+        $content += "| Script | Descripción | Tipo |`n"
         $content += "|--------|-------------|------|`n"
         
         foreach ($script in $scripts | Sort-Object -Property Name) {
