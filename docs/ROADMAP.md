@@ -63,6 +63,15 @@ seguro, extensible, zero-drama.**
 | 4   | **Plugin system local-first**         | Baja      | ~3h         | Plugins comunitarios sin dependencia cloud, solo git + archivos locales |
 | 5   | **Dashboard modo offline completo**   | Baja      | ~2h         | Toda la funcionalidad del dashboard sin conexión a WS                   |
 
+## Fase 1 — Consolidación corta (ahora)
+
+| Acción                                        | Objetivo                         | Impacto |
+| --------------------------------------------- | -------------------------------- | ------- |
+| Definir módulos core vs experimental          | Reducir ambigüedad operativa     | Alto    |
+| Marcar módulos experimentales como opt-in     | Evitar que se usen por defecto   | Alto    |
+| Añadir validación de configuración de madurez | Sustituir intuición por contrato | Medio   |
+| Documentar la ruta de maduración del stack    | Hacerla ejecutable y priorizada  | Medio   |
+
 ## Deprecado
 
 | Feature                     | Motivo                                                                          |
