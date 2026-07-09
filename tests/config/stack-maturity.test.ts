@@ -26,4 +26,12 @@ describe('stack-maturity.json', () => {
       config.experimental.every((item: { activation: string }) => item.activation === 'opt-in'),
     );
   });
+
+  it('requires governance gates before experimental activation', () => {
+    const requiredChecks = config.governance?.requiredForExperimental;
+    assert.ok(Array.isArray(requiredChecks));
+    assert.ok(requiredChecks.includes('tests'));
+    assert.ok(requiredChecks.includes('typecheck'));
+    assert.ok(requiredChecks.includes('security-scan'));
+  });
 });

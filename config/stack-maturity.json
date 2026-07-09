@@ -5,6 +5,9 @@
     "experimentalModules": "opt-in",
     "requireApprovalForExperimental": true
   },
+  "governance": {
+    "requiredForExperimental": ["tests", "typecheck", "security-scan"]
+  },
   "core": [
     {
       "name": "session-orchestration",
