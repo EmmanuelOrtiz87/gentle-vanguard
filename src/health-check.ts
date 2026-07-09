@@ -31,12 +31,21 @@ function readJson(...parts: string[]) {
 }
 
 async function tcpCheck(port: number, host = '127.0.0.1', timeoutMs = 2000): Promise<boolean> {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const sock = new net.Socket();
     sock.setTimeout(timeoutMs);
-    sock.on('connect', () => { sock.destroy(); resolve(true); });
-    sock.on('error', () => { sock.destroy(); resolve(false); });
-    sock.on('timeout', () => { sock.destroy(); resolve(false); });
+    sock.on('connect', () => {
+      sock.destroy();
+      resolve(true);
+    });
+    sock.on('error', () => {
+      sock.destroy();
+      resolve(false);
+    });
+    sock.on('timeout', () => {
+      sock.destroy();
+      resolve(false);
+    });
     sock.connect(port, host);
   });
 }
@@ -62,12 +71,15 @@ function checkMCP() {
   try {
     const input = JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list', params: {} });
     const r = spawnSync('node', [mcpJs], {
-      input, stdio: ['pipe', 'pipe', 'pipe'], timeout: 10000, maxBuffer: 1024 * 1024,
+      input,
+      stdio: ['pipe', 'pipe', 'pipe'],
+      timeout: 10000,
+      maxBuffer: 1024 * 1024,
     });
     const stdout = (r.stdout || '').toString();
     const stderr = (r.stderr || '').toString();
     const allOutput = stdout + '\n' + stderr;
-    const lines = allOutput.split('\n').filter(l => l.trim());
+    const lines = allOutput.split('\n').filter((l) => l.trim());
     let toolsCount = 0;
     for (const line of lines) {
       try {
@@ -75,7 +87,9 @@ function checkMCP() {
         const tools = parsed.result?.tools || [];
         toolsCount = tools.length;
         if (toolsCount > 0) break;
-      } catch { /* skip non-JSON lines */ }
+      } catch {
+        /* skip non-JSON lines */
+      }
     }
     writeCheck('MCP tools/list responds', toolsCount > 0, `${toolsCount} tools`);
   } catch (e: any) {
@@ -86,13 +100,18 @@ function checkMCP() {
 function checkTeamMode() {
   header('Team Mode');
   const script = path.resolve(ROOT, 'scripts/team-mode/team-orchestrator.ps1');
-  writeCheck('Team Mode script exists', fs.existsSync(script), 'scripts/team-mode/team-orchestrator.ps1');
+  writeCheck(
+    'Team Mode script exists',
+    fs.existsSync(script),
+    'scripts/team-mode/team-orchestrator.ps1',
+  );
   if (!fs.existsSync(script)) return;
   try {
-    const r = spawnSync('pwsh', [
-      '-File', script, '-Task', 'health check',
-      '-MaxParallel', '1', '-TimeoutSeconds', '5',
-    ], { cwd: ROOT, stdio: 'pipe', timeout: 15000 });
+    const r = spawnSync(
+      'pwsh',
+      ['-File', script, '-Task', 'health check', '-MaxParallel', '1', '-TimeoutSeconds', '5'],
+      { cwd: ROOT, stdio: 'pipe', timeout: 15000 },
+    );
     writeCheck('Team Mode dry-run passes', r.status === 0);
   } catch {
     writeCheck('Team Mode dry-run passes', false);
@@ -101,7 +120,10 @@ function checkTeamMode() {
 
 function checkSessionRef() {
   header('Session Reference System');
-  writeCheck('Session Ref script exists', exists('scripts/utilities/SESSION/session-reference-system.ps1'));
+  writeCheck(
+    'Session Ref script exists',
+    exists('scripts/utilities/SESSION/session-reference-system.ps1'),
+  );
 }
 
 function checkSkillFactory() {
@@ -121,10 +143,11 @@ function checkSDD() {
   writeCheck('SDD Pipeline exists', fs.existsSync(script));
   if (!fs.existsSync(script)) return;
   try {
-    const r = spawnSync('pwsh', [
-      '-File', script, '-Feature', 'health-check',
-      '-Description', 'Health check', '-DryRun',
-    ], { cwd: ROOT, stdio: 'pipe', timeout: 15000 });
+    const r = spawnSync(
+      'pwsh',
+      ['-File', script, '-Feature', 'health-check', '-Description', 'Health check', '-DryRun'],
+      { cwd: ROOT, stdio: 'pipe', timeout: 15000 },
+    );
     writeCheck('SDD Pipeline dry-run passes', r.status === 0);
   } catch {
     writeCheck('SDD Pipeline dry-run passes', false);
@@ -136,7 +159,9 @@ function checkPnpm() {
   writeCheck('pnpm-lock.yaml exists', exists('pnpm-lock.yaml'));
   writeCheck('pnpm security normativa exists', exists('rules/NORMATIVA-PNPM-SECURITY.md'));
   try {
-    const v = execSync('pnpm --version', { cwd: ROOT, stdio: 'pipe', timeout: 10000 }).toString().trim();
+    const v = execSync('pnpm --version', { cwd: ROOT, stdio: 'pipe', timeout: 10000 })
+      .toString()
+      .trim();
     writeCheck('pnpm installed', true, `v${v}`);
   } catch {
     writeCheck('pnpm installed', false);
@@ -165,7 +190,11 @@ function checkOptimizationStack() {
     return;
   }
   try {
-    const r = spawnSync('pwsh', ['-File', script, '-Quiet'], { cwd: ROOT, stdio: 'pipe', timeout: 15000 });
+    const r = spawnSync('pwsh', ['-File', script, '-Quiet'], {
+      cwd: ROOT,
+      stdio: 'pipe',
+      timeout: 15000,
+    });
     writeCheck('Optimization stack (8 rules)', r.status === 0);
   } catch {
     writeCheck('Optimization stack (8 rules)', false);
@@ -175,10 +204,18 @@ function checkOptimizationStack() {
 function checkGateGuard() {
   header('GateGuard');
   const script = path.resolve(ROOT, 'scripts/gateguard/gateguard-mcp.ps1');
-  writeCheck('GateGuard script exists', fs.existsSync(script), 'scripts/gateguard/gateguard-mcp.ps1');
+  writeCheck(
+    'GateGuard script exists',
+    fs.existsSync(script),
+    'scripts/gateguard/gateguard-mcp.ps1',
+  );
   if (!fs.existsSync(script)) return;
   try {
-    const r = spawnSync('pwsh', ['-File', script, '-Server', 'codegraph'], { cwd: ROOT, stdio: 'pipe', timeout: 15000 });
+    const r = spawnSync('pwsh', ['-File', script, '-Server', 'codegraph'], {
+      cwd: ROOT,
+      stdio: 'pipe',
+      timeout: 15000,
+    });
     const output = r.stdout.toString().trim();
     const jsonMatch = output.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
@@ -196,8 +233,16 @@ function checkGateGuard() {
 function checkMlEmbeddings() {
   header('ML Embeddings (Auto-Delegation)');
   writeCheck('ml-index.json exists', exists('.atl', 'ml-index.json'), '.atl/ml-index.json');
-  writeCheck('skill-embedder.ps1 exists', exists('scripts/ml', 'skill-embedder.ps1'), 'scripts/ml/skill-embedder.ps1');
-  writeCheck('ml-router.ps1 exists', exists('scripts/ml', 'ml-router.ps1'), 'scripts/ml/ml-router.ps1');
+  writeCheck(
+    'skill-embedder.ps1 exists',
+    exists('scripts/ml', 'skill-embedder.ps1'),
+    'scripts/ml/skill-embedder.ps1',
+  );
+  writeCheck(
+    'ml-router.ps1 exists',
+    exists('scripts/ml', 'ml-router.ps1'),
+    'scripts/ml/ml-router.ps1',
+  );
   const mlIndex = path.resolve(ROOT, '.atl/ml-index.json');
   if (fs.existsSync(mlIndex)) {
     try {
@@ -215,9 +260,16 @@ function checkMlEmbeddings() {
 
 async function checkEngramRag() {
   header('Engram RAG Index');
-  writeCheck('engram-rag-reindex.ps1 exists', exists('scripts/utilities/ENGRAM-RAG/engram-rag-reindex.ps1'));
+  writeCheck(
+    'engram-rag-reindex.ps1 exists',
+    exists('scripts/utilities/ENGRAM-RAG/engram-rag-reindex.ps1'),
+  );
   try {
-    const output = execSync('engram doctor --json', { cwd: ROOT, stdio: 'pipe', timeout: 15000 }).toString();
+    const output = execSync('engram doctor --json', {
+      cwd: ROOT,
+      stdio: 'pipe',
+      timeout: 15000,
+    }).toString();
     const healthy = output.includes('"status":"ok"') || output.includes('"ok"');
     writeCheck('engram doctor', healthy);
   } catch {
@@ -235,12 +287,18 @@ async function checkDashboardV3() {
 
 function checkMcpBridge() {
   header('MCP Bridge');
-  writeCheck('mcp-bridge.ps1 exists', exists('scripts/utilities/MCP-BRIDGE/mcp-bridge.ps1'),
-    'scripts/utilities/MCP-BRIDGE/mcp-bridge.ps1');
-  writeCheck('tms-mcp-bridge.ps1 exists', exists('scripts/tms-mcp-bridge.ps1'),
-    'scripts/tms-mcp-bridge.ps1');
+  writeCheck(
+    'mcp-bridge.ps1 exists',
+    exists('scripts/utilities/MCP-BRIDGE/mcp-bridge.ps1'),
+    'scripts/utilities/MCP-BRIDGE/mcp-bridge.ps1',
+  );
+  writeCheck(
+    'tms-mcp-bridge.ps1 exists',
+    exists('scripts/tms-mcp-bridge.ps1'),
+    'scripts/tms-mcp-bridge.ps1',
+  );
   const configs = ['config/skill-mcp.json', 'config/mcp-bridge.json'];
-  const found = configs.filter(c => exists(c)).length;
+  const found = configs.filter((c) => exists(c)).length;
   writeCheck('MCP configs present', found === configs.length, `${found} of ${configs.length}`);
 }
 
@@ -255,7 +313,10 @@ function checkCostTracking() {
   try {
     const config = readJson('config/model-router.json');
     writeCheck('costTracking section present', config.costTracking !== undefined);
-    writeCheck('routingPolicy section present', config.routingPolicy?.fastCheapToStrongReasoning !== undefined);
+    writeCheck(
+      'routingPolicy section present',
+      config.routingPolicy?.fastCheapToStrongReasoning !== undefined,
+    );
   } catch (e: any) {
     writeCheck('costTracking section present', false, e.message);
     writeCheck('routingPolicy section present', false);
@@ -296,7 +357,7 @@ async function main() {
       case '--component':
       case '-c':
         if (i + 1 < args.length) {
-          components.push(...args[++i].split(',').map(s => s.trim()));
+          components.push(...args[++i].split(',').map((s) => s.trim()));
         }
         break;
       default:
@@ -322,11 +383,13 @@ async function main() {
 
   console.log(`\n\x1b[36m=== Health Check Complete ===\x1b[0m`);
   const ok = exitCode === 0;
-  console.log(`${ok ? '\x1b[32m' : '\x1b[31m'}Status: ${ok ? 'ALL PASS' : `${exitCode} FAILURES`}\x1b[0m`);
+  console.log(
+    `${ok ? '\x1b[32m' : '\x1b[31m'}Status: ${ok ? 'ALL PASS' : `${exitCode} FAILURES`}\x1b[0m`,
+  );
   process.exit(exitCode);
 }
 
-main().catch(e => {
+main().catch((e) => {
   console.error('\x1b[31mFATAL:\x1b[0m', e.message);
   process.exit(1);
 });

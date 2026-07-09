@@ -22,14 +22,27 @@ const results: CheckResult[] = [];
 let quiet = false;
 let exitCode = 0;
 
-function addResult(component: string, check: string, status: CheckResult['status'], detail: string, action = 'ok', critical = false) {
+function addResult(
+  component: string,
+  check: string,
+  status: CheckResult['status'],
+  detail: string,
+  action = 'ok',
+  critical = false,
+) {
   results.push({
-    component, check, status, detail, action,
+    component,
+    check,
+    status,
+    detail,
+    action,
     timestamp: new Date().toISOString(),
   });
   if (!quiet || status !== 'PASS') {
     const icons: Record<string, string> = { PASS: '  ', WARN: '  ', FAIL: '  ', SKIP: '  ' };
-    console.log(`${icons[status]}[${component}] ${check}: ${status}${detail ? ' - ' + detail : ''}`);
+    console.log(
+      `${icons[status]}[${component}] ${check}: ${status}${detail ? ' - ' + detail : ''}`,
+    );
   }
   if (status === 'FAIL' && critical) exitCode++;
 }
@@ -38,29 +51,48 @@ function getFileAgeHours(filePath: string): number {
   try {
     const stats = statSync(filePath);
     return (Date.now() - stats.mtimeMs) / (1000 * 60 * 60);
-  } catch { return -1; }
+  } catch {
+    return -1;
+  }
 }
 
 function testPort(port: number): Promise<boolean> {
-  return new Promise(resolve => {
-    const sock = createConnection(port, '127.0.0.1', () => { sock.destroy(); resolve(true); });
+  return new Promise((resolve) => {
+    const sock = createConnection(port, '127.0.0.1', () => {
+      sock.destroy();
+      resolve(true);
+    });
     sock.on('error', () => resolve(false));
     sock.setTimeout(3000);
-    sock.on('timeout', () => { sock.destroy(); resolve(false); });
+    sock.on('timeout', () => {
+      sock.destroy();
+      resolve(false);
+    });
   });
 }
 
 function testHttp(url: string): Promise<boolean> {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const client = createConnection(parseInt(new URL(url).port, 10) || 8080, '127.0.0.1', () => {
-      client.write(`GET ${new URL(url).pathname} HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n`);
+      client.write(
+        `GET ${new URL(url).pathname} HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n`,
+      );
     });
     let data = '';
-    client.on('data', (chunk: Buffer) => { data += chunk.toString(); });
-    client.on('end', () => resolve(data.includes('200 OK') || data.includes('HTTP/1.1 200') || data.includes('HTTP/1.0 200')));
+    client.on('data', (chunk: Buffer) => {
+      data += chunk.toString();
+    });
+    client.on('end', () =>
+      resolve(
+        data.includes('200 OK') || data.includes('HTTP/1.1 200') || data.includes('HTTP/1.0 200'),
+      ),
+    );
     client.on('error', () => resolve(false));
     client.setTimeout(5000);
-    client.on('timeout', () => { client.destroy(); resolve(false); });
+    client.on('timeout', () => {
+      client.destroy();
+      resolve(false);
+    });
   });
 }
 
@@ -72,14 +104,26 @@ function readJson(p: string): any {
   return JSON.parse(readFileSync(p, 'utf-8'));
 }
 
-function payloadFileOk(component: string, label: string, filePath: string, onFailAction = 'manual', critical = false): boolean {
+function payloadFileOk(
+  component: string,
+  label: string,
+  filePath: string,
+  onFailAction = 'manual',
+  critical = false,
+): boolean {
   if (!fileExists(filePath)) {
     addResult(component, label, 'WARN', 'Not found', onFailAction);
     return false;
   }
   if (filePath.endsWith('.json')) {
-    try { readJson(filePath); addResult(component, label, 'PASS', '', 'ok'); return true; }
-    catch { addResult(component, label, 'FAIL', 'Invalid JSON', onFailAction, critical); return false; }
+    try {
+      readJson(filePath);
+      addResult(component, label, 'PASS', '', 'ok');
+      return true;
+    } catch {
+      addResult(component, label, 'FAIL', 'Invalid JSON', onFailAction, critical);
+      return false;
+    }
   } else {
     addResult(component, label, 'PASS', '', 'ok');
     return true;
@@ -108,7 +152,13 @@ async function checkDashboardWs() {
   if (httpOk) {
     addResult('dashboard-ws', `HTTP API (port ${wsPort})`, 'PASS', 'Responding', 'ok');
   } else if (running) {
-    addResult('dashboard-ws', `HTTP API (port ${wsPort})`, 'WARN', 'Port open but HTTP not responding', 'verify');
+    addResult(
+      'dashboard-ws',
+      `HTTP API (port ${wsPort})`,
+      'WARN',
+      'Port open but HTTP not responding',
+      'verify',
+    );
   } else {
     addResult('dashboard-ws', `HTTP API (port ${wsPort})`, 'FAIL', 'Not responding', 'restart');
   }
@@ -120,7 +170,13 @@ async function checkDashboardWs() {
       process.kill(parseInt(watchdogPid, 10), 0);
       addResult('dashboard-ws', 'watchdog process', 'PASS', `PID ${watchdogPid} running`, 'ok');
     } catch {
-      addResult('dashboard-ws', 'watchdog process', 'FAIL', `PID ${watchdogPid} not running`, 'restart');
+      addResult(
+        'dashboard-ws',
+        'watchdog process',
+        'FAIL',
+        `PID ${watchdogPid} not running`,
+        'restart',
+      );
     }
   } else if (httpOk || running) {
     addResult('dashboard-ws', 'watchdog process', 'PASS', 'WS running standalone', 'ok');
@@ -141,8 +197,13 @@ async function checkDashboardWs() {
     addResult('dashboard-ws', 'WS server process', 'WARN', 'No PID file', 'start');
   }
 
-  addResult('dashboard-ws', 'build (dist/index.html)',
-    fileExists(join(ROOT, 'apps/web-dashboard/dist/index.html')) ? 'PASS' : 'FAIL', '', 'ok');
+  addResult(
+    'dashboard-ws',
+    'build (dist/index.html)',
+    fileExists(join(ROOT, 'apps/web-dashboard/dist/index.html')) ? 'PASS' : 'FAIL',
+    '',
+    'ok',
+  );
 }
 
 // ─── Component: CodeGraph ───────────────────────────────────────────────────
@@ -169,15 +230,35 @@ async function checkMlEmbeddings() {
   if (ageH === -1) {
     addResult('ml-embeddings', 'skill-embeddings.json', 'FAIL', 'Not found', 'rebuild');
   } else if (ageH > 48) {
-    addResult('ml-embeddings', 'skill-embeddings.json freshness', 'WARN', `Stale: ${ageH.toFixed(1)} hours`, 'rebuild');
+    addResult(
+      'ml-embeddings',
+      'skill-embeddings.json freshness',
+      'WARN',
+      `Stale: ${ageH.toFixed(1)} hours`,
+      'rebuild',
+    );
   } else {
-    addResult('ml-embeddings', 'skill-embeddings.json freshness', 'PASS', `${ageH.toFixed(1)} hours`, 'ok');
+    addResult(
+      'ml-embeddings',
+      'skill-embeddings.json freshness',
+      'PASS',
+      `${ageH.toFixed(1)} hours`,
+      'ok',
+    );
   }
 
   if (fileExists(mlDir)) {
-    const files = readdirSync(mlDir, { recursive: true }).filter(f => statSync(join(mlDir, f as string)).isFile());
+    const files = readdirSync(mlDir, { recursive: true }).filter((f) =>
+      statSync(join(mlDir, f as string)).isFile(),
+    );
     const fc = files.length;
-    addResult('ml-embeddings', 'embedding files', fc > 0 ? 'PASS' : 'WARN', `${fc} files`, 'rebuild');
+    addResult(
+      'ml-embeddings',
+      'embedding files',
+      fc > 0 ? 'PASS' : 'WARN',
+      `${fc} files`,
+      'rebuild',
+    );
   } else {
     addResult('ml-embeddings', 'embedding directory', 'FAIL', 'Not found', 'rebuild');
   }
@@ -213,7 +294,13 @@ async function checkEngram() {
   const ragLog = join(ROOT, '.atl/rag-reindex.log');
   if (fileExists(ragLog)) {
     const logAge = getFileAgeHours(ragLog);
-    addResult('engram', 'reindex freshness', logAge <= 48 ? 'PASS' : 'WARN', `${logAge.toFixed(1)} hours`, 'reindex');
+    addResult(
+      'engram',
+      'reindex freshness',
+      logAge <= 48 ? 'PASS' : 'WARN',
+      `${logAge.toFixed(1)} hours`,
+      'reindex',
+    );
 
     const content = readFileSync(ragLog, 'utf-8');
     const tailLines = content.trim().split('\n').slice(-3).join('\n');
@@ -228,16 +315,31 @@ async function checkEngram() {
   const engramDir = join(userProfile, '.engram');
   addResult('engram', 'engram directory', fileExists(engramDir) ? 'PASS' : 'FAIL', '', 'manual');
 
-  const engramBin = join(userProfile, 'bin', process.platform === 'win32' ? 'engram.exe' : 'engram');
+  const engramBin = join(
+    userProfile,
+    'bin',
+    process.platform === 'win32' ? 'engram.exe' : 'engram',
+  );
   const engramCmd = fileExists(engramBin) ? engramBin : 'engram';
   try {
-    const output = execSync(`"${engramCmd}" doctor --json`, { encoding: 'utf-8', timeout: 10000, shell: process.env.COMSPEC || 'cmd.exe' });
+    const output = execSync(`"${engramCmd}" doctor --json`, {
+      encoding: 'utf-8',
+      timeout: 10000,
+      shell: process.env.COMSPEC || 'cmd.exe',
+    });
     const ok = /"status"\s*:\s*"ok"/.test(output);
     addResult('engram', 'doctor', ok ? 'PASS' : 'WARN', `Healthy=${ok}`, 'verify');
   } catch (e: any) {
     const output = ((e.stdout || '') + (e.stderr || '')).toString();
     const ok = /"status"\s*:\s*"ok"/.test(output);
-    addResult('engram', 'doctor', ok ? 'PASS' : 'FAIL', ok ? 'Healthy (stderr)' : 'Not accessible', ok ? 'verify' : 'manual', !ok);
+    addResult(
+      'engram',
+      'doctor',
+      ok ? 'PASS' : 'FAIL',
+      ok ? 'Healthy (stderr)' : 'Not accessible',
+      ok ? 'verify' : 'manual',
+      !ok,
+    );
   }
 }
 
@@ -249,16 +351,34 @@ async function checkMcp() {
   payloadFileOk('mcp', 'skill-server.js', join(ROOT, 'dist/scripts/mcp/skill-server.js'), 'build');
   payloadFileOk('mcp', 'skill-server.ts', join(ROOT, 'scripts/mcp/skill-server.ts'), 'manual');
   payloadFileOk('mcp', 'mcp-bridge.ps1', join(ROOT, 'scripts/mcp-bridge/mcp-bridge.ps1'), 'manual');
-  payloadFileOk('mcp', 'mcp-bridge.ts (dashboard)', join(ROOT, 'apps/web-dashboard/server/mcp-bridge.ts'), 'manual');
+  payloadFileOk(
+    'mcp',
+    'mcp-bridge.ts (dashboard)',
+    join(ROOT, 'apps/web-dashboard/server/mcp-bridge.ts'),
+    'manual',
+  );
 
-  const mcpConfigs = ['config/skill-mcp.json', 'config/mcp-bridge.json', 'config/mcp-config.sd.json'];
-  const found = mcpConfigs.filter(c => fileExists(join(ROOT, c))).length;
-  addResult('mcp', 'config files', found === mcpConfigs.length ? 'PASS' : 'WARN', `${found} of ${mcpConfigs.length}`, 'verify');
+  const mcpConfigs = [
+    'config/skill-mcp.json',
+    'config/mcp-bridge.json',
+    'config/mcp-config.sd.json',
+  ];
+  const found = mcpConfigs.filter((c) => fileExists(join(ROOT, c))).length;
+  addResult(
+    'mcp',
+    'config files',
+    found === mcpConfigs.length ? 'PASS' : 'WARN',
+    `${found} of ${mcpConfigs.length}`,
+    'verify',
+  );
 
   const bridgePs1 = join(ROOT, 'scripts/mcp-bridge/mcp-bridge.ps1');
   if (fileExists(bridgePs1)) {
     try {
-      const output = execSync(`pwsh -NoProfile -File "${bridgePs1}" -Action verify 2>&1`, { encoding: 'utf-8', timeout: 10000 });
+      const output = execSync(`pwsh -NoProfile -File "${bridgePs1}" -Action verify 2>&1`, {
+        encoding: 'utf-8',
+        timeout: 10000,
+      });
       const healthOk = /OK|PASS|healthy|Bridge status: OK|^True$/.test(output);
       addResult('mcp', 'bridge health', healthOk ? 'PASS' : 'WARN', '', 'verify');
     } catch {
@@ -269,9 +389,24 @@ async function checkMcp() {
   }
 
   payloadFileOk('mcp', 'mcp-registry.json', join(ROOT, 'config/mcp-registry.json'), 'config');
-  payloadFileOk('mcp', 'mcp-manager.ps1', join(ROOT, 'scripts/utilities/MCP/mcp-manager.ps1'), 'manual');
-  payloadFileOk('mcp', 'mcp-gateway.ps1', join(ROOT, 'scripts/utilities/MCP/mcp-gateway.ps1'), 'manual');
-  payloadFileOk('mcp', 'mcp-gateway-api.ts (dashboard)', join(ROOT, 'apps/web-dashboard/server/mcp-gateway-api.ts'), 'manual');
+  payloadFileOk(
+    'mcp',
+    'mcp-manager.ps1',
+    join(ROOT, 'scripts/utilities/MCP/mcp-manager.ps1'),
+    'manual',
+  );
+  payloadFileOk(
+    'mcp',
+    'mcp-gateway.ps1',
+    join(ROOT, 'scripts/utilities/MCP/mcp-gateway.ps1'),
+    'manual',
+  );
+  payloadFileOk(
+    'mcp',
+    'mcp-gateway-api.ts (dashboard)',
+    join(ROOT, 'apps/web-dashboard/server/mcp-gateway-api.ts'),
+    'manual',
+  );
   payloadFileOk('mcp', 'mcp-templates.json', join(ROOT, 'config/mcp-templates.json'), 'config');
 }
 
@@ -292,8 +427,13 @@ async function checkSessionPipeline() {
     addResult('session', name, fileExists(join(ROOT, s)) ? 'PASS' : 'FAIL', '', 'manual');
   }
 
-  addResult('session', 'autostart config',
-    fileExists(join(ROOT, 'config/session-autostart.config.json')) ? 'PASS' : 'FAIL', '', 'manual');
+  addResult(
+    'session',
+    'autostart config',
+    fileExists(join(ROOT, 'config/session-autostart.config.json')) ? 'PASS' : 'FAIL',
+    '',
+    'manual',
+  );
 }
 
 // ─── Component: Git Hooks ───────────────────────────────────────────────────
@@ -301,8 +441,13 @@ async function checkSessionPipeline() {
 async function checkHooks() {
   if (!quiet) console.log('  [Hooks] Checking...');
 
-  addResult('hooks', '.lefthook.yml',
-    fileExists(join(ROOT, '.lefthook.yml')) ? 'PASS' : 'FAIL', '', 'manual');
+  addResult(
+    'hooks',
+    '.lefthook.yml',
+    fileExists(join(ROOT, '.lefthook.yml')) ? 'PASS' : 'FAIL',
+    '',
+    'manual',
+  );
 
   try {
     execSync('lefthook validate 2>&1', { encoding: 'utf-8', timeout: 10000 });
@@ -318,10 +463,16 @@ async function checkConfigs() {
   if (!quiet) console.log('  [Configs] Checking...');
 
   const configs = [
-    'config/orchestrator.json', 'config/auto-delegation.json', 'config/session-autostart.config.json',
-    'config/security-policy.json', 'config/trusted-users-policy.json',
-    'config/security-privacy.json', 'config/sre-error-budgets.json',
-    'config/dashboard-alerts.json', 'opencode.json', 'renovate.json',
+    'config/orchestrator.json',
+    'config/auto-delegation.json',
+    'config/session-autostart.config.json',
+    'config/security-policy.json',
+    'config/trusted-users-policy.json',
+    'config/security-privacy.json',
+    'config/sre-error-budgets.json',
+    'config/dashboard-alerts.json',
+    'opencode.json',
+    'renovate.json',
   ];
   for (const cfg of configs) {
     payloadFileOk('configs', cfg, join(ROOT, cfg), 'fix', true);
@@ -333,7 +484,15 @@ async function checkConfigs() {
 async function checkToolConfigs() {
   if (!quiet) console.log('  [Tool Configs] Checking...');
 
-  const files = ['CLAUDE.md', 'AGENTS.md', '.clinerules', '.cursorrules', 'SECURITY.md', '.nvmrc', '.node-version'];
+  const files = [
+    'CLAUDE.md',
+    'AGENTS.md',
+    '.clinerules',
+    '.cursorrules',
+    'SECURITY.md',
+    '.nvmrc',
+    '.node-version',
+  ];
   for (const f of files) {
     addResult('tool-configs', f, fileExists(join(ROOT, f)) ? 'PASS' : 'WARN', '', 'manual');
   }
@@ -352,9 +511,13 @@ async function checkSecurity() {
   if (!quiet) console.log('  [Security] Checking...');
 
   const secFiles = [
-    'config/owner-auth.json.enc', 'config/owner-auth.json.integrity',
-    'scripts/security/privacy-gateway.ps1', 'scripts/security/security-orchestrator.ps1',
-    'SECURITY.md', '.github/CODEOWNERS', '.github/dependabot.yml',
+    'config/owner-auth.json.enc',
+    'config/owner-auth.json.integrity',
+    'scripts/security/privacy-gateway.ps1',
+    'scripts/security/security-orchestrator.ps1',
+    'SECURITY.md',
+    '.github/CODEOWNERS',
+    '.github/dependabot.yml',
   ];
   for (const f of secFiles) {
     addResult('security', f, fileExists(join(ROOT, f)) ? 'PASS' : 'WARN', '', 'manual');
@@ -372,8 +535,14 @@ async function checkCloudConnectors() {
       const data = readJson(cloudMetrics);
       const execs = (data.executions || []).length;
       const successCount = (data.executions || []).filter((e: any) => e.success).length;
-      const successRate = execs > 0 ? (successCount / execs * 100).toFixed(1) : '100';
-      addResult('cloud-connectors', 'metrics file', 'PASS', `${execs} executions, ${successRate}% success`, 'ok');
+      const successRate = execs > 0 ? ((successCount / execs) * 100).toFixed(1) : '100';
+      addResult(
+        'cloud-connectors',
+        'metrics file',
+        'PASS',
+        `${execs} executions, ${successRate}% success`,
+        'ok',
+      );
     } catch {
       addResult('cloud-connectors', 'metrics file', 'WARN', 'Corrupted', 'verify');
     }
@@ -383,17 +552,31 @@ async function checkCloudConnectors() {
 
   const hybridMetrics = join(SESSION_DIR, 'hybrid-metrics.json');
   if (fileExists(hybridMetrics)) {
-    addResult('cloud-connectors', 'hybrid metrics', 'PASS', 'Hybrid routing history available', 'ok');
+    addResult(
+      'cloud-connectors',
+      'hybrid metrics',
+      'PASS',
+      'Hybrid routing history available',
+      'ok',
+    );
   } else {
     addResult('cloud-connectors', 'hybrid metrics', 'WARN', 'No hybrid routing yet', 'ok');
   }
 
   const delegators = ['aws-delegator.ps1', 'azure-delegator.ps1', 'hybrid-executor.ps1'];
-  const missingCount = delegators.filter(d => !fileExists(join(ROOT, `scripts/utilities/ops/CLOUD-CONNECTORS/${d}`))).length;
+  const missingCount = delegators.filter(
+    (d) => !fileExists(join(ROOT, `scripts/utilities/ops/CLOUD-CONNECTORS/${d}`)),
+  ).length;
   if (missingCount === 0) {
     addResult('cloud-connectors', 'delegator scripts', 'PASS', 'All 3 scripts present', 'ok');
   } else {
-    addResult('cloud-connectors', 'delegator scripts', 'FAIL', `Missing ${missingCount} delegator script(s)`, 'verify');
+    addResult(
+      'cloud-connectors',
+      'delegator scripts',
+      'FAIL',
+      `Missing ${missingCount} delegator script(s)`,
+      'verify',
+    );
   }
 }
 
@@ -407,7 +590,7 @@ async function checkTracing() {
   const metricsDir = join(telemetryDir, 'metrics');
 
   if (fileExists(tracesDir)) {
-    const traceFiles = readdirSync(tracesDir).filter(f => f.endsWith('.jsonl')).length;
+    const traceFiles = readdirSync(tracesDir).filter((f) => f.endsWith('.jsonl')).length;
     addResult('tracing', 'trace files', 'PASS', `${traceFiles} trace file(s)`, 'ok');
   } else {
     addResult('tracing', 'trace files', 'WARN', 'No traces directory', 'ok');
@@ -418,7 +601,13 @@ async function checkTracing() {
     if (fileExists(promFile)) {
       const age = getFileAgeHours(promFile);
       const status: CheckResult['status'] = age < 24 ? 'PASS' : age < 72 ? 'WARN' : 'FAIL';
-      addResult('tracing', 'prometheus metrics', status, `last export ${age.toFixed(1)} hrs ago`, 'ok');
+      addResult(
+        'tracing',
+        'prometheus metrics',
+        status,
+        `last export ${age.toFixed(1)} hrs ago`,
+        'ok',
+      );
     } else {
       addResult('tracing', 'prometheus metrics', 'WARN', 'No prometheus export', 'ok');
     }
@@ -426,8 +615,15 @@ async function checkTracing() {
     addResult('tracing', 'metrics directory', 'WARN', 'Not initialized', 'ok');
   }
 
-  addResult('tracing', 'instrumentation script',
-    fileExists(join(ROOT, 'scripts/utilities/ops/TRACING/tracing-instrument.ps1')) ? 'PASS' : 'FAIL', '', 'verify');
+  addResult(
+    'tracing',
+    'instrumentation script',
+    fileExists(join(ROOT, 'scripts/utilities/ops/TRACING/tracing-instrument.ps1'))
+      ? 'PASS'
+      : 'FAIL',
+    '',
+    'verify',
+  );
 }
 
 // ─── Component: State Persistence ────────────────────────────────────────────
@@ -440,15 +636,24 @@ async function checkStatePersistence() {
   const snapshotDir = join(SESSION_DIR, 'snapshots');
 
   if (fileExists(checkpointDir)) {
-    const ckpts = readdirSync(checkpointDir).filter(f => statSync(join(checkpointDir, f)).isDirectory()).length;
+    const ckpts = readdirSync(checkpointDir).filter((f) =>
+      statSync(join(checkpointDir, f)).isDirectory(),
+    ).length;
     addResult('state-persistence', 'checkpoints', 'PASS', `${ckpts} checkpoint(s)`, 'ok');
-    const dirs = readdirSync(checkpointDir).filter(f => statSync(join(checkpointDir, f)).isDirectory())
-      .map(f => ({ name: f, mtime: statSync(join(checkpointDir, f)).mtimeMs }))
+    const dirs = readdirSync(checkpointDir)
+      .filter((f) => statSync(join(checkpointDir, f)).isDirectory())
+      .map((f) => ({ name: f, mtime: statSync(join(checkpointDir, f)).mtimeMs }))
       .sort((a, b) => b.mtime - a.mtime);
     if (dirs.length > 0) {
       const latestAge = (Date.now() - dirs[0].mtime) / (1000 * 60 * 60);
       if (latestAge > 72) {
-        addResult('state-persistence', 'latest checkpoint', 'WARN', `${latestAge.toFixed(1)}hrs old`, 'verify');
+        addResult(
+          'state-persistence',
+          'latest checkpoint',
+          'WARN',
+          `${latestAge.toFixed(1)}hrs old`,
+          'verify',
+        );
       }
     }
   } else {
@@ -456,25 +661,33 @@ async function checkStatePersistence() {
   }
 
   if (fileExists(manifestDir)) {
-    const manifests = readdirSync(manifestDir).filter(f => f.endsWith('.json')).length;
+    const manifests = readdirSync(manifestDir).filter((f) => f.endsWith('.json')).length;
     addResult('state-persistence', 'manifests', 'PASS', `${manifests} manifest(s)`, 'ok');
   } else {
     addResult('state-persistence', 'manifests', 'WARN', 'No manifests', 'ok');
   }
 
   if (fileExists(snapshotDir)) {
-    const snaps = readdirSync(snapshotDir).filter(f => f.endsWith('.json')).length;
+    const snaps = readdirSync(snapshotDir).filter((f) => f.endsWith('.json')).length;
     addResult('state-persistence', 'snapshots', 'PASS', `${snaps} snapshot(s)`, 'ok');
   } else {
     addResult('state-persistence', 'snapshots', 'WARN', 'No snapshots', 'ok');
   }
 
   const ckptMgr = join(ROOT, 'scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1');
-  const rollbackOrch = join(ROOT, 'scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1');
+  const rollbackOrch = join(
+    ROOT,
+    'scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1',
+  );
   const snapMgr = join(ROOT, 'scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1');
   const allScripts = fileExists(ckptMgr) && fileExists(rollbackOrch) && fileExists(snapMgr);
-  addResult('state-persistence', 'scripts', allScripts ? 'PASS' : 'FAIL',
-    allScripts ? 'All 3 scripts present' : 'Missing scripts', 'verify');
+  addResult(
+    'state-persistence',
+    'scripts',
+    allScripts ? 'PASS' : 'FAIL',
+    allScripts ? 'All 3 scripts present' : 'Missing scripts',
+    'verify',
+  );
 }
 
 // ─── Component: Audit Pipeline ───────────────────────────────────────────────
@@ -487,13 +700,19 @@ async function checkAuditPipeline() {
   const indexFile = join(auditDir, 'index.json');
 
   if (fileExists(logDir)) {
-    const logFiles = readdirSync(logDir).filter(f => f.endsWith('.jsonl'));
+    const logFiles = readdirSync(logDir).filter((f) => f.endsWith('.jsonl'));
     let totalEvents = 0;
     for (const f of logFiles) {
       const content = readFileSync(join(logDir, f), 'utf-8').trim();
       if (content) totalEvents += content.split('\n').length;
     }
-    addResult('audit', 'log files', 'PASS', `${logFiles.length} file(s), ${totalEvents} events`, 'ok');
+    addResult(
+      'audit',
+      'log files',
+      'PASS',
+      `${logFiles.length} file(s), ${totalEvents} events`,
+      'ok',
+    );
   } else {
     addResult('audit', 'log files', 'WARN', 'No audit logs yet', 'ok');
   }
@@ -504,14 +723,24 @@ async function checkAuditPipeline() {
     addResult('audit', 'index', 'WARN', 'No index', 'ok');
   }
 
-  addResult('audit', 'pipeline script',
-    fileExists(join(ROOT, 'scripts/security/audit-pipeline.ps1')) ? 'PASS' : 'FAIL', '', 'verify');
+  addResult(
+    'audit',
+    'pipeline script',
+    fileExists(join(ROOT, 'scripts/security/audit-pipeline.ps1')) ? 'PASS' : 'FAIL',
+    '',
+    'verify',
+  );
 
   const rbacPath = join(ROOT, 'config/rbac-policy.json');
   const cspPath = join(ROOT, 'config/security-csp.json');
   const secConfigs = fileExists(rbacPath) && fileExists(cspPath);
-  addResult('audit', 'security configs', secConfigs ? 'PASS' : 'FAIL',
-    secConfigs ? 'RBAC + CSP present' : 'Missing configs', 'verify');
+  addResult(
+    'audit',
+    'security configs',
+    secConfigs ? 'PASS' : 'FAIL',
+    secConfigs ? 'RBAC + CSP present' : 'Missing configs',
+    'verify',
+  );
 }
 
 // ─── Component: Governance ──────────────────────────────────────────────────
@@ -520,8 +749,11 @@ async function checkGovernance() {
   if (!quiet) console.log('  [Governance] Checking...');
 
   const govFiles = [
-    'rules/NORMATIVAS-PERFORMANCE.md', 'rules/SDD-STRICT-TDD.md', 'rules/PER-PHASE-MODEL-ROUTING.md',
-    'openspec/config.yaml', 'rules/NORMATIVA-PNPM-SECURITY.md',
+    'rules/NORMATIVAS-PERFORMANCE.md',
+    'rules/SDD-STRICT-TDD.md',
+    'rules/PER-PHASE-MODEL-ROUTING.md',
+    'openspec/config.yaml',
+    'rules/NORMATIVA-PNPM-SECURITY.md',
   ];
   for (const f of govFiles) {
     addResult('governance', f, fileExists(join(ROOT, f)) ? 'PASS' : 'WARN', '', 'manual');
@@ -537,7 +769,10 @@ async function rebuildMlEmbeddings() {
   const skillEmbedder = join(ROOT, 'scripts/utilities/agents/AUTO-DELEGATION/skill-embedder.ps1');
   if (fileExists(skillEmbedder)) {
     try {
-      execSync(`pwsh -NoProfile -File "${skillEmbedder}" 2>&1`, { encoding: 'utf-8', timeout: 60000 });
+      execSync(`pwsh -NoProfile -File "${skillEmbedder}" 2>&1`, {
+        encoding: 'utf-8',
+        timeout: 60000,
+      });
       addResult('ml-embeddings', 'rebuild', 'PASS', 'Completed', 'ok');
     } catch (e: any) {
       addResult('ml-embeddings', 'rebuild', 'FAIL', `Error: ${e.message}`, 'manual', true);
@@ -567,8 +802,8 @@ async function reindexEngramRag() {
 async function autoHeal() {
   if (!quiet) console.log('\n  -- Auto-Heal Phase --');
 
-  const needsRestart = results.filter(r => r.action === 'restart' && r.status !== 'PASS');
-  const needsStart = results.filter(r => r.action === 'start' && r.status !== 'PASS');
+  const needsRestart = results.filter((r) => r.action === 'restart' && r.status !== 'PASS');
+  const needsStart = results.filter((r) => r.action === 'start' && r.status !== 'PASS');
 
   let healed = 0;
   let failed = 0;
@@ -579,7 +814,7 @@ async function autoHeal() {
   }
 
   // Dashboard WS server restart
-  const dashFail = [...needsRestart, ...needsStart].filter(r => r.component === 'dashboard-ws');
+  const dashFail = [...needsRestart, ...needsStart].filter((r) => r.component === 'dashboard-ws');
   if (dashFail.length > 0) {
     let wsPort = 8080;
     const portsFile = join(RUNTIME_DIR, 'dashboard-ports.json');
@@ -594,17 +829,21 @@ async function autoHeal() {
     const wsAutostart = join(ROOT, 'scripts/utilities/dashboard/dashboard-ws-autostart.ps1');
 
     if (wsRunning) {
-      if (!quiet) console.log(`  [Heal] WS alive on port ${wsPort}, no action needed (watchdog optional)`);
+      if (!quiet)
+        console.log(`  [Heal] WS alive on port ${wsPort}, no action needed (watchdog optional)`);
       addResult('dashboard-ws', 'autoheal', 'PASS', 'WS alive, watchdog skipped', 'ok');
       healed++;
     } else if (fileExists(wsAutostart)) {
       if (!quiet) console.log('  [Heal] Restarting Dashboard WS server...');
       try {
         const child = spawn('pwsh', ['-NoProfile', '-File', wsAutostart, '-Quiet'], {
-          cwd: ROOT, stdio: 'ignore', detached: true, windowsHide: true,
+          cwd: ROOT,
+          stdio: 'ignore',
+          detached: true,
+          windowsHide: true,
         });
         child.unref();
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await new Promise((resolve) => setTimeout(resolve, 5000));
         if (child.exitCode === null) {
           addResult('dashboard-ws', 'autoheal', 'PASS', `Restarted PID ${child.pid}`, 'ok');
           healed++;
@@ -623,15 +862,18 @@ async function autoHeal() {
   }
 
   // CodeGraph server restart
-  const cgFail = needsRestart.filter(r => r.component === 'codegraph');
+  const cgFail = needsRestart.filter((r) => r.component === 'codegraph');
   if (cgFail.length > 0) {
     if (!quiet) console.log('  [Heal] Restarting CodeGraph serve...');
     try {
       const child = spawn('npx.cmd', ['codegraph', 'serve', '--mcp'], {
-        cwd: ROOT, stdio: 'ignore', detached: true, windowsHide: true,
+        cwd: ROOT,
+        stdio: 'ignore',
+        detached: true,
+        windowsHide: true,
       });
       child.unref();
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       if (child.exitCode === null) {
         addResult('codegraph', 'autoheal', 'PASS', `Restarted PID ${child.pid}`, 'ok');
         healed++;
@@ -649,21 +891,25 @@ async function autoHeal() {
 // ─── Summary ────────────────────────────────────────────────────────────────
 
 function generateReport(outputPath?: string) {
-  const pass = results.filter(r => r.status === 'PASS').length;
-  const warn = results.filter(r => r.status === 'WARN').length;
-  const fail = results.filter(r => r.status === 'FAIL').length;
-  const skip = results.filter(r => r.status === 'SKIP').length;
+  const pass = results.filter((r) => r.status === 'PASS').length;
+  const warn = results.filter((r) => r.status === 'WARN').length;
+  const fail = results.filter((r) => r.status === 'FAIL').length;
+  const skip = results.filter((r) => r.status === 'SKIP').length;
   const total = results.length;
 
-  const byComponentMap = new Map<string, { pass: number; warn: number; fail: number; skip: number }>();
+  const byComponentMap = new Map<
+    string,
+    { pass: number; warn: number; fail: number; skip: number }
+  >();
   for (const r of results) {
-    if (!byComponentMap.has(r.component)) byComponentMap.set(r.component, { pass: 0, warn: 0, fail: 0, skip: 0 });
+    if (!byComponentMap.has(r.component))
+      byComponentMap.set(r.component, { pass: 0, warn: 0, fail: 0, skip: 0 });
     const c = byComponentMap.get(r.component)!;
     c[r.status.toLowerCase() as keyof typeof c]++;
   }
   const byComponent = Array.from(byComponentMap.entries()).map(([name, counts]) => ({
     component: name,
-    status: counts.fail > 0 ? 'ISSUES' : 'OK' as const,
+    status: counts.fail > 0 ? 'ISSUES' : ('OK' as const),
     fails: counts.fail,
     pass: counts.pass,
     warn: counts.warn,
@@ -762,16 +1008,29 @@ async function main() {
       await runAllChecks();
       if (!quiet) console.log('\n  -- Auto-Rebuild Phase --');
       {
-        const needsRebuild = results.filter(r => ['rebuild', 'reindex'].includes(r.action) && r.status !== 'PASS');
+        const needsRebuild = results.filter(
+          (r) => ['rebuild', 'reindex'].includes(r.action) && r.status !== 'PASS',
+        );
         if (needsRebuild.length === 0 && !opts.force) {
           if (!quiet) console.log('  Everything fresh');
         } else {
           if (opts.force && !quiet) console.log('  Force rebuild');
           else if (!quiet) console.log(`  ${needsRebuild.length} component(s) need rebuild`);
-          if (opts.force || results.some(r => r.component === 'ml-embeddings' && r.action === 'rebuild' && r.status !== 'PASS')) {
+          if (
+            opts.force ||
+            results.some(
+              (r) =>
+                r.component === 'ml-embeddings' && r.action === 'rebuild' && r.status !== 'PASS',
+            )
+          ) {
             await rebuildMlEmbeddings();
           }
-          if (opts.force || results.some(r => r.component === 'engram' && r.action === 'reindex' && r.status !== 'PASS')) {
+          if (
+            opts.force ||
+            results.some(
+              (r) => r.component === 'engram' && r.action === 'reindex' && r.status !== 'PASS',
+            )
+          ) {
             await reindexEngramRag();
           }
         }
@@ -789,10 +1048,20 @@ async function main() {
       await runAllChecks();
       await autoHeal();
       if (!quiet) console.log('\n  -- Rebuild Phase --');
-      if (opts.force || results.some(r => r.component === 'ml-embeddings' && r.action === 'rebuild' && r.status !== 'PASS')) {
+      if (
+        opts.force ||
+        results.some(
+          (r) => r.component === 'ml-embeddings' && r.action === 'rebuild' && r.status !== 'PASS',
+        )
+      ) {
         await rebuildMlEmbeddings();
       }
-      if (opts.force || results.some(r => r.component === 'engram' && r.action === 'reindex' && r.status !== 'PASS')) {
+      if (
+        opts.force ||
+        results.some(
+          (r) => r.component === 'engram' && r.action === 'reindex' && r.status !== 'PASS',
+        )
+      ) {
         await reindexEngramRag();
       }
       generateReport(opts.output);
@@ -831,7 +1100,7 @@ async function main() {
   if (exitCode > 0) process.exit(Math.min(exitCode, 255));
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('[FATAL]', err);
   process.exit(1);
 });

@@ -58,9 +58,15 @@ function executeStep(step: PipelineStep): Promise<{ success: boolean; error?: st
   });
 }
 
-async function executeStepWithTimeout(step: PipelineStep, timeoutMs = 120000): Promise<{ success: boolean; error?: string }> {
+async function executeStepWithTimeout(
+  step: PipelineStep,
+  timeoutMs = 120000,
+): Promise<{ success: boolean; error?: string }> {
   const timeoutPromise = new Promise<{ success: boolean; error: string }>((resolvePromise) => {
-    setTimeout(() => resolvePromise({ success: false, error: `Timeout after ${timeoutMs}ms` }), timeoutMs);
+    setTimeout(
+      () => resolvePromise({ success: false, error: `Timeout after ${timeoutMs}ms` }),
+      timeoutMs,
+    );
   });
   return Promise.race([executeStep(step), timeoutPromise]);
 }
