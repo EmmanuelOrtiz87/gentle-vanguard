@@ -1,6 +1,10 @@
 {
   "version": "1.0.0",
   "summary": "Stable modules are the default path for day-to-day operations; experimental modules remain opt-in and isolated.",
+  "policy": {
+    "experimentalModules": "opt-in",
+    "requireApprovalForExperimental": true
+  },
   "core": [
     {
       "name": "session-orchestration",
@@ -32,25 +36,29 @@
       "name": "cloud-connectors",
       "description": "Hybrid executor, AWS/Azure delegation, and cost-based routing",
       "tier": "experimental",
-      "owner": "platform"
+      "owner": "platform",
+      "activation": "opt-in"
     },
     {
       "name": "federation",
       "description": "Cross-org trust, auth, and capability exchange",
       "tier": "experimental",
-      "owner": "platform"
+      "owner": "platform",
+      "activation": "opt-in"
     },
     {
       "name": "event-sourcing-and-saga",
       "description": "Advanced event sourcing and saga orchestration flows",
       "tier": "experimental",
-      "owner": "platform"
+      "owner": "platform",
+      "activation": "opt-in"
     },
     {
       "name": "autonomous-evolution",
       "description": "Self-evolving agents and predictive incident response",
       "tier": "experimental",
-      "owner": "platform"
+      "owner": "platform",
+      "activation": "opt-in"
     }
   ]
 }

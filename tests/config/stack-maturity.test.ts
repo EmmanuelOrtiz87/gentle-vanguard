@@ -18,4 +18,12 @@ describe('stack-maturity.json', () => {
     assert.ok(config.experimental.length >= 2);
     assert.ok(config.experimental.every((item: { tier: string }) => item.tier === 'experimental'));
   });
+
+  it('uses an explicit opt-in policy for experimental modules', () => {
+    assert.equal(config.policy?.experimentalModules, 'opt-in');
+    assert.equal(config.policy?.requireApprovalForExperimental, true);
+    assert.ok(
+      config.experimental.every((item: { activation: string }) => item.activation === 'opt-in'),
+    );
+  });
 });
