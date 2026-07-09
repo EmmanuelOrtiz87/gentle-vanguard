@@ -6,21 +6,21 @@ param(
     [Parameter(Mandatory=$true)]
     [ValidateSet('add', 'triage', 'list', 'migrate', 'status')]
     [string]$Action,
-    
+
     [Parameter(Mandatory=$false)]
     [string]$Title,
-    
+
     [Parameter(Mandatory=$false)]
     [ValidateSet('feature', 'tech-debt', 'optimization', 'docs')]
     [string]$Type = 'feature',
-    
+
     [Parameter(Mandatory=$false)]
     [ValidateSet('high', 'medium', 'low')]
     [string]$Priority = 'medium',
-    
+
     [Parameter(Mandatory=$false)]
     [string]$Description,
-    
+
     [Parameter(Mandatory=$false)]
     [string]$Owner = 'unassigned'
 )
@@ -48,11 +48,11 @@ function Get-NextId {
 
 function Add-BacklogItem {
     param($Title, $Type, $Priority, $Description, $Owner)
-    
+
     Ensure-BacklogDir
     $id = "BL-$(Get-NextId)"
     $date = Get-Date -Format 'yyyy-MM-dd'
-    
+
     $item = @{
         id = $id
         title = $Title
@@ -68,13 +68,13 @@ function Add-BacklogItem {
         linked_sessions = @()
         linked_prs = @()
     }
-    
+
     $items = @()
     if (Test-Path $itemsFile) {
         $items = Get-Content $itemsFile | ConvertFrom-Json
     }
     $items += $item
-    
+
     $items | ConvertTo-Json -Depth 10 | Set-Content $itemsFile -Encoding UTF8
     Write-Host "[OK] Added ${id}: ${Title}" -ForegroundColor Green
 }
@@ -84,14 +84,14 @@ function Migrate-LegacyBacklog {
         Write-Host "[WARN] Legacy backlog file not found at $legacyFile" -ForegroundColor Yellow
         return
     }
-    
+
     Write-Host "[INFO] Migrating legacy backlog from $legacyFile..." -ForegroundColor Cyan
-    
+
     $content = Get-Content $legacyFile -Raw
     $lines = $content -split "`n"
     $inTable = $false
     $items = @()
-    
+
     foreach ($line in $lines) {
         if ($line -match '^\| ID \| Date \|') { $inTable = $true; continue }
         if ($inTable -and $line -match '^\|---') { continue }
@@ -106,11 +106,11 @@ function Migrate-LegacyBacklog {
                 $status = $cols[6]
                 $owner = $cols[7]
                 $trigger = $cols[8]
-                
+
                 # Map legacy status
                 $newStatus = 'pending'
                 if ($status -eq 'done') { $newStatus = 'done' }
-                
+
                 $items += @{
                     id = $id
                     title = $theme
@@ -130,12 +130,12 @@ function Migrate-LegacyBacklog {
         }
         if ($inTable -and $line -notmatch '^\|') { break }
     }
-    
+
     if ($items.Count -gt 0) {
         Ensure-BacklogDir
         $items | ConvertTo-Json -Depth 10 | Set-Content $itemsFile -Encoding UTF8
         Write-Host "[OK] Migrated $($items.Count) items to $itemsFile" -ForegroundColor Green
-        
+
         # Archive legacy
         $archiveDir = Join-Path $repoRoot 'docs\reference\archive'
         if (-not (Test-Path $archiveDir)) { New-Item -ItemType Directory -Path $archiveDir -Force | Out-Null }
@@ -149,35 +149,35 @@ function Migrate-LegacyBacklog {
 
 function Update-BacklogReadme {
     if (-not (Test-Path $itemsFile)) { return }
-    
+
     $items = Get-Content $itemsFile | ConvertFrom-Json
     $readmePath = Join-Path $backlogDir 'README.md'
     $templatePath = Join-Path $repoRoot 'docs\templates\backlog-readme-template.md'
-    
+
     # Default template if not found
-    $template = "# Backlog de Desarrollo\n\n> **Nota:** Este archivo es generado automticamente a partir de `items.json`.\n\n## Resumen\n\n| Estado | Cantidad |\n|--------|----------|\n| Pendiente | {{PENDING_COUNT}} |\n| En Progreso | {{IN_PROGRESS_COUNT}} |\n| Completado | {{DONE_COUNT}} |\n\n## Lista Detallada\n\n{{BACKLOG_TABLE}}\n\n---\n*Generado: {{GENERATION_DATE}}*"
-    
+    $template = "# Backlog de Desarrollo\n\n> **Nota:** Este archivo es generado automáticamente a partir de `items.json`.\n\n## Resumen\n\n| Estado | Cantidad |\n|--------|----------|\n| Pendiente | {{PENDING_COUNT}} |\n| En Progreso | {{IN_PROGRESS_COUNT}} |\n| Completado | {{DONE_COUNT}} |\n\n## Lista Detallada\n\n{{BACKLOG_TABLE}}\n\n---\n*Generado: {{GENERATION_DATE}}*"
+
     if (Test-Path $templatePath) {
         $template = Get-Content $templatePath -Raw
     }
-    
+
     $pending = @($items | Where-Object { $_.status -eq 'pending' }).Count
     $inProgress = @($items | Where-Object { $_.status -eq 'in-progress' }).Count
     $done = @($items | Where-Object { $_.status -eq 'done' }).Count
-    
-    $table = "| ID | Ttulo | Prioridad | Estado | Owner |\n|----|--------|-----------|--------|-------|\n"
+
+    $table = "| ID | Título | Prioridad | Estado | Owner |\n|----|--------|-----------|--------|-------|\n"
     foreach ($item in $items) {
         if ($item.status -ne 'done') {
             $table += "| $($item.id) | $($item.title) | $($item.priority) | $($item.status) | $($item.owner) |\n"
         }
     }
-    
+
     $content = $template.Replace("{{PENDING_COUNT}}", $pending)
     $content = $content.Replace("{{IN_PROGRESS_COUNT}}", $inProgress)
     $content = $content.Replace("{{DONE_COUNT}}", $done)
     $content = $content.Replace("{{BACKLOG_TABLE}}", $table)
     $content = $content.Replace("{{GENERATION_DATE}}", (Get-Date -Format 'yyyy-MM-dd HH:mm'))
-    
+
     $content | Out-File -FilePath $readmePath -Encoding UTF8BOM
     Write-Host "[OK] README actualizado en $readmePath" -ForegroundColor Gray
 }
@@ -187,7 +187,7 @@ function List-BacklogItems {
         Write-Host "[INFO] Backlog is empty." -ForegroundColor Cyan
         return
     }
-    
+
     $items = Get-Content $itemsFile | ConvertFrom-Json
     Write-Host "`n=== BACKLOG ITEMS ===" -ForegroundColor Cyan
     foreach ($item in $items) {
@@ -198,7 +198,7 @@ function List-BacklogItems {
         }
         Write-Host "[$($item.id)] $($item.title) (Priority: $($item.priority), Status: $($item.status))" -ForegroundColor $color
     }
-    
+
     Update-BacklogReadme
 }
 

@@ -48,16 +48,16 @@ function Write-Log {
 
 function Get-ScriptInfo {
     param([string]$ScriptPath)
-    
+
     $content = Get-Content -Path $ScriptPath -Raw
     $name = Split-Path -Leaf $ScriptPath
-    
+
     # Extract SYNOPSIS
     $synopsis = ""
     if ($content -match '\.SYNOPSIS\s+([^\n]+)') {
         $synopsis = $matches[1].Trim()
     }
-    
+
     # Extract parameters
     $parameters = @()
     $paramMatches = [regex]::Matches($content, '\.PARAMETER\s+(\w+)\s+([^\n]+)')
@@ -67,7 +67,7 @@ function Get-ScriptInfo {
             Description = $match.Groups[2].Value
         }
     }
-    
+
     return @{
         Name = $name
         Path = $ScriptPath
@@ -79,45 +79,45 @@ function Get-ScriptInfo {
 
 function Get-DirectoryScripts {
     param([string]$DirectoryPath)
-    
+
     $scripts = @()
-    
+
     if (Test-Path $DirectoryPath) {
         $items = Get-ChildItem -Path $DirectoryPath -Filter "*.ps1" -File
         foreach ($item in $items) {
             $scripts += Get-ScriptInfo -ScriptPath $item.FullName
         }
     }
-    
+
     return $scripts
 }
 
 function Generate-IndexContent {
     param([hashtable]$ScriptsByCategory)
-    
-    $content = @"
-# [DOC] NDICE COMPLETO DE SCRIPTS
 
-**Versin:** 2.0.0  
-**ltima actualizacin:** $(Get-Date -Format 'yyyy-MM-dd')  
+    $content = @"
+# [DOC] ÍNDICE COMPLETO DE SCRIPTS
+
+**Versión:** 2.0.
+**Última actualización:** $(Get-Date -Format 'yyyy-MM-dd'
 **Total de Scripts:** $($ScriptsByCategory.Values | Measure-Object -Sum | Select-Object -ExpandProperty Sum)
 
-ndice maestro de todos los scripts disponibles en el directorio `scripts/utilities/`. Generado automticamente.
+Índice maestro de todos los scripts disponibles en el directorio `scripts/utilities/`. Generado automáticamente.
 
 ---
 
 ## [LIST] Tabla de Contenidos
 
-- [Scripts por Categora](#scripts-por-categora)
-- [Bsqueda Rpida](#bsqueda-rpida)
+- [Scripts por Categoría](#scripts-por-categoria)
+- [Búsqueda Rápida](#busqueda-rapida)
 
 ---
 
-## [SEARCH] Bsqueda Rpida
+## [SEARCH] Búsqueda Rápida
 
 ### Por Directorio
 
-| Directorio | Scripts | Descripcin |
+| Directorio | Scripts | Descripción |
 |-----------|---------|-------------|
 "@
 
@@ -125,30 +125,30 @@ ndice maestro de todos los scripts disponibles en el directorio `scripts/utiliti
         $count = $ScriptsByCategory[$category].Count
         $content += "`n| $category | $count | Consultar abajo |"
     }
-    
-    $content += "`n`n---`n`n##  Scripts por Categora`n`n"
-    
+
+    $content += "`n`n---`n`n##  Scripts por Categoría`n`n"
+
     foreach ($category in $ScriptsByCategory.Keys | Sort-Object) {
         $scripts = $ScriptsByCategory[$category]
         $content += "`n### $category`n`n"
-        $content += "| Script | Descripcin | Tipo |`n"
+        $content += "| Script | Descripción | Tipo |`n"
         $content += "|--------|-------------|------|`n"
-        
+
         foreach ($script in $scripts | Sort-Object -Property Name) {
             $content += "| ``$($script.Name)`` | $($script.Synopsis) | $($script.Type) |`n"
         }
     }
-    
+
     return $content
 }
 
 try {
     Write-Log "Starting INDEX.md generation"
-    
+
     # Scan directories
     $scriptsByCategory = @{}
     $directories = Get-ChildItem -Path $Path -Directory | Where-Object { $_.Name -match '^[A-Z]' }
-    
+
     foreach ($dir in $directories) {
         Write-Log "Scanning directory: $($dir.Name)" "DEBUG"
         $scripts = Get-DirectoryScripts -DirectoryPath $dir.FullName
@@ -156,16 +156,16 @@ try {
             $scriptsByCategory[$dir.Name] = $scripts
         }
     }
-    
+
     Write-Log "Found $($scriptsByCategory.Values | Measure-Object -Sum | Select-Object -ExpandProperty Sum) scripts in $($scriptsByCategory.Count) categories"
-    
+
     # Generate content
     $indexContent = Generate-IndexContent -ScriptsByCategory $scriptsByCategory
-    
+
     # Write to file
     $outputPath = Join-Path -Path $Path -ChildPath $OutputFile
     Set-Content -Path $outputPath -Value $indexContent -Encoding UTF8
-    
+
     Write-Log "INDEX.md generated successfully: $outputPath" "SUCCESS"
     exit 0
 }

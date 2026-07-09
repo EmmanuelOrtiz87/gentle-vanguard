@@ -250,6 +250,29 @@
 - **Pre-commit hooks**: `.lefthook.yml` added `auto-code-review` step for staged files.
 - **VERSION**: Updated from 3.3.3 to 5.1.0 reflecting full v5.1+v6.0 feature set.
 
+## [3.3.4] - 2026-07-02
+
+### Added
+
+- **Document Analysis Skill**: Skill nativa extraída de Turnkey — 8 módulos Python (sidecar NDJSON),
+  pipeline LLM real con opencode, conectores Jira/Confluence, watchdog de carpeta
+  `docs/requirements/`, pre-commit hook non-blocking.
+- **Dashboard metrics**: `documentAnalysis.results` + `reports` en `real-data.ts`.
+- **Autostart step**: `document-analysis-init` lazy en `session-autostart.config.json`.
+
+### Fixed
+
+- **JSON BOM**: 2 configs con BOM corregidos (`judgment-day-automation.json`,
+  `judgment-day-orchestrator-config.json`).
+- **Prettier formatting**: `README.md`, `real-data.ts`, `session-autostart.config.json`, `SKILL.md`,
+  `LEARNED-NORMS.md`, `norms-registry.json` formateados.
+
+### Changed
+
+- **Skills count**: 385 → 386 (+1 Document Analysis).
+- **Public repo sync**: Sincronizado vía `sync-to-public.ps1` con sanitización.
+- **Dashboard build**: `npm run build` → 0 errores, 3.52s, 2193 módulos.
+
 ## [3.3.3] - 2026-06-19
 
 ### Fixed
