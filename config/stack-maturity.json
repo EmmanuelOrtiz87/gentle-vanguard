@@ -8,6 +8,10 @@
   "governance": {
     "requiredForExperimental": ["tests", "typecheck", "security-scan"]
   },
+  "activationWorkflow": {
+    "requiredApprovals": 1,
+    "checklist": ["review", "approval", "rollout"]
+  },
   "core": [
     {
       "name": "session-orchestration",

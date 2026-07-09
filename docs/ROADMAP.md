@@ -65,13 +65,15 @@ seguro, extensible, zero-drama.**
 
 ## Fase 1 — Consolidación corta (ahora)
 
-| Acción                                        | Objetivo                              | Impacto |
-| --------------------------------------------- | ------------------------------------- | ------- | --- | ------------------------------------------------------------------ | ----------------------------------------- | ---- |
-| Definir módulos core vs experimental          | Reducir ambigüedad operativa          | Alto    |
-| Marcar módulos experimentales como opt-in     | Evitar que se usen por defecto        | Alto    |
-| Añadir validación de configuración de madurez | Sustituir intuición por contrato      | Medio   |
-| Documentar la ruta de maduración del stack    | Hacerla ejecutable y priorizada       | Medio   |
-| Aplicar política explícita de activación      | Obligar opt-in para módulos riesgosos | Alto    |     | Añadir gates de gobernanza antes de activar módulos experimentales | Evitar activaciones sin validación mínima | Alto |
+| Acción                                                             | Objetivo                                           | Impacto |
+| ------------------------------------------------------------------ | -------------------------------------------------- | ------- |
+| Definir módulos core vs experimental                               | Reducir ambigüedad operativa                       | Alto    |
+| Marcar módulos experimentales como opt-in                          | Evitar que se usen por defecto                     | Alto    |
+| Añadir validación de configuración de madurez                      | Sustituir intuición por contrato                   | Medio   |
+| Documentar la ruta de maduración del stack                         | Hacerla ejecutable y priorizada                    | Medio   |
+| Aplicar política explícita de activación                           | Obligar opt-in para módulos riesgosos              | Alto    |
+| Añadir gates de gobernanza antes de activar módulos experimentales | Evitar activaciones sin validación mínima          | Alto    |
+| Definir workflow formal de activación de módulos experimentales    | Garantizar revisión y aprobación antes del rollout | Alto    |
 
 ## Deprecado
 

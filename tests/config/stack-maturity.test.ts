@@ -34,4 +34,13 @@ describe('stack-maturity.json', () => {
     assert.ok(requiredChecks.includes('typecheck'));
     assert.ok(requiredChecks.includes('security-scan'));
   });
+
+  it('defines a formal activation workflow for experimental modules', () => {
+    const workflow = config.activationWorkflow;
+    assert.ok(workflow);
+    assert.ok(Array.isArray(workflow.checklist));
+    assert.ok(workflow.checklist.includes('review'));
+    assert.ok(workflow.checklist.includes('approval'));
+    assert.equal(workflow.requiredApprovals, 1);
+  });
 });
