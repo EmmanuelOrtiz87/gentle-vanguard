@@ -75,6 +75,11 @@ seguro, extensible, zero-drama.**
 | Añadir gates de gobernanza antes de activar módulos experimentales | Evitar activaciones sin validación mínima          | Alto    |
 | Definir workflow formal de activación de módulos experimentales    | Garantizar revisión y aprobación antes del rollout | Alto    |
 
+## Guía de adopción
+
+- Ver [docs/STACK-MATURITY-GUIDE.md](docs/STACK-MATURITY-GUIDE.md) para la política resumida de
+  madurez del stack.
+
 ## Deprecado
 
 | Feature                     | Motivo                                                                          |
