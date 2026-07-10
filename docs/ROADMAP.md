@@ -80,6 +80,12 @@ seguro, extensible, zero-drama.**
 - Ver [docs/STACK-MATURITY-GUIDE.md](docs/STACK-MATURITY-GUIDE.md) para la política resumida de
   madurez del stack.
 
+## Prioridad de migración PS1 → TS
+
+- Ver [config/ps1-ts-migration.json](config/ps1-ts-migration.json) para la ola inicial de scripts
+  críticos a migrar.
+- Primera ola priorizada: security orchestrator, hybrid executor y checkpoint manager.
+
 ## Deprecado
 
 | Feature                     | Motivo                                                                          |

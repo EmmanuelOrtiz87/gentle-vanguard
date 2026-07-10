@@ -80,3 +80,23 @@
 - [ ] Documentation updated
 - [ ] No breaking changes (or documented above)
 - [ ] CI/CD pipeline passes
+
+---
+
+<!-- Experimental activation section (fill when requesting module activation) -->
+
+### Experimental Module Activation Request
+
+- Module name:
+- Owners:
+- Short description of scope and impact:
+
+#### Activation checklist (must be completed before requesting approval)
+
+- [ ] Confirmed module labeled `experimental` in `config/stack-maturity.json`
+- [ ] Ran `pnpm test:config` and `pnpm typecheck` locally
+- [ ] Ran security scan (e.g. `pnpm secretlint`)
+- [ ] Added tests demonstrating behavior
+- [ ] Added migration/rollback notes if applicable
+
+Activation requires at least one approval and will generate an activation record in CI.

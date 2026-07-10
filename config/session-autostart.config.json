@@ -114,10 +114,10 @@
       {
         "id": "security-orchestrator",
         "enabled": true,
-        "script": "scripts/security/security-orchestrator.ps1",
-        "args": "-Action init -AsJson",
+        "script": "src/security-orchestrator.ts",
+        "args": "init prompt",
         "required": true,
-        "description": "Initialize Security Orchestrator with policy and privacy configs"
+        "description": "Initialize Security Orchestrator with policy and privacy configs (TS)"
       },
       {
         "id": "skill-router",
@@ -192,16 +192,6 @@
         "description": "Intelligent temporary Codex/Windsurf optimization with automatic restore when normalized"
       },
       {
-        "id": "adaptive-claude-cline-profile",
-        "enabled": false,
-        "deprecated": true,
-        "lazy": true,
-        "script": "scripts/utilities/adaptive-claude-cline-profile.ps1",
-        "args": "-Mode Auto -TimeZone \"Argentina Standard Time\" -PeakStart 9 -PeakEnd 15",
-        "required": false,
-        "description": "[SCRIPT NOT FOUND] Intelligent temporary Claude Code/Cline optimization — disabled until script is restored"
-      },
-      {
         "id": "lefthook-verify",
         "enabled": true,
         "script": "scripts/utilities/lefthook-verify.ps1",
@@ -218,16 +208,6 @@
         "description": "Verify CodeGraph index freshness and sync if stale (\u003e30min old)"
       },
       {
-        "id": "self-diagnosis",
-        "enabled": false,
-        "deprecated": true,
-        "lazy": true,
-        "script": "scripts/utilities/DIAGNOSIS/self-diagnosis-autonomous.ps1",
-        "args": "-Depth quick",
-        "required": false,
-        "description": "[SCRIPT NOT FOUND] Proactive failure detection — disabled until script is restored or recreated"
-      },
-      {
         "id": "metrics-collection",
         "enabled": true,
         "lazy": true,
@@ -235,26 +215,6 @@
         "args": "-Scope full -Quiet",
         "required": false,
         "description": "Auto-collect metrics after session start for live dashboard"
-      },
-      {
-        "id": "dashboard-render",
-        "enabled": false,
-        "deprecated": true,
-        "lazy": true,
-        "script": "scripts/metrics/dashboard-render.ps1",
-        "args": "",
-        "required": false,
-        "description": "[DEPRECATED] Static HTML dashboard — superseded by React dashboard (dashboard-ws-start). Kept for reference."
-      },
-      {
-        "id": "live-feed-start",
-        "enabled": false,
-        "deprecated": true,
-        "lazy": true,
-        "script": "scripts/utilities/live-feed-manager.ps1",
-        "args": "-Action start -RefreshSeconds 15 -ServerPort 8090 -OpenDashboard",
-        "required": false,
-        "description": "[DEPRECATED] Console live-feed HTTP server — superseded by dashboard-ws-start. Kept for reference."
       },
       {
         "id": "dashboard-ws-start",
@@ -405,10 +365,10 @@
         "id": "cloud-connectors-init",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1",
-        "args": "-SkillId __healthcheck__ -SkillInput @{action=\u0027ping\u0027} -InvocationType DryRun -Quiet",
+        "script": "src/hybrid-executor.ts",
+        "args": "",
         "required": false,
-        "description": "Initialize cloud connectors — validates config, checks circuit breaker states, pre-warms connections (Phase 1.2)"
+        "description": "Initialize cloud connectors — validates config, checks circuit breaker states (TS)"
       },
       {
         "id": "cloud-connectors-metrics",
@@ -432,10 +392,10 @@
         "id": "checkpoint-auto-create",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1",
-        "args": "-Action create -Label autostart -Quiet",
+        "script": "src/checkpoint-manager.ts",
+        "args": "create",
         "required": false,
-        "description": "Auto-create session state checkpoint at session start for rollback safety (Phase 2)"
+        "description": "Auto-create session state checkpoint at session start for rollback safety (TS)"
       },
       {
         "id": "audit-pipeline-init",
@@ -499,8 +459,8 @@
       },
       {
         "id": "maintenance-auto-prune",
-        "script": "scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1",
-        "args": "-Action list -Quiet",
+        "script": "src/checkpoint-manager.ts",
+        "args": "list",
         "lazy": true,
         "enabled": true,
         "required": false,

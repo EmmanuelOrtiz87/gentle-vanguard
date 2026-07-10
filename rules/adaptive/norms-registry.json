@@ -1,11 +1,11 @@
 {
   "norms": [],
   "stats": {
+    "deprecatedNorms": 0,
     "categories": {},
     "activeNorms": 0,
-    "deprecatedNorms": 0,
     "totalNorms": 0
   },
-  "version": 3,
-  "lastUpdated": "2026-07-02T10:34:06.5537579-03:00"
+  "lastUpdated": "2026-07-09T22:16:55.7285362-03:00",
+  "version": 3
 }
