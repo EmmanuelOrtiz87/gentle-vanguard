@@ -1,14 +1,16 @@
 {
-  "version": "2.0.0",
-  "summary": "Priority order for migrating PowerShell entrypoints to TypeScript.",
+  "version": "3.0.0",
+  "summary": "TypeScript migration tracker for Gentle-Vanguard PS1 → TS.",
   "cleanupDate": "2026-07-10",
   "cleanupSummary": {
-    "scriptsRemoved": 372,
-    "scriptsRemaining": 127,
+    "scriptsRemoved": 385,
+    "scriptsRemaining": 119,
     "duplicatesResolved": 19,
     "directoriesCleaned": 50,
     "stubsCreated": 3,
-    "credentialsRemoved": true
+    "credentialsRemoved": true,
+    "tsMigrationsWave1": 4,
+    "tsMigrationsWave2": 5
   },
   "priorities": [
     {
@@ -37,10 +39,64 @@
       "script": "scripts/maintenance/maintenance-watchtower.ps1",
       "target": "src/maintenance-watchtower.ts",
       "priority": "high",
+      "status": "implemented"
+    },
+    {
+      "id": "session-scoring",
+      "script": "scripts/adaptive/session-scoring.ps1",
+      "target": "src/session-scoring.ts",
+      "priority": "high",
       "status": "implemented",
       "migratedAt": "2026-07-10",
-      "configUpdated": true
+      "configUpdated": true,
+      "reason": "Broken PS1 (null property access, divide-by-zero), 3 calls/session"
+    },
+    {
+      "id": "token-budget-guard",
+      "script": "scripts/utilities/telemetry/TELEMETRY-METRICS/token-budget-guard.ps1",
+      "target": "src/token-budget-guard.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "2 calls/session, pure data processing, CSV fragility in PS1"
+    },
+    {
+      "id": "audit-pipeline",
+      "script": "scripts/security/audit-pipeline.ps1",
+      "target": "src/audit-pipeline.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "SOC2/GDPR compliance, SHA256 hashing native in Node.js"
+    },
+    {
+      "id": "session-cleanup-start",
+      "script": "scripts/utilities/session/session-cleanup-start.ps1",
+      "target": "src/session-cleanup-start.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "Had runtime bug (-and parameter), orchestrator spawning 5+ subprocesses"
+    },
+    {
+      "id": "correction-rules-engine",
+      "script": "scripts/adaptive/correction-rules-engine.ps1",
+      "target": "src/correction-rules-engine.ts",
+      "priority": "medium",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "Largest PS1 (423 lines), self-healing core, Zod-ready"
     }
+  ],
+  "completedWave1": [
+    "security-orchestrator",
+    "hybrid-executor",
+    "checkpoint-manager",
+    "maintenance-watchtower"
   ],
   "firstWave": [
     "security-orchestrator",
@@ -48,5 +104,30 @@
     "checkpoint-manager",
     "maintenance-watchtower"
   ],
-  "nextWave": ["audit-pipeline", "tracing-instrument", "event-sourcing", "session-autostart"]
+  "completedWave2": [
+    "session-scoring",
+    "token-budget-guard",
+    "audit-pipeline",
+    "session-cleanup-start",
+    "correction-rules-engine"
+  ],
+  "nextWave": [
+    "tracing-instrument",
+    "event-sourcing",
+    "session-autostart",
+    "engram-integrity-check"
+  ],
+  "tsFiles": [
+    "src/session-autostart.ts",
+    "src/health-check.ts",
+    "src/maintenance-watchtower.ts",
+    "src/security-orchestrator.ts",
+    "src/hybrid-executor.ts",
+    "src/checkpoint-manager.ts",
+    "src/session-scoring.ts",
+    "src/token-budget-guard.ts",
+    "src/audit-pipeline.ts",
+    "src/session-cleanup-start.ts",
+    "src/correction-rules-engine.ts"
+  ]
 }

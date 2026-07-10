@@ -513,7 +513,7 @@ async function checkSecurity() {
     'config/owner-auth.json.enc',
     'config/owner-auth.json.integrity',
     'scripts/security/privacy-gateway.ps1',
-    'scripts/security/security-orchestrator.ps1',
+    'src/security-orchestrator.ts',
     'SECURITY.md',
     '.github/CODEOWNERS',
     '.github/dependabot.yml',
@@ -562,10 +562,11 @@ async function checkCloudConnectors() {
     addResult('cloud-connectors', 'hybrid metrics', 'WARN', 'No hybrid routing yet', 'ok');
   }
 
-  const delegators = ['aws-delegator.ps1', 'azure-delegator.ps1', 'hybrid-executor.ps1'];
-  const missingCount = delegators.filter(
-    (d) => !fileExists(join(ROOT, `scripts/utilities/ops/CLOUD-CONNECTORS/${d}`)),
-  ).length;
+  const delegators = ['aws-delegator.ps1', 'azure-delegator.ps1', 'src/hybrid-executor.ts'];
+  const missingCount = delegators.filter((d) => {
+    if (d.endsWith('.ts')) return !fileExists(join(ROOT, d));
+    return !fileExists(join(ROOT, `scripts/utilities/ops/CLOUD-CONNECTORS/${d}`));
+  }).length;
   if (missingCount === 0) {
     addResult('cloud-connectors', 'delegator scripts', 'PASS', 'All 3 scripts present', 'ok');
   } else {
@@ -673,7 +674,7 @@ async function checkStatePersistence() {
     addResult('state-persistence', 'snapshots', 'WARN', 'No snapshots', 'ok');
   }
 
-  const ckptMgr = join(ROOT, 'scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1');
+  const ckptMgr = join(ROOT, 'src/checkpoint-manager.ts');
   const rollbackOrch = join(
     ROOT,
     'scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1',

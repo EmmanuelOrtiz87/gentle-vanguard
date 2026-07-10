@@ -122,13 +122,13 @@ function checkSessionRef() {
   header('Session Reference System');
   writeCheck(
     'Session Ref script exists',
-    exists('scripts/utilities/SESSION/session-reference-system.ps1'),
+    exists('scripts/utilities/session/session-reference-system.ps1'),
   );
 }
 
 function checkSkillFactory() {
   header('Skill Factory');
-  writeCheck('Skill Factory exists', exists('scripts/utilities/SKILL-FACTORY/skill-factory.ps1'));
+  writeCheck('Skill Factory exists', exists('scripts/utilities/skill-factory/skill-factory.ps1'));
   writeCheck('Skill registry exists', exists('.atl', 'skill-registry.md'));
   const regPath = path.resolve(ROOT, '.atl/skill-registry.md');
   if (fs.existsSync(regPath)) {
@@ -262,7 +262,7 @@ async function checkEngramRag() {
   header('Engram RAG Index');
   writeCheck(
     'engram-rag-reindex.ps1 exists',
-    exists('scripts/utilities/ENGRAM-RAG/engram-rag-reindex.ps1'),
+    exists('scripts/utilities/memory/ENGRAM-RAG/engram-rag-reindex.ps1'),
   );
   try {
     const output = execSync('engram doctor --json', {
@@ -279,18 +279,18 @@ async function checkEngramRag() {
 
 async function checkDashboardV3() {
   header('Dashboard v3');
-  writeCheck('server.js exists', exists('dashboard', 'server.js'));
-  writeCheck('index.html exists', exists('dashboard', 'index.html'));
-  const portOpen = await tcpCheck(3000);
-  writeCheck('dashboard server (port 3000)', portOpen);
+  const dashboardDir = path.resolve(ROOT, 'apps/web-dashboard');
+  writeCheck('apps/web-dashboard exists', fs.existsSync(dashboardDir));
+  const portOpen = await tcpCheck(5173);
+  writeCheck('dashboard dev server (port 5173)', portOpen);
 }
 
 function checkMcpBridge() {
   header('MCP Bridge');
   writeCheck(
     'mcp-bridge.ps1 exists',
-    exists('scripts/utilities/MCP-BRIDGE/mcp-bridge.ps1'),
-    'scripts/utilities/MCP-BRIDGE/mcp-bridge.ps1',
+    exists('scripts/mcp-bridge/mcp-bridge.ps1'),
+    'scripts/mcp-bridge/mcp-bridge.ps1',
   );
   writeCheck(
     'tms-mcp-bridge.ps1 exists',

@@ -29,7 +29,7 @@ post-merge:
     post-merge-update:
       run:
         powershell -NoProfile -Command "& { if (Test-Path scripts/utilities/session-manager.ps1) {
-        .\tools\session-manager.ps1 -Action update } }"
+        .\scripts\utilities\session-manager.ps1 -Action update } }"
 
 pre-commit:
   commands:
