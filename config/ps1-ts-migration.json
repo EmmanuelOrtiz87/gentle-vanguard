@@ -1,6 +1,15 @@
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "summary": "Priority order for migrating PowerShell entrypoints to TypeScript.",
+  "cleanupDate": "2026-07-10",
+  "cleanupSummary": {
+    "scriptsRemoved": 372,
+    "scriptsRemaining": 127,
+    "duplicatesResolved": 19,
+    "directoriesCleaned": 50,
+    "stubsCreated": 3,
+    "credentialsRemoved": true
+  },
   "priorities": [
     {
       "id": "security-orchestrator",
@@ -22,8 +31,22 @@
       "target": "src/checkpoint-manager.ts",
       "priority": "medium",
       "status": "implemented"
+    },
+    {
+      "id": "maintenance-watchtower",
+      "script": "scripts/maintenance/maintenance-watchtower.ps1",
+      "target": "src/maintenance-watchtower.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true
     }
   ],
-  "firstWave": ["security-orchestrator", "hybrid-executor", "checkpoint-manager"],
-  "nextWave": ["audit-pipeline", "tracing-instrument", "event-sourcing"]
+  "firstWave": [
+    "security-orchestrator",
+    "hybrid-executor",
+    "checkpoint-manager",
+    "maintenance-watchtower"
+  ],
+  "nextWave": ["audit-pipeline", "tracing-instrument", "event-sourcing", "session-autostart"]
 }

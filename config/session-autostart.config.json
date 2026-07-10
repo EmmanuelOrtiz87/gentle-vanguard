@@ -329,7 +329,7 @@
         "id": "maintenance-watchtower",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/maintenance/maintenance-watchtower.ps1",
+        "script": "src/maintenance-watchtower.ts",
         "args": "-Action autoheal -Quiet",
         "required": false,
         "description": "Health check completo + auto-healing de componentes caídos al inicio de sesión. Corre en background (lazy)."
