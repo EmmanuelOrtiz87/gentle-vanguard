@@ -246,7 +246,7 @@
         "id": "skill-recommendation",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/AUTO-DELEGATION/skill-recommender.ps1",
+        "script": "scripts/utilities/agents/AUTO-DELEGATION/skill-recommender.ps1",
         "args": "-Proactive -TopN 3",
         "required": false,
         "description": "Recomienda skills relevantes basado en el contexto actual del workspace (git branch, archivos modificados, commits recientes)"
@@ -271,7 +271,7 @@
         "id": "skill-size-check",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/check-skill-sizes.ps1",
+        "script": "scripts/utilities/skills/SKILL/check-skill-sizes.ps1",
         "args": "-WarnOnly",
         "required": false,
         "description": "Audita skills que exceden limites de tokens/lineas y recomienda split a references/"
@@ -305,7 +305,7 @@
         "id": "json-validator-verify",
         "enabled": true,
         "script": "scripts/utilities/config/JSON/json-validator.ps1",
-        "args": "-JsonString \u0027{\"test\": \"value\"}\u0027 -Context \u0027startup-verify\u0027",
+        "args": "-JsonString '{\"test\":\"ok\"}' -Context startup-verify",
         "required": false,
         "description": "Verifica que el validador JSON esta operativo al inicio de sesion"
       },
@@ -338,7 +338,7 @@
         "id": "digest-generator",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/DIGEST/digest-generator.ps1",
+        "script": "scripts/utilities/reporting/DIGEST/digest-generator.ps1",
         "args": "-Mode status -Show",
         "required": false,
         "description": "Genera digest de inicio de sesion con health, feedback trends, proposals pendientes"

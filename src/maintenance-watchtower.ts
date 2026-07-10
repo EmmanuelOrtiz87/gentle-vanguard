@@ -2,7 +2,7 @@
 
 import { readFileSync, existsSync, readdirSync, writeFileSync, statSync } from 'fs';
 import { join, resolve, basename } from 'path';
-import { spawn, execSync } from 'child_process';
+import { spawn, execSync, execFileSync } from 'child_process';
 import { createConnection } from 'net';
 
 const ROOT = resolve(process.cwd());
@@ -322,10 +322,9 @@ async function checkEngram() {
   );
   const engramCmd = fileExists(engramBin) ? engramBin : 'engram';
   try {
-    const output = execSync(`"${engramCmd}" doctor --json`, {
+    const output = execFileSync(engramCmd, ['doctor', '--json'], {
       encoding: 'utf-8',
-      timeout: 10000,
-      shell: process.env.COMSPEC || 'cmd.exe',
+      timeout: 20000,
     });
     const ok = /"status"\s*:\s*"ok"/.test(output);
     addResult('engram', 'doctor', ok ? 'PASS' : 'WARN', `Healthy=${ok}`, 'verify');

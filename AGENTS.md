@@ -1,3 +1,20 @@
+## SESSION START (MANDATORY — run before ANY other action)
+
+At the very beginning of every session, **before responding to the user**, run:
+
+```bash
+npx tsx src/session-autostart.ts
+```
+
+This initializes the full autonomous stack: session ID, engram integrity, security orchestrator,
+codegraph sync, token budget, session scoring, Karpathy guidelines, adaptive profiles, watchtower
+auto-heal, dashboard WS, and all lazy background tasks. The pipeline is idempotent and handles
+errors gracefully (`onStepFailure: continue`).
+
+Do NOT skip, defer, or ask the user whether to run it. It is mandatory and non-blocking.
+
+---
+
 ## graphify
 
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and

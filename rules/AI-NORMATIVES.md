@@ -1,7 +1,7 @@
 # AI Normatives — Gentle-Vanguard
 
-Canonical normatives for all AI agents operating in this workspace.  
-Last reviewed: 2026-05-04 | Version: 1.0.0
+Canonical normatives for all AI agents operating in this workspace Last reviewed: 2026-05-04 |
+Version: 1.0.0
 
 ---
 
@@ -79,9 +79,9 @@ External tools are allowed only when:
 
 ## 3. Routing — Single Source of Truth
 
-All agent→skill mappings live in **`config/auto-delegation.json`**.  
-Instruction files (`CLAUDE.md`, `AGENTS.md`, `CODEX.md`, etc.) **must NOT** duplicate mapping tables
-— they reference the canonical config only.
+All agent→skill mappings live in **`config/auto-delegation.json`** Instruction files (`CLAUDE.md`,
+`AGENTS.md`, `CODEX.md`, etc.) **must NOT** duplicate mapping tables — they reference the canonical
+config only.
 
 Key sections:
 
@@ -173,8 +173,7 @@ Configured in `config/auto-delegation.json#hallucinationGuardLevels`:
 - `high` — Full check — ALL requiredEvidence items verified before task marked done
 - `critical` — Full check + hedging language scan + external command verification required
 
-If a skill is not found locally → respond: _"Trigger detected for [skill]. Requires
-@orchestrator."_  
+If a skill is not found locally → respond: \_"Trigger detected for [skill]. Requires @orchestrator."
 Do **NOT** invent skill paths or fake tool calls.
 
 ---
@@ -182,8 +181,7 @@ Do **NOT** invent skill paths or fake tool calls.
 ## 8. Session Lifecycle
 
 1. **Pre**: Run `pre-process-input.ps1` with first user message — MUST be before any response
-2. **Start**: Run `scripts/utilities/session-autostart.cmd` (Windows) or
-   `bash ./scripts/utilities/session-autostart.sh`
+2. **Start**: Run `npx tsx src/session-autostart.ts` (TypeScript pipeline, 54 steps, idempotent)
 3. **Track**: Session ID pattern `session-YYYY-MM-DD-XX`, project `workspace_gentle_vanguard`
 4. **Analyze**: Read `scripts/.session/startup-summary.json` — report peak hour and warnings to user
 5. **Verify**: Run `agent-verify.ps1` to validate workspace integrity (SHOULD)
@@ -222,8 +220,8 @@ Before any release or major commit:
 pwsh -File scripts/utilities/validate-configs.ps1
 ```
 
-Checks: JSON syntax, required keys, script paths, root file declarations.  
-**FAIL** = block release. **PASS with warnings** = review and document.
+Checks: JSON syntax, required keys, script paths, root file declarations **FAIL** = block release.
+**PASS with warnings** = review and document.
 
 ---
 
@@ -241,8 +239,7 @@ pwsh -File scripts/utilities/agent-verify.ps1
 | `PASS_WITH_WARNINGS` | Non-blocking issues found | Review warnings, then proceed       |
 | `FAIL`               | One or more checks failed | **Fix all FAILs before proceeding** |
 
-Targeted checks: `-Domain config|tests|hooks|structure|skills`  
-Machine-readable output: `-Json`
+Targeted checks: `-Domain config|tests|hooks|structure|skills Machine-readable output: `-Json`
 
 The agent uses this tool to:
 
