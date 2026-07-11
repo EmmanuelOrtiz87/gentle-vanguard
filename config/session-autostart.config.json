@@ -73,7 +73,7 @@
       {
         "id": "engram-integrity",
         "enabled": true,
-        "script": "scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1",
+        "script": "src/engram-integrity-check.ts",
         "args": "-Mode status -Quiet",
         "required": false,
         "description": "Verificar integridad de Engram (SHA256 + SQLite + chunks) al inicio de sesion"
@@ -506,7 +506,7 @@
         "id": "mcp-gateway-init",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/MCP/mcp-gateway.ps1",
+        "script": "src/mcp-gateway.ts",
         "args": "-Action start -Quiet",
         "required": false,
         "description": "Start MCP Native gateway at session start (v6.4)"

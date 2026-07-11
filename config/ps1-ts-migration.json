@@ -1,17 +1,18 @@
 {
-  "version": "4.0.0",
+  "version": "5.0.0",
   "summary": "TypeScript migration tracker for Gentle-Vanguard PS1 → TS.",
   "cleanupDate": "2026-07-10",
   "cleanupSummary": {
-    "scriptsRemoved": 388,
-    "scriptsRemaining": 116,
+    "scriptsRemoved": 390,
+    "scriptsRemaining": 114,
     "duplicatesResolved": 19,
     "directoriesCleaned": 50,
     "stubsCreated": 3,
     "credentialsRemoved": true,
     "tsMigrationsWave1": 4,
     "tsMigrationsWave2": 5,
-    "tsMigrationsWave3": 3
+    "tsMigrationsWave3": 3,
+    "tsMigrationsWave4": 2
   },
   "priorities": [
     {
@@ -121,6 +122,26 @@
       "migratedAt": "2026-07-10",
       "configUpdated": true,
       "reason": "Saga pattern with compensating actions, checkpoint integration"
+    },
+    {
+      "id": "engram-integrity-check",
+      "script": "scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1",
+      "target": "src/engram-integrity-check.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "5-point integrity check (manifest/DB/checksums/chunks/backups), native crypto"
+    },
+    {
+      "id": "mcp-gateway",
+      "script": "scripts/utilities/MCP/mcp-gateway.ps1",
+      "target": "src/mcp-gateway.ts",
+      "priority": "medium",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "MCP server lifecycle management, PID tracking, clean process spawn"
     }
   ],
   "completedWave1": [
@@ -143,6 +164,7 @@
     "maintenance-watchtower"
   ],
   "completedWave3": ["tracing-instrument", "event-sourcing", "saga-orchestrator"],
+  "completedWave4": ["engram-integrity-check", "mcp-gateway"],
   "nextWave": ["session-autostart", "engram-integrity-check"],
   "tsFiles": [
     "src/session-autostart.ts",
@@ -158,6 +180,8 @@
     "src/correction-rules-engine.ts",
     "src/tracing-instrument.ts",
     "src/event-sourcing.ts",
-    "src/saga-orchestrator.ts"
+    "src/saga-orchestrator.ts",
+    "src/engram-integrity-check.ts",
+    "src/mcp-gateway.ts"
   ]
 }

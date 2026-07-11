@@ -20,9 +20,6 @@ function log(msg: string) {
 function ok(msg: string) {
   console.log(`[CLEANUP] ${msg}`);
 }
-function warn(msg: string) {
-  console.log(`[CLEANUP] ${msg}`);
-}
 
 function runPs1(script: string, ...args: string[]): { ok: boolean; output: string } {
   const fullPath = join(ROOT, script);
@@ -135,31 +132,7 @@ export function runCleanup(
   }
 
   if (!opts.skipCompression) {
-    log('Generating compressed CLAUDE.min.md...');
-    const compressor = join(repoRoot, 'scripts/utilities/semantic-compression.ps1');
-    if (existsSync(compressor)) {
-      const claudePath = join(repoRoot, 'CLAUDE.md');
-      const minPath = join(sessionDir, 'CLAUDE.min.md');
-      if (existsSync(claudePath)) {
-        runPs1(
-          'scripts/utilities/semantic-compression.ps1',
-          '-InputPath',
-          claudePath,
-          '-OutputPath',
-          minPath,
-          '-Aggressive',
-        );
-        if (existsSync(minPath)) {
-          const origSize = statSync(claudePath).size;
-          const minSize = statSync(minPath).size;
-          ok(
-            `CLAUDE.min.md generated: ${origSize} -> ${minSize} chars (${Math.round((1 - minSize / origSize) * 100)}% reduction)`,
-          );
-        }
-      }
-    } else {
-      warn('Compressor not found, skipping');
-    }
+    log('Skipping compression (semantic-compression.ps1 removed during cleanup)');
   }
 
   log('Closing session tracing span...');

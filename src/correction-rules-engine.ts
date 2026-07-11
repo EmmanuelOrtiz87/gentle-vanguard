@@ -161,9 +161,6 @@ function executeRule(rule: CorrectionRule, _score: number): CorrectionResult {
         };
         break;
       case 'CacheMiss': {
-        const warmer = join(ROOT, 'scripts/utilities/cache/CACHE-MANAGEMENT/cache-warmer.ps1');
-        if (existsSync(warmer))
-          runPs1('scripts/utilities/cache/CACHE-MANAGEMENT/cache-warmer.ps1', '-Warm', '-Quiet');
         result = { success: true, message: 'Cache corrected: pre-warmed embeddings' };
         break;
       }

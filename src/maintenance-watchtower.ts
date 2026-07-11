@@ -394,12 +394,7 @@ async function checkMcp() {
     join(ROOT, 'scripts/utilities/MCP/mcp-manager.ps1'),
     'manual',
   );
-  payloadFileOk(
-    'mcp',
-    'mcp-gateway.ps1',
-    join(ROOT, 'scripts/utilities/MCP/mcp-gateway.ps1'),
-    'manual',
-  );
+  payloadFileOk('mcp', 'mcp-gateway.ts', join(ROOT, 'src/mcp-gateway.ts'), 'manual');
   payloadFileOk(
     'mcp',
     'mcp-gateway-api.ts (dashboard)',
@@ -419,7 +414,7 @@ async function checkSessionPipeline() {
     'scripts/utilities/session-manager.ps1',
     'scripts/utilities/pre-process-input.ps1',
     'scripts/utilities/session/session-start-optimized.ps1',
-    'scripts/utilities/session/session-cleanup-start.ps1',
+    'src/session-cleanup-start.ts',
   ];
   for (const s of scripts) {
     const name = basename(s);
@@ -724,7 +719,7 @@ async function checkAuditPipeline() {
   addResult(
     'audit',
     'pipeline script',
-    fileExists(join(ROOT, 'scripts/security/audit-pipeline.ps1')) ? 'PASS' : 'FAIL',
+    fileExists(join(ROOT, 'src/audit-pipeline.ts')) ? 'PASS' : 'FAIL',
     '',
     'verify',
   );
