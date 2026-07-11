@@ -112,10 +112,16 @@ function loadEvents(id: string): StoredEvent[] {
   const path = getStorePath(id);
   if (!path) return [];
   if (!existsSync(path)) return [];
-  return readFileSync(path, 'utf-8')
-    .split('\n')
-    .filter((l) => l.trim())
-    .map((line) => JSON.parse(line) as StoredEvent);
+  const events: StoredEvent[] = [];
+  for (const line of readFileSync(path, 'utf-8').split('\n')) {
+    if (!line.trim()) continue;
+    try {
+      events.push(JSON.parse(line) as StoredEvent);
+    } catch {
+      log(`Skipping corrupt event line in ${id}`, 'WARN');
+    }
+  }
+  return events;
 }
 
 function getNextVersion(id: string): number {

@@ -997,21 +997,31 @@ function parseArgs() {
 }
 
 async function runAllChecks() {
-  await checkDashboardWs();
-  await checkCodeGraph();
-  await checkMlEmbeddings();
-  await checkEngram();
-  await checkMcp();
-  await checkSessionPipeline();
-  await checkHooks();
-  await checkConfigs();
-  await checkToolConfigs();
-  await checkSecurity();
-  await checkCloudConnectors();
-  await checkTracing();
-  await checkStatePersistence();
-  await checkAuditPipeline();
-  await checkGovernance();
+  const checks = [
+    checkDashboardWs,
+    checkCodeGraph,
+    checkMlEmbeddings,
+    checkEngram,
+    checkMcp,
+    checkSessionPipeline,
+    checkHooks,
+    checkConfigs,
+    checkToolConfigs,
+    checkSecurity,
+    checkCloudConnectors,
+    checkTracing,
+    checkStatePersistence,
+    checkAuditPipeline,
+    checkGovernance,
+  ];
+  for (const check of checks) {
+    try {
+      await check();
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      addResult('system', check.name, 'FAIL', `Check failed: ${msg}`, 'manual');
+    }
+  }
 }
 
 async function main() {

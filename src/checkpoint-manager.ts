@@ -156,9 +156,14 @@ export function listCheckpoints(rootInput: string): CheckpointSummary[] {
     .sort((a, b) => b.localeCompare(a))
     .map((checkpointId) => {
       const manifestPath = getManifestPath(root, checkpointId);
-      const manifest = existsSync(manifestPath)
-        ? (JSON.parse(readFileSync(manifestPath, 'utf8')) as CheckpointManifest)
-        : null;
+      let manifest: CheckpointManifest | null = null;
+      if (existsSync(manifestPath)) {
+        try {
+          manifest = JSON.parse(readFileSync(manifestPath, 'utf8')) as CheckpointManifest;
+        } catch {
+          console.warn(`[CHECKPOINT] Skipping corrupt manifest: ${checkpointId}`);
+        }
+      }
       return {
         id: checkpointId,
         createdAt: manifest?.createdAt ?? '',

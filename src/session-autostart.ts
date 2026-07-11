@@ -24,8 +24,14 @@ const ROOT = resolve(process.cwd());
 const CONFIG_PATH = join(ROOT, 'config', 'session-autostart.config.json');
 
 function loadConfig(): PipelineConfig {
-  const raw = readFileSync(CONFIG_PATH, 'utf-8');
-  return JSON.parse(raw);
+  try {
+    const raw = readFileSync(CONFIG_PATH, 'utf-8');
+    return JSON.parse(raw);
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error(`[SESSION-AUTOSTART] Failed to load config: ${msg}`);
+    return { pipeline: { steps: [] } };
+  }
 }
 
 function executeStep(step: PipelineStep): Promise<{ success: boolean; error?: string }> {

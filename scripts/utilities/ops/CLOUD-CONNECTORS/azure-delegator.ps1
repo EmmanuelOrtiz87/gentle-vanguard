@@ -99,18 +99,31 @@ $circuitBreaker = [CircuitBreaker]::new()
 
 function Start-TracingSpan {
     param([string]$Name)
-    $tracer = Join-Path $PSScriptRoot '../TRACING/tracing-instrument.ps1'
+    $tracerTs = Join-Path $repoRoot 'src/tracing-instrument.ts'
+    $tracerPs1 = Join-Path $PSScriptRoot '../TRACING/tracing-instrument.ps1'
+    $tracer = if (Test-Path $tracerTs) { $tracerTs } else { $tracerPs1 }
     if (Test-Path $tracer) {
-        return & $tracer -Action start -SpanName $Name -Attributes @{ skillId = $SkillId; provider = 'Azure' } -Quiet 2>&1
+        if ($tracer -like '*.ts') {
+            return & npx tsx $tracer -Action start -SpanName $Name -Quiet 2>&1
+        } else {
+            return & $tracer -Action start -SpanName $Name -Attributes @{ skillId = $SkillId; provider = 'Azure' } -Quiet 2>&1
+        }
     }
     return $null
 }
 function Stop-TracingSpan {
     param([string]$Name, [bool]$Success, [int]$Duration, [string]$Error)
-    $tracer = Join-Path $PSScriptRoot '../TRACING/tracing-instrument.ps1'
+    $tracerTs = Join-Path $repoRoot 'src/tracing-instrument.ts'
+    $tracerPs1 = Join-Path $PSScriptRoot '../TRACING/tracing-instrument.ps1'
+    $tracer = if (Test-Path $tracerTs) { $tracerTs } else { $tracerPs1 }
     if (-not (Test-Path $tracer)) { return }
-    if ($Success) { & $tracer -Action end -SpanName $Name -Attributes @{ durationMs = $Duration; skillId = $SkillId } -Quiet | Out-Null }
-    else { & $tracer -Action error -SpanName $Name -ErrorMessage $Error -Attributes @{ durationMs = $Duration; skillId = $SkillId } -Quiet | Out-Null }
+    if ($tracer -like '*.ts') {
+        if ($Success) { & npx tsx $tracer -Action end -SpanName $Name -Quiet | Out-Null }
+        else { & npx tsx $tracer -Action error -SpanName $Name -ErrorMessage $Error -Quiet | Out-Null }
+    } else {
+        if ($Success) { & $tracer -Action end -SpanName $Name -Attributes @{ durationMs = $Duration; skillId = $SkillId } -Quiet | Out-Null }
+        else { & $tracer -Action error -SpanName $Name -ErrorMessage $Error -Attributes @{ durationMs = $Duration; skillId = $SkillId } -Quiet | Out-Null }
+    }
 }
 
 function Log-Audit {

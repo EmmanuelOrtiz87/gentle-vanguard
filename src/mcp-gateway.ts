@@ -60,7 +60,12 @@ interface Registry {
 
 function readRegistry(): Registry {
   if (!existsSync(REGISTRY_PATH)) return { servers: [] };
-  return JSON.parse(readFileSync(REGISTRY_PATH, 'utf-8'));
+  try {
+    return JSON.parse(readFileSync(REGISTRY_PATH, 'utf-8'));
+  } catch {
+    log(`Corrupt registry at ${REGISTRY_PATH}, using empty registry`);
+    return { servers: [] };
+  }
 }
 
 function getProcPath(name: string): { pid: number; proc: ReturnType<typeof process.kill> } | null {

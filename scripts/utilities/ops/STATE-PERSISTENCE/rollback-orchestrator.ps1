@@ -220,7 +220,14 @@ if ($AutoBackup) {
 
 $result = Invoke-Rollback -Id $checkpointId
 
-$verification = & (Join-Path $PSScriptRoot 'checkpoint-manager.ps1') -Action verify -CheckpointId $checkpointId -Quiet:$Quiet
+$ckptMgrTs = Join-Path $repoRoot 'src/checkpoint-manager.ts'
+$ckptMgrPs1 = Join-Path $PSScriptRoot 'checkpoint-manager.ps1'
+$ckptMgr = if (Test-Path $ckptMgrTs) { $ckptMgrTs } else { $ckptMgrPs1 }
+if ($ckptMgr -like '*.ts') {
+    $verification = & npx tsx $ckptMgr -Action verify -CheckpointId $checkpointId -Quiet:$Quiet
+} else {
+    $verification = & $ckptMgr -Action verify -CheckpointId $checkpointId -Quiet:$Quiet
+}
 
 Write-Log "Rollback to $checkpointId complete: $($result.restored) restored, $($result.errors) errors" 'SUCCESS'
 
