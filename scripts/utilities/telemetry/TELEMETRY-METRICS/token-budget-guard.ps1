@@ -152,9 +152,10 @@ function Get-EngramStatus {
         return @{ available = $true; source = $engramCmd.Source }
     }
 
-    $launcher = Join-Path $repoRoot 'scripts\utilities\run-engram.ps1'
-    if (Test-Path $launcher) {
-        return @{ available = $false; source = $launcher }
+    # Check for engram binary in common locations
+    $engramBin = Join-Path $env:USERPROFILE 'bin\engram.exe'
+    if (Test-Path $engramBin) {
+        return @{ available = $true; source = $engramBin }
     }
 
     return @{ available = $false; source = '' }

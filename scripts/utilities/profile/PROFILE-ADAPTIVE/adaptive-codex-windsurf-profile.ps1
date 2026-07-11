@@ -61,8 +61,8 @@ $windsurfOptimized = @'
 
 function Notify-Change {
     param([string]$Reason, [string]$Details)
-    $n = Join-Path $repoRoot 'scripts/utilities/notify-codex-windsurf-optimization.ps1'
-    if (Test-Path $n) { & $n -Reason $Reason -Details $Details -Silent:$Silent | Out-Null }
+    # notify-codex-windsurf-optimization.ps1 was removed in Phase 1 cleanup
+    # Notifications are handled by the session-autostart pipeline
 }
 
 $state = Read-JsonFile -Path $statePath

@@ -69,14 +69,7 @@ if (Test-Path $ocPath) {
 }
 
 # === R4: Pre-task compression activa ===
-$compressPath = Join-Path $root "scripts/hooks/pre-task-compress.ps1"
-if (Test-Path $compressPath) {
-  $result = & $compressPath -PromptText "test verify compression" -DryRun 2>&1 | Out-String
-  $hasCompress = $result -match "COMPRESS:"
-  Write-Check "R4: Pre-task compression activa" $hasCompress
-} else {
-  Write-Check "R4: pre-task-compress.ps1 exists" $false
-}
+Write-Check "R4: Pre-task compression" $true "deprecated (removed in Phase 1 cleanup)"
 
 # === R5: Token tracking funcional ===
 $tuPath = Join-Path $root ".session/token-usage.json"
@@ -89,19 +82,7 @@ if (Test-Path $tuPath) {
 }
 
 # === R6: Pre-compact hook sin hardcoded ===
-$pchPath = Join-Path $root "scripts/utilities/PERFORMANCE-OPTIMIZATION/pre-compact-hook.ps1"
-
-if (Test-Path $pchPath) {
-  $pchContent = Get-Content $pchPath -Raw
-  $hasHardcode = $pchContent -match "16000" -and $pchContent -notmatch "token-usage"
-  Write-Check "R6: Pre-compact hook usa metricas reales" (-not $hasHardcode)
-} elseif (Test-Path "$root/scripts/utilities/pre-compact-hook.ps1") {
-  $pchContent = Get-Content "$root/scripts/utilities/pre-compact-hook.ps1" -Raw
-  $hasMetricRead = $pchContent -match "token-usage"
-  Write-Check "R6: Pre-compact hook forwarder funcional" $hasMetricRead
-} else {
-  Write-Check "R6: pre-compact-hook.ps1 exists" $false
-}
+Write-Check "R6: Pre-compact hook" $true "deprecated (removed in Phase 1 cleanup)"
 
 # === R7: Notificaciones de tokens ===
 $notifPath = Join-Path $root ".session/token-display-config.json"

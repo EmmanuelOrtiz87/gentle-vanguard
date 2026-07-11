@@ -402,7 +402,7 @@
         "enabled": true,
         "lazy": true,
         "script": "src/audit-pipeline.ts",
-        "args": "-Action log -EventType session.start -Component system -Operation autostart -Actor system -Status success -Message \u0027Session autostart pipeline initialized\u0027 -Quiet",
+        "args": "-Action log -EventType session.start -Component system -Operation autostart -Actor system -Status success -Message Session-autostart-pipeline-initialized -Quiet",
         "required": false,
         "description": "Log session start in the audit pipeline for SOC2/GDPR compliance (Phase 3)"
       },

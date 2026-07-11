@@ -16,7 +16,6 @@ $sessionDir = Get-SessionDir -RepoRoot $repoRoot
 $statePath = Join-Path $sessionDir 'adaptive-opencode-state.json'
 $summaryPath = Join-Path $sessionDir 'startup-summary.json'
 $metricsPath = Join-Path $repoRoot '.session/metrics/current-session.json'
-$notifyPath = Join-Path $repoRoot 'scripts/utilities/notify-user.ps1'
 
 $opencodePath = Join-Path $repoRoot 'opencode.json'
 $baselinePath = Join-Path $sessionDir 'opencode-baseline.json'

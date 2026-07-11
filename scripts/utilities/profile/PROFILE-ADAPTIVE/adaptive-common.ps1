@@ -53,7 +53,7 @@ function Test-PeakHour {
 }
 
 function Test-TokenPressure {
-    param([string]$RepoRoot)
+    param([string]$RepoRoot = (Get-RepoRoot))
     $budgetFile = Join-Path $RepoRoot '.session/token-budget.json'
     $budget = Read-JsonFile -Path $budgetFile
     if (-not $budget) { return $false }

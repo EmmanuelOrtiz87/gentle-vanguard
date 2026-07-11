@@ -17,14 +17,14 @@ if ($env:GV_BASE_DIR) {
 }
 Set-Location $repoRoot
 
-function Write-Header { 
-    param([string]$Message) 
-    if (-not $Quiet) { 
+function Write-Header 
+    param([string]$Message
+    if (-not $Quiet) 
         Write-Host ""
         Write-Host "========================================================" -ForegroundColor Cyan
         Write-Host "$Message" -ForegroundColor Cyan
         Write-Host "========================================================" -ForegroundColor Cyan
-    } 
+    
 }
 
 function Write-Ok { param([string]$Message) if (-not $Quiet) { Write-Host "[OK] $Message" -ForegroundColor Green } }
@@ -34,27 +34,27 @@ function Write-Info { param([string]$Message) if (-not $Quiet) { Write-Host "[IN
 
 function Show-GitFlowHelp {
     param([string]$CurrentBranch, [string]$Kind, [string]$ExpectedBase)
-    
+
     Write-Host ""
     Write-Host "========================================================" -ForegroundColor Cyan
     Write-Host "GitFlow Validation Guide - Gentle-Vanguard" -ForegroundColor Cyan
     Write-Host "========================================================" -ForegroundColor Cyan
-    
+
     Write-Host ""
     Write-Host "QUICK SOLUTION:" -ForegroundColor Green
     Write-Host "1. Create a working branch:" -ForegroundColor White
-    Write-Host "   .\scripts\utilities\create-gitflow-branch.ps1" -ForegroundColor Yellow
+    Write-Host "   git checkout -b feature/your-description" -ForegroundColor Yellow
     Write-Host "   (Or manually: git checkout -b feature/your-description)" -ForegroundColor Gray
-    
+
     Write-Host ""
     Write-Host "2. Make your changes and commits" -ForegroundColor White
     Write-Host "3. Push the branch:" -ForegroundColor White
     Write-Host "   git push -u origin $CurrentBranch" -ForegroundColor Yellow
-    
+
     Write-Host ""
     Write-Host "4. Open a Pull Request on GitHub" -ForegroundColor White
     Write-Host "   Base: $ExpectedBase" -ForegroundColor Yellow
-    
+
     Write-Host ""
     Write-Host "ALLOWED BRANCH TYPES:" -ForegroundColor Cyan
     Write-Host "  feature/*  - New functionality - PR base: develop" -ForegroundColor Green
@@ -62,7 +62,7 @@ function Show-GitFlowHelp {
     Write-Host "  chore/*    - Maintenance - PR base: develop" -ForegroundColor Green
     Write-Host "  hotfix/*   - Critical fixes - PR base: main" -ForegroundColor Red
     Write-Host "  release/*  - Release prep - PR base: main" -ForegroundColor Yellow
-    
+
     Write-Host ""
     Write-Host "VALID BRANCH NAME EXAMPLES:" -ForegroundColor Cyan
     Write-Host "  feature/add-user-authentication" -ForegroundColor Green
@@ -108,17 +108,21 @@ if ($kind -eq 'unknown') {
     Write-Host "  chore/    - for maintenance" -ForegroundColor Green
     Write-Host "  hotfix/   - for critical fixes" -ForegroundColor Red
     Write-Host "  release/  - for release preparation" -ForegroundColor Yellow
-    
+
     if ($Interactive) {
         Write-Host ""
         Write-Host "Do you want to create a valid branch now? (Y/n)" -ForegroundColor Cyan
         $response = Read-Host ""
         if ($response -ne 'n' -and $response -ne 'N') {
-            & "$repoRoot\scripts\utilities\create-gitflow-branch.ps1"
+            $featureName = Read-Host "Enter feature name (e.g. feature/my-change)"
+            if ($featureName) {
+                git checkout -b $featureName
+                Write-Host "Created branch: $featureName" -ForegroundColor Green
+            }
             exit 0
         }
     }
-    
+
     Show-GitFlowHelp -CurrentBranch $branch -Kind 'unknown' -ExpectedBase 'N/A'
     exit 1
 }

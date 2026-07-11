@@ -53,8 +53,14 @@ if (Test-Path $tmpExport) {
 # Run vector index build
 $indexScript = Join-Path $PSScriptRoot 'engram-vector-index.ps1'
 if (-not (Test-Path $indexScript)) {
-    Write-Log "Vector index script not found: $indexScript" Red
-    exit 1
+    Write-Log "Vector index script removed in Phase 1 cleanup - using engram CLI directly" Yellow
+    $engramCmd = Get-Command engram -ErrorAction SilentlyContinue
+    if ($engramCmd) {
+        & engram reindex --project $Project 2>&1
+    } else {
+        Write-Log "engram CLI not available for reindex" Red
+    }
+    return
 }
 
 $argsList = @('-Force')

@@ -104,6 +104,7 @@ function startServers() {
         detached: true,
         stdio: 'ignore',
         windowsHide: true,
+        shell: true,
       });
       child.unref();
       writeFileSync(join(LOCK_DIR, `${s.name}.pid`), String(child.pid), 'utf-8');

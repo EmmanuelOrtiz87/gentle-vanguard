@@ -77,14 +77,14 @@ if (-not $Source) {
         (Join-Path (Split-Path -Parent $PSScriptRoot) "gentle-vanguard"),
         (Join-Path (Split-Path -Parent $PSScriptRoot) "gentle-vanguard")
     )
-    
+
     foreach ($src in $possibleSources) {
         if (Test-Path $src) {
             $Source = $src
             break
         }
     }
-    
+
     if (-not $Source) {
         Write-Err "Source not found. Specify with -Source parameter."
         Write-Host "Checked locations:"
@@ -140,8 +140,8 @@ if (-not (Test-Path $sourceSkills)) {
     exit 1
 }
 
-$skillDirs = Get-ChildItem -Path $sourceSkills -Directory | Where-Object { 
-    Test-Path (Join-Path $_.FullName "SKILL.md") 
+$skillDirs = Get-ChildItem -Path $sourceSkills -Directory | Where-Object 
+    Test-Path (Join-Path $_.FullName "SKILL.md"
 }
 
 $syncCount = 0
@@ -150,18 +150,18 @@ $skipCount = 0
 foreach ($skillDir in $skillDirs) {
     $targetPath = Join-Path $targetSkills $skillDir.Name
     $shouldSkip = (Test-Path $targetPath) -and -not $Force
-    
+
     if ($shouldSkip) {
         Write-Info "[SKIP] $($skillDir.Name) (already exists)"
         $skipCount++
         continue
     }
-    
+
     if ($Global) {
         if (Test-Path $targetPath) {
             Remove-Item -Recurse -Force $targetPath
         }
-        
+
         try {
             New-Item -ItemType SymbolicLink -Path $targetPath -Target $skillDir.FullName -Force | Out-Null
             Write-Success "[SYMLINK] $($skillDir.Name)"
@@ -210,7 +210,7 @@ $hookScripts = Get-ChildItem -Path $sourceSkills -Recurse -Filter "pre-commit*.p
 foreach ($hook in $hookScripts) {
     $hookName = $hook.BaseName + ".ps1"
     $targetHook = Join-Path $gitHooksDir $hookName
-    
+
     if ($Global) {
         if (Test-Path $targetHook) { Remove-Item $targetHook -Force }
         try {
@@ -241,7 +241,7 @@ Ensure-Directory -Path $preToolHookTarget
 $preToolHooks = Get-ChildItem -Path $preToolHookSource -Filter "pre-tool*.ps1" -ErrorAction SilentlyContinue
 foreach ($hook in $preToolHooks) {
     $targetHook = Join-Path $preToolHookTarget $hook.Name
-    
+
     try {
         New-Item -ItemType SymbolicLink -Path $targetHook -Target $hook.FullName -Force | Out-Null
         Write-Success "[PreTool] $($hook.Name) (symlinked)"
@@ -284,7 +284,7 @@ switch (`$cmd) {
         Write-Host "Skills: `$(`(Get-ChildItem `$SkillsDir -Directory).Count`)"
     }
     'update' {
-        & "`$PSScriptRoot\..\scripts\sync-skills.ps1" -Force
+        Write-Host "Skills sync was removed in Phase 1 cleanup. Skills are managed via .opencode/skills/ directory."
     }
     default {
         Write-Host "Gentle-Vanguard CLI"
