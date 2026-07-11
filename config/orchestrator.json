@@ -202,8 +202,7 @@
       "storage": ".runtime/hashline-db.json",
       "hash_algorithm": "SHA-256",
       "integration": {
-        "lefthook": ".lefthook.yml#post-commit.hashing-snapshot",
-        "pre_compact": "scripts/utilities/pre-compact-hook.ps1"
+        "lefthook": ".lefthook.yml#post-commit.hashing-snapshot"
       }
     }
   },
@@ -233,8 +232,7 @@
         "soft": "WARN — log and continue",
         "hard": "BLOCK — refuse dispatch until reset or override"
       },
-      "legacy_script": "scripts/utilities/token-guard.ps1",
-      "operational_script": "scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1",
+      "operational_script": "src/token-budget-guard.ts",
       "metrics_path": "docs/sessions/metrics/token-guard-usage.csv"
     },
     "constraint_optimization": {
@@ -276,8 +274,7 @@
         ]
       },
       "integration": {
-        "auto_delegation": "$ref:auto-delegation.json#/adaptive_mode/artifact_naming",
-        "utility_script": "scripts/utilities/artifact-naming.ps1"
+        "auto_delegation": "$ref:auto-delegation.json#/adaptive_mode/artifact_naming"
       }
     }
   },
@@ -302,7 +299,7 @@
   "norms": {
     "orchestrator": "docs/NORMATIVAS-ORQUESTADOR.md",
     "hashline": "scripts/editing/hashline.ps1",
-    "team_mode": "scripts/utilities/WORKFLOW-ORCHESTRATION/team-mode.ps1",
+    "team_mode": "disabled — re-enable when TS team orchestrator is built",
     "code_review": "rules/CODE-REVIEW-STANDARDS.md",
     "pr_workflow": "rules/PR-WORKFLOW.md",
     "secrets_management": "rules/SECRETS-MANAGEMENT.md",

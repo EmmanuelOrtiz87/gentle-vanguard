@@ -618,9 +618,7 @@ async function checkTracing() {
   addResult(
     'tracing',
     'instrumentation script',
-    fileExists(join(ROOT, 'scripts/utilities/ops/TRACING/tracing-instrument.ps1'))
-      ? 'PASS'
-      : 'FAIL',
+    fileExists(join(ROOT, 'src/tracing-instrument.ts')) ? 'PASS' : 'FAIL',
     '',
     'verify',
   );

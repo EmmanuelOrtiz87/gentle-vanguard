@@ -383,7 +383,7 @@
         "id": "tracing-init",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/ops/TRACING/tracing-instrument.ps1",
+        "script": "src/tracing-instrument.ts",
         "args": "-Action start -SpanName session-start -ServiceName gentle-vanguard -Quiet",
         "required": false,
         "description": "Initialize distributed tracing span for this session — sends OTLP to collector (Phase 1.3)"
@@ -410,7 +410,7 @@
         "id": "event-sourcing-init",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1",
+        "script": "src/event-sourcing.ts",
         "args": "-Action append -AggregateId session-autostart -EventType session.started -EventData \u0027{}\u0027 -Quiet",
         "required": false,
         "description": "Record session start event in append-only event store for traceability (Phase 5)"

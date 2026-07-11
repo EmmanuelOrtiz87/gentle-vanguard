@@ -176,18 +176,26 @@ export function runCleanup(
         try {
           const span = JSON.parse(line);
           if (span.name === 'session-start') {
-            runPs1(
-              'scripts/utilities/ops/TRACING/tracing-instrument.ps1',
-              '-Action',
-              'end',
-              '-TraceId',
-              span.traceId,
-              '-SpanId',
-              span.spanId,
-              '-SpanName',
-              'session-start',
-              '-Quiet',
-            );
+            const tracingScript = join(repoRoot, 'src/tracing-instrument.ts');
+            if (existsSync(tracingScript)) {
+              spawnSync(
+                'npx',
+                [
+                  'tsx',
+                  tracingScript,
+                  '-Action',
+                  'end',
+                  '-TraceId',
+                  span.traceId,
+                  '-SpanId',
+                  span.spanId,
+                  '-SpanName',
+                  'session-start',
+                  '-Quiet',
+                ],
+                { cwd: repoRoot, stdio: 'pipe', timeout: 15000 },
+              );
+            }
             ok('Tracing span closed');
             break;
           }
@@ -235,20 +243,25 @@ export function runCleanup(
   }
 
   log('Recording session-close event...');
-  const evtStore = join(ROOT, 'scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1');
+  const evtStore = join(ROOT, 'src/event-sourcing.ts');
   if (existsSync(evtStore)) {
     const aggId = `session-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}`;
-    runPs1(
-      'scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1',
-      '-Action',
-      'append',
-      '-AggregateId',
-      aggId,
-      '-EventType',
-      'session.ended',
-      '-EventData',
-      "{'duration':'cleanup'}",
-      '-Quiet',
+    spawnSync(
+      'npx',
+      [
+        'tsx',
+        evtStore,
+        '-Action',
+        'append',
+        '-AggregateId',
+        aggId,
+        '-EventType',
+        'session.ended',
+        '-EventData',
+        '{"duration":"cleanup"}',
+        '-Quiet',
+      ],
+      { cwd: ROOT, stdio: 'pipe', timeout: 15000 },
     );
     ok('Session end event recorded');
   }

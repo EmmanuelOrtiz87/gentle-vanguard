@@ -1,16 +1,17 @@
 {
-  "version": "3.0.0",
+  "version": "4.0.0",
   "summary": "TypeScript migration tracker for Gentle-Vanguard PS1 → TS.",
   "cleanupDate": "2026-07-10",
   "cleanupSummary": {
-    "scriptsRemoved": 385,
-    "scriptsRemaining": 119,
+    "scriptsRemoved": 388,
+    "scriptsRemaining": 116,
     "duplicatesResolved": 19,
     "directoriesCleaned": 50,
     "stubsCreated": 3,
     "credentialsRemoved": true,
     "tsMigrationsWave1": 4,
-    "tsMigrationsWave2": 5
+    "tsMigrationsWave2": 5,
+    "tsMigrationsWave3": 3
   },
   "priorities": [
     {
@@ -90,15 +91,39 @@
       "migratedAt": "2026-07-10",
       "configUpdated": true,
       "reason": "Largest PS1 (423 lines), self-healing core, Zod-ready"
+    },
+    {
+      "id": "tracing-instrument",
+      "script": "scripts/utilities/ops/TRACING/tracing-instrument.ps1",
+      "target": "src/tracing-instrument.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "OTLP spans, bigint nanosecond timestamps, 3 config references"
+    },
+    {
+      "id": "event-sourcing",
+      "script": "scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1",
+      "target": "src/event-sourcing.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "Append-only event store, projection handlers, 3 config references"
+    },
+    {
+      "id": "saga-orchestrator",
+      "script": "scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1",
+      "target": "src/saga-orchestrator.ts",
+      "priority": "medium",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "Saga pattern with compensating actions, checkpoint integration"
     }
   ],
   "completedWave1": [
-    "security-orchestrator",
-    "hybrid-executor",
-    "checkpoint-manager",
-    "maintenance-watchtower"
-  ],
-  "firstWave": [
     "security-orchestrator",
     "hybrid-executor",
     "checkpoint-manager",
@@ -111,12 +136,14 @@
     "session-cleanup-start",
     "correction-rules-engine"
   ],
-  "nextWave": [
-    "tracing-instrument",
-    "event-sourcing",
-    "session-autostart",
-    "engram-integrity-check"
+  "firstWave": [
+    "security-orchestrator",
+    "hybrid-executor",
+    "checkpoint-manager",
+    "maintenance-watchtower"
   ],
+  "completedWave3": ["tracing-instrument", "event-sourcing", "saga-orchestrator"],
+  "nextWave": ["session-autostart", "engram-integrity-check"],
   "tsFiles": [
     "src/session-autostart.ts",
     "src/health-check.ts",
@@ -128,6 +155,9 @@
     "src/token-budget-guard.ts",
     "src/audit-pipeline.ts",
     "src/session-cleanup-start.ts",
-    "src/correction-rules-engine.ts"
+    "src/correction-rules-engine.ts",
+    "src/tracing-instrument.ts",
+    "src/event-sourcing.ts",
+    "src/saga-orchestrator.ts"
   ]
 }

@@ -235,13 +235,13 @@ function checkMlEmbeddings() {
   writeCheck('ml-index.json exists', exists('.atl', 'ml-index.json'), '.atl/ml-index.json');
   writeCheck(
     'skill-embedder.ps1 exists',
-    exists('scripts/ml', 'skill-embedder.ps1'),
-    'scripts/ml/skill-embedder.ps1',
+    exists('scripts/utilities/agents/AUTO-DELEGATION/skill-embedder.ps1'),
+    'scripts/utilities/agents/AUTO-DELEGATION/skill-embedder.ps1',
   );
   writeCheck(
     'ml-router.ps1 exists',
-    exists('scripts/ml', 'ml-router.ps1'),
-    'scripts/ml/ml-router.ps1',
+    exists('scripts/utilities/agents/AUTO-DELEGATION/ml-router.ps1'),
+    'scripts/utilities/agents/AUTO-DELEGATION/ml-router.ps1',
   );
   const mlIndex = path.resolve(ROOT, '.atl/ml-index.json');
   if (fs.existsSync(mlIndex)) {
@@ -291,11 +291,6 @@ function checkMcpBridge() {
     'mcp-bridge.ps1 exists',
     exists('scripts/mcp-bridge/mcp-bridge.ps1'),
     'scripts/mcp-bridge/mcp-bridge.ps1',
-  );
-  writeCheck(
-    'tms-mcp-bridge.ps1 exists',
-    exists('scripts/tms-mcp-bridge.ps1'),
-    'scripts/tms-mcp-bridge.ps1',
   );
   const configs = ['config/skill-mcp.json', 'config/mcp-bridge.json'];
   const found = configs.filter((c) => exists(c)).length;
