@@ -28,6 +28,13 @@ const SAGA_LOG = join(ROOT, '.session', 'saga.log');
 
 let quiet = false;
 
+// ─── Security: Path traversal validation ─────────────────────────────────────
+function safePath(userPath: string, allowedBase: string): string | null {
+  const resolved = resolve(allowedBase, userPath);
+  if (!resolved.startsWith(allowedBase)) return null;
+  return resolved;
+}
+
 function log(msg: string, level: 'INFO' | 'WARN' | 'ERROR' | 'SUCCESS' = 'INFO') {
   const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
   const colors: Record<string, string> = {
@@ -54,8 +61,8 @@ function newSagaId(): string {
   return `saga-${date}-${rand}`;
 }
 
-function getSagaPath(id: string): string {
-  return join(SAGA_DIR, `${id}.json`);
+function getSagaPath(id: string): string | null {
+  return safePath(`${id}.json`, SAGA_DIR);
 }
 
 interface SagaStep {
@@ -100,12 +107,13 @@ interface SagaState {
 
 function saveSagaState(state: SagaState): void {
   ensureDirs();
-  writeFileSync(getSagaPath(state.id), JSON.stringify(state, null, 2));
+  const path = getSagaPath(state.id);
+  if (path) writeFileSync(path, JSON.stringify(state, null, 2));
 }
 
 function loadSagaState(id: string): SagaState {
   const path = getSagaPath(id);
-  if (!existsSync(path)) throw new Error(`Saga ${id} not found`);
+  if (!path || !existsSync(path)) throw new Error(`Saga ${id} not found`);
   return JSON.parse(readFileSync(path, 'utf-8'));
 }
 

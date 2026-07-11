@@ -2,7 +2,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { execSync, spawnSync } from 'child_process';
+import { spawnSync } from 'child_process';
 import * as net from 'net';
 
 const ROOT = process.cwd();
@@ -92,8 +92,8 @@ function checkMCP() {
       }
     }
     writeCheck('MCP tools/list responds', toolsCount > 0, `${toolsCount} tools`);
-  } catch (e: any) {
-    writeCheck('MCP tools/list responds', false, e.message);
+  } catch (e: unknown) {
+    writeCheck('MCP tools/list responds', false, e instanceof Error ? e.message : String(e));
   }
 }
 
@@ -159,10 +159,9 @@ function checkPnpm() {
   writeCheck('pnpm-lock.yaml exists', exists('pnpm-lock.yaml'));
   writeCheck('pnpm security normativa exists', exists('rules/NORMATIVA-PNPM-SECURITY.md'));
   try {
-    const v = execSync('pnpm --version', { cwd: ROOT, stdio: 'pipe', timeout: 10000 })
-      .toString()
-      .trim();
-    writeCheck('pnpm installed', true, `v${v}`);
+    const r = spawnSync('pnpm', ['--version'], { cwd: ROOT, stdio: 'pipe', timeout: 10000 });
+    const v = (r.stdout?.toString() ?? '').trim();
+    writeCheck('pnpm installed', r.status === 0, `v${v}`);
   } catch {
     writeCheck('pnpm installed', false);
   }
@@ -225,8 +224,8 @@ function checkGateGuard() {
     } else {
       writeCheck('GateGuard responds', false, 'No JSON response found');
     }
-  } catch (e: any) {
-    writeCheck('GateGuard responds', false, e.message);
+  } catch (e: unknown) {
+    writeCheck('GateGuard responds', false, e instanceof Error ? e.message : String(e));
   }
 }
 
@@ -265,11 +264,12 @@ async function checkEngramRag() {
     exists('scripts/utilities/memory/ENGRAM-RAG/engram-rag-reindex.ps1'),
   );
   try {
-    const output = execSync('engram doctor --json', {
+    const r = spawnSync('engram', ['doctor', '--json'], {
       cwd: ROOT,
       stdio: 'pipe',
       timeout: 15000,
-    }).toString();
+    });
+    const output = (r.stdout?.toString() ?? '') + (r.stderr?.toString() ?? '');
     const healthy = output.includes('"status":"ok"') || output.includes('"ok"');
     writeCheck('engram doctor', healthy);
   } catch {
@@ -312,8 +312,8 @@ function checkCostTracking() {
       'routingPolicy section present',
       config.routingPolicy?.fastCheapToStrongReasoning !== undefined,
     );
-  } catch (e: any) {
-    writeCheck('costTracking section present', false, e.message);
+  } catch (e: unknown) {
+    writeCheck('costTracking section present', false, e instanceof Error ? e.message : String(e));
     writeCheck('routingPolicy section present', false);
   }
 }

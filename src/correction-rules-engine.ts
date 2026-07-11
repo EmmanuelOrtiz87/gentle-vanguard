@@ -65,8 +65,8 @@ export function loadRules(root: string = ROOT): CorrectionRule[] {
     const config: CorrectionRulesConfig = JSON.parse(readFileSync(p, 'utf-8'));
     log(`Loaded ${config.rules.length} correction rules`);
     return config.rules;
-  } catch (e: any) {
-    log(`Failed to parse rules: ${e.message}`, 'ERROR');
+  } catch (e: unknown) {
+    log(`Failed to parse rules: ${e instanceof Error ? e.message : String(e)}`, 'ERROR');
     return [];
   }
 }
@@ -100,12 +100,14 @@ function runPs1(script: string, ...args: string[]): { ok: boolean; output: strin
       ok: r.status === 0,
       output: (r.stdout?.toString() ?? '') + (r.stderr?.toString() ?? ''),
     };
-  } catch (e: any) {
-    return { ok: false, output: e.message };
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    log(`Error: ${msg}`, 'ERROR');
+    return { ok: false, output: msg };
   }
 }
 
-function modifyJsonConfig(relPath: string, modifier: (obj: any) => void): void {
+function modifyJsonConfig(relPath: string, modifier: (obj: Record<string, unknown>) => void): void {
   const p = join(ROOT, relPath);
   if (!existsSync(p)) {
     log(`Config not found: ${relPath}`, 'WARN');
@@ -186,19 +188,28 @@ function executeRule(rule: CorrectionRule, _score: number): CorrectionResult {
       }
       case 'EngineOverload':
         modifyJsonConfig('config/circuit-breaker.json', (c) => {
-          if (c.rateLimitPerMinute) c.rateLimitPerMinute = Math.floor(c.rateLimitPerMinute * 0.5);
+          const rate = c.rateLimitPerMinute;
+          if (typeof rate === 'number') c.rateLimitPerMinute = Math.floor(rate * 0.5);
         });
         result = { success: true, message: 'Throttling corrected: reduced rate limit by 50%' };
         break;
       case 'MemoryFragmentation': {
-        const integrity = join(ROOT, 'scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1');
-        if (existsSync(integrity)) {
-          runPs1(
-            'scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1',
-            '-Mode',
-            'checksums',
-            '-Quiet',
-          );
+        const integrityTs = join(ROOT, 'src/engram-integrity-check.ts');
+        const integrityPs1 = join(
+          ROOT,
+          'scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1',
+        );
+        const integrityScript = existsSync(integrityTs) ? integrityTs : integrityPs1;
+        if (existsSync(integrityScript)) {
+          if (integrityScript.endsWith('.ts')) {
+            spawnSync('npx', ['tsx', integrityScript, '-Mode', 'checksums', '-Quiet'], {
+              cwd: ROOT,
+              stdio: 'pipe',
+              timeout: 30000,
+            });
+          } else {
+            runPs1(integrityScript, '-Mode', 'checksums', '-Quiet');
+          }
           result = { success: true, message: 'Memory corrected: regenerated Engram checksums' };
         } else {
           result = { success: false, reason: 'Engram integrity check not found' };
@@ -224,10 +235,11 @@ function executeRule(rule: CorrectionRule, _score: number): CorrectionResult {
       updateRuleMetrics(rule.id, false);
     }
     return result;
-  } catch (e: any) {
-    log(`Exception during correction: ${e.message}`, 'ERROR');
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    log(`Exception during correction: ${msg}`, 'ERROR');
     updateRuleMetrics(rule.id, false);
-    return { success: false, reason: e.message };
+    return { success: false, reason: msg };
   }
 }
 
@@ -360,8 +372,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         console.error(`Invalid mode: ${mode}`);
         process.exit(1);
     }
-  } catch (e: any) {
-    log(`Fatal error: ${e.message}`, 'ERROR');
+  } catch (e: unknown) {
+    log(`Fatal error: ${e instanceof Error ? e.message : String(e)}`, 'ERROR');
     process.exit(1);
   }
 }

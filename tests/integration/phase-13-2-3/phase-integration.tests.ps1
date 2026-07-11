@@ -244,9 +244,10 @@ Describe 'Cross-Phase Integration' {
     }
 
     It 'session-cleanup should call tracing/checkpoint/audit' {
-        $content = Get-Content (Join-Path $repoRoot 'scripts/utilities/session/session-cleanup-start.ps1') -Raw
-        $content -match 'tracing-instrument.*Action end' | Should -Be $true
-        $content -match 'checkpoint-manager.*Action prune' | Should -Be $true
+        $tsFile = Join-Path $repoRoot 'src/session-cleanup-start.ts'
+        $content = Get-Content $tsFile -Raw
+        $content -match 'tracing-instrument.*end' | Should -Be $true
+        $content -match 'checkpoint-manager.*prune' | Should -Be $true
         $content -match 'audit-pipeline.*session.end' | Should -Be $true
         $content -match 'event-sourcing.*session.ended' | Should -Be $true
     }

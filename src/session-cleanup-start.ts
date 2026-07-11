@@ -34,8 +34,8 @@ function runPs1(script: string, ...args: string[]): { ok: boolean; output: strin
       ok: r.status === 0,
       output: (r.stdout?.toString() ?? '') + (r.stderr?.toString() ?? ''),
     };
-  } catch (e: any) {
-    return { ok: false, output: e.message };
+  } catch (e: unknown) {
+    return { ok: false, output: e instanceof Error ? e.message : String(e) };
   }
 }
 
@@ -180,7 +180,6 @@ export function runCleanup(
   }
 
   log('Pruning old checkpoints...');
-  runPs1('src/checkpoint-manager.ts'); // TS script — run via npx tsx
   const ckptMgr = join(ROOT, 'src/checkpoint-manager.ts');
   if (existsSync(ckptMgr)) {
     spawnSync('npx', ['tsx', ckptMgr, 'prune'], { cwd: ROOT, stdio: 'pipe', timeout: 15000 });

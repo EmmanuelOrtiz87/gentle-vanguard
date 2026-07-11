@@ -29,6 +29,13 @@ const SNAPSHOT_DIR = join(ROOT, '.session', 'event-snapshots');
 
 let quiet = false;
 
+// ─── Security: Path traversal validation ─────────────────────────────────────
+function safePath(userPath: string, allowedBase: string): string | null {
+  const resolved = resolve(allowedBase, userPath);
+  if (!resolved.startsWith(allowedBase)) return null;
+  return resolved;
+}
+
 function log(msg: string, level: 'INFO' | 'WARN' | 'ERROR' | 'SUCCESS' = 'INFO') {
   if (quiet) return;
   const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -47,12 +54,16 @@ function ensureDirs() {
   }
 }
 
-function getStorePath(id: string): string {
-  return join(EVENT_STORE_DIR, `${id}.jsonl`);
+function getStorePath(id: string): string | null {
+  const safe = safePath(`${id}.jsonl`, EVENT_STORE_DIR);
+  if (!safe) return null;
+  return safe;
 }
 
-function getSnapshotPath(id: string): string {
-  return join(SNAPSHOT_DIR, `${id}-snapshot.json`);
+function getSnapshotPath(id: string): string | null {
+  const safe = safePath(`${id}-snapshot.json`, SNAPSHOT_DIR);
+  if (!safe) return null;
+  return safe;
 }
 
 function newEventId(): string {
@@ -90,11 +101,16 @@ function newEvent(
 
 function saveEvent(event: StoredEvent): void {
   const path = getStorePath(event.aggregateId);
+  if (!path) {
+    log('Invalid aggregate ID', 'ERROR');
+    return;
+  }
   appendFileSync(path, JSON.stringify(event) + '\n');
 }
 
 function loadEvents(id: string): StoredEvent[] {
   const path = getStorePath(id);
+  if (!path) return [];
   if (!existsSync(path)) return [];
   return readFileSync(path, 'utf-8')
     .split('\n')
@@ -212,7 +228,7 @@ function projectAction(args: Record<string, string>): Record<string, unknown> {
     eventsCount: 0,
   };
 
-  if (existsSync(snapshotPath)) {
+  if (snapshotPath && existsSync(snapshotPath)) {
     const snap = JSON.parse(readFileSync(snapshotPath, 'utf-8'));
     Object.assign(state, snap.state);
     startVersion = snap.version;
@@ -242,7 +258,8 @@ function snapshotAction(args: Record<string, string>): Record<string, unknown> {
     createdAt: new Date().toISOString(),
   };
   ensureDirs();
-  writeFileSync(getSnapshotPath(aggregateId), JSON.stringify(snapshot, null, 2));
+  const snapPath = getSnapshotPath(aggregateId);
+  if (snapPath) writeFileSync(snapPath, JSON.stringify(snapshot, null, 2));
   log(`Snapshot saved at v${events.length} for ${aggregateId}`, 'SUCCESS');
   return snapshot;
 }

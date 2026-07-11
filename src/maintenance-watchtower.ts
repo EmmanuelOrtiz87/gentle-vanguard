@@ -2,7 +2,7 @@
 
 import { readFileSync, existsSync, readdirSync, writeFileSync, statSync } from 'fs';
 import { join, resolve, basename } from 'path';
-import { spawn, execSync, execFileSync } from 'child_process';
+import { spawn, spawnSync, execFileSync } from 'child_process';
 import { createConnection } from 'net';
 
 const ROOT = resolve(process.cwd());
@@ -100,8 +100,8 @@ function fileExists(p: string): boolean {
   return existsSync(p);
 }
 
-function readJson(p: string): any {
-  return JSON.parse(readFileSync(p, 'utf-8'));
+function readJson(p: string): Record<string, unknown> {
+  return JSON.parse(readFileSync(p, 'utf-8')) as Record<string, unknown>;
 }
 
 function payloadFileOk(
@@ -140,7 +140,7 @@ async function checkDashboardWs() {
   if (fileExists(portsFile)) {
     try {
       const ports = readJson(portsFile);
-      wsPort = ports.wsPort || 8080;
+      wsPort = typeof ports.wsPort === 'number' ? ports.wsPort : 8080;
     } catch {
       addResult('dashboard-ws', 'ports.json', 'FAIL', 'Invalid JSON', 'verify');
     }
@@ -328,8 +328,9 @@ async function checkEngram() {
     });
     const ok = /"status"\s*:\s*"ok"/.test(output);
     addResult('engram', 'doctor', ok ? 'PASS' : 'WARN', `Healthy=${ok}`, 'verify');
-  } catch (e: any) {
-    const output = ((e.stdout || '') + (e.stderr || '')).toString();
+  } catch (e: unknown) {
+    const err = e as { stdout?: string; stderr?: string };
+    const output = ((err.stdout ?? '') + (err.stderr ?? '')).toString();
     const ok = /"status"\s*:\s*"ok"/.test(output);
     addResult(
       'engram',
@@ -374,10 +375,13 @@ async function checkMcp() {
   const bridgePs1 = join(ROOT, 'scripts/mcp-bridge/mcp-bridge.ps1');
   if (fileExists(bridgePs1)) {
     try {
-      const output = execSync(`pwsh -NoProfile -File "${bridgePs1}" -Action verify 2>&1`, {
-        encoding: 'utf-8',
+      const r = spawnSync('pwsh', ['-NoProfile', '-File', bridgePs1, '-Action', 'verify'], {
+        cwd: ROOT,
+        stdio: 'pipe',
         timeout: 10000,
+        encoding: 'utf-8',
       });
+      const output = (r.stdout ?? '') + (r.stderr ?? '');
       const healthOk = /OK|PASS|healthy|Bridge status: OK|^True$/.test(output);
       addResult('mcp', 'bridge health', healthOk ? 'PASS' : 'WARN', '', 'verify');
     } catch {
@@ -444,8 +448,8 @@ async function checkHooks() {
   );
 
   try {
-    execSync('lefthook validate 2>&1', { encoding: 'utf-8', timeout: 10000 });
-    addResult('hooks', 'lefthook validate', 'PASS', '', 'manual');
+    const r = spawnSync('lefthook', ['validate'], { cwd: ROOT, stdio: 'pipe', timeout: 10000 });
+    addResult('hooks', 'lefthook validate', r.status === 0 ? 'PASS' : 'FAIL', '', 'manual');
   } catch {
     addResult('hooks', 'lefthook validate', 'FAIL', 'Not installed or invalid', 'manual');
   }
@@ -527,8 +531,10 @@ async function checkCloudConnectors() {
   if (fileExists(cloudMetrics)) {
     try {
       const data = readJson(cloudMetrics);
-      const execs = (data.executions || []).length;
-      const successCount = (data.executions || []).filter((e: any) => e.success).length;
+      const execs = ((data.executions ?? []) as Array<Record<string, unknown>>).length;
+      const successCount = ((data.executions ?? []) as Array<Record<string, unknown>>).filter(
+        (e) => e.success,
+      ).length;
       const successRate = execs > 0 ? ((successCount / execs) * 100).toFixed(1) : '100';
       addResult(
         'cloud-connectors',
@@ -762,13 +768,21 @@ async function rebuildMlEmbeddings() {
   const skillEmbedder = join(ROOT, 'scripts/utilities/agents/AUTO-DELEGATION/skill-embedder.ps1');
   if (fileExists(skillEmbedder)) {
     try {
-      execSync(`pwsh -NoProfile -File "${skillEmbedder}" 2>&1`, {
-        encoding: 'utf-8',
+      const r = spawnSync('pwsh', ['-NoProfile', '-File', skillEmbedder], {
+        cwd: ROOT,
+        stdio: 'pipe',
         timeout: 60000,
       });
-      addResult('ml-embeddings', 'rebuild', 'PASS', 'Completed', 'ok');
-    } catch (e: any) {
-      addResult('ml-embeddings', 'rebuild', 'FAIL', `Error: ${e.message}`, 'manual', true);
+      addResult('ml-embeddings', 'rebuild', r.status === 0 ? 'PASS' : 'FAIL', 'Completed', 'ok');
+    } catch (e: unknown) {
+      addResult(
+        'ml-embeddings',
+        'rebuild',
+        'FAIL',
+        `Error: ${e instanceof Error ? e.message : String(e)}`,
+        'manual',
+        true,
+      );
     }
   } else {
     addResult('ml-embeddings', 'rebuild', 'SKIP', 'Not found', 'manual');
@@ -780,10 +794,21 @@ async function reindexEngramRag() {
   const ragReindex = join(ROOT, 'scripts/utilities/memory/ENGRAM-RAG/engram-rag-reindex.ps1');
   if (fileExists(ragReindex)) {
     try {
-      execSync(`pwsh -NoProfile -File "${ragReindex}" 2>&1`, { encoding: 'utf-8', timeout: 60000 });
-      addResult('engram', 'reindex', 'PASS', 'Completed', 'ok');
-    } catch (e: any) {
-      addResult('engram', 'reindex', 'FAIL', `Error: ${e.message}`, 'manual', true);
+      const r = spawnSync('pwsh', ['-NoProfile', '-File', ragReindex], {
+        cwd: ROOT,
+        stdio: 'pipe',
+        timeout: 60000,
+      });
+      addResult('engram', 'reindex', r.status === 0 ? 'PASS' : 'FAIL', 'Completed', 'ok');
+    } catch (e: unknown) {
+      addResult(
+        'engram',
+        'reindex',
+        'FAIL',
+        `Error: ${e instanceof Error ? e.message : String(e)}`,
+        'manual',
+        true,
+      );
     }
   } else {
     addResult('engram', 'reindex', 'SKIP', 'Not found', 'manual');
@@ -814,7 +839,7 @@ async function autoHeal() {
     if (fileExists(portsFile)) {
       try {
         const ports = readJson(portsFile);
-        wsPort = ports.wsPort || 8080;
+        wsPort = typeof ports.wsPort === 'number' ? ports.wsPort : 8080;
       } catch {}
     }
 
@@ -844,8 +869,15 @@ async function autoHeal() {
           addResult('dashboard-ws', 'autoheal', 'FAIL', 'Restart failed', 'manual', true);
           failed++;
         }
-      } catch (e: any) {
-        addResult('dashboard-ws', 'autoheal', 'FAIL', `Error: ${e.message}`, 'manual', true);
+      } catch (e: unknown) {
+        addResult(
+          'dashboard-ws',
+          'autoheal',
+          'FAIL',
+          `Error: ${e instanceof Error ? e.message : String(e)}`,
+          'manual',
+          true,
+        );
         failed++;
       }
     } else {

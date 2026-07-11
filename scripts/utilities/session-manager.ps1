@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Session manager stub — delegates to session-cleanup-start.ps1
+    Session manager stub — delegates to session-cleanup-start.ts (or .ps1 fallback)
 .DESCRIPTION
     This is a thin proxy created during Phase 1 cleanup (2026-07-10).
     The original session-manager.ps1 was a wrapper; this stub preserves the
@@ -12,15 +12,22 @@ param(
     [switch]$Quiet
 )
 
-$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$target = Join-Path $scriptDir "session\session-cleanup-start.ps1"
+$repoRoot = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
+$targetTs = Join-Path $repoRoot "src\session-cleanup-start.ts"
+$targetPs1 = Join-Path $MyInvocation.MyCommand.Path "..\session\session-cleanup-start.ps1"
 
-if (Test-Path $target) {
+if (Test-Path $targetTs) {
     $args = @()
     if ($Mode) { $args += "-Mode"; $args += $Mode }
     if ($TimeZone) { $args += "-TimeZone"; $args += $TimeZone }
     if ($Quiet) { $args += "-Quiet" }
-    & $target @args
+    & npx tsx $targetTs @args
+} elseif (Test-Path $targetPs1) {
+    $args = @()
+    if ($Mode) { $args += "-Mode"; $args += $Mode }
+    if ($TimeZone) { $args += "-TimeZone"; $args += $TimeZone }
+    if ($Quiet) { $args += "-Quiet" }
+    & $targetPs1 @args
 } else {
-    Write-Warning "[session-manager] target not found: $target"
+    Write-Warning "[session-manager] target not found: $targetTs or $targetPs1"
 }

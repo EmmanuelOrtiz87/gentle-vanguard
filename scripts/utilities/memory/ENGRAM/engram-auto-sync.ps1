@@ -20,7 +20,9 @@ $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) {
     $PWD.Path
 }
 
-$integrityScript = Join-Path $repoRoot "scripts\utilities\memory\ENGRAM\engram-integrity-check.ps1"
+$integrityScriptTs = Join-Path $repoRoot "src\engram-integrity-check.ts"
+$integrityScriptPs1 = Join-Path $repoRoot "scripts\utilities\memory\ENGRAM\engram-integrity-check.ps1"
+$integrityScript = if (Test-Path $integrityScriptTs) { $integrityScriptTs } else { $integrityScriptPs1 }
 $engramDataDir = Join-Path $repoRoot ".engram-data"
 $dbPath = Join-Path $engramDataDir "engram.db"
 $checksumPath = Join-Path $repoRoot ".engram\checksums.sha256"
@@ -53,49 +55,53 @@ function Get-ChecksumLastModified {
 
 function Check-Synchronization {
     Write-Log "Checking Engram synchronization..."
-    
+
     if (-not (Test-Path $dbPath)) {
         Write-Log "Database not found, skipping" "WARN"
         return $true
     }
-    
+
     $dbTime = Get-DbLastModified
     $checksumTime = Get-ChecksumLastModified
-    
+
     if (-not $checksumTime) {
         Write-Log "Checksums not found, regenerating..." "WARN"
         return $false
     }
-    
+
     # If DB was modified after checksums, they're out of sync
     if ($dbTime -gt $checksumTime) {
         $timeDiff = ($dbTime - $checksumTime).TotalSeconds
         Write-Log "DB modified $([math]::Round($timeDiff))s after checksums" "WARN"
         return $false
     }
-    
+
     # Verify actual checksums match
-    $checkResult = & $integrityScript -Mode check -Quiet 2>$null
+    if ($integrityScript -like '*.ts') {
+        $checkResult = & npx tsx $integrityScript -Mode check -Quiet 2>$null
+    } else {
+        $checkResult = & $integrityScript -Mode check -Quiet 2>$null
+    }
     $checkExitCode = $LASTEXITCODE
-    
+
     if ($checkExitCode -ne 0) {
         Write-Log "Integrity verification failed" "WARN"
         return $false
     }
-    
+
     Write-Log "Synchronization OK" "OK"
     return $true
 }
 
 function Sync-Checksums {
     Write-Log "Regenerating checksums..."
-    
+
     # Acquire lock to prevent concurrent operations
     $lockDir = Split-Path -Parent $lockFile
     if (-not (Test-Path $lockDir)) {
         New-Item -ItemType Directory -Path $lockDir -Force | Out-Null
     }
-    
+
     # Simple lock: check if recent lock exists
     if (Test-Path $lockFile) {
         $lockAge = ((Get-Date) - (Get-Item $lockFile).LastWriteTime).TotalSeconds
@@ -104,27 +110,35 @@ function Sync-Checksums {
             return $false
         }
     }
-    
+
     # Create lock
     Set-Content $lockFile -Value (Get-Date -Format "o") -Force
-    
+
     try {
         # Run checksum regeneration
-        & $integrityScript -Mode checksums -Quiet
+        if ($integrityScript -like '*.ts') {
+            & npx tsx $integrityScript -Mode checksums -Quiet
+        } else {
+            & $integrityScript -Mode checksums -Quiet
+        }
         $syncExitCode = $LASTEXITCODE
-        
+
         if ($syncExitCode -ne 0) {
             Write-Log "Checksum regeneration failed" "ERR"
             return $false
         }
-        
+
         # Verify
-        & $integrityScript -Mode check -Quiet 2>$null
+        if ($integrityScript -like '*.ts') {
+            & npx tsx $integrityScript -Mode check -Quiet 2>$null
+        } else {
+            & $integrityScript -Mode check -Quiet 2>$null
+        }
         $verifyExitCode = $LASTEXITCODE
-        
+
         if ($verifyExitCode -eq 0) {
             Write-Log "Checksums synchronized" "OK"
-            
+
             # Record sync time
             $syncData = @{
                 timestamp = (Get-Date -Format "o")
@@ -133,7 +147,7 @@ function Sync-Checksums {
                 checksumModified = (Get-ChecksumLastModified).ToString("o")
             }
             $syncData | ConvertTo-Json | Set-Content $lastCheckFile -Force
-            
+
             return $true
         } else {
             Write-Log "Verification after sync failed" "ERR"
@@ -147,10 +161,10 @@ function Sync-Checksums {
 
 function Invoke-PeriodicMonitor {
     Write-Log "Starting periodic monitor (interval: ${CheckIntervalMinutes}min)"
-    
+
     while ($true) {
         Write-Log "Checking sync status..."
-        
+
         if (-not (Check-Synchronization)) {
             Write-Log "Out of sync detected, auto-fixing..." "WARN"
             if (Sync-Checksums) {
@@ -159,7 +173,7 @@ function Invoke-PeriodicMonitor {
                 Write-Log "Auto-fix failed, manual intervention may be needed" "ERR"
             }
         }
-        
+
         Write-Log "Next check in ${CheckIntervalMinutes} minutes"
         Start-Sleep -Seconds ($CheckIntervalMinutes * 60)
     }
@@ -174,7 +188,7 @@ switch ($Mode) {
             exit 1
         }
     }
-    
+
     "sync" {
         if (Sync-Checksums) {
             exit 0
@@ -182,7 +196,7 @@ switch ($Mode) {
             exit 1
         }
     }
-    
+
     "monitor" {
         Invoke-PeriodicMonitor
     }
