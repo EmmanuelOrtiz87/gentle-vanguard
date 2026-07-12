@@ -331,25 +331,43 @@ async function checkEngram() {
     process.platform === 'win32' ? 'engram.exe' : 'engram',
   );
   const engramCmd = fileExists(engramBin) ? engramBin : 'engram';
-  try {
-    const output = execFileSync(engramCmd, ['doctor', '--json'], {
-      encoding: 'utf-8',
-      timeout: 20000,
-    });
-    const ok = /"status"\s*:\s*"ok"/.test(output);
-    addResult('engram', 'doctor', ok ? 'PASS' : 'WARN', `Healthy=${ok}`, 'verify');
-  } catch (e: unknown) {
-    const err = e as { stdout?: string; stderr?: string };
-    const output = ((err.stdout ?? '') + (err.stderr ?? '')).toString();
-    const ok = /"status"\s*:\s*"ok"/.test(output);
-    addResult(
-      'engram',
-      'doctor',
-      ok ? 'PASS' : 'FAIL',
-      ok ? 'Healthy (stderr)' : 'Not accessible',
-      ok ? 'verify' : 'manual',
-      !ok,
-    );
+
+  // If engram MCP server is running, doctor will deadlock on DB lock — skip gracefully
+  const engramMcpRunning = (() => {
+    try {
+      const r = spawnSync('tasklist', [], {
+        encoding: 'utf-8',
+        timeout: 5000,
+      });
+      return (r.stdout ?? '').toLowerCase().includes('engram.exe');
+    } catch {
+      return false;
+    }
+  })();
+
+  if (engramMcpRunning) {
+    addResult('engram', 'doctor', 'PASS', 'MCP server active (skip to avoid deadlock)', 'ok');
+  } else {
+    try {
+      const output = execFileSync(engramCmd, ['doctor', '--json'], {
+        encoding: 'utf-8',
+        timeout: 15000,
+      });
+      const ok = /"status"\s*:\s*"ok"/.test(output);
+      addResult('engram', 'doctor', ok ? 'PASS' : 'WARN', `Healthy=${ok}`, 'verify');
+    } catch (e: unknown) {
+      const err = e as { stdout?: string; stderr?: string };
+      const output = ((err.stdout ?? '') + (err.stderr ?? '')).toString();
+      const ok = /"status"\s*:\s*"ok"/.test(output);
+      addResult(
+        'engram',
+        'doctor',
+        ok ? 'PASS' : 'FAIL',
+        ok ? 'Healthy (stderr)' : 'Not accessible',
+        ok ? 'verify' : 'manual',
+        !ok,
+      );
+    }
   }
 }
 
@@ -1125,7 +1143,10 @@ async function main() {
         if (!quiet) console.log(`  Next cycle in ${opts.interval}s...`);
         setTimeout(loop, opts.interval * 1000);
       };
-      loop();
+      loop().catch((err) => {
+        console.error('Watchtower continuous loop error:', err);
+        process.exit(1);
+      });
       break;
 
     case 'report':

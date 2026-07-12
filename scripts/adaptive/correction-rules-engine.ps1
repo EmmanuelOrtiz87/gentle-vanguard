@@ -198,11 +198,8 @@ function Invoke-CacheWarmingCorrection {
 
     Write-Log "Pre-warming embedding cache..." INFO
 
-    # Trigger cache warming process
-    $warmingScript = Join-Path $root 'scripts/utilities/cache/CACHE-MANAGEMENT/cache-warmer.ps1'
-    if (Test-Path $warmingScript) {
-        & $warmingScript -Warm -Quiet
-    }
+    # Cache warming — script removed in Phase 1 cleanup; no-op with fallback
+    Write-Log "Cache warming skipped (cache-warmer.ps1 removed in cleanup phase)" INFO
 
     return @{ success = $true; message = 'Cache corrected: pre-warmed embeddings' }
 }

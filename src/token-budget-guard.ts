@@ -79,7 +79,7 @@ function loadConfig(): GuardConfig {
       const custom = raw?.subagent_orchestration?.token_budget_guard;
       if (custom) {
         for (const key of Object.keys(DEFAULT_CONFIG)) {
-          if (key in custom) (config as any)[key] = custom[key];
+          if (key in custom) (config as Record<string, unknown>)[key] = custom[key];
         }
       }
     } catch {

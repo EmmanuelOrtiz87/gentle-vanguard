@@ -246,19 +246,27 @@ export class ResilienceManager {
 
     // Monitor primary tier
     setInterval(async () => {
-      const status = await this.checkTierHealth('primary');
-      if (!status.isHealthy && this.activeTier === 'primary') {
-        console.warn('Primary tier unhealthy, initiating failover...');
-        await this.failoverToSecondary();
+      try {
+        const status = await this.checkTierHealth('primary');
+        if (!status.isHealthy && this.activeTier === 'primary') {
+          console.warn('Primary tier unhealthy, initiating failover...');
+          await this.failoverToSecondary();
+        }
+      } catch (err) {
+        console.error('Primary tier monitor error:', err);
       }
     }, 5000);
 
     // Monitor secondary tier
     setInterval(async () => {
-      const status = await this.checkTierHealth('secondary');
-      if (!status.isHealthy && this.activeTier === 'secondary') {
-        console.warn('Secondary tier unhealthy, initiating failover...');
-        await this.failoverToTertiary();
+      try {
+        const status = await this.checkTierHealth('secondary');
+        if (!status.isHealthy && this.activeTier === 'secondary') {
+          console.warn('Secondary tier unhealthy, initiating failover...');
+          await this.failoverToTertiary();
+        }
+      } catch (err) {
+        console.error('Secondary tier monitor error:', err);
       }
     }, 10000);
 
