@@ -1,3 +1,9 @@
+# DEPRECATED: gv.ps1 is a legacy orchestrator shell with 7700+ lines and many broken
+# script references from the Phase 1 cleanup. Use direct commands instead:
+#   npx tsx src/session-autostart.ts    — session start
+#   npx tsx src/maintenance-watchtower.ts --action health — health check
+#   npx tsx src/health-check.ts         — health check (legacy)
+# This file is kept for reference only and will be removed in a future cleanup.
 # gv.ps1 - Workflow CLI
 # Automated development workflow for Gentle-Vanguard
 
@@ -5,13 +11,13 @@ param(
     [Parameter(Position=0)]
     [ValidateSet('init', 'review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'gentle-vanguard-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'webhook', 'predictor', 'sla-dashboard', 'escalation', 'live-server', 'learning', 'watchtower', 'heal', 'gateway', 'feedback', 'digest', 'adr-list', 'adr-search', 'security', 'metrics', 'help')]
     [string]$Command = 'help',
-    
+
     [Parameter(Position=1)]
     [string]$Scope = '',
 
     [Parameter(Position=2, ValueFromRemainingArguments=$true)]
     [string[]]$RemainingArgs = @(),
-    
+
     [switch]$SkipTests,
     [switch]$SkipReview,
     [switch]$SkipHomologationGate,
@@ -244,7 +250,7 @@ switch ($Command) {
     'help' {
         Show-Help
     }
-    
+
     'status' {
         Show-Status
     }
@@ -403,7 +409,7 @@ switch ($Command) {
             exit 1
         }
     }
-    
+
     'update' {
         Invoke-Update
     }
@@ -486,7 +492,7 @@ switch ($Command) {
 
         Write-Success "Judgment Day complete - APPROVED"
     }
-    
+
     'audit' {
         Write-Step "Generating Audit"
         Invoke-TokenBudgetGuard -Task 'audit' -Risk 'medium' -EstimatedChars 8800
@@ -533,54 +539,54 @@ switch ($Command) {
             Write-Host "  gv.ps1 audit judgment  -- full sweep + adversarial AI review" -ForegroundColor DarkGray
         }
     }
-    
+
     'pr' {
         if (-not (Get-BranchStatus)) { exit 0 }
-        
+
         Write-Step "Creating Pull Request"
-        
+
         # Run review first
         if (-not $SkipReview) {
             & "$PSCommandPath" review -SkipTests
         }
-        
+
         # Generate PR template
         $prPath = Join-Path $repoRoot '.github/PULL_REQUEST_TEMPLATE.md'
         if (-not (Test-Path (Split-Path $prPath))) {
             New-Item -ItemType Directory -Path (Split-Path $prPath) -Force | Out-Null
         }
-        
+
         New-PRDescription -OutputPath $prPath
         Write-Host ""
         Write-Host "PR template created at: $prPath" -ForegroundColor Cyan
         Write-Host "Edit the template and run: gh pr create" -ForegroundColor Cyan
     }
-    
+
     'push' {
         if (-not (Get-BranchStatus)) { exit 0 }
-        
+
         Write-Step "Pushing Changes"
         Warn-OldWorkflowCheckpoints -ThresholdDays 7
-        
+
         # Check secrets
         if (-not (Test-Secrets)) {
             Write-Error "Secrets detected - push blocked"
             exit 1
         }
-        
+
         # Run tests
         if (-not $SkipTests) {
             Test-GoTests | Out-Null
             Test-AngularTests | Out-Null
         }
-        
+
         # Generate audit
         & "$PSCommandPath" audit
 
         $publishMode = Resolve-PublishMode -RequestedMode $Scope -ForceMode:$Force
         $gitInfo = Get-GitInfo
         $branchName = if ([string]::IsNullOrWhiteSpace($gitInfo.Branch)) { '<current-branch>' } else { $gitInfo.Branch }
-        
+
         # Commit and push
         Write-Host ""
         if ($publishMode -eq 'push+pr') {
@@ -594,7 +600,7 @@ switch ($Command) {
             Write-Host "  git add ." -ForegroundColor Yellow
             Write-Host "  git commit -m 'type(scope): description'" -ForegroundColor Yellow
             Write-Host "  git push" -ForegroundColor Yellow
-            Write-Host "" 
+            Write-Host "
             Write-Host "Later, create PR with:" -ForegroundColor Cyan
             Write-Host "  .\scripts\utilities\gv.ps1 pr" -ForegroundColor Yellow
         }
@@ -604,10 +610,10 @@ switch ($Command) {
         Invoke-TokenBudgetGuard -Task 'publish' -Risk 'high' -EstimatedChars 18000
         Invoke-PublishWorkflow -SkipReviewGate:$SkipReview -SkipTestsGate:$SkipTests -SkipHomologationGate:$SkipHomologationGate -ForceMode:$Force
     }
-    
+
     'health' {
         Write-Step "System Health Check & Tool Activation"
-        
+
         $healthScript = Join-Path $scriptDir '..\SKILLS-TOOLS\ensure-tools-active.ps1'
         if (Test-Path $healthScript) {
             $healthArgs = @('-AutoStart')
@@ -820,7 +826,7 @@ switch ($Command) {
             exit 1
         }
     }
-    
+
     'verify' {
         Write-Step "Quick Stack Verification & Auto-Repair"
         $diagScript = $null
@@ -865,7 +871,7 @@ switch ($Command) {
             exit 1
         }
     }
-    
+
     'migrate-structure' {
         Write-Step "Structure Migration"
         $migrateScript = Join-Path $scriptDir 'migrate-structure.ps1'
@@ -1047,7 +1053,7 @@ switch ($Command) {
                 BenchmarkEvery = 4
                 Open = $true
             }
-            
+
             # Parse RemainingArgs for parameter overrides
             $i = 0
             while ($i -lt $RemainingArgs.Count) {
@@ -1086,7 +1092,7 @@ switch ($Command) {
                     $i++
                 }
             }
-            
+
             & $liveDashboardScript @liveParams
             exit $LASTEXITCODE
         }
@@ -1384,13 +1390,13 @@ param(
     [Parameter(Position=0)]
     [ValidateSet('init', 'review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'gentle-vanguard-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'webhook', 'predictor', 'sla-dashboard', 'escalation', 'live-server', 'learning', 'watchtower', 'heal', 'gateway', 'feedback', 'digest', 'adr-list', 'adr-search', 'security', 'metrics', 'help')]
     [string]$Command = 'help',
-    
+
     [Parameter(Position=1)]
     [string]$Scope = '',
 
     [Parameter(Position=2, ValueFromRemainingArguments=$true)]
     [string[]]$RemainingArgs = @(),
-    
+
     [switch]$SkipTests,
     [switch]$SkipReview,
     [switch]$SkipHomologationGate,
@@ -1623,7 +1629,7 @@ switch ($Command) {
     'help' {
         Show-Help
     }
-    
+
     'status' {
         Show-Status
     }
@@ -1782,7 +1788,7 @@ switch ($Command) {
             exit 1
         }
     }
-    
+
     'update' {
         Invoke-Update
     }
@@ -1865,7 +1871,7 @@ switch ($Command) {
 
         Write-Success "Judgment Day complete - APPROVED"
     }
-    
+
     'audit' {
         Write-Step "Generating Audit"
         Invoke-TokenBudgetGuard -Task 'audit' -Risk 'medium' -EstimatedChars 8800
@@ -1912,54 +1918,54 @@ switch ($Command) {
             Write-Host "  gv.ps1 audit judgment  -- full sweep + adversarial AI review" -ForegroundColor DarkGray
         }
     }
-    
+
     'pr' {
         if (-not (Get-BranchStatus)) { exit 0 }
-        
+
         Write-Step "Creating Pull Request"
-        
+
         # Run review first
         if (-not $SkipReview) {
             & "$PSCommandPath" review -SkipTests
         }
-        
+
         # Generate PR template
         $prPath = Join-Path $repoRoot '.github/PULL_REQUEST_TEMPLATE.md'
         if (-not (Test-Path (Split-Path $prPath))) {
             New-Item -ItemType Directory -Path (Split-Path $prPath) -Force | Out-Null
         }
-        
+
         New-PRDescription -OutputPath $prPath
         Write-Host ""
         Write-Host "PR template created at: $prPath" -ForegroundColor Cyan
         Write-Host "Edit the template and run: gh pr create" -ForegroundColor Cyan
     }
-    
+
     'push' {
         if (-not (Get-BranchStatus)) { exit 0 }
-        
+
         Write-Step "Pushing Changes"
         Warn-OldWorkflowCheckpoints -ThresholdDays 7
-        
+
         # Check secrets
         if (-not (Test-Secrets)) {
             Write-Error "Secrets detected - push blocked"
             exit 1
         }
-        
+
         # Run tests
         if (-not $SkipTests) {
             Test-GoTests | Out-Null
             Test-AngularTests | Out-Null
         }
-        
+
         # Generate audit
         & "$PSCommandPath" audit
 
         $publishMode = Resolve-PublishMode -RequestedMode $Scope -ForceMode:$Force
         $gitInfo = Get-GitInfo
         $branchName = if ([string]::IsNullOrWhiteSpace($gitInfo.Branch)) { '<current-branch>' } else { $gitInfo.Branch }
-        
+
         # Commit and push
         Write-Host ""
         if ($publishMode -eq 'push+pr') {
@@ -1973,7 +1979,7 @@ switch ($Command) {
             Write-Host "  git add ." -ForegroundColor Yellow
             Write-Host "  git commit -m 'type(scope): description'" -ForegroundColor Yellow
             Write-Host "  git push" -ForegroundColor Yellow
-            Write-Host "" 
+            Write-Host "
             Write-Host "Later, create PR with:" -ForegroundColor Cyan
             Write-Host "  .\scripts\utilities\gv.ps1 pr" -ForegroundColor Yellow
         }
@@ -1983,10 +1989,10 @@ switch ($Command) {
         Invoke-TokenBudgetGuard -Task 'publish' -Risk 'high' -EstimatedChars 18000
         Invoke-PublishWorkflow -SkipReviewGate:$SkipReview -SkipTestsGate:$SkipTests -SkipHomologationGate:$SkipHomologationGate -ForceMode:$Force
     }
-    
+
     'health' {
         Write-Step "System Health Check & Tool Activation"
-        
+
         $healthScript = Join-Path $scriptDir '..\SKILLS-TOOLS\ensure-tools-active.ps1'
         if (Test-Path $healthScript) {
             $healthArgs = @('-AutoStart')
@@ -2199,7 +2205,7 @@ switch ($Command) {
             exit 1
         }
     }
-    
+
     'verify' {
         Write-Step "Quick Stack Verification & Auto-Repair"
         $diagScript = $null
@@ -2244,7 +2250,7 @@ switch ($Command) {
             exit 1
         }
     }
-    
+
     'migrate-structure' {
         Write-Step "Structure Migration"
         $migrateScript = Join-Path $scriptDir 'migrate-structure.ps1'
@@ -2426,7 +2432,7 @@ switch ($Command) {
                 BenchmarkEvery = 4
                 Open = $true
             }
-            
+
             # Parse RemainingArgs for parameter overrides
             $i = 0
             while ($i -lt $RemainingArgs.Count) {
@@ -2465,7 +2471,7 @@ switch ($Command) {
                     $i++
                 }
             }
-            
+
             & $liveDashboardScript @liveParams
             exit $LASTEXITCODE
         }
@@ -2763,13 +2769,13 @@ param(
     [Parameter(Position=0)]
     [ValidateSet('init', 'review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'gentle-vanguard-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'webhook', 'predictor', 'sla-dashboard', 'escalation', 'live-server', 'learning', 'watchtower', 'heal', 'gateway', 'feedback', 'digest', 'adr-list', 'adr-search', 'security', 'metrics', 'help')]
     [string]$Command = 'help',
-    
+
     [Parameter(Position=1)]
     [string]$Scope = '',
 
     [Parameter(Position=2, ValueFromRemainingArguments=$true)]
     [string[]]$RemainingArgs = @(),
-    
+
     [switch]$SkipTests,
     [switch]$SkipReview,
     [switch]$SkipHomologationGate,
@@ -3002,7 +3008,7 @@ switch ($Command) {
     'help' {
         Show-Help
     }
-    
+
     'status' {
         Show-Status
     }
@@ -3161,7 +3167,7 @@ switch ($Command) {
             exit 1
         }
     }
-    
+
     'update' {
         Invoke-Update
     }
@@ -3244,7 +3250,7 @@ switch ($Command) {
 
         Write-Success "Judgment Day complete - APPROVED"
     }
-    
+
     'audit' {
         Write-Step "Generating Audit"
         Invoke-TokenBudgetGuard -Task 'audit' -Risk 'medium' -EstimatedChars 8800
@@ -3291,54 +3297,54 @@ switch ($Command) {
             Write-Host "  gv.ps1 audit judgment  -- full sweep + adversarial AI review" -ForegroundColor DarkGray
         }
     }
-    
+
     'pr' {
         if (-not (Get-BranchStatus)) { exit 0 }
-        
+
         Write-Step "Creating Pull Request"
-        
+
         # Run review first
         if (-not $SkipReview) {
             & "$PSCommandPath" review -SkipTests
         }
-        
+
         # Generate PR template
         $prPath = Join-Path $repoRoot '.github/PULL_REQUEST_TEMPLATE.md'
         if (-not (Test-Path (Split-Path $prPath))) {
             New-Item -ItemType Directory -Path (Split-Path $prPath) -Force | Out-Null
         }
-        
+
         New-PRDescription -OutputPath $prPath
         Write-Host ""
         Write-Host "PR template created at: $prPath" -ForegroundColor Cyan
         Write-Host "Edit the template and run: gh pr create" -ForegroundColor Cyan
     }
-    
+
     'push' {
         if (-not (Get-BranchStatus)) { exit 0 }
-        
+
         Write-Step "Pushing Changes"
         Warn-OldWorkflowCheckpoints -ThresholdDays 7
-        
+
         # Check secrets
         if (-not (Test-Secrets)) {
             Write-Error "Secrets detected - push blocked"
             exit 1
         }
-        
+
         # Run tests
         if (-not $SkipTests) {
             Test-GoTests | Out-Null
             Test-AngularTests | Out-Null
         }
-        
+
         # Generate audit
         & "$PSCommandPath" audit
 
         $publishMode = Resolve-PublishMode -RequestedMode $Scope -ForceMode:$Force
         $gitInfo = Get-GitInfo
         $branchName = if ([string]::IsNullOrWhiteSpace($gitInfo.Branch)) { '<current-branch>' } else { $gitInfo.Branch }
-        
+
         # Commit and push
         Write-Host ""
         if ($publishMode -eq 'push+pr') {
@@ -3352,7 +3358,7 @@ switch ($Command) {
             Write-Host "  git add ." -ForegroundColor Yellow
             Write-Host "  git commit -m 'type(scope): description'" -ForegroundColor Yellow
             Write-Host "  git push" -ForegroundColor Yellow
-            Write-Host "" 
+            Write-Host "
             Write-Host "Later, create PR with:" -ForegroundColor Cyan
             Write-Host "  .\scripts\utilities\gv.ps1 pr" -ForegroundColor Yellow
         }
@@ -3362,10 +3368,10 @@ switch ($Command) {
         Invoke-TokenBudgetGuard -Task 'publish' -Risk 'high' -EstimatedChars 18000
         Invoke-PublishWorkflow -SkipReviewGate:$SkipReview -SkipTestsGate:$SkipTests -SkipHomologationGate:$SkipHomologationGate -ForceMode:$Force
     }
-    
+
     'health' {
         Write-Step "System Health Check & Tool Activation"
-        
+
         $healthScript = Join-Path $scriptDir '..\SKILLS-TOOLS\ensure-tools-active.ps1'
         if (Test-Path $healthScript) {
             $healthArgs = @('-AutoStart')
@@ -3578,7 +3584,7 @@ switch ($Command) {
             exit 1
         }
     }
-    
+
     'verify' {
         Write-Step "Quick Stack Verification & Auto-Repair"
         $diagScript = $null
@@ -3623,7 +3629,7 @@ switch ($Command) {
             exit 1
         }
     }
-    
+
     'migrate-structure' {
         Write-Step "Structure Migration"
         $migrateScript = Join-Path $scriptDir 'migrate-structure.ps1'
@@ -3805,7 +3811,7 @@ switch ($Command) {
                 BenchmarkEvery = 4
                 Open = $true
             }
-            
+
             # Parse RemainingArgs for parameter overrides
             $i = 0
             while ($i -lt $RemainingArgs.Count) {
@@ -3844,7 +3850,7 @@ switch ($Command) {
                     $i++
                 }
             }
-            
+
             & $liveDashboardScript @liveParams
             exit $LASTEXITCODE
         }
@@ -4142,13 +4148,13 @@ param(
     [Parameter(Position=0)]
     [ValidateSet('init', 'review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'gentle-vanguard-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'webhook', 'predictor', 'sla-dashboard', 'escalation', 'live-server', 'learning', 'watchtower', 'heal', 'gateway', 'feedback', 'digest', 'adr-list', 'adr-search', 'security', 'metrics', 'help')]
     [string]$Command = 'help',
-    
+
     [Parameter(Position=1)]
     [string]$Scope = '',
 
     [Parameter(Position=2, ValueFromRemainingArguments=$true)]
     [string[]]$RemainingArgs = @(),
-    
+
     [switch]$SkipTests,
     [switch]$SkipReview,
     [switch]$SkipHomologationGate,
@@ -4381,7 +4387,7 @@ switch ($Command) {
     'help' {
         Show-Help
     }
-    
+
     'status' {
         Show-Status
     }
@@ -4540,7 +4546,7 @@ switch ($Command) {
             exit 1
         }
     }
-    
+
     'update' {
         Invoke-Update
     }
@@ -4623,7 +4629,7 @@ switch ($Command) {
 
         Write-Success "Judgment Day complete - APPROVED"
     }
-    
+
     'audit' {
         Write-Step "Generating Audit"
         Invoke-TokenBudgetGuard -Task 'audit' -Risk 'medium' -EstimatedChars 8800
@@ -4670,54 +4676,54 @@ switch ($Command) {
             Write-Host "  gv.ps1 audit judgment  -- full sweep + adversarial AI review" -ForegroundColor DarkGray
         }
     }
-    
+
     'pr' {
         if (-not (Get-BranchStatus)) { exit 0 }
-        
+
         Write-Step "Creating Pull Request"
-        
+
         # Run review first
         if (-not $SkipReview) {
             & "$PSCommandPath" review -SkipTests
         }
-        
+
         # Generate PR template
         $prPath = Join-Path $repoRoot '.github/PULL_REQUEST_TEMPLATE.md'
         if (-not (Test-Path (Split-Path $prPath))) {
             New-Item -ItemType Directory -Path (Split-Path $prPath) -Force | Out-Null
         }
-        
+
         New-PRDescription -OutputPath $prPath
         Write-Host ""
         Write-Host "PR template created at: $prPath" -ForegroundColor Cyan
         Write-Host "Edit the template and run: gh pr create" -ForegroundColor Cyan
     }
-    
+
     'push' {
         if (-not (Get-BranchStatus)) { exit 0 }
-        
+
         Write-Step "Pushing Changes"
         Warn-OldWorkflowCheckpoints -ThresholdDays 7
-        
+
         # Check secrets
         if (-not (Test-Secrets)) {
             Write-Error "Secrets detected - push blocked"
             exit 1
         }
-        
+
         # Run tests
         if (-not $SkipTests) {
             Test-GoTests | Out-Null
             Test-AngularTests | Out-Null
         }
-        
+
         # Generate audit
         & "$PSCommandPath" audit
 
         $publishMode = Resolve-PublishMode -RequestedMode $Scope -ForceMode:$Force
         $gitInfo = Get-GitInfo
         $branchName = if ([string]::IsNullOrWhiteSpace($gitInfo.Branch)) { '<current-branch>' } else { $gitInfo.Branch }
-        
+
         # Commit and push
         Write-Host ""
         if ($publishMode -eq 'push+pr') {
@@ -4731,7 +4737,7 @@ switch ($Command) {
             Write-Host "  git add ." -ForegroundColor Yellow
             Write-Host "  git commit -m 'type(scope): description'" -ForegroundColor Yellow
             Write-Host "  git push" -ForegroundColor Yellow
-            Write-Host "" 
+            Write-Host "
             Write-Host "Later, create PR with:" -ForegroundColor Cyan
             Write-Host "  .\scripts\utilities\gv.ps1 pr" -ForegroundColor Yellow
         }
@@ -4741,10 +4747,10 @@ switch ($Command) {
         Invoke-TokenBudgetGuard -Task 'publish' -Risk 'high' -EstimatedChars 18000
         Invoke-PublishWorkflow -SkipReviewGate:$SkipReview -SkipTestsGate:$SkipTests -SkipHomologationGate:$SkipHomologationGate -ForceMode:$Force
     }
-    
+
     'health' {
         Write-Step "System Health Check & Tool Activation"
-        
+
         $healthScript = Join-Path $scriptDir '..\SKILLS-TOOLS\ensure-tools-active.ps1'
         if (Test-Path $healthScript) {
             $healthArgs = @('-AutoStart')
@@ -4957,7 +4963,7 @@ switch ($Command) {
             exit 1
         }
     }
-    
+
     'verify' {
         Write-Step "Quick Stack Verification & Auto-Repair"
         $diagScript = $null
@@ -5002,7 +5008,7 @@ switch ($Command) {
             exit 1
         }
     }
-    
+
     'migrate-structure' {
         Write-Step "Structure Migration"
         $migrateScript = Join-Path $scriptDir 'migrate-structure.ps1'
@@ -5184,7 +5190,7 @@ switch ($Command) {
                 BenchmarkEvery = 4
                 Open = $true
             }
-            
+
             # Parse RemainingArgs for parameter overrides
             $i = 0
             while ($i -lt $RemainingArgs.Count) {
@@ -5223,7 +5229,7 @@ switch ($Command) {
                     $i++
                 }
             }
-            
+
             & $liveDashboardScript @liveParams
             exit $LASTEXITCODE
         }
@@ -5709,12 +5715,12 @@ switch ($Command) {
         Write-Step "Parallel Agent Dispatch with Memory Persistence"
         $dispatchScript = Join-Path $scriptDir 'dispatch-agent.ps1'
         $memoryScript = Join-Path $scriptDir 'dispatch-memory-manager.ps1'
-        
+
         if (-not (Test-Path $dispatchScript)) {
             Write-Error "Dispatch script not found: $dispatchScript"
             exit 1
         }
-        
+
         if (-not (Test-Path $memoryScript)) {
             Write-Error "Dispatch memory manager not found: $memoryScript"
             exit 1
@@ -5723,16 +5729,16 @@ switch ($Command) {
         # Parse dispatch command: dispatch [agents|memory] [action] [params...]
         $dispatchParts = $Scope -split ' ', 3
         $dispatchAction = if ($dispatchParts[0]) { $dispatchParts[0].ToLower() } else { 'execute' }
-        
+
         switch ($dispatchAction) {
             'memory' {
                 # Memory management: dispatch memory [list|load|save|clear|sync]
                 $memAction = if ($dispatchParts[1]) { $dispatchParts[1].ToLower() } else { 'list' }
                 Write-Host "Memory action: $memAction" -ForegroundColor Gray
-                
+
                 $memArgs = @('-Action', $memAction)
                 if ($JSON) { $memArgs += '-AsJson' }
-                
+
                 & $memoryScript @memArgs
             }
             'list' {
@@ -5758,12 +5764,12 @@ switch ($Command) {
                 # Execute dispatch with agents
                 $agents = if ($dispatchAction -ne 'execute') { $dispatchAction } else { $dispatchParts[1] }
                 $task = if ($dispatchParts.Count -gt 2) { $dispatchParts[2] } else { '' }
-                
+
                 $dispatchArgs = @()
                 if ($agents) { $dispatchArgs += @('-Agents', $agents) }
                 if ($task) { $dispatchArgs += @('-Task', $task) }
                 if ($JSON) { $dispatchArgs += '-AsJson' }
-                
+
                 Invoke-TokenBudgetGuard -Task 'dispatch' -Risk 'medium' -EstimatedChars 5000
                 & $dispatchScript @dispatchArgs
             }
@@ -5867,7 +5873,7 @@ switch ($Command) {
 
         & $routerScript @routeParams
     }
-    
+
     'webhook' {
         Write-Step "Webhook Alerting Configuration"
         $webhookScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\webhook-alerting.ps1'
@@ -5875,7 +5881,7 @@ switch ($Command) {
             Write-Error "Webhook script not found: $webhookScript"
             exit 1
         }
-        
+
         if ($Scope -eq 'test') {
             Write-Host "Testing webhook connection..." -ForegroundColor Cyan
             & $webhookScript -WebhookUrl $env:WEBHOOK_URL -Status 'YELLOW' `
@@ -5886,7 +5892,7 @@ switch ($Command) {
             Write-Host "Set env vars: WEBHOOK_URL, WEBHOOK_PROVIDER (slack|teams|discord|generic)" -ForegroundColor Gray
         }
     }
-    
+
     'predictor' {
         Write-Step "Baseline Predictor"
         $predictorScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\baseline-predictor.ps1'
@@ -5894,15 +5900,15 @@ switch ($Command) {
             Write-Error "Predictor script not found: $predictorScript"
             exit 1
         }
-        
+
         $forecastHours = 24
         if ($Scope -match '^\d+$') {
             $forecastHours = [int]$Scope
         }
-        
+
         & $predictorScript -ForecastHours $forecastHours
     }
-    
+
     'sla-dashboard' {
         Write-Step "SLA Dashboard Generation"
         $slaScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\sla-dashboard-generator.ps1'
@@ -5910,7 +5916,7 @@ switch ($Command) {
             Write-Error "SLA dashboard script not found: $slaScript"
             exit 1
         }
-        
+
         $slaPath = Join-Path $repoRoot 'reports\sla-dashboard.html'
         $openFlag = $Scope -eq 'open'
         $slaParams = @{
@@ -5924,7 +5930,7 @@ switch ($Command) {
 
         & $slaScript @slaParams
     }
-    
+
     'escalation' {
         Write-Step "Auto-Escalation Configuration"
         $escalationScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\auto-escalation.ps1'
@@ -5932,22 +5938,22 @@ switch ($Command) {
             Write-Error "Auto-escalation script not found: $escalationScript"
             exit 1
         }
-        
+
         if ([string]::IsNullOrWhiteSpace($env:GITHUB_TOKEN)) {
             Write-Error "GITHUB_TOKEN environment variable not set"
             exit 1
         }
-        
+
         $repo = $Scope
         if ([string]::IsNullOrWhiteSpace($repo)) {
             Write-Error "Usage: gv escalation <owner/repo>"
             exit 1
         }
-        
+
         Write-Host "Auto-escalation enabled for: $repo" -ForegroundColor Green
         Write-Host "Threshold: 3 consecutive failures" -ForegroundColor Gray
     }
-    
+
     'live-server' {
         Write-Step "Live Dashboard Server (SSE)"
         $liveServerScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\websocket-live-server.ps1'
@@ -5955,12 +5961,12 @@ switch ($Command) {
             Write-Error "Live server script not found: $liveServerScript"
             exit 1
         }
-        
+
         $port = 8090
         if ($Scope -match '^\d+$') {
             $port = [int]$Scope
         }
-        
+
         & $liveServerScript -Port $port
     }
 
@@ -6267,12 +6273,12 @@ exit 0
         Write-Step "Parallel Agent Dispatch with Memory Persistence"
         $dispatchScript = Join-Path $scriptDir 'dispatch-agent.ps1'
         $memoryScript = Join-Path $scriptDir 'dispatch-memory-manager.ps1'
-        
+
         if (-not (Test-Path $dispatchScript)) {
             Write-Error "Dispatch script not found: $dispatchScript"
             exit 1
         }
-        
+
         if (-not (Test-Path $memoryScript)) {
             Write-Error "Dispatch memory manager not found: $memoryScript"
             exit 1
@@ -6281,16 +6287,16 @@ exit 0
         # Parse dispatch command: dispatch [agents|memory] [action] [params...]
         $dispatchParts = $Scope -split ' ', 3
         $dispatchAction = if ($dispatchParts[0]) { $dispatchParts[0].ToLower() } else { 'execute' }
-        
+
         switch ($dispatchAction) {
             'memory' {
                 # Memory management: dispatch memory [list|load|save|clear|sync]
                 $memAction = if ($dispatchParts[1]) { $dispatchParts[1].ToLower() } else { 'list' }
                 Write-Host "Memory action: $memAction" -ForegroundColor Gray
-                
+
                 $memArgs = @('-Action', $memAction)
                 if ($JSON) { $memArgs += '-AsJson' }
-                
+
                 & $memoryScript @memArgs
             }
             'list' {
@@ -6316,12 +6322,12 @@ exit 0
                 # Execute dispatch with agents
                 $agents = if ($dispatchAction -ne 'execute') { $dispatchAction } else { $dispatchParts[1] }
                 $task = if ($dispatchParts.Count -gt 2) { $dispatchParts[2] } else { '' }
-                
+
                 $dispatchArgs = @()
                 if ($agents) { $dispatchArgs += @('-Agents', $agents) }
                 if ($task) { $dispatchArgs += @('-Task', $task) }
                 if ($JSON) { $dispatchArgs += '-AsJson' }
-                
+
                 Invoke-TokenBudgetGuard -Task 'dispatch' -Risk 'medium' -EstimatedChars 5000
                 & $dispatchScript @dispatchArgs
             }
@@ -6425,7 +6431,7 @@ exit 0
 
         & $routerScript @routeParams
     }
-    
+
     'webhook' {
         Write-Step "Webhook Alerting Configuration"
         $webhookScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\webhook-alerting.ps1'
@@ -6433,7 +6439,7 @@ exit 0
             Write-Error "Webhook script not found: $webhookScript"
             exit 1
         }
-        
+
         if ($Scope -eq 'test') {
             Write-Host "Testing webhook connection..." -ForegroundColor Cyan
             & $webhookScript -WebhookUrl $env:WEBHOOK_URL -Status 'YELLOW' `
@@ -6444,7 +6450,7 @@ exit 0
             Write-Host "Set env vars: WEBHOOK_URL, WEBHOOK_PROVIDER (slack|teams|discord|generic)" -ForegroundColor Gray
         }
     }
-    
+
     'predictor' {
         Write-Step "Baseline Predictor"
         $predictorScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\baseline-predictor.ps1'
@@ -6452,15 +6458,15 @@ exit 0
             Write-Error "Predictor script not found: $predictorScript"
             exit 1
         }
-        
+
         $forecastHours = 24
         if ($Scope -match '^\d+$') {
             $forecastHours = [int]$Scope
         }
-        
+
         & $predictorScript -ForecastHours $forecastHours
     }
-    
+
     'sla-dashboard' {
         Write-Step "SLA Dashboard Generation"
         $slaScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\sla-dashboard-generator.ps1'
@@ -6468,7 +6474,7 @@ exit 0
             Write-Error "SLA dashboard script not found: $slaScript"
             exit 1
         }
-        
+
         $slaPath = Join-Path $repoRoot 'reports\sla-dashboard.html'
         $openFlag = $Scope -eq 'open'
         $slaParams = @{
@@ -6482,7 +6488,7 @@ exit 0
 
         & $slaScript @slaParams
     }
-    
+
     'escalation' {
         Write-Step "Auto-Escalation Configuration"
         $escalationScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\auto-escalation.ps1'
@@ -6490,22 +6496,22 @@ exit 0
             Write-Error "Auto-escalation script not found: $escalationScript"
             exit 1
         }
-        
+
         if ([string]::IsNullOrWhiteSpace($env:GITHUB_TOKEN)) {
             Write-Error "GITHUB_TOKEN environment variable not set"
             exit 1
         }
-        
+
         $repo = $Scope
         if ([string]::IsNullOrWhiteSpace($repo)) {
             Write-Error "Usage: gv escalation <owner/repo>"
             exit 1
         }
-        
+
         Write-Host "Auto-escalation enabled for: $repo" -ForegroundColor Green
         Write-Host "Threshold: 3 consecutive failures" -ForegroundColor Gray
     }
-    
+
     'live-server' {
         Write-Step "Live Dashboard Server (SSE)"
         $liveServerScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\websocket-live-server.ps1'
@@ -6513,12 +6519,12 @@ exit 0
             Write-Error "Live server script not found: $liveServerScript"
             exit 1
         }
-        
+
         $port = 8090
         if ($Scope -match '^\d+$') {
             $port = [int]$Scope
         }
-        
+
         & $liveServerScript -Port $port
     }
 
@@ -6826,12 +6832,12 @@ exit 0
         Write-Step "Parallel Agent Dispatch with Memory Persistence"
         $dispatchScript = Join-Path $scriptDir 'dispatch-agent.ps1'
         $memoryScript = Join-Path $scriptDir 'dispatch-memory-manager.ps1'
-        
+
         if (-not (Test-Path $dispatchScript)) {
             Write-Error "Dispatch script not found: $dispatchScript"
             exit 1
         }
-        
+
         if (-not (Test-Path $memoryScript)) {
             Write-Error "Dispatch memory manager not found: $memoryScript"
             exit 1
@@ -6840,16 +6846,16 @@ exit 0
         # Parse dispatch command: dispatch [agents|memory] [action] [params...]
         $dispatchParts = $Scope -split ' ', 3
         $dispatchAction = if ($dispatchParts[0]) { $dispatchParts[0].ToLower() } else { 'execute' }
-        
+
         switch ($dispatchAction) {
             'memory' {
                 # Memory management: dispatch memory [list|load|save|clear|sync]
                 $memAction = if ($dispatchParts[1]) { $dispatchParts[1].ToLower() } else { 'list' }
                 Write-Host "Memory action: $memAction" -ForegroundColor Gray
-                
+
                 $memArgs = @('-Action', $memAction)
                 if ($JSON) { $memArgs += '-AsJson' }
-                
+
                 & $memoryScript @memArgs
             }
             'list' {
@@ -6875,12 +6881,12 @@ exit 0
                 # Execute dispatch with agents
                 $agents = if ($dispatchAction -ne 'execute') { $dispatchAction } else { $dispatchParts[1] }
                 $task = if ($dispatchParts.Count -gt 2) { $dispatchParts[2] } else { '' }
-                
+
                 $dispatchArgs = @()
                 if ($agents) { $dispatchArgs += @('-Agents', $agents) }
                 if ($task) { $dispatchArgs += @('-Task', $task) }
                 if ($JSON) { $dispatchArgs += '-AsJson' }
-                
+
                 Invoke-TokenBudgetGuard -Task 'dispatch' -Risk 'medium' -EstimatedChars 5000
                 & $dispatchScript @dispatchArgs
             }
@@ -6984,7 +6990,7 @@ exit 0
 
         & $routerScript @routeParams
     }
-    
+
     'webhook' {
         Write-Step "Webhook Alerting Configuration"
         $webhookScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\webhook-alerting.ps1'
@@ -6992,7 +6998,7 @@ exit 0
             Write-Error "Webhook script not found: $webhookScript"
             exit 1
         }
-        
+
         if ($Scope -eq 'test') {
             Write-Host "Testing webhook connection..." -ForegroundColor Cyan
             & $webhookScript -WebhookUrl $env:WEBHOOK_URL -Status 'YELLOW' `
@@ -7003,7 +7009,7 @@ exit 0
             Write-Host "Set env vars: WEBHOOK_URL, WEBHOOK_PROVIDER (slack|teams|discord|generic)" -ForegroundColor Gray
         }
     }
-    
+
     'predictor' {
         Write-Step "Baseline Predictor"
         $predictorScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\baseline-predictor.ps1'
@@ -7011,15 +7017,15 @@ exit 0
             Write-Error "Predictor script not found: $predictorScript"
             exit 1
         }
-        
+
         $forecastHours = 24
         if ($Scope -match '^\d+$') {
             $forecastHours = [int]$Scope
         }
-        
+
         & $predictorScript -ForecastHours $forecastHours
     }
-    
+
     'sla-dashboard' {
         Write-Step "SLA Dashboard Generation"
         $slaScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\sla-dashboard-generator.ps1'
@@ -7027,7 +7033,7 @@ exit 0
             Write-Error "SLA dashboard script not found: $slaScript"
             exit 1
         }
-        
+
         $slaPath = Join-Path $repoRoot 'reports\sla-dashboard.html'
         $openFlag = $Scope -eq 'open'
         $slaParams = @{
@@ -7041,7 +7047,7 @@ exit 0
 
         & $slaScript @slaParams
     }
-    
+
     'escalation' {
         Write-Step "Auto-Escalation Configuration"
         $escalationScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\auto-escalation.ps1'
@@ -7049,22 +7055,22 @@ exit 0
             Write-Error "Auto-escalation script not found: $escalationScript"
             exit 1
         }
-        
+
         if ([string]::IsNullOrWhiteSpace($env:GITHUB_TOKEN)) {
             Write-Error "GITHUB_TOKEN environment variable not set"
             exit 1
         }
-        
+
         $repo = $Scope
         if ([string]::IsNullOrWhiteSpace($repo)) {
             Write-Error "Usage: gv escalation <owner/repo>"
             exit 1
         }
-        
+
         Write-Host "Auto-escalation enabled for: $repo" -ForegroundColor Green
         Write-Host "Threshold: 3 consecutive failures" -ForegroundColor Gray
     }
-    
+
     'live-server' {
         Write-Step "Live Dashboard Server (SSE)"
         $liveServerScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\websocket-live-server.ps1'
@@ -7072,12 +7078,12 @@ exit 0
             Write-Error "Live server script not found: $liveServerScript"
             exit 1
         }
-        
+
         $port = 8090
         if ($Scope -match '^\d+$') {
             $port = [int]$Scope
         }
-        
+
         & $liveServerScript -Port $port
     }
 
@@ -7384,12 +7390,12 @@ exit 0
         Write-Step "Parallel Agent Dispatch with Memory Persistence"
         $dispatchScript = Join-Path $scriptDir 'dispatch-agent.ps1'
         $memoryScript = Join-Path $scriptDir 'dispatch-memory-manager.ps1'
-        
+
         if (-not (Test-Path $dispatchScript)) {
             Write-Error "Dispatch script not found: $dispatchScript"
             exit 1
         }
-        
+
         if (-not (Test-Path $memoryScript)) {
             Write-Error "Dispatch memory manager not found: $memoryScript"
             exit 1
@@ -7398,16 +7404,16 @@ exit 0
         # Parse dispatch command: dispatch [agents|memory] [action] [params...]
         $dispatchParts = $Scope -split ' ', 3
         $dispatchAction = if ($dispatchParts[0]) { $dispatchParts[0].ToLower() } else { 'execute' }
-        
+
         switch ($dispatchAction) {
             'memory' {
                 # Memory management: dispatch memory [list|load|save|clear|sync]
                 $memAction = if ($dispatchParts[1]) { $dispatchParts[1].ToLower() } else { 'list' }
                 Write-Host "Memory action: $memAction" -ForegroundColor Gray
-                
+
                 $memArgs = @('-Action', $memAction)
                 if ($JSON) { $memArgs += '-AsJson' }
-                
+
                 & $memoryScript @memArgs
             }
             'list' {
@@ -7433,12 +7439,12 @@ exit 0
                 # Execute dispatch with agents
                 $agents = if ($dispatchAction -ne 'execute') { $dispatchAction } else { $dispatchParts[1] }
                 $task = if ($dispatchParts.Count -gt 2) { $dispatchParts[2] } else { '' }
-                
+
                 $dispatchArgs = @()
                 if ($agents) { $dispatchArgs += @('-Agents', $agents) }
                 if ($task) { $dispatchArgs += @('-Task', $task) }
                 if ($JSON) { $dispatchArgs += '-AsJson' }
-                
+
                 Invoke-TokenBudgetGuard -Task 'dispatch' -Risk 'medium' -EstimatedChars 5000
                 & $dispatchScript @dispatchArgs
             }
@@ -7542,7 +7548,7 @@ exit 0
 
         & $routerScript @routeParams
     }
-    
+
     'webhook' {
         Write-Step "Webhook Alerting Configuration"
         $webhookScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\webhook-alerting.ps1'
@@ -7550,7 +7556,7 @@ exit 0
             Write-Error "Webhook script not found: $webhookScript"
             exit 1
         }
-        
+
         if ($Scope -eq 'test') {
             Write-Host "Testing webhook connection..." -ForegroundColor Cyan
             & $webhookScript -WebhookUrl $env:WEBHOOK_URL -Status 'YELLOW' `
@@ -7561,7 +7567,7 @@ exit 0
             Write-Host "Set env vars: WEBHOOK_URL, WEBHOOK_PROVIDER (slack|teams|discord|generic)" -ForegroundColor Gray
         }
     }
-    
+
     'predictor' {
         Write-Step "Baseline Predictor"
         $predictorScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\baseline-predictor.ps1'
@@ -7569,15 +7575,15 @@ exit 0
             Write-Error "Predictor script not found: $predictorScript"
             exit 1
         }
-        
+
         $forecastHours = 24
         if ($Scope -match '^\d+$') {
             $forecastHours = [int]$Scope
         }
-        
+
         & $predictorScript -ForecastHours $forecastHours
     }
-    
+
     'sla-dashboard' {
         Write-Step "SLA Dashboard Generation"
         $slaScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\sla-dashboard-generator.ps1'
@@ -7585,7 +7591,7 @@ exit 0
             Write-Error "SLA dashboard script not found: $slaScript"
             exit 1
         }
-        
+
         $slaPath = Join-Path $repoRoot 'reports\sla-dashboard.html'
         $openFlag = $Scope -eq 'open'
         $slaParams = @{
@@ -7599,7 +7605,7 @@ exit 0
 
         & $slaScript @slaParams
     }
-    
+
     'escalation' {
         Write-Step "Auto-Escalation Configuration"
         $escalationScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\auto-escalation.ps1'
@@ -7607,22 +7613,22 @@ exit 0
             Write-Error "Auto-escalation script not found: $escalationScript"
             exit 1
         }
-        
+
         if ([string]::IsNullOrWhiteSpace($env:GITHUB_TOKEN)) {
             Write-Error "GITHUB_TOKEN environment variable not set"
             exit 1
         }
-        
+
         $repo = $Scope
         if ([string]::IsNullOrWhiteSpace($repo)) {
             Write-Error "Usage: gv escalation <owner/repo>"
             exit 1
         }
-        
+
         Write-Host "Auto-escalation enabled for: $repo" -ForegroundColor Green
         Write-Host "Threshold: 3 consecutive failures" -ForegroundColor Gray
     }
-    
+
     'live-server' {
         Write-Step "Live Dashboard Server (SSE)"
         $liveServerScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\websocket-live-server.ps1'
@@ -7630,12 +7636,12 @@ exit 0
             Write-Error "Live server script not found: $liveServerScript"
             exit 1
         }
-        
+
         $port = 8090
         if ($Scope -match '^\d+$') {
             $port = [int]$Scope
         }
-        
+
         & $liveServerScript -Port $port
     }
 

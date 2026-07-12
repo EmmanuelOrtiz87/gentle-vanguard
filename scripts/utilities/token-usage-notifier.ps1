@@ -14,9 +14,11 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $target = Join-Path $scriptDir "token\token-metrics-store.ps1"
 
 if (Test-Path $target) {
-    $args_ = @('-Action', $Action)
-    if ($Quiet) { $args_ += '-Quiet' }
-    & $target @args_
+    if ($Quiet) {
+        & $target -Action $Action -Quiet
+    } else {
+        & $target -Action $Action
+    }
 } else {
     Write-Warning "[token-usage-notifier] target not found: $target"
 }
