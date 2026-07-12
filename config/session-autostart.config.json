@@ -297,7 +297,7 @@
         "id": "token-notification-init",
         "enabled": true,
         "script": "scripts/utilities/token-usage-notifier.ps1",
-        "args": "-Action status",
+        "args": "-Action init",
         "required": false,
         "description": "Inicializa sistema de notificaciones de tokens al inicio de sesion"
       },

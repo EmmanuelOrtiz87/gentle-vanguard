@@ -79,12 +79,13 @@ function getManifestPath(root: string, checkpointId: string): string {
   return join(getManifestDir(root), `${checkpointId}.json`);
 }
 
-function collectSessionFiles(dirPath: string): string[] {
+function collectSessionFiles(dirPath: string, maxDepth: number = 10): string[] {
   const files: string[] = [];
+  if (maxDepth <= 0) return files;
   for (const entry of readdirSync(dirPath, { withFileTypes: true })) {
     const fullPath = join(dirPath, entry.name);
     if (entry.isDirectory()) {
-      files.push(...collectSessionFiles(fullPath));
+      files.push(...collectSessionFiles(fullPath, maxDepth - 1));
     } else if (entry.isFile()) {
       files.push(fullPath);
     }
