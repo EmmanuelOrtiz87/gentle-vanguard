@@ -191,11 +191,11 @@ function Get-ToolConfig {
     )
     $result = $DetectedTool
     $sessionStartCmd = if ($DetectedTool.os.isWindows) {
-        "scripts/utilities/session-autostart.ps1"
+        "npx tsx src/session-autostart.ts"
     } elseif ($DetectedTool.os.isLinux -or $DetectedTool.os.isMacOS) {
-        "bash ./scripts/utilities/session-autostart.sh"
+        "npx tsx src/session-autostart.ts"
     } else {
-        "scripts/utilities/session-autostart.ps1"
+        "npx tsx src/session-autostart.ts"
     }
 
     $result.instructions = @{

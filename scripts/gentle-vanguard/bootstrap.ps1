@@ -207,7 +207,7 @@ try {
     $taskName = "Gentle-Vanguard-CodeGraph-Sync"
     $existing = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
     if (-not $existing) {
-        $taskScript = Resolve-Path (Join-Path $workspaceRoot "scripts/utilities/codegraph-sync-autostart.ps1")
+        $taskScript = Resolve-Path (Join-Path $workspaceRoot "scripts/utilities/codegraph/codegraph-sync-autostart.ps1")
         $action = New-ScheduledTaskAction -Execute "pwsh.exe" -Argument "-NoProfile -NoLogo -NonInteractive -File `"$taskScript`""
         $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date "08:00") -RepetitionInterval (New-TimeSpan -Hours 1) -RepetitionDuration ([TimeSpan]::FromDays(30))
         $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Minutes 5)
@@ -225,19 +225,14 @@ if ($InstallGitHubRunner) {
     Write-ErrorMsg "GitHub runner installer was removed in Phase 1 cleanup."
     Write-InfoMsg "Use GitHub Actions or follow: https://docs.github.com/en/actions/hosting-runners"
     exit 1
-        Write-Success 'GitHub runner installation finished.'
-    } else {
-        Write-ErrorMsg 'GitHub runner installation failed.'
-        exit 1
-    }
 }
 
 Write-Step "Step 5: System Health Report (Health Check)..."
 $report = @{
     Git = if (Get-Command git -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
-    GitHubCLI = if (Get-Command gh -ErrorAction SilentlyContinue) 
+    GitHubCLI = if (Get-Command gh -ErrorAction SilentlyContinue
         "PASS
-    } else 
+    } els
         if (Test-Path "$env:ProgramFiles\GitHub CLI\gh.exe") { "RESTART REQUIRED (Installed but not in PATH)" } else { "INFO: Not installed" }
     }
     Go  = if (Get-Command go -ErrorAction SilentlyContinue) { "PASS" } elseif (Get-Command engram -ErrorAction SilentlyContinue) { "WARN: Not installed (Engram available)" } else { "FAIL" }
@@ -254,4 +249,4 @@ foreach ($item in $report.Keys) {
 }
 
 Write-Host "`n[SUCCESS] Gentle-Vanguard Initialized and Verified!" -ForegroundColor Green
-Write-Host "You can now run 'scripts/run-engram.ps1' to start your assisted development session." -ForegroundColor Green
+Write-Host "You can now run 'npx tsx src/session-autostart.ts' to start your session." -ForegroundColor Green

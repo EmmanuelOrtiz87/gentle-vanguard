@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { existsSync, readFileSync, writeFileSync, mkdirSync, rmSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync, rmSync, appendFileSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { spawnSync } from 'child_process';
@@ -49,7 +49,7 @@ function log(msg: string, level: 'INFO' | 'WARN' | 'ERROR' | 'SUCCESS' = 'INFO')
   console.log(`${colors[level] ?? ''}[${ts}] [${level}] ${msg}\x1b[0m`);
   ensureDir(LOG_PATH);
   try {
-    require('fs').appendFileSync(LOG_PATH, `[${ts}] [${level}] ${msg}\n`);
+    appendFileSync(LOG_PATH, `[${ts}] [${level}] ${msg}\n`);
   } catch {
     /* ignore */
   }

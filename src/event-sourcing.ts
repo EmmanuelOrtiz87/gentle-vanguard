@@ -18,6 +18,7 @@ import {
   writeFileSync,
   mkdirSync,
   readdirSync,
+  statSync,
 } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
@@ -297,12 +298,12 @@ function listAction(): Array<{
         /* skip */
       }
     }
-    const stat = require('fs').statSync(join(EVENT_STORE_DIR, file));
+    const fileStat = statSync(join(EVENT_STORE_DIR, file));
     aggregates.push({
       aggregateId: id,
       eventCount: lines.length,
       lastEvent: lastEventType,
-      size: `${(stat.size / 1024).toFixed(1)} KB`,
+      size: `${(fileStat.size / 1024).toFixed(1)} KB`,
     });
   }
   return aggregates.sort((a, b) => b.eventCount - a.eventCount);

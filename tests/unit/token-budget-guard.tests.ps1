@@ -4,19 +4,19 @@
 Describe 'Token Budget Guard Tests' {
     BeforeAll {
         $script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
-        $script:sessionAutostart = Join-Path $script:root "scripts/utilities/SESSION/session-autostart.ps1"
+        $script:sessionAutostart = Join-Path $script:root "src/session-autostart.ts"
         $script:sessionConfig = Join-Path $script:root "config/session-autostart.config.json"
         $script:tokenGuardPath = Join-Path $script:root "scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1"
     }
 
     Context 'Token Budget Guard Implementation' {
-        It 'session-autostart.ps1 exists' {
+        It 'session-autostart exists' {
             Test-Path $script:sessionAutostart | Should -Be $true
         }
 
         It 'session-autostart is config-driven' {
             $content = Get-Content $script:sessionAutostart -Raw
-            ($content -match 'config-driven|ConfigFile|\$config\.pipeline') | Should -Be $true
+            ($content -match 'config-driven|ConfigFile|pipeline') | Should -Be $true
         }
 
         It 'token-budget-guard script exists' {

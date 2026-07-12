@@ -11,7 +11,17 @@
  * Migrated from: scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1
  */
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync } from 'fs';
+import {
+  existsSync,
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+  readdirSync,
+  statSync,
+  openSync,
+  readSync,
+  closeSync,
+} from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { createHash } from 'crypto';
@@ -168,10 +178,10 @@ function testDbHeader(dbPath: string): [boolean, string] {
   const stat = statSync(dbPath);
   if (stat.size === 0) return [false, 'Empty file'];
   try {
-    const fd = require('fs').openSync(dbPath, 'r');
+    const fd = openSync(dbPath, 'r');
     const header = Buffer.alloc(16);
-    const bytesRead = require('fs').readSync(fd, header, 0, 16, 0);
-    require('fs').closeSync(fd);
+    const bytesRead = readSync(fd, header, 0, 16, 0);
+    closeSync(fd);
     if (bytesRead < 16) return [false, 'Too small'];
     // SQLite magic header: "SQLite format 3\0"
     const sqliteMagic = Buffer.from([

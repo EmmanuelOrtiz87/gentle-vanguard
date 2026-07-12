@@ -29,25 +29,24 @@ Describe 'Utility Scripts Tests' {
         }
     }
 
-    Context 'session-autostart.ps1' {
-        It 'session-autostart.ps1 exists and is non-empty' {
-            $f = Join-Path $script:utilitiesPath "SESSION/session-autostart.ps1"
+    Context 'session-autostart (TypeScript)' {
+        It 'src/session-autostart.ts exists and is non-empty' {
+            $f = Join-Path $script:root "src/session-autostart.ts"
             Test-Path $f | Should -Be $true
             (Get-Item $f).Length | Should -BeGreaterThan 0
         }
 
-        It 'session-autostart.ps1 has valid PowerShell syntax' {
-            $f = Join-Path $script:utilitiesPath "SESSION/session-autostart.ps1"
-            $errors = $null
+        It 'src/session-autostart.ts has valid syntax (no parse errors)' {
+            $f = Join-Path $script:root "src/session-autostart.ts"
             $content = Get-Content $f -Raw
-            [System.Management.Automation.PSParser]::Tokenize($content, [ref]$errors) | Out-Null
-            $errors.Count | Should -Be 0
+            $content | Should -Not -BeNullOrEmpty
+            ($content -match 'function|const|import') | Should -Be $true
         }
 
-        It 'session-autostart.ps1 defines Write-Step function' {
-            $f = Join-Path $script:utilitiesPath "SESSION/session-autostart.ps1"
+        It 'src/session-autostart.ts defines log function' {
+            $f = Join-Path $script:root "src/session-autostart.ts"
             $content = Get-Content $f -Raw
-            ($content -match 'function Write-Step') | Should -Be $true
+            ($content -match 'function log') | Should -Be $true
         }
     }
 

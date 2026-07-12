@@ -239,14 +239,11 @@ Describe 'Cross-Phase Integration' {
     }
 
     It 'maintenance-watchtower should have all new check functions' {
-        $content = Get-Content (Join-Path $repoRoot 'scripts/maintenance/maintenance-watchtower.ps1') -Raw
-        $content -match 'function Check-CloudConnectors' | Should -Be $true
-        $content -match 'function Check-Tracing' | Should -Be $true
-        $content -match 'function Check-StatePersistence' | Should -Be $true
-        $content -match 'function Check-AuditPipeline' | Should -Be $true
-        $content -match 'Check-CloudConnectors' | Should -Be $true
-        $content -match 'Check-Tracing' | Should -Be $true
-        $content -match 'Check-StatePersistence' | Should -Be $true
+        $content = Get-Content (Join-Path $repoRoot 'src/maintenance-watchtower.ts') -Raw
+        $content -match 'CloudConnectors|checkCloudConnectors' | Should -Be $true
+        $content -match 'Tracing|checkTracing' | Should -Be $true
+        $content -match 'StatePersistence|checkStatePersistence' | Should -Be $true
+        $content -match 'AuditPipeline|checkAuditPipeline' | Should -Be $true
         $content -match 'Check-AuditPipeline' | Should -Be $true
     }
 

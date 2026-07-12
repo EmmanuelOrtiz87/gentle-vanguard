@@ -100,7 +100,7 @@ function startServers() {
       continue;
     }
     try {
-      const child = spawn(s.command, s.args, {
+      const child = spawn(`${s.command} ${s.args.join(' ')}`, {
         detached: true,
         stdio: 'ignore',
         windowsHide: true,

@@ -20,6 +20,7 @@ import {
 } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
+import http from 'http';
 
 const ROOT = resolve(process.cwd());
 const TRACES_DIR = join(ROOT, '.telemetry', 'traces');
@@ -155,8 +156,7 @@ function sendOtlpSpan(span: OtlpSpan, serviceName: string): void {
     });
 
     const url = new URL('http://localhost:4318/v1/traces');
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const transport = url.protocol === 'https:' ? require('https') : require('http');
+    const transport = http;
     const req = transport.request(
       {
         hostname: url.hostname,

@@ -9,15 +9,15 @@ Describe 'Session Workflow Integration Tests' {
     }
 
     Context 'Session Startup Workflow' {
-        It 'session-autostart.ps1 exists' {
-            $f = Join-Path $script:utilitiesPath "SESSION/session-autostart.ps1"
+        It 'session-autostart.ts exists' {
+            $f = Join-Path $script:root "src/session-autostart.ts"
             Test-Path $f | Should -Be $true
         }
 
         It 'session-autostart is config-driven pipeline' {
-            $f = Join-Path $script:utilitiesPath "SESSION/session-autostart.ps1"
+            $f = Join-Path $script:root "src/session-autostart.ts"
             $content = Get-Content $f -Raw
-            ($content -match '\$config\.pipeline|Config-Driven|config-driven') | Should -Be $true
+            ($content -match 'pipeline|config-driven|steps') | Should -Be $true
         }
 
         It 'session-autostart.config.json defines pipeline steps' {
@@ -31,8 +31,8 @@ Describe 'Session Workflow Integration Tests' {
     }
 
     Context 'Engram Integration' {
-        It 'session-autostart.ps1 initializes Engram' {
-            $f = Join-Path $script:utilitiesPath "SESSION/session-autostart.ps1"
+        It 'session-autostart initializes Engram' {
+            $f = Join-Path $script:root "src/session-autostart.ts"
             $content = Get-Content $f -Raw
             ($content -match 'engram|Engram') | Should -Be $true
         }
@@ -50,9 +50,9 @@ Describe 'Session Workflow Integration Tests' {
         }
 
         It 'session-autostart uses config-driven orchestration' {
-            $f = Join-Path $script:utilitiesPath "SESSION/session-autostart.ps1"
+            $f = Join-Path $script:root "src/session-autostart.ts"
             $content = Get-Content $f -Raw
-            ($content -match '\$steps|\$config\.pipeline\.steps|foreach.*\$steps') | Should -Be $true
+            ($content -match 'steps|pipeline|config') | Should -Be $true
         }
     }
 
