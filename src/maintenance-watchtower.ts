@@ -146,11 +146,21 @@ async function checkDashboardWs() {
     }
   }
 
-  const httpOk = await testHttp(`http://127.0.0.1:${wsPort}/api/metrics`);
-  const running = await testPort(wsPort);
+  // Try configured port first, then fallback to common ports
+  const portsToTry = [wsPort, 8080, 8082].filter((p, i, arr) => arr.indexOf(p) === i);
+  let httpOk = false;
+  let respondingPort = wsPort;
+  for (const port of portsToTry) {
+    httpOk = await testHttp(`http://127.0.0.1:${port}/api/metrics`);
+    if (httpOk) {
+      respondingPort = port;
+      break;
+    }
+  }
+  const running = !httpOk && (await testPort(wsPort));
 
   if (httpOk) {
-    addResult('dashboard-ws', `HTTP API (port ${wsPort})`, 'PASS', 'Responding', 'ok');
+    addResult('dashboard-ws', `HTTP API (port ${respondingPort})`, 'PASS', 'Responding', 'ok');
   } else if (running) {
     addResult(
       'dashboard-ws',
