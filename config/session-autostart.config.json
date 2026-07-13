@@ -510,6 +510,15 @@
         "args": "-Action start -Quiet",
         "required": false,
         "description": "Start MCP Native gateway at session start (v6.4)"
+      },
+      {
+        "id": "db-health-check",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/recovery/db-health-check.ts",
+        "args": "",
+        "required": false,
+        "description": "Validate SQLite database integrity (CodeGraph + Engram) on session start — auto-repairs WAL/REINDEX issues"
       }
     ],
     "onStepFailure": "continue",
