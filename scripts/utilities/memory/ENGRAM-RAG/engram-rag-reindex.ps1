@@ -53,13 +53,26 @@ if (Test-Path $tmpExport) {
 # Run vector index build
 $indexScript = Join-Path $PSScriptRoot 'engram-vector-index.ps1'
 if (-not (Test-Path $indexScript)) {
-    Write-Log "Vector index script removed in Phase 1 cleanup - using engram CLI directly" Yellow
+    Write-Log "Vector index script removed in Phase 1 cleanup — using engram export for freshness" Yellow
     $engramCmd = Get-Command engram -ErrorAction SilentlyContinue
     if ($engramCmd) {
-        & engram reindex --project $Project 2>&1
+        $exportArgs = @('export', $tmpExport)
+        if ($Project) { $exportArgs += @('--project', $Project) }
+        & engram @exportArgs 2>&1
+        if (Test-Path $tmpExport) {
+            Remove-Item $tmpExport -Force -ErrorAction SilentlyContinue
+        }
+        Write-Log "engram export completed" Green
     } else {
-        Write-Log "engram CLI not available for reindex" Red
+        Write-Log "engram CLI not available" Yellow
     }
+    # Write freshness log for watchtower
+    $ragLog = Join-Path $repoRoot '.atl' 'rag-reindex.log'
+    $ragLogDir = Split-Path $ragLog -Parent
+    if (-not (Test-Path $ragLogDir)) { New-Item -ItemType Directory -Path $ragLogDir -Force | Out-Null }
+    $ts = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    "[RAG-REINDEX] $ts — completed — project=$($Project -replace '^$','all') — method=engram-export" | Set-Content $ragLog -Encoding UTF8
+    Write-Log "Freshness log: $ragLog" Green
     return
 }
 

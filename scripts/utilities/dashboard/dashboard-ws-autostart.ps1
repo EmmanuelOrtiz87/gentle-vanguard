@@ -42,6 +42,29 @@ if (-not (Test-Path $wsScript)) {
     exit 1
 }
 
+# Check if WS server is already running on any port
+$existingWsOk = $false
+$existingPort = 0
+foreach ($testPort in @(8080, 8082, 8083)) {
+    try {
+        $resp = Invoke-WebRequest -Uri "http://127.0.0.1:${testPort}/api/health" -TimeoutSec 2 -ErrorAction Stop
+        if ($resp.StatusCode -eq 200) {
+            $existingWsOk = $true
+            $existingPort = $testPort
+            break
+        }
+    } catch {}
+}
+
+if ($existingWsOk) {
+    "$(Get-Date -Format 'o') | [SKIP] WS already running on port $existingPort" | Out-File -FilePath $logFile -Append
+    Save-DashboardPorts -WsPort $existingPort -VitePort 0
+    if (-not $Quiet) {
+        Write-Host "[DASHBOARD-WS] WS already running on port $existingPort — skipping start" -ForegroundColor Green
+    }
+    exit 0
+}
+
 # Detect available port
 $preferredPort = if ($Port -gt 0) { $Port } else {
     $ports = Read-DashboardPorts
@@ -58,58 +81,45 @@ if ($selectedPort -ne $preferredPort -and -not $Quiet) {
 Save-DashboardPorts -WsPort $selectedPort -VitePort 0
 
 if (-not $Quiet) {
-    Write-Host "[DASHBOARD-WS] Starting WS server on port $selectedPort (watchdog)..." -ForegroundColor Cyan
+    Write-Host "[DASHBOARD-WS] Starting WS server on port $selectedPort..." -ForegroundColor Cyan
 }
 
-$restartCount = 0
-$maxRestarts = 10
+# Start WS server detached (fire-and-forget)
+$cmdLine = "set WS_PORT=$selectedPort && npx.cmd tsx `"$wsScript`""
+$proc = Start-Process -FilePath "cmd.exe" -ArgumentList "/c", $cmdLine -WorkingDirectory $wsServerDir -WindowStyle Hidden -PassThru
+$procId = $proc.Id
+$proc.Id | Out-File -FilePath $pidFile -Force
 
-while ($restartCount -lt $maxRestarts) {
-    # Use cmd /c to ensure batch file (npx.cmd) works and env vars propagate correctly
-    $cmdLine = "set WS_PORT=$selectedPort && npx.cmd tsx `"$wsScript`""
-    $proc = Start-Process -FilePath "cmd.exe" -ArgumentList "/c", $cmdLine -WorkingDirectory $wsServerDir -WindowStyle Hidden -PassThru
-    $procId = $proc.Id
-    $proc.Id | Out-File -FilePath $pidFile -Force
+"$(Get-Date -Format 'o') | [START] PID=$procId port=$selectedPort" | Out-File -FilePath $logFile -Append
 
-    "$(Get-Date -Format 'o') | [START] PID=$procId port=$selectedPort restart=$restartCount" | Out-File -FilePath $logFile -Append
+# Wait up to 15s for the server to become healthy
+$started = $false
+for ($i = 0; $i -lt 3; $i++) {
+    Start-Sleep -Seconds 5
+    $alive = Get-Process -Id $procId -ErrorAction SilentlyContinue
+    if (-not $alive) {
+        "$(Get-Date -Format 'o') | [ERR] Process $procId exited prematurely" | Out-File -FilePath $logFile -Append
+        break
+    }
+    try {
+        $resp = Invoke-WebRequest -Uri "http://127.0.0.1:${selectedPort}/api/health" -TimeoutSec 3 -ErrorAction Stop
+        if ($resp.StatusCode -eq 200) {
+            $started = $true
+            break
+        }
+    } catch {}
+}
 
+if ($started) {
+    "$(Get-Date -Format 'o') | [OK] WS healthy on port $selectedPort (PID=$procId)" | Out-File -FilePath $logFile -Append
     if (-not $Quiet) {
-        Write-Host "[DASHBOARD-WS] Started PID $procId on port $selectedPort (restart #$restartCount)" -ForegroundColor Green
+        Write-Host "[DASHBOARD-WS] WS server healthy on port $selectedPort (PID $procId)" -ForegroundColor Green
     }
-
-    do {
-        Start-Sleep -Seconds 5
-        $alive = Get-Process -Id $procId -ErrorAction SilentlyContinue
-        $portOpen = $false
-        try {
-            $portCheck = Test-NetConnection -ComputerName localhost -Port $selectedPort -WarningAction SilentlyContinue -ErrorAction SilentlyContinue
-            $portOpen = $portCheck.TcpTestSucceeded
-        } catch {}
-
-        "$(Get-Date -Format 'o') | [BEAT] PID=$procId alive=$($alive -ne $null) port=$selectedPort`:$portOpen" | Out-File -FilePath $logFile -Append
-
-        if (-not $alive -and -not $portOpen) {
-            Write-Warning "[DASHBOARD-WS] Process $procId died on port $selectedPort. Restarting..."
-            $restartCount++
-            break
-        }
-        if (-not $alive) {
-            Write-Warning "[DASHBOARD-WS] Process $procId exited. Restarting..."
-            $restartCount++
-            break
-        }
-    } while ($alive)
-
-    if ($restartCount -ge $maxRestarts) {
-        $errMsg = "Max restarts ($maxRestarts) reached on port $selectedPort. Giving up."
-        "$(Get-Date -Format 'o') | [FATAL] $errMsg" | Out-File -FilePath $logFile -Append
-        Write-Warning "[DASHBOARD-WS] $errMsg"
-        Remove-Item -Path $pidFile -Force -ErrorAction SilentlyContinue
-        Remove-Item -Path $watchdogPidFile -Force -ErrorAction SilentlyContinue
-        Clear-DashboardPorts
-        exit 2
+    exit 0
+} else {
+    "$(Get-Date -Format 'o') | [WARN] WS process started but health check inconclusive (PID=$procId port=$selectedPort)" | Out-File -FilePath $logFile -Append
+    if (-not $Quiet) {
+        Write-Warning "[DASHBOARD-WS] WS process started but health check inconclusive"
     }
+    exit 0
 }
-
-# Cleanup watchdog pidfile on normal exit (shouldn't reach here normally due to while loop)
-Remove-Item -Path $watchdogPidFile -Force -ErrorAction SilentlyContinue
