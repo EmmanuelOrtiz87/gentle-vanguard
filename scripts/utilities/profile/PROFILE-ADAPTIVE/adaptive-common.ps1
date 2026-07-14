@@ -34,10 +34,12 @@ function Save-JsonFile {
 }
 
 function Get-DefaultState {
-    return @{
+    return [pscustomobject]@{
+        optimizationActive = $false
         normalStreak = 0
-        peakHoursUsed = 0
-        lastProfile = 'balanced'
+        lastAction = 'none'
+        lastReason = 'none'
+        lastChangedAt = $null
     }
 }
 

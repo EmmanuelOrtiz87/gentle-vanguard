@@ -59,10 +59,9 @@ $windsurfOptimized = @'
 }
 '@
 
-function Notify-Change {
+function NotifyChange {
     param([string]$Reason, [string]$Details)
-    # notify-codex-windsurf-optimization.ps1 was removed in Phase 1 cleanup
-    # Notifications are handled by the session-autostart pipeline
+    # Notification script removed in Phase 1 cleanup — no-op
 }
 
 $state = Read-JsonFile -Path $statePath
