@@ -281,6 +281,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         attributes,
       });
       exportSpanToFile(span);
+      getPrometheusMetrics(spanName, 0, false, serviceName);
       console.log(JSON.stringify({ traceId, spanId, startNs: startNs.toString(), parentSpanId }));
       break;
     }

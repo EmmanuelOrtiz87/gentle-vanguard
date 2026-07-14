@@ -12,7 +12,8 @@
     "tsMigrationsWave1": 4,
     "tsMigrationsWave2": 5,
     "tsMigrationsWave3": 3,
-    "tsMigrationsWave4": 2
+    "tsMigrationsWave4": 2,
+    "tsMigrationsWave5": 3
   },
   "priorities": [
     {
@@ -142,6 +143,36 @@
       "migratedAt": "2026-07-10",
       "configUpdated": true,
       "reason": "MCP server lifecycle management, PID tracking, clean process spawn"
+    },
+    {
+      "id": "post-autostart-summary",
+      "script": "scripts/utilities/post-autostart-summary.ps1",
+      "target": "src/post-autostart-summary.ts",
+      "priority": "medium",
+      "status": "implemented",
+      "migratedAt": "2026-07-14",
+      "configUpdated": true,
+      "reason": "Simple startup summary JSON, used 3 times in pipeline"
+    },
+    {
+      "id": "engram-auto-sync",
+      "script": "scripts/utilities/memory/ENGRAM/engram-auto-sync.ps1",
+      "target": "src/engram-auto-sync.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-14",
+      "configUpdated": true,
+      "reason": "File-lock concurrency, multi-mode dispatch, setInterval replaces Start-Sleep loop"
+    },
+    {
+      "id": "skill-recommender",
+      "script": "scripts/utilities/agents/AUTO-DELEGATION/skill-recommender.ps1",
+      "target": "src/skill-recommender.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-14",
+      "configUpdated": true,
+      "reason": "Tokenization, branch-hint regex, multi-format parser — benefits from TS types"
     }
   ],
   "completedWave1": [
@@ -165,7 +196,8 @@
   ],
   "completedWave3": ["tracing-instrument", "event-sourcing", "saga-orchestrator"],
   "completedWave4": ["engram-integrity-check", "mcp-gateway"],
-  "nextWave": ["session-autostart", "engram-integrity-check"],
+  "completedWave5": ["post-autostart-summary", "engram-auto-sync", "skill-recommender"],
+  "nextWave": [],
   "tsFiles": [
     "src/session-autostart.ts",
     "src/health-check.ts",
@@ -182,6 +214,9 @@
     "src/event-sourcing.ts",
     "src/saga-orchestrator.ts",
     "src/engram-integrity-check.ts",
-    "src/mcp-gateway.ts"
+    "src/mcp-gateway.ts",
+    "src/post-autostart-summary.ts",
+    "src/engram-auto-sync.ts",
+    "src/skill-recommender.ts"
   ]
 }

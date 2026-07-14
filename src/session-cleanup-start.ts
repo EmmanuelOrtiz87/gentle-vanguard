@@ -20,6 +20,9 @@ function log(msg: string) {
 function ok(msg: string) {
   console.log(`[CLEANUP] ${msg}`);
 }
+function warn(msg: string) {
+  console.warn(`[CLEANUP] WARN: ${msg}`);
+}
 
 function runPs1(script: string, ...args: string[]): { ok: boolean; output: string } {
   const fullPath = join(ROOT, script);
@@ -151,7 +154,7 @@ export function runCleanup(
           if (span.name === 'session-start') {
             const tracingScript = join(repoRoot, 'src/tracing-instrument.ts');
             if (existsSync(tracingScript)) {
-              spawnSync(
+              const result = spawnSync(
                 'npx',
                 [
                   'tsx',
@@ -164,12 +167,20 @@ export function runCleanup(
                   span.spanId,
                   '-SpanName',
                   'session-start',
+                  '-Attributes',
+                  JSON.stringify({ startTimeUnixNano: span.startTimeUnixNano }),
                   '-Quiet',
                 ],
                 { cwd: repoRoot, stdio: 'pipe', timeout: 15000 },
               );
+              if (result.status === 0) {
+                ok('Tracing span closed');
+              } else {
+                warn('Tracing span close failed (non-fatal)');
+              }
+            } else {
+              warn('Tracing script not found, span not closed');
             }
-            ok('Tracing span closed');
             break;
           }
         } catch {

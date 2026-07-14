@@ -98,7 +98,7 @@
       {
         "id": "engram-auto-sync",
         "enabled": true,
-        "script": "scripts/utilities/memory/ENGRAM/engram-auto-sync.ps1",
+        "script": "src/engram-auto-sync.ts",
         "args": "-Mode sync -Quiet",
         "required": false,
         "description": "Auto-synchronize Engram checksums if DB was modified (prevents hash mismatches)"
@@ -228,7 +228,7 @@
       {
         "id": "post-autostart-summary",
         "enabled": true,
-        "script": "scripts/utilities/post-autostart-summary.ps1",
+        "script": "src/post-autostart-summary.ts",
         "args": "-TimeZone \"Argentina Standard Time\" -PeakStart 9 -PeakEnd 15 -Region \"Argentina\"",
         "required": false,
         "description": "Generate startup-summary.json with peak hour, session ID, workspace state"
@@ -246,7 +246,7 @@
         "id": "skill-recommendation",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/agents/AUTO-DELEGATION/skill-recommender.ps1",
+        "script": "src/skill-recommender.ts",
         "args": "-Proactive -TopN 3",
         "required": false,
         "description": "Recomienda skills relevantes basado en el contexto actual del workspace (git branch, archivos modificados, commits recientes)"
@@ -279,7 +279,7 @@
       {
         "id": "post-autostart-consistency-check",
         "enabled": true,
-        "script": "scripts/utilities/post-autostart-summary.ps1",
+        "script": "src/post-autostart-summary.ts",
         "args": "",
         "required": false,
         "description": "Refresca startup-summary.json como ultimo paso para asegurar datos actuales post-pipeline"
@@ -419,7 +419,7 @@
         "id": "post-session-learning",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/post-autostart-summary.ps1",
+        "script": "src/post-autostart-summary.ts",
         "args": "-FinalReportMode",
         "required": false,
         "description": "Generate final session report + auto-learned patterns for next session"
