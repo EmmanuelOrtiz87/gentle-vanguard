@@ -180,13 +180,24 @@ async function checkDashboardWs() {
       process.kill(parseInt(watchdogPid, 10), 0);
       addResult('dashboard-ws', 'watchdog process', 'PASS', `PID ${watchdogPid} running`, 'ok');
     } catch {
-      addResult(
-        'dashboard-ws',
-        'watchdog process',
-        'FAIL',
-        `PID ${watchdogPid} not running`,
-        'restart',
-      );
+      // Watchdog is a fire-and-forget launcher — dead PID is expected when WS is healthy
+      if (httpOk || running) {
+        addResult(
+          'dashboard-ws',
+          'watchdog process',
+          'PASS',
+          'WS running, watchdog one-shot (ok)',
+          'ok',
+        );
+      } else {
+        addResult(
+          'dashboard-ws',
+          'watchdog process',
+          'FAIL',
+          `PID ${watchdogPid} not running`,
+          'restart',
+        );
+      }
     }
   } else if (httpOk || running) {
     addResult('dashboard-ws', 'watchdog process', 'PASS', 'WS running standalone', 'ok');
