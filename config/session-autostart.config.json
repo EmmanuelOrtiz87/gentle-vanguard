@@ -460,7 +460,7 @@
       {
         "id": "maintenance-auto-prune",
         "script": "src/checkpoint-manager.ts",
-        "args": "list",
+        "args": "prune",
         "lazy": true,
         "enabled": true,
         "required": false,

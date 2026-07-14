@@ -35,15 +35,7 @@ function parseArgs(argv: string[]): Args {
 
 const ROOT = resolve(process.env.GENTLE_VANGUARD_BASE_DIR || process.cwd());
 const integrityScriptTs = join(ROOT, 'src', 'engram-integrity-check.ts');
-const integrityScriptPs1 = join(
-  ROOT,
-  'scripts',
-  'utilities',
-  'memory',
-  'ENGRAM',
-  'engram-integrity-check.ps1',
-);
-const integrityScript = existsSync(integrityScriptTs) ? integrityScriptTs : integrityScriptPs1;
+const integrityScript = integrityScriptTs;
 const engramDataDir = join(ROOT, '.engram-data');
 const dbPath = join(engramDataDir, 'engram.db');
 const checksumPath = join(ROOT, '.engram', 'checksums.sha256');

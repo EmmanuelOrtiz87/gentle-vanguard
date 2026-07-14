@@ -6,7 +6,7 @@
  * Migrated from: scripts/utilities/post-autostart-summary.ps1
  */
 
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { execSync } from 'child_process';
 
@@ -60,8 +60,7 @@ function getLatestSessionId(root: string): string | null {
   const sessionDir = join(root, 'session');
   if (!existsSync(sessionDir)) return null;
   try {
-    const files = require('fs')
-      .readdirSync(sessionDir)
+    const files = readdirSync(sessionDir)
       .filter((f: string) => f.startsWith('session-') && f.endsWith('.json'))
       .sort()
       .reverse();

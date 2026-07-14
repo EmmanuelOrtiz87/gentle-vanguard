@@ -87,26 +87,6 @@ export function testRuleTrigger(rule: CorrectionRule, score: number): boolean {
   return trigger ? trigger(score) : false;
 }
 
-function runPs1(script: string, ...args: string[]): { ok: boolean; output: string } {
-  const fullPath = join(ROOT, script);
-  if (!existsSync(fullPath)) return { ok: false, output: `Script not found: ${script}` };
-  try {
-    const r = spawnSync('pwsh', ['-NoProfile', '-File', fullPath, ...args], {
-      cwd: ROOT,
-      stdio: 'pipe',
-      timeout: 30000,
-    });
-    return {
-      ok: r.status === 0,
-      output: (r.stdout?.toString() ?? '') + (r.stderr?.toString() ?? ''),
-    };
-  } catch (e: unknown) {
-    const msg = e instanceof Error ? e.message : String(e);
-    log(`Error: ${msg}`, 'ERROR');
-    return { ok: false, output: msg };
-  }
-}
-
 function modifyJsonConfig(relPath: string, modifier: (obj: Record<string, unknown>) => void): void {
   const p = join(ROOT, relPath);
   if (!existsSync(p)) {
@@ -194,22 +174,13 @@ function executeRule(rule: CorrectionRule, _score: number): CorrectionResult {
         result = { success: true, message: 'Throttling corrected: reduced rate limit by 50%' };
         break;
       case 'MemoryFragmentation': {
-        const integrityTs = join(ROOT, 'src/engram-integrity-check.ts');
-        const integrityPs1 = join(
-          ROOT,
-          'scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1',
-        );
-        const integrityScript = existsSync(integrityTs) ? integrityTs : integrityPs1;
+        const integrityScript = join(ROOT, 'src/engram-integrity-check.ts');
         if (existsSync(integrityScript)) {
-          if (integrityScript.endsWith('.ts')) {
-            spawnSync('npx', ['tsx', integrityScript, '-Mode', 'checksums', '-Quiet'], {
-              cwd: ROOT,
-              stdio: 'pipe',
-              timeout: 30000,
-            });
-          } else {
-            runPs1(integrityScript, '-Mode', 'checksums', '-Quiet');
-          }
+          spawnSync('npx', ['tsx', integrityScript, '-Mode', 'checksums', '-Quiet'], {
+            cwd: ROOT,
+            stdio: 'pipe',
+            timeout: 30000,
+          });
           result = { success: true, message: 'Memory corrected: regenerated Engram checksums' };
         } else {
           result = { success: false, reason: 'Engram integrity check not found' };

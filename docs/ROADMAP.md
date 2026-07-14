@@ -37,21 +37,21 @@ seguro, extensible, zero-drama.**
 
 ## Backlog — Migración PS1 → TS
 
-| #   | Script                                                              | Tamaño | Prioridad | Estado                                                         |
-| --- | ------------------------------------------------------------------- | ------ | --------- | -------------------------------------------------------------- |
-| 1   | `scripts/security/security-orchestrator.ps1`                        | 22 KB  | Alta      | 🔲 Pendiente                                                   |
-| 2   | `scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1`        | —      | Alta      | 🔲 Pendiente                                                   |
-| 3   | `scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1`          | —      | Alta      | 🔲 Pendiente                                                   |
-| 4   | `scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1`        | —      | Alta      | 🔲 Pendiente                                                   |
-| 5   | `scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1`    | —      | Media     | 🔲 Pendiente                                                   |
-| 6   | `scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1`      | —      | Media     | 🔲 Pendiente                                                   |
-| 7   | `scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1` | —      | Media     | 🔲 Pendiente                                                   |
-| 8   | `scripts/security/audit-pipeline.ps1`                               | —      | Media     | 🔲 Pendiente                                                   |
-| 9   | `scripts/utilities/ops/TRACING/tracing-instrument.ps1`              | —      | Media     | 🔲 Pendiente                                                   |
-| 10  | `scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1`        | —      | Media     | 🔲 Pendiente                                                   |
-| 11  | `scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1`     | —      | Media     | 🔲 Pendiente                                                   |
-| 12  | `scripts/utilities/session/session-autostart.ps1`                   | —      | Baja      | 🔲 Pendiente (TS ya existe como src/session-autostart.ts)      |
-| 13  | `scripts/maintenance/maintenance-watchtower.ps1`                    | —      | Baja      | 🔲 Pendiente (TS ya existe como src/maintenance-watchtower.ts) |
+| #   | Script                                                              | Tamaño | Prioridad | Estado                                    |
+| --- | ------------------------------------------------------------------- | ------ | --------- | ----------------------------------------- |
+| 1   | `scripts/security/security-orchestrator.ps1`                        | 22 KB  | Alta      | ✅ Done (`src/security-orchestrator.ts`)  |
+| 2   | `scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1`        | —      | Alta      | ✅ Done (`src/hybrid-executor.ts`)        |
+| 3   | `scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1`          | —      | Alta      | 🔲 Pendiente                              |
+| 4   | `scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1`        | —      | Alta      | 🔲 Pendiente                              |
+| 5   | `scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1`    | —      | Media     | ✅ Done (`src/checkpoint-manager.ts`)     |
+| 6   | `scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1`      | —      | Media     | 🔲 Pendiente                              |
+| 7   | `scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1` | —      | Media     | 🔲 Pendiente                              |
+| 8   | `scripts/security/audit-pipeline.ps1`                               | —      | Media     | ✅ Done (`src/audit-pipeline.ts`)         |
+| 9   | `scripts/utilities/ops/TRACING/tracing-instrument.ps1`              | —      | Media     | ✅ Done (`src/tracing-instrument.ts`)     |
+| 10  | `scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1`        | —      | Media     | ✅ Done (`src/event-sourcing.ts`)         |
+| 11  | `scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1`     | —      | Media     | ✅ Done (`src/saga-orchestrator.ts`)      |
+| 12  | `scripts/utilities/session/session-autostart.ps1`                   | —      | Baja      | ✅ Done (`src/session-autostart.ts`)      |
+| 13  | `scripts/maintenance/maintenance-watchtower.ps1`                    | —      | Baja      | ✅ Done (`src/maintenance-watchtower.ts`) |
 
 ## Backlog — Mejoras Local-First
 

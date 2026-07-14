@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { execSync } from 'child_process';
 
@@ -29,7 +29,7 @@ describe('health-check eval', () => {
   it('MCP skill-server registers 5 tools', () => {
     const skillServer = join(ROOT, 'scripts', 'mcp', 'skill-server.ts');
     expect(existsSync(skillServer)).toBe(true);
-    const content = require('fs').readFileSync(skillServer, 'utf-8');
+    const content = readFileSync(skillServer, 'utf-8');
     const toolMatches = content.match(/server\.tool\(/g);
     expect(toolMatches).not.toBeNull();
     expect(toolMatches!.length).toBe(5);

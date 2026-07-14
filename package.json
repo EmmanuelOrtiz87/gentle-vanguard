@@ -49,7 +49,7 @@
     "test:eval": "npx vitest run --config vitest.eval.config.ts",
     "dashboard:build": "cd apps/web-dashboard && pnpm build",
     "dashboard:dev": "cd apps/web-dashboard && pnpm dev",
-    "dashboard:server": "node apps/web-dashboard/server/websocket-server.ts",
+    "dashboard:server": "npx tsx apps/web-dashboard/server/websocket-server.ts",
     "postinstall": "pnpm build:mcp"
   },
   "devDependencies": {
