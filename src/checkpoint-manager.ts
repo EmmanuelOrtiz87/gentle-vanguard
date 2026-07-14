@@ -79,18 +79,50 @@ function getManifestPath(root: string, checkpointId: string): string {
   return join(getManifestDir(root), `${checkpointId}.json`);
 }
 
-function collectSessionFiles(dirPath: string, maxDepth: number = 10): string[] {
+const EXCLUDED_DIRS = new Set(['checkpoints', 'manifests', 'snapshots', 'traces', 'tracing']);
+
+function collectSessionFiles(dirPath: string, maxDepth: number = 6): string[] {
   const files: string[] = [];
   if (maxDepth <= 0) return files;
-  for (const entry of readdirSync(dirPath, { withFileTypes: true })) {
-    const fullPath = join(dirPath, entry.name);
+  let entries;
+  try {
+    entries = readdirSync(dirPath, { withFileTypes: true });
+  } catch {
+    return files;
+  }
+  for (const entry of entries) {
     if (entry.isDirectory()) {
-      files.push(...collectSessionFiles(fullPath, maxDepth - 1));
+      if (EXCLUDED_DIRS.has(entry.name)) continue;
+      files.push(...collectSessionFiles(join(dirPath, entry.name), maxDepth - 1));
     } else if (entry.isFile()) {
-      files.push(fullPath);
+      files.push(join(dirPath, entry.name));
     }
   }
   return files;
+}
+
+export function pruneCheckpoints(rootInput: string, keepCount: number = 3): string[] {
+  const root = normalizeRoot(rootInput);
+  const checkpointDir = getCheckpointDir(root);
+  if (!existsSync(checkpointDir)) return [];
+
+  const checkpoints = readdirSync(checkpointDir, { withFileTypes: true })
+    .filter((e) => e.isDirectory())
+    .sort((a, b) => b.name.localeCompare(a.name));
+
+  const pruned: string[] = [];
+  for (let i = keepCount; i < checkpoints.length; i++) {
+    const dir = join(checkpointDir, checkpoints[i].name);
+    const manifest = join(getManifestDir(root), `${checkpoints[i].name}.json`);
+    try {
+      rmSync(dir, { recursive: true, force: true });
+      if (existsSync(manifest)) rmSync(manifest, { force: true });
+      pruned.push(checkpoints[i].name);
+    } catch {
+      console.warn(`[CHECKPOINT] Failed to prune ${checkpoints[i].name}`);
+    }
+  }
+  return pruned;
 }
 
 export function createCheckpoint(
@@ -143,6 +175,12 @@ export function createCheckpoint(
   };
 
   writeFileSync(getManifestPath(root, checkpointId), JSON.stringify(manifest, null, 2), 'utf8');
+
+  const pruned = pruneCheckpoints(root, 3);
+  if (pruned.length > 0) {
+    console.warn(`[CHECKPOINT] Pruned ${pruned.length} old checkpoint(s): ${pruned.join(', ')}`);
+  }
+
   return manifest;
 }
 
@@ -217,5 +255,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   } else if (action === 'verify') {
     const checkpointId = process.argv[4] ?? '';
     console.log(JSON.stringify(verifyCheckpoint(root, checkpointId)));
+  } else if (action === 'prune') {
+    const keepCount = parseInt(process.argv[4] ?? '3', 10);
+    console.log(JSON.stringify(pruneCheckpoints(root, keepCount)));
   }
 }

@@ -65,7 +65,7 @@ function NotifyChange {
 }
 
 $state = Read-JsonFile -Path $statePath
-if (-not $state) { $state = Get-DefaultState }
+$state = Ensure-StateProperties -State $state
 
 $peak = Test-PeakHour -TimeZone $TimeZone -PeakStart $PeakStart -PeakEnd $PeakEnd
 $pressure = Test-TokenPressure

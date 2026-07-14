@@ -43,6 +43,18 @@ function Get-DefaultState {
     }
 }
 
+function Ensure-StateProperties {
+    param([pscustomobject]$State)
+    if ($null -eq $State) { return (Get-DefaultState) }
+    $defaults = Get-DefaultState
+    foreach ($prop in $defaults.PSObject.Properties) {
+        if (-not ($State.PSObject.Properties.Name -contains $prop.Name)) {
+            $State | Add-Member -NotePropertyName $prop.Name -NotePropertyValue $prop.Value -Force
+        }
+    }
+    return $State
+}
+
 function Test-PeakHour {
     param([string]$TimeZone, [int]$PeakStart = 9, [int]$PeakEnd = 15)
     try {

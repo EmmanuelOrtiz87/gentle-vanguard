@@ -46,6 +46,7 @@
     "test:config": "node --test tests/config/*.test.ts",
     "test:research": "cd research/rlhf-dataset-search && python -m pytest ../../tests/research/test_search_datasets.py -v",
     "test:workflows": "node --test tests/workflows/*.test.ts",
+    "test:eval": "npx vitest run --config vitest.eval.config.ts",
     "dashboard:build": "cd apps/web-dashboard && pnpm build",
     "dashboard:dev": "cd apps/web-dashboard && pnpm dev",
     "dashboard:server": "node apps/web-dashboard/server/websocket-server.ts",

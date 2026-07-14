@@ -120,7 +120,7 @@
           "*": "allow"
         }
       },
-      "steps": 6
+      "steps": 12
     },
     "sdd-explore": {
       "description": "BA exploration agent — requirements gathering and analysis",
@@ -334,16 +334,34 @@
       "enabled": true
     }
   },
+  "tools": {
+    "bash": true,
+    "readFile": true,
+    "writeFile": true,
+    "editFile": true,
+    "listFiles": true
+  },
   "default_agent": "orchestrator",
   "share": "manual",
   "compaction": {
     "auto": true,
     "prune": true,
-    "threshold": 8000,
-    "strategy": "sliding-window",
-    "maxTurns": 10,
-    "pruneToolResults": true,
-    "summarize": true
+    "tail_turns": 15,
+    "keep_recent": 5
+  },
+  "references": {
+    "docs": {
+      "path": "docs",
+      "description": "Use for architecture decisions, guides, SDD specs, and project documentation"
+    },
+    "config": {
+      "path": "config",
+      "description": "Use for configuration schemas, security policies, model routing, and pipeline configs"
+    },
+    "src": {
+      "path": "src",
+      "description": "Use for TypeScript core source code — session pipeline, health checks, watchtower, security"
+    }
   },
   "watcher": {
     "ignore": [
@@ -356,13 +374,6 @@
       "logs/**",
       "session/**"
     ]
-  },
-  "tools": {
-    "bash": true,
-    "readFile": true,
-    "writeFile": true,
-    "editFile": true,
-    "listFiles": true
   },
   "permission": {
     "read": "allow",
