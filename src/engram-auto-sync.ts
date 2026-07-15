@@ -115,6 +115,11 @@ function checkSynchronization(): boolean {
 function syncChecksums(): boolean {
   log('Regenerating checksums...');
 
+  if (!existsSync(dbPath)) {
+    log('Database not found, skipping sync', 'WARN');
+    return true;
+  }
+
   const lockDir = join(ROOT, '.runtime');
   if (!existsSync(lockDir)) mkdirSync(lockDir, { recursive: true });
 
