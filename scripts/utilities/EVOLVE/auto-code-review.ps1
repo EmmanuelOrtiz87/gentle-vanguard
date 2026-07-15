@@ -109,6 +109,7 @@ function Invoke-PerformanceReview {
 function Invoke-SddComplianceReview {
   param([string]$FilePath)
   $issues = @()
+  if (-not (Test-Path $FilePath)) { return $issues }
   $content = Get-Content $FilePath -Raw
 
   # Check .ps1 files for help comment
