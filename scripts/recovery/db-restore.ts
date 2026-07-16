@@ -48,27 +48,6 @@ function findDbFiles(dir: string): string[] {
   return results;
 }
 
-function getTables(db: string): string[] {
-  try {
-    const r = execSync(`sqlite3 "${db}" ".tables"`, { encoding: 'utf8', timeout: 10000 }).trim();
-    return r.split(/\s+/).filter((t) => t.length > 0 && !t.startsWith('sqlite_'));
-  } catch {
-    return [];
-  }
-}
-
-function getRowCount(db: string, table: string): number {
-  try {
-    const r = execSync(`sqlite3 "${db}" "SELECT COUNT(*) FROM [${table}];"`, {
-      encoding: 'utf8',
-      timeout: 5000,
-    }).trim();
-    return parseInt(r, 10) || 0;
-  } catch {
-    return -1;
-  }
-}
-
 function getIntegrity(db: string): 'ok' | 'error' | 'missing' {
   try {
     const r = execSync(`sqlite3 "${db}" "PRAGMA integrity_check;"`, {
@@ -87,7 +66,7 @@ function rebuildDb(dbPath: string): boolean {
     execSync(`sqlite3 "${dbPath}" ".dump" | sqlite3 "${tmpPath}"`, {
       encoding: 'utf8',
       timeout: 60000,
-      shell: true,
+      shell: 'true',
     });
     const integrity = getIntegrity(tmpPath);
     if (integrity === 'ok') {

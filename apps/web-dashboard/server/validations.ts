@@ -8,9 +8,8 @@ const SESSIONS_PATH = join(ROOT, '.runtime', 'metrics', 'sessions.json');
 const SESSIONS_HISTORY_PATH = join(ROOT, '.event-bus', 'sessions-history.json');
 function execGit(args: string): string {
   try {
-    return execSync(`git ${args}`, { cwd: ROOT, encoding: 'utf-8', timeout: 3000 }).trim();
-  } catch (e) {
-    console.warn('[validations] git failed:', (e as Error).message);
+    return execSync(`git ${args} 2>NUL`, { cwd: ROOT, encoding: 'utf-8', timeout: 3000 }).trim();
+  } catch {
     return '';
   }
 }

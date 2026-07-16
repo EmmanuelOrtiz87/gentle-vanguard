@@ -118,18 +118,6 @@ function getIntegrity(db: string): 'ok' | 'error' | 'missing' {
   }
 }
 
-function getWalMode(db: string): boolean {
-  try {
-    const r = execSync(`sqlite3 "${db}" "PRAGMA journal_mode;"`, {
-      encoding: 'utf8',
-      timeout: 5000,
-    }).trim();
-    return r.toLowerCase() === 'wal';
-  } catch {
-    return false;
-  }
-}
-
 function checkpointWal(db: string): boolean {
   try {
     execSync(`sqlite3 "${db}" "PRAGMA wal_checkpoint(TRUNCATE);"`, {

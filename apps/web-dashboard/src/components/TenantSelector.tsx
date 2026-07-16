@@ -44,7 +44,12 @@ export function TenantSelector() {
       >
         <span className={`w-1.5 h-1.5 rounded-full ${current ? 'bg-green-500' : 'bg-gray-400'}`} />
         {current ? current.name : 'All Tenants'}
-        <svg className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg
+          className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
@@ -63,7 +68,9 @@ export function TenantSelector() {
               className={`w-full text-left px-3 py-2 text-xs font-medium ${t.id === currentTenantId ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-gray-300'} hover:bg-gray-100 dark:hover:bg-gray-700`}
             >
               <span className="flex items-center gap-1.5">
-                <span className={`w-1.5 h-1.5 rounded-full ${t.isDefault ? 'bg-green-500' : 'bg-blue-400'}`} />
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${t.isDefault ? 'bg-green-500' : 'bg-blue-400'}`}
+                />
                 {t.name}
               </span>
             </button>

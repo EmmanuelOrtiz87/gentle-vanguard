@@ -327,8 +327,8 @@ for (const target of scanTargets) {
       if (expectedSchema) {
         const expected = expectedSchema.find((s) => s.name === table);
         if (!expected) {
-          const extras = KNOWN_EXTRA_COLUMNS[table] || [];
-          if (actualCols.size > expected ? expected.columns.length + extras.length : 99) {
+          const threshold = 99;
+          if (actualCols.size > threshold) {
             LOG(`  [WARN] ${table}: unexpected table (not in schema)`, YELLOW);
             issues.push({
               db: dbPath,

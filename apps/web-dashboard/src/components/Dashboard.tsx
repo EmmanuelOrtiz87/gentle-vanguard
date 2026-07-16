@@ -402,8 +402,9 @@ function DashboardInner() {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               {['avg', 'p50', 'p95', 'p99', 'max'].map((p) => {
-                const val = data.latency![p as keyof typeof data.latency] as number;
-                const pct = data.latency!.max > 0 ? (val / data.latency!.max) * 100 : 0;
+                const latency = data.latency;
+                const val = (latency?.[p as keyof typeof latency] as number) ?? 0;
+                const pct = (latency?.max ?? 0) > 0 ? (val / (latency?.max ?? 1)) * 100 : 0;
                 return (
                   <div key={p} className="card text-center">
                     <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">

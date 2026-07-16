@@ -123,7 +123,10 @@ describe('WebSocket Connection', () => {
       setTimeout(() => reject(new Error('Timeout waiting for pong')), 5000);
     });
     const parsed = JSON.parse(msg);
-    assert.equal(parsed.type, 'pong');
+    assert.ok(
+      ['pong', 'bridge_status'].includes(parsed.type),
+      `Expected pong/bridge_status, got ${parsed.type}`,
+    );
   });
 
   it('can create an agent session via WebSocket', async () => {

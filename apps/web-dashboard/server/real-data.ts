@@ -451,7 +451,7 @@ export function getCloudMetrics(): CloudMetrics {
 
 export function getTraces(): { traces: Trace[]; stats: TraceStats } {
   const traces: Trace[] = [];
-  let errorCount = 0;
+  const errorCount = 0;
 
   try {
     if (existsSync(CONTEXT_LOG_DIR)) {
@@ -527,7 +527,9 @@ export function getTenantScopedMetrics(tenantId: string): DashboardData {
       const found = (registry.tenants || []).find((t: any) => t.id === tenantId);
       if (found) tenantName = found.name || tenantId;
     }
-  } catch { /* fallback to tenantId */ }
+  } catch {
+    /* fallback to tenantId */
+  }
 
   const tenantSessionDir = join(ROOT, '.session', 'tenants', tenantId);
   const tenantTokenPath = join(tenantSessionDir, 'token-usage.json');
