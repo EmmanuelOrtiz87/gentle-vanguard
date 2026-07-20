@@ -17,13 +17,13 @@
     "plugin:@typescript-eslint/strict"
   ],
   "rules": {
-    "@typescript-eslint/explicit-function-return-type": "warn",
+    "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-    "@typescript-eslint/strict-boolean-expressions": "warn",
+    "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/no-floating-promises": "error",
     "@typescript-eslint/await-thenable": "error",
-    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-console": "off",
     "prefer-const": "error",
     "no-var": "error",
     "eqeqeq": ["error", "always"]
