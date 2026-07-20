@@ -65,8 +65,11 @@ function Invoke-SecurityReview {
   param([string]$FilePath)
   $issues = @()
 
-  # Skip upstream skill docs — they contain security examples, not real secrets
+  # Skip upstream skill docs and review tools — they contain security patterns, not real issues
   if ($FilePath -match '\.opencode[/\\]skills[/\\]') { return $issues }
+  if ($FilePath -match 'auto-code-review') { return $issues }
+  if ($FilePath -match 'review-lenses') { return $issues }
+  if ($FilePath -match 'compact-state') { return $issues }
 
   $content = Get-Content $FilePath -Raw
 
