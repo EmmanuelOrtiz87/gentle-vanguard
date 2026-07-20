@@ -269,6 +269,26 @@
       "priority": "medium",
       "status": "implemented",
       "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "aws-delegator",
+      "script": "scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1",
+      "target": "src/aws-delegator.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-20",
+      "configUpdated": true,
+      "reason": "Cloud connector for AWS Lambda, circuit-breaker, retry, tracing, audit, metrics"
+    },
+    {
+      "id": "azure-delegator",
+      "script": "scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1",
+      "target": "src/azure-delegator.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-20",
+      "configUpdated": true,
+      "reason": "Cloud connector for Azure Functions, circuit-breaker, retry, auth headers, tracing, audit, metrics"
     }
   ],
   "completedWave1": [
@@ -330,6 +350,7 @@
     "session-manager": "src/session-cleanup-start.ts",
     "token-notification-init": "src/token-metrics-store.ts"
   },
+  "completedWave9": ["aws-delegator", "azure-delegator"],
   "nextWave": [],
   "tsFiles": [
     "src/session-autostart.ts",
@@ -385,6 +406,8 @@
     "src/metrics-collector.ts",
     "src/skill-usage-tracker.ts",
     "src/auto-code-review.ts",
+    "src/aws-delegator.ts",
+    "src/azure-delegator.ts",
     "src/cross-workspace-validator.ts",
     "src/knowledge-base-init.ts",
     "src/skill-embedder-incremental.ts",
