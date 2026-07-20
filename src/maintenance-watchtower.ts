@@ -602,8 +602,11 @@ async function checkCloudConnectors() {
     addResult('cloud-connectors', 'hybrid metrics', 'WARN', 'No hybrid routing yet', 'ok');
   }
 
-  const delegators = ['src/aws-delegator.ts', 'src/azure-delegator.ts', 'src/hybrid-executor.ts'];
-  const missingCount = delegators.filter((d) => !fileExists(join(ROOT, d))).length;
+  const delegators = ['aws-delegator.ps1', 'azure-delegator.ps1', 'src/hybrid-executor.ts'];
+  const missingCount = delegators.filter((d) => {
+    if (d.endsWith('.ts')) return !fileExists(join(ROOT, d));
+    return !fileExists(join(ROOT, `scripts/utilities/ops/CLOUD-CONNECTORS/${d}`));
+  }).length;
   if (missingCount === 0) {
     addResult('cloud-connectors', 'delegator scripts', 'PASS', 'All 3 scripts present', 'ok');
   } else {
@@ -876,9 +879,7 @@ async function autoHeal() {
       try {
         const ports = readJson(portsFile);
         wsPort = typeof ports.wsPort === 'number' ? ports.wsPort : 8080;
-      } catch {
-        /* port file parse error, use default */
-      }
+      } catch { /* port file parse error, use default */ }
     }
 
     const wsRunning = await testPort(wsPort);
@@ -894,12 +895,16 @@ async function autoHeal() {
     } else if (wsAutostart.endsWith('.ts')) {
       if (!quiet) console.log('  [Heal] Restarting Dashboard WS server (TS)...');
       try {
-        const child = spawn(process.execPath, ['node_modules/.bin/tsx', wsAutostart, '--quiet'], {
-          cwd: ROOT,
-          stdio: 'ignore',
-          detached: true,
-          windowsHide: true,
-        });
+        const child = spawn(
+          process.execPath,
+          ['node_modules/.bin/tsx', wsAutostart, '--quiet'],
+          {
+            cwd: ROOT,
+            stdio: 'ignore',
+            detached: true,
+            windowsHide: true,
+          },
+        );
         child.unref();
         await new Promise((resolve) => setTimeout(resolve, 15000));
         if (child.exitCode === null) {
