@@ -118,18 +118,11 @@ When a chart would communicate results more effectively than a table:
 **Full analysis:**
 
 ```
-/analyze What's causing the increase in support ticket volume over the past 3 months? Break down by category and priority.
-```
-
-**Formal report:**
-
-```
-/analyze Prepare a data quality assessment of our customer table -- completeness, consistency, and any issues we should address.
+/analyze What's causing the increase in support ticket volume over the past 3 months?
 ```
 
 ## Tips
 
-- Be specific about time ranges, segments, or metrics when possible
-- If you know the table names, mention them to speed up the process
-- For complex questions, Claude may break them into multiple queries
-- Results are always validated before presentation -- if something looks off, Claude will flag it
+- Be specific about time ranges, segments, or metrics
+- Know the table names? Mention them
+- Complex questions may be broken into multiple queries

@@ -102,7 +102,7 @@ function Initialize-Validators {
     $script:Validators.docker.path = Get-ChildItem -Path $repoRoot -Filter "Dockerfile" -File -ErrorAction SilentlyContinue | Select-Object -First 1
     $script:Validators.docker.exists = $null -ne $script:Validators.docker.path
 
-    $script:Validators.security.path = Get-ChildItem -Path $repoRoot -Filter "security-orchestrator.ps1" -Recurse -File -ErrorAction SilentlyContinue | Select-Object -First 1
+    $script:Validators.security.path = Get-ChildItem -Path $repoRoot -Filter "security-orchestrator.*" -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Extension -in '.ps1','.ts' } | Select-Object -First 1
     $script:Validators.security.exists = $null -ne $script:Validators.security.path
 
     $script:Validators.links.path = Get-ChildItem -Path $repoRoot -Filter "broken-links*.ps1" -Recurse -File -ErrorAction SilentlyContinue | Select-Object -First 1

@@ -12,7 +12,7 @@ $validProps = @(
     'formatter', 'instructions', 'layout', 'logLevel', 'lsp',
     'mcp', 'mode', 'model',
     'permission', 'plugin', 'provider',
-    'reference', 'server', 'share', 'shell', 'skills',
+    'reference', 'references', 'server', 'share', 'shell', 'skills',
     'small_model', 'snapshot',
     'tools', 'tool_output',
     'username', 'watcher'

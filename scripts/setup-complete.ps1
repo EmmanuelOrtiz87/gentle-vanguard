@@ -36,7 +36,7 @@ function Write-StepError {
 
 function Test-Prerequisites {
     Write-Step "Checking Prerequisites for: $Mode mode"
-    
+
     # PowerShell 7+
     $psVersion = $PSVersionTable.PSVersion
     if ($psVersion.Major -lt 7) {
@@ -45,7 +45,7 @@ function Test-Prerequisites {
         exit 1
     }
     Write-Success "PowerShell $psVersion detected"
-    
+
     # Git
     try {
         $gitVersion = git --version 2>$null
@@ -57,7 +57,7 @@ function Test-Prerequisites {
     } catch {
         Write-StepWarning "Git not found. Install from https://git-scm.com/"
     }
-    
+
     # Node.js (for some tools)
     try {
         $nodeVersion = node --version 2>$null
@@ -67,7 +67,7 @@ function Test-Prerequisites {
     } catch {
         Write-Host "  Node.js not found (optional)" -ForegroundColor Gray
     }
-    
+
     # Disk space
     $drive = if (Test-Path $InstallPath) { (Get-Item $InstallPath).PSDrive } else { "C:" }
     $freeSpace = (Get-PSDrive $drive -ErrorAction SilentlyContinue).Free
@@ -80,13 +80,13 @@ function Test-Prerequisites {
 
 function Install-Gentle-Vanguard {
     Write-Step "Installing Gentle-Vanguard ($Mode mode)"
-    
+
     # Create directory
     if (-not (Test-Path $InstallPath)) {
         New-Item -ItemType Directory -Path $InstallPath -Force | Out-Null
         Write-Success "Created install directory: $InstallPath"
     }
-    
+
     # Clone or copy files
     if (Test-Path "$PSScriptRoot\..\.git") {
         Write-Host "  Copying from current repository..." -ForegroundColor Gray
@@ -102,18 +102,18 @@ function Install-Gentle-Vanguard {
         Write-StepWarning "Not in a git repository. Please clone Gentle-Vanguard first."
         return $false
     }
-    
-    # Install git hooks
+
+    # Install git hooks via lefthook
     if (-not $SkipHooks) {
-        $hooksScript = Join-Path $InstallPath "scripts\utilities\install-hooks.ps1"
-        if (Test-Path $hooksScript) {
-            & $hooksScript
-            if ($LASTEXITCODE -eq 0) {
-                Write-Success "Git hooks installed (Lefthook + Trufflehog)"
-            }
+        $lefthookCmd = Get-Command lefthook -ErrorAction SilentlyContinue
+        if ($lefthookCmd) {
+            lefthook install 2>&1 | Out-Null
+            Write-Success "Git hooks installed (Lefthook)"
+        } else {
+            Write-StepWarning "Lefthook not found. Install: npm install -g lefthook"
         }
     }
-    
+
     # Mode-specific setup
     switch ($Mode) {
         'developer' {
@@ -145,19 +145,19 @@ function Install-Gentle-Vanguard {
             }
         }
     }
-    
+
     return $true
 }
 
 function Initialize-Environment {
     Write-Step "Initializing Environment"
-    
+
     # VS Code settings
     $vscodeDir = Join-Path $InstallPath ".vscode"
     if (-not (Test-Path $vscodeDir)) {
         New-Item -ItemType Directory -Path $vscodeDir -Force | Out-Null
     }
-    
+
     $settingsPath = Join-Path $vscodeDir "settings.json"
     $settings = @{
         "powershell.codeFormatting.pester.scriptBlockMustHaveBraces" = $true
@@ -167,13 +167,13 @@ function Initialize-Environment {
     }
     $settings | ConvertTo-Json | Out-File $settingsPath -Encoding UTF8
     Write-Success "VS Code settings configured"
-    
+
     # PowerShell profile
     $profileDir = Split-Path $PROFILE.CurrentUserCurrentHost
     if (-not (Test-Path $profileDir)) {
         New-Item -ItemType Directory -Path $profileDir -Force | Out-Null
     }
-    
+
     $profileContent = @"
 # Gentle-Vanguard Environment
 `$env:GENTLE_VANGUARD_ROOT = '$InstallPath'
@@ -189,9 +189,9 @@ function Run-Tests {
         Write-StepWarning "Skipping tests (SkipTests specified)"
         return
     }
-    
+
     Write-Step "Running Test Suite"
-    
+
     # Run Pester tests
     $testDir = Join-Path $InstallPath "tests"
     if (Test-Path $testDir) {

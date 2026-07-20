@@ -122,7 +122,7 @@ if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
                 sudo apt install gh -y
                 if ($?) { sudo apt install gh -y }
             }
-            
+
             if (Get-Command gh -ErrorAction SilentlyContinue) {
                 Write-Success "GitHub CLI installed successfully."
             }
@@ -207,7 +207,7 @@ try {
     $taskName = "Gentle-Vanguard-CodeGraph-Sync"
     $existing = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
     if (-not $existing) {
-        $taskScript = Resolve-Path (Join-Path $workspaceRoot "scripts/utilities/codegraph-sync-autostart.ps1")
+        $taskScript = Resolve-Path (Join-Path $workspaceRoot "scripts/utilities/codegraph/codegraph-sync-autostart.ps1")
         $action = New-ScheduledTaskAction -Execute "pwsh.exe" -Argument "-NoProfile -NoLogo -NonInteractive -File `"$taskScript`""
         $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date "08:00") -RepetitionInterval (New-TimeSpan -Hours 1) -RepetitionDuration ([TimeSpan]::FromDays(30))
         $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Minutes 5)
@@ -222,27 +222,17 @@ try {
 
 if ($InstallGitHubRunner) {
     Write-Step "Step 4c: Installing optional GitHub self-hosted runner..."
-    $runnerInstaller = Join-Path $workspaceRoot 'scripts/utilities/DEPLOYMENT/install-github-runner.ps1'
-    if (-not (Test-Path $runnerInstaller)) {
-        Write-ErrorMsg "Runner installer not found: $runnerInstaller"
-        exit 1
-    }
-
-    & $runnerInstaller -ConfigPath (Join-Path $workspaceRoot $GitHubRunnerConfigPath)
-    if ($LASTEXITCODE -eq 0) {
-        Write-Success 'GitHub runner installation finished.'
-    } else {
-        Write-ErrorMsg 'GitHub runner installation failed.'
-        exit 1
-    }
+    Write-ErrorMsg "GitHub runner installer was removed in Phase 1 cleanup."
+    Write-InfoMsg "Use GitHub Actions or follow: https://docs.github.com/en/actions/hosting-runners"
+    exit 1
 }
 
 Write-Step "Step 5: System Health Report (Health Check)..."
 $report = @{
     Git = if (Get-Command git -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
-    GitHubCLI = if (Get-Command gh -ErrorAction SilentlyContinue) { 
-        "PASS" 
-    } else { 
+    GitHubCLI = if (Get-Command gh -ErrorAction SilentlyContinue
+        "PASS
+    } els
         if (Test-Path "$env:ProgramFiles\GitHub CLI\gh.exe") { "RESTART REQUIRED (Installed but not in PATH)" } else { "INFO: Not installed" }
     }
     Go  = if (Get-Command go -ErrorAction SilentlyContinue) { "PASS" } elseif (Get-Command engram -ErrorAction SilentlyContinue) { "WARN: Not installed (Engram available)" } else { "FAIL" }
@@ -259,4 +249,4 @@ foreach ($item in $report.Keys) {
 }
 
 Write-Host "`n[SUCCESS] Gentle-Vanguard Initialized and Verified!" -ForegroundColor Green
-Write-Host "You can now run 'scripts/run-engram.ps1' to start your assisted development session." -ForegroundColor Green
+Write-Host "You can now run 'npx tsx src/session-autostart.ts' to start your session." -ForegroundColor Green

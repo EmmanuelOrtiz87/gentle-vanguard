@@ -1,26 +1,53 @@
 {
-  "name": "Windsurf - Gentle-Vanguard Profile",
-  "version": "2.0.0",
-  "description": "Gentle-Vanguard stack con MCP bridge universal",
-  "rules": [
-    "Configuración de proyecto en config/windsurf-project-settings.json",
-    "Optimización de prompts en config/system-prompt-optimization.json"
-  ],
-  "mcpServers": {
-    "gentle-vanguard-skills": {
-      "command": "node",
-      "args": ["dist/scripts/mcp/skill-server.js"],
-      "description": "143+ skills vía MCP: list_skills, get_skill, search_skills"
-    },
-    "engram": {
-      "command": "engram",
-      "args": ["mcp", "--tools=agent"],
-      "description": "Memoria persistente Engram vía MCP"
-    },
-    "codegraph": {
-      "command": "codegraph",
-      "args": ["serve", "--mcp"],
-      "description": "CodeGraph: análisis de código indexado"
+  "name": "Windsurf - Optimized Profile",
+  "version": "1.2.0",
+  "description": "Optimized Windsurf for peak hour / token pressure",
+  "workspace": {
+    "projectRoot": ".",
+    "configFiles": [
+      "AGENTS.md",
+      "CLAUDE.md"
+    ],
+    "skillRegistry": ".atl/skill-registry.md"
+  },
+  "aiSettings": {
+    "temperature": 0.3,
+    "maxTokens": 2500,
+    "localFirst": true
+  },
+  "toolPermissions": {
+    "websearch": "deny",
+    "webfetch": "deny",
+    "externalTools": "ask"
+  },
+  "contextManagement": {
+    "useEngramMemory": true,
+    "useLocalSkills": true,
+    "useProjectDocs": true,
+    "fastContext": true
+  },
+  "cascade": {
+    "restrictToLocal": true,
+    "allowExternalTools": false,
+    "webDocsSearch": "disabled"
+  },
+  "preProcessing": {
+    "enabled": true,
+    "mandatory": true,
+    "script": "scripts/utilities/pre-process-input.ps1",
+    "scriptArgs": {
+      "UserInput": "USER_INPUT_HERE",
+      "WorkspaceRoot": "."
     }
+  },
+  "sessionManagement": {
+    "tracking": {
+      "project": "gentle-vanguard",
+      "sessionIdPattern": "session-YYYY-MM-DD-XX"
+    }
+  },
+  "language": {
+    "default": "es",
+    "technicalTerms": "en"
   }
 }

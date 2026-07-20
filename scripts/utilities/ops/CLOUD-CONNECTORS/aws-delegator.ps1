@@ -2,7 +2,7 @@
 <#
 .SYNOPSIS
     AWS Lambda Delegator — Route skill executions to AWS Lambda
-    
+
 .DESCRIPTION
     Wraps skill calls to AWS Lambda for distributed execution with:
     - Authentication via AWS SDK
@@ -10,7 +10,7 @@
     - Session state persistence to S3
     - Circuit breaker pattern
     - Cost tracking
-    
+
 .NOTES
     Part of Cloud Integration Phase v4.0
     Requires AWS SDK for PowerShell
@@ -19,26 +19,26 @@
 param(
     [Parameter(Mandatory = $true, ParameterSetName = 'Invoke')]
     [string]$SkillId,
-    
+
     [Parameter(Mandatory = $true, ParameterSetName = 'Invoke')]
     [object]$SkillInput,
-    
+
     [Parameter(Mandatory = $false)]
     [ValidateSet('RequestResponse', 'Event', 'DryRun')]
     [string]$InvocationType = 'RequestResponse',
-    
+
     [Parameter(Mandatory = $false)]
     [string]$FunctionName = 'gentle-vanguard-skill-executor',
-    
+
     [Parameter(Mandatory = $false)]
     [string]$AwsRegion = 'us-east-1',
-    
+
     [Parameter(Mandatory = $false)]
     [int]$MaxRetries = 3,
-    
+
     [Parameter(Mandatory = $false)]
     [switch]$RecordMetrics,
-    
+
     [Parameter(Mandatory = $false)]
     [switch]$Quiet
 )
@@ -106,18 +106,31 @@ $circuitBreaker = [CircuitBreaker]::new()
 # ===== TRACING =====
 function Start-TracingSpan {
     param([string]$Name)
-    $tracer = Join-Path $PSScriptRoot '../TRACING/tracing-instrument.ps1'
+    $tracerTs = Join-Path $repoRoot 'src/tracing-instrument.ts'
+    $tracerPs1 = Join-Path $PSScriptRoot '../TRACING/tracing-instrument.ps1'
+    $tracer = if (Test-Path $tracerTs) { $tracerTs } else { $tracerPs1 }
     if (Test-Path $tracer) {
-        return & $tracer -Action start -SpanName $Name -Attributes @{ skillId = $SkillId; provider = 'AWS' } -Quiet 2>&1
+        if ($tracer -like '*.ts') {
+            return & npx tsx $tracer -Action start -SpanName $Name -Quiet 2>&1
+        } else {
+            return & $tracer -Action start -SpanName $Name -Attributes @{ skillId = $SkillId; provider = 'AWS' } -Quiet 2>&1
+        }
     }
     return $null
 }
 function Stop-TracingSpan {
     param([string]$Name, [bool]$Success, [int]$Duration, [string]$Error)
-    $tracer = Join-Path $PSScriptRoot '../TRACING/tracing-instrument.ps1'
+    $tracerTs = Join-Path $repoRoot 'src/tracing-instrument.ts'
+    $tracerPs1 = Join-Path $PSScriptRoot '../TRACING/tracing-instrument.ps1'
+    $tracer = if (Test-Path $tracerTs) { $tracerTs } else { $tracerPs1 }
     if (-not (Test-Path $tracer)) { return }
-    if ($Success) { & $tracer -Action end -SpanName $Name -Attributes @{ durationMs = $Duration; skillId = $SkillId } -Quiet | Out-Null }
-    else { & $tracer -Action error -SpanName $Name -ErrorMessage $Error -Attributes @{ durationMs = $Duration; skillId = $SkillId } -Quiet | Out-Null }
+    if ($tracer -like '*.ts') {
+        if ($Success) { & npx tsx $tracer -Action end -SpanName $Name -Quiet | Out-Null }
+        else { & npx tsx $tracer -Action error -SpanName $Name -ErrorMessage $Error -Quiet | Out-Null }
+    } else {
+        if ($Success) { & $tracer -Action end -SpanName $Name -Attributes @{ durationMs = $Duration; skillId = $SkillId } -Quiet | Out-Null }
+        else { & $tracer -Action error -SpanName $Name -ErrorMessage $Error -Attributes @{ durationMs = $Duration; skillId = $SkillId } -Quiet | Out-Null }
+    }
 }
 
 # ===== AUDIT =====
@@ -147,7 +160,7 @@ function Invoke-WithRetry {
         }
         catch {
             $circuitBreaker.RecordFailure()
-            
+
             if ($attempt -eq $MaxRetries) {
                 Write-Log "Failed after $MaxRetries attempts: $_" ERROR
                 throw
@@ -203,7 +216,7 @@ function Invoke-SkillOnLambda {
     }
     catch {
         Write-Log "Lambda invocation failed: $_" ERROR
-        
+
         if ($RecordMetrics) {
             Record-CloudMetrics -Provider 'AWS' -Duration 0 -Success $false -Cost 0
         }

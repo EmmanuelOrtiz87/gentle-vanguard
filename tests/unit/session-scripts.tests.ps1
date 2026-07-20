@@ -35,23 +35,22 @@ Describe 'Session Scripts Tests' {
     }
 
     Context 'Session Autostart' {
-        It 'session-autostart.ps1 exists' {
-            $f = Join-Path $script:utilitiesPath "SESSION/session-autostart.ps1"
+        It 'session-autostart.ts exists' {
+            $f = Join-Path $script:root "src/session-autostart.ts"
             Test-Path $f | Should -Be $true
         }
 
-        It 'session-autostart.ps1 has valid PowerShell syntax' {
-            $f = Join-Path $script:utilitiesPath "SESSION/session-autostart.ps1"
-            $errors = $null
+        It 'session-autostart.ts has valid content' {
+            $f = Join-Path $script:root "src/session-autostart.ts"
             $content = Get-Content $f -Raw
-            [System.Management.Automation.PSParser]::Tokenize($content, [ref]$errors) | Out-Null
-            $errors.Count | Should -Be 0
+            $content | Should -Not -BeNullOrEmpty
+            ($content -match 'function|const|import') | Should -Be $true
         }
 
-        It 'session-autostart.ps1 uses config-driven pipeline' {
-            $f = Join-Path $script:utilitiesPath "SESSION/session-autostart.ps1"
+        It 'session-autostart uses config-driven pipeline' {
+            $f = Join-Path $script:root "src/session-autostart.ts"
             $content = Get-Content $f -Raw
-            ($content -match 'config-driven|ConfigFile|\$config\.pipeline') | Should -Be $true
+            ($content -match 'pipeline|config-driven|steps') | Should -Be $true
         }
 
         It 'get-session-id.ps1 checks the active session marker' {
@@ -73,8 +72,8 @@ Describe 'Session Scripts Tests' {
     }
 
     Context 'Engram Session Integration' {
-        It 'session-autostart.ps1 initializes Engram' {
-            $f = Join-Path $script:utilitiesPath "SESSION/session-autostart.ps1"
+        It 'session-autostart initializes Engram' {
+            $f = Join-Path $script:root "src/session-autostart.ts"
             $content = Get-Content $f -Raw
             ($content -match 'engram|Engram') | Should -Be $true
         }

@@ -1,5 +1,17 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Globe, Cpu, Play, Square, RefreshCw, AlertCircle, CheckCircle, PauseCircle, Plus, Server, Clock } from 'lucide-react';
+import {
+  Globe,
+  Cpu,
+  Play,
+  Square,
+  RefreshCw,
+  AlertCircle,
+  CheckCircle,
+  PauseCircle,
+  Plus,
+  Server,
+  Clock,
+} from 'lucide-react';
 
 interface MeshServer {
   name: string;
@@ -49,7 +61,9 @@ function MultiRepoViewInner() {
   useEffect(() => {
     void fetchMesh();
     intervalRef.current = setInterval(() => void fetchMesh(true), AUTO_REFRESH_MS);
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
   }, [fetchMesh]);
 
   const handleDiscover = async () => {
@@ -57,7 +71,9 @@ function MultiRepoViewInner() {
     try {
       await fetch('/api/mesh/discover', { method: 'POST' });
       setTimeout(() => void fetchMesh(), 1000);
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     setDiscovering(false);
   };
 
@@ -66,7 +82,9 @@ function MultiRepoViewInner() {
     try {
       await fetch('/api/mesh/sync', { method: 'POST' });
       setTimeout(() => void fetchMesh(), 1000);
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     setSyncing(false);
   };
 
@@ -74,22 +92,30 @@ function MultiRepoViewInner() {
     try {
       await fetch(`/api/mcp/servers/${name}/${action}`, { method: 'POST' });
       setTimeout(() => void fetchMesh(), 1000);
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   };
 
   const statusIcon = (status: string) => {
     switch (status) {
-      case 'running': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'error': return <AlertCircle className="w-4 h-4 text-red-500" />;
-      default: return <PauseCircle className="w-4 h-4 text-gray-400" />;
+      case 'running':
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case 'error':
+        return <AlertCircle className="w-4 h-4 text-red-500" />;
+      default:
+        return <PauseCircle className="w-4 h-4 text-gray-400" />;
     }
   };
 
   const repoStatusIcon = (status: string) => {
     switch (status) {
-      case 'healthy': return <CheckCircle className="w-5 h-5 text-green-500" />;
-      case 'degraded': return <AlertCircle className="w-5 h-5 text-yellow-500" />;
-      default: return <PauseCircle className="w-5 h-5 text-gray-400" />;
+      case 'healthy':
+        return <CheckCircle className="w-5 h-5 text-green-500" />;
+      case 'degraded':
+        return <AlertCircle className="w-5 h-5 text-yellow-500" />;
+      default:
+        return <PauseCircle className="w-5 h-5 text-gray-400" />;
     }
   };
 
@@ -113,9 +139,15 @@ function MultiRepoViewInner() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          {pollError && <span className="text-xs text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> API error</span>}
+          {pollError && (
+            <span className="text-xs text-red-500 flex items-center gap-1">
+              <AlertCircle className="w-3 h-3" /> API error
+            </span>
+          )}
           {lastChecked && !pollError && (
-            <span className="text-xs text-gray-400 flex items-center gap-1"><Clock className="w-3 h-3" /> {lastChecked}</span>
+            <span className="text-xs text-gray-400 flex items-center gap-1">
+              <Clock className="w-3 h-3" /> {lastChecked}
+            </span>
           )}
           <span className="text-xs text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
             {totalServers} servers · {totalRunning} running
@@ -154,20 +186,30 @@ function MultiRepoViewInner() {
           <div className="p-8 text-center bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
             <AlertCircle className="w-10 h-10 mx-auto mb-2 text-red-500" />
             <p className="text-gray-500">Failed to load mesh data.</p>
-            <button onClick={() => void fetchMesh()} className="mt-2 text-sm text-blue-600 hover:underline">Retry</button>
+            <button
+              onClick={() => void fetchMesh()}
+              className="mt-2 text-sm text-blue-600 hover:underline"
+            >
+              Retry
+            </button>
           </div>
         ) : workspaces.length === 0 ? (
           <div className="p-8 text-center text-gray-500 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
             <Globe className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p>No mesh workspaces found.</p>
-            <p className="text-xs mt-1">Configure peers in config/federation-config.json or click Discover.</p>
+            <p className="text-xs mt-1">
+              Configure peers in config/federation-config.json or click Discover.
+            </p>
           </div>
         ) : (
           workspaces.map((ws) => {
             const counts = countByStatus(ws.servers);
             const isExpanded = expanded === ws.name;
             return (
-              <div key={ws.name} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+              <div
+                key={ws.name}
+                className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700"
+              >
                 <button
                   onClick={() => setExpanded(isExpanded ? null : ws.name)}
                   className="w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-750"
@@ -180,27 +222,44 @@ function MultiRepoViewInner() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3 text-xs">
-                    {counts.running > 0 && <span className="text-green-500">{counts.running} running</span>}
+                    {counts.running > 0 && (
+                      <span className="text-green-500">{counts.running} running</span>
+                    )}
                     {counts.error > 0 && <span className="text-red-500">{counts.error} error</span>}
-                    {counts.stopped > 0 && <span className="text-gray-400">{counts.stopped} stopped</span>}
+                    {counts.stopped > 0 && (
+                      <span className="text-gray-400">{counts.stopped} stopped</span>
+                    )}
                     <span className="text-gray-400 font-medium">{ws.servers.length} servers</span>
                   </div>
                 </button>
                 {isExpanded && (
                   <div className="border-t border-gray-200 dark:border-gray-700 divide-y divide-gray-100 dark:divide-gray-700">
                     {ws.servers.length === 0 ? (
-                      <div className="px-4 py-3 pl-12 text-sm text-gray-500">No MCP servers configured</div>
+                      <div className="px-4 py-3 pl-12 text-sm text-gray-500">
+                        No MCP servers configured
+                      </div>
                     ) : (
                       ws.servers.map((s) => (
-                        <div key={s.name} className="flex items-center justify-between px-4 py-3 pl-12">
+                        <div
+                          key={s.name}
+                          className="flex items-center justify-between px-4 py-3 pl-12"
+                        >
                           <div className="flex items-center gap-3">
                             <Cpu className="w-4 h-4 text-gray-400" />
                             <div>
                               <div className="flex items-center gap-2">
-                                <span className="text-sm font-medium text-gray-900 dark:text-white">{s.name}</span>
-                                <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                                  s.type === 'builtin' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
-                                }`}>{s.type}</span>
+                                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                                  {s.name}
+                                </span>
+                                <span
+                                  className={`text-xs px-1.5 py-0.5 rounded-full ${
+                                    s.type === 'builtin'
+                                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                                      : 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
+                                  }`}
+                                >
+                                  {s.type}
+                                </span>
                                 <span className="text-xs text-gray-500">{s.description}</span>
                               </div>
                               {s.pid && <div className="text-xs text-gray-400">PID {s.pid}</div>}
@@ -210,11 +269,17 @@ function MultiRepoViewInner() {
                             {statusIcon(s.status)}
                             <span className="text-xs text-gray-500 mr-2">{s.status}</span>
                             {s.status === 'running' ? (
-                              <button onClick={() => toggleServer(s.name, 'stop')} className="p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded">
+                              <button
+                                onClick={() => toggleServer(s.name, 'stop')}
+                                className="p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
+                              >
                                 <Square className="w-3.5 h-3.5" />
                               </button>
                             ) : (
-                              <button onClick={() => toggleServer(s.name, 'start')} className="p-1 text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 rounded">
+                              <button
+                                onClick={() => toggleServer(s.name, 'start')}
+                                className="p-1 text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 rounded"
+                              >
                                 <Play className="w-3.5 h-3.5" />
                               </button>
                             )}

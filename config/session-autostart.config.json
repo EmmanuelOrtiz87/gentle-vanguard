@@ -7,24 +7,24 @@
       {
         "id": "tool-detection",
         "enabled": true,
-        "script": "scripts/utilities/setup/DETECT/detect-tool.ps1",
-        "args": "-AsJson",
+        "script": "src/detect-tool.ts",
+        "args": "--json",
         "required": false,
-        "description": "Detect AI tool/agent and load tool-specific configuration"
+        "description": "Detect AI tool/agent and load tool-specific configuration (TS)"
       },
       {
         "id": "session-manager",
         "enabled": true,
-        "script": "scripts/utilities/session-manager.ps1",
-        "args": "-Mode AutoStart",
+        "script": "src/session-cleanup-start.ts",
+        "args": "--quiet --skip-cache-flush --skip-compression",
         "required": true,
         "phase": 0,
-        "description": "Initialize session ID and create session file"
+        "description": "Initialize session ID and create session file (TS)"
       },
       {
         "id": "session-cleanup",
         "enabled": true,
-        "script": "scripts/utilities/session/session-cleanup-start.ps1",
+        "script": "src/session-cleanup-start.ts",
         "args": "-Quiet",
         "required": false,
         "description": "Flush caches, close orphans, reset state, generate compressed CLAUDE.min.md"
@@ -32,40 +32,40 @@
       {
         "id": "github-bypass",
         "enabled": true,
-        "script": "scripts/utilities/session/SESSION-MANAGEMENT/ensure-github-bypass.ps1",
-        "args": "",
+        "script": "src/ensure-github-bypass.ts",
+        "args": "--owner EmmanuelOrtiz87 --branch develop",
         "required": false,
-        "description": "Ensure GitHub bypass policy for current user"
+        "description": "Ensure GitHub bypass policy for current user (TS)"
       },
       {
         "id": "notifications",
         "enabled": true,
-        "script": "scripts/utilities/session/session-notification.ps1",
-        "args": "-TimeZone \"Argentina Standard Time\" -PeakStart 9 -PeakEnd 15 -Region \"Argentina\"",
+        "script": "src/session-notification.ts",
+        "args": "--timezone \"America/Argentina/Buenos_Aires\" --peak-start 9 --peak-end 15 --region \"Argentina\"",
         "required": false,
-        "description": "Time-based peak hour notifications"
+        "description": "Time-based peak hour notifications (TS)"
       },
       {
         "id": "auth-session",
         "enabled": false,
-        "script": "scripts/utilities/auth-session.ps1",
+        "script": "src/auth-session.ts",
         "args": "",
         "required": false,
-        "description": "Authenticate owner for restricted operations (requires manual trigger with -ApiKey or -UseSecurityQuestions)",
+        "description": "Authenticate owner for restricted operations (TS)",
         "note": "Disabled by default - auth is demand-driven, not at session start. Enable if session-level auth is required."
       },
       {
         "id": "engram-policy",
         "enabled": true,
-        "script": "scripts/gentle-vanguard/engram-policy.ps1",
-        "args": "-Action enforce",
+        "script": "src/engram-policy.ts",
+        "args": "",
         "required": true,
-        "description": "Verify Engram is installed and running"
+        "description": "Verify Engram is installed and running (TS)"
       },
       {
         "id": "token-budget",
         "enabled": true,
-        "script": "scripts/utilities/telemetry/TELEMETRY-METRICS/token-budget-guard.ps1",
+        "script": "src/token-budget-guard.ts",
         "args": "-Task session-start -Risk low -Record -ActualPromptTokens 0 -ActualCompletionTokens 0",
         "required": false,
         "description": "Record session start for token budget tracking"
@@ -73,7 +73,7 @@
       {
         "id": "engram-integrity",
         "enabled": true,
-        "script": "scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1",
+        "script": "src/engram-integrity-check.ts",
         "args": "-Mode status -Quiet",
         "required": false,
         "description": "Verificar integridad de Engram (SHA256 + SQLite + chunks) al inicio de sesion"
@@ -82,23 +82,23 @@
         "id": "engram-backup",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/ops/BACKUP-RESTORE/backup-engram.ps1",
-        "args": "-Mode backup -Quiet",
+        "script": "src/backup-engram.ts",
+        "args": "--mode backup --quiet",
         "required": false,
-        "description": "Backup automatico de Engram (DB + sessions + SHA256 checksums) via backup-engram.ps1"
+        "description": "Backup automatico de Engram (DB + sessions + SHA256 checksums) (TS)"
       },
       {
         "id": "engram-optimization",
         "enabled": true,
-        "script": "scripts/utilities/OPTIMIZE/optimize-engram-usage.ps1",
-        "args": "-ProjectName workspace_gentle_vanguard",
+        "script": "src/optimize-engram-usage.ts",
+        "args": "--project workspace_gentle_vanguard",
         "required": false,
-        "description": "Optimize Engram memory usage"
+        "description": "Optimize Engram memory usage (TS)"
       },
       {
         "id": "engram-auto-sync",
         "enabled": true,
-        "script": "scripts/utilities/memory/ENGRAM/engram-auto-sync.ps1",
+        "script": "src/engram-auto-sync.ts",
         "args": "-Mode sync -Quiet",
         "required": false,
         "description": "Auto-synchronize Engram checksums if DB was modified (prevents hash mismatches)"
@@ -106,10 +106,10 @@
       {
         "id": "cross-workspace-validation",
         "enabled": true,
-        "script": "scripts/monitoring/cross-workspace-validator.ps1",
-        "args": "-Detailed",
+        "script": "src/cross-workspace-validator.ts",
+        "args": "--detailed",
         "required": false,
-        "description": "Validate cross-workspace consistency"
+        "description": "Validate cross-workspace consistency (TS)"
       },
       {
         "id": "security-orchestrator",
@@ -122,31 +122,31 @@
       {
         "id": "skill-router",
         "enabled": true,
-        "script": "scripts/utilities/skills/SKILL/skill-router.ps1",
-        "args": "-Query \"session-start\"",
+        "script": "src/skill-router.ts",
+        "args": "--query \"session-start\"",
         "required": false,
-        "description": "Verify skill router is active"
+        "description": "Verify skill router is active (TS)"
       },
       {
         "id": "karpathy-guidelines",
         "enabled": true,
-        "script": "scripts/adaptive/karpathy-enforcer.ps1",
-        "args": "-Trigger session-start -VerboseOutput",
+        "script": "src/karpathy-enforcer.ts",
+        "args": "--trigger session-start --verbose",
         "required": false,
-        "description": "Enforce Karpathy guidelines (Think, Simplicity, Surgical, Goal-Driven)"
+        "description": "Enforce Karpathy guidelines (Think, Simplicity, Surgical, Goal-Driven) (TS)"
       },
       {
         "id": "session-metrics-start",
         "enabled": true,
-        "script": "scripts/utilities/session/session-metrics-tracker.ps1",
-        "args": "-Action start",
+        "script": "src/session-metrics-tracker.ts",
+        "args": "--action start",
         "required": false,
-        "description": "Initialize session metrics tracking (tokens, tool calls, files)"
+        "description": "Initialize session metrics tracking (tokens, tool calls, files) (TS)"
       },
       {
         "id": "session-scoring-init",
         "enabled": true,
-        "script": "scripts/adaptive/session-scoring.ps1",
+        "script": "src/session-scoring.ts",
         "args": "-Action init",
         "required": false,
         "description": "Initialize quality scoring system with baseline metrics"
@@ -154,7 +154,7 @@
       {
         "id": "session-scoring-start",
         "enabled": true,
-        "script": "scripts/adaptive/session-scoring.ps1",
+        "script": "src/session-scoring.ts",
         "args": "-Action record -EventType session -Detail session-start -Success",
         "required": false,
         "description": "Record session-start event in quality scoring system"
@@ -162,7 +162,7 @@
       {
         "id": "session-scoring-close",
         "enabled": false,
-        "script": "scripts/adaptive/session-scoring.ps1",
+        "script": "src/session-scoring.ts",
         "args": "-Action record -EventType session -Detail session-close -Success",
         "required": false,
         "description": "Record session-close event in quality scoring system (enabled on session end)"
@@ -170,65 +170,65 @@
       {
         "id": "token-metrics-init",
         "enabled": true,
-        "script": "scripts/utilities/token/token-metrics-store.ps1",
-        "args": "-Action init",
+        "script": "src/token-metrics-store.ts",
+        "args": "--action init",
         "required": false,
-        "description": "Initialize token metrics database for historical tracking"
+        "description": "Initialize token metrics database for historical tracking (TS)"
       },
       {
         "id": "adaptive-opencode-profile",
         "enabled": true,
-        "script": "scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-opencode-profile.ps1",
-        "args": "-Mode Auto -TimeZone \"Argentina Standard Time\" -PeakStart 9 -PeakEnd 15",
+        "script": "src/adaptive-opencode-profile.ts",
+        "args": "--mode Auto --timezone \"America/Argentina/Buenos_Aires\" --peak-start 9 --peak-end 15",
         "required": false,
-        "description": "Intelligent temporary OpenCode optimization with automatic restore when normalized"
+        "description": "Intelligent temporary OpenCode optimization with automatic restore when normalized (TS)"
       },
       {
         "id": "adaptive-codex-windsurf-profile",
         "enabled": true,
-        "script": "scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-codex-windsurf-profile.ps1",
-        "args": "-Mode Auto -TimeZone \"Argentina Standard Time\" -PeakStart 9 -PeakEnd 15",
+        "script": "src/adaptive-codex-windsurf-profile.ts",
+        "args": "--mode Auto --timezone \"America/Argentina/Buenos_Aires\" --peak-start 9 --peak-end 15",
         "required": false,
-        "description": "Intelligent temporary Codex/Windsurf optimization with automatic restore when normalized"
+        "description": "Intelligent temporary Codex/Windsurf optimization with automatic restore when normalized (TS)"
       },
       {
         "id": "lefthook-verify",
         "enabled": true,
-        "script": "scripts/utilities/lefthook-verify.ps1",
+        "script": "src/lefthook-verify.ts",
         "args": "",
         "required": false,
-        "description": "Verify Lefthook CLI + hooks are installed (post-commit/post-merge for CodeGraph auto-sync)"
+        "description": "Verify Lefthook CLI + hooks are installed (post-commit/post-merge for CodeGraph auto-sync) (TS)"
       },
       {
         "id": "codegraph-sync",
         "enabled": true,
-        "script": "scripts/utilities/codegraph/codegraph-sync-autostart.ps1",
+        "script": "src/codegraph-sync-autostart.ts",
         "args": "",
         "required": false,
-        "description": "Verify CodeGraph index freshness and sync if stale (\u003e30min old)"
+        "description": "Verify CodeGraph index freshness and sync if stale (>30min old) (TS)"
       },
       {
         "id": "metrics-collection",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/metrics/collector.ps1",
-        "args": "-Scope full -Quiet",
+        "script": "src/metrics-collector.ts",
+        "args": "--scope full --quiet",
         "required": false,
-        "description": "Auto-collect metrics after session start for live dashboard"
+        "description": "Auto-collect metrics after session start for live dashboard (TS)"
       },
       {
         "id": "dashboard-ws-start",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/dashboard/dashboard-ws-autostart.ps1",
-        "args": "-Quiet",
+        "script": "src/dashboard-ws-autostart.ts",
+        "args": "--quiet",
         "required": false,
-        "description": "Start React WebSocket metrics server with watchdog auto-recovery — serves LLM observability dashboard on port 8080/5173"
+        "description": "Start React WebSocket metrics server with watchdog auto-recovery — serves LLM observability dashboard on port 8080/5173 (TS)"
       },
       {
         "id": "post-autostart-summary",
         "enabled": true,
-        "script": "scripts/utilities/post-autostart-summary.ps1",
+        "script": "src/post-autostart-summary.ts",
         "args": "-TimeZone \"Argentina Standard Time\" -PeakStart 9 -PeakEnd 15 -Region \"Argentina\"",
         "required": false,
         "description": "Generate startup-summary.json with peak hour, session ID, workspace state"
@@ -237,16 +237,16 @@
         "id": "knowledge-base-init",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/knowledge-base/knowledge-base-autoinit.ps1",
-        "args": "-Quiet",
+        "script": "src/knowledge-base-init.ts",
+        "args": "--quiet",
         "required": false,
-        "description": "Initialize Knowledge Base vault, validate structure, and run full sync with Engram/documents"
+        "description": "Initialize Knowledge Base vault, validate structure, and run full sync with Engram/documents (TS)"
       },
       {
         "id": "skill-recommendation",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/agents/AUTO-DELEGATION/skill-recommender.ps1",
+        "script": "src/skill-recommender.ts",
         "args": "-Proactive -TopN 3",
         "required": false,
         "description": "Recomienda skills relevantes basado en el contexto actual del workspace (git branch, archivos modificados, commits recientes)"
@@ -254,32 +254,32 @@
       {
         "id": "skill-usage-scan",
         "enabled": true,
-        "script": "scripts/skills/usage-tracker.ps1",
+        "script": "src/skill-usage-tracker.ts",
         "args": "",
         "required": false,
-        "description": "Inicializa/escanea métricas de uso de skills al inicio de sesion"
+        "description": "Inicializa/escanea métricas de uso de skills al inicio de sesion (TS)"
       },
       {
         "id": "skill-nudge-check",
         "enabled": false,
-        "script": "scripts/skills/skill-nudge.ps1",
-        "args": "-Report",
+        "script": "src/skill-nudge.ts",
+        "args": "--report",
         "required": false,
-        "description": "Reporta nudges pendientes de skills al inicio (desactivado por defecto, corre al cerrar)"
+        "description": "Reporta nudges pendientes de skills al inicio (desactivado por defecto, corre al cerrar) (TS)"
       },
       {
         "id": "skill-size-check",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/skills/SKILL/check-skill-sizes.ps1",
-        "args": "-WarnOnly",
+        "script": "src/check-skill-sizes.ts",
+        "args": "--warn-only",
         "required": false,
-        "description": "Audita skills que exceden limites de tokens/lineas y recomienda split a references/"
+        "description": "Audita skills que exceden limites de tokens/lineas y recomienda split a references/ (TS)"
       },
       {
         "id": "post-autostart-consistency-check",
         "enabled": true,
-        "script": "scripts/utilities/post-autostart-summary.ps1",
+        "script": "src/post-autostart-summary.ts",
         "args": "",
         "required": false,
         "description": "Refresca startup-summary.json como ultimo paso para asegurar datos actuales post-pipeline"
@@ -288,48 +288,48 @@
         "id": "document-analysis-init",
         "enabled": true,
         "lazy": true,
-        "script": "skills/document-analysis-skill/invoke-document-analysis.ps1",
-        "args": "-Quiet",
+        "script": "src/document-analysis-init.ts",
+        "args": "--quiet",
         "required": false,
-        "description": "Inicializar Document Analysis Skill - sidecar Python + conectores Jira/Confluence para analisis de requerimientos"
+        "description": "Inicializar Document Analysis Skill - sidecar Python + conectores Jira/Confluence (TS)"
       },
       {
         "id": "token-notification-init",
         "enabled": true,
-        "script": "scripts/utilities/token-usage-notifier.ps1",
-        "args": "-Action status",
+        "script": "src/token-metrics-store.ts",
+        "args": "--action init --quiet",
         "required": false,
-        "description": "Inicializa sistema de notificaciones de tokens al inicio de sesion"
+        "description": "Inicializa sistema de notificaciones de tokens al inicio de sesion (TS)"
       },
       {
         "id": "json-validator-verify",
         "enabled": true,
-        "script": "scripts/utilities/config/JSON/json-validator.ps1",
-        "args": "-JsonString '{\"test\":\"ok\"}' -Context startup-verify",
+        "script": "src/json-validator.ts",
+        "args": "--json-string '{\"test\":\"ok\"}' --context startup-verify",
         "required": false,
-        "description": "Verifica que el validador JSON esta operativo al inicio de sesion"
+        "description": "Verifica que el validador JSON esta operativo al inicio de sesion (TS)"
       },
       {
         "id": "opencode-config-validate",
         "enabled": true,
-        "script": "scripts/utilities/CONFIG/validate-opencode-config.ps1",
-        "args": "-ConfigPath opencode.json",
+        "script": "src/validate-opencode-config.ts",
+        "args": "--config opencode.json",
         "required": false,
-        "description": "Valida que opencode.json no tenga props no reconocidas por OpenCode (previene crash al iniciar)"
+        "description": "Valida que opencode.json no tenga props no reconocidas por OpenCode (previene crash al iniciar) (TS)"
       },
       {
         "id": "validate-tool-configs",
         "enabled": true,
-        "script": "scripts/utilities/CONFIG/validate-tool-configs.ps1",
-        "args": "-Quiet",
+        "script": "src/validate-tool-configs.ts",
+        "args": "--quiet",
         "required": false,
-        "description": "Valida tool configs (.windsurf, .continue, .clinerules) contra schemas oficiales"
+        "description": "Valida tool configs (.windsurf, .continue, .clinerules) contra schemas oficiales (TS)"
       },
       {
         "id": "maintenance-watchtower",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/maintenance/maintenance-watchtower.ps1",
+        "script": "src/maintenance-watchtower.ts",
         "args": "-Action autoheal -Quiet",
         "required": false,
         "description": "Health check completo + auto-healing de componentes caídos al inicio de sesión. Corre en background (lazy)."
@@ -338,24 +338,24 @@
         "id": "digest-generator",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/reporting/DIGEST/digest-generator.ps1",
-        "args": "-Mode status -Show",
+        "script": "src/digest-generator.ts",
+        "args": "--mode status --show",
         "required": false,
-        "description": "Genera digest de inicio de sesion con health, feedback trends, proposals pendientes"
+        "description": "Genera digest de inicio de sesion con health, feedback trends, proposals pendientes (TS)"
       },
       {
         "id": "fine-tuning-data-collect",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/FINE-TUNING/ft-data-collector.ps1",
-        "args": "-Source all -Force",
+        "script": "src/fine-tuning-data-collector.ts",
+        "args": "--source all",
         "required": false,
-        "description": "Auto-colecta datos de sesiones, engram, skills para fine-tuning dataset"
+        "description": "Auto-colecta datos de sesiones, engram, skills para fine-tuning dataset (TS)"
       },
       {
         "id": "judgment-day-correction",
         "enabled": true,
-        "script": "scripts/adaptive/correction-rules-engine.ps1",
+        "script": "src/correction-rules-engine.ts",
         "args": "-Mode check -Quiet",
         "required": false,
         "lazy": true,
@@ -374,7 +374,7 @@
         "id": "cloud-connectors-metrics",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/telemetry/TELEMETRY-METRICS/token-budget-guard.ps1",
+        "script": "src/token-budget-guard.ts",
         "args": "-Task cloud-metrics -Risk low -Record -ActualPromptTokens 0 -ActualCompletionTokens 0",
         "required": false,
         "description": "Ship cloud connector metrics (executions, cost, latency) to dashboard metrics pipeline (Phase 1.2)"
@@ -383,7 +383,7 @@
         "id": "tracing-init",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/ops/TRACING/tracing-instrument.ps1",
+        "script": "src/tracing-instrument.ts",
         "args": "-Action start -SpanName session-start -ServiceName gentle-vanguard -Quiet",
         "required": false,
         "description": "Initialize distributed tracing span for this session — sends OTLP to collector (Phase 1.3)"
@@ -401,8 +401,8 @@
         "id": "audit-pipeline-init",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/security/audit-pipeline.ps1",
-        "args": "-Action log -EventType session.start -Component system -Operation autostart -Actor system -Status success -Message \u0027Session autostart pipeline initialized\u0027 -Quiet",
+        "script": "src/audit-pipeline.ts",
+        "args": "-Action log -EventType session.start -Component system -Operation autostart -Actor system -Status success -Message Session-autostart-pipeline-initialized -Quiet",
         "required": false,
         "description": "Log session start in the audit pipeline for SOC2/GDPR compliance (Phase 3)"
       },
@@ -410,7 +410,7 @@
         "id": "event-sourcing-init",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1",
+        "script": "src/event-sourcing.ts",
         "args": "-Action append -AggregateId session-autostart -EventType session.started -EventData \u0027{}\u0027 -Quiet",
         "required": false,
         "description": "Record session start event in append-only event store for traceability (Phase 5)"
@@ -419,7 +419,7 @@
         "id": "post-session-learning",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/post-autostart-summary.ps1",
+        "script": "src/post-autostart-summary.ts",
         "args": "-FinalReportMode",
         "required": false,
         "description": "Generate final session report + auto-learned patterns for next session"
@@ -427,40 +427,42 @@
       {
         "id": "cost-tracker-init",
         "enabled": true,
-        "script": "scripts/utilities/telemetry/TELEMETRY-METRICS/cost-tracker.ps1",
-        "args": "-Action status -Quiet",
+        "script": "src/cost-tracker.ts",
+        "args": "--action status --quiet",
         "required": false,
-        "description": "Initialize cost tracking and show daily budget status at session start"
+        "description": "Initialize cost tracking and show daily budget status at session start (TS)"
       },
       {
         "id": "planning-estimator-verify",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/planning/planning-estimator.ps1",
-        "args": "-Action report -TaskType feature -Complexity 1 -FilesChanged 1 -LinesChanged 10 -Quiet",
+        "script": "src/planning-estimator.ts",
+        "args": "--action report --task-type feature --complexity 1 --files-changed 1 --lines-changed 10 --quiet",
         "required": false,
-        "description": "Verify planning estimator is operational at session start"
+        "description": "Verify planning estimator is operational at session start (TS)"
       },
       {
         "id": "engram-auto-compact",
-        "script": "scripts/utilities/memory/ENGRAM/engram-auto-compact.ps1",
-        "args": "-Quiet -RetentionDays 90",
-        "lazy": true,
         "enabled": true,
-        "description": "Auto-compact old engram observations (>90 days)"
+        "lazy": true,
+        "script": "src/engram-auto-compact.ts",
+        "args": "--quiet",
+        "required": false,
+        "description": "Auto-compact old engram observations (>90 days) (TS)"
       },
       {
         "id": "ml-embeddings-incremental",
-        "script": "scripts/utilities/agents/AUTO-DELEGATION/skill-embedder-incremental.ps1",
-        "args": "-Quiet",
-        "lazy": true,
         "enabled": true,
-        "description": "Incrementally update skill embeddings on session start"
+        "lazy": true,
+        "script": "src/skill-embedder-incremental.ts",
+        "args": "--quiet",
+        "required": false,
+        "description": "Incrementally update skill embeddings on session start (TS)"
       },
       {
         "id": "maintenance-auto-prune",
         "script": "src/checkpoint-manager.ts",
-        "args": "list",
+        "args": "prune",
         "lazy": true,
         "enabled": true,
         "required": false,
@@ -469,47 +471,176 @@
       {
         "id": "tenant-context",
         "enabled": true,
-        "script": "scripts/utilities/TENANT/tenant-context.ps1",
-        "args": "-Action get",
         "lazy": true,
+        "script": "src/tenant-context.ts",
+        "args": "--action get",
         "required": false,
-        "description": "Resolve tenant context (multi-tenant isolation v5.1)"
+        "description": "Resolve tenant context (multi-tenant isolation v5.1) (TS)"
       },
       {
         "id": "eval-quality-gate",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/EVAL/eval-runner.ps1",
-        "args": "-Suite codegraph-search -Export",
+        "script": "src/eval-quality-gate.ts",
+        "args": "--suite codegraph-search --export",
         "required": false,
-        "description": "Run eval quality gates on core skills (v5.1)"
+        "description": "Run eval quality gates on core skills (v5.1) (TS)"
       },
       {
         "id": "self-heal-status",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/CI/ci-rollback-engine.ps1",
-        "args": "-Action status",
+        "script": "src/ci-rollback-engine.ts",
+        "args": "--action status",
         "required": false,
-        "description": "Check CI/CD self-healing status (v5.1)"
+        "description": "Check CI/CD self-healing status (v5.1) (TS)"
       },
       {
         "id": "auto-code-review",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/EVOLVE/auto-code-review.ps1",
-        "args": "-Action pre-commit",
+        "script": "src/auto-code-review.ts",
+        "args": "--action pre-commit",
         "required": false,
-        "description": "Autonomous code review on staged files (v6.0)"
+        "description": "Autonomous code review on staged files (v6.0) (TS)"
       },
       {
         "id": "mcp-gateway-init",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/MCP/mcp-gateway.ps1",
+        "script": "src/mcp-gateway.ts",
         "args": "-Action start -Quiet",
         "required": false,
         "description": "Start MCP Native gateway at session start (v6.4)"
+      },
+      {
+        "id": "db-health-check",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/recovery/db-health-check.ts",
+        "args": "",
+        "required": false,
+        "description": "Validate SQLite database integrity (CodeGraph + Engram) on session start — auto-repairs WAL/REINDEX issues"
+      },
+      {
+        "id": "self-reflection",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/self-reflection-loop.ts",
+        "args": "--quiet",
+        "required": false,
+        "phase": 99,
+        "description": "Self-reflection loop — analyze patterns, generate insights, suggest improvements (meta-cognitive)"
+      },
+      {
+        "id": "knowledge-synthesizer",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/knowledge-synthesizer.ts",
+        "args": "--quiet",
+        "required": false,
+        "phase": 99,
+        "description": "Knowledge Synthesizer — cross-session knowledge distillation, concept mapping, trend and gap analysis"
+      },
+      {
+        "id": "adaptive-router",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/adaptive-router.ts",
+        "args": "--build --quiet",
+        "required": false,
+        "phase": 99,
+        "description": "Adaptive Router Dinámico — dynamic routing from historical performance data"
+      },
+      {
+        "id": "predictive-governor",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/predictive-governor.ts",
+        "args": "--quiet",
+        "required": false,
+        "phase": 99,
+        "description": "Predictive Resource Governor — anticipate load, prewarm resources, adjust budgets"
+      },
+      {
+        "id": "root-cause-correlator",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/root-cause-correlator.ts",
+        "args": "--quiet",
+        "required": false,
+        "phase": 99,
+        "description": "Root-Cause Correlator — cross-component failure correlation and cascade detection"
+      },
+      {
+        "id": "skill-evolution-engine",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/skill-evolution-engine.ts",
+        "args": "--quiet",
+        "required": false,
+        "phase": 99,
+        "description": "Skill & Agent Evolution Engine — analyze usage, detect gaps, suggest refinements, deprecate unused"
+      },
+      {
+        "id": "convergence-monitor",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/convergence-monitor.ts",
+        "args": "--quiet",
+        "required": false,
+        "phase": 99,
+        "description": "Convergence Monitor — tracks if the stack is converging, oscillating, or diverging (stage #7)"
+      },
+      {
+        "id": "findings-ledger-init",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/findings-ledger.ts",
+        "args": "--report --quiet",
+        "required": false,
+        "phase": 99,
+        "description": "Findings Ledger — structured lifecycle for review findings (stage #8 trust layer)"
+      },
+      {
+        "id": "compact-state-init",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/compact-state.ts",
+        "args": "--gc --quiet",
+        "required": false,
+        "phase": 99,
+        "description": "Compact State Machine — formal state machine for review transactions with CAS (stage #8 trust layer)"
+      },
+      {
+        "id": "review-lenses-init",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/review-lenses.ts",
+        "args": "--risk medium --target src --quiet",
+        "required": false,
+        "phase": 99,
+        "description": "Review Lenses — 4-lens review with risk-signal selection (stage #8 trust layer)"
+      },
+      {
+        "id": "result-gatekeeper-verify",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/result-gatekeeper.ts",
+        "args": "--verify all --quiet",
+        "required": false,
+        "phase": 99,
+        "description": "Result Gatekeeper — contract validation between pipeline phases (stage #8 trust layer)"
+      },
+      {
+        "id": "publication-gates-prune",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/publication-gates.ts",
+        "args": "--prune --quiet",
+        "required": false,
+        "phase": 99,
+        "description": "Publication Gates — TOCTOU and stale-approval prevention (stage #8 trust layer)"
       }
     ],
     "onStepFailure": "continue",

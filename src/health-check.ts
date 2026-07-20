@@ -2,7 +2,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { execSync, spawnSync } from 'child_process';
+import { spawnSync } from 'child_process';
 import * as net from 'net';
 
 const ROOT = process.cwd();
@@ -92,8 +92,8 @@ function checkMCP() {
       }
     }
     writeCheck('MCP tools/list responds', toolsCount > 0, `${toolsCount} tools`);
-  } catch (e: any) {
-    writeCheck('MCP tools/list responds', false, e.message);
+  } catch (e: unknown) {
+    writeCheck('MCP tools/list responds', false, e instanceof Error ? e.message : String(e));
   }
 }
 
@@ -122,13 +122,13 @@ function checkSessionRef() {
   header('Session Reference System');
   writeCheck(
     'Session Ref script exists',
-    exists('scripts/utilities/SESSION/session-reference-system.ps1'),
+    exists('scripts/utilities/session/session-reference-system.ps1'),
   );
 }
 
 function checkSkillFactory() {
   header('Skill Factory');
-  writeCheck('Skill Factory exists', exists('scripts/utilities/SKILL-FACTORY/skill-factory.ps1'));
+  writeCheck('Skill Factory exists', exists('scripts/utilities/skill-factory/skill-factory.ps1'));
   writeCheck('Skill registry exists', exists('.atl', 'skill-registry.md'));
   const regPath = path.resolve(ROOT, '.atl/skill-registry.md');
   if (fs.existsSync(regPath)) {
@@ -159,10 +159,9 @@ function checkPnpm() {
   writeCheck('pnpm-lock.yaml exists', exists('pnpm-lock.yaml'));
   writeCheck('pnpm security normativa exists', exists('rules/NORMATIVA-PNPM-SECURITY.md'));
   try {
-    const v = execSync('pnpm --version', { cwd: ROOT, stdio: 'pipe', timeout: 10000 })
-      .toString()
-      .trim();
-    writeCheck('pnpm installed', true, `v${v}`);
+    const r = spawnSync('pnpm', ['--version'], { cwd: ROOT, stdio: 'pipe', timeout: 10000 });
+    const v = (r.stdout?.toString() ?? '').trim();
+    writeCheck('pnpm installed', r.status === 0, `v${v}`);
   } catch {
     writeCheck('pnpm installed', false);
   }
@@ -225,8 +224,8 @@ function checkGateGuard() {
     } else {
       writeCheck('GateGuard responds', false, 'No JSON response found');
     }
-  } catch (e: any) {
-    writeCheck('GateGuard responds', false, e.message);
+  } catch (e: unknown) {
+    writeCheck('GateGuard responds', false, e instanceof Error ? e.message : String(e));
   }
 }
 
@@ -235,13 +234,13 @@ function checkMlEmbeddings() {
   writeCheck('ml-index.json exists', exists('.atl', 'ml-index.json'), '.atl/ml-index.json');
   writeCheck(
     'skill-embedder.ps1 exists',
-    exists('scripts/ml', 'skill-embedder.ps1'),
-    'scripts/ml/skill-embedder.ps1',
+    exists('scripts/utilities/agents/AUTO-DELEGATION/skill-embedder.ps1'),
+    'scripts/utilities/agents/AUTO-DELEGATION/skill-embedder.ps1',
   );
   writeCheck(
     'ml-router.ps1 exists',
-    exists('scripts/ml', 'ml-router.ps1'),
-    'scripts/ml/ml-router.ps1',
+    exists('scripts/utilities/agents/AUTO-DELEGATION/ml-router.ps1'),
+    'scripts/utilities/agents/AUTO-DELEGATION/ml-router.ps1',
   );
   const mlIndex = path.resolve(ROOT, '.atl/ml-index.json');
   if (fs.existsSync(mlIndex)) {
@@ -262,14 +261,15 @@ async function checkEngramRag() {
   header('Engram RAG Index');
   writeCheck(
     'engram-rag-reindex.ps1 exists',
-    exists('scripts/utilities/ENGRAM-RAG/engram-rag-reindex.ps1'),
+    exists('scripts/utilities/memory/ENGRAM-RAG/engram-rag-reindex.ps1'),
   );
   try {
-    const output = execSync('engram doctor --json', {
+    const r = spawnSync('engram', ['doctor', '--json'], {
       cwd: ROOT,
       stdio: 'pipe',
       timeout: 15000,
-    }).toString();
+    });
+    const output = (r.stdout?.toString() ?? '') + (r.stderr?.toString() ?? '');
     const healthy = output.includes('"status":"ok"') || output.includes('"ok"');
     writeCheck('engram doctor', healthy);
   } catch {
@@ -279,23 +279,18 @@ async function checkEngramRag() {
 
 async function checkDashboardV3() {
   header('Dashboard v3');
-  writeCheck('server.js exists', exists('dashboard', 'server.js'));
-  writeCheck('index.html exists', exists('dashboard', 'index.html'));
-  const portOpen = await tcpCheck(3000);
-  writeCheck('dashboard server (port 3000)', portOpen);
+  const dashboardDir = path.resolve(ROOT, 'apps/web-dashboard');
+  writeCheck('apps/web-dashboard exists', fs.existsSync(dashboardDir));
+  const portOpen = await tcpCheck(5173);
+  writeCheck('dashboard dev server (port 5173)', portOpen);
 }
 
 function checkMcpBridge() {
   header('MCP Bridge');
   writeCheck(
     'mcp-bridge.ps1 exists',
-    exists('scripts/utilities/MCP-BRIDGE/mcp-bridge.ps1'),
-    'scripts/utilities/MCP-BRIDGE/mcp-bridge.ps1',
-  );
-  writeCheck(
-    'tms-mcp-bridge.ps1 exists',
-    exists('scripts/tms-mcp-bridge.ps1'),
-    'scripts/tms-mcp-bridge.ps1',
+    exists('scripts/mcp-bridge/mcp-bridge.ps1'),
+    'scripts/mcp-bridge/mcp-bridge.ps1',
   );
   const configs = ['config/skill-mcp.json', 'config/mcp-bridge.json'];
   const found = configs.filter((c) => exists(c)).length;
@@ -317,8 +312,8 @@ function checkCostTracking() {
       'routingPolicy section present',
       config.routingPolicy?.fastCheapToStrongReasoning !== undefined,
     );
-  } catch (e: any) {
-    writeCheck('costTracking section present', false, e.message);
+  } catch (e: unknown) {
+    writeCheck('costTracking section present', false, e instanceof Error ? e.message : String(e));
     writeCheck('routingPolicy section present', false);
   }
 }

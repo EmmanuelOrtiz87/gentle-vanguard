@@ -1,5 +1,15 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { Search, BookOpen, Activity, MessageSquare, Camera, Braces, ChevronDown, ChevronUp, RefreshCw } from 'lucide-react';
+import {
+  Search,
+  BookOpen,
+  Activity,
+  MessageSquare,
+  Camera,
+  Braces,
+  ChevronDown,
+  ChevronUp,
+  RefreshCw,
+} from 'lucide-react';
 
 interface KnowledgeResult {
   source: string;
@@ -11,11 +21,31 @@ interface KnowledgeResult {
 }
 
 const SOURCE_CONFIG: Record<string, { icon: typeof BookOpen; label: string; color: string }> = {
-  events: { icon: Activity, label: 'Events', color: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400' },
-  traces: { icon: Activity, label: 'Traces', color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' },
-  feedback: { icon: MessageSquare, label: 'Feedback', color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' },
-  checkpoints: { icon: Camera, label: 'Checkpoints', color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' },
-  engram: { icon: Braces, label: 'Engram', color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' },
+  events: {
+    icon: Activity,
+    label: 'Events',
+    color: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400',
+  },
+  traces: {
+    icon: Activity,
+    label: 'Traces',
+    color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
+  },
+  feedback: {
+    icon: MessageSquare,
+    label: 'Feedback',
+    color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+  },
+  checkpoints: {
+    icon: Camera,
+    label: 'Checkpoints',
+    color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
+  },
+  engram: {
+    icon: Braces,
+    label: 'Engram',
+    color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+  },
 };
 
 function KnowledgePanelInner() {
@@ -35,24 +65,29 @@ function KnowledgePanelInner() {
     });
   };
 
-  const search = useCallback(async (q?: string, srcs?: string[]) => {
-    const searchQuery = q ?? query;
-    const searchSources = srcs ?? sources;
-    if (!searchQuery.trim()) return;
-    setLoading(true);
-    setSearched(true);
-    try {
-      const res = await fetch(`/api/knowledge?q=${encodeURIComponent(searchQuery)}&sources=${searchSources.join(',')}&limit=20`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const msg = await res.json();
-      setResults(msg.data?.results || []);
-      setPollError(false);
-    } catch {
-      setResults([]);
-      setPollError(true);
-    }
-    setLoading(false);
-  }, [query, sources]);
+  const search = useCallback(
+    async (q?: string, srcs?: string[]) => {
+      const searchQuery = q ?? query;
+      const searchSources = srcs ?? sources;
+      if (!searchQuery.trim()) return;
+      setLoading(true);
+      setSearched(true);
+      try {
+        const res = await fetch(
+          `/api/knowledge?q=${encodeURIComponent(searchQuery)}&sources=${searchSources.join(',')}&limit=20`,
+        );
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const msg = await res.json();
+        setResults(msg.data?.results || []);
+        setPollError(false);
+      } catch {
+        setResults([]);
+        setPollError(true);
+      }
+      setLoading(false);
+    },
+    [query, sources],
+  );
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && e.ctrlKey) void search();
@@ -83,7 +118,10 @@ function KnowledgePanelInner() {
           </p>
         </div>
         {searched && (
-          <button onClick={() => void search()} className="flex items-center gap-1.5 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+          <button
+            onClick={() => void search()}
+            className="flex items-center gap-1.5 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} /> Refresh
           </button>
         )}
@@ -139,7 +177,9 @@ function KnowledgePanelInner() {
         ) : pollError ? (
           <div className="p-8 text-center">
             <div className="text-red-500 mb-2">Failed to reach knowledge API</div>
-            <button onClick={() => void search()} className="text-sm text-blue-600 hover:underline">Retry</button>
+            <button onClick={() => void search()} className="text-sm text-blue-600 hover:underline">
+              Retry
+            </button>
           </div>
         ) : !searched ? (
           <div className="p-8 text-center text-gray-500">
@@ -164,10 +204,14 @@ function KnowledgePanelInner() {
                 <div key={key} className="p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${colorClass}`}>
+                      <span
+                        className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${colorClass}`}
+                      >
                         {r.source.toUpperCase()}
                       </span>
-                      <span className="font-medium text-gray-900 dark:text-white text-sm">{r.title}</span>
+                      <span className="font-medium text-gray-900 dark:text-white text-sm">
+                        {r.title}
+                      </span>
                       <span className="text-xs text-gray-400">{r.timestamp}</span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -179,11 +223,17 @@ function KnowledgePanelInner() {
                         onClick={() => setExpanded(isExpanded ? null : key)}
                         className="text-gray-400 hover:text-gray-600"
                       >
-                        {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                        {isExpanded ? (
+                          <ChevronUp className="w-4 h-4" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4" />
+                        )}
                       </button>
                     </div>
                   </div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">{r.content}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
+                    {r.content}
+                  </p>
                   {isExpanded && (
                     <pre className="mt-2 p-2 bg-gray-50 dark:bg-gray-900 rounded text-xs text-gray-600 dark:text-gray-400 overflow-x-auto whitespace-pre-wrap max-h-64 overflow-y-auto">
                       {JSON.stringify(r, null, 2)}

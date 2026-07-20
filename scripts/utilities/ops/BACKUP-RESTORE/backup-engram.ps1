@@ -39,7 +39,9 @@ param(
 $ErrorActionPreference = "Continue"
 $root = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)))
 $engramDir = Join-Path $root ".engram-data"
-$integrityScript = Join-Path $root "scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1"
+$integrityScriptTs = Join-Path $root "src/engram-integrity-check.ts"
+$integrityScriptPs1 = Join-Path $root "scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1"
+$integrityScript = if (Test-Path $integrityScriptTs) { $integrityScriptTs } else { $integrityScriptPs1 }
 $backupLogFile = Join-Path $root "logs/engram-backup.log"
 
 if (-not $OutputDir) { $OutputDir = Join-Path $root ".backups/engram" }
@@ -126,10 +128,18 @@ function Invoke-Backup {
     $icChecksumPath = Join-Path $root ".engram/checksums.sha256"
     if (-not (Test-Path $icChecksumPath)) {
       Write-Step "Generating initial SHA256 checksums..." "INFO"
-      & $integrityScript -Mode checksums -Quiet 2>&1 | Out-Null
+      if ($integrityScript -like '*.ts') {
+        & npx tsx $integrityScript -Mode checksums -Quiet 2>&1 | Out-Null
+      } else {
+        & $integrityScript -Mode checksums -Quiet 2>&1 | Out-Null
+      }
     }
     Write-Step "Pre-backup integrity check..." "INFO"
-    $icResult = & $integrityScript -Mode check -Quiet 2>&1
+    if ($integrityScript -like '*.ts') {
+      $icResult = & npx tsx $integrityScript -Mode check -Quiet 2>&1
+    } else {
+      $icResult = & $integrityScript -Mode check -Quiet 2>&1
+    }
     $icOk = $LASTEXITCODE -eq 0
     if (-not $icOk) {
       Write-Step "Integrity check FAILED  --  run repair first: $integrityScript -Mode repair" "ERR"

@@ -14,8 +14,18 @@ import {
   validateSkillStructure,
   getSkillContent,
 } from './marketplace-api.js';
-import { getRealMetrics, getTraces, getOSMetrics, getCloudMetrics, getTenantScopedMetrics } from './real-data.js';
-import { mcpServersHandler, mcpServerActionHandler, mcpServerRegisterHandler } from './mcp-gateway-api.js';
+import {
+  getRealMetrics,
+  getTraces,
+  getOSMetrics,
+  getCloudMetrics,
+  getTenantScopedMetrics,
+} from './real-data.js';
+import {
+  mcpServersHandler,
+  mcpServerActionHandler,
+  mcpServerRegisterHandler,
+} from './mcp-gateway-api.js';
 import { meshHandler, meshDiscoverHandler, meshSyncHandler } from './mesh-api.js';
 import { runValidations } from './validations.js';
 import { ROOT, readJson, countSkills } from './shared.js';
@@ -30,7 +40,9 @@ const SESSIONS_HISTORY_PATH = join(ROOT, '.event-bus', 'sessions-history.json');
 
 const PORT = parseInt(process.env.WS_PORT || '8080', 10);
 const server = createServer(handleRequest);
+server.on('error', (err: Error) => console.error('[WS-ERROR] HTTP server:', err.message));
 const wss = new WebSocketServer({ server });
+wss.on('error', (err: Error) => console.error('[WS-ERROR] WS server:', err.message));
 
 const clients = new Set<WebSocket>();
 const agentSubscriptions = new Map<string, Set<WebSocket>>();
@@ -75,6 +87,7 @@ function loadSessions(): void {
     const content = readFileSync(SESSIONS_HISTORY_PATH, 'utf-8');
     const list: AgentSession[] = JSON.parse(content);
     for (const s of list) {
+      if (!s.messages) s.messages = [];
       if (!sessions.has(s.id)) sessions.set(s.id, s);
     }
     console.log(`[HISTORY] Loaded ${list.length} sessions from disk`);
@@ -337,545 +350,522 @@ async function executeSkillAndStream(
 
 // --- HTTP Handlers ---
 
-function handleRequest(req: IncomingMessage, res: ServerResponse) {
-  const url = new URL(req.url || '/', `http://${req.headers.host}`);
-  const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
-
-  if (req.method === 'OPTIONS') {
-    res.writeHead(204, { ...headers, 'Access-Control-Allow-Methods': 'GET, OPTIONS' });
-    res.end();
-    return;
-  }
-
-  if (url.pathname === '/api/metrics') {
-    const tenantId = typeof url.searchParams.get('tenantId') === 'string'
-      ? url.searchParams.get('tenantId')!
-      : undefined;
-    res.writeHead(200, headers);
-    res.end(JSON.stringify({ type: 'metrics', data: generateMetrics(tenantId) }));
-    return;
-  }
-
-  if (url.pathname === '/api/tenants') {
-    res.writeHead(200, headers);
-    res.end(JSON.stringify(readTenantRegistry()));
-    return;
-  }
-
-  if (url.pathname === '/api/mcp/metrics') {
-    res.writeHead(200, headers);
-    res.end(
-      JSON.stringify({
-        type: 'mcp',
-        data: { skills: countSkills(REGISTRY_PATH), calls: loadStats() },
-      }),
-    );
-    return;
-  }
-
-  if (url.pathname === '/api/mcp/servers' && req.method === 'POST') {
-    mcpServerRegisterHandler(req, res, headers);
-    return;
-  }
-
-  if (url.pathname === '/api/mcp/servers') {
-    mcpServersHandler(req, res, headers);
-    return;
-  }
-
-  if (url.pathname.match(/^\/api\/mcp\/servers\/([^/]+)\/(start|stop)$/)) {
-    mcpServerActionHandler(req, res, headers);
-    return;
-  }
-
-  if (url.pathname === '/api/health') {
-    const adaptiveNormsPath = join(ROOT, 'rules', 'adaptive', 'norms-registry.json');
-    const adaptiveNorms = existsSync(adaptiveNormsPath)
-      ? JSON.parse(readFileSync(adaptiveNormsPath, 'utf-8')).stats
-      : null;
-    const metricsReportPath = join(ROOT, '.session', 'metrics-report.json');
-    const sessionMetrics = existsSync(metricsReportPath)
-      ? JSON.parse(readFileSync(metricsReportPath, 'utf-8')).summary
-      : null;
-    const logAggregatePath = join(ROOT, '.session', 'logs', 'aggregate.json');
-    const logAggregate = existsSync(logAggregatePath)
-      ? JSON.parse(readFileSync(logAggregatePath, 'utf-8'))
-      : null;
-    const cloudMetricsFile = join(ROOT, '.session', 'cloud-metrics.json');
-    const cloudMetrics = existsSync(cloudMetricsFile)
-      ? JSON.parse(readFileSync(cloudMetricsFile, 'utf-8'))
-      : null;
-    const checkpointDir = join(ROOT, '.session', 'checkpoints');
-    const checkpointCount = existsSync(checkpointDir)
-      ? readdirSync(checkpointDir).filter((d) => !d.includes('.')).length
-      : 0;
-    const auditDir = join(ROOT, '.session', 'audit', 'logs');
-    const auditFileCount = existsSync(auditDir)
-      ? readdirSync(auditDir).filter((f) => f.endsWith('.jsonl')).length
-      : 0;
-    const telemetryDir = join(ROOT, '.telemetry', 'traces');
-    const traceFileCount = existsSync(telemetryDir)
-      ? readdirSync(telemetryDir).filter((f) => f.endsWith('.jsonl')).length
-      : 0;
-
-    res.writeHead(200, headers);
-    res.end(
-      JSON.stringify({
-        status: 'ok',
-        version: '3.3.1',
-        uptime: process.uptime(),
-        connections: clients.size,
-        components: {
-          websocket: { status: 'ok', clients: clients.size },
-          mcp: { status: bridgeReady ? 'ok' : 'degraded', tools: bridgeToolCount },
-          adaptive: {
-            status: adaptiveNorms ? 'ok' : 'unknown',
-            normsLoaded: adaptiveNorms?.totalNorms || 0,
-            sessionScore: sessionMetrics?.quality_score || 0,
-            logEntries: logAggregate?.totals?.totalEntries || 0,
-            logErrorRate: logAggregate?.totals?.errorRate || 0,
-            logComponents: logAggregate?.componentCount || 0,
-          },
-          cloud: {
-            status: cloudMetrics && cloudMetrics.executions?.length > 0 ? 'ok' : 'unknown',
-            executions: cloudMetrics?.executions?.length || 0,
-            totalCost:
-              cloudMetrics?.executions?.reduce((s: number, e: any) => s + (e.cost || 0), 0) || 0,
-          },
-          tracing: {
-            status: traceFileCount > 0 ? 'ok' : 'unknown',
-            traceFiles: traceFileCount,
-          },
-          checkpoints: {
-            status: checkpointCount > 0 ? 'ok' : 'unknown',
-            total: checkpointCount,
-          },
-          audit: {
-            status: auditFileCount > 0 ? 'ok' : 'unknown',
-            logFiles: auditFileCount,
-          },
-        },
-        timestamp: new Date().toISOString(),
-      }),
-    );
-    return;
-  }
-
-  if (url.pathname === '/api/traces') {
-    res.writeHead(200, headers);
-    res.end(JSON.stringify(getTraces()));
-    return;
-  }
-
-  if (url.pathname === '/api/feedback' && req.method === 'POST') {
-    let body = '';
-    req.on('data', (chunk) => {
-      body += chunk;
-    });
-    req.on('end', () => {
-      try {
-        const { traceId, spanId, type } = JSON.parse(body);
-        if (!traceId || !spanId || !type) {
-          res.writeHead(400, headers);
-          res.end(JSON.stringify({ error: 'traceId, spanId, type required' }));
-          return;
-        }
-        const dir = dirname(FEEDBACK_PATH);
-        if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
-        const existing = readJson<{
-          thumbsUp: number;
-          thumbsDown: number;
-          entries: Record<string, string>;
-        }>(FEEDBACK_PATH) || { thumbsUp: 0, thumbsDown: 0, entries: {} };
-        existing.entries[spanId] = type;
-        if (type === 'up') existing.thumbsUp++;
-        else existing.thumbsDown++;
-        writeFileSync(FEEDBACK_PATH, JSON.stringify(existing, null, 2));
-        res.writeHead(200, headers);
-        res.end(
-          JSON.stringify({
-            ok: true,
-            score: (existing.thumbsUp / (existing.thumbsUp + existing.thumbsDown)) * 100,
-          }),
-        );
-      } catch {
-        res.writeHead(400, headers);
-        res.end(JSON.stringify({ error: 'Invalid JSON' }));
-      }
-    });
-    return;
-  }
-
-  if (url.pathname === '/api/alerts') {
-    let alerts: Record<string, unknown>[] = [];
-    try {
-      if (existsSync(ALERTS_CONFIG_PATH)) {
-        const config = JSON.parse(readFileSync(ALERTS_CONFIG_PATH, 'utf-8'));
-        const metrics = generateMetrics();
-        alerts = Object.entries(config.rules || {}).map(([name, rule]: [string, any]) => {
-          const actual = rule.metric
-            .split('.')
-            .reduce((obj: any, key: string) => obj?.[key], metrics as any);
-          const below = rule.direction === 'below';
-          const triggered =
-            typeof actual === 'number' &&
-            typeof rule.threshold === 'number' &&
-            (below ? actual <= rule.threshold : actual >= rule.threshold);
-          return {
-            name,
-            rule: rule.label || name,
-            actual: actual ?? 0,
-            threshold: rule.threshold,
-            severity: rule.severity || 'info',
-            triggered,
-            unit: rule.unit || '',
-          };
-        });
-      }
-    } catch {
-      /* best-effort */
-    }
-    res.writeHead(200, headers);
-    res.end(JSON.stringify({ alerts }));
-    return;
-  }
-
-  if (url.pathname === '/api/health/global') {
-    res.writeHead(200, headers);
-    res.end(JSON.stringify(getGlobalHealth()));
-    return;
-  }
-
-  if (url.pathname === '/api/safety') {
-    const safetyAuditDir = join(ROOT, '.session', 'safety', 'audit');
-    const guardrailLogs = existsSync(safetyAuditDir) ? readdirSync(safetyAuditDir).filter(f => f.startsWith('guardrail-')) : [];
-    const scorerLogs = existsSync(safetyAuditDir) ? readdirSync(safetyAuditDir).filter(f => f.startsWith('scorer-')) : [];
-    const injectionLogs = existsSync(safetyAuditDir) ? readdirSync(safetyAuditDir).filter(f => f.startsWith('injection-')) : [];
-
-    let totalBlocked = 0;
-    let totalAllowed = 0;
-    for (const log of guardrailLogs.slice(-20)) {
-      try {
-        const data = JSON.parse(readFileSync(join(safetyAuditDir, log), 'utf-8'));
-        if (data.allowed === false) totalBlocked++;
-        else totalAllowed++;
-      } catch {}
-    }
-
-    let lastScored: any = null;
-    if (scorerLogs.length > 0) {
-      try {
-        lastScored = JSON.parse(readFileSync(join(safetyAuditDir, scorerLogs[scorerLogs.length - 1]), 'utf-8'));
-      } catch {}
-    }
-
-    const safetyConfigPath = join(ROOT, 'config', 'safety-layer.json');
-    const config = existsSync(safetyConfigPath) ? JSON.parse(readFileSync(safetyConfigPath, 'utf-8')) : null;
-
-    res.writeHead(200, headers);
-    res.end(JSON.stringify({
-      type: 'safety',
-      data: {
-        enabled: config?.global?.enabled ?? false,
-        guardrailChecks: guardrailLogs.length,
-        scorerEvals: scorerLogs.length,
-        injectionScans: injectionLogs.length,
-        mutationsBlocked: totalBlocked,
-        mutationsAllowed: totalAllowed,
-        lastRiskScore: lastScored?.score ?? null,
-        lastRiskLevel: lastScored?.riskLevel ?? null,
-        constitutionalRules: config?.guardrails?.constitutional?.length ?? 0,
-        blockedPatterns: config?.guardrails?.blockedPatterns?.length ?? 0,
-        injectionPatterns: config?.injectionProtection?.knownPatterns?.length ?? 0,
-      }
-    }));
-    return;
-  }
-
-  if (url.pathname === '/api/federation') {
-    const fedRegistryPath = join(ROOT, '.session', 'federation', 'org-registry.json');
-    const fedConfigPath = join(ROOT, 'config', 'federation-config.json');
-    const fedConfig = existsSync(fedConfigPath) ? JSON.parse(readFileSync(fedConfigPath, 'utf-8')) : null;
-    const registry = existsSync(fedRegistryPath) ? JSON.parse(readFileSync(fedRegistryPath, 'utf-8')) : null;
-
-    const knownOrgs = registry?.knownOrgs ?? [];
-    const trustedOrgs = knownOrgs.filter((o: any) => o.trusted === true);
-    const handshakePending = knownOrgs.filter((o: any) => o.lastHandshake === null || o.lastHandshake === undefined);
-
-    res.writeHead(200, headers);
-    res.end(JSON.stringify({
-      type: 'federation',
-      data: {
-        localOrg: fedConfig?.localOrg?.id ?? 'unknown',
-        displayName: fedConfig?.localOrg?.displayName ?? '',
-        knownOrgCount: knownOrgs.length,
-        trustedOrgCount: trustedOrgs.length,
-        handshakePendingCount: handshakePending.length,
-        requireSignedManifests: fedConfig?.auth?.requireSignedManifests ?? true,
-        tokenExpiryMinutes: fedConfig?.auth?.tokenExpiryMinutes ?? 60,
-        defaultMeshPort: fedConfig?.localOrg?.defaultMeshPort ?? 9091,
-        orgs: knownOrgs.map((o: any) => ({
-          id: o.id,
-          trusted: o.trusted ?? false,
-          lastHandshake: o.lastHandshake ?? 'never',
-          approvedCapabilities: o.approvedCapabilities ?? [],
-        })),
-      }
-    }));
-    return;
-  }
-
-  if (url.pathname === '/api/mesh') {
-    meshHandler(req, res, headers);
-    return;
-  }
-
-  if (url.pathname === '/api/mesh/discover' && req.method === 'POST') {
-    meshDiscoverHandler(req, res, headers);
-    return;
-  }
-
-  if (url.pathname === '/api/mesh/sync' && req.method === 'POST') {
-    meshSyncHandler(req, res, headers);
-    return;
-  }
-
-  if (url.pathname === '/api/cloud/metrics') {
-    res.writeHead(200, headers);
-    res.end(JSON.stringify({ type: 'cloud', data: getCloudMetrics() }));
-    return;
-  }
-
-  if (url.pathname === '/api/agent/tools') {
-    const bridge = getBridge();
-    res.writeHead(200, headers);
-    res.end(JSON.stringify({ tools: bridge.tools, connected: bridge.connected }));
-    return;
-  }
-
-  if (url.pathname === '/api/agent/sessions') {
-    const list = Array.from(sessions.values()).map((s) => ({
-      id: s.id,
-      agent: s.agent,
-      status: s.status,
-      messageCount: s.messages.length,
-      updatedAt: s.updatedAt,
-    }));
-    res.writeHead(200, headers);
-    res.end(JSON.stringify({ sessions: list }));
-    return;
-  }
-
-  if (url.pathname === '/api/state/events') {
-    res.writeHead(200, headers);
-    try {
-      const historyPath = join(ROOT, '.event-bus', 'history.json');
-      if (existsSync(historyPath)) {
-        const history = JSON.parse(readFileSync(historyPath, 'utf-8'));
-        res.end(JSON.stringify({ events: history.events || [] }));
-      } else {
-        res.end(JSON.stringify({ events: [] }));
-      }
-    } catch {
-      res.end(JSON.stringify({ events: [] }));
-    }
-    return;
-  }
-
-  if (url.pathname === '/api/state/tasks') {
-    res.writeHead(200, headers);
-    const bridge = getStateBridge();
-    res.end(JSON.stringify({ tasks: bridge.tasks }));
-    return;
-  }
-
-  if (url.pathname === '/api/state/emit' && req.method === 'POST') {
-    let body = '';
-    req.on('data', (chunk) => {
-      body += chunk;
-    });
-    req.on('end', () => {
-      try {
-        const { event, payload } = JSON.parse(body);
-        if (event) {
-          getStateBridge().emitEvent(event, payload || {});
-          res.writeHead(200, headers);
-          res.end(JSON.stringify({ ok: true }));
-        } else {
-          res.writeHead(400, headers);
-          res.end(JSON.stringify({ error: 'event field required' }));
-        }
-      } catch {
-        res.writeHead(400, headers);
-        res.end(JSON.stringify({ error: 'Invalid JSON' }));
-      }
-    });
-    return;
-  }
-
-  if (url.pathname.startsWith('/api/agent/session/')) {
-    const sessionId = url.pathname.split('/').pop();
-    const session = sessionId ? sessions.get(sessionId) : undefined;
-    if (!session) {
-      res.writeHead(404, headers);
-      res.end(JSON.stringify({ error: 'Session not found' }));
-      return;
-    }
-    res.writeHead(200, headers);
-    res.end(JSON.stringify({ session }));
-    return;
-  }
-
-  // --- Marketplace Routes ---
-
-  if (url.pathname === '/api/marketplace' && req.method === 'GET') {
-    const listings = getListings();
-    res.writeHead(200, headers);
-    res.end(JSON.stringify({ success: true, data: listings, total: listings.length }));
-    return;
-  }
-
-  if (url.pathname === '/api/marketplace' && req.method === 'POST') {
-    let body = '';
-    req.on('data', (chunk) => {
-      body += chunk;
-    });
-    req.on('end', () => {
-      try {
-        const payload = JSON.parse(body);
-        const missingFields: string[] = [];
-        if (!payload.name) missingFields.push('name');
-        if (!payload.description) missingFields.push('description');
-        if (!payload.author) missingFields.push('author');
-        if (!payload.skillContent) missingFields.push('skillContent');
-
-        if (missingFields.length > 0) {
-          res.writeHead(400, headers);
-          res.end(
-            JSON.stringify({
-              success: false,
-              error: `Missing required fields: ${missingFields.join(', ')}`,
-            }),
-          );
-          return;
-        }
-
-        const validation = validateSkillStructure(payload.skillContent);
-        if (!validation.valid) {
-          res.writeHead(400, headers);
-          res.end(
-            JSON.stringify({
-              success: false,
-              error: 'Skill structure validation failed',
-              details: validation.errors,
-            }),
-          );
-          return;
-        }
-
-        const listing = createListing({
-          name: payload.name,
-          description: payload.description,
-          author: payload.author,
-          version: payload.version,
-          tags: payload.tags,
-          triggers: payload.triggers,
-          agentType: payload.agentType,
-          skillContent: payload.skillContent,
-        });
-        res.writeHead(201, headers);
-        res.end(
-          JSON.stringify({
-            success: true,
-            data: listing,
-            message: `Skill '${payload.name}' created successfully`,
-          }),
-        );
-      } catch (err) {
-        const message = err instanceof Error ? err.message : 'Failed to create listing';
-        const status = message.includes('already exists') ? 409 : 500;
-        res.writeHead(status, headers);
-        res.end(JSON.stringify({ success: false, error: message }));
-      }
-    });
-    return;
-  }
-
-  if (url.pathname === '/api/marketplace/validate/structure' && req.method === 'POST') {
-    let body = '';
-    req.on('data', (chunk) => {
-      body += chunk;
-    });
-    req.on('end', () => {
-      try {
-        const { skillContent } = JSON.parse(body);
-        if (!skillContent) {
-          res.writeHead(400, headers);
-          res.end(
-            JSON.stringify({ success: false, error: 'Missing required field: skillContent' }),
-          );
-          return;
-        }
-        const result = validateSkillStructure(skillContent);
-        res.writeHead(200, headers);
-        res.end(JSON.stringify({ success: true, data: result }));
-      } catch {
-        res.writeHead(400, headers);
-        res.end(JSON.stringify({ success: false, error: 'Invalid JSON' }));
-      }
-    });
-    return;
-  }
-
-  // Match /api/marketplace/:id/review and /api/marketplace/:id/download
-  const marketplaceMatch = url.pathname.match(
-    /^\/api\/marketplace\/([^/]+)(?:\/(review|download))?$/,
+process.on('uncaughtException', (err) => {
+  console.error('[WS-ERROR] Uncaught exception:', err.message);
+});
+process.on('unhandledRejection', (err: unknown) => {
+  console.error(
+    '[WS-ERROR] Unhandled rejection:',
+    err instanceof Error ? err.message : String(err),
   );
-  if (marketplaceMatch) {
-    const listingId = marketplaceMatch[1];
-    const action = marketplaceMatch[2];
+});
 
-    if (!action && req.method === 'GET') {
-      const listing = getListing(listingId);
-      if (!listing) {
-        res.writeHead(404, headers);
-        res.end(JSON.stringify({ success: false, error: 'Listing not found' }));
-        return;
-      }
-      const content = listing.skillPath ? getSkillContent(listing.skillPath) : null;
-      res.writeHead(200, headers);
-      res.end(JSON.stringify({ success: true, data: { ...listing, content } }));
+function handleRequest(req: IncomingMessage, res: ServerResponse) {
+  const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+  try {
+    const url = new URL(req.url || '/', `http://${req.headers.host}`);
+
+    if (req.method === 'OPTIONS') {
+      res.writeHead(204, { ...headers, 'Access-Control-Allow-Methods': 'GET, OPTIONS' });
+      res.end();
       return;
     }
 
-    if (action === 'review' && req.method === 'POST') {
+    if (url.pathname === '/api/metrics') {
+      const tenantIdParam = url.searchParams.get('tenantId');
+      const tenantId = typeof tenantIdParam === 'string' ? tenantIdParam : undefined;
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ type: 'metrics', data: generateMetrics(tenantId) }));
+      return;
+    }
+
+    if (url.pathname === '/api/tenants') {
+      res.writeHead(200, headers);
+      res.end(JSON.stringify(readTenantRegistry()));
+      return;
+    }
+
+    if (url.pathname === '/api/mcp/metrics') {
+      res.writeHead(200, headers);
+      res.end(
+        JSON.stringify({
+          type: 'mcp',
+          data: { skills: countSkills(REGISTRY_PATH), calls: loadStats() },
+        }),
+      );
+      return;
+    }
+
+    if (url.pathname === '/api/mcp/servers' && req.method === 'POST') {
+      mcpServerRegisterHandler(req, res, headers);
+      return;
+    }
+
+    if (url.pathname === '/api/mcp/servers') {
+      mcpServersHandler(req, res, headers);
+      return;
+    }
+
+    if (url.pathname.match(/^\/api\/mcp\/servers\/([^/]+)\/(start|stop)$/)) {
+      mcpServerActionHandler(req, res, headers);
+      return;
+    }
+
+    if (url.pathname === '/api/health') {
+      const adaptiveNormsPath = join(ROOT, 'rules', 'adaptive', 'norms-registry.json');
+      const adaptiveNorms = existsSync(adaptiveNormsPath)
+        ? JSON.parse(readFileSync(adaptiveNormsPath, 'utf-8')).stats
+        : null;
+      const metricsReportPath = join(ROOT, '.session', 'metrics-report.json');
+      const sessionMetrics = existsSync(metricsReportPath)
+        ? JSON.parse(readFileSync(metricsReportPath, 'utf-8')).summary
+        : null;
+      const logAggregatePath = join(ROOT, '.session', 'logs', 'aggregate.json');
+      const logAggregate = existsSync(logAggregatePath)
+        ? JSON.parse(readFileSync(logAggregatePath, 'utf-8'))
+        : null;
+      const cloudMetricsFile = join(ROOT, '.session', 'cloud-metrics.json');
+      const cloudMetrics = existsSync(cloudMetricsFile)
+        ? JSON.parse(readFileSync(cloudMetricsFile, 'utf-8'))
+        : null;
+      const checkpointDir = join(ROOT, '.session', 'checkpoints');
+      const checkpointCount = existsSync(checkpointDir)
+        ? readdirSync(checkpointDir).filter((d) => !d.includes('.')).length
+        : 0;
+      const auditDir = join(ROOT, '.session', 'audit', 'logs');
+      const auditFileCount = existsSync(auditDir)
+        ? readdirSync(auditDir).filter((f) => f.endsWith('.jsonl')).length
+        : 0;
+      const telemetryDir = join(ROOT, '.telemetry', 'traces');
+      const traceFileCount = existsSync(telemetryDir)
+        ? readdirSync(telemetryDir).filter((f) => f.endsWith('.jsonl')).length
+        : 0;
+
+      res.writeHead(200, headers);
+      res.end(
+        JSON.stringify({
+          status: 'ok',
+          version: '3.3.1',
+          uptime: process.uptime(),
+          connections: clients.size,
+          components: {
+            websocket: { status: 'ok', clients: clients.size },
+            mcp: { status: bridgeReady ? 'ok' : 'degraded', tools: bridgeToolCount },
+            adaptive: {
+              status: adaptiveNorms ? 'ok' : 'unknown',
+              normsLoaded: adaptiveNorms?.totalNorms || 0,
+              sessionScore: sessionMetrics?.quality_score || 0,
+              logEntries: logAggregate?.totals?.totalEntries || 0,
+              logErrorRate: logAggregate?.totals?.errorRate || 0,
+              logComponents: logAggregate?.componentCount || 0,
+            },
+            cloud: {
+              status: cloudMetrics && cloudMetrics.executions?.length > 0 ? 'ok' : 'unknown',
+              executions: cloudMetrics?.executions?.length || 0,
+              totalCost:
+                cloudMetrics?.executions?.reduce((s: number, e: any) => s + (e.cost || 0), 0) || 0,
+            },
+            tracing: {
+              status: traceFileCount > 0 ? 'ok' : 'unknown',
+              traceFiles: traceFileCount,
+            },
+            checkpoints: {
+              status: checkpointCount > 0 ? 'ok' : 'unknown',
+              total: checkpointCount,
+            },
+            audit: {
+              status: auditFileCount > 0 ? 'ok' : 'unknown',
+              logFiles: auditFileCount,
+            },
+          },
+          timestamp: new Date().toISOString(),
+        }),
+      );
+      return;
+    }
+
+    if (url.pathname === '/api/traces') {
+      res.writeHead(200, headers);
+      res.end(JSON.stringify(getTraces()));
+      return;
+    }
+
+    if (url.pathname === '/api/feedback' && req.method === 'POST') {
       let body = '';
       req.on('data', (chunk) => {
         body += chunk;
       });
       req.on('end', () => {
         try {
-          const { user, rating, comment } = JSON.parse(body);
-          if (!user || rating === null || !comment) {
+          const { traceId, spanId, type } = JSON.parse(body);
+          if (!traceId || !spanId || !type) {
+            res.writeHead(400, headers);
+            res.end(JSON.stringify({ error: 'traceId, spanId, type required' }));
+            return;
+          }
+          const dir = dirname(FEEDBACK_PATH);
+          if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+          const existing = readJson<{
+            thumbsUp: number;
+            thumbsDown: number;
+            entries: Record<string, string>;
+          }>(FEEDBACK_PATH) || { thumbsUp: 0, thumbsDown: 0, entries: {} };
+          existing.entries[spanId] = type;
+          if (type === 'up') existing.thumbsUp++;
+          else existing.thumbsDown++;
+          writeFileSync(FEEDBACK_PATH, JSON.stringify(existing, null, 2));
+          res.writeHead(200, headers);
+          res.end(
+            JSON.stringify({
+              ok: true,
+              score: (existing.thumbsUp / (existing.thumbsUp + existing.thumbsDown)) * 100,
+            }),
+          );
+        } catch {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ error: 'Invalid JSON' }));
+        }
+      });
+      return;
+    }
+
+    if (url.pathname === '/api/alerts') {
+      let alerts: Record<string, unknown>[] = [];
+      try {
+        if (existsSync(ALERTS_CONFIG_PATH)) {
+          const config = JSON.parse(readFileSync(ALERTS_CONFIG_PATH, 'utf-8'));
+          const metrics = generateMetrics();
+          alerts = Object.entries(config.rules || {}).map(([name, rule]: [string, any]) => {
+            const actual = rule.metric
+              .split('.')
+              .reduce((obj: any, key: string) => obj?.[key], metrics as any);
+            const below = rule.direction === 'below';
+            const triggered =
+              typeof actual === 'number' &&
+              typeof rule.threshold === 'number' &&
+              (below ? actual <= rule.threshold : actual >= rule.threshold);
+            return {
+              name,
+              rule: rule.label || name,
+              actual: actual ?? 0,
+              threshold: rule.threshold,
+              severity: rule.severity || 'info',
+              triggered,
+              unit: rule.unit || '',
+            };
+          });
+        }
+      } catch {
+        /* best-effort */
+      }
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ alerts }));
+      return;
+    }
+
+    if (url.pathname === '/api/health/global') {
+      res.writeHead(200, headers);
+      res.end(JSON.stringify(getGlobalHealth()));
+      return;
+    }
+
+    if (url.pathname === '/api/safety') {
+      const safetyAuditDir = join(ROOT, '.session', 'safety', 'audit');
+      const guardrailLogs = existsSync(safetyAuditDir)
+        ? readdirSync(safetyAuditDir).filter((f) => f.startsWith('guardrail-'))
+        : [];
+      const scorerLogs = existsSync(safetyAuditDir)
+        ? readdirSync(safetyAuditDir).filter((f) => f.startsWith('scorer-'))
+        : [];
+      const injectionLogs = existsSync(safetyAuditDir)
+        ? readdirSync(safetyAuditDir).filter((f) => f.startsWith('injection-'))
+        : [];
+
+      let totalBlocked = 0;
+      let totalAllowed = 0;
+      for (const log of guardrailLogs.slice(-20)) {
+        try {
+          const data = JSON.parse(readFileSync(join(safetyAuditDir, log), 'utf-8'));
+          if (data.allowed === false) totalBlocked++;
+          else totalAllowed++;
+        } catch {
+          /* ignore parse errors */
+        }
+      }
+
+      let lastScored: any = null;
+      if (scorerLogs.length > 0) {
+        try {
+          lastScored = JSON.parse(
+            readFileSync(join(safetyAuditDir, scorerLogs[scorerLogs.length - 1]), 'utf-8'),
+          );
+        } catch {
+          /* ignore parse errors */
+        }
+      }
+
+      const safetyConfigPath = join(ROOT, 'config', 'safety-layer.json');
+      const config = existsSync(safetyConfigPath)
+        ? JSON.parse(readFileSync(safetyConfigPath, 'utf-8'))
+        : null;
+
+      res.writeHead(200, headers);
+      res.end(
+        JSON.stringify({
+          type: 'safety',
+          data: {
+            enabled: config?.global?.enabled ?? false,
+            guardrailChecks: guardrailLogs.length,
+            scorerEvals: scorerLogs.length,
+            injectionScans: injectionLogs.length,
+            mutationsBlocked: totalBlocked,
+            mutationsAllowed: totalAllowed,
+            lastRiskScore: lastScored?.score ?? null,
+            lastRiskLevel: lastScored?.riskLevel ?? null,
+            constitutionalRules: config?.guardrails?.constitutional?.length ?? 0,
+            blockedPatterns: config?.guardrails?.blockedPatterns?.length ?? 0,
+            injectionPatterns: config?.injectionProtection?.knownPatterns?.length ?? 0,
+          },
+        }),
+      );
+      return;
+    }
+
+    if (url.pathname === '/api/federation') {
+      const fedRegistryPath = join(ROOT, '.session', 'federation', 'org-registry.json');
+      const fedConfigPath = join(ROOT, 'config', 'federation-config.json');
+      const fedConfig = existsSync(fedConfigPath)
+        ? JSON.parse(readFileSync(fedConfigPath, 'utf-8'))
+        : null;
+      const registry = existsSync(fedRegistryPath)
+        ? JSON.parse(readFileSync(fedRegistryPath, 'utf-8'))
+        : null;
+
+      const knownOrgs = registry?.knownOrgs ?? [];
+      const trustedOrgs = knownOrgs.filter((o: any) => o.trusted === true);
+      const handshakePending = knownOrgs.filter(
+        (o: any) => o.lastHandshake === null || o.lastHandshake === undefined,
+      );
+
+      res.writeHead(200, headers);
+      res.end(
+        JSON.stringify({
+          type: 'federation',
+          data: {
+            localOrg: fedConfig?.localOrg?.id ?? 'unknown',
+            displayName: fedConfig?.localOrg?.displayName ?? '',
+            knownOrgCount: knownOrgs.length,
+            trustedOrgCount: trustedOrgs.length,
+            handshakePendingCount: handshakePending.length,
+            requireSignedManifests: fedConfig?.auth?.requireSignedManifests ?? true,
+            tokenExpiryMinutes: fedConfig?.auth?.tokenExpiryMinutes ?? 60,
+            defaultMeshPort: fedConfig?.localOrg?.defaultMeshPort ?? 9091,
+            orgs: knownOrgs.map((o: any) => ({
+              id: o.id,
+              trusted: o.trusted ?? false,
+              lastHandshake: o.lastHandshake ?? 'never',
+              approvedCapabilities: o.approvedCapabilities ?? [],
+            })),
+          },
+        }),
+      );
+      return;
+    }
+
+    if (url.pathname === '/api/mesh') {
+      meshHandler(req, res, headers);
+      return;
+    }
+
+    if (url.pathname === '/api/mesh/discover' && req.method === 'POST') {
+      meshDiscoverHandler(req, res, headers);
+      return;
+    }
+
+    if (url.pathname === '/api/mesh/sync' && req.method === 'POST') {
+      meshSyncHandler(req, res, headers);
+      return;
+    }
+
+    if (url.pathname === '/api/cloud/metrics') {
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ type: 'cloud', data: getCloudMetrics() }));
+      return;
+    }
+
+    if (url.pathname === '/api/agent/tools') {
+      const bridge = getBridge();
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ tools: bridge.tools, connected: bridge.connected }));
+      return;
+    }
+
+    if (url.pathname === '/api/agent/sessions') {
+      const list = Array.from(sessions.values()).map((s) => ({
+        id: s.id,
+        agent: s.agent,
+        status: s.status,
+        messageCount: s.messages?.length ?? 0,
+        updatedAt: s.updatedAt,
+      }));
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ sessions: list }));
+      return;
+    }
+
+    if (url.pathname === '/api/state/events') {
+      res.writeHead(200, headers);
+      try {
+        const historyPath = join(ROOT, '.event-bus', 'history.json');
+        if (existsSync(historyPath)) {
+          const history = JSON.parse(readFileSync(historyPath, 'utf-8'));
+          res.end(JSON.stringify({ events: history.events || [] }));
+        } else {
+          res.end(JSON.stringify({ events: [] }));
+        }
+      } catch {
+        res.end(JSON.stringify({ events: [] }));
+      }
+      return;
+    }
+
+    if (url.pathname === '/api/state/tasks') {
+      res.writeHead(200, headers);
+      const bridge = getStateBridge();
+      res.end(JSON.stringify({ tasks: bridge.tasks }));
+      return;
+    }
+
+    if (url.pathname === '/api/state/emit' && req.method === 'POST') {
+      let body = '';
+      req.on('data', (chunk) => {
+        body += chunk;
+      });
+      req.on('end', () => {
+        try {
+          const { event, payload } = JSON.parse(body);
+          if (event) {
+            getStateBridge().emitEvent(event, payload || {});
+            res.writeHead(200, headers);
+            res.end(JSON.stringify({ ok: true }));
+          } else {
+            res.writeHead(400, headers);
+            res.end(JSON.stringify({ error: 'event field required' }));
+          }
+        } catch {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ error: 'Invalid JSON' }));
+        }
+      });
+      return;
+    }
+
+    if (url.pathname.startsWith('/api/agent/session/')) {
+      const sessionId = url.pathname.split('/').pop();
+      const session = sessionId ? sessions.get(sessionId) : undefined;
+      if (!session) {
+        res.writeHead(404, headers);
+        res.end(JSON.stringify({ error: 'Session not found' }));
+        return;
+      }
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ session }));
+      return;
+    }
+
+    // --- Marketplace Routes ---
+
+    if (url.pathname === '/api/marketplace' && req.method === 'GET') {
+      const listings = getListings();
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ success: true, data: listings, total: listings.length }));
+      return;
+    }
+
+    if (url.pathname === '/api/marketplace' && req.method === 'POST') {
+      let body = '';
+      req.on('data', (chunk) => {
+        body += chunk;
+      });
+      req.on('end', () => {
+        try {
+          const payload = JSON.parse(body);
+          const missingFields: string[] = [];
+          if (!payload.name) missingFields.push('name');
+          if (!payload.description) missingFields.push('description');
+          if (!payload.author) missingFields.push('author');
+          if (!payload.skillContent) missingFields.push('skillContent');
+
+          if (missingFields.length > 0) {
             res.writeHead(400, headers);
             res.end(
               JSON.stringify({
                 success: false,
-                error: 'Missing required fields: user, rating, comment',
+                error: `Missing required fields: ${missingFields.join(', ')}`,
               }),
             );
             return;
           }
-          if (typeof rating !== 'number' || rating < 1 || rating > 5) {
+
+          const validation = validateSkillStructure(payload.skillContent);
+          if (!validation.valid) {
             res.writeHead(400, headers);
             res.end(
-              JSON.stringify({ success: false, error: 'Rating must be a number between 1 and 5' }),
+              JSON.stringify({
+                success: false,
+                error: 'Skill structure validation failed',
+                details: validation.errors,
+              }),
             );
             return;
           }
-          const review = addReview(listingId, { user, rating, comment });
+
+          const listing = createListing({
+            name: payload.name,
+            description: payload.description,
+            author: payload.author,
+            version: payload.version,
+            tags: payload.tags,
+            triggers: payload.triggers,
+            agentType: payload.agentType,
+            skillContent: payload.skillContent,
+          });
           res.writeHead(201, headers);
-          res.end(JSON.stringify({ success: true, data: review }));
+          res.end(
+            JSON.stringify({
+              success: true,
+              data: listing,
+              message: `Skill '${payload.name}' created successfully`,
+            }),
+          );
+        } catch (err) {
+          const message = err instanceof Error ? err.message : 'Failed to create listing';
+          const status = message.includes('already exists') ? 409 : 500;
+          res.writeHead(status, headers);
+          res.end(JSON.stringify({ success: false, error: message }));
+        }
+      });
+      return;
+    }
+
+    if (url.pathname === '/api/marketplace/validate/structure' && req.method === 'POST') {
+      let body = '';
+      req.on('data', (chunk) => {
+        body += chunk;
+      });
+      req.on('end', () => {
+        try {
+          const { skillContent } = JSON.parse(body);
+          if (!skillContent) {
+            res.writeHead(400, headers);
+            res.end(
+              JSON.stringify({ success: false, error: 'Missing required field: skillContent' }),
+            );
+            return;
+          }
+          const result = validateSkillStructure(skillContent);
+          res.writeHead(200, headers);
+          res.end(JSON.stringify({ success: true, data: result }));
         } catch {
           res.writeHead(400, headers);
           res.end(JSON.stringify({ success: false, error: 'Invalid JSON' }));
@@ -884,20 +874,90 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
       return;
     }
 
-    if (action === 'download' && req.method === 'POST') {
-      const downloads = incrementDownloads(listingId);
-      res.writeHead(200, headers);
-      res.end(JSON.stringify({ success: true, data: { id: listingId, downloads } }));
+    // Match /api/marketplace/:id/review and /api/marketplace/:id/download
+    const marketplaceMatch = url.pathname.match(
+      /^\/api\/marketplace\/([^/]+)(?:\/(review|download))?$/,
+    );
+    if (marketplaceMatch) {
+      const listingId = marketplaceMatch[1];
+      const action = marketplaceMatch[2];
+
+      if (!action && req.method === 'GET') {
+        const listing = getListing(listingId);
+        if (!listing) {
+          res.writeHead(404, headers);
+          res.end(JSON.stringify({ success: false, error: 'Listing not found' }));
+          return;
+        }
+        const content = listing.skillPath ? getSkillContent(listing.skillPath) : null;
+        res.writeHead(200, headers);
+        res.end(JSON.stringify({ success: true, data: { ...listing, content } }));
+        return;
+      }
+
+      if (action === 'review' && req.method === 'POST') {
+        let body = '';
+        req.on('data', (chunk) => {
+          body += chunk;
+        });
+        req.on('end', () => {
+          try {
+            const { user, rating, comment } = JSON.parse(body);
+            if (!user || rating === null || !comment) {
+              res.writeHead(400, headers);
+              res.end(
+                JSON.stringify({
+                  success: false,
+                  error: 'Missing required fields: user, rating, comment',
+                }),
+              );
+              return;
+            }
+            if (typeof rating !== 'number' || rating < 1 || rating > 5) {
+              res.writeHead(400, headers);
+              res.end(
+                JSON.stringify({
+                  success: false,
+                  error: 'Rating must be a number between 1 and 5',
+                }),
+              );
+              return;
+            }
+            const review = addReview(listingId, { user, rating, comment });
+            res.writeHead(201, headers);
+            res.end(JSON.stringify({ success: true, data: review }));
+          } catch {
+            res.writeHead(400, headers);
+            res.end(JSON.stringify({ success: false, error: 'Invalid JSON' }));
+          }
+        });
+        return;
+      }
+
+      if (action === 'download' && req.method === 'POST') {
+        const downloads = incrementDownloads(listingId);
+        res.writeHead(200, headers);
+        res.end(JSON.stringify({ success: true, data: { id: listingId, downloads } }));
+        return;
+      }
+
+      res.writeHead(404, headers);
+      res.end(JSON.stringify({ success: false, error: 'Route not found' }));
       return;
     }
 
     res.writeHead(404, headers);
-    res.end(JSON.stringify({ success: false, error: 'Route not found' }));
-    return;
+    res.end(JSON.stringify({ error: 'Not found' }));
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error('[WS-ERROR] handleRequest failed:', msg);
+    try {
+      res.writeHead(500, headers);
+      res.end(JSON.stringify({ error: 'Internal server error' }));
+    } catch {
+      /* ignore write errors after crash */
+    }
   }
-
-  res.writeHead(404, headers);
-  res.end(JSON.stringify({ error: 'Not found' }));
 }
 
 // --- WebSocket ---
@@ -964,12 +1024,25 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
 });
 
 let prevMetrics: Record<string, unknown> | null = null;
-let prevAlertState = new Map<string, boolean>();
+const prevAlertState = new Map<string, boolean>();
 
 function broadcastValidations(): void {
-  const validations = runValidations(bridgeReady, bridgeToolCount, clients.size);
-  const msg = JSON.stringify({ type: 'validations', data: validations });
-  clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(msg));
+  try {
+    const validations = runValidations(bridgeReady, bridgeToolCount, clients.size);
+    const msg = JSON.stringify({ type: 'validations', data: validations });
+    clients.forEach((c) => {
+      try {
+        if (c.readyState === WebSocket.OPEN) c.send(msg);
+      } catch {
+        /* ignore send errors */
+      }
+    });
+  } catch (err) {
+    console.error(
+      '[WS-VALIDATIONS] broadcast error:',
+      err instanceof Error ? err.message : String(err),
+    );
+  }
 }
 
 function evaluateAlerts(metrics: any): Array<{

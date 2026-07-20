@@ -58,7 +58,7 @@ function Get-DefaultGuardConfig {
             './scripts/utilities/gv.ps1 context-pack "<objective>"',
             './scripts/utilities/gv.ps1 compact-start "<objective>"',
             './scripts/utilities/gv.ps1 end-session "<task>" -SkipReview -SkipTests -Force',
-            './scripts/utilities/run-engram.ps1 --help'
+            'npx tsx src/session-autostart.ts'
         )
     }
 }
@@ -152,9 +152,10 @@ function Get-EngramStatus {
         return @{ available = $true; source = $engramCmd.Source }
     }
 
-    $launcher = Join-Path $repoRoot 'scripts\utilities\run-engram.ps1'
-    if (Test-Path $launcher) {
-        return @{ available = $false; source = $launcher }
+    # Check for engram binary in common locations
+    $engramBin = Join-Path $env:USERPROFILE 'bin\engram.exe'
+    if (Test-Path $engramBin) {
+        return @{ available = $true; source = $engramBin }
     }
 
     return @{ available = $false; source = '' }
@@ -208,7 +209,7 @@ if ($engramRequiredIssue -and $status -eq 'PASS') {
 $alternatives = @($guardConfig.fallback_actions)
 if (-not $engram.available) {
     $alternatives += './scripts/utilities/gv.ps1 install-engram'
-    $alternatives += './scripts/utilities/run-engram.ps1 --help'
+    $alternatives += 'npx tsx src/session-autostart.ts'
 }
 
 if ($Mode -eq 'check' -or $Record) {

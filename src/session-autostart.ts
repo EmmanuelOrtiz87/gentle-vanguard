@@ -24,8 +24,14 @@ const ROOT = resolve(process.cwd());
 const CONFIG_PATH = join(ROOT, 'config', 'session-autostart.config.json');
 
 function loadConfig(): PipelineConfig {
-  const raw = readFileSync(CONFIG_PATH, 'utf-8');
-  return JSON.parse(raw);
+  try {
+    const raw = readFileSync(CONFIG_PATH, 'utf-8');
+    return JSON.parse(raw);
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error(`[SESSION-AUTOSTART] Failed to load config: ${msg}`);
+    return { pipeline: { steps: [] } };
+  }
 }
 
 function executeStep(step: PipelineStep): Promise<{ success: boolean; error?: string }> {
@@ -38,15 +44,22 @@ function executeStep(step: PipelineStep): Promise<{ success: boolean; error?: st
   return new Promise((resolvePromise) => {
     let child;
 
+    const spawnOptions: import('child_process').SpawnOptions = {
+      cwd: ROOT,
+      stdio: 'inherit',
+      shell: true,
+      windowsHide: true,
+    };
+
     if (scriptPath.endsWith('.ps1')) {
       const cmd = `pwsh -NoProfile -File "${scriptPath}" ${step.args || ''}`;
-      child = spawn(cmd, [], { cwd: ROOT, stdio: 'inherit', shell: true });
+      child = spawn(cmd, [], spawnOptions);
     } else if (scriptPath.endsWith('.ts')) {
       const cmd = `npx tsx "${scriptPath}" ${step.args || ''}`;
-      child = spawn(cmd, [], { cwd: ROOT, stdio: 'inherit', shell: true });
+      child = spawn(cmd, [], spawnOptions);
     } else {
       const cmd = `"${scriptPath}" ${step.args || ''}`;
-      child = spawn(cmd, [], { cwd: ROOT, stdio: 'inherit', shell: true });
+      child = spawn(cmd, [], spawnOptions);
     }
 
     child.on('close', (code) => {
@@ -93,7 +106,7 @@ async function main() {
   for (const step of steps) {
     const phase = step.phase ?? 1;
     if (!phaseMap.has(phase)) phaseMap.set(phase, []);
-    phaseMap.get(phase)!.push(step);
+    phaseMap.get(phase)?.push(step);
   }
 
   const sortedPhases = [...phaseMap.entries()].sort(([a], [b]) => a - b);

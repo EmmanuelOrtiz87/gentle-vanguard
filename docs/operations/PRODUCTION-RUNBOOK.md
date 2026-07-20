@@ -1,7 +1,6 @@
 # Gentle-Vanguard Production Runbook
 
-**Version:** 4.0.0  
-**Last Updated:** 2026-06-19
+**Version:** 4.0. **Last Updated:** 2026-06-19
 
 ## Architecture Overview
 
@@ -111,25 +110,25 @@ scripts/utilities/dashboard/dashboard-start.ps1
 
 ```powershell
 # System health
-pwsh scripts/maintenance/maintenance-watchtower.ps1 -Action health
+npx tsx src/maintenance-watchtower.ts --action health
 
 # Session quality
-pwsh scripts/adaptive/session-scoring.ps1 -Action report
+npx tsx src/session-scoring.ts -Action report
 
 # Cloud metrics
 Get-Content .session/cloud-metrics.json | ConvertFrom-Json | Select-Object -ExpandProperty stats
 
 # Audit trail
-pwsh scripts/security/audit-pipeline.ps1 -Action query -EventType correction -LastHour
+npx tsx src/audit-pipeline.ts -Action query -EventType correction -LastHour
 
 # Checkpoint list
-pwsh scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1 -Action list
+npx tsx src/checkpoint-manager.ts list
 
 # Auto-correction rules
-pwsh scripts/adaptive/correction-rules-engine.ps1 -Mode report
+npx tsx src/correction-rules-engine.ts -Mode report
 
 # Tracing export
-pwsh scripts/utilities/ops/TRACING/tracing-instrument.ps1 -Action export
+npx tsx src/tracing-instrument.ts -Action export
 ```
 
 ## Troubleshooting

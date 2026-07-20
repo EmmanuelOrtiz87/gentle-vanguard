@@ -11,12 +11,11 @@ metadata:
 
 ## Overview
 
-Based on Daniel Kahneman, Dan Lovallo, and Olivier Sibony's research, this skill provides a
-systematic checklist to identify cognitive biases that distort decisions. Awareness of biases alone
-doesn't prevent them—structured checklists and processes do.
+Based on Kahneman, Lovallo & Sibony's research, this skill provides a systematic
+checklist to identify cognitive biases that distort decisions.
 
-**Core Principle:** Your brain is systematically wrong in predictable ways. Use checklists to catch
-errors your intuition will miss.
+**Core Principle:** Your brain is systematically wrong in predictable ways. Use
+checklists to catch errors your intuition will miss.
 
 ## When to Use
 
@@ -29,13 +28,10 @@ errors your intuition will miss.
 
 ## System 1 vs System 2
 
-| System 1 (Fast)       | System 2 (Slow)       |
-| --------------------- | --------------------- |
-| Automatic, effortless | Deliberate, effortful |
-| Emotional, intuitive  | Analytical, logical   |
-| Pattern-matching      | Rule-following        |
-| Prone to biases       | Can catch biases      |
-| Default mode          | Requires activation   |
+| System 1 (Fast) | System 2 (Slow) |
+|---|---|
+| Automatic, intuitive | Deliberate, analytical |
+| Prone to biases | Can catch biases |
 
 **Goal:** Activate System 2 for important decisions using structured processes.
 
@@ -45,176 +41,45 @@ Before approving any significant recommendation, evaluate:
 
 ### Self-Interest Biases
 
-**1. Is there self-interest at play?**
-
-- Does the recommender benefit from this decision?
-- Would they recommend the same if incentives were different?
-- Are there conflicts of interest?
-
-**2. Is there emotional attachment (affect heuristic)?**
-
-- Has the team fallen in love with the proposal?
-- Are they dismissing concerns too quickly?
-- Is criticism being taken personally?
+1. Is there self-interest at play?
+2. Is there emotional attachment (affect heuristic)?
 
 ### Group Dynamics
 
-**3. Has dissenting opinion been suppressed (groupthink)?**
-
-- Were alternative views genuinely explored?
-- Is there pressure to conform?
-- Has a devil's advocate been assigned?
-
-**4. Is there appropriate diversity of opinion?**
-
-- Did independent thinkers contribute?
-- Were estimates made independently before discussion?
-- Has anyone with a different perspective reviewed this?
+3. Has dissenting opinion been suppressed (groupthink)?
+4. Is there appropriate diversity of opinion?
 
 ### Pattern Recognition Errors
 
-**5. Are we over-relying on a single analogy (saliency bias)?**
-
-- Is there one "this is just like X" dominating thinking?
-- Have we sought disconfirming analogies?
-- Are we cherry-picking the comparison?
-
-**6. Are we anchored on an initial number?**
-
-- Where did the first estimate come from?
-- Would a different starting point change the conclusion?
-- Have we re-estimated from scratch?
+5. Are we over-relying on a single analogy (saliency bias)?
+6. Are we anchored on an initial number?
 
 ### Confirmation Bias
 
-**7. Were credible alternatives seriously considered?**
-
-- Did we explore at least 2-3 real alternatives?
-- Were alternatives given fair evaluation?
-- Or were they strawmen to justify the preferred option?
-
-**8. Are we seeking confirming evidence only?**
-
-- What evidence would disprove this thesis?
-- Have we actively looked for disconfirming data?
-- Are we explaining away contradictory evidence?
+7. Were credible alternatives seriously considered?
+8. Are we seeking confirming evidence only?
 
 ### Planning Fallacies
 
-**9. Is the base case realistic?**
-
-- Is this more optimistic than similar past projects?
-- What's the base rate of success for similar efforts?
-- Have we adjusted for "this time is different" thinking?
-
-**10. Is the worst case bad enough?**
-
-- Does worst case assume only one thing goes wrong?
-- What if multiple risks materialize simultaneously?
-- Have we considered tail risks?
-
-**11. Are we discounting sunk costs appropriately?**
-
-- Would we make this decision if starting fresh?
-- Are we continuing because we've "invested too much"?
-- What would an outsider with no history decide?
+9. Is the base case realistic?
+10. Is the worst case bad enough?
+11. Are we discounting sunk costs appropriately?
 
 ### Halo Effects
 
-**12. Are we assuming success transfers?**
-
-- Are we trusting this team/approach because of past wins?
-- Were past successes in similar contexts?
-- Are we attributing success to skill when luck played a role?
+12. Are we assuming success transfers?
 
 ## Quick Debiasing Techniques
 
-### For Anchoring
+- **Anchoring:** Generate estimate before seeing others' numbers; ask "What if 2x or 0.5x?"; use multiple estimators.
+- **Confirmation Bias:** Assign someone to argue the opposite; ask "What would make us wrong?"; seek critics.
+- **Overconfidence:** Widen confidence intervals; use reference class forecasting; check base rates.
+- **Sunk Cost:** Ask "Would we start today knowing what we know?"; ignore past investment.
+- **Groupthink:** Collect independent opinions before discussion; assign devil's advocate.
 
-- Generate estimate BEFORE seeing others' numbers
-- Ask: "What if the true number is 2x or 0.5x?"
-- Use multiple independent estimators
+## Decision Quality Audit
 
-### For Confirmation Bias
-
-- Assign someone to argue the opposite position
-- Ask: "What would make us wrong?"
-- Seek out critics, not supporters
-
-### For Overconfidence
-
-- Widen confidence intervals (usually too narrow)
-- Use reference class forecasting (base rates)
-- Ask: "How often have similar predictions been right?"
-
-### For Sunk Cost
-
-- Ask: "Would we start this project today knowing what we know?"
-- Ignore past investment when evaluating future returns
-- Consider opportunity cost of continuing
-
-### For Groupthink
-
-- Collect independent opinions before discussion
-- Assign devil's advocate role
-- Make it safe to dissent
-
-## Decision Quality Audit Template
-
-```markdown
-# Decision Quality Audit: [Decision Name]
-
-## Recommendation Summary
-
-[Brief description]
-
-## Bias Checklist
-
-### Self-Interest & Emotion
-
-- [ ] Self-interest checked: [Notes]
-- [ ] Emotional attachment assessed: [Notes]
-
-### Group Dynamics
-
-- [ ] Dissent encouraged: [Notes]
-- [ ] Independent input gathered: [Notes]
-
-### Pattern Recognition
-
-- [ ] Multiple analogies considered: [Notes]
-- [ ] Anchoring effects checked: [Notes]
-
-### Confirmation Bias
-
-- [ ] Alternatives genuinely evaluated: [Notes]
-- [ ] Disconfirming evidence sought: [Notes]
-
-### Planning Realism
-
-- [ ] Base case reality-checked: [Notes]
-- [ ] Worst case severe enough: [Notes]
-- [ ] Sunk costs ignored: [Notes]
-
-### Halo Effects
-
-- [ ] Success transfer questioned: [Notes]
-
-## Red Flags Identified
-
-[List any concerns from checklist]
-
-## Mitigations
-
-[How will identified biases be addressed?]
-
-## Decision
-
-- [ ] Proceed as recommended
-- [ ] Proceed with modifications
-- [ ] Requires more analysis
-- [ ] Reject recommendation
-```
+The full audit template has been extracted to [`references/decision-audit-template.md`](references/decision-audit-template.md).
 
 ## Verification Checklist
 

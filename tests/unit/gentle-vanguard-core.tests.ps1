@@ -12,8 +12,8 @@ Describe 'Gentle-Vanguard Core Tests' {
     }
 
     Context 'Session Tools' {
-        It 'session-autostart.ps1 exists' {
-            Test-Path "$script:root\scripts\utilities\SESSION\session-autostart.ps1" | Should -Be $true
+        It 'session-autostart.ts exists' {
+            Test-Path "$script:root\src\session-autostart.ts" | Should -Be $true
         }
 
         It 'install-hooks.ps1 exists' {

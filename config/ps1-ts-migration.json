@@ -1,6 +1,20 @@
 {
-  "version": "1.0.0",
-  "summary": "Priority order for migrating PowerShell entrypoints to TypeScript.",
+  "version": "8.0.0",
+  "summary": "TypeScript migration tracker for Gentle-Vanguard PS1 → TS.",
+  "cleanupDate": "2026-07-10",
+  "cleanupSummary": {
+    "scriptsRemoved": 390,
+    "scriptsRemaining": 114,
+    "duplicatesResolved": 19,
+    "directoriesCleaned": 50,
+    "stubsCreated": 3,
+    "credentialsRemoved": true,
+    "tsMigrationsWave1": 4,
+    "tsMigrationsWave2": 5,
+    "tsMigrationsWave3": 3,
+    "tsMigrationsWave4": 2,
+    "tsMigrationsWave5": 3
+  },
   "priorities": [
     {
       "id": "security-orchestrator",
@@ -22,8 +36,359 @@
       "target": "src/checkpoint-manager.ts",
       "priority": "medium",
       "status": "implemented"
+    },
+    {
+      "id": "maintenance-watchtower",
+      "script": "scripts/maintenance/maintenance-watchtower.ps1",
+      "target": "src/maintenance-watchtower.ts",
+      "priority": "high",
+      "status": "implemented"
+    },
+    {
+      "id": "session-scoring",
+      "script": "scripts/adaptive/session-scoring.ps1",
+      "target": "src/session-scoring.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "Broken PS1 (null property access, divide-by-zero), 3 calls/session"
+    },
+    {
+      "id": "token-budget-guard",
+      "script": "scripts/utilities/telemetry/TELEMETRY-METRICS/token-budget-guard.ps1",
+      "target": "src/token-budget-guard.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "2 calls/session, pure data processing, CSV fragility in PS1"
+    },
+    {
+      "id": "audit-pipeline",
+      "script": "scripts/security/audit-pipeline.ps1",
+      "target": "src/audit-pipeline.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "SOC2/GDPR compliance, SHA256 hashing native in Node.js"
+    },
+    {
+      "id": "session-cleanup-start",
+      "script": "scripts/utilities/session/session-cleanup-start.ps1",
+      "target": "src/session-cleanup-start.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "Had runtime bug (-and parameter), orchestrator spawning 5+ subprocesses"
+    },
+    {
+      "id": "correction-rules-engine",
+      "script": "scripts/adaptive/correction-rules-engine.ps1",
+      "target": "src/correction-rules-engine.ts",
+      "priority": "medium",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "Largest PS1 (423 lines), self-healing core, Zod-ready"
+    },
+    {
+      "id": "tracing-instrument",
+      "script": "scripts/utilities/ops/TRACING/tracing-instrument.ps1",
+      "target": "src/tracing-instrument.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "OTLP spans, bigint nanosecond timestamps, 3 config references"
+    },
+    {
+      "id": "event-sourcing",
+      "script": "scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1",
+      "target": "src/event-sourcing.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "Append-only event store, projection handlers, 3 config references"
+    },
+    {
+      "id": "saga-orchestrator",
+      "script": "scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1",
+      "target": "src/saga-orchestrator.ts",
+      "priority": "medium",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "Saga pattern with compensating actions, checkpoint integration"
+    },
+    {
+      "id": "engram-integrity-check",
+      "script": "scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1",
+      "target": "src/engram-integrity-check.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "5-point integrity check (manifest/DB/checksums/chunks/backups), native crypto"
+    },
+    {
+      "id": "mcp-gateway",
+      "script": "scripts/utilities/MCP/mcp-gateway.ps1",
+      "target": "src/mcp-gateway.ts",
+      "priority": "medium",
+      "status": "implemented",
+      "migratedAt": "2026-07-10",
+      "configUpdated": true,
+      "reason": "MCP server lifecycle management, PID tracking, clean process spawn"
+    },
+    {
+      "id": "post-autostart-summary",
+      "script": "scripts/utilities/post-autostart-summary.ps1",
+      "target": "src/post-autostart-summary.ts",
+      "priority": "medium",
+      "status": "implemented",
+      "migratedAt": "2026-07-14",
+      "configUpdated": true,
+      "reason": "Simple startup summary JSON, used 3 times in pipeline"
+    },
+    {
+      "id": "engram-auto-sync",
+      "script": "scripts/utilities/memory/ENGRAM/engram-auto-sync.ps1",
+      "target": "src/engram-auto-sync.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-14",
+      "configUpdated": true,
+      "reason": "File-lock concurrency, multi-mode dispatch, setInterval replaces Start-Sleep loop"
+    },
+    {
+      "id": "skill-recommender",
+      "script": "scripts/utilities/agents/AUTO-DELEGATION/skill-recommender.ps1",
+      "target": "src/skill-recommender.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-14",
+      "configUpdated": true,
+      "reason": "Tokenization, branch-hint regex, multi-format parser — benefits from TS types"
+    },
+    {
+      "id": "dashboard-common",
+      "script": "scripts/utilities/dashboard/dashboard-common.ps1",
+      "target": "src/dashboard-common.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "dashboard-ws-autostart",
+      "script": "scripts/utilities/dashboard/dashboard-ws-autostart.ps1",
+      "target": "src/dashboard-ws-autostart.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "dashboard-start",
+      "script": "scripts/utilities/dashboard/dashboard-start.ps1",
+      "target": "src/dashboard-start.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "dashboard-stop",
+      "script": "scripts/utilities/dashboard/dashboard-stop.ps1",
+      "target": "src/dashboard-stop.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "detect-tool",
+      "script": "scripts/utilities/setup/DETECT/detect-tool.ps1",
+      "target": "src/detect-tool.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "lefthook-verify",
+      "script": "scripts/utilities/lefthook-verify.ps1",
+      "target": "src/lefthook-verify.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "karpathy-enforcer",
+      "script": "scripts/adaptive/karpathy-enforcer.ps1",
+      "target": "src/karpathy-enforcer.ts",
+      "priority": "medium",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "session-notification",
+      "script": "scripts/utilities/session/session-notification.ps1",
+      "target": "src/session-notification.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "token-metrics-store",
+      "script": "scripts/utilities/telemetry/TELEMETRY-METRICS/token-metrics-store.ps1",
+      "target": "src/token-metrics-store.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "session-metrics-tracker",
+      "script": "scripts/utilities/session/session-metrics-tracker.ps1",
+      "target": "src/session-metrics-tracker.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "validate-tool-configs",
+      "script": "scripts/utilities/validate-tool-configs.ps1",
+      "target": "src/validate-tool-configs.ts",
+      "priority": "medium",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "adaptive-opencode-profile",
+      "script": "scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-opencode-profile.ps1",
+      "target": "src/adaptive-opencode-profile.ts",
+      "priority": "medium",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
     }
   ],
-  "firstWave": ["security-orchestrator", "hybrid-executor", "checkpoint-manager"],
-  "nextWave": ["audit-pipeline", "tracing-instrument", "event-sourcing"]
+  "completedWave1": [
+    "security-orchestrator",
+    "hybrid-executor",
+    "checkpoint-manager",
+    "maintenance-watchtower"
+  ],
+  "completedWave2": [
+    "session-scoring",
+    "token-budget-guard",
+    "audit-pipeline",
+    "session-cleanup-start",
+    "correction-rules-engine"
+  ],
+  "firstWave": [
+    "security-orchestrator",
+    "hybrid-executor",
+    "checkpoint-manager",
+    "maintenance-watchtower"
+  ],
+  "completedWave3": ["tracing-instrument", "event-sourcing", "saga-orchestrator"],
+  "completedWave4": ["engram-integrity-check", "mcp-gateway"],
+  "completedWave5": ["post-autostart-summary", "engram-auto-sync", "skill-recommender"],
+  "completedWave6": [
+    "dashboard-common",
+    "dashboard-ws-autostart",
+    "dashboard-start",
+    "dashboard-stop",
+    "detect-tool",
+    "lefthook-verify",
+    "karpathy-enforcer",
+    "session-notification"
+  ],
+  "completedWave7": [
+    "token-metrics-store",
+    "session-metrics-tracker",
+    "validate-tool-configs",
+    "adaptive-opencode-profile"
+  ],
+  "completedWave8": [
+    "engram-policy",
+    "auth-session",
+    "codegraph-sync-autostart",
+    "validate-opencode-config",
+    "skill-router",
+    "ensure-github-bypass",
+    "check-skill-sizes",
+    "adaptive-codex-windsurf-profile",
+    "optimize-engram-usage",
+    "eval-quality-gate",
+    "ci-rollback-engine",
+    "json-validator",
+    "fine-tuning-data-collector",
+    "digest-generator",
+    "engram-auto-compact"
+  ],
+  "delegatedSteps": {
+    "session-manager": "src/session-cleanup-start.ts",
+    "token-notification-init": "src/token-metrics-store.ts"
+  },
+  "nextWave": [],
+  "tsFiles": [
+    "src/session-autostart.ts",
+    "src/health-check.ts",
+    "src/maintenance-watchtower.ts",
+    "src/security-orchestrator.ts",
+    "src/hybrid-executor.ts",
+    "src/checkpoint-manager.ts",
+    "src/session-scoring.ts",
+    "src/token-budget-guard.ts",
+    "src/audit-pipeline.ts",
+    "src/session-cleanup-start.ts",
+    "src/correction-rules-engine.ts",
+    "src/tracing-instrument.ts",
+    "src/event-sourcing.ts",
+    "src/saga-orchestrator.ts",
+    "src/engram-integrity-check.ts",
+    "src/mcp-gateway.ts",
+    "src/post-autostart-summary.ts",
+    "src/engram-auto-sync.ts",
+    "src/skill-recommender.ts",
+    "src/dashboard-common.ts",
+    "src/dashboard-ws-autostart.ts",
+    "src/dashboard-start.ts",
+    "src/dashboard-stop.ts",
+    "src/detect-tool.ts",
+    "src/lefthook-verify.ts",
+    "src/karpathy-enforcer.ts",
+    "src/session-notification.ts",
+    "src/token-metrics-store.ts",
+    "src/session-metrics-tracker.ts",
+    "src/validate-tool-configs.ts",
+    "src/adaptive-opencode-profile.ts",
+    "src/engram-policy.ts",
+    "src/auth-session.ts",
+    "src/codegraph-sync-autostart.ts",
+    "src/validate-opencode-config.ts",
+    "src/skill-router.ts",
+    "src/ensure-github-bypass.ts",
+    "src/check-skill-sizes.ts",
+    "src/adaptive-codex-windsurf-profile.ts",
+    "src/optimize-engram-usage.ts",
+    "src/eval-quality-gate.ts",
+    "src/ci-rollback-engine.ts",
+    "src/json-validator.ts",
+    "src/fine-tuning-data-collector.ts",
+    "src/digest-generator.ts",
+    "src/engram-auto-compact.ts",
+    "src/tenant-context.ts",
+    "src/planning-estimator.ts",
+    "src/cost-tracker.ts",
+    "src/backup-engram.ts",
+    "src/metrics-collector.ts",
+    "src/skill-usage-tracker.ts",
+    "src/auto-code-review.ts",
+    "src/cross-workspace-validator.ts",
+    "src/knowledge-base-init.ts",
+    "src/skill-embedder-incremental.ts",
+    "src/document-analysis-init.ts",
+    "src/skill-nudge.ts"
+  ]
 }

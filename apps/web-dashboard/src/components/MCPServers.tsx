@@ -20,17 +20,23 @@ function MCPServersInner() {
       if (msg.type === 'mcp-servers') {
         setServers(msg.data.servers || []);
       }
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     setLoading(false);
   }, []);
 
-  useEffect(() => { void fetchServers(); }, [fetchServers]);
+  useEffect(() => {
+    void fetchServers();
+  }, [fetchServers]);
 
   const toggleServer = async (name: string, action: 'start' | 'stop') => {
     try {
       await fetch(`/api/mcp/servers/${name}/${action}`, { method: 'POST' });
       setTimeout(fetchServers, 1000);
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   };
 
   const addServer = async () => {
@@ -53,14 +59,19 @@ function MCPServersInner() {
       setNewArgs('');
       setNewDesc('');
       setTimeout(fetchServers, 1000);
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   };
 
   const statusColor = (status: string) => {
     switch (status) {
-      case 'running': return 'text-green-500';
-      case 'error': return 'text-red-500';
-      default: return 'text-gray-400';
+      case 'running':
+        return 'text-green-500';
+      case 'error':
+        return 'text-red-500';
+      default:
+        return 'text-gray-400';
     }
   };
 
@@ -150,16 +161,22 @@ function MCPServersInner() {
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-medium text-gray-900 dark:text-white">{s.name}</span>
-                      <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                        s.type === 'builtin' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
-                      }`}>
+                      <span
+                        className={`text-xs px-1.5 py-0.5 rounded-full ${
+                          s.type === 'builtin'
+                            ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                            : 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
+                        }`}
+                      >
                         {s.type}
                       </span>
                       <span className={`text-xs font-medium ${statusColor(s.status)}`}>
                         {s.status}
                       </span>
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{s.description}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                      {s.description}
+                    </p>
                     <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
                       {s.command} {s.args.join(' ')}
                     </p>

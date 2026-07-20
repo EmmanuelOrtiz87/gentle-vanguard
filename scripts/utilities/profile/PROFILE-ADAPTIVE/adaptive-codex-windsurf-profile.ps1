@@ -59,14 +59,13 @@ $windsurfOptimized = @'
 }
 '@
 
-function Notify-Change {
+function NotifyChange {
     param([string]$Reason, [string]$Details)
-    $n = Join-Path $repoRoot 'scripts/utilities/notify-codex-windsurf-optimization.ps1'
-    if (Test-Path $n) { & $n -Reason $Reason -Details $Details -Silent:$Silent | Out-Null }
+    # Notification script removed in Phase 1 cleanup — no-op
 }
 
 $state = Read-JsonFile -Path $statePath
-if (-not $state) { $state = Get-DefaultState }
+$state = Ensure-StateProperties -State $state
 
 $peak = Test-PeakHour -TimeZone $TimeZone -PeakStart $PeakStart -PeakEnd $PeakEnd
 $pressure = Test-TokenPressure

@@ -25,8 +25,7 @@
 #>
 
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$DocumentPath,
+    [string]$DocumentPath = '',
     [ValidateSet('full', 'quick', 'tech-only', 'cost-only')]
     [string]$Scope = 'full',
     [ValidateSet('document', 'jira', 'confluence', 'all')]
@@ -40,6 +39,12 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+
+if ([string]::IsNullOrWhiteSpace($DocumentPath)) {
+    Write-Host "[document-analysis-init] No DocumentPath provided, skipping analysis" -ForegroundColor DarkGray
+    return @{ status = 'skipped'; reason = 'no_document_path' } | ConvertTo-Json
+}
+
 $ScriptDir = Split-Path $PSScriptRoot -Parent
 $ProjectRoot = Split-Path $ScriptDir -Parent
 $SidecarDir = Join-Path $PSScriptRoot 'sidecar'

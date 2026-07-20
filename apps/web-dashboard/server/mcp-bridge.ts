@@ -76,6 +76,7 @@ export class MCPBridge extends EventEmitter {
       this.proc = spawn(process.execPath, [tsxBin, SERVER_SCRIPT], {
         stdio: ['pipe', 'pipe', 'pipe'],
         cwd,
+        windowsHide: true,
       });
 
       let started = false;

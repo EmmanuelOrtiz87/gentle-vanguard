@@ -35,152 +35,16 @@ Decision with consequences beyond immediate? → yes → APPLY SECOND-ORDER THIN
                                             ↘ no → First-order may suffice
 ```
 
-## First vs Second-Order Thinking
-
-| Situation      | First-Order                  | Second-Order                                                             |
-| -------------- | ---------------------------- | ------------------------------------------------------------------------ |
-| Team is slow   | Add more engineers           | More engineers → more coordination → slower decisions → may get slower   |
-| Users complain | Add the feature they request | Feature → complexity → more support load → less time for core work       |
-| Costs too high | Cut spending                 | Cuts → reduced quality → customer churn → revenue drop → worse situation |
-| Bug in prod    | Hotfix immediately           | Hotfix → skip testing → more bugs → trust erosion → slower deployments   |
-
 ## The Process
 
 ### Step 1: Identify the Decision and First-Order Effect
-
-```
-Decision: Add a feature flag system
-First-order: Teams can ship features independently ✓
-```
-
-### Step 2: Ask "And Then What?"
-
-Chain the consequences:
-
-```
-Feature flags → More flags created → Flag debt accumulates
-             → Teams don't clean up → Combinatorial testing complexity
-             → Bugs from flag interactions → "Turn it off" becomes risky
-             → Flags become permanent → Codebase complexity explodes
-```
-
-### Step 3: Apply the 10/10/10 Framework
-
-Evaluate impact across time horizons:
-
-| Timeframe  | Question                                  | Analysis              |
-| ---------- | ----------------------------------------- | --------------------- |
-| 10 minutes | How will I feel right after?              | Relief—problem solved |
-| 10 months  | How will this affect things in 10 months? | Flag sprawl emerging  |
-| 10 years   | What's the long-term trajectory?          | Technical debt crisis |
-
-### Step 4: Consider Systemic Effects
-
-Ask: "What if everyone did this?"
-
-```
-Decision: Skip code review for urgent fixes
-If everyone: All urgent fixes skip review
-Result: Definition of "urgent" expands → most things skip review
-Outcome: Quality collapses, more urgent fixes needed
-```
-
+### Step 2: Ask "And Then What?" — chain the consequences
+### Step 3: Apply the 10/10/10 Framework (10 min / 10 mo / 10 yr)
+### Step 4: Consider Systemic Effects — "What if everyone did this?"
 ### Step 5: Map the Consequence Chain
 
 ```
-┌─────────────────┐
-│ Decision: X     │
-└────────┬────────┘
-         ▼
-┌─────────────────┐
-│ 1st Order: A    │ ← Obvious, intended
-└────────┬────────┘
-         ▼
-┌─────────────────┐
-│ 2nd Order: B    │ ← Less obvious
-└────────┬────────┘
-         ▼
-┌─────────────────┐
-│ 3rd Order: C    │ ← Often counterintuitive
-└────────┬────────┘
-         ▼
-┌─────────────────┐
-│ Feedback Loop   │ ← May reinforce or counteract
-└─────────────────┘
-```
-
-## Common Second-Order Effects in Software
-
-### Optimization
-
-```
-1st: Optimize critical path → Faster
-2nd: Team focuses on optimization → Less feature work
-3rd: Premature optimization spreads → Complexity increases
-4th: Maintenance burden grows → Slower overall
-```
-
-### Hiring
-
-```
-1st: Hire senior engineers → More capacity
-2nd: Salary expectations rise → Budget pressure
-3rd: Junior engineers feel stuck → Attrition
-4th: Knowledge concentrated in seniors → Bus factor risk
-```
-
-### Process Addition
-
-```
-1st: Add approval process → More oversight
-2nd: Approvals create bottleneck → Slower delivery
-3rd: People route around process → Shadow processes
-4th: Formal process becomes theater → Worst of both worlds
-```
-
-### Technical Shortcuts
-
-```
-1st: Skip tests to ship faster → Feature delivered
-2nd: Bugs emerge → Support load increases
-3rd: Team fights fires → Less time for features
-4th: More shortcuts taken → Quality death spiral
-```
-
-## Application Framework
-
-For any significant decision, fill out:
-
-```markdown
-## Second-Order Analysis: [Decision]
-
-### Immediate Effect (1st Order)
-
-[What happens right away]
-
-### Near-Term Consequences (2nd Order)
-
-[What does the immediate effect cause? 1-3 months]
-
-### Medium-Term Consequences (3rd Order)
-
-[What do the near-term effects cause? 3-12 months]
-
-### Long-Term Trajectory
-
-[Where does this path lead? 1+ years]
-
-### Feedback Loops
-
-[Does this create reinforcing or balancing dynamics?]
-
-### If Scaled
-
-[What happens if this becomes standard practice?]
-
-### Revised Decision
-
-[Given analysis, what should we actually do?]
+Decision → 1st Order → 2nd Order → 3rd Order → Feedback Loop
 ```
 
 ## Questions to Surface Second-Order Effects

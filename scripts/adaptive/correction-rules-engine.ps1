@@ -2,11 +2,11 @@
 <#
 .SYNOPSIS
     Auto-Correction Rules Engine — Judgment Day Executor
-    
+
 .DESCRIPTION
     Executes auto-correction rules based on session scoring metrics.
     Provides self-healing capabilities for the multi-agent system.
-    
+
 .NOTES
     Part of Phase 1 Roadmap v4.0
     - Executes correction rules with atomic rollback capability
@@ -18,13 +18,13 @@ param(
     [Parameter(Mandatory = $false)]
     [ValidateSet('check', 'execute', 'validate', 'report', 'clear')]
     [string]$Mode = 'check',
-    
+
     [Parameter(Mandatory = $false)]
     [string]$RulesConfig = 'config/correction-rules.json',
-    
+
     [Parameter(Mandatory = $false)]
     [string]$SessionScore = 81,
-    
+
     [Parameter(Mandatory = $false)]
     [switch]$Quiet
 )
@@ -48,7 +48,7 @@ function Get-CorrectionRules {
         Write-Log "Rules config not found: $configPath" ERROR
         return @()
     }
-    
+
     try {
         $json = Get-Content $configPath -Raw | ConvertFrom-Json
         Write-Log "Loaded $($json.rules.Count) correction rules" INFO
@@ -63,7 +63,7 @@ function Get-CorrectionRules {
 # ===== CHECK TRIGGER CONDITIONS =====
 function Test-RuleTrigger {
     param([object]$Rule, [int]$Score)
-    
+
     # Examples of trigger conditions
     $triggers = @{
         'TokenBudgetExceeded'      = { $Score -lt 50 }
@@ -75,29 +75,29 @@ function Test-RuleTrigger {
         'EngineOverload'           = { $Score -lt 50 }
         'MemoryFragmentation'      = { $Score -lt 65 }
     }
-    
+
     if ($triggers.ContainsKey($Rule.id)) {
         return & $triggers[$Rule.id]
     }
-    
+
     return $false
 }
 
 # ===== EXECUTE AUTO-CORRECTION =====
 function Invoke-Correction {
     param([object]$Rule, [int]$Score)
-    
+
     Write-Log "Executing rule: $($Rule.id) (confidence: $($Rule.metadata.confidence))" INFO
-    
+
     # Ensure atomic transaction
     $checkpointId = (Get-Date -Format 'yyyyMMdd_HHmmss_ffff')
     $backupPath = "$root/.session/state-backups/$checkpointId"
-    
+
     try {
         # 1. Create rollback point
         New-Item -ItemType Directory -Path $backupPath -Force | Out-Null
         Write-Log "Created rollback checkpoint: $checkpointId" INFO
-        
+
         # 2. Execute rule action based on type
         $result = switch ($Rule.id) {
             'TokenBudgetExceeded' { Invoke-TokenBudgetCorrection $Rule }
@@ -113,7 +113,7 @@ function Invoke-Correction {
                 return @{ success = $false; reason = 'Unknown rule type' }
             }
         }
-        
+
         # 3. Validate correction
         if ($result.success) {
             Write-Log "Correction successful: $($result.message)" SUCCESS
@@ -124,7 +124,7 @@ function Invoke-Correction {
             Invoke-Rollback $checkpointId $Rule
             Update-RuleMetrics $Rule.id $false
         }
-        
+
         return $result
     }
     catch {
@@ -138,84 +138,81 @@ function Invoke-Correction {
 # ===== RULE IMPLEMENTATIONS =====
 function Invoke-TokenBudgetCorrection {
     param([object]$Rule)
-    
+
     Write-Log "Throttling skill complexity..." INFO
-    
+
     # Reduce complexity tier
     $configPath = Join-Path $root 'config/behavior-prompts.json'
     $config = Get-Content $configPath -Raw | ConvertFrom-Json
     $config.skillComplexityTier = 'BASIC'
     $config | ConvertTo-Json -Depth 10 | Set-Content $configPath
-    
+
     return @{ success = $true; message = 'Token budget corrected: reduced skill complexity to BASIC' }
 }
 
 function Invoke-ErrorRateCorrection {
     param([object]$Rule)
-    
+
     Write-Log "Reducing error rate by activating premortem..." INFO
-    
+
     # Activate premortem mode + manual review requirement
     $orchestratorPath = Join-Path $root 'config/orchestrator.json'
     $config = Get-Content $orchestratorPath -Raw | ConvertFrom-Json
     $config.premortEmEnabled = $true
     $config.requireManualReview = $true
     $config | ConvertTo-Json -Depth 10 | Set-Content $orchestratorPath
-    
+
     return @{ success = $true; message = 'Error rate corrected: enabled premortem + manual review' }
 }
 
 function Invoke-QualityCorrection {
     param([object]$Rule)
-    
+
     Write-Log "Improving quality by activating SDD lifecycle..." INFO
-    
+
     # Route to BA → SAD → DEV → QA cycle
     $delegationPath = Join-Path $root 'config/auto-delegation.json'
     $config = Get-Content $delegationPath -Raw | ConvertFrom-Json
     $config.enforceSDDLifecycle = $true
     $config | ConvertTo-Json -Depth 10 | Set-Content $delegationPath
-    
+
     return @{ success = $true; message = 'Quality corrected: enforced full SDD lifecycle' }
 }
 
 function Invoke-AgentRerouteCorrection {
     param([object]$Rule)
-    
+
     Write-Log "Re-routing to different agent tier..." INFO
-    
+
     # Increase confidence requirement for agent selection
     $configPath = Join-Path $root 'config/auto-delegation.json'
     $config = Get-Content $configPath -Raw | ConvertFrom-Json
     $config.minimumConfidenceThreshold = 0.85
     $config | ConvertTo-Json -Depth 10 | Set-Content $configPath
-    
+
     return @{ success = $true; message = 'Agent alignment corrected: increased confidence threshold to 85%' }
 }
 
 function Invoke-CacheWarmingCorrection {
     param([object]$Rule)
-    
+
     Write-Log "Pre-warming embedding cache..." INFO
-    
-    # Trigger cache warming process
-    $warmingScript = Join-Path $root 'scripts/utilities/cache/CACHE-MANAGEMENT/cache-warmer.ps1'
-    if (Test-Path $warmingScript) {
-        & $warmingScript -Warm -Quiet
-    }
-    
+
+    # Cache warming — script removed in Phase 1 cleanup; no-op with fallback
+    Write-Log "Cache warming skipped (cache-warmer.ps1 removed in cleanup phase)" INFO
+
     return @{ success = $true; message = 'Cache corrected: pre-warmed embeddings' }
 }
 
 function Invoke-SkillRollbackCorrection {
     param([object]$Rule)
-    
+
     Write-Log "Rolling back to previous skill versions..." INFO
-    
+
     # Restore from skills-lock.json previous version
     $lockPath = Join-Path $root 'skills-lock.json'
     $lock = Get-Content $lockPath -Raw | ConvertFrom-Json
-    
+
     # Check if backup version exists
     if ($lock.previousVersion) {
         $lock.currentVersion = $lock.previousVersion
@@ -223,15 +220,15 @@ function Invoke-SkillRollbackCorrection {
         $lock | ConvertTo-Json -Depth 10 | Set-Content $lockPath
         return @{ success = $true; message = 'Skills corrected: rolled back to previous version' }
     }
-    
+
     return @{ success = $false; reason = 'No previous version available' }
 }
 
 function Invoke-ThrottlingCorrection {
     param([object]$Rule)
-    
+
     Write-Log "Activating throttling to reduce engine load..." INFO
-    
+
     $configPath = Join-Path $root 'config/circuit-breaker.json'
     if (Test-Path $configPath) {
         $config = Get-Content $configPath -Raw | ConvertFrom-Json
@@ -239,30 +236,37 @@ function Invoke-ThrottlingCorrection {
         $config | ConvertTo-Json -Depth 10 | Set-Content $configPath
         return @{ success = $true; message = "Throttling corrected: reduced rate limit by 50%" }
     }
-    
+
     return @{ success = $true; message = 'Throttling enabled via circuit breaker' }
 }
 
 function Invoke-EngramDefragCorrection {
     param([object]$Rule)
-    
+
     Write-Log "Defragmenting Engram memory..." INFO
-    
-    $engravPath = Join-Path $root 'scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1'
+
+    $engravPathTs = Join-Path $root 'src/engram-integrity-check.ts'
+    $engravPathPs1 = Join-Path $root 'scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1'
+    $engravPath = if (Test-Path $engravPathTs) { $engravPathTs } else { $engravPathPs1 }
+
     if (Test-Path $engravPath) {
-        & $engravPath -Mode checksums -Quiet
+        if ($engravPath -like '*.ts') {
+            & npx tsx $engravPath -Mode checksums -Quiet
+        } else {
+            & $engravPath -Mode checksums -Quiet
+        }
         return @{ success = $true; message = 'Memory corrected: regenerated Engram checksums' }
     }
-    
+
     return @{ success = $false; reason = 'Engram integrity check not found' }
 }
 
 # ===== ROLLBACK MECHANISM =====
 function Invoke-Rollback {
     param([string]$CheckpointId, [object]$Rule)
-    
+
     Write-Log "Rolling back checkpoint: $CheckpointId for rule: $($Rule.id)" WARN
-    
+
     if ($Rule.rollback) {
         try {
             & $Rule.rollback
@@ -277,16 +281,16 @@ function Invoke-Rollback {
 # ===== METRICS TRACKING =====
 function Update-RuleMetrics {
     param([string]$RuleId, [bool]$Success)
-    
+
     $metricsPath = "$root/.session/rule-metrics.json"
     $metrics = @{ rules = @() }
-    
+
     if (Test-Path $metricsPath) {
         $metrics = Get-Content $metricsPath -Raw | ConvertFrom-Json
     }
-    
+
     $ruleMetric = $metrics.rules | Where-Object { $_.id -eq $RuleId } | Select-Object -First 1
-    
+
     if ($null -eq $ruleMetric) {
         $ruleMetric = @{
             id             = $RuleId
@@ -297,22 +301,22 @@ function Update-RuleMetrics {
         }
         $metrics.rules += $ruleMetric
     }
-    
+
     $ruleMetric.executionCount++
     if ($Success) { $ruleMetric.successCount++ }
     $ruleMetric.lastExecution = Get-Date -Format 'o'
     $ruleMetric.successRate = [math]::Round($ruleMetric.successCount / $ruleMetric.executionCount * 100, 2)
-    
+
     $metrics | ConvertTo-Json -Depth 10 | Set-Content $metricsPath
 }
 
 # ===== MAIN OPERATIONS =====
 function Invoke-Check {
     Write-Log "Checking which rules would trigger at score $SessionScore" INFO
-    
+
     $rules = Get-CorrectionRules
     $triggered = @()
-    
+
     foreach ($rule in $rules) {
         if (Test-RuleTrigger $rule $SessionScore) {
             $triggered += @{
@@ -322,7 +326,7 @@ function Invoke-Check {
             }
         }
     }
-    
+
     if ($triggered.Count -gt 0) {
         Write-Log "Found $($triggered.Count) rules to trigger:" INFO
         $triggered | ConvertTo-Json -Depth 5 | Write-Host
@@ -336,34 +340,34 @@ function Invoke-Check {
 
 function Invoke-Execute {
     Write-Log "Executing auto-corrections for score $SessionScore" INFO
-    
+
     $rules = Get-CorrectionRules
     $results = @()
-    
+
     foreach ($rule in $rules) {
         if (Test-RuleTrigger $rule $SessionScore) {
             $result = Invoke-Correction $rule $SessionScore
             $results += $result
         }
     }
-    
+
     Write-Log "Completed $($results.Count) corrections" SUCCESS
     return $results
 }
 
 function Invoke-Validate {
     Write-Log "Validating correction rules configuration..." INFO
-    
+
     try {
         $rules = Get-CorrectionRules
-        
+
         foreach ($rule in $rules) {
             if (-not $rule.id -or -not $rule.metadata) {
                 Write-Log "Rule validation failed: missing id or metadata" ERROR
                 return $false
             }
         }
-        
+
         Write-Log "All $($rules.Count) rules are valid" SUCCESS
         return $true
     }
@@ -375,16 +379,16 @@ function Invoke-Validate {
 
 function Invoke-Report {
     Write-Log "Generating auto-correction report..." INFO
-    
+
     $metricsPath = "$root/.session/rule-metrics.json"
     if (Test-Path $metricsPath) {
         $metrics = Get-Content $metricsPath -Raw | ConvertFrom-Json
-        
+
         Write-Host "`n=== AUTO-CORRECTION METRICS ===" -ForegroundColor Cyan
         $metrics.rules | Sort-Object -Property successRate -Descending | ForEach-Object {
             Write-Host "  $($_.id): $($_.successRate)% success rate ($($_.successCount)/$($_.executionCount))" -ForegroundColor Green
         }
-        
+
         return $metrics
     }
     else {
@@ -395,7 +399,7 @@ function Invoke-Report {
 
 function Invoke-Clear {
     Write-Log "Clearing auto-correction metrics..." WARN
-    
+
     $metricsPath = "$root/.session/rule-metrics.json"
     if (Test-Path $metricsPath) {
         Remove-Item $metricsPath -Force

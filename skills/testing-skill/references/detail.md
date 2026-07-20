@@ -1,53 +1,81 @@
-fetchUser: vi.fn(), }));
+# Testing Skill — Detailed Reference
 
-// Mock time for consistent tests vi.useFakeTimers();
-
-// Reset mocks between tests afterEach(() => { vi.clearAllMocks(); });
-
-````
-
-## Coverage Targets
-
-| Coverage Type | Minimum | Recommended |
-| ------------- | ------- | ----------- |
-| Statements    | 70%     | 80%         |
-| Branches      | 60%     | 70%         |
-| Functions     | 70%     | 80%         |
-| Lines         | 70%     | 80%         |
-
-## CI/CD Integration
-
-```yaml
-# GitHub Actions
-- name: Run tests
-  run: npm run test:coverage
-- name: Upload coverage
-  uses: codecov/codecov-action@v3
-````
+Extracted sections from the main SKILL.md to keep it concise.
 
 ## Anti-Patterns to Avoid
 
-1. **Don't test private methods** - Test public interfaces
-2. **Don't assert on timestamps** - Mock time
-3. **Don't make tests order-dependent** - Reset state
-4. **Don't skip flaky tests** - Fix them or mark as known issue
-5. **Don't test third-party code** - Mock external services
+1. **Don't test private methods** — Test public interfaces
+2. **Don't assert on timestamps** — Mock time
+3. **Don't make tests order-dependent** — Reset state
+4. **Don't skip flaky tests** — Fix them or mark as known issue
+5. **Don't test third-party code** — Mock external services
 
-## Quick Reference
+## Risk-Based Testing
+
+1. **Identify risks** for each feature (data loss, security, UX, performance)
+2. **Score** likelihood × impact
+3. **Allocate test effort** proportionally to risk score
+4. **Reassess** after each release
+
+## Coverage Goals
+
+| Type                | Target |
+| ------------------- | ------ |
+| Line coverage       | >80%   |
+| Branch coverage     | >75%   |
+| Mutation score      | >60%   |
+| Critical path E2E   | 100%   |
+| API endpoint tested | >90%   |
+
+## Framework Selection
+
+| Type        | Stack              | Recommended           |
+| ----------- | ------------------ | --------------------- |
+| Unit        | Node.js/TypeScript | Vitest, Jest          |
+| Unit        | Go                 | testing package       |
+| Unit        | Python             | pytest                |
+| Integration | Node.js            | Supertest, MSW        |
+| E2E         | React/Vue          | Playwright, Cypress   |
+| API         | Any                | REST Client, Postman  |
+| Component   | React              | React Testing Library |
+| Component   | Vue                | Vue Test Utils        |
+
+## Test File Naming
+
+```
+src/
+  components/Button/
+    Button.tsx
+    Button.test.tsx       Unit
+    Button.e2e.spec.ts    E2E
+  services/
+    api.ts
+    api.test.ts           Integration
+    api.mock.ts           Mock
+  __tests__/
+    setup.ts              Setup
+```
+
+## Test Structure (AAA Pattern)
+
+```typescript
+describe('User', () => {
+  describe('age', () => {
+    it('should update age when birthday is called', () => {
+      const user = createUser({ name: 'John', age: 30 });
+      user.birthday();
+      expect(user.age).toBe(31);
+    });
+  });
+});
+```
+
+## Quick CLI Reference
 
 ```bash
-# Run tests
-npm test
-
-# Run with coverage
-npm run test:coverage
-
-# Run specific file
-npm test -- Button.test.tsx
-
-# Run in watch mode
-npm run test:watch
-
-# Run E2E
-npx playwright test
+npm test                  # Run all tests
+npm run test:coverage     # Run with coverage
+npm test -- Button.test.tsx # Run specific file
+npm run test:watch        # Watch mode
+npx playwright test       # Run E2E
 ```

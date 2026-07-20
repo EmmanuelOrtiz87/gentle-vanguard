@@ -52,7 +52,7 @@ function Resolve-WorkspacePath {
 
 function Write-Status {
     param([string]$Message, [string]$Status = "INFO")
-    
+
     $color = switch ($Status) {
         "OK" { "Green" }
         "WARN" { "Yellow" }
@@ -60,7 +60,7 @@ function Write-Status {
         "INFO" { "Cyan" }
         default { "White" }
     }
-    
+
     Write-Host "[$Status] $Message" -ForegroundColor $color
 }
 
@@ -70,29 +70,29 @@ function Compare-ConfigFiles {
         [string]$File2,
         [string]$Description
     )
-    
+
     Write-Host "`nValidando: $Description" -ForegroundColor Yellow
-    
+
     if (-not (Test-Path $File1)) {
         Write-Status "Archivo no existe: $File1" "ERROR"
         return $false
     }
-    
+
     if (-not (Test-Path $File2)) {
         Write-Status "Archivo no existe: $File2" "ERROR"
         return $false
     }
-    
+
     $content1 = Get-Content $File1 -Raw
     $content2 = Get-Content $File2 -Raw
-    
+
     if ($content1 -eq $content2) {
         Write-Status "Archivos identicos" "OK"
         return $true
     }
-    
+
     Write-Status "Archivos difieren" "WARN"
-    
+
     if ($Detailed) {
         Write-Host "`nDiferencias:" -ForegroundColor Gray
         $diff = Compare-Object (Get-Content $File1) (Get-Content $File2) -IncludeEqual
@@ -101,7 +101,7 @@ function Compare-ConfigFiles {
             Write-Host "  [$indicator] $($_.InputObject)" -ForegroundColor Gray
         }
     }
-    
+
     return $false
 }
 
@@ -111,14 +111,14 @@ function Sync-ConfigFile {
         [string]$Destination,
         [string]$Description
     )
-    
+
     Write-Host "`nSincronizando: $Description" -ForegroundColor Yellow
-    
+
     if (-not (Test-Path $Source)) {
         Write-Status "Archivo origen no existe: $Source" "ERROR"
         return $false
     }
-    
+
     try {
         Copy-Item $Source $Destination -Force
         Write-Status "Sincronizado: $Destination" "OK"
@@ -195,14 +195,14 @@ if (Test-Path "config/adaptive-config.json") {
         -File1 "config/adaptive-config.json" `
         -File2 (Join-Path $GentleVanguardRepoRoot "config/adaptive-config.json") `
         -Description "Adaptive Config"
-    
+
     $validations += @{
         Name = "Adaptive Config"
         Local = "config/adaptive-config.json"
         GentleVanguard = (Join-Path $GentleVanguardRepoRoot "config/adaptive-config.json")
         Status = $result
     }
-    
+
     if (-not $result) { $issues++ }
 }
 
@@ -222,19 +222,21 @@ $validations += @{
 if (-not $result) { $issues++ }
 
 # 5. GV.ps1 Script
-if ((Test-Path "scripts/utilities/gv.ps1") -and (Test-Path (Join-Path $GentleVanguardRepoRoot "scripts/utilities/gv.ps1"))) {
+$gvPath = "scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1"
+$gvTarget = Join-Path $GentleVanguardRepoRoot $gvPath
+if ((Test-Path $gvPath) -and (Test-Path $gvTarget)) {
     $result = Compare-ConfigFiles `
-        -File1 "scripts/utilities/gv.ps1" `
-        -File2 (Join-Path $GentleVanguardRepoRoot "scripts/utilities/gv.ps1") `
+        -File1 $gvPath `
+        -File2 $gvTarget `
         -Description "Workflow Script (gv.ps1)"
-    
+
     $validations += @{
         Name = "Workflow Script"
-        Local = "scripts/utilities/gv.ps1"
-        GentleVanguard = (Join-Path $GentleVanguardRepoRoot "scripts/utilities/gv.ps1")
+        Local = $gvPath
+        GentleVanguard = $gvTarget
         Status = $result
     }
-    
+
     if (-not $result) { $issues++ }
 }
 
@@ -258,7 +260,7 @@ if ($issues -gt 0) {
 if ($Fix -and $issues -gt 0) {
     Write-Host "`n=== Aplicando Correcciones ===" -ForegroundColor Cyan
     Write-Host "Estrategia: Sincronizar desde gentle-vanguard hacia local`n" -ForegroundColor Gray
-    
+
     $fixed = 0
     foreach ($val in $validations) {
         if (-not $val.Status) {
@@ -267,7 +269,7 @@ if ($Fix -and $issues -gt 0) {
             }
         }
     }
-    
+
     Write-Host "`nArchivos sincronizados: $fixed/$issues" -ForegroundColor $(if ($fixed -eq $issues) { "Green" } else { "Yellow" })
 }
 elseif ($issues -gt 0) {

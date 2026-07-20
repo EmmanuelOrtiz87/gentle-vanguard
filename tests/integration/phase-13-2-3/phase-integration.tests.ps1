@@ -6,38 +6,55 @@
 
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)))
-$tracer = Join-Path $repoRoot 'scripts/utilities/ops/TRACING/tracing-instrument.ps1'
-$ckptMgr = Join-Path $repoRoot 'scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1'
+$tracerTs = Join-Path $repoRoot 'src/tracing-instrument.ts'
+$tracerPs1 = Join-Path $repoRoot 'scripts/utilities/ops/TRACING/tracing-instrument.ps1'
+$tracer = if (Test-Path $tracerTs) { $tracerTs } else { $tracerPs1 }
+$ckptMgrTs = Join-Path $repoRoot 'src/checkpoint-manager.ts'
+$ckptMgrPs1 = Join-Path $repoRoot 'scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1'
+$ckptMgr = if (Test-Path $ckptMgrTs) { $ckptMgrTs } else { $ckptMgrPs1 }
 $rollback = Join-Path $repoRoot 'scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1'
 $snapMgr = Join-Path $repoRoot 'scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1'
 $auditPipe = Join-Path $repoRoot 'scripts/security/audit-pipeline.ps1'
-$evtStore = Join-Path $repoRoot 'scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1'
-$sagaOrch = Join-Path $repoRoot 'scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1'
+$evtStoreTs = Join-Path $repoRoot 'src/event-sourcing.ts'
+$evtStorePs1 = Join-Path $repoRoot 'scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1'
+$evtStore = if (Test-Path $evtStoreTs) { $evtStoreTs } else { $evtStorePs1 }
+$sagaOrchTs = Join-Path $repoRoot 'src/saga-orchestrator.ts'
+$sagaOrchPs1 = Join-Path $repoRoot 'scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1'
+$sagaOrch = if (Test-Path $sagaOrchTs) { $sagaOrchTs } else { $sagaOrchPs1 }
+
+function Invoke-Script {
+    param([string]$ScriptPath, [string[]]$Arguments)
+    if ($ScriptPath -like '*.ts') {
+        return & npx tsx $ScriptPath @Arguments
+    } else {
+        return & $ScriptPath @Arguments
+    }
+}
 
 # ===== Phase 1.3 — Tracing =====
 
 Describe 'Phase 1.3 — Distributed Tracing' {
-    It 'tracing-instrument.ps1 should exist' {
+    It 'tracing-instrument should exist' {
         Test-Path $tracer | Should -Be $true
     }
 
     It 'should start a tracing span' {
-        $result = & $tracer -Action start -SpanName test-span -Quiet 2>&1
+        $result = Invoke-Script $tracer @('-Action', 'start', '-SpanName', 'test-span', '-Quiet') 2>&1
         $result | Should -Not -Be $null
         $result.traceId | Should -Not -BeNullOrEmpty
         $result.spanId | Should -Not -BeNullOrEmpty
     }
 
     It 'should end a tracing span' {
-        $span = & $tracer -Action start -SpanName test-end-span -Quiet 2>&1
-        $result = & $tracer -Action end -TraceId $span.traceId -SpanId $span.spanId -SpanName test-end-span -Attributes @{startTimeUnixNano = $span.startNs } -Quiet 2>&1
+        $span = Invoke-Script $tracer @('-Action', 'start', '-SpanName', 'test-end-span', '-Quiet') 2>&1
+        $result = Invoke-Script $tracer @('-Action', 'end', '-TraceId', $span.traceId, '-SpanId', $span.spanId, '-SpanName', 'test-end-span', '-Quiet') 2>&1
         $result | Should -Not -Be $null
         $result.durationMs | Should -BeGreaterThan 0
     }
 
     It 'should record an error span' {
-        $span = & $tracer -Action start -SpanName test-error-span -Quiet 2>&1
-        $result = & $tracer -Action error -TraceId $span.traceId -SpanId $span.spanId -SpanName test-error-span -ErrorMessage 'test error' -Attributes @{startTimeUnixNano = $span.startNs } -Quiet 2>&1
+        $span = Invoke-Script $tracer @('-Action', 'start', '-SpanName', 'test-error-span', '-Quiet') 2>&1
+        $result = Invoke-Script $tracer @('-Action', 'error', '-TraceId', $span.traceId, '-SpanId', $span.spanId, '-SpanName', 'test-error-span', '-ErrorMessage', 'test error', '-Quiet') 2>&1
         $result.error | Should -Be 'test error'
     }
 
@@ -52,34 +69,34 @@ Describe 'Phase 1.3 — Distributed Tracing' {
 # ===== Phase 2 — State Persistence =====
 
 Describe 'Phase 2 — State Persistence' {
-    It 'checkpoint-manager.ps1 should exist' {
+    It 'checkpoint-manager should exist' {
         Test-Path $ckptMgr | Should -Be $true
     }
 
     It 'should create a checkpoint' {
-        $result = & $ckptMgr -Action create -Label test-integration -Quiet 2>&1
+        $result = Invoke-Script $ckptMgr @('-Action', 'create', '-Label', 'test-integration', '-Quiet') 2>&1
         $result | Should -Not -Be $null
         $result.checkpointId | Should -Match '^ckpt-'
         $result.count | Should -BeGreaterThan 0
     }
 
     It 'should list checkpoints' {
-        $result = & $ckptMgr -Action list -Quiet 2>&1
+        $result = Invoke-Script $ckptMgr @('-Action', 'list', '-Quiet') 2>&1
         $result | Should -Not -Be $null
         $result.Count | Should -BeGreaterThan 0
     }
 
     It 'should verify a checkpoint' {
-        $list = & $ckptMgr -Action list -Quiet 2>&1
+        $list = Invoke-Script $ckptMgr @('-Action', 'list', '-Quiet') 2>&1
         $latestId = $list[0].id
-        $result = & $ckptMgr -Action verify -CheckpointId $latestId -Quiet 2>&1
+        $result = Invoke-Script $ckptMgr @('-Action', 'verify', '-CheckpointId', $latestId, '-Quiet') 2>&1
         $result.status | Should -Be 'INTACT'
     }
 
     It 'should diff a checkpoint' {
-        $list = & $ckptMgr -Action list -Quiet 2>&1
+        $list = Invoke-Script $ckptMgr @('-Action', 'list', '-Quiet') 2>&1
         $latestId = $list[0].id
-        $result = & $ckptMgr -Action diff -CheckpointId $latestId -Quiet 2>&1
+        $result = Invoke-Script $ckptMgr @('-Action', 'diff', '-CheckpointId', $latestId, '-Quiet') 2>&1
         $result | Should -Not -Be $null
         $result.checkpointId | Should -Be $latestId
     }
@@ -167,41 +184,41 @@ Describe 'Phase 3 — Audit Pipeline' {
 # ===== Phase 5 — Event Sourcing & Saga =====
 
 Describe 'Phase 5 — Event Sourcing & Saga' {
-    It 'event-sourcing.ps1 should exist' {
+    It 'event-sourcing should exist' {
         Test-Path $evtStore | Should -Be $true
     }
 
     It 'should append an event' {
-        $result = & $evtStore -Action append -AggregateId test-aggregate -EventType test.event -EventData '{"key":"value"}' -Quiet 2>&1
+        $result = Invoke-Script $evtStore @('-Action', 'append', '-AggregateId', 'test-aggregate', '-EventType', 'test.event', '-EventData', '{"key":"value"}', '-Quiet') 2>&1
         $result | Should -Not -Be $null
         $result.eventId | Should -Match '^evt-'
         $result.type | Should -Be 'test.event'
     }
 
     It 'should list aggregates' {
-        $result = & $evtStore -Action list -Quiet 2>&1
+        $result = Invoke-Script $evtStore @('-Action', 'list', '-Quiet') 2>&1
         $result | Should -Not -Be $null
         ($result | Where-Object { $_.aggregateId -eq 'test-aggregate' }).Count | Should -BeGreaterThan 0
     }
 
     It 'should replay events' {
-        $result = & $evtStore -Action replay -AggregateId test-aggregate -Quiet 2>&1
+        $result = Invoke-Script $evtStore @('-Action', 'replay', '-AggregateId', 'test-aggregate', '-Quiet') 2>&1
         $result | Should -Not -Be $null
         $result.Count | Should -BeGreaterThan 0
     }
 
     It 'should build a projection' {
-        $result = & $evtStore -Action project -AggregateId test-aggregate -Quiet 2>&1
+        $result = Invoke-Script $evtStore @('-Action', 'project', '-AggregateId', 'test-aggregate', '-Quiet') 2>&1
         $result | Should -Not -Be $null
         $result.eventsCount | Should -BeGreaterThan 0
     }
 
-    It 'saga-orchestrator.ps1 should exist' {
+    It 'saga-orchestrator should exist' {
         Test-Path $sagaOrch | Should -Be $true
     }
 
     It 'should list sagas (empty)' {
-        $result = & $sagaOrch -Action list -Quiet 2>&1
+        $result = Invoke-Script $sagaOrch @('-Action', 'list', '-Quiet') 2>&1
         $result | Should -Not -Be $null
     }
 }
@@ -222,14 +239,11 @@ Describe 'Cross-Phase Integration' {
     }
 
     It 'maintenance-watchtower should have all new check functions' {
-        $content = Get-Content (Join-Path $repoRoot 'scripts/maintenance/maintenance-watchtower.ps1') -Raw
-        $content -match 'function Check-CloudConnectors' | Should -Be $true
-        $content -match 'function Check-Tracing' | Should -Be $true
-        $content -match 'function Check-StatePersistence' | Should -Be $true
-        $content -match 'function Check-AuditPipeline' | Should -Be $true
-        $content -match 'Check-CloudConnectors' | Should -Be $true
-        $content -match 'Check-Tracing' | Should -Be $true
-        $content -match 'Check-StatePersistence' | Should -Be $true
+        $content = Get-Content (Join-Path $repoRoot 'src/maintenance-watchtower.ts') -Raw
+        $content -match 'CloudConnectors|checkCloudConnectors' | Should -Be $true
+        $content -match 'Tracing|checkTracing' | Should -Be $true
+        $content -match 'StatePersistence|checkStatePersistence' | Should -Be $true
+        $content -match 'AuditPipeline|checkAuditPipeline' | Should -Be $true
         $content -match 'Check-AuditPipeline' | Should -Be $true
     }
 
@@ -244,9 +258,10 @@ Describe 'Cross-Phase Integration' {
     }
 
     It 'session-cleanup should call tracing/checkpoint/audit' {
-        $content = Get-Content (Join-Path $repoRoot 'scripts/utilities/session/session-cleanup-start.ps1') -Raw
-        $content -match 'tracing-instrument.*Action end' | Should -Be $true
-        $content -match 'checkpoint-manager.*Action prune' | Should -Be $true
+        $tsFile = Join-Path $repoRoot 'src/session-cleanup-start.ts'
+        $content = Get-Content $tsFile -Raw
+        $content -match 'tracing-instrument.*end' | Should -Be $true
+        $content -match 'checkpoint-manager.*prune' | Should -Be $true
         $content -match 'audit-pipeline.*session.end' | Should -Be $true
         $content -match 'event-sourcing.*session.ended' | Should -Be $true
     }

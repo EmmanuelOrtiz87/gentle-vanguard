@@ -16,7 +16,6 @@ $sessionDir = Get-SessionDir -RepoRoot $repoRoot
 $statePath = Join-Path $sessionDir 'adaptive-opencode-state.json'
 $summaryPath = Join-Path $sessionDir 'startup-summary.json'
 $metricsPath = Join-Path $repoRoot '.session/metrics/current-session.json'
-$notifyPath = Join-Path $repoRoot 'scripts/utilities/notify-user.ps1'
 
 $opencodePath = Join-Path $repoRoot 'opencode.json'
 $baselinePath = Join-Path $sessionDir 'opencode-baseline.json'
@@ -52,7 +51,7 @@ function Apply-OptimizedOverlay {
 }
 
 $state = Read-JsonFile -Path $statePath
-if (-not $state) { $state = Get-DefaultState }
+$state = Ensure-StateProperties -State $state
 
 $peak = Test-PeakHour -TimeZone $TimeZone -PeakStart $PeakStart -PeakEnd $PeakEnd
 $pressure = Test-TokenPressure
@@ -73,7 +72,7 @@ if ($shouldOptimize) {
         Save-JsonFile -Path $opencodePath -Data $currentConfig
         $state.optimizationActive = $true; $state.lastAction = 'optimized'; $state.lastReason = $reason; $state.lastChangedAt = (Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz')
         Save-JsonFile -Path $statePath -Data $state
-        Invoke-AdaptiveNotify -Reason 'OpenCode optimization enabled (temporary)' -Details "Trigger: $reason"
+        # AdaptiveNotify -Reason 'OpenCode optimization enabled (temporary)' -Details "Trigger: $reason"
         Write-LogOk "Adaptive OpenCode optimization enabled ($reason)."
     } else { $state.lastReason = $reason; Save-JsonFile -Path $statePath -Data $state; Write-LogInfo "Optimization already active ($reason)." }
     exit 0

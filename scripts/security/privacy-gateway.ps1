@@ -4,10 +4,10 @@
 param(
     [Parameter(Mandatory)]
     [string]$Text,
-    
+
     [ValidateSet('ai-api', 'mcp', 'log', 'error', 'prompt')]
     [string]$Target = 'prompt',
-    
+
     [switch]$AsJson
 )
 
@@ -33,7 +33,7 @@ $INJECTION_PATTERNS = @(
 # Fallback sanitization (built-in, no dependency on external scripts)
 function Test-InjectionAttempt {
     param([string]$Text)
-    
+
     foreach ($p in $INJECTION_PATTERNS) {
         if ($Text -match $p.Pattern) {
             return @{
@@ -49,18 +49,18 @@ function Test-InjectionAttempt {
 
 function FallbackSanitize {
     param([string]$Input)
-    
+
     $machineName = [System.Environment]::MachineName
     $userName = [System.Environment]::UserName
     $homePath = [System.Environment]::GetFolderPath('UserProfile')
-    
+
     $result = $Input
     if ($machineName) { $result = $result -replace [regex]::Escape($machineName), '<MACHINE>' }
     if ($userName) { $result = $result -replace [regex]::Escape($userName), '<USER>' }
     if ($homePath) { $result = $result -replace [regex]::Escape($homePath), '<HOME>' }
     $result = $result -replace 'C:\\Users\\[^\\]+', '<HOME>'
     $result = $result -replace '/home/[^/]+', '<HOME>'
-    
+
     return $result
 }
 
@@ -81,13 +81,19 @@ if ($injectionCheck.detected) {
 }
 
 # Try security orchestrator first
-$securityScript = Join-Path $repoRoot 'scripts\security\security-orchestrator.ps1'
+$securityScriptTs = Join-Path $repoRoot 'src\security-orchestrator.ts'
+$securityScriptPs1 = Join-Path $repoRoot 'scripts\security\security-orchestrator.ps1'
+$securityScript = if (Test-Path $securityScriptTs) { $securityScriptTs } else { $securityScriptPs1 }
 $sanitized = $null
 $method = 'fallback'
 
 if (Test-Path $securityScript) {
     try {
-        $sanitized = & $securityScript -Action "sanitize" -Content $Text -Mode "prompt" 2>$null
+        if ($securityScript -like '*.ts') {
+            $sanitized = & npx tsx $securityScript -Action "sanitize" -Content $Text -Mode "prompt" 2>$null
+        } else {
+            $sanitized = & $securityScript -Action "sanitize" -Content $Text -Mode "prompt" 2>$null
+        }
         if ($sanitized) {
             $method = 'orchestrator'
         }

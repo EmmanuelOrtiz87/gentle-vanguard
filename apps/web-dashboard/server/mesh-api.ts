@@ -70,7 +70,9 @@ function getMeshWorkspaces(): MeshWorkspace[] {
           if (existsSync(lockPath)) {
             try {
               pid = parseInt(readFileSync(lockPath, 'utf-8').trim(), 10);
-              const raw = pwsh(`Get-Process -Id ${pid} -ErrorAction SilentlyContinue | ConvertTo-Json -Compress`);
+              const raw = pwsh(
+                `Get-Process -Id ${pid} -ErrorAction SilentlyContinue | ConvertTo-Json -Compress`,
+              );
               status = raw ? 'running' : 'error';
               if (status === 'error') pid = null;
             } catch {
@@ -103,23 +105,37 @@ function getMeshWorkspaces(): MeshWorkspace[] {
   });
 }
 
-export function meshHandler(_req: IncomingMessage, res: ServerResponse, headers: Record<string, string>) {
+export function meshHandler(
+  _req: IncomingMessage,
+  res: ServerResponse,
+  headers: Record<string, string>,
+) {
   const workspaces = getMeshWorkspaces();
   res.writeHead(200, headers);
   res.end(JSON.stringify({ type: 'mesh', data: { workspaces } }));
 }
 
-export function meshDiscoverHandler(_req: IncomingMessage, res: ServerResponse, headers: Record<string, string>) {
+export function meshDiscoverHandler(
+  _req: IncomingMessage,
+  res: ServerResponse,
+  headers: Record<string, string>,
+) {
   const meshScript = join(ROOT, 'scripts', 'utilities', 'MCP', 'mcp-mesh-scan.ps1');
   if (existsSync(meshScript)) {
     pwsh(`& '${meshScript}' -Action discover -Quiet`);
   }
   const workspaces = getMeshWorkspaces();
   res.writeHead(200, headers);
-  res.end(JSON.stringify({ type: 'mesh', data: { workspaces, message: 'Mesh discovery completed' } }));
+  res.end(
+    JSON.stringify({ type: 'mesh', data: { workspaces, message: 'Mesh discovery completed' } }),
+  );
 }
 
-export function meshSyncHandler(_req: IncomingMessage, res: ServerResponse, headers: Record<string, string>) {
+export function meshSyncHandler(
+  _req: IncomingMessage,
+  res: ServerResponse,
+  headers: Record<string, string>,
+) {
   const meshScript = join(ROOT, 'scripts', 'utilities', 'MCP', 'mcp-mesh-scan.ps1');
   if (existsSync(meshScript)) {
     pwsh(`& '${meshScript}' -Action sync -Quiet`);

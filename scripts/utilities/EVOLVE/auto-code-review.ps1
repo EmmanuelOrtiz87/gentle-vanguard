@@ -64,6 +64,10 @@ function Invoke-StyleReview {
 function Invoke-SecurityReview {
   param([string]$FilePath)
   $issues = @()
+
+  # Skip upstream skill docs — they contain security examples, not real secrets
+  if ($FilePath -match '\.opencode[/\\]skills[/\\]') { return $issues }
+
   $content = Get-Content $FilePath -Raw
 
   # Check for hardcoded secrets patterns
@@ -105,6 +109,7 @@ function Invoke-PerformanceReview {
 function Invoke-SddComplianceReview {
   param([string]$FilePath)
   $issues = @()
+  if (-not (Test-Path $FilePath)) { return $issues }
   $content = Get-Content $FilePath -Raw
 
   # Check .ps1 files for help comment
