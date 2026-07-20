@@ -74,26 +74,28 @@ function sha256(filePath: string): string {
 
 // ===== Checksums =====
 
-function newChecksums(engramDir: string, dbPath: string, checksumPath: string): string[] {
+function newChecksums(engramDir: string, _dbPath: string, checksumPath: string): string[] {
   log('Generating SHA256 checksums...', 'INFO');
   const checksums: string[] = [];
   const chunksDir = join(engramDir, 'chunks');
   if (existsSync(chunksDir)) {
     for (const f of readdirSync(chunksDir).filter((f) => f.endsWith('.jsonl.gz'))) {
       const hash = sha256(join(chunksDir, f));
-      checksums.push(`${hash} *${f}`);
+      checksums.push(`${hash} *chunks/${f}`);
     }
   }
-  if (existsSync(dbPath)) {
-    const hash = sha256(dbPath);
-    checksums.push(`${hash} *engram.db`);
+  // Also checksum the manifest (exclude checksums.sha256 to avoid self-reference loop)
+  const manifestPath = join(engramDir, 'manifest.json');
+  if (existsSync(manifestPath)) {
+    const hash = sha256(manifestPath);
+    checksums.push(`${hash} *manifest.json`);
   }
   writeFileSync(checksumPath, checksums.join('\n') + '\n', 'utf-8');
   log(`Checksums written: ${checksums.length} files`, 'OK');
   return checksums;
 }
 
-function verifyChecksums(engramDir: string, dbPath: string, checksumPath: string): boolean {
+function verifyChecksums(engramDir: string, _dbPath: string, checksumPath: string): boolean {
   log('Verifying checksums...', 'INFO');
   if (!existsSync(checksumPath)) {
     log(`No checksums file found at ${checksumPath}`, 'WARN');
@@ -109,7 +111,13 @@ function verifyChecksums(engramDir: string, dbPath: string, checksumPath: string
     const match = line.match(/^([0-9a-fA-F]{64}) \*(\S+)$/);
     if (match) {
       const [, expectedHash, fileName] = match;
-      const filePath = fileName === 'engram.db' ? dbPath : join(engramDir, 'chunks', fileName);
+      // Files are stored as chunks/<name> or just <name> (manifest)
+      // Handle both old format (just filename) and new format (chunks/ prefix)
+      const filePath = fileName.startsWith('chunks/')
+        ? join(engramDir, fileName)
+        : fileName.endsWith('.jsonl.gz')
+          ? join(engramDir, 'chunks', fileName)
+          : join(engramDir, fileName);
       if (existsSync(filePath)) {
         const actualHash = sha256(filePath);
         if (actualHash === expectedHash) {
@@ -171,45 +179,49 @@ function verifyManifest(engramDir: string, manifestPath: string): boolean {
   }
 }
 
-// ===== Database =====
+// ===== Chunks Verification (Engram v1.19+ uses jsonl.gz chunks, not SQLite) =====
 
-function testDbHeader(dbPath: string): [boolean, string] {
-  if (!existsSync(dbPath)) return [false, 'Not found'];
-  const stat = statSync(dbPath);
-  if (stat.size === 0) return [false, 'Empty file'];
-  try {
-    const fd = openSync(dbPath, 'r');
-    const header = Buffer.alloc(16);
-    const bytesRead = readSync(fd, header, 0, 16, 0);
-    closeSync(fd);
-    if (bytesRead < 16) return [false, 'Too small'];
-    // SQLite magic header: "SQLite format 3\0"
-    const sqliteMagic = Buffer.from([
-      0x53, 0x51, 0x4c, 0x69, 0x74, 0x65, 0x20, 0x66, 0x6f, 0x72, 0x6d, 0x61, 0x74, 0x20, 0x33,
-      0x00,
-    ]);
-    const isSqlite = header.equals(sqliteMagic);
-    if (isSqlite) return [true, `${(stat.size / 1024).toFixed(1)}KB`];
-    return [false, `Not SQLite (header: ${header.slice(0, 4).join(',')})`];
-  } catch (e: unknown) {
-    return [false, `Unreadable: ${e instanceof Error ? e.message : String(e)}`];
-  }
-}
-
-function verifyDatabase(dbPath: string): boolean {
-  log('Verifying SQLite database...', 'INFO');
-  if (!existsSync(dbPath)) {
-    log('engram.db not found', 'WARN');
-    writeResult('engram.db exists', 'FAIL');
+function verifyChunksIntegrity(engramDir: string): boolean {
+  log('Verifying chunks data...', 'INFO');
+  const chunksDir = join(engramDir, 'chunks');
+  if (!existsSync(chunksDir)) {
+    log('Chunks directory not found', 'WARN');
+    writeResult('Chunks directory exists', 'FAIL');
     return false;
   }
-  const [ok, detail] = testDbHeader(dbPath);
-  if (ok) {
-    writeResult(`SQLite header: ${detail}`, 'PASS');
+  const chunkFiles = readdirSync(chunksDir).filter((f) => f.endsWith('.jsonl.gz'));
+  if (chunkFiles.length === 0) {
+    log('No chunk files found', 'WARN');
+    writeResult('Chunks have content', 'FAIL');
+    return false;
+  }
+  let validCount = 0;
+  let totalSize = 0;
+  for (const f of chunkFiles) {
+    const fp = join(chunksDir, f);
+    try {
+      const st = statSync(fp);
+      totalSize += st.size;
+      // Verify gzip magic header (0x1f 0x8b)
+      const fd = openSync(fp, 'r');
+      const header = Buffer.alloc(2);
+      readSync(fd, header, 0, 2, 0);
+      closeSync(fd);
+      if (header[0] === 0x1f && header[1] === 0x8b) {
+        validCount++;
+      } else {
+        log(`Invalid gzip header in ${f}`, 'WARN');
+      }
+    } catch {
+      log(`Cannot read ${f}`, 'WARN');
+    }
+  }
+  const totalKB = (totalSize / 1024).toFixed(1);
+  if (validCount === chunkFiles.length) {
+    writeResult(`Chunks (${chunkFiles.length} files, ${totalKB}KB)`, 'PASS');
     return true;
   }
-  log(`engram.db check: ${detail}`, 'ERR');
-  writeResult('engram.db is valid SQLite', 'FAIL');
+  writeResult(`Chunks integrity (${validCount}/${chunkFiles.length} valid)`, 'FAIL');
   return false;
 }
 
@@ -228,8 +240,8 @@ function invokeIntegrityCheck(
   log('1) Manifest', 'INFO');
   if (!verifyManifest(engramDir, manifestPath)) allPass = false;
 
-  log('2) Database', 'INFO');
-  if (!verifyDatabase(dbPath)) allPass = false;
+  log('2) Chunks data integrity', 'INFO');
+  if (!verifyChunksIntegrity(engramDir)) allPass = false;
 
   log('3) Checksums', 'INFO');
   if (existsSync(checksumPath)) {
@@ -267,14 +279,27 @@ function invokeIntegrityCheck(
     if (backupDirs.length > 0) {
       const latestBackup = backupDirs.sort().reverse()[0];
       const latestPath = join(backupDir, latestBackup);
-      const dbFiles = readdirSync(latestPath).filter((f) => f.endsWith('.db'));
-      if (dbFiles.length > 0) {
-        const dbSize = statSync(join(latestPath, dbFiles[0])).size;
-        writeResult(`Latest backup (${latestBackup}, ${(dbSize / 1024).toFixed(0)}KB)`, 'PASS');
+      // Support both old format (.db) and new format (.jsonl.gz chunks)
+      // Check for chunks in root or chunks/ subdirectory (new format)
+      const chunkFilesRoot = readdirSync(latestPath).filter((f) => f.endsWith('.jsonl.gz'));
+      const chunksSubDir = join(latestPath, 'chunks');
+      const chunkFilesSub = existsSync(chunksSubDir)
+        ? readdirSync(chunksSubDir).filter((f) => f.endsWith('.jsonl.gz'))
+        : [];
+      const chunkFiles = chunkFilesRoot.length > 0 ? chunkFilesRoot : chunkFilesSub;
+      if (chunkFiles.length > 0) {
+        const totalSize = chunkFiles.reduce((sum, f) => sum + statSync(join(chunkFilesSub.length > 0 ? chunksSubDir : latestPath, f)).size, 0);
+        writeResult(`Latest backup (${latestBackup}, ${Math.round(totalSize / 1024)}KB, ${chunkFiles.length} chunks)`, 'PASS');
       } else {
-        log('Latest backup may be incomplete', 'WARN');
-        writeResult('Backup integrity', 'FAIL');
-        allPass = false;
+        const dbFiles = readdirSync(latestPath).filter((f) => f.endsWith('.db'));
+        if (dbFiles.length > 0) {
+          const totalSize = dbFiles.reduce((sum, f) => sum + statSync(join(latestPath, f)).size, 0);
+          writeResult(`Latest backup (${latestBackup}, legacy ${Math.round(totalSize / 1024)}KB db)`, 'PASS');
+        } else {
+          log('Latest backup may be incomplete', 'WARN');
+          writeResult('Backup integrity', 'FAIL');
+          allPass = false;
+        }
       }
     }
   } else {

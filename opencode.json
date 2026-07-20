@@ -324,13 +324,20 @@
   "mcp": {
     "codegraph": {
       "type": "local",
-      "command": ["codegraph", "serve", "--mcp"],
+      "command": [
+        "codegraph",
+        "serve",
+        "--mcp"
+      ],
       "enabled": true
     },
     "engram": {
       "type": "stdio",
       "command": "engram",
-      "args": ["mcp", "--tools=agent"],
+      "args": [
+        "mcp",
+        "--tools=agent"
+      ],
       "enabled": true
     }
   },
@@ -340,14 +347,6 @@
     "writeFile": true,
     "editFile": true,
     "listFiles": true
-  },
-  "default_agent": "orchestrator",
-  "share": "manual",
-  "compaction": {
-    "auto": true,
-    "prune": true,
-    "tail_turns": 15,
-    "keep_recent": 5
   },
   "references": {
     "docs": {
@@ -362,6 +361,12 @@
       "path": "src",
       "description": "Use for TypeScript core source code — session pipeline, health checks, watchtower, security"
     }
+  },
+  "default_agent": "orchestrator",
+  "share": "manual",
+  "compaction": {
+    "auto": true,
+    "prune": true
   },
   "watcher": {
     "ignore": [

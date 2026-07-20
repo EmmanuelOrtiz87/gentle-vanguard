@@ -51,68 +51,11 @@ Check your MCP settings to add ~~chat, ~~email, ~~cloud storage, or other tools.
 
 ### 3. Gather Activity from Each Source
 
-**~~chat:**
-
-- Search for messages mentioning the user (`to:me`)
-- Check channels the user is in for recent activity
-- Look for threads the user participated in
-- Identify new messages in key channels
-
-**~~email:**
-
-- Search recent inbox messages
-- Identify threads with new replies
-- Flag emails with action items or questions directed at the user
-
-**~~cloud storage:**
-
-- Find documents recently modified or shared with the user
-- Note new comments on docs the user owns or collaborates on
-
-**~~project tracker:**
-
-- Tasks assigned to the user (new or updated)
-- Tasks completed by others that the user follows
-- Comments on tasks the user is involved with
-
-**~~CRM:**
-
-- Opportunity stage changes
-- New activities logged on accounts the user owns
-- Updated contacts or accounts
-
-**~~knowledge base:**
-
-- Recently updated documents in relevant collections
-- New documents created in watched areas
+See [references/activity-gathering.md](references/activity-gathering.md) for per-source MCP calls.
 
 ### 4. Identify Key Items
 
-From all gathered activity, extract and categorize:
-
-**Action Items:**
-
-- Direct requests made to the user ("Can you...", "Please...", "@user")
-- Tasks assigned or due soon
-- Questions awaiting the user's response
-- Review requests
-
-**Decisions:**
-
-- Conclusions reached in threads or emails
-- Approvals or rejections
-- Policy or direction changes
-
-**Mentions:**
-
-- Times the user was mentioned or referenced
-- Discussions about the user's projects or areas
-
-**Updates:**
-
-- Status changes on projects the user follows
-- Document updates in the user's domain
-- Completed items the user was waiting on
+From all gathered activity, extract and categorize into action items, decisions, mentions, and updates. See [references/key-items.md](references/key-items.md) for the full categorization.
 
 ### 5. Group by Topic
 
@@ -134,33 +77,7 @@ sources:
 
 ### 6. Format the Digest
 
-Structure the output clearly:
-
-```
-# [Daily/Weekly] Digest — [Date or Date Range]
-
-Sources scanned: ~~chat, ~~email, ~~cloud storage, [others]
-
-## Action Items (X items)
-- [ ] [Action item 1] — from [person], [source] ([date])
-- [ ] [Action item 2] — from [person], [source] ([date])
-
-## Decisions Made
-- [Decision 1] — [context] ([source], [date])
-- [Decision 2] — [context] ([source], [date])
-
-## [Topic/Project Group 1]
-[Activity summary with source attribution]
-
-## [Topic/Project Group 2]
-[Activity summary with source attribution]
-
-## Mentions
-- [Mention context] — [source] ([date])
-
-## Documents Updated
-- [Doc name] — [who modified, what changed] ([date])
-```
+See [references/output-format.md](references/output-format.md) for the full output template and summary stats.
 
 ### 7. Handle Unavailable Sources
 

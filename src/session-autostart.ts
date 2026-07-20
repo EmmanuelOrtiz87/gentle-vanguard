@@ -44,15 +44,22 @@ function executeStep(step: PipelineStep): Promise<{ success: boolean; error?: st
   return new Promise((resolvePromise) => {
     let child;
 
+    const spawnOptions: import('child_process').SpawnOptions = {
+      cwd: ROOT,
+      stdio: 'inherit',
+      shell: true,
+      windowsHide: true,
+    };
+
     if (scriptPath.endsWith('.ps1')) {
       const cmd = `pwsh -NoProfile -File "${scriptPath}" ${step.args || ''}`;
-      child = spawn(cmd, [], { cwd: ROOT, stdio: 'inherit', shell: true });
+      child = spawn(cmd, [], spawnOptions);
     } else if (scriptPath.endsWith('.ts')) {
       const cmd = `npx tsx "${scriptPath}" ${step.args || ''}`;
-      child = spawn(cmd, [], { cwd: ROOT, stdio: 'inherit', shell: true });
+      child = spawn(cmd, [], spawnOptions);
     } else {
       const cmd = `"${scriptPath}" ${step.args || ''}`;
-      child = spawn(cmd, [], { cwd: ROOT, stdio: 'inherit', shell: true });
+      child = spawn(cmd, [], spawnOptions);
     }
 
     child.on('close', (code) => {
@@ -99,7 +106,7 @@ async function main() {
   for (const step of steps) {
     const phase = step.phase ?? 1;
     if (!phaseMap.has(phase)) phaseMap.set(phase, []);
-    phaseMap.get(phase)!.push(step);
+    phaseMap.get(phase)?.push(step);
   }
 
   const sortedPhases = [...phaseMap.entries()].sort(([a], [b]) => a - b);

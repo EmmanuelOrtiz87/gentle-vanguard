@@ -11,6 +11,12 @@ import {
 } from 'fs';
 import { join, resolve } from 'path';
 
+interface BackupManifest {
+  actions?: string[];
+  issues?: string[];
+  [key: string]: unknown;
+}
+
 const ROOT = resolve(process.cwd());
 const TS = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 const LOG = (m: string, c = '') => console.log(c + m + '\x1b[0m');
@@ -105,7 +111,7 @@ function listBackups(): void {
     const dirPath = join(BACKUP_DIR, dir);
     const files = readdirSync(dirPath).filter((f) => f.endsWith('.bak'));
     const manifestPath = join(dirPath, 'manifest.json');
-    let manifest: any = null;
+    let manifest: BackupManifest | null = null;
     if (existsSync(manifestPath)) {
       try {
         manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'));

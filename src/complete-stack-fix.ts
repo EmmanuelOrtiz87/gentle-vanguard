@@ -9,8 +9,8 @@ const S = (p: string) => join(ROOT, p);
 function run(cmd: string): string {
   try {
     return execSync(cmd, { encoding: 'utf8', timeout: 60000, cwd: ROOT }).trim();
-  } catch (e: any) {
-    return 'ERR: ' + e.message;
+  } catch (e: unknown) {
+    return 'ERR: ' + (e instanceof Error ? e.message : String(e));
   }
 }
 function read(p: string): string {
@@ -31,7 +31,7 @@ function patch(p: string, from: string, to: string) {
   console.log('  [PATCH] ' + p);
 }
 function log(m: string, c = 'white') {
-  const cl: any = {
+  const cl: Record<string, string> = {
     cyan: '\x1b[36m',
     green: '\x1b[32m',
     yellow: '\x1b[33m',

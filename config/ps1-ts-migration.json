@@ -1,5 +1,5 @@
 {
-  "version": "5.0.0",
+  "version": "8.0.0",
   "summary": "TypeScript migration tracker for Gentle-Vanguard PS1 → TS.",
   "cleanupDate": "2026-07-10",
   "cleanupSummary": {
@@ -173,6 +173,102 @@
       "migratedAt": "2026-07-14",
       "configUpdated": true,
       "reason": "Tokenization, branch-hint regex, multi-format parser — benefits from TS types"
+    },
+    {
+      "id": "dashboard-common",
+      "script": "scripts/utilities/dashboard/dashboard-common.ps1",
+      "target": "src/dashboard-common.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "dashboard-ws-autostart",
+      "script": "scripts/utilities/dashboard/dashboard-ws-autostart.ps1",
+      "target": "src/dashboard-ws-autostart.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "dashboard-start",
+      "script": "scripts/utilities/dashboard/dashboard-start.ps1",
+      "target": "src/dashboard-start.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "dashboard-stop",
+      "script": "scripts/utilities/dashboard/dashboard-stop.ps1",
+      "target": "src/dashboard-stop.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "detect-tool",
+      "script": "scripts/utilities/setup/DETECT/detect-tool.ps1",
+      "target": "src/detect-tool.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "lefthook-verify",
+      "script": "scripts/utilities/lefthook-verify.ps1",
+      "target": "src/lefthook-verify.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "karpathy-enforcer",
+      "script": "scripts/adaptive/karpathy-enforcer.ps1",
+      "target": "src/karpathy-enforcer.ts",
+      "priority": "medium",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "session-notification",
+      "script": "scripts/utilities/session/session-notification.ps1",
+      "target": "src/session-notification.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "token-metrics-store",
+      "script": "scripts/utilities/telemetry/TELEMETRY-METRICS/token-metrics-store.ps1",
+      "target": "src/token-metrics-store.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "session-metrics-tracker",
+      "script": "scripts/utilities/session/session-metrics-tracker.ps1",
+      "target": "src/session-metrics-tracker.ts",
+      "priority": "high",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "validate-tool-configs",
+      "script": "scripts/utilities/validate-tool-configs.ps1",
+      "target": "src/validate-tool-configs.ts",
+      "priority": "medium",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
+    },
+    {
+      "id": "adaptive-opencode-profile",
+      "script": "scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-opencode-profile.ps1",
+      "target": "src/adaptive-opencode-profile.ts",
+      "priority": "medium",
+      "status": "implemented",
+      "migratedAt": "2026-07-17"
     }
   ],
   "completedWave1": [
@@ -197,6 +293,43 @@
   "completedWave3": ["tracing-instrument", "event-sourcing", "saga-orchestrator"],
   "completedWave4": ["engram-integrity-check", "mcp-gateway"],
   "completedWave5": ["post-autostart-summary", "engram-auto-sync", "skill-recommender"],
+  "completedWave6": [
+    "dashboard-common",
+    "dashboard-ws-autostart",
+    "dashboard-start",
+    "dashboard-stop",
+    "detect-tool",
+    "lefthook-verify",
+    "karpathy-enforcer",
+    "session-notification"
+  ],
+  "completedWave7": [
+    "token-metrics-store",
+    "session-metrics-tracker",
+    "validate-tool-configs",
+    "adaptive-opencode-profile"
+  ],
+  "completedWave8": [
+    "engram-policy",
+    "auth-session",
+    "codegraph-sync-autostart",
+    "validate-opencode-config",
+    "skill-router",
+    "ensure-github-bypass",
+    "check-skill-sizes",
+    "adaptive-codex-windsurf-profile",
+    "optimize-engram-usage",
+    "eval-quality-gate",
+    "ci-rollback-engine",
+    "json-validator",
+    "fine-tuning-data-collector",
+    "digest-generator",
+    "engram-auto-compact"
+  ],
+  "delegatedSteps": {
+    "session-manager": "src/session-cleanup-start.ts",
+    "token-notification-init": "src/token-metrics-store.ts"
+  },
   "nextWave": [],
   "tsFiles": [
     "src/session-autostart.ts",
@@ -217,6 +350,45 @@
     "src/mcp-gateway.ts",
     "src/post-autostart-summary.ts",
     "src/engram-auto-sync.ts",
-    "src/skill-recommender.ts"
+    "src/skill-recommender.ts",
+    "src/dashboard-common.ts",
+    "src/dashboard-ws-autostart.ts",
+    "src/dashboard-start.ts",
+    "src/dashboard-stop.ts",
+    "src/detect-tool.ts",
+    "src/lefthook-verify.ts",
+    "src/karpathy-enforcer.ts",
+    "src/session-notification.ts",
+    "src/token-metrics-store.ts",
+    "src/session-metrics-tracker.ts",
+    "src/validate-tool-configs.ts",
+    "src/adaptive-opencode-profile.ts",
+    "src/engram-policy.ts",
+    "src/auth-session.ts",
+    "src/codegraph-sync-autostart.ts",
+    "src/validate-opencode-config.ts",
+    "src/skill-router.ts",
+    "src/ensure-github-bypass.ts",
+    "src/check-skill-sizes.ts",
+    "src/adaptive-codex-windsurf-profile.ts",
+    "src/optimize-engram-usage.ts",
+    "src/eval-quality-gate.ts",
+    "src/ci-rollback-engine.ts",
+    "src/json-validator.ts",
+    "src/fine-tuning-data-collector.ts",
+    "src/digest-generator.ts",
+    "src/engram-auto-compact.ts",
+    "src/tenant-context.ts",
+    "src/planning-estimator.ts",
+    "src/cost-tracker.ts",
+    "src/backup-engram.ts",
+    "src/metrics-collector.ts",
+    "src/skill-usage-tracker.ts",
+    "src/auto-code-review.ts",
+    "src/cross-workspace-validator.ts",
+    "src/knowledge-base-init.ts",
+    "src/skill-embedder-incremental.ts",
+    "src/document-analysis-init.ts",
+    "src/skill-nudge.ts"
   ]
 }

@@ -303,6 +303,144 @@ export function invokeClear(): void {
   }
 }
 
+// ─── Bounded Loop Enforcement ──────────────────────────────────────
+//
+// Implementa el patrón del libro "Bounded Correction Loop":
+//   - Max 4 sweeps total (maxSweeps)
+//   - 2 consecutive passes to terminate (consecutivePassesRequired)
+//   - Escalation after max sweeps exceeded
+//   - Persiste estado entre sweeps en .session/correction-sweep.json
+
+const SWEEP_TRACK_PATH = join(ROOT, '.session', 'correction-sweep.json');
+
+export interface SweepState {
+  sessionId: string;
+  totalSweeps: number;
+  consecutivePasses: number;
+  lastSweepTime: string;
+  history: { sweep: number; passed: boolean; score: number; timestamp: string }[];
+  escalated: boolean;
+}
+
+function getDefaultSweepState(): SweepState {
+  return {
+    sessionId: `session-${new Date().toISOString().slice(0, 10)}`,
+    totalSweeps: 0,
+    consecutivePasses: 0,
+    lastSweepTime: '',
+    history: [],
+    escalated: false,
+  };
+}
+
+function loadSweepState(): SweepState {
+  if (!existsSync(SWEEP_TRACK_PATH)) return getDefaultSweepState();
+  try {
+    return { ...getDefaultSweepState(), ...JSON.parse(readFileSync(SWEEP_TRACK_PATH, 'utf-8')) };
+  } catch {
+    return getDefaultSweepState();
+  }
+}
+
+function saveSweepState(state: SweepState): void {
+  ensureDir(SWEEP_TRACK_PATH);
+  writeFileSync(SWEEP_TRACK_PATH, JSON.stringify(state, null, 2));
+}
+
+export function invokeBoundedCorrection(
+  score: number,
+  opts: {
+    maxSweeps?: number;
+    consecutivePassesRequired?: number;
+    quiet?: boolean;
+  } = {},
+): {
+  executed: boolean;
+  results: CorrectionResult[];
+  sweepState: SweepState;
+  escalationReason?: string;
+} {
+  const maxSweeps = opts.maxSweeps ?? 4;
+  const consecutivePassesRequired = opts.consecutivePassesRequired ?? 2;
+  const quiet = opts.quiet ?? false;
+
+  const state = loadSweepState();
+
+  // Check if already escalated
+  if (state.escalated) {
+    if (!quiet) log('Sweep already escalated — no more corrections will execute', 'WARN');
+    return { executed: false, results: [], sweepState: state, escalationReason: 'Already escalated' };
+  }
+
+  // Check max sweeps
+  if (state.totalSweeps >= maxSweeps) {
+    state.escalated = true;
+    state.history.push({
+      sweep: state.totalSweeps,
+      passed: false,
+      score,
+      timestamp: new Date().toISOString(),
+    });
+    saveSweepState(state);
+    const reason = `Max sweeps (${maxSweeps}) exceeded — escalating`;
+    if (!quiet) log(reason, 'ERROR');
+    return { executed: false, results: [], sweepState: state, escalationReason: reason };
+  }
+
+  // Check if we already have enough consecutive passes
+  if (state.consecutivePasses >= consecutivePassesRequired) {
+    if (!quiet) log(`${state.consecutivePasses} consecutive passes — no corrections needed`, 'SUCCESS');
+    return { executed: false, results: [], sweepState: state };
+  }
+
+  // Execute corrections
+  const rules = loadRules();
+  const triggeredRules = rules.filter((r) => testRuleTrigger(r, score));
+  const results = triggeredRules.map((r) => executeRule(r, score));
+
+  // Determine if this sweep passed (no triggered rules or all successful)
+  const passed = triggeredRules.length === 0 || results.every(r => r.success);
+
+  // Update sweep state
+  state.totalSweeps++;
+  state.lastSweepTime = new Date().toISOString();
+  if (passed) {
+    state.consecutivePasses++;
+  } else {
+    state.consecutivePasses = 0;
+  }
+  state.history.push({
+    sweep: state.totalSweeps,
+    passed,
+    score,
+    timestamp: new Date().toISOString(),
+  });
+
+  // Check if we've reached consecutive passes required
+  if (state.consecutivePasses >= consecutivePassesRequired) {
+    if (!quiet) log(`${state.consecutivePasses} consecutive passes — correction loop terminated`, 'SUCCESS');
+  }
+
+  // Check escalation
+  if (state.totalSweeps >= maxSweeps && state.consecutivePasses < consecutivePassesRequired) {
+    state.escalated = true;
+    const reason = `Max sweeps (${maxSweeps}) without ${consecutivePassesRequired} consecutive passes — escalating`;
+    if (!quiet) log(reason, 'ERROR');
+    saveSweepState(state);
+    return { executed: results.length > 0, results, sweepState: state, escalationReason: reason };
+  }
+
+  saveSweepState(state);
+  if (!quiet) log(`Sweep ${state.totalSweeps}/${maxSweeps}: ${passed ? 'PASS' : 'FAIL'} (${state.consecutivePasses}/${consecutivePassesRequired} consecutive)`, passed ? 'SUCCESS' : 'WARN');
+  return { executed: results.length > 0, results, sweepState: state };
+}
+
+export function resetSweepState(quiet = false): void {
+  const state = getDefaultSweepState();
+  saveSweepState(state);
+  if (!quiet) log('Correction sweep state reset', 'INFO');
+}
+
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const args = process.argv.slice(2);
   let mode = 'check',
@@ -338,6 +476,12 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         break;
       case 'clear':
         invokeClear();
+        break;
+      case 'bounded':
+        console.log(JSON.stringify(invokeBoundedCorrection(sessionScore, { quiet: args.includes('-Quiet') }), null, 2));
+        break;
+      case 'reset':
+        resetSweepState(args.includes('-Quiet'));
         break;
       default:
         console.error(`Invalid mode: ${mode}`);

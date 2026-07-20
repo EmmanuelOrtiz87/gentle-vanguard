@@ -31,131 +31,37 @@ Decision flow:
 
 ```
 Have a goal? → yes → Can you list ways to achieve it? → maybe → INVERT FIRST
-                                                      ↘ no → Definitely invert
-           ↘ no → Define goal, then invert
+                                                       ↘ no → Definitely invert
+            ↘ no → Define goal, then invert
 ```
 
 ## The Process
 
 ### Step 1: Define the Goal Clearly
-
-State what success looks like:
-
-```
-Goal: "Ship a reliable authentication system by Q2"
-Goal: "Build a high-performing engineering team"
-Goal: "Launch product with strong user retention"
-```
+State what success looks like. Capture the specific outcome.
 
 ### Step 2: Invert — Ask "How Would I Fail?"
-
-List all ways to guarantee failure, ruin, or the opposite of your goal:
-
-```
-Goal: Ship reliable auth system
-Inversions (How to guarantee failure):
-- Skip security review and pen testing
-- No rate limiting or brute force protection
-- Store passwords in plaintext
-- No monitoring or alerting
-- Skip edge cases in testing
-- No documentation for on-call
-- Single point of failure, no redundancy
-- Ignore compliance requirements
-- No rollback plan
-- Deploy on Friday before vacation
-```
+List all ways to guarantee failure or the opposite of your goal. Aim for 10+ items.
 
 ### Step 3: Categorize the Failure Modes
-
-Group by type and severity:
-
-| Category    | Failure Mode            | Severity |
-| ----------- | ----------------------- | -------- |
-| Security    | Plaintext passwords     | Critical |
-| Security    | No rate limiting        | High     |
-| Operations  | No monitoring           | High     |
-| Operations  | No rollback plan        | High     |
-| Process     | Skip security review    | Critical |
-| Process     | No documentation        | Medium   |
-| Reliability | Single point of failure | High     |
+Group by type (security, operations, process, reliability) and severity (critical/high/medium).
 
 ### Step 4: Convert to Avoidance Checklist
-
-Transform each failure mode into a requirement:
-
-```
-Anti-goal: Store passwords in plaintext
-→ Requirement: Use bcrypt/argon2 with appropriate work factor
-
-Anti-goal: No rate limiting
-→ Requirement: Implement rate limiting with exponential backoff
-
-Anti-goal: Deploy Friday before vacation
-→ Requirement: No deploys within 48h of team unavailability
-```
+Transform each failure mode into a positive requirement or mitigation.
 
 ### Step 5: Prioritize by Impact
+Focus on failures that would be most damaging, most likely, or hardest to recover from.
 
-Focus on avoiding the failures that would be:
-
-- Most damaging if they occurred
-- Most likely to occur without explicit prevention
-- Hardest to recover from
+For full examples of each step, see [references/inversion-process.md](references/inversion-process.md).
 
 ## Application Patterns
 
-### For Technical Design
+- **Technical Design** — Invert "scalable API" → prevent no-caching, sync-everything, N+1, no-circuit-breakers
+- **Code Review** — Invert "high-quality merge" → prevent security bugs, no tests, poor naming, missing error handling
+- **Career/Team Building** — Invert "successful career" → prevent unreliability, no learning, comfort zone
+- **Project Planning** — Invert "successful launch" → prevent no-user-research, no-load-testing, no-rollback
 
-```
-Goal: Build scalable API
-Invert: How to make it fail under load?
-- No caching → Add caching layer
-- Synchronous everything → Add async where appropriate
-- No connection pooling → Implement pooling
-- N+1 queries → Eager loading, query optimization
-- No circuit breakers → Add circuit breakers
-```
-
-### For Code Review
-
-```
-Goal: Merge high-quality code
-Invert: What would make this PR problematic?
-- Introduces security vulnerability
-- Breaks existing functionality
-- No tests for new behavior
-- Unclear intent/poor naming
-- Performance regression
-- Missing error handling
-```
-
-### For Career/Team Building
-
-```
-Goal: Build successful engineering career
-Invert (Munger's list of what to avoid):
-- Be unreliable
-- Learn only from your own mistakes (ignore others')
-- Give up after first failure
-- Be resentful and envious
-- Stay within comfort zone
-- Avoid difficult conversations
-- Don't learn continuously
-```
-
-### For Project Planning
-
-```
-Goal: Successful product launch
-Invert: How to guarantee launch failure?
-- No user research → Validate with users
-- No load testing → Load test before launch
-- No rollback capability → Build rollback
-- No success metrics defined → Define metrics upfront
-- Team burnout → Sustainable pace
-- No communication plan → Prepare stakeholder comms
-```
+For detailed examples, see [references/inversion-examples.md](references/inversion-examples.md).
 
 ## Combining with Pre-Mortem
 
@@ -164,16 +70,6 @@ Inversion + Pre-Mortem creates powerful risk identification:
 1. **Inversion**: List ways the project could fail (theoretical)
 2. **Pre-Mortem**: Imagine it DID fail, explain why (narrative)
 3. **Synthesize**: Combine both lists, prioritize, mitigate
-
-## Common Inversions for Software
-
-| Domain          | Goal             | Key Inversions to Avoid                                    |
-| --------------- | ---------------- | ---------------------------------------------------------- |
-| Security        | Secure system    | Trusting user input, weak auth, exposed secrets            |
-| Performance     | Fast system      | No caching, blocking calls, no indexes                     |
-| Reliability     | Stable system    | No monitoring, no redundancy, no graceful degradation      |
-| Maintainability | Clean code       | No tests, cryptic names, tight coupling                    |
-| Team            | High performance | Poor communication, no psychological safety, unclear goals |
 
 ## Verification Checklist
 

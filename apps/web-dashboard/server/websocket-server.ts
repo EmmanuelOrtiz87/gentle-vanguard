@@ -361,9 +361,9 @@ process.on('unhandledRejection', (err: unknown) => {
 });
 
 function handleRequest(req: IncomingMessage, res: ServerResponse) {
+  const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
   try {
     const url = new URL(req.url || '/', `http://${req.headers.host}`);
-    const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
 
     if (req.method === 'OPTIONS') {
       res.writeHead(204, { ...headers, 'Access-Control-Allow-Methods': 'GET, OPTIONS' });

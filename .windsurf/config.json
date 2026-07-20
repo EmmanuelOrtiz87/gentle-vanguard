@@ -4,26 +4,50 @@
   "description": "Optimized Windsurf for peak hour / token pressure",
   "workspace": {
     "projectRoot": ".",
-    "configFiles": ["AGENTS.md", "CLAUDE.md"],
+    "configFiles": [
+      "AGENTS.md",
+      "CLAUDE.md"
+    ],
     "skillRegistry": ".atl/skill-registry.md"
   },
-  "aiSettings": { "temperature": 0.3, "maxTokens": 2500, "localFirst": true },
-  "toolPermissions": { "websearch": "deny", "webfetch": "deny", "externalTools": "ask" },
+  "aiSettings": {
+    "temperature": 0.3,
+    "maxTokens": 2500,
+    "localFirst": true
+  },
+  "toolPermissions": {
+    "websearch": "deny",
+    "webfetch": "deny",
+    "externalTools": "ask"
+  },
   "contextManagement": {
     "useEngramMemory": true,
     "useLocalSkills": true,
     "useProjectDocs": true,
     "fastContext": true
   },
-  "cascade": { "restrictToLocal": true, "allowExternalTools": false, "webDocsSearch": "disabled" },
+  "cascade": {
+    "restrictToLocal": true,
+    "allowExternalTools": false,
+    "webDocsSearch": "disabled"
+  },
   "preProcessing": {
     "enabled": true,
     "mandatory": true,
     "script": "scripts/utilities/pre-process-input.ps1",
-    "scriptArgs": { "UserInput": "USER_INPUT_HERE", "WorkspaceRoot": "." }
+    "scriptArgs": {
+      "UserInput": "USER_INPUT_HERE",
+      "WorkspaceRoot": "."
+    }
   },
   "sessionManagement": {
-    "tracking": { "project": "gentle-vanguard", "sessionIdPattern": "session-YYYY-MM-DD-XX" }
+    "tracking": {
+      "project": "gentle-vanguard",
+      "sessionIdPattern": "session-YYYY-MM-DD-XX"
+    }
   },
-  "language": { "default": "es", "technicalTerms": "en" }
+  "language": {
+    "default": "es",
+    "technicalTerms": "en"
+  }
 }

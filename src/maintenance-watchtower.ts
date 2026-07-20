@@ -879,33 +879,68 @@ async function autoHeal() {
       try {
         const ports = readJson(portsFile);
         wsPort = typeof ports.wsPort === 'number' ? ports.wsPort : 8080;
-      } catch {}
+      } catch { /* port file parse error, use default */ }
     }
 
     const wsRunning = await testPort(wsPort);
-    const wsAutostart = join(ROOT, 'scripts/utilities/dashboard/dashboard-ws-autostart.ps1');
+    const wsAutostartPs1 = join(ROOT, 'scripts/utilities/dashboard/dashboard-ws-autostart.ps1');
+    const wsAutostartTs = join(ROOT, 'src', 'dashboard-ws-autostart.ts');
+    const wsAutostart = fileExists(wsAutostartTs) ? wsAutostartTs : wsAutostartPs1;
 
     if (wsRunning) {
       if (!quiet)
         console.log(`  [Heal] WS alive on port ${wsPort}, no action needed (watchdog optional)`);
       addResult('dashboard-ws', 'autoheal', 'PASS', 'WS alive, watchdog skipped', 'ok');
       healed++;
-    } else if (fileExists(wsAutostart)) {
-      if (!quiet) console.log('  [Heal] Restarting Dashboard WS server...');
+    } else if (wsAutostart.endsWith('.ts')) {
+      if (!quiet) console.log('  [Heal] Restarting Dashboard WS server (TS)...');
       try {
-        const child = spawn('pwsh', ['-NoProfile', '-File', wsAutostart, '-Quiet'], {
+        const child = spawn(
+          process.execPath,
+          ['node_modules/.bin/tsx', wsAutostart, '--quiet'],
+          {
+            cwd: ROOT,
+            stdio: 'ignore',
+            detached: true,
+            windowsHide: true,
+          },
+        );
+        child.unref();
+        await new Promise((resolve) => setTimeout(resolve, 15000));
+        if (child.exitCode === null) {
+          addResult('dashboard-ws', 'autoheal', 'PASS', `Restarted PID ${child.pid}`, 'ok');
+          healed++;
+        } else {
+          addResult('dashboard-ws', 'autoheal', 'FAIL', 'Restart failed (TS)', 'manual', true);
+          failed++;
+        }
+      } catch (e: unknown) {
+        addResult(
+          'dashboard-ws',
+          'autoheal',
+          'FAIL',
+          `Error: ${e instanceof Error ? e.message : String(e)}`,
+          'manual',
+          true,
+        );
+        failed++;
+      }
+    } else if (fileExists(wsAutostartPs1)) {
+      if (!quiet) console.log('  [Heal] Restarting Dashboard WS server (PS1 fallback)...');
+      try {
+        const child = spawn('pwsh', ['-NoProfile', '-File', wsAutostartPs1, '-Quiet'], {
           cwd: ROOT,
           stdio: 'ignore',
           detached: true,
           windowsHide: true,
         });
         child.unref();
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+        await new Promise((resolve) => setTimeout(resolve, 15000));
         if (child.exitCode === null) {
           addResult('dashboard-ws', 'autoheal', 'PASS', `Restarted PID ${child.pid}`, 'ok');
           healed++;
         } else {
-          addResult('dashboard-ws', 'autoheal', 'FAIL', 'Restart failed', 'manual', true);
+          addResult('dashboard-ws', 'autoheal', 'FAIL', 'Restart failed (PS1)', 'manual', true);
           failed++;
         }
       } catch (e: unknown) {
@@ -920,7 +955,7 @@ async function autoHeal() {
         failed++;
       }
     } else {
-      if (!quiet) console.log('    dashboard-ws-autostart.ps1 not found');
+      if (!quiet) console.log('    No dashboard-ws-autostart script found');
       failed++;
     }
   }
@@ -968,7 +1003,7 @@ function generateReport(outputPath?: string) {
   for (const r of results) {
     if (!byComponentMap.has(r.component))
       byComponentMap.set(r.component, { pass: 0, warn: 0, fail: 0, skip: 0 });
-    const c = byComponentMap.get(r.component)!;
+    const c = byComponentMap.get(r.component) ?? { pass: 0, warn: 0, fail: 0, skip: 0 };
     c[r.status.toLowerCase() as keyof typeof c]++;
   }
   const byComponent = Array.from(byComponentMap.entries()).map(([name, counts]) => ({
@@ -1141,7 +1176,7 @@ async function main() {
       generateReport(opts.output);
       break;
 
-    case 'continuous':
+    case 'continuous': {
       if (!quiet) console.log(`Continuous mode: Interval=${opts.interval}s (Ctrl+C to stop)`);
       let cycle = 0;
       const loop = async () => {
@@ -1154,11 +1189,12 @@ async function main() {
         if (!quiet) console.log(`  Next cycle in ${opts.interval}s...`);
         setTimeout(loop, opts.interval * 1000);
       };
-      loop().catch((err) => {
+      void loop().catch((err) => {
         console.error('Watchtower continuous loop error:', err);
         process.exit(1);
       });
       break;
+    }
 
     case 'report':
       await runAllChecks();

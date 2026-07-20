@@ -24,24 +24,6 @@ function warn(msg: string) {
   console.warn(`[CLEANUP] WARN: ${msg}`);
 }
 
-function runPs1(script: string, ...args: string[]): { ok: boolean; output: string } {
-  const fullPath = join(ROOT, script);
-  if (!existsSync(fullPath)) return { ok: false, output: `Script not found: ${script}` };
-  try {
-    const r = spawnSync('pwsh', ['-NoProfile', '-File', fullPath, ...args], {
-      cwd: ROOT,
-      stdio: 'pipe',
-      timeout: 30000,
-    });
-    return {
-      ok: r.status === 0,
-      output: (r.stdout?.toString() ?? '') + (r.stderr?.toString() ?? ''),
-    };
-  } catch (e: unknown) {
-    return { ok: false, output: e instanceof Error ? e.message : String(e) };
-  }
-}
-
 function removeStaleSessions(sessionDir: string): void {
   if (!existsSync(sessionDir)) return;
   const cutoff = Date.now() - 8 * 3600000;
@@ -117,16 +99,9 @@ export function runCleanup(
 
   if (!opts.skipOrphanCleanup) {
     log('Closing orphaned sessions...');
-    const r = runPs1(
-      'scripts/utilities/session-manager.ps1',
-      '-Mode',
-      'Cleanup',
-      '-OrphanMaxAgeHours',
-      '8',
-      '-NoExit',
-    );
-    if (r.ok) ok('Orphan cleanup done');
+    removeStaleSessions(sessionDir);
     removeStaleSessions(sessionDir2);
+    ok('Orphan cleanup done');
   }
 
   if (!opts.skipCacheFlush) {

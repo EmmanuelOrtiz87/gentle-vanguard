@@ -110,7 +110,7 @@ export function evaluateAction(
   }
 
   switch (action) {
-    case 'sanitize':
+    case 'sanitize': {
       if (!content) return { status: 'ERROR', message: 'Content required for sanitize' };
       const blocked = testBlockCritical(content);
       if (blocked.blocked) {
@@ -121,6 +121,7 @@ export function evaluateAction(
         };
       }
       return { status: 'OK', original: content, sanitized: sanitizeText(content, mode), mode };
+    }
     case 'block': {
       const blocked = testBlockCritical(content ?? '');
       if (blocked.blocked) {
