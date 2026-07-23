@@ -37,9 +37,9 @@ const SUITES: Suite[] = [
     required: true,
   },
   {
-    name: 'Unit Tests (staged-review)',
+    name: 'Unit Tests (all)',
     cmd: 'node',
-    args: ['--test', 'tests/unit/staged-review.test.ts'],
+    args: ['--test', 'tests/unit/*.test.ts'],
     required: true,
   },
   {
