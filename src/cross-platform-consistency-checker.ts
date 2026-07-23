@@ -117,7 +117,7 @@ export class CrossPlatformConsistencyChecker {
           platformFiles.push(file);
         }
       }
-    } catch (error) {
+    } catch {
       // Ignore errors in file discovery
     }
 
@@ -157,7 +157,7 @@ export class CrossPlatformConsistencyChecker {
           }
         }
       }
-    } catch (error) {
+    } catch {
       // Ignore errors in compatibility checking
     }
 
@@ -200,7 +200,7 @@ export class CrossPlatformConsistencyChecker {
           }
         }
       }
-    } catch (error) {
+    } catch {
       // Ignore errors in path separator checking
     }
 

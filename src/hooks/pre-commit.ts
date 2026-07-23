@@ -165,7 +165,7 @@ function main(_args?: string[]): number {
       console.log('[OK] README governance validation passed');
     } else {
       // PS1 fallback
-      let validateScript = join(gitRoot, 'scripts', 'utilities', 'validate', 'validate-readme.ps1');
+      const validateScript = join(gitRoot, 'scripts', 'utilities', 'validate', 'validate-readme.ps1');
       if (!existsSync(validateScript)) {
         console.log('[WARN] validate-readme not found - skipping governance check');
       } else {

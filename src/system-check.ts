@@ -128,4 +128,4 @@ async function run(): Promise<void> {
   if (failed > 0) process.exit(1);
 }
 
-run();
+void run();

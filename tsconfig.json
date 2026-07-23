@@ -21,9 +21,8 @@
     "sourceMap": false,
     "outDir": "./dist",
     "rootDir": ".",
-    "types": ["node"],
-    // "ignoreDeprecations": "6.0"
+    "types": ["node"]
   },
-  "include": ["scripts/mcp/**/*.ts", "scripts/recovery/**/*.ts", "scripts/utilities/ops/REVIEW/**/*.ts", "src/**/*.ts"],
+  "include": ["scripts/mcp/**/*.ts", "scripts/recovery/**/*.ts", "scripts/utilities/ops/REVIEW/**/*.ts", "scripts/utilities/security/**/*.ts", "src/**/*.ts"],
   "exclude": ["node_modules", "dist", "build", "coverage", "templates"]
 }

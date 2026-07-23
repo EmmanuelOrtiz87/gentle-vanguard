@@ -121,7 +121,7 @@ async function main(): Promise<void> {
     }
 
     const release = await getLatestRelease(preRelease);
-    let latestVersion = release.tag_name.replace(/^v/, '');
+     const latestVersion = release.tag_name.replace(/^v/, '');
     const downloadAsset = release.assets.find((a) => a.name.endsWith('.exe'));
     const downloadUrl = downloadAsset ? downloadAsset.browser_download_url : '';
 

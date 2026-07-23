@@ -183,7 +183,7 @@ function main(): void {
         let skillsUsed = '';
         let actionsPerformed = '';
         const outcome = 'COMPLETE';
-        let issuesFound = 0;
+        const issuesFound = 0;
         let duration = 0;
         let cost = 0.0;
 

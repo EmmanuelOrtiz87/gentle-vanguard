@@ -76,7 +76,7 @@ export class IntegrationValidator {
           result.warnings.push('Skill package.json missing description field');
         }
 
-      } catch (error) {
+      } catch {
         result.errors.push('Invalid package.json format');
         result.isValid = false;
       }

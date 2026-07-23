@@ -40,7 +40,6 @@ function main(): void {
   mkdirSync(rpDir, { recursive: true });
 
   const loop = async (): Promise<void> => {
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       const timestamp = new Date().toISOString().replace(/[:.]/g, '').slice(0, 15);
       const rp = {

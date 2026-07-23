@@ -77,7 +77,7 @@ function main() {
     Model: raw['Model'] ?? '',
   };
 
-  let {
+  const {
     InputTokens = 0, OutputTokens = 0, ContextChars = 0, SessionId = '',
     TurnLabel = '', InputSummary = '', OutputSummary = '', ToolCalls = '', Model = '',
   } = args;

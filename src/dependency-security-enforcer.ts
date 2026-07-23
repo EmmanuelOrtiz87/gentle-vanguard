@@ -236,7 +236,7 @@ export class DependencySecurityEnforcer {
           // Default to pass for unknown policies
           status = 'pass';
       }
-    } catch (error) {
+    } catch {
       // If we can't evaluate the result, assume failure
       status = 'fail';
     }
