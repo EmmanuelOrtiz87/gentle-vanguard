@@ -1,3 +1,4 @@
+# DEPRECATED: This script has been migrated to TS. Use: npx tsx src/check-skill-sizes.ts
 param([switch]$WarnOnly, [int]$MaxTokens = 1000, [int]$MaxLines = 150)
 
 $ErrorActionPreference = 'Continue'
@@ -34,3 +35,4 @@ if (-not $WarnOnly) {
 }
 
 exit 0
+

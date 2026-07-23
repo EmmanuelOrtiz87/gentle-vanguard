@@ -54,14 +54,14 @@ function resolveProjectRoot(): string {
 }
 
 const PROJECT_ROOT = resolveProjectRoot();
-const SCRIPT_DIR = join(PROJECT_ROOT, 'scripts', 'utilities', 'agents', 'AUTO-DELEGATION');
-const ROUTER_PATH = join(SCRIPT_DIR, 'ml-router.ps1');
-const ANALYZER_PATH = join(SCRIPT_DIR, 'context-analyzer.ps1');
+const ROUTER_PATH = join(PROJECT_ROOT, 'src', 'ml-router.ts');
 
 function getWorkspaceContext(): string {
-  if (!existsSync(ANALYZER_PATH)) return '';
+  const analyzerPath = join(resolveProjectRoot(), 'src', 'context-analyzer.ts');
+  if (!existsSync(analyzerPath)) return '';
   try {
-    const result = execSync(`pwsh -NoProfile -File "${ANALYZER_PATH}" -Raw`, {
+    const result = execSync(`npx tsx "${analyzerPath}" --raw`, {
+      timeout: 15000,
       encoding: 'utf-8',
       cwd: PROJECT_ROOT,
       stdio: ['pipe', 'pipe', 'pipe'],
@@ -83,7 +83,7 @@ function invokeSkillRecommendation(queryText: string, topN: number): SkillRecomm
   }
   try {
     const raw = execSync(
-      `pwsh -NoProfile -File "${ROUTER_PATH}" -Query "${queryText.replace(/"/g, '\\"')}" -TopN ${topN * 2} -Raw`,
+      `npx tsx src/ml-router.ts --query "${queryText.replace(/"/g, '\\"')}" --topn ${topN * 2} --raw`,
       { encoding: 'utf-8', cwd: PROJECT_ROOT, stdio: ['pipe', 'pipe', 'pipe'] },
     ).trim();
     if (!raw) return [];

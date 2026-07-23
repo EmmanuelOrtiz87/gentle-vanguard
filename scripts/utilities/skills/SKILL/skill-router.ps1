@@ -1,3 +1,4 @@
+# DEPRECATED: This script has been migrated to TS. Use: npx tsx src/skill-router.ts
 <#
 .SYNOPSIS
     Skill Router - Query routing for specialized skills
@@ -85,4 +86,5 @@ if ($matchedSkills.Count -gt 0) {
     Write-Output '{"Status":"NoMatch","Skills":[],"Query":"' + $Query + '"}'
     exit 0
 }
+
 

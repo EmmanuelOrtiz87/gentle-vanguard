@@ -530,7 +530,14 @@
   },
   "unmappedFlows": {
     "prReview": {
-      "triggers": ["pull request", "PR", "create PR", "open PR", "merge", "review PR"],
+      "triggers": [
+        "pull request",
+        "PR",
+        "create PR",
+        "open PR",
+        "merge",
+        "review PR"
+      ],
       "gate": {
         "agent": "QA",
         "profile": "$ref:agentProfiles.QA",
@@ -549,7 +556,15 @@
         "escalateOnFailure": "orchestrator"
       },
       "skill": "code-review-orchestrator-skill",
-      "dimensions": ["Security", "Quality", "Architecture", "Testing", "Docs", "API", "GitFlow"]
+      "dimensions": [
+        "Security",
+        "Quality",
+        "Architecture",
+        "Testing",
+        "Docs",
+        "API",
+        "GitFlow"
+      ]
     },
     "releaseManagement": {
       "triggers": [
@@ -604,7 +619,10 @@
           "repository state reviewed",
           "blockers stated explicitly"
         ],
-        "blockCloseIf": ["audit not recorded", "open FIXME/TODO items not documented"],
+        "blockCloseIf": [
+          "audit not recorded",
+          "open FIXME/TODO items not documented"
+        ],
         "escalateOnFailure": "orchestrator"
       },
       "skill": "project-orchestrator-skill",
@@ -624,7 +642,10 @@
         "stats"
       ],
       "gate": {
-        "agents": ["DOC", "GOV"],
+        "agents": [
+          "DOC",
+          "GOV"
+        ],
         "profiles": {
           "DOC": "$ref:agentProfiles.DOC",
           "GOV": "$ref:agentProfiles.GOV"
@@ -1714,12 +1735,45 @@
       "abrir solicitação de pull",
       "pr created"
     ],
-    "GITFLOW-HOOKS": ["pre-commit", "pre-push", "git hook", "hook validation", "git-hook"],
-    "GITFLOW-MERGE": ["post-merge", "merge sync", "sync after merge", "post-merge-sync"],
-    "GITFLOW-WORKFLOW": ["gitflow", "workflow", "git workflow", "git flow"],
-    "GITFLOW-COMMIT": ["commit", "conventional commit", "commit message", "git commit"],
-    "GITFLOW-CONFLICT": ["conflict", "merge conflict", "resolve conflict", "git conflict"],
-    "PR-REVIEW": ["pull request", "create PR", "open PR", "review PR", "merge PR", "PR review"],
+    "GITFLOW-HOOKS": [
+      "pre-commit",
+      "pre-push",
+      "git hook",
+      "hook validation",
+      "git-hook"
+    ],
+    "GITFLOW-MERGE": [
+      "post-merge",
+      "merge sync",
+      "sync after merge",
+      "post-merge-sync"
+    ],
+    "GITFLOW-WORKFLOW": [
+      "gitflow",
+      "workflow",
+      "git workflow",
+      "git flow"
+    ],
+    "GITFLOW-COMMIT": [
+      "commit",
+      "conventional commit",
+      "commit message",
+      "git commit"
+    ],
+    "GITFLOW-CONFLICT": [
+      "conflict",
+      "merge conflict",
+      "resolve conflict",
+      "git conflict"
+    ],
+    "PR-REVIEW": [
+      "pull request",
+      "create PR",
+      "open PR",
+      "review PR",
+      "merge PR",
+      "PR review"
+    ],
     "RELEASE": [
       "release",
       "changelog",
@@ -1855,13 +1909,22 @@
     "complexity_detection": {
       "enabled": true,
       "min_agents_for_adaptive": 2,
-      "complexity_keywords": ["multi-phase", "feedback-loop", "rollback", "cross-team", "high-risk"]
+      "complexity_keywords": [
+        "multi-phase",
+        "feedback-loop",
+        "rollback",
+        "cross-team",
+        "high-risk"
+      ]
     },
     "constraint_optimization": {
       "enabled": true,
       "passes_threshold": 3,
       "state_file": ".session/constraint-retention-state.json",
-      "track_elements": ["requiredEvidence", "compliance_checkpoints"],
+      "track_elements": [
+        "requiredEvidence",
+        "compliance_checkpoints"
+      ],
       "soft_drop": true,
       "reset_on_failure": true,
       "notify_on_drop": false
@@ -1869,7 +1932,11 @@
     "artifact_naming": {
       "enabled": true,
       "mode": "username_prefix",
-      "modes_available": ["username_prefix", "user_subdirectory", "session_scoped"],
+      "modes_available": [
+        "username_prefix",
+        "user_subdirectory",
+        "session_scoped"
+      ],
       "username_sources": [
         "$env:GENTLE_VANGUARD_USERNAME",
         "$env:USERNAME",
@@ -1955,7 +2022,10 @@
         "When session state file is missing: recreate from available context",
         "When git working tree is dirty: document uncommitted changes before closing"
       ],
-      "requiredEvidence": ["session state captured", "git status verified"],
+      "requiredEvidence": [
+        "session state captured",
+        "git status verified"
+      ],
       "constraint_retention": {
         "temperature_earned": false,
         "hallucinationGuard_earned": false,
@@ -2082,7 +2152,10 @@
         "When a feature changes: check if related docs need update",
         "When writing examples: test them — incorrect examples are worse than no examples"
       ],
-      "requiredEvidence": ["doc file written to disk", "all referenced paths exist"],
+      "requiredEvidence": [
+        "doc file written to disk",
+        "all referenced paths exist"
+      ],
       "constraint_retention": {
         "temperature_earned": false,
         "hallucinationGuard_earned": false,
@@ -2357,7 +2430,9 @@
       "maxRetries": 2,
       "escalateOnFailure": "orchestrator",
       "rationale": "Scripts are automation - a bad script runs unattended and causes damage",
-      "aliases": ["SCRIPT-GOV"]
+      "aliases": [
+        "SCRIPT-GOV"
+      ]
     },
     "CODEGRAPH": {
       "temperature": 0.1,

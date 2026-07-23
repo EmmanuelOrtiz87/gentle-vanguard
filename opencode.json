@@ -12,94 +12,10 @@
         "apiKey": "ollama"
       },
       "models": {
-        "qwen2.5-coder:3b": {
-          "id": "qwen2.5-coder:3b",
-          "name": "Qwen2.5 Coder 3B",
-          "family": "qwen2.5-coder",
-          "attachment": false,
-          "reasoning": false,
-          "temperature": true,
-          "tool_call": true
-        },
-        "qwen2.5-coder:7b": {
-          "id": "qwen2.5-coder:7b",
-          "name": "Qwen2.5 Coder 7B",
-          "family": "qwen2.5-coder",
-          "attachment": false,
-          "reasoning": false,
-          "temperature": true,
-          "tool_call": true
-        },
-        "qwen2.5-coder:14b": {
-          "id": "qwen2.5-coder:14b",
-          "name": "Qwen2.5 Coder 14B",
-          "family": "qwen2.5-coder",
-          "attachment": false,
-          "reasoning": false,
-          "temperature": true,
-          "tool_call": true
-        },
-        "qwen3-coder:latest": {
-          "id": "qwen3-coder:latest",
-          "name": "Qwen3 Coder 30B MoE",
-          "family": "qwen3-coder",
-          "attachment": false,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true
-        }
-      }
-    },
-    "openrouter": {
-      "options": {
-        "setCacheKey": true,
-        "timeout": 300000
-      }
-    },
-    "anthropic": {
-      "options": {
-        "setCacheKey": true,
-        "timeout": 300000
-      }
-    },
-    "littellmott": {
-      "name": "littellmott",
-      "npm": "@ai-sdk/openai-compatible",
-      "options": {
-        "baseURL": "https://ftfnxnldtgioplze2xowa3s4na0gkgpu.lambda-url.us-east-1.on.aws/v1",
-        "headers": {
-          "x-api-key": "${env:LITTELMOTT_API_KEY}"
-        }
-      },
-      "models": {
-        "claude-haiku": {
-          "name": "claude-haiku",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true
-        },
-        "kimi-2-5": {
-          "name": "kimi-2-5",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true
-        },
-        "minimax-n2-5": {
-          "name": "minimax-n2-5",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true
-        },
-        "qwen3-coder-next": {
-          "name": "qwen3-coder-next",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true
-        }
+        "qwen2.5-coder:3b": {},
+        "qwen2.5-coder:7b": {},
+        "qwen2.5-coder:14b": {},
+        "qwen3-coder:latest": {}
       }
     }
   },
@@ -136,12 +52,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": {
-        "preProcess": "scripts/utilities/pre-process-input.ps1",
-        "mappings": "config/auto-delegation.json#keywordMappings",
-        "agentProfiles": "config/auto-delegation.json#agentProfiles",
-        "fallbackStrategy": "clarify-ba"
-      },
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     },
     "sdd-design": {
@@ -158,12 +69,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": {
-        "preProcess": "scripts/utilities/pre-process-input.ps1",
-        "mappings": "config/auto-delegation.json#keywordMappings",
-        "agentProfiles": "config/auto-delegation.json#agentProfiles",
-        "fallbackStrategy": "clarify-ba"
-      },
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     },
     "sdd-apply": {
@@ -180,12 +86,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": {
-        "preProcess": "scripts/utilities/pre-process-input.ps1",
-        "mappings": "config/auto-delegation.json#keywordMappings",
-        "agentProfiles": "config/auto-delegation.json#agentProfiles",
-        "fallbackStrategy": "clarify-ba"
-      },
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     },
     "sdd-verify": {
@@ -202,12 +103,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": {
-        "preProcess": "scripts/utilities/pre-process-input.ps1",
-        "mappings": "config/auto-delegation.json#keywordMappings",
-        "agentProfiles": "config/auto-delegation.json#agentProfiles",
-        "fallbackStrategy": "clarify-ba"
-      },
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     },
     "doc-agent": {
@@ -224,12 +120,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": {
-        "preProcess": "scripts/utilities/pre-process-input.ps1",
-        "mappings": "config/auto-delegation.json#keywordMappings",
-        "agentProfiles": "config/auto-delegation.json#agentProfiles",
-        "fallbackStrategy": "clarify-ba"
-      },
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     },
     "ops-agent": {
@@ -246,12 +137,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": {
-        "preProcess": "scripts/utilities/pre-process-input.ps1",
-        "mappings": "config/auto-delegation.json#keywordMappings",
-        "agentProfiles": "config/auto-delegation.json#agentProfiles",
-        "fallbackStrategy": "clarify-ba"
-      },
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     },
     "gov-agent": {
@@ -268,12 +154,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": {
-        "preProcess": "scripts/utilities/pre-process-input.ps1",
-        "mappings": "config/auto-delegation.json#keywordMappings",
-        "agentProfiles": "config/auto-delegation.json#agentProfiles",
-        "fallbackStrategy": "clarify-ba"
-      },
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     },
     "session-agent": {
@@ -290,12 +171,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": {
-        "preProcess": "scripts/utilities/pre-process-input.ps1",
-        "mappings": "config/auto-delegation.json#keywordMappings",
-        "agentProfiles": "config/auto-delegation.json#agentProfiles",
-        "fallbackStrategy": "clarify-ba"
-      },
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     },
     "premortem-agent": {
@@ -306,38 +182,26 @@
       "options": {
         "minTokens": 2000,
         "maxTokens": 6000,
-        "temperature": 0.5
+        "temperature": 0.15
       },
       "permission": {
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": {
-        "preProcess": "scripts/utilities/pre-process-input.ps1",
-        "mappings": "config/auto-delegation.json#keywordMappings",
-        "agentProfiles": "config/auto-delegation.json#agentProfiles",
-        "fallbackStrategy": "clarify-ba"
-      },
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     }
   },
   "mcp": {
     "codegraph": {
       "type": "local",
-      "command": [
-        "codegraph",
-        "serve",
-        "--mcp"
-      ],
+      "command": "codegraph serve --mcp",
       "enabled": true
     },
     "engram": {
       "type": "stdio",
       "command": "engram",
-      "args": [
-        "mcp",
-        "--tools=agent"
-      ],
+      "args": "mcp --tools=agent",
       "enabled": true
     }
   },
@@ -347,20 +211,6 @@
     "writeFile": true,
     "editFile": true,
     "listFiles": true
-  },
-  "references": {
-    "docs": {
-      "path": "docs",
-      "description": "Use for architecture decisions, guides, SDD specs, and project documentation"
-    },
-    "config": {
-      "path": "config",
-      "description": "Use for configuration schemas, security policies, model routing, and pipeline configs"
-    },
-    "src": {
-      "path": "src",
-      "description": "Use for TypeScript core source code — session pipeline, health checks, watchtower, security"
-    }
   },
   "default_agent": "orchestrator",
   "share": "manual",
@@ -406,5 +256,6 @@
     "task": {
       "*": "allow"
     }
-  }
+  },
+  "references": {}
 }

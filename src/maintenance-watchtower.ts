@@ -285,8 +285,8 @@ async function checkMlEmbeddings() {
   }
 
   const scripts = [
-    'scripts/utilities/agents/AUTO-DELEGATION/skill-embedder.ps1',
-    'scripts/utilities/agents/AUTO-DELEGATION/ml-router.ps1',
+    'src/skill-embedder.ts',
+    'src/ml-router.ts',
   ];
   for (const s of scripts) {
     const name = basename(s);
@@ -309,8 +309,8 @@ async function checkMlEmbeddings() {
 async function checkEngram() {
   if (!quiet) console.log('  [Engram] Checking...');
 
-  const ragReindex = join(ROOT, 'scripts/utilities/memory/ENGRAM-RAG/engram-rag-reindex.ps1');
-  addResult('engram', 'reindex script', fileExists(ragReindex) ? 'PASS' : 'FAIL', '', 'manual');
+  const ragReindexTs = join(ROOT, 'src', 'engram-rag-reindex.ts');
+  addResult('engram', 'reindex script', fileExists(ragReindexTs) ? 'PASS' : 'FAIL', '', 'manual');
 
   const ragLog = join(ROOT, '.atl/rag-reindex.log');
   if (fileExists(ragLog)) {
@@ -389,7 +389,7 @@ async function checkMcp() {
 
   payloadFileOk('mcp', 'skill-server.js', join(ROOT, 'dist/scripts/mcp/skill-server.js'), 'build');
   payloadFileOk('mcp', 'skill-server.ts', join(ROOT, 'scripts/mcp/skill-server.ts'), 'manual');
-  payloadFileOk('mcp', 'mcp-bridge.ps1', join(ROOT, 'scripts/mcp-bridge/mcp-bridge.ps1'), 'manual');
+  payloadFileOk('mcp', 'mcp-bridge.ts', join(ROOT, 'src/mcp-bridge.ts'), 'manual');
   payloadFileOk(
     'mcp',
     'mcp-bridge.ts (dashboard)',
@@ -411,10 +411,10 @@ async function checkMcp() {
     'verify',
   );
 
-  const bridgePs1 = join(ROOT, 'scripts/mcp-bridge/mcp-bridge.ps1');
-  if (fileExists(bridgePs1)) {
+  const bridgeTs = join(ROOT, 'src/mcp-bridge.ts');
+  if (fileExists(bridgeTs)) {
     try {
-      const r = spawnSync('pwsh', ['-NoProfile', '-File', bridgePs1, '-Action', 'verify'], {
+      const r = spawnSync('npx', ['tsx', 'src/mcp-bridge.ts', '--action', 'verify'], {
         cwd: ROOT,
         stdio: 'pipe',
         timeout: 10000,
@@ -433,8 +433,8 @@ async function checkMcp() {
   payloadFileOk('mcp', 'mcp-registry.json', join(ROOT, 'config/mcp-registry.json'), 'config');
   payloadFileOk(
     'mcp',
-    'mcp-manager.ps1',
-    join(ROOT, 'scripts/utilities/MCP/mcp-manager.ps1'),
+    'mcp-manager.ts',
+    join(ROOT, 'src/mcp-manager.ts'),
     'manual',
   );
   payloadFileOk('mcp', 'mcp-gateway.ts', join(ROOT, 'src/mcp-gateway.ts'), 'manual');
@@ -453,10 +453,10 @@ async function checkSessionPipeline() {
   if (!quiet) console.log('  [Session] Checking...');
 
   const scripts = [
-    'scripts/utilities/session-start-optimized.ps1',
-    'scripts/utilities/session-manager.ps1',
-    'scripts/utilities/pre-process-input.ps1',
-    'scripts/utilities/session/session-start-optimized.ps1',
+    'src/session-start-optimized.ts',
+    'src/session-manager.ts',
+    'src/pre-process-input.ts',
+    'src/session-start-optimized.ts',
     'src/session-cleanup-start.ts',
   ];
   for (const s of scripts) {
@@ -550,7 +550,7 @@ async function checkSecurity() {
   const secFiles = [
     'config/owner-auth.json.enc',
     'config/owner-auth.json.integrity',
-    'scripts/security/privacy-gateway.ps1',
+    'src/privacy-gateway.ts',
     'src/security-orchestrator.ts',
     'SECURITY.md',
     '.github/CODEOWNERS',
@@ -602,11 +602,8 @@ async function checkCloudConnectors() {
     addResult('cloud-connectors', 'hybrid metrics', 'WARN', 'No hybrid routing yet', 'ok');
   }
 
-  const delegators = ['aws-delegator.ps1', 'azure-delegator.ps1', 'src/hybrid-executor.ts'];
-  const missingCount = delegators.filter((d) => {
-    if (d.endsWith('.ts')) return !fileExists(join(ROOT, d));
-    return !fileExists(join(ROOT, `scripts/utilities/ops/CLOUD-CONNECTORS/${d}`));
-  }).length;
+  const delegators = ['src/aws-delegator.ts', 'src/azure-delegator.ts', 'src/hybrid-executor.ts'];
+  const missingCount = delegators.filter((d) => !fileExists(join(ROOT, d))).length;
   if (missingCount === 0) {
     addResult('cloud-connectors', 'delegator scripts', 'PASS', 'All 3 scripts present', 'ok');
   } else {
@@ -713,11 +710,8 @@ async function checkStatePersistence() {
   }
 
   const ckptMgr = join(ROOT, 'src/checkpoint-manager.ts');
-  const rollbackOrch = join(
-    ROOT,
-    'scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1',
-  );
-  const snapMgr = join(ROOT, 'scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1');
+  const rollbackOrch = join(ROOT, 'src/rollback-orchestrator.ts');
+  const snapMgr = join(ROOT, 'src/snapshot-manager.ts');
   const allScripts = fileExists(ckptMgr) && fileExists(rollbackOrch) && fileExists(snapMgr);
   addResult(
     'state-persistence',
@@ -804,10 +798,10 @@ async function checkGovernance() {
 
 async function rebuildMlEmbeddings() {
   if (!quiet) console.log('  [Rebuild] ML Embeddings...');
-  const skillEmbedder = join(ROOT, 'scripts/utilities/agents/AUTO-DELEGATION/skill-embedder.ps1');
+  const skillEmbedder = join(ROOT, 'src/skill-embedder.ts');
   if (fileExists(skillEmbedder)) {
     try {
-      const r = spawnSync('pwsh', ['-NoProfile', '-File', skillEmbedder], {
+      const r = spawnSync('npx', ['tsx', 'src/skill-embedder.ts'], {
         cwd: ROOT,
         stdio: 'pipe',
         timeout: 60000,
@@ -830,14 +824,25 @@ async function rebuildMlEmbeddings() {
 
 async function reindexEngramRag() {
   if (!quiet) console.log('  [Rebuild] Engram RAG...');
-  const ragReindex = join(ROOT, 'scripts/utilities/memory/ENGRAM-RAG/engram-rag-reindex.ps1');
-  if (fileExists(ragReindex)) {
+  const ragReindexTs = join(ROOT, 'src', 'engram-rag-reindex.ts');
+  const ragReindexPs1 = join(ROOT, 'scripts/utilities/memory/ENGRAM-RAG/engram-rag-reindex.ps1');
+  const hasTs = fileExists(ragReindexTs);
+  if (hasTs || fileExists(ragReindexPs1)) {
     try {
-      const r = spawnSync('pwsh', ['-NoProfile', '-File', ragReindex], {
-        cwd: ROOT,
-        stdio: 'pipe',
-        timeout: 60000,
-      });
+      let r: { status: number | null };
+      if (hasTs) {
+        r = spawnSync('npx', ['tsx', ragReindexTs], {
+          cwd: ROOT,
+          stdio: 'pipe',
+          timeout: 60000,
+        });
+      } else {
+        r = spawnSync('pwsh', ['-NoProfile', '-File', ragReindexPs1], {
+          cwd: ROOT,
+          stdio: 'pipe',
+          timeout: 60000,
+        });
+      }
       addResult('engram', 'reindex', r.status === 0 ? 'PASS' : 'FAIL', 'Completed', 'ok');
     } catch (e: unknown) {
       addResult(

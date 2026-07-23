@@ -108,15 +108,21 @@ function getVaultStats(): { notes: number; sizeKB: number } {
 }
 
 function runFullSync(quiet: boolean): boolean {
-  const syncScript = join(projectRoot, 'scripts', 'utilities', 'knowledge-base', 'knowledge-base-sync.ps1');
-  if (existsSync(syncScript)) {
+  const syncScriptTs = join(projectRoot, 'src', 'knowledge-base-sync.ts');
+  const syncScriptPs1 = join(projectRoot, 'scripts', 'utilities', 'knowledge-base', 'knowledge-base-sync.ps1');
+  const hasTs = existsSync(syncScriptTs);
+  if (hasTs || existsSync(syncScriptPs1)) {
     try {
-      execSync(`pwsh -NoProfile "${syncScript}" -Mode full -Quiet`, { cwd: projectRoot, timeout: 60000, windowsHide: true });
+      if (hasTs) {
+        execSync(`npx tsx "${syncScriptTs}" --mode full --quiet`, { cwd: projectRoot, timeout: 60000, windowsHide: true });
+      } else {
+        execSync(`pwsh -NoProfile "${syncScriptPs1}" -Mode full -Quiet`, { cwd: projectRoot, timeout: 60000, windowsHide: true });
+      }
       if (!quiet) console.log('[OK] Full sync completed');
       return true;
     } catch (e: unknown) { console.log(`[ERROR] Sync failed: ${e instanceof Error ? e.message : String(e)}`); return false; }
   }
-  console.log(`[ERROR] Sync script not found: ${syncScript}`);
+  console.log(`[ERROR] Sync script not found: ${syncScriptPs1}`);
   return false;
 }
 

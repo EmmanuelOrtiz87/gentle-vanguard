@@ -1,7 +1,7 @@
 import { existsSync, statSync } from 'fs';
 import { join } from 'path';
 import { execSync } from 'child_process';
-import { ROOT, readJson } from './shared.js';
+import { ROOT, readJson } from './shared.ts';
 
 const TOKEN_PATH = join(ROOT, '.runtime', 'metrics', 'token.json');
 const SESSIONS_PATH = join(ROOT, '.runtime', 'metrics', 'sessions.json');
@@ -127,3 +127,4 @@ export function runValidations(
 
   return results;
 }
+

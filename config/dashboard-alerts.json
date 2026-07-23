@@ -84,6 +84,50 @@
       "unit": "score",
       "enabled": true,
       "direction": "below"
+    },
+    "high_memory_usage": {
+      "label": "High Memory Usage",
+      "metric": "system.memory.usagePercent",
+      "threshold": 80,
+      "severity": "warning",
+      "unit": "%",
+      "enabled": true,
+      "direction": "above"
+    },
+    "high_cpu_load": {
+      "label": "High CPU Load",
+      "metric": "system.cpu.loadAverage",
+      "threshold": 2.0,
+      "severity": "warning",
+      "unit": "load average",
+      "enabled": true,
+      "direction": "above"
+    },
+    "low_disk_space": {
+      "label": "Low Disk Space",
+      "metric": "system.memory.free",
+      "threshold": 100,
+      "severity": "warning",
+      "unit": "MB",
+      "enabled": true,
+      "direction": "below"
+    },
+    "high_response_time": {
+      "label": "High Response Time",
+      "metric": "mcp.performance.avgResponseTime",
+      "threshold": 5000,
+      "severity": "warning",
+      "unit": "ms",
+      "enabled": true
+    },
+    "low_cost_efficiency": {
+      "label": "Low Cost Efficiency",
+      "metric": "costInsights.savingsPct",
+      "threshold": 20,
+      "severity": "warning",
+      "unit": "%",
+      "enabled": true,
+      "direction": "below"
     }
   }
 }

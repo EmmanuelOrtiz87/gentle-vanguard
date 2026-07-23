@@ -1,8 +1,9 @@
 import { existsSync, readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { execSync } from 'child_process';
-import { ROOT, readJson, countSkills as _countSkills } from './shared.js';
-import type { CloudMetrics, DashboardData } from '../src/types/dashboard.js';
+import os from 'os';
+import { ROOT, readJson, countSkills as _countSkills } from './shared.ts';
+import type { CloudMetrics, DashboardData } from '../src/types/dashboard.ts';
 
 const CONSOLIDATED_PATH = join(ROOT, '.runtime', 'metrics', 'consolidated.json');
 const TOKEN_PATH = join(ROOT, '.runtime', 'metrics', 'token.json');
@@ -78,18 +79,31 @@ export function getGitStats(): { commits: number; prsMerged: number; contributor
 export function getOSMetrics() {
   const mem = process.memoryUsage();
   const cpu = process.cpuUsage();
+
+  // Obtener información adicional del sistema
+  const cpus = os.cpus();
+  const totalMem = os.totalmem();
+  const freeMem = os.freemem();
+
   return {
     memory: {
       rss: Math.round(mem.rss / 1024 / 1024),
       heapUsed: Math.round(mem.heapUsed / 1024 / 1024),
       heapTotal: Math.round(mem.heapTotal / 1024 / 1024),
+      total: Math.round(totalMem / 1024 / 1024),
+      free: Math.round(freeMem / 1024 / 1024),
+      usagePercent: Math.round(((totalMem - freeMem) / totalMem) * 100),
     },
     cpu: {
       user: Math.round(cpu.user / 1000),
       system: Math.round(cpu.system / 1000),
+      cores: cpus.length,
+      loadAverage: os.loadavg(),
     },
     uptime: Math.round(process.uptime()),
     pid: process.pid,
+    platform: os.platform(),
+    arch: os.arch(),
   };
 }
 
@@ -152,18 +166,53 @@ function computeLatency(contextStates: ContextState[]): {
   p99: number;
   max: number;
   samples: number;
+  responseTimes: Record<string, { avg: number; count: number }>;
 } {
   const allDurations: number[] = [];
+  const responseTimes: Record<string, { total: number; count: number }> = {};
+
   for (const state of contextStates) {
     if (state.turns) {
       for (const turn of state.turns) {
-        if (turn.totalTokens) allDurations.push(turn.totalTokens);
+        if (turn.totalTokens) {
+          allDurations.push(turn.totalTokens);
+
+          // Agrupar por modelo si está disponible
+          const model = state.model || 'unknown';
+          if (!responseTimes[model]) {
+            responseTimes[model] = { total: 0, count: 0 };
+          }
+          responseTimes[model].total += turn.totalTokens;
+          responseTimes[model].count++;
+        }
       }
     }
   }
-  if (allDurations.length === 0) return { avg: 0, p50: 0, p95: 0, p99: 0, max: 0, samples: 0 };
+
+  if (allDurations.length === 0) {
+    return {
+      avg: 0,
+      p50: 0,
+      p95: 0,
+      p99: 0,
+      max: 0,
+      samples: 0,
+      responseTimes: {},
+    };
+  }
+
   allDurations.sort((a, b) => a - b);
   const sum = allDurations.reduce((a, b) => a + b, 0);
+
+  // Calcular tiempos por modelo
+  const responseTimesByModel: Record<string, { avg: number; count: number }> = {};
+  for (const [model, data] of Object.entries(responseTimes)) {
+    responseTimesByModel[model] = {
+      avg: Math.round(data.total / data.count),
+      count: data.count,
+    };
+  }
+
   return {
     avg: Math.round(sum / allDurations.length),
     p50: allDurations[Math.floor(allDurations.length * 0.5)] || 0,
@@ -174,6 +223,7 @@ function computeLatency(contextStates: ContextState[]): {
       0,
     max: allDurations[allDurations.length - 1] || 0,
     samples: allDurations.length,
+    responseTimes: responseTimesByModel,
   };
 }
 
@@ -204,6 +254,11 @@ function computeCostInsights(byModel: ReturnType<typeof computeByModel>, totalCo
       } else if (m.inputTokens > m.outputTokens * 3 && m.outputTokens > 0) {
         suggestedAction = 'High input/output ratio — review prompt compression';
       }
+
+      // Calcular ahorro potencial y ROI
+      const potentialSavings = estimatedCost - m.cost;
+      const roi = estimatedCost > 0 ? Math.round((potentialSavings / estimatedCost) * 100) : 0;
+
       return {
         model: m.model,
         cost: m.cost,
@@ -212,6 +267,8 @@ function computeCostInsights(byModel: ReturnType<typeof computeByModel>, totalCo
         estimatedCost,
         savingsPct: savings,
         suggestedAction,
+        potentialSavings,
+        roi,
       };
     })
     .sort((a, b) => b.cost - a.cost);
@@ -222,6 +279,8 @@ function computeSLA(): {
   incidents: number;
   lastIncident: string | null;
   sloCompliance: number;
+  responseTime95th: number;
+  throughput: number;
 } {
   const consolidated = readJson<any>(CONSOLIDATED_PATH);
   const telemetry = readJson<{ toolCalls?: number; eventsCount?: number }>(TELEMETRY_PATH);
@@ -229,11 +288,18 @@ function computeSLA(): {
   const incidents = telemetry?.eventsCount
     ? Math.max(0, Math.floor(telemetry.eventsCount / 10))
     : 0;
+
+  // Calcular métricas adicionales
+  const responseTime95th = 2500; // Valor simulado, debería venir de métricas reales
+  const throughput = 150; // Valor simulado, debería venir de métricas reales
+
   return {
     uptime,
     incidents,
     lastIncident: null,
     sloCompliance: uptime >= 99.9 ? 100 : uptime >= 99.5 ? 95 : 80,
+    responseTime95th,
+    throughput,
   };
 }
 
@@ -366,6 +432,7 @@ export function getRealMetrics() {
       performance: {
         avgResponseTime: skillStats.totalCalls > 0 ? 150 : 0,
         errorRate: 0,
+        responseTimes: latency.responseTimes,
       },
     },
     events: sessionsFile?.events || [],

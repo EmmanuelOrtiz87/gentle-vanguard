@@ -118,10 +118,10 @@ function main(): void {
   if (totalChanged === 0) { log('No changes detected, embeddings are up to date', 'OK'); return; }
 
   if (changePercent > 50 || force) {
-    if (dryRun) { log(`[DRY-RUN] Would run full rebuild via skill-embedder.ps1`); return; }
+    if (dryRun) { log(`[DRY-RUN] Would run full rebuild via skill-embedder.ts`); return; }
     log(`${force ? 'Force flag set' : `${Math.round(changePercent)}% skills changed (>50%)`}, doing full rebuild`);
     try {
-      execSync(`pwsh -NoProfile "${join(join(findProjectRoot(ROOT), 'scripts'), 'utilities', 'agents', 'AUTO-DELEGATION', 'skill-embedder.ps1')}"`, { cwd: projectRoot, timeout: 60000, windowsHide: true });
+      execSync(`npx tsx src/skill-embedder.ts`, { cwd: projectRoot, timeout: 60000 });
     } catch (e: unknown) { log(`Full rebuild failed: ${e instanceof Error ? e.message : String(e)}`, 'ERROR'); }
     return;
   }
@@ -132,7 +132,7 @@ function main(): void {
 
   if (modified.length > 0 || added.length > 0) {
     try {
-      execSync(`pwsh -NoProfile "${join(join(findProjectRoot(ROOT), 'scripts'), 'utilities', 'agents', 'AUTO-DELEGATION', 'skill-embedder.ps1')}"`, { cwd: projectRoot, timeout: 60000, windowsHide: true });
+      execSync(`npx tsx src/skill-embedder.ts`, { cwd: projectRoot, timeout: 60000 });
     } catch (e: unknown) { log(`Rebuild failed: ${e instanceof Error ? e.message : String(e)}`, 'ERROR'); }
   } else {
     // Only removals

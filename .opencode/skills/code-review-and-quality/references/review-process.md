@@ -123,3 +123,26 @@ Part of code review is dependency review:
 5. **Keep the lockfile honest.** Commit it, review its diff, and never hand-edit it. The lockfile is the thing that actually pins what ships.
 
 For triaging `npm audit` findings and supply-chain risk (typosquatting, compromised maintainers), follow the `security-and-hardening` skill — this section covers the upgrade _workflow_, that one covers the security verdict.
+
+## Delegation Triggers
+
+Based on Gentle AI workflow guidance, these triggers direct agent behavior:
+
+| Trigger | Expected Behavior |
+|---------|-------------------|
+| Reading 4+ files to understand a flow | Delegate to exploration agent or run an exploration phase |
+| Touching 2+ non-trivial files | Use one focused writer and validate the result |
+| Implementation ready for review | Start bounded native review that freezes candidate and creates content-bound receipt |
+| Commit, push, or PR | Validate same receipt against live Git candidate; never silently reopen review |
+| Long monolithic session with accumulating complexity | Pause and delegate, re-plan, or justify why not |
+| Wrong cwd, worktree/git accident, merge recovery | Stop, preserve review scope, investigate or validate existing receipt before proceeding |
+
+## Receipt and Gate Binding
+
+The review system binds receipts to Git candidates to protect against scope/identity drift:
+
+1. **Create Receipt** — When review completes, generate receipt bound to current Git SHA
+2. **Validate on Delivery** — Before commit/PR, validate receipt matches live Git state
+3. **Staged Index** — For focused reviews, use `git add <path>` then review staged only
+
+See `review-authority-threat-model.md` for full threat model and trust boundaries.

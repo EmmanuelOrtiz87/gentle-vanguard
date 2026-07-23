@@ -2,9 +2,9 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { readFileSync, writeFileSync, existsSync, mkdirSync, watch, readdirSync } from 'fs';
 import { join, dirname } from 'path';
-import { getBridge } from './mcp-bridge.js';
-import { getStateBridge } from './shared-state-bridge.js';
-import { getGlobalHealth } from './global-health-api.js';
+import { getBridge } from './mcp-bridge.ts';
+import { getStateBridge } from './shared-state-bridge.ts';
+import { getGlobalHealth } from './global-health-api.ts';
 import {
   getListings,
   getListing,
@@ -13,26 +13,26 @@ import {
   incrementDownloads,
   validateSkillStructure,
   getSkillContent,
-} from './marketplace-api.js';
+} from './marketplace-api.ts';
 import {
   getRealMetrics,
   getTraces,
   getOSMetrics,
   getCloudMetrics,
   getTenantScopedMetrics,
-} from './real-data.js';
+} from './real-data.ts';
 import {
   mcpServersHandler,
   mcpServerActionHandler,
   mcpServerRegisterHandler,
-} from './mcp-gateway-api.js';
-import { meshHandler, meshDiscoverHandler, meshSyncHandler } from './mesh-api.js';
-import { runValidations } from './validations.js';
-import { ROOT, readJson, countSkills } from './shared.js';
+} from './mcp-gateway-api.ts';
+import { meshHandler, meshDiscoverHandler, meshSyncHandler } from './mesh-api.ts';
+import { runValidations } from './validations.ts';
+import { ROOT, readJson, countSkills } from './shared.ts';
 
 const FEEDBACK_PATH = join(ROOT, '.runtime', 'metrics', 'feedback.json');
 const ALERTS_CONFIG_PATH = join(ROOT, 'config', 'dashboard-alerts.json');
-import type { AgentSession, AgentMessage, AgentToolCall } from '../src/types/agent.js';
+import type { AgentSession, AgentMessage, AgentToolCall } from '../src/types/agent.ts';
 
 const STATS_PATH = join(ROOT, '.atl', 'skill-stats.json');
 const REGISTRY_PATH = join(ROOT, '.atl', 'skill-registry.md');

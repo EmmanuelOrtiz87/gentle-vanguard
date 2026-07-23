@@ -58,7 +58,7 @@ const WINDSURF_OPTIMIZED = JSON.stringify({
   toolPermissions: { websearch: 'deny', webfetch: 'deny', externalTools: 'ask' },
   contextManagement: { useEngramMemory: true, useLocalSkills: true, useProjectDocs: true, fastContext: true },
   cascade: { restrictToLocal: true, allowExternalTools: false, webDocsSearch: 'disabled' },
-  preProcessing: { enabled: true, mandatory: true, script: 'scripts/utilities/pre-process-input.ps1', scriptArgs: { UserInput: 'USER_INPUT_HERE', WorkspaceRoot: '.' } },
+  preProcessing: { enabled: true, mandatory: true, script: 'npx tsx src/pre-process-input.ts', scriptArgs: { UserInput: 'USER_INPUT_HERE', WorkspaceRoot: '.' } },
   sessionManagement: { tracking: { project: 'gentle-vanguard', sessionIdPattern: 'session-YYYY-MM-DD-XX' } },
   language: { default: 'es', technicalTerms: 'en' },
 }, null, 2);

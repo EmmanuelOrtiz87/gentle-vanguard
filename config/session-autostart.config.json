@@ -120,6 +120,22 @@
         "description": "Initialize Security Orchestrator with policy and privacy configs (TS)"
       },
       {
+        "id": "security-initializer",
+        "enabled": true,
+        "script": "src/security-initializer.ts",
+        "args": "",
+        "required": false,
+        "description": "Initialize enhanced security components (dependency checks, audit logging) (TS)"
+      },
+      {
+        "id": "dependency-security-initializer",
+        "enabled": true,
+        "script": "src/dependency-security-initializer.ts",
+        "args": "",
+        "required": false,
+        "description": "Initialize and enforce dependency security policies (TS)"
+      },
+      {
         "id": "skill-router",
         "enabled": true,
         "script": "src/skill-router.ts",
@@ -451,6 +467,24 @@
         "description": "Auto-compact old engram observations (>90 days) (TS)"
       },
       {
+        "id": "engram-auto-update",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/engram-auto-update.ts",
+        "args": "--check-only",
+        "required": false,
+        "description": "Check for engram updates and install if available — validates post-update (auto-evolution)"
+      },
+      {
+        "id": "gentle-ai-monitor",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/gentle-ai-monitor.ts",
+        "args": "--analyze-release",
+        "required": false,
+        "description": "Monitor gentle-ai releases without installation — analyzes and generates suggestions (alignment)"
+      },
+      {
         "id": "ml-embeddings-incremental",
         "enabled": true,
         "lazy": true,
@@ -503,6 +537,24 @@
         "args": "--action pre-commit",
         "required": false,
         "description": "Autonomous code review on staged files (v6.0) (TS)"
+      },
+      {
+        "id": "receipt-manager-init",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/ops/REVIEW/receipt-manager.ts",
+        "args": "list",
+        "required": false,
+        "description": "Initialize receipt manager — validates review receipts bound to Git candidates (Gentle AI alignment)"
+      },
+      {
+        "id": "staged-review-init",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/ops/REVIEW/staged-review.ts",
+        "args": "status",
+        "required": false,
+        "description": "Check staged review session status — supports staged index review (Gentle AI alignment)"
       },
       {
         "id": "mcp-gateway-init",

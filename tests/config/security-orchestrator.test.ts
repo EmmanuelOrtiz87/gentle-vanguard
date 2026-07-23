@@ -4,6 +4,7 @@ import {
   sanitizeText,
   testBlockCritical,
   evaluateAction,
+  detectHallucination,
   type SecurityActionResult,
 } from '../../src/security-orchestrator.ts';
 
@@ -35,5 +36,33 @@ describe('security-orchestrator.ts', () => {
   it('allows inspection actions without credentials', () => {
     const result = evaluateAction('status', undefined, 'prompt', undefined, false);
     assert.equal((result as SecurityActionResult).status, 'OK');
+  });
+
+  it('detects hallucination risks in content', () => {
+    const result = detectHallucination(
+      'According to the AI, this is definitely the correct answer.',
+      'medium'
+    );
+    assert.equal(result.hasRisk, true);
+    // Should be high risk because it matches two patterns (Unverified Claims + Absolute Statements)
+    assert.equal(result.riskLevel, 'high');
+  });
+
+  it('detects high hallucination risk with high agent tier', () => {
+    const result = detectHallucination(
+      'According to the AI, this is definitely the correct answer. The AI claims this is completely accurate.',
+      'high'
+    );
+    assert.equal(result.hasRisk, true);
+    assert.equal(result.riskLevel, 'high');
+  });
+
+  it('does not detect hallucination risk in neutral content', () => {
+    const result = detectHallucination(
+      'This is a simple statement about the weather.',
+      'medium'
+    );
+    assert.equal(result.hasRisk, false);
+    assert.equal(result.riskLevel, 'low');
   });
 });

@@ -6,8 +6,8 @@
     "activeToolDetection": {
       "enabled": true,
       "mandatory": true,
-      "script": "scripts/utilities/detect-tool.ps1",
-      "scriptArgs": "-ConfigPath config/orchestrator.json -AsJson",
+      "script": "npx tsx src/detect-tool.ts",
+      "scriptArgs": "--config config/orchestrator.json --json",
       "fallbackTool": "opencode",
       "fallbackPromptFile": "CLAUDE.md",
       "canonicalEntryPoint": "docs/AGENTS.md",
@@ -16,11 +16,8 @@
     "preProcessing": {
       "enabled": true,
       "mandatory": true,
-      "script": "scripts/utilities/pre-process-input.ps1",
-      "scriptArgs": {
-        "UserInput": "USER_INPUT_HERE",
-        "WorkspaceRoot": "."
-      },
+      "script": "npx tsx src/pre-process-input.ts",
+      "scriptArgs": "--input \"USER_INPUT_HERE\" --workspace-root .",
       "fallbackBehavior": "continue",
       "fallbackStrategy": "clarify-ba",
       "parseOutput": {
@@ -198,7 +195,8 @@
   "editing": {
     "hashline": {
       "enabled": true,
-      "script": "scripts/editing/hashline.ps1",
+      "script": "npx tsx src/hashline.ts",
+      "note": "hashline.ts — full migration complete, hashline.ps1 removed",
       "storage": ".runtime/hashline-db.json",
       "hash_algorithm": "SHA-256",
       "integration": {
@@ -209,7 +207,8 @@
   "team_mode": {
     "enabled": false,
     "note": "team-mode.ps1 and dispatch-agent.ps1 were removed in cleanup — re-enable when TS equivalents are built",
-    "message_bus": "scripts/adaptive/agent-message-bus.ps1",
+    "message_bus": "npx tsx src/agent-message-bus.ts",
+    "message_bus_note": "agent-message-bus.ts — pending migration",
     "max_members": 8,
     "runtime_dir": ".runtime/teams"
   },
@@ -298,7 +297,7 @@
   },
   "norms": {
     "orchestrator": "docs/NORMATIVAS-ORQUESTADOR.md",
-    "hashline": "scripts/editing/hashline.ps1",
+    "hashline": "src/hashline.ts (full migration complete, hashline.ps1 removed)",
     "team_mode": "disabled — re-enable when TS team orchestrator is built",
     "code_review": "rules/CODE-REVIEW-STANDARDS.md",
     "pr_workflow": "rules/PR-WORKFLOW.md",
@@ -342,8 +341,8 @@
       "supportsMemTools": true,
       "detectFirst": true,
       "mandatoryStartup": "npx tsx src/session-autostart.ts",
-      "adaptiveProfile": "scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-opencode-profile.ps1",
-      "note": "CLAUDE.md is auto-loaded by OpenCode — contains immediate detect-tool.ps1 directive atop"
+      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
+      "note": "CLAUDE.md is auto-loaded by OpenCode — contains immediate detect-tool.ts directive atop"
     },
     "claude-code": {
       "promptFile": "CLAUDE.md",
@@ -353,7 +352,7 @@
       "communicationLang": "es",
       "supportsSkillTool": true,
       "supportsMemTools": true,
-      "adaptiveProfile": "scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-opencode-profile.ps1",
+      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
       "note": "Claude Code native — CLAUDE.md is auto-loaded. Uses opencode profile as baseline."
     },
     "cline": {
@@ -364,8 +363,8 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": true,
-      "mcpBridge": "scripts/mcp-bridge/mcp-bridge.ps1",
-      "adaptiveProfile": "scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-opencode-profile.ps1",
+      "mcpBridge": "npx tsx src/mcp-bridge.ts",
+      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
       "note": "Cline sin skill tool nativo — skills via MCP bridge. Uses opencode profile as baseline."
     },
     "cursor": {
@@ -376,8 +375,8 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": true,
-      "mcpBridge": "scripts/mcp-bridge/mcp-bridge.ps1",
-      "adaptiveProfile": "scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-opencode-profile.ps1",
+      "mcpBridge": "npx tsx src/mcp-bridge.ts",
+      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
       "note": "Cursor sin skill tool nativo — skills via MCP bridge. Uses opencode profile as baseline."
     },
     "windsurf": {
@@ -388,8 +387,8 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": true,
-      "mcpBridge": "scripts/mcp-bridge/mcp-bridge.ps1",
-      "adaptiveProfile": "scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-codex-windsurf-profile.ps1",
+      "mcpBridge": "npx tsx src/mcp-bridge.ts",
+      "adaptiveProfile": "npx tsx src/adaptive-codex-windsurf-profile.ts",
       "note": "Windsurf sin skill tool nativo — skills via MCP bridge"
     },
     "codex": {
@@ -400,7 +399,7 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": false,
-      "adaptiveProfile": "scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-codex-windsurf-profile.ps1",
+      "adaptiveProfile": "npx tsx src/adaptive-codex-windsurf-profile.ts",
       "note": "Codex — shares adaptive profile with Windsurf"
     },
     "continue-dev": {
@@ -411,7 +410,7 @@
       "communicationLang": "es",
       "supportsSkillTool": true,
       "supportsMemTools": true,
-      "adaptiveProfile": "scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-opencode-profile.ps1",
+      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
       "note": "Continue.dev — uses opencode profile as baseline"
     },
     "copilot": {
@@ -422,7 +421,7 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": false,
-      "adaptiveProfile": "scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-opencode-profile.ps1",
+      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
       "note": "GitHub Copilot — uses opencode profile as baseline"
     },
     "antigravity": {
@@ -433,7 +432,7 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": false,
-      "adaptiveProfile": "scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-opencode-profile.ps1",
+      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
       "note": "Antigravity — uses opencode profile as baseline"
     },
     "claude-generic": {
@@ -444,7 +443,7 @@
       "communicationLang": "es",
       "supportsSkillTool": true,
       "supportsMemTools": true,
-      "adaptiveProfile": "scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-opencode-profile.ps1",
+      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
       "note": "Fallback for Claude variants — always prefer AGENTS.md"
     }
   },

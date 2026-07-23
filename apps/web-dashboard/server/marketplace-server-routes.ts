@@ -8,7 +8,7 @@ import {
   validateSkillStructure,
   getSkillContent,
   CreateSkillPayload,
-} from './marketplace-api.js';
+} from '\./\.ts';
 
 function json(res: ServerResponse, status: number, data: unknown): void {
   res.writeHead(status, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
@@ -158,3 +158,4 @@ export async function handleMarketplaceRoutes(
 
   return false;
 }
+

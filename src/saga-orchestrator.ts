@@ -35,6 +35,12 @@ function safePath(userPath: string, allowedBase: string): string | null {
   return resolved;
 }
 
+function getTsEquivalent(psPath: string): string | null {
+  const base = psPath.replace(/\\/g, '/').split('/').pop()?.replace(/\.ps1$/i, '') ?? '';
+  const tsPath = join(ROOT, 'src', `${base}.ts`);
+  return existsSync(tsPath) ? tsPath : null;
+}
+
 function log(msg: string, level: 'INFO' | 'WARN' | 'ERROR' | 'SUCCESS' = 'INFO') {
   const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
   const colors: Record<string, string> = {
@@ -139,11 +145,10 @@ function invokeStep(
         if (step.script) {
           const fullPath = join(ROOT, step.script);
           if (existsSync(fullPath)) {
-            const r = spawnSync('pwsh', ['-NoProfile', '-File', fullPath, ...(step.args ?? [])], {
-              cwd: ROOT,
-              stdio: 'pipe',
-              timeout: 30000,
-            });
+            const tsAlt = getTsEquivalent(fullPath);
+            const r = tsAlt
+              ? spawnSync('npx', ['tsx', tsAlt, ...(step.args ?? [])], { cwd: ROOT, stdio: 'pipe', timeout: 30000 })
+              : spawnSync('pwsh', ['-NoProfile', '-File', fullPath, ...(step.args ?? [])], { cwd: ROOT, stdio: 'pipe', timeout: 30000 });
             result.output = r.stdout?.toString();
             result.success = r.status === 0;
           } else {
@@ -236,11 +241,14 @@ function invokeCompensation(step: SagaStep, context: StepContext): boolean {
         if (comp.script) {
           const fullPath = join(ROOT, comp.script);
           if (existsSync(fullPath)) {
-            spawnSync('pwsh', ['-NoProfile', '-File', fullPath, ...(comp.args ?? [])], {
-              cwd: ROOT,
-              stdio: 'pipe',
-              timeout: 30000,
-            });
+            const tsAlt = getTsEquivalent(fullPath);
+            spawnSync(
+              tsAlt ? 'npx' : 'pwsh',
+              tsAlt
+                ? ['tsx', tsAlt, ...(comp.args ?? [])]
+                : ['-NoProfile', '-File', fullPath, ...(comp.args ?? [])],
+              { cwd: ROOT, stdio: 'pipe', timeout: 30000 },
+            );
           }
         }
         break;
@@ -253,14 +261,13 @@ function invokeCompensation(step: SagaStep, context: StepContext): boolean {
             'scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1',
           );
           if (existsSync(rollbackScript)) {
+            const tsAlt = getTsEquivalent(rollbackScript);
             spawnSync(
-              'pwsh',
-              ['-NoProfile', '-File', rollbackScript, '-CheckpointId', ckptId, '-Force'],
-              {
-                cwd: ROOT,
-                stdio: 'pipe',
-                timeout: 30000,
-              },
+              tsAlt ? 'npx' : 'pwsh',
+              tsAlt
+                ? ['tsx', tsAlt, '-CheckpointId', ckptId, '-Force']
+                : ['-NoProfile', '-File', rollbackScript, '-CheckpointId', ckptId, '-Force'],
+              { cwd: ROOT, stdio: 'pipe', timeout: 30000 },
             );
           }
         }

@@ -37,6 +37,7 @@ export interface LatencyMetrics {
   p99: number;
   max: number;
   samples: number;
+  responseTimes: Record<string, { avg: number; count: number }>;
 }
 
 export interface FeedbackMetric {
@@ -54,6 +55,8 @@ export interface CostInsight {
   estimatedCost?: number;
   savingsPct?: number;
   suggestedAction?: string;
+  potentialSavings?: number;
+  roi?: number;
 }
 
 export interface DashboardData {
@@ -77,19 +80,23 @@ export interface DashboardData {
       bySkill: Record<string, number>;
       lastCall: string | null;
     };
-    performance: { avgResponseTime: number; errorRate: number };
+    performance: { avgResponseTime: number; errorRate: number; responseTimes: Record<string, { avg: number; count: number }> };
   };
   system?: {
-    memory: { rss: number; heapUsed: number; heapTotal: number };
-    cpu: { user: number; system: number };
+    memory: { rss: number; heapUsed: number; heapTotal: number; total: number; free: number; usagePercent: number };
+    cpu: { user: number; system: number; cores: number; loadAverage: number[] };
     uptime: number;
     pid: number;
+    platform: string;
+    arch: string;
   };
   sla?: {
     uptime: number;
     incidents: number;
     lastIncident: string | null;
     sloCompliance: number;
+    responseTime95th: number;
+    throughput: number;
   };
   tenantId?: string;
   tenantName?: string;

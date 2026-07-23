@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 import { join, dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { existsSync, readdirSync, readFileSync } from 'fs';
-import type { GlobalHealth, RepositoryHealth } from '../src/types/dashboard.js';
+import type { GlobalHealth, RepositoryHealth } from '\.\./src/types/\.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -185,3 +185,4 @@ export function getGlobalHealth(): GlobalHealth {
     lastUpdated: new Date().toISOString(),
   };
 }
+
