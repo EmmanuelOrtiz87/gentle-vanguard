@@ -36,6 +36,7 @@ import { NotificationToast } from './NotificationToast';
 import { ValidationPanel } from './ValidationPanel';
 import { AlertPanel } from './AlertPanel';
 import { LiveTraceFeed } from './LiveTraceFeed';
+import { SkillHeatmap } from './SkillHeatmap';
 import { InfoPopup } from './InfoPopup';
 import { LocaleContext, useLocale, LOCALE_NAMES, LOCALE_FLAGS, t } from '../hooks/useLocale';
 import type { Locale } from '../hooks/useLocale';
@@ -483,6 +484,15 @@ function DashboardInner() {
             </div>
           </div>
         )}
+
+        {/* Skill Activity Heatmap */}
+        <div className="mb-8">
+          <SkillHeatmap
+            bySkill={(data as any).mcp?.calls?.bySkill ?? {}}
+            totalSkills={(data as any).mcp?.skills?.total ?? 0}
+            totalCalls={(data as any).mcp?.calls?.total ?? 0}
+          />
+        </div>
 
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
