@@ -85,9 +85,8 @@ function success(validator: string, details: string): void {
 }
 
 function findFirstFile(root: string, pattern: string, recursive = true): string | null {
-  const { spawnSync: spawn } = require('child_process');
   const cmd = `Get-ChildItem -Path "${root}" -Filter "${pattern}" ${recursive ? '-Recurse' : ''} -File -ErrorAction SilentlyContinue | Select-Object -First 1 | Select-Object -ExpandProperty FullName`;
-  const result = spawn('pwsh', ['-NoProfile', '-Command', cmd], { windowsHide: true });
+  const result = spawnSync('pwsh', ['-NoProfile', '-Command', cmd], { windowsHide: true });
   const out = result.stdout?.toString().trim();
   return out || null;
 }
