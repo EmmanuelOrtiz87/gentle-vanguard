@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 import { join, dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { existsSync, readdirSync, readFileSync } from 'fs';
-import type { GlobalHealth, RepositoryHealth } from '\.\./src/types/\.ts';
+import type { GlobalHealth, RepositoryHealth } from '../src/types/dashboard';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

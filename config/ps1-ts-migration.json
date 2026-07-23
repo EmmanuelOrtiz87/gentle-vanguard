@@ -594,6 +594,9 @@
     "v264-scripts-unit-test",
     "v284-scripts-unit-test"
   ],
+  "completedWave23": [
+    "delete-61-superseded-test-ps1-files"
+  ],
   "completedWave19": [
     "security-scan-ts-equivalent",
     "confluence-connector-ts-equivalent",
