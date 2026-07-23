@@ -37,6 +37,8 @@ import { ValidationPanel } from './ValidationPanel';
 import { AlertPanel } from './AlertPanel';
 import { LiveTraceFeed } from './LiveTraceFeed';
 import { SkillHeatmap } from './SkillHeatmap';
+import { SessionActivityHeatmap } from './SessionActivityHeatmap';
+import { ActivityTimeline } from './ActivityTimeline';
 import { InfoPopup } from './InfoPopup';
 import { LocaleContext, useLocale, LOCALE_NAMES, LOCALE_FLAGS, t } from '../hooks/useLocale';
 import type { Locale } from '../hooks/useLocale';
@@ -485,13 +487,14 @@ function DashboardInner() {
           </div>
         )}
 
-        {/* Skill Activity Heatmap */}
-        <div className="mb-8">
+        {/* Skill Activity + Session Activity Heatmaps */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <SkillHeatmap
             bySkill={(data as any).mcp?.calls?.bySkill ?? {}}
             totalSkills={(data as any).mcp?.skills?.total ?? 0}
             totalCalls={(data as any).mcp?.calls?.total ?? 0}
           />
+          <SessionActivityHeatmap sessions={sessions} />
         </div>
 
         <div className="mb-8">
@@ -597,8 +600,9 @@ function DashboardInner() {
           </div>
         </div>
 
-        <div className="mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <LiveChart data={history} />
+          <ActivityTimeline history={history} />
         </div>
 
         <SessionTable sessions={sessions} />
