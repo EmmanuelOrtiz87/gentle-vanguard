@@ -15,6 +15,9 @@ describe('CI/CD Workflows', () => {
     assert.ok(content.includes('dashboard-build'), 'Should have dashboard-build job');
     assert.ok(content.includes('security-scan'), 'Should have security-scan job');
     assert.ok(content.includes('workflow-lint'), 'Should have workflow-lint job');
+    assert.ok(content.includes('pnpm/action-setup'), 'Should use pnpm');
+    assert.ok(content.includes('frozen-lockfile'), 'Should use frozen lockfile');
+    assert.ok(content.includes('cache: pnpm'), 'Should cache pnpm store');
   });
 
   it('security.yml exists and contains required jobs', () => {

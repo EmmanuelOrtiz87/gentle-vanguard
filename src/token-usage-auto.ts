@@ -77,9 +77,11 @@ function main() {
     Model: raw['Model'] ?? '',
   };
 
+  const {
+    ContextChars = 0, TurnLabel = '', InputSummary = '', OutputSummary = '', ToolCalls = '', Model = '',
+  } = args;
   let {
-    InputTokens = 0, OutputTokens = 0, ContextChars = 0, SessionId = '',
-    TurnLabel = '', InputSummary = '', OutputSummary = '', ToolCalls = '', Model = '',
+    InputTokens = 0, OutputTokens = 0, SessionId = '',
   } = args;
 
   const ROOT = process.env.GENTLE_VANGUARD_BASE_DIR

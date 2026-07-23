@@ -142,7 +142,7 @@ function getHistoricalRisk(agent: string, root: string): number {
     try {
       const data: MutationHistoryEntry = JSON.parse(fs.readFileSync(path.join(agentDir, entry), 'utf-8'));
       total++;
-      if (data.status === 'rolled-back' || (data.scoreBefore != null && data.scoreAfter != null && data.scoreAfter < data.scoreBefore)) {
+      if (data.status === 'rolled-back' || (data.scoreBefore !== null && data.scoreBefore !== undefined && data.scoreAfter !== null && data.scoreAfter !== undefined && data.scoreAfter < data.scoreBefore)) {
         rollbacks++;
       }
     } catch {

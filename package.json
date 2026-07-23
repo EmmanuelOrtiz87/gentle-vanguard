@@ -97,7 +97,8 @@
     "secretlint": "^9.0.0",
     "typescript": "^5.9.3",
     "uuid": "^14.0.1",
-    "vitest": "^3.1.3"
+    "vitest": "^3.1.3",
+    "ws": "^8.21.1"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",

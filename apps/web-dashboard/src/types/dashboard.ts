@@ -146,4 +146,6 @@ export interface MetricHistory {
   sessions: number;
   cost: number;
   latency?: number;
+  mcpSkills?: number;
+  commits?: number;
 }

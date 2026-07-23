@@ -75,6 +75,26 @@ export function LiveChart({ data }: LiveChartProps) {
                 name="Latency (ms)"
               />
             )}
+            {data.some((d) => (d as any).mcpSkills) && (
+              <Line
+                type="monotone"
+                dataKey="mcpSkills"
+                stroke="#ec4899"
+                strokeWidth={2}
+                dot={false}
+                name="MCP Skills"
+              />
+            )}
+            {data.some((d) => (d as any).commits) && (
+              <Line
+                type="monotone"
+                dataKey="commits"
+                stroke="#f97316"
+                strokeWidth={2}
+                dot={false}
+                name="Commits"
+              />
+            )}
           </LineChart>
         </ResponsiveContainer>
       </div>

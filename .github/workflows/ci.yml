@@ -8,6 +8,7 @@ on:
 
 env:
   NODE_VERSION: '22'
+  PNPM_VERSION: '11.15.1'
 
 jobs:
   lint-typecheck:
@@ -16,23 +17,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Lint (ESLint)
-        run: npm run lint
+        run: pnpm lint
 
       - name: TypeScript check
-        run: npx tsc --noEmit
+        run: pnpm typecheck
 
       - name: JSON validation
-        run: npm run test:config
+        run: pnpm test:config
 
   test:
     name: Tests
@@ -40,17 +46,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Run tests
-        run: npm test
+        run: pnpm test
 
   dashboard-build:
     name: Dashboard Build
@@ -58,18 +69,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build dashboard
         working-directory: apps/web-dashboard
-        run: npm run build
+        run: pnpm build
 
   security-scan:
     name: Security Scan
@@ -77,17 +93,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Security audit
-        run: npm audit --audit-level=high || true
+        run: pnpm audit --audit-level=high || true
 
   workflow-lint:
     name: Workflow Validation
@@ -95,13 +116,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate GitHub Actions workflows
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
 
       - name: Install action-validator
-        run: npm install -g @action-validator/cli @action-validator/core
+        run: pnpm add -g @action-validator/cli @action-validator/core
 
       - name: Validate workflows
         run: action-validator .github/workflows/*.yml

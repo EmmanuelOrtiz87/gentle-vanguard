@@ -36,12 +36,16 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
         const sessions = payload.sessions?.active ?? 0;
         const cost = payload.tokens?.cost ?? 0;
         const latency = payload.latency?.avg ?? 0;
+        const mcpSkills = (payload as any).mcp?.skills?.total ?? 0;
+        const commits = (payload as any).git?.commits ?? 0;
         const newEntry: MetricHistory = {
           timestamp: payload.timestamp || new Date().toISOString(),
           tokens,
           sessions,
           cost,
           latency,
+          mcpSkills,
+          commits,
         };
         return [...prev, newEntry].slice(-20);
       });
