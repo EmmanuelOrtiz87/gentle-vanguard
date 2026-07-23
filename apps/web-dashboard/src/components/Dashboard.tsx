@@ -509,6 +509,36 @@ function DashboardInner() {
           </div>
         </div>
 
+        {/* Row: Session & Repository Activity */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <BarChart3 className="w-5 h-5 text-purple-500" />
+            <SectionHeader title="Session & Repository Activity" infoKey="active_sessions" />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="card">
+              <p className="metric-label">Total Sessions</p>
+              <p className="metric-value text-purple-600 dark:text-purple-400">{data.sessions.total}</p>
+              <p className="text-xs text-gray-500 mt-1">{data.sessions.active} active now</p>
+            </div>
+            <div className="card">
+              <p className="metric-label">Git Commits</p>
+              <p className="metric-value text-blue-600 dark:text-blue-400">{(data as any).git?.commits ?? 0}</p>
+              <p className="text-xs text-gray-500 mt-1">{(data as any).git?.contributors ?? 0} contributors</p>
+            </div>
+            <div className="card">
+              <p className="metric-label">Trace Files</p>
+              <p className="metric-value text-amber-600 dark:text-amber-400">{(data as any).traceFiles ?? 0}</p>
+              <p className="text-xs text-gray-500 mt-1">{(data as any).checkpoints ?? 0} checkpoints</p>
+            </div>
+            <div className="card">
+              <p className="metric-label">Audit Logs</p>
+              <p className="metric-value text-emerald-600 dark:text-emerald-400">{(data as any).auditLogs ?? 0}</p>
+              <p className="text-xs text-gray-500 mt-1">{(data as any).mcp?.skills?.total ?? 0} MCP skills</p>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <ValidationPanel />
           <LiveTraceFeed />

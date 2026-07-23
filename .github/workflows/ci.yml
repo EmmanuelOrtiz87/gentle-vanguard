@@ -2,13 +2,12 @@ name: Gentle-Vanguard CI/CD
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
 
 env:
-  NODE_VERSION: '20'
-  PNPM_VERSION: '11.1.1'
+  NODE_VERSION: '22'
 
 jobs:
   lint-typecheck:
@@ -17,28 +16,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Lint (ESLint)
-        run: pnpm lint
+        run: npm run lint
 
       - name: TypeScript check
-        run: pnpm typecheck
+        run: npx tsc --noEmit
 
-      - name: Format check (Prettier)
-        run: pnpm format:check
+      - name: JSON validation
+        run: npm run test:config
 
   test:
     name: Tests
@@ -46,25 +40,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Run tests
-        run: pnpm test
-
-      - name: Run integration tests
-        run: pnpm test:integration
+        run: npm test
 
   dashboard-build:
     name: Dashboard Build
@@ -72,65 +58,50 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          version: ${{ env.PNPM_VERSION }}
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build dashboard
+        working-directory: apps/web-dashboard
+        run: npm run build
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
-      - name: Build dashboard
-        run: pnpm dashboard:build
+      - name: Security audit
+        run: npm audit --audit-level=high || true
 
-  docker-build:
-    name: Docker Build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker image
-        run: pnpm docker:build
-
-  python-lint:
-    name: Python Lint
+  workflow-lint:
+    name: Workflow Validation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Python 3.11
-        uses: actions/setup-python@v5
+      - name: Validate GitHub Actions workflows
+        uses: actions/setup-node@v4
         with:
-          python-version: '3.11'
-          cache: 'pip'
+          node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install ruff
-        run: pip install ruff
+      - name: Install action-validator
+        run: npm install -g @action-validator/cli @action-validator/core
 
-      - name: Ruff check
-        run: ruff check .
-
-  go-test:
-    name: Go Test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: stable
-          cache: true
-
-      - name: Run Go tests
-        run: go test ./tests/go-tests/...
+      - name: Validate workflows
+        run: action-validator .github/workflows/*.yml

@@ -13,7 +13,8 @@ describe('CI/CD Workflows', () => {
     assert.ok(content.includes('lint-typecheck'), 'Should have lint-typecheck job');
     assert.ok(content.includes('test:'), 'Should have test job');
     assert.ok(content.includes('dashboard-build'), 'Should have dashboard-build job');
-    assert.ok(content.includes('python-lint'), 'Should have python-lint job');
+    assert.ok(content.includes('security-scan'), 'Should have security-scan job');
+    assert.ok(content.includes('workflow-lint'), 'Should have workflow-lint job');
   });
 
   it('security.yml exists and contains required jobs', () => {
