@@ -285,7 +285,7 @@ async function checkMlEmbeddings() {
   }
 
   const scripts = [
-    'src/skill-embedder.ts',
+    'src/Skills/skill-embedder.ts',
     'src/ml-router.ts',
   ];
   for (const s of scripts) {
@@ -434,10 +434,10 @@ async function checkMcp() {
   payloadFileOk(
     'mcp',
     'mcp-manager.ts',
-    join(ROOT, 'src/mcp-manager.ts'),
+    join(ROOT, 'src/MCP/mcp-manager.ts'),
     'manual',
   );
-  payloadFileOk('mcp', 'mcp-gateway.ts', join(ROOT, 'src/mcp-gateway.ts'), 'manual');
+  payloadFileOk('mcp', 'mcp-gateway.ts', join(ROOT, 'src/MCP/mcp-gateway.ts'), 'manual');
   payloadFileOk(
     'mcp',
     'mcp-gateway-api.ts (dashboard)',
@@ -550,8 +550,8 @@ async function checkSecurity() {
   const secFiles = [
     'config/owner-auth.json.enc',
     'config/owner-auth.json.integrity',
-    'src/privacy-gateway.ts',
-    'src/security-orchestrator.ts',
+    'src/Security/privacy-gateway.ts',
+    'src/Security/security-orchestrator.ts',
     'SECURITY.md',
     '.github/CODEOWNERS',
     '.github/dependabot.yml',
@@ -758,7 +758,7 @@ async function checkAuditPipeline() {
   addResult(
     'audit',
     'pipeline script',
-    fileExists(join(ROOT, 'src/audit-pipeline.ts')) ? 'PASS' : 'FAIL',
+    fileExists(join(ROOT, 'src/v4.0-Infrastructure/audit-pipeline.ts')) ? 'PASS' : 'FAIL',
     '',
     'verify',
   );
@@ -798,10 +798,10 @@ async function checkGovernance() {
 
 async function rebuildMlEmbeddings() {
   if (!quiet) console.log('  [Rebuild] ML Embeddings...');
-  const skillEmbedder = join(ROOT, 'src/skill-embedder.ts');
+  const skillEmbedder = join(ROOT, 'src/Skills/skill-embedder.ts');
   if (fileExists(skillEmbedder)) {
     try {
-      const r = spawnSync('npx', ['tsx', 'src/skill-embedder.ts'], {
+      const r = spawnSync('npx', ['tsx', 'src/Skills/skill-embedder.ts'], {
         cwd: ROOT,
         stdio: 'pipe',
         timeout: 60000,

@@ -102,6 +102,7 @@ const SUITES: Suite[] = [
     cmd: 'npx',
     args: ['tsx', '--test', 'tests/integration/routing-critical-flows.test.ts'],
     required: true,
+    timeout: 180_000,
   },
   {
     name: 'Auto-Delegation Router Integration',
