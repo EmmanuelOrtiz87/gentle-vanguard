@@ -7,14 +7,14 @@ const ROOT = resolve(import.meta.dirname, '..', '..');
 
 describe('gentle-vanguard-core', () => {
   it('src/session-autostart.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'session-autostart.ts')));
+    assert.ok(existsSync(resolve(ROOT, 'src', 'Core', 'session-autostart.ts')));
   });
 
   it('src/health-check.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'health-check.ts')));
+    assert.ok(existsSync(resolve(ROOT, 'src', 'Core', 'health-check.ts')));
   });
 
   it('src/maintenance-watchtower.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'maintenance-watchtower.ts')));
+    assert.ok(existsSync(resolve(ROOT, 'src', 'Core', 'maintenance-watchtower.ts')));
   });
 });

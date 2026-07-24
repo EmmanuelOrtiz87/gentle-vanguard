@@ -28,7 +28,7 @@ function runCLI(script: string, ...args: string[]): { stdout: string; stderr: st
 describe('Routing Critical Flows', () => {
   describe('Tool detection', () => {
     it('detects OpenCode tool via --json flag', () => {
-      const { stdout, status } = runCLI('src/detect-tool.ts', '--json');
+      const { stdout, status } = runCLI('src/Core/detect-tool.ts', '--json');
       assert.strictEqual(status, 0, `Exit code: ${status}, stderr: ${stdout}`);
       const parsed = JSON.parse(stdout);
       assert.strictEqual(parsed.name, 'opencode');
@@ -38,7 +38,7 @@ describe('Routing Critical Flows', () => {
     });
 
     it('returns valid OS info', () => {
-      const { stdout, status } = runCLI('src/detect-tool.ts', '--json');
+      const { stdout, status } = runCLI('src/Core/detect-tool.ts', '--json');
       assert.strictEqual(status, 0);
       const parsed = JSON.parse(stdout);
       assert.ok(parsed.os?.platform, 'Missing platform');
@@ -46,7 +46,7 @@ describe('Routing Critical Flows', () => {
     });
 
     it('returns instructions with session-autostart', () => {
-      const { stdout } = runCLI('src/detect-tool.ts', '--json');
+      const { stdout } = runCLI('src/Core/detect-tool.ts', '--json');
       const parsed = JSON.parse(stdout);
       assert.ok(parsed.instructions?.sessionAutostart, 'Missing sessionAutostart instruction');
       assert.ok(parsed.instructions?.mandatoryStartup, 'Missing mandatoryStartup');

@@ -11,7 +11,7 @@ const ROOT = resolve(import.meta.dirname, '..', '..');
 
 describe('Session Autostart', () => {
   it('runs session-autostart.ts without errors', () => {
-    const result = spawnSync('npx', ['tsx', 'src/session-autostart.ts'], {
+    const result = spawnSync('npx', ['tsx', 'src/Core/session-autostart.ts'], {
       cwd: ROOT, encoding: 'utf-8', timeout: 120000, shell: true
     });
     // Check that the pipeline started (it may have lazy background tasks still running)

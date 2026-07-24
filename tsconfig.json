@@ -24,5 +24,5 @@
     "types": ["node"]
   },
   "include": ["scripts/mcp/**/*.ts", "scripts/recovery/**/*.ts", "scripts/utilities/ops/REVIEW/**/*.ts", "scripts/utilities/security/**/*.ts", "src/**/*.ts"],
-  "exclude": ["node_modules", "dist", "build", "coverage", "templates"]
+  "exclude": ["node_modules", "dist", "build", "coverage", "templates", "src/v5.0-Convergence"]
 }

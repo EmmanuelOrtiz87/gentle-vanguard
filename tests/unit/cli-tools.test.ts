@@ -7,7 +7,7 @@ const ROOT = resolve(import.meta.dirname, '..', '..');
 
 describe('cli-tools', () => {
   it('detect-tool.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'detect-tool.ts')));
+    assert.ok(existsSync(resolve(ROOT, 'src', 'Core', 'detect-tool.ts')));
   });
 
   it('pre-process-input.ts exists', () => {

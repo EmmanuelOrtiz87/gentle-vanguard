@@ -41,6 +41,10 @@ pre-commit:
 
 pre-push:
   commands:
+    typecheck:
+      run: pnpm typecheck
+    lint:
+      run: pnpm lint
     audit-check:
       run: npx tsx src/siem-audit-bridge.ts --Scope quick
     orchestrator-auto-fix:

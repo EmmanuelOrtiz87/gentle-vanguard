@@ -7,10 +7,10 @@ const ROOT = resolve(import.meta.dirname, '..', '..');
 
 describe('plugin-architecture', () => {
   it('src/skill-factory.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'skill-factory.ts')));
+    assert.ok(existsSync(resolve(ROOT, 'src', 'Skills', 'skill-factory.ts')));
   });
 
   it('src/skill-embedder.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'skill-embedder.ts')));
+    assert.ok(existsSync(resolve(ROOT, 'src', 'Skills', 'skill-embedder.ts')));
   });
 });

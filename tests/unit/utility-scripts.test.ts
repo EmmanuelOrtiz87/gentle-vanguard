@@ -15,6 +15,6 @@ describe('utility-scripts', () => {
   });
 
   it('src/normative-audit-pipeline.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'normative-audit-pipeline.ts')));
+    assert.ok(existsSync(resolve(ROOT, 'src', 'v4.0-Infrastructure', 'normative-audit-pipeline.ts')));
   });
 });

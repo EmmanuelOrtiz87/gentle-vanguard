@@ -7,10 +7,10 @@ const ROOT = resolve(import.meta.dirname, '..', '..');
 
 describe('v284-scripts', () => {
   it('src/audit-pipeline.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'audit-pipeline.ts')));
+    assert.ok(existsSync(resolve(ROOT, 'src', 'v4.0-Infrastructure', 'audit-pipeline.ts')));
   });
 
   it('src/privacy-gateway.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'privacy-gateway.ts')));
+    assert.ok(existsSync(resolve(ROOT, 'src', 'Security', 'privacy-gateway.ts')));
   });
 });

@@ -6,7 +6,7 @@ import {
   evaluateAction,
   detectHallucination,
   type SecurityActionResult,
-} from '../../src/security-orchestrator.ts';
+} from '../../src/Security/security-orchestrator.ts';
 
 describe('security-orchestrator.ts', () => {
   it('sanitizes sensitive values in prompt mode', () => {

@@ -8,7 +8,7 @@ import { execSync } from 'child_process';
 import { resolve } from 'path';
 
 const ROOT = resolve(import.meta.dirname, '..', '..');
-const SCRIPT = resolve(ROOT, 'src', 'privacy-gateway.ts');
+const SCRIPT = resolve(ROOT, 'src', 'Security', 'privacy-gateway.ts');
 
 function runScript(scriptPath: string, ...args: string[]): string {
   try {

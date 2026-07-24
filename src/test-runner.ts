@@ -4,9 +4,9 @@
  * Test Runner — runs all valid test suites across the Gentle-Vanguard codebase.
  *
  * Suites:
- *   - Config tests:       node --test tests/config/*.test.ts        (6 tests)
- *   - Workflow tests:     node --test tests/workflows/*.test.ts     (2 tests)
- *   - Unit tests (basic): node --test tests/unit/staged-review.test.ts  (8 tests)
+ *   - Config tests:       npx tsx --test tests/config/*.test.ts        (6 tests)
+ *   - Workflow tests:     npx tsx --test tests/workflows/*.test.ts     (2 tests)
+ *   - Unit tests (basic): npx tsx --test tests/unit/staged-review.test.ts  (8 tests)
  *   - Eval tests:         npx vitest run --config vitest.eval.config.ts (~5 tests, needs vitest)
  *
  * Usage: npx tsx src/test-runner.ts [--all] [--verbose]
@@ -26,117 +26,117 @@ interface Suite {
 const SUITES: Suite[] = [
   {
     name: 'Config Tests',
-    cmd: 'node',
-    args: ['--test', 'tests/config/*.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/config/*.test.ts'],
     required: true,
   },
   {
     name: 'Workflow Tests',
-    cmd: 'node',
-    args: ['--test', 'tests/workflows/*.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/workflows/*.test.ts'],
     required: true,
   },
   {
     name: 'Unit Tests (all)',
-    cmd: 'node',
-    args: ['--test', 'tests/unit/*.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/unit/*.test.ts'],
     required: true,
   },
   {
     name: 'Security Orchestrator Tests',
-    cmd: 'node',
-    args: ['--test', 'tests/security/security-orchestrator.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/security/security-orchestrator.test.ts'],
     required: true,
   },
   {
     name: 'Encryption Manager Tests',
-    cmd: 'node',
-    args: ['--test', 'tests/security/encryption-manager.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/security/encryption-manager.test.ts'],
     required: true,
   },
   {
     name: 'Privacy Sanitizer Tests',
-    cmd: 'node',
-    args: ['--test', 'tests/security/privacy-sanitizer.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/security/privacy-sanitizer.test.ts'],
     required: true,
   },
   {
     name: 'Secrets Manager Tests',
-    cmd: 'node',
-    args: ['--test', 'tests/security/secrets-manager.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/security/secrets-manager.test.ts'],
     required: true,
   },
   {
     name: 'Security Logger Tests',
-    cmd: 'node',
-    args: ['--test', 'tests/security/security-logger.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/security/security-logger.test.ts'],
     required: true,
   },
   {
     name: 'Input Validation Tests',
-    cmd: 'node',
-    args: ['--test', 'tests/security/input-validation.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/security/input-validation.test.ts'],
     required: true,
   },
   {
     name: 'Input Validator Tests',
-    cmd: 'node',
-    args: ['--test', 'tests/security/input-validator.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/security/input-validator.test.ts'],
     required: true,
   },
   {
     name: 'Security Checks Tests',
-    cmd: 'node',
-    args: ['--test', 'tests/security/security-checks.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/security/security-checks.test.ts'],
     required: true,
   },
   {
     name: 'Session Autostart Integration',
-    cmd: 'node',
-    args: ['--test', 'tests/integration/session-autostart.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/integration/session-autostart.test.ts'],
     required: true,
     timeout: 180_000,
   },
   {
     name: 'Routing Critical Flows Integration',
-    cmd: 'node',
-    args: ['--test', 'tests/integration/routing-critical-flows.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/integration/routing-critical-flows.test.ts'],
     required: true,
   },
   {
     name: 'Auto-Delegation Router Integration',
-    cmd: 'node',
-    args: ['--test', 'tests/integration/auto-delegation-router.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/integration/auto-delegation-router.test.ts'],
     required: true,
   },
   {
     name: 'Tool Detection Integration',
-    cmd: 'node',
-    args: ['--test', 'tests/integration/detect-tool.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/integration/detect-tool.test.ts'],
     required: true,
   },
   {
     name: 'Engram Orchestrator Integration',
-    cmd: 'node',
-    args: ['--test', 'tests/integration/engram-orchestrator.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/integration/engram-orchestrator.test.ts'],
     required: true,
   },
   {
     name: 'Session Persistence Integration',
-    cmd: 'node',
-    args: ['--test', 'tests/integration/engram-session-persistence.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/integration/engram-session-persistence.test.ts'],
     required: true,
   },
   {
     name: 'Post-Session Learning Integration',
-    cmd: 'node',
-    args: ['--test', 'tests/integration/post-session-learning.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/integration/post-session-learning.test.ts'],
     required: true,
   },
   {
     name: 'Pre-Close Validator Integration',
-    cmd: 'node',
-    args: ['--test', 'tests/integration/pre-close-validator.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/integration/pre-close-validator.test.ts'],
     required: true,
   },
 ];
@@ -150,20 +150,20 @@ const OPTIONAL_SUITES: Suite[] = [
   },
   {
     name: 'Unit Tests (receipt-manager)',
-    cmd: 'node',
-    args: ['--test', 'tests/unit/receipt-manager.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/unit/receipt-manager.test.ts'],
     required: false,
   },
   {
     name: 'Unit Tests (MCP skill-server)',
-    cmd: 'node',
-    args: ['--test', 'tests/unit/mcp/skill-server.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/unit/mcp/skill-server.test.ts'],
     required: false,
   },
   {
     name: 'Integration Tests (cloud-connectors)',
-    cmd: 'node',
-    args: ['--test', 'tests/integration/cloud-connectors/*.test.ts'],
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/integration/cloud-connectors/*.test.ts'],
     required: false,
   },
 ];

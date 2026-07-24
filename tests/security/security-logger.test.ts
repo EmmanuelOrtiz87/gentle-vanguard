@@ -8,7 +8,7 @@ import { execSync } from 'child_process';
 import { resolve } from 'path';
 
 const ROOT = resolve(import.meta.dirname, '..', '..');
-const SCRIPT = resolve(ROOT, 'src', 'audit-pipeline.ts');
+const SCRIPT = resolve(ROOT, 'src', 'v4.0-Infrastructure', 'audit-pipeline.ts');
 
 function runScript(scriptPath: string, ...args: string[]): string {
   try {
