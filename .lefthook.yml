@@ -6,7 +6,7 @@ post-commit:
     codegraph-sync:
       run: npx tsx src/codegraph-post-modification-sync.ts --Trigger post-commit --Force
     hashline-snapshot:
-      run: npx tsx src/hashline-snapshot-hook.ts
+      run: npx tsx src/v4.0-Infrastructure/hashline-snapshot-hook.ts
 
 post-merge:
   commands:
@@ -46,12 +46,12 @@ pre-push:
     lint:
       run: pnpm lint
     audit-check:
-      run: npx tsx src/siem-audit-bridge.ts --Scope quick
+      run: npx tsx src/v4.0-Infrastructure/siem-audit-bridge.ts --Scope quick
     orchestrator-auto-fix:
       run: npx tsx src/orchestrate-auto-fix.ts --Fix
     npm-audit:
       glob: 'package.json'
-      run: npx tsx src/npm-audit-pre-push.ts --AuditLevel moderate
+      run: npx tsx src/v4.0-Infrastructure/npm-audit-pre-push.ts --AuditLevel moderate
 
 commit-msg:
   commands:
