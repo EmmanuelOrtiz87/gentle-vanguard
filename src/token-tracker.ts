@@ -21,6 +21,23 @@
 import { existsSync, mkdirSync, readFileSync, appendFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
+import { createRequire } from 'module';
+
+const _require = createRequire(import.meta.url);
+
+// Lazy db import for SQLite dual-write
+let _db: any = null;
+function getDb(): any {
+  if (!_db) {
+    try {
+      const mod = _require('../apps/web-dashboard/server/database/manager');
+      _db = mod.DatabaseManager.getInstance();
+    } catch {
+      // SQLite not available — skip dual-write
+    }
+  }
+  return _db;
+}
 
 interface TokenUsage {
   promptTokens: number;
@@ -176,6 +193,16 @@ export class TokenTracker {
 
     this.ensureMetricsDir();
     appendFileSync(TOKEN_LOG_FILE, JSON.stringify(entry) + '\n');
+
+    // SQLite dual-write
+    try {
+      const mgr = getDb();
+      if (mgr) {
+        mgr.recordTokenUsage(this.sessionId, usage.promptTokens, usage.completionTokens, cost.totalCost, `${this.provider}/${this.model}`);
+      }
+    } catch {
+      // Dual-write failure is non-critical
+    }
   }
 
   /**

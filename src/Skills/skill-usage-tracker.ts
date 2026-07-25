@@ -7,6 +7,23 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
+import { createRequire } from 'module';
+
+const _require = createRequire(import.meta.url);
+
+// Lazy db import for SQLite dual-write
+let _db: any = null;
+function getDb(): any {
+  if (!_db) {
+    try {
+      const mod = _require('../../apps/web-dashboard/server/database/manager');
+      _db = mod.DatabaseManager.getInstance();
+    } catch {
+      // SQLite not available — skip dual-write
+    }
+  }
+  return _db;
+}
 
 interface SkillMetric {
   skillName: string;
@@ -77,6 +94,8 @@ function increment(name: string, outcome: string | null, tokenCount: number): vo
   if (tokenCount > 0) metric.avgTokensUsed = Math.round(((metric.avgTokensUsed * (metric.useCount - 1)) + tokenCount) / metric.useCount * 10) / 10;
   saveMetric(name, metric);
   console.log(`[OK] ${name} incremented (uses: ${metric.useCount})`);
+  // SQLite dual-write
+  try { const mgr = getDb(); if (mgr) mgr.recordSkillUsage(name, undefined, tokenCount); } catch { /* */ }
 }
 
 function recordFailure(name: string, errorType: string, description: string): void {
@@ -93,6 +112,8 @@ function recordFailure(name: string, errorType: string, description: string): vo
 
   // Also check nudge conditions
   checkNudgeConditions();
+  // SQLite dual-write
+  try { const mgr = getDb(); if (mgr) mgr.recordSkillUsage(name, undefined, 0); } catch { /* */ }
 }
 
 function record(name: string, outcome: string | null, tokenCount: number): void {
@@ -105,6 +126,8 @@ function record(name: string, outcome: string | null, tokenCount: number): void 
   }
   saveMetric(name, metric);
   console.log(`[OK] ${name} recorded`);
+  // SQLite dual-write
+  try { const mgr = getDb(); if (mgr) mgr.recordSkillUsage(name, undefined, tokenCount); } catch { /* */ }
 }
 
 function scan(): void {
