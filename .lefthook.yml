@@ -46,12 +46,12 @@ pre-push:
     lint:
       run: pnpm lint
     audit-check:
-      run: npx tsx src/v4.0-Infrastructure/siem-audit-bridge.ts --Scope quick
+      run: npx tsx src/infrastructure/siem-audit-bridge.ts --Scope quick
     orchestrator-auto-fix:
       run: npx tsx src/orchestrate-auto-fix.ts --Fix
     npm-audit:
       glob: 'package.json'
-      run: npx tsx src/v4.0-Infrastructure/npm-audit-pre-push.ts --AuditLevel moderate
+      run: npx tsx src/infrastructure/npm-audit-pre-push.ts --AuditLevel moderate
 
 commit-msg:
   commands:
