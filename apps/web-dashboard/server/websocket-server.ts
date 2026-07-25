@@ -21,6 +21,10 @@ import {
   getTraces,
   getCloudMetrics,
   getTenantScopedMetrics,
+  getSkillUsageFromDb,
+  getTokenUsageFromDb,
+  getContractResultsFromDb,
+  getRoutingRulesFromDb,
 } from './real-data.ts';
 import {
   mcpServersHandler,
@@ -747,6 +751,34 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
     if (url.pathname === '/api/cloud/metrics') {
       res.writeHead(200, headers);
       res.end(JSON.stringify({ type: 'cloud', data: getCloudMetrics() }));
+      return;
+    }
+
+    // ─── Stack Tables API (Wave 37: SQLite-backed) ─────────────────────
+    if (url.pathname === '/api/skill-usage') {
+      const limit = parseInt(url.searchParams.get('limit') || '20', 10);
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ type: 'skill-usage', data: getSkillUsageFromDb(limit) }));
+      return;
+    }
+
+    if (url.pathname === '/api/token-usage') {
+      const sessionId = url.searchParams.get('sessionId') || undefined;
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ type: 'token-usage', data: getTokenUsageFromDb(sessionId) }));
+      return;
+    }
+
+    if (url.pathname === '/api/contract-results') {
+      const limit = parseInt(url.searchParams.get('limit') || '20', 10);
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ type: 'contract-results', data: getContractResultsFromDb(limit) }));
+      return;
+    }
+
+    if (url.pathname === '/api/routing-rules') {
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ type: 'routing-rules', data: getRoutingRulesFromDb() }));
       return;
     }
 

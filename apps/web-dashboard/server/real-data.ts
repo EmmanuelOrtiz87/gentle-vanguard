@@ -629,3 +629,57 @@ export function getTenantScopedMetrics(tenantId: string): DashboardData {
     tenantName,
   };
 }
+
+// ─── Stack Tables (SQLite queries for Wave 36/37) ─────────────────────
+
+export function getSkillUsageFromDb(limit = 20) {
+  if (!dbAvailable()) return { skills: [], total: 0 };
+  try {
+    const db = getDb();
+    const skills = db.getTopSkills(limit);
+    return { skills, total: skills.length };
+  } catch {
+    return { skills: [], total: 0, error: 'DB query failed' };
+  }
+}
+
+export function getTokenUsageFromDb(sessionId?: string) {
+  if (!dbAvailable()) return { usage: null };
+  try {
+    const db = getDb();
+    if (sessionId) {
+      return { usage: db.getTokenUsageBySession(sessionId), sessionId };
+    }
+    // Get recent token usage across all sessions
+    const rows = db.getDb()
+      .prepare('SELECT session_id, SUM(prompt_tokens) as prompt, SUM(completion_tokens) as completion, SUM(cost) as cost, MAX(timestamp) as last_used FROM token_usage GROUP BY session_id ORDER BY last_used DESC LIMIT 20')
+      .all() as Array<{ session_id: string; prompt: number; completion: number; cost: number; last_used: string }>;
+    return { usage: rows, total: rows.length };
+  } catch {
+    return { usage: null, error: 'DB query failed' };
+  }
+}
+
+export function getContractResultsFromDb(limit = 20) {
+  if (!dbAvailable()) return { results: [], total: 0 };
+  try {
+    const db = getDb();
+    const rows = db.getDb()
+      .prepare('SELECT * FROM contract_results ORDER BY created_at DESC LIMIT ?')
+      .all(limit) as Array<Record<string, unknown>>;
+    return { results: rows, total: rows.length };
+  } catch {
+    return { results: [], total: 0, error: 'DB query failed' };
+  }
+}
+
+export function getRoutingRulesFromDb() {
+  if (!dbAvailable()) return { rules: [], total: 0 };
+  try {
+    const db = getDb();
+    const rules = db.getEnabledRoutingRules();
+    return { rules, total: rules.length };
+  } catch {
+    return { rules: [], total: 0, error: 'DB query failed' };
+  }
+}
