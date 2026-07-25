@@ -5,6 +5,7 @@ import { join, dirname } from 'path';
 import { getBridge } from './mcp-bridge.ts';
 import { getStateBridge } from './shared-state-bridge.ts';
 import { getGlobalHealth } from './global-health-api.ts';
+import { getResilienceConfig } from '@gentle-vanguard/core/resilience-bridge';
 import {
   getListings,
   getListing,
@@ -14,10 +15,10 @@ import {
   validateSkillStructure,
   getSkillContent,
 } from './marketplace-api.ts';
+import { MetricsWriter } from './database/metrics-writer.ts';
 import {
   getRealMetrics,
   getTraces,
-  getOSMetrics,
   getCloudMetrics,
   getTenantScopedMetrics,
 } from './real-data.ts';
@@ -51,6 +52,10 @@ const connPerIp = new Map<string, number>();
 const MAX_CONN_PER_IP = 5;
 let bridgeReady = false;
 let bridgeToolCount = 0;
+
+// ─── Database Persistence Layer ───────────────────────────────────────
+const metricsWriter = new MetricsWriter();
+let metricsWriterStarted = false;
 
 function loadStats() {
   const content = readJson<{
@@ -477,6 +482,58 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
               status: auditFileCount > 0 ? 'ok' : 'unknown',
               logFiles: auditFileCount,
             },
+            resilience: (() => {
+              try {
+                const config = getResilienceConfig();
+                const operations = Object.keys(config.timeoutConfig).length;
+                const circuitBreakers = Object.keys(config.circuitBreakers).length;
+                return {
+                  status: operations > 0 ? 'ok' : 'unknown',
+                  operations,
+                  circuitBreakers,
+                  retryConfigured: Object.keys(config.retryConfig).length,
+                };
+              } catch {
+                return { status: 'unknown', operations: 0, circuitBreakers: 0, retryConfigured: 0 };
+              }
+            })(),
+            budget: (() => {
+              try {
+                const guardPath = join(ROOT, 'config', 'token-budget-guard.json');
+                if (existsSync(guardPath)) {
+                  const raw = JSON.parse(readFileSync(guardPath, 'utf-8'));
+                  const limits = raw?.tokenBudget?.limits || {};
+                  const usedPath = join(ROOT, 'docs', 'sessions', 'metrics', 'token-guard-usage.csv');
+                  let usedToday = 0;
+                  if (existsSync(usedPath)) {
+                    const csv = readFileSync(usedPath, 'utf-8');
+                    const today = new Date().toISOString().slice(0, 10);
+                    const lines = csv.split('\n').filter(l => l.trim());
+                    for (const line of lines.slice(1)) {
+                      const cols = line.split(',');
+                      if (cols[1] === today && /^\d+$/.test(cols[4])) {
+                        usedToday += parseInt(cols[4], 10);
+                      }
+                    }
+                  }
+                  const daily = limits.daily || 120000;
+                  return {
+                    status: usedToday < daily ? 'ok' : 'warning',
+                    dailyLimit: daily,
+                    perSessionLimit: limits.perSession || 15000,
+                    perAgentLimit: limits.perAgent || 3000,
+                    usedToday,
+                    usedPercent: Math.round((usedToday / daily) * 100),
+                    softThreshold: limits.softThreshold || 70,
+                    hardThreshold: limits.hardThreshold || 90,
+                    sourceOfTruth: 'config/token-budget-guard.json',
+                  };
+                }
+                return { status: 'unknown', dailyLimit: 0, usedToday: 0 };
+              } catch {
+                return { status: 'unknown', dailyLimit: 0, usedToday: 0 };
+              }
+            })(),
           },
           timestamp: new Date().toISOString(),
         }),
@@ -1181,73 +1238,15 @@ setInterval(() => {
   prevMetrics = metrics;
 }, 5000);
 
-// Auto-refresh token.json cada 5 minutos
-setInterval(() => {
-  consolidateMetrics();
-  console.log('[METRICS] token.json auto-refreshed (5min cycle)');
-}, 300000);
-
-// --- Consolidation: escribe consolidated.json cada 30s ---
-const CONSOLIDATED_PATH = join(ROOT, '.runtime', 'metrics', 'consolidated.json');
-const TOKEN_PATH = join(ROOT, '.runtime', 'metrics', 'token.json');
-const METRICS_DIR = dirname(CONSOLIDATED_PATH);
-
-function consolidateMetrics(): void {
-  try {
-    if (!existsSync(METRICS_DIR)) mkdirSync(METRICS_DIR, { recursive: true });
-
-    const consolidated = readJson<any>(CONSOLIDATED_PATH) || {};
-    const skillStats = readJson<any>(STATS_PATH) || {};
-    const tokenData = readJson<any>(TOKEN_PATH) || {};
-    const liveData = readJson<any>(join(ROOT, '.runtime', 'metrics', 'live.json'));
-    const sessionsData = readJson<any>(join(ROOT, '.runtime', 'metrics', 'sessions.json'));
-
-    const os = getOSMetrics();
-    const gitLive = getRealMetrics().git || { commits: 0, prsMerged: 0, contributors: 0 };
-
-    const merged = {
-      token: {
-        used: tokenData.usedToday || consolidated?.token?.used || 0,
-        budget: tokenData.budget || consolidated?.token?.budget || 120000,
-        pct: tokenData.pct || consolidated?.token?.pct || 0,
-        usedToday: tokenData.usedToday || consolidated?.token?.used || 0,
-        estCost: tokenData.estCost || consolidated?.token?.estCost || 0,
-        status: consolidated?.token?.status || 'GREEN',
-      },
-      sessions: {
-        total:
-          sessionsData?.total ||
-          clients.size ||
-          sessions.size ||
-          consolidated?.sessions?.total ||
-          0,
-        active: sessionsData?.active || clients.size || consolidated?.sessions?.active || 0,
-        today: sessionsData?.today || consolidated?.sessions?.today || 0,
-      },
-      git: gitLive,
-      live: liveData || consolidated?.live || { trafficLight: 'GREEN', routingAcc: 1 },
-      cost: consolidated?.cost || { actualCost: 0, savingsPct: 0 },
-      mcp: {
-        totalSkills: skillStats?.totalSkills || consolidated?.mcp?.totalSkills || 0,
-        totalCalls: skillStats?.totalCalls || consolidated?.mcp?.totalCalls || 0,
-        lastCall: skillStats?.lastCall || consolidated?.mcp?.lastCall || null,
-      },
-      system: os,
-      _consolidatedAt: new Date().toISOString(),
-      _consolidationCount: (consolidated?._consolidationCount || 0) + 1,
-    };
-
-    writeFileSync(CONSOLIDATED_PATH, JSON.stringify(merged, null, 2));
-    console.log(`[CONSOLIDATE] consolidated.json written (#${merged._consolidationCount})`);
-  } catch (e) {
-    console.warn('[CONSOLIDATE] Error:', (e as Error).message);
-  }
-}
-
-setInterval(consolidateMetrics, 30000);
-
-// Consolidación inicial al arrancar (con pequeño delay para que otros servicios inicien)
-setTimeout(consolidateMetrics, 2000);
+// --- Database-Backed Metrics Writer (replaces JSON consolidation) ---
+// MetricsWriter handles:
+//   1. Collecting real metrics from git, sessions, tokens, MCP, system
+//   2. Writing metric_snapshots to SQLite every 30s
+//   3. Writing consolidated.json for backward compatibility
+//   4. Housekeeping (pruning old data, VACUUM)
+//
+// The first writeSnapshot() happens immediately on start(),
+// then every 30s automatically.
 
 // File watcher en .runtime/metrics/ — broadcast inmediato ante cambios reales
 const METRICS_WATCH_DIR = join(ROOT, '.runtime', 'metrics');
@@ -1275,7 +1274,9 @@ if (existsSync(METRICS_WATCH_DIR)) {
 
 async function start() {
   loadSessions();
-  consolidateMetrics();
+  // Start the database-backed metrics writer (snapshots + consolidated.json)
+  metricsWriter.start(30000);
+  metricsWriterStarted = true;
   try {
     const mcpBridge = getBridge();
     await mcpBridge.start();
@@ -1344,6 +1345,7 @@ server.listen(PORT, () => {
 
 function shutdown(signal: string) {
   console.log(`[SHUTDOWN] Received ${signal}, closing gracefully...`);
+  if (metricsWriterStarted) metricsWriter.stop();
   const bridge = getBridge();
   bridge.stop().catch(() => {});
   getStateBridge().stop();
