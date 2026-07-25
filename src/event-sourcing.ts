@@ -23,6 +23,23 @@ import {
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { randomBytes } from 'crypto';
+import { createRequire } from 'module';
+
+const _require = createRequire(import.meta.url);
+
+// Lazy db import for SQLite dual-write
+let _db: any = null;
+function getDb(): any {
+  if (!_db) {
+    try {
+      const mod = _require('../../apps/web-dashboard/server/database/manager');
+      _db = mod.DatabaseManager.getInstance();
+    } catch {
+      // SQLite not available — skip dual-write
+    }
+  }
+  return _db;
+}
 
 const ROOT = resolve(process.cwd());
 const EVENT_STORE_DIR = join(ROOT, '.session', 'event-store');
@@ -107,6 +124,16 @@ function saveEvent(event: StoredEvent): void {
     return;
   }
   appendFileSync(path, JSON.stringify(event) + '\n');
+
+  // SQLite dual-write
+  try {
+    const mgr = getDb();
+    if (mgr) {
+      mgr.insertEvent(event.type, { eventId: event.eventId, aggregateId: event.aggregateId, version: event.version, data: event.data, sessionId: event.sessionId });
+    }
+  } catch {
+    // Dual-write failure is non-critical
+  }
 }
 
 function loadEvents(id: string): StoredEvent[] {
