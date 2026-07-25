@@ -4,7 +4,7 @@ import tsPlugin from '@typescript-eslint/eslint-plugin';
 
 export default [
   {
-    ignores: ['dist/**', 'node_modules/**', 'coverage/**', 'templates/**', 'apps/web-dashboard/dist/**', '*.js', 'src/v5.0-Convergence/**'],
+    ignores: ['dist/**', 'node_modules/**', 'coverage/**', 'templates/**', 'apps/web-dashboard/dist/**', '*.js', 'src/v5.0-Convergence/**', 'src/convergence/**'],
   },
   {
     files: ['src/**/*.ts', 'scripts/**/*.ts'],
