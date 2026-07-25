@@ -1,24 +1,26 @@
 #!/usr/bin/env node
 /**
- * SHA256 Response Cache
- * 
- * Implements a hash-based response cache to reduce token costs and latency.
+ * SHA256 Response Cache — SQLite-backed
+ *
  * Caches responses based on SHA256 hash of input + context.
- * 
+ * Persisted in gentle-vanguard.db via the response_cache table.
+ * Legacy JSON files in .session/response-cache/ are migrated on first use.
+ *
  * Features:
  * - SHA256-based cache keys
  * - TTL-based expiration (default 30 min)
  * - Cache hit/miss metrics tracking
  * - Automatic cleanup of expired entries
- * - Persistent storage in .session/response-cache/
- * 
+ * - Persistent storage in SQLite (response_cache table)
+ *
  * Expected Impact: 33-41% latency reduction, 25-35% token cost reduction
  */
 
 import { createHash } from 'crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync, unlinkSync, statSync } from 'fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync, unlinkSync, statSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
+import { db as getDbSingleton } from './database/db';
 
 interface CacheEntry {
   key: string;
@@ -41,30 +43,60 @@ interface CacheStats {
 
 interface CacheConfig {
   enabled: boolean;
-  directory: string;
-  defaultTtl: number; // milliseconds
+  defaultTtlMinutes: number; // minutes
   maxEntries: number;
   cleanupInterval: number; // milliseconds
+  useSqlite: boolean; // true = SQLite storage, false = legacy JSON
 }
 
 const ROOT = resolve(process.cwd());
+const LEGACY_DIR = join(ROOT, '.session', 'response-cache');
 const DEFAULT_CONFIG: CacheConfig = {
   enabled: true,
-  directory: join(ROOT, '.session', 'response-cache'),
-  defaultTtl: 30 * 60 * 1000, // 30 minutes
+  defaultTtlMinutes: 30,
   maxEntries: 1000,
   cleanupInterval: 5 * 60 * 1000, // 5 minutes
+  useSqlite: true,
 };
 
-const STATS_FILE = join(DEFAULT_CONFIG.directory, 'cache-stats.json');
+// ─── DB helper ────────────────────────────────────────────────────────────────
 
-// ─── Core Functions ───────────────────────────────────────────────────────────
+let _dbCached: any = null;
+function getDb(): any {
+  if (!_dbCached) {
+    try {
+      _dbCached = getDbSingleton();
+      // Ensure tokens_saved column exists (Wave 35 migration for existing DBs)
+      ensureTokensColumn();
+    } catch {
+      return null;
+    }
+  }
+  return _dbCached;
+}
 
-function ensureDir(dir: string): void {
-  if (!existsSync(dir)) {
-    mkdirSync(dir, { recursive: true });
+/** Ensure the tokens_saved column exists in response_cache table */
+function ensureTokensColumn(): void {
+  if (!_dbCached) return;
+  try {
+    // Check if column exists
+    _dbCached.getDb()
+      .prepare('SELECT tokens_saved FROM response_cache LIMIT 1')
+      .get();
+  } catch {
+    // Column doesn't exist — add it
+    try {
+      _dbCached.getDb()
+        .prepare('ALTER TABLE response_cache ADD COLUMN tokens_saved INTEGER DEFAULT 0')
+        .run();
+      console.log('[response-cache] Added tokens_saved column to response_cache table');
+    } catch (e2) {
+      console.warn('[response-cache] Could not add tokens_saved column:', (e2 as Error).message);
+    }
   }
 }
+
+// ─── Core Functions ───────────────────────────────────────────────────────────
 
 function generateCacheKey(input: string, context: string = ''): string {
   const hash = createHash('sha256');
@@ -72,174 +104,294 @@ function generateCacheKey(input: string, context: string = ''): string {
   return hash.digest('hex');
 }
 
-function getCacheFilePath(key: string): string {
-  // Use first 2 chars as subdirectory for better filesystem performance
-  const subdir = key.slice(0, 2);
-  const dir = join(DEFAULT_CONFIG.directory, subdir);
-  ensureDir(dir);
-  return join(dir, `${key}.json`);
-}
+// ─── SQLite Operations (primary) ──────────────────────────────────────────────
 
-function loadStats(): CacheStats {
-  if (existsSync(STATS_FILE)) {
+function sqliteGet(key: string): CacheEntry | null {
+  const db = getDb();
+  if (!db) return null;
+
+  try {
+    // Check if tokens_saved column exists (added in migration update)
+    let tokensCol = '0';
     try {
-      return JSON.parse(readFileSync(STATS_FILE, 'utf-8'));
-    } catch {
-      // Reset on error
-    }
+      db.getDb().prepare('SELECT tokens_saved FROM response_cache LIMIT 1').get();
+      tokensCol = 'tokens_saved';
+    } catch { /* column doesn't exist yet */ }
+
+    const row = db.getDb()
+      .prepare(
+        `SELECT key, response, created_at, hit_count, expires_at, ${tokensCol} as tokens_saved
+         FROM response_cache WHERE key = ?
+         AND (expires_at IS NULL OR expires_at > datetime('now'))`,
+      )
+      .get(key) as any;
+
+    if (!row) return null;
+
+    // Increment hit count
+    db.getDb()
+      .prepare('UPDATE response_cache SET hit_count = hit_count + 1 WHERE key = ?')
+      .run(key);
+
+    return {
+      key: row.key,
+      input: '',
+      response: row.response,
+      timestamp: new Date(row.created_at).getTime(),
+      ttl: DEFAULT_CONFIG.defaultTtlMinutes * 60 * 1000,
+      hitCount: row.hit_count + 1,
+      tokensSaved: row.tokens_saved ?? 0,
+    };
+  } catch {
+    return null;
   }
-  return {
-    hits: 0,
-    misses: 0,
-    hitRate: 0,
-    totalSavings: 0,
-    entries: 0,
-    expired: 0,
-  };
 }
 
-function saveStats(stats: CacheStats): void {
-  ensureDir(DEFAULT_CONFIG.directory);
-  writeFileSync(STATS_FILE, JSON.stringify(stats, null, 2));
+function sqliteSet(key: string, response: string, tokensSaved = 0, ttlMinutes?: number): void {
+  const db = getDb();
+  if (!db) return;
+
+  try {
+    const ttl = ttlMinutes ?? DEFAULT_CONFIG.defaultTtlMinutes;
+    const expiresAt = ttl > 0
+      ? new Date(Date.now() + ttl * 60 * 1000).toISOString()
+      : null;
+
+    db.getDb()
+      .prepare(
+        `INSERT OR REPLACE INTO response_cache (key, response, model, created_at, expires_at, hit_count, tokens_saved)
+         VALUES (?, ?, NULL, datetime('now'), ?,
+           COALESCE((SELECT hit_count FROM response_cache WHERE key = ?), 0), ?)`,
+      )
+      .run(key, response, expiresAt, key, tokensSaved);
+  } catch (e) {
+    console.warn('[response-cache] SQLite write failed:', (e as Error).message);
+  }
 }
 
-function updateHitRate(stats: CacheStats): void {
-  const total = stats.hits + stats.misses;
-  stats.hitRate = total > 0 ? Math.round((stats.hits / total) * 10000) / 100 : 0;
+function sqliteClear(): void {
+  const db = getDb();
+  if (!db) return;
+  try {
+    db.getDb().prepare('DELETE FROM response_cache').run();
+  } catch { /* ignore */ }
 }
 
-// ─── Cache Operations ─────────────────────────────────────────────────────────
+function sqliteCleanup(): number {
+  const db = getDb();
+  if (!db) return 0;
+  try {
+    const result = db.getDb()
+      .prepare("DELETE FROM response_cache WHERE expires_at < datetime('now')")
+      .run();
+    return result.changes;
+  } catch {
+    return 0;
+  }
+}
+
+function sqliteCount(): number {
+  const db = getDb();
+  if (!db) return 0;
+  try {
+    const row = db.getDb()
+      .prepare('SELECT COUNT(*) as c FROM response_cache')
+      .get() as any;
+    return row?.c ?? 0;
+  } catch {
+    return 0;
+  }
+}
+
+// ─── Legacy JSON Operations (fallback/deprecated) ────────────────────────────
+
+function getLegacyFilePath(key: string): string {
+  const subdir = key.slice(0, 2);
+  return join(LEGACY_DIR, subdir, `${key}.json`);
+}
+
+function legacyLoadEntry(key: string): CacheEntry | null {
+  const filePath = getLegacyFilePath(key);
+  if (!existsSync(filePath)) return null;
+  try {
+    return JSON.parse(readFileSync(filePath, 'utf-8'));
+  } catch {
+    return null;
+  }
+}
+
+function legacySaveEntry(entry: CacheEntry): void {
+  const subdir = entry.key.slice(0, 2);
+  const dir = join(LEGACY_DIR, subdir);
+  if (!existsSync(dir)) {
+    mkdirSync(dir, { recursive: true });
+  }
+  writeFileSync(getLegacyFilePath(entry.key), JSON.stringify(entry, null, 2));
+}
+
+// ─── ResponseCache Class ──────────────────────────────────────────────────────
 
 export class ResponseCache {
   private config: CacheConfig;
   private stats: CacheStats;
+  private legacyStatsFile: string;
 
   constructor(config: Partial<CacheConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
-    ensureDir(this.config.directory);
-    this.stats = loadStats();
+    this.legacyStatsFile = join(LEGACY_DIR, 'cache-stats.json');
+    this.stats = this.loadStats();
+  }
+
+  private loadStats(): CacheStats {
+    if (existsSync(this.legacyStatsFile)) {
+      try {
+        return JSON.parse(readFileSync(this.legacyStatsFile, 'utf-8'));
+      } catch { /* reset on error */ }
+    }
+    return { hits: 0, misses: 0, hitRate: 0, totalSavings: 0, entries: 0, expired: 0 };
+  }
+
+  private saveStats(): void {
+    if (existsSync(LEGACY_DIR)) {
+      try {
+        writeFileSync(this.legacyStatsFile, JSON.stringify(this.stats, null, 2));
+      } catch { /* ignore */ }
+    }
+  }
+
+  private updateHitRate(): void {
+    const total = this.stats.hits + this.stats.misses;
+    this.stats.hitRate = total > 0 ? Math.round((this.stats.hits / total) * 10000) / 100 : 0;
   }
 
   /**
-   * Get a cached response
-   * Returns null if not found or expired
+   * Get a cached response. Returns null if not found or expired.
    */
   get(input: string, context: string = ''): { response: string; tokensSaved: number } | null {
     if (!this.config.enabled) return null;
 
     const key = generateCacheKey(input, context);
-    const filePath = getCacheFilePath(key);
 
-    if (!existsSync(filePath)) {
-      this.stats.misses++;
-      updateHitRate(this.stats);
-      saveStats(this.stats);
-      return null;
-    }
-
-    try {
-      const entry: CacheEntry = JSON.parse(readFileSync(filePath, 'utf-8'));
-      const now = Date.now();
-
-      // Check if expired
-      if (now > entry.timestamp + entry.ttl) {
-        this.stats.expired++;
-        this.stats.misses++;
-        updateHitRate(this.stats);
-        saveStats(this.stats);
-        // Delete expired entry
-        try { unlinkSync(filePath); } catch {}
-        return null;
+    if (this.config.useSqlite) {
+      const entry = sqliteGet(key);
+      if (entry) {
+        this.stats.hits++;
+        this.stats.totalSavings += entry.tokensSaved;
+        this.updateHitRate();
+        this.saveStats();
+        return { response: entry.response, tokensSaved: entry.tokensSaved };
       }
-
-      // Cache hit!
-      entry.hitCount++;
-      this.stats.hits++;
-      this.stats.totalSavings += entry.tokensSaved;
-      updateHitRate(this.stats);
-      saveStats(this.stats);
-
-      // Update hit count in file
-      writeFileSync(filePath, JSON.stringify(entry, null, 2));
-
-      return {
-        response: entry.response,
-        tokensSaved: entry.tokensSaved,
-      };
-    } catch {
-      this.stats.misses++;
-      updateHitRate(this.stats);
-      saveStats(this.stats);
-      return null;
+    } else {
+      // Legacy JSON path
+      const entry = legacyLoadEntry(key);
+      if (entry) {
+        const now = Date.now();
+        if (now > entry.timestamp + entry.ttl) {
+          this.stats.expired++;
+          this.stats.misses++;
+          this.updateHitRate();
+          this.saveStats();
+          try { unlinkSync(getLegacyFilePath(key)); } catch { /* ignore */ }
+          return null;
+        }
+        entry.hitCount++;
+        this.stats.hits++;
+        this.stats.totalSavings += entry.tokensSaved;
+        this.updateHitRate();
+        this.saveStats();
+        legacySaveEntry(entry);
+        return { response: entry.response, tokensSaved: entry.tokensSaved };
+      }
     }
+
+    this.stats.misses++;
+    this.updateHitRate();
+    this.saveStats();
+    return null;
   }
 
   /**
-   * Store a response in cache
+   * Store a response in cache.
    */
-  set(input: string, response: string, tokensSaved: number, context: string = '', ttl?: number): void {
+  set(input: string, response: string, tokensSaved: number, context: string = '', ttlMinutes?: number): void {
     if (!this.config.enabled) return;
 
     const key = generateCacheKey(input, context);
-    const entry: CacheEntry = {
-      key,
-      input: input.slice(0, 500), // Store truncated input for debugging
-      response,
-      timestamp: Date.now(),
-      ttl: ttl ?? this.config.defaultTtl,
-      hitCount: 0,
-      tokensSaved,
-    };
 
-    const filePath = getCacheFilePath(key);
-    writeFileSync(filePath, JSON.stringify(entry, null, 2));
+    if (this.config.useSqlite) {
+      sqliteSet(key, response, tokensSaved, ttlMinutes);
+      this.stats.entries = sqliteCount();
+    } else {
+      const entry: CacheEntry = {
+        key,
+        input: input.slice(0, 500),
+        response,
+        timestamp: Date.now(),
+        ttl: (ttlMinutes ?? DEFAULT_CONFIG.defaultTtlMinutes) * 60 * 1000,
+        hitCount: 0,
+        tokensSaved,
+      };
+      legacySaveEntry(entry);
+      this.stats.entries = this.countEntriesLegacy();
+    }
 
-    this.stats.entries = this.countEntries();
-    saveStats(this.stats);
+    this.saveStats();
   }
 
   /**
-   * Get current statistics
+   * Get current statistics.
    */
   getStats(): CacheStats {
-    this.stats.entries = this.countEntries();
+    this.stats.entries = this.config.useSqlite ? sqliteCount() : this.countEntriesLegacy();
     return { ...this.stats };
   }
 
   /**
-   * Clear all cache entries
+   * Clear all cache entries.
    */
   clear(): void {
-    if (!existsSync(this.config.directory)) return;
-
-    const entries = readdirSync(this.config.directory, { recursive: true });
-    for (const entry of entries) {
-      const fullPath = join(this.config.directory, entry.toString());
-      try {
-        const stat = statSync(fullPath);
-        if (stat.isFile()) {
-          unlinkSync(fullPath);
-        }
-      } catch {}
+    if (this.config.useSqlite) {
+      sqliteClear();
+    } else {
+      this.clearLegacy();
     }
 
     this.stats = {
-      hits: 0,
-      misses: 0,
-      hitRate: 0,
-      totalSavings: 0,
-      entries: 0,
-      expired: 0,
+      hits: 0, misses: 0, hitRate: 0, totalSavings: 0, entries: 0, expired: 0,
     };
-    saveStats(this.stats);
+    this.saveStats();
+  }
+
+  private clearLegacy(): void {
+    if (!existsSync(LEGACY_DIR)) return;
+    const entries = readdirSync(LEGACY_DIR, { recursive: true });
+    for (const entry of entries) {
+      const fullPath = join(LEGACY_DIR, entry.toString());
+      try {
+        if (statSync(fullPath).isFile()) unlinkSync(fullPath);
+      } catch { /* ignore */ }
+    }
   }
 
   /**
-   * Clean up expired entries
+   * Clean up expired entries. Returns count of cleaned entries.
    */
   cleanup(): number {
-    if (!existsSync(this.config.directory)) return 0;
+    let cleaned = 0;
 
+    if (this.config.useSqlite) {
+      cleaned = sqliteCleanup();
+      this.stats.entries = sqliteCount();
+    } else {
+      cleaned = this.cleanupLegacy();
+    }
+
+    this.saveStats();
+    return cleaned;
+  }
+
+  private cleanupLegacy(): number {
+    if (!existsSync(LEGACY_DIR)) return 0;
     let cleaned = 0;
     const now = Date.now();
 
@@ -259,24 +411,49 @@ export class ResponseCache {
               this.stats.expired++;
             }
           }
-        } catch {}
+        } catch { /* ignore */ }
       }
     };
 
-    walkDir(this.config.directory);
-    this.stats.entries = this.countEntries();
-    saveStats(this.stats);
-
+    walkDir(LEGACY_DIR);
+    this.stats.entries = this.countEntriesLegacy();
     return cleaned;
   }
 
-  /**
-   * Count total cache entries
-   */
-  private countEntries(): number {
-    if (!existsSync(this.config.directory)) return 0;
-
+  private countEntriesLegacy(): number {
+    if (!existsSync(LEGACY_DIR)) return 0;
     let count = 0;
+
+    const walkDir = (dir: string) => {
+      const entries = readdirSync(dir);
+      for (const entry of entries) {
+        const fullPath = join(dir, entry);
+        try {
+          if (statSync(fullPath).isDirectory()) {
+            walkDir(fullPath);
+          } else if (entry.endsWith('.json') && entry !== 'cache-stats.json') {
+            count++;
+          }
+        } catch { /* ignore */ }
+      }
+    };
+
+    walkDir(LEGACY_DIR);
+    return count;
+  }
+
+  /**
+   * Migrate legacy JSON cache entries to SQLite.
+   * Reads all JSON files from .session/response-cache/ and inserts into response_cache table.
+   */
+  migrateFromJson(): number {
+    if (!existsSync(LEGACY_DIR)) {
+      console.log('[response-cache] No legacy cache directory found');
+      return 0;
+    }
+
+    let migrated = 0;
+
     const walkDir = (dir: string) => {
       const entries = readdirSync(dir);
       for (const entry of entries) {
@@ -286,14 +463,29 @@ export class ResponseCache {
           if (stat.isDirectory()) {
             walkDir(fullPath);
           } else if (entry.endsWith('.json') && entry !== 'cache-stats.json') {
-            count++;
+            const data: CacheEntry = JSON.parse(readFileSync(fullPath, 'utf-8'));
+            const now = Date.now();
+
+            // Skip expired entries
+            if (now > data.timestamp + data.ttl) {
+              try { unlinkSync(fullPath); } catch { /* ignore */ }
+              continue;
+            }
+
+            // Calculate remaining TTL in minutes
+            const remainingMs = (data.timestamp + data.ttl) - now;
+            const ttlMinutes = Math.max(1, Math.ceil(remainingMs / 60000));
+
+            sqliteSet(data.key, data.response, data.tokensSaved, ttlMinutes);
+            migrated++;
           }
-        } catch {}
+        } catch { /* ignore */ }
       }
     };
 
-    walkDir(this.config.directory);
-    return count;
+    walkDir(LEGACY_DIR);
+    console.log(`[response-cache] Migrated ${migrated} entries from JSON to SQLite`);
+    return migrated;
   }
 }
 
@@ -301,7 +493,7 @@ export class ResponseCache {
 
 function printUsage(): void {
   console.log(`
-SHA256 Response Cache CLI
+SHA256 Response Cache CLI (SQLite-backed)
 
 Usage:
   npx tsx src/response-cache.ts <command> [options]
@@ -312,24 +504,31 @@ Commands:
   set <input> <response>   Store response in cache (test)
   clear                    Clear all cache entries
   cleanup                  Remove expired entries
+  migrate                  Migrate legacy JSON cache to SQLite
   test                     Run cache tests
+
+Options:
+  --legacy                 Use legacy JSON files instead of SQLite
 
 Examples:
   npx tsx src/response-cache.ts stats
   npx tsx src/response-cache.ts cleanup
+  npx tsx src/response-cache.ts migrate
 `);
 }
 
 function runCLI(): void {
   const args = process.argv.slice(2);
   const command = args[0];
+  const useLegacy = args.includes('--legacy');
 
-  const cache = new ResponseCache();
+  const cache = new ResponseCache({ useSqlite: !useLegacy });
 
   switch (command) {
     case 'stats': {
       const stats = cache.getStats();
       console.log('\n=== Response Cache Statistics ===\n');
+      console.log(`Storage:         ${useLegacy ? 'JSON files' : 'SQLite'}`);
       console.log(`Cache Hits:      ${stats.hits}`);
       console.log(`Cache Misses:    ${stats.misses}`);
       console.log(`Hit Rate:        ${stats.hitRate}%`);
@@ -366,7 +565,7 @@ function runCLI(): void {
         console.error('Error: Input and response required');
         process.exit(1);
       }
-      cache.set(input, response, 100); // Assume 100 tokens saved
+      cache.set(input, response, 100);
       console.log('Response cached successfully');
       break;
     }
@@ -383,30 +582,36 @@ function runCLI(): void {
       break;
     }
 
+    case 'migrate': {
+      const count = cache.migrateFromJson();
+      console.log(`Migration complete: ${count} entries migrated to SQLite`);
+      break;
+    }
+
     case 'test': {
       console.log('\n=== Running Cache Tests ===\n');
-      
+
       // Test 1: Basic set/get
       console.log('Test 1: Basic set/get');
       cache.set('test-input-1', 'test-response-1', 50);
       const result1 = cache.get('test-input-1');
       console.log(result1?.response === 'test-response-1' ? '✅ PASS' : '❌ FAIL');
-      
+
       // Test 2: Cache hit
       console.log('Test 2: Cache hit tracking');
       const result2 = cache.get('test-input-1');
       console.log(result2?.tokensSaved === 50 ? '✅ PASS' : '❌ FAIL');
-      
+
       // Test 3: Cache miss
       console.log('Test 3: Cache miss');
       const result3 = cache.get('non-existent-input');
       console.log(result3 === null ? '✅ PASS' : '❌ FAIL');
-      
+
       // Test 4: Stats
       console.log('Test 4: Stats tracking');
       const stats = cache.getStats();
       console.log(stats.hits >= 2 && stats.misses >= 1 ? '✅ PASS' : '❌ FAIL');
-      
+
       console.log('\n=== Tests Complete ===\n');
       break;
     }

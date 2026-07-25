@@ -95,6 +95,16 @@ export interface FeedbackRecord {
   created_at: string;
 }
 
+export interface ContractResultRecord {
+  id?: number;
+  contract_id: string;
+  session_id?: string;
+  status: string;
+  result?: string;
+  duration_ms?: number;
+  created_at: string;
+}
+
 // ─── Migrations ───────────────────────────────────────────────────────
 
 const MIGRATIONS: Array<{ id: string; sql: string }> = [
@@ -204,7 +214,8 @@ const MIGRATIONS: Array<{ id: string; sql: string }> = [
         model TEXT,
         created_at TEXT NOT NULL DEFAULT (datetime('now')),
         expires_at TEXT,
-        hit_count INTEGER DEFAULT 0
+        hit_count INTEGER DEFAULT 0,
+        tokens_saved INTEGER DEFAULT 0
       );
 
       -- Contract results (SDD contract validation)
@@ -585,6 +596,163 @@ export class DatabaseManager {
       total,
       score: total > 0 ? Math.round((up / total) * 100) : 0,
     };
+  }
+
+  // ─── Stack Tables (002: response_cache) ────────────────────────────
+
+  /** Get a cached response by SHA256 key */
+  getCachedResponse(key: string): { response: string; model?: string; hitCount: number } | null {
+    const row = this.db
+      .prepare(
+        `SELECT response, model, hit_count, expires_at FROM response_cache WHERE key = ?
+         AND (expires_at IS NULL OR expires_at > datetime('now'))`,
+      )
+      .get(key) as { response: string; model: string | null; hit_count: number; expires_at: string | null } | undefined;
+    if (!row) return null;
+
+    // Increment hit count
+    this.db.prepare('UPDATE response_cache SET hit_count = hit_count + 1 WHERE key = ?').run(key);
+    return { response: row.response, model: row.model ?? undefined, hitCount: row.hit_count };
+  }
+
+  /** Cache a response with SHA256 key */
+  setCachedResponse(key: string, response: string, model?: string, ttlMinutes = 30): void {
+    const expiresAt = ttlMinutes > 0
+      ? new Date(Date.now() + ttlMinutes * 60 * 1000).toISOString()
+      : null;
+    this.db
+      .prepare(
+        `INSERT OR REPLACE INTO response_cache (key, response, model, created_at, expires_at, hit_count)
+         VALUES (?, ?, ?, datetime('now'), ?, COALESCE((SELECT hit_count FROM response_cache WHERE key = ?), 0))`,
+      )
+      .run(key, response, model ?? null, expiresAt, key);
+  }
+
+  /** Delete a cached response */
+  deleteCachedResponse(key: string): void {
+    this.db.prepare('DELETE FROM response_cache WHERE key = ?').run(key);
+  }
+
+  /** Prune expired cache entries */
+  pruneExpiredCache(): number {
+    const result = this.db
+      .prepare("DELETE FROM response_cache WHERE expires_at < datetime('now')")
+      .run();
+    return result.changes;
+  }
+
+  /** Get response cache stats */
+  getCacheStats(): { entries: number; totalHits: number; expired: number } {
+    const entries = (this.db.prepare('SELECT COUNT(*) as c FROM response_cache').get() as any).c;
+    const totalHits = (this.db.prepare('SELECT COALESCE(SUM(hit_count), 0) as h FROM response_cache').get() as any).h;
+    const expired = (this.db
+      .prepare("SELECT COUNT(*) as c FROM response_cache WHERE expires_at < datetime('now')")
+      .get() as any).c;
+    return { entries, totalHits, expired };
+  }
+
+  // ─── Stack Tables (002: contract_results) ───────────────────────────
+
+  /** Insert a contract validation result */
+  insertContractResult(contractId: string, status: string, sessionId?: string, result?: string, durationMs?: number): void {
+    this.db
+      .prepare(
+        `INSERT INTO contract_results (contract_id, session_id, status, result, duration_ms, created_at)
+         VALUES (?, ?, ?, ?, ?, datetime('now'))`,
+      )
+      .run(contractId, sessionId ?? null, status, result ?? null, durationMs ?? null);
+  }
+
+  /** Get contract results by session */
+  getContractResultsBySession(sessionId: string): import('./manager').ContractResultRecord[] {
+    return this.db
+      .prepare('SELECT * FROM contract_results WHERE session_id = ? ORDER BY created_at DESC')
+      .all(sessionId) as any[];
+  }
+
+  // ─── Stack Tables (002: skill_usage) ────────────────────────────────
+
+  /** Record or update skill usage */
+  recordSkillUsage(skillId: string, sessionId?: string, tokensUsed = 0, cost = 0): void {
+    this.db
+      .prepare(
+        `INSERT INTO skill_usage (skill_id, session_id, count, tokens_used, cost, last_used)
+         VALUES (?, ?, 1, ?, ?, datetime('now'))
+         ON CONFLICT(skill_id, session_id) DO UPDATE SET
+           count = count + 1,
+           tokens_used = tokens_used + excluded.tokens_used,
+           cost = cost + excluded.cost,
+           last_used = datetime('now')`,
+      )
+      .run(skillId, sessionId ?? 'global', tokensUsed, cost);
+  }
+
+  /** Get top skills by usage */
+  getTopSkills(limit = 10): Array<{ skillId: string; count: number; tokensUsed: number; cost: number }> {
+    return this.db
+      .prepare(
+        `SELECT skill_id, SUM(count) as count, SUM(tokens_used) as tokens_used, SUM(cost) as cost
+         FROM skill_usage GROUP BY skill_id ORDER BY count DESC LIMIT ?`,
+      )
+      .all(limit) as any[];
+  }
+
+  // ─── Stack Tables (002: token_usage) ────────────────────────────────
+
+  /** Record token usage for a session */
+  recordTokenUsage(sessionId: string, promptTokens: number, completionTokens: number, cost: number, model?: string): void {
+    this.db
+      .prepare(
+        `INSERT INTO token_usage (session_id, prompt_tokens, completion_tokens, cost, model, timestamp)
+         VALUES (?, ?, ?, ?, ?, datetime('now'))`,
+      )
+      .run(sessionId, promptTokens, completionTokens, cost, model ?? null);
+  }
+
+  /** Get total token usage by session */
+  getTokenUsageBySession(sessionId: string): { totalPrompt: number; totalCompletion: number; totalCost: number } {
+    const row = this.db
+      .prepare(
+        `SELECT COALESCE(SUM(prompt_tokens), 0) as totalPrompt,
+                COALESCE(SUM(completion_tokens), 0) as totalCompletion,
+                COALESCE(SUM(cost), 0) as totalCost
+         FROM token_usage WHERE session_id = ?`,
+      )
+      .get(sessionId) as any;
+    return row;
+  }
+
+  // ─── Stack Tables (002: routing_rules) ──────────────────────────────
+
+  /** Upsert a routing rule */
+  upsertRoutingRule(pattern: string, target: string, priority = 0): void {
+    this.db
+      .prepare(
+        `INSERT INTO routing_rules (pattern, target, priority, enabled, hit_count, created_at, updated_at)
+         VALUES (?, ?, ?, 1, 0, datetime('now'), datetime('now'))
+         ON CONFLICT(pattern) DO UPDATE SET
+           target = excluded.target,
+           priority = excluded.priority,
+           updated_at = datetime('now')`,
+      )
+      .run(pattern, target, priority);
+  }
+
+  /** Get enabled routing rules */
+  getEnabledRoutingRules(): Array<{ pattern: string; target: string; priority: number; hitCount: number }> {
+    return this.db
+      .prepare(
+        `SELECT pattern, target, priority, hit_count FROM routing_rules
+         WHERE enabled = 1 ORDER BY priority DESC, hit_count DESC`,
+      )
+      .all() as any[];
+  }
+
+  /** Record a routing rule hit */
+  recordRoutingHit(pattern: string): void {
+    this.db
+      .prepare('UPDATE routing_rules SET hit_count = hit_count + 1, updated_at = datetime(\'now\') WHERE pattern = ?')
+      .run(pattern);
   }
 
   // ─── Housekeeping ───────────────────────────────────────────────────
