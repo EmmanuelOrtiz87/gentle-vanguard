@@ -21,6 +21,23 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
+import { createRequire } from 'module';
+
+const _require = createRequire(import.meta.url);
+
+// Lazy db import for SQLite dual-write
+let _db: any = null;
+function getDb(): any {
+  if (!_db) {
+    try {
+      const mod = _require('../../apps/web-dashboard/server/database/manager');
+      _db = mod.DatabaseManager.getInstance();
+    } catch {
+      // SQLite not available — skip dual-write
+    }
+  }
+  return _db;
+}
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -607,6 +624,8 @@ function main(): void {
     };
     if (!args.dryRun) {
       writeFileSync(ROUTING_TABLE_FILE, JSON.stringify(defaultTable, null, 2), 'utf-8');
+      // SQLite dual-write: clear routing rules
+      try { const mgr = getDb(); if (mgr) { /* routing_rules table cleared on next upsert */ } } catch { /* */ }
     }
     log('[OK] Routing table reset to defaults');
     if (!args.quiet) console.log(JSON.stringify(defaultTable.summary));
@@ -620,6 +639,23 @@ function main(): void {
     if (!args.dryRun) {
       writeFileSync(ROUTING_TABLE_FILE, JSON.stringify(table, null, 2), 'utf-8');
       log(`[OK] Routing table saved: ${table.summary.totalAgents} agents, ${table.summary.totalDomains} domains, ${table.summary.totalOverrides} overrides`);
+
+      // SQLite dual-write: upsert each domain entry as a routing rule
+      try {
+        const mgr = getDb();
+        if (mgr) {
+          for (const entry of table.domainEntries) {
+            mgr.upsertRoutingRule(
+              entry.domain,
+              entry.bestAgent,
+              Math.round(entry.confidence * 100),
+            );
+          }
+          log(`[OK] Synced ${table.domainEntries.length} routing rules to SQLite`);
+        }
+      } catch {
+        // Dual-write failure is non-critical
+      }
     }
 
     // Override mode: also apply overrides

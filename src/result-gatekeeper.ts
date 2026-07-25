@@ -26,6 +26,23 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { execSync } from 'child_process';
 import { pathToFileURL } from 'url';
+import { createRequire } from 'module';
+
+const _require = createRequire(import.meta.url);
+
+// Lazy db import for SQLite dual-write
+let _db: any = null;
+function getDb(): any {
+  if (!_db) {
+    try {
+      const mod = _require('../../apps/web-dashboard/server/database/manager');
+      _db = mod.DatabaseManager.getInstance();
+    } catch {
+      // SQLite not available — skip dual-write
+    }
+  }
+  return _db;
+}
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -270,6 +287,16 @@ export function verifyContract(phase: string): ContractResult {
   const dir = join(ROOT, config.outputDir);
   ensureDir(dir);
   writeFileSync(join(dir, `${phase}-${Date.now()}.json`), JSON.stringify(result, null, 2));
+
+  // SQLite dual-write
+  try {
+    const mgr = getDb();
+    if (mgr) {
+      mgr.insertContractResult(phase, status, process.env.SESSION_ID, JSON.stringify({ summary: result.summary, validations: validationResults.length }));
+    }
+  } catch {
+    // Dual-write failure is non-critical
+  }
 
   return result;
 }
