@@ -194,6 +194,76 @@ const MIGRATIONS: Array<{ id: string; sql: string }> = [
       CREATE INDEX IF NOT EXISTS idx_feedback_span ON feedback(span_id);
     `,
   },
+  {
+    id: '002_stack_tables',
+    sql: `
+      -- Response cache (SHA256 key → response, TTL-aware)
+      CREATE TABLE IF NOT EXISTS response_cache (
+        key TEXT PRIMARY KEY,
+        response TEXT NOT NULL,
+        model TEXT,
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        expires_at TEXT,
+        hit_count INTEGER DEFAULT 0
+      );
+
+      -- Contract results (SDD contract validation)
+      CREATE TABLE IF NOT EXISTS contract_results (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        contract_id TEXT NOT NULL,
+        session_id TEXT,
+        status TEXT NOT NULL CHECK(status IN ('pass', 'fail', 'error', 'pending')),
+        result TEXT,
+        duration_ms INTEGER,
+        created_at TEXT NOT NULL DEFAULT (datetime('now'))
+      );
+
+      -- Skill usage tracking
+      CREATE TABLE IF NOT EXISTS skill_usage (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        skill_id TEXT NOT NULL,
+        session_id TEXT,
+        count INTEGER DEFAULT 1,
+        tokens_used INTEGER DEFAULT 0,
+        cost REAL DEFAULT 0,
+        last_used TEXT NOT NULL DEFAULT (datetime('now')),
+        UNIQUE(skill_id, session_id)
+      );
+
+      -- Token usage per session
+      CREATE TABLE IF NOT EXISTS token_usage (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        session_id TEXT NOT NULL,
+        prompt_tokens INTEGER DEFAULT 0,
+        completion_tokens INTEGER DEFAULT 0,
+        total_tokens INTEGER GENERATED ALWAYS AS (prompt_tokens + completion_tokens) STORED,
+        cost REAL DEFAULT 0,
+        model TEXT,
+        timestamp TEXT NOT NULL DEFAULT (datetime('now'))
+      );
+
+      -- Routing rules (adaptive router persistence)
+      CREATE TABLE IF NOT EXISTS routing_rules (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        pattern TEXT NOT NULL,
+        target TEXT NOT NULL,
+        priority INTEGER DEFAULT 0,
+        enabled INTEGER DEFAULT 1,
+        hit_count INTEGER DEFAULT 0,
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+      );
+
+      -- Indexes for stack tables
+      CREATE INDEX IF NOT EXISTS idx_response_cache_expires ON response_cache(expires_at);
+      CREATE INDEX IF NOT EXISTS idx_contract_results_session ON contract_results(session_id);
+      CREATE INDEX IF NOT EXISTS idx_contract_results_status ON contract_results(status);
+      CREATE INDEX IF NOT EXISTS idx_skill_usage_skill ON skill_usage(skill_id);
+      CREATE INDEX IF NOT EXISTS idx_token_usage_session ON token_usage(session_id);
+      CREATE INDEX IF NOT EXISTS idx_token_usage_ts ON token_usage(timestamp);
+      CREATE INDEX IF NOT EXISTS idx_routing_rules_pattern ON routing_rules(pattern);
+    `,
+  },
 ];
 
 // ─── DatabaseManager ──────────────────────────────────────────────────

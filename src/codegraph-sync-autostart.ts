@@ -8,6 +8,7 @@
 import { existsSync, statSync } from 'fs';
 import { join, resolve } from 'path';
 import { execSync } from 'child_process';
+import { getEffectiveProcessTimeout } from './core/timeout-config';
 import { pathToFileURL } from 'url';
 
 const ROOT = resolve(process.cwd());
@@ -69,7 +70,7 @@ function main(): void {
   if (needsSync) {
     console.log(`[INFO] CodeGraph index is ${dbAgeMinutes}min old (threshold: ${stalenessThresholdMinutes}min). Syncing...`);
     try {
-      execSync('codegraph sync', { cwd: repoRoot, stdio: 'pipe', timeout: 60000, windowsHide: true });
+      execSync('codegraph sync', { cwd: repoRoot, stdio: 'pipe', timeout: getEffectiveProcessTimeout('long_running'), windowsHide: true });
       result('OK', `CodeGraph index synced successfully (was ${dbAgeMinutes}min old)`, { dbSizeMB, ageMinutes: dbAgeMinutes, action: 'synced' });
     } catch (e) {
       result('WARN', `CodeGraph sync failed: ${e instanceof Error ? e.message : String(e)}`, { dbSizeMB, ageMinutes: dbAgeMinutes, action: 'sync_error' });

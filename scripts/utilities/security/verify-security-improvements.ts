@@ -5,13 +5,13 @@
  * Verifies that all security enhancements are properly implemented
  */
 
-import { dependencySecurityEnforcer } from '../../../src/Security/dependency-security-enforcer';
-import { auditLogger } from '../../../src/v4.0-Infrastructure/audit-logger-enhanced';
+import { dependencySecurityEnforcer } from '../../../src/security/dependency-security-enforcer';
+import { auditLogger } from '../../../src/infrastructure/audit-logger-enhanced';
 import {
   sanitizeText,
   testBlockCritical,
   detectHallucination,
-} from '../../../src/Security/security-orchestrator';
+} from '../../../src/security/security-orchestrator';
 
 /**
  * Verify all security improvements

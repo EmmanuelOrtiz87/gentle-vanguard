@@ -221,7 +221,8 @@
         "chars_per_token": 4,
         "note": "Canonical unit: tokens. chars/4 = estimated tokens. Use this formula across all scripts."
       },
-      "daily_budget_tokens": 30000,
+      "daily_budget_tokens": 120000,
+      "source_of_truth": "config/token-budget-guard.json",
       "soft_threshold_pct": 70,
       "hard_threshold_pct": 90,
       "per_agent_budget_tokens": 3000,

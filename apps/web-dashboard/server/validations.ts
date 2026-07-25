@@ -2,13 +2,14 @@ import { existsSync, statSync } from 'fs';
 import { join } from 'path';
 import { execSync } from 'child_process';
 import { ROOT, readJson } from './shared.ts';
+import { getProcessExecutionTimeouts } from '@gentle-vanguard/core/timeout-config';
 
 const TOKEN_PATH = join(ROOT, '.runtime', 'metrics', 'token.json');
 const SESSIONS_PATH = join(ROOT, '.runtime', 'metrics', 'sessions.json');
 const SESSIONS_HISTORY_PATH = join(ROOT, '.event-bus', 'sessions-history.json');
 function execGit(args: string): string {
   try {
-    return execSync(`git ${args} 2>NUL`, { cwd: ROOT, encoding: 'utf-8', timeout: 3000 }).trim();
+    return execSync(`git ${args} 2>NUL`, { cwd: ROOT, encoding: 'utf-8', timeout: getProcessExecutionTimeouts().git_operation_ms ?? 3000 }).trim();
   } catch {
     return '';
   }

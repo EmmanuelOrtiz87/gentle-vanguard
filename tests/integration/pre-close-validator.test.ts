@@ -11,7 +11,7 @@ const ROOT = resolve(import.meta.dirname, '..', '..');
 
 describe('Pre-Close Validator', () => {
   it('validate-tool-configs.ts runs with exit code 0', () => {
-    const result = spawnSync('npx', ['tsx', 'src/Core/validate-tool-configs.ts'], {
+    const result = spawnSync('npx', ['tsx', 'src/core/validate-tool-configs.ts'], {
       cwd: ROOT, encoding: 'utf-8', timeout: 15000, shell: true
     });
     assert.strictEqual(result.status, 0, `stdout: ${result.stdout}\nstderr: ${result.stderr}`);

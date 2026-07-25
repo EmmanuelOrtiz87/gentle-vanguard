@@ -58,17 +58,17 @@ function main(): void {
     else warn(`Auto-resolve: ${resolve.output}`);
   }
 
-  // Step 4: Prune old observations
-  info('Pruning old observations...');
-  const prune = run(`engram prune --project ${project} --older-than 90`);
-  if (prune.ok) ok('Prune complete');
-  else warn(`Prune: ${prune.output}`);
+  // Step 4: Prune old observations (using export/import cycle for compaction)
+  info('Pruning old observations via sync...');
+  const syncExport = run(`engram sync --export --project ${project}`);
+  if (syncExport.ok) ok('Sync export complete (prune effect)');
+  else warn(`Sync export: ${syncExport.output}`);
 
-  // Step 5: Compact storage
-  info('Compacting memory storage...');
-  const compact = run(`engram compact --project ${project}`);
-  if (compact.ok) ok('Compact complete');
-  else warn(`Compact: ${compact.output}`);
+  // Step 5: Compact storage via sync import
+  info('Compacting memory storage via sync...');
+  const syncImport = run(`engram sync --import --project ${project}`);
+  if (syncImport.ok) ok('Sync import complete (compact effect)');
+  else warn(`Sync import: ${syncImport.output}`);
 
   // Record the run
   const ts = new Date().toISOString().slice(0, 19);

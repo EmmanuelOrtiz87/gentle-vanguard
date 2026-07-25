@@ -5,6 +5,7 @@ import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { spawnSync } from 'child_process';
 import * as https from 'https';
+import { getExternalApiTimeouts, getEffectiveProcessTimeout } from './core/timeout-config';
 
 const ROOT = resolve(process.cwd());
 const LOG_FILE = join(ROOT, '.session', 'azure-delegator.log');
@@ -46,7 +47,7 @@ function writeLog(message: string, level: 'INFO' | 'WARN' | 'ERROR' | 'SUCCESS' 
 class CircuitBreaker {
   private failureThreshold = 5;
   private successThreshold = 2;
-  private timeoutSeconds = 60;
+  private timeoutSeconds = Math.ceil((getExternalApiTimeouts()?.http_client_default_ms ?? 60000) / 1000);
   private state: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED';
   private failureCount = 0;
   private successCount = 0;
@@ -91,7 +92,7 @@ const circuitBreaker = new CircuitBreaker();
 export function startTracingSpan(name: string) {
   const tracer = join(ROOT, 'src/tracing-instrument.ts');
   if (existsSync(tracer)) {
-    spawnSync('npx', ['tsx', tracer, '-Action', 'start', '-SpanName', name, '-Quiet'], { cwd: ROOT, stdio: 'pipe', timeout: 10000 });
+    spawnSync('npx', ['tsx', tracer, '-Action', 'start', '-SpanName', name, '-Quiet'], { cwd: ROOT, stdio: 'pipe', timeout: getEffectiveProcessTimeout('default') });
   }
 }
 
@@ -99,9 +100,9 @@ export function stopTracingSpan(name: string, success: boolean, error?: string) 
   const tracer = join(ROOT, 'src/tracing-instrument.ts');
   if (!existsSync(tracer)) return;
   if (success) {
-    spawnSync('npx', ['tsx', tracer, '-Action', 'end', '-SpanName', name, '-Quiet'], { cwd: ROOT, stdio: 'pipe', timeout: 10000 });
+    spawnSync('npx', ['tsx', tracer, '-Action', 'end', '-SpanName', name, '-Quiet'], { cwd: ROOT, stdio: 'pipe', timeout: getEffectiveProcessTimeout('default') });
   } else {
-    spawnSync('npx', ['tsx', tracer, '-Action', 'error', '-SpanName', name, '-ErrorMessage', error ?? '', '-Quiet'], { cwd: ROOT, stdio: 'pipe', timeout: 10000 });
+    spawnSync('npx', ['tsx', tracer, '-Action', 'error', '-SpanName', name, '-ErrorMessage', error ?? '', '-Quiet'], { cwd: ROOT, stdio: 'pipe', timeout: getEffectiveProcessTimeout('default') });
   }
 }
 

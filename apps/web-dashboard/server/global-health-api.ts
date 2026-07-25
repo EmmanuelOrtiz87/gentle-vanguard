@@ -3,6 +3,7 @@ import { join, dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { existsSync, readdirSync, readFileSync } from 'fs';
 import type { GlobalHealth, RepositoryHealth } from '../src/types/dashboard';
+import { getProcessExecutionTimeouts } from '@gentle-vanguard/core/timeout-config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -10,7 +11,7 @@ const ROOT = resolve(__dirname, '../../..');
 
 function execGit(args: string, cwd: string = ROOT): string {
   try {
-    return execSync(`git ${args}`, { cwd, encoding: 'utf-8', timeout: 3000 }).trim();
+    return execSync(`git ${args}`, { cwd, encoding: 'utf-8', timeout: getProcessExecutionTimeouts().git_operation_ms ?? 3000 }).trim();
   } catch {
     return '';
   }
@@ -89,7 +90,7 @@ function getOpenPRCount(): number {
     const out = execSync('gh pr list --json number --jq length', {
       cwd: ROOT,
       encoding: 'utf-8',
-      timeout: 5000,
+      timeout: getProcessExecutionTimeouts().git_operation_ms ?? 5000,
     }).trim();
     const n = parseInt(out, 10);
     if (!isNaN(n)) return n;

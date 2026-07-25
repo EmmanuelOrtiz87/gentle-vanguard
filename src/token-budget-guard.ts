@@ -64,7 +64,8 @@ const TASK_TOKENS: Record<string, number> = {
 
 const METRICS_DIR = join(ROOT, 'docs', 'sessions', 'metrics');
 const USAGE_FILE = join(METRICS_DIR, 'token-guard-usage.csv');
-const CONFIG_PATH = join(ROOT, 'config', 'orchestrator.json');
+const GUARD_CONFIG_PATH = join(ROOT, 'config', 'token-budget-guard.json');
+const ORCHESTRATOR_PATH = join(ROOT, 'config', 'orchestrator.json');
 
 function ensureDir(filePath: string) {
   const dir = dirname(filePath);
@@ -73,17 +74,37 @@ function ensureDir(filePath: string) {
 
 function loadConfig(): GuardConfig {
   const config = { ...DEFAULT_CONFIG };
-  if (existsSync(CONFIG_PATH)) {
+
+  // Priority 1: token-budget-guard.json (single source of truth, v2)
+  if (existsSync(GUARD_CONFIG_PATH)) {
     try {
-      const raw = JSON.parse(readFileSync(CONFIG_PATH, 'utf-8'));
-      const custom = raw?.subagent_orchestration?.token_budget_guard;
+      const raw = JSON.parse(readFileSync(GUARD_CONFIG_PATH, 'utf-8'));
+      const tb = raw?.tokenBudget?.limits;
+      if (tb) {
+        config.daily_budget_tokens = tb.daily ?? config.daily_budget_tokens;
+        config.soft_threshold_pct = tb.softThreshold ?? config.soft_threshold_pct;
+        config.hard_threshold_pct = tb.hardThreshold ?? config.hard_threshold_pct;
+        console.log(`[TOKEN-BUDGET] Loaded from token-budget-guard.json: daily_budget=${config.daily_budget_tokens}, soft=${config.soft_threshold_pct}%, hard=${config.hard_threshold_pct}%`);
+        return config;
+      }
+    } catch (err) {
+      console.warn(`[TOKEN-BUDGET] Failed to load token-budget-guard.json: ${err}`);
+    }
+  }
+
+  // Priority 2: orchestrator.json (legacy fallback)
+  if (existsSync(ORCHESTRATOR_PATH)) {
+    try {
+      const raw = JSON.parse(readFileSync(ORCHESTRATOR_PATH, 'utf-8'));
+      const custom = raw?.orchestrator?.token_budget_guard || raw?.subagent_orchestration?.token_budget_guard;
       if (custom) {
         for (const key of Object.keys(DEFAULT_CONFIG)) {
           if (key in custom) (config as Record<string, unknown>)[key] = custom[key];
         }
+        console.log(`[TOKEN-BUDGET] Loaded from orchestrator.json (legacy): daily_budget=${config.daily_budget_tokens}, soft=${config.soft_threshold_pct}%, hard=${config.hard_threshold_pct}%`);
       }
-    } catch {
-      /* use defaults */
+    } catch (err) {
+      console.warn(`[TOKEN-BUDGET] Failed to load orchestrator.json: ${err}`);
     }
   }
   return config;

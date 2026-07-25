@@ -56,37 +56,64 @@ function gitCmd(root: string, cmd: string): string | null {
   }
 }
 
-function getLatestSessionId(root: string): string | null {
-  const sessionDir = join(root, 'session');
-  if (!existsSync(sessionDir)) return null;
-  try {
-    const files = readdirSync(sessionDir)
-      .filter((f: string) => f.startsWith('session-') && f.endsWith('.json'))
-      .sort()
-      .reverse();
-    if (files.length === 0) return null;
-    const data = JSON.parse(readFileSync(join(sessionDir, files[0]), 'utf-8'));
-    return data.sessionId ?? null;
-  } catch {
-    return null;
+function getSessionInfo(root: string): { sessionId: string | null; timezone: string | null; peakStart: number | null; peakEnd: number | null; region: string | null } {
+  // Try to get session info from the most recent session file
+  const sessionDirs = [join(root, '.session'), join(root, 'session')];
+  
+  for (const sessionDir of sessionDirs) {
+    if (!existsSync(sessionDir)) continue;
+    try {
+      const files = readdirSync(sessionDir)
+        .filter((f: string) => f.startsWith('session-') && f.endsWith('.json'))
+        .sort()
+        .reverse();
+      if (files.length === 0) continue;
+      const data = JSON.parse(readFileSync(join(sessionDir, files[0]), 'utf-8'));
+      return {
+        sessionId: data.sessionId ?? data.id ?? null,
+        timezone: data.timezone ?? data.timeZone ?? null,
+        peakStart: data.peakStart ?? data.peak_start ?? null,
+        peakEnd: data.peakEnd ?? data.peak_end ?? null,
+        region: data.region ?? null,
+      };
+    } catch {
+      continue;
+    }
   }
+  return { sessionId: null, timezone: null, peakStart: null, peakEnd: null, region: null };
 }
 
-function main() {
+function main(): Record<string, any> {
   const args = parseArgs(process.argv);
   const root = resolveRoot();
   const timestamp = new Date().toISOString();
-  const sessionId = getLatestSessionId(root);
+  
+  // Get session info from session file (more reliable than args)
+  const sessionInfo = getSessionInfo(root);
+  const sessionId = sessionInfo.sessionId;
   const branch = gitCmd(root, 'rev-parse --abbrev-ref HEAD');
   const lastCommit = gitCmd(root, 'log -1 --format="%H"');
 
+  // Use session file values first, then args, then use defaults from notifications config
+  const notifications = { timezone: 'America/Argentina/Buenos_Aires', peakStart: 9, peakEnd: 15, region: 'Argentina' };
+  try {
+    const configPath = join(root, 'config', 'session-autostart.config.json');
+    if (existsSync(configPath)) {
+      const config = JSON.parse(readFileSync(configPath, 'utf-8'));
+      if (config.notifications) {
+        Object.assign(notifications, config.notifications);
+      }
+    }
+  } catch {}
+
+  // Build summary with fallbacks: session file > args > config > null
   const summary = {
     timestamp,
     sessionId,
-    timezone: args.TimeZone ?? null,
-    peakStart: args.PeakStart ?? null,
-    peakEnd: args.PeakEnd ?? null,
-    region: args.Region ?? null,
+    timezone: sessionInfo.timezone ?? args.TimeZone ?? notifications.timezone ?? null,
+    peakStart: sessionInfo.peakStart ?? args.PeakStart ?? notifications.peakStart ?? null,
+    peakEnd: sessionInfo.peakEnd ?? args.PeakEnd ?? notifications.peakEnd ?? null,
+    region: sessionInfo.region ?? args.Region ?? notifications.region ?? null,
     workspace: {
       branch,
       lastCommit,
@@ -103,12 +130,13 @@ function main() {
   console.log(`  sessionId : ${sessionId}`);
   console.log(`  branch    : ${branch}`);
   console.log(`  lastCommit: ${lastCommit}`);
-  console.log(`  timezone  : ${args.TimeZone}`);
-  console.log(`  peakStart : ${args.PeakStart}`);
-  console.log(`  peakEnd   : ${args.PeakEnd}`);
-  console.log(`  region    : ${args.Region}`);
+  console.log(`  timezone  : ${summary.timezone}`);
+  console.log(`  peakStart : ${summary.peakStart}`);
+  console.log(`  peakEnd   : ${summary.peakEnd}`);
+  console.log(`  region    : ${summary.region}`);
 
-  process.exit(0);
+  // Return success without process.exit to avoid breaking pipeline
+  return summary;
 }
 
 main();

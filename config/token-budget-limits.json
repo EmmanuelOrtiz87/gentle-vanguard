@@ -1,64 +1,30 @@
 {
-  "version": "1.0.0",
-  "description": "Token budget limits configuration — enforced by cost-tracker.ps1 and token-budget-guard.ps1",
-  "last_updated": "2026-07-04",
-
-  "daily_limits": {
-    "max_cost_usd": 5.0,
-    "max_tokens": 500000,
-    "alert_at_percent": 80,
-    "hard_limit_action": "pause_and_alert"
+  "version": "2.0.0",
+  "description": "⚠️ DEPRECATED — This file is no longer the source of truth. Token budget configuration has been consolidated into config/token-budget-guard.json.",
+  "deprecated": true,
+  "sourceOfTruth": "config/token-budget-guard.json",
+  "last_updated": "2026-07-24",
+  "migration": {
+    "date": "2026-07-24",
+    "action": "Consolidated all budget, pricing, and agent limit configs into token-budget-guard.json",
+    "affectedFiles": [
+      "config/orchestrator.json#subagent_orchestration.token_budget_guard",
+      "config/timeout-config.json#token_budget_daily",
+      "config/token-budget-limits.json"
+    ]
   },
-
-  "per_task_limits": {
-    "max_cost_usd": 0.8,
-    "max_tokens": 80000,
-    "model_override_allowed": false
-  },
-
-  "per_agent_daily_limits": {
-    "BA": { "tokens": 50000, "cost_usd": 0.5 },
-    "SAD": { "tokens": 80000, "cost_usd": 0.8 },
-    "DEV": { "tokens": 100000, "cost_usd": 1.0 },
-    "QA": { "tokens": 40000, "cost_usd": 0.4 },
-    "OPS": { "tokens": 30000, "cost_usd": 0.3 },
-    "GOV": { "tokens": 20000, "cost_usd": 0.2 },
-    "DOC": { "tokens": 15000, "cost_usd": 0.15 },
-    "DEFAULT": { "tokens": 50000, "cost_usd": 0.5 }
-  },
-
-  "model_pricing_per_1m_tokens": {
-    "gpt-4o": { "input": 2.5, "output": 10.0 },
-    "claude-3.5-sonnet": { "input": 3.0, "output": 15.0 },
-    "gpt-4o-mini": { "input": 0.15, "output": 0.6 },
-    "claude-3-haiku": { "input": 0.25, "output": 1.25 },
-    "gemini-2.0-flash": { "input": 0.1, "output": 0.4 }
-  },
-
-  "model_selection_rules": {
-    "trivial_tasks": "gpt-4o-mini",
-    "simple_tasks": "gpt-4o-mini",
-    "medium_tasks": "claude-3.5-sonnet",
-    "complex_tasks": "gpt-4o",
-    "critical_tasks": "gpt-4o",
-    "bulk_processing": "gemini-2.0-flash",
-    "default": "claude-3.5-sonnet"
-  },
-
-  "session_limits": {
-    "max_total_tokens": 500000,
-    "max_total_cost_usd": 5.0,
-    "max_conversation_turns": 50,
-    "context_window_alert_at_percent": 80,
-    "force_compaction_at_percent": 90
-  },
-
-  "alerting": {
-    "daily_cost_exceeded": { "severity": "CRITICAL", "action": "pause_non_critical" },
-    "daily_tokens_exceeded": { "severity": "WARNING", "action": "log_and_notify" },
-    "agent_limit_exceeded": { "severity": "WARNING", "action": "log_and_notify" },
-    "task_limit_exceeded": { "severity": "WARNING", "action": "log_and_notify" },
-    "cost_spike_2x": { "severity": "WARNING", "action": "investigate" },
-    "runaway_usage": { "severity": "CRITICAL", "action": "kill_task" }
+  "legacyValues": {
+    "note": "These values are kept for reference only. Do not edit — edit token-budget-guard.json instead.",
+    "daily_max_tokens": 500000,
+    "daily_max_cost_usd": 5.0,
+    "per_agent_daily_limits": {
+      "BA": { "tokens": 50000 },
+      "SAD": { "tokens": 80000 },
+      "DEV": { "tokens": 100000 },
+      "QA": { "tokens": 40000 },
+      "OPS": { "tokens": 30000 },
+      "GOV": { "tokens": 20000 },
+      "DOC": { "tokens": 15000 }
+    }
   }
 }

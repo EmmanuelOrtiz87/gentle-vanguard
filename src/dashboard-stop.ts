@@ -18,6 +18,7 @@ import {
   stopByPidFile,
   killProcess,
 } from './dashboard-common';
+import { getEffectiveProcessTimeout } from './core/timeout-config';
 
 const ROOT = path.resolve(process.cwd());
 const RUNTIME_DIR = path.join(ROOT, '.runtime');
@@ -46,7 +47,7 @@ function killNodeProcesses(): void {
   try {
     const output = execSync(
       'wmic process where "name=\'node.exe\'" get ProcessId,CommandLine /format:csv',
-      { encoding: 'utf-8', timeout: 5000, windowsHide: true },
+      { encoding: 'utf-8', timeout: getEffectiveProcessTimeout('default'), windowsHide: true },
     );
     for (const line of output.split('\n')) {
       if (line.includes('websocket-server') || line.includes('vite')) {

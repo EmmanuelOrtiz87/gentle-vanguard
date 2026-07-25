@@ -3,6 +3,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync, rmSync, appendFileS
 import { dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { spawnSync } from 'child_process';
+import { getEffectiveProcessTimeout } from './core/timeout-config';
 
 const ROOT = resolve(process.cwd());
 
@@ -179,7 +180,7 @@ function executeRule(rule: CorrectionRule, _score: number): CorrectionResult {
           spawnSync('npx', ['tsx', integrityScript, '-Mode', 'checksums', '-Quiet'], {
             cwd: ROOT,
             stdio: 'pipe',
-            timeout: 30000,
+            timeout: getEffectiveProcessTimeout('default'),
           });
           result = { success: true, message: 'Memory corrected: regenerated Engram checksums' };
         } else {

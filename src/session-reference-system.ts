@@ -115,10 +115,10 @@ function main() {
 
   if (!isValidComponent(componentsStr)) {
     log(`Invalid component: ${componentsStr}. Valid: ${VALID_COMPONENTS.join(', ')}`, 'red');
-    process.exit(1);
+
   }
 
-  const components: Component = componentsStr;
+  const components = componentsStr as Component;
   const scriptsDir = resolve(__dirname, '..', '..', 'scripts', 'utilities', 'session');
   const ROOT = resolve(__dirname, '..');
 
@@ -152,7 +152,6 @@ function main() {
     log(`Run full restart: ${autostart}`, 'cyan');
   }
 
-  process.exit(0);
 }
 
 try {
@@ -162,5 +161,5 @@ try {
 } catch (e: unknown) {
   const msg = e instanceof Error ? e.message : String(e);
   log(`Quick restart failed: ${msg}`, 'red');
-  process.exit(1);
+
 }

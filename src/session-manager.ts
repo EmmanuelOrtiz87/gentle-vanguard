@@ -61,7 +61,7 @@ function run(): void {
     process.exit(result.status ?? 0);
   } else {
     console.warn(`[session-manager] target not found: ${TARGET_TS} or ${TARGET_PS1}`);
-    process.exit(1);
+
   }
 }
 

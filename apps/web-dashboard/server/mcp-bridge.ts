@@ -3,6 +3,7 @@ import { existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { EventEmitter } from 'events';
+import { getExternalApiTimeouts } from '@gentle-vanguard/core/timeout-config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -82,7 +83,7 @@ export class MCPBridge extends EventEmitter {
       let started = false;
       const timeout = setTimeout(() => {
         if (!started) reject(new Error('MCP bridge start timeout'));
-      }, 15000);
+      }, getExternalApiTimeouts()?.mcp_bridge_start_ms ?? 15000);
 
       this.proc.stdout?.on('data', (data: Buffer) => {
         this.buffer += data.toString();

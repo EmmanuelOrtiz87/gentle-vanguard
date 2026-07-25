@@ -8,12 +8,13 @@
 
 import { execSync } from 'child_process';
 import { pathToFileURL } from 'url';
+import { getEffectiveProcessTimeout } from './core/timeout-config';
 
 function run(cmd: string, opts: { quiet?: boolean } = {}): string {
   try {
     return execSync(cmd, {
       encoding: 'utf-8',
-      timeout: 30000,
+      timeout: getEffectiveProcessTimeout('default'),
       windowsHide: true,
       stdio: opts.quiet ? 'pipe' : 'pipe',
     }).trim();

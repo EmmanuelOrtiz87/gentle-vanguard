@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { spawnSync } from 'child_process';
 import * as net from 'net';
+import { getEffectiveProcessTimeout, getExternalApiTimeouts } from './timeout-config';
 
 const ROOT = process.cwd();
 let quiet = false;
@@ -51,7 +52,7 @@ function tryRunTs(tsPath: string, args: string[] = []): { status: number; stdout
     const r = spawnSync('npx', ['tsx', tsPath, ...args], {
       cwd: ROOT,
       stdio: 'pipe',
-      timeout: 15000,
+      timeout: getEffectiveProcessTimeout('health_check'),
       shell: true,
     });
     return { status: r.status ?? -1, stdout: (r.stdout ?? '').toString() };
@@ -70,14 +71,14 @@ function checkMCP() {
   writeCheck('MCP TS exists', fs.existsSync(mcpTs), 'scripts/mcp/skill-server.ts');
   if (!fs.existsSync(mcpJs)) return;
   try {
-    const r = spawnSync('pnpm', ['tsc', '--noEmit'], { cwd: ROOT, stdio: 'pipe', timeout: 60000 });
+    const r = spawnSync('pnpm', ['tsc', '--noEmit'], { cwd: ROOT, stdio: 'pipe', timeout: getEffectiveProcessTimeout('tsc') });
     writeCheck('MCP TS compiles clean', r.status === 0);
   } catch {
     writeCheck('MCP TS compiles clean', false);
   }
   try {
     const input = JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list', params: {} });
-    const r = spawnSync('node', [mcpJs], { input, stdio: ['pipe', 'pipe', 'pipe'], timeout: 10000, maxBuffer: 1024 * 1024 });
+    const r = spawnSync('node', [mcpJs], { input, stdio: ['pipe', 'pipe', 'pipe'], timeout: getEffectiveProcessTimeout('default'), maxBuffer: 1024 * 1024 });
     const allOutput = ((r.stdout || '').toString()) + '\n' + ((r.stderr || '').toString());
     const lines = allOutput.split('\n').filter((l) => l.trim());
     let toolsCount = 0;
@@ -108,7 +109,7 @@ function checkSessionRef() {
 
 function checkSkillFactory() {
   header('Skill Factory');
-  writeCheck('Skill Factory (TS)', exists('src/skill-factory.ts'), 'src/skill-factory.ts');
+  writeCheck('Skill Factory (TS)', exists('src/skills/skill-factory.ts'), 'src/skills/skill-factory.ts');
   writeCheck('Skill registry exists', exists('.atl', 'skill-registry.md'));
   const regPath = path.resolve(ROOT, '.atl/skill-registry.md');
   if (fs.existsSync(regPath)) {
@@ -127,7 +128,7 @@ function checkPnpm() {
   writeCheck('pnpm-lock.yaml exists', exists('pnpm-lock.yaml'));
   writeCheck('pnpm security normativa exists', exists('rules/NORMATIVA-PNPM-SECURITY.md'));
   try {
-    const r = spawnSync('pnpm', ['--version'], { cwd: ROOT, stdio: 'pipe', timeout: 10000 });
+    const r = spawnSync('pnpm', ['--version'], { cwd: ROOT, stdio: 'pipe', timeout: getEffectiveProcessTimeout('pnpm') });
     const v = (r.stdout?.toString() ?? '').trim();
     writeCheck('pnpm installed', r.status === 0, `v${v}`);
   } catch {
@@ -177,15 +178,31 @@ function checkGateGuard() {
 
 function checkMlEmbeddings() {
   header('ML Embeddings (Auto-Delegation)');
-  writeCheck('ml-index.json exists', exists('.atl', 'ml-index.json'), '.atl/ml-index.json');
-  writeCheck('skill-embedder.ts exists', exists('src/skill-embedder.ts'), 'src/skill-embedder.ts');
+  // Check both ml-index.json and skill-embeddings.json
+  const mlIndexPath = path.resolve(ROOT, '.atl/ml-index.json');
+  const skillEmbeddingsPath = path.resolve(ROOT, '.atl/skill-embeddings.json');
+  
+  const hasMlIndex = fs.existsSync(mlIndexPath);
+  const hasSkillEmbeddings = fs.existsSync(skillEmbeddingsPath);
+  
+  writeCheck('ml-index.json exists', hasMlIndex, '.atl/ml-index.json');
+  writeCheck('skill-embeddings.json exists', hasSkillEmbeddings, '.atl/skill-embeddings.json');
+  writeCheck('skill-embedder.ts exists', exists('src/skills/skill-embedder.ts'), 'src/skills/skill-embedder.ts');
   writeCheck('ml-router.ts exists', exists('src/ml-router.ts'), 'src/ml-router.ts');
-  const mlIndex = path.resolve(ROOT, '.atl/ml-index.json');
-  if (fs.existsSync(mlIndex)) {
-    try { const data = readJson('.atl', 'ml-index.json'); const cnt = Object.keys(data).length; writeCheck('ml-index parseable', true, `${cnt} skills indexed`); } catch { writeCheck('ml-index parseable', false); }
-    const stat = fs.statSync(mlIndex);
+  
+  // Use skill-embeddings.json as primary source if available
+  const primaryPath = hasSkillEmbeddings ? skillEmbeddingsPath : mlIndexPath;
+  if (fs.existsSync(primaryPath)) {
+    try { 
+      const data = JSON.parse(fs.readFileSync(primaryPath, 'utf-8')); 
+      const cnt = Object.keys(data).length; 
+      writeCheck('embeddings parseable', true, `${cnt} skills indexed`); 
+    } catch { 
+      writeCheck('embeddings parseable', false); 
+    }
+    const stat = fs.statSync(primaryPath);
     const ageHours = (Date.now() - stat.mtimeMs) / (1000 * 60 * 60);
-    writeCheck('ml-index fresh (<48h)', ageHours <= 48, `${ageHours.toFixed(1)} hours old`);
+    writeCheck('embeddings fresh (<48h)', ageHours <= 48, `${ageHours.toFixed(1)} hours old`);
   }
 }
 
@@ -193,7 +210,7 @@ async function checkEngramRag() {
   header('Engram RAG Index');
   writeCheck('engram-rag-reindex.ts exists', exists('src/engram-rag-reindex.ts'), 'src/engram-rag-reindex.ts');
   try {
-    const r = spawnSync('engram', ['doctor', '--json'], { cwd: ROOT, stdio: 'pipe', timeout: 15000 });
+    const r = spawnSync('engram', ['doctor', '--json'], { cwd: ROOT, stdio: 'pipe', timeout: getExternalApiTimeouts()?.engram_operation_ms ?? 15000 });
     const output = (r.stdout?.toString() ?? '') + (r.stderr?.toString() ?? '');
     const healthy = output.includes('"status":"ok"') || output.includes('"ok"');
     writeCheck('engram doctor', healthy);

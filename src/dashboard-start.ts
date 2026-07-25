@@ -47,12 +47,14 @@ function parseArgs(): CliOptions {
   };
 }
 
+import { getEffectiveProcessTimeout } from './core/timeout-config';
+
 /** HTTP GET check until a server responds or timeout */
 async function waitForServer(url: string, maxAttempts = 20, delayMs = 1000): Promise<boolean> {
   for (let i = 0; i < maxAttempts; i++) {
     try {
       const ok = await new Promise<boolean>((resolve) => {
-        const req = http.get(url, { timeout: 2000 }, (res) => {
+        const req = http.get(url, { timeout: getEffectiveProcessTimeout('health_check') }, (res) => {
           resolve(res.statusCode === 200);
         });
         req.on('error', () => resolve(false));

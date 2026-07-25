@@ -80,10 +80,46 @@ function log(
 
 // ─── GitHub API ───────────────────────────────────────────────────────────────
 
+async function fetchWithRetry(url: string, options: RequestInit, retries = 3, delay = 1000): Promise<Response | null> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
+      
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+      });
+      
+      clearTimeout(timeout);
+      return response;
+    } catch (err: any) {
+      const isLastAttempt = i === retries - 1;
+      const errorMsg = err?.message || String(err);
+      
+      // Handle UV_HANDLE_CLOSING and other fetch errors
+      if (errorMsg.includes('UV_HANDLE_CLOSING') || errorMsg.includes('fetch failed')) {
+        log(`Fetch attempt ${i + 1}/${retries} failed: ${errorMsg}`, 'WARN');
+        if (!isLastAttempt) {
+          log(`Waiting ${delay}ms before retry...`, 'INFO');
+          await new Promise(resolve => setTimeout(resolve, delay));
+          continue;
+        }
+      }
+      
+      if (isLastAttempt) {
+        log(`All ${retries} fetch attempts failed: ${errorMsg}`, 'ERROR');
+        return null;
+      }
+    }
+  }
+  return null;
+}
+
 async function getLatestRelease(): Promise<GitHubRelease | null> {
   // Try GitHub API first (may fail with 403 without token)
   try {
-    const response = await fetch(
+    const response = await fetchWithRetry(
       'https://api.github.com/repos/Gentleman-Programming/gentle-ai/releases/latest',
       {
         headers: {
@@ -93,13 +129,15 @@ async function getLatestRelease(): Promise<GitHubRelease | null> {
       },
     );
 
-    if (response.ok) {
+    if (!response) {
+      log('GitHub API failed after retries, trying alternative method...', 'WARN');
+    } else if (response.ok) {
       const release = (await response.json()) as GitHubRelease;
       log('Got release from GitHub API', 'INFO');
       return release;
+    } else {
+      log(`GitHub API returned ${response.status}, trying alternative method...`, 'WARN');
     }
-
-    log(`GitHub API returned ${response.status}, trying alternative method...`, 'WARN');
   } catch (err) {
     log(
       `GitHub API failed: ${err instanceof Error ? err.message : String(err)}, trying alternative...`,

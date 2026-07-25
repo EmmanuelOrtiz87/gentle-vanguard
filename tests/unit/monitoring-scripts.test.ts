@@ -11,6 +11,6 @@ describe('monitoring-scripts', () => {
   });
 
   it('src/periodic-checkpoint.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'v4.0-Infrastructure', 'periodic-checkpoint.ts')));
+    assert.ok(existsSync(resolve(ROOT, 'src', 'infrastructure', 'periodic-checkpoint.ts')));
   });
 });

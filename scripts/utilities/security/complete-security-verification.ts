@@ -5,15 +5,15 @@
  * Verifies that all security enhancements are properly implemented
  */
 
-import { dependencySecurityEnforcer } from '../../../src/Security/dependency-security-enforcer';
-import { auditLogger } from '../../../src/v4.0-Infrastructure/audit-logger-enhanced';
+import { dependencySecurityEnforcer } from '../../../src/security/dependency-security-enforcer';
+import { auditLogger } from '../../../src/infrastructure/audit-logger-enhanced';
 import {
   sanitizeText,
   testBlockCritical,
   detectHallucination,
-} from '../../../src/Security/security-orchestrator';
-import { integrationValidator } from '../../../src/Security/integration-validator';
-import { toolDetector } from '../../../src/Core/tool-detector-enhanced';
+} from '../../../src/security/security-orchestrator';
+import { integrationValidator } from '../../../src/security/integration-validator';
+import { toolDetector } from '../../../src/core/tool-detector-enhanced';
 import { consistencyChecker } from '../../../src/utils/cross-platform-consistency-checker';
 import { apiCompatibilityChecker } from '../../../src/utils/api-compatibility-checker';
 

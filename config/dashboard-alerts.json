@@ -128,6 +128,100 @@
       "unit": "%",
       "enabled": true,
       "direction": "below"
+    },
+
+    "timeout_violation_rate": {
+      "label": "High Timeout Violation Rate",
+      "metric": "timeout.violationRate",
+      "threshold": 0.1,
+      "severity": "warning",
+      "unit": "%",
+      "enabled": true,
+      "direction": "above",
+      "description": "Más del 10% de las operaciones exceden su timeout"
+    },
+    "timeout_p95_violation": {
+      "label": "P95 Latency Exceeds Timeout",
+      "metric": "timeout.p95Ms",
+      "threshold": 30000,
+      "severity": "error",
+      "unit": "ms",
+      "enabled": true,
+      "description": "La latencia p95 supera los 30s — degradación de performance"
+    },
+    "timeout_critical_violation": {
+      "label": "Critical Timeout Violation",
+      "metric": "timeout.criticalViolations",
+      "threshold": 1,
+      "severity": "error",
+      "unit": "violations",
+      "enabled": true,
+      "direction": "above",
+      "description": "Se detectó una violación crítica de timeout (2x threshold)"
+    },
+    "process_starvation": {
+      "label": "Process Starvation Detected",
+      "metric": "process_execution.avgDurationMs",
+      "threshold": 60000,
+      "severity": "warning",
+      "unit": "ms",
+      "enabled": true,
+      "description": "El tiempo promedio de ejecución de procesos supera los 60s"
+    },
+    "socket_queue_backlog": {
+      "label": "Socket Queue Backlog",
+      "metric": "http_server.activeConnections",
+      "threshold": 50,
+      "severity": "warning",
+      "unit": "connections",
+      "enabled": false,
+      "description": "Más de 50 conexiones activas simultáneas en el servidor HTTP"
+    },
+    "websocket_disconnect_rate": {
+      "label": "High WebSocket Disconnect Rate",
+      "metric": "websocket.reconnectRate",
+      "threshold": 5,
+      "severity": "warning",
+      "unit": "reconnects/min",
+      "enabled": true,
+      "description": "Más de 5 reconexiones WebSocket por minuto"
+    },
+    "database_query_slow": {
+      "label": "Slow Database Query",
+      "metric": "database.avgQueryMs",
+      "threshold": 2000,
+      "severity": "warning",
+      "unit": "ms",
+      "enabled": true,
+      "description": "Consultas a base de datos tardan más de 2s en promedio"
+    },
+    "cache_miss_rate": {
+      "label": "High Cache Miss Rate",
+      "metric": "cache.missRate",
+      "threshold": 0.5,
+      "severity": "info",
+      "unit": "%",
+      "enabled": false,
+      "description": "Más del 50% de cache misses — posible bottleneck"
+    },
+    "pipeline_step_slow": {
+      "label": "Slow Pipeline Step",
+      "metric": "pipeline.stepAvgMs",
+      "threshold": 30000,
+      "severity": "warning",
+      "unit": "ms",
+      "enabled": true,
+      "description": "Un paso de la pipeline está tardando más de 30s en promedio"
+    },
+    "session_expiry_risk": {
+      "label": "Session Expiry Risk",
+      "metric": "session.remainingMinutes",
+      "threshold": 10,
+      "severity": "info",
+      "unit": "minutes",
+      "enabled": true,
+      "description": "Quedan menos de 10 minutos antes del expiry de sesión",
+      "direction": "below"
     }
   }
 }

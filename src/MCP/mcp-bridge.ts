@@ -59,7 +59,11 @@ function testMCPIntegration(tool: string): MCPIntegrationStatus {
 }
 
 function testSkillServer(): boolean {
-  const serverPath = join(ROOT, 'dist', 'scripts', 'mcp', 'skill-server.js');
+  // Auto-detect if running from src/ or dist/ and adjust path
+  const isSrc = __filename.includes("src/mcp") || __filename.includes("src\\mcp");
+  const serverPath = isSrc 
+    ? join(ROOT, "..", "dist", "scripts", "mcp", "skill-server.js")
+    : join(ROOT, "dist", "scripts", "mcp", "skill-server.js");
   if (existsSync(serverPath)) {
     console.log('  skill-server.js: OK');
     return true;
@@ -253,4 +257,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       console.error(`Unknown action: ${action}. Valid: status, setup, verify, launch`);
       process.exit(1);
   }
+  
+  // Ensure the script exits after completing the action
+  process.exit(0);
 }

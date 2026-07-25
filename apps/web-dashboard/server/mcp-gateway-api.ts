@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import type { IncomingMessage, ServerResponse } from 'http';
+import { getExternalApiTimeouts } from '@gentle-vanguard/core/timeout-config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,7 +14,7 @@ const REGISTRY_PATH = join(ROOT, 'config', 'mcp-registry.json');
 
 function pwsh(script: string): string {
   try {
-    return execSync(`pwsh -NoProfile -Command "${script}"`, { encoding: 'utf-8', timeout: 15000 });
+    return execSync(`pwsh -NoProfile -Command "${script}"`, { encoding: 'utf-8', timeout: getExternalApiTimeouts()?.mcp_request_ms ?? 15000 });
   } catch {
     return '';
   }

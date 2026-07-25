@@ -7,10 +7,19 @@
       {
         "id": "tool-detection",
         "enabled": true,
-        "script": "src/detect-tool.ts",
+        "script": "src/Core/detect-tool.ts",
         "args": "--json",
         "required": false,
         "description": "Detect AI tool/agent and load tool-specific configuration (TS)"
+      },
+      {
+        "id": "bootstrap-symlink",
+        "enabled": true,
+        "script": "src/bootstrap-symlink.ts",
+        "args": "",
+        "required": true,
+        "phase": 0,
+        "description": "Auto-create @gentle-vanguard/core symlink for module resolution"
       },
       {
         "id": "session-manager",
@@ -114,7 +123,7 @@
       {
         "id": "security-orchestrator",
         "enabled": true,
-        "script": "src/security-orchestrator.ts",
+        "script": "src/Security/security-orchestrator.ts",
         "args": "init prompt",
         "required": true,
         "description": "Initialize Security Orchestrator with policy and privacy configs (TS)"
@@ -130,7 +139,7 @@
       {
         "id": "dependency-security-initializer",
         "enabled": true,
-        "script": "src/dependency-security-initializer.ts",
+        "script": "src/Security/dependency-security-initializer.ts",
         "args": "",
         "required": false,
         "description": "Initialize and enforce dependency security policies (TS)"
@@ -138,7 +147,7 @@
       {
         "id": "skill-router",
         "enabled": true,
-        "script": "src/skill-router.ts",
+        "script": "src/Skills/skill-router.ts",
         "args": "--query \"session-start\"",
         "required": false,
         "description": "Verify skill router is active (TS)"
@@ -270,7 +279,7 @@
       {
         "id": "skill-usage-scan",
         "enabled": true,
-        "script": "src/skill-usage-tracker.ts",
+        "script": "src/Skills/skill-usage-tracker.ts",
         "args": "",
         "required": false,
         "description": "Inicializa/escanea métricas de uso de skills al inicio de sesion (TS)"
@@ -336,7 +345,7 @@
       {
         "id": "validate-tool-configs",
         "enabled": true,
-        "script": "src/validate-tool-configs.ts",
+        "script": "src/Core/validate-tool-configs.ts",
         "args": "--quiet",
         "required": false,
         "description": "Valida tool configs (.windsurf, .continue, .clinerules) contra schemas oficiales (TS)"
@@ -432,6 +441,15 @@
         "description": "Record session start event in append-only event store for traceability (Phase 5)"
       },
       {
+        "id": "auto-norm-learner",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/auto-norm-learner.ts",
+        "args": "--trigger=session-start --quiet",
+        "required": false,
+        "description": "Auto-learn norms from session patterns and update LEARNED-NORMS.md (meta-cognitive learning)"
+      },
+      {
         "id": "post-session-learning",
         "enabled": true,
         "lazy": true,
@@ -516,7 +534,7 @@
         "enabled": true,
         "lazy": true,
         "script": "src/eval-quality-gate.ts",
-        "args": "--suite codegraph-search --export",
+        "args": "--suite=codegraph-search --export",
         "required": false,
         "description": "Run eval quality gates on core skills (v5.1) (TS)"
       },
@@ -573,6 +591,15 @@
         "args": "",
         "required": false,
         "description": "Validate SQLite database integrity (CodeGraph + Engram) on session start — auto-repairs WAL/REINDEX issues"
+      },
+      {
+        "id": "db-init",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/database/db-init.ts",
+        "args": "--quiet",
+        "required": false,
+        "description": "Initialize gentle-vanguard.db (auto-creates DB, runs all pending migrations, outputs health info) — idempotent, safe to run every session (Wave 34)"
       },
       {
         "id": "self-reflection",
@@ -685,7 +712,7 @@
         "description": "Result Gatekeeper — contract validation between pipeline phases (stage #8 trust layer)"
       },
       {
-        "id": "publication-gates-prune",
+        "id": "publication-gates",
         "enabled": true,
         "lazy": true,
         "script": "src/publication-gates.ts",
@@ -693,6 +720,51 @@
         "required": false,
         "phase": 99,
         "description": "Publication Gates — TOCTOU and stale-approval prevention (stage #8 trust layer)"
+      },
+      {
+        "id": "response-cache-init",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/response-cache.ts",
+        "args": "stats",
+        "required": false,
+        "description": "Initialize SHA256 Response Cache and show statistics"
+      },
+      {
+        "id": "cost-efficiency-score",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/cost-efficiency-scorer.ts",
+        "args": "score",
+        "required": false,
+        "description": "Calculate and record cost efficiency score for session"
+      },
+      {
+        "id": "auto-optimization",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/auto-optimizer.ts",
+        "args": "--mode auto",
+        "required": false,
+        "description": "Auto-optimize stack based on session metrics and learned patterns"
+      },
+      {
+        "id": "timeout-monitor-init",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/start-monitor-daemon.ts",
+        "args": "",
+        "required": false,
+        "description": "Start timeout & performance monitoring daemon (detached) — tracks violations, measures latencies, emits alerts"
+      },
+      {
+        "id": "timeout-config-verify",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/core/timeout-config.ts",
+        "args": "",
+        "required": false,
+        "description": "Verify centralized timeout configuration is valid and accessible"
       }
     ],
     "onStepFailure": "continue",

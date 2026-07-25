@@ -8,6 +8,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import { join, resolve } from 'path';
 import { execSync } from 'child_process';
 import { pathToFileURL } from 'url';
+import { getEffectiveProcessTimeout } from './core/timeout-config';
 
 type DigestMode = 'daily' | 'status' | 'weekly';
 
@@ -59,9 +60,9 @@ function main(): void {
   let branch = '';
   let commitCount = 0;
   try {
-    branch = execSync('git rev-parse --abbrev-ref HEAD', { cwd: repoRoot, encoding: 'utf-8', timeout: 5000, windowsHide: true }).trim();
+    branch = execSync('git rev-parse --abbrev-ref HEAD', { cwd: repoRoot, encoding: 'utf-8', timeout: getEffectiveProcessTimeout('git'), windowsHide: true }).trim();
     const since = new Date(Date.now() - 86400000).toISOString().slice(0, 19);
-    const log = execSync(`git log --oneline --since="${since}"`, { cwd: repoRoot, encoding: 'utf-8', timeout: 5000, windowsHide: true });
+    const log = execSync(`git log --oneline --since="${since}"`, { cwd: repoRoot, encoding: 'utf-8', timeout: getEffectiveProcessTimeout('git'), windowsHide: true });
     commitCount = log.trim() ? log.split('\n').length : 0;
   } catch { /* git not available */ }
 
@@ -69,7 +70,7 @@ function main(): void {
   const healthScript = join(repoRoot, 'scripts', 'utilities', 'SKILLS-TOOLS', 'ensure-tools-active.ps1');
   if (existsSync(healthScript)) {
     try {
-      execSync(`pwsh -NoProfile -File "${healthScript}" -AutoStart -Quiet`, { cwd: repoRoot, timeout: 15000, windowsHide: true });
+      execSync(`pwsh -NoProfile -File "${healthScript}" -AutoStart -Quiet`, { cwd: repoRoot, timeout: getEffectiveProcessTimeout('health_check'), windowsHide: true });
       healthStatus = 'ok';
     } catch { healthStatus = 'warn'; }
   }

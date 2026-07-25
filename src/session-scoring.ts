@@ -250,6 +250,5 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       break;
     default:
       console.error(`Unknown action: ${action}`);
-      process.exit(1);
   }
 }

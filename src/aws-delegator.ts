@@ -4,6 +4,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync } fr
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { spawnSync } from 'child_process';
+import { getExternalApiTimeouts } from './core/timeout-config';
 
 const ROOT = resolve(process.cwd());
 const LOG_FILE = join(ROOT, '.session', 'aws-delegator.log');
@@ -37,7 +38,7 @@ function newTraceId(): string {
 export class CircuitBreaker {
   failureThreshold = 5;
   successThreshold = 2;
-  timeoutSeconds = 60;
+  timeoutSeconds = Math.ceil((getExternalApiTimeouts()?.http_client_default_ms ?? 60000) / 1000);
   state: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED';
   failureCount = 0;
   successCount = 0;

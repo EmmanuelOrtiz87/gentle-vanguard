@@ -235,3 +235,6 @@ session-archive/
 # Obsidian workspace layout (local-only, user-specific)
 knowledge-base/.obsidian/workspace.json
 knowledge-base/.obsidian/workspace/
+
+# Runtime module resolution symlink (created by bootstrap)
+apps/web-dashboard/node_modules/@gentle-vanguard/

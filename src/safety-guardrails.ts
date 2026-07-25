@@ -75,7 +75,7 @@ function loadConfig(root: string): SafetyConfig {
   const configPath = path.join(root, 'config', 'safety-layer.json');
   if (!fs.existsSync(configPath)) {
     console.error('[SAFETY] safety-layer.json not found');
-    process.exit(1);
+
   }
   return JSON.parse(fs.readFileSync(configPath, 'utf-8'));
 }
@@ -127,8 +127,8 @@ function testResourceLimits(mutation: Mutation, config: SafetyConfig): Violation
 }
 
 function doValidate(agentId: string, proposedMutation: string, config: SafetyConfig, auditDir: string): GuardrailResult {
-  if (!agentId) { console.error('[SAFETY] Provide --agentId'); process.exit(1); }
-  if (!proposedMutation) { console.error('[SAFETY] Provide --mutation as JSON'); process.exit(1); }
+  if (!agentId) { console.error('[SAFETY] Provide --agentId'); throw new Error("Validation failed"); }
+  if (!proposedMutation) { console.error('[SAFETY] Provide --mutation as JSON'); throw new Error("Validation failed"); }
 
   let mutation: Mutation;
   try { mutation = JSON.parse(proposedMutation); } catch { console.error('[SAFETY] Invalid JSON in --mutation'); process.exit(1); return undefined as never; }
@@ -247,7 +247,7 @@ function main(): void {
     default:
       console.error(`[SAFETY] Unknown action: ${action}`);
       printUsage();
-      process.exit(1);
+
   }
 }
 

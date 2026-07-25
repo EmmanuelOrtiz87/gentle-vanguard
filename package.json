@@ -81,6 +81,13 @@
     "dashboard:build": "cd apps/web-dashboard && pnpm build",
     "dashboard:dev": "cd apps/web-dashboard && pnpm dev",
     "dashboard:server": "npx tsx apps/web-dashboard/server/websocket-server.ts",
+    "db:init": "npx tsx src/database/db-init.ts",
+    "db:health": "npx tsx scripts/database/db-health.ts",
+    "db:backup": "npx tsx scripts/database/db-backup.ts backup",
+    "db:restore": "npx tsx scripts/database/db-backup.ts restore latest",
+    "db:list": "npx tsx scripts/database/db-backup.ts list",
+    "db:optimize": "npx tsx scripts/database/db-backup.ts optimize",
+    "db:prune": "npx tsx scripts/database/db-backup.ts prune --keep 10",
     "postinstall": "pnpm build:mcp"
   },
   "devDependencies": {

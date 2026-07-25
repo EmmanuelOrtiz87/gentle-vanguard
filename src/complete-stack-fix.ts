@@ -1,6 +1,7 @@
 import { execSync } from 'child_process';
 import { existsSync, writeFileSync, mkdirSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
+import { getEffectiveProcessTimeout } from './core/timeout-config';
 
 const ROOT = resolve(process.cwd());
 const TS = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
@@ -8,7 +9,7 @@ const S = (p: string) => join(ROOT, p);
 
 function run(cmd: string): string {
   try {
-    return execSync(cmd, { encoding: 'utf8', timeout: 60000, cwd: ROOT }).trim();
+    return execSync(cmd, { encoding: 'utf8', timeout: getEffectiveProcessTimeout('long_running'), cwd: ROOT }).trim();
   } catch (e: unknown) {
     return 'ERR: ' + (e instanceof Error ? e.message : String(e));
   }

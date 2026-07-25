@@ -64,24 +64,49 @@ function flushCaches(sessionDir: string): void {
 
   const tokenFile = join(sessionDir, 'token-usage.json');
   const sid = `session-${new Date().toISOString().slice(0, 16).replace(/[:-]/g, '')}`;
-  writeFileSync(
-    tokenFile,
-    JSON.stringify(
-      {
-        sessionId: sid,
-        startTime: new Date().toISOString(),
-        messages: [],
-        totalInputTokens: 0,
-        totalOutputTokens: 0,
-        totalTokens: 0,
-        totalContextChars: 0,
-        messageCount: 0,
-      },
-      null,
-      2,
-    ),
-  );
+  const sessionData = {
+    sessionId: sid,
+    id: sid,
+    startTime: new Date().toISOString(),
+    timestamp: new Date().toISOString(),
+    messages: [],
+    totalInputTokens: 0,
+    totalOutputTokens: 0,
+    totalTokens: 0,
+    totalContextChars: 0,
+    messageCount: 0,
+    timezone: 'America/Argentina/Buenos_Aires',
+    timeZone: 'America/Argentina/Buenos_Aires',
+    peakStart: 9,
+    peak_start: 9,
+    peakEnd: 15,
+    peak_end: 15,
+    region: 'Argentina',
+    status: 'active',
+    toolCalls: 0,
+    filesRead: 0,
+    filesEdited: 0,
+    skillsUsed: [],
+    errors: 0,
+    warnings: 0,
+    cacheHits: 0,
+    cacheMisses: 0,
+    qualityScore: 100,
+  };
+  
+  writeFileSync(tokenFile, JSON.stringify(sessionData, null, 2));
   ok(`Token tracking reset for ${sid}`);
+  
+  // Create session-current.json for downstream components
+  const currentSessionFile = join(sessionDir, 'session-current.json');
+  writeFileSync(currentSessionFile, JSON.stringify(sessionData, null, 2));
+  ok(`Session file created: session-current.json`);
+  
+  // Also create dated session file
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const datedSessionFile = join(sessionDir, `session-${dateStr}-01.json`);
+  writeFileSync(datedSessionFile, JSON.stringify(sessionData, null, 2));
+  ok(`Dated session file created: session-${dateStr}-01.json`);
 }
 
 export function runCleanup(

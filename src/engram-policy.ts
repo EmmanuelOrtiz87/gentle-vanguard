@@ -7,6 +7,7 @@
 
 import { execSync } from 'child_process';
 import { pathToFileURL } from 'url';
+import { getExternalApiTimeouts } from './core/timeout-config';
 
 function log(msg: string): void {
   console.log(`[ENGRAM-POLICY] ${msg}`);
@@ -23,7 +24,7 @@ function main(): void {
   try {
     const version = execSync(`${engramBin} --version`, {
       encoding: 'utf-8',
-      timeout: 5000,
+      timeout: getExternalApiTimeouts()?.engram_operation_ms ?? 5000,
       windowsHide: true,
     }).trim();
     log(`Engram available: ${version}`);
@@ -39,9 +40,9 @@ function main(): void {
   // Check Engram memory integrity
   log('Checking memory integrity...');
   try {
-    execSync(`${engramBin} search --project ${projectName} --limit 1`, {
+    execSync(`${engramBin} doctor --project ${projectName}`, {
       encoding: 'utf-8',
-      timeout: 10000,
+      timeout: getExternalApiTimeouts()?.engram_operation_ms ?? 10000,
       windowsHide: true,
     });
     log('Memory integrity verified');

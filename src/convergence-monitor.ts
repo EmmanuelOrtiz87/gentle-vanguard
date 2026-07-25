@@ -17,6 +17,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import { join, resolve } from 'path';
 import { execSync } from 'child_process';
 import { pathToFileURL } from 'url';
+import { getEffectiveProcessTimeout } from './core/timeout-config';
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -146,7 +147,7 @@ function collectConfigChanges(log: LogFn): DecisionChange[] {
       try {
         const logOut = execSync(
           `git log --since="${since}" --format="%aI|%s" -- "${cfgPath}"`,
-          { cwd: ROOT, encoding: 'utf-8', timeout: 5000, windowsHide: true }
+          { cwd: ROOT, encoding: 'utf-8', timeout: getEffectiveProcessTimeout('default'), windowsHide: true }
         ).trim();
         if (logOut) {
           for (const line of logOut.split('\n')) {

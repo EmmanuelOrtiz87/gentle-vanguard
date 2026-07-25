@@ -9,6 +9,7 @@ import { join, resolve } from 'path';
 import { execSync } from 'child_process';
 import { createHash } from 'crypto';
 import { pathToFileURL } from 'url';
+import { getEffectiveProcessTimeout } from './core/timeout-config';
 
 const ROOT = resolve(process.cwd());
 
@@ -73,11 +74,11 @@ function invokeBackup(date: string, outputDir: string, integrityCheck: boolean, 
     const icChecksumPath = join(root, '.engram', 'checksums.sha256');
     if (!existsSync(icChecksumPath)) {
       log('Generating initial SHA256 checksums...', 'INFO', quiet);
-      try { execSync(`npx tsx "${integrityScript}" -Mode checksums -Quiet`, { cwd: root, timeout: 30000, windowsHide: true }); } catch { /* ignore */ }
+      try { execSync(`npx tsx "${integrityScript}" -Mode checksums -Quiet`, { cwd: root, timeout: getEffectiveProcessTimeout('long_running'), windowsHide: true }); } catch { /* ignore */ }
     }
     log('Pre-backup integrity check...', 'INFO', quiet);
     try {
-      execSync(`npx tsx "${integrityScript}" -Mode check -Quiet`, { cwd: root, timeout: 30000, windowsHide: true });
+      execSync(`npx tsx "${integrityScript}" -Mode check -Quiet`, { cwd: root, timeout: getEffectiveProcessTimeout('long_running'), windowsHide: true });
       log('Pre-backup integrity PASSED', 'OK', quiet);
     } catch {
       log(`Integrity check FAILED — run repair first: ${integrityScript} -Mode repair`, 'ERR', quiet);

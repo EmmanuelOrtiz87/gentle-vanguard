@@ -13,6 +13,7 @@ import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { execSync } from 'child_process';
+import { getExternalApiTimeouts } from './core/timeout-config';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -65,9 +66,45 @@ function compareVersions(current: string, latest: string): number {
 
 // ─── GitHub API ───────────────────────────────────────────────────────────────
 
+async function fetchWithRetry(url: string, options: RequestInit, retries = 3, delay = 1000): Promise<Response | null> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), getExternalApiTimeouts()?.http_client_default_ms ?? 10000);
+      
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+      });
+      
+      clearTimeout(timeout);
+      return response;
+    } catch (err: any) {
+      const isLastAttempt = i === retries - 1;
+      const errorMsg = err?.message || String(err);
+      
+      // Handle UV_HANDLE_CLOSING and other fetch errors
+      if (errorMsg.includes('UV_HANDLE_CLOSING') || errorMsg.includes('fetch failed')) {
+        log(`Fetch attempt ${i + 1}/${retries} failed: ${errorMsg}`, 'WARN');
+        if (!isLastAttempt) {
+          log(`Waiting ${delay}ms before retry...`, 'INFO');
+          await new Promise(resolve => setTimeout(resolve, delay)); // delay from param (1000ms default)
+          continue;
+        }
+      }
+      
+      if (isLastAttempt) {
+        log(`All ${retries} fetch attempts failed: ${errorMsg}`, 'ERROR');
+        return null;
+      }
+    }
+  }
+  return null;
+}
+
 async function getLatestVersion(): Promise<string | null> {
   try {
-    const response = await fetch(
+    const response = await fetchWithRetry(
       'https://api.github.com/repos/Gentleman-Programming/engram/releases/latest',
       {
         headers: {
@@ -76,6 +113,11 @@ async function getLatestVersion(): Promise<string | null> {
         },
       },
     );
+
+    if (!response) {
+      log('Failed to fetch from GitHub API after retries', 'ERROR');
+      return null;
+    }
 
     if (!response.ok) {
       log(`GitHub API error: ${response.status}`, 'ERROR');

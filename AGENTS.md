@@ -301,6 +301,37 @@ python research/rlhf-dataset-search/search_datasets.py --source all --query "rew
 | CI/CD workflows   | `npm run test:workflows` | 2     |
 | Research scripts  | `npm run test:research`  | 5     |
 
+## Database Lifecycle (Wave 34)
+
+`gentle-vanguard.db` es la base de datos operativa del stack (ubicada en `.runtime/gentle-vanguard.db`).
+Se usa para almacenar: métricas, sesiones, trazas, eventos, alertas, feedback, caché de respuestas,
+resultados de contratos, uso de skills, uso de tokens y reglas de ruteo.
+
+**Arquitectura**: Singleton `DatabaseManager` en `apps/web-dashboard/server/database/manager.ts`
+con migraciones automáticas (WAL mode, foreign keys ON). Importable desde cualquier script del stack.
+
+| Comando                         | Descripción                                       |
+| ------------------------------- | ------------------------------------------------- |
+| `npm run db:init`               | Initialize DB + run all migrations (idempotent)   |
+| `npm run db:health`             | Health check: integrity, WAL, tables, rows        |
+| `npm run db:backup`             | Safe online backup to `.runtime/backups/`         |
+| `npm run db:restore`            | Restore latest backup                             |
+| `npm run db:list`               | List available backups                            |
+| `npm run db:optimize`           | WAL checkpoint + REINDEX + VACUUM                 |
+| `npm run db:prune`              | Keep only 10 most recent backups                  |
+
+**Pipeline**: El paso `db-init` (lazy) corre al inicio de cada sesión vía `session-autostart.config.json`.
+
+**Stack tables** (migration `002_stack_tables`):
+- `response_cache` — SHA256 key → response (TTL-aware, hit_count tracking)
+- `contract_results` — SDD contract validation results
+- `skill_usage` — Per-session skill usage tracking
+- `token_usage` — Token accounting with generated `total_tokens` column
+- `routing_rules` — Adaptive router persistence with hit_count
+
+**Watchtower**: El componente `gentle-vanguard-db` verifica: existencia del archivo, tamaño WAL,
+integridad (PRAGMA integrity_check) y conteo de tablas/rows en cada ciclo de health check.
+
 ### Verificación rápida
 
 ```powershell
@@ -317,4 +348,7 @@ npm run test:config
 npm run test:workflows
 # Dashboard build
 cd apps/web-dashboard && npm run build
+# Database lifecycle
+npm run db:init
+npm run db:health
 ```

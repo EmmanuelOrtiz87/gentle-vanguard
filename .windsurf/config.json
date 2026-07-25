@@ -34,7 +34,7 @@
   "preProcessing": {
     "enabled": true,
     "mandatory": true,
-    "script": "scripts/utilities/pre-process-input.ps1",
+    "script": "npx tsx src/pre-process-input.ts",
     "scriptArgs": {
       "UserInput": "USER_INPUT_HERE",
       "WorkspaceRoot": "."
