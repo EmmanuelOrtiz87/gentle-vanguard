@@ -35,7 +35,7 @@
   },
   "enforcement": {
     "ci_gate": true,
-    "script": "scripts/sre/enforce-error-budget.ps1",
+    "script": "npx tsx src/enforce-error-budget.ts",
     "alert_channel": "github-actions",
     "notify_on_threshold": ["50_to_75", "75_to_90", "over_90"]
   }

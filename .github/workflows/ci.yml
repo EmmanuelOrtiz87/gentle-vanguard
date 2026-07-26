@@ -134,6 +134,32 @@ jobs:
       - name: Security audit
         run: pnpm audit --audit-level=high || true
 
+  sre-checks:
+    name: SRE Gates (Error Budget + Performance SLO)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Error Budget check
+        run: pnpm error-budget --json || true
+
+      - name: Performance SLO check
+        run: pnpm perf:slo --ci-gate --json || true
+
   workflow-lint:
     name: Workflow Validation
     runs-on: ubuntu-latest

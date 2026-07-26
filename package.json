@@ -99,6 +99,14 @@
     "gv:svg": "npx tsx src/cli/svg-generator.ts",
     "gv:build": "npm run gv:protect && npm run gv:installer",
     "gv:build:quick": "npm run gv:installer -- --skip-encrypt",
+    "gv:image": "npx tsx src/cli/image-gen.ts",
+    "gv:diagram": "npx tsx src/cli/diagram-renderer.ts",
+    "gv:perf": "npx tsx src/performance-slo-monitor.ts",
+    "perf:slo": "npx tsx src/performance-slo-monitor.ts",
+    "error-budget": "npx tsx src/enforce-error-budget.ts",
+    "semantic-search": "npx tsx src/semantic-search.ts",
+    "workload-guard": "npx tsx src/workload-guard.ts",
+    "self-diagnosis": "npx tsx src/self-diagnosis.ts",
     "postinstall": "pnpm build:mcp"
   },
   "devDependencies": {
