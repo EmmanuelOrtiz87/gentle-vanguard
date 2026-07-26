@@ -301,14 +301,56 @@ python research/rlhf-dataset-search/search_datasets.py --source all --query "rew
 | CI/CD workflows   | `npm run test:workflows` | 2     |
 | Research scripts  | `npm run test:research`  | 5     |
 
-## Database Lifecycle (Wave 34)
+## nexus — Base de Datos Operacional
 
-`gentle-vanguard.db` es la base de datos operativa del stack (ubicada en `.runtime/gentle-vanguard.db`).
-Se usa para almacenar: métricas, sesiones, trazas, eventos, alertas, feedback, caché de respuestas,
-resultados de contratos, uso de skills, uso de tokens y reglas de ruteo.
+**Nexus** es la base de datos operacional del stack Gentle-Vanguard (`.runtime/gentle-vanguard.db`).
+Es el sistema nervioso central donde converge toda la información operacional: métricas, sesiones,
+trazas, eventos, alertas, feedback, caché de respuestas, resultados de contratos, uso de skills,
+uso de tokens, reglas de ruteo y session scoring.
+
+### Identity Manifest
+
+```json
+{
+  "name": "Nexus",
+  "type": "SQLite (WAL mode, FK ON)",
+  "path": ".runtime/gentle-vanguard.db",
+  "manager": "DatabaseManager (singleton)",
+  "tables": 12,
+  "migrations": 3,
+  "purpose": "Operational database — all stack operational data",
+  "autoInit": true,
+  "autoPrune": true,
+  "autoBackup": true,
+  "monitoredBy": "watchtower (gentle-vanguard-db component)",
+  "pipelineSteps": ["db-init", "db-health-check", "db-prune"]
+}
+```
+
+### Architecture
 
 **Arquitectura**: Singleton `DatabaseManager` en `apps/web-dashboard/server/database/manager.ts`
 con migraciones automáticas (WAL mode, foreign keys ON). Importable desde cualquier script del stack.
+
+#### Migration 001 - Initial Schema (Core operacional)
+- `metric_snapshots` — Time-series: tokens, sesiones, latencia, health cada 30s
+- `sessions` — Historial de sesiones (upsert por session_id)
+- `traces` — Distributed tracing spans (árbol trace_id → span_id)
+- `events` — Event sourcing — append-only (type + JSON payload)
+- `alerts` — Evaluaciones de alertas (5s broadcast cycle)
+- `feedback` — User feedback thumbs up/down por span
+
+#### Migration 002 - Stack Tables (Capa operacional extendida)
+- `response_cache` — SHA256 key → response (TTL-aware, hit_count tracking)
+- `contract_results` — SDD contract validation results
+- `skill_usage` — Per-session skill usage tracking
+- `token_usage` — Token accounting with generated `total_tokens` column
+- `routing_rules` — Adaptive router persistence with hit_count
+
+#### Migration 003 - Session Scoring (Wave 37 E)
+- `session_scoring` — Quality scoring por sesión (delegations, corrections, proactive hits, etc.)
+
+### Lifecycle
 
 | Comando                         | Descripción                                       |
 | ------------------------------- | ------------------------------------------------- |
@@ -318,37 +360,52 @@ con migraciones automáticas (WAL mode, foreign keys ON). Importable desde cualq
 | `npm run db:restore`            | Restore latest backup                             |
 | `npm run db:list`               | List available backups                            |
 | `npm run db:optimize`           | WAL checkpoint + REINDEX + VACUUM                 |
-| `npm run db:prune`              | Keep only 10 most recent backups                  |
+| `npm run db:prune`              | Prune old data from stack tables (events >30d, cache >7d, token_usage >90d) |
+| `npm run db:prune:backup`       | Keep only 10 most recent backups                  |
 
-**Pipeline**: El paso `db-init` (lazy) corre al inicio de cada sesión vía `session-autostart.config.json`.
+### Pipeline Integration
 
-**Stack tables** (migration `002_stack_tables`):
-- `response_cache` — SHA256 key → response (TTL-aware, hit_count tracking)
-- `contract_results` — SDD contract validation results
-- `skill_usage` — Per-session skill usage tracking
-- `token_usage` — Token accounting with generated `total_tokens` column
-- `routing_rules` — Adaptive router persistence with hit_count
+3 lazy steps en `config/session-autostart.config.json` (non-blocking):
 
-**Watchtower**: El componente `gentle-vanguard-db` verifica: existencia del archivo, tamaño WAL,
-integridad (PRAGMA integrity_check) y conteo de tablas/rows en cada ciclo de health check.
+| Step                | Script                             | Propósito                          |
+| ------------------- | ---------------------------------- | ---------------------------------- |
+| `db-init`           | `src/database/db-init.ts`          | Init + migrations cada sesión      |
+| `db-health-check`   | `scripts/recovery/db-health-check.ts` | Validate SQLite integrity       |
+| `db-prune`          | `scripts/database/db-prune.ts`     | Prune old data cada sesión         |
+
+### Watchtower Monitoring
+
+El componente `gentle-vanguard-db` en la watchtower verifica en cada ciclo:
+
+1. **database file** — existencia y tamaño
+2. **WAL file** — tamaño (> 5MB = WARN → checkpoint)
+3. **integrity check** — `PASS` (ok), `WARN` (transient: DB locked, CLI unavailable), `FAIL` (corruption)
+4. **size** — conteo de tablas y rows
+
+### Normativa y Skill
+
+- **Normativa**: `rules/NEXUS-NORMATIVA.md` — identidad, ciclo de vida, guardrails, retention policy
+- **Skill**: `skills/nexus-database/SKILL.md` — cómo gestionar Nexus autónomamente
+- **Comando**: load the skill via `"nexus"`, `"db"`, `"database"`, or `"gentle-vanguard.db"` triggers
+
+### Relaciones con el Stack
+
+| Componente          | Relación con Nexus                                    |
+| ------------------- | ----------------------------------------------------- |
+| **Dashboard**       | Lee métricas, sesiones, trazas, alertas, feedback     |
+| **Session Scoring** | Escribe/lee quality scores por sesión                 |
+| **Adaptive Router** | Persiste routing_rules con hit_count                  |
+| **Response Cache**  | Cachea respuestas SHA256 con TTL                      |
+| **Watchtower**      | Monitorea integridad, tamaño, WAL en cada ciclo       |
+| **Token Budget**    | Almacena token_usage por sesión                       |
+| **SDD Contracts**   | Almacena contract_results para validación             |
 
 ### Verificación rápida
 
 ```powershell
-# Probar todo el pipeline
-& "scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1" -SkillId __healthcheck__ -SkillInput @{action='ping'} -InvocationType DryRun -Quiet
-& "scripts/security/audit-pipeline.ps1" -Action status -Quiet
-& "scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1" -Action list -Quiet
-& "scripts/utilities/ops/TRACING/tracing-instrument.ps1" -Action start -SpanName test -Quiet
-& "scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1" -Action project -AggregateId test -Quiet
-npx tsx src/maintenance-watchtower.ts --action health --quiet
-# Verificaciones TypeScript
-npm run typecheck
-npm run test:config
-npm run test:workflows
-# Dashboard build
-cd apps/web-dashboard && npm run build
-# Database lifecycle
-npm run db:init
+# Verificar estado de Nexus
 npm run db:health
+npm run db:init
+# Verificar integridad via watchtower
+npm run watchtower:health
 ```

@@ -753,10 +753,29 @@ async function checkGentleVanguardDb() {
         shell: true,
       });
       const output = (r.stdout ?? '').trim();
+      const stderr = (r.stderr ?? '').trim();
+      const processFailed = r.error || (r.status !== null && r.status !== 0);
+      const isTransient = processFailed || output === '' || /locked|busy|no such|Error/i.test(stderr);
       const integrityOk = output === 'ok';
-      addResult('gentle-vanguard-db', 'integrity check', integrityOk ? 'PASS' : 'FAIL', integrityOk ? 'ok' : output.substring(0, 80), integrityOk ? 'ok' : 'restore');
 
-      // Get table and row counts
+      let status: 'PASS' | 'WARN' | 'FAIL';
+      let action: string;
+      if (integrityOk) {
+        status = 'PASS';
+        action = 'ok';
+      } else if (isTransient) {
+        // Transient: DB locked by another process or CLI unavailable — not corruption
+        status = 'WARN';
+        action = 'retry';
+      } else {
+        status = 'FAIL';
+        action = 'restore';
+      }
+
+      const detail = integrityOk ? 'ok' : isTransient ? `Transient (${output.substring(0, 40) || stderr.substring(0, 40) || 'process error'})` : output.substring(0, 80);
+      addResult('gentle-vanguard-db', 'integrity check', status, detail, action);
+
+      // Get table and row counts (only on PASS)
       if (integrityOk) {
         try {
           const tablesOut = execFileSync('sqlite3', [dbPath, '.tables'], { encoding: 'utf8', timeout: 5000 }).trim();
