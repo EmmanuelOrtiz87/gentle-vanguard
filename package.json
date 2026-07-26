@@ -95,6 +95,10 @@
     "gv:protect": "npx tsx src/cli/protect.ts",
     "gv:installer": "npx tsx src/cli/create-installer.ts",
     "gv:launcher": "npx tsx build/Gentle-Vanguard-Launcher.ts",
+    "gv:mermaid": "npx tsx src/cli/mermaid-renderer.ts",
+    "gv:svg": "npx tsx src/cli/svg-generator.ts",
+    "gv:build": "npm run gv:protect && npm run gv:installer",
+    "gv:build:quick": "npm run gv:installer -- --skip-encrypt",
     "postinstall": "pnpm build:mcp"
   },
   "devDependencies": {

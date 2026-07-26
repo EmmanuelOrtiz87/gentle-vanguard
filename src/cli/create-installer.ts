@@ -72,7 +72,7 @@ function main(): void {
 
     // Still prepare the artifacts
     if (!dryRun) {
-      const nsiScript = join(BUILD_DIR, 'installer.nsi');
+      const nsiScript = join(BUILD_DIR, 'gentle-vanguard-installer-auto.nsi');
       if (existsSync(nsiScript)) {
         copyFileSync(nsiScript, join(DIST_DIR, 'installer.nsi'));
         ok(`NSIS script copied to ${DIST_DIR}`);
@@ -83,7 +83,7 @@ function main(): void {
 
   // Phase 3: Build installer
   step('Phase 3: Building installer');
-  const nsiScript = join(BUILD_DIR, 'installer.nsi');
+  const nsiScript = join(BUILD_DIR, 'gentle-vanguard-installer-auto.nsi');
     const installerName = 'Gentle-Vanguard-Setup.exe';
 
   if (existsSync(nsiScript)) {
@@ -97,7 +97,7 @@ function main(): void {
     }
   } else {
     warn(`NSIS script not found at ${nsiScript}`);
-    warn('Create installer.nsi to automate the installer build');
+    warn('Run protect.ts first to generate the installer script');
   }
 
   // Phase 4: Post-build summary

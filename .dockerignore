@@ -1,0 +1,61 @@
+# Node
+node_modules/
+.pnpm-store/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+dist/
+build/protected/
+build/compiled/
+build/output/
+coverage/
+.turbo/
+
+# IDE and tools
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitattributes
+.gitignore
+.gitmodules
+
+# Temporary files
+.cache/
+.temp/
+tmp/
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
+
+# Runtime data
+.runtime/
+.session/
+.telemetry/
+.engram-data/
+.codegraph/
+graphify-out/
+.backups/
+
+# Secrets
+keys/
+*.key
+*.pem
+*.cert
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Documentation and templates
+docs/
+templates/
+research/

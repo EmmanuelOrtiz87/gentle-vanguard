@@ -289,8 +289,8 @@ python research/rlhf-dataset-search/search_datasets.py --source all --query "rew
 
 ## CI/CD Pipeline
 
-- `.github/workflows/ci.yml` — 6 jobs: lint-typecheck, test, dashboard-build, docker-build,
-  python-lint, go-test
+- `.github/workflows/ci.yml` — 6 jobs: lint-typecheck, test, dashboard-tests, dashboard-build,
+  security-scan, workflow-lint
 - `.github/workflows/security.yml` — 3 jobs: gitleaks, secretlint, trivy
 
 ## Testing

@@ -44,8 +44,13 @@ jobs:
         run: |
           choco install nsis -y --no-progress
           echo "NSIS_DIR=C:\Program Files (x86)\NSIS" >> $env:GITHUB_ENV
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - name: Build installer
-        run: pwsh -File build/create-installer.ps1
+        run: npx tsx src/cli/create-installer.ts
+        shell: pwsh
       - name: Upload installer to release
         uses: softprops/action-gh-release@v2
         with:
