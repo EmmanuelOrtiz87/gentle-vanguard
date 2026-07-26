@@ -206,7 +206,7 @@ incidents, response coordination, mitigation, and recovery planning
 | **State**                  | zustand-5                                                                                                                                                                                                                                                            |
 | **Validation**             | zod-4                                                                                                                                                                                                                                                                |
 | **Backend**                | golang-api, api-design, django-drf                                                                                                                                                                                                                                   |
-| **Database**               | database-relational, database-nosql                                                                                                                                                                                                                                  |
+| **Database**               | database-relational, database-nosql, nexus-database                                                                                                                                                                                                                  |
 | **DevOps**                 | docker-devops, terraform-infrastructure, kubernetes-deployment                                                                                                                                                                                                       |
 | **Testing**                | testing-strategy, testing-skill, playwright, pytest, go-testing                                                                                                                                                                                                      |
 | **AI**                     | ai-sdk-5, mcp-skill, cloud-agent-connector, pretool-format-hook, codegraph-skill                                                                                                                                                                                     |
@@ -514,6 +514,14 @@ mobile work
 **Trigger**: `MongoDB`, `Redis`, `NoSQL`, `document database`, `caching`
 
 **Use when**: MongoDB, Redis caching, document models, session storage
+
+---
+
+### nexus-database-skill
+
+**Trigger**: `Nexus`, `nexus-database`, `gentle-vanguard.db`, `operational-db`, `DatabaseManager`, `session_scoring`, `response_cache`, `token_usage`, `routing_rules`, `session scoring`, `db:health`, `db:backup`, `db:prune`
+
+**Use when**: Managing the Gentle-Vanguard operational database (Nexus) — init, health check, backup, restore, prune, optimize, retention policy, session scoring, or monitoring via watchtower
 
 ---
 

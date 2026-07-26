@@ -7,9 +7,10 @@ Gentle-Vanguard.
 
 | Componente    | Ruta                            | Critico | Proposito                                   |
 | ------------- | ------------------------------- | ------- | ------------------------------------------- |
-| CodeGraph     | `.codegraph/codegraph.db`       | SI      | Knowledge graph index (nodes, edges, files) |
-| Engram-local  | `.engram-data/*.db`             | NO      | Persistent memory observations              |
-| Engram-global | `~/.engram/global/.engram/*.db` | NO      | Global memory across projects               |
+| CodeGraph     | `.codegraph/codegraph.db`             | SI  | Knowledge graph index (nodes, edges, files) |
+| Engram-local  | `.engram-data/*.db`                   | SI  | Persistent memory — decisions, bugs, architecture, conventions, agent/skill performance, stack historical context |
+| Engram-global | `~/.engram/global/.engram/*.db`       | SI  | Global memory — cross-project knowledge, learned behaviors, patterns across repos |
+| **Nexus**     | `.runtime/gentle-vanguard.db`         | SI  | Operational DB — metrics, sessions, traces, events, alerts, feedback, cache, contracts, scoring, routing |
 
 ## Error "no such column: data"
 
