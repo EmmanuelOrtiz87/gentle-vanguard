@@ -89,6 +89,8 @@
     "db:optimize": "npx tsx scripts/database/db-backup.ts optimize",
     "db:prune": "npx tsx scripts/database/db-prune.ts",
 "db:prune:backup": "npx tsx scripts/database/db-backup.ts prune --keep 10",
+    "cli:gv": "npx tsx src/cli/gv.ts",
+    "gv": "npx tsx src/cli/gv.ts",
     "postinstall": "pnpm build:mcp"
   },
   "devDependencies": {

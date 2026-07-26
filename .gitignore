@@ -13,10 +13,12 @@ docs/draft/
 docs/.backup/
 
 # Build and runtime
-bin/
+bin/*
+!bin/*.ps1
 obj/
 dist/
-build/
+build/*
+!build/*.ps1
 *.exe
 *.dll
 *.so
