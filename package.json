@@ -91,6 +91,10 @@
 "db:prune:backup": "npx tsx scripts/database/db-backup.ts prune --keep 10",
     "cli:gv": "npx tsx src/cli/gv.ts",
     "gv": "npx tsx src/cli/gv.ts",
+    "gv:main": "npx tsx src/cli/gentle-vanguard.ts",
+    "gv:protect": "npx tsx src/cli/protect.ts",
+    "gv:installer": "npx tsx src/cli/create-installer.ts",
+    "gv:launcher": "npx tsx build/Gentle-Vanguard-Launcher.ts",
     "postinstall": "pnpm build:mcp"
   },
   "devDependencies": {

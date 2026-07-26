@@ -19,6 +19,7 @@ obj/
 dist/
 build/*
 !build/*.ps1
+!build/*.ts
 *.exe
 *.dll
 *.so
