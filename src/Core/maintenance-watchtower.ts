@@ -736,11 +736,25 @@ async function checkGentleVanguardDb() {
   addResult('gentle-vanguard-db', 'database file', dbExists ? 'PASS' : 'FAIL', dbExists ? `${(statSync(dbPath).size / 1024 / 1024).toFixed(2)} MB` : 'Not found', 'init');
 
   if (dbExists) {
-    // Check WAL size
+    // Check WAL size — auto-checkpoint if WAL > DB size or > 5MB
     const walPath = dbPath + '-wal';
     if (fileExists(walPath)) {
-      const walMB = statSync(walPath).size / 1024 / 1024;
-      addResult('gentle-vanguard-db', 'WAL file', walMB > 5 ? 'WARN' : 'PASS', `${walMB.toFixed(2)} MB`, walMB > 5 ? 'checkpoint' : 'ok');
+      const walBytes = statSync(walPath).size;
+      const walMB = walBytes / 1024 / 1024;
+      const dbBytes = statSync(dbPath).size;
+      const walRatio = dbBytes > 0 ? walBytes / dbBytes : 0;
+      const needsCheckpoint = walMB > 5 || walRatio > 1.5;
+      if (needsCheckpoint) {
+        try {
+          spawnSync('sqlite3', [dbPath, 'PRAGMA wal_checkpoint(TRUNCATE);'], { encoding: 'utf8', timeout: 30000, shell: true });
+          const newWalBytes = existsSync(walPath) ? statSync(walPath).size : 0;
+          addResult('gentle-vanguard-db', 'WAL auto-checkpoint', 'PASS', `${walMB.toFixed(2)} MB → ${(newWalBytes / 1024 / 1024).toFixed(2)} MB (ratio ${walRatio.toFixed(1)}x)`, 'auto-healed');
+        } catch {
+          addResult('gentle-vanguard-db', 'WAL file', 'WARN', `${walMB.toFixed(2)} MB (checkpoint failed)`, 'manual');
+        }
+      } else {
+        addResult('gentle-vanguard-db', 'WAL file', 'PASS', `${walMB.toFixed(2)} MB`, 'ok');
+      }
     } else {
       addResult('gentle-vanguard-db', 'WAL file', 'PASS', 'No WAL (journal mode)');
     }
