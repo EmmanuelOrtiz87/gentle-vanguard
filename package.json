@@ -107,6 +107,9 @@
     "semantic-search": "npx tsx src/semantic-search.ts",
     "workload-guard": "npx tsx src/workload-guard.ts",
     "self-diagnosis": "npx tsx src/self-diagnosis.ts",
+    "gv:postmortem": "npx tsx src/post-mortem-trigger.ts",
+    "gv:tokens": "npx tsx src/design-token-pipeline.ts",
+    "gv:sea": "npx tsx src/build-sea.ts",
     "postinstall": "pnpm build:mcp"
   },
   "devDependencies": {

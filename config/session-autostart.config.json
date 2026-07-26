@@ -360,6 +360,24 @@
         "description": "Health check completo + auto-healing de componentes caídos al inicio de sesión. Corre en background (lazy)."
       },
       {
+        "id": "post-mortem-trigger",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/post-mortem-trigger.ts",
+        "args": "--after-heal",
+        "required": false,
+        "description": "Post-mortem automation — runs self-diagnosis after watchtower auto-heal, logs incidents to Nexus + audit."
+      },
+      {
+        "id": "design-token-pipeline",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/design-token-pipeline.ts",
+        "args": "",
+        "required": false,
+        "description": "Design Token Pipeline — generates assets/tokens.css, tokens.json, tokens.scss from config/brand.json."
+      },
+      {
         "id": "digest-generator",
         "enabled": true,
         "lazy": true,

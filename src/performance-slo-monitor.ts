@@ -97,24 +97,33 @@ function measureDiskUsage(): { percent: number; freeGb: number; totalGb: number 
   try {
     const cwd = process.cwd();
     if (process.platform === 'win32') {
-      const drive = cwd.substring(0, 2);
-      const output = execSync(`wmic logicaldisk where "DeviceID='${drive}'" get Size,FreeSpace /format:csv`, {
-        encoding: 'utf8', maxBuffer: 1024 * 1024, timeout: 5000,
-      });
-      const lines = output.trim().split('\n').filter(l => l.trim() && !l.includes('FreeSpace'));
-      for (const line of lines) {
-        const parts = line.split(',');
-        if (parts.length >= 3) {
-          const freeSpace = parseInt(parts[1], 10);
-          const size = parseInt(parts[2], 10);
-          if (size > 0) {
-            return {
-              percent: Math.round((1 - freeSpace / size) * 10000) / 100,
-              freeGb: Math.round(freeSpace / (1024 * 1024 * 1024) * 100) / 100,
-              totalGb: Math.round(size / (1024 * 1024 * 1024) * 100) / 100,
-            };
+      const drive = cwd.substring(0, 1);
+      try {
+        // Use PowerShell Get-PSDrive (works on Win10/11, no wmic dependency)
+        const output = execSync(
+          `powershell -NoProfile -Command "Get-PSDrive -Name ${drive} | Select-Object Used,Free | ConvertTo-Csv -NoTypeInformation"`,
+          { encoding: 'utf8', maxBuffer: 1024 * 1024, timeout: 10000, stdio: ['pipe', 'pipe', 'ignore'] }
+        );
+        const lines = output.trim().split('\n').filter(l => l.trim() && !l.includes('Used') && !l.includes('"'));
+        for (const line of lines) {
+          const parts = line.split(',').map(p => p.replace(/"/g, '').trim());
+          if (parts.length >= 2) {
+            const used = parseInt(parts[0], 10);
+            const free = parseInt(parts[1], 10);
+            const total = used + free;
+            if (total > 0) {
+              return {
+                percent: Math.round((used / total) * 10000) / 100,
+                freeGb: Math.round(free / (1024 * 1024 * 1024) * 100) / 100,
+                totalGb: Math.round(total / (1024 * 1024 * 1024) * 100) / 100,
+              };
+            }
           }
         }
+      } catch {
+        // PowerShell fallback failed, try Node.js os.freemem
+        // os module not available for disk, return estimate
+        return { percent: 0, freeGb: 0, totalGb: 0 };
       }
     }
     // Fallback

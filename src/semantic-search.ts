@@ -84,9 +84,10 @@ function grepSearch(query: string, maxResults: number): SearchResult[] {
   for (const pattern of searchPatterns) {
     if (seen.size >= maxResults) break;
     try {
+      // Use Node.js exec with error suppression (cross-platform)
       const output = execSync(
-        `rg -n --no-heading -m 3 "${pattern}" --type ts "${srcDir}" 2>nul || true`,
-        { encoding: 'utf8', maxBuffer: 1024 * 1024 }
+        `rg -n --no-heading -m 3 "${pattern}" --type ts "${srcDir}"`,
+        { encoding: 'utf8', maxBuffer: 1024 * 1024, stdio: ['pipe', 'pipe', 'ignore'] }
       );
 
       for (const line of output.trim().split('\n')) {
