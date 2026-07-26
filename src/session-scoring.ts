@@ -2,6 +2,7 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
+import { db } from './database/db.js';
 
 const ROOT = resolve(process.cwd());
 
@@ -71,6 +72,19 @@ function getDefaultMetrics(): MetricsData {
 }
 
 export function getMetricsData(root: string = ROOT): MetricsData {
+  // Try SQLite first (Wave 37 E)
+  try {
+    const mgr = db();
+    const row = mgr.getSessionScoring('latest');
+    if (row && (row as any).summary_json) {
+      const parsed = JSON.parse((row as any).summary_json);
+      return { ...getDefaultMetrics(), ...parsed, timestamp: new Date().toISOString() };
+    }
+  } catch {
+    // Fall through to JSON
+  }
+
+  // Fallback to JSON
   const p = join(root, '.session', 'metrics-report.json');
   if (!existsSync(p)) return getDefaultMetrics();
   try {
@@ -86,6 +100,28 @@ export function saveMetricsData(data: MetricsData, root: string = ROOT): void {
   ensureDir(p);
   data.timestamp = new Date().toISOString();
   writeFileSync(p, JSON.stringify(data, null, 2));
+
+  // Dual-write to SQLite (Wave 37 E)
+  try {
+    const mgr = db();
+    const sessionId = `session-${new Date().toISOString().slice(0, 10)}`;
+    mgr.saveSessionScoring({
+      sessionId,
+      qualityScore: data.summary.quality_score,
+      successRate: data.summary.success_rate,
+      totalDelegations: data.summary.total_delegations,
+      totalCorrections: data.summary.total_corrections,
+      totalProactive: data.summary.total_proactive_suggestions,
+      proactiveHits: data.proactive_hits,
+      totalCloudCalls: data.summary.total_cloud_calls,
+      totalCheckpoints: data.summary.total_checkpoints,
+      totalTracingSpans: data.summary.total_tracing_spans,
+      totalAuditEvents: data.summary.total_audit_events,
+      summaryJson: JSON.stringify(data),
+    });
+  } catch {
+    // Non-fatal — JSON persistence still works
+  }
 }
 
 export function calcQualityScore(summary: MetricsSummary, proactiveHits: number): number {

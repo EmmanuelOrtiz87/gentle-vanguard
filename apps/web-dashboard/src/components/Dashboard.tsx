@@ -34,6 +34,10 @@ import { GlobalHealth } from './GlobalHealth';
 import { useAgentStream } from '../hooks/useAgentStream';
 import { NotificationToast } from './NotificationToast';
 import { ValidationPanel } from './ValidationPanel';
+import { SkillUsagePanel } from './SkillUsagePanel';
+import { TokenUsagePanel } from './TokenUsagePanel';
+import { ContractResultsPanel } from './ContractResultsPanel';
+import { RoutingRulesPanel } from './RoutingRulesPanel';
 import { AlertPanel } from './AlertPanel';
 import { LiveTraceFeed } from './LiveTraceFeed';
 import { SkillHeatmap } from './SkillHeatmap';
@@ -41,6 +45,7 @@ import { SessionActivityHeatmap } from './SessionActivityHeatmap';
 import { ActivityTimeline } from './ActivityTimeline';
 import { InfoPopup } from './InfoPopup';
 import { LocaleContext, useLocale, LOCALE_NAMES, LOCALE_FLAGS, t } from '../hooks/useLocale';
+import { useStackTables } from '../hooks/useStackTables';
 import type { Locale } from '../hooks/useLocale';
 import type { ModelCost, CostInsight } from '../types/dashboard';
 
@@ -79,6 +84,13 @@ function DashboardInner() {
   const { triggeredAlerts } = useAlerts();
   const sessions = useSessions();
   const { locale, setLocale } = useLocale();
+  const {
+    skillUsage,
+    tokenUsage,
+    contractResults,
+    routingRules,
+    loading: stackLoading,
+  } = useStackTables();
   const [showLangSelector, setShowLangSelector] = useState(false);
 
   useEffect(() => {
@@ -519,6 +531,21 @@ function DashboardInner() {
               <p className="metric-label">Audit Logs</p>
               <p className="metric-value">{(data as any).auditLogs ?? 0}</p>
             </div>
+          </div>
+        </div>
+
+        {/* Row: SQLite Stack Tables (Wave 37) */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <Server className="w-5 h-5 text-teal-500" />
+            <SectionHeader title="SQLite Stack Tables" infoKey="mcp" />
+            {stackLoading && <RefreshCw className="w-3.5 h-3.5 text-gray-400 animate-spin" />}
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <SkillUsagePanel skills={skillUsage.skills} total={skillUsage.total} />
+            <TokenUsagePanel usage={tokenUsage.usage} total={tokenUsage.total} />
+            <ContractResultsPanel results={contractResults.results} total={contractResults.total} />
+            <RoutingRulesPanel rules={routingRules.rules} total={routingRules.total} />
           </div>
         </div>
 

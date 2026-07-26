@@ -275,6 +275,31 @@ const MIGRATIONS: Array<{ id: string; sql: string }> = [
       CREATE INDEX IF NOT EXISTS idx_routing_rules_pattern ON routing_rules(pattern);
     `,
   },
+  {
+    id: '003_session_scoring',
+    sql: `
+      -- Session scoring data (Wave 37 E: SQLite-backed session metrics)
+      CREATE TABLE IF NOT EXISTS session_scoring (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        session_id TEXT NOT NULL,
+        quality_score REAL DEFAULT 100,
+        success_rate REAL DEFAULT 100,
+        total_delegations INTEGER DEFAULT 0,
+        total_corrections INTEGER DEFAULT 0,
+        total_proactive INTEGER DEFAULT 0,
+        proactive_hits INTEGER DEFAULT 0,
+        total_cloud_calls INTEGER DEFAULT 0,
+        total_checkpoints INTEGER DEFAULT 0,
+        total_tracing_spans INTEGER DEFAULT 0,
+        total_audit_events INTEGER DEFAULT 0,
+        summary_json TEXT,
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_session_scoring_session ON session_scoring(session_id);
+    `,
+  },
 ];
 
 // ─── DatabaseManager ──────────────────────────────────────────────────
@@ -755,6 +780,70 @@ export class DatabaseManager {
       .run(pattern);
   }
 
+  // ─── Session Scoring (Wave 37 E) ─────────────────────────────────────
+
+  /** Save session scoring data (upsert by session_id) */
+  saveSessionScoring(data: {
+    sessionId: string;
+    qualityScore: number;
+    successRate: number;
+    totalDelegations: number;
+    totalCorrections: number;
+    totalProactive: number;
+    proactiveHits: number;
+    totalCloudCalls: number;
+    totalCheckpoints: number;
+    totalTracingSpans: number;
+    totalAuditEvents: number;
+    summaryJson: string;
+  }): void {
+    const existing = this.db
+      .prepare('SELECT id FROM session_scoring WHERE session_id = ?')
+      .get(data.sessionId) as any;
+
+    if (existing) {
+      this.db
+        .prepare(`UPDATE session_scoring SET
+          quality_score = ?, success_rate = ?, total_delegations = ?, total_corrections = ?,
+          total_proactive = ?, proactive_hits = ?, total_cloud_calls = ?, total_checkpoints = ?,
+          total_tracing_spans = ?, total_audit_events = ?, summary_json = ?,
+          updated_at = datetime('now')
+          WHERE session_id = ?`)
+        .run(
+          data.qualityScore, data.successRate, data.totalDelegations, data.totalCorrections,
+          data.totalProactive, data.proactiveHits, data.totalCloudCalls, data.totalCheckpoints,
+          data.totalTracingSpans, data.totalAuditEvents, data.summaryJson, data.sessionId,
+        );
+    } else {
+      this.db
+        .prepare(`INSERT INTO session_scoring
+          (session_id, quality_score, success_rate, total_delegations, total_corrections,
+           total_proactive, proactive_hits, total_cloud_calls, total_checkpoints,
+           total_tracing_spans, total_audit_events, summary_json, updated_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`)
+        .run(
+          data.sessionId, data.qualityScore, data.successRate, data.totalDelegations,
+          data.totalCorrections, data.totalProactive, data.proactiveHits,
+          data.totalCloudCalls, data.totalCheckpoints, data.totalTracingSpans,
+          data.totalAuditEvents, data.summaryJson,
+        );
+    }
+  }
+
+  /** Get session scoring summary for dashboard */
+  getSessionScoring(sessionId: string): Record<string, unknown> | null {
+    return this.db
+      .prepare('SELECT * FROM session_scoring WHERE session_id = ?')
+      .get(sessionId) as any ?? null;
+  }
+
+  /** Get all session scoring records */
+  getAllSessionScoring(limit = 20): Array<Record<string, unknown>> {
+    return this.db
+      .prepare('SELECT * FROM session_scoring ORDER BY updated_at DESC LIMIT ?')
+      .all(limit) as any[];
+  }
+
   // ─── Housekeeping ───────────────────────────────────────────────────
 
   /** Prune old data, keeping the DB lean */
@@ -774,6 +863,24 @@ export class DatabaseManager {
       console.log('[DB] Vacuum completed');
     }
     console.log('[DB] Housekeeping done');
+  }
+
+  /** Prune all stack tables (Wave 37 D). Deletes old data to keep DB lean */
+  pruneAll(): { events: number; cache: number; tokenUsage: number; skillUsage: number } {
+    const result = { events: 0, cache: 0, tokenUsage: 0, skillUsage: 0 };
+    try {
+      result.events = this.db.prepare("DELETE FROM events WHERE created_at < datetime('now', '-30 days')").run().changes;
+      result.cache = this.db.prepare("DELETE FROM response_cache WHERE created_at < datetime('now', '-7 days')").run().changes;
+      result.tokenUsage = this.db.prepare("DELETE FROM token_usage WHERE timestamp < datetime('now', '-90 days')").run().changes;
+      result.skillUsage = this.db.prepare(
+        "DELETE FROM skill_usage WHERE session_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM sessions WHERE session_id = skill_usage.session_id)",
+      ).run().changes;
+      this.housekeeping();
+      console.log(`[DB] PruneAll done: ${JSON.stringify(result)}`);
+    } catch (err) {
+      console.error('[DB] PruneAll error:', err);
+    }
+    return result;
   }
 
   /** Close the database connection */

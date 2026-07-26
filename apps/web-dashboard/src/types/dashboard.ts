@@ -100,6 +100,7 @@ export interface DashboardData {
   };
   tenantId?: string;
   tenantName?: string;
+  sqlite?: SqliteMetrics;
 }
 
 export interface Session {
@@ -140,6 +141,14 @@ export interface CloudMetrics {
   };
 }
 
+export interface SqliteMetrics {
+  skillCount: number;
+  skillAvgCost: number;
+  tokenTotalCost: number;
+  contractPassRate: number;
+  routingTotalHits: number;
+}
+
 export interface MetricHistory {
   timestamp: string;
   tokens: number;
@@ -148,4 +157,44 @@ export interface MetricHistory {
   latency?: number;
   mcpSkills?: number;
   commits?: number;
+}
+
+// ─── Stack Tables (Wave 37: SQLite-backed panels) ─────────────────────
+
+export interface SkillUsageRow {
+  skillId: string;
+  count: number;
+  tokensUsed: number;
+  cost: number;
+}
+
+export interface TokenUsageRow {
+  session_id: string;
+  prompt: number;
+  completion: number;
+  cost: number;
+  last_used: string;
+}
+
+export interface ContractResultRow {
+  id?: number;
+  contract_id: string;
+  result: string;
+  score?: number;
+  created_at: string;
+  [key: string]: unknown;
+}
+
+export interface RoutingRuleRow {
+  pattern: string;
+  target: string;
+  priority: number;
+  hitCount: number;
+}
+
+export interface StackTablesData {
+  skillUsage: { skills: SkillUsageRow[]; total: number };
+  tokenUsage: { usage: TokenUsageRow[]; total: number };
+  contractResults: { results: ContractResultRow[]; total: number };
+  routingRules: { rules: RoutingRuleRow[]; total: number };
 }

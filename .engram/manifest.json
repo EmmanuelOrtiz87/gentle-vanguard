@@ -88,6 +88,14 @@
       "sessions": 0,
       "memories": 1,
       "prompts": 0
+    },
+    {
+      "id": "f76a51c1",
+      "created_by": "emman",
+      "created_at": "2026-07-26T03:42:30Z",
+      "sessions": 1,
+      "memories": 17,
+      "prompts": 2
     }
   ]
 }

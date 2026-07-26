@@ -222,6 +222,37 @@
       "enabled": true,
       "description": "Quedan menos de 10 minutos antes del expiry de sesión",
       "direction": "below"
+    },
+
+    "sqlite_skill_success_rate": {
+      "label": "SQLite Skill Success Rate",
+      "metric": "sqlite.contractPassRate",
+      "threshold": 0.5,
+      "severity": "warning",
+      "unit": "%",
+      "enabled": true,
+      "direction": "below",
+      "description": "Tasa de contratos exitosos en SQLite por debajo de 50%"
+    },
+    "sqlite_token_budget_usage": {
+      "label": "SQLite Token Budget Usage",
+      "metric": "sqlite.tokenTotalCost",
+      "threshold": 0.05,
+      "severity": "warning",
+      "unit": "$",
+      "enabled": true,
+      "direction": "above",
+      "description": "Costo total de tokens en SQLite supera $0.05"
+    },
+    "sqlite_routing_coverage": {
+      "label": "SQLite Routing Coverage",
+      "metric": "sqlite.routingTotalHits",
+      "threshold": 5,
+      "severity": "info",
+      "unit": "hits",
+      "enabled": true,
+      "direction": "below",
+      "description": "Pocos hits de enrutamiento — reglas infrautilizadas"
     }
   }
 }

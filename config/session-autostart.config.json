@@ -602,6 +602,15 @@
         "description": "Initialize gentle-vanguard.db (auto-creates DB, runs all pending migrations, outputs health info) — idempotent, safe to run every session (Wave 34)"
       },
       {
+        "id": "db-prune",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/database/db-prune.ts",
+        "args": "--quiet",
+        "required": false,
+        "description": "Prune old data from gentle-vanguard.db stack tables — events >30d, cache >7d, token_usage >90d, orphaned skill_usage (Wave 37 D)"
+      },
+      {
         "id": "self-reflection",
         "enabled": true,
         "lazy": true,

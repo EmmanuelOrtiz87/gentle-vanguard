@@ -228,6 +228,41 @@ function getRealMetricsFromDb(): DashboardData {
     join(ROOT, '.session', 'cloud-metrics.json'),
   );
 
+  // ─── SQLite Stack Tables Metrics (Wave 37) ─────────────────────────
+  let sqliteSkillCount = 0;
+  let sqliteSkillAvgCost = 0;
+  let sqliteTokenTotalCost = 0;
+  let sqliteContractPassRate = 0;
+  let sqliteRoutingTotalHits = 0;
+  try {
+    const topSkills = db.getTopSkills(100);
+    sqliteSkillCount = topSkills.length;
+    sqliteSkillAvgCost = topSkills.length > 0
+      ? topSkills.reduce((s: number, sk: any) => s + (sk.cost || 0), 0) / topSkills.length
+      : 0;
+
+    const tokenRows = db.getDb()
+      .prepare("SELECT COALESCE(SUM(cost), 0) as totalCost FROM token_usage")
+      .get() as any;
+    sqliteTokenTotalCost = tokenRows?.totalCost ?? 0;
+
+    const contractRows = db.getDb()
+      .prepare("SELECT result, COUNT(*) as cnt FROM contract_results GROUP BY result")
+      .all() as Array<{ result: string; cnt: number }>;
+    const totalContracts = contractRows.reduce((s: number, r: any) => s + (r.cnt || 0), 0);
+    const passContracts = contractRows
+      .filter((r: any) => r.result === 'pass' || r.result === 'valid' || r.result === 'success')
+      .reduce((s: number, r: any) => s + (r.cnt || 0), 0);
+    sqliteContractPassRate = totalContracts > 0 ? passContracts / totalContracts : 1;
+
+    const routingHits = db.getDb()
+      .prepare("SELECT COALESCE(SUM(hit_count), 0) as totalHits FROM routing_rules")
+      .get() as any;
+    sqliteRoutingTotalHits = routingHits?.totalHits ?? 0;
+  } catch {
+    // Non-fatal — SQLite metrics default to 0
+  }
+
   return {
     tokens: {
       used: snapshot?.tokens_used ?? 0,
@@ -281,6 +316,13 @@ function getRealMetricsFromDb(): DashboardData {
     checkpoints: checkpointCount,
     auditLogs: auditFileCount,
     traceFiles: traceFileCount,
+    sqlite: {
+      skillCount: sqliteSkillCount,
+      skillAvgCost: sqliteSkillAvgCost,
+      tokenTotalCost: sqliteTokenTotalCost,
+      contractPassRate: sqliteContractPassRate,
+      routingTotalHits: sqliteRoutingTotalHits,
+    },
   };
 }
 
