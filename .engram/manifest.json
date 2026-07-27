@@ -232,6 +232,14 @@
       "sessions": 0,
       "memories": 1,
       "prompts": 0
+    },
+    {
+      "id": "4e152f9d",
+      "created_by": "emman",
+      "created_at": "2026-07-27T05:35:36Z",
+      "sessions": 0,
+      "memories": 3,
+      "prompts": 0
     }
   ]
 }

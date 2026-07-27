@@ -275,13 +275,5 @@
       "*": "allow"
     }
   },
-  "references": {},
-  "mcpServers": {
-    "gentle-vanguard-lsp": {
-      "command": "npx",
-      "args": ["tsx", "src/mcp/mcp-lsp-server.ts"],
-      "enabled": true,
-      "description": "TypeScript Language Service — code navigation for agents"
-    }
-  }
+  "references": {}
 }
