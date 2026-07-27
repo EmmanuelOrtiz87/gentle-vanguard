@@ -300,6 +300,45 @@ const MIGRATIONS: Array<{ id: string; sql: string }> = [
       CREATE INDEX IF NOT EXISTS idx_session_scoring_session ON session_scoring(session_id);
     `,
   },
+  {
+    id: '004_error_memory',
+    sql: `
+      -- Error memory: persistent bug tracking with root cause and fix
+      CREATE TABLE IF NOT EXISTS error_memory (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        bug TEXT NOT NULL,
+        root_cause TEXT,
+        fix TEXT,
+        file TEXT,
+        pattern TEXT,
+        severity TEXT DEFAULT 'medium',
+        session_id TEXT,
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+      );
+
+      -- Semantic search index: store TF-IDF vector as JSON for cosine similarity
+      CREATE TABLE IF NOT EXISTS error_embeddings (
+        error_id INTEGER NOT NULL,
+        embedding TEXT NOT NULL,
+        FOREIGN KEY (error_id) REFERENCES error_memory(id) ON DELETE CASCADE
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_error_memory_pattern ON error_memory(pattern);
+      CREATE INDEX IF NOT EXISTS idx_error_memory_file ON error_memory(file);
+      CREATE INDEX IF NOT EXISTS idx_error_memory_severity ON error_memory(severity);
+      CREATE INDEX IF NOT EXISTS idx_error_memory_created ON error_memory(created_at);
+    `,
+  },
+  {
+    id: '005_semantic_cache',
+    sql: `
+      -- Response cache: add input_text and embedding columns for semantic matching
+      -- SQLite 3.25+ supports ALTER TABLE ADD COLUMN
+      ALTER TABLE response_cache ADD COLUMN input_text TEXT DEFAULT '';
+      ALTER TABLE response_cache ADD COLUMN input_embedding TEXT DEFAULT '{}';
+    `,
+  },
 ];
 
 // ─── DatabaseManager ──────────────────────────────────────────────────
@@ -658,14 +697,6 @@ export class DatabaseManager {
     this.db.prepare('DELETE FROM response_cache WHERE key = ?').run(key);
   }
 
-  /** Prune expired cache entries */
-  pruneExpiredCache(): number {
-    const result = this.db
-      .prepare("DELETE FROM response_cache WHERE expires_at < datetime('now')")
-      .run();
-    return result.changes;
-  }
-
   /** Get response cache stats */
   getCacheStats(): { entries: number; totalHits: number; expired: number } {
     const entries = (this.db.prepare('SELECT COUNT(*) as c FROM response_cache').get() as any).c;
@@ -842,6 +873,150 @@ export class DatabaseManager {
     return this.db
       .prepare('SELECT * FROM session_scoring ORDER BY updated_at DESC LIMIT ?')
       .all(limit) as any[];
+  }
+
+  // ─── Error Memory (005) ──────────────────────────────────────────────
+
+  /** Save an error memory entry */
+  saveErrorMemory(data: {
+    bug: string;
+    rootCause: string;
+    fix: string;
+    file?: string;
+    pattern?: string;
+    severity?: string;
+    sessionId?: string;
+  }): number {
+    const result = this.db
+      .prepare(`INSERT INTO error_memory (bug, root_cause, fix, file, pattern, severity, session_id, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))`)
+      .run(
+        data.bug,
+        data.rootCause,
+        data.fix,
+        data.file ?? null,
+        data.pattern ?? null,
+        data.severity ?? 'medium',
+        data.sessionId ?? null,
+      );
+    console.log(`[DB] Error memory saved: "${data.bug.substring(0, 60)}..." (id=${result.lastInsertRowid})`);
+    return Number(result.lastInsertRowid);
+  }
+
+  /** Find errors by exact file match */
+  findErrorsByFile(file: string): Array<Record<string, unknown>> {
+    return this.db
+      .prepare('SELECT * FROM error_memory WHERE file = ? ORDER BY created_at DESC LIMIT 10')
+      .all(file) as any[];
+  }
+
+  /** Find errors by pattern match */
+  findErrorsByPattern(pattern: string): Array<Record<string, unknown>> {
+    return this.db
+      .prepare('SELECT * FROM error_memory WHERE pattern = ? ORDER BY created_at DESC LIMIT 10')
+      .all(pattern) as any[];
+  }
+
+  /** Search errors by keyword in bug/root_cause/fix */
+  searchErrors(keyword: string, limit = 5): Array<Record<string, unknown>> {
+    const like = `%${keyword}%`;
+    return this.db
+      .prepare(`SELECT * FROM error_memory
+                WHERE bug LIKE ? OR root_cause LIKE ? OR fix LIKE ? OR file LIKE ?
+                ORDER BY created_at DESC LIMIT ?`)
+      .all(like, like, like, like, limit) as any[];
+  }
+
+  /** Get all recent errors */
+  getRecentErrors(limit = 20): Array<Record<string, unknown>> {
+    return this.db
+      .prepare('SELECT * FROM error_memory ORDER BY updated_at DESC LIMIT ?')
+      .all(limit) as any[];
+  }
+
+  /** Get error by ID */
+  getErrorById(id: number): Record<string, unknown> | null {
+    return this.db
+      .prepare('SELECT * FROM error_memory WHERE id = ?')
+      .get(id) as any ?? null;
+  }
+
+  /** Delete old error memories beyond retention */
+  pruneErrorMemory(days = 365): number {
+    return this.db
+      .prepare(`DELETE FROM error_memory WHERE created_at < datetime('now', ? || ' days')`)
+      .run(`-${days}`).changes;
+  }
+
+  // ─── Semantic Cache (005) ────────────────────────────────────────────
+
+  /** Save response with embedding for semantic lookup */
+  saveSemanticCache(entry: {
+    key: string;
+    response: string;
+    inputText: string;
+    inputEmbedding: Record<string, number>;
+    model?: string;
+    ttlMinutes?: number;
+  }): void {
+    const expiresAt = entry.ttlMinutes
+      ? new Date(Date.now() + entry.ttlMinutes * 60000).toISOString()
+      : null;
+    this.db
+      .prepare(`INSERT OR REPLACE INTO response_cache
+                (key, response, model, input_text, input_embedding, created_at, expires_at, hit_count, tokens_saved)
+                VALUES (?, ?, ?, ?, ?, datetime('now'), ?, 0, 0)`)
+      .run(
+        entry.key,
+        entry.response,
+        entry.model ?? null,
+        entry.inputText,
+        JSON.stringify(entry.inputEmbedding),
+        expiresAt,
+      );
+  }
+
+  /** Find semantically similar cache entries by exact match (fast pre-filter) */
+  findExactCache(key: string): { response: string; inputText: string; inputEmbedding: Record<string, number> } | null {
+    const row = this.db
+      .prepare(`SELECT response, input_text, input_embedding FROM response_cache
+                WHERE key = ? AND (expires_at IS NULL OR expires_at > datetime('now'))`)
+      .get(key) as any;
+    if (!row) return null;
+    // Record hit
+    this.db.prepare('UPDATE response_cache SET hit_count = hit_count + 1 WHERE key = ?').run(key);
+    return {
+      response: row.response,
+      inputText: row.input_text ?? '',
+      inputEmbedding: row.input_embedding ? JSON.parse(row.input_embedding) : {},
+    };
+  }
+
+  /** Get all cache entries with embeddings (for semantic scan) */
+  getAllCacheEntries(): Array<{
+    key: string;
+    response: string;
+    inputText: string;
+    inputEmbedding: Record<string, number>;
+  }> {
+    const rows = this.db
+      .prepare(`SELECT key, response, input_text, input_embedding FROM response_cache
+                WHERE input_embedding IS NOT NULL AND input_embedding != '{}'
+                AND (expires_at IS NULL OR expires_at > datetime('now'))`)
+      .all() as any[];
+    return rows.map((r: any) => ({
+      key: r.key,
+      response: r.response,
+      inputText: r.input_text ?? '',
+      inputEmbedding: r.input_embedding ? JSON.parse(r.input_embedding) : {},
+    }));
+  }
+
+  /** Prune expired cache entries */
+  pruneExpiredCache(): number {
+    return this.db
+      .prepare("DELETE FROM response_cache WHERE expires_at IS NOT NULL AND expires_at < datetime('now')")
+      .run().changes;
   }
 
   // ─── Housekeeping ───────────────────────────────────────────────────
