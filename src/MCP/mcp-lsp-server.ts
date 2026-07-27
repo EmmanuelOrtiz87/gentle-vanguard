@@ -157,15 +157,28 @@ function getLanguageService(configPath?: string): LsCache {
 }
 
 function resolveFilePath(filePath: string): string {
-  if (isAbsolute(filePath)) return filePath;
-  return resolve(ROOT, filePath);
+  if (isAbsolute(filePath)) return normalizePath(filePath);
+  return normalizePath(resolve(ROOT, filePath));
+}
+
+function normalizePath(p: string): string {
+  return p.replace(/[/\\]/g, '\\');
 }
 
 function getOffset(service: ts.LanguageService, fileName: string, line: number, col: number): number {
   const program = service.getProgram();
   if (!program) return 0;
   const sf = program.getSourceFile(fileName);
-  if (!sf) return 0;
+  if (!sf) {
+    // Try normalizing path
+    const normalized = normalizePath(fileName);
+    for (const f of program.getSourceFiles()) {
+      if (f.fileName && normalizePath(f.fileName) === normalized) {
+        return f.getPositionOfLineAndCharacter(Math.max(0, line - 1), Math.max(0, col - 1));
+      }
+    }
+    return 0;
+  }
   return sf.getPositionOfLineAndCharacter(Math.max(0, line - 1), Math.max(0, col - 1));
 }
 
@@ -413,6 +426,7 @@ function printSignature(item: ts.SignatureHelpItem): string {
 
 function handleSymbolSearch(query: string, maxResults: number) {
   const cache = getLanguageService();
+  const program = cache.service.getProgram();
 
   const navToItems = cache.service.getNavigateToItems(query, maxResults, undefined, undefined);
 
@@ -424,17 +438,29 @@ function handleSymbolSearch(query: string, maxResults: number) {
     found: true,
     total: navToItems.length,
     truncated: navToItems.length >= maxResults,
-    symbols: navToItems.map(item => ({
-      name: item.name,
-      kind: item.kind,
-      kindModifiers: item.kindModifiers ?? '',
-      file: item.fileName,
-      line: (item as any).startLine ?? 0,
-      col: (item as any).startCol ?? 0,
-      containerName: item.containerName ?? undefined,
-      containerKind: item.containerKind ?? undefined,
-      matchKind: (item as any).matchKind,
-    })),
+    symbols: navToItems.map(item => {
+      // Compute line/col from textSpan.start using source file
+      let line = 0, col = 0;
+      if (program) {
+        const sf = program.getSourceFile(item.fileName);
+        if (sf) {
+          const lc = getLineColFromPosition(sf, item.textSpan.start);
+          line = lc.line;
+          col = lc.col;
+        }
+      }
+      return {
+        name: item.name,
+        kind: item.kind,
+        kindModifiers: item.kindModifiers ?? '',
+        file: item.fileName,
+        line,
+        col,
+        containerName: item.containerName ?? undefined,
+        containerKind: item.containerKind ?? undefined,
+        matchKind: (item as any).matchKind,
+      };
+    }),
   };
 }
 
