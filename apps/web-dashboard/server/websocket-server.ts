@@ -388,6 +388,32 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
       return;
     }
 
+    // SLO metrics endpoint — GET returns latest, POST stores from perf:slo
+    const SLO_PATH = join(ROOT, '.runtime', 'metrics', 'slo-latest.json');
+    if (url.pathname === '/api/slo' && req.method === 'POST') {
+      let body = '';
+      req.on('data', (chunk: Buffer) => { body += chunk.toString(); });
+      req.on('end', () => {
+        try {
+          const data = JSON.parse(body);
+          mkdirSync(dirname(SLO_PATH), { recursive: true });
+          writeFileSync(SLO_PATH, JSON.stringify({ ...data, ingested: new Date().toISOString() }, null, 2));
+          res.writeHead(200, headers);
+          res.end(JSON.stringify({ success: true }));
+        } catch (e) {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ error: 'Invalid JSON' }));
+        }
+      });
+      return;
+    }
+    if (url.pathname === '/api/slo') {
+      const sloData = existsSync(SLO_PATH) ? JSON.parse(readFileSync(SLO_PATH, 'utf8')) : null;
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ type: 'slo', data: sloData }));
+      return;
+    }
+
     if (url.pathname === '/api/tenants') {
       res.writeHead(200, headers);
       res.end(JSON.stringify(readTenantRegistry()));

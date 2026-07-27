@@ -43,6 +43,7 @@ import { LiveTraceFeed } from './LiveTraceFeed';
 import { SkillHeatmap } from './SkillHeatmap';
 import { SessionActivityHeatmap } from './SessionActivityHeatmap';
 import { ActivityTimeline } from './ActivityTimeline';
+import { SloPanel } from './SloPanel';
 import { InfoPopup } from './InfoPopup';
 import { LocaleContext, useLocale, LOCALE_NAMES, LOCALE_FLAGS, t } from '../hooks/useLocale';
 import { useStackTables } from '../hooks/useStackTables';
@@ -259,6 +260,9 @@ function DashboardInner() {
             </>
           )}
         </div>
+
+        {/* Row 1b: Performance SLO */}
+        <SloPanel />
 
         {/* Row 2: Cost, Feedback, SLA, System */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

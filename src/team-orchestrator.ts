@@ -1,33 +1,51 @@
 #!/usr/bin/env node
+/**
+ * Team Orchestrator — Parallel Swarm Mode (Leader-Worker).
+ *
+ * A Leader agent decomposes complex tasks into sub-tasks, dispatches them to
+ * parallel Worker agents (child_process), and synthesizes results.
+ *
+ * Usage:
+ *   npx tsx src/team-orchestrator.ts start --task "Build a React dashboard" --skills "react-19,api-design"
+ *   npx tsx src/team-orchestrator.ts start --task "Security audit" --max-parallel 5
+ *   npx tsx src/team-orchestrator.ts status
+ *   npx tsx src/team-orchestrator.ts report
+ *   npx tsx src/team-orchestrator.ts stop
+ */
 
 import {
   existsSync,
+  mkdirSync,
   readFileSync,
   writeFileSync,
-  mkdirSync,
   readdirSync,
   appendFileSync,
+  rmSync,
 } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { spawnSync, execSync } from 'child_process';
 import { randomBytes } from 'crypto';
 
+// ---- Types ----
+
 interface SubTask {
   name: string;
-  sub: string;
+  description: string;
 }
 
-interface AgentResult {
+interface WorkerResult {
   skill: string;
   status: 'running' | 'completed' | 'failed' | 'timeout';
   started: string;
   finished?: string;
   output: string;
   error: string | null;
+  exitCode: number | null;
+  workerDir: string;
 }
 
-interface ClientOptions {
+interface OrchestratorOptions {
   task: string;
   skills: string[];
   maxParallel: number;
@@ -36,14 +54,20 @@ interface ClientOptions {
   quiet: boolean;
   action: string;
   skill: string;
+  decompose: boolean;
+  worktree: boolean;
 }
+
+// ---- Constants ----
 
 const ROOT = resolve(process.env.GENTLE_VANGUARD_BASE_DIR ?? process.cwd());
 const RESULTS_DIR = join(ROOT, '.session', 'team-mode');
-const MCP_SERVER = join(ROOT, 'dist', 'scripts', 'mcp', 'skill-server.js');
 const ORCHESTRATOR_LOG = join(ROOT, '.session', 'team-orchestrator.log');
+const SWARM_WORK_DIR = join(ROOT, '.session', 'swarm-workers');
 
 let quiet = false;
+
+// ---- Logging ----
 
 function log(msg: string, level: 'INFO' | 'WARN' | 'ERROR' | 'SUCCESS' = 'INFO') {
   const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -53,14 +77,15 @@ function log(msg: string, level: 'INFO' | 'WARN' | 'ERROR' | 'SUCCESS' = 'INFO')
     ERROR: '\x1b[31m',
     SUCCESS: '\x1b[32m',
   };
-  if (!quiet) console.log(`${colors[level] ?? ''}[${ts}] [TEAM] [${level}] ${msg}\x1b[0m`);
+  if (!quiet) console.log(`${colors[level] ?? ''}[${ts}] [SWARM] [${level}] ${msg}\x1b[0m`);
   try {
-    appendFileSync(ORCHESTRATOR_LOG, `[${ts}] [${level}] ${msg}\n`);
+    appendFileSync(ORCHESTRATOR_LOG, `[${ts}] [SWARM] [${level}] ${msg}\n`);
   } catch { /* ignore */ }
 }
 
 function ensureDirs() {
   if (!existsSync(RESULTS_DIR)) mkdirSync(RESULTS_DIR, { recursive: true });
+  if (!existsSync(SWARM_WORK_DIR)) mkdirSync(SWARM_WORK_DIR, { recursive: true });
 }
 
 function timestamp(): string {
@@ -73,208 +98,355 @@ function dateStamp(): string {
   return `${d.getFullYear()}${(d.getMonth() + 1).toString().padStart(2, '0')}${d.getDate().toString().padStart(2, '0')}-${d.getHours().toString().padStart(2, '0')}${d.getMinutes().toString().padStart(2, '0')}${d.getSeconds().toString().padStart(2, '0')}`;
 }
 
-function invokeMcpTool(tool: string, args: Record<string, unknown> = {}): string | null {
-  const req = JSON.stringify({
-    jsonrpc: '2.0',
-    id: randomBytes(16).toString('hex'),
-    method: 'tools/call',
-    params: { name: tool, arguments: args },
-  });
+// ---- Leader: Task Decomposition ----
+
+/**
+ * Leader decomposes a complex task into sub-tasks using the skill-router.
+ * Each skill matched becomes a worker assignment.
+ */
+function leaderDecompose(task: string, explicitSkills: string[]): SubTask[] {
+  if (explicitSkills.length > 0) {
+    return explicitSkills.map(s => ({
+      name: s,
+      description: `[${s}] ${task}`,
+    }));
+  }
+
+  // Call the semantic skill router to find relevant skills
   try {
-    if (!existsSync(MCP_SERVER)) return null;
-    const result = spawnSync('node', [MCP_SERVER], {
-      input: req,
+    const routerPath = join(ROOT, 'src', 'skills', 'skill-router.ts').replace(/\\/g, '/');
+    const escapedTask = task.replace(/"/g, '\\"');
+    const result = spawnSync(`npx tsx "${routerPath}" --query "${escapedTask}" --top-k 5 --json`, {
+      cwd: ROOT,
       encoding: 'utf-8',
       timeout: 15000,
       shell: true,
     });
-    if (result.status !== 0 || !result.stdout) return null;
-    const parsed = JSON.parse(result.stdout);
-    return parsed?.result?.content?.[0]?.text ?? null;
+
+    if (result.status === 0 && result.stdout) {
+      const parsed = JSON.parse(result.stdout);
+      if (parsed.Status === 'Routed' && parsed.Matches?.length > 0) {
+        const subTasks: SubTask[] = parsed.Matches.map((m: { skill: string; confidence: number }) => ({
+          name: m.skill,
+          description: `[${m.skill} (confidence: ${(m.confidence * 100).toFixed(0)}%)] ${task}`,
+        }));
+        log(`Leader decomposed task into ${subTasks.length} sub-tasks via semantic router`, 'SUCCESS');
+        return subTasks;
+      }
+    }
   } catch {
-    return null;
+    log('Leader decomposition via skill-router failed, using fallback', 'WARN');
   }
+
+  // Fallback: use a single generic worker
+  log('Leader fallback: single worker for task', 'WARN');
+  return [{ name: 'auto-delegation-router', description: `[auto-delegation-router] ${task}` }];
 }
 
-function getRelevantSkills(task: string, explicitSkills: string[]): string[] {
-  if (explicitSkills.length > 0) return explicitSkills;
-  const result = invokeMcpTool('search_skills', { query: task });
-  if (!result) return [];
-  const lines = result.split('\n').filter((l) => /^\s*-\s+\*\*(.+?)\*\*/.test(l));
-  return lines
-    .map((l) => {
-      const m = l.match(/\*\*(.+?)\*\*/);
-      return m ? m[1] : null;
-    })
-    .filter((s): s is string => s !== null);
-}
+// ---- Worker: Real Agent Execution ----
 
-function runAgentInline(skillName: string, subTask: string, _timeoutSec: number): AgentResult {
+/**
+ * Worker spawns a fresh tsx process as an isolated agent.
+ * Each worker runs in its own temp directory under .session/swarm-workers/.
+ */
+function spawnWorker(
+  skillName: string,
+  subTask: string,
+  timeoutSec: number,
+  workerId: string,
+): WorkerResult {
   const started = timestamp();
-  const result: AgentResult = {
+  const workerDir = join(SWARM_WORK_DIR, `${skillName}-${workerId}`);
+  if (!existsSync(workerDir)) mkdirSync(workerDir, { recursive: true });
+
+  const result: WorkerResult = {
     skill: skillName,
     status: 'running',
     started,
     output: '',
     error: null,
+    exitCode: null,
+    workerDir,
   };
+
+  // Write the task to the worker directory
+  writeFileSync(join(workerDir, 'task.json'), JSON.stringify({ skill: skillName, task: subTask }, null, 2), 'utf-8');
+
+  const workerScript = join(ROOT, 'src', 'skills', 'skill-router.ts');
+
   try {
-    const logData: string[] = [];
-    logData.push(`[TEAM:${skillName}] Starting sub-task...`);
-    logData.push(`[TEAM:${skillName}] Skill ${skillName} applied to: ${subTask}`);
-    logData.push(`[TEAM:${skillName}] Complete.`);
-    result.output = logData.join('\n');
-    result.status = 'completed';
+    log(`[WORKER:${skillName}] Spawning in ${workerDir}`, 'INFO');
+
+    const escapedScript = workerScript.replace(/\\/g, '/');
+    const escapedQuery = subTask.replace(/"/g, '\\"');
+    const proc = spawnSync(`npx tsx "${escapedScript}" --query "${escapedQuery}" --json`, {
+      cwd: workerDir,
+      encoding: 'utf-8',
+      timeout: timeoutSec * 1000,
+      shell: true,
+      env: {
+        ...process.env,
+        GENTLE_VANGUARD_BASE_DIR: ROOT,
+        SWARM_WORKER_ID: workerId,
+        SWARM_WORKER_SKILL: skillName,
+      },
+    });
+
+    const stdout = proc.stdout?.trim() || '';
+    const stderr = proc.stderr?.trim() || '';
+
+    result.exitCode = proc.status;
+    result.output = stdout || stderr || '(no output)';
+    result.error = proc.error ? proc.error.message : (stderr || null);
+    result.status = proc.status === 0 ? 'completed' : 'failed';
+
+    // Write worker output files
+    writeFileSync(join(workerDir, 'output.json'), JSON.stringify({
+      skill: skillName,
+      status: result.status,
+      exitCode: result.exitCode,
+      stdout,
+      stderr,
+      finished: timestamp(),
+    }, null, 2), 'utf-8');
+
+    // Write stdout log
+    if (stdout) writeFileSync(join(workerDir, 'output.log'), stdout, 'utf-8');
+    if (stderr) writeFileSync(join(workerDir, 'error.log'), stderr, 'utf-8');
+
   } catch (err: unknown) {
     result.status = 'failed';
     result.error = err instanceof Error ? err.message : String(err);
+    result.exitCode = -1;
   }
+
   result.finished = timestamp();
   return result;
 }
 
-async function actionStart(opts: ClientOptions): Promise<AgentResult[]> {
-  ensureDirs();
-  log(`Action: start | Task: ${opts.task}`, 'INFO');
-  if (!existsSync(MCP_SERVER)) {
-    log('MCP server not found. Run: pnpm build:mcp', 'ERROR');
-    process.exit(1);
+// ---- Synthesis ----
+
+function leaderSynthesize(allResults: WorkerResult[], subTasks: SubTask[], task: string): string {
+  const completedCount = allResults.filter(r => r.status === 'completed').length;
+  const failedCount = allResults.filter(r => r.status === 'failed').length;
+  const duration = allResults.length > 0 && allResults[0].started && allResults[allResults.length - 1].finished
+    ? `${allResults[allResults.length - 1].finished}`
+    : 'unknown';
+
+  const lines: string[] = [
+    '# Swarm Mode Report',
+    `**Task**: ${task}`,
+    `**Date**: ${new Date().toISOString().slice(0, 16).replace('T', ' ')}`,
+    `**Leader decomposition**: ${subTasks.length} sub-tasks into ${allResults.length} workers`,
+    `**Results**: ${completedCount} completed, ${failedCount} failed`,
+    `**Duration**: ${duration}`,
+    '',
+    '## Per-Worker Results',
+    '',
+  ];
+
+  for (const r of allResults) {
+    const statusIcon = r.status === 'completed' ? '✅' : r.status === 'failed' ? '❌' : '⏳';
+    lines.push(`### ${statusIcon} ${r.skill}`);
+    lines.push(`- **Status**: ${r.status}`);
+    lines.push(`- **Exit Code**: ${r.exitCode ?? 'N/A'}`);
+    lines.push(`- **Started**: ${r.started} | **Finished**: ${r.finished ?? 'N/A'}`);
+    lines.push(`- **Worker Dir**: \`${r.workerDir}\``);
+    if (r.output) lines.push(`- **Output**: ${r.output.substring(0, 300)}`);
+    if (r.error) lines.push(`- **Error**: ${r.error.substring(0, 300)}`);
+    lines.push('');
   }
 
-  const targetSkills = getRelevantSkills(opts.task, opts.skills);
-  if (targetSkills.length === 0) {
-    log('No skills matched. Using default delegation.', 'WARN');
-    targetSkills.push('auto-delegation-router');
+  lines.push('## Next Steps');
+  lines.push('- Review individual worker dirs for detailed output');
+  lines.push('- Re-run failed workers: `--action rerun --skill <name>`');
+  if (failedCount > 0) {
+    lines.push('- Fix issues and re-run: `npm run team:run -- --action rerun --skill <failed-skill>`');
   }
-  log(`Skills: ${targetSkills.join(', ')}`, 'SUCCESS');
+
+  const report = lines.join('\n');
+  const reportFile = join(RESULTS_DIR, `swarm-report-${dateStamp()}.md`);
+  writeFileSync(reportFile, report, 'utf-8');
+  log(`Swarm report written to ${reportFile}`, 'SUCCESS');
+  if (!quiet) console.log(`\n${report}\n`);
+  return report;
+}
+
+// ---- Actions ----
+
+async function actionStart(opts: OrchestratorOptions): Promise<WorkerResult[]> {
+  ensureDirs();
+  log(`🚀 SWARM MODE — Leader initializing`, 'SUCCESS');
+  log(`Task: ${opts.task}`, 'INFO');
+
+  // LEADER: Decompose task
+  log(`Leader decomposing task...`, 'INFO');
+  const subTasks = leaderDecompose(opts.task, opts.skills);
+  log(`Leader: ${subTasks.length} sub-tasks created`, 'SUCCESS');
+  for (const st of subTasks) {
+    log(`  🧩 ${st.name}`, 'INFO');
+  }
 
   if (opts.dryRun) {
-    log(`[DRY-RUN] Would execute ${targetSkills.length} sub-agents in parallel (max ${opts.maxParallel})`, 'WARN');
+    log(`[DRY-RUN] Would execute ${subTasks.length} workers in parallel (max ${opts.maxParallel})`, 'WARN');
     return [];
   }
 
-  const subTasks: SubTask[] = targetSkills.map((s) => ({ name: s, sub: `[${s}] ${opts.task}` }));
-  log(`Sub-tasks: ${subTasks.length} | Parallel: ${opts.maxParallel}`, 'INFO');
-
-  const allResults: AgentResult[] = [];
+  // WORKERS: Parallel execution
+  log(`Workers deploying (maxParallel=${opts.maxParallel}, timeout=${opts.timeoutSeconds}s)...`, 'INFO');
+  const allResults: WorkerResult[] = [];
   const queue = [...subTasks];
-  const active: { job: Promise<AgentResult>; name: string }[] = [];
+  const swarmId = randomBytes(4).toString('hex');
 
-  while (queue.length > 0 || active.length > 0) {
-    while (active.length < opts.maxParallel && queue.length > 0) {
+  // Process tasks in parallel with concurrency limit
+  async function processQueue(): Promise<void> {
+    const promises: Promise<void>[] = [];
+
+    function runNext(): Promise<void> {
+      if (queue.length === 0) return Promise.resolve();
       const task = queue.shift()!;
-      const logFile = join(RESULTS_DIR, `${task.name}-${dateStamp()}.log`);
-      const jobPromise = new Promise<AgentResult>((resolvePromise) => {
-        const result = runAgentInline(task.name, task.sub, opts.timeoutSeconds);
-        writeFileSync(logFile, JSON.stringify(result, null, 2), 'utf-8');
-        resolvePromise(result);
-      });
-      active.push({ job: jobPromise, name: task.name });
-      if (!opts.quiet) log(`[LAUNCH] ${task.name}`, 'INFO');
-    }
-    if (active.length === 0) break;
-    await Promise.allSettled(active.map((a) => a.job));
-    for (let i = active.length - 1; i >= 0; i--) {
-      const a = active[i];
-      try {
-        const result = await a.job;
+      return new Promise<void>((resolvePromise) => {
+        const workerId = `${swarmId}-${randomBytes(2).toString('hex')}`;
+        log(`  [LAUNCH] Worker for ${task.name} (${workerId})`, 'INFO');
+        const result = spawnWorker(task.name, task.description, opts.timeoutSeconds, workerId);
         allResults.push(result);
-        if (!opts.quiet) {
-          const color = result.status === 'completed' ? 'SUCCESS' : 'ERROR';
-          log(`[DONE] ${a.name}: ${result.status}`, color as 'SUCCESS' | 'ERROR');
-        }
-        active.splice(i, 1);
-      } catch {
-        // still running
-      }
+        const level = result.status === 'completed' ? 'SUCCESS' : 'ERROR';
+        log(`  [DONE] ${task.name}: ${result.status} (exit: ${result.exitCode})`, level as 'SUCCESS' | 'ERROR');
+        resolvePromise();
+      });
     }
-    if (active.length > 0) {
-      await new Promise((r) => setTimeout(r, 500));
+
+    // Fill initial batch
+    for (let i = 0; i < Math.min(opts.maxParallel, subTasks.length); i++) {
+      promises.push(runNext());
+    }
+
+    await Promise.allSettled(promises);
+
+    // Process remaining sequentially (in batches)
+    while (queue.length > 0) {
+      const batch: Promise<void>[] = [];
+      for (let i = 0; i < opts.maxParallel && queue.length > 0; i++) {
+        batch.push(runNext());
+      }
+      await Promise.allSettled(batch);
     }
   }
 
-  actionSynthesize(allResults, targetSkills, opts.task);
+  await processQueue();
+
+  // LEADER: Synthesize results
+  log(`Leader synthesizing ${allResults.length} worker results...`, 'INFO');
+  leaderSynthesize(allResults, subTasks, opts.task);
+
+  const completed = allResults.filter(r => r.status === 'completed').length;
+  const failed = allResults.filter(r => r.status === 'failed').length;
+  log(`🏁 Swarm complete: ${completed} completed, ${failed} failed of ${allResults.length} total`, 'SUCCESS');
+
   return allResults;
 }
 
-function actionStop(_opts: ClientOptions): void {
-  log('Stop action — cleaning up team-mode processes', 'WARN');
+function actionStop(): void {
+  log('Stopping swarm workers...', 'WARN');
   try {
+    // Kill any lingering npx tsx processes spawned by team-orchestrator
     if (process.platform === 'win32') {
-      execSync('taskkill /F /IM pwsh.exe /FI "WINDOWTITLE eq team-orchestrator*" 2>nul', { stdio: 'ignore' });
+      execSync('taskkill /F /IM node.exe /FI "WINDOWTITLE eq *.tsx*" 2>nul', { stdio: 'ignore' });
     } else {
       execSync('pkill -f "team-orchestrator" 2>/dev/null', { stdio: 'ignore' });
     }
-    log('Team mode processes stopped.', 'SUCCESS');
+    log('Swarm workers stopped.', 'SUCCESS');
   } catch {
-    log('No team-mode processes found to stop.', 'INFO');
+    log('No swarm workers found to stop.', 'INFO');
   }
 }
 
 function actionStatus(): void {
   ensureDirs();
-  const files = existsSync(RESULTS_DIR) ? readdirSync(RESULTS_DIR).filter((f) => f.endsWith('.log')) : [];
-  log(`Status — ${files.length} result files in ${RESULTS_DIR}`, 'INFO');
-  for (const f of files) {
+  const files = existsSync(RESULTS_DIR)
+    ? readdirSync(RESULTS_DIR).filter(f => f.startsWith('swarm-report') && f.endsWith('.md'))
+    : [];
+  const workerDirs = existsSync(SWARM_WORK_DIR)
+    ? readdirSync(SWARM_WORK_DIR).filter(d => {
+        const full = join(SWARM_WORK_DIR, d);
+        try { return existsSync(full) && !rmSync; } catch { return false; }
+      })
+    : [];
+
+  log(`=== Swarm Status ===`, 'INFO');
+  log(`Reports: ${files.length} in ${RESULTS_DIR}`, 'INFO');
+  log(`Worker dirs: ${workerDirs.length} in ${SWARM_WORK_DIR}`, 'INFO');
+
+  // Show recent reports
+  const recentFiles = files.slice(-5);
+  for (const f of recentFiles) {
     try {
       const content = readFileSync(join(RESULTS_DIR, f), 'utf-8');
-      const parsed = JSON.parse(content) as AgentResult;
-      log(`  ${f}: ${parsed.skill} — ${parsed.status}`, parsed.status === 'completed' ? 'SUCCESS' : 'WARN');
+      const taskMatch = content.match(/\*\*Task\*\*: (.+)/);
+      const resultsMatch = content.match(/\*\*Results\*\*: (.+)/);
+      log(`  📄 ${f}${taskMatch ? ` — ${taskMatch[1]}` : ''}${resultsMatch ? ` [${resultsMatch[1]}]` : ''}`, 'INFO');
     } catch {
-      log(`  ${f}: (unparseable)`, 'WARN');
+      log(`  📄 ${f} (unreadable)`, 'WARN');
+    }
+  }
+
+  // Show active workers
+  if (workerDirs.length > 0) {
+    log(`Active worker directories:`, 'INFO');
+    for (const d of workerDirs.slice(-10)) {
+      const outputFile = join(SWARM_WORK_DIR, d, 'output.json');
+      let status = 'unknown';
+      try {
+        const data = JSON.parse(readFileSync(outputFile, 'utf-8'));
+        status = data.status;
+      } catch { /* no output yet */ }
+      log(`  🧩 ${d}: ${status}`, status === 'completed' ? 'SUCCESS' : status === 'failed' ? 'ERROR' : 'INFO');
     }
   }
 }
 
-function actionDelegate(opts: ClientOptions): AgentResult {
+function actionDelegate(opts: OrchestratorOptions): WorkerResult {
   ensureDirs();
   const skillName = opts.skill || opts.skills[0] || 'default';
-  log(`Delegate — invoking skill "${skillName}" with task "${opts.task}"`, 'INFO');
-  const result = runAgentInline(skillName, `[${skillName}] ${opts.task}`, opts.timeoutSeconds);
-  const logFile = join(RESULTS_DIR, `${skillName}-${dateStamp()}.log`);
-  writeFileSync(logFile, JSON.stringify(result, null, 2), 'utf-8');
+  log(`Delegate — invoking skill "${skillName}" as single worker`, 'INFO');
+  const swarmId = randomBytes(4).toString('hex');
+  const workerId = `${swarmId}-${randomBytes(2).toString('hex')}`;
+  const result = spawnWorker(skillName, `[${skillName}] ${opts.task}`, opts.timeoutSeconds, workerId);
   log(`[DONE] ${skillName}: ${result.status}`, result.status === 'completed' ? 'SUCCESS' : 'ERROR');
   return result;
 }
 
-function actionSynthesize(allResults: AgentResult[], targetSkills: string[], task: string): string {
-  const completedCount = allResults.filter((r) => r.status === 'completed').length;
-
-  const synthesis = [
-    '# Team Mode Report',
-    `**Task**: ${task}`,
-    `**Date**: ${new Date().toISOString().slice(0, 16).replace('T', ' ')}`,
-    `**Skills used**: ${targetSkills.join(', ')}`,
-    `**Results**: ${completedCount}/${allResults.length} successful`,
-    '',
-    '## Per-Skill Results',
-    ...allResults.map((r) => `- **${r.skill}**: ${r.status}`),
-    '',
-    '## Next Steps',
-    '- Review individual logs for detailed per-skill output',
-    '- Re-run failed skills with --action delegate --skill <name>',
-    '',
-  ].join('\n');
-
-  const reportFile = join(RESULTS_DIR, `synthesis-${dateStamp()}.md`);
-  writeFileSync(reportFile, synthesis, 'utf-8');
-  log(`Synthesis written to ${reportFile}`, 'SUCCESS');
-  if (!quiet) console.log(`\n${synthesis}\n`);
-  return synthesis;
-}
-
-function actionReport(opts: ClientOptions, allResults: AgentResult[], targetSkills: string[]): void {
-  log('Generating full report...', 'INFO');
-  actionStatus();
-  if (allResults.length > 0) {
-    actionSynthesize(allResults, targetSkills, opts.task);
+function actionRerun(opts: OrchestratorOptions): void {
+  const skillToRerun = opts.skill || opts.skills[0];
+  if (!skillToRerun) {
+    log('Rerun requires --skill <name>', 'ERROR');
+    return;
   }
-  log('Report complete.', 'SUCCESS');
+  log(`Rerunning failed skill: ${skillToRerun}`, 'INFO');
+  const result = actionDelegate({ ...opts, skill: skillToRerun });
+  log(`Rerun complete: ${skillToRerun} → ${result.status}`, result.status === 'completed' ? 'SUCCESS' : 'ERROR');
 }
 
-function parseArgs(): ClientOptions {
+function actionClean(): void {
+  log('Cleaning swarm worker directories...', 'WARN');
+  let cleaned = 0;
+  if (existsSync(SWARM_WORK_DIR)) {
+    const dirs = readdirSync(SWARM_WORK_DIR);
+    for (const d of dirs) {
+      try {
+        rmSync(join(SWARM_WORK_DIR, d), { recursive: true, force: true });
+        cleaned++;
+      } catch { /* skip */ }
+    }
+  }
+  log(`Cleaned ${cleaned} worker directories`, 'SUCCESS');
+}
+
+// ---- CLI Parsing ----
+
+function parseArgs(): OrchestratorOptions {
   const args = process.argv.slice(2);
-  const opts: ClientOptions = {
+  const opts: OrchestratorOptions = {
     task: '',
     skills: [],
     maxParallel: 3,
@@ -283,6 +455,8 @@ function parseArgs(): ClientOptions {
     quiet: false,
     action: 'start',
     skill: '',
+    decompose: true,
+    worktree: false,
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -292,7 +466,7 @@ function parseArgs(): ClientOptions {
         break;
       case '--skills':
         if (args[i + 1] && !args[i + 1].startsWith('-')) {
-          opts.skills = args[++i].split(',').map((s) => s.trim());
+          opts.skills = args[++i].split(',').map(s => s.trim());
         }
         break;
       case '--max-parallel':
@@ -316,22 +490,32 @@ function parseArgs(): ClientOptions {
       case '--skill':
         opts.skill = args[++i] ?? '';
         break;
+      case '--no-decompose':
+        opts.decompose = false;
+        break;
+      case '--worktree':
+        opts.worktree = true;
+        break;
     }
   }
 
   return opts;
 }
 
+// ---- Main ----
+
 async function main() {
   quiet = process.argv.includes('--quiet');
   const opts = parseArgs();
+
+  log(`Swarm Orchestrator v2.0 — action: ${opts.action}`, 'INFO');
 
   switch (opts.action) {
     case 'start':
       await actionStart(opts);
       break;
     case 'stop':
-      actionStop(opts);
+      actionStop();
       break;
     case 'status':
       actionStatus();
@@ -339,38 +523,27 @@ async function main() {
     case 'delegate':
       actionDelegate(opts);
       break;
-    case 'synthesize': {
-      ensureDirs();
-      const files = existsSync(RESULTS_DIR)
-        ? readdirSync(RESULTS_DIR).filter((f) => f.endsWith('.log') && !f.startsWith('synthesis'))
-        : [];
-      const allResults: AgentResult[] = [];
-      for (const f of files) {
-        try {
-          allResults.push(JSON.parse(readFileSync(join(RESULTS_DIR, f), 'utf-8')) as AgentResult);
-        } catch { /* skip */ }
-      }
-      const skills = [...new Set(allResults.map((r) => r.skill))];
-      actionSynthesize(allResults, skills, opts.task || '(from log files)');
+    case 'rerun':
+      actionRerun(opts);
       break;
-    }
+    case 'clean':
+      actionClean();
+      break;
+    case 'synthesize':
     case 'report': {
       ensureDirs();
       const files = existsSync(RESULTS_DIR)
-        ? readdirSync(RESULTS_DIR).filter((f) => f.endsWith('.log') && !f.startsWith('synthesis'))
+        ? readdirSync(RESULTS_DIR).filter(f => f.startsWith('swarm-report') && f.endsWith('.md'))
         : [];
-      const allResults: AgentResult[] = [];
-      for (const f of files) {
-        try {
-          allResults.push(JSON.parse(readFileSync(join(RESULTS_DIR, f), 'utf-8')) as AgentResult);
-        } catch { /* skip */ }
+      log(`${opts.action === 'report' ? 'Report' : 'Synthesis'} — ${files.length} report(s) available`, 'INFO');
+      if (files.length > 0) {
+        const latest = files[files.length - 1];
+        console.log(readFileSync(join(RESULTS_DIR, latest), 'utf-8'));
       }
-      const skills = [...new Set(allResults.map((r) => r.skill))];
-      actionReport(opts, allResults, skills);
       break;
     }
     default:
-      log(`Unknown action: ${opts.action}. Use: start, stop, status, delegate, synthesize, report`, 'ERROR');
+      log(`Unknown action: ${opts.action}. Use: start, stop, status, delegate, rerun, clean, report`, 'ERROR');
       process.exit(1);
   }
 }

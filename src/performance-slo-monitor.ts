@@ -301,12 +301,12 @@ function main(): void {
       const ports = JSON.parse(readFileSync(wsPort, 'utf8') || '{}');
       const port = ports.wsPort || 8080;
       const postData = JSON.stringify({
-        type: 'slo_metrics',
         timestamp: report.timestamp,
         passed: report.passed,
-        checks: report.checks.map(c => ({ name: c.name, status: c.status, current: c.current, threshold: c.threshold })),
+        overall: report.overall,
+        checks: report.checks.map(c => ({ name: c.name, status: c.status, current: c.current, threshold: c.threshold, unit: c.unit })),
       });
-      const req = httpRequest({ hostname: 'localhost', port, path: '/api/metrics', method: 'POST', headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(postData) } });
+      const req = httpRequest({ hostname: 'localhost', port, path: '/api/slo', method: 'POST', headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(postData) } });
       req.write(postData);
       req.end();
     }
