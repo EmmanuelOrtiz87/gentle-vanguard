@@ -26,6 +26,19 @@
       "enabled": true,
       "autoStart": true,
       "description": "Persistent memory via Engram MCP"
+    },
+    {
+      "name": "lsp-server",
+      "type": "builtin",
+      "transport": "stdio",
+      "command": "npx",
+      "args": [
+        "tsx",
+        "src/mcp/mcp-lsp-server.ts"
+      ],
+      "enabled": true,
+      "autoStart": true,
+      "description": "TypeScript Language Service via MCP: go_to_definition, find_references, get_hover_info, get_completions, get_diagnostics, get_symbol_info, get_file_symbols"
     }
   ]
 }

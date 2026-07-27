@@ -792,6 +792,16 @@
         "args": "",
         "required": false,
         "description": "Verify centralized timeout configuration is valid and accessible"
+      },
+      {
+        "id": "summarize-wipe",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/summarize-wipe.ts",
+        "args": "auto",
+        "required": false,
+        "phase": 99,
+        "description": "Context compaction engine — auto-checks token budget, compacts session if above threshold, wipes old context"
       }
     ],
     "onStepFailure": "continue",
