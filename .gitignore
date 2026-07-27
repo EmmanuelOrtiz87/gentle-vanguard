@@ -241,3 +241,14 @@ knowledge-base/.obsidian/workspace/
 
 # Runtime module resolution symlink (created by bootstrap)
 apps/web-dashboard/node_modules/@gentle-vanguard/
+
+# Sanitization patterns for public repo
+.recovery/
+.engram-data/backups/
+.engram-data/*.db.backup
+config/owner-auth.json*
+.session/archive/
+*.enc
+*.key
+**/*.pem
+# End sanitization patterns
