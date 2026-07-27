@@ -71,6 +71,41 @@ const SKILL_KEYWORDS: Record<string, string[]> = {
   svg: ['svg-generator'],
   banner: ['svg-generator'],
   logo: ['svg-generator'],
+  // Image Generation skill
+  'generate image': ['image-generation-skill'],
+  'image gen': ['image-generation-skill'],
+  'image generation': ['image-generation-skill'],
+  'ai image': ['image-generation-skill'],
+  'ai art': ['image-generation-skill'],
+  'dall-e': ['image-generation-skill'],
+  'dalle': ['image-generation-skill'],
+  'stable diffusion': ['image-generation-skill'],
+  'flux': ['image-generation-skill'],
+  'visual asset': ['image-generation-skill', 'svg-generator'],
+  illustration: ['image-generation-skill'],
+  // Diagram renderer skill
+  graphviz: ['diagram-renderer-skill'],
+  dot: ['diagram-renderer-skill'],
+  plantuml: ['diagram-renderer-skill'],
+  puml: ['diagram-renderer-skill'],
+  'sequence diagram': ['diagram-renderer-skill'],
+  'class diagram': ['diagram-renderer-skill'],
+  'activity diagram': ['diagram-renderer-skill'],
+  'state machine': ['diagram-renderer-skill', 'mermaid-renderer'],
+  'network topology': ['diagram-renderer-skill'],
+  'architecture diagram': ['diagram-renderer-skill', 'visual-content-skill'],
+  'dependency graph': ['diagram-renderer-skill'],
+  // Post-mortem / Incident
+  'post-mortem': ['post-mortem-trigger'],
+  'postmortem': ['post-mortem-trigger'],
+  incident: ['post-mortem-trigger'],
+  'auto-heal': ['post-mortem-trigger'],
+  'break glass': ['post-mortem-trigger', 'self-diagnosis'],
+  // Design tokens
+  'design token': ['design-token-pipeline'],
+  'brand token': ['design-token-pipeline'],
+  'css tokens': ['design-token-pipeline'],
+  'design system token': ['design-token-pipeline', 'design-system-skill'],
 };
 
 function main(): void {
@@ -88,9 +123,20 @@ function main(): void {
   const queryLower = query.toLowerCase();
   const matchedSet = new Set<string>();
 
+  // Exact matches (highest confidence)
   for (const [keyword, skills] of Object.entries(SKILL_KEYWORDS)) {
     if (queryLower.includes(keyword)) {
       for (const s of skills) matchedSet.add(s);
+    }
+  }
+
+  // Fuzzy fallback: partial keyword matches when no exact matches found
+  if (matchedSet.size === 0) {
+    for (const [keyword, skills] of Object.entries(SKILL_KEYWORDS)) {
+      // Check if query contains keyword OR keyword contains query (partial match)
+      if (keyword.includes(queryLower) || queryLower.includes(keyword)) {
+        for (const s of skills) matchedSet.add(s);
+      }
     }
   }
 

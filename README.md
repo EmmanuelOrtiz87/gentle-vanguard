@@ -12,11 +12,11 @@
 </p>
 
 <p align="center">
-  <a href="docs/AGENTS.md">Agent Bootstrap</a> &nbsp;·&nbsp;
+  <a href="docs/agents/AGENTS.md">Agent Bootstrap</a> &nbsp;·&nbsp;
   <a href="CHANGELOG.md">Changelog</a> &nbsp;·&nbsp;
-  <a href="docs/ROADMAP.md">Roadmap</a> &nbsp;·&nbsp;
+  <a href="docs/product/ROADMAP.md">Roadmap</a> &nbsp;·&nbsp;
   <a href="rules/NORMATIVES.md">Normatives</a> &nbsp;·&nbsp;
-  <a href="docs/QUICK-COMMANDS.md">Quick Commands</a>
+  <a href="docs/operations/procedures/QUICK-COMMANDS.md">Quick Commands</a>
 </p>
 
 <p align="center">
@@ -141,7 +141,8 @@ Start with one command: `.\scripts\utilities\dashboard\dashboard-start.ps1`
 | `.\scripts\maintenance\maintenance-watchtower.ps1 -Action health`   | Run 79 health checks                                |
 | `.\scripts\maintenance\maintenance-watchtower.ps1 -Action autoheal` | Health + auto-restart failed processes              |
 
-See [docs/QUICK-COMMANDS.md](docs/QUICK-COMMANDS.md) for the full reference.
+See [docs/operations/procedures/QUICK-COMMANDS.md](docs/operations/procedures/QUICK-COMMANDS.md)
+for the full reference.
 
 ---
 
@@ -149,11 +150,11 @@ See [docs/QUICK-COMMANDS.md](docs/QUICK-COMMANDS.md) for the full reference.
 
 | Resource         | Path                     |
 | ---------------- | ------------------------ |
-| Agent Bootstrap  | `docs/AGENTS.md`         |
-| Quick Commands   | `docs/QUICK-COMMANDS.md` |
+| Agent Bootstrap  | `docs/agents/AGENTS.md`  |
+| Quick Commands   | `docs/operations/procedures/QUICK-COMMANDS.md` |
 | Normatives Index | `rules/NORMATIVES.md`    |
 | Changelog        | `CHANGELOG.md`           |
-| Roadmap          | `docs/ROADMAP.md`        |
+| Roadmap          | `docs/product/ROADMAP.md` |
 
 ---
 

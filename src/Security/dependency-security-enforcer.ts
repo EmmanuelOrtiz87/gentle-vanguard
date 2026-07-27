@@ -6,6 +6,7 @@
  */
 
 import { execSync, ExecSyncOptions } from 'child_process';
+import { pathToFileURL } from 'url';
 // import { readFileSync } from 'fs'; // Removed unused import
 // import { join } from 'path'; // Removed unused import
 // import { Buffer } from 'buffer'; // Removed unused import
@@ -436,7 +437,7 @@ export class DependencySecurityEnforcer {
 export const dependencySecurityEnforcer = new DependencySecurityEnforcer();
 
 // If called directly, run the security checks
-if (process.argv[1] && typeof process !== 'undefined' && process.argv[1]) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const enforcer = new DependencySecurityEnforcer();
 
   enforcer.runSecurityChecks()

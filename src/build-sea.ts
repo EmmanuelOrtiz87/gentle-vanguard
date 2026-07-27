@@ -184,6 +184,12 @@ function buildSEA(target: SEATarget, nodePath: string, skipBuild: boolean): Buil
     const outputPath = resolve(process.cwd(), target.outputExe);
     mkdirSync(dirname(outputPath), { recursive: true });
 
+    // Remove existing output first to ensure clean copy (prevents locked file issues)
+    if (existsSync(outputPath)) {
+      try { execSync(`del "${outputPath}" 2>nul`, { stdio: 'ignore' }); }
+      catch { try { require('fs').unlinkSync(outputPath); } catch {} }
+    }
+
     // Copy node.exe as base
     try {
       copyFileSync(nodePath, outputPath);
@@ -197,23 +203,43 @@ function buildSEA(target: SEATarget, nodePath: string, skipBuild: boolean): Buil
     // then `postject` to inject it into the copied binary.
     // Postject is the official Node.js tool for SEA injection.
 
-    // Try using npx postject
+    // Try using postject (check common install paths)
     const blobFile = resolve(process.cwd(), SEA_DIR, `${target.name}.blob`);
     if (!existsSync(blobFile)) {
       result.error = `SEA blob not found at ${blobFile}`;
       return result;
     }
 
+    // Find postject's cli.js (call via node directly — avoids .cmd argument issues)
+    const postjectCandidates = [
+      resolve(process.cwd(), 'node_modules', 'postject', 'dist', 'cli.js'),
+      'C:\\Users\\emman\\AppData\\Roaming\\npm\\node_modules\\postject\\dist\\cli.js',
+      'C:\\Users\\emman\\AppData\\Roaming\\npm\\node_modules\\@postject\\cli.js',
+    ];
+
+    let postjectArgs: [string, string[]] = ['postject', []];
+    for (const cliPath of postjectCandidates) {
+      if (existsSync(cliPath)) {
+        postjectArgs = [process.execPath, [cliPath]];
+        break;
+      }
+    }
+
+    const postjectCmd = postjectArgs[0];
+    const postjectBaseArgs = postjectArgs[1];
+    const postjectCallArgs = [
+      ...postjectBaseArgs,
+      outputPath,
+      'NODE_SEA_BLOB',
+      blobFile,
+      '--sentinel-fuse', 'NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2',
+      '--macho-segment-name', 'NODE_SEA',
+      '--overwrite',
+    ];
+
     const postjectResult = spawnSync(
-      'npx',
-      [
-        '--yes', 'postject',
-        outputPath,
-        'NODE_SEA_BLOB',
-        blobFile,
-        '--sentinel-fuse', 'NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2',
-        '--macho-segment-name', 'NODE_SEA',
-      ],
+      postjectCmd,
+      postjectCallArgs,
       { encoding: 'utf8', timeout: 30000, stdio: ['pipe', 'pipe', 'inherit'] }
     );
 
@@ -221,7 +247,6 @@ function buildSEA(target: SEATarget, nodePath: string, skipBuild: boolean): Buil
       // postject not available or failed — the blob was still generated,
       // but the .exe won't be self-contained. Provide instructions.
       result.error = `Postject failed (install with: npm install -g postject). Blob available at ${blobFile}`;
-      // The blob is still valid, return partial success
       result.output = blobFile;
       result.success = true;
       return result;

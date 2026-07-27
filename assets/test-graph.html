@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/@viz-js/viz@3.9.0/lib/viz-standalone.min.js"></script>
+  <style>body{margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#fff}</style>
+</head>
+<body>
+  <div id="graph_1785046583642"></div>
+  <script>
+    Viz.instance().then(viz => {
+      document.getElementById('graph_1785046583642').innerHTML = viz.renderSVGElement(`digraph G { rankdir=LR; A -> B; B -> C; }`);
+    }).catch(console.error);
+  </script>
+</body>
+</html>

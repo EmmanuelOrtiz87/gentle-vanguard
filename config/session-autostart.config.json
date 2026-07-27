@@ -7,7 +7,7 @@
       {
         "id": "tool-detection",
         "enabled": true,
-        "script": "src/Core/detect-tool.ts",
+        "script": "src/core/detect-tool.ts",
         "args": "--json",
         "required": false,
         "description": "Detect AI tool/agent and load tool-specific configuration (TS)"
@@ -123,7 +123,7 @@
       {
         "id": "security-orchestrator",
         "enabled": true,
-        "script": "src/Security/security-orchestrator.ts",
+        "script": "src/security/security-orchestrator.ts",
         "args": "init prompt",
         "required": true,
         "description": "Initialize Security Orchestrator with policy and privacy configs (TS)"
@@ -139,7 +139,7 @@
       {
         "id": "dependency-security-initializer",
         "enabled": true,
-        "script": "src/Security/dependency-security-initializer.ts",
+        "script": "src/security/dependency-security-initializer.ts",
         "args": "",
         "required": false,
         "description": "Initialize and enforce dependency security policies (TS)"
@@ -147,7 +147,7 @@
       {
         "id": "skill-router",
         "enabled": true,
-        "script": "src/Skills/skill-router.ts",
+        "script": "src/skills/skill-router.ts",
         "args": "--query \"session-start\"",
         "required": false,
         "description": "Verify skill router is active (TS)"
@@ -271,7 +271,7 @@
         "id": "skill-recommendation",
         "enabled": true,
         "lazy": true,
-        "script": "src/skill-recommender.ts",
+        "script": "src/skills/skill-recommender.ts",
         "args": "-Proactive -TopN 3",
         "required": false,
         "description": "Recomienda skills relevantes basado en el contexto actual del workspace (git branch, archivos modificados, commits recientes)"
@@ -279,7 +279,7 @@
       {
         "id": "skill-usage-scan",
         "enabled": true,
-        "script": "src/Skills/skill-usage-tracker.ts",
+        "script": "src/skills/skill-usage-tracker.ts",
         "args": "",
         "required": false,
         "description": "Inicializa/escanea métricas de uso de skills al inicio de sesion (TS)"
@@ -345,7 +345,7 @@
       {
         "id": "validate-tool-configs",
         "enabled": true,
-        "script": "src/Core/validate-tool-configs.ts",
+        "script": "src/core/validate-tool-configs.ts",
         "args": "--quiet",
         "required": false,
         "description": "Valida tool configs (.windsurf, .continue, .clinerules) contra schemas oficiales (TS)"
@@ -354,7 +354,7 @@
         "id": "maintenance-watchtower",
         "enabled": true,
         "lazy": true,
-        "script": "src/maintenance-watchtower.ts",
+        "script": "src/core/maintenance-watchtower.ts",
         "args": "-Action autoheal -Quiet",
         "required": false,
         "description": "Health check completo + auto-healing de componentes caídos al inicio de sesión. Corre en background (lazy)."
@@ -444,7 +444,7 @@
         "id": "audit-pipeline-init",
         "enabled": true,
         "lazy": true,
-        "script": "src/audit-pipeline.ts",
+        "script": "src/infrastructure/audit-pipeline.ts",
         "args": "-Action log -EventType session.start -Component system -Operation autostart -Actor system -Status success -Message Session-autostart-pipeline-initialized -Quiet",
         "required": false,
         "description": "Log session start in the audit pipeline for SOC2/GDPR compliance (Phase 3)"
@@ -524,7 +524,7 @@
         "id": "ml-embeddings-incremental",
         "enabled": true,
         "lazy": true,
-        "script": "src/skill-embedder-incremental.ts",
+        "script": "src/skills/skill-embedder-incremental.ts",
         "args": "--quiet",
         "required": false,
         "description": "Incrementally update skill embeddings on session start (TS)"
@@ -560,7 +560,7 @@
         "id": "self-heal-status",
         "enabled": true,
         "lazy": true,
-        "script": "src/ci-rollback-engine.ts",
+        "script": "src/multitenant/ci-rollback-engine.ts",
         "args": "--action status",
         "required": false,
         "description": "Check CI/CD self-healing status (v5.1) (TS)"
@@ -596,7 +596,7 @@
         "id": "mcp-gateway-init",
         "enabled": true,
         "lazy": true,
-        "script": "src/mcp-gateway.ts",
+        "script": "src/mcp-native/mcp-gateway.ts",
         "args": "-Action start -Quiet",
         "required": false,
         "description": "Start MCP Native gateway at session start (v6.4)"
@@ -682,7 +682,7 @@
         "id": "skill-evolution-engine",
         "enabled": true,
         "lazy": true,
-        "script": "src/skill-evolution-engine.ts",
+        "script": "src/skills/skill-evolution-engine.ts",
         "args": "--quiet",
         "required": false,
         "phase": 99,

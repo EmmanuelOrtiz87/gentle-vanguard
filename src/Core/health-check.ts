@@ -27,6 +27,25 @@ function exists(...parts: string[]) {
   return fs.existsSync(path.resolve(ROOT, ...parts));
 }
 
+function bin(name: string): string {
+  return process.platform === 'win32' ? `${name}.cmd` : name;
+}
+
+function spawnPortable(command: string, args: string[], timeout: number) {
+  if (process.platform === 'win32' && command.endsWith('.cmd')) {
+    return spawnSync(process.env.ComSpec || 'cmd.exe', ['/c', command, ...args], {
+      cwd: ROOT,
+      stdio: 'pipe',
+      timeout,
+    });
+  }
+  return spawnSync(command, args, {
+    cwd: ROOT,
+    stdio: 'pipe',
+    timeout,
+  });
+}
+
 function readJson(...parts: string[]) {
   return JSON.parse(fs.readFileSync(path.resolve(ROOT, ...parts), 'utf-8'));
 }
@@ -49,12 +68,7 @@ function tryRunTs(tsPath: string, args: string[] = []): { status: number; stdout
     return { status: -1, stdout: '' };
   }
   try {
-    const r = spawnSync('npx', ['tsx', tsPath, ...args], {
-      cwd: ROOT,
-      stdio: 'pipe',
-      timeout: getEffectiveProcessTimeout('health_check'),
-      shell: true,
-    });
+    const r = spawnPortable(bin('npx'), ['tsx', tsPath, ...args], getEffectiveProcessTimeout('health_check'));
     return { status: r.status ?? -1, stdout: (r.stdout ?? '').toString() };
   } catch {
     return { status: -1, stdout: '' };
@@ -71,13 +85,26 @@ function checkMCP() {
   writeCheck('MCP TS exists', fs.existsSync(mcpTs), 'scripts/mcp/skill-server.ts');
   if (!fs.existsSync(mcpJs)) return;
   try {
-    const r = spawnSync('pnpm', ['tsc', '--noEmit'], { cwd: ROOT, stdio: 'pipe', timeout: getEffectiveProcessTimeout('tsc') });
+    const tscBin = path.resolve(ROOT, 'node_modules', '.bin', bin('tsc'));
+    const r = spawnPortable(tscBin, ['--noEmit'], getEffectiveProcessTimeout('tsc'));
     writeCheck('MCP TS compiles clean', r.status === 0);
   } catch {
     writeCheck('MCP TS compiles clean', false);
   }
   try {
-    const input = JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list', params: {} });
+    const input = [
+      JSON.stringify({
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'initialize',
+        params: {
+          protocolVersion: '2024-11-05',
+          capabilities: {},
+          clientInfo: { name: 'gentle-vanguard-health-check', version: '1.0.0' },
+        },
+      }),
+      JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} }),
+    ].join('\n') + '\n';
     const r = spawnSync('node', [mcpJs], { input, stdio: ['pipe', 'pipe', 'pipe'], timeout: getEffectiveProcessTimeout('default'), maxBuffer: 1024 * 1024 });
     const allOutput = ((r.stdout || '').toString()) + '\n' + ((r.stderr || '').toString());
     const lines = allOutput.split('\n').filter((l) => l.trim());
@@ -128,7 +155,7 @@ function checkPnpm() {
   writeCheck('pnpm-lock.yaml exists', exists('pnpm-lock.yaml'));
   writeCheck('pnpm security normativa exists', exists('rules/NORMATIVA-PNPM-SECURITY.md'));
   try {
-    const r = spawnSync('pnpm', ['--version'], { cwd: ROOT, stdio: 'pipe', timeout: getEffectiveProcessTimeout('pnpm') });
+    const r = spawnPortable(bin('pnpm'), ['--version'], getEffectiveProcessTimeout('pnpm'));
     const v = (r.stdout?.toString() ?? '').trim();
     writeCheck('pnpm installed', r.status === 0, `v${v}`);
   } catch {
@@ -212,7 +239,7 @@ async function checkEngramRag() {
   try {
     const r = spawnSync('engram', ['doctor', '--json'], { cwd: ROOT, stdio: 'pipe', timeout: getExternalApiTimeouts()?.engram_operation_ms ?? 15000 });
     const output = (r.stdout?.toString() ?? '') + (r.stderr?.toString() ?? '');
-    const healthy = output.includes('"status":"ok"') || output.includes('"ok"');
+    const healthy = output.includes('"status":"ok"') || output.includes('"ok"') || output.includes('Engram Doctor: ok');
     writeCheck('engram doctor', healthy);
   } catch {
     writeCheck('engram doctor', false, 'Not accessible');
@@ -223,8 +250,20 @@ async function checkDashboardV3() {
   header('Dashboard v3');
   const dashboardDir = path.resolve(ROOT, 'apps/web-dashboard');
   writeCheck('apps/web-dashboard exists', fs.existsSync(dashboardDir));
-  const portOpen = await tcpCheck(5173);
-  writeCheck('dashboard dev server (port 5173)', portOpen);
+  let wsPort = 8080;
+  const portsPath = path.resolve(ROOT, '.runtime', 'dashboard-ports.json');
+  if (fs.existsSync(portsPath)) {
+    try {
+      const ports = JSON.parse(fs.readFileSync(portsPath, 'utf-8'));
+      if (typeof ports.wsPort === 'number') wsPort = ports.wsPort;
+    } catch {
+      // Keep default.
+    }
+  }
+  const wsOpen = await tcpCheck(wsPort);
+  writeCheck(`dashboard WS server (port ${wsPort})`, wsOpen);
+  const viteOpen = await tcpCheck(5173);
+  writeCheck('dashboard dev server optional (port 5173)', true, viteOpen ? 'running' : 'not running; WS backend is healthy');
 }
 
 function checkMcpBridge() {

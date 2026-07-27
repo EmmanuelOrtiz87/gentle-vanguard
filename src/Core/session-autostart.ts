@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-import { readFileSync, existsSync } from 'fs';
+import { appendFileSync, mkdirSync, readFileSync, existsSync } from 'fs';
 import { join, resolve } from 'path';
-import { spawn } from 'child_process';
+import { spawn, type ChildProcess } from 'child_process';
+import { getPipelineTimeouts } from './timeout-config';
 
 interface PipelineStep {
   id: string;
@@ -22,6 +23,8 @@ interface PipelineConfig {
 
 const ROOT = resolve(process.cwd());
 const CONFIG_PATH = join(ROOT, 'config', 'session-autostart.config.json');
+const LOG_DIR = join(ROOT, 'logs');
+const LAZY_LOG_PATH = join(LOG_DIR, 'session-autostart-lazy.log');
 
 function loadConfig(): PipelineConfig {
   try {
@@ -34,7 +37,30 @@ function loadConfig(): PipelineConfig {
   }
 }
 
-function executeStep(step: PipelineStep): Promise<{ success: boolean; error?: string }> {
+function buildStepCommand(scriptPath: string, step: PipelineStep): string {
+  if (scriptPath.endsWith('.ps1')) {
+    return `pwsh -NoProfile -File "${scriptPath}" ${step.args || ''}`;
+  }
+  if (scriptPath.endsWith('.ts')) {
+    return `npx tsx "${scriptPath}" ${step.args || ''}`;
+  }
+  return `"${scriptPath}" ${step.args || ''}`;
+}
+
+function killProcessTree(child: ChildProcess): void {
+  if (!child.pid) return;
+  if (process.platform === 'win32') {
+    spawn('taskkill', ['/pid', String(child.pid), '/t', '/f'], {
+      cwd: ROOT,
+      stdio: 'ignore',
+      windowsHide: true,
+    });
+    return;
+  }
+  child.kill('SIGTERM');
+}
+
+function executeStep(step: PipelineStep, timeoutMs: number): Promise<{ success: boolean; error?: string }> {
   const scriptPath = join(ROOT, step.script);
 
   if (!existsSync(scriptPath)) {
@@ -42,8 +68,6 @@ function executeStep(step: PipelineStep): Promise<{ success: boolean; error?: st
   }
 
   return new Promise((resolvePromise) => {
-    let child;
-
     const spawnOptions: import('child_process').SpawnOptions = {
       cwd: ROOT,
       stdio: 'inherit',
@@ -51,42 +75,58 @@ function executeStep(step: PipelineStep): Promise<{ success: boolean; error?: st
       windowsHide: true,
     };
 
-    if (scriptPath.endsWith('.ps1')) {
-      const cmd = `pwsh -NoProfile -File "${scriptPath}" ${step.args || ''}`;
-      child = spawn(cmd, [], spawnOptions);
-    } else if (scriptPath.endsWith('.ts')) {
-      const cmd = `npx tsx "${scriptPath}" ${step.args || ''}`;
-      child = spawn(cmd, [], spawnOptions);
-    } else {
-      const cmd = `"${scriptPath}" ${step.args || ''}`;
-      child = spawn(cmd, [], spawnOptions);
-    }
+    const child = spawn(buildStepCommand(scriptPath, step), [], spawnOptions);
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      killProcessTree(child);
+      resolvePromise({ success: false, error: `Timeout after ${timeoutMs}ms` });
+    }, timeoutMs);
 
     child.on('close', (code) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
       resolvePromise({ success: code === 0 });
     });
     child.on('error', (err) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
       resolvePromise({ success: false, error: err.message });
     });
   });
 }
 
-async function executeStepWithTimeout(
-  step: PipelineStep,
-  timeoutMs = 120000,
-): Promise<{ success: boolean; error?: string }> {
-  const timeoutPromise = new Promise<{ success: boolean; error: string }>((resolvePromise) => {
-    setTimeout(
-      () => resolvePromise({ success: false, error: `Timeout after ${timeoutMs}ms` }),
-      timeoutMs,
-    );
+function startLazyStep(step: PipelineStep): { success: boolean; error?: string } {
+  const scriptPath = join(ROOT, step.script);
+  if (!existsSync(scriptPath)) {
+    return { success: false, error: `Script not found: ${step.script}` };
+  }
+
+  mkdirSync(LOG_DIR, { recursive: true });
+  appendFileSync(
+    LAZY_LOG_PATH,
+    `[${new Date().toISOString()}] starting ${step.id}: ${buildStepCommand(scriptPath, step)}\n`,
+    'utf-8',
+  );
+
+  const child = spawn(buildStepCommand(scriptPath, step), [], {
+    cwd: ROOT,
+    stdio: 'ignore',
+    shell: true,
+    detached: true,
+    windowsHide: true,
   });
-  return Promise.race([executeStep(step), timeoutPromise]);
+  child.unref();
+  return { success: true };
 }
 
 async function main() {
   console.log(`[SESSION-AUTOSTART] Loading pipeline from ${CONFIG_PATH}\n`);
 
+  const timeoutConfig = getPipelineTimeouts();
   const config = loadConfig();
   const allSteps = config.pipeline.steps.filter((s) => s.enabled === true);
   const steps = allSteps.filter((s) => !s.lazy);
@@ -116,7 +156,10 @@ async function main() {
       for (const step of phaseSteps) {
         stepNum++;
         const isRequired = step.required === true;
-        const result = await executeStepWithTimeout(step);
+        const timeoutMs = isRequired
+          ? timeoutConfig.required_step_ms ?? timeoutConfig.session_autostart_step_ms
+          : timeoutConfig.session_autostart_step_ms;
+        const result = await executeStep(step, timeoutMs);
         if (result.success) {
           console.log(`[${stepNum}/${totalSteps}] [OK] ${step.id} completed`);
         } else {
@@ -135,7 +178,12 @@ async function main() {
       }
 
       const results = await Promise.allSettled(
-        phaseSteps.map((step) => executeStepWithTimeout(step)),
+        phaseSteps.map((step) => {
+          const timeoutMs = step.required === true
+            ? timeoutConfig.required_step_ms ?? timeoutConfig.session_autostart_step_ms
+            : timeoutConfig.session_autostart_step_ms;
+          return executeStep(step, timeoutMs);
+        }),
       );
 
       for (let i = 0; i < phaseSteps.length; i++) {
@@ -160,18 +208,16 @@ async function main() {
   }
 
   if (lazySteps.length > 0) {
-    console.log(`\n=== Running Lazy Steps ===`);
+    console.log(`\n=== Starting Lazy Steps ===`);
     for (const step of lazySteps) {
-      const scriptPath = join(ROOT, step.script);
-      if (existsSync(scriptPath)) {
-        const result = await executeStepWithTimeout(step);
-        if (result.success) {
-          console.log(`  [OK] ${step.id} (lazy)`);
-        } else {
-          console.log(`  [WARN] ${step.id} (lazy): ${result.error || 'Failed'}`);
-        }
+      const result = startLazyStep(step);
+      if (result.success) {
+        console.log(`  [OK] ${step.id} (lazy started)`);
+      } else {
+        console.log(`  [WARN] ${step.id} (lazy): ${result.error || 'Failed'}`);
       }
     }
+    console.log(`[INFO] Lazy step launch log: ${LAZY_LOG_PATH}`);
   }
 
   console.log(`\n=== Session Autostart Summary ===`);

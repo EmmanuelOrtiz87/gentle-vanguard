@@ -291,7 +291,8 @@ $LASTEXITCODE
 ## References
 
 - [RELEASE-PROCESS.md §2.5](../../guides/RELEASE-PROCESS.md#25-homologation-gate-mandatory--auto-runs-on-publish)
-- [validate-release-homologation.ps1](../../../scripts/utilities/DEPLOYMENT/validate-release-homologation.ps1)
+- Historical implementation: `scripts/utilities/DEPLOYMENT/validate-release-homologation.ps1`
+  (removed during script migration)
 - [TROUBLESHOOTING-RUNBOOK.md §Release Workflow Issues](../../guides/TROUBLESHOOTING-RUNBOOK.md#release-workflow-issues)
 
 ---

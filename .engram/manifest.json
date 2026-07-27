@@ -96,6 +96,46 @@
       "sessions": 1,
       "memories": 17,
       "prompts": 2
+    },
+    {
+      "id": "3f40360d",
+      "created_by": "emman",
+      "created_at": "2026-07-26T14:21:41Z",
+      "sessions": 1,
+      "memories": 13,
+      "prompts": 1
+    },
+    {
+      "id": "c0d7b413",
+      "created_by": "emman",
+      "created_at": "2026-07-26T15:14:07Z",
+      "sessions": 0,
+      "memories": 1,
+      "prompts": 0
+    },
+    {
+      "id": "63193b7a",
+      "created_by": "emman",
+      "created_at": "2026-07-26T15:15:34Z",
+      "sessions": 0,
+      "memories": 1,
+      "prompts": 0
+    },
+    {
+      "id": "cd38a2cf",
+      "created_by": "emman",
+      "created_at": "2026-07-27T03:10:51Z",
+      "sessions": 0,
+      "memories": 1,
+      "prompts": 0
+    },
+    {
+      "id": "06223c55",
+      "created_by": "emman",
+      "created_at": "2026-07-27T03:17:52Z",
+      "sessions": 0,
+      "memories": 1,
+      "prompts": 0
     }
   ]
 }

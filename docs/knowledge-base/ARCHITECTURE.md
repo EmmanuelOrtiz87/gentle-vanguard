@@ -138,4 +138,5 @@ User Session
 - `scripts/utilities/knowledge-base/knowledge-base-manager.ps1`
 - `scripts/utilities/knowledge-base/knowledge-base-sync.ps1`
 - `config/knowledge-base-config.json`
-- `docs/knowledge-base/USAGE.md`
+- `docs/knowledge-base/README.md` for the current live documentation entry point.
+- `.archive/docs/stale-guides/knowledge-base-USAGE.md` for the archived legacy usage guide.

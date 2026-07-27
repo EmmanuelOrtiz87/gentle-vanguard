@@ -567,7 +567,7 @@
     "engine-scripts-unit-test",
     "engram-memory-manager-unit-test",
     "feedback-digest-scripts-unit-test",
-    "foundation-manager-unit-test",
+    "gentle-vanguard-manager-unit-test",
     "gentle-vanguard-core-unit-test",
     "githooks-scripts-unit-test",
     "gv-init-unit-test",

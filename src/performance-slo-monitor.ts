@@ -11,8 +11,9 @@
  */
 
 import { execSync } from 'child_process';
-import { existsSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
+import { request as httpRequest } from 'http';
 
 interface SLODefinition {
   name: string;
@@ -292,6 +293,24 @@ function main(): void {
   if (args.output) {
     writeFileSync(resolve(process.cwd(), args.output), JSON.stringify(report, null, 2));
   }
+
+  // Emit to Dashboard WS (best-effort, non-blocking)
+  try {
+    const wsPort = resolve(process.cwd(), '.runtime/dashboard-ports.json');
+    if (existsSync(wsPort)) {
+      const ports = JSON.parse(readFileSync(wsPort, 'utf8') || '{}');
+      const port = ports.wsPort || 8080;
+      const postData = JSON.stringify({
+        type: 'slo_metrics',
+        timestamp: report.timestamp,
+        passed: report.passed,
+        checks: report.checks.map(c => ({ name: c.name, status: c.status, current: c.current, threshold: c.threshold })),
+      });
+      const req = httpRequest({ hostname: 'localhost', port, path: '/api/metrics', method: 'POST', headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(postData) } });
+      req.write(postData);
+      req.end();
+    }
+  } catch { /* dashboard WS unavailable — non-fatal */ }
 
   process.exit(exitCode);
 }

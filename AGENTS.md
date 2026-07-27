@@ -25,12 +25,13 @@ anything else.
 
 Rules:
 
-- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json
-  exists. For label-based searches, always use `graphify query` instead of `path`/`explain`.
-- Use `graphify explain "<node_id>"` for focused explanations by exact node ID (e.g.,
+- For codebase questions, first run `npm run graphify -- query "<question>"` when
+  graphify-out/graph.json exists. For label-based searches, always use
+  `npm run graphify -- query` instead of `path`/`explain`.
+- Use `npm run graphify -- explain "<node_id>"` for focused explanations by exact node ID (e.g.,
   `adaptive_auto_delegate_orchestrator_start_orchestrator`). Node IDs use underscore-separated paths
-  — run `graphify query` first to find the correct ID.
-- `graphify path "<A>" "<B>"` and `graphify affected "X"` are limited — the graph only has
+  — run `npm run graphify -- query` first to find the correct ID.
+- `npm run graphify -- path "<A>" "<B>"` and `npm run graphify -- affected "X"` are limited — the graph only has
   `contains`/`calls` edges (AST-only, no `references`/`imports` edges without LLM semantic
   extraction). Cross-file paths are rare without a paid API key.
 - Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are
@@ -39,10 +40,11 @@ Rules:
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do
   not surface enough context.
-- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
-  Use `--force` when refactors delete code (node count decreases).
+- After modifying code, run `npm run graphify -- update .` to validate the graph snapshot and keep
+  the Graphify workflow active. Use CodeGraph sync for freshness in this environment.
 - Community labeling uses Gemini free tier (20 requests/day limit). If labeling fails with 429, wait
-  for daily reset or set a paid API key. Re-run `graphify label .` to retry.
+  for daily reset or set a paid API key. Re-run the labeling workflow only when the real labeler is
+  available.
 - For graph.html visualization: set `$env:GRAPHIFY_VIZ_NODE_LIMIT=40000` before `cluster-only` or
   `label` to handle graphs larger than the 5000-node default.
 
@@ -233,11 +235,11 @@ Verificado: 7/7 responden OK en entorno local.
 
 ### Notes
 
-- **graphify update**: The npm package `graphify@1.0.0` installed globally is a different project
-  (Random Graph Generator) — NOT the opencode graphify CLI. It has no `bin` entry, so
-  `graphify update .` cannot run in this environment. The `graphify-out/` directory exists from a
-  prior external process. Skip `graphify update` — code changes are tracked via `.codegraph/` index
-  and git hooks.
+- **graphify CLI**: Use the stack-local Graphify command through
+  `npm run graphify -- <command>`. It reads `graphify-out/graph.json` and supports `query`,
+  `explain`, `path`, `affected`, `status`, and `update .`. Do not install the unrelated
+  npm package `graphify@1.0.0`; it is a random graph generator, not this stack's knowledge graph
+  CLI. Code freshness is still handled by `.codegraph/` and git hooks.
 - **`$var:` syntax**: In PowerShell string interpolation, `$varname:` must be written as
   `${varname}:` to avoid parser errors. All instances are fixed.
 
