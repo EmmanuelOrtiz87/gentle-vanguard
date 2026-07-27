@@ -10,8 +10,8 @@
 
 import { resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { spawnSync } from 'child_process';
 import { ResponseCache } from './response-cache';
+import { runNpxTsxSync } from './core/run-command.js';
 
 interface PrivacyGatewayResponse {
   status: string;
@@ -51,11 +51,9 @@ function parseArgs(): { input: string; workspaceRoot: string; useCache: boolean 
 function applyPrivacyGateway(input: string, workspaceRoot: string): string | null {
   const gatewayPath = resolve(workspaceRoot, 'src/privacy-gateway.ts');
   try {
-    const result = spawnSync('npx', ['tsx', gatewayPath, '--text', input, '--as-json'], {
-      encoding: 'utf-8',
-      stdio: 'pipe',
-      timeout: 15000,
+    const result = runNpxTsxSync(gatewayPath, ['--text', input, '--as-json'], {
       cwd: workspaceRoot,
+      timeout: 15000,
     });
 
     if (result.status !== 0 || !result.stdout?.trim()) return null;

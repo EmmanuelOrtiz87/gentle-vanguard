@@ -38,6 +38,7 @@ import { SkillUsagePanel } from './SkillUsagePanel';
 import { TokenUsagePanel } from './TokenUsagePanel';
 import { ContractResultsPanel } from './ContractResultsPanel';
 import { RoutingRulesPanel } from './RoutingRulesPanel';
+import { SwarmWorkersPanel } from './SwarmWorkersPanel';
 import { AlertPanel } from './AlertPanel';
 import { LiveTraceFeed } from './LiveTraceFeed';
 import { SkillHeatmap } from './SkillHeatmap';
@@ -536,6 +537,11 @@ function DashboardInner() {
               <p className="metric-value">{(data as any).auditLogs ?? 0}</p>
             </div>
           </div>
+        </div>
+
+        {/* Row: Swarm Workers */}
+        <div className="mb-8">
+          <SwarmWorkersPanel data={data.swarmWorkers} />
         </div>
 
         {/* Row: SQLite Stack Tables (Wave 37) */}

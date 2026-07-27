@@ -182,3 +182,6 @@ jobs:
 
       - name: Validate workflows
         run: action-validator .github/workflows/*.yml
+
+      - name: Validate npm ci compliance
+        run: npx tsx src/npm-ci-check.ts

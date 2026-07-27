@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 
 const ROOT = resolve(import.meta.dirname, '..', '..');
 
-describe('v264-scripts', () => {
+describe('scripts', () => {
   it('src/session-start-optimized.ts exists', () => {
     assert.ok(existsSync(resolve(ROOT, 'src', 'session-start-optimized.ts')));
   });

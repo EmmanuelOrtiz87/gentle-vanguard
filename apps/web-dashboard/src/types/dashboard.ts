@@ -101,6 +101,27 @@ export interface DashboardData {
   tenantId?: string;
   tenantName?: string;
   sqlite?: SqliteMetrics;
+  swarmWorkers?: SwarmWorkerData;
+}
+
+export interface SwarmWorkerEntry {
+  skill: string;
+  status: 'running' | 'completed' | 'failed' | 'timeout';
+  started: string;
+  finished?: string;
+  exitCode: number | null;
+  output: string;
+  error: string | null;
+  workerDir: string;
+}
+
+export interface SwarmWorkerData {
+  activeCount: number;
+  completedCount: number;
+  failedCount: number;
+  workers: SwarmWorkerEntry[];
+  lastReport: string | null;
+  reports: number;
 }
 
 export interface Session {

@@ -1,8 +1,35 @@
 #!/usr/bin/env node
-import { appendFileSync, mkdirSync, readFileSync, existsSync } from 'fs';
+import { appendFileSync, mkdirSync, readFileSync, existsSync, writeFileSync, unlinkSync } from 'fs';
 import { join, resolve } from 'path';
 import { spawn, type ChildProcess } from 'child_process';
 import { getPipelineTimeouts } from './timeout-config';
+
+// ─── Lock file: prevent running session-autostart more than once ──────
+
+const LOCK_FILE = join(resolve(process.cwd()), '.runtime', 'session-autostart.lock');
+
+function checkLock(): boolean {
+  try {
+    if (existsSync(LOCK_FILE)) {
+      const pid = parseInt(readFileSync(LOCK_FILE, 'utf-8').trim(), 10);
+      // Check if process is still alive
+      try {
+        process.kill(pid, 0); // signal 0 = test existence
+        console.log(`[LOCK] Session-autostart already running (PID ${pid}). Skipping duplicate.`);
+        return false;
+      } catch {
+        // Process is dead, lockfile is stale — remove it
+        try { unlinkSync(LOCK_FILE); } catch { /* ignore */ }
+      }
+    }
+    writeFileSync(LOCK_FILE, String(process.pid), 'utf-8');
+    return true;
+  } catch {
+    return true; // If lock fails, proceed anyway
+  }
+}
+
+// ─── Types ────────────────────────────────────────────────────────────
 
 interface PipelineStep {
   id: string;
@@ -26,6 +53,9 @@ const CONFIG_PATH = join(ROOT, 'config', 'session-autostart.config.json');
 const LOG_DIR = join(ROOT, 'logs');
 const LAZY_LOG_PATH = join(LOG_DIR, 'session-autostart-lazy.log');
 
+// Max concurrent lazy steps to prevent spawning 56 processes at once
+const MAX_LAZY_CONCURRENCY = 5;
+
 function loadConfig(): PipelineConfig {
   try {
     const raw = readFileSync(CONFIG_PATH, 'utf-8');
@@ -37,14 +67,23 @@ function loadConfig(): PipelineConfig {
   }
 }
 
-function buildStepCommand(scriptPath: string, step: PipelineStep): string {
+/**
+ * Build shell command string.
+ * On Windows, must use `shell: true` for npx.cmd batch files.
+ * windowsHide: true is enforced at the spawn() call site.
+ */
+function buildStepCommand(step: PipelineStep): string {
+  const scriptPath = join(ROOT, step.script);
+  let cmd: string;
   if (scriptPath.endsWith('.ps1')) {
-    return `pwsh -NoProfile -File "${scriptPath}" ${step.args || ''}`;
+    cmd = `pwsh -NoProfile -File "${scriptPath}"`;
+  } else if (scriptPath.endsWith('.ts')) {
+    cmd = `npx tsx "${scriptPath}"`;
+  } else {
+    cmd = `"${scriptPath}"`;
   }
-  if (scriptPath.endsWith('.ts')) {
-    return `npx tsx "${scriptPath}" ${step.args || ''}`;
-  }
-  return `"${scriptPath}" ${step.args || ''}`;
+  if (step.args) cmd += ` ${step.args}`;
+  return cmd;
 }
 
 function killProcessTree(child: ChildProcess): void {
@@ -53,7 +92,7 @@ function killProcessTree(child: ChildProcess): void {
     spawn('taskkill', ['/pid', String(child.pid), '/t', '/f'], {
       cwd: ROOT,
       stdio: 'ignore',
-      windowsHide: true,
+      windowsHide: true,      // ✅ hide taskkill window
     });
     return;
   }
@@ -68,14 +107,18 @@ function executeStep(step: PipelineStep, timeoutMs: number): Promise<{ success: 
   }
 
   return new Promise((resolvePromise) => {
+    const cmd = buildStepCommand(step);
+
+    // shell:true is required on Windows for npx.cmd batch files.
+    // windowsHide:true ensures no flashing cmd.exe windows.
     const spawnOptions: import('child_process').SpawnOptions = {
       cwd: ROOT,
-      stdio: 'inherit',
-      shell: true,
-      windowsHide: true,
+      stdio: 'inherit',       // show output in parent console
+      windowsHide: true,      // ✅ CRITICAL: hide window on Windows
+      shell: true,            // required for npx.cmd on Windows
     };
 
-    const child = spawn(buildStepCommand(scriptPath, step), [], spawnOptions);
+    const child = spawn(cmd, [], spawnOptions);
     let settled = false;
     const timer = setTimeout(() => {
       if (settled) return;
@@ -99,6 +142,10 @@ function executeStep(step: PipelineStep, timeoutMs: number): Promise<{ success: 
   });
 }
 
+/**
+ * Start a lazy step with windowsHide:true.
+ * Lazy steps are batched to avoid spawning 56 processes simultaneously.
+ */
 function startLazyStep(step: PipelineStep): { success: boolean; error?: string } {
   const scriptPath = join(ROOT, step.script);
   if (!existsSync(scriptPath)) {
@@ -108,22 +155,25 @@ function startLazyStep(step: PipelineStep): { success: boolean; error?: string }
   mkdirSync(LOG_DIR, { recursive: true });
   appendFileSync(
     LAZY_LOG_PATH,
-    `[${new Date().toISOString()}] starting ${step.id}: ${buildStepCommand(scriptPath, step)}\n`,
+    `[${new Date().toISOString()}] starting ${step.id}: ${buildStepCommand(step)}\n`,
     'utf-8',
   );
 
-  const child = spawn(buildStepCommand(scriptPath, step), [], {
+  const cmd = buildStepCommand(step);
+  const child = spawn(cmd, [], {
     cwd: ROOT,
     stdio: 'ignore',
-    shell: true,
-    detached: true,
-    windowsHide: true,
+    windowsHide: true,       // ✅ CRITICAL: no flashing window
+    shell: true,             // required for npx.cmd on Windows
   });
   child.unref();
   return { success: true };
 }
 
 async function main() {
+  // Lock check: only run once per OS user session
+  if (!checkLock()) return;
+
   console.log(`[SESSION-AUTOSTART] Loading pipeline from ${CONFIG_PATH}\n`);
 
   const timeoutConfig = getPipelineTimeouts();
@@ -208,16 +258,26 @@ async function main() {
   }
 
   if (lazySteps.length > 0) {
-    console.log(`\n=== Starting Lazy Steps ===`);
-    for (const step of lazySteps) {
-      const result = startLazyStep(step);
-      if (result.success) {
-        console.log(`  [OK] ${step.id} (lazy started)`);
-      } else {
-        console.log(`  [WARN] ${step.id} (lazy): ${result.error || 'Failed'}`);
+    console.log(`\n=== Starting Lazy Steps (batch=${MAX_LAZY_CONCURRENCY}) ===`);
+    let launched = 0;
+    for (let i = 0; i < lazySteps.length; i += MAX_LAZY_CONCURRENCY) {
+      const batch = lazySteps.slice(i, i + MAX_LAZY_CONCURRENCY);
+      for (const step of batch) {
+        const result = startLazyStep(step);
+        if (result.success) {
+          launched++;
+          console.log(`  [OK] ${step.id} (lazy started)`);
+        } else {
+          console.log(`  [WARN] ${step.id} (lazy): ${result.error || 'Failed'}`);
+        }
+      }
+      // Small delay between batches to avoid overwhelming the OS
+      if (i + MAX_LAZY_CONCURRENCY < lazySteps.length) {
+        await new Promise(r => setTimeout(r, 500));
       }
     }
     console.log(`[INFO] Lazy step launch log: ${LAZY_LOG_PATH}`);
+    console.log(`[INFO] Launched ${launched}/${lazySteps.length} lazy steps in batches of ${MAX_LAZY_CONCURRENCY}`);
   }
 
   console.log(`\n=== Session Autostart Summary ===`);

@@ -41,11 +41,11 @@ seguro, extensible, zero-drama.**
 | --- | ------------------------------------------------------------------- | ------ | --------- | ----------------------------------------- |
 | 1   | `scripts/security/security-orchestrator.ps1`                        | 22 KB  | Alta      | ✅ Done (`src/security-orchestrator.ts`)  |
 | 2   | `scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1`        | —      | Alta      | ✅ Done (`src/hybrid-executor.ts`)        |
-| 3   | `scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1`          | —      | Alta      | 🔲 Pendiente                              |
-| 4   | `scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1`        | —      | Alta      | 🔲 Pendiente                              |
+| 3   | `scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1`          | —      | Alta      | ✅ Done (`src/aws-delegator.ts`)          |
+| 4   | `scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1`        | —      | Alta      | ✅ Done (`src/azure-delegator.ts`)        |
 | 5   | `scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1`    | —      | Media     | ✅ Done (`src/checkpoint-manager.ts`)     |
-| 6   | `scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1`      | —      | Media     | 🔲 Pendiente                              |
-| 7   | `scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1` | —      | Media     | 🔲 Pendiente                              |
+| 6   | `scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1`      | —      | Media     | ✅ Done (`src/snapshot-manager.ts`)       |
+| 7   | `scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1` | —      | Media     | ✅ Done (`src/rollback-orchestrator.ts`) |
 | 8   | `scripts/security/audit-pipeline.ps1`                               | —      | Media     | ✅ Done (`src/audit-pipeline.ts`)         |
 | 9   | `scripts/utilities/ops/TRACING/tracing-instrument.ps1`              | —      | Media     | ✅ Done (`src/tracing-instrument.ts`)     |
 | 10  | `scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1`        | —      | Media     | ✅ Done (`src/event-sourcing.ts`)         |

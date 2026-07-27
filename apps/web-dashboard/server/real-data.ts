@@ -12,7 +12,7 @@ import { join } from 'path';
 import { execSync } from 'child_process';
 import os from 'os';
 import { ROOT, readJson, countSkills as _countSkills } from './shared.ts';
-import type { CloudMetrics, DashboardData } from '../src/types/dashboard.ts';
+import type { CloudMetrics, DashboardData, SwarmWorkerData } from '../src/types/dashboard.ts';
 import { getProcessExecutionTimeouts } from '@gentle-vanguard/core/timeout-config';
 import { DatabaseManager } from './database/manager.ts';
 
@@ -70,6 +70,68 @@ function dbAvailable(): boolean {
     return !!getDb() && getDb().hasData();
   } catch {
     return false;
+  }
+}
+
+// ─── Swarm Workers ────────────────────────────────────────────────────
+
+const SWARM_WORK_DIR = join(ROOT, '.session', 'swarm-workers');
+const RESULTS_DIR = join(ROOT, '.session', 'swarm-results');
+
+export function getSwarmWorkers(): SwarmWorkerData {
+  const empty: SwarmWorkerData = { activeCount: 0, completedCount: 0, failedCount: 0, workers: [], lastReport: null, reports: 0 };
+
+  try {
+    // Read worker directories
+    const workerDirs = existsSync(SWARM_WORK_DIR)
+      ? readdirSync(SWARM_WORK_DIR).filter(d => {
+          try { return existsSync(join(SWARM_WORK_DIR, d, 'output.json')); } catch { return false; }
+        })
+      : [];
+
+    const workers: SwarmWorkerData['workers'] = [];
+    let active = 0, completed = 0, failed = 0;
+
+    for (const dir of workerDirs.slice(-50)) { // limit to last 50 workers
+      try {
+        const outputPath = join(SWARM_WORK_DIR, dir, 'output.json');
+        if (!existsSync(outputPath)) continue;
+        const data = JSON.parse(readFileSync(outputPath, 'utf-8'));
+        const entry = {
+          skill: data.skill || dir,
+          status: data.status || 'unknown',
+          started: data.started || '',
+          finished: data.finished || undefined,
+          exitCode: data.exitCode ?? null,
+          output: (data.stdout || data.output || '').substring(0, 200),
+          error: data.stderr || data.error || null,
+          workerDir: join(SWARM_WORK_DIR, dir),
+        };
+        workers.push(entry);
+        if (entry.status === 'running') active++;
+        else if (entry.status === 'completed') completed++;
+        else if (entry.status === 'failed') failed++;
+      } catch { /* skip unreadable */ }
+    }
+
+    // Read latest report
+    let lastReport: string | null = null;
+    const reportFiles = existsSync(RESULTS_DIR)
+      ? readdirSync(RESULTS_DIR).filter(f => f.startsWith('swarm-report') && f.endsWith('.md')).sort().reverse()
+      : [];
+    const reports = reportFiles.length;
+    if (reportFiles.length > 0) {
+      try {
+        const content = readFileSync(join(RESULTS_DIR, reportFiles[0]), 'utf-8');
+        const taskMatch = content.match(/\*\*Task\*\*: (.+)/);
+        const resultsMatch = content.match(/\*\*Results\*\*: (.+)/);
+        lastReport = `${taskMatch?.[1] ?? 'unknown'} [${resultsMatch?.[1] ?? '?'}]`;
+      } catch { /* skip */ }
+    }
+
+    return { activeCount: active, completedCount: completed, failedCount: failed, workers, lastReport, reports };
+  } catch {
+    return empty;
   }
 }
 
@@ -323,6 +385,7 @@ function getRealMetricsFromDb(): DashboardData {
       contractPassRate: sqliteContractPassRate,
       routingTotalHits: sqliteRoutingTotalHits,
     },
+    swarmWorkers: getSwarmWorkers(),
   };
 }
 

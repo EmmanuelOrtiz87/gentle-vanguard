@@ -31,10 +31,9 @@ const SNAPSHOT_DIR = join(SESSION_DIR, 'snapshots');
 const CRITICAL_FILES = [
   'session-state.json',
   'token-usage.json',
-  'cloud-metrics.json',
-  'hybrid-metrics.json',
   'metrics-report.json',
   'health.json',
+  // Note: cloud-metrics.json and hybrid-metrics.json removed - stack operates local-only
 ];
 
 function log(message: string, level: 'INFO' | 'WARN' | 'SUCCESS' = 'INFO', quiet = false): void {

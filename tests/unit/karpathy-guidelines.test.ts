@@ -10,8 +10,8 @@ describe('karpathy-guidelines', () => {
     assert.ok(existsSync(resolve(ROOT, 'src', 'hooks', 'karpathy-enforcer-hook.ts')));
   });
 
-  it('docs/AGENTS.md references tool detection', () => {
-    const content = readFileSync(resolve(ROOT, 'docs', 'AGENTS.md'), 'utf-8');
+  it('docs/agents/AGENTS.md references tool detection', () => {
+    const content = readFileSync(resolve(ROOT, 'docs', 'agents', 'AGENTS.md'), 'utf-8');
     assert.ok(content.includes('Tool Detection'), 'Expected tool detection section in AGENTS.md');
   });
 });

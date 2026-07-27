@@ -507,7 +507,7 @@
     "validate-gitflow",
     "hashline-snapshot-hook",
     "setup-multi-machine",
-    "metrics-collector-v2",
+    "metrics-collector",
     "periodic-checkpoint",
     "scan-skill-hook",
     "setup-secure",
@@ -591,8 +591,8 @@
     "token-budget-guard-unit-test",
     "token-budget-real-unit-test",
     "utility-scripts-unit-test",
-    "v264-scripts-unit-test",
-    "v284-scripts-unit-test"
+    "scripts-unit-test",
+    "scripts-integration-test"
   ],
   "completedWave23": [
     "delete-61-superseded-test-ps1-files"
@@ -860,7 +860,7 @@
     "src/validate-gitflow.ts",
     "src/hashline-snapshot-hook.ts",
     "src/setup-multi-machine.ts",
-    "src/metrics-collector-v2.ts",
+    "src/metrics-collector.ts",
     "src/periodic-checkpoint.ts",
     "src/scan-skill-hook.ts",
     "src/setup-secure.ts",

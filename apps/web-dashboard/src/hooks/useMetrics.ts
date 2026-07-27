@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { DashboardData, MetricHistory } from '../types/dashboard';
 import { useSharedWs } from './useSharedWs';
+import { saveOfflineCache, loadOfflineCache, hasFreshOfflineCache } from '../lib/offline-storage';
 
 export interface Notification {
   type: string;
@@ -17,7 +18,11 @@ const FALLBACK_DATA: DashboardData = {
 };
 
 export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) {
-  const [data, setData] = useState<DashboardData>(FALLBACK_DATA);
+  const [data, setData] = useState<DashboardData>(() => {
+    // Try to load from offline cache on init
+    const cached = loadOfflineCache(initialTenantId);
+    return cached ? (cached as DashboardData) : FALLBACK_DATA;
+  });
   const [tenantId, setTenantId] = useState<string | undefined>(initialTenantId);
   const [history, setHistory] = useState<MetricHistory[]>([]);
   const [loading, setLoading] = useState(false);
@@ -26,11 +31,20 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
 
   const updateFromPayload = useCallback(
     (payload: Partial<DashboardData> & { timestamp?: string }) => {
+      const newData = {
+        ...payload,
+        system: payload.system ?? data.system,
+      } as DashboardData;
+      
       setData((prev) => ({
         ...prev,
         ...payload,
         system: payload.system ?? prev.system,
       }));
+      
+      // Save to offline cache
+      saveOfflineCache(newData, tenantId);
+      
       setHistory((prev) => {
         const tokens = payload.tokens?.used ?? 0;
         const sessions = payload.sessions?.active ?? 0;
@@ -50,7 +64,7 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
         return [...prev, newEntry].slice(-20);
       });
     },
-    [],
+    [tenantId, data.system],
   );
 
   const { connected: wsConnected } = useSharedWs(
@@ -85,7 +99,14 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
       }
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch metrics');
+      // Try to load from offline cache on error
+      const cached = loadOfflineCache(tenantId);
+      if (cached) {
+        updateFromPayload(cached as Partial<DashboardData>);
+        setError('Using cached data (server unavailable)');
+      } else {
+        setError(err instanceof Error ? err.message : 'Failed to fetch metrics');
+      }
     } finally {
       setLoading(false);
     }
@@ -112,5 +133,6 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
     dismissNotification,
     tenantId,
     setTenantId,
+    offlineMode: !wsConnected && hasFreshOfflineCache(tenantId),
   };
 }
