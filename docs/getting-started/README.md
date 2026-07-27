@@ -1,7 +1,13 @@
 # 🚀 Getting Started
 
 <p align="center">
-  <b>Guides for new users and quick setup</b>
+  <b>Gentle-Vanguard v3.4.0 — Quick Start Guide</b>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Version-3.4.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Health-100%25-22C55E?style=flat-square&labelColor=0D1117" alt="Health">
+  <img src="https://img.shields.io/badge/Status-Optimized-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
 </p>
 
 ---
@@ -49,23 +55,27 @@ git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
 cd gentle-vanguard
 ```
 
-### Step 2: Bootstrap Your Machine
+### Step 2: Start Session
 
 ```powershell
-.\scripts\gentle-vanguard\bootstrap-machine.ps1
+npx tsx src/session-autostart.ts
 ```
 
 This will:
 
-- ✅ Install required PowerShell modules
-- ✅ Configure Git hooks (Lefthook + Trufflehog)
-- ✅ Set up environment variables
-- ✅ Validate all prerequisites
+- ✅ Initialize session tracking
+- ✅ Start dashboard WebSocket server
+- ✅ Run health checks
+- ✅ Sync Knowledge Base
 
 ### Step 3: Start Working
 
 ```powershell
-.\scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1 start-session
+# Health check
+npm run watchtower:health
+
+# Dashboard
+npm run dashboard:start
 ```
 
 ---
@@ -73,13 +83,23 @@ This will:
 ## 📖 Daily Usage Commands
 
 ```powershell
-gv verify  # Check all 14 quality gates
-gv version # Show stack version + skills count
-gv start-session   # Begin tracked session
-gv judgment-day    # Full QA gate before release
-gv dashboard       # Open HTML metrics dashboard
-gv benchmark       # SLO benchmark of key commands
-gv sync-drift      # Detect drift between gentle-vanguard and projects
+# Session management
+npx tsx src/session-autostart.ts    # Start session
+npm run watchtower:health           # Health check (82 checks)
+
+# Dashboard
+npm run dashboard:start             # Start dashboard
+npm run dashboard:stop              # Stop dashboard
+
+# Knowledge Base
+npx tsx src/knowledge-base-sync.ts --stats      # Show stats
+npx tsx src/knowledge-base-sync.ts --mode full # Full sync
+
+# Graphify (code navigation)
+npm run graphify -- query "search term"
+
+# Token budget
+npx tsx src/token-budget-guard.ts -Mode status
 ```
 
 ---

@@ -1,0 +1,51 @@
+chore(release): sync develop into main (#16)
+
+* feat(workflow): add push mode selector for push+pr vs push-only (#8)
+
+* feat(workflow): add push publish mode selector
+
+* feat(workflow): add governed publish command with auto-merge policy
+
+* docs(workflow): document governed publish decision policy
+
+* feat(gitflow): enforce branch policy and PR base mapping
+
+* chore(publish): apply validated release changes
+
+* chore(structure): relocate setup.sh into scripts/foundation (#9)
+
+* feat(workflow): add push publish mode selector
+
+* feat(workflow): add governed publish command with auto-merge policy
+
+* docs(workflow): document governed publish decision policy
+
+* feat(gitflow): enforce branch policy and PR base mapping
+
+* chore(publish): apply validated release changes
+
+* chore(structure): relocate setup.sh into scripts/foundation
+
+* feat(tooling): automate gga/engram/gentle-ai updates without brew (#11)
+
+* feat(workflow): add push publish mode selector
+
+* feat(workflow): add governed publish command with auto-merge policy
+
+* docs(workflow): document governed publish decision policy
+
+* feat(gitflow): enforce branch policy and PR base mapping
+
+* chore(publish): apply validated release changes
+
+* chore(structure): relocate setup.sh into scripts/foundation
+
+* feat(tooling): automate gga/engram/gentle-ai updates without brew
+
+* chore(docs): remove engram-tool references from runtime guidance (#13)
+
+* chore(engram): point installs to official upstream source (#15)
+
+* chore(docs): remove engram-tool references from runtime guidance
+
+* chore(engram): point installs to official upstream source

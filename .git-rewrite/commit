@@ -1,0 +1,73 @@
+tree 01209e9a4dc548de757ba78cb05352ef7db3acff
+parent 8f825f94941eef924a618b8b36ae324cbd1b9d13
+author EmmanuelOrtiz87 <51458059+EmmanuelOrtiz87@users.noreply.github.com> 1776102617 -0300
+committer GitHub <noreply@github.com> 1776102617 -0300
+gpgsig -----BEGIN PGP SIGNATURE-----
+ 
+ wsFcBAABCAAQBQJp3SzZCRC1aQ7uu5UhlAAAdsEQAE5Nx2dAmfJa+xck6uCb9uIU
+ T38NEGI9C8BeZ8n5sDeAfPI7euczUhOlFWo6cikVM2LBhCGlizaxeXjwoujvrlVB
+ +v7BNcEI2h73ZzBVW0Jlh89Y4MdoJ4YfKRXi4bi/OjoVwZdWmNs1v1EhT7DqzVYM
+ ghRWzxT+z3iNh0AZ3RAJ34r/igm+qemGCticEaBCXjuU8xL6MG4DIswiEgXGefoP
+ YsnG7gCfv8mZPrzWhr47yP/WYOP4oEFVP30ipq1DB+hfRG9AqWll9hrJiIBdhlRR
+ ZCCTu8TIo3JtzuoVy5lrcXPLEWTnavlZaC+7BIH2VDPQN4LqkVSVxmWNvI/BPxVc
+ fVnbmBCv5Ff/e3nXZAa6Qc1/zR54fcvYTXsUPGSBerdkPl8RoTvpFTLNrwAud7rn
+ lkqudLUIj2BXI5IOMMmNZ98ZRrWGAcxuahku2KT2ggJSmxqWko9PemzHfYkoiM/r
+ 7tTeSA2fiSNz36bJzCjrf5t0afIGKUQxBL5tNPX3OeQqY5USU0LDzFmXRqJn0utv
+ Rz4AiSvZGj3d+DGvQm2VAnNk571XFH8/L27vjjuPRb0g5E7GBTEoQ4wi20wEpAqy
+ mSbo07wfQ/4Fkcj0V7quFethHzbqlqNftKUCZiHGv8Xe673Qr1XYaZVq20vlHkA+
+ TUQFIKjyPbjIFWrkUfx6
+ =+nrC
+ -----END PGP SIGNATURE-----
+ 
+
+chore(release): sync develop into main (#16)
+
+* feat(workflow): add push mode selector for push+pr vs push-only (#8)
+
+* feat(workflow): add push publish mode selector
+
+* feat(workflow): add governed publish command with auto-merge policy
+
+* docs(workflow): document governed publish decision policy
+
+* feat(gitflow): enforce branch policy and PR base mapping
+
+* chore(publish): apply validated release changes
+
+* chore(structure): relocate setup.sh into scripts/foundation (#9)
+
+* feat(workflow): add push publish mode selector
+
+* feat(workflow): add governed publish command with auto-merge policy
+
+* docs(workflow): document governed publish decision policy
+
+* feat(gitflow): enforce branch policy and PR base mapping
+
+* chore(publish): apply validated release changes
+
+* chore(structure): relocate setup.sh into scripts/foundation
+
+* feat(tooling): automate gga/engram/gentle-ai updates without brew (#11)
+
+* feat(workflow): add push publish mode selector
+
+* feat(workflow): add governed publish command with auto-merge policy
+
+* docs(workflow): document governed publish decision policy
+
+* feat(gitflow): enforce branch policy and PR base mapping
+
+* chore(publish): apply validated release changes
+
+* chore(structure): relocate setup.sh into scripts/foundation
+
+* feat(tooling): automate gga/engram/gentle-ai updates without brew
+
+* chore(docs): remove engram-tool references from runtime guidance (#13)
+
+* chore(engram): point installs to official upstream source (#15)
+
+* chore(docs): remove engram-tool references from runtime guidance
+
+* chore(engram): point installs to official upstream source
