@@ -58,7 +58,7 @@ function getTimestamp(): string {
  * Exporta observaciones de Engram al vault
  * Convierte memoria de sesión a notas de largo plazo
  */
-async function exportFromEngram(sessionId?: string): Promise<{ exported: number; errors: string[] }> {
+async function exportFromEngram(_sessionId?: string): Promise<{ exported: number; errors: string[] }> {
   log('Exporting from Engram...', 'INFO');
   const errors: string[] = [];
   let exported = 0;
@@ -165,6 +165,11 @@ async function importToEngram(): Promise<{ imported: number; errors: string[] }>
 
         // Guardar en Engram como referencia
         // Nota: Esto es un stub - en implementación real usaría mem_save
+        // TODO: Implementar integración real con Engram
+        // Usar title para logging o metadata
+        if (title) {
+          // Placeholder para uso futuro de title
+        }
         imported++;
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
