@@ -1,5 +1,34 @@
 # Changelog — Gentle-Vanguard
 
+## [3.4.0] — 2026-07-27
+
+### Stack Optimization & Simplification
+- **100% Health Check**: Achieved 82/82 PASS (0 WARN, 0 FAIL) — all components operational
+- **Configuration Simplification**: Removed model configs from `opencode.json` — OpenCode handles model selection
+- **Cloud Dependencies Removed**: Deleted AWS/Azure connectors, hybrid executor — local-only operation
+- **File Naming Standardization**: Removed versioned filenames (v1, v2, etc.)
+  - `metrics-collector-v2.ts` → `metrics-collector.ts`
+  - `v264-scripts.test.ts` → `scripts.test.ts`
+  - `v284-scripts.test.ts` → `scripts-integration.test.ts`
+- **Knowledge Base Sync**: New `src/knowledge-base-sync.ts` — auto-sync Engram to Obsidian vault
+- **Auto-Reindex**: Engram auto-reindex every session (lazy step in pipeline)
+- **Documentation**: Added naming standards to `docs/architecture/architecture-standards.md`
+- **Optimization Summary**: Created `docs/OPTIMIZATION-SUMMARY-2026-07-27.md`
+
+### Standards Established
+- No version numbers in filenames (use Git for versioning)
+- Local-first architecture (no cloud dependencies required)
+- Auto-sync Knowledge Base at session start
+- Documented conventions for file naming
+
+### Metrics
+- Files changed: 44
+- Lines added: +3,999
+- Lines removed: -1,798
+- Health Score: 100% (82/82)
+
+---
+
 ## [3.3.3] — 2026-07-26
 
 ### Wave 37.5 — Nexus Identity & Optimization
