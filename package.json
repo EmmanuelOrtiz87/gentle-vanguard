@@ -78,6 +78,17 @@
     "test:research": "cd research/rlhf-dataset-search && python -m pytest ../../tests/research/test_search_datasets.py -v",
     "test:workflows": "node --test tests/workflows/*.test.ts",
     "test:eval": "npx vitest run --config vitest.eval.config.ts",
+    "deps:check": "npx tsx src/dependency-validator.ts",
+    "deps:install": "npx tsx src/dependency-installer.ts",
+    "deps:check:json": "npx tsx src/dependency-validator.ts --json",
+    "deps:check:quiet": "npx tsx src/dependency-validator.ts --quiet",
+    "stack:verify": "npx tsx src/stack-verify.ts",
+    "stack:verify:quick": "npx tsx src/stack-verify.ts --quick",
+    "stack:verify:json": "npx tsx src/stack-verify.ts --json",
+    "stack:verify:fix": "npx tsx src/stack-verify.ts --fix",
+    "stack:setup": "npx tsx src/stack-setup.ts",
+    "stack:setup:yes": "npx tsx src/stack-setup.ts --yes",
+    "stack:setup:dry": "npx tsx src/stack-setup.ts --dry-run",
     "dashboard:build": "cd apps/web-dashboard && pnpm build",
     "dashboard:dev": "cd apps/web-dashboard && pnpm dev",
     "dashboard:server": "npx tsx apps/web-dashboard/server/websocket-server.ts",
@@ -108,9 +119,25 @@
     "semantic-search": "npx tsx src/semantic-search.ts",
     "workload-guard": "npx tsx src/workload-guard.ts",
     "self-diagnosis": "npx tsx src/self-diagnosis.ts",
+    "optimize:output": "npx tsx src/output-compression.ts",
+    "optimize:chat": "npx tsx src/chat-level-enforcer.ts",
+    "optimize:pipeline": "npx tsx src/token-optimization-orchestrator.ts",
+    "optimize:stats": "npx tsx src/token-optimization-orchestrator.ts --stats",
+    "optimize:wrap": "npx tsx src/llm-call-wrapper.ts",
+    "optimize:pre": "npx tsx src/pre-process-input.ts",
     "gv:postmortem": "npx tsx src/post-mortem-trigger.ts",
     "gv:tokens": "npx tsx src/design-token-pipeline.ts",
     "gv:sea": "npx tsx src/build-sea.ts",
+    "presentations:serve": "npx tsx src/cli/serve-presentations.ts",
+    "presentations:stop": "npx tsx src/cli/stop-presentations.ts",
+    "backlog": "npx tsx src/cli/backlog.ts",
+    "backlog:add": "npx tsx src/cli/backlog.ts add",
+    "backlog:list": "npx tsx src/cli/backlog.ts list",
+    "backlog:get": "npx tsx src/cli/backlog.ts get",
+    "backlog:update": "npx tsx src/cli/backlog.ts update",
+    "backlog:search": "npx tsx src/cli/backlog.ts search",
+    "backlog:stats": "npx tsx src/cli/backlog.ts stats",
+    "backlog:report": "npx tsx src/cli/backlog.ts report",
     "postinstall": "pnpm build:mcp"
   },
   "devDependencies": {
@@ -135,8 +162,9 @@
     "ws": "^8.21.1"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@modelcontextprotocol/sdk": "^1.30.0",
     "hono": "4.12.31",
     "zod": "^4.4.3"
-  }
+  },
+  "pnpm": {}
 }
