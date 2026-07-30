@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>☁️ Operations, CI/CD & Cloud — Gentle-Vanguard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+:root{--p:#00bfff;--pl:#4dcfff;--a:#a855f7;--ok:#22c55e;--wn:#f59e0b;--er:#ef4444;--bg:#0a0e1a;--bg2:#0f1525;--card:#131a2e;--br:#1e2a45}
+*{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:#e2e8f0;overflow-x:hidden}
+code,.mono{font-family:'JetBrains Mono',monospace}
+.nav-blur{background:rgba(10,14,26,.85);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--br);z-index:1050}
+.nav-blur .nav-link{color:#94a3b8;font-size:.82rem;font-weight:500;padding:.5rem .7rem;transition:.2s;white-space:nowrap}
+.nav-blur .nav-link:hover,.nav-blur .nav-link.active{color:var(--p)}
+.hero{min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:8rem 1rem 4rem}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(0,191,255,.08),transparent 70%),radial-gradient(ellipse at 70% 50%,rgba(168,85,247,.06),transparent 70%);pointer-events:none}
+.hero h1{font-size:3.2rem;font-weight:800;letter-spacing:-.03em;line-height:1.15}
+.glow{background:linear-gradient(135deg,var(--p),var(--a));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero .lead{font-size:1.15rem;color:#94a3b8;max-width:720px;margin:1.5rem auto 0}
+.section-card{background:var(--card);border:1px solid var(--br);border-radius:16px;padding:1.75rem;transition:transform .3s,box-shadow .3s;position:relative;overflow:hidden}
+.section-card:hover{transform:translateY(-3px);box-shadow:0 0 30px rgba(0,191,255,.08),0 8px 40px rgba(0,0,0,.3)}
+.section-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--p),var(--a));opacity:0;transition:opacity .3s}
+.section-card:hover::before{opacity:1}
+.section-card .card-title{font-size:1.15rem;font-weight:700;color:#f1f5f9;margin-bottom:.75rem}
+.section-card .card-text{color:#94a3b8;font-size:.9rem;line-height:1.65}
+.stat-n{font-size:2.4rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(135deg,var(--p),var(--pl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.stat-l{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-top:.25rem}
+.badge-gv{font-size:.7rem;font-weight:600;padding:.3em .7em;border-radius:6px;letter-spacing:.02em}
+.badge-p{background:rgba(0,191,255,.15);color:var(--p)}
+.badge-a{background:rgba(168,85,247,.15);color:var(--a)}
+.badge-ok{background:rgba(34,197,94,.15);color:var(--ok)}
+.badge-wn{background:rgba(245,158,11,.15);color:var(--wn)}
+.badge-er{background:rgba(239,68,68,.15);color:var(--er)}
+section{padding:4rem 1rem;max-width:1400px;margin:0 auto}
+.section-title{text-align:center;margin-bottom:2.5rem}
+.section-title h2{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800}
+.section-title p{color:#94a3b8;max-width:600px;margin:0 auto}
+.fade-in{opacity:0;transform:translateY(25px);transition:opacity .7s ease,transform .7s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+footer{background:var(--bg2);border-top:1px solid var(--br);padding:2rem 0;text-align:center;color:#475569;font-size:.85rem}
+footer a{color:var(--p);text-decoration:none}
+@media(max-width:991.98px){.nav-blur .nav-link{font-size:.75rem;padding:.35rem .5rem}.hero h1{font-size:2.2rem}.hero{min-height:50vh;padding:6rem 1rem 3rem}.stat-n{font-size:1.8rem}}
+.badge-ops{background:rgba(0,191,255,.15);color:var(--p);font-size:.7rem;font-weight:600;padding:.35em .7em;border-radius:6px;border:1px solid rgba(0,191,255,.2)}
+.badge-sec{background:rgba(239,68,68,.15);color:var(--er);font-size:.7rem;font-weight:600;padding:.35em .7em;border-radius:6px;border:1px solid rgba(239,68,68,.2)}
+.table-ops{--bs-table-bg:transparent;--bs-table-color:#e2e8f0;font-size:.85rem}
+.table-ops th{border-bottom:2px solid var(--br);color:var(--p);font-weight:600;text-transform:uppercase;font-size:.7rem;letter-spacing:1px}
+.table-ops td{border-color:var(--br);vertical-align:middle}
+.table-ops tr:hover{background:rgba(0,191,255,.04)}
+.cb-closed{color:var(--ok);font-weight:600}
+.cb-half{color:var(--wn);font-weight:600}
+.cb-open{color:var(--er);font-weight:600}
+.prog-p{height:6px;border-radius:3px;background:var(--br)}
+.prog-p .progress-bar{background:linear-gradient(90deg,var(--p),var(--pl));border-radius:3px}
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-xl nav-blur fixed-top">
+  <div class="container-fluid px-3">
+    <a class="navbar-brand text-light fw-bold mono" href="index.html" style="font-size:.85rem"><i class="bi bi-robot me-2" style="color:var(--p)"></i>GV</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+      <i class="bi bi-list" style="color:var(--p)"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto" style="max-height:85vh;overflow-y:auto">
+        <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="architecture.html"><i class="bi bi-diagram-3 me-1"></i>Arch</a></li>
+        <li class="nav-item"><a class="nav-link" href="autonomy.html"><i class="bi bi-robot me-1"></i>Autonomy</a></li>
+        <li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="quickstart.html"><i class="bi bi-rocket-takeoff me-1"></i>Quickstart</a></li>
+        <li class="nav-item"><a class="nav-link" href="memory-knowledge.html"><i class="bi bi-brain me-1"></i>Memory</a></li>
+        <li class="nav-item"><a class="nav-link" href="security-governance.html"><i class="bi bi-shield-check me-1"></i>Security</a></li>
+        <li class="nav-item"><a class="nav-link" href="agents-pipeline.html"><i class="bi bi-diagram-2 me-1"></i>Agents</a></li>
+        <li class="nav-item"><a class="nav-link active" href="operations-cloud.html"><i class="bi bi-cloud me-1"></i>Cloud</a></li>
+        <li class="nav-item"><a class="nav-link" href="patterns-conventions.html"><i class="bi bi-file-code me-1"></i>Patterns</a></li>
+          <li class="nav-item"><a class="nav-link" href="health.html"><i class="bi bi-heart-pulse me-1"></i>Health</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section class="hero fade-in">
+  <div class="container">
+    <span class="badge-ops mb-3 d-inline-block"><i class="bi bi-cloud-fill me-1"></i> Operations Layer</span>
+    <h1 class="glow">☁️ Operations, CI/CD & Cloud</h1>
+    <p class="lead">Production-grade infrastructure: distributed tracing, state persistence, event sourcing,<br>cloud connectors, and automated CI/CD quality gates.</p>
+  </div>
+</section>
+
+<div class="container">
+
+<div class="row mb-4">
+  <div class="col-md-3 col-6 mb-3 fade-in"><div class="section-card text-center h-100"><div class="stat-n">6</div><div class="stat-l">CI Jobs</div></div></div>
+  <div class="col-md-3 col-6 mb-3 fade-in"><div class="section-card text-center h-100"><div class="stat-n">3</div><div class="stat-l">Cloud Connectors</div></div></div>
+  <div class="col-md-3 col-6 mb-3 fade-in"><div class="section-card text-center h-100"><div class="stat-n">7</div><div class="stat-l">Health Components</div></div></div>
+  <div class="col-md-3 col-6 mb-3 fade-in"><div class="section-card text-center h-100"><div class="stat-n">13</div><div class="stat-l">Total Tests</div></div></div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6 fade-in">
+    <div class="section-card h-100">
+      <h2><i class="bi bi-gear-wide-connected me-2"></i>CI/CD Pipeline</h2>
+      <p class="text-muted small">Quality gates enforced before every merge — 6 parallel jobs + 3 security scans.</p>
+      <div class="d-flex flex-wrap gap-2 mb-3">
+        <span class="badge-ops"><i class="bi bi-check-lg me-1"></i>lint-typecheck</span>
+        <span class="badge-ops"><i class="bi bi-check-lg me-1"></i>test</span>
+        <span class="badge-ops"><i class="bi bi-check-lg me-1"></i>dashboard-tests</span>
+        <span class="badge-ops"><i class="bi bi-check-lg me-1"></i>dashboard-build</span>
+        <span class="badge-sec"><i class="bi bi-shield me-1"></i>security-scan</span>
+        <span class="badge-ops"><i class="bi bi-check-lg me-1"></i>workflow-lint</span>
+      </div>
+      <h3><i class="bi bi-shield-check"></i>Security Workflow</h3>
+      <div class="d-flex flex-wrap gap-2 mb-2">
+        <span class="badge-sec"><i class="bi bi-key me-1"></i>gitleaks</span>
+        <span class="badge-sec"><i class="bi bi-incognito me-1"></i>secretlint</span>
+        <span class="badge-sec"><i class="bi bi-bug me-1"></i>trivy</span>
+      </div>
+      <div class="mt-3">
+        <div class="d-flex justify-content-between small"><span>Quality Gate Score</span><span class="text-white fw-bold">94%</span></div>
+        <div class="prog-p mt-1"><div class="progress-bar" style="width:94%"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 fade-in">
+    <div class="section-card h-100">
+      <h2><i class="bi bi-cloud-arrow-up me-2"></i>Cloud Connectors</h2>
+      <p class="text-muted small">Hybrid routing engine with circuit breaker, automatic fallback, and cost/latency-aware load balancing.</p>
+      <div class="mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-1"><span class="fw-semibold">Hybrid Executor</span><span class="badge-ops"><i class="bi bi-diagram-3 me-1"></i>primary</span></div>
+        <div class="d-flex justify-content-between align-items-center mb-1"><span class="fw-semibold">AWS Delegator</span><span class="badge-ops">cloud</span></div>
+        <div class="d-flex justify-content-between align-items-center"><span class="fw-semibold">Azure Delegator</span><span class="badge-ops">cloud</span></div>
+      </div>
+      <h3><i class="bi bi-arrow-repeat"></i>Circuit Breaker States</h3>
+      <div class="d-flex gap-4 mt-2">
+        <div><span class="cb-closed"><i class="bi bi-check-circle-fill me-1"></i>CLOSED</span><div class="text-muted small">0 failures</div></div>
+        <div><span class="cb-half"><i class="bi bi-exclamation-triangle-fill me-1"></i>HALF_OPEN</span><div class="text-muted small">2 successes</div></div>
+        <div><span class="cb-open"><i class="bi bi-x-circle-fill me-1"></i>OPEN</span><div class="text-muted small">5 failures</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6 fade-in">
+    <div class="section-card h-100">
+      <h2><i class="bi bi-diagram-2 me-2"></i>Distributed Tracing</h2>
+      <p class="text-muted small">Full OpenTelemetry-compatible tracing pipeline with span export and JSONL storage.</p>
+      <div class="d-flex align-items-center gap-3 mb-3 p-3 rounded-3" style="background:rgba(0,191,255,.05)">
+        <div><i class="bi bi-filetype-json fs-2" style="color:var(--p)"></i></div>
+        <div><code class="small">.telemetry/spans/ &amp; .telemetry/traces/</code></div>
+      </div>
+      <div class="d-flex flex-wrap gap-2 mb-2">
+        <span class="badge-ops">start</span>
+        <span class="badge-ops">end</span>
+        <span class="badge-ops">error</span>
+      </div>
+      <div class="mt-2"><code class="small text-muted">OTLP → http://localhost:4318/v1/traces</code></div>
+    </div>
+  </div>
+  <div class="col-lg-6 fade-in">
+    <div class="section-card h-100">
+      <h2><i class="bi bi-database me-2"></i>State Persistence</h2>
+      <p class="text-muted small">Three-tier persistence: checkpoints (auto), snapshots (manual), rollback (dry-run validated).</p>
+      <div class="mb-2"><span class="badge-ops me-1">checkpoint</span><span class="text-muted small">create, list, diff, verify, prune</span></div>
+      <div class="mb-2"><span class="badge-ops me-1">snapshot</span><span class="text-muted small">snapshot, list, prune</span></div>
+      <div class="mb-2"><span class="badge-ops me-1">rollback</span><span class="text-muted small">dry-run validation</span></div>
+      <div class="mt-2 small text-muted"><i class="bi bi-folder me-1"></i>.session/checkpoints/ · .session/snapshots/</div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6 fade-in">
+    <div class="section-card h-100">
+      <h2><i class="bi bi-arrow-right-circle me-2"></i>Event Sourcing + Saga</h2>
+      <p class="text-muted small">Append-only event store with projection snapshots and distributed saga orchestration with compensation.</p>
+      <div class="row g-2">
+        <div class="col-6"><div class="p-2 rounded-3" style="background:rgba(168,85,247,.08)"><span class="fw-semibold small" style="color:var(--a)">Event Store</span><div class="text-muted small">append, project, snapshot, prune</div></div></div>
+        <div class="col-6"><div class="p-2 rounded-3" style="background:rgba(0,191,255,.08)"><span class="fw-semibold small" style="color:var(--p)">Saga</span><div class="text-muted small">create, register-step, complete, compensate, list</div></div></div>
+      </div>
+      <div class="mt-2 small text-muted"><i class="bi bi-folder me-1"></i>.session/event-store/ · .session/sagas/</div>
+    </div>
+  </div>
+  <div class="col-lg-6 fade-in">
+    <div class="section-card h-100">
+      <h2><i class="bi bi-heart-pulse me-2"></i>Health API</h2>
+      <p class="text-muted small">7-component health endpoint with status granularity — all verified operational.</p>
+      <div class="d-flex flex-wrap gap-2 mb-3">
+        <span class="badge-ops"><i class="bi bi-check-circle text-success me-1"></i>websocket</span>
+        <span class="badge-ops"><i class="bi bi-check-circle text-success me-1"></i>mcp</span>
+        <span class="badge-ops"><i class="bi bi-check-circle text-success me-1"></i>adaptive</span>
+        <span class="badge-ops"><i class="bi bi-check-circle text-success me-1"></i>cloud</span>
+        <span class="badge-ops"><i class="bi bi-check-circle text-success me-1"></i>tracing</span>
+        <span class="badge-ops"><i class="bi bi-check-circle text-success me-1"></i>checkpoints</span>
+        <span class="badge-ops"><i class="bi bi-check-circle text-success me-1"></i>audit</span>
+      </div>
+      <div class="d-flex align-items-center gap-2"><span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-3 fs-6">7/7 ✓ OK</span><span class="text-muted small">All components responsive</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6 fade-in">
+    <div class="section-card">
+      <h2><i class="bi bi-flask me-2"></i>Testing Infrastructure</h2>
+      <p class="text-muted small">Multi-suite test strategy across config, CI/CD, research, and dashboard.</p>
+      <div class="d-flex justify-content-between mb-2 p-2 rounded-3" style="background:rgba(34,197,94,.06)">
+        <span><i class="bi bi-gear me-2" style="color:var(--ok)"></i>Config Validation</span><span class="fw-semibold">6 tests</span>
+      </div>
+      <div class="d-flex justify-content-between mb-2 p-2 rounded-3" style="background:rgba(0,191,255,.06)">
+        <span><i class="bi bi-github me-2" style="color:var(--p)"></i>CI/CD Workflows</span><span class="fw-semibold">2 tests</span>
+      </div>
+      <div class="d-flex justify-content-between mb-2 p-2 rounded-3" style="background:rgba(168,85,247,.06)">
+        <span><i class="bi bi-search me-2" style="color:var(--a)"></i>Research Scripts</span><span class="fw-semibold">5 tests</span>
+      </div>
+      <div class="d-flex justify-content-between p-2 rounded-3" style="background:rgba(245,158,11,.06)">
+        <span><i class="bi bi-bar-chart me-2" style="color:var(--wn)"></i>Dashboard (vitest)</span><span class="fw-semibold">—</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 fade-in">
+    <div class="section-card">
+      <h2><i class="bi bi-terminal me-2"></i>Operations Commands</h2>
+      <table class="table table-ops mb-0">
+        <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code class="small">npm run test:config</code></td><td>Validate JSON schemas</td></tr>
+          <tr><td><code class="small">npm run test:workflows</code></td><td>Verify CI/CD workflow syntax</td></tr>
+          <tr><td><code class="small">npm run test:research</code></td><td>Research script integrity</td></tr>
+          <tr><td><code class="small">npm run db:health</code></td><td>Nexus DB health check</td></tr>
+          <tr><td><code class="small">npm run db:backup</code></td><td>Safe online backup</td></tr>
+          <tr><td><code class="small">npm run watchtower</code></td><td>Full maintenance check</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="fade-in">
+  <div class="section-card text-center">
+    <h2><i class="bi bi-pipeline me-2"></i>Pipeline Integration</h2>
+    <p class="text-muted small mb-3">All ops components integrate as lazy, non-blocking steps in the session autostart pipeline.</p>
+    <div class="d-flex flex-wrap justify-content-center gap-2">
+      <span class="badge-ops"><i class="bi bi-magic me-1"></i>tracing-init</span>
+      <span class="badge-ops"><i class="bi bi-save me-1"></i>checkpoint-auto-create</span>
+      <span class="badge-ops"><i class="bi bi-journal me-1"></i>audit-pipeline-init</span>
+      <span class="badge-ops"><i class="bi bi-boxes me-1"></i>event-sourcing-init</span>
+      <span class="badge-ops"><i class="bi bi-cloud me-1"></i>cloud-connectors-init</span>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  <p class="mb-2">Gentle-Vanguard <strong>v8.0.1</strong> — 100% Autonomous AI Stack · <span class="text-secondary">✦ Plataforma Autónoma de Orquestración AI</span></p>
+  <p class="mb-2 d-flex flex-wrap justify-content-center gap-3">
+    <a href="architecture.html"><i class="bi bi-diagram-3 me-1"></i>Architecture</a>
+    <a href="autonomy.html"><i class="bi bi-robot me-1"></i>Autonomy</a>
+    <a href="dashboard.html"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a>
+    <a href="quickstart.html"><i class="bi bi-rocket-takeoff me-1"></i>Quick Start</a>
+    <a href="memory-knowledge.html"><i class="bi bi-brain me-1"></i>Memory</a>
+    <a href="security-governance.html"><i class="bi bi-shield me-1"></i>Security</a>
+    <a href="agents-pipeline.html"><i class="bi bi-people me-1"></i>Agents</a>
+    <a href="operations-cloud.html"><i class="bi bi-cloud me-1"></i>Operations</a>
+<a href="patterns-conventions.html"><i class="bi bi-diagram-2 me-1"></i>Patterns</a>
+      <a href="health.html"><i class="bi bi-heart-pulse me-1"></i>Health</a>
+      <a href="index.html"><i class="bi bi-book me-1"></i>The Book</a>
+    <a href="https://github.com/EmmanuelOrtiz87/gentle-vanguard" target="_blank"><i class="bi bi-github me-1"></i>GitHub</a>
+  </p>
+  <div class="d-flex flex-wrap justify-content-center gap-2 mt-2 mb-2">
+    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1" style="font-size:.6rem">263 TS Files</span>
+    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1" style="font-size:.6rem">19/19 Tests</span>
+    <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-2 py-1" style="font-size:.6rem">82/82 Health</span>
+    <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-2 py-1" style="font-size:.6rem">10 DAOs</span>
+    <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1" style="font-size:.6rem">118 Skills</span>
+    <span class="badge bg-light bg-opacity-10 text-light border border-light border-opacity-25 px-2 py-1" style="font-size:.6rem">52 Normatives</span>
+  </div>
+  <p class="mt-2 mb-0"><small><i class="bi bi-cpu me-1"></i>Don't let your mellow hustle be faded.</small></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible') });
+}, { threshold: 0.1 });
+document.querySelectorAll('section').forEach(s => observer.observe(s));
+document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelectorAll('.navbar-nav .nav-link').forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
