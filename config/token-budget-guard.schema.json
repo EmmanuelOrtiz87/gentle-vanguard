@@ -1,0 +1,139 @@
+{
+  "$id": "token-budget-guard",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Token Budget Guard Configuration",
+  "description": "Schema for token budget configuration - authoritative config for all token budgeting",
+  "type": "object",
+  "required": ["version", "tokenBudget"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "description": {
+      "type": "string"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date"
+    },
+    "tokenBudget": {
+      "type": "object",
+      "required": ["version", "limits", "tracking", "enforcement", "notifications", "alerting"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "limits": {
+          "type": "object",
+          "required": ["daily", "perSession", "perAgent", "softThreshold", "hardThreshold"],
+          "properties": {
+            "daily": {
+              "type": "integer",
+              "minimum": 1000,
+              "maximum": 10000000,
+              "description": "Maximum tokens per day"
+            },
+            "perSession": {
+              "type": "integer",
+              "minimum": 100,
+              "maximum": 1000000,
+              "description": "Maximum tokens per session"
+            },
+            "perAgent": {
+              "type": "integer",
+              "minimum": 100,
+              "maximum": 100000,
+              "description": "Maximum tokens per agent call"
+            },
+            "softThreshold": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "description": "Soft limit threshold percentage"
+            },
+            "hardThreshold": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "description": "Hard limit threshold percentage"
+            }
+          }
+        },
+        "tracking": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "actualTokens": { "type": "boolean" },
+            "estimatedTokens": { "type": "boolean" },
+            "costTracking": { "type": "boolean" },
+            "metricsPath": { "type": "string" }
+          }
+        },
+        "enforcement": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": ["soft", "hard", "disabled"],
+              "description": "Enforcement mode"
+            },
+            "requireEngram": { "type": "boolean" },
+            "nonBlocking": { "type": "boolean" }
+          }
+        },
+        "notifications": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "softAlert": { "type": "boolean" },
+            "hardAlert": { "type": "boolean" }
+          }
+        },
+        "agentLimits": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "minTokens": { "type": "integer", "minimum": 100 },
+              "maxTokens": { "type": "integer", "minimum": 100 },
+              "steps": { "type": "integer", "minimum": 1 }
+            },
+            "required": ["minTokens", "maxTokens", "steps"]
+          }
+        },
+        "modelPricing": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "input": { "type": "number", "minimum": 0 },
+              "output": { "type": "number", "minimum": 0 }
+            },
+            "required": ["input", "output"]
+          }
+        },
+        "alerting": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "severity": {
+                "enum": ["INFO", "WARNING", "ERROR", "CRITICAL"]
+              },
+              "action": { "type": "string" }
+            },
+            "required": ["severity", "action"]
+          }
+        },
+        "references": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    }
+  }
+}
