@@ -158,8 +158,7 @@ function checkPlatform(results: CheckResult[]): void {
     },
     {
       name: 'Lefthook Hooks',
-      path: '.lefthook',
-      isDir: true,
+      path: '.git/hooks/pre-commit',
       detail: 'Git validation hooks',
       fix: 'npx lefthook install',
       optional: true,
