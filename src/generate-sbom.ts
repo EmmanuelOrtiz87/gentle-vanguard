@@ -5,7 +5,7 @@
  */
 
 import { spawnSync } from 'child_process';
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 
 interface SBOMOptions {
