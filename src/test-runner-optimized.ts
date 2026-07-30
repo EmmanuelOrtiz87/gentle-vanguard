@@ -152,7 +152,20 @@ async function runParallel(suites: Suite[], options: RunOptions, progressPrefix:
   let completed = 0;
   
   const queue = [...suites];
-  const running: Promise<void>[] = [];
+  // Trackable promises with completion status
+  interface TrackablePromise extends Promise<void> {
+    isCompleted: boolean;
+  }
+  
+  function makeTrackable(promise: Promise<void>): TrackablePromise {
+    const trackable = promise.finally(() => {
+      (trackable as TrackablePromise).isCompleted = true;
+    }) as TrackablePromise;
+    trackable.isCompleted = false;
+    return trackable;
+  }
+  
+  const running: TrackablePromise[] = [];
   
   while (queue.length > 0 || running.length > 0) {
     // Start new tasks up to parallel limit
@@ -176,15 +189,19 @@ async function runParallel(suites: Suite[], options: RunOptions, progressPrefix:
           process.stdout.write(`\r${progressPrefix} ${completed}/${suites.length} (${passed}✓ ${failed}✗)`);
         }
       });
-      running.push(promise);
+      running.push(makeTrackable(promise));
     }
     
     // Wait for at least one to complete
     if (running.length > 0) {
       await Promise.race(running);
+      // Allow event loop to process completed promises
+      await new Promise(resolve => setImmediate(resolve));
       // Remove completed promises
       for (let i = running.length - 1; i >= 0; i--) {
-        if ((running[i] as any).isFulfilled) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        if (running[i].isCompleted) {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           running.splice(i, 1);
         }
       }

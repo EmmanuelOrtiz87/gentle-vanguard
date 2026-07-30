@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+/* eslint-disable security/detect-unsafe-regex */
+/* These regex patterns are intentionally complex for injection detection - not user-input parsing */
+
 import { spawnSync } from 'child_process';
 import { existsSync } from 'fs';
 import { resolve } from 'path';

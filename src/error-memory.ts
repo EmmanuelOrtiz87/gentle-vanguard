@@ -178,7 +178,9 @@ function findRelevantErrors(context: {
     // 4. If still no matches and we have a query, show recent errors as fallback
     if (matches.length === 0 && context.query) {
       const recent = db.getRecentErrors(limit) as ErrorEntry[];
-      for (const e of recent) {
+      // Use classic for loop to avoid floating promise false positive
+      for (let i = 0; i < recent.length; i++) {
+        const e = recent[i];
         if (!seen.has(e.id!)) {
           seen.add(e.id!);
           matches.push({ entry: e, score: 0.1, matchField: 'keyword' });

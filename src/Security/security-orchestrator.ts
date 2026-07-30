@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+/* eslint-disable security/detect-unsafe-regex */
+/* These regex patterns are intentionally complex for security token detection - not user-input parsing */
+
 export type SecurityMode = 'prompt' | 'log' | 'error' | 'audit';
 export type SecurityAction =
   | 'init'

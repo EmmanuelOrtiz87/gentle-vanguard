@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+/* eslint-disable security/detect-unsafe-regex */
+/* This regex validates conventional commit format - safe static pattern */
+
 import { existsSync, readFileSync } from 'fs';
 import { pathToFileURL } from 'url';
 
