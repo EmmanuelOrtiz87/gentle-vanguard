@@ -5,8 +5,8 @@
  */
 
 import { spawnSync } from 'child_process';
-import { existsSync, mkdirSync } from 'fs';
-import { join, dirname } from 'path';
+import { existsSync, mkdirSync, readFileSync } from 'fs';
+import { dirname } from 'path';
 
 interface SBOMOptions {
   output: string;
@@ -17,7 +17,7 @@ function parseArgs(): SBOMOptions {
   const args = process.argv.slice(2);
   let output = 'sbom/gentle-vanguard-sbom.json';
   let format: 'json' | 'xml' = 'json';
-  
+
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--output' || args[i] === '-o') {
       output = args[i + 1];
@@ -27,7 +27,7 @@ function parseArgs(): SBOMOptions {
       i++;
     }
   }
-  
+
   return { output, format };
 }
 
