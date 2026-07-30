@@ -52,6 +52,7 @@ footer a{color:var(--p);text-decoration:none}
 .navbar-toggler{border:1px solid var(--br);padding:.35rem .5rem}
 @media(max-width:991.98px){.nav-blur .nav-link{font-size:.75rem;padding:.35rem .5rem}.hero h1{font-size:2.2rem}.hero{min-height:50vh;padding:6rem 1rem 3rem}.stat-n{font-size:1.8rem}}
 </style>
+  <script src="assets/js/i18n.js"></script>
 </head>
 <body>
 
@@ -63,17 +64,25 @@ footer a{color:var(--p);text-decoration:none}
     </button>
     <div class="collapse navbar-collapse" id="navMain">
       <ul class="navbar-nav ms-auto" style="max-height:85vh;overflow-y:auto">
-        <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="architecture.html"><i class="bi bi-diagram-3 me-1"></i>Arch</a></li>
-        <li class="nav-item"><a class="nav-link active" href="autonomy.html"><i class="bi bi-robot me-1"></i>Autonomy</a></li>
-        <li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="quickstart.html"><i class="bi bi-rocket-takeoff me-1"></i>Quickstart</a></li>
-        <li class="nav-item"><a class="nav-link" href="memory-knowledge.html"><i class="bi bi-brain me-1"></i>Memory</a></li>
-        <li class="nav-item"><a class="nav-link" href="security-governance.html"><i class="bi bi-shield-check me-1"></i>Security</a></li>
-        <li class="nav-item"><a class="nav-link" href="agents-pipeline.html"><i class="bi bi-diagram-2 me-1"></i>Agents</a></li>
-        <li class="nav-item"><a class="nav-link" href="operations-cloud.html"><i class="bi bi-cloud me-1"></i>Cloud</a></li>
-        <li class="nav-item"><a class="nav-link" href="patterns-conventions.html"><i class="bi bi-file-code me-1"></i>Patterns</a></li>
-          <li class="nav-item"><a class="nav-link" href="health.html"><i class="bi bi-heart-pulse me-1"></i>Health</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house me-1"></i><span data-i18n="nav_home">Home</span></a></li>
+        <li class="nav-item"><a class="nav-link" href="architecture.html"><i class="bi bi-diagram-3 me-1"></i><span data-i18n="nav_arch">Arch</span></a></li>
+        <li class="nav-item"><a class="nav-link active" href="autonomy.html"><i class="bi bi-robot me-1"></i><span data-i18n="nav_autonomy">Autonomy</span></a></li>
+        <li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="bi bi-speedometer2 me-1"></i><span data-i18n="nav_dashboard">Dashboard</span></a></li>
+        <li class="nav-item"><a class="nav-link" href="quickstart.html"><i class="bi bi-rocket-takeoff me-1"></i><span data-i18n="nav_quickstart">Quickstart</span></a></li>
+        <li class="nav-item"><a class="nav-link" href="memory-knowledge.html"><i class="bi bi-brain me-1"></i><span data-i18n="nav_memory">Memory</span></a></li>
+        <li class="nav-item"><a class="nav-link" href="security-governance.html"><i class="bi bi-shield-check me-1"></i><span data-i18n="nav_security">Security</span></a></li>
+        <li class="nav-item"><a class="nav-link" href="agents-pipeline.html"><i class="bi bi-diagram-2 me-1"></i><span data-i18n="nav_agents">Agents</span></a></li>
+        <li class="nav-item"><a class="nav-link" href="operations-cloud.html"><i class="bi bi-cloud me-1"></i><span data-i18n="nav_cloud">Cloud</span></a></li>
+        <li class="nav-item"><a class="nav-link" href="patterns-conventions.html"><i class="bi bi-file-code me-1"></i><span data-i18n="nav_patterns">Patterns</span></a></li>
+          <li class="nav-item"><a class="nav-link" href="health.html"><i class="bi bi-heart-pulse me-1"></i><span data-i18n="nav_health">Health</span></a></li>
+          <li class="nav-item dropdown ms-1">
+            <a class="nav-link dropdown-toggle py-1 px-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Language"><i class="bi bi-translate"></i></a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><button class="dropdown-item" data-lang="en">🇬🇧 English</button></li>
+              <li><button class="dropdown-item" data-lang="es">🇪🇸 Español</button></li>
+              <li><button class="dropdown-item" data-lang="pt-BR">🇧🇷 Português</button></li>
+            </ul>
+          </li>
       </ul>
     </div>
   </div>
