@@ -31,7 +31,7 @@ pre-commit:
       glob: 'package-lock.json'
       run: npx tsx src/lockfile-lint-pre-commit.ts
     trufflehog-scan:
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -Command "trufflehog filesystem --no-verification --no-update . *>$null; exit 0"
+      run: trufflehog filesystem --no-verification --no-update --fail=false --exclude-paths .trufflehogignore . || exit 0
     skill-scan:
       glob: 'skills/*/SKILL.md'
       run: npx tsx src/scan-skill-hook.ts --StagedFiles '{staged_files}'

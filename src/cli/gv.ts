@@ -15,12 +15,20 @@
  *   prune       Prune old Nexus data
  *   backup      Backup Nexus DB
  *   optimize    Optimize Nexus DB (WAL + VACUUM)
+ *   new         Create new project (scaffolding info)
+ *   update      Update stack via git pull
+ *   update-all  Full stack update
+ *   sync        Alias for update
+ *   tools       Show optional tools status
+ *   secret      Secret management (stub — use engram/vault instead)
+ *   cache       Cache management (stub — use Nexus DB instead)
  *   help        Show this help
  */
 
 import { execSync } from 'child_process';
 import { existsSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
+import { printBanner } from './banner.js';
 
 const ROOT = resolve(process.cwd());
 const SKILLS_DIR = join(ROOT, 'skills');
@@ -30,11 +38,7 @@ const args = process.argv.slice(2);
 const command = args[0] || 'help';
 
 function header(): void {
-  console.log('');
-  console.log('========================================');
-  console.log('  Gentle-Vanguard CLI (TS)');
-  console.log('========================================');
-  console.log('');
+  printBanner('CLI v8.0');
 }
 
 function footer(): void {
@@ -58,6 +62,13 @@ COMMANDS:
   prune       Prune old Nexus data
   backup      Backup Nexus DB
   optimize    Optimize Nexus DB (WAL + VACUUM)
+  new         Create new project scaffolding
+  update      Update stack via git pull
+  update-all  Full stack update (git pull + npm update)
+  sync        Alias for update
+  tools       Show optional tools status
+  secret      Secret management (engram-vault)
+  cache       Cache management (Nexus DB)
   help        Show this help
 
 EXAMPLES:
@@ -224,6 +235,69 @@ async function main(): Promise<void> {
 
     case 'optimize':
       runCommand('npm run db:optimize', 'NEXUS');
+      break;
+
+    case 'new':
+      header();
+      console.log('Project scaffolding:\n');
+      console.log('  Use the SDD workflow:');
+      console.log('    1. npx tsx src/session-autostart.ts');
+      console.log('    2. Load skill: spec-driven-development, planning-and-task-breakdown');
+      console.log('    3. Ask the orchestrator to create a new project\n');
+      footer();
+      break;
+
+    case 'update':
+    case 'sync':
+      header();
+      console.log('Updating stack...\n');
+      runCommand('git pull origin develop', 'GIT');
+      runCommand('npm update', 'NPM');
+      footer();
+      break;
+
+    case 'update-all':
+      header();
+      console.log('Full stack update...\n');
+      runCommand('git pull origin develop', 'GIT');
+      runCommand('npm update', 'NPM');
+      runCommand('npm run db:optimize', 'NEXUS');
+      footer();
+      break;
+
+    case 'tools': {
+      header();
+      console.log('Available Tools:\n');
+      const tools = [
+        { name: 'opencode', desc: 'opencode CLI (code editing)', check: 'opencode --version' },
+        { name: 'engram', desc: 'Persistent memory (plugin)', check: 'npx engram --version' },
+        { name: 'node', desc: 'Node.js runtime', check: 'node --version' },
+        { name: 'npx', desc: 'Node package executor', check: 'npx --version' },
+      ];
+      for (const t of tools) {
+        try {
+          const ver = execSync(t.check, { encoding: 'utf8', timeout: 5000 }).trim().split('\n')[0];
+          console.log(`  [OK]    ${t.name.padEnd(12)} ${ver}`);
+        } catch {
+          console.log(`  [MISS]  ${t.name.padEnd(12)} ${t.desc}`);
+        }
+      }
+      console.log('\n  All tools are optional. The stack works without them.');
+      footer();
+      break;
+    }
+
+    case 'secret':
+      header();
+      console.log('Secret Management:\n');
+      console.log('  Secrets are managed via engram memory (secure, persistent).');
+      console.log('  Use: npx tsx src/cli/gv.ts info  to check stack status.\n');
+      console.log('  For credential storage, use your OS keychain or engram vault.\n');
+      footer();
+      break;
+
+    case 'cache':
+      runCommand('npm run db:health', 'NEXUS (cache lives in Nexus DB)');
       break;
 
     default:

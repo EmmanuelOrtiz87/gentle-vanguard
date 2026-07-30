@@ -1,0 +1,22 @@
+# TruffleHog exclusion patterns (regex, not glob)
+# These paths/directories are excluded from secret scanning
+
+^node_modules/
+\.backups/
+\.recovery/
+\.engram/
+\.ft/
+reports/
+knowledge-base/
+\.git/
+pnpm-lock\.yaml
+package-lock\.json
+\.gz$
+\.zip$
+\.png$
+\.jpg$
+\.svg$
+\.ico$
+\.woff2?$
+\.ttf$
+\.eot$

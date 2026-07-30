@@ -971,9 +971,7 @@ async function autoHeal() {
     }
 
     const wsRunning = await testPort(wsPort);
-    const wsAutostartPs1 = join(ROOT, 'scripts/utilities/dashboard/dashboard-ws-autostart.ps1');
-    const wsAutostartTs = join(ROOT, 'src', 'dashboard-ws-autostart.ts');
-    const wsAutostart = fileExists(wsAutostartTs) ? wsAutostartTs : wsAutostartPs1;
+    const wsAutostart = join(ROOT, 'src', 'dashboard-ws-autostart.ts');
 
     if (wsRunning) {
       if (!quiet)
@@ -981,55 +979,51 @@ async function autoHeal() {
       addResult('dashboard-ws', 'autoheal', 'PASS', 'WS alive, watchdog skipped', 'ok');
       healed++;
     } else if (wsAutostart.endsWith('.ts')) {
-      if (!quiet) console.log('  [Heal] Restarting Dashboard WS server (TS)...');
+      // Use TS wrapper for reliable Windows process launching
+      const wrapperTs = join(ROOT, 'src', 'dashboard-ws-launcher.ts');
+      if (!quiet) console.log('  [Heal] Restarting Dashboard WS server via wrapper...');
       try {
+        // Launch via TS wrapper - creates truly detached process
         const child = spawn(
-          process.execPath,
-          ['node_modules/.bin/tsx', wsAutostart, '--quiet'],
+          process.platform === 'win32' ? 'npx.cmd' : 'npx',
+          ['tsx', wrapperTs, '--quiet'],
           {
+            cwd: ROOT,
+            stdio: 'ignore',
+            windowsHide: true,
+            detached: true,
+          },
+        );
+        child.unref();
+        
+        // Wait for process to start and check if port is up
+        await new Promise((resolve) => setTimeout(resolve, 8000));
+        
+        // Verify by checking if port is now responding
+        const isPortUp = await testPort(wsPort);
+        if (isPortUp) {
+          addResult('dashboard-ws', 'autoheal', 'PASS', `Restarted (port ${wsPort} responding)`, 'ok');
+          healed++;
+        } else {
+          // Try fallback to direct tsx launch
+          if (!quiet) console.log('  [Heal] Wrapper launch incomplete, trying direct spawn...');
+          const fallback = spawn('npx', ['tsx', wsAutostart, '--quiet'], {
             cwd: ROOT,
             stdio: 'ignore',
             detached: true,
             windowsHide: true,
-          },
-        );
-        child.unref();
-        await new Promise((resolve) => setTimeout(resolve, 15000));
-        if (child.exitCode === null) {
-          addResult('dashboard-ws', 'autoheal', 'PASS', `Restarted PID ${child.pid}`, 'ok');
-          healed++;
-        } else {
-          addResult('dashboard-ws', 'autoheal', 'FAIL', 'Restart failed (TS)', 'manual', true);
-          failed++;
-        }
-      } catch (e: unknown) {
-        addResult(
-          'dashboard-ws',
-          'autoheal',
-          'FAIL',
-          `Error: ${e instanceof Error ? e.message : String(e)}`,
-          'manual',
-          true,
-        );
-        failed++;
-      }
-    } else if (fileExists(wsAutostartPs1)) {
-      if (!quiet) console.log('  [Heal] Restarting Dashboard WS server (PS1 fallback)...');
-      try {
-        const child = spawn('pwsh', ['-NoProfile', '-File', wsAutostartPs1, '-Quiet'], {
-          cwd: ROOT,
-          stdio: 'ignore',
-          detached: true,
-          windowsHide: true,
-        });
-        child.unref();
-        await new Promise((resolve) => setTimeout(resolve, 15000));
-        if (child.exitCode === null) {
-          addResult('dashboard-ws', 'autoheal', 'PASS', `Restarted PID ${child.pid}`, 'ok');
-          healed++;
-        } else {
-          addResult('dashboard-ws', 'autoheal', 'FAIL', 'Restart failed (PS1)', 'manual', true);
-          failed++;
+          });
+          fallback.unref();
+          await new Promise((resolve) => setTimeout(resolve, 10000));
+          
+          const fallbackCheck = await testPort(wsPort);
+          if (fallbackCheck) {
+            addResult('dashboard-ws', 'autoheal', 'PASS', `Restarted via fallback (port ${wsPort} responding)`, 'ok');
+            healed++;
+          } else {
+            addResult('dashboard-ws', 'autoheal', 'FAIL', 'Restart failed - port not responding', 'manual', true);
+            failed++;
+          }
         }
       } catch (e: unknown) {
         addResult(
@@ -1044,6 +1038,7 @@ async function autoHeal() {
       }
     } else {
       if (!quiet) console.log('    No dashboard-ws-autostart script found');
+      addResult('dashboard-ws', 'autoheal', 'FAIL', 'No autostart script found', 'manual', true);
       failed++;
     }
   }
@@ -1177,13 +1172,18 @@ async function runAllChecks() {
     checkGovernance,
     checkGentleVanguardDb,
   ];
-  for (const check of checks) {
+  // Parallelized with Promise.allSettled — each check is I/O-bound (file reads, HTTP, DB)
+  const results = await Promise.allSettled(checks.map(async (check) => {
     try {
       await check();
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e);
       addResult('system', check.name, 'FAIL', `Check failed: ${msg}`, 'manual');
     }
+  }));
+  const rejected = results.filter(r => r.status === 'rejected');
+  if (rejected.length > 0 && !quiet) {
+    console.log(`  [WARN] ${rejected.length} check(s) threw unhandled rejection`);
   }
 }
 
