@@ -282,7 +282,7 @@ gv daily
 | Step | Agent        | Skill                        | Action                                                                 |
 | ---- | ------------ | ---------------------------- | ---------------------------------------------------------------------- |
 | 1    | ORCHESTRATOR | `project-orchestrator-skill` | Detects `daily` keyword, routes to DAILY agent                         |
-| 2    | DAILY        | `daily-workflow`             | Runs `scripts/utilities/WORKFLOW-ORCHESTRATION/daily-check.ps1`        |
+| 2    | DAILY        | `daily-workflow`             | Runs `src/daily-check.ts`        |
 | 3    | DAILY        | `session-workflow-skill`     | Checks: git status, branch hygiene, stale checkpoints (>7d), CI status |
 | 4    | DAILY        | `project-orchestrator-skill` | Validates: config integrity, skill registry health, gv version         |
 | 5    | GOV          | `quality-skill`              | Context efficiency: prompt adoption %, avg chars, trend vs last week   |

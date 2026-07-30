@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Receipt Manager v1.0.0
+ * Receipt Manager 
  * Structured review receipts with decision tracking
- * Part of Gentle-Vanguard v6.0
+ * Part of Gentle-Vanguard 
  */
 
 import { EventEmitter } from 'events';

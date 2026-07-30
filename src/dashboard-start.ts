@@ -89,14 +89,11 @@ async function startViteDev(wsPort: number, vitePort: number): Promise<void> {
     console.log(`[DASHBOARD] Starting Vite on port ${vitePort} (WS backend → localhost:${wsPort})...`);
   }
 
+  // Use .cmd on Windows (vite without .cmd is a Unix shell script, not executable by node.exe)
+  const viteBin = path.join(WEB_APP_DIR, 'node_modules', '.bin', 'vite.cmd');
   const child = spawn(
-    process.execPath,
-    [
-      path.join(WEB_APP_DIR, 'node_modules', '.bin', 'vite'),
-      '--host',
-      '--port',
-      String(vitePort),
-    ],
+    'cmd.exe',
+    ['/c', viteBin, '--host', '--port', String(vitePort)],
     {
       cwd: WEB_APP_DIR,
       stdio: 'ignore',

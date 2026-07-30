@@ -77,6 +77,16 @@ async function main(): Promise<number> {
     log(`  ${m.id} @ ${m.applied_at}`);
   }
 
+  // Auto WAL checkpoint if WAL file exceeds 1MB
+  const WAL_PATH = DB_PATH + '-wal';
+  if (existsSync(WAL_PATH)) {
+    const walSize = statSync(WAL_PATH).size;
+    if (walSize > 1_000_000) {
+      raw.prepare("PRAGMA wal_checkpoint(TRUNCATE)").run();
+      log(`WAL checkpoint triggered: ${(walSize / 1024 / 1024).toFixed(1)}MB`);
+    }
+  }
+
   // Output JSON for pipeline consumption
   if (!quiet) {
     console.log(

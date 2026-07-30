@@ -26,7 +26,7 @@ Gentle-Vanguard soporta dos escenarios de actualización:
 
 **Para actualizar solo skills y herramientas:**
 
-```powershell
+```TypeScript
 # CLI directo
 gv update                    # Sincroniza skills
 gv update-all               # Sincroniza skills + herramientas (engram, opencode)
@@ -35,7 +35,7 @@ gv check                    # Verifica actualizaciones disponibles
 
 **Desde repositorio clonado:**
 
-```powershell
+```TypeScript
 cd C:\Workspace_local\gentle-vanguard
 scripts\gentle-vanguard\sync-skills.ps1 -Force
 ```
@@ -63,7 +63,7 @@ scripts\gentle-vanguard\sync-skills.ps1 -Force
 
 **Método**: Generar nuevo .exe y reinstalar
 
-```powershell
+```TypeScript
 # En desarrollo (gentle-vanguard)
 cd C:\Workspace_local\gentle-vanguard
 
@@ -87,7 +87,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File "build\create-installer.ps1" -Skip
 
 **Para testers y developers:** Actualizar installation sin pasar por instalador
 
-```powershell
+```TypeScript
 cd C:\Workspace_local\gentle-vanguard
 
 # Primero encriptar
@@ -159,13 +159,13 @@ scripts\gentle-vanguard\sync-stack.ps1 -Source local -Force    # Aplicar cambios
 
 ### Actualizar Skills (Versiones Menores)
 
-```powershell
+```TypeScript
 gv update
 ```
 
 O desde repo:
 
-```powershell
+```TypeScript
 git pull origin main
 gv update
 ```
@@ -181,7 +181,7 @@ gv update
 
 **Si algo falla después de sync-stack.ps1:**
 
-```powershell
+```TypeScript
 # Listar backups disponibles
 ls "C:\Program Files\Gentle-Vanguard\backup-*"
 
@@ -220,7 +220,7 @@ copy "C:\Program Files\Gentle-Vanguard\backup-YYYYMMDD-HHMMSS\protected\*" `
 
 ### Dev local: Aplicar cambios y testear
 
-```powershell
+```TypeScript
 cd C:\Workspace_local\gentle-vanguard
 
 # 1. Hacer cambios en scripts
@@ -239,7 +239,7 @@ gv validate
 
 ### Buildear para distribución
 
-```powershell
+```TypeScript
 cd C:\Workspace_local\gentle-vanguard
 
 # 1. Asegurar encrypt
@@ -256,7 +256,7 @@ build\create-installer.ps1 -SkipEncrypt
 
 ### Usuarios finales: Actualizar instalación existente
 
-```powershell
+```TypeScript
 # Opción 1: Solo skills
 gv update
 

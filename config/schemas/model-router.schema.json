@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Model Router Configuration",
+  "description": "Routing policy, cost tracking, and model levels for Gentle-Vanguard",
+  "type": "object",
+  "properties": {
+    "routingPolicy": {
+      "type": "object",
+      "description": "Defines how requests are routed to different models",
+      "properties": {
+        "defaultProvider": { "type": "string", "description": "Default AI provider" },
+        "fallbackProvider": { "type": "string", "description": "Fallback if primary fails" },
+        "routingStrategy": {
+          "type": "string",
+          "enum": ["cost", "latency", "capability", "load-balanced"],
+          "description": "Strategy for routing decisions"
+        },
+        "modelTiers": {
+          "type": "object",
+          "description": "Model tiers for different task complexities",
+          "patternProperties": {
+            "^[a-z]+$": {
+              "type": "object",
+              "properties": {
+                "models": { "type": "array", "items": { "type": "string" } },
+                "selection": { "type": "string", "enum": ["round-robin", "cost", "latency"] }
+              }
+            }
+          }
+        }
+      },
+      "required": ["defaultProvider", "routingStrategy"]
+    },
+    "costTracking": {
+      "type": "object",
+      "description": "Token and cost tracking configuration",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "dailyBudget": { "type": "integer", "minimum": 1000 },
+        "softThreshold": { "type": "number", "minimum": 0, "maximum": 100 },
+        "hardThreshold": { "type": "number", "minimum": 0, "maximum": 100 },
+        "trackByModel": { "type": "boolean" },
+        "trackBySession": { "type": "boolean" }
+      },
+      "required": ["enabled", "dailyBudget"]
+    },
+    "modelLevels": {
+      "type": "object",
+      "description": "Model capability levels for routing",
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "type": "object",
+          "properties": {
+            "level": { "type": "integer", "minimum": 0, "maximum": 5 },
+            "cost": { "type": "number", "minimum": 0 },
+            "capabilities": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    }
+  },
+  "required": ["routingPolicy"]
+}

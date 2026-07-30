@@ -196,7 +196,7 @@ AI agents scan tables more reliably than paragraphs:
 | CompressionRatio  | 0.60                             | 40% context reduction before compaction |
 | Handoff retention | Anchored content saved to Engram | No loss of critical state               |
 
-Config: `scripts/utilities/pre-compact-hook.ps1`, `scripts/utilities/handoff-compress.ps1`
+Config: `src/pre-compact-hook.ts`, `src/handoff-compress.ts`
 
 ### 7.8 Behavior Prompts Optimization
 
@@ -255,8 +255,8 @@ When delegating via `task` tool, the prompt sent to subagents MUST follow:
 | Orchestrator Config     | `config/orchestrator.json`                |
 | Context Efficiency      | `config/context-efficiency.json`          |
 | Compaction Config       | `opencode.json#compaction`                |
-| Pre-process Caching     | `scripts/utilities/pre-process-input.ps1` |
-| Pre-Compact Hook        | `scripts/utilities/pre-compact-hook.ps1`  |
+| Pre-process Caching     | `src/pre-process-input.ts` |
+| Pre-Compact Hook        | `src/pre-compact-hook.ts`  |
 | Behavior Prompts        | `config/behavior-prompts.json` (74 lines) |
 | Quick Commands          | `docs/QUICK-COMMANDS.md`                  |
 | Response Profile        | `CLAUDE.md#Response-Profile`              |

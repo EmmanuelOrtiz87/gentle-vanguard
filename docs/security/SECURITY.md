@@ -40,7 +40,7 @@ This project implements the following security controls:
 | --------------------- | ------------------------------------------------------------------------------------------------- |
 | Secret scanning       | Pre-commit hook (`check-secrets` patterns) + gitleaks + trufflehog + GitHub secret scanning       |
 | Dependency scanning   | Trivy (weekly, `.github/workflows/security-scan.yml`)                                             |
-| SAST (PowerShell)     | PSScriptAnalyzer (`.github/workflows/ps-lint.yml`)                                                |
+| SAST (TypeScript)     | PSScriptAnalyzer (`.github/workflows/ps-lint.yml`)                                                |
 | SAST (CodeQL)         | CodeQL analysis (`.github/workflows/security-scan.yml#CodeQL`)                                    |
 | SBOM Generation       | CycloneDX via Trivy (`.github/workflows/security-scan.yml#SBOM`)                                  |
 | Workflow hardening    | All workflows: `permissions: contents: read`, `timeout-minutes`, `concurrency`                    |
@@ -90,7 +90,7 @@ This project implements the following security controls:
 - [ ] No `Write-Host` of environment variables in hooks (use `Write-SafeHook`)
 - [ ] New CI workflows must include `permissions: contents: read`, `timeout-minutes`, and
       `concurrency`
-- [ ] PowerShell scripts must pass PSScriptAnalyzer with zero errors
+- [ ] TypeScript scripts must pass PSScriptAnalyzer with zero errors
 - [ ] External URLs only from the allow-list in `config/security-privacy.json`
 - [ ] Run `tests/security/*.tests.ps1` before submitting PRs with security changes
 - [ ] Use `scripts/security/secret-vault.ps1` for secrets — never env vars or plain files

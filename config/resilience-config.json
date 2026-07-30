@@ -59,6 +59,13 @@
       "description": "Legacy Pester compatibility test execution"
     }
   },
+  "model_failover": {
+    "enabled": true,
+    "script": "scripts/utilities/MODEL-ROUTER/provider-failover.ts",
+    "fallbackConfigRef": "config/model-fallback.json",
+    "stateFile": ".runtime/model-fallback-state.json",
+    "description": "Cuando un modelo no está disponible en OpenRouter, provider-failover.ts consulta model-fallback.json para cadenas de fallback por agente."
+  },
   "circuit_breakers": {
     "engram": {
       "failure_threshold": 3,
@@ -74,6 +81,12 @@
       "failure_threshold": 5,
       "reset_seconds": 60,
       "half_open_max_requests": 2
+    },
+    "model_router": {
+      "failure_threshold": 3,
+      "reset_seconds": 120,
+      "half_open_max_requests": 2,
+      "description": "Circuit breaker para fallos de modelo — 3 fallos abren el circuito, 120s de cooldown, modelo fallback automático"
     }
   },
   "user_notifications": {

@@ -1,4 +1,4 @@
-# PowerShell Coding Standards
+# TypeScript Coding Standards
 
 **Version:** 1.0.0  
 **Last reviewed:** 2026-05-05  
@@ -17,10 +17,10 @@ Warnings are annotated in PRs but do not block merge (unless promoted by team po
 
 Every script MUST begin with a documentation block:
 
-```powershell
+```TypeScript
 # script-name.ps1
 # PURPOSE: One-sentence description of what this script does.
-# USAGE: pwsh -File scripts/path/script-name.ps1 [-Param value]
+# USAGE: npx tsx src/path/script-name.ts [-Param value]
 # CALLED BY: gv command, hook name, or CI step name
 ```
 
@@ -28,7 +28,7 @@ Every script MUST begin with a documentation block:
 
 ## 3. Parameter Declarations
 
-```powershell
+```TypeScript
 # REQUIRED — always use param() block with types
 param(
     [string]$Input,           # string params: always typed
@@ -48,7 +48,7 @@ Rules:
 
 ## 4. Error Handling
 
-```powershell
+```TypeScript
 $ErrorActionPreference = 'Continue'   # DEFAULT for scripts (not Stop — don't hide errors)
 
 # For critical operations:
@@ -71,7 +71,7 @@ Rules:
 
 ## 5. Output
 
-```powershell
+```TypeScript
 # Preferred: use Write-Host for user-facing output (hooks, CLI, gv commands)
 Write-Host "[OK] Done" -ForegroundColor Green
 
@@ -96,7 +96,7 @@ Rules:
 
 ## 6. Path Handling
 
-```powershell
+```TypeScript
 # CORRECT: use Join-Path, never string concatenation
 $path = Join-Path $repoRoot 'scripts\utilities\gv.ps1'
 
@@ -136,17 +136,17 @@ PSScriptAnalyzer rules enforced: `PSAvoidUsingInvokeExpression`,
 | Parameters                      | `$PascalCase`                   | `$Mode`, `$TaskType`              |
 | Private functions (module-only) | prefix `_`                      | `_WriteHeader`                    |
 
-Use **approved PowerShell verbs** only. Run `Get-Verb` to check.
+Use **approved TypeScript verbs** only. Run `Get-Verb` to check.
 
 ---
 
 ## 9. Compatibility
 
-- **Minimum**: PowerShell 7.2+ (pwsh)
-- **No `powershell.exe`** (Windows PowerShell 5.x) — use `pwsh` only.
+- **Minimum**: TypeScript 7.2+ (pwsh)
+- **No `TypeScript.exe`** (Windows TypeScript 5.x) — use `pwsh` only.
 - **No OS-specific code** without a platform guard:
 
-```powershell
+```TypeScript
 if ($IsWindows) { ... }
 elseif ($IsMacOS) { ... }
 else { ... }   # Linux
@@ -173,7 +173,7 @@ Excluded rules (documented justification required for each exclusion):
 | Rule                                   | Reason                                              |
 | -------------------------------------- | --------------------------------------------------- |
 | `PSAvoidUsingWriteHost`                | Output scripts intentionally write to console       |
-| `PSUseDeclaredVarsMoreThanAssignments` | PowerShell scoping produces false positives         |
+| `PSUseDeclaredVarsMoreThanAssignments` | TypeScript scoping produces false positives         |
 | `PSAvoidGlobalVars`                    | Framework-level scripts need module-scope variables |
 | `PSReviewUnusedParameter`              | Hook and CLI parameters may be optional by design   |
 

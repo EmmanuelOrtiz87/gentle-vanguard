@@ -8,7 +8,7 @@ This document describes the hooks system implemented in gentle-vanguard.
 
 ### Pre-Process Input
 
-- **Script**: `scripts/utilities/pre-process-input.ps1`
+- **Script**: `src/pre-process-input.ts`
 - **Purpose**: Detect skill triggers from user input
 - **Trigger**: Before processing any user command
 

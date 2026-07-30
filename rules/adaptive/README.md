@@ -29,9 +29,9 @@ Rules about where documentation should be stored, naming conventions, and struct
 
 ### CORR-### (Auto-Correction)
 
-Patterns for automatically fixing common mistakes (PowerShell syntax, etc.).
+Patterns for automatically fixing common mistakes (TypeScript syntax, etc.).
 
-**Example**: `CORR-001` - PowerShell [OK] parser error at line start
+**Example**: `CORR-001` - TypeScript [OK] parser error at line start
 
 ### SESS-### (Session Patterns)
 

@@ -19,9 +19,11 @@ PERFORMANCE
 ## Cross-Platform (Source: NORMATIVAS-CROSS-PLATFORM.md)
 
 - Windows 10+/Ubuntu 22.04+/macOS 13+ — all scripts must run on all platforms
-- PowerShell 7.4+ mandatory; avoid PSCustomObject (use [PSCustomObject] or hashtable)
+- **TypeScript-First**: All operational scripts MUST be TypeScript via `npx tsx`.
+  See `rules/TYPESCRIPT-FIRST-POLICY.md` for full policy. TypeScript scripts are deprecated
+  for stack operations; TypeScript remains available as a system shell only.
 - Paths: use `Join-Path` not string concat; `[IO.Path]::DirectorySeparatorChar`
-- Line endings: LF in repo; CRLF only for Windows-specific `.ps1` user-facing scripts
+- Line endings: LF in repo; CRLF only for Windows-specific user-facing files
 
 ## Multi-Repo Strategy (Source: NORMATIVAS-MULTI-REPO.md)
 

@@ -4,8 +4,8 @@
   "description": "Model Router: per-agent model/temperature binding with opencode Go tier models and big-pickle fallback",
   "lastModified": "2026-05-11T00:00:00.0000000-03:00",
   "modifiedBy": "config-sync",
-  "defaults": {
-    "model": "qwen-3.6-plus",
+    "defaults": {
+    "model": "qwen/qwen-plus",
     "provider": "openrouter",
     "temperature": 0.3,
     "hallucinationGuard": "medium",
@@ -283,12 +283,16 @@
   },
   "failover": {
     "enabled": true,
-    "script": "scripts/utilities/MODEL-ROUTER/provider-failover.ps1",
+    "script": "scripts/utilities/MODEL-ROUTER/provider-failover.ts",
     "chain": ["openrouter", "anthropic", "openai", "ollama"],
     "autoCheck": "on-route",
     "cacheMinutes": 5,
     "fallbackModel": "opencode/big-pickle",
-    "stateFile": ".session/provider-state.json"
+    "fallbackConfigRef": "config/model-fallback.json",
+    "stateFile": ".runtime/model-fallback-state.json",
+    "agentFallbackEnabled": true,
+    "notifyOnFallback": true,
+    "description": "FAILOVER ACTIVO — cuando un modelo no está disponible, provider-failover.ts consulta model-fallback.json para cadenas de fallback por agente. Ver config/model-fallback.json para la configuración detallada de cada agente."
   },
   "providerPriority": {
     "description": "Ordered list for model selection UI (first = default)",

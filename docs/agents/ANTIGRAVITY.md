@@ -5,7 +5,7 @@
 **BEFORE responding to ANY user input:**
 
 1. **Run trigger detection** - Execute:
-   `powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
+   `TypeScript -File src/pre-process-input.ts -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
 2. **Parse output**:
    - If `TRIGGER_MATCH_FOUND` → Load indicated skill using `skill` tool BEFORE any other action
    - If `PLAN_MODE_REQUIRED` → Activate BA agent, load `sdd-lifecycle` skill
@@ -73,7 +73,7 @@ When trigger detected, load corresponding skill:
   pipeline → `docker-devops-skill`
 - **DOC**: documentation, docs, readme, guide, runbook, specification, bdd specs, sdd specs →
   `documentation-governance`
-- **SCRIPT-GOV**: script, powershell, parser error, syntax error, validate script, governance
+- **SCRIPT-GOV**: script, TypeScript, parser error, syntax error, validate script, governance
   script, hook, pre-push, pre-commit, fix script, auto fix, autofix, script error, correct script →
   `sdd-lifecycle`
 - **REPORT**: informe, report, reporte, metricas, metrics, analytics, analisis, dashboard, resumen

@@ -43,7 +43,7 @@ npx tsx scripts/recovery/db-restore.ts repair
 
 **Recuperacion manual:**
 
-```powershell
+```TypeScript
 # 1. Verificar estado
 npx tsx scripts/recovery/schema-integrity.ts
 
@@ -86,6 +86,48 @@ Cada restore point es un JSON con:
 - `issues`: Lista de problemas encontrados
 - `actions`: Acciones tomadas
 
+## Session Close & Recovery Points
+
+El orquestador de cierre de sesion (`src/session-close-orchestrator.ts`) ejecuta 6 fases que generan
+puntos de recuperacion:
+
+| Fase | Accion | Punto de recuperacion |
+|------|--------|----------------------|
+| PRE-CLOSE | Timestamp, cierre de tracing | `.session/session-current.json` |
+| PERSIST | Engram summary, session scoring, event store, token metrics | `.engram-data/`, `.session/event-store/`, `.session/metrics/` |
+| BACKUP | Checkpoint, Nexus backup, Engram backup | `.session/checkpoints/`, `.runtime/backups/`, `.engram-backups/` |
+| AUDIT | Audit log, CodeGraph sync | `.session/audit/logs/` |
+| CLEANUP | Kill procesos hijos (CodeGraph MCP, Dashboard WS, timeout daemon), flush caches | limpia `.session/cache/` |
+| VERIFY | Session file, Nexus health, checkpoint/backup existence | Reporte en `.session/close-report-*.json` |
+
+### Procesos que mata el CLEANUP
+
+1. **CodeGraph MCP server** — `codegraph.js serve --mcp`
+2. **Dashboard WebSocket** — `websocket-server.ts`
+3. **Timeout Monitor Daemon** — `timeout-monitor.ts --daemon`
+4. **Orphans** — cualquier proceso `tsx` hijo de session-*.ts residual
+
+### Como restaurar desde un cierre
+
+```bash
+# 1. Verificar el ultimo reporte de cierre
+cat .session/close-report-*.json
+
+# 2. Restaurar checkpoint (dry-run primero)
+npx tsx src/checkpoint-manager.ts restore --dry-run
+
+# 3. Restaurar Nexus DB
+npx tsx scripts/database/db-restore.ts list
+npx tsx scripts/database/db-restore.ts restore <backup-name>
+```
+
+## Pipeline Integration
+
+El orquestador de cierre se ejecuta como lazy step en la pipeline de sesion:
+- `session-scoring-close` — registra el evento de cierre en scoring (habilitado)
+- `session-close-orchestrator` — ejecuta las 6 fases de cierre (nuevo, lazy)
+- Ambos steps son `required: false` y `lazy: true` para no bloquear el inicio
+
 ## Mantenimiento Periodico
 
 ### Verificacion rapida
@@ -96,7 +138,7 @@ npx tsx scripts/recovery/db-health-check.ts
 
 ### Limpieza de backups antiguos
 
-```powershell
+```TypeScript
 Get-ChildItem ".recovery/schema-backups" -Directory |
   Where-Object { $_.CreationTime -lt (Get-Date).AddDays(-30) } |
   Remove-Item -Recurse -Force

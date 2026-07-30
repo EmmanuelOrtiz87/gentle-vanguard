@@ -74,7 +74,7 @@ Ensuring all development tools are active and ready...
 
 ### Automation Systems (100% Operational)
 
-- **PowerShell Profile**: Global auto-activation deployed
+- **TypeScript Profile**: Global auto-activation deployed
 - **Health Checks**: Continuous tool validation
 - **Pre-commit Hooks**: Automatic quality enforcement
 - **CI/CD Pipelines**: Automated testing and deployment
@@ -83,7 +83,7 @@ Ensuring all development tools are active and ready...
 
 - **Runtime Router**: Active and policy-driven
 - **Performance**: All operations complete within expected timeframes
-- **Compatibility**: Tested on Windows with PowerShell 7+
+- **Compatibility**: Tested on Windows with TypeScript 7+
 
 ---
 
@@ -101,7 +101,7 @@ Ensuring all development tools are active and ready...
 - **Auto-Activation**: Tools activate automatically on project entry
 - **Health Monitoring**: Continuous validation of system components
 - **Environment Setup**: One-command initialization
-- **PowerShell Integration**: Global activation via profile
+- **TypeScript Integration**: Global activation via profile
 
 ### Quality Assurance
 
@@ -141,7 +141,7 @@ Ensuring all development tools are active and ready...
 
 ### Daily Operations
 
-```powershell
+```TypeScript
 # Health monitoring
 .\scripts\utilities\gv.ps1 health          #  Validated
 
@@ -153,7 +153,7 @@ Ensuring all development tools are active and ready...
 
 ### Maintenance
 
-- **Automatic Updates**: PowerShell profile handles tool updates
+- **Automatic Updates**: TypeScript profile handles tool updates
 - **Health Monitoring**: Continuous validation active
 - **Documentation**: Complete and up-to-date
 - **Backup Systems**: Engram provides memory persistence

@@ -1,6 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "description": "Gentle-Vanguard Stack Configuration - Model-agnostic orchestration layer. Models are selected via OpenCode UI, not hardcoded here.",
   "agent": {
     "orchestrator": {
       "description": "Main orchestrator agent — coordinates all subagents autonomously",
@@ -11,7 +10,8 @@
         "task": {
           "*": "allow"
         }
-      }
+      },
+      "steps": 12
     },
     "sdd-explore": {
       "description": "BA exploration agent — requirements gathering and analysis",
@@ -21,7 +21,8 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}"
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
+      "steps": 6
     },
     "sdd-design": {
       "description": "SAD architecture design agent — system design and API contracts",
@@ -31,7 +32,8 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}"
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
+      "steps": 6
     },
     "sdd-apply": {
       "description": "DEV implementation agent — code generation and feature building",
@@ -41,7 +43,8 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}"
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
+      "steps": 6
     },
     "sdd-verify": {
       "description": "QA verification agent — testing and validation",
@@ -51,7 +54,8 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}"
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
+      "steps": 6
     },
     "doc-agent": {
       "description": "Documentation agent — technical docs and guides",
@@ -61,7 +65,8 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}"
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
+      "steps": 6
     },
     "ops-agent": {
       "description": "Operations agent — deployment, CI/CD, infrastructure",
@@ -71,7 +76,8 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}"
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
+      "steps": 6
     },
     "gov-agent": {
       "description": "Governance agent — compliance, security, audit",
@@ -81,7 +87,8 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}"
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
+      "steps": 6
     },
     "session-agent": {
       "description": "Session management agent — state tracking and lifecycle",
@@ -91,7 +98,8 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}"
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
+      "steps": 6
     },
     "premortem-agent": {
       "description": "Premortem analysis agent — risk identification and stress testing",
@@ -101,7 +109,8 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}"
+      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
+      "steps": 6
     }
   },
   "mcp": {

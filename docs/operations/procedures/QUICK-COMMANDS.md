@@ -1,6 +1,6 @@
 # Quick Commands — Gentle-Vanguard
 
-```powershell
+```TypeScript
 # Start session (Windows)
 .\scripts\utilities\session-autostart.cmd
 # Start session (Linux/macOS)

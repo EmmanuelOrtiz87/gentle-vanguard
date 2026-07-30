@@ -138,7 +138,7 @@ src/
 | Métrica | Valor |
 |---------|-------|
 | Archivos TypeScript | 231 |
-| Scripts PowerShell restantes | 114 |
+| Scripts TypeScript restantes | 114 |
 | Scripts originales migrados | 276 de 390 |
 | Health Checks | 60 |
 | Componentes | 11 |

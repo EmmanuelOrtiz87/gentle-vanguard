@@ -44,7 +44,7 @@ y validable en cada fase del ciclo de vida.
 | ------------------------------- | ------------------------------------------------- | -------------------------------------- |
 | Appropriateness recognisability | `docs/AGENTS.md` + `rules/README.md`              | Docs actualizados                      |
 | Learnability                    | `skills/` con SKILL.md                            | Cada skill documentada                 |
-| Operability                     | `scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1` | Comandos gv funcionales                |
+| Operability                     | `src/gv.ts` | Comandos gv funcionales                |
 | User error protection           | `config/security-hardening.json`                  | Input validation en todas las entradas |
 | User interface aesthetics       | `docs/NORMATIVAS-ACCESIBILIDAD.md`                | WCAG 2.2 AA compliance                 |
 | Accessibility                   | axe-core + Playwright                             | WCAG automated checks                  |

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Auto Code Review v1.0.0
+ * Auto Code Review 
  * Autonomous code review with multi-lens analysis
- * Part of Gentle-Vanguard v6.0
+ * Part of Gentle-Vanguard 
  */
 
 import { EventEmitter } from 'events';

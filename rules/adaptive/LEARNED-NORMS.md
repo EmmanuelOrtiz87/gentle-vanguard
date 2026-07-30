@@ -65,7 +65,7 @@ _No deprecated norms._
 
 ### Key Learnings
 
-1. **Migración PS1→TS**: La migración de 390 scripts PowerShell a TypeScript ha sido exitosa. El stack ahora tiene 194 archivos TS funcionando.
+1. **Migración PS1→TS**: La migración de 390 scripts TypeScript a TypeScript ha sido exitosa. El stack ahora tiene 194 archivos TS funcionando.
 
 2. **Corrección de Rutas**: Se identificaron y corrigieron 7 rutas incorrectas en `config/session-autostart.config.json` que causaban warnings "Script not found".
 

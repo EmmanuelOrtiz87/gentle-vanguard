@@ -34,6 +34,7 @@ import {
 import { meshHandler, meshDiscoverHandler, meshSyncHandler } from './mesh-api.ts';
 import { runValidations } from './validations.ts';
 import { ROOT, readJson, countSkills } from './shared.ts';
+import { OperationalMetricsTracker } from '@gentle-vanguard/core/operational-metrics-tracker';
 
 const FEEDBACK_PATH = join(ROOT, '.runtime', 'metrics', 'feedback.json');
 const ALERTS_CONFIG_PATH = join(ROOT, 'config', 'dashboard-alerts.json');
@@ -1207,6 +1208,17 @@ function evaluateAlerts(metrics: any): Array<{
 
 setInterval(() => {
   const metrics = generateMetrics();
+  
+  // Agregar métricas operacionales si existen datos
+  try {
+    const operationalMetrics = OperationalMetricsTracker.calculateMetrics();
+    if (operationalMetrics && operationalMetrics.totalOperations > 0) {
+      (metrics as any).operational = operationalMetrics;
+    }
+  } catch {
+    // Silencioso si no hay métricas operacionales aún
+  }
+  
   const msg = JSON.stringify({ type: 'metrics', data: metrics });
   clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(msg));
   broadcastValidations();

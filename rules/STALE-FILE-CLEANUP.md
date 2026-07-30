@@ -19,7 +19,7 @@ código muerto. La limpieza es trimestral, controlada y siempre preserva el hist
 
 ### 2.2 Qué se Archiva
 
-- Scripts PowerShell reemplazados por versiones TypeScript (ver checklist §3)
+- Scripts TypeScript reemplazados por versiones TypeScript (ver checklist §3)
 - Configuraciones sin referencias activas después de 90 días
 - Archivos de documentación duplicados o fusionados
 - Plantillas de skill o agent que ya no están en uso

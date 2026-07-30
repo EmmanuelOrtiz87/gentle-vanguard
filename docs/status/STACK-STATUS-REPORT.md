@@ -28,9 +28,9 @@ VS Code, Copilot, Antigravity.
 | ------------------- | ------------------------------------------ | --------- | -------------------------- |
 | Bootstrap workspace | `scripts/core/bootstrap*.ps1`              | ✅ Activo | Manual (setup inicial)     |
 | CLI principal       | `gv.ps1`                                   | ✅ Activo | Manual                     |
-| Tool detection      | `scripts/utilities/DETECT/detect-tool.ps1` | ✅ Activo | Automático (cada turno)    |
-| Pre-process hook    | `scripts/utilities/pre-process-input.ps1`  | ✅ Activo | Automático (cada turno)    |
-| Session manager     | `scripts/utilities/session-manager.ps1`    | ✅ Activo | Automático (start/end)     |
+| Tool detection      | `src/detect-tool.ts` | ✅ Activo | Automático (cada turno)    |
+| Pre-process hook    | `src/pre-process-input.ts`  | ✅ Activo | Automático (cada turno)    |
+| Session manager     | `src/session-manager.ts`    | ✅ Activo | Automático (start/end)     |
 | Hashline integrity  | `scripts/editing/hashline.ps1`             | ✅ Activo | Automático (snapshot hook) |
 
 ### 2.2 Memoria Persistente (Engram)
@@ -56,11 +56,11 @@ VS Code, Copilot, Antigravity.
 
 | Componente            | Archivo(s)                                              | Estado      | Automatización         |
 | --------------------- | ------------------------------------------------------- | ----------- | ---------------------- |
-| FT pipeline           | `scripts/utilities/FINE-TUNING/ft-pipeline.ps1`         | ✅ Activo   | Automático (CI weekly) |
-| FT trainer            | `scripts/utilities/FINE-TUNING/ft-trainer.ps1`          | ✅ Activo   | Manual / CI            |
-| FT evaluator          | `scripts/utilities/FINE-TUNING/ft-evaluator.ps1`        | ✅ Activo   | Manual / CI            |
-| FT threshold detector | `scripts/utilities/FINE-TUNING/ft-threshold-detect.ps1` | ✅ Activo   | Automático (CI)        |
-| FT auto-prune         | `scripts/utilities/FINE-TUNING/ft-auto-prune.ps1`       | ✅ Activo   | Automático (CI)        |
+| FT pipeline           | `src/fine-tuning/ft-pipeline.ts`         | ✅ Activo   | Automático (CI weekly) |
+| FT trainer            | `src/fine-tuning/ft-trainer.ts`          | ✅ Activo   | Manual / CI            |
+| FT evaluator          | `src/fine-tuning/ft-evaluator.ts`        | ✅ Activo   | Manual / CI            |
+| FT threshold detector | `src/fine-tuning/ft-threshold-detect.ts` | ✅ Activo   | Automático (CI)        |
+| FT auto-prune         | `src/fine-tuning/ft-auto-prune.ts`       | ✅ Activo   | Automático (CI)        |
 | FT registry           | `.ft/registry.json`                                     | ✅ Activo   | Automático             |
 | Adapters activos      | BA, DEV (mistral-7b-lora, v1.0.0)                       | ✅ Activo   | LoRA fine-tuned        |
 | Python trainer        | `scripts/utilities/FINE-TUNING/python/train_lora.py`    | ⚠️ Presente | Manual (stub)          |
@@ -141,7 +141,7 @@ VS Code, Copilot, Antigravity.
 
 | Componente               | Archivo(s)                                       | Estado    | Automatización               |
 | ------------------------ | ------------------------------------------------ | --------- | ---------------------------- |
-| Auto-norm learner        | `scripts/adaptive/auto-norm-learner.ps1`         | ⚠️ Activo | Manual (bajo demanda)        |
+| Auto-norm learner        | `src/auto-norm-learner.ts`         | ⚠️ Activo | Manual (bajo demanda)        |
 | Auto-norm enforcer       | `scripts/adaptive/auto-norm-enforcer.ps1`        | ✅ Activo | Automático (cada 5 turnos)   |
 | Failure learning         | `scripts/adaptive/failure-learning-system.ps1`   | ⚠️ Activo | Manual                       |
 | Cache manager            | `scripts/adaptive/cache-manager.ps1`             | ✅ Activo | Automático (sesión)          |

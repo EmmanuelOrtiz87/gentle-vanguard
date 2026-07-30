@@ -14,7 +14,7 @@ operational and production-ready.**
 **Last Updated**: 2026-05-03  
 **Status**: **FULLY OPERATIONAL**  
 **Coverage**: 100% Projects Homologated  
-**Activation**: Automatic through workflow health checks, with optional PowerShell profile
+**Activation**: Automatic through workflow health checks, with optional TypeScript profile
 integration on Windows
 
 ---
@@ -60,7 +60,7 @@ Gentle-Vanguard Suite
 | **Workflow CLI**       | Ready    | `.\scripts\utilities\gv.ps1`        | Project coordination & automation       |
 | **Health Check**       | Ready    | `.\scripts\utilities\gv.ps1 health` | Tool validation & activation            |
 | **Auto-Init**          | Ready    | `auto-init-dev-environment.ps1`     | Environment setup                       |
-| **PowerShell Profile** | Optional | `$PROFILE`                          | Windows convenience for auto-activation |
+| **TypeScript Profile** | Optional | `$PROFILE`                          | Windows convenience for auto-activation |
 
 ### Quality Assurance
 
@@ -113,12 +113,12 @@ Gentle-Vanguard Suite
 
 ### 1. Environment Setup (One-time)
 
-```powershell
+```TypeScript
 # Clone gentle-vanguard template
 git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard-public.git
 
-# Optional Windows PowerShell profile setup
-Copy-Item "scripts/utilities/Microsoft.PowerShell_profile.ps1" $PROFILE
+# Optional Windows TypeScript profile setup
+Copy-Item "scripts/utilities/Microsoft.TypeScript_profile.ps1" $PROFILE
 . $PROFILE
 
 # Initialize environment
@@ -127,7 +127,7 @@ Copy-Item "scripts/utilities/Microsoft.PowerShell_profile.ps1" $PROFILE
 
 ### 2. Project Development (Per Session)
 
-```powershell
+```TypeScript
 # Enter project directory (auto-activates tools)
 cd .\bitbucket-dashboard
 
@@ -151,7 +151,7 @@ git commit -m "feat: add new dashboard component"
 
 ### 4. Deployment (Automated)
 
-```powershell
+```TypeScript
 # Local CI/CD
 .\scripts\ci.ps1              # Run all checks
 .\scripts\deploy.ps1          # Deploy to environment
@@ -174,7 +174,7 @@ git commit -m "feat: add new dashboard component"
 - **Zero-Config Setup**: One-command environment initialization
 - **Auto-Activation**: Tools activate automatically when entering projects
 - **Health Monitoring**: Continuous validation of tool availability
-- **PowerShell Integration**: Global activation via profile
+- **TypeScript Integration**: Global activation via profile
 
 ### Production Readiness
 
@@ -208,7 +208,7 @@ git commit -m "feat: add new dashboard component"
 
 ### Daily Operations
 
-```powershell
+```TypeScript
 # Health check (run daily)
 .\scripts\utilities\gv.ps1 health
 
@@ -228,7 +228,7 @@ git commit -m "feat: add new dashboard component"
 
 ### Updates
 
-- **Automatic**: Health checks and workflow entrypoints keep tools aligned; the PowerShell profile
+- **Automatic**: Health checks and workflow entrypoints keep tools aligned; the TypeScript profile
   is optional on Windows
 - **Manual**: `.\scripts\utilities\gv.ps1 update` for explicit updates
 - **Skills**: AI skills update automatically via orchestrator
@@ -272,7 +272,7 @@ git commit -m "feat: add new dashboard component"
 
 ### Quick Commands
 
-```powershell
+```TypeScript
 # Get help
 .\scripts\utilities\gv.ps1 --help
 

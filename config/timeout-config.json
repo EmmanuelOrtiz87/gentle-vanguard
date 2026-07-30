@@ -56,7 +56,7 @@
     "pnpm_command_ms": 60000,
     "tsc_typecheck_ms": 120000,
     "pipeline_step_ms": 120000,
-    "health_check_ms": 15000,
+    "health_check_ms": 60000,
     "watchdog_restart_delay_ms": 5000,
     "spawn_max_buffer_bytes": 1048576,
     "description": "Timeouts para ejecución de procesos (spawnSync, execSync, child_process)"

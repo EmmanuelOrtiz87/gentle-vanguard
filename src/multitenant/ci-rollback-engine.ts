@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * CI Rollback Engine v1.0.0
+ * CI Rollback Engine 
  * Self-healing CI/CD with automatic rollback
- * Part of Gentle-Vanguard v5.1
+ * Part of Gentle-Vanguard 
  */
 
 import { EventEmitter } from 'events';

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * GateGuard MCP v1.0.0
+ * GateGuard MCP 
  * MCP-specific security guards and validators
- * Part of Gentle-Vanguard v6.4
+ * Part of Gentle-Vanguard 
  */
 
 import { EventEmitter } from 'events';

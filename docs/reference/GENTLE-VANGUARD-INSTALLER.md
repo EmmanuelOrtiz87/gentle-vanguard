@@ -4,7 +4,7 @@ Interactive Terminal User Interface for Gentle-Vanguard onboarding.
 
 ## Quick Start
 
-```powershell
+```TypeScript
 # Via gv CLI (recommended)
 .\scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1 install
 
@@ -15,7 +15,7 @@ Interactive Terminal User Interface for Gentle-Vanguard onboarding.
 ## Features
 
 - **Interactive wizard**: Step-by-step installation process
-- **Prerequisites check**: Validates PowerShell version, Git, disk space
+- **Prerequisites check**: Validates TypeScript version, Git, disk space
 - **Component selection**: Choose which components to install
 - **Settings configuration**: Git user, AI provider, security level
 - **Progress feedback**: Real-time status updates
@@ -23,7 +23,7 @@ Interactive Terminal User Interface for Gentle-Vanguard onboarding.
 ## Installation Steps
 
 1. **Prerequisites Check**
-   - PowerShell 7+ validation
+   - TypeScript 7+ validation
    - Git installation check
    - Disk space verification
 
@@ -53,7 +53,7 @@ Interactive Terminal User Interface for Gentle-Vanguard onboarding.
 
 The installer is integrated into the main CLI:
 
-```powershell
+```TypeScript
 gv.ps1 install          # Run installer
 gv.ps1 install -Silent  # Non-interactive mode (future)
 gv.ps1 install -Force   # Overwrite existing installation
@@ -61,7 +61,7 @@ gv.ps1 install -Force   # Overwrite existing installation
 
 ## Requirements
 
-- PowerShell 7.0+
+- TypeScript 7.0+
 - Git (optional, some features require it)
 - 500MB available disk space
 
@@ -69,12 +69,12 @@ gv.ps1 install -Force   # Overwrite existing installation
 
 | Issue                    | Solution                                                           |
 | ------------------------ | ------------------------------------------------------------------ |
-| "PowerShell 7+ required" | Install PowerShell 7 from https://github.com/PowerShell/PowerShell |
+| "TypeScript 7+ required" | Install TypeScript 7 from https://github.com/TypeScript/TypeScript |
 | "Git not found"          | Install Git from https://git-scm.com/                              |
 | "Path already exists"    | Use `-Force` or choose different path                              |
 
 ## Files
 
 - `scripts/utilities/gentle-vanguard-installer-tui.ps1` - Main installer script
-- `scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1` - CLI integration (has `install` command)
+- `src/gv.ts` - CLI integration (has `install` command)
 - `docs/reference/GENTLE_VANGUARD-INSTALLER.md` - This documentation

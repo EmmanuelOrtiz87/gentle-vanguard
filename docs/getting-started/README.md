@@ -16,7 +16,7 @@
 
 | Document                                     | Description                                     |
 | -------------------------------------------- | ----------------------------------------------- |
-| **[PREREQUISITES.md](PREREQUISITES.md)**     | System requirements (git, PowerShell, AI agent) |
+| **[PREREQUISITES.md](PREREQUISITES.md)**     | System requirements (git, TypeScript, AI agent) |
 | **[DEVELOPER-SETUP.md](DEVELOPER-SETUP.md)** | Step-by-step developer setup                    |
 | **[installation.md](installation.md)**       | Detailed installation guide                     |
 
@@ -39,7 +39,7 @@
 | Requirement                          | Version | Status      | Notes                                 |
 | ------------------------------------ | ------- | ----------- | ------------------------------------- |
 | **🪟 Windows 10/11 / Linux / macOS** | Any     | ✅ Required | Cross-platform support                |
-| **⚡ PowerShell 7+**                 | 7.0+    | ✅ Required | `winget install Microsoft.PowerShell` |
+| **⚡ TypeScript 7+**                 | 7.0+    | ✅ Required | `winget install Microsoft.TypeScript` |
 | **🌿 Git**                           | 2.30+   | ✅ Required | Version control system                |
 | **🟢 Node.js**                       | 18+     | ⚠️ Optional | For some tools                        |
 | **🐹 Go**                            | 1.19+   | ⚠️ Optional | For compiled components               |
@@ -50,14 +50,14 @@
 
 ### Step 1: Clone the Repository
 
-```powershell
+```TypeScript
 git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
 cd gentle-vanguard
 ```
 
 ### Step 2: Start Session
 
-```powershell
+```TypeScript
 npx tsx src/session-autostart.ts
 ```
 
@@ -70,7 +70,7 @@ This will:
 
 ### Step 3: Start Working
 
-```powershell
+```TypeScript
 # Health check
 npm run watchtower:health
 
@@ -82,7 +82,7 @@ npm run dashboard:start
 
 ## 📖 Daily Usage Commands
 
-```powershell
+```TypeScript
 # Session management
 npx tsx src/session-autostart.ts    # Start session
 npm run watchtower:health           # Health check (82 checks)

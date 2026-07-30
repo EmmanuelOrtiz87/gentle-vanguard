@@ -5,7 +5,7 @@
 **BEFORE responding to ANY user input:**
 
 1. **Run**:
-   `powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
+   `TypeScript -File src/pre-process-input.ts -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
 2. **Parse output**:
    - `TRIGGER_MATCH_FOUND` → load skill BEFORE any other action
    - `PLAN_MODE_REQUIRED` → activate BA agent (confidence < 40)

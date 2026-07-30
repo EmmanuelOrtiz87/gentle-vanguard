@@ -23,7 +23,7 @@ subagentes especializados basado en:
 ### 2. Implementation
 
 - **`skills/auto-delegation-router/auto-delegation-router.ps1`** (500+ lneas)
-  - Mdulo PowerShell con todas las funciones
+  - Mdulo TypeScript con todas las funciones
   - Gestin de configuración
   - Motor de extraccin de palabras clave
   - Motor de rbol de decisin
@@ -57,7 +57,7 @@ subagentes especializados basado en:
 
 ### 1. Keyword-Based Auto-Routing
 
-```powershell
+```TypeScript
 $keywords = Extract-TaskKeywords -TaskDescription "Implement login feature"
 # Output: @{ "DEV" = 2; "GOV" = 1 }
 ```
@@ -82,7 +82,7 @@ $keywords = Extract-TaskKeywords -TaskDescription "Implement login feature"
 3. **Level 3**: Ajustes basados en contexto (riesgo alto incluir QA)
 4. **Level 4**: Enrutamiento basado en dependencias (deploy/release incluir OPS)
 
-```powershell
+```TypeScript
 $decisións = Evaluate-decisiónTree -TaskDescription $task -Keywords $keywords
 # Output: Array de decisiónes con Level, Agent, Reason, Score
 ```
@@ -105,7 +105,7 @@ $decisións = Evaluate-decisiónTree -TaskDescription $task -Keywords $keywords
 - Low: 40%
 - Very Low: < 40%
 
-```powershell
+```TypeScript
 $confidence = Calculate-ConfidenceScore -Keywords $keywords -decisiónTree $decisións
 # Output: @{ Score = 85; Confidence = "High"; Adjustments = @(...) }
 ```
@@ -114,7 +114,7 @@ $confidence = Calculate-ConfidenceScore -Keywords $keywords -decisiónTree $deci
 
 **configuración por defecto: DISABLED**
 
-```powershell
+```TypeScript
 # Habilitar
 Enable-AutoDelegation
 
@@ -128,7 +128,7 @@ $config.Enabled  # $true o $false
 
 **Ajustar umbral de confianza:**
 
-```powershell
+```TypeScript
 Set-ConfidenceThreshold -Threshold 70
 ```
 
@@ -161,7 +161,7 @@ TAREA
 
 ### Ejemplo 1: Enrutamiento Simple
 
-```powershell
+```TypeScript
 $task = "Implement login feature with React components and security hardening"
 $routing = Route-TaskToAgent -TaskDescription $task
 
@@ -175,7 +175,7 @@ $routing = Route-TaskToAgent -TaskDescription $task
 
 ### Ejemplo 2: Enrutamiento Multi-Agente
 
-```powershell
+```TypeScript
 $task = "Create BDD scenarios for checkout flow and implement payment integration"
 $routing = Route-TaskToAgent -TaskDescription $task
 
@@ -189,7 +189,7 @@ $routing = Route-TaskToAgent -TaskDescription $task
 
 ### Ejemplo 3: Baja Confianza
 
-```powershell
+```TypeScript
 $task = "Fix the thing"
 $routing = Route-TaskToAgent -TaskDescription $task
 
@@ -204,19 +204,19 @@ $routing = Route-TaskToAgent -TaskDescription $task
 
 ### Paso 1: Cargar el mdulo
 
-```powershell
+```TypeScript
 Import-Module ".\skills\auto-delegation-router\auto-delegation-router.ps1" -Force
 ```
 
 ### Paso 2: Habilitar auto-delegation
 
-```powershell
+```TypeScript
 Enable-AutoDelegation
 ```
 
 ### Paso 3: Usar en orchestrator
 
-```powershell
+```TypeScript
 function Invoke-OrchestratorWithAutoRouting {
     param([string]$TaskDescription)
 
@@ -239,7 +239,7 @@ function Invoke-OrchestratorWithAutoRouting {
 
 ## Mtricas y Monitoreo
 
-```powershell
+```TypeScript
 $metrics = Get-RoutingMetrics
 
 # Resultado:
@@ -277,7 +277,7 @@ $metrics = Get-RoutingMetrics
 
 Ejecutar suite de pruebas:
 
-```powershell
+```TypeScript
 .\tests\integration\auto-delegation-router.integration.tests.ps1
 ```
 

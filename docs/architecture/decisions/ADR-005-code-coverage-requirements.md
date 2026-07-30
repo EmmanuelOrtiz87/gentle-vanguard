@@ -48,7 +48,7 @@ non-blocking warning in CI (Q2 2026) and blocking gate (Q3 2026).**
 | --------- | --------- | ----------------------------------------------------------------------- |
 | Lines     | 70%       | Conservative baseline; infrastructure scripts have unreachable branches |
 | Functions | 75%       | Higher than lines — key entry points must be tested                     |
-| Branches  | 65%       | Lowest — PowerShell branching is harder to cover                        |
+| Branches  | 65%       | Lowest — TypeScript branching is harder to cover                        |
 
 ### Target Trajectory
 
@@ -72,7 +72,7 @@ Files excluded from coverage measurement (see `tests/coverage-config.json`):
 
 Coverage is measured via Pester's built-in `-CodeCoverage` parameter:
 
-```powershell
+```TypeScript
 # scripts/run-tests-simple.ps1
 .\run-tests-simple.ps1 -WithCoverage
 ```
@@ -94,7 +94,7 @@ CI workflow uploads coverage reports as artifacts.
 
 ### Negative
 
-- ⚠️ PowerShell coverage is less precise than JavaScript/Go (no branch-level analysis in Pester v3)
+- ⚠️ TypeScript coverage is less precise than JavaScript/Go (no branch-level analysis in Pester v3)
 - ⚠️ Initial 70% threshold may be generous — review after first full measurement
 - ⚠️ Requires Pester's `-CodeCoverage` to complete within CI timeout (15 min currently)
 
@@ -107,7 +107,7 @@ CI workflow uploads coverage reports as artifacts.
 2. **Report-only, no threshold** — Rejected: reports without enforcement degrade over time
 3. **100% target** — Rejected: infrastructure/deployment scripts have error-handling branches that
    are intentionally difficult to trigger in tests
-4. **Istanbul/NYC for JS, separate for PS** — Rejected: gentle-vanguard is primarily PowerShell;
+4. **Istanbul/NYC for JS, separate for PS** — Rejected: gentle-vanguard is primarily TypeScript;
    adding a second tool doubles complexity
 
 ---
@@ -117,4 +117,4 @@ CI workflow uploads coverage reports as artifacts.
 - `tests/coverage-config.json` — threshold configuration
 - `scripts/run-tests-simple.ps1` — coverage flag implementation
 - `.github/workflows/test-suite.yml` — CI integration
-- ADR-002 (PowerShell language choice) — explains why Pester is the test framework
+- ADR-002 (TypeScript language choice) — explains why Pester is the test framework

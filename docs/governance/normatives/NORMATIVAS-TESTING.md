@@ -91,7 +91,7 @@ tests/
 
 ### 4.2 Nomenclatura
 
-- `<component>.<type>.tests.ps1` (PowerShell)
+- `<component>.<type>.tests.ps1` (TypeScript)
 - `<component>.<type>.test.py` (Python)
 - Tests sin LLM: sufijo `.unit`
 - Tests con LLM: sufijo `.integration`

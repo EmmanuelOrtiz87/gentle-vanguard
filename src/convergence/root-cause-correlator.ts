@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 /**
- * Root-Cause Correlator v1.0.0
+ * Root-Cause Correlator 
  * Cross-component failure correlation and root cause identification
  * Integrates with Tracing and Event Sourcing
  * 
- * Part of Gentle-Vanguard v5.0 — Convergence Layer
+ * Part of Gentle-Vanguard  — Convergence Layer
  */
 
 import { EventEmitter } from 'events';
@@ -395,8 +395,8 @@ export const rootCauseCorrelator = new RootCauseCorrelator();
 
 // CLI execution
 if (require.main === module) {
-  console.log('Root-Cause Correlator v1.0.0');
-  console.log('Part of Gentle-Vanguard v5.0 — Convergence Layer\n');
+  console.log('Root-Cause Correlator ');
+  console.log('Part of Gentle-Vanguard  — Convergence Layer\n');
   
   const correlator = new RootCauseCorrelator();
   

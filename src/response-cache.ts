@@ -130,7 +130,7 @@ function semanticCacheLookup(input: string): { response: string; key: string; si
   }
 }
 
-interface CacheEntry {
+export interface CacheEntry {
   key: string;
   input: string;
   response: string;
@@ -140,7 +140,7 @@ interface CacheEntry {
   tokensSaved: number;
 }
 
-interface CacheStats {
+export interface CacheStats {
   hits: number;
   misses: number;
   hitRate: number;
@@ -149,7 +149,7 @@ interface CacheStats {
   expired: number;
 }
 
-interface CacheConfig {
+export interface CacheConfig {
   enabled: boolean;
   defaultTtlMinutes: number; // minutes
   maxEntries: number;
@@ -161,7 +161,7 @@ const ROOT = resolve(process.cwd());
 const LEGACY_DIR = join(ROOT, '.session', 'response-cache');
 const DEFAULT_CONFIG: CacheConfig = {
   enabled: true,
-  defaultTtlMinutes: 30,
+  defaultTtlMinutes: 60, // Extended from 30 to 60 minutes for better cache hit rate
   maxEntries: 1000,
   cleanupInterval: 5 * 60 * 1000, // 5 minutes
   useSqlite: true,
@@ -370,6 +370,10 @@ function legacySaveEntry(entry: CacheEntry): void {
   }
   writeFileSync(getLegacyFilePath(entry.key), JSON.stringify(entry, null, 2));
 }
+
+// ─── Public API ──────────────────────────────────────────────────────────────
+
+export { generateCacheKey };
 
 // ─── ResponseCache Class ──────────────────────────────────────────────────────
 

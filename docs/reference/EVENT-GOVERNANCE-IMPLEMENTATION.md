@@ -113,7 +113,7 @@ Integracin del Orchestrator con governance.
 
 ### Emitir evento con validacin
 
-```powershell
+```TypeScript
 .\event-bus-enhanced.ps1 -Action emit `
   -Event "dispatch.started" `
   -Payload '{"execution_id":"dispatch-20260423","mode":"parallel","agents":["DEV","QA"]}' `
@@ -122,19 +122,19 @@ Integracin del Orchestrator con governance.
 
 ### Verificar poltica de evento
 
-```powershell
+```TypeScript
 .\event-governance-layer.ps1 -Action check-policy -EventName "dispatch.started"
 ```
 
 ### Obtener reporte de governance
 
-```powershell
+```TypeScript
 .\orchestrator-governance-integration.ps1 -Action report
 ```
 
 ### Monitorear eventos
 
-```powershell
+```TypeScript
 .\orchestrator-governance-integration.ps1 -Action monitor
 ```
 

@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
 /**
- * Convergence Monitor v1.0.0
+ * Convergence Monitor 
  * Detects convergence, oscillation, or divergence in system behavior
  * Auto-adjusts parameters based on real-time metrics
  * 
- * Part of Gentle-Vanguard v5.0 — Convergence Layer
+ * Part of Gentle-Vanguard  — Convergence Layer
  */
 
 import { EventEmitter } from 'events';
-// Metrics store will be implemented in v5.0
+// Metrics store will be implemented in 
 // import { MetricsStore } from '../utils/token-metrics-store';
 
 interface ConvergenceConfig {
@@ -265,8 +265,8 @@ export const convergenceMonitor = new ConvergenceMonitor();
 
 // CLI execution
 if (require.main === module) {
-  console.log('Convergence Monitor v1.0.0');
-  console.log('Part of Gentle-Vanguard v5.0 — Convergence Layer\n');
+  console.log('Convergence Monitor ');
+  console.log('Part of Gentle-Vanguard  — Convergence Layer\n');
   
   const monitor = new ConvergenceMonitor({
     windowSize: 50,

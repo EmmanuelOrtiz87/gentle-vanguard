@@ -102,7 +102,7 @@ sections, real-time updates, comprehensive analytics, and WCAG 2.1 AA accessibil
 
 ### Generate Dashboard
 
-```powershell
+```TypeScript
 # 1. Collect all metrics
 .\scripts\metrics\collector.ps1 -Scope full
 
@@ -115,7 +115,7 @@ sections, real-time updates, comprehensive analytics, and WCAG 2.1 AA accessibil
 
 ### Validate Dashboard
 
-```powershell
+```TypeScript
 # Run automated tests
 .\scripts\tests\dashboard-validator.ps1
 
@@ -128,7 +128,7 @@ sections, real-time updates, comprehensive analytics, and WCAG 2.1 AA accessibil
 
 ### Monitor Health
 
-```powershell
+```TypeScript
 # Single check
 .\scripts\metrics\dashboard-health-check.ps1
 
@@ -252,7 +252,7 @@ All interactive elements have appropriate ARIA labels:
 
 Encrypt sensitive metrics:
 
-```powershell
+```TypeScript
 # Encrypt file
 .\scripts\utils\encrypt-data.ps1 -Action encrypt -FilePath ".runtime\metrics\sensitive.json"
 
@@ -303,18 +303,18 @@ Analytics data is:
 
 1. Check if files exist:
 
-   ```powershell
+   ```TypeScript
    Test-Path "reports/dashboard.html"
    ```
 
 2. Validate JSON files:
 
-   ```powershell
+   ```TypeScript
    .\scripts\tests\dashboard-validator.ps1
    ```
 
 3. Regenerate dashboard:
-   ```powershell
+   ```TypeScript
    .\scripts\metrics\dashboard-render.ps1
    ```
 
@@ -356,7 +356,7 @@ The dashboard includes automated CI/CD:
 
 Prevents committing metrics files:
 
-```powershell
+```TypeScript
 # .git/hooks/pre-commit
 if ($files -match "\.runtime/metrics") {
     Write-Host "ERROR: Metrics files should not be committed"

@@ -15,15 +15,15 @@ jobs:
     name: Lint & TypeCheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@f548e57e54
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@e51e5fe84f
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -44,15 +44,15 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@f548e57e54
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@e51e5fe84f
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -67,15 +67,15 @@ jobs:
     name: Dashboard Tests (vitest)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@f548e57e54
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@e51e5fe84f
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -91,15 +91,15 @@ jobs:
     name: Dashboard Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@f548e57e54
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@e51e5fe84f
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -115,15 +115,15 @@ jobs:
     name: Security Scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@f548e57e54
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@e51e5fe84f
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -132,21 +132,28 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Security audit
-        run: pnpm audit --audit-level=high || true
+        run: pnpm audit --audit-level=high
+        continue-on-error: false
+
+      - name: SAST scan (eslint-plugin-security)
+        run: pnpm lint -- --format stylish
+        continue-on-error: true
+        env:
+          CI: true
 
   sre-checks:
     name: SRE Gates (Error Budget + Performance SLO)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@f548e57e54
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@e51e5fe84f
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -164,15 +171,15 @@ jobs:
     name: Workflow Validation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@f548e57e54
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@e51e5fe84f
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -185,3 +192,95 @@ jobs:
 
       - name: Validate npm ci compliance
         run: npx tsx src/npm-ci-check.ts
+
+  planning-estimate:
+    name: Planning Estimate
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@f548e57e54
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@b906affcce
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@e51e5fe84f
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate planning estimate
+        run: |
+          echo "## Planning Estimate" >> $GITHUB_STEP_SUMMARY
+          npx tsx src/planning-integration.ts pr-description >> $GITHUB_STEP_SUMMARY
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  coverage-report:
+    name: Coverage Report
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+      - uses: actions/checkout@f548e57e54
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@b906affcce
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@e51e5fe84f
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate coverage report
+        run: pnpm coverage
+
+      - name: Upload coverage to GitHub
+        uses: actions/upload-artifact@50759540e242
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
+
+  sbom-generation:
+    name: SBOM Generation
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+      - uses: actions/checkout@f548e57e54
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@b906affcce
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@e51e5fe84f
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate SBOM
+        run: npx tsx src/generate-sbom.ts --output sbom/gentle-vanguard-sbom.json --format json
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@50759540e242
+        with:
+          name: sbom-report
+          path: sbom/
+          retention-days: 90

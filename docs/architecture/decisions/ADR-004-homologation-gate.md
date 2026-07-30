@@ -83,9 +83,9 @@ gv.ps1 publish
 
 ### Validations Performed
 
-**In `scripts/utilities/DEPLOYMENT/validate-release-homologation.ps1`**:
+**In `src/deployment/validate-release-homologation.ts`**:
 
-```powershell
+```TypeScript
 # 1. VERSION alignment (REQUIRED)
 Gentle-Vanguard\VERSION = "1.0.0"
 Gentle-Vanguard-Public\VERSION = "1.0.0"
@@ -109,7 +109,7 @@ v1.0.0 exists in both repos
 
 **Scenario 1: VERSION Mismatch**
 
-```powershell
+```TypeScript
 ❌ [BLOCKED] Homologation gate failed
 
   VERSION Mismatch:
@@ -125,7 +125,7 @@ Resolution:
 
 **Scenario 2: Branch Misalignment**
 
-```powershell
+```TypeScript
 ❌ [BLOCKED] Homologation gate failed
 
   Branch Misalignment:
@@ -141,7 +141,7 @@ Resolution:
 
 **Scenario 3: Dirty Working Tree**
 
-```powershell
+```TypeScript
 ❌ [BLOCKED] Homologation gate failed
 
   Working tree not clean:
@@ -158,7 +158,7 @@ Resolution:
 
 ### Bypass (Emergency Only)
 
-```powershell
+```TypeScript
 # Skip gate (NOT RECOMMENDED)
 gv.ps1 publish -SkipHomologationGate
 
@@ -202,7 +202,7 @@ gv.ps1 publish -SkipHomologationGate
 
 **Happy Path: Everything Aligned**
 
-```powershell
+```TypeScript
 cd gentle-vanguard
 git status
 # On branch develop, everything committed
@@ -217,7 +217,7 @@ gv.ps1 publish
 
 **Recovery Path: VERSION Mismatch**
 
-```powershell
+```TypeScript
 gv.ps1 publish
 # ❌ Homologation Gate: FAILED
 #    VERSION mismatch: gentle-vanguard=1.0.1, gentle-vanguard-public=1.0.0
@@ -265,7 +265,7 @@ gv.ps1 publish
 
 ## Related Decisions
 
-- [ADR-001](ADR-001-powershell-language-choice.md) — Why gate is written in PowerShell
+- [ADR-001](ADR-001-TypeScript-language-choice.md) — Why gate is written in TypeScript
 - [RELEASE-PROCESS.md](../../guides/RELEASE-PROCESS.md) — Full release workflow
 
 ---
@@ -274,7 +274,7 @@ gv.ps1 publish
 
 **Manual verification** (safe to run anytime):
 
-```powershell
+```TypeScript
 cd gentle-vanguard
 
 # Run gate manually
@@ -291,7 +291,7 @@ $LASTEXITCODE
 ## References
 
 - [RELEASE-PROCESS.md §2.5](../../guides/RELEASE-PROCESS.md#25-homologation-gate-mandatory--auto-runs-on-publish)
-- Historical implementation: `scripts/utilities/DEPLOYMENT/validate-release-homologation.ps1`
+- Historical implementation: `src/deployment/validate-release-homologation.ts`
   (removed during script migration)
 - [TROUBLESHOOTING-RUNBOOK.md §Release Workflow Issues](../../guides/TROUBLESHOOTING-RUNBOOK.md#release-workflow-issues)
 

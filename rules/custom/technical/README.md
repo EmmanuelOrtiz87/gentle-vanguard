@@ -39,7 +39,7 @@ How to verify: command, parser check, or acceptance criteria.
 File: `TECH-001-parser-validation.md`
 
 ````markdown
-# PowerShell Parser Validation
+# TypeScript Parser Validation
 
 ## Metadata
 
@@ -51,7 +51,7 @@ File: `TECH-001-parser-validation.md`
 
 ## Requirement
 
-All runtime PowerShell scripts must parse cleanly before commit.
+All runtime TypeScript scripts must parse cleanly before commit.
 
 ## Why It Matters
 
@@ -59,7 +59,7 @@ Prevents parser and runtime regressions in hook and CI automation.
 
 ## Validation
 
-```powershell
+```TypeScript
 [System.Management.Automation.Language.Parser]::ParseFile($path, [ref]$null, [ref]$errors)
 $errors.Count -eq 0
 ```

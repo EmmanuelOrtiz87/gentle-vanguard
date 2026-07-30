@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 /**
- * Self-Reflection Loop v1.0.0
+ * Self-Reflection Loop 
  * Meta-cognitive analysis and improvement suggestions
  * Continuous self-optimization through introspection
  * 
- * Part of Gentle-Vanguard v5.0 — Convergence Layer
+ * Part of Gentle-Vanguard  — Convergence Layer
  */
 
 import { EventEmitter } from 'events';
@@ -412,8 +412,8 @@ export const selfReflectionLoop = new SelfReflectionLoop();
 
 // CLI execution
 if (require.main === module) {
-  console.log('Self-Reflection Loop v1.0.0');
-  console.log('Part of Gentle-Vanguard v5.0 — Convergence Layer\n');
+  console.log('Self-Reflection Loop ');
+  console.log('Part of Gentle-Vanguard  — Convergence Layer\n');
   
   const loop = new SelfReflectionLoop({
     reflectionInterval: 1, // 1 minute for demo

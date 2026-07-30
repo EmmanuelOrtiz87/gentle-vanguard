@@ -19,10 +19,10 @@ Central inventory of automation scripts with ownership, risk level, and executio
 | scripts/utilities/ensure-tools-active.ps1                      | Tooling                | B     | yes       | platform       | Avoids heavy auto-installs unless forced                                                                                                                     |
 | scripts/utilities/run-engram.ps1                               | Memory Runtime         | B     | manual    | platform       | Canonical launcher for Engram session persistence                                                                                                            |
 | scripts/utilities/gv.ps1                                       | Operator CLI           | B     | manual    | dev-experience | Entrypoint for workflow commands                                                                                                                             |
-| scripts/utilities/DEPLOYMENT/validate-release-homologation.ps1 | Release Governance     | B     | manual    | dev-experience | Complementary pre-release multi-repo gate (VERSION/branch/tag alignment)                                                                                     |
+| src/deployment/validate-release-homologation.ts | Release Governance     | B     | manual    | dev-experience | Complementary pre-release multi-repo gate (VERSION/branch/tag alignment)                                                                                     |
 | scripts/utilities/enable-optional-post-commit.ps1              | Optional Hook Coverage | B     | manual    | dev-experience | Enables/disables optional post-commit automation (disabled by default)                                                                                       |
 | scripts/gentle-vanguard/setup.sh                               | Gentle-Vanguard Setup  | B     | manual    | platform       | Cross-platform bootstrap entrypoint for Linux/macOS/WSL                                                                                                      |
-| scripts/gentle-vanguard/bootstrap.ps1                          | Gentle-Vanguard Setup  | B     | manual    | platform       | Canonical PowerShell bootstrap entrypoint for workspace initialization                                                                                       |
+| scripts/gentle-vanguard/bootstrap.ps1                          | Gentle-Vanguard Setup  | B     | manual    | platform       | Canonical TypeScript bootstrap entrypoint for workspace initialization                                                                                       |
 | scripts/gentle-vanguard/gv.ps1                                 | Gentle-Vanguard CLI    | B     | manual    | platform       | Workspace bootstrap and scaffolding CLI (`init`, `new`, `validate`, `tools`, `skills`)                                                                       |
 | scripts/project/new-project.ps1                                | Project Scaffolding    | B     | manual    | dev-experience | Canonical new-project entrypoint backed by bootstrap-workspace                                                                                               |
 | scripts/utilities/end-session.ps1                              | Session Closure        | B     | manual    | dev-experience | Runs review/audit/governance checks and generates delivery closure artifact                                                                                  |
@@ -54,7 +54,7 @@ Central inventory of automation scripts with ownership, risk level, and executio
 
 Use this profile only when the project needs commit-time memory/session synchronization.
 
-```powershell
+```TypeScript
 # Enable optional post-commit coverage
 .\scripts\utilities\enable-optional-post-commit.ps1
 
@@ -79,7 +79,7 @@ Default policy: keep development flow unblocked for advisory gaps, but never hid
 
 ## Validation Commands
 
-```powershell
+```TypeScript
 # IDE and session readiness
 .\scripts\utilities\gv.ps1 ide-status
 
@@ -90,13 +90,13 @@ Default policy: keep development flow unblocked for advisory gaps, but never hid
 .\scripts\utilities\auto-init-dev-environment.ps1 -Quiet
 
 # Governance policy gate (legacy-safe advisory mode)
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1
+TypeScript -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1
 
 # GitFlow policy gate
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-gitflow.ps1
+TypeScript -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-gitflow.ps1
 
 # Canonical structure enforcement (enable only with explicit migration approval)
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1 -EnforceCanonicalStructure
+TypeScript -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1 -EnforceCanonicalStructure
 
 # Guided migration of loose scripts (preflight + rollback)
 .\scripts\utilities\gv.ps1 migrate-structure          # dry-run preflight

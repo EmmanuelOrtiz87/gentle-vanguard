@@ -4,7 +4,7 @@ Standards and best practices for Gentle-Vanguard project development. Last updat
 
 ---
 
-## PowerShell Coding Standards
+## TypeScript Coding Standards
 
 ### Required Patterns
 
@@ -33,7 +33,7 @@ Standards and best practices for Gentle-Vanguard project development. Last updat
   scripts, hooks, and `gv` commands for direct user output
 - No hardcoded paths (use relative or config-driven paths)
 - No empty `catch` blocks
-- No `Should Be` syntax (use `Should -Be` for Pester 5.x)
+- No `Should Be` syntax (use `Should -Be` for node:test)
 - No circular dependencies between modules
 - No hardcoded secrets or API keys
 
@@ -52,9 +52,9 @@ tests/
 └── security/       # Security-focused tests
 ```
 
-### Pester 5.x Syntax (REQUIRED)
+### node:test Syntax (REQUIRED)
 
-```powershell
+```TypeScript
 # CORRECT:
 $result | Should -Be $expected
 $value | Should -Not -BeNullOrEmpty
@@ -176,7 +176,7 @@ Every config JSON MUST include:
 
 ### Token Efficiency
 
-- **Context packing**: Use `scripts/utilities/handoff-compress.ps1` for large sessions
+- **Context packing**: Use `src/handoff-compress.ts` for large sessions
 - **Token budgeting**: All AI interactions must call `scripts/utilities/token-guard.ps1`
 - **Compression**: Apply 0.90 ratio for memory packs
 
@@ -271,7 +271,7 @@ understand before changing.
 
 ### Required Tools
 
-- **PowerShell** 7.0+
+- **TypeScript** 7.0+
 - **Pester** 5.x (minimum 5.3 for coverage support)
 - **Git** 2.30+
 - **Lefthook** 2.1.6+
@@ -279,7 +279,7 @@ understand before changing.
 
 ### VSCode Settings
 
-- PowerShell extension installed
+- TypeScript extension installed
 - Pester snippets enabled
 - Format on save: enabled
 - Trim trailing whitespace: enabled
@@ -356,15 +356,15 @@ Violations result in:
 All scripts must maintain valid references to other scripts, configurations, and documentation. Use
 `scripts/utilities/validate-cross-references.ps1` to audit:
 
-```powershell
+```TypeScript
 # Full validation
-pwsh -NoProfile -File scripts/utilities/validate-cross-references.ps1
+npx tsx src/utilities/validate-cross-references.ts
 
 # Only broken references
-pwsh -NoProfile -File scripts/utilities/validate-cross-references.ps1 -BrokenRefsOnly
+npx tsx src/utilities/validate-cross-references.ts -BrokenRefsOnly
 
 # Only unreferenced files
-pwsh -NoProfile -File scripts/utilities/validate-cross-references.ps1 -UnreferencedOnly
+npx tsx src/utilities/validate-cross-references.ts -UnreferencedOnly
 ```
 
 ### Deprecation Lifecycle
@@ -373,7 +373,7 @@ When deprecating a script or feature:
 
 1. **Mark as Deprecated**: Add comment block at file start
 
-   ```powershell
+   ```TypeScript
    <#
    .SYNOPSIS
        [DEPRECATED] Use new-script.ps1 instead
@@ -410,7 +410,7 @@ When deprecating a script or feature:
 All PRs must pass reference validation:
 
 ```bash
-pwsh -NoProfile -File scripts/utilities/validate-cross-references.ps1
+npx tsx src/utilities/validate-cross-references.ts
 ```
 
 Broken references block merge. Fix before committing.

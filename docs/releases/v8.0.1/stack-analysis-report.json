@@ -14,7 +14,7 @@
   },
   "inventory": {
     "src": {
-      "description": "Core TypeScript implementation files - migrated from PowerShell",
+      "description": "Core TypeScript implementation files - migrated from TypeScript",
       "total_files": 203,
       "categories": {
         "core": {

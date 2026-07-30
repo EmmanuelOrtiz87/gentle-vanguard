@@ -24,6 +24,7 @@ interface EvoArgs {
   mode: 'all' | 'analyze' | 'gaps' | 'refine' | 'deprecate';
   quiet: boolean;
   dryRun: boolean;
+  autoArchive: boolean;
 }
 
 interface SkillInfo {
@@ -456,7 +457,7 @@ function detectDeprecations(
 // ─── Main ─────────────────────────────────────────────────────────────
 
 function parseArgs(argv: string[]): EvoArgs {
-  const args: EvoArgs = { mode: 'all', quiet: false, dryRun: false };
+  const args: EvoArgs = { mode: 'all', quiet: false, dryRun: false, autoArchive: false };
   for (let i = 2; i < argv.length; i++) {
     const arg = argv[i];
     if (arg === '--analyze') args.mode = 'analyze';
@@ -465,8 +466,36 @@ function parseArgs(argv: string[]): EvoArgs {
     else if (arg === '--deprecate') args.mode = 'deprecate';
     else if (arg === '--quiet') args.quiet = true;
     else if (arg === '--dry-run') args.dryRun = true;
+    else if (arg === '--auto-archive') args.autoArchive = true;
   }
   return args;
+}
+
+// ─── Auto-Archive Integration ─────────────────────────────────────────
+
+function autoArchiveDeprecations(deprecations: DeprecationCandidate[]): number {
+  const archives = deprecations.filter(d => d.suggestedAction === 'archive');
+  if (archives.length === 0) return 0;
+  
+  const triggerDir = join(ROOT, '.session', 'auto-apply');
+  if (!existsSync(triggerDir)) mkdirSync(triggerDir, { recursive: true });
+  
+  let archived = 0;
+  for (const dep of archives) {
+    const triggerFile = join(triggerDir, `trigger-archive-${dep.skillName}.json`);
+    writeFileSync(triggerFile, JSON.stringify({
+      source: 'skill-evolution-engine',
+      type: 'deprecation',
+      skillName: dep.skillName,
+      daysSinceUse: dep.daysSinceUse,
+      reason: dep.reason,
+      confidence: dep.daysSinceUse > 60 ? 0.95 : 0.85,
+      timestamp: now(),
+      autoApply: true,
+    }, null, 2), 'utf-8');
+    archived++;
+  }
+  return archived;
 }
 
 function main(): void {
@@ -545,6 +574,13 @@ function main(): void {
   else if (staleRatio < 0.25 && deprecations.length < 10) health = 'good';
   else if (staleRatio < 0.4) health = 'fair';
   else health = 'poor';
+
+  // 6.5 Auto-archive if enabled
+  let archivedCount = 0;
+  if (args.autoArchive && deprecations.length > 0) {
+    archivedCount = autoArchiveDeprecations(deprecations);
+    log(`  Auto-archive triggered for ${archivedCount} skills`);
+  }
 
   // 7. Output
   const output: EvoOutput = {

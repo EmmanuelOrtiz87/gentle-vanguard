@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 /**
- * Knowledge Synthesizer v1.0.0
+ * Knowledge Synthesizer 
  * Cross-session knowledge distillation and concept mapping
  * Long-term learning and pattern recognition
  * 
- * Part of Gentle-Vanguard v5.0 — Convergence Layer
+ * Part of Gentle-Vanguard  — Convergence Layer
  */
 
 import { EventEmitter } from 'events';
@@ -361,8 +361,8 @@ export const knowledgeSynthesizer = new KnowledgeSynthesizer();
 
 // CLI execution
 if (require.main === module) {
-  console.log('Knowledge Synthesizer v1.0.0');
-  console.log('Part of Gentle-Vanguard v5.0 — Convergence Layer\n');
+  console.log('Knowledge Synthesizer ');
+  console.log('Part of Gentle-Vanguard  — Convergence Layer\n');
   
   const synthesizer = new KnowledgeSynthesizer();
   

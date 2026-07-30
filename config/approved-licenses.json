@@ -1,0 +1,61 @@
+{
+  "version": "1.0.0",
+  "name": "approved-licenses",
+  "description": "Approved dependency licenses for Gentle-Vanguard stack",
+  "approvedLicenses": [
+    {
+      "license": "MIT",
+      "status": "approved",
+      "reason": "Permissive open-source license"
+    },
+    {
+      "license": "Apache-2.0",
+      "status": "approved",
+      "reason": "Permissive open-source license with patent protection"
+    },
+    {
+      "license": "BSD-2-Clause",
+      "status": "approved",
+      "reason": "Permissive BSD license"
+    },
+    {
+      "license": "BSD-3-Clause",
+      "status": "approved",
+      "reason": "Permissive BSD license with non-endorsement clause"
+    },
+    {
+      "license": "ISC",
+      "status": "approved",
+      "reason": "Permissive license similar to MIT"
+    },
+    {
+      "license": "CC0-1.0",
+      "status": "approved",
+      "reason": "Public domain dedication"
+    },
+    {
+      "license": "WTFPL",
+      "status": "approved",
+      "reason": "Permissive public domain-like license"
+    }
+  ],
+  "dualLicenses": [
+    {
+      "pattern": "(BSD-2-Clause OR MIT OR Apache-2.0)",
+      "status": "approved",
+      "reason": "Any of the listed licenses is acceptable"
+    },
+    {
+      "pattern": "(MIT OR CC0-1.0)",
+      "status": "approved",
+      "reason": "Any of the listed licenses is acceptable"
+    },
+    {
+      "pattern": "(MIT OR WTFPL)",
+      "status": "approved",
+      "reason": "Any of the listed licenses is acceptable"
+    }
+  ],
+  "lastUpdated": "2026-07-27",
+  "approvedBy": "security-policy"
+}

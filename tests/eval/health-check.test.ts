@@ -7,11 +7,11 @@ const ROOT = join(import.meta.dirname, '..', '..');
 
 describe('health-check eval', () => {
   it('health check script exists', () => {
-    expect(existsSync(join(ROOT, 'src', 'health-check.ts'))).toBe(true);
+    expect(existsSync(join(ROOT, 'src', 'core', 'health-check.ts'))).toBe(true);
   });
 
   it('watchtower script exists', () => {
-    expect(existsSync(join(ROOT, 'src', 'maintenance-watchtower.ts'))).toBe(true);
+    expect(existsSync(join(ROOT, 'src', 'core', 'maintenance-watchtower.ts'))).toBe(true);
   });
 
   it('session-autostart script exists', () => {

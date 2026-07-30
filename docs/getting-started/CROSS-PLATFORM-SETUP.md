@@ -5,7 +5,7 @@
 The Gentle-Vanguard - Development Stack now supports **all platforms** through
 orchestrator-coordinated shell routing:
 
-- **Windows**: PowerShell 5.1+ or PowerShell Core (pwsh)
+- **Windows**: TypeScript 5.1+ or TypeScript Core (pwsh)
 - **Linux**: Bash, sh, zsh
 - **macOS**: Bash, zsh, sh
 - **WSL**: Full support via bash
@@ -14,18 +14,18 @@ orchestrator-coordinated shell routing:
 
 1. The workspace is platform-aware for Windows, Linux, macOS, and WSL.
 2. The wrapper commands are shell-aware and route to the correct entrypoint.
-3. The tool activation and update scripts are PowerShell-based, but they now resolve
+3. The tool activation and update scripts are TypeScript-based, but they now resolve
    platform-specific paths, home directories, and install metadata dynamically.
-4. This means the stack is highly portable across OSes, while PowerShell remains the canonical
+4. This means the stack is highly portable across OSes, while TypeScript remains the canonical
    implementation runtime for automation.
 
 ## Quick Start
 
-### Windows (PowerShell)
+### Windows (TypeScript)
 
-```powershell
+```TypeScript
 # First time setup
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bootstrap.ps1
+TypeScript -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bootstrap.ps1
 
 # Then use workflow commands
 .\scripts\utilities\gv.ps1 status
@@ -55,16 +55,16 @@ The orchestrator automatically detects your platform and available shells:
 detect_os  # Returns: linux, macos, windows
 
 # Detect shell
-detect_shell  # Returns: bash, zsh, sh, powershell, pwsh
+detect_shell  # Returns: bash, zsh, sh, TypeScript, pwsh
 ```
 
 ### Intelligent Routing
 
 When you run `./gv`, the system:
 
-1. Detects available shells (prioritizes: PowerShell bash sh)
+1. Detects available shells (prioritizes: TypeScript bash sh)
 2. Routes to appropriate implementation:
-   - Windows + PowerShell available runs `gv.ps1`
+   - Windows + TypeScript available runs `gv.ps1`
    - Linux/macOS + bash available runs `gv.sh`
    - Fallback uses `gv` wrapper script
 
@@ -88,7 +88,7 @@ Same commands work on **all platforms**:
 | Script                                  | Platform           | Purpose                                   |
 | --------------------------------------- | ------------------ | ----------------------------------------- |
 | `scripts/gentle-vanguard/setup.sh`      | Linux/macOS/WSL    | Universal setup with platform detection   |
-| `scripts/gentle-vanguard/bootstrap.ps1` | Windows/PowerShell | Canonical PowerShell bootstrap entrypoint |
+| `scripts/gentle-vanguard/bootstrap.ps1` | Windows/TypeScript | Canonical TypeScript bootstrap entrypoint |
 | `gv` wrapper + `scripts/utilities/gv.*` | All                | Auto-detects platform on execution        |
 
 ### Diagnostic Scripts
@@ -96,21 +96,21 @@ Same commands work on **all platforms**:
 | Script                                       | Platform           | Purpose                                             |
 | -------------------------------------------- | ------------------ | --------------------------------------------------- |
 | `scripts/diagnostics/system-diagnostics.sh`  | Linux/macOS/WSL    | Check Go, Git, Engram, Node.js                      |
-| `scripts/diagnostics/system-diagnostics.ps1` | Windows/PowerShell | PowerShell diagnostics entrypoint for Windows hosts |
+| `scripts/diagnostics/system-diagnostics.ps1` | Windows/TypeScript | TypeScript diagnostics entrypoint for Windows hosts |
 
 ### Initialization Scripts
 
 | Script                                            | Platform           | Purpose                                                   |
 | ------------------------------------------------- | ------------------ | --------------------------------------------------------- |
 | `scripts/utilities/auto-init-dev-environment.sh`  | Linux/macOS/WSL    | Auto-detect and initialize stack                          |
-| `scripts/utilities/auto-init-dev-environment.ps1` | Windows/PowerShell | PowerShell auto-init entrypoint with auto-install support |
+| `scripts/utilities/auto-init-dev-environment.ps1` | Windows/TypeScript | TypeScript auto-init entrypoint with auto-install support |
 
 ### Workflow CLI
 
 | Script                     | Platform           | Purpose                         |
 | -------------------------- | ------------------ | ------------------------------- |
 | `scripts/utilities/gv.sh`  | Linux/macOS/WSL    | Main workflow CLI (bash)        |
-| `scripts/utilities/gv.ps1` | Windows/PowerShell | Main workflow CLI (PowerShell)  |
+| `scripts/utilities/gv.ps1` | Windows/TypeScript | Main workflow CLI (TypeScript)  |
 | `gv` (wrapper)             | All                | Smart router that detects shell |
 
 ## Command Reference
@@ -213,9 +213,9 @@ The orchestrator is configured in `config/orchestrator.json`:
   "platform_aware": true,
   "cross_platform_routing": true,
   "communication_response_mode": "simple",
-  "supported_shells": ["powershell", "pwsh", "bash", "sh"],
+  "supported_shells": ["TypeScript", "pwsh", "bash", "sh"],
   "shell_routing": {
-    "windows": ["powershell", "pwsh"],
+    "windows": ["TypeScript", "pwsh"],
     "linux": ["bash", "sh"],
     "macos": ["bash", "zsh", "sh"]
   },
@@ -275,7 +275,7 @@ Before each commit:
 ## Compatibility Notes
 
 1. `gv.ps1`, `ensure-tools-active.ps1`, and `update-tools.ps1` are the canonical automation scripts.
-2. On Linux or macOS, prefer `pwsh` when invoking the PowerShell scripts directly.
+2. On Linux or macOS, prefer `pwsh` when invoking the TypeScript scripts directly.
 3. Bash support is recommended when using shell-based helper tooling.
 4. AI tooling is configurable and optional; the workspace does not require a single IDE or AI
    provider to be hardcoded.
@@ -291,7 +291,7 @@ chmod +x scripts/diagnostics/*.sh
 chmod +x scripts/git-hooks/*
 ```
 
-**Windows:** Already executable (PowerShell scripts handle execution)
+**Windows:** Already executable (TypeScript scripts handle execution)
 
 ### Problem: "Go not found"
 
@@ -320,8 +320,8 @@ Explicitly use desired shell:
 # Force bash
 bash scripts/utilities/gv.sh status
 
-# Force PowerShell
-powershell -File scripts\utilities\gv.ps1 status
+# Force TypeScript
+TypeScript -File scripts\utilities\gv.ps1 status
 ```
 
 ## Development
@@ -365,7 +365,7 @@ esac
 ```
 project-root/
  scripts/gentle-vanguard/setup.sh       # Universal setup entry point (bash)
- scripts/gentle-vanguard/bootstrap.ps1  # PowerShell bootstrap entry point
+ scripts/gentle-vanguard/bootstrap.ps1  # TypeScript bootstrap entry point
  gv                                # Universal wrapper (any shell)
  config/
     orchestrator.json             # Platform routing config
@@ -373,7 +373,7 @@ project-root/
  scripts/
     utilities/
        gv.sh                     # Bash/sh workflow CLI
-       gv.ps1                    # PowerShell workflow CLI
+       gv.ps1                    # TypeScript workflow CLI
        auto-init-dev-environment.sh
        auto-init-dev-environment.ps1
        ...
@@ -398,7 +398,7 @@ project-root/
 ## What's Next
 
 1. Run setup: `bash scripts/gentle-vanguard/setup.sh` (Linux/macOS) or
-   `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bootstrap.ps1`
+   `TypeScript -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bootstrap.ps1`
    (Windows)
 2. Verify installation: `./gv health` or `.\scripts\utilities\gv.ps1 health`
 3. Start development: See project-specific README

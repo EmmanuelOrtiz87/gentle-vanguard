@@ -32,7 +32,7 @@ culturalmente apropiado.
 | --------------------- | ------------------------- | --------------------- |
 | JavaScript/TypeScript | react-intl / FormatJS     | ICU MessageFormat     |
 | Python                | Babel + Django i18n       | .po / .mo + gettext   |
-| PowerShell            | Resource strings          | .psd1 con hashtable   |
+| TypeScript            | Resource strings          | .psd1 con hashtable   |
 | React Native          | react-intl + IntlProvider | ICU MessageFormat     |
 | General               | i18next                   | JSON resource bundles |
 

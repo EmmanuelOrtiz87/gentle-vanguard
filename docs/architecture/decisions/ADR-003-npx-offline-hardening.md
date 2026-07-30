@@ -134,7 +134,7 @@ allow-git=none
 — MCP Workspace and [STACK-OPTIMIZATION-ROADMAP.md](../../guides/STACK-OPTIMIZATION-ROADMAP.md)
 §Conscious Update Procedure**:
 
-```powershell
+```TypeScript
 # 1. Review current status
 npm list @modelcontextprotocol/server-filesystem
 
@@ -243,7 +243,7 @@ Testing: [what was verified]
 
 ## Related Decisions
 
-- [ADR-001](ADR-001-powershell-language-choice.md) — Why PowerShell for hooks
+- [ADR-001](ADR-001-TypeScript-language-choice.md) — Why TypeScript for hooks
 
 ---
 

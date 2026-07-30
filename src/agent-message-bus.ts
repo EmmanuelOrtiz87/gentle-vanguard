@@ -12,6 +12,7 @@ interface AgentMessage {
   correlation_id: string;
   subject: string;
   payload: unknown;
+  compressedPayload?: string;
   timestamp: string;
   expires_at: string | null;
   priority: 'normal' | 'high' | 'low';

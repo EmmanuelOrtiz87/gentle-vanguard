@@ -1,0 +1,48 @@
+# Deploy Presentations Book
+# Builds and deploys docs/presentations/ to GitHub Pages on push to
+# develop/main when presentations change, or via workflow_dispatch.
+# -------------------------------------------------------------------
+# Badge: ![status](https://img.shields.io/github/actions/workflow/status/<owner>/<repo>/deploy-presentations.yml?label=Presentations)
+
+name: "Deploy Presentations Book"
+
+on:
+  push:
+    branches: [develop, main]
+    paths:
+      - docs/presentations/**
+  workflow_dispatch:
+
+concurrency:
+  group: pages-${{ github.ref_name }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == github.event.repository.owner.login && !github.event.repository.fork
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@f548e57e54
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/presentations
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

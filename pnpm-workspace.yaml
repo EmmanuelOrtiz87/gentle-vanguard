@@ -2,3 +2,13 @@ allowBuilds:
   better-sqlite3: true
   esbuild: true
   lefthook: true
+minimumReleaseAgeExclude:
+  - '@modelcontextprotocol/sdk@1.30.0'
+
+overrides:
+  brace-expansion: '>=5.0.8'
+  '@hono/node-server': '>=2.0.5'
+
+resolutions:
+  brace-expansion: '>=5.0.8'
+  '@hono/node-server': '>=2.0.5'

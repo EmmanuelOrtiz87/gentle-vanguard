@@ -38,7 +38,7 @@ Invokes skills on AWS Lambda with:
 - Session state persistence to S3 (local simulation to `.session/s3-backups/`)
 - Cost tracking ($0.0000167/invocation)
 
-```powershell
+```TypeScript
 # Basic usage
 pwsh scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1 `
   -SkillId "code-review" `
@@ -56,7 +56,7 @@ Invokes skills on Azure Functions with:
 - Dry-run mode for testing without real invocation
 - Cost tracking ($0.00002/invocation)
 
-```powershell
+```TypeScript
 # Basic usage
 pwsh scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1 `
   -SkillId "code-review" `
@@ -74,7 +74,7 @@ Routes between AWS and Azure based on strategy:
 - **load**: Picks least loaded (load/capacity ratio)
 - **Fallback**: If primary fails, automatically tries secondary
 
-```powershell
+```TypeScript
 # Cost-based routing (default)
 pwsh scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1 `
   -SkillId "code-review" `

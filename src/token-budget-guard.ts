@@ -174,10 +174,19 @@ export function saveUsageRecord(opts: {
 
 export function checkEngram(): { available: boolean; source: string } {
   try {
-    const r = execSync('which engram', { stdio: 'pipe', timeout: 5000 }).toString().trim();
-    if (r) return { available: true, source: r };
+    // Windows compatible: try 'where' first, fallback to direct execution
+    const isWindows = process.platform === 'win32';
+    const cmd = isWindows ? 'where engram' : 'which engram';
+    const r = execSync(cmd, { stdio: 'pipe', timeout: 5000 }).toString().trim();
+    if (r) return { available: true, source: r.split('\n')[0].trim() };
   } catch {
-    /* not found */
+    // Fallback: try to run engram directly
+    try {
+      execSync('engram --version', { stdio: 'pipe', timeout: 5000 });
+      return { available: true, source: 'engram (in PATH)' };
+    } catch {
+      /* not found */
+    }
   }
   return { available: false, source: '' };
 }

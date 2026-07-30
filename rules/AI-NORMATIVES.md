@@ -7,13 +7,13 @@ Version: 1.0.0
 
 ## 1. Pre-Processing Rule (MANDATORY)
 
-Every AI agent **MUST** run `scripts/utilities/pre-process-input.ps1` before responding.
+Every AI agent **MUST** run `src/pre-process-input.ts` before responding.
 
 The **first call** in a session MUST use the first user message as input. Subsequent calls MUST
 re-process each new user message before responding.
 
-```powershell
-pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/pre-process-input.ps1 `
+```TypeScript
+pwsh -NoProfile -ExecutionPolicy Bypass -File src/pre-process-input.ts `
   -UserInput "<USER_INPUT>" -WorkspaceRoot "."
 ```
 
@@ -143,7 +143,7 @@ Operational requirements:
 3. Regressions are blocked by automated matrix validation in
    `tests/e2e/routing-language-matrix.json` executed by
    `scripts/utilities/routing-quality-eval.ps1`.
-4. `scripts/utilities/agent-verify.ps1` must fail if multilingual routing matrix has mismatches.
+4. `src/agent-verify.ts` must fail if multilingual routing matrix has mismatches.
 5. No confidence threshold gates SDD flow — if the skill matches `sdd-lifecycle` and the input
    contains a development/feature intent keyword (in any supported language), PLAN_MODE_REQUIRED is
    triggered unconditionally.
@@ -185,7 +185,7 @@ Do **NOT** invent skill paths or fake tool calls.
 3. **Track**: Session ID pattern `session-YYYY-MM-DD-XX`, project `workspace_gentle_vanguard`
 4. **Analyze**: Read `scripts/.session/startup-summary.json` — report peak hour and warnings to user
 5. **Verify**: Run `agent-verify.ps1` to validate workspace integrity (SHOULD)
-6. **End**: Run `scripts/utilities/pre-close-validator.ps1` before closing; save key decisions to
+6. **End**: Run `src/pre-close-validator.ts` before closing; save key decisions to
    engram
 
 ---
@@ -193,8 +193,8 @@ Do **NOT** invent skill paths or fake tool calls.
 ## 9. Commit & Hook Standards
 
 - All commits follow Conventional Commits: `type(scope): message`
-- `pre-commit` hook runs `hooks/pre-commit.ps1` — validates JSON, privacy rules, script safety
-- Install hooks with `pwsh -File scripts/utilities/install-hooks.ps1` (idempotent)
+- `pre-commit` hook runs `hooks/pre-commit` — validates JSON, privacy rules, script safety
+- Install hooks with `pwsh -File src/install-hooks.ts` (idempotent)
 - **Never** use `git commit --no-verify` unless authorized by GOV agent
 
 Valid types: `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`, `test`, `ci`
@@ -206,9 +206,9 @@ Valid types: `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`, `test`, `ci`
 - Default: `simple` + `ultra` response mode
 - Temperature: 0.3 (focused) — overridden per agent profile
 - Max tokens: 4500 (default agent)
-- Context compression: `scripts/utilities/handoff-compress.ps1` for agent-to-agent handoffs
+- Context compression: `src/handoff-compress.ts` for agent-to-agent handoffs
 - Pre-compact hook:
-  `scripts/utilities/pre-compact-hook.ps1 -ProjectName workspace_gentle_vanguard -CompressionRatio 0.90`
+  `src/pre-compact-hook.ts -ProjectName workspace_gentle_vanguard -CompressionRatio 0.90`
 
 ---
 
@@ -216,8 +216,8 @@ Valid types: `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`, `test`, `ci`
 
 Before any release or major commit:
 
-```powershell
-pwsh -File scripts/utilities/validate-configs.ps1
+```TypeScript
+pwsh -File src/validate-configs.ts
 ```
 
 Checks: JSON syntax, required keys, script paths, root file declarations **FAIL** = block release.
@@ -229,8 +229,8 @@ Checks: JSON syntax, required keys, script paths, root file declarations **FAIL*
 
 After completing **any significant work**, the agent MUST run:
 
-```powershell
-pwsh -File scripts/utilities/agent-verify.ps1
+```TypeScript
+pwsh -File src/agent-verify.ts
 ```
 
 | Result               | Meaning                   | Action                              |
@@ -265,7 +265,7 @@ optional and does NOT require explicit user direction.
 
 After completing any task that involves bugs, workarounds, or new patterns:
 
-```powershell
+```TypeScript
 gv learning          # detect gaps and generate proposals
 gv learning apply    # auto-apply low-severity proposals
 ```
@@ -349,7 +349,7 @@ permissions:
 - Windows Scheduled Task uses local host timezone.
 - Convert local time to UTC explicitly before editing workflow cron.
 
-Validation gate: `scripts/utilities/agent-verify.ps1` enforces this standard for scheduled
+Validation gate: `src/agent-verify.ts` enforces this standard for scheduled
 workflows.
 
 ---
@@ -429,7 +429,7 @@ keys, signing certificates, service account credentials.
 
 ### Commands
 
-```powershell
+```TypeScript
 # Create secret (stored encrypted in vault)
 gv secret create --name API_TOKEN --type api-keys --value <token>
 
@@ -482,4 +482,4 @@ security compliance)
 | PSScriptAnalyzer Config      | `config/PSScriptAnalyzerSettings.psd1`                         |
 | ESLint Config                | `.eslintrc.json`                                               |
 | TypeScript Config            | `tsconfig.json`                                                |
-| Self-verification            | `scripts/utilities/agent-verify.ps1`                           |
+| Self-verification            | `src/agent-verify.ts`                           |

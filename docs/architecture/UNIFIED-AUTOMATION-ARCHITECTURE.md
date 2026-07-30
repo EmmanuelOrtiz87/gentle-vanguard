@@ -40,7 +40,7 @@ them but doesn't automatically obey them BEFORE every response.
     "pre_process": {
       "enabled": true,
       "mandatory": true,
-      "script": "scripts/utilities/pre-process-input.ps1",
+      "script": "src/pre-process-input.ts",
       "args": ["-UserInput", "${user_input}", "-WorkspaceRoot", "."]
     }
   }
@@ -52,7 +52,7 @@ them but doesn't automatically obey them BEFORE every response.
 {
   "cline.hooks.preProcess": {
     "enabled": true,
-    "script": "scripts/utilities/pre-process-input.ps1"
+    "script": "src/pre-process-input.ts"
   }
 }
 ```

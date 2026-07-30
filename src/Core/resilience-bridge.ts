@@ -13,11 +13,9 @@
  */
 
 import * as fs from 'fs';
-import { resolve } from 'path';
 import * as path from 'path';
+import { ROOT } from './repo-root';
 import { getTimeout, getCircuitBreakerConfig, getRetryConfig } from './timeout-config';
-
-const ROOT = resolve(process.cwd());
 
 // ---------------------------------------------------------------------------
 // Types

@@ -383,6 +383,20 @@ async function main() {
   // Log to Engram
   logToEngram(norms, context);
 
+  // Signal auto-apply-safe for newly promoted norms
+  const promotedCount = norms.filter(n => n.status === 'active').length - 
+    norms.filter(n => n.status === 'proposed').length;
+  if (promotedCount > 0) {
+    const triggerDir = join(ROOT, '.session', 'auto-apply');
+    if (!existsSync(triggerDir)) mkdirSync(triggerDir, { recursive: true });
+    writeFileSync(join(triggerDir, 'trigger-norms.json'), JSON.stringify({
+      source: 'auto-norm-learner',
+      type: 'norm-promotion',
+      promotedCount,
+      timestamp: new Date().toISOString(),
+    }), 'utf-8');
+  }
+
   // Output summary
   const activeCount = norms.filter(n => n.status === 'active').length;
   const proposedCount = norms.filter(n => n.status === 'proposed').length;

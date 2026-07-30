@@ -2,9 +2,9 @@
 
 Tareas internas para probar y calibrar el loop SIA.
 
-## Task 1: PowerShell Skill Lister
+## Task 1: TypeScript Skill Lister
 
-**Spec**: Escribir un script PowerShell que liste todas las skills en `skills/` agrupadas por
+**Spec**: Escribir un script TypeScript que liste todas las skills en `skills/` agrupadas por
 directorio, mostrando nombre, trigger principal, y source. Output en tabla formateada.
 
 **Expected**: `scripts/sia/bench/skill-lister.ps1`
@@ -17,7 +17,7 @@ directorio, mostrando nombre, trigger principal, y source. Output en tabla forma
 
 ## Task 2: JSON Schema Validator
 
-**Spec**: Generar script PowerShell que valide un archivo JSON contra un schema dado, mostrando
+**Spec**: Generar script TypeScript que valide un archivo JSON contra un schema dado, mostrando
 errores con ruta completa del campo fallido.
 
 **Expected**: `scripts/sia/bench/json-validator.ps1`
@@ -30,7 +30,7 @@ errores con ruta completa del campo fallido.
 
 ## Task 3: Semantic Search Function
 
-**Spec**: Crear función PowerShell que implemente búsqueda semántica simple usando cosine similarity
+**Spec**: Crear función TypeScript que implemente búsqueda semántica simple usando cosine similarity
 sobre embeddings basados en palabras clave (sin dependencias externas).
 
 **Expected**: `scripts/sia/bench/semantic-search.ps1`
@@ -58,7 +58,7 @@ funciones especializadas y un main que los coordine.
 
 ## Running
 
-```powershell
+```TypeScript
 # Run a benchmark task through SIA
 .\scripts\sia\sia-orchestrator.ps1 -TaskSpec (Get-Content docs/sia/BENCHMARK-TASKS.md -Raw) -OutputDir ".sia-bench"
 ```

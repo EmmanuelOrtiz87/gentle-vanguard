@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 /**
- * Skill Evolution Engine v1.0.0
+ * Skill Evolution Engine
  * Usage analysis, gap detection, and skill deprecation
  * Continuous improvement of skill ecosystem
  * 
- * Part of Gentle-Vanguard v5.0 — Convergence Layer
+ * Part of Gentle-Vanguard — Convergence Layer
  */
 
 import { EventEmitter } from 'events';

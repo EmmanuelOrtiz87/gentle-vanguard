@@ -6,8 +6,8 @@ Tool-agnostic startup for this workspace | Canonical entry point
 
 Detect which AI tool is running BEFORE any other action:
 
-```powershell
-$detected = pwsh -NoProfile -File scripts/utilities/detect-tool.ps1 -AsJson | ConvertFrom-Json
+```TypeScript
+$detected = pwsh -NoProfile -File src/detect-tool.ts -AsJson | ConvertFrom-Json
 $detected.name
 $detected.os.platform
 ```
@@ -57,7 +57,7 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 | Strict TDD enforcement   | `rules/SDD-STRICT-TDD.md`                                                |
 | Per-phase model routing  | `rules/PER-PHASE-MODEL-ROUTING.md`                                       |
 | Dependency automation    | `renovate.json` (Renovate) + `.github/dependabot.yml` (Dependabot)       |
-| Pre-processing hook      | `scripts/utilities/pre-process-input.ps1`                                |
+| Pre-processing hook      | `src/pre-process-input.ts`                                |
 | SDD FLOW                 | New feature -> BA/EXPLORE, no exceptions                                 |
 | Delegation Rules         | `rules/DELEGATION-RULES.md`                                              |
 
@@ -78,8 +78,8 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 | Technique           | Description                                                                                         |
 | ------------------- | --------------------------------------------------------------------------------------------------- |
 | Memory tiering      | Hot (active) -> Warm (1d, 90%) -> Cold (7d, 70%)                                                    |
-| Handoff compression | `scripts/utilities/handoff-compress.ps1`                                                            |
-| Pre-compact hook    | `scripts/utilities/pre-compact-hook.ps1`                                                            |
+| Handoff compression | `src/handoff-compress.ts`                                                            |
+| Pre-compact hook    | `src/pre-compact-hook.ts`                                                            |
 | Response cache      | `pre-process-input.ps1` — SHA256 cache, TTL 30min, -33-41% latency (flag `-DisableCache` to bypass) |
 | Lazy autostart      | `session-autostart.config.json` — 6 non-critical steps deferred post-pipeline                       |
 | In-process pipeline | `session-start-optimized.ps1` — removed `Start-Job`, runs `&` directo in-process                    |
@@ -99,8 +99,8 @@ Toggle session accumulated | | `/notif compact on/off` | Toggle compact/verbose 
 
 For context logging (post-response), run manually when needed:
 
-```powershell
-pwsh -NoProfile -File scripts/utilities/token-usage-auto.ps1 -InputTokens <N> -OutputTokens <N> -ContextChars <N> -InputSummary "<...>" -OutputSummary "<...>" -TurnLabel "<...>" -Model "<model>"
+```TypeScript
+pwsh -NoProfile -File src/token-usage-auto.ts -InputTokens <N> -OutputTokens <N> -ContextChars <N> -InputSummary "<...>" -OutputSummary "<...>" -TurnLabel "<...>" -Model "<model>"
 ```
 
 Creates `.session/context-log/<session-id>/turn-NNN.md` and `context-summary.md`. On close:
@@ -151,15 +151,15 @@ See `docs/QUICK-COMMANDS.md` for full list.
 | Devcontainer                 | `.devcontainer/devcontainer.json`                       |
 | JSON Validator               | `scripts/utilities/json-validator.ps1`                  |
 | JSON Construction            | `rules/NORMATIVAS-JSON-CONSTRUCTION.md`                 |
-| **Feedback Collector**       | `scripts/utilities/FEEDBACK/feedback-collector.ps1`     |
-| **Feedback Analyzer**        | `scripts/utilities/FEEDBACK/feedback-analyzer.ps1`      |
-| **Digest Generator**         | `scripts/utilities/DIGEST/digest-generator.ps1`         |
+| **Feedback Collector**       | `src/feedback/feedback-collector.ts`     |
+| **Feedback Analyzer**        | `src/feedback/feedback-analyzer.ts`      |
+| **Digest Generator**         | `src/digest/digest-generator.ts`         |
 | **NORMATIVAS-FEEDBACK**      | `rules/NORMATIVAS-FEEDBACK.md`                          |
-| **Release Automation**       | `scripts/utilities/DEPLOYMENT/release-automation.ps1`   |
+| **Release Automation**       | `src/deployment/release-automation.ts`   |
 | **NORMATIVAS-RELEASE**       | `rules/NORMATIVAS-RELEASE.md`                           |
-| **Fine-Tuning Pipeline**     | `scripts/utilities/FINE-TUNING/ft-pipeline.ps1`         |
-| **FT Trainer**               | `scripts/utilities/FINE-TUNING/ft-trainer.ps1`          |
-| **FT Status**                | `scripts/utilities/FINE-TUNING/ft-status.ps1`           |
-| **FT Threshold Detect**      | `scripts/utilities/FINE-TUNING/ft-threshold-detect.ps1` |
-| **FT Auto-Prune**            | `scripts/utilities/FINE-TUNING/ft-auto-prune.ps1`       |
+| **Fine-Tuning Pipeline**     | `src/fine-tuning/ft-pipeline.ts`         |
+| **FT Trainer**               | `src/fine-tuning/ft-trainer.ts`          |
+| **FT Status**                | `src/fine-tuning/ft-status.ts`           |
+| **FT Threshold Detect**      | `src/fine-tuning/ft-threshold-detect.ts` |
+| **FT Auto-Prune**            | `src/fine-tuning/ft-auto-prune.ts`       |
 | **FT Registry**              | `.ft/registry.json`                                     |

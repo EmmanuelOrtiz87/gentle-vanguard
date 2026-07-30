@@ -8,7 +8,7 @@ The autonomous validation system continuously monitors workspace health and conf
 
 ### Comprehensive Validation
 
-- **Script**: `scripts/utilities/WORKFLOW-ORCHESTRATION/comprehensive-validation.ps1`
+- **Script**: `src/comprehensive-validation.ts`
 - **Purpose**: End-to-end validation of entire workspace
 - **Run**: `.\comprehensive-validation.ps1 -Verbose`
 

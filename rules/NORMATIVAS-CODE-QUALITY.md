@@ -8,7 +8,7 @@
 - Idempotency: `Test-Path` before `New-Item`, `-ErrorAction SilentlyContinue` + explicit check
 - Error handling: `try/catch` with `$Error[0].Exception`, no generic `trap`
 - Logging: structured JSON via `Write-Log`, timestamps in ISO 8601
-- Naming: PascalCase for PowerShell, kebab-case for files, snake_case for JSON keys
+- Naming: PascalCase for TypeScript, kebab-case for files, snake_case for JSON keys
 
 ## Quality Standards (Source: NORMATIVAS-QUALITY.md)
 

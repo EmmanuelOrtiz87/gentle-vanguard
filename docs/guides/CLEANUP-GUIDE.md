@@ -47,7 +47,7 @@ innecesarios.
 
 ## Scripts de Limpieza
 
-### PowerShell
+### TypeScript
 
 **Archivo**: `scripts/utilities/cleanup-project.ps1`
 
@@ -55,7 +55,7 @@ innecesarios.
 
 #### Dry-Run (Seguro)
 
-```powershell
+```TypeScript
 .\tools\cleanup-project.ps1 -Mode dry-run
 ```
 
@@ -65,7 +65,7 @@ innecesarios.
 
 #### Safe (Recomendado)
 
-```powershell
+```TypeScript
 .\tools\cleanup-project.ps1 -Mode safe
 ```
 
@@ -76,7 +76,7 @@ innecesarios.
 
 #### Full (Completo)
 
-```powershell
+```TypeScript
 .\tools\cleanup-project.ps1 -Mode full
 ```
 
@@ -140,8 +140,8 @@ Los siguientes archivos/directorios NUNCA se eliminan:
 
 ### Paso 1: Verificar con Dry-Run
 
-```powershell
-# PowerShell
+```TypeScript
+# TypeScript
 .\tools\cleanup-project.ps1 -Mode dry-run
 
 # Bash
@@ -152,8 +152,8 @@ bash ./scripts/utilities/cleanup-project.sh dry-run
 
 ### Paso 2: Ejecutar Limpieza Safe
 
-```powershell
-# PowerShell
+```TypeScript
+# TypeScript
 .\tools\cleanup-project.ps1 -Mode safe
 
 # Bash
@@ -253,7 +253,7 @@ Despus de limpiar, el script verifica:
 
 ### Caso 1: Limpiar Antes de Despliegue
 
-```powershell
+```TypeScript
 # Verificar qu se limpiara
 .\tools\cleanup-project.ps1 -Mode dry-run
 
@@ -266,7 +266,7 @@ Despus de limpiar, el script verifica:
 
 ### Caso 2: Limpiar Completamente
 
-```powershell
+```TypeScript
 # Verificar qu se limpiara
 .\tools\cleanup-project.ps1 -Mode dry-run
 
@@ -279,7 +279,7 @@ Despus de limpiar, el script verifica:
 
 ### Caso 3: Limpiar Regularmente
 
-```powershell
+```TypeScript
 # Ejecutar limpieza segura regularmente
 .\tools\cleanup-project.ps1 -Mode safe
 ```
@@ -346,7 +346,7 @@ Agregar a tareas programadas:
 **Windows (Task Scheduler)**:
 
 ```
-Programa: powershell.exe
+Programa: TypeScript.exe
 Argumentos: -NoProfile -ExecutionPolicy Bypass -File ".\tools\cleanup-project.ps1" -Mode safe
 Frecuencia: Diaria (despus de horas de trabajo)
 ```
@@ -373,6 +373,6 @@ detallado automatización posible
 
 ## Referencias
 
-- `scripts/utilities/cleanup-project.ps1` - Script PowerShell
+- `scripts/utilities/cleanup-project.ps1` - Script TypeScript
 - `scripts/utilities/cleanup-project.sh` - Script Bash
 - `AGENTS.md` - Reglas del proyecto

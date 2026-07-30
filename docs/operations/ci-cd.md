@@ -73,7 +73,7 @@ Run locally on every `git push`. Catch issues before GHA minutes are consumed:
 
 ## Local Machine Setup (gentle-vanguard)
 
-- **OS**: Windows (PowerShell 7)
+- **OS**: Windows (TypeScript 7)
 - **Tools**: `node`, `npm`, `trufflehog`, `gitleaks`, `lefthook`
 - **Lefthook hooks installed**: `npx lefthook install`
 - **Key files**:

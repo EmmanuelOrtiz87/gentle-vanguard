@@ -19,7 +19,7 @@ Before updating, completely close OpenCode (or any client using engram).
 
 **Option A (recommended - go install):**
 
-```powershell
+```TypeScript
 go install github.com/gentle-vanguard/engram/cmd/engram@latest
 ```
 
@@ -27,7 +27,7 @@ Binary goes to `%USERPROFILE%\go\bin\engram.exe`
 
 **Option B (copy from workspace tools):**
 
-```powershell
+```TypeScript
 Copy-Item ".\gentle-vanguard\\tools\engram.exe" "$HOME\bin\engram.exe"
 ```
 
@@ -39,7 +39,7 @@ Copy-Item ".\gentle-vanguard\\tools\engram.exe" "$HOME\bin\engram.exe"
 
 ### Step 3: Reconfigure the Agent
 
-```powershell
+```TypeScript
 engram setup opencode
 ```
 
@@ -55,7 +55,7 @@ Open OpenCode (or your MCP client). It will automatically load the new engram.ex
 
 ### Step 5: Verify
 
-```powershell
+```TypeScript
 engram --version
 # Should show new version (e.g., 1.15.1)
 ```

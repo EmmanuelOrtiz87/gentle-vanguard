@@ -167,6 +167,12 @@ const OPTIONAL_SUITES: Suite[] = [
     args: ['tsx', '--test', 'tests/integration/cloud-connectors/*.test.ts'],
     required: false,
   },
+  {
+    name: 'Skills Tests',
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/skills/*.test.ts'],
+    required: false,
+  },
 ];
 
 function parseArgs(): { all: boolean; verbose: boolean } {

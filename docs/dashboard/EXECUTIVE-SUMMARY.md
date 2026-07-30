@@ -157,7 +157,7 @@ PRs                  →         →         →
 
 ### Quick Start
 
-```powershell
+```TypeScript
 # Generate dashboard
 .\scripts\metrics\collector.ps1 -Scope full
 .\scripts\metrics\log-analyzer.ps1 -DaysBack 30 -SaveToMetrics
@@ -172,7 +172,7 @@ PRs                  →         →         →
 
 ### Encryption
 
-```powershell
+```TypeScript
 # Encrypt sensitive data
 .\scripts\utils\encrypt-data.ps1 -Action encrypt -FilePath "data.json"
 
@@ -189,7 +189,7 @@ PRs                  →         →         →
 - ✅ **WCAG 2.1 AA** - Web accessibility
 - ✅ **OWASP** - Security best practices
 - ✅ **Semantic HTML** - Proper structure
-- ✅ **PowerShell Best Practices** - Code quality
+- ✅ **TypeScript Best Practices** - Code quality
 - ✅ **GitHub Actions** - CI/CD standards
 
 ### Checklist

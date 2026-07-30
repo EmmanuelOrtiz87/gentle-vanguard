@@ -11,8 +11,30 @@ import {
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { spawnSync } from 'child_process';
+import { SessionContextLog } from './core/session-context-log.js';
 
 const ROOT = resolve(process.cwd());
+
+// Try to load centralized timeout config, fallback to hardcoded values
+function getTimeout(key: string, fallback: number): number {
+  try {
+    const cfgPath = join(ROOT, 'config', 'timeout-config.json');
+    if (existsSync(cfgPath)) {
+      const cfg = JSON.parse(readFileSync(cfgPath, 'utf-8'));
+      const parts = key.split('.');
+      let val: Record<string, unknown> = cfg;
+      for (const p of parts) {
+        if (val && typeof val === 'object' && p in val) val = val[p] as Record<string, unknown>;
+        else return fallback;
+      }
+      return typeof val === 'number' ? val : fallback;
+    }
+  } catch { /* fallback to default */ }
+  return fallback;
+}
+
+const DEFAULT_TIMEOUT = getTimeout('process_execution.script_default_ms', 30000);
+const LONG_TIMEOUT = getTimeout('process_execution.script_long_running_ms', 120000);
 
 function log(msg: string) {
   console.log(`[CLEANUP] ${msg}`);
@@ -107,6 +129,31 @@ function flushCaches(sessionDir: string): void {
   const datedSessionFile = join(sessionDir, `session-${dateStr}-01.json`);
   writeFileSync(datedSessionFile, JSON.stringify(sessionData, null, 2));
   ok(`Dated session file created: session-${dateStr}-01.json`);
+  
+  // Guardar en context-log (sistema unificado - dashboard source of truth)
+  const ctxLog = new SessionContextLog({
+    sessionId: sid,
+    agent: 'orchestrator',
+    status: 'active',
+    totalTokens: 0,
+    totalCost: 0,
+    messageCount: 0,
+    metadata: {
+      toolCalls: 0,
+      filesRead: 0,
+      filesEdited: 0,
+      skillsUsed: [],
+      errors: 0,
+      warnings: 0,
+      cacheHits: 0,
+      cacheMisses: 0,
+      qualityScore: 100,
+      region: 'Argentina',
+      timezone: 'America/Argentina/Buenos_Aires',
+    },
+  });
+  ctxLog.save();
+  ok(`Session saved to context-log: ${sid}`);
 }
 
 export function runCleanup(
@@ -171,7 +218,7 @@ export function runCleanup(
                   JSON.stringify({ startTimeUnixNano: span.startTimeUnixNano }),
                   '-Quiet',
                 ],
-                { cwd: repoRoot, stdio: 'pipe', timeout: 15000 },
+                { cwd: repoRoot, stdio: 'pipe', timeout: DEFAULT_TIMEOUT },
               );
               if (result.status === 0) {
                 ok('Tracing span closed');
@@ -193,7 +240,7 @@ export function runCleanup(
   log('Pruning old checkpoints...');
   const ckptMgr = join(ROOT, 'src/checkpoint-manager.ts');
   if (existsSync(ckptMgr)) {
-    spawnSync('npx', ['tsx', ckptMgr, 'prune'], { cwd: ROOT, stdio: 'pipe', timeout: 15000 });
+    spawnSync('npx', ['tsx', ckptMgr, 'prune'], { cwd: ROOT, stdio: 'pipe', timeout: LONG_TIMEOUT });
     ok('Checkpoint prune done');
   }
 
@@ -220,7 +267,7 @@ export function runCleanup(
         'Session cleanup completed',
         '-Quiet',
       ],
-      { cwd: ROOT, stdio: 'pipe', timeout: 15000 },
+      { cwd: ROOT, stdio: 'pipe', timeout: DEFAULT_TIMEOUT },
     );
     ok('Audit session-end logged');
   }
@@ -244,7 +291,7 @@ export function runCleanup(
         '{"duration":"cleanup"}',
         '-Quiet',
       ],
-      { cwd: ROOT, stdio: 'pipe', timeout: 15000 },
+      { cwd: ROOT, stdio: 'pipe', timeout: DEFAULT_TIMEOUT },
     );
     ok('Session end event recorded');
   }

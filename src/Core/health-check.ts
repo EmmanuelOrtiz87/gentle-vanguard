@@ -4,7 +4,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { spawnSync } from 'child_process';
 import * as net from 'net';
-import { getEffectiveProcessTimeout, getExternalApiTimeouts } from './timeout-config';
+import { getEffectiveProcessTimeout } from './timeout-config';
+import { printBanner } from '../cli/banner.js';
 
 const ROOT = process.cwd();
 let quiet = false;
@@ -31,19 +32,17 @@ function bin(name: string): string {
   return process.platform === 'win32' ? `${name}.cmd` : name;
 }
 
-function spawnPortable(command: string, args: string[], timeout: number) {
-  if (process.platform === 'win32' && command.endsWith('.cmd')) {
-    return spawnSync(process.env.ComSpec || 'cmd.exe', ['/c', command, ...args], {
-      cwd: ROOT,
-      stdio: 'pipe',
-      timeout,
-    });
-  }
-  return spawnSync(command, args, {
+function spawnPortable(command: string, args: string[], timeout: number, maxBuffer?: number) {
+  const opts: any = {
     cwd: ROOT,
     stdio: 'pipe',
     timeout,
-  });
+    maxBuffer: maxBuffer || 1024 * 1024, // 1MB default
+  };
+  if (process.platform === 'win32' && command.endsWith('.cmd')) {
+    return spawnSync(process.env.ComSpec || 'cmd.exe', ['/c', command, ...args], opts);
+  }
+  return spawnSync(command, args, opts);
 }
 
 function readJson(...parts: string[]) {
@@ -85,8 +84,8 @@ function checkMCP() {
   writeCheck('MCP TS exists', fs.existsSync(mcpTs), 'scripts/mcp/skill-server.ts');
   if (!fs.existsSync(mcpJs)) return;
   try {
-    const tscBin = path.resolve(ROOT, 'node_modules', '.bin', bin('tsc'));
-    const r = spawnPortable(tscBin, ['--noEmit'], getEffectiveProcessTimeout('tsc'));
+    // Use npx to resolve tsc — reliable on both Unix and Windows
+    const r = spawnPortable(bin('npx'), ['tsc', '--noEmit', '--noEmitOnError'], getEffectiveProcessTimeout('tsc'));
     writeCheck('MCP TS compiles clean', r.status === 0);
   } catch {
     writeCheck('MCP TS compiles clean', false);
@@ -237,12 +236,15 @@ async function checkEngramRag() {
   header('Engram RAG Index');
   writeCheck('engram-rag-reindex.ts exists', exists('src/engram-rag-reindex.ts'), 'src/engram-rag-reindex.ts');
   try {
-    const r = spawnSync('engram', ['doctor', '--json'], { cwd: ROOT, stdio: 'pipe', timeout: getExternalApiTimeouts()?.engram_operation_ms ?? 15000 });
+    // Use spawnSync with shell:true for reliable Windows execution
+    const r = spawnSync(process.platform === 'win32' ? 'cmd.exe' : 'engram',
+      process.platform === 'win32' ? ['/c', 'engram', 'doctor', '--json'] : ['doctor', '--json'],
+      { cwd: ROOT, stdio: 'pipe', timeout: getEffectiveProcessTimeout('health_check'), maxBuffer: 1024 * 1024 });
     const output = (r.stdout?.toString() ?? '') + (r.stderr?.toString() ?? '');
-    const healthy = output.includes('"status":"ok"') || output.includes('"ok"') || output.includes('Engram Doctor: ok');
+    const healthy = output.includes('"status":"ok"') || output.includes('"status": "ok"') || output.includes('Engram Doctor: ok');
     writeCheck('engram doctor', healthy);
-  } catch {
-    writeCheck('engram doctor', false, 'Not accessible');
+  } catch (e: unknown) {
+    writeCheck('engram doctor', false, e instanceof Error ? e.message : 'Not accessible');
   }
 }
 
@@ -325,6 +327,8 @@ async function main() {
         break;
     }
   }
+
+  if (!quiet) printBanner('Health Check');
 
   if (components.length === 0 || components.includes('all')) {
     components = Object.keys(checkMap);

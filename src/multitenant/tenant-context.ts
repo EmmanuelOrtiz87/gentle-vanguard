@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 /**
- * Tenant Context v1.0.0
+ * Tenant Context 
  * Multi-tenant context resolution and isolation
  * Secure tenant boundaries with complete separation
  * 
- * Part of Gentle-Vanguard v5.1 — Multi-Tenant Isolation
+ * Part of Gentle-Vanguard  — Multi-Tenant Isolation
  */
 
 import { EventEmitter } from 'events';
@@ -441,8 +441,8 @@ export const tenantContextManager = new TenantContextManager();
 
 // CLI execution
 if (require.main === module) {
-  console.log('Tenant Context Manager v1.0.0');
-  console.log('Part of Gentle-Vanguard v5.1 — Multi-Tenant Isolation\n');
+  console.log('Tenant Context Manager ');
+  console.log('Part of Gentle-Vanguard  — Multi-Tenant Isolation\n');
   
   const manager = new TenantContextManager({
     enforceIsolation: true,

@@ -111,7 +111,7 @@ git checkout v1.0.0 -- docs/architecture/ARCHITECTURE.md
 
 ## Quick Reference
 
-```powershell
+```TypeScript
 # List recent decisións
 Get-ChildItem .decisións/ -Filter "decisión-*.md" | Sort-Object Name -Descending | Select-Object -First 10
 

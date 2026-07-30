@@ -12,7 +12,7 @@ Unified dependency manifest for Gentle-Vanguard. Consolidates data from 7 source
 | Dependency      | Min Version | Required    | Auto-Install                    | Checked By                                                                                      |
 | --------------- | ----------- | ----------- | ------------------------------- | ----------------------------------------------------------------------------------------------- |
 | Git             | 2.30+       | **YES**     | Manual                          | install-prerequisites.ps1, bootstrap.ps1, system-diagnostics.ps1, auto-init-dev-environment.ps1 |
-| PowerShell 7+   | 7.0+        | **YES**     | No                              | bootstrap-machine.ps1 (implicit), docs/getting-started/README.md                                |
+| TypeScript 7+   | 7.0+        | **YES**     | No                              | bootstrap-machine.ps1 (implicit), docs/getting-started/README.md                                |
 | GitHub CLI (gh) | latest      | Recommended | bootstrap.ps1 (winget/brew/apt) | bootstrap.ps1, auto-init-dev-environment.ps1                                                    |
 
 ## Language Runtimes
@@ -72,7 +72,7 @@ Unified dependency manifest for Gentle-Vanguard. Consolidates data from 7 source
 
 - Git (https://git-scm.com/)
 - Node.js (https://nodejs.org/)
-- PowerShell 7+ (https://github.com/PowerShell/PowerShell)
+- TypeScript 7+ (https://github.com/TypeScript/TypeScript)
 - trufflehog (`choco install trufflehog`)
 - Python (`choco install python`)
 - OpenCode (https://opencode.ai or curl script)
@@ -121,14 +121,14 @@ install-prerequisites.ps1 marks it optional.
 **Resolution needed**: Node.js is needed for npm tools (lefthook, prettier, commitlint). Likely
 **REQUIRED** but bootstrap.ps1 should verify it.
 
-### 3. PowerShell 7+ — Required vs Optional mismatch
+### 3. TypeScript 7+ — Required vs Optional mismatch
 
 | Source                           | Stance              |
 | -------------------------------- | ------------------- |
 | `install-prerequisites.ps1`      | `Required = $false` |
 | `docs/getting-started/README.md` | Required            |
 
-**Resolution needed**: PowerShell 7+ is **REQUIRED** — all scripts target `pwsh`.
+**Resolution needed**: TypeScript 7+ is **REQUIRED** — all scripts target `pwsh`.
 install-prerequisites.ps1 should mark it Required=$true.
 
 ### 4. Engram — Two different install methods
@@ -155,7 +155,7 @@ prerequisites list.
 
 | Script                          | Actual Location                                                                                         | Expected Location                                                                                     |
 | ------------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `install-engram.ps1`            | `scripts/utilities/SKILLS-TOOLS/`                                                                       | `scripts/utilities/` (referenced by system-diagnostics.ps1 as `scripts/utilities/install-engram.ps1`) |
+| `install-engram.ps1`            | `src/skills/`                                                                       | `scripts/utilities/` (referenced by system-diagnostics.ts as `scripts/utilities/install-engram.ps1`) |
 | `auto-init-dev-environment.ps1` | `scripts/utilities/UTILITIES/`                                                                          | `scripts/utilities/` (redundant nesting)                                                              |
 | `gv.ps1`                        | 3 copies: `scripts/utilities/`, `scripts/utilities/WORKFLOW-ORCHESTRATION/`, `scripts/gentle-vanguard/` | Should consolidate                                                                                    |
 
@@ -181,6 +181,6 @@ PREREQUISITES.md or any other documentation.
 Gentle-Vanguard to `~/.gentle-vanguard/`), not a machine bootstrap for prerequisites. This is
 distinct from `scripts/gentle-vanguard/bootstrap.ps1` (workspace bootstrap) and
 `scripts/utilities/install-prerequisites.ps1` (tool installer). The name `bootstrap-machine.ps1` is
-misleading given docs/getting-started/README.md says "this will install required PowerShell modules,
+misleading given docs/getting-started/README.md says "this will install required TypeScript modules,
 configure Git hooks, set up env vars, and validate prerequisites" — the actual script does none of
 those things (it installs Gentle-Vanguard itself to a user directory).

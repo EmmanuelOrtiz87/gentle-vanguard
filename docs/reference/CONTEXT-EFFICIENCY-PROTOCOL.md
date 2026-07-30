@@ -41,7 +41,7 @@ During compaction, these content types are preserved:
 
 ### 2.3 Configuration
 
-Pre-compact hook located at: `scripts/utilities/pre-compact-hook.ps1` Configuration:
+Pre-compact hook located at: `src/pre-compact-hook.ts` Configuration:
 `scripts/utilities/context-efficiency-config.json`
 
 ## 3. Engram Optimization
@@ -153,7 +153,7 @@ At session end:
 ### 7.1 Primary Scripts
 
 - `scripts/utilities/optimize-engram-usage.ps1`: Main optimization script
-- `scripts/utilities/pre-compact-hook.ps1`: Automatic compaction hook
+- `src/pre-compact-hook.ts`: Automatic compaction hook
 - `scripts/utilities/session-autostart.cmd`: Enhanced startup with optimization
 
 ### 7.2 Configuration Files

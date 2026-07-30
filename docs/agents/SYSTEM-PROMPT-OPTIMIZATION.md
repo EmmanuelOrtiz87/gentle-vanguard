@@ -32,25 +32,25 @@ Framework completo para optimización de system prompts con reducción de 97% de
 
 ## Usage
 
-```powershell
+```TypeScript
 # Compress a prompt
-pwsh -File scripts/utilities/semantic-compression.ps1 -InputPath "CLAUDE.md" -OutputPath "CLAUDE.min.md" -ShowStats
+npx tsx src/utilities/semantic-compression.ts -InputPath "CLAUDE.md" -OutputPath "CLAUDE.min.md" -ShowStats
 
 # Cache a prompt
 $hash = (Get-FileHash "CLAUDE.md" -Algorithm SHA256).Hash.Substring(0,16)
-pwsh -File scripts/utilities/prompt-cache.ps1 -Action set -PromptHash $hash -PromptContent (Get-Content "CLAUDE.md" -Raw)
+npx tsx src/utilities/prompt-cache.ts -Action set -PromptHash $hash -PromptContent (Get-Content "CLAUDE.md" -Raw)
 
 # Check cache stats
-pwsh -File scripts/utilities/prompt-cache.ps1 -Action stats
+npx tsx src/utilities/prompt-cache.ts -Action stats
 
 # Security scan
-pwsh -File scripts/utilities/prompt-security-scanner.ps1 -PromptContent (Get-Content "CLAUDE.md" -Raw)
+npx tsx src/utilities/prompt-security-scanner.ts -PromptContent (Get-Content "CLAUDE.md" -Raw)
 
 # Version a prompt
-pwsh -File scripts/utilities/prompt-versioning.ps1 -Action save -PromptName "CLAUDE" -Content (Get-Content "CLAUDE.md" -Raw)
+npx tsx src/utilities/prompt-versioning.ts -Action save -PromptName "CLAUDE" -Content (Get-Content "CLAUDE.md" -Raw)
 
 # Adapt to model
-pwsh -File scripts/utilities/prompt-model-adapter.ps1 -PromptContent (Get-Content "CLAUDE.md" -Raw) -TargetModel anthropic
+npx tsx src/utilities/prompt-model-adapter.ts -PromptContent (Get-Content "CLAUDE.md" -Raw) -TargetModel anthropic
 ```
 
 ## Results

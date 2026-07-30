@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 /**
- * Predictive Governor v1.0.0
+ * Predictive Governor 
  * Anticipates load and adjusts budgets proactively
  * Prevents resource exhaustion through prediction
  * 
- * Part of Gentle-Vanguard v5.0 — Convergence Layer
+ * Part of Gentle-Vanguard  — Convergence Layer
  */
 
 import { EventEmitter } from 'events';
@@ -293,8 +293,8 @@ export const predictiveGovernor = new PredictiveGovernor();
 
 // CLI execution
 if (require.main === module) {
-  console.log('Predictive Governor v1.0.0');
-  console.log('Part of Gentle-Vanguard v5.0 — Convergence Layer\n');
+  console.log('Predictive Governor ');
+  console.log('Part of Gentle-Vanguard  — Convergence Layer\n');
   
   const governor = new PredictiveGovernor({
     predictionHorizon: 30,

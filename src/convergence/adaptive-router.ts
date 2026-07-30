@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 /**
- * Adaptive Router v1.0.0
+ * Adaptive Router 
  * Dynamic routing based on historical performance data
  * Learns optimal paths through continuous feedback
  * 
- * Part of Gentle-Vanguard v5.0 — Convergence Layer
+ * Part of Gentle-Vanguard  — Convergence Layer
  */
 
 import { EventEmitter } from 'events';
@@ -318,8 +318,8 @@ export const adaptiveRouter = new AdaptiveRouter();
 
 // CLI execution
 if (require.main === module) {
-  console.log('Adaptive Router v1.0.0');
-  console.log('Part of Gentle-Vanguard v5.0 — Convergence Layer\n');
+  console.log('Adaptive Router ');
+  console.log('Part of Gentle-Vanguard  — Convergence Layer\n');
   
   const router = new AdaptiveRouter({
     learningRate: 0.2,

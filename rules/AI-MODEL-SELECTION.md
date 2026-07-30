@@ -123,7 +123,7 @@ When changing a model assignment:
 | ----------------------- | ------------------------------------------------------------ |
 | Orchestrator Config     | `config/orchestrator.json`                                   |
 | Agent Config (OpenCode) | `opencode.json`                                              |
-| Token Budget Guard      | `scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1` |
+| Token Budget Guard      | `src/telemetry/token-budget-guard.ts` |
 | Performance Normatives  | `rules/NORMATIVAS-PERFORMANCE.md`                            |
 | Context Engineering     | `rules/CONTEXT-ENGINEERING.md`                               |
 

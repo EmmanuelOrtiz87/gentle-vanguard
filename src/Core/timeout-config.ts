@@ -15,10 +15,8 @@
  */
 
 import * as fs from 'fs';
-import { resolve } from 'path';
 import * as path from 'path';
-
-const ROOT = resolve(process.cwd());
+import { ROOT } from './repo-root';
 
 // ---------------------------------------------------------------------------
 // Types

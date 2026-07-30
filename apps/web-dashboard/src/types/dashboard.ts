@@ -98,10 +98,44 @@ export interface DashboardData {
     responseTime95th: number;
     throughput: number;
   };
+  operational?: OperationalMetrics;
   tenantId?: string;
   tenantName?: string;
   sqlite?: SqliteMetrics;
   swarmWorkers?: SwarmWorkerData;
+}
+
+export interface OperationalMetrics {
+  velocity: {
+    commitsPerHour: number;
+    filesModifiedPerSession: number;
+    linesAdded: number;
+    linesDeleted: number;
+    avgTimeBetweenCommits: number;
+  };
+  efficiency: {
+    avgToolLatency: number;
+    successRate: number;
+    fastestTool: string;
+    slowestTool: string;
+    responseTimeP95: number;
+  };
+  productivity: {
+    skillsUsed: number;
+    uniqueSkills: string[];
+    agentsActive: number;
+    tasksCompleted: number;
+    sessionsCompleted: number;
+  };
+  quality: {
+    buildSuccessRate: number;
+    testPassRate: number;
+    errorsDetected: number;
+    autoCorrections: number;
+    typeCheckFailures: number;
+  };
+  totalOperations: number;
+  lastUpdated: string;
 }
 
 export interface SwarmWorkerEntry {

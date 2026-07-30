@@ -138,7 +138,7 @@ Use `continue-on-error: true` only for advisory steps — never for blocking gat
 
 - Access secrets via `${{ secrets.NAME }}` — never embed in code.
 - Mask dynamic secrets immediately: `echo "::add-mask::$VALUE"`.
-- Never log secrets with `set -x` or PowerShell's `-Verbose` on secret-manipulating steps.
+- Never log secrets with `set -x` or TypeScript's `-Verbose` on secret-manipulating steps.
 - Store secrets in GitHub Secrets or Environments, not in config files.
 
 ---

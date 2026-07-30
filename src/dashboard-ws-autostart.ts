@@ -126,7 +126,9 @@ async function main(overridePort?: number): Promise<number> {
   const selectedPort = await getFreePort(preferredPort > 0 ? preferredPort : defaultPort);
 
   logToFile(`[PORT] selected=${selectedPort}`);
-  saveDashboardPorts(selectedPort, 0);
+  // Preserve existing vitePort instead of overwriting with 0
+  const existingPorts = readDashboardPorts();
+  saveDashboardPorts(selectedPort, existingPorts?.vitePort ?? 0);
 
   // Start WS server detached with windowsHide
   logToFile(`[START] Starting WS server on port ${selectedPort}`);

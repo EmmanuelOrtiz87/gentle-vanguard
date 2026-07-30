@@ -32,9 +32,9 @@ file and uses one of these strategies:
 
 ## Platform Support
 
-- Windows: PowerShell bootstrap with `pwsh` fallback to `powershell`
-- Linux: use the shell wrapper or invoke the PowerShell script with `pwsh`
-- macOS: use the shell wrapper or invoke the PowerShell script with `pwsh`
+- Windows: TypeScript bootstrap with `pwsh` fallback to `TypeScript`
+- Linux: use the shell wrapper or invoke the TypeScript script with `pwsh`
+- macOS: use the shell wrapper or invoke the TypeScript script with `pwsh`
 
 ## Portability Notes
 
@@ -42,7 +42,7 @@ file and uses one of these strategies:
 2. `ensure-tools-active.ps1` and `update-tools.ps1` no longer assume platform-specific paths for
    home directories, PATH updates, or tool verification.
 3. The stack is OS-aware and wrapper-friendly, but the canonical automation layer is still
-   PowerShell.
+   TypeScript.
 4. Bash remains a useful cross-platform capability for shell-based helper utilities.
 
 ## Windows Note
@@ -76,4 +76,4 @@ instead of looking for a fake executable.
 
 ## Validation
 
-Use `scripts/validation/validate-workspace.ps1` or the equivalent PowerShell command on Linux/macOS.
+Use `scripts/validation/validate-workspace.ps1` or the equivalent TypeScript command on Linux/macOS.

@@ -4,9 +4,9 @@ Centralized configuration for project standards and enforcement.
 
 ## Development Standards
 
-### PowerShell Standards
+### TypeScript Standards
 
-- **Version**: PowerShell 7.0+ required
+- **Version**: TypeScript 7.0+ required
 - **Pester Version**: 5.x (minimum 5.3)
 - **Coding Style**: PascalCase for functions, camelCase for locals
 - **Required Attributes**: `[CmdletBinding()]` for all advanced functions
@@ -14,7 +14,7 @@ Centralized configuration for project standards and enforcement.
 
 ### Testing Standards
 
-- **Framework**: Pester 5.x
+- **Framework**: node:test
 - **Syntax**: `Should -Be`, `Should -Match`, `Should -Contain` (NO `Should Be`)
 - **Coverage Target**: 80% for critical scripts, 70% for utilities
 - **Test Tags**: `CI` (PR runs), `Slow` (>1s), `Feature` (daily runs)

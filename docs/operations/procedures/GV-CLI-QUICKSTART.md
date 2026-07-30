@@ -8,18 +8,18 @@
 
 ### Option 1: Automatic (Recommended)
 
-```powershell
+```TypeScript
 cd c:\Workspace_local\gentle-vanguard
 .\scripts\utilities\install-gentle-vanguard-cli.ps1
 ```
 
-Then restart PowerShell and use `gentle-vanguard` anywhere.
+Then restart TypeScript and use `gentle-vanguard` anywhere.
 
 ### Option 2: Manual
 
-Add this to your PowerShell profile (`$PROFILE`):
+Add this to your TypeScript profile (`$PROFILE`):
 
-```powershell
+```TypeScript
 function gentle-vanguard {
     & ".\scripts\utilities\WORKFLOW-ORCHESTRATION\gentle-vanguard.ps1" @args
 }
@@ -27,13 +27,13 @@ function gentle-vanguard {
 
 Then:
 
-```powershell
+```TypeScript
 . $PROFILE
 ```
 
 ### Option 3: Direct Execution
 
-```powershell
+```TypeScript
 .\scripts\utilities\WORKFLOW-ORCHESTRATION\gentle-vanguard.ps1 <command> [options]
 ```
 
@@ -45,7 +45,7 @@ Then:
 
 #### 1. **Static Dashboard** (single snapshot)
 
-```powershell
+```TypeScript
 gv dashboard
 ```
 
@@ -55,7 +55,7 @@ gv dashboard
 
 #### 2. **Dashboard with Auto-Open**
 
-```powershell
+```TypeScript
 gv dashboard open
 ```
 
@@ -63,7 +63,7 @@ gv dashboard open
 
 #### 3. **Live Dashboard** (continuous refresh ⭐ NEW)
 
-```powershell
+```TypeScript
 gv dashboard live
 ```
 
@@ -79,7 +79,7 @@ gv dashboard live
 
 #### 1. **Full Stack Benchmark**
 
-```powershell
+```TypeScript
 gv benchmark full
 ```
 
@@ -92,7 +92,7 @@ gv benchmark full
 
 #### 2. **Benchmark with Auto-Remediation** ⭐ NEW
 
-```powershell
+```TypeScript
 gv benchmark full remediate
 ```
 
@@ -103,7 +103,7 @@ gv benchmark full remediate
 
 #### 3. **Benchmark with Baseline Reset**
 
-```powershell
+```TypeScript
 gv benchmark full baseline-update
 ```
 
@@ -116,7 +116,7 @@ gv benchmark full baseline-update
 
 #### Start Development Session
 
-```powershell
+```TypeScript
 gv start-session
 ```
 
@@ -125,7 +125,7 @@ gv start-session
 
 #### Health Check
 
-```powershell
+```TypeScript
 gv health
 ```
 
@@ -133,7 +133,7 @@ gv health
 
 #### Verify Code Quality
 
-```powershell
+```TypeScript
 gv verify
 ```
 
@@ -141,7 +141,7 @@ gv verify
 
 #### Run Real Coverage Gate
 
-```powershell
+```TypeScript
 pwsh -File .\scripts\utilities\verify-coverage.ps1
 ```
 
@@ -151,7 +151,7 @@ pwsh -File .\scripts\utilities\verify-coverage.ps1
 
 #### Run Post-Session Learning Explicitly
 
-```powershell
+```TypeScript
 pwsh -File .\scripts\utilities\post-session-learning.ps1 -SessionId "session-YYYY-MM-DD-01"
 ```
 
@@ -166,7 +166,7 @@ pwsh -File .\scripts\utilities\post-session-learning.ps1 -SessionId "session-YYY
 
 **During development:**
 
-```powershell
+```TypeScript
 # Start session
 gv start-session
 
@@ -182,7 +182,7 @@ gv benchmark full
 
 **If something breaks:**
 
-```powershell
+```TypeScript
 gv benchmark full remediate
 # → Review incident report in reports/incidents/
 ```
@@ -193,7 +193,7 @@ gv benchmark full remediate
 
 **Real-time monitoring:**
 
-```powershell
+```TypeScript
 gv dashboard live
 # → Open http://localhost:xxxx in browser
 # → Refreshes every 15 seconds
@@ -202,7 +202,7 @@ gv dashboard live
 
 **Weekly health check:**
 
-```powershell
+```TypeScript
 gv health
 # → GREEN: all systems operational
 # → YELLOW: warnings (review logs)
@@ -229,7 +229,7 @@ gv health
 
 ### Auto-Refresh Dashboard in Browser
 
-```powershell
+```TypeScript
 # Browser auto-refreshes every 30 seconds
 gv dashboard live -RefreshSeconds 30
 
@@ -239,14 +239,14 @@ gv dashboard live -Iterations 10
 
 ### Benchmark with Custom Intervals
 
-```powershell
+```TypeScript
 # Update baseline every 8 benchmark cycles
 gv dashboard live -BenchmarkEvery 8 -RefreshSeconds 10
 ```
 
 ### Enable Auto-Remediation for Monitoring
 
-```powershell
+```TypeScript
 # Runs incident playbook automatically on benchmark failure
 gv dashboard live -AutoRemediateOnFail
 
@@ -273,7 +273,7 @@ gv dashboard live -AutoRemediateOnFail
 
 ### "gentle-vanguard: command not found"
 
-```powershell
+```TypeScript
 # Solution 1: Reload profile
 . $PROFILE
 
@@ -286,14 +286,14 @@ gv dashboard live -AutoRemediateOnFail
 
 ### "Windows Defender Firewall" still triggers
 
-```powershell
+```TypeScript
 # Use full path instead of 'gv'
 .\scripts\utilities\WORKFLOW-ORCHESTRATION\gentle-vanguard.ps1 dashboard live
 ```
 
 ### Dashboard doesn't refresh
 
-```powershell
+```TypeScript
 # Check if browser has auto-refresh meta tag
 # If not, manually refresh (F5) or wait for next cycle
 

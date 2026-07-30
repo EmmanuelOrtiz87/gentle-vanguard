@@ -3,6 +3,10 @@ import { appendFileSync, mkdirSync, readFileSync, existsSync, writeFileSync, unl
 import { join, resolve } from 'path';
 import { spawn, type ChildProcess } from 'child_process';
 import { getPipelineTimeouts } from './timeout-config';
+import { log as createLogger } from '../utils/logger.js';
+import { printBanner } from '../cli/banner.js';
+
+const LOG = createLogger('SESSION-AUTOSTART');
 
 // ─── Lock file: prevent running session-autostart more than once ──────
 
@@ -15,7 +19,7 @@ function checkLock(): boolean {
       // Check if process is still alive
       try {
         process.kill(pid, 0); // signal 0 = test existence
-        console.log(`[LOCK] Session-autostart already running (PID ${pid}). Skipping duplicate.`);
+        LOG.info(`[LOCK] Session-autostart already running (PID ${pid}). Skipping duplicate.`);
         return false;
       } catch {
         // Process is dead, lockfile is stale — remove it
@@ -62,7 +66,7 @@ function loadConfig(): PipelineConfig {
     return JSON.parse(raw);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
-    console.error(`[SESSION-AUTOSTART] Failed to load config: ${msg}`);
+    LOG.error(`[SESSION-AUTOSTART] Failed to load config: ${msg}`);
     return { pipeline: { steps: [] } };
   }
 }
@@ -174,7 +178,8 @@ async function main() {
   // Lock check: only run once per OS user session
   if (!checkLock()) return;
 
-  console.log(`[SESSION-AUTOSTART] Loading pipeline from ${CONFIG_PATH}\n`);
+  if (!process.env.GV_QUIET) printBanner('Session Autostart');
+  LOG.info(`[SESSION-AUTOSTART] Loading pipeline from ${CONFIG_PATH}\n`);
 
   const timeoutConfig = getPipelineTimeouts();
   const config = loadConfig();
@@ -187,9 +192,9 @@ async function main() {
   const failed: string[] = [];
   const requiredFailed: string[] = [];
 
-  console.log(`[INFO] Pipeline steps: ${totalSteps} enabled (phased parallel)`);
+  LOG.info(`[INFO] Pipeline steps: ${totalSteps} enabled (phased parallel)`);
   if (lazySteps.length > 0) {
-    console.log(`[INFO] ${lazySteps.length} lazy steps deferred to background\n`);
+    LOG.info(`[INFO] ${lazySteps.length} lazy steps deferred to background\n`);
   }
 
   const phaseMap = new Map<number, PipelineStep[]>();
@@ -211,20 +216,20 @@ async function main() {
           : timeoutConfig.session_autostart_step_ms;
         const result = await executeStep(step, timeoutMs);
         if (result.success) {
-          console.log(`[${stepNum}/${totalSteps}] [OK] ${step.id} completed`);
+          LOG.info(`[${stepNum}/${totalSteps}] [OK] ${step.id} completed`);
         } else {
           const errMsg = result.error || 'Failed';
-          console.log(`[${stepNum}/${totalSteps}] [WARNING] ${step.id}: ${errMsg}`);
+          LOG.info(`[${stepNum}/${totalSteps}] [WARNING] ${step.id}: ${errMsg}`);
           failed.push(step.id);
           if (isRequired) requiredFailed.push(step.id);
         }
         if (isRequired && !result.success) break;
       }
     } else {
-      console.log(`--- Phase ${phaseNum} (${phaseSteps.length} steps in parallel) ---`);
+      LOG.info(`--- Phase ${phaseNum} (${phaseSteps.length} steps in parallel) ---`);
       for (const step of phaseSteps) {
         stepNum++;
-        console.log(`[${stepNum}/${totalSteps}] ${step.id}...`);
+        LOG.info(`[${stepNum}/${totalSteps}] ${step.id}...`);
       }
 
       const results = await Promise.allSettled(
@@ -241,13 +246,13 @@ async function main() {
         const result = results[i];
         const isRequired = step.required === true;
         if (result.status === 'fulfilled' && result.value.success) {
-          console.log(`  [OK] ${step.id} completed`);
+          LOG.info(`  [OK] ${step.id} completed`);
         } else {
           const errMsg =
             result.status === 'rejected'
               ? result.reason?.message || 'Rejected'
               : result.value?.error || 'Failed';
-          console.log(`  [WARNING] ${step.id}: ${errMsg}`);
+          LOG.info(`  [WARNING] ${step.id}: ${errMsg}`);
           failed.push(step.id);
           if (isRequired) requiredFailed.push(step.id);
         }
@@ -258,7 +263,7 @@ async function main() {
   }
 
   if (lazySteps.length > 0) {
-    console.log(`\n=== Starting Lazy Steps (batch=${MAX_LAZY_CONCURRENCY}) ===`);
+    LOG.info(`\n=== Starting Lazy Steps (batch=${MAX_LAZY_CONCURRENCY}) ===`);
     let launched = 0;
     for (let i = 0; i < lazySteps.length; i += MAX_LAZY_CONCURRENCY) {
       const batch = lazySteps.slice(i, i + MAX_LAZY_CONCURRENCY);
@@ -266,40 +271,40 @@ async function main() {
         const result = startLazyStep(step);
         if (result.success) {
           launched++;
-          console.log(`  [OK] ${step.id} (lazy started)`);
+          LOG.info(`  [OK] ${step.id} (lazy started)`);
         } else {
-          console.log(`  [WARN] ${step.id} (lazy): ${result.error || 'Failed'}`);
+          LOG.info(`  [WARN] ${step.id} (lazy): ${result.error || 'Failed'}`);
         }
       }
       // Small delay between batches to avoid overwhelming the OS
       if (i + MAX_LAZY_CONCURRENCY < lazySteps.length) {
-        await new Promise(r => setTimeout(r, 500));
+        await new Promise(r => setTimeout(r, 100));
       }
     }
-    console.log(`[INFO] Lazy step launch log: ${LAZY_LOG_PATH}`);
-    console.log(`[INFO] Launched ${launched}/${lazySteps.length} lazy steps in batches of ${MAX_LAZY_CONCURRENCY}`);
+    LOG.info(`[INFO] Lazy step launch log: ${LAZY_LOG_PATH}`);
+    LOG.info(`[INFO] Launched ${launched}/${lazySteps.length} lazy steps in batches of ${MAX_LAZY_CONCURRENCY}`);
   }
 
-  console.log(`\n=== Session Autostart Summary ===`);
-  console.log(`Steps executed: ${stepNum}`);
-  console.log(`Lazy steps:     ${lazySteps.length}`);
-  console.log(`Steps failed:   ${failed.length}`);
-  console.log(`Required fails: ${requiredFailed.length}`);
+  LOG.info(`\n=== Session Autostart Summary ===`);
+  LOG.info(`Steps executed: ${stepNum}`);
+  LOG.info(`Lazy steps:     ${lazySteps.length}`);
+  LOG.info(`Steps failed:   ${failed.length}`);
+  LOG.info(`Required fails: ${requiredFailed.length}`);
 
   if (requiredFailed.length > 0) {
-    console.error(`[ERROR] Required steps failed: ${requiredFailed.join(', ')}`);
-    console.log(`[ACTION] Fix the issues above and re-run session autostart.`);
+    LOG.error(`[ERROR] Required steps failed: ${requiredFailed.join(', ')}`);
+    LOG.info(`[ACTION] Fix the issues above and re-run session autostart.`);
     process.exit(1);
   }
 
   if (failed.length > 0) {
-    console.log(`[WARNING] Non-required steps with issues: ${failed.join(', ')}`);
+    LOG.info(`[WARNING] Non-required steps with issues: ${failed.join(', ')}`);
   }
 
-  console.log(`[READY] Workspace ready for operations`);
+  LOG.info(`[READY] Workspace ready for operations`);
 }
 
 main().catch((err) => {
-  console.error('[SESSION-AUTOSTART] Fatal error:', err);
+  LOG.error('[SESSION-AUTOSTART] Fatal error:', err);
   process.exit(1);
 });

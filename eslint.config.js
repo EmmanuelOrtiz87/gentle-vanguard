@@ -1,6 +1,7 @@
 // ESLint v10 flat config — migrated from .eslintrc.json
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
+import securityPlugin from 'eslint-plugin-security';
 
 export default [
   {
@@ -18,6 +19,7 @@ export default [
     },
     plugins: {
       '@typescript-eslint': tsPlugin,
+      'security': securityPlugin,
     },
     rules: {
       // ESLint recommended
@@ -32,6 +34,15 @@ export default [
       '@typescript-eslint/strict-boolean-expressions': 'off',
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/await-thenable': 'error',
+      // Security rules (SAST)
+      'security/detect-object-injection': 'warn',
+      'security/detect-non-literal-regexp': 'warn',
+      'security/detect-non-literal-require': 'warn',
+      'security/detect-possible-timing-attacks': 'warn',
+      'security/detect-eval-with-expression': 'error',
+      'security/detect-no-csrf-before-method-override': 'error',
+      'security/detect-pseudoRandomBytes': 'error',
+      'security/detect-unsafe-regex': 'error',
     },
   },
 ];

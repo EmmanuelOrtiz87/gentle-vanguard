@@ -32,7 +32,7 @@ garantizar consistencia, trazabilidad y colisiones mínimas en el almacenamiento
 | `ops/dashboard-ws`              | WebSocket y salud del dashboard            |
 | `ops/auto-heal`                 | Reglas de auto-recuperación                |
 | `testing/coverage`              | Cobertura y requisitos de prueba           |
-| `migration/ps1-to-ts`           | Migración de PowerShell a TypeScript       |
+| `migration/ps1-to-ts`           | Migración de TypeScript a TypeScript       |
 
 ## 4. Validación
 

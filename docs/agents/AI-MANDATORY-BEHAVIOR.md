@@ -3,7 +3,7 @@
 **BEFORE every response, run:**
 
 ```
-powershell -File tools/pre-process-input.ps1 -UserInput "<input>" -WorkspaceRoot "."
+TypeScript -File tools/pre-process-input.ps1 -UserInput "<input>" -WorkspaceRoot "."
 ```
 
 - `TRIGGER_MATCH_FOUND` → load skill immediately, then respond

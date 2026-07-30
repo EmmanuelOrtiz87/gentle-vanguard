@@ -4,6 +4,40 @@ import { existsSync, readFileSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { spawnSync } from 'child_process';
+import { createRequire } from 'module';
+
+const _require = createRequire(import.meta.url);
+
+// Lazy SQLite connection for Nexus DB dual-write
+let _nexusDb: any = null;
+function getNexusDb(): any {
+  if (_nexusDb) return _nexusDb;
+  try {
+    const Database = _require('better-sqlite3');
+    const dbPath = join(resolve(process.cwd()), '.runtime', 'gentle-vanguard.db');
+    if (existsSync(dbPath)) {
+      _nexusDb = new Database(dbPath);
+      return _nexusDb;
+    }
+  } catch {
+    // SQLite not available
+  }
+  return null;
+}
+
+function writeTokenToNexus(sessionId: string, promptTokens: number, completionTokens: number, model: string): void {
+  try {
+    const db = getNexusDb();
+    if (db) {
+      db.prepare(
+        `INSERT INTO token_usage (session_id, prompt_tokens, completion_tokens, cost, model, timestamp)
+         VALUES (?, ?, ?, 0, ?, datetime('now'))`
+      ).run(sessionId, promptTokens, completionTokens, model || null);
+    }
+  } catch {
+    // Dual-write failure is non-critical
+  }
+}
 
 export interface TokenUsageArgs {
   InputTokens?: number;
@@ -154,6 +188,9 @@ function main() {
       Silent: 'true',
     });
   }
+
+  // Nexus DB dual-write: persist tokens to SQLite
+  writeTokenToNexus(SessionId, InputTokens, OutputTokens, Model);
 
   process.exit(0);
 }

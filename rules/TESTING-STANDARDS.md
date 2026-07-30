@@ -2,7 +2,7 @@
 
 **Version:** 1.0.0  
 **Last reviewed:** 2026-05-05  
-**Framework:** Pester 5.x (PowerShell unit/integration tests)  
+**Framework:** node:test (TypeScript unit/integration tests)  
 **Enforced by:** `agent-verify.ps1` (`tests` domain check) + CI `gentle-vanguard-quality-gate.yml`
 
 ---
@@ -64,7 +64,7 @@ Rules:
 
 ## 4. Pester Test Structure
 
-```powershell
+```TypeScript
 #Requires -Modules Pester
 
 Describe '<ComponentName> Tests' {
@@ -136,7 +136,7 @@ Rules:
 
 This is the **Mandatory Minimum**. Additional behavior tests are strongly encouraged.
 
-```powershell
+```TypeScript
 # Minimal test template for a new script
 Describe 'my-new-script.ps1' {
     BeforeAll {
@@ -160,9 +160,9 @@ Describe 'my-new-script.ps1' {
 
 ## 7. Running Tests
 
-```powershell
+```TypeScript
 # Run all unit tests (used by agent-verify + CI)
-pwsh -File scripts/utilities/agent-verify.ps1
+pwsh -File src/agent-verify.ts
 
 # Run specific test file
 Invoke-Pester tests/unit/gentle-vanguard-core.tests.ps1 -Output Detailed

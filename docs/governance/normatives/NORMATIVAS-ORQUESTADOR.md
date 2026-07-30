@@ -223,7 +223,7 @@ TODO commit DEBE pasar:
 
 Antes de compaction (~25k tokens), ejecutar:
 
-```powershell
+```TypeScript
 .\tools\pre-compact-hook.ps1 -ProjectName "workspace_gentle_vanguard" -CompressionRatio 0.90
 ```
 
@@ -231,7 +231,7 @@ Antes de compaction (~25k tokens), ejecutar:
 
 Para transferencias agente-a-agente:
 
-```powershell
+```TypeScript
 .\tools\handoff-compress.ps1
 ```
 

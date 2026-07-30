@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Eval Quality Gate v1.0.0
+ * Eval Quality Gate 
  * Quality gates for evaluation benchmarks
- * Part of Gentle-Vanguard v5.1
+ * Part of Gentle-Vanguard 
  */
 
 import { EventEmitter } from 'events';

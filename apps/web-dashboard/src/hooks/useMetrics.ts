@@ -113,10 +113,11 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
   }, [updateFromPayload, tenantId]);
 
   useEffect(() => {
-    void fetchMetrics();
+    fetchMetrics();
     const interval = setInterval(fetchMetrics, 5000);
     return () => clearInterval(interval);
-  }, [fetchMetrics]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Solo ejecutar al montar, evita recarga infinita
 
   const dismissNotification = useCallback((index: number) => {
     setNotifications((prev) => prev.filter((_, i) => i !== index));

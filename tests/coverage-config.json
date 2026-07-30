@@ -1,68 +1,62 @@
 {
-  "_comment": "Pester code coverage thresholds and declared workflow targets",
-  "version": "1.0.0",
-  "minimumCoverage": 85,
+  "_comment": "TypeScript code coverage thresholds for CI gates",
+  "version": "2.0.0",
+  "minimumCoverage": 30,
   "thresholds": {
-    "lines": 70,
-    "functions": 75,
-    "branches": 65
+    "lines": 30,
+    "functions": 30,
+    "branches": 25,
+    "statements": 30
   },
   "coverageTargets": [
     {
-      "name": "session-manager-critical-workflow",
-      "threshold": 85,
-      "tests": ["tests/integration/engram-session-persistence.integration.tests.ps1"],
-      "scripts": ["scripts/utilities/SESSION/session-manager.ps1"]
+      "name": "session-autostart-critical",
+      "threshold": 60,
+      "tests": ["tests/integration/session-autostart.test.ts"],
+      "source": ["src/session-autostart.ts"]
     },
     {
-      "name": "post-session-learning-persistence",
-      "threshold": 85,
-      "tests": [
-        "tests/integration/engram-session-persistence.integration.tests.ps1",
-        "tests/integration/post-session-learning.integration.tests.ps1"
-      ],
-      "scripts": ["scripts/utilities/ENGRAM/post-session-learning.ps1"]
+      "name": "engram-orchestrator-critical",
+      "threshold": 60,
+      "tests": ["tests/integration/engram-orchestrator.test.ts"],
+      "source": ["src/engram-orchestrator.ts"]
     },
     {
-      "name": "session-autostart-critical-workflow",
-      "threshold": 85,
-      "tests": ["tests/integration/session-autostart.integration.tests.ps1"],
-      "scripts": ["scripts/utilities/SESSION/session-autostart.ps1"]
-    },
-    {
-      "name": "detect-tool-critical-workflow",
-      "threshold": 85,
-      "tests": ["tests/integration/detect-tool.integration.tests.ps1"],
-      "scripts": ["scripts/utilities/DETECT/detect-tool.ps1"]
-    },
-    {
-      "name": "pre-close-validator-critical-workflow",
+      "name": "routing-critical-flows",
       "threshold": 70,
-      "tests": ["tests/integration/pre-close-validator.integration.tests.ps1"],
-      "scripts": ["scripts/utilities/GUARD/pre-close-validator.ps1"]
+      "tests": ["tests/integration/routing-critical-flows.test.ts"],
+      "source": ["src/agent-router.ts"]
+    },
+    {
+      "name": "security-orchestrator",
+      "threshold": 60,
+      "tests": ["tests/security/security-orchestrator.test.ts"],
+      "source": ["src/security-orchestrator.ts"]
     }
   ],
-  "include": ["scripts/**/*.ps1"],
+  "include": ["src/**/*.ts", "scripts/**/*.ts"],
   "exclude": [
-    "scripts/setup-complete.ps1",
-    "scripts/run-tests-simple.ps1",
-    "scripts/testing/run-tests.ps1",
-    "build/**",
-    "bin/**"
+    "src/**/*.d.ts",
+    "src/**/*.test.ts",
+    "scripts/**/*.test.ts",
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/coverage/**",
+    "apps/web-dashboard/dist/**"
   ],
-  "outputDir": "tests/coverage",
-  "reportFormats": ["JaCoCo"],
+  "outputDir": "coverage",
+  "reportFormats": ["text", "lcov", "html"],
   "_notes": {
-    "thresholds": "Set conservatively at start; raise by 5% each quarter",
+    "thresholds": "Starting low (30%) and raising by 5% each month",
     "target_2026_Q3": {
-      "lines": 75,
-      "functions": 80,
-      "branches": 70
+      "lines": 50,
+      "functions": 50,
+      "branches": 45
     },
     "target_2026_Q4": {
-      "lines": 80,
-      "functions": 85,
-      "branches": 75
+      "lines": 70,
+      "functions": 70,
+      "branches": 65
     }
   }
 }

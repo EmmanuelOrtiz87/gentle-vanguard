@@ -65,7 +65,7 @@ orchestrator, manual **Function**:
 
 ### 3. Auto-Norm Learner
 
-**File**: `scripts/adaptive/auto-norm-learner.ps1` **Trigger**: session-start, session-close, manual
+**File**: `src/auto-norm-learner.ts` **Trigger**: session-start, session-close, manual
 **Function**:
 
 - Queries Engram memory for patterns
@@ -76,7 +76,7 @@ orchestrator, manual **Function**:
 **Norm Types**:
 
 - `DOC-###`: Documentation placement/organization
-- `CORR-###`: Correction patterns (PowerShell syntax, etc.)
+- `CORR-###`: Correction patterns (TypeScript syntax, etc.)
 - `SESS-###`: Session patterns
 
 ### 4. Auto-Doc-Drift Detector
@@ -217,7 +217,7 @@ gentle-vanguard/
 
 ### Manual Operations
 
-```powershell
+```TypeScript
 # Backup now
 .\scripts\adaptive\auto-backup-orchestrator.ps1 -Action backup -Trigger manual
 
@@ -250,7 +250,7 @@ gentle-vanguard/
 **Symptom**: `[BKP-WARN] Engram binary not found, skipping` **Fix**: Ensure
 `scripts/utilities/engram.exe` exists. The script auto-detects via:
 
-```powershell
+```TypeScript
 $engramPath = Join-Path $repoRoot "tools\engram.exe"
 ```
 
@@ -259,7 +259,7 @@ $engramPath = Join-Path $repoRoot "tools\engram.exe"
 **Cause**: Engram not running or binary not found **Result**: Only metadata backup (unencrypted)
 **Fix**: Verify Engram binary path
 
-### PowerShell Parser Errors
+### TypeScript Parser Errors
 
 **Symptom**: `InvalidLeftHandSide` or `Missing ')'` **Cause**: Trailing commas in param blocks
 **Fix**: Ensure no trailing commas after parameter defaults

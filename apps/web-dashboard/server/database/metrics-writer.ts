@@ -18,6 +18,7 @@ import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 import os from 'os';
 import { DatabaseManager, type MetricSnapshot } from './manager.ts';
+import { getAggregatedMetrics, listSessions, readSessionState } from '@gentle-vanguard/core/session-context-log';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -28,9 +29,7 @@ const ROOT = join(__dirname, '..', '..', '..', '..');
 const CONSOLIDATED_PATH = join(ROOT, '.runtime', 'metrics', 'consolidated.json');
 const STATS_PATH = join(ROOT, '.atl', 'skill-stats.json');
 const REGISTRY_PATH = join(ROOT, '.atl', 'skill-registry.md');
-const SESSIONS_HISTORY_PATH = join(ROOT, '.event-bus', 'sessions-history.json');
 const CONTEXT_LOG_DIR = join(ROOT, '.session', 'context-log');
-const TOKEN_USAGE_PATH = join(ROOT, '.session', 'token-usage.json');
 
 // ─── Helpers ──────────────────────────────────────────────────────────
 
@@ -109,62 +108,52 @@ export class MetricsWriter {
     // 1. Git stats (REAL — from git)
     const commitCount = parseInt(execGit('rev-list --count HEAD'), 10) || 0;
 
-    // 2. Sessions (REAL — from sessions-history.json)
-    const sessionsHistory = readJson<Array<{ id: string; status: string; createdAt: string }>>(
-      SESSIONS_HISTORY_PATH,
-    ) || [];
-    const sessionsTotal = sessionsHistory.length;
-    const sessionsActive = sessionsHistory.filter(
-      (s) => s.status === 'active' || s.status === 'awaiting_input',
-    ).length;
-    const today = new Date().toISOString().slice(0, 10);
-    const sessionsToday = sessionsHistory.filter(
-      (s) => (s.createdAt || '').startsWith(today),
-    ).length;
-
-    // Also sync sessions from history into DB
-    for (const s of sessionsHistory) {
-      this.db.upsertSession({
-        id: s.id,
-        agent: 'unknown',
-        status: s.status,
-        created_at: s.createdAt,
-        updated_at: s.createdAt,
-        tokens_used: 0,
-        cost: 0,
-        message_count: 0,
-      });
+    // 2. Sessions (REAL — from unified SessionContextLog)
+    let sessionsTotal = 0;
+    let sessionsActive = 0;
+    let sessionsToday = 0;
+    try {
+      const ctxMetrics = getAggregatedMetrics();
+      sessionsTotal = ctxMetrics.totalSessions;
+      sessionsActive = ctxMetrics.activeSessions;
+      
+      const today = new Date().toISOString().slice(0, 10);
+      const allSessionIds = listSessions();
+      sessionsToday = allSessionIds.filter(id => {
+        const state = readSessionState(id);
+        if (!state) return false;
+        return state.createdAt.startsWith(today);
+      }).length;
+      
+      // Sync sessions to DB
+      for (const sid of allSessionIds) {
+        const state = readSessionState(sid);
+        if (state) {
+          this.db.upsertSession({
+            id: state.sessionId,
+            agent: state.agent,
+            status: state.status,
+            created_at: state.createdAt,
+            updated_at: state.updatedAt,
+            tokens_used: state.totalTokens,
+            cost: state.totalCost,
+            message_count: state.messageCount,
+          });
+        }
+      }
+    } catch (err) {
+      console.error('[MW] Error reading from SessionContextLog:', err);
     }
 
-    // 3. Tokens (REAL — from context-log .state.json + token-usage.json)
+    // 3. Tokens (REAL — from unified SessionContextLog)
     let tokensUsed = 0;
     let tokenCost = 0;
     try {
-      // From token-usage.json
-      const tokenUsage = readJson<{ totalTokens?: number; totalCost?: number }>(TOKEN_USAGE_PATH);
-      tokensUsed = tokenUsage?.totalTokens ?? 0;
-      tokenCost = tokenUsage?.totalCost ?? 0;
-
-      // Also scan context-log
-      if (existsSync(CONTEXT_LOG_DIR)) {
-        const dirs = readdirSync(CONTEXT_LOG_DIR, { withFileTypes: true });
-        for (const d of dirs) {
-          if (!d.isDirectory()) continue;
-          const stateFile = join(CONTEXT_LOG_DIR, d.name, '.state.json');
-          if (!existsSync(stateFile)) continue;
-          const state = readJson<{
-            totalTokens?: number;
-            totalCost?: number;
-            turns?: Array<{ inputTokens?: number; outputTokens?: number }>;
-          }>(stateFile);
-          if (state) {
-            tokensUsed = Math.max(tokensUsed, state.totalTokens ?? 0);
-            tokenCost = Math.max(tokenCost, state.totalCost ?? 0);
-          }
-        }
-      }
-    } catch {
-      // best-effort
+      const ctxMetrics = getAggregatedMetrics();
+      tokensUsed = ctxMetrics.totalTokens;
+      tokenCost = ctxMetrics.totalCost;
+    } catch (err) {
+      console.error('[MW] Error reading tokens from SessionContextLog:', err);
     }
 
     // 4. MCP stats (REAL — from .atl/skill-stats.json)

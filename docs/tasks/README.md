@@ -38,7 +38,7 @@ tasks/
 
 ### Create New Task Brief#
 
-```powershell
+```TypeScript
 # Use the template
 cp ../supplementary/TASK-BRIEF.template.md task-name.md
 

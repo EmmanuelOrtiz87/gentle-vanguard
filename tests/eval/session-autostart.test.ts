@@ -50,6 +50,8 @@ describe('session-autostart pipeline', () => {
   it('step scripts reference existing files', () => {
     const missing: string[] = [];
     for (const step of config.pipeline.steps) {
+      // Skip disabled steps — they may reference scripts that don't exist yet
+      if (step.enabled === false) continue;
       const scriptPath = join(ROOT, step.script);
       if (!existsSync(scriptPath)) {
         missing.push(`${step.id}: ${step.script}`);

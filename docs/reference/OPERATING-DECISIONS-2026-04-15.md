@@ -70,7 +70,7 @@ Workspace + Gentle-Vanguard operating flow.
 - `gv day-end-closure`/`day-end-closure.ps1` invocation stabilized (named switch handling).
 - Session startup compatibility checks integrated into workspace startup manager.
 - Complementary release homologation gate automated via
-  `scripts/utilities/DEPLOYMENT/validate-release-homologation.ps1` and exposed as
+  `src/deployment/validate-release-homologation.ts` and exposed as
   `gv.ps1 release-homologation`.
 
 ### Definitions
@@ -88,7 +88,7 @@ Workspace + Gentle-Vanguard operating flow.
 
 ## Continuity Commands
 
-```powershell
+```TypeScript
 .\tools\session-autostart.cmd
 .\tools\session-manual-start.cmd
 .\tools\session-manual-end.cmd

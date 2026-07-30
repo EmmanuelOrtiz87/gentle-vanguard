@@ -578,6 +578,33 @@ function parseArgs(argv: string[]): GovArgs {
   return args;
 }
 
+// ─── Auto-Apply Integration ──────────────────────────────────────────
+
+function triggerAutoApply(_confidence: number, budgetAdjustment: BudgetAdjustment | null): void {
+  if (!budgetAdjustment) return;
+  if (budgetAdjustment.confidence < 0.8) return;
+  
+  try {
+    // Signal auto-apply-safe by creating a trigger file
+    const triggerDir = join(ROOT, '.session', 'auto-apply');
+    if (!existsSync(triggerDir)) mkdirSync(triggerDir, { recursive: true });
+    
+    const triggerFile = join(triggerDir, 'trigger-budget.json');
+    writeFileSync(triggerFile, JSON.stringify({
+      source: 'predictive-governor',
+      type: 'budget',
+      confidence: budgetAdjustment.confidence,
+      currentBudget: budgetAdjustment.currentBudget,
+      suggestedBudget: budgetAdjustment.suggestedBudget,
+      reason: budgetAdjustment.reason,
+      timestamp: now(),
+      autoApply: budgetAdjustment.confidence >= 0.8,
+    }, null, 2), 'utf-8');
+  } catch {
+    // Non-critical — auto-apply-safe will pick it up next cycle
+  }
+}
+
 function main(): void {
   const args = parseArgs(process.argv);
   const log = getLogger(args.quiet);
@@ -668,6 +695,12 @@ function main(): void {
     const outFile = join(outputDir, `governor-${now().slice(0, 10)}.json`);
     writeFileSync(outFile, JSON.stringify(output, null, 2), 'utf-8');
     log(`[OK] Governor report saved: ${outFile}`);
+  }
+
+  // 8. Auto-apply signal
+  if (budgetAdjustment && budgetAdjustment.confidence >= 0.8 && !args.dryRun) {
+    triggerAutoApply(budgetAdjustment.confidence, budgetAdjustment);
+    log(`  Auto-apply triggered (confidence: ${(budgetAdjustment.confidence * 100).toFixed(0)}%)`);
   }
 
   // Pipeline summary

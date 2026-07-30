@@ -23,6 +23,6 @@
     "rootDir": ".",
     "types": ["node"]
   },
-  "include": ["scripts/mcp/**/*.ts", "scripts/recovery/**/*.ts", "scripts/database/**/*.ts", "scripts/utilities/ops/REVIEW/**/*.ts", "scripts/utilities/security/**/*.ts", "src/**/*.ts"],
+  "include": ["scripts/mcp/**/*.ts", "scripts/recovery/**/*.ts", "scripts/database/**/*.ts", "scripts/utilities/ops/REVIEW/**/*.ts", "scripts/utilities/security/**/*.ts", "scripts/utilities/MODEL-ROUTER/**/*.ts", "src/**/*.ts"],
   "exclude": ["node_modules", "dist", "build", "coverage", "templates", "src/convergence"]
 }

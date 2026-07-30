@@ -48,6 +48,22 @@ Profile: **ultra** | Detail: **simple** | Chat: **chat-compact** (max 4 lines te
 5. Tool output: pipe large results through `Select-Object -First 30`, `head -50`
 6. Code blocks: only include relevant lines, not entire files
 
+## Token Optimization Commands
+
+```bash
+# Compress output with profile
+npm run optimize:output -- --input "text" --profile ultra
+
+# Enforce chat level
+npm run optimize:chat -- --level chat-compact --input "text"
+
+# Run full optimization pipeline
+npm run optimize:pipeline -- --mode pipeline --input "text"
+
+# View optimization stats
+npm run optimize:stats
+```
+
 ## Settings
 
 Temp: 0.3 | Max tokens: 4500 | Cache: enabled (setCacheKey: true) | Lang: es | Engram:

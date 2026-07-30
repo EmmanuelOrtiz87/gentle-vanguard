@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Findings Ledger v1.0.0
+ * Findings Ledger 
  * Structured findings ledger with tamper-proof records
- * Part of Gentle-Vanguard v8.0
+ * Part of Gentle-Vanguard 
  */
 
 import { EventEmitter } from 'events';

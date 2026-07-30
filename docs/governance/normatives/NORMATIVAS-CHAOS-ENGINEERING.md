@@ -66,7 +66,7 @@ inesperados sin degradacion catastrófica.
 
 ### 4.3 Hypothesize-Experiment-Prove Cycle
 
-`powershell
+`TypeScript
 
 # Script de experimento de caos
 

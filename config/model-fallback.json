@@ -1,0 +1,103 @@
+{
+  "version": "1.0.0",
+  "description": "Model fallback chains for agent dispatch — cuando un modelo no está disponible en OpenRouter, intenta con alternativas en orden de prioridad.",
+  "lastModified": "2026-07-30",
+  "modifiedBy": "orchestrator",
+  "global": {
+    "enabled": true,
+    "maxFallbackAttempts": 3,
+    "notifyOnFallback": true,
+    "persistState": true
+  },
+  "agentFallbacks": {
+    "ORCHESTRATOR": {
+      "primary": "qwen/qwen-plus",
+      "chain": ["z-ai/glm-5", "moonshotai/kimi-k2.6", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "openai", "anthropic"],
+      "rationale": "Orquestador — Qwen-plus estable, fallback a GLM5/Kimi/DeepSeek"
+    },
+    "BA": {
+      "primary": "moonshotai/kimi-k2.6",
+      "chain": ["qwen/qwen-plus", "z-ai/glm-5", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "openai", "anthropic"],
+      "rationale": "BA explora — Kimi K2.6 para razonamiento, fallback a Qwen/GLM5"
+    },
+    "SAD": {
+      "primary": "moonshotai/kimi-k2.6",
+      "chain": ["qwen/qwen-plus", "z-ai/glm-5", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "openai", "anthropic"],
+      "rationale": "SAD diseña — Kimi K2.6 para precisión, fallback a Qwen/GLM5"
+    },
+    "DEV": {
+      "primary": "z-ai/glm-5",
+      "chain": ["qwen/qwen-plus", "moonshotai/kimi-k2.6", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "openai", "anthropic"],
+      "rationale": "DEV implementa — GLM5 para código, fallback a Qwen/Kimi"
+    },
+    "QA": {
+      "primary": "z-ai/glm-5",
+      "chain": ["qwen/qwen-plus", "moonshotai/kimi-k2.6", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "openai", "anthropic"],
+      "rationale": "QA valida — GLM5 para precisión, fallback a Qwen/Kimi"
+    },
+    "OPS": {
+      "primary": "z-ai/glm-5",
+      "chain": ["qwen/qwen-plus", "moonshotai/kimi-k2.6", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "openai", "anthropic"],
+      "rationale": "OPS despliega — GLM5 para precisión, fallback a Qwen/Kimi"
+    },
+    "GOV": {
+      "primary": "moonshotai/kimi-k2.6",
+      "chain": ["z-ai/glm-5", "qwen/qwen-plus", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "openai", "anthropic"],
+      "rationale": "GOV audita — Kimi K2.6 para compliance, fallback a GLM5/Qwen"
+    },
+    "DOC": {
+      "primary": "qwen/qwen-plus",
+      "chain": ["z-ai/glm-5", "moonshotai/kimi-k2.6", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "openai", "anthropic"],
+      "rationale": "DOC documenta — Qwen-plus estable, fallback a GLM5/Kimi"
+    },
+    "SESSION": {
+      "primary": "qwen/qwen-plus",
+      "chain": ["z-ai/glm-5", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "openai"],
+      "rationale": "SESSION trackea — Qwen-plus para sesiones, fallback a GLM5"
+    },
+    "PREMORTEM": {
+      "primary": "z-ai/glm-5",
+      "chain": ["moonshotai/kimi-k2.6", "qwen/qwen-plus", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "openai", "anthropic"],
+      "rationale": "PREMORTEM analiza riesgos — GLM5 para adversarial, fallback a Kimi/Qwen"
+    },
+    "MKT": {
+      "primary": "qwen/qwen-plus",
+      "chain": ["z-ai/glm-5", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "openai"],
+      "rationale": "MKT crea contenido — Qwen-plus, fallback a GLM5"
+    },
+    "SALES": {
+      "primary": "qwen/qwen-plus",
+      "chain": ["z-ai/glm-5", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "openai"],
+      "rationale": "SALES sigue metodología — Qwen-plus eficiente"
+    },
+    "FINANCE": {
+      "primary": "z-ai/glm-5",
+      "chain": ["qwen/qwen-plus", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "openai"],
+      "rationale": "FINANCE calcula — GLM5 para precisión numérica"
+    }
+  },
+  "universalFallbacks": [
+    "deepseek/deepseek-chat",
+    "qwen/qwen-plus",
+    "z-ai/glm-5"
+  ],
+  "agentTypeFallback": {
+    "description": "Cuando un tipo de agente específico falla, usar estos tipos como fallback universal",
+    "rule": "Intentar con 'general' como fallback universal, luego 'explore' para tareas de análisis",
+    "priorities": ["general", "explore"],
+    "notes": "general y explore son tipos de agente integrados en OpenCode que no dependen de modelos específicos configurados en .md"
+  }
+}

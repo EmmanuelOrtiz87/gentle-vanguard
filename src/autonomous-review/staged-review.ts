@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Staged Review v1.0.0
+ * Staged Review 
  * Staged index review with incremental validation
- * Part of Gentle-Vanguard v6.0
+ * Part of Gentle-Vanguard 
  */
 
 import { EventEmitter } from 'events';

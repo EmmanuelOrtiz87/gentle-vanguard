@@ -24,7 +24,7 @@ Each ADR is immutable once accepted. Updates create new ADRs (ADR-005, etc).
 
 | ID                                                     | Title                                 | Status      | Date     | Summary                                                                                |
 | ------------------------------------------------------ | ------------------------------------- | ----------- | -------- | -------------------------------------------------------------------------------------- |
-| **[ADR-001](ADR-001-powershell-language-choice.md)**   | Primary Language: PowerShell          | ✅ Accepted | May 2026 | Why PowerShell over Bash/Python for automation                                         |
+| **[ADR-001](ADR-001-TypeScript-language-choice.md)**   | Primary Language: TypeScript          | ✅ Accepted | May 2026 | Why TypeScript over Bash/Python for automation                                         |
 | **ADR-002**                                            | MCP Workspace: External Local         | 📋 Planned  | —        | See [FIRST-TIME-SETUP-CHECKLIST.md](../../guides/FIRST-TIME-SETUP-CHECKLIST.md) Step 3 |
 | **[ADR-003](ADR-003-npx-offline-hardening.md)**        | NPX Hardening: Offline + Workspace    | ✅ Accepted | May 2026 | Why npx uses offline mode with pre-vetted workspace                                    |
 | **[ADR-004](ADR-004-homologation-gate.md)**            | Homologation Gate: Mandatory          | ✅ Accepted | May 2026 | Why release workflow has mandatory repo alignment check                                |
@@ -187,7 +187,7 @@ Is there uncertainty or tradeoffs?
 
 **Related Code**:
 
-- `scripts/utilities/DEPLOYMENT/validate-release-homologation.ps1` — Implements ADR-004
+- `src/deployment/validate-release-homologation.ts` — Implements ADR-004
 - `scripts/hooks/*.ps1` — Implements ADR-001
 - `$HOME\mcp-workspace/` — Implements ADR-002
 

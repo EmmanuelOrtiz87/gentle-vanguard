@@ -13,8 +13,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@b906affcce
+      - uses: actions/setup-node@e51e5fe84f
         with:
           node-version: 20
           cache: pnpm
@@ -51,8 +51,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@b906affcce
+      - uses: actions/setup-node@e51e5fe84f
         with:
           node-version: 20
           cache: pnpm
@@ -68,8 +68,8 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           fetch-depth: 0
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@b906affcce
+      - uses: actions/setup-node@e51e5fe84f
         with:
           node-version: 20
           cache: pnpm
@@ -84,8 +84,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@b906affcce
+      - uses: actions/setup-node@e51e5fe84f
         with:
           node-version: 20
           cache: pnpm

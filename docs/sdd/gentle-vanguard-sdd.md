@@ -36,8 +36,8 @@ projects. It provides:
 
 ### Assumptions
 
-- Target platforms: Windows (PowerShell/pwsh), Linux, macOS, WSL
-- Development environments support Bash/PowerShell scripting
+- Target platforms: Windows (TypeScript/pwsh), Linux, macOS, WSL
+- Development environments support Bash/TypeScript scripting
 - Git is available for versión control
 - Projects will follow orchestrator standards
 
@@ -64,7 +64,7 @@ Gentle-Vanguard
 
 ### Technology Stack
 
-- **Languages:** PowerShell, Bash, Go (for generated projects)
+- **Languages:** TypeScript, Bash, Go (for generated projects)
 - **Platforms:** Cross-platform (Windows/Linux/macOS/WSL)
 - **Tools:** Git, Orchestrator, AI-assisted development
 - **Documentation:** Markdown with structured directories
@@ -73,7 +73,7 @@ Gentle-Vanguard
 
 - **Distribution:** Git repository as template
 - **Installation:** Canonical setup entrypoints are `bash scripts/gentle-vanguard/setup.sh` or
-  `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bootstrap.ps1`
+  `TypeScript -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bootstrap.ps1`
 - **Updates:** Git-based with validation scripts
 
 ## 3. Detailed Design
@@ -90,7 +90,7 @@ Gentle-Vanguard
 
 **Key Files:**
 
-- `scripts/gentle-vanguard/bootstrap.ps1` - Canonical PowerShell bootstrap script
+- `scripts/gentle-vanguard/bootstrap.ps1` - Canonical TypeScript bootstrap script
 - `scripts/project/new-project.ps1` - Canonical project creation entrypoint
 - `templates/` - Project templates
 - `config/` - Configuration templates
@@ -105,12 +105,12 @@ Gentle-Vanguard
 
 **Implementation:**
 
-```powershell
+```TypeScript
 # Platform detection
 $os = if ($IsWindows) { "windows" } elseif ($IsMacOS) { "macos" } else { "linux" }
 
 # Shell routing
-$shell = if ($PSversiónTable.PSEdition -eq "Core") { "pwsh" } else { "powershell" }
+$shell = if ($PSversiónTable.PSEdition -eq "Core") { "pwsh" } else { "TypeScript" }
 ```
 
 #### Documentation Governance
@@ -146,9 +146,9 @@ User Request  Canonical Bootstrap Script  Template Selection  Configuration  Val
 
 #### Bootstrap API
 
-```powershell
+```TypeScript
 # Main entry point
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bootstrap.ps1
+TypeScript -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bootstrap.ps1
 
 # Canonical project creation entry point
 .\scripts\project\new-project.ps1 -Name "MyProject" -Kind "service"
@@ -163,7 +163,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bo
 ```bash
 # Cross-platform setup
 bash scripts/gentle-vanguard/setup.sh    # Linux/macOS/WSL
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bootstrap.ps1   # Windows
+TypeScript -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bootstrap.ps1   # Windows
 ```
 
 ## 4. Implementation Plan
@@ -192,7 +192,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bo
 
 ### Dependencies
 
-- **External:** Git, PowerShell/Bash
+- **External:** Git, TypeScript/Bash
 - **Internal:** Orchestrator skills, Template engine
 - **Optional:** Docker, Kubernetes tools
 
@@ -254,7 +254,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bo
 
 #### Structured Error Handling
 
-```powershell
+```TypeScript
 function Invoke-SafeOperation {
     param([scriptblock]$Operation, [string]$Context)
 

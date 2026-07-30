@@ -72,7 +72,7 @@ kubectl get svc -n gentle-vanguard
 
 ### MCP Bridge Failure
 
-```powershell
+```TypeScript
 pwsh scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1 -SkillId __healthcheck__ -InvocationType DryRun
 # If this fails, restart MCP:
 docker compose restart mcp-server
@@ -80,7 +80,7 @@ docker compose restart mcp-server
 
 ### Checkpoint Rollback
 
-```powershell
+```TypeScript
 pwsh scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1 -Action list
 pwsh scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1 -CheckpointId ckpt-20260619-103000 -DryRun
 pwsh scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1 -CheckpointId ckpt-20260619-103000 -AutoBackup
@@ -88,7 +88,7 @@ pwsh scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1 -Checkpoi
 
 ### Dashboard WS Recovery
 
-```powershell
+```TypeScript
 # Check watchdog
 Get-Content .runtime/dashboard-ws.log -Tail 5
 # Restart
@@ -108,7 +108,7 @@ scripts/utilities/dashboard/dashboard-start.ps1
 
 ## Monitoring Commands
 
-```powershell
+```TypeScript
 # System health
 npx tsx src/maintenance-watchtower.ts --action health
 
