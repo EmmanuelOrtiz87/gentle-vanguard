@@ -1,6 +1,8 @@
 ---
 name: security-and-hardening
-description: Hardens code against vulnerabilities — input validation, auth, data storage, external integrations, untrusted data, sessions, third-party services.
+description: Security and Hardening
+triggers:
+  - security and hardening
 ---
 
 # Security and Hardening

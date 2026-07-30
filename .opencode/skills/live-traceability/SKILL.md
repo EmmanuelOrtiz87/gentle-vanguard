@@ -1,3 +1,10 @@
+---
+name: live-traceability
+description: Skill: Live Traceability
+triggers:
+  - live traceability
+---
+
 # Skill: Live Traceability
 
 Capture and visualize real-time agent session data — turns, tokens, mechanisms, profiles, and cost —

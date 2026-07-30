@@ -1,8 +1,12 @@
 ---
 name: debugging-and-error-recovery
-description:
-  Systematic root-cause debugging. Use when tests fail, builds break, behavior doesn't match
-  expectations, or you encounter any unexpected error and need a structured approach.
+description: Systematic root-cause debugging. Use when tests fail, builds break, or behavior does not match expectations.
+triggers:
+  - debug
+  - error
+  - troubleshoot
+  - fix bug
+  - root cause
 ---
 
 # Debugging and Error Recovery

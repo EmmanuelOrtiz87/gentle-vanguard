@@ -1,3 +1,10 @@
+---
+name: finance-financial-analyst
+description: finance-financial-analyst
+triggers:
+  - finance financial analyst
+---
+
 # finance-financial-analyst
 
 ## Description

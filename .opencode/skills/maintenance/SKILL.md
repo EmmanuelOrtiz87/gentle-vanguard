@@ -1,3 +1,10 @@
+---
+name: maintenance
+description: Maintenance Skill — Gentle-Vanguard
+triggers:
+  - maintenance
+---
+
 # Maintenance Skill — Gentle-Vanguard
 
 Auto-maintenance: prune checkpoints, compact event store, clean graphify snapshots, optimize session

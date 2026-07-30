@@ -1,3 +1,10 @@
+---
+name: knowledge-base
+description: Knowledge Base Skill — Gentle-Vanguard
+triggers:
+  - knowledge base
+---
+
 # Knowledge Base Skill — Gentle-Vanguard
 
 Access and manage the Obsidian-compatible knowledge base vault.

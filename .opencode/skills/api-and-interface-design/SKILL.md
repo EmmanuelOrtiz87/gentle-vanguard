@@ -1,6 +1,12 @@
 ---
 name: api-and-interface-design
-description: Guides stable API and interface design. Use when designing REST/GraphQL endpoints, module boundaries, component props, or changing existing public interfaces.
+description: Design stable APIs and module boundaries. Use for REST/GraphQL endpoints, component props, or public interface changes.
+triggers:
+  - api design
+  - interface
+  - endpoint
+  - module boundary
+  - public api
 ---
 
 # API and Interface Design

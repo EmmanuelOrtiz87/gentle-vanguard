@@ -1,3 +1,10 @@
+---
+name: safety
+description: Safety Skill — Gentle-Vanguard
+triggers:
+  - safety
+---
+
 # Safety Skill — Gentle-Vanguard
 
 Safety guardrails, prompt injection detection, and mutation safety scoring for agent mutations.

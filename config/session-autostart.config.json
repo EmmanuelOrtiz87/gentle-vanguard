@@ -85,7 +85,7 @@
         "script": "src/engram-integrity-check.ts",
         "args": "-Mode status -Quiet",
         "required": false,
-        "description": "Verificar integridad de Engram (SHA256 + SQLite + chunks) al inicio de sesion"
+        "description": "Verify Engram integrity (SHA256 + SQLite + chunks) with auto-sync"
       },
       {
         "id": "engram-backup",
@@ -94,23 +94,7 @@
         "script": "src/backup-engram.ts",
         "args": "--mode backup --quiet",
         "required": false,
-        "description": "Backup automatico de Engram (DB + sessions + SHA256 checksums) (TS)"
-      },
-      {
-        "id": "engram-optimization",
-        "enabled": true,
-        "script": "src/optimize-engram-usage.ts",
-        "args": "--project workspace_gentle_vanguard",
-        "required": false,
-        "description": "Optimize Engram memory usage (TS)"
-      },
-      {
-        "id": "engram-auto-sync",
-        "enabled": true,
-        "script": "src/engram-auto-sync.ts",
-        "args": "-Mode sync -Quiet",
-        "required": false,
-        "description": "Auto-synchronize Engram checksums if DB was modified (prevents hash mismatches)"
+        "description": "Auto-backup Engram (DB + sessions + SHA256 checksums)"
       },
       {
         "id": "cross-workspace-validation",
@@ -169,28 +153,12 @@
         "description": "Initialize session metrics tracking (tokens, tool calls, files) (TS)"
       },
       {
-        "id": "session-scoring-init",
+        "id": "session-scoring",
         "enabled": true,
         "script": "src/session-scoring.ts",
         "args": "-Action init",
         "required": false,
         "description": "Initialize quality scoring system with baseline metrics"
-      },
-      {
-        "id": "session-scoring-start",
-        "enabled": true,
-        "script": "src/session-scoring.ts",
-        "args": "-Action record -EventType session -Detail session-start -Success",
-        "required": false,
-        "description": "Record session-start event in quality scoring system"
-      },
-      {
-        "id": "session-scoring-close",
-        "enabled": true,
-        "script": "src/session-scoring.ts",
-        "args": "-Action record -EventType session -Detail session-close -Success",
-        "required": false,
-        "description": "Record session-close event in quality scoring system (enabled on session end)"
       },
       {
         "id": "session-close-orchestrator",
@@ -711,7 +679,17 @@
         "args": "--quiet",
         "required": false,
         "phase": 99,
-        "description": "Predictive Resource Governor \u00e2\u20ac\u201d anticipate load, prewarm resources, adjust budgets"
+        "description": "Predictive Resource Governor — anticipate load, prewarm resources, adjust budgets"
+      },
+      {
+        "id": "proactive-intelligence",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/proactive-intelligence-engine.ts",
+        "args": "--analyze --quiet",
+        "required": false,
+        "phase": 99,
+        "description": "Proactive Intelligence Engine — anticipates user needs based on usage patterns and context"
       },
       {
         "id": "root-cause-correlator",

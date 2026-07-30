@@ -12,87 +12,88 @@
   "agentFallbacks": {
     "ORCHESTRATOR": {
       "primary": "qwen/qwen-plus",
-      "chain": ["z-ai/glm-5", "moonshotai/kimi-k2.6", "deepseek/deepseek-chat"],
-      "providerPriority": ["openrouter", "openai", "anthropic"],
-      "rationale": "Orquestador — Qwen-plus estable, fallback a GLM5/Kimi/DeepSeek"
+      "chain": ["anthropic/claude-3.5-sonnet", "google/gemini-pro", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "anthropic", "google", "deepseek"],
+      "rationale": "Orquestador — Qwen-plus estable, fallback a Claude/Gemini/DeepSeek"
     },
     "BA": {
-      "primary": "moonshotai/kimi-k2.6",
-      "chain": ["qwen/qwen-plus", "z-ai/glm-5", "deepseek/deepseek-chat"],
-      "providerPriority": ["openrouter", "openai", "anthropic"],
-      "rationale": "BA explora — Kimi K2.6 para razonamiento, fallback a Qwen/GLM5"
+      "primary": "anthropic/claude-3.5-sonnet",
+      "chain": ["qwen/qwen-plus", "google/gemini-pro", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "anthropic", "qwen", "google"],
+      "rationale": "BA explora — Claude para razonamiento, fallback a Qwen/Gemini/DeepSeek"
     },
     "SAD": {
-      "primary": "moonshotai/kimi-k2.6",
-      "chain": ["qwen/qwen-plus", "z-ai/glm-5", "deepseek/deepseek-chat"],
-      "providerPriority": ["openrouter", "openai", "anthropic"],
-      "rationale": "SAD diseña — Kimi K2.6 para precisión, fallback a Qwen/GLM5"
+      "primary": "anthropic/claude-3.5-sonnet",
+      "chain": ["google/gemini-pro", "qwen/qwen-plus", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "anthropic", "google", "qwen"],
+      "rationale": "SAD diseña — Claude para precisión, fallback a Gemini/Qwen/DeepSeek"
     },
     "DEV": {
-      "primary": "z-ai/glm-5",
-      "chain": ["qwen/qwen-plus", "moonshotai/kimi-k2.6", "deepseek/deepseek-chat"],
-      "providerPriority": ["openrouter", "openai", "anthropic"],
-      "rationale": "DEV implementa — GLM5 para código, fallback a Qwen/Kimi"
+      "primary": "anthropic/claude-3.5-sonnet",
+      "chain": ["qwen/qwen-plus", "google/gemini-pro", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "anthropic", "qwen", "google"],
+      "rationale": "DEV implementa — Claude para código, fallback a Qwen/Gemini/DeepSeek"
     },
     "QA": {
-      "primary": "z-ai/glm-5",
-      "chain": ["qwen/qwen-plus", "moonshotai/kimi-k2.6", "deepseek/deepseek-chat"],
-      "providerPriority": ["openrouter", "openai", "anthropic"],
-      "rationale": "QA valida — GLM5 para precisión, fallback a Qwen/Kimi"
+      "primary": "anthropic/claude-3.5-sonnet",
+      "chain": ["google/gemini-pro", "qwen/qwen-plus", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "anthropic", "google", "qwen"],
+      "rationale": "QA valida — Claude para precisión, fallback a Gemini/Qwen/DeepSeek"
     },
     "OPS": {
-      "primary": "z-ai/glm-5",
-      "chain": ["qwen/qwen-plus", "moonshotai/kimi-k2.6", "deepseek/deepseek-chat"],
-      "providerPriority": ["openrouter", "openai", "anthropic"],
-      "rationale": "OPS despliega — GLM5 para precisión, fallback a Qwen/Kimi"
+      "primary": "anthropic/claude-3.5-sonnet",
+      "chain": ["qwen/qwen-plus", "google/gemini-pro", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "anthropic", "qwen", "google"],
+      "rationale": "OPS despliega — Claude para precisión, fallback a Qwen/Gemini/DeepSeek"
     },
     "GOV": {
-      "primary": "moonshotai/kimi-k2.6",
-      "chain": ["z-ai/glm-5", "qwen/qwen-plus", "deepseek/deepseek-chat"],
-      "providerPriority": ["openrouter", "openai", "anthropic"],
-      "rationale": "GOV audita — Kimi K2.6 para compliance, fallback a GLM5/Qwen"
+      "primary": "anthropic/claude-3.5-sonnet",
+      "chain": ["google/gemini-pro", "qwen/qwen-plus", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "anthropic", "google", "qwen"],
+      "rationale": "GOV audita — Claude para compliance, fallback a Gemini/Qwen/DeepSeek"
     },
     "DOC": {
       "primary": "qwen/qwen-plus",
-      "chain": ["z-ai/glm-5", "moonshotai/kimi-k2.6", "deepseek/deepseek-chat"],
-      "providerPriority": ["openrouter", "openai", "anthropic"],
-      "rationale": "DOC documenta — Qwen-plus estable, fallback a GLM5/Kimi"
+      "chain": ["anthropic/claude-3.5-sonnet", "google/gemini-pro", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "qwen", "anthropic", "google"],
+      "rationale": "DOC documenta — Qwen-plus estable, fallback a Claude/Gemini/DeepSeek"
     },
     "SESSION": {
       "primary": "qwen/qwen-plus",
-      "chain": ["z-ai/glm-5", "deepseek/deepseek-chat"],
-      "providerPriority": ["openrouter", "openai"],
-      "rationale": "SESSION trackea — Qwen-plus para sesiones, fallback a GLM5"
+      "chain": ["anthropic/claude-3.5-sonnet", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "anthropic"],
+      "rationale": "SESSION trackea — Qwen-plus para sesiones, fallback a Claude"
     },
     "PREMORTEM": {
-      "primary": "z-ai/glm-5",
-      "chain": ["moonshotai/kimi-k2.6", "qwen/qwen-plus", "deepseek/deepseek-chat"],
-      "providerPriority": ["openrouter", "openai", "anthropic"],
-      "rationale": "PREMORTEM analiza riesgos — GLM5 para adversarial, fallback a Kimi/Qwen"
+      "primary": "anthropic/claude-3.5-sonnet",
+      "chain": ["google/gemini-pro", "qwen/qwen-plus", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "anthropic", "google"],
+      "rationale": "PREMORTEM analiza riesgos — Claude para adversarial, fallback a Gemini/Qwen"
     },
     "MKT": {
       "primary": "qwen/qwen-plus",
-      "chain": ["z-ai/glm-5", "deepseek/deepseek-chat"],
-      "providerPriority": ["openrouter", "openai"],
-      "rationale": "MKT crea contenido — Qwen-plus, fallback a GLM5"
+      "chain": ["anthropic/claude-3.5-sonnet", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "qwen", "anthropic"],
+      "rationale": "MKT crea contenido — Qwen-plus, fallback a Claude"
     },
     "SALES": {
       "primary": "qwen/qwen-plus",
-      "chain": ["z-ai/glm-5", "deepseek/deepseek-chat"],
-      "providerPriority": ["openrouter", "openai"],
+      "chain": ["anthropic/claude-3.5-sonnet", "deepseek/deepseek-chat"],
+      "providerPriority": ["openrouter", "qwen", "anthropic"],
       "rationale": "SALES sigue metodología — Qwen-plus eficiente"
     },
     "FINANCE": {
-      "primary": "z-ai/glm-5",
+      "primary": "anthropic/claude-3.5-sonnet",
       "chain": ["qwen/qwen-plus", "deepseek/deepseek-chat"],
-      "providerPriority": ["openrouter", "openai"],
-      "rationale": "FINANCE calcula — GLM5 para precisión numérica"
+      "providerPriority": ["openrouter", "anthropic", "qwen"],
+      "rationale": "FINANCE calcula — Claude para precisión numérica"
     }
   },
   "universalFallbacks": [
     "deepseek/deepseek-chat",
     "qwen/qwen-plus",
-    "z-ai/glm-5"
+    "anthropic/claude-3.5-sonnet",
+    "google/gemini-pro"
   ],
   "agentTypeFallback": {
     "description": "Cuando un tipo de agente específico falla, usar estos tipos como fallback universal",

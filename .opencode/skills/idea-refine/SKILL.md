@@ -1,6 +1,13 @@
 ---
 name: idea-refine
-description: Refines raw ideas into sharp concepts through divergent then convergent thinking. Use when an idea is vague, to stress-test assumptions, or to expand options before converging. Triggers on "ideate", "refine this idea", or "stress-test my plan".
+description: Refine raw ideas into sharp concepts. Divergent then convergent thinking to stress-test assumptions and expand options.
+triggers:
+  - idea
+  - refine
+  - ideate
+  - concept
+  - brainstorm
+  - stress-test idea
 ---
 
 # Idea Refine

@@ -1,3 +1,10 @@
+---
+name: sales-account-executive
+description: sales-account-executive
+triggers:
+  - sales account executive
+---
+
 # sales-account-executive
 
 ## Description

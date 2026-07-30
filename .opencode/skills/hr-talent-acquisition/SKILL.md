@@ -1,3 +1,10 @@
+---
+name: hr-talent-acquisition
+description: hr-talent-acquisition
+triggers:
+  - hr talent acquisition
+---
+
 # hr-talent-acquisition
 
 ## Description

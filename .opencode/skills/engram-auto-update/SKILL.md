@@ -1,11 +1,10 @@
 ---
 name: engram-auto-update
-description: >
-  Auto-update engram to latest version with validation and rollback.
-metadata:
-  source: gentle-vanguard
-  original-name: engram-auto-update
-  department: infrastructure
+description: Auto-update engram to latest version with validation and rollback.
+triggers:
+  - engram update
+  - update engram
+  - memory update
 ---
 
 # Engram Auto-Update Skill

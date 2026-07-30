@@ -1,6 +1,11 @@
 ---
 name: context-engineering
-description: Optimizes context for new sessions or quality decline.
+description: Optimize context for new sessions. Manage context budget, compression, and efficiency for AI interactions.
+triggers:
+  - context
+  - context optimization
+  - session start
+  - context budget
 ---
 
 # Context Engineering

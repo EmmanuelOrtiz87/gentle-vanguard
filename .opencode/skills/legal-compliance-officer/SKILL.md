@@ -1,3 +1,10 @@
+---
+name: legal-compliance-officer
+description: legal-compliance-officer
+triggers:
+  - legal compliance officer
+---
+
 # legal-compliance-officer
 
 ## Description

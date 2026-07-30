@@ -1,6 +1,13 @@
 ---
 name: planning-and-task-breakdown
-description: Breaks work into small, ordered tasks from specs or vague requirements.
+description: Break work into small, ordered tasks from specs or vague requirements. Decompose into implementable units with acceptance criteria.
+triggers:
+  - plan
+  - breakdown
+  - tasks
+  - decompose
+  - planning
+  - task breakdown
 ---
 
 # Planning and Task Breakdown

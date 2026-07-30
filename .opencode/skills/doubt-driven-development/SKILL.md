@@ -1,8 +1,12 @@
 ---
 name: doubt-driven-development
-description:
-  Fresh-context adversarial review for non-trivial decisions. Use when correctness matters,
-  working in unfamiliar code, or stakes are high (production, security, irreversible ops).
+description: Fresh-context adversarial review. Use when correctness matters, working in unfamiliar code, or stakes are high.
+triggers:
+  - doubt
+  - adversarial
+  - challenge assumptions
+  - stress-test
+  - review with doubt
 ---
 
 # Doubt-Driven Development

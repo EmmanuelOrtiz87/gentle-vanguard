@@ -1,6 +1,12 @@
 ---
 name: test-driven-development
-description: Drives development with tests. Write a failing test before code. Use when implementing logic, fixing bugs, or modifying behavior.
+description: Drive development with tests. Write failing tests before code. Use when implementing logic, fixing bugs, or modifying behavior.
+triggers:
+  - tdd
+  - test driven
+  - write test first
+  - failing test
+  - test before code
 ---
 
 # Test-Driven Development

@@ -1,12 +1,10 @@
 ---
 name: gentle-ai-monitor
-description: >
-  Monitor gentle-ai releases without installation. Absorb updates and generate actionable
-  suggestions.
-metadata:
-  source: gentle-vanguard
-  original-name: gentle-ai-monitor
-  department: infrastructure
+description: Monitor gentle-ai releases without installation. Absorb updates and generate actionable suggestions.
+triggers:
+  - gentle-ai
+  - monitor updates
+  - track releases
 ---
 
 # Gentle AI Monitor Skill

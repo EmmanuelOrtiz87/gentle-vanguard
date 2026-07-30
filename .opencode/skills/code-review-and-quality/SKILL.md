@@ -1,8 +1,12 @@
 ---
 name: code-review-and-quality
-description:
-  Conducts multi-axis code review. Use before merging any change. Assess quality across correctness,
-  readability, architecture, security, and performance.
+description: Multi-axis code review. Assess correctness, readability, architecture, security, and performance before merging.
+triggers:
+  - code review
+  - quality
+  - review code
+  - assess
+  - pre-merge review
 ---
 
 # Code Review and Quality

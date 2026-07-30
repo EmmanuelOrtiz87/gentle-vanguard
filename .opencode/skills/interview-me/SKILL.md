@@ -1,9 +1,12 @@
 ---
 name: interview-me
-description:
-  Extracts what the user actually wants via one-question-at-a-time interviewing with
-  a guess attached. Apply when the ask is underspecified, missing who/why/success/
-  constraint, or the user invokes "interview me" / "grill me" / "stress-test".
+description: Extract what the user actually wants. One-question-at-a-time interviewing with hypothesis attached.
+triggers:
+  - interview
+  - clarify
+  - extract requirements
+  - interview me
+  - grill me
 ---
 
 # Interview Me

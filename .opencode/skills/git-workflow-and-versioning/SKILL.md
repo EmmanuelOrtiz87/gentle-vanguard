@@ -1,8 +1,14 @@
 ---
 name: git-workflow-and-versioning
-description:
-  Structures git workflow practices. Use when committing, branching, resolving conflicts,
-  organizing parallel work, cutting a release, version bumping, tagging, or writing a changelog.
+description: Structure git workflow practices. Commit, branch, resolve conflicts, organize parallel work, cut releases, version bumping.
+triggers:
+  - git
+  - commit
+  - branch
+  - version
+  - release
+  - tag
+  - changelog
 ---
 
 # Git Workflow and Versioning

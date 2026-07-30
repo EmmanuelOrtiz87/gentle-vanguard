@@ -24,6 +24,25 @@ import { runNpxTsxSync } from './core/run-command.js';
 // getOutputConfig imported for future use in budget-aware optimization
 import { enforceChatLevel, ChatLevel } from './chat-level-enforcer.js';
 
+// Proactive Intelligence integration
+interface ProactiveSuggestion {
+  id: string;
+  type: 'skill' | 'command' | 'context' | 'reminder' | 'action';
+  title: string;
+  description: string;
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  confidence: number;
+  action: string;
+}
+
+interface PIResponse {
+  patterns: number;
+  suggestions: number;
+  autoApply: number;
+  confidence: number;
+  suggestionList: ProactiveSuggestion[];
+}
+
 interface PrivacyGatewayResponse {
   status: string;
   sanitized?: string;
@@ -110,6 +129,29 @@ function applyPromptCompression(input: string, skill: string): string {
   }
 }
 
+function getProactiveSuggestions(workspaceRoot: string): PIResponse | null {
+  try {
+    const piePath = resolve(workspaceRoot, 'src/proactive-intelligence-engine.ts');
+    const result = runNpxTsxSync(piePath, ['--suggest', '--quiet'], {
+      cwd: workspaceRoot,
+      timeout: 10000,
+    });
+
+    if (result.status !== 0 || !result.stdout?.trim()) return null;
+
+    const parsed = JSON.parse(result.stdout.trim());
+    return {
+      patterns: parsed.patterns ?? 0,
+      suggestions: parsed.suggestions ?? 0,
+      autoApply: parsed.autoApply ?? 0,
+      confidence: parsed.confidence ?? 0,
+      suggestionList: parsed.suggestionList ?? [],
+    };
+  } catch {
+    return null;
+  }
+}
+
 function checkTokenBudget(): { shouldOptimize: boolean; level: ChatLevel } {
   try {
     // Check if we should auto-escalate to economy mode
@@ -162,6 +204,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     }
   }
 
+  // Stage 4: Proactive Intelligence - Get contextual suggestions
+  const proactiveSuggestions = getProactiveSuggestions(workspaceRoot);
+
   const durationMs = Date.now() - startTime;
 
   if (json) {
@@ -172,10 +217,23 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       compressed: output.length < input.length,
       chatLevelApplied,
       budgetOptimized: budgetCheck.shouldOptimize,
+      proactiveSuggestions: proactiveSuggestions?.suggestions ?? 0,
+      proactiveConfidence: proactiveSuggestions?.confidence ?? 0,
       durationMs,
       output,
     }));
   } else {
+    // Show proactive suggestions if available
+    if (proactiveSuggestions && proactiveSuggestions.suggestions > 0) {
+      console.error('\n[PROACTIVE INTELLIGENCE] Contextual Suggestions:');
+      for (const s of proactiveSuggestions.suggestionList?.slice(0, 3) ?? []) {
+        if (s.confidence >= 0.5) {
+          console.error(`  • ${s.title} (${(s.confidence * 100).toFixed(0)}% confidence)`);
+          console.error(`    ${s.description}`);
+        }
+      }
+      console.error('');
+    }
     console.log(output);
   }
 }

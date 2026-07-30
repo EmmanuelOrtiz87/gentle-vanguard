@@ -1,9 +1,12 @@
 ---
 name: incremental-implementation
-description:
-  Delivers changes incrementally. Use when implementing any feature or change that touches more than
-  one file. Use when you're about to write a large amount of code at once, or when a task feels too
-  big to land in one step.
+description: Deliver changes incrementally. Break features into small, ordered steps that can be implemented, tested, and verified.
+triggers:
+  - incremental
+  - small steps
+  - break down
+  - step by step
+  - iterative
 ---
 
 # Incremental Implementation

@@ -832,6 +832,30 @@
       "sessions": 0,
       "memories": 1,
       "prompts": 0
+    },
+    {
+      "id": "2de6636a",
+      "created_by": "emman",
+      "created_at": "2026-07-30T16:18:04Z",
+      "sessions": 0,
+      "memories": 9,
+      "prompts": 0
+    },
+    {
+      "id": "52f07b41",
+      "created_by": "emman",
+      "created_at": "2026-07-30T18:44:47Z",
+      "sessions": 1,
+      "memories": 13,
+      "prompts": 1
+    },
+    {
+      "id": "6b5e128f",
+      "created_by": "emman",
+      "created_at": "2026-07-30T19:37:35Z",
+      "sessions": 0,
+      "memories": 4,
+      "prompts": 0
     }
   ]
 }

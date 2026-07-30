@@ -1,10 +1,12 @@
 ---
 name: validate-stack
-description:
-  'Use ONLY when the user requests post-fix verification, or after modifying session-related files
-  in scripts/utilities/. Validates the full Gentle-Vanguard stack: pre-process-input triggers,
-  session pipeline health, hashline 5 actions, session-autostart Wait-Job, tool detection,
-  pre-commit/post-commit hooks. Run ALL verification steps, not just one.'
+description: Validate the full Gentle-Vanguard stack. Run verification steps for pre-process-input, session pipeline, hooks, and tool detection.
+triggers:
+  - validate
+  - stack verify
+  - verify stack
+  - check stack
+  - validation
 ---
 
 # Validate Stack

@@ -26,6 +26,7 @@
     "mcp:test": "npx tsx src/health-check.ts --component mcp",
     "# health:check:ps1": "removed — use health:check (TS) instead",
     "health:check": "npx tsx src/core/health-check.ts",
+    "health:check:fast": "npx tsx src/core/health-check-optimized.ts",
     "health:check:quiet": "npx tsx src/core/health-check.ts --quiet",
     "watchtower": "npx tsx src/core/maintenance-watchtower.ts",
     "watchtower:health": "npx tsx src/core/maintenance-watchtower.ts --action health",
@@ -144,6 +145,7 @@
     "@playwright/test": "^1.54.2",
     "@secretlint/secretlint-rule-preset-recommend": "^9.0.0",
     "@types/better-sqlite3": "^7.6.13",
+    "@types/glob": "^9.0.0",
     "@types/node": "^25.9.1",
     "@typescript-eslint/eslint-plugin": "^8.64.0",
     "@typescript-eslint/parser": "^8.64.0",
@@ -164,6 +166,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
+    "glob": "^13.0.6",
     "hono": "4.12.31",
     "zod": "^4.4.3"
   },

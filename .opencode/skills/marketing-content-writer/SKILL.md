@@ -1,3 +1,10 @@
+---
+name: marketing-content-writer
+description: marketing-content-writer
+triggers:
+  - marketing content writer
+---
+
 # marketing-content-writer
 
 ## Description
