@@ -134,6 +134,18 @@ export function getAggregatedDashboardMetrics(): AggregatedMetrics {
     costData?.totalCostUsd || 0,
     tokenData?.totalCost || 0
   );
+
+  // Calcular input/output tokens desde entries de cost tracking (fuente canónica);
+  // fallback proporcional 80/20 si no hay desglose registrado.
+  const costEntries = costData?.entries || [];
+  const entriesInput = costEntries.reduce((sum, e) => sum + (e.inputTokens || 0), 0);
+  const entriesOutput = costEntries.reduce((sum, e) => sum + (e.outputTokens || 0), 0);
+  const totalInputTokens = entriesInput > 0 || entriesOutput > 0
+    ? entriesInput
+    : Math.round(totalTokens * 0.8);
+  const totalOutputTokens = entriesInput > 0 || entriesOutput > 0
+    ? entriesOutput
+    : Math.round(totalTokens * 0.2);
   
   // Calcular feedback
   const feedbackUp = liveMetrics.totalFeedbackUp;
@@ -154,8 +166,8 @@ export function getAggregatedDashboardMetrics(): AggregatedMetrics {
     sessionsToday,
     
     totalTokens,
-    totalInputTokens: 0, // TODO: trackear separado
-    totalOutputTokens: 0,
+    totalInputTokens,
+    totalOutputTokens,
     
     totalCost,
     costByModel: costData?.byModel ? 

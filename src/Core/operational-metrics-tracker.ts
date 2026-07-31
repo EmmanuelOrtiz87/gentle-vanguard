@@ -19,6 +19,7 @@ import { ROOT } from './repo-root';
 
 const METRICS_DIR = path.join(ROOT, '.runtime', 'operational-metrics');
 const OPERATIONS_LOG = path.join(METRICS_DIR, 'operations.jsonl');
+const CORRECTIONS_LOG = path.join(ROOT, '.session', 'correction-engine.log');
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -158,10 +159,10 @@ export class OperationalMetricsTracker {
   }
 
   /**
-   * Trackear build
+   * Trackear build (checkType opcional: 'typecheck' | 'lint' | 'build')
    */
-  trackBuild(success: boolean, durationMs: number): void {
-    this.endOperation('build', 'build', success, { durationMs });
+  trackBuild(success: boolean, durationMs: number, checkType: 'typecheck' | 'lint' | 'build' = 'build'): void {
+    this.endOperation('build', 'build', success, { durationMs, checkType });
   }
 
   /**
@@ -254,8 +255,8 @@ export class OperationalMetricsTracker {
         buildSuccessRate,
         testPassRate,
         errorsDetected: events.filter(e => !e.success).length,
-        autoCorrections: 0, // TODO: track from correction-rules
-        typeCheckFailures: 0, // TODO: track from typecheck runs
+        autoCorrections: countAutoCorrections(fromDate, toDate),
+        typeCheckFailures: events.filter(e => e.type === 'build' && !e.success && e.metadata?.checkType === 'typecheck').length,
       },
       totalOperations: events.length,
       lastUpdated: new Date().toISOString(),
@@ -291,6 +292,43 @@ export class OperationalMetricsTracker {
 }
 
 // ─── Helper Functions ────────────────────────────────────────────────────
+
+/**
+ * Cuenta correcciones realmente ejecutadas desde el log del correction-rules-engine.
+ * Excluye líneas de evaluación (checking/loaded/no rules triggered) — solo cuenta
+ * correcciones aplicadas (Executing/Completed/applied/triggered with action).
+ */
+function countAutoCorrections(fromDate?: string, toDate?: string): number {
+  if (!fs.existsSync(CORRECTIONS_LOG)) return 0;
+  try {
+    const content = fs.readFileSync(CORRECTIONS_LOG, 'utf-8');
+    const lines = content.split('\n').filter(line => line.trim());
+    let count = 0;
+
+    for (const line of lines) {
+      // Normalizar timestamp: [YYYY-MM-DD HH:MM:SS] ...
+      const tsMatch = line.match(/\[(\d{4}-\d{2}-\d{2})/);
+      if (tsMatch) {
+        const date = tsMatch[1];
+        if (fromDate && date < fromDate) continue;
+        if (toDate && date > toDate) continue;
+      }
+
+      // Líneas de evaluación NO cuentan como correcciones
+      if (/Checking which rules|Loaded \d+ correction rules|No rules triggered|Sweep already escalated/.test(line)) {
+        continue;
+      }
+
+      // Líneas que indican corrección ejecutada/aplicada
+      if (/Executing auto-corrections|Completed \d+ corrections|Rule .* triggered|CORRECTED|Applied correction/.test(line)) {
+        count++;
+      }
+    }
+    return count;
+  } catch {
+    return 0;
+  }
+}
 
 function calculateAvgTimeBetween(events: OperationEvent[]): number {
   if (events.length < 2) return 0;

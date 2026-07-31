@@ -1,8 +1,8 @@
 {
-  "version": "2.2.0",
+  "version": "2.2.1",
   "enabled": true,
   "description": "Model Router: per-agent model/temperature binding aligned to the native available model opencode/deepseek-v4-flash-free with local provider fallback",
-  "lastModified": "2026-07-31T00:00:00.0000000-03:00",
+  "lastModified": "2026-07-31T04:45:00.0000000-03:00",
   "modifiedBy": "orchestrator",
     "defaults": {
     "model": "opencode/deepseek-v4-flash-free",
@@ -129,8 +129,8 @@
       "provider": "opencode",
       "temperature": 0.2,
       "hallucinationGuard": "high",
-      "subagent": "general",
-      "rationale": "Telemetría — modelo nativo disponible"
+      "subagent": "bus-tele-agent",
+      "rationale": "Telemetría — agente específico bus-tele-agent (modelo nativo disponible)"
     },
     "PREMORTEM": {
       "model": "opencode/deepseek-v4-flash-free",
@@ -143,10 +143,10 @@
     "SELF-DIAG": {
       "model": "opencode/deepseek-v4-flash-free",
       "provider": "opencode",
-      "temperature": 0.15,
+      "temperature": 0.1,
       "hallucinationGuard": "high",
-      "subagent": "general",
-      "rationale": "SELF-DIAG diagnóstico — modelo nativo disponible"
+      "subagent": "self-diag-agent",
+      "rationale": "SELF-DIAG diagnóstico — agente específico self-diag-agent (modelo nativo disponible)"
     },
     "SCRIPT-GOV": {
       "model": "opencode/deepseek-v4-flash-free",
@@ -161,50 +161,50 @@
       "provider": "opencode",
       "temperature": 0.1,
       "hallucinationGuard": "critical",
-      "subagent": "general",
-      "rationale": "GitFlow — modelo nativo disponible"
+      "subagent": "gitflow-agent",
+      "rationale": "GitFlow — agente específico gitflow-agent (modelo nativo disponible)"
     },
     "GITFLOW-PR": {
       "model": "opencode/deepseek-v4-flash-free",
       "provider": "opencode",
       "temperature": 0.1,
       "hallucinationGuard": "critical",
-      "subagent": "general"
+      "subagent": "gitflow-agent"
     },
     "GITFLOW-HOOKS": {
       "model": "opencode/deepseek-v4-flash-free",
       "provider": "opencode",
       "temperature": 0.1,
       "hallucinationGuard": "critical",
-      "subagent": "general"
+      "subagent": "gitflow-agent"
     },
     "GITFLOW-MERGE": {
       "model": "opencode/deepseek-v4-flash-free",
       "provider": "opencode",
       "temperature": 0.1,
       "hallucinationGuard": "critical",
-      "subagent": "general"
+      "subagent": "gitflow-agent"
     },
     "GITFLOW-WORKFLOW": {
       "model": "opencode/deepseek-v4-flash-free",
       "provider": "opencode",
       "temperature": 0.1,
       "hallucinationGuard": "critical",
-      "subagent": "general"
+      "subagent": "gitflow-agent"
     },
     "GITFLOW-COMMIT": {
       "model": "opencode/deepseek-v4-flash-free",
       "provider": "opencode",
       "temperature": 0.1,
       "hallucinationGuard": "critical",
-      "subagent": "general"
+      "subagent": "gitflow-agent"
     },
     "GITFLOW-CONFLICT": {
       "model": "opencode/deepseek-v4-flash-free",
       "provider": "opencode",
       "temperature": 0.1,
       "hallucinationGuard": "critical",
-      "subagent": "general"
+      "subagent": "gitflow-agent"
     },
     "REPORT": {
       "model": "opencode/deepseek-v4-flash-free",

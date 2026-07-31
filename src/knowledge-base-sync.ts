@@ -20,11 +20,18 @@
 import { existsSync, mkdirSync, writeFileSync, readFileSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { spawnSync } from 'child_process';
+import { createHash } from 'crypto';
 
 const ROOT = resolve(process.cwd());
 const VAULT_DIR = join(ROOT, 'knowledge-base');
 const SESSIONS_DIR = join(VAULT_DIR, '04-sessions');
 const INBOX_DIR = join(VAULT_DIR, '00-inbox');
+const IMPORT_STATE_FILE = join(ROOT, '.runtime', 'kb-sync-imported.json');
+const ENGRAM_PROJECT = process.env.ENGRAM_PROJECT || 'gentle-vanguard';
+
+interface ImportState {
+  [filepath: string]: { hash: string; engramId?: string; importedAt: string };
+}
 
 interface SyncOptions {
   mode: 'full' | 'export' | 'import' | 'session-summary';
@@ -135,42 +142,107 @@ ${obs.content}
 }
 
 /**
- * Importa notas del vault a Engram
- * Permite buscar conocimiento previo desde Engram
+ * Carga el estado de importaciones previas (deduplicación por hash)
  */
-async function importToEngram(): Promise<{ imported: number; errors: string[] }> {
-  log('Importing from vault to Engram...', 'INFO');
+function loadImportState(): ImportState {
+  if (!existsSync(IMPORT_STATE_FILE)) return {};
+  try {
+    return JSON.parse(readFileSync(IMPORT_STATE_FILE, 'utf-8')) as ImportState;
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Persiste el estado de importaciones
+ */
+function saveImportState(state: ImportState): void {
+  ensureDir(join(ROOT, '.runtime'));
+  writeFileSync(IMPORT_STATE_FILE, JSON.stringify(state, null, 2), 'utf-8');
+}
+
+/**
+ * Guarda una observación en Engram vía CLI (memoria persistente real)
+ */
+function saveToEngram(title: string, content: string): { ok: boolean; id?: string; error?: string } {
+  // Limitar contenido para el CLI (línea de comando) — truncar de forma segura
+  const safeTitle = title.slice(0, 200).replace(/\r?\n/g, ' ');
+  const safeContent = content.slice(0, 3000).replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
+
+  const result = spawnSync(
+    'engram',
+    ['save', safeTitle, safeContent, '--type', 'discovery', '--project', ENGRAM_PROJECT, '--scope', 'project'],
+    { encoding: 'utf-8', timeout: 15000 }
+  );
+
+  if (result.status !== 0) {
+    const stderr = (result.stderr || '').trim();
+    return { ok: false, error: stderr || result.error?.message || 'engram CLI failed' };
+  }
+
+  // Extraer ID de la salida si está disponible (formato: "Memory saved: <title> (type)")
+  const stdout = (result.stdout || '').trim();
+  const idMatch = stdout.match(/#(\d+)/);
+  return { ok: true, id: idMatch ? idMatch[1] : undefined };
+}
+
+/**
+ * Importa notas del vault a Engram
+ * Usa `engram save` (integración real) con deduplicación por hash de contenido
+ */
+async function importToEngram(): Promise<{ imported: number; skipped: number; errors: string[] }> {
+  log(`Importing from vault to Engram (project: ${ENGRAM_PROJECT})...`, 'INFO');
   const errors: string[] = [];
   let imported = 0;
+  let skipped = 0;
 
-  // Buscar notas en el vault que no estén en Engram
+  // Verificar que el CLI de engram esté disponible
+  const check = spawnSync('engram', ['--version'], { encoding: 'utf-8', timeout: 5000 });
+  if (check.status !== 0) {
+    log('Engram CLI unavailable — cannot import', 'WARN');
+    return { imported: 0, skipped: 0, errors: ['Engram CLI unavailable'] };
+  }
+
+  const state = loadImportState();
   const folders = ['01-projects', '02-architecture', '03-skills', '05-research'];
-  
+
   for (const folder of folders) {
     const folderPath = join(VAULT_DIR, folder);
     if (!existsSync(folderPath)) continue;
 
     const files = readdirSync(folderPath, { recursive: true }) as string[];
-    
+
     for (const file of files) {
       if (!file.endsWith('.md')) continue;
-      
+
       const filepath = join(folderPath, file.toString());
       try {
         const content = readFileSync(filepath, 'utf-8');
-        
+        if (!content.trim()) continue;
+
         // Extraer título (primera línea # )
         const titleMatch = content.match(/^# (.+)$/m);
-        const title = titleMatch ? titleMatch[1] : file.toString();
+        const title = titleMatch ? titleMatch[1].trim() : file.toString().replace(/\.md$/, '');
 
-        // Guardar en Engram como referencia
-        // Nota: Esto es un stub - en implementación real usaría mem_save
-        // TODO: Implementar integración real con Engram
-        // Usar title para logging o metadata
-        if (title) {
-          // Placeholder para uso futuro de title
+        // Deduplicación: si el contenido no cambió, no re-importar
+        const hash = createHash('sha256').update(content).digest('hex');
+        const previous = state[filepath];
+        if (previous && previous.hash === hash) {
+          skipped++;
+          continue;
         }
-        imported++;
+
+        // Contenido a guardar: título + cuerpo (sin front-matter yaml)
+        const body = content.replace(/^---[\s\S]*?---\n?/, '').trim();
+        const summary = body.slice(0, 2500);
+
+        const result = saveToEngram(title, summary);
+        if (result.ok) {
+          state[filepath] = { hash, engramId: result.id, importedAt: new Date().toISOString() };
+          imported++;
+        } else {
+          errors.push(`Failed to import ${file}: ${result.error}`);
+        }
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         errors.push(`Failed to import ${file}: ${msg}`);
@@ -178,8 +250,9 @@ async function importToEngram(): Promise<{ imported: number; errors: string[] }>
     }
   }
 
-  log(`Imported ${imported} notes from vault`, 'SUCCESS');
-  return { imported, errors };
+  saveImportState(state);
+  log(`Imported ${imported} notes to Engram (${skipped} unchanged)`, 'SUCCESS');
+  return { imported, skipped, errors };
 }
 
 /**
@@ -318,7 +391,7 @@ async function main(): Promise<void> {
     ['00-inbox', '01-projects', '02-architecture', '03-skills', '04-sessions', '05-research', '06-templates', '07-archive'].forEach(ensureDir);
   }
 
-  const results: { export?: { exported: number; errors: string[] }; import?: { imported: number; errors: string[] }; summary?: { path?: string; error?: string } } = {};
+  const results: { export?: { exported: number; errors: string[] }; import?: { imported: number; skipped: number; errors: string[] }; summary?: { path?: string; error?: string } } = {};
 
   switch (opts.mode) {
     case 'export':
@@ -349,7 +422,10 @@ async function main(): Promise<void> {
   }
   
   if (results.import) {
-    console.log(`  Imported: ${results.import.imported} notes`);
+    console.log(`  Imported: ${results.import.imported} notes (${results.import.skipped} unchanged)`);
+    if (results.import.errors.length > 0) {
+      console.log(`  Import errors: ${results.import.errors.length}`);
+    }
   }
   
   if (results.summary) {
