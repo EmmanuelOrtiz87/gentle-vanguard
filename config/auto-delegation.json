@@ -1,5 +1,15 @@
 {
   "enabled": true,
+  "_meta": {
+    "description": "Agent routing configuration for Gentle-Vanguard stack",
+    "note": "Only agents listed in 'availableAgents' have corresponding subagents in opencode.json. All others are reference/planned agents for future expansion. The orchestrator MUST verify agent availability before dispatching.",
+    "availableAgents": ["sdd-explore", "sdd-design", "sdd-apply", "sdd-verify", "doc-agent", "ops-agent", "gov-agent", "session-agent", "premortem-agent", "maintenance-agent", "gitflow-agent", "self-diag-agent", "knowledge-agent", "mkt-agent", "sales-agent", "finance-agent", "hr-agent", "legal-agent", "bus-tele-agent", "sia-agent"],
+    "availableCodes": ["BA", "SAD", "DEV", "QA", "OPS", "GOV", "DOC", "SESSION", "PREMORTEM", "MAINTENANCE", "GITFLOW", "SELF-DIAG", "KNOWLEDGE", "MKT", "SALES", "FINANCE", "HR", "LEGAL", "BUS-TELE", "SIA"],
+    "plannedAgents": [],
+    "version": "2.1",
+    "lastUpdated": "2026-07-31",
+    "enforcement": "Orchestrator MUST validate agent exists in opencode.json before dispatching. If agent not found, use fallbackStrategy (clarify-ba)."
+  },
   "confidenceThreshold": 60,
   "maxParallelAgents": 3,
   "fallbackStrategy": "clarify-ba",
@@ -97,6 +107,9 @@
     "CODEGRAPH": "validate-stack",
     "SIA": "spec-driven-development",
     "MAINTENANCE": "maintenance",
+    "GITFLOW": "gitflow",
+    "KNOWLEDGE": "knowledge",
+    "SELF-DIAG": "self-diag",
     "KNOWLEDGE": "knowledge-base"
   },
   "skillToAgentProfile": {

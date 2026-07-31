@@ -17,99 +17,220 @@
       "description": "BA exploration agent — requirements gathering and analysis",
       "mode": "subagent",
       "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
       "permission": {
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     },
     "sdd-design": {
       "description": "SAD architecture design agent — system design and API contracts",
       "mode": "subagent",
       "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
       "permission": {
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     },
     "sdd-apply": {
       "description": "DEV implementation agent — code generation and feature building",
       "mode": "subagent",
       "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
       "permission": {
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     },
     "sdd-verify": {
       "description": "QA verification agent — testing and validation",
       "mode": "subagent",
       "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
       "permission": {
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     },
     "doc-agent": {
       "description": "Documentation agent — technical docs and guides",
       "mode": "subagent",
       "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
       "permission": {
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     },
     "ops-agent": {
       "description": "Operations agent — deployment, CI/CD, infrastructure",
       "mode": "subagent",
       "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
       "permission": {
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     },
     "gov-agent": {
       "description": "Governance agent — compliance, security, audit",
       "mode": "subagent",
       "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
       "permission": {
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     },
     "session-agent": {
       "description": "Session management agent — state tracking and lifecycle",
       "mode": "subagent",
       "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
       "permission": {
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
       "steps": 6
     },
     "premortem-agent": {
       "description": "Premortem analysis agent — risk identification and stress testing",
       "mode": "subagent",
       "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
       "permission": {
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "routing": "@{preProcess=npx tsx src/pre-process-input.ts; mappings=config/auto-delegation.json#keywordMappings; agentProfiles=config/auto-delegation.json#agentProfiles; fallbackStrategy=clarify-ba}",
+      "steps": 6
+    },
+    "maintenance-agent": {
+      "description": "Maintenance agent — cleanup, optimization, and health monitoring",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
+      "permission": {
+        "websearch": "deny",
+        "webfetch": "deny"
+      },
+      "steps": 6
+    },
+    "gitflow-agent": {
+      "description": "GitFlow agent — branch management, PR automation, and git workflows",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
+      "permission": {
+        "websearch": "deny",
+        "webfetch": "deny"
+      },
+      "steps": 6
+    },
+    "self-diag-agent": {
+      "description": "Self-diagnosis agent — auto-debug and break-glass recovery",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
+      "permission": {
+        "websearch": "deny",
+        "webfetch": "deny"
+      },
+      "steps": 6
+    },
+    "knowledge-agent": {
+      "description": "Knowledge agent — knowledge base operations and vault management",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
+      "permission": {
+        "websearch": "deny",
+        "webfetch": "deny"
+      },
+      "steps": 6
+    },
+    "mkt-agent": {
+      "description": "Marketing agent — content strategy, campaigns, and brand positioning",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
+      "permission": {
+        "websearch": "deny",
+        "webfetch": "deny"
+      },
+      "steps": 6
+    },
+    "sales-agent": {
+      "description": "Sales agent — pipeline management, outreach, and deal qualification",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
+      "permission": {
+        "websearch": "deny",
+        "webfetch": "deny"
+      },
+      "steps": 6
+    },
+    "finance-agent": {
+      "description": "Finance agent — financial analysis, modeling, and forecasting",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
+      "permission": {
+        "websearch": "deny",
+        "webfetch": "deny"
+      },
+      "steps": 6
+    },
+    "hr-agent": {
+      "description": "HR agent — hiring, onboarding, and people operations",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
+      "permission": {
+        "websearch": "deny",
+        "webfetch": "deny"
+      },
+      "steps": 6
+    },
+    "legal-agent": {
+      "description": "Legal agent — compliance, contracts, and regulatory matters",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
+      "permission": {
+        "websearch": "deny",
+        "webfetch": "deny"
+      },
+      "steps": 6
+    },
+    "bus-tele-agent": {
+      "description": "Business telemetry agent — metrics, analytics, and business intelligence",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
+      "permission": {
+        "websearch": "deny",
+        "webfetch": "deny"
+      },
+      "steps": 6
+    },
+    "sia-agent": {
+      "description": "SIA self-improving agent — iterative refinement and feedback loops",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "opencode/deepseek-v4-flash-free",
+      "permission": {
+        "websearch": "deny",
+        "webfetch": "deny"
+      },
       "steps": 6
     }
   },
