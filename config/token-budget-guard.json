@@ -43,9 +43,10 @@
       "premortem-agent": { "minTokens": 2000, "maxTokens": 6000, "steps": 6 }
     },
     "modelPricing": {
-      "openrouter/z-ai/glm-5": { "input": 0.15, "output": 0.6 },
-      "openrouter/moonshot/kimi-k2.6": { "input": 0.25, "output": 1.25 },
-      "openrouter/qwen/qwen-3.6-plus": { "input": 0.1, "output": 0.4 }
+      "opencode/deepseek-v4-flash-free": { "input": 0.0, "output": 0.0 },
+      "ollama/llama3": { "input": 0.0, "output": 0.0 },
+      "ollama/mistral": { "input": 0.0, "output": 0.0 },
+      "ollama/qwen2.5": { "input": 0.0, "output": 0.0 }
     },
     "alerting": {
       "dailyCostExceeded": { "severity": "WARNING", "action": "log_and_notify" },

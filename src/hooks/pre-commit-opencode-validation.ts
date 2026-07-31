@@ -30,6 +30,126 @@ function tryParseJson(filePath: string): Record<string, unknown> | null {
   }
 }
 
+/**
+ * Validates a JSON document against its JSON-Schema (draft 2020-12) without external
+ * dependencies (no AJV available in this stack).
+ *
+ * Supports the subset used by the stack schemas:
+ *   - required: top-level and nested (recursive)
+ *   - type: object | array | string | number | integer | boolean | null
+ *   - properties (objects)
+ *   - patternProperties / additionalProperties (objects)
+ *   - items / additionalItems (arrays)
+ *   - enum, minimum/maximum, pattern, format (basic checks)
+ *
+ * Note: this intentionally does NOT enforce the legacy `provider.anthropic` root shape.
+ * Provider config now lives in `defaults.provider` / `agentBindings[*].provider` (opencode).
+ */
+function validateAgainstSchema(value: unknown, schema: Record<string, unknown>, path: string): string[] {
+  const errors: string[] = [];
+
+  // required
+  const required = schema.required as string[] | undefined;
+  if (required && (typeof value !== 'object' || value === null)) {
+    errors.push(`${path}: expected object for required check`);
+    return errors;
+  }
+  if (required && typeof value === 'object' && value !== null) {
+    const obj = value as Record<string, unknown>;
+    for (const field of required) {
+      if (!(field in obj)) {
+        errors.push(`${path}: missing required field '${field}'`);
+      }
+    }
+  }
+
+  // type
+  const type = schema.type as string | string[] | undefined;
+  if (type) {
+    const types = Array.isArray(type) ? type : [type];
+    const actual = value === null ? 'null' : Array.isArray(value) ? 'array' : typeof value;
+    // integer is a number in JS
+    const matches = types.some(
+      (t) => t === actual || (t === 'integer' && actual === 'number' && Number.isInteger(value as number))
+    );
+    if (!matches) {
+      errors.push(`${path}: expected type '${types.join(' | ')}', got '${actual}'`);
+      return errors;
+    }
+  }
+
+  // enum
+  const enumValues = schema.enum as unknown[] | undefined;
+  if (enumValues && !enumValues.includes(value)) {
+    errors.push(`${path}: value not in enum [${enumValues.map((e) => String(e)).join(', ')}]`);
+  }
+
+  // numeric constraints
+  if (typeof value === 'number') {
+    if (typeof schema.minimum === 'number' && value < schema.minimum) {
+      errors.push(`${path}: ${value} < minimum ${schema.minimum}`);
+    }
+    if (typeof schema.maximum === 'number' && value > schema.maximum) {
+      errors.push(`${path}: ${value} > maximum ${schema.maximum}`);
+    }
+  }
+
+  // string pattern / format
+  if (typeof value === 'string') {
+    if (typeof schema.pattern === 'string' && !new RegExp(schema.pattern).test(value)) {
+      errors.push(`${path}: '${value}' does not match pattern ${schema.pattern}`);
+    }
+    if (schema.format === 'date-time' && Number.isNaN(Date.parse(value))) {
+      errors.push(`${path}: '${value}' is not a valid date-time`);
+    }
+    if (schema.format === 'date' && Number.isNaN(Date.parse(value))) {
+      errors.push(`${path}: '${value}' is not a valid date`);
+    }
+  }
+
+  // nested objects
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    const obj = value as Record<string, unknown>;
+    const props = (schema.properties as Record<string, unknown>) ?? {};
+    const patternProps = (schema.patternProperties as Record<string, unknown>) ?? {};
+    const additional = schema.additionalProperties as Record<string, unknown> | boolean | undefined;
+
+    for (const [key, child] of Object.entries(obj)) {
+      let childSchema: Record<string, unknown> | undefined = props[key] as Record<string, unknown> | undefined;
+      if (!childSchema) {
+        for (const [pattern, pSchema] of Object.entries(patternProps)) {
+          if (new RegExp(pattern).test(key)) {
+            childSchema = pSchema as Record<string, unknown>;
+            break;
+          }
+        }
+      }
+      if (!childSchema) {
+        if (additional === false) {
+          errors.push(`${path}.${key}: additional property not allowed`);
+        } else if (additional && typeof additional === 'object') {
+          childSchema = additional;
+        }
+      }
+      if (childSchema && typeof childSchema === 'object') {
+        errors.push(...validateAgainstSchema(child, childSchema, `${path}.${key}`));
+      }
+    }
+  }
+
+  // nested arrays
+  if (Array.isArray(value)) {
+    const items = schema.items as Record<string, unknown> | undefined;
+    if (items && typeof items === 'object') {
+      value.forEach((item, idx) => {
+        errors.push(...validateAgainstSchema(item, items, `${path}[${idx}]`));
+      });
+    }
+  }
+
+  return errors;
+}
+
 function testJsonSchema(jsonPath: string, schemaPath: string): boolean {
   if (!existsSync(jsonPath)) {
     writeLog(`File not found: ${jsonPath}`, 'Error');
@@ -52,30 +172,14 @@ function testJsonSchema(jsonPath: string, schemaPath: string): boolean {
     return false;
   }
 
-  const requiredFields = schema.required as string[] | undefined;
-  if (requiredFields) {
-    for (const field of requiredFields) {
-      if (!(field in json)) {
-        writeLog(`Required field missing: ${field}`, 'Error');
-        return false;
-      }
+  const errors = validateAgainstSchema(json, schema, jsonPath.split(/[\\/]/).pop() ?? jsonPath);
+  if (errors.length > 0) {
+    for (const err of errors.slice(0, 10)) {
+      writeLog(`  Schema error: ${err}`, 'Error');
     }
-  }
-
-  const provider = json.provider as Record<string, unknown> | undefined;
-  if (!provider) {
-    writeLog('provider is required', 'Error');
-    return false;
-  }
-
-  const anthropic = provider.anthropic as Record<string, unknown> | undefined;
-  if (!anthropic) {
-    writeLog('provider.anthropic is required', 'Error');
-    return false;
-  }
-
-  if (!anthropic.enabled || !anthropic.model) {
-    writeLog('provider.anthropic.enabled and model are required', 'Error');
+    if (errors.length > 10) {
+      writeLog(`  ...and ${errors.length - 10} more errors`, 'Error');
+    }
     return false;
   }
 

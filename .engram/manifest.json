@@ -864,6 +864,22 @@
       "sessions": 0,
       "memories": 2,
       "prompts": 0
+    },
+    {
+      "id": "4cc9e59f",
+      "created_by": "emman",
+      "created_at": "2026-07-31T01:30:13Z",
+      "sessions": 0,
+      "memories": 20,
+      "prompts": 0
+    },
+    {
+      "id": "cc30c81a",
+      "created_by": "emman",
+      "created_at": "2026-07-31T03:48:09Z",
+      "sessions": 1,
+      "memories": 6,
+      "prompts": 0
     }
   ]
 }

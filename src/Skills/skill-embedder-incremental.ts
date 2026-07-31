@@ -102,6 +102,7 @@ function main(): void {
   for (const [skill, agent] of Object.entries(currentSkills)) {
     const hash = sha16(`${skill}|${agent}`);
     if (prevSkills[skill]) {
+      // eslint-disable-next-line security/detect-possible-timing-attacks -- internal state comparison, not secret
       if (prevSkills[skill] !== hash) modified.push(skill);
       else unchanged.push(skill);
     } else added.push(skill);

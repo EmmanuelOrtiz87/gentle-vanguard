@@ -141,6 +141,12 @@
     "backlog:report": "npx tsx src/cli/backlog.ts report",
     "postinstall": "pnpm build:mcp",
 
+    "model:current": "npx tsx scripts/utilities/MODEL-ROUTER/model-switch.ts current",
+    "model:list": "npx tsx scripts/utilities/MODEL-ROUTER/model-switch.ts list",
+    "model:switch": "npx tsx scripts/utilities/MODEL-ROUTER/model-switch.ts switch",
+    "model:capability": "npx tsx scripts/utilities/MODEL-ROUTER/model-switch.ts capability",
+    "model:fix": "npx tsx scripts/utilities/MODEL-ROUTER/fix-models.ts",
+    "model:help": "npx tsx scripts/utilities/MODEL-ROUTER/model-switch.ts help",
     "cb:status": "npx tsx src/circuit-breaker-api.ts status",
     "cb:reset": "npx tsx src/circuit-breaker-api.ts reset",
     "cb:force-open": "npx tsx src/circuit-breaker-api.ts force-state --state OPEN",

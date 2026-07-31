@@ -233,6 +233,7 @@ export function verifyCheckpoint(rootInput: string, checkpointId: string): Verif
       continue;
     }
     const hash = computeFileHash(currentPath);
+    // eslint-disable-next-line security/detect-possible-timing-attacks -- hash comparison is not attacker-controlled timing
     if (hash === file.sha256) valid += 1;
     else invalid += 1;
   }

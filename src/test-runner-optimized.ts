@@ -199,7 +199,6 @@ async function runParallel(suites: Suite[], options: RunOptions, progressPrefix:
       await new Promise(resolve => setImmediate(resolve));
       // Remove completed promises
       for (let i = running.length - 1; i >= 0; i--) {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         if (running[i].isCompleted) {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           running.splice(i, 1);

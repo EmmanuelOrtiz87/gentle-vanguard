@@ -98,6 +98,40 @@ Accept override gracefully when the author has full context. Comment on code, no
 All Critical and Required issues resolved or deferred, tests pass, build succeeds. See
 [references/quality-gates.md](references/quality-gates.md) for full checklist and red flags.
 
+## Verification Contract (gentle-ai v2.2.x alignment)
+
+Every reviewed work unit MUST carry implementation evidence before it is accepted. This contract
+is absorbed from the gentle-ai review transaction model and applied natively to our stack:
+
+| Requirement | Rule |
+|---|---|
+| Focused test command | Exact command + exact result recorded (e.g. `npm run test:config` → 6 passed). |
+| Runtime harness | Command/scenario + exact result, or explicit `N/A` with reason why no runtime boundary exists. |
+| Rollback boundary | Names the exact files/behavior removable without unrelated work; stated independently of commit creation. |
+| Review budget | Keep each PR within 400 changed lines (`additions + deletions`) unless a maintainer accepts `size:exception`. |
+| Evidence in same unit | Tests, docs, and verification travel with the behavior they verify — never in a separate follow-up. |
+| Five lifecycle gates | `post-apply` (implemented candidate), `pre-commit` (staged), `pre-push` (committed), `pre-pr` (candidate + base), `release` (immutable tree). |
+| Immutable review target | Review the frozen candidate tree, not the live worktree; never accept "it passed locally" without replayable evidence. |
+
+### Review findings format
+
+Severe findings MUST include an `evidence_class` and `causal_disposition`. Claims of
+`introduced`, `behavior-activated`, or `worsened` are admitted only when repository-derived
+changed-line evidence supports the claimed location. Review results echo the exact subject
+identity (lineage/target/lens) and report structured inspection: completed paths, not prose.
+
+### Chained PR protection
+
+When a planned PR exceeds 400 changed lines: split into chained PRs (see `chained-pr` skill),
+each reviewable in about 60 minutes, with a dependency diagram marking the current PR with `📍`,
+and tests/docs kept with the unit they verify.
+
+## Change Sizing (aligned)
+
+See [references/quality-gates.md](references/quality-gates.md). Budget:
+- ~100 lines ideal, ~300 acceptable for single logical changes, ~1000+ split it.
+- The 400-line PR budget from gentle-ai is the hard cap for a single reviewable unit.
+
 ## See Also
 
 - [references/review-criteria.md](references/review-criteria.md)
