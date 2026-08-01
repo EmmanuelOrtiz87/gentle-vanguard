@@ -834,8 +834,13 @@ async function checkAuditPipeline() {
 
   if (fileExists(indexFile)) {
     addResult('audit', 'index', 'PASS', 'Available', 'ok');
+  } else if (fileExists(logDir) && readdirSync(logDir).some((f) => f.endsWith('.jsonl'))) {
+    // Events exist but the index is missing — real inconsistency worth flagging.
+    addResult('audit', 'index', 'WARN', 'No index (events present)', 'ok');
   } else {
-    addResult('audit', 'index', 'WARN', 'No index', 'ok');
+    // No audit events yet — index is legitimately absent until the first event
+    // is recorded (saveAuditEvent creates it). Initial state is not a warning.
+    addResult('audit', 'index', 'PASS', 'No events yet (index pending)', 'ok');
   }
 
   addResult(
