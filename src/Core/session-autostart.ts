@@ -1,30 +1,80 @@
 #!/usr/bin/env node
 import { appendFileSync, mkdirSync, readFileSync, existsSync, writeFileSync, unlinkSync } from 'fs';
 import { join, resolve } from 'path';
-import { spawn, type ChildProcess } from 'child_process';
+import { execSync, spawn, type ChildProcess } from 'child_process';
 import { getPipelineTimeouts } from './timeout-config';
 import { log as createLogger } from '../utils/logger.js';
 import { printBanner } from '../cli/banner.js';
 
 const LOG = createLogger('SESSION-AUTOSTART');
 
+// ─── Optional output redirection ──────────────────────────────────────────
+// The detached launcher (session-autostart-detached.ts) sets AUTOSTART_LOG_FILE
+// so the pipeline run is observable even though nothing is written to the
+// caller's pipe. We redirect ALL console output to that file natively (no
+// reliance on cmd.exe `>` redirection, which breaks under detached process
+// groups on Windows). Uses appendFileSync (synchronous) so every line survives
+// the final `process.exit(0)` — an async stream would lose buffered lines.
+const AUTOSTART_LOG_FILE = process.env.AUTOSTART_LOG_FILE;
+if (AUTOSTART_LOG_FILE) {
+  const mirror = (...args: unknown[]): void => {
+    try { appendFileSync(AUTOSTART_LOG_FILE, args.map(String).join(' ') + '\n', 'utf-8'); } catch { /* best-effort */ }
+  };
+  console.log = (...args: unknown[]) => mirror(...args);
+  console.warn = (...args: unknown[]) => mirror(...args);
+  console.error = (...args: unknown[]) => mirror(...args);
+}
+
 // ─── Lock file: prevent running session-autostart more than once ──────
 
 const LOCK_FILE = join(resolve(process.cwd()), '.runtime', 'session-autostart.lock');
+
+/**
+ * Robust lock-owner liveness check.
+ *
+ * `process.kill(pid, 0)` only verifies that SOME process exists with that PID.
+ * On Windows, an orphaned `conhost.exe` (console host of a previously detached
+ * run) or a recycled PID can keep that check true and block the pipeline with
+ * a spurious "[LOCK] already running" skip.
+ *
+ * This verifies the PID actually belongs to a `node` process whose command
+ * line references `session-autostart` before treating the lock as live.
+ * Any ambiguity resolves to "stale" (proceed), matching the lock's intent of
+ * preventing accidental duplicates while never wedging the pipeline.
+ */
+function isLockOwnerAlive(pid: number): boolean {
+  if (!Number.isInteger(pid) || pid <= 0) return false;
+  try {
+    process.kill(pid, 0); // signal 0 = test existence
+  } catch {
+    return false; // no such process -> stale
+  }
+  // PID exists; on Windows confirm it is a node process running session-autostart.
+  if (process.platform === 'win32') {
+    try {
+      const cmd = execSync(
+        `powershell -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \\"ProcessId=${pid}\\").CommandLine"`,
+        { encoding: 'utf-8', windowsHide: true, timeout: 5000, stdio: ['ignore', 'pipe', 'ignore'] },
+      ).trim();
+      if (!cmd) return false; // no command line info -> treat as stale
+      return /node(\.exe)?/i.test(cmd) && /session-autostart/i.test(cmd);
+    } catch {
+      return false; // powershell unavailable/failed -> treat as stale (safe to proceed)
+    }
+  }
+  return true; // non-Windows: plain existence check is sufficient
+}
 
 function checkLock(): boolean {
   try {
     if (existsSync(LOCK_FILE)) {
       const pid = parseInt(readFileSync(LOCK_FILE, 'utf-8').trim(), 10);
-      // Check if process is still alive
-      try {
-        process.kill(pid, 0); // signal 0 = test existence
+      if (isLockOwnerAlive(pid)) {
         LOG.info(`[LOCK] Session-autostart already running (PID ${pid}). Skipping duplicate.`);
         return false;
-      } catch {
-        // Process is dead, lockfile is stale — remove it
-        try { unlinkSync(LOCK_FILE); } catch { /* ignore */ }
       }
+      // Owner is dead or not a real session-autostart process — lockfile is stale, remove it
+      try { unlinkSync(LOCK_FILE); } catch { /* ignore */ }
     }
     writeFileSync(LOCK_FILE, String(process.pid), 'utf-8');
     return true;

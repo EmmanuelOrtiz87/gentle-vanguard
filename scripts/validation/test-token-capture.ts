@@ -6,7 +6,7 @@
  */
 
 import { execSync } from 'child_process';
-import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
 
 const ROOT = resolve(process.cwd());
@@ -23,7 +23,7 @@ try {
     console.log('✅ Token Guard está funcionando:');
     console.log('   ' + result.trim());
 } catch (error) {
-    console.log('⚠️  Error al verificar Token Guard:', error.message);
+    console.log('⚠️  Error al verificar Token Guard:', (error as Error).message);
 }
 
 // 2. Verificar que los archivos de configuración estén actualizados
@@ -48,7 +48,7 @@ configs.forEach(config => {
                 console.log(`   - Perfil ultra: ${configObj.profiles.ultra.maxTokens} tokens`);
             }
         } catch (e) {
-            console.log(`⚠️  Error leyendo ${config}: ${e.message}`);
+            console.log(`⚠️  Error leyendo ${config}: ${(e as Error).message}`);
         }
     } else {
         console.log(`❌ ${config}: No encontrado`);
@@ -67,7 +67,7 @@ if (existsSync(metricsFile)) {
             console.log('   ' + lines[lines.length - 1]);
         }
     } catch (e) {
-        console.log(`⚠️  Error leyendo métricas: ${e.message}`);
+        console.log(`⚠️  Error leyendo métricas: ${(e as Error).message}`);
     }
 } else {
     console.log('⚠️  Archivo de métricas no encontrado (puede ser normal)');
@@ -94,7 +94,7 @@ try {
         }
     }
 } catch (error) {
-    console.log('⚠️  Error ejecutando prueba:', error.message);
+    console.log('⚠️  Error ejecutando prueba:', (error as Error).message);
 }
 
 // 5. Verificar versión del sistema
@@ -108,11 +108,11 @@ try {
     const configDir = join(ROOT, 'config');
     if (existsSync(configDir)) {
         console.log(`✅ Directorio de configuración: OK`);
-        const files = require('fs').readdirSync(configDir).filter(f => f.endsWith('.json')).slice(0, 5);
+        const files = require('fs').readdirSync(configDir).filter((f: string) => f.endsWith('.json')).slice(0, 5);
         console.log(`   Archivos clave: ${files.join(', ')}`);
     }
 } catch (e) {
-    console.log(`⚠️  Error verificando sistema: ${e.message}`);
+    console.log(`⚠️  Error verificando sistema: ${(e as Error).message}`);
 }
 
 console.log('\n🎯 Test completado - verificar errores para solucionar problemas de captura de tokens');

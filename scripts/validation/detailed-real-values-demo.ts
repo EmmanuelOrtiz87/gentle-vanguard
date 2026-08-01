@@ -5,7 +5,7 @@
  * Muestra métricas concretas de cada iteración y procesos
  */
 
-import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { spawnSync } from 'child_process';
 
@@ -48,7 +48,7 @@ if (existsSync(statsFile)) {
         console.log(`   Ahorro promedio: ${stats.avgSavingsPct}%`);
         console.log(`   Tasa de aciertos: ${stats.cacheHitRate}`);
     } catch (e) {
-        console.log('⚠️  Error leyendo estadísticas:', e.message);
+        console.log('⚠️  Error leyendo estadísticas:', (e as Error).message);
     }
 }
 
@@ -81,6 +81,10 @@ for (let i = 1; i <= 3; i++) {
         encoding: 'utf-8'
     });
     
+    if (result.status !== 0) {
+        console.log(`   ⚠️ Token guard devolvió error (exit ${result.status}), se continúa con métricas previas`);
+    }
+    
     // Mostrar resultado de la ejecución
     console.log(`   Tarea: ${taskName}`);
     console.log(`   Riesgo: ${i === 1 ? 'medium' : i === 2 ? 'high' : 'low'}`);
@@ -99,7 +103,7 @@ for (let i = 1; i <= 3; i++) {
             }
         }
     } catch (e) {
-        console.log(`   ⚠️  Error en métricas: ${e.message}`);
+        console.log(`   ⚠️  Error en métricas: ${(e as Error).message}`);
     }
     
     executions.push({
@@ -160,7 +164,7 @@ try {
     console.log(`   Compresión de entrada activa: ${compressionConfig.profiles.ultra.abbreviate ? 'Sí' : 'No'}`);
     
 } catch (e) {
-    console.log('⚠️  Error leyendo configuraciones:', e.message);
+    console.log('⚠️  Error leyendo configuraciones:', (e as Error).message);
 }
 
 // 5. EJEMPLO REAL DE PROMPT Y RESULTADO

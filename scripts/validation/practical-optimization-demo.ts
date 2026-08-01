@@ -46,6 +46,10 @@ try {
         encoding: 'utf-8'
     });
     
+    if (result.status !== 0) {
+        console.log('   ⚠️ Token guard devolvió error, pero se continúa la demo');
+    }
+    
     console.log('✅ Prueba de token guard ejecutada');
     console.log('   Resultado: Registrado en sistema de métricas');
     
@@ -61,7 +65,7 @@ try {
     }
     
 } catch (error) {
-    console.log(`⚠️  Advertencia en prueba: ${error.message}`);
+    console.log(`⚠️  Advertencia en prueba: ${(error as Error).message}`);
     console.log('   (Esto puede ser normal en entorno de prueba)');
 }
 

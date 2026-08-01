@@ -43,7 +43,7 @@ console.log('Entrada original (48 palabras):');
 console.log(entradaOriginal);
 console.log('\nEntrada comprimida (15 palabras):');
 console.log(entradaComprimida);
-console.log(`\nReducción: ${(1 - 15/48)*100:.0f}% de palabras`);
+console.log(`\nReducción: ${((1 - 15/48) * 100).toFixed(0)}% de palabras`);
 
 // 3. Simular ejemplo de salida comprimida
 console.log('\n📄 Ejemplo de salida comprimida:');
@@ -65,7 +65,7 @@ console.log('Salida original (57 palabras):');
 console.log(salidaOriginal);
 console.log('\nSalida comprimida (21 palabras):');
 console.log(salidaComprimida);
-console.log(`\nReducción: ${(1 - 21/57)*100:.0f}% de palabras`);
+console.log(`\nReducción: ${((1 - 21/57) * 100).toFixed(0)}% de palabras`);
 
 // 4. Verificar estado actual del sistema
 console.log('\n📊 Estado actual del sistema:');
@@ -83,7 +83,7 @@ try {
         console.log('⚠️  Error en monitoreo:', result.stderr);
     }
 } catch (error) {
-    console.log('⚠️  Error ejecutando monitoreo:', error.message);
+    console.log('⚠️  Error ejecutando monitoreo:', (error as Error).message);
 }
 
 // 5. Comparativa de ahorro esperado

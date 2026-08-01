@@ -44,7 +44,7 @@ configs.forEach(config => {
             }
             
         } catch (e) {
-            console.log(`❌ Error leyendo ${config.file}: ${e.message}`);
+            console.log(`❌ Error leyendo ${config.file}: ${(e as Error).message}`);
         }
     } else {
         console.log(`❌ ${config.desc}: No encontrado`);
@@ -83,7 +83,7 @@ metricFiles.forEach(metric => {
                 console.log(`✅ ${metric.desc}: Archivo encontrado`);
             }
         } catch (e) {
-            console.log(`❌ Error leyendo ${metric.file}: ${e.message}`);
+            console.log(`❌ Error leyendo ${metric.file}: ${(e as Error).message}`);
         }
     } else {
         console.log(`⚠️  ${metric.desc}: No encontrado (normal en inicio)`);
@@ -130,7 +130,7 @@ try {
         console.log('⚠️  Error en monitoreo:', result.stderr);
     }
 } catch (error) {
-    console.log('⚠️  Error ejecutando monitoreo:', error.message);
+    console.log('⚠️  Error ejecutando monitoreo:', (error as Error).message);
 }
 
 // 5. Resumen de ahorros implementados

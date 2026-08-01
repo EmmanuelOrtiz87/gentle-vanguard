@@ -83,7 +83,7 @@ try {
         console.log('⚠️  Error en monitoreo:', result.stderr);
     }
 } catch (error) {
-    console.log('⚠️  Error ejecutando monitoreo:', error.message);
+    console.log('⚠️  Error ejecutando monitoreo:', (error as Error).message);
 }
 
 // 5. Comparativa de ahorro esperado

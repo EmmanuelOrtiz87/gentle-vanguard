@@ -5,7 +5,7 @@
  * Confirma que podemos operar con todas las capacidades disponibles
  */
 
-import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { spawnSync } from 'child_process';
 
@@ -72,7 +72,7 @@ try {
     console.log(`      - Compresión: ${(outputConfig.profiles.ultra.compressionLevel * 100).toFixed(0)}%`);
     
 } catch (error) {
-    console.log(`   ❌ Error verificando configuraciones: ${error.message}`);
+    console.log(`   ❌ Error verificando configuraciones: ${(error as Error).message}`);
     allChecksPassed = false;
 }
 
@@ -94,7 +94,7 @@ try {
     }
     
 } catch (error) {
-    console.log(`   ⚠️  Error ejecutando token guard: ${error.message}`);
+    console.log(`   ⚠️  Error ejecutando token guard: ${(error as Error).message}`);
     allChecksPassed = false;
 }
 
@@ -134,7 +134,7 @@ try {
     }
     
 } catch (error) {
-    console.log(`   ❌ Error en ejecución de prueba: ${error.message}`);
+    console.log(`   ❌ Error en ejecución de prueba: ${(error as Error).message}`);
     allChecksPassed = false;
 }
 
@@ -157,7 +157,7 @@ try {
     });
     
 } catch (error) {
-    console.log(`   ❌ Error verificando package.json: ${error.message}`);
+    console.log(`   ❌ Error verificando package.json: ${(error as Error).message}`);
     allChecksPassed = false;
 }
 

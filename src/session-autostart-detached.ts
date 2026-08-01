@@ -12,19 +12,25 @@
  * keep the pipe open, so a synchronous caller (CI step, hook, or an agent shell)
  * waits for EOF forever and hits an artificial timeout.
  *
- * This launcher detaches the autostart completely:
- *   - spawn with `detached: true`  -> new console/process group, no pipe shared
- *   - `stdio: 'ignore'`            -> child stdout/stderr go to NUL, never the caller's pipe
- *   - `windowsHide: true`          -> no flashing console window
- *   - `child.unref()`              -> parent can exit immediately
- *
- * It writes nothing to stdout/stderr so callers return instantly. The autostart
- * writes its own logs (session-autostart.log / lazy log) as usual.
+ * HOW THIS LAUNCHER WORKS
+ * -----------------------
+ * It spawns the real autostart detached (`detached: true`, `windowsHide: true`,
+ * no shell) and passes the env var `AUTOSTART_LOG_FILE` pointing to a per-run
+ * timestamped log file. The autostart core then redirects its own console
+ * output to that file natively — no reliance on cmd.exe `>` inline redirection,
+ * which does not survive detached process groups on Windows.
+ * Key points:
+ *   - The lazy daemons inherit the FILE descriptor (not the caller's pipe),
+ *     so the caller's shell gets EOF as soon as the autostart main process
+ *     exits (process.exit(0)) and returns instantly.
+ *   - Per-run timestamped log name -> immune to EBUSY (a previous run can never
+ *     hold the same file), and keeps history for observability.
+ *   - Old logs (older than 7 days) are pruned automatically.
  *
  * USAGE
  * -----
- *   npx tsx src/session-autostart-detached.ts
  *   npm run session:autostart:detached
+ *   npx tsx src/session-autostart-detached.ts [-- args...]
  *
  * To run the autostart synchronously and wait for it, use the normal entry:
  *   npx tsx src/session-autostart.ts
@@ -35,42 +41,50 @@ import * as path from 'node:path';
 import * as fs from 'node:fs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-
-// Persist the detached autostart stdout/stderr to a log file so the pipeline
-// run remains observable even though nothing is written to the caller's pipe.
 const LOG_DIR = path.join(ROOT, '.runtime');
+
+// Per-run timestamped log: immune to EBUSY and keeps history.
 fs.mkdirSync(LOG_DIR, { recursive: true });
-const LOG_PATH = path.join(LOG_DIR, 'autostart-detached.log');
+const ts = new Date()
+  .toISOString()
+  .replace(/[-:]/g, '')
+  .replace(/\.\d{3}Z$/, '');
+const LOG_PATH = path.join(LOG_DIR, `autostart-detached-${ts}.log`);
+
+// Prune logs older than 7 days (best-effort, non-blocking).
+try {
+  const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  for (const f of fs.readdirSync(LOG_DIR)) {
+    if (f.startsWith('autostart-detached-') && f.endsWith('.log')) {
+      const full = path.join(LOG_DIR, f);
+      if (fs.statSync(full).mtimeMs < cutoff) fs.unlinkSync(full);
+    }
+  }
+} catch {
+  /* ignore prune errors */
+}
 
 const args = process.argv.slice(2);
 
-// Spawn the real autostart directly with Node + tsx loader. This avoids the
-// cmd.exe/npx.cmd wrapper chain entirely: with `detached: true` and an opened
-// file descriptor for stdout/stderr, the child tree writes to the log file
-// directly and never inherits the caller's stdout/stderr pipe. This is the
-// robust way to fire-and-forget a daemon-spawning pipeline on Windows.
-const logFd = fs.openSync(LOG_PATH, 'a');
+// The autostart core redirects its own output to AUTOSTART_LOG_FILE natively
+// (see src/core/session-autostart.ts) — no shell needed at all, which avoids
+// both cmd.exe console nesting and the DEP0190 deprecation warning. The lazy
+// daemons never inherit the caller's pipe either.
 const child = spawn(
   process.execPath,
   ['--import', 'tsx', path.join(ROOT, 'src', 'session-autostart.ts'), ...args],
   {
     cwd: ROOT,
-    stdio: ['ignore', logFd, logFd],
+    stdio: 'ignore',
     windowsHide: true,
     detached: true,
+    env: { ...process.env, AUTOSTART_LOG_FILE: LOG_PATH },
   },
 );
 
-child.once('exit', () => {
-  try {
-    fs.closeSync(logFd);
-  } catch {
-    /* already closed */
-  }
-});
 child.unref();
 
-// Nothing is printed on purpose — the caller should return immediately and
-// not depend on any output from the detached background process. The pipeline
-// log is available at .runtime/autostart-detached.log (and the lazy step log
-// at logs/session-autostart-lazy.log).
+// Nothing is printed on purpose — the caller should return immediately and not
+// depend on any output from the detached background process. The pipeline log
+// for this run is at .runtime/autostart-detached-<timestamp>.log (the lazy step
+// log lives at logs/session-autostart-lazy.log).

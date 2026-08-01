@@ -39,7 +39,7 @@ try {
     console.log(`   ✅ Estado: ${sessionData.status}`);
     
 } catch (error) {
-    console.log(`   ⚠️  Error al iniciar sesión: ${error.message}`);
+    console.log(`   ⚠️  Error al iniciar sesión: ${(error as Error).message}`);
 }
 
 // 2. Simular una solicitud típica en Opencode
@@ -66,7 +66,7 @@ try {
     console.log(`   Tokens: ${tokensBefore} → ${tokensAfter} (-${reduction}%)`);
     
 } catch (error) {
-    console.log(`   ⚠️  Error en optimización de prompt: ${error.message}`);
+    console.log(`   ⚠️  Error en optimización de prompt: ${(error as Error).message}`);
 }
 
 // 4. Ejecutar en el sistema de tokens (token guard)
@@ -78,6 +78,10 @@ try {
         stdio: 'pipe',
         encoding: 'utf-8'
     });
+    
+    if (result.status !== 0) {
+        console.log('   ⚠️ Token guard devolvió error, pero se continúa la simulación');
+    }
     
     console.log('   ✅ Token Guard procesado correctamente');
     console.log('   ✅ Métricas registradas en sistema');
@@ -93,7 +97,7 @@ try {
     }
     
 } catch (error) {
-    console.log(`   ⚠️  Error en token guard: ${error.message}`);
+    console.log(`   ⚠️  Error en token guard: ${(error as Error).message}`);
 }
 
 // 5. Simular proceso de desarrollo con salida optimizada
@@ -117,7 +121,7 @@ export function factorial(n: number): number {
     console.log(`      - Compresión: 95%`);
     
 } catch (error) {
-    console.log(`   ⚠️  Error en proceso de desarrollo: ${error.message}`);
+    console.log(`   ⚠️  Error en proceso de desarrollo: ${(error as Error).message}`);
 }
 
 // 6. Monitoreo de uso en tiempo real
@@ -138,7 +142,7 @@ try {
     }
     
 } catch (error) {
-    console.log(`   ⚠️  Error en monitoreo: ${error.message}`);
+    console.log(`   ⚠️  Error en monitoreo: ${(error as Error).message}`);
 }
 
 // 7. Validar métricas del sistema
@@ -167,7 +171,7 @@ try {
     }
     
 } catch (error) {
-    console.log(`   ⚠️  Error en validación de métricas: ${error.message}`);
+    console.log(`   ⚠️  Error en validación de métricas: ${(error as Error).message}`);
 }
 
 // 8. Resumen de optimizaciones aplicadas

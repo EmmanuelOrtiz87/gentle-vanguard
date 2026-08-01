@@ -139,14 +139,13 @@ console.log('\n💾 Verificando copias de seguridad...');
 const backupDir = join(ROOT, 'backups', 'configs', '2026-07-31');
 if (existsSync(backupDir)) {
     console.log('✅ Directorio de backups encontrado');
-    const files = [];
     try {
         const fs = require('fs');
         const backupFiles = fs.readdirSync(backupDir);
-        backupFiles.forEach(file => {
+        backupFiles.forEach((file: string) => {
             console.log(`   - ${file}`);
         });
-    } catch (e) {
+    } catch {
         console.log('   No se pudo leer el directorio de backups');
     }
 } else {
