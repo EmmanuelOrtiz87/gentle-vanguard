@@ -169,6 +169,9 @@ function startLazyStep(step: PipelineStep): { success: boolean; error?: string }
     stdio: 'ignore',
     windowsHide: true,       // ✅ CRITICAL: no flashing window
     shell: true,             // required for npx.cmd on Windows
+    detached: true,          // ✅ CRITICAL: detach from parent console/pipe so lazy
+                             //   daemons (setInterval watchers) never keep the
+                             //   calling shell waiting on an open stdout pipe.
   });
   child.unref();
   return { success: true };
@@ -302,6 +305,12 @@ async function main() {
   }
 
   LOG.info(`[READY] Workspace ready for operations`);
+
+  // CRITICAL: Force explicit exit. Lazy steps are fire-and-forget background
+  // processes; on Windows (shell:true) their grandchildren can inherit stdout
+  // handles, keeping this process alive and blocking callers (CI, hooks, shells).
+  // Exiting explicitly releases the pipe and avoids artificial timeouts.
+  process.exit(0);
 }
 
 main().catch((err) => {
