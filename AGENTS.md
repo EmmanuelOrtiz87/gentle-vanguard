@@ -13,6 +13,18 @@ errors gracefully (`onStepFailure: continue`).
 
 Do NOT skip, defer, or ask the user whether to run it. It is mandatory and non-blocking.
 
+**Non-blocking alternative** (fire-and-forget, returns in ~1.3s; pipeline runs fully in background
+with a per-run log at `.runtime/autostart-detached-<timestamp>.log`):
+
+```bash
+npm run session:autostart:detached
+```
+
+Use the detached launcher when the caller is a CI step, git hook, or agent shell that must not
+hang on the pipeline's lazy background daemons. The lock is robust (validates the owning process
+is a real `node` running session-autostart), so orphaned `conhost.exe` processes can never wedge
+the pipeline. Logs are pruned automatically after 7 days.
+
 ---
 
 ## graphify
