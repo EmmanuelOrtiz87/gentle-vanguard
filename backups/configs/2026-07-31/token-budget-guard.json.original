@@ -2,13 +2,13 @@
   "$schema": "./token-budget-guard-schema.json",
   "version": "2.0.0",
   "description": "Token budget configuration — SINGLE SOURCE OF TRUTH. This file is the authoritative config for all token budgeting across the stack.",
-  "last_updated": "2026-07-31",
+  "last_updated": "2026-07-24",
 
   "tokenBudget": {
     "version": "2.0.0",
     "limits": {
-      "daily": 60000,
-      "perSession": 7500,
+      "daily": 120000,
+      "perSession": 15000,
       "perAgent": 3000,
       "softThreshold": 70,
       "hardThreshold": 90
@@ -60,7 +60,6 @@
       "opencodeAgentConfig": "opencode.json#agent",
       "orchestratorBudget": "config/orchestrator.json#subagent_orchestration.token_budget_guard",
       "timeoutConfig": "config/timeout-config.json#token_budget_daily"
-
-}
+    }
   }
 }
