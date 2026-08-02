@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "description": "Model Provider Health — firmas de error de proveedor LLM que disparan auto-switch al modelo nativo. Detecta fallos de tool calling, modelos inexistentes, auth y rate limits registrados en el log de opencode.",
+  "lastModified": "2026-08-02",
+  "modifiedBy": "orchestrator",
+  "enabled": true,
+  "fallbackModel": "opencode/deepseek-v4-flash-free",
+  "cooldownMinutes": 60,
+  "maxDetectionsPerModel": 3,
+  "stateFile": ".runtime/model-health.json",
+  "logSources": [
+    "~/.local/share/opencode/log/opencode.log",
+    ".session/*.log",
+    ".session/*.jsonl"
+  ],
+  "signatures": [
+    {
+      "id": "UnsupportedToolCalling",
+      "pattern": "UnsupportedParamsError|doesn't support tool calling|modify_params",
+      "severity": "critical",
+      "action": "switch-to-fallback",
+      "description": "Proveedor no soporta tool calling sin param tools= (tipico Bedrock via litellm proxy). Auto-switch al modelo nativo."
+    },
+    {
+      "id": "ModelNotFound",
+      "pattern": "Model not found|ProviderModelNotFoundError|model_not_found|Did you mean",
+      "severity": "high",
+      "action": "switch-to-fallback",
+      "description": "Modelo inexistente o ID stale. Auto-switch al modelo nativo."
+    },
+    {
+      "id": "AuthFailure",
+      "pattern": "AuthenticationError|invalid_api_key|401 Unauthorized|Unauthorized|Forbidden",
+      "severity": "high",
+      "action": "switch-to-fallback",
+      "description": "Credenciales de proveedor invalidas. Auto-switch al modelo nativo."
+    },
+    {
+      "id": "RateLimit",
+      "pattern": "RateLimitError|429 Too Many Requests|quota exceeded|insufficient_quota",
+      "severity": "medium",
+      "action": "record-only",
+      "description": "Rate limit/quota. Solo se registra; el fallback nativo es gratuito y no deberia agotarse."
+    },
+    {
+      "id": "ConnectionError",
+      "pattern": "APIConnectionError|ECONNREFUSED|ENOTFOUND|connection refused|socket hang up",
+      "severity": "high",
+      "action": "switch-to-fallback",
+      "description": "Endpoint del proveedor inaccesible. Auto-switch al modelo nativo."
+    },
+    {
+      "id": "BadRequest",
+      "pattern": "BadRequestError|400 Bad Request|Invalid request",
+      "severity": "medium",
+      "action": "record-only",
+      "description": "Request malformado — puede ser transitorio. Solo se registra."
+    }
+  ]
+}

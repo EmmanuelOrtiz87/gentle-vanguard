@@ -81,6 +81,22 @@ const TRIGGERS: Record<string, (score: number) => boolean> = {
   SkillVersionMismatch: (s) => s < 55,
   EngineOverload: (s) => s < 50,
   MemoryFragmentation: (s) => s < 65,
+  ModelProviderUnsupported: () => {
+    // Trigger only when an unhealthy model is persisted in model-health state
+    try {
+      const healthPath = join(ROOT, '.runtime', 'model-health.json');
+      if (!existsSync(healthPath)) return false;
+      const health = JSON.parse(readFileSync(healthPath, 'utf-8'));
+      const models = health.models as Record<string, { status?: string; cooldownUntil?: string }> | undefined;
+      if (!models) return false;
+      const now = Date.now();
+      return Object.values(models).some(m =>
+        m.status === 'unhealthy' && m.cooldownUntil && new Date(m.cooldownUntil).getTime() > now,
+      );
+    } catch {
+      return false;
+    }
+  },
 };
 
 export function testRuleTrigger(rule: CorrectionRule, score: number): boolean {
@@ -185,6 +201,31 @@ function executeRule(rule: CorrectionRule, _score: number): CorrectionResult {
           result = { success: true, message: 'Memory corrected: regenerated Engram checksums' };
         } else {
           result = { success: false, reason: 'Engram integrity check not found' };
+        }
+        break;
+      }
+      case 'ModelProviderUnsupported': {
+        const healer = join(ROOT, 'src', 'model-provider-healer.ts');
+        if (existsSync(healer)) {
+          const res = spawnSync('npx', ['tsx', healer, '--quiet'], {
+            cwd: ROOT,
+            stdio: 'pipe',
+            timeout: getEffectiveProcessTimeout('default'),
+          });
+          const out = res.stdout?.toString() || '';
+          let switched = false;
+          try {
+            const parsed = JSON.parse(out.split('\n').filter(l => l.trim().startsWith('{')).join('\n'));
+            switched = parsed?.status === 'recovered' || parsed?.switched === true;
+          } catch { /* ignore */ }
+          result = {
+            success: true,
+            message: switched
+              ? 'Provider model error corrected: auto-switched to native fallback'
+              : 'Provider model health checked: unhealthy models marked, active model OK',
+          };
+        } else {
+          result = { success: false, reason: 'model-provider-healer.ts not found' };
         }
         break;
       }

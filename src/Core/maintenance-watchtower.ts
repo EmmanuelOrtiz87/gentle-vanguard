@@ -847,6 +847,61 @@ async function checkGentleVanguardDb() {
   }
 }
 
+// ─── Component: Model Provider Health ────────────────────────────────────────
+
+async function checkModelHealth() {
+  if (!quiet) console.log('  [model-provider-health] Checking...');
+
+  const statePath = join(RUNTIME_DIR, 'model-health.json');
+  const configPath = join(ROOT, 'config', 'model-health.json');
+  const activePath = join(RUNTIME_DIR, 'model-active.json');
+
+  if (!fileExists(configPath)) {
+    addResult('model-provider-health', 'config', 'FAIL', 'config/model-health.json not found', 'verify');
+    return;
+  }
+  addResult('model-provider-health', 'config', 'PASS', 'model-health.json present', 'ok');
+
+  let activeModel = 'unknown';
+  if (fileExists(activePath)) {
+    try {
+      const active = JSON.parse(readFileSync(activePath, 'utf-8'));
+      activeModel = active.model || active.activeModel || 'unknown';
+    } catch { /* ignore */ }
+  }
+
+  if (!fileExists(statePath)) {
+    addResult('model-provider-health', 'state', 'PASS', `No unhealthy models tracked`, 'ok');
+    addResult('model-provider-health', 'active model', 'PASS', activeModel, 'ok');
+    return;
+  }
+
+  try {
+    const state = JSON.parse(readFileSync(statePath, 'utf-8'));
+    const models = (state.models ?? {}) as Record<string, { status?: string; reason?: string; cooldownUntil?: string }>;
+    const now = Date.now();
+    const unhealthy = Object.entries(models).filter(([, m]) => m.status === 'unhealthy' && m.cooldownUntil && new Date(m.cooldownUntil).getTime() > now);
+    const healthy = Object.entries(models).filter(([, m]) => m.status === 'healthy');
+
+    if (unhealthy.length > 0) {
+      for (const [name, m] of unhealthy) {
+        addResult('model-provider-health', `model ${name}`, 'WARN', `unhealthy (${m.reason?.slice(0, 60) ?? 'unknown reason'})`, 'switch-to-fallback');
+      }
+    }
+    if (healthy.length > 0) {
+      for (const [name, m] of healthy) {
+        addResult('model-provider-health', `model ${name}`, 'PASS', m.reason ?? 'healthy', 'ok');
+      }
+    }
+    if (unhealthy.length === 0 && healthy.length === 0) {
+      addResult('model-provider-health', 'state', 'PASS', 'No models tracked', 'ok');
+    }
+    addResult('model-provider-health', 'active model', activeModel === 'unknown' ? 'WARN' : 'PASS', activeModel, 'ok');
+  } catch {
+    addResult('model-provider-health', 'state', 'WARN', 'Could not parse model-health.json', 'verify');
+  }
+}
+
 // ─── Component: Audit Pipeline ───────────────────────────────────────────────
 
 async function checkAuditPipeline() {
@@ -1218,6 +1273,7 @@ async function runAllChecks() {
     checkAuditPipeline,
     checkGovernance,
     checkGentleVanguardDb,
+    checkModelHealth,
   ];
   // Parallelized with Promise.allSettled — each check is I/O-bound (file reads, HTTP, DB)
   const results = await Promise.allSettled(checks.map(async (check) => {

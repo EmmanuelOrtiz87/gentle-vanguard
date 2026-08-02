@@ -874,6 +874,16 @@
         "required": false,
         "phase": 99,
         "description": "Context compaction engine \u00e2\u20ac\u201d auto-checks token budget, compacts session if above threshold, wipes old context"
+      },
+      {
+        "id": "model-provider-heal",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/model-provider-healer.ts",
+        "args": "--quiet",
+        "required": false,
+        "phase": 90,
+        "description": "Model provider health \u00e2\u20ac\u201d detecta errores de proveedor LLM (UnsupportedParamsError/Bedrock/Model not found) en opencode.log y auto-switch al modelo nativo"
       }
     ],
     "onStepFailure": "continue",

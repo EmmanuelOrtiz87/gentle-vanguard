@@ -262,5 +262,43 @@ Status: [READY] Workspace ready for operations
 
 ---
 
+## Session 2026-08-02 — Model Provider Health & Auto-Healing
+
+### Causa Raíz: `UnsupportedParamsError` con kimi-2-5
+
+El error `litellm.UnsupportedParamsError: Bedrock doesn't support tool calling without tools= param` se repetía en otras sesiones porque opencode usa tool calling por defecto y el proveedor `littellmott-nuevo` (proxy litellm en AWS Lambda) enruta el model group `kimi-2-5` a Amazon Bedrock, que no acepta tool calling sin `tools=`. El proxy no tenía `modify_params: True` ni fallbacks. El stack no tenía ningún mecanismo que parseara errores de proveedor LLM de los logs.
+
+### Solución Implementada
+
+1. **`src/model-provider-healer.ts`** (nuevo CLI): escanea logs de opencode (solo `level=ERROR`) buscando firmas de error de proveedor (UnsupportedToolCalling, ModelNotFound, AuthFailure, RateLimit, ConnectionError, BadRequest). Cuando detecta un modelo fallando, lo marca `unhealthy` en `.runtime/model-health.json` con cooldown de 60min y auto-switch al modelo nativo `opencode/deepseek-v4-flash-free`. Flags: `--scan` `--status` `--clear` `--quiet`.
+
+2. **`config/model-health.json`** (nuevo): 6 firmas de error con severidad/acción, fallbackModel, cooldown, max detecciones, logSources.
+
+3. **Regla `ModelProviderUnsupported`** en `config/correction-rules.json` + wiring en `correction-rules-engine.ts` (trigger = existe modelo unhealthy con cooldown vigente; acción = ejecutar el healer).
+
+4. **Step lazy `model-provider-heal`** en `config/session-autostart.config.json` (fase 90, corre el healer en `--quiet` al inicio de cada sesión).
+
+5. **Check `model-provider-health`** en la watchtower (`src/Core/maintenance-watchtower.ts`) — reporta WARN si hay modelo unhealthy.
+
+### Learnings Clave
+
+1. **Falsos positivos en log-scanning**: escanear el contenido completo del log del opencode produce falsos positivos porque los propios comandos del agente (ej. `Select-String -Pattern "Model not found"`) quedan registrados. Fix: filtrar solo líneas `level=ERROR` y extraer `modelID=`/`providerID=` de la línea del error, no de todo el archivo.
+
+2. **ESM require() bug**: usar `require('fs')` dentro de un módulo ESM lanzaba TypeError silencioso y el tail del log devolvía `''` (0 detecciones). Fix: importar `statSync, openSync, readSync, closeSync` al inicio.
+
+3. **Causa raíz del patrón recurrente**: opencode inyecta modelos internos stale (ej. `openrouter/moonshot/kimi-k2.6`) a subagentes sin campo `model` explícito. El fix es escribir `model` explícito válido (`fix-models.ts` documenta el patrón).
+
+4. **Config stack ya estaba OK**: `config/model-router.json` y `config/model-fallback.json` ya apuntaban al nativo; el problema era la falta de detección automática, no la configuración.
+
+### Estado Verificado
+
+- Healer detecta `kimi-2-5` + `littellmott-nuevo` con `UnsupportedToolCalling` (extrae del snippet de la línea ERROR).
+- Estado persistido: `.runtime/model-health.json` (kimi-2-5 unhealthy, cooldown 1h).
+- Correction engine dispara y ejecuta la regla correctamente (13 reglas).
+- Watchtower: 84 PASS / 1 WARN (kimi-2-5) / 0 FAIL.
+- Typecheck y lint limpios.
+
+---
+
 *This file is automatically updated by the auto-norm-learner system.*
-*Last manual update: 2026-07-24 14:30*
+*Last manual update: 2026-08-02 05:50*
