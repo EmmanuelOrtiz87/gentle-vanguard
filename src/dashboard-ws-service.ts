@@ -83,24 +83,43 @@ function healthCheck(port: number): Promise<boolean> {
 
 function startWsServer(port: number): ChildProcess {
   log(`[START] Launching Dashboard WS on port ${port}...`);
-  
-  const child = spawn(
-    'npx.cmd',
-    ['tsx', WS_SCRIPT],
-    {
-      cwd: ROOT,
-      stdio: 'ignore',
-      detached: true,
-      windowsHide: true,
-      env: {
-        ...process.env,
-        WS_PORT: String(port),
-      },
-    }
-  );
+
+  // NOTE: On Windows, .cmd files (npx.cmd/tsx.cmd) require cmd.exe or
+  // shell:true — spawning them directly raises "spawn EINVAL". The same
+  // pattern is used in dashboard-ws-autostart.ts.
+  const tsxBin = path.join(ROOT, 'node_modules', '.bin', 'tsx.cmd');
+  const child = process.platform === 'win32'
+    ? spawn(
+        'cmd.exe',
+        ['/c', `set WS_PORT=${port}&& `, tsxBin, WS_SCRIPT],
+        {
+          cwd: ROOT,
+          stdio: 'ignore',
+          detached: true,
+          windowsHide: true,
+          env: {
+            ...process.env,
+            WS_PORT: String(port),
+          },
+        },
+      )
+    : spawn(
+        'npx',
+        ['tsx', WS_SCRIPT],
+        {
+          cwd: ROOT,
+          stdio: 'ignore',
+          detached: true,
+          windowsHide: true,
+          env: {
+            ...process.env,
+            WS_PORT: String(port),
+          },
+        },
+      );
 
   child.unref();
-  
+
   if (child.pid) {
     writePid(child.pid);
     log(`[START] Process started with PID ${child.pid}`);

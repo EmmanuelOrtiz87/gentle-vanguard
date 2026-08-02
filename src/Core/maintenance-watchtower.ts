@@ -72,6 +72,35 @@ function testPort(port: number): Promise<boolean> {
   });
 }
 
+/** Resolve the real PID listening on a TCP port (Windows via netstat, Unix via lsof/ss) */
+async function getPidByPort(port: number): Promise<number | null> {
+  try {
+    if (process.platform === 'win32') {
+      const out = execFileSync('netstat', ['-ano', '-p', 'TCP'], {
+        encoding: 'utf-8',
+        timeout: 5000,
+        windowsHide: true,
+      });
+      for (const line of out.split(/\r?\n/)) {
+        if (!line.includes(`:${port}`) || !line.includes('LISTENING')) continue;
+        const parts = line.trim().split(/\s+/);
+        const pid = parseInt(parts[parts.length - 1], 10);
+        if (!isNaN(pid)) return pid;
+      }
+    } else {
+      const out = execFileSync('lsof', ['-ti', `:${port}`], {
+        encoding: 'utf-8',
+        timeout: 5000,
+      });
+      const pid = parseInt(out.trim().split('\n')[0], 10);
+      if (!isNaN(pid)) return pid;
+    }
+  } catch {
+    // not found or error
+  }
+  return null;
+}
+
 function testHttp(url: string): Promise<boolean> {
   return new Promise((resolve) => {
     const client = createConnection(parseInt(new URL(url).port, 10) || 8080, '127.0.0.1', () => {
@@ -207,7 +236,20 @@ async function checkDashboardWs() {
   }
 
   const pidFile = join(RUNTIME_DIR, 'dashboard-ws.pid');
-  if (fileExists(pidFile)) {
+  if (httpOk) {
+    // WS is alive and responding — the PID file may be stale (points to a dead
+    // cmd.exe wrapper). Treat HTTP as source of truth and self-heal the file
+    // with the real PID listening on the port.
+    let pidDetail = 'Responding (PID file stale)';
+    const realPid = await getPidByPort(respondingPort);
+    if (realPid) {
+      pidDetail = `PID ${realPid} running`;
+      try {
+        writeFileSync(pidFile, String(realPid), 'utf-8');
+      } catch { /* non-fatal */ }
+    }
+    addResult('dashboard-ws', 'WS server process', 'PASS', pidDetail, 'ok');
+  } else if (fileExists(pidFile)) {
     const wsPid = readFileSync(pidFile, 'utf-8').trim();
     try {
       process.kill(parseInt(wsPid, 10), 0);

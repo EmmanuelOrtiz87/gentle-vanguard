@@ -14,6 +14,7 @@ import { spawn } from 'child_process';
 import { pathToFileURL } from 'url';
 import {
   getFreePort,
+  getProcessIdByPort,
   saveDashboardPorts,
   readDashboardPorts,
   logToFile,
@@ -156,15 +157,30 @@ async function main(overridePort?: number): Promise<number> {
 
   logToFile(`[START] PID=${procId} port=${selectedPort}`);
 
-  // Wait up to 15s for server to become healthy
-  for (let i = 0; i < 3; i++) {
+  // Wait up to 20s for server to become healthy. NOTE: we must NOT bail out
+  // when the cmd.exe wrapper PID dies — on Windows the real node process is a
+  // descendant and keeps running after cmd.exe exits. Health check is truth.
+  let healthy = false;
+  for (let i = 0; i < 4; i++) {
     await sleep(5000);
-    if (procId === null || procId === undefined || !isProcessAlive(procId)) break;
     const ok = await healthCheck(selectedPort);
     if (ok) {
-      logToFile(`[OK] WS healthy on port ${selectedPort} (PID=${procId})`);
-      return 0;
+      healthy = true;
+      break;
     }
+  }
+
+  // Resolve the REAL server PID (the node process listening on the port), not
+  // the cmd.exe wrapper PID. This is what the watchtower and stop scripts use.
+  const realPid = await getProcessIdByPort(selectedPort);
+  if (realPid && realPid !== procId) {
+    fs.writeFileSync(PID_FILE, String(realPid), 'utf-8');
+    logToFile(`[PID] Resolved real server PID=${realPid} (was wrapper PID=${procId})`);
+  }
+
+  if (healthy) {
+    logToFile(`[OK] WS healthy on port ${selectedPort} (PID=${realPid ?? procId})`);
+    return 0;
   }
 
   logToFile(`[WARN] WS process started but health check inconclusive (PID=${procId} port=${selectedPort})`);

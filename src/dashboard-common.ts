@@ -104,10 +104,20 @@ export async function getProcessIdByPort(port: number): Promise<number | null> {
 
 /** Check if a process with given PID is alive */
 export function isProcessAlive(pid: number): boolean {
+  if (!pid || pid <= 0) return false;
   try {
     if (process.platform === 'win32') {
-      execSync(`tasklist /FI "PID eq ${pid}" /NH 2>nul`, { windowsHide: true, timeout: 3000 });
-      return true;
+      // NOTE: tasklist /FI returns exit code 0 even when the PID does NOT exist
+      // (it prints "INFO: No tasks are running..."). We must parse the output
+      // instead of relying on the exit code — otherwise stale PID files are
+      // never cleaned and the watchdog falsely believes processes are alive.
+      const output = execSync(`tasklist /FI "PID eq ${pid}" /NH /FO CSV`, {
+        encoding: 'utf-8',
+        windowsHide: true,
+        timeout: 3000,
+      });
+      // CSV row looks like: "node.exe","26316","Console","1","12,345 K"
+      return output.includes(`"${pid}"`);
     }
     // Unix: kill -0 checks if process exists
     process.kill(pid, 0);
