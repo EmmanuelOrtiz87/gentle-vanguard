@@ -5,8 +5,8 @@
       "description": "Main orchestrator agent — coordinates all subagents autonomously",
       "mode": "primary",
       "permission": {
-        "websearch": "deny",
-        "webfetch": "deny",
+        "websearch": "ask",
+        "webfetch": "ask",
         "task": {
           "*": "allow"
         }

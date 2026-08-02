@@ -291,7 +291,7 @@
       {
         "id": "skill-nudge-check",
         "enabled": false,
-        "script": "src/skill-nudge.ts",
+        "script": "src/skills/skill-nudge.ts",
         "args": "--report",
         "required": false,
         "description": "Reporta nudges pendientes de skills al inicio (desactivado por defecto, corre al cerrar) (TS)"
