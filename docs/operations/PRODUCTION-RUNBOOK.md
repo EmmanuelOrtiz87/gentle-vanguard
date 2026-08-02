@@ -92,8 +92,8 @@ pwsh scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1 -Checkpoi
 # Check watchdog
 Get-Content .runtime/dashboard-ws.log -Tail 5
 # Restart
-scripts/utilities/dashboard/dashboard-stop.ps1
-scripts/utilities/dashboard/dashboard-start.ps1
+npx tsx src/dashboard-stop.ts
+npx tsx src/dashboard-start.ts
 ```
 
 ## Data Persistence

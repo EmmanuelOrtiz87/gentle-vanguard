@@ -18,7 +18,7 @@ This document outlines the improvements needed to align Gentle-Vanguard stack wi
 | Multi-Model Pattern | ✅ ALIGNED | Model A writes → Model B reviews → Human final call |
 | Verification Story | ✅ ALIGNED | Tests, build, manual verification steps |
 | SDD (Spec-Driven Development) | ✅ ALIGNED | SDD agents and phases implemented |
-| Engram Integration | ✅ ALIGNED | Persistent memory via engram MCP |
+| Engram Integration | ✅ ALIGNED | Persistent memory via engram MCP; official OpenCode plugin installed (`engram setup opencode`); stack session summary persisted via official HTTP API (`POST /sessions/{id}/end`). No custom session-tracking scripts (matches gentle-ai: "Engram works automatically") |
 | Skills System | ✅ ALIGNED | Skill registry and loading |
 
 ### ⚠️ Gaps to Address
@@ -30,6 +30,30 @@ This document outlines the improvements needed to align Gentle-Vanguard stack wi
 | Threat Model Doc | MEDIUM | Missing review-authority-threat-model.md |
 | Delegation Triggers | MEDIUM | Vague triggers, need explicit rules |
 | gentle-ai Integration | LOW | No integration with gentle-ai CLI |
+
+### ✅ Alignment Decision: Engram Session Lifecycle (2026-08-01)
+
+**Context**: The stack previously attempted custom Engram session tracking (`engram-session-register.ts`
++ a pipeline step + the `engram mem session-summary` CLI subcommand). All three were wrong:
+
+- `engram mem session-summary` is NOT a CLI command — `mem_session_summary` is an **MCP tool**
+  (verified against Engram v1.20.0 `--help` and the official README/ARCHITECTURE).
+- `engram setup opencode` installs the **official OpenCode plugin** that already handles session
+  tracking automatically (session.created → `POST /sessions`, chat.message → `POST /prompts`,
+  tool.execute.after → passive capture).
+- gentle-ai's own philosophy (README): *"Engram works automatically. You don't need to do anything."*
+
+**Adopted pattern (native, aligned with gentle-ai)**:
+1. **Official plugin** — `engram setup opencode` (installed; session tracking automatic after OpenCode restart).
+2. **MCP tools** — the agent uses `mem_save`, `mem_search`, `mem_session_summary`, etc. directly (already available in this environment).
+3. **HTTP API for the pipeline** — the stack's `session-close-orchestrator.ts` persists the session
+   summary via the documented endpoint `POST /sessions/{id}/end` (idempotent, graceful SKIP when the
+   server is unreachable).
+4. **No custom registration scripts** — deleted `src/engram-session-register.ts`; no pipeline step added.
+5. **Project name** — canonical `gentle-vanguard` (from git remote) fixed in `config/engram-policy.json`.
+
+**Guardrail**: do NOT re-introduce custom Engram CLI/session scripts. If something is missing, extend
+the official plugin or use the documented HTTP API / MCP tools.
 
 ---
 

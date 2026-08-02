@@ -154,7 +154,6 @@
     "router:adaptive": "npx tsx src/adaptive-router.ts",
     "router:suggest": "npx tsx src/adaptive-router.ts --suggest",
     "monitor:convergence": "npx tsx src/convergence-monitor.ts",
-    "perf:slo": "npx tsx src/performance-slo-monitor.ts",
     "perf:analyze": "npx tsx src/performance-analyzer.ts",
     "engram:sync": "npx tsx src/engram-auto-sync.ts",
     "engram:backup": "npx tsx src/engram-auto-sync.ts --backup",
@@ -164,8 +163,23 @@
     "pie:analyze": "npx tsx src/proactive-intelligence-engine.ts --analyze",
     "pie:suggest": "npx tsx src/proactive-intelligence-engine.ts --suggest",
     "test:optimized": "npx tsx src/test-runner-optimized.ts",
-    "test:parallel": "npx tsx src/test-runner-optimized.ts --parallel 4",
-    "test:quick": "npx tsx src/test-runner-optimized.ts --quick"
+    "test:parallel": "npx tsx src/test-runner-optimized.ts --parallel 4"  ,
+    "test:quick": "npx tsx src/test-runner-optimized.ts --quick",
+
+    "rdd:start": "npx tsx src/rdd/rdd-core.ts start",
+    "rdd:classify": "npx tsx src/rdd/rdd-core.ts classify",
+    "rdd:review": "npx tsx src/rdd/rdd-core.ts review",
+    "rdd:receipt": "npx tsx src/rdd/rdd-core.ts receipt",
+    "rdd:gate": "npx tsx src/rdd/rdd-gates.ts validate",
+    "rdd:status": "npx tsx src/rdd/rdd-core.ts status",
+    "rdd:risk": "npx tsx src/rdd/risk-classifier.ts classify",
+    "rdd:4r": "npx tsx src/rdd/rdd-4r-review.ts auto",
+    "rdd:install-hooks": "npx tsx src/rdd/rdd-gates.ts install-hooks",
+    "rdd:disable": "npx tsx src/rdd/rdd-kill-switch.ts disable",
+    "rdd:enable": "npx tsx src/rdd/rdd-kill-switch.ts enable",
+    "rdd:kill-status": "npx tsx src/rdd/rdd-kill-switch.ts status",
+    "rdd:kill-history": "npx tsx src/rdd/rdd-kill-switch.ts history",
+    "test:rdd": "npx tsx tests/unit/rdd/risk-classifier.test.ts && npx tsx tests/unit/rdd/rdd-kill-switch.test.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.2",

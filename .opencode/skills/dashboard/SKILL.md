@@ -21,9 +21,9 @@ Self-contained React/TypeScript/Vite observability system. No mock data — all 
 ## Quick Start
 
 ```powershell
-.\scripts\utilities\dashboard\dashboard-start.ps1        # Full: WS server + Vite + Chrome
-.\scripts\utilities\dashboard\dashboard-ws-autostart.ps1 # WS server only (pipeline)
-.\scripts\utilities\dashboard\dashboard-stop.ps1         # Kill watchdog → WS → cleanup ports
+npx tsx src/dashboard-start.ts         # Full: WS server + Vite + Chrome
+npx tsx src/dashboard-ws-autostart.ts  # WS server only (pipeline)
+npx tsx src/dashboard-stop.ts          # Kill watchdog → WS → cleanup ports
 ```
 
 Dynamic ports persisted to `.runtime/dashboard-ports.json`. See [architecture](./references/architecture.md).

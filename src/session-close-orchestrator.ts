@@ -19,6 +19,7 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync } from 'fs';
 import { join, resolve, relative } from 'path';
 import { spawnSync, execSync } from 'child_process';
+import http from 'http';
 import { pathToFileURL } from 'url';
 
 const ROOT = resolve(process.cwd());
@@ -273,12 +274,17 @@ function phasePreValidate(): PhaseResult[] {
   return results;
 }
 
-function phasePersist(reason: string): PhaseResult[] {
+async function phasePersist(reason: string): Promise<PhaseResult[]> {
   const results: PhaseResult[] = [];
   log('=== FASE 2: PERSIST ===');
 
-  // 2.1 Save engram session summary
+  // 2.1 Save engram session summary — official HTTP API (POST /sessions/{id}/end).
+  // Per gentle-ai alignment: the stack session lifecycle is registered by the
+  // official OpenCode plugin (engram setup opencode); this phase only persists
+  // the stack session's summary via the documented HTTP endpoint. Skips
+  // gracefully when the engram server is not reachable (non-blocking).
   const sessionData = readSessionData();
+  const sessionId = String(sessionData.sessionId || sessionData.id || 'unknown');
   const summaryContent = [
     `## Goal`,
     sessionData.goal ? String(sessionData.goal) : `Session completed with reason: ${reason}`,
@@ -299,25 +305,47 @@ function phasePersist(reason: string): PhaseResult[] {
     `- .engram-data/`,
   ].join('\n');
 
-  if (existsSync(join(ROOT, 'node_modules', '.bin', 'engram'))) {
-    try {
-      const memCmd = [
-        'mem', 'session-summary', '--content', summaryContent,
-        '--session-id', String(sessionData.sessionId || sessionData.id || 'unknown'),
-        '--project', 'gentle-vanguard'
-      ];
-      const r = runCmd('engram', memCmd, 30000);
-      const st = r.status === 0 ? 'PASS' : 'FAIL';
-      results.push({ phase: 'engram-summary', status: st, detail: st === 'PASS' ? 'Summary saved' : `Exit: ${r.status}` });
-      if (st === 'PASS') ok('Engram session summary saved');
-      else warn(`Engram summary failed (exit ${r.status})`);
-    } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : 'Unknown error';
-      results.push({ phase: 'engram-summary', status: 'FAIL', detail: msg });
-      warn(`Engram summary error: ${msg}`);
+  const engramPort = Number(process.env.ENGRAM_PORT || 7437);
+
+  // Minimal HTTP POST to 127.0.0.1:{port} using Node native http (no CLI).
+  const postSummary = (): Promise<boolean> =>
+    new Promise((resolveP) => {
+      const payload = JSON.stringify({ summary: summaryContent });
+      const req = http.request(
+        {
+          host: '127.0.0.1',
+          port: engramPort,
+          path: `/sessions/${encodeURIComponent(sessionId)}/end`,
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) },
+          timeout: 3000,
+        },
+        (res) => {
+          res.resume();
+          resolveP(res.statusCode === 200 || res.statusCode === 201);
+        },
+      );
+      req.on('error', () => resolveP(false));
+      req.on('timeout', () => {
+        req.destroy();
+        resolveP(false);
+      });
+      req.write(payload);
+      req.end();
+    });
+
+  try {
+    const saved = await postSummary();
+    if (saved) {
+      results.push({ phase: 'engram-summary', status: 'PASS', detail: `Summary saved via POST /sessions/${sessionId}/end` });
+      ok('Engram session summary saved');
+    } else {
+      results.push({ phase: 'engram-summary', status: 'SKIP', detail: 'Engram server not reachable — summary handled by agent MCP mem_session_summary' });
     }
-  } else {
-    results.push({ phase: 'engram-summary', status: 'SKIP', detail: 'engram CLI not available' });
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : 'Unknown error';
+    results.push({ phase: 'engram-summary', status: 'SKIP', detail: msg });
+    warn(`Engram summary skipped: ${msg}`);
   }
 
   // 2.2 Save session scoring
@@ -466,15 +494,21 @@ function killProcessByCommandLine(matcher: string): boolean {
   const isWin = process.platform === 'win32';
   try {
     if (isWin) {
-      // Windows: use CIM to find and kill processes matching command line
-      const psCmd = `Get-CimInstance Win32_Process -Filter "Name='node.exe' OR Name='tsx.exe'" | Where-Object { $_.CommandLine -match '${matcher}' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force; Write-Output "Killed PID $($_.ProcessId)" }`;
+      // Windows: use CIM to find and kill processes matching command line.
+      // Safety: NEVER kill the orchestrator itself or its ancestors. Exclude:
+      //   - the current PID
+      //   - the parent PID (npx/cmd wrapper that spawned tsx)
+      //   - any process whose CommandLine references this script by name
+      //     (protects the whole process tree: npx → tsx → orchestrator)
+      const selfName = 'session-close-orchestrator';
+      const psCmd = `Get-CimInstance Win32_Process -Filter "Name='node.exe' OR Name='tsx.exe'" | Where-Object { $_.CommandLine -match '${matcher}' -and $_.ProcessId -ne ${process.pid} -and $_.ProcessId -ne ${process.ppid ?? -1} -and $_.CommandLine -notmatch '${selfName}' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force; Write-Output "Killed PID $($_.ProcessId)" }`;
       const r = execSync(`powershell -NoProfile -Command "${psCmd.replace(/"/g, '\\"')}"`, { timeout: 15000, stdio: 'pipe', encoding: 'utf-8' });
       const out = (r as string).toString().trim();
       return out.length > 0; // true if at least one process was killed
     } else {
-      // Unix: use pkill -f
+      // Unix: use pkill -f, excluding the current process
       try { execSync(`pkill -f "${matcher}"`, { timeout: 10000, stdio: 'pipe' }); } catch { /* ignore */ }
-      // Verify if any matching processes were killed by checking if any remain
+      // Verify if any matching processes (other than self) were killed
       try { execSync(`pgrep -f "${matcher}"`, { timeout: 5000 }); return false; } catch { return true; }
     }
   } catch {
@@ -502,11 +536,14 @@ function phaseCleanup(): PhaseResult[] {
     }
   }
 
-  // 5.2 Also kill any orphan tsx daemon processes
+  // 5.2 Also kill any orphan session daemon processes (metrics tracker, cleanup daemons).
+  // NOTE: matcher is deliberately specific — it must NOT match this orchestrator
+  // (session-close-orchestrator.ts) or its wrapper, otherwise we kill ourselves
+  // mid-run and never write the close report. See killProcessByCommandLine self-exclusion.
   try {
-    const orphanKilled = killProcessByCommandLine('tsx.*session-.*\\.ts');
+    const orphanKilled = killProcessByCommandLine('session-(metrics-tracker|cleanup-start|metrics-memory)');
     if (orphanKilled) {
-      results.push({ phase: 'kill-orphan-session', status: 'PASS', detail: 'Orphan session processes killed' });
+      results.push({ phase: 'kill-orphan-session', status: 'PASS', detail: 'Orphan session daemons killed' });
       ok('Orphan session processes cleaned');
     }
   } catch { /* skip silently */ }
@@ -640,7 +677,7 @@ export async function runCloseOrchestrator(reason = 'session-end'): Promise<Clos
   const phases = {
     preClose: phasePreClose(reason),
     preValidate: preValidateResults,
-    persist: phasePersist(reason),
+    persist: await phasePersist(reason),
     backup: phaseBackup(),
     audit: phaseAudit(),
     cleanup: phaseCleanup(),
@@ -706,7 +743,7 @@ async function main() {
     }
     // Run only the essential startup-cleanup phases
     phasePreClose(reason);
-    phasePersist(reason);
+    await phasePersist(reason);
     const cleanupResults = phaseCleanup();
     const passed = cleanupResults.filter(r => r.status === 'PASS').length;
     const failed = cleanupResults.filter(r => r.status === 'FAIL').length;

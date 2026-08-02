@@ -16,7 +16,7 @@
 ## Dynamic Port Allocation
 
 ```
-Get-FreePort algorithm (dashboard-common.ps1):
+Get-FreePort algorithm (src/dashboard-common.ts):
   1. Start from preferred port (config, env, or default)
   2. Scan upward (+100 ports max)
   3. Check if port is in Listen/Established/Bound state

@@ -1,6 +1,6 @@
 ---
 name: validate-stack
-description: Validate the full Gentle-Vanguard stack. Run verification steps for pre-process-input, session pipeline, hooks, and tool detection.
+description: Validate the full Gentle-Vanguard stack. Run verification steps for TypeScript components, session pipeline, hooks, and RDD system.
 triggers:
   - validate
   - stack verify
@@ -11,58 +11,106 @@ triggers:
 
 # Validate Stack
 
-Run these verifications in order after any fix to session, hashline, or pre-process-input files.
-Report the result of each step. Fail on first error — do not continue.
+Run these verifications in order to validate the Gentle-Vanguard stack v4.0+ (TypeScript-first).
 
-## 1. Parse validation
+> **Note**: Scripts PowerShell (.ps1) fueron migrados a TypeScript (.ts). Ver AGENTS.md líneas 273-284.
 
-```
-pwsh -NoProfile -File scripts/editing/hashline.ps1 -Action status
-```
+## 1. Package JSON Validation
 
-Expected output: database path, file count, line count. No error messages.
-
-## 2. Pre-process-input: "inicia sesion" triggers SESSION
-
-```
-pwsh -NoProfile -File scripts/utilities/pre-process-input.ps1 -UserInput "inicia sesion"
+```bash
+node -e "JSON.parse(require('fs').readFileSync('package.json')); console.log('✓ package.json is valid JSON')"
 ```
 
-Expected output: `HasMatch=True`, `AgentCode=SESSION`, `Skill=session-workflow-skill`,
-`PlanMode=False`
+Expected: No errors, ✓ package.json is valid JSON.
 
-## 3. All 5 hashline actions
+## 2. Opencode Config Validation
 
-```
-pwsh -NoProfile -Command "& 'scripts/editing/hashline.ps1' -Action status 2>&1"
-pwsh -NoProfile -Command "& 'scripts/editing/hashline.ps1' -Action init -Path scripts/editing/hashline.ps1 -Quiet 2>&1"
-pwsh -NoProfile -Command "& 'scripts/editing/hashline.ps1' -Action update -Path scripts/editing/hashline.ps1 -Quiet 2>&1"
-pwsh -NoProfile -Command "& 'scripts/editing/hashline.ps1' -Action verify -Path scripts/editing/hashline.ps1 2>&1"
-pwsh -NoProfile -Command "& 'scripts/editing/hashline.ps1' -Action prune -Quiet 2>&1"
+```bash
+node -e "JSON.parse(require('fs').readFileSync('opencode.json')); console.log('✓ opencode.json is valid JSON')"
 ```
 
-Expected: status shows db data; init/update/prune silent (Quiet); verify shows `[HASHLINE] OK`.
+Expected: No errors, ✓ opencode.json is valid JSON.
 
-## 4. Session autostart: no Wait-Job warning
+## 3. TypeScript Compilation Check
 
-```
-pwsh -NoProfile -File scripts/utilities/session/session-start-optimized.ps1 2>&1 | Select-String -Pattern 'WARN|error|Error|ERROR|warning'
-```
-
-Expected output: empty (no matches).
-
-## 5. Parse hashline.ps1 for syntax errors
-
-```
-pwsh -NoProfile -Command "$errors = $null; $null = [System.Management.Automation.Language.Parser]::ParseInput((Get-Content scripts/editing/hashline.ps1 -Raw), [ref]$null, [ref]$errors); if ($errors) { Write-Host 'PARSE ERRORS:' $errors.Count; $errors | ForEach-Object { Write-Host ('Line {0}: {1}' -f $_.Extent.StartLineNumber, $_.Message) } } else { Write-Host 'PARSE OK: 0 errors' }"
+```bash
+npm run typecheck 2>&1
 ```
 
-Expected: `PARSE OK: 0 errors`
+Expected: Only warnings (TS6133 - unused vars), no errors.
 
-## 6. Working tree status
+## 4. Session Autostart (TypeScript)
 
+```bash
+npm run session:autostart:detached
 ```
+
+Expected: Returns in ~1.3s, log at `.runtime/autostart-detached-*.log`.
+
+## 5. Health Check Full
+
+```bash
+npm run health:check
+```
+
+Expected: 25+ PASS, failures should be non-critical.
+
+## 6. RDD Risk Classification Test
+
+```bash
+npm run rdd:risk -- --staged --json
+```
+
+Expected: JSON output with tier, score, reviewLenses.
+
+## 7. Database Health (Nexus)
+
+```bash
+npm run db:health
+```
+
+Expected: SQLite integrity PASS, 12 tables, migrations OK.
+
+## 8. Watchtower Health
+
+```bash
+npm run watchtower:health 2>&1
+```
+
+Expected: 60 checks PASS, components OK.
+
+## 9. Working Tree Status
+
+```bash
 git status --short
 ```
 
-Expected: clean (no output), or only expected staged/unstaged files matching the current task.
+Expected: Clean or only expected files changed.
+
+## Expected Results Summary
+
+| Check | Expected |
+|-------|----------|
+| package.json | Valid JSON |
+| opencode.json | Valid JSON |
+| typecheck | No errors (warnings OK) |
+| session autostart | Starts successfully |
+| health:check | 25/29+ PASS |
+| rdd:risk | Returns valid JSON |
+| db:health | SQLite integrity OK |
+| watchtower | Components healthy |
+
+## Legacy PS1 Scripts (Deprecated)
+
+Los siguientes archivos fueron **eliminados** después de migración a TS:
+
+- `scripts/editing/hashline.ps1` → `src/hashline.ts`
+- `scripts/utilities/pre-process-input.ps1` → `src/pre-process-input.ts`
+- `scripts/utilities/session/session-start-optimized.ps1` → `src/session-autostart.ts`
+- `scripts/maintenance/maintenance-watchtower.ps1` → `src/core/maintenance-watchtower.ts`
+
+## Documentation
+
+- `AGENTS.md` - Lineas 273-284: Migración PS1→TS
+- `CHANGELOG.md` - Linea 95: 108 PS1 scripts eliminados
+- `rules/RDD-NORMATIVA.md` - Sistema RDD nativo

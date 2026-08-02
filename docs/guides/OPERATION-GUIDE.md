@@ -69,7 +69,7 @@ pnpm run session:start
 |-------------|---------|-------------|
 | **Dashboard Start** | `pnpm run dashboard:start` | Inicia WebSocket server + Vite |
 | **Dashboard WS** | `npx tsx src/dashboard-ws-autostart.ts` | Solo WebSocket server |
-| **Dashboard Stop** | `scripts/utilities/dashboard/dashboard-stop.ps1` | Detiene dashboard |
+| **Dashboard Stop** | `npx tsx src/dashboard-stop.ts` | Detiene dashboard |
 
 ### Cloud Connectors
 
@@ -191,7 +191,7 @@ Los siguientes warnings son **transitorios** y no indican problemas:
 Get-Content .runtime/dashboard-ws.log -Tail 20
 
 # Reiniciar
-scripts/utilities/dashboard/dashboard-stop.ps1
+npx tsx src/dashboard-stop.ts
 npx tsx src/dashboard-ws-autostart.ts
 ```
 

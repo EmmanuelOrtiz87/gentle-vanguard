@@ -73,7 +73,7 @@ The LLM observability dashboard lives in `apps/web-dashboard/` (React/TypeScript
   dashboard with real-time charts, tracing waterfall, alerts, i18n (en/es/pt-BR), and metric info
   popups.
 - **No mock data** — everything derives from real traces.
-- **Dynamic port allocation** — `Get-FreePort()` in `dashboard-common.ps1` scans +100 ports via
+- **Dynamic port allocation** — `Get-FreePort()` in `src/dashboard-common.ts` scans +100 ports via
   `Get-NetTCPConnection`, picks first free. Chosen ports persisted to
   `.runtime/dashboard-ports.json`.
 
@@ -81,17 +81,17 @@ The LLM observability dashboard lives in `apps/web-dashboard/` (React/TypeScript
 
 | Action                          | Command                                                  |
 | ------------------------------- | -------------------------------------------------------- |
-| Start full (WS + Vite + Chrome) | `scripts/utilities/dashboard/dashboard-start.ps1`        |
-| Start WS only (pipeline)        | `scripts/utilities/dashboard/dashboard-ws-autostart.ps1` |
-| Stop all                        | `scripts/utilities/dashboard/dashboard-stop.ps1`         |
+| Start full (WS + Vite + Chrome) | `npx tsx src/dashboard-start.ts`                         |
+| Start WS only (pipeline)        | `npx tsx src/dashboard-ws-autostart.ts`                  |
+| Stop all                        | `npx tsx src/dashboard-stop.ts`                          |
 
 ### Auto-recovery
 
-- The WS server watchdog (`dashboard-ws-autostart.ps1`) monitors the process every 5s via port check
+- The WS server watchdog (`src/dashboard-ws-autostart.ts`) monitors the process every 5s via port check
   (`Test-NetConnection localhost:<port>`). If the process dies or the port closes, it restarts (up
   to 10 attempts). Uses `cmd /c set WS_PORT=... && npx.cmd tsx ...` for reliable Windows batch
   execution. Heartbeat logged to `.runtime/dashboard-ws.log`.
-- Watchdog stores its own PID in `.runtime/dashboard-ws-watchdog.pid` — `dashboard-stop.ps1` kills
+- Watchdog stores its own PID in `.runtime/dashboard-ws-watchdog.pid` — `src/dashboard-stop.ts` kills
   the watchdog FIRST before the WS process to prevent restart loops.
 - Frontend HTTP polling in `useMetrics.ts` always runs regardless of WebSocket state — data loads
   even if the WS server is temporarily down.
@@ -120,12 +120,12 @@ npm run build          # must exit 0 with no TS errors
 - `components/TracingDashboard.tsx` — waterfall view + feedback
 - `components/InfoPopup.tsx` — animated popup (fade-in + scale)
 - `config/dashboard-alerts.json` — 8 alert rules
-- `scripts/utilities/dashboard/dashboard-common.ps1` — shared port allocation (Get-FreePort,
+- `src/dashboard-common.ts` — shared port allocation (Get-FreePort,
   Save/Read/Clear-DashboardPorts)
-- `scripts/utilities/dashboard/dashboard-ws-autostart.ps1` — watchdog start with auto-recovery (10
+- `src/dashboard-ws-autostart.ts` — watchdog start with auto-recovery (10
   restarts)
-- `scripts/utilities/dashboard/dashboard-start.ps1` — full launcher (WS watchdog + Vite + Chrome)
-- `scripts/utilities/dashboard/dashboard-stop.ps1` — cleanup stop (kills watchdog → PID files → port
+- `src/dashboard-start.ts` — full launcher (WS watchdog + Vite + Chrome)
+- `src/dashboard-stop.ts` — cleanup stop (kills watchdog → PID files → port
   → process name)
 - `vite.config.ts` — reads WS_PORT (proxy target) and VITE_DEV_PORT from env
 - `.runtime/dashboard-ports.json` — persisted port assignments for stop/restart
@@ -173,12 +173,12 @@ Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica
 
 ### Estabilidad comprobada
 
-- **60/60 PASS — 0 WARN — 0 FAIL — 0 SKIP** (todos los componentes OK)
+- **82/82 PASS — 0 WARN — 0 FAIL — 0 SKIP** (todos los componentes OK)
 - Dashboard WS API 200 OK, watchdog con auto-restart (10 intentos)
 - CodeGraph: 133 files, 1410 nodes, 1763 edges
-- Puertos dinámicos con `Get-FreePort()` en `dashboard-common.ps1`
+- Puertos dinámicos con `Get-FreePort()` en `src/dashboard-common.ts`
 - Pipeline session-autostart con `lazy: true` para steps no bloqueantes
-- `dashboard-stop.ps1` mata watchdog primero para evitar restart loops
+- `src/dashboard-stop.ts` mata watchdog primero para evitar restart loops
 - Frontend HTTP polling tolera caídas temporales del WS server
 
 ## v4.0-infrastructure

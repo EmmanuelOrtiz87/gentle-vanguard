@@ -3,7 +3,7 @@
 ## "Connecting..." or Blank Screen
 
 - WS server may be down. Check `.runtime/dashboard-ws.log` for watchdog heartbeats.
-- Restart: `dashboard-stop.ps1 && dashboard-start.ps1`
+- Restart: `npx tsx src/dashboard-stop.ts && npx tsx src/dashboard-start.ts`
 
 ## Metrics Show 0 or Stale Data
 
@@ -25,7 +25,7 @@
 
 ## Port Conflict / "address in use"
 
-- Run `dashboard-stop.ps1` to kill stale processes.
+- Run `npx tsx src/dashboard-stop.ts` to kill stale processes.
 - System auto-selects next free port; check `.runtime/dashboard-ports.json`.
 - Engram uses port 7437 (no collision with dashboard 8080/5173).
 - `Get-FreePort` scans +100 ports; falls back to `TcpListener` test if `Get-NetTCPConnection` fails.

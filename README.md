@@ -39,7 +39,7 @@ cd gentle-vanguard
 .\scripts\setup-complete.ps1
 
 # Run the dashboard (WS server + Vite + auto-open browser)
-.\scripts\utilities\dashboard\dashboard-start.ps1
+npx tsx src/dashboard-start.ts
 ```
 
 Works on Windows, macOS, and Linux.
@@ -167,8 +167,8 @@ apps/web-dashboard/
     └── ...
 ```
 
-**Start**: `.\scripts\utilities\dashboard\dashboard-start.ps1`  
-**Stop**: `.\scripts\utilities\dashboard\dashboard-stop.ps1`
+**Start**: `npx tsx src/dashboard-start.ts`  
+**Stop**: `npx tsx src/dashboard-stop.ts`
 
 ---
 

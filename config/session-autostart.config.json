@@ -761,16 +761,34 @@
         "phase": 99,
         "description": "Result Gatekeeper \u00e2\u20ac\u201d contract validation between pipeline phases (stage #8 trust layer)"
       },
-      {
-        "id": "publication-gates",
-        "enabled": true,
-        "lazy": true,
-        "script": "src/publication-gates.ts",
-        "args": "--prune --quiet",
-        "required": false,
-        "phase": 99,
-        "description": "Publication Gates \u00e2\u20ac\u201d TOCTOU and stale-approval prevention (stage #8 trust layer)"
-      },
+    {
+      "id": "publication-gates",
+      "enabled": true,
+      "lazy": true,
+      "script": "src/publication-gates.ts",
+      "args": "--prune --quiet",
+      "required": false,
+      "phase": 99,
+      "description": "Publication Gates \u00e2\u20ac\u201d TOCTOU and stale-approval prevention (stage #8 trust layer)"
+    },
+    {
+      "id": "rdd-initializer",
+      "enabled": true,
+      "lazy": true,
+      "script": "src/rdd/rdd-core.ts",
+      "args": "status --json",
+      "required": false,
+      "description": "RDD Initializer \u00e2\u20ac\u201d Receipt-Driven Development system initialization (native, no gentle-ai CLI dependency)"
+    },
+    {
+      "id": "rdd-risk-classifier-verify",
+      "enabled": true,
+      "lazy": true,
+      "script": "src/rdd/risk-classifier.ts",
+      "args": "classify --json --staged",
+      "required": false,
+      "description": "RDD Risk Classifier \u00e2\u20ac\u201d Evidence-based risk classification for staged changes (native)"
+    },
       {
         "id": "response-cache-init",
         "enabled": true,

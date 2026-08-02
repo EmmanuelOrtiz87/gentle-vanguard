@@ -28,11 +28,11 @@ apps/web-dashboard/
 ```
 
 ```
-scripts/utilities/dashboard/
-├── dashboard-common.ps1       # Get-FreePort, Save/Read/Clear-DashboardPorts, Get-ProcessIdByPort
-├── dashboard-ws-autostart.ps1 # Watchdog (monitors port 5s, restarts up to 10x)
-├── dashboard-start.ps1        # Full launcher: free ports → WS watchdog + Vite + Chrome
-└── dashboard-stop.ps1         # Kill watchdog → PID files → port → process name
+src/
+├── dashboard-common.ts       # Get-FreePort, Save/Read/Clear-DashboardPorts, Get-ProcessIdByPort
+├── dashboard-ws-autostart.ts # Watchdog (monitors port 5s, restarts up to 10x)
+├── dashboard-start.ts        # Full launcher: free ports → WS watchdog + Vite + Chrome
+└── dashboard-stop.ts         # Kill watchdog → PID files → port → process name
 ```
 
 ## Data Flow
