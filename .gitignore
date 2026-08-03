@@ -243,6 +243,10 @@ knowledge-base/.obsidian/workspace/
 # Runtime module resolution symlink (created by bootstrap)
 apps/web-dashboard/node_modules/@gentle-vanguard/
 
+# GateGuard runtime state (auto-generated, not source)
+src/.gateguard-state.json
+**/.gateguard-state.json
+
 # Sanitization patterns for public repo
 .recovery/
 .engram-data/backups/
