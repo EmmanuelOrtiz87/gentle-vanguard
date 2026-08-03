@@ -186,6 +186,9 @@
     "semantic:build": "npx tsx src/profiler/semantic-code-graph.ts build",
     "semantic:query": "npx tsx src/profiler/semantic-code-graph.ts query",
     "semantic:status": "npx tsx src/profiler/semantic-code-graph.ts status",
+    "perf:alert": "npx tsx src/profiler/performance-alert.ts check",
+    "perf:alert:ack": "npx tsx src/profiler/performance-alert.ts ack",
+    "perf:alert:status": "npx tsx src/profiler/performance-alert.ts status",
     "test:rdd": "npx tsx tests/unit/rdd/risk-classifier.test.ts && npx tsx tests/unit/rdd/rdd-kill-switch.test.ts"
   },
   "devDependencies": {
