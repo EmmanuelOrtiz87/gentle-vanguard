@@ -147,7 +147,7 @@ async function main(): Promise<void> {
       break;
 
     case 'check':
-      runCommand('npx tsx src/Core/maintenance-watchtower.ts --action health', 'WATCHTOWER');
+      runCommand('npx tsx src/core/maintenance-watchtower.ts --action health', 'WATCHTOWER');
       break;
 
     case 'validate': {
