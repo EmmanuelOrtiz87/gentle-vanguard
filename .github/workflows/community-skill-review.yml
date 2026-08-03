@@ -79,7 +79,7 @@ jobs:
           $changedFiles = & git diff --name-only origin/${{ github.base_ref }}...HEAD
 
           foreach ($file in $changedFiles) {
-            if ($file -match 'skills/.+?/SKILL\.md$') {
+            if ($file -match '^skills/.+?/SKILL\.md$') {
               $content = Get-Content $file -Raw
 
               if (-not ($content -match '^---[\s\S]*?^---')) {
@@ -87,9 +87,14 @@ jobs:
               }
 
               if (-not ($content -match '^name:\s*\S+' -or $content -match '"name":\s*"\S+' -or $content -match "'name':\s*'\S+'")) {
-                $frontmatter = ($content | Select-String -Pattern '(?s)^---\s*\n(.*?)\n---' -AllMatches).Matches.Groups[1].Value
-                if (-not ($frontmatter -match 'name')) {
-                  $errors += "Frontmatter missing 'name' field in $file"
+                $frontmatch = [regex]::Match($content, '(?s)^---\s*\n(.*?)\n---')
+                if ($frontmatch.Success) {
+                  $frontmatter = $frontmatch.Groups[1].Value
+                  if (-not ($frontmatter -match 'name')) {
+                    $errors += "Frontmatter missing 'name' field in $file"
+                  }
+                } else {
+                  $errors += "Invalid YAML frontmatter in $file"
                 }
               }
 
