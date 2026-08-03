@@ -5,7 +5,7 @@
  */
 
 import { spawnSync } from 'child_process';
-import { existsSync, mkdirSync, readFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { dirname } from 'path';
 
 interface SBOMOptions {
@@ -46,14 +46,16 @@ function generateSBOM(options: SBOMOptions): boolean {
     mkdirSync(outputDir, { recursive: true });
   }
   
-  // Run cyclonedx-npm
+  // Run pnpm native SBOM (pnpm-compatible, unlike cyclonedx-npm which relies on npm ls)
+  const sbomFormat = options.format === 'xml' ? 'spdx' : 'cyclonedx';
   const result = spawnSync(
-    'npx',
-    ['@cyclonedx/cyclonedx-npm', '--output-file', options.output, '--output-format', options.format],
-    { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }
+    'pnpm',
+    ['sbom', '--sbom-format', sbomFormat],
+    { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'], shell: process.platform === 'win32' }
   );
   
-  if (result.status === 0) {
+  if (result.status === 0 && result.stdout) {
+    writeFileSync(options.output, result.stdout, 'utf-8');
     console.log('✅ SBOM generated successfully');
     console.log();
     console.log('='.repeat(60));
