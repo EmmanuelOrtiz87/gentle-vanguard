@@ -10,6 +10,7 @@ permissions:
   contents: read
   security-events: write
   pull-requests: write
+  actions: read
 
 jobs:
   gitleaks:
@@ -34,8 +35,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
-        with:
-          version: '11.1.1'
 
       - name: Setup Node.js
         uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858

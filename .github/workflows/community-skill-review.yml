@@ -32,7 +32,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
       - name: Extract skill details from issue body
         if: github.event_name == 'issues'

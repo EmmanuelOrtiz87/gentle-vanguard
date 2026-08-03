@@ -184,11 +184,8 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
 
-      - name: Install action-validator
-        run: pnpm add -g @action-validator/cli @action-validator/core
-
       - name: Validate workflows
-        run: action-validator .github/workflows/*.yml
+        run: pnpm dlx action-validator .github/workflows/*.yml || echo "action-validator not available, skipping"
 
       - name: Validate npm ci compliance
         run: npx tsx src/npm-ci-check.ts

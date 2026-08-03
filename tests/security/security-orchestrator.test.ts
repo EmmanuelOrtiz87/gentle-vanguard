@@ -9,7 +9,7 @@ import { execSync } from 'child_process';
 import { resolve } from 'path';
 
 const ROOT = resolve(import.meta.dirname, '..', '..');
-const SCRIPT = resolve(ROOT, 'src', 'Security', 'security-orchestrator.ts');
+const SCRIPT = resolve(ROOT, 'src', 'security', 'security-orchestrator.ts');
 
 interface TestResult {
   status: string;
