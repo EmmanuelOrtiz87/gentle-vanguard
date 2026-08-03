@@ -1,5 +1,15 @@
 {
   "enabled": true,
+  "_meta": {
+    "description": "Agent routing configuration for Gentle-Vanguard stack",
+    "note": "Only agents listed in 'availableAgents' have corresponding subagents in opencode.json. All others are reference/planned agents for future expansion. The orchestrator MUST verify agent availability before dispatching.",
+    "availableAgents": ["sdd-explore", "sdd-design", "sdd-apply", "sdd-verify", "doc-agent", "ops-agent", "gov-agent", "session-agent", "premortem-agent", "maintenance-agent", "gitflow-agent", "self-diag-agent", "knowledge-agent", "mkt-agent", "sales-agent", "finance-agent", "hr-agent", "legal-agent", "bus-tele-agent", "sia-agent"],
+    "availableCodes": ["BA", "SAD", "DEV", "QA", "OPS", "GOV", "DOC", "SESSION", "PREMORTEM", "MAINTENANCE", "GITFLOW", "SELF-DIAG", "KNOWLEDGE", "MKT", "SALES", "FINANCE", "HR", "LEGAL", "BUS-TELE", "SIA"],
+    "plannedAgents": [],
+    "version": "2.1",
+    "lastUpdated": "2026-07-31",
+    "enforcement": "Orchestrator MUST validate agent exists in opencode.json before dispatching. If agent not found, use fallbackStrategy (clarify-ba)."
+  },
   "confidenceThreshold": 60,
   "maxParallelAgents": 3,
   "fallbackStrategy": "clarify-ba",
@@ -30,7 +40,9 @@
       "BUS-TELE": 1,
       "PREMORTEM": 2,
       "SELF-DIAG": 1,
-      "SIA": 1
+      "SIA": 1,
+      "MAINTENANCE": 1,
+      "KNOWLEDGE": 1
     },
     "default": 1,
     "globalMax": 3,
@@ -41,18 +53,18 @@
       "tier1_direct": {
         "confidenceMin": 80,
         "action": "dispatch_immediately",
-        "description": "High confidence — dispatch without clarification"
+        "description": "High confidence \u00e2\u20ac\u201d dispatch without clarification"
       },
       "tier2_confirm": {
         "confidenceMin": 60,
         "confidenceMax": 79,
         "action": "dispatch_with_summary",
-        "description": "Medium confidence — dispatch but surface agent + skill to user"
+        "description": "Medium confidence \u00e2\u20ac\u201d dispatch but surface agent + skill to user"
       },
       "tier3_clarify": {
         "confidenceMax": 59,
         "action": "activate_ba_exploration",
-        "description": "Low confidence — activate BA before dispatching"
+        "description": "Low confidence \u00e2\u20ac\u201d activate BA before dispatching"
       }
     },
     "_comment": "Consumed by auto-delegate-orchestrator.ps1 Invoke-TieredRouting"
@@ -63,39 +75,46 @@
     "lowConfidence": 40
   },
   "agentCodeToSkill": {
-    "BA": "sdd-lifecycle",
-    "GOV": "judgment-day",
-    "SESSION": "session-workflow-skill",
-    "SAD": "sdd-lifecycle",
-    "DEV": "sdd-lifecycle",
-    "QA": "sdd-lifecycle",
-    "OPS": "docker-devops-skill",
-    "DOC": "documentation-governance",
-    "SCRIPT-GOV": "script-governance-skill",
-    "ORCHESTRATOR": "project-orchestrator-skill",
-    "REPORT": "reporting-skill",
-    "PR-REVIEW": "code-review-orchestrator-skill",
-    "RELEASE": "release-management-skill",
-    "GITFLOW-BRANCH": "gitflow-orchestrator-skill",
-    "GITFLOW-PR": "branch-pr",
-    "GITFLOW-HOOKS": "gitflow-orchestrator-skill",
-    "GITFLOW-MERGE": "gitflow-orchestrator-skill",
-    "GITFLOW-WORKFLOW": "git-workflow-skill",
-    "GITFLOW-COMMIT": "git-workflow-skill",
-    "GITFLOW-CONFLICT": "git-workflow-skill",
-    "SELF-DIAG": "self-diagnosis-skill",
-    "DAILY": "daily-workflow",
+    "BA": "spec-driven-development",
+    "GOV": "validate-stack",
+    "SESSION": "context-engineering",
+    "SAD": "spec-driven-development",
+    "DEV": "spec-driven-development",
+    "QA": "spec-driven-development",
+    "OPS": "ci-cd-and-automation",
+    "DOC": "documentation-and-adrs",
+    "SCRIPT-GOV": "validate-stack",
+    "ORCHESTRATOR": "planning-and-task-breakdown",
+    "REPORT": "documentation-and-adrs",
+    "PR-REVIEW": "code-review-and-quality",
+    "RELEASE": "shipping-and-launch",
+    "GITFLOW-BRANCH": "git-workflow-and-versioning",
+    "GITFLOW-PR": "git-workflow-and-versioning",
+    "GITFLOW-HOOKS": "git-workflow-and-versioning",
+    "GITFLOW-MERGE": "git-workflow-and-versioning",
+    "GITFLOW-WORKFLOW": "git-workflow-and-versioning",
+    "GITFLOW-COMMIT": "git-workflow-and-versioning",
+    "GITFLOW-CONFLICT": "git-workflow-and-versioning",
+    "SELF-DIAG": "debugging-and-error-recovery",
+    "DAILY": "planning-and-task-breakdown",
     "MKT": "marketing-content-writer",
     "SALES": "sales-account-executive",
     "FINANCE": "finance-financial-analyst",
     "HR": "hr-talent-acquisition",
     "LEGAL": "legal-compliance-officer",
-    "BUS-TELE": "business-telemetry-skill",
-    "PREMORTEM": "premortem-skill",
-    "CODEGRAPH": "codegraph-skill",
-    "SIA": "sia-skill"
+    "BUS-TELE": "observability-and-instrumentation",
+    "PREMORTEM": "validate-stack",
+    "CODEGRAPH": "validate-stack",
+    "SIA": "spec-driven-development",
+    "MAINTENANCE": "maintenance",
+    "GITFLOW": "gitflow",
+    "KNOWLEDGE": "knowledge",
+    "SELF-DIAG": "self-diag",
+    "KNOWLEDGE": "knowledge-base"
   },
   "skillToAgentProfile": {
+    "maintenance-skill": "MAINTENANCE",
+    "knowledge-base-skill": "KNOWLEDGE",
     "session-workflow-skill": "SESSION",
     "code-review-orchestrator-skill": "QA",
     "release-management-skill": "OPS",
@@ -480,7 +499,31 @@
     "webapp-testing-skill": "DEV",
     "write-query-skill": "DEV",
     "write-spec-skill": "BA",
-    "xlsx-skill": "DEV"
+    "xlsx-skill": "DEV",
+    "test-driven-development": "QA",
+    "code-review-and-quality": "QA",
+    "code-simplification": "DEV",
+    "debugging-and-error-recovery": "DEV",
+    "performance-optimization": "DEV",
+    "security-and-hardening": "GOV",
+    "ci-cd-and-automation": "OPS",
+    "git-workflow-and-versioning": "DEV",
+    "documentation-and-adrs": "DOC",
+    "planning-and-task-breakdown": "BA",
+    "shipping-and-launch": "OPS",
+    "observability-and-instrumentation": "OPS",
+    "frontend-ui-engineering": "DEV",
+    "api-and-interface-design": "SAD",
+    "context-engineering": "SAD",
+    "source-driven-development": "DEV",
+    "spec-driven-development": "BA",
+    "incremental-implementation": "DEV",
+    "doubt-driven-development": "QA",
+    "deprecation-and-migration": "DEV",
+    "browser-testing-with-devtools": "QA",
+    "idea-refine": "BA",
+    "interview-me": "BA",
+    "using-agent-skills": "GOV"
   },
   "clarifyBaStrategy": {
     "enabled": true,
@@ -500,7 +543,14 @@
   },
   "unmappedFlows": {
     "prReview": {
-      "triggers": ["pull request", "PR", "create PR", "open PR", "merge", "review PR"],
+      "triggers": [
+        "pull request",
+        "PR",
+        "create PR",
+        "open PR",
+        "merge",
+        "review PR"
+      ],
       "gate": {
         "agent": "QA",
         "profile": "$ref:agentProfiles.QA",
@@ -519,7 +569,15 @@
         "escalateOnFailure": "orchestrator"
       },
       "skill": "code-review-orchestrator-skill",
-      "dimensions": ["Security", "Quality", "Architecture", "Testing", "Docs", "API", "GitFlow"]
+      "dimensions": [
+        "Security",
+        "Quality",
+        "Architecture",
+        "Testing",
+        "Docs",
+        "API",
+        "GitFlow"
+      ]
     },
     "releaseManagement": {
       "triggers": [
@@ -574,7 +632,10 @@
           "repository state reviewed",
           "blockers stated explicitly"
         ],
-        "blockCloseIf": ["audit not recorded", "open FIXME/TODO items not documented"],
+        "blockCloseIf": [
+          "audit not recorded",
+          "open FIXME/TODO items not documented"
+        ],
         "escalateOnFailure": "orchestrator"
       },
       "skill": "project-orchestrator-skill",
@@ -594,7 +655,10 @@
         "stats"
       ],
       "gate": {
-        "agents": ["DOC", "GOV"],
+        "agents": [
+          "DOC",
+          "GOV"
+        ],
         "profiles": {
           "DOC": "$ref:agentProfiles.DOC",
           "GOV": "$ref:agentProfiles.GOV"
@@ -817,40 +881,82 @@
       "overridea tu config",
       "te esta afectando la config"
     ],
+    "MAINTENANCE": [
+      "mantenimiento",
+      "limpiar",
+      "prune",
+      "optimizar",
+      "compactar",
+      "compact",
+      "maintenance",
+      "cleanup",
+      "limpiar cache",
+      "limpiar temporales",
+      "prunear checkpoints",
+      "eliminar snapshots",
+      "limpiar session",
+      "optimizar stack",
+      "auto mantenimiento",
+      "mantenimiento automatico",
+      "checkpoint pruning",
+      "graphify cleanup",
+      "event store compact"
+    ],
+    "KNOWLEDGE": [
+      "knowledge base",
+      "vault",
+      "obsidian",
+      "notas",
+      "kb",
+      "knowledge",
+      "wiki",
+      "documentacion",
+      "documentation",
+      "base de conocimiento",
+      "boveda",
+      "nota",
+      "notas del proyecto",
+      "sync vault",
+      "sincronizar vault",
+      "knowledge base sync",
+      "crear nota",
+      "buscar nota",
+      "listar notas"
+    ],
     "SESSION": [
       "inicia sesion",
-      "inicia sesión",
+      "inicia sesi\u00c3\u00b3n",
       "iniciar sesion",
-      "iniciar sesión",
+      "iniciar sesi\u00c3\u00b3n",
       "start session",
       "iniciar sessao",
-      "iniciar sessão",
+      "iniciar sess\u00c3\u00a3o",
       "iniciar sessao de trabalho",
-      "iniciar sessão de trabalho",
-      "guardar sesión",
+      "iniciar sess\u00c3\u00a3o de trabalho",
+      "guardar sesi\u00c3\u00b3n",
       "guardar sesion",
       "guarda sesion",
-      "guarda sesión",
+      "guarda sesi\u00c3\u00b3n",
       "continuar",
       "continue",
       "continuar sessao",
-      "continuar sessão",
+      "continuar sess\u00c3\u00a3o",
       "estado",
       "status",
       "status da sessao",
-      "status da sessão",
+      "status da sess\u00c3\u00a3o",
       "cerrar sesion",
-      "cerrar sesión",
+      "cerrar sesi\u00c3\u00b3n",
       "close session",
       "session end",
       "encerrar sessao",
-      "encerrar sessão",
+      "encerrar sess\u00c3\u00a3o",
       "fechar sessao",
-      "fechar sessão",
+      "fechar sess\u00c3\u00a3o",
       "fin de sesion",
-      "fin de sesión",
+      "fin de sesi\u00c3\u00b3n",
       "finalizar sesion",
-      "finalizar sesión"
+      "finalizar sesi\u00c3\u00b3n"
     ],
     "DAILY": [
       "daily check",
@@ -887,7 +993,7 @@
       "\"rest endpoint\"",
       "\"graphql\"",
       "\"openapi\"",
-      "\"api versióning\"",
+      "\"api versi\u00c3\u00b3ning\"",
       "\"pagination\"",
       "\"api documentation\"",
       "\"api error handling\".",
@@ -1299,7 +1405,7 @@
       "\"helm\".",
       "\"release\"",
       "\"changelog\"",
-      "\"versión bump\"",
+      "\"versi\u00c3\u00b3n bump\"",
       "\"ship\"",
       "\"cut release\"",
       "\"operations\"",
@@ -1567,7 +1673,7 @@
       "enrich codegraph",
       "codegraph semantic",
       "enhanced search",
-      "búsqueda semántica",
+      "b\u00c3\u00basqueda sem\u00c3\u00a1ntica",
       "codegraph enrichment",
       "symbol lookup",
       "dependency graph",
@@ -1639,15 +1745,48 @@
       "abrir pull request",
       "criar PR",
       "abrir solicitacao de pull",
-      "abrir solicitação de pull",
+      "abrir solicita\u00c3\u00a7\u00c3\u00a3o de pull",
       "pr created"
     ],
-    "GITFLOW-HOOKS": ["pre-commit", "pre-push", "git hook", "hook validation", "git-hook"],
-    "GITFLOW-MERGE": ["post-merge", "merge sync", "sync after merge", "post-merge-sync"],
-    "GITFLOW-WORKFLOW": ["gitflow", "workflow", "git workflow", "git flow"],
-    "GITFLOW-COMMIT": ["commit", "conventional commit", "commit message", "git commit"],
-    "GITFLOW-CONFLICT": ["conflict", "merge conflict", "resolve conflict", "git conflict"],
-    "PR-REVIEW": ["pull request", "create PR", "open PR", "review PR", "merge PR", "PR review"],
+    "GITFLOW-HOOKS": [
+      "pre-commit",
+      "pre-push",
+      "git hook",
+      "hook validation",
+      "git-hook"
+    ],
+    "GITFLOW-MERGE": [
+      "post-merge",
+      "merge sync",
+      "sync after merge",
+      "post-merge-sync"
+    ],
+    "GITFLOW-WORKFLOW": [
+      "gitflow",
+      "workflow",
+      "git workflow",
+      "git flow"
+    ],
+    "GITFLOW-COMMIT": [
+      "commit",
+      "conventional commit",
+      "commit message",
+      "git commit"
+    ],
+    "GITFLOW-CONFLICT": [
+      "conflict",
+      "merge conflict",
+      "resolve conflict",
+      "git conflict"
+    ],
+    "PR-REVIEW": [
+      "pull request",
+      "create PR",
+      "open PR",
+      "review PR",
+      "merge PR",
+      "PR review"
+    ],
     "RELEASE": [
       "release",
       "changelog",
@@ -1681,7 +1820,7 @@
       "\"feature request\"",
       "\"nueva funcionalidad\"",
       "\"nuevo modulo\"",
-      "\"nuevo módulo\"",
+      "\"nuevo m\u00c3\u00b3dulo\"",
       "\"nuevo componente\"",
       "\"new feature\"",
       "\"new module\"",
@@ -1693,9 +1832,9 @@
       "\"add module\"",
       "\"add component\"",
       "\"funcionalidad de\"",
-      "\"módulo de\"",
-      "\"módulo para\"",
-      "\"módulo que\"",
+      "\"m\u00c3\u00b3dulo de\"",
+      "\"m\u00c3\u00b3dulo para\"",
+      "\"m\u00c3\u00b3dulo que\"",
       "\"backlog\"",
       "\"triage\"",
       "\"roadmap\"",
@@ -1783,13 +1922,22 @@
     "complexity_detection": {
       "enabled": true,
       "min_agents_for_adaptive": 2,
-      "complexity_keywords": ["multi-phase", "feedback-loop", "rollback", "cross-team", "high-risk"]
+      "complexity_keywords": [
+        "multi-phase",
+        "feedback-loop",
+        "rollback",
+        "cross-team",
+        "high-risk"
+      ]
     },
     "constraint_optimization": {
       "enabled": true,
       "passes_threshold": 3,
       "state_file": ".session/constraint-retention-state.json",
-      "track_elements": ["requiredEvidence", "compliance_checkpoints"],
+      "track_elements": [
+        "requiredEvidence",
+        "compliance_checkpoints"
+      ],
       "soft_drop": true,
       "reset_on_failure": true,
       "notify_on_drop": false
@@ -1797,7 +1945,11 @@
     "artifact_naming": {
       "enabled": true,
       "mode": "username_prefix",
-      "modes_available": ["username_prefix", "user_subdirectory", "session_scoped"],
+      "modes_available": [
+        "username_prefix",
+        "user_subdirectory",
+        "session_scoped"
+      ],
       "username_sources": [
         "$env:GENTLE_VANGUARD_USERNAME",
         "$env:USERNAME",
@@ -1826,7 +1978,7 @@
     "BA": {
       "temperature": 0.7,
       "hallucinationGuard": "low",
-      "vibe": "Quote EXACT requirements — never add features not in the spec. 'Luxury' and 'premium' are red flags — treat them as scope creep",
+      "vibe": "Quote EXACT requirements \u00e2\u20ac\u201d never add features not in the spec. 'Luxury' and 'premium' are red flags \u00e2\u20ac\u201d treat them as scope creep",
       "personalityFile": "config/agent-prompts/BA.md",
       "automatic_triggers": [
         "When user says 'make it better': ask what specific metric defines 'better'",
@@ -1851,7 +2003,7 @@
     "SAD": {
       "temperature": 0.3,
       "hallucinationGuard": "medium",
-      "vibe": "Designs the systems that hold everything up — databases, APIs, scale. Every decision must cite a tradeoff examined",
+      "vibe": "Designs the systems that hold everything up \u00e2\u20ac\u201d databases, APIs, scale. Every decision must cite a tradeoff examined",
       "personalityFile": "config/agent-prompts/SAD.md",
       "automatic_triggers": [
         "When design lacks failure mode analysis: add before approving",
@@ -1877,13 +2029,16 @@
     "SESSION": {
       "temperature": 0.1,
       "hallucinationGuard": "high",
-      "vibe": "Session management is deterministic state tracking — if the state file doesn't match reality, stop and fix it",
+      "vibe": "Session management is deterministic state tracking \u00e2\u20ac\u201d if the state file doesn't match reality, stop and fix it",
       "personalityFile": "config/agent-prompts/SESSION.md",
       "automatic_triggers": [
         "When session state file is missing: recreate from available context",
         "When git working tree is dirty: document uncommitted changes before closing"
       ],
-      "requiredEvidence": ["session state captured", "git status verified"],
+      "requiredEvidence": [
+        "session state captured",
+        "git status verified"
+      ],
       "constraint_retention": {
         "temperature_earned": false,
         "hallucinationGuard_earned": false,
@@ -1894,12 +2049,12 @@
       "hedgingBlocked": true,
       "maxRetries": 1,
       "escalateOnFailure": "orchestrator",
-      "rationale": "Session management is deterministic state tracking — no ambiguity allowed"
+      "rationale": "Session management is deterministic state tracking \u00e2\u20ac\u201d no ambiguity allowed"
     },
     "DEV": {
       "temperature": 0.15,
       "hallucinationGuard": "high",
-      "vibe": "Ship three well-designed tools rather than fifteen confusing ones — code must compile, tests must pass, nothing imaginary",
+      "vibe": "Ship three well-designed tools rather than fifteen confusing ones \u00e2\u20ac\u201d code must compile, tests must pass, nothing imaginary",
       "personalityFile": "config/agent-prompts/DEV.md",
       "automatic_triggers": [
         "When lint fails: fix before moving to next task",
@@ -1926,7 +2081,7 @@
     "QA": {
       "temperature": 0.1,
       "hallucinationGuard": "critical",
-      "vibe": "Default to finding 3-5 issues. 'Looks good to me' is not an acceptable review — prove it with evidence",
+      "vibe": "Default to finding 3-5 issues. 'Looks good to me' is not an acceptable review \u00e2\u20ac\u201d prove it with evidence",
       "personalityFile": "config/agent-prompts/QA.md",
       "automatic_triggers": [
         "When PR claims 'minor change': verify file count, test coverage, side effects",
@@ -1952,7 +2107,7 @@
     "OPS": {
       "temperature": 0.1,
       "hallucinationGuard": "critical",
-      "vibe": "Production is sacred — every deploy needs a rollback plan, every config needs validation",
+      "vibe": "Production is sacred \u00e2\u20ac\u201d every deploy needs a rollback plan, every config needs validation",
       "personalityFile": "config/agent-prompts/OPS.md",
       "automatic_triggers": [
         "When deploy plan lacks rollback: block until documented",
@@ -2008,9 +2163,12 @@
       "personalityFile": "config/agent-prompts/DOC.md",
       "automatic_triggers": [
         "When a feature changes: check if related docs need update",
-        "When writing examples: test them — incorrect examples are worse than no examples"
+        "When writing examples: test them \u00e2\u20ac\u201d incorrect examples are worse than no examples"
       ],
-      "requiredEvidence": ["doc file written to disk", "all referenced paths exist"],
+      "requiredEvidence": [
+        "doc file written to disk",
+        "all referenced paths exist"
+      ],
       "constraint_retention": {
         "temperature_earned": false,
         "hallucinationGuard_earned": false,
@@ -2136,7 +2294,7 @@
     "HR": {
       "temperature": 0.4,
       "hallucinationGuard": "medium",
-      "vibe": "Fairness and consistency — every process must be auditably unbiased",
+      "vibe": "Fairness and consistency \u00e2\u20ac\u201d every process must be auditably unbiased",
       "personalityFile": "config/agent-prompts/HR.md",
       "automatic_triggers": [
         "When job description lacks inclusive language: flag and suggest alternatives",
@@ -2186,7 +2344,7 @@
     "BUS-TELE": {
       "temperature": 0.2,
       "hallucinationGuard": "high",
-      "vibe": "Fabricated metrics drive bad decisions — every number must trace to a source file",
+      "vibe": "Fabricated metrics drive bad decisions \u00e2\u20ac\u201d every number must trace to a source file",
       "personalityFile": "config/agent-prompts/BUS-TELE.md",
       "automatic_triggers": [
         "When metric lacks source file citation: reject",
@@ -2211,7 +2369,7 @@
     "PREMORTEM": {
       "temperature": 0.5,
       "hallucinationGuard": "medium",
-      "vibe": "The plan will fail — my job is to find out how before it does",
+      "vibe": "The plan will fail \u00e2\u20ac\u201d my job is to find out how before it does",
       "personalityFile": "config/agent-prompts/PREMORTEM.md",
       "automatic_triggers": [
         "When plan lacks failure scenarios: add premortem analysis",
@@ -2231,7 +2389,7 @@
       "hedgingBlocked": false,
       "maxRetries": 2,
       "escalateOnFailure": "orchestrator",
-      "rationale": "Premortem needs creative scenario generation + structured synthesis — moderate temp for failure exploration"
+      "rationale": "Premortem needs creative scenario generation + structured synthesis \u00e2\u20ac\u201d moderate temp for failure exploration"
     },
     "SELF-DIAG": {
       "temperature": 0.1,
@@ -2258,12 +2416,12 @@
       "hedgingBlocked": true,
       "maxRetries": 1,
       "escalateOnFailure": "orchestrator",
-      "rationale": "Self-diagnosis is critical path — must break glass when config harms operability. No ambiguity."
+      "rationale": "Self-diagnosis is critical path \u00e2\u20ac\u201d must break glass when config harms operability. No ambiguity."
     },
     "SCRIPT": {
       "temperature": 0.15,
       "hallucinationGuard": "high",
-      "vibe": "A bad script runs unattended and causes silent damage — validate everything",
+      "vibe": "A bad script runs unattended and causes silent damage \u00e2\u20ac\u201d validate everything",
       "personalityFile": "config/agent-prompts/SCRIPT.md",
       "automatic_triggers": [
         "When script lacks error handling: flag before acceptance",
@@ -2285,12 +2443,14 @@
       "maxRetries": 2,
       "escalateOnFailure": "orchestrator",
       "rationale": "Scripts are automation - a bad script runs unattended and causes damage",
-      "aliases": ["SCRIPT-GOV"]
+      "aliases": [
+        "SCRIPT-GOV"
+      ]
     },
     "CODEGRAPH": {
       "temperature": 0.1,
       "hallucinationGuard": "critical",
-      "vibe": "Deterministic code intelligence — results must be verifiable against the actual codebase",
+      "vibe": "Deterministic code intelligence \u00e2\u20ac\u201d results must be verifiable against the actual codebase",
       "personalityFile": "config/agent-prompts/CODEGRAPH.md",
       "automatic_triggers": [
         "When query returns 0 results: verify symbol name against codebase",
@@ -2310,12 +2470,12 @@
       "hedgingBlocked": true,
       "maxRetries": 2,
       "escalateOnFailure": "DEV",
-      "rationale": "CodeGraph is deterministic code intelligence — results must be verifiable against the actual codebase, no invention allowed"
+      "rationale": "CodeGraph is deterministic code intelligence \u00e2\u20ac\u201d results must be verifiable against the actual codebase, no invention allowed"
     },
     "SIA": {
       "temperature": 0.2,
       "hallucinationGuard": "high",
-      "vibe": "Self-improvement through iteration — each cycle must measurably improve score, not just change output",
+      "vibe": "Self-improvement through iteration \u00e2\u20ac\u201d each cycle must measurably improve score, not just change output",
       "personalityFile": "config/agent-prompts/SIA-META.md",
       "automatic_triggers": [
         "When task needs iterative refinement: initiate SIA loop",
@@ -2336,7 +2496,7 @@
       "hedgingBlocked": true,
       "maxRetries": 3,
       "escalateOnFailure": "orchestrator",
-      "rationale": "SIA is an iterative loop — each iteration must show measurable score improvement, not cosmetic changes"
+      "rationale": "SIA is an iterative loop \u00e2\u20ac\u201d each iteration must show measurable score improvement, not cosmetic changes"
     },
     "hallucinationGuardLevels": {
       "low": "Log only - agent self-reports output, no external verification",

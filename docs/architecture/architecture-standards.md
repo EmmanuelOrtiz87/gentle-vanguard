@@ -72,9 +72,46 @@ decisións are stored in:
 4. **Update SKILL_INDEX** - If a decisión affects skill loading or triggers, update the index
 5. **Cross-workspace sync** - Gentle-Vanguard decisións apply to all consumer repositories
 
+## File Naming Standards
+
+### ❌ Anti-Patterns (No usar)
+
+| ❌ Incorrecto | ✅ Correcto | Razón |
+|--------------|-----------|-------|
+| `ARCHITECTURE-v2.md` | `ARCHITECTURE.md` | Versionado en nombre |
+| `metrics-collector-v2.ts` | `metrics-collector.ts` | Versionado en nombre |
+| `v264-scripts.test.ts` | `scripts.test.ts` | Versionado en nombre |
+| `config-v1.json` | `config.json` | Versionado en nombre |
+
+### ✅ Patrones Correctos
+
+1. **Sin versionado en nombres**: Usar Git para historial de versiones
+2. **Nombres descriptivos**: `scripts-integration.test.ts` > `v284-scripts.test.ts`
+3. **Consistencia**: Kebab-case para archivos, camelCase para funciones
+4. **Extensión explícita**: `.test.ts` para tests, `.config.json` para configs
+
+### Versionado
+
+El versionado se maneja mediante:
+
+- **Git**: Historial completo de cambios (`git log`, `git diff`)
+- **Base de datos**: Metadatos y referencias históricas
+- **CHANGELOG.md**: Resumen de cambios por versión
+
+```bash
+# Ver historial de un archivo
+git log --follow docs/architecture/ARCHITECTURE.md
+
+# Ver diferencias entre versiones
+git diff v1.0.0..v2.0.0 -- docs/architecture/ARCHITECTURE.md
+
+# Restaurar versión anterior
+git checkout v1.0.0 -- docs/architecture/ARCHITECTURE.md
+```
+
 ## Quick Reference
 
-```powershell
+```TypeScript
 # List recent decisións
 Get-ChildItem .decisións/ -Filter "decisión-*.md" | Sort-Object Name -Descending | Select-Object -First 10
 

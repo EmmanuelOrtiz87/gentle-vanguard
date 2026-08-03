@@ -1,12 +1,11 @@
 # References for testing-skill
 
-This directory contains extracted content from SKILL.md to keep the main file under size limits.
+This directory holds extracted content from SKILL.md to keep the main file under size limits.
 
 ## Files
 
-- (No large blocks extracted)
+- [`detail.md`](detail.md) — Anti-patterns, Risk-Based Testing, Coverage Goals, Framework Selection, Test File Naming, AAA examples, CLI quick reference
 
 ## Usage
 
-Reference these files when you need detailed examples. The main SKILL.md contains the essential
-rules and patterns only.
+Reference these files when you need detailed tables, code examples, or extended guidance. The main SKILL.md contains only essential rules and decision gates.

@@ -16,8 +16,7 @@ First principles thinking strips away assumptions and conventions to reveal fund
 reconstructs solutions from those basics. This approach, championed by Elon Musk and rooted in
 Aristotle's philosophy, enables breakthrough solutions by escaping the trap of reasoning by analogy.
 
-**Core Principle:** Don't accept "that's how it's always done." Reduce to fundamentals, then
-rebuild.
+**Core Principle:** Don't accept "that's how it's always done." Reduce to fundamentals, then rebuild.
 
 ## When to Use
 
@@ -31,9 +30,9 @@ rebuild.
 Decision flow:
 
 ```
-Problem intractable? → yes → Are you reasoning from analogy? → yes → APPLY FIRST PRINCIPLES
-                                                            ↘ no → Already at fundamentals
-                  ↘ no → Standard problem-solving may suffice
+Problem intractable? → reasoning from analogy? → yes → APPLY FIRST PRINCIPLES
+                                                ↘ no → Already at fundamentals
+                   ↘ no → Standard problem-solving
 ```
 
 ## The Process
@@ -48,9 +47,8 @@ List everything you "know" or assume about the problem:
 - Why do people say it can't be done?
 
 ```
-Example: "Rocket launches cost $65M because that's what aerospace companies charge"
-Assumptions: Must buy from existing suppliers, existing designs are optimal,
-             materials must be aerospace-grade, vertical integration is too hard
+Rocket cost $65M → Assumptions: existing suppliers, designs optimal,
+                   aerospace-grade materials, vertical integration too hard
 ```
 
 ### Step 2: Break Down to Fundamentals
@@ -66,10 +64,8 @@ Decomposition questions:
 - What is the minimum viable version?
 
 ```
-Example: Rocket raw materials (aluminum, titanium, copper, carbon fiber)
-         = ~2% of typical rocket price
-Fundamental truth: Materials aren't the cost driver;
-                   manufacturing/overhead/margins are
+Rocket materials (aluminum, titanium, etc.) = ~2% of price
+→ Fundamental: manufacturing/overhead/margins, not materials
 ```
 
 ### Step 3: Challenge Each Assumption
@@ -84,11 +80,8 @@ For each assumption, ask:
 Use the "5 Whys" to drill deeper:
 
 ```
-Why is it expensive? → Suppliers charge high margins
-Why? → Limited competition
-Why? → High barriers to entry
-Why? → Assumption that you must use existing supply chain
-Why? → Nobody questioned it
+Expensive → high margins → limited competition → entry barriers
+→ assumption: must use existing supply chain → nobody questioned it
 ```
 
 ### Step 4: Rebuild from Fundamentals
@@ -101,8 +94,7 @@ Starting ONLY from verified truths:
 - What would a solution look like with 10x less resources?
 
 ```
-Example: Build rockets in-house using commodity materials
-         = SpaceX reduced launch costs by 10x
+In-house rockets with commodity materials → SpaceX 10x cost reduction
 ```
 
 ### Step 5: Validate Against Reality
@@ -112,48 +104,6 @@ Example: Build rockets in-house using commodity materials
 - What's the minimum viable test?
 - How can you prove/disprove this quickly?
 
-## Mental Traps to Avoid
-
-| Trap                 | Description                     | Antidote                                  |
-| -------------------- | ------------------------------- | ----------------------------------------- |
-| Reasoning by Analogy | "Others do it this way"         | Ask "but is it optimal?"                  |
-| Appeal to Authority  | "Experts say it's impossible"   | "What specifically makes it impossible?"  |
-| Sunk Cost            | "We've always done it this way" | "What if we started fresh today?"         |
-| Complexity Bias      | Assuming complex = better       | "What's the simplest version?"            |
-| False Constraints    | Accepting artificial limits     | "Is this a law of physics or convention?" |
-
-## Application Examples
-
-### Software Architecture
-
-```
-Assumption: "We need a microservices architecture"
-First Principles:
-- What problem are we solving? (scalability, team independence, deployment)
-- What's the minimum that achieves this?
-- A modular monolith might suffice for current scale
-```
-
-### Cost Reduction
-
-```
-Assumption: "This service costs $50k/month, that's just cloud pricing"
-First Principles:
-- What compute/storage do we actually need?
-- What are we paying for that we don't use?
-- Could we reduce by 80% with right-sizing?
-```
-
-### Feature Development
-
-```
-Assumption: "Users need feature X (because competitor has it)"
-First Principles:
-- What job is the user trying to accomplish?
-- What's the simplest way to enable that job?
-- Maybe a different approach solves it better
-```
-
 ## Verification Checklist
 
 - [ ] Listed all assumptions about the problem
@@ -162,12 +112,6 @@ First Principles:
 - [ ] Rebuilt solution using only verified fundamentals
 - [ ] Validated that solution doesn't violate actual constraints
 - [ ] Identified minimum viable test to prove/disprove approach
-
-## Combining with Other Models
-
-- **Inversion**: After first principles, ask "what would make this fail?"
-- **Second-Order Thinking**: Consider downstream effects of your new approach
-- **Pre-Mortem**: Imagine your first-principles solution failed—why?
 
 ## Key Questions
 

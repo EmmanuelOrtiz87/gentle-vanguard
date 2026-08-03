@@ -1,6 +1,6 @@
 # AI Model Selection Policy
 
-**Version:** 1.0.0 **Last updated:** 2026-05-14 **Applies to:** All AI agent invocations across all
+**Version:** 2.0.0 **Last updated:** 2026-07-31 **Applies to:** All AI agent invocations across all
 supported tools
 
 ---
@@ -10,17 +10,20 @@ supported tools
 Different tasks require different model capabilities. Using a large expensive model for a simple
 validation is wasteful. Using a small weak model for complex architecture is risky. This policy
 defines which model to use for which task, based on capability requirements and cost optimization.
+In the current environment the native available model is `opencode/deepseek-v4-flash-free` (free
+tier, provider `opencode`); the tier structure below is retained for when additional models become
+available (openrouter/ollama/dify/lm-studio2).
 
 ---
 
 ## 2. Model Tier Definitions
 
-| Tier                 | Model(s)                         | Strengths                                     | Weaknesses                        | Cost/M Tokens |
-| -------------------- | -------------------------------- | --------------------------------------------- | --------------------------------- | ------------- |
-| **T1 — Heavy**       | GLM-5, Claude Sonnet 4, GPT-4o   | Deep reasoning, architecture, code generation | Expensive, slower                 | $10-30        |
-| **T2 — Medium**      | GLM-4, Claude Haiku, GPT-4o-mini | Balanced perf/cost, good for most tasks       | Less depth on complex reasoning   | $1-5          |
-| **T3 — Light**       | Qwen 3.6B+ (local), Llama 3 8B   | Fast, cheap, private (local)                  | Limited context, weaker reasoning | $0-0.5        |
-| **T4 — Specialized** | Fine-tuned models                | Domain-specific excellence                    | Narrow applicability              | Varies        |
+| Tier                 | Model(s)                          | Strengths                                     | Weaknesses                        | Cost/M Tokens |
+| -------------------- | --------------------------------- | --------------------------------------------- | --------------------------------- | ------------- |
+| **T1 — Heavy**       | opencode/deepseek-v4-flash-free   | Deep reasoning, architecture, code generation | Single model for all tasks        | $0 (free)     |
+| **T2 — Medium**      | opencode/deepseek-v4-flash-free   | Balanced perf/cost, good for most tasks       | Less depth on complex reasoning   | $0 (free)     |
+| **T3 — Light**       | opencode/deepseek-v4-flash-free, ollama (llama3, qwen2.5) | Fast, cheap, private (local)     | Limited context, weaker reasoning | $0-0.5        |
+| **T4 — Specialized** | Fine-tuned models                 | Domain-specific excellence                    | Narrow applicability              | Varies        |
 
 ---
 
@@ -86,22 +89,22 @@ Is the task security-critical or architecture-defining?
 
 ```json
 {
-  "orchestrator": { "model": "openrouter/z-ai/glm-5" },
-  "sdd-explore": { "model": "openrouter/qwen/qwen-3.6-plus" },
-  "sdd-design": { "model": "openrouter/z-ai/glm-5" },
-  "sdd-apply": { "model": "openrouter/z-ai/glm-5" },
-  "sdd-verify": { "model": "openrouter/qwen/qwen-3.6-plus" }
+  "orchestrator": { "model": "opencode/deepseek-v4-flash-free" },
+  "sdd-explore": { "model": "opencode/deepseek-v4-flash-free" },
+  "sdd-design": { "model": "opencode/deepseek-v4-flash-free" },
+  "sdd-apply": { "model": "opencode/deepseek-v4-flash-free" },
+  "sdd-verify": { "model": "opencode/deepseek-v4-flash-free" }
 }
 ```
 
 ### General Guidelines
 
-- **Orchestrator/routing decisions**: Use T2 (cheap, fast — just needs to route)
-- **Exploration/analysis**: T3 (local) for simple queries, T2 for complex
-- **Design/architecture**: T1 (heavy) always
-- **Implementation**: T1 for complex, T2 for simple
-- **Verification/testing**: T2 for test generation, T3 for running/parsing
-- **Code review**: T1 for security/architecture review, T2 for style
+- **Orchestrator/routing decisions**: Use the native model (cheap, fast — just needs to route)
+- **Exploration/analysis**: native model for simple queries
+- **Design/architecture**: native model (deep reasoning)
+- **Implementation**: native model
+- **Verification/testing**: native model
+- **Code review**: native model (thoroughness via temperature 0.1)
 
 ---
 
@@ -115,6 +118,17 @@ When changing a model assignment:
 4. Compare quality metrics (pass rate, rework rate)
 5. Roll back if quality degrades or cost exceeds 2x budget
 
+### Custom Provider Health
+
+- Keep `model` and `small_model` aligned when switching OpenCode models. Internal calls such as
+  compaction may use the small model path.
+- Validate global custom providers with `npm run model:validate-provider` before relying on them.
+- For LiteLLM providers that route to Bedrock, configure the proxy with
+  `litellm_settings.modify_params: true`; OpenCode fallback can keep the stack alive, but it does
+  not repair the upstream proxy.
+- Do not clear an unhealthy model state until a fresh request succeeds or the proxy/config change is
+  verified.
+
 ---
 
 ## 8. References
@@ -123,7 +137,8 @@ When changing a model assignment:
 | ----------------------- | ------------------------------------------------------------ |
 | Orchestrator Config     | `config/orchestrator.json`                                   |
 | Agent Config (OpenCode) | `opencode.json`                                              |
-| Token Budget Guard      | `scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1` |
+| Provider Health Runbook | `docs/operations/procedures/MODEL-PROVIDER-HEALTH-RUNBOOK.md` |
+| Token Budget Guard      | `src/telemetry/token-budget-guard.ts` |
 | Performance Normatives  | `rules/NORMATIVAS-PERFORMANCE.md`                            |
 | Context Engineering     | `rules/CONTEXT-ENGINEERING.md`                               |
 

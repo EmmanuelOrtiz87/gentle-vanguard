@@ -1,49 +1,52 @@
 # Per-Phase Model Routing
 
-Version: 1.0.0 | Framework: Assign optimal AI models per SDD phase
+Version: 2.0.0 | Framework: Assign optimal AI models per SDD phase
 
 ## Purpose
 
 Each SDD phase has different cognitive demands. Route each phase to the model best suited for its
 task type — cheaper/faster models for exploration, stronger for implementation, strict for
-verification.
+verification. In the current environment the native available model is
+`opencode/deepseek-v4-flash-free` (free tier); temperatures vary per phase to shape behavior.
 
 ## Phase-to-Model Mapping
 
-| Phase        | Cognitive Demand                               | Recommended Model               | Rationale                                        |
-| ------------ | ---------------------------------------------- | ------------------------------- | ------------------------------------------------ |
-| BA (Explore) | Research, analysis, requirements gathering     | `openrouter/moonshot/kimi-k2.6` | Strong context understanding, good at synthesis  |
-| SAD (Design) | Architecture, API contracts, sequence diagrams | `openrouter/moonshot/kimi-k2.6` | Strong reasoning for design decisions            |
-| DEV (Apply)  | Code generation, implementation                | `openrouter/z-ai/glm-5`         | Strong code generation, high max tokens          |
-| QA (Verify)  | Testing, validation, edge case analysis        | `openrouter/z-ai/glm-5`         | Strict mode, low temperature for reproducibility |
-| DOC          | Documentation, guides, markdown                | `openrouter/qwen/qwen-3.6-plus` | Good prose, cost-effective                       |
-| OPS          | CI/CD, infrastructure, deployments             | `openrouter/z-ai/glm-5`         | Precision required for infra changes             |
-| GOV          | Compliance, security, audit                    | `openrouter/moonshot/kimi-k2.6` | Strong analytical reasoning                      |
-| Session      | Session management, state tracking             | `openrouter/qwen/qwen-3.6-plus` | Lightweight, fast response                       |
-| Premortem    | Risk analysis, stress testing                  | `openrouter/z-ai/glm-5`         | Systematic analysis                              |
-| Finance      | Financial modeling                             | `openrouter/z-ai/glm-5`         | Precision required                               |
-| Legal        | Compliance, regulatory                         | `openrouter/moonshot/kimi-k2.6` | Strong analytical reasoning                      |
-| Marketing    | Copywriting, SEO                               | `openrouter/qwen/qwen-3.6-plus` | Good prose, cost-effective                       |
-| Sales        | Pipeline management                            | `openrouter/qwen/qwen-3.6-plus` | Fast, efficient                                  |
-| HR           | People processes                               | `openrouter/qwen/qwen-3.6-plus` | Fast, efficient                                  |
+| Phase        | Cognitive Demand                               | Recommended Model                     | Rationale                                        |
+| ------------ | ---------------------------------------------- | ------------------------------------- | ------------------------------------------------ |
+| BA (Explore) | Research, analysis, requirements gathering     | `opencode/deepseek-v4-flash-free`     | Strong context understanding, good at synthesis  |
+| SAD (Design) | Architecture, API contracts, sequence diagrams | `opencode/deepseek-v4-flash-free`     | Strong reasoning for design decisions            |
+| DEV (Apply)  | Code generation, implementation                | `opencode/deepseek-v4-flash-free`     | Strong code generation, high max tokens          |
+| QA (Verify)  | Testing, validation, edge case analysis        | `opencode/deepseek-v4-flash-free`     | Strict mode, low temperature for reproducibility |
+| DOC          | Documentation, guides, markdown                | `opencode/deepseek-v4-flash-free`     | Good prose, cost-effective                       |
+| OPS          | CI/CD, infrastructure, deployments             | `opencode/deepseek-v4-flash-free`     | Precision required for infra changes             |
+| GOV          | Compliance, security, audit                    | `opencode/deepseek-v4-flash-free`     | Strong analytical reasoning                      |
+| Session      | Session management, state tracking             | `opencode/deepseek-v4-flash-free`     | Lightweight, fast response                       |
+| Premortem    | Risk analysis, stress testing                  | `opencode/deepseek-v4-flash-free`     | Systematic analysis                              |
+| Finance      | Financial modeling                             | `opencode/deepseek-v4-flash-free`     | Precision required                               |
+| Legal        | Compliance, regulatory                         | `opencode/deepseek-v4-flash-free`     | Strong analytical reasoning                      |
+| Marketing    | Copywriting, SEO                               | `opencode/deepseek-v4-flash-free`     | Good prose, cost-effective                       |
+| Sales        | Pipeline management                            | `opencode/deepseek-v4-flash-free`     | Fast, efficient                                  |
+| HR           | People processes                               | `opencode/deepseek-v4-flash-free`     | Fast, efficient                                  |
 
 ## Configuration
 
 Model routing is configured in:
 
-1. **`config/orchestrator.json#agent.<name>.model`** — per-agent model assignment (primary)
+1. **`config/model-router.json#agentBindings.<NAME>.model`** — per-agent model assignment (primary)
 2. **`opencode.json#agent.<name>.model`** — OpenCode-specific overrides
-3. **`config/model-routing.json`** — routing rules (if exists)
+3. **`.opencode/agents/*.md`** — subagent definitions (front-matter `model:` takes precedence)
+4. **`config/model-fallback.json`** — fallback chains per agent
 
 ## Rules
 
 ### 1. Phase-Appropriate Model Selection (MUST)
 
-Each SDD phase MUST use the recommended model tier:
+All phases MUST use the native available model `opencode/deepseek-v4-flash-free` (provider
+`opencode`). If additional models become available, re-apply the tier mapping:
 
-- **BA/SAD/GOV/LEGAL**: `kimi-k2.6` (analytical/reasoning)
-- **DEV/QA/OPS/FINANCE/PREMORTEM**: `glm-5` (precision/code)
-- **DOC/MKT/SALES/HR/SESSION**: `qwen-3.6-plus` (cost-effective)
+- **BA/SAD/GOV/LEGAL**: strong reasoning tier (analytical/reasoning)
+- **DEV/QA/OPS/FINANCE/PREMORTEM**: precision/code tier
+- **DOC/MKT/SALES/HR/SESSION**: cost-effective tier
 
 ### 2. Temperature by Phase (MUST)
 
@@ -67,6 +70,6 @@ When deviating from the recommended model:
 
 If the primary model is unavailable:
 
-1. `glm-5` ← `kimi-k2.6` ← `qwen-3.6-plus` (descending capability)
-2. If all remote models fail → `ollama` local fallback (if configured)
-3. If all fail → session agent logs the error and stops
+1. `opencode/deepseek-v4-flash-free` ← `ollama/qwen2.5` ← `dify/qwen-plus` (local fallbacks)
+2. If all models fail → session agent logs the error and stops
+3. Agent type fallback: `general` first, then `explore` (integrated types, always available)

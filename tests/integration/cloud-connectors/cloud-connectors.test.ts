@@ -55,33 +55,37 @@ describe('AWS Connector', () => {
   });
 
   describe('Skill Invocation', () => {
-    it('should invoke Lambda function with skill payload', async () => {
-      const skillPayload = {
-        skillId: 'test-skill-001',
-        input: {
-          query: 'Extract key information from text',
-          text: 'Sample document content',
-        },
-      };
+    it(
+      'should invoke Lambda function with skill payload',
+      async () => {
+        const skillPayload = {
+          skillId: 'test-skill-001',
+          input: {
+            query: 'Extract key information from text',
+            text: 'Sample document content',
+          },
+        };
 
-      try {
-        const response = await lambdaClient.invoke({
-          FunctionName: testFunctionName,
-          InvocationType: 'RequestResponse',
-          Payload: JSON.stringify(skillPayload),
-        });
+        try {
+          const response = await lambdaClient.invoke({
+            FunctionName: testFunctionName,
+            InvocationType: 'RequestResponse',
+            Payload: JSON.stringify(skillPayload),
+          });
 
-        expect(response.StatusCode).toBe(200);
-        expect(response.Payload).toBeDefined();
+          expect(response.StatusCode).toBe(200);
+          expect(response.Payload).toBeDefined();
 
-        const result = JSON.parse(response.Payload as string);
-        expect(result.success).toBe(true);
-        expect(result.output).toBeDefined();
-      } catch (error) {
-        // Expected to fail without real AWS setup, but structure is correct
-        expect((error as Error).message).toBeDefined();
-      }
-    }, testTimeout);
+          const result = JSON.parse(response.Payload as string);
+          expect(result.success).toBe(true);
+          expect(result.output).toBeDefined();
+        } catch (error) {
+          // Expected to fail without real AWS setup, but structure is correct
+          expect((error as Error).message).toBeDefined();
+        }
+      },
+      testTimeout,
+    );
 
     it('should handle Lambda execution errors', async () => {
       const badPayload = {
@@ -184,7 +188,7 @@ describe('AWS Connector', () => {
           } catch (error) {
             if (i < maxRetries - 1) {
               const delay = Math.pow(2, i) * 1000; // 1s, 2s, 4s
-              await new Promise(resolve => setTimeout(resolve, delay));
+              await new Promise((resolve) => setTimeout(resolve, delay));
             }
           }
         }
@@ -220,7 +224,9 @@ describe('AWS Connector', () => {
  */
 describe('Azure Connector', () => {
   let azureClient: AzureFunctions.FunctionClient;
-  const testFunctionUrl = process.env.AZURE_FUNCTION_URL || 'https://gentle-vanguard.azurewebsites.net/api/skill-executor';
+  const testFunctionUrl =
+    process.env.AZURE_FUNCTION_URL ||
+    'https://gentle-vanguard.azurewebsites.net/api/skill-executor';
   const testTimeout = 30000;
 
   beforeAll(async () => {
@@ -237,7 +243,7 @@ describe('Azure Connector', () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${await credential.getToken('https://management.azure.com')}`,
+            Authorization: `Bearer ${await credential.getToken('https://management.azure.com')}`,
           },
           body: JSON.stringify(payload),
         });
@@ -257,7 +263,7 @@ describe('Azure Connector', () => {
         const badCredential = new AZ.ClientSecretCredential(
           'invalid-tenant',
           'invalid-client',
-          'invalid-secret'
+          'invalid-secret',
         );
         await badCredential.getToken('https://management.azure.com');
         expect.fail('Should have thrown auth error');
@@ -268,23 +274,27 @@ describe('Azure Connector', () => {
   });
 
   describe('Function Invocation', () => {
-    it('should invoke Azure Function with skill payload', async () => {
-      const skillPayload = {
-        skillId: 'test-skill-001',
-        input: {
-          query: 'Extract key information',
-          text: 'Sample content',
-        },
-      };
+    it(
+      'should invoke Azure Function with skill payload',
+      async () => {
+        const skillPayload = {
+          skillId: 'test-skill-001',
+          input: {
+            query: 'Extract key information',
+            text: 'Sample content',
+          },
+        };
 
-      try {
-        const result = await azureClient.invoke(skillPayload);
-        expect(result).toBeDefined();
-      } catch (error) {
-        // Expected for test environment
-        expect((error as Error).message).toBeDefined();
-      }
-    }, testTimeout);
+        try {
+          const result = await azureClient.invoke(skillPayload);
+          expect(result).toBeDefined();
+        } catch (error) {
+          // Expected for test environment
+          expect((error as Error).message).toBeDefined();
+        }
+      },
+      testTimeout,
+    );
 
     it('should handle function execution errors', async () => {
       try {
@@ -335,7 +345,7 @@ describe('Hybrid Cloud Executor', () => {
     it('should route to cheaper provider', async () => {
       const providers = {
         AWS: { cost: 0.0000167, latency: 45 }, // $0.00002/invocation
-        Azure: { cost: 0.000020, latency: 60 }, // $0.00002/invocation
+        Azure: { cost: 0.00002, latency: 60 }, // $0.00002/invocation
       };
 
       // AWS is cheaper in this case
@@ -351,7 +361,9 @@ describe('Hybrid Cloud Executor', () => {
         Azure: { latency: 60, reliability: 0.99 },
       };
 
-      const selected = Object.entries(providers).sort(([, a], [, b]) => a.latency - b.latency)[0][0];
+      const selected = Object.entries(providers).sort(
+        ([, a], [, b]) => a.latency - b.latency,
+      )[0][0];
       expect(selected).toBe('AWS');
     });
   });
@@ -364,7 +376,9 @@ describe('Hybrid Cloud Executor', () => {
       };
 
       // Azure has lower relative load
-      const selected = Object.entries(providers).sort(([, a], [, b]) => (a.load / a.capacity) - (b.load / b.capacity))[0][0];
+      const selected = Object.entries(providers).sort(
+        ([, a], [, b]) => a.load / a.capacity - b.load / b.capacity,
+      )[0][0];
       expect(selected).toBe('Azure');
     });
   });

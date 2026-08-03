@@ -1,0 +1,52 @@
+/* Gentle-Vanguard Design Tokens */
+/* Auto-generated from config/brand.json — DO NOT EDIT DIRECTLY */
+/* Generated: 2026-08-01T17:43:53.286Z */
+
+:root {
+  --gv-color-primary: #00BFFF;
+  --gv-color-primary-light: #4DCFFF;
+  --gv-color-primary-dark: #0055BB;
+  --gv-color-accent: #A855F7;
+  --gv-color-accent-teal: #06B6D4;
+  --gv-color-background: #0D1117;
+  --gv-color-surface: #1A2035;
+  --gv-color-surface-icon: #2A2D3A;
+  --gv-color-circuit: #1A3050;
+  --gv-color-text-primary: #FFFFFF;
+  --gv-color-text-brand: #00BFFF;
+  --gv-color-text-muted: #6B7280;
+  --gv-color-border: #1E3A5F;
+  --gv-color-success: #22C55E;
+  --gv-color-warning: #F59E0B;
+  --gv-color-error: #EF4444;
+  --gv-color-selected: #4DCFFF;
+
+  /* CLI Theme */
+  --gv-cli-banner-color: #00BFFF;
+  --gv-cli-subtitle-color: #6B7280;
+  --gv-cli-success-color: #22C55E;
+  --gv-cli-error-color: #EF4444;
+  --gv-cli-warning-color: #F59E0B;
+  --gv-cli-selected-color: #4DCFFF;
+  --gv-cli-override-color: #F59E0B;
+  --gv-cli-muted-color: #6B7280;
+
+  /* Typography */
+  --gv-font-display: Orbitron, Rajdhani, 'Share Tech Mono', monospace;
+  --gv-font-body: 'Inter', 'Segoe UI', sans-serif;
+  --gv-font-mono: 'JetBrains Mono', 'Cascadia Code', monospace;
+  --gv-font-weight-display: 700;
+  --gv-font-weight-heading: 600;
+  --gv-font-weight-body: 400;
+  --gv-letter-spacing-display: 0.1em;
+  --gv-letter-spacing-heading: 0.05em;
+
+  /* Gradients */
+  --gv-gradient-logo-primary: linear-gradient(to bottom, #4DCFFF, #0055BB);
+  --gv-gradient-logo-icon: linear-gradient(135deg, #A855F7, #06B6D4);
+  --gv-gradient-github-header: linear-gradient(135deg, #A855F7, #06B6D4);
+
+  /* Brand */
+  --gv-brand-name: "GENTLE-VANGUARD";
+  --gv-brand-tagline: "ADVANCED TECHNOLOGY SOLUTIONS";
+}

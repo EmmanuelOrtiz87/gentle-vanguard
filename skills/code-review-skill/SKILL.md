@@ -105,10 +105,6 @@ If no specific file or URL is provided, ask what to review.
 | --- | ------ | ------ | ------------- | ----------- |
 | 1   | [file] | [line] | [description] | Performance |
 
-### What Looks Good
-
-- [Positive observations]
-
 ### Verdict
 
 [Approve / Request Changes / Needs Discussion]
@@ -116,22 +112,10 @@ If no specific file or URL is provided, ask what to review.
 
 ## If Connectors Available
 
-If **~~source control** is connected:
-
-- Pull the PR diff automatically from the URL
-- Check CI status and test results
-
-If **~~project tracker** is connected:
-
-- Link findings to related tickets
-- Verify the PR addresses the stated requirements
-
-If **~~knowledge base** is connected:
-
-- Check changes against team coding standards and style guides
+When **~~source control** is connected: pull PR diff, check CI, link findings.
 
 ## Tips
 
-1. **Provide context** — "This is a hot path" or "This handles PII" helps me focus.
+1. **Provide context** — "Hot path" or "handles PII" helps me focus.
 2. **Specify concerns** — "Focus on security" narrows the review.
-3. **Include tests** — I'll check test coverage and quality too.
+3. **Include tests** — I'll check coverage and quality too.

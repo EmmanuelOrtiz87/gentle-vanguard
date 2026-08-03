@@ -6,14 +6,14 @@ test.describe('API Tests', () => {
       get: async (endpoint: string) => request.get(endpoint),
       post: async (endpoint: string, data: any) => request.post(endpoint, { data }),
       put: async (endpoint: string, data: any) => request.put(endpoint, { data }),
-      delete: async (endpoint: string) => request.delete(endpoint)
+      delete: async (endpoint: string) => request.delete(endpoint),
     };
   };
 
   test('GET /api/users should return users list', async ({ request }) => {
     const response = await request.get('/api/users');
     expect(response.ok()).toBeTruthy();
-    
+
     const users = await response.json();
     expect(Array.isArray(users)).toBeTruthy();
   });
@@ -22,12 +22,12 @@ test.describe('API Tests', () => {
     const newUser = {
       name: 'Test User',
       email: `test${Date.now()}@example.com`,
-      password: 'password123'
+      password: 'password123',
     };
-    
+
     const response = await request.post('/api/users', { data: newUser });
     expect(response.status()).toBe(201);
-    
+
     const user = await response.json();
     expect(user).toHaveProperty('id');
     expect(user.email).toBe(newUser.email);
@@ -36,7 +36,7 @@ test.describe('API Tests', () => {
   test('GET /api/users/:id should return single user', async ({ request }) => {
     const response = await request.get('/api/users/1');
     expect(response.ok()).toBeTruthy();
-    
+
     const user = await response.json();
     expect(user).toHaveProperty('id');
   });
@@ -45,7 +45,7 @@ test.describe('API Tests', () => {
     const updateData = { name: 'Updated Name' };
     const response = await request.put('/api/users/1', { data: updateData });
     expect(response.ok()).toBeTruthy();
-    
+
     const user = await response.json();
     expect(user.name).toBe(updateData.name);
   });

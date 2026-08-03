@@ -1,6 +1,6 @@
 {
   "codegraph": {
-    "LastFailure": null,
-    "ConsecutiveFailures": 0
+    "ConsecutiveFailures": 0,
+    "LastFailure": null
   }
 }

@@ -3,395 +3,218 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-3.3.4-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
-  <img src="https://img.shields.io/badge/Adaptive_System-%E2%9C%93-22C55E?style=flat-square&labelColor=0D1117" alt="Adaptive System">
-  <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
+  <img src="https://img.shields.io/badge/Version-3.5.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Status-Public%20Release-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
-  <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
-  <img src="https://img.shields.io/badge/Agents-18-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
-  <img src="https://img.shields.io/badge/Skills-386-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
-  <img src="https://img.shields.io/badge/Validate_Stack-ALL_PASS-22C55E?style=flat-square&labelColor=0D1117" alt="Validate Stack">
-  <img src="https://img.shields.io/badge/Session_Score-81/100-00BFFF?style=flat-square&labelColor=0D1117" alt="Session Score">
-  <img src="https://img.shields.io/badge/CI/CD_Workflows-12-4DCFFF?style=flat-square&labelColor=0D1117" alt="CI/CD">
-  <img src="https://img.shields.io/badge/Docker_Stack-%E2%9C%93-22C55E?style=flat-square&labelColor=0D1117" alt="Docker">
-  <img src="https://img.shields.io/badge/Logging-JSONL-FFAA00?style=flat-square&labelColor=0D1117" alt="Logging">
+  <img src="https://img.shields.io/badge/TypeScript-7+-A855F7?style=flat-square&labelColor=0D1117" alt="TypeScript">
+  <img src="https://img.shields.io/badge/TypeScript-100%25-3178C6?style=flat-square&labelColor=0D1117" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Tests-19%2F19-22C55E?style=flat-square&labelColor=0D1117" alt="Tests">
+  <img src="https://img.shields.io/badge/Health-82%2F82-22C55E?style=flat-square&labelColor=0D1117" alt="Health">
+  <img src="https://img.shields.io/badge/Dashboard_Ready-%E2%9C%93-22C55E?style=flat-square&labelColor=0D1117" alt="Dashboard Ready">
 </p>
 
 <p align="center">
-  <a href="docs/AGENTS.md">Agent Bootstrap</a> &nbsp;·&nbsp;
-  <a href="docs/AGENTS.md#mandatory-startup-sequence">Startup</a> &nbsp;·&nbsp;
-  <a href="docs/QUICK-COMMANDS.md">Quick Commands</a> &nbsp;·&nbsp;
-  <a href="rules/DELEGATION-RULES.md">Delegation</a> &nbsp;·&nbsp;
-  <a href="rules/NORMATIVES.md">Normatives</a> &nbsp;·&nbsp;
+  <a href="docs/agents/AGENTS.md">Agent Bootstrap</a> &nbsp;·&nbsp;
   <a href="CHANGELOG.md">Changelog</a> &nbsp;·&nbsp;
-  <a href="docs/diagrams/">Diagrams</a> &nbsp;·&nbsp;
-  <a href="reports/dashboard.html">Dashboard</a>
+  <a href="rules/NORMATIVES.md">Normatives</a> &nbsp;·&nbsp;
+  <a href="docs/operations/procedures/QUICK-COMMANDS.md">Quick Commands</a> &nbsp;·&nbsp;
+  <a href="rules/NEXUS-NORMATIVA.md">Nexus DB</a>
 </p>
 
 <p align="center">
-  <strong>AI-powered development orchestrator · 18 agents · 386 skills · 10 tool-compatible</strong><br>
-  <em>Tool-agnostic · SDD Lifecycle · Hashline · Adaptive Feedback Loop · Engram Memory · Proactive Delivery</em>
+  <strong>AI-powered development orchestrator — zero-dependency, self-healing, fully autonomous</strong><br>
+  <em>SDD Lifecycle · Engram Memory · Adaptive Feedback · 100 Pipeline Steps · 82 Health Checks</em>
 </p>
-
-> _"Building the definitive bridge between high-end software engineering and corporate strategy."_ —
-> [Read the Manifesto](docs/MANIFESTO.md)
-
----
-
-## 🎯 What is Gentle-Vanguard?
-
-A full **AI orchestration layer** that gives structure, memory, and governance to AI-assisted
-development. Works across any coding tool — OpenCode, Claude Code, Cline, Cursor, Windsurf, Codex,
-GitHub Copilot, Continue.dev.
-
----
-
-## 🏛️ Stack Architecture
-
-```mermaid
-flowchart TB
-  classDef layer fill:#1a2035,stroke:#a855f7,color:#e0e0e0,stroke-width:2px
-  classDef agent fill:#1a2035,stroke:#00bfff,color:#e0e0e0
-  classDef cmd fill:#1a2035,stroke:#22c55e,color:#e0e0e0
-  classDef skill fill:#1a2035,stroke:#f7df1e,color:#e0e0e0
-  classDef mem fill:#1a2035,stroke:#ffaa00,color:#e0e0e0
-  classDef adaptive fill:#1a2035,stroke:#ef4444,color:#e0e0e0,stroke-dasharray: 5 5
-
-  subgraph L5["Layer 5: AGENTS — 18 Specialized Agents"]
-    A1[BA / SAD / DEV / QA]
-    A2[OPS / GOV / DOC / SEC]
-    A3[SDD / EXPLORE / PREMORTEM]
-  end
-  subgraph L4["Layer 4: COMMANDS"]
-    C1[pre-process-input.ps1]
-    C2[gv.ps1 / detect-tool.ps1]
-    C3[hashline.ps1 / session-start.ps1]
-  end
-  subgraph L3["Layer 3: MCP"]
-    M1[skill-server.ts]
-    M2[mcp-bridge.ps1]
-    M3[model-router.ts]
-  end
-  subgraph L2["Layer 2: SKILLS — 386 Skills"]
-    S1[Angular / React / Next.js]
-    S2[Go / Python / TypeScript / Document Analysis]
-    S3[Docker / K8s / Playwright]
-    S4[Security / API / Mobile]
-  end
-  subgraph L1["Layer 1: MEMORY"]
-    R1[(Engram Persistent Memory)]
-    R2[Hot / Warm / Cold Tiers]
-  end
-  subgraph ADAPTIVE["🔄 Adaptive Feedback Loop"]
-    F1[correction-capture.ps1]
-    F2[session-scoring.ps1 — 81/100]
-    F3[pattern-detector.ps1 — 88 patterns]
-    F4[auto-norm-learner.ps1 — 144 norms]
-    F5[auto-norm-enforcer.ps1]
-  end
-
-  L5 --> L4 --> L3 --> L2 --> L1
-  ADAPTIVE -.-> L5
-  ADAPTIVE -.-> L4
-```
-
----
-
-## 🧩 Component Diagram
-
-```mermaid
-flowchart LR
-  classDef script fill:#1a2035,stroke:#00bfff,color:#e0e0e0
-  classDef file fill:#1a2035,stroke:#22c55e,color:#e0e0e0
-  classDef metric fill:#1a2035,stroke:#ffaa00,color:#e0e0e0
-
-  UI[("👤 User Input")] --> PIP[pre-process-input.ps1]:::script
-  PIP --> CC[correction-capture.ps1]:::script
-  PIP --> PD[pattern-detector.ps1]:::script
-
-  CC -->|"3 types: correction/refinement/repetition"| SS[session-scoring.ps1]:::script
-  CC -->|"high severity"| ANL[auto-norm-learner.ps1]:::script
-
-  PD --> SS
-  SS -->|"81/100 quality"| DASH[📊 Dashboard]:::metric
-
-  ANL --> NORMS[📄 LEARNED-NORMS.md — 144 norms]:::file
-  ANL --> ANE[auto-norm-enforcer.ps1]:::script
-
-  ANE -->|"validates"| DOCS[📄 docs/ rules/ structure]:::file
-  ANE -->|"✅ ALL PASS"| UI
-
-  SS -->|"proactive hits"| UI
-```
-
----
-
-## 🔄 Sequence Diagram — User Flow
-
-```mermaid
-sequenceDiagram
-  participant U as 👤 User
-  participant PIP as pre-process-input
-  participant CC as correction-capture
-  participant PD as pattern-detector
-  participant SS as session-scoring
-  participant ANL as auto-norm-learner
-  participant AG as Agent
-
-  U->>PIP: Types message
-  PIP->>CC: Detect corrections in input
-  PIP->>PD: Match patterns
-  CC-->>SS: Correction type + severity
-  PD-->>SS: Pattern matches (88 tracked)
-  SS-->>U: 📊 Score: 81/100
-  alt High severity correction
-    CC->>ANL: Learn new norm
-    ANL-->>U: 📄 Norm learned (144 total)
-  end
-  PIP->>AG: Route to specialist agent
-  AG-->>U: 🎯 Proactive response
-```
-
----
-
-## 🚀 Core Capabilities
-
-| Capability                   | Description                                                                                                               |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| **📄 Document Analysis**     | Extrae texto de PDF/DOCX/XLSX/PPTX, detecta tecnologias, especialistas, dependencias, estima tiempos+costos USD           |
-| **🤖 18 Specialized Agents** | Each with narrow role, model profile, enforcement rules                                                                   |
-| **📚 386 On-Demand Skills**  | Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s, Playwright, Security, API Design, Document Analysis |
-| **💾 Engram Memory**         | Persistent memory — decisions, bugs, and patterns across sessions with hot/warm/cold tiers                                |
-| **💰 Cost-Aware Router**     | Fast/cheap, strong-reasoning, or strong-coding profiles per agent                                                         |
-| **📋 SDD Lifecycle**         | BA explore → SAD design → DEV implement → QA verify                                                                       |
-| **🛡️ Governance**            | 7D validation, judgment-day adversarial review, pre-commit hooks, 34 CI/CD workflows                                      |
-| **📊 Session Management**    | 10-phase autostart, orphan cleanup, token budget tracking                                                                 |
-| **🔒 Proactive Security**    | AES-256 encryption, TruffleHog scanning, Gitleaks integration                                                             |
-| **🎯 Auto-Delegation**       | ML-based routing with 80%+ direct, 60%+ confirmation threshold                                                            |
-| **🧪 Fine-Tuning**           | LoRA adapters for BA and DEV agents                                                                                       |
-| **🔄 Adaptive Profiles**     | Auto-detect tool and adjust config per tool capabilities                                                                  |
-
----
-
-## 🔄 Adaptive Feedback Loop
-
-New in **v3.3.1** — a self-improving system that learns from every interaction:
-
-### Fase 1: auto-norm-learner
-
-Detects high-severity corrections and **automatically extracts norms**. Uses ForceBaseline to
-prevent duplicate norms. Currently maintains **144 learned norms** in
-`rules/adaptive/LEARNED-NORMS.md`.
-
-- `scripts/adaptive/auto-norm-learner.ps1`
-- `rules/adaptive/LEARNED-NORMS.md` — 144 entries
-- Trigger: high severity correction detected
-
-### Fase 2: session-scoring
-
-Scores each session on quality, correction frequency, and proactive hit rate. Runs on session close.
-
-- **Current score: 81/100**
-- Metrics per type: corrections, refinements, repetitions
-- Tracks proactive suggestion accuracy
-- `scripts/adaptive/session-scoring.ps1`
-
-### Fase 3: correction-capture
-
-Captures corrections, refinements, and repetitions from user input in real-time. Classifies each
-into one of 3 types:
-
-| Type          | Description                    | Hot Trigger       |
-| ------------- | ------------------------------ | ----------------- |
-| 🔧 Correction | Fixes an error in agent output | Auto-learns norm  |
-| ✨ Refinement | Improves quality without error | Session scoring   |
-| 🔁 Repetition | User re-explains same concept  | Pattern detection |
-
-- `scripts/adaptive/correction-capture.ps1`
-
-### Fase 4: pattern-detector + auto-norm-enforcer
-
-- **pattern-detector**: 88 patterns tracked, identifies recurring issues across sessions
-- **auto-norm-enforcer**: Validates docs and rules structure against learned norms on session
-  start/close — **✅ ALL PASS**
-
----
-
-## 🐛 Bugs Fixed (v3.3.x Cycle)
-
-| #   | Bug                                    | Root Cause                                                     | Fix                                                      |
-| --- | -------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------- |
-| 1   | `$Input` auto variable conflict        | PowerShell `$Input` automatic variable shadowed parameter      | Renamed to `$InputText`                                  |
-| 2   | `$($Correction.Severity})` extra brace | Mismatched closing brace in string interpolation               | Added missing `(` → `$($Correction.Severity)`            |
-| 3   | Proactive suggestions invisible        | Generated but never displayed to user                          | Added output pipeline to user prompt                     |
-| 4   | auto-norm-enforcer parser broken       | Searched nonexistent section `[NORM]` instead of `##` headings | Fixed regex to match markdown headings                   |
-| 5   | token-metrics-store corrupted DB crash | Null metric types crashed JSON parsing                         | Added `$null` guards and fallback default values         |
-| 6   | engram.db hash mismatch                | Power outage during write caused checksum failure              | Added repair routine with `--repair` on checksum failure |
-
----
-
-## 🧠 Engram Persistent Memory
-
-Engram provides structured long-term memory across coding sessions:
-
-- **Hot tier**: Current session context
-- **Warm tier**: Recent sessions (24h, 90% recall)
-- **Cold tier**: Historical data (7d+, 70% recall)
-- **Manual saves**: Architecture decisions, bug fixes, patterns
-- **Integrity**: Checksum-verified with automatic repair
-
-```powershell
-# Query past learnings
-mem_search "architecture decisions"
-
-# Save important context
-mem_save --title "Auth pattern" --type architecture
-```
-
----
-
-## ✅ Validation & Health
-
-| Check                                                                    | Status        |
-| ------------------------------------------------------------------------ | ------------- |
-| 🔄 validate-stack (pre-process-input, session pipeline, hashline, hooks) | ✅ ALL PASS   |
-| 🧠 engram integrity (hash, repair, reindex)                              | ✅ ALL PASS   |
-| 📄 auto-norm-enforcer (144 norms validated)                              | ✅ ALL PASS   |
-| 📄 norms-registry.json (144 norms, versioned schema)                     | ✅ SYNCED     |
-| 📊 session-scoring operational                                           | ✅ 81/100     |
-| 🔍 pattern-detector (88 patterns)                                        | ✅ ACTIVE     |
-| 🛡️ CI/CD (12 consolidated workflows, reusable)                           | ✅ PASSING    |
-| 🐳 Docker Compose (5 services, full stack)                               | ✅ CONFIGURED |
-| 📝 Structured logging (JSONL, auto-rotate)                               | ✅ ACTIVE     |
-| 🧩 Adapters consolidated (3→1 TypeScript)                                | ✅ COMPLETED  |
-| 📄 Document Analysis Skill (sidecar Python + conectores Jira/Confluence) | ✅ ACTIVE     |
-
----
-
-## 📦 Latest Release: v3.3.2
-
-**Highlights:**
-
-- 🌐 **Dashboard i18n** — 3 idiomas (en/es/pt-BR), 14 métricas localizadas
-- 🚨 **Alertas automáticos** — 8 reglas en dashboard-alerts.json
-- 🛡️ **Maintenance Watchtower** — 60 checks en 11 componentes, 6 modos
-- 📊 **Info Popups** — métricas con descripción animada (fade-in + scale)
-- 🔧 **Dashboard server refactor** — WebSocket + REST API resiliente
-- 🧩 **Dashboard utilities** — scripts de ciclo de vida con puertos dinámicos
-- 🐛 **Pre-process pipeline** — trace system, debug logging, health integration
-- 📄 **SECURITY.md** + .clinerules + .cursorrules — tool configs oficiales
-- 📚 **Nuevas normativas**: NORMATIVA-PNPM-SECURITY, NORMATIVAS-PERFORMANCE
-- 🗂️ **norms-registry.json** — 144 normas con schema versionado
 
 ---
 
 ## ⚡ Quick Start
 
-```powershell
-# Clone
+```TypeScript
+# Clone anywhere — no dependencies required beyond TypeScript 7+
 git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
 cd gentle-vanguard
 
-# Run the bootstrap
-./gentle-vanguard.ps1 -Dashboard
+# Auto-install (prerequisites, hooks, dashboard build)
+.\scripts\setup-complete.ps1
 
-# Or use session start pipeline
-pwsh -NoProfile -File scripts/utilities/session-start-optimized.ps1
+# Run the dashboard (WS server + Vite + auto-open browser)
+npx tsx src/dashboard-start.ts
+```
+
+Works on Windows, macOS, and Linux.
+
+---
+
+## 🛡️ What is Gentle-Vanguard?
+
+An **AI orchestration layer** that gives structure, memory, and governance to AI-assisted development. Tool-agnostic across OpenCode, Claude Code, Cline, Cursor, Windsurf, Codex, Copilot, Continue.dev — with **zero cloud services, zero API keys, zero external dependencies**.
+
+The stack runs a **100-step autonomous pipeline** at session start, monitors **82 health checks** across 13 components, persists state in a **SQLite operational database** (15 tables, 10 DAOs), and powers a **real-time observability dashboard** with WebSocket push.
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart TB
+  classDef layer fill:#1a2035,stroke:#a855f7,color:#e0e0e0,stroke-width:2px
+  classDef agent fill:#1a2035,stroke:#00bfff,color:#e0e0e0
+  classDef dash fill:#1a2035,stroke:#22c55e,color:#e0e0e0
+
+  subgraph L6["Layer 6: EXECUTIVE — Autonomous Operations"]
+    A1[Auto-Apply Safe · Circuit Breaker · Auto-Escalation · Session Scoring]
+    A2[Dynamic Dependency Graph · AB Testing · Predictive Governor · Convergence Monitor]
+  end
+  subgraph L5["Layer 5: AGENTS — 18 Specialized Roles"]
+    B1[BA · SAD · DEV · QA · OPS · GOV · DOC · SEC · PREMORTEM · SDD-EXPLORE]
+    B2[SDD-DESIGN · SDD-APPLY · SDD-VERIFY · SESSION · OPS · PREMORTEM · GOV · DOC]
+  end
+  subgraph L4["Layer 4: DASHBOARD — Real-time Observability"]
+    D1[7-section UI · WebSocket push / 5s · HTTP REST API]
+    D2[i18n en/es/pt-BR · 14 metrics · Tracing Waterfall · Alerts · Feedback]
+    D3[Nexus DB · 10 DAOs · 15 tables · WAL mode · Auto-prune]
+  end
+  subgraph L3["Layer 3: MCP — Model Context Protocol"]
+    M1[Gateway · Bridge · Registry · Multi-language SDK]
+    M2[8 pre-built templates · ts/js/py/go/rs]
+  end
+  subgraph L2["Layer 2: MEMORY & KNOWLEDGE"]
+    K1[Engram (hot/warm/cold) · CodeGraph (1410 nodes) · Event Store]
+    K2[Checkpoints · Snapshots · Knowledge Base · Findings Ledger]
+  end
+  subgraph L1["Layer 1: ORCHESTRATION"]
+    O1[100-step pipeline · 82 health checks · Auto-healing watchdog]
+    O2[SDD lifecycle · Audit · Tracing · Cloud connectors · Security orchestrator]
+  end
+
+  L6 --> L5 --> L4 --> L3 --> L2 --> L1
 ```
 
 ---
 
-## 📖 Documentation
+## ✨ Features
 
-| Resource         | Path                             |
-| ---------------- | -------------------------------- |
-| Agent Bootstrap  | `docs/AGENTS.md`                 |
-| Quick Commands   | `docs/QUICK-COMMANDS.md`         |
-| Delegation Rules | `rules/DELEGATION-RULES.md`      |
-| Normatives Index | `rules/NORMATIVES.md`            |
-| Architecture     | `docs/reference/ARCHITECTURE.md` |
-| Getting Started  | `docs/getting-started/README.md` |
-| Changelog        | `CHANGELOG.md`                   |
-| Roadmap          | `docs/ROADMAP.md`                |
-| Stack Status     | `docs/STACK-STATUS-REPORT.md`    |
-| Adapters         | `adapters/index.ts`              |
-| Research         | `research/rlhf-dataset-search/`  |
-
-### 📐 Diagrams
-
-| Diagram           | File                                       |
-| ----------------- | ------------------------------------------ |
-| Call Graph        | `docs/diagrams/call-graph.mmd`             |
-| Data Flow         | `docs/diagrams/data-flow.mmd`              |
-| Module Dependency | `docs/diagrams/module-dependency.mmd`      |
-| Document Analysis | `skills/document-analysis-skill/SKILL.md`  |
-| Document Pipeline | `docs/diagrams/document-analysis-flow.mmd` |
+| Capability | Description |
+|---|---|
+| **Auto-Apply Safe** | Executive engine — applies safe optimizations (budget, deprecations, norms) with rollback protection |
+| **Circuit Breaker API** | 5-failure → OPEN, 2-success → HALF_OPEN → CLOSED, with automatic fallback |
+| **Auto-Escalation** | Escalates unresolved issues through configured channels with SLA tracking |
+| **Dynamic Dependency Graph** | Real-time dependency resolution and conflict detection across the stack |
+| **AB Testing Framework** | Session-scoped experiment framework with statistical significance testing |
+| **Session Scoring** | Auto-compare quality scores across sessions (delegations, corrections, proactive hits) |
+| **10 DAOs** | Database Repository pattern — Cache, Contract, ErrorMemory, Event, Housekeeping, Metrics, Session, Skill, Trace, MigrationRunner |
+| **Cache LRU + WAL** | SHA256 response cache with TTL + automatic WAL checkpoint when >5MB |
+| **Parallel Watchtower** | 82 health checks across 13 components — runs in parallel with auto-heal |
+| **Session Consolidation** | Context compaction engine — token-budget-aware, auto-summarize and wipe |
+| **Engram Memory** | Persistent memory across sessions with hot/warm/cold tiers and auto-repair |
+| **Dashboard UI** | Real-time: 7-section view, tracing waterfall, alerts, feedback, i18n (en/es/pt-BR) |
+| **Nexus Database** | SQLite operational DB (WAL mode, FK ON) — 15 tables, auto-migrate, auto-prune |
+| **100 Pipeline Steps** | Session autostart pipeline with lazy/blocking phases, on-failure=continue |
+| **18 Specialized Agents** | BA, SAD, DEV, QA, OPS, GOV, DOC, SEC — each with model routing |
+| **SDD Lifecycle** | Explore → Design → Implement → Verify — full spec-driven development |
+| **Adaptive Feedback** | Auto-learn norms from corrections, session scoring, pattern detection |
+| **Governance** | 60+ normatives, pre-commit hooks, CI/CD, audit pipeline, safety layer |
+| **Predictive Governor** | Anticipate load, prewarm resources, adjust token budgets proactively |
+| **Zero-dependency** | Works with just TypeScript 7+ — no cloud, no API keys, no external services |
 
 ---
 
-## 📁 Project Structure
+## 📊 Key Metrics
+
+| Metric | Value |
+|---|---|
+| Test Suites | **19/19 passed** |
+| Health Checks | **82/82 PASS** — 13 components |
+| Pipeline Steps | **100** (blocking + lazy) |
+| DAOs / Tables | **10 DAOs / 15 tables** |
+| Autonomy | **100%** — zero manual intervention required |
+| CodeGraph | **1,410 nodes / 1,763 edges / 133 files** |
+| Dashboard APIs | **25+ REST endpoints + WebSocket** |
+| i18n Locales | **3** — en, es, pt-BR |
+| Uptime Recovery | **Auto-heal watchdog** — 10 restart attempts |
+| DB Size | **~0.27 MB** (operational + historical) |
+
+---
+
+## 📈 Dashboard
+
+Real-time LLM observability dashboard — React + TypeScript + Vite + WebSocket:
 
 ```
-gentle-vanguard/
-├── apps/                   # Applications (web-dashboard, API)
-├── build/                  # Build artifacts
-├── config/                 # Centralized configuration
-├── docs/                   # Documentation
-│   ├── diagrams/           # Mermaid architecture diagrams
-│   ├── marketing/          # Social media & launch content
-│   ├── reference/          # Technical reference
-│   └── getting-started/    # Onboarding guides
-├── hooks/                  # Custom hooks
-├── rules/                  # Normatives and standards (60+ rules)
-│   └── adaptive/           # Auto-learned norms (144) + norms-registry.json
-├── scripts/
-│   ├── adaptive/           # Adaptive feedback loop (5 scripts + sync-norms-registry)
-│   ├── common/             # Shared modules (Logger.psm1)
-│   ├── core/               # Core bootstrap
-│   ├── utilities/          # Utility scripts
-│   ├── security/           # Security tools
-│   └── monitoring/         # Monitoring and metrics
-├── adapters/               # Tool adapters (consolidated TypeScript: antigravity, codex, windsurf)
-├── research/               # RLHF dataset search scripts
-│   └── document-analysis-skill/ # Document Analysis: sidecar Python + conectores Jira/Confluence
-├── skills/                 # MCP skills (386)
-├── reports/                # Generated dashboards & reports
-├── docker-compose.yml      # Full stack (5 services)
-├── tests/                  # Unit + integration tests
+apps/web-dashboard/
+├── server/
+│   ├── websocket-server.ts    # WS push / 5s + 25+ REST endpoints
+│   ├── real-data.ts           # Real metrics from .session/ traces
+│   ├── database/
+│   │   ├── manager.ts         # DatabaseManager singleton (SQLite WAL)
+│   │   ├── metrics-writer.ts  # Time-series writer
+│   │   └── repositories/      # 10 DAOs (Cache, Contract, Error, Event, etc.)
+│   ├── mesh-api.ts            # Multi-repo mesh endpoints
+│   ├── knowledge-api.ts       # Unified knowledge query
+│   ├── mcp-gateway-api.ts     # MCP server management
+│   ├── global-health-api.ts   # /api/health (7 components)
+│   ├── marketplace-api.ts     # Skill marketplace
+│   └── shared-state-bridge.ts # Cross-component state sync
+└── src/components/
+    ├── Dashboard.tsx           # 7-section main view
+    ├── TracingDashboard.tsx    # Waterfall with feedback
+    ├── KnowledgePanel.tsx      # Unified search (events, traces, feedback, engram)
+    ├── MultiRepoView.tsx       # Cross-workspace MCP orchestration
+    ├── MCPServers.tsx          # MCP registry management
+    ├── TenantSelector.tsx      # Multi-tenant filter
+    ├── InfoPopup.tsx           # Animated metric info (fade-in + scale)
+    └── ...
 ```
 
----
-
-## 🛡️ Normatives & Standards
-
-Governed by [60+ normatives](rules/NORMATIVES.md):
-
-| Area              | Standard                                    |
-| ----------------- | ------------------------------------------- |
-| Architecture      | NORMATIVAS-ARCHITECTURE                     |
-| Code              | NORMATIVAS-CODIGO                           |
-| Configuration     | NORMATIVAS-CONFIG + CONFIG-SAFETY           |
-| Documentation     | NORMATIVAS-DOCS                             |
-| Document Analysis | SKILL.md en skills/document-analysis-skill/ |
-| Security          | AI-SAFETY, SOC2, GDPR                       |
-| DevOps            | NORMATIVAS-DEVOPS                           |
-| Performance       | NORMATIVAS-PERFORMANCE                      |
-| Error Handling    | NORMATIVAS-ERROR-HANDLING                   |
-| Enforcement       | NORMATIVAS-ENFORCEMENT                      |
-| Session           | NORMATIVAS-SESSION                          |
-
-Enforcement: pre-response hook (every turn) → pre-commit hooks (Lefthook) → CI/CD (12 reusable
-workflows) → adaptive enforcement (session start/close).
+**Start**: `npx tsx src/dashboard-start.ts`  
+**Stop**: `npx tsx src/dashboard-stop.ts`
 
 ---
 
-## 🌐 Social & Community
+## 📋 Quick Commands
 
-- **GitHub (Private)**:
-  [github.com/EmmanuelOrtiz87/gentle-vanguard](https://github.com/EmmanuelOrtiz87/gentle-vanguard)
-- **GitHub (Public)**:
-  [github.com/EmmanuelOrtiz87/gentle-vanguard-public](https://github.com/EmmanuelOrtiz87/gentle-vanguard-public)
-- **Social Launch**: [docs/marketing/SOCIAL-MEDIA-LAUNCH.md](docs/marketing/SOCIAL-MEDIA-LAUNCH.md)
+| Command | Description |
+|---|---|
+| `npm test` | Run all **19 test suites** |
+| `npx tsx src/session-autostart.ts` | Run the **100-step session pipeline** |
+| `npx tsx src/auto-apply-safe.ts --check` | Check safe optimizations pending |
+| `npx tsx src/auto-apply-safe.ts --apply` | Apply safe optimizations with rollback |
+| `npx tsx src/auto-apply-safe.ts --report` | Report optimization status |
+| `npm run watchtower` | Run **82 health checks** |
+| `npm run watchtower:health` | Health-check only mode |
+| `npm run db:health` | Nexus DB health (integrity, WAL, tables) |
+| `npm run db:init` | Init DB + run migrations (idempotent) |
+| `npm run db:backup` | Safe online backup |
+| `npm run db:prune` | Prune old data (events >30d, cache >7d) |
+| `cd apps/web-dashboard && npm run build` | Build dashboard for production |
+| `.\scripts\setup-complete.ps1` | Auto-install (prerequisites + hooks + build) |
+| `npm run graphify -- query "<question>"` | Knowledge graph semantic search |
+| `npm run graphify -- update .` | Update code graph snapshot |
+
+Full reference: [docs/operations/procedures/QUICK-COMMANDS.md](docs/operations/procedures/QUICK-COMMANDS.md)
+
+---
+
+## 📚 Documentation
+
+| Resource | Path |
+|---|---|
+| Agent Bootstrap | `docs/agents/AGENTS.md` |
+| Quick Commands | `docs/operations/procedures/QUICK-COMMANDS.md` |
+| Normatives Index | `rules/NORMATIVES.md` |
+| Nexus DB Normativa | `rules/NEXUS-NORMATIVA.md` |
+| Changelog | `CHANGELOG.md` |
+| Dashboard Skill | `.opencode/skills/dashboard/SKILL.md` |
+| Vanguards (Stack Rules) | `rules/` |
+
+---
+
+## 📦 Requirements
+
+- **TypeScript 7+** — the only hard requirement
+- **Node.js 18+** — optional, only for dashboard development
+- **Git** — optional, only for clone and hooks
 
 ---
 
@@ -402,5 +225,5 @@ MIT © 2026 Emmanuel Ortiz
 ---
 
 <p align="center">
-  <sub>Gentle-Vanguard v3.3.4 — Don't let your mellow hustle be faded.</sub>
+  <sub>Gentle-Vanguard v3.5.0 — Don't let your mellow hustle be faded.</sub>
 </p>

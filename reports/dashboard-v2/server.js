@@ -9,7 +9,7 @@ const ROOT = path.resolve(__dirname, '..', '..');
 const METRICS_DIR = path.join(ROOT, '.runtime', 'metrics');
 const SESSION_DIR = path.join(ROOT, '.session');
 const CONTEXT_LOG_DIR = path.join(SESSION_DIR, 'context-log');
-const MODEL_ROUTING = path.join(ROOT, 'config', 'model-routing.json');
+const MODEL_ROUTING = path.join(ROOT, 'config', 'model-router.json');
 const AGENT_PROFILES = path.join(ROOT, 'config', 'orchestrator.json');
 
 const MIME_TYPES = {

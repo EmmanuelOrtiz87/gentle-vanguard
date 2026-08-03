@@ -1,0 +1,9 @@
+{
+  "provider": {
+    "fixture": {
+      "baseURL": "http://127.0.0.1:60924/v1",
+      "apiKey": "fixture"
+    }
+  },
+  "model": "fixture/fixture"
+}

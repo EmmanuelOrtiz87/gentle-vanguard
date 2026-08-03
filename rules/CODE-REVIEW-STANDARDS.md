@@ -108,7 +108,7 @@ Every finding MUST be classified:
 
 Every AI-generated code block MUST be annotated:
 
-```powershell
+```TypeScript
 # AI-generated — reviewed by <reviewer> on <date>
 ```
 

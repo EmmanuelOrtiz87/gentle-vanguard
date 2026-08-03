@@ -1,0 +1,23 @@
+{
+  "security": {
+    "version": "1.0.0",
+    "level": "high",
+    "dependencyChecks": {
+      "enabled": true,
+      "vulnerabilityScan": true,
+      "licenseCompliance": true,
+      "deprecatedPackages": true,
+      "autoFix": false
+    },
+    "auditLogging": {
+      "enabled": true,
+      "level": "info",
+      "retentionDays": 90
+    },
+    "policies": {
+      "requireLockFile": true,
+      "allowDeprecated": false,
+      "maxSeverity": "high"
+    }
+  }
+}

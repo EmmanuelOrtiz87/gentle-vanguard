@@ -30,10 +30,10 @@ chaining. **Rule:** Prohibido usar `!` en TypeScript (regla `no-non-null-asserti
 su lugar: optional chaining (`?.`), nullish coalescing (`??`), o type guards explícitos
 (`if (x !== null && x !== undefined)`).
 
-## NORM-005: Dashboard TS requiere CI propio separado del dashboard PowerShell
+## NORM-005: Dashboard TS requiere CI propio separado del dashboard TypeScript
 
 **Context:** El dashboard TypeScript (`apps/web-dashboard/`) no tenía cobertura en CI. El workflow
-`dashboard-ci.yml` solo cubre el dashboard PowerShell (métricas). **Rule:** Todo subproyecto con
+`dashboard-ci.yml` solo cubre el dashboard TypeScript (métricas). **Rule:** Todo subproyecto con
 `package.json` propio debe tener su propio workflow de CI que ejecute lint + typecheck + build ante
 cambios en sus archivos. **File:** `.github/workflows/dashboard-ts-ci.yml`
 

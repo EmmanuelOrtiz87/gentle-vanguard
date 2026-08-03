@@ -41,7 +41,7 @@ The following sections are **mandatory** and must not be removed, renamed, or su
 
 | #   | Section                      | Minimum Content                                                                                                                                          | Rationale                                                             |
 | --- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| 1   | **Header**                   | Title, subtitle with stats (agents, skills, tool-compatible), badges (version, status, license, PowerShell, agents, skills, workflows), navigation links | First impression — must show project scale at a glance                |
+| 1   | **Header**                   | Title, subtitle with stats (agents, skills, tool-compatible), badges (version, status, license, TypeScript, agents, skills, workflows), navigation links | First impression — must show project scale at a glance                |
 | 2   | **What is Gentle-Vanguard?** | 6-bullet summary + Mermaid flowchart (request → orchestrator → delegation → SDD → skills → memory)                                                       | Core value proposition — cannot be reduced to a tagline               |
 | 3   | **Architecture**             | Work Routing Ladder (Mermaid), Delegation Rules table (5 rules), Model Routing per Agent (Mermaid), 5-Layer Architecture table                           | Technical depth — this is the developer-facing repo                   |
 | 4   | **Agent Ecosystem**          | Full table: Agent, Role, Model Profile, Delegates to                                                                                                     | 16 agents with their routing — essential for understanding delegation |
@@ -56,7 +56,7 @@ The following sections are **mandatory** and must not be removed, renamed, or su
 
 | #   | Section                | Minimum Content                                                                                                | Rationale                                    |
 | --- | ---------------------- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| 1   | **Header**             | Title, subtitle with stats, badges (version, status, license, PowerShell, platform, agents, skills, workflows) | Public-facing first impression               |
+| 1   | **Header**             | Title, subtitle with stats, badges (version, status, license, TypeScript, platform, agents, skills, workflows) | Public-facing first impression               |
 | 2   | **What It Solves**     | Problem/Solution table (6+ rows)                                                                               | Value proposition for non-technical audience |
 | 3   | **Architecture**       | Mermaid flowchart + 5-Layer Architecture table                                                                 | Technical credibility                        |
 | 4   | **Agent Ecosystem**    | Full table: Agent, Role, Model Profile                                                                         | Shows depth of orchestration                 |
@@ -143,7 +143,7 @@ After a reviewed and approved change to a README:
 
 Run the validation script before any README change:
 
-```powershell
+```TypeScript
 .\scripts\utilities\validate-readme.ps1
 ```
 

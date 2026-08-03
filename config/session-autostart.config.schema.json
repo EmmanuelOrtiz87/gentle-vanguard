@@ -1,0 +1,99 @@
+{
+  "$id": "session-autostart-config",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Session Autostart Configuration",
+  "description": "Configuration for session autostart pipeline - controls which steps run and their parameters",
+  "type": "object",
+  "required": ["version", "name", "pipeline"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "pipeline": {
+      "type": "object",
+      "required": ["steps"],
+      "properties": {
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Step"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Step": {
+      "type": "object",
+      "required": ["id", "enabled", "script"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the step"
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether this step is enabled"
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "Whether this step is disabled"
+        },
+        "script": {
+          "type": "string",
+          "description": "Path to the script to execute"
+        },
+        "args": {
+          "type": "string",
+          "description": "Arguments to pass to the script"
+        },
+        "required": {
+          "type": "boolean",
+          "description": "Whether this step is required (failure stops pipeline)"
+        },
+        "phase": {
+          "type": "integer",
+          "description": "Execution phase (lower numbers run first)"
+        },
+        "lazy": {
+          "type": "boolean",
+          "description": "Whether this step runs lazily (background)"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of the step"
+        },
+        "note": {
+          "type": "string",
+          "description": "Additional notes about the step"
+        },
+        "deprecated": {
+          "type": "boolean",
+          "description": "Whether this step is deprecated"
+        },
+        "onStepFailure": {
+          "type": "string",
+          "enum": ["stop", "continue", "skip_branch"],
+          "description": "Behavior when step fails"
+        },
+        "retryCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of retries on failure"
+        },
+        "timeout": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Timeout in seconds"
+        }
+      }
+    }
+  }
+}

@@ -44,7 +44,7 @@
 | **[tools.md](tools.md)**                                                           | Third-party integrations                     |
 | **[structure.md](structure.md)**                                                   | Workspace layout                             |
 | **[script-registry.md](script-registry.md)**                                       | Script governance registry and policy levels |
-| **[FOUNDATION-INSTALLER.md](FOUNDATION-INSTALLER.md)**                             | Gentle-Vanguard installer guide              |
+| **[GENTLE-VANGUARD-INSTALLER.md](GENTLE-VANGUARD-INSTALLER.md)**                   | Gentle-Vanguard installer guide              |
 | **[REAL-TOKEN-TRACKING.md](REAL-TOKEN-TRACKING.md)**                               | Token tracking guide                         |
 | **[PLUGIN-ARCHITECTURE.md](PLUGIN-ARCHITECTURE.md)**                               | Plugin development guide                     |
 | **[SKILL-ORGANIZATION.md](SKILL-ORGANIZATION.md)**                                 | Skill catalog and organization               |
@@ -58,7 +58,7 @@
 | **[VALIDATION-REPORT.md](VALIDATION-REPORT.md)**                                   | Validation report                            |
 | **[FUTURE-FEATURES-BACKLOG.md](FUTURE-FEATURES-BACKLOG.md)**                       | Future features backlog                      |
 | ~~MIGRATION-NORMATIVAS-GLOBALES.md~~                                               | _(archived — ver NORMATIVAS-ORQUESTADOR.md)_ |
-| **[NORMATIVAS-ORQUESTADOR.md](../NORMATIVAS-ORQUESTADOR.md)**                      | Orchestrator norms                           |
+| **[NORMATIVAS-ORQUESTADOR.md](../governance/normatives/NORMATIVAS-ORQUESTADOR.md)** | Orchestrator norms                           |
 | **[master-instructions.md](master-instructions.md)**                               | Master instructions                          |
 | **[shared-knowledge.md](shared-knowledge.md)**                                     | Shared knowledge base                        |
 | **[OBSERVABILIDAD.md](OBSERVABILIDAD.md)**                                         | Observability guide                          |

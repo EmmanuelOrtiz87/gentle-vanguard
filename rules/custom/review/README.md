@@ -69,5 +69,5 @@ All PRs must pass security and regression checks before merge.
 
 ## Required Evidence
 
-Smoke test output and PowerShell parser validation results in PR description.
+Smoke test output and TypeScript parser validation results in PR description.
 ```

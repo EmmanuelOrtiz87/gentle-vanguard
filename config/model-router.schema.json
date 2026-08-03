@@ -1,0 +1,147 @@
+{
+  "$id": "model-router-config",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Model Router Configuration",
+  "description": "Configuration for LLM model routing with per-agent bindings and fallback handling",
+  "type": "object",
+  "required": ["version", "enabled", "defaults", "agentBindings"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "description": {
+      "type": "string"
+    },
+    "lastModified": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "modifiedBy": {
+      "type": "string"
+    },
+    "defaults": {
+      "type": "object",
+      "required": ["model", "provider", "temperature"],
+      "properties": {
+        "model": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string",
+          "enum": ["openrouter", "openai", "anthropic", "google", "local", "opencode"]
+        },
+        "temperature": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "hallucinationGuard": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"]
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "fallback": {
+      "type": "object",
+      "properties": {
+        "model": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "quotaExhaustedBehavior": {
+          "type": "string",
+          "enum": ["auto-switch", "fail", "queue"]
+        },
+        "notifyOnSwitch": {
+          "type": "boolean"
+        },
+        "notificationMessage": {
+          "type": "string"
+        },
+        "resetOnRenewal": {
+          "type": "boolean"
+        }
+      }
+    },
+    "agentBindings": {
+      "type": "object",
+      "patternProperties": {
+        "^[A-Z][A-Z0-9_-]*$": {
+          "type": "object",
+          "required": ["model", "provider", "temperature", "subagent"],
+          "properties": {
+            "model": {
+              "type": "string"
+            },
+            "provider": {
+              "type": "string",
+              "enum": ["openrouter", "openai", "anthropic", "google", "local", "opencode"]
+            },
+            "temperature": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "hallucinationGuard": {
+              "type": "string",
+              "enum": ["low", "medium", "high", "critical"]
+            },
+            "subagent": {
+              "type": "string"
+            },
+            "rationale": {
+              "type": "string"
+            },
+            "maxTokens": {
+              "type": "integer",
+              "minimum": 100
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "costTracking": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "trackByAgent": {
+          "type": "boolean"
+        },
+        "trackByModel": {
+          "type": "boolean"
+        },
+        "reportingInterval": {
+          "type": "string",
+          "enum": ["realtime", "hourly", "daily", "session"]
+        }
+      }
+    },
+    "routingPolicy": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["static", "adaptive", "cost-optimized"]
+        },
+        "healthCheckEnabled": {
+          "type": "boolean"
+        },
+        "circuitBreakerEnabled": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

@@ -2,9 +2,9 @@
 
 ## Descripción
 
-directorio centralizado para todos los scripts del proyecto gentle-vanguard.
+Directorio centralizado para todos los scripts del proyecto Gentle-Vanguard.
 
-**Versión**: 2.0.0 **última actualización**: 2026-04-21 **Estado**: PRODUCCIN
+**Versión**: 2.0.0 **Última actualización**: 2026-04-21 **Estado**: PRODUCCIÓN
 
 ---
 
@@ -34,7 +34,7 @@ scripts/
   plugins/                             # Plugins extensibles (vía plugin-loader.ps1)
      example-hello-world/             # Plugin ejemplo con plugin.json + hello-world.ps1
   monitoring/                          # Scripts de monitoreo
-     health-check.ps1               # Verificación de salud
+      health-check.ts                # Verificación de salud (TS)
   utilities/                           # Scripts utilitarios
       setup.ps1                      # Setup inicial
       cleanup.ps1                    # Limpieza
@@ -53,7 +53,7 @@ scripts/
 **Funciones principales**:
 
 - `Get-OSType` - Detecta el sistema operativo
-- `Get-SafePath` - Crea rutas agnsticas
+- `Get-SafePath` - Crea rutas agnósticas
 - `Get-UserHome` - Obtiene directorio del usuario
 - `Write-Log` - Logging con timestamp
 - `Set-ExecutablePermission` - Permisos ejecutables
@@ -141,15 +141,15 @@ Write-Log "Mensaje" "info"
 
 #### input-validator.ps1
 
-**Propósito**: Validación y sanitizacin de entrada
+**Propósito**: Validación y sanitización de entrada
 
 **Tipos de validacin**:
 
-- `string` - Strings con lmites
-- `integer` - Nmeros enteros
+- `string` - Strings con límites
+- `integer` - Números enteros
 - `path` - Rutas seguras
-- `command` - Comandos sin inyeccin
-- `email` - Emails vlidos
+- `command` - Comandos sin inyección
+- `email` - Emails válidos
 
 **Uso**:
 
@@ -213,7 +213,7 @@ Write-Log "Mensaje" "info"
 # Generar reporte
 .\scripts\security\security-logger.ps1 -Action report
 
-# Detectar anomalas
+# Detectar anomalías
 .\scripts\security\security-logger.ps1 -Action anomalies
 ```
 
@@ -221,9 +221,9 @@ Write-Log "Mensaje" "info"
 
 ### Monitoring (Scripts de Monitoreo)
 
-#### health-check.ps1
+#### health-check.ts (migrado desde PS1)
 
-**Propósito**: Verificación de salud del sistema
+**Propósito**: Verificación de salud del sistema (TypeScript)
 
 **Verifica**:
 

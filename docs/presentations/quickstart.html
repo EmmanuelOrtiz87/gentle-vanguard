@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🚀 Quick Start — Gentle-Vanguard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+:root{--p:#00bfff;--pl:#4dcfff;--a:#a855f7;--ok:#22c55e;--wn:#f59e0b;--er:#ef4444;--bg:#0a0e1a;--bg2:#0f1525;--card:#131a2e;--br:#1e2a45}
+*{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:#e2e8f0;overflow-x:hidden}
+code,.mono{font-family:'JetBrains Mono',monospace}
+.nav-blur{background:rgba(10,14,26,.85);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--br);z-index:1050}
+.nav-blur .nav-link{color:#94a3b8;font-size:.82rem;font-weight:500;padding:.5rem .7rem;transition:.2s;white-space:nowrap}
+.nav-blur .nav-link:hover,.nav-blur .nav-link.active{color:var(--p)}
+.hero{min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:8rem 1rem 4rem}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(0,191,255,.08),transparent 70%),radial-gradient(ellipse at 70% 50%,rgba(168,85,247,.06),transparent 70%);pointer-events:none}
+.hero h1{font-size:3.2rem;font-weight:800;letter-spacing:-.03em;line-height:1.15}
+.glow{background:linear-gradient(135deg,var(--p),var(--a));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero .lead{font-size:1.15rem;color:#94a3b8;max-width:720px;margin:1.5rem auto 0}
+.section-card{background:var(--card);border:1px solid var(--br);border-radius:16px;padding:1.75rem;transition:transform .3s,box-shadow .3s;position:relative;overflow:hidden}
+.section-card:hover{transform:translateY(-3px);box-shadow:0 0 30px rgba(0,191,255,.08),0 8px 40px rgba(0,0,0,.3)}
+.section-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--p),var(--a));opacity:0;transition:opacity .3s}
+.section-card:hover::before{opacity:1}
+.section-card .card-title{font-size:1.15rem;font-weight:700;color:#f1f5f9;margin-bottom:.75rem}
+.section-card .card-text{color:#94a3b8;font-size:.9rem;line-height:1.65}
+.stat-n{font-size:2.4rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(135deg,var(--p),var(--pl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.stat-l{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-top:.25rem}
+.badge-gv{font-size:.7rem;font-weight:600;padding:.3em .7em;border-radius:6px;letter-spacing:.02em}
+.badge-p{background:rgba(0,191,255,.15);color:var(--p)}
+.badge-a{background:rgba(168,85,247,.15);color:var(--a)}
+.badge-ok{background:rgba(34,197,94,.15);color:var(--ok)}
+.badge-wn{background:rgba(245,158,11,.15);color:var(--wn)}
+.badge-er{background:rgba(239,68,68,.15);color:var(--er)}
+section{padding:4rem 1rem;max-width:1400px;margin:0 auto}
+.section-title{text-align:center;margin-bottom:2.5rem}
+.section-title h2{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800}
+.section-title p{color:#94a3b8;max-width:600px;margin:0 auto}
+.fade-in{opacity:0;transform:translateY(25px);transition:opacity .7s ease,transform .7s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+footer{background:var(--bg2);border-top:1px solid var(--br);padding:2rem 0;text-align:center;color:#475569;font-size:.85rem}
+footer a{color:var(--p);text-decoration:none}
+.cmd-block{background:#0d1117;border:1px solid var(--br);border-radius:12px;padding:1.2rem;font-family:'JetBrains Mono',monospace;font-size:.85rem;color:#e6edf3;overflow-x:auto}
+.cmd-block .prompt{color:var(--ok)}.cmd-block .comment{color:#8b949e;font-style:italic}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(0,191,255,.15);color:var(--p);font-size:.75rem;font-weight:700;margin-right:10px;flex-shrink:0}
+.table-cmd{font-size:.8rem}.table-cmd td{vertical-align:middle}
+.table-cmd code{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--p);background:rgba(0,191,255,.08);padding:.15em .5em;border-radius:4px}
+.arch-layer{background:var(--card);border:1px solid var(--br);border-radius:16px;padding:1rem 1.5rem;margin-bottom:.8rem;transition:all .3s ease}
+.arch-layer:hover{border-color:var(--p);box-shadow:0 0 30px rgba(0,191,255,.08)}
+.arch-layer .layer-name{font-size:.72rem;font-weight:700;color:var(--p);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+.arch-layer .items{display:flex;flex-wrap:wrap;gap:.5rem}
+.arch-layer .items span{background:var(--bg2);padding:.25em .7em;border-radius:6px;font-size:.72rem;color:#94a3b8;border:1px solid transparent;transition:all .3s ease}
+.arch-layer:hover .items span{border-color:rgba(0,191,255,.2);color:#f1f5f9}
+.section-card h3{font-size:1.05rem;font-weight:700;margin-bottom:.6rem}
+.section-card p{font-size:.82rem;color:#94a3b8;line-height:1.6}
+.section-card .badge-tag{display:inline-block;background:rgba(0,191,255,.1);color:var(--p);padding:.2em .6em;border-radius:6px;font-size:.68rem;font-weight:600}
+.navbar-toggler{border:1px solid var(--br);padding:.35rem .5rem}
+.bi-list{font-size:1.5rem}
+@media(max-width:991.98px){.nav-blur .nav-link{font-size:.75rem;padding:.35rem .5rem}.hero h1{font-size:2.2rem}.hero{min-height:50vh;padding:6rem 1rem 3rem}.stat-n{font-size:1.8rem}}
+</style>
+  <script src="assets/js/i18n.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-xl nav-blur fixed-top">
+  <div class="container-fluid px-3">
+    <a class="navbar-brand text-light fw-bold mono" href="index.html" style="font-size:.85rem"><i class="bi bi-robot me-2" style="color:var(--p)"></i>GV</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+      <i class="bi bi-list" style="color:var(--p)"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto" style="max-height:85vh;overflow-y:auto">
+        <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="architecture.html"><i class="bi bi-diagram-3 me-1"></i>Arch</a></li>
+        <li class="nav-item"><a class="nav-link" href="autonomy.html"><i class="bi bi-robot me-1"></i>Autonomy</a></li>
+        <li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link active" href="quickstart.html"><i class="bi bi-rocket-takeoff me-1"></i>Quickstart</a></li>
+        <li class="nav-item"><a class="nav-link" href="memory-knowledge.html"><i class="bi bi-brain me-1"></i>Memory</a></li>
+        <li class="nav-item"><a class="nav-link" href="security-governance.html"><i class="bi bi-shield-check me-1"></i>Security</a></li>
+        <li class="nav-item"><a class="nav-link" href="agents-pipeline.html"><i class="bi bi-diagram-2 me-1"></i>Agents</a></li>
+        <li class="nav-item"><a class="nav-link" href="operations-cloud.html"><i class="bi bi-cloud me-1"></i>Cloud</a></li>
+        <li class="nav-item"><a class="nav-link" href="patterns-conventions.html"><i class="bi bi-file-code me-1"></i>Patterns</a></li>
+        <li class="nav-item"><a class="nav-link" href="health.html"><i class="bi bi-heart-pulse me-1"></i>Health</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <header class="hero">
+    <div>
+      <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2 rounded-pill mb-3 z-1" style="font-size:.75rem">✦ SETUP GUIDE — v8.0.1</span>
+      <h1 class="display-1 fw-bold z-1" style="font-size:clamp(2.5rem,6vw,5rem);letter-spacing:-.02em;line-height:1.05"><span class="glow">Quick Start Guide</span></h1>
+      <p class="lead text-secondary z-1" style="max-width:650px;font-size:clamp(1rem,2vw,1.3rem)">
+        From zero to autonomous AI stack in under 2 minutes. <strong class="text-light">34 pipeline steps</strong> · <strong class="text-light">65 lazy services</strong> · <strong class="text-light">100% operational</strong>
+      </p>
+      <div class="d-flex flex-wrap gap-4 justify-content-center z-1 mt-3">
+        <div class="text-center"><div class="stat-n">PS7+</div><div class="stat-l">Required</div></div>
+        <div class="text-center"><div class="stat-n">Node18</div><div class="stat-l">Required</div></div>
+        <div class="text-center"><div class="stat-n">34</div><div class="stat-l">Pipeline Steps</div></div>
+        <div class="text-center"><div class="stat-n">65</div><div class="stat-l">Lazy Steps</div></div>
+        <div class="text-center"><div class="stat-n">82/82</div><div class="stat-l">Health PASS</div></div>
+      </div>
+    </div>
+  </header>
+
+  <section id="prerequisites" class="fade-in">
+    <div class="section-title"><h2>📋 Prerequisites</h2><p>Ensure your environment meets these minimum requirements</p></div>
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-3">
+        <div class="section-card text-center">
+          <div class="icon" style="font-size:2.5rem;margin-bottom:.75rem"><i class="bi bi-terminal text-info"></i></div>
+          <h3>PowerShell 7+</h3>
+          <p class="mb-1">REQUIRED — tested on <strong class="text-light">7.4.x</strong></p>
+          <span class="badge-tag">Minimum</span>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="section-card text-center">
+          <div class="icon" style="font-size:2.5rem;margin-bottom:.75rem"><i class="bi bi-node-plus text-success"></i></div>
+          <h3>Node.js 18+</h3>
+          <p class="mb-1">LTS recommended — required for dashboard</p>
+          <span class="badge-tag ok">Recommended</span>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="section-card text-center">
+          <div class="icon" style="font-size:2.5rem;margin-bottom:.75rem"><i class="bi bi-git text-warning"></i></div>
+          <h3>Git</h3>
+          <p class="mb-1">Recommended for version control &amp; hooks</p>
+          <span class="badge-tag">Optional</span>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="section-card text-center">
+          <div class="icon" style="font-size:2.5rem;margin-bottom:.75rem"><i class="bi bi-memory text-a" style="color:var(--a)"></i></div>
+          <h3>4GB RAM</h3>
+          <p class="mb-1">Minimum — <strong class="text-light">8GB</strong> recommended for full stack</p>
+          <span class="badge-tag ok">Minimum</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="setup" class="fade-in">
+    <div class="section-title"><h2>⚡ One-Command Setup</h2><p>Clone, install, and launch — three commands, under 60 seconds</p></div>
+    <div class="cmd-block">
+      <div><span class="comment"># Clone the repository</span></div>
+      <div><span class="prompt">$</span> git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git</div>
+      <div>&nbsp;</div>
+      <div><span class="comment"># Enter the project directory</span></div>
+      <div><span class="prompt">$</span> cd gentle-vanguard</div>
+      <div>&nbsp;</div>
+      <div><span class="comment"># Run the autostart pipeline (MANDATORY first command)</span></div>
+      <div><span class="prompt">$</span> npx tsx src/session-autostart.ts</div>
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+      <span class="badge bg-success bg-opacity-10 text-success p-2 border border-success border-opacity-25">✅ 34 steps OK — system ready</span>
+    </div>
+  </section>
+
+  <section id="daily-commands" class="fade-in">
+    <div class="section-title"><h2>📟 Daily Commands</h2><p>Essential commands for daily operation</p></div>
+    <div class="table-responsive">
+      <table class="table table-dark table-striped table-hover table-cmd align-middle mb-0">
+        <thead><tr><th class="text-info" style="width:40%">Command</th><th class="text-info" style="width:40%">Description</th><th class="text-info" style="width:20%">Expected</th></tr></thead>
+        <tbody>
+          <tr><td><code>npx tsx src/session-autostart.ts</code></td><td>Start session <span class="badge bg-warning bg-opacity-10 text-warning ms-1" style="font-size:.6rem">MANDATORY</span></td><td><span class="badge bg-success bg-opacity-10 text-success">34 steps OK</span></td></tr>
+          <tr><td><code>npm test</code></td><td>Run all test suites</td><td><span class="badge bg-success bg-opacity-10 text-success">19/19 PASS</span></td></tr>
+          <tr><td><code>npm run watchtower:health</code></td><td>Run health checks</td><td><span class="badge bg-success bg-opacity-10 text-success">82/82 PASS</span></td></tr>
+          <tr><td><code>npx tsx src/auto-apply-safe.ts --check</code></td><td>Check pending auto-applies</td><td><span class="badge bg-secondary bg-opacity-10 text-secondary">0 pending</span></td></tr>
+          <tr><td><code>npm run db:health</code></td><td>Database health check</td><td><span class="badge bg-success bg-opacity-10 text-success">All OK</span></td></tr>
+          <tr><td><code>npm run graphify -- query "&lt;q&gt;"</code></td><td>Knowledge graph query</td><td><span class="badge bg-info bg-opacity-10 text-info">Results</span></td></tr>
+          <tr><td><code>cd apps/web-dashboard &amp;&amp; npm run build</code></td><td>Build dashboard</td><td><span class="badge bg-success bg-opacity-10 text-success">Exit 0</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="dashboard-cmds" class="fade-in">
+    <div class="section-title"><h2>📊 Dashboard Commands</h2><p>Start, manage, and stop the LLM observability dashboard</p></div>
+    <div class="table-responsive">
+      <table class="table table-dark table-striped table-hover table-cmd align-middle mb-0">
+        <thead><tr><th class="text-info" style="width:45%">Command</th><th class="text-info" style="width:55%">Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>npm run dashboard:dev</code></td><td>Start full dashboard (Vite dev + WS proxy)</td></tr>
+          <tr><td><code>npm run dashboard:server</code></td><td>Start WS server only (WebSocket + HTTP API)</td></tr>
+          <tr><td><code>npm run dashboard:build</code></td><td>Build production dashboard bundle</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="db-cmds" class="fade-in">
+    <div class="section-title"><h2>💾 Database Commands</h2><p>Manage the Nexus operational database (SQLite WAL mode)</p></div>
+    <div class="table-responsive">
+      <table class="table table-dark table-striped table-hover table-cmd align-middle mb-0">
+        <thead><tr><th class="text-info" style="width:30%">Command</th><th class="text-info" style="width:70%">Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>npm run db:init</code></td><td>Initialize DB + run all migrations (idempotent)</td></tr>
+          <tr><td><code>npm run db:health</code></td><td>Health check — integrity, WAL, tables, rows</td></tr>
+          <tr><td><code>npm run db:backup</code></td><td>Safe online backup to <code>.runtime/backups/</code></td></tr>
+          <tr><td><code>npm run db:prune</code></td><td>Prune old data (events &gt;30d, cache &gt;7d, tokens &gt;90d)</td></tr>
+          <tr><td><code>npm run db:optimize</code></td><td>WAL checkpoint + REINDEX + VACUUM</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="workflow" class="fade-in">
+    <div class="section-title"><h2>🔄 Development Workflow</h2><p>Standard daily routine — from autostart to productive work</p></div>
+    <div class="row g-3">
+      <div class="col-lg-8 mx-auto">
+        <div class="section-card">
+          <div class="d-flex flex-column gap-3">
+            <div class="d-flex align-items-start">
+              <span class="step-num">1</span>
+              <div><strong>Start session:</strong> <code class="text-info" style="font-family:'JetBrains Mono',monospace;font-size:.8rem">npx tsx src/session-autostart.ts</code><br/><small class="text-secondary">This is the <strong class="text-warning">mandatory first command</strong> every session</small></div>
+            </div>
+            <div class="d-flex align-items-start">
+              <span class="step-num">2</span>
+              <div><strong>34 pipeline steps</strong> run in parallel (Phase 1)<br/><small class="text-secondary">All core services initialize: tool detection, session manager, token budget, engram, security, codegraph, DB</small></div>
+            </div>
+            <div class="d-flex align-items-start">
+              <span class="step-num">3</span>
+              <div><strong>65 lazy steps</strong> start in background<br/><small class="text-secondary">Non-blocking services: dashboard WS, ML embeddings, checkpoint, audit, event sourcing</small></div>
+            </div>
+            <div class="d-flex align-items-start">
+              <span class="step-num">4</span>
+              <div><strong>All health checks</strong> verify system readiness<br/><small class="text-secondary">82 checks across 16 components — all must PASS</small></div>
+            </div>
+            <div class="d-flex align-items-start">
+              <span class="step-num">5</span>
+              <div><strong>Dashboard WS</strong> starts automatically<br/><small class="text-secondary">Watchdog process monitors health every 5s, auto-restarts up to 10 times</small></div>
+            </div>
+            <div class="d-flex align-items-start">
+              <span class="step-num">6</span>
+              <div><strong>Auto-apply safe</strong> monitors for quality improvements<br/><small class="text-secondary">Max 5 auto-applies/day, rollback if degradation &gt;15%</small></div>
+            </div>
+            <div class="d-flex align-items-start">
+              <span class="step-num">7</span>
+              <div><strong>Start working!</strong><br/><small class="text-secondary">The entire stack is ready — memory loaded, DB initialized, dashboard live</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="architecture-overview" class="fade-in">
+    <div class="section-title"><h2>🏗️ Architecture Overview</h2><p>6-layer autonomous AI stack — from IDE tools to governance</p></div>
+    <div class="arch-layer"><div class="layer-name"><i class="bi bi-laptop me-1"></i> Layer 1 — Tools (10 IDE Integrations)</div><div class="items"><span>OpenCode</span><span>Claude Code</span><span>Cursor</span><span>Windsurf</span><span>Cline</span><span>Codex</span><span>Copilot</span><span>Continue.dev</span><span>Aider</span><span>Roo Code</span></div></div>
+    <div class="arch-layer"><div class="layer-name"><i class="bi bi-robot me-1"></i> Layer 2 — Agents (18 Specialized)</div><div class="items"><span>Orchestrator</span><span>BA Explore</span><span>SAD Design</span><span>DEV Implement</span><span>QA Verify</span><span>GOV Compliance</span><span>OPS Deploy</span><span>DOC Docs</span><span>Audit</span><span>Session</span><span>Premortem</span><span>Adaptive Router</span><span class="new">SDD Apply</span><span class="new">SDD Explore</span></div></div>
+    <div class="arch-layer"><div class="layer-name"><i class="bi bi-gear me-1"></i> Layer 3 — Pipeline (34 Steps + 65 Lazy)</div><div class="items"><span>tool-detection</span><span>session-manager</span><span>token-budget</span><span>karpathy-guidelines</span><span>codegraph-sync</span><span>security-orch</span><span>db-init</span><span class="new">auto-apply-safe</span><span class="new">predictive-governor</span><span class="new">auto-norm-learner</span></div></div>
+    <div class="arch-layer"><div class="layer-name"><i class="bi bi-memory me-1"></i> Layer 4 — Memory &amp; Knowledge</div><div class="items"><span>Engram (2219 obs)</span><span>CodeGraph (1410 nodes)</span><span>Graphify (23MB)</span><span>ML Embeddings</span><span>Nexus DB</span><span>Knowledge Vault</span></div></div>
+    <div class="arch-layer"><div class="layer-name"><i class="bi bi-database me-1"></i> Layer 5 — Data (10 DAOs, 5 Migrations)</div><div class="items"><span>MetricsRepo</span><span>SessionRepo</span><span>TraceRepo</span><span>EventRepo</span><span>CacheRepo</span><span>SkillRepo</span><span>ContractRepo</span><span>ErrorMemoryRepo</span><span>HousekeepingRepo</span><span>MigrationRunner</span></div></div>
+    <div class="arch-layer"><div class="layer-name"><i class="bi bi-shield-check me-1"></i> Layer 6 — Executive (100% Autonomous)</div><div class="items"><span>Auto-Apply Safe</span><span>Circuit Breaker</span><span>Auto-Escalation</span><span>Dependency Graph</span><span>AB Testing</span><span>Session Scoring</span><span>Norms Learner</span><span>Watchtower 82/82</span></div></div>
+  </section>
+
+  <section id="troubleshooting" class="fade-in">
+    <div class="section-title"><h2>🔧 Troubleshooting</h2><p>Common issues and their solutions</p></div>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="section-card">
+          <h3><i class="bi bi-x-circle text-danger me-1"></i> Autostart fails steps</h3>
+          <p class="mb-0">Check logs in <code class="text-info" style="font-family:'JetBrains Mono',monospace;font-size:.75rem">logs/session-autostart.log</code> for the specific step that failed. Most failures are transient — re-run the command.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="section-card">
+          <h3><i class="bi bi-x-circle text-danger me-1"></i> Dashboard won't start</h3>
+          <p class="mb-0">Check <code class="text-info" style="font-family:'JetBrains Mono',monospace;font-size:.75rem">.runtime/dashboard-ports.json</code> for port conflicts. Kill the process on the conflicting port and retry.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="section-card">
+          <h3><i class="bi bi-x-circle text-danger me-1"></i> Tests fail</h3>
+          <p class="mb-0">Run <code class="text-info" style="font-family:'JetBrains Mono',monospace;font-size:.75rem">npm run typecheck</code> and <code class="text-info" style="font-family:'JetBrains Mono',monospace;font-size:.75rem">npm run lint</code> first. Fix any type/lint errors, then re-run <code class="text-info" style="font-family:'JetBrains Mono',monospace;font-size:.75rem">npm test</code>.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="section-card">
+          <h3><i class="bi bi-x-circle text-danger me-1"></i> Database issues</h3>
+          <p class="mb-0">Run <code class="text-info" style="font-family:'JetBrains Mono',monospace;font-size:.75rem">npm run db:optimize</code> to WAL checkpoint, REINDEX, and VACUUM. If corruption is suspected, restore from backup via <code class="text-info" style="font-family:'JetBrains Mono',monospace;font-size:.75rem">npm run db:restore</code>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="references" class="fade-in">
+    <div class="section-title"><h2>🔗 Reference Links</h2><p>Navigate the full presentation book</p></div>
+    <div class="row g-3 justify-content-center">
+      <div class="col-sm-6 col-md-4 col-lg-3"><a href="index.html" class="text-decoration-none"><div class="section-card text-center"><h3>📘 Full Book</h3><p class="mb-0">Complete stack reference</p><span class="badge-tag">Start here</span></div></a></div>
+      <div class="col-sm-6 col-md-4 col-lg-3"><a href="architecture.html" class="text-decoration-none"><div class="section-card text-center"><h3>🏗️ Architecture</h3><p class="mb-0">6-layer deep dive</p><span class="badge-tag">Explore</span></div></a></div>
+      <div class="col-sm-6 col-md-4 col-lg-3"><a href="autonomy.html" class="text-decoration-none"><div class="section-card text-center"><h3>🤖 Autonomy</h3><p class="mb-0">Self-healing systems</p><span class="badge-tag">Explore</span></div></a></div>
+      <div class="col-sm-6 col-md-4 col-lg-3"><a href="dashboard.html" class="text-decoration-none"><div class="section-card text-center"><h3>📊 Dashboard</h3><p class="mb-0">Observability UI</p><span class="badge-tag">Explore</span></div></a></div>
+      <div class="col-sm-6 col-md-4 col-lg-3"><a href="memory-knowledge.html" class="text-decoration-none"><div class="section-card text-center"><h3>🧠 Memory</h3><p class="mb-0">Knowledge systems</p><span class="badge-tag">Explore</span></div></a></div>
+      <div class="col-sm-6 col-md-4 col-lg-3"><a href="https://github.com/EmmanuelOrtiz87/gentle-vanguard" target="_blank" class="text-decoration-none"><div class="section-card text-center"><h3><i class="bi bi-github me-1"></i> GitHub</h3><p class="mb-0">Source repository</p><span class="badge-tag">External</span></div></a></div>
+    </div>
+  </section>
+
+<footer>
+  <p class="mb-2">Gentle-Vanguard <strong>v8.0.1</strong> — 100% Autonomous AI Stack · <span class="text-secondary">✦ Plataforma Autónoma de Orquestración AI</span></p>
+  <p class="mb-2 d-flex flex-wrap justify-content-center gap-3">
+    <a href="architecture.html"><i class="bi bi-diagram-3 me-1"></i>Architecture</a>
+    <a href="autonomy.html"><i class="bi bi-robot me-1"></i>Autonomy</a>
+    <a href="dashboard.html"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a>
+    <a href="quickstart.html"><i class="bi bi-rocket-takeoff me-1"></i>Quick Start</a>
+    <a href="memory-knowledge.html"><i class="bi bi-brain me-1"></i>Memory</a>
+    <a href="security-governance.html"><i class="bi bi-shield me-1"></i>Security</a>
+    <a href="agents-pipeline.html"><i class="bi bi-people me-1"></i>Agents</a>
+    <a href="operations-cloud.html"><i class="bi bi-cloud me-1"></i>Operations</a>
+    <a href="patterns-conventions.html"><i class="bi bi-diagram-2 me-1"></i>Patterns</a>
+    <a href="health.html"><i class="bi bi-heart-pulse me-1"></i>Health</a>
+    <a href="index.html"><i class="bi bi-book me-1"></i>The Book</a>
+    <a href="https://github.com/EmmanuelOrtiz87/gentle-vanguard" target="_blank"><i class="bi bi-github me-1"></i>GitHub</a>
+  </p>
+  <div class="d-flex flex-wrap justify-content-center gap-2 mt-2 mb-2">
+    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1" style="font-size:.6rem">263 TS Files</span>
+    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1" style="font-size:.6rem">19/19 Tests</span>
+    <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-2 py-1" style="font-size:.6rem">82/82 Health</span>
+    <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-2 py-1" style="font-size:.6rem">10 DAOs</span>
+    <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1" style="font-size:.6rem">118 Skills</span>
+    <span class="badge bg-light bg-opacity-10 text-light border border-light border-opacity-25 px-2 py-1" style="font-size:.6rem">52 Normatives</span>
+  </div>
+  <p class="mt-2 mb-0"><small><i class="bi bi-cpu me-1"></i>Don't let your mellow hustle be faded.</small></p>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible') });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('section, .fade-in').forEach(s => observer.observe(s));
+    document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        document.querySelectorAll('.navbar-nav .nav-link').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

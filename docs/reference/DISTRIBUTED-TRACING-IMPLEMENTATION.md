@@ -120,38 +120,38 @@ Todos los reportes en un nico directorio `.telemetry/`:
 
 ### Inicializar Tracing
 
-```powershell
+```TypeScript
 # Se inicializa automticamente en session-autostart
 .\tools\session-autostart.cmd
 ```
 
 ### Ver Resumen de Telemetra
 
-```powershell
+```TypeScript
 .\tools\telemetry-dashboard.ps1 -Action show-summary
 ```
 
 ### Generar Reportes
 
-```powershell
+```TypeScript
 .\tools\telemetry-dashboard.ps1 -Action generate-reports
 ```
 
 ### Ver Reportes Disponibles
 
-```powershell
+```TypeScript
 .\tools\telemetry-dashboard.ps1 -Action show-reports
 ```
 
 ### Ver Traces Recientes
 
-```powershell
+```TypeScript
 .\tools\telemetry-dashboard.ps1 -Action view-traces
 ```
 
 ### Exportar Datos
 
-```powershell
+```TypeScript
 .\tools\telemetry-dashboard.ps1 -Action export-data
 ```
 
@@ -159,7 +159,7 @@ Todos los reportes en un nico directorio `.telemetry/`:
 
 ### Rastrear un Dispatch
 
-```powershell
+```TypeScript
 # Cargar mdulo
 . .\skills\distributed-tracing-skill\distributed-tracing-core.ps1
 
@@ -217,7 +217,7 @@ Finalize-DistributedTracing
 
 ### Auto-Delegation Router
 
-```powershell
+```TypeScript
 # Cada dispatch genera un span raz
 # Sub-spans para keyword extraction, decisión tree, confidence scoring
 # Mtricas de routing accuracy
@@ -225,7 +225,7 @@ Finalize-DistributedTracing
 
 ### Judgment Day Orchestrator
 
-```powershell
+```TypeScript
 # Span para cada fase de judgment
 # Mtricas de review time y approval rate
 # Trazabilidad de decisiónes
@@ -233,7 +233,7 @@ Finalize-DistributedTracing
 
 ### Session Manager
 
-```powershell
+```TypeScript
 # Correlation ID propagado a toda la sesin
 # Mtricas de session lifecycle
 # Anlisis de session performance

@@ -114,7 +114,7 @@ on task matching. The `/init` command generates AGENTS.md from repo scan.
 
 **Best practice** (from gentle-vanguard's `prompt-cache.ps1`):
 
-```powershell
+```TypeScript
 # Cache by SHA256 hash of prompt content
 $hash = (Get-FileHash "CLAUDE.md" -Algorithm SHA256).Hash.Substring(0,16)
 prompt-cache.ps1 -Action set -PromptHash $hash -PromptContent $content
@@ -147,7 +147,7 @@ The 10% system-prompt-to-total-budget ratio is a consistent pattern.
 
 **Prompt versioning script** (`prompt-versioning.ps1`):
 
-```powershell
+```TypeScript
 prompt-versioning.ps1 -Action save -PromptName "CLAUDE" -Content (Get-Content "CLAUDE.md" -Raw)
 ```
 
@@ -180,7 +180,7 @@ TODO, BUG, decisions, RESULT. Implemented via `pre-compact-hook.ps1`.
 
 `scripts/utilities/CONFIG/validate-opencode-config.ps1` uses a strict **allowlist**:
 
-```powershell
+```TypeScript
 $validProps = @(
     '$schema', 'agent', 'attachment', 'autoshare', 'autoupdate',
     'command', 'compaction', 'default_agent',
@@ -210,7 +210,7 @@ with JSON params:
 
 Auto-validation hook available:
 
-```powershell
+```TypeScript
 pwsh -NoProfile -File hooks/pre-tool-call-validate.ps1 `
   -ToolName "<tool>" -JsonPayload '<json>' -AutoFix
 ```

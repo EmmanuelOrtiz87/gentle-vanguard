@@ -1,0 +1,185 @@
+{
+  "timestamp": "2026-07-21T15:59:00Z",
+  "tokens": {
+    "used": 12500,
+    "limit": 120000,
+    "cost": 0.35,
+    "byModel": [
+      {
+        "model": "gpt-4",
+        "inputTokens": 8000,
+        "outputTokens": 4500,
+        "totalTokens": 12500,
+        "cost": 0.35,
+        "calls": 15
+      }
+    ]
+  },
+  "sessions": {
+    "total": 12,
+    "active": 2,
+    "today": 3,
+    "avgDuration": 1800
+  },
+  "latency": {
+    "avg": 1250,
+    "p50": 1000,
+    "p95": 2500,
+    "p99": 3200,
+    "max": 4500,
+    "samples": 42,
+    "responseTimes": {
+      "gpt-4": {
+        "avg": 1400,
+        "count": 25
+      },
+      "claude-3": {
+        "avg": 950,
+        "count": 17
+      }
+    }
+  },
+  "feedback": {
+    "thumbsUp": 85,
+    "thumbsDown": 15,
+    "total": 100,
+    "score": 85
+  },
+  "costInsights": [
+    {
+      "model": "gpt-4",
+      "cost": 0.35,
+      "tokens": 12500,
+      "pct": 100,
+      "estimatedCost": 0.45,
+      "savingsPct": 22,
+      "suggestedAction": "Consider gpt-4 → claude-3-haiku for cost reduction",
+      "potentialSavings": 0.10,
+      "roi": 22
+    }
+  ],
+  "sla": {
+    "uptime": 99.95,
+    "incidents": 2,
+    "lastIncident": "2026-07-20T14:30:00Z",
+    "sloCompliance": 100,
+    "responseTime95th": 2500,
+    "throughput": 150
+  },
+  "git": {
+    "commits": 1795,
+    "prsMerged": 0,
+    "contributors": 6
+  },
+  "system": {
+    "memory": {
+      "rss": 71,
+      "heapUsed": 12,
+      "heapTotal": 13,
+      "total": 8192,
+      "free": 2048,
+      "usagePercent": 75
+    },
+    "cpu": {
+      "user": 687,
+      "system": 2265,
+      "cores": 8,
+      "loadAverage": [0.5, 0.3, 0.1]
+    },
+    "uptime": 421,
+    "pid": 24604,
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "health": {
+    "status": "healthy",
+    "routing": 0.95
+  },
+  "mcp": {
+    "skills": {
+      "total": 120,
+      "byAgent": {
+        "DEV": 60,
+        "QA": 25,
+        "OPS": 15,
+        "GOV": 20
+      },
+      "recentlyUsed": [
+        "code-review-orchestrator-skill",
+        "release-management-skill",
+        "docker-devops-skill"
+      ]
+    },
+    "calls": {
+      "total": 1250,
+      "byTool": {
+        "tool1": 450,
+        "tool2": 320,
+        "tool3": 280,
+        "tool4": 180
+      },
+      "bySkill": {
+        "code-review-orchestrator-skill": 320,
+        "release-management-skill": 280,
+        "docker-devops-skill": 180
+      },
+      "lastCall": "2026-07-21T15:58:30Z"
+    },
+    "performance": {
+      "avgResponseTime": 1250,
+      "errorRate": 0.02,
+      "responseTimes": {
+        "gpt-4": {
+          "avg": 1400,
+          "count": 25
+        },
+        "claude-3": {
+          "avg": 950,
+          "count": 17
+        }
+      }
+    }
+  },
+  "events": [
+    {
+      "type": "session.start",
+      "timestamp": "2026-07-21T15:00:00Z",
+      "status": "success"
+    },
+    {
+      "type": "tool.call",
+      "timestamp": "2026-07-21T15:01:20Z",
+      "tool": "gpt-4",
+      "duration": 1200
+    }
+  ],
+  "cloud": {
+    "executions": 42,
+    "totalCost": 0.15
+  },
+  "checkpoints": 3,
+  "auditLogs": 12,
+  "traceFiles": 8,
+  "documentAnalysis": {
+    "results": 5,
+    "reports": 3
+  },
+  "transparency": {
+    "level": "full",
+    "metrics": [
+      "session-transactions",
+      "response-times",
+      "resource-consumption",
+      "cost-efficiency",
+      "savings-opportunities",
+      "alert-triggers",
+      "performance-indicators"
+    ],
+    "visibility": {
+      "realTime": true,
+      "historical": true,
+      "aggregated": true,
+      "detailed": true
+    }
+  }
+}

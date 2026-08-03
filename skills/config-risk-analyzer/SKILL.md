@@ -145,6 +145,5 @@ Este skill se integra con:
       "prevention": "Cómo prevenirlo"
     }
   ],
-  "confirmationRequired": true|false
-}
+  "confirmationRequired": true|false }
 ```

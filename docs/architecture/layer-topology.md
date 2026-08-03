@@ -152,7 +152,7 @@ supports the tool interface.
 
 ### 1. Interface Over Implementation
 
-Each layer defines WHAT it does, not HOW. Layer 5 doesn't care if Layer 4 uses bash or PowerShell.
+Each layer defines WHAT it does, not HOW. Layer 5 doesn't care if Layer 4 uses bash or TypeScript.
 
 ### 2. Pluggable Components
 

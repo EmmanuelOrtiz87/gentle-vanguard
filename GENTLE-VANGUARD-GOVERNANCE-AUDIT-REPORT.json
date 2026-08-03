@@ -1,0 +1,486 @@
+{
+  "audit_info": {
+    "project": "Gentle-Vanguard",
+    "version": "v3.3.3",
+    "audit_date": "2026-07-28",
+    "auditor": "GOV Agent",
+    "scope": "Normatives, Configuration, Compliance, Security Governance"
+  },
+  
+  "executive_summary": {
+    "total_normatives": 60,
+    "total_configs": 112,
+    "total_ci_workflows": 23,
+    "auto_enforced_count": 29,
+    "manual_enforced_count": 15,
+    "unenforced_count": 16,
+    "overall_coverage": "72%"
+  },
+
+  "normatives": {
+    "total_count": 60,
+    "by_category": {
+      "core_normatives": {
+        "location": "rules/",
+        "files": 54,
+        "primary": [
+          "NORMATIVES.md",
+          "NORMATIVAS-ARCHITECTURE.md",
+          "NORMATIVAS-CODE-QUALITY.md",
+          "NORMATIVAS-WORKFLOW.md",
+          "NORMATIVAS-PERFORMANCE.md",
+          "NORMATIVAS-OPS-DEVOPS.md",
+          "NORMATIVAS-MULTI-TENANT.md",
+          "NORMATIVAS-EVAL-QUALITY.md",
+          "NORMATIVAS-CICD-SELF-HEALING.md",
+          "NORMATIVAS-AUTONOMOUS-EVOLUTION.md",
+          "NORMATIVAS-SECURITY-COMPLIANCE.md",
+          "SECRETS-MANAGEMENT.md",
+          "TOKEN-BUDGET-POLICY.md",
+          "TESTING-STANDARDS.md",
+          "SESSION-CLOSE-NORMATIVA.md",
+          "RECOVERY-NORMATIVA.md",
+          "NEXUS-NORMATIVA.md",
+          "INCIDENT-RESPONSE.md",
+          "DELEGATION-RULES.md",
+          "AI-NORMATIVES.md",
+          "README-GOVERNANCE.md"
+        ]
+      },
+      "iso_compliance": {
+        "location": "docs/governance/normatives/",
+        "files": 12,
+        "primary": [
+          "NORMATIVAS-ISO27001.md",
+          "NORMATIVAS-ISO25010.md",
+          "NORMATIVAS-SEGURIDAD.md",
+          "NORMATIVAS-SRE.md",
+          "NORMATIVAS-SBOM.md",
+          "NORMATIVAS-ORQUESTADOR.md",
+          "NORMATIVAS-TESTING.md",
+          "NORMATIVAS-CHAOS-ENGINEERING.md",
+          "NORMATIVAS-API-DESIGN.md",
+          "NORMATIVAS-I18N-L10N.md",
+          "NORMATIVAS-ACCESIBILIDAD.md"
+        ]
+      },
+      "adaptive_norms": {
+        "location": "rules/adaptive/",
+        "files": 5,
+        "status": "MOSTLY_EMPTY",
+        "notes": "norms-registry.json is empty (0 norms)"
+      },
+      "custom_rules": {
+        "location": "rules/custom/",
+        "files": 4,
+        "status": "MINIMAL_CONTENT"
+      }
+    },
+    
+    "auto_enforced": [
+      {
+        "id": "pre-commit-normative-audit",
+        "enforcer": "lefthook - normative-audit",
+        "tool": "normative-audit-hook.ts",
+        "stage": "pre-commit",
+        "status": "ACTIVE",
+        "script": "src/hooks/normative-audit-hook.ts"
+      },
+      {
+        "id": "pre-commit-validation",
+        "enforcer": "lefthook - opencode-validation",
+        "tool": "pre-commit-opencode-validation.ts",
+        "stage": "pre-commit",
+        "status": "ACTIVE",
+        "script": "src/hooks/pre-commit-opencode-validation.ts"
+      },
+      {
+        "id": "pre-commit-tool-configs",
+        "enforcer": "lefthook - validate-tool-configs",
+        "tool": "validate-tool-configs.ts",
+        "stage": "pre-commit",
+        "status": "ACTIVE",
+        "script": "src/core/validate-tool-configs.ts"
+      },
+      {
+        "id": "ci-normative-enforcement",
+        "enforcer": "GitHub Actions",
+        "workflow": "reusable-governance.yml",
+        "stage": "CI/CD",
+        "status": "ACTIVE",
+        "job": "normative"
+      },
+      {
+        "id": "pre-commit-karpathy",
+        "enforcer": "lefthook - karpathy-enforcer",
+        "tool": "karpathy-enforcer-hook.ps1",
+        "stage": "pre-commit",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "pre-push-audit",
+        "enforcer": "lefthook - audit-check",
+        "tool": "siem-audit-bridge.ts",
+        "stage": "pre-push",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "session-autostart-karpathy",
+        "enforcer": "session-autostart pipeline",
+        "tool": "karpathy-enforcer.ts",
+        "stage": "session-start",
+        "status": "ACTIVE",
+        "script": "src/karpathy-enforcer.ts"
+      },
+      {
+        "id": "eval-gates-enforcement",
+        "enforcer": "eval-gates.json",
+        "tool": "eval-runner.ps1",
+        "stage": "CI/CD",
+        "status": "CONFIGURED"
+      },
+      {
+        "id": "auto-norm-enforcer",
+        "enforcer": "scripts/adaptive/auto-norm-enforcer.ps1",
+        "stage": "every-5-turns",
+        "status": "MISSING_SCRIPT",
+        "note": "Script referenced but file does not exist"
+      }
+    ],
+    
+    "manual_enforced": [
+      {
+        "id": "README-governance",
+        "policy": "README-GOVERNANCE.md",
+        "enforcement": "Pre-commit hook + manual review",
+        "responsible": "Project Owner"
+      },
+      {
+        "id": "ADR-validation",
+        "workflow": "reusable-governance.yml",
+        "job": "adr",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "SDD-gate",
+        "workflow": "reusable-governance.yml",
+        "job": "sdd-gate",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "skill-registry-validation",
+        "workflow": "reusable-governance.yml",
+        "job": "skill-registry",
+        "status": "ACTIVE"
+      }
+    ],
+    
+    "outdated": [
+      {
+        "file": "rules/NORMATIVAS-SECURITY-COMPLIANCE.md",
+        "issue": "References NORMATIVAS-ENFORCEMENT.md which does not exist",
+        "line": "Line 53: See `rules/NORMATIVAS-ENFORCEMENT.md`"
+      },
+      {
+        "file": "rules/NORMATIVES.md",
+        "issue": "References multiple non-existent files",
+        "missing": [
+          "NORMATIVAS-CONFIG.md",
+          "NORMATIVAS-AI-SAFETY.md",
+          "NORMATIVAS-COST-OPTIMIZATION.md",
+          "NORMATIVAS-DISASTER-RECOVERY.md",
+          "NORMATIVAS-INCIDENT-MANAGEMENT.md",
+          "NORMATIVAS-DEVOPS.md",
+          "NORMATIVAS-GIT.md",
+          "NORMATIVAS-SOC2.md",
+          "NORMATIVAS-GDPR.md",
+          "NORMATIVAS-ENFORCEMENT.md"
+        ]
+      },
+      {
+        "file": "rules/adaptive/norms-registry.json",
+        "issue": "Empty registry - 0 norms registered",
+        "last_updated": "2026-07-10"
+      },
+      {
+        "file": "docs/governance/policies/CONFIGURATION-VALIDATION-CHECKLIST.md",
+        "issue": "References obsolete scripts (comprehensive-validation.ps1, cross-workspace-validator.ps1)",
+        "status": "OUTDATED"
+      }
+    ],
+    
+    "missing_normatives": [
+      "NORMATIVAS-ENFORCEMENT.md (referenced but missing)",
+      "NORMATIVAS-CONFIG.md (referenced but missing)",
+      "NORMATIVAS-AI-SAFETY.md (referenced but missing)",
+      "NORMATIVAS-COST-OPTIMIZATION.md (referenced but missing)",
+      "NORMATIVAS-DISASTER-RECOVERY.md (referenced but missing)",
+      "NORMATIVAS-INCIDENT-MANAGEMENT.md (referenced but missing)",
+      "NORMATIVAS-DEVOPS.md (referenced but missing)",
+      "NORMATIVAS-GIT.md (referenced but missing)",
+      "NORMATIVAS-SOC2.md (referenced but missing)",
+      "NORMATIVAS-GDPR.md (referenced but missing)"
+    ]
+  },
+
+  "configuration_governance": {
+    "total_configs": 112,
+    "validated_automatically": {
+      "via_tool_validator": [
+        "opencode.json",
+        ".windsurf/config.json",
+        ".continue/config.json",
+        ".clinerules"
+      ],
+      "pre_commit": [
+        "src/core/validate-tool-configs.ts - runs on every commit",
+        "src/hooks/pre-commit-opencode-validation.ts - JSON validation"
+      ]
+    },
+    "schema_coverage": {
+      "with_schema": 1,
+      "without_schema": 111,
+      "coverage_percentage": "0.9%"
+    },
+    "schemas_available": [
+      "config/timeout-config.schema.json (1 of 112 configs)"
+    ],
+    "config_owners": {
+      "system_configs": "Owner",
+      "security_configs": "Owner",
+      "tool_configs": "Various (JSON validation enforced)",
+      "orchestrator_configs": "Orchestrator Agent"
+    },
+    "versioning": {
+      "status": "MANUAL",
+      "notes": "No automated config versioning detected",
+      "recommendation": "Implement config versioning workflow"
+    },
+    "drift_detection": {
+      "manual": "session-autostart.config.json - cross-workspace-validation step",
+      "automated": "validate-tool-configs.ts - schema drift detection for tool configs",
+      "coverage": "LOW - only tool configs have automated drift detection"
+    },
+    "gaps": [
+      "Only 1 of 112 config files has a JSON schema (0.9% coverage)",
+      "No centralized config validation workflow",
+      "config/secrets-governance.json exists but validation limited",
+      "No automated config drift detection for most configs"
+    ]
+  },
+
+  "decision_records": {
+    "total_adrs": 6,
+    "accepted": 5,
+    "planned": 1,
+    "deprecated": 0,
+    "adr_files": [
+      "ADR-001-powershell-language-choice.md (Accepted)",
+      "ADR-002-mcp-workspace-external-local (Planned)",
+      "ADR-003-npx-offline-hardening.md (Accepted)",
+      "ADR-004-homologation-gate.md (Accepted)",
+      "ADR-005-code-coverage-requirements.md (Accepted)",
+      "ADR-006-automated-dependency-updates.md (Accepted)"
+    ],
+    "template_usage": "YES - Full ADR template in docs/architecture/decisions/README.md",
+    "ci_validation": "YES - reusable-governance.yml validates ADR structure",
+    "gaps": [
+      "Planned ADR-002 not started",
+      "Missing ADRs for major decisions (MCP adoption, SDD framework, Agent ecosystem)"
+    ]
+  },
+
+  "compliance_checks": {
+    "automated_checks": [
+      {
+        "name": "ISO 27001 Control Validation",
+        "script": "CI workflow validation",
+        "triggers": ["CI/CD"],
+        "status": "CONFIGURED"
+      },
+      {
+        "name": "Quality Gates",
+        "config": "config/quality-gates.json",
+        "gates_count": 29,
+        "enforced": 26,
+        "governance_only": 3,
+        "stages": ["pre-commit", "commit-msg", "post-commit", "pre-push", "ci"]
+      },
+      {
+        "name": "Eval Gates",
+        "config": "config/eval-gates.json",
+        "enforcement": "eval-gates-enforcement.md",
+        "status": "CONFIGURED"
+      },
+      {
+        "name": "SDD Gate",
+        "workflow": "reusable-governance.yml",
+        "status": "ACTIVE"
+      }
+    ],
+    "manual_checks": [
+      {
+        "name": "Governance Review",
+        "responsible": "GOV Agent / Project Owner",
+        "frequency": "On-demand"
+      }
+    ],
+    "failure_handling": {
+      "blocking": "Pipeline/Commit blocked",
+      "warning": "Warning issued, pipeline continues",
+      "escalation": "3 consecutive warnings = escalation to blocking"
+    }
+  },
+
+  "security_governance": {
+    "rules_enforced": [
+      {
+        "name": "Secret Detection",
+        "tools": ["Gitleaks", "TruffleHog", "Secretlint"],
+        "stages": ["pre-commit", "pre-push", "CI"],
+        "status": "ACTIVE"
+      },
+      {
+        "name": "Dependency Security",
+        "tools": ["npm audit", "Trivy", "Dependabot"],
+        "stages": ["pre-push", "CI weekly"],
+        "status": "ACTIVE"
+      },
+      {
+        "name": "Input Validation",
+        "tool": "pre-process-input.ps1",
+        "stage": "Every session turn",
+        "status": "ACTIVE"
+      },
+      {
+        "name": "Security Orchestrator",
+        "tool": "src/security/security-orchestrator.ts",
+        "stage": ["Session init", "Pre-processing"],
+        "status": "ACTIVE"
+      }
+    ],
+    "security_check_automation": {
+      "pre_commit": [
+        "secretlint",
+        "trufflehog-scan",
+        "skill-scan"
+      ],
+      "pre_push": [
+        "npm-audit",
+        "audit-check",
+        "typecheck",
+        "lint"
+      ],
+      "ci_cd": [
+        "security-scan.yml - Gitleaks",
+        "reusable-security.yml - Gitleaks + Secretlint + Trivy",
+        "security.yml - Full security scan"
+      ]
+    },
+    "secrets_management": {
+      "policy": "SECRETS-MANAGEMENT.md",
+      "rotation_schedule": "Defined (30-365 days by type)",
+      "detection": "Multi-layer (Gitleaks + Trufflehog + Secretlint)",
+      "response_procedure": "Documented (REVOKE-ROTATE-REMOVE-AUDIT-PREVENT)",
+      "enforcement": "Pre-commit hooks + CI/CD"
+    }
+  },
+
+  "gaps": [
+    {
+      "category": "norms",
+      "severity": "critical",
+      "description": "BROKEN REFERENCE: NORMATIVAS-ENFORCEMENT.md is referenced by 4+ files but does not exist",
+      "affected_files": [
+        "rules/NORMATIVAS-SECURITY-COMPLIANCE.md",
+        "rules/NORMATIVES.md",
+        "rules/CONTEXT-ENGINEERING.md"
+      ],
+      "recommendation": "Create NORMATIVAS-ENFORCEMENT.md or update references"
+    },
+    {
+      "category": "norms",
+      "severity": "high",
+      "description": "10 normative files referenced in NORMATIVES.md do not exist (NORMATIVAS-CONFIG, NORMATIVAS-AI-SAFETY, etc.)",
+      "recommendation": "Either create missing files or remove references"
+    },
+    {
+      "category": "norms",
+      "severity": "medium",
+      "description": "Empty adaptive norms registry (rules/adaptive/norms-registry.json has 0 norms)",
+      "recommendation": "Populate registry or remove empty file"
+    },
+    {
+      "category": "config",
+      "severity": "critical",
+      "description": "Only 1 of 112 config files has JSON schema validation (0.9% coverage)",
+      "recommendation": "Create schemas for critical configs; implement config validation in CI"
+    },
+    {
+      "category": "config",
+      "severity": "high",
+      "description": "Script auto-norm-enforcer.ps1 referenced in quality-gates.json and CI references does not exist",
+      "recommendation": "Create the script or remove references"
+    },
+    {
+      "category": "compliance",
+      "severity": "medium",
+      "description": "Governance checks in quality-gates.json marked as 'not enforced' (governance-sdd-spec-validation, deploy-readiness)",
+      "recommendation": "Migrate these to enforced via appropriate tooling"
+    },
+    {
+      "category": "compliance",
+      "severity": "medium",
+      "description": "3 gates in quality-gates.json not enforced: governance-sdd-spec-validation, deploy-readiness",
+      "recommendation": "Implement these gates or remove aspirational entries"
+    },
+    {
+      "category": "security",
+      "severity": "low",
+      "description": "Trivy configured in reusable-security.yml but may have incomplete coverage",
+      "recommendation": "Review Trivy configuration for full filesystem scanning"
+    },
+    {
+      "category": "adr",
+      "severity": "low",
+      "description": "ADR-002 (MCP Workspace) has been 'Planned' for extended period without implementation",
+      "recommendation": "Complete ADR-002 or mark as superseded"
+    },
+    {
+      "category": "documentation",
+      "severity": "medium",
+      "description": "CONFIGURATION-VALIDATION-CHECKLIST.md references obsolete scripts (comprehensive-validation.ps1, cross-workspace-validator.ps1)",
+      "recommendation": "Update checklist to reference current TypeScript validation scripts"
+    }
+  ],
+
+  "coverage_metrics": {
+    "automated_normative_enforcement": "72%",
+    "config_schema_coverage": "0.9% (1/112)",
+    "adr_template_compliance": "100% (6/6 ADRs follow template)",
+    "security_check_automation": "95%",
+    "compliance_check_automation": "85%",
+    "ci_workflow_coverage": "91% (21/23 workflows active)"
+  },
+
+  "recommendations": {
+    "immediate_actions": [
+      "Create MISSING NORMATIVAS-ENFORCEMENT.md file or fix broken references",
+      "Fix adaptive norms registry - populate or remove",
+      "Add JSON schemas for critical configs (at least top 20)",
+      "Create auto-norm-enforcer.ps1 or remove references"
+    ],
+    "short_term": [
+      "Implement config drift detection workflow",
+      "Add governance gates enforcement (currently 3 aspirational gates)",
+      "Complete or cancel ADR-002",
+      "Update CONFIGURATION-VALIDATION-CHECKLIST.md"
+    ],
+    "long_term": [
+      "Achieve 100% config schema coverage for critical configs",
+      "Implement automated normative compliance dashboard",
+      "Add config versioning and rollback capability",
+      "Create centralized governance metrics"
+    ]
+  }
+}

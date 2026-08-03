@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "estimateOnPR": true,
+  "estimateOnCommit": false,
+  "defaultModel": "claude-3.5-sonnet",
+  "thresholds": {
+    "complexityAuto": 3,
+    "requireBreakdown": 5
+  },
+  "autoLabelPRs": true,
+  "labelMapping": {
+    "complexity-1": "XS",
+    "complexity-2": "S",
+    "complexity-3": "M",
+    "complexity-4": "L",
+    "complexity-5": "XL"
+  }
+}

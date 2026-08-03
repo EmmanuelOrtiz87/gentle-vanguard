@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+**Superseded** by ADR-002 (TypeScript-First Architecture)
 
 ## Date
 
@@ -17,19 +17,19 @@ technical choices, their rationale, and their implications.
 
 Adopt the following architecture decisions as the gentle-vanguard for the project:
 
-### 1. PowerShell-First with Multi-Language Support
+### 1. TypeScript with Multi-Language Support
 
-The project is primarily PowerShell with supplementary languages (Go, Node.js, Python) for specific
-use cases where PowerShell is not the best fit.
+The project is primarily TypeScript with supplementary languages (Go, Node.js, Python) for specific
+use cases where TypeScript is not the best fit.
 
 ### 2. Lefthook v2 for Git Hooks
 
 Use lefthook v2 instead of raw Git hooks or husky for consistent cross-platform hook management with
 YAML-based configuration.
 
-### 3. Pester 5.x for Testing
+### 3. node:test for Testing
 
-Use Pester 5.x with the `New-PesterConfiguration` API for all PowerShell testing. Tests organized in
+Use node:test with the `New-PesterConfiguration` API for all TypeScript testing. Tests organized in
 4 categories: unit, integration, security, performance.
 
 ### 4. Engram for Memory

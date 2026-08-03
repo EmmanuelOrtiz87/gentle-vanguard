@@ -6,8 +6,8 @@
     "activeToolDetection": {
       "enabled": true,
       "mandatory": true,
-      "script": "scripts/utilities/detect-tool.ps1",
-      "scriptArgs": "-ConfigPath config/orchestrator.json -AsJson",
+      "script": "npx tsx src/detect-tool.ts",
+      "scriptArgs": "--config config/orchestrator.json --json",
       "fallbackTool": "opencode",
       "fallbackPromptFile": "CLAUDE.md",
       "canonicalEntryPoint": "docs/AGENTS.md",
@@ -16,11 +16,8 @@
     "preProcessing": {
       "enabled": true,
       "mandatory": true,
-      "script": "scripts/utilities/pre-process-input.ps1",
-      "scriptArgs": {
-        "UserInput": "USER_INPUT_HERE",
-        "WorkspaceRoot": "."
-      },
+      "script": "npx tsx src/pre-process-input.ts",
+      "scriptArgs": "--input \"USER_INPUT_HERE\" --workspace-root .",
       "fallbackBehavior": "continue",
       "fallbackStrategy": "clarify-ba",
       "parseOutput": {
@@ -198,20 +195,20 @@
   "editing": {
     "hashline": {
       "enabled": true,
-      "script": "scripts/editing/hashline.ps1",
+      "script": "npx tsx src/hashline.ts",
+      "note": "hashline.ts — full migration complete, hashline.ps1 removed",
       "storage": ".runtime/hashline-db.json",
       "hash_algorithm": "SHA-256",
       "integration": {
-        "lefthook": ".lefthook.yml#post-commit.hashing-snapshot",
-        "pre_compact": "scripts/utilities/pre-compact-hook.ps1"
+        "lefthook": ".lefthook.yml#post-commit.hashing-snapshot"
       }
     }
   },
   "team_mode": {
-    "enabled": true,
-    "script": "scripts/utilities/WORKFLOW-ORCHESTRATION/team-mode.ps1",
-    "dispatch_integration": "scripts/utilities/WORKFLOW-ORCHESTRATION/dispatch-agent.ps1#-Mode team",
-    "message_bus": "scripts/adaptive/agent-message-bus.ps1",
+    "enabled": false,
+    "note": "team-mode.ps1 and dispatch-agent.ps1 were removed in cleanup — re-enable when TS equivalents are built",
+    "message_bus": "npx tsx src/agent-message-bus.ts",
+    "message_bus_note": "agent-message-bus.ts — pending migration",
     "max_members": 8,
     "runtime_dir": ".runtime/teams"
   },
@@ -224,7 +221,8 @@
         "chars_per_token": 4,
         "note": "Canonical unit: tokens. chars/4 = estimated tokens. Use this formula across all scripts."
       },
-      "daily_budget_tokens": 30000,
+      "daily_budget_tokens": 120000,
+      "source_of_truth": "config/token-budget-guard.json",
       "soft_threshold_pct": 70,
       "hard_threshold_pct": 90,
       "per_agent_budget_tokens": 3000,
@@ -234,8 +232,7 @@
         "soft": "WARN — log and continue",
         "hard": "BLOCK — refuse dispatch until reset or override"
       },
-      "legacy_script": "scripts/utilities/token-guard.ps1",
-      "operational_script": "scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1",
+      "operational_script": "src/token-budget-guard.ts",
       "metrics_path": "docs/sessions/metrics/token-guard-usage.csv"
     },
     "constraint_optimization": {
@@ -277,8 +274,7 @@
         ]
       },
       "integration": {
-        "auto_delegation": "$ref:auto-delegation.json#/adaptive_mode/artifact_naming",
-        "utility_script": "scripts/utilities/artifact-naming.ps1"
+        "auto_delegation": "$ref:auto-delegation.json#/adaptive_mode/artifact_naming"
       }
     }
   },
@@ -302,8 +298,8 @@
   },
   "norms": {
     "orchestrator": "docs/NORMATIVAS-ORQUESTADOR.md",
-    "hashline": "scripts/editing/hashline.ps1",
-    "team_mode": "scripts/utilities/WORKFLOW-ORCHESTRATION/team-mode.ps1",
+    "hashline": "src/hashline.ts (full migration complete, hashline.ps1 removed)",
+    "team_mode": "disabled — re-enable when TS team orchestrator is built",
     "code_review": "rules/CODE-REVIEW-STANDARDS.md",
     "pr_workflow": "rules/PR-WORKFLOW.md",
     "secrets_management": "rules/SECRETS-MANAGEMENT.md",
@@ -312,7 +308,7 @@
     "continuous_improvement": "rules/CONTINUOUS-IMPROVEMENT.md",
     "prompt_engineering": "rules/PROMPT-ENGINEERING.md",
     "ai_model_selection": "rules/AI-MODEL-SELECTION.md",
-    "model_routing": "config/model-routing.json",
+    "model_routing": "config/model-router.json",
     "delegation_rules": "rules/DELEGATION-RULES.md",
     "sdd_config": "openspec/config.yaml",
     "inter_agent_communication": "rules/INTER-AGENT-COMMUNICATION.md",
@@ -345,9 +341,9 @@
       "supportsSkillTool": true,
       "supportsMemTools": true,
       "detectFirst": true,
-      "mandatoryStartup": "scripts/utilities/session-autostart.cmd",
-      "adaptiveProfile": "scripts/utilities/adaptive-opencode-profile.ps1",
-      "note": "CLAUDE.md is auto-loaded by OpenCode — contains immediate detect-tool.ps1 directive atop"
+      "mandatoryStartup": "npx tsx src/session-autostart.ts",
+      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
+      "note": "CLAUDE.md is auto-loaded by OpenCode — contains immediate detect-tool.ts directive atop"
     },
     "claude-code": {
       "promptFile": "CLAUDE.md",
@@ -357,8 +353,8 @@
       "communicationLang": "es",
       "supportsSkillTool": true,
       "supportsMemTools": true,
-      "adaptiveProfile": "scripts/utilities/adaptive-claude-cline-profile.ps1",
-      "note": "Claude Code native — CLAUDE.md is auto-loaded"
+      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
+      "note": "Claude Code native — CLAUDE.md is auto-loaded. Uses opencode profile as baseline."
     },
     "cline": {
       "promptFile": ".clinerules",
@@ -368,9 +364,9 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": true,
-      "mcpBridge": "scripts/mcp-bridge/mcp-bridge.ps1",
-      "adaptiveProfile": "scripts/utilities/adaptive-claude-cline-profile.ps1",
-      "note": "Cline sin skill tool nativo — skills vía MCP bridge (gentle-vanguard-skills) en .cline/config.json"
+      "mcpBridge": "npx tsx src/mcp-bridge.ts",
+      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
+      "note": "Cline sin skill tool nativo — skills via MCP bridge. Uses opencode profile as baseline."
     },
     "cursor": {
       "promptFile": ".cursorrules",
@@ -380,9 +376,9 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": true,
-      "mcpBridge": "scripts/mcp-bridge/mcp-bridge.ps1",
-      "adaptiveProfile": "scripts/utilities/adaptive-cursor-profile.ps1",
-      "note": "Cursor sin skill tool nativo — skills vía MCP bridge en .cursor/config.json#mcpServers"
+      "mcpBridge": "npx tsx src/mcp-bridge.ts",
+      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
+      "note": "Cursor sin skill tool nativo — skills via MCP bridge. Uses opencode profile as baseline."
     },
     "windsurf": {
       "promptFile": "CLAUDE.md",
@@ -392,9 +388,9 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": true,
-      "mcpBridge": "scripts/mcp-bridge/mcp-bridge.ps1",
-      "adaptiveProfile": "scripts/utilities/adaptive-codex-windsurf-profile.ps1",
-      "note": "Windsurf sin skill tool nativo — skills vía MCP bridge en .windsurf/config.json#mcpServers"
+      "mcpBridge": "npx tsx src/mcp-bridge.ts",
+      "adaptiveProfile": "npx tsx src/adaptive-codex-windsurf-profile.ts",
+      "note": "Windsurf sin skill tool nativo — skills via MCP bridge"
     },
     "codex": {
       "promptFile": "CLAUDE.md",
@@ -404,7 +400,7 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": false,
-      "adaptiveProfile": "scripts/utilities/adaptive-codex-windsurf-profile.ps1",
+      "adaptiveProfile": "npx tsx src/adaptive-codex-windsurf-profile.ts",
       "note": "Codex — shares adaptive profile with Windsurf"
     },
     "continue-dev": {
@@ -415,8 +411,8 @@
       "communicationLang": "es",
       "supportsSkillTool": true,
       "supportsMemTools": true,
-      "adaptiveProfile": "scripts/utilities/adaptive-continue-copilot-profile.ps1",
-      "note": "Continue.dev — adaptive profile manages token/permission optimization"
+      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
+      "note": "Continue.dev — uses opencode profile as baseline"
     },
     "copilot": {
       "promptFile": "CLAUDE.md",
@@ -426,8 +422,8 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": false,
-      "adaptiveProfile": "scripts/utilities/adaptive-continue-copilot-profile.ps1",
-      "note": "GitHub Copilot — shares adaptive profile with Continue.dev"
+      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
+      "note": "GitHub Copilot — uses opencode profile as baseline"
     },
     "antigravity": {
       "promptFile": "CLAUDE.md",
@@ -437,8 +433,8 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": false,
-      "adaptiveProfile": "scripts/utilities/adaptive-antigravity-profile.ps1",
-      "note": "Antigravity — v2.0 config with full skill emulation and engram memory. Dedicated adaptive profile."
+      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
+      "note": "Antigravity — uses opencode profile as baseline"
     },
     "claude-generic": {
       "promptFile": "CLAUDE.md",
@@ -448,7 +444,7 @@
       "communicationLang": "es",
       "supportsSkillTool": true,
       "supportsMemTools": true,
-      "adaptiveProfile": "scripts/utilities/adaptive-opencode-profile.ps1",
+      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
       "note": "Fallback for Claude variants — always prefer AGENTS.md"
     }
   },

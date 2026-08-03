@@ -36,7 +36,8 @@
     "enabled": true,
     "slidingWindowTurns": 10,
     "pruneToolResults": true,
-    "summarizeOlderTurns": false,
+    "summarizeOlderTurns": true,
+    "maxSummaryTokens": 500,
     "inputTokenBudgetPct": 80,
     "note": "Syncs with opencode.json compaction config. slidingWindowTurns must match maxTurns."
   },

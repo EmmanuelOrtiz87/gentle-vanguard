@@ -11,7 +11,7 @@ los umbrales configurados. Existen dos scripts; solo uno es operacional.
 
 | Script                                                       | Estado             | Fuente de config                                                     |
 | ------------------------------------------------------------ | ------------------ | -------------------------------------------------------------------- |
-| `scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1` | ✅ **OPERACIONAL** | `config/orchestrator.json#subagent_orchestration.token_budget_guard` |
+| `src/telemetry/token-budget-guard.ts` | ✅ **OPERACIONAL** | `config/orchestrator.json#subagent_orchestration.token_budget_guard` |
 | `scripts/utilities/token-guard.ps1`                          | ⛔ **DEPRECATED**  | `token-guard-config.json` (no existe en disco)                       |
 
 **Usar solo el script operacional.** El legacy tiene thresholds distintos y referencia un archivo de
@@ -21,7 +21,7 @@ config inexistente.
 
 ### 1. Token Budget Guard (Operacional)
 
-- **Script**: `scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1`
+- **Script**: `src/telemetry/token-budget-guard.ts`
 - **Configuración canónica**: `config/orchestrator.json` →
   `subagent_orchestration.token_budget_guard`
 - **Estado**: `.session/token-guard-state.json`
@@ -57,7 +57,7 @@ config inexistente.
 
 ```
 Token Budget Guard System (Operacional)
- scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1  ← motor principal
+ src/telemetry/token-budget-guard.ts  ← motor principal
  config/orchestrator.json#subagent_orchestration.token_budget_guard  ← config canónica
  docs/sessions/metrics/token-guard-usage.csv  ← historial de uso
 
@@ -117,7 +117,7 @@ Editar en `config/orchestrator.json` bajo `subagent_orchestration.token_budget_g
 
 ### Monitoreo
 
-```powershell
+```TypeScript
 # Inicializar Token Guard
 Initialize-TokenGuard -Config $config -SessionId "session-2026-04-23-15"
 
@@ -131,7 +131,7 @@ Check-TokenThreshold -CurrentTokens 102400 -BudgetTokens 128000 `
 
 ### Control de Dispatch
 
-```powershell
+```TypeScript
 # Pausar dispatch
 Pause-Dispatch -StateFile ".\.session\token-guard-state.json" `
   -Reason "Presupuesto de tokens excedido (80%)"
@@ -145,7 +145,7 @@ Is-DispatchPaused -StateFile ".\.session\token-guard-state.json"
 
 ### Fragmentacin
 
-```powershell
+```TypeScript
 # Inicializar fragmentacin
 Initialize-RoundFragmentation -Config $config `
   -StateFile ".\.session\token-guard-state.json"
@@ -157,7 +157,7 @@ Complete-Round -StateFile ".\.session\token-guard-state.json" `
 
 ### Reportes
 
-```powershell
+```TypeScript
 # Generar reporte
 Generate-TokenReport -StateFile ".\.session\token-guard-state.json" `
   -LogPath ".\.session\token-guard.log" -Config $config
@@ -167,7 +167,7 @@ Generate-TokenReport -StateFile ".\.session\token-guard-state.json" `
 
 ### Monitor Mode (Predeterminado)
 
-```powershell
+```TypeScript
 .\tools\token-guard.ps1 -ConfigPath "scripts/utilities/token-guard-config.json" `
   -SessionId "session-2026-04-23-15" -Mode "monitor"
 ```
@@ -178,7 +178,7 @@ Generate-TokenReport -StateFile ".\.session\token-guard-state.json" `
 
 ### Enforce Mode
 
-```powershell
+```TypeScript
 .\tools\token-guard.ps1 -ConfigPath "scripts/utilities/token-guard-config.json" `
   -SessionId "session-2026-04-23-15" -Mode "enforce"
 ```
@@ -189,7 +189,7 @@ Generate-TokenReport -StateFile ".\.session\token-guard-state.json" `
 
 ### Report Mode
 
-```powershell
+```TypeScript
 .\tools\token-guard.ps1 -ConfigPath "scripts/utilities/token-guard-config.json" `
   -SessionId "session-2026-04-23-15" -Mode "report"
 ```
@@ -222,12 +222,12 @@ El Token Guard se integra automticamente en `scripts/utilities/session-autostart
 
 ```batch
 REM Extraer SessionId del archivo de sesin
-for /f "tokens=*" %%i in ('powershell -NoProfile -ExecutionPolicy Bypass -Command "..."') do set SESSION_ID=%%i
+for /f "tokens=*" %%i in ('TypeScript -NoProfile -ExecutionPolicy Bypass -Command "..."') do set SESSION_ID=%%i
 
 REM Inicializar Token Guard para proteccin de tokens
 echo [INFO] Initializing Token Guard...
 if exist "%TOKEN_GUARD_SCRIPT%" (
-  powershell -NoProfile -ExecutionPolicy Bypass -File "%TOKEN_GUARD_SCRIPT%" `
+  TypeScript -NoProfile -ExecutionPolicy Bypass -File "%TOKEN_GUARD_SCRIPT%" `
     -ConfigPath "scripts/utilities/token-guard-config.json" `
     -SessionId "%SESSION_ID%" -Mode "monitor"
 )
@@ -324,7 +324,7 @@ El `scripts/utilities/session-autostart.config.json` incluye la seccin de Token 
 
 ### Token Guard no se inicializa
 
-```powershell
+```TypeScript
 # Verificar que el archivo de configuración existe
 Test-Path "scripts/utilities/token-guard-config.json"
 
@@ -337,7 +337,7 @@ Test-Path "scripts/utilities/token-guard.ps1"
 
 ### No se crea archivo de estado
 
-```powershell
+```TypeScript
 # Verificar permisos en .session
 Get-Item ".\.session" | Select-Object FullName, Mode
 
@@ -347,7 +347,7 @@ New-Item -ItemType Directory -Path ".\.session" -Force
 
 ### Alertas no se disparan
 
-```powershell
+```TypeScript
 # Verificar configuración
 Get-Content "scripts/utilities/token-guard-config.json" | ConvertFrom-Json
 

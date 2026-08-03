@@ -1,0 +1,82 @@
+{
+  "$id": "workspace-config",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Workspace Configuration",
+  "description": "Configuration for Gentle-Vanguard workspace structure",
+  "type": "object",
+  "required": ["workspaceName", "workspaceRoot", "projectRoot", "dataRoot"],
+  "properties": {
+    "workspaceName": {
+      "type": "string",
+      "description": "Name of the workspace",
+      "minLength": 1
+    },
+    "workspaceRoot": {
+      "type": "string",
+      "description": "Root directory for the workspace",
+      "minLength": 1
+    },
+    "projectRoot": {
+      "type": "string",
+      "description": "Directory containing projects",
+      "minLength": 1
+    },
+    "dataRoot": {
+      "type": "string",
+      "description": "Directory for workspace data",
+      "minLength": 1
+    },
+    "toolsRoot": {
+      "type": "string",
+      "description": "Directory for tools",
+      "default": "tools"
+    },
+    "projectTemplate": {
+      "type": "string",
+      "description": "Template directory for new projects",
+      "default": "templates/project-root"
+    },
+    "projectDefaults": {
+      "type": "object",
+      "description": "Default settings for new projects",
+      "properties": {
+        "repositoryMode": {
+          "type": "string",
+          "enum": ["template", "copy", "symlink"],
+          "description": "How project repositories are created"
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["service", "library", "app", "cli", "api"],
+          "description": "Type of project"
+        },
+        "preset": {
+          "type": "string",
+          "description": "Preset configuration to use"
+        },
+        "architecture": {
+          "type": "string",
+          "enum": ["layered", "hexagonal", "clean", "ddd", "microservices"],
+          "description": "Architecture pattern"
+        },
+        "profile": {
+          "type": "string",
+          "description": "Project profile"
+        },
+        "aiModelMode": {
+          "type": "string",
+          "enum": ["local", "cloud", "hybrid", "none"],
+          "description": "AI model execution mode"
+        },
+        "testCommand": {
+          "type": "string",
+          "description": "Command to run tests"
+        },
+        "postInstallCommand": {
+          "type": "string",
+          "description": "Command to run after project creation"
+        }
+      }
+    }
+  }
+}

@@ -28,14 +28,30 @@ jobs:
 
   normative:
     name: Normative Enforcement
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      NODE_VERSION: '22'
+      PNPM_VERSION: '11.15.1'
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Run norm enforcer
-        run:
-          pwsh -NoProfile scripts/adaptive/auto-norm-enforcer.ps1 -Trigger orchestrator
-          -VerboseOutput
+        run: npx tsx src/auto-norm-enforcer.ts --check
 
   sdd-gate:
     name: SDD Gate

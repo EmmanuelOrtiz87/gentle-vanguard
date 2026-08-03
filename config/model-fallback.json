@@ -1,0 +1,104 @@
+{
+  "version": "2.0.0",
+  "description": "Model fallback chains for agent dispatch — el modelo nativo opencode/deepseek-v4-flash-free es el primario; si no está disponible, intenta con proveedores locales configurados (ollama/dify/lm-studio2).",
+  "lastModified": "2026-07-31",
+  "modifiedBy": "orchestrator",
+  "global": {
+    "enabled": true,
+    "maxFallbackAttempts": 3,
+    "notifyOnFallback": true,
+    "persistState": true
+  },
+  "agentFallbacks": {
+    "ORCHESTRATOR": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/llama3", "dify/qwen-plus", "lm-studio2/qwen2.5"],
+      "providerPriority": ["opencode", "ollama", "dify", "lm-studio2"],
+      "rationale": "Orquestador — modelo nativo estable, fallback a proveedores locales"
+    },
+    "BA": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/mistral", "dify/qwen-plus"],
+      "providerPriority": ["opencode", "ollama", "dify"],
+      "rationale": "BA explora — modelo nativo para razonamiento, fallback a locales"
+    },
+    "SAD": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/mistral", "dify/qwen-plus"],
+      "providerPriority": ["opencode", "ollama", "dify"],
+      "rationale": "SAD diseña — modelo nativo para precisión, fallback a locales"
+    },
+    "DEV": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/mistral", "dify/qwen-plus"],
+      "providerPriority": ["opencode", "ollama", "dify"],
+      "rationale": "DEV implementa — modelo nativo para código, fallback a locales"
+    },
+    "QA": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/mistral", "dify/qwen-plus"],
+      "providerPriority": ["opencode", "ollama", "dify"],
+      "rationale": "QA valida — modelo nativo para precisión, fallback a locales"
+    },
+    "OPS": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/mistral", "dify/qwen-plus"],
+      "providerPriority": ["opencode", "ollama", "dify"],
+      "rationale": "OPS despliega — modelo nativo para precisión, fallback a locales"
+    },
+    "GOV": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/mistral", "dify/qwen-plus"],
+      "providerPriority": ["opencode", "ollama", "dify"],
+      "rationale": "GOV audita — modelo nativo para compliance, fallback a locales"
+    },
+    "DOC": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/llama3", "dify/qwen-plus"],
+      "providerPriority": ["opencode", "ollama", "dify"],
+      "rationale": "DOC documenta — modelo nativo, fallback a locales"
+    },
+    "SESSION": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "dify/qwen-plus"],
+      "providerPriority": ["opencode", "ollama", "dify"],
+      "rationale": "SESSION trackea — modelo nativo para sesiones, fallback a locales"
+    },
+    "PREMORTEM": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/mistral", "dify/qwen-plus"],
+      "providerPriority": ["opencode", "ollama", "dify"],
+      "rationale": "PREMORTEM analiza riesgos — modelo nativo para adversarial, fallback a locales"
+    },
+    "MKT": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/llama3", "dify/qwen-plus"],
+      "providerPriority": ["opencode", "ollama", "dify"],
+      "rationale": "MKT crea contenido — modelo nativo, fallback a locales"
+    },
+    "SALES": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "dify/qwen-plus"],
+      "providerPriority": ["opencode", "ollama", "dify"],
+      "rationale": "SALES sigue metodología — modelo nativo eficiente"
+    },
+    "FINANCE": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/mistral", "dify/qwen-plus"],
+      "providerPriority": ["opencode", "ollama", "dify"],
+      "rationale": "FINANCE calcula — modelo nativo para precisión numérica"
+    }
+  },
+  "universalFallbacks": [
+    "opencode/deepseek-v4-flash-free",
+    "ollama/qwen2.5",
+    "ollama/llama3",
+    "dify/qwen-plus"
+  ],
+  "agentTypeFallback": {
+    "description": "Cuando un tipo de agente específico falla, usar estos tipos como fallback universal",
+    "rule": "Intentar con 'general' como fallback universal, luego 'explore' para tareas de análisis",
+    "priorities": ["general", "explore"],
+    "notes": "general y explore son tipos de agente integrados en OpenCode que usan el system-model y siempre están disponibles"
+  }
+}

@@ -47,7 +47,7 @@ Add additional test cases to:
 Improve the implementation while keeping all tests GREEN:
 
 - Apply coding standards from `rules/DEVELOPMENT-STANDARDS.md`
-- Follow PowerShell best practices from `rules/POWERSHELL-STANDARDS.md`
+- Follow TypeScript best practices from `rules/TypeScript-STANDARDS.md`
 - Verify `lefthook validate` still passes
 - Verify no regressions
 
@@ -55,7 +55,7 @@ Improve the implementation while keeping all tests GREEN:
 
 ### Automated Checks (MUST run before commit)
 
-```powershell
+```TypeScript
 # Run test suite
 Invoke-Pester -Path tests/ -Output Detailed
 
@@ -79,9 +79,9 @@ TDD Evidence: [task-id]
 
 | Layer       | When                       | Tool       | Path                 |
 | ----------- | -------------------------- | ---------- | -------------------- |
-| Unit        | Every SDD apply phase      | Pester 5.x | `tests/unit/`        |
-| Integration | Cross-script changes       | Pester 5.x | `tests/integration/` |
-| Security    | Auth/key/injection changes | Pester 5.x | `tests/security/`    |
+| Unit        | Every SDD apply phase      | node:test | `tests/unit/`        |
+| Integration | Cross-script changes       | node:test | `tests/integration/` |
+| Security    | Auth/key/injection changes | node:test | `tests/security/`    |
 
 ## Exceptions
 

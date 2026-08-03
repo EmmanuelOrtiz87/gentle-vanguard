@@ -37,6 +37,7 @@ export interface LatencyMetrics {
   p99: number;
   max: number;
   samples: number;
+  responseTimes: Record<string, { avg: number; count: number }>;
 }
 
 export interface FeedbackMetric {
@@ -54,6 +55,8 @@ export interface CostInsight {
   estimatedCost?: number;
   savingsPct?: number;
   suggestedAction?: string;
+  potentialSavings?: number;
+  roi?: number;
 }
 
 export interface DashboardData {
@@ -77,20 +80,82 @@ export interface DashboardData {
       bySkill: Record<string, number>;
       lastCall: string | null;
     };
-    performance: { avgResponseTime: number; errorRate: number };
+    performance: { avgResponseTime: number; errorRate: number; responseTimes: Record<string, { avg: number; count: number }> };
   };
   system?: {
-    memory: { rss: number; heapUsed: number; heapTotal: number };
-    cpu: { user: number; system: number };
+    memory: { rss: number; heapUsed: number; heapTotal: number; total: number; free: number; usagePercent: number };
+    cpu: { user: number; system: number; cores: number; loadAverage: number[] };
     uptime: number;
     pid: number;
+    platform: string;
+    arch: string;
   };
   sla?: {
     uptime: number;
     incidents: number;
     lastIncident: string | null;
     sloCompliance: number;
+    responseTime95th: number;
+    throughput: number;
   };
+  operational?: OperationalMetrics;
+  tenantId?: string;
+  tenantName?: string;
+  sqlite?: SqliteMetrics;
+  swarmWorkers?: SwarmWorkerData;
+}
+
+export interface OperationalMetrics {
+  velocity: {
+    commitsPerHour: number;
+    filesModifiedPerSession: number;
+    linesAdded: number;
+    linesDeleted: number;
+    avgTimeBetweenCommits: number;
+  };
+  efficiency: {
+    avgToolLatency: number;
+    successRate: number;
+    fastestTool: string;
+    slowestTool: string;
+    responseTimeP95: number;
+  };
+  productivity: {
+    skillsUsed: number;
+    uniqueSkills: string[];
+    agentsActive: number;
+    tasksCompleted: number;
+    sessionsCompleted: number;
+  };
+  quality: {
+    buildSuccessRate: number;
+    testPassRate: number;
+    errorsDetected: number;
+    autoCorrections: number;
+    typeCheckFailures: number;
+  };
+  totalOperations: number;
+  lastUpdated: string;
+}
+
+export interface SwarmWorkerEntry {
+  skill: string;
+  status: 'running' | 'completed' | 'failed' | 'timeout';
+  started: string;
+  finished?: string;
+  exitCode: number | null;
+  output: string;
+  error: string | null;
+  workerDir: string;
+}
+
+export interface SwarmWorkerData {
+  activeCount: number;
+  completedCount: number;
+  failedCount: number;
+  workers: SwarmWorkerEntry[];
+  lastReport: string | null;
+  reports: number;
 }
 
 export interface Session {
@@ -118,14 +183,25 @@ export interface CloudMetrics {
     totalCost: number;
     successRate: number;
     avgLatency: number;
-    byProvider: Record<string, {
-      executions: number;
-      cost: number;
-      successRate: number;
-      avgLatency: number;
-    }>;
+    byProvider: Record<
+      string,
+      {
+        executions: number;
+        cost: number;
+        successRate: number;
+        avgLatency: number;
+      }
+    >;
     circuitBreakerStates: Record<string, string>;
   };
+}
+
+export interface SqliteMetrics {
+  skillCount: number;
+  skillAvgCost: number;
+  tokenTotalCost: number;
+  contractPassRate: number;
+  routingTotalHits: number;
 }
 
 export interface MetricHistory {
@@ -134,4 +210,46 @@ export interface MetricHistory {
   sessions: number;
   cost: number;
   latency?: number;
+  mcpSkills?: number;
+  commits?: number;
+}
+
+// ─── Stack Tables (Wave 37: SQLite-backed panels) ─────────────────────
+
+export interface SkillUsageRow {
+  skillId: string;
+  count: number;
+  tokensUsed: number;
+  cost: number;
+}
+
+export interface TokenUsageRow {
+  session_id: string;
+  prompt: number;
+  completion: number;
+  cost: number;
+  last_used: string;
+}
+
+export interface ContractResultRow {
+  id?: number;
+  contract_id: string;
+  result: string;
+  score?: number;
+  created_at: string;
+  [key: string]: unknown;
+}
+
+export interface RoutingRuleRow {
+  pattern: string;
+  target: string;
+  priority: number;
+  hitCount: number;
+}
+
+export interface StackTablesData {
+  skillUsage: { skills: SkillUsageRow[]; total: number };
+  tokenUsage: { usage: TokenUsageRow[]; total: number };
+  contractResults: { results: ContractResultRow[]; total: number };
+  routingRules: { rules: RoutingRuleRow[]; total: number };
 }

@@ -74,66 +74,6 @@ metadata:
 4. Run coverage check against minimum thresholds
 5. Verify no anti-patterns (testing internals, brittle selectors, order dependencies)
 
-## Risk-Based Testing
-
-1. **Identify risks** for each feature (data loss, security, UX, performance)
-2. **Score** likelihood × impact
-3. **Allocate test effort** proportionally to risk score
-4. **Reassess** after each release
-
-## Coverage Goals
-
-| Type                | Target |
-| ------------------- | ------ |
-| Line coverage       | >80%   |
-| Branch coverage     | >75%   |
-| Mutation score      | >60%   |
-| Critical path E2E   | 100%   |
-| API endpoint tested | >90%   |
-
-## Framework Selection
-
-| Type        | Stack              | Recommended           |
-| ----------- | ------------------ | --------------------- |
-| Unit        | Node.js/TypeScript | Vitest, Jest          |
-| Unit        | Go                 | testing package       |
-| Unit        | Python             | pytest                |
-| Integration | Node.js            | Supertest, MSW        |
-| E2E         | React/Vue          | Playwright, Cypress   |
-| API         | Any                | REST Client, Postman  |
-| Component   | React              | React Testing Library |
-| Component   | Vue                | Vue Test Utils        |
-
-## Test File Naming
-
-```
-src/
-  components/Button/
-    Button.tsx
-    Button.test.tsx       Unit
-    Button.e2e.spec.ts    E2E
-  services/
-    api.ts
-    api.test.ts           Integration
-    api.mock.ts           Mock
-  __tests__/
-    setup.ts              Setup
-```
-
-## Test Structure (AAA Pattern)
-
-```typescript
-describe('User', () => {
-  describe('age', () => {
-    it('should update age when birthday is called', () => {
-      const user = createUser({ name: 'John', age: 30 });
-      user.birthday();
-      expect(user.age).toBe(31);
-    });
-  });
-});
-```
-
 ## Mocking Best Practices
 
 - Mock external dependencies, not internal modules
@@ -147,8 +87,4 @@ describe('User', () => {
 - E2E nightly or on demand
 - Flaky test detection → auto-quarantine → alert
 
-> **Referencia detallada**: [references/detail.md](references/detail.md)
-
-```
-
-```
+> **Detailed reference**: [references/detail.md](references/detail.md)

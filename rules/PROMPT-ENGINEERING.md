@@ -33,7 +33,7 @@ Every prompt MUST follow this structure:
 ### Example Structure
 
 ```
-You are a PowerShell expert reviewing session closure scripts.
+You are a TypeScript expert reviewing session closure scripts.
 
 Context: Gentle-Vanguard project session lifecycle. Script must run on Windows pwsh 7.4+.
 All paths use Join-Path. No Write-Host in reusable functions.

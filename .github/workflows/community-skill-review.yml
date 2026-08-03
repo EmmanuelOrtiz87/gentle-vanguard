@@ -30,9 +30,9 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
       - name: Extract skill details from issue body
         if: github.event_name == 'issues'
@@ -79,7 +79,7 @@ jobs:
           $changedFiles = & git diff --name-only origin/${{ github.base_ref }}...HEAD
 
           foreach ($file in $changedFiles) {
-            if ($file -match 'skills/.+?/SKILL\.md$') {
+            if ($file -match '^skills/.+?/SKILL\.md$') {
               $content = Get-Content $file -Raw
 
               if (-not ($content -match '^---[\s\S]*?^---')) {
@@ -87,9 +87,14 @@ jobs:
               }
 
               if (-not ($content -match '^name:\s*\S+' -or $content -match '"name":\s*"\S+' -or $content -match "'name':\s*'\S+'")) {
-                $frontmatter = ($content | Select-String -Pattern '(?s)^---\s*\n(.*?)\n---' -AllMatches).Matches.Groups[1].Value
-                if (-not ($frontmatter -match 'name')) {
-                  $errors += "Frontmatter missing 'name' field in $file"
+                $frontmatch = [regex]::Match($content, '(?s)^---\s*\n(.*?)\n---')
+                if ($frontmatch.Success) {
+                  $frontmatter = $frontmatch.Groups[1].Value
+                  if (-not ($frontmatter -match 'name')) {
+                    $errors += "Frontmatter missing 'name' field in $file"
+                  }
+                } else {
+                  $errors += "Invalid YAML frontmatter in $file"
                 }
               }
 
@@ -182,8 +187,8 @@ jobs:
           script: |
             const validationPassed = '${{ steps.validate_issue.outputs.validationPassed }}' === 'true';
             const hasConflicts = '${{ steps.conflicts.outputs.hasConflicts }}' === 'true';
-            const validationErrors = '${{ steps.validate_issue.outputs.validationErrors }}';
-            const conflictErrors = '${{ steps.conflicts.outputs.conflictErrors }}';
+            const validationErrors = ${{ toJSON(steps.validate_issue.outputs.validationErrors || '') }};
+            const conflictErrors = ${{ toJSON(steps.conflicts.outputs.conflictErrors || '') }};
 
             let body = `## Skill Review Checklist\n\n`;
             body += `### ✅ Validation\n\n`;
@@ -246,8 +251,8 @@ jobs:
           script: |
             const validationPassed = '${{ steps.validate_pr.outputs.validationPassed }}' === 'true';
             const hasConflicts = '${{ steps.conflicts.outputs.hasConflicts }}' === 'true';
-            const validationErrors = '${{ steps.validate_pr.outputs.validationErrors }}';
-            const conflictErrors = '${{ steps.conflicts.outputs.conflictErrors }}';
+            const validationErrors = ${{ toJSON(steps.validate_pr.outputs.validationErrors || '') }};
+            const conflictErrors = ${{ toJSON(steps.conflicts.outputs.conflictErrors || '') }};
 
             let body = `## Skill Review Checklist\n\n`;
             body += `### ✅ Validation\n\n`;
@@ -337,7 +342,7 @@ jobs:
 
       - name: Upload validation artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: community-skill-validation
           path: |
