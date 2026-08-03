@@ -188,10 +188,15 @@ function testJsonSchema(jsonPath: string, schemaPath: string): boolean {
 }
 
 function testNormativas(jsonPath: string, gitRoot: string): boolean {
-  const normativasPath = join(gitRoot, 'docs', 'reference', 'NORMATIVAS-ORQUESTADOR.md');
+  const normativasPath = join(gitRoot, 'docs', 'governance', 'normatives', 'NORMATIVAS-ORQUESTADOR.md');
   if (!existsSync(normativasPath)) {
-    writeLog('NORMATIVAS-ORQUESTADOR.md not found, skipping', 'Warning');
-    return true;
+    writeLog('NORMATIVAS-ORQUESTADOR.md not found in docs/governance/normatives, checking legacy location', 'Warning');
+    // Fallback to legacy location for backwards compatibility
+    const legacyPath = join(gitRoot, 'docs', 'reference', 'NORMATIVAS-ORQUESTADOR.md');
+    if (!existsSync(legacyPath)) {
+      writeLog('NORMATIVAS-ORQUESTADOR.md not found in legacy location either, skipping', 'Warning');
+      return true;
+    }
   }
 
   try {
