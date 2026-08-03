@@ -6,13 +6,18 @@
  * skill routing. The TS pipeline routes through detect-tool.ts (tool detection) and
  * team-orchestrator.ts (skill routing). This test validates the full pipeline.
  */
-import { describe, it } from 'node:test';
+import { describe, it, before } from 'node:test';
 import assert from 'node:assert';
 import { spawnSync } from 'child_process';
 import { resolve } from 'path';
 import { existsSync, readFileSync } from 'fs';
 
 const ROOT = resolve(import.meta.dirname, '..', '..');
+
+before(() => {
+  // Ensure deterministic opencode detection regardless of CI env (confidence 100)
+  process.env.OPENCODE_SERVER_USERNAME = 'ci';
+});
 
 function runCLI(script: string, ...args: string[]): { stdout: string; stderr: string; status: number } {
   const result = spawnSync('npx', ['tsx', script, ...args], {

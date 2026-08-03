@@ -39,7 +39,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -65,6 +65,7 @@ jobs:
           severity: CRITICAL,HIGH
 
       - name: Upload Trivy results to GitHub Security
+        continue-on-error: true
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-results.sarif

@@ -187,8 +187,8 @@ jobs:
           script: |
             const validationPassed = '${{ steps.validate_issue.outputs.validationPassed }}' === 'true';
             const hasConflicts = '${{ steps.conflicts.outputs.hasConflicts }}' === 'true';
-            const validationErrors = '${{ steps.validate_issue.outputs.validationErrors }}';
-            const conflictErrors = '${{ steps.conflicts.outputs.conflictErrors }}';
+            const validationErrors = ${{ toJSON(steps.validate_issue.outputs.validationErrors || '') }};
+            const conflictErrors = ${{ toJSON(steps.conflicts.outputs.conflictErrors || '') }};
 
             let body = `## Skill Review Checklist\n\n`;
             body += `### ✅ Validation\n\n`;
@@ -251,8 +251,8 @@ jobs:
           script: |
             const validationPassed = '${{ steps.validate_pr.outputs.validationPassed }}' === 'true';
             const hasConflicts = '${{ steps.conflicts.outputs.hasConflicts }}' === 'true';
-            const validationErrors = '${{ steps.validate_pr.outputs.validationErrors }}';
-            const conflictErrors = '${{ steps.conflicts.outputs.conflictErrors }}';
+            const validationErrors = ${{ toJSON(steps.validate_pr.outputs.validationErrors || '') }};
+            const conflictErrors = ${{ toJSON(steps.conflicts.outputs.conflictErrors || '') }};
 
             let body = `## Skill Review Checklist\n\n`;
             body += `### ✅ Validation\n\n`;
