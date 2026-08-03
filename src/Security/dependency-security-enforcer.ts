@@ -36,7 +36,7 @@ export class DependencySecurityEnforcer {
       {
         name: 'vulnerability-scan',
         description: 'Scan for security vulnerabilities in dependencies',
-        checkCommand: this.pnpmAvailable ? 'pnpm audit --audit-level=high' : 'npm audit --audit-level=high',
+        checkCommand: this.pnpmAvailable ? 'pnpm audit --audit-level=high --json' : 'npm audit --audit-level=high --json',
         remediation: 'Run "pnpm audit fix" or manually update vulnerable packages',
         severity: 'critical',
         enabled: this.pnpmAvailable
@@ -191,29 +191,47 @@ export class DependencySecurityEnforcer {
     try {
       switch (policy.name) {
         case 'vulnerability-scan':
-          // Check if audit found vulnerabilities
-          if (output.includes('found') && output.includes('vulnerability')) {
-            // If there are vulnerabilities, check if they're above the audit level
-            if (output.includes('0 vulnerabilities found')) {
-              status = 'pass';
-            } else {
-              status = 'fail';
+          // Prefer machine-readable audit output. pnpm returns
+          // metadata.vulnerabilities counts; npm returns a similar shape.
+          try {
+            const parsed = JSON.parse(output);
+            const vulnerabilities = parsed.metadata?.vulnerabilities;
+            if (vulnerabilities && typeof vulnerabilities === 'object') {
+              const high = Number(vulnerabilities.high ?? 0);
+              const critical = Number(vulnerabilities.critical ?? 0);
+              status = high + critical > 0 ? 'fail' : 'pass';
+              break;
             }
-          } else if (output.includes('audit passed')) {
+            if (parsed.advisories && Object.keys(parsed.advisories).length === 0) {
+              status = 'pass';
+              break;
+            }
+          } catch {
+            // Fall through to legacy text parsing.
+          }
+          if (output.includes('0 vulnerabilities found') || output.includes('audit passed')) {
             status = 'pass';
           } else {
-            // Default to fail if we can't parse the result
             status = 'fail';
           }
           break;
 
         case 'license-compliance':
-          // For license compliance, check if there are any license issues
-          // This is a simplified check - in practice you'd parse JSON output
-          if (output.includes('No licenses found') || output.includes('error')) {
+          // pnpm licenses list --json returns an object grouped by license.
+          // A valid non-empty JSON result means licenses were discovered; this
+          // policy does not maintain a denylist, so it should not fail on parseable data.
+          try {
+            const parsed = JSON.parse(output);
+            status = parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0 ? 'pass' : 'fail';
+          } catch {
+            if (output.includes('No licenses found') || output.toLowerCase().includes('error')) {
+              status = 'fail';
+            } else {
+              status = 'pass';
+            }
+          }
+          if (output.toLowerCase().includes('timed out')) {
             status = 'fail';
-          } else {
-            status = 'pass';
           }
           break;
 

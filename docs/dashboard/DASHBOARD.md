@@ -1,9 +1,10 @@
-# Dashboard Ultimate v2.0 - Complete Documentation
+# Dashboard v3.0 - Complete Documentation
 
 ## Overview
 
-The Gentle-Vanguard Dashboard Ultimate v2.0 is an enterprise-grade live metrics dashboard with 9
-sections, real-time updates, comprehensive analytics, and WCAG 2.1 AA accessibility compliance.
+The Gentle-Vanguard Dashboard v3.0 is an enterprise-grade live metrics dashboard with 7 sections
+(React/TypeScript/Vite SPA), real-time WebSocket updates, comprehensive analytics, and WCAG 2.1 AA
+accessibility compliance.
 
 ---
 
@@ -51,7 +52,7 @@ sections, real-time updates, comprehensive analytics, and WCAG 2.1 AA accessibil
 ┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
 │   SOURCES       │────▶│   COLLECTOR      │────▶│   STORE         │
 │                 │     │                  │     │                 │
-│ • session/*.json│     │ collector.ps1    │     │ .runtime/metrics│
+│ • session/*.json│     │ real-data.ts │     │ .runtime/metrics│
 │ • logs/*.json   │     │   -Scope full    │     │                 │
 │ • .token-state  │     │                  │     │ • consolidated  │
 │ • git log       │     │ Extract→Transform│     │ • sessions      │
@@ -67,8 +68,8 @@ sections, real-time updates, comprehensive analytics, and WCAG 2.1 AA accessibil
                                                    ┌─────────────────┐
                                                    │   RENDERER      │
                                                    │                 │
-                                                   │ • dashboard-    │
-                                                   │   render.ps1    │
+│ • websocket-    │
+│   server.ts     │
                                                    │                 │
                                                    │ Generates HTML  │
                                                    │ with 9 sections │
@@ -78,8 +79,8 @@ sections, real-time updates, comprehensive analytics, and WCAG 2.1 AA accessibil
                                                    ┌─────────────────┐
                                                    │   OUTPUT        │
                                                    │                 │
-                                                   │ reports/        │
-                                                   │ dashboard.html  │
+│ apps/web-       │
+│ dashboard/      │
                                                    │ (38.8 KB)       │
                                                    └─────────────────┘
 ```
@@ -88,52 +89,49 @@ sections, real-time updates, comprehensive analytics, and WCAG 2.1 AA accessibil
 
 | Component        | File                                         | Purpose                                |
 | ---------------- | -------------------------------------------- | -------------------------------------- |
-| Collector        | `scripts/metrics/collector.ps1`              | Aggregates metrics from all sources    |
-| Log Analyzer     | `scripts/metrics/log-analyzer.ps1`           | Analyzes session logs for productivity |
-| Dashboard Render | `scripts/metrics/dashboard-render.ps1`       | Generates HTML dashboard               |
-| Health Check     | `scripts/metrics/dashboard-health-check.ps1` | Monitors dashboard health              |
-| Validator        | `scripts/tests/dashboard-validator.ps1`      | Validates dashboard integrity          |
-| Service Worker   | `reports/sw.js`                              | Caching and offline support            |
-| Analytics        | `reports/analytics.js`                       | Usage tracking                         |
+| WS Server        | `apps/web-dashboard/server/websocket-server.ts` | Real-time metrics via WebSocket     |
+| Frontend         | `apps/web-dashboard/` (React/TS/Vite)         | 7-section dashboard SPA               |
+| Data Pipeline    | `apps/web-dashboard/server/real-data.ts`      | Reads `.state.json` → computes metrics|
+| Health Check     | `npm run watchtower:health`                   | Monitors dashboard + stack health     |
+| Launcher         | `src/dashboard-start.ts`                      | Starts WS watchdog + Vite + Chrome    |
+| Watchdog         | `src/dashboard-ws-autostart.ts`               | Auto-recovers WS server (10 retries)  |
+| Stop             | `src/dashboard-stop.ts`                       | Clean shutdown (watchdog first)       |
 
 ---
 
 ## Quick Start
 
-### Generate Dashboard
+### Start Dashboard
 
 ```TypeScript
-# 1. Collect all metrics
-.\scripts\metrics\collector.ps1 -Scope full
+# 1. Start full stack (WS server + Vite + Chrome)
+npx tsx src/dashboard-start.ts
 
-# 2. Analyze logs for performance metrics
-.\scripts\metrics\log-analyzer.ps1 -DaysBack 30 -SaveToMetrics
-
-# 3. Generate dashboard
-.\scripts\metrics\dashboard-render.ps1 -Open
+# 2. Or start WS server only (pipeline mode)
+npx tsx src/dashboard-ws-autostart.ts
 ```
 
 ### Validate Dashboard
 
 ```TypeScript
-# Run automated tests
-.\scripts\tests\dashboard-validator.ps1
+# Build the frontend (must exit 0 with no TS errors)
+cd apps/web-dashboard && npm run build
+
+# Verify WS server health API
+Invoke-RestMethod http://localhost:8080/api/health
 
 # Expected output:
-# [OK] Dashboard Exists - 38.8 KB
-# [OK] JSON Valid - 10 files
-# [OK] Structure - All 7 checks
-# Summary: 3/3 passed
+# websocket, mcp, adaptive, cloud, tracing, checkpoints, audit — 7/7 OK
 ```
 
 ### Monitor Health
 
 ```TypeScript
 # Single check
-.\scripts\metrics\dashboard-health-check.ps1
+npm run watchtower:health
 
-# Continuous monitoring (daemon mode)
-.\scripts\metrics\dashboard-health-check.ps1 -Daemon -CheckInterval 300
+# Stop all dashboard processes
+npx tsx src/dashboard-stop.ts
 ```
 
 ---
@@ -250,14 +248,14 @@ All interactive elements have appropriate ARIA labels:
 
 ### Data Encryption
 
-Encrypt sensitive metrics:
+Sensitive metrics are protected by pre-commit hooks that block committing `.runtime/metrics` files:
 
 ```TypeScript
-# Encrypt file
-.\scripts\utils\encrypt-data.ps1 -Action encrypt -FilePath ".runtime\metrics\sensitive.json"
-
-# Decrypt file
-.\scripts\utils\encrypt-data.ps1 -Action decrypt -FilePath ".runtime\metrics\sensitive.json"
+# .git/hooks/pre-commit (managed by lefthook)
+if ($files -match "\.runtime/metrics") {
+    Write-Host "ERROR: Metrics files should not be committed"
+    exit 1
+}
 ```
 
 ### Security Features
@@ -301,21 +299,22 @@ Analytics data is:
 
 ### Dashboard Not Loading
 
-1. Check if files exist:
+1. Check if WS server is running:
 
    ```TypeScript
-   Test-Path "reports/dashboard.html"
+   Invoke-RestMethod http://localhost:8080/api/health
    ```
 
-2. Validate JSON files:
+2. Verify WS server responds:
 
    ```TypeScript
-   .\scripts\tests\dashboard-validator.ps1
+   Invoke-RestMethod http://localhost:8080/api/health
    ```
 
-3. Regenerate dashboard:
+3. Restart dashboard:
    ```TypeScript
-   .\scripts\metrics\dashboard-render.ps1
+   npx tsx src/dashboard-stop.ts
+   npx tsx src/dashboard-start.ts
    ```
 
 ### Charts Not Rendering
@@ -384,8 +383,8 @@ For issues or questions:
 1. Check [Troubleshooting](#troubleshooting)
 2. Review [rules/NORMATIVES.md](../../rules/NORMATIVES.md)
 3. Review [NORMATIVAS-SRE.md](../governance/normatives/NORMATIVAS-SRE.md)
-4. Run validator: `.\scripts\tests\dashboard-validator.ps1`
+4. Run health check: `npm run watchtower:health`
 
 ---
 
-_Version: 2.0.0 | Last Updated: 2026-05-26_
+_Version: 3.0.0 | Last Updated: 2026-08-02_

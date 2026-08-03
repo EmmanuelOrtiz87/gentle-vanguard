@@ -2,7 +2,7 @@
 
 <p align="center">
   <b>Gentle-Vanguard — AI-First Development Workspace</b><br>
-  <i>v8.0.1 · Updated 2026-07-08</i>
+  <i>v3.5.0 · Updated 2026-08-02</i>
 </p>
 
 ---

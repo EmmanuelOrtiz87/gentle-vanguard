@@ -1,6 +1,6 @@
 # Quick Commands — Gentle-Vanguard
 
-> **Versión**: 3.4.0 | **Última actualización**: 2026-07-30
+> **Versión**: 3.5.0 | **Última actualización**: 2026-08-02
 
 ---
 
@@ -198,7 +198,7 @@ npm run secretlint           # Detectar secrets
 
 ## Environment Info
 
-- **Stack Version**: 3.4.0
+- **Stack Version**: 3.5.0
 - **TypeScript**: 5.x (strict mode)
 - **Node**: >= 20.0.0
 - **Package Manager**: pnpm 11.15.1

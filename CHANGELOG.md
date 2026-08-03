@@ -1,5 +1,40 @@
 # Changelog — Gentle-Vanguard
 
+## [3.5.0] — 2026-08-02
+
+### Native RDD System
+- **Risk-Driven Development**: Full native RDD pipeline (`src/rdd/`) — risk-classifier, RDD gates,
+  4R review, RDD core, kill switch
+- **RDD Normativa**: `rules/RDD-NORMATIVA.md` + `rules/REVIEW-AUTHORITY-THREAT-MODEL.md`
+- **Tests**: RDD test suite passing
+
+### Model Provider Healing
+- **Auto-Healing**: `src/model-provider-healer.ts` — detects unhealthy models (UnsupportedToolCalling,
+  ModelNotFound, AuthFailure, RateLimit, ConnectionError, BadRequest) and auto-switches to fallback
+- **Health State**: `config/model-health.json` + `.runtime/model-health.json` with cooldown
+- **Correction Rule**: `ModelProviderUnsupported` in `config/correction-rules.json` (13 rules total)
+- **Watchtower Check**: `model-provider-health` component monitors provider health
+- **Pipeline Step**: `model-provider-heal` (lazy, phase 90)
+
+### Web Permissions
+- **Orchestrator**: `websearch`/`webfetch` set to `ask` (LOCAL-FIRST policy allows external search
+  when user requests it)
+- **LOCAL-FIRST-POLICY.md**: Updated with the `ask` mechanism
+- **Skill Nudge Fix**: Corrected `skill-nudge` path in pipeline config
+
+### Documentation & Migrations
+- **Migration Complete**: All PS1 scripts migrated to TypeScript — removed legacy references
+- **Docs Updated**: `DASHBOARD.md`, `CROSS-PLATFORM-SETUP.md`, `CLEANUP-GUIDE.md` — replaced broken
+  PS1 commands with real TS equivalents (`npm run db:prune`, `stack:setup`, `gv`, `health:check`)
+- **Version Alignment**: VERSION file fixed (was stale 8.0.1, now 3.5.0)
+
+### Metrics
+- Health Score: 84 PASS / 1 WARN (expected: kimi-2-5 unhealthy, auto-healed) / 0 FAIL
+- Pipeline: 101 steps, 99 enabled, 0 missing scripts
+- Dashboard build: OK
+
+---
+
 ## [3.4.0] — 2026-07-27
 
 ### Stack Optimization & Simplification

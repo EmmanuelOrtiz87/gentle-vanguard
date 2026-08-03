@@ -1,11 +1,11 @@
 # 🚀 Getting Started
 
 <p align="center">
-  <b>Gentle-Vanguard v3.4.0 — Quick Start Guide</b>
+  <b>Gentle-Vanguard v3.5.0 — Quick Start Guide</b>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-3.4.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-3.5.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Health-100%25-22C55E?style=flat-square&labelColor=0D1117" alt="Health">
   <img src="https://img.shields.io/badge/Status-Optimized-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
 </p>

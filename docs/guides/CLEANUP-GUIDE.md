@@ -47,67 +47,53 @@ innecesarios.
 
 ## Scripts de Limpieza
 
-### TypeScript
+> **Nota**: El script legacy `cleanup-project.ps1` / `cleanup-project.sh` fue reemplazado por los
+> comandos TypeScript del stack. La limpieza ahora se realiza con los comandos de pruning
+> operacionales:
 
-**Archivo**: `scripts/utilities/cleanup-project.ps1`
-
-**Modos**:
-
-#### Dry-Run (Seguro)
+### Prune de Datos (Nexus DB)
 
 ```TypeScript
-.\tools\cleanup-project.ps1 -Mode dry-run
+# Elimina datos antiguos: eventos >30d, cache >7d, token_usage >90d
+npm run db:prune
+
+# Mantener solo los 10 backups más recientes
+npm run db:prune:backup
 ```
 
-- Muestra qu se limpiara
-- NO elimina nada
-- Perfecto para verificar
+### Cleanup de Snapshots
+
+```TypeScript
+# Elimina snapshots antiguos (retención 7 días)
+npx tsx src/snapshot-manager.ts --action cleanup
+```
+
+### Modos de Seguridad
+
+#### Dry-Run (Verificación)
+
+```TypeScript
+# Mostrar qué se limpiaría sin eliminar nada
+npm run db:health
+```
 
 #### Safe (Recomendado)
 
 ```TypeScript
-.\tools\cleanup-project.ps1 -Mode safe
+# Limpieza de datos temporales/caché sin tocar logs
+npm run db:prune
 ```
-
-- Elimina archivos temporales
-- Elimina directorios de cach
-- NO elimina logs
-- Verifica integridad del proyecto
 
 #### Full (Completo)
 
 ```TypeScript
-.\tools\cleanup-project.ps1 -Mode full
+# Limpieza completa + checkpoint WAL + VACUUM
+npm run db:optimize
 ```
 
-- Elimina archivos temporales
-- Elimina logs
-- Elimina directorios de cach
-- Verifica integridad del proyecto
-
-### Bash
-
-**Archivo**: `scripts/utilities/cleanup-project.sh`
-
-**Modos**:
-
-#### Dry-Run (Seguro)
-
-```bash
-bash ./scripts/utilities/cleanup-project.sh dry-run
-```
-
-#### Safe (Recomendado)
-
-```bash
-bash ./scripts/utilities/cleanup-project.sh safe
-```
-
-#### Full (Completo)
-
-```bash
-bash ./scripts/utilities/cleanup-project.sh full
-```
+- Elimina datos vencidos según retention policy
+- Verifica integridad de la base de datos
+- No toca documentación, configs, ni scripts
 
 ---
 
@@ -141,11 +127,8 @@ Los siguientes archivos/directorios NUNCA se eliminan:
 ### Paso 1: Verificar con Dry-Run
 
 ```TypeScript
-# TypeScript
-.\tools\cleanup-project.ps1 -Mode dry-run
-
-# Bash
-bash ./scripts/utilities/cleanup-project.sh dry-run
+# Mostrar qué se limpiaría sin eliminar nada
+npm run db:health
 ```
 
 **Resultado**: Ver qu se limpiara sin eliminar nada
@@ -153,21 +136,24 @@ bash ./scripts/utilities/cleanup-project.sh dry-run
 ### Paso 2: Ejecutar Limpieza Safe
 
 ```TypeScript
-# TypeScript
-.\tools\cleanup-project.ps1 -Mode safe
-
-# Bash
-bash ./scripts/utilities/cleanup-project.sh safe
+# Prune datos vencidos (eventos, cache, token_usage)
+npm run db:prune
 ```
 
-**Resultado**: Proyecto limpio sin perder logs importantes
+**Resultado**: Datos vencidos eliminados sin perder logs importantes
 
 ### Paso 3: Verificar Integridad
 
-El script automticamente verifica:
+```TypeScript
+# Verificar integridad de la base de datos
+npm run db:health
+```
 
-- Directorios requeridos presentes
-- Archivos requeridos presentes
+El comando verifica:
+
+- Integridad SQLite
+- Estado WAL
+- Conteo de tablas y rows
 - Estructura del proyecto intacta
 
 ---
@@ -213,10 +199,9 @@ El script automticamente verifica:
 
 ### Scripts
 
-- `scripts/utilities/` - Todos los scripts
-- `scripts/utilities/*.ps1`
-- `scripts/utilities/*.sh`
-- `scripts/utilities/*.cmd`
+- `src/` - Todos los scripts TypeScript
+- `scripts/` - Scripts de soporte (TS)
+- `src/cli/` - CLI del stack
 
 ### Datos
 
@@ -254,34 +239,35 @@ Despus de limpiar, el script verifica:
 ### Caso 1: Limpiar Antes de Despliegue
 
 ```TypeScript
-# Verificar qu se limpiara
-.\tools\cleanup-project.ps1 -Mode dry-run
+# Verificar qué se limpiará
+npm run db:health
 
 # Limpiar de forma segura
-.\tools\cleanup-project.ps1 -Mode safe
+npm run db:prune
 
 # Verificar resultado
-.\tools\cleanup-project.ps1 -Mode dry-run
+npm run db:health
 ```
 
 ### Caso 2: Limpiar Completamente
 
 ```TypeScript
-# Verificar qu se limpiara
-.\tools\cleanup-project.ps1 -Mode dry-run
+# Verificar qué se limpiará
+npm run db:health
 
-# Limpiar todo
-.\tools\cleanup-project.ps1 -Mode full
+# Limpiar todo + optimizar
+npm run db:prune
+npm run db:optimize
 
 # Verificar resultado
-.\tools\cleanup-project.ps1 -Mode dry-run
+npm run db:health
 ```
 
 ### Caso 3: Limpiar Regularmente
 
 ```TypeScript
-# Ejecutar limpieza segura regularmente
-.\tools\cleanup-project.ps1 -Mode safe
+# Ejecutar limpieza segura regularmente (pipeline lazy step: db-prune)
+npm run db:prune
 ```
 
 ---
@@ -341,21 +327,21 @@ Despus de limpiar, el script verifica:
 
 ### Limpiar Regularmente
 
-Agregar a tareas programadas:
+La limpieza ya está automatizada en la pipeline de sesión (step lazy `db-prune`):
 
 **Windows (Task Scheduler)**:
 
 ```
-Programa: TypeScript.exe
-Argumentos: -NoProfile -ExecutionPolicy Bypass -File ".\tools\cleanup-project.ps1" -Mode safe
-Frecuencia: Diaria (despus de horas de trabajo)
+Programa: cmd.exe
+Argumentos: /c cd /d C:\path\to\project && npm run db:prune
+Frecuencia: Diaria (después de horas de trabajo)
 ```
 
 **Linux/macOS (Cron)**:
 
 ```bash
 # Ejecutar limpieza diaria a las 22:00
-0 22 * * * cd /path/to/project && bash ./scripts/utilities/cleanup-project.sh safe
+0 22 * * * cd /path/to/project && npm run db:prune
 ```
 
 ---
@@ -373,6 +359,8 @@ detallado automatización posible
 
 ## Referencias
 
-- `scripts/utilities/cleanup-project.ps1` - Script TypeScript
-- `scripts/utilities/cleanup-project.sh` - Script Bash
+- `npm run db:prune` - Prune de datos vencidos (TS: `scripts/database/db-prune.ts`)
+- `npm run db:optimize` - WAL checkpoint + REINDEX + VACUUM
+- `npm run db:health` - Verificación de integridad de la base de datos
+- `npx tsx src/snapshot-manager.ts --action cleanup` - Limpieza de snapshots
 - `AGENTS.md` - Reglas del proyecto

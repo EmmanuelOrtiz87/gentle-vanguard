@@ -296,10 +296,23 @@ function heal(quiet: boolean): {
       cooldownUntil: '',
       autoSwitched: false,
     };
-    entry.detections++;
-    entry.reason = hit.snippet.slice(0, 200);
+    const reason = hit.snippet.slice(0, 200);
+    const sameCooldownHit = entry.status === 'unhealthy' &&
+      entry.signatureId === hit.signatureId &&
+      entry.reason === reason &&
+      entry.cooldownUntil &&
+      new Date(entry.cooldownUntil).getTime() > Date.now();
+    if (!sameCooldownHit) {
+      entry.detections++;
+    }
+    entry.reason = reason;
     entry.signatureId = hit.signatureId;
     entry.lastDetectedAt = hit.at;
+    if (sameCooldownHit) {
+      unhealthy.push(model);
+      state.models[model] = entry;
+      continue;
+    }
 
     const cooldownMs = config.cooldownMinutes * 60000;
     const inCooldown = entry.cooldownUntil && new Date(entry.cooldownUntil).getTime() > Date.now();

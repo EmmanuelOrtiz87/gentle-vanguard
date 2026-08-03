@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "packageManager": "pnpm@11.15.1",
   "engines": {
     "pnpm": ">=11.0.0",
@@ -147,6 +147,7 @@
     "model:switch": "npx tsx scripts/utilities/MODEL-ROUTER/model-switch.ts switch",
     "model:capability": "npx tsx scripts/utilities/MODEL-ROUTER/model-switch.ts capability",
     "model:fix": "npx tsx scripts/utilities/MODEL-ROUTER/fix-models.ts",
+    "model:validate-provider": "npx tsx scripts/utilities/MODEL-ROUTER/validate-provider-config.ts",
     "model:help": "npx tsx scripts/utilities/MODEL-ROUTER/model-switch.ts help",
     "cb:status": "npx tsx src/circuit-breaker-api.ts status",
     "cb:reset": "npx tsx src/circuit-breaker-api.ts reset",

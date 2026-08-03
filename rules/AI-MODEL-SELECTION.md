@@ -118,6 +118,17 @@ When changing a model assignment:
 4. Compare quality metrics (pass rate, rework rate)
 5. Roll back if quality degrades or cost exceeds 2x budget
 
+### Custom Provider Health
+
+- Keep `model` and `small_model` aligned when switching OpenCode models. Internal calls such as
+  compaction may use the small model path.
+- Validate global custom providers with `npm run model:validate-provider` before relying on them.
+- For LiteLLM providers that route to Bedrock, configure the proxy with
+  `litellm_settings.modify_params: true`; OpenCode fallback can keep the stack alive, but it does
+  not repair the upstream proxy.
+- Do not clear an unhealthy model state until a fresh request succeeds or the proxy/config change is
+  verified.
+
 ---
 
 ## 8. References
@@ -126,6 +137,7 @@ When changing a model assignment:
 | ----------------------- | ------------------------------------------------------------ |
 | Orchestrator Config     | `config/orchestrator.json`                                   |
 | Agent Config (OpenCode) | `opencode.json`                                              |
+| Provider Health Runbook | `docs/operations/procedures/MODEL-PROVIDER-HEALTH-RUNBOOK.md` |
 | Token Budget Guard      | `src/telemetry/token-budget-guard.ts` |
 | Performance Normatives  | `rules/NORMATIVAS-PERFORMANCE.md`                            |
 | Context Engineering     | `rules/CONTEXT-ENGINEERING.md`                               |

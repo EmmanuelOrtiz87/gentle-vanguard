@@ -19,7 +19,7 @@ const SCHEMAS: Record<string, string[]> = {
     'formatter', 'instructions', 'layout', 'logLevel', 'lsp',
     'mcp', 'mode', 'model',
     'permission', 'plugin', 'provider',
-    'reference', 'server', 'share', 'shell', 'skills',
+    'reference', 'references', 'server', 'share', 'shell', 'skills',
     'small_model', 'snapshot',
     'tools', 'tool_output',
     'username', 'watcher',
@@ -27,6 +27,8 @@ const SCHEMAS: Record<string, string[]> = {
   '.windsurf/config.json': [
     'name', 'description', 'version', 'rules', 'customRules', 'handle',
     'mcpServers', 'gentle-vanguard-skills', 'engram', 'codegraph',
+    'workspace', 'aiSettings', 'toolPermissions', 'contextManagement',
+    'cascade', 'preProcessing', 'sessionManagement', 'language',
   ],
   '.continue/config.json': [
     'name', 'description', 'version', 'models', 'modelProviders',

@@ -1,7 +1,7 @@
 # Guía de Operación Gentle-Vanguard
 
-**Versión:** 8.0.1  
-**Última actualización:** 2026-07-27
+**Versión:** 3.5.0  
+**Última actualización:** 2026-08-02
 
 ---
 
@@ -345,4 +345,4 @@ gentle-vanguard/
 
 ---
 
-**Gentle-Vanguard v8.0.1** — *Local-first, seguro, extensible, zero-drama.*
+**Gentle-Vanguard v3.5.0** — *Local-first, seguro, extensible, zero-drama.*

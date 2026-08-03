@@ -225,7 +225,7 @@ function switchModel(modelRef: string): { ok: boolean; message: string; backup?:
     // Write new model
     const global = loadJsonSafe<OpenCodeConfig>(GLOBAL_OPENCODE_CONFIG) ?? {};
     global.model = resolved;
-    global.small_model = global.small_model ?? resolved;
+    global.small_model = resolved;
     writeFileSync(GLOBAL_OPENCODE_CONFIG, JSON.stringify(global, null, 2) + '\n', 'utf-8');
 
     // Persist state
