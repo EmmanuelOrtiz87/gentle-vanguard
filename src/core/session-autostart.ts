@@ -5,8 +5,28 @@ import { execSync, spawn, type ChildProcess } from 'child_process';
 import { getPipelineTimeouts } from './timeout-config';
 import { log as createLogger } from '../utils/logger.js';
 import { printBanner } from '../cli/banner.js';
+import { newAuditEvent, saveAuditEvent } from '../infrastructure/audit-pipeline.js';
 
 const LOG = createLogger('SESSION-AUTOSTART');
+
+// ─── Audit Logging Helper ────────────────────────────────────────────────
+function auditLog(eventType: string, component: string, operation: string, status: string, message: string, metadata?: Record<string, unknown>): void {
+  try {
+    const event = newAuditEvent({
+      eventType,
+      component,
+      operation,
+      actor: 'session-autostart',
+      target: component,
+      status,
+      message,
+      metadata: metadata || {},
+    });
+    saveAuditEvent(event);
+  } catch (err) {
+    LOG.warn(`[AUDIT] Failed to log event: ${err}`);
+  }
+}
 
 // ─── Optional output redirection ──────────────────────────────────────────
 // The detached launcher (session-autostart-detached.ts) sets AUTOSTART_LOG_FILE
@@ -228,8 +248,20 @@ function startLazyStep(step: PipelineStep): { success: boolean; error?: string }
 }
 
 async function main() {
+  const sessionStartTime = new Date().toISOString();
+  
   // Lock check: only run once per OS user session
-  if (!checkLock()) return;
+  if (!checkLock()) {
+    auditLog('session.skip', 'session-autostart', 'lock_check', 'skipped', 'Session autostart skipped - lock active');
+    return;
+  }
+
+  // Log session start event
+  auditLog('session.start', 'session-autostart', 'initialize', 'success', `Session autostart initiated at ${sessionStartTime}`, {
+    pid: process.pid,
+    platform: process.platform,
+    nodeVersion: process.version,
+  });
 
   if (!process.env.GV_QUIET) printBanner('Session Autostart');
   LOG.info(`[SESSION-AUTOSTART] Loading pipeline from ${CONFIG_PATH}\n`);
@@ -249,6 +281,13 @@ async function main() {
   if (lazySteps.length > 0) {
     LOG.info(`[INFO] ${lazySteps.length} lazy steps deferred to background\n`);
   }
+  
+  // Log pipeline configuration
+  auditLog('config.load', 'session-autostart', 'load_config', 'success', `Loaded ${totalSteps} steps + ${lazySteps.length} lazy`, {
+    totalSteps,
+    lazySteps: lazySteps.length,
+    phases: [...new Set(steps.map(s => s.phase ?? 1))].length,
+  });
 
   const phaseMap = new Map<number, PipelineStep[]>();
   for (const step of steps) {
@@ -354,13 +393,33 @@ async function main() {
     LOG.info(`[WARNING] Non-required steps with issues: ${failed.join(', ')}`);
   }
 
+  // Log completion
+  const totalLazyLaunched = lazySteps.length;
+  const status = requiredFailed.length > 0 ? 'failure' : failed.length > 0 ? 'warning' : 'success';
+  
+  auditLog('session.complete', 'session-autostart', 'finish', status, 
+    `Session autostart completed: ${stepNum} steps, ${failed.length} failed, ${requiredFailed.length} required failed`, {
+    executed: stepNum,
+    failed: failed.length,
+    requiredFailed: requiredFailed.length,
+    lazySteps: totalLazyLaunched,
+    duration: Date.now() - new Date(sessionStartTime).getTime(),
+  });
+
+  if (requiredFailed.length > 0) {
+    auditLog('session.error', 'session-autostart', 'required_failure', 'failure', 
+      `Required steps failed: ${requiredFailed.join(', ')}`, {
+      failedSteps: requiredFailed,
+    });
+  }
+
   LOG.info(`[READY] Workspace ready for operations`);
 
   // CRITICAL: Force explicit exit. Lazy steps are fire-and-forget background
   // processes; on Windows (shell:true) their grandchildren can inherit stdout
   // handles, keeping this process alive and blocking callers (CI, hooks, shells).
   // Exiting explicitly releases the pipe and avoids artificial timeouts.
-  process.exit(0);
+  process.exit(requiredFailed.length > 0 ? 1 : 0);
 }
 
 main().catch((err) => {
