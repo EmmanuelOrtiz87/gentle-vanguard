@@ -34,7 +34,7 @@ describe('Routing Critical Flows', () => {
       assert.strictEqual(parsed.name, 'opencode');
       assert.strictEqual(parsed.isOpenCode, true);
       assert.strictEqual(parsed.confidence, 100);
-      assert.ok(parsed.os.isWindows, 'Expected Windows OS');
+      assert.strictEqual(parsed.os.isWindows, process.platform === 'win32');
     });
 
     it('returns valid OS info', () => {

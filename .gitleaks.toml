@@ -14,6 +14,8 @@ paths = [
     "demos/",
     # Security skill examples with placeholder/demo API keys
     "skills/security-expert-skill/",
+    # Public pentesting skill docs with placeholder curl auth examples and injection payloads
+    "public/skills/",
     # Model router config with intentional password hash
     "config/model-router\\.json",
     # Private sync workflow intentionally references PAT_SYNC and x-access-token
