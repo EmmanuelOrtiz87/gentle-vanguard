@@ -45,7 +45,7 @@ jobs:
           choco install nsis -y --no-progress
           echo "NSIS_DIR=C:\Program Files (x86)\NSIS" >> $env:GITHUB_ENV
       - name: Setup Node.js
-        uses: actions/setup-node@e51e5fe84f
+        uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
         with:
           node-version: '20'
       - name: Build installer

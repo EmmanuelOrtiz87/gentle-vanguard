@@ -36,7 +36,7 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@f548e57e54
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
       - name: Run maintenance checks
         run: |
           # Check for outdated deps
@@ -56,7 +56,7 @@ jobs:
     timeout-minutes: 15
     if: github.event.schedule == '0 6 1 * *'
     steps:
-      - uses: actions/checkout@f548e57e54
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
         with:
           fetch-depth: 0
       - name: Generate report

@@ -13,7 +13,7 @@ jobs:
       github.event.label.name == 'experimental-activation' || github.event.action == 'closed'
     steps:
       - name: Checkout
-        uses: actions/checkout@f548e57e54
+        uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
 
       - name: Check approvals
         uses: actions/github-script@v6

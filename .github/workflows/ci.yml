@@ -15,15 +15,15 @@ jobs:
     name: Lint & TypeCheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@f548e57e54
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@e51e5fe84f
+        uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -44,15 +44,15 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@f548e57e54
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@e51e5fe84f
+        uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -67,15 +67,15 @@ jobs:
     name: Dashboard Tests (vitest)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@f548e57e54
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@e51e5fe84f
+        uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -91,15 +91,15 @@ jobs:
     name: Dashboard Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@f548e57e54
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@e51e5fe84f
+        uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -115,15 +115,15 @@ jobs:
     name: Security Scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@f548e57e54
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@e51e5fe84f
+        uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -145,15 +145,15 @@ jobs:
     name: SRE Gates (Error Budget + Performance SLO)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@f548e57e54
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@e51e5fe84f
+        uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -171,15 +171,15 @@ jobs:
     name: Workflow Validation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@f548e57e54
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@e51e5fe84f
+        uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -198,17 +198,17 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@f548e57e54
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
         with:
           fetch-depth: 0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@e51e5fe84f
+        uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -228,15 +228,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test]
     steps:
-      - uses: actions/checkout@f548e57e54
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@e51e5fe84f
+        uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -248,7 +248,7 @@ jobs:
         run: pnpm coverage
 
       - name: Upload coverage to GitHub
-        uses: actions/upload-artifact@50759540e242
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: coverage-report
           path: coverage/
@@ -259,15 +259,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test]
     steps:
-      - uses: actions/checkout@f548e57e54
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@e51e5fe84f
+        uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -279,7 +279,7 @@ jobs:
         run: npx tsx src/generate-sbom.ts --output sbom/gentle-vanguard-sbom.json --format json
 
       - name: Upload SBOM
-        uses: actions/upload-artifact@50759540e242
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: sbom-report
           path: sbom/
