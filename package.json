@@ -180,6 +180,12 @@
     "rdd:enable": "npx tsx src/rdd/rdd-kill-switch.ts enable",
     "rdd:kill-status": "npx tsx src/rdd/rdd-kill-switch.ts status",
     "rdd:kill-history": "npx tsx src/rdd/rdd-kill-switch.ts history",
+    "perf:run": "npx tsx src/profiler/performance-profiler.ts run",
+    "perf:baseline": "npx tsx src/profiler/performance-profiler.ts baseline",
+    "perf:status": "npx tsx src/profiler/performance-profiler.ts status",
+    "semantic:build": "npx tsx src/profiler/semantic-code-graph.ts build",
+    "semantic:query": "npx tsx src/profiler/semantic-code-graph.ts query",
+    "semantic:status": "npx tsx src/profiler/semantic-code-graph.ts status",
     "test:rdd": "npx tsx tests/unit/rdd/risk-classifier.test.ts && npx tsx tests/unit/rdd/rdd-kill-switch.test.ts"
   },
   "devDependencies": {
