@@ -9,6 +9,20 @@ import { newAuditEvent, saveAuditEvent } from '../infrastructure/audit-pipeline.
 
 const LOG = createLogger('SESSION-AUTOSTART');
 
+// ─── Auto-Checkpoint Helper ──────────────────────────────────────────────
+async function createAutoCheckpoint(): Promise<void> {
+  try {
+    const checkpointCmd = 'npx tsx src/checkpoint-manager.ts create --label auto-session-start';
+    execSync(checkpointCmd, { encoding: 'utf-8', timeout: 30000 });
+    auditLog('checkpoint.create', 'session-autostart', 'auto_checkpoint', 'success', 'Auto-checkpoint created on session start');
+    LOG.info('[CHECKPOINT] Auto-checkpoint created successfully');
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    auditLog('checkpoint.error', 'session-autostart', 'auto_checkpoint', 'failure', `Auto-checkpoint failed: ${msg}`);
+    LOG.warn(`[CHECKPOINT] Auto-checkpoint creation failed: ${msg}`);
+  }
+}
+
 // ─── Audit Logging Helper ────────────────────────────────────────────────
 function auditLog(eventType: string, component: string, operation: string, status: string, message: string, metadata?: Record<string, unknown>): void {
   try {
@@ -414,6 +428,12 @@ async function main() {
   }
 
   LOG.info(`[READY] Workspace ready for operations`);
+
+  // Create auto-checkpoint on successful session start
+  if (requiredFailed.length === 0) {
+    LOG.info('[CHECKPOINT] Creating auto-checkpoint...');
+    await createAutoCheckpoint();
+  }
 
   // CRITICAL: Force explicit exit. Lazy steps are fire-and-forget background
   // processes; on Windows (shell:true) their grandchildren can inherit stdout
