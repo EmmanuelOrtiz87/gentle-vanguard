@@ -14,10 +14,13 @@
  */
 
 import { execSync } from 'child_process';
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { resolve, join } from 'path';
 
 const ROOT = resolve(process.cwd());
+
+// Cache file for lint state persistence
+// const CACHE_FILE = join(ROOT, '.runtime', 'lint-fix-cache.json');
 
 interface LintError {
   file: string;
@@ -288,7 +291,8 @@ async function main(): Promise<void> {
     try {
       execSync('npm run typecheck 2>&1', { encoding: 'utf-8', cwd: ROOT, stdio: 'pipe' });
       log('  Typecheck passed ✅', 'info');
-    } catch (e) {
+    } catch (_e) {
+      // Typecheck failure is expected if there are errors - log and continue
       log('  Typecheck failed - stopping batch', 'error');
       break;
     }

@@ -15,7 +15,7 @@
  */
 
 import { execSync } from 'child_process';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync } from 'fs';
 import { join, resolve } from 'path';
 import { runSync } from '../core/run-command.js';
 
@@ -37,7 +37,7 @@ function checkNodeVersion(): ValidationResult {
       return { name: 'Node.js', passed: true, message: `v${version}`, fixable: false };
     }
     return { name: 'Node.js', passed: false, message: `v${version} (need >=20)`, fixable: false };
-  } catch (e) {
+  } catch (_e) {
     return { name: 'Node.js', passed: false, message: 'Unknown', fixable: false };
   }
 }

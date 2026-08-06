@@ -14,7 +14,8 @@
  *   npx tsx src/tools/stack-start-all.ts --verbose     # Detailed output
  */
 
-import { spawn, spawnSync } from 'child_process';
+// unused: spawnSync
+import { spawn } from 'child_process';
 import { existsSync, writeFileSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { runSync } from '../core/run-command.js';
@@ -63,6 +64,7 @@ function isPortInUse(port: number): boolean {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function isProcessRunning(name: string): boolean {
   try {
     const result = runSync('tasklist', ['/fi', `imagename eq ${name}`], { timeout: 5000 });
@@ -235,7 +237,7 @@ function printSummary(): void {
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const skipMcp = args.includes('--skip-mcp');
-  const verbose = args.includes('--verbose');
+  const _verbose = args.includes('--verbose');
   
   console.log('🚀 Starting Gentle-Vanguard Stack...\n');
   

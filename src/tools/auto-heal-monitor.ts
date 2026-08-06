@@ -77,6 +77,7 @@ function isPortListening(port: number): boolean {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function isProcessRunning(name: string): boolean {
   try {
     const result = runSync('tasklist', ['/fi', `imagename eq ${name}`], { timeout: 3000 });
