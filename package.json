@@ -212,7 +212,11 @@
     "perf:alert": "npx tsx src/profiler/performance-alert.ts check",
     "perf:alert:ack": "npx tsx src/profiler/performance-alert.ts ack",
     "perf:alert:status": "npx tsx src/profiler/performance-alert.ts status",
-    "test:rdd": "npx tsx tests/unit/rdd/risk-classifier.test.ts && npx tsx tests/unit/rdd/rdd-kill-switch.test.ts"
+    "test:rdd": "npx tsx tests/unit/rdd/risk-classifier.test.ts && npx tsx tests/unit/rdd/rdd-kill-switch.test.ts",
+    "profile:list": "npx tsx src/model-profile-switcher.ts --list",
+    "profile:status": "npx tsx src/model-profile-switcher.ts --status",
+    "profile:set": "npx tsx src/model-profile-switcher.ts --set",
+    "profile:apply": "npx tsx src/model-profile-switcher.ts --set"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.2",

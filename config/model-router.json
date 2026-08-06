@@ -354,5 +354,39 @@
       "thinking": "high",
       "rationale": "Fresh-context model for thorough review and compliance"
     }
+  },
+  "profiles": {
+    "description": "Multi-profile-per-SDD-phase convention (absorbed from gentle-ai). Named profile sets route model/temperature/hallucinationGuard per SDD phase. Switch with the model-profile-switcher. All profiles map to the single native model in this environment; the value is the per-phase temperature/guard tuning.",
+    "active": "balanced",
+    "available": ["cheap", "balanced", "premium"],
+    "sets": {
+      "cheap": {
+        "description": "Fast/low-cost: lower temperature, lower hallucination guard. For high-volume deterministic phases.",
+        "phases": {
+          "BA": { "temperature": 0.7, "hallucinationGuard": "low" },
+          "SAD": { "temperature": 0.5, "hallucinationGuard": "low" },
+          "DEV": { "temperature": 0.3, "hallucinationGuard": "medium" },
+          "QA": { "temperature": 0.2, "hallucinationGuard": "medium" }
+        }
+      },
+      "balanced": {
+        "description": "Default: balanced temperature and guard across phases.",
+        "phases": {
+          "BA": { "temperature": 0.7, "hallucinationGuard": "low" },
+          "SAD": { "temperature": 0.3, "hallucinationGuard": "medium" },
+          "DEV": { "temperature": 0.15, "hallucinationGuard": "high" },
+          "QA": { "temperature": 0.1, "hallucinationGuard": "critical" }
+        }
+      },
+      "premium": {
+        "description": "Highest quality: lower temperature, higher hallucination guard for correctness-critical phases.",
+        "phases": {
+          "BA": { "temperature": 0.5, "hallucinationGuard": "medium" },
+          "SAD": { "temperature": 0.2, "hallucinationGuard": "high" },
+          "DEV": { "temperature": 0.1, "hallucinationGuard": "critical" },
+          "QA": { "temperature": 0.0, "hallucinationGuard": "critical" }
+        }
+      }
+    }
   }
 }
