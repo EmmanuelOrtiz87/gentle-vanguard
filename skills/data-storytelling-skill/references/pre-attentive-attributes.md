@@ -1,16 +1,17 @@
 # Pre-Attentive Attributes
 
-Visual properties the brain processes in under 500ms — before conscious attention. Use them to direct the audience's eye to the most important insight instantly.
+Visual properties the brain processes in under 500ms — before conscious attention. Use them to
+direct the audience's eye to the most important insight instantly.
 
-| Attribute | Best Used For | Example |
-|---|---|---|
-| Color (hue) | Highlighting a specific category | One bar in red, others in gray |
-| Intensity | Showing magnitude or importance | Darker shade = higher value |
-| Size | Showing quantity or hierarchy | Larger circle = more users |
-| Position | Showing ranking or sequence | Top of list = highest ranked |
-| Orientation | Showing difference or grouping | Angled element vs. straight |
-| Shape | Categorizing different types | Circles for product, squares for service |
-| Motion | Showing change or urgency | Animated growth (use sparingly) |
+| Attribute   | Best Used For                    | Example                                  |
+| ----------- | -------------------------------- | ---------------------------------------- |
+| Color (hue) | Highlighting a specific category | One bar in red, others in gray           |
+| Intensity   | Showing magnitude or importance  | Darker shade = higher value              |
+| Size        | Showing quantity or hierarchy    | Larger circle = more users               |
+| Position    | Showing ranking or sequence      | Top of list = highest ranked             |
+| Orientation | Showing difference or grouping   | Angled element vs. straight              |
+| Shape       | Categorizing different types     | Circles for product, squares for service |
+| Motion      | Showing change or urgency        | Animated growth (use sparingly)          |
 
 ## The Highlighting Technique
 

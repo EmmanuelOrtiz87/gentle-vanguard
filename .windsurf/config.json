@@ -4,10 +4,7 @@
   "description": "Optimized Windsurf for peak hour / token pressure",
   "workspace": {
     "projectRoot": ".",
-    "configFiles": [
-      "AGENTS.md",
-      "CLAUDE.md"
-    ],
+    "configFiles": ["AGENTS.md", "CLAUDE.md"],
     "skillRegistry": ".atl/skill-registry.md"
   },
   "aiSettings": {

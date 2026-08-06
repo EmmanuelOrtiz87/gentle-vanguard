@@ -15,6 +15,7 @@ Prior: Based on similar features, ~30% succeed significantly
 ## Step 2: Assess the Evidence
 
 Consider:
+
 - How likely is this evidence if hypothesis is TRUE?
 - How likely is this evidence if hypothesis is FALSE?
 - What's the ratio?

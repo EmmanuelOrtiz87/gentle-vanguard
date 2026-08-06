@@ -46,11 +46,11 @@ This document analyzes the security model of Receipt-Driven Development (RDD) in
 
 ### S - Spoofing
 
-| Threat | Description | Mitigation |
-|--------|-------------|------------|
-| Identity spoofing | Attacker impersonates reviewer | Receipts signed with author + reviewer identity |
-| Git spoofing | Commit author field spoofed | Verify GPG signatures if required |
-| Tool spoofing | Malicious receipt-manager script | Hash verification of scripts |
+| Threat            | Description                      | Mitigation                                      |
+| ----------------- | -------------------------------- | ----------------------------------------------- |
+| Identity spoofing | Attacker impersonates reviewer   | Receipts signed with author + reviewer identity |
+| Git spoofing      | Commit author field spoofed      | Verify GPG signatures if required               |
+| Tool spoofing     | Malicious receipt-manager script | Hash verification of scripts                    |
 
 **Mitigation**: Author + reviewer in receipt; optional GPG verification.
 
@@ -58,12 +58,12 @@ This document analyzes the security model of Receipt-Driven Development (RDD) in
 
 ### T - Tampering
 
-| Threat | Description | Mitigation |
-|--------|-------------|------------|
-| Scope drift | Change grows beyond original intent | Receipt bound to specific Git tree SHA |
-| Identity drift | Receipt references wrong candidate | Content-hash verification at gates |
-| Post-review tampering | Code changed after review | SHA mismatch detected at gates |
-| Receipt tampering | Malicious modification of receipt | Content-hash + signature |
+| Threat                | Description                         | Mitigation                             |
+| --------------------- | ----------------------------------- | -------------------------------------- |
+| Scope drift           | Change grows beyond original intent | Receipt bound to specific Git tree SHA |
+| Identity drift        | Receipt references wrong candidate  | Content-hash verification at gates     |
+| Post-review tampering | Code changed after review           | SHA mismatch detected at gates         |
+| Receipt tampering     | Malicious modification of receipt   | Content-hash + signature               |
 
 **Mitigation**: Content-bound receipts with SHA-256 of file contents.
 
@@ -71,11 +71,11 @@ This document analyzes the security model of Receipt-Driven Development (RDD) in
 
 ### R - Repudiation
 
-| Threat | Description | Mitigation |
-|--------|-------------|------------|
-| Reviewer denies approval | Claim receipt is forged | Immutable receipt with timestamp |
-| Author claims unreviewed | Bypass review process | Gate validation requires receipt |
-| Break-glass abuse | Emergency bypass without audit | Audit log of all bypasses |
+| Threat                   | Description                    | Mitigation                       |
+| ------------------------ | ------------------------------ | -------------------------------- |
+| Reviewer denies approval | Claim receipt is forged        | Immutable receipt with timestamp |
+| Author claims unreviewed | Bypass review process          | Gate validation requires receipt |
+| Break-glass abuse        | Emergency bypass without audit | Audit log of all bypasses        |
 
 **Mitigation**: Receipts stored permanently; audit log in `.session/rdd-gates/`.
 
@@ -83,11 +83,11 @@ This document analyzes the security model of Receipt-Driven Development (RDD) in
 
 ### I - Information Disclosure
 
-| Threat | Description | Mitigation |
-|--------|-------------|------------|
-| Receipt exposure | Sensitive findings leaked | Receipts stored locally, not in git |
-| Review notes leaked | Security issues exposed | Classification of findings |
-| Gate logs exposed | TOCTOU attack info | Permissions on `.session/` directory |
+| Threat              | Description               | Mitigation                           |
+| ------------------- | ------------------------- | ------------------------------------ |
+| Receipt exposure    | Sensitive findings leaked | Receipts stored locally, not in git  |
+| Review notes leaked | Security issues exposed   | Classification of findings           |
+| Gate logs exposed   | TOCTOU attack info        | Permissions on `.session/` directory |
 
 **Mitigation**: Receipts in `.session/` (gitignored); minimal logging.
 
@@ -95,11 +95,11 @@ This document analyzes the security model of Receipt-Driven Development (RDD) in
 
 ### D - Denial of Service
 
-| Threat | Description | Mitigation |
-|--------|-------------|------------|
-| Review blocking | Preventing review completion | Timeouts; manual override |
-| Gate blocking | Blocking delivery | Emergency bypass with reason |
-| Receipt corruption | Corrupting receipt store | Backups in Nexus DB |
+| Threat             | Description                  | Mitigation                   |
+| ------------------ | ---------------------------- | ---------------------------- |
+| Review blocking    | Preventing review completion | Timeouts; manual override    |
+| Gate blocking      | Blocking delivery            | Emergency bypass with reason |
+| Receipt corruption | Corrupting receipt store     | Backups in Nexus DB          |
 
 **Mitigation**: Emergency bypass; redundant storage.
 
@@ -107,11 +107,11 @@ This document analyzes the security model of Receipt-Driven Development (RDD) in
 
 ### E - Elevation of Privilege
 
-| Threat | Description | Mitigation |
-|--------|-------------|------------|
-| Bypass gates | Circumventing RDD validation | Git hooks + mandatory gates |
-| Forge receipt | Creating fake approval | Content-hash verification |
-| Kill switch abuse | Disabling RDD arbitrarily | Requires explicit file creation |
+| Threat            | Description                  | Mitigation                      |
+| ----------------- | ---------------------------- | ------------------------------- |
+| Bypass gates      | Circumventing RDD validation | Git hooks + mandatory gates     |
+| Forge receipt     | Creating fake approval       | Content-hash verification       |
+| Kill switch abuse | Disabling RDD arbitrarily    | Requires explicit file creation |
 
 **Mitigation**: Content-bound receipts cannot be forged.
 
@@ -130,6 +130,7 @@ T2: Receipt for SHA A used to approve SHA B
 ### Mitigation
 
 Every gate validates:
+
 1. **Receipt exists** → post-apply
 2. **SHA matches** → pre-commit
 3. **SHA in history** → pre-push
@@ -170,7 +171,7 @@ validate(gate, receipt):
   if gate == "pre-commit":
     assert receipt.candidateHash == git rev-parse HEAD
     assert receipt.contentHash == SHA256(current files)
-  
+
   if gate == "release":
     assert receipt.approved == true
     assert no critical findings
@@ -221,12 +222,12 @@ git commit -m "$GIT_COMMIT_MESSAGE"
 
 ## Residual Risks
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| Malicious author | Low | High | Peer review required |
-| Compromised workstation | Low | High | GPG signatures |
-| Review fatigue | Medium | Medium | Automated detection |
-| Gate bypass via CI | Medium | High | CI gates validation |
+| Risk                    | Likelihood | Impact | Mitigation           |
+| ----------------------- | ---------- | ------ | -------------------- |
+| Malicious author        | Low        | High   | Peer review required |
+| Compromised workstation | Low        | High   | GPG signatures       |
+| Review fatigue          | Medium     | Medium | Automated detection  |
+| Gate bypass via CI      | Medium     | High   | CI gates validation  |
 
 ---
 

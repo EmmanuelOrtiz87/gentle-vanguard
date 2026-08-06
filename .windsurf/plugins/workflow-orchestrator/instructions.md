@@ -4,11 +4,10 @@
 
 ## Description
 
-
 ## Triggers
 
-
 ## Instructions
+
 # Workflow Orchestrator Skill
 
 ## Activation Contract

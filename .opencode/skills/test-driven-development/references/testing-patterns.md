@@ -2,7 +2,8 @@
 
 ## The Test Pyramid
 
-Invest testing effort according to the pyramid — most tests should be small and fast, with progressively fewer tests at higher levels.
+Invest testing effort according to the pyramid — most tests should be small and fast, with
+progressively fewer tests at higher levels.
 
 ### Test Sizes (Resource Model)
 
@@ -51,7 +52,8 @@ it('calls db.query with ORDER BY created_at DESC', async () => {
 
 ### DAMP Over DRY in Tests
 
-In production code, DRY (Don't Repeat Yourself) is usually right. In tests, **DAMP (Descriptive And Meaningful Phrases)** is better.
+In production code, DRY (Don't Repeat Yourself) is usually right. In tests, **DAMP (Descriptive And
+Meaningful Phrases)** is better.
 
 ```typescript
 // DAMP: Each test is self-contained and readable
@@ -82,7 +84,9 @@ Preference order (most to least preferred):
 4. Mock (interaction)   → Verifies method calls — use sparingly
 ```
 
-**Use mocks only when:** the real implementation is too slow, non-deterministic, or has side effects you can't control (external APIs, email sending). Over-mocking creates tests that pass while production breaks.
+**Use mocks only when:** the real implementation is too slow, non-deterministic, or has side effects
+you can't control (external APIs, email sending). Over-mocking creates tests that pass while
+production breaks.
 
 ### Use the Arrange-Act-Assert Pattern
 
@@ -182,4 +186,6 @@ After completing any implementation:
 - [ ] No tests were skipped or disabled
 - [ ] Coverage hasn't decreased (if tracked)
 
-**Note:** Run each test command after a change that could affect the result. After a clean run, don't repeat the same command unless the code has changed since — re-running on unchanged code adds no confidence.
+**Note:** Run each test command after a change that could affect the result. After a clean run,
+don't repeat the same command unless the code has changed since — re-running on unchanged code adds
+no confidence.

@@ -9,21 +9,48 @@ import { resolve } from 'path';
 import { pathToFileURL } from 'url';
 
 const VALID_PROPS = new Set([
-  '$schema', 'agent', 'attachment', 'autoshare', 'autoupdate',
-  'command', 'compaction', 'default_agent',
-  'disabled_providers', 'enabled_providers', 'enterprise', 'experimental',
-  'formatter', 'instructions', 'layout', 'logLevel', 'lsp',
-  'mcp', 'mode', 'model',
-  'permission', 'plugin', 'provider',
-  'reference', 'references', 'server', 'share', 'shell', 'skills',
-  'small_model', 'snapshot',
-  'tools', 'tool_output',
-  'username', 'watcher',
+  '$schema',
+  'agent',
+  'attachment',
+  'autoshare',
+  'autoupdate',
+  'command',
+  'compaction',
+  'default_agent',
+  'disabled_providers',
+  'enabled_providers',
+  'enterprise',
+  'experimental',
+  'formatter',
+  'instructions',
+  'layout',
+  'logLevel',
+  'lsp',
+  'mcp',
+  'mode',
+  'model',
+  'permission',
+  'plugin',
+  'provider',
+  'reference',
+  'references',
+  'server',
+  'share',
+  'shell',
+  'skills',
+  'small_model',
+  'snapshot',
+  'tools',
+  'tool_output',
+  'username',
+  'watcher',
 ]);
 
 function main(): void {
   const args = process.argv.slice(2);
-  const configPath = resolve(args.includes('--config') ? args[args.indexOf('--config') + 1] : 'opencode.json');
+  const configPath = resolve(
+    args.includes('--config') ? args[args.indexOf('--config') + 1] : 'opencode.json',
+  );
   const fix = args.includes('--fix') || args.includes('-Fix');
 
   if (!existsSync(configPath)) {

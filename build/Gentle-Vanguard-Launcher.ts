@@ -16,7 +16,15 @@
  */
 
 import { createDecipheriv } from 'crypto';
-import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync, readdirSync, statSync } from 'fs';
+import {
+  readFileSync,
+  writeFileSync,
+  existsSync,
+  mkdirSync,
+  rmSync,
+  readdirSync,
+  statSync,
+} from 'fs';
 import { join, resolve, relative, extname, basename, dirname } from 'path';
 import * as readline from 'readline';
 import { execSync, spawn } from 'child_process';
@@ -30,8 +38,16 @@ const nonInteractive = args.includes('--non-interactive') || args.includes('-Non
 
 // Paths
 const ROOT = resolve(process.cwd());
-const appDataDir = join(process.env.LOCALAPPDATA || join(process.env.HOME || '', '.local', 'share'), 'Gentle-Vanguard', 'scripts');
-const dataDir = join(process.env.LOCALAPPDATA || join(process.env.HOME || '', '.local', 'share'), 'Gentle-Vanguard', 'data');
+const appDataDir = join(
+  process.env.LOCALAPPDATA || join(process.env.HOME || '', '.local', 'share'),
+  'Gentle-Vanguard',
+  'scripts',
+);
+const dataDir = join(
+  process.env.LOCALAPPDATA || join(process.env.HOME || '', '.local', 'share'),
+  'Gentle-Vanguard',
+  'data',
+);
 const stateFile = join(dataDir, 'setup-state.json');
 const cacheKeyPath = join(dataDir, 'master.key');
 const cacheScript = join(appDataDir, 'scripts', 'utilities', 'WORKFLOW-ORCHESTRATION', 'gv.ps1');
@@ -43,16 +59,28 @@ const ALGORITHM = 'aes-256-gcm';
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 function prompt(q: string): Promise<string> {
-  return new Promise(resolve => rl.question(q, resolve));
+  return new Promise((resolve) => rl.question(q, resolve));
 }
 
-function log(msg: string): void { console.log(msg); }
-function step(label: string, msg: string): void { console.log(`  [${label}] ${msg}`); }
-function ok(msg: string): void { console.log(`  [OK] ${msg}`); }
-function warn(msg: string): void { console.log(`  [WARN] ${msg}`); }
-function fail(msg: string): void { console.error(`  [FAIL] ${msg}`); }
+function log(msg: string): void {
+  console.log(msg);
+}
+function step(label: string, msg: string): void {
+  console.log(`  [${label}] ${msg}`);
+}
+function ok(msg: string): void {
+  console.log(`  [OK] ${msg}`);
+}
+function warn(msg: string): void {
+  console.log(`  [WARN] ${msg}`);
+}
+function fail(msg: string): void {
+  console.error(`  [FAIL] ${msg}`);
+}
 
-function clearScreen(): void { console.clear(); }
+function clearScreen(): void {
+  console.clear();
+}
 
 function showBanner(): void {
   clearScreen();
@@ -195,7 +223,7 @@ function extractEmbeddedArchive(base64: string, outDir: string): number {
 
   const count = execSync(
     `powershell -NoProfile -Command "Expand-Archive -Path '${tmpZip}' -DestinationPath '${outDir}' -Force; (Get-ChildItem -Path '${outDir}' -Recurse -File).Count"`,
-    { encoding: 'utf8', timeout: 30000 }
+    { encoding: 'utf8', timeout: 30000 },
   ).trim();
 
   rmSync(tmpZip, { force: true });
@@ -209,11 +237,7 @@ async function installScripts(mode: string): Promise<boolean> {
 
   // Look for embedded archive (would be injected at build time)
   // For now, look for protected/ directory
-  const candidates = [
-    join(ROOT, 'build', 'protected'),
-    join(ROOT, 'protected'),
-    ROOT,
-  ];
+  const candidates = [join(ROOT, 'build', 'protected'), join(ROOT, 'protected'), ROOT];
 
   for (const p of candidates) {
     if (existsSync(join(p, 'scripts', 'utilities', 'WORKFLOW-ORCHESTRATION', 'gv.ps1.enc'))) {
@@ -228,14 +252,16 @@ async function installScripts(mode: string): Promise<boolean> {
     return installFromSource(mode);
   }
 
-  const key = resolveMasterKey() || await promptForKey();
+  const key = resolveMasterKey() || (await promptForKey());
   if (!key) {
     fail('Master key required to decrypt scripts.');
     return false;
   }
 
   try {
-    const encFiles = readdirSync(encBasePath, { recursive: true }).filter(f => f.endsWith('.enc'));
+    const encFiles = readdirSync(encBasePath, { recursive: true }).filter((f) =>
+      f.endsWith('.enc'),
+    );
     let decryptedCount = 0;
 
     for (const relPath of encFiles) {
@@ -331,7 +357,10 @@ async function doFullInstall(): Promise<void> {
     for (const issue of issues) fail(`${issue.name}: ${issue.message}`);
     log('');
     const cont = await prompt('Continue anyway? (y/N): ');
-    if (cont.toLowerCase() !== 'y') { log('Installation cancelled.'); return; }
+    if (cont.toLowerCase() !== 'y') {
+      log('Installation cancelled.');
+      return;
+    }
   }
 
   log('');
@@ -360,7 +389,10 @@ async function doMinimalInstall(): Promise<void> {
   warn('Skills, tools, and extras are NOT included.');
   log('');
   const cont = await prompt('Proceed with minimal installation? (y/N): ');
-  if (cont.toLowerCase() !== 'y') { log('Installation cancelled.'); return; }
+  if (cont.toLowerCase() !== 'y') {
+    log('Installation cancelled.');
+    return;
+  }
 
   const success = await installScripts('minimal');
   if (success) {
@@ -444,12 +476,12 @@ function doLaunch(): void {
   process.env.GENTLE_VANGUARD_DATA_DIR = dataDir;
 
   // Delegate to gv.ts
-  const child = spawn('npx.cmd', ['tsx', gvScript, ...args.filter(a => a !== '--launch')], {
+  const child = spawn('npx.cmd', ['tsx', gvScript, ...args.filter((a) => a !== '--launch')], {
     stdio: 'inherit',
     shell: true,
     cwd: ROOT,
   });
-  child.on('close', code => process.exit(code ?? 0));
+  child.on('close', (code) => process.exit(code ?? 0));
 }
 
 // ─── Main Menu ─────────────────────────────────────────────────────────────────
@@ -528,13 +560,28 @@ async function main(): Promise<void> {
     while (true) {
       const choice = await showMainMenu();
       switch (choice) {
-        case '1': await doFullInstall(); break;
-        case '2': await doMinimalInstall(); break;
-        case '3': await doReconfigure(); break;
-        case '4': showEnvironmentCheck(); break;
-        case '5': showHelp(); await prompt('Press Enter to continue...'); break;
-        case '6': log('Exiting...'); rl.close(); return;
-        default: warn('Invalid selection. Choose 1-6.');
+        case '1':
+          await doFullInstall();
+          break;
+        case '2':
+          await doMinimalInstall();
+          break;
+        case '3':
+          await doReconfigure();
+          break;
+        case '4':
+          showEnvironmentCheck();
+          break;
+        case '5':
+          showHelp();
+          await prompt('Press Enter to continue...');
+          break;
+        case '6':
+          log('Exiting...');
+          rl.close();
+          return;
+        default:
+          warn('Invalid selection. Choose 1-6.');
       }
     }
   } else {
@@ -542,7 +589,7 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('FATAL:', err.message);
   process.exit(1);
 });

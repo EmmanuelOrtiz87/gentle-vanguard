@@ -48,7 +48,11 @@ function createLineChart(canvasId, labels, datasets) {
         x: { grid: { display: false } },
         y: {
           beginAtZero: true,
-          ticks: { callback: function (value) { return formatValue(value, 'currency'); } },
+          ticks: {
+            callback: function (value) {
+              return formatValue(value, 'currency');
+            },
+          },
         },
       },
     },
@@ -67,14 +71,16 @@ function createBarChart(canvasId, labels, data, options = {}) {
     type: 'bar',
     data: {
       labels: labels,
-      datasets: [{
-        label: options.label || 'Value',
-        data: data,
-        backgroundColor: options.colors || COLORS.map((c) => c + 'CC'),
-        borderColor: options.colors || COLORS,
-        borderWidth: 1,
-        borderRadius: 4,
-      }],
+      datasets: [
+        {
+          label: options.label || 'Value',
+          data: data,
+          backgroundColor: options.colors || COLORS.map((c) => c + 'CC'),
+          borderColor: options.colors || COLORS,
+          borderWidth: 1,
+          borderRadius: 4,
+        },
+      ],
     },
     options: {
       responsive: true,
@@ -85,7 +91,10 @@ function createBarChart(canvasId, labels, data, options = {}) {
         tooltip: {
           callbacks: {
             label: function (context) {
-              return formatValue(context.parsed[isHorizontal ? 'x' : 'y'], options.format || 'number');
+              return formatValue(
+                context.parsed[isHorizontal ? 'x' : 'y'],
+                options.format || 'number',
+              );
             },
           },
         },
@@ -94,12 +103,24 @@ function createBarChart(canvasId, labels, data, options = {}) {
         x: {
           beginAtZero: true,
           grid: { display: isHorizontal },
-          ticks: isHorizontal ? { callback: function (value) { return formatValue(value, options.format || 'number'); } } : {},
+          ticks: isHorizontal
+            ? {
+                callback: function (value) {
+                  return formatValue(value, options.format || 'number');
+                },
+              }
+            : {},
         },
         y: {
           beginAtZero: !isHorizontal,
           grid: { display: !isHorizontal },
-          ticks: !isHorizontal ? { callback: function (value) { return formatValue(value, options.format || 'number'); } } : {},
+          ticks: !isHorizontal
+            ? {
+                callback: function (value) {
+                  return formatValue(value, options.format || 'number');
+                },
+              }
+            : {},
         },
       },
     },
@@ -116,12 +137,14 @@ function createDoughnutChart(canvasId, labels, data) {
     type: 'doughnut',
     data: {
       labels: labels,
-      datasets: [{
-        data: data,
-        backgroundColor: COLORS.map((c) => c + 'CC'),
-        borderColor: '#ffffff',
-        borderWidth: 2,
-      }],
+      datasets: [
+        {
+          data: data,
+          backgroundColor: COLORS.map((c) => c + 'CC'),
+          borderColor: '#ffffff',
+          borderWidth: 2,
+        },
+      ],
     },
     options: {
       responsive: true,

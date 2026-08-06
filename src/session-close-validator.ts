@@ -18,7 +18,6 @@
  *   npx tsx src/session-close-validator.ts --verify (alias para --mode quick)
  */
 
- 
 /* The import regex below is safe - it only parses TypeScript import statements, not user input */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync } from 'fs';
@@ -66,8 +65,18 @@ export interface ValidationReport {
   score: number; // 0-100, 100 = perfect
   details: {
     crossReferences: { total: number; broken: number; fixed: number };
-    tempFiles: { registered: number; unregistered: number; cleaned: number; authorizedPending: number };
-    errorsAndWarnings: { todoCount: number; fixmeCount: number; tsIgnoreCount: number; hackCount: number };
+    tempFiles: {
+      registered: number;
+      unregistered: number;
+      cleaned: number;
+      authorizedPending: number;
+    };
+    errorsAndWarnings: {
+      todoCount: number;
+      fixmeCount: number;
+      tsIgnoreCount: number;
+      hackCount: number;
+    };
     unusedFiles: string[];
     completeness: { goal: string | null; accomplished: number; pending: number };
   };
@@ -79,10 +88,18 @@ import { log as createLogger } from './utils/logger.js';
 
 const LOG = createLogger('VALIDATOR');
 
-function log(msg: string) { LOG.info(msg); }
-function ok(msg: string) { LOG.info(`✅ ${msg}`); }
-function warn(msg: string) { LOG.warn(msg); }
-function fail(msg: string) { LOG.error(msg); }
+function log(msg: string) {
+  LOG.info(msg);
+}
+function ok(msg: string) {
+  LOG.info(`✅ ${msg}`);
+}
+function warn(msg: string) {
+  LOG.warn(msg);
+}
+function fail(msg: string) {
+  LOG.error(msg);
+}
 
 function getAllFiles(dir: string, ext: string): string[] {
   const result: string[] = [];
@@ -98,23 +115,41 @@ function getAllFiles(dir: string, ext: string): string[] {
         result.push(full);
       }
     }
-  } catch { /* skip unreadable */ }
+  } catch {
+    /* skip unreadable */
+  }
   return result;
 }
 
 function getSessionData(): Record<string, unknown> {
   const fp = join(SESSION_DIR, 'session-current.json');
   if (!existsSync(fp)) return {};
-  try { return JSON.parse(readFileSync(fp, 'utf-8')); } catch { return {}; }
+  try {
+    return JSON.parse(readFileSync(fp, 'utf-8'));
+  } catch {
+    return {};
+  }
 }
 
 function getChangedFiles(): Set<string> {
   try {
-    const r = runSync('git', ['diff', '--name-only', 'HEAD'], { cwd: ROOT, stdio: 'pipe', timeout: 15000 });
+    const r = runSync('git', ['diff', '--name-only', 'HEAD'], {
+      cwd: ROOT,
+      stdio: 'pipe',
+      timeout: 15000,
+    });
     if (r.status === 0) {
-      return new Set(r.stdout.toString().split('\n').filter(l => l.trim()).map(l => l.trim()));
+      return new Set(
+        r.stdout
+          .toString()
+          .split('\n')
+          .filter((l) => l.trim())
+          .map((l) => l.trim()),
+      );
     }
-  } catch { /* fallback */ }
+  } catch {
+    /* fallback */
+  }
   return new Set();
 }
 
@@ -186,17 +221,17 @@ function validateCrossReferences(_mode: ValidationMode, _autoFix: boolean): Cros
 
       const canExist = [
         resolved,
-        ...extensionsToCheck.map(ext => resolved + ext),
-        ...extensionsToCheck.map(ext => basePath + ext),  // Also try without .js
+        ...extensionsToCheck.map((ext) => resolved + ext),
+        ...extensionsToCheck.map((ext) => basePath + ext), // Also try without .js
         join(resolved, 'index.ts'),
         join(resolved, 'index.tsx'),
         join(resolved, 'index.js'),
-        join(basePath, 'index.ts'),                        // ./dir → ./dir/index.ts
+        join(basePath, 'index.ts'), // ./dir → ./dir/index.ts
         join(basePath, 'index.tsx'),
         join(basePath, 'index.js'),
       ];
 
-      const found = canExist.some(p => existsSync(p));
+      const found = canExist.some((p) => existsSync(p));
 
       if (!found) {
         // Use line number from AST (accurate)
@@ -230,7 +265,11 @@ interface TempFileResult {
   issues: ValidationIssue[];
 }
 
-function validateTempFiles(mode: ValidationMode, dryRun: boolean, autoFix: boolean): TempFileResult {
+function validateTempFiles(
+  mode: ValidationMode,
+  dryRun: boolean,
+  autoFix: boolean,
+): TempFileResult {
   log('--- Temp File Validation ---');
   const issues: ValidationIssue[] = [];
 
@@ -247,7 +286,8 @@ function validateTempFiles(mode: ValidationMode, dryRun: boolean, autoFix: boole
     const issue: ValidationIssue = {
       severity: daysSinceAuth > 7 ? 'warning' : 'info',
       category: 'temp-file',
-      message: `Authorized-pending temp file "${entry.path}" ` +
+      message:
+        `Authorized-pending temp file "${entry.path}" ` +
         (daysSinceAuth > 7
           ? `has been pending for ${daysSinceAuth} days — consider integrating or archiving`
           : `awaiting integration since ${entry.authorized_at || entry.created}`),
@@ -284,8 +324,16 @@ function validateTempFiles(mode: ValidationMode, dryRun: boolean, autoFix: boole
     }
   }
 
-  log(`Temp files: ${registered} registered, ${unregistered.length} unregistered, ${authorizedPending.length} pending`);
-  return { registered, unregistered: unregistered.length, cleaned, authorizedPending: authorizedPending.length, issues };
+  log(
+    `Temp files: ${registered} registered, ${unregistered.length} unregistered, ${authorizedPending.length} pending`,
+  );
+  return {
+    registered,
+    unregistered: unregistered.length,
+    cleaned,
+    authorizedPending: authorizedPending.length,
+    issues,
+  };
 }
 
 // ─── Category: Error & Warning Scan ─────────────────────────────────────────
@@ -308,9 +356,12 @@ function scanErrorsAndWarnings(mode: ValidationMode): ErrorWarningResult {
   let hackCount = 0;
 
   const changedFiles = getChangedFiles();
-  const scopeFiles = mode === 'full'
-    ? getAllFiles(join(ROOT, 'src'), '.ts')
-    : Array.from(changedFiles).filter(f => f.endsWith('.ts') || f.endsWith('.tsx')).map(f => join(ROOT, f));
+  const scopeFiles =
+    mode === 'full'
+      ? getAllFiles(join(ROOT, 'src'), '.ts')
+      : Array.from(changedFiles)
+          .filter((f) => f.endsWith('.ts') || f.endsWith('.tsx'))
+          .map((f) => join(ROOT, f));
 
   for (const file of scopeFiles) {
     if (!existsSync(file)) continue;
@@ -379,7 +430,9 @@ function scanErrorsAndWarnings(mode: ValidationMode): ErrorWarningResult {
     });
   }
 
-  log(`Found: ${todoCount} TODO, ${fixmeCount} FIXME, ${tsIgnoreCount} @ts-ignore, ${hackCount} HACK`);
+  log(
+    `Found: ${todoCount} TODO, ${fixmeCount} FIXME, ${tsIgnoreCount} @ts-ignore, ${hackCount} HACK`,
+  );
   return { todoCount, fixmeCount, tsIgnoreCount, hackCount, issues };
 }
 
@@ -478,10 +531,14 @@ function checkCompleteness(mode: ValidationMode): CompletenessResult {
   const sessionData = getSessionData();
   const goal = sessionData.goal ? String(sessionData.goal) : null;
   const accomplished = sessionData.accomplished
-    ? (Array.isArray(sessionData.accomplished) ? sessionData.accomplished.length : 1)
+    ? Array.isArray(sessionData.accomplished)
+      ? sessionData.accomplished.length
+      : 1
     : 0;
   const nextSteps = sessionData.nextSteps
-    ? (Array.isArray(sessionData.nextSteps) ? sessionData.nextSteps : [sessionData.nextSteps])
+    ? Array.isArray(sessionData.nextSteps)
+      ? sessionData.nextSteps
+      : [sessionData.nextSteps]
     : [];
 
   // Check if there are pending/next steps
@@ -510,7 +567,9 @@ function checkCompleteness(mode: ValidationMode): CompletenessResult {
     }
   }
 
-  log(`Goal: ${goal ? 'defined' : 'not defined'}, Accomplished: ${accomplished}, Pending: ${nextSteps.length}`);
+  log(
+    `Goal: ${goal ? 'defined' : 'not defined'}, Accomplished: ${accomplished}, Pending: ${nextSteps.length}`,
+  );
   return { goal, accomplished, pending: nextSteps.length, issues };
 }
 
@@ -560,23 +619,23 @@ function scanTechnicalDebt(): ValidationIssue[] {
 
   // Large file detection (>500 lines), excluding orchestration files
   const EXCLUDED_LARGE_FILES = [
-    /(?:orchestrator|orchestrate)/i,     // orchestrators are intentionally large
-    /maintenance-watchtower/,            // watchtower orchestrator
-    /token-optimization/,                // complex optimization engine
-    /knowledge-synthesizer/,             // processing pipeline
-    /session-close/,                     // our own close ecosystem
-    /mcp-(lsp|gateway|bridge|manager)/,  // MCP servers are complex by design
-    /adaptive-router/,                   // routing engine
-    /predictive-governor/,               // governor engine
-    /self-reflection-loop/,              // ML loop
-    /code-review/,                       // review engine
-    /sia-orchestrator/,                  // SIA orchestrator
-    /chat-level-enforcer/,               // enforcer
-    /response-cache/,                    // cache engine
-    /output-compression/,                // compression engine
-    /gentle-ai-monitor/,                 // monitor
-    /timeout-config/,                    // config with examples
-    /skill-evolution-engine/,            // ML engine
+    /(?:orchestrator|orchestrate)/i, // orchestrators are intentionally large
+    /maintenance-watchtower/, // watchtower orchestrator
+    /token-optimization/, // complex optimization engine
+    /knowledge-synthesizer/, // processing pipeline
+    /session-close/, // our own close ecosystem
+    /mcp-(lsp|gateway|bridge|manager)/, // MCP servers are complex by design
+    /adaptive-router/, // routing engine
+    /predictive-governor/, // governor engine
+    /self-reflection-loop/, // ML loop
+    /code-review/, // review engine
+    /sia-orchestrator/, // SIA orchestrator
+    /chat-level-enforcer/, // enforcer
+    /response-cache/, // cache engine
+    /output-compression/, // compression engine
+    /gentle-ai-monitor/, // monitor
+    /timeout-config/, // config with examples
+    /skill-evolution-engine/, // ML engine
   ];
 
   for (const file of allTs) {
@@ -585,7 +644,7 @@ function scanTechnicalDebt(): ValidationIssue[] {
     if (lines > 500) {
       const relPath = relative(ROOT, file).replace(/\\/g, '/');
       // Skip intentionally large files
-      if (EXCLUDED_LARGE_FILES.some(p => p.test(relPath))) continue;
+      if (EXCLUDED_LARGE_FILES.some((p) => p.test(relPath))) continue;
       issues.push({
         severity: 'info',
         category: 'technical-debt',
@@ -644,12 +703,12 @@ export async function runValidation(
   }
 
   // Summarize
-  const errors = allIssues.filter(i => i.severity === 'error').length;
-  const warnings = allIssues.filter(i => i.severity === 'warning').length;
-  const info = allIssues.filter(i => i.severity === 'info').length;
+  const errors = allIssues.filter((i) => i.severity === 'error').length;
+  const warnings = allIssues.filter((i) => i.severity === 'warning').length;
+  const info = allIssues.filter((i) => i.severity === 'info').length;
 
   // Score: 100 - (errors * 10) - (warnings * 3), minimum 0. INFO does not penalize.
-  const score = Math.max(0, 100 - (errors * 10) - (warnings * 3));
+  const score = Math.max(0, 100 - errors * 10 - warnings * 3);
 
   const report: ValidationReport = {
     timestamp: new Date().toISOString(),
@@ -666,10 +725,24 @@ export async function runValidation(
     score,
     details: {
       crossReferences: { total: crossRef.total, broken: crossRef.broken, fixed: crossRef.fixed },
-      tempFiles: { registered: tempFiles.registered, unregistered: tempFiles.unregistered, cleaned: tempFiles.cleaned, authorizedPending: tempFiles.authorizedPending },
-      errorsAndWarnings: { todoCount: errorsWarnings.todoCount, fixmeCount: errorsWarnings.fixmeCount, tsIgnoreCount: errorsWarnings.tsIgnoreCount, hackCount: errorsWarnings.hackCount },
+      tempFiles: {
+        registered: tempFiles.registered,
+        unregistered: tempFiles.unregistered,
+        cleaned: tempFiles.cleaned,
+        authorizedPending: tempFiles.authorizedPending,
+      },
+      errorsAndWarnings: {
+        todoCount: errorsWarnings.todoCount,
+        fixmeCount: errorsWarnings.fixmeCount,
+        tsIgnoreCount: errorsWarnings.tsIgnoreCount,
+        hackCount: errorsWarnings.hackCount,
+      },
       unusedFiles: unused.files,
-      completeness: { goal: completeness.goal, accomplished: completeness.accomplished, pending: completeness.pending },
+      completeness: {
+        goal: completeness.goal,
+        accomplished: completeness.accomplished,
+        pending: completeness.pending,
+      },
     },
   };
 
@@ -682,14 +755,14 @@ export async function runValidation(
 
   if (errors > 0) {
     fail('Validation found ERRORS that must be resolved:');
-    for (const issue of allIssues.filter(i => i.severity === 'error')) {
+    for (const issue of allIssues.filter((i) => i.severity === 'error')) {
       fail(`  ${issue.category}: ${issue.message}`);
     }
   }
 
   if (warnings > 0) {
     warn('Validation found warnings:');
-    for (const issue of allIssues.filter(i => i.severity === 'warning')) {
+    for (const issue of allIssues.filter((i) => i.severity === 'warning')) {
       warn(`  ${issue.category}: ${issue.message}`);
     }
   }
@@ -728,9 +801,8 @@ Options:
   }
 
   const modeIdx = args.indexOf('--mode');
-  const mode: ValidationMode = modeIdx >= 0 && modeIdx + 1 < args.length
-    ? (args[modeIdx + 1] as ValidationMode)
-    : 'quick';
+  const mode: ValidationMode =
+    modeIdx >= 0 && modeIdx + 1 < args.length ? (args[modeIdx + 1] as ValidationMode) : 'quick';
 
   if (!['quick', 'deep', 'full'].includes(mode)) {
     console.error(`ERROR: Invalid mode "${mode}". Use quick, deep, or full.`);
@@ -741,20 +813,22 @@ Options:
   const autoFix = args.includes('--auto-fix');
   const writeReport = args.includes('--report') || args.includes('-r');
 
-  runValidation(mode, dryRun, autoFix).then(report => {
-    if (writeReport) {
-      const reportDir = join(SESSION_DIR, 'validation');
-      mkdirSync(reportDir, { recursive: true });
-      const reportFile = join(reportDir, `close-validation-report.json`);
-      writeFileSync(reportFile, JSON.stringify(report, null, 2));
-      ok(`Validation report written to ${reportFile}`);
-    }
+  runValidation(mode, dryRun, autoFix)
+    .then((report) => {
+      if (writeReport) {
+        const reportDir = join(SESSION_DIR, 'validation');
+        mkdirSync(reportDir, { recursive: true });
+        const reportFile = join(reportDir, `close-validation-report.json`);
+        writeFileSync(reportFile, JSON.stringify(report, null, 2));
+        ok(`Validation report written to ${reportFile}`);
+      }
 
-    process.exit(report.summary.errors > 0 ? 1 : 0);
-  }).catch(e => {
-    console.error('[VALIDATOR] ❌ FATAL:', e instanceof Error ? e.message : 'Unknown error');
-    process.exit(1);
-  });
+      process.exit(report.summary.errors > 0 ? 1 : 0);
+    })
+    .catch((e) => {
+      console.error('[VALIDATOR] ❌ FATAL:', e instanceof Error ? e.message : 'Unknown error');
+      process.exit(1);
+    });
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

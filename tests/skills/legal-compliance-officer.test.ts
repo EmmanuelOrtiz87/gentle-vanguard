@@ -17,7 +17,7 @@ test('legal-compliance-officer - SKILL.md exists', () => {
 
 test('legal-compliance-officer - has required sections', () => {
   const content = readFileSync(skillPath, 'utf-8');
-  
+
   const requiredSections = [
     '# legal-compliance-officer',
     '## Description',
@@ -25,9 +25,9 @@ test('legal-compliance-officer - has required sections', () => {
     '## Workflow',
     '## Output Format',
     '## Examples',
-    '## References'
+    '## References',
   ];
-  
+
   for (const section of requiredSections) {
     assert(content.includes(section), `Missing section: ${section}`);
   }
@@ -35,28 +35,34 @@ test('legal-compliance-officer - has required sections', () => {
 
 test('legal-compliance-officer - has legal terminology', () => {
   const content = readFileSync(skillPath, 'utf-8');
-  
+
   // Should include legal/compliance terminology
   const terms = ['compliance', 'contract', 'license', 'GDPR', 'policy', 'privacy'];
-  const hasTerms = terms.some(t => content.toLowerCase().includes(t.toLowerCase()));
+  const hasTerms = terms.some((t) => content.toLowerCase().includes(t.toLowerCase()));
   assert(hasTerms, 'Should include legal/compliance terminology');
 });
 
 test('legal-compliance-officer - has disclaimer', () => {
   const content = readFileSync(skillPath, 'utf-8');
-  
+
   // Legal skill should have a disclaimer
-  assert(content.includes('## Disclaimers') || content.includes('Disclaimer'), 
-    'Must include legal disclaimer');
-  assert(content.toLowerCase().includes('legal advice') || content.toLowerCase().includes('counsel'), 
-    'Disclaimer should mention this is not legal advice');
+  assert(
+    content.includes('## Disclaimers') || content.includes('Disclaimer'),
+    'Must include legal disclaimer',
+  );
+  assert(
+    content.toLowerCase().includes('legal advice') || content.toLowerCase().includes('counsel'),
+    'Disclaimer should mention this is not legal advice',
+  );
 });
 
 test('legal-compliance-officer - has contract examples', () => {
   const content = readFileSync(skillPath, 'utf-8');
-  
-  assert(content.includes('### Vendor Contract Review') || content.includes('### Privacy Policy'), 
-    'Must include legal document examples');
+
+  assert(
+    content.includes('### Vendor Contract Review') || content.includes('### Privacy Policy'),
+    'Must include legal document examples',
+  );
 });
 
 console.log('\nTest suite: legal-compliance-officer');

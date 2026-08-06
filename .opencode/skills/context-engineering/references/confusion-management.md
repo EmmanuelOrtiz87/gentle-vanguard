@@ -57,4 +57,5 @@ PLAN:
 → Executing unless you redirect.
 ```
 
-This catches wrong directions before you've built on them. It's a 30-second investment that prevents 30-minute rework.
+This catches wrong directions before you've built on them. It's a 30-second investment that prevents
+30-minute rework.

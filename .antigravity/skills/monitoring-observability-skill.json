@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "# Monitoring & Observability\n\nBuild comprehensive observability for your systems.\n\n## The Three Pillars\n\n> **See also**: [observability-skill](../observability-skill/SKILL.md) for broader observability\n> patterns (logs, tracing, alerting, SLOs),\n> [monitoring-aggregator](../monitoring-aggregator/SKILL.md) for metrics collection\n\n### 1. Metrics (Prometheus)\n\n```yaml\n# Instrument your app\nhttp_requests_total{method=\"GET\", endpoint=\"/api/users\", status=\"200\"} 1024\nhttp_request_duration_seconds{quantile=\"0.95\"} 0.235\n```\n\n### 2. Logging (Loki / ELK)\n\n- Structured JSON logging\n- Include: timestamp, level, service, trace_id, message\n- Centralized log aggregation\n- Log levels: DEBUG < INFO < WARN < ERROR < FATAL\n\n### 3. Tracing (Jaeger / Tempo)\n\n- Trace every request across services\n- Span: individual operation with timing\n- Distributed context propagation via trace ID headers\n- Sample 1-10% of production traffic\n\n## Alerting (Alertmanager)\n\n### Alert Severity\n\n| Severity | Response Time | Channel         |\n| -------- | ------------- | --------------- |\n| Critical | Immediately   | PagerDuty + SMS |\n| Warning  | 1 hour        | Slack + Email   |\n| Info     | Next day      | Dashboard       |\n\n### Golden Signals (Google SRE)\n\n1. **Latency**: Time to respond\n2. **Traffic**: Requests per second\n3. **Errors**: Error rate (5xx, exceptions)\n4. **Saturation**: Resource utilization\n\n## Dashboard Design (Grafana)\n\n### Rules\n\n- 3-5 panels per row\n- Time series with trend lines, not raw numbers\n- RED metrics: Rate, Errors, Duration per service\n- USE metrics: Utilization, Saturation, Errors per resource\n- Include annotations for deployments, incidents\n\n## Best Practices\n\n- Monitor from outside (synthetic checks)\n- Monitor everything, alert on what matters\n- Use SLOs to define what's \"good enough\"\n- Test alerts (fire drills, tabletop exercises)\n- Review dashboards monthly with the team",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

@@ -393,12 +393,17 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
     const SLO_PATH = join(ROOT, '.runtime', 'metrics', 'slo-latest.json');
     if (url.pathname === '/api/slo' && req.method === 'POST') {
       let body = '';
-      req.on('data', (chunk: Buffer) => { body += chunk.toString(); });
+      req.on('data', (chunk: Buffer) => {
+        body += chunk.toString();
+      });
       req.on('end', () => {
         try {
           const data = JSON.parse(body);
           mkdirSync(dirname(SLO_PATH), { recursive: true });
-          writeFileSync(SLO_PATH, JSON.stringify({ ...data, ingested: new Date().toISOString() }, null, 2));
+          writeFileSync(
+            SLO_PATH,
+            JSON.stringify({ ...data, ingested: new Date().toISOString() }, null, 2),
+          );
           res.writeHead(200, headers);
           res.end(JSON.stringify({ success: true }));
         } catch (e) {
@@ -534,12 +539,18 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
                 if (existsSync(guardPath)) {
                   const raw = JSON.parse(readFileSync(guardPath, 'utf-8'));
                   const limits = raw?.tokenBudget?.limits || {};
-                  const usedPath = join(ROOT, 'docs', 'sessions', 'metrics', 'token-guard-usage.csv');
+                  const usedPath = join(
+                    ROOT,
+                    'docs',
+                    'sessions',
+                    'metrics',
+                    'token-guard-usage.csv',
+                  );
                   let usedToday = 0;
                   if (existsSync(usedPath)) {
                     const csv = readFileSync(usedPath, 'utf-8');
                     const today = new Date().toISOString().slice(0, 10);
-                    const lines = csv.split('\n').filter(l => l.trim());
+                    const lines = csv.split('\n').filter((l) => l.trim());
                     for (const line of lines.slice(1)) {
                       const cols = line.split(',');
                       if (cols[1] === today && /^\d+$/.test(cols[4])) {
@@ -1208,7 +1219,7 @@ function evaluateAlerts(metrics: any): Array<{
 
 setInterval(() => {
   const metrics = generateMetrics();
-  
+
   // Agregar métricas operacionales si existen datos
   try {
     const operationalMetrics = OperationalMetricsTracker.calculateMetrics();
@@ -1218,7 +1229,7 @@ setInterval(() => {
   } catch {
     // Silencioso si no hay métricas operacionales aún
   }
-  
+
   const msg = JSON.stringify({ type: 'metrics', data: metrics });
   clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(msg));
   broadcastValidations();

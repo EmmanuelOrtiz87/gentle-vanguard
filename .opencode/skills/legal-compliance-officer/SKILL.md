@@ -9,7 +9,8 @@ triggers:
 
 ## Description
 
-Advises on legal matters, intellectual property, data privacy, and regulatory compliance. Ensures contracts, policies, and practices align with applicable laws and industry standards.
+Advises on legal matters, intellectual property, data privacy, and regulatory compliance. Ensures
+contracts, policies, and practices align with applicable laws and industry standards.
 
 ## When to Use
 
@@ -42,6 +43,7 @@ Advises on legal matters, intellectual property, data privacy, and regulatory co
 **Input**: "Review SaaS vendor MSA for data processing terms"
 
 **Output**:
+
 ```
 Red Flags:
 ⚠️ Section 4.2: Unlimited liability cap - recommend negotiating to 12 months fees
@@ -59,10 +61,11 @@ Recommended Changes:
 **Input**: "Update for new AI training data retention"
 
 **Output**:
+
 ```
 Section: Model Training and Data Retention
 
-"We do not use Customer Data to train our AI models. 
+"We do not use Customer Data to train our AI models.
 
 Data Retention:
 - Prompts/responses: 30 days for quality improvement, then deleted
@@ -75,6 +78,7 @@ Data Retention:
 **Input**: "Audit dependencies for license conflicts"
 
 **Output**:
+
 ```
 Risk Assessment:
 - MIT/Apache-2.0: ✅ Permissive, no action required
@@ -95,4 +99,5 @@ Actions:
 
 ## Disclaimers
 
-This skill provides guidance only and does not constitute legal advice. Always consult qualified legal counsel for specific situations.
+This skill provides guidance only and does not constitute legal advice. Always consult qualified
+legal counsel for specific situations.

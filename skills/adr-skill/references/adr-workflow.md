@@ -18,13 +18,15 @@
 ## Step 1: When to Write an ADR
 
 Write an ADR when the decision:
+
 - **Is significant**: Changes the architecture, not just implementation
 - **Is irreversible**: Hard to undo (database, framework, cloud provider)
 - **Has tradeoffs**: No obvious "right" answer
 - **Will be referenced later**: Someone will ask "why?"
 - **Involves cost**: Financial, operational, or opportunity cost
 
-**ADR-worthy examples:** Choosing a database/message-queue/cache, adopting a framework, API design (REST vs GraphQL vs gRPC), deployment strategy, data model changes, security architecture.
+**ADR-worthy examples:** Choosing a database/message-queue/cache, adopting a framework, API design
+(REST vs GraphQL vs gRPC), deployment strategy, data model changes, security architecture.
 
 **Non-ADR examples:** Renaming a variable, adding a minor dependency, bug fixes, config changes.
 
@@ -39,6 +41,7 @@ cp templates/adr-template.md docs/adr/ADR-043-use-graphql-for-public-api.md
 ## Step 3: Review
 
 Include in the same PR as implementation or as standalone PR. Reviewers should check:
+
 - Is the context clear? Can a new member understand the problem?
 - Are alternatives fairly represented?
 - Are consequences honestly assessed?
@@ -51,9 +54,11 @@ After acceptance, status changes to "Accepted". If revisited:
 
 ```markdown
 ## Status
+
 Superseded by ADR-052
 
 ## Rationale for Deprecation
+
 In 2024, a managed Kafka service became available that eliminates the operational overhead that
 motivated our original SQS choice.
 ```
@@ -71,4 +76,5 @@ project/
 └── .adr-dir                      # Points to the ADR directory
 ```
 
-**Why in-repo:** Version controlled alongside code, visible in same PRs, found by new team members exploring the codebase, branch-specific ADRs for experiments.
+**Why in-repo:** Version controlled alongside code, visible in same PRs, found by new team members
+exploring the codebase, branch-specific ADRs for experiments.

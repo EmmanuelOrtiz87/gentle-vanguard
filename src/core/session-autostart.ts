@@ -14,21 +14,44 @@ const LOG = createLogger('SESSION-AUTOSTART');
 // ─── Auto-Checkpoint Helper ──────────────────────────────────────────────
 async function createAutoCheckpoint(): Promise<void> {
   try {
-    const r = runNpxTsxSync('src/checkpoint-manager.ts', ['create', '--label', 'auto-session-start'], {
-      timeout: 30000,
-    });
+    const r = runNpxTsxSync(
+      'src/checkpoint-manager.ts',
+      ['create', '--label', 'auto-session-start'],
+      {
+        timeout: 30000,
+      },
+    );
     if (r.status !== 0) throw r.error ?? new Error(`checkpoint exited ${r.status}`);
-    auditLog('checkpoint.create', 'session-autostart', 'auto_checkpoint', 'success', 'Auto-checkpoint created on session start');
+    auditLog(
+      'checkpoint.create',
+      'session-autostart',
+      'auto_checkpoint',
+      'success',
+      'Auto-checkpoint created on session start',
+    );
     LOG.info('[CHECKPOINT] Auto-checkpoint created successfully');
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    auditLog('checkpoint.error', 'session-autostart', 'auto_checkpoint', 'failure', `Auto-checkpoint failed: ${msg}`);
+    auditLog(
+      'checkpoint.error',
+      'session-autostart',
+      'auto_checkpoint',
+      'failure',
+      `Auto-checkpoint failed: ${msg}`,
+    );
     LOG.warn(`[CHECKPOINT] Auto-checkpoint creation failed: ${msg}`);
   }
 }
 
 // ─── Audit Logging Helper ────────────────────────────────────────────────
-function auditLog(eventType: string, component: string, operation: string, status: string, message: string, metadata?: Record<string, unknown>): void {
+function auditLog(
+  eventType: string,
+  component: string,
+  operation: string,
+  status: string,
+  message: string,
+  metadata?: Record<string, unknown>,
+): void {
   try {
     const event = newAuditEvent({
       eventType,
@@ -56,7 +79,11 @@ function auditLog(eventType: string, component: string, operation: string, statu
 const AUTOSTART_LOG_FILE = process.env.AUTOSTART_LOG_FILE;
 if (AUTOSTART_LOG_FILE) {
   const mirror = (...args: unknown[]): void => {
-    try { appendFileSync(AUTOSTART_LOG_FILE, args.map(String).join(' ') + '\n', 'utf-8'); } catch { /* best-effort */ }
+    try {
+      appendFileSync(AUTOSTART_LOG_FILE, args.map(String).join(' ') + '\n', 'utf-8');
+    } catch {
+      /* best-effort */
+    }
   };
   console.log = (...args: unknown[]) => mirror(...args);
   console.warn = (...args: unknown[]) => mirror(...args);
@@ -114,7 +141,11 @@ function checkLock(): boolean {
         return false;
       }
       // Owner is dead or not a real session-autostart process — lockfile is stale, remove it
-      try { unlinkSync(LOCK_FILE); } catch { /* ignore */ }
+      try {
+        unlinkSync(LOCK_FILE);
+      } catch {
+        /* ignore */
+      }
     }
     writeFileSync(LOCK_FILE, String(process.pid), 'utf-8');
     return true;
@@ -186,14 +217,17 @@ function killProcessTree(child: ChildProcess): void {
     spawn('taskkill', ['/pid', String(child.pid), '/t', '/f'], {
       cwd: ROOT,
       stdio: 'ignore',
-      windowsHide: true,      // ✅ hide taskkill window
+      windowsHide: true, // ✅ hide taskkill window
     });
     return;
   }
   child.kill('SIGTERM');
 }
 
-function executeStep(step: PipelineStep, timeoutMs: number): Promise<{ success: boolean; error?: string }> {
+function executeStep(
+  step: PipelineStep,
+  timeoutMs: number,
+): Promise<{ success: boolean; error?: string }> {
   const scriptPath = join(ROOT, step.script);
 
   if (!existsSync(scriptPath)) {
@@ -207,9 +241,9 @@ function executeStep(step: PipelineStep, timeoutMs: number): Promise<{ success: 
     // windowsHide:true ensures no flashing cmd.exe windows.
     const spawnOptions: import('child_process').SpawnOptions = {
       cwd: ROOT,
-      stdio: 'inherit',       // show output in parent console
-      windowsHide: true,      // ✅ CRITICAL: hide window on Windows
-      shell: true,            // required for npx.cmd on Windows
+      stdio: 'inherit', // show output in parent console
+      windowsHide: true, // ✅ CRITICAL: hide window on Windows
+      shell: true, // required for npx.cmd on Windows
     };
 
     const child = spawn(cmd, [], spawnOptions);
@@ -257,11 +291,11 @@ function startLazyStep(step: PipelineStep): { success: boolean; error?: string }
   const child = spawn(cmd, [], {
     cwd: ROOT,
     stdio: 'ignore',
-    windowsHide: true,       // ✅ CRITICAL: no flashing window
-    shell: true,             // required for npx.cmd on Windows
-    detached: true,          // ✅ CRITICAL: detach from parent console/pipe so lazy
-                             //   daemons (setInterval watchers) never keep the
-                             //   calling shell waiting on an open stdout pipe.
+    windowsHide: true, // ✅ CRITICAL: no flashing window
+    shell: true, // required for npx.cmd on Windows
+    detached: true, // ✅ CRITICAL: detach from parent console/pipe so lazy
+    //   daemons (setInterval watchers) never keep the
+    //   calling shell waiting on an open stdout pipe.
   });
   child.unref();
   return { success: true };
@@ -269,31 +303,46 @@ function startLazyStep(step: PipelineStep): { success: boolean; error?: string }
 
 async function main() {
   const sessionStartTime = new Date().toISOString();
-  
+
   // Lock check: only run once per OS user session
   if (!checkLock()) {
-    auditLog('session.skip', 'session-autostart', 'lock_check', 'skipped', 'Session autostart skipped - lock active');
+    auditLog(
+      'session.skip',
+      'session-autostart',
+      'lock_check',
+      'skipped',
+      'Session autostart skipped - lock active',
+    );
     return;
   }
 
   // Log session start event
-  auditLog('session.start', 'session-autostart', 'initialize', 'success', `Session autostart initiated at ${sessionStartTime}`, {
-    pid: process.pid,
-    platform: process.platform,
-    nodeVersion: process.version,
-  });
+  auditLog(
+    'session.start',
+    'session-autostart',
+    'initialize',
+    'success',
+    `Session autostart initiated at ${sessionStartTime}`,
+    {
+      pid: process.pid,
+      platform: process.platform,
+      nodeVersion: process.version,
+    },
+  );
 
   if (!process.env.GV_QUIET) printBanner('Session Autostart');
-  
+
   // Iniciar sesión explícitamente (funciona en TODAS las herramientas, no depende del plugin automático)
   const sessionId = `session-${sessionStartTime.replace(/[:.]/g, '-').slice(0, 19)}`;
   const engramSession = sessionStart(sessionId);
   if (engramSession.success) {
     LOG.info(`[ENGRAM] Session started explicitly: ${engramSession.sessionId}`);
   } else {
-    LOG.warn(`[ENGRAM] Session start warning: ${engramSession.error || 'Unknown error'} (continuing without Engram)`);
+    LOG.warn(
+      `[ENGRAM] Session start warning: ${engramSession.error || 'Unknown error'} (continuing without Engram)`,
+    );
   }
-  
+
   LOG.info(`[SESSION-AUTOSTART] Loading pipeline from ${CONFIG_PATH}\n`);
 
   const timeoutConfig = getPipelineTimeouts();
@@ -311,13 +360,20 @@ async function main() {
   if (lazySteps.length > 0) {
     LOG.info(`[INFO] ${lazySteps.length} lazy steps deferred to background\n`);
   }
-  
+
   // Log pipeline configuration
-  auditLog('config.load', 'session-autostart', 'load_config', 'success', `Loaded ${totalSteps} steps + ${lazySteps.length} lazy`, {
-    totalSteps,
-    lazySteps: lazySteps.length,
-    phases: [...new Set(steps.map(s => s.phase ?? 1))].length,
-  });
+  auditLog(
+    'config.load',
+    'session-autostart',
+    'load_config',
+    'success',
+    `Loaded ${totalSteps} steps + ${lazySteps.length} lazy`,
+    {
+      totalSteps,
+      lazySteps: lazySteps.length,
+      phases: [...new Set(steps.map((s) => s.phase ?? 1))].length,
+    },
+  );
 
   const phaseMap = new Map<number, PipelineStep[]>();
   for (const step of steps) {
@@ -334,7 +390,7 @@ async function main() {
         stepNum++;
         const isRequired = step.required === true;
         const timeoutMs = isRequired
-          ? timeoutConfig.required_step_ms ?? timeoutConfig.session_autostart_step_ms
+          ? (timeoutConfig.required_step_ms ?? timeoutConfig.session_autostart_step_ms)
           : timeoutConfig.session_autostart_step_ms;
         const result = await executeStep(step, timeoutMs);
         if (result.success) {
@@ -356,9 +412,10 @@ async function main() {
 
       const results = await Promise.allSettled(
         phaseSteps.map((step) => {
-          const timeoutMs = step.required === true
-            ? timeoutConfig.required_step_ms ?? timeoutConfig.session_autostart_step_ms
-            : timeoutConfig.session_autostart_step_ms;
+          const timeoutMs =
+            step.required === true
+              ? (timeoutConfig.required_step_ms ?? timeoutConfig.session_autostart_step_ms)
+              : timeoutConfig.session_autostart_step_ms;
           return executeStep(step, timeoutMs);
         }),
       );
@@ -400,11 +457,13 @@ async function main() {
       }
       // Small delay between batches to avoid overwhelming the OS
       if (i + MAX_LAZY_CONCURRENCY < lazySteps.length) {
-        await new Promise(r => setTimeout(r, 100));
+        await new Promise((r) => setTimeout(r, 100));
       }
     }
     LOG.info(`[INFO] Lazy step launch log: ${LAZY_LOG_PATH}`);
-    LOG.info(`[INFO] Launched ${launched}/${lazySteps.length} lazy steps in batches of ${MAX_LAZY_CONCURRENCY}`);
+    LOG.info(
+      `[INFO] Launched ${launched}/${lazySteps.length} lazy steps in batches of ${MAX_LAZY_CONCURRENCY}`,
+    );
   }
 
   LOG.info(`\n=== Session Autostart Summary ===`);
@@ -426,21 +485,33 @@ async function main() {
   // Log completion
   const totalLazyLaunched = lazySteps.length;
   const status = requiredFailed.length > 0 ? 'failure' : failed.length > 0 ? 'warning' : 'success';
-  
-  auditLog('session.complete', 'session-autostart', 'finish', status, 
-    `Session autostart completed: ${stepNum} steps, ${failed.length} failed, ${requiredFailed.length} required failed`, {
-    executed: stepNum,
-    failed: failed.length,
-    requiredFailed: requiredFailed.length,
-    lazySteps: totalLazyLaunched,
-    duration: Date.now() - new Date(sessionStartTime).getTime(),
-  });
+
+  auditLog(
+    'session.complete',
+    'session-autostart',
+    'finish',
+    status,
+    `Session autostart completed: ${stepNum} steps, ${failed.length} failed, ${requiredFailed.length} required failed`,
+    {
+      executed: stepNum,
+      failed: failed.length,
+      requiredFailed: requiredFailed.length,
+      lazySteps: totalLazyLaunched,
+      duration: Date.now() - new Date(sessionStartTime).getTime(),
+    },
+  );
 
   if (requiredFailed.length > 0) {
-    auditLog('session.error', 'session-autostart', 'required_failure', 'failure', 
-      `Required steps failed: ${requiredFailed.join(', ')}`, {
-      failedSteps: requiredFailed,
-    });
+    auditLog(
+      'session.error',
+      'session-autostart',
+      'required_failure',
+      'failure',
+      `Required steps failed: ${requiredFailed.join(', ')}`,
+      {
+        failedSteps: requiredFailed,
+      },
+    );
   }
 
   LOG.info(`[READY] Workspace ready for operations`);

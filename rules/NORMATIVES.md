@@ -11,6 +11,7 @@
 ## Table of Contents
 
 ### Core Normativas (NORMATIVAS-*.md)
+
 1. [Architecture](#architecture-normatives)
 2. [Autonomous Evolution](#autonomous-evolution-normatives)
 3. [CI/CD Self-Healing](#cicd-self-healing-normatives)
@@ -24,12 +25,14 @@
 11. [Workflow](#workflow-normatives)
 
 ### Special Normativas
+
 - [Nexus Database](#nexus-database-normativa)
 - [RDD (Rules-Driven Development)](#rdd-normativa)
 - [Session Management](#session-management-normativa)
 - [Recovery & Disaster](#recovery-normativa)
 
 ### Supporting Rules
+
 - [AI & ML](#ai--ml-rules)
 - [Code & Standards](#code--standards-rules)
 - [Process & Workflow](#process--workflow-rules)
@@ -75,7 +78,8 @@ See `rules/NORMATIVAS-EVAL-QUALITY.md` - Quality gates for evaluations and asses
 
 ## Multi-Tenant Normatives
 
-See `rules/NORMATIVAS-MULTI-TENANT.md` - Isolation and resource management for multi-tenant operations.
+See `rules/NORMATIVAS-MULTI-TENANT.md` - Isolation and resource management for multi-tenant
+operations.
 
 ---
 
@@ -307,4 +311,4 @@ See `rules/HAND-WRITTEN-NORMS.md` - User-contributed conventions and patterns.
 
 ---
 
-*Última actualización: 2026-08-04 - Índice reconstruido con 54 normativas reales*
+_Última actualización: 2026-08-04 - Índice reconstruido con 54 normativas reales_

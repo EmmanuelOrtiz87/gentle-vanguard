@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 ## When to Use
 
 - Adding telemetry to services or APIs

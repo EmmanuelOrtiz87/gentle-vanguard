@@ -36,7 +36,12 @@ function safePath(userPath: string, allowedBase: string): string | null {
 }
 
 function getTsEquivalent(psPath: string): string | null {
-  const base = psPath.replace(/\\/g, '/').split('/').pop()?.replace(/\.ps1$/i, '') ?? '';
+  const base =
+    psPath
+      .replace(/\\/g, '/')
+      .split('/')
+      .pop()
+      ?.replace(/\.ps1$/i, '') ?? '';
   const tsPath = join(ROOT, 'src', `${base}.ts`);
   return existsSync(tsPath) ? tsPath : null;
 }
@@ -148,7 +153,11 @@ function invokeStep(
             const tsAlt = getTsEquivalent(fullPath);
             const r = tsAlt
               ? runNpxTsxSync(tsAlt, step.args ?? [], { cwd: ROOT, stdio: 'pipe', timeout: 30000 })
-              : runSync('pwsh', ['-NoProfile', '-File', fullPath, ...(step.args ?? [])], { cwd: ROOT, stdio: 'pipe', timeout: 30000 });
+              : runSync('pwsh', ['-NoProfile', '-File', fullPath, ...(step.args ?? [])], {
+                  cwd: ROOT,
+                  stdio: 'pipe',
+                  timeout: 30000,
+                });
             result.output = r.stdout;
             result.success = r.status === 0;
           } else {
@@ -198,11 +207,15 @@ function invokeStep(
       case 'checkpoint': {
         const ckptScript = join(ROOT, 'src/checkpoint-manager.ts');
         if (existsSync(ckptScript)) {
-          const r = runNpxTsxSync(ckptScript, ['create', '--label', step.label ?? 'saga-checkpoint'], {
+          const r = runNpxTsxSync(
+            ckptScript,
+            ['create', '--label', step.label ?? 'saga-checkpoint'],
+            {
               cwd: ROOT,
               stdio: 'pipe',
               timeout: 15000,
-            });
+            },
+          );
           result.output = r.stdout;
           result.success = r.status === 0;
         } else {
@@ -240,7 +253,11 @@ function invokeCompensation(step: SagaStep, context: StepContext): boolean {
             const tsAlt = getTsEquivalent(fullPath);
             tsAlt
               ? runNpxTsxSync(tsAlt, comp.args ?? [], { cwd: ROOT, stdio: 'pipe', timeout: 30000 })
-              : runSync('pwsh', ['-NoProfile', '-File', fullPath, ...(comp.args ?? [])], { cwd: ROOT, stdio: 'pipe', timeout: 30000 });
+              : runSync('pwsh', ['-NoProfile', '-File', fullPath, ...(comp.args ?? [])], {
+                  cwd: ROOT,
+                  stdio: 'pipe',
+                  timeout: 30000,
+                });
           }
         }
         break;
@@ -248,15 +265,20 @@ function invokeCompensation(step: SagaStep, context: StepContext): boolean {
       case 'rollback': {
         const ckptId = context.lastCheckpointId;
         if (ckptId) {
-          const rollbackScript = join(
-            ROOT,
-            'src/rollback-orchestrator.ts',
-          );
+          const rollbackScript = join(ROOT, 'src/rollback-orchestrator.ts');
           if (existsSync(rollbackScript)) {
             const tsAlt = getTsEquivalent(rollbackScript);
             tsAlt
-              ? runNpxTsxSync(tsAlt, ['-CheckpointId', ckptId, '-Force'], { cwd: ROOT, stdio: 'pipe', timeout: 30000 })
-              : runSync('pwsh', ['-NoProfile', '-File', rollbackScript, '-CheckpointId', ckptId, '-Force'], { cwd: ROOT, stdio: 'pipe', timeout: 30000 });
+              ? runNpxTsxSync(tsAlt, ['-CheckpointId', ckptId, '-Force'], {
+                  cwd: ROOT,
+                  stdio: 'pipe',
+                  timeout: 30000,
+                })
+              : runSync(
+                  'pwsh',
+                  ['-NoProfile', '-File', rollbackScript, '-CheckpointId', ckptId, '-Force'],
+                  { cwd: ROOT, stdio: 'pipe', timeout: 30000 },
+                );
           }
         }
         break;

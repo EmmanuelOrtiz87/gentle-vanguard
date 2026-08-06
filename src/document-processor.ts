@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
  * Document Processor
- * 
+ *
  * Extract and process content from various document formats.
  * Supports PDF, DOCX, TXT, CSV, JSON, HTML.
- * 
+ *
  * Usage:
  *   npx tsx src/document-processor.ts <command> <file> [options]
- * 
+ *
  * Commands:
  *   extract <file> [--pages 1,3-5] [--ocr] [--format md|json|txt]
  *   tables <file> [--output path] [--format csv|json]
@@ -76,17 +76,26 @@ function ensureDir(p: string): void {
 function detectFormat(filePath: string): DocumentResult['format'] {
   const ext = extname(filePath).toLowerCase();
   switch (ext) {
-    case '.pdf': return 'pdf';
-    case '.docx': return 'docx';
-    case '.txt': return 'txt';
-    case '.md': return 'md';
-    case '.csv': return 'csv';
-    case '.json': return 'json';
+    case '.pdf':
+      return 'pdf';
+    case '.docx':
+      return 'docx';
+    case '.txt':
+      return 'txt';
+    case '.md':
+      return 'md';
+    case '.csv':
+      return 'csv';
+    case '.json':
+      return 'json';
     case '.yml':
-    case '.yaml': return 'yaml';
+    case '.yaml':
+      return 'yaml';
     case '.html':
-    case '.htm': return 'html';
-    default: return 'unknown';
+    case '.htm':
+      return 'html';
+    default:
+      return 'unknown';
   }
 }
 
@@ -104,7 +113,7 @@ function getFileSize(filePath: string): number {
 function processTextFile(filePath: string): DocumentResult {
   const text = readFileSync(filePath, 'utf-8');
   const words = text.split(/\s+/).filter((w: string) => w.length > 0);
-  
+
   return {
     source: filePath,
     format: detectFormat(filePath),
@@ -122,7 +131,7 @@ function processJsonFile(filePath: string): DocumentResult {
   try {
     const content = readFileSync(filePath, 'utf-8');
     const data = JSON.parse(content);
-    
+
     // Extract text recursively
     function extractText(obj: unknown): string {
       if (typeof obj === 'string') return obj;
@@ -132,7 +141,7 @@ function processJsonFile(filePath: string): DocumentResult {
       }
       return String(obj);
     }
-    
+
     return {
       source: filePath,
       format: 'json',
@@ -158,7 +167,7 @@ function processCsvFile(filePath: string): DocumentResult {
   try {
     const content = readFileSync(filePath, 'utf-8');
     const lines = content.split('\n').filter((l: string) => l.trim());
-    
+
     if (lines.length === 0) {
       return {
         source: filePath,
@@ -168,21 +177,25 @@ function processCsvFile(filePath: string): DocumentResult {
         tables: [],
       };
     }
-    
+
     const delimiter = content.includes('\t') ? '\t' : ',';
     const headers = lines[0].split(delimiter).map((h: string) => h.trim());
-    const rows = lines.slice(1).map((line: string) => line.split(delimiter).map((c: string) => c.trim()));
-    
+    const rows = lines
+      .slice(1)
+      .map((line: string) => line.split(delimiter).map((c: string) => c.trim()));
+
     return {
       source: filePath,
       format: 'csv',
       success: true,
       text: `CSV with ${rows.length} rows and ${headers.length} columns`,
-      tables: [{
-        index: 0,
-        headers,
-        rows,
-      }],
+      tables: [
+        {
+          index: 0,
+          headers,
+          rows,
+        },
+      ],
       metadata: {
         wordCount: content.split(/\s+/).filter((w: string) => w.length > 0).length,
       },
@@ -201,16 +214,16 @@ function processCsvFile(filePath: string): DocumentResult {
 
 async function processPdfFile(filePath: string, _options: ProcessOptions): Promise<DocumentResult> {
   const errors: string[] = [];
-  
+
   // Try pdftotext first (more reliable)
   try {
     const result = runSyncShell(`pdftotext -layout "${filePath}" - 2>&1`, {
       maxBuffer: 50 * 1024 * 1024,
       timeout: 30000,
     }).stdout;
-    
+
     const words = result.split(/\s+/).filter((w: string) => w.length > 0);
-    
+
     return {
       source: filePath,
       format: 'pdf',
@@ -223,7 +236,7 @@ async function processPdfFile(filePath: string, _options: ProcessOptions): Promi
   } catch {
     errors.push('pdftotext not available, trying fallback');
   }
-  
+
   // Fallback: return informational message
   return {
     source: filePath,
@@ -252,18 +265,18 @@ async function processDocxFile(_filePath: string): Promise<DocumentResult> {
 
 function generateSummary(text: string, maxLength: number = 500): string {
   const sentences = text.split(/[.!?]+/).filter((s: string) => s.trim().length > 20);
-  
+
   // Simple extractive summary: first sentence + most informative
   let summary = '';
   let length = 0;
-  
+
   for (const sentence of sentences) {
     const trimmed = sentence.trim();
     if (length + trimmed.length > maxLength) break;
     summary += trimmed + '. ';
     length += trimmed.length + 2;
   }
-  
+
   return summary.trim() || text.slice(0, maxLength) + (text.length > maxLength ? '...' : '');
 }
 
@@ -278,19 +291,21 @@ async function cmdExtract(filePath: string, options: ProcessOptions): Promise<Do
       errors: [`File not found: ${filePath}`],
     };
   }
-  
+
   const size = getFileSize(filePath);
   if (size > MAX_FILE_SIZE) {
     return {
       source: filePath,
       format: 'unknown',
       success: false,
-      errors: [`File too large: ${(size / 1024 / 1024).toFixed(1)}MB (max ${MAX_FILE_SIZE / 1024 / 1024}MB)`],
+      errors: [
+        `File too large: ${(size / 1024 / 1024).toFixed(1)}MB (max ${MAX_FILE_SIZE / 1024 / 1024}MB)`,
+      ],
     };
   }
-  
+
   const format = detectFormat(filePath);
-  
+
   try {
     switch (format) {
       case 'pdf':
@@ -326,13 +341,13 @@ async function cmdExtract(filePath: string, options: ProcessOptions): Promise<Do
 
 async function cmdSummarize(filePath: string, options: ProcessOptions): Promise<DocumentResult> {
   const result = await cmdExtract(filePath, { ...options, format: 'txt' });
-  
+
   if (!result.success || !result.text) {
     return result;
   }
-  
+
   const summary = generateSummary(result.text, options.maxLength);
-  
+
   return {
     ...result,
     text: summary,
@@ -346,23 +361,23 @@ async function cmdSummarize(filePath: string, options: ProcessOptions): Promise<
 
 async function cmdBatch(pattern: string, options: ProcessOptions): Promise<DocumentResult[]> {
   const results: DocumentResult[] = [];
-  
+
   // Simple glob implementation
   const { globSync } = await import('glob');
   const files = globSync(pattern, { cwd: ROOT });
-  
+
   for (const file of files) {
     const fullPath = resolve(ROOT, file);
     const result = await cmdExtract(fullPath, options);
     results.push(result);
-    
+
     if (options.output && result.success && result.text) {
       const outFile = join(options.output, `${basename(file, extname(file))}.txt`);
       ensureDir(dirname(outFile));
       writeFileSync(outFile, result.text, 'utf-8');
     }
   }
-  
+
   return results;
 }
 
@@ -372,13 +387,16 @@ function parseArgs(argv: string[]): { command: string; file: string; options: Pr
   const args = argv.slice(2);
   const command = args[0] || 'help';
   const file = args[1] || '';
-  
+
   const options: ProcessOptions = {};
-  
+
   for (let i = 2; i < args.length; i++) {
     const arg = args[i];
     if (arg === '--pages') {
-      options.pages = args[++i]?.split(',').map((p: string) => parseInt(p)).filter((n: number) => !isNaN(n));
+      options.pages = args[++i]
+        ?.split(',')
+        .map((p: string) => parseInt(p))
+        .filter((n: number) => !isNaN(n));
     } else if (arg === '--ocr') {
       options.ocr = true;
     } else if (arg === '--format') {
@@ -389,15 +407,15 @@ function parseArgs(argv: string[]): { command: string; file: string; options: Pr
       options.maxLength = parseInt(args[++i]) || 500;
     }
   }
-  
+
   return { command, file, options };
 }
 
 async function main(): Promise<void> {
   const { command, file, options } = parseArgs(process.argv);
-  
+
   console.log(`[DOCUMENT-PROCESSOR] Command: ${command}`);
-  
+
   switch (command) {
     case 'extract': {
       if (!file) {
@@ -408,7 +426,7 @@ async function main(): Promise<void> {
       console.log(JSON.stringify(result, null, 2));
       break;
     }
-    
+
     case 'summarize': {
       if (!file) {
         console.error('Usage: summarize <file> [--max-length 500]');
@@ -418,7 +436,7 @@ async function main(): Promise<void> {
       console.log(JSON.stringify(result, null, 2));
       break;
     }
-    
+
     case 'batch': {
       if (!file) {
         console.error('Usage: batch <pattern> [--output dir]');
@@ -428,7 +446,7 @@ async function main(): Promise<void> {
       console.log(JSON.stringify({ processed: results.length, results }, null, 2));
       break;
     }
-    
+
     case 'help':
     default:
       console.log(`
@@ -453,7 +471,7 @@ Install for better handling:
 
 // Run if called directly
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
-  main().catch(e => {
+  main().catch((e) => {
     console.error('[DOCUMENT-PROCESSOR] Error:', e);
     process.exit(1);
   });

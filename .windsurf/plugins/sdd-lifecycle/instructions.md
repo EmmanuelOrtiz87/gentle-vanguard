@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # SDD Lifecycle Skill
 
 Complete Spec-Driven Development workflow with all phases.

@@ -18,7 +18,7 @@ interface AuditResult {
 }
 
 const VALID_LEVELS = ['critical', 'high', 'moderate', 'low'] as const;
-type AuditLevel = typeof VALID_LEVELS[number];
+type AuditLevel = (typeof VALID_LEVELS)[number];
 
 const BLOCK_LEVELS: Record<AuditLevel, AuditLevel[]> = {
   critical: ['critical'],
@@ -94,9 +94,7 @@ function main(): number {
     console.log(`  Low:       ${vulnerabilities.low}`);
   }
 
-  const hasBlockingVuln = BLOCK_LEVELS[auditLevel].some(
-    (level) => vulnerabilities[level] > 0,
-  );
+  const hasBlockingVuln = BLOCK_LEVELS[auditLevel].some((level) => vulnerabilities[level] > 0);
 
   if (hasBlockingVuln) {
     console.log(`\n[BLOCKED] npm audit found vulnerabilities at ${auditLevel} level or above`);
@@ -104,7 +102,9 @@ function main(): number {
     console.log(`  1. Run: npm audit fix`);
     console.log(`  2. Review changes to package-lock.json`);
     console.log(`  3. Test changes: npm test`);
-    console.log(`  4. Commit: git add package-lock.json && git commit -m 'fix(security): resolve npm vulnerabilities'`);
+    console.log(
+      `  4. Commit: git add package-lock.json && git commit -m 'fix(security): resolve npm vulnerabilities'`,
+    );
     console.log(`  5. Push again`);
     console.log(`\nFor force push (not recommended):`);
     console.log(`  git push --no-verify`);

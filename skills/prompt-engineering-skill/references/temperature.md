@@ -4,21 +4,21 @@
 
 Both parameters control randomness in generation.
 
-| Parameter | Range | Effect |
-| --------- | ----- | ------ |
-| Temperature | 0.0 - 2.0 | Scales log probabilities. Lower = more deterministic, higher = more random |
+| Parameter       | Range     | Effect                                                                        |
+| --------------- | --------- | ----------------------------------------------------------------------------- |
+| Temperature     | 0.0 - 2.0 | Scales log probabilities. Lower = more deterministic, higher = more random    |
 | Top-P (nucleus) | 0.0 - 1.0 | Cumulative probability threshold. Lower = more focused, higher = more diverse |
 
 ## Recommended Settings
 
-| Task | Temperature | Top-P | Rationale |
-| ---- | ----------- | ----- | --------- |
-| Code generation | 0.0 - 0.2 | 0.5 - 0.9 | Deterministic, correct code |
-| Factual QA | 0.0 - 0.3 | 0.5 - 0.8 | Accuracy over creativity |
-| Data extraction | 0.0 - 0.1 | 0.3 - 0.5 | Consistent structured output |
-| Creative writing | 0.7 - 1.0 | 0.9 - 1.0 | Novelty and variety |
-| Brainstorming | 0.8 - 1.2 | 0.9 - 1.0 | Generate diverse ideas |
-| Translation | 0.1 - 0.3 | 0.5 - 0.7 | Accuracy and fluency |
+| Task             | Temperature | Top-P     | Rationale                    |
+| ---------------- | ----------- | --------- | ---------------------------- |
+| Code generation  | 0.0 - 0.2   | 0.5 - 0.9 | Deterministic, correct code  |
+| Factual QA       | 0.0 - 0.3   | 0.5 - 0.8 | Accuracy over creativity     |
+| Data extraction  | 0.0 - 0.1   | 0.3 - 0.5 | Consistent structured output |
+| Creative writing | 0.7 - 1.0   | 0.9 - 1.0 | Novelty and variety          |
+| Brainstorming    | 0.8 - 1.2   | 0.9 - 1.0 | Generate diverse ideas       |
+| Translation      | 0.1 - 0.3   | 0.5 - 0.7 | Accuracy and fluency         |
 
 ## Rule of Thumb
 

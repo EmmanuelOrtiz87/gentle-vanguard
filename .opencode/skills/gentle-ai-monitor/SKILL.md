@@ -1,6 +1,8 @@
 ---
 name: gentle-ai-monitor
-description: Monitor gentle-ai releases without installation. Absorb updates and generate actionable suggestions.
+description:
+  Monitor gentle-ai releases without installation. Absorb updates and generate actionable
+  suggestions.
 triggers:
   - gentle-ai
   - monitor updates

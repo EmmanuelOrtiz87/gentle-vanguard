@@ -46,7 +46,7 @@ async function testSessionAutostart() {
   // Verify session autostart script exists
   const autostartPath = join(process.cwd(), 'src', 'session-autostart.ts');
   assert(existsSync(autostartPath), 'session-autostart.ts should exist');
-  
+
   // Verify session context directory exists
   const contextDir = join(process.cwd(), '.session', 'context-log');
   assert(existsSync(contextDir), '.session/context-log directory should exist');
@@ -56,7 +56,7 @@ async function testSessionAutostart() {
 async function testHealthCheck() {
   const healthPath = join(process.cwd(), 'src', 'core', 'health-check.ts');
   assert(existsSync(healthPath), 'health-check.ts should exist');
-  
+
   // Check that key components are detectable
   const mcpPath = join(process.cwd(), 'dist', 'scripts', 'mcp', 'skill-server.js');
   assert(existsSync(mcpPath), 'MCP skill server should be built');
@@ -66,7 +66,7 @@ async function testHealthCheck() {
 async function testWatchtowerHealth() {
   const watchtowerPath = join(process.cwd(), 'src', 'core', 'maintenance-watchtower.ts');
   assert(existsSync(watchtowerPath), 'Maintenance watchtower should exist');
-  
+
   // Verify runtime directory structure
   const runtimeDir = join(process.cwd(), '.runtime');
   assert(existsSync(runtimeDir), '.runtime directory should exist');
@@ -77,7 +77,7 @@ async function testDashboardWs() {
   // Verify dashboard exists
   const dashboardPath = join(process.cwd(), 'apps', 'web-dashboard');
   assert(existsSync(dashboardPath), 'Web dashboard should exist');
-  
+
   // Verify server script exists
   const serverPath = join(dashboardPath, 'server', 'websocket-server.ts');
   assert(existsSync(serverPath), 'WebSocket server should exist');
@@ -87,7 +87,7 @@ async function testDashboardWs() {
 async function testDatabaseHealth() {
   const dbPath = join(process.cwd(), '.runtime', 'gentle-vanguard.db');
   assert(existsSync(dbPath), 'Nexus database should exist');
-  
+
   // Database should be readable (size > 0)
   const stats = readFileSync(dbPath);
   assert(stats.length > 0, 'Database should not be empty');
@@ -97,7 +97,7 @@ async function testDatabaseHealth() {
 async function testSkillsRegistry() {
   const registryPath = join(process.cwd(), '.atl', 'skill-embeddings.json');
   assert(existsSync(registryPath), 'Skill embeddings should exist');
-  
+
   const embeddings = JSON.parse(readFileSync(registryPath, 'utf-8'));
   assert(embeddings.skills.length > 400, 'Should have 400+ skills indexed');
   assert(embeddings.metadata, 'Should have metadata');
@@ -107,7 +107,7 @@ async function testSkillsRegistry() {
 async function testAuditPipeline() {
   const auditPath = join(process.cwd(), 'src', 'infrastructure', 'audit-pipeline.ts');
   assert(existsSync(auditPath), 'Audit pipeline should exist');
-  
+
   // Verify audit directory structure
   const auditDir = join(process.cwd(), '.session', 'audit');
   // Directory is created on first event, so we just check the script exists
@@ -117,7 +117,7 @@ async function testAuditPipeline() {
 async function testTokenBudget() {
   const budgetPath = join(process.cwd(), 'config', 'token-budget-guard.json');
   assert(existsSync(budgetPath), 'Token budget config should exist');
-  
+
   const config = JSON.parse(readFileSync(budgetPath, 'utf-8'));
   assert(config.tokenBudget.limits.daily > 0, 'Daily budget should be configured');
   assert(config.tokenBudget.limits.softThreshold > 0, 'Soft threshold should be configured');
@@ -127,7 +127,7 @@ async function testTokenBudget() {
 async function testMcpBridge() {
   const mcpBridgePath = join(process.cwd(), 'src', 'mcp-bridge.ts');
   assert(existsSync(mcpBridgePath), 'MCP bridge should exist');
-  
+
   // Verify MCP config
   const mcpConfigPath = join(process.cwd(), 'config', 'mcp-config.json');
   if (existsSync(mcpConfigPath)) {
@@ -169,10 +169,10 @@ async function main() {
 
   console.log();
   console.log('━'.repeat(50));
-  
-  const passed = TEST_RESULTS.filter(r => r.status === 'PASS').length;
-  const failed = TEST_RESULTS.filter(r => r.status === 'FAIL').length;
-  const skipped = TEST_RESULTS.filter(r => r.status === 'SKIP').length;
+
+  const passed = TEST_RESULTS.filter((r) => r.status === 'PASS').length;
+  const failed = TEST_RESULTS.filter((r) => r.status === 'FAIL').length;
+  const skipped = TEST_RESULTS.filter((r) => r.status === 'SKIP').length;
   const total = TEST_RESULTS.length;
   const duration = TEST_RESULTS.reduce((sum, r) => sum + r.duration, 0);
 

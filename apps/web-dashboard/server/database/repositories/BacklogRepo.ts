@@ -17,14 +17,14 @@ export interface BacklogItem {
   resolution_notes?: string;
   session_id?: string;
   trace_id?: string;
-  assignee_role?: string;     // dev | po | qa | ux | ops | sec | any
-  estimated_hours?: number;   // estimated resolution time
-  actual_hours?: number;      // actual time spent
-  priority?: number;          // 1-5 numeric priority
-  target_release?: string;    // target version/release
-  environment?: string;       // dev | staging | prod | all
-  reported_by?: string;       // who reported it
-  impact?: string;            // blocking | major | minor | cosmetic
+  assignee_role?: string; // dev | po | qa | ux | ops | sec | any
+  estimated_hours?: number; // estimated resolution time
+  actual_hours?: number; // actual time spent
+  priority?: number; // 1-5 numeric priority
+  target_release?: string; // target version/release
+  environment?: string; // dev | staging | prod | all
+  reported_by?: string; // who reported it
+  impact?: string; // blocking | major | minor | cosmetic
   created_at: string;
   updated_at: string;
   resolved_at?: string;
@@ -72,7 +72,9 @@ export class BacklogRepo {
 
   /** Add a new backlog item. Returns the item ID. */
   addItem(item: Omit<BacklogItem, 'created_at' | 'updated_at' | 'id'> & { id?: string }): string {
-    const id = item.id ?? `BL-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+    const id =
+      item.id ??
+      `BL-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
     const now = new Date().toISOString().replace('T', ' ').substring(0, 19);
     const stmt = this.db.prepare(`
       INSERT INTO backlog_items (id, type, title, description, severity, status, source, resolution_notes,
@@ -80,18 +82,28 @@ export class BacklogRepo {
         environment, reported_by, impact, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
-    stmt.run(id, item.type, item.title, item.description ?? '', item.severity, item.status ?? 'open',
-             item.source ?? '', item.resolution_notes ?? '',
-             item.session_id ?? null, item.trace_id ?? null,
-             item.assignee_role ?? 'any',
-             item.estimated_hours ?? null,
-             item.actual_hours ?? null,
-             item.priority ?? 3,
-             item.target_release ?? null,
-             item.environment ?? 'all',
-             item.reported_by ?? null,
-             item.impact ?? 'minor',
-             now, now);
+    stmt.run(
+      id,
+      item.type,
+      item.title,
+      item.description ?? '',
+      item.severity,
+      item.status ?? 'open',
+      item.source ?? '',
+      item.resolution_notes ?? '',
+      item.session_id ?? null,
+      item.trace_id ?? null,
+      item.assignee_role ?? 'any',
+      item.estimated_hours ?? null,
+      item.actual_hours ?? null,
+      item.priority ?? 3,
+      item.target_release ?? null,
+      item.environment ?? 'all',
+      item.reported_by ?? null,
+      item.impact ?? 'minor',
+      now,
+      now,
+    );
 
     // Record initial status history
     this.recordStatusChange(id, null, item.status ?? 'open', 'Item created');
@@ -105,13 +117,28 @@ export class BacklogRepo {
     const fields: string[] = ['updated_at = ?'];
     const params: unknown[] = [now];
 
-    const updatable = ['title', 'description', 'severity', 'resolution_notes', 'source',
-      'assignee_role', 'estimated_hours', 'actual_hours', 'priority', 'target_release',
-      'environment', 'reported_by', 'impact'] as const;
+    const updatable = [
+      'title',
+      'description',
+      'severity',
+      'resolution_notes',
+      'source',
+      'assignee_role',
+      'estimated_hours',
+      'actual_hours',
+      'priority',
+      'target_release',
+      'environment',
+      'reported_by',
+      'impact',
+    ] as const;
 
     for (const key of updatable) {
       const val = (updates as any)[key];
-      if (val !== undefined) { fields.push(`${key} = ?`); params.push(val); }
+      if (val !== undefined) {
+        fields.push(`${key} = ?`);
+        params.push(val);
+      }
     }
 
     if (updates.status !== undefined) {
@@ -119,7 +146,10 @@ export class BacklogRepo {
       const fromStatus = current?.status ?? null;
       fields.push('status = ?');
       params.push(updates.status);
-      if (updates.status === 'resolved') { fields.push('resolved_at = ?'); params.push(now); }
+      if (updates.status === 'resolved') {
+        fields.push('resolved_at = ?');
+        params.push(now);
+      }
       this.recordStatusChange(id, fromStatus, updates.status, updates.resolution_notes ?? '');
     }
 
@@ -129,14 +159,18 @@ export class BacklogRepo {
 
   /** Get a single item by ID. */
   getItem(id: string): BacklogItem | null {
-    const row = this.db.prepare(`
+    const row = this.db
+      .prepare(
+        `
       SELECT bi.*, GROUP_CONCAT(DISTINCT bt.name) as tags
       FROM backlog_items bi
       LEFT JOIN backlog_item_tags bit ON bi.id = bit.item_id
       LEFT JOIN backlog_tags bt ON bit.tag_id = bt.id
       WHERE bi.id = ?
       GROUP BY bi.id
-    `).get(id) as Record<string, unknown> | undefined;
+    `,
+      )
+      .get(id) as Record<string, unknown> | undefined;
 
     if (!row) return null;
     return this.rowToItem(row);
@@ -149,21 +183,37 @@ export class BacklogRepo {
     const limit = filter.limit ?? 50;
     const offset = filter.offset ?? 0;
 
-    if (filter.type) { conditions.push('bi.type = ?'); params.push(filter.type); }
-    if (filter.severity) { conditions.push('bi.severity = ?'); params.push(filter.severity); }
-    if (filter.status) { conditions.push('bi.status = ?'); params.push(filter.status); }
-    if (filter.session_id) { conditions.push('bi.session_id = ?'); params.push(filter.session_id); }
+    if (filter.type) {
+      conditions.push('bi.type = ?');
+      params.push(filter.type);
+    }
+    if (filter.severity) {
+      conditions.push('bi.severity = ?');
+      params.push(filter.severity);
+    }
+    if (filter.status) {
+      conditions.push('bi.status = ?');
+      params.push(filter.status);
+    }
+    if (filter.session_id) {
+      conditions.push('bi.session_id = ?');
+      params.push(filter.session_id);
+    }
     if (filter.search) {
       conditions.push('(bi.title LIKE ? OR bi.description LIKE ?)');
       params.push(`%${filter.search}%`, `%${filter.search}%`);
     }
     if (filter.tag) {
-      conditions.push('bi.id IN (SELECT bit.item_id FROM backlog_item_tags bit JOIN backlog_tags bt ON bit.tag_id = bt.id WHERE bt.name = ?)');
+      conditions.push(
+        'bi.id IN (SELECT bit.item_id FROM backlog_item_tags bit JOIN backlog_tags bt ON bit.tag_id = bt.id WHERE bt.name = ?)',
+      );
       params.push(filter.tag);
     }
 
     const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
-    const rows = this.db.prepare(`
+    const rows = this.db
+      .prepare(
+        `
       SELECT bi.*, GROUP_CONCAT(DISTINCT bt.name) as tags
       FROM backlog_items bi
       LEFT JOIN backlog_item_tags bit ON bi.id = bit.item_id
@@ -177,9 +227,11 @@ export class BacklogRepo {
         END,
         bi.created_at DESC
       LIMIT ? OFFSET ?
-    `).all(...params, limit, offset) as Record<string, unknown>[];
+    `,
+      )
+      .all(...params, limit, offset) as Record<string, unknown>[];
 
-    return rows.map(r => this.rowToItem(r));
+    return rows.map((r) => this.rowToItem(r));
   }
 
   /** Count items matching filter. */
@@ -187,16 +239,29 @@ export class BacklogRepo {
     const conditions: string[] = [];
     const params: unknown[] = [];
 
-    if (filter.type) { conditions.push('type = ?'); params.push(filter.type); }
-    if (filter.severity) { conditions.push('severity = ?'); params.push(filter.severity); }
-    if (filter.status) { conditions.push('status = ?'); params.push(filter.status); }
+    if (filter.type) {
+      conditions.push('type = ?');
+      params.push(filter.type);
+    }
+    if (filter.severity) {
+      conditions.push('severity = ?');
+      params.push(filter.severity);
+    }
+    if (filter.status) {
+      conditions.push('status = ?');
+      params.push(filter.status);
+    }
     if (filter.tag) {
-      conditions.push('id IN (SELECT bit.item_id FROM backlog_item_tags bit JOIN backlog_tags bt ON bit.tag_id = bt.id WHERE bt.name = ?)');
+      conditions.push(
+        'id IN (SELECT bit.item_id FROM backlog_item_tags bit JOIN backlog_tags bt ON bit.tag_id = bt.id WHERE bt.name = ?)',
+      );
       params.push(filter.tag);
     }
 
     const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
-    const row = this.db.prepare(`SELECT COUNT(*) as count FROM backlog_items bi ${where}`).get(...params) as { count: number };
+    const row = this.db
+      .prepare(`SELECT COUNT(*) as count FROM backlog_items bi ${where}`)
+      .get(...params) as { count: number };
     return row.count;
   }
 
@@ -207,7 +272,9 @@ export class BacklogRepo {
 
   /** Search for similar items by title/description (dedup prevention). */
   searchSimilar(query: string, limit = 5): BacklogItem[] {
-    const rows = this.db.prepare(`
+    const rows = this.db
+      .prepare(
+        `
       SELECT bi.*, GROUP_CONCAT(DISTINCT bt.name) as tags
       FROM backlog_items bi
       LEFT JOIN backlog_item_tags bit ON bi.id = bit.item_id
@@ -222,24 +289,49 @@ export class BacklogRepo {
         END,
         bi.created_at DESC
       LIMIT ?
-    `).all(`%${query}%`, `%${query}%`, `%${query}%`, `%${query}%`, limit) as Record<string, unknown>[];
+    `,
+      )
+      .all(`%${query}%`, `%${query}%`, `%${query}%`, `%${query}%`, limit) as Record<
+      string,
+      unknown
+    >[];
 
-    return rows.map(r => this.rowToItem(r));
+    return rows.map((r) => this.rowToItem(r));
   }
 
   /** Get summary stats for dashboard/reporting. */
   getStats(): Record<string, unknown> {
-    const total = (this.db.prepare('SELECT COUNT(*) as c FROM backlog_items').get() as { c: number }).c;
-    const byStatus = this.db.prepare(`
+    const total = (
+      this.db.prepare('SELECT COUNT(*) as c FROM backlog_items').get() as { c: number }
+    ).c;
+    const byStatus = this.db
+      .prepare(
+        `
       SELECT status, COUNT(*) as count FROM backlog_items GROUP BY status
-    `).all() as Array<{ status: string; count: number }>;
-    const bySeverity = this.db.prepare(`
+    `,
+      )
+      .all() as Array<{ status: string; count: number }>;
+    const bySeverity = this.db
+      .prepare(
+        `
       SELECT severity, COUNT(*) as count FROM backlog_items GROUP BY severity
-    `).all() as Array<{ severity: string; count: number }>;
-    const byType = this.db.prepare(`
+    `,
+      )
+      .all() as Array<{ severity: string; count: number }>;
+    const byType = this.db
+      .prepare(
+        `
       SELECT type, COUNT(*) as count FROM backlog_items GROUP BY type
-    `).all() as Array<{ type: string; count: number }>;
-    const openCount = (this.db.prepare("SELECT COUNT(*) as c FROM backlog_items WHERE status NOT IN ('resolved','wont_fix','duplicate')").get() as { c: number }).c;
+    `,
+      )
+      .all() as Array<{ type: string; count: number }>;
+    const openCount = (
+      this.db
+        .prepare(
+          "SELECT COUNT(*) as c FROM backlog_items WHERE status NOT IN ('resolved','wont_fix','duplicate')",
+        )
+        .get() as { c: number }
+    ).c;
 
     return { total, open: openCount, byStatus, bySeverity, byType };
   }
@@ -248,23 +340,32 @@ export class BacklogRepo {
 
   /** Get or create a tag by name. */
   ensureTag(name: string, color = '#00bfff'): number {
-    const existing = this.db.prepare('SELECT id FROM backlog_tags WHERE name = ?').get(name) as { id: number } | undefined;
+    const existing = this.db.prepare('SELECT id FROM backlog_tags WHERE name = ?').get(name) as
+      { id: number } | undefined;
     if (existing) return existing.id;
-    const result = this.db.prepare('INSERT INTO backlog_tags (name, color) VALUES (?, ?)').run(name, color);
+    const result = this.db
+      .prepare('INSERT INTO backlog_tags (name, color) VALUES (?, ?)')
+      .run(name, color);
     return Number(result.lastInsertRowid);
   }
 
   /** Add a tag to an item. */
   addTagToItem(itemId: string, tagName: string, tagColor = '#00bfff'): void {
     const tagId = this.ensureTag(tagName, tagColor);
-    this.db.prepare('INSERT OR IGNORE INTO backlog_item_tags (item_id, tag_id) VALUES (?, ?)').run(itemId, tagId);
+    this.db
+      .prepare('INSERT OR IGNORE INTO backlog_item_tags (item_id, tag_id) VALUES (?, ?)')
+      .run(itemId, tagId);
   }
 
   /** Remove a tag from an item. */
   removeTagFromItem(itemId: string, tagName: string): void {
-    this.db.prepare(`
+    this.db
+      .prepare(
+        `
       DELETE FROM backlog_item_tags WHERE item_id = ? AND tag_id = (SELECT id FROM backlog_tags WHERE name = ?)
-    `).run(itemId, tagName);
+    `,
+      )
+      .run(itemId, tagName);
   }
 
   /** List all tags. */
@@ -276,58 +377,72 @@ export class BacklogRepo {
 
   /** Add a comment to an item. */
   addComment(itemId: string, content: string, author = 'system'): number {
-    const result = this.db.prepare(
-      'INSERT INTO backlog_comments (item_id, content, author) VALUES (?, ?, ?)'
-    ).run(itemId, content, author);
+    const result = this.db
+      .prepare('INSERT INTO backlog_comments (item_id, content, author) VALUES (?, ?, ?)')
+      .run(itemId, content, author);
     return Number(result.lastInsertRowid);
   }
 
   /** Get comments for an item. */
   getComments(itemId: string): BacklogComment[] {
-    return this.db.prepare(
-      'SELECT * FROM backlog_comments WHERE item_id = ? ORDER BY created_at ASC'
-    ).all(itemId) as BacklogComment[];
+    return this.db
+      .prepare('SELECT * FROM backlog_comments WHERE item_id = ? ORDER BY created_at ASC')
+      .all(itemId) as BacklogComment[];
   }
 
   // ─── Status History ────────────────────────────────────────────────
 
-  private recordStatusChange(itemId: string, from: string | null, to: string, reason: string): void {
-    this.db.prepare(
-      'INSERT INTO backlog_status_history (item_id, from_status, to_status, reason) VALUES (?, ?, ?, ?)'
-    ).run(itemId, from, to, reason);
+  private recordStatusChange(
+    itemId: string,
+    from: string | null,
+    to: string,
+    reason: string,
+  ): void {
+    this.db
+      .prepare(
+        'INSERT INTO backlog_status_history (item_id, from_status, to_status, reason) VALUES (?, ?, ?, ?)',
+      )
+      .run(itemId, from, to, reason);
   }
 
   /** Get status history for an item. */
   getStatusHistory(itemId: string): BacklogStatusChange[] {
-    return this.db.prepare(
-      'SELECT * FROM backlog_status_history WHERE item_id = ? ORDER BY created_at ASC'
-    ).all(itemId) as BacklogStatusChange[];
+    return this.db
+      .prepare('SELECT * FROM backlog_status_history WHERE item_id = ? ORDER BY created_at ASC')
+      .all(itemId) as BacklogStatusChange[];
   }
 
   // ─── Related Items ─────────────────────────────────────────────────
 
   /** Link two items. */
   relateItems(itemId: string, relatedItemId: string, relationType: string): void {
-    this.db.prepare(
-      'INSERT OR IGNORE INTO backlog_related_items (item_id, related_item_id, relation_type) VALUES (?, ?, ?)'
-    ).run(itemId, relatedItemId, relationType);
+    this.db
+      .prepare(
+        'INSERT OR IGNORE INTO backlog_related_items (item_id, related_item_id, relation_type) VALUES (?, ?, ?)',
+      )
+      .run(itemId, relatedItemId, relationType);
   }
 
   /** Get related items. */
   getRelatedItems(itemId: string): Array<{ related_item_id: string; relation_type: string }> {
-    return this.db.prepare(
-      'SELECT related_item_id, relation_type FROM backlog_related_items WHERE item_id = ?'
-    ).all(itemId) as Array<{ related_item_id: string; relation_type: string }>;
+    return this.db
+      .prepare('SELECT related_item_id, relation_type FROM backlog_related_items WHERE item_id = ?')
+      .all(itemId) as Array<{ related_item_id: string; relation_type: string }>;
   }
 
   // ─── Pruning ───────────────────────────────────────────────────────
 
   /** Prune old resolved items (older than N days). Default: 365 days */
   pruneResolved(days = 365): number {
-    const cutoff = new Date(Date.now() - days * 86400000).toISOString().replace('T', ' ').substring(0, 19);
-    const result = this.db.prepare(
-      "DELETE FROM backlog_items WHERE status IN ('resolved','wont_fix','duplicate') AND updated_at < ?"
-    ).run(cutoff);
+    const cutoff = new Date(Date.now() - days * 86400000)
+      .toISOString()
+      .replace('T', ' ')
+      .substring(0, 19);
+    const result = this.db
+      .prepare(
+        "DELETE FROM backlog_items WHERE status IN ('resolved','wont_fix','duplicate') AND updated_at < ?",
+      )
+      .run(cutoff);
     return result.changes;
   }
 

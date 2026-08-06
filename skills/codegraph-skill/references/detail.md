@@ -40,6 +40,7 @@ codegraph index
 
 ## Best Practices
 
-1. **Trust CodeGraph results** — `codegraph_context` returns accurate symbols and relationships. No need to verify via grep/read.
+1. **Trust CodeGraph results** — `codegraph_context` returns accurate symbols and relationships. No
+   need to verify via grep/read.
 2. **Use `codegraph_context` first** before editing code.
 3. **Sync after editing** — `codegraph sync` or wait 2s for file watcher debounce.

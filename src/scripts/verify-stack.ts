@@ -26,18 +26,30 @@ function check(name: string, fn: () => boolean | Promise<boolean>, timeoutMs = 3
   try {
     const result = fn();
     if (result instanceof Promise) {
-      result.then(r => {
-        if (r) { passed++; process.stdout.write(`  ✅ ${name}\n`); }
-        else { failed++; process.stdout.write(`  ❌ ${name}\n`); }
-        stop(true);
-      }).catch(e => {
-        failed++;
-        process.stdout.write(`  ❌ ${name}: ${e.message}\n`);
-        stop(false);
-      });
+      result
+        .then((r) => {
+          if (r) {
+            passed++;
+            process.stdout.write(`  ✅ ${name}\n`);
+          } else {
+            failed++;
+            process.stdout.write(`  ❌ ${name}\n`);
+          }
+          stop(true);
+        })
+        .catch((e) => {
+          failed++;
+          process.stdout.write(`  ❌ ${name}: ${e.message}\n`);
+          stop(false);
+        });
     } else {
-      if (result) { passed++; process.stdout.write(`  ✅ ${name}\n`); }
-      else { failed++; process.stdout.write(`  ❌ ${name}\n`); }
+      if (result) {
+        passed++;
+        process.stdout.write(`  ✅ ${name}\n`);
+      } else {
+        failed++;
+        process.stdout.write(`  ❌ ${name}\n`);
+      }
       stop(true);
     }
   } catch (e: any) {
@@ -47,7 +59,10 @@ function check(name: string, fn: () => boolean | Promise<boolean>, timeoutMs = 3
   }
 }
 
-function exec(cmd: string, opts?: { cwd?: string; timeout?: number }): { code: number; output: string } {
+function exec(
+  cmd: string,
+  opts?: { cwd?: string; timeout?: number },
+): { code: number; output: string } {
   const r = runSyncShell(cmd, {
     timeout: opts?.timeout ?? 60000,
     stdio: 'pipe',
@@ -84,7 +99,9 @@ async function main() {
   check('timeout-config tests pass', () => tcTestResult.code === 0);
 
   // 4. Timeout monitor tests
-  const tmTestResult = exec('npx tsx --test tests/unit/timeout-monitor.test.ts', { timeout: 30000 });
+  const tmTestResult = exec('npx tsx --test tests/unit/timeout-monitor.test.ts', {
+    timeout: 30000,
+  });
   check('timeout-monitor tests pass', () => tmTestResult.code === 0);
 
   // 5. Dashboard build
@@ -98,9 +115,14 @@ async function main() {
     const r = getResilienceConfig();
     const opCount = Object.keys(r.timeoutConfig).length;
     const cbCount = Object.keys(r.circuitBreakers).length;
-    check('resilience bridge loads (' + opCount + ' ops, ' + cbCount + ' CBs)', () => opCount > 0 && cbCount >= 0);
+    check(
+      'resilience bridge loads (' + opCount + ' ops, ' + cbCount + ' CBs)',
+      () => opCount > 0 && cbCount >= 0,
+    );
   } catch (e: any) {
-    check('resilience bridge loads', () => { throw e; });
+    check('resilience bridge loads', () => {
+      throw e;
+    });
   }
 
   // 7. Timeout config values
@@ -113,19 +135,39 @@ async function main() {
     check('websocket.ping_interval_ms = ' + wsTimeout + 'ms', () => wsTimeout > 0);
     check('config version: ' + cfg.version, () => cfg.version === '1.0.0');
     check('12 categories loaded', () => {
-      const cats = ['global', 'http_server', 'websocket', 'external_api', 'process_execution', 'pipeline', 'dashboard', 'database', 'cache', 'session', 'hooks', 'monitoring', 'circuit_breaker'];
-      return cats.filter(c => (cfg as any)[c] !== undefined).length >= 12;
+      const cats = [
+        'global',
+        'http_server',
+        'websocket',
+        'external_api',
+        'process_execution',
+        'pipeline',
+        'dashboard',
+        'database',
+        'cache',
+        'session',
+        'hooks',
+        'monitoring',
+        'circuit_breaker',
+      ];
+      return cats.filter((c) => (cfg as any)[c] !== undefined).length >= 12;
     });
   } catch (e: any) {
-    check('timeout config values', () => { throw e; });
+    check('timeout config values', () => {
+      throw e;
+    });
   }
 
   // 8. Session autostart pipeline (dry-run check)
   printSection('Session Autostart Pipeline');
   const saResult = exec('npx tsx src/core/session-autostart.ts', { timeout: 180000 });
   // The pipeline might exit 1 on some non-critical failures, but should at least start
-  const hasRequiredSteps = saResult.output.includes('[OK]') || saResult.output.includes('32 enabled');
-  check('session autostart starts (' + (saResult.code === 0 ? 'exit 0' : 'exit ' + saResult.code) + ')', () => hasRequiredSteps);
+  const hasRequiredSteps =
+    saResult.output.includes('[OK]') || saResult.output.includes('32 enabled');
+  check(
+    'session autostart starts (' + (saResult.code === 0 ? 'exit 0' : 'exit ' + saResult.code) + ')',
+    () => hasRequiredSteps,
+  );
 
   // 9. Performance metrics
   printSection('Performance Monitoring');
@@ -156,7 +198,7 @@ async function main() {
   process.exit(failed > 0 ? 1 : 0);
 }
 
-main().catch(e => {
+main().catch((e) => {
   console.error('Verification error:', e);
   process.exit(1);
 });

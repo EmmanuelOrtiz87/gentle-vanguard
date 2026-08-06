@@ -3,6 +3,7 @@
 ## Leading Indicators
 
 Metrics that change quickly after launch (days to weeks):
+
 - **Adoption rate**: % of eligible users who try the feature
 - **Activation rate**: % of users who complete the core action
 - **Task completion rate**: % of users who successfully accomplish their goal
@@ -13,6 +14,7 @@ Metrics that change quickly after launch (days to weeks):
 ## Lagging Indicators
 
 Metrics that take time to develop (weeks to months):
+
 - **Retention impact**: Does this feature improve user retention?
 - **Revenue impact**: Does this drive upgrades, expansion, or new revenue?
 - **NPS / satisfaction change**: Does this improve how users feel about the product?
@@ -32,6 +34,7 @@ Metrics that take time to develop (weeks to months):
 ## Recognizing Scope Creep
 
 Scope creep happens when:
+
 - Requirements keep getting added after the spec is approved
 - "Small" additions accumulate into a significantly larger project
 - The team is building features no user asked for ("while we're at it...")

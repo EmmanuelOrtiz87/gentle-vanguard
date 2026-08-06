@@ -2,12 +2,12 @@
 
 ## Data Size Guidelines
 
-| Data Size | Approach |
-|---|---|
-| <1,000 rows | Embed directly in HTML. Full interactivity. |
-| 1,000 - 10,000 rows | Embed in HTML. May need to pre-aggregate for charts. |
-| 10,000 - 100,000 rows | Pre-aggregate server-side. Embed only aggregated data. |
-| >100,000 rows | Not suitable for client-side dashboard. Use a BI tool or paginate. |
+| Data Size             | Approach                                                           |
+| --------------------- | ------------------------------------------------------------------ |
+| <1,000 rows           | Embed directly in HTML. Full interactivity.                        |
+| 1,000 - 10,000 rows   | Embed in HTML. May need to pre-aggregate for charts.               |
+| 10,000 - 100,000 rows | Pre-aggregate server-side. Embed only aggregated data.             |
+| >100,000 rows         | Not suitable for client-side dashboard. Use a BI tool or paginate. |
 
 ## Pre-Aggregation Pattern
 

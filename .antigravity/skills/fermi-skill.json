@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "# Fermi Estimation\n\n## Overview\n\nFermi estimation decomposes impossible-to-know quantities into estimable factors. Errors tend to cancel across factors, yielding useful order-of-magnitude results.\n\n## When to Use\n\n- Capacity / cost / market sizing, feasibility, sanity checks, prioritization\n- Use when you can't measure directly but need a number anyway\n\n## Process\n\n1. **Clarify** — precise question, not vague\n2. **Decompose** — 3-6 independent factors (component, rate×time, population×%, analogy)\n3. **Estimate each** — use ranges, geometric mean, one significant figure\n4. **Combine** — multiply/add factors\n5. **Sanity check** — plausible? physical? 10x change decision?\n6. **State result** — point estimate, range, confidence, implication\n\n## Decomposition Strategies\n\n| Strategy | Formula |\n|---|---|\n| By component | Total = Sum of parts |\n| Rate × time | Total = Rate × Duration |\n| Population × % | Target = Base × Percentage |\n| Analogy × adjustment | New ≈ Similar × Ratio |\n\n## Key Questions\n\n- Can I break this into smaller pieces?\n- What's the upper / lower bound?\n- Would being off by 10x change my decision?\n- Can I cross-check via a different approach?\n\n> Estimate first to know what answer to expect, then calculate to verify.\n> — John Wheeler\n\n---\n\n*Examples, template, patterns, tips, and checklist moved to `references/`.*",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

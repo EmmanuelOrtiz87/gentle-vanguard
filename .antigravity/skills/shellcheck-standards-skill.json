@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "# Shell Script Standards\n\n## Purpose\n\nMaintain shell script quality and portability across bash/PowerShell runtimes.\n\n## Running Linters\n\n```powershell\n# PowerShell\nInvoke-ScriptAnalyzer -Path .\\scripts\\\n\n# Bash\nshellcheck -x bin/* lib/*.sh\n```\n\n## PowerShell Standards\n\n### Variables\n\n```powershell\n# GOOD  use $ for variables\n$name = \"value\"\n$env:PATH += \";$customPath\"\n\n# GOOD  local scope\nfunction Get-Value {\n    $result = Get-Something\n    return $result\n}\n```\n\n### Parameters\n\n```powershell\n# GOOD  typed parameters\nparam(\n    [string]$Name,\n    [int]$Count = 10,\n    [switch]$Force\n)\n```\n\n### Error Handling\n\n```powershell\n# GOOD  use ErrorAction\nInvoke-Something -ErrorAction Stop\n$ErrorActionPreference = 'Stop'\n```\n\n## Bash Standards\n\n### Quoting\n\n```bash\n# GOOD  always quote\necho \"$var\"\n\"$cmd\" \"$arg\"\n\n# BAD  unquoted\necho $var\n```\n\n### Conditionals\n\n```bash\n# GOOD  use [[ ]]\n[[ \"$var\" == \"value\" ]]\n[[ -f \"$file\" ]]\n\n# BAD  use [ ] only for POSIX\n```\n\n### Functions\n\n```bash\n# GOOD  local variables\nmy_function() {\n    local result\n    result=\"something\"\n}\n```\n\n## Cross-Platform\n\n### Paths\n\n```powershell\n# GOOD  Join-Path\n$path = Join-Path $dir $file\n\n# GOOD  forward slashes work on all platforms\n$uri = \"https://example.com/path\"\n```\n\n### Line Endings\n\n```bash\n# Set in .gitattributes\n*.ps1 text eol=crlf\n*.sh text eol=lf\n```\n\n## Common Fixes\n\n| Issue                    | Fix                               |\n| ------------------------ | --------------------------------- |\n| `$var` unquoted          | Add `\"$var\"`                      |\n| `$?` without check       | Use `if command; then`            |\n| Global vars in functions | Add `local` keyword               |\n| eval usage               | Use arrays or parameter expansion |",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

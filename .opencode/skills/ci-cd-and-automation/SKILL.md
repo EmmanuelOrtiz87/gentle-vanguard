@@ -1,6 +1,8 @@
 ---
 name: ci-cd-and-automation
-description: Automate CI/CD pipelines. Configure build processes, test runners, deployment strategies, and quality gates.
+description:
+  Automate CI/CD pipelines. Configure build processes, test runners, deployment strategies, and
+  quality gates.
 triggers:
   - ci/cd
   - pipeline
@@ -40,22 +42,22 @@ When CI fails, feed the output directly to an agent:
 
 > "The CI pipeline failed with this error: [paste error]. Fix and verify locally."
 
-| Failure        | Fix                                   |
-|----------------|---------------------------------------|
-| Lint failure   | Run `npm run lint --fix` and commit   |
-| Type error     | Read the error location, fix the type |
-| Test failure   | Follow the debugging skill            |
-| Build error    | Check config and dependencies         |
+| Failure      | Fix                                   |
+| ------------ | ------------------------------------- |
+| Lint failure | Run `npm run lint --fix` and commit   |
+| Type error   | Read the error location, fix the type |
+| Test failure | Follow the debugging skill            |
+| Build error  | Check config and dependencies         |
 
 ## Common Rationalizations
 
-| Rationalization                   | Reality                                                                            |
-|-----------------------------------|------------------------------------------------------------------------------------|
-| "CI is too slow"                  | Optimize the pipeline (see references), don't skip it.                             |
-| "This change is trivial"          | Trivial changes break builds. CI is fast for trivial changes anyway.               |
-| "The test is flaky, just re-run"  | Flaky tests mask real bugs. Fix the flakiness.                                     |
-| "We'll add CI later"              | Projects without CI accumulate broken states. Set it up on day one.                |
-| "Manual testing is enough"        | Manual testing doesn't scale and isn't repeatable. Automate what you can.          |
+| Rationalization                  | Reality                                                                   |
+| -------------------------------- | ------------------------------------------------------------------------- |
+| "CI is too slow"                 | Optimize the pipeline (see references), don't skip it.                    |
+| "This change is trivial"         | Trivial changes break builds. CI is fast for trivial changes anyway.      |
+| "The test is flaky, just re-run" | Flaky tests mask real bugs. Fix the flakiness.                            |
+| "We'll add CI later"             | Projects without CI accumulate broken states. Set it up on day one.       |
+| "Manual testing is enough"       | Manual testing doesn't scale and isn't repeatable. Automate what you can. |
 
 ## Red Flags
 
@@ -82,5 +84,7 @@ When CI fails, feed the output directly to an agent:
 Detailed YAML configurations, deployment strategies, and optimization guides:
 
 - [pipeline-setup.md](references/pipeline-setup.md) — CI pipeline YAML examples, environment setup
-- [workflow-patterns.md](references/workflow-patterns.md) — deployment strategies, feature flags, automation
-- [quality-gates.md](references/quality-gates.md) — CI optimization, parallelism, caching, gate pipeline
+- [workflow-patterns.md](references/workflow-patterns.md) — deployment strategies, feature flags,
+  automation
+- [quality-gates.md](references/quality-gates.md) — CI optimization, parallelism, caching, gate
+  pipeline

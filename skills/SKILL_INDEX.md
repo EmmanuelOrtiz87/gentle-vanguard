@@ -519,9 +519,12 @@ mobile work
 
 ### nexus-database-skill
 
-**Trigger**: `Nexus`, `nexus-database`, `gentle-vanguard.db`, `operational-db`, `DatabaseManager`, `session_scoring`, `response_cache`, `token_usage`, `routing_rules`, `session scoring`, `db:health`, `db:backup`, `db:prune`
+**Trigger**: `Nexus`, `nexus-database`, `gentle-vanguard.db`, `operational-db`, `DatabaseManager`,
+`session_scoring`, `response_cache`, `token_usage`, `routing_rules`, `session scoring`, `db:health`,
+`db:backup`, `db:prune`
 
-**Use when**: Managing the Gentle-Vanguard operational database (Nexus) — init, health check, backup, restore, prune, optimize, retention policy, session scoring, or monitoring via watchtower
+**Use when**: Managing the Gentle-Vanguard operational database (Nexus) — init, health check,
+backup, restore, prune, optimize, retention policy, session scoring, or monitoring via watchtower
 
 ---
 

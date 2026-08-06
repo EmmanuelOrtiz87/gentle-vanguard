@@ -131,7 +131,9 @@ function checkDependencies(quiet: boolean): ResolutionResult {
   return {
     step: 'Dependencies',
     ok,
-    message: ok ? 'No vulnerabilities' : result.stdout?.trim() || result.stderr?.trim() || `Exit code ${result.status}`,
+    message: ok
+      ? 'No vulnerabilities'
+      : result.stdout?.trim() || result.stderr?.trim() || `Exit code ${result.status}`,
   };
 }
 
@@ -154,19 +156,39 @@ function checkHealth(quiet: boolean): ResolutionResult {
 }
 
 function finalizeTracing(quiet: boolean): ResolutionResult {
-  return runStep('tracing-instrument.ts', ['--action', 'end', '--span-name', 'final-resolution'], 'Close tracing spans', quiet);
+  return runStep(
+    'tracing-instrument.ts',
+    ['--action', 'end', '--span-name', 'final-resolution'],
+    'Close tracing spans',
+    quiet,
+  );
 }
 
 function finalizeAudit(quiet: boolean): ResolutionResult {
-  return runStep('audit-pipeline.ts', ['--action', 'log', '--message', 'Session finalized'], 'Audit log finalization', quiet);
+  return runStep(
+    'audit-pipeline.ts',
+    ['--action', 'log', '--message', 'Session finalized'],
+    'Audit log finalization',
+    quiet,
+  );
 }
 
 function finalizeEvents(quiet: boolean): ResolutionResult {
-  return runStep('event-sourcing.ts', ['--action', 'snapshot', '--aggregate-id', 'session-finalize'], 'Event store finalization', quiet);
+  return runStep(
+    'event-sourcing.ts',
+    ['--action', 'snapshot', '--aggregate-id', 'session-finalize'],
+    'Event store finalization',
+    quiet,
+  );
 }
 
 function finalizeCheckpoint(quiet: boolean): ResolutionResult {
-  return runStep('checkpoint-manager.ts', ['--action', 'create', '--label', 'final-resolution'], 'Checkpoint creation', quiet);
+  return runStep(
+    'checkpoint-manager.ts',
+    ['--action', 'create', '--label', 'final-resolution'],
+    'Checkpoint creation',
+    quiet,
+  );
 }
 
 function printSummary(results: ResolutionResult[], quiet: boolean): void {

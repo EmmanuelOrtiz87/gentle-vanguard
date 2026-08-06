@@ -27,23 +27,35 @@ describe('OpenCode validation workflow', () => {
       timeout: 30000,
     });
 
-    assert.equal(result.status, 0, `Expected zero exit code, got ${result.status}
+    assert.equal(
+      result.status,
+      0,
+      `Expected zero exit code, got ${result.status}
 stdout: ${result.stdout}
-stderr: ${result.stderr}`);
+stderr: ${result.stderr}`,
+    );
   });
 
   it('runs opencode-validation-monitor.ts with no active alerts', () => {
-    const result = spawnSync('pnpm', ['exec', 'tsx', 'src/monitor/opencode-validation-monitor.ts'], {
-      cwd: ROOT,
-      env: { ...process.env, GENTLE_VANGUARD_DB_DIR: tempDbDir },
-      encoding: 'utf-8',
-      shell: true,
-      timeout: 30000,
-    });
+    const result = spawnSync(
+      'pnpm',
+      ['exec', 'tsx', 'src/monitor/opencode-validation-monitor.ts'],
+      {
+        cwd: ROOT,
+        env: { ...process.env, GENTLE_VANGUARD_DB_DIR: tempDbDir },
+        encoding: 'utf-8',
+        shell: true,
+        timeout: 30000,
+      },
+    );
 
-    assert.equal(result.status, 0, `Expected zero exit code, got ${result.status}
+    assert.equal(
+      result.status,
+      0,
+      `Expected zero exit code, got ${result.status}
 stdout: ${result.stdout}
-stderr: ${result.stderr}`);
+stderr: ${result.stderr}`,
+    );
     assert.match(result.stdout ?? '', /No active OpenCode validation alerts\./);
   });
 });

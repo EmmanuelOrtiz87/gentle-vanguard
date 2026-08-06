@@ -1,10 +1,12 @@
 # Código de Conducta para Revisiones de Código
 
-Este documento establece los estándares y mejores prácticas para las revisiones de código en el proyecto Gentle-Vanguard.
+Este documento establece los estándares y mejores prácticas para las revisiones de código en el
+proyecto Gentle-Vanguard.
 
 ## 1. Objetivo
 
 Establecer un marco consistente para revisiones de código que garantice:
+
 - Calidad del código
 - Seguridad
 - Mantenibilidad
@@ -13,30 +15,35 @@ Establecer un marco consistente para revisiones de código que garantice:
 ## 2. Criterios de Revisión (Five-Axis Review)
 
 ### 2.1 Correctitud
+
 - Verificar que el código cumple con los requisitos especificados
 - Comprobar manejo de casos extremos y errores
 - Validar cobertura de pruebas unitarias
 - Revisar condiciones de carrera y problemas de concurrencia
 
 ### 2.2 Legibilidad
+
 - Verificar nombres de variables, funciones y clases descriptivos
 - Comprobar estructura de control clara y lógica
 - Validar complejidad del código (cyclomatic complexity)
 - Revisar presencia de código muerto o comentarios obsoletos
 
 ### 2.3 Arquitectura
+
 - Verificar patrones de diseño aplicados
 - Comprobar límites de módulo y dependencias
 - Validar dirección de dependencias (no deben ir hacia atrás)
 - Revisar acoplamiento y cohesión
 
 ### 2.4 Seguridad
+
 - Validar entrada de usuario y sanitización
 - Revisar manejo de secretos y credenciales
 - Comprobar autenticación y autorización
 - Verificar protección contra inyección de prompts y ataques comunes
 
 ### 2.5 Rendimiento
+
 - Revisar operaciones N+1
 - Validar uso de recursos (memoria, CPU)
 - Comprobar operaciones sincrónicas innecesarias
@@ -45,12 +52,14 @@ Establecer un marco consistente para revisiones de código que garantice:
 ## 3. Proceso de Revisión
 
 ### 3.1 Preparación
+
 1. Asegurar que el código pasa todas las pruebas unitarias
 2. Verificar que el código compila sin errores ni advertencias
 3. Confirmar que se siguen las convenciones de estilo del proyecto
 4. Validar que se han incluido pruebas de integración si aplica
 
 ### 3.2 Revisión
+
 1. Revisar el propósito del cambio
 2. Aplicar los cinco criterios mencionados anteriormente
 3. Identificar hallazgos por severidad:
@@ -60,6 +69,7 @@ Establecer un marco consistente para revisiones de código que garantice:
    - **FYI**: Información de interés
 
 ### 3.3 Comunicación
+
 1. Comentar en el código específico donde se encuentran problemas
 2. Usar lenguaje constructivo y profesional
 3. Proporcionar sugerencias de mejora cuando sea apropiado
@@ -68,6 +78,7 @@ Establecer un marco consistente para revisiones de código que garantice:
 ## 4. Plantillas de Revisión
 
 ### 4.1 Cambios de Funcionalidad
+
 ```
 ## Revisión de Funcionalidad
 
@@ -87,6 +98,7 @@ Establecer un marco consistente para revisiones de código que garantice:
 ```
 
 ### 4.2 Cambios de Seguridad
+
 ```
 ## Revisión de Seguridad
 
@@ -104,6 +116,7 @@ Establecer un marco consistente para revisiones de código que garantice:
 ```
 
 ### 4.3 Cambios de Rendimiento
+
 ```
 ## Revisión de Rendimiento
 
@@ -123,12 +136,14 @@ Establecer un marco consistente para revisiones de código que garantice:
 ## 5. Herramientas de Apoyo
 
 ### 5.1 Verificación Automática
+
 - `npm run lint` - Verificación de estilo de código
 - `npm run typecheck` - Verificación de tipos
 - `npm test` - Ejecución de pruebas unitarias
 - `npm run security:check` - Verificación de seguridad
 
 ### 5.2 Métricas de Calidad
+
 - Cobertura de código (mínimo 80%)
 - Complejidad ciclomática (máximo 10 por función)
 - Líneas de código por función (máximo 50)
@@ -137,6 +152,7 @@ Establecer un marco consistente para revisiones de código que garantice:
 ## 6. Buenas Prácticas
 
 ### 6.1 Para Revisores
+
 1. Revisar el código con atención a los detalles
 2. Entender el contexto del cambio antes de revisar
 3. Ser constructivo y profesional en los comentarios
@@ -144,6 +160,7 @@ Establecer un marco consistente para revisiones de código que garantice:
 5. Verificar que las pruebas cubren el nuevo código
 
 ### 6.2 Para Autores
+
 1. Escribir código limpio y bien documentado
 2. Incluir pruebas unitarias para el nuevo código
 3. Seguir las convenciones de estilo del proyecto
@@ -153,6 +170,7 @@ Establecer un marco consistente para revisiones de código que garantice:
 ## 7. Aprobación Final
 
 Una revisión se considera aprobada cuando:
+
 1. Todos los hallazgos críticos y requeridos están resueltos
 2. El código cumple con los estándares de calidad del proyecto
 3. Todas las pruebas pasan satisfactoriamente
@@ -161,4 +179,5 @@ Una revisión se considera aprobada cuando:
 
 ## 8. Revisión Periódica
 
-Este documento debe revisarse cada 6 meses o después de cualquier cambio importante en las prácticas de desarrollo del equipo.
+Este documento debe revisarse cada 6 meses o después de cualquier cambio importante en las prácticas
+de desarrollo del equipo.

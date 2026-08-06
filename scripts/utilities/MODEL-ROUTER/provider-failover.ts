@@ -36,22 +36,28 @@ interface FallbackConfig {
     notifyOnFallback: boolean;
     persistState: boolean;
   };
-  agentFallbacks: Record<string, {
-    primary: string;
-    chain: string[];
-    providerPriority: string[];
-    rationale: string;
-  }>;
+  agentFallbacks: Record<
+    string,
+    {
+      primary: string;
+      chain: string[];
+      providerPriority: string[];
+      rationale: string;
+    }
+  >;
   universalFallbacks: string[];
 }
 
 interface RouterConfig {
-  agentBindings: Record<string, {
-    model: string;
-    provider: string;
-    subagent: string;
-    rationale?: string;
-  }>;
+  agentBindings: Record<
+    string,
+    {
+      model: string;
+      provider: string;
+      subagent: string;
+      rationale?: string;
+    }
+  >;
   fallback: {
     model: string;
     description: string;
@@ -59,15 +65,18 @@ interface RouterConfig {
 }
 
 interface FallbackState {
-  agentStates: Record<string, {
-    currentModel: string;
-    fallbackHistory: Array<{
-      attempted: string;
-      result: 'success' | 'fail';
-      timestamp: string;
-    }>;
-    lastUsedProvider: string;
-  }>;
+  agentStates: Record<
+    string,
+    {
+      currentModel: string;
+      fallbackHistory: Array<{
+        attempted: string;
+        result: 'success' | 'fail';
+        timestamp: string;
+      }>;
+      lastUsedProvider: string;
+    }
+  >;
   globalFallbackCount: number;
   lastUpdated: string;
 }
@@ -88,11 +97,13 @@ function loadState(): FallbackState {
     if (existsSync(STATE_PATH)) {
       return JSON.parse(readFileSync(STATE_PATH, 'utf-8')) as FallbackState;
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return {
     agentStates: {},
     globalFallbackCount: 0,
-    lastUpdated: new Date().toISOString()
+    lastUpdated: new Date().toISOString(),
   };
 }
 
@@ -134,7 +145,10 @@ function getAgentFallbackChain(agentType: string): string[] {
   return fallbackConfig.universalFallbacks || [];
 }
 
-function resolveModelWithFallback(agentType: string, _taskDescription?: string): {
+function resolveModelWithFallback(
+  agentType: string,
+  _taskDescription?: string,
+): {
   model: string;
   provider: string;
   fallbackUsed: boolean;
@@ -161,28 +175,32 @@ function resolveModelWithFallback(agentType: string, _taskDescription?: string):
       provider: currentProvider,
       fallbackUsed: true,
       alternativeAvailable: false,
-      suggestedAgentType: binding?.subagent
+      suggestedAgentType: binding?.subagent,
     };
   }
 
   // If primary model and fallbacks available, suggest the full chain
-  const alternativeAvailable = fallbackChain.length > 1 || (!!binding?.model && fallbackChain.length > 0);
+  const alternativeAvailable =
+    fallbackChain.length > 1 || (!!binding?.model && fallbackChain.length > 0);
 
   return {
     model: currentModel,
     provider: currentProvider,
     fallbackUsed: false,
     alternativeAvailable,
-    suggestedAgentType: binding?.subagent
+    suggestedAgentType: binding?.subagent,
   };
 }
 
-function formatNotification(agentType: string, result: {
-  model: string;
-  fallbackUsed: boolean;
-  alternativeAvailable: boolean;
-  suggestedAgentType?: string;
-}): string {
+function formatNotification(
+  agentType: string,
+  result: {
+    model: string;
+    fallbackUsed: boolean;
+    alternativeAvailable: boolean;
+    suggestedAgentType?: string;
+  },
+): string {
   if (result.fallbackUsed) {
     return `[FAILOVER] Agent ${agentType} usando modelo alternativo: ${result.model}`;
   }
@@ -205,19 +223,26 @@ async function main(): Promise<void> {
     // Report mode — show all agent fallback statuses
     const fallbackConfig = loadConfig<FallbackConfig>(FALLBACK_CONFIG_PATH, 'model-fallback.json');
     const state = loadState();
-    console.log(JSON.stringify({
-      status: 'ok',
-      mode: 'report',
-      agents: Object.keys(fallbackConfig.agentFallbacks || {}).map(a => ({
-        agent: a,
-        primary: fallbackConfig.agentFallbacks[a].primary,
-        fallbackChain: fallbackConfig.agentFallbacks[a].chain,
-        currentState: state.agentStates[a]?.currentModel || fallbackConfig.agentFallbacks[a].primary,
-        fallbacksUsed: state.agentStates[a]?.fallbackHistory?.length || 0
-      })),
-      globalFallbackCount: state.globalFallbackCount,
-      universalFallbacks: fallbackConfig.universalFallbacks || []
-    }, null, 2));
+    console.log(
+      JSON.stringify(
+        {
+          status: 'ok',
+          mode: 'report',
+          agents: Object.keys(fallbackConfig.agentFallbacks || {}).map((a) => ({
+            agent: a,
+            primary: fallbackConfig.agentFallbacks[a].primary,
+            fallbackChain: fallbackConfig.agentFallbacks[a].chain,
+            currentState:
+              state.agentStates[a]?.currentModel || fallbackConfig.agentFallbacks[a].primary,
+            fallbacksUsed: state.agentStates[a]?.fallbackHistory?.length || 0,
+          })),
+          globalFallbackCount: state.globalFallbackCount,
+          universalFallbacks: fallbackConfig.universalFallbacks || [],
+        },
+        null,
+        2,
+      ),
+    );
     return;
   }
 
@@ -233,7 +258,7 @@ async function main(): Promise<void> {
     alternativeAvailable: result.alternativeAvailable,
     suggestedAgentType: result.suggestedAgentType || 'explore',
     notification: formatNotification(agentType, result),
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 
   // Persist to state
@@ -243,7 +268,7 @@ async function main(): Promise<void> {
       state.agentStates[agentType] = {
         currentModel: result.model,
         fallbackHistory: [],
-        lastUsedProvider: 'openrouter'
+        lastUsedProvider: 'openrouter',
       };
     }
     saveState(state);
@@ -254,16 +279,20 @@ async function main(): Promise<void> {
 
   // If alternatives are available, also output user-friendly suggestion
   if (result.alternativeAvailable) {
-    console.error(`\nℹ️  TIP: Si el agente ${agentType} falla por modelo, intenta con "explore" como fallback universal.`);
+    console.error(
+      `\nℹ️  TIP: Si el agente ${agentType} falla por modelo, intenta con "explore" como fallback universal.`,
+    );
     console.error(`   O usa: --agent ${agentType} --fallback-only para ver solo alternativas.`);
   }
 }
 
-main().catch(err => {
-  console.error(JSON.stringify({
-    status: 'error',
-    error: err instanceof Error ? err.message : String(err),
-    suggestion: 'Verificar config/model-fallback.json y config/model-router.json'
-  }));
+main().catch((err) => {
+  console.error(
+    JSON.stringify({
+      status: 'error',
+      error: err instanceof Error ? err.message : String(err),
+      suggestion: 'Verificar config/model-fallback.json y config/model-router.json',
+    }),
+  );
   process.exit(1);
 });

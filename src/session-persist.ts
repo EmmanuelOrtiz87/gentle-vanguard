@@ -2,7 +2,7 @@
 /**
  * Session Persistence Manager
  * Evita reinicios costosos manteniendo estado entre comandos
- * 
+ *
  * Problem: Each command triggers full session-autostart (40K+ tokens)
  * Solution: Check session state, only initialize if needed
  */
@@ -38,23 +38,23 @@ export function isSessionActive(): { active: boolean; state?: SessionState; reas
     }
 
     const state: SessionState = JSON.parse(readFileSync(SESSION_STATE_FILE, 'utf-8'));
-    
+
     // Check if session is recent
     const lastActivity = new Date(state.lastActivity).getTime();
     const now = Date.now();
     const inactive = now - lastActivity > SESSION_TIMEOUT_MS;
-    
+
     if (inactive) {
       return { active: false, state, reason: 'Session expired (>30min)' };
     }
-    
+
     // Check if process is alive
     try {
       process.kill(state.pid, 0);
     } catch {
       return { active: false, state, reason: 'Process not running' };
     }
-    
+
     return { active: true, state };
   } catch {
     return { active: false, reason: 'Invalid state file' };
@@ -93,7 +93,7 @@ export function createSessionState(id: string): SessionState {
       engram: false,
     },
   };
-  
+
   writeFileSync(SESSION_STATE_FILE, JSON.stringify(state, null, 2));
   return state;
 }
@@ -117,7 +117,7 @@ export function markComponentReady(component: keyof SessionState['components']):
 // CLI
 if (import.meta.url === `file://${process.argv[1]}`) {
   const command = process.argv[2];
-  
+
   switch (command) {
     case 'check': {
       const result = isSessionActive();

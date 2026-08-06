@@ -54,16 +54,17 @@ function testMCPIntegration(tool: string): MCPIntegrationStatus {
     return { configured: false, skillServer: false, path: configPath };
   }
   const hasMCP = 'mcpServers' in content;
-  const hasSkills = hasMCP && 'gentle-vanguard-skills' in (content.mcpServers as Record<string, unknown>);
+  const hasSkills =
+    hasMCP && 'gentle-vanguard-skills' in (content.mcpServers as Record<string, unknown>);
   return { configured: hasMCP, skillServer: hasSkills, path: configPath };
 }
 
 function testSkillServer(): boolean {
   // Auto-detect if running from src/ or dist/ and adjust path
-  const isSrc = __filename.includes("src/mcp") || __filename.includes("src\\mcp");
-  const serverPath = isSrc 
-    ? join(ROOT, "..", "dist", "scripts", "mcp", "skill-server.js")
-    : join(ROOT, "dist", "scripts", "mcp", "skill-server.js");
+  const isSrc = __filename.includes('src/mcp') || __filename.includes('src\\mcp');
+  const serverPath = isSrc
+    ? join(ROOT, '..', 'dist', 'scripts', 'mcp', 'skill-server.js')
+    : join(ROOT, 'dist', 'scripts', 'mcp', 'skill-server.js');
   if (existsSync(serverPath)) {
     console.log('  skill-server.js: OK');
     return true;
@@ -165,7 +166,8 @@ function actionSetup(allTools: boolean, tool: string): void {
   const orchestrator = readJson<Record<string, unknown>>(CONFIG_PATH);
   if (!orchestrator) return;
 
-  const toolProfiles = orchestrator.toolProfiles as Record<string, Record<string, unknown>> | undefined;
+  const toolProfiles = orchestrator.toolProfiles as
+    Record<string, Record<string, unknown>> | undefined;
   if (toolProfiles) {
     for (const t of targets) {
       if (toolProfiles[t]) {
@@ -223,7 +225,7 @@ function actionLaunch(): void {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const args = process.argv.slice(2);
-  const action = args.find(a => !a.startsWith('-')) || 'status';
+  const action = args.find((a) => !a.startsWith('-')) || 'status';
   const toolIdx = args.indexOf('--tool');
   const tool = toolIdx >= 0 && args[toolIdx + 1] ? args[toolIdx + 1] : '';
   const allTools = args.includes('--all-tools') || args.includes('--all');
@@ -245,7 +247,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       console.error(`Unknown action: ${action}. Valid: status, setup, verify, launch`);
       process.exit(1);
   }
-  
+
   // Ensure the script exits after completing the action
   process.exit(0);
 }

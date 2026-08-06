@@ -2,7 +2,7 @@
 /**
  * Smart Session Autostart
  * Wrapper inteligente que evita reinicios innecesarios
- * 
+ *
  * Lógica:
  * 1. Limpia procesos zombie
  * 2. Verifica si sesión está activa
@@ -30,20 +30,20 @@ function isSessionActive(): { active: boolean; reason: string } {
     }
 
     const state: SessionState = JSON.parse(require('fs').readFileSync(SESSION_FILE, 'utf-8'));
-    
+
     // Check 30min timeout
     const lastActivity = new Date(state.lastActivity).getTime();
     if (Date.now() - lastActivity > 30 * 60 * 1000) {
       return { active: false, reason: 'Session expired (>30min)' };
     }
-    
+
     // Check process alive
     try {
       process.kill(state.pid, 0);
     } catch {
       return { active: false, reason: 'Process dead' };
     }
-    
+
     return { active: true, reason: 'Session active' };
   } catch {
     return { active: false, reason: 'Invalid state' };
@@ -66,11 +66,18 @@ function killZombieProcesses(): void {
     try {
       const output = runSync(
         'powershell',
-        ['-NoProfile', '-Command', `Get-NetTCPConnection -LocalPort ${port} -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess`],
-        { stdio: 'pipe' }
+        [
+          '-NoProfile',
+          '-Command',
+          `Get-NetTCPConnection -LocalPort ${port} -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess`,
+        ],
+        { stdio: 'pipe' },
       ).stdout;
-      
-      const pids = output.trim().split('\n').filter(p => p && !isNaN(parseInt(p)));
+
+      const pids = output
+        .trim()
+        .split('\n')
+        .filter((p) => p && !isNaN(parseInt(p)));
       for (const pid of pids) {
         try {
           runSyncShell(`taskkill /F /T /PID ${pid} 2>NUL`, { stdio: 'pipe' });
@@ -93,12 +100,12 @@ if (status.active) {
   console.log(`[SMART] ${status.reason}, starting fresh...`);
   console.log('[SMART] Cleaning zombie processes...');
   killZombieProcesses();
-  
+
   console.log('[SMART] Starting session autostart...');
   try {
-    runSync('npm', ['run', 'session:autostart:detached'], { 
+    runSync('npm', ['run', 'session:autostart:detached'], {
       stdio: 'inherit',
-      cwd: ROOT 
+      cwd: ROOT,
     });
     console.log('[SMART] ✅ Session started');
   } catch (e) {

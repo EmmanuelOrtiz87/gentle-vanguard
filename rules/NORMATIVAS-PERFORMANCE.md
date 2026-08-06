@@ -5,16 +5,19 @@ Versión: 1.0.0 | Actualización: 2026-08-04
 ## 🎯 Objetivos de Rendimiento
 
 ### Latencia
+
 - **Percepción instantánea**: < 100ms para respuestas
 - **Feedback rápido**: < 500ms para operaciones de tools
 - **Operaciones pesadas**: < 2s con indicador de progreso
 
 ### Throughput
+
 - **Procesamiento paralelo**: hasta 5 subagentes concurrentes
 - **Batch processing**: grupos de 5 para lazy steps
 - **Rate limiting**: respetar cooldowns de proveedores externos
 
 ### Eficiencia de Recursos
+
 - **Token budget**: 60,000 diarios / 15,000 por sesión
 - **Uso memory**: liberar recursos con `lazy: true` pattern
 - **Procesos**: cleanup automático de huérfanos cada 24h
@@ -22,6 +25,7 @@ Versión: 1.0.0 | Actualización: 2026-08-04
 ## ⚙️ Políticas de Optimización
 
 ### 1. Context Engineering
+
 ```typescript
 // Prioridad: Explícito > Implícito > Inferido
 1. User message (explícito)
@@ -31,11 +35,13 @@ Versión: 1.0.0 | Actualización: 2026-08-04
 ```
 
 ### 2. Truncamiento Inteligente
+
 - Output limitado a 50 líneas por defecto
 - Code blocks: solo líneas relevantes
 - Respuestas comprimidas con profile `ultra`
 
 ### 3. Lazy Execution
+
 ```json
 {
   "lazy": true,
@@ -45,6 +51,7 @@ Versión: 1.0.0 | Actualización: 2026-08-04
 ```
 
 ### 4. Checkpoint Management
+
 - Autocheckpoints cada 15 minutos de actividad
 - Snapshot manual en puntos de inflexión
 - Rollback: restaurar desde checkpoint válido
@@ -52,14 +59,16 @@ Versión: 1.0.0 | Actualización: 2026-08-04
 ## 📊 Métricas y Alertas
 
 ### Quality Gates
-| Gripe | Threshold | Aaction |
-|-------|-----------|---------|
-| Token usage | > 70% soft, > 90% hard | Switch a `chat-compact` |
-| Session time | > 4h | Prompt checkpoint |
-| Memory growth | > 500MB | Auto-prune caches |
-| Error rate | > 5% | Auto-diagnosis |
+
+| Gripe         | Threshold              | Aaction                 |
+| ------------- | ---------------------- | ----------------------- |
+| Token usage   | > 70% soft, > 90% hard | Switch a `chat-compact` |
+| Session time  | > 4h                   | Prompt checkpoint       |
+| Memory growth | > 500MB                | Auto-prune caches       |
+| Error rate    | > 5%                   | Auto-diagnosis          |
 
 ### Performance SLOs
+
 - **P95 latency**: < 200ms (tool calls)
 - **P99 latency**: < 500ms (subagent dispatch)
 - **Availability**: 99.5% uptime esperado
@@ -68,12 +77,14 @@ Versión: 1.0.0 | Actualización: 2026-08-04
 ## 🔧 Herramientas de Optimización
 
 ### Scripts Nativos
+
 - `npx tsx src/semantic-search.ts` → Busqueda semántica (vs grep)
 - `npx tsx src/session-cleanup-start.ts` → Flush caches
 - `npx tsx src/workload-guard.ts` → Pre-validación de carga
 - `npx tsx src/token-optimization-orchestrator.ts` → Compresión
 
 ### Configuración
+
 - `config/token-budget-guard.json` → Presupuesto y thresholds
 - `config/session-autostart.config.json` → Lazy step scheduling
 - `.opencode/response-profile.json` → Perfil compresión
@@ -99,10 +110,12 @@ Subagent Dispatch: < 200ms
 ## 📢 Escalado
 
 Si performance < 80%:
+
 1. Ejecutar `npx tsx src/self-diagnosis.ts --profile performance`
 2. Revisar `.session/metrics-report.json`
 3. Considerar `npx tsx src/session-compact.ts` para limpieza
 4. Escalar a orchestrator si degradación persiste
 
 ---
+
 Última actualización: 2026-08-04 | Owner: GOV

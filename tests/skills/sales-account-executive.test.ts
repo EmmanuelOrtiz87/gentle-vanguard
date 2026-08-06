@@ -17,7 +17,7 @@ test('sales-account-executive - SKILL.md exists', () => {
 
 test('sales-account-executive - has required sections', () => {
   const content = readFileSync(skillPath, 'utf-8');
-  
+
   const requiredSections = [
     '# sales-account-executive',
     '## Description',
@@ -25,9 +25,9 @@ test('sales-account-executive - has required sections', () => {
     '## Workflow',
     '## Output Format',
     '## Examples',
-    '## References'
+    '## References',
   ];
-  
+
   for (const section of requiredSections) {
     assert(content.includes(section), `Missing section: ${section}`);
   }
@@ -36,7 +36,7 @@ test('sales-account-executive - has required sections', () => {
 test('sales-account-executive - workflow steps are numbered', () => {
   const content = readFileSync(skillPath, 'utf-8');
   const workflowMatch = content.match(/## Workflow[\s\S]*?(?=## |$)/);
-  
+
   assert(workflowMatch, 'Workflow section must exist');
   const workflow = workflowMatch[0];
   const numberedSteps = workflow.match(/\d+\./g);
@@ -45,17 +45,21 @@ test('sales-account-executive - workflow steps are numbered', () => {
 
 test('sales-account-executive - has BANT framework', () => {
   const content = readFileSync(skillPath, 'utf-8');
-  
+
   // Sales skill should reference BANT framework
-  assert(content.includes('BANT') || content.includes('Budget') || content.includes('Authority'), 
-    'Should reference sales qualification framework');
+  assert(
+    content.includes('BANT') || content.includes('Budget') || content.includes('Authority'),
+    'Should reference sales qualification framework',
+  );
 });
 
 test('sales-account-executive - has concrete examples', () => {
   const content = readFileSync(skillPath, 'utf-8');
-  
-  assert(content.includes('### Discovery Questions') || content.includes('### Proposal Structure'), 
-    'Must include sales-specific examples');
+
+  assert(
+    content.includes('### Discovery Questions') || content.includes('### Proposal Structure'),
+    'Must include sales-specific examples',
+  );
   assert(content.includes('**Input**:'), 'Examples must have Input markup');
 });
 

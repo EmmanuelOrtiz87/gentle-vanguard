@@ -1,6 +1,8 @@
 ---
 name: test-driven-development
-description: Drive development with tests. Write failing tests before code. Use when implementing logic, fixing bugs, or modifying behavior.
+description:
+  Drive development with tests. Write failing tests before code. Use when implementing logic, fixing
+  bugs, or modifying behavior.
 triggers:
   - tdd
   - test driven
@@ -13,10 +15,11 @@ triggers:
 
 ## Overview
 
-Write a failing test before the code. For bugs, reproduce with a test first. Tests are proof — "seems right" is not done.
+Write a failing test before the code. For bugs, reproduce with a test first. Tests are proof —
+"seems right" is not done.
 
-**When to Use:** New logic, bug fixes, modifying functionality, edge cases.
-**Skip:** Config changes, docs, static content.
+**When to Use:** New logic, bug fixes, modifying functionality, edge cases. **Skip:** Config
+changes, docs, static content.
 
 ## TDD Cycle
 
@@ -40,33 +43,33 @@ Unit (80%) → Integration (15%) → E2E (5%).
 
 ## Principles
 
-| Principle | Description |
-| --------- | ----------- |
-| **Test State, Not Interactions** | Assert on outcomes, not internal calls |
-| **DAMP Over DRY** | Duplication for clarity is OK |
-| **Prefer Real Over Mocks** | Real > Fake > Stub > Mock. Mock only at boundaries |
-| **Arrange-Act-Assert** | 3 clear phases per test |
-| **One Assertion Per Concept** | Each test verifies one behavior |
-| **Descriptive Names** | `it('sets status to completed')` |
+| Principle                        | Description                                        |
+| -------------------------------- | -------------------------------------------------- |
+| **Test State, Not Interactions** | Assert on outcomes, not internal calls             |
+| **DAMP Over DRY**                | Duplication for clarity is OK                      |
+| **Prefer Real Over Mocks**       | Real > Fake > Stub > Mock. Mock only at boundaries |
+| **Arrange-Act-Assert**           | 3 clear phases per test                            |
+| **One Assertion Per Concept**    | Each test verifies one behavior                    |
+| **Descriptive Names**            | `it('sets status to completed')`                   |
 
 ## Anti-Patterns
 
-| Anti-Pattern | Problem |
-| ------------ | ------- |
+| Anti-Pattern                   | Problem                                     |
+| ------------------------------ | ------------------------------------------- |
 | Testing implementation details | Tests break on refactor, behavior unchanged |
-| Flaky tests | Erode trust in the suite |
-| Mocking everything | Tests pass but production breaks |
-| Snapshot abuse | Nobody reviews large snapshots |
-| No test isolation | Fail together despite passing individually |
+| Flaky tests                    | Erode trust in the suite                    |
+| Mocking everything             | Tests pass but production breaks            |
+| Snapshot abuse                 | Nobody reviews large snapshots              |
+| No test isolation              | Fail together despite passing individually  |
 
 ## Rationalizations
 
-| Rationalization | Reality |
-| --------------- | ------- |
+| Rationalization          | Reality                                                            |
+| ------------------------ | ------------------------------------------------------------------ |
 | "I'll write tests after" | You won't. Tests after the fact test implementation, not behavior. |
-| "Too simple to test" | Simple code gets complicated. Tests document expectations. |
-| "Tests slow me down" | Tests slow you now, speed you up on every future change. |
-| "I tested it manually" | Manual testing doesn't persist. |
+| "Too simple to test"     | Simple code gets complicated. Tests document expectations.         |
+| "Tests slow me down"     | Tests slow you now, speed you up on every future change.           |
+| "I tested it manually"   | Manual testing doesn't persist.                                    |
 
 ## Red Flags
 
@@ -87,15 +90,20 @@ Unit (80%) → Integration (15%) → E2E (5%).
 
 ## Browser Testing
 
-Unit tests aren't enough for browser code. Use Chrome DevTools MCP for DOM inspection, console logs, network requests, performance traces, screenshots.
+Unit tests aren't enough for browser code. Use Chrome DevTools MCP for DOM inspection, console logs,
+network requests, performance traces, screenshots.
 
 ## Subagents for Testing
 
-For complex bug fixes, spawn a subagent to write the reproduction test — ensures the test is written without knowledge of the fix.
+For complex bug fixes, spawn a subagent to write the reproduction test — ensures the test is written
+without knowledge of the fix.
 
 ## See Also
 
-- [`references/tdd-cycle.md`](references/tdd-cycle.md) — RED-GREEN-REFACTOR walkthrough, Prove-It Pattern
-- [`references/testing-patterns.md`](references/testing-patterns.md) — Pyramid, principles, anti-patterns, rationalizations, red flags, verification
-- [`references/framework-guide.md`](references/framework-guide.md) — Browser testing with DevTools, subagents
+- [`references/tdd-cycle.md`](references/tdd-cycle.md) — RED-GREEN-REFACTOR walkthrough, Prove-It
+  Pattern
+- [`references/testing-patterns.md`](references/testing-patterns.md) — Pyramid, principles,
+  anti-patterns, rationalizations, red flags, verification
+- [`references/framework-guide.md`](references/framework-guide.md) — Browser testing with DevTools,
+  subagents
 - `browser-testing-with-devtools` skill — DevTools setup

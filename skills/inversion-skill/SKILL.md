@@ -38,28 +38,38 @@ Have a goal? → yes → Can you list ways to achieve it? → maybe → INVERT F
 ## The Process
 
 ### Step 1: Define the Goal Clearly
+
 State what success looks like. Capture the specific outcome.
 
 ### Step 2: Invert — Ask "How Would I Fail?"
+
 List all ways to guarantee failure or the opposite of your goal. Aim for 10+ items.
 
 ### Step 3: Categorize the Failure Modes
+
 Group by type (security, operations, process, reliability) and severity (critical/high/medium).
 
 ### Step 4: Convert to Avoidance Checklist
+
 Transform each failure mode into a positive requirement or mitigation.
 
 ### Step 5: Prioritize by Impact
+
 Focus on failures that would be most damaging, most likely, or hardest to recover from.
 
-For full examples of each step, see [references/inversion-process.md](references/inversion-process.md).
+For full examples of each step, see
+[references/inversion-process.md](references/inversion-process.md).
 
 ## Application Patterns
 
-- **Technical Design** — Invert "scalable API" → prevent no-caching, sync-everything, N+1, no-circuit-breakers
-- **Code Review** — Invert "high-quality merge" → prevent security bugs, no tests, poor naming, missing error handling
-- **Career/Team Building** — Invert "successful career" → prevent unreliability, no learning, comfort zone
-- **Project Planning** — Invert "successful launch" → prevent no-user-research, no-load-testing, no-rollback
+- **Technical Design** — Invert "scalable API" → prevent no-caching, sync-everything, N+1,
+  no-circuit-breakers
+- **Code Review** — Invert "high-quality merge" → prevent security bugs, no tests, poor naming,
+  missing error handling
+- **Career/Team Building** — Invert "successful career" → prevent unreliability, no learning,
+  comfort zone
+- **Project Planning** — Invert "successful launch" → prevent no-user-research, no-load-testing,
+  no-rollback
 
 For detailed examples, see [references/inversion-examples.md](references/inversion-examples.md).
 

@@ -60,7 +60,6 @@
       "opencodeAgentConfig": "opencode.json#agent",
       "orchestratorBudget": "config/orchestrator.json#subagent_orchestration.token_budget_guard",
       "timeoutConfig": "config/timeout-config.json#token_budget_daily"
-
-}
+    }
   }
 }

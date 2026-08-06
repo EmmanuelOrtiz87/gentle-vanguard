@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "# Prompt Engineering\n\nCore principles, techniques, and patterns for effective LLM prompting.\n\n## Reference Files\n\n- [Core Principles](references/core-principles.md)\n- [Prompt Engineering Scorecard](references/scorecard.md)\n- [Chain-of-Thought](references/chain-of-thought.md)\n- [Few-Shot vs Zero-Shot](references/few-shot-vs-zero-shot.md)\n- [Role Prompting](references/role-prompting.md)\n- [Structured Output Formats](references/structured-output.md)\n- [System vs User Prompts](references/system-vs-user.md)\n- [Temperature & Top-P](references/temperature.md)\n- [Iterative Refinement](references/iterative-refinement.md)\n- [Common Mistakes](references/common-mistakes.md)\n- [Summary Cheat Sheet](references/summary-cheat-sheet.md)",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

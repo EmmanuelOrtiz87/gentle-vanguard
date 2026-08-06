@@ -73,7 +73,10 @@ export interface OutputCompressionConfig {
   };
   autoMode: {
     enabled: boolean;
-    thresholds: Record<string, { budgetPct: number; profile: CompressionProfile; chatLevel: string }>;
+    thresholds: Record<
+      string,
+      { budgetPct: number; profile: CompressionProfile; chatLevel: string }
+    >;
   };
   metrics: {
     enabled: boolean;
@@ -113,11 +116,14 @@ export interface CompressionMetrics {
   totalCompressedTokens: number;
   averageCompressionRatio: number;
   totalTokenSavings: number;
-  byProfile: Record<CompressionProfile, {
-    runs: number;
-    avgCompressionRatio: number;
-    avgTokenSavings: number;
-  }>;
+  byProfile: Record<
+    CompressionProfile,
+    {
+      runs: number;
+      avgCompressionRatio: number;
+      avgTokenSavings: number;
+    }
+  >;
 }
 
 // ─── Paths ────────────────────────────────────────────────────────────────────
@@ -164,7 +170,7 @@ function getDefaultConfig(): OutputCompressionConfig {
         expandContractions: false,
         removeFillers: true,
         singleLineResponses: true,
-        guidelines: ['Use abbreviations', 'One-word answers when enough']
+        guidelines: ['Use abbreviations', 'One-word answers when enough'],
       },
       lleno: {
         name: 'lleno',
@@ -177,7 +183,7 @@ function getDefaultConfig(): OutputCompressionConfig {
         expandContractions: false,
         removeFillers: true,
         singleLineResponses: false,
-        guidelines: ['Complete sentences preferred']
+        guidelines: ['Complete sentences preferred'],
       },
       lite: {
         name: 'lite',
@@ -190,7 +196,7 @@ function getDefaultConfig(): OutputCompressionConfig {
         expandContractions: true,
         removeFillers: true,
         singleLineResponses: false,
-        guidelines: ['No digressions', 'Complete sentences']
+        guidelines: ['No digressions', 'Complete sentences'],
       },
       simple: {
         name: 'simple',
@@ -203,8 +209,8 @@ function getDefaultConfig(): OutputCompressionConfig {
         expandContractions: false,
         removeFillers: true,
         singleLineResponses: true,
-        guidelines: ['No preamble or postamble']
-      }
+        guidelines: ['No preamble or postamble'],
+      },
     },
     chatLevels: {},
     abbreviations: { expansion: {}, contraction: {} },
@@ -217,7 +223,7 @@ function getDefaultConfig(): OutputCompressionConfig {
       maxOverridesPerHour: 2,
       cooldownTurns: 5,
       requiresReason: true,
-      auditLog: '.logs/output-compression-breakglass.jsonl'
+      auditLog: '.logs/output-compression-breakglass.jsonl',
     },
     autoMode: {
       enabled: true,
@@ -226,8 +232,8 @@ function getDefaultConfig(): OutputCompressionConfig {
         high: { budgetPct: 85, profile: 'ultra', chatLevel: 'chat-compact' },
         medium: { budgetPct: 70, profile: 'simple', chatLevel: 'chat-compact' },
         normal: { budgetPct: 50, profile: 'lleno', chatLevel: 'chat-balanced' },
-        low: { budgetPct: 0, profile: 'lite', chatLevel: 'chat-balanced' }
-      }
+        low: { budgetPct: 0, profile: 'lite', chatLevel: 'chat-balanced' },
+      },
     },
     metrics: {
       enabled: true,
@@ -235,8 +241,8 @@ function getDefaultConfig(): OutputCompressionConfig {
       trackTokenSavings: true,
       trackLineReduction: true,
       storagePath: '.runtime/output-compression-metrics.json',
-      reportInterval: 100
-    }
+      reportInterval: 100,
+    },
   };
 }
 
@@ -257,17 +263,19 @@ export function getTokenBudgetUsage(): TokenBudgetInfo {
       return {
         used,
         budget: total,
-        percentage: total > 0 ? (used / total) * 100 : 0
+        percentage: total > 0 ? (used / total) * 100 : 0,
       };
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 
   // Fallback to metrics file if exists
   const metricsPath = join(ROOT, 'docs', 'sessions', 'metrics', 'token-guard-usage.csv');
   try {
     if (existsSync(metricsPath)) {
       const content = readFileSync(metricsPath, 'utf-8');
-      const lines = content.split('\n').filter(l => l.trim());
+      const lines = content.split('\n').filter((l) => l.trim());
       const today = new Date().toISOString().slice(0, 10);
       let used = 0;
 
@@ -280,7 +288,9 @@ export function getTokenBudgetUsage(): TokenBudgetInfo {
 
       return { used, budget: 120000, percentage: (used / 120000) * 100 };
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 
   return { used: 0, budget: 120000, percentage: 0 };
 }
@@ -289,8 +299,9 @@ export function selectProfileForBudget(budgetPct: number): CompressionProfile {
   const config = getConfig();
   if (!config.autoMode?.enabled) return 'lleno';
 
-  const thresholds = Object.entries(config.autoMode.thresholds)
-    .sort((a, b) => b[1].budgetPct - a[1].budgetPct);
+  const thresholds = Object.entries(config.autoMode.thresholds).sort(
+    (a, b) => b[1].budgetPct - a[1].budgetPct,
+  );
 
   for (const [, threshold] of thresholds) {
     if (budgetPct >= threshold.budgetPct) {
@@ -308,15 +319,19 @@ function estimateTokens(text: string): number {
   return Math.ceil(text.length / 4);
 }
 
-function expandAbbreviations(text: string, config: OutputCompressionConfig): { text: string; count: number } {
+function expandAbbreviations(
+  text: string,
+  config: OutputCompressionConfig,
+): { text: string; count: number } {
   if (!config.abbreviations?.expansion) return { text, count: 0 };
 
   let count = 0;
   let result = text;
 
   // Sort by length descending to match longer phrases first
-  const expansions = Object.entries(config.abbreviations.expansion)
-    .sort((a, b) => b[0].length - a[0].length);
+  const expansions = Object.entries(config.abbreviations.expansion).sort(
+    (a, b) => b[0].length - a[0].length,
+  );
 
   for (const [abbr, expansion] of expansions) {
     // Match whole word only (case insensitive)
@@ -331,7 +346,10 @@ function expandAbbreviations(text: string, config: OutputCompressionConfig): { t
   return { text: result, count };
 }
 
-function contractAbbreviations(text: string, config: OutputCompressionConfig): { text: string; count: number } {
+function contractAbbreviations(
+  text: string,
+  config: OutputCompressionConfig,
+): { text: string; count: number } {
   if (!config.profiles.ultra.abbreviate && !config.profiles.simple.abbreviate) {
     return { text, count: 0 };
   }
@@ -340,8 +358,9 @@ function contractAbbreviations(text: string, config: OutputCompressionConfig): {
   let result = text;
 
   // Sort by length descending to match longer phrases first
-  const contractions = Object.entries(config.abbreviations?.contraction ?? {})
-    .sort((a, b) => b[0].length - a[0].length);
+  const contractions = Object.entries(config.abbreviations?.contraction ?? {}).sort(
+    (a, b) => b[0].length - a[0].length,
+  );
 
   for (const [phrase, abbr] of contractions) {
     // Match phrase (case insensitive, word boundaries)
@@ -360,7 +379,10 @@ function escapeRegex(str: string): string {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function removeFillers(text: string, config: OutputCompressionConfig): { text: string; count: number } {
+function removeFillers(
+  text: string,
+  config: OutputCompressionConfig,
+): { text: string; count: number } {
   if (!config.fillerWords?.length) return { text, count: 0 };
 
   let count = 0;
@@ -383,7 +405,10 @@ function removeFillers(text: string, config: OutputCompressionConfig): { text: s
   return { text: result, count };
 }
 
-function applyCausalNotation(text: string, config: OutputCompressionConfig): { text: string; count: number } {
+function applyCausalNotation(
+  text: string,
+  config: OutputCompressionConfig,
+): { text: string; count: number } {
   if (!config.causalNotation?.enabled) return { text, count: 0 };
 
   let count = 0;
@@ -394,7 +419,8 @@ function applyCausalNotation(text: string, config: OutputCompressionConfig): { t
   // Replace verbose causal phrases with symbols
   if (patterns.causes) {
     for (const pattern of patterns.causes) {
-      if (pattern.length > 2) { // Only replace full phrases, not symbols
+      if (pattern.length > 2) {
+        // Only replace full phrases, not symbols
         const regex = new RegExp(`\\b${escapeRegex(pattern)}\\b`, 'gi');
         result = result.replace(regex, () => {
           count++;
@@ -489,7 +515,7 @@ export function compressOutput(
     maxLines?: number;
     maxTokens?: number;
     expandOnly?: boolean;
-  } = {}
+  } = {},
 ): CompressionResult {
   const startTime = Date.now();
   const config = getConfig();
@@ -513,7 +539,7 @@ export function compressOutput(
       abbreviationsContracted: 0,
       fillersRemoved: 0,
       causalNotationsApplied: 0,
-      durationMs: 0
+      durationMs: 0,
     };
   }
 
@@ -601,7 +627,7 @@ export function compressOutput(
     abbreviationsContracted,
     fillersRemoved,
     causalNotationsApplied,
-    durationMs: Date.now() - startTime
+    durationMs: Date.now() - startTime,
   };
 
   // Save metrics
@@ -616,13 +642,18 @@ export function compressOutput(
 
 function loadMetrics(): CompressionMetrics {
   const config = getConfig();
-  const metricsPath = join(ROOT, config.metrics?.storagePath ?? '.runtime/output-compression-metrics.json');
+  const metricsPath = join(
+    ROOT,
+    config.metrics?.storagePath ?? '.runtime/output-compression-metrics.json',
+  );
 
   try {
     if (existsSync(metricsPath)) {
       return JSON.parse(readFileSync(metricsPath, 'utf-8')) as CompressionMetrics;
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 
   return {
     totalRuns: 0,
@@ -636,15 +667,18 @@ function loadMetrics(): CompressionMetrics {
       ultra: { runs: 0, avgCompressionRatio: 1, avgTokenSavings: 0 },
       lleno: { runs: 0, avgCompressionRatio: 1, avgTokenSavings: 0 },
       lite: { runs: 0, avgCompressionRatio: 1, avgTokenSavings: 0 },
-      simple: { runs: 0, avgCompressionRatio: 1, avgTokenSavings: 0 }
-    }
+      simple: { runs: 0, avgCompressionRatio: 1, avgTokenSavings: 0 },
+    },
   };
 }
 
 function saveMetrics(result: CompressionResult): void {
   try {
     const config = getConfig();
-    const metricsPath = join(ROOT, config.metrics?.storagePath ?? '.runtime/output-compression-metrics.json');
+    const metricsPath = join(
+      ROOT,
+      config.metrics?.storagePath ?? '.runtime/output-compression-metrics.json',
+    );
     const metrics = loadMetrics();
 
     // Update global metrics
@@ -671,7 +705,9 @@ function saveMetrics(result: CompressionResult): void {
     // Ensure directory exists
     ensureDir(metricsPath);
     writeFileSync(metricsPath, JSON.stringify(metrics, null, 2), 'utf-8');
-  } catch { /* metrics are non-critical */ }
+  } catch {
+    /* metrics are non-critical */
+  }
 }
 
 function ensureDir(filePath: string): void {
@@ -684,7 +720,7 @@ function ensureDir(filePath: string): void {
 export function logBreakGlassOverride(
   reason: string,
   fromProfile: CompressionProfile,
-  toProfile: CompressionProfile
+  toProfile: CompressionProfile,
 ): void {
   const config = getConfig();
   if (!config.breakGlass?.enabled) return;
@@ -696,12 +732,14 @@ export function logBreakGlassOverride(
     timestamp: new Date().toISOString(),
     reason,
     fromProfile,
-    toProfile
+    toProfile,
   };
 
   try {
     appendFileSync(auditPath, JSON.stringify(entry) + '\n');
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 }
 
 // ─── CLI ──────────────────────────────────────────────────────────────────────
@@ -758,10 +796,13 @@ function formatResult(result: CompressionResult): string {
     `    • Abbreviations contracted: ${result.abbreviationsContracted}`,
     `    • Fillers removed:         ${result.fillersRemoved}`,
     `    • Causal notations:        ${result.causalNotationsApplied}`,
-    ''
+    '',
   ];
 
-  if (result.compressedLines < result.originalLines || result.compressedChars < result.originalChars) {
+  if (
+    result.compressedLines < result.originalLines ||
+    result.compressedChars < result.originalChars
+  ) {
     lines.push('  ⚡ Compressed output:', '', result.compressed.slice(0, 500));
     if (result.compressed.length > 500) lines.push('  ... (truncated)');
   }
@@ -801,7 +842,9 @@ function main(): void {
     console.log('  By profile:');
     for (const [profile, p] of Object.entries(metrics.byProfile)) {
       if (p.runs > 0) {
-        console.log(`    ${profile.padEnd(8)} ${p.runs} runs, ${(p.avgCompressionRatio * 100).toFixed(1)}% ratio, ${p.avgTokenSavings.toFixed(0)} avg tokens saved`);
+        console.log(
+          `    ${profile.padEnd(8)} ${p.runs} runs, ${(p.avgCompressionRatio * 100).toFixed(1)}% ratio, ${p.avgTokenSavings.toFixed(0)} avg tokens saved`,
+        );
       }
     }
     return;

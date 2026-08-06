@@ -24,8 +24,10 @@ $passed = @()
 
 function Write-Log { param([string]$Message, [string]$Level = "INFO")
 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    $color = switch ($Level) { "ERROR" { "Red" }
-"WARN" { "Yellow" } "SUCCESS" { "Green" } default { "White" } } Write-Host "[$timestamp] [$Level]
+    $color = switch
+($Level) { "ERROR" { "Red" }
+"WARN" { "Yellow" } "SUCCESS" { "Green" } default { "White" } } Write-Host "[$timestamp]
+[$Level]
 $Message" -ForegroundColor $color }
 
 function Test-ScriptHeader { param([string]$ScriptPath)

@@ -74,7 +74,9 @@ export class MCPBridge extends EventEmitter {
           if (existsSync(candidate)) tsxBin = candidate;
         }
       }
-    } catch { /* fallback to null */ }
+    } catch {
+      /* fallback to null */
+    }
     if (!tsxBin) {
       // Fallback: try standard node_modules
       const fallback = resolve(PACKAGE_ROOT, 'node_modules/tsx/dist/cli.mjs');

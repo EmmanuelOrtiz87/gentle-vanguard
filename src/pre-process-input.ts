@@ -191,7 +191,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   // Stage 3: Token Budget Check & Auto-Optimization
   const budgetCheck = checkTokenBudget();
   let chatLevelApplied = false;
-  
+
   if (budgetCheck.shouldOptimize && !skipCompression) {
     try {
       const enforced = enforceChatLevel(output, budgetCheck.level);
@@ -210,18 +210,20 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const durationMs = Date.now() - startTime;
 
   if (json) {
-    console.log(JSON.stringify({
-      status: 'ok',
-      originalLength: input.length,
-      outputLength: output.length,
-      compressed: output.length < input.length,
-      chatLevelApplied,
-      budgetOptimized: budgetCheck.shouldOptimize,
-      proactiveSuggestions: proactiveSuggestions?.suggestions ?? 0,
-      proactiveConfidence: proactiveSuggestions?.confidence ?? 0,
-      durationMs,
-      output,
-    }));
+    console.log(
+      JSON.stringify({
+        status: 'ok',
+        originalLength: input.length,
+        outputLength: output.length,
+        compressed: output.length < input.length,
+        chatLevelApplied,
+        budgetOptimized: budgetCheck.shouldOptimize,
+        proactiveSuggestions: proactiveSuggestions?.suggestions ?? 0,
+        proactiveConfidence: proactiveSuggestions?.confidence ?? 0,
+        durationMs,
+        output,
+      }),
+    );
   } else {
     // Show proactive suggestions if available
     if (proactiveSuggestions && proactiveSuggestions.suggestions > 0) {

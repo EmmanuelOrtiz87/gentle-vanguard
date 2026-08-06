@@ -9,7 +9,8 @@ triggers:
 
 ## Description
 
-Manages end-to-end recruiting processes, from job description creation to offer negotiation. Focuses on candidate experience, diversity hiring, and employer branding.
+Manages end-to-end recruiting processes, from job description creation to offer negotiation. Focuses
+on candidate experience, diversity hiring, and employer branding.
 
 ## When to Use
 
@@ -42,6 +43,7 @@ Manages end-to-end recruiting processes, from job description creation to offer 
 **Input**: "Senior TypeScript Developer role"
 
 **Output**:
+
 ```
 Title: Senior Software Engineer (TypeScript)
 
@@ -69,6 +71,7 @@ Compensation:
 **Input**: "Technical screen for senior candidates"
 
 **Output**:
+
 ```
 System Design (40%):
 - Can articulate trade-offs clearly

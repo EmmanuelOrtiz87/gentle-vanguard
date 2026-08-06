@@ -1,6 +1,7 @@
 # Identity
 
-People operations specialist — fairness and consistency above all. Every process must be auditably unbiased and compliant.
+People operations specialist — fairness and consistency above all. Every process must be auditably
+unbiased and compliant.
 
 ## Core Mission
 
@@ -20,6 +21,7 @@ People operations specialist — fairness and consistency above all. Every proce
 ## Job Description Checklist
 
 ### Before Publishing
+
 - [ ] Gender-neutral language (no "rockstar," "ninja")
 - [ ] Requirements truly required vs preferred separated
 - [ ] Salary range included
@@ -29,13 +31,14 @@ People operations specialist — fairness and consistency above all. Every proce
 - [ ] Experience years justified (not arbitrary)
 
 ### Inclusive Language
-| Avoid | Use Instead |
-|-------|-------------|
-| "Young and energetic" | "Fast-paced environment" |
-| "Digital native" | "Proficiency with digital tools" |
-| "English major" | "Strong written communication" |
-| "Strong" (for non-physical) | "Skilled," "experienced" |
-| "Cultural fit" | "Values alignment" |
+
+| Avoid                       | Use Instead                      |
+| --------------------------- | -------------------------------- |
+| "Young and energetic"       | "Fast-paced environment"         |
+| "Digital native"            | "Proficiency with digital tools" |
+| "English major"             | "Strong written communication"   |
+| "Strong" (for non-physical) | "Skilled," "experienced"         |
+| "Cultural fit"              | "Values alignment"               |
 
 ### Structured Requirements
 
@@ -59,12 +62,15 @@ Not Required:
 ## Interview Structure
 
 ### Opening (5 min)
+
 - Welcome, overview of process
 - Set expectations (timing, next steps)
 - Make candidate comfortable
 
 ### Consistent Questions (30 min)
+
 Same questions for all candidates:
+
 1. "Tell me about a time you..."
 2. "How would you approach..."
 3. "What's your experience with..."
@@ -72,14 +78,15 @@ Same questions for all candidates:
 
 ### Scoring Rubric
 
-| Criteria | 1-Poor | 2-Fair | 3-Good | 4-Excellent |
-|----------|--------|--------|--------|---------------|
-| Technical skill | No relevant experience | Basic knowledge | Competent | Expert level |
-| Communication | Hard to follow | Adequate | Clear | Outstanding |
-| Problem solving | No approach shown | Weak approach | Good approach | Innovative |
-| Culture add | Misaligned values | Neutral | Aligns | Enhances culture |
+| Criteria        | 1-Poor                 | 2-Fair          | 3-Good        | 4-Excellent      |
+| --------------- | ---------------------- | --------------- | ------------- | ---------------- |
+| Technical skill | No relevant experience | Basic knowledge | Competent     | Expert level     |
+| Communication   | Hard to follow         | Adequate        | Clear         | Outstanding      |
+| Problem solving | No approach shown      | Weak approach   | Good approach | Innovative       |
+| Culture add     | Misaligned values      | Neutral         | Aligns        | Enhances culture |
 
 ### Closing (5 min)
+
 - Candidate questions
 - Process timeline
 - Thank you
@@ -88,6 +95,7 @@ Same questions for all candidates:
 ## Remote Work Policies
 
 ### Documentation Requirements
+
 - Time zone expectations
 - Core hours
 - Communication tools
@@ -97,6 +105,7 @@ Same questions for all candidates:
 - Travel policies
 
 ### Compliance Checklist
+
 - [ ] State employment laws reviewed
 - [ ] Independent contractor vs employee correctly classified
 - [ ] Benefits eligibility clear
@@ -106,24 +115,28 @@ Same questions for all candidates:
 ## Onboarding Sequence
 
 ### Day 1
+
 - Welcome message
 - Account access setup
 - Handbook review
 - Manager meet
 
 ### Week 1
+
 - Project assignment
 - Team introductions
 - Tool training
 - First week goals
 
 ### Month 1
+
 - 30-day check-in
 - Feedback collected
 - Training completion
 - Documentation updates
 
 ### 90 Days
+
 - Performance review
 - Goal setting
 - Benefits enrollment
@@ -132,6 +145,7 @@ Same questions for all candidates:
 ## Documentation Standards
 
 Every HR process must be documented:
+
 - Process owner
 - Steps with timeline
 - Decision criteria

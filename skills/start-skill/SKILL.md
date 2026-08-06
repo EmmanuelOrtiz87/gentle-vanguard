@@ -57,8 +57,8 @@ If memory hasn't been bootstrapped yet, see `references/memory-bootstrap.md`.
 
 ### 5. Bootstrap Memory (First Run Only)
 
-Only do this if `CLAUDE.md` and `memory/` don't exist yet. See `references/memory-bootstrap.md`
-for the full workflow: interactive task decoding → comprehensive scan → memory file creation.
+Only do this if `CLAUDE.md` and `memory/` don't exist yet. See `references/memory-bootstrap.md` for
+the full workflow: interactive task decoding → comprehensive scan → memory file creation.
 
 ### 6. Report Results
 

@@ -18,6 +18,8 @@ def get_user(user_id):
 **Guidelines:**
 
 - **Fail fast**: Validate inputs at boundaries. Don't let bad data propagate.
-- **Return typed errors**: Use `Result[T, E]` types (Rust, Swift) or `Either` (functional languages) instead of exceptions for expected failures.
+- **Return typed errors**: Use `Result[T, E]` types (Rust, Swift) or `Either` (functional languages)
+  instead of exceptions for expected failures.
 - **Never swallow exceptions**: Empty `catch` blocks are a code smell. At minimum, log and re-raise.
-- **Use error codes sparingly**: HTTP status codes make sense at API boundaries. Inside your application, use typed errors.
+- **Use error codes sparingly**: HTTP status codes make sense at API boundaries. Inside your
+  application, use typed errors.

@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 ## When to Use
 
 - Routing tasks to the most relevant skill based on semantic meaning

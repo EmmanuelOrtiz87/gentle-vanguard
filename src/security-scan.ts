@@ -28,7 +28,12 @@ interface ScanResult {
 }
 
 function runScan(type: string): ScanResult {
-  const result: ScanResult = { type, passed: true, issues: [], timestamp: new Date().toISOString() };
+  const result: ScanResult = {
+    type,
+    passed: true,
+    issues: [],
+    timestamp: new Date().toISOString(),
+  };
 
   try {
     switch (type) {

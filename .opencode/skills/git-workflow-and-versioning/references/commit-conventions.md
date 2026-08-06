@@ -130,6 +130,8 @@ Automate this with git hooks:
 
 ## Handling Generated Files
 
-- **Commit generated files** only if the project expects them (e.g., `package-lock.json`, Prisma migrations)
-- **Don't commit** build output (`dist/`, `.next/`), environment files (`.env`), or IDE config (`.vscode/settings.json` unless shared)
+- **Commit generated files** only if the project expects them (e.g., `package-lock.json`, Prisma
+  migrations)
+- **Don't commit** build output (`dist/`, `.next/`), environment files (`.env`), or IDE config
+  (`.vscode/settings.json` unless shared)
 - **Have a `.gitignore`** that covers: `node_modules/`, `dist/`, `.env`, `.env.local`, `*.pem`

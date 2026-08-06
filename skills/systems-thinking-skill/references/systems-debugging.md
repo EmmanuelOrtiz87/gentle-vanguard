@@ -18,6 +18,7 @@ Draw components, connections, and data/control flows:
 ## Step 2: Identify Feedback Loops
 
 For each loop, determine:
+
 - Is it reinforcing or balancing?
 - What's the delay in the loop?
 - What could make it unstable?
@@ -41,6 +42,7 @@ Symptom: High latency in Service C
 ## Step 4: Look for Interactions
 
 What happens when components interact under stress?
+
 - Circuit breakers tripping
 - Cascading timeouts
 - Resource contention

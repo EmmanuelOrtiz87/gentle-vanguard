@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 ## Activation Contract
 
 Triggered when user provides a requirements document (PDF, DOCX, XLSX, PPTX, MD, TXT) and requests

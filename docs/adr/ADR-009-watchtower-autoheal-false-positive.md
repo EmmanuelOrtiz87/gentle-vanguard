@@ -26,8 +26,8 @@ compared stdout to `'ok'`. However:
 3. Empty string !== 'ok', so the check reported **FAIL** even when the DB was perfectly healthy
 4. Meanwhile, `db-health.ts` (using `execSync`) correctly caught the error and reported it cleanly
 
-This created a discrepancy: `npm run db:health -- --json` showed `integrity: 'ok'` but the watchtower
-reported `FAIL`.
+This created a discrepancy: `npm run db:health -- --json` showed `integrity: 'ok'` but the
+watchtower reported `FAIL`.
 
 ### Other Limitations
 
@@ -48,6 +48,7 @@ FAIL: Definite corruption (output contains real integrity errors)
 ```
 
 Detection logic:
+
 - `processFailed = r.error || (r.status !== 0)` — the process itself failed to execute
 - `isTransient = processFailed || output === '' || /locked|busy|no such|Error/i.test(stderr)`
 - Only FAIL on `output !== 'ok'` AND `!isTransient`
@@ -84,8 +85,8 @@ if (needsCheckpoint) {
 ### Negative
 
 - **Slightly more complex** — three-state logic vs binary pass/fail
-- **Auto-healing hides issues** — transient WAL growth might indicate a deeper problem
-  (mitigated: logged with details)
+- **Auto-healing hides issues** — transient WAL growth might indicate a deeper problem (mitigated:
+  logged with details)
 
 ## Alternatives Considered
 

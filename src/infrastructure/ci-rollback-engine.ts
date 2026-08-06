@@ -100,13 +100,19 @@ function doStatus(repoRoot: string, config: { rollback: RollbackConfig }): Statu
 
   console.log(`\x1b[36m[ROLLBACK] Status:\x1b[0m`);
   const branchColor = isSafe ? '\x1b[32m' : '\x1b[33m';
-  console.log(`  Branch: ${currentBranch} ${branchColor}${isSafe ? '(safe)' : '(not safe — rollback requires approval)'}\x1b[0m`);
+  console.log(
+    `  Branch: ${currentBranch} ${branchColor}${isSafe ? '(safe)' : '(not safe — rollback requires approval)'}\x1b[0m`,
+  );
   console.log(`  \x1b[90mLast commit: ${lastCommit}\x1b[0m`);
   console.log(`  \x1b[90mAuto-rollback: ${config.rollback.autoRollback}\x1b[0m`);
   console.log(`  \x1b[90mRecent rollbacks:\x1b[0m`);
 
   if (existsSync(rollbackDir)) {
-    const logs = readdirSync(rollbackDir).filter((f) => f.endsWith('.json')).sort().reverse().slice(0, 5);
+    const logs = readdirSync(rollbackDir)
+      .filter((f) => f.endsWith('.json'))
+      .sort()
+      .reverse()
+      .slice(0, 5);
     for (const log of logs) {
       try {
         const data = JSON.parse(readFileSync(join(rollbackDir, log), 'utf-8')) as RollbackRecord;
@@ -120,16 +126,26 @@ function doStatus(repoRoot: string, config: { rollback: RollbackConfig }): Statu
   return { branch: currentBranch, isSafe, autoRollback: config.rollback.autoRollback };
 }
 
-function doRollback(repoRoot: string, config: { rollback: RollbackConfig }, jobName: string, reason: string, dryRun: boolean): Record<string, unknown> {
+function doRollback(
+  repoRoot: string,
+  config: { rollback: RollbackConfig },
+  jobName: string,
+  reason: string,
+  dryRun: boolean,
+): Record<string, unknown> {
   const currentBranch = getCurrentBranch(repoRoot);
   const isSafe = config.rollback.safeBranches.includes(currentBranch);
 
   if (!isSafe && config.rollback.requireApproval) {
-    throw new Error(`[ROLLBACK] Branch '${currentBranch}' is not in safe list and requires approval`);
+    throw new Error(
+      `[ROLLBACK] Branch '${currentBranch}' is not in safe list and requires approval`,
+    );
   }
 
   if (!config.rollback.autoRollback) {
-    console.log('\x1b[33m[ROLLBACK] Auto-rollback is disabled — manual intervention required\x1b[0m');
+    console.log(
+      '\x1b[33m[ROLLBACK] Auto-rollback is disabled — manual intervention required\x1b[0m',
+    );
     return { status: 'skipped', reason: 'autoRollback disabled' };
   }
 
@@ -139,7 +155,10 @@ function doRollback(repoRoot: string, config: { rollback: RollbackConfig }, jobN
   if (dryRun) {
     console.log('\x1b[33m[DRY-RUN] Would execute: git revert HEAD --no-edit\x1b[0m');
     console.log('\x1b[33m[DRY-RUN] Would execute: git push origin ' + currentBranch + '\x1b[0m');
-    return { status: 'dryrun', commands: ['git revert HEAD --no-edit', `git push origin ${currentBranch}`] };
+    return {
+      status: 'dryrun',
+      commands: ['git revert HEAD --no-edit', `git push origin ${currentBranch}`],
+    };
   }
 
   const rollbackRecord: RollbackRecord = {
@@ -152,8 +171,14 @@ function doRollback(repoRoot: string, config: { rollback: RollbackConfig }, jobN
   };
 
   try {
-    runSync('git', ['-C', repoRoot, 'revert', 'HEAD', '--no-edit'], { stdio: 'pipe', windowsHide: true });
-    runSync('git', ['-C', repoRoot, 'push', 'origin', currentBranch], { stdio: 'pipe', windowsHide: true });
+    runSync('git', ['-C', repoRoot, 'revert', 'HEAD', '--no-edit'], {
+      stdio: 'pipe',
+      windowsHide: true,
+    });
+    runSync('git', ['-C', repoRoot, 'push', 'origin', currentBranch], {
+      stdio: 'pipe',
+      windowsHide: true,
+    });
 
     const commitAfter = getCommitHash(repoRoot);
     rollbackRecord.commitAfter = commitAfter;
@@ -166,7 +191,10 @@ function doRollback(repoRoot: string, config: { rollback: RollbackConfig }, jobN
       : join(repoRoot, '.session', 'audit');
     const incidentsDir = join(auditDir, 'incidents');
     mkdirSync(incidentsDir, { recursive: true });
-    const incidentFile = join(incidentsDir, `${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}-rollback.json`);
+    const incidentFile = join(
+      incidentsDir,
+      `${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}-rollback.json`,
+    );
     writeFileSync(incidentFile, JSON.stringify(rollbackRecord, null, 2), 'utf-8');
     console.log(`\x1b[90m[ROLLBACK] Incident logged: ${incidentFile}\x1b[0m`);
   } catch (e) {
@@ -177,7 +205,10 @@ function doRollback(repoRoot: string, config: { rollback: RollbackConfig }, jobN
 
   const rollbackDir = join(repoRoot, '.session', 'rollbacks');
   mkdirSync(rollbackDir, { recursive: true });
-  const logFile = join(rollbackDir, `${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}.json`);
+  const logFile = join(
+    rollbackDir,
+    `${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}.json`,
+  );
   writeFileSync(logFile, JSON.stringify(rollbackRecord, null, 2), 'utf-8');
 
   return rollbackRecord as unknown as Record<string, unknown>;
@@ -207,7 +238,9 @@ function doLog(repoRoot: string): RollbackRecord[] {
       const data = JSON.parse(readFileSync(join(rollbackDir, log), 'utf-8')) as RollbackRecord;
       records.push(data);
       const color = data.status === 'success' ? '\x1b[32m' : '\x1b[31m';
-      console.log(`  ${color}${data.timestamp} | ${data.jobName} | ${data.status} | ${data.reason}\x1b[0m`);
+      console.log(
+        `  ${color}${data.timestamp} | ${data.jobName} | ${data.status} | ${data.reason}\x1b[0m`,
+      );
     } catch {
       // skip unparseable
     }

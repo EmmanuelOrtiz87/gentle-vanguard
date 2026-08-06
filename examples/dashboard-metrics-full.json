@@ -54,7 +54,7 @@
       "estimatedCost": 0.45,
       "savingsPct": 22,
       "suggestedAction": "Consider gpt-4 → claude-3-haiku for cost reduction",
-      "potentialSavings": 0.10,
+      "potentialSavings": 0.1,
       "roi": 22
     }
   ],

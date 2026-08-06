@@ -36,9 +36,9 @@ Ask the user (conversationally, not all at once):
 
 ### 3. Pull Context from Connected Tools
 
-If **~~project tracker** is connected: search for related tickets, epics, or features.
-If **~~knowledge base** is connected: search for related research or prior specs.
-If **~~design** is connected: pull related mockups or design explorations.
+If **~~project tracker** is connected: search for related tickets, epics, or features. If
+**~~knowledge base** is connected: search for related research or prior specs. If **~~design** is
+connected: pull related mockups or design explorations.
 
 If not connected, work entirely from what the user provides.
 
@@ -57,13 +57,15 @@ Produce a structured PRD with these sections (see reference files for details):
 
 ### 5. Review and Iterate
 
-After generating the PRD: ask the user if any sections need adjustment, offer to expand, or offer to create follow-up artifacts.
+After generating the PRD: ask the user if any sections need adjustment, offer to expand, or offer to
+create follow-up artifacts.
 
 ## Reference Files
 
 Detailed guidance for each section:
 
 - [PRD Structure](references/prd-structure.md) — full breakdown of each PRD section
-- [Writing Guides](references/writing-guides.md) — user stories, MoSCoW categorization, acceptance criteria
+- [Writing Guides](references/writing-guides.md) — user stories, MoSCoW categorization, acceptance
+  criteria
 - [Metrics & Scope](references/metrics-and-scope.md) — leading/lagging indicators, scope management
 - [Output Format & Tips](references/output-format.md) — markdown format, best practices

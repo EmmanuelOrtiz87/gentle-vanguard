@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Task Management
 
 Tasks are tracked in a simple `TASKS.md` file that both you and the user can edit.

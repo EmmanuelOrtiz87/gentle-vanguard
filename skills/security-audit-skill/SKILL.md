@@ -47,20 +47,20 @@ Detailed checklists and testing guidance → `references/owasp-top10.md`
 
 ## Tooling
 
-| Category | Tools | Reference |
-|----------|-------|-----------|
-| SAST     | Semgrep, SonarQube, CodeQL, Brakeman | `references/tooling.md` |
-| DAST     | OWASP ZAP, Burp Suite Pro, Acunetix | `references/tooling.md` |
-| SCA      | Trivy, Snyk, Dependabot, OWASP Dependency-Check | `references/tooling.md` |
-| Container| Grype, Kube-bench, Trivy | `references/tooling.md` |
+| Category  | Tools                                           | Reference               |
+| --------- | ----------------------------------------------- | ----------------------- |
+| SAST      | Semgrep, SonarQube, CodeQL, Brakeman            | `references/tooling.md` |
+| DAST      | OWASP ZAP, Burp Suite Pro, Acunetix             | `references/tooling.md` |
+| SCA       | Trivy, Snyk, Dependabot, OWASP Dependency-Check | `references/tooling.md` |
+| Container | Grype, Kube-bench, Trivy                        | `references/tooling.md` |
 
 ---
 
 ## Threat Modeling
 
-| Framework | Use | Reference |
-|-----------|-----|-----------|
-| STRIDE    | Categorize threats per component | `references/threat-modeling.md` |
+| Framework | Use                                    | Reference                       |
+| --------- | -------------------------------------- | ------------------------------- |
+| STRIDE    | Categorize threats per component       | `references/threat-modeling.md` |
 | DREAD     | Risk scoring (internal prioritization) | `references/threat-modeling.md` |
 
 ---
@@ -78,12 +78,12 @@ Detailed checklists and testing guidance → `references/owasp-top10.md`
 ## CVSS v3.1 Quick Reference
 
 | Severity | Score Range |
-|----------|-------------|
-| Critical | 9.0 – 10.0 |
-| High     | 7.0 – 8.9 |
-| Medium   | 4.0 – 6.9 |
-| Low      | 0.1 – 3.9 |
-| None     | 0.0 |
+| -------- | ----------- |
+| Critical | 9.0 – 10.0  |
+| High     | 7.0 – 8.9   |
+| Medium   | 4.0 – 6.9   |
+| Low      | 0.1 – 3.9   |
+| None     | 0.0         |
 
 > Full classification → `references/cvss-classification.md`
 

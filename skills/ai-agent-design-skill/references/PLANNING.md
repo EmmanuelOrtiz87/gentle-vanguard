@@ -46,14 +46,15 @@ Plan:
 5. Schedule email to stakeholders
 ```
 
-**When to use**: Tasks with clear sequential dependencies, long-running workflows where intermediate results matter, when verification is needed before executing.
+**When to use**: Tasks with clear sequential dependencies, long-running workflows where intermediate
+results matter, when verification is needed before executing.
 
 ## ReAct vs Plan-and-Execute
 
-| Aspect | ReAct | Plan-and-Execute |
-|---|---|---|
-| Flexibility | High (adapts mid-task) | Low (follows plan) |
-| Reliability | Lower (can go off-track) | Higher (structured) |
-| Speed | Faster for simple tasks | Faster for complex tasks |
-| Observability | Step-by-step visible | Full plan visible upfront |
-| Best for | Exploratory, dynamic tasks | Well-understood, stable tasks |
+| Aspect        | ReAct                      | Plan-and-Execute              |
+| ------------- | -------------------------- | ----------------------------- |
+| Flexibility   | High (adapts mid-task)     | Low (follows plan)            |
+| Reliability   | Lower (can go off-track)   | Higher (structured)           |
+| Speed         | Faster for simple tasks    | Faster for complex tasks      |
+| Observability | Step-by-step visible       | Full plan visible upfront     |
+| Best for      | Exploratory, dynamic tasks | Well-understood, stable tasks |

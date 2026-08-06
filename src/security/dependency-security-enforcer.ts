@@ -29,17 +29,19 @@ export class DependencySecurityEnforcer {
   constructor() {
     // Check if pnpm is available
     this.pnpmAvailable = this.checkPnpmAvailable();
-    
+
     // Define security policies based on PNPM-SECURITY.md
     // If pnpm is not available, disable pnpm-dependent checks
     this.policies = [
       {
         name: 'vulnerability-scan',
         description: 'Scan for security vulnerabilities in dependencies',
-        checkCommand: this.pnpmAvailable ? 'pnpm audit --audit-level=high --json' : 'npm audit --audit-level=high --json',
+        checkCommand: this.pnpmAvailable
+          ? 'pnpm audit --audit-level=high --json'
+          : 'npm audit --audit-level=high --json',
         remediation: 'Run "pnpm audit fix" or manually update vulnerable packages',
         severity: 'critical',
-        enabled: this.pnpmAvailable
+        enabled: this.pnpmAvailable,
       },
       {
         name: 'license-compliance',
@@ -47,7 +49,7 @@ export class DependencySecurityEnforcer {
         checkCommand: this.pnpmAvailable ? 'pnpm licenses list --json' : 'npm list --json',
         remediation: 'Review and approve licenses for all dependencies',
         severity: 'high',
-        enabled: this.pnpmAvailable
+        enabled: this.pnpmAvailable,
       },
       {
         name: 'dependency-lock',
@@ -55,7 +57,7 @@ export class DependencySecurityEnforcer {
         checkCommand: this.pnpmAvailable ? 'pnpm install --frozen-lockfile' : 'npm ci',
         remediation: 'Run "pnpm install" to regenerate lockfile if needed',
         severity: 'critical',
-        enabled: true
+        enabled: true,
       },
       {
         name: 'security-updates',
@@ -64,7 +66,7 @@ export class DependencySecurityEnforcer {
         checkCommand: this.pnpmAvailable ? 'pnpm outdated --long' : 'npm outdated --long',
         remediation: 'Update dependencies to versions with security patches',
         severity: 'high',
-        enabled: this.pnpmAvailable
+        enabled: this.pnpmAvailable,
       },
       {
         name: 'deprecated-packages',
@@ -73,7 +75,7 @@ export class DependencySecurityEnforcer {
         checkCommand: this.pnpmAvailable ? 'pnpm outdated --json' : 'npm outdated --json',
         remediation: 'Replace deprecated packages with maintained alternatives',
         severity: 'medium',
-        enabled: this.pnpmAvailable
+        enabled: this.pnpmAvailable,
       },
       {
         name: 'unused-dependencies',
@@ -81,8 +83,8 @@ export class DependencySecurityEnforcer {
         checkCommand: 'pnpm prune --dry-run',
         remediation: 'Remove unused dependencies to reduce attack surface',
         severity: 'medium',
-        enabled: false
-      }
+        enabled: false,
+      },
     ];
   }
 
@@ -115,7 +117,7 @@ export class DependencySecurityEnforcer {
 
     console.log('Running dependency security policy checks...\n');
 
-    for (const policy of this.policies.filter(p => p.enabled)) {
+    for (const policy of this.policies.filter((p) => p.enabled)) {
       try {
         console.log(`Checking: ${policy.name} - ${policy.description}`);
 
@@ -137,14 +139,14 @@ export class DependencySecurityEnforcer {
             description: policy.description,
             status: 'fail',
             message: `Policy violation: ${policy.remediation}`,
-            severity: policy.severity
+            severity: policy.severity,
           });
         } else {
           issues.push({
             policy: policy.name,
             description: policy.description,
             status: 'pass',
-            severity: policy.severity
+            severity: policy.severity,
           });
         }
 
@@ -156,7 +158,7 @@ export class DependencySecurityEnforcer {
           description: policy.description,
           status: 'fail',
           message: error.message || 'Unknown error occurred',
-          severity: policy.severity
+          severity: policy.severity,
         });
         console.log(`  Result: fail - ${error.message || 'Unknown error'}\n`);
       }
@@ -164,7 +166,7 @@ export class DependencySecurityEnforcer {
 
     return {
       compliant,
-      issues
+      issues,
     };
   }
 
@@ -212,7 +214,10 @@ export class DependencySecurityEnforcer {
           // policy does not maintain a denylist, so it should not fail on parseable data.
           try {
             const parsed = JSON.parse(output);
-            status = parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0 ? 'pass' : 'fail';
+            status =
+              parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0
+                ? 'pass'
+                : 'fail';
           } catch {
             if (output.includes('No licenses found') || output.toLowerCase().includes('error')) {
               status = 'fail';
@@ -235,7 +240,15 @@ export class DependencySecurityEnforcer {
           // pnpm outdated --long outputs a table with package lines when outdated exist.
           // Empty output or only header lines means all up to date.
           {
-            const lines = output.split('\n').filter(l => l.trim().length > 0 && !l.includes('Package') && !l.includes('===') && !l.includes('─'));
+            const lines = output
+              .split('\n')
+              .filter(
+                (l) =>
+                  l.trim().length > 0 &&
+                  !l.includes('Package') &&
+                  !l.includes('===') &&
+                  !l.includes('─'),
+              );
             // If there are actual package lines with outdated versions, flag it as advisory (not fail)
             // Only fail if there are known-vulnerability outdated packages (not just version bumps)
             status = lines.length > 0 ? 'pass' : 'pass'; // Advisory only — actual vulns are caught by vulnerability-scan
@@ -332,7 +345,7 @@ export class DependencySecurityEnforcer {
     return {
       success: failed.length === 0,
       applied,
-      failed
+      failed,
     };
   }
 
@@ -423,7 +436,7 @@ export class DependencySecurityEnforcer {
    * @param enabled Whether to enable or disable
    */
   setPolicyEnabled(policyName: string, enabled: boolean): void {
-    const policy = this.policies.find(p => p.name === policyName);
+    const policy = this.policies.find((p) => p.name === policyName);
     if (policy) {
       policy.enabled = enabled;
       console.log(`Policy "${policyName}" ${enabled ? 'enabled' : 'disabled'}`);
@@ -448,8 +461,9 @@ export const dependencySecurityEnforcer = new DependencySecurityEnforcer();
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const enforcer = new DependencySecurityEnforcer();
 
-  enforcer.runSecurityChecks()
-    .then(results => {
+  enforcer
+    .runSecurityChecks()
+    .then((results) => {
       console.log(enforcer.generateReport(results));
 
       if (!results.compliant) {
@@ -459,7 +473,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         console.log('✅ All security policies compliant.');
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.error('Security check failed:', error);
       process.exit(1);
     });

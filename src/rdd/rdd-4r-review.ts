@@ -137,38 +137,163 @@ interface RiskPattern {
 }
 
 const RISK_PATTERNS: RiskPattern[] = [
-  { pattern: /eval\s*\(/, lens: 'risk', severity: 'critical', message: 'eval() detected — remote code execution risk' },
-  { pattern: /innerHTML\s*=/, lens: 'risk', severity: 'required', message: 'innerHTML assignment — potential XSS' },
-  { pattern: /dangerouslySetInnerHTML/, lens: 'risk', severity: 'required', message: 'dangerouslySetInnerHTML requires sanitization' },
-  { pattern: /password\s*[:=]+\s*["\']/, lens: 'risk', severity: 'critical', message: 'Potential hardcoded password' },
-  { pattern: /api[_-]?key\s*[:=]+\s*["\']/, lens: 'risk', severity: 'critical', message: 'Potential hardcoded API key' },
-  { pattern: /secret\s*[:=]+\s*["\']/, lens: 'risk', severity: 'critical', message: 'Potential hardcoded secret' },
-  { pattern: /SELECT\s+.*\s+FROM/i, lens: 'risk', severity: 'required', message: 'Raw SQL — verify parameterized queries' },
-  { pattern: /exec\s*\(\s* req\.query/i, lens: 'risk', severity: 'critical', message: 'Command injection risk — never execute user input' },
-  { pattern: /TODO\s*:\s*security/i, lens: 'risk', severity: 'required', message: 'Security TODO found — must be addressed' },
-  { pattern: /FIXME\s*:\s*security/i, lens: 'risk', severity: 'required', message: 'Security FIXME found — must be addressed' },
-  { pattern: /any\s*:\s*any/, lens: 'reliability', severity: 'nit', message: 'Using any:any — prefer proper types' },
-  { pattern: /@ts-ignore/, lens: 'reliability', severity: 'required', message: '@ts-ignore suppresses errors — add explanation' },
-  { pattern: /@ts-expect-error/, lens: 'reliability', severity: 'nit', message: 'TypeScript error expected — verify this is intentional' },
-  { pattern: /catch\s*\(\s*\)\s*\{/, lens: 'resilience', severity: 'required', message: 'Empty catch block — swallowing errors' },
-  { pattern: /catch\s*\(\s*e\s*\)\s*\{\s*\}/, lens: 'resilience', severity: 'required', message: 'Empty catch block — errors silently ignored' },
-  { pattern: /console\.log/, lens: 'readability', severity: 'nit', message: 'console.log should be removed or converted to proper logging' },
-  { pattern: /debugger;/, lens: 'readability', severity: 'required', message: 'debugger statement found — must be removed' },
-  { pattern: /FIXME\s*:/i, lens: 'reliability', severity: 'nit', message: 'FIXME found — should be addressed before merge' },
-  { pattern: /TODO\s*:/i, lens: 'reliability', severity: 'nit', message: 'TODO found — create ticket if not addressed' },
-  { pattern: /setTimeout\s*\(\s*function/, lens: 'resilience', severity: 'nit', message: 'setTimeout with function — ensure cleanup on unmount' },
-  { pattern: /setInterval\s*\(/, lens: 'resilience', severity: 'required', message: 'setInterval requires cleanup — check for memory leaks' },
-  { pattern: /\.then\s*\([^)]*\)\s*\.then/, lens: 'readability', severity: 'nit', message: 'Promise chain — consider async/await for readability' },
-  { pattern: /var\s+/, lens: 'readability', severity: 'nit', message: 'var used — prefer const/let' },
-  { pattern: /==\s*null/, lens: 'reliability', severity: 'nit', message: '== null — prefer === for clarity' },
-  { pattern: /!=\s*null/, lens: 'reliability', severity: 'nit', message: '!= null — prefer !== for clarity' },
+  {
+    pattern: /eval\s*\(/,
+    lens: 'risk',
+    severity: 'critical',
+    message: 'eval() detected — remote code execution risk',
+  },
+  {
+    pattern: /innerHTML\s*=/,
+    lens: 'risk',
+    severity: 'required',
+    message: 'innerHTML assignment — potential XSS',
+  },
+  {
+    pattern: /dangerouslySetInnerHTML/,
+    lens: 'risk',
+    severity: 'required',
+    message: 'dangerouslySetInnerHTML requires sanitization',
+  },
+  {
+    pattern: /password\s*[:=]+\s*["\']/,
+    lens: 'risk',
+    severity: 'critical',
+    message: 'Potential hardcoded password',
+  },
+  {
+    pattern: /api[_-]?key\s*[:=]+\s*["\']/,
+    lens: 'risk',
+    severity: 'critical',
+    message: 'Potential hardcoded API key',
+  },
+  {
+    pattern: /secret\s*[:=]+\s*["\']/,
+    lens: 'risk',
+    severity: 'critical',
+    message: 'Potential hardcoded secret',
+  },
+  {
+    pattern: /SELECT\s+.*\s+FROM/i,
+    lens: 'risk',
+    severity: 'required',
+    message: 'Raw SQL — verify parameterized queries',
+  },
+  {
+    pattern: /exec\s*\(\s* req\.query/i,
+    lens: 'risk',
+    severity: 'critical',
+    message: 'Command injection risk — never execute user input',
+  },
+  {
+    pattern: /TODO\s*:\s*security/i,
+    lens: 'risk',
+    severity: 'required',
+    message: 'Security TODO found — must be addressed',
+  },
+  {
+    pattern: /FIXME\s*:\s*security/i,
+    lens: 'risk',
+    severity: 'required',
+    message: 'Security FIXME found — must be addressed',
+  },
+  {
+    pattern: /any\s*:\s*any/,
+    lens: 'reliability',
+    severity: 'nit',
+    message: 'Using any:any — prefer proper types',
+  },
+  {
+    pattern: /@ts-ignore/,
+    lens: 'reliability',
+    severity: 'required',
+    message: '@ts-ignore suppresses errors — add explanation',
+  },
+  {
+    pattern: /@ts-expect-error/,
+    lens: 'reliability',
+    severity: 'nit',
+    message: 'TypeScript error expected — verify this is intentional',
+  },
+  {
+    pattern: /catch\s*\(\s*\)\s*\{/,
+    lens: 'resilience',
+    severity: 'required',
+    message: 'Empty catch block — swallowing errors',
+  },
+  {
+    pattern: /catch\s*\(\s*e\s*\)\s*\{\s*\}/,
+    lens: 'resilience',
+    severity: 'required',
+    message: 'Empty catch block — errors silently ignored',
+  },
+  {
+    pattern: /console\.log/,
+    lens: 'readability',
+    severity: 'nit',
+    message: 'console.log should be removed or converted to proper logging',
+  },
+  {
+    pattern: /debugger;/,
+    lens: 'readability',
+    severity: 'required',
+    message: 'debugger statement found — must be removed',
+  },
+  {
+    pattern: /FIXME\s*:/i,
+    lens: 'reliability',
+    severity: 'nit',
+    message: 'FIXME found — should be addressed before merge',
+  },
+  {
+    pattern: /TODO\s*:/i,
+    lens: 'reliability',
+    severity: 'nit',
+    message: 'TODO found — create ticket if not addressed',
+  },
+  {
+    pattern: /setTimeout\s*\(\s*function/,
+    lens: 'resilience',
+    severity: 'nit',
+    message: 'setTimeout with function — ensure cleanup on unmount',
+  },
+  {
+    pattern: /setInterval\s*\(/,
+    lens: 'resilience',
+    severity: 'required',
+    message: 'setInterval requires cleanup — check for memory leaks',
+  },
+  {
+    pattern: /\.then\s*\([^)]*\)\s*\.then/,
+    lens: 'readability',
+    severity: 'nit',
+    message: 'Promise chain — consider async/await for readability',
+  },
+  {
+    pattern: /var\s+/,
+    lens: 'readability',
+    severity: 'nit',
+    message: 'var used — prefer const/let',
+  },
+  {
+    pattern: /==\s*null/,
+    lens: 'reliability',
+    severity: 'nit',
+    message: '== null — prefer === for clarity',
+  },
+  {
+    pattern: /!=\s*null/,
+    lens: 'reliability',
+    severity: 'nit',
+    message: '!= null — prefer !== for clarity',
+  },
 ];
 
 // ─── Auto-Review Engine ────────────────────────────────────────────────────────
 
 export function autoReviewFile(filePath: string, content: string): ReviewFinding[] {
   const findings: ReviewFinding[] = [];
-  
+
   for (const { pattern, lens, severity, message } of RISK_PATTERNS) {
     if (pattern.test(content)) {
       const lines = content.split('\n');
@@ -185,22 +310,22 @@ export function autoReviewFile(filePath: string, content: string): ReviewFinding
       }
     }
   }
-  
+
   return findings;
 }
 
 export function autoReviewChanges(files: string[]): ReviewFinding[] {
   const allFindings: ReviewFinding[] = [];
   const ROOT = resolve(process.cwd());
-  
+
   for (const file of files) {
     try {
       const fullPath = join(ROOT, file);
       if (!existsSync(fullPath)) continue;
-      
+
       // Only review code files
       if (!/\.(ts|tsx|js|jsx|py|go|rs|java|cs)$/.test(file)) continue;
-      
+
       const content = readFileSync(fullPath, 'utf-8');
       const findings = autoReviewFile(file, content);
       allFindings.push(...findings);
@@ -208,40 +333,36 @@ export function autoReviewChanges(files: string[]): ReviewFinding[] {
       // Skip files that can't be read
     }
   }
-  
+
   return allFindings;
 }
 
 // ─── Review Generation ─────────────────────────────────────────────────────────
 
-export function generateReview4R(
-  receiptId: string,
-  files: string[],
-  reviewer: string
-): Review4R {
+export function generateReview4R(receiptId: string, files: string[], reviewer: string): Review4R {
   const autoFindings = autoReviewChanges(files);
-  
+
   const review: Review4R = {
     receiptId,
-    riskFindings: autoFindings.filter(f => f.lens === 'risk'),
-    readabilityFindings: autoFindings.filter(f => f.lens === 'readability'),
-    reliabilityFindings: autoFindings.filter(f => f.lens === 'reliability'),
-    resilienceFindings: autoFindings.filter(f => f.lens === 'resilience'),
+    riskFindings: autoFindings.filter((f) => f.lens === 'risk'),
+    readabilityFindings: autoFindings.filter((f) => f.lens === 'readability'),
+    reliabilityFindings: autoFindings.filter((f) => f.lens === 'reliability'),
+    resilienceFindings: autoFindings.filter((f) => f.lens === 'resilience'),
     approved: false,
     reviewer,
     timestamp: new Date().toISOString(),
   };
-  
+
   // Auto-approve if no critical findings
-  const criticalCount = autoFindings.filter(f => f.severity === 'critical').length;
+  const criticalCount = autoFindings.filter((f) => f.severity === 'critical').length;
   review.approved = criticalCount === 0;
-  
+
   return review;
 }
 
 export function formatReview4R(review: Review4R): string {
   const lines: string[] = [];
-  
+
   lines.push('╔════════════════════════════════════════════════════════════════════════╗');
   lines.push('║                     4R REVIEW RESULT                                   ║');
   lines.push('╚════════════════════════════════════════════════════════════════════════╝');
@@ -251,19 +372,19 @@ export function formatReview4R(review: Review4R): string {
   lines.push(`Status: ${review.approved ? '✓ APPROVED' : '✗ CHANGES REQUIRED'}`);
   lines.push(`Time: ${new Date(review.timestamp).toLocaleString()}`);
   lines.push('');
-  
+
   const lenses: { name: string; findings: ReviewFinding[] }[] = [
     { name: 'RISK', findings: review.riskFindings },
     { name: 'READABILITY', findings: review.readabilityFindings },
     { name: 'RELIABILITY', findings: review.reliabilityFindings },
     { name: 'RESILIENCE', findings: review.resilienceFindings },
   ];
-  
+
   for (const { name, findings } of lenses) {
     lines.push('─'.repeat(70));
     lines.push(`[${name}] ${findings.length} finding(s)`);
     lines.push('─'.repeat(70));
-    
+
     if (findings.length === 0) {
       lines.push('  ✓ No issues detected');
     } else {
@@ -278,9 +399,9 @@ export function formatReview4R(review: Review4R): string {
     }
     lines.push('');
   }
-  
+
   lines.push('═'.repeat(70));
-  
+
   return lines.join('\n');
 }
 
@@ -290,9 +411,9 @@ export function startInteractiveReview(_receiptId: string): void {
   console.log('\n╔════════════════════════════════════════════════════════════════════════╗');
   console.log('║              INTERACTIVE 4R REVIEW SESSION                             ║');
   console.log('╚════════════════════════════════════════════════════════════════════════╝\n');
-  
+
   console.log('Review this change through the 4R lenses:\n');
-  
+
   for (const [lens, checklist] of Object.entries(LENS_CHECKLISTS)) {
     console.log(`${lens.toUpperCase()} (${checklist.weight}% weight):`);
     console.log('─'.repeat(60));
@@ -301,7 +422,7 @@ export function startInteractiveReview(_receiptId: string): void {
     }
     console.log('');
   }
-  
+
   console.log('Instructions:');
   console.log('  1. Review the code manually');
   console.log('  2. Check off items in the checklist');
@@ -319,42 +440,42 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     try {
       switch (action) {
         case 'auto': {
-          const receiptId = args.find(a => a.startsWith('--receipt='))?.split('=')[1];
-          const files = args.filter(a => !a.startsWith('--'));
-          
+          const receiptId = args.find((a) => a.startsWith('--receipt='))?.split('=')[1];
+          const files = args.filter((a) => !a.startsWith('--'));
+
           if (!receiptId) {
             console.error('Usage: auto --receipt=<id> [file1] [file2] ...');
             process.exit(1);
           }
-          
+
           const reviewer = process.env.USER || process.env.USERNAME || 'system';
           const review = generateReview4R(receiptId, files.length > 0 ? files : [], reviewer);
-          
+
           if (args.includes('--json')) {
             console.log(JSON.stringify(review, null, 2));
           } else {
             console.log(formatReview4R(review));
           }
-          
+
           process.exit(review.approved ? 0 : 1);
           break;
         }
 
         case 'interactive': {
-          const receiptId = args.find(a => a.startsWith('--receipt='))?.split('=')[1];
-          
+          const receiptId = args.find((a) => a.startsWith('--receipt='))?.split('=')[1];
+
           if (!receiptId) {
             console.error('Usage: interactive --receipt=<id>');
             process.exit(1);
           }
-          
+
           startInteractiveReview(receiptId);
           break;
         }
 
         case 'checklist': {
           const lens = args[1] as ReviewLens;
-          
+
           if (lens && LENS_CHECKLISTS[lens]) {
             const checklist = LENS_CHECKLISTS[lens];
             console.log(`\n${lens.toUpperCase()} Checklist (${checklist.weight}% weight):\n`);
@@ -365,7 +486,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
             console.log('\nAll 4R Checklists:\n');
             for (const [name, checklist] of Object.entries(LENS_CHECKLISTS)) {
               console.log(`${name.toUpperCase()} (${checklist.weight}%):`);
-              checklist.items.slice(0, 3).forEach(item => console.log(`  • ${item}`));
+              checklist.items.slice(0, 3).forEach((item) => console.log(`  • ${item}`));
               console.log(`  ... and ${checklist.items.length - 3} more`);
               console.log('');
             }

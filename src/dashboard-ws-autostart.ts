@@ -86,7 +86,8 @@ function awaitExists(port: number): Promise<boolean> {
 /** Main autostart logic */
 async function main(overridePort?: number): Promise<number> {
   const portArgIdx = process.argv.indexOf('--port');
-  const preferredPort = overridePort ?? (portArgIdx > 0 ? parseInt(process.argv[portArgIdx + 1] || '0', 10) : 0);
+  const preferredPort =
+    overridePort ?? (portArgIdx > 0 ? parseInt(process.argv[portArgIdx + 1] || '0', 10) : 0);
 
   // Ensure runtime dir
   if (!fs.existsSync(RUNTIME_DIR)) {
@@ -122,7 +123,7 @@ async function main(overridePort?: number): Promise<number> {
   // Detect available port
   const defaultPort = (() => {
     const ports = readDashboardPorts();
-    return (ports?.wsPort) || 8080;
+    return ports?.wsPort || 8080;
   })();
   const selectedPort = await getFreePort(preferredPort > 0 ? preferredPort : defaultPort);
 
@@ -136,20 +137,16 @@ async function main(overridePort?: number): Promise<number> {
 
   // On Windows, .cmd files require cmd.exe or shell:true (spawn EINVAL otherwise)
   const tsxBin = path.join(WS_SERVER_DIR, 'node_modules', '.bin', 'tsx.cmd');
-  const child = spawn(
-    'cmd.exe',
-    ['/c', tsxBin, WS_SCRIPT],
-    {
-      cwd: WS_SERVER_DIR,
-      stdio: 'ignore',
-      detached: true,
-      windowsHide: true,
-      env: {
-        ...process.env,
-        WS_PORT: String(selectedPort),
-      },
+  const child = spawn('cmd.exe', ['/c', tsxBin, WS_SCRIPT], {
+    cwd: WS_SERVER_DIR,
+    stdio: 'ignore',
+    detached: true,
+    windowsHide: true,
+    env: {
+      ...process.env,
+      WS_PORT: String(selectedPort),
     },
-  );
+  });
 
   child.unref();
   const procId = child.pid;
@@ -183,7 +180,9 @@ async function main(overridePort?: number): Promise<number> {
     return 0;
   }
 
-  logToFile(`[WARN] WS process started but health check inconclusive (PID=${procId} port=${selectedPort})`);
+  logToFile(
+    `[WARN] WS process started but health check inconclusive (PID=${procId} port=${selectedPort})`,
+  );
   return 0;
 }
 

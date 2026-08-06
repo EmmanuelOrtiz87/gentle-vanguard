@@ -3,6 +3,7 @@
 ### Step 1: Build the Replacement
 
 Don't deprecate without a working alternative. The replacement must:
+
 - Cover all critical use cases of the old system
 - Have documentation and migration guides
 - Be proven in production (not just "theoretically better")
@@ -26,6 +27,7 @@ lacks observability. NewService handles both automatically.
 ### Step 3: Migrate Incrementally
 
 For each consumer:
+
 ```
 1. Identify all touchpoints with the deprecated system
 2. Update to use the replacement
@@ -34,13 +36,14 @@ For each consumer:
 5. Confirm no regressions
 ```
 
-**The Churn Rule:** If you own the infrastructure being deprecated, you are responsible for migrating
-your users — or providing backward-compatible updates that require no migration. Don't announce
-deprecation and leave users to figure it out.
+**The Churn Rule:** If you own the infrastructure being deprecated, you are responsible for
+migrating your users — or providing backward-compatible updates that require no migration. Don't
+announce deprecation and leave users to figure it out.
 
 ### Step 4: Remove the Old System
 
 Only after all consumers have migrated:
+
 ```
 1. Verify zero active usage (metrics, logs, dependency analysis)
 2. Remove the code

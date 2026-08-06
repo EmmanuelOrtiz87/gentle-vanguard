@@ -10,18 +10,19 @@ After each increment, verify:
 - [ ] The new functionality works as expected
 - [ ] The change is committed with a descriptive message
 
-**Note:** Run each verification command after a change that could affect it. After a successful run, don't repeat the same command unless the code has changed since.
+**Note:** Run each verification command after a change that could affect it. After a successful run,
+don't repeat the same command unless the code has changed since.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-|----------------|---------|
-| "I'll test it all at the end" | Bugs compound. A bug in Slice 1 makes Slices 2-5 wrong. Test each slice. |
-| "It's faster to do it all at once" | It *feels* faster until something breaks and you can't find which of 500 changed lines caused it. |
-| "These changes are too small to commit separately" | Small commits are free. Large commits hide bugs. |
-| "I'll add the feature flag later" | If the feature isn't complete, it shouldn't be user-visible. Add the flag now. |
-| "This refactor is small enough to include" | Refactors mixed with features make both harder to review and debug. |
-| "Let me run the build command again just to be sure" | After a successful run, repeating adds nothing unless the code has changed. |
+| Rationalization                                      | Reality                                                                                           |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| "I'll test it all at the end"                        | Bugs compound. A bug in Slice 1 makes Slices 2-5 wrong. Test each slice.                          |
+| "It's faster to do it all at once"                   | It _feels_ faster until something breaks and you can't find which of 500 changed lines caused it. |
+| "These changes are too small to commit separately"   | Small commits are free. Large commits hide bugs.                                                  |
+| "I'll add the feature flag later"                    | If the feature isn't complete, it shouldn't be user-visible. Add the flag now.                    |
+| "This refactor is small enough to include"           | Refactors mixed with features make both harder to review and debug.                               |
+| "Let me run the build command again just to be sure" | After a successful run, repeating adds nothing unless the code has changed.                       |
 
 ## Red Flags
 

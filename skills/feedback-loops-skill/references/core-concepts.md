@@ -2,7 +2,8 @@
 
 ### Reinforcing Loops (R)
 
-Self-amplifying feedback that accelerates change in one direction. Growth, collapse, and compound effects.
+Self-amplifying feedback that accelerates change in one direction. Growth, collapse, and compound
+effects.
 
 - **R1 - Growth**: More users → more value → more users (network effect)
 - **R2 - Erosion**: Lower quality → fewer users → less revenue → lower quality
@@ -28,7 +29,8 @@ Time between cause and effect. Delays create oscillation and instability.
 - Response delay: time to act once noticed
 - Material delay: time for action to take effect
 
-**Rule**: The longer the delay relative to the rate of change, the more the system will overshoot and oscillate.
+**Rule**: The longer the delay relative to the rate of change, the more the system will overshoot
+and oscillate.
 
 ### Loop Dominance
 

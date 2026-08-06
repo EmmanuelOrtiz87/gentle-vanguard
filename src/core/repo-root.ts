@@ -32,7 +32,9 @@ function findRepoRoot(): string {
   }
 
   // Fallback: usa cwd si no encontramos el repo (debería no pasar en producción)
-  console.warn('[REPO-ROOT] No se encontró marcador de raíz (config/timeout-config.json), usando cwd como fallback');
+  console.warn(
+    '[REPO-ROOT] No se encontró marcador de raíz (config/timeout-config.json), usando cwd como fallback',
+  );
   return resolve(process.cwd());
 }
 
@@ -58,7 +60,8 @@ export function repoPath(...paths: string[]): string {
 
 // CLI para debugging
 // @ts-ignore — check if this is the main module (ESM compatible)
-const isMainModule = import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.includes('repo-root');
+const isMainModule =
+  import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.includes('repo-root');
 if (isMainModule) {
   console.log(`[REPO-ROOT] ROOT: ${ROOT}`);
   console.log(`[REPO-ROOT] cwd: ${process.cwd()}`);

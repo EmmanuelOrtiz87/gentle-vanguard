@@ -4,11 +4,10 @@
 
 ## Description
 
-
 ## Triggers
 
-
 ## Instructions
+
 # Auto-Delegation Router Skill
 
 ## Activation Contract

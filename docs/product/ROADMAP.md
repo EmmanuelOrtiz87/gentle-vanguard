@@ -45,7 +45,7 @@ seguro, extensible, zero-drama.**
 | 4   | `scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1`        | —      | Alta      | ✅ Done (`src/azure-delegator.ts`)        |
 | 5   | `scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1`    | —      | Media     | ✅ Done (`src/checkpoint-manager.ts`)     |
 | 6   | `scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1`      | —      | Media     | ✅ Done (`src/snapshot-manager.ts`)       |
-| 7   | `scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1` | —      | Media     | ✅ Done (`src/rollback-orchestrator.ts`) |
+| 7   | `scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1` | —      | Media     | ✅ Done (`src/rollback-orchestrator.ts`)  |
 | 8   | `scripts/security/audit-pipeline.ps1`                               | —      | Media     | ✅ Done (`src/audit-pipeline.ts`)         |
 | 9   | `scripts/utilities/ops/TRACING/tracing-instrument.ps1`              | —      | Media     | ✅ Done (`src/tracing-instrument.ts`)     |
 | 10  | `scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1`        | —      | Media     | ✅ Done (`src/event-sourcing.ts`)         |
@@ -77,13 +77,13 @@ seguro, extensible, zero-drama.**
 
 ## Guía de adopción
 
-- Ver [docs/status/STACK-MATURITY-GUIDE.md](../status/STACK-MATURITY-GUIDE.md) para la política resumida de
-  madurez del stack.
+- Ver [docs/status/STACK-MATURITY-GUIDE.md](../status/STACK-MATURITY-GUIDE.md) para la política
+  resumida de madurez del stack.
 
 ## Prioridad de migración PS1 → TS
 
-- Ver [config/ps1-ts-migration.json](../../config/ps1-ts-migration.json) para la ola inicial de scripts
-  críticos a migrar.
+- Ver [config/ps1-ts-migration.json](../../config/ps1-ts-migration.json) para la ola inicial de
+  scripts críticos a migrar.
 - Primera ola priorizada: security orchestrator, hybrid executor y checkpoint manager.
 
 ## Deprecado

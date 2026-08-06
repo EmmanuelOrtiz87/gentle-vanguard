@@ -4,11 +4,10 @@
 
 ## Description
 
-
 ## Triggers
 
-
 ## Instructions
+
 ## Activation Contract
 
 Triggered on pre-commit hook or when user says "code review", "review all", "quality check", "audit

@@ -54,13 +54,24 @@ function main(): void {
 
   log('Starting full re-index...');
 
-  if (existsSync(indexFile)) { rmSync(indexFile, { force: true }); log('Removed existing index file'); }
-  if (existsSync(metaFile)) { rmSync(metaFile, { force: true }); log('Removed existing index metadata'); }
-  if (existsSync(tmpExport)) { rmSync(tmpExport, { force: true }); }
+  if (existsSync(indexFile)) {
+    rmSync(indexFile, { force: true });
+    log('Removed existing index file');
+  }
+  if (existsSync(metaFile)) {
+    rmSync(metaFile, { force: true });
+    log('Removed existing index metadata');
+  }
+  if (existsSync(tmpExport)) {
+    rmSync(tmpExport, { force: true });
+  }
 
   const indexScript = join(__dirname, 'engram-vector-index.ps1');
   if (!existsSync(indexScript)) {
-    log('Vector index script removed in Phase 1 cleanup — using engram export for freshness', 'Yellow');
+    log(
+      'Vector index script removed in Phase 1 cleanup — using engram export for freshness',
+      'Yellow',
+    );
     try {
       runSync('engram', ['--version'], { stdio: 'pipe' });
       const exportArgs = ['export', tmpExport];
@@ -76,7 +87,11 @@ function main(): void {
     const ragLogDir = dirname(ragLog);
     mkdirSync(ragLogDir, { recursive: true });
     const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    writeFileSync(ragLog, `[RAG-REINDEX] ${ts} — completed — project=${args.project || 'all'} — method=engram-export`, 'utf8');
+    writeFileSync(
+      ragLog,
+      `[RAG-REINDEX] ${ts} — completed — project=${args.project || 'all'} — method=engram-export`,
+      'utf8',
+    );
     log(`Freshness log: ${ragLog}`, 'Green');
     return;
   }
@@ -100,7 +115,11 @@ function main(): void {
   const ragLogDir = dirname(ragLog);
   mkdirSync(ragLogDir, { recursive: true });
   const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
-  writeFileSync(ragLog, `[RAG-REINDEX] ${ts} — completed — project=${args.project || 'all'} — index=${indexFile}`, 'utf8');
+  writeFileSync(
+    ragLog,
+    `[RAG-REINDEX] ${ts} — completed — project=${args.project || 'all'} — index=${indexFile}`,
+    'utf8',
+  );
   log(`Freshness log: ${ragLog}`, 'Green');
 }
 

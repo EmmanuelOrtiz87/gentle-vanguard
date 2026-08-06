@@ -68,7 +68,7 @@ async function verifyAllSecurityImprovements() {
       action: 'verification_test',
       component: 'security-verifier',
       status: 'success',
-      details: 'Security improvements verification test'
+      details: 'Security improvements verification test',
     });
 
     // Try to search for the entry
@@ -144,7 +144,6 @@ async function verifyAllSecurityImprovements() {
       console.log('❌ Some security improvements failed verification');
       return false;
     }
-
   } catch (error) {
     console.error('Verification failed with error:', error);
     return false;
@@ -154,12 +153,12 @@ async function verifyAllSecurityImprovements() {
 // If called directly, run verification
 if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) {
   verifyAllSecurityImprovements()
-    .then(success => {
+    .then((success) => {
       if (!success) {
         process.exit(1);
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.error('Verification error:', error);
       process.exit(1);
     });

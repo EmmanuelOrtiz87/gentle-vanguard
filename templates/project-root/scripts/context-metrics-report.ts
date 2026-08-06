@@ -18,9 +18,7 @@ import { join, resolve } from 'path';
 const REPO_ROOT = resolve(join(__dirname, '..'));
 
 const args = process.argv.slice(2);
-const days = parseInt(
-  args.includes('--days') ? args[args.indexOf('--days') + 1] || '7' : '7', 10
-);
+const days = parseInt(args.includes('--days') ? args[args.indexOf('--days') + 1] || '7' : '7', 10);
 
 let metricsPath = args.includes('--metrics-path')
   ? args[args.indexOf('--metrics-path') + 1] || ''
@@ -38,7 +36,7 @@ if (!existsSync(metricsPath)) {
 
 // Parse CSV
 const csvContent = readFileSync(metricsPath, 'utf-8');
-const lines = csvContent.split('\n').filter(l => l.trim());
+const lines = csvContent.split('\n').filter((l) => l.trim());
 
 if (lines.length <= 1) {
   console.log('[INFO] No context usage records found.');
@@ -86,8 +84,8 @@ if (rows.length === 0) {
 }
 
 const total = rows.length;
-const compactCount = rows.filter(r => r.event === 'compact-start').length;
-const packCount = rows.filter(r => r.event === 'context-pack').length;
+const compactCount = rows.filter((r) => r.event === 'compact-start').length;
+const packCount = rows.filter((r) => r.event === 'context-pack').length;
 const avgObjective = Math.round(rows.reduce((s, r) => s + r.objective_chars, 0) / rows.length);
 const avgPrompt = Math.round(rows.reduce((s, r) => s + r.prompt_chars, 0) / rows.length);
 
@@ -113,7 +111,7 @@ const sortedDays = [...byDay.keys()].sort();
 for (const day of sortedDays) {
   const dayRows = byDay.get(day)!;
   const dTotal = dayRows.length;
-  const dCompact = dayRows.filter(r => r.event === 'compact-start').length;
-  const dPack = dayRows.filter(r => r.event === 'context-pack').length;
+  const dCompact = dayRows.filter((r) => r.event === 'compact-start').length;
+  const dPack = dayRows.filter((r) => r.event === 'context-pack').length;
   console.log(`  ${day}: total=${dTotal}, context-pack=${dPack}, compact-start=${dCompact}`);
 }

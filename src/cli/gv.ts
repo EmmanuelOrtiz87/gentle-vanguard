@@ -82,10 +82,10 @@ EXAMPLES:
 
 function getStackInfo(): Record<string, unknown> {
   const skillsCount = existsSync(SKILLS_DIR)
-    ? readdirSync(SKILLS_DIR, { withFileTypes: true }).filter(d => d.isDirectory()).length
+    ? readdirSync(SKILLS_DIR, { withFileTypes: true }).filter((d) => d.isDirectory()).length
     : 0;
   const rulesCount = existsSync(RULES_DIR)
-    ? readdirSync(RULES_DIR).filter(f => f.endsWith('.md')).length
+    ? readdirSync(RULES_DIR).filter((f) => f.endsWith('.md')).length
     : 0;
   return {
     root: ROOT,
@@ -110,7 +110,7 @@ function showInfo(): void {
   if (existsSync(SKILLS_DIR)) {
     console.log('  Available Skills:');
     const dirs = readdirSync(SKILLS_DIR, { withFileTypes: true })
-      .filter(d => d.isDirectory())
+      .filter((d) => d.isDirectory())
       .sort((a, b) => a.name.localeCompare(b.name));
     for (const d of dirs) {
       console.log(`    - ${d.name}`);
@@ -152,7 +152,11 @@ async function main(): Promise<void> {
       break;
 
     case 'check':
-      runCommand('npx', ['tsx', 'src/core/maintenance-watchtower.ts', '--action', 'health'], 'WATCHTOWER');
+      runCommand(
+        'npx',
+        ['tsx', 'src/core/maintenance-watchtower.ts', '--action', 'health'],
+        'WATCHTOWER',
+      );
       break;
 
     case 'validate': {
@@ -170,7 +174,9 @@ async function main(): Promise<void> {
 
       // Check skills
       if (existsSync(SKILLS_DIR)) {
-        const count = readdirSync(SKILLS_DIR, { withFileTypes: true }).filter(d => d.isDirectory()).length;
+        const count = readdirSync(SKILLS_DIR, { withFileTypes: true }).filter((d) =>
+          d.isDirectory(),
+        ).length;
         console.log(`  [OK] ${count} skills`);
       } else {
         console.log('  [FAIL] Skills directory missing');
@@ -189,7 +195,10 @@ async function main(): Promise<void> {
       try {
         const r = runSync('npm', ['run', 'typecheck'], { timeout: 60000 });
         if (r.status === 0) console.log('  [OK] TypeScript typecheck passes');
-        else { console.log('  [FAIL] TypeScript typecheck failed'); ok = false; }
+        else {
+          console.log('  [FAIL] TypeScript typecheck failed');
+          ok = false;
+        }
       } catch {
         console.log('  [FAIL] TypeScript typecheck failed');
         ok = false;
@@ -214,7 +223,7 @@ async function main(): Promise<void> {
       header();
       if (existsSync(SKILLS_DIR)) {
         const dirs = readdirSync(SKILLS_DIR, { withFileTypes: true })
-          .filter(d => d.isDirectory())
+          .filter((d) => d.isDirectory())
           .sort((a, b) => a.name.localeCompare(b.name));
         console.log('Installed Skills:\n');
         for (const d of dirs) {
@@ -276,8 +285,18 @@ async function main(): Promise<void> {
       header();
       console.log('Available Tools:\n');
       const tools = [
-        { name: 'opencode', desc: 'opencode CLI (code editing)', command: 'opencode', args: ['--version'] },
-        { name: 'engram', desc: 'Persistent memory (plugin)', command: 'npx', args: ['engram', '--version'] },
+        {
+          name: 'opencode',
+          desc: 'opencode CLI (code editing)',
+          command: 'opencode',
+          args: ['--version'],
+        },
+        {
+          name: 'engram',
+          desc: 'Persistent memory (plugin)',
+          command: 'npx',
+          args: ['engram', '--version'],
+        },
         { name: 'node', desc: 'Node.js runtime', command: 'node', args: ['--version'] },
         { name: 'npx', desc: 'Node package executor', command: 'npx', args: ['--version'] },
       ];
@@ -316,7 +335,7 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('FATAL:', err.message);
   process.exit(1);
 });

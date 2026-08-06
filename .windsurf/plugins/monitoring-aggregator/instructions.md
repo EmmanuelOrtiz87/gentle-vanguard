@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 Monitoring aggregation skill for collecting and analyzing workspace metrics
 
 ## Triggers
 
-
 ## Instructions
+
 # Skill: monitoring-aggregator
 
 **versión**: 1.0.0 **Created**: 2026-04-20 **Status**: ACTIVE **Priority**: MEDIUM

@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /**
  * Knowledge Base Sync - Engram ↔ Vault
- * 
+ *
  * Sincroniza automáticamente entre Engram (memoria de sesión) y el vault de Obsidian.
- * 
+ *
  * Features:
  * - Exporta observaciones de Engram al vault (largo plazo)
  * - Importa notas del vault a Engram (búsqueda de conocimiento)
  * - Genera resúmenes de sesión automáticamente
  * - Mantiene cross-references entre sesiones
- * 
+ *
  * Usage:
  *   npx tsx src/knowledge-base-sync.ts --mode full
  *   npx tsx src/knowledge-base-sync.ts --mode export
@@ -65,7 +65,9 @@ function getTimestamp(): string {
  * Exporta observaciones de Engram al vault
  * Convierte memoria de sesión a notas de largo plazo
  */
-async function exportFromEngram(_sessionId?: string): Promise<{ exported: number; errors: string[] }> {
+async function exportFromEngram(
+  _sessionId?: string,
+): Promise<{ exported: number; errors: string[] }> {
   log('Exporting from Engram...', 'INFO');
   const errors: string[] = [];
   let exported = 0;
@@ -163,15 +165,28 @@ function saveImportState(state: ImportState): void {
 /**
  * Guarda una observación en Engram vía CLI (memoria persistente real)
  */
-function saveToEngram(title: string, content: string): { ok: boolean; id?: string; error?: string } {
+function saveToEngram(
+  title: string,
+  content: string,
+): { ok: boolean; id?: string; error?: string } {
   // Limitar contenido para el CLI (línea de comando) — truncar de forma segura
   const safeTitle = title.slice(0, 200).replace(/\r?\n/g, ' ');
   const safeContent = content.slice(0, 3000).replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
 
   const result = runSync(
     'engram',
-    ['save', safeTitle, safeContent, '--type', 'discovery', '--project', ENGRAM_PROJECT, '--scope', 'project'],
-    { timeout: 15000 }
+    [
+      'save',
+      safeTitle,
+      safeContent,
+      '--type',
+      'discovery',
+      '--project',
+      ENGRAM_PROJECT,
+      '--scope',
+      'project',
+    ],
+    { timeout: 15000 },
   );
 
   if (result.status !== 0) {
@@ -257,7 +272,9 @@ async function importToEngram(): Promise<{ imported: number; skipped: number; er
 /**
  * Genera resumen de sesión actual
  */
-async function generateSessionSummary(sessionId?: string): Promise<{ path?: string; error?: string }> {
+async function generateSessionSummary(
+  sessionId?: string,
+): Promise<{ path?: string; error?: string }> {
   const sid = sessionId || `session-${getToday().replace(/-/g, '')}`;
   log(`Generating session summary: ${sid}...`, 'INFO');
 
@@ -269,7 +286,7 @@ async function generateSessionSummary(sessionId?: string): Promise<{ path?: stri
     let sessionData = '';
 
     if (existsSync(sessionDir)) {
-      const files = readdirSync(sessionDir).filter(f => f.endsWith('.md'));
+      const files = readdirSync(sessionDir).filter((f) => f.endsWith('.md'));
       for (const file of files) {
         sessionData += readFileSync(join(sessionDir, file), 'utf-8') + '\n\n';
       }
@@ -315,8 +332,17 @@ ${sessionData || '*No session data available*'}
  */
 function showStats(): void {
   log('Knowledge Base Stats:', 'INFO');
-  
-  const folders = ['00-inbox', '01-projects', '02-architecture', '03-skills', '04-sessions', '05-research', '06-templates', '07-archive'];
+
+  const folders = [
+    '00-inbox',
+    '01-projects',
+    '02-architecture',
+    '03-skills',
+    '04-sessions',
+    '05-research',
+    '06-templates',
+    '07-archive',
+  ];
   let total = 0;
 
   for (const folder of folders) {
@@ -325,9 +351,9 @@ function showStats(): void {
       console.log(`  ${folder}: 0 files`);
       continue;
     }
-    
+
     const files = readdirSync(folderPath, { recursive: true }) as string[];
-    const mdFiles = files.filter(f => f.toString().endsWith('.md')).length;
+    const mdFiles = files.filter((f) => f.toString().endsWith('.md')).length;
     console.log(`  ${folder}: ${mdFiles} files`);
     total += mdFiles;
   }
@@ -387,10 +413,23 @@ async function main(): Promise<void> {
   if (!existsSync(VAULT_DIR)) {
     log('Vault not found. Creating structure...', 'WARN');
     ensureDir(VAULT_DIR);
-    ['00-inbox', '01-projects', '02-architecture', '03-skills', '04-sessions', '05-research', '06-templates', '07-archive'].forEach(ensureDir);
+    [
+      '00-inbox',
+      '01-projects',
+      '02-architecture',
+      '03-skills',
+      '04-sessions',
+      '05-research',
+      '06-templates',
+      '07-archive',
+    ].forEach(ensureDir);
   }
 
-  const results: { export?: { exported: number; errors: string[] }; import?: { imported: number; skipped: number; errors: string[] }; summary?: { path?: string; error?: string } } = {};
+  const results: {
+    export?: { exported: number; errors: string[] };
+    import?: { imported: number; skipped: number; errors: string[] };
+    summary?: { path?: string; error?: string };
+  } = {};
 
   switch (opts.mode) {
     case 'export':
@@ -412,21 +451,23 @@ async function main(): Promise<void> {
   console.log('\n╔════════════════════════════════════════════════════════╗');
   console.log('║                    Summary                             ║');
   console.log('╚════════════════════════════════════════════════════════╝');
-  
+
   if (results.export) {
     console.log(`  Exported: ${results.export.exported} observations`);
     if (results.export.errors.length > 0) {
       console.log(`  Export errors: ${results.export.errors.length}`);
     }
   }
-  
+
   if (results.import) {
-    console.log(`  Imported: ${results.import.imported} notes (${results.import.skipped} unchanged)`);
+    console.log(
+      `  Imported: ${results.import.imported} notes (${results.import.skipped} unchanged)`,
+    );
     if (results.import.errors.length > 0) {
       console.log(`  Import errors: ${results.import.errors.length}`);
     }
   }
-  
+
   if (results.summary) {
     if (results.summary.path) {
       console.log(`  Session summary: ${results.summary.path}`);

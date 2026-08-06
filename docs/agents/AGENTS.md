@@ -57,7 +57,7 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 | Strict TDD enforcement   | `rules/SDD-STRICT-TDD.md`                                                |
 | Per-phase model routing  | `rules/PER-PHASE-MODEL-ROUTING.md`                                       |
 | Dependency automation    | `renovate.json` (Renovate) + `.github/dependabot.yml` (Dependabot)       |
-| Pre-processing hook      | `src/pre-process-input.ts`                                |
+| Pre-processing hook      | `src/pre-process-input.ts`                                               |
 | SDD FLOW                 | New feature -> BA/EXPLORE, no exceptions                                 |
 | Delegation Rules         | `rules/DELEGATION-RULES.md`                                              |
 
@@ -78,8 +78,8 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 | Technique           | Description                                                                                         |
 | ------------------- | --------------------------------------------------------------------------------------------------- |
 | Memory tiering      | Hot (active) -> Warm (1d, 90%) -> Cold (7d, 70%)                                                    |
-| Handoff compression | `src/handoff-compress.ts`                                                            |
-| Pre-compact hook    | `src/pre-compact-hook.ts`                                                            |
+| Handoff compression | `src/handoff-compress.ts`                                                                           |
+| Pre-compact hook    | `src/pre-compact-hook.ts`                                                                           |
 | Response cache      | `pre-process-input.ps1` — SHA256 cache, TTL 30min, -33-41% latency (flag `-DisableCache` to bypass) |
 | Lazy autostart      | `session-autostart.config.json` — 6 non-critical steps deferred post-pipeline                       |
 | In-process pipeline | `session-start-optimized.ps1` — removed `Start-Job`, runs `&` directo in-process                    |
@@ -112,54 +112,54 @@ See `docs/QUICK-COMMANDS.md` for full list.
 
 ## Key References
 
-| Resource                     | Path                                                    |
-| ---------------------------- | ------------------------------------------------------- |
-| Orchestrator config          | `config/orchestrator.json`                              |
-| Auto-delegation              | `config/auto-delegation.json`                           |
-| NORMATIVES (index)           | `rules/NORMATIVES.md`                                   |
-| NORMATIVAS-ARCHITECTURE      | `rules/NORMATIVAS-ARCHITECTURE.md`                      |
-| NORMATIVAS-CONFIG            | `rules/NORMATIVAS-CONFIG.md`                            |
-| NORMATIVAS-DEVOPS            | `rules/NORMATIVAS-DEVOPS.md`                            |
-| NORMATIVAS-DOCS              | `rules/NORMATIVAS-DOCS.md`                              |
-| NORMATIVAS-ENFORCEMENT       | `rules/NORMATIVAS-ENFORCEMENT.md`                       |
-| NORMATIVAS-GIT               | `rules/NORMATIVAS-GIT.md`                               |
-| NORMATIVAS-CODIGO            | `rules/NORMATIVAS-CODIGO.md`                            |
-| NORMATIVAS-PERFORMANCE       | `rules/NORMATIVAS-PERFORMANCE.md`                       |
-| NORMATIVAS-SESSION           | `rules/NORMATIVAS-SESSION.md`                           |
-| NORMATIVAS-SOC2              | `rules/NORMATIVAS-SOC2.md`                              |
-| **NORMATIVAS-AI-SAFETY**     | `rules/NORMATIVAS-AI-SAFETY.md`                         |
-| **NORMATIVAS-COST-OPT**      | `rules/NORMATIVAS-COST-OPTIMIZATION.md`                 |
-| **NORMATIVAS-DISASTER-REC**  | `rules/NORMATIVAS-DISASTER-RECOVERY.md`                 |
-| **NORMATIVAS-INCIDENT-MGMT** | `rules/NORMATIVAS-INCIDENT-MANAGEMENT.md`               |
-| AI normatives                | `rules/AI-NORMATIVES.md`                                |
-| Dev standards                | `rules/DEVELOPMENT-STANDARDS.md`                        |
-| Delegation rules             | `rules/DELEGATION-RULES.md`                             |
-| Model routing                | `config/model-router.json`                              |
-| SDD config                   | `openspec/config.yaml`                                  |
-| Context engineering          | `rules/CONTEXT-ENGINEERING.md`                          |
-| CodeGraph skill              | `skills/codegraph-skill/SKILL.md`                       |
-| Quick commands               | `docs/QUICK-COMMANDS.md`                                |
-| JS/TS Quality CI             | `.github/workflows/js-ts-quality.yml`                   |
-| Python Quality CI            | `.github/workflows/python-quality.yml`                  |
-| Markdown Lint CI             | `.github/workflows/markdown-lint.yml`                   |
-| Commit Lint CI               | `.github/workflows/commitlint.yml`                      |
-| Coverage CI                  | `.github/workflows/coverage.yml`                        |
-| npm Audit CI                 | `.github/workflows/npm-audit.yml`                       |
-| Stale Issues CI              | `.github/workflows/stale.yml`                           |
-| PR Labeler CI                | `.github/workflows/labeler.yml`                         |
-| OpenAPI Validate CI          | `.github/workflows/openapi-validate.yml`                |
-| Devcontainer                 | `.devcontainer/devcontainer.json`                       |
-| JSON Validator               | `scripts/utilities/json-validator.ps1`                  |
-| JSON Construction            | `rules/NORMATIVAS-JSON-CONSTRUCTION.md`                 |
-| **Feedback Collector**       | `src/feedback/feedback-collector.ts`     |
-| **Feedback Analyzer**        | `src/feedback/feedback-analyzer.ts`      |
-| **Digest Generator**         | `src/digest/digest-generator.ts`         |
-| **NORMATIVAS-FEEDBACK**      | `rules/NORMATIVAS-FEEDBACK.md`                          |
-| **Release Automation**       | `src/deployment/release-automation.ts`   |
-| **NORMATIVAS-RELEASE**       | `rules/NORMATIVAS-RELEASE.md`                           |
-| **Fine-Tuning Pipeline**     | `src/fine-tuning/ft-pipeline.ts`         |
-| **FT Trainer**               | `src/fine-tuning/ft-trainer.ts`          |
-| **FT Status**                | `src/fine-tuning/ft-status.ts`           |
-| **FT Threshold Detect**      | `src/fine-tuning/ft-threshold-detect.ts` |
-| **FT Auto-Prune**            | `src/fine-tuning/ft-auto-prune.ts`       |
-| **FT Registry**              | `.ft/registry.json`                                     |
+| Resource                     | Path                                      |
+| ---------------------------- | ----------------------------------------- |
+| Orchestrator config          | `config/orchestrator.json`                |
+| Auto-delegation              | `config/auto-delegation.json`             |
+| NORMATIVES (index)           | `rules/NORMATIVES.md`                     |
+| NORMATIVAS-ARCHITECTURE      | `rules/NORMATIVAS-ARCHITECTURE.md`        |
+| NORMATIVAS-CONFIG            | `rules/NORMATIVAS-CONFIG.md`              |
+| NORMATIVAS-DEVOPS            | `rules/NORMATIVAS-DEVOPS.md`              |
+| NORMATIVAS-DOCS              | `rules/NORMATIVAS-DOCS.md`                |
+| NORMATIVAS-ENFORCEMENT       | `rules/NORMATIVAS-ENFORCEMENT.md`         |
+| NORMATIVAS-GIT               | `rules/NORMATIVAS-GIT.md`                 |
+| NORMATIVAS-CODIGO            | `rules/NORMATIVAS-CODIGO.md`              |
+| NORMATIVAS-PERFORMANCE       | `rules/NORMATIVAS-PERFORMANCE.md`         |
+| NORMATIVAS-SESSION           | `rules/NORMATIVAS-SESSION.md`             |
+| NORMATIVAS-SOC2              | `rules/NORMATIVAS-SOC2.md`                |
+| **NORMATIVAS-AI-SAFETY**     | `rules/NORMATIVAS-AI-SAFETY.md`           |
+| **NORMATIVAS-COST-OPT**      | `rules/NORMATIVAS-COST-OPTIMIZATION.md`   |
+| **NORMATIVAS-DISASTER-REC**  | `rules/NORMATIVAS-DISASTER-RECOVERY.md`   |
+| **NORMATIVAS-INCIDENT-MGMT** | `rules/NORMATIVAS-INCIDENT-MANAGEMENT.md` |
+| AI normatives                | `rules/AI-NORMATIVES.md`                  |
+| Dev standards                | `rules/DEVELOPMENT-STANDARDS.md`          |
+| Delegation rules             | `rules/DELEGATION-RULES.md`               |
+| Model routing                | `config/model-router.json`                |
+| SDD config                   | `openspec/config.yaml`                    |
+| Context engineering          | `rules/CONTEXT-ENGINEERING.md`            |
+| CodeGraph skill              | `skills/codegraph-skill/SKILL.md`         |
+| Quick commands               | `docs/QUICK-COMMANDS.md`                  |
+| JS/TS Quality CI             | `.github/workflows/js-ts-quality.yml`     |
+| Python Quality CI            | `.github/workflows/python-quality.yml`    |
+| Markdown Lint CI             | `.github/workflows/markdown-lint.yml`     |
+| Commit Lint CI               | `.github/workflows/commitlint.yml`        |
+| Coverage CI                  | `.github/workflows/coverage.yml`          |
+| npm Audit CI                 | `.github/workflows/npm-audit.yml`         |
+| Stale Issues CI              | `.github/workflows/stale.yml`             |
+| PR Labeler CI                | `.github/workflows/labeler.yml`           |
+| OpenAPI Validate CI          | `.github/workflows/openapi-validate.yml`  |
+| Devcontainer                 | `.devcontainer/devcontainer.json`         |
+| JSON Validator               | `scripts/utilities/json-validator.ps1`    |
+| JSON Construction            | `rules/NORMATIVAS-JSON-CONSTRUCTION.md`   |
+| **Feedback Collector**       | `src/feedback/feedback-collector.ts`      |
+| **Feedback Analyzer**        | `src/feedback/feedback-analyzer.ts`       |
+| **Digest Generator**         | `src/digest/digest-generator.ts`          |
+| **NORMATIVAS-FEEDBACK**      | `rules/NORMATIVAS-FEEDBACK.md`            |
+| **Release Automation**       | `src/deployment/release-automation.ts`    |
+| **NORMATIVAS-RELEASE**       | `rules/NORMATIVAS-RELEASE.md`             |
+| **Fine-Tuning Pipeline**     | `src/fine-tuning/ft-pipeline.ts`          |
+| **FT Trainer**               | `src/fine-tuning/ft-trainer.ts`           |
+| **FT Status**                | `src/fine-tuning/ft-status.ts`            |
+| **FT Threshold Detect**      | `src/fine-tuning/ft-threshold-detect.ts`  |
+| **FT Auto-Prune**            | `src/fine-tuning/ft-auto-prune.ts`        |
+| **FT Registry**              | `.ft/registry.json`                       |

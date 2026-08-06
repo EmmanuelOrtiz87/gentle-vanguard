@@ -4,11 +4,10 @@
 
 ## Description
 
-
 ## Triggers
 
-
 ## Instructions
+
 # Documentation Governance
 
 ## Activation Contract

@@ -18,7 +18,8 @@ This is the recommended default. Teams using gitflow or long-lived branches can 
 discipline matters more than the specific branching strategy.
 
 - **Dev branches are costs.** Every day a branch lives, it accumulates merge risk.
-- **Release branches are acceptable.** When you need to stabilize a release while main moves forward.
+- **Release branches are acceptable.** When you need to stabilize a release while main moves
+  forward.
 - **Feature flags > long branches.** Prefer deploying incomplete work behind flags rather than
   keeping it on a branch for weeks.
 

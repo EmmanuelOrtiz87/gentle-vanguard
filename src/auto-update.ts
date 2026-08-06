@@ -80,10 +80,14 @@ function findExePath(projectRoot: string): string {
 
   log(`Executable not found at ${exePath}. Searching project root...`, 'Yellow');
 
-  const { stdout } = runSync('powershell', [
-    '-Command',
-    `Get-ChildItem -Path '${projectRoot}' -Recurse -Filter '${exeName}' -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName`,
-  ], { stdio: 'pipe' });
+  const { stdout } = runSync(
+    'powershell',
+    [
+      '-Command',
+      `Get-ChildItem -Path '${projectRoot}' -Recurse -Filter '${exeName}' -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName`,
+    ],
+    { stdio: 'pipe' },
+  );
 
   const found = stdout?.trim();
   if (found) return found;
@@ -126,7 +130,7 @@ async function main(): Promise<void> {
 
     if (!force) {
       const confirmed = await askConfirmation(
-        `Update v${latestVersion} available. Download and install? [Y/N] `
+        `Update v${latestVersion} available. Download and install? [Y/N] `,
       );
       if (!confirmed) {
         log('Update cancelled by user.', 'Yellow');
@@ -143,10 +147,7 @@ async function main(): Promise<void> {
     }
 
     const backupPath = exePath.replace(extname(exePath), '.backup.exe');
-    const downloadPath = join(
-      tmpdir(),
-      `gentle-vanguard-${latestVersion}.exe`
-    );
+    const downloadPath = join(tmpdir(), `gentle-vanguard-${latestVersion}.exe`);
 
     log('Downloading v' + latestVersion + '...', 'Cyan');
     if (dryRun) {
@@ -208,8 +209,16 @@ async function main(): Promise<void> {
       }
     }
 
-    try { unlinkSync(downloadPath); } catch { /* ignore */ }
-    try { unlinkSync(backupPath); } catch { /* ignore */ }
+    try {
+      unlinkSync(downloadPath);
+    } catch {
+      /* ignore */
+    }
+    try {
+      unlinkSync(backupPath);
+    } catch {
+      /* ignore */
+    }
 
     log(`Update complete. You are now running v${latestVersion}.`, 'Green');
     process.exit(0);
@@ -228,7 +237,10 @@ function restoreBackup(exePath: string, backupPath: string): void {
   }
 }
 
-if (process.argv[1] && (process.argv[1] === fileURLToPath(import.meta.url) || process.argv[1].endsWith('auto-update.ts'))) {
+if (
+  process.argv[1] &&
+  (process.argv[1] === fileURLToPath(import.meta.url) || process.argv[1].endsWith('auto-update.ts'))
+) {
   main().catch((e: unknown) => {
     const msg = e instanceof Error ? e.message : String(e);
     log(`Auto-update failed: ${msg}`, 'Red');

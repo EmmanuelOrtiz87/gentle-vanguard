@@ -4,9 +4,11 @@
 
 **What:** Numbers—budgets, rates, thresholds, timeouts
 
-**Examples:** Adjusting cache TTL, changing retry counts, modifying timeout values, tweaking rate limits
+**Examples:** Adjusting cache TTL, changing retry counts, modifying timeout values, tweaking rate
+limits
 
-**Why low leverage:** Parameters rarely change behavior fundamentally. The system absorbs parameter changes and continues its pattern.
+**Why low leverage:** Parameters rarely change behavior fundamentally. The system absorbs parameter
+changes and continues its pattern.
 
 ```
 Intervention: Increase server timeout from 30s to 60s
@@ -20,7 +22,8 @@ Leverage: Very low—masks symptom, doesn't fix system
 
 **Examples:** Queue depth limits, connection pool sizes, memory allocations, batch sizes
 
-**Why low leverage:** Buffers absorb fluctuations but don't change system dynamics. Bigger buffer = slower response to change.
+**Why low leverage:** Buffers absorb fluctuations but don't change system dynamics. Bigger buffer =
+slower response to change.
 
 ```
 Intervention: Increase message queue size
@@ -48,7 +51,8 @@ Leverage: Medium—structural change, but within existing paradigm
 
 **Examples:** Deployment pipeline duration, feedback cycle time, onboarding time, release frequency
 
-**Why medium leverage:** Shortening delays makes systems more responsive and stable. Many oscillation problems are actually delay problems.
+**Why medium leverage:** Shortening delays makes systems more responsive and stable. Many
+oscillation problems are actually delay problems.
 
 ```
 Intervention: Reduce deployment time from 2 hours to 10 minutes
@@ -62,7 +66,8 @@ Leverage: Medium-high—changes system responsiveness fundamentally
 
 **Examples:** Auto-scaling rules, circuit breakers, quality gates, alerting thresholds
 
-**Why medium-high leverage:** Strengthening balancing loops increases stability; weakening them enables change.
+**Why medium-high leverage:** Strengthening balancing loops increases stability; weakening them
+enables change.
 
 ```
 Intervention: Implement circuit breaker with automatic recovery
@@ -74,9 +79,11 @@ Leverage: Medium-high—changes failure dynamics
 
 **What:** Positive feedback that amplifies change
 
-**Examples:** Growth loops (viral, network effects), technical debt spirals, talent attraction/attrition cycles, performance improvement loops
+**Examples:** Growth loops (viral, network effects), technical debt spirals, talent
+attraction/attrition cycles, performance improvement loops
 
-**Why high leverage:** Reinforcing loops drive exponential growth or collapse. Controlling gain = controlling trajectory.
+**Why high leverage:** Reinforcing loops drive exponential growth or collapse. Controlling gain =
+controlling trajectory.
 
 ```
 Intervention: Create "fix broken windows" culture that reinforces quality
@@ -88,9 +95,11 @@ Leverage: High—self-sustaining improvement
 
 **What:** Who has access to what information
 
-**Examples:** Metrics dashboards, error visibility, cost attribution, performance feedback to developers
+**Examples:** Metrics dashboards, error visibility, cost attribution, performance feedback to
+developers
 
-**Why high leverage:** Adding information where it was missing changes behavior dramatically. People respond to what they can see.
+**Why high leverage:** Adding information where it was missing changes behavior dramatically. People
+respond to what they can see.
 
 ```
 Intervention: Show cloud costs per team in real-time dashboard
@@ -102,7 +111,8 @@ Leverage: High—behavior change through visibility
 
 **What:** Incentives, constraints, permissions
 
-**Examples:** Code review requirements, definition of done, SLA agreements, approval processes, deployment policies
+**Examples:** Code review requirements, definition of done, SLA agreements, approval processes,
+deployment policies
 
 **Why high leverage:** Rules define what's allowed and rewarded. Change rules, change behavior.
 
@@ -116,7 +126,8 @@ Leverage: High—changes what's acceptable
 
 **What:** Ability of the system to change its own structure
 
-**Examples:** Team autonomy to change processes, ability to add/remove services, permission to experiment, organizational learning capacity
+**Examples:** Team autonomy to change processes, ability to add/remove services, permission to
+experiment, organizational learning capacity
 
 **Why very high leverage:** Systems that can evolve survive; rigid systems eventually fail.
 
@@ -132,7 +143,8 @@ Leverage: Very high—enables adaptation
 
 **Examples:** Success metrics, OKRs and KPIs, definition of "winning", what's optimized for
 
-**Why very high leverage:** Everything else serves the goal. Change the goal, change everything downstream.
+**Why very high leverage:** Everything else serves the goal. Change the goal, change everything
+downstream.
 
 ```
 Intervention: Change metric from "features shipped" to "user outcomes achieved"
@@ -144,9 +156,11 @@ Leverage: Very high—redirects all effort
 
 **What:** The shared assumptions from which goals arise
 
-**Examples:** "Move fast and break things" vs "Boring technology", "Monolith is bad" vs "Right tool for context", "Engineering is a cost center" vs "Engineering creates value"
+**Examples:** "Move fast and break things" vs "Boring technology", "Monolith is bad" vs "Right tool
+for context", "Engineering is a cost center" vs "Engineering creates value"
 
-**Why transformational:** Paradigms are upstream of goals, rules, and structure. Shift the paradigm, transform the system.
+**Why transformational:** Paradigms are upstream of goals, rules, and structure. Shift the paradigm,
+transform the system.
 
 ```
 Intervention: Shift from "avoid failure" to "learn from failure"
@@ -158,9 +172,11 @@ Leverage: Transformational—changes what's thinkable
 
 **What:** The ability to change paradigms, recognizing no paradigm is "true"
 
-**Examples:** Recognizing that current best practices are temporary, ability to hold multiple paradigms simultaneously, knowing when to abandon a paradigm
+**Examples:** Recognizing that current best practices are temporary, ability to hold multiple
+paradigms simultaneously, knowing when to abandon a paradigm
 
-**Why highest leverage:** Freedom from paradigm lock-in enables choosing the right paradigm for each context.
+**Why highest leverage:** Freedom from paradigm lock-in enables choosing the right paradigm for each
+context.
 
 ```
 Mastery: Recognize when "microservices always" became dogma

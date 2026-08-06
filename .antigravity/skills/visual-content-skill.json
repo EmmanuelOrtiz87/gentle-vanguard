@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "# Visual Content Skill\n\n## Purpose\n\nCreate visual content to complement text in content-output-skill. For social media, presentations,\nand documentation.\n\n## Content Types\n\n| Type         | Format        | Use                   |\n| ------------ | ------------- | --------------------- |\n| ASCII Art    | Text          | Logos, banners        |\n| Mermaid      | .mmd          | Architecture diagrams |\n| Presentation | MD/PowerPoint | Talks, demos          |\n| Social Cards | 1200x630px    | Twitter, LinkedIn     |\n\n---\n\n## ASCII Art\n\n### Gentle-Vanguard Logo (Classic)\n\n```\n\n\n\n\n\n\n\n\n        Gentle-Vanguard\n\n```\n\n### Gentle-Vanguard Logo (Modern)\n\n```\n\n\n\n\n\n\n\n\n          F O U N D A T I O N\n\n\n```\n\n### Gentle-Vanguard Logo (Minimal)\n\n```\n\n\n\n\n\n\n\n       Gentle-Vanguard\n\n```\n\n### Pillars (7D)\n\n```\n\n   SECURITY       QUALITY\n   ARCH           TESTING\n   API            DOCS\n   GITFLOW\n\n```\n\n### Features Icons\n\n```\n   AI Orchestration      Memory\n   Auto-Delegation       Judgment\n   Reporting           SDD\n   7D Validation      On-Demand\n```\n\n### Mini Banner\n\n```\n Gentle-Vanguard v2.0 - AI Development Stack\n=====================================\n```\n\n        Gentle-Vanguard\n\n```\n\n### Mini Banner\n```\n\n---\n\n> **Referencia detallada**: [ eferences/detail.md](references/detail.md)",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

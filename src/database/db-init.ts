@@ -44,9 +44,7 @@ async function main(): Promise<number> {
   }
 
   // Dynamic import to avoid better-sqlite3 loading if just checking
-  const { DatabaseManager } = await import(
-    '../../apps/web-dashboard/server/database/manager'
-  );
+  const { DatabaseManager } = await import('../../apps/web-dashboard/server/database/manager');
 
   const db = DatabaseManager.getInstance();
 
@@ -59,9 +57,7 @@ async function main(): Promise<number> {
     .all() as { name: string }[];
 
   const totalRows = tables.reduce((sum, t) => {
-    const row = raw
-      .prepare(`SELECT COUNT(*) as cnt FROM [${t.name}]`)
-      .get() as { cnt: number };
+    const row = raw.prepare(`SELECT COUNT(*) as cnt FROM [${t.name}]`).get() as { cnt: number };
     return sum + row.cnt;
   }, 0);
 
@@ -82,7 +78,7 @@ async function main(): Promise<number> {
   if (existsSync(WAL_PATH)) {
     const walSize = statSync(WAL_PATH).size;
     if (walSize > 1_000_000) {
-      raw.prepare("PRAGMA wal_checkpoint(TRUNCATE)").run();
+      raw.prepare('PRAGMA wal_checkpoint(TRUNCATE)').run();
       log(`WAL checkpoint triggered: ${(walSize / 1024 / 1024).toFixed(1)}MB`);
     }
   }

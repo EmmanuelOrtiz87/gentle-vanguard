@@ -151,7 +151,8 @@ LOG level:
 
 ### Clean Console Standard
 
-A production-quality page should have **zero** console errors and warnings. If the console isn't clean, fix the warnings before shipping.
+A production-quality page should have **zero** console errors and warnings. If the console isn't
+clean, fix the warnings before shipping.
 
 ## Accessibility Verification with DevTools
 

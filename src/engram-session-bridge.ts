@@ -45,7 +45,7 @@ export function sessionStart(sessionId?: string): SessionStartResult {
     const result = runSync(
       'npx',
       ['engram', 'mem', 'session_start', '--id', sid, '--project', PROJECT],
-      { timeout: 5000, cwd: process.cwd() }
+      { timeout: 5000, cwd: process.cwd() },
     );
 
     if (result.status === 0 || result.status === null) {
@@ -54,10 +54,14 @@ export function sessionStart(sessionId?: string): SessionStartResult {
     }
 
     // Fallback: intentar con MCP tool directamente
-    const mcpResult = runSync('node', [
-      '-e',
-      `const c=require('child_process');c.spawnSync('npx',['engram','mem','session_start','--id','${sid}'],{stdio:'inherit'})`
-    ], { timeout: 5000 });
+    const mcpResult = runSync(
+      'node',
+      [
+        '-e',
+        `const c=require('child_process');c.spawnSync('npx',['engram','mem','session_start','--id','${sid}'],{stdio:'inherit'})`,
+      ],
+      { timeout: 5000 },
+    );
 
     if (mcpResult.status === 0) {
       console.log(`[ENGRAM] Session started (MCP): ${sid}`);
@@ -76,33 +80,45 @@ export function sessionStart(sessionId?: string): SessionStartResult {
 /**
  * Genera resumen de sesión vía MCP (mem_session_summary)
  */
-export function sessionSummary(content: {
-  goal?: string;
-  discoveries?: string[];
-  accomplished?: string[];
-  nextSteps?: string[];
-}, sessionId: string): boolean {
+export function sessionSummary(
+  content: {
+    goal?: string;
+    discoveries?: string[];
+    accomplished?: string[];
+    nextSteps?: string[];
+  },
+  sessionId: string,
+): boolean {
   try {
     const summary = [
       `## Goal`,
       content.goal || 'Session completed',
       ``,
       `## Discoveries`,
-      ...(content.discoveries?.map(d => `- ${d}`) || ['- Session completed']),
+      ...(content.discoveries?.map((d) => `- ${d}`) || ['- Session completed']),
       ``,
       `## Accomplished`,
-      ...(content.accomplished?.map(a => `- ✅ ${a}`) || ['- ✅ Session completed']),
+      ...(content.accomplished?.map((a) => `- ✅ ${a}`) || ['- ✅ Session completed']),
       ``,
       `## Next Steps`,
-      ...(content.nextSteps?.map(s => `- ${s}`) || ['- Review session artifacts']),
+      ...(content.nextSteps?.map((s) => `- ${s}`) || ['- Review session artifacts']),
     ].join('\n');
 
-    const result = runSync('npx', [
-      'engram', 'mem', 'session_summary',
-      '--id', sessionId,
-      '--content', summary,
-      '--project', PROJECT
-    ], { timeout: 10000 });
+    const result = runSync(
+      'npx',
+      [
+        'engram',
+        'mem',
+        'session_summary',
+        '--id',
+        sessionId,
+        '--content',
+        summary,
+        '--project',
+        PROJECT,
+      ],
+      { timeout: 10000 },
+    );
 
     return result.status === 0;
   } catch (error) {
@@ -121,7 +137,7 @@ export async function sessionEnd(
     discoveries?: string[];
     accomplished?: string[];
     nextSteps?: string[];
-  }
+  },
 ): Promise<SessionEndResult> {
   let mcpSuccess = false;
   let httpSuccess = false;
@@ -134,11 +150,11 @@ export async function sessionEnd(
 
   // 2. Intentar cierre vía MCP explícito
   try {
-    const result = runSync('npx', [
-      'engram', 'mem', 'session_end',
-      '--id', sessionId,
-      '--project', PROJECT
-    ], { timeout: 5000 });
+    const result = runSync(
+      'npx',
+      ['engram', 'mem', 'session_end', '--id', sessionId, '--project', PROJECT],
+      { timeout: 5000 },
+    );
 
     if (result.status === 0) {
       mcpSuccess = true;
@@ -172,7 +188,7 @@ export async function sessionEnd(
     sessionId,
     mcpSuccess,
     httpSuccess,
-    error: error || undefined
+    error: error || undefined,
   };
 }
 
@@ -181,15 +197,20 @@ export async function sessionEnd(
  */
 function postSessionEndHttp(
   sessionId: string,
-  summary?: { goal?: string; discoveries?: string[]; accomplished?: string[]; nextSteps?: string[] }
+  summary?: {
+    goal?: string;
+    discoveries?: string[];
+    accomplished?: string[];
+    nextSteps?: string[];
+  },
 ): Promise<boolean> {
   return new Promise((resolve) => {
     const summaryContent = summary
       ? [
           `## Goal\n${summary.goal || 'Session completed'}`,
-          `## Discoveries\n${summary.discoveries?.map(d => `- ${d}`).join('\n') || '- Session completed'}`,
-          `## Accomplished\n${summary.accomplished?.map(a => `- ✅ ${a}`).join('\n') || '- ✅ Session completed'}`,
-          `## Next Steps\n${summary.nextSteps?.map(s => `- ${s}`).join('\n') || '- Review session artifacts'}`,
+          `## Discoveries\n${summary.discoveries?.map((d) => `- ${d}`).join('\n') || '- Session completed'}`,
+          `## Accomplished\n${summary.accomplished?.map((a) => `- ✅ ${a}`).join('\n') || '- ✅ Session completed'}`,
+          `## Next Steps\n${summary.nextSteps?.map((s) => `- ${s}`).join('\n') || '- Review session artifacts'}`,
         ].join('\n\n')
       : 'Session completed';
 
@@ -203,14 +224,14 @@ function postSessionEndHttp(
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(payload)
+          'Content-Length': Buffer.byteLength(payload),
         },
         timeout: 5000,
       },
       (res) => {
         res.resume();
         resolve(res.statusCode === 200 || res.statusCode === 201);
-      }
+      },
     );
 
     req.on('error', () => resolve(false));
@@ -227,17 +248,23 @@ function postSessionEndHttp(
 // Auto-ejecutar si es main module
 if (import.meta.url === `file://${process.argv[1]}`) {
   const command = process.argv[2];
-  const sessionId = process.argv[3] || `session-${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}`;
+  const sessionId =
+    process.argv[3] || `session-${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}`;
 
   if (command === 'start') {
     const result = sessionStart(sessionId);
     console.log(JSON.stringify(result, null, 2));
     process.exit(result.success ? 0 : 1);
   } else if (command === 'end') {
-    sessionEnd(sessionId).then(result => {
-      console.log(JSON.stringify(result, null, 2));
-      process.exit(result.success ? 0 : 1);
-    });
+    sessionEnd(sessionId)
+      .then((result) => {
+        console.log(JSON.stringify(result, null, 2));
+        process.exit(result.success ? 0 : 1);
+      })
+      .catch((err) => {
+        console.error(err);
+        process.exit(1);
+      });
   } else {
     console.log('Usage: npx tsx src/engram-session-bridge.ts {start|end} [session-id]');
     process.exit(1);

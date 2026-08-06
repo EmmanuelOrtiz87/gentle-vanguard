@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # ADAPTIVE MODE ORCHESTRATOR SKILL
 
 ## Descripcin General

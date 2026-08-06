@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Humanizador
 
 Revisa textos generados por IA y los reescribe para que suenen naturales, humanos y creíbles, sin

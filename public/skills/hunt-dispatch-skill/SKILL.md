@@ -182,9 +182,7 @@ never echo back, log, or persist:
   fingerprint scan against `recon/<target>/live-hosts.txt` maps banner / domain signals to one or
   more of these platform skills.
 - **`hunt-rce`** / **`hunt-sqli`** / **`hunt-ssrf`** / **`hunt-ato`** / **all other hunt-\*
-  skills`** — When the mode-specific skill set is being printed. Workflow primitive: this skill is
-  the loader; it names the hunt-\* skills but does not run probes — actual hunting happens after
-  step 4 returns control to `/hunt`.
+  skills`** — When the mode-specific skill set is being printed. Workflow primitive: this skill is the loader; it names the hunt-\* skills but does not run probes — actual hunting happens after step 4 returns control to `/hunt`.
 - **`report-writing`** vs **`redteam-report-template`** — When the taxonomy print specifies the
   report format. Workflow primitive: `mode=wapt` ends with `report-writing` as the deliverable
   format; `mode=redteam` ends with `redteam-report-template` instead.

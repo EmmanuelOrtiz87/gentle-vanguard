@@ -13,8 +13,10 @@ export class ErrorMemoryRepo {
     sessionId?: string;
   }): number {
     const result = this.db
-      .prepare(`INSERT INTO error_memory (bug, root_cause, fix, file, pattern, severity, session_id, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))`)
+      .prepare(
+        `INSERT INTO error_memory (bug, root_cause, fix, file, pattern, severity, session_id, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))`,
+      )
       .run(
         data.bug,
         data.rootCause,
@@ -24,7 +26,9 @@ export class ErrorMemoryRepo {
         data.severity ?? 'medium',
         data.sessionId ?? null,
       );
-    console.log(`[DB] Error memory saved: "${data.bug.substring(0, 60)}..." (id=${result.lastInsertRowid})`);
+    console.log(
+      `[DB] Error memory saved: "${data.bug.substring(0, 60)}..." (id=${result.lastInsertRowid})`,
+    );
     return Number(result.lastInsertRowid);
   }
 
@@ -43,9 +47,11 @@ export class ErrorMemoryRepo {
   searchErrors(keyword: string, limit = 5): Array<Record<string, unknown>> {
     const like = `%${keyword}%`;
     return this.db
-      .prepare(`SELECT * FROM error_memory
+      .prepare(
+        `SELECT * FROM error_memory
                 WHERE bug LIKE ? OR root_cause LIKE ? OR fix LIKE ? OR file LIKE ?
-                ORDER BY created_at DESC LIMIT ?`)
+                ORDER BY created_at DESC LIMIT ?`,
+      )
       .all(like, like, like, like, limit) as any[];
   }
 
@@ -56,9 +62,7 @@ export class ErrorMemoryRepo {
   }
 
   getErrorById(id: number): Record<string, unknown> | null {
-    return this.db
-      .prepare('SELECT * FROM error_memory WHERE id = ?')
-      .get(id) as any ?? null;
+    return (this.db.prepare('SELECT * FROM error_memory WHERE id = ?').get(id) as any) ?? null;
   }
 
   pruneErrorMemory(days = 365): number {

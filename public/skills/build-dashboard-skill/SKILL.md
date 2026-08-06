@@ -904,9 +904,7 @@ Instead of embedding raw data and aggregating in the browser:
 
 ```javascript
 // DON'T: embed 50,000 raw rows
-const RAW_DATA = [
-  /* 50,000 rows */
-];
+const RAW_DATA = [/* 50,000 rows */];
 
 // DO: pre-aggregate before embedding
 const CHART_DATA = {

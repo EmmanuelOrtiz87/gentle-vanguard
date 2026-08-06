@@ -5,13 +5,6 @@
 
 import { existsSync } from 'fs';
 
-const patterns = [
-  { from: /pwsh hooks\/([\w-]+)\.ps1/g, to: 'npx tsx src/hooks/$1.ts' },
-  { from: /pwsh scripts\/hooks\/([\w-]+)\.ps1/g, to: 'npx tsx src/hooks/$1.ts' },
-  { from: /hooks\/([\w-]+)\.ps1/g, to: 'src/hooks/$1.ts' },
-  { from: /scripts\/([\w/-]+)\/([\w-]+)\.ps1/g, to: 'src/$2.ts' },
-];
-
 // Solo verificación por ahora
 console.log('Análisis de referencias PS1 para migración:');
 console.log('==========================================\n');

@@ -9,10 +9,10 @@ los umbrales configurados. Existen dos scripts; solo uno es operacional.
 
 ## Scripts: Operacional vs Legacy
 
-| Script                                                       | Estado             | Fuente de config                                                     |
-| ------------------------------------------------------------ | ------------------ | -------------------------------------------------------------------- |
+| Script                                | Estado             | Fuente de config                                                     |
+| ------------------------------------- | ------------------ | -------------------------------------------------------------------- |
 | `src/telemetry/token-budget-guard.ts` | ✅ **OPERACIONAL** | `config/orchestrator.json#subagent_orchestration.token_budget_guard` |
-| `scripts/utilities/token-guard.ps1`                          | ⛔ **DEPRECATED**  | `token-guard-config.json` (no existe en disco)                       |
+| `scripts/utilities/token-guard.ps1`   | ⛔ **DEPRECATED**  | `token-guard-config.json` (no existe en disco)                       |
 
 **Usar solo el script operacional.** El legacy tiene thresholds distintos y referencia un archivo de
 config inexistente.
@@ -304,12 +304,12 @@ El `scripts/utilities/session-autostart.config.json` incluye la seccin de Token 
 ## Ventajas
 
 **Automtico**: Se ejecuta sin intervencin manual  
- **Preventivo**: Alerta antes de exceder presupuesto  
- **Protector**: Pausa dispatch en caso crtico  
- **Fragmentado**: Divide trabajo en rounds manejables  
- **Observable**: Logging detallado y reportes  
- **Configurable**: Todos los parmetros ajustables  
- **Integrado**: Parte del flujo de sesin
+**Preventivo**: Alerta antes de exceder presupuesto  
+**Protector**: Pausa dispatch en caso crtico  
+**Fragmentado**: Divide trabajo en rounds manejables  
+**Observable**: Logging detallado y reportes  
+**Configurable**: Todos los parmetros ajustables  
+**Integrado**: Parte del flujo de sesin
 
 ## Prximas Mejoras
 

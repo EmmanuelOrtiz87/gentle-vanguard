@@ -36,14 +36,18 @@ interface EnforcementResult {
 function loadNorms(): Norm[] {
   try {
     if (existsSync(NORMS_DB)) return JSON.parse(readFileSync(NORMS_DB, 'utf-8'));
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return [];
 }
 
 function loadSessionMetrics(): Record<string, unknown> {
   try {
     if (existsSync(SESSION_METRICS)) return JSON.parse(readFileSync(SESSION_METRICS, 'utf-8'));
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return {};
 }
 
@@ -53,14 +57,14 @@ function checkNorm(norm: Norm): EnforcementResult {
   }
 
   const metrics = loadSessionMetrics();
-  
+
   // Check based on category
   switch (norm.category) {
     case 'avoidance':
       // Check if the avoided pattern appears
       if (norm.check && metrics.errors && Array.isArray(metrics.errors)) {
         const errors = metrics.errors as string[];
-        const hasPattern = errors.some(e => norm.check && new RegExp(norm.check, 'i').test(e));
+        const hasPattern = errors.some((e) => norm.check && new RegExp(norm.check, 'i').test(e));
         return {
           normId: norm.id,
           description: norm.description,
@@ -69,7 +73,7 @@ function checkNorm(norm: Norm): EnforcementResult {
         };
       }
       break;
-      
+
     case 'optimization':
       // Check if optimization target is met
       if (norm.check && metrics.qualityScore !== undefined) {
@@ -83,52 +87,82 @@ function checkNorm(norm: Norm): EnforcementResult {
         };
       }
       break;
-      
+
     case 'pattern':
       // Check if expected pattern exists in codebase
       if (norm.check) {
         try {
-          const r = runSyncShell(`grep -r "${norm.check}" --include="*.ts" --include="*.md" src/ rules/ | head -3`, {
-            cwd: ROOT, timeout: 5000,
-          });
+          const r = runSyncShell(
+            `grep -r "${norm.check}" --include="*.ts" --include="*.md" src/ rules/ | head -3`,
+            {
+              cwd: ROOT,
+              timeout: 5000,
+            },
+          );
           if (r.status === 0) {
-            return { normId: norm.id, description: norm.description, status: 'pass', detail: 'Pattern found' };
+            return {
+              normId: norm.id,
+              description: norm.description,
+              status: 'pass',
+              detail: 'Pattern found',
+            };
           }
-          return { normId: norm.id, description: norm.description, status: 'fail', detail: 'Pattern not found' };
+          return {
+            normId: norm.id,
+            description: norm.description,
+            status: 'fail',
+            detail: 'Pattern not found',
+          };
         } catch {
-          return { normId: norm.id, description: norm.description, status: 'fail', detail: 'Pattern not found' };
+          return {
+            normId: norm.id,
+            description: norm.description,
+            status: 'fail',
+            detail: 'Pattern not found',
+          };
         }
       }
       break;
   }
 
-  return { normId: norm.id, description: norm.description, status: 'skip', detail: 'No check defined' };
+  return {
+    normId: norm.id,
+    description: norm.description,
+    status: 'skip',
+    detail: 'No check defined',
+  };
 }
 
 function enforce(): void {
   const norms = loadNorms();
   const results: EnforcementResult[] = norms.map(checkNorm);
-  
-  const passed = results.filter(r => r.status === 'pass').length;
-  const failed = results.filter(r => r.status === 'fail').length;
-  const skipped = results.filter(r => r.status === 'skip').length;
 
-  console.log(JSON.stringify({
-    total: results.length,
-    passed,
-    failed,
-    skipped,
-    complianceRate: results.length > 0 ? Math.round((passed / (passed + failed)) * 100) : 100,
-    details: results,
-  }));
+  const passed = results.filter((r) => r.status === 'pass').length;
+  const failed = results.filter((r) => r.status === 'fail').length;
+  const skipped = results.filter((r) => r.status === 'skip').length;
+
+  console.log(
+    JSON.stringify({
+      total: results.length,
+      passed,
+      failed,
+      skipped,
+      complianceRate: results.length > 0 ? Math.round((passed / (passed + failed)) * 100) : 100,
+      details: results,
+    }),
+  );
 }
 
 function main(): void {
   const args = process.argv.slice(2);
-  const action = args.includes('--check') ? 'check' 
-    : args.includes('--apply') ? 'apply' 
-    : args.includes('--report') ? 'report' : 'check';
-  
+  const action = args.includes('--check')
+    ? 'check'
+    : args.includes('--apply')
+      ? 'apply'
+      : args.includes('--report')
+        ? 'report'
+        : 'check';
+
   if (action === 'check') {
     enforce();
   } else if (action === 'report') {

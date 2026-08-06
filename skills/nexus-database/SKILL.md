@@ -1,10 +1,9 @@
 ---
 name: nexus-database
 description: >
-  Manage Nexus — the operational SQLite database of Gentle-Vanguard. Init, health check,
-  backup, restore, prune, optimize, and monitor the 12-table schema. Nexus stores all
-  operational data: metrics, sessions, traces, events, alerts, feedback, cache, contracts,
-  scoring, and routing rules.
+  Manage Nexus — the operational SQLite database of Gentle-Vanguard. Init, health check, backup,
+  restore, prune, optimize, and monitor the 12-table schema. Nexus stores all operational data:
+  metrics, sessions, traces, events, alerts, feedback, cache, contracts, scoring, and routing rules.
 metadata:
   source: GV-native
   trigger: nexus, db, database, operational-db, gentle-vanguard.db
@@ -14,8 +13,9 @@ metadata:
 
 ## Overview
 
-**Nexus** is the central operational database of the Gentle-Vanguard stack (`.runtime/gentle-vanguard.db`).
-It replaces the fragmented JSON-file persistence with a single ACID SQLite database in WAL mode.
+**Nexus** is the central operational database of the Gentle-Vanguard stack
+(`.runtime/gentle-vanguard.db`). It replaces the fragmented JSON-file persistence with a single ACID
+SQLite database in WAL mode.
 
 This skill teaches agents how to manage Nexus autonomously: init, health check, backup, restore,
 prune, optimize, and interpret the watchtower monitoring.
@@ -23,11 +23,13 @@ prune, optimize, and interpret the watchtower monitoring.
 ## When to Use
 
 - **Session start**: Nexus auto-initializes via `db-init` lazy step — no action needed
-- **Health check**: When investigating DB issues, performance degradation, or before/after schema changes
+- **Health check**: When investigating DB issues, performance degradation, or before/after schema
+  changes
 - **Backup**: Before any risky operation, or for offsite/cloud backup
 - **Restore**: When corruption is detected or rollback needed
 - **Prune**: When disk space is low or data retention policy needs enforcement
-- **Schema changes**: Contact the DatabaseManager migration system — never raw SQL on production data
+- **Schema changes**: Contact the DatabaseManager migration system — never raw SQL on production
+  data
 
 ## Quick Commands
 
@@ -87,31 +89,31 @@ npm run db:prune:backup
 The `DatabaseManager` singleton (`apps/web-dashboard/server/database/manager.ts`) is the
 authoritative interface for all Nexus operations:
 
-| Method                | Purpose                                      |
-| --------------------- | -------------------------------------------- |
-| `getInstance()`       | Get singleton (auto-creates DB + migrations) |
-| `runMigrations()`     | Apply pending migrations (idempotent)        |
-| `insertMetricSnapshot`| Record time-series metrics                   |
-| `upsertSession`       | Create or update session record              |
-| `insertTrace`         | Record distributed tracing span              |
-| `insertEvent`         | Append event to event store                  |
-| `insertAlert`         | Record alert evaluation                      |
-| `insertFeedback`      | Record user feedback                         |
-| `pruneAll()`          | Delete old data per retention policy         |
-| `housekeeping()`      | Compact metric_snapshots, alerts, vacuum     |
-| `close()`             | Close connection gracefully                  |
-| `getDb()`             | Raw better-sqlite3 instance for advanced use |
+| Method                 | Purpose                                      |
+| ---------------------- | -------------------------------------------- |
+| `getInstance()`        | Get singleton (auto-creates DB + migrations) |
+| `runMigrations()`      | Apply pending migrations (idempotent)        |
+| `insertMetricSnapshot` | Record time-series metrics                   |
+| `upsertSession`        | Create or update session record              |
+| `insertTrace`          | Record distributed tracing span              |
+| `insertEvent`          | Append event to event store                  |
+| `insertAlert`          | Record alert evaluation                      |
+| `insertFeedback`       | Record user feedback                         |
+| `pruneAll()`           | Delete old data per retention policy         |
+| `housekeeping()`       | Compact metric_snapshots, alerts, vacuum     |
+| `close()`              | Close connection gracefully                  |
+| `getDb()`              | Raw better-sqlite3 instance for advanced use |
 
 ## Retention Policy
 
-| Table              | Retention | Why                                  |
-| ------------------ | --------- | ------------------------------------ |
-| `events`           | 30 days   | Event sourcing — debugging window    |
-| `response_cache`   | 7 days    | Fast-changing data                   |
-| `token_usage`      | 90 days   | Cost trending needs history          |
-| `metric_snapshots` | 1000 rows | Sufficient for trend analysis        |
-| `alerts`           | 500 rows  | Latest alerts only                   |
-| Others             | ∞         | Permanent operational data           |
+| Table              | Retention | Why                               |
+| ------------------ | --------- | --------------------------------- |
+| `events`           | 30 days   | Event sourcing — debugging window |
+| `response_cache`   | 7 days    | Fast-changing data                |
+| `token_usage`      | 90 days   | Cost trending needs history       |
+| `metric_snapshots` | 1000 rows | Sufficient for trend analysis     |
+| `alerts`           | 500 rows  | Latest alerts only                |
+| Others             | ∞         | Permanent operational data        |
 
 ## Watchtower Monitoring
 
@@ -126,6 +128,7 @@ The `gentle-vanguard-db` component in maintenance-watchtower checks:
 4. **size** — table count and total rows
 
 If integrity check FAILs:
+
 ```bash
 # 1. Run detailed health check
 npm run db:health -- --json
@@ -144,11 +147,11 @@ npm run db:init
 
 Nexus runs in the session autostart pipeline via 3 lazy steps:
 
-| Step              | Script                     | When                |
-| ----------------- | -------------------------- | ------------------- |
-| `db-init`         | `src/database/db-init.ts`  | Every session start |
+| Step              | Script                                | When                |
+| ----------------- | ------------------------------------- | ------------------- |
+| `db-init`         | `src/database/db-init.ts`             | Every session start |
 | `db-health-check` | `scripts/recovery/db-health-check.ts` | Every session start |
-| `db-prune`        | `scripts/database/db-prune.ts` | Every session start |
+| `db-prune`        | `scripts/database/db-prune.ts`        | Every session start |
 
 These are non-blocking (`lazy: true`, `onStepFailure: continue`).
 

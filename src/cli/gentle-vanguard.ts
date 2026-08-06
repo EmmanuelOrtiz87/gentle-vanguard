@@ -118,7 +118,7 @@ async function main(): Promise<void> {
   console.log('');
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('FATAL:', err.message);
   process.exit(1);
 });

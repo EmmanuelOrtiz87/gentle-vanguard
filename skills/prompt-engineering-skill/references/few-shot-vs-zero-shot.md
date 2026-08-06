@@ -38,11 +38,11 @@ French:
 
 ## When to Choose Which
 
-| Scenario | Recommend | Rationale |
-| -------- | --------- | --------- |
-| Translation | Few-shot | Helps with style and register |
-| Summarization | Zero-shot | Less bias, more faithful |
-| Classification | Few-shot | Handles ambiguous cases |
-| Code generation | Few-shot | Establishes style and patterns |
-| Creative writing | Zero-shot | More original output |
-| Structured extraction | Few-shot | Precise format control |
+| Scenario              | Recommend | Rationale                      |
+| --------------------- | --------- | ------------------------------ |
+| Translation           | Few-shot  | Helps with style and register  |
+| Summarization         | Zero-shot | Less bias, more faithful       |
+| Classification        | Few-shot  | Handles ambiguous cases        |
+| Code generation       | Few-shot  | Establishes style and patterns |
+| Creative writing      | Zero-shot | More original output           |
+| Structured extraction | Few-shot  | Precise format control         |

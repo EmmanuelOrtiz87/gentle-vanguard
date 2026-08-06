@@ -23,5 +23,5 @@
 └──────────────────────────────────────────────────────────────┘
 ```
 
-Use `(+)` for same-direction relationships and `(-)` for opposite-direction relationships.
-Label each loop as **Reinforcing** (self-amplifying) or **Balancing** (self-correcting).
+Use `(+)` for same-direction relationships and `(-)` for opposite-direction relationships. Label
+each loop as **Reinforcing** (self-amplifying) or **Balancing** (self-correcting).

@@ -24,29 +24,44 @@ Load this skill whenever you need to:
 
 ## Critical Rules
 
-1. **Blank issues are DISABLED** — `blank_issues_enabled: false` in `.github/ISSUE_TEMPLATE/config.yml`. You MUST use a template.
-2. **`status:needs-review` is applied automatically** — every new issue gets this label; you do NOT add it manually.
-3. **`status:approved` is REQUIRED before ANY work begins** — a maintainer must label the issue before you or anyone opens a PR.
-4. **Questions go to Discussions** — use GitHub Discussions, NOT issues, for questions and general conversation.
+1. **Blank issues are DISABLED** — `blank_issues_enabled: false` in
+   `.github/ISSUE_TEMPLATE/config.yml`. You MUST use a template.
+2. **`status:needs-review` is applied automatically** — every new issue gets this label; you do NOT
+   add it manually.
+3. **`status:approved` is REQUIRED before ANY work begins** — a maintainer must label the issue
+   before you or anyone opens a PR.
+4. **Questions go to Discussions** — use GitHub Discussions, NOT issues, for questions and general
+   conversation.
 5. **No Co-Authored-By trailers** — never add AI attribution to commits.
-6. **Pre-submission privacy review is MANDATORY** — before `gh issue create`, replace private project names, usernames, home paths, hostnames, secrets/credentials, and environment-specific identifiers with explicit placeholders (`<project-name>`, `<user>`, `<hostname>`, `<token>`). Keep reproduction structure with placeholders — never redact an example into nothingness. Do NOT redact intentionally public identifiers like `gentle-vanguard`, `engram`, `opencode`. A final body scan happens immediately before publish.
+6. **Pre-submission privacy review is MANDATORY** — before `gh issue create`, replace private
+   project names, usernames, home paths, hostnames, secrets/credentials, and environment-specific
+   identifiers with explicit placeholders (`<project-name>`, `<user>`, `<hostname>`, `<token>`).
+   Keep reproduction structure with placeholders — never redact an example into nothingness. Do NOT
+   redact intentionally public identifiers like `gentle-vanguard`, `engram`, `opencode`. A final
+   body scan happens immediately before publish.
 
 ## Pre-submission Privacy Review
 
-Every issue body is scanned immediately before `gh issue create`. The scan replaces — never deletes — environment-specific data with explicit placeholders so the reproduction still teaches:
+Every issue body is scanned immediately before `gh issue create`. The scan replaces — never deletes
+— environment-specific data with explicit placeholders so the reproduction still teaches:
 
-| Category | Replace with | Example (before → after) |
-|----------|---------------|---------------------------|
-| Private project names | `<project-name>` | `my-private-project-b` → `<project-name>` |
-| Usernames | `<user>` | `C:\Users\my-real-username\go\bin` → `C:\Users\<user>\go\bin` |
-| Hostnames | `<hostname>` | `devbox-macbook.local` → `<hostname>` |
-| Home paths | `/home/<user>` or `C:\Users\<user>` | (covered above) |
-| API keys, tokens, passwords | `<token>` / `<password>` | `ghp_abc123...` → `<token>` |
-| Internal ports / hostnames | `<host>:<port>` | `10.0.0.42:5432` → `<host>:<port>` |
+| Category                    | Replace with                        | Example (before → after)                                      |
+| --------------------------- | ----------------------------------- | ------------------------------------------------------------- |
+| Private project names       | `<project-name>`                    | `my-private-project-b` → `<project-name>`                     |
+| Usernames                   | `<user>`                            | `C:\Users\my-real-username\go\bin` → `C:\Users\<user>\go\bin` |
+| Hostnames                   | `<hostname>`                        | `devbox-macbook.local` → `<hostname>`                         |
+| Home paths                  | `/home/<user>` or `C:\Users\<user>` | (covered above)                                               |
+| API keys, tokens, passwords | `<token>` / `<password>`            | `ghp_abc123...` → `<token>`                                   |
+| Internal ports / hostnames  | `<host>:<port>`                     | `10.0.0.42:5432` → `<host>:<port>`                            |
 
-Intentionally public identifiers are NOT redacted: tool names (`gentle-vanguard`, `engram`, `opencode`, `node`, `python`), package names, public documentation URLs, generic example domains (`example.com`, `localhost`).
+Intentionally public identifiers are NOT redacted: tool names (`gentle-vanguard`, `engram`,
+`opencode`, `node`, `python`), package names, public documentation URLs, generic example domains
+(`example.com`, `localhost`).
 
-**Rule of thumb:** if the reader can run the reproduction step after you replace every identifier with its placeholder, the sanitization is correct. If a step becomes impossible (because the placeholder consumed a needed value), that step needs the value — and you should mark it `<value-required>` and explain in the body what the user should fill in.
+**Rule of thumb:** if the reader can run the reproduction step after you replace every identifier
+with its placeholder, the sanitization is correct. If a step becomes impossible (because the
+placeholder consumed a needed value), that step needs the value — and you should mark it
+`<value-required>` and explain in the body what the user should fill in.
 
 ## Workflow
 
@@ -71,26 +86,27 @@ Intentionally public identifiers are NOT redacted: tool names (`gentle-vanguard`
 
 ## Bug Report
 
-**Template path**: `.github/ISSUE_TEMPLATE/bug_report.yml`
-**Auto-labels**: `bug`, `status:needs-review`
+**Template path**: `.github/ISSUE_TEMPLATE/bug_report.yml` **Auto-labels**: `bug`,
+`status:needs-review`
 
 ### Required Fields
 
-| Field | Description |
-|-------|-------------|
-| Pre-flight Checklist | Confirm no duplicate exists; confirm PR-approval understanding |
-| Bug Description | Clear description of what the bug is |
-| Steps to Reproduce | Numbered steps to reproduce the behavior |
-| Expected Behavior | What should happen |
-| Actual Behavior | What actually happens |
-| Stack Version | Version or commit of Gentle-Vanguard |
-| Operating System | macOS / Linux distro / Windows / WSL |
-| AI Agent / Client | OpenCode / Claude Code / Gemini CLI / Cursor / Windsurf / Other |
-| Affected Area | See area list below |
+| Field                | Description                                                     |
+| -------------------- | --------------------------------------------------------------- |
+| Pre-flight Checklist | Confirm no duplicate exists; confirm PR-approval understanding  |
+| Bug Description      | Clear description of what the bug is                            |
+| Steps to Reproduce   | Numbered steps to reproduce the behavior                        |
+| Expected Behavior    | What should happen                                              |
+| Actual Behavior      | What actually happens                                           |
+| Stack Version        | Version or commit of Gentle-Vanguard                            |
+| Operating System     | macOS / Linux distro / Windows / WSL                            |
+| AI Agent / Client    | OpenCode / Claude Code / Gemini CLI / Cursor / Windsurf / Other |
+| Affected Area        | See area list below                                             |
 
 ### Affected Areas
 
-`CLI (commands, flags)` · `Session Pipeline` · `Dashboard` · `Agent Detection` · `Model Router` · `System Detection` · `Database (Nexus)` · `Documentation` · `Other`
+`CLI (commands, flags)` · `Session Pipeline` · `Dashboard` · `Agent Detection` · `Model Router` ·
+`System Detection` · `Database (Nexus)` · `Documentation` · `Other`
 
 ### Example CLI Command
 
@@ -105,19 +121,19 @@ gh issue create \
 
 ## Feature Request
 
-**Template path**: `.github/ISSUE_TEMPLATE/feature_request.yml`
-**Auto-labels**: `enhancement`, `status:needs-review`
+**Template path**: `.github/ISSUE_TEMPLATE/feature_request.yml` **Auto-labels**: `enhancement`,
+`status:needs-review`
 
 ### Required Fields
 
-| Field | Description |
-|-------|-------------|
-| Pre-flight Checklist | Confirm no duplicate exists; confirm PR-approval understanding |
-| Affected Area | Which area of the stack this feature affects |
-| Problem Statement | Describe the problem this feature solves |
-| Proposed Solution | Specific description — include example command/output if relevant |
-| Alternatives Considered | (optional) Other approaches you thought about |
-| Additional Context | (optional) Screenshots, config files, etc. |
+| Field                   | Description                                                       |
+| ----------------------- | ----------------------------------------------------------------- |
+| Pre-flight Checklist    | Confirm no duplicate exists; confirm PR-approval understanding    |
+| Affected Area           | Which area of the stack this feature affects                      |
+| Problem Statement       | Describe the problem this feature solves                          |
+| Proposed Solution       | Specific description — include example command/output if relevant |
+| Alternatives Considered | (optional) Other approaches you thought about                     |
+| Additional Context      | (optional) Screenshots, config files, etc.                        |
 
 ---
 
@@ -125,35 +141,35 @@ gh issue create \
 
 ### Status Labels (applied to Issues)
 
-| Label | Description | Who Applies |
-|-------|-------------|-------------|
-| `status:needs-review` | Newly opened, awaiting maintainer review | **Auto** (template) |
-| `status:approved` | Approved — work can begin | Maintainer only |
-| `status:in-progress` | Being actively worked on | Contributor |
-| `status:blocked` | Blocked by another issue or external dependency | Maintainer / Contributor |
-| `status:wont-fix` | Out of scope or won't be addressed | Maintainer only |
+| Label                 | Description                                     | Who Applies              |
+| --------------------- | ----------------------------------------------- | ------------------------ |
+| `status:needs-review` | Newly opened, awaiting maintainer review        | **Auto** (template)      |
+| `status:approved`     | Approved — work can begin                       | Maintainer only          |
+| `status:in-progress`  | Being actively worked on                        | Contributor              |
+| `status:blocked`      | Blocked by another issue or external dependency | Maintainer / Contributor |
+| `status:wont-fix`     | Out of scope or won't be addressed              | Maintainer only          |
 
 ### Type Labels (applied to Issues and PRs)
 
-| Label | Description |
-|-------|-------------|
-| `bug` | Defect report |
-| `enhancement` | Feature or improvement request |
-| `type:bug` | Bug fix (used on PRs) |
-| `type:feature` | New feature (used on PRs) |
-| `type:docs` | Documentation only (used on PRs) |
-| `type:refactor` | Refactoring, no functional changes (used on PRs) |
-| `type:chore` | Build, CI, tooling (used on PRs) |
-| `type:breaking-change` | Breaking change (used on PRs) |
+| Label                  | Description                                      |
+| ---------------------- | ------------------------------------------------ |
+| `bug`                  | Defect report                                    |
+| `enhancement`          | Feature or improvement request                   |
+| `type:bug`             | Bug fix (used on PRs)                            |
+| `type:feature`         | New feature (used on PRs)                        |
+| `type:docs`            | Documentation only (used on PRs)                 |
+| `type:refactor`        | Refactoring, no functional changes (used on PRs) |
+| `type:chore`           | Build, CI, tooling (used on PRs)                 |
+| `type:breaking-change` | Breaking change (used on PRs)                    |
 
 ### Priority Labels
 
-| Label | Description |
-|-------|-------------|
+| Label               | Description                               |
+| ------------------- | ----------------------------------------- |
 | `priority:critical` | Blocking issues, security vulnerabilities |
-| `priority:high` | Important, affects many users |
-| `priority:medium` | Normal priority |
-| `priority:low` | Nice to have |
+| `priority:high`     | Important, affects many users             |
+| `priority:medium`   | Normal priority                           |
+| `priority:low`      | Nice to have                              |
 
 ---
 

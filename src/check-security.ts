@@ -13,7 +13,10 @@ const CRITICAL_PATTERNS: SecretPattern[] = [
   { name: 'AWS Access Key', pattern: /AKIA[0-9A-Z]{16}/ },
   { name: 'GitHub Token', pattern: /ghp_[A-Za-z0-9]{36}/ },
   { name: 'Private Key', pattern: /-----BEGIN.*PRIVATE KEY-----/ },
-  { name: 'Generic API Key', pattern: /(api[_-]?key|apikey)["\s]*[=:]["\s]*["'][A-Za-z0-9]{20,}["']/i },
+  {
+    name: 'Generic API Key',
+    pattern: /(api[_-]?key|apikey)["\s]*[=:]["\s]*["'][A-Za-z0-9]{20,}["']/i,
+  },
   { name: 'Database URL', pattern: /(mysql|postgres|mongodb):\/\/[^:]+:[^@]+@/i },
   { name: 'Stripe Key', pattern: /sk_live_[0-9a-zA-Z]{24,}/ },
   { name: 'JWT Token', pattern: /eyJ[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+/ },

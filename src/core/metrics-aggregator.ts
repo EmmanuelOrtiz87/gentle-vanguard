@@ -65,32 +65,32 @@ export interface AggregatedMetrics {
   sessionsTotal: number;
   sessionsActive: number;
   sessionsToday: number;
-  
+
   // Tokens
   totalTokens: number;
   totalInputTokens: number;
   totalOutputTokens: number;
-  
+
   // Costos
   totalCost: number;
   costByModel: Record<string, number>;
   costByAgent: Record<string, number>;
-  
+
   // Feedback
   feedbackUp: number;
   feedbackDown: number;
   feedbackTotal: number;
-  
+
   // Latency
   avgLatency: number;
   p50Latency: number;
   p95Latency: number;
-  
+
   // SLO
   sloCompliance: number;
   sloViolations: number;
   sloTotal: number;
-  
+
   // Datos crudos para gráficas
   sessions: SessionState[];
   history: Array<{
@@ -109,30 +109,30 @@ export function getAggregatedDashboardMetrics(): AggregatedMetrics {
   // 1. Leer SessionContextLog (sesiones actuales)
   const sessions = getAllSessionStates();
   const today = new Date().toISOString().slice(0, 10);
-  const sessionsToday = sessions.filter(s => s.createdAt?.startsWith(today)).length;
-  
+  const sessionsToday = sessions.filter((s) => s.createdAt?.startsWith(today)).length;
+
   // 2. Leer métricas en tiempo real
   const liveMetrics = getAllLiveMetrics();
-  
+
   // 3. Leer cost tracking
   const costData = readJson<CostTrackingData>(COST_TRACKING_PATH);
-  
+
   // 4. Leer token usage
   const tokenData = readJson<TokenUsageData>(TOKEN_USAGE_PATH);
-  
+
   // Calcular tokens totales (priorizar datos más recientes)
   const totalTokens = Math.max(
     liveMetrics.totalTokens,
     costData?.totalTokens || 0,
     tokenData?.totalTokens || 0,
-    sessions.reduce((sum, s) => sum + (s.totalTokens || 0), 0)
+    sessions.reduce((sum, s) => sum + (s.totalTokens || 0), 0),
   );
-  
+
   // Calcular costos (priorizar cost-tracking que es más preciso)
   const totalCost = Math.max(
     liveMetrics.totalCost,
     costData?.totalCostUsd || 0,
-    tokenData?.totalCost || 0
+    tokenData?.totalCost || 0,
   );
 
   // Calcular input/output tokens desde entries de cost tracking (fuente canónica);
@@ -140,53 +140,53 @@ export function getAggregatedDashboardMetrics(): AggregatedMetrics {
   const costEntries = costData?.entries || [];
   const entriesInput = costEntries.reduce((sum, e) => sum + (e.inputTokens || 0), 0);
   const entriesOutput = costEntries.reduce((sum, e) => sum + (e.outputTokens || 0), 0);
-  const totalInputTokens = entriesInput > 0 || entriesOutput > 0
-    ? entriesInput
-    : Math.round(totalTokens * 0.8);
-  const totalOutputTokens = entriesInput > 0 || entriesOutput > 0
-    ? entriesOutput
-    : Math.round(totalTokens * 0.2);
-  
+  const totalInputTokens =
+    entriesInput > 0 || entriesOutput > 0 ? entriesInput : Math.round(totalTokens * 0.8);
+  const totalOutputTokens =
+    entriesInput > 0 || entriesOutput > 0 ? entriesOutput : Math.round(totalTokens * 0.2);
+
   // Calcular feedback
   const feedbackUp = liveMetrics.totalFeedbackUp;
   const feedbackDown = liveMetrics.totalFeedbackDown;
-  
+
   // Calcular latencia
   const avgLatency = liveMetrics.avgLatency;
-  
+
   // SLO compliance simple (placeholder, se puede mejorar)
-  const sloCompliance = avgLatency > 0 ? Math.max(0, 100 - (avgLatency / 100)) : 100;
-  
+  const sloCompliance = avgLatency > 0 ? Math.max(0, 100 - avgLatency / 100) : 100;
+
   // Construir historial para gráficas
   const history = buildHistory(sessions, costData);
-  
+
   return {
     sessionsTotal: sessions.length,
-    sessionsActive: sessions.filter(s => s.status === 'active').length,
+    sessionsActive: sessions.filter((s) => s.status === 'active').length,
     sessionsToday,
-    
+
     totalTokens,
     totalInputTokens,
     totalOutputTokens,
-    
+
     totalCost,
-    costByModel: costData?.byModel ? 
-      Object.fromEntries(Object.entries(costData.byModel).map(([k, v]) => [k, v.cost])) : {},
-    costByAgent: costData?.byAgent ?
-      Object.fromEntries(Object.entries(costData.byAgent).map(([k, v]) => [k, v.cost])) : {},
-    
+    costByModel: costData?.byModel
+      ? Object.fromEntries(Object.entries(costData.byModel).map(([k, v]) => [k, v.cost]))
+      : {},
+    costByAgent: costData?.byAgent
+      ? Object.fromEntries(Object.entries(costData.byAgent).map(([k, v]) => [k, v.cost]))
+      : {},
+
     feedbackUp,
     feedbackDown,
     feedbackTotal: feedbackUp + feedbackDown,
-    
+
     avgLatency,
-    p50Latency: avgLatency * 0.9,  // Aproximación
+    p50Latency: avgLatency * 0.9, // Aproximación
     p95Latency: avgLatency * 1.5, // Aproximación
-    
+
     sloCompliance,
     sloViolations: 0,
     sloTotal: 0,
-    
+
     sessions,
     history,
   };
@@ -200,7 +200,7 @@ function buildHistory(
   costData: CostTrackingData | null,
 ): AggregatedMetrics['history'] {
   const history: AggregatedMetrics['history'] = [];
-  
+
   // Agregar entradas de cost tracking
   if (costData?.entries) {
     for (const entry of costData.entries.slice(-20)) {
@@ -213,7 +213,7 @@ function buildHistory(
       });
     }
   }
-  
+
   return history;
 }
 
@@ -234,7 +234,7 @@ export function recordMetricEvent(event: {
   // Importación dinámica para evitar circular dependency
   const { trackTokenUsage, trackFeedback } = require('./session-metrics-tracker');
   const { SessionContextLog } = require('./session-context-log');
-  
+
   // Actualizar session-metrics-tracker
   if (event.type === 'tool_use' || event.type === 'llm_response') {
     trackTokenUsage(
@@ -242,18 +242,15 @@ export function recordMetricEvent(event: {
       event.inputTokens || 0,
       event.outputTokens || 0,
       event.latencyMs || 0,
-      event.costUsd || 0
+      event.costUsd || 0,
     );
   }
-  
+
   // Registrar feedback
   if (event.type === 'feedback' && event.feedback) {
-    trackFeedback(
-      event.sessionId,
-      event.feedback === 'up' ? 'thumbs_up' : 'thumbs_down'
-    );
+    trackFeedback(event.sessionId, event.feedback === 'up' ? 'thumbs_up' : 'thumbs_down');
   }
-  
+
   // También actualizar SessionContextLog
   try {
     const state = require('./session-context-log').readSessionState(event.sessionId);

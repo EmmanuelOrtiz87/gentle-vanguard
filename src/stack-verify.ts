@@ -42,7 +42,8 @@ interface VerificationReport {
 
 // ─── Platform Detection ───────────────────────────────────────────────
 
-const PLATFORM: string = process.platform === 'win32' ? 'windows' : process.platform === 'darwin' ? 'macos' : 'linux';
+const PLATFORM: string =
+  process.platform === 'win32' ? 'windows' : process.platform === 'darwin' ? 'macos' : 'linux';
 const ROOT = resolve(process.cwd());
 
 // ─── Color ────────────────────────────────────────────────────────────
@@ -58,7 +59,11 @@ const C = {
 
 // ─── Helper ───────────────────────────────────────────────────────────
 
-function run(cmd: string, args: string[], timeoutMs?: number): { stdout: string; stderr: string; status: number | null } {
+function run(
+  cmd: string,
+  args: string[],
+  timeoutMs?: number,
+): { stdout: string; stderr: string; status: number | null } {
   try {
     const r = runSync(cmd, args, { stdio: 'pipe', timeout: timeoutMs ?? 30000 });
     return { stdout: r.stdout.trim(), stderr: r.stderr.trim(), status: r.status };
@@ -69,13 +74,18 @@ function run(cmd: string, args: string[], timeoutMs?: number): { stdout: string;
 
 function pingPort(port: number): boolean {
   try {
-    const r = run('node', ['-e', `
+    const r = run('node', [
+      '-e',
+      `
       const net = require('net');
       const s = net.connect(${port}, '127.0.0.1', () => { s.end(); process.exit(0); });
       s.on('error', () => process.exit(1));
-    `]);
+    `,
+    ]);
     return r.status === 0;
-  } catch { return false; }
+  } catch {
+    return false;
+  }
 }
 
 // ─── Layer 1: Machine Dependencies ────────────────────────────────────
@@ -93,9 +103,9 @@ async function checkDeps(results: CheckResult[]): Promise<void> {
     const { getDeps, validateAll } = await import('./dependency-validator.js');
     const deps = getDeps();
     const depResults = await validateAll(deps);
-    const passed = depResults.filter(r => r.status === 'PASS').length;
-    const warned = depResults.filter(r => r.status === 'WARN').length;
-    const failed = depResults.filter(r => r.status === 'FAIL').length;
+    const passed = depResults.filter((r) => r.status === 'PASS').length;
+    const warned = depResults.filter((r) => r.status === 'WARN').length;
+    const failed = depResults.filter((r) => r.status === 'FAIL').length;
 
     const lastResult = results[results.length - 1];
     lastResult.message = `${passed} PASS / ${warned} WARN / ${failed} FAIL`;
@@ -110,7 +120,14 @@ async function checkDeps(results: CheckResult[]): Promise<void> {
 // ─── Layer 2: Platform Components ─────────────────────────────────────
 
 function checkPlatform(results: CheckResult[]): void {
-  const checks: { name: string; path: string; isDir?: boolean; detail?: string; fix?: string; optional?: boolean }[] = [
+  const checks: {
+    name: string;
+    path: string;
+    isDir?: boolean;
+    detail?: string;
+    fix?: string;
+    optional?: boolean;
+  }[] = [
     {
       name: 'Nexus DB',
       path: '.runtime/gentle-vanguard.db',
@@ -185,7 +202,9 @@ function checkPlatform(results: CheckResult[]): void {
 
   for (const check of checks) {
     const absPath = join(ROOT, check.path);
-    const found = check.isDir ? existsSync(absPath) && statSync(absPath).isDirectory() : existsSync(absPath);
+    const found = check.isDir
+      ? existsSync(absPath) && statSync(absPath).isDirectory()
+      : existsSync(absPath);
 
     if (found) {
       let message = check.detail ?? (check.isDir ? 'Directory exists' : 'File exists');
@@ -193,14 +212,22 @@ function checkPlatform(results: CheckResult[]): void {
       if (!check.isDir && ['Nexus DB', 'Graphify Graph'].includes(check.name)) {
         try {
           const size = statSync(absPath).size;
-          const sizeStr = size > 1024 * 1024 ? `${(size / 1024 / 1024).toFixed(1)} MB` : size > 1024 ? `${(size / 1024).toFixed(1)} KB` : `${size} B`;
+          const sizeStr =
+            size > 1024 * 1024
+              ? `${(size / 1024 / 1024).toFixed(1)} MB`
+              : size > 1024
+                ? `${(size / 1024).toFixed(1)} KB`
+                : `${size} B`;
           message += ` (${sizeStr})`;
         } catch {}
       }
       // Get node/edge count for graph
       if (check.name === 'Graphify Graph' && found) {
         try {
-          const r = run('node', ['-e', `const f=require('fs');const j=JSON.parse(f.readFileSync('graphify-out/graph.json','utf8'));console.log((j.nodes||[]).length+' nodes, '+(j.links||[]).length+' edges')`]);
+          const r = run('node', [
+            '-e',
+            `const f=require('fs');const j=JSON.parse(f.readFileSync('graphify-out/graph.json','utf8'));console.log((j.nodes||[]).length+' nodes, '+(j.links||[]).length+' edges')`,
+          ]);
           if (r.status === 0 && r.stdout) message = r.stdout;
         } catch {}
       }
@@ -208,7 +235,13 @@ function checkPlatform(results: CheckResult[]): void {
     } else {
       const fixMsg = check.fix ? `Try: ${check.fix}` : 'File/directory missing';
       const status = check.optional ? 'WARN' : 'FAIL';
-      results.push({ name: check.name, layer: 'platform', status, message: `Missing — ${fixMsg}`, fixCmd: check.fix });
+      results.push({
+        name: check.name,
+        layer: 'platform',
+        status,
+        message: `Missing — ${fixMsg}`,
+        fixCmd: check.fix,
+      });
     }
   }
 }
@@ -255,7 +288,11 @@ async function checkIntegrity(results: CheckResult[]): Promise<void> {
     const r = run('engram', ['doctor', '--json']);
     if (r.stdout) {
       let data: any;
-      try { data = JSON.parse(r.stdout); } catch { data = null; }
+      try {
+        data = JSON.parse(r.stdout);
+      } catch {
+        data = null;
+      }
       if (data) {
         const hasErrors = (data.errors ?? []).length > 0;
         results.push({
@@ -267,7 +304,12 @@ async function checkIntegrity(results: CheckResult[]): Promise<void> {
         });
       } else {
         // Non-JSON output but command ran — treat as healthy
-        results.push({ name: 'Engram Memory', layer: 'integrity', status: 'PASS', message: 'Available' });
+        results.push({
+          name: 'Engram Memory',
+          layer: 'integrity',
+          status: 'PASS',
+          message: 'Available',
+        });
       }
     } else {
       results.push({
@@ -278,14 +320,21 @@ async function checkIntegrity(results: CheckResult[]): Promise<void> {
       });
     }
   } catch {
-    results.push({ name: 'Engram Memory', layer: 'integrity', status: 'WARN', message: 'Could not run engram doctor' });
+    results.push({
+      name: 'Engram Memory',
+      layer: 'integrity',
+      status: 'WARN',
+      message: 'Could not run engram doctor',
+    });
   }
 
   // Nexus DB Integrity — check DB file exists and is valid
   try {
     const dbPath = join(ROOT, '.runtime/gentle-vanguard.db');
     if (existsSync(dbPath)) {
-      const r = run('node', ['-e', `
+      const r = run('node', [
+        '-e',
+        `
         const fs = require('fs');
         const path = '.runtime/gentle-vanguard.db';
         try {
@@ -299,7 +348,8 @@ async function checkIntegrity(results: CheckResult[]): Promise<void> {
           const isSQLite = buf[0] === 0x53 && buf[1] === 0x51 && buf[2] === 0x4C; // 'SQL'
           console.log(isSQLite ? 'OK' : 'CORRUPT');
         } catch(e) { console.log('ERROR: '+e.message); }
-      `]);
+      `,
+      ]);
       const dbOk = r.status === 0 && r.stdout.trim() === 'OK';
       results.push({
         name: 'Nexus DB Integrity',
@@ -309,10 +359,21 @@ async function checkIntegrity(results: CheckResult[]): Promise<void> {
         fixCmd: !dbOk ? 'npm run db:init' : undefined,
       });
     } else {
-      results.push({ name: 'Nexus DB Integrity', layer: 'integrity', status: 'FAIL', message: 'Nexus DB not found', fixCmd: 'npm run db:init' });
+      results.push({
+        name: 'Nexus DB Integrity',
+        layer: 'integrity',
+        status: 'FAIL',
+        message: 'Nexus DB not found',
+        fixCmd: 'npm run db:init',
+      });
     }
   } catch {
-    results.push({ name: 'Nexus DB Integrity', layer: 'integrity', status: 'WARN', message: 'Could not check DB integrity' });
+    results.push({
+      name: 'Nexus DB Integrity',
+      layer: 'integrity',
+      status: 'WARN',
+      message: 'Could not check DB integrity',
+    });
   }
 
   // TypeScript typecheck
@@ -328,7 +389,12 @@ async function checkIntegrity(results: CheckResult[]): Promise<void> {
       fixCmd: hasTsErrors ? 'npm run typecheck' : undefined,
     });
   } catch {
-    results.push({ name: 'TypeScript Typecheck', layer: 'integrity', status: 'SKIP', message: 'Could not run tsc' });
+    results.push({
+      name: 'TypeScript Typecheck',
+      layer: 'integrity',
+      status: 'SKIP',
+      message: 'Could not run tsc',
+    });
   }
 }
 
@@ -338,7 +404,11 @@ function printReport(results: CheckResult[], json: boolean): VerificationReport 
   const report: VerificationReport = {
     timestamp: new Date().toISOString(),
     platform: PLATFORM,
-    total: 0, passed: 0, warned: 0, failed: 0, skipped: 0,
+    total: 0,
+    passed: 0,
+    warned: 0,
+    failed: 0,
+    skipped: 0,
     results,
   };
 
@@ -371,12 +441,19 @@ function printReport(results: CheckResult[], json: boolean): VerificationReport 
   ];
 
   for (const layer of layers) {
-    const items = results.filter(r => r.layer === layer.key);
+    const items = results.filter((r) => r.layer === layer.key);
     if (items.length === 0) continue;
     console.log(C.bold(C.cyan(`  ── ${layer.label} ──`)));
 
     for (const item of items) {
-      const icon = item.status === 'PASS' ? C.green('✔') : item.status === 'WARN' ? C.yellow('⚠') : item.status === 'FAIL' ? C.red('✘') : C.dim('−');
+      const icon =
+        item.status === 'PASS'
+          ? C.green('✔')
+          : item.status === 'WARN'
+            ? C.yellow('⚠')
+            : item.status === 'FAIL'
+              ? C.red('✘')
+              : C.dim('−');
       const msg = item.status === 'PASS' ? C.dim(item.message) : item.message;
       console.log(`  ${icon} ${item.name.padEnd(24)} ${msg}`);
       if (item.status === 'FAIL' && item.fixCmd) {
@@ -387,7 +464,11 @@ function printReport(results: CheckResult[], json: boolean): VerificationReport 
   }
 
   // ── SUMMARY ──
-  console.log(C.bold(`  ${C.cyan('═══')} ${C.green(`${report.passed} PASS`)} | ${C.yellow(`${report.warned} WARN`)} | ${report.failed > 0 ? C.red(`${report.failed} FAIL`) : `${report.failed} FAIL`} | ${C.dim(`${report.skipped} SKIP`)} | ${report.total} total ${C.cyan('═══')}`));
+  console.log(
+    C.bold(
+      `  ${C.cyan('═══')} ${C.green(`${report.passed} PASS`)} | ${C.yellow(`${report.warned} WARN`)} | ${report.failed > 0 ? C.red(`${report.failed} FAIL`) : `${report.failed} FAIL`} | ${C.dim(`${report.skipped} SKIP`)} | ${report.total} total ${C.cyan('═══')}`,
+    ),
+  );
 
   if (report.failed > 0) {
     console.log(C.red('\n  ✘ Some checks failed. Run with --fix to attempt auto-recovery.'));
@@ -403,7 +484,7 @@ function printReport(results: CheckResult[], json: boolean): VerificationReport 
 // ─── Auto-fix attempt ─────────────────────────────────────────────────
 
 async function autoFix(results: CheckResult[]): Promise<number> {
-  const fixable = results.filter(r => r.status === 'FAIL' && r.fixCmd);
+  const fixable = results.filter((r) => r.status === 'FAIL' && r.fixCmd);
   if (fixable.length === 0) {
     console.log(C.green('\n  ✓ No fixable failures found.'));
     return 0;
@@ -422,14 +503,18 @@ async function autoFix(results: CheckResult[]): Promise<number> {
         console.log(`    ${C.green('✔')} Fixed successfully`);
         fixed++;
       } else {
-        console.log(`    ${C.red('✘')} Failed: ${(r.stderr || r.stdout || 'unknown error').slice(0, 200)}`);
+        console.log(
+          `    ${C.red('✘')} Failed: ${(r.stderr || r.stdout || 'unknown error').slice(0, 200)}`,
+        );
       }
     } catch (err: any) {
       console.log(`    ${C.red('✘')} Error: ${err.message}`);
     }
   }
 
-  console.log(C.cyan(`\n  Fixed ${fixed}/${fixable.length} failures. Re-run without --fix to verify.`));
+  console.log(
+    C.cyan(`\n  Fixed ${fixed}/${fixable.length} failures. Re-run without --fix to verify.`),
+  );
   return fixable.length - fixed;
 }
 
@@ -471,7 +556,7 @@ async function main(): Promise<void> {
   process.exit(remainingFailures > 0 ? 1 : 0);
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error(C.red(`\n  FATAL: ${err.message}`));
   process.exit(2);
 });

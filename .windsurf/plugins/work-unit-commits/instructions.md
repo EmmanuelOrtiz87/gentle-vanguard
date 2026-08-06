@@ -4,11 +4,10 @@
 
 ## Description
 
-
 ## Triggers
 
-
 ## Instructions
+
 ## When to Use
 
 Load this skill when deciding what belongs in each commit or PR.

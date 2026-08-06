@@ -50,14 +50,13 @@ dashboard browser           ← polls /api/traceability/* every 5s
 
 ## Server Endpoints
 
-| Endpoint                                 | Description                                  |
-| ---------------------------------------- | -------------------------------------------- | ----- | ---- | ------------------ |
-| `GET /api/metrics`                       | Aggregated metrics (real data from sessions) |
-| `GET /api/traceability/live`             | Current active session with turns            |
-| `GET /api/traceability/sessions`         | All sessions + mechanisms                    |
-| `GET /api/traceability/session/:id`      | Single session detail                        |
-| `GET /api/traceability/history?range=day | week                                         | month | all` | Aggregated history |
-| `GET /api/traceability/mechanisms`       | Mechanism/profile change history             |
+| Endpoint | Description | | ---------------------------------------- |
+-------------------------------------------- | ----- | ---- | ------------------ | |
+`GET /api/metrics` | Aggregated metrics (real data from sessions) | | `GET /api/traceability/live` |
+Current active session with turns | | `GET /api/traceability/sessions` | All sessions + mechanisms |
+| `GET /api/traceability/session/:id` | Single session detail | |
+`GET /api/traceability/history?range=day | week                                         | month | all`
+| Aggregated history | | `GET /api/traceability/mechanisms` | Mechanism/profile change history |
 
 ## Alerting
 

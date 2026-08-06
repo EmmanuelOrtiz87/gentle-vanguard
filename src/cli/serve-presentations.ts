@@ -24,7 +24,10 @@ import * as os from 'node:os';
 import { runSyncShell } from '../core/run-command.js';
 import { printBanner } from './banner.js';
 
-const PORT = parseInt(process.argv.find(a => a.startsWith('--port='))?.split('=')[1] ?? process.env.PORT ?? '3000', 10);
+const PORT = parseInt(
+  process.argv.find((a) => a.startsWith('--port='))?.split('=')[1] ?? process.env.PORT ?? '3000',
+  10,
+);
 const NO_BROWSER = process.argv.includes('--no-browser');
 const QUIET = process.argv.includes('--quiet');
 const ROOT = path.resolve(process.cwd(), 'docs/presentations');
@@ -55,12 +58,15 @@ function getNetworkIP(): string {
   const interfaces = os.networkInterfaces();
   for (const name of Object.keys(interfaces)) {
     for (const iface of interfaces[name] ?? []) {
-      if (iface.family === 'IPv4' && !iface.internal &&
-          !name.toLowerCase().includes('loopback') &&
-          !name.toLowerCase().includes('bluetooth') &&
-          !name.toLowerCase().includes('virtual') &&
-          !name.toLowerCase().includes('hyper-v') &&
-          !name.toLowerCase().includes('docker')) {
+      if (
+        iface.family === 'IPv4' &&
+        !iface.internal &&
+        !name.toLowerCase().includes('loopback') &&
+        !name.toLowerCase().includes('bluetooth') &&
+        !name.toLowerCase().includes('virtual') &&
+        !name.toLowerCase().includes('hyper-v') &&
+        !name.toLowerCase().includes('docker')
+      ) {
         return iface.address;
       }
     }
@@ -122,7 +128,9 @@ server.listen(PORT, () => {
   console.log(`  Network:  http://${hostIP}:${PORT}`);
   console.log(`  Dir:      ${ROOT}`);
   console.log(`  Log:      ${LOG_PATH}`);
-  console.log(`  QR:       https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=http://${hostIP}:${PORT}`);
+  console.log(
+    `  QR:       https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=http://${hostIP}:${PORT}`,
+  );
   console.log('');
 
   // Open browser

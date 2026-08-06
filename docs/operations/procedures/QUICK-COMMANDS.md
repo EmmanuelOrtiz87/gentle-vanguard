@@ -208,4 +208,4 @@ npm run secretlint           # Detectar secrets
 
 ---
 
-*Para ver todos los comandos disponibles: `npm run` (sin argumentos)*
+_Para ver todos los comandos disponibles: `npm run` (sin argumentos)_

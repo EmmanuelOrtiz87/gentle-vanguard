@@ -9,7 +9,10 @@ const S = (p: string) => join(ROOT, p);
 
 function run(cmd: string): string {
   try {
-    const result = runSyncShell(cmd, { timeout: getEffectiveProcessTimeout('long_running'), cwd: ROOT });
+    const result = runSyncShell(cmd, {
+      timeout: getEffectiveProcessTimeout('long_running'),
+      cwd: ROOT,
+    });
     return result.stdout?.trim() ?? '';
   } catch (e: unknown) {
     return 'ERR: ' + (e instanceof Error ? e.message : String(e));
@@ -57,19 +60,11 @@ patch(
 
 // 2. Fix adaptive-opencode-profile.ps1 - remove Invoke-AdaptiveNotify calls
 log('[2/6] Fix adaptive-opencode-profile.ps1...', 'yellow');
-patch(
-  'src/adaptive-opencode-profile.ts',
-  'Invoke-AdaptiveNotify',
-  '# AdaptiveNotify',
-);
+patch('src/adaptive-opencode-profile.ts', 'Invoke-AdaptiveNotify', '# AdaptiveNotify');
 
 // 3. Fix adaptive-codex-windsurf-profile.ps1 - remove Notify-Change calls
 log('[3/6] Fix adaptive-codex-windsurf-profile.ps1...', 'yellow');
-patch(
-  'src/adaptive-codex-windsurf-profile.ts',
-  'Notify-Change',
-  '# NotifyChange',
-);
+patch('src/adaptive-codex-windsurf-profile.ts', 'Notify-Change', '# NotifyChange');
 
 // 4. Create recovery scripts directory
 log('[4/6] Create recovery infrastructure...', 'yellow');

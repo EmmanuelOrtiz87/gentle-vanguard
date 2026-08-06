@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "# Documentation Alignment Skill\n\n## Purpose\n\nKeep documentation synchronized with every code and workflow change.\n\n## Docs Map\n\n| File               | Covers                                    |\n| ------------------ | ----------------------------------------- |\n| `README.md`        | Installation, usage, CLI flags, providers |\n| `CONTRIBUTING.md`  | Dev setup, contribution workflow, testing |\n| `docs/guides/*.md` | User guides and how-tos                   |\n\n## Change Doc Rules\n\n| If you change...               | Update...             |\n| ------------------------------ | --------------------- |\n| A CLI flag (add/remove/rename) | README.md flags table |\n| A provider (behavior change)   | README.md             |\n| Test structure or commands     | CONTRIBUTING.md       |\n| Install/uninstall behavior     | README.md             |\n| Hook behavior                  | README.md             |\n\n## Critical Rules\n\n- NEVER reference CLI flags or commands that don't exist in code\n- NEVER let a PR with behavior changes ship without updating docs\n- Docs must describe FINAL state, not journey\n- Code examples in docs must be tested and accurate\n\n## Verification Checklist\n\nBefore submitting a PR with code changes:\n\n```\n[ ] Does this change affect any CLI flags?       update README.md\n[ ] Does this change affect provider behavior?   update README.md\n[ ] Does this add/remove a config option?        update README.md\n[ ] Are all code examples still accurate?        verify manually\n```\n\n## Anti-patterns\n\n```\n# BAD  README shows old flag\nREADME: --cache-dir\nCode: --cache-path   was renamed\n\n# BAD  docs reference non-existent script\nREADME: \"run setup.sh\"   setup.sh doesn't exist\n```",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

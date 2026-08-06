@@ -19,14 +19,14 @@
 
 ## Expected vs Actual Behavior
 
-**Expected:** 403 Forbidden when user_id does not match authenticated user
-**Actual:** 200 OK with victim's full order data
+**Expected:** 403 Forbidden when user_id does not match authenticated user **Actual:** 200 OK with
+victim's full order data
 
 ## Severity Justification
 
-P2 (High) — Direct read access to other users' PII. Affects all user accounts.
-No user interaction required. Exploitable by any authenticated user.
-Automated enumeration could exfil all [N] user records in minutes.
+P2 (High) — Direct read access to other users' PII. Affects all user accounts. No user interaction
+required. Exploitable by any authenticated user. Automated enumeration could exfil all [N] user
+records in minutes.
 
 ## Remediation
 

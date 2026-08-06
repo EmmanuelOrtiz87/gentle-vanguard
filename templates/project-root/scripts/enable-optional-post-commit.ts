@@ -22,9 +22,15 @@ const args = process.argv.slice(2);
 const disable = args.includes('--disable') || args.includes('-Disable');
 const force = args.includes('--force') || args.includes('-Force');
 
-function step(msg: string): void { console.log(`\n=== ${msg} ===`); }
-function ok(msg: string): void { console.log(`[OK] ${msg}`); }
-function warn(msg: string): void { console.log(`[WARN] ${msg}`); }
+function step(msg: string): void {
+  console.log(`\n=== ${msg} ===`);
+}
+function ok(msg: string): void {
+  console.log(`[OK] ${msg}`);
+}
+function warn(msg: string): void {
+  console.log(`[WARN] ${msg}`);
+}
 
 const configDir = join(REPO_ROOT, '.config');
 const hooksDir = join(REPO_ROOT, '.githooks');
@@ -135,7 +141,9 @@ if (disable) {
   } else {
     warn('Optional post-commit marker was already absent.');
   }
-  console.log('To re-enable, run: npx tsx templates/project-root/scripts/enable-optional-post-commit.ts');
+  console.log(
+    'To re-enable, run: npx tsx templates/project-root/scripts/enable-optional-post-commit.ts',
+  );
   process.exit(0);
 }
 
@@ -145,7 +153,9 @@ if (!existsSync(hooksDir)) mkdirSync(hooksDir, { recursive: true });
 if (!existsSync(scriptsProjectDir)) mkdirSync(scriptsProjectDir, { recursive: true });
 
 if (existsSync(postCommitScript) && !force) {
-  warn('project-post-commit.ps1 already exists; preserving current file (use --force to overwrite).');
+  warn(
+    'project-post-commit.ps1 already exists; preserving current file (use --force to overwrite).',
+  );
 } else {
   writeFileSync(postCommitScript, postCommitContent, 'utf-8');
   ok('Created scripts/project/project-post-commit.ps1');
@@ -174,4 +184,6 @@ try {
 }
 
 console.log('Optional post-commit automation is now enabled.');
-console.log('Disable anytime with: npx tsx templates/project-root/scripts/enable-optional-post-commit.ts --disable');
+console.log(
+  'Disable anytime with: npx tsx templates/project-root/scripts/enable-optional-post-commit.ts --disable',
+);

@@ -35,16 +35,16 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
         ...payload,
         system: payload.system ?? data.system,
       } as DashboardData;
-      
+
       setData((prev) => ({
         ...prev,
         ...payload,
         system: payload.system ?? prev.system,
       }));
-      
+
       // Save to offline cache
       saveOfflineCache(newData, tenantId);
-      
+
       setHistory((prev) => {
         const tokens = payload.tokens?.used ?? 0;
         const sessions = payload.sessions?.active ?? 0;

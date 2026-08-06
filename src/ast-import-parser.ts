@@ -1,9 +1,9 @@
 /**
  * AST Import Parser
- * 
+ *
  * Usa TypeScript Compiler API para extraer imports reales
  * No regex - parsing real del AST
- * 
+ *
  * Usage:
  *   import { extractRealImports } from './ast-import-parser.js';
  *   const imports = extractRealImports(sourceCode);
@@ -23,21 +23,16 @@ export interface ImportInfo {
  */
 export function extractRealImports(sourceCode: string, fileName = 'file.ts'): ImportInfo[] {
   const imports: ImportInfo[] = [];
-  
+
   // Parse source code to AST
-  const sourceFile = ts.createSourceFile(
-    fileName,
-    sourceCode,
-    ts.ScriptTarget.Latest,
-    true
-  );
-  
+  const sourceFile = ts.createSourceFile(fileName, sourceCode, ts.ScriptTarget.Latest, true);
+
   // Visit all nodes
   function visit(node: ts.Node) {
     // Case 1: import ... from 'path' or import 'path'
     if (ts.isImportDeclaration(node)) {
       const moduleSpecifier = node.moduleSpecifier;
-      
+
       // Get the string value (handle both 'path' and "path")
       if (ts.isStringLiteral(moduleSpecifier)) {
         const path = moduleSpecifier.text;
@@ -45,7 +40,7 @@ export function extractRealImports(sourceCode: string, fileName = 'file.ts'): Im
         imports.push({ path, line, isDynamic: false });
       }
     }
-    
+
     // Case 2: export ... from 'path' (re-exports)
     if (ts.isExportDeclaration(node) && node.moduleSpecifier) {
       if (ts.isStringLiteral(node.moduleSpecifier)) {
@@ -54,7 +49,7 @@ export function extractRealImports(sourceCode: string, fileName = 'file.ts'): Im
         imports.push({ path, line, isDynamic: false });
       }
     }
-    
+
     // Case 3: require('path') - CommonJS
     if (ts.isCallExpression(node)) {
       const expression = node.expression;
@@ -66,7 +61,7 @@ export function extractRealImports(sourceCode: string, fileName = 'file.ts'): Im
           imports.push({ path, line, isDynamic: false });
         }
       }
-      
+
       // Case 4: dynamic import() - only if it's an actual import expression
       if (node.expression.kind === ts.SyntaxKind.ImportKeyword) {
         const firstArg = node.arguments[0];
@@ -77,10 +72,10 @@ export function extractRealImports(sourceCode: string, fileName = 'file.ts'): Im
         }
       }
     }
-    
+
     ts.forEachChild(node, visit);
   }
-  
+
   visit(sourceFile);
   return imports;
 }
@@ -91,20 +86,20 @@ export function extractRealImports(sourceCode: string, fileName = 'file.ts'): Im
 export function isImportValid(
   importPath: string,
   sourceFile: string,
-  availableModules: Set<string>
+  availableModules: Set<string>,
 ): boolean {
   // Absolute imports from project root
   if (importPath.startsWith('/')) {
     return availableModules.has(importPath.slice(1));
   }
-  
+
   // Relative imports
   if (importPath.startsWith('.')) {
     // These need to be resolved relative to source file
     // For now, we just check if the pattern looks valid
     return true; // Will be checked with file system
   }
-  
+
   // Node modules imports (e.g., 'typescript', 'fs')
   // These are considered valid
   return true;
@@ -124,7 +119,7 @@ function test() {
   import('./dynamic-import');
 }
 `;
-  
+
   const imports = extractRealImports(testCode, 'test.ts');
   console.log('Real imports found:');
   for (const imp of imports) {

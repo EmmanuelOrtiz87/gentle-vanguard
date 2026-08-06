@@ -2,7 +2,8 @@
 
 ## Function Calling / Tool Use
 
-Modern LLMs support "function calling" — the model outputs a structured request to invoke a tool, and the runtime executes it and returns the result.
+Modern LLMs support "function calling" — the model outputs a structured request to invoke a tool,
+and the runtime executes it and returns the result.
 
 ## Tool Schema Pattern (OpenAI-style)
 
@@ -81,10 +82,10 @@ class SearchTool(AgentTool):
 
 ## Tool Categories
 
-| Category | Examples | When to Use |
-|---|---|---|
-| **Retrieval** | Search, SQL query, vector search | Agent needs external information |
-| **Computation** | Calculator, code interpreter, stats | Agent needs to compute or analyze |
-| **Action** | Email send, API call, file write | Agent needs to affect the world |
-| **Communication** | Slack message, notification | Agent needs to inform humans |
-| **Validation** | Spell check, safety check, lint | Agent needs to verify its work |
+| Category          | Examples                            | When to Use                       |
+| ----------------- | ----------------------------------- | --------------------------------- |
+| **Retrieval**     | Search, SQL query, vector search    | Agent needs external information  |
+| **Computation**   | Calculator, code interpreter, stats | Agent needs to compute or analyze |
+| **Action**        | Email send, API call, file write    | Agent needs to affect the world   |
+| **Communication** | Slack message, notification         | Agent needs to inform humans      |
+| **Validation**    | Spell check, safety check, lint     | Agent needs to verify its work    |

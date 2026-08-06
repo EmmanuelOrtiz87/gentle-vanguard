@@ -1,6 +1,7 @@
 # User Story Writing
 
 Good user stories are:
+
 - **Independent**: Can be developed and delivered on their own
 - **Negotiable**: Details can be discussed, the story is not a contract
 - **Valuable**: Delivers value to the user (not just the team)
@@ -14,7 +15,8 @@ Good user stories are:
 - Solution-prescriptive: "As a user, I want a dropdown menu" — describe the need, not the UI widget
 - No benefit: "As a user, I want to click a button" — why? What does it accomplish?
 - Too large: "As a user, I want to manage my team" — break this into specific capabilities
-- Internal focus: "As the engineering team, we want to refactor the database" — this is a task, not a user story
+- Internal focus: "As the engineering team, we want to refactor the database" — this is a task, not
+  a user story
 
 # Requirements Categorization
 
@@ -28,25 +30,30 @@ Good user stories are:
 ## Tips for Categorization
 
 - Be ruthless about P0s. The tighter the must-have list, the faster you ship and learn.
-- If everything is P0, nothing is P0. Challenge every must-have: "Would we really not ship without this?"
+- If everything is P0, nothing is P0. Challenge every must-have: "Would we really not ship without
+  this?"
 - P1s should be things you are confident you will build soon, not a wish list.
-- P2s are architectural insurance — they guide design decisions even though you are not building them now.
+- P2s are architectural insurance — they guide design decisions even though you are not building
+  them now.
 
 # Acceptance Criteria
 
 Write acceptance criteria in Given/When/Then format or as a checklist:
 
 **Given/When/Then**:
+
 - Given [precondition or context]
 - When [action the user takes]
 - Then [expected outcome]
 
 Example:
+
 - Given the admin has configured SSO for their organization
 - When a team member visits the login page
 - Then they are automatically redirected to the organization's SSO provider
 
 **Checklist format**:
+
 - [ ] Admin can enter SSO provider URL in organization settings
 - [ ] Team members see "Log in with SSO" button on login page
 - [ ] SSO login creates a new account if one does not exist

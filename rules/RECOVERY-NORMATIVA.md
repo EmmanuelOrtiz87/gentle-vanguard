@@ -5,12 +5,12 @@ Gentle-Vanguard.
 
 ## Componentes con SQLite
 
-| Componente    | Ruta                            | Critico | Proposito                                   |
-| ------------- | ------------------------------- | ------- | ------------------------------------------- |
-| CodeGraph     | `.codegraph/codegraph.db`             | SI  | Knowledge graph index (nodes, edges, files) |
-| Engram-local  | `.engram-data/*.db`                   | SI  | Persistent memory — decisions, bugs, architecture, conventions, agent/skill performance, stack historical context |
-| Engram-global | `~/.engram/global/.engram/*.db`       | SI  | Global memory — cross-project knowledge, learned behaviors, patterns across repos |
-| **Nexus**     | `.runtime/gentle-vanguard.db`         | SI  | Operational DB — metrics, sessions, traces, events, alerts, feedback, cache, contracts, scoring, routing |
+| Componente    | Ruta                            | Critico | Proposito                                                                                                         |
+| ------------- | ------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
+| CodeGraph     | `.codegraph/codegraph.db`       | SI      | Knowledge graph index (nodes, edges, files)                                                                       |
+| Engram-local  | `.engram-data/*.db`             | SI      | Persistent memory — decisions, bugs, architecture, conventions, agent/skill performance, stack historical context |
+| Engram-global | `~/.engram/global/.engram/*.db` | SI      | Global memory — cross-project knowledge, learned behaviors, patterns across repos                                 |
+| **Nexus**     | `.runtime/gentle-vanguard.db`   | SI      | Operational DB — metrics, sessions, traces, events, alerts, feedback, cache, contracts, scoring, routing          |
 
 ## Error "no such column: data"
 
@@ -91,14 +91,14 @@ Cada restore point es un JSON con:
 El orquestador de cierre de sesion (`src/session-close-orchestrator.ts`) ejecuta 6 fases que generan
 puntos de recuperacion:
 
-| Fase | Accion | Punto de recuperacion |
-|------|--------|----------------------|
-| PRE-CLOSE | Timestamp, cierre de tracing | `.session/session-current.json` |
-| PERSIST | Engram summary, session scoring, event store, token metrics | `.engram-data/`, `.session/event-store/`, `.session/metrics/` |
-| BACKUP | Checkpoint, Nexus backup, Engram backup | `.session/checkpoints/`, `.runtime/backups/`, `.engram-backups/` |
-| AUDIT | Audit log, CodeGraph sync | `.session/audit/logs/` |
-| CLEANUP | Kill procesos hijos (CodeGraph MCP, Dashboard WS, timeout daemon), flush caches | limpia `.session/cache/` |
-| VERIFY | Session file, Nexus health, checkpoint/backup existence | Reporte en `.session/close-report-*.json` |
+| Fase      | Accion                                                                          | Punto de recuperacion                                            |
+| --------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| PRE-CLOSE | Timestamp, cierre de tracing                                                    | `.session/session-current.json`                                  |
+| PERSIST   | Engram summary, session scoring, event store, token metrics                     | `.engram-data/`, `.session/event-store/`, `.session/metrics/`    |
+| BACKUP    | Checkpoint, Nexus backup, Engram backup                                         | `.session/checkpoints/`, `.runtime/backups/`, `.engram-backups/` |
+| AUDIT     | Audit log, CodeGraph sync                                                       | `.session/audit/logs/`                                           |
+| CLEANUP   | Kill procesos hijos (CodeGraph MCP, Dashboard WS, timeout daemon), flush caches | limpia `.session/cache/`                                         |
+| VERIFY    | Session file, Nexus health, checkpoint/backup existence                         | Reporte en `.session/close-report-*.json`                        |
 
 ### Procesos que mata el CLEANUP
 
@@ -124,6 +124,7 @@ npx tsx scripts/database/db-restore.ts restore <backup-name>
 ## Pipeline Integration
 
 El orquestador de cierre se ejecuta como lazy step en la pipeline de sesion:
+
 - `session-scoring-close` — registra el evento de cierre en scoring (habilitado)
 - `session-close-orchestrator` — ejecuta las 6 fases de cierre (nuevo, lazy)
 - Ambos steps son `required: false` y `lazy: true` para no bloquear el inicio

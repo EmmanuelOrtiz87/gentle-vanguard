@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Writing Plans
 
 ## Overview
@@ -40,9 +41,8 @@ Every plan MUST start with this header:
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development
 > (recommended) or superpowers:executing-plans. Steps use checkbox (`- [ ]`) syntax.
 
-**Goal:** [One sentence describing what this builds]
-**Architecture:** [2-3 sentences about approach]
-**Tech Stack:** [Key technologies/libraries]
+**Goal:** [One sentence describing what this builds] **Architecture:** [2-3 sentences about
+approach] **Tech Stack:** [Key technologies/libraries]
 
 ---
 ```
@@ -53,8 +53,8 @@ See [references/task-structure.md](references/task-structure.md) for the full te
 
 Key rule — **each step is one action (2–5 minutes):**
 
-"Write the failing test" → "Run it to verify it fails" → "Implement minimal code" →
-"Run tests to verify" → "Commit"
+"Write the failing test" → "Run it to verify it fails" → "Implement minimal code" → "Run tests to
+verify" → "Commit"
 
 ## No Placeholders
 
@@ -82,5 +82,5 @@ See [references/self-review.md](references/self-review.md).
 
 ## Execution Handoff
 
-After saving, offer Subagent-Driven (recommended) or Inline Execution.
-See [references/execution-handoff.md](references/execution-handoff.md).
+After saving, offer Subagent-Driven (recommended) or Inline Execution. See
+[references/execution-handoff.md](references/execution-handoff.md).

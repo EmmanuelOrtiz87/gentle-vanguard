@@ -91,18 +91,27 @@ function getFileSize(filePath: string): number {
   }
 }
 
-function findTsFilesRecursive(dir: string, baseDir: string, maxDepth: number = 3, currentDepth: number = 0): string[] {
+function findTsFilesRecursive(
+  dir: string,
+  baseDir: string,
+  maxDepth: number = 3,
+  currentDepth: number = 0,
+): string[] {
   const files: string[] = [];
-  
+
   if (currentDepth > maxDepth) return files;
-  
+
   try {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       const fullPath = path.join(dir, entry.name);
-      
-      if (entry.isDirectory() && !entry.name.startsWith('.') && !entry.name.includes('node_modules')) {
+
+      if (
+        entry.isDirectory() &&
+        !entry.name.startsWith('.') &&
+        !entry.name.includes('node_modules')
+      ) {
         files.push(...findTsFilesRecursive(fullPath, baseDir, maxDepth, currentDepth + 1));
       } else if (entry.isFile() && entry.name.endsWith('.ts')) {
         files.push(fullPath);
@@ -111,7 +120,7 @@ function findTsFilesRecursive(dir: string, baseDir: string, maxDepth: number = 3
   } catch {
     // Directory not accessible, skip
   }
-  
+
   return files;
 }
 
@@ -123,7 +132,7 @@ async function scanDirectory(dir: string): Promise<string[]> {
 async function benchmarkFile(filePath: string): Promise<PerfResult | null> {
   const relativePath = path.relative(ROOT, filePath);
   const startupTime = await measureStartupTime(filePath);
-  
+
   if (startupTime < 0) {
     return null;
   }
@@ -139,12 +148,12 @@ async function benchmarkFile(filePath: string): Promise<PerfResult | null> {
 
 async function scanAndReport(): Promise<void> {
   console.log('🔍 Scanning TypeScript files for performance analysis...\n');
-  
+
   const files = await scanDirectory(path.join(ROOT, 'src'));
   console.log(`Found ${files.length} TypeScript files\n`);
 
   const results: PerfResult[] = [];
-  
+
   // Sample only critical files to avoid long execution
   const criticalDirs = [
     'src\\skills',
@@ -154,17 +163,19 @@ async function scanAndReport(): Promise<void> {
     'src' + path.sep + 'core',
     'src' + path.sep + 'cli',
   ];
-  
-  const sampleFiles = files.filter(f => {
-    const normalizedPath = f.replace(/\\/g, path.sep);
-    return criticalDirs.some(dir => normalizedPath.includes(dir));
-  }).slice(0, 20);
+
+  const sampleFiles = files
+    .filter((f) => {
+      const normalizedPath = f.replace(/\\/g, path.sep);
+      return criticalDirs.some((dir) => normalizedPath.includes(dir));
+    })
+    .slice(0, 20);
 
   for (let i = 0; i < sampleFiles.length; i++) {
     const file = sampleFiles[i];
     const relativePath = path.relative(ROOT, file);
     process.stdout.write(`[${i + 1}/${sampleFiles.length}] Analyzing ${relativePath}...`);
-    
+
     const result = await benchmarkFile(file);
     if (result) {
       results.push(result);
@@ -197,12 +208,14 @@ async function scanAndReport(): Promise<void> {
   console.log(`Average startup time: ${report.summary.avgStartupTime.toFixed(0)}ms\n`);
 
   console.log('🐌 Slowest files:');
-  report.summary.slowest.forEach(r => {
-    console.log(`  ${r.startupTime.toString().padStart(4)}ms - ${r.file} (${r.importCount} imports, ${(r.fileSize / 1024).toFixed(1)}KB)`);
+  report.summary.slowest.forEach((r) => {
+    console.log(
+      `  ${r.startupTime.toString().padStart(4)}ms - ${r.file} (${r.importCount} imports, ${(r.fileSize / 1024).toFixed(1)}KB)`,
+    );
   });
 
   console.log('\n🚀 Fastest files:');
-  report.summary.fastest.forEach(r => {
+  report.summary.fastest.forEach((r) => {
     console.log(`  ${r.startupTime.toString().padStart(4)}ms - ${r.file}`);
   });
 
@@ -211,53 +224,55 @@ async function scanAndReport(): Promise<void> {
 
 async function benchmarkSingle(filePath: string): Promise<void> {
   const absolutePath = path.isAbsolute(filePath) ? filePath : path.join(ROOT, filePath);
-  
+
   console.log(`Benchmarking: ${filePath}\n`);
-  
+
   const times: number[] = [];
   for (let i = 0; i < 5; i++) {
     process.stdout.write(`Run ${i + 1}/5...`);
     const time = await measureStartupTime(absolutePath);
     times.push(time);
     process.stdout.write(` ${time}ms\n`);
-    
+
     // Small delay between runs
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise((r) => setTimeout(r, 100));
   }
-  
+
   const avg = times.reduce((a, b) => a + b, 0) / times.length;
   const min = Math.min(...times);
   const max = Math.max(...times);
-  
+
   console.log(`\n📊 Results:`);
   console.log(`  Average: ${avg.toFixed(0)}ms`);
   console.log(`  Min: ${min}ms`);
   console.log(`  Max: ${max}ms`);
-  console.log(`  StdDev: ${Math.sqrt(times.map(t => Math.pow(t - avg, 2)).reduce((a, b) => a + b) / times.length).toFixed(1)}ms`);
+  console.log(
+    `  StdDev: ${Math.sqrt(times.map((t) => Math.pow(t - avg, 2)).reduce((a, b) => a + b) / times.length).toFixed(1)}ms`,
+  );
 }
 
 async function showReport(): Promise<void> {
   if (!fs.existsSync(REPORT_FILE)) {
-    console.error('No report found. Run: npx tsx src/performance-analyzer.ts --scan')
+    console.error('No report found. Run: npx tsx src/performance-analyzer.ts --scan');
     process.exit(1);
   }
-  
+
   const report = JSON.parse(fs.readFileSync(REPORT_FILE, 'utf-8')) as PerfReport;
-  
+
   console.log('📊 Last Performance Report\n');
   console.log(`Generated: ${report.generatedAt}`);
   console.log(`Files: ${report.summary.totalFiles}`);
   console.log(`Avg startup: ${report.summary.avgStartupTime.toFixed(0)}ms\n`);
-  
+
   console.log('🐌 Slowest:');
-  report.summary.slowest.forEach(r => {
+  report.summary.slowest.forEach((r) => {
     console.log(`  ${r.startupTime}ms - ${r.file}`);
   });
 }
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
-  
+
   if (args.includes('--scan')) {
     await scanAndReport();
   } else if (args.includes('--benchmark') && args[args.indexOf('--benchmark') + 1]) {
@@ -285,7 +300,7 @@ Examples:
   }
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('[FATAL]', err);
   process.exit(1);
 });

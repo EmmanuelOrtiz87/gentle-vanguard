@@ -38,7 +38,9 @@ function log(msg: string): void {
   console.log(line);
   try {
     fs.appendFileSync(LOG_FILE, line + '\n', 'utf-8');
-  } catch { /* silent */ }
+  } catch {
+    /* silent */
+  }
 }
 
 function ensureDir(): void {
@@ -77,7 +79,10 @@ function healthCheck(port: number): Promise<boolean> {
       resolve(res.statusCode === 200);
     });
     req.on('error', () => resolve(false));
-    req.on('timeout', () => { req.destroy(); resolve(false); });
+    req.on('timeout', () => {
+      req.destroy();
+      resolve(false);
+    });
   });
 }
 
@@ -88,11 +93,9 @@ function startWsServer(port: number): ChildProcess {
   // shell:true — spawning them directly raises "spawn EINVAL". The same
   // pattern is used in dashboard-ws-autostart.ts.
   const tsxBin = path.join(ROOT, 'node_modules', '.bin', 'tsx.cmd');
-  const child = process.platform === 'win32'
-    ? spawn(
-        'cmd.exe',
-        ['/c', `set WS_PORT=${port}&& `, tsxBin, WS_SCRIPT],
-        {
+  const child =
+    process.platform === 'win32'
+      ? spawn('cmd.exe', ['/c', `set WS_PORT=${port}&& `, tsxBin, WS_SCRIPT], {
           cwd: ROOT,
           stdio: 'ignore',
           detached: true,
@@ -101,12 +104,8 @@ function startWsServer(port: number): ChildProcess {
             ...process.env,
             WS_PORT: String(port),
           },
-        },
-      )
-    : spawn(
-        'npx',
-        ['tsx', WS_SCRIPT],
-        {
+        })
+      : spawn('npx', ['tsx', WS_SCRIPT], {
           cwd: ROOT,
           stdio: 'ignore',
           detached: true,
@@ -115,8 +114,7 @@ function startWsServer(port: number): ChildProcess {
             ...process.env,
             WS_PORT: String(port),
           },
-        },
-      );
+        });
 
   child.unref();
 
@@ -138,7 +136,11 @@ async function runService(): Promise<void> {
   const oldPid = readPid();
   if (oldPid && !isRunning(oldPid)) {
     log('[CLEANUP] Removed stale PID file');
-    try { fs.unlinkSync(PID_FILE); } catch { /* ignore */ }
+    try {
+      fs.unlinkSync(PID_FILE);
+    } catch {
+      /* ignore */
+    }
   }
 
   // Main service loop
@@ -149,13 +151,17 @@ async function runService(): Promise<void> {
 
     if (currentPid && isRunning(currentPid) && healthy) {
       // All good, wait and check again
-      await new Promise(r => setTimeout(r, HEALTH_CHECK_INTERVAL));
+      await new Promise((r) => setTimeout(r, HEALTH_CHECK_INTERVAL));
       continue;
     }
 
     if (currentPid && isRunning(currentPid) && !healthy) {
       log('[HEALTH] Process running but not responding, restarting...');
-      try { process.kill(currentPid); } catch { /* ignore */ }
+      try {
+        process.kill(currentPid);
+      } catch {
+        /* ignore */
+      }
     }
 
     // Start new instance
@@ -165,7 +171,7 @@ async function runService(): Promise<void> {
     // Wait for it to become ready
     let attempts = 0;
     while (attempts < 6) {
-      await new Promise(r => setTimeout(r, 2000));
+      await new Promise((r) => setTimeout(r, 2000));
       if (await healthCheck(port)) {
         log('[READY] Dashboard WS is healthy');
         break;
@@ -178,7 +184,7 @@ async function runService(): Promise<void> {
     }
 
     // Wait before next check
-    await new Promise(r => setTimeout(r, HEALTH_CHECK_INTERVAL));
+    await new Promise((r) => setTimeout(r, HEALTH_CHECK_INTERVAL));
   }
 }
 
@@ -186,21 +192,25 @@ async function install(): Promise<void> {
   // Create startup task for current user using Windows Registry
   const startupKey = 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run';
   const command = `cmd /c cd /d "${ROOT}" && npx tsx src/dashboard-ws-service.ts --start`;
-  
+
   log('[INSTALL] Registering auto-start...');
-  
+
   try {
-    const regCmd = spawn('reg', ['add', startupKey, '/v', 'GentleVanguardDashboardWS', '/t', 'REG_SZ', '/d', command, '/f'], { 
-      stdio: 'inherit',
-      windowsHide: true 
-    });
-    
+    const regCmd = spawn(
+      'reg',
+      ['add', startupKey, '/v', 'GentleVanguardDashboardWS', '/t', 'REG_SZ', '/d', command, '/f'],
+      {
+        stdio: 'inherit',
+        windowsHide: true,
+      },
+    );
+
     await new Promise((resolve) => {
       regCmd.on('close', (code) => {
         resolve(code);
       });
     });
-    
+
     log('[INSTALL] Auto-start registered successfully');
     log(`[INSTALL] Command: ${command}`);
     log('[INSTALL] Dashboard WS will start automatically on next login');
@@ -212,21 +222,21 @@ async function install(): Promise<void> {
 
 async function uninstall(): Promise<void> {
   const startupKey = 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run';
-  
+
   log('[UNINSTALL] Removing auto-start...');
-  
+
   try {
-    const regCmd = spawn('reg', ['delete', startupKey, '/v', 'GentleVanguardDashboardWS', '/f'], { 
+    const regCmd = spawn('reg', ['delete', startupKey, '/v', 'GentleVanguardDashboardWS', '/f'], {
       stdio: 'inherit',
-      windowsHide: true 
+      windowsHide: true,
     });
-    
+
     await new Promise((resolve) => {
       regCmd.on('close', (code) => {
         resolve(code);
       });
     });
-    
+
     log('[UNINSTALL] Auto-start removed');
   } catch (err) {
     log(`[UNINSTALL] Error: ${err}`);
@@ -237,7 +247,7 @@ async function status(): Promise<void> {
   const pid = readPid();
   const port = DEFAULT_PORT;
   const healthy = await healthCheck(port);
-  
+
   if (pid && isRunning(pid)) {
     console.log(`Status: RUNNING (PID: ${pid})`);
     console.log(`Health: ${healthy ? 'HEALTHY' : 'NOT RESPONDING'}`);
@@ -250,27 +260,27 @@ async function status(): Promise<void> {
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
-  
+
   if (args.includes('--install')) {
     await install();
     process.exit(0);
   }
-  
+
   if (args.includes('--uninstall')) {
     await uninstall();
     process.exit(0);
   }
-  
+
   if (args.includes('--status')) {
     await status();
     process.exit(0);
   }
-  
+
   // Default: run service
   await runService();
 }
 
-main().catch(err => {
+main().catch((err) => {
   log(`[FATAL] ${err}`);
   process.exit(1);
 });

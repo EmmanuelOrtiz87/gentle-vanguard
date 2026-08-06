@@ -4,23 +4,23 @@ Expanded rationale for each step of the interview-me skill.
 
 ## Step 1: Hypothesize, with a confidence number
 
-Before asking anything, write down your current best read of what the user wants in
-**one sentence**, plus an honest confidence number (0–100%):
+Before asking anything, write down your current best read of what the user wants in **one
+sentence**, plus an honest confidence number (0–100%):
 
 ```
 HYPOTHESIS: You want a way to answer "how are we doing?" in standup, and "dashboard" was the convention that came to mind.
 CONFIDENCE: ~30% — missing: who it's for, what "metrics" means in context, and what success looks like
 ```
 
-The number forces honesty. If you wrote down a high number but can't actually predict
-the user's reactions to the next three questions you'd ask, the number is wrong. Start
-at the level you can defend.
+The number forces honesty. If you wrote down a high number but can't actually predict the user's
+reactions to the next three questions you'd ask, the number is wrong. Start at the level you can
+defend.
 
-When confidence is below ~70%, append a brief reason on the same line — what's still
-unresolved or missing. This tells the user exactly what the interview needs to surface.
+When confidence is below ~70%, append a brief reason on the same line — what's still unresolved or
+missing. This tells the user exactly what the interview needs to surface.
 
-**Common mistake:** Writing a high confidence number without being able to back it up
-with a prediction of the user's next three reactions.
+**Common mistake:** Writing a high confidence number without being able to back it up with a
+prediction of the user's next three reactions.
 
 ## Step 2: Ask one question at a time, each with a guess
 
@@ -37,8 +37,8 @@ Wait for the user to react before asking the next question.
 
 - The user can't react to your hypotheses if you bury them in a list
 - Batches encourage skim-reading and surface answers
-- The third question often depends on the answer to the first; asking them all at once
-  locks in the wrong framing
+- The third question often depends on the answer to the first; asking them all at once locks in the
+  wrong framing
 - The user's energy for thinking carefully is finite; spend it one question at a time
 
 **Why attach a guess:**
@@ -47,25 +47,23 @@ Wait for the user to react before asking the next question.
 - It commits you to a hypothesis you can be visibly wrong about, which keeps you honest
 - It surfaces _your_ assumptions, which is what the interview is meant to expose
 
-The risk here is a polite user agreeing with your guess to be agreeable. Mitigate by
-being visibly willing to be wrong, and occasionally guess in a direction you expect the
-user to push back on.
+The risk here is a polite user agreeing with your guess to be agreeable. Mitigate by being visibly
+willing to be wrong, and occasionally guess in a direction you expect the user to push back on.
 
-**Common mistake:** Batching multiple questions in one message, or asking without your
-hypothesis attached.
+**Common mistake:** Batching multiple questions in one message, or asking without your hypothesis
+attached.
 
 ## Step 3: Listen for "want vs. should want"
 
-The most dangerous answers are the ones where the user says what a thoughtful answer
-_sounds like_ rather than what they actually want. Watch for:
+The most dangerous answers are the ones where the user says what a thoughtful answer _sounds like_
+rather than what they actually want. Watch for:
 
-- Answers that pattern-match best-practice talk ("I want it to be scalable", "clean
-  architecture") without specifics
+- Answers that pattern-match best-practice talk ("I want it to be scalable", "clean architecture")
+  without specifics
 - Answers that defer to convention ("the way most apps do it", "the standard approach")
-- Phrases like "I should probably…", "I think I'm supposed to…", "good engineering
-  practice says…"
-- Buzzwords as goals — when "modern", "scalable", "robust" are the answer instead of a
-  specific outcome
+- Phrases like "I should probably…", "I think I'm supposed to…", "good engineering practice says…"
+- Buzzwords as goals — when "modern", "scalable", "robust" are the answer instead of a specific
+  outcome
 
 When you hear these, the question to ask is:
 
@@ -77,9 +75,8 @@ That single question often does more work than the previous five.
 
 ## Step 4: Restate intent in the user's own words
 
-When your confidence is high, write back what you now think the user wants. Keep it tight
-(5–8 lines), use their language, and structure it so they can confirm or correct line by
-line:
+When your confidence is high, write back what you now think the user wants. Keep it tight (5–8
+lines), use their language, and structure it so they can confirm or correct line by line:
 
 ```
 Here's what I now think you want:
@@ -94,22 +91,22 @@ Here's what I now think you want:
 Yes / no / refine?
 ```
 
-Including "Out of scope" is non-negotiable. Half of misalignment is silent disagreement
-about what is _not_ being built.
+Including "Out of scope" is non-negotiable. Half of misalignment is silent disagreement about what
+is _not_ being built.
 
-**Common mistake:** Skipping the "Out of scope" line, or writing a restate that is too
-vague for the user to correct meaningfully.
+**Common mistake:** Skipping the "Out of scope" line, or writing a restate that is too vague for the
+user to correct meaningfully.
 
 ## Step 5: Confirm — explicit yes, not "whatever you think"
 
 The gate is an explicit "yes." The following are **not** yes:
 
-- "Whatever you think is best." → The user is delegating, which means they don't have
-  95% confidence either. Re-ask with two concrete options framed as a choice.
+- "Whatever you think is best." → The user is delegating, which means they don't have 95% confidence
+  either. Re-ask with two concrete options framed as a choice.
 - "Sounds good." → Ambiguous. Ask: "Anything you'd refine?" Silence isn't confirmation.
 - "Sure, let's go." → Often a polite exit, not an endorsement. Same follow-up.
-- Silence followed by "okay let's start." → The user has given up on the interview, not
-  converged. Stop and ask whether you've missed something.
+- Silence followed by "okay let's start." → The user has given up on the interview, not converged.
+  Stop and ask whether you've missed something.
 
 If they correct you, fold the correction in and restate. Loop until explicit yes.
 
@@ -121,13 +118,13 @@ You're done when you can answer yes to:
 
 > _Can I predict the user's reaction to the next three questions I would ask?_
 
-If yes, you have shared understanding. Stop interviewing and produce the restate. If no,
-you're not done; ask the next question.
+If yes, you have shared understanding. Stop interviewing and produce the restate. If no, you're not
+done; ask the next question.
 
-This is a checkable test, not a vibe. It also has a floor: if you've gone several rounds
-and still can't predict, that's information about the ask, not a reason to keep grinding.
-Stop and tell the user: "I've asked X questions and I still can't predict your reactions.
-Something foundational is missing. Want to step back?"
+This is a checkable test, not a vibe. It also has a floor: if you've gone several rounds and still
+can't predict, that's information about the ask, not a reason to keep grinding. Stop and tell the
+user: "I've asked X questions and I still can't predict your reactions. Something foundational is
+missing. Want to step back?"
 
-**Common mistake:** Continuing to ask questions when it's clear the user doesn't know
-what they want yet, instead of calling that out.
+**Common mistake:** Continuing to ask questions when it's clear the user doesn't know what they want
+yet, instead of calling that out.

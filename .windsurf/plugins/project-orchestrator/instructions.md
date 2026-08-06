@@ -4,11 +4,10 @@
 
 ## Description
 
-
 ## Triggers
 
-
 ## Instructions
+
 ## Activation Contract
 
 ALWAYS ACTIVE. Loads on every session for coordination, stack detection, skill loading, and workflow

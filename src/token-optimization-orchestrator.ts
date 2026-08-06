@@ -22,15 +22,22 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { compressPrompt, CompressionResult as PromptCompressionResult } from './prompt-compression.js';
-import { compressOutput, CompressionResult as OutputCompressionResult } from './output-compression.js';
+import {
+  compressPrompt,
+  CompressionResult as PromptCompressionResult,
+} from './prompt-compression.js';
+import {
+  compressOutput,
+  CompressionResult as OutputCompressionResult,
+} from './output-compression.js';
 import { enforceChatLevel, ChatLevelEnforcementResult, ChatLevel } from './chat-level-enforcer.js';
 import { ResponseCache, generateCacheKey } from './response-cache.js';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
 export type OrchestratorMode = 'optimize' | 'pipeline' | 'check' | 'report';
-export type PipelineStage = 'pre-process' | 'process' | 'post-process' | 'cache-check' | 'cache-store';
+export type PipelineStage =
+  'pre-process' | 'process' | 'post-process' | 'cache-check' | 'cache-store';
 
 export interface PipelineInput {
   prompt: string;
@@ -78,8 +85,8 @@ export interface OptimizationMetrics {
   totalTokensIn: number;
   totalTokensOut: number;
   totalSavings: number;
-  totalReduction: number;            // percentage
-  estimatedCostSaved: number;      // in arbitrary units
+  totalReduction: number; // percentage
+  estimatedCostSaved: number; // in arbitrary units
 }
 
 export interface OrchestratorConfig {
@@ -105,11 +112,14 @@ export interface OrchestratorStats {
   cacheHitRate: number;
   totalTokenSavings: number;
   avgSavingsPct: number;
-  byStage: Record<PipelineStage, {
-    runs: number;
-    avgDurationMs: number;
-    avgSavings: number;
-  }>;
+  byStage: Record<
+    PipelineStage,
+    {
+      runs: number;
+      avgDurationMs: number;
+      avgSavings: number;
+    }
+  >;
 }
 
 // ─── Paths ────────────────────────────────────────────────────────────────────
@@ -144,11 +154,13 @@ export function getConfig(): OrchestratorConfig {
         tokenBudgetAware: true,
         metricsEnabled: true,
         metricsStoragePath: '.runtime/token-optimization-metrics.json',
-        reportInterval: 100
+        reportInterval: 100,
       };
       return _config;
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 
   _config = {
     enabled: true,
@@ -161,7 +173,7 @@ export function getConfig(): OrchestratorConfig {
     tokenBudgetAware: true,
     metricsEnabled: true,
     metricsStoragePath: '.runtime/token-optimization-metrics.json',
-    reportInterval: 100
+    reportInterval: 100,
   };
   return _config;
 }
@@ -181,7 +193,7 @@ interface StageContext {
 
 async function runCacheCheckStage(
   input: PipelineInput,
-  context: StageContext
+  context: StageContext,
 ): Promise<PipelineStageResult> {
   const start = Date.now();
   const tokensIn = estimateTokens(input.prompt);
@@ -196,7 +208,7 @@ async function runCacheCheckStage(
         tokensIn,
         tokensOut: 0,
         savings: 0,
-        success: true
+        success: true,
       };
     }
 
@@ -215,7 +227,7 @@ async function runCacheCheckStage(
         tokensIn,
         tokensOut,
         savings: tokensIn - tokensOut,
-        success: true
+        success: true,
       };
     }
 
@@ -227,7 +239,7 @@ async function runCacheCheckStage(
       tokensIn,
       tokensOut: 0,
       savings: 0,
-      success: true
+      success: true,
     };
   } catch (err) {
     return {
@@ -239,14 +251,14 @@ async function runCacheCheckStage(
       tokensOut: 0,
       savings: 0,
       success: false,
-      error: String(err)
+      error: String(err),
     };
   }
 }
 
 async function runPreProcessStage(
   input: PipelineInput,
-  config: OrchestratorConfig
+  config: OrchestratorConfig,
 ): Promise<PipelineStageResult> {
   const start = Date.now();
   const original = input.prompt;
@@ -262,7 +274,7 @@ async function runPreProcessStage(
         tokensIn: originalTokens,
         tokensOut: originalTokens,
         savings: 0,
-        success: true
+        success: true,
       };
     }
 
@@ -278,7 +290,7 @@ async function runPreProcessStage(
       tokensIn: originalTokens,
       tokensOut,
       savings: originalTokens - tokensOut,
-      success: true
+      success: true,
     };
   } catch (err) {
     return {
@@ -290,7 +302,7 @@ async function runPreProcessStage(
       tokensOut: originalTokens,
       savings: 0,
       success: false,
-      error: String(err)
+      error: String(err),
     };
   }
 }
@@ -298,7 +310,7 @@ async function runPreProcessStage(
 async function runProcessStage(
   _input: PipelineInput,
   preProcessed: string,
-  _stageContext: StageContext
+  _stageContext: StageContext,
 ): Promise<PipelineStageResult> {
   const start = Date.now();
   const tokensIn = estimateTokens(preProcessed);
@@ -316,14 +328,14 @@ async function runProcessStage(
     tokensIn,
     tokensOut,
     savings: 0,
-    success: true
+    success: true,
   };
 }
 
 async function runPostProcessStage(
   response: string,
   input: PipelineInput,
-  config: OrchestratorConfig
+  config: OrchestratorConfig,
 ): Promise<PipelineStageResult> {
   const start = Date.now();
   const originalTokens = estimateTokens(response);
@@ -338,7 +350,7 @@ async function runPostProcessStage(
         tokensIn: originalTokens,
         tokensOut: originalTokens,
         savings: 0,
-        success: true
+        success: true,
       };
     }
 
@@ -346,11 +358,9 @@ async function runPostProcessStage(
     const enforced = enforceChatLevel(response, input.chatLevel ?? config.defaultChatLevel);
 
     // Then apply output compression
-    const compressed = compressOutput(
-      enforced.enforced,
-      enforced.profile,
-      { maxTokens: input.maxResponseTokens }
-    );
+    const compressed = compressOutput(enforced.enforced, enforced.profile, {
+      maxTokens: input.maxResponseTokens,
+    });
 
     const tokensOut = estimateTokens(compressed.compressed);
 
@@ -362,7 +372,7 @@ async function runPostProcessStage(
       tokensIn: originalTokens,
       tokensOut,
       savings: originalTokens - tokensOut,
-      success: true
+      success: true,
     };
   } catch (err) {
     return {
@@ -374,7 +384,7 @@ async function runPostProcessStage(
       tokensOut: originalTokens,
       savings: 0,
       success: false,
-      error: String(err)
+      error: String(err),
     };
   }
 }
@@ -384,7 +394,7 @@ async function runCacheStoreStage(
   response: string,
   tokensSaved: number,
   context: StageContext,
-  input: PipelineInput
+  input: PipelineInput,
 ): Promise<PipelineStageResult> {
   const start = Date.now();
   const tokensIn = estimateTokens(response);
@@ -399,7 +409,7 @@ async function runCacheStoreStage(
         tokensIn,
         tokensOut: 0,
         savings: 0,
-        success: true
+        success: true,
       };
     }
 
@@ -413,7 +423,7 @@ async function runCacheStoreStage(
       tokensIn,
       tokensOut: 0,
       savings: tokensSaved,
-      success: true
+      success: true,
     };
   } catch (err) {
     return {
@@ -425,7 +435,7 @@ async function runCacheStoreStage(
       tokensOut: 0,
       savings: 0,
       success: false,
-      error: String(err)
+      error: String(err),
     };
   }
 }
@@ -438,7 +448,7 @@ export async function runPipeline(
     skipCache?: boolean;
     skipPreProcess?: boolean;
     skipPostProcess?: boolean;
-  } = {}
+  } = {},
 ): Promise<PipelineResult> {
   const startTime = Date.now();
   const config = getConfig();
@@ -447,7 +457,7 @@ export async function runPipeline(
   // Initialize cache (lazy singleton)
   const cache = new ResponseCache({
     enabled: input.cacheEnabled ?? config.cacheEnabled,
-    defaultTtlMinutes: input.ttlMinutes ?? config.cacheTtlMinutes
+    defaultTtlMinutes: input.ttlMinutes ?? config.cacheTtlMinutes,
   });
 
   const context: StageContext = { cache };
@@ -463,7 +473,7 @@ export async function runPipeline(
       output: {
         response: cacheCheck.output,
         fromCache: true,
-        cacheKey: context.cacheKey
+        cacheKey: context.cacheKey,
       },
       stages,
       metrics: {
@@ -473,9 +483,9 @@ export async function runPipeline(
         totalTokensOut: cacheCheck.tokensOut,
         totalSavings: cacheCheck.savings,
         totalReduction: (cacheCheck.tokensOut / cacheCheck.tokensIn) * 100,
-        estimatedCostSaved: cacheCheck.savings * 0.001 // Arbitrary unit
+        estimatedCostSaved: cacheCheck.savings * 0.001, // Arbitrary unit
       },
-      durationMs: Date.now() - startTime
+      durationMs: Date.now() - startTime,
     };
 
     saveMetrics(result);
@@ -514,7 +524,7 @@ export async function runPipeline(
     output: {
       response,
       fromCache: false,
-      cacheKey: context.cacheKey
+      cacheKey: context.cacheKey,
     },
     stages,
     metrics: {
@@ -523,10 +533,11 @@ export async function runPipeline(
       totalTokensIn,
       totalTokensOut,
       totalSavings: totalSavings,
-      totalReduction: totalTokensIn > 0 ? ((totalTokensIn - totalTokensOut) / totalTokensIn) * 100 : 0,
-      estimatedCostSaved: totalSavings * 0.001
+      totalReduction:
+        totalTokensIn > 0 ? ((totalTokensIn - totalTokensOut) / totalTokensIn) * 100 : 0,
+      estimatedCostSaved: totalSavings * 0.001,
     },
-    durationMs: Date.now() - startTime
+    durationMs: Date.now() - startTime,
   };
 
   saveMetrics(result);
@@ -542,7 +553,7 @@ export function optimizePrompt(prompt: string, skill?: string): PromptCompressio
 export function optimizeResponse(
   response: string,
   chatLevel: ChatLevel = 'chat-compact',
-  profile?: 'ultra' | 'lleno' | 'lite' | 'simple'
+  profile?: 'ultra' | 'lleno' | 'lite' | 'simple',
 ): { chatEnforcement: ChatLevelEnforcementResult; outputCompression: OutputCompressionResult } {
   const chatEnforcement = enforceChatLevel(response, chatLevel);
   const outputCompression = compressOutput(chatEnforcement.enforced, profile ?? 'auto');
@@ -586,7 +597,9 @@ function saveMetrics(result: PipelineResult): void {
 
     // Update aggregate stats
     updateStats(result);
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 }
 
 function updateStats(result: PipelineResult): void {
@@ -603,10 +616,10 @@ function updateStats(result: PipelineResult): void {
       byStage: {
         'cache-check': { runs: 0, avgDurationMs: 0, avgSavings: 0 },
         'pre-process': { runs: 0, avgDurationMs: 0, avgSavings: 0 },
-        'process': { runs: 0, avgDurationMs: 0, avgSavings: 0 },
+        process: { runs: 0, avgDurationMs: 0, avgSavings: 0 },
         'post-process': { runs: 0, avgDurationMs: 0, avgSavings: 0 },
-        'cache-store': { runs: 0, avgDurationMs: 0, avgSavings: 0 }
-      }
+        'cache-store': { runs: 0, avgDurationMs: 0, avgSavings: 0 },
+      },
     };
 
     if (existsSync(STATS_PATH)) {
@@ -638,15 +651,22 @@ function updateStats(result: PipelineResult): void {
 
     // Calculate average savings
     const orchestratorConfig = getConfig();
-    const allRuns = JSON.parse(readFileSync(join(ROOT, orchestratorConfig.metricsStoragePath), 'utf-8') || '[]');
+    const allRuns = JSON.parse(
+      readFileSync(join(ROOT, orchestratorConfig.metricsStoragePath), 'utf-8') || '[]',
+    );
     if (Array.isArray(allRuns) && allRuns.length > 0) {
-      const totalSavings = allRuns.reduce((sum: number, r: PipelineResult) => sum + r.metrics.totalSavings, 0);
+      const totalSavings = allRuns.reduce(
+        (sum: number, r: PipelineResult) => sum + r.metrics.totalSavings,
+        0,
+      );
       stats.avgSavingsPct = totalSavings / allRuns.length;
     }
 
     ensureDir(STATS_PATH);
     writeFileSync(STATS_PATH, JSON.stringify(stats, null, 2));
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 }
 
 function loadStats(): OrchestratorStats {
@@ -654,7 +674,9 @@ function loadStats(): OrchestratorStats {
     if (existsSync(STATS_PATH)) {
       return JSON.parse(readFileSync(STATS_PATH, 'utf-8')) as OrchestratorStats;
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 
   return {
     totalRuns: 0,
@@ -668,10 +690,10 @@ function loadStats(): OrchestratorStats {
     byStage: {
       'cache-check': { runs: 0, avgDurationMs: 0, avgSavings: 0 },
       'pre-process': { runs: 0, avgDurationMs: 0, avgSavings: 0 },
-      'process': { runs: 0, avgDurationMs: 0, avgSavings: 0 },
+      process: { runs: 0, avgDurationMs: 0, avgSavings: 0 },
       'post-process': { runs: 0, avgDurationMs: 0, avgSavings: 0 },
-      'cache-store': { runs: 0, avgDurationMs: 0, avgSavings: 0 }
-    }
+      'cache-store': { runs: 0, avgDurationMs: 0, avgSavings: 0 },
+    },
   };
 }
 
@@ -696,7 +718,9 @@ export function generateReport(): {
   }
 
   if (stats.byStage['post-process'].avgSavings < 100) {
-    recommendations.push('Post-process compression savings are low - consider stricter chat levels');
+    recommendations.push(
+      'Post-process compression savings are low - consider stricter chat levels',
+    );
   }
 
   return { stats, config, recommendations };
@@ -757,7 +781,7 @@ function formatPipelineResult(result: PipelineResult): string {
     `  From Cache:    ${result.output.fromCache ? 'Yes ✓' : 'No'}`,
     '',
     '  ── Stages ──────────────────────────────────────',
-    ''
+    '',
   ];
 
   for (const stage of result.stages) {
@@ -774,7 +798,7 @@ function formatPipelineResult(result: PipelineResult): string {
     `    Total Output:          ~${result.metrics.totalTokensOut} tokens`,
     `    Total Savings:         ${result.metrics.totalSavings} tokens`,
     `    Reduction:             ${result.metrics.totalReduction.toFixed(1)}%`,
-    `    Cache Hit:             ${result.metrics.cacheHit ? 'Yes' : 'No'}`
+    `    Cache Hit:             ${result.metrics.cacheHit ? 'Yes' : 'No'}`,
   );
 
   if (result.metrics.cacheHit) {
@@ -785,7 +809,7 @@ function formatPipelineResult(result: PipelineResult): string {
     '',
     '  ── Output ───────────────────────────────────────',
     '',
-    result.output.response.slice(0, 500)
+    result.output.response.slice(0, 500),
   );
 
   if (result.output.response.length > 500) {
@@ -821,12 +845,24 @@ async function main(): Promise<void> {
         console.log('[OK] Metrics cleared');
       }
       if (existsSync(STATS_PATH)) {
-        writeFileSync(STATS_PATH, JSON.stringify({
-          totalRuns: 0, successfulRuns: 0, failedRuns: 0,
-          cacheHits: 0, cacheMisses: 0, cacheHitRate: 0,
-          totalTokenSavings: 0, avgSavingsPct: 0,
-          byStage: {}
-        }, null, 2));
+        writeFileSync(
+          STATS_PATH,
+          JSON.stringify(
+            {
+              totalRuns: 0,
+              successfulRuns: 0,
+              failedRuns: 0,
+              cacheHits: 0,
+              cacheMisses: 0,
+              cacheHitRate: 0,
+              totalTokenSavings: 0,
+              avgSavingsPct: 0,
+              byStage: {},
+            },
+            null,
+            2,
+          ),
+        );
         console.log('[OK] Stats cleared');
       }
     } catch (err) {
@@ -854,7 +890,9 @@ async function main(): Promise<void> {
     console.log('');
     console.log('  By Stage:');
     for (const [stage, s] of Object.entries(stats.byStage)) {
-      console.log(`    ${stage.padEnd(15)} ${s.runs} runs, ${s.avgDurationMs.toFixed(0)}ms avg, ${s.avgSavings.toFixed(0)} tokens saved`);
+      console.log(
+        `    ${stage.padEnd(15)} ${s.runs} runs, ${s.avgDurationMs.toFixed(0)}ms avg, ${s.avgSavings.toFixed(0)} tokens saved`,
+      );
     }
     console.log('');
     return;
@@ -933,7 +971,8 @@ async function main(): Promise<void> {
 
   const skill = skillIdx >= 0 ? args[skillIdx + 1] : undefined;
   const level = (levelIdx >= 0 ? args[levelIdx + 1] : 'chat-compact') as ChatLevel;
-  const profile = profileIdx >= 0 ? args[profileIdx + 1] as 'ultra' | 'lleno' | 'lite' | 'simple' : undefined;
+  const profile =
+    profileIdx >= 0 ? (args[profileIdx + 1] as 'ultra' | 'lleno' | 'lite' | 'simple') : undefined;
   const context = contextIdx >= 0 ? args[contextIdx + 1] : undefined;
   const ttl = ttlIdx >= 0 ? parseInt(args[ttlIdx + 1] ?? '60', 10) : undefined;
 
@@ -957,7 +996,9 @@ async function main(): Promise<void> {
       } else if (!quietFlag) {
         console.log('Chat Level Enforcement:');
         console.log(`  Level: ${result.chatEnforcement.level}`);
-        console.log(`  Lines: ${result.chatEnforcement.originalLines} → ${result.chatEnforcement.enforcedLines}`);
+        console.log(
+          `  Lines: ${result.chatEnforcement.originalLines} → ${result.chatEnforcement.enforcedLines}`,
+        );
         console.log('');
         console.log('Output Compression:');
         console.log(`  Profile: ${result.outputCompression.profile}`);
@@ -979,7 +1020,7 @@ async function main(): Promise<void> {
         skill,
         chatLevel: level,
         cacheEnabled: !skipCacheFlag,
-        ttlMinutes: ttl
+        ttlMinutes: ttl,
       };
 
       const result = await runPipeline(pipelineInput);
@@ -998,7 +1039,7 @@ async function main(): Promise<void> {
 
 // ─── Run CLI if called directly
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  main().catch(err => {
+  main().catch((err) => {
     console.error('Fatal error:', err);
     process.exit(1);
   });

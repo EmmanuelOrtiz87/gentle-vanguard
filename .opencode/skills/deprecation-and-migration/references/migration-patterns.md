@@ -60,12 +60,13 @@ the old one            the app                  a later, separate deploy
 2. **Dual-write.** App writes both `name` and `full_name` on every insert/update. Deploy.
 3. **Backfill.** Copy `name → full_name` for existing rows, in batches.
 4. **Switch reads.** Point the app at `full_name`, keep writing both. Deploy and bake.
-5. **Contract.** Stop writing `name`, then — in a *separate, later* deploy — drop the column.
+5. **Contract.** Stop writing `name`, then — in a _separate, later_ deploy — drop the column.
 
 Each step is independently deployable and reversible: if step 4 misbehaves, roll the code back and
 `full_name` is still being populated.
 
 **Rules:**
+
 - **Additive first, destructive last and alone.** Adds are safe in any deploy; drops get their own
   deploy after no code references the old shape.
 - **Every migration has a tested down path.** Write and run the `down` before merging.

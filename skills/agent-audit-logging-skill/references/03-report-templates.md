@@ -6,6 +6,7 @@
 # Agent Audit Summary — {date}
 
 ## Overview
+
 - **Total Invocations**: 1,247
 - **Successful**: 1,198 (96.1%)
 - **Failed**: 49 (3.9%)
@@ -13,6 +14,7 @@
 - **Human Escalations**: 12
 
 ## Top Agents by Activity
+
 | Agent          | Invocations | Errors | Avg Duration |
 | -------------- | ----------- | ------ | ------------ |
 | Support Agent  | 534         | 12     | 2.3s         |
@@ -20,11 +22,13 @@
 | Code Agent     | 401         | 29     | 4.7s         |
 
 ## Error Summary
+
 - **TimeoutError**: 23 (46.9%)
 - **RateLimitError**: 14 (28.6%)
 - **ValidationError**: 12 (24.5%)
 
 ## Compliance Checks
+
 - ✅ Human escalation rate within threshold
 - ✅ Tool approval rate 100%
 - ✅ Data access logged for all operations
@@ -37,6 +41,7 @@
 # Incident Forensics — Trace {trace_id}
 
 ## Timeline
+
 | Time     | Agent   | Action                    | Duration | Status     |
 | -------- | ------- | ------------------------- | -------- | ---------- |
 | 14:23:01 | Router  | Task received             | 0ms      | ✅         |
@@ -51,10 +56,12 @@
 | 14:23:35 | Billing | Human escalation          | 0.1s     | ✅         |
 
 ## Root Cause
+
 The `process_refund` API was down (503 errors). The circuit breaker correctly opened after 2
 failures, and the agent degraded to a fallback path before escalating to a human operator.
 
 ## Recommendations
+
 1. Increase `process_refund` timeout from 10s to 30s
 2. Add a cached fallback for refund status checks
 3. Set up PagerDuty alert for `process_refund` failures

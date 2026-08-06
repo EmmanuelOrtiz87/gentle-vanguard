@@ -1,6 +1,9 @@
 ---
 name: document-processor
-description: Process, extract and analyze content from PDF, DOCX, TXT and other document formats. Use when reading documents, extracting text, analyzing reports, parsing contracts, or processing documentation.
+description:
+  Process, extract and analyze content from PDF, DOCX, TXT and other document formats. Use when
+  reading documents, extracting text, analyzing reports, parsing contracts, or processing
+  documentation.
 triggers:
   - process document
   - extract text
@@ -15,19 +18,19 @@ triggers:
 
 ## Overview
 
-Process and extract structured content from documents (PDF, DOCX, TXT).
-Extracts text, tables, metadata, and generates summaries.
+Process and extract structured content from documents (PDF, DOCX, TXT). Extracts text, tables,
+metadata, and generates summaries.
 
 ## Supported Formats
 
-| Format | Extension | Capability |
-|--------|-----------|------------|
-| PDF | .pdf | Full text extraction, metadata, page structure |
-| Word | .docx | Full text, styles, tables, images (refs) |
-| Text | .txt, .md, .rst | Direct reading, structure analysis |
-| CSV | .csv, .tsv | Structured data, table extraction |
-| JSON/YAML | .json, .yaml, .yml | Schema validation, content extraction |
-| HTML | .html, .htm | DOM extraction, text cleaning |
+| Format    | Extension          | Capability                                     |
+| --------- | ------------------ | ---------------------------------------------- |
+| PDF       | .pdf               | Full text extraction, metadata, page structure |
+| Word      | .docx              | Full text, styles, tables, images (refs)       |
+| Text      | .txt, .md, .rst    | Direct reading, structure analysis             |
+| CSV       | .csv, .tsv         | Structured data, table extraction              |
+| JSON/YAML | .json, .yaml, .yml | Schema validation, content extraction          |
+| HTML      | .html, .htm        | DOM extraction, text cleaning                  |
 
 ## Usage Flow
 
@@ -52,6 +55,7 @@ Document received
 ## Extraction Modes
 
 ### 1. Text Extraction
+
 ```bash
 # Extract all text
 npx tsx src/document-processor.ts extract "document.pdf"
@@ -64,6 +68,7 @@ npx tsx src/document-processor.ts extract "scanned.pdf" --ocr
 ```
 
 ### 2. Table Extraction
+
 ```bash
 # Extract tables to CSV
 npx tsx src/document-processor.ts tables "report.pdf" --output tables.csv
@@ -73,6 +78,7 @@ npx tsx src/document-processor.ts tables "spreadsheet.xlsx" --format json
 ```
 
 ### 3. Metadata Extraction
+
 ```bash
 # Get document metadata
 npx tsx src/document-processor.ts meta "document.pdf"
@@ -81,6 +87,7 @@ npx tsx src/document-processor.ts meta "document.pdf"
 ```
 
 ### 4. Summary Generation
+
 ```bash
 # Generate executive summary
 npx tsx src/document-processor.ts summarize "long-document.pdf"
@@ -124,14 +131,14 @@ interface TableData {
 
 ## Error Handling
 
-| Error | Remediation |
-|-------|-------------|
-| File not found | Check path, suggest alternatives |
-| Permission denied | Suggest `sudo` or file permissions |
-| Corrupted PDF | Try recovery mode, suggest repair tools |
-| Encrypted PDF | Request password or skip |
+| Error                | Remediation                             |
+| -------------------- | --------------------------------------- |
+| File not found       | Check path, suggest alternatives        |
+| Permission denied    | Suggest `sudo` or file permissions      |
+| Corrupted PDF        | Try recovery mode, suggest repair tools |
+| Encrypted PDF        | Request password or skip                |
 | Missing dependencies | Auto-install or provide install command |
-| OCR required | Suggest Tesseract installation |
+| OCR required         | Suggest Tesseract installation          |
 
 ## Integration with Other Skills
 
@@ -143,6 +150,7 @@ interface TableData {
 ## Examples
 
 ### Example 1: Extract PDF to Markdown
+
 ```bash
 $ npx tsx src/document-processor.ts extract "spec.pdf" --format md
 
@@ -157,6 +165,7 @@ Extracted text...
 ```
 
 ### Example 2: Analyze Contract
+
 ```bash
 $ npx tsx src/document-processor.ts analyze "contract.pdf" --focus clauses
 
@@ -167,6 +176,7 @@ Key clauses found:
 ```
 
 ### Example 3: Batch Process
+
 ```bash�$ npx tsx src/document-processor.ts batch "./documents/*.pdf" --output ./extracted/
 
 Processing: report1.pdf ✓
@@ -177,6 +187,7 @@ Processing: scanned.pdf (OCR) ✓
 ## Dependencies
 
 Downloaded on first use:
+
 - `pdf-parse` - PDF text extraction
 - `docx` - DOCX parsing
 - `xlsx` - Excel/CSV parsing
@@ -184,13 +195,13 @@ Downloaded on first use:
 
 ## Performance
 
-| File Size | Format | Typical Time |
-|-----------|--------|--------------|
-| <1 MB | PDF | 1-2s |
-| 1-10 MB | PDF | 3-5s |
-| >10 MB | PDF | 5-15s |
-| DOCX | Any size | <3s |
-| OCR | Per page | 2-5s/page |
+| File Size | Format   | Typical Time |
+| --------- | -------- | ------------ |
+| <1 MB     | PDF      | 1-2s         |
+| 1-10 MB   | PDF      | 3-5s         |
+| >10 MB    | PDF      | 5-15s        |
+| DOCX      | Any size | <3s          |
+| OCR       | Per page | 2-5s/page    |
 
 ## See Also
 

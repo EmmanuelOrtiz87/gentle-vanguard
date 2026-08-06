@@ -18,13 +18,15 @@ console.log('🔍 Verificando configuraciones implementadas...');
 
 const outputConfigPath = join(ROOT, 'config', 'output-compression.json');
 if (existsSync(outputConfigPath)) {
-    const configContent = readFileSync(outputConfigPath, 'utf-8');
-    const config = JSON.parse(configContent);
-    
-    console.log('✅ Configuración de compresión de salida:');
-    console.log('   - Perfil "ultra": ' + config.profiles.ultra.maxTokens + ' tokens máximos');
-    console.log('   - Chat compacto: ' + config.chatLevels['chat-compact'].maxTokens + ' tokens máximos');
-    console.log('   - Compresión: ' + (config.profiles.ultra.compressionLevel * 100) + '%');
+  const configContent = readFileSync(outputConfigPath, 'utf-8');
+  const config = JSON.parse(configContent);
+
+  console.log('✅ Configuración de compresión de salida:');
+  console.log('   - Perfil "ultra": ' + config.profiles.ultra.maxTokens + ' tokens máximos');
+  console.log(
+    '   - Chat compacto: ' + config.chatLevels['chat-compact'].maxTokens + ' tokens máximos',
+  );
+  console.log('   - Compresión: ' + config.profiles.ultra.compressionLevel * 100 + '%');
 }
 
 // 2. Simular ejemplo de prompt de entrada comprimido
@@ -70,18 +72,18 @@ console.log('\nReducción: 63% de palabras');
 // 4. Verificar estado actual del sistema
 console.log('\n📊 Estado actual del sistema:');
 try {
-    const result = runSyncShell('npx tsx src/token-budget-guard.ts -Mode status -Quiet', {
-        cwd: ROOT
-    });
-    
-    if (result.status === 0) {
-        console.log('✅ Monitoreo de tokens activo:');
-        console.log('   ' + result.stdout.trim().replace(/\n/g, '\n   '));
-    } else {
-        console.log('⚠️  Error en monitoreo:', result.stderr);
-    }
+  const result = runSyncShell('npx tsx src/token-budget-guard.ts -Mode status -Quiet', {
+    cwd: ROOT,
+  });
+
+  if (result.status === 0) {
+    console.log('✅ Monitoreo de tokens activo:');
+    console.log('   ' + result.stdout.trim().replace(/\n/g, '\n   '));
+  } else {
+    console.log('⚠️  Error en monitoreo:', result.stderr);
+  }
 } catch (error) {
-    console.log('⚠️  Error ejecutando monitoreo:', (error as Error).message);
+  console.log('⚠️  Error ejecutando monitoreo:', (error as Error).message);
 }
 
 // 5. Comparativa de ahorro esperado

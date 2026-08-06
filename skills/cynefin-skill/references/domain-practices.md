@@ -11,6 +11,7 @@
 - Process compliance
 
 Example applications:
+
 - Deployment procedures
 - Coding standards
 - Basic incident response
@@ -28,6 +29,7 @@ Example applications:
 - Scenario planning
 
 Example applications:
+
 - System architecture
 - Performance optimization
 - Security review
@@ -45,6 +47,7 @@ Example applications:
 - Feature flags
 
 Example applications:
+
 - Product development
 - Team process improvement
 - User experience design
@@ -61,6 +64,7 @@ Example applications:
 - Post-incident review (later)
 
 Example applications:
+
 - Major outages
 - Security incidents
 - Crisis response

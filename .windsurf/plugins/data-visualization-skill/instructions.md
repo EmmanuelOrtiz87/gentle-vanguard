@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Data Visualization Skill
 
 Chart selection guidance, Python visualization code patterns, design principles, and accessibility

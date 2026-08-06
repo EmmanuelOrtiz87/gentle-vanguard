@@ -1,6 +1,9 @@
 ---
 name: data-analyst
-description: Analyze datasets, generate insights, create visualizations, and perform statistical analysis. Use when working with data, CSV/JSON files, creating reports, or extracting insights from any structured data.
+description:
+  Analyze datasets, generate insights, create visualizations, and perform statistical analysis. Use
+  when working with data, CSV/JSON files, creating reports, or extracting insights from any
+  structured data.
 triggers:
   - analyze data
   - data analysis
@@ -16,23 +19,24 @@ triggers:
 
 ## Overview
 
-Analyze structured data (CSV, JSON, SQL results) to generate insights,
-statistics, correlations, and visualizations.
+Analyze structured data (CSV, JSON, SQL results) to generate insights, statistics, correlations, and
+visualizations.
 
 ## Data Sources
 
-| Source | Capability | Notes |
-|--------|------------|-------|
-| CSV | Full support | Streaming for large files |
-| JSON | Full support | Nested object flattening |
-| TSV | Full support | Tab-delimited |
-| SQLite | Full support | Direct queries via Nexus |
-| Excel | Partial | Via document-processor first |
-| API Response | Full support | JSON parsing |
+| Source       | Capability   | Notes                        |
+| ------------ | ------------ | ---------------------------- |
+| CSV          | Full support | Streaming for large files    |
+| JSON         | Full support | Nested object flattening     |
+| TSV          | Full support | Tab-delimited                |
+| SQLite       | Full support | Direct queries via Nexus     |
+| Excel        | Partial      | Via document-processor first |
+| API Response | Full support | JSON parsing                 |
 
 ## Analysis Types
 
 ### 1. Descriptive Statistics
+
 ```bash
 # Generate summary statistics
 npx tsx src/data-analyst.ts describe "data.csv"
@@ -41,6 +45,7 @@ npx tsx src/data-analyst.ts describe "data.csv"
 ```
 
 ### 2. Correlation Analysis
+
 ```bash
 # Find correlations
 npx tsx src/data-analyst.ts correlate "data.json" --target revenue
@@ -49,6 +54,7 @@ npx tsx src/data-analyst.ts correlate "data.json" --target revenue
 ```
 
 ### 3. Trend Analysis
+
 ```bash
 # Time series analysis
 npx tsx src/data-analyst.ts trend "metrics.csv" --date date_column --value sales
@@ -57,12 +63,14 @@ npx tsx src/data-analyst.ts trend "metrics.csv" --date date_column --value sales
 ```
 
 ### 4. Segmentation
+
 ```bash
 # Group by and aggregate
 npx tsx src/data-analyst.ts segment "transactions.csv" --by region --metric avg(amount)
 ```
 
 ### 5. Anomaly Detection
+
 ```bash
 # Find outliers
 npx tsx src/data-analyst.ts anomalies "metrics.csv" --column cpu_usage
@@ -140,6 +148,7 @@ interface DataInsight {
 ## Common Patterns
 
 ### Pattern 1: Session Performance Analysis
+
 ```bash
 # Analyze session quality over time
 npx tsx src/data-analyst.ts query "SELECT * FROM sessions WHERE timestamp > date('now', '-7 days')" --analyze quality_score
@@ -151,6 +160,7 @@ Insights:
 ```
 
 ### Pattern 2: Token Usage Analysis
+
 ```bash
 # Analyze token efficiency
 npx tsx src/data-analyst.ts query "SELECT * FROM token_usage ORDER BY timestamp" --trend
@@ -162,6 +172,7 @@ Insights:
 ```
 
 ### Pattern 3: File Change Analysis
+
 ```bash
 # Analyze most modified files
 npx tsx src/data-analyst.ts query "SELECT * FROM audit_logs WHERE type LIKE '%file%'" --group-by path
@@ -180,19 +191,19 @@ Insights:
 
 ## Performance
 
-| Rows | Columns | Typical Time |
-|------|---------|--------------|
-| <1,000 | <20 | <2s |
-| 10,000 | <50 | 3-5s |
-| 100,000 | <100 | 10-30s (streaming) |
-| >1M | >100 | Requires sampling |
+| Rows    | Columns | Typical Time       |
+| ------- | ------- | ------------------ |
+| <1,000  | <20     | <2s                |
+| 10,000  | <50     | 3-5s               |
+| 100,000 | <100    | 10-30s (streaming) |
+| >1M     | >100    | Requires sampling  |
 
 ## Error Handling
 
-| Scenario | Response |
-|----------|----------|
-| Empty dataset | Warning with suggestions |
-| All nulls | Column type detection failure |
+| Scenario      | Response                       |
+| ------------- | ------------------------------ |
+| Empty dataset | Warning with suggestions       |
+| All nulls     | Column type detection failure  |
 | Malformed CSV | Attempt recovery with warnings |
-| Memory limit | Automatic sampling |
-| Invalid SQL | Query validation error |
+| Memory limit  | Automatic sampling             |
+| Invalid SQL   | Query validation error         |

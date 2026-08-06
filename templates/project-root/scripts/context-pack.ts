@@ -19,7 +19,10 @@ import { execSync } from 'child_process';
 const REPO_ROOT = resolve(join(__dirname, '..'));
 
 function getTimestamp(): string {
-  return new Date().toISOString().replace('T', ' ').replace(/\.\d+Z$/, '');
+  return new Date()
+    .toISOString()
+    .replace('T', ' ')
+    .replace(/\.\d+Z$/, '');
 }
 
 function getDateTag(): string {
@@ -33,30 +36,44 @@ function getDateTag(): string {
   return `${y}-${m}-${d}-${hh}${mm}${ss}`;
 }
 
-function writeMetric(event: string, objective: string, changedCount: number, promptChars: number, outputFile: string): void {
+function writeMetric(
+  event: string,
+  objective: string,
+  changedCount: number,
+  promptChars: number,
+  outputFile: string,
+): void {
   const metricsDir = join(REPO_ROOT, 'docs', 'sessions', 'metrics');
   if (!existsSync(metricsDir)) mkdirSync(metricsDir, { recursive: true });
 
   const metricsFile = join(metricsDir, 'context-usage.csv');
   if (!existsSync(metricsFile)) {
-    writeFileSync(metricsFile, 'timestamp,event,repository,branch,objective_chars,changed_count,prompt_chars,output_file\n', 'utf-8');
+    writeFileSync(
+      metricsFile,
+      'timestamp,event,repository,branch,objective_chars,changed_count,prompt_chars,output_file\n',
+      'utf-8',
+    );
   }
 
   let branchName = '(unknown)';
   try {
-    branchName = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8', timeout: 5000 }).trim();
+    branchName = execSync('git rev-parse --abbrev-ref HEAD', {
+      encoding: 'utf8',
+      timeout: 5000,
+    }).trim();
   } catch {}
 
-  const line = [
-    new Date().toISOString(),
-    event,
-    basename(REPO_ROOT),
-    branchName,
-    objective.length,
-    changedCount,
-    promptChars,
-    outputFile.replace(/,/g, ';'),
-  ].join(',') + '\n';
+  const line =
+    [
+      new Date().toISOString(),
+      event,
+      basename(REPO_ROOT),
+      branchName,
+      objective.length,
+      changedCount,
+      promptChars,
+      outputFile.replace(/,/g, ';'),
+    ].join(',') + '\n';
 
   appendFileSync(metricsFile, line, 'utf-8');
 }
@@ -65,10 +82,10 @@ function getChangedFiles(limit: number): string[] {
   try {
     const lines = execSync('git status --porcelain', { encoding: 'utf8', timeout: 5000 })
       .split('\n')
-      .filter(l => l.trim().length >= 4)
+      .filter((l) => l.trim().length >= 4)
       .slice(0, limit);
 
-    return lines.map(line => {
+    return lines.map((line) => {
       const status = line.substring(0, 2).trim();
       const path = line.substring(3).trim();
       return `- [${status}] ${path}`;
@@ -82,8 +99,8 @@ function getRecentCommits(limit: number): string[] {
   try {
     const lines = execSync(`git log --oneline -n ${limit}`, { encoding: 'utf8', timeout: 5000 })
       .split('\n')
-      .filter(l => l.trim());
-    return lines.map(l => `- ${l.trim()}`);
+      .filter((l) => l.trim());
+    return lines.map((l) => `- ${l.trim()}`);
   } catch {
     return ['- none'];
   }
@@ -98,11 +115,13 @@ const objective = args.includes('--objective')
     : '';
 
 const maxChangedFiles = parseInt(
-  args.includes('--max-files') ? args[args.indexOf('--max-files') + 1] || '12' : '12', 10
+  args.includes('--max-files') ? args[args.indexOf('--max-files') + 1] || '12' : '12',
+  10,
 );
 
 const maxCommits = parseInt(
-  args.includes('--max-commits') ? args[args.indexOf('--max-commits') + 1] || '8' : '8', 10
+  args.includes('--max-commits') ? args[args.indexOf('--max-commits') + 1] || '8' : '8',
+  10,
 );
 
 const outputPath = args.includes('--output')

@@ -65,8 +65,7 @@ orchestrator, manual **Function**:
 
 ### 3. Auto-Norm Learner
 
-**File**: `src/auto-norm-learner.ts` **Trigger**: session-start, session-close, manual
-**Function**:
+**File**: `src/auto-norm-learner.ts` **Trigger**: session-start, session-close, manual **Function**:
 
 - Queries Engram memory for patterns
 - Creates new norms in `rules/adaptive/LEARNED-NORMS.md`

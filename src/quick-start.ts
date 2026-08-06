@@ -2,17 +2,13 @@
 /**
  * Quick Start - Script unificado de inicio rápido
  * Versión TypeScript nativa (no depende de batch files)
- * 
+ *
  * USO: npx tsx src/quick-start.ts [--complete]
  */
 
-import { spawn } from 'child_process';
 import { runSync, runSyncShell, runNpxTsxSync } from './core/run-command.js';
-import { existsSync } from 'fs';
-import { join } from 'path';
 
 const ROOT = process.cwd();
-const RUNTIME_DIR = join(ROOT, '.runtime');
 
 interface StartOptions {
   complete: boolean;
@@ -39,10 +35,10 @@ function log(message: string, type: 'info' | 'success' | 'warning' | 'error' = '
 function cleanupProcesses(): void {
   log('Limpiando procesos zombie...', 'info');
   try {
-    runNpxTsxSync('src/process-cleanup.ts', [], { 
-      cwd: ROOT, 
+    runNpxTsxSync('src/process-cleanup.ts', [], {
+      cwd: ROOT,
       stdio: 'pipe',
-      timeout: 10000
+      timeout: 10000,
     });
     log('Procesos limpiados', 'success');
   } catch {
@@ -52,9 +48,9 @@ function cleanupProcesses(): void {
 
 function checkDashboardRunning(): boolean {
   try {
-    runSync('curl', ['-s', 'http://localhost:8080/health'], { 
+    runSync('curl', ['-s', 'http://localhost:8080/health'], {
       timeout: 2000,
-      stdio: 'pipe'
+      stdio: 'pipe',
     });
     return true;
   } catch {}
@@ -63,23 +59,23 @@ function checkDashboardRunning(): boolean {
 
 function startDashboard(): boolean {
   log('Iniciando dashboard...', 'info');
-  
+
   try {
     // Use execSync con detachment via start /B en Windows
     const isWin = process.platform === 'win32';
-    const cmd = isWin 
+    const cmd = isWin
       ? `start /B npx tsx src/dashboard-start.ts --no-browser > .runtime/dashboard.log 2>&1`
       : `npx tsx src/dashboard-start.ts --no-browser > .runtime/dashboard.log 2>&1 &`;
-    
+
     runSyncShell(cmd, {
       cwd: ROOT,
       stdio: 'pipe',
     });
-    
+
     // Esperar a que inicie
     let attempts = 0;
     const maxAttempts = 20;
-    
+
     while (attempts < maxAttempts) {
       // Esperar 1 segundo entre checks
       setTimeout(() => {}, 1000);
@@ -88,7 +84,7 @@ function startDashboard(): boolean {
       }
       attempts++;
     }
-    
+
     return checkDashboardRunning();
   } catch (e) {
     log(`Error iniciando: ${e}`, 'warning');
@@ -121,28 +117,28 @@ function printSuccess(): void {
 function main(): void {
   const options = parseArgs();
   const startTime = Date.now();
-  
+
   printBanner();
-  
+
   // Paso 1: Cleanup
   cleanupProcesses();
-  
+
   // Paso 2: Verificación completa (opcional)
   if (options.complete) {
     log('Modo completo: verificando builds...', 'info');
     // Aquí irían verificaciones adicionales
   }
-  
+
   // Paso 3: Verificar si ya está corriendo
   if (checkDashboardRunning()) {
     log('Dashboard ya está corriendo', 'success');
     printSuccess();
     return;
   }
-  
+
   // Paso 4: Iniciar
   const success = startDashboard();
-  
+
   if (success) {
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
     log(`Dashboard iniciado en ${elapsed}s`, 'success');

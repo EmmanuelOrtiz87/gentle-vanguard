@@ -4,7 +4,7 @@
   "description": "Model Router: per-agent model/temperature binding aligned to the native available model opencode/deepseek-v4-flash-free with local provider fallback",
   "lastModified": "2026-07-31T04:45:00.0000000-03:00",
   "modifiedBy": "orchestrator",
-    "defaults": {
+  "defaults": {
     "model": "opencode/deepseek-v4-flash-free",
     "provider": "opencode",
     "temperature": 0.3,
@@ -296,13 +296,7 @@
   },
   "providerPriority": {
     "description": "Ordered list for model selection UI (first = default)",
-    "order": [
-      "opencode",
-      "ollama",
-      "dify",
-      "lm-studio2",
-      "custom"
-    ]
+    "order": ["opencode", "ollama", "dify", "lm-studio2", "custom"]
   },
   "audit": {
     "enabled": true,

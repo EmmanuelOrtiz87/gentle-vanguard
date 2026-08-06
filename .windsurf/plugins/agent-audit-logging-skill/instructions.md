@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Agent Audit Log Reporting
 
 When agents make decisions, take actions, and spend money, every step must be traceable. Audit logs
@@ -20,12 +21,12 @@ traceability chains, compliance reporting, and forensic analysis for production 
 
 Detailed content is split into focused reference files under `references/`:
 
-| File | Contents |
-| ---- | -------- |
-| `references/01-core-concepts.md` | Why audit logging matters, what to log (priority tables) |
-| `references/02-implementation.md` | Full Python code: schema, logger, traceability, compliance, dashboard, storage |
-| `references/03-report-templates.md` | Daily audit summary, incident forensics report templates |
-| `references/04-triggers-and-anti-patterns.md` | Trigger phrases table, anti-patterns table |
+| File                                          | Contents                                                                       |
+| --------------------------------------------- | ------------------------------------------------------------------------------ |
+| `references/01-core-concepts.md`              | Why audit logging matters, what to log (priority tables)                       |
+| `references/02-implementation.md`             | Full Python code: schema, logger, traceability, compliance, dashboard, storage |
+| `references/03-report-templates.md`           | Daily audit summary, incident forensics report templates                       |
+| `references/04-triggers-and-anti-patterns.md` | Trigger phrases table, anti-patterns table                                     |
 
 ## Quick Start
 

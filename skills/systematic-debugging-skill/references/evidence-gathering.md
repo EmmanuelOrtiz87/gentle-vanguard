@@ -7,12 +7,14 @@
 **BEFORE proposing fixes, add diagnostic instrumentation:**
 
 For EACH component boundary:
+
 - Log what data enters component
 - Log what data exits component
 - Verify environment/config propagation
 - Check state at each layer
 
-Run once to gather evidence showing WHERE it breaks, THEN analyze evidence to identify the failing component, THEN investigate that specific component.
+Run once to gather evidence showing WHERE it breaks, THEN analyze evidence to identify the failing
+component, THEN investigate that specific component.
 
 ### Example (multi-layer build/signing system)
 

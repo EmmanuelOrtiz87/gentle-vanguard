@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Result Gatekeeper 
+ * Result Gatekeeper
  * Contract validation between phases
- * Part of Gentle-Vanguard 
+ * Part of Gentle-Vanguard
  */
 
 import { EventEmitter } from 'events';

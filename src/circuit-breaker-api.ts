@@ -93,7 +93,7 @@ export function recordSuccess(component: string): void {
     registerComponent({ name: component });
     return recordSuccess(component);
   }
-  
+
   state.failureCount = 0;
   state.lastSuccess = new Date().toISOString();
   if (state.state !== 'CLOSED') {
@@ -111,10 +111,10 @@ export function recordFailure(component: string): void {
     circuits = loadCircuits(); // Reload after registerComponent writes to disk
     state = circuits[component];
   }
-  
+
   state.failureCount++;
   state.lastFailure = new Date().toISOString();
-  
+
   if (state.failureCount >= state.threshold && state.state === 'CLOSED') {
     state.state = 'OPEN';
     state.lastStateChange = new Date().toISOString();
@@ -122,7 +122,7 @@ export function recordFailure(component: string): void {
     state.state = 'OPEN';
     state.lastStateChange = new Date().toISOString();
   }
-  
+
   saveCircuits(circuits);
 }
 
@@ -143,7 +143,7 @@ export function resetCircuit(component: string): void {
 export function checkAndResetStaleCircuits(): number {
   const circuits = loadCircuits();
   let reset = 0;
-  
+
   for (const [name, state] of Object.entries(circuits)) {
     if (state.state === 'OPEN' && state.lastFailure) {
       const elapsed = Date.now() - new Date(state.lastFailure).getTime();
@@ -154,7 +154,7 @@ export function checkAndResetStaleCircuits(): number {
       }
     }
   }
-  
+
   if (reset > 0) saveCircuits(circuits);
   return reset;
 }
@@ -164,19 +164,21 @@ export function checkAndResetStaleCircuits(): number {
 function main(): void {
   const args = process.argv.slice(2);
   const action = args[0];
-  
+
   if (action === 'status') {
     const circuits = getAllCircuitStates();
-    const openCount = circuits.filter(c => c.state === 'OPEN').length;
-    const healthyCount = circuits.filter(c => c.state === 'CLOSED').length;
-    
-    console.log(JSON.stringify({
-      total: circuits.length,
-      healthy: healthyCount,
-      open: openCount,
-      halfOpen: circuits.length - healthyCount - openCount,
-      circuits,
-    }));
+    const openCount = circuits.filter((c) => c.state === 'OPEN').length;
+    const healthyCount = circuits.filter((c) => c.state === 'CLOSED').length;
+
+    console.log(
+      JSON.stringify({
+        total: circuits.length,
+        healthy: healthyCount,
+        open: openCount,
+        halfOpen: circuits.length - healthyCount - openCount,
+        circuits,
+      }),
+    );
   } else if (action === 'reset-stale') {
     const reset = checkAndResetStaleCircuits();
     console.log(JSON.stringify({ resetStale: reset }));

@@ -1,9 +1,8 @@
 ---
 name: codegraph-skill
 description: >
-  Semantic code graph for codebase exploration. Uses CodeGraph MCP tools to query
-  symbols, call chains, imports, and impact analysis in 1-3 calls instead of 30-50+
-  grep/glob/read.
+  Semantic code graph for codebase exploration. Uses CodeGraph MCP tools to query symbols, call
+  chains, imports, and impact analysis in 1-3 calls instead of 30-50+ grep/glob/read.
 metadata:
   source: GV-native
 ---
@@ -12,7 +11,8 @@ metadata:
 
 ## Overview
 
-CodeGraph pre-indexes the codebase into a queryable SQLite graph (symbols, call chains, imports, routes). Agents answer structural questions with 1-3 MCP calls instead of 30-50+ grep/glob/read.
+CodeGraph pre-indexes the codebase into a queryable SQLite graph (symbols, call chains, imports,
+routes). Agents answer structural questions with 1-3 MCP calls instead of 30-50+ grep/glob/read.
 
 ## When to Use
 
@@ -24,27 +24,29 @@ CodeGraph pre-indexes the codebase into a queryable SQLite graph (symbols, call 
 
 ## MCP Tools
 
-| Tool                 | Purpose                                                    |
-| -------------------- | ---------------------------------------------------------- |
-| `codegraph_context`  | Task context — entry points, related symbols, code snippets|
-| `codegraph_explore`  | Explore structure and relationships                        |
-| `codegraph_query`    | FTS5-powered symbol search                                 |
-| `codegraph_files`    | Indexed project structure                                  |
-| `codegraph_affected` | Tests transitively affected by source changes              |
-| `codegraph_status`   | Index status and statistics                                |
-| `codegraph_sync`     | Sync changes (file watcher, 2s debounce)                   |
-| `codegraph_index`    | Re-index all files                                         |
+| Tool                 | Purpose                                                     |
+| -------------------- | ----------------------------------------------------------- |
+| `codegraph_context`  | Task context — entry points, related symbols, code snippets |
+| `codegraph_explore`  | Explore structure and relationships                         |
+| `codegraph_query`    | FTS5-powered symbol search                                  |
+| `codegraph_files`    | Indexed project structure                                   |
+| `codegraph_affected` | Tests transitively affected by source changes               |
+| `codegraph_status`   | Index status and statistics                                 |
+| `codegraph_sync`     | Sync changes (file watcher, 2s debounce)                    |
+| `codegraph_index`    | Re-index all files                                          |
 
-CLI: `codegraph init -i`, `status`, `query "session"`, `context "..."`, `files`, `sync`, `index`. Full examples in [references/detail.md](references/detail.md).
+CLI: `codegraph init -i`, `status`, `query "session"`, `context "..."`, `files`, `sync`, `index`.
+Full examples in [references/detail.md](references/detail.md).
 
 ## Semantic Search
 
-| Script                          | Purpose                                                     |
-| ------------------------------- | ----------------------------------------------------------- |
-| `codegraph-semantic-search.ps1` | FTS5 + fuzzy synonym matching with relevance scoring        |
-| `codegraph-enrich.ps1`          | Layer detection, complexity tags, metadata enrichment       |
+| Script                          | Purpose                                               |
+| ------------------------------- | ----------------------------------------------------- |
+| `codegraph-semantic-search.ps1` | FTS5 + fuzzy synonym matching with relevance scoring  |
+| `codegraph-enrich.ps1`          | Layer detection, complexity tags, metadata enrichment |
 
-Synonym map: auth, error, config, db, api, test, ui, cache, net (5-10 terms each). Usage: `.\scripts\codegraph\codegraph-semantic-search.ps1 -Query "where is auth handled"`.
+Synonym map: auth, error, config, db, api, test, ui, cache, net (5-10 terms each). Usage:
+`.\scripts\codegraph\codegraph-semantic-search.ps1 -Query "where is auth handled"`.
 
 ## Configuration
 
@@ -60,7 +62,10 @@ Synonym map: auth, error, config, db, api, test, ui, cache, net (5-10 terms each
 }
 ```
 
-Index: `.codegraph/codegraph.db` (SQLite, `.gitignore`d). Auto-sync 2s debounce. Supports 19+ languages (TS, JS, Python, Go, Rust, Java, C#, PHP, Ruby, C, C++, Swift, Kotlin, Dart, Svelte, Vue, Liquid, Pascal, Scala). Framework routes for Django, Flask, FastAPI, Express, Laravel, Rails, Spring, Gin, Axum, ASP.NET, Vapor, React Router, SvelteKit.
+Index: `.codegraph/codegraph.db` (SQLite, `.gitignore`d). Auto-sync 2s debounce. Supports 19+
+languages (TS, JS, Python, Go, Rust, Java, C#, PHP, Ruby, C, C++, Swift, Kotlin, Dart, Svelte, Vue,
+Liquid, Pascal, Scala). Framework routes for Django, Flask, FastAPI, Express, Laravel, Rails,
+Spring, Gin, Axum, ASP.NET, Vapor, React Router, SvelteKit.
 
 ---
 

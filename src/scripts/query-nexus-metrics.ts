@@ -21,18 +21,24 @@ console.log('   NEXUS DB — Métricas Históricas');
 console.log('═══════════════════════════════════════════\n');
 
 // Available tables
-const tables = d.prepare("SELECT name FROM sqlite_master WHERE type='table'").all() as { name: string }[];
-console.log('Tablas disponibles:', tables.map(t => t.name).join(', '), '\n');
+const tables = d.prepare("SELECT name FROM sqlite_master WHERE type='table'").all() as {
+  name: string;
+}[];
+console.log('Tablas disponibles:', tables.map((t) => t.name).join(', '), '\n');
 
 // 1. Session Scoring
 try {
-  const rows = d.prepare(`
+  const rows = d
+    .prepare(
+      `
     SELECT created_at, session_id, total_delegations, success_rate, 
            total_corrections, total_proactive, quality_score
     FROM session_scoring 
     ORDER BY created_at DESC LIMIT 15
-  `).all() as any[];
-  
+  `,
+    )
+    .all() as any[];
+
   console.log('┌──────────────────────────────────────────────────────────────────────────┐');
   console.log('│ SESSION SCORING — Historial (col: created_at, quality_score, total_proactive) │');
   console.log('├──────────────────────────────────────────────────────────────────────────┤');
@@ -42,7 +48,9 @@ try {
     rows.forEach((r: any) => {
       const ts = (r.created_at || '').toString().slice(0, 19);
       const sid = (r.session_id || '').toString().slice(0, 22).padEnd(22);
-      console.log(`│ ${ts} │ ${sid} │ del:${String(r.total_delegations ?? 0).padStart(3)} rate:${String(r.success_rate ?? 0).padStart(5)} corr:${String(r.total_corrections ?? 0).padStart(3)} pro:${String(r.total_proactive ?? 0).padStart(3)} score:${String(r.quality_score ?? '-').padStart(5)} │`);
+      console.log(
+        `│ ${ts} │ ${sid} │ del:${String(r.total_delegations ?? 0).padStart(3)} rate:${String(r.success_rate ?? 0).padStart(5)} corr:${String(r.total_corrections ?? 0).padStart(3)} pro:${String(r.total_proactive ?? 0).padStart(3)} score:${String(r.quality_score ?? '-').padStart(5)} │`,
+      );
     });
   }
   console.log('└──────────────────────────────────────────────────────────────────────────┘\n');
@@ -52,14 +60,18 @@ try {
 
 // 2. Token Usage (per session)
 try {
-  const tok = d.prepare(`
+  const tok = d
+    .prepare(
+      `
     SELECT session_id, SUM(prompt_tokens) as total_in, SUM(completion_tokens) as total_out,
            SUM(prompt_tokens + completion_tokens) as total_tok
     FROM token_usage 
     GROUP BY session_id 
     ORDER BY total_tok DESC LIMIT 10
-  `).all() as any[];
-  
+  `,
+    )
+    .all() as any[];
+
   console.log('┌───────────────────────────────────────────────────────────┐');
   console.log('│ TOKEN USAGE — Top 10 sesiones (prompt_tokens, completion_tokens) │');
   console.log('├───────────────────────────────────────────────────────────┤');
@@ -68,7 +80,9 @@ try {
   } else {
     tok.forEach((r: any) => {
       const sid = (r.session_id || '').toString().slice(0, 24).padEnd(24);
-      console.log(`│ ${sid} │ in:${String(r.total_in ?? 0).padStart(8)} out:${String(r.total_out ?? 0).padStart(8)} tot:${String(r.total_tok ?? 0).padStart(10)} │`);
+      console.log(
+        `│ ${sid} │ in:${String(r.total_in ?? 0).padStart(8)} out:${String(r.total_out ?? 0).padStart(8)} tot:${String(r.total_tok ?? 0).padStart(10)} │`,
+      );
     });
   }
   console.log('└───────────────────────────────────────────────────────────┘\n');
@@ -78,15 +92,19 @@ try {
 
 // 3. Metric Snapshots (daily averages)
 try {
-  const snap = d.prepare(`
+  const snap = d
+    .prepare(
+      `
     SELECT substr(timestamp, 1, 10) as day, 
            ROUND(AVG(tokens_used), 0) as avg_tokens, 
            ROUND(AVG(sessions_total), 1) as avg_sessions
     FROM metric_snapshots 
     GROUP BY day 
     ORDER BY day DESC LIMIT 10
-  `).all() as any[];
-  
+  `,
+    )
+    .all() as any[];
+
   console.log('┌──────────────────────────────────────────────┐');
   console.log('│ METRIC SNAPSHOTS — Promedios diarios          │');
   console.log('├──────────────────────────────────────────────┤');
@@ -94,7 +112,9 @@ try {
     console.log('│ (sin datos — tabla vacía)                     │');
   } else {
     snap.forEach((r: any) => {
-      console.log(`│ ${r.day} │ tokens: ${String(r.avg_tokens ?? 0).padStart(10)} │ sessions: ${String(r.avg_sessions ?? 0).padStart(5)} │`);
+      console.log(
+        `│ ${r.day} │ tokens: ${String(r.avg_tokens ?? 0).padStart(10)} │ sessions: ${String(r.avg_sessions ?? 0).padStart(5)} │`,
+      );
     });
   }
   console.log('└──────────────────────────────────────────────┘\n');
@@ -104,7 +124,9 @@ try {
 
 // 4. Overall stats
 try {
-  const stats = d.prepare(`
+  const stats = d
+    .prepare(
+      `
     SELECT 
       COUNT(*) as total_rows,
       ROUND(AVG(success_rate), 2) as avg_success_rate,
@@ -112,16 +134,28 @@ try {
       SUM(total_corrections) as total_corrections,
       SUM(total_proactive) as total_proactive
     FROM session_scoring
-  `).get() as any;
-  
+  `,
+    )
+    .get() as any;
+
   console.log('┌──────────────────────────────────────────────┐');
   console.log('│ ESTADÍSTICAS GLOBALES                         │');
   console.log('├──────────────────────────────────────────────┤');
-  console.log(`│ Sesiones: ${String(stats.total_rows ?? 0).padStart(10)}                           │`);
-  console.log(`│ Avg Success Rate: ${String(stats.avg_success_rate ?? '-').padStart(10)}              │`);
-  console.log(`│ Total Delegations: ${String(stats.total_delegations ?? 0).padStart(8)}              │`);
-  console.log(`│ Total Corrections: ${String(stats.total_corrections ?? 0).padStart(8)}              │`);
-  console.log(`│ Total Proactive: ${String(stats.total_proactive ?? 0).padStart(9)}               │`);
+  console.log(
+    `│ Sesiones: ${String(stats.total_rows ?? 0).padStart(10)}                           │`,
+  );
+  console.log(
+    `│ Avg Success Rate: ${String(stats.avg_success_rate ?? '-').padStart(10)}              │`,
+  );
+  console.log(
+    `│ Total Delegations: ${String(stats.total_delegations ?? 0).padStart(8)}              │`,
+  );
+  console.log(
+    `│ Total Corrections: ${String(stats.total_corrections ?? 0).padStart(8)}              │`,
+  );
+  console.log(
+    `│ Total Proactive: ${String(stats.total_proactive ?? 0).padStart(9)}               │`,
+  );
   console.log('└──────────────────────────────────────────────┘\n');
 } catch (e: any) {
   console.log('global stats error:', e.message, '\n');

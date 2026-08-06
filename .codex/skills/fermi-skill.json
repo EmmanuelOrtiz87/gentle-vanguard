@@ -11,9 +11,7 @@
           "description": "Task to execute"
         }
       },
-      "required": [
-        "task"
-      ],
+      "required": ["task"],
       "additionalProperties": false
     }
   }

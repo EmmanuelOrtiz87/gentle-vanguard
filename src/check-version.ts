@@ -121,7 +121,7 @@ async function main(): Promise<void> {
     }
 
     const release = await getLatestRelease(preRelease);
-     const latestVersion = release.tag_name.replace(/^v/, '');
+    const latestVersion = release.tag_name.replace(/^v/, '');
     const downloadAsset = release.assets.find((a) => a.name.endsWith('.exe'));
     const downloadUrl = downloadAsset ? downloadAsset.browser_download_url : '';
 
@@ -158,7 +158,11 @@ async function main(): Promise<void> {
   }
 }
 
-if (process.argv[1] && (process.argv[1] === fileURLToPath(import.meta.url) || process.argv[1].endsWith('check-version.ts'))) {
+if (
+  process.argv[1] &&
+  (process.argv[1] === fileURLToPath(import.meta.url) ||
+    process.argv[1].endsWith('check-version.ts'))
+) {
   main().catch((e: unknown) => {
     const msg = e instanceof Error ? e.message : String(e);
     console.log(`CHECK_FAILED|${msg.replace(/\|/g, '-')}`);

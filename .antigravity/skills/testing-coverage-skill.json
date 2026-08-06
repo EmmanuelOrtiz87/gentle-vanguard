@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "# Testing Coverage Skill\n\n## Purpose\n\nEnsure test coverage for all behavior changes in scripts.\n\n## Test Framework\n\nGentle-Vanguard uses **Pester** for PowerShell and **ShellSpec** for Bash scripts.\n\n## Running Tests\n\n```powershell\n# PowerShell - Pester\nInvoke-Pester -Path .\\tests\\\n\n# Bash - ShellSpec\nshellspec spec/\n\n# Via gv.ps1\n.\\gv.ps1 test\n```\n\n## Test Structure\n\n```\nscripts/\n tests/\n    unit/           # Isolated function tests\n    integration/    # End-to-end tests\n    helpers/        # Shared fixtures\n```\n\n## Critical Rules\n\n1. Every feature or bug fix MUST include tests\n2. Use setup/cleanup blocks with temp dirs\n3. Mock external commands in unit tests\n4. Run tests before every push\n\n## Pester Patterns\n\n```powershell\nDescribe \"Get-Config\" {\n    BeforeEach {\n        $script:configPath = \"test-config.json\"\n    }\n\n    It \"returns default values\" {\n        $result = Get-Config\n        $result.provider | Should -Be \"openai\"\n    }\n\n    It \"throws when config missing\" {\n        { Get-Config -Path \"missing.json\" } | Should -Throw\n    }\n}\n```\n\n## Test Categories\n\n| Type        | Purpose                     | Speed     |\n| ----------- | --------------------------- | --------- |\n| Unit        | Test functions in isolation | Fast      |\n| Integration | Test full workflows         | Slow      |\n| Smoke       | Quick sanity check          | Very Fast |\n\n## Coverage Requirements\n\n| Change Type   | Min Coverage    |\n| ------------- | --------------- |\n| New function  | 80%             |\n| Bug fix       | Regression test |\n| Config change | Smoke test      |",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

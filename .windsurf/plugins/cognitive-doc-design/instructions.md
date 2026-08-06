@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Cognitive Doc Design (Gentle-Vanguard Adaptation)
 
 ## When to Use

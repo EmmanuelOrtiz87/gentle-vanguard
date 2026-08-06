@@ -24,6 +24,7 @@ Get-FreePort algorithm (src/dashboard-common.ts):
 ```
 
 Ports persisted to `.runtime/dashboard-ports.json`:
+
 ```json
 { "wsPort": 8081, "vitePort": 5199, "updated": "2026-06-18T..." }
 ```
@@ -33,5 +34,6 @@ Both stop and start scripts read this file for port reuse.
 ## Alert System
 
 - `config/dashboard-alerts.json` — 8 rules with `direction` ("above" or "below").
-- Rules: high_token_usage, budget_limit, high_latency_p95, high_error_rate, low_feedback_score, low_sla, high_active_sessions, cost_spike.
+- Rules: high_token_usage, budget_limit, high_latency_p95, high_error_rate, low_feedback_score,
+  low_sla, high_active_sessions, cost_spike.
 - Fixed `direction: "below"` evaluation: `actual <= threshold`.

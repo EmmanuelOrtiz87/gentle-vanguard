@@ -77,8 +77,8 @@ TDD Evidence: [task-id]
 
 ## Testing Layers
 
-| Layer       | When                       | Tool       | Path                 |
-| ----------- | -------------------------- | ---------- | -------------------- |
+| Layer       | When                       | Tool      | Path                 |
+| ----------- | -------------------------- | --------- | -------------------- |
 | Unit        | Every SDD apply phase      | node:test | `tests/unit/`        |
 | Integration | Cross-script changes       | node:test | `tests/integration/` |
 | Security    | Auth/key/injection changes | node:test | `tests/security/`    |

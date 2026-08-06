@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Skill Creator
 
 Create new skills and iteratively improve them.
@@ -28,15 +29,19 @@ Create new skills and iteratively improve them.
 
 ## Communication
 
-Adjust language to user's familiarity. "Evaluation" and "benchmark" are borderline; explain "JSON" and "assertion" unless the user shows familiarity. Brief definitions are OK when unsure.
+Adjust language to user's familiarity. "Evaluation" and "benchmark" are borderline; explain "JSON"
+and "assertion" unless the user shows familiarity. Brief definitions are OK when unsure.
 
 ## Detailed Instructions
 
 Read the relevant reference file:
 
-- `references/creating-a-skill.md` — Capture intent, interview, skill anatomy, writing patterns, test cases
-- `references/running-evaluations.md` — Full 5-step eval cycle: spawn, draft assertions, grade, aggregate, launch viewer
-- `references/improving-the-skill.md` — Generalize from feedback, keep lean, explain the why, bundle repeated work
+- `references/creating-a-skill.md` — Capture intent, interview, skill anatomy, writing patterns,
+  test cases
+- `references/running-evaluations.md` — Full 5-step eval cycle: spawn, draft assertions, grade,
+  aggregate, launch viewer
+- `references/improving-the-skill.md` — Generalize from feedback, keep lean, explain the why, bundle
+  repeated work
 - `references/blind-comparison.md` — Optional A/B comparison between versions
 - `references/description-optimization.md` — Generate trigger evals, review, run optimization loop
 - `references/platform-guide.md` — Claude.ai and Cowork-specific adaptations

@@ -123,7 +123,7 @@ async function run(): Promise<void> {
     console.log(JSON.stringify(results, null, 2));
   }
 
-  const failed = results.filter(r => !r.passed).length;
+  const failed = results.filter((r) => !r.passed).length;
   if (failed > 0) process.exit(1);
 }
 

@@ -58,14 +58,14 @@ function isDisabled(): boolean {
 
 function getDisableInfo(): { reason: string; timestamp: string; user: string } | null {
   if (!isDisabled()) return null;
-  
+
   try {
     const content = readFileSync(DISABLED_FLAG, 'utf-8');
     const lines = content.split('\n');
-    const reasonLine = lines.find(l => l.startsWith('reason='));
-    const timestampLine = lines.find(l => l.startsWith('timestamp='));
-    const userLine = lines.find(l => l.startsWith('user='));
-    
+    const reasonLine = lines.find((l) => l.startsWith('reason='));
+    const timestampLine = lines.find((l) => l.startsWith('timestamp='));
+    const userLine = lines.find((l) => l.startsWith('user='));
+
     return {
       reason: reasonLine?.split('=')[1] || 'unknown',
       timestamp: timestampLine?.split('=')[1] || new Date().toISOString(),
@@ -78,10 +78,10 @@ function getDisableInfo(): { reason: string; timestamp: string; user: string } |
 
 function disable(reason: string): void {
   ensureDir();
-  
+
   const timestamp = new Date().toISOString();
   const user = process.env.USER || process.env.USERNAME || 'system';
-  
+
   const content = [
     'RDD DISABLED',
     `timestamp=${timestamp}`,
@@ -90,9 +90,9 @@ function disable(reason: string): void {
     '',
     'To re-enable: npx tsx src/rdd/rdd-kill-switch.ts enable',
   ].join('\n');
-  
+
   writeFileSync(DISABLED_FLAG, content);
-  
+
   // Log event
   const event: DisableEvent = {
     action: 'disable',
@@ -100,10 +100,10 @@ function disable(reason: string): void {
     reason,
     user,
   };
-  
+
   const logEntry = JSON.stringify(event) + '\n';
   writeFileSync(DISABLE_LOG, logEntry, { flag: 'a' });
-  
+
   log(`RDD DISABLED: ${reason}`, 'WARN');
   log('⚠️ WARNING: Gates will be bypassed. Use with caution.', 'WARN');
 }
@@ -113,22 +113,22 @@ function enable(): void {
     log('RDD is already enabled', 'INFO');
     return;
   }
-  
+
   const info = getDisableInfo();
   const timestamp = new Date().toISOString();
   const user = process.env.USER || process.env.USERNAME || 'system';
-  
+
   // Calculate duration
   let duration: number | undefined;
   if (info?.timestamp) {
     const start = new Date(info.timestamp).getTime();
     const end = new Date().getTime();
-    duration = Math.round((end - start) / (1000 * 60 * 60) * 100) / 100; // hours with 2 decimals
+    duration = Math.round(((end - start) / (1000 * 60 * 60)) * 100) / 100; // hours with 2 decimals
   }
-  
+
   // Remove flag
   unlinkSync(DISABLED_FLAG);
-  
+
   // Log event
   const event: DisableEvent = {
     action: 'enable',
@@ -136,27 +136,30 @@ function enable(): void {
     user,
     duration,
   };
-  
+
   const logEntry = JSON.stringify(event) + '\n';
   writeFileSync(DISABLE_LOG, logEntry, { flag: 'a' });
-  
+
   log(`RDD ENABLED (was disabled for ${duration} hours)`, 'SUCCESS');
 }
 
-function status(): { disabled: boolean; info?: { reason: string; timestamp: string; user: string; hoursElapsed: number } } {
+function status(): {
+  disabled: boolean;
+  info?: { reason: string; timestamp: string; user: string; hoursElapsed: number };
+} {
   const disabled = isDisabled();
-  
+
   if (!disabled) {
     return { disabled: false };
   }
-  
+
   const info = getDisableInfo();
   if (!info) {
     return { disabled: true };
   }
-  
+
   const elapsed = (new Date().getTime() - new Date(info.timestamp).getTime()) / (1000 * 60 * 60);
-  
+
   return {
     disabled: true,
     info: {
@@ -170,13 +173,13 @@ function status(): { disabled: boolean; info?: { reason: string; timestamp: stri
 
 function getDisableHistory(limit = 10): DisableEvent[] {
   if (!existsSync(DISABLE_LOG)) return [];
-  
+
   try {
     const content = readFileSync(DISABLE_LOG, 'utf-8');
     return content
       .split('\n')
-      .filter(l => l.trim())
-      .map(l => JSON.parse(l))
+      .filter((l) => l.trim())
+      .map((l) => JSON.parse(l))
       .slice(-limit);
   } catch {
     return [];
@@ -193,15 +196,15 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     try {
       switch (action) {
         case 'disable': {
-          const reasonArg = args.find(a => a.startsWith('--reason='));
+          const reasonArg = args.find((a) => a.startsWith('--reason='));
           const reason = reasonArg ? reasonArg.split('=')[1] : args[1];
-          
+
           if (!reason) {
             console.error('Usage: disable --reason="<reason>"');
             console.error('Example: disable --reason="Emergency security fix"');
             process.exit(1);
           }
-          
+
           disable(reason);
           break;
         }
@@ -213,11 +216,17 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 
         case 'status': {
           const current = status();
-          
+
           if (current.disabled) {
-            console.log('\u001b[31m╔════════════════════════════════════════════════════════════════╗\u001b[0m');
-            console.log('\u001b[31m║                  RDD DISABLED                                 ║\u001b[0m');
-            console.log('\u001b[31m╚════════════════════════════════════════════════════════════════╝\u001b[0m');
+            console.log(
+              '\u001b[31m╔════════════════════════════════════════════════════════════════╗\u001b[0m',
+            );
+            console.log(
+              '\u001b[31m║                  RDD DISABLED                                 ║\u001b[0m',
+            );
+            console.log(
+              '\u001b[31m╚════════════════════════════════════════════════════════════════╝\u001b[0m',
+            );
             console.log('');
             console.log(`Reason:    ${current.info?.reason}`);
             console.log(`Timestamp: ${current.info?.timestamp}`);
@@ -226,11 +235,13 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
             console.log('');
             console.log('\u001b[33m⚠️  WARNING: Review gates are bypassed\u001b[0m');
             console.log('');
-            
+
             if ((current.info?.hoursElapsed || 0) > 24) {
-              console.log('\u001b[31m⚠️  CRITICAL: Disabled for >24 hours. Consider re-enabling.\u001b[0m');
+              console.log(
+                '\u001b[31m⚠️  CRITICAL: Disabled for >24 hours. Consider re-enabling.\u001b[0m',
+              );
             }
-            
+
             process.exit(2); // Special exit code for disabled
           } else {
             console.log('\u001b[32m✓ RDD is ENABLED\u001b[0m');
@@ -240,13 +251,19 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         }
 
         case 'history': {
-          const limit = parseInt(args.find(a => a.startsWith('--limit='))?.split('=')[1] || '10', 10);
+          const limit = parseInt(
+            args.find((a) => a.startsWith('--limit='))?.split('=')[1] || '10',
+            10,
+          );
           const history = getDisableHistory(limit);
-          
+
           console.log(`\nLast ${history.length} disable/enable events:\n`);
-          
+
           for (const event of history) {
-            const icon = event.action === 'disable' ? '\u001b[31m\u25a0\u001b[0m' : '\u001b[32m\u25b2\u001b[0m';
+            const icon =
+              event.action === 'disable'
+                ? '\u001b[31m\u25a0\u001b[0m'
+                : '\u001b[32m\u25b2\u001b[0m';
             console.log(`${icon} ${event.action.toUpperCase().padEnd(7)} ${event.timestamp}`);
             if (event.reason) console.log(`   Reason: ${event.reason}`);
             if (event.duration) console.log(`   Duration: ${event.duration} hours`);

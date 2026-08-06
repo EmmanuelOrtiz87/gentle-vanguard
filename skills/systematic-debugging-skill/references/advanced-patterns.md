@@ -3,11 +3,13 @@
 ## When 3+ Fixes Have Failed: Question the Architecture
 
 **Pattern indicating architectural problem:**
+
 - Each fix reveals new shared state/coupling/problem in a different place
 - Fixes require "massive refactoring" to implement
 - Each fix creates new symptoms elsewhere
 
 **STOP and question fundamentals:**
+
 - Is this pattern fundamentally sound?
 - Are we "sticking with it through sheer inertia"?
 - Should we refactor architecture vs. continue fixing symptoms?

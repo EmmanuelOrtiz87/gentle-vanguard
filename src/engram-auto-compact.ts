@@ -18,13 +18,21 @@ function run(cmd: string): { ok: boolean; output: string } {
 
 function main(): void {
   const args = process.argv.slice(2);
-  const project = args.includes('--project') ? args[args.indexOf('--project') + 1] : 'gentle-vanguard';
+  const project = args.includes('--project')
+    ? args[args.indexOf('--project') + 1]
+    : 'gentle-vanguard';
   const quiet = args.includes('--quiet') || args.includes('-Quiet');
   const aggressive = args.includes('--aggressive') || args.includes('-Aggressive');
 
-  const info = (m: string) => { if (!quiet) console.log(`[INFO] ${m}`); };
-  const ok = (m: string) => { if (!quiet) console.log(`[OK] ${m}`); };
-  const warn = (m: string) => { if (!quiet) console.log(`[WARN] ${m}`); };
+  const info = (m: string) => {
+    if (!quiet) console.log(`[INFO] ${m}`);
+  };
+  const ok = (m: string) => {
+    if (!quiet) console.log(`[OK] ${m}`);
+  };
+  const warn = (m: string) => {
+    if (!quiet) console.log(`[WARN] ${m}`);
+  };
 
   info(`Starting Engram auto-compact for project: ${project}`);
 
@@ -44,7 +52,9 @@ function main(): void {
 
   // Step 2: Conflict scan
   info('Scanning memory conflicts...');
-  const conflicts = run(`engram conflicts scan --project ${project}${aggressive ? ' --aggressive' : ''}`);
+  const conflicts = run(
+    `engram conflicts scan --project ${project}${aggressive ? ' --aggressive' : ''}`,
+  );
   if (conflicts.ok) {
     const count = conflicts.output.match(/\d+/)?.[0] || '0';
     ok(`Conflict scan complete: ${count} conflicts`);

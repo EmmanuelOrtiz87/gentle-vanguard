@@ -9,7 +9,8 @@ triggers:
 
 ## Overview
 
-Treat every external input as hostile, every secret as sacred, every auth check as mandatory. Security is a constraint on every line touching user data, auth, or external systems.
+Treat every external input as hostile, every secret as sacred, every auth check as mandatory.
+Security is a constraint on every line touching user data, auth, or external systems.
 
 ## Process: Threat Model First
 
@@ -20,28 +21,36 @@ Treat every external input as hostile, every secret as sacred, every auth check 
 
 ## The Three-Tier Boundary System
 
-**Always Do:** Validate all external input; parameterize all DB queries; encode output (XSS prevention); use HTTPS; hash passwords (bcrypt/scrypt/argon2); set security headers (CSP, HSTS, X-Frame-Options, X-Content-Type-Options); use httpOnly+secure+sameSite cookies; run native package audit before every release.
+**Always Do:** Validate all external input; parameterize all DB queries; encode output (XSS
+prevention); use HTTPS; hash passwords (bcrypt/scrypt/argon2); set security headers (CSP, HSTS,
+X-Frame-Options, X-Content-Type-Options); use httpOnly+secure+sameSite cookies; run native package
+audit before every release.
 
-**Ask First (human approval):** New auth flows; storing PII/payment data; new external integrations; changing CORS; file upload handlers; modifying rate limiting; granting elevated roles.
+**Ask First (human approval):** New auth flows; storing PII/payment data; new external integrations;
+changing CORS; file upload handlers; modifying rate limiting; granting elevated roles.
 
-**Never Do:** Commit secrets to VCS; log sensitive data; trust client-side validation as a security boundary; disable security headers for convenience; use `eval()`/`innerHTML` with user data; store sessions in client-accessible storage; expose stack traces to users.
+**Never Do:** Commit secrets to VCS; log sensitive data; trust client-side validation as a security
+boundary; disable security headers for convenience; use `eval()`/`innerHTML` with user data; store
+sessions in client-accessible storage; expose stack traces to users.
 
 ## Reference Links
 
-| Topic | Reference |
-|---|---|
-| OWASP Top 10 prevention patterns | [references/owasp-patterns.md](references/owasp-patterns.md) |
-| Input validation (Zod schemas, file upload safety) | [references/input-validation.md](references/input-validation.md) |
-| Dependency audit triage & supply-chain hygiene | [references/dependency-audit.md](references/dependency-audit.md) |
-| Rate limiting code examples | [references/rate-limiting.md](references/rate-limiting.md) |
-| Secrets management (.env, gitignore, rotation) | [references/secrets-management.md](references/secrets-management.md) |
-| LLM security (OWASP LLM Top 10) | [references/llm-security.md](references/llm-security.md) |
-| Full security checklist | [references/security-checklist.md](references/security-checklist.md) |
-| Threat model reference table | [references/threat-model.md](references/threat-model.md) |
+| Topic                                              | Reference                                                            |
+| -------------------------------------------------- | -------------------------------------------------------------------- |
+| OWASP Top 10 prevention patterns                   | [references/owasp-patterns.md](references/owasp-patterns.md)         |
+| Input validation (Zod schemas, file upload safety) | [references/input-validation.md](references/input-validation.md)     |
+| Dependency audit triage & supply-chain hygiene     | [references/dependency-audit.md](references/dependency-audit.md)     |
+| Rate limiting code examples                        | [references/rate-limiting.md](references/rate-limiting.md)           |
+| Secrets management (.env, gitignore, rotation)     | [references/secrets-management.md](references/secrets-management.md) |
+| LLM security (OWASP LLM Top 10)                    | [references/llm-security.md](references/llm-security.md)             |
+| Full security checklist                            | [references/security-checklist.md](references/security-checklist.md) |
+| Threat model reference table                       | [references/threat-model.md](references/threat-model.md)             |
 
 ## Red Flags
 
-User input to DB/shell/DOM directly; secrets in source code; endpoints without auth; missing CORS or wildcard origins; no rate limiting on auth endpoints; exposed stack traces; unmitigated critical deps; SSRF (user-supplied URLs); LLM output fed into query/DOM/shell; secrets/PII in LLM context.
+User input to DB/shell/DOM directly; secrets in source code; endpoints without auth; missing CORS or
+wildcard origins; no rate limiting on auth endpoints; exposed stack traces; unmitigated critical
+deps; SSRF (user-supplied URLs); LLM output fed into query/DOM/shell; secrets/PII in LLM context.
 
 ## Verification
 

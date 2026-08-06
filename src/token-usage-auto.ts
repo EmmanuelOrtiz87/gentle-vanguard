@@ -27,13 +27,18 @@ function getNexusDb(): any {
   return null;
 }
 
-function writeTokenToNexus(sessionId: string, promptTokens: number, completionTokens: number, model: string): void {
+function writeTokenToNexus(
+  sessionId: string,
+  promptTokens: number,
+  completionTokens: number,
+  model: string,
+): void {
   try {
     const db = getNexusDb();
     if (db) {
       db.prepare(
         `INSERT INTO token_usage (session_id, prompt_tokens, completion_tokens, cost, model, timestamp)
-         VALUES (?, ?, ?, 0, ?, datetime('now'))`
+         VALUES (?, ?, ?, 0, ?, datetime('now'))`,
       ).run(sessionId, promptTokens, completionTokens, model || null);
     }
   } catch {
@@ -98,11 +103,14 @@ function main() {
   };
 
   const {
-    ContextChars = 0, TurnLabel = '', InputSummary = '', OutputSummary = '', ToolCalls = '', Model = '',
+    ContextChars = 0,
+    TurnLabel = '',
+    InputSummary = '',
+    OutputSummary = '',
+    ToolCalls = '',
+    Model = '',
   } = args;
-  let {
-    InputTokens = 0, OutputTokens = 0, SessionId = '',
-  } = args;
+  let { InputTokens = 0, OutputTokens = 0, SessionId = '' } = args;
 
   const ROOT = process.env.GENTLE_VANGUARD_BASE_DIR
     ? resolve(process.env.GENTLE_VANGUARD_BASE_DIR)
@@ -125,11 +133,14 @@ function main() {
     if (existsSync(sessionDir)) {
       try {
         const files = readdirSync(sessionDir)
-          .filter(f => f.startsWith('session-') && f.endsWith('.json'))
+          .filter((f) => f.startsWith('session-') && f.endsWith('.json'))
           .sort()
           .reverse();
         if (files.length > 0) {
-          const sd = JSON.parse(readFileSync(join(sessionDir, files[0]), 'utf8')) as Record<string, unknown>;
+          const sd = JSON.parse(readFileSync(join(sessionDir, files[0]), 'utf8')) as Record<
+            string,
+            unknown
+          >;
           if (typeof sd.sessionId === 'string') SessionId = sd.sessionId;
         }
       } catch {
@@ -145,16 +156,28 @@ function main() {
       InputTokens = Math.max(1, Math.floor(ContextChars / 4));
       OutputTokens = Math.max(1, Math.floor(500 / 4));
     }
-    runNpxTsxSync(notifierTs, ['-Action', 'accumulate', '-InputTokens', String(InputTokens), '-OutputTokens', String(OutputTokens)], {
-      cwd: ROOT, stdio: 'ignore'
-    });
+    runNpxTsxSync(
+      notifierTs,
+      [
+        '-Action',
+        'accumulate',
+        '-InputTokens',
+        String(InputTokens),
+        '-OutputTokens',
+        String(OutputTokens),
+      ],
+      {
+        cwd: ROOT,
+        stdio: 'ignore',
+      },
+    );
   }
 
   // TS migration: session-context-log.ps1 → src/core/session-context-log.ts
   try {
     const ctxDir = join(ROOT, '.session', 'context-log');
     if (!existsSync(ctxDir)) {
-      import('fs').then(({ mkdirSync }) => mkdirSync(ctxDir, { recursive: true }));
+      import('fs').then(({ mkdirSync }) => mkdirSync(ctxDir, { recursive: true })).catch(() => {});
     }
     const prev = readSessionState(SessionId);
     const now = new Date().toISOString();

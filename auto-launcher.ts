@@ -36,18 +36,32 @@ console.log('');
 
 // Initialize all components
 const components = {
-  'v5.0 Convergence': [convergenceMonitor, knowledgeSynthesizer, selfReflectionLoop, adaptiveRouter, predictiveGovernor, rootCauseCorrelator, skillEvolutionEngine],
+  'v5.0 Convergence': [
+    convergenceMonitor,
+    knowledgeSynthesizer,
+    selfReflectionLoop,
+    adaptiveRouter,
+    predictiveGovernor,
+    rootCauseCorrelator,
+    skillEvolutionEngine,
+  ],
   'v5.1 Multi-Tenant': [tenantContextManager, evalQualityGate],
   'v6.0 Autonomous Review': [autoCodeReview, receiptManager, stagedReview],
   'v6.4 MCP Native': [mcpGateway, gateGuardMCP],
-  'v8.0 Trust Layer': [findingsLedger, compactState, reviewLenses, resultGatekeeper, publicationGates],
+  'v8.0 Trust Layer': [
+    findingsLedger,
+    compactState,
+    reviewLenses,
+    resultGatekeeper,
+    publicationGates,
+  ],
 };
 
 console.log('Initializing components...\n');
 
 for (const [phase, comps] of Object.entries(components)) {
   console.log(`[${phase}]`);
-  comps.forEach(comp => {
+  comps.forEach((comp) => {
     const stats = comp.getStats ? comp.getStats() : { status: 'active' };
     console.log(`  ✓ ${comp.constructor.name}: ${JSON.stringify(stats)}`);
   });

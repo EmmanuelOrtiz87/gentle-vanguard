@@ -17,7 +17,11 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { getConfig as getOutputConfig, compressOutput, CompressionProfile } from './output-compression.js';
+import {
+  getConfig as getOutputConfig,
+  compressOutput,
+  CompressionProfile,
+} from './output-compression.js';
 
 // ─── Types ──────────────────────────────────────────────────────────────────────
 
@@ -51,11 +55,14 @@ export interface ChatLevelMetrics {
   totalEnforcements: number;
   enforcedCount: number;
   overriddenCount: number;
-  byLevel: Record<ChatLevel, {
-    count: number;
-    avgLinesSaved: number;
-    avgTokensSaved: number;
-  }>;
+  byLevel: Record<
+    ChatLevel,
+    {
+      count: number;
+      avgLinesSaved: number;
+      avgTokensSaved: number;
+    }
+  >;
   breakGlassUsage: {
     totalOverrides: number;
     byReason: Record<string, number>;
@@ -99,13 +106,15 @@ function loadState(): BreakGlassState {
       const states: Record<string, BreakGlassState> = JSON.parse(readFileSync(STATE_PATH, 'utf-8'));
       if (states[sessionId]) return states[sessionId];
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 
   return {
     sessionId,
     overridesUsed: 0,
     lastOverrideAt: null,
-    cooldownRemaining: 0
+    cooldownRemaining: 0,
   };
 }
 
@@ -118,7 +127,9 @@ function saveState(state: BreakGlassState): void {
     states[state.sessionId] = state;
     ensureDir(STATE_PATH);
     writeFileSync(STATE_PATH, JSON.stringify(states, null, 2));
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 }
 
 function ensureDir(filePath: string): void {
@@ -142,15 +153,18 @@ export function getOrchestratorConfig(): Partial<EnforcerConfig> {
         autoEscalateTriggers: chat?.auto_escalate_triggers ?? [],
         breakGlass: {
           enabled: policy?.break_glass?.enabled ?? true,
-          maxOverridesPerSession: policy?.break_glass?.abuse_prevention?.max_overrides_per_session ?? 3,
+          maxOverridesPerSession:
+            policy?.break_glass?.abuse_prevention?.max_overrides_per_session ?? 3,
           maxOverridesPerHour: policy?.break_glass?.abuse_prevention?.max_overrides_per_hour ?? 2,
           cooldownTurns: policy?.break_glass?.cooldown_turns ?? 5,
           requiresReason: true,
-          auditLog: policy?.break_glass?.audit_log ?? '.logs/break-glass-audit.jsonl'
-        }
+          auditLog: policy?.break_glass?.audit_log ?? '.logs/break-glass-audit.jsonl',
+        },
       };
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 
   return {
     defaultLevel: 'chat-compact',
@@ -163,8 +177,8 @@ export function getOrchestratorConfig(): Partial<EnforcerConfig> {
       maxOverridesPerHour: 2,
       cooldownTurns: 5,
       requiresReason: true,
-      auditLog: '.logs/break-glass-audit.jsonl'
-    }
+      auditLog: '.logs/break-glass-audit.jsonl',
+    },
   };
 }
 
@@ -193,15 +207,33 @@ export function getChatLevelConfig(level: ChatLevel): {
       maxTokens: chatConfig.maxTokens,
       enforceLineLimit: chatConfig.enforceLineLimit,
       enforceTokenLimit: chatConfig.enforceTokenLimit,
-      defaultProfile: chatConfig.defaultProfile
+      defaultProfile: chatConfig.defaultProfile,
     };
   }
 
   // Defaults
   const defaults = {
-    'chat-compact': { maxLines: 10, maxTokens: 500, enforceLineLimit: true, enforceTokenLimit: true, defaultProfile: 'ultra' as CompressionProfile },
-    'chat-balanced': { maxLines: 25, maxTokens: 1500, enforceLineLimit: true, enforceTokenLimit: true, defaultProfile: 'lleno' as CompressionProfile },
-    'chat-detailed': { maxLines: 100, maxTokens: 4000, enforceLineLimit: false, enforceTokenLimit: false, defaultProfile: 'lite' as CompressionProfile }
+    'chat-compact': {
+      maxLines: 10,
+      maxTokens: 500,
+      enforceLineLimit: true,
+      enforceTokenLimit: true,
+      defaultProfile: 'ultra' as CompressionProfile,
+    },
+    'chat-balanced': {
+      maxLines: 25,
+      maxTokens: 1500,
+      enforceLineLimit: true,
+      enforceTokenLimit: true,
+      defaultProfile: 'lleno' as CompressionProfile,
+    },
+    'chat-detailed': {
+      maxLines: 100,
+      maxTokens: 4000,
+      enforceLineLimit: false,
+      enforceTokenLimit: false,
+      defaultProfile: 'lite' as CompressionProfile,
+    },
   };
 
   return defaults[level];
@@ -256,12 +288,14 @@ export function applyBreakGlass(reason: string): void {
     timestamp: new Date().toISOString(),
     sessionId: state.sessionId,
     reason,
-    overridesUsed: state.overridesUsed
+    overridesUsed: state.overridesUsed,
   };
 
   try {
     appendFileSync(auditLog, JSON.stringify(entry) + '\n');
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 }
 
 export function decrementCooldown(): void {
@@ -294,7 +328,7 @@ export function enforceChatLevel(
     autoEscalate?: boolean;
     breakGlassReason?: string;
     profile?: CompressionProfile;
-  } = {}
+  } = {},
 ): ChatLevelEnforcementResult {
   const startTime = Date.now();
 
@@ -313,7 +347,7 @@ export function enforceChatLevel(
       tokensExcess: 0,
       wasEnforced: false,
       overridden: false,
-      durationMs: 0
+      durationMs: 0,
     };
   }
 
@@ -361,7 +395,7 @@ export function enforceChatLevel(
   // Apply output compression with the level's settings
   const compressionResult = compressOutput(input, profile, {
     maxLines: levelConfig.enforceLineLimit ? levelConfig.maxLines : undefined,
-    maxTokens: levelConfig.enforceTokenLimit ? levelConfig.maxTokens : undefined
+    maxTokens: levelConfig.enforceTokenLimit ? levelConfig.maxTokens : undefined,
   });
 
   const originalLines = input.split('\n').length;
@@ -389,7 +423,7 @@ export function enforceChatLevel(
     wasEnforced,
     overridden,
     overrideReason,
-    durationMs: Date.now() - startTime
+    durationMs: Date.now() - startTime,
   };
 
   // Save metrics
@@ -408,7 +442,9 @@ function loadChatMetrics(): ChatLevelMetrics {
     if (existsSync(METRICS_PATH)) {
       return JSON.parse(readFileSync(METRICS_PATH, 'utf-8')) as ChatLevelMetrics;
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 
   return {
     totalEnforcements: 0,
@@ -417,12 +453,12 @@ function loadChatMetrics(): ChatLevelMetrics {
     byLevel: {
       'chat-compact': { count: 0, avgLinesSaved: 0, avgTokensSaved: 0 },
       'chat-balanced': { count: 0, avgLinesSaved: 0, avgTokensSaved: 0 },
-      'chat-detailed': { count: 0, avgLinesSaved: 0, avgTokensSaved: 0 }
+      'chat-detailed': { count: 0, avgLinesSaved: 0, avgTokensSaved: 0 },
     },
     breakGlassUsage: {
       totalOverrides: 0,
-      byReason: {}
-    }
+      byReason: {},
+    },
   };
 }
 
@@ -455,7 +491,9 @@ function saveChatMetrics(result: ChatLevelEnforcementResult): void {
 
     ensureDir(METRICS_PATH);
     writeFileSync(METRICS_PATH, JSON.stringify(metrics, null, 2));
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 }
 
 // ─── Profile Selection ──────────────────────────────────────────────────────────
@@ -487,7 +525,7 @@ export function getStatus(): {
     currentLevel: level,
     config: getChatLevelConfig(level),
     state: loadState(),
-    metrics: loadChatMetrics()
+    metrics: loadChatMetrics(),
   };
 }
 
@@ -546,14 +584,14 @@ function formatResult(result: ChatLevelEnforcementResult): string {
     `  Level:           ${result.level}`,
     `  Profile:         ${result.profile}`,
     `  Duration:        ${result.durationMs}ms`,
-    ''
+    '',
   ];
 
   if (result.overridden) {
     lines.push(
       `  ⚠️  BREAK-GLASS OVERRIDE APPLIED`,
       `  Reason:          ${result.overrideReason}`,
-      ''
+      '',
     );
   }
 
@@ -561,7 +599,7 @@ function formatResult(result: ChatLevelEnforcementResult): string {
     `  Original:        ${result.originalLines} lines, ~${result.originalTokens} tokens`,
     `  Enforced:        ${result.enforcedLines} lines, ~${result.enforcedTokens} tokens`,
     `  Savings:         ${savings} tokens, ${result.originalLines - result.enforcedLines} lines`,
-    ''
+    '',
   );
 
   if (result.linesExcess > 0) {
@@ -639,7 +677,11 @@ function main(): void {
 
   let input = '';
   let level: ChatLevel = 'chat-compact';
-  const options: { autoEscalate?: boolean; breakGlassReason?: string; profile?: CompressionProfile } = {};
+  const options: {
+    autoEscalate?: boolean;
+    breakGlassReason?: string;
+    profile?: CompressionProfile;
+  } = {};
 
   if (inputIdx >= 0) {
     input = args[inputIdx + 1] ?? '';

@@ -118,9 +118,9 @@ sdk.start();
 ```
 
 Add manual spans only around meaningful internal units of work (e.g., `applyDiscounts`,
-`chargeProvider`) and attach attributes on-call will filter by. Propagate context across every
-async boundary — HTTP headers, queue message metadata — or the trace dies at the gap. Sample
-head-based at a low rate by default; keep 100% of errors if your backend supports tail sampling.
+`chargeProvider`) and attach attributes on-call will filter by. Propagate context across every async
+boundary — HTTP headers, queue message metadata — or the trace dies at the gap. Sample head-based at
+a low rate by default; keep 100% of errors if your backend supports tail sampling.
 
 ## 6. Alerting
 
@@ -137,6 +137,7 @@ Cause-based alerts fire when nothing is wrong and miss failures you didn't predi
 alerts fire exactly when users are hurt.
 
 Rules for every alert:
+
 1. **It must be actionable.** If the response is "ignore it", delete the alert.
 2. **It links to a runbook** — even three lines: what it means, first query, escalation path.
 3. **It has a threshold and duration** justified by the SLO or by historical data.
@@ -149,5 +150,5 @@ Instrumentation is code; it can be wrong. Before calling the work done:
 - Force an error in staging → find it in the logs by `requestId`, confirm fields are structured
 - Send test traffic → confirm metric series appear with the expected labels and sane values
 - Follow one request across services in the tracing UI → no broken spans
-- Fire each new alert once (lower threshold temporarily) → confirm it reaches the right channel
-  and the runbook link works
+- Fire each new alert once (lower threshold temporarily) → confirm it reaches the right channel and
+  the runbook link works

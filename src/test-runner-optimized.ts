@@ -8,7 +8,7 @@
  *   - Reduced default timeout from 120s to 60s
  *   - Quick mode: only critical tests (--quick flag)
  *   - Better progress reporting
-*
+ *
  * Usage:
  *   npx tsx src/test-runner-optimized.ts [--all] [--quick] [--verbose] [--parallel 4]
  */
@@ -107,27 +107,34 @@ function parseArgs(): RunOptions {
   };
 }
 
-function runSuite(suite: Suite, verbose: boolean): Promise<{ name: string; passed: boolean; output: string; duration: number }> {
+function runSuite(
+  suite: Suite,
+  verbose: boolean,
+): Promise<{ name: string; passed: boolean; output: string; duration: number }> {
   return new Promise((resolve) => {
     const startTime = Date.now();
     const label = `[${suite.name}]`;
-    
+
     const child = spawn(suite.cmd, suite.args, {
       shell: true,
       stdio: ['pipe', 'pipe', 'pipe'],
     });
 
     let output = '';
-    child.stdout?.on('data', (data) => { output += data.toString(); });
-    child.stderr?.on('data', (data) => { output += data.toString(); });
+    child.stdout?.on('data', (data) => {
+      output += data.toString();
+    });
+    child.stderr?.on('data', (data) => {
+      output += data.toString();
+    });
 
     const timeout = setTimeout(() => {
       child.kill('SIGTERM');
-      resolve({ 
-        name: suite.name, 
-        passed: false, 
+      resolve({
+        name: suite.name,
+        passed: false,
         output: 'TIMEOUT: Test exceeded time limit',
-        duration: Date.now() - startTime
+        duration: Date.now() - startTime,
       });
     }, suite.timeout ?? 60_000);
 
@@ -135,28 +142,32 @@ function runSuite(suite: Suite, verbose: boolean): Promise<{ name: string; passe
       clearTimeout(timeout);
       const duration = Date.now() - startTime;
       const passed = code === 0;
-      
+
       if (verbose) {
         process.stdout.write(`${label} ${passed ? '✓ PASS' : '✗ FAIL'} (${duration}ms)\n`);
       }
-      
+
       resolve({ name: suite.name, passed, output, duration });
     });
   });
 }
 
-async function runParallel(suites: Suite[], options: RunOptions, progressPrefix: string): Promise<{ passed: number; failed: number; results: any[] }> {
+async function runParallel(
+  suites: Suite[],
+  options: RunOptions,
+  progressPrefix: string,
+): Promise<{ passed: number; failed: number; results: any[] }> {
   const results: any[] = [];
   let passed = 0;
   let failed = 0;
   let completed = 0;
-  
+
   const queue = [...suites];
   // Trackable promises with completion status
   interface TrackablePromise extends Promise<void> {
     isCompleted: boolean;
   }
-  
+
   function makeTrackable(promise: Promise<void>): TrackablePromise {
     const trackable = promise.finally(() => {
       (trackable as TrackablePromise).isCompleted = true;
@@ -164,9 +175,9 @@ async function runParallel(suites: Suite[], options: RunOptions, progressPrefix:
     trackable.isCompleted = false;
     return trackable;
   }
-  
+
   const running: TrackablePromise[] = [];
-  
+
   while (queue.length > 0 || running.length > 0) {
     // Start new tasks up to parallel limit
     while (running.length < options.parallel && queue.length > 0) {
@@ -174,7 +185,7 @@ async function runParallel(suites: Suite[], options: RunOptions, progressPrefix:
       const promise = runSuite(suite, options.verbose).then((result) => {
         results.push(result);
         completed++;
-        
+
         if (result.passed) {
           passed++;
         } else {
@@ -184,19 +195,21 @@ async function runParallel(suites: Suite[], options: RunOptions, progressPrefix:
             process.stdout.write(`  ⚠ ${result.name}: ${lines}\n`);
           }
         }
-        
+
         if (!options.verbose) {
-          process.stdout.write(`\r${progressPrefix} ${completed}/${suites.length} (${passed}✓ ${failed}✗)`);
+          process.stdout.write(
+            `\r${progressPrefix} ${completed}/${suites.length} (${passed}✓ ${failed}✗)`,
+          );
         }
       });
       running.push(makeTrackable(promise));
     }
-    
+
     // Wait for at least one to complete
     if (running.length > 0) {
       await Promise.race(running);
       // Allow event loop to process completed promises
-      await new Promise(resolve => setImmediate(resolve));
+      await new Promise((resolve) => setImmediate(resolve));
       // Remove completed promises
       for (let i = running.length - 1; i >= 0; i--) {
         if (running[i].isCompleted) {
@@ -206,21 +219,21 @@ async function runParallel(suites: Suite[], options: RunOptions, progressPrefix:
       }
     }
   }
-  
+
   if (!options.verbose) {
     process.stdout.write('\n');
   }
-  
+
   return { passed, failed, results };
 }
 
 async function main(): Promise<void> {
   const options = parseArgs();
-  
+
   // Select suites based on mode
   let suitesToRun: Suite[] = [];
   if (options.quick) {
-    suitesToRun = CORE_SUITES.filter(s => s.quick);
+    suitesToRun = CORE_SUITES.filter((s) => s.quick);
     process.stdout.write('⚡ QUICK MODE: Running only critical tests\n\n');
   } else {
     suitesToRun = [...CORE_SUITES, ...EXTENDED_SUITES];
@@ -228,9 +241,9 @@ async function main(): Promise<void> {
       suitesToRun = [...suitesToRun, ...OPTIONAL_SUITES];
     }
   }
-  
+
   // Filter out non-existent optional suites
-  suitesToRun = suitesToRun.filter(suite => {
+  suitesToRun = suitesToRun.filter((suite) => {
     if (suite.required) return true;
     const testFile = suite.args[suite.args.length - 1];
     if (testFile && !testFile.includes('*')) {
@@ -238,21 +251,25 @@ async function main(): Promise<void> {
     }
     return true;
   });
-  
+
   process.stdout.write(`┌────────────────────────────────────────────────┐\n`);
   process.stdout.write(`│  TEST RUNNER OPTIMIZED v2                        │\n`);
-  process.stdout.write(`│  ${String(suitesToRun.length).padStart(3)} suites | ${options.parallel} parallel | ${options.quick ? 'QUICK' : 'FULL'} mode        │\n`);
+  process.stdout.write(
+    `│  ${String(suitesToRun.length).padStart(3)} suites | ${options.parallel} parallel | ${options.quick ? 'QUICK' : 'FULL'} mode        │\n`,
+  );
   process.stdout.write(`└────────────────────────────────────────────────┘\n\n`);
-  
+
   const startTime = Date.now();
   const { passed, failed, results } = await runParallel(suitesToRun, options, 'Running:');
   const totalDuration = Date.now() - startTime;
-  
+
   // Summary
   process.stdout.write(`\n┌────────────────────────────────────────────────┐\n`);
-  process.stdout.write(`│  RESULT: ${passed} passed, ${failed} failed | ${(totalDuration / 1000).toFixed(1)}s           │\n`);
+  process.stdout.write(
+    `│  RESULT: ${passed} passed, ${failed} failed | ${(totalDuration / 1000).toFixed(1)}s           │\n`,
+  );
   process.stdout.write(`└────────────────────────────────────────────────┘\n`);
-  
+
   // Show slow tests
   const slowThreshold = 30_000; // 30 seconds
   const slowTests = results.filter((r: any) => r.duration > slowThreshold);
@@ -262,7 +279,7 @@ async function main(): Promise<void> {
       process.stdout.write(`  - ${r.name}: ${(r.duration / 1000).toFixed(1)}s\n`);
     });
   }
-  
+
   // Recommendations
   if (options.all && failed > 0) {
     process.stdout.write(`\n💡 Try running without --all for faster execution\n`);
@@ -270,11 +287,11 @@ async function main(): Promise<void> {
   if (!options.quick && failed === 0) {
     process.stdout.write(`\n💡 For CI/CD, try --quick flag for 2x faster runs\n`);
   }
-  
+
   process.exit(failed > 0 ? 1 : 0);
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('[FATAL]', err);
   process.exit(1);
 });

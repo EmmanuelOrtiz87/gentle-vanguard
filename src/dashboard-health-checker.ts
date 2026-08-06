@@ -1,24 +1,24 @@
 /**
  * Dashboard Health Checker — Solución Definitiva
- * 
+ *
  * PROBLEMA QUE RESUELVE:
  *   El health check anterior (src/core/health-check.ts) solo verificaba
  *   si el puerto TCP estaba abierto con un socket raw. Esto fallaba porque:
  *   - El servidor WebSocket necesita HTTP upgrade handshake
  *   - Un socket TCP simple no hace el handshake WebSocket
  *   - Resultado: false positive (puerto "abierto" pero WS no funciona)
- * 
+ *
  * SOLUCIÓN:
  *   Este módulo implementa 3 niveles de verificación:
- *   
+ *
  *   Level 1: HTTP GET /api/health → JSON response expected
  *   Level 2: HTTP GET /api/metrics → JSON response expected  
  *   Level 3: TCP socket (legacy fallback) → open/closed
- * 
+ *
  *   Si Level 1 o Level 2 pasan, el dashboard está HEALTHY.
  *   Si solo Level 3 pasa, está DEGRADED (corriendo pero no funcional).
  *   Si ninguno pasa, está DOWN.
- * 
+ *
  * USO:
  *   import { checkDashboardHealth } from './dashboard-health-checker.js';
  *   const result = await checkDashboardHealth();
@@ -49,7 +49,7 @@ export interface DashboardHealthResult {
 async function httpGetJson(
   port: number,
   path: string,
-  timeout = 3000
+  timeout = 3000,
 ): Promise<{ ok: boolean; statusCode: number; body: any; error?: string }> {
   return new Promise((resolve) => {
     const options = {
@@ -59,14 +59,16 @@ async function httpGetJson(
       method: 'GET',
       timeout,
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
       },
     };
 
     let body = '';
     const req = http.request(options, (res) => {
       res.setEncoding('utf8');
-      res.on('data', (chunk) => { body += chunk; });
+      res.on('data', (chunk) => {
+        body += chunk;
+      });
       res.on('end', () => {
         try {
           const json = body ? JSON.parse(body) : null;
@@ -105,9 +107,18 @@ async function tcpCheck(port: number, timeout = 2000): Promise<boolean> {
   return new Promise((resolve) => {
     const sock = new net.Socket();
     sock.setTimeout(timeout);
-    sock.on('connect', () => { sock.destroy(); resolve(true); });
-    sock.on('error', () => { sock.destroy(); resolve(false); });
-    sock.on('timeout', () => { sock.destroy(); resolve(false); });
+    sock.on('connect', () => {
+      sock.destroy();
+      resolve(true);
+    });
+    sock.on('error', () => {
+      sock.destroy();
+      resolve(false);
+    });
+    sock.on('timeout', () => {
+      sock.destroy();
+      resolve(false);
+    });
     sock.connect(port, '127.0.0.1');
   });
 }
@@ -125,10 +136,10 @@ async function checkViteHealth(): Promise<boolean> {
  */
 export async function checkDashboardHealth(
   wsPort = 8080,
-  vitePort = 5173
+  vitePort = 5173,
 ): Promise<DashboardHealthResult> {
   // Run all checks in parallel
-  const [healthApi, metricsApi, tcpResult, viteResult] = await Promise.all([
+  const [healthApi, metricsApi, tcpResult] = await Promise.all([
     httpGetJson(wsPort, '/api/health', 3000),
     httpGetJson(wsPort, '/api/metrics', 3000),
     tcpCheck(wsPort, 2000),
@@ -188,7 +199,7 @@ export async function isDashboardHealthy(): Promise<boolean> {
  */
 export async function checkDashboardHealthWithRetry(
   retries = 2,
-  delay = 1000
+  delay = 1000,
 ): Promise<DashboardHealthResult> {
   for (let i = 0; i <= retries; i++) {
     const result = await checkDashboardHealth();
@@ -196,7 +207,7 @@ export async function checkDashboardHealthWithRetry(
       return result;
     }
     if (i < retries) {
-      await new Promise(r => setTimeout(r, delay));
+      await new Promise((r) => setTimeout(r, delay));
     }
   }
   return checkDashboardHealth();
@@ -205,15 +216,21 @@ export async function checkDashboardHealthWithRetry(
 // CLI usage
 if (import.meta.url === `file://${process.argv[1]}`) {
   checkDashboardHealth()
-    .then(result => {
+    .then((result) => {
       console.log(JSON.stringify(result, null, 2));
       process.exit(result.status === 'down' ? 1 : 0);
     })
-    .catch(err => {
-      console.error(JSON.stringify({
-        status: 'error',
-        error: err.message,
-      }, null, 2));
+    .catch((err) => {
+      console.error(
+        JSON.stringify(
+          {
+            status: 'error',
+            error: err.message,
+          },
+          null,
+          2,
+        ),
+      );
       process.exit(1);
     });
 }

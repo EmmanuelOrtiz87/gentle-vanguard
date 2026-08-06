@@ -42,15 +42,26 @@ function main(): number {
   const inputTokens = Math.max(0, Math.floor(ctxChars / 4));
   const outputTokens = 0;
 
-  runNpxTsxSync(autoScript, [
-    '-InputTokens', String(inputTokens),
-    '-OutputTokens', String(outputTokens),
-    '-ContextChars', String(ctxChars),
-    '-TurnLabel', turnLabel,
-    '-InputSummary', inputSummary,
-    '-OutputSummary', outputSummary,
-    '-Model', 'auto-detected',
-  ], { cwd: repoRoot, stdio: 'inherit' });
+  runNpxTsxSync(
+    autoScript,
+    [
+      '-InputTokens',
+      String(inputTokens),
+      '-OutputTokens',
+      String(outputTokens),
+      '-ContextChars',
+      String(ctxChars),
+      '-TurnLabel',
+      turnLabel,
+      '-InputSummary',
+      inputSummary,
+      '-OutputSummary',
+      outputSummary,
+      '-Model',
+      'auto-detected',
+    ],
+    { cwd: repoRoot, stdio: 'inherit' },
+  );
 
   return 0;
 }

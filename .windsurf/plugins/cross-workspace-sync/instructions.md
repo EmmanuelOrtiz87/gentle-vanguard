@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 Cross-workspace synchronization skill for maintaining consistency across projects
 
 ## Triggers
 
-
 ## Instructions
+
 # Skill: cross-workspace-sync
 
 **versión**: 1.0.0 **Created**: 2026-04-20 **Status**: ACTIVE **Priority**: MEDIUM

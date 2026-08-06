@@ -69,9 +69,10 @@ async function launch(): Promise<void> {
 
   // Spawn detached process using cmd /c for proper Windows process management
   const cmd = process.platform === 'win32' ? 'cmd.exe' : '/bin/sh';
-  const args = process.platform === 'win32'
-    ? ['/c', 'set', `WS_PORT=${WS_PORT}`, '&&', 'npx.cmd', 'tsx', wsScript]
-    : ['-c', `WS_PORT=${WS_PORT} npx tsx "${wsScript}"`];
+  const args =
+    process.platform === 'win32'
+      ? ['/c', 'set', `WS_PORT=${WS_PORT}`, '&&', 'npx.cmd', 'tsx', wsScript]
+      : ['-c', `WS_PORT=${WS_PORT} npx tsx "${wsScript}"`];
 
   const child = spawn(cmd, args, {
     cwd: ROOT,

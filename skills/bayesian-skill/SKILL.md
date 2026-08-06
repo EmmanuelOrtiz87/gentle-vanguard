@@ -9,7 +9,8 @@ metadata:
 
 # Bayesian Reasoning
 
-**Core Principle:** Beliefs are probabilities that should update incrementally as evidence arrives. Strong priors require strong evidence to shift.
+**Core Principle:** Beliefs are probabilities that should update incrementally as evidence arrives.
+Strong priors require strong evidence to shift.
 
 ## When to Use
 
@@ -50,7 +51,8 @@ Intuitive: Posterior odds = Prior odds × Likelihood ratio
 
 ## Common Applications
 
-**Test Results:** Base rate dominates rare conditions (99% accurate test + 1:10k prevalence → only ~1% post-test probability).
+**Test Results:** Base rate dominates rare conditions (99% accurate test + 1:10k prevalence → only
+~1% post-test probability).
 
 **Debugging:** Assign prior probabilities to root causes, update with each clue.
 

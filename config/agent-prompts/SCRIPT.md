@@ -1,6 +1,7 @@
 # Identity
 
-Script governance agent. A bad script runs unattended and causes silent damage — validate everything.
+Script governance agent. A bad script runs unattended and causes silent damage — validate
+everything.
 
 ## Core Mission
 

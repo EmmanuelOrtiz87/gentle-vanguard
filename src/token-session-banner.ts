@@ -42,7 +42,13 @@ interface BannerData {
 }
 
 function loadBudget(): BudgetLimits {
-  const def: BudgetLimits = { daily: 60000, perSession: 7500, perAgent: 3000, softThreshold: 70, hardThreshold: 90 };
+  const def: BudgetLimits = {
+    daily: 60000,
+    perSession: 7500,
+    perAgent: 3000,
+    softThreshold: 70,
+    hardThreshold: 90,
+  };
   try {
     if (fs.existsSync(BUDGET_CONFIG)) {
       const raw = JSON.parse(fs.readFileSync(BUDGET_CONFIG, 'utf-8'));
@@ -57,7 +63,9 @@ function loadBudget(): BudgetLimits {
         };
       }
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return def;
 }
 
@@ -69,14 +77,18 @@ function readSessionId(): string {
       const sid = String(data.sessionId ?? data.id ?? '').trim();
       if (sid) return sid;
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return `session-${new Date().toISOString().slice(0, 13).replace('T', '-')}`;
 }
 
 /** Tokens consumed by the stack startup (session file accumulated + Nexus). */
 function readStartupTokens(sessionId: string): { input: number; output: number; total: number } {
   // Session file accumulated totals
-  let input = 0, output = 0, total = 0;
+  let input = 0,
+    output = 0,
+    total = 0;
   const fp = path.join(SESSION_DIR, 'session-current.json');
   try {
     if (fs.existsSync(fp)) {
@@ -85,7 +97,9 @@ function readStartupTokens(sessionId: string): { input: number; output: number; 
       output = Number(data.totalOutputTokens ?? data.outputTokens ?? 0) || 0;
       total = Number(data.totalTokens ?? 0) || input + output;
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 
   // Prefer Nexus real data if present for this session
   try {
@@ -108,7 +122,9 @@ function readStartupTokens(sessionId: string): { input: number; output: number; 
         db.close();
       }
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 
   return { input, output, total };
 }
@@ -131,7 +147,9 @@ function readDailyTokens(): number {
         db.close();
       }
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return 0;
 }
 
@@ -143,20 +161,27 @@ function buildBanner(): BannerData {
 
   const sessionUsed = startup.total;
   const sessionRemaining = Math.max(0, budget.perSession - sessionUsed);
-  const sessionPct = budget.perSession > 0 ? Math.round((sessionUsed / budget.perSession) * 100) : 0;
+  const sessionPct =
+    budget.perSession > 0 ? Math.round((sessionUsed / budget.perSession) * 100) : 0;
 
   const dailyRemaining = Math.max(0, budget.daily - dailyUsed);
   const dailyPct = budget.daily > 0 ? Math.round((dailyUsed / budget.daily) * 100) : 0;
 
   let status: BannerData['status'] = 'OK';
   if (dailyPct >= budget.hardThreshold || sessionPct >= budget.hardThreshold) status = 'HARD_LIMIT';
-  else if (dailyPct >= budget.softThreshold || sessionPct >= budget.softThreshold) status = 'SOFT_LIMIT';
+  else if (dailyPct >= budget.softThreshold || sessionPct >= budget.softThreshold)
+    status = 'SOFT_LIMIT';
 
   return {
     session_id: sessionId,
     generated_at: new Date().toISOString(),
     startup,
-    session: { used: sessionUsed, limit: budget.perSession, remaining: sessionRemaining, pct: sessionPct },
+    session: {
+      used: sessionUsed,
+      limit: budget.perSession,
+      remaining: sessionRemaining,
+      pct: sessionPct,
+    },
     daily: { used: dailyUsed, limit: budget.daily, remaining: dailyRemaining, pct: dailyPct },
     thresholds: { soft: budget.softThreshold, hard: budget.hardThreshold },
     status,
@@ -177,15 +202,20 @@ function render(b: BannerData): string {
   lines.push(`    Total:   ${b.startup.total.toLocaleString()} tokens`);
   lines.push('');
   lines.push('  ── Presupuesto de sesión ──');
-  lines.push(`    Usados:    ${b.session.used.toLocaleString()} / ${b.session.limit.toLocaleString()} (${b.session.pct}%)`);
+  lines.push(
+    `    Usados:    ${b.session.used.toLocaleString()} / ${b.session.limit.toLocaleString()} (${b.session.pct}%)`,
+  );
   lines.push(`    Restantes: ${b.session.remaining.toLocaleString()} tokens`);
   lines.push('');
   lines.push('  ── Presupuesto diario ──');
-  lines.push(`    Usados:    ${b.daily.used.toLocaleString()} / ${b.daily.limit.toLocaleString()} (${b.daily.pct}%)`);
+  lines.push(
+    `    Usados:    ${b.daily.used.toLocaleString()} / ${b.daily.limit.toLocaleString()} (${b.daily.pct}%)`,
+  );
   lines.push(`    Restantes: ${b.daily.remaining.toLocaleString()} tokens`);
   lines.push(`    Umbrales:  soft ${b.thresholds.soft}% / hard ${b.thresholds.hard}%`);
   lines.push('══════════════════════════════════════════════════════');
-  if (b.status === 'HARD_LIMIT') lines.push('  ⚠️  HARD LIMIT alcanzado — considere compactar o cerrar sesión.');
+  if (b.status === 'HARD_LIMIT')
+    lines.push('  ⚠️  HARD LIMIT alcanzado — considere compactar o cerrar sesión.');
   else if (b.status === 'SOFT_LIMIT') lines.push('  ⚠️  SOFT LIMIT alcanzado — vigile el consumo.');
   lines.push('');
   return lines.join('\n');

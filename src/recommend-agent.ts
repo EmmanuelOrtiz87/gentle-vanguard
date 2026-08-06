@@ -26,15 +26,15 @@ const ROUTING_TABLE = join(ROOT, '.session', 'routing', 'routing-table.json');
 const STATIC_MAP: Record<string, string[]> = {
   'code-review': ['sdd-verify', 'gov-agent', 'sdd-apply'],
   'code-apply': ['sdd-apply', 'sdd-design', 'sdd-verify'],
-  'requirements': ['sdd-explore', 'session-agent', 'knowledge-agent'],
-  'architecture': ['sdd-design', 'sdd-explore', 'premortem-agent'],
-  'testing': ['sdd-verify', 'sdd-apply', 'self-diag-agent'],
-  'docs': ['doc-agent', 'technical-writer', 'knowledge-agent'],
-  'ops': ['ops-agent', 'maintenance-agent', 'self-diag-agent'],
-  'security': ['gov-agent', 'legal-agent', 'premortem-agent'],
-  'governance': ['gov-agent', 'legal-agent', 'doc-agent'],
-  'session': ['session-agent', 'maintenance-agent', 'sdd-verify'],
-  'general': ['sdd-apply', 'explore', 'general'],
+  requirements: ['sdd-explore', 'session-agent', 'knowledge-agent'],
+  architecture: ['sdd-design', 'sdd-explore', 'premortem-agent'],
+  testing: ['sdd-verify', 'sdd-apply', 'self-diag-agent'],
+  docs: ['doc-agent', 'technical-writer', 'knowledge-agent'],
+  ops: ['ops-agent', 'maintenance-agent', 'self-diag-agent'],
+  security: ['gov-agent', 'legal-agent', 'premortem-agent'],
+  governance: ['gov-agent', 'legal-agent', 'doc-agent'],
+  session: ['session-agent', 'maintenance-agent', 'sdd-verify'],
+  general: ['sdd-apply', 'explore', 'general'],
 };
 
 interface RoutingTable {
@@ -63,11 +63,22 @@ function loadRoutingTable(): RoutingTable | null {
 function matchDomain(task: string, domainHint: string): string {
   const normalized = task.toLowerCase();
   const pairs: Array<[string, string]> = [
-    ['review', 'code-review'], ['refactor', 'code-apply'], ['implement', 'code-apply'],
-    ['feature', 'code-apply'], ['requirement', 'requirements'], ['analy', 'requirements'],
-    ['architect', 'architecture'], ['design', 'architecture'], ['test', 'testing'],
-    ['doc', 'docs'], ['deploy', 'ops'], ['infra', 'ops'], ['secur', 'security'],
-    ['audit', 'governance'], ['compliance', 'governance'], ['session', 'session'],
+    ['review', 'code-review'],
+    ['refactor', 'code-apply'],
+    ['implement', 'code-apply'],
+    ['feature', 'code-apply'],
+    ['requirement', 'requirements'],
+    ['analy', 'requirements'],
+    ['architect', 'architecture'],
+    ['design', 'architecture'],
+    ['test', 'testing'],
+    ['doc', 'docs'],
+    ['deploy', 'ops'],
+    ['infra', 'ops'],
+    ['secur', 'security'],
+    ['audit', 'governance'],
+    ['compliance', 'governance'],
+    ['session', 'session'],
   ];
   if (domainHint) return domainHint;
   for (const [kw, domain] of pairs) {
@@ -83,8 +94,10 @@ function recommend(task: string, domainHint: string, topN: number): unknown {
   // 1. Check overrides (highest priority — learned routing)
   if (table?.overrides) {
     for (const o of table.overrides) {
-      if (domain.toLowerCase().includes(o.domainPattern.toLowerCase()) ||
-          o.domainPattern.toLowerCase().includes(domain.toLowerCase())) {
+      if (
+        domain.toLowerCase().includes(o.domainPattern.toLowerCase()) ||
+        o.domainPattern.toLowerCase().includes(domain.toLowerCase())
+      ) {
         return {
           domain,
           recommended: o.targetAgent,
@@ -98,9 +111,7 @@ function recommend(task: string, domainHint: string, topN: number): unknown {
 
   // 2. Check domain entries (learned performance)
   if (table?.domainEntries) {
-    const entry = table.domainEntries.find(
-      (d) => d.domain.toLowerCase() === domain.toLowerCase(),
-    );
+    const entry = table.domainEntries.find((d) => d.domain.toLowerCase() === domain.toLowerCase());
     if (entry && entry.bestAgent) {
       return {
         domain,
@@ -123,7 +134,12 @@ function recommend(task: string, domainHint: string, topN: number): unknown {
   };
 }
 
-function parseArgs(argv: string[]): { task: string; domain: string; topN: number; refresh: boolean } {
+function parseArgs(argv: string[]): {
+  task: string;
+  domain: string;
+  topN: number;
+  refresh: boolean;
+} {
   const args = { task: '', domain: '', topN: 3, refresh: false };
   for (let i = 2; i < argv.length; i++) {
     if (argv[i] === '--task' && argv[i + 1]) args.task = argv[++i];
@@ -140,7 +156,9 @@ function main(): void {
   if (refresh) {
     try {
       runNpxTsxSync('src/adaptive-router.ts', ['--build', '--quiet'], {
-        cwd: ROOT, stdio: 'pipe', timeout: 30000,
+        cwd: ROOT,
+        stdio: 'pipe',
+        timeout: 30000,
       });
     } catch {
       // refresh failure is non-blocking

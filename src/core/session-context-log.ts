@@ -90,18 +90,18 @@ function getStatePath(sessionId: string): string {
  */
 export function saveSessionState(state: SessionState): void {
   ensureContextLogDir();
-  
+
   const statePath = getStatePath(state.sessionId);
   const sessionDir = path.dirname(statePath);
-  
+
   // Crear directorio de sesión si no existe
   if (!fs.existsSync(sessionDir)) {
     fs.mkdirSync(sessionDir, { recursive: true });
   }
-  
+
   // Guardar estado
   fs.writeFileSync(statePath, JSON.stringify(state, null, 2), 'utf-8');
-  
+
   console.log(`[SessionContextLog] Saved: ${state.sessionId}`);
 }
 
@@ -110,11 +110,11 @@ export function saveSessionState(state: SessionState): void {
  */
 export function readSessionState(sessionId: string): SessionState | null {
   const statePath = getStatePath(sessionId);
-  
+
   if (!fs.existsSync(statePath)) {
     return null;
   }
-  
+
   try {
     const content = fs.readFileSync(statePath, 'utf-8');
     return JSON.parse(content) as SessionState;
@@ -131,13 +131,13 @@ export function listSessions(): string[] {
   if (!fs.existsSync(CONTEXT_LOG_DIR)) {
     return [];
   }
-  
+
   try {
     const entries = fs.readdirSync(CONTEXT_LOG_DIR, { withFileTypes: true });
     return entries
-      .filter(e => e.isDirectory())
-      .map(e => e.name)
-      .filter(name => {
+      .filter((e) => e.isDirectory())
+      .map((e) => e.name)
+      .filter((name) => {
         // Verificar que tenga un .state.json válido
         const statePath = path.join(CONTEXT_LOG_DIR, name, '.state.json');
         return fs.existsSync(statePath);
@@ -153,9 +153,7 @@ export function listSessions(): string[] {
  */
 export function getAllSessionStates(): SessionState[] {
   const sessionIds = listSessions();
-  return sessionIds
-    .map(id => readSessionState(id))
-    .filter((s): s is SessionState => s !== null);
+  return sessionIds.map((id) => readSessionState(id)).filter((s): s is SessionState => s !== null);
 }
 
 /**
@@ -169,10 +167,10 @@ export function getAggregatedMetrics(): {
   totalMessages: number;
 } {
   const sessions = getAllSessionStates();
-  
+
   return {
     totalSessions: sessions.length,
-    activeSessions: sessions.filter(s => s.status === 'active').length,
+    activeSessions: sessions.filter((s) => s.status === 'active').length,
     totalTokens: sessions.reduce((sum, s) => sum + (s.totalTokens || 0), 0),
     totalCost: sessions.reduce((sum, s) => sum + (s.totalCost || 0), 0),
     totalMessages: sessions.reduce((sum, s) => sum + (s.messageCount || 0), 0),
@@ -228,7 +226,7 @@ export class SessionContextLog {
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   console.log('[SessionContextLog] Testing...');
-  
+
   // Test write
   const log = new SessionContextLog({
     sessionId: 'test-session',
@@ -237,11 +235,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   });
   log.save();
   console.log('[SessionContextLog] Test session saved');
-  
+
   // Test read
   const sessions = listSessions();
   console.log('[SessionContextLog] Sessions:', sessions);
-  
+
   // Test aggregated
   const metrics = getAggregatedMetrics();
   console.log('[SessionContextLog] Metrics:', metrics);

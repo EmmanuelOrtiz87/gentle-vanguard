@@ -23,7 +23,18 @@
  *   npx tsx src/model-provider-healer.ts --quiet    # minimo output (pipeline)
  */
 
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync, appendFileSync, statSync, openSync, readSync, closeSync } from 'fs';
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  writeFileSync,
+  appendFileSync,
+  statSync,
+  openSync,
+  readSync,
+  closeSync,
+} from 'fs';
 import { join, dirname, resolve } from 'path';
 import { homedir } from 'os';
 import { runNpxTsxSync } from './core/run-command.js';
@@ -121,9 +132,12 @@ function log(msg: string, level: 'INFO' | 'WARN' | 'ERROR' | 'SUCCESS' = 'INFO')
   };
   console.log(`${colors[level] ?? ''}[${ts}] [${level}] ${msg}\x1b[0m`);
   try {
-    if (!existsSync(dirname(CORRECTION_LOG))) mkdirSync(dirname(CORRECTION_LOG), { recursive: true });
+    if (!existsSync(dirname(CORRECTION_LOG)))
+      mkdirSync(dirname(CORRECTION_LOG), { recursive: true });
     appendFileSync(CORRECTION_LOG, `${ts} [${level}] ${msg}\n`);
-  } catch { /* non-fatal */ }
+  } catch {
+    /* non-fatal */
+  }
 }
 
 // ─── Log scanning ─────────────────────────────────────────────────────
@@ -142,8 +156,12 @@ function expandLogSource(source: string): string[] {
   const absDir = resolve(ROOT, dirPart);
   if (!existsSync(absDir)) return [];
   return readdirSync(absDir)
-    .filter(f => new RegExp(`^${filePart.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*')}$`).test(f))
-    .map(f => join(absDir, f));
+    .filter((f) =>
+      new RegExp(`^${filePart.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*')}$`).test(
+        f,
+      ),
+    )
+    .map((f) => join(absDir, f));
 }
 
 function tailLogFile(filePath: string, maxBytes = 2 * 1024 * 1024): string {
@@ -193,15 +211,18 @@ function scanLogs(config: HealthConfig): Array<{
     const content = tailLogFile(file);
     if (!content) continue;
     // Only consider ERROR-level lines to avoid matching our own commands/permissions
-    const errorLines = content.split(/\r?\n/).filter(l => /level=ERROR/.test(l));
+    const errorLines = content.split(/\r?\n/).filter((l) => /level=ERROR/.test(l));
     if (errorLines.length === 0) continue;
     for (const sig of config.signatures) {
       const re = new RegExp(sig.pattern, 'i');
-      const line = errorLines.find(l => re.test(l));
+      const line = errorLines.find((l) => re.test(l));
       if (!line) continue;
       const match = line.match(re);
       const idx = match?.index ?? 0;
-      const snippet = line.slice(Math.max(0, idx - 120), idx + 220).replace(/\s+/g, ' ').trim();
+      const snippet = line
+        .slice(Math.max(0, idx - 120), idx + 220)
+        .replace(/\s+/g, ' ')
+        .trim();
       // Extract model/provider from the ERROR line (not our own INFO commands)
       const modelMatch = line.match(/model(?:ID)?=([^\s,]+)/);
       const providerMatch = line.match(/provider(?:ID)?=([^\s,]+)/);
@@ -235,8 +256,14 @@ function switchToFallback(config: HealthConfig): boolean {
   }
   // Manual fallback: write model-active.json + global config
   try {
-    const state = { model: target, provider: target.split('/')[0], changedAt: new Date().toISOString(), source: 'model-healer' };
-    if (!existsSync(dirname(ACTIVE_MODEL_PATH))) mkdirSync(dirname(ACTIVE_MODEL_PATH), { recursive: true });
+    const state = {
+      model: target,
+      provider: target.split('/')[0],
+      changedAt: new Date().toISOString(),
+      source: 'model-healer',
+    };
+    if (!existsSync(dirname(ACTIVE_MODEL_PATH)))
+      mkdirSync(dirname(ACTIVE_MODEL_PATH), { recursive: true });
     writeFileSync(ACTIVE_MODEL_PATH, JSON.stringify(state, null, 2), 'utf-8');
     if (existsSync(GLOBAL_OPENCODE_CONFIG)) {
       const global = loadJsonSafe<Record<string, unknown>>(GLOBAL_OPENCODE_CONFIG, {}) ?? {};
@@ -262,7 +289,15 @@ function heal(quiet: boolean): {
   const config = loadConfig();
   if (!config?.enabled) {
     if (!quiet) log('Model health checking disabled in config', 'WARN');
-    return { scannedFiles: 0, detections: 0, activeModel: '', activeUnhealthy: false, switched: false, switchTarget: null, unhealthy: [] };
+    return {
+      scannedFiles: 0,
+      detections: 0,
+      activeModel: '',
+      activeUnhealthy: false,
+      switched: false,
+      switchTarget: null,
+      unhealthy: [],
+    };
   }
 
   const hits = scanLogs(config);
@@ -272,7 +307,15 @@ function heal(quiet: boolean): {
 
   if (hits.length === 0) {
     if (!quiet) log('No provider error signatures found in logs', 'INFO');
-    return { scannedFiles: 0, detections: 0, activeModel: active.model, activeUnhealthy, switched: false, switchTarget: null, unhealthy: [] };
+    return {
+      scannedFiles: 0,
+      detections: 0,
+      activeModel: active.model,
+      activeUnhealthy,
+      switched: false,
+      switchTarget: null,
+      unhealthy: [],
+    };
   }
 
   if (!quiet) log(`Found ${hits.length} provider error signature(s)`, 'WARN');
@@ -297,7 +340,8 @@ function heal(quiet: boolean): {
       autoSwitched: false,
     };
     const reason = hit.snippet.slice(0, 200);
-    const sameCooldownHit = entry.status === 'unhealthy' &&
+    const sameCooldownHit =
+      entry.status === 'unhealthy' &&
       entry.signatureId === hit.signatureId &&
       entry.reason === reason &&
       entry.cooldownUntil &&
@@ -318,12 +362,19 @@ function heal(quiet: boolean): {
     const inCooldown = entry.cooldownUntil && new Date(entry.cooldownUntil).getTime() > Date.now();
     const maxed = entry.detections >= config.maxDetectionsPerModel;
 
-    if ((hit.action === 'switch-to-fallback' && (inCooldown || maxed || hit.severity === 'critical'))) {
+    if (
+      hit.action === 'switch-to-fallback' &&
+      (inCooldown || maxed || hit.severity === 'critical')
+    ) {
       entry.status = 'unhealthy';
       entry.cooldownUntil = new Date(Date.now() + cooldownMs).toISOString();
       entry.autoSwitched = true;
       unhealthy.push(model);
-      if (!quiet) log(`Model ${model} marked unhealthy (${hit.signatureId}) — will switch to fallback`, 'ERROR');
+      if (!quiet)
+        log(
+          `Model ${model} marked unhealthy (${hit.signatureId}) — will switch to fallback`,
+          'ERROR',
+        );
       if (model === active.model) {
         switchTarget = config.fallbackModel;
       }
@@ -346,24 +397,29 @@ function heal(quiet: boolean): {
   }
 
   if (switchTarget && !activeUnhealthy) {
-    if (!quiet) log(`Active model ${active.model} is unhealthy — switching to ${switchTarget}`, 'ERROR');
+    if (!quiet)
+      log(`Active model ${active.model} is unhealthy — switching to ${switchTarget}`, 'ERROR');
     switched = switchToFallback(config);
     if (switched) {
       log(`[MODEL-HEALER] Auto-switched active model to ${switchTarget}`, 'SUCCESS');
     } else {
-      log(`[MODEL-HEALER] FAILED to switch to ${switchTarget} — manual intervention required`, 'ERROR');
+      log(
+        `[MODEL-HEALER] FAILED to switch to ${switchTarget} — manual intervention required`,
+        'ERROR',
+      );
     }
   } else if (activeUnhealthy) {
     if (!quiet) log(`Active model ${active.model} already marked unhealthy — in cooldown`, 'WARN');
   }
 
   saveState(state);
-  if (!quiet) log(`Health state updated: ${Object.keys(state.models).length} models tracked`, 'INFO');
+  if (!quiet)
+    log(`Health state updated: ${Object.keys(state.models).length} models tracked`, 'INFO');
   return {
     scannedFiles: 0,
     detections: hits.length,
     activeModel: active.model,
-    activeUnhealthy: activeUnhealthy || (switchTarget !== null),
+    activeUnhealthy: activeUnhealthy || switchTarget !== null,
     switched,
     switchTarget,
     unhealthy,
@@ -387,7 +443,9 @@ function printStatus(): void {
     console.log(`  ${icon} ${model} (${e.provider || 'unknown'}) — ${e.status}`);
     if (e.status === 'unhealthy') {
       console.log(`     reason: ${e.reason.slice(0, 120)}`);
-      console.log(`     detections: ${e.detections} | cooldown until: ${e.cooldownUntil} | auto-switched: ${e.autoSwitched}`);
+      console.log(
+        `     detections: ${e.detections} | cooldown until: ${e.cooldownUntil} | auto-switched: ${e.autoSwitched}`,
+      );
     }
   }
   console.log(`\nConfig: ${CONFIG_PATH}`);
@@ -397,7 +455,13 @@ function printStatus(): void {
 function main(): void {
   const args = process.argv.slice(2);
   const quiet = args.includes('--quiet');
-  const mode = args.includes('--scan') ? 'scan' : args.includes('--status') ? 'status' : args.includes('--clear') ? 'clear' : 'heal';
+  const mode = args.includes('--scan')
+    ? 'scan'
+    : args.includes('--status')
+      ? 'status'
+      : args.includes('--clear')
+        ? 'clear'
+        : 'heal';
 
   if (mode === 'status') {
     printStatus();
@@ -417,18 +481,26 @@ function main(): void {
 
   const result = heal(quiet);
   if (!quiet) {
-    console.log(JSON.stringify({
-      status: result.switched ? 'recovered' : result.activeUnhealthy ? 'degraded' : 'ok',
-      ...result,
-    }, null, 2));
+    console.log(
+      JSON.stringify(
+        {
+          status: result.switched ? 'recovered' : result.activeUnhealthy ? 'degraded' : 'ok',
+          ...result,
+        },
+        null,
+        2,
+      ),
+    );
   } else {
-    console.log(JSON.stringify({
-      status: result.switched ? 'recovered' : result.activeUnhealthy ? 'degraded' : 'ok',
-      activeModel: result.activeModel,
-      unhealthy: result.unhealthy,
-      switched: result.switched,
-      switchTarget: result.switchTarget,
-    }));
+    console.log(
+      JSON.stringify({
+        status: result.switched ? 'recovered' : result.activeUnhealthy ? 'degraded' : 'ok',
+        activeModel: result.activeModel,
+        unhealthy: result.unhealthy,
+        switched: result.switched,
+        switchTarget: result.switchTarget,
+      }),
+    );
   }
 }
 

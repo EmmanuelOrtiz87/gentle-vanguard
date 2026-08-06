@@ -153,11 +153,11 @@ prerequisites list.
 
 ### 7. Script location inconsistencies
 
-| Script                          | Actual Location                                                                                         | Expected Location                                                                                     |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `install-engram.ps1`            | `src/skills/`                                                                       | `scripts/utilities/` (referenced by system-diagnostics.ts as `scripts/utilities/install-engram.ps1`) |
-| `auto-init-dev-environment.ps1` | `scripts/utilities/UTILITIES/`                                                                          | `scripts/utilities/` (redundant nesting)                                                              |
-| `src/cli/gv.ts`                        | 3 copies: `scripts/utilities/`, `scripts/utilities/WORKFLOW-ORCHESTRATION/`, `scripts/gentle-vanguard/` | Should consolidate                                                                                    |
+| Script                          | Actual Location                                                                                         | Expected Location                                                                                    |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `install-engram.ps1`            | `src/skills/`                                                                                           | `scripts/utilities/` (referenced by system-diagnostics.ts as `scripts/utilities/install-engram.ps1`) |
+| `auto-init-dev-environment.ps1` | `scripts/utilities/UTILITIES/`                                                                          | `scripts/utilities/` (redundant nesting)                                                             |
+| `src/cli/gv.ts`                 | 3 copies: `scripts/utilities/`, `scripts/utilities/WORKFLOW-ORCHESTRATION/`, `scripts/gentle-vanguard/` | Should consolidate                                                                                   |
 
 ### 8. Missing dependencies from PREREQUISITES.md not in install-prerequisites
 

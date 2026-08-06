@@ -17,7 +17,7 @@ test('hr-talent-acquisition - SKILL.md exists', () => {
 
 test('hr-talent-acquisition - has required sections', () => {
   const content = readFileSync(skillPath, 'utf-8');
-  
+
   const requiredSections = [
     '# hr-talent-acquisition',
     '## Description',
@@ -25,9 +25,9 @@ test('hr-talent-acquisition - has required sections', () => {
     '## Workflow',
     '## Output Format',
     '## Examples',
-    '## References'
+    '## References',
   ];
-  
+
   for (const section of requiredSections) {
     assert(content.includes(section), `Missing section: ${section}`);
   }
@@ -35,18 +35,20 @@ test('hr-talent-acquisition - has required sections', () => {
 
 test('hr-talent-acquisition - has recruiting-specific content', () => {
   const content = readFileSync(skillPath, 'utf-8');
-  
+
   // Should include recruiting terminology
   const terms = ['candidate', 'interview', 'recruiting', 'hiring', 'job description'];
-  const hasTerms = terms.some(t => content.toLowerCase().includes(t));
+  const hasTerms = terms.some((t) => content.toLowerCase().includes(t));
   assert(hasTerms, 'Should include recruiting terminology');
 });
 
 test('hr-talent-acquisition - has interview rubric', () => {
   const content = readFileSync(skillPath, 'utf-8');
-  
-  assert(content.includes('### Interview Rubric') || content.includes('### Job Description'), 
-    'Must include HR-specific examples');
+
+  assert(
+    content.includes('### Interview Rubric') || content.includes('### Job Description'),
+    'Must include HR-specific examples',
+  );
 });
 
 console.log('\nTest suite: hr-talent-acquisition');

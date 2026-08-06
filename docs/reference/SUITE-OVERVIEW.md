@@ -55,12 +55,12 @@ Gentle-Vanguard Suite
 
 ### Development Tools
 
-| Tool                   | Status   | Command                             | Description                             |
-| ---------------------- | -------- | ----------------------------------- | --------------------------------------- |
+| Tool                   | Status   | Command                                    | Description                             |
+| ---------------------- | -------- | ------------------------------------------ | --------------------------------------- |
 | **Workflow CLI**       | Ready    | `.\scripts\utilities\src/cli/gv.ts`        | Project coordination & automation       |
 | **Health Check**       | Ready    | `.\scripts\utilities\src/cli/gv.ts health` | Tool validation & activation            |
-| **Auto-Init**          | Ready    | `auto-init-dev-environment.ps1`     | Environment setup                       |
-| **TypeScript Profile** | Optional | `$PROFILE`                          | Windows convenience for auto-activation |
+| **Auto-Init**          | Ready    | `auto-init-dev-environment.ps1`            | Environment setup                       |
+| **TypeScript Profile** | Optional | `$PROFILE`                                 | Windows convenience for auto-activation |
 
 ### Quality Assurance
 

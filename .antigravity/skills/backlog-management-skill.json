@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "## Purpose\n\nStandardize backlog intake, triage, and lifecycle management using structured JSON for automation\nreadiness while maintaining human-readable markdown views.\n\n## Directory Structure\n\n```\ndocs/backlog/\n items.json              # Source of truth (structured data)\n README.md               # Human-readable view (generated or manual)\n archive/                # Completed/discarded items\n```\n\n## JSON Schema\n\n```json\n{\n  \"id\": \"BL-XXX\",\n  \"title\": \"Short descriptive title\",\n  \"type\": \"feature|tech-debt|optimization|docs\",\n  \"priority\": \"high|medium|low\",\n  \"status\": \"pending|triaged|scheduled|in-progress|done|discarded\",\n  \"created_at\": \"YYYY-MM-DD\",\n  \"owner\": \"AGENT-ROLE or User\",\n  \"description\": \"Detailed context\",\n  \"value_prop\": \"Why this matters\",\n  \"defer_reason\": \"Why it wasn't done immediately\",\n  \"trigger\": \"Condition to revisit\",\n  \"linked_sessions\": [],\n  \"linked_prs\": []\n}\n```\n\n## Triage Workflow\n\n1. **Intake:** New items added to `items.json` with status `pending`.\n2. **Analysis:** Agent reviews for duplicates, scope clarity, and priority alignment.\n3. **Enrichment:** Add `estimated_effort` and `dependencies`.\n4. **Scheduling:** Move to `scheduled` when assigned to a release/milestone.\n\n## Automation Rules\n\n- **Duplicate Detection:** Compare new items against existing `title` and `description` using fuzzy\n  matching.\n- **Stale Item Alert:** Flag items with `status: pending` for > 30 days.\n- **Traceability:** Auto-link `linked_sessions` when commit messages reference `BL-XXX`.\n\n## Migration from Markdown\n\n1. Parse existing `FUTURE-FEATURES-BACKLOG.md` table rows.\n2. Map columns to JSON schema fields.\n3. Generate `items.json`.\n4. Update `README.md` to point to new structure.\n5. Deprecate old markdown file (move to archive).",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

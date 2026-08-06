@@ -8,7 +8,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const ROOT = process.cwd();
-const DIRS = ['src', 'config', 'scripts', 'hooks', '.github'];
 const EXT = /\.ps1['"]/;
 
 function isCommentLine(line: string): boolean {
@@ -38,14 +37,16 @@ function extractPs1Refs(line: string): string[] {
 let commentRefs = 0;
 const functionalMissing: Array<{ file: string; line: number; ref: string }> = [];
 const functionalExists: Array<{ file: string; line: number; ref: string }> = [];
-const unclassifiable: Array<{ file: string; line: number; ref: string }> = [];
 
 function walk(dir: string): void {
   if (!fs.existsSync(dir)) return;
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (['node_modules', '.git', 'dist', 'build', '.runtime', 'graphify-out'].includes(entry.name)) continue;
+      if (
+        ['node_modules', '.git', 'dist', 'build', '.runtime', 'graphify-out'].includes(entry.name)
+      )
+        continue;
       walk(full);
     } else if (/\.(ts|js|json|yml|yaml|md|ps1)$/.test(entry.name)) {
       analyzeFile(full);
@@ -69,7 +70,7 @@ function analyzeFile(file: string): void {
     for (const ref of refs) {
       if (ref.startsWith('.')) continue; // .ps1 as extension only
       // Skip pure extension references
-      if (ref === '.ps1' || ref === '.ps1"' || ref === '.ps1\'') continue;
+      if (ref === '.ps1' || ref === '.ps1"' || ref === ".ps1'") continue;
       // Resolve relative to ROOT (best effort) or config/skills dirs
       const candidates = [path.join(ROOT, ref.replace(/\\/g, '/'))];
       const exists = candidates.some((c) => fs.existsSync(c));

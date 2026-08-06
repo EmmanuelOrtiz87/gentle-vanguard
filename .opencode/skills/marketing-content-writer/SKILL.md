@@ -9,7 +9,8 @@ triggers:
 
 ## Description
 
-Creates marketing copy, landing pages, email campaigns, and content strategies for products and services. Focuses on conversion optimization, SEO integration, and audience engagement.
+Creates marketing copy, landing pages, email campaigns, and content strategies for products and
+services. Focuses on conversion optimization, SEO integration, and audience engagement.
 
 ## When to Use
 
@@ -21,7 +22,8 @@ Creates marketing copy, landing pages, email campaigns, and content strategies f
 
 ## Workflow
 
-1. **Understand the Product**: Ask clarifying questions about target audience, unique value proposition, and desired outcomes.
+1. **Understand the Product**: Ask clarifying questions about target audience, unique value
+   proposition, and desired outcomes.
 2. **Define the Message**: Establish the core message, tone, and call-to-action.
 3. **Draft Content**: Create multiple variants for A/B testing consideration.
 4. **Optimize**: Apply SEO best practices and conversion principles.
@@ -42,6 +44,7 @@ Creates marketing copy, landing pages, email campaigns, and content strategies f
 **Input**: "Need landing page for new TypeScript developer tool"
 
 **Output**:
+
 ```
 Headline: Write TypeScript 40% Faster with AI-Powered Intellisense
 Subhead: Gentle-Vanguard integrates directly into your workflow, learning your codebase patterns as you code.
@@ -53,6 +56,7 @@ CTA: Start Free Trial →
 **Input**: "Onboarding sequence for new users"
 
 **Output**:
+
 ```
 Email 1 (Day 0): Welcome + Quick Win Setup
 Subject: Your Gentle-Vanguard workspace is ready 🚀

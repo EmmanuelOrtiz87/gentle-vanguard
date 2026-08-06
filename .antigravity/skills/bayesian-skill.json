@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "# Bayesian Reasoning\n\n**Core Principle:** Beliefs are probabilities that should update incrementally as evidence arrives. Strong priors require strong evidence to shift.\n\n## When to Use\n\n- Estimating probabilities or likelihoods\n- Interpreting test results or metrics\n- Making decisions with incomplete information\n- Evaluating competing hypotheses\n- Learning from experiments or A/B tests\n- Diagnosing problems with uncertain causes\n- Predicting outcomes based on historical data\n\nDecision flow: `Uncertain? → Have prior? → New evidence? → APPLY BAYESIAN UPDATE`\n\n## Key Concepts\n\n- **Prior P(H):** Your belief BEFORE seeing new evidence (use base rates)\n- **Likelihood P(E|H):** How probable is the evidence if H is true?\n- **Posterior P(H|E):** Your updated belief AFTER seeing evidence\n\n## Bayes' Theorem\n\n```\n                P(E|H) × P(H)\nP(H|E) = ─────────────────────────\n                   P(E)\n\nIntuitive: Posterior odds = Prior odds × Likelihood ratio\n```\n\n## The Process\n\n1. **Establish Prior** — base rates, explicit uncertainty\n2. **Assess Evidence** — likelihood under H vs not-H\n3. **Update Belief** — multiply prior odds by likelihood ratio\n4. **Iterate** — today's posterior is tomorrow's prior\n\n→ Full worked examples in `references/process-and-examples.md`\n\n## Common Applications\n\n**Test Results:** Base rate dominates rare conditions (99% accurate test + 1:10k prevalence → only ~1% post-test probability).\n\n**Debugging:** Assign prior probabilities to root causes, update with each clue.\n\n**Project Estimation:** Start with historical base rate, update with risk factors.\n\n→ Detailed applications in `references/process-and-examples.md`\n\n## Mental Shortcuts\n\n| Evidence Type     | Likelihood Ratio |\n| ----------------- | ---------------- |\n| Definitive proof  | 100x+            |\n| Strong evidence   | 10-100x          |\n| Moderate evidence | 3-10x            |\n| Weak evidence     | 1.5-3x           |\n| Noise             | ~1x              |\n\n→ Calibration, checklist, and Kahneman's warning in `references/shortcuts-and-calibration.md`",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

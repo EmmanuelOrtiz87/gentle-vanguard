@@ -40,14 +40,14 @@ y validable en cada fase del ciclo de vida.
 
 ### 2.4 Usability (Usabilidad)
 
-| Sub-caracteristica              | Control Gentle-Vanguard                           | Verification                           |
-| ------------------------------- | ------------------------------------------------- | -------------------------------------- |
-| Appropriateness recognisability | `docs/AGENTS.md` + `rules/README.md`              | Docs actualizados                      |
-| Learnability                    | `skills/` con SKILL.md                            | Cada skill documentada                 |
-| Operability                     | `src/gv.ts` | Comandos gv funcionales                |
-| User error protection           | `config/security-hardening.json`                  | Input validation en todas las entradas |
-| User interface aesthetics       | `docs/NORMATIVAS-ACCESIBILIDAD.md`                | WCAG 2.2 AA compliance                 |
-| Accessibility                   | axe-core + Playwright                             | WCAG automated checks                  |
+| Sub-caracteristica              | Control Gentle-Vanguard              | Verification                           |
+| ------------------------------- | ------------------------------------ | -------------------------------------- |
+| Appropriateness recognisability | `docs/AGENTS.md` + `rules/README.md` | Docs actualizados                      |
+| Learnability                    | `skills/` con SKILL.md               | Cada skill documentada                 |
+| Operability                     | `src/gv.ts`                          | Comandos gv funcionales                |
+| User error protection           | `config/security-hardening.json`     | Input validation en todas las entradas |
+| User interface aesthetics       | `docs/NORMATIVAS-ACCESIBILIDAD.md`   | WCAG 2.2 AA compliance                 |
+| Accessibility                   | axe-core + Playwright                | WCAG automated checks                  |
 
 ### 2.5 Reliability (Fiabilidad)
 

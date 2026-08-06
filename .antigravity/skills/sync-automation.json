@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "# sync-automation\n\n# Auto-sync for Gentle-Vanguard\n\n## Trigger\n\n\"sync\", \"public repo\", \"auto-sync\"\n\n## Description\n\nAutomates synchronization between local Gentle-Vanguard and public repository.\n\n## Execution\n\n1. Check `config/sync-config.json` for settings\n2. Run `scripts/utilities/gentle-vanguard-sync.ps1 -Mode sync`\n3. Validate sync with `git status` and `git log`\n4. Report sync status to user\n\n## Notes\n\n- Supports auto-sync via git hooks or scheduled tasks\n- Logs sync activity to `.runtime/sync-log.csv`",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

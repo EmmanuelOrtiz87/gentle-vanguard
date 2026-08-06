@@ -16,7 +16,8 @@ First principles thinking strips away assumptions and conventions to reveal fund
 reconstructs solutions from those basics. This approach, championed by Elon Musk and rooted in
 Aristotle's philosophy, enables breakthrough solutions by escaping the trap of reasoning by analogy.
 
-**Core Principle:** Don't accept "that's how it's always done." Reduce to fundamentals, then rebuild.
+**Core Principle:** Don't accept "that's how it's always done." Reduce to fundamentals, then
+rebuild.
 
 ## When to Use
 

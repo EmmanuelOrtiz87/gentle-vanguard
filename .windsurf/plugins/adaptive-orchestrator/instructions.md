@@ -4,11 +4,10 @@
 
 ## Description
 
-
 ## Triggers
 
-
 ## Instructions
+
 # Adaptive Orchestrator
 
 ## Activation Contract

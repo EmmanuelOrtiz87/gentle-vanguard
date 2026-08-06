@@ -4,11 +4,10 @@
 
 ## Description
 
-
 ## Triggers
 
-
 ## Instructions
+
 # Gentle-Vanguard Audit Skill
 
 ## Activation Contract

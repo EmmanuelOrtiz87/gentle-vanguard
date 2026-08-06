@@ -58,9 +58,11 @@ async function main(): Promise<number> {
   const adapters = await loadAdapters();
 
   const available: { name: string; adapter: any }[] = [];
-  if (adapters.antigravityAdapter) available.push({ name: 'antigravity', adapter: adapters.antigravityAdapter });
+  if (adapters.antigravityAdapter)
+    available.push({ name: 'antigravity', adapter: adapters.antigravityAdapter });
   if (adapters.codexAdapter) available.push({ name: 'codex', adapter: adapters.codexAdapter });
-  if (adapters.windsurfAdapter) available.push({ name: 'windsurf', adapter: adapters.windsurfAdapter });
+  if (adapters.windsurfAdapter)
+    available.push({ name: 'windsurf', adapter: adapters.windsurfAdapter });
 
   if (available.length === 0) {
     console.error('[skill-export] No format adapters available. Check adapters/ directory.');

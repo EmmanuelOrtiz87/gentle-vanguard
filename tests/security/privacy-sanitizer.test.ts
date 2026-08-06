@@ -12,7 +12,8 @@ const SCRIPT = resolve(ROOT, 'src', 'security', 'privacy-gateway.ts');
 
 function runScript(scriptPath: string, ...args: string[]): string {
   try {
-    const cmd = args.length > 0 ? `npx tsx ${scriptPath} ${args.join(' ')}` : `npx tsx ${scriptPath}`;
+    const cmd =
+      args.length > 0 ? `npx tsx ${scriptPath} ${args.join(' ')}` : `npx tsx ${scriptPath}`;
     return execSync(cmd, { cwd: ROOT, encoding: 'utf-8', timeout: 10000 });
   } catch (err: any) {
     return err.stdout || err.stderr || err.message || '';
@@ -36,7 +37,15 @@ describe('privacy-sanitizer', () => {
 
   it('should pass safe content', () => {
     // Use single-arg with escaped quotes to preserve spaces
-    const result = execSync(`npx tsx "${SCRIPT}" --text "What is the weather today?"`, { cwd: ROOT, encoding: 'utf-8', timeout: 10000, shell: true });
-    assert.ok(result.includes('weather') || result.includes('today'), `Expected weather-related content, got: ${result}`);
+    const result = execSync(`npx tsx "${SCRIPT}" --text "What is the weather today?"`, {
+      cwd: ROOT,
+      encoding: 'utf-8',
+      timeout: 10000,
+      shell: true,
+    });
+    assert.ok(
+      result.includes('weather') || result.includes('today'),
+      `Expected weather-related content, got: ${result}`,
+    );
   });
 });

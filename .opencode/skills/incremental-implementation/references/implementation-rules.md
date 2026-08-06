@@ -23,13 +23,15 @@ SIMPLICITY CHECK:
 ✓ Three form components
 ```
 
-Three similar lines of code is better than a premature abstraction. Implement the naive, obviously-correct version first. Optimize only after correctness is proven with tests.
+Three similar lines of code is better than a premature abstraction. Implement the naive,
+obviously-correct version first. Optimize only after correctness is proven with tests.
 
 ### Rule 0.5: Scope Discipline
 
 Touch only what the task requires.
 
 Do NOT:
+
 - "Clean up" code adjacent to your change
 - Refactor imports in files you're not modifying
 - Remove comments you don't fully understand
@@ -48,13 +50,15 @@ NOTICED BUT NOT TOUCHING:
 
 Each increment changes one logical thing. Don't mix concerns:
 
-**Bad:** One commit that adds a new component, refactors an existing one, and updates the build config.
+**Bad:** One commit that adds a new component, refactors an existing one, and updates the build
+config.
 
 **Good:** Three separate commits — one for each change.
 
 ### Rule 2: Keep It Compilable
 
-After each increment, the project must build and existing tests must pass. Don't leave the codebase in a broken state between slices.
+After each increment, the project must build and existing tests must pass. Don't leave the codebase
+in a broken state between slices.
 
 ### Rule 3: Feature Flags for Incomplete Features
 

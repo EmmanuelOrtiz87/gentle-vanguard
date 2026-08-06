@@ -23,10 +23,18 @@ const args = process.argv.slice(2);
 const skipEncrypt = args.includes('--skip-encrypt') || args.includes('-SkipEncrypt');
 const dryRun = args.includes('--dry-run') || args.includes('-DryRun');
 
-function step(msg: string): void { console.log(`[BUILD] ${msg}`); }
-function ok(msg: string): void { console.log(`  [OK] ${msg}`); }
-function warn(msg: string): void { console.log(`  [WARN] ${msg}`); }
-function err(msg: string): void { console.error(`  [ERROR] ${msg}`); }
+function step(msg: string): void {
+  console.log(`[BUILD] ${msg}`);
+}
+function ok(msg: string): void {
+  console.log(`  [OK] ${msg}`);
+}
+function warn(msg: string): void {
+  console.log(`  [WARN] ${msg}`);
+}
+function err(msg: string): void {
+  console.error(`  [ERROR] ${msg}`);
+}
 
 function run(cmd: string, label: string): boolean {
   try {
@@ -56,7 +64,10 @@ function main(): void {
   if (!skipEncrypt) {
     step('Phase 1: Encrypting scripts');
     const ok_ = run('npx tsx src/cli/protect.ts', 'encrypt scripts');
-    if (!ok_) { err('Encryption failed, aborting'); process.exit(1); }
+    if (!ok_) {
+      err('Encryption failed, aborting');
+      process.exit(1);
+    }
   } else {
     warn('Skipping encryption phase');
   }
@@ -65,7 +76,8 @@ function main(): void {
   step('Phase 2: Verifying NSIS');
   try {
     const nsis = runSyncShell('makensis /VERSION', { stdio: 'pipe', timeout: 10000 });
-    if (nsis.status === 0) ok('NSIS found'); else throw new Error('makensis not in PATH');
+    if (nsis.status === 0) ok('NSIS found');
+    else throw new Error('makensis not in PATH');
   } catch {
     warn('makensis not found in PATH. Install NSIS 3+ from https://nsis.sourceforge.io/');
     warn('Continuing with artifact preparation only...');
@@ -84,14 +96,17 @@ function main(): void {
   // Phase 3: Build installer
   step('Phase 3: Building installer');
   const nsiScript = join(BUILD_DIR, 'gentle-vanguard-installer-auto.nsi');
-    const installerName = 'Gentle-Vanguard-Setup.exe';
+  const installerName = 'Gentle-Vanguard-Setup.exe';
 
   if (existsSync(nsiScript)) {
     const ok_ = run(`makensis "${nsiScript}"`, 'makensis');
-    if (!ok_) { err('NSIS build failed'); process.exit(1); }
+    if (!ok_) {
+      err('NSIS build failed');
+      process.exit(1);
+    }
 
     // Find output
-        const expected = join(DIST_DIR, installerName);
+    const expected = join(DIST_DIR, installerName);
     if (!dryRun && existsSync(expected)) {
       ok(`Installer created: ${expected}`);
     }

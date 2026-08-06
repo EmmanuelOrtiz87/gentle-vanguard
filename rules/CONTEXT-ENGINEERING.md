@@ -255,8 +255,8 @@ When delegating via `task` tool, the prompt sent to subagents MUST follow:
 | Orchestrator Config     | `config/orchestrator.json`                |
 | Context Efficiency      | `config/context-efficiency.json`          |
 | Compaction Config       | `opencode.json#compaction`                |
-| Pre-process Caching     | `src/pre-process-input.ts` |
-| Pre-Compact Hook        | `src/pre-compact-hook.ts`  |
+| Pre-process Caching     | `src/pre-process-input.ts`                |
+| Pre-Compact Hook        | `src/pre-compact-hook.ts`                 |
 | Behavior Prompts        | `config/behavior-prompts.json` (74 lines) |
 | Quick Commands          | `docs/QUICK-COMMANDS.md`                  |
 | Response Profile        | `CLAUDE.md#Response-Profile`              |

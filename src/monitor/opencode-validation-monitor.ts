@@ -24,7 +24,10 @@ function main(): number {
 
     return 1;
   } catch (err) {
-    console.error('Failed to query Nexus alert store:', err instanceof Error ? err.message : String(err));
+    console.error(
+      'Failed to query Nexus alert store:',
+      err instanceof Error ? err.message : String(err),
+    );
     return 2;
   }
 }

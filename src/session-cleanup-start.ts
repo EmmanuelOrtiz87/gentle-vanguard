@@ -29,7 +29,9 @@ function getTimeout(key: string, fallback: number): number {
       }
       return typeof val === 'number' ? val : fallback;
     }
-  } catch { /* fallback to default */ }
+  } catch {
+    /* fallback to default */
+  }
   return fallback;
 }
 
@@ -63,7 +65,7 @@ function removeStaleSessions(sessionDir: string): void {
 function initSessionData(): { sid: string; sessionData: Record<string, unknown> } {
   const sessionDir = join(ROOT, '.session');
   mkdirSync(sessionDir, { recursive: true });
-  
+
   const sid = `session-${new Date().toISOString().slice(0, 16).replace(/[:-]/g, '')}`;
   const sessionData = {
     sessionId: sid,
@@ -94,18 +96,18 @@ function initSessionData(): { sid: string; sessionData: Record<string, unknown> 
     cacheMisses: 0,
     qualityScore: 100,
   };
-  
+
   // Create session-current.json for downstream components - ALWAYS
   const currentSessionFile = join(sessionDir, 'session-current.json');
   writeFileSync(currentSessionFile, JSON.stringify(sessionData, null, 2));
   ok(`Session file created: session-current.json`);
-  
+
   // Also create dated session file
   const dateStr = new Date().toISOString().slice(0, 10);
   const datedSessionFile = join(sessionDir, `session-${dateStr}-01.json`);
   writeFileSync(datedSessionFile, JSON.stringify(sessionData, null, 2));
   ok(`Dated session file created: session-${dateStr}-01.json`);
-  
+
   return { sid, sessionData };
 }
 
@@ -138,7 +140,7 @@ function flushCaches(sessionDir: string, sessionData: Record<string, unknown>): 
   const tokenFile = join(sessionDir, 'token-usage.json');
   writeFileSync(tokenFile, JSON.stringify(sessionData, null, 2));
   ok(`Token tracking reset for ${sessionData.sessionId}`);
-  
+
   // Guardar en context-log (sistema unificado - dashboard source of truth)
   const ctxLog = new SessionContextLog({
     sessionId: sessionData.sessionId as string,

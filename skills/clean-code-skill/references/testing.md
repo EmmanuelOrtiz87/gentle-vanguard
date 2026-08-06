@@ -11,7 +11,8 @@
 
 **Guidelines:**
 
-- Test behavior, not implementation. Your tests should pass after a refactor if the behavior didn't change.
+- Test behavior, not implementation. Your tests should pass after a refactor if the behavior didn't
+  change.
 - One assertion concept per test. Use multiple `it()` blocks rather than multiple asserts in one.
 - Use realistic test data. `"foo"` and `123` don't catch edge cases.
 - For AI-generated code: always verify with tests. The AI writes the code, you write the tests.

@@ -6,7 +6,8 @@
 import { readFileSync, existsSync } from 'fs';
 import { pathToFileURL } from 'url';
 
-const CONVENTIONAL_COMMIT_REGEX = /^(feat|fix|docs|chore|refactor|test|style|perf|build|ci|revert)(\([a-z]+\))?:/;
+const CONVENTIONAL_COMMIT_REGEX =
+  /^(feat|fix|docs|chore|refactor|test|style|perf|build|ci|revert)(\([a-z]+\))?:/;
 
 function main(): number {
   const args = process.argv.slice(2);

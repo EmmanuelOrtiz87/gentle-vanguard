@@ -1,32 +1,32 @@
 # TYPESCRIPT-FIRST POLICY
 
-**Status:** ACTIVE — 2026-07-29
-**Supersedes:** `NORMATIVAS-ARCHITECTURE.md` § "TypeScript 7.4+ mandatory"
+**Status:** ACTIVE — 2026-07-29 **Supersedes:** `NORMATIVAS-ARCHITECTURE.md` § "TypeScript 7.4+
+mandatory"
 
 ---
 
 ## 1. Purpose
 
-Eliminar la dependencia de TypeScript como plataforma de scripting del stack Gentle-Vanguard.
-Todos los scripts operacionales deben ser TypeScript/Node.js. TypeScript queda solo como shell del
-sistema operativo (equivalente a bash), no como runtime de scripts del stack.
+Eliminar la dependencia de TypeScript como plataforma de scripting del stack Gentle-Vanguard. Todos
+los scripts operacionales deben ser TypeScript/Node.js. TypeScript queda solo como shell del sistema
+operativo (equivalente a bash), no como runtime de scripts del stack.
 
 ## 2. Mandatory Rule
 
 > **TS-001**: ALL new scripts MUST be written in TypeScript (.ts) and run via `npx tsx`.
 >
-> **TS-002**: TypeScript scripts (.ps1) are **DEPRECATED** for stack operations. No new .ps1
-> files shall be created in `scripts/`, `src/`, or `hooks/`.
+> **TS-002**: TypeScript scripts (.ps1) are **DEPRECATED** for stack operations. No new .ps1 files
+> shall be created in `scripts/`, `src/`, or `hooks/`.
 >
 > **TS-003**: Any existing .ps1 script used for stack operations MUST be migrated to TypeScript.
 
 ## 3. Exceptions
 
-| Exception | Rationale |
-|-----------|-----------|
-| System shell scripts | Interactive shell use (e.g., `ls`, `cd`, `mkdir` in terminal) |
-| CI/CD platform scripts | When GitHub Actions runner requires platform-specific shell |
-| User-preference scripts | User may keep personal .ps1 in their own profile |
+| Exception               | Rationale                                                     |
+| ----------------------- | ------------------------------------------------------------- |
+| System shell scripts    | Interactive shell use (e.g., `ls`, `cd`, `mkdir` in terminal) |
+| CI/CD platform scripts  | When GitHub Actions runner requires platform-specific shell   |
+| User-preference scripts | User may keep personal .ps1 in their own profile              |
 
 Exceptions require explicit annotation: `# EXCEPTION: TYPESCRIPT-FIRST-POLICY — <reason>`
 

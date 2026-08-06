@@ -83,15 +83,18 @@ User: "ask todd about the PSR for phoenix"
 
 ## Working Memory Format (CLAUDE.md)
 
-See [references/working-memory-format.md](references/working-memory-format.md) for the full template.
+See [references/working-memory-format.md](references/working-memory-format.md) for the full
+template.
 
 ## Deep Memory Format (memory/)
 
-See [references/deep-memory-format.md](references/deep-memory-format.md) for glossary, people, projects, and company context templates.
+See [references/deep-memory-format.md](references/deep-memory-format.md) for glossary, people,
+projects, and company context templates.
 
 ## Interaction Guide
 
-See [references/interaction-guide.md](references/interaction-guide.md) for decoding, adding memory, recalling, progressive disclosure, and bootstrapping.
+See [references/interaction-guide.md](references/interaction-guide.md) for decoding, adding memory,
+recalling, progressive disclosure, and bootstrapping.
 
 ## Conventions
 

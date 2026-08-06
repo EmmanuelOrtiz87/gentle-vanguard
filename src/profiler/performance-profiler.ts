@@ -38,24 +38,21 @@ function ensureDirs(): void {
 
 // Get memory usage in MB
 function getMemoryMB(): number {
-  return Math.round(process.memoryUsage().heapUsed / 1024 / 1024 * 100) / 100;
+  return Math.round((process.memoryUsage().heapUsed / 1024 / 1024) * 100) / 100;
 }
 
 // Run a benchmark
-export async function benchmark<T>(
-  name: string,
-  fn: () => Promise<T>
-): Promise<BenchmarkResult> {
+export async function benchmark<T>(name: string, fn: () => Promise<T>): Promise<BenchmarkResult> {
   ensureDirs();
-  
+
   const memBefore = getMemoryMB();
   const start = performance.now();
-  
+
   await fn();
-  
+
   const duration = performance.now() - start;
   const memAfter = getMemoryMB();
-  
+
   const result: BenchmarkResult = {
     name,
     duration_ms: Math.round(duration * 100) / 100,
@@ -63,12 +60,12 @@ export async function benchmark<T>(
     memory_after_mb: memAfter,
     memory_delta_mb: Math.round((memAfter - memBefore) * 100) / 100,
     timestamp: new Date().toISOString(),
-    version: getVersion()
+    version: getVersion(),
   };
-  
+
   // Save result
   appendFileSync(RESULTS_FILE, JSON.stringify(result) + '\n', 'utf-8');
-  
+
   return result;
 }
 
@@ -88,10 +85,13 @@ export function saveBaseline(results: BenchmarkResult[]): void {
   const baseline = {
     createdAt: new Date().toISOString(),
     version: getVersion(),
-    benchmarks: results.reduce((acc, r) => {
-      acc[r.name] = r;
-      return acc;
-    }, {} as Record<string, BenchmarkResult>)
+    benchmarks: results.reduce(
+      (acc, r) => {
+        acc[r.name] = r;
+        return acc;
+      },
+      {} as Record<string, BenchmarkResult>,
+    ),
   };
   writeFileSync(BASELINE_FILE, JSON.stringify(baseline, null, 2), 'utf-8');
 }
@@ -105,13 +105,13 @@ export function compareWithBaseline(result: BenchmarkResult): BenchmarkCompariso
       baseline_ms: 0,
       delta_pct: 0,
       status: 'STABLE',
-      alert: false
+      alert: false,
     };
   }
-  
+
   const baseline = JSON.parse(readFileSync(BASELINE_FILE, 'utf-8'));
   const baselineResult = baseline.benchmarks[result.name];
-  
+
   if (!baselineResult) {
     return {
       name: result.name,
@@ -119,85 +119,89 @@ export function compareWithBaseline(result: BenchmarkResult): BenchmarkCompariso
       baseline_ms: 0,
       delta_pct: 0,
       status: 'STABLE',
-      alert: false
+      alert: false,
     };
   }
-  
+
   const delta = (result.duration_ms - baselineResult.duration_ms) / baselineResult.duration_ms;
   const deltaPct = Math.round(delta * 1000) / 10;
-  
+
   let status: 'IMPROVED' | 'REGRESSION' | 'STABLE' = 'STABLE';
   if (delta < -0.1) status = 'IMPROVED';
   else if (delta > 0.1) status = 'REGRESSION';
-  
+
   return {
     name: result.name,
     current_ms: result.duration_ms,
     baseline_ms: baselineResult.duration_ms,
     delta_pct: deltaPct,
     status,
-    alert: delta > 0.2 // Alert if >20% slower
+    alert: delta > 0.2, // Alert if >20% slower
   };
 }
 
 // Run all benchmarks
 export async function runAllBenchmarks(): Promise<BenchmarkResult[]> {
   const results: BenchmarkResult[] = [];
-  
+
   console.log('=== Gentle-Vanguard Performance Profiler ===\n');
-  
+
   // Benchmark 1: Health check (skip - requires interactive)
   console.log('Benchmarking health check (simulated)...');
-  results.push(await benchmark('health-check', async () => {
-    // Simulate health check components
-    const fs = await import('fs');
-    const checks = [
-      existsSync('src/core/health-check.ts'),
-      existsSync('.runtime/gentle-vanguard.db'),
-      existsSync('.session/context-log')
-    ];
-    await new Promise(r => setTimeout(r, 100));
-  }));
-  
+  results.push(
+    await benchmark('health-check', async () => {
+      // Simulate health check components
+      await new Promise((r) => setTimeout(r, 100));
+    }),
+  );
+
   // Benchmark 2: Skill router query
   console.log('Benchmarking skill router...');
-  results.push(await benchmark('skill-router', async () => {
-    const fs = await import('fs');
-    const embeddings = JSON.parse(fs.readFileSync('.atl/skill-embeddings.json', 'utf-8'));
-    // Simulate 10 queries
-    for (let i = 0; i < 10; i++) {
-      embeddings.skills.slice(0, 5);
-    }
-  }));
-  
+  results.push(
+    await benchmark('skill-router', async () => {
+      const fs = await import('fs');
+      const embeddings = JSON.parse(fs.readFileSync('.atl/skill-embeddings.json', 'utf-8'));
+      // Simulate 10 queries
+      for (let i = 0; i < 10; i++) {
+        embeddings.skills.slice(0, 5);
+      }
+    }),
+  );
+
   // Benchmark 3: Audit pipeline
   console.log('Benchmarking audit pipeline...');
-  results.push(await benchmark('audit-pipeline', async () => {
-    const fs = await import('fs');
-    const auditPath = join('.session', 'audit', 'index.json');
-    if (fs.existsSync(auditPath)) {
-      JSON.parse(fs.readFileSync(auditPath, 'utf-8'));
-    }
-  }));
-  
+  results.push(
+    await benchmark('audit-pipeline', async () => {
+      const fs = await import('fs');
+      const auditPath = join('.session', 'audit', 'index.json');
+      if (fs.existsSync(auditPath)) {
+        JSON.parse(fs.readFileSync(auditPath, 'utf-8'));
+      }
+    }),
+  );
+
   // Benchmark 4: Nexus DB query
   console.log('Benchmarking Nexus DB...');
-  results.push(await benchmark('nexus-db', async () => {
-    const fs = await import('fs');
-    const dbPath = join('.runtime', 'gentle-vanguard.db');
-    if (fs.existsSync(dbPath)) {
-      fs.statSync(dbPath);
-    }
-  }));
-  
+  results.push(
+    await benchmark('nexus-db', async () => {
+      const fs = await import('fs');
+      const dbPath = join('.runtime', 'gentle-vanguard.db');
+      if (fs.existsSync(dbPath)) {
+        fs.statSync(dbPath);
+      }
+    }),
+  );
+
   // Benchmark 5: Session start (lightweight)
   console.log('Benchmarking session pipeline load...');
-  results.push(await benchmark('session-pipeline', async () => {
-    const fs = await import('fs');
-    const config = JSON.parse(fs.readFileSync('config/session-autostart.config.json', 'utf-8'));
-    config.pipeline.steps.length;
-  }));
-  
+  results.push(
+    await benchmark('session-pipeline', async () => {
+      const fs = await import('fs');
+      const config = JSON.parse(fs.readFileSync('config/session-autostart.config.json', 'utf-8'));
+      config.pipeline.steps.length;
+    }),
+  );
+
   return results;
 }
 
@@ -207,21 +211,25 @@ export function printResults(results: BenchmarkResult[]): void {
   console.log('┌────────────────────┬────────────┬────────────┬────────────┐');
   console.log('│ Operation          │ Time (ms)  │ Memory Δ   │ Status     │');
   console.log('├────────────────────┼────────────┼────────────┼────────────┤');
-  
+
   for (const result of results) {
     const comparison = compareWithBaseline(result);
-    const status = comparison.alert ? '⚠️ REGRESSION' : comparison.delta_pct < -5 ? '✅ IMPROVED' : '✓ STABLE';
-    
+    const status = comparison.alert
+      ? '⚠️ REGRESSION'
+      : comparison.delta_pct < -5
+        ? '✅ IMPROVED'
+        : '✓ STABLE';
+
     console.log(
       `│ ${result.name.padEnd(18)} │ ${result.duration_ms.toString().padStart(10)} │ ${
         (result.memory_delta_mb >= 0 ? '+' : '') + result.memory_delta_mb.toString().padStart(9)
-      } │ ${status.padEnd(10)} │`
+      } │ ${status.padEnd(10)} │`,
     );
   }
-  
+
   console.log('└────────────────────┴────────────┴────────────┴────────────┘');
-  
-  const alerts = results.filter(r => compareWithBaseline(r).alert);
+
+  const alerts = results.filter((r) => compareWithBaseline(r).alert);
   if (alerts.length > 0) {
     console.log('\n⚠️  PERFORMANCE ALERTS:');
     for (const alert of alerts) {
@@ -234,8 +242,8 @@ export function printResults(results: BenchmarkResult[]): void {
 // CLI
 if (process.argv[1]?.includes('performance-profiler.ts')) {
   const command = process.argv[2];
-  
-  (async () => {
+
+  void (async () => {
     switch (command) {
       case 'run': {
         const results = await runAllBenchmarks();

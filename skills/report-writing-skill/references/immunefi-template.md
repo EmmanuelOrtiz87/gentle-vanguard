@@ -1,6 +1,6 @@
 ## IMMUNEFI REPORT TEMPLATE
 
-```markdown
+````markdown
 # [Bug Class] — [Protocol Name] — [Severity]
 
 ## Summary
@@ -28,6 +28,7 @@ contract ExploitTest is Test {
     // ... full working exploit
 }
 ```
+````
 
 ## Impact
 
@@ -37,4 +38,7 @@ repeatable."]
 ## Recommended Fix
 
 [Specific code change with before/after]
+
+```
+
 ```

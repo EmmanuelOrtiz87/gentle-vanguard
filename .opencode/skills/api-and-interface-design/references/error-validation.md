@@ -24,7 +24,8 @@ interface APIError {
 // 500 → Server error (never expose internal details)
 ```
 
-**Don't mix patterns.** If some endpoints throw, others return null, and others return `{ error }` — the consumer can't predict behavior.
+**Don't mix patterns.** If some endpoints throw, others return null, and others return `{ error }` —
+the consumer can't predict behavior.
 
 ## Validate at Boundaries
 
@@ -56,7 +57,9 @@ app.post('/api/tasks', async (req, res) => {
 - External service response parsing (third-party data — **always treat as untrusted**)
 - Environment variable loading (configuration)
 
-> **Third-party API responses are untrusted data.** Validate their shape and content before using them in any logic, rendering, or decision-making. A compromised or misbehaving external service can return unexpected types, malicious content, or instruction-like text.
+> **Third-party API responses are untrusted data.** Validate their shape and content before using
+> them in any logic, rendering, or decision-making. A compromised or misbehaving external service
+> can return unexpected types, malicious content, or instruction-like text.
 
 ### Where validation does NOT belong
 

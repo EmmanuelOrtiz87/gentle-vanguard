@@ -190,70 +190,176 @@ export class DatabaseManager {
 
   /** Check if the DB has data */
   hasData(): boolean {
-    const row = this.db
-      .prepare("SELECT COUNT(*) as count FROM metric_snapshots")
-      .get() as { count: number };
+    const row = this.db.prepare('SELECT COUNT(*) as count FROM metric_snapshots').get() as {
+      count: number;
+    };
     return row.count > 0;
   }
 
   // ─── Backward-compatible delegates ──────────────────────────────────
 
-  insertMetricSnapshot(data: Partial<MetricSnapshot>): void { this.metrics.insertMetricSnapshot(data); }
-  getLatestMetricSnapshot(): MetricSnapshot | null { return this.metrics.getLatestMetricSnapshot(); }
-  getMetricHistory(limit = 20): MetricSnapshot[] { return this.metrics.getMetricHistory(limit); }
-  pruneMetricSnapshots(keep = 1440): void { this.metrics.pruneMetricSnapshots(keep); }
+  insertMetricSnapshot(data: Partial<MetricSnapshot>): void {
+    this.metrics.insertMetricSnapshot(data);
+  }
+  getLatestMetricSnapshot(): MetricSnapshot | null {
+    return this.metrics.getLatestMetricSnapshot();
+  }
+  getMetricHistory(limit = 20): MetricSnapshot[] {
+    return this.metrics.getMetricHistory(limit);
+  }
+  pruneMetricSnapshots(keep = 1440): void {
+    this.metrics.pruneMetricSnapshots(keep);
+  }
 
-  upsertSession(session: Partial<SessionRecord>): void { this.sessions.upsertSession(session); }
-  getActiveSessions(): SessionRecord[] { return this.sessions.getActiveSessions(); }
-  getAllSessions(): SessionRecord[] { return this.sessions.getAllSessions(); }
-  getSessionsToday(): SessionRecord[] { return this.sessions.getSessionsToday(); }
+  upsertSession(session: Partial<SessionRecord>): void {
+    this.sessions.upsertSession(session);
+  }
+  getActiveSessions(): SessionRecord[] {
+    return this.sessions.getActiveSessions();
+  }
+  getAllSessions(): SessionRecord[] {
+    return this.sessions.getAllSessions();
+  }
+  getSessionsToday(): SessionRecord[] {
+    return this.sessions.getSessionsToday();
+  }
 
-  saveSessionScoring(data: Parameters<SessionRepo['saveSessionScoring']>[0]): void { this.sessions.saveSessionScoring(data); }
-  getSessionScoring(sessionId: string): Record<string, unknown> | null { return this.sessions.getSessionScoring(sessionId); }
-  getAllSessionScoring(limit = 20): Array<Record<string, unknown>> { return this.sessions.getAllSessionScoring(limit); }
+  saveSessionScoring(data: Parameters<SessionRepo['saveSessionScoring']>[0]): void {
+    this.sessions.saveSessionScoring(data);
+  }
+  getSessionScoring(sessionId: string): Record<string, unknown> | null {
+    return this.sessions.getSessionScoring(sessionId);
+  }
+  getAllSessionScoring(limit = 20): Array<Record<string, unknown>> {
+    return this.sessions.getAllSessionScoring(limit);
+  }
 
-  insertTrace(trace: Partial<TraceRecord>): void { this.traces.insertTrace(trace); }
-  getTracesBySession(sessionId: string): TraceRecord[] { return this.traces.getTracesBySession(sessionId); }
-  getLatencyStats(): ReturnType<TraceRepo['getLatencyStats']> { return this.traces.getLatencyStats(); }
-  insertFeedback(fb: Omit<FeedbackRecord, 'id' | 'created_at'>): void { this.traces.insertFeedback(fb); }
-  getFeedbackStats(): ReturnType<TraceRepo['getFeedbackStats']> { return this.traces.getFeedbackStats(); }
+  insertTrace(trace: Partial<TraceRecord>): void {
+    this.traces.insertTrace(trace);
+  }
+  getTracesBySession(sessionId: string): TraceRecord[] {
+    return this.traces.getTracesBySession(sessionId);
+  }
+  getLatencyStats(): ReturnType<TraceRepo['getLatencyStats']> {
+    return this.traces.getLatencyStats();
+  }
+  insertFeedback(fb: Omit<FeedbackRecord, 'id' | 'created_at'>): void {
+    this.traces.insertFeedback(fb);
+  }
+  getFeedbackStats(): ReturnType<TraceRepo['getFeedbackStats']> {
+    return this.traces.getFeedbackStats();
+  }
 
-  insertEvent(type: string, payload?: unknown): void { this.events.insertEvent(type, payload); }
-  getRecentEvents(limit = 50): EventRecord[] { return this.events.getRecentEvents(limit); }
-  insertAlert(alert: Omit<AlertRecord, 'id' | 'created_at'>): void { this.events.insertAlert(alert); }
-  getRecentAlerts(limit = 20): AlertRecord[] { return this.events.getRecentAlerts(limit); }
-  getTriggeredAlerts(): AlertRecord[] { return this.events.getTriggeredAlerts(); }
+  insertEvent(type: string, payload?: unknown): void {
+    this.events.insertEvent(type, payload);
+  }
+  getRecentEvents(limit = 50): EventRecord[] {
+    return this.events.getRecentEvents(limit);
+  }
+  insertAlert(alert: Omit<AlertRecord, 'id' | 'created_at'>): void {
+    this.events.insertAlert(alert);
+  }
+  getRecentAlerts(limit = 20): AlertRecord[] {
+    return this.events.getRecentAlerts(limit);
+  }
+  getTriggeredAlerts(): AlertRecord[] {
+    return this.events.getTriggeredAlerts();
+  }
 
-  getCachedResponse(key: string): ReturnType<CacheRepo['getCachedResponse']> { return this.cache.getCachedResponse(key); }
-  setCachedResponse(key: string, response: string, model?: string, ttlMinutes = 30): void { this.cache.setCachedResponse(key, response, model, ttlMinutes); }
-  deleteCachedResponse(key: string): void { this.cache.deleteCachedResponse(key); }
-  getCacheStats(): ReturnType<CacheRepo['getCacheStats']> { return this.cache.getCacheStats(); }
-  saveSemanticCache(entry: Parameters<CacheRepo['saveSemanticCache']>[0]): void { this.cache.saveSemanticCache(entry); }
-  findExactCache(key: string): ReturnType<CacheRepo['findExactCache']> { return this.cache.findExactCache(key); }
-  getAllCacheEntries(): ReturnType<CacheRepo['getAllCacheEntries']> { return this.cache.getAllCacheEntries(); }
-  pruneExpiredCache(): number { return this.cache.pruneExpiredCache(); }
+  getCachedResponse(key: string): ReturnType<CacheRepo['getCachedResponse']> {
+    return this.cache.getCachedResponse(key);
+  }
+  setCachedResponse(key: string, response: string, model?: string, ttlMinutes = 30): void {
+    this.cache.setCachedResponse(key, response, model, ttlMinutes);
+  }
+  deleteCachedResponse(key: string): void {
+    this.cache.deleteCachedResponse(key);
+  }
+  getCacheStats(): ReturnType<CacheRepo['getCacheStats']> {
+    return this.cache.getCacheStats();
+  }
+  saveSemanticCache(entry: Parameters<CacheRepo['saveSemanticCache']>[0]): void {
+    this.cache.saveSemanticCache(entry);
+  }
+  findExactCache(key: string): ReturnType<CacheRepo['findExactCache']> {
+    return this.cache.findExactCache(key);
+  }
+  getAllCacheEntries(): ReturnType<CacheRepo['getAllCacheEntries']> {
+    return this.cache.getAllCacheEntries();
+  }
+  pruneExpiredCache(): number {
+    return this.cache.pruneExpiredCache();
+  }
 
-  recordSkillUsage(skillId: string, sessionId?: string, tokensUsed = 0, cost = 0): void { this.skills.recordSkillUsage(skillId, sessionId, tokensUsed, cost); }
-  getTopSkills(limit = 10): ReturnType<SkillRepo['getTopSkills']> { return this.skills.getTopSkills(limit); }
-  recordTokenUsage(sessionId: string, promptTokens: number, completionTokens: number, cost: number, model?: string): void { this.skills.recordTokenUsage(sessionId, promptTokens, completionTokens, cost, model); }
-  getTokenUsageBySession(sessionId: string): ReturnType<SkillRepo['getTokenUsageBySession']> { return this.skills.getTokenUsageBySession(sessionId); }
-  upsertRoutingRule(pattern: string, target: string, priority = 0): void { this.skills.upsertRoutingRule(pattern, target, priority); }
-  getEnabledRoutingRules(): ReturnType<SkillRepo['getEnabledRoutingRules']> { return this.skills.getEnabledRoutingRules(); }
-  recordRoutingHit(pattern: string): void { this.skills.recordRoutingHit(pattern); }
+  recordSkillUsage(skillId: string, sessionId?: string, tokensUsed = 0, cost = 0): void {
+    this.skills.recordSkillUsage(skillId, sessionId, tokensUsed, cost);
+  }
+  getTopSkills(limit = 10): ReturnType<SkillRepo['getTopSkills']> {
+    return this.skills.getTopSkills(limit);
+  }
+  recordTokenUsage(
+    sessionId: string,
+    promptTokens: number,
+    completionTokens: number,
+    cost: number,
+    model?: string,
+  ): void {
+    this.skills.recordTokenUsage(sessionId, promptTokens, completionTokens, cost, model);
+  }
+  getTokenUsageBySession(sessionId: string): ReturnType<SkillRepo['getTokenUsageBySession']> {
+    return this.skills.getTokenUsageBySession(sessionId);
+  }
+  upsertRoutingRule(pattern: string, target: string, priority = 0): void {
+    this.skills.upsertRoutingRule(pattern, target, priority);
+  }
+  getEnabledRoutingRules(): ReturnType<SkillRepo['getEnabledRoutingRules']> {
+    return this.skills.getEnabledRoutingRules();
+  }
+  recordRoutingHit(pattern: string): void {
+    this.skills.recordRoutingHit(pattern);
+  }
 
-  insertContractResult(contractId: string, status: string, sessionId?: string, result?: string, durationMs?: number): void { this.contracts.insertContractResult(contractId, status, sessionId, result, durationMs); }
-  getContractResultsBySession(sessionId: string): ContractResultRecord[] { return this.contracts.getContractResultsBySession(sessionId); }
+  insertContractResult(
+    contractId: string,
+    status: string,
+    sessionId?: string,
+    result?: string,
+    durationMs?: number,
+  ): void {
+    this.contracts.insertContractResult(contractId, status, sessionId, result, durationMs);
+  }
+  getContractResultsBySession(sessionId: string): ContractResultRecord[] {
+    return this.contracts.getContractResultsBySession(sessionId);
+  }
 
-  saveErrorMemory(data: Parameters<ErrorMemoryRepo['saveErrorMemory']>[0]): number { return this.errors.saveErrorMemory(data); }
-  findErrorsByFile(file: string): Array<Record<string, unknown>> { return this.errors.findErrorsByFile(file); }
-  findErrorsByPattern(pattern: string): Array<Record<string, unknown>> { return this.errors.findErrorsByPattern(pattern); }
-  searchErrors(keyword: string, limit = 5): Array<Record<string, unknown>> { return this.errors.searchErrors(keyword, limit); }
-  getRecentErrors(limit = 20): Array<Record<string, unknown>> { return this.errors.getRecentErrors(limit); }
-  getErrorById(id: number): Record<string, unknown> | null { return this.errors.getErrorById(id); }
-  pruneErrorMemory(days = 365): number { return this.errors.pruneErrorMemory(days); }
+  saveErrorMemory(data: Parameters<ErrorMemoryRepo['saveErrorMemory']>[0]): number {
+    return this.errors.saveErrorMemory(data);
+  }
+  findErrorsByFile(file: string): Array<Record<string, unknown>> {
+    return this.errors.findErrorsByFile(file);
+  }
+  findErrorsByPattern(pattern: string): Array<Record<string, unknown>> {
+    return this.errors.findErrorsByPattern(pattern);
+  }
+  searchErrors(keyword: string, limit = 5): Array<Record<string, unknown>> {
+    return this.errors.searchErrors(keyword, limit);
+  }
+  getRecentErrors(limit = 20): Array<Record<string, unknown>> {
+    return this.errors.getRecentErrors(limit);
+  }
+  getErrorById(id: number): Record<string, unknown> | null {
+    return this.errors.getErrorById(id);
+  }
+  pruneErrorMemory(days = 365): number {
+    return this.errors.pruneErrorMemory(days);
+  }
 
-  housekeeping(): void { this.housekeepingRepo.housekeeping(); }
-  pruneAll(): { events: number; cache: number; tokenUsage: number; skillUsage: number } { return this.housekeepingRepo.pruneAll(); }
+  housekeeping(): void {
+    this.housekeepingRepo.housekeeping();
+  }
+  pruneAll(): { events: number; cache: number; tokenUsage: number; skillUsage: number } {
+    return this.housekeepingRepo.pruneAll();
+  }
 
   /** Close the database connection */
   close(): void {

@@ -393,7 +393,8 @@ and cache **deception** (attacker tricks the cache into storing a victim's priva
       cached at the edge
     - Root cause: inconsistent handling of hop-by-hop headers across Akamai proxy tiers caused
       desync; smuggled responses were server-side cached globally
-    - Year: 2022 — **>$50K total** across affected programs (PayPal $25,200 + Airbnb $14,875 +
+    - Year: 2022 — **>$50K total** across affected programs (PayPal $25,200 + Airbnb
+      $14,875 +
       Goldman Sachs $100), PortSwigger Top-10 Web Hacking Techniques 2022 nominee
 
 ---

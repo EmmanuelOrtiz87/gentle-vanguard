@@ -22,7 +22,9 @@ function main(): void {
 
   let changed: string;
   try {
-    changed = runSync('git', ['diff', '--name-only', 'HEAD~1', 'HEAD'], { stdio: 'pipe' }).stdout.trim();
+    changed = runSync('git', ['diff', '--name-only', 'HEAD~1', 'HEAD'], {
+      stdio: 'pipe',
+    }).stdout.trim();
   } catch {
     return;
   }
@@ -36,7 +38,9 @@ function main(): void {
       const hashlineScript = join(resolve(__dirname, '..'), 'src', 'hashline.ts');
       const quietArgs = args.quiet ? ['--quiet'] : [];
       try {
-        runNpxTsxSync(hashlineScript, ['--action', 'update', '--path', p, ...quietArgs], { stdio: 'pipe' });
+        runNpxTsxSync(hashlineScript, ['--action', 'update', '--path', p, ...quietArgs], {
+          stdio: 'pipe',
+        });
       } catch {
         // silently continue on error
       }

@@ -4,11 +4,10 @@
 
 ## Description
 
-
 ## Triggers
 
-
 ## Instructions
+
 # gentle-vanguard-manager-skill (FF-017)
 
 Auto-update and self-maintenance skill for the gentle-vanguard workspace.

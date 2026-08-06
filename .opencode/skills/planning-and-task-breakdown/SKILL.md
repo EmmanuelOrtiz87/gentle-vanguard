@@ -1,6 +1,8 @@
 ---
 name: planning-and-task-breakdown
-description: Break work into small, ordered tasks from specs or vague requirements. Decompose into implementable units with acceptance criteria.
+description:
+  Break work into small, ordered tasks from specs or vague requirements. Decompose into
+  implementable units with acceptance criteria.
 triggers:
   - plan
   - breakdown
@@ -32,8 +34,8 @@ well-defined tasks.
 
 ### Step 1: Enter Plan Mode
 
-Read the spec and codebase in read-only mode. Identify patterns, map dependencies, note risks.
-**Do NOT write code.** Output saved to `tasks/plan.md` and `tasks/todo.md`.
+Read the spec and codebase in read-only mode. Identify patterns, map dependencies, note risks. **Do
+NOT write code.** Output saved to `tasks/plan.md` and `tasks/todo.md`.
 
 ### Step 2: Dependency Graph
 
@@ -42,13 +44,13 @@ follows the dependency graph bottom-up: build foundations first.
 
 ### Step 3: Vertical Slicing
 
-Build one complete feature path at a time (schema + API + UI together), not all DB then all API
-then all UI. Each vertical slice delivers working, testable functionality.
+Build one complete feature path at a time (schema + API + UI together), not all DB then all API then
+all UI. Each vertical slice delivers working, testable functionality.
 
 ### Step 4: Write Tasks
 
-Each task needs a title, description, acceptance criteria, verification steps, dependencies,
-files touched, and estimated scope. See `references/task-template.md` for the full structure.
+Each task needs a title, description, acceptance criteria, verification steps, dependencies, files
+touched, and estimated scope. See `references/task-template.md` for the full structure.
 
 ### Step 5: Order and Checkpoint
 
@@ -69,6 +71,7 @@ checkpoints occur after every 2-3 tasks. Put high-risk tasks early (fail fast). 
 An agent performs best on S and M tasks. Break L/XL tasks into smaller units.
 
 **When to break a task down further:**
+
 - It takes more than one focused session (~2+ hours)
 - Acceptance criteria can't fit in 3 or fewer bullet points
 - It touches two or more independent subsystems
@@ -76,8 +79,8 @@ An agent performs best on S and M tasks. Break L/XL tasks into smaller units.
 
 ## Output Files
 
-- **Plan document:** `tasks/plan.md` — full implementation plan including architecture decisions
-  and a task checklist. See `references/plan-template.md`.
+- **Plan document:** `tasks/plan.md` — full implementation plan including architecture decisions and
+  a task checklist. See `references/plan-template.md`.
 
 ## Red Flags
 

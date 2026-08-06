@@ -36,33 +36,33 @@
 
 ## 📊 Key References
 
-| Document                                                                           | Purpose                                      |
-| ---------------------------------------------------------------------------------- | -------------------------------------------- |
-| **[ARCHITECTURE.md](ARCHITECTURE.md)**                                             | System design rationale                      |
-| **[SUBAGENT-ARCHITECTURE.md](SUBAGENT-ARCHITECTURE.md)**                           | Multi-agent execution model                  |
-| **[project-types.md](project-types.md)**                                           | Project scaffolding options                  |
-| **[tools.md](tools.md)**                                                           | Third-party integrations                     |
-| **[structure.md](structure.md)**                                                   | Workspace layout                             |
-| **[script-registry.md](script-registry.md)**                                       | Script governance registry and policy levels |
-| **[GENTLE-VANGUARD-INSTALLER.md](GENTLE-VANGUARD-INSTALLER.md)**                   | Gentle-Vanguard installer guide              |
-| **[REAL-TOKEN-TRACKING.md](REAL-TOKEN-TRACKING.md)**                               | Token tracking guide                         |
-| **[PLUGIN-ARCHITECTURE.md](PLUGIN-ARCHITECTURE.md)**                               | Plugin development guide                     |
-| **[SKILL-ORGANIZATION.md](SKILL-ORGANIZATION.md)**                                 | Skill catalog and organization               |
-| **[AUTO-DELEGATION-IMPLEMENTATION.md](AUTO-DELEGATION-IMPLEMENTATION.md)**         | Auto-delegation implementation               |
-| **[CONTEXT-EFFICIENCY-PROTOCOL.md](CONTEXT-EFFICIENCY-PROTOCOL.md)**               | Context efficiency protocol                  |
-| **[DISTRIBUTED-TRACING-IMPLEMENTATION.md](DISTRIBUTED-TRACING-IMPLEMENTATION.md)** | Distributed tracing implementation           |
-| **[EVENT-GOVERNANCE-IMPLEMENTATION.md](EVENT-GOVERNANCE-IMPLEMENTATION.md)**       | Event governance implementation              |
-| **[PERSISTENCE-CONTRACT.md](PERSISTENCE-CONTRACT.md)**                             | Persistence contract                         |
-| **[SDD-GOVERNANCE-POLICY.md](SDD-GOVERNANCE-POLICY.md)**                           | SDD governance policy                        |
-| **[SKILL-RESOLVER-PROTOCOL.md](SKILL-RESOLVER-PROTOCOL.md)**                       | Skill resolver protocol                      |
-| **[VALIDATION-REPORT.md](VALIDATION-REPORT.md)**                                   | Validation report                            |
-| **[FUTURE-FEATURES-BACKLOG.md](FUTURE-FEATURES-BACKLOG.md)**                       | Future features backlog                      |
-| ~~MIGRATION-NORMATIVAS-GLOBALES.md~~                                               | _(archived — ver NORMATIVAS-ORQUESTADOR.md)_ |
+| Document                                                                            | Purpose                                      |
+| ----------------------------------------------------------------------------------- | -------------------------------------------- |
+| **[ARCHITECTURE.md](ARCHITECTURE.md)**                                              | System design rationale                      |
+| **[SUBAGENT-ARCHITECTURE.md](SUBAGENT-ARCHITECTURE.md)**                            | Multi-agent execution model                  |
+| **[project-types.md](project-types.md)**                                            | Project scaffolding options                  |
+| **[tools.md](tools.md)**                                                            | Third-party integrations                     |
+| **[structure.md](structure.md)**                                                    | Workspace layout                             |
+| **[script-registry.md](script-registry.md)**                                        | Script governance registry and policy levels |
+| **[GENTLE-VANGUARD-INSTALLER.md](GENTLE-VANGUARD-INSTALLER.md)**                    | Gentle-Vanguard installer guide              |
+| **[REAL-TOKEN-TRACKING.md](REAL-TOKEN-TRACKING.md)**                                | Token tracking guide                         |
+| **[PLUGIN-ARCHITECTURE.md](PLUGIN-ARCHITECTURE.md)**                                | Plugin development guide                     |
+| **[SKILL-ORGANIZATION.md](SKILL-ORGANIZATION.md)**                                  | Skill catalog and organization               |
+| **[AUTO-DELEGATION-IMPLEMENTATION.md](AUTO-DELEGATION-IMPLEMENTATION.md)**          | Auto-delegation implementation               |
+| **[CONTEXT-EFFICIENCY-PROTOCOL.md](CONTEXT-EFFICIENCY-PROTOCOL.md)**                | Context efficiency protocol                  |
+| **[DISTRIBUTED-TRACING-IMPLEMENTATION.md](DISTRIBUTED-TRACING-IMPLEMENTATION.md)**  | Distributed tracing implementation           |
+| **[EVENT-GOVERNANCE-IMPLEMENTATION.md](EVENT-GOVERNANCE-IMPLEMENTATION.md)**        | Event governance implementation              |
+| **[PERSISTENCE-CONTRACT.md](PERSISTENCE-CONTRACT.md)**                              | Persistence contract                         |
+| **[SDD-GOVERNANCE-POLICY.md](SDD-GOVERNANCE-POLICY.md)**                            | SDD governance policy                        |
+| **[SKILL-RESOLVER-PROTOCOL.md](SKILL-RESOLVER-PROTOCOL.md)**                        | Skill resolver protocol                      |
+| **[VALIDATION-REPORT.md](VALIDATION-REPORT.md)**                                    | Validation report                            |
+| **[FUTURE-FEATURES-BACKLOG.md](FUTURE-FEATURES-BACKLOG.md)**                        | Future features backlog                      |
+| ~~MIGRATION-NORMATIVAS-GLOBALES.md~~                                                | _(archived — ver NORMATIVAS-ORQUESTADOR.md)_ |
 | **[NORMATIVAS-ORQUESTADOR.md](../governance/normatives/NORMATIVAS-ORQUESTADOR.md)** | Orchestrator norms                           |
-| **[master-instructions.md](master-instructions.md)**                               | Master instructions                          |
-| **[shared-knowledge.md](shared-knowledge.md)**                                     | Shared knowledge base                        |
-| **[OBSERVABILIDAD.md](OBSERVABILIDAD.md)**                                         | Observability guide                          |
-| **[SUPPLEMENTARY/README.md](../supplementary/README.md)**                          | Supplementary docs hub                       |
+| **[master-instructions.md](master-instructions.md)**                                | Master instructions                          |
+| **[shared-knowledge.md](shared-knowledge.md)**                                      | Shared knowledge base                        |
+| **[OBSERVABILIDAD.md](OBSERVABILIDAD.md)**                                          | Observability guide                          |
+| **[SUPPLEMENTARY/README.md](../supplementary/README.md)**                           | Supplementary docs hub                       |
 
 ---
 

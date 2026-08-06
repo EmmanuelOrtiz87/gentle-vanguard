@@ -33,8 +33,12 @@ function run(): void {
   // TS migration: token-metrics-store.ps1 → src/token-metrics-store.ts
   if (fs.existsSync(TS_ENTRY)) {
     const tsArgs: string[] = [TS_ENTRY];
-    if (action) { tsArgs.push('-Action', action); }
-    if (quiet) { tsArgs.push('-Quiet'); }
+    if (action) {
+      tsArgs.push('-Action', action);
+    }
+    if (quiet) {
+      tsArgs.push('-Quiet');
+    }
     const result = runNpxTsxSync(tsArgs[0], tsArgs.slice(1), {
       stdio: 'inherit',
       cwd: ROOT,
@@ -42,7 +46,9 @@ function run(): void {
     process.exit(result.status ?? 0);
   } else if (fs.existsSync(LEGACY_PS1)) {
     const psArgs: string[] = ['-File', LEGACY_PS1, '-Action', action];
-    if (quiet) { psArgs.push('-Quiet'); }
+    if (quiet) {
+      psArgs.push('-Quiet');
+    }
     const result = runSync('powershell', psArgs, { stdio: 'inherit', cwd: ROOT });
     process.exit(result.status ?? 0);
   } else {

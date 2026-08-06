@@ -296,9 +296,7 @@ fetch('/api/endpoint', {
   method: 'POST',
   headers: { 'content-type': 'application/json' },
   credentials: 'include', // sends cookies automatically — they won't appear in your code
-  body: JSON.stringify({
-    /* your payload */
-  }),
+  body: JSON.stringify({/* your payload */}),
 })
   .then((r) => r.json())
   .then((j) => console.log('LABEL:', JSON.stringify(j)));
@@ -327,9 +325,7 @@ warnings to appear.
 If the response body is too long for a clean screenshot, log a summary instead:
 
 ```js
-fetch('/api/endpoint', {
-  /* ... */
-})
+fetch('/api/endpoint', {/* ... */})
   .then((r) => r.json())
   .then((j) => {
     console.log('RESPONSE SHAPE:', Object.keys(j.data || {}));

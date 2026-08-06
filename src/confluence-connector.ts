@@ -47,8 +47,14 @@ const quiet = args.includes('--quiet');
 const pageId = args.indexOf('--page') >= 0 ? args[args.indexOf('--page') + 1] : undefined;
 const spaceKey = args.indexOf('--space') >= 0 ? args[args.indexOf('--space') + 1] : '';
 const outputPath = args.indexOf('--output') >= 0 ? args[args.indexOf('--output') + 1] : undefined;
-const baseUrl = args.indexOf('--base-url') >= 0 ? args[args.indexOf('--base-url') + 1] : process.env.CONFLUENCE_BASE_URL || 'https://your-domain.atlassian.net/wiki';
-const token = args.indexOf('--token') >= 0 ? args[args.indexOf('--token') + 1] : process.env.CONFLUENCE_API_TOKEN || '';
+const baseUrl =
+  args.indexOf('--base-url') >= 0
+    ? args[args.indexOf('--base-url') + 1]
+    : process.env.CONFLUENCE_BASE_URL || 'https://your-domain.atlassian.net/wiki';
+const token =
+  args.indexOf('--token') >= 0
+    ? args[args.indexOf('--token') + 1]
+    : process.env.CONFLUENCE_API_TOKEN || '';
 
 const result: ConnectorResult = {
   source: `confluence:${spaceKey || pageId || 'unknown'}`,

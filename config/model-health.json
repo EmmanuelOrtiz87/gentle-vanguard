@@ -8,11 +8,7 @@
   "cooldownMinutes": 60,
   "maxDetectionsPerModel": 3,
   "stateFile": ".runtime/model-health.json",
-  "logSources": [
-    "~/.local/share/opencode/log/opencode.log",
-    ".session/*.log",
-    ".session/*.jsonl"
-  ],
+  "logSources": ["~/.local/share/opencode/log/opencode.log", ".session/*.log", ".session/*.jsonl"],
   "signatures": [
     {
       "id": "UnsupportedToolCalling",

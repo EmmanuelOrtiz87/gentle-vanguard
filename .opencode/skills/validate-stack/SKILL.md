@@ -1,6 +1,8 @@
 ---
 name: validate-stack
-description: Validate the full Gentle-Vanguard stack. Run verification steps for TypeScript components, session pipeline, hooks, and RDD system.
+description:
+  Validate the full Gentle-Vanguard stack. Run verification steps for TypeScript components, session
+  pipeline, hooks, and RDD system.
 triggers:
   - validate
   - stack verify
@@ -13,7 +15,8 @@ triggers:
 
 Run these verifications in order to validate the Gentle-Vanguard stack v4.0+ (TypeScript-first).
 
-> **Note**: Scripts PowerShell (.ps1) fueron migrados a TypeScript (.ts). Ver AGENTS.md líneas 273-284.
+> **Note**: Scripts PowerShell (.ps1) fueron migrados a TypeScript (.ts). Ver AGENTS.md líneas
+> 273-284.
 
 ## 1. Package JSON Validation
 
@@ -89,16 +92,16 @@ Expected: Clean or only expected files changed.
 
 ## Expected Results Summary
 
-| Check | Expected |
-|-------|----------|
-| package.json | Valid JSON |
-| opencode.json | Valid JSON |
-| typecheck | No errors (warnings OK) |
-| session autostart | Starts successfully |
-| health:check | 25/29+ PASS |
-| rdd:risk | Returns valid JSON |
-| db:health | SQLite integrity OK |
-| watchtower | Components healthy |
+| Check             | Expected                |
+| ----------------- | ----------------------- |
+| package.json      | Valid JSON              |
+| opencode.json     | Valid JSON              |
+| typecheck         | No errors (warnings OK) |
+| session autostart | Starts successfully     |
+| health:check      | 25/29+ PASS             |
+| rdd:risk          | Returns valid JSON      |
+| db:health         | SQLite integrity OK     |
+| watchtower        | Components healthy      |
 
 ## Legacy PS1 Scripts (Deprecated)
 

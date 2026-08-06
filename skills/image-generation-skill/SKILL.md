@@ -1,9 +1,9 @@
 ---
 name: image-generation-skill
 description: >
-  AI Image Generation — generates images natively via DALL-E, Stable Diffusion, or ComfyUI.
-  Trigger: "generate image", "create image", "AI art", "DALL-E", "Stable Diffusion", "FLUX",
-  "visual asset", "banner", "logo", "illustration", "image generation".
+  AI Image Generation — generates images natively via DALL-E, Stable Diffusion, or ComfyUI. Trigger:
+  "generate image", "create image", "AI art", "DALL-E", "Stable Diffusion", "FLUX", "visual asset",
+  "banner", "logo", "illustration", "image generation".
 metadata:
   source: GV-native
 ---
@@ -51,34 +51,38 @@ npx tsx src/cli/image-gen.ts "Gentle-Vanguard hero banner" --provider svg --bann
 
 ## Output Formats
 
-| Flag          | Format  | Description                    |
-|---------------|---------|--------------------------------|
-| `--output`    | auto    | Auto-detect from extension     |
-| `--format png`| PNG     | Raster (default for AI APIs)   |
-| `--format svg`| SVG     | Vector (only with --provider svg)|
-| `--format jpg`| JPEG    | Compressed raster              |
+| Flag           | Format | Description                       |
+| -------------- | ------ | --------------------------------- |
+| `--output`     | auto   | Auto-detect from extension        |
+| `--format png` | PNG    | Raster (default for AI APIs)      |
+| `--format svg` | SVG    | Vector (only with --provider svg) |
+| `--format jpg` | JPEG   | Compressed raster                 |
 
 ## Providers
 
 ### DALL-E 3 (OpenAI)
+
 - **Quality**: Best for photorealistic, complex scenes
 - **Cost**: ~$0.040/image (standard), ~$0.080/image (HD)
 - **Size**: 1024x1024, 1792x1024, 1024x1792
 - **Config**: `OPENAI_API_KEY` env var
 
 ### Stable Diffusion (StabilityAI / Replicate)
+
 - **Quality**: Good for artistic, stylized, creative
 - **Cost**: ~$0.005-0.010/image (Replicate)
 - **Sizes**: 512x512, 768x768, 1024x1024
 - **Config**: `REPLICATE_API_TOKEN` or `STABILITY_API_KEY` env var
 
 ### FLUX.1 (Replicate)
+
 - **Quality**: Excellent for photorealistic, fast
 - **Cost**: ~$0.003-0.005/image
 - **Sizes**: 1024x1024
 - **Config**: `REPLICATE_API_TOKEN` env var
 
 ### SVG Fallback (Offline)
+
 - **Zero cost**, no API key needed
 - Uses `config/brand.json` for theming
 - Templates: hero, feature, diagram, icon, avatar

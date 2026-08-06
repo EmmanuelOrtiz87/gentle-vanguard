@@ -1,6 +1,8 @@
 ---
 name: idea-refine
-description: Refine raw ideas into sharp concepts. Divergent then convergent thinking to stress-test assumptions and expand options.
+description:
+  Refine raw ideas into sharp concepts. Divergent then convergent thinking to stress-test
+  assumptions and expand options.
 triggers:
   - idea
   - refine
@@ -12,13 +14,18 @@ triggers:
 
 # Idea Refine
 
-Refines raw ideas into sharp, actionable concepts through structured divergent and convergent thinking.
+Refines raw ideas into sharp, actionable concepts through structured divergent and convergent
+thinking.
 
 ## Process
 
-1. **Understand & Expand (Divergent):** Restate as "How Might We", ask 3-5 sharpening questions (who, success, constraints, prior attempts, why now), generate 5-8 variations (inversion, constraint removal, audience shift, combination, simplification, 10x, expert lens).
-2. **Evaluate & Converge:** Cluster into 2-3 directions, stress-test for user value/feasibility/differentiation, surface hidden assumptions.
-3. **Sharpen & Ship:** Produce a markdown one-pager: Problem Statement, Recommended Direction, Key Assumptions, MVP Scope, Not Doing, Open Questions.
+1. **Understand & Expand (Divergent):** Restate as "How Might We", ask 3-5 sharpening questions
+   (who, success, constraints, prior attempts, why now), generate 5-8 variations (inversion,
+   constraint removal, audience shift, combination, simplification, 10x, expert lens).
+2. **Evaluate & Converge:** Cluster into 2-3 directions, stress-test for user
+   value/feasibility/differentiation, surface hidden assumptions.
+3. **Sharpen & Ship:** Produce a markdown one-pager: Problem Statement, Recommended Direction, Key
+   Assumptions, MVP Scope, Not Doing, Open Questions.
 
 ## Usage
 
@@ -29,6 +36,7 @@ Init ideas dir: `bash scripts/idea-refine/scripts/idea-refine.sh`
 ## References
 
 See `references/` in this skill directory for:
+
 - `frameworks.md` — additional ideation frameworks
 - `refinement-criteria.md` — full evaluation rubric
 - `examples.md` — example ideation sessions
@@ -38,14 +46,17 @@ See `references/` in this skill directory for:
 ### Phase 1: Understand & Expand (Divergent)
 
 - Restate as "How Might We" — forces clarity on the actual problem.
-- Ask 3-5 sharpening questions: who specifically? what does success look like? real constraints? what's been tried? why now?
-- Generate 5-8 variations: inversion, constraint removal, audience shift, combination, simplification, 10x version, expert lens.
+- Ask 3-5 sharpening questions: who specifically? what does success look like? real constraints?
+  what's been tried? why now?
+- Generate 5-8 variations: inversion, constraint removal, audience shift, combination,
+  simplification, 10x version, expert lens.
 - If inside a codebase, use Glob/Grep/Read for context.
 
 ### Phase 2: Evaluate & Converge
 
 - Cluster resonated ideas into 2-3 distinct directions.
-- Stress-test each: user value (painkiller vs vitamin), feasibility (hardest part), differentiation (switching cost).
+- Stress-test each: user value (painkiller vs vitamin), feasibility (hardest part), differentiation
+  (switching cost).
 - Surface hidden assumptions: what you're betting on, what could kill it, what you're ignoring.
 - Be honest, not supportive. Push back on weak ideas with specificity.
 
@@ -55,17 +66,29 @@ Produce a one-pager with this structure:
 
 ```md
 # [Idea]
+
 ## Problem Statement
+
 [One-line "How Might We"]
+
 ## Recommended Direction
+
 [Chosen direction + why — 2-3 paragraphs max]
+
 ## Key Assumptions
+
 - [ ] [Assumption] — [how to test]
+
 ## MVP Scope
+
 [Minimum version testing core assumptions]
+
 ## Not Doing
+
 - [Thing] — [reason]
+
 ## Open Questions
+
 [What needs answering before building]
 ```
 
@@ -82,7 +105,8 @@ Ask user before saving to `docs/ideas/`. The "Not Doing" list is the most valuab
 
 ### Tone
 
-Direct, thoughtful, slightly provocative. Channel "that's interesting, but what if..." — push one step further without exhausting.
+Direct, thoughtful, slightly provocative. Channel "that's interesting, but what if..." — push one
+step further without exhausting.
 
 ## Red Flags
 

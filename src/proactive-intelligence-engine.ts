@@ -1,19 +1,19 @@
 #!/usr/bin/env node
 /**
  * Proactive Intelligence Engine
- * 
+ *
  * Anticipates user needs based on:
  *   - Usage patterns from session history
  *   - Time-of-day patterns
  *   - Project context
  *   - Recent activity
  *   - Learned norms
- * 
+ *
  * Generates contextual suggestions BEFORE user asks
- * 
+ *
  * Usage:
  *   npx tsx src/proactive-intelligence-engine.ts [--analyze] [--suggest] [--apply]
- * 
+ *
  * Integration:
  *   - session-autostart pipeline (lazy step)
  *   - Called before user input (pre-process-input.ts)
@@ -166,21 +166,21 @@ function dayName(day: number): string {
 
 function analyzeTimePatterns(sessions: SessionPattern[]): UsagePattern[] {
   const patterns: UsagePattern[] = [];
-  
+
   // Group by hour
   const hourFrequency = new Map<number, number>();
   const hourTasks = new Map<number, Map<string, number>>();
-  
+
   for (const session of sessions) {
     const hour = new Date(session.timestamp).getHours();
     hourFrequency.set(hour, (hourFrequency.get(hour) || 0) + 1);
-    
+
     if (!hourTasks.has(hour)) hourTasks.set(hour, new Map());
     const tasks = hourTasks.get(hour)!;
     const taskType = session.taskType || 'general';
     tasks.set(taskType, (tasks.get(taskType) || 0) + 1);
   }
-  
+
   // Find peak hours
   const maxFreq = Math.max(...hourFrequency.values(), 1);
   for (const [hour, freq] of hourFrequency) {
@@ -189,7 +189,7 @@ function analyzeTimePatterns(sessions: SessionPattern[]): UsagePattern[] {
       const commonTask = tasks
         ? [...tasks.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] || 'general'
         : 'general';
-      
+
       patterns.push({
         type: 'time_based',
         id: `time-${hour}`,
@@ -202,31 +202,31 @@ function analyzeTimePatterns(sessions: SessionPattern[]): UsagePattern[] {
       });
     }
   }
-  
+
   return patterns;
 }
 
 function analyzeFilePatterns(sessions: SessionPattern[]): UsagePattern[] {
   const patterns: UsagePattern[] = [];
   const fileGroups = new Map<string, { count: number; files: Set<string> }>();
-  
+
   for (const session of sessions) {
     const keyFiles = session.filesAccessed
-      .filter(f => f.includes('/src/') || f.includes('\\src\\'))
-      .map(f => f.replace(/\\/g, '/').split('/src/')[1]?.split('/')[0] || '')
+      .filter((f) => f.includes('/src/') || f.includes('\\src\\'))
+      .map((f) => f.replace(/\\/g, '/').split('/src/')[1]?.split('/')[0] || '')
       .filter(Boolean);
-    
+
     for (const key of new Set(keyFiles)) {
       const existing = fileGroups.get(key);
       if (existing) {
         existing.count++;
-        session.filesAccessed.forEach(f => existing.files.add(f));
+        session.filesAccessed.forEach((f) => existing.files.add(f));
       } else {
         fileGroups.set(key, { count: 1, files: new Set(session.filesAccessed) });
       }
     }
   }
-  
+
   for (const [key, data] of fileGroups) {
     if (data.count >= 3) {
       patterns.push({
@@ -241,20 +241,20 @@ function analyzeFilePatterns(sessions: SessionPattern[]): UsagePattern[] {
       });
     }
   }
-  
+
   return patterns;
 }
 
 function analyzeSequencePatterns(sessions: SessionPattern[]): UsagePattern[] {
   const patterns: UsagePattern[] = [];
-  
+
   // Find common skill sequences
   const sequences = new Map<string, { count: number; nextSkills: string[] }>();
-  
+
   for (let i = 0; i < sessions.length - 1; i++) {
     const current = sessions[i];
     const next = sessions[i + 1];
-    
+
     for (const skill of current.skillsUsed) {
       const key = `after:${skill}`;
       const existing = sequences.get(key);
@@ -266,7 +266,7 @@ function analyzeSequencePatterns(sessions: SessionPattern[]): UsagePattern[] {
       }
     }
   }
-  
+
   for (const [key, data] of sequences) {
     if (data.count >= 2) {
       // Find most common next skill
@@ -275,7 +275,7 @@ function analyzeSequencePatterns(sessions: SessionPattern[]): UsagePattern[] {
         skillCounts.set(skill, (skillCounts.get(skill) || 0) + 1);
       }
       const mostCommon = [...skillCounts.entries()].sort((a, b) => b[1] - a[1])[0];
-      
+
       if (mostCommon && mostCommon[1] >= 2) {
         const prevSkill = key.replace('after:', '');
         patterns.push({
@@ -291,7 +291,7 @@ function analyzeSequencePatterns(sessions: SessionPattern[]): UsagePattern[] {
       }
     }
   }
-  
+
   return patterns;
 }
 
@@ -299,7 +299,7 @@ function analyzeSequencePatterns(sessions: SessionPattern[]): UsagePattern[] {
 
 function generateTimeSuggestion(hour: number, taskType: string): ProactiveSuggestion {
   const hourLabel = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
-  
+
   const suggestions: Record<string, ProactiveSuggestion> = {
     morning: {
       id: `suggest-morning-${hour}`,
@@ -333,7 +333,7 @@ function generateTimeSuggestion(hour: number, taskType: string): ProactiveSugges
       id: `suggest-evening-${hour}`,
       type: 'action',
       title: 'Session summary?',
-      description: 'Would you like a summary of today\'s work?',
+      description: "Would you like a summary of today's work?",
       priority: 'low',
       action: 'generate_digest',
       args: { type: 'daily' },
@@ -358,13 +358,13 @@ function generateTimeSuggestion(hour: number, taskType: string): ProactiveSugges
       estimatedTokens: 500,
     },
   };
-  
+
   return suggestions[taskType] || suggestions.general;
 }
 
 function generateFileSuggestion(key: string, files: Set<string>): ProactiveSuggestion {
   const fileList = [...files].slice(0, 5);
-  
+
   return {
     id: `suggest-files-${key}`,
     type: 'context',
@@ -404,20 +404,23 @@ function captureContext(): ContextSnapshot {
   let activeFiles: string[] = [];
   let branch = 'unknown';
   let recentCommits: string[] = [];
-  
+
   try {
     // Get git info
     const gitStatus = runSync('git', ['status', '--porcelain'], { cwd: ROOT }).stdout;
-    activeFiles = gitStatus.split('\n').filter((l: string) => l.trim()).map((l: string) => l.slice(3));
-    
+    activeFiles = gitStatus
+      .split('\n')
+      .filter((l: string) => l.trim())
+      .map((l: string) => l.slice(3));
+
     branch = runSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { cwd: ROOT }).stdout.trim();
-    
+
     const gitLog = runSync('git', ['log', '--oneline', '-5'], { cwd: ROOT }).stdout;
     recentCommits = gitLog.split('\n').filter(Boolean);
   } catch {
     // Git not available or error
   }
-  
+
   return {
     timestamp: now(),
     dayOfWeek: currentDayOfWeek(),
@@ -434,16 +437,16 @@ function captureContext(): ContextSnapshot {
 
 function loadRecentSessions(days: number): SessionPattern[] {
   const sessions: SessionPattern[] = [];
-  const cutoff = Date.now() - (days * 24 * 60 * 60 * 1000);
-  
+  const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
+
   if (!existsSync(CONTEXT_LOG_DIR)) return sessions;
-  
+
   try {
     const dirs = readdirSync(CONTEXT_LOG_DIR)
-      .filter(d => d.startsWith('session-'))
+      .filter((d) => d.startsWith('session-'))
       .sort()
       .slice(-30); // Last 30 sessions
-    
+
     for (const dir of dirs) {
       const statePath = join(CONTEXT_LOG_DIR, dir, '.state.json');
       if (existsSync(statePath)) {
@@ -454,7 +457,7 @@ function loadRecentSessions(days: number): SessionPattern[] {
           filesModified?: string[];
           skillsInvoked?: string[];
         } | null>(statePath, null);
-        
+
         if (state && new Date(state.startTime).getTime() > cutoff) {
           sessions.push({
             sessionId: state.sessionId,
@@ -472,15 +475,15 @@ function loadRecentSessions(days: number): SessionPattern[] {
   } catch (e) {
     console.error('[PIE] Error loading sessions:', e);
   }
-  
+
   return sessions;
 }
 
 function inferTaskType(files: string[]): string {
-  if (files.some(f => f.includes('test') || f.includes('spec'))) return 'testing';
-  if (files.some(f => f.includes('docs') || f.endsWith('.md'))) return 'documentation';
-  if (files.some(f => f.includes('config') || f.endsWith('.json'))) return 'configuration';
-  if (files.some(f => f.includes('src/') && f.endsWith('.ts'))) return 'development';
+  if (files.some((f) => f.includes('test') || f.includes('spec'))) return 'testing';
+  if (files.some((f) => f.includes('docs') || f.endsWith('.md'))) return 'documentation';
+  if (files.some((f) => f.includes('config') || f.endsWith('.json'))) return 'configuration';
+  if (files.some((f) => f.includes('src/') && f.endsWith('.ts'))) return 'development';
   return 'general';
 }
 
@@ -494,16 +497,16 @@ function generateProactiveSuggestions(
   // Context used for future contextual filtering
   void _context;
   const suggestions: ProactiveSuggestion[] = [];
-  
+
   for (const pattern of patterns) {
     if (pattern.confidence >= config.minConfidence) {
       suggestions.push(...pattern.suggests);
     }
   }
-  
+
   // Sort by confidence
   suggestions.sort((a, b) => b.confidence - a.confidence);
-  
+
   // Limit and deduplicate
   const unique = new Map<string, ProactiveSuggestion>();
   for (const s of suggestions.slice(0, config.maxSuggestions * 2)) {
@@ -511,19 +514,27 @@ function generateProactiveSuggestions(
       unique.set(s.id, s);
     }
   }
-  
+
   return [...unique.values()].slice(0, config.maxSuggestions);
 }
 
 function executeProactiveAction(suggestion: ProactiveSuggestion): void {
   const triggerDir = join(SESSION_DIR, 'proactive-actions');
   ensureDir(triggerDir);
-  
+
   const actionFile = join(triggerDir, `${suggestion.id}.json`);
-  writeFileSync(actionFile, JSON.stringify({
-    ...suggestion,
-    executedAt: now(),
-  }, null, 2), 'utf-8');
+  writeFileSync(
+    actionFile,
+    JSON.stringify(
+      {
+        ...suggestion,
+        executedAt: now(),
+      },
+      null,
+      2,
+    ),
+    'utf-8',
+  );
 }
 
 interface CLIArgs {
@@ -547,51 +558,54 @@ function parseArgs(argv: string[]): CLIArgs {
 function main(): void {
   const args = parseArgs(process.argv);
   const config = loadJson<PIEConfig>(PIE_CONFIG, DEFAULT_CONFIG);
-  
+
   if (!config.enabled) {
     if (!args.quiet) console.log('[PIE] Proactive Intelligence Engine disabled');
     return;
   }
-  
+
   ensureDir(PIE_DIR);
-  
+
   if (!args.quiet) console.log('[PIE] Proactive Intelligence Engine starting...');
-  
+
   // 1. Capture current context
   const context = captureContext();
-  if (!args.quiet) console.log(`[PIE] Context: ${dayName(context.dayOfWeek)} ${context.hour}:00, branch: ${context.branch}`);
-  
+  if (!args.quiet)
+    console.log(
+      `[PIE] Context: ${dayName(context.dayOfWeek)} ${context.hour}:00, branch: ${context.branch}`,
+    );
+
   // 2. Load recent sessions
   const sessions = loadRecentSessions(config.analysisWindow);
   if (!args.quiet) console.log(`[PIE] Loaded ${sessions.length} recent sessions`);
-  
+
   // 3. Analyze patterns
   let patterns: UsagePattern[] = [];
   if (args.analyze || args.suggest || (!args.analyze && !args.suggest && !args.apply)) {
     const timePatterns = analyzeTimePatterns(sessions);
     const filePatterns = analyzeFilePatterns(sessions);
     const seqPatterns = analyzeSequencePatterns(sessions);
-    
+
     patterns = [...timePatterns, ...filePatterns, ...seqPatterns];
     if (!args.quiet) console.log(`[PIE] Detected ${patterns.length} patterns`);
-    
+
     if (!args.dryRun) {
       saveJson(PATTERNS_DB, patterns);
     }
   } else {
     patterns = loadJson<UsagePattern[]>(PATTERNS_DB, []);
   }
-  
+
   // 4. Generate suggestions
   let suggestions: ProactiveSuggestion[] = [];
   if (args.suggest || (!args.analyze && !args.suggest && !args.apply)) {
     suggestions = generateProactiveSuggestions(patterns, context, config);
     if (!args.quiet) console.log(`[PIE] Generated ${suggestions.length} proactive suggestions`);
-    
+
     if (!args.dryRun) {
       saveJson(SUGGESTIONS_DB, { timestamp: now(), suggestions });
     }
-    
+
     // 5. Display suggestions
     if (!args.quiet && suggestions.length > 0) {
       console.log('\n[PIE] Proactive Suggestions:');
@@ -599,20 +613,23 @@ function main(): void {
         const auto = s.confidence >= config.autoApplyMinConfidence ? ' [AUTO]' : '';
         console.log(`\n  [${s.priority.toUpperCase()}] ${s.title}${auto}`);
         console.log(`         ${s.description}`);
-        console.log(`         Confidence: ${(s.confidence * 100).toFixed(0)}% | Tokens: ~${s.estimatedTokens}`);
+        console.log(
+          `         Confidence: ${(s.confidence * 100).toFixed(0)}% | Tokens: ~${s.estimatedTokens}`,
+        );
         console.log(`         Rationale: ${s.rationale}`);
       }
     }
   }
-  
+
   // 6. Execute auto-apply candidates
   const highConfidenceActions = suggestions.filter(
-    s => s.confidence >= config.autoApplyMinConfidence && config.autoApplyEnabled
+    (s) => s.confidence >= config.autoApplyMinConfidence && config.autoApplyEnabled,
   );
-  
+
   if (args.apply || (!args.dryRun && highConfidenceActions.length > 0)) {
-    if (!args.quiet) console.log(`\n[PIE] Auto-applying ${highConfidenceActions.length} high-confidence actions`);
-    
+    if (!args.quiet)
+      console.log(`\n[PIE] Auto-applying ${highConfidenceActions.length} high-confidence actions`);
+
     for (const action of highConfidenceActions) {
       if (!args.dryRun) {
         executeProactiveAction(action);
@@ -620,7 +637,7 @@ function main(): void {
       if (!args.quiet) console.log(`  → Queued: ${action.title}`);
     }
   }
-  
+
   // 7. Assemble result
   const result: AnticipationResult = {
     timestamp: now(),
@@ -632,18 +649,17 @@ function main(): void {
       patternsAnalyzed: patterns.length,
       suggestionsGenerated: suggestions.length,
       autoApplyCandidates: highConfidenceActions.length,
-      confidence: patterns.length > 0 
-        ? patterns.reduce((s, p) => s + p.confidence, 0) / patterns.length 
-        : 0,
+      confidence:
+        patterns.length > 0 ? patterns.reduce((s, p) => s + p.confidence, 0) / patterns.length : 0,
     },
   };
-  
+
   // 8. Save result
   if (!args.dryRun) {
     const resultPath = join(PIE_DIR, `result-${now().slice(0, 10)}.json`);
     saveJson(resultPath, result);
   }
-  
+
   // 9. Output summary
   if (!args.quiet) {
     console.log('\n[PIE] Summary:');
@@ -653,14 +669,16 @@ function main(): void {
     console.log(`  Avg confidence: ${(result.metrics.confidence * 100).toFixed(0)}%`);
     console.log('[PIE] Done');
   }
-  
+
   // Output JSON for pipeline
-  console.log(JSON.stringify({
-    patterns: result.metrics.patternsAnalyzed,
-    suggestions: result.metrics.suggestionsGenerated,
-    autoApply: result.metrics.autoApplyCandidates,
-    confidence: Math.round(result.metrics.confidence * 100),
-  }));
+  console.log(
+    JSON.stringify({
+      patterns: result.metrics.patternsAnalyzed,
+      suggestions: result.metrics.suggestionsGenerated,
+      autoApply: result.metrics.autoApplyCandidates,
+      confidence: Math.round(result.metrics.confidence * 100),
+    }),
+  );
 }
 
 // Run if called directly

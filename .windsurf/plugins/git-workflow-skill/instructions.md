@@ -3,12 +3,14 @@
 > Gentle-Vanguard Skill
 
 ## Description
-Use when managing git branches, commits, pull requests, merge conflicts, or git workflows. Triggers: "git branch", "git merge", "conflict", "pull request", "commit", "rebase", "cherry-pick", "stash".
+
+Use when managing git branches, commits, pull requests, merge conflicts, or git workflows. Triggers:
+"git branch", "git merge", "conflict", "pull request", "commit", "rebase", "cherry-pick", "stash".
 
 ## Triggers
 
-
 ## Instructions
+
 # Git Workflow Skill
 
 ## Purpose

@@ -106,8 +106,8 @@ function applyToAgentMd(agent: string, steps: number): boolean {
   const f = join(AGENTS_DIR, `${agent}.md`);
   if (!existsSync(f)) return false;
   let content = readFileSync(f, 'utf-8');
-  if (/^steps:\s*[0-9]+(?:\.[0-9]+)?/m.test(content)) {
-    content = content.replace(/^steps:\s*[0-9]+(?:\.[0-9]+)?/m, `steps: ${steps}`);
+  if (/^steps:\s*(?:[0-9]+\.[0-9]+|[0-9]+)/m.test(content)) {
+    content = content.replace(/^steps:\s*(?:[0-9]+\.[0-9]+|[0-9]+)/m, `steps: ${steps}`);
   } else {
     // Insert after the model line in frontmatter
     content = content.replace(/^(model:.*)$/m, `$1\nsteps: ${steps}`);
@@ -116,7 +116,10 @@ function applyToAgentMd(agent: string, steps: number): boolean {
   return true;
 }
 
-function applySteps(agent: string, steps: number): { agent: string; steps: number; opencodeJson: boolean; agentMd: boolean } {
+function applySteps(
+  agent: string,
+  steps: number,
+): { agent: string; steps: number; opencodeJson: boolean; agentMd: boolean } {
   const normalized = normalizeSteps(steps);
   const opencodeJson = applyToOpencodeJson(agent, normalized);
   const agentMd = applyToAgentMd(agent, normalized);
@@ -128,7 +131,10 @@ function status(): void {
   if (!cfg?.agent) return;
   const rows = Object.entries(cfg.agent)
     .map(([k, v]) => ({ agent: k, steps: v.steps ?? '?' }))
-    .sort((a, b) => (typeof a.steps === 'number' ? a.steps : 0) - (typeof b.steps === 'number' ? b.steps : 0));
+    .sort(
+      (a, b) =>
+        (typeof a.steps === 'number' ? a.steps : 0) - (typeof b.steps === 'number' ? b.steps : 0),
+    );
   console.log('=== Adaptive Steps Status ===');
   for (const r of rows) {
     console.log(`  ${r.agent}: ${r.steps}`);
@@ -156,9 +162,15 @@ function main(): void {
   }
 
   if (args.estimate) {
-    const base = args.agent ? BASELINE[args.agent] ?? 20 : 24;
+    const base = args.agent ? (BASELINE[args.agent] ?? 20) : 24;
     const steps = estimateSteps(args.estimate, base);
-    console.log(JSON.stringify({ agent: args.agent ?? 'orchestrator', estimatedSteps: steps, task: args.estimate }, null, 2));
+    console.log(
+      JSON.stringify(
+        { agent: args.agent ?? 'orchestrator', estimatedSteps: steps, task: args.estimate },
+        null,
+        2,
+      ),
+    );
     return;
   }
 
@@ -184,17 +196,25 @@ function main(): void {
     const current = currentSteps(agent);
     const bumped = Math.min(current + 20, 80);
     const result = applySteps(agent, bumped);
-    console.log(JSON.stringify({
-      ...result,
-      previousSteps: current,
-      task_id: args.task_id,
-      action: 'resume',
-      note: `Re-dispatch with task_id=${args.task_id} and steps=${bumped}`,
-    }, null, 2));
+    console.log(
+      JSON.stringify(
+        {
+          ...result,
+          previousSteps: current,
+          task_id: args.task_id,
+          action: 'resume',
+          note: `Re-dispatch with task_id=${args.task_id} and steps=${bumped}`,
+        },
+        null,
+        2,
+      ),
+    );
     return;
   }
 
-  console.log('Usage: --estimate <task> | --apply <agent> --steps <n> | --auto <task> [--agent <a>] | --resume <agent> --task_id <id> | --status');
+  console.log(
+    'Usage: --estimate <task> | --apply <agent> --steps <n> | --auto <task> [--agent <a>] | --resume <agent> --task_id <id> | --status',
+  );
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

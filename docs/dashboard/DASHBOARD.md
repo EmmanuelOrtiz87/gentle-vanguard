@@ -87,15 +87,15 @@ accessibility compliance.
 
 ### Components
 
-| Component        | File                                         | Purpose                                |
-| ---------------- | -------------------------------------------- | -------------------------------------- |
-| WS Server        | `apps/web-dashboard/server/websocket-server.ts` | Real-time metrics via WebSocket     |
-| Frontend         | `apps/web-dashboard/` (React/TS/Vite)         | 7-section dashboard SPA               |
-| Data Pipeline    | `apps/web-dashboard/server/real-data.ts`      | Reads `.state.json` → computes metrics|
-| Health Check     | `npm run watchtower:health`                   | Monitors dashboard + stack health     |
-| Launcher         | `src/dashboard-start.ts`                      | Starts WS watchdog + Vite + Chrome    |
-| Watchdog         | `src/dashboard-ws-autostart.ts`               | Auto-recovers WS server (10 retries)  |
-| Stop             | `src/dashboard-stop.ts`                       | Clean shutdown (watchdog first)       |
+| Component     | File                                            | Purpose                                |
+| ------------- | ----------------------------------------------- | -------------------------------------- |
+| WS Server     | `apps/web-dashboard/server/websocket-server.ts` | Real-time metrics via WebSocket        |
+| Frontend      | `apps/web-dashboard/` (React/TS/Vite)           | 7-section dashboard SPA                |
+| Data Pipeline | `apps/web-dashboard/server/real-data.ts`        | Reads `.state.json` → computes metrics |
+| Health Check  | `npm run watchtower:health`                     | Monitors dashboard + stack health      |
+| Launcher      | `src/dashboard-start.ts`                        | Starts WS watchdog + Vite + Chrome     |
+| Watchdog      | `src/dashboard-ws-autostart.ts`                 | Auto-recovers WS server (10 retries)   |
+| Stop          | `src/dashboard-stop.ts`                         | Clean shutdown (watchdog first)        |
 
 ---
 

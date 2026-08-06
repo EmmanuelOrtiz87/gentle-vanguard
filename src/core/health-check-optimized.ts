@@ -63,8 +63,8 @@ function readJsonCached(...parts: string[]): any {
 
 // Batch file existence checks
 async function checkFileBatch(checks: { name: string; path: string[] }[]): Promise<void> {
-  const results = checks.map(c => ({ ...c, exists: exists(...c.path) }));
-  results.forEach(r => writeCheck(r.name, r.exists));
+  const results = checks.map((c) => ({ ...c, exists: exists(...c.path) }));
+  results.forEach((r) => writeCheck(r.name, r.exists));
 }
 
 // Parallel health checks by category
@@ -75,12 +75,12 @@ async function checkMcp(): Promise<void> {
     { name: 'MCP TS exists', path: ['scripts', 'mcp', 'skill-server.ts'] },
   ];
   await checkFileBatch(checks);
-  
+
   // Compile check in parallel
-  const r = runSync('npx.cmd', ['tsx', '--noEmit', 'scripts/mcp/skill-server.ts'], { 
-    cwd: ROOT, 
+  const r = runSync('npx.cmd', ['tsx', '--noEmit', 'scripts/mcp/skill-server.ts'], {
+    cwd: ROOT,
     stdio: 'pipe',
-    timeout: 10000
+    timeout: 10000,
   });
   writeCheck('MCP TS compiles clean', r.status === 0);
 }
@@ -89,12 +89,15 @@ async function checkDashboard(): Promise<void> {
   header('Dashboard v3');
   const dashboardDir = exists('apps', 'web-dashboard');
   writeCheck('apps/web-dashboard exists', dashboardDir);
-  
+
   if (!dashboardDir) return;
-  
+
   // Run all dashboard checks in parallel
   const checks = [
-    { name: 'Dashboard WS server', path: ['apps', 'web-dashboard', 'server', 'websocket-server.ts'] },
+    {
+      name: 'Dashboard WS server',
+      path: ['apps', 'web-dashboard', 'server', 'websocket-server.ts'],
+    },
     { name: 'Dashboard build', path: ['apps', 'web-dashboard', 'dist', 'index.html'] },
   ];
   await checkFileBatch(checks);
@@ -131,20 +134,18 @@ async function checkMlEmbeddings(): Promise<void> {
     { name: 'ml-router.ts exists', path: ['src', 'skills', 'ml-router.ts'] },
   ];
   await checkFileBatch(checks);
-  
+
   // Parse JSON in parallel
   const mlIndex = readJsonCached('.atl', 'ml-index.json');
   const embeddings = readJsonCached('.atl', 'skill-embeddings.json');
-  
+
   writeCheck('ml-index.json parseable', mlIndex !== null);
   writeCheck('skill-embeddings.json parseable', embeddings !== null);
 }
 
 async function checkEngramRag(): Promise<void> {
   header('Engram RAG');
-  const checks = [
-    { name: 'engram-rag-reindex.ts exists', path: ['src', 'engram-rag-reindex.ts'] },
-  ];
+  const checks = [{ name: 'engram-rag-reindex.ts exists', path: ['src', 'engram-rag-reindex.ts'] }];
   await checkFileBatch(checks);
 }
 
@@ -179,12 +180,16 @@ async function checkCrossWorkspace(): Promise<void> {
 async function main() {
   const args = process.argv.slice(2);
   const components: string[] = [];
-  
+
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--quiet': case '-q': quiet = true; break;
-      case '--component': case '-c':
-        if (i + 1 < args.length) components.push(...args[++i].split(',').map(s => s.trim()));
+      case '--quiet':
+      case '-q':
+        quiet = true;
+        break;
+      case '--component':
+      case '-c':
+        if (i + 1 < args.length) components.push(...args[++i].split(',').map((s) => s.trim()));
         break;
       default:
         if (!args[i].startsWith('-')) components.push(args[i]);
@@ -193,7 +198,7 @@ async function main() {
   }
 
   const startTime = Date.now();
-  
+
   if (!quiet) console.log('\x1b[36mStarting parallel health checks...\x1b[0m\n');
 
   // Define all check categories
@@ -213,21 +218,23 @@ async function main() {
   // Run selected components in parallel
   const componentsToRun = components.length > 0 ? components : Object.keys(allChecks);
   const checkFns = componentsToRun
-    .map(c => allChecks[c as keyof typeof allChecks])
+    .map((c) => allChecks[c as keyof typeof allChecks])
     .filter(Boolean);
 
-  await Promise.all(checkFns.map(fn => fn()));
+  await Promise.all(checkFns.map((fn) => fn()));
 
   const duration = Date.now() - startTime;
-  
+
   console.log(`\n\x1b[36m=== Health Check Complete ===\x1b[0m`);
   console.log(`\x1b[90mCompleted in ${(duration / 1000).toFixed(1)}s\x1b[0m`);
   const ok = exitCode === 0;
-  console.log(`${ok ? '\x1b[32m' : '\x1b[31m'}Status: ${ok ? 'ALL PASS' : `${exitCode} FAILURES`}\x1b[0m`);
+  console.log(
+    `${ok ? '\x1b[32m' : '\x1b[31m'}Status: ${ok ? 'ALL PASS' : `${exitCode} FAILURES`}\x1b[0m`,
+  );
   process.exit(exitCode);
 }
 
-main().catch(e => {
+main().catch((e) => {
   console.error('\x1b[31mFatal error:\x1b[0m', e);
   process.exit(1);
 });

@@ -11,6 +11,7 @@
 ## Best Practices
 
 **DO:**
+
 - Annotate ONE key insight per chart
 - Use arrows/lines to clearly connect annotation to data point
 - Keep annotations short (8-12 words max)
@@ -18,6 +19,7 @@
 - Place annotations in empty space (not over data)
 
 **DON'T:**
+
 - Annotate every interesting point (overwhelming)
 - Use annotations that explain what's already obvious
 - Make annotations larger than the data itself

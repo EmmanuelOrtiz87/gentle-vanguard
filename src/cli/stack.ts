@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Stack CLI - Unified command interface for Gentle-Vanguard
- * 
+ *
  * Operates with all available tools in the stack:
  *   gv stack health
  *   gv stack watchtower [health|rebuild|autoheal|report]
@@ -13,13 +13,13 @@
  *   gv stack tools [list|run <tool>]
  *   gv stack learning [status|suggest]
  *   gv stack knowledge acquire <url>
- * 
+ *
  * Extensible: Add new commands to COMMANDS registry
  */
 
 import { existsSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSync, runSyncShell } from '../../adapters/command-runner.js';
+import { runSync } from '../../adapters/command-runner.js';
 
 const ROOT = resolve(process.cwd());
 
@@ -81,17 +81,6 @@ function runNpmScript(script: string): void {
   }
 }
 
-function runShell(cmd: string): void {
-  const result = runSyncShell(cmd, {
-    cwd: ROOT,
-    stdio: 'inherit',
-    timeout: 120000,
-  });
-  if (result.status !== 0) {
-    process.exit(result.status || 1);
-  }
-}
-
 // ─── Commands ────────────────────────────────────────────────────────────────────
 
 const COMMANDS: Command[] = [
@@ -104,7 +93,7 @@ const COMMANDS: Command[] = [
       const detailed = args.includes('--detailed') || args.includes('-d');
       printInfo(`Running health check${detailed ? ' (detailed mode)' : ''}...`);
       runNpxTsx('src/core/health-check.ts', detailed ? ['--detailed'] : []);
-    }
+    },
   },
   {
     name: 'watchtower',
@@ -114,16 +103,16 @@ const COMMANDS: Command[] = [
     handler: (args) => {
       const action = args[0] || 'health';
       const validActions = ['health', 'rebuild', 'autoheal', 'report', 'continuous'];
-      
+
       if (!validActions.includes(action)) {
         printError(`Invalid action: ${action}`);
         printInfo(`Valid actions: ${validActions.join(', ')}`);
         process.exit(1);
       }
-      
+
       printInfo(`Running watchtower: ${action}...`);
       runNpxTsx('src/core/maintenance-watchtower.ts', [`--action=${action}`]);
-    }
+    },
   },
   {
     name: 'dashboard',
@@ -132,7 +121,7 @@ const COMMANDS: Command[] = [
     usage: 'stack dashboard [start|stop|status]',
     handler: (args) => {
       const action = args[0] || 'status';
-      
+
       switch (action) {
         case 'start':
           printInfo('Starting dashboard...');
@@ -151,7 +140,7 @@ const COMMANDS: Command[] = [
           printInfo('Use: start, stop, or status');
           process.exit(1);
       }
-    }
+    },
   },
   {
     name: 'session',
@@ -160,7 +149,7 @@ const COMMANDS: Command[] = [
     usage: 'stack session [start|close|status]',
     handler: (args) => {
       const action = args[0] || 'status';
-      
+
       switch (action) {
         case 'start':
           printInfo('Starting session autostart pipeline...');
@@ -179,7 +168,7 @@ const COMMANDS: Command[] = [
           printInfo('Use: start, close, or status');
           process.exit(1);
       }
-    }
+    },
   },
   {
     name: 'codegraph',
@@ -188,7 +177,7 @@ const COMMANDS: Command[] = [
     usage: 'stack codegraph [sync|query|status|update]',
     handler: (args) => {
       const action = args[0] || 'status';
-      
+
       switch (action) {
         case 'sync':
           printInfo('Syncing codegraph...');
@@ -210,7 +199,7 @@ const COMMANDS: Command[] = [
           printError(`Unknown action: ${action}`);
           process.exit(1);
       }
-    }
+    },
   },
   {
     name: 'engram',
@@ -219,7 +208,7 @@ const COMMANDS: Command[] = [
     usage: 'stack engram [sync|compact|integrity|status]',
     handler: (args) => {
       const action = args[0] || 'status';
-      
+
       switch (action) {
         case 'sync':
           printInfo('Syncing Engram...');
@@ -240,7 +229,7 @@ const COMMANDS: Command[] = [
           printError(`Unknown action: ${action}`);
           process.exit(1);
       }
-    }
+    },
   },
   {
     name: 'validate',
@@ -251,7 +240,7 @@ const COMMANDS: Command[] = [
       const full = args.includes('--full') || args.includes('-f');
       printInfo(`Running stack validation${full ? ' (full mode)' : ''}...`);
       runNpxTsx('src/stack-verify.ts', full ? ['--full'] : []);
-    }
+    },
   },
   {
     name: 'tools',
@@ -260,13 +249,13 @@ const COMMANDS: Command[] = [
     usage: 'stack tools [list|<tool-name>]',
     handler: (args) => {
       const action = args[0] || 'list';
-      
+
       if (action === 'list') {
         listAvailableTools();
       } else {
         executeTool(action, args.slice(1));
       }
-    }
+    },
   },
   {
     name: 'learning',
@@ -275,7 +264,7 @@ const COMMANDS: Command[] = [
     usage: 'stack learning [status|suggest|patterns]',
     handler: (args) => {
       const action = args[0] || 'status';
-      
+
       switch (action) {
         case 'status':
           printInfo('Checking learning engine status...');
@@ -283,7 +272,9 @@ const COMMANDS: Command[] = [
           break;
         case 'suggest':
           const domain = args[1];
-          printInfo(domain ? `Getting suggestions for: ${domain}...` : 'Getting improvement suggestions...');
+          printInfo(
+            domain ? `Getting suggestions for: ${domain}...` : 'Getting improvement suggestions...',
+          );
           runNpxTsx('src/learning-engine.ts', domain ? ['--suggest', domain] : ['--suggest']);
           break;
         case 'patterns':
@@ -294,7 +285,7 @@ const COMMANDS: Command[] = [
           printError(`Unknown action: ${action}`);
           process.exit(1);
       }
-    }
+    },
   },
   {
     name: 'knowledge',
@@ -306,14 +297,14 @@ const COMMANDS: Command[] = [
         const url = args[1];
         const sourceIndex = args.indexOf('--source');
         const source = sourceIndex > -1 ? args[sourceIndex + 1] : 'web';
-        
+
         printInfo(`Acquiring knowledge from: ${url}...`);
         runNpxTsx('src/knowledge-acquisition.ts', ['--fetch', url, '--source', source]);
       } else {
         printError('Usage: stack knowledge acquire <url> [--source <name>]');
         process.exit(1);
       }
-    }
+    },
   },
   {
     name: 'help',
@@ -326,20 +317,20 @@ const COMMANDS: Command[] = [
       } else {
         showHelp();
       }
-    }
-  }
+    },
+  },
 ];
 
 // ─── Helper Functions ──────────────────────────────────────────────────────────────
 
 function checkDashboardStatus(): void {
   const portsFile = join(ROOT, '.runtime', 'dashboard-ports.json');
-  
+
   if (!existsSync(portsFile)) {
     printInfo('Dashboard not running (no ports file)');
     return;
   }
-  
+
   try {
     const ports = JSON.parse(readFileSync(portsFile, 'utf-8'));
     printSuccess('Dashboard configured:');
@@ -352,12 +343,12 @@ function checkDashboardStatus(): void {
 
 function checkSessionStatus(): void {
   const sessionFile = join(ROOT, '.session', 'session-current.json');
-  
+
   if (!existsSync(sessionFile)) {
     printInfo('No active session found');
     return;
   }
-  
+
   try {
     const session = JSON.parse(readFileSync(sessionFile, 'utf-8'));
     printSuccess(`Session found: ${session.id || 'unknown'}`);
@@ -370,12 +361,12 @@ function checkSessionStatus(): void {
 
 function checkCodegraphStatus(): void {
   const graphFile = join(ROOT, 'graphify-out', 'graph.json');
-  
+
   if (!existsSync(graphFile)) {
     printInfo('Codegraph not built (run: stack codegraph sync)');
     return;
   }
-  
+
   try {
     const graph = JSON.parse(readFileSync(graphFile, 'utf-8'));
     const nodeCount = graph.nodes?.length || 0;
@@ -388,12 +379,12 @@ function checkCodegraphStatus(): void {
 
 function checkEngramStatus(): void {
   const dbFile = join(ROOT, '.runtime', 'engram.db');
-  
+
   if (!existsSync(dbFile)) {
     printInfo('Engram database not found');
     return;
   }
-  
+
   printSuccess('Engram database exists');
 }
 
@@ -401,7 +392,7 @@ function listAvailableTools(): void {
   printDivider();
   console.log('Available Stack Tools:');
   printDivider();
-  
+
   const tools = [
     { name: 'health-check', desc: 'Comprehensive health check' },
     { name: 'maintenance-watchtower', desc: 'Auto-healing monitoring' },
@@ -414,13 +405,13 @@ function listAvailableTools(): void {
     { name: 'knowledge-acquisition', desc: 'External knowledge fetch' },
     { name: 'stack-verify', desc: 'Full stack validation' },
     { name: 'security-scan', desc: 'Security analysis' },
-    { name: 'test-runner', desc: 'Test execution' }
+    { name: 'test-runner', desc: 'Test execution' },
   ];
-  
-  tools.forEach(tool => {
+
+  tools.forEach((tool) => {
     console.log(`  ${tool.name.padEnd(25)} ${tool.desc}`);
   });
-  
+
   printDivider();
   printInfo('Run: stack tools <tool-name> to execute');
 }
@@ -429,7 +420,7 @@ function executeTool(toolName: string, args: string[]): void {
   const toolMap: Record<string, string> = {
     'health-check': 'src/core/health-check.ts',
     'maintenance-watchtower': 'src/core/maintenance-watchtower.ts',
-    'dashboard': 'src/dashboard-start.ts',
+    dashboard: 'src/dashboard-start.ts',
     'codegraph-sync': 'src/codegraph-sync-autostart.ts',
     'engram-sync': 'src/engram-auto-sync.ts',
     'session-autostart': 'src/core/session-autostart.ts',
@@ -437,31 +428,29 @@ function executeTool(toolName: string, args: string[]): void {
     'learning-engine': 'src/learning-engine.ts',
     'knowledge-acquisition': 'src/knowledge-acquisition.ts',
     'stack-verify': 'src/stack-verify.ts',
-    'security-scan': 'src/security-scan.ts'
+    'security-scan': 'src/security-scan.ts',
   };
-  
+
   const script = toolMap[toolName];
-  
+
   if (!script) {
     printError(`Unknown tool: ${toolName}`);
     printInfo('Run "stack tools list" to see available tools');
     process.exit(1);
   }
-  
+
   printInfo(`Executing tool: ${toolName}...`);
   runNpxTsx(script, args);
 }
 
 function showCommandHelp(commandName: string): void {
-  const cmd = COMMANDS.find(c => 
-    c.name === commandName || c.aliases?.includes(commandName)
-  );
-  
+  const cmd = COMMANDS.find((c) => c.name === commandName || c.aliases?.includes(commandName));
+
   if (!cmd) {
     printError(`Unknown command: ${commandName}`);
     process.exit(1);
   }
-  
+
   printDivider();
   console.log(`Command: ${cmd.name}`);
   console.log(`Description: ${cmd.description}`);
@@ -474,18 +463,18 @@ function showCommandHelp(commandName: string): void {
 
 function showHelp(): void {
   printBanner();
-  
+
   printDivider();
   console.log('USAGE: stack <command> [options]');
   printDivider();
   console.log();
-  
+
   console.log('COMMANDS:');
-  COMMANDS.forEach(cmd => {
+  COMMANDS.forEach((cmd) => {
     const aliases = cmd.aliases?.length ? ` [${cmd.aliases.join(', ')}]` : '';
     console.log(`  ${cmd.name.padEnd(12)}${aliases.padEnd(15)} ${cmd.description}`);
   });
-  
+
   console.log();
   printDivider();
   console.log('EXAMPLES:');
@@ -509,7 +498,7 @@ function printCompletions(shell: 'bash' | 'zsh' | 'pwsh'): void {
     case 'bash':
       console.log(`_stack_completions() {
   local cur="\${COMP_WORDS[COMP_CWORD]}"
-  local commands="${COMMANDS.map(c => c.name).join(' ')}"
+  local commands="${COMMANDS.map((c) => c.name).join(' ')}"
   COMPREPLY=($(compgen -W "\$commands" -- "\$cur"))
 }
 complete -F _stack_completions stack`);
@@ -517,7 +506,7 @@ complete -F _stack_completions stack`);
     case 'zsh':
       console.log(`#compdef stack
 _stack() {
-  local commands=(${COMMANDS.map(c => `"${c.name}:${c.description}"`).join(' ')})
+  local commands=(${COMMANDS.map((c) => `"${c.name}:${c.description}"`).join(' ')})
   _describe 'command' commands
 }
 compdef _stack stack`);
@@ -525,7 +514,7 @@ compdef _stack stack`);
     case 'pwsh':
       console.log(`Register-ArgumentCompleter -CommandName stack -ScriptBlock {
   param(\$wordToComplete)
-  \$commands = @('${COMMANDS.map(c => c.name).join("', '")}')
+  \$commands = @('${COMMANDS.map((c) => c.name).join("', '")}')
   \$commands | Where-Object { \$_ -like "\$wordToComplete*" } | ForEach-Object {
     [System.Management.Automation.CompletionResult]::new(\$_, \$_)
   }
@@ -538,32 +527,32 @@ compdef _stack stack`);
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
-  
+
   // Handle completions flag
   if (args[0] === '--completions') {
     const shell = (args[1] as 'bash' | 'zsh' | 'pwsh') || 'bash';
     printCompletions(shell);
     return;
   }
-  
+
   const commandName = args[0] || 'help';
   const commandArgs = args.slice(1);
-  
-  const command = COMMANDS.find(cmd => 
-    cmd.name === commandName || cmd.aliases?.includes(commandName)
+
+  const command = COMMANDS.find(
+    (cmd) => cmd.name === commandName || cmd.aliases?.includes(commandName),
   );
-  
+
   if (!command) {
     printError(`Unknown command: ${commandName}`);
     console.log();
     showHelp();
     process.exit(1);
   }
-  
+
   await command.handler(commandArgs);
 }
 
-main().catch(err => {
+main().catch((err) => {
   printError(err.message);
   process.exit(1);
 });

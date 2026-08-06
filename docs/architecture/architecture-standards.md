@@ -76,12 +76,12 @@ decisións are stored in:
 
 ### ❌ Anti-Patterns (No usar)
 
-| ❌ Incorrecto | ✅ Correcto | Razón |
-|--------------|-----------|-------|
-| `ARCHITECTURE-v2.md` | `ARCHITECTURE.md` | Versionado en nombre |
+| ❌ Incorrecto             | ✅ Correcto            | Razón                |
+| ------------------------- | ---------------------- | -------------------- |
+| `ARCHITECTURE-v2.md`      | `ARCHITECTURE.md`      | Versionado en nombre |
 | `metrics-collector-v2.ts` | `metrics-collector.ts` | Versionado en nombre |
-| `v264-scripts.test.ts` | `scripts.test.ts` | Versionado en nombre |
-| `config-v1.json` | `config.json` | Versionado en nombre |
+| `v264-scripts.test.ts`    | `scripts.test.ts`      | Versionado en nombre |
+| `config-v1.json`          | `config.json`          | Versionado en nombre |
 
 ### ✅ Patrones Correctos
 

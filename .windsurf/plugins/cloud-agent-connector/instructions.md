@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 ## Purpose
 
 Enable Gentle-Vanguard to delegate tasks to high-performance cloud models while maintaining

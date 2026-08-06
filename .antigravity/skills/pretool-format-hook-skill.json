@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "## Purpose\n\nRun linter/formatter **before** AI agent reads saved files to avoid:\n\n- Wasted tokens on \"fix indentation\"\n- \"Code has formatting issues\" responses\n- Manual formatting feedback loops\n\n## Usage\n\n```powershell\n# Format single file\n.\\hooks\\pre-tool-format.ps1 -FilePath \".\\src\\index.ts\"\n\n# Dry run (preview)\n.\\hooks\\pre-tool-format.ps1 -FilePath \".\\src\\index.ts\" -DryRun\n\n# Verbose\n.\\hooks\\pre-tool-format.ps1 -FilePath \".\\src\\index.ts\" -Verbose\n```\n\n## Supported Languages\n\n| Extension | Formatter         |\n| --------- | ----------------- |\n| `.ps1`    | PowerShell Format |\n| `.ts`     | Prettier + ESLint |\n| `.js`     | Prettier + ESLint |\n| `.py`     | Black + Ruff      |\n| `.go`     | gofmt             |\n| `.rs`     | rustfmt           |\n| `.json`   | JSON formatter    |\n| `.md`     | Prettier          |\n\n## Cost Savings\n\n**Per formatting fix:** ~1,000 tokens ~50 tokens (hook only)\n\n## Integration\n\nSee [docs/guides/PRETOOL-FORMAT-HOOK.md](../../docs/guides/PRETOOL-FORMAT-HOOK.md) for:\n\n- OpenCode integration\n- Claude Code integration\n- VS Code tasks\n- Troubleshooting",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

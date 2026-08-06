@@ -114,7 +114,7 @@ function invokePrivacyScan(files: string[]): Violations {
 
 function main(args: string[]): number {
   const staged = args.includes('--staged');
-  const filePaths = args.filter(a => !a.startsWith('--') && !a.startsWith('-'));
+  const filePaths = args.filter((a) => !a.startsWith('--') && !a.startsWith('-'));
 
   console.log('=== PRE-COMMIT PRIVACY SCAN ===');
 

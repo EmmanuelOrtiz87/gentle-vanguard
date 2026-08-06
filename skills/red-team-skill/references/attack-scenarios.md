@@ -5,6 +5,7 @@
 **Goal:** Compromise accounts with reused passwords.
 
 Execution:
+
 1. Obtain breach database (simulated)
 2. Run credentials against login endpoint
 3. Document rate limiting behavior
@@ -12,6 +13,7 @@ Execution:
 5. Attempt bypass techniques
 
 Findings:
+
 - Rate limiting triggers at 10 attempts/minute
 - No account lockout
 - No breach credential detection
@@ -22,6 +24,7 @@ Findings:
 **Goal:** Access accounts without credentials.
 
 Execution:
+
 1. Analyze session token structure
 2. Test token entropy
 3. Attempt token prediction
@@ -29,6 +32,7 @@ Execution:
 5. Check secure cookie flags
 
 Findings:
+
 - Session tokens use secure random
 - Cookies missing HttpOnly flag ← VULNERABILITY
 - No session binding to IP
@@ -38,11 +42,12 @@ Findings:
 
 For each defense, try to bypass it:
 
-| Attempt | Result |
-|---------|--------|
-| Distribute across IPs | BYPASSED — no IP correlation |
-| Vary username slowly | Works — only per-IP limit |
-| Use different user agents | No effect |
-| Target password reset instead | BYPASSED — no rate limit |
+| Attempt                       | Result                       |
+| ----------------------------- | ---------------------------- |
+| Distribute across IPs         | BYPASSED — no IP correlation |
+| Vary username slowly          | Works — only per-IP limit    |
+| Use different user agents     | No effect                    |
+| Target password reset instead | BYPASSED — no rate limit     |
 
-**Conclusion:** Rate limiting is per-IP only, easily distributed. Password reset has no rate limiting.
+**Conclusion:** Rate limiting is per-IP only, easily distributed. Password reset has no rate
+limiting.

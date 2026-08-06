@@ -22,8 +22,7 @@ In this stack the error appeared for `littellmott-nuevo/kimi-2-5` during an inte
 ## What It Means
 
 - OpenCode was able to recover the session by switching to the native fallback.
-- The custom provider itself is not proven healthy until a new request succeeds after the proxy
-  fix.
+- The custom provider itself is not proven healthy until a new request succeeds after the proxy fix.
 - For LiteLLM routes backed by Bedrock, the durable fix belongs on the LiteLLM proxy:
   `litellm_settings.modify_params: true`.
 - Local OpenCode metadata still matters. Custom provider models should have explicit `id`,

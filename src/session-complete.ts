@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Session Complete - Cierre completo de sesión con persistencia Engram y cierre de procesos
- * 
+ *
  * Este script:
  * 1. Guarda resumen de sesión en Engram
  * 2. Identifica y cierra procesos de la sesión actual
@@ -65,7 +65,7 @@ function getCurrentSession(): SessionInfo | null {
  */
 function saveToEngram(session: SessionInfo): boolean {
   log('Saving session summary to Engram...');
-  
+
   const duration = Date.now() - new Date(session.startTime).getTime();
   const durationMinutes = Math.floor(duration / 60000);
 
@@ -96,7 +96,7 @@ Ready for next session start.`;
   const result = runSync(
     'engram',
     ['save', '--title', title, '--type', 'decision', '--content', content],
-    { cwd: ROOT, stdio: 'pipe', timeout: 30000 }
+    { cwd: ROOT, stdio: 'pipe', timeout: 30000 },
   );
 
   if (result.status === 0) {
@@ -116,18 +116,28 @@ Ready for next session start.`;
  */
 function identifySessionProcesses(session: SessionInfo): number[] {
   log('Identifying session processes...');
-  
+
   const processes: number[] = [];
-  
+
   // Buscar procesos node/tsx iniciados después de la sesión
   try {
-const result = runSync(
-  'powershell',
-  ['-NoProfile', '-Command', 'Get-Process | Where-Object { $_.ProcessName -eq "node" -and $_.StartTime -gt (Get-Date -Date "' + session.startTime + '") } | Select-Object -ExpandProperty Id'],
-  { stdio: 'pipe' }
-);
-    
-    const pids = result.stdout.trim().split('\n').map(p => parseInt(p.trim())).filter(p => !isNaN(p));
+    const result = runSync(
+      'powershell',
+      [
+        '-NoProfile',
+        '-Command',
+        'Get-Process | Where-Object { $_.ProcessName -eq "node" -and $_.StartTime -gt (Get-Date -Date "' +
+          session.startTime +
+          '") } | Select-Object -ExpandProperty Id',
+      ],
+      { stdio: 'pipe' },
+    );
+
+    const pids = result.stdout
+      .trim()
+      .split('\n')
+      .map((p) => parseInt(p.trim()))
+      .filter((p) => !isNaN(p));
     processes.push(...pids);
   } catch {
     // Fallback: buscar en archivos de sesión
@@ -136,12 +146,20 @@ const result = runSync(
   // Buscar dashboard processes
   try {
     const dashboardResult = runSync(
-  'powershell',
-  ['-NoProfile', '-Command', 'Get-Process | Where-Object { $_.ProcessName -match "dashboard|websocket" } | Select-Object -ExpandProperty Id'],
-  { stdio: 'pipe' }
+      'powershell',
+      [
+        '-NoProfile',
+        '-Command',
+        'Get-Process | Where-Object { $_.ProcessName -match "dashboard|websocket" } | Select-Object -ExpandProperty Id',
+      ],
+      { stdio: 'pipe' },
     );
-    
-    const dashboardPids = dashboardResult.stdout.trim().split('\n').map(p => parseInt(p.trim())).filter(p => !isNaN(p));
+
+    const dashboardPids = dashboardResult.stdout
+      .trim()
+      .split('\n')
+      .map((p) => parseInt(p.trim()))
+      .filter((p) => !isNaN(p));
     processes.push(...dashboardPids);
   } catch {
     // No dashboard processes
@@ -149,7 +167,7 @@ const result = runSync(
 
   // Eliminar duplicados
   const uniqueProcesses = [...new Set(processes)];
-  
+
   ok(`Identified ${uniqueProcesses.length} session processes`);
   return uniqueProcesses;
 }
@@ -161,11 +179,13 @@ function hasOtherActiveSessions(currentSessionId: string): boolean {
   const sessionsDir = SESSION_DIR;
   if (!existsSync(sessionsDir)) return false;
 
-  const sessionFiles = readdirSync(sessionsDir).filter(f => f.startsWith('session-') && f.endsWith('.json'));
-  
+  const sessionFiles = readdirSync(sessionsDir).filter(
+    (f) => f.startsWith('session-') && f.endsWith('.json'),
+  );
+
   for (const file of sessionFiles) {
     if (file.includes('session-current.json')) continue;
-    
+
     const filePath = join(sessionsDir, file);
     try {
       const data = JSON.parse(readFileSync(filePath, 'utf-8'));
@@ -217,8 +237,12 @@ function isSharedProcess(pid: number): boolean {
   try {
     const result = runSync(
       'powershell',
-      ['-NoProfile', '-Command', `Get-Process -Id ${pid} | Select-Object -ExpandProperty ProcessName`],
-      { stdio: 'pipe' }
+      [
+        '-NoProfile',
+        '-Command',
+        `Get-Process -Id ${pid} | Select-Object -ExpandProperty ProcessName`,
+      ],
+      { stdio: 'pipe' },
     );
     const name = result.stdout.trim();
     return ['dashboard-ws', 'engram', 'codegraph'].includes(name);
@@ -232,7 +256,7 @@ function isSharedProcess(pid: number): boolean {
  */
 function runStackCleanup(): void {
   log('Running stack cleanup...');
-  
+
   const cleanupScript = join(ROOT, 'src/session-cleanup-start.ts');
   if (existsSync(cleanupScript)) {
     const result = runNpxTsxSync(cleanupScript, [], {
@@ -240,7 +264,7 @@ function runStackCleanup(): void {
       stdio: 'inherit',
       timeout: 60000,
     });
-    
+
     if (result.status === 0) {
       ok('Stack cleanup completed');
     } else {
@@ -254,7 +278,7 @@ function runStackCleanup(): void {
  */
 function saveFinalMetrics(session: SessionInfo): void {
   log('Saving final metrics...');
-  
+
   const metricsFile = join(SESSION_DIR, 'session-metrics.json');
   const metrics = {
     sessionId: session.sessionId,

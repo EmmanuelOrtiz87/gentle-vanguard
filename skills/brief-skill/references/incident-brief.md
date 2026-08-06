@@ -50,8 +50,11 @@
 
 ## Important Notes
 
-- Speed matters. Produce the brief quickly with available information rather than waiting for complete information
+- Speed matters. Produce the brief quickly with available information rather than waiting for
+  complete information
 - Flag any litigation hold or preservation obligations immediately
-- Note privilege considerations (mark the brief as attorney-client privileged / work product if appropriate)
-- If the incident may involve a data breach, flag applicable notification deadlines (e.g., 72 hours for GDPR)
+- Note privilege considerations (mark the brief as attorney-client privileged / work product if
+  appropriate)
+- If the incident may involve a data breach, flag applicable notification deadlines (e.g., 72 hours
+  for GDPR)
 - Recommend outside counsel engagement if the matter is significant

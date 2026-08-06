@@ -4,11 +4,10 @@
 
 ## Description
 
-
 ## Triggers
 
-
 ## Instructions
+
 ## Activation Contract
 
 Use when input matches trigger words or user asks about release planning, version bumps, changelog

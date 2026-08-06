@@ -1,13 +1,16 @@
 # Measurement
 
-> Part of [`performance-optimization`](../SKILL.md). Measure before optimizing — profile first, identify the actual bottleneck, fix it, measure again.
+> Part of [`performance-optimization`](../SKILL.md). Measure before optimizing — profile first,
+> identify the actual bottleneck, fix it, measure again.
 
 ## Two Complementary Approaches
 
 Use **both** synthetic and RUM:
 
-- **Synthetic (Lighthouse, DevTools Performance tab):** Controlled conditions, reproducible. Best for CI regression detection and isolating specific issues.
-- **RUM (web-vitals library, CrUX):** Real user data in real conditions. Required to validate that a fix actually improved user experience.
+- **Synthetic (Lighthouse, DevTools Performance tab):** Controlled conditions, reproducible. Best
+  for CI regression detection and isolating specific issues.
+- **RUM (web-vitals library, CrUX):** Real user data in real conditions. Required to validate that a
+  fix actually improved user experience.
 
 ### Frontend
 

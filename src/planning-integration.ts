@@ -46,13 +46,13 @@ function getGitDiffStats(): { files: number; insertions: number; deletions: numb
   try {
     const diffStat = runSyncShell('git diff --stat --cached 2>/dev/null || git diff --stat').stdout;
     const lines = diffStat.split('\n');
-    const summaryLine = lines.find(l => l.includes('changed') && l.includes('insertions'));
-    
+    const summaryLine = lines.find((l) => l.includes('changed') && l.includes('insertions'));
+
     if (summaryLine) {
       const filesMatch = summaryLine.match(/(\d+)\s+files?/);
       const insertionsMatch = summaryLine.match(/(\d+)\s+insertions?/);
       const deletionsMatch = summaryLine.match(/(\d+)\s+deletions?/);
-      
+
       return {
         files: filesMatch ? parseInt(filesMatch[1]) : 0,
         insertions: insertionsMatch ? parseInt(insertionsMatch[1]) : 0,
@@ -92,11 +92,11 @@ function inferTaskTypeFromBranch(): string {
 function generatePRDescription(): string {
   const config = loadConfig();
   if (!config.enabled) return '';
-  
+
   const stats = getGitDiffStats();
   const complexity = getDiffComplexityHint(stats.files);
   const taskType = inferTaskTypeFromBranch();
-  
+
   const lines = [
     '## Planning Estimate',
     '',
@@ -114,26 +114,26 @@ function generatePRDescription(): string {
     '- [ ] Security review (if applicable)',
     '- [ ] Breaking changes documented',
   ];
-  
+
   return lines.join('\n');
 }
 
 function generateCommitMessage(): string {
   const config = loadConfig();
   if (!config.enabled || !config.estimateOnCommit) return '';
-  
+
   const stats = getGitDiffStats();
   const complexity = getDiffComplexityHint(stats.files);
-  
+
   if (stats.files === 0) return '';
-  
+
   return `[complexity:${complexity}] [files:${stats.files}]`;
 }
 
 function main(): void {
   const args = process.argv.slice(2);
   const command = args[0];
-  
+
   switch (command) {
     case 'pr-description':
       console.log(generatePRDescription());
@@ -141,13 +141,12 @@ function main(): void {
     case 'commit-msg':
       console.log(generateCommitMessage());
       break;
-    case 'check':
-      {
-        const stats = getGitDiffStats();
-        const config = loadConfig();
-        console.log(JSON.stringify({ stats, config }, null, 2));
-        break;
-      }
+    case 'check': {
+      const stats = getGitDiffStats();
+      const config = loadConfig();
+      console.log(JSON.stringify({ stats, config }, null, 2));
+      break;
+    }
     default:
       console.log('Usage: npx tsx src/planning-integration.ts [pr-description|commit-msg|check]');
       process.exit(1);

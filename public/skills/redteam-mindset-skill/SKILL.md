@@ -109,7 +109,7 @@ failure modes explicit:
    document — it does not require user pre-approval.
 10. **Skill-gap-as-stop-condition.** "No `hunt-zoho` skill exists, so I logged a v1.1 gap and moved
     on." NO. If a hunt-* skill doesn't exist for a discovered tech stack, do the same work
-    *manually* using the vendor's public check matrix. Log the gap in v1.1 roadmap *and\* run the
+    _manually_ using the vendor's public check matrix. Log the gap in v1.1 roadmap *and\* run the
     checks now.
 
 ### Real-engagement cadence — what a complete sweep per live host actually looks like
@@ -275,7 +275,8 @@ Aggressive defaults:
 **The correct frame:**
 
 > "Tesseract failed. Decision tree: try preprocessing (binarize, denoise, upscale, multi-PSM), then
-> trained-model OCR, then paid solving service ($5/mo for engagement-grade volume), then
+> trained-model OCR, then paid solving service
+> ($5/mo for engagement-grade volume), then
 > session-bound captcha replay attack. A real attacker WILL invest the $5."
 
 Decision-tree for blockers:

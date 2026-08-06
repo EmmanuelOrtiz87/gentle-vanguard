@@ -39,7 +39,9 @@ function log(msg: string, quiet: boolean): void {
 function appendLog(msg: string): void {
   try {
     fs.appendFileSync(LOG_FILE, `${now()} ${msg}\n`, 'utf-8');
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 }
 
 function readSessionId(explicit: string): string {
@@ -51,7 +53,9 @@ function readSessionId(explicit: string): string {
       const sid = String(data.sessionId ?? data.id ?? '').trim();
       if (sid) return sid;
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return `session-${now().slice(0, 10).replace(/-/g, '')}`;
 }
 
@@ -96,7 +100,13 @@ export function recordMessage(opts: {
         `INSERT INTO token_usage (session_id, prompt_tokens, completion_tokens, cost, model, timestamp)
          VALUES (?, ?, ?, ?, ?, datetime('now'))`,
       );
-      const info = insert.run(opts.sessionId, opts.input, opts.output, opts.cost, opts.model || null);
+      const info = insert.run(
+        opts.sessionId,
+        opts.input,
+        opts.output,
+        opts.cost,
+        opts.model || null,
+      );
       const rowId = Number(info.lastInsertRowid);
 
       const payload = JSON.stringify({
@@ -111,7 +121,10 @@ export function recordMessage(opts: {
         token_usage_row_id: rowId,
         recorded_at: now(),
       });
-      db.prepare('INSERT INTO events (type, payload) VALUES (?, ?)').run('message.token_usage', payload);
+      db.prepare('INSERT INTO events (type, payload) VALUES (?, ?)').run(
+        'message.token_usage',
+        payload,
+      );
 
       return { recorded: true, rowId };
     } finally {
@@ -143,8 +156,13 @@ function main(): void {
   const result = recordMessage({ sessionId, input, output, turn, model, cost });
 
   if (result.recorded) {
-    appendLog(`RECORDED session=${sessionId} in=${input} out=${output} total=${input + output} turn=${turn} row=${result.rowId}`);
-    log(`recorded session=${sessionId} in=${input} out=${output} total=${input + output} turn=${turn}`, quiet);
+    appendLog(
+      `RECORDED session=${sessionId} in=${input} out=${output} total=${input + output} turn=${turn} row=${result.rowId}`,
+    );
+    log(
+      `recorded session=${sessionId} in=${input} out=${output} total=${input + output} turn=${turn}`,
+      quiet,
+    );
   } else {
     log(`WARN not recorded: ${result.reason}`, quiet);
   }

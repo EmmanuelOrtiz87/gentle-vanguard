@@ -73,37 +73,60 @@ export class SessionRepo {
 
     if (existing) {
       this.db
-        .prepare(`UPDATE session_scoring SET
+        .prepare(
+          `UPDATE session_scoring SET
           quality_score = ?, success_rate = ?, total_delegations = ?, total_corrections = ?,
           total_proactive = ?, proactive_hits = ?, total_cloud_calls = ?, total_checkpoints = ?,
           total_tracing_spans = ?, total_audit_events = ?, summary_json = ?,
           updated_at = datetime('now')
-          WHERE session_id = ?`)
+          WHERE session_id = ?`,
+        )
         .run(
-          data.qualityScore, data.successRate, data.totalDelegations, data.totalCorrections,
-          data.totalProactive, data.proactiveHits, data.totalCloudCalls, data.totalCheckpoints,
-          data.totalTracingSpans, data.totalAuditEvents, data.summaryJson, data.sessionId,
+          data.qualityScore,
+          data.successRate,
+          data.totalDelegations,
+          data.totalCorrections,
+          data.totalProactive,
+          data.proactiveHits,
+          data.totalCloudCalls,
+          data.totalCheckpoints,
+          data.totalTracingSpans,
+          data.totalAuditEvents,
+          data.summaryJson,
+          data.sessionId,
         );
     } else {
       this.db
-        .prepare(`INSERT INTO session_scoring
+        .prepare(
+          `INSERT INTO session_scoring
           (session_id, quality_score, success_rate, total_delegations, total_corrections,
            total_proactive, proactive_hits, total_cloud_calls, total_checkpoints,
            total_tracing_spans, total_audit_events, summary_json, updated_at)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`,
+        )
         .run(
-          data.sessionId, data.qualityScore, data.successRate, data.totalDelegations,
-          data.totalCorrections, data.totalProactive, data.proactiveHits,
-          data.totalCloudCalls, data.totalCheckpoints, data.totalTracingSpans,
-          data.totalAuditEvents, data.summaryJson,
+          data.sessionId,
+          data.qualityScore,
+          data.successRate,
+          data.totalDelegations,
+          data.totalCorrections,
+          data.totalProactive,
+          data.proactiveHits,
+          data.totalCloudCalls,
+          data.totalCheckpoints,
+          data.totalTracingSpans,
+          data.totalAuditEvents,
+          data.summaryJson,
         );
     }
   }
 
   getSessionScoring(sessionId: string): Record<string, unknown> | null {
-    return this.db
-      .prepare('SELECT * FROM session_scoring WHERE session_id = ?')
-      .get(sessionId) as any ?? null;
+    return (
+      (this.db
+        .prepare('SELECT * FROM session_scoring WHERE session_id = ?')
+        .get(sessionId) as any) ?? null
+    );
   }
 
   getAllSessionScoring(limit = 20): Array<Record<string, unknown>> {

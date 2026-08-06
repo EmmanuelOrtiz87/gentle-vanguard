@@ -39,6 +39,8 @@
 
 ## Important Notes
 
-- Topic briefs synthesize what is available in connected sources; they do not substitute for formal legal research
-- If the topic requires current legal authority or case law, recommend the user consult a legal research platform (Westlaw, Lexis, etc.) or outside counsel
+- Topic briefs synthesize what is available in connected sources; they do not substitute for formal
+  legal research
+- If the topic requires current legal authority or case law, recommend the user consult a legal
+  research platform (Westlaw, Lexis, etc.) or outside counsel
 - Always note the limitations of the sources searched

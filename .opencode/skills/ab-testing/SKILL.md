@@ -13,23 +13,29 @@ triggers:
 
 # AB Testing Framework
 
-`src/ab-testing-framework.ts` — stores experiments, assignments, and results in `.session/experiments/`.
+`src/ab-testing-framework.ts` — stores experiments, assignments, and results in
+`.session/experiments/`.
 
 ## API Reference
 
-| Function | Purpose |
-|----------|---------|
-| `createExperiment(config)` | Create a draft experiment with variants (traffic must sum to 100%) |
-| `startExperiment(id)` | Move experiment from draft to running |
-| `assignVariant(expId, sessionId)` | Weighted-random assignment, stable per session |
-| `recordResult(expId, variantId, metrics)` | Record metric outcomes per variant |
-| `evaluateExperiment(expId)` | Determine winner with significance check (effect > 5%) |
-| `rollbackExperiment(expId)` | Halt and mark as rolled-back |
+| Function                                  | Purpose                                                            |
+| ----------------------------------------- | ------------------------------------------------------------------ |
+| `createExperiment(config)`                | Create a draft experiment with variants (traffic must sum to 100%) |
+| `startExperiment(id)`                     | Move experiment from draft to running                              |
+| `assignVariant(expId, sessionId)`         | Weighted-random assignment, stable per session                     |
+| `recordResult(expId, variantId, metrics)` | Record metric outcomes per variant                                 |
+| `evaluateExperiment(expId)`               | Determine winner with significance check (effect > 5%)             |
+| `rollbackExperiment(expId)`               | Halt and mark as rolled-back                                       |
 
 ## Usage
 
 ```typescript
-import { createExperiment, assignVariant, recordResult, evaluateExperiment } from './ab-testing-framework';
+import {
+  createExperiment,
+  assignVariant,
+  recordResult,
+  evaluateExperiment,
+} from './ab-testing-framework';
 
 const exp = createExperiment({
   name: 'Routing strategy v2',
@@ -58,4 +64,7 @@ npx tsx src/ab-testing-framework.ts evaluate <experiment-id>
 
 ## Integration with Session Scoring
 
-Results from `evaluateExperiment()` feed into `session-scoring-autocompare.ts` via `.session/quality-trend.json`. Experiment wins that improve quality metrics are persisted in `contract_results` (Nexus table). Rolled-back experiments trigger an anomaly signal in the auto-escalation pipeline.
+Results from `evaluateExperiment()` feed into `session-scoring-autocompare.ts` via
+`.session/quality-trend.json`. Experiment wins that improve quality metrics are persisted in
+`contract_results` (Nexus table). Rolled-back experiments trigger an anomaly signal in the
+auto-escalation pipeline.

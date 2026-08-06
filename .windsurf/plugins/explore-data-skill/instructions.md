@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # /explore-data - Profile and Explore a Dataset
 
 > If you see unfamiliar placeholders or need to check which tools are connected, see
@@ -27,7 +28,8 @@ and patterns before diving into analysis.
 
 ### 1. Access the Data
 
-**If a data warehouse MCP server is connected:** resolve table name, query metadata, run profiling queries.
+**If a data warehouse MCP server is connected:** resolve table name, query metadata, run profiling
+queries.
 
 **If a file is provided (CSV, Excel, Parquet, JSON):** read file, infer column types.
 
@@ -37,13 +39,15 @@ and patterns before diving into analysis.
 
 Analyze table-level: row/column count, grain, primary key, last updated, date range.
 
-Classify columns: **Identifier**, **Dimension**, **Metric**, **Temporal**, **Text**, **Boolean**, **Structural**.
+Classify columns: **Identifier**, **Dimension**, **Metric**, **Temporal**, **Text**, **Boolean**,
+**Structural**.
 
 ### 3. Generate Data Profile
 
 Run profiling per column type. See [references/quality-assessment-framework.md] for rating guides.
 
-**Numeric:** min, max, mean, median, stddev, percentiles (p1/p5/p25/p75/p95/p99), zero/negative counts.
+**Numeric:** min, max, mean, median, stddev, percentiles (p1/p5/p25/p75/p95/p99), zero/negative
+counts.
 
 **String:** min/max/avg length, empty count, pattern/case/whitespace analysis.
 
@@ -53,19 +57,23 @@ Run profiling per column type. See [references/quality-assessment-framework.md] 
 
 ### 4. Identify Data Quality Issues
 
-Flag: high null rates (>5% warn, >20% alert), unexpected cardinality, suspicious values, duplicate natural keys, distribution skew, encoding issues. See [references/quality-assessment-framework.md].
+Flag: high null rates (>5% warn, >20% alert), unexpected cardinality, suspicious values, duplicate
+natural keys, distribution skew, encoding issues. See [references/quality-assessment-framework.md].
 
 ### 5. Discover Relationships and Patterns
 
-Foreign key candidates, hierarchies, correlations, derived/redundant columns. See [references/pattern-discovery.md].
+Foreign key candidates, hierarchies, correlations, derived/redundant columns. See
+[references/pattern-discovery.md].
 
 ### 6. Suggest Interesting Dimensions and Metrics
 
-Recommend best dimension columns (3-50 values), key metrics, time columns, natural groupings, potential join keys.
+Recommend best dimension columns (3-50 values), key metrics, time columns, natural groupings,
+potential join keys.
 
 ### 7. Recommend Follow-Up Analyses
 
-Suggest 3-5 specific analyses: trend, distribution deep-dive, data quality investigation, correlation, cohort analysis.
+Suggest 3-5 specific analyses: trend, distribution deep-dive, data quality investigation,
+correlation, cohort analysis.
 
 ## Output Format
 

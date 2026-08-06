@@ -1,11 +1,12 @@
 # SESSION-CLOSE-NORMATIVA.md
 
-Protocolo autónomo de cierre de sesión — garantiza que toda sesión, sin importar su duración o complejidad, quede completamente documentada, respaldada y recuperable.
+Protocolo autónomo de cierre de sesión — garantiza que toda sesión, sin importar su duración o
+complejidad, quede completamente documentada, respaldada y recuperable.
 
 ## Filosofía
 
-Cada sesión debe cerrarse como si fuera la última. No importa si fue una sesión de 5 minutos o 5 horas:
-el stack debe quedar en un estado consistente, rastreable y restaurable.
+Cada sesión debe cerrarse como si fuera la última. No importa si fue una sesión de 5 minutos o 5
+horas: el stack debe quedar en un estado consistente, rastreable y restaurable.
 
 ## Ciclo de Cierre (Orden Obligatorio)
 
@@ -14,7 +15,9 @@ el stack debe quedar en un estado consistente, rastreable y restaurable.
 ```
 
 ### Fase 1: PRE-CLOSE
+
 Acciones inmediatas antes de cualquier limpieza:
+
 - [ ] Registrar timestamp de cierre en session-current.json
 - [ ] Detener workers activos del swarm (si los hay)
 - [ ] Cerrar tracing span activo
@@ -22,8 +25,11 @@ Acciones inmediatas antes de cualquier limpieza:
 - [ ] Calcular session scoring final
 
 ### Fase 2: PERSIST
+
 Guardar todo el conocimiento de la sesión:
-- [ ] **Engram**: Guardar session summary con Goal, Discoveries, Accomplished, Next Steps, Relevant Files
+
+- [ ] **Engram**: Guardar session summary con Goal, Discoveries, Accomplished, Next Steps, Relevant
+      Files
 - [ ] **Engram**: Guardar memoria de decisiones/arquitectura/bugs encontrados
 - [ ] **Nexus DB**: Escribir métricas finales (tokens, tool calls, errores)
 - [ ] **Nexus DB**: Escribir session_scoring final
@@ -34,7 +40,9 @@ Guardar todo el conocimiento de la sesión:
 - [ ] **Session Files**: Crear session-{date}.json con datos completos
 
 ### Fase 3: BACKUP
+
 Crear puntos de restauración:
+
 - [ ] **Checkpoint**: Crear checkpoint del estado de sesión (session files, configs)
 - [ ] **Nexus Backup**: Backup de `.runtime/gentle-vanguard.db`
 - [ ] **Engram Backup**: Backup de `.engram-data/` y SHA256 checksums
@@ -42,7 +50,9 @@ Crear puntos de restauración:
 - [ ] **Manifest**: Escribir manifest con metadata del backup
 
 ### Fase 4: AUDIT
+
 Registro permanente de lo ocurrido:
+
 - [ ] **Audit Pipeline**: Loggear session.end con metadata completa
 - [ ] **Event Store**: Append session.ended con payload de resumen
 - [ ] **Tracing**: Cerrar span de sesión con atributos finales
@@ -50,7 +60,9 @@ Registro permanente de lo ocurrido:
 - [ ] **Dashboard WS**: Emitir métricas finales vía WebSocket
 
 ### Fase 5: CLEANUP
+
 Limpieza de recursos temporales:
+
 - [ ] Flushear caches de sesión (normativa-cache, prompt-cache, preprocess-cache)
 - [ ] Resetear token tracking
 - [ ] Prunear checkpoints viejos (>14 días)
@@ -59,7 +71,9 @@ Limpieza de recursos temporales:
 - [ ] Cerrar dashboard WS watchdog (si es última sesión del día)
 
 ### Fase 6: VERIFY
+
 Validar que todo quedó correcto:
+
 - [ ] Verificar que Engram tiene la session summary guardada
 - [ ] Verificar que Nexus DB tiene los datos de la sesión
 - [ ] Verificar que el checkpoint se creó correctamente
@@ -84,18 +98,21 @@ ejecutar este protocolo. El orquestador:
 ## Puntos de Restauración
 
 ### Checkpoints (rápidos, frecuentes)
+
 - Ubicación: `.session/checkpoints/`
 - Contenido: session-current.json, configs activas, token-usage
 - Retención: 14 días
 - Creación: Al inicio de sesión y al cierre
 
 ### Snapshots (completos, menos frecuentes)
+
 - Ubicación: `.session/snapshots/`
 - Contenido: `.session/` completo + `.runtime/gentle-vanguard.db` + `.engram-data/` SHA256
 - Retención: 30 días
 - Creación: Al cierre de sesiones con `--reason evolution|release|major-change`
 
 ### Backups de Base de Datos
+
 - Ubicación: `.runtime/backups/`
 - Contenido: gentile-vanguard.db (online-safe via `.backup` CLI)
 - Retención: 10 backups más recientes
@@ -104,21 +121,25 @@ ejecutar este protocolo. El orquestador:
 ## Restauración
 
 ### Desde checkpoint (rápido)
+
 ```bash
 npx tsx src/checkpoint-manager.ts restore <checkpoint-id>
 ```
 
 ### Desde snapshot (completo)
+
 ```bash
 npx tsx src/rollback-orchestrator.ts --source snapshot --id <snapshot-id>
 ```
 
 ### Desde backup de Nexus
+
 ```bash
 npm run db:restore <backup-name>
 ```
 
 ### Desde backup de Engram
+
 ```bash
 npx tsx src/backup-engram.ts --mode restore --id <backup-id>
 ```

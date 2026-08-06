@@ -3,6 +3,7 @@
 ## 🚀 Inicio Rápido (OPTIMIZADO)
 
 ### Opción 1: Script de inicio (RECOMENDADO - 0.76s)
+
 ```batch
 # Modo rápido (recomendado para uso diario)
 start.bat
@@ -12,6 +13,7 @@ start.bat --complete
 ```
 
 **Optimizaciones:**
+
 - ✅ 60% más rápido que dashboard-start.ts
 - ✅ Limpia procesos zombie automáticamente
 - ✅ No bloquea el terminal (corre en background)
@@ -19,6 +21,7 @@ start.bat --complete
 - ✅ Logs en `.runtime/dashboard.log`
 
 ### Opción 2: Comandos manuales
+
 ```bash
 # Limpiar y verificar estado
 npx tsx src/gv.ts status
@@ -34,6 +37,7 @@ npx tsx src/gv.ts dashboard start
 ## 🎯 Comandos Principales
 
 ### CLI Unificado (gv.ts)
+
 ```bash
 # Ver estado completo del stack
 npx tsx src/gv.ts status
@@ -56,6 +60,7 @@ npx tsx src/gv.ts health
 ```
 
 ### Health Check
+
 ```bash
 npm run watchtower:health
 ```
@@ -68,6 +73,7 @@ npm run watchtower:health
 ## 🛠️ Herramientas Nativas
 
 ### Gestión de Referencias PS1
+
 ```bash
 # Ver qué se arreglaría (dry-run)
 npx tsx src/auto-ps1-fixer.ts --dry-run
@@ -81,6 +87,7 @@ npx tsx src/auto-ps1-fixer-configs.ts
 ```
 
 ### Steps Adaptativos
+
 ```bash
 # Ver estado de steps
 npx tsx src/adaptive-steps.ts --status
@@ -102,12 +109,15 @@ npx tsx src/adaptive-steps.ts --auto "task description" --agent sdd-apply
 ## 📝 Notas
 
 ### Sin Dependencia de PowerShell
+
 Todas las herramientas funcionan **sin PowerShell**:
+
 - Usan `netstat.exe` nativo de Windows
 - Usan `taskkill` nativo de Windows
 - APIs de Node.js para filesystem
 
 ### Session Persistence
+
 - Timeout: 30 minutos de inactividad
 - Archivo: `.session/.active-session.json`
 - Si expira, simplemente reinicia con `gv.ts session start`
@@ -115,6 +125,7 @@ Todas las herramientas funcionan **sin PowerShell**:
 ## 🆘 Solución de Problemas
 
 ### Dashboard no inicia
+
 ```bash
 # Limpiar todo y reiniciar
 npx tsx src/gv.ts cleanup
@@ -122,6 +133,7 @@ npx tsx src/dashboard-start.ts
 ```
 
 ### Health check muestra FAILs
+
 ```bash
 # Reiniciar stack completo
 npx tsx src/dashboard-stop.ts
@@ -131,6 +143,7 @@ npx tsx src/dashboard-start.ts
 ```
 
 ### Verificar puertos ocupados
+
 ```bash
 # Windows nativo (sin PowerShell)
 netstat -ano | findstr :8080

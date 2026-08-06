@@ -8,8 +8,8 @@ One agent handles everything: reasoning, tool selection, execution, and response
 [User] → [LLM + Tools + Memory] → [Response]
 ```
 
-**Pros**: Simple, easy to debug, low latency
-**Cons**: Single point of failure, limited specialization, context window pressure
+**Pros**: Simple, easy to debug, low latency **Cons**: Single point of failure, limited
+specialization, context window pressure
 
 ## Multi-Agent Architecture
 
@@ -22,8 +22,8 @@ Multiple specialized agents collaborate on a task.
             Agent        Agent        Agent
 ```
 
-**Pros**: Specialization, parallel execution, modular design
-**Cons**: Coordination overhead, increased latency, harder to debug
+**Pros**: Specialization, parallel execution, modular design **Cons**: Coordination overhead,
+increased latency, harder to debug
 
 ## Supervisor Pattern
 
@@ -66,10 +66,10 @@ class Router:
 
 ## Decision Matrix
 
-| Factor | Single-Agent | Multi-Agent | Supervisor | Routing |
-|---|---|---|---|---|
-| Complexity | Low | High | Medium | Medium |
-| Latency | Low | High | Medium | Low |
-| Modularity | Low | High | High | Medium |
-| Debugging | Easy | Hard | Medium | Easy |
-| Context Usage | Efficient | Expensive | Moderate | Efficient |
+| Factor        | Single-Agent | Multi-Agent | Supervisor | Routing   |
+| ------------- | ------------ | ----------- | ---------- | --------- |
+| Complexity    | Low          | High        | Medium     | Medium    |
+| Latency       | Low          | High        | Medium     | Low       |
+| Modularity    | Low          | High        | High       | Medium    |
+| Debugging     | Easy         | Hard        | Medium     | Easy      |
+| Context Usage | Efficient    | Expensive   | Moderate   | Efficient |

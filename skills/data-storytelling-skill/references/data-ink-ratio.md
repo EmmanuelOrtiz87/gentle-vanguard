@@ -1,7 +1,7 @@
 # Data-Ink Ratio
 
-Data-Ink = pixels used to display data
-Non-Data-Ink = decorative elements, gridlines, borders, backgrounds
+Data-Ink = pixels used to display data Non-Data-Ink = decorative elements, gridlines, borders,
+backgrounds
 
 Data-Ink Ratio = Data-Ink / Total Ink
 
@@ -10,6 +10,7 @@ Goal: Maximize the data-ink ratio (remove non-data ink without losing context)
 ## Poor vs Good
 
 ❌ **POOR** (Low data-ink ratio):
+
 - 3D bar chart with shadows and gradients
 - Background color with gradient
 - Thick gridlines every interval
@@ -18,6 +19,7 @@ Goal: Maximize the data-ink ratio (remove non-data ink without losing context)
 - Excessive axis labels
 
 ✅ **GOOD** (High data-ink ratio):
+
 - Flat, 2D design, minimal/no background fill
 - Thin, light gridlines (or none), no chart borders
 - Data points stand out with color

@@ -2,13 +2,13 @@
 
 ## Common Failure Modes
 
-| Failure | Symptom | Recovery Strategy |
-|---|---|---|
-| Tool call failure | Invalid parameters, timeout | Retry with validated params, fallback tool |
-| Hallucination | Plausible but incorrect info | Cross-reference, ask for citations |
-| Loop | Repeated same action | Max step limit, novelty detection |
-| Context overflow | Lost early information | Summarization, sliding window |
-| Wrong tool choice | Inappropriate action | Confirmation step for critical tools |
+| Failure           | Symptom                      | Recovery Strategy                          |
+| ----------------- | ---------------------------- | ------------------------------------------ |
+| Tool call failure | Invalid parameters, timeout  | Retry with validated params, fallback tool |
+| Hallucination     | Plausible but incorrect info | Cross-reference, ask for citations         |
+| Loop              | Repeated same action         | Max step limit, novelty detection          |
+| Context overflow  | Lost early information       | Summarization, sliding window              |
+| Wrong tool choice | Inappropriate action         | Confirmation step for critical tools       |
 
 ## Recovery Implementation
 

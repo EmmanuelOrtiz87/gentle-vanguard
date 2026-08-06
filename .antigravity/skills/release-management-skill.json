@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "## Activation Contract\n\nUse when input matches trigger words or user asks about release planning, version bumps, changelog\nupdates, hotfixes, or release readiness.\n\n## Hard Rules\n\n- MUST use semver: MAJOR (breaking), MINOR (feature), PATCH (fix)\n- MUST update CHANGELOG.md before every release\n- MUST include migration notes for breaking changes\n- MUST define a rollback plan before cutover\n- MUST keep hotfix scope minimal — no opportunistic refactors\n- MUST focus release notes on user impact, not implementation details\n\n## Decision Gates\n\n| Gate         | Condition                            | Action              |\n| ------------ | ------------------------------------ | ------------------- |\n| Bump level   | Breaking change?                     | MAJOR               |\n| Bump level   | New backward-compatible feature?     | MINOR               |\n| Bump level   | Backward-compatible bug fix?         | PATCH               |\n| Release type | Production incident or security fix? | Hotfix (fast-track) |\n| Release type | Standard release?                    | Normal pipeline     |\n\n## Execution Steps\n\n1. Verify all intended changes merged and verified\n2. Update CHANGELOG.md with user-visible changes\n3. Bump version per semver rules\n4. Write migration notes for breaking changes\n5. Define rollback plan\n6. Document post-release verification steps\n\n## Output Contract\n\nReturn version bumped, CHANGELOG additions, migration notes, rollback plan, and post-release\nverification steps.\n\n## References\n\n- `references/CHANGELOG-template.md` — CHANGELOG entry format",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

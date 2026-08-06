@@ -80,10 +80,21 @@ export interface DashboardData {
       bySkill: Record<string, number>;
       lastCall: string | null;
     };
-    performance: { avgResponseTime: number; errorRate: number; responseTimes: Record<string, { avg: number; count: number }> };
+    performance: {
+      avgResponseTime: number;
+      errorRate: number;
+      responseTimes: Record<string, { avg: number; count: number }>;
+    };
   };
   system?: {
-    memory: { rss: number; heapUsed: number; heapTotal: number; total: number; free: number; usagePercent: number };
+    memory: {
+      rss: number;
+      heapUsed: number;
+      heapTotal: number;
+      total: number;
+      free: number;
+      usagePercent: number;
+    };
     cpu: { user: number; system: number; cores: number; loadAverage: number[] };
     uptime: number;
     pid: number;

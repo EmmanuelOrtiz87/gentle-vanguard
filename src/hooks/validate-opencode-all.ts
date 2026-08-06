@@ -8,7 +8,7 @@ function loadJson(p: string) {
   if (!existsSync(p)) return null;
   try {
     return JSON.parse(readFileSync(p, 'utf-8'));
-  } catch (e) {
+  } catch {
     console.error(`Invalid JSON: ${p}`);
     process.exit(2);
   }
@@ -75,10 +75,17 @@ function alertValidationFailure(errors: number): void {
       threshold: 0,
       transition: 'fired',
     });
-    dbm.insertEvent('opencode.validation', { status: 'failed', errors, timestamp: new Date().toISOString() });
+    dbm.insertEvent('opencode.validation', {
+      status: 'failed',
+      errors,
+      timestamp: new Date().toISOString(),
+    });
     console.error('Nexus alert created for validation failure');
   } catch (err) {
-    console.error('Failed to write validation alert to Nexus DB:', err instanceof Error ? err.message : String(err));
+    console.error(
+      'Failed to write validation alert to Nexus DB:',
+      err instanceof Error ? err.message : String(err),
+    );
   }
 }
 
@@ -94,7 +101,11 @@ function clearValidationAlert(): void {
       threshold: 0,
       transition: 'resolved',
     });
-    dbm.insertEvent('opencode.validation', { status: 'passed', errors: 0, timestamp: new Date().toISOString() });
+    dbm.insertEvent('opencode.validation', {
+      status: 'passed',
+      errors: 0,
+      timestamp: new Date().toISOString(),
+    });
   } catch {
     // No-op if DB is unavailable
   }

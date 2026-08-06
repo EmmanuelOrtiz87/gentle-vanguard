@@ -17,7 +17,9 @@ export class SkillRepo {
       .run(skillId, sessionId ?? 'global', tokensUsed, cost);
   }
 
-  getTopSkills(limit = 10): Array<{ skillId: string; count: number; tokensUsed: number; cost: number }> {
+  getTopSkills(
+    limit = 10,
+  ): Array<{ skillId: string; count: number; tokensUsed: number; cost: number }> {
     return this.db
       .prepare(
         `SELECT skill_id, SUM(count) as count, SUM(tokens_used) as tokens_used, SUM(cost) as cost
@@ -26,7 +28,13 @@ export class SkillRepo {
       .all(limit) as any[];
   }
 
-  recordTokenUsage(sessionId: string, promptTokens: number, completionTokens: number, cost: number, model?: string): void {
+  recordTokenUsage(
+    sessionId: string,
+    promptTokens: number,
+    completionTokens: number,
+    cost: number,
+    model?: string,
+  ): void {
     this.db
       .prepare(
         `INSERT INTO token_usage (session_id, prompt_tokens, completion_tokens, cost, model, timestamp)
@@ -35,7 +43,11 @@ export class SkillRepo {
       .run(sessionId, promptTokens, completionTokens, cost, model ?? null);
   }
 
-  getTokenUsageBySession(sessionId: string): { totalPrompt: number; totalCompletion: number; totalCost: number } {
+  getTokenUsageBySession(sessionId: string): {
+    totalPrompt: number;
+    totalCompletion: number;
+    totalCost: number;
+  } {
     const row = this.db
       .prepare(
         `SELECT COALESCE(SUM(prompt_tokens), 0) as totalPrompt,
@@ -60,7 +72,12 @@ export class SkillRepo {
       .run(pattern, target, priority);
   }
 
-  getEnabledRoutingRules(): Array<{ pattern: string; target: string; priority: number; hitCount: number }> {
+  getEnabledRoutingRules(): Array<{
+    pattern: string;
+    target: string;
+    priority: number;
+    hitCount: number;
+  }> {
     return this.db
       .prepare(
         `SELECT pattern, target, priority, hit_count FROM routing_rules
@@ -71,7 +88,9 @@ export class SkillRepo {
 
   recordRoutingHit(pattern: string): void {
     this.db
-      .prepare('UPDATE routing_rules SET hit_count = hit_count + 1, updated_at = datetime(\'now\') WHERE pattern = ?')
+      .prepare(
+        "UPDATE routing_rules SET hit_count = hit_count + 1, updated_at = datetime('now') WHERE pattern = ?",
+      )
       .run(pattern);
   }
 }

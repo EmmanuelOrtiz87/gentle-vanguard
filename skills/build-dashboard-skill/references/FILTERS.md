@@ -111,7 +111,8 @@ function renderTable(containerId, data, columns) {
       sortDir = 'desc';
     }
     const sorted = [...data].sort((a, b) => {
-      const aVal = a[field], bVal = b[field];
+      const aVal = a[field],
+        bVal = b[field];
       const cmp = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
       return sortDir === 'asc' ? cmp : -cmp;
     });

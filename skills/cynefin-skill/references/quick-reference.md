@@ -21,8 +21,11 @@
 
 ## Snowden's Wisdom
 
-> "Complex systems are not causal—they're dispositional. You can't predict what will happen; you can only influence what might happen."
+> "Complex systems are not causal—they're dispositional. You can't predict what will happen; you can
+> only influence what might happen."
 
 > "The only way to understand a complex system is to probe it and see how it responds."
 
-> Different problems require different thinking. The failure isn't in your methodology—it's in applying the wrong methodology to the wrong domain. Match the approach to the problem, not the other way around.
+> Different problems require different thinking. The failure isn't in your methodology—it's in
+> applying the wrong methodology to the wrong domain. Match the approach to the problem, not the
+> other way around.

@@ -185,8 +185,7 @@ Do **NOT** invent skill paths or fake tool calls.
 3. **Track**: Session ID pattern `session-YYYY-MM-DD-XX`, project `workspace_gentle_vanguard`
 4. **Analyze**: Read `scripts/.session/startup-summary.json` — report peak hour and warnings to user
 5. **Verify**: Run `agent-verify.ps1` to validate workspace integrity (SHOULD)
-6. **End**: Run `src/pre-close-validator.ts` before closing; save key decisions to
-   engram
+6. **End**: Run `src/pre-close-validator.ts` before closing; save key decisions to engram
 
 ---
 
@@ -349,8 +348,7 @@ permissions:
 - Windows Scheduled Task uses local host timezone.
 - Convert local time to UTC explicitly before editing workflow cron.
 
-Validation gate: `src/agent-verify.ts` enforces this standard for scheduled
-workflows.
+Validation gate: `src/agent-verify.ts` enforces this standard for scheduled workflows.
 
 ---
 
@@ -482,4 +480,4 @@ security compliance)
 | PSScriptAnalyzer Config      | `config/PSScriptAnalyzerSettings.psd1`                         |
 | ESLint Config                | `.eslintrc.json`                                               |
 | TypeScript Config            | `tsconfig.json`                                                |
-| Self-verification            | `src/agent-verify.ts`                           |
+| Self-verification            | `src/agent-verify.ts`                                          |

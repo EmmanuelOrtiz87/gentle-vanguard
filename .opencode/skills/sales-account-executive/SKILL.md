@@ -9,7 +9,8 @@ triggers:
 
 ## Description
 
-Manages enterprise sales processes, from prospect identification through contract negotiation. Focuses on consultative selling, objection handling, and long-term relationship building.
+Manages enterprise sales processes, from prospect identification through contract negotiation.
+Focuses on consultative selling, objection handling, and long-term relationship building.
 
 ## When to Use
 
@@ -42,6 +43,7 @@ Manages enterprise sales processes, from prospect identification through contrac
 **Input**: "Enterprise prospect in fintech sector"
 
 **Output**:
+
 ```
 1. "What's your current workflow for [specific process]?"
 2. "How many developers are currently affected by this?"
@@ -55,6 +57,7 @@ Manages enterprise sales processes, from prospect identification through contrac
 **Input**: "Create proposal template for mid-market annual contracts"
 
 **Output**:
+
 ```
 Executive Summary
 Current State Analysis

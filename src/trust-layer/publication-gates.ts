@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Publication Gates 
+ * Publication Gates
  * TOCTOU prevention and stale-approval detection
- * Part of Gentle-Vanguard 
+ * Part of Gentle-Vanguard
  */
 
 import { EventEmitter } from 'events';

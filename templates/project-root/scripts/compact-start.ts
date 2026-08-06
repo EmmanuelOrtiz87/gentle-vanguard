@@ -30,31 +30,41 @@ const objective = args.includes('--objective')
 
 const noClipboard = args.includes('--no-clipboard') || args.includes('-NoClipboard');
 
-function writeMetric(event: string, objective: string, promptChars: number, outputFile: string): void {
+function writeMetric(
+  event: string,
+  objective: string,
+  promptChars: number,
+  outputFile: string,
+): void {
   const metricsDir = join(REPO_ROOT, 'docs', 'sessions', 'metrics');
   if (!existsSync(metricsDir)) mkdirSync(metricsDir, { recursive: true });
 
   const metricsFile = join(metricsDir, 'context-usage.csv');
   if (!existsSync(metricsFile)) {
-    const header = 'timestamp,event,repository,branch,objective_chars,changed_count,prompt_chars,output_file\n';
+    const header =
+      'timestamp,event,repository,branch,objective_chars,changed_count,prompt_chars,output_file\n';
     writeFileSync(metricsFile, header, 'utf-8');
   }
 
   let branchName = '(unknown)';
   try {
-    branchName = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8', timeout: 5000 }).trim();
+    branchName = execSync('git rev-parse --abbrev-ref HEAD', {
+      encoding: 'utf8',
+      timeout: 5000,
+    }).trim();
   } catch {}
 
-  const line = [
-    new Date().toISOString(),
-    event,
-    basename(REPO_ROOT),
-    branchName,
-    objective.length,
-    0,
-    promptChars,
-    outputFile.replace(/,/g, ';'),
-  ].join(',') + '\n';
+  const line =
+    [
+      new Date().toISOString(),
+      event,
+      basename(REPO_ROOT),
+      branchName,
+      objective.length,
+      0,
+      promptChars,
+      outputFile.replace(/,/g, ';'),
+    ].join(',') + '\n';
 
   appendFileSync(metricsFile, line, 'utf-8');
 }
@@ -70,14 +80,20 @@ let contextPath: string | null = null;
 try {
   const contextRaw = execSync(
     `npx tsx "${contextPackScript}"${objective ? ` --objective "${objective}"` : ''} --passthru`,
-    { encoding: 'utf8', timeout: 30000, cwd: REPO_ROOT }
+    { encoding: 'utf8', timeout: 30000, cwd: REPO_ROOT },
   ).trim();
 
   // Extract the last line that looks like a file path
-  const lines = contextRaw.split('\n').filter(l => l.trim());
+  const lines = contextRaw.split('\n').filter((l) => l.trim());
   for (const line of lines.reverse()) {
     const trimmed = line.trim();
-    if (trimmed.endsWith('-context-pack.md') && (trimmed.includes(':\\\\') || trimmed.includes(':\\') || trimmed.startsWith('/') || trimmed.startsWith('\\\\'))) {
+    if (
+      trimmed.endsWith('-context-pack.md') &&
+      (trimmed.includes(':\\\\') ||
+        trimmed.includes(':\\') ||
+        trimmed.startsWith('/') ||
+        trimmed.startsWith('\\\\'))
+    ) {
       contextPath = trimmed;
       break;
     }
@@ -89,7 +105,7 @@ try {
     if (existsSync(sessionsDir)) {
       const { readdirSync } = require('fs');
       const files = readdirSync(sessionsDir)
-        .filter(f => f.endsWith('-context-pack.md'))
+        .filter((f) => f.endsWith('-context-pack.md'))
         .sort()
         .reverse();
       if (files.length > 0) {
@@ -122,7 +138,11 @@ Apply minimal required changes and validate outcomes.
 if (!noClipboard) {
   try {
     // Use a child process to pipe to clip
-    execSync(`echo ${JSON.stringify(prompt)} | clip`, { stdio: 'pipe', timeout: 5000, shell: true });
+    execSync(`echo ${JSON.stringify(prompt)} | clip`, {
+      stdio: 'pipe',
+      timeout: 5000,
+      shell: true,
+    });
     console.log('[OK] Compact prompt copied to clipboard.');
   } catch {
     console.log('[INFO] Clipboard copy not available. Prompt shown below.');

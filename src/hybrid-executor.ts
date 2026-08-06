@@ -97,7 +97,10 @@ export function selectProvider(
  * @param selected - The selected/provider to anchor on
  * @param allProviders - Optional list of all available providers (defaults to ['AWS', 'Azure'])
  */
-export function getProviderOrder(selected: ProviderInfo, allProviders: string[] = ['AWS', 'Azure']): string[] {
+export function getProviderOrder(
+  selected: ProviderInfo,
+  allProviders: string[] = ['AWS', 'Azure'],
+): string[] {
   const order: string[] = [selected.provider];
 
   for (const p of allProviders) {
@@ -169,6 +172,9 @@ function main(): void {
   process.exit(1);
 }
 
-if (process.argv[1]?.endsWith('hybrid-executor.ts') || process.argv[1]?.endsWith('hybrid-executor.js')) {
+if (
+  process.argv[1]?.endsWith('hybrid-executor.ts') ||
+  process.argv[1]?.endsWith('hybrid-executor.js')
+) {
   main();
 }

@@ -11,9 +11,13 @@ function execGit(args: string[], cwd: string = process.cwd()): string {
 }
 
 function runPowerShell(scriptPath: string, args: string[]): void {
-  runSync('powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', scriptPath, ...args], {
-    stdio: 'inherit',
-  });
+  runSync(
+    'powershell.exe',
+    ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', scriptPath, ...args],
+    {
+      stdio: 'inherit',
+    },
+  );
 }
 
 function findUpward(startDir: string, relativePath: string): string | null {
@@ -41,8 +45,14 @@ function main(): number {
   console.log('  Gentle-Vanguard - Post-Checkout Health Check');
   console.log('');
 
-  const diagnosticsScript = findUpward(gitRoot, join('scripts', 'diagnostics', 'system-diagnostics.ps1'));
-  const autoInitScript = findUpward(gitRoot, join('scripts', 'utilities', 'UTILITIES', 'auto-init-dev-environment.ps1'));
+  const diagnosticsScript = findUpward(
+    gitRoot,
+    join('scripts', 'diagnostics', 'system-diagnostics.ps1'),
+  );
+  const autoInitScript = findUpward(
+    gitRoot,
+    join('scripts', 'utilities', 'UTILITIES', 'auto-init-dev-environment.ps1'),
+  );
 
   if (diagnosticsScript) {
     console.log('Running system diagnostics...');

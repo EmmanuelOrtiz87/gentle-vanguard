@@ -14,7 +14,10 @@ const CRITICAL_PATTERNS: CriticalPattern[] = [
   { name: 'AWS Access Key', pattern: /AKIA[0-9A-Z]{16}/ },
   { name: 'GitHub Token', pattern: /ghp_[A-Za-z0-9]{36}/ },
   { name: 'Private Key', pattern: /-----BEGIN.*PRIVATE KEY-----/ },
-  { name: 'Generic API Key', pattern: /(api[_-]?key|apikey)["\s]*[=:]["\s]*["'][A-Za-z0-9]{20,}["']/i },
+  {
+    name: 'Generic API Key',
+    pattern: /(api[_-]?key|apikey)["\s]*[=:]["\s]*["'][A-Za-z0-9]{20,}["']/i,
+  },
   { name: 'Database URL', pattern: /(mysql|postgres|mongodb):\/\/[^:]+:[^@]+@/i },
   { name: 'Stripe Key', pattern: /sk_live_[0-9a-zA-Z]{24,}/ },
   { name: 'JWT Token', pattern: /eyJ[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+/ },
@@ -63,7 +66,6 @@ function runScript(scriptPath: string, cwd?: string): boolean {
 }
 
 function main(_args?: string[]): number {
-
   const cwd = process.cwd();
   const gitRoot = execGit(['rev-parse', '--show-toplevel'], cwd);
   if (!gitRoot) {
@@ -91,12 +93,22 @@ function main(_args?: string[]): number {
   console.log('[INFO] Running 7-dimension checks...');
 
   const checks = [
-    { ts: 'src/check-security.ts', ps1: 'src/check-security.ts', blocking: true, label: 'Security' },
+    {
+      ts: 'src/check-security.ts',
+      ps1: 'src/check-security.ts',
+      blocking: true,
+      label: 'Security',
+    },
     { ts: '', ps1: 'scripts/hooks/check-quality.ps1', blocking: true, label: 'Quality' },
     { ts: '', ps1: 'scripts/hooks/check-architecture.ps1', blocking: true, label: 'Architecture' },
     { ts: '', ps1: 'scripts/hooks/check-testing.ps1', blocking: true, label: 'Testing' },
     { ts: '', ps1: 'scripts/hooks/check-api.ps1', blocking: true, label: 'API' },
-    { ts: '', ps1: 'scripts/hooks/check-documentation.ps1', blocking: false, label: 'Documentation' },
+    {
+      ts: '',
+      ps1: 'scripts/hooks/check-documentation.ps1',
+      blocking: false,
+      label: 'Documentation',
+    },
     { ts: '', ps1: 'scripts/hooks/check-gitflow.ps1', blocking: false, label: 'Gitflow' },
   ];
 
@@ -130,7 +142,10 @@ function main(_args?: string[]): number {
 
   let readmeChanged = false;
   for (const f of stagedFiles) {
-    if (basename(f) === 'README.md') { readmeChanged = true; break; }
+    if (basename(f) === 'README.md') {
+      readmeChanged = true;
+      break;
+    }
   }
 
   if (readmeChanged) {
@@ -139,21 +154,33 @@ function main(_args?: string[]): number {
     // Try TS first
     const validateTs = join(gitRoot, 'src', 'validate-readme.ts');
     if (existsSync(validateTs)) {
-        const r = runNpxTsxSync('src/validate-readme.ts', ['--repo', 'both'], { cwd: gitRoot });
-        if (r.status !== 0) {
+      const r = runNpxTsxSync('src/validate-readme.ts', ['--repo', 'both'], { cwd: gitRoot });
+      if (r.status !== 0) {
         console.log('[BLOCK] README governance validation failed. See rules/README-GOVERNANCE.md');
         return 1;
       }
       console.log('[OK] README governance validation passed');
     } else {
       // PS1 fallback
-      const validateScript = join(gitRoot, 'scripts', 'utilities', 'validate', 'validate-readme.ps1');
+      const validateScript = join(
+        gitRoot,
+        'scripts',
+        'utilities',
+        'validate',
+        'validate-readme.ps1',
+      );
       if (!existsSync(validateScript)) {
         console.log('[WARN] validate-readme not found - skipping governance check');
       } else {
-        const r = runSync('pwsh', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', validateScript, '-Repo', 'both'], { cwd: gitRoot });
+        const r = runSync(
+          'pwsh',
+          ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', validateScript, '-Repo', 'both'],
+          { cwd: gitRoot },
+        );
         if (r.status !== 0) {
-          console.log('[BLOCK] README governance validation failed. See rules/README-GOVERNANCE.md');
+          console.log(
+            '[BLOCK] README governance validation failed. See rules/README-GOVERNANCE.md',
+          );
           return 1;
         }
         console.log('[OK] README governance validation passed');

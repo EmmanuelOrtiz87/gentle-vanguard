@@ -1,6 +1,14 @@
 #!/usr/bin/env node
 
-import { existsSync, mkdirSync, writeFileSync, readdirSync, statSync, copyFileSync, appendFileSync } from 'fs';
+import {
+  existsSync,
+  mkdirSync,
+  writeFileSync,
+  readdirSync,
+  statSync,
+  copyFileSync,
+  appendFileSync,
+} from 'fs';
 import { join, resolve, dirname } from 'path';
 import { runSync } from './core/run-command.js';
 import { fileURLToPath } from 'url';
@@ -28,7 +36,8 @@ function parseArgs(argv: string[]): SetupCompleteArgs {
   };
   for (let i = 2; i < argv.length; i++) {
     const arg = argv[i];
-    if ((arg === '--install-path' || arg === '-InstallPath') && argv[i + 1]) args.installPath = argv[++i];
+    if ((arg === '--install-path' || arg === '-InstallPath') && argv[i + 1])
+      args.installPath = argv[++i];
     else if ((arg === '--mode' || arg === '-Mode') && argv[i + 1]) {
       const mode = argv[++i];
       if (mode === 'developer' || mode === 'team' || mode === 'enterprise') {
@@ -61,9 +70,17 @@ function cmdExists(cmd: string): boolean {
   return result.status === 0;
 }
 
-function runCmd(cmd: string, args: string[], cwd?: string): { stdout: string; stderr: string; status: number | null } {
+function runCmd(
+  cmd: string,
+  args: string[],
+  cwd?: string,
+): { stdout: string; stderr: string; status: number | null } {
   const result = runSync(cmd, args, { stdio: 'pipe', cwd });
-  return { stdout: (result.stdout ?? '').trim(), stderr: (result.stderr ?? '').trim(), status: result.status };
+  return {
+    stdout: (result.stdout ?? '').trim(),
+    stderr: (result.stderr ?? '').trim(),
+    status: result.status,
+  };
 }
 
 function copyDir(src: string, dest: string): void {
@@ -207,7 +224,12 @@ function initializeEnvironment(installPath: string): void {
   writeSuccess('VS Code settings configured');
 
   if (platform() === 'win32') {
-    const psProfilePath = join(homedir(), 'Documents', 'PowerShell', 'Microsoft.PowerShell_profile.ps1');
+    const psProfilePath = join(
+      homedir(),
+      'Documents',
+      'PowerShell',
+      'Microsoft.PowerShell_profile.ps1',
+    );
     const psProfileDir = dirname(psProfilePath);
     if (!existsSync(psProfileDir)) {
       mkdirSync(psProfileDir, { recursive: true });

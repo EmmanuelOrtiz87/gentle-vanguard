@@ -287,9 +287,7 @@ assert '[[ -n "${AWS_REGION:-}" ]]' "AWS_REGION is not set"
 | Associative arrays   | `declare -A map`       | Not supported   | Avoid or use external files                    |
 | [[]] test            | `[[ "$a" == "$b" ]]`   | `["$a" = "$b"]` | Use `[ ]` for POSIX                            |
 | Here strings         | `grep <<< "$var"`      | Not supported   | `echo "$var"                                   | grep` |
-| ${var^} (case mod)   | `echo "${var^}"`       | Not supported   | `tr '[:lower:]' '[:upper:]'`                   |
-| Process substitution | `diff <(cmd1) <(cmd2)` | Not supported   | Use temp files                                 |
-| let / (( ))          | `(( x++ ))`            | Not supported   | `x=$(( x + 1 ))`                               |
+| ${var^} (case mod)   | `echo "${var^}"`      | Not supported   |`tr '[:lower:]' '[:upper:]'`                  | | Process substitution |`diff <(cmd1) <(cmd2)`| Not supported   | Use temp files                                 | | let / (( ))          |`(( x++ ))`           | Not supported   |`x=$(( x + 1 ))`                               |
 
 **Rule of thumb**: Start with `#!/bin/sh` unless you genuinely need Bash-specific features. If you
 need arrays or associative maps, use Bash but document the requirement.
@@ -619,14 +617,13 @@ shellcheck script.sh
 
 **Common ShellCheck warnings and fixes**:
 
-| SC#    | Warning                              | Fix                                    |
-| ------ | ------------------------------------ | -------------------------------------- | ---- | ------- | --- | ------- |
-| SC2086 | Double quote to prevent globbing     | `"$var"` instead of `$var`             |
-| SC2002 | Useless cat                          | `< file cmd` instead of `cat file      | cmd` |
-| SC2046 | Quote this to prevent word splitting | `"$(command)"` instead of `$(command)` |
-| SC2164 | Use cd ...                           |                                        | exit | `cd dir |     | exit 1` |
-| SC2068 | Double quote array expansions        | `"${arr[@]}"` instead of `${arr[@]}`   |
-| SC2155 | Declare and assign separately        | Declare var, then assign on next line  |
+| SC# | Warning | Fix | | ------ | ------------------------------------ |
+-------------------------------------- | ---- | ------- | --- | ------- | | SC2086 | Double quote to
+prevent globbing | `"$var"` instead of `$var` | | SC2002 | Useless cat | `< file cmd` instead of
+`cat file      | cmd` | | SC2046 | Quote this to prevent word splitting | `"$(command)"` instead of
+`$(command)` | | SC2164 | Use cd ... | | exit | `cd dir |     | exit 1` | | SC2068 | Double quote
+array expansions | `"${arr[@]}"` instead of `${arr[@]}` | | SC2155 | Declare and assign separately |
+Declare var, then assign on next line |
 
 ### bash -n Syntax Checking
 

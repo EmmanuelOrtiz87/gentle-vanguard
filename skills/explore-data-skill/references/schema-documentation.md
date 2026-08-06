@@ -5,12 +5,9 @@
 ```markdown
 ## Table: [schema.table_name]
 
-**Description**: [What this table represents]
-**Grain**: [One row per...]
-**Primary Key**: [column(s)]
-**Row Count**: [approximate, with date]
-**Update Frequency**: [real-time / hourly / daily / weekly]
-**Owner**: [team or person]
+**Description**: [What this table represents] **Grain**: [One row per...] **Primary Key**:
+[column(s)] **Row Count**: [approximate, with date] **Update Frequency**: [real-time / hourly /
+daily / weekly] **Owner**: [team or person]
 
 ### Key Columns
 

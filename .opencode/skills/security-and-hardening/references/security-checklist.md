@@ -36,7 +36,8 @@
 ## Supply Chain
 
 - [ ] One authoritative lockfile committed; CI uses that manager's frozen/immutable install
-- [ ] Native audit triaged by reachability and fix risk; dependency install scripts blocked unless explicitly approved
+- [ ] Native audit triaged by reachability and fix risk; dependency install scripts blocked unless
+      explicitly approved
 - [ ] New dependencies reviewed (ownership, provenance, release age, transitive graph)
 
 ## AI / LLM (if used)
@@ -49,7 +50,8 @@
 
 After implementing security-relevant code:
 
-- [ ] The native audit has no unmitigated reachable critical/high findings; CI preserves the authoritative lockfile and blocks unreviewed dependency scripts
+- [ ] The native audit has no unmitigated reachable critical/high findings; CI preserves the
+      authoritative lockfile and blocks unreviewed dependency scripts
 - [ ] No secrets in source code or git history
 - [ ] All user input validated at system boundaries
 - [ ] Authentication and authorization checked on every protected endpoint

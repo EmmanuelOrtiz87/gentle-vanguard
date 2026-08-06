@@ -77,7 +77,7 @@ function getEffectiveConfig(): OpenCodeConfig {
   return {
     model: project.model ?? global.model ?? '',
     small_model: project.small_model ?? global.small_model ?? '',
-    provider: { ...(global.provider ?? {}), ...(project.provider ?? {}) }
+    provider: { ...(global.provider ?? {}), ...(project.provider ?? {}) },
   };
 }
 
@@ -98,7 +98,7 @@ function getCurrentModel(): { model: string; provider: string; source: string } 
   return {
     model: 'opencode/deepseek-v4-flash-free',
     provider: 'opencode',
-    source: 'builtin-default'
+    source: 'builtin-default',
   };
 }
 
@@ -114,13 +114,19 @@ function listAvailableModels(): Array<{
   local: boolean;
 }> {
   const config = getEffectiveConfig();
-  const models: Array<{ provider: string; model: string; label: string; hasApiKey: boolean; local: boolean }> = [];
+  const models: Array<{
+    provider: string;
+    model: string;
+    label: string;
+    hasApiKey: boolean;
+    local: boolean;
+  }> = [];
 
   // 1. Native opencode free models (always available — zero config)
   const nativeModels = [
     'opencode/deepseek-v4-flash-free',
     'opencode/llama-3.3-70b',
-    'opencode/qwen2.5-coder-32b'
+    'opencode/qwen2.5-coder-32b',
   ];
   for (const m of nativeModels) {
     models.push({ provider: 'opencode', model: m, label: m, hasApiKey: true, local: false });
@@ -129,11 +135,14 @@ function listAvailableModels(): Array<{
   // 2. Configured providers
   for (const [providerKey, provider] of Object.entries(config.provider ?? {})) {
     const baseURL = provider.options?.baseURL ?? '';
-    const local = baseURL.includes('localhost') || baseURL.includes('127.0.0.1') || baseURL.includes('192.168.');
+    const local =
+      baseURL.includes('localhost') ||
+      baseURL.includes('127.0.0.1') ||
+      baseURL.includes('192.168.');
     const hasApiKey = Boolean(
       provider.options?.apiKey ||
       (provider.options?.headers &&
-        Object.values(provider.options.headers).some(v => String(v).length > 3))
+        Object.values(provider.options.headers).some((v) => String(v).length > 3)),
     );
     for (const [modelId, model] of Object.entries(provider.models ?? {})) {
       models.push({
@@ -141,7 +150,7 @@ function listAvailableModels(): Array<{
         model: `${providerKey}/${model.id ?? model.name ?? modelId}`,
         label: model.name ?? model.id ?? modelId,
         hasApiKey,
-        local
+        local,
       });
     }
   }
@@ -164,32 +173,36 @@ function detectCapability(): {
   const config = getEffectiveConfig();
   const providers = Object.entries(config.provider ?? {}).map(([name, p]) => {
     const baseURL = p.options?.baseURL ?? '';
-    const local = baseURL.includes('localhost') || baseURL.includes('127.0.0.1') || baseURL.includes('192.168.');
+    const local =
+      baseURL.includes('localhost') ||
+      baseURL.includes('127.0.0.1') ||
+      baseURL.includes('192.168.');
     const hasApiKey = Boolean(
       p.options?.apiKey ||
-      (p.options?.headers && Object.values(p.options.headers).some(v => String(v).length > 3))
+      (p.options?.headers && Object.values(p.options.headers).some((v) => String(v).length > 3)),
     );
     return { name, models: Object.keys(p.models ?? {}).length, hasApiKey, local };
   });
 
-  const viable = providers.filter(p => p.hasApiKey || p.local);
+  const viable = providers.filter((p) => p.hasApiKey || p.local);
   const active = getCurrentModel();
 
   if (viable.length > 0) {
     return {
       status: 'ok',
       subagentsAvailable: true,
-      reason: `Providers disponibles: ${viable.map(p => p.name).join(', ')}. Subagentes viables.`,
+      reason: `Providers disponibles: ${viable.map((p) => p.name).join(', ')}. Subagentes viables.`,
       activeModel: active.model,
-      providers
+      providers,
     };
   }
   return {
     status: 'degraded',
     subagentsAvailable: false,
-    reason: 'Sin providers con API key o locales. El orquestador trabaja inline con el modelo de sesión (sin ruido, sin fallos).',
+    reason:
+      'Sin providers con API key o locales. El orquestador trabaja inline con el modelo de sesión (sin ruido, sin fallos).',
     activeModel: active.model,
-    providers
+    providers,
   };
 }
 
@@ -204,14 +217,14 @@ function switchModel(modelRef: string): { ok: boolean; message: string; backup?:
     }
 
     // Validate the requested model exists among available ones
-    const available = listAvailableModels().map(m => m.model);
+    const available = listAvailableModels().map((m) => m.model);
     const exact = available.includes(modelRef);
-    const bySuffix = available.find(m => m.toLowerCase().endsWith(modelRef.toLowerCase()));
+    const bySuffix = available.find((m) => m.toLowerCase().endsWith(modelRef.toLowerCase()));
 
     if (!exact && !bySuffix) {
       return {
         ok: false,
-        message: `Modelo "${modelRef}" no encontrado. Usa "npm run model:list" para ver los disponibles.`
+        message: `Modelo "${modelRef}" no encontrado. Usa "npm run model:list" para ver los disponibles.`,
       };
     }
     const resolved: string = exact ? modelRef : (bySuffix as string);
@@ -233,7 +246,7 @@ function switchModel(modelRef: string): { ok: boolean; message: string; backup?:
       model: resolved,
       provider: resolved.split('/')[0] ?? 'unknown',
       changedAt: new Date().toISOString(),
-      source: 'switch-command'
+      source: 'switch-command',
     };
     const stateDir = dirname(ACTIVE_MODEL_STATE);
     if (!existsSync(stateDir)) mkdirSync(stateDir, { recursive: true });
@@ -242,7 +255,7 @@ function switchModel(modelRef: string): { ok: boolean; message: string; backup?:
     return {
       ok: true,
       message: `Modelo cambiado a ${resolved}. Backup en ${backupPath}.`,
-      backup: backupPath
+      backup: backupPath,
     };
   } catch (err) {
     return { ok: false, message: `Error: ${err instanceof Error ? err.message : String(err)}` };
@@ -276,30 +289,52 @@ async function main(): Promise<void> {
   switch (command) {
     case 'current': {
       const current = getCurrentModel();
-      console.log(JSON.stringify({
-        status: 'ok',
-        model: current.model,
-        provider: current.provider,
-        source: current.source,
-        note: 'El stack funciona con este modelo; el cambio es opcional.'
-      }, null, 2));
+      console.log(
+        JSON.stringify(
+          {
+            status: 'ok',
+            model: current.model,
+            provider: current.provider,
+            source: current.source,
+            note: 'El stack funciona con este modelo; el cambio es opcional.',
+          },
+          null,
+          2,
+        ),
+      );
       break;
     }
     case 'list': {
       const models = listAvailableModels();
-      console.log(JSON.stringify({
-        status: 'ok',
-        count: models.length,
-        native: models.filter(m => m.provider === 'opencode').map(m => m.model),
-        providers: models.filter(m => m.provider !== 'opencode'),
-        tip: 'Para cambiar: npm run model:switch -- <provider/model>'
-      }, null, 2));
+      console.log(
+        JSON.stringify(
+          {
+            status: 'ok',
+            count: models.length,
+            native: models.filter((m) => m.provider === 'opencode').map((m) => m.model),
+            providers: models.filter((m) => m.provider !== 'opencode'),
+            tip: 'Para cambiar: npm run model:switch -- <provider/model>',
+          },
+          null,
+          2,
+        ),
+      );
       break;
     }
     case 'switch': {
       const target = args[1];
       if (!target) {
-        console.log(JSON.stringify({ status: 'error', message: 'Uso: model:switch -- <provider/model>', tip: 'npm run model:list para ver opciones' }, null, 2));
+        console.log(
+          JSON.stringify(
+            {
+              status: 'error',
+              message: 'Uso: model:switch -- <provider/model>',
+              tip: 'npm run model:list para ver opciones',
+            },
+            null,
+            2,
+          ),
+        );
         process.exitCode = 0;
         break;
       }
@@ -317,20 +352,32 @@ async function main(): Promise<void> {
       printHelp();
       break;
     default: {
-      console.log(JSON.stringify({
-        status: 'error',
-        message: `Comando desconocido: ${command}`,
-        valid: ['current', 'list', 'switch', 'capability', 'help']
-      }, null, 2));
+      console.log(
+        JSON.stringify(
+          {
+            status: 'error',
+            message: `Comando desconocido: ${command}`,
+            valid: ['current', 'list', 'switch', 'capability', 'help'],
+          },
+          null,
+          2,
+        ),
+      );
     }
   }
 }
 
-main().catch(err => {
+main().catch((err) => {
   // NEVER blocks the stack — report and exit 0
-  console.log(JSON.stringify({
-    status: 'error',
-    error: err instanceof Error ? err.message : String(err),
-    note: 'Error no bloqueante — el stack sigue con el modelo de sesión.'
-  }, null, 2));
+  console.log(
+    JSON.stringify(
+      {
+        status: 'error',
+        error: err instanceof Error ? err.message : String(err),
+        note: 'Error no bloqueante — el stack sigue con el modelo de sesión.',
+      },
+      null,
+      2,
+    ),
+  );
 });

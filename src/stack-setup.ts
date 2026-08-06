@@ -97,9 +97,13 @@ function prompt(msg: string): boolean {
   console.log(C.cyan(`\n  ? ${msg} (Y/n)`));
   // Simple read from stdin
   try {
-    runSync(process.platform === 'win32' ? 'powershell' : 'read', 
-      process.platform === 'win32' ? ['-NoProfile', '-Command', '$host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown").Key'] : [],
-      { stdio: 'inherit', timeout: 30000 });
+    runSync(
+      process.platform === 'win32' ? 'powershell' : 'read',
+      process.platform === 'win32'
+        ? ['-NoProfile', '-Command', '$host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown").Key']
+        : [],
+      { stdio: 'inherit', timeout: 30000 },
+    );
     return true; // default proceed
   } catch {
     return true;
@@ -178,7 +182,9 @@ async function main(): Promise<void> {
   console.log(C.bold(C.cyan(`\n╔════════════════════════════════════════════════════════════╗`)));
   console.log(C.bold(C.cyan(`║                     Setup Complete                        ║`)));
   console.log(C.bold(C.cyan(`╚════════════════════════════════════════════════════════════╝`)));
-  console.log(`  ${C.green(`✔ ${completed} completed`)}  ${failed > 0 ? C.red(`${failed} failed`) : `${failed} failed`}  ${skipped > 0 ? C.yellow(`${skipped} skipped`) : `${skipped} skipped`}`);
+  console.log(
+    `  ${C.green(`✔ ${completed} completed`)}  ${failed > 0 ? C.red(`${failed} failed`) : `${failed} failed`}  ${skipped > 0 ? C.yellow(`${skipped} skipped`) : `${skipped} skipped`}`,
+  );
 
   if (failed === 0) {
     console.log(C.green('\n  ✅ Stack is ready! Run: npm run stack:verify'));
@@ -188,7 +194,7 @@ async function main(): Promise<void> {
     console.log(C.yellow('  Run: npm run stack:verify to check current state\n'));
   }
 
-  process.exit(failed > 0 && steps.some(s => s.critical && failed) ? 1 : 0);
+  process.exit(failed > 0 && steps.some((s) => s.critical && failed) ? 1 : 0);
 }
 
 /**
@@ -215,7 +221,7 @@ function resolveCommand(input: string): { cmd: string; args: string[] } {
   return { cmd: tokens[0] ?? '', args: tokens.slice(1) };
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error(C.red(`\n  FATAL: ${err.message}`));
   process.exit(2);
 });

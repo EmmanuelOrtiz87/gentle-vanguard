@@ -22,43 +22,150 @@
     },
     "global": {
       "type": "object",
-      "required": ["default_timeout_ms", "default_retry_attempts", "default_retry_delay_ms", "default_retry_backoff_factor"],
+      "required": [
+        "default_timeout_ms",
+        "default_retry_attempts",
+        "default_retry_delay_ms",
+        "default_retry_backoff_factor"
+      ],
       "additionalProperties": false,
       "properties": {
-        "default_timeout_ms": { "type": "integer", "minimum": 0, "description": "Default timeout in milliseconds for all operations" },
-        "default_retry_attempts": { "type": "integer", "minimum": 0, "description": "Default number of retry attempts" },
-        "default_retry_delay_ms": { "type": "integer", "minimum": 0, "description": "Default delay between retries in milliseconds" },
-        "default_retry_backoff_factor": { "type": "number", "minimum": 1.0, "description": "Exponential backoff multiplier" },
+        "default_timeout_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Default timeout in milliseconds for all operations"
+        },
+        "default_retry_attempts": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Default number of retry attempts"
+        },
+        "default_retry_delay_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Default delay between retries in milliseconds"
+        },
+        "default_retry_backoff_factor": {
+          "type": "number",
+          "minimum": 1.0,
+          "description": "Exponential backoff multiplier"
+        },
         "description": { "type": "string", "description": "Human-readable description" }
       }
     },
     "http_server": {
       "type": "object",
-      "required": ["socket_timeout_ms", "headers_timeout_ms", "keep_alive_timeout_ms", "request_timeout_ms", "response_timeout_ms", "shutdown_graceful_ms", "shutdown_force_ms"],
+      "required": [
+        "socket_timeout_ms",
+        "headers_timeout_ms",
+        "keep_alive_timeout_ms",
+        "request_timeout_ms",
+        "response_timeout_ms",
+        "shutdown_graceful_ms",
+        "shutdown_force_ms"
+      ],
       "additionalProperties": false,
       "properties": {
-        "socket_timeout_ms": { "type": "integer", "minimum": 1000, "maximum": 600000, "description": "TCP socket timeout in milliseconds" },
-        "headers_timeout_ms": { "type": "integer", "minimum": 1000, "maximum": 300000, "description": "Maximum time to wait for headers in milliseconds" },
-        "keep_alive_timeout_ms": { "type": "integer", "minimum": 1000, "maximum": 60000, "description": "Keep-alive socket idle timeout in milliseconds" },
-        "request_timeout_ms": { "type": "integer", "minimum": 1000, "maximum": 600000, "description": "Max time for entire HTTP request in milliseconds" },
-        "response_timeout_ms": { "type": "integer", "minimum": 1000, "maximum": 600000, "description": "Max time to wait for response body in milliseconds" },
-        "shutdown_graceful_ms": { "type": "integer", "minimum": 1000, "maximum": 120000, "description": "Graceful shutdown wait time in milliseconds" },
-        "shutdown_force_ms": { "type": "integer", "minimum": 100, "maximum": 30000, "description": "Force kill after graceful timeout in milliseconds" },
+        "socket_timeout_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 600000,
+          "description": "TCP socket timeout in milliseconds"
+        },
+        "headers_timeout_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 300000,
+          "description": "Maximum time to wait for headers in milliseconds"
+        },
+        "keep_alive_timeout_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 60000,
+          "description": "Keep-alive socket idle timeout in milliseconds"
+        },
+        "request_timeout_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 600000,
+          "description": "Max time for entire HTTP request in milliseconds"
+        },
+        "response_timeout_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 600000,
+          "description": "Max time to wait for response body in milliseconds"
+        },
+        "shutdown_graceful_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 120000,
+          "description": "Graceful shutdown wait time in milliseconds"
+        },
+        "shutdown_force_ms": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 30000,
+          "description": "Force kill after graceful timeout in milliseconds"
+        },
         "description": { "type": "string" }
       }
     },
     "websocket": {
       "type": "object",
-      "required": ["ping_interval_ms", "pong_timeout_ms", "handshake_timeout_ms", "reconnect_delay_base_ms", "reconnect_delay_max_ms", "reconnect_max_attempts", "heartbeat_interval_ms"],
+      "required": [
+        "ping_interval_ms",
+        "pong_timeout_ms",
+        "handshake_timeout_ms",
+        "reconnect_delay_base_ms",
+        "reconnect_delay_max_ms",
+        "reconnect_max_attempts",
+        "heartbeat_interval_ms"
+      ],
       "additionalProperties": false,
       "properties": {
-        "ping_interval_ms": { "type": "integer", "minimum": 1000, "maximum": 120000, "description": "Interval between WebSocket ping frames in milliseconds" },
-        "pong_timeout_ms": { "type": "integer", "minimum": 1000, "maximum": 60000, "description": "Max time to wait for pong response in milliseconds" },
-        "handshake_timeout_ms": { "type": "integer", "minimum": 1000, "maximum": 30000, "description": "WebSocket connection handshake timeout in milliseconds" },
-        "reconnect_delay_base_ms": { "type": "integer", "minimum": 100, "maximum": 10000, "description": "Base delay before reconnect attempt in milliseconds" },
-        "reconnect_delay_max_ms": { "type": "integer", "minimum": 1000, "maximum": 300000, "description": "Maximum reconnect delay with backoff in milliseconds" },
-        "reconnect_max_attempts": { "type": "integer", "minimum": 0, "maximum": 100, "description": "Maximum number of reconnection attempts" },
-        "heartbeat_interval_ms": { "type": "integer", "minimum": 1000, "maximum": 60000, "description": "Heartbeat check interval in milliseconds" },
+        "ping_interval_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 120000,
+          "description": "Interval between WebSocket ping frames in milliseconds"
+        },
+        "pong_timeout_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 60000,
+          "description": "Max time to wait for pong response in milliseconds"
+        },
+        "handshake_timeout_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 30000,
+          "description": "WebSocket connection handshake timeout in milliseconds"
+        },
+        "reconnect_delay_base_ms": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 10000,
+          "description": "Base delay before reconnect attempt in milliseconds"
+        },
+        "reconnect_delay_max_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 300000,
+          "description": "Maximum reconnect delay with backoff in milliseconds"
+        },
+        "reconnect_max_attempts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Maximum number of reconnection attempts"
+        },
+        "heartbeat_interval_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 60000,
+          "description": "Heartbeat check interval in milliseconds"
+        },
         "description": { "type": "string" }
       }
     },
@@ -67,8 +174,18 @@
       "required": ["http_client_default_ms", "http_client_max_ms"],
       "additionalProperties": false,
       "properties": {
-        "http_client_default_ms": { "type": "integer", "minimum": 1000, "maximum": 300000, "description": "Default HTTP client timeout in milliseconds" },
-        "http_client_max_ms": { "type": "integer", "minimum": 1000, "maximum": 600000, "description": "Maximum HTTP client timeout in milliseconds" },
+        "http_client_default_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 300000,
+          "description": "Default HTTP client timeout in milliseconds"
+        },
+        "http_client_max_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 600000,
+          "description": "Maximum HTTP client timeout in milliseconds"
+        },
         "openai_request_ms": { "type": "integer", "minimum": 1000, "maximum": 600000 },
         "anthropic_request_ms": { "type": "integer", "minimum": 1000, "maximum": 600000 },
         "openrouter_request_ms": { "type": "integer", "minimum": 1000, "maximum": 600000 },
@@ -184,11 +301,19 @@
     },
     "monitoring": {
       "type": "object",
-      "required": ["health_check_interval_ms", "metrics_collection_interval_ms", "alert_cooldown_ms"],
+      "required": [
+        "health_check_interval_ms",
+        "metrics_collection_interval_ms",
+        "alert_cooldown_ms"
+      ],
       "additionalProperties": false,
       "properties": {
         "health_check_interval_ms": { "type": "integer", "minimum": 1000, "maximum": 3600000 },
-        "metrics_collection_interval_ms": { "type": "integer", "minimum": 1000, "maximum": 3600000 },
+        "metrics_collection_interval_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 3600000
+        },
         "alert_cooldown_ms": { "type": "integer", "minimum": 1000, "maximum": 86400000 },
         "log_rotation_interval_ms": { "type": "integer", "minimum": 3600000, "maximum": 604800000 },
         "cleanup_interval_ms": { "type": "integer", "minimum": 60000, "maximum": 86400000 },

@@ -12,7 +12,8 @@ metadata:
 
 ## Overview
 
-Fermi estimation decomposes impossible-to-know quantities into estimable factors. Errors tend to cancel across factors, yielding useful order-of-magnitude results.
+Fermi estimation decomposes impossible-to-know quantities into estimable factors. Errors tend to
+cancel across factors, yielding useful order-of-magnitude results.
 
 ## When to Use
 
@@ -30,12 +31,12 @@ Fermi estimation decomposes impossible-to-know quantities into estimable factors
 
 ## Decomposition Strategies
 
-| Strategy | Formula |
-|---|---|
-| By component | Total = Sum of parts |
-| Rate × time | Total = Rate × Duration |
-| Population × % | Target = Base × Percentage |
-| Analogy × adjustment | New ≈ Similar × Ratio |
+| Strategy             | Formula                    |
+| -------------------- | -------------------------- |
+| By component         | Total = Sum of parts       |
+| Rate × time          | Total = Rate × Duration    |
+| Population × %       | Target = Base × Percentage |
+| Analogy × adjustment | New ≈ Similar × Ratio      |
 
 ## Key Questions
 
@@ -44,9 +45,8 @@ Fermi estimation decomposes impossible-to-know quantities into estimable factors
 - Would being off by 10x change my decision?
 - Can I cross-check via a different approach?
 
-> Estimate first to know what answer to expect, then calculate to verify.
-> — John Wheeler
+> Estimate first to know what answer to expect, then calculate to verify. — John Wheeler
 
 ---
 
-*Examples, template, patterns, tips, and checklist moved to `references/`.*
+_Examples, template, patterns, tips, and checklist moved to `references/`._

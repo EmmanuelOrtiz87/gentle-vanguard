@@ -1,1 +1,5 @@
-export { validateOpencodeJsonSteps, validateAgentMdSteps, normalizeSteps } from '../opencode-guards.js';
+export {
+  validateOpencodeJsonSteps,
+  validateAgentMdSteps,
+  normalizeSteps,
+} from '../opencode-guards.js';

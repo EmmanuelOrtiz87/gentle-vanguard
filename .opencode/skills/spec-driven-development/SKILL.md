@@ -1,6 +1,8 @@
 ---
 name: spec-driven-development
-description: Create specs before coding. Use when starting new projects or when requirements are unclear or ambiguous.
+description:
+  Create specs before coding. Use when starting new projects or when requirements are unclear or
+  ambiguous.
 triggers:
   - spec
   - specification
@@ -54,8 +56,8 @@ See `references/spec-template.md` for the spec template and success criteria ref
 With the validated spec, generate a technical implementation plan identifying major components,
 dependencies, implementation order, and risks.
 
-> Follow `planning-and-task-breakdown` for dependency-graph and vertical-slicing mechanics.
-> Save the plan to `tasks/plan.md` and task list to `tasks/todo.md`.
+> Follow `planning-and-task-breakdown` for dependency-graph and vertical-slicing mechanics. Save the
+> plan to `tasks/plan.md` and task list to `tasks/todo.md`.
 
 ### Phase 3: Tasks
 

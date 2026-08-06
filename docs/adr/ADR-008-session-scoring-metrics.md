@@ -54,6 +54,7 @@ quality_score = base(100) - corrections_weight + proactive_bonus + delegation_ef
 ```
 
 Where:
+
 - `base = 100` — perfect session starts at 100
 - Each correction reduces the score
 - Each proactive hit increases the score

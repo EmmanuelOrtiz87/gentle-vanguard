@@ -59,9 +59,15 @@ export interface TempFileRegistry {
 
 // ─── Registry Operations ────────────────────────────────────────────────────
 
-function log(msg: string) { console.log(`[TEMP-REGISTRY] ${msg}`); }
-function ok(msg: string) { console.log(`[TEMP-REGISTRY] ✅ ${msg}`); }
-function warn(msg: string) { console.warn(`[TEMP-MEM] ⚠️ ${msg}`); }
+function log(msg: string) {
+  console.log(`[TEMP-REGISTRY] ${msg}`);
+}
+function ok(msg: string) {
+  console.log(`[TEMP-REGISTRY] ✅ ${msg}`);
+}
+function warn(msg: string) {
+  console.warn(`[TEMP-MEM] ⚠️ ${msg}`);
+}
 
 function getSessionId(): string | null {
   try {
@@ -70,7 +76,9 @@ function getSessionId(): string | null {
       const data = JSON.parse(readFileSync(sf, 'utf-8'));
       return data.sessionId || data.id || null;
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return null;
 }
 
@@ -106,12 +114,16 @@ function normalizePath(filePath: string): string {
  * Add a new temp file entry to the registry.
  * If the file is already registered, it is NOT duplicated (idempotent).
  */
-export function addEntry(filePath: string, reason?: string, status?: TempFileStatus): TempFileEntry {
+export function addEntry(
+  filePath: string,
+  reason?: string,
+  status?: TempFileStatus,
+): TempFileEntry {
   const registry = loadRegistry();
   const normalized = normalizePath(filePath);
 
   // Check if already exists
-  const existing = registry.entries.find(e => e.path === normalized);
+  const existing = registry.entries.find((e) => e.path === normalized);
   if (existing) {
     log(`File already registered: ${normalized} (status: ${existing.status})`);
     return existing;
@@ -142,7 +154,7 @@ export function addEntry(filePath: string, reason?: string, status?: TempFileSta
 export function authorizeEntry(filePath: string, reason?: string): TempFileEntry | null {
   const registry = loadRegistry();
   const normalized = normalizePath(filePath);
-  const entry = registry.entries.find(e => e.path === normalized);
+  const entry = registry.entries.find((e) => e.path === normalized);
 
   if (!entry) {
     warn(`File not in registry: ${normalized}. Use --add first.`);
@@ -180,7 +192,7 @@ export function authorizeEntry(filePath: string, reason?: string): TempFileEntry
 export function integrateEntry(filePath: string, into: string): TempFileEntry | null {
   const registry = loadRegistry();
   const normalized = normalizePath(filePath);
-  const entry = registry.entries.find(e => e.path === normalized);
+  const entry = registry.entries.find((e) => e.path === normalized);
 
   if (!entry) {
     warn(`File not in registry: ${normalized}`);
@@ -201,7 +213,7 @@ export function integrateEntry(filePath: string, into: string): TempFileEntry | 
 export function getEntry(filePath: string): TempFileEntry | undefined {
   const registry = loadRegistry();
   const normalized = normalizePath(filePath);
-  return registry.entries.find(e => e.path === normalized);
+  return registry.entries.find((e) => e.path === normalized);
 }
 
 /**
@@ -209,7 +221,7 @@ export function getEntry(filePath: string): TempFileEntry | undefined {
  */
 export function listEntries(status?: TempFileStatus): TempFileEntry[] {
   const registry = loadRegistry();
-  if (status) return registry.entries.filter(e => e.status === status);
+  if (status) return registry.entries.filter((e) => e.status === status);
   return registry.entries;
 }
 
@@ -219,14 +231,9 @@ export function listEntries(status?: TempFileStatus): TempFileEntry[] {
  */
 export function findUnregisteredTempFiles(): string[] {
   const registry = loadRegistry();
-  const registeredPaths = new Set(registry.entries.map(e => e.path));
+  const registeredPaths = new Set(registry.entries.map((e) => e.path));
 
-  const tempDirs = [
-    '.session/tmp/',
-    '.session/cache/',
-    '.temp/',
-    'tmp/',
-  ];
+  const tempDirs = ['.session/tmp/', '.session/cache/', '.temp/', 'tmp/'];
 
   const unregistered: string[] = [];
   for (const dir of tempDirs) {
@@ -240,7 +247,9 @@ export function findUnregisteredTempFiles(): string[] {
           unregistered.push(rel);
         }
       }
-    } catch { /* skip unreadable dirs */ }
+    } catch {
+      /* skip unreadable dirs */
+    }
   }
 
   return unregistered;
@@ -258,7 +267,9 @@ function readdirRecursive(dir: string): string[] {
         result.push(full);
       }
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return result;
 }
 
@@ -284,10 +295,7 @@ export function pruneRegistry(maxAgeDays = 30, dryRun = false): { removed: numbe
     // Remove if: file does NOT exist
     // Remove if: temporary AND older than maxAge
 
-    const shouldKeep = fileExists && (
-      entry.status !== 'temporary' ||
-      age < maxAgeMs
-    );
+    const shouldKeep = fileExists && (entry.status !== 'temporary' || age < maxAgeMs);
 
     if (shouldKeep) {
       surviving.push(entry);
@@ -328,7 +336,9 @@ export function cleanUnregisteredTemps(dryRun = false): { deleted: number } {
         try {
           rmSync(fullPath, { force: true });
           deleted++;
-        } catch { /* skip locked files */ }
+        } catch {
+          /* skip locked files */
+        }
       } else {
         deleted++;
       }
@@ -397,9 +407,10 @@ Options:
   // --list [status]
   if (args.includes('--list')) {
     const statusIdx = args.indexOf('--list') + 1;
-    const statusFilter = statusIdx < args.length && !args[statusIdx].startsWith('--')
-      ? args[statusIdx] as TempFileStatus
-      : undefined;
+    const statusFilter =
+      statusIdx < args.length && !args[statusIdx].startsWith('--')
+        ? (args[statusIdx] as TempFileStatus)
+        : undefined;
     const entries = listEntries(statusFilter);
     if (entries.length === 0) {
       log('No entries found.');
@@ -420,7 +431,10 @@ Options:
   // --add <path> [--reason <r>]
   if (args.includes('--add')) {
     const idx = args.indexOf('--add') + 1;
-    if (idx >= args.length) { console.error('ERROR: --add requires a path'); process.exit(1); }
+    if (idx >= args.length) {
+      console.error('ERROR: --add requires a path');
+      process.exit(1);
+    }
     const filePath = args[idx];
     const reasonIdx = args.indexOf('--reason');
     const reason = reasonIdx >= 0 && reasonIdx + 1 < args.length ? args[reasonIdx + 1] : undefined;
@@ -431,7 +445,10 @@ Options:
   // --authorize <path> [--reason <r>]
   if (args.includes('--authorize')) {
     const idx = args.indexOf('--authorize') + 1;
-    if (idx >= args.length) { console.error('ERROR: --authorize requires a path'); process.exit(1); }
+    if (idx >= args.length) {
+      console.error('ERROR: --authorize requires a path');
+      process.exit(1);
+    }
     const filePath = args[idx];
     const reasonIdx = args.indexOf('--reason');
     const reason = reasonIdx >= 0 && reasonIdx + 1 < args.length ? args[reasonIdx + 1] : undefined;
@@ -442,10 +459,16 @@ Options:
   // --integrate <path> --into <wf>
   if (args.includes('--integrate')) {
     const idx = args.indexOf('--integrate') + 1;
-    if (idx >= args.length) { console.error('ERROR: --integrate requires a path'); process.exit(1); }
+    if (idx >= args.length) {
+      console.error('ERROR: --integrate requires a path');
+      process.exit(1);
+    }
     const filePath = args[idx];
     const intoIdx = args.indexOf('--into');
-    if (intoIdx < 0 || intoIdx + 1 >= args.length) { console.error('ERROR: --integrate requires --into <workflow>'); process.exit(1); }
+    if (intoIdx < 0 || intoIdx + 1 >= args.length) {
+      console.error('ERROR: --integrate requires --into <workflow>');
+      process.exit(1);
+    }
     const into = args[intoIdx + 1];
     integrateEntry(filePath, into);
     return;
@@ -454,7 +477,10 @@ Options:
   // --status <path>
   if (args.includes('--status')) {
     const idx = args.indexOf('--status') + 1;
-    if (idx >= args.length) { console.error('ERROR: --status requires a path'); process.exit(1); }
+    if (idx >= args.length) {
+      console.error('ERROR: --status requires a path');
+      process.exit(1);
+    }
     const entry = getEntry(args[idx]);
     if (!entry) {
       log('File not found in registry.');

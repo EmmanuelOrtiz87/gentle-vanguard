@@ -125,7 +125,10 @@ export function meshDiscoverHandler(
   const workspaces = getMeshWorkspaces();
   res.writeHead(200, headers);
   res.end(
-    JSON.stringify({ type: 'mesh', data: { workspaces, message: 'Mesh discovery completed via registry polling' } }),
+    JSON.stringify({
+      type: 'mesh',
+      data: { workspaces, message: 'Mesh discovery completed via registry polling' },
+    }),
   );
 }
 
@@ -138,5 +141,10 @@ export function meshSyncHandler(
   // Sync is now done via direct workspace registry polling
   const workspaces = getMeshWorkspaces();
   res.writeHead(200, headers);
-  res.end(JSON.stringify({ type: 'mesh', data: { workspaces, message: 'Mesh sync completed via registry polling' } }));
+  res.end(
+    JSON.stringify({
+      type: 'mesh',
+      data: { workspaces, message: 'Mesh sync completed via registry polling' },
+    }),
+  );
 }

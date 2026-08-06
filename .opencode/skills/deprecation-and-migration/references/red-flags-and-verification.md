@@ -27,4 +27,5 @@
 - [ ] The change ships in additive phases (expand → backfill → contract), not a single in-place edit
 - [ ] Old and new code are both valid against the schema at every deploy step
 - [ ] Each migration has a tested down path; backfills run in throttled batches
-- [ ] Destructive steps (drop/rename) ship in their own deploy after no code references the old shape
+- [ ] Destructive steps (drop/rename) ship in their own deploy after no code references the old
+      shape

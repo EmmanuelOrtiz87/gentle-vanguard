@@ -19,7 +19,12 @@ const REPO_ROOT = resolve(join(SCRIPT_DIR, '..'));
 const PROJECT_NAME = basename(REPO_ROOT);
 
 function toSlug(value: string): string {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'task';
+  return (
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '') || 'task'
+  );
 }
 
 function getTimestamp(): string {

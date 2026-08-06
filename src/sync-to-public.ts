@@ -53,10 +53,7 @@ function parseArgs(): SyncOptions {
   };
 
   const resolvedRoot = resolveRoot(process.cwd());
-  const privateRepo =
-    extract('--private-repo') ||
-    process.env.PRIVATE_REPO ||
-    resolvedRoot;
+  const privateRepo = extract('--private-repo') || process.env.PRIVATE_REPO || resolvedRoot;
 
   const publicRepo =
     extract('--public-repo') ||
@@ -130,7 +127,12 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
   // 2. Public docs dir
   rmIf(path.join(targetDir, 'docs'), { recurse: true });
   mkdirp(path.join(targetDir, 'docs'));
-  for (const dir of ['docs/getting-started', 'docs/guides', 'docs/marketing', 'docs/supplementary']) {
+  for (const dir of [
+    'docs/getting-started',
+    'docs/guides',
+    'docs/marketing',
+    'docs/supplementary',
+  ]) {
     const src = path.join(privateRepo, dir);
     if (fs.existsSync(src)) {
       copyIf(src, path.join(targetDir, dir), { recurse: true });
@@ -156,7 +158,10 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
       path.join(targetDir, 'docs', 'architecture', 'README.md'),
     );
   }
-  copyIf(path.join(privateRepo, 'docs', 'EXAMPLES.md'), path.join(targetDir, 'docs', 'EXAMPLES.md'));
+  copyIf(
+    path.join(privateRepo, 'docs', 'EXAMPLES.md'),
+    path.join(targetDir, 'docs', 'EXAMPLES.md'),
+  );
 
   // 3. Example configs
   const exampleDir = path.join(targetDir, 'config');
@@ -266,7 +271,14 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
   }
 
   // 10b. CI root files
-  for (const f of ['.gitleaks.toml', 'package.json', '.prettierrc', '.prettierignore', 'VERSION', 'INSTALLATION.md']) {
+  for (const f of [
+    '.gitleaks.toml',
+    'package.json',
+    '.prettierrc',
+    '.prettierignore',
+    'VERSION',
+    'INSTALLATION.md',
+  ]) {
     copyIf(path.join(privateRepo, f), path.join(targetDir, f));
   }
 
@@ -411,7 +423,9 @@ function main(): void {
   console.log('');
 
   if (!fs.existsSync(path.join(privateRepo, 'config', 'orchestrator.json'))) {
-    console.log('[WARN] privateRepo does not look like a Gentle-Vanguard root (missing config/orchestrator.json)');
+    console.log(
+      '[WARN] privateRepo does not look like a Gentle-Vanguard root (missing config/orchestrator.json)',
+    );
   }
 
   if (opts.skipPush) {

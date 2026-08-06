@@ -75,7 +75,7 @@ export function printBanner(subtitle?: string, color = CYAN): void {
 
 /** Simple box banner for quick use */
 export function printBox(subtitle?: string, color = CYAN): void {
-  const lines = BOX_BANNER.map(l => `${color}${l}${RESET}`);
+  const lines = BOX_BANNER.map((l) => `${color}${l}${RESET}`);
   if (subtitle) {
     const pad = 42 - subtitle.length;
     const left = Math.floor(pad / 2);

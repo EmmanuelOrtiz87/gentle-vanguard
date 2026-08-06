@@ -43,11 +43,9 @@ For each low-leverage intervention, ask: "What's the higher-leverage version?"
 Higher leverage often means more resistance. Evaluate:
 
 ```markdown
-Intervention: Change success metric from velocity to outcomes
-Leverage: Level 3 (Goals) - Very High
-Resistance: High - threatens existing measurement systems
-Feasibility: Medium - needs executive buy-in
-Strategy: Pilot with one team, demonstrate results, expand
+Intervention: Change success metric from velocity to outcomes Leverage: Level 3 (Goals) - Very High
+Resistance: High - threatens existing measurement systems Feasibility: Medium - needs executive
+buy-in Strategy: Pilot with one team, demonstrate results, expand
 ```
 
 ## Step 5: Choose Highest Feasible Leverage

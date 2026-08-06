@@ -187,7 +187,9 @@ function renderMarkdown(s: SummaryData): string {
   lines.push('| Modelo | Input | Output | Total | Costo |');
   lines.push('|---|---|---|---|---|');
   for (const m of s.by_model) {
-    lines.push(`| ${m.model} | ${m.input.toLocaleString()} | ${m.output.toLocaleString()} | ${m.total.toLocaleString()} | $${m.cost.toFixed(4)} |`);
+    lines.push(
+      `| ${m.model} | ${m.input.toLocaleString()} | ${m.output.toLocaleString()} | ${m.total.toLocaleString()} | $${m.cost.toFixed(4)} |`,
+    );
   }
   lines.push('');
   lines.push('## Top sesiones');
@@ -203,7 +205,9 @@ function renderMarkdown(s: SummaryData): string {
   lines.push('| Día | Input | Output | Total | Sesiones |');
   lines.push('|---|---|---|---|---|');
   for (const d of s.by_day) {
-    lines.push(`| ${d.day} | ${d.input.toLocaleString()} | ${d.output.toLocaleString()} | ${d.total.toLocaleString()} | ${d.sessions} |`);
+    lines.push(
+      `| ${d.day} | ${d.input.toLocaleString()} | ${d.output.toLocaleString()} | ${d.total.toLocaleString()} | ${d.sessions} |`,
+    );
   }
   lines.push('');
   return lines.join('\n');
@@ -232,7 +236,9 @@ function main(): void {
     console.log(`Token summary written to:`);
     console.log(`  ${mdPath}`);
     console.log(`  ${jsonPath}`);
-    console.log(`Período: ${summary.period} | Total: ${summary.totals.total.toLocaleString()} tokens | Costo: $${summary.totals.cost.toFixed(4)}`);
+    console.log(
+      `Período: ${summary.period} | Total: ${summary.totals.total.toLocaleString()} tokens | Costo: $${summary.totals.cost.toFixed(4)}`,
+    );
   }
 }
 

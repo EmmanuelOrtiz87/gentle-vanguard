@@ -4,11 +4,10 @@
 
 ## Description
 
-
 ## Triggers
 
-
 ## Instructions
+
 # sync-automation
 
 # Auto-sync for Gentle-Vanguard

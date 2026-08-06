@@ -26,8 +26,12 @@ function run(): void {
   const { mode, quiet } = parseArgs();
 
   const tsArgs: string[] = [];
-  if (mode) { tsArgs.push('--mode', mode); }
-  if (quiet) { tsArgs.push('--quiet'); }
+  if (mode) {
+    tsArgs.push('--mode', mode);
+  }
+  if (quiet) {
+    tsArgs.push('--quiet');
+  }
 
   const result = runNpxTsxSync('src/session-manager.ts', tsArgs, {
     stdio: 'inherit',

@@ -85,7 +85,10 @@ function loadModelsCache(): Record<string, { models?: Record<string, unknown> }>
  * Returns whether a full model ID (e.g. "opencode/deepseek-v4-flash-free")
  * exists in the models cache. Also accepts bare IDs (searches all providers).
  */
-function isModelValid(fullId: string, cache: Record<string, { models?: Record<string, unknown> }>): boolean {
+function isModelValid(
+  fullId: string,
+  cache: Record<string, { models?: Record<string, unknown> }>,
+): boolean {
   const [providerId, modelId] = splitModelSpec(fullId);
   if (!modelId) return false;
 
@@ -129,7 +132,10 @@ function resolveRootModel(explicit?: string): { id: string; source: string } {
  * Fixes the model assignments in the project opencode.json.
  * Mirrors Gentle-AI injectModelAssignments decision tree.
  */
-function fixModels(targetModel: string, dryRun: boolean): {
+function fixModels(
+  targetModel: string,
+  dryRun: boolean,
+): {
   status: string;
   dryRun: boolean;
   injected: string[];
@@ -145,7 +151,17 @@ function fixModels(targetModel: string, dryRun: boolean): {
 
   const config = loadJsonSafe<OpenCodeConfig>(PROJECT_OPENCODE_CONFIG);
   if (!config?.agent) {
-    return { status: 'error', dryRun, injected: [], fixed: [], kept: [], skipped: [], rootModel: targetModel, cacheValid: rootValid, message: `No "agent" section found in ${PROJECT_OPENCODE_CONFIG}` };
+    return {
+      status: 'error',
+      dryRun,
+      injected: [],
+      fixed: [],
+      kept: [],
+      skipped: [],
+      rootModel: targetModel,
+      cacheValid: rootValid,
+      message: `No "agent" section found in ${PROJECT_OPENCODE_CONFIG}`,
+    };
   }
 
   const injected: string[] = [];
@@ -197,7 +213,7 @@ function fixModels(targetModel: string, dryRun: boolean): {
     skipped,
     rootModel: targetModel,
     cacheValid: rootValid,
-    message: `${dryRun ? '[DRY-RUN] ' : ''}${injected.length} inyectados, ${fixed.length} corregidos, ${kept.length} validados, ${skipped.length} saltados (${total} agentes). Root model ${targetModel} ${rootValid ? 'válido en cache' : 'NO ENCONTRADO en cache'}.`
+    message: `${dryRun ? '[DRY-RUN] ' : ''}${injected.length} inyectados, ${fixed.length} corregidos, ${kept.length} validados, ${skipped.length} saltados (${total} agentes). Root model ${targetModel} ${rootValid ? 'válido en cache' : 'NO ENCONTRADO en cache'}.`,
   };
 }
 
@@ -209,7 +225,9 @@ async function main(): Promise<void> {
   const root = resolveRootModel(modelArg);
   const result = fixModels(root.id, dryRun);
 
-  console.log(JSON.stringify({ ...result, rootModelSource: root.source, cachePath: MODELS_CACHE }, null, 2));
+  console.log(
+    JSON.stringify({ ...result, rootModelSource: root.source, cachePath: MODELS_CACHE }, null, 2),
+  );
 
   if (result.status === 'ok' && !dryRun) {
     console.error('\n⚠️  IMPORTANTE: opencode solo re-lee opencode.json al iniciar sesión.');
@@ -218,10 +236,16 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch(err => {
-  console.log(JSON.stringify({
-    status: 'error',
-    error: err instanceof Error ? err.message : String(err),
-    note: 'Error no bloqueante.'
-  }, null, 2));
+main().catch((err) => {
+  console.log(
+    JSON.stringify(
+      {
+        status: 'error',
+        error: err instanceof Error ? err.message : String(err),
+        note: 'Error no bloqueante.',
+      },
+      null,
+      2,
+    ),
+  );
 });

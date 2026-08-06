@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Security Expert Skill
 
 **Trigger Keywords:** security, secure, credentials, secrets, api-key, token, password, auth, jwt,

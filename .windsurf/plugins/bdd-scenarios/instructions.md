@@ -4,11 +4,10 @@
 
 ## Description
 
-
 ## Triggers
 
-
 ## Instructions
+
 # BDD Scenarios
 
 Learn to write clear, maintainable BDD scenarios that effectively capture business requirements and

@@ -2,9 +2,19 @@
 
 ## Executive Summary
 
-This comprehensive research report documents GitHub repositories related to reward modeling and training for Large Language Models (LLMs) from 2025-2026. The research covers multiple categories including RLHF (Reinforcement Learning from Human Feedback) frameworks, preference optimization methods, reward model training implementations, and related tooling. Through systematic GitHub API searches and web research, this study identifies and analyzes over 100 significant repositories representing the cutting edge of LLM alignment technology.
+This comprehensive research report documents GitHub repositories related to reward modeling and
+training for Large Language Models (LLMs) from 2025-2026. The research covers multiple categories
+including RLHF (Reinforcement Learning from Human Feedback) frameworks, preference optimization
+methods, reward model training implementations, and related tooling. Through systematic GitHub API
+searches and web research, this study identifies and analyzes over 100 significant repositories
+representing the cutting edge of LLM alignment technology.
 
-The findings reveal a vibrant ecosystem with major contributions from organizations including Hugging Face, Meta, Stanford, Berkeley, DeepMind, and numerous open-source communities. The most prominent technical trends include the rise of GRPO (Group Relative Policy Optimization) following DeepSeek-R1's success, the proliferation of multi-method frameworks supporting DPO, KTO, ORPO, and SimPO, and the emergence of efficient training frameworks enabling single-GPU preference optimization.
+The findings reveal a vibrant ecosystem with major contributions from organizations including
+Hugging Face, Meta, Stanford, Berkeley, DeepMind, and numerous open-source communities. The most
+prominent technical trends include the rise of GRPO (Group Relative Policy Optimization) following
+DeepSeek-R1's success, the proliferation of multi-method frameworks supporting DPO, KTO, ORPO, and
+SimPO, and the emergence of efficient training frameworks enabling single-GPU preference
+optimization.
 
 ---
 
@@ -12,13 +22,26 @@ The findings reveal a vibrant ecosystem with major contributions from organizati
 
 ### 1.1 Background on LLM Alignment and Reward Modeling
 
-Reward modeling and training represent critical components in the development of aligned large language models. The fundamental challenge lies in specifying reward functions that capture human preferences without requiring explicit programming of desired behaviors. The field has evolved significantly since the introduction of Reinforcement Learning from Human Feedback (RLHF), which won the 2024 Nobel Prize in Economics through its foundational work on preference modeling.
+Reward modeling and training represent critical components in the development of aligned large
+language models. The fundamental challenge lies in specifying reward functions that capture human
+preferences without requiring explicit programming of desired behaviors. The field has evolved
+significantly since the introduction of Reinforcement Learning from Human Feedback (RLHF), which won
+the 2024 Nobel Prize in Economics through its foundational work on preference modeling.
 
-The evolution from RLHF to Direct Preference Optimization (DPO) and subsequent methods has dramatically reduced the complexity of alignment training. Modern approaches eliminate the need for separate reward models in many cases, enabling more efficient training pipelines. The 2025-2026 period has witnessed particularly rapid advancement, with new methods like GRPO, KTO, ORPO, and SimPO gaining significant traction.
+The evolution from RLHF to Direct Preference Optimization (DPO) and subsequent methods has
+dramatically reduced the complexity of alignment training. Modern approaches eliminate the need for
+separate reward models in many cases, enabling more efficient training pipelines. The 2025-2026
+period has witnessed particularly rapid advancement, with new methods like GRPO, KTO, ORPO, and
+SimPO gaining significant traction.
 
 ### 1.2 Research Objectives
 
-This research aims to provide a comprehensive catalog of GitHub repositories related to reward modeling and LLM training released or significantly updated during 2025-2026. The specific objectives include: (1) identifying frameworks and libraries for RLHF and preference optimization, (2) documenting reward model training implementations, (3) analyzing organizational contributors and their research priorities, and (4) providing actionable information for practitioners seeking to implement LLM alignment pipelines.
+This research aims to provide a comprehensive catalog of GitHub repositories related to reward
+modeling and LLM training released or significantly updated during 2025-2026. The specific
+objectives include: (1) identifying frameworks and libraries for RLHF and preference optimization,
+(2) documenting reward model training implementations, (3) analyzing organizational contributors and
+their research priorities, and (4) providing actionable information for practitioners seeking to
+implement LLM alignment pipelines.
 
 ---
 
@@ -26,7 +49,10 @@ This research aims to provide a comprehensive catalog of GitHub repositories rel
 
 ### 2.1 Overview
 
-RLHF frameworks provide the infrastructure for training language models with human feedback. These frameworks typically implement the three-stage pipeline: supervised fine-tuning, reward model training, and policy optimization (typically using PPO or its variants). The following sections document the major frameworks identified during this research.
+RLHF frameworks provide the infrastructure for training language models with human feedback. These
+frameworks typically implement the three-stage pipeline: supervised fine-tuning, reward model
+training, and policy optimization (typically using PPO or its variants). The following sections
+document the major frameworks identified during this research.
 
 ### 2.2 Hugging Face TRL (Transformer Reinforcement Learning)
 
@@ -47,8 +73,12 @@ RLHF frameworks provide the infrastructure for training language models with hum
 - **Last Update**: June 10, 2026
 - **Documentation**: https://huggingface.co/docs/trl
 
-**Complete Description**:
-The TRL library is the foundational framework for LLM alignment research and implementation within the Hugging Face ecosystem. It provides a unified API for all stages of the alignment pipeline, from supervised fine-tuning through preference optimization. The library implements state-of-the-art algorithms including DPO, GRPO, and ORPO, making it the most comprehensive solution for practitioners. Recent additions include support for vision-language models and multi-modal alignment.
+**Complete Description**: The TRL library is the foundational framework for LLM alignment research
+and implementation within the Hugging Face ecosystem. It provides a unified API for all stages of
+the alignment pipeline, from supervised fine-tuning through preference optimization. The library
+implements state-of-the-art algorithms including DPO, GRPO, and ORPO, making it the most
+comprehensive solution for practitioners. Recent additions include support for vision-language
+models and multi-modal alignment.
 
 ### 2.2 Hugging Face Alignment Handbook
 
@@ -68,8 +98,10 @@ The TRL library is the foundational framework for LLM alignment research and imp
 - **Stars**: 3,200+ (estimated)
 - **Last Update**: June 10, 2026
 
-**Complete Description**:
-The Alignment Handbook provides production-ready training recipes for LLM alignment, built on top of TRL and other Hugging Face libraries. It represents the official recommended approach for practitioners seeking to train aligned models, with configurations optimized for various hardware setups and model scales.
+**Complete Description**: The Alignment Handbook provides production-ready training recipes for LLM
+alignment, built on top of TRL and other Hugging Face libraries. It represents the official
+recommended approach for practitioners seeking to train aligned models, with configurations
+optimized for various hardware setups and model scales.
 
 ### 2.3 OpenRLHF
 
@@ -90,8 +122,11 @@ The Alignment Handbook provides production-ready training recipes for LLM alignm
 - **Forks**: 700+ (estimated)
 - **Last Update**: June 10, 2026
 
-**Complete Description**:
-OpenRLHF represents one of the most capable open-source alternatives to Hugging Face TRL, with a particular focus on scalability and performance. Its architecture leverages Ray for distributed computing, enabling training at scales difficult to achieve with simpler frameworks. The support for DAPO and REINFORCE++ positions it at the cutting edge of preference optimization research.
+**Complete Description**: OpenRLHF represents one of the most capable open-source alternatives to
+Hugging Face TRL, with a particular focus on scalability and performance. Its architecture leverages
+Ray for distributed computing, enabling training at scales difficult to achieve with simpler
+frameworks. The support for DAPO and REINFORCE++ positions it at the cutting edge of preference
+optimization research.
 
 ### 2.4 verl (versatile efficient reinforcement learning)
 
@@ -112,8 +147,11 @@ OpenRLHF represents one of the most capable open-source alternatives to Hugging 
 - **Last Update**: June 10, 2026
 - **Documentation**: https://verl-project.github.io/
 
-**Complete Description**:
-verl is a production-grade reinforcement learning framework developed by ByteDance's Volcano Engine, designed for efficient post-training of large language models. The framework implements advanced optimization techniques including GRPO and provides optimized kernels for improved training throughput. Its architecture supports both offline and online RL training paradigms.
+**Complete Description**: verl is a production-grade reinforcement learning framework developed by
+ByteDance's Volcano Engine, designed for efficient post-training of large language models. The
+framework implements advanced optimization techniques including GRPO and provides optimized kernels
+for improved training throughput. Its architecture supports both offline and online RL training
+paradigms.
 
 ### 2.5 RL4LMs
 
@@ -134,8 +172,11 @@ verl is a production-grade reinforcement learning framework developed by ByteDan
 - **Last Update**: June 6, 2026
 - **Documentation**: https://ai4science.github.io/rl4lms/
 
-**Complete Description**:
-RL4LMs is an academic-grade reinforcement learning library from the Allen AI Institute, providing modular implementations of RL algorithms for language model training. The library emphasizes research flexibility and includes comprehensive evaluation frameworks for assessing alignment quality. It is particularly popular among academic researchers working on novel RL approaches for LLM training.
+**Complete Description**: RL4LMs is an academic-grade reinforcement learning library from the Allen
+AI Institute, providing modular implementations of RL algorithms for language model training. The
+library emphasizes research flexibility and includes comprehensive evaluation frameworks for
+assessing alignment quality. It is particularly popular among academic researchers working on novel
+RL approaches for LLM training.
 
 ### 2.6 trlx
 
@@ -155,8 +196,10 @@ RL4LMs is an academic-grade reinforcement learning library from the Allen AI Ins
 - **Stars**: 2,900+ (estimated)
 - **Last Update**: June 9, 2026
 
-**Complete Description**:
-trlx from CarperAI (Scale AI) provides a flexible framework for distributed RLHF training. The library supports both online (PPO) and offline (ILQL) reinforcement learning approaches, giving practitioners flexibility in their training methodology. Its modular design allows easy integration of custom reward functions and policies.
+**Complete Description**: trlx from CarperAI (Scale AI) provides a flexible framework for
+distributed RLHF training. The library supports both online (PPO) and offline (ILQL) reinforcement
+learning approaches, giving practitioners flexibility in their training methodology. Its modular
+design allows easy integration of custom reward functions and policies.
 
 ### 2.7 OAT (Online Alignment Toolkit)
 
@@ -175,8 +218,9 @@ trlx from CarperAI (Scale AI) provides a flexible framework for distributed RLHF
 - **Stars**: 800+ (estimated)
 - **Last Update**: June 2, 2026
 
-**Complete Description**:
-OAT from Sea AI Lab provides a streamlined framework for online alignment research. The library focuses on simplicity and research accessibility, making it popular among academic groups exploring novel alignment techniques.
+**Complete Description**: OAT from Sea AI Lab provides a streamlined framework for online alignment
+research. The library focuses on simplicity and research accessibility, making it popular among
+academic groups exploring novel alignment techniques.
 
 ---
 
@@ -200,8 +244,10 @@ OAT from Sea AI Lab provides a streamlined framework for online alignment resear
 - **Stars**: 2,400+ (estimated)
 - **Last Update**: June 10, 2026
 
-**Complete Description**:
-This repository contains the canonical implementation of DPO, the method that revolutionized LLM alignment by enabling direct optimization against preference data without requiring a separate reward model. The implementation provides the foundation upon which many subsequent frameworks build their DPO support.
+**Complete Description**: This repository contains the canonical implementation of DPO, the method
+that revolutionized LLM alignment by enabling direct optimization against preference data without
+requiring a separate reward model. The implementation provides the foundation upon which many
+subsequent frameworks build their DPO support.
 
 ### 3.2 ContextualAI HALOs
 
@@ -213,15 +259,18 @@ This repository contains the canonical implementation of DPO, the method that re
 - **Programming Language**: Python
 - **Tech Stack**: PyTorch, Transformers, TRL
 - **Key Features and Implementation Approach**:
-  - Library with extensible implementations of DPO, KTO, PPO, ORPO, and other human-aware loss functions
+  - Library with extensible implementations of DPO, KTO, PPO, ORPO, and other human-aware loss
+    functions
   - Provides production-ready implementations of multiple alignment algorithms
   - Includes both online and offline training approaches
   - Optimized for practical deployment scenarios
 - **Stars**: 2,100+ (estimated)
 - **Last Update**: June 6, 2026
 
-**Complete Description**:
-HALOs (Human-Aware Loss functions) from Contextual AI provides a unified library for multiple preference optimization methods. The library's modular design allows practitioners to easily switch between different optimization approaches, facilitating comparative research and practical experimentation.
+**Complete Description**: HALOs (Human-Aware Loss functions) from Contextual AI provides a unified
+library for multiple preference optimization methods. The library's modular design allows
+practitioners to easily switch between different optimization approaches, facilitating comparative
+research and practical experimentation.
 
 ### 3.3 SimPO (Simple Preference Optimization)
 
@@ -241,8 +290,10 @@ HALOs (Human-Aware Loss functions) from Contextual AI provides a unified library
 - **Last Update**: June 6, 2026
 - **Paper**: https://arxiv.org/abs/2405.14734
 
-**Complete Description**:
-SimPO from Princeton NLP introduces a simplified preference optimization approach that eliminates the need for a reference model during inference, reducing memory requirements and improving deployment flexibility. The method has demonstrated strong performance on alignment benchmarks.
+**Complete Description**: SimPO from Princeton NLP introduces a simplified preference optimization
+approach that eliminates the need for a reference model during inference, reducing memory
+requirements and improving deployment flexibility. The method has demonstrated strong performance on
+alignment benchmarks.
 
 ---
 
@@ -266,8 +317,10 @@ SimPO from Princeton NLP introduces a simplified preference optimization approac
 - **Last Update**: June 3, 2026
 - **Documentation**: https://github.com/WangJingyao07/Awesome-GRPO
 
-**Complete Description**:
-This curated collection serves as the primary community resource for GRPO-related research and implementation. It aggregates implementations, papers, and resources from across the ecosystem, making it an essential starting point for practitioners seeking to implement GRPO-based training.
+**Complete Description**: This curated collection serves as the primary community resource for
+GRPO-related research and implementation. It aggregates implementations, papers, and resources from
+across the ecosystem, making it an essential starting point for practitioners seeking to implement
+GRPO-based training.
 
 #### Repository: jianzhnie/Open-R1
 
@@ -287,8 +340,9 @@ This curated collection serves as the primary community resource for GRPO-relate
 - **License**: Apache License 2.0
 - **Last Update**: June 9, 2026
 
-**Complete Description**:
-Open-R1 provides a complete implementation of the DeepSeek-R1 training pipeline, enabling practitioners to replicate the reasoning capabilities demonstrated in DeepSeek-R1. The implementation includes comprehensive training scripts and evaluation frameworks.
+**Complete Description**: Open-R1 provides a complete implementation of the DeepSeek-R1 training
+pipeline, enabling practitioners to replicate the reasoning capabilities demonstrated in
+DeepSeek-R1. The implementation includes comprehensive training scripts and evaluation frameworks.
 
 ### 4.2 GRPO Implementations and Tools
 
@@ -310,8 +364,9 @@ Open-R1 provides a complete implementation of the DeepSeek-R1 training pipeline,
 - **License**: MIT License
 - **Last Update**: June 8, 2026
 
-**Complete Description**:
-unsloth-buddy provides an streamlined fine-tuning experience with native GRPO support. The integration with Unsloth enables dramatically faster training iterations, while MLX support opens Apple Silicon as a viable training platform.
+**Complete Description**: unsloth-buddy provides an streamlined fine-tuning experience with native
+GRPO support. The integration with Unsloth enables dramatically faster training iterations, while
+MLX support opens Apple Silicon as a viable training platform.
 
 #### Repository: Doriandarko/MLX-GRPO
 
@@ -329,8 +384,9 @@ unsloth-buddy provides an streamlined fine-tuning experience with native GRPO su
 - **Forks**: 22
 - **Last Update**: June 8, 2026
 
-**Complete Description**:
-MLX-GRPO brings GRPO training to Apple Silicon, enabling researchers with Mac computers to participate in reinforcement learning research without requiring expensive GPU infrastructure.
+**Complete Description**: MLX-GRPO brings GRPO training to Apple Silicon, enabling researchers with
+Mac computers to participate in reinforcement learning research without requiring expensive GPU
+infrastructure.
 
 ---
 
@@ -352,8 +408,9 @@ MLX-GRPO brings GRPO training to Apple Silicon, enabling researchers with Mac co
   - Supports multiple reward model architectures
 - **Last Update**: June 5, 2026
 
-**Complete Description**:
-This repository focuses specifically on reward model training, providing recipes for building the reward models used in RLHF pipelines. The training scripts support multiple architectures and evaluation approaches.
+**Complete Description**: This repository focuses specifically on reward model training, providing
+recipes for building the reward models used in RLHF pipelines. The training scripts support multiple
+architectures and evaluation approaches.
 
 ### 5.2 Reward Bench
 
@@ -371,8 +428,9 @@ This repository focuses specifically on reward model training, providing recipes
 - **Last Update**: June 7, 2026
 - **Documentation**: https://www.llm-reward-bench.com/
 
-**Complete Description**:
-RewardBench provides the first standardized evaluation framework for reward models, addressing a critical gap in the LLM alignment ecosystem. The benchmark enables fair comparison of reward models across different training approaches and architectures.
+**Complete Description**: RewardBench provides the first standardized evaluation framework for
+reward models, addressing a critical gap in the LLM alignment ecosystem. The benchmark enables fair
+comparison of reward models across different training approaches and architectures.
 
 ### 5.3 Additional Reward Model Repositories
 
@@ -416,8 +474,10 @@ RewardBench provides the first standardized evaluation framework for reward mode
 - **Last Update**: June 10, 2026
 - **Documentation**: https://llamafactory.cn/
 
-**Complete Description**:
-LlamaFactory represents one of the most comprehensive end-to-end fine-tuning solutions, supporting an extensive range of models and training methods. Its unified interface simplifies the training pipeline while maintaining support for advanced techniques like GRPO and preference optimization.
+**Complete Description**: LlamaFactory represents one of the most comprehensive end-to-end
+fine-tuning solutions, supporting an extensive range of models and training methods. Its unified
+interface simplifies the training pipeline while maintaining support for advanced techniques like
+GRPO and preference optimization.
 
 ### 6.2 ModelScope ms-swift
 
@@ -438,8 +498,9 @@ LlamaFactory represents one of the most comprehensive end-to-end fine-tuning sol
 - **Forks**: 900+ (estimated)
 - **Last Update**: June 10, 2026
 
-**Complete Description**:
-ms-swift from Alibaba's ModelScope provides production-grade fine-tuning capabilities with extensive model coverage. The framework's integration with the broader ModelScope ecosystem enables seamless access to models and datasets.
+**Complete Description**: ms-swift from Alibaba's ModelScope provides production-grade fine-tuning
+capabilities with extensive model coverage. The framework's integration with the broader ModelScope
+ecosystem enables seamless access to models and datasets.
 
 ### 6.3 Axolotl
 
@@ -459,8 +520,9 @@ ms-swift from Alibaba's ModelScope provides production-grade fine-tuning capabil
 - **Last Update**: June 10, 2026
 - **Documentation**: https://axolotl.ai/
 
-**Complete Description**:
-Axolotl provides a production-ready fine-tuning platform that abstracts away the complexity of distributed training while maintaining flexibility for advanced users. The platform's popularity reflects its reliability and comprehensive feature set.
+**Complete Description**: Axolotl provides a production-ready fine-tuning platform that abstracts
+away the complexity of distributed training while maintaining flexibility for advanced users. The
+platform's popularity reflects its reliability and comprehensive feature set.
 
 ### 6.4 DeepSpeed-Chat Extensions
 
@@ -489,8 +551,9 @@ Multiple repositories extend Microsoft's DeepSpeed-Chat for various use cases:
   - Comprehensive medical domain support
 - **Last Update**: June 10, 2026
 
-**Complete Description**:
-MedicalGPT demonstrates the application of preference optimization methods to domain-specific fine-tuning, providing a template for building specialized aligned models in fields requiring high accuracy and safety.
+**Complete Description**: MedicalGPT demonstrates the application of preference optimization methods
+to domain-specific fine-tuning, providing a template for building specialized aligned models in
+fields requiring high accuracy and safety.
 
 ### 7.2 Stanford Alpaca and Related Projects
 
@@ -507,8 +570,9 @@ MedicalGPT demonstrates the application of preference optimization methods to do
   - Foundation for many subsequent instruction tuning projects
 - **Last Update**: June 10, 2026
 
-**Complete Description**:
-Stanford Alpaca pioneered the approach of using LLM-generated data for instruction fine-tuning, demonstrating that high-quality instruction-following models could be created without massive human annotation effort.
+**Complete Description**: Stanford Alpaca pioneered the approach of using LLM-generated data for
+instruction fine-tuning, demonstrating that high-quality instruction-following models could be
+created without massive human annotation effort.
 
 ---
 
@@ -528,8 +592,9 @@ Stanford Alpaca pioneered the approach of using LLM-generated data for instructi
   - Standard benchmark for alignment research
 - **Last Update**: June 10, 2026
 
-**Complete Description**:
-Alpaca Eval provides the primary automatic evaluation framework for instruction-following models, enabling reproducible comparison of alignment approaches without expensive human evaluation.
+**Complete Description**: Alpaca Eval provides the primary automatic evaluation framework for
+instruction-following models, enabling reproducible comparison of alignment approaches without
+expensive human evaluation.
 
 ### 8.2 Alpaca Farm
 
@@ -545,8 +610,9 @@ Alpaca Eval provides the primary automatic evaluation framework for instruction-
   - Critical tool for rapid iteration in alignment research
 - **Last Update**: June 4, 2026
 
-**Complete Description**:
-Alpaca Farm addresses the data collection challenge in RLHF research by providing simulation methods that approximate human preferences, dramatically accelerating the research cycle.
+**Complete Description**: Alpaca Farm addresses the data collection challenge in RLHF research by
+providing simulation methods that approximate human preferences, dramatically accelerating the
+research cycle.
 
 ---
 
@@ -554,48 +620,48 @@ Alpaca Farm addresses the data collection challenge in RLHF research by providin
 
 ### 9.1 Core RLHF Frameworks
 
-| Repository | URL | Stars | Last Update |
-|------------|-----|-------|-------------|
-| huggingface/trl | https://github.com/huggingface/trl | 17,400+ | June 10, 2026 |
-| OpenRLHF/OpenRLHF | https://github.com/OpenRLHF/OpenRLHF | 5,800+ | June 10, 2026 |
-| verl-project/verl | https://github.com/verl-project/verl | 4,500+ | June 10, 2026 |
-| allenai/RL4LMs | https://github.com/allenai/RL4LMs | 3,800+ | June 6, 2026 |
-| huggingface/alignment-handbook | https://github.com/huggingface/alignment-handbook | 3,200+ | June 10, 2026 |
-| CarperAI/trlx | https://github.com/CarperAI/trlx | 2,900+ | June 9, 2026 |
+| Repository                     | URL                                               | Stars   | Last Update   |
+| ------------------------------ | ------------------------------------------------- | ------- | ------------- |
+| huggingface/trl                | https://github.com/huggingface/trl                | 17,400+ | June 10, 2026 |
+| OpenRLHF/OpenRLHF              | https://github.com/OpenRLHF/OpenRLHF              | 5,800+  | June 10, 2026 |
+| verl-project/verl              | https://github.com/verl-project/verl              | 4,500+  | June 10, 2026 |
+| allenai/RL4LMs                 | https://github.com/allenai/RL4LMs                 | 3,800+  | June 6, 2026  |
+| huggingface/alignment-handbook | https://github.com/huggingface/alignment-handbook | 3,200+  | June 10, 2026 |
+| CarperAI/trlx                  | https://github.com/CarperAI/trlx                  | 2,900+  | June 9, 2026  |
 
 ### 9.2 Preference Optimization
 
-| Repository | URL | Stars | Last Update |
-|------------|-----|-------|-------------|
+| Repository                                   | URL                                                             | Stars  | Last Update   |
+| -------------------------------------------- | --------------------------------------------------------------- | ------ | ------------- |
 | eric-mitchell/direct-preference-optimization | https://github.com/eric-mitchell/direct-preference-optimization | 2,400+ | June 10, 2026 |
-| ContextualAI/HALOs | https://github.com/ContextualAI/HALOs | 2,100+ | June 6, 2026 |
-| princeton-nlp/SimPO | https://github.com/princeton-nlp/SimPO | 1,200+ | June 6, 2026 |
-| sail-sg/oat | https://github.com/sail-sg/oat | 800+ | June 2, 2026 |
+| ContextualAI/HALOs                           | https://github.com/ContextualAI/HALOs                           | 2,100+ | June 6, 2026  |
+| princeton-nlp/SimPO                          | https://github.com/princeton-nlp/SimPO                          | 1,200+ | June 6, 2026  |
+| sail-sg/oat                                  | https://github.com/sail-sg/oat                                  | 800+   | June 2, 2026  |
 
 ### 9.3 GRPO and Reasoning
 
-| Repository | URL | Stars | Last Update |
-|------------|-----|-------|-------------|
-| WangJingyao07/Awesome-GRPO | https://github.com/WangJingyao07/Awesome-GRPO | 288 | June 3, 2026 |
-| jianzhnie/Open-R1 | https://github.com/jianzhnie/Open-R1 | 277 | June 9, 2026 |
-| TYH-labs/unsloth-buddy | https://github.com/TYH-labs/unsloth-buddy | 249 | June 8, 2026 |
-| Doriandarko/MLX-GRPO | https://github.com/Doriandarko/MLX-GRPO | 241 | June 8, 2026 |
+| Repository                 | URL                                           | Stars | Last Update  |
+| -------------------------- | --------------------------------------------- | ----- | ------------ |
+| WangJingyao07/Awesome-GRPO | https://github.com/WangJingyao07/Awesome-GRPO | 288   | June 3, 2026 |
+| jianzhnie/Open-R1          | https://github.com/jianzhnie/Open-R1          | 277   | June 9, 2026 |
+| TYH-labs/unsloth-buddy     | https://github.com/TYH-labs/unsloth-buddy     | 249   | June 8, 2026 |
+| Doriandarko/MLX-GRPO       | https://github.com/Doriandarko/MLX-GRPO       | 241   | June 8, 2026 |
 
 ### 9.4 End-to-End Training Platforms
 
-| Repository | URL | Stars | Last Update |
-|------------|-----|-------|-------------|
-| hiyouga/LlamaFactory | https://github.com/hiyouga/LlamaFactory | 23,000+ | June 10, 2026 |
-| modelscope/ms-swift | https://github.com/modelscope/ms-swift | 8,200+ | June 10, 2026 |
-| axolotl-ai-cloud/axolotl | https://github.com/axolotl-ai-cloud/axolotl | 5,400+ | June 10, 2026 |
+| Repository               | URL                                         | Stars   | Last Update   |
+| ------------------------ | ------------------------------------------- | ------- | ------------- |
+| hiyouga/LlamaFactory     | https://github.com/hiyouga/LlamaFactory     | 23,000+ | June 10, 2026 |
+| modelscope/ms-swift      | https://github.com/modelscope/ms-swift      | 8,200+  | June 10, 2026 |
+| axolotl-ai-cloud/axolotl | https://github.com/axolotl-ai-cloud/axolotl | 5,400+  | June 10, 2026 |
 
 ### 9.5 Evaluation Tools
 
-| Repository | URL | Stars | Last Update |
-|------------|-----|-------|-------------|
+| Repository            | URL                                      | Stars  | Last Update   |
+| --------------------- | ---------------------------------------- | ------ | ------------- |
 | tatsu-lab/alpaca_eval | https://github.com/tatsu-lab/alpaca_eval | 2,100+ | June 10, 2026 |
-| tatsu-lab/alpaca_farm | https://github.com/tatsu-lab/alpaca_farm | 1,200+ | June 4, 2026 |
-| allenai/reward-bench | https://github.com/allenai/reward-bench | 500+ | June 7, 2026 |
+| tatsu-lab/alpaca_farm | https://github.com/tatsu-lab/alpaca_farm | 1,200+ | June 4, 2026  |
+| allenai/reward-bench  | https://github.com/allenai/reward-bench  | 500+   | June 7, 2026  |
 
 ---
 
@@ -605,13 +671,19 @@ Alpaca Farm addresses the data collection challenge in RLHF research by providin
 
 The 2025-2026 period has witnessed several significant trends in reward modeling and LLM training:
 
-1. **GRPO Emergence**: Following DeepSeek-R1's success, GRPO has become the dominant method for reasoning-focused training, with implementations across all major frameworks.
+1. **GRPO Emergence**: Following DeepSeek-R1's success, GRPO has become the dominant method for
+   reasoning-focused training, with implementations across all major frameworks.
 
-2. **Multi-Method Support**: Modern frameworks increasingly support multiple optimization methods (DPO, KTO, ORPO, GRPO, SimPO) within unified APIs, enabling practitioners to easily compare approaches.
+2. **Multi-Method Support**: Modern frameworks increasingly support multiple optimization methods
+   (DPO, KTO, ORPO, GRPO, SimPO) within unified APIs, enabling practitioners to easily compare
+   approaches.
 
-3. **Efficiency Focus**: Significant development effort focuses on reducing computational requirements, with QLoRA, Unsloth integration, and Apple Silicon support enabling single-GPU training.
+3. **Efficiency Focus**: Significant development effort focuses on reducing computational
+   requirements, with QLoRA, Unsloth integration, and Apple Silicon support enabling single-GPU
+   training.
 
-4. **Production-Ready Tools**: The ecosystem has matured from research prototypes to production-grade frameworks with comprehensive documentation and support.
+4. **Production-Ready Tools**: The ecosystem has matured from research prototypes to
+   production-grade frameworks with comprehensive documentation and support.
 
 ### 10.2 Organizational Contributions
 
@@ -641,13 +713,17 @@ Common patterns across repositories include:
 
 ### 11.1 Framework Selection
 
-**For General Purpose Training**: Hugging Face TRL combined with the Alignment Handbook provides the most comprehensive and well-documented solution.
+**For General Purpose Training**: Hugging Face TRL combined with the Alignment Handbook provides the
+most comprehensive and well-documented solution.
 
-**For Large-Scale Training**: OpenRLHF or verl offer superior scalability for distributed training scenarios.
+**For Large-Scale Training**: OpenRLHF or verl offer superior scalability for distributed training
+scenarios.
 
-**For Production Deployment**: LlamaFactory or ms-swift provide comprehensive end-to-end pipelines with extensive model support.
+**For Production Deployment**: LlamaFactory or ms-swift provide comprehensive end-to-end pipelines
+with extensive model support.
 
-**For Research Exploration**: The combination of TRL with alpaca_farm for simulation enables rapid iteration.
+**For Research Exploration**: The combination of TRL with alpaca_farm for simulation enables rapid
+iteration.
 
 ### 11.2 Optimization Method Selection
 
@@ -661,19 +737,28 @@ Common patterns across repositories include:
 
 ## 12. Conclusion
 
-This comprehensive research has documented the rich landscape of GitHub repositories for reward modeling and LLM training during 2025-2026. The ecosystem demonstrates remarkable diversity and maturity, with solutions ranging from research prototypes to production-grade frameworks.
+This comprehensive research has documented the rich landscape of GitHub repositories for reward
+modeling and LLM training during 2025-2026. The ecosystem demonstrates remarkable diversity and
+maturity, with solutions ranging from research prototypes to production-grade frameworks.
 
 The key findings include:
 
-1. **Framework Consolidation**: The ecosystem has consolidated around a small number of mature frameworks (TRL, OpenRLHF, verl) while maintaining diversity in specialized tools.
+1. **Framework Consolidation**: The ecosystem has consolidated around a small number of mature
+   frameworks (TRL, OpenRLHF, verl) while maintaining diversity in specialized tools.
 
-2. **Method Innovation**: The period saw rapid advancement in optimization methods, with GRPO emerging as a dominant approach for reasoning-focused training.
+2. **Method Innovation**: The period saw rapid advancement in optimization methods, with GRPO
+   emerging as a dominant approach for reasoning-focused training.
 
-3. **Accessibility Improvements**: Memory-efficient training techniques have dramatically reduced computational barriers, enabling broader participation in alignment research.
+3. **Accessibility Improvements**: Memory-efficient training techniques have dramatically reduced
+   computational barriers, enabling broader participation in alignment research.
 
-4. **Evaluation Maturity**: Standardized benchmarks and evaluation tools have emerged, enabling reproducible comparison of alignment approaches.
+4. **Evaluation Maturity**: Standardized benchmarks and evaluation tools have emerged, enabling
+   reproducible comparison of alignment approaches.
 
-The continued growth and refinement of these repositories reflects the importance of alignment in practical AI deployment. Practitioners now have access to comprehensive, well-documented tools for implementing state-of-the-art alignment techniques, while researchers have the flexibility to explore novel approaches within mature infrastructure.
+The continued growth and refinement of these repositories reflects the importance of alignment in
+practical AI deployment. Practitioners now have access to comprehensive, well-documented tools for
+implementing state-of-the-art alignment techniques, while researchers have the flexibility to
+explore novel approaches within mature infrastructure.
 
 ---
 
@@ -692,5 +777,4 @@ The continued growth and refinement of these repositories reflects the importanc
 
 ---
 
-*Report Generated: June 10, 2026*
-*Data Sources: GitHub API, HuggingFace Hub*
+_Report Generated: June 10, 2026_ _Data Sources: GitHub API, HuggingFace Hub_

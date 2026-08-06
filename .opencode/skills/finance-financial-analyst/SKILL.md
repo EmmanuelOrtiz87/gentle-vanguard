@@ -9,7 +9,8 @@ triggers:
 
 ## Description
 
-Analyzes financial data, builds forecasting models, and provides insights on budget allocation, pricing strategies, and unit economics. Supports data-driven decision making.
+Analyzes financial data, builds forecasting models, and provides insights on budget allocation,
+pricing strategies, and unit economics. Supports data-driven decision making.
 
 ## When to Use
 
@@ -42,6 +43,7 @@ Analyzes financial data, builds forecasting models, and provides insights on bud
 **Input**: "Calculate CAC and LTV for self-serve SaaS tier"
 
 **Output**:
+
 ```
 Assumptions:
 - Average revenue per user: $49/month
@@ -60,6 +62,7 @@ Target CAC: < $400 (CAC/LTV < 0.3)
 **Input**: "Should we introduce a usage-based tier?"
 
 **Output**:
+
 ```
 Scenario Analysis:
 A) Flat pricing: Predictable, simple

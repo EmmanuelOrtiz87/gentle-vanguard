@@ -25,9 +25,12 @@ Load this skill whenever you need to:
 
 ## Critical Rules
 
-1. **Every PR MUST link an approved issue** — `Closes/Fixes/Resolves #<N>` in the PR body, and that issue MUST have `status:approved`. PRs without this are **automatically rejected** by CI.
-2. **Exactly one `type:*` label** — apply exactly ONE type label to the PR. CI will reject PRs with zero or multiple type labels.
-3. **400-line review budget** — keep PRs within 400 changed lines (`additions + deletions`) or request/obtain maintainer-applied `size:exception` with rationale documented.
+1. **Every PR MUST link an approved issue** — `Closes/Fixes/Resolves #<N>` in the PR body, and that
+   issue MUST have `status:approved`. PRs without this are **automatically rejected** by CI.
+2. **Exactly one `type:*` label** — apply exactly ONE type label to the PR. CI will reject PRs with
+   zero or multiple type labels.
+3. **400-line review budget** — keep PRs within 400 changed lines (`additions + deletions`) or
+   request/obtain maintainer-applied `size:exception` with rationale documented.
 4. **Automated checks must pass** — typecheck, lint, and test suites before merge.
 5. **No `Co-Authored-By` trailers** — never add AI attribution to commits.
 6. **No force-push to main/master** — protected branch.
@@ -63,19 +66,19 @@ Branch names **must** match this pattern:
 ^(feat|fix|chore|docs|style|refactor|perf|test|build|ci|revert)\/[a-z0-9._-]+$
 ```
 
-| Type | Example |
-|------|---------|
-| `feat/` | `feat/user-login` |
-| `fix/` | `fix/duplicate-observation-insert` |
-| `docs/` | `docs/api-reference-update` |
+| Type        | Example                            |
+| ----------- | ---------------------------------- |
+| `feat/`     | `feat/user-login`                  |
+| `fix/`      | `fix/duplicate-observation-insert` |
+| `docs/`     | `docs/api-reference-update`        |
 | `refactor/` | `refactor/extract-query-sanitizer` |
-| `chore/` | `chore/bump-pnpm-lock` |
-| `style/` | `style/fix-linter-warnings` |
-| `perf/` | `perf/optimize-catalog-loading` |
-| `test/` | `test/add-pipeline-coverage` |
-| `build/` | `build/update-pipeline-config` |
-| `ci/` | `ci/add-e2e-docker-job` |
-| `revert/` | `revert/undo-model-picker-change` |
+| `chore/`    | `chore/bump-pnpm-lock`             |
+| `style/`    | `style/fix-linter-warnings`        |
+| `perf/`     | `perf/optimize-catalog-loading`    |
+| `test/`     | `test/add-pipeline-coverage`       |
+| `build/`    | `build/update-pipeline-config`     |
+| `ci/`       | `ci/add-e2e-docker-job`            |
+| `revert/`   | `revert/undo-model-picker-change`  |
 
 **Rules:**
 
@@ -87,9 +90,10 @@ Branch names **must** match this pattern:
 
 ## PR Body Format
 
-The PR body must follow the template at `.github/PULL_REQUEST_TEMPLATE.md`. All sections are required unless marked optional.
+The PR body must follow the template at `.github/PULL_REQUEST_TEMPLATE.md`. All sections are
+required unless marked optional.
 
-```markdown
+````markdown
 ## 🔗 Linked Issue
 
 Closes #<N>
@@ -109,23 +113,27 @@ Closes #<N>
 
 ## 📂 Changes
 
-| File / Area | What Changed |
-|-------------|-------------|
+| File / Area    | What Changed      |
+| -------------- | ----------------- |
 | `path/to/file` | Brief description |
 
 ## 🧪 Test Plan
 
 **Typecheck**
+
 ```bash
 npx tsc --noEmit
 ```
+````
 
 **Lint**
+
 ```bash
 npm run lint
 ```
 
 **Tests**
+
 ```bash
 npm run test:config
 ```
@@ -138,13 +146,15 @@ npm run test:config
 ## ✅ Contributor Checklist
 
 - [ ] PR is linked to an issue with `status:approved`
-- [ ] PR stays within 400 changed lines, or I have requested/obtained maintainer-applied `size:exception` with rationale documented
+- [ ] PR stays within 400 changed lines, or I have requested/obtained maintainer-applied
+      `size:exception` with rationale documented
 - [ ] I have added the appropriate `type:*` label to this PR
 - [ ] Typecheck passes (`npx tsc --noEmit`)
 - [ ] Lint passes (`npm run lint`)
 - [ ] I have updated documentation if necessary
 - [ ] My commits follow Conventional Commits format
 - [ ] My commits do not include `Co-Authored-By` trailers
+
 ```
 
 ---
@@ -170,17 +180,21 @@ These checks run on every PR and **all must pass** before merge:
 Commit messages **must** match this pattern:
 
 ```
+
 ^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9\._-]+\))?!?: .+
+
 ```
 
 ### Format
 
 ```
+
 <type>(<optional-scope>)!: <description>
 
 [optional body]
 
 [optional footer]
+
 ```
 
 ### Allowed Types
@@ -204,9 +218,11 @@ Commit messages **must** match this pattern:
 Add `!` after the type/scope:
 
 ```
+
 feat(cli)!: rename --config flag to --config-file
 
 BREAKING CHANGE: the --config flag has been renamed to --config-file.
+
 ```
 
 Breaking changes map to `type:breaking-change` label.
@@ -214,19 +230,15 @@ Breaking changes map to `type:breaking-change` label.
 ### Examples
 
 ```
-feat(tui): add progress bar to installation steps
-fix(agent): correct agent detection on macOS
-docs: update contributing guide
-chore(deps): bump typescript to latest
-refactor(pipeline): extract step executor
-style: fix linter warnings in catalog package
-perf(system): cache OS detection result
-test(installer): add coverage for catalog step execution
-build: update pipeline config for arm64
-ci: split unit and e2e test jobs
-revert: undo model picker redesign
-feat(cli)!: change default config path
-```
+
+feat(tui): add progress bar to installation steps fix(agent): correct agent detection on macOS docs:
+update contributing guide chore(deps): bump typescript to latest refactor(pipeline): extract step
+executor style: fix linter warnings in catalog package perf(system): cache OS detection result
+test(installer): add coverage for catalog step execution build: update pipeline config for arm64 ci:
+split unit and e2e test jobs revert: undo model picker redesign feat(cli)!: change default config
+path
+
+````
 
 ---
 
@@ -241,7 +253,7 @@ gh issue view <N> --repo EmmanuelOrtiz87/gentle-vanguard
 # Create branch
 git checkout main && git pull
 git checkout -b fix/<short-description>
-```
+````
 
 ### Testing Locally
 

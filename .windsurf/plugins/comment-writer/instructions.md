@@ -4,11 +4,10 @@
 
 ## Description
 
-
 ## Triggers
 
-
 ## Instructions
+
 ## When to Use
 
 Load this skill whenever you write a comment that another human will read.

@@ -18,12 +18,12 @@ available (openrouter/ollama/dify/lm-studio2).
 
 ## 2. Model Tier Definitions
 
-| Tier                 | Model(s)                          | Strengths                                     | Weaknesses                        | Cost/M Tokens |
-| -------------------- | --------------------------------- | --------------------------------------------- | --------------------------------- | ------------- |
-| **T1 — Heavy**       | opencode/deepseek-v4-flash-free   | Deep reasoning, architecture, code generation | Single model for all tasks        | $0 (free)     |
-| **T2 — Medium**      | opencode/deepseek-v4-flash-free   | Balanced perf/cost, good for most tasks       | Less depth on complex reasoning   | $0 (free)     |
-| **T3 — Light**       | opencode/deepseek-v4-flash-free, ollama (llama3, qwen2.5) | Fast, cheap, private (local)     | Limited context, weaker reasoning | $0-0.5        |
-| **T4 — Specialized** | Fine-tuned models                 | Domain-specific excellence                    | Narrow applicability              | Varies        |
+| Tier                 | Model(s)                                                  | Strengths                                     | Weaknesses                        | Cost/M Tokens |
+| -------------------- | --------------------------------------------------------- | --------------------------------------------- | --------------------------------- | ------------- |
+| **T1 — Heavy**       | opencode/deepseek-v4-flash-free                           | Deep reasoning, architecture, code generation | Single model for all tasks        | $0 (free)     |
+| **T2 — Medium**      | opencode/deepseek-v4-flash-free                           | Balanced perf/cost, good for most tasks       | Less depth on complex reasoning   | $0 (free)     |
+| **T3 — Light**       | opencode/deepseek-v4-flash-free, ollama (llama3, qwen2.5) | Fast, cheap, private (local)                  | Limited context, weaker reasoning | $0-0.5        |
+| **T4 — Specialized** | Fine-tuned models                                         | Domain-specific excellence                    | Narrow applicability              | Varies        |
 
 ---
 
@@ -133,14 +133,14 @@ When changing a model assignment:
 
 ## 8. References
 
-| Resource                | Path                                                         |
-| ----------------------- | ------------------------------------------------------------ |
-| Orchestrator Config     | `config/orchestrator.json`                                   |
-| Agent Config (OpenCode) | `opencode.json`                                              |
+| Resource                | Path                                                          |
+| ----------------------- | ------------------------------------------------------------- |
+| Orchestrator Config     | `config/orchestrator.json`                                    |
+| Agent Config (OpenCode) | `opencode.json`                                               |
 | Provider Health Runbook | `docs/operations/procedures/MODEL-PROVIDER-HEALTH-RUNBOOK.md` |
-| Token Budget Guard      | `src/telemetry/token-budget-guard.ts` |
-| Performance Normatives  | `rules/NORMATIVAS-PERFORMANCE.md`                            |
-| Context Engineering     | `rules/CONTEXT-ENGINEERING.md`                               |
+| Token Budget Guard      | `src/telemetry/token-budget-guard.ts`                         |
+| Performance Normatives  | `rules/NORMATIVAS-PERFORMANCE.md`                             |
+| Context Engineering     | `rules/CONTEXT-ENGINEERING.md`                                |
 
 ---
 

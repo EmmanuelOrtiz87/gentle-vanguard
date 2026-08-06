@@ -61,7 +61,11 @@ function readDb(): TokenDb {
     }
   } catch {
     const backupPath = DB_PATH.replace(/\.json$/, `.corrupted.${Date.now()}.json`);
-    try { fs.copyFileSync(DB_PATH, backupPath); } catch { /* ignore */ }
+    try {
+      fs.copyFileSync(DB_PATH, backupPath);
+    } catch {
+      /* ignore */
+    }
     console.warn(`[METRICS-STORE] Corrupted DB, reinitializing: ${DB_PATH}`);
   }
   return { token_usage: [], version: '1.0' };
@@ -141,7 +145,10 @@ function getWeeklyData(): AggregatedRow[] {
   const cutoffStr = cutoff.toISOString().slice(0, 10);
 
   const filtered = db.token_usage.filter((r) => r.date >= cutoffStr);
-  const grouped = new Map<string, { tokens: number; cost: number; sessions: Set<string>; counts: number[] }>();
+  const grouped = new Map<
+    string,
+    { tokens: number; cost: number; sessions: Set<string>; counts: number[] }
+  >();
 
   for (const r of filtered) {
     const d = new Date(r.date);
@@ -175,7 +182,10 @@ function getMonthlyData(): AggregatedRow[] {
   const cutoffStr = cutoff.toISOString().slice(0, 10);
 
   const filtered = db.token_usage.filter((r) => r.date >= cutoffStr);
-  const grouped = new Map<string, { tokens: number; cost: number; sessions: Set<string>; counts: number[] }>();
+  const grouped = new Map<
+    string,
+    { tokens: number; cost: number; sessions: Set<string>; counts: number[] }
+  >();
 
   for (const r of filtered) {
     const monthKey = r.date.slice(0, 7);
@@ -216,7 +226,9 @@ interface CloseSummary {
 }
 
 /** Read segmented token totals for a session from Nexus token_usage (source of truth). */
-function readNexusSessionTokens(sessionId: string): { prompt: number; completion: number; cost: number } | null {
+function readNexusSessionTokens(
+  sessionId: string,
+): { prompt: number; completion: number; cost: number } | null {
   try {
     const Database = _require('better-sqlite3');
     if (!fs.existsSync(NEXUS_DB_PATH)) return null;
@@ -250,7 +262,9 @@ function readSessionFileTokens(): { input: number; output: number; total: number
       const total = Number(data.totalTokens ?? 0) || input + output;
       return { input, output, total };
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return { input: 0, output: 0, total: 0 };
 }
 
@@ -271,7 +285,9 @@ function closeSession(sessionId: string): CloseSummary {
   const metricsStore = readMetricsStoreSessionTokens(sessionId);
 
   // Prefer Nexus (real per-message data); fall back to session file, then metrics store.
-  let input = 0, output = 0, cost = 0;
+  let input = 0,
+    output = 0,
+    cost = 0;
   let source: CloseSummary['source'] = 'session-file';
 
   if (nexus && (nexus.prompt > 0 || nexus.completion > 0)) {
@@ -304,7 +320,11 @@ function closeSession(sessionId: string): CloseSummary {
 
   // Persist close summary to .session/token-close-summary.json
   ensureRuntimeDir();
-  fs.writeFileSync(path.join(SESSION_DIR, 'token-close-summary.json'), JSON.stringify(summary, null, 2), 'utf-8');
+  fs.writeFileSync(
+    path.join(SESSION_DIR, 'token-close-summary.json'),
+    JSON.stringify(summary, null, 2),
+    'utf-8',
+  );
 
   // Update session-current.json with final metrics ONLY if the target session
   // matches the current active session. Prevents cross-session contamination
@@ -323,7 +343,9 @@ function closeSession(sessionId: string): CloseSummary {
         fs.writeFileSync(fp, JSON.stringify(data, null, 2), 'utf-8');
       }
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 
   return summary;
 }
@@ -350,7 +372,7 @@ function getDashboardData(): Record<string, unknown> {
 function main(): void {
   const args = process.argv.slice(2);
   const actionIdx = args.indexOf('--action');
-  const action = actionIdx >= 0 ? args[actionIdx + 1] : (args[0] || 'query');
+  const action = actionIdx >= 0 ? args[actionIdx + 1] : args[0] || 'query';
   const sessionId = extractArg(args, '--session-id');
   const tokens = parseInt(extractArg(args, '--tokens') || '0', 10);
   const cost = parseFloat(extractArg(args, '--cost') || '0');
@@ -367,8 +389,14 @@ function main(): void {
       break;
 
     case 'record':
-      if (!sessionId) { console.error('-SessionId required'); process.exit(1); }
-      if (tokens <= 0) { console.error('-Tokens must be > 0'); process.exit(1); }
+      if (!sessionId) {
+        console.error('-SessionId required');
+        process.exit(1);
+      }
+      if (tokens <= 0) {
+        console.error('-Tokens must be > 0');
+        process.exit(1);
+      }
       recordUsage(sessionId, tokens, cost);
       result.status = 'recorded';
       result.sessionId = sessionId;
@@ -450,18 +478,26 @@ function readSessionIdFromFiles(): string | undefined {
         const sid = String(data.sessionId ?? data.id ?? '').trim();
         if (sid) return sid;
       }
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }
   try {
-    const files = fs.readdirSync(SESSION_DIR)
+    const files = fs
+      .readdirSync(SESSION_DIR)
       .filter((f) => f.startsWith('session-') && f.endsWith('.json') && !f.includes('current'))
       .sort();
     for (const f of files.reverse()) {
-      const data = JSON.parse(fs.readFileSync(path.join(SESSION_DIR, f), 'utf-8')) as Record<string, unknown>;
+      const data = JSON.parse(fs.readFileSync(path.join(SESSION_DIR, f), 'utf-8')) as Record<
+        string,
+        unknown
+      >;
       const sid = String(data.sessionId ?? data.id ?? '').trim();
       if (sid) return sid;
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return undefined;
 }
 

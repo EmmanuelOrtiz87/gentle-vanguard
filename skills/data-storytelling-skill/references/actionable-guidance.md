@@ -3,16 +3,19 @@
 ## The Three-Act Data Story
 
 **ACT 1: Context**
+
 - What's the situation?
 - What are we measuring and why?
 - What's the time frame?
 
 **ACT 2: The Insight**
+
 - What changed? (The "aha" moment)
 - Why did it change? (Cause explanation)
 - How significant is it? (Magnitude)
 
 **ACT 3: Implication**
+
 - What should we do about it?
 - What happens if we don't act?
 - What's the expected outcome?

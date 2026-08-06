@@ -95,22 +95,24 @@ function saveExperiments(e: ABExperiment[]): void {
 
 // ─── API ──────────────────────────────────────────────────────────────
 
-export function createExperiment(config: Omit<ABExperiment, 'id' | 'startDate' | 'status'>): ABExperiment {
+export function createExperiment(
+  config: Omit<ABExperiment, 'id' | 'startDate' | 'status'>,
+): ABExperiment {
   const experiments = loadExperiments();
-  
+
   const experiment: ABExperiment = {
     ...config,
     id: `exp-${randomUUID().slice(0, 8)}`,
     startDate: new Date().toISOString(),
     status: 'draft',
   };
-  
+
   // Validate traffic distribution sums to 100
   const totalTraffic = experiment.variants.reduce((s, v) => s + v.trafficPercent, 0);
   if (Math.abs(totalTraffic - 100) > 1) {
     throw new Error(`Traffic distribution must sum to 100%, got ${totalTraffic}%`);
   }
-  
+
   experiments.push(experiment);
   saveExperiments(experiments);
   return experiment;
@@ -118,18 +120,20 @@ export function createExperiment(config: Omit<ABExperiment, 'id' | 'startDate' |
 
 export function assignVariant(experimentId: string, sessionId: string): Variant {
   const experiments = loadExperiments();
-  const experiment = experiments.find(e => e.id === experimentId);
+  const experiment = experiments.find((e) => e.id === experimentId);
   if (!experiment) throw new Error(`Experiment ${experimentId} not found`);
   if (experiment.status !== 'running') throw new Error(`Experiment ${experimentId} is not running`);
-  
+
   // Check existing assignment
   const assignments = loadAssignments();
-  const existing = assignments.find(a => a.sessionId === sessionId && a.experimentId === experimentId);
+  const existing = assignments.find(
+    (a) => a.sessionId === sessionId && a.experimentId === experimentId,
+  );
   if (existing) {
-    const variant = experiment.variants.find(v => v.id === existing.variantId);
+    const variant = experiment.variants.find((v) => v.id === existing.variantId);
     if (variant) return variant;
   }
-  
+
   // Weighted random assignment
   const rand = randomInt(0, 100);
   let cumulative = 0;
@@ -146,68 +150,79 @@ export function assignVariant(experimentId: string, sessionId: string): Variant 
       return variant;
     }
   }
-  
+
   // Fallback to first variant
   const fallback = experiment.variants[0];
-  assignments.push({ sessionId, experimentId, variantId: fallback.id, assignedAt: new Date().toISOString() });
+  assignments.push({
+    sessionId,
+    experimentId,
+    variantId: fallback.id,
+    assignedAt: new Date().toISOString(),
+  });
   saveAssignments(assignments);
   return fallback;
 }
 
-export function recordResult(experimentId: string, variantId: string, metrics: Record<string, number>): void {
+export function recordResult(
+  experimentId: string,
+  variantId: string,
+  metrics: Record<string, number>,
+): void {
   const results = loadResults();
   if (!results[experimentId]) results[experimentId] = [];
-  
-  let variantResult = results[experimentId].find(r => r.variantId === variantId);
+
+  let variantResult = results[experimentId].find((r) => r.variantId === variantId);
   if (!variantResult) {
     variantResult = { variantId, samples: 0, totalMetric: 0, avgMetric: 0 };
     results[experimentId].push(variantResult);
   }
-  
+
   const metricValue = metrics[Object.keys(metrics)[0]] || 0;
   variantResult.samples++;
   variantResult.totalMetric += metricValue;
   variantResult.avgMetric = variantResult.totalMetric / variantResult.samples;
-  
+
   saveResults(results);
 }
 
-export function evaluateExperiment(experimentId: string): { winner: string | null; significant: boolean } {
+export function evaluateExperiment(experimentId: string): {
+  winner: string | null;
+  significant: boolean;
+} {
   const results = loadResults();
   const experimentResults = results[experimentId];
   if (!experimentResults || experimentResults.length < 2) {
     return { winner: null, significant: false };
   }
-  
+
   const experiments = loadExperiments();
-  const experiment = experiments.find(e => e.id === experimentId);
+  const experiment = experiments.find((e) => e.id === experimentId);
   if (!experiment) return { winner: null, significant: false };
-  
+
   // Check minimum sample size
-  const minSamples = Math.min(...experimentResults.map(r => r.samples));
+  const minSamples = Math.min(...experimentResults.map((r) => r.samples));
   if (minSamples < experiment.minSampleSize) {
     return { winner: null, significant: false };
   }
-  
+
   // Simple winner determination (highest avg metric)
   const sorted = [...experimentResults].sort((a, b) => b.avgMetric - a.avgMetric);
   const winner = sorted[0];
   const runnerUp = sorted[1];
-  
+
   // Simple significance check (effect size > 5%)
-  const effectSize = runnerUp.avgMetric > 0 
-    ? (winner.avgMetric - runnerUp.avgMetric) / runnerUp.avgMetric 
-    : 1;
-  
+  const effectSize =
+    runnerUp.avgMetric > 0 ? (winner.avgMetric - runnerUp.avgMetric) / runnerUp.avgMetric : 1;
+
   const significant = effectSize > 0.05 && winner.samples >= experiment.minSampleSize;
-  
+
   // Auto-complete if significant
   if (significant && experiment.status === 'running') {
     experiment.status = 'completed';
     experiment.endDate = new Date().toISOString();
     saveExperiments(experiments);
   }
-  
+
   return {
     winner: winner.variantId,
     significant,
@@ -216,9 +231,9 @@ export function evaluateExperiment(experimentId: string): { winner: string | nul
 
 export function rollbackExperiment(experimentId: string): boolean {
   const experiments = loadExperiments();
-  const experiment = experiments.find(e => e.id === experimentId);
+  const experiment = experiments.find((e) => e.id === experimentId);
   if (!experiment) return false;
-  
+
   experiment.status = 'rolled-back';
   experiment.endDate = new Date().toISOString();
   saveExperiments(experiments);
@@ -227,9 +242,9 @@ export function rollbackExperiment(experimentId: string): boolean {
 
 export function startExperiment(experimentId: string): boolean {
   const experiments = loadExperiments();
-  const experiment = experiments.find(e => e.id === experimentId);
+  const experiment = experiments.find((e) => e.id === experimentId);
   if (!experiment || experiment.status !== 'draft') return false;
-  
+
   experiment.status = 'running';
   saveExperiments(experiments);
   return true;
@@ -240,12 +255,19 @@ export function startExperiment(experimentId: string): boolean {
 function main(): void {
   const args = process.argv.slice(2);
   const action = args[0];
-  
+
   if (action === 'list') {
     const experiments = loadExperiments();
-    console.log(JSON.stringify(experiments.map(e => ({
-      id: e.id, name: e.name, status: e.status, variants: e.variants.length,
-    }))));
+    console.log(
+      JSON.stringify(
+        experiments.map((e) => ({
+          id: e.id,
+          name: e.name,
+          status: e.status,
+          variants: e.variants.length,
+        })),
+      ),
+    );
   } else if (action === 'evaluate' && args[1]) {
     const result = evaluateExperiment(args[1]);
     console.log(JSON.stringify(result));

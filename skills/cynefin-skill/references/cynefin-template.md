@@ -11,8 +11,8 @@
 
 ### Cause-Effect Analysis
 
-Relationship: [Clear / Requires expertise / Retrospective / Turbulent]
-Evidence: [What makes you believe this]
+Relationship: [Clear / Requires expertise / Retrospective / Turbulent] Evidence: [What makes you
+believe this]
 
 ### Domain Classification
 

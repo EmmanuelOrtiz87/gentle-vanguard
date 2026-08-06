@@ -15,7 +15,7 @@
 
 import { execSync } from 'child_process';
 import { readFileSync, writeFileSync } from 'fs';
-import { resolve, join } from 'path';
+import { resolve } from 'path';
 
 const ROOT = resolve(process.cwd());
 
@@ -36,8 +36,6 @@ interface FixResult {
   fixes: string[];
   errors: string[];
 }
-
-const CACHE_FILE = join(ROOT, '.runtime', 'lint-fix-cache.json');
 
 function log(msg: string, level: 'info' | 'warn' | 'error' = 'info'): void {
   const prefix = level === 'error' ? '[ERR]' : level === 'warn' ? '[WARN]' : '[INFO]';
@@ -89,21 +87,26 @@ function fixUnusedImports(content: string): { content: string; fixed: boolean } 
     const line = lines[i];
     const match = importRegex.exec(line);
     if (match) {
-      const importedItems = line.match(/\{([^}]+)\}/)?.[1]?.split(',').map(s => s.trim().split(' ').pop()) || [];
+      const importedItems =
+        line
+          .match(/\{([^}]+)\}/)?.[1]
+          ?.split(',')
+          .map((s) => s.trim().split(' ').pop()) || [];
       const defaultImport = line.match(/import\s+(\w+)\s+from/)?.[1];
       const items = defaultImport ? [defaultImport, ...importedItems] : importedItems;
-      
+
       let anyUsed = false;
       for (const item of items) {
         // Check if item is used in the file (not just declared)
         const usageRegex = new RegExp(`\\b${item}\\b`, 'g');
         const usages = content.match(usageRegex);
-        if (usages && usages.length > 1) { // 1 = declaration itself
+        if (usages && usages.length > 1) {
+          // 1 = declaration itself
           anyUsed = true;
           break;
         }
       }
-      
+
       if (!anyUsed && items.length > 0) {
         lines[i] = `// REMOVED: ${line}`;
         fixed = true;
@@ -118,7 +121,7 @@ function fixPreferConst(content: string): { content: string; fixed: boolean } {
   // Change let to const where variable is never reassigned
   const letRegex = /^(\s*)let\s+(\w+)\s*=/gm;
   let fixed = false;
-  
+
   let result = content;
   let match;
   while ((match = letRegex.exec(content)) !== null) {
@@ -126,12 +129,12 @@ function fixPreferConst(content: string): { content: string; fixed: boolean } {
     const varName = match[2];
     const assignmentRegex = new RegExp(`\\b${varName}\\s*=`);
     const assignments = content.match(assignmentRegex);
-    
+
     if (assignments && assignments.length === 1) {
       // Only one assignment = declaration, can be const
       result = result.replace(
         new RegExp(`^${indent}let\\s+${varName}\\s*=`, 'm'),
-        `${indent}const ${varName} =`
+        `${indent}const ${varName} =`,
       );
       fixed = true;
     }
@@ -144,7 +147,7 @@ function fixFloatingPromises(content: string): { content: string; fixed: boolean
   // Add void operator to unhandled promises
   const promiseRegex = /^(\s*)(\w+\([^)]*\)\.(?:then|catch|finally)\([^)]*\));?$/gm;
   let fixed = false;
-  
+
   let result = content;
   let match;
   while ((match = promiseRegex.exec(content)) !== null) {
@@ -181,7 +184,7 @@ function fixUnsafeRegex(content: string): { content: string; fixed: boolean } {
 
 async function fixFile(file: string, dryRun: boolean): Promise<FixResult> {
   const result: FixResult = { file, fixes: [], errors: [] };
-  
+
   let content = getFileContent(file);
   if (!content) {
     result.errors.push('Could not read file');
@@ -236,7 +239,7 @@ async function main(): Promise<void> {
   }
 
   log('Running lint check...');
-  
+
   let lintOutput: string;
   try {
     lintOutput = execSync('npm run lint 2>&1', { encoding: 'utf-8', cwd: ROOT });
@@ -247,7 +250,7 @@ async function main(): Promise<void> {
   }
 
   const errors = parseLintOutput(lintOutput);
-  
+
   if (errors.length === 0) {
     log('No lint errors found! ✅', 'info');
     process.exit(0);
@@ -271,16 +274,18 @@ async function main(): Promise<void> {
 
   for (let i = 0; i < files.length; i += batchSize) {
     const batch = files.slice(i, i + batchSize);
-    log(`Processing batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(files.length / batchSize)}...`);
-    
+    log(
+      `Processing batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(files.length / batchSize)}...`,
+    );
+
     for (const file of batch) {
       const result = await fixFile(file, dryRun);
       results.push(result);
-      
+
       if (result.fixes.length > 0) {
         log(`  ${file}: ${result.fixes.join(', ')}`, 'info');
       }
-      
+
       if (result.errors.length > 0) {
         log(`  ${file}: errors - ${result.errors.join(', ')}`, 'error');
       }
@@ -291,7 +296,7 @@ async function main(): Promise<void> {
     try {
       execSync('npm run typecheck 2>&1', { encoding: 'utf-8', cwd: ROOT, stdio: 'pipe' });
       log('  Typecheck passed ✅', 'info');
-    } catch (_e) {
+    } catch {
       // Typecheck failure is expected if there are errors - log and continue
       log('  Typecheck failed - stopping batch', 'error');
       break;
@@ -299,11 +304,11 @@ async function main(): Promise<void> {
   }
 
   // Summary
-  const withFixes = results.filter(r => r.fixes.length > 0);
+  const withFixes = results.filter((r) => r.fixes.length > 0);
   log(`\n=== Summary ===`, 'info');
   log(`Files processed: ${results.length}`, 'info');
   log(`Files with fixes: ${withFixes.length}`, 'info');
-  
+
   if (dryRun) {
     log('\nRun with --apply to apply fixes', 'warn');
   } else {
@@ -311,7 +316,7 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch(e => {
+main().catch((e) => {
   console.error('Fatal error:', e);
   process.exit(1);
 });

@@ -2,7 +2,9 @@
 
 ## 1. Preserve Behavior Exactly
 
-Don't change what the code does — only how it expresses it. All inputs, outputs, side effects, error behavior, and edge cases must remain identical. If you're not sure a simplification preserves behavior, don't make it.
+Don't change what the code does — only how it expresses it. All inputs, outputs, side effects, error
+behavior, and edge cases must remain identical. If you're not sure a simplification preserves
+behavior, don't make it.
 
 ```
 ASK BEFORE EVERY CHANGE:
@@ -14,7 +16,8 @@ ASK BEFORE EVERY CHANGE:
 
 ## 2. Follow Project Conventions
 
-Simplification means making code more consistent with the codebase, not imposing external preferences. Before simplifying:
+Simplification means making code more consistent with the codebase, not imposing external
+preferences. Before simplifying:
 
 ```
 1. Read CLAUDE.md / project conventions
@@ -67,11 +70,16 @@ for (const item of items) {
 
 Simplification has a failure mode: over-simplification. Watch for these traps:
 
-- **Inlining too aggressively** — removing a helper that gave a concept a name makes the call site harder to read
-- **Combining unrelated logic** — two simple functions merged into one complex function is not simpler
-- **Removing "unnecessary" abstraction** — some abstractions exist for extensibility or testability, not complexity
+- **Inlining too aggressively** — removing a helper that gave a concept a name makes the call site
+  harder to read
+- **Combining unrelated logic** — two simple functions merged into one complex function is not
+  simpler
+- **Removing "unnecessary" abstraction** — some abstractions exist for extensibility or testability,
+  not complexity
 - **Optimizing for line count** — fewer lines is not the goal; easier comprehension is
 
 ## 5. Scope to What Changed
 
-Default to simplifying recently modified code. Avoid drive-by refactors of unrelated code unless explicitly asked to broaden scope. Unscoped simplification creates noise in diffs and risks unintended regressions.
+Default to simplifying recently modified code. Avoid drive-by refactors of unrelated code unless
+explicitly asked to broaden scope. Unscoped simplification creates noise in diffs and risks
+unintended regressions.

@@ -23,6 +23,7 @@ Tests reveal intent and coverage:
 Walk through the code with the five axes in mind:
 
 For each file changed:
+
 1. Correctness: Does this code do what the test says it should?
 2. Readability: Can I understand this without help?
 3. Architecture: Does this fit the system?
@@ -33,17 +34,21 @@ For each file changed:
 
 Label every comment with its severity so the author knows what's required vs optional:
 
-| Prefix | Meaning | Author Action |
-|---|---|---|
-| _(no prefix)_ | Required change | Must address before merge |
-| **Critical:** | Blocks merge | Security vulnerability, data loss, broken functionality |
-| **Nit:** | Minor, optional | Author may ignore — formatting, style preferences |
-| **Optional:** / **Consider:** | Suggestion | Worth considering but not required |
-| **FYI** | Informational only | No action needed — context for future reference |
+| Prefix                        | Meaning            | Author Action                                           |
+| ----------------------------- | ------------------ | ------------------------------------------------------- |
+| _(no prefix)_                 | Required change    | Must address before merge                               |
+| **Critical:**                 | Blocks merge       | Security vulnerability, data loss, broken functionality |
+| **Nit:**                      | Minor, optional    | Author may ignore — formatting, style preferences       |
+| **Optional:** / **Consider:** | Suggestion         | Worth considering but not required                      |
+| **FYI**                       | Informational only | No action needed — context for future reference         |
 
-This prevents authors from treating all feedback as mandatory and wasting time on optional suggestions.
+This prevents authors from treating all feedback as mandatory and wasting time on optional
+suggestions.
 
-**Lead with what matters.** Order findings by leverage: correctness and security first, then structural regressions and missed simplifications, then everything else. Don't bury a real issue under cosmetic nits — a few high-conviction comments beat a long list. If you have one structural problem and ten nits, the structural problem _is_ the review.
+**Lead with what matters.** Order findings by leverage: correctness and security first, then
+structural regressions and missed simplifications, then everything else. Don't bury a real issue
+under cosmetic nits — a few high-conviction comments beat a long list. If you have one structural
+problem and ten nits, the structural problem _is_ the review.
 
 ## Step 5: Verify the Verification
 
@@ -90,7 +95,8 @@ After any refactoring or implementation change, check for orphaned code:
 2. List it explicitly
 3. **Ask before deleting:** "Should I remove these now-unused elements: [list]?"
 
-Don't leave dead code lying around — it confuses future readers and agents. But don't silently delete things you're not sure about. When in doubt, ask.
+Don't leave dead code lying around — it confuses future readers and agents. But don't silently
+delete things you're not sure about. When in doubt, ask.
 
 ```
 DEAD CODE IDENTIFIED:
@@ -112,30 +118,43 @@ Part of code review is dependency review:
 4. Does it have known vulnerabilities? (`npm audit`)
 5. What's the license? (Must be compatible with the project.)
 
-**Rule:** Prefer standard library and existing utilities over new dependencies. Every dependency is a liability.
+**Rule:** Prefer standard library and existing utilities over new dependencies. Every dependency is
+a liability.
 
-**Upgrading an existing dependency** is a code change like any other, and the riskiest upgrades are the ones merged in bulk with a message like "bump deps." Review them with the same discipline:
+**Upgrading an existing dependency** is a code change like any other, and the riskiest upgrades are
+the ones merged in bulk with a message like "bump deps." Review them with the same discipline:
 
-1. **Read the changelog, not just the version number.** Semver is a promise the maintainer may not have kept — a "patch" can carry a behavioral change. For a major bump, read the migration notes and find what breaks.
-2. **One dependency per change.** Upgrade and merge them individually (or in small related groups). When a bulk bump breaks the build, you've lost which package did it; a single-package change makes the cause obvious and the revert clean.
-3. **Let the tests decide.** The upgrade is verified by a green suite before _and_ after, not by "it installed." If coverage around the dependency's behavior is thin, that gap is the real finding — add a test first.
-4. **Mind the transitive graph.** Most installed packages are ones nobody chose directly. Review the lockfile diff, not just `package.json`; a single direct bump can pull in dozens of indirect changes.
-5. **Keep the lockfile honest.** Commit it, review its diff, and never hand-edit it. The lockfile is the thing that actually pins what ships.
+1. **Read the changelog, not just the version number.** Semver is a promise the maintainer may not
+   have kept — a "patch" can carry a behavioral change. For a major bump, read the migration notes
+   and find what breaks.
+2. **One dependency per change.** Upgrade and merge them individually (or in small related groups).
+   When a bulk bump breaks the build, you've lost which package did it; a single-package change
+   makes the cause obvious and the revert clean.
+3. **Let the tests decide.** The upgrade is verified by a green suite before _and_ after, not by "it
+   installed." If coverage around the dependency's behavior is thin, that gap is the real finding —
+   add a test first.
+4. **Mind the transitive graph.** Most installed packages are ones nobody chose directly. Review the
+   lockfile diff, not just `package.json`; a single direct bump can pull in dozens of indirect
+   changes.
+5. **Keep the lockfile honest.** Commit it, review its diff, and never hand-edit it. The lockfile is
+   the thing that actually pins what ships.
 
-For triaging `npm audit` findings and supply-chain risk (typosquatting, compromised maintainers), follow the `security-and-hardening` skill — this section covers the upgrade _workflow_, that one covers the security verdict.
+For triaging `npm audit` findings and supply-chain risk (typosquatting, compromised maintainers),
+follow the `security-and-hardening` skill — this section covers the upgrade _workflow_, that one
+covers the security verdict.
 
 ## Delegation Triggers
 
 Based on Gentle AI workflow guidance, these triggers direct agent behavior:
 
-| Trigger | Expected Behavior |
-|---------|-------------------|
-| Reading 4+ files to understand a flow | Delegate to exploration agent or run an exploration phase |
-| Touching 2+ non-trivial files | Use one focused writer and validate the result |
-| Implementation ready for review | Start bounded native review that freezes candidate and creates content-bound receipt |
-| Commit, push, or PR | Validate same receipt against live Git candidate; never silently reopen review |
-| Long monolithic session with accumulating complexity | Pause and delegate, re-plan, or justify why not |
-| Wrong cwd, worktree/git accident, merge recovery | Stop, preserve review scope, investigate or validate existing receipt before proceeding |
+| Trigger                                              | Expected Behavior                                                                       |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Reading 4+ files to understand a flow                | Delegate to exploration agent or run an exploration phase                               |
+| Touching 2+ non-trivial files                        | Use one focused writer and validate the result                                          |
+| Implementation ready for review                      | Start bounded native review that freezes candidate and creates content-bound receipt    |
+| Commit, push, or PR                                  | Validate same receipt against live Git candidate; never silently reopen review          |
+| Long monolithic session with accumulating complexity | Pause and delegate, re-plan, or justify why not                                         |
+| Wrong cwd, worktree/git accident, merge recovery     | Stop, preserve review scope, investigate or validate existing receipt before proceeding |
 
 ## Receipt and Gate Binding
 

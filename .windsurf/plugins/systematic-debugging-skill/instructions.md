@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Systematic Debugging
 
 ## Overview
@@ -29,9 +30,11 @@ If you haven't completed Phase 1, you cannot propose fixes.
 
 ## When to Use
 
-Use for ANY technical issue: test failures, production bugs, unexpected behavior, performance problems, build failures, integration issues.
+Use for ANY technical issue: test failures, production bugs, unexpected behavior, performance
+problems, build failures, integration issues.
 
-**Use ESPECIALLY when:** under time pressure, "just one quick fix" seems obvious, you've already tried multiple fixes, previous fix didn't work, you don't fully understand the issue.
+**Use ESPECIALLY when:** under time pressure, "just one quick fix" seems obvious, you've already
+tried multiple fixes, previous fix didn't work, you don't fully understand the issue.
 
 **Don't skip when:** issue seems simple, you're in a hurry, manager wants it fixed NOW.
 
@@ -88,15 +91,16 @@ You MUST complete each phase before proceeding to the next.
 
 ## Quick Reference
 
-| Phase | Key Activities | Success Criteria |
-|---|---|---|
-| **1. Root Cause** | Read errors, reproduce, check changes, gather evidence | Understand WHAT and WHY |
-| **2. Pattern** | Find working examples, compare | Identify differences |
-| **3. Hypothesis** | Form theory, test minimally | Confirmed or new hypothesis |
-| **4. Implementation** | Create test, fix, verify | Bug resolved, tests pass |
+| Phase                 | Key Activities                                         | Success Criteria            |
+| --------------------- | ------------------------------------------------------ | --------------------------- |
+| **1. Root Cause**     | Read errors, reproduce, check changes, gather evidence | Understand WHAT and WHY     |
+| **2. Pattern**        | Find working examples, compare                         | Identify differences        |
+| **3. Hypothesis**     | Form theory, test minimally                            | Confirmed or new hypothesis |
+| **4. Implementation** | Create test, fix, verify                               | Bug resolved, tests pass    |
 
 ## Supporting Techniques
 
 - `references/evidence-gathering.md` — Multi-component diagnostic instrumentation
-- `references/advanced-patterns.md` — Architecture questioning, no-root-cause handling, real-world impact
+- `references/advanced-patterns.md` — Architecture questioning, no-root-cause handling, real-world
+  impact
 - `references/common-pitfalls.md` — Rationalizations table, partner redirection signals

@@ -51,7 +51,8 @@ Run tests after every refactor step to confirm nothing broke.
 
 # The Prove-It Pattern (Bug Fixes)
 
-When a bug is reported, **do not start by trying to fix it.** Start by writing a test that reproduces it.
+When a bug is reported, **do not start by trying to fix it.** Start by writing a test that
+reproduces it.
 
 ```
 Bug report arrives

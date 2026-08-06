@@ -17,8 +17,10 @@ Auto-maintained by auto-norm-learner.ts — last run: 2026-07-24 11:24
 ## Active Norms
 
 ### norm-20260724-initial-001
+
 - **Category**: optimization
-- **Description**: Migración completa de PS1 a TypeScript mejora estabilidad y reduce errores de runtime
+- **Description**: Migración completa de PS1 a TypeScript mejora estabilidad y reduce errores de
+  runtime
 - **Trigger**: ps1-ts-migration-complete
 - **Confidence**: 95%
 - **Occurrences**: 1
@@ -32,8 +34,10 @@ Auto-maintained by auto-norm-learner.ts — last run: 2026-07-24 11:24
 ## Proposed Norms
 
 ### norm-20260724-initial-002
+
 - **Category**: pattern
-- **Description**: Corregir rutas en config/session-autostart.config.json antes de ejecutar pipeline evita warnings de "Script not found"
+- **Description**: Corregir rutas en config/session-autostart.config.json antes de ejecutar pipeline
+  evita warnings de "Script not found"
 - **Trigger**: path-correction-needed
 - **Confidence**: 90%
 - **Occurrences**: 1
@@ -43,8 +47,10 @@ Auto-maintained by auto-norm-learner.ts — last run: 2026-07-24 11:24
 - **Source**: manual-seed
 
 ### norm-20260724-initial-003
+
 - **Category**: fix
-- **Description**: Usar 'engram doctor' en lugar de 'engram search' para verificar integridad de memoria
+- **Description**: Usar 'engram doctor' en lugar de 'engram search' para verificar integridad de
+  memoria
 - **Trigger**: engram-command-correction
 - **Confidence**: 85%
 - **Occurrences**: 1
@@ -65,15 +71,20 @@ _No deprecated norms._
 
 ### Key Learnings
 
-1. **Migración PS1→TS**: La migración de 390 scripts TypeScript a TypeScript ha sido exitosa. El stack ahora tiene 194 archivos TS funcionando.
+1. **Migración PS1→TS**: La migración de 390 scripts TypeScript a TypeScript ha sido exitosa. El
+   stack ahora tiene 194 archivos TS funcionando.
 
-2. **Corrección de Rutas**: Se identificaron y corrigieron 7 rutas incorrectas en `config/session-autostart.config.json` que causaban warnings "Script not found".
+2. **Corrección de Rutas**: Se identificaron y corrigieron 7 rutas incorrectas en
+   `config/session-autostart.config.json` que causaban warnings "Script not found".
 
-3. **Integración Engram**: Engram v1.20.0 está correctamente instalado y funcionando. Se corrigió el comando de verificación de integridad.
+3. **Integración Engram**: Engram v1.20.0 está correctamente instalado y funcionando. Se corrigió el
+   comando de verificación de integridad.
 
-4. **Auto-Norm-Learner**: Sistema implementado y activo. Analiza patrones de sesión y genera normas automáticamente.
+4. **Auto-Norm-Learner**: Sistema implementado y activo. Analiza patrones de sesión y genera normas
+   automáticamente.
 
-5. **Pipeline Optimizado**: 32 steps ejecutándose correctamente, 45 lazy steps en background, 0 warnings críticos.
+5. **Pipeline Optimizado**: 32 steps ejecutándose correctamente, 45 lazy steps en background, 0
+   warnings críticos.
 
 ### Metrics
 
@@ -130,6 +141,7 @@ _No deprecated norms._
 ### Pipeline Actualizado
 
 Nuevos steps agregados a `config/session-autostart.config.json`:
+
 - `response-cache-init`: Inicializa cache y muestra estadísticas
 - `cost-efficiency-score`: Calcula score de eficiencia
 - `auto-optimization`: Optimización automática
@@ -175,24 +187,26 @@ Multipliers: quality 1.1x, errorFree 1.1x, skillUsage 1.15x, cacheEfficiency 1.0
 
 ### Optimizaciones Activas
 
-| Optimización | Estado | Impacto |
-|--------------|--------|---------|
-| Response Profile: Ultra | ✅ | Compresión agresiva |
-| Model Routing | ✅ | Ruteo al modelo más barato |
-| Prompt Compression | ✅ | Compresión semántica |
-| SHA256 Response Cache | ✅ **NUEVO** | 25-35% ahorro tokens |
-| Token Tracking Real | ✅ **NUEVO** | Costos reales |
-| Cost Efficiency Scoring | ✅ **NUEVO** | Métricas de eficiencia |
-| Auto-Optimization | ✅ **NUEVO** | Optimización automática |
+| Optimización            | Estado       | Impacto                    |
+| ----------------------- | ------------ | -------------------------- |
+| Response Profile: Ultra | ✅           | Compresión agresiva        |
+| Model Routing           | ✅           | Ruteo al modelo más barato |
+| Prompt Compression      | ✅           | Compresión semántica       |
+| SHA256 Response Cache   | ✅ **NUEVO** | 25-35% ahorro tokens       |
+| Token Tracking Real     | ✅ **NUEVO** | Costos reales              |
+| Cost Efficiency Scoring | ✅ **NUEVO** | Métricas de eficiencia     |
+| Auto-Optimization       | ✅ **NUEVO** | Optimización automática    |
 
 ### Correcciones Finales - Sistema 100% Funcional
 
 #### Session File Creation
+
 - ✅ Creado `session-current.json` en `src/session-cleanup-start.ts`
 - ✅ Incluye todos los campos: sessionId, timezone, peakStart, peakEnd, region, status, etc.
 - ✅ Contract validations ahora pasan: session-manager, session-metrics-start
 
 #### Config Files Creados (5 archivos)
+
 - ✅ `config/engram-policy.json` - Configuración de Engram
 - ✅ `config/security-config.json` - Configuración de seguridad
 - ✅ `config/karpathy-enforcer.json` - Guidelines de Karpathy
@@ -200,32 +214,37 @@ Multipliers: quality 1.1x, errorFree 1.1x, skillUsage 1.15x, cacheEfficiency 1.0
 - ✅ `config/token-budget-guard.json` - Presupuesto de tokens
 
 #### Process.exit() Fixes
+
 - ✅ Creado `src/fix-process-exits.ts` - Script automatizado
 - ✅ Corregidos 13 process.exit() en archivos críticos
-- ✅ Archivos corregidos: security-initializer, dependency-security-initializer, session-manager, session-reference-system, session-scoring, safety-guardrails
+- ✅ Archivos corregidos: security-initializer, dependency-security-initializer, session-manager,
+  session-reference-system, session-scoring, safety-guardrails
 
 #### Security Checks Mejorados
+
 - ✅ Detección automática de pnpm disponible
 - ✅ Fallback a npm si pnpm no está disponible
 - ✅ Checks se deshabilitan automáticamente si no hay package manager
 
 #### Engram DB
+
 - ✅ Creado `.engram/engram.db` para validaciones
 
 #### Limpieza de Logs
+
 - ✅ Eliminados logs antiguos de `.logs/homologation/`
 
 ### Contract Validations - Estado Final
 
-| Contract | Estado |
-|----------|--------|
-| session-manager | ✅ PASS |
+| Contract              | Estado  |
+| --------------------- | ------- |
+| session-manager       | ✅ PASS |
 | security-orchestrator | ✅ PASS |
-| karpathy-guidelines | ✅ PASS |
+| karpathy-guidelines   | ✅ PASS |
 | session-metrics-start | ✅ PASS |
-| token-budget | ✅ PASS |
-| skill-router | ✅ PASS |
-| engram-policy | ✅ PASS |
+| token-budget          | ✅ PASS |
+| skill-router          | ✅ PASS |
+| engram-policy         | ✅ PASS |
 
 **7 de 7 contratos pasando** ✅
 
@@ -254,11 +273,9 @@ Status: [READY] Workspace ready for operations
 
 ### Sistema Completamente Funcional
 
-✅ **100% Operativo** - Sin warnings, sin fails, sin gaps
-✅ **Autónomo** - Pipeline se ejecuta automáticamente
-✅ **Optimizado** - Cache, token tracking, cost efficiency
-✅ **Documentado** - Todas las capacidades documentadas
-✅ **Integrado** - Engram, dashboard, métricas
+✅ **100% Operativo** - Sin warnings, sin fails, sin gaps ✅ **Autónomo** - Pipeline se ejecuta
+automáticamente ✅ **Optimizado** - Cache, token tracking, cost efficiency ✅ **Documentado** -
+Todas las capacidades documentadas ✅ **Integrado** - Engram, dashboard, métricas
 
 ---
 
@@ -266,33 +283,55 @@ Status: [READY] Workspace ready for operations
 
 ### Causa Raíz: `UnsupportedParamsError` con kimi-2-5
 
-El error `litellm.UnsupportedParamsError: Bedrock doesn't support tool calling without tools= param` se repetía en otras sesiones porque opencode usa tool calling por defecto y el proveedor `littellmott-nuevo` (proxy litellm en AWS Lambda) enruta el model group `kimi-2-5` a Amazon Bedrock, que no acepta tool calling sin `tools=`. El proxy no tenía `modify_params: True` ni fallbacks. El stack no tenía ningún mecanismo que parseara errores de proveedor LLM de los logs.
+El error `litellm.UnsupportedParamsError: Bedrock doesn't support tool calling without tools= param`
+se repetía en otras sesiones porque opencode usa tool calling por defecto y el proveedor
+`littellmott-nuevo` (proxy litellm en AWS Lambda) enruta el model group `kimi-2-5` a Amazon Bedrock,
+que no acepta tool calling sin `tools=`. El proxy no tenía `modify_params: True` ni fallbacks. El
+stack no tenía ningún mecanismo que parseara errores de proveedor LLM de los logs.
 
 ### Solución Implementada
 
-1. **`src/model-provider-healer.ts`** (nuevo CLI): escanea logs de opencode (solo `level=ERROR`) buscando firmas de error de proveedor (UnsupportedToolCalling, ModelNotFound, AuthFailure, RateLimit, ConnectionError, BadRequest). Cuando detecta un modelo fallando, lo marca `unhealthy` en `.runtime/model-health.json` con cooldown de 60min y auto-switch al modelo nativo `opencode/deepseek-v4-flash-free`. Flags: `--scan` `--status` `--clear` `--quiet`.
+1. **`src/model-provider-healer.ts`** (nuevo CLI): escanea logs de opencode (solo `level=ERROR`)
+   buscando firmas de error de proveedor (UnsupportedToolCalling, ModelNotFound, AuthFailure,
+   RateLimit, ConnectionError, BadRequest). Cuando detecta un modelo fallando, lo marca `unhealthy`
+   en `.runtime/model-health.json` con cooldown de 60min y auto-switch al modelo nativo
+   `opencode/deepseek-v4-flash-free`. Flags: `--scan` `--status` `--clear` `--quiet`.
 
-2. **`config/model-health.json`** (nuevo): 6 firmas de error con severidad/acción, fallbackModel, cooldown, max detecciones, logSources.
+2. **`config/model-health.json`** (nuevo): 6 firmas de error con severidad/acción, fallbackModel,
+   cooldown, max detecciones, logSources.
 
-3. **Regla `ModelProviderUnsupported`** en `config/correction-rules.json` + wiring en `correction-rules-engine.ts` (trigger = existe modelo unhealthy con cooldown vigente; acción = ejecutar el healer).
+3. **Regla `ModelProviderUnsupported`** en `config/correction-rules.json` + wiring en
+   `correction-rules-engine.ts` (trigger = existe modelo unhealthy con cooldown vigente; acción =
+   ejecutar el healer).
 
-4. **Step lazy `model-provider-heal`** en `config/session-autostart.config.json` (fase 90, corre el healer en `--quiet` al inicio de cada sesión).
+4. **Step lazy `model-provider-heal`** en `config/session-autostart.config.json` (fase 90, corre el
+   healer en `--quiet` al inicio de cada sesión).
 
-5. **Check `model-provider-health`** en la watchtower (`src/Core/maintenance-watchtower.ts`) — reporta WARN si hay modelo unhealthy.
+5. **Check `model-provider-health`** en la watchtower (`src/Core/maintenance-watchtower.ts`) —
+   reporta WARN si hay modelo unhealthy.
 
 ### Learnings Clave
 
-1. **Falsos positivos en log-scanning**: escanear el contenido completo del log del opencode produce falsos positivos porque los propios comandos del agente (ej. `Select-String -Pattern "Model not found"`) quedan registrados. Fix: filtrar solo líneas `level=ERROR` y extraer `modelID=`/`providerID=` de la línea del error, no de todo el archivo.
+1. **Falsos positivos en log-scanning**: escanear el contenido completo del log del opencode produce
+   falsos positivos porque los propios comandos del agente (ej.
+   `Select-String -Pattern "Model not found"`) quedan registrados. Fix: filtrar solo líneas
+   `level=ERROR` y extraer `modelID=`/`providerID=` de la línea del error, no de todo el archivo.
 
-2. **ESM require() bug**: usar `require('fs')` dentro de un módulo ESM lanzaba TypeError silencioso y el tail del log devolvía `''` (0 detecciones). Fix: importar `statSync, openSync, readSync, closeSync` al inicio.
+2. **ESM require() bug**: usar `require('fs')` dentro de un módulo ESM lanzaba TypeError silencioso
+   y el tail del log devolvía `''` (0 detecciones). Fix: importar
+   `statSync, openSync, readSync, closeSync` al inicio.
 
-3. **Causa raíz del patrón recurrente**: opencode inyecta modelos internos stale (ej. `openrouter/moonshot/kimi-k2.6`) a subagentes sin campo `model` explícito. El fix es escribir `model` explícito válido (`fix-models.ts` documenta el patrón).
+3. **Causa raíz del patrón recurrente**: opencode inyecta modelos internos stale (ej.
+   `openrouter/moonshot/kimi-k2.6`) a subagentes sin campo `model` explícito. El fix es escribir
+   `model` explícito válido (`fix-models.ts` documenta el patrón).
 
-4. **Config stack ya estaba OK**: `config/model-router.json` y `config/model-fallback.json` ya apuntaban al nativo; el problema era la falta de detección automática, no la configuración.
+4. **Config stack ya estaba OK**: `config/model-router.json` y `config/model-fallback.json` ya
+   apuntaban al nativo; el problema era la falta de detección automática, no la configuración.
 
 ### Estado Verificado
 
-- Healer detecta `kimi-2-5` + `littellmott-nuevo` con `UnsupportedToolCalling` (extrae del snippet de la línea ERROR).
+- Healer detecta `kimi-2-5` + `littellmott-nuevo` con `UnsupportedToolCalling` (extrae del snippet
+  de la línea ERROR).
 - Estado persistido: `.runtime/model-health.json` (kimi-2-5 unhealthy, cooldown 1h).
 - Correction engine dispara y ejecuta la regla correctamente (13 reglas).
 - Watchtower: 84 PASS / 1 WARN (kimi-2-5) / 0 FAIL.
@@ -300,5 +339,5 @@ El error `litellm.UnsupportedParamsError: Bedrock doesn't support tool calling w
 
 ---
 
-*This file is automatically updated by the auto-norm-learner system.*
-*Last manual update: 2026-08-02 05:50*
+_This file is automatically updated by the auto-norm-learner system._ _Last manual update:
+2026-08-02 05:50_

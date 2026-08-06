@@ -15,6 +15,7 @@
 ## Tips
 
 - Dashboards are fully self-contained HTML files -- share them by sending the file
-- For real-time dashboards, consider connecting to a BI tool instead. These are point-in-time snapshots
+- For real-time dashboards, consider connecting to a BI tool instead. These are point-in-time
+  snapshots
 - Request "dark mode" or "presentation mode" for different styling
 - You can request a specific color scheme to match your brand

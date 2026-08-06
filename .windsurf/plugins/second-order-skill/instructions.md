@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Second-Order Thinking
 
 ## Overview
@@ -39,9 +40,13 @@ Decision with consequences beyond immediate? → yes → APPLY SECOND-ORDER THIN
 ## The Process
 
 ### Step 1: Identify the Decision and First-Order Effect
+
 ### Step 2: Ask "And Then What?" — chain the consequences
+
 ### Step 3: Apply the 10/10/10 Framework (10 min / 10 mo / 10 yr)
+
 ### Step 4: Consider Systemic Effects — "What if everyone did this?"
+
 ### Step 5: Map the Consequence Chain
 
 ```

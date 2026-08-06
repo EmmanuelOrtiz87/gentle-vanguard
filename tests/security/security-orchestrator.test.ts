@@ -62,7 +62,10 @@ describe('Security Orchestrator', () => {
     });
 
     it('should detect GitHub tokens', () => {
-      const result = runSecurityOrchestrator('check', 'ghp_A0B1C2D3E4F5G6H7I8J9K0L1M2N3O4P5Q6R7S8T');
+      const result = runSecurityOrchestrator(
+        'check',
+        'ghp_A0B1C2D3E4F5G6H7I8J9K0L1M2N3O4P5Q6R7S8T',
+      );
       assert.ok(result);
     });
 

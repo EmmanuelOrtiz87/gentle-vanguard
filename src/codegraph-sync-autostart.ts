@@ -62,13 +62,15 @@ function main(): void {
     }
   }
 
-  const dbAgeMinutes = Math.round((Date.now() - dbLastWrite) / 60000 * 10) / 10;
-  const dbSizeMB = Math.round(dbStat.size / (1024 * 1024) * 100) / 100;
+  const dbAgeMinutes = Math.round(((Date.now() - dbLastWrite) / 60000) * 10) / 10;
+  const dbSizeMB = Math.round((dbStat.size / (1024 * 1024)) * 100) / 100;
   const stalenessThresholdMinutes = 30;
   const needsSync = dbAgeMinutes > stalenessThresholdMinutes;
 
   if (needsSync) {
-    console.log(`[INFO] CodeGraph index is ${dbAgeMinutes}min old (threshold: ${stalenessThresholdMinutes}min). Syncing...`);
+    console.log(
+      `[INFO] CodeGraph index is ${dbAgeMinutes}min old (threshold: ${stalenessThresholdMinutes}min). Syncing...`,
+    );
     try {
       const sync = runSync('codegraph', ['sync'], {
         cwd: repoRoot,
@@ -76,12 +78,24 @@ function main(): void {
         timeout: getEffectiveProcessTimeout('long_running'),
       });
       if (sync.error && sync.status === null) throw sync.error;
-      result('OK', `CodeGraph index synced successfully (was ${dbAgeMinutes}min old)`, { dbSizeMB, ageMinutes: dbAgeMinutes, action: 'synced' });
+      result('OK', `CodeGraph index synced successfully (was ${dbAgeMinutes}min old)`, {
+        dbSizeMB,
+        ageMinutes: dbAgeMinutes,
+        action: 'synced',
+      });
     } catch (e) {
-      result('WARN', `CodeGraph sync failed: ${e instanceof Error ? e.message : String(e)}`, { dbSizeMB, ageMinutes: dbAgeMinutes, action: 'sync_error' });
+      result('WARN', `CodeGraph sync failed: ${e instanceof Error ? e.message : String(e)}`, {
+        dbSizeMB,
+        ageMinutes: dbAgeMinutes,
+        action: 'sync_error',
+      });
     }
   } else {
-    result('OK', `CodeGraph index is fresh (${dbAgeMinutes}min old, ${dbSizeMB}MB)`, { dbSizeMB, ageMinutes: dbAgeMinutes, action: 'fresh' });
+    result('OK', `CodeGraph index is fresh (${dbAgeMinutes}min old, ${dbSizeMB}MB)`, {
+      dbSizeMB,
+      ageMinutes: dbAgeMinutes,
+      action: 'fresh',
+    });
   }
 }
 

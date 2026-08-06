@@ -3,7 +3,7 @@
 **Normativa**: `rules/LOCAL-FIRST-PREFERENCE.md`  
 **Versión**: 1.0.0  
 **Estado**: PREFERENCE (guía flexible, no estricta)  
-**Última revisión**: 2026-07-30  
+**Última revisión**: 2026-07-30
 
 ---
 
@@ -13,18 +13,19 @@ Gentle-Vanguard evoluciona **hacia adentro, no hacia afuera**.
 
 > **Default**: Mejorar lo existente > Agregar dependencias externas
 
-Este principio guía las decisiones de arquitectura pero **no es una cárcel**. Puede sobreescribirse con confirmación explícita.
+Este principio guía las decisiones de arquitectura pero **no es una cárcel**. Puede sobreescribirse
+con confirmación explícita.
 
 ---
 
 ## 2. Principios de Evolución
 
-| Principio | Descripción |
-|-----------|-------------|
+| Principio                  | Descripción                                      |
+| -------------------------- | ------------------------------------------------ |
 | **Profundidad > Amplitud** | Mejorar componentes existentes vs agregar nuevos |
-| **Refinamiento Interno** | Optimizar lo que ya funciona |
-| **Auto-suficiencia** | El stack se mantiene y mejora solo |
-| **Sinergia Local** | Componentes que se potencian entre sí localmente |
+| **Refinamiento Interno**   | Optimizar lo que ya funciona                     |
+| **Auto-suficiencia**       | El stack se mantiene y mejora solo               |
+| **Sinergia Local**         | Componentes que se potencian entre sí localmente |
 
 ---
 
@@ -88,6 +89,7 @@ Todo item debe tener tag:
 - `requires-approval` - Bloqueado hasta aprobación
 
 Ejemplo:
+
 ```bash
 gv backlog add --title "VS Code Extension" \
   --type requirement \
@@ -98,11 +100,11 @@ gv backlog add --title "VS Code Extension" \
 
 ## 6. Normativas Relacionadas
 
-| Normativa | Relación |
-|-----------|----------|
-| `AI-NORMATIVES.md` | Local-First Principle de herramientas |
-| `DEVELOPMENT-STANDARDS.md` | Estándares de código |
-| `NORMATIVAS-PERFORMANCE.md` | Optimización local |
+| Normativa                   | Relación                              |
+| --------------------------- | ------------------------------------- |
+| `AI-NORMATIVES.md`          | Local-First Principle de herramientas |
+| `DEVELOPMENT-STANDARDS.md`  | Estándares de código                  |
+| `NORMATIVAS-PERFORMANCE.md` | Optimización local                    |
 
 ---
 
@@ -116,6 +118,7 @@ Esta normativa puede sobreescribirse en casos específicos siempre que:
 4. Se actualice esta normativa si es un patrón recurrente
 
 **Ejemplo de override válido**:
+
 - Contexto: "Necesitamos VS Code Extension para usuario X"
 - Razón: "Es el IDE principal del equipo"
 - Confirmación: ✅ Sí, proceder
@@ -131,4 +134,4 @@ Esta normativa puede sobreescribirse en casos específicos siempre que:
 
 ---
 
-*Esta normativa es una guía viva. Evoluciona con el proyecto.*
+_Esta normativa es una guía viva. Evoluciona con el proyecto._

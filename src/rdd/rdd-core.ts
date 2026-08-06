@@ -37,13 +37,14 @@ export interface RDDWorkflow {
     'pre-commit': boolean;
     'pre-push': boolean;
     'pre-pr': boolean;
-    'release': boolean;
+    release: boolean;
   };
   startedAt: string;
   completedAt: string | null;
 }
 
-export type WorkflowAction = 'start' | 'classify' | 'review' | 'receipt' | 'gate' | 'status' | 'abort';
+export type WorkflowAction =
+  'start' | 'classify' | 'review' | 'receipt' | 'gate' | 'status' | 'abort';
 
 // ─── Config ────────────────────────────────────────────────────────────────────
 
@@ -81,30 +82,27 @@ export function startWorkflow(): RDDWorkflow {
       'pre-commit': false,
       'pre-push': false,
       'pre-pr': false,
-      'release': false,
+      release: false,
     },
     startedAt: new Date().toISOString(),
     completedAt: null,
   };
-  
+
   saveWorkflow(workflow);
   log(`Started workflow ${workflow.workflowId}`, 'SUCCESS');
-  
+
   return workflow;
 }
 
 function saveWorkflow(workflow: RDDWorkflow): void {
   mkdirSync(RDD_DIR, { recursive: true });
-  writeFileSync(
-    join(RDD_DIR, `${workflow.workflowId}.json`),
-    JSON.stringify(workflow, null, 2)
-  );
+  writeFileSync(join(RDD_DIR, `${workflow.workflowId}.json`), JSON.stringify(workflow, null, 2));
 }
 
 function loadWorkflow(workflowId: string): RDDWorkflow | null {
   const path = join(RDD_DIR, `${workflowId}.json`);
   if (!existsSync(path)) return null;
-  
+
   try {
     const workflow: RDDWorkflow = JSON.parse(readFileSync(path, 'utf-8'));
     return workflow;
@@ -115,14 +113,17 @@ function loadWorkflow(workflowId: string): RDDWorkflow | null {
 
 function loadLatestWorkflow(): RDDWorkflow | null {
   if (!existsSync(RDD_DIR)) return null;
-  
+
   try {
     const files = runSyncShell('ls -t *.json 2>/dev/null || echo ""', {
       cwd: RDD_DIR,
-    }).stdout.trim().split('\n').filter(f => f);
-    
+    })
+      .stdout.trim()
+      .split('\n')
+      .filter((f) => f);
+
     if (files.length === 0) return null;
-    
+
     const latest = files[0];
     return JSON.parse(readFileSync(join(RDD_DIR, latest), 'utf-8'));
   } catch {
@@ -134,31 +135,34 @@ function loadLatestWorkflow(): RDDWorkflow | null {
 
 async function stepClassify(workflow: RDDWorkflow): Promise<RDDWorkflow> {
   log('Running risk classification...', 'INFO');
-  
+
   try {
     // Import and run risk classifier
     const { classifyRisk } = await import('./risk-classifier.js');
     const classification = classifyRisk(false); // committed changes
-    
+
     workflow.classification = {
       tier: classification.tier,
       score: classification.score,
       reviewLenses: classification.reviewLenses,
     };
     workflow.status = 'risk-classified';
-    
-    log(`Classified as ${classification.tier.toUpperCase()} risk (${classification.reviewLenses} lens(es))`, 'SUCCESS');
-    
+
+    log(
+      `Classified as ${classification.tier.toUpperCase()} risk (${classification.reviewLenses} lens(es))`,
+      'SUCCESS',
+    );
+
     if (classification.tier === 'low') {
       log('Low risk: proceeding to auto-approve', 'INFO');
     }
-    
+
     saveWorkflow(workflow);
   } catch (err) {
     log(`Risk classification failed: ${err instanceof Error ? err.message : String(err)}`, 'ERROR');
     workflow.status = 'failed';
   }
-  
+
   return workflow;
 }
 
@@ -168,44 +172,47 @@ async function stepReview(workflow: RDDWorkflow): Promise<RDDWorkflow> {
     workflow.status = 'failed';
     return workflow;
   }
-  
+
   const { tier, reviewLenses } = workflow.classification;
-  
+
   if (tier === 'low') {
     log('Low risk: skipping review', 'INFO');
     workflow.status = 'reviewing';
     saveWorkflow(workflow);
     return workflow;
   }
-  
+
   if (reviewLenses === 1) {
     log('Starting focused 1-lens review...', 'INFO');
     log('Review recommendation: Focus on highest risk category', 'INFO');
   } else if (reviewLenses === 4) {
     log('Starting full 4R review...', 'INFO');
   }
-  
+
   workflow.status = 'reviewing';
   saveWorkflow(workflow);
-  
+
   return workflow;
 }
 
 async function stepReceipt(workflow: RDDWorkflow): Promise<RDDWorkflow> {
   log('Issuing receipt...', 'INFO');
-  
+
   try {
     // Run receipt manager
     runNpxTsxSync('scripts/utilities/ops/REVIEW/receipt-manager.ts', ['create', '--approved'], {
       cwd: ROOT,
     });
-    
+
     // Find the created receipt
     const receiptsDir = join(ROOT, '.session', 'receipts');
     const files = runSyncShell('ls -t *.json 2>/dev/null || echo ""', {
       cwd: receiptsDir,
-    }).stdout.trim().split('\n').filter(f => f);
-    
+    })
+      .stdout.trim()
+      .split('\n')
+      .filter((f) => f);
+
     if (files.length > 0) {
       const receiptData = JSON.parse(readFileSync(join(receiptsDir, files[0]), 'utf-8'));
       workflow.receipt = {
@@ -214,14 +221,14 @@ async function stepReceipt(workflow: RDDWorkflow): Promise<RDDWorkflow> {
         approved: receiptData.approved,
       };
     }
-    
+
     workflow.status = 'receipt-issued';
     log('Receipt issued', 'SUCCESS');
     saveWorkflow(workflow);
   } catch (err) {
     log(`Receipt issuance failed: ${err instanceof Error ? err.message : String(err)}`, 'ERROR');
   }
-  
+
   return workflow;
 }
 
@@ -230,14 +237,14 @@ async function stepGate(workflow: RDDWorkflow, gate: string): Promise<RDDWorkflo
     log('Must issue receipt first', 'ERROR');
     return workflow;
   }
-  
+
   log(`Validating ${gate} gate...`, 'INFO');
-  
+
   try {
     runNpxTsxSync('src/rdd/rdd-gates.ts', ['validate', gate, `--receipt=${workflow.receipt.id}`], {
       cwd: ROOT,
     });
-    
+
     log(`Gate ${gate}: passed`, 'SUCCESS');
     workflow.gates[gate as keyof typeof workflow.gates] = true;
     saveWorkflow(workflow);
@@ -248,39 +255,42 @@ async function stepGate(workflow: RDDWorkflow, gate: string): Promise<RDDWorkflo
       console.log(err.message);
     }
   }
-  
+
   // Check if all gates passed
   const allGates = Object.entries(workflow.gates);
   const passedGates = allGates.filter(([_, v]) => v).length;
-  
+
   if (passedGates === allGates.length) {
     workflow.status = 'completed';
     workflow.completedAt = new Date().toISOString();
     log('All gates passed! Workflow complete', 'SUCCESS');
     saveWorkflow(workflow);
   }
-  
+
   return workflow;
 }
 
 // ─── Workflow Runner ──────────────────────────────────────────────────────────
 
-export async function runWorkflow(action: WorkflowAction, options: { gate?: string; workflowId?: string } = {}): Promise<RDDWorkflow | null> {
-  let workflow: RDDWorkflow | null = options.workflowId 
-    ? loadWorkflow(options.workflowId) 
+export async function runWorkflow(
+  action: WorkflowAction,
+  options: { gate?: string; workflowId?: string } = {},
+): Promise<RDDWorkflow | null> {
+  let workflow: RDDWorkflow | null = options.workflowId
+    ? loadWorkflow(options.workflowId)
     : loadLatestWorkflow();
-  
+
   if (action === 'start') {
     workflow = startWorkflow();
   }
-  
+
   if (!workflow && action !== 'status') {
     log('No active workflow. Run "start" first', 'ERROR');
     return null;
   }
-  
+
   if (!workflow) return null;
-  
+
   switch (action) {
     case 'start':
       // Already started above
@@ -306,7 +316,7 @@ export async function runWorkflow(action: WorkflowAction, options: { gate?: stri
       log('Workflow aborted', 'WARN');
       break;
   }
-  
+
   return workflow;
 }
 
@@ -314,7 +324,7 @@ export async function runWorkflow(action: WorkflowAction, options: { gate?: stri
 
 export function formatStatus(workflow: RDDWorkflow): string {
   const lines: string[] = [];
-  
+
   lines.push('╔════════════════════════════════════════════════════════════════════════╗');
   lines.push('║              RDD WORKFLOW STATUS                                       ║');
   lines.push('╚════════════════════════════════════════════════════════════════════════╝');
@@ -322,13 +332,13 @@ export function formatStatus(workflow: RDDWorkflow): string {
   lines.push(`Workflow: ${workflow.workflowId}`);
   lines.push(`Status:   ${workflow.status.toUpperCase()}`);
   lines.push(`Started:  ${new Date(workflow.startedAt).toLocaleString()}`);
-  
+
   if (workflow.completedAt) {
     lines.push(`Completed: ${new Date(workflow.completedAt).toLocaleString()}`);
   }
-  
+
   lines.push('');
-  
+
   if (workflow.classification) {
     lines.push('CLASSIFICATION:');
     lines.push(`  Tier:  ${workflow.classification.tier.toUpperCase()}`);
@@ -336,7 +346,7 @@ export function formatStatus(workflow: RDDWorkflow): string {
     lines.push(`  Lenses: ${workflow.classification.reviewLenses}`);
     lines.push('');
   }
-  
+
   if (workflow.receipt) {
     lines.push('RECEIPT:');
     lines.push(`  ID: ${workflow.receipt.id}`);
@@ -344,16 +354,16 @@ export function formatStatus(workflow: RDDWorkflow): string {
     lines.push(`  Approved: ${workflow.receipt.approved ? 'YES' : 'NO'}`);
     lines.push('');
   }
-  
+
   lines.push('GATES:');
   for (const [gate, passed] of Object.entries(workflow.gates)) {
     const icon = passed ? '✓' : '○';
     lines.push(`  ${icon} ${gate}`);
   }
-  
+
   lines.push('');
   lines.push('─'.repeat(70));
-  
+
   return lines.join('\n');
 }
 
@@ -362,14 +372,14 @@ export function formatStatus(workflow: RDDWorkflow): string {
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   void (async () => {
     const args = process.argv.slice(2);
-    const action = args[0] as WorkflowAction || 'status';
+    const action = (args[0] as WorkflowAction) || 'status';
 
     try {
-      const workflowId = args.find(a => a.startsWith('--workflow='))?.split('=')[1];
-      const gate = args.find(a => a.startsWith('--gate='))?.split('=')[1];
-      
+      const workflowId = args.find((a) => a.startsWith('--workflow='))?.split('=')[1];
+      const gate = args.find((a) => a.startsWith('--gate='))?.split('=')[1];
+
       const workflow = await runWorkflow(action, { workflowId, gate });
-      
+
       if (workflow) {
         if (args.includes('--json')) {
           console.log(JSON.stringify(workflow, null, 2));
@@ -377,7 +387,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
           console.log(formatStatus(workflow));
         }
       }
-      
+
       process.exit(workflow?.status === 'failed' ? 1 : 0);
     } catch (err) {
       log(`Error: ${err instanceof Error ? err.message : String(err)}`, 'ERROR');

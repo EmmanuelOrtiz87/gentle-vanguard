@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 /**
  * Auto-Step-Recovery System
- * 
+ *
  * Detecta automáticamente cuando un agente agota steps y reasigna
  * con steps aumentados sin intervención manual.
- * 
+ *
  * Este sistema:
  * 1. Monitorea las respuestas de los agentes
  * 2. Detecta "maximum steps reached" o "step limit exceeded"
  * 3. Reasigna automáticamente con +20 steps (máx 80)
  * 4. Preserva contexto y continúa ejecución
- * 
+ *
  * Integración: Usar wrapAgentCall() en lugar de llamada directa
  */
 
@@ -19,13 +19,6 @@ import { join, resolve } from 'path';
 
 const ROOT = resolve(process.cwd());
 const RECOVERY_LOG = join(ROOT, '.session', 'step-recovery.log');
-
-interface AgentConfig {
-  agentId: string;
-  steps: number;
-  taskId: string;
-  context?: string;
-}
 
 interface RecoveryResult {
   success: boolean;
@@ -46,7 +39,7 @@ export function detectStepExhaustion(response: string): boolean {
     /has reached its limit of/i,
     /cannot complete.*insufficient steps/i,
   ];
-  return patterns.some(p => p.test(response));
+  return patterns.some((p) => p.test(response));
 }
 
 /**
@@ -54,7 +47,7 @@ export function detectStepExhaustion(response: string): boolean {
  */
 export function bumpSteps(agentId: string, currentSteps: number): number {
   const newSteps = Math.min(currentSteps + 20, 80);
-  
+
   // Aplicar en opencode.json
   try {
     const opencodePath = join(ROOT, 'opencode.json');
@@ -66,7 +59,7 @@ export function bumpSteps(agentId: string, currentSteps: number): number {
   } catch (e) {
     console.error(`[AutoRecovery] Failed to update steps: ${e}`);
   }
-  
+
   return newSteps;
 }
 
@@ -74,13 +67,13 @@ export function bumpSteps(agentId: string, currentSteps: number): number {
  * Reasigna tarea con steps aumentados
  */
 export function reassignWithMoreSteps(
-  agentId: string, 
-  taskId: string, 
-  context?: string
+  agentId: string,
+  taskId: string,
+  context?: string,
 ): RecoveryResult {
   const currentSteps = getCurrentSteps(agentId);
   const newSteps = bumpSteps(agentId, currentSteps);
-  
+
   // Log recovery
   const logEntry = {
     timestamp: new Date().toISOString(),
@@ -90,12 +83,12 @@ export function reassignWithMoreSteps(
     newSteps,
     context,
   };
-  
+
   try {
     const existing = existsSync(RECOVERY_LOG) ? readFileSync(RECOVERY_LOG, 'utf-8') + '\n' : '';
     writeFileSync(RECOVERY_LOG, existing + JSON.stringify(logEntry), 'utf-8');
   } catch {}
-  
+
   return {
     success: true,
     newSteps,
@@ -106,23 +99,17 @@ export function reassignWithMoreSteps(
 /**
  * Wrap para llamadas a agentes con auto-recovery
  */
-export function wrapAgentCall(
-  agentId: string,
-  taskDescription: string,
-  taskId: string
-): string {
-  const currentSteps = getCurrentSteps(agentId);
-  
+export function wrapAgentCall(agentId: string, taskDescription: string, taskId: string): string {
   // Aquí iría la llamada real al agente
   // Por ahora simulamos detección
-  
+
   const simulationResponse = `Agent ${agentId} processing: ${taskDescription}`;
-  
+
   if (detectStepExhaustion(simulationResponse)) {
     const recovery = reassignWithMoreSteps(agentId, taskId, taskDescription);
     return `RECOVERED: ${recovery.message}. Retrying...`;
   }
-  
+
   return simulationResponse;
 }
 
@@ -140,7 +127,7 @@ function getCurrentSteps(agentId: string): number {
 if (import.meta.url === `file://${process.argv[1]}`) {
   console.log('Auto-Step-Recovery System');
   console.log('==========================\n');
-  
+
   // Test detección
   const testCases = [
     'Agent completed successfully',
@@ -148,11 +135,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     'Step limit exceeded, cannot continue',
     'Task finished normally',
   ];
-  
+
   for (const test of testCases) {
     const detected = detectStepExhaustion(test);
     console.log(`"${test}" → ${detected ? 'DETECTED' : 'OK'}`);
   }
-  
+
   console.log('\nSystem ready for integration.');
 }

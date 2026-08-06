@@ -54,9 +54,17 @@ function loadBudget(): { daily: number; perSession: number; soft: number; hard: 
     if (fs.existsSync(BUDGET_CONFIG)) {
       const raw = JSON.parse(fs.readFileSync(BUDGET_CONFIG, 'utf-8'));
       const l = raw?.tokenBudget?.limits;
-      if (l) return { daily: l.daily ?? def.daily, perSession: l.perSession ?? def.perSession, soft: l.softThreshold ?? def.soft, hard: l.hardThreshold ?? def.hard };
+      if (l)
+        return {
+          daily: l.daily ?? def.daily,
+          perSession: l.perSession ?? def.perSession,
+          soft: l.softThreshold ?? def.soft,
+          hard: l.hardThreshold ?? def.hard,
+        };
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return def;
 }
 
@@ -67,14 +75,13 @@ function readSessionId(): string {
       const data = JSON.parse(fs.readFileSync(fp, 'utf-8')) as Record<string, unknown>;
       return String(data.sessionId ?? data.id ?? '').trim() || 'unknown';
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return 'unknown';
 }
 
-function queryNexus(
-  sql: string,
-  params: unknown[] = [],
-): unknown {
+function queryNexus(sql: string, params: unknown[] = []): unknown {
   try {
     const Database = _require('better-sqlite3');
     if (!fs.existsSync(NEXUS_DB_PATH)) return null;
@@ -96,9 +103,13 @@ function readCompactions(): CompactionRecord[] {
     const records: CompactionRecord[] = [];
     for (const f of files) {
       try {
-        const r = JSON.parse(fs.readFileSync(path.join(COMPACTED_DIR, f), 'utf-8')) as CompactionRecord;
+        const r = JSON.parse(
+          fs.readFileSync(path.join(COMPACTED_DIR, f), 'utf-8'),
+        ) as CompactionRecord;
         if (typeof r.originalTokens === 'number') records.push(r);
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
     }
     return records.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
   } catch {
@@ -168,11 +179,15 @@ function render(s: StatusData): string {
   lines.push(`    Total:       ${s.breakdown.total.toLocaleString()} tokens`);
   lines.push('');
   lines.push('  ── Presupuesto de sesión ──');
-  lines.push(`    Usados:      ${s.session.used.toLocaleString()} / ${s.session.limit.toLocaleString()} (${s.session.pct}%)`);
+  lines.push(
+    `    Usados:      ${s.session.used.toLocaleString()} / ${s.session.limit.toLocaleString()} (${s.session.pct}%)`,
+  );
   lines.push(`    Restantes:   ${s.session.remaining.toLocaleString()} tokens`);
   lines.push('');
   lines.push('  ── Presupuesto diario ──');
-  lines.push(`    Usados:      ${s.daily.used.toLocaleString()} / ${s.daily.limit.toLocaleString()} (${s.daily.pct}%)`);
+  lines.push(
+    `    Usados:      ${s.daily.used.toLocaleString()} / ${s.daily.limit.toLocaleString()} (${s.daily.pct}%)`,
+  );
   lines.push(`    Restantes:   ${s.daily.remaining.toLocaleString()} tokens`);
   lines.push('');
   lines.push('  ── Compactación ──');
@@ -181,7 +196,9 @@ function render(s: StatusData): string {
     lines.push(`    Última:       ${s.compact.latest.timestamp}`);
     lines.push(`    Antes:        ${s.compact.tokens_before.toLocaleString()} tokens`);
     lines.push(`    Después:      ${s.compact.tokens_after.toLocaleString()} tokens`);
-    lines.push(`    Ahorro:       ${s.compact.tokens_saved.toLocaleString()} tokens (${s.compact.latest.reductionPct}%)`);
+    lines.push(
+      `    Ahorro:       ${s.compact.tokens_saved.toLocaleString()} tokens (${s.compact.latest.reductionPct}%)`,
+    );
   } else {
     lines.push('    (sin eventos de compactación registrados)');
   }

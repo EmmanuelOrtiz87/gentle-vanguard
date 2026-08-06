@@ -52,9 +52,13 @@ Works on Windows, macOS, and Linux.
 
 ## 🛡️ What is Gentle-Vanguard?
 
-An **AI orchestration layer** that gives structure, memory, and governance to AI-assisted development. Tool-agnostic across OpenCode, Claude Code, Cline, Cursor, Windsurf, Codex, Copilot, Continue.dev — with **zero cloud services, zero API keys, zero external dependencies**.
+An **AI orchestration layer** that gives structure, memory, and governance to AI-assisted
+development. Tool-agnostic across OpenCode, Claude Code, Cline, Cursor, Windsurf, Codex, Copilot,
+Continue.dev — with **zero cloud services, zero API keys, zero external dependencies**.
 
-The stack runs a **100-step autonomous pipeline** at session start, monitors **82 health checks** across 13 components, persists state in a **SQLite operational database** (15 tables, 10 DAOs), and powers a **real-time observability dashboard** with WebSocket push.
+The stack runs a **100-step autonomous pipeline** at session start, monitors **82 health checks**
+across 13 components, persists state in a **SQLite operational database** (15 tables, 10 DAOs), and
+powers a **real-time observability dashboard** with WebSocket push.
 
 ---
 
@@ -99,45 +103,45 @@ flowchart TB
 
 ## ✨ Features
 
-| Capability | Description |
-|---|---|
-| **Auto-Apply Safe** | Executive engine — applies safe optimizations (budget, deprecations, norms) with rollback protection |
-| **Circuit Breaker API** | 5-failure → OPEN, 2-success → HALF_OPEN → CLOSED, with automatic fallback |
-| **Auto-Escalation** | Escalates unresolved issues through configured channels with SLA tracking |
-| **Dynamic Dependency Graph** | Real-time dependency resolution and conflict detection across the stack |
-| **AB Testing Framework** | Session-scoped experiment framework with statistical significance testing |
-| **Session Scoring** | Auto-compare quality scores across sessions (delegations, corrections, proactive hits) |
-| **10 DAOs** | Database Repository pattern — Cache, Contract, ErrorMemory, Event, Housekeeping, Metrics, Session, Skill, Trace, MigrationRunner |
-| **Cache LRU + WAL** | SHA256 response cache with TTL + automatic WAL checkpoint when >5MB |
-| **Parallel Watchtower** | 82 health checks across 13 components — runs in parallel with auto-heal |
-| **Session Consolidation** | Context compaction engine — token-budget-aware, auto-summarize and wipe |
-| **Engram Memory** | Persistent memory across sessions with hot/warm/cold tiers and auto-repair |
-| **Dashboard UI** | Real-time: 7-section view, tracing waterfall, alerts, feedback, i18n (en/es/pt-BR) |
-| **Nexus Database** | SQLite operational DB (WAL mode, FK ON) — 15 tables, auto-migrate, auto-prune |
-| **100 Pipeline Steps** | Session autostart pipeline with lazy/blocking phases, on-failure=continue |
-| **18 Specialized Agents** | BA, SAD, DEV, QA, OPS, GOV, DOC, SEC — each with model routing |
-| **SDD Lifecycle** | Explore → Design → Implement → Verify — full spec-driven development |
-| **Adaptive Feedback** | Auto-learn norms from corrections, session scoring, pattern detection |
-| **Governance** | 60+ normatives, pre-commit hooks, CI/CD, audit pipeline, safety layer |
-| **Predictive Governor** | Anticipate load, prewarm resources, adjust token budgets proactively |
-| **Zero-dependency** | Works with just TypeScript 7+ — no cloud, no API keys, no external services |
+| Capability                   | Description                                                                                                                      |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **Auto-Apply Safe**          | Executive engine — applies safe optimizations (budget, deprecations, norms) with rollback protection                             |
+| **Circuit Breaker API**      | 5-failure → OPEN, 2-success → HALF_OPEN → CLOSED, with automatic fallback                                                        |
+| **Auto-Escalation**          | Escalates unresolved issues through configured channels with SLA tracking                                                        |
+| **Dynamic Dependency Graph** | Real-time dependency resolution and conflict detection across the stack                                                          |
+| **AB Testing Framework**     | Session-scoped experiment framework with statistical significance testing                                                        |
+| **Session Scoring**          | Auto-compare quality scores across sessions (delegations, corrections, proactive hits)                                           |
+| **10 DAOs**                  | Database Repository pattern — Cache, Contract, ErrorMemory, Event, Housekeeping, Metrics, Session, Skill, Trace, MigrationRunner |
+| **Cache LRU + WAL**          | SHA256 response cache with TTL + automatic WAL checkpoint when >5MB                                                              |
+| **Parallel Watchtower**      | 82 health checks across 13 components — runs in parallel with auto-heal                                                          |
+| **Session Consolidation**    | Context compaction engine — token-budget-aware, auto-summarize and wipe                                                          |
+| **Engram Memory**            | Persistent memory across sessions with hot/warm/cold tiers and auto-repair                                                       |
+| **Dashboard UI**             | Real-time: 7-section view, tracing waterfall, alerts, feedback, i18n (en/es/pt-BR)                                               |
+| **Nexus Database**           | SQLite operational DB (WAL mode, FK ON) — 15 tables, auto-migrate, auto-prune                                                    |
+| **100 Pipeline Steps**       | Session autostart pipeline with lazy/blocking phases, on-failure=continue                                                        |
+| **18 Specialized Agents**    | BA, SAD, DEV, QA, OPS, GOV, DOC, SEC — each with model routing                                                                   |
+| **SDD Lifecycle**            | Explore → Design → Implement → Verify — full spec-driven development                                                             |
+| **Adaptive Feedback**        | Auto-learn norms from corrections, session scoring, pattern detection                                                            |
+| **Governance**               | 60+ normatives, pre-commit hooks, CI/CD, audit pipeline, safety layer                                                            |
+| **Predictive Governor**      | Anticipate load, prewarm resources, adjust token budgets proactively                                                             |
+| **Zero-dependency**          | Works with just TypeScript 7+ — no cloud, no API keys, no external services                                                      |
 
 ---
 
 ## 📊 Key Metrics
 
-| Metric | Value |
-|---|---|
-| Test Suites | **19/19 passed** |
-| Health Checks | **82/82 PASS** — 13 components |
-| Pipeline Steps | **100** (blocking + lazy) |
-| DAOs / Tables | **10 DAOs / 15 tables** |
-| Autonomy | **100%** — zero manual intervention required |
-| CodeGraph | **1,410 nodes / 1,763 edges / 133 files** |
-| Dashboard APIs | **25+ REST endpoints + WebSocket** |
-| i18n Locales | **3** — en, es, pt-BR |
+| Metric          | Value                                        |
+| --------------- | -------------------------------------------- |
+| Test Suites     | **19/19 passed**                             |
+| Health Checks   | **82/82 PASS** — 13 components               |
+| Pipeline Steps  | **100** (blocking + lazy)                    |
+| DAOs / Tables   | **10 DAOs / 15 tables**                      |
+| Autonomy        | **100%** — zero manual intervention required |
+| CodeGraph       | **1,410 nodes / 1,763 edges / 133 files**    |
+| Dashboard APIs  | **25+ REST endpoints + WebSocket**           |
+| i18n Locales    | **3** — en, es, pt-BR                        |
 | Uptime Recovery | **Auto-heal watchdog** — 10 restart attempts |
-| DB Size | **~0.27 MB** (operational + historical) |
+| DB Size         | **~0.27 MB** (operational + historical)      |
 
 ---
 
@@ -178,41 +182,42 @@ apps/web-dashboard/
 
 ## 📋 Quick Commands
 
-| Command | Description |
-|---|---|
-| `npm start` | **Quick start** dashboard (optimized - 0.76s) |
-| `npm run start:complete` | Start with full verification checks |
-| `npm test` | Run all **19 test suites** |
-| `npx tsx src/session-autostart.ts` | Run the **100-step session pipeline** |
-| `npx tsx src/auto-apply-safe.ts --check` | Check safe optimizations pending |
-| `npx tsx src/auto-apply-safe.ts --apply` | Apply safe optimizations with rollback |
-| `npx tsx src/auto-apply-safe.ts --report` | Report optimization status |
-| `npm run watchtower` | Run **82 health checks** |
-| `npm run watchtower:health` | Health-check only mode |
-| `npm run db:health` | Nexus DB health (integrity, WAL, tables) |
-| `npm run db:init` | Init DB + run migrations (idempotent) |
-| `npm run db:backup` | Safe online backup |
-| `npm run db:prune` | Prune old data (events >30d, cache >7d) |
-| `cd apps/web-dashboard && npm run build` | Build dashboard for production |
-| `.\scripts\setup-complete.ps1` | Auto-install (prerequisites + hooks + build) |
-| `npm run graphify -- query "<question>"` | Knowledge graph semantic search |
-| `npm run graphify -- update .` | Update code graph snapshot |
+| Command                                   | Description                                   |
+| ----------------------------------------- | --------------------------------------------- |
+| `npm start`                               | **Quick start** dashboard (optimized - 0.76s) |
+| `npm run start:complete`                  | Start with full verification checks           |
+| `npm test`                                | Run all **19 test suites**                    |
+| `npx tsx src/session-autostart.ts`        | Run the **100-step session pipeline**         |
+| `npx tsx src/auto-apply-safe.ts --check`  | Check safe optimizations pending              |
+| `npx tsx src/auto-apply-safe.ts --apply`  | Apply safe optimizations with rollback        |
+| `npx tsx src/auto-apply-safe.ts --report` | Report optimization status                    |
+| `npm run watchtower`                      | Run **82 health checks**                      |
+| `npm run watchtower:health`               | Health-check only mode                        |
+| `npm run db:health`                       | Nexus DB health (integrity, WAL, tables)      |
+| `npm run db:init`                         | Init DB + run migrations (idempotent)         |
+| `npm run db:backup`                       | Safe online backup                            |
+| `npm run db:prune`                        | Prune old data (events >30d, cache >7d)       |
+| `cd apps/web-dashboard && npm run build`  | Build dashboard for production                |
+| `.\scripts\setup-complete.ps1`            | Auto-install (prerequisites + hooks + build)  |
+| `npm run graphify -- query "<question>"`  | Knowledge graph semantic search               |
+| `npm run graphify -- update .`            | Update code graph snapshot                    |
 
-Full reference: [docs/operations/procedures/QUICK-COMMANDS.md](docs/operations/procedures/QUICK-COMMANDS.md)
+Full reference:
+[docs/operations/procedures/QUICK-COMMANDS.md](docs/operations/procedures/QUICK-COMMANDS.md)
 
 ---
 
 ## 📚 Documentation
 
-| Resource | Path |
-|---|---|
-| Agent Bootstrap | `docs/agents/AGENTS.md` |
-| Quick Commands | `docs/operations/procedures/QUICK-COMMANDS.md` |
-| Normatives Index | `rules/NORMATIVES.md` |
-| Nexus DB Normativa | `rules/NEXUS-NORMATIVA.md` |
-| Changelog | `CHANGELOG.md` |
-| Dashboard Skill | `.opencode/skills/dashboard/SKILL.md` |
-| Vanguards (Stack Rules) | `rules/` |
+| Resource                | Path                                           |
+| ----------------------- | ---------------------------------------------- |
+| Agent Bootstrap         | `docs/agents/AGENTS.md`                        |
+| Quick Commands          | `docs/operations/procedures/QUICK-COMMANDS.md` |
+| Normatives Index        | `rules/NORMATIVES.md`                          |
+| Nexus DB Normativa      | `rules/NEXUS-NORMATIVA.md`                     |
+| Changelog               | `CHANGELOG.md`                                 |
+| Dashboard Skill         | `.opencode/skills/dashboard/SKILL.md`          |
+| Vanguards (Stack Rules) | `rules/`                                       |
 
 ---
 

@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
  * Session Close Orchestrator
- * 
+ *
  * Orquesta el protocolo completo de cierre de sesión en 6 fases:
  *   PRE-CLOSE → PERSIST → BACKUP → AUDIT → CLEANUP → VERIFY
- * 
+ *
  * 100% autónomo. Se ejecuta automáticamente al detectar fin de sesión
  * o a demanda vía CLI.
- * 
+ *
  * Uso:
  *   npx tsx src/session-close-orchestrator.ts
  *   npx tsx src/session-close-orchestrator.ts --reason "maintenance"
@@ -19,13 +19,12 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync } from 'fs';
 import { join, resolve, relative } from 'path';
 import { runSync, runSyncShell, runNpxTsxSync } from './core/run-command.js';
-import http from 'http';
 import { pathToFileURL } from 'url';
 import { sessionEnd } from './engram-session-bridge.js';
 
 // ─── Guardian Protection ────────────────────────────────────────────────────────
 // Importa protección contra cierres informales
-import { guardianCheck, detectInformalClosure, learnFromMistake } from './session-close-guardian.js';
+import { guardianCheck, learnFromMistake } from './session-close-guardian.js';
 
 const ROOT = resolve(process.cwd());
 const SESSION_DIR = join(ROOT, '.session');
@@ -39,9 +38,15 @@ import { log as createLogger } from './utils/logger.js';
 
 const LOG = createLogger('CLOSE');
 
-function log(msg: string) { LOG.info(msg); }
-function ok(msg: string) { LOG.info(`✅ ${msg}`); }
-function warn(msg: string) { LOG.warn(msg); }
+function log(msg: string) {
+  LOG.info(msg);
+}
+function ok(msg: string) {
+  LOG.info(`✅ ${msg}`);
+}
+function warn(msg: string) {
+  LOG.warn(msg);
+}
 
 function getSessionFile(): string {
   return join(SESSION_DIR, 'session-current.json');
@@ -50,7 +55,11 @@ function getSessionFile(): string {
 function readSessionData(): Record<string, unknown> {
   const fp = getSessionFile();
   if (!existsSync(fp)) return {};
-  try { return JSON.parse(readFileSync(fp, 'utf-8')); } catch { return {}; }
+  try {
+    return JSON.parse(readFileSync(fp, 'utf-8'));
+  } catch {
+    return {};
+  }
 }
 
 function writeSessionData(data: Record<string, unknown>): void {
@@ -62,7 +71,11 @@ function writeSessionData(data: Record<string, unknown>): void {
   writeFileSync(datedFile, JSON.stringify(data, null, 2));
 }
 
-function runScript(script: string, args: string[], timeout = 60000): { status: number; stdout: string } {
+function runScript(
+  script: string,
+  args: string[],
+  timeout = 60000,
+): { status: number; stdout: string } {
   const fullPath = join(ROOT, script);
   if (!existsSync(fullPath)) return { status: -1, stdout: '' };
   try {
@@ -100,7 +113,11 @@ function phasePreClose(reason: string): PhaseResult[] {
     data.closeReason = reason;
     data.status = 'closed';
     writeSessionData(data);
-    results.push({ phase: 'pre-close-timestamp', status: 'PASS', detail: `Session closed at ${data.closeTime}` });
+    results.push({
+      phase: 'pre-close-timestamp',
+      status: 'PASS',
+      detail: `Session closed at ${data.closeTime}`,
+    });
     ok('Session timestamp recorded');
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'Unknown error';
@@ -113,13 +130,24 @@ function phasePreClose(reason: string): PhaseResult[] {
   if (existsSync(informalMarker)) {
     let detail = 'Informal close marker found: sesión previa cerrada fuera del protocolo oficial';
     try {
-      const markerData = JSON.parse(readFileSync(informalMarker, 'utf-8')) as Record<string, unknown>;
+      const markerData = JSON.parse(readFileSync(informalMarker, 'utf-8')) as Record<
+        string,
+        unknown
+      >;
       if (markerData.reason) detail += ` (reason: ${String(markerData.reason)})`;
-    } catch { /* keep generic detail if marker is not valid JSON */ }
+    } catch {
+      /* keep generic detail if marker is not valid JSON */
+    }
     results.push({ phase: 'informal-close-attempt', status: 'SKIP', detail });
-    warn(`Informal close attempt marker detected at ${informalMarker} — review guardian-warnings.log`);
+    warn(
+      `Informal close attempt marker detected at ${informalMarker} — review guardian-warnings.log`,
+    );
   } else {
-    results.push({ phase: 'informal-close-attempt', status: 'PASS', detail: 'No informal close marker found' });
+    results.push({
+      phase: 'informal-close-attempt',
+      status: 'PASS',
+      detail: 'No informal close marker found',
+    });
   }
 
   // 1.3 Close tracing span (resilient — find any .jsonl span file)
@@ -127,33 +155,58 @@ function phasePreClose(reason: string): PhaseResult[] {
   if (existsSync(spanDir)) {
     try {
       // Find all JSONL span files in the directory
-      const spanFiles = readdirSync(spanDir).filter(f => f.endsWith('.jsonl'));
+      const spanFiles = readdirSync(spanDir).filter((f) => f.endsWith('.jsonl'));
       if (spanFiles.length > 0) {
         // Use the first available span file
         const spanFile = join(spanDir, spanFiles[0]);
         const spanContent = readFileSync(spanFile, 'utf-8');
-        const spans = spanContent.split('\n').filter(l => l.trim());
+        const spans = spanContent.split('\n').filter((l) => l.trim());
         for (const line of spans.reverse()) {
           try {
             const span = JSON.parse(line);
             if (span.name === 'session-start') {
-              const r = runScript('src/tracing-instrument.ts', [
-                '-Action', 'end', '-TraceId', span.traceId,
-                '-SpanId', span.spanId, '-SpanName', 'session-start',
-                '-Attributes', JSON.stringify({ closeReason: reason, closeTime: new Date().toISOString() }),
-                '-Quiet'
-              ], 15000);
+              const r = runScript(
+                'src/tracing-instrument.ts',
+                [
+                  '-Action',
+                  'end',
+                  '-TraceId',
+                  span.traceId,
+                  '-SpanId',
+                  span.spanId,
+                  '-SpanName',
+                  'session-start',
+                  '-Attributes',
+                  JSON.stringify({ closeReason: reason, closeTime: new Date().toISOString() }),
+                  '-Quiet',
+                ],
+                15000,
+              );
               const st = r.status === 0 ? 'PASS' : 'FAIL';
-              results.push({ phase: 'tracing-close', status: st, detail: st === 'PASS' ? 'Span closed' : 'Span close returned non-zero' });
+              results.push({
+                phase: 'tracing-close',
+                status: st,
+                detail: st === 'PASS' ? 'Span closed' : 'Span close returned non-zero',
+              });
               break;
             }
-          } catch { /* skip malformed lines */ }
+          } catch {
+            /* skip malformed lines */
+          }
         }
       } else {
-        results.push({ phase: 'tracing-close', status: 'SKIP', detail: 'No span files found in .telemetry/spans/' });
+        results.push({
+          phase: 'tracing-close',
+          status: 'SKIP',
+          detail: 'No span files found in .telemetry/spans/',
+        });
       }
     } catch (e: unknown) {
-      results.push({ phase: 'tracing-close', status: 'SKIP', detail: e instanceof Error ? e.message : 'Span read error' });
+      results.push({
+        phase: 'tracing-close',
+        status: 'SKIP',
+        detail: e instanceof Error ? e.message : 'Span read error',
+      });
     }
   } else {
     results.push({ phase: 'tracing-close', status: 'SKIP', detail: '.telemetry/spans/ not found' });
@@ -178,17 +231,30 @@ function getAllFiles(dir: string, ext: string): string[] {
         result.push(full);
       }
     }
-  } catch { /* skip unreadable */ }
+  } catch {
+    /* skip unreadable */
+  }
   return result;
 }
 
 function getChangedFiles(): Set<string> {
   try {
-    const r = runSync('git', ['diff', '--name-only', 'HEAD'], { cwd: ROOT, stdio: 'pipe', timeout: 10000 });
+    const r = runSync('git', ['diff', '--name-only', 'HEAD'], {
+      cwd: ROOT,
+      stdio: 'pipe',
+      timeout: 10000,
+    });
     if (r.status === 0) {
-      return new Set(r.stdout.split('\n').filter(l => l.trim()).map(l => l.trim()));
+      return new Set(
+        r.stdout
+          .split('\n')
+          .filter((l) => l.trim())
+          .map((l) => l.trim()),
+      );
     }
-  } catch { /* fallback */ }
+  } catch {
+    /* fallback */
+  }
   return new Set();
 }
 
@@ -208,7 +274,7 @@ function phasePreValidate(): PhaseResult[] {
       const codeOnly = content
         .replace(/\/\/.*$/gm, '')
         .replace(/\/\*[\s\S]*?\*\//g, '')
-        .replace(/`[\s\S]*?`/g, '');  // Remove template literals (includes import strings)
+        .replace(/`[\s\S]*?`/g, ''); // Remove template literals (includes import strings)
       // Only match actual ES6 import statements at line start
       const importRegex = /^\s*import\s+.*?\s+from\s+['"](\.[^'"]+)['"];?\s*$/gm;
       let match: RegExpExecArray | null;
@@ -221,27 +287,48 @@ function phasePreValidate(): PhaseResult[] {
         const basePath = resolved.replace(/\.(js|mjs)$/, '');
 
         const canExist = [
-          resolved, resolved + '.ts', resolved + '.tsx',
-          resolved + '.js', resolved + '.jsx', resolved + '.mjs', resolved + '.json',
-          basePath + '.ts', basePath + '.tsx',
-          join(resolved, 'index.ts'), join(resolved, 'index.tsx'), join(resolved, 'index.js'),
-          join(basePath, 'index.ts'), join(basePath, 'index.tsx'),
+          resolved,
+          resolved + '.ts',
+          resolved + '.tsx',
+          resolved + '.js',
+          resolved + '.jsx',
+          resolved + '.mjs',
+          resolved + '.json',
+          basePath + '.ts',
+          basePath + '.tsx',
+          join(resolved, 'index.ts'),
+          join(resolved, 'index.tsx'),
+          join(resolved, 'index.js'),
+          join(basePath, 'index.ts'),
+          join(basePath, 'index.tsx'),
         ];
 
-        if (!canExist.some(p => existsSync(p))) {
+        if (!canExist.some((p) => existsSync(p))) {
           brokenImports++;
         }
       }
     }
 
     if (brokenImports > 0) {
-      results.push({ phase: 'cross-ref-scan', status: 'FAIL', detail: `${brokenImports} broken imports in ${totalImports} scanned` });
+      results.push({
+        phase: 'cross-ref-scan',
+        status: 'FAIL',
+        detail: `${brokenImports} broken imports in ${totalImports} scanned`,
+      });
       warn(`Pre-validation: ${brokenImports} broken imports found`);
     } else {
-      results.push({ phase: 'cross-ref-scan', status: 'PASS', detail: `${totalImports} imports ok` });
+      results.push({
+        phase: 'cross-ref-scan',
+        status: 'PASS',
+        detail: `${totalImports} imports ok`,
+      });
     }
   } catch (e: unknown) {
-    results.push({ phase: 'cross-ref-scan', status: 'SKIP', detail: e instanceof Error ? e.message : 'Scan error' });
+    results.push({
+      phase: 'cross-ref-scan',
+      status: 'SKIP',
+      detail: e instanceof Error ? e.message : 'Scan error',
+    });
   }
 
   // 1b.2 Temp file check (via temp-file-registry import — inline fallback)
@@ -250,32 +337,56 @@ function phasePreValidate(): PhaseResult[] {
     if (existsSync(registryPath)) {
       const registry = JSON.parse(readFileSync(registryPath, 'utf-8'));
       const entries = registry.entries || [];
-      const authorizedPending = entries.filter((e: { status: string }) => e.status === 'authorized-pending');
+      const authorizedPending = entries.filter(
+        (e: { status: string }) => e.status === 'authorized-pending',
+      );
       const temporary = entries.filter((e: { status: string }) => e.status === 'temporary');
 
       if (authorizedPending.length > 0) {
-        results.push({ phase: 'temp-pending', status: 'SKIP', detail: `${authorizedPending.length} file(s) pending integration` });
+        results.push({
+          phase: 'temp-pending',
+          status: 'SKIP',
+          detail: `${authorizedPending.length} file(s) pending integration`,
+        });
         warn(`${authorizedPending.length} authorized-pending temp files — integrate or archive`);
       }
 
       if (temporary.length > 0) {
-        results.push({ phase: 'temp-temporary', status: 'SKIP', detail: `${temporary.length} temp file(s) not yet authorized` });
+        results.push({
+          phase: 'temp-temporary',
+          status: 'SKIP',
+          detail: `${temporary.length} temp file(s) not yet authorized`,
+        });
         warn(`${temporary.length} temporary files awaiting authorization`);
       }
 
-      results.push({ phase: 'temp-registry', status: 'PASS', detail: `${entries.length} total tracked files` });
+      results.push({
+        phase: 'temp-registry',
+        status: 'PASS',
+        detail: `${entries.length} total tracked files`,
+      });
     } else {
-      results.push({ phase: 'temp-registry', status: 'SKIP', detail: 'No temp-file-registry.json found' });
+      results.push({
+        phase: 'temp-registry',
+        status: 'SKIP',
+        detail: 'No temp-file-registry.json found',
+      });
     }
   } catch (e: unknown) {
-    results.push({ phase: 'temp-registry', status: 'SKIP', detail: e instanceof Error ? e.message : 'Registry read error' });
+    results.push({
+      phase: 'temp-registry',
+      status: 'SKIP',
+      detail: e instanceof Error ? e.message : 'Registry read error',
+    });
   }
 
   // 1b.3 Error/warning scan on changed files
   try {
     const changedFiles = getChangedFiles();
-    const tsFiles = Array.from(changedFiles).filter(f => f.endsWith('.ts'));
-    let todoCount = 0, fixmeCount = 0, tsIgnoreCount = 0;
+    const tsFiles = Array.from(changedFiles).filter((f) => f.endsWith('.ts'));
+    let todoCount = 0,
+      fixmeCount = 0,
+      tsIgnoreCount = 0;
 
     for (const file of tsFiles) {
       const fullPath = join(ROOT, file);
@@ -291,10 +402,18 @@ function phasePreValidate(): PhaseResult[] {
       results.push({ phase: 'error-warning-scan', status: 'SKIP', detail });
       if (fixmeCount > 0 || tsIgnoreCount > 0) warn(`Pre-validation: ${detail}`);
     } else {
-      results.push({ phase: 'error-warning-scan', status: 'PASS', detail: 'No errors/warnings in changed files' });
+      results.push({
+        phase: 'error-warning-scan',
+        status: 'PASS',
+        detail: 'No errors/warnings in changed files',
+      });
     }
   } catch (e: unknown) {
-    results.push({ phase: 'error-warning-scan', status: 'SKIP', detail: e instanceof Error ? e.message : 'Scan error' });
+    results.push({
+      phase: 'error-warning-scan',
+      status: 'SKIP',
+      detail: e instanceof Error ? e.message : 'Scan error',
+    });
   }
 
   return results;
@@ -309,44 +428,44 @@ async function phasePersist(reason: string): Promise<PhaseResult[]> {
   // NO depende del plugin OpenCode automático — usa llamadas MCP explícitas
   const sessionData = readSessionData();
   const sessionId = String(sessionData.sessionId || sessionData.id || 'unknown');
-  
+
   const summary = {
     goal: sessionData.goal ? String(sessionData.goal) : `Session completed with reason: ${reason}`,
-    discoveries: Array.isArray(sessionData.discoveries) 
-      ? sessionData.discoveries.map((d: unknown) => String(d)) 
+    discoveries: Array.isArray(sessionData.discoveries)
+      ? sessionData.discoveries.map((d: unknown) => String(d))
       : ['Session completed'],
-    accomplished: Array.isArray(sessionData.accomplished) 
-      ? sessionData.accomplished.map((a: unknown) => String(a)) 
+    accomplished: Array.isArray(sessionData.accomplished)
+      ? sessionData.accomplished.map((a: unknown) => String(a))
       : [`Session ${reason} completed`],
     nextSteps: [
       'Review session artifacts in .session/',
-      'Verify Nexus DB health with npm run db:health'
-    ]
+      'Verify Nexus DB health with npm run db:health',
+    ],
   };
 
   try {
     // Usar bridge unificado que intenta MCP primero, luego HTTP fallback
     const engramResult = await sessionEnd(sessionId, summary);
-    
+
     if (engramResult.mcpSuccess) {
-      results.push({ 
-        phase: 'engram-summary', 
-        status: 'PASS', 
-        detail: `Session closed via MCP (MCP: ${engramResult.mcpSuccess}, HTTP: ${engramResult.httpSuccess})` 
+      results.push({
+        phase: 'engram-summary',
+        status: 'PASS',
+        detail: `Session closed via MCP (MCP: ${engramResult.mcpSuccess}, HTTP: ${engramResult.httpSuccess})`,
       });
       ok('Engram session closed successfully');
     } else if (engramResult.httpSuccess) {
-      results.push({ 
-        phase: 'engram-summary', 
-        status: 'PASS', 
-        detail: `Session closed via HTTP fallback` 
+      results.push({
+        phase: 'engram-summary',
+        status: 'PASS',
+        detail: `Session closed via HTTP fallback`,
       });
       ok('Engram session closed via HTTP');
     } else {
-      results.push({ 
-        phase: 'engram-summary', 
-        status: 'SKIP', 
-        detail: `Engram not reachable: ${engramResult.error || 'Unknown error'} (non-blocking)` 
+      results.push({
+        phase: 'engram-summary',
+        status: 'SKIP',
+        detail: `Engram not reachable: ${engramResult.error || 'Unknown error'} (non-blocking)`,
       });
       warn(`Engram session close skipped: ${engramResult.error || 'Unknown'}`);
     }
@@ -357,43 +476,63 @@ async function phasePersist(reason: string): Promise<PhaseResult[]> {
   }
 
   // 2.2 Save session scoring
-  const sr = runScript('src/session-scoring.ts', [
-    '-Action', 'record',
-    '-EventType', 'session',
-    '-Detail', 'session-close',
-    ...(reason === 'verify' ? [] : ['-Success'])
-  ], 30000);
+  const sr = runScript(
+    'src/session-scoring.ts',
+    [
+      '-Action',
+      'record',
+      '-EventType',
+      'session',
+      '-Detail',
+      'session-close',
+      ...(reason === 'verify' ? [] : ['-Success']),
+    ],
+    30000,
+  );
   results.push({
     phase: 'session-scoring',
     status: sr.status === 0 ? 'PASS' : 'FAIL',
-    detail: sr.status === 0 ? 'Scoring recorded' : `Exit: ${sr.status}`
+    detail: sr.status === 0 ? 'Scoring recorded' : `Exit: ${sr.status}`,
   });
 
   // 2.3 Save event to event sourcing
   const aggId = `session-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}`;
-  const er = runScript('src/event-sourcing.ts', [
-    '-Action', 'append',
-    '-AggregateId', aggId,
-    '-EventType', 'session.ended',
-    '-EventData', JSON.stringify({ reason, closeTime: new Date().toISOString() }),
-    '-Quiet'
-  ], 15000);
+  const er = runScript(
+    'src/event-sourcing.ts',
+    [
+      '-Action',
+      'append',
+      '-AggregateId',
+      aggId,
+      '-EventType',
+      'session.ended',
+      '-EventData',
+      JSON.stringify({ reason, closeTime: new Date().toISOString() }),
+      '-Quiet',
+    ],
+    15000,
+  );
   results.push({
     phase: 'event-store',
     status: er.status === 0 ? 'PASS' : 'FAIL',
-    detail: er.status === 0 ? 'Event recorded' : `Exit: ${er.status}`
+    detail: er.status === 0 ? 'Event recorded' : `Exit: ${er.status}`,
   });
 
   // 2.4 Save final token metrics (close summary with segmented totals)
   const closeTokenArgs = [
-    '--action', 'close',
-    '--session-id', String(sessionData.sessionId || sessionData.id || 'unknown'),
+    '--action',
+    'close',
+    '--session-id',
+    String(sessionData.sessionId || sessionData.id || 'unknown'),
   ];
   const tm = runScript('src/token-metrics-store.ts', closeTokenArgs, 15000);
   const closeSummaryFile = join(SESSION_DIR, 'token-close-summary.json');
   if (existsSync(closeSummaryFile)) {
     try {
-      const summary = JSON.parse(readFileSync(closeSummaryFile, 'utf-8')) as Record<string, unknown>;
+      const summary = JSON.parse(readFileSync(closeSummaryFile, 'utf-8')) as Record<
+        string,
+        unknown
+      >;
       const seg = `in=${summary.input_tokens} out=${summary.output_tokens} total=${summary.total_tokens} cost=$${Number(summary.cost_usd ?? 0).toFixed(4)} (${summary.source})`;
       results.push({
         phase: 'token-metrics',
@@ -435,11 +574,15 @@ function phaseBackup(): PhaseResult[] {
   log('=== FASE 3: BACKUP ===');
 
   // 3.1 Create checkpoint
-  const cp = runScript('src/checkpoint-manager.ts', ['create', '--label', `session-close-${new Date().toISOString().slice(0, 16)}`], 30000);
+  const cp = runScript(
+    'src/checkpoint-manager.ts',
+    ['create', '--label', `session-close-${new Date().toISOString().slice(0, 16)}`],
+    30000,
+  );
   results.push({
     phase: 'checkpoint-create',
     status: cp.status === 0 ? 'PASS' : 'FAIL',
-    detail: cp.status === 0 ? 'Checkpoint created' : `Exit: ${cp.status}`
+    detail: cp.status === 0 ? 'Checkpoint created' : `Exit: ${cp.status}`,
   });
 
   // 3.2 Backup Nexus DB
@@ -449,16 +592,20 @@ function phaseBackup(): PhaseResult[] {
     results.push({
       phase: 'nexus-backup',
       status: br.status === 0 ? 'PASS' : 'FAIL',
-      detail: br.status === 0 ? 'Nexus DB backed up' : `Exit: ${br.status}`
+      detail: br.status === 0 ? 'Nexus DB backed up' : `Exit: ${br.status}`,
     });
   } else {
     // Fallback: use npm run db:backup
     try {
-      const br = runCmd('npx', ['tsx', 'scripts/database/db-backup.ts', 'backup', '--quiet'], 30000);
+      const br = runCmd(
+        'npx',
+        ['tsx', 'scripts/database/db-backup.ts', 'backup', '--quiet'],
+        30000,
+      );
       results.push({
         phase: 'nexus-backup',
         status: br.status === 0 ? 'PASS' : 'FAIL',
-        detail: br.status === 0 ? 'Nexus DB backed up' : `Exit: ${br.status}`
+        detail: br.status === 0 ? 'Nexus DB backed up' : `Exit: ${br.status}`,
       });
     } catch {
       results.push({ phase: 'nexus-backup', status: 'FAIL', detail: 'Backup script not found' });
@@ -470,7 +617,7 @@ function phaseBackup(): PhaseResult[] {
   results.push({
     phase: 'engram-backup',
     status: eb.status === 0 ? 'PASS' : 'SKIP',
-    detail: eb.status === 0 ? 'Engram backed up' : 'Engram backup script skipped'
+    detail: eb.status === 0 ? 'Engram backed up' : 'Engram backup script skipped',
   });
 
   // 3.4 Prune old checkpoints
@@ -478,7 +625,7 @@ function phaseBackup(): PhaseResult[] {
   results.push({
     phase: 'checkpoint-prune',
     status: pp.status === 0 ? 'PASS' : 'SKIP',
-    detail: pp.status === 0 ? 'Old checkpoints pruned' : 'Prune skipped'
+    detail: pp.status === 0 ? 'Old checkpoints pruned' : 'Prune skipped',
   });
 
   return results;
@@ -489,20 +636,30 @@ function phaseAudit(): PhaseResult[] {
   log('=== FASE 4: AUDIT ===');
 
   // 4.1 Audit pipeline log
-  const ar = runScript('src/infrastructure/audit-pipeline.ts', [
-    'log',
-    '-EventType', 'session.end',
-    '-Component', 'system',
-    '-Operation', 'session-close-orchestrator',
-    '-Actor', 'system',
-    '-Status', 'success',
-    '-Message', `Session closed via orchestrator`,
-    '-Quiet'
-  ], 15000);
+  const ar = runScript(
+    'src/infrastructure/audit-pipeline.ts',
+    [
+      'log',
+      '-EventType',
+      'session.end',
+      '-Component',
+      'system',
+      '-Operation',
+      'session-close-orchestrator',
+      '-Actor',
+      'system',
+      '-Status',
+      'success',
+      '-Message',
+      `Session closed via orchestrator`,
+      '-Quiet',
+    ],
+    15000,
+  );
   results.push({
     phase: 'audit-log',
     status: ar.status === 0 ? 'PASS' : 'FAIL',
-    detail: ar.status === 0 ? 'Audit logged' : `Exit: ${ar.status}`
+    detail: ar.status === 0 ? 'Audit logged' : `Exit: ${ar.status}`,
   });
 
   // 4.2 CodeGraph sync (if there were file changes)
@@ -510,7 +667,7 @@ function phaseAudit(): PhaseResult[] {
   results.push({
     phase: 'codegraph-sync',
     status: cg.status === 0 ? 'PASS' : 'SKIP',
-    detail: cg.status === 0 ? 'CodeGraph synced' : 'Sync skipped'
+    detail: cg.status === 0 ? 'CodeGraph synced' : 'Sync skipped',
   });
 
   return results;
@@ -541,7 +698,10 @@ function killProcessByCommandLine(matcher: string): boolean {
       //     (protects the whole process tree: npx → tsx → orchestrator)
       const selfName = 'session-close-orchestrator';
       const psCmd = `Get-CimInstance Win32_Process -Filter "Name='node.exe' OR Name='tsx.exe'" | Where-Object { $_.CommandLine -match '${matcher}' -and $_.ProcessId -ne ${process.pid} -and $_.ProcessId -ne ${process.ppid ?? -1} -and $_.CommandLine -notmatch '${selfName}' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force; Write-Output "Killed PID $($_.ProcessId)" }`;
-      const r = runSync('powershell', ['-NoProfile', '-Command', psCmd], { timeout: 15000, stdio: 'pipe' });
+      const r = runSync('powershell', ['-NoProfile', '-Command', psCmd], {
+        timeout: 15000,
+        stdio: 'pipe',
+      });
       const out = r.stdout.trim();
       return out.length > 0; // true if at least one process was killed
     } else {
@@ -567,12 +727,16 @@ function phaseCleanup(): PhaseResult[] {
       results.push({
         phase: `kill-${target.name.toLowerCase().replace(/\s+/g, '-')}`,
         status: killed ? 'PASS' : 'SKIP',
-        detail: killed ? `${target.name} terminated` : `${target.name} not running`
+        detail: killed ? `${target.name} terminated` : `${target.name} not running`,
       });
       if (killed) ok(`${target.name} process killed`);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : 'Unknown error';
-      results.push({ phase: `kill-${target.name.toLowerCase().replace(/\s+/g, '-')}`, status: 'SKIP', detail: msg });
+      results.push({
+        phase: `kill-${target.name.toLowerCase().replace(/\s+/g, '-')}`,
+        status: 'SKIP',
+        detail: msg,
+      });
     }
   }
 
@@ -581,12 +745,20 @@ function phaseCleanup(): PhaseResult[] {
   // (session-close-orchestrator.ts) or its wrapper, otherwise we kill ourselves
   // mid-run and never write the close report. See killProcessByCommandLine self-exclusion.
   try {
-    const orphanKilled = killProcessByCommandLine('session-(metrics-tracker|cleanup-start|metrics-memory)');
+    const orphanKilled = killProcessByCommandLine(
+      'session-(metrics-tracker|cleanup-start|metrics-memory)',
+    );
     if (orphanKilled) {
-      results.push({ phase: 'kill-orphan-session', status: 'PASS', detail: 'Orphan session daemons killed' });
+      results.push({
+        phase: 'kill-orphan-session',
+        status: 'PASS',
+        detail: 'Orphan session daemons killed',
+      });
       ok('Orphan session processes cleaned');
     }
-  } catch { /* skip silently */ }
+  } catch {
+    /* skip silently */
+  }
 
   // 5.3 Clean temp files (unregistered + stale registry entries)
   try {
@@ -606,17 +778,25 @@ function phaseCleanup(): PhaseResult[] {
               // Check if registered
               const relPath = relative(ROOT, full).replace(/\\/g, '/');
               const registry = JSON.parse(readFileSync(registryPath, 'utf-8'));
-              const isRegistered = (registry.entries || []).some((e: { path: string }) => e.path === relPath);
+              const isRegistered = (registry.entries || []).some(
+                (e: { path: string }) => e.path === relPath,
+              );
               if (!isRegistered) {
                 rmSync(full, { force: true });
                 cleanedCount++;
               }
             }
           }
-        } catch { /* skip */ }
+        } catch {
+          /* skip */
+        }
       }
       if (cleanedCount > 0) {
-        results.push({ phase: 'temp-cleanup', status: 'PASS', detail: `Cleaned ${cleanedCount} unregistered temp files` });
+        results.push({
+          phase: 'temp-cleanup',
+          status: 'PASS',
+          detail: `Cleaned ${cleanedCount} unregistered temp files`,
+        });
         ok(`Temp cleanup: removed ${cleanedCount} unregistered files`);
       } else {
         results.push({ phase: 'temp-cleanup', status: 'SKIP', detail: 'No temp files to clean' });
@@ -625,17 +805,19 @@ function phaseCleanup(): PhaseResult[] {
       results.push({ phase: 'temp-cleanup', status: 'SKIP', detail: 'No temp registry' });
     }
   } catch (e: unknown) {
-    results.push({ phase: 'temp-cleanup', status: 'SKIP', detail: e instanceof Error ? e.message : 'Cleanup error' });
+    results.push({
+      phase: 'temp-cleanup',
+      status: 'SKIP',
+      detail: e instanceof Error ? e.message : 'Cleanup error',
+    });
   }
 
   // 5.4 Flush caches and reset
-  const cr = runScript('src/session-cleanup-start.ts', [
-    '-SkipOrphanCleanup', '-Quiet'
-  ], 60000);
+  const cr = runScript('src/session-cleanup-start.ts', ['-SkipOrphanCleanup', '-Quiet'], 60000);
   results.push({
     phase: 'cache-flush',
     status: cr.status === 0 ? 'PASS' : 'FAIL',
-    detail: cr.status === 0 ? 'Caches flushed' : `Exit: ${cr.status}`
+    detail: cr.status === 0 ? 'Caches flushed' : `Exit: ${cr.status}`,
   });
 
   return results;
@@ -650,16 +832,17 @@ function phaseVerify(): PhaseResult[] {
   results.push({
     phase: 'session-file',
     status: existsSync(sessionFile) ? 'PASS' : 'FAIL',
-    detail: existsSync(sessionFile) ? sessionFile : 'session-current.json not found'
+    detail: existsSync(sessionFile) ? sessionFile : 'session-current.json not found',
   });
 
   // 6.2 Verify Nexus DB health
   const dh = runScript('scripts/database/db-health.ts', [], 15000);
-  const healthy = dh.stdout.includes('healthy') || dh.stdout.includes('HEALTHY') || dh.stdout.includes('[ OK ]');
+  const healthy =
+    dh.stdout.includes('healthy') || dh.stdout.includes('HEALTHY') || dh.stdout.includes('[ OK ]');
   results.push({
     phase: 'nexus-health',
     status: healthy ? 'PASS' : 'FAIL',
-    detail: healthy ? 'Nexus DB healthy' : 'Nexus DB may have issues'
+    detail: healthy ? 'Nexus DB healthy' : 'Nexus DB may have issues',
   });
 
   // 6.3 Verify checkpoint exists (ckpt-* are directories, not .json files)
@@ -676,7 +859,7 @@ function phaseVerify(): PhaseResult[] {
   results.push({
     phase: 'checkpoint-exists',
     status: ckpts.length > 0 ? 'PASS' : 'SKIP',
-    detail: ckpts.length > 0 ? `${ckpts.length} checkpoint(s) found` : 'No checkpoints'
+    detail: ckpts.length > 0 ? `${ckpts.length} checkpoint(s) found` : 'No checkpoints',
   });
 
   // 6.4 Verify backup exists
@@ -685,7 +868,7 @@ function phaseVerify(): PhaseResult[] {
   results.push({
     phase: 'backup-exists',
     status: backups.length > 0 ? 'PASS' : 'SKIP',
-    detail: backups.length > 0 ? `${backups.length} backup(s) found` : 'No backups'
+    detail: backups.length > 0 ? `${backups.length} backup(s) found` : 'No backups',
   });
 
   return results;
@@ -733,22 +916,32 @@ export async function runCloseOrchestrator(reason = 'session-end'): Promise<Clos
   };
 
   const allResults = [
-    ...phases.preClose, ...phases.preValidate, ...phases.persist,
-    ...phases.backup, ...phases.audit, ...phases.cleanup, ...phases.verify
+    ...phases.preClose,
+    ...phases.preValidate,
+    ...phases.persist,
+    ...phases.backup,
+    ...phases.audit,
+    ...phases.cleanup,
+    ...phases.verify,
   ];
 
-  const passed = allResults.filter(r => r.status === 'PASS').length;
-  const failed = allResults.filter(r => r.status === 'FAIL').length;
-  const skipped = allResults.filter(r => r.status === 'SKIP').length;
+  const passed = allResults.filter((r) => r.status === 'PASS').length;
+  const failed = allResults.filter((r) => r.status === 'FAIL').length;
+  const skipped = allResults.filter((r) => r.status === 'SKIP').length;
 
   let overall: CloseReport['overall'] = 'PASS';
   if (failed > 0) overall = 'FAIL';
   else if (skipped > 0 && passed > 0) overall = 'PASS_WITH_WARNINGS';
 
   // Calculate validation score (0-100) from pre-validate results
-  const validationScore = preValidateResults.length > 0
-    ? Math.round((preValidateResults.filter(r => r.status === 'PASS').length / preValidateResults.length) * 100)
-    : undefined;
+  const validationScore =
+    preValidateResults.length > 0
+      ? Math.round(
+          (preValidateResults.filter((r) => r.status === 'PASS').length /
+            preValidateResults.length) *
+            100,
+        )
+      : undefined;
 
   log('═══════════════════════════════════════════');
   log(`  RESULTS: ${passed} PASS / ${failed} FAIL / ${skipped} SKIP`);
@@ -789,7 +982,9 @@ async function main() {
   // so the pattern is registered for future sessions.
   const guardian = guardianCheck();
   if (!guardian.passed) {
-    learnFromMistake(`Orchestrator invoked after informal close attempt: ${guardian.warning || 'unknown reason'}`);
+    learnFromMistake(
+      `Orchestrator invoked after informal close attempt: ${guardian.warning || 'unknown reason'}`,
+    );
   }
 
   // Lightweight mode for session-start cleanup (skip pre-validate, backup, audit, verify)
@@ -802,8 +997,8 @@ async function main() {
     phasePreClose(reason);
     await phasePersist(reason);
     const cleanupResults = phaseCleanup();
-    const passed = cleanupResults.filter(r => r.status === 'PASS').length;
-    const failed = cleanupResults.filter(r => r.status === 'FAIL').length;
+    const passed = cleanupResults.filter((r) => r.status === 'PASS').length;
+    const failed = cleanupResults.filter((r) => r.status === 'FAIL').length;
     ok(`Lightweight cleanup: ${passed} pass, ${failed} fail`);
     process.exit(failed > 0 ? 1 : 0);
   }
@@ -818,7 +1013,7 @@ async function main() {
       const icon = r.status === 'PASS' ? '✅' : r.status === 'FAIL' ? '❌' : '⏭️';
       LOG.info(`  ${icon} [${r.phase}] ${r.detail}`);
     }
-    const allPass = verifyResults.every(r => r.status === 'PASS');
+    const allPass = verifyResults.every((r) => r.status === 'PASS');
     LOG.info(`\n  Overall: ${allPass ? '✅ ALL PASS' : '❌ SOME FAILURES'}`);
     process.exit(allPass ? 0 : 1);
   }
@@ -832,22 +1027,34 @@ async function main() {
 
   // Write report
   mkdirSync(SESSION_DIR, { recursive: true });
-  const reportFile = join(SESSION_DIR, `close-report-${new Date().toISOString().slice(0, 16).replace(/[:-]/g, '')}.json`);
+  const reportFile = join(
+    SESSION_DIR,
+    `close-report-${new Date().toISOString().slice(0, 16).replace(/[:-]/g, '')}.json`,
+  );
   writeFileSync(reportFile, JSON.stringify(report, null, 2));
   ok(`Report written to ${reportFile}`);
 
   // If --validate, run deep validator as spawned process (non-blocking if lazy)
   if (args.includes('--validate')) {
-    const validateMode = args.includes('--deep') ? 'deep' : args.includes('--full') ? 'full' : 'quick';
+    const validateMode = args.includes('--deep')
+      ? 'deep'
+      : args.includes('--full')
+        ? 'full'
+        : 'quick';
     const dryRun = args.includes('--dry-run');
     const autoFix = args.includes('--auto-fix');
     log(`Invoking session-close-validator (mode: ${validateMode})...`);
-    const vr = runScript('src/session-close-validator.ts', [
-      '--mode', validateMode,
-      ...(dryRun ? ['--dry-run'] : []),
-      ...(autoFix ? ['--auto-fix'] : []),
-      '--report'
-    ], 120000);
+    const vr = runScript(
+      'src/session-close-validator.ts',
+      [
+        '--mode',
+        validateMode,
+        ...(dryRun ? ['--dry-run'] : []),
+        ...(autoFix ? ['--auto-fix'] : []),
+        '--report',
+      ],
+      120000,
+    );
     if (vr.status === 0) ok('Deep validation passed');
     else warn(`Deep validation finished with exit code ${vr.status}`);
   }

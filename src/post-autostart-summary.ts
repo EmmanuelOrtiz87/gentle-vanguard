@@ -56,10 +56,16 @@ function gitCmd(root: string, cmd: string): string | null {
   }
 }
 
-function getSessionInfo(root: string): { sessionId: string | null; timezone: string | null; peakStart: number | null; peakEnd: number | null; region: string | null } {
+function getSessionInfo(root: string): {
+  sessionId: string | null;
+  timezone: string | null;
+  peakStart: number | null;
+  peakEnd: number | null;
+  region: string | null;
+} {
   // Try to get session info from the most recent session file
   const sessionDirs = [join(root, '.session'), join(root, 'session')];
-  
+
   for (const sessionDir of sessionDirs) {
     if (!existsSync(sessionDir)) continue;
     try {
@@ -87,7 +93,7 @@ function main(): Record<string, any> {
   const args = parseArgs(process.argv);
   const root = resolveRoot();
   const timestamp = new Date().toISOString();
-  
+
   // Get session info from session file (more reliable than args)
   const sessionInfo = getSessionInfo(root);
   const sessionId = sessionInfo.sessionId;
@@ -95,7 +101,12 @@ function main(): Record<string, any> {
   const lastCommit = gitCmd(root, 'log -1 --format="%H"');
 
   // Use session file values first, then args, then use defaults from notifications config
-  const notifications = { timezone: 'America/Argentina/Buenos_Aires', peakStart: 9, peakEnd: 15, region: 'Argentina' };
+  const notifications = {
+    timezone: 'America/Argentina/Buenos_Aires',
+    peakStart: 9,
+    peakEnd: 15,
+    region: 'Argentina',
+  };
   try {
     const configPath = join(root, 'config', 'session-autostart.config.json');
     if (existsSync(configPath)) {

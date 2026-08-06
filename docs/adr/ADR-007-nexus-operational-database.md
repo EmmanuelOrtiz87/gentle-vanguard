@@ -21,8 +21,8 @@ directories. This approach had several problems:
 5. **No data lifecycle** — old data accumulated indefinitely without pruning
 
 Separately, new components needed persistence: response cache (Wave 35), contract results (Wave 36),
-skill usage tracking, token accounting, routing rules, and session scoring (Wave 37). Each would have
-required its own JSON file without a unified solution.
+skill usage tracking, token accounting, routing rules, and session scoring (Wave 37). Each would
+have required its own JSON file without a unified solution.
 
 Additionally, the database lacked a formal identity — it was referred to simply as
 `gentle-vanguard.db` without the architectural presence that components like Engram, CodeGraph, and
@@ -45,6 +45,7 @@ Replace all JSON file persistence with a single SQLite database (`gentle-vanguar
 ### Phase 2: Stack Tables (Wave 35-36)
 
 Migration 002 added operational tables:
+
 - `response_cache` — SHA256 key → response with TTL and hit_count
 - `contract_results` — SDD contract validation (pass/fail/error)
 - `skill_usage` — Per-session skill usage with tokens and cost
@@ -60,6 +61,7 @@ corrections, proactive hits, cloud calls, checkpoints, tracing spans, audit even
 
 The database was formally named **Nexus** — the central point where all operational data converges.
 This included:
+
 - `rules/NEXUS-NORMATIVA.md` — identity, lifecycle, guardrails, retention policy
 - `skills/nexus-database/SKILL.md` — autonomous management skill
 - `AGENTS.md` updated with Nexus identity section

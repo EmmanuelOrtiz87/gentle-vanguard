@@ -2,13 +2,16 @@
 
 ## Research Summary
 
-This research investigates Google AI Studio's evaluation capabilities, metrics, testing tools, and quality assessment features. Due to authentication requirements on Google AI Studio's platform, some documentation pages returned 404 errors or required sign-in to access.
+This research investigates Google AI Studio's evaluation capabilities, metrics, testing tools, and
+quality assessment features. Due to authentication requirements on Google AI Studio's platform, some
+documentation pages returned 404 errors or required sign-in to access.
 
 ## Key Findings
 
 ### 1. Platform Overview
 
 Google AI Studio (https://aistudio.google.com/) is described as:
+
 - "Test prompts, manage your API keys, monitor usage, and build prototypes"
 - Web-based IDE for Gemini models
 - Part of Google's broader AI development ecosystem
@@ -25,12 +28,14 @@ Google AI Studio (https://aistudio.google.com/) is described as:
 Based on documentation analysis:
 
 **Prompt Testing Features**:
+
 - Real-time prompt testing and iteration
 - Multiple model selection (Gemini 1.5 Pro, Flash, etc.)
 - Temperature, token limit, and parameter adjustments
 - System instruction configuration
 
 **Testing Capabilities**:
+
 - Chat mode for conversational testing
 - Freeform prompt input
 - Structured prompt templates
@@ -39,6 +44,7 @@ Based on documentation analysis:
 ### 4. Limitations of Research
 
 The following areas could not be fully verified due to authentication requirements:
+
 - Specific evaluation metric names
 - Built-in benchmark evaluation tools
 - Compare mode features
@@ -48,6 +54,7 @@ The following areas could not be fully verified due to authentication requiremen
 ### 5. Related Google Cloud Services
 
 For advanced evaluation capabilities, consider:
+
 - **Vertex AI**: Provides model evaluation and benchmarking tools
 - **Model Garden**: Access to model comparison features
 - **Cloud Console**: Usage monitoring and analytics
@@ -68,4 +75,5 @@ For advanced evaluation capabilities, consider:
 
 ---
 
-*Note: This research was conducted via webfetch and documentation analysis. Some features may require authentication or may have changed since the research date.*
+_Note: This research was conducted via webfetch and documentation analysis. Some features may
+require authentication or may have changed since the research date._

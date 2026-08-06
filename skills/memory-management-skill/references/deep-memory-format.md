@@ -44,7 +44,8 @@ Workplace shorthand, acronyms, and internal language.
 ```markdown
 # Todd Martinez
 
-**Also known as:** Todd, T **Role:** Finance Lead **Team:** Finance **Reports to:** CFO (Michael Chen)
+**Also known as:** Todd, T **Role:** Finance Lead **Team:** Finance **Reports to:** CFO (Michael
+Chen)
 
 ## Communication
 

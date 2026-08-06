@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "# API Testing\n\nTest REST and GraphQL APIs systematically.\n\n## Test Categories\n\n| Category    | What                | Example                       |\n| ----------- | ------------------- | ----------------------------- |\n| Functional  | Does it work?       | POST /users returns 201       |\n| Validation  | Input handling      | Missing required field → 400  |\n| Auth        | Access control      | No token → 401                |\n| Edge Cases  | Boundary conditions | Max page size, empty results  |\n| Contract    | Schema conformance  | Response matches OpenAPI spec |\n| Performance | Within SLO          | p95 < 500ms                   |\n\n## REST API Testing\n\n### Structure\n\n```typescript\ndescribe('POST /users', () => {\n  it('creates a user with valid data', async () => {\n    const res = await request(app)\n      .post('/api/users')\n      .send({ name: 'Alice', email: 'alice@test.com' });\n    expect(res.status).toBe(201);\n    expect(res.body).toHaveProperty('id');\n  });\n  it('rejects duplicate email', async () => {\n    const res = await request(app)\n      .post('/api/users')\n      .send({ name: 'Alice', email: 'existing@test.com' });\n    expect(res.status).toBe(409);\n  });\n});\n```\n\n## Contract Testing (Pact)\n\n- Provider publishes OpenAPI spec\n- Consumer tests verify against published spec\n- CI rejects PR if contract breaks\n- Prevents API drift between services\n\n## GraphQL Testing\n\n- Test queries and mutations independently\n- Validate against schema\n- Test error paths (partial failures, null propagation)\n\n## API Monitoring\n\n- Synthetic checks every 5 minutes\n- Assert status, response time, required fields\n- Alert on SLA breaches\n- Monitor from multiple regions",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

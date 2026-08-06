@@ -114,7 +114,9 @@ export function isProcessAlive(pid: number): boolean {
       // (it prints "INFO: No tasks are running..."). We must parse the output
       // instead of relying on the exit code — otherwise stale PID files are
       // never cleaned and the watchdog falsely believes processes are alive.
-      const r = runSync('tasklist', ['/FI', `PID eq ${pid}`, '/NH', '/FO', 'CSV'], { timeout: 3000 });
+      const r = runSync('tasklist', ['/FI', `PID eq ${pid}`, '/NH', '/FO', 'CSV'], {
+        timeout: 3000,
+      });
       const output = (r.stdout ?? '').toString();
       // CSV row looks like: "node.exe","26316","Console","1","12,345 K"
       return output.includes(`"${pid}"`);
@@ -129,15 +131,15 @@ export function isProcessAlive(pid: number): boolean {
 
 /** Kill a process by PID */
 export function killProcess(pid: number): void {
-    try {
-      if (process.platform === 'win32') {
-        runSync('taskkill', ['/F', '/PID', String(pid)], { timeout: 3000 });
-      } else {
-        process.kill(pid, 'SIGTERM');
-      }
-    } catch {
-      // ignore
+  try {
+    if (process.platform === 'win32') {
+      runSync('taskkill', ['/F', '/PID', String(pid)], { timeout: 3000 });
+    } else {
+      process.kill(pid, 'SIGTERM');
     }
+  } catch {
+    // ignore
+  }
 }
 
 /** Read a PID from a file and kill the process, then remove the file */
@@ -206,6 +208,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       break;
     default:
       console.log('Usage: npx tsx src/dashboard-common.ts <cmd>');
-      console.log('Commands: get-free-port [preferred], get-pid-by-port <port>, read-ports, clear-ports');
+      console.log(
+        'Commands: get-free-port [preferred], get-pid-by-port <port>, read-ports, clear-ports',
+      );
   }
 }

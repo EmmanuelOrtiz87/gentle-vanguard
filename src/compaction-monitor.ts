@@ -1,19 +1,19 @@
 #!/usr/bin/env node
 /**
  * Compaction Monitor - Sistema de monitoreo de contexto
- * 
+ *
  * Monitorea el tamaño del contexto y alerta cuando se acerca al límite
  * para prevenir problemas con modelos que no soportan compaction automático.
- * 
+ *
  * USO:
  *   npx tsx src/compaction-monitor.ts --check
  *   npx tsx src/compaction-monitor.ts --status
  *   npx tsx src/compaction-monitor.ts --alert
- * 
+ *
  * THRESHOLDS:
  *   SOFT: 15,000 tokens (WARN)
  *   HARD: 25,000 tokens (CRITICAL)
- * 
+ *
  * Para Kimi2-5: Desactivar compaction automático en opencode.json
  */
 
@@ -26,9 +26,9 @@ const ALERT_STATE_FILE = join(ROOT, '.session', 'compaction-alert-state.json');
 
 // Thresholds optimizados para Kimi2-5
 const THRESHOLDS = {
-  SOFT: 15000,    // WARN - Sugerir compactación manual
-  HARD: 25000,    // CRITICAL - Recomendar cierre de sesión
-  MAX: 30000,     // LÍMITE ABSOLUTO - Forzar acción
+  SOFT: 15000, // WARN - Sugerir compactación manual
+  HARD: 25000, // CRITICAL - Recomendar cierre de sesión
+  MAX: 30000, // LÍMITE ABSOLUTO - Forzar acción
 };
 
 interface CompactionStatus {
@@ -53,7 +53,12 @@ interface AlertState {
  * Estima tokens basado en archivos en context-log
  * Heurística: ~100 tokens por archivo + ~500 tokens por turno
  */
-function estimateTokens(): { tokens: number; files: number; turns: number; sessionId: string | null } {
+function estimateTokens(): {
+  tokens: number;
+  files: number;
+  turns: number;
+  sessionId: string | null;
+} {
   let files = 0;
   let turns = 0;
   let sessionId: string | null = null;
@@ -64,7 +69,7 @@ function estimateTokens(): { tokens: number; files: number; turns: number; sessi
     }
 
     const sessions = readdirSync(CONTEXT_LOG_DIR, { withFileTypes: true })
-      .filter(d => d.isDirectory())
+      .filter((d) => d.isDirectory())
       .sort((a, b) => {
         const statA = statSync(join(CONTEXT_LOG_DIR, a.name));
         const statB = statSync(join(CONTEXT_LOG_DIR, b.name));
@@ -109,12 +114,16 @@ function estimateTokens(): { tokens: number; files: number; turns: number; sessi
 /**
  * Determina el estado basado en thresholds
  */
-function determineStatus(tokens: number): { status: CompactionStatus['status']; message: string; recommendation: string } {
+function determineStatus(tokens: number): {
+  status: CompactionStatus['status'];
+  message: string;
+  recommendation: string;
+} {
   if (tokens > THRESHOLDS.MAX) {
     return {
       status: 'OVERFLOW',
       message: `Context overflow: ${tokens.toLocaleString()} tokens (MAX: ${THRESHOLDS.MAX.toLocaleString()})`,
-      recommendation: 'CRITICAL: Close session immediately. Use "/compact" or start fresh session.'
+      recommendation: 'CRITICAL: Close session immediately. Use "/compact" or start fresh session.',
     };
   }
 
@@ -122,7 +131,8 @@ function determineStatus(tokens: number): { status: CompactionStatus['status']; 
     return {
       status: 'CRITICAL',
       message: `High context usage: ${tokens.toLocaleString()} tokens (HARD limit: ${THRESHOLDS.HARD.toLocaleString()})`,
-      recommendation: 'URGENT: Consider manual compaction with context-engineering skill or closing session.'
+      recommendation:
+        'URGENT: Consider manual compaction with context-engineering skill or closing session.',
     };
   }
 
@@ -130,14 +140,14 @@ function determineStatus(tokens: number): { status: CompactionStatus['status']; 
     return {
       status: 'WARN',
       message: `Elevated context: ${tokens.toLocaleString()} tokens (SOFT limit: ${THRESHOLDS.SOFT.toLocaleString()})`,
-      recommendation: 'Optional: Use context-engineering skill to optimize or continue monitoring.'
+      recommendation: 'Optional: Use context-engineering skill to optimize or continue monitoring.',
     };
   }
 
   return {
     status: 'OK',
     message: `Context healthy: ${tokens.toLocaleString()} tokens`,
-    recommendation: 'Continue normal operation. Compaction not required.'
+    recommendation: 'Continue normal operation. Compaction not required.',
   };
 }
 
@@ -150,14 +160,17 @@ function saveAlertState(status: CompactionStatus): void {
       lastAlert: new Date().toISOString(),
       lastStatus: status.status,
       alertCount: status.status !== 'OK' ? 1 : 0,
-      actions: status.status !== 'OK' ? [status.recommendation] : []
+      actions: status.status !== 'OK' ? [status.recommendation] : [],
     };
 
     if (existsSync(ALERT_STATE_FILE)) {
       try {
         const existing = JSON.parse(readFileSync(ALERT_STATE_FILE, 'utf-8'));
         state.alertCount = (existing.alertCount || 0) + (status.status !== 'OK' ? 1 : 0);
-        state.actions = [...(existing.actions || []), ...(status.status !== 'OK' ? [status.recommendation] : [])].slice(-10);
+        state.actions = [
+          ...(existing.actions || []),
+          ...(status.status !== 'OK' ? [status.recommendation] : []),
+        ].slice(-10);
       } catch {
         // Ignore
       }
@@ -203,7 +216,9 @@ function showStatus(): void {
   console.log('║        COMPACTION MONITOR - Context Status             ║');
   console.log('╠════════════════════════════════════════════════════════╣');
   console.log(`║  Session:     ${(status.sessionId ?? 'N/A').padEnd(38)} ║`);
-  console.log(`║  Tokens:      ${status.estimatedTokens.toLocaleString().padStart(10)} / ${THRESHOLDS.MAX.toLocaleString().padEnd(20)} ║`);
+  console.log(
+    `║  Tokens:      ${status.estimatedTokens.toLocaleString().padStart(10)} / ${THRESHOLDS.MAX.toLocaleString().padEnd(20)} ║`,
+  );
   console.log(`║  Files:       ${status.filesInContext.toString().padStart(38)} ║`);
   console.log(`║  Turns:       ${status.turnsCount.toString().padStart(38)} ║`);
   console.log(`║  Status:      ${status.status.padStart(38)} ║`);
@@ -227,12 +242,12 @@ function showStatus(): void {
  */
 function showAlert(): void {
   const status = checkCompactionStatus();
-  
+
   if (status.status !== 'OK') {
     console.error(`\n⚠️  COMPACTION ALERT [${status.status}]`);
     console.error(status.message);
     console.error(`→ ${status.recommendation}\n`);
-    
+
     if (status.status === 'CRITICAL' || status.status === 'OVERFLOW') {
       process.exit(1);
     }
@@ -244,7 +259,7 @@ function showAlert(): void {
 // CLI
 function main(): void {
   const args = process.argv.slice(2);
-  
+
   if (args.includes('--status') || args.includes('-s')) {
     showStatus();
   } else if (args.includes('--alert') || args.includes('-a')) {

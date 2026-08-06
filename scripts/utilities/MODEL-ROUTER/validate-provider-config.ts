@@ -66,9 +66,11 @@ function main(): void {
 
   for (const [key, provider] of Object.entries(providers)) {
     const label = provider.name ?? key;
-    const openAiCompatible = provider.npm === '@ai-sdk/openai-compatible' || provider.api === 'openai';
+    const openAiCompatible =
+      provider.npm === '@ai-sdk/openai-compatible' || provider.api === 'openai';
     if (!provider.id) warnings.push(`${key}: provider id is missing`);
-    if (!provider.api && openAiCompatible) warnings.push(`${key}: api should be explicit ("openai")`);
+    if (!provider.api && openAiCompatible)
+      warnings.push(`${key}: api should be explicit ("openai")`);
     if (!provider.options?.baseURL) issues.push(`${key}: options.baseURL is missing`);
     if (!hasCredential(provider) && !provider.options?.baseURL?.includes('localhost')) {
       warnings.push(`${key}: no apiKey/header credential found`);
@@ -77,24 +79,37 @@ function main(): void {
     if (Object.keys(models).length === 0) issues.push(`${key}: no models configured`);
     for (const [modelKey, model] of Object.entries(models)) {
       if (!model.id && !model.name) issues.push(`${key}/${modelKey}: model id/name is missing`);
-      if (!model.id) warnings.push(`${key}/${modelKey}: model id is missing; selector will fall back to name/key`);
-      if (model.tool_call !== true) warnings.push(`${key}/${modelKey}: tool_call is not explicitly true`);
-      if (model.temperature !== true) warnings.push(`${key}/${modelKey}: temperature is not explicitly true`);
+      if (!model.id)
+        warnings.push(
+          `${key}/${modelKey}: model id is missing; selector will fall back to name/key`,
+        );
+      if (model.tool_call !== true)
+        warnings.push(`${key}/${modelKey}: tool_call is not explicitly true`);
+      if (model.temperature !== true)
+        warnings.push(`${key}/${modelKey}: temperature is not explicitly true`);
     }
     if (/lite|litellm|bedrock/i.test(`${key} ${label} ${provider.options?.baseURL ?? ''}`)) {
-      warnings.push(`${key}: if this routes to Bedrock through LiteLLM, set litellm_settings.modify_params=true on the proxy`);
+      warnings.push(
+        `${key}: if this routes to Bedrock through LiteLLM, set litellm_settings.modify_params=true on the proxy`,
+      );
     }
   }
 
-  console.log(JSON.stringify({
-    status: issues.length === 0 ? 'ok' : 'fail',
-    config: GLOBAL_OPENCODE_CONFIG,
-    activeModel: config.model ?? null,
-    activeSmallModel: config.small_model ?? null,
-    providers: Object.keys(providers).length,
-    issues,
-    warnings,
-  }, null, 2));
+  console.log(
+    JSON.stringify(
+      {
+        status: issues.length === 0 ? 'ok' : 'fail',
+        config: GLOBAL_OPENCODE_CONFIG,
+        activeModel: config.model ?? null,
+        activeSmallModel: config.small_model ?? null,
+        providers: Object.keys(providers).length,
+        issues,
+        warnings,
+      },
+      null,
+      2,
+    ),
+  );
 
   if (issues.length > 0) process.exit(1);
 }

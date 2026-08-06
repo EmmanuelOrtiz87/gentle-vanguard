@@ -21,11 +21,12 @@ function main(): number {
     'powershell.exe',
     [
       '-NoProfile',
-      '-ExecutionPolicy', 'Bypass',
+      '-ExecutionPolicy',
+      'Bypass',
       '-Command',
       `& '${handlerScript}' -ScriptBlock { ${scriptBlock} } -TimeoutSeconds 30 -OperationName karpathy-enforcer -FallbackAction warn_skip`,
     ],
-    { stdio: 'inherit' }
+    { stdio: 'inherit' },
   );
 
   return result.status ?? 0;

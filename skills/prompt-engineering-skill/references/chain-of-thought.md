@@ -38,10 +38,10 @@ A:
 
 ## When to Use Chain-of-Thought
 
-| Task Type | CoT Recommended? | Notes |
-| --------- | ---------------- | ----- |
-| Arithmetic/Math | ✅ Yes | Essential for multi-step |
-| Logic Puzzles | ✅ Yes | Dramatically improves accuracy |
-| Code Generation | ⚠️ Sometimes | Useful for complex algorithms |
-| Creative Writing | ❌ No | Can feel mechanical |
-| Factual Recall | ❌ No | Adds unnecessary verbosity |
+| Task Type        | CoT Recommended? | Notes                          |
+| ---------------- | ---------------- | ------------------------------ |
+| Arithmetic/Math  | ✅ Yes           | Essential for multi-step       |
+| Logic Puzzles    | ✅ Yes           | Dramatically improves accuracy |
+| Code Generation  | ⚠️ Sometimes     | Useful for complex algorithms  |
+| Creative Writing | ❌ No            | Can feel mechanical            |
+| Factual Recall   | ❌ No            | Adds unnecessary verbosity     |

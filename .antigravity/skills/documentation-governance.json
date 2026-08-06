@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "# Documentation Governance\n\n## Activation Contract\n\nLoad when creating or updating any project documentation: README files, ARCHITECTURE docs, setup\nguides, code reviews, script/help docs, secrets docs, or any markdown/comment work requiring\nconsistent structure.\n\n## Hard Rules\n\n1. Write all documentation in English\n2. Use numbered steps when order matters\n3. Keep file names, headings, and script names aligned\n4. Remove stale references, temporary files, and duplicate guidance\n5. Validate links, headings, and filenames before finishing\n\n## Decision Gates\n\nSelect document type from `references/documentation-standards.md`:\n\n- README → use README template\n- Installation/setup guide → use setup guide template\n- Technical document → use technical doc template\n- Code review → use code review template\n- Script comments → use commenting rules\n\n## Execution Steps\n\n1. Identify document type\n2. Apply matching template from `references/documentation-standards.md`\n3. Normalize language, naming, and ordering\n4. Verify script lists, file references, and paths are accurate\n5. Keep output concise but complete for a new developer\n6. Validate links, headings, and filenames\n\n## Output Contract\n\n- Start with the main entry point\n- Number steps when order matters\n- Enumerate important files and scripts\n- Keep terminology stable across the repo\n- Keep docs synchronized with code and scripts they describe\n\n## References\n\n- Templates & standards:\n  [references/documentation-standards.md](references/documentation-standards.md)",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

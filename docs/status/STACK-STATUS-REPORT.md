@@ -24,14 +24,14 @@ VS Code, Copilot, Antigravity.
 
 ### 2.1 Core / Bootstrap
 
-| Componente          | Archivo(s)                                 | Estado    | Automatización             |
-| ------------------- | ------------------------------------------ | --------- | -------------------------- |
-| Bootstrap workspace | `scripts/core/bootstrap*.ps1`              | ✅ Activo | Manual (setup inicial)     |
-| CLI principal       | `src/cli/gv.ts`                                   | ✅ Activo | Manual                     |
-| Tool detection      | `src/detect-tool.ts` | ✅ Activo | Automático (cada turno)    |
-| Pre-process hook    | `src/pre-process-input.ts`  | ✅ Activo | Automático (cada turno)    |
-| Session manager     | `src/session-manager.ts`    | ✅ Activo | Automático (start/end)     |
-| Hashline integrity  | `scripts/editing/hashline.ps1`             | ✅ Activo | Automático (snapshot hook) |
+| Componente          | Archivo(s)                     | Estado    | Automatización             |
+| ------------------- | ------------------------------ | --------- | -------------------------- |
+| Bootstrap workspace | `scripts/core/bootstrap*.ps1`  | ✅ Activo | Manual (setup inicial)     |
+| CLI principal       | `src/cli/gv.ts`                | ✅ Activo | Manual                     |
+| Tool detection      | `src/detect-tool.ts`           | ✅ Activo | Automático (cada turno)    |
+| Pre-process hook    | `src/pre-process-input.ts`     | ✅ Activo | Automático (cada turno)    |
+| Session manager     | `src/session-manager.ts`       | ✅ Activo | Automático (start/end)     |
+| Hashline integrity  | `scripts/editing/hashline.ps1` | ✅ Activo | Automático (snapshot hook) |
 
 ### 2.2 Memoria Persistente (Engram)
 
@@ -54,16 +54,16 @@ VS Code, Copilot, Antigravity.
 
 ### 2.4 Fine-Tuning (LoRA)
 
-| Componente            | Archivo(s)                                              | Estado      | Automatización         |
-| --------------------- | ------------------------------------------------------- | ----------- | ---------------------- |
-| FT pipeline           | `src/fine-tuning/ft-pipeline.ts`         | ✅ Activo   | Automático (CI weekly) |
-| FT trainer            | `src/fine-tuning/ft-trainer.ts`          | ✅ Activo   | Manual / CI            |
-| FT evaluator          | `src/fine-tuning/ft-evaluator.ts`        | ✅ Activo   | Manual / CI            |
-| FT threshold detector | `src/fine-tuning/ft-threshold-detect.ts` | ✅ Activo   | Automático (CI)        |
-| FT auto-prune         | `src/fine-tuning/ft-auto-prune.ts`       | ✅ Activo   | Automático (CI)        |
-| FT registry           | `.ft/registry.json`                                     | ✅ Activo   | Automático             |
-| Adapters activos      | BA, DEV (mistral-7b-lora, v1.0.0)                       | ✅ Activo   | LoRA fine-tuned        |
-| Python trainer        | `scripts/utilities/FINE-TUNING/python/train_lora.py`    | ⚠️ Presente | Manual (stub)          |
+| Componente            | Archivo(s)                                           | Estado      | Automatización         |
+| --------------------- | ---------------------------------------------------- | ----------- | ---------------------- |
+| FT pipeline           | `src/fine-tuning/ft-pipeline.ts`                     | ✅ Activo   | Automático (CI weekly) |
+| FT trainer            | `src/fine-tuning/ft-trainer.ts`                      | ✅ Activo   | Manual / CI            |
+| FT evaluator          | `src/fine-tuning/ft-evaluator.ts`                    | ✅ Activo   | Manual / CI            |
+| FT threshold detector | `src/fine-tuning/ft-threshold-detect.ts`             | ✅ Activo   | Automático (CI)        |
+| FT auto-prune         | `src/fine-tuning/ft-auto-prune.ts`                   | ✅ Activo   | Automático (CI)        |
+| FT registry           | `.ft/registry.json`                                  | ✅ Activo   | Automático             |
+| Adapters activos      | BA, DEV (mistral-7b-lora, v1.0.0)                    | ✅ Activo   | LoRA fine-tuned        |
+| Python trainer        | `scripts/utilities/FINE-TUNING/python/train_lora.py` | ⚠️ Presente | Manual (stub)          |
 
 ### 2.5 Dashboard / Métricas
 
@@ -141,7 +141,7 @@ VS Code, Copilot, Antigravity.
 
 | Componente               | Archivo(s)                                       | Estado    | Automatización               |
 | ------------------------ | ------------------------------------------------ | --------- | ---------------------------- |
-| Auto-norm learner        | `src/auto-norm-learner.ts`         | ⚠️ Activo | Manual (bajo demanda)        |
+| Auto-norm learner        | `src/auto-norm-learner.ts`                       | ⚠️ Activo | Manual (bajo demanda)        |
 | Auto-norm enforcer       | `scripts/adaptive/auto-norm-enforcer.ps1`        | ✅ Activo | Automático (cada 5 turnos)   |
 | Failure learning         | `scripts/adaptive/failure-learning-system.ps1`   | ⚠️ Activo | Manual                       |
 | Cache manager            | `scripts/adaptive/cache-manager.ps1`             | ✅ Activo | Automático (sesión)          |
@@ -294,7 +294,7 @@ Maintenance Watchtower:
 | --------------------- | -------------------------------------------------------- |
 | Entry point canónico  | `docs/AGENTS.md`                                         |
 | Bootstrap workspace   | `scripts/core/bootstrap-workspace.ps1`                   |
-| CLI                   | `scripts/core/src/cli/gv.ts`                                    |
+| CLI                   | `scripts/core/src/cli/gv.ts`                             |
 | Orquestador principal | `config/orchestrator.json`                               |
 | Auto-delegación       | `config/auto-delegation.json`                            |
 | Routing de modelos    | `config/model-router.json`                               |

@@ -20,7 +20,9 @@ export function validateOpencodeJsonSteps(json: unknown, path: string = 'opencod
     const stepsValue = (config as Record<string, unknown>).steps;
     if (stepsValue === undefined) continue;
     if (typeof stepsValue !== 'number' || !Number.isInteger(stepsValue) || stepsValue <= 0) {
-      errors.push(`${path}.agent.${agent}.steps must be a positive integer, got ${JSON.stringify(stepsValue)}`);
+      errors.push(
+        `${path}.agent.${agent}.steps must be a positive integer, got ${JSON.stringify(stepsValue)}`,
+      );
     }
   }
 
@@ -41,7 +43,7 @@ export function validateAgentMdSteps(filePath: string): string[] {
   const frontmatter = parseFrontmatter(content);
   if (!frontmatter) return [];
 
-  const match = frontmatter.match(/^steps:\s*([^\n#]+?)(?:\s*(?:#.*)?)$/m);
+  const match = frontmatter.match(/^steps:\s*([^\n#]+)/m);
   if (!match) return [];
 
   const stepsValue = match[1].trim();

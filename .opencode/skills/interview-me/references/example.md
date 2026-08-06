@@ -9,9 +9,9 @@ User:  build me a dashboard for our metrics
 Agent: <starts proposing chart libraries and layouts>
 ```
 
-The agent has assumed: who it's for, what metrics, what "for our team" means, what
-success looks like. None of these are stated. Every assumption is a place the user can
-later say "that's not what I meant."
+The agent has assumed: who it's for, what metrics, what "for our team" means, what success looks
+like. None of these are stated. Every assumption is a place the user can later say "that's not what
+I meant."
 
 ## With `interview-me`
 
@@ -48,6 +48,5 @@ User: First one actually. I literally don't have a list. They're spread across
 Agent: <continues>
 ```
 
-Two questions in, the agent has discovered the actual ask isn't "a dashboard." It's
-"a list." Different artifact, different scope, different work. The dashboard would
-have been wrong.
+Two questions in, the agent has discovered the actual ask isn't "a dashboard." It's "a list."
+Different artifact, different scope, different work. The dashboard would have been wrong.

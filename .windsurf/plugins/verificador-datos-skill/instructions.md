@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Verificador de Datos
 
 Detecta errores, exageraciones, afirmaciones no verificables y datos incorrectos en cualquier texto

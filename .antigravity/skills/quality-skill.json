@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "# Quality Skill\n\n## Activation Contract\n\nLoad during any code review, PR preparation, or when enforcing consistent code quality. Activates on\nlint/format commands or quality gate checks.\n\n## Hard Rules\n\n- REJECT any code with linter errors (ESLint, golint, shellcheck, etc.)\n- REJECT any code with formatting errors (Prettier, gofmt, shfmt, etc.)\n- REJECT unused variables or unreachable code\n\n## Decision Gates\n\n| Check          | Tool       | Action        |\n| -------------- | ---------- | ------------- |\n| JS/TS lint     | ESLint     | Fix or reject |\n| General format | Prettier   | Run formatter |\n| Go format      | gofmt      | Run formatter |\n| Shell check    | shellcheck | Fix issues    |\n\n## Execution Steps\n\n1. Detect project languages and their configured linters/formatters\n2. Run all applicable linters\n3. If errors found: report and reject (do NOT auto-fix unless requested)\n4. Run all applicable formatters\n5. Verify no issues remain\n\n## Output Contract\n\n- Report each linter/formatter result per file\n- Exit with rejection message if any hard rule violation exists\n- List violations with file path, line number, and rule name\n\n## References\n\n(No local reference files yet)",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

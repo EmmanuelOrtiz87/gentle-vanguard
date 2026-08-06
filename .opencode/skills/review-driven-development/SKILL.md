@@ -2,11 +2,13 @@
 
 ## Overview
 
-Receipt-Driven Development (RDD) is a native Gentle-Vanguard methodology for code review authorization with cryptographic proof.
+Receipt-Driven Development (RDD) is a native Gentle-Vanguard methodology for code review
+authorization with cryptographic proof.
 
 Philosophy: **Trust the receipt, not the narration.**
 
-RDD creates an immutable, verifiable chain of custody from code change → review → delivery using content-bound receipts.
+RDD creates an immutable, verifiable chain of custody from code change → review → delivery using
+content-bound receipts.
 
 This is a native implementation. No dependency on `gentle-ai` CLI.
 
@@ -35,23 +37,23 @@ The receipt is stored in `.session/receipts/{id}.json`.
 
 Risk is determined by the **nature** of the change, not its **size**.
 
-| Tier | Score | Review | Lenses |
-|------|-------|--------|--------|
-| Low | 0-39 | Structural readback | 0 |
-| Standard | 40-69 | 1 focused reviewer | 1 |
-| High | 70-100 | Full 4R review | 4 |
+| Tier     | Score  | Review              | Lenses |
+| -------- | ------ | ------------------- | ------ |
+| Low      | 0-39   | Structural readback | 0      |
+| Standard | 40-69  | 1 focused reviewer  | 1      |
+| High     | 70-100 | Full 4R review      | 4      |
 
 ### The 5 Delivery Gates
 
 Every gate validates the same content-bound receipt.
 
-| Gate | Purpose | Validation |
-|------|---------|------------|
-| post-apply | After implementation | Receipt exists |
-| pre-commit | Before git commit | SHA match |
-| pre-push | Before push | Commit in history |
-| pre-pr | Before PR | Tree hash match |
-| release | Before release | Strict validation |
+| Gate       | Purpose              | Validation        |
+| ---------- | -------------------- | ----------------- |
+| post-apply | After implementation | Receipt exists    |
+| pre-commit | Before git commit    | SHA match         |
+| pre-push   | Before push          | Commit in history |
+| pre-pr     | Before PR            | Tree hash match   |
+| release    | Before release       | Strict validation |
 
 ---
 
@@ -108,6 +110,7 @@ npm run rdd:install-hooks
 ## 4R Review Lenses
 
 ### RISK
+
 Security, safety, and dangerous behavior.
 
 - Input validation
@@ -117,6 +120,7 @@ Security, safety, and dangerous behavior.
 - Encryption compliance
 
 ### READABILITY
+
 Clarity and maintainability.
 
 - Clear naming
@@ -126,6 +130,7 @@ Clarity and maintainability.
 - Dead code removal
 
 ### RELIABILITY
+
 Correctness and edge cases.
 
 - Unit tests cover paths
@@ -135,6 +140,7 @@ Correctness and edge cases.
 - Build passes
 
 ### RESILIENCE
+
 Failure modes and recovery.
 
 - Error handling
@@ -174,15 +180,15 @@ SDD Apply ────────┴─ Implement ────────┤
 
 ## Files
 
-| File | Purpose |
-|------|---------|
-| `src/rdd/rdd-core.ts` | Main coordinator |
+| File                         | Purpose                            |
+| ---------------------------- | ---------------------------------- |
+| `src/rdd/rdd-core.ts`        | Main coordinator                   |
 | `src/rdd/risk-classifier.ts` | Evidence-based risk classification |
-| `src/rdd/rdd-4r-review.ts` | 4 lenses auto-review |
-| `src/rdd/rdd-gates.ts` | 5 delivery gates |
-| `.session/receipts/*.json` | Stored receipts |
-| `.session/rdd/*.json` | Workflow state |
-| `.session/rdd-gates/*.json` | Gate validations |
+| `src/rdd/rdd-4r-review.ts`   | 4 lenses auto-review               |
+| `src/rdd/rdd-gates.ts`       | 5 delivery gates                   |
+| `.session/receipts/*.json`   | Stored receipts                    |
+| `.session/rdd/*.json`        | Workflow state                     |
+| `.session/rdd-gates/*.json`  | Gate validations                   |
 
 ---
 
@@ -221,7 +227,5 @@ Emergency bypass with reason:
 
 ## Philosophy
 
-> Every code change gets a receipt.
-> Every receipt validates at gates.
-> Risk is evidence, not lines of code.
-> The code is the source of truth.
+> Every code change gets a receipt. Every receipt validates at gates. Risk is evidence, not lines of
+> code. The code is the source of truth.

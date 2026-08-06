@@ -19,10 +19,10 @@
 type LogLevel = 'INFO' | 'WARN' | 'ERROR' | 'DEBUG';
 
 const COLORS: Record<LogLevel, string> = {
-  INFO: '\x1b[36m',    // cyan
-  WARN: '\x1b[33m',    // yellow
-  ERROR: '\x1b[31m',   // red
-  DEBUG: '\x1b[90m',   // gray
+  INFO: '\x1b[36m', // cyan
+  WARN: '\x1b[33m', // yellow
+  ERROR: '\x1b[31m', // red
+  DEBUG: '\x1b[90m', // gray
 };
 const RESET = '\x1b[0m';
 

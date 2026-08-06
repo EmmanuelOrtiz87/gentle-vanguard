@@ -1,8 +1,8 @@
 ---
 name: feedback-loops-skill
 description: >
-  Feedback loop analysis — reinforcing, balancing, delays, system dynamics.
-  Imported from cc-thinking-skills.
+  Feedback loop analysis — reinforcing, balancing, delays, system dynamics. Imported from
+  cc-thinking-skills.
 metadata:
   source: cc-thinking-skills
   original-name: thinking-feedback-loops
@@ -10,18 +10,19 @@ metadata:
 
 # Feedback Loop Analysis
 
-**Principle:** System behavior emerges from feedback structure. To change behavior, change the loops.
+**Principle:** System behavior emerges from feedback structure. To change behavior, change the
+loops.
 
 ## Quick Reference
 
-| Topic | File |
-| ----- | ---- |
-| Core Concepts (R, B, delays) | [references/core-concepts.md](references/core-concepts.md) |
-| System Archetypes (5 patterns) | [references/system-patterns.md](references/system-patterns.md) |
-| Identification Guide (4-step) | [references/identification-guide.md](references/identification-guide.md) |
-| Leverage Points (Meadows' 12) | [references/leverage-points.md](references/leverage-points.md) |
-| Application Framework | [references/application-framework.md](references/application-framework.md) |
-| Integration & Verification | [references/integration.md](references/integration.md) |
+| Topic                          | File                                                                       |
+| ------------------------------ | -------------------------------------------------------------------------- |
+| Core Concepts (R, B, delays)   | [references/core-concepts.md](references/core-concepts.md)                 |
+| System Archetypes (5 patterns) | [references/system-patterns.md](references/system-patterns.md)             |
+| Identification Guide (4-step)  | [references/identification-guide.md](references/identification-guide.md)   |
+| Leverage Points (Meadows' 12)  | [references/leverage-points.md](references/leverage-points.md)             |
+| Application Framework          | [references/application-framework.md](references/application-framework.md) |
+| Integration & Verification     | [references/integration.md](references/integration.md)                     |
 
 ## Key Questions
 

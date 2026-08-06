@@ -106,13 +106,10 @@ export interface PreCallResult {
   cacheKey: string;
 }
 
-export function preProcessLLMInput(
-  prompt: string,
-  options: LLMCallOptions
-): PreCallResult {
+export function preProcessLLMInput(prompt: string, options: LLMCallOptions): PreCallResult {
   const start = Date.now();
   let processed = prompt;
-  
+
   // Stage 1: Input compression (if not skipped)
   if (!options.skipCompression) {
     try {
@@ -155,10 +152,7 @@ export interface PostCallResult {
   chatLevelEnforced: boolean;
 }
 
-export function postProcessLLMOutput(
-  response: string,
-  options: LLMCallOptions
-): PostCallResult {
+export function postProcessLLMOutput(response: string, options: LLMCallOptions): PostCallResult {
   const start = Date.now();
   let processed = response;
   let chatLevelEnforced = false;
@@ -213,7 +207,7 @@ export function postProcessLLMOutput(
 export async function wrapLLMCall(
   llmFunction: LLMFunction,
   prompt: string,
-  options: LLMCallOptions = {}
+  options: LLMCallOptions = {},
 ): Promise<LLMCallResult> {
   const startTime = Date.now();
   const cache = new ResponseCache();
@@ -237,7 +231,8 @@ export async function wrapLLMCall(
         inputCompressed: preProcessed.wasCompressed,
         outputCompressed: false,
         chatLevelEnforced: false,
-        tokensSaved: cached.tokensSaved + (preProcessed.originalTokens - preProcessed.compressedTokens),
+        tokensSaved:
+          cached.tokensSaved + (preProcessed.originalTokens - preProcessed.compressedTokens),
         durationMs: Date.now() - startTime,
       };
     }
@@ -260,14 +255,16 @@ export async function wrapLLMCall(
 
   // Store in cache
   if (!options.skipCache) {
-    const tokensSaved = 
-      (preProcessed.originalTokens - preProcessed.compressedTokens) +
+    const tokensSaved =
+      preProcessed.originalTokens -
+      preProcessed.compressedTokens +
       (postProcessed.originalTokens - postProcessed.compressedTokens);
     cache.set(preProcessed.cacheKey, postProcessed.processedResponse, tokensSaved, options.context);
   }
 
-  const totalTokensSaved = 
-    (preProcessed.originalTokens - preProcessed.compressedTokens) +
+  const totalTokensSaved =
+    preProcessed.originalTokens -
+    preProcessed.compressedTokens +
     (postProcessed.originalTokens - postProcessed.compressedTokens);
 
   logWrapper({
@@ -340,7 +337,8 @@ function parseCLIArgs(): CLIOptions {
         options.profile = (args[++i] as 'ultra' | 'lleno' | 'lite' | 'simple') ?? 'ultra';
         break;
       case '--chat-level':
-        options.chatLevel = (args[++i] as 'chat-compact' | 'chat-balanced' | 'chat-detailed') ?? 'chat-compact';
+        options.chatLevel =
+          (args[++i] as 'chat-compact' | 'chat-balanced' | 'chat-detailed') ?? 'chat-compact';
         break;
       case '--skip-cache':
         options.skipCache = true;
@@ -369,7 +367,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const options = parseCLIArgs();
 
   if (!options.prompt) {
-    console.error('Usage: npx tsx src/llm-call-wrapper.ts --prompt "..." [--model "..."] [--profile ultra|lleno|lite|simple]');
+    console.error(
+      'Usage: npx tsx src/llm-call-wrapper.ts --prompt "..." [--model "..."] [--profile ultra|lleno|lite|simple]',
+    );
     process.exit(1);
   }
 

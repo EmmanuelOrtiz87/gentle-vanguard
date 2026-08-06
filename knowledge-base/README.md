@@ -5,7 +5,8 @@
 
 ## Overview
 
-This is the Knowledge Base vault for Gentle-Vanguard — a structured repository of session summaries, architecture decisions, research notes, and project documentation.
+This is the Knowledge Base vault for Gentle-Vanguard — a structured repository of session summaries,
+architecture decisions, research notes, and project documentation.
 
 ## Structure
 
@@ -32,6 +33,7 @@ This vault is automatically synchronized with Engram memory:
 ## Usage
 
 Access via:
+
 - **CLI**: `npx tsx src/knowledge-base-sync.ts --stats`
 - **Automation**: Runs automatically at session start
 - **Manual**: `npx tsx src/knowledge-base-sync.ts --mode full`
@@ -44,4 +46,4 @@ Access via:
 
 ---
 
-*Part of Gentle-Vanguard v3.4.0*
+_Part of Gentle-Vanguard v3.4.0_

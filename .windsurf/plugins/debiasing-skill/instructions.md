@@ -3,21 +3,22 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Cognitive Debiasing
 
 ## Overview
 
-Based on Kahneman, Lovallo & Sibony's research, this skill provides a systematic
-checklist to identify cognitive biases that distort decisions.
+Based on Kahneman, Lovallo & Sibony's research, this skill provides a systematic checklist to
+identify cognitive biases that distort decisions.
 
-**Core Principle:** Your brain is systematically wrong in predictable ways. Use
-checklists to catch errors your intuition will miss.
+**Core Principle:** Your brain is systematically wrong in predictable ways. Use checklists to catch
+errors your intuition will miss.
 
 ## When to Use
 
@@ -30,10 +31,10 @@ checklists to catch errors your intuition will miss.
 
 ## System 1 vs System 2
 
-| System 1 (Fast) | System 2 (Slow) |
-|---|---|
+| System 1 (Fast)      | System 2 (Slow)        |
+| -------------------- | ---------------------- |
 | Automatic, intuitive | Deliberate, analytical |
-| Prone to biases | Can catch biases |
+| Prone to biases      | Can catch biases       |
 
 **Goal:** Activate System 2 for important decisions using structured processes.
 
@@ -73,15 +74,18 @@ Before approving any significant recommendation, evaluate:
 
 ## Quick Debiasing Techniques
 
-- **Anchoring:** Generate estimate before seeing others' numbers; ask "What if 2x or 0.5x?"; use multiple estimators.
-- **Confirmation Bias:** Assign someone to argue the opposite; ask "What would make us wrong?"; seek critics.
+- **Anchoring:** Generate estimate before seeing others' numbers; ask "What if 2x or 0.5x?"; use
+  multiple estimators.
+- **Confirmation Bias:** Assign someone to argue the opposite; ask "What would make us wrong?"; seek
+  critics.
 - **Overconfidence:** Widen confidence intervals; use reference class forecasting; check base rates.
 - **Sunk Cost:** Ask "Would we start today knowing what we know?"; ignore past investment.
 - **Groupthink:** Collect independent opinions before discussion; assign devil's advocate.
 
 ## Decision Quality Audit
 
-The full audit template has been extracted to [`references/decision-audit-template.md`](references/decision-audit-template.md).
+The full audit template has been extracted to
+[`references/decision-audit-template.md`](references/decision-audit-template.md).
 
 ## Verification Checklist
 

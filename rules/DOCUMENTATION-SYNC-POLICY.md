@@ -7,8 +7,8 @@
 ## 1. Purpose
 
 Mantener consistencia total entre lo documentado y lo realmente implementado. Cada cambio técnico,
-de arquitectura, de negocio o de migración debe reflejarse en TODOS los artefactos relevantes.
-La deuda documental es deuda técnica.
+de arquitectura, de negocio o de migración debe reflejarse en TODOS los artefactos relevantes. La
+deuda documental es deuda técnica.
 
 ## 2. The Sync Rule
 
@@ -27,16 +27,16 @@ La deuda documental es deuda técnica.
 
 ## 3. Change Types & Required Updates
 
-| Change Type | Must Update |
-|-------------|-------------|
-| **New script/module** | `package.json` scripts, README, relevant docs, CLAUDE.md if agent-facing |
-| **API change** | Type definitions, JSDoc, ADR, presentation, tests |
-| **Architecture change** | ADR, presentation (architecture.html), diagrams, NORMATIVAS |
-| **Migration (PS1→TS)** | This policy (historical context), scripts table, presentations, CLAUDE.md |
-| **Config change** | Schema files, JSON validator, documentation, examples |
-| **Policy change** | All references to the old policy, README-rules, presentation pages |
-| **Feature addition** | Presentations (add card/section), quickstart, README, tests |
-| **Bug fix** | Comments in fixed code, CHANGELOG, relevant docs if behavior changed |
+| Change Type             | Must Update                                                               |
+| ----------------------- | ------------------------------------------------------------------------- |
+| **New script/module**   | `package.json` scripts, README, relevant docs, CLAUDE.md if agent-facing  |
+| **API change**          | Type definitions, JSDoc, ADR, presentation, tests                         |
+| **Architecture change** | ADR, presentation (architecture.html), diagrams, NORMATIVAS               |
+| **Migration (PS1→TS)**  | This policy (historical context), scripts table, presentations, CLAUDE.md |
+| **Config change**       | Schema files, JSON validator, documentation, examples                     |
+| **Policy change**       | All references to the old policy, README-rules, presentation pages        |
+| **Feature addition**    | Presentations (add card/section), quickstart, README, tests               |
+| **Bug fix**             | Comments in fixed code, CHANGELOG, relevant docs if behavior changed      |
 
 ## 4. The Documentation Gap Process
 

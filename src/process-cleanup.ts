@@ -17,26 +17,23 @@ const ROOT = process.cwd();
 export function killZombieDashboard(): number {
   let killed = 0;
   const ports = [8080, 5173, 3000];
-  
+
   for (const port of ports) {
     try {
       // Use netstat.exe nativo (viene con Windows, no requiere PowerShell)
-      const output = runSyncShell(
-        `netstat -ano | findstr :${port}`,
-        {}
-      ).stdout;
-      
-      const lines = output.split('\n').filter(line => line.includes('LISTENING'));
-      
+      const output = runSyncShell(`netstat -ano | findstr :${port}`, {}).stdout;
+
+      const lines = output.split('\n').filter((line) => line.includes('LISTENING'));
+
       for (const line of lines) {
         const parts = line.trim().split(/\s+/);
         const pid = parts[parts.length - 1];
-        
+
         if (pid && !isNaN(parseInt(pid))) {
           try {
             // taskkill es nativo de Windows
-            runSyncShell(`taskkill /F /T /PID ${pid}`, { 
-              stdio: 'pipe'
+            runSyncShell(`taskkill /F /T /PID ${pid}`, {
+              stdio: 'pipe',
             });
             console.log(`[CLEANUP] Killed PID ${pid} on port ${port}`);
             killed++;
@@ -49,7 +46,7 @@ export function killZombieDashboard(): number {
       // Port not in use or error
     }
   }
-  
+
   return killed;
 }
 
@@ -58,26 +55,23 @@ export function killZombieDashboard(): number {
  */
 export function killNodeProcesses(): number {
   let killed = 0;
-  
+
   try {
     // Find node processes
-    const result = runSyncShell(
-      'tasklist /FI "IMAGENAME eq node.exe" /FO CSV',
-      {}
-    ).stdout;
-    
+    const result = runSyncShell('tasklist /FI "IMAGENAME eq node.exe" /FO CSV', {}).stdout;
+
     const lines = result.split('\n').slice(1); // Skip header
-    
+
     for (const line of lines) {
       const parts = line.replace(/"/g, '').split(',');
       const pid = parts[1];
-      
+
       if (pid && !isNaN(parseInt(pid))) {
         try {
           // Don't kill ourselves
           if (parseInt(pid) !== process.pid) {
-            runSyncShell(`taskkill /F /T /PID ${pid}`, { 
-              stdio: 'pipe'
+            runSyncShell(`taskkill /F /T /PID ${pid}`, {
+              stdio: 'pipe',
             });
             killed++;
           }
@@ -85,7 +79,7 @@ export function killNodeProcesses(): number {
       }
     }
   } catch {}
-  
+
   return killed;
 }
 
@@ -97,7 +91,7 @@ export function cleanPidFiles(): string[] {
     join(ROOT, '.runtime', 'dashboard-vite.pid'),
     join(ROOT, '.session', '.active-session.json'),
   ];
-  
+
   for (const file of files) {
     try {
       if (existsSync(file)) {
@@ -107,18 +101,18 @@ export function cleanPidFiles(): string[] {
       }
     } catch {}
   }
-  
+
   return cleaned;
 }
 
 export function fullCleanup(): { killed: number; cleaned: number } {
   console.log('[CLEANUP] Starting cleanup (Node.js native, no PowerShell)...');
-  
+
   const killed = killZombieDashboard();
   const cleaned = cleanPidFiles().length;
-  
+
   console.log(`[CLEANUP] Summary: ${killed} processes killed, ${cleaned} files cleaned`);
-  
+
   return { killed, cleaned };
 }
 

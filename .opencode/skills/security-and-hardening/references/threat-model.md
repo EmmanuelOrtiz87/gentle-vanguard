@@ -4,7 +4,8 @@ Before hardening, spend five minutes thinking like an attacker:
 
 ## 1. Map the Trust Boundaries
 
-Where does untrusted data cross into your system? HTTP requests, form fields, file uploads, webhooks, third-party APIs, message queues, and **LLM output**. Every boundary is attack surface.
+Where does untrusted data cross into your system? HTTP requests, form fields, file uploads,
+webhooks, third-party APIs, message queues, and **LLM output**. Every boundary is attack surface.
 
 ## 2. Name the Assets
 
@@ -25,4 +26,5 @@ What's worth stealing or breaking? Credentials, PII, payment data, admin actions
 
 For each feature, ask "how would I misuse this?" — then make that your first test.
 
-If you can't name the trust boundaries for a feature, you're not ready to secure it. This is OWASP **A04: Insecure Design** — most breaches begin in design, not code.
+If you can't name the trust boundaries for a feature, you're not ready to secure it. This is OWASP
+**A04: Insecure Design** — most breaches begin in design, not code.

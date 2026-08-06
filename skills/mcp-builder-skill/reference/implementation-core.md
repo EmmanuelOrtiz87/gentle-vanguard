@@ -36,9 +36,9 @@ Create shared utilities:
 
 ## Annotations
 
-| Annotation | Type | Default | Description |
-|---|---|---|---|
-| `readOnlyHint` | boolean | false | Tool does not modify its environment |
-| `destructiveHint` | boolean | true | Tool may perform destructive updates |
-| `idempotentHint` | boolean | false | Repeated calls with same args have no additional effect |
-| `openWorldHint` | boolean | true | Tool interacts with external entities |
+| Annotation        | Type    | Default | Description                                             |
+| ----------------- | ------- | ------- | ------------------------------------------------------- |
+| `readOnlyHint`    | boolean | false   | Tool does not modify its environment                    |
+| `destructiveHint` | boolean | true    | Tool may perform destructive updates                    |
+| `idempotentHint`  | boolean | false   | Repeated calls with same args have no additional effect |
+| `openWorldHint`   | boolean | true    | Tool interacts with external entities                   |

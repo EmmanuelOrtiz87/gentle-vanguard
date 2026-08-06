@@ -21,7 +21,8 @@ technique's known failure modes.
 
 ## When to Use
 
-- Incident post-mortems, Bug investigations, Process failures, Customer complaints, Recurring problems
+- Incident post-mortems, Bug investigations, Process failures, Customer complaints, Recurring
+  problems
 
 ## Standard Five Whys Failure Modes
 
@@ -56,10 +57,11 @@ See `references/process-steps.md` for full step-by-step details with templates a
 
 ## Ohno's Wisdom
 
-Taiichi Ohno said: "By asking 'why' five times and answering each time, we can get to the real
-cause of the problem."
+Taiichi Ohno said: "By asking 'why' five times and answering each time, we can get to the real cause
+of the problem."
 
 The extension: Five is not magic. The real guidance is:
+
 1. Keep asking until you reach something actionable
 2. But don't speculate past your evidence
 3. And never stop at human blame

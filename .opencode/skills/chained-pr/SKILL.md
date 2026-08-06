@@ -18,7 +18,9 @@ metadata:
 
 ## Activation Contract
 
-Load this skill when a planned PR may exceed **400 changed lines**, SDD forecasts `400-line budget risk: High` or `Chained PRs recommended: Yes`, or the user asks for chained/stacked PRs, review slices, or reviewer-load control.
+Load this skill when a planned PR may exceed **400 changed lines**, SDD forecasts
+`400-line budget risk: High` or `Chained PRs recommended: Yes`, or the user asks for chained/stacked
+PRs, review slices, or reviewer-load control.
 
 ## Hard Rules
 
@@ -27,19 +29,20 @@ Load this skill when a planned PR may exceed **400 changed lines**, SDD forecast
 - Use one deliverable work unit per PR; keep tests/docs with the unit they verify.
 - State start, end, prior dependencies, follow-up work, and out-of-scope items in every chained PR.
 - Every child PR must include a dependency diagram marking the current PR with `📍`.
-- In Feature Branch Chain, create a draft/no-merge tracker PR; child PR #1 targets the tracker branch, later children target the immediate parent branch.
+- In Feature Branch Chain, create a draft/no-merge tracker PR; child PR #1 targets the tracker
+  branch, later children target the immediate parent branch.
 - Treat polluted diffs as base bugs: retarget or rebase until only the current work unit appears.
 - Do not mix chain strategies after the user chooses one.
 
 ## Decision Gates
 
-| Condition | Action |
-|---|---|
-| PR ≤400 changed lines and focused | Keep single PR. |
-| PR >400, each slice can land independently | Use Stacked PRs to main. |
-| PR >400, feature must integrate before main | Use Feature Branch Chain with tracker. |
-| Generated/vendor/migration diff cannot split cleanly | Ask maintainer for `size:exception`. |
-| SDD provides `delivery_strategy` | Follow it before apply/PR creation. |
+| Condition                                            | Action                                 |
+| ---------------------------------------------------- | -------------------------------------- |
+| PR ≤400 changed lines and focused                    | Keep single PR.                        |
+| PR >400, each slice can land independently           | Use Stacked PRs to main.               |
+| PR >400, feature must integrate before main          | Use Feature Branch Chain with tracker. |
+| Generated/vendor/migration diff cannot split cleanly | Ask maintainer for `size:exception`.   |
+| SDD provides `delivery_strategy`                     | Follow it before apply/PR creation.    |
 
 ## Execution Steps
 
@@ -52,8 +55,10 @@ Load this skill when a planned PR may exceed **400 changed lines**, SDD forecast
 
 ## Output Contract
 
-Return the chosen strategy, PR order, current PR boundary, dependency diagram, review budget (`additions + deletions`), verification plan, and any `size:exception` rationale.
+Return the chosen strategy, PR order, current PR boundary, dependency diagram, review budget
+(`additions + deletions`), verification plan, and any `size:exception` rationale.
 
 ## References
 
-- [references/chaining-details.md](references/chaining-details.md) — strategy diagrams, PR body section, branch commands, and reviewer guidance.
+- [references/chaining-details.md](references/chaining-details.md) — strategy diagrams, PR body
+  section, branch commands, and reviewer guidance.

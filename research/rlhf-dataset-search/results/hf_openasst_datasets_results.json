@@ -1,12 +1,7 @@
 {
   "search_metadata": {
     "timestamp": "2026-06-10T18:17:58.093696",
-    "queries": [
-      "openassistant",
-      "OASST",
-      "open-assistant",
-      "OpenAssistant"
-    ]
+    "queries": ["openassistant", "OASST", "open-assistant", "OpenAssistant"]
   },
   "datasets_found": [],
   "detailed_info": {
@@ -211,9 +206,7 @@
       "card_info": {
         "has_readme": true,
         "has_yaml": false,
-        "config_files": [
-          "transformed_databricks_dataset.json"
-        ]
+        "config_files": ["transformed_databricks_dataset.json"]
       }
     },
     "Jessiecs/llama-2-7b-a3-openassistant-guanaco-backward": {
@@ -924,9 +917,7 @@
       "card_info": {
         "has_readme": true,
         "has_yaml": false,
-        "config_files": [
-          "dataset_config.yml"
-        ]
+        "config_files": ["dataset_config.yml"]
       }
     },
     "lincolnhuj/openassistant-guanaco-backward": {

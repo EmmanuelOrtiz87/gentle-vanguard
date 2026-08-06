@@ -6,9 +6,7 @@ export class EventRepo {
 
   insertEvent(type: string, payload?: unknown): void {
     this.db
-      .prepare(
-        'INSERT INTO events (type, payload, created_at) VALUES (?, ?, datetime(\'now\'))',
-      )
+      .prepare("INSERT INTO events (type, payload, created_at) VALUES (?, ?, datetime('now'))")
       .run(type, payload ? JSON.stringify(payload) : null);
   }
 

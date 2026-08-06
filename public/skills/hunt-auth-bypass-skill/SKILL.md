@@ -453,8 +453,8 @@ reuse patterns.
     ([H1 #2101076](https://hackerone.com/reports/2101076))
     - Subclass: partner-portal / SAML domain-binding bypass via unicode control characters
     - Payload: new user sign-up at SAML-enforced org; append trailing control character (e.g., `\r`,
-      ` `) to email → domain comparison normalises away, signup proceeds → unauthorised access to the
-      org
+      `�`) to email → domain comparison normalises away, signup proceeds → unauthorised access to
+      the org
     - Root cause: inconsistent unicode/control-char normalisation between domain check and identity
       write
     - Year: 2024 — bounty awarded (amount undisclosed)

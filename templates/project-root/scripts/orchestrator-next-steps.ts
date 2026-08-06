@@ -25,10 +25,18 @@ if (!existsSync(join(projectRoot, 'README.md'))) {
 const args = process.argv.slice(2);
 const detailed = args.includes('--detailed') || args.includes('-Detailed');
 
-function step(msg: string): void { console.log(`\n=== ${msg} ===`); }
-function info(msg: string): void { console.log(`[INFO] ${msg}`); }
-function action(msg: string): void { console.log(`  - ${msg}`); }
-function ok(msg: string): void { console.log(`[OK] ${msg}`); }
+function step(msg: string): void {
+  console.log(`\n=== ${msg} ===`);
+}
+function info(msg: string): void {
+  console.log(`[INFO] ${msg}`);
+}
+function action(msg: string): void {
+  console.log(`  - ${msg}`);
+}
+function ok(msg: string): void {
+  console.log(`[OK] ${msg}`);
+}
 
 function resolveSkillPath(candidate: string): string | null {
   if (existsSync(candidate)) return resolve(candidate);
@@ -42,7 +50,9 @@ step('Project Orchestrator - Next Steps');
 
 if (!existsSync(activationFile)) {
   console.log('The orchestrator does not appear to be active in this project.');
-  console.log('Run project setup or create a new project from the Gentle-Vanguard template to activate it.');
+  console.log(
+    'Run project setup or create a new project from the Gentle-Vanguard template to activate it.',
+  );
   process.exit(1);
 }
 
@@ -117,7 +127,9 @@ if (detailed) {
   step('Detailed Guidance');
   action('Apply testing-strategy and testing-skill to improve test coverage.');
   action('Use architecture-governance for architecture decisions and documentation.');
-  action('Use security-expert and code-review-orchestrator for quality and vulnerability analysis.');
+  action(
+    'Use security-expert and code-review-orchestrator for quality and vulnerability analysis.',
+  );
   action('Use ai-sdk-5 and mcp-skill for AI-assisted modeling and session memory.');
 }
 

@@ -84,4 +84,5 @@ Pull Request Opened
   Ready for review
 ```
 
-If lint fails, fix lint — don't disable the rule. If a test fails, fix the code — don't skip the test.
+If lint fails, fix lint — don't disable the rule. If a test fails, fix the code — don't skip the
+test.

@@ -1,10 +1,12 @@
 # Memory Systems
 
-Without memory, every agent interaction is a fresh start. Memory enables personalization, continuity, and learning.
+Without memory, every agent interaction is a fresh start. Memory enables personalization,
+continuity, and learning.
 
 ## Memory Types
 
 ### Short-Term Memory (STM)
+
 - **What**: Current conversation or session context
 - **Storage**: In-context (within the LLM's context window)
 - **Duration**: Single session
@@ -29,6 +31,7 @@ class ShortTermMemory:
 ```
 
 ### Long-Term Memory (LTM)
+
 - **What**: Facts, preferences, knowledge from past sessions
 - **Storage**: Vector databases, relational databases, key-value stores
 - **Duration**: Permanent (until deleted)
@@ -56,6 +59,7 @@ class LongTermMemory:
 ```
 
 ### Episodic Memory
+
 - **What**: Record of past events, actions, and outcomes
 - **Storage**: Time-series database or event log
 - **Duration**: Configurable retention
@@ -77,6 +81,7 @@ class EpisodicMemory:
 ```
 
 ### Semantic Memory
+
 - **What**: General knowledge, concepts, relationships
 - **Storage**: Knowledge graphs, structured databases
 - **Duration**: Persistent, updated over time
@@ -84,10 +89,10 @@ class EpisodicMemory:
 
 ## Retrieval Strategies
 
-| Strategy | Description | Best For |
-|---|---|---|
-| **Last-N** | Keep the last N turns of conversation | Simple chatbots |
-| **Sliding Window** | Keep most recent tokens up to a limit | General purpose |
-| **Summarization** | Summarize older context to save tokens | Long conversations |
-| **RAG** | Retrieve relevant context from vector store | Knowledge-heavy tasks |
-| **Hybrid** | Combine multiple strategies | Production systems |
+| Strategy           | Description                                 | Best For              |
+| ------------------ | ------------------------------------------- | --------------------- |
+| **Last-N**         | Keep the last N turns of conversation       | Simple chatbots       |
+| **Sliding Window** | Keep most recent tokens up to a limit       | General purpose       |
+| **Summarization**  | Summarize older context to save tokens      | Long conversations    |
+| **RAG**            | Retrieve relevant context from vector store | Knowledge-heavy tasks |
+| **Hybrid**         | Combine multiple strategies                 | Production systems    |

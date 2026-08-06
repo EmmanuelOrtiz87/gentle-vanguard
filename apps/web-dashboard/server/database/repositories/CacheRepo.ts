@@ -9,7 +9,9 @@ export class CacheRepo {
         `SELECT response, model, hit_count, expires_at FROM response_cache WHERE key = ?
          AND (expires_at IS NULL OR expires_at > datetime('now'))`,
       )
-      .get(key) as { response: string; model: string | null; hit_count: number; expires_at: string | null } | undefined;
+      .get(key) as
+      | { response: string; model: string | null; hit_count: number; expires_at: string | null }
+      | undefined;
     if (!row) return null;
 
     this.db.prepare('UPDATE response_cache SET hit_count = hit_count + 1 WHERE key = ?').run(key);
@@ -17,9 +19,8 @@ export class CacheRepo {
   }
 
   setCachedResponse(key: string, response: string, model?: string, ttlMinutes = 30): void {
-    const expiresAt = ttlMinutes > 0
-      ? new Date(Date.now() + ttlMinutes * 60 * 1000).toISOString()
-      : null;
+    const expiresAt =
+      ttlMinutes > 0 ? new Date(Date.now() + ttlMinutes * 60 * 1000).toISOString() : null;
     this.db
       .prepare(
         `INSERT OR REPLACE INTO response_cache (key, response, model, created_at, expires_at, hit_count)
@@ -34,10 +35,14 @@ export class CacheRepo {
 
   getCacheStats(): { entries: number; totalHits: number; expired: number } {
     const entries = (this.db.prepare('SELECT COUNT(*) as c FROM response_cache').get() as any).c;
-    const totalHits = (this.db.prepare('SELECT COALESCE(SUM(hit_count), 0) as h FROM response_cache').get() as any).h;
-    const expired = (this.db
-      .prepare("SELECT COUNT(*) as c FROM response_cache WHERE expires_at < datetime('now')")
-      .get() as any).c;
+    const totalHits = (
+      this.db.prepare('SELECT COALESCE(SUM(hit_count), 0) as h FROM response_cache').get() as any
+    ).h;
+    const expired = (
+      this.db
+        .prepare("SELECT COUNT(*) as c FROM response_cache WHERE expires_at < datetime('now')")
+        .get() as any
+    ).c;
     return { entries, totalHits, expired };
   }
 
@@ -53,9 +58,11 @@ export class CacheRepo {
       ? new Date(Date.now() + entry.ttlMinutes * 60000).toISOString()
       : null;
     this.db
-      .prepare(`INSERT OR REPLACE INTO response_cache
+      .prepare(
+        `INSERT OR REPLACE INTO response_cache
                 (key, response, model, input_text, input_embedding, created_at, expires_at, hit_count, tokens_saved)
-                VALUES (?, ?, ?, ?, ?, datetime('now'), ?, 0, 0)`)
+                VALUES (?, ?, ?, ?, ?, datetime('now'), ?, 0, 0)`,
+      )
       .run(
         entry.key,
         entry.response,
@@ -66,10 +73,14 @@ export class CacheRepo {
       );
   }
 
-  findExactCache(key: string): { response: string; inputText: string; inputEmbedding: Record<string, number> } | null {
+  findExactCache(
+    key: string,
+  ): { response: string; inputText: string; inputEmbedding: Record<string, number> } | null {
     const row = this.db
-      .prepare(`SELECT response, input_text, input_embedding FROM response_cache
-                WHERE key = ? AND (expires_at IS NULL OR expires_at > datetime('now'))`)
+      .prepare(
+        `SELECT response, input_text, input_embedding FROM response_cache
+                WHERE key = ? AND (expires_at IS NULL OR expires_at > datetime('now'))`,
+      )
       .get(key) as any;
     if (!row) return null;
     this.db.prepare('UPDATE response_cache SET hit_count = hit_count + 1 WHERE key = ?').run(key);
@@ -87,9 +98,11 @@ export class CacheRepo {
     inputEmbedding: Record<string, number>;
   }> {
     const rows = this.db
-      .prepare(`SELECT key, response, input_text, input_embedding FROM response_cache
+      .prepare(
+        `SELECT key, response, input_text, input_embedding FROM response_cache
                 WHERE input_embedding IS NOT NULL AND input_embedding != '{}'
-                AND (expires_at IS NULL OR expires_at > datetime('now'))`)
+                AND (expires_at IS NULL OR expires_at > datetime('now'))`,
+      )
       .all() as any[];
     return rows.map((r: any) => ({
       key: r.key,
@@ -101,7 +114,9 @@ export class CacheRepo {
 
   pruneExpiredCache(): number {
     return this.db
-      .prepare("DELETE FROM response_cache WHERE expires_at IS NOT NULL AND expires_at < datetime('now')")
+      .prepare(
+        "DELETE FROM response_cache WHERE expires_at IS NOT NULL AND expires_at < datetime('now')",
+      )
       .run().changes;
   }
 }

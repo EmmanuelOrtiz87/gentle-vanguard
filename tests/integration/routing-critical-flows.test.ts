@@ -19,9 +19,15 @@ before(() => {
   process.env.OPENCODE_SERVER_USERNAME = 'ci';
 });
 
-function runCLI(script: string, ...args: string[]): { stdout: string; stderr: string; status: number } {
+function runCLI(
+  script: string,
+  ...args: string[]
+): { stdout: string; stderr: string; status: number } {
   const result = spawnSync('npx', ['tsx', script, ...args], {
-    cwd: ROOT, encoding: 'utf-8', timeout: 30000, shell: true
+    cwd: ROOT,
+    encoding: 'utf-8',
+    timeout: 30000,
+    shell: true,
   });
   return {
     stdout: (result.stdout || '').trim(),
@@ -60,19 +66,37 @@ describe('Routing Critical Flows', () => {
 
   describe('Input preprocessing', () => {
     it('sanitizes deployment request input', () => {
-      const { stdout, status } = runCLI('src/pre-process-input.ts', '--input', 'deploy to kubernetes with docker and helm', '--workspace-root', ROOT);
+      const { stdout, status } = runCLI(
+        'src/pre-process-input.ts',
+        '--input',
+        'deploy to kubernetes with docker and helm',
+        '--workspace-root',
+        ROOT,
+      );
       assert.strictEqual(status, 0, `Exit code: ${status}, stderr: ${stdout}`);
       assert.ok(stdout.length > 0, 'Expected sanitized output');
     });
 
     it('sanitizes reporting request input', () => {
-      const { stdout, status } = runCLI('src/pre-process-input.ts', '--input', 'crear dashboard con metrics y reporte ejecutivo', '--workspace-root', ROOT);
+      const { stdout, status } = runCLI(
+        'src/pre-process-input.ts',
+        '--input',
+        'crear dashboard con metrics y reporte ejecutivo',
+        '--workspace-root',
+        ROOT,
+      );
       assert.strictEqual(status, 0);
       assert.ok(stdout.length > 0, 'Expected sanitized output');
     });
 
     it('sanitizes new project request input', () => {
-      const { stdout, status } = runCLI('src/pre-process-input.ts', '--input', 'pedi crear un nuevo proyecto', '--workspace-root', ROOT);
+      const { stdout, status } = runCLI(
+        'src/pre-process-input.ts',
+        '--input',
+        'pedi crear un nuevo proyecto',
+        '--workspace-root',
+        ROOT,
+      );
       assert.strictEqual(status, 0);
       assert.ok(stdout.length > 0, 'Expected sanitized output');
     });

@@ -152,7 +152,12 @@ function main(): void {
         } else {
           const serverJs = join(getProjectRoot(), 'scripts', 'mcp', `${server}-server.js`);
           if (existsSync(serverJs)) {
-            const input = JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list', params: {} });
+            const input = JSON.stringify({
+              jsonrpc: '2.0',
+              id: 1,
+              method: 'tools/list',
+              params: {},
+            });
             runSync('node', [serverJs], { input, stdio: 'pipe' });
             healthy = true;
           }
@@ -186,6 +191,10 @@ function main(): void {
   console.log(JSON.stringify(result));
 }
 
-if (process.argv[1] && (process.argv[1] === fileURLToPath(import.meta.url) || process.argv[1].endsWith('gateguard-mcp.ts'))) {
+if (
+  process.argv[1] &&
+  (process.argv[1] === fileURLToPath(import.meta.url) ||
+    process.argv[1].endsWith('gateguard-mcp.ts'))
+) {
   main();
 }

@@ -23,6 +23,16 @@
     "rootDir": ".",
     "types": ["node"]
   },
-  "include": ["adapters/**/*.ts", "scripts/mcp/**/*.ts", "scripts/recovery/**/*.ts", "scripts/database/**/*.ts", "scripts/utilities/ops/REVIEW/**/*.ts", "scripts/utilities/security/**/*.ts", "scripts/utilities/MODEL-ROUTER/**/*.ts", "scripts/validation/**/*.ts", "src/**/*.ts"],
+  "include": [
+    "adapters/**/*.ts",
+    "scripts/mcp/**/*.ts",
+    "scripts/recovery/**/*.ts",
+    "scripts/database/**/*.ts",
+    "scripts/utilities/ops/REVIEW/**/*.ts",
+    "scripts/utilities/security/**/*.ts",
+    "scripts/utilities/MODEL-ROUTER/**/*.ts",
+    "scripts/validation/**/*.ts",
+    "src/**/*.ts"
+  ],
   "exclude": ["node_modules", "dist", "build", "coverage", "templates", "src/convergence"]
 }

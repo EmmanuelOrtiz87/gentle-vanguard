@@ -50,7 +50,7 @@ export class SessionMetricsTracker {
   private constructor(sessionId: string) {
     this.sessionId = sessionId;
     this.metrics = this.loadOrCreate();
-    
+
     // Guardar en disco cada 5 segundos
     this.flushInterval = setInterval(() => this.flush(), 5000);
   }
@@ -83,7 +83,7 @@ export class SessionMetricsTracker {
   private loadOrCreate(): SessionMetrics {
     this.ensureMetricsDir();
     const metricsPath = this.getMetricsPath();
-    
+
     if (fs.existsSync(metricsPath)) {
       try {
         const content = fs.readFileSync(metricsPath, 'utf-8');
@@ -110,7 +110,12 @@ export class SessionMetricsTracker {
   /**
    * Agregar uso de tokens de un turno
    */
-  addTokenUsage(inputTokens: number, outputTokens: number, latencyMs: number = 0, cost: number = 0): void {
+  addTokenUsage(
+    inputTokens: number,
+    outputTokens: number,
+    latencyMs: number = 0,
+    cost: number = 0,
+  ): void {
     const turn: TurnData = {
       timestamp: new Date().toISOString(),
       inputTokens,
@@ -124,15 +129,17 @@ export class SessionMetricsTracker {
     this.metrics.totalTokens += inputTokens + outputTokens;
     this.metrics.totalCost += cost;
     this.metrics.turnCount++;
-    
+
     // Recalcular latencia promedio
     const totalLatency = this.metrics.turns.reduce((sum, t) => sum + t.latencyMs, 0);
     this.metrics.avgLatency = totalLatency / this.metrics.turns.length;
-    
+
     this.metrics.lastUpdate = new Date().toISOString();
-    
+
     // Log puntual
-    console.log(`[MetricsTracker] ${this.sessionId}: +${inputTokens + outputTokens} tokens, cost $${cost.toFixed(4)}`);
+    console.log(
+      `[MetricsTracker] ${this.sessionId}: +${inputTokens + outputTokens} tokens, cost $${cost.toFixed(4)}`,
+    );
   }
 
   /**
@@ -172,10 +179,10 @@ export class SessionMetricsTracker {
    */
   getSLOCompliance(): { compliance: number; violations: number; total: number } {
     const SLO_THRESHOLD_MS = 5000; // 5 segundos de SLO
-    const violations = this.metrics.turns.filter(t => t.latencyMs > SLO_THRESHOLD_MS).length;
+    const violations = this.metrics.turns.filter((t) => t.latencyMs > SLO_THRESHOLD_MS).length;
     const total = this.metrics.turns.length;
     const compliance = total > 0 ? ((total - violations) / total) * 100 : 100;
-    
+
     return {
       compliance: Math.round(compliance),
       violations,
@@ -195,7 +202,7 @@ export class SessionMetricsTracker {
       totalCost: this.metrics.totalCost,
       messageCount: this.metrics.turnCount,
     });
-    
+
     // Agregar todos los turns
     for (const turn of this.metrics.turns) {
       ctxLog.addTurn({
@@ -204,7 +211,7 @@ export class SessionMetricsTracker {
         timestamp: turn.timestamp,
       });
     }
-    
+
     ctxLog.save();
     console.log(`[MetricsTracker] ${this.sessionId}: Synced to ContextLog`);
   }
@@ -271,10 +278,10 @@ export function getAllLiveMetrics(): {
   sessions: string[];
 } {
   const metrics: SessionMetrics[] = [];
-  
+
   // Leer todos los archivos de métricas
   if (fs.existsSync(METRICS_DIR)) {
-    const files = fs.readdirSync(METRICS_DIR).filter(f => f.endsWith('.json'));
+    const files = fs.readdirSync(METRICS_DIR).filter((f) => f.endsWith('.json'));
     for (const file of files) {
       try {
         const content = fs.readFileSync(path.join(METRICS_DIR, file), 'utf-8');
@@ -284,16 +291,15 @@ export function getAllLiveMetrics(): {
       }
     }
   }
-  
+
   return {
     totalTokens: metrics.reduce((sum, m) => sum + m.totalTokens, 0),
     totalCost: metrics.reduce((sum, m) => sum + m.totalCost, 0),
     totalTurns: metrics.reduce((sum, m) => sum + m.turnCount, 0),
     totalFeedbackUp: metrics.reduce((sum, m) => sum + m.feedbackUp, 0),
     totalFeedbackDown: metrics.reduce((sum, m) => sum + m.feedbackDown, 0),
-    avgLatency: metrics.length > 0
-      ? metrics.reduce((sum, m) => sum + m.avgLatency, 0) / metrics.length
-      : 0,
-    sessions: metrics.map(m => m.sessionId),
+    avgLatency:
+      metrics.length > 0 ? metrics.reduce((sum, m) => sum + m.avgLatency, 0) / metrics.length : 0,
+    sessions: metrics.map((m) => m.sessionId),
   };
 }

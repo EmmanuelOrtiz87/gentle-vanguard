@@ -45,8 +45,14 @@ function fetchFromJira(issueKey: string, baseUrl: string, token: string): any {
 const quiet = args.includes('--quiet');
 const issueKey = args.indexOf('--issue') >= 0 ? args[args.indexOf('--issue') + 1] : undefined;
 const outputPath = args.indexOf('--output') >= 0 ? args[args.indexOf('--output') + 1] : undefined;
-const baseUrl = args.indexOf('--base-url') >= 0 ? args[args.indexOf('--base-url') + 1] : process.env.JIRA_BASE_URL || 'https://your-domain.atlassian.net';
-const token = args.indexOf('--token') >= 0 ? args[args.indexOf('--token') + 1] : process.env.JIRA_API_TOKEN || '';
+const baseUrl =
+  args.indexOf('--base-url') >= 0
+    ? args[args.indexOf('--base-url') + 1]
+    : process.env.JIRA_BASE_URL || 'https://your-domain.atlassian.net';
+const token =
+  args.indexOf('--token') >= 0
+    ? args[args.indexOf('--token') + 1]
+    : process.env.JIRA_API_TOKEN || '';
 
 const result: ConnectorResult = {
   source: `jira:${issueKey || 'query'}`,

@@ -25,6 +25,7 @@ success criteria clear. Every launch should be reversible, observable, and incre
 ### 1. Pre-Launch Checklist
 
 See `references/pre-launch-checklist.md` for the full checklist covering:
+
 - **Code Quality** — tests, builds, linting, code review, error handling
 - **Security** — secrets, vulnerabilities, input validation, auth, CORS
 - **Performance** — Core Web Vitals, N+1 queries, bundles, caching
@@ -64,12 +65,12 @@ the full template.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-|---|---|
-| "It works in staging" | Different data, traffic, and edge cases in production. |
-| "No feature flags needed" | Every feature benefits from a kill switch. |
-| "Monitoring is overhead" | Without it you get user complaints instead of dashboards. |
-| "We'll add monitoring later" | Add it before launch. You can't fix what you can't see. |
+| Rationalization                 | Reality                                                      |
+| ------------------------------- | ------------------------------------------------------------ |
+| "It works in staging"           | Different data, traffic, and edge cases in production.       |
+| "No feature flags needed"       | Every feature benefits from a kill switch.                   |
+| "Monitoring is overhead"        | Without it you get user complaints instead of dashboards.    |
+| "We'll add monitoring later"    | Add it before launch. You can't fix what you can't see.      |
 | "Rollback is admitting failure" | Rolling back is responsible. Shipping broken is the failure. |
 
 ## Red Flags

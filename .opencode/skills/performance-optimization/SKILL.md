@@ -61,13 +61,13 @@ See [Budgets Reference](references/budgets.md) for recommended targets and CI en
 
 ## Common Rationalizations
 
-| Rationalization                     | Reality                                                                                |
-| ----------------------------------- | -------------------------------------------------------------------------------------- |
-| "We'll optimize later"              | Performance debt compounds. Fix obvious anti-patterns now, defer micro-optimizations.  |
-| "It's fast on my machine"           | Your machine isn't the user's. Profile on representative hardware and networks.        |
-| "This optimization is obvious"      | If you didn't measure, you don't know. Profile first.                                  |
-| "Users won't notice 100ms"          | Research shows 100ms delays impact conversion rates. Users notice more than you know.  |
-| "The framework handles performance" | Frameworks prevent some issues but can't fix N+1 queries or oversized bundles.         |
+| Rationalization                     | Reality                                                                               |
+| ----------------------------------- | ------------------------------------------------------------------------------------- |
+| "We'll optimize later"              | Performance debt compounds. Fix obvious anti-patterns now, defer micro-optimizations. |
+| "It's fast on my machine"           | Your machine isn't the user's. Profile on representative hardware and networks.       |
+| "This optimization is obvious"      | If you didn't measure, you don't know. Profile first.                                 |
+| "Users won't notice 100ms"          | Research shows 100ms delays impact conversion rates. Users notice more than you know. |
+| "The framework handles performance" | Frameworks prevent some issues but can't fix N+1 queries or oversized bundles.        |
 
 ## Red Flags
 
@@ -81,8 +81,8 @@ See [Budgets Reference](references/budgets.md) for recommended targets and CI en
 
 ## Reference Files
 
-| File | Content |
-| ---- | ------- |
-| [Measurement](references/measurement.md) | Synthetic & RUM approaches, diagnostic tree, Core Web Vitals table |
-| [Anti-Patterns](references/anti-patterns.md) | Bottleneck tables, all code examples with BAD/GOOD patterns |
-| [Budgets](references/budgets.md) | Budget targets, CI commands, verification checklist |
+| File                                         | Content                                                            |
+| -------------------------------------------- | ------------------------------------------------------------------ |
+| [Measurement](references/measurement.md)     | Synthetic & RUM approaches, diagnostic tree, Core Web Vitals table |
+| [Anti-Patterns](references/anti-patterns.md) | Bottleneck tables, all code examples with BAD/GOOD patterns        |
+| [Budgets](references/budgets.md)             | Budget targets, CI commands, verification checklist                |

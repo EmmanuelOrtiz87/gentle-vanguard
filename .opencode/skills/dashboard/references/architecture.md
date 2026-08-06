@@ -52,6 +52,8 @@ websocket-server.ts
 ## Resilience & Port Flexibility
 
 - HTTP polling always runs (even without WebSocket).
-- WS watchdog auto-recovery (up to 10 restarts). Watchdog PID in `.runtime/dashboard-ws-watchdog.pid`.
-- Dynamic ports: `WS_PORT` env (default 8080), `VITE_DEV_PORT` (default 5173). `Get-FreePort()` scans +100 ports via `Get-NetTCPConnection`. Ports persisted to `.runtime/dashboard-ports.json`.
+- WS watchdog auto-recovery (up to 10 restarts). Watchdog PID in
+  `.runtime/dashboard-ws-watchdog.pid`.
+- Dynamic ports: `WS_PORT` env (default 8080), `VITE_DEV_PORT` (default 5173). `Get-FreePort()`
+  scans +100 ports via `Get-NetTCPConnection`. Ports persisted to `.runtime/dashboard-ports.json`.
 - `strictPort: false` in Vite config for auto-fallback.

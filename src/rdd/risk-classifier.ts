@@ -261,11 +261,14 @@ function log(message: string, level: 'INFO' | 'WARN' | 'ERROR' | 'SUCCESS' = 'IN
 
 // ─── Git Operations ───────────────────────────────────────────────────────────
 
-function _getChangedFiles(stagedOnly = false): { files: string[]; lines: { insertions: number; deletions: number } } {
+function _getChangedFiles(stagedOnly = false): {
+  files: string[];
+  lines: { insertions: number; deletions: number };
+} {
   try {
     const diffCommand = stagedOnly ? 'git diff --cached --numstat' : 'git diff --numstat';
     const diff = runSyncShell(diffCommand, { cwd: ROOT }).stdout;
-    
+
     let insertions = 0;
     let deletions = 0;
     const files: string[] = [];
@@ -276,10 +279,10 @@ function _getChangedFiles(stagedOnly = false): { files: string[]; lines: { inser
         const adds = parseInt(match[1], 10);
         const dels = parseInt(match[2], 10);
         const _file = match[3];
-        
+
         // Handle renamed files (format: "old\u005ctnew")
         const actualFile = _file.includes('\u005ct') ? _file.split('\u005ct')[1] : _file;
-        
+
         insertions += adds;
         deletions += dels;
         files.push(actualFile);
@@ -288,7 +291,10 @@ function _getChangedFiles(stagedOnly = false): { files: string[]; lines: { inser
 
     return { files, lines: { insertions, deletions } };
   } catch (err) {
-    log(`Failed to get changed files: ${err instanceof Error ? err.message : String(err)}`, 'ERROR');
+    log(
+      `Failed to get changed files: ${err instanceof Error ? err.message : String(err)}`,
+      'ERROR',
+    );
     return { files: [], lines: { insertions: 0, deletions: 0 } };
   }
 }
@@ -314,7 +320,7 @@ function categorizeFile(filePath: string): FileCategory {
         return category as FileCategory;
       }
     }
-    
+
     // Check content patterns
     if (content) {
       for (const pattern of patterns) {
@@ -341,7 +347,7 @@ function readFileSafe(filePath: string): string | null {
 
 function hasBreakingChanges(commitMessage: string, _files: string[]): boolean {
   const message = commitMessage.toLowerCase();
-  
+
   // Check commit message
   for (const pattern of BREAKING_INDICATORS) {
     if (pattern.test(message)) {
@@ -356,7 +362,7 @@ function hasBreakingChanges(commitMessage: string, _files: string[]): boolean {
   return false;
 }
 
-function analyzeChangeScope(files: string[]): { 
+function analyzeChangeScope(files: string[]): {
   crossesSecurityBoundary: boolean;
   crossesDatabaseBoundary: boolean;
   crossesApiBoundary: boolean;
@@ -408,21 +414,22 @@ function calculateRisk(analysis: ChangeAnalysis): RiskClassification {
       severity: score >= 70 ? 4 : score >= 50 ? 3 : 2,
       evidence: `Files contain ${cat} code (base risk ${score}/100)`,
       files: Array.from(analysis.fileCategories.entries())
-        .filter(([_, c]) => c === cat).map(([f]) => f),
+        .filter(([_, c]) => c === cat)
+        .map(([f]) => f),
     });
     baseScore = Math.max(baseScore, score);
   }
 
   // Factor 2: Cross-boundary changes
   const scope = analyzeChangeScope(analysis.files);
-  
+
   if (scope.crossesSecurityBoundary) {
     factors.push({
       name: 'Crosses security boundary',
       category: 'security',
       severity: 5,
       evidence: 'Changes touch authentication or security-sensitive code',
-      files: analysis.files.filter(f => {
+      files: analysis.files.filter((f) => {
         const cat = categorizeFile(f);
         return cat === 'auth' || cat === 'security';
       }),
@@ -436,7 +443,7 @@ function calculateRisk(analysis: ChangeAnalysis): RiskClassification {
       category: 'data',
       severity: 4,
       evidence: 'Changes touch database schema or migrations',
-      files: analysis.files.filter(f => categorizeFile(f) === 'database'),
+      files: analysis.files.filter((f) => categorizeFile(f) === 'database'),
     });
     baseScore = Math.max(baseScore, 75);
   }
@@ -447,7 +454,7 @@ function calculateRisk(analysis: ChangeAnalysis): RiskClassification {
       category: 'api',
       severity: 3,
       evidence: 'Changes affect external API integration',
-      files: analysis.files.filter(f => categorizeFile(f) === 'external-api'),
+      files: analysis.files.filter((f) => categorizeFile(f) === 'external-api'),
     });
     baseScore = Math.max(baseScore, 65);
   }
@@ -472,7 +479,8 @@ function calculateRisk(analysis: ChangeAnalysis): RiskClassification {
 
   if (baseScore >= 70) {
     tier = 'high';
-    recommendation = 'HIGH RISK: Full 4R review required (Risk, Readability, Reliability, Resilience). Cannot self-approve.';
+    recommendation =
+      'HIGH RISK: Full 4R review required (Risk, Readability, Reliability, Resilience). Cannot self-approve.';
     reviewLenses = 4;
   } else if (baseScore >= 40) {
     tier = 'standard';
@@ -480,7 +488,8 @@ function calculateRisk(analysis: ChangeAnalysis): RiskClassification {
     reviewLenses = 1;
   } else {
     tier = 'low';
-    recommendation = 'LOW RISK: Structural readback sufficient. Silent validation or optional review.';
+    recommendation =
+      'LOW RISK: Structural readback sufficient. Silent validation or optional review.';
     reviewLenses = 0;
   }
 
@@ -508,18 +517,16 @@ function generateRationale(factors: RiskFactor[], score: number): string {
     return 'Low-risk change: documentation or simple configuration updates only.';
   }
 
-  const topFactors = factors
-    .sort((a, b) => b.severity - a.severity)
-    .slice(0, 3);
+  const topFactors = factors.sort((a, b) => b.severity - a.severity).slice(0, 3);
 
-  return `Risk score ${score}/100 based on: ${topFactors.map(f => f.name).join('; ')}.`;
+  return `Risk score ${score}/100 based on: ${topFactors.map((f) => f.name).join('; ')}.`;
 }
 
 // ─── Main API ───────────────────────────────────────────────────────────────────
 
 export function classifyRisk(stagedOnly = false): RiskClassification {
   const { files, lines } = _getChangedFiles(stagedOnly);
-  
+
   if (files.length === 0) {
     return {
       tier: 'low',
@@ -546,8 +553,11 @@ export function classifyRisk(stagedOnly = false): RiskClassification {
 
   const classification = calculateRisk(analysis);
 
-  log(`Classified ${files.length} files as ${classification.tier.toUpperCase()} risk (score: ${classification.score})`, 'SUCCESS');
-  
+  log(
+    `Classified ${files.length} files as ${classification.tier.toUpperCase()} risk (score: ${classification.score})`,
+    'SUCCESS',
+  );
+
   return classification;
 }
 
@@ -564,14 +574,18 @@ export function explainRisk(classification: RiskClassification): string {
   lines.push('RATIONALE:');
   lines.push(`  ${classification.rationale}`);
   lines.push('');
-  
+
   if (classification.factors.length > 0) {
     lines.push('RISK FACTORS:');
     for (const factor of classification.factors) {
-      lines.push(`  [${factor.category.toUpperCase()}] ${factor.name} (severity: ${factor.severity}/5)`);
+      lines.push(
+        `  [${factor.category.toUpperCase()}] ${factor.name} (severity: ${factor.severity}/5)`,
+      );
       lines.push(`    Evidence: ${factor.evidence}`);
       if (factor.files.length > 0) {
-        lines.push(`    Files: ${factor.files.slice(0, 3).join(', ')}${factor.files.length > 3 ? '...' : ''}`);
+        lines.push(
+          `    Files: ${factor.files.slice(0, 3).join(', ')}${factor.files.length > 3 ? '...' : ''}`,
+        );
       }
       lines.push('');
     }
@@ -597,7 +611,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         case 'classify': {
           const staged = args.includes('--staged');
           const classification = classifyRisk(staged);
-          
+
           if (args.includes('--json')) {
             console.log(JSON.stringify(classification, null, 2));
           } else {
@@ -605,14 +619,16 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
           }
 
           // Exit code: 0=low, 1=standard, 2=high
-          process.exit(classification.tier === 'high' ? 2 : classification.tier === 'standard' ? 1 : 0);
+          process.exit(
+            classification.tier === 'high' ? 2 : classification.tier === 'standard' ? 1 : 0,
+          );
         }
 
         case 'explain': {
           // Read from stdin or file
           let classification: RiskClassification;
-          const file = args.find(a => a.startsWith('--file='))?.split('=')[1];
-          
+          const file = args.find((a) => a.startsWith('--file='))?.split('=')[1];
+
           if (file) {
             const content = readFileSafe(file);
             if (!content) {
@@ -623,7 +639,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
           } else {
             classification = classifyRisk(false);
           }
-          
+
           console.log(explainRisk(classification));
           break;
         }
@@ -631,10 +647,10 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         case 'factors': {
           const staged = args.includes('--staged');
           const { files } = _getChangedFiles(staged);
-          
+
           console.log('File-by-file classification:');
           console.log('');
-          
+
           for (const file of files) {
             const category = categorizeFile(file);
             const risk = CATEGORY_RISK[category];

@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Chained PRs (Gentle-Vanguard Adaptation)
 
 ## When to Use#

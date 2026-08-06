@@ -6,7 +6,9 @@
 
 ## Context
 
-ADR-001 established TypeScript as the primary implementation language for Gentle-Vanguard, supplemented by Go, Node.js, and Python for specific use cases. This decision was made in early 2026 when the ecosystem had:
+ADR-001 established TypeScript as the primary implementation language for Gentle-Vanguard,
+supplemented by Go, Node.js, and Python for specific use cases. This decision was made in early 2026
+when the ecosystem had:
 
 - Heavy investment in TypeScript automation (390+ scripts)
 - Windows-centric development environment
@@ -14,29 +16,35 @@ ADR-001 established TypeScript as the primary implementation language for Gentle
 
 However, several factors emerged that challenged this decision:
 
-1. **Cross-platform compatibility**: TypeScript required explicit handling for Windows vs. Linux/macOS path separators, environment variables, and process spawning
-2. **Developer experience**: TypeScript tools (type checking, IntelliSense, refactoring) proved more effective at codebase scale
-3. **Performance**: Node.js execution of compiled TypeScript matched or exceeded TypeScript startup times
-4. **Ecosystem alignment**: Modern AI tooling and CI/CD platforms have first-class TypeScript/Node.js support
-5. **Maintenance burden**: Keeping 390+ TypeScript scripts synchronized with evolving patterns required disproportionate effort
+1. **Cross-platform compatibility**: TypeScript required explicit handling for Windows vs.
+   Linux/macOS path separators, environment variables, and process spawning
+2. **Developer experience**: TypeScript tools (type checking, IntelliSense, refactoring) proved more
+   effective at codebase scale
+3. **Performance**: Node.js execution of compiled TypeScript matched or exceeded TypeScript startup
+   times
+4. **Ecosystem alignment**: Modern AI tooling and CI/CD platforms have first-class
+   TypeScript/Node.js support
+5. **Maintenance burden**: Keeping 390+ TypeScript scripts synchronized with evolving patterns
+   required disproportionate effort
 
 ## Decision
 
 **Migrate the entire stack from TypeScript to TypeScript.**
 
-All new code MUST be written in TypeScript. Existing TypeScript scripts are to be migrated incrementally following TypeScript-first patterns.
+All new code MUST be written in TypeScript. Existing TypeScript scripts are to be migrated
+incrementally following TypeScript-first patterns.
 
 ### Implementation Details
 
-| Aspect | Before (TypeScript) | After (TypeScript) |
-|--------|---------------------|-------------------|
-| **Entry Point** | `scripts/utilities/*.ps1` | `src/*.ts` |
-| **Execution** | `npx tsx src/gv.ts` | `npx tsx src/script.ts` |
-| **Package Manager** | None / TypeScript Gallery | `pnpm` |
-| **Testing** | Pester | `node:test` via `tsx --test` |
-| **Type Safety** | Runtime checks | TypeScript compiler (`tsc --noEmit`) |
-| **Linting** | PSScriptAnalyzer | ESLint + security plugin |
-| **Autostart** | `session-autostart.ps1` | `npx tsx src/session-autostart.ts` |
+| Aspect              | Before (TypeScript)       | After (TypeScript)                   |
+| ------------------- | ------------------------- | ------------------------------------ |
+| **Entry Point**     | `scripts/utilities/*.ps1` | `src/*.ts`                           |
+| **Execution**       | `npx tsx src/gv.ts`       | `npx tsx src/script.ts`              |
+| **Package Manager** | None / TypeScript Gallery | `pnpm`                               |
+| **Testing**         | Pester                    | `node:test` via `tsx --test`         |
+| **Type Safety**     | Runtime checks            | TypeScript compiler (`tsc --noEmit`) |
+| **Linting**         | PSScriptAnalyzer          | ESLint + security plugin             |
+| **Autostart**       | `session-autostart.ps1`   | `npx tsx src/session-autostart.ts`   |
 
 ### Migration Rules
 

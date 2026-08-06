@@ -1,6 +1,7 @@
 # No Placeholders — Complete List
 
-Every step must contain the actual content an engineer needs. These are **plan failures** — never write them:
+Every step must contain the actual content an engineer needs. These are **plan failures** — never
+write them:
 
 - "TBD", "TODO", "implement later", "fill in details"
 - "Add appropriate error handling" / "add validation" / "handle edge cases"

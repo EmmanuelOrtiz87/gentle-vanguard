@@ -45,9 +45,13 @@ function stopWatchdog(): void {
 function killNodeProcesses(): void {
   if (process.platform !== 'win32') return;
   try {
-    const result = runSync('wmic', ['process', 'where', "name='node.exe'", 'get', 'ProcessId,CommandLine', '/format:csv'], {
-      timeout: getEffectiveProcessTimeout('default'),
-    });
+    const result = runSync(
+      'wmic',
+      ['process', 'where', "name='node.exe'", 'get', 'ProcessId,CommandLine', '/format:csv'],
+      {
+        timeout: getEffectiveProcessTimeout('default'),
+      },
+    );
     if (result.status !== 0) return;
     const output = (result.stdout ?? '').toString();
     for (const line of output.split('\n')) {
@@ -94,7 +98,8 @@ async function main(): Promise<void> {
   const vitePid = await getProcessIdByPort(vitePort);
   if (vitePid) {
     killProcess(vitePid);
-    if (!quiet) console.log(`[DASHBOARD] Stopped Vite dev server on port ${vitePort} (PID ${vitePid})`);
+    if (!quiet)
+      console.log(`[DASHBOARD] Stopped Vite dev server on port ${vitePort} (PID ${vitePid})`);
   }
 
   // Clean up any remaining node processes

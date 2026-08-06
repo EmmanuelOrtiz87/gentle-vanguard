@@ -33,9 +33,7 @@ function assertIsString(val: unknown): asserts val is string {
 
 ```typescript
 type Action =
-  | { type: 'increment'; amount: number }
-  | { type: 'decrement'; amount: number }
-  | { type: 'reset' };
+  { type: 'increment'; amount: number } | { type: 'decrement'; amount: number } | { type: 'reset' };
 
 function reducer(state: number, action: Action): number {
   switch (action.type) {

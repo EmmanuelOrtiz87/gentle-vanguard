@@ -81,10 +81,14 @@ function invokeSkillRecommendation(queryText: string, topN: number): SkillRecomm
     return [];
   }
   try {
-    const raw = runNpxTsxSync('src/ml-router.ts', ['--query', queryText, '--topn', String(topN * 2), '--raw'], {
-      cwd: PROJECT_ROOT,
-      stdio: ['pipe', 'pipe', 'pipe'],
-    }).stdout.trim();
+    const raw = runNpxTsxSync(
+      'src/ml-router.ts',
+      ['--query', queryText, '--topn', String(topN * 2), '--raw'],
+      {
+        cwd: PROJECT_ROOT,
+        stdio: ['pipe', 'pipe', 'pipe'],
+      },
+    ).stdout.trim();
     if (!raw) return [];
     let parsed: unknown;
     try {

@@ -22,7 +22,13 @@
  *   const result = runSyncShell('npx tsx script.ts --arg');
  */
 
-import { spawn, spawnSync, type SpawnOptions, type SpawnSyncOptions, type ChildProcess } from 'child_process';
+import {
+  spawn,
+  spawnSync,
+  type SpawnOptions,
+  type SpawnSyncOptions,
+  type ChildProcess,
+} from 'child_process';
 import { createRequire } from 'module';
 import { readFileSync } from 'fs';
 import { dirname, join } from 'path';
@@ -39,24 +45,25 @@ export interface RunSyncResult {
   signal: string | null;
 }
 
-export type RunOptions = Partial<SpawnOptions> & Partial<SpawnSyncOptions> & {
-  cwd?: string;
-  timeout?: number;
-  env?: Record<string, string | undefined>;
-  maxBuffer?: number;
-  encoding?: BufferEncoding | 'utf-8';
-};
+export type RunOptions = Partial<SpawnOptions> &
+  Partial<SpawnSyncOptions> & {
+    cwd?: string;
+    timeout?: number;
+    env?: Record<string, string | undefined>;
+    maxBuffer?: number;
+    encoding?: BufferEncoding | 'utf-8';
+  };
 
 // ─── Defaults ─────────────────────────────────────────────────────────
 
 const DEFAULT_OPTIONS: SpawnOptions = {
-  windowsHide: true,     // CRITICAL: no flashing cmd windows on Windows
-  stdio: 'pipe',         // capture output by default
+  windowsHide: true, // CRITICAL: no flashing cmd windows on Windows
+  stdio: 'pipe', // capture output by default
 };
 
 const DEFAULT_SYNC_OPTIONS: SpawnSyncOptions = {
-  windowsHide: true,     // CRITICAL: no flashing cmd windows on Windows
-  stdio: 'pipe',         // capture output by default
+  windowsHide: true, // CRITICAL: no flashing cmd windows on Windows
+  stdio: 'pipe', // capture output by default
   encoding: 'utf-8' as const,
   maxBuffer: 1024 * 1024, // 1MB default
 };
@@ -72,11 +79,7 @@ const DEFAULT_SYNC_OPTIONS: SpawnSyncOptions = {
  * @param options - Optional spawn options
  * @returns ChildProcess instance
  */
-export function run(
-  command: string,
-  args: string[] = [],
-  options: RunOptions = {},
-): ChildProcess {
+export function run(command: string, args: string[] = [], options: RunOptions = {}): ChildProcess {
   const spawnOpts: SpawnOptions = {
     ...(DEFAULT_OPTIONS as SpawnOptions),
     ...(options as SpawnOptions),
@@ -112,7 +115,10 @@ function quoteArg(a: string): string {
   return /[\s"]/.test(a) ? `"${a.replace(/"/g, '""')}"` : a;
 }
 
-function windowsScriptSpawn(command: string, args: string[]): { command: string; args: string[]; shell: boolean } {
+function windowsScriptSpawn(
+  command: string,
+  args: string[],
+): { command: string; args: string[]; shell: boolean } {
   return { command: [command, ...args].map(quoteArg).join(' '), args: [], shell: true };
 }
 
@@ -178,10 +184,7 @@ export function runSync(
  * USE ONLY when you need shell features (pipes, globs, redirects).
  * Prefer run()/runSync() with direct argv arrays.
  */
-export function runSyncShell(
-  command: string,
-  options: RunOptions = {},
-): RunSyncResult {
+export function runSyncShell(command: string, options: RunOptions = {}): RunSyncResult {
   const isWindows = process.platform === 'win32';
   const shellCmd = isWindows ? process.env.ComSpec || 'cmd.exe' : '/bin/sh';
   const shellArgs = isWindows ? ['/d', '/s', '/c', command] : ['-c', command];
@@ -226,7 +229,9 @@ export function runSyncShell(
  */
 function resolveTsxCli(): string {
   const pkgJson = require.resolve('tsx/package.json');
-  const pkg = JSON.parse(readFileSync(pkgJson, 'utf-8')) as { bin?: string | Record<string, string> };
+  const pkg = JSON.parse(readFileSync(pkgJson, 'utf-8')) as {
+    bin?: string | Record<string, string>;
+  };
   const bin = typeof pkg.bin === 'string' ? pkg.bin : pkg.bin?.tsx;
   if (!bin) throw new Error('Cannot resolve tsx bin entry');
   return join(dirname(pkgJson), bin);

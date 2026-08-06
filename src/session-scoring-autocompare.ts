@@ -42,16 +42,16 @@ interface TrendReport {
 
 function loadStateFiles(): SessionScore[] {
   const scores: SessionScore[] = [];
-  
+
   if (!existsSync(CONTEXT_LOG)) return scores;
-  
-  const dirs = readdirSync(CONTEXT_LOG, { withFileTypes: true })
-    .filter(d => d.isDirectory());
-  
-  for (const dir of dirs.slice(-20)) { // Last 20 sessions
+
+  const dirs = readdirSync(CONTEXT_LOG, { withFileTypes: true }).filter((d) => d.isDirectory());
+
+  for (const dir of dirs.slice(-20)) {
+    // Last 20 sessions
     const stateFile = join(CONTEXT_LOG, dir.name, '.state.json');
     if (!existsSync(stateFile)) continue;
-    
+
     try {
       const state = JSON.parse(readFileSync(stateFile, 'utf-8'));
       scores.push({
@@ -64,9 +64,11 @@ function loadStateFiles(): SessionScore[] {
         filesChanged: state.filesChanged || 0,
         duration: state.duration || 0,
       });
-    } catch { /* skip corrupt */ }
+    } catch {
+      /* skip corrupt */
+    }
   }
-  
+
   return scores.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 }
 
@@ -80,28 +82,31 @@ function detectRegression(scores: SessionScore[]): TrendReport {
       recommendation: 'Not enough data for trend analysis',
     };
   }
-  
+
   const current = scores[0];
   const historical = scores.slice(1);
-  
+
   const baseline = {
     avgQuality: historical.reduce((s, x) => s + x.qualityScore, 0) / historical.length,
     avgEfficiency: historical.reduce((s, x) => s + x.tokenEfficiency, 0) / historical.length,
     avgErrors: historical.reduce((s, x) => s + x.errorCount, 0) / historical.length,
   };
-  
+
   const regression = {
-    qualityDrop: baseline.avgQuality > 0 
-      ? ((current.qualityScore - baseline.avgQuality) / baseline.avgQuality) * 100 
-      : null,
-    efficiencyDrop: baseline.avgEfficiency > 0
-      ? ((current.tokenEfficiency - baseline.avgEfficiency) / baseline.avgEfficiency) * 100
-      : null,
-    errorIncrease: baseline.avgErrors > 0
-      ? ((current.errorCount - baseline.avgErrors) / baseline.avgErrors) * 100
-      : null,
+    qualityDrop:
+      baseline.avgQuality > 0
+        ? ((current.qualityScore - baseline.avgQuality) / baseline.avgQuality) * 100
+        : null,
+    efficiencyDrop:
+      baseline.avgEfficiency > 0
+        ? ((current.tokenEfficiency - baseline.avgEfficiency) / baseline.avgEfficiency) * 100
+        : null,
+    errorIncrease:
+      baseline.avgErrors > 0
+        ? ((current.errorCount - baseline.avgErrors) / baseline.avgErrors) * 100
+        : null,
   };
-  
+
   const anomalies: string[] = [];
   if (regression.qualityDrop !== null && regression.qualityDrop < -15) {
     anomalies.push(`Quality regression: ${regression.qualityDrop.toFixed(1)}%`);
@@ -109,14 +114,14 @@ function detectRegression(scores: SessionScore[]): TrendReport {
   if (regression.errorIncrease !== null && regression.errorIncrease > 50) {
     anomalies.push(`Error spike: ${regression.errorIncrease.toFixed(1)}% increase`);
   }
-  
+
   let recommendation = 'Session quality is stable';
   if (anomalies.length > 0) {
     recommendation = `Anomalies detected: ${anomalies.join('; ')}. Auto-investigation recommended.`;
   } else if (regression.qualityDrop !== null && regression.qualityDrop > 5) {
     recommendation = 'Quality improving. Continue current patterns.';
   }
-  
+
   const report: TrendReport = {
     currentSession: current,
     baseline,
@@ -124,7 +129,7 @@ function detectRegression(scores: SessionScore[]): TrendReport {
     anomalies,
     recommendation,
   };
-  
+
   writeFileSync(REPORT_FILE, JSON.stringify(report, null, 2), 'utf-8');
   return report;
 }

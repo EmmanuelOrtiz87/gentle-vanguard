@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # /design-system
 
 > If you see unfamiliar placeholders or need to check which tools are connected, see

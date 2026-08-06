@@ -29,15 +29,15 @@ Use it for:
 
 ## Critical Rules
 
-| Rule | Requirement |
-|------|-------------|
-| Commit by work unit | A commit represents a deliverable behavior, fix, migration, or docs unit. |
-| Do not commit by file type | Avoid `models`, then `services`, then `tests` if none works alone. |
-| Keep tests with code | Tests belong in the same commit as the behavior they verify. |
-| Keep docs with the user-visible change | Docs belong with the feature or workflow they explain. |
-| Tell a story | A reviewer should understand why each commit exists from its diff and message. |
-| Future PR-ready | Each commit should be a candidate chained PR when the change grows. |
-| SDD workload guard | If SDD tasks forecast a >400-line change, group commits into chained PR slices before implementation. |
+| Rule                                   | Requirement                                                                                           |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Commit by work unit                    | A commit represents a deliverable behavior, fix, migration, or docs unit.                             |
+| Do not commit by file type             | Avoid `models`, then `services`, then `tests` if none works alone.                                    |
+| Keep tests with code                   | Tests belong in the same commit as the behavior they verify.                                          |
+| Keep docs with the user-visible change | Docs belong with the feature or workflow they explain.                                                |
+| Tell a story                           | A reviewer should understand why each commit exists from its diff and message.                        |
+| Future PR-ready                        | Each commit should be a candidate chained PR when the change grows.                                   |
+| SDD workload guard                     | If SDD tasks forecast a >400-line change, group commits into chained PR slices before implementation. |
 
 ## Work Unit Checklist
 
@@ -48,18 +48,19 @@ Before committing, confirm:
 - [ ] Tests or docs for this unit are included when relevant.
 - [ ] Rollback is reasonable without reverting unrelated work.
 - [ ] Focused test command and exact result are recorded.
-- [ ] Runtime harness command/scenario and exact result are recorded, or explicit `N/A` explains why no runtime boundary exists.
+- [ ] Runtime harness command/scenario and exact result are recorded, or explicit `N/A` explains why
+      no runtime boundary exists.
 - [ ] Rollback boundary names the exact files/behavior removable without unrelated work.
 - [ ] The commit message explains the outcome, not the file list.
 
 ## Split Examples
 
-| Weak split | Better work-unit split |
-|------------|------------------------|
-| `add models` | `feat(auth): add token validation domain model and tests` |
-| `add services` | `feat(auth): wire token validation into login flow` |
-| `add tests` | Tests included with each behavior commit |
-| `update docs` | Docs included with the user-facing change they explain |
+| Weak split     | Better work-unit split                                    |
+| -------------- | --------------------------------------------------------- |
+| `add models`   | `feat(auth): add token validation domain model and tests` |
+| `add services` | `feat(auth): wire token validation into login flow`       |
+| `add tests`    | Tests included with each behavior commit                  |
+| `update docs`  | Docs included with the user-facing change they explain    |
 
 ## PR Relationship
 
@@ -76,8 +77,12 @@ When `sdd-tasks` produces a Review Workload Forecast:
 
 - Low risk: keep work-unit commits inside one PR.
 - Medium risk: commit by work unit and monitor changed lines before PR creation.
-- High risk: follow SDD `delivery_strategy` — ask on `ask-on-risk`, auto-slice on `auto-chain`, require `size:exception` on over-budget `single-pr`, or record accepted `size:exception` on `exception-ok`.
-- Count authored additions plus deletions for the `>400` threshold. Exclude generated goldens from that authored count, but include every generated file in complete snapshot identity and receipt validation.
+- High risk: follow SDD `delivery_strategy` — ask on `ask-on-risk`, auto-slice on `auto-chain`,
+  require `size:exception` on over-budget `single-pr`, or record accepted `size:exception` on
+  `exception-ok`.
+- Count authored additions plus deletions for the `>400` threshold. Exclude generated goldens from
+  that authored count, but include every generated file in complete snapshot identity and receipt
+  validation.
 
 Each SDD work unit should map cleanly to a commit or PR with:
 
@@ -90,8 +95,10 @@ Its implementation evidence MUST include:
 
 - Focused test command and exact result.
 - Runtime harness command/scenario and exact result, or explicit `N/A` with reason.
-- Rollback boundary stated independently of commit creation; uncommitted work units still require it.
-- When fixing a bounded review ledger, group atomic work units inside the single correction transaction; work-unit count never creates another fix budget.
+- Rollback boundary stated independently of commit creation; uncommitted work units still require
+  it.
+- When fixing a bounded review ledger, group atomic work units inside the single correction
+  transaction; work-unit count never creates another fix budget.
 
 ## Commands
 

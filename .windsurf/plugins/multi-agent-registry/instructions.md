@@ -4,11 +4,10 @@
 
 ## Description
 
-
 ## Triggers
 
-
 ## Instructions
+
 # Multi-Agent Specialization Registry
 
 ## Activation Contract

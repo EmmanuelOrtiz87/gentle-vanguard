@@ -2,15 +2,15 @@
 
 ## When to Use Each
 
-| Context | Recommendation | Reason |
-|---|---|---|
-| Live presentation | Static chart | Audience doesn't interact anyway |
-| Email / PDF | Static + summary table | Reader can't click |
-| Board meeting | Static + printed backup | Focus on discussion |
-| Executive review | Static with drill-downs | PDF with appendix |
-| Data room / due diligence | Interactive dashboard | Investors want to explore |
-| Internal weekly report | Interactive preferred | Team needs to filter and slice |
-| Conference presentation | Static (high impact) | One message, perfectly framed |
+| Context                   | Recommendation          | Reason                           |
+| ------------------------- | ----------------------- | -------------------------------- |
+| Live presentation         | Static chart            | Audience doesn't interact anyway |
+| Email / PDF               | Static + summary table  | Reader can't click               |
+| Board meeting             | Static + printed backup | Focus on discussion              |
+| Executive review          | Static with drill-downs | PDF with appendix                |
+| Data room / due diligence | Interactive dashboard   | Investors want to explore        |
+| Internal weekly report    | Interactive preferred   | Team needs to filter and slice   |
+| Conference presentation   | Static (high impact)    | One message, perfectly framed    |
 
 ## Static Chart Best Practices
 

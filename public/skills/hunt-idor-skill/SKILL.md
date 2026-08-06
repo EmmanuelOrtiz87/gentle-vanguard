@@ -412,8 +412,10 @@ compositions on modern bug-bounty programs.
 - **C.** Iterate IDs (decoding base64 to extract numeric, incrementing) to exfil emails, order
   totals, payment methods across the entire customer base.
 - **Impact:** Mass cross-tenant PII / financial data extraction. Single bug, full database.
-- **Real shape:** Shopify Billing IDOR H1 #2207248 ($5,000); HackerOne PolicyPageAssetGroup IDOR H1
-  #1618347 ($25,000). Cross-refs `hunt-graphql` Disclosed Report Citation #5 and #2.
+- **Real shape:** Shopify Billing IDOR H1 #2207248
+  ($5,000); HackerOne PolicyPageAssetGroup IDOR H1
+  #1618347 ($25,000). Cross-refs `hunt-graphql`
+  Disclosed Report Citation #5 and #2.
 
 ### Chain 4 — IDOR on `/api/teams/{id}/members` + Mass-Assignment in Body → Role Escalation on Victim Team
 

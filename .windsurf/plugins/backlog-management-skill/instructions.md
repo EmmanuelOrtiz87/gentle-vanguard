@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 ## Purpose
 
 Standardize backlog intake, triage, and lifecycle management using structured JSON for automation

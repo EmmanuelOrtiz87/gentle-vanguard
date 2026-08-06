@@ -68,11 +68,7 @@
     "downloads": 221,
     "likes": 7,
     "gated": false,
-    "files": [
-      ".gitattributes",
-      "README.md",
-      "openassistant_oasst1.json"
-    ],
+    "files": [".gitattributes", "README.md", "openassistant_oasst1.json"],
     "total_files": 3
   },
   "OpenAssistant/oasst_top1_2023-08-25": {
@@ -99,11 +95,7 @@
     "downloads": 131,
     "likes": 13,
     "gated": false,
-    "files": [
-      ".gitattributes",
-      "README.md",
-      "data/train-00000-of-00001-cd5a0919d6737111.parquet"
-    ],
+    "files": [".gitattributes", "README.md", "data/train-00000-of-00001-cd5a0919d6737111.parquet"],
     "total_files": 3
   },
   "argilla/oasst_response_comparison": {
@@ -146,11 +138,7 @@
     "downloads": 49,
     "likes": 6,
     "gated": false,
-    "files": [
-      ".gitattributes",
-      "README.md",
-      "oasst_octopack.jsonl"
-    ],
+    "files": [".gitattributes", "README.md", "oasst_octopack.jsonl"],
     "total_files": 3
   },
   "tasksource/oasst1_pairwise_rlhf_reward": {
@@ -177,11 +165,7 @@
     "downloads": 9,
     "likes": 2,
     "gated": false,
-    "files": [
-      ".gitattributes",
-      "README.md",
-      "oasst1_en_conv.jsonl"
-    ],
+    "files": [".gitattributes", "README.md", "oasst1_en_conv.jsonl"],
     "total_files": 3
   },
   "laion/OASST2": {

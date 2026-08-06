@@ -1,6 +1,8 @@
 ---
 name: frontend-ui-engineering
-description: Build production-quality, accessible, responsive user interfaces. Implement layouts, components, manage state, meet WCAG requirements.
+description:
+  Build production-quality, accessible, responsive user interfaces. Implement layouts, components,
+  manage state, meet WCAG requirements.
 triggers:
   - frontend
   - ui
@@ -30,7 +32,8 @@ interaction patterns, and no generic "AI aesthetic."
 ## Core Principles
 
 - **Composition over configuration** — components should compose, not take props for everything
-- **Container/presentation separation** — data fetching lives in containers, rendering in presentational components
+- **Container/presentation separation** — data fetching lives in containers, rendering in
+  presentational components
 - **Simplest state first** — `useState` → lifted → context → URL → server state → global store
 - **Mobile-first responsive** — build for 320px, then expand to 768px, 1024px, 1440px
 - **WCAG 2.1 AA** — keyboard nav, ARIA labels, focus management, meaningful empty/error states
@@ -38,14 +41,14 @@ interaction patterns, and no generic "AI aesthetic."
 
 ## Reference Files
 
-| Topic                     | File                                                                      |
-| ------------------------- | ------------------------------------------------------------------------- |
-| Component Architecture    | [references/component-architecture.md](references/component-architecture.md) |
-| State Management          | [references/state-management.md](references/state-management.md)             |
-| Design System Adherence   | [references/design-system.md](references/design-system.md)                   |
-| Accessibility             | [references/accessibility.md](references/accessibility.md)                   |
-| Responsive & Loading      | [references/responsive-and-loading.md](references/responsive-and-loading.md) |
-| Quality Checks            | [references/quality-checks.md](references/quality-checks.md)                 |
+| Topic                   | File                                                                         |
+| ----------------------- | ---------------------------------------------------------------------------- |
+| Component Architecture  | [references/component-architecture.md](references/component-architecture.md) |
+| State Management        | [references/state-management.md](references/state-management.md)             |
+| Design System Adherence | [references/design-system.md](references/design-system.md)                   |
+| Accessibility           | [references/accessibility.md](references/accessibility.md)                   |
+| Responsive & Loading    | [references/responsive-and-loading.md](references/responsive-and-loading.md) |
+| Quality Checks          | [references/quality-checks.md](references/quality-checks.md)                 |
 
 ## Quick Reference: State Management Decision Ladder
 

@@ -17,7 +17,7 @@ test('finance-financial-analyst - SKILL.md exists', () => {
 
 test('finance-financial-analyst - has required sections', () => {
   const content = readFileSync(skillPath, 'utf-8');
-  
+
   const requiredSections = [
     '# finance-financial-analyst',
     '## Description',
@@ -25,9 +25,9 @@ test('finance-financial-analyst - has required sections', () => {
     '## Workflow',
     '## Output Format',
     '## Examples',
-    '## References'
+    '## References',
   ];
-  
+
   for (const section of requiredSections) {
     assert(content.includes(section), `Missing section: ${section}`);
   }
@@ -35,18 +35,20 @@ test('finance-financial-analyst - has required sections', () => {
 
 test('finance-financial-analyst - has financial metrics', () => {
   const content = readFileSync(skillPath, 'utf-8');
-  
+
   // Should include financial metrics
   const metrics = ['LTV', 'CAC', 'ROI', 'margin', 'revenue'];
-  const hasMetrics = metrics.some(m => content.includes(m));
+  const hasMetrics = metrics.some((m) => content.includes(m));
   assert(hasMetrics, 'Should include financial metrics (LTV, CAC, ROI, etc.)');
 });
 
 test('finance-financial-analyst - has calculation examples', () => {
   const content = readFileSync(skillPath, 'utf-8');
-  
-  assert(content.includes('### Unit Economics Model') || content.includes('### Pricing Scenario'), 
-    'Must include financial modeling examples');
+
+  assert(
+    content.includes('### Unit Economics Model') || content.includes('### Pricing Scenario'),
+    'Must include financial modeling examples',
+  );
   assert(content.includes('=') || content.includes('$'), 'Examples should include calculations');
 });
 

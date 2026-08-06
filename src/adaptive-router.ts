@@ -165,8 +165,14 @@ function loadJsonLines(path: string): Record<string, unknown>[] {
     if (!existsSync(path)) return [];
     return readFileSync(path, 'utf-8')
       .split('\n')
-      .filter(l => l.trim())
-      .map(l => { try { return JSON.parse(l) as Record<string, unknown>; } catch { return null; } })
+      .filter((l) => l.trim())
+      .map((l) => {
+        try {
+          return JSON.parse(l) as Record<string, unknown>;
+        } catch {
+          return null;
+        }
+      })
       .filter(Boolean) as Record<string, unknown>[];
   } catch {
     return [];
@@ -178,7 +184,9 @@ interface Logger {
 }
 
 function getLogger(quiet: boolean): Logger {
-  return (msg: string) => { if (!quiet) console.log(msg); };
+  return (msg: string) => {
+    if (!quiet) console.log(msg);
+  };
 }
 
 function ensureDir(p: string): void {
@@ -200,7 +208,7 @@ function collectSkillUsage(log: Logger): SkillMetric[] {
     log('  Skill usage dir not found');
     return [];
   }
-  const files = readdirSync(SKILL_USAGE_DIR).filter(f => f.endsWith('.json'));
+  const files = readdirSync(SKILL_USAGE_DIR).filter((f) => f.endsWith('.json'));
   const metrics: SkillMetric[] = [];
   for (const f of files) {
     const m = loadJson<SkillMetric>(join(SKILL_USAGE_DIR, f), null as unknown as SkillMetric);
@@ -212,7 +220,7 @@ function collectSkillUsage(log: Logger): SkillMetric[] {
 
 function collectDelegations(log: Logger): DelegationRecord[] {
   const metrics = loadJson<Record<string, unknown>>(METRICS_FILE, {});
-  const agents = metrics.agents as Record<string, unknown> || {};
+  const agents = (metrics.agents as Record<string, unknown>) || {};
   const delegations: DelegationRecord[] = [];
 
   for (const [agentId, data] of Object.entries(agents)) {
@@ -235,7 +243,7 @@ function collectDelegations(log: Logger): DelegationRecord[] {
   }
 
   // Try to extract per-domain from summary
-  const summary = metrics.summary as Record<string, unknown> || {};
+  const summary = (metrics.summary as Record<string, unknown>) || {};
   const totalDelegations = (summary.total_delegations as number) || 0;
   log(`  Delegation records: ${delegations.length} (total: ${totalDelegations})`);
   return delegations;
@@ -243,7 +251,7 @@ function collectDelegations(log: Logger): DelegationRecord[] {
 
 function collectCorrections(log: Logger): CorrectionEntry[] {
   const entries = loadJsonLines(CORRECTIONS_LOG);
-  const corrections: CorrectionEntry[] = entries.map(e => ({
+  const corrections: CorrectionEntry[] = entries.map((e) => ({
     timestamp: (e.timestamp as string) || '',
     action: (e.action as string) || '',
     target: (e.target as string) || undefined,
@@ -257,12 +265,12 @@ function collectCorrections(log: Logger): CorrectionEntry[] {
 function collectReflections(): Array<Record<string, unknown>> {
   if (!existsSync(REFLECTIONS_DIR)) return [];
   return readdirSync(REFLECTIONS_DIR)
-    .filter(f => f.startsWith('reflection-') && f.endsWith('.json'))
+    .filter((f) => f.startsWith('reflection-') && f.endsWith('.json'))
     .sort()
     .reverse()
     .slice(0, 10)
-    .map(f => loadJson<Record<string, unknown>>(join(REFLECTIONS_DIR, f), {}))
-    .filter(r => Object.keys(r).length > 0);
+    .map((f) => loadJson<Record<string, unknown>>(join(REFLECTIONS_DIR, f), {}))
+    .filter((r) => Object.keys(r).length > 0);
 }
 
 function collectKnowledgeConcepts(log: Logger): Array<Record<string, unknown>> {
@@ -271,7 +279,7 @@ function collectKnowledgeConcepts(log: Logger): Array<Record<string, unknown>> {
     return [];
   }
   const files = readdirSync(KNOWLEDGE_DIR)
-    .filter(f => f.startsWith('synthesis-') && f.endsWith('.json'))
+    .filter((f) => f.startsWith('synthesis-') && f.endsWith('.json'))
     .sort()
     .reverse()
     .slice(0, 5);
@@ -279,7 +287,7 @@ function collectKnowledgeConcepts(log: Logger): Array<Record<string, unknown>> {
   const concepts: Array<Record<string, unknown>> = [];
   for (const f of files) {
     const synth = loadJson<Record<string, unknown>>(join(KNOWLEDGE_DIR, f), {});
-    const synthConcepts = synth.concepts as Array<Record<string, unknown>> || [];
+    const synthConcepts = (synth.concepts as Array<Record<string, unknown>>) || [];
     concepts.push(...synthConcepts);
   }
   log(`  Knowledge concepts: ${concepts.length}`);
@@ -298,7 +306,28 @@ function collectStaticRouterSkills(): string[] {
   let m: RegExpExecArray | null;
   while ((m = re.exec(content)) !== null) {
     const skill = m[1];
-    if (skill.length > 2 && !['query', 'project', 'status', 'routed', 'skills', 'querylower', 'angul', 'react', 'docker', 'security', 'typescript', 'database', 'documentation', 'architecture', 'session', 'automation', 'gentle'].includes(skill)) {
+    if (
+      skill.length > 2 &&
+      ![
+        'query',
+        'project',
+        'status',
+        'routed',
+        'skills',
+        'querylower',
+        'angul',
+        'react',
+        'docker',
+        'security',
+        'typescript',
+        'database',
+        'documentation',
+        'architecture',
+        'session',
+        'automation',
+        'gentle',
+      ].includes(skill)
+    ) {
       skills.add(skill);
     }
   }
@@ -337,7 +366,7 @@ function computeAgentPerformance(
 
     existing.totalDelegations += sm.useCount || 0;
     existing.successes += Math.round((sm.successRate || 0) * (sm.useCount || 0));
-    existing.failures += (sm.failureCount || 0);
+    existing.failures += sm.failureCount || 0;
     existing.avgDuration = (existing.avgDuration + (sm.avgTokensUsed || 0)) / 2;
     existing.lastEvent = existing.lastEvent || sm.lastOutcome || null;
     agentMap.set(agentId, existing);
@@ -361,9 +390,8 @@ function computeAgentPerformance(
     existing.totalDelegations++;
     if (d.success) existing.successes++;
     else existing.failures++;
-    existing.avgDuration = existing.avgDuration === 0
-      ? d.duration
-      : (existing.avgDuration + d.duration) / 2;
+    existing.avgDuration =
+      existing.avgDuration === 0 ? d.duration : (existing.avgDuration + d.duration) / 2;
     if (d.timestamp && (!existing.lastEvent || d.timestamp > existing.lastEvent)) {
       existing.lastEvent = d.timestamp;
     }
@@ -403,7 +431,10 @@ function computeAgentPerformance(
   agents.sort((a, b) => b.successRate - a.successRate);
 
   // Build domain entries
-  const domainMap = new Map<string, { agents: Array<{ agentId: string; successRate: number }>; totalAttempts: number }>();
+  const domainMap = new Map<
+    string,
+    { agents: Array<{ agentId: string; successRate: number }>; totalAttempts: number }
+  >();
 
   for (const agent of agents) {
     const domain = agent.domain || 'general';
@@ -416,7 +447,7 @@ function computeAgentPerformance(
   // Add general domain if no specific domains exist
   if (domainMap.size === 0) {
     domainMap.set('general', {
-      agents: agents.map(a => ({ agentId: a.agentId, successRate: a.successRate })),
+      agents: agents.map((a) => ({ agentId: a.agentId, successRate: a.successRate })),
       totalAttempts: agents.reduce((s, a) => s + a.totalDelegations, 0),
     });
   }
@@ -460,7 +491,7 @@ function buildOverrides(
   const maxOverrides = config.maxOverrides;
 
   // Remove expired overrides
-  const validExisting = overrides.filter(o => !o.expiresAt || o.expiresAt > now_);
+  const validExisting = overrides.filter((o) => !o.expiresAt || o.expiresAt > now_);
 
   // Generate new overrides from high-confidence domain entries
   for (const entry of domainEntries) {
@@ -468,8 +499,8 @@ function buildOverrides(
     if (entry.confidence < threshold) continue;
 
     // Check if an override already exists for this domain
-    const alreadyExists = validExisting.some(o =>
-      o.domainPattern.toLowerCase() === entry.domain.toLowerCase(),
+    const alreadyExists = validExisting.some(
+      (o) => o.domainPattern.toLowerCase() === entry.domain.toLowerCase(),
     );
     if (alreadyExists) continue;
 
@@ -488,10 +519,7 @@ function buildOverrides(
 
 // ─── Routing Table ────────────────────────────────────────────────────
 
-function buildRoutingTable(
-  config: typeof DEFAULT_CONFIG,
-  log: Logger,
-): RoutingTable {
+function buildRoutingTable(config: typeof DEFAULT_CONFIG, log: Logger): RoutingTable {
   const now_ = now();
 
   // 1. Collect data
@@ -507,7 +535,13 @@ function buildRoutingTable(
   // 2. Compute performance
   log('Computing agent performance...');
   const { agentPerformance, domainEntries } = computeAgentPerformance(
-    skillMetrics, delegations, corrections, reflections, knowledgeConcepts, routerSkills, config,
+    skillMetrics,
+    delegations,
+    corrections,
+    reflections,
+    knowledgeConcepts,
+    routerSkills,
+    config,
   );
   log(`  Agents scored: ${agentPerformance.length}, Domains mapped: ${domainEntries.length}`);
 
@@ -531,9 +565,12 @@ function buildRoutingTable(
       totalAgents: agentPerformance.length,
       totalDomains: domainEntries.length,
       totalOverrides: overrides.length,
-      overallConfidence: domainEntries.length > 0
-        ? Math.round(domainEntries.reduce((s, d) => s + d.confidence, 0) / domainEntries.length * 100) / 100
-        : 0,
+      overallConfidence:
+        domainEntries.length > 0
+          ? Math.round(
+              (domainEntries.reduce((s, d) => s + d.confidence, 0) / domainEntries.length) * 100,
+            ) / 100
+          : 0,
     },
   };
 
@@ -556,7 +593,9 @@ function formatStatus(table: RoutingTable): string {
     lines.push('── Domain Routing Table ──');
     for (const d of table.domainEntries.slice(0, 10)) {
       const icon = d.confidence >= 0.8 ? '✅' : d.confidence >= 0.5 ? '🟡' : '🟢';
-      lines.push(`  ${icon} ${d.domain} → ${d.bestAgent} (${(d.avgSuccessRate * 100).toFixed(0)}% success, ${d.totalAttempts} attempts, conf: ${(d.confidence * 100).toFixed(0)}%)`);
+      lines.push(
+        `  ${icon} ${d.domain} → ${d.bestAgent} (${(d.avgSuccessRate * 100).toFixed(0)}% success, ${d.totalAttempts} attempts, conf: ${(d.confidence * 100).toFixed(0)}%)`,
+      );
     }
     lines.push('');
   }
@@ -564,7 +603,9 @@ function formatStatus(table: RoutingTable): string {
   if (table.overrides.length > 0) {
     lines.push('── Active Overrides ──');
     for (const o of table.overrides) {
-      lines.push(`  🔄 ${o.domainPattern} → ${o.targetAgent} (conf: ${(o.confidence * 100).toFixed(0)}%)`);
+      lines.push(
+        `  🔄 ${o.domainPattern} → ${o.targetAgent} (conf: ${(o.confidence * 100).toFixed(0)}%)`,
+      );
       lines.push(`     ${o.reason}`);
     }
     lines.push('');
@@ -572,9 +613,13 @@ function formatStatus(table: RoutingTable): string {
 
   if (table.agentPerformance.length > 0) {
     lines.push('── Agent Performance ──');
-    const topAgents = [...table.agentPerformance].sort((a, b) => b.successRate - a.successRate).slice(0, 10);
+    const topAgents = [...table.agentPerformance]
+      .sort((a, b) => b.successRate - a.successRate)
+      .slice(0, 10);
     for (const a of topAgents) {
-      lines.push(`  ${a.agentId}: ${(a.successRate * 100).toFixed(0)}% success (${a.totalDelegations} calls, ${a.corrections} corrections, conf: ${(a.confidence * 100).toFixed(0)}%)`);
+      lines.push(
+        `  ${a.agentId}: ${(a.successRate * 100).toFixed(0)}% success (${a.totalDelegations} calls, ${a.corrections} corrections, conf: ${(a.confidence * 100).toFixed(0)}%)`,
+      );
     }
   }
 
@@ -625,7 +670,14 @@ function main(): void {
     if (!args.dryRun) {
       writeFileSync(ROUTING_TABLE_FILE, JSON.stringify(defaultTable, null, 2), 'utf-8');
       // SQLite dual-write: clear routing rules
-      try { const mgr = getDb(); if (mgr) { /* routing_rules table cleared on next upsert */ } } catch { /* */ }
+      try {
+        const mgr = getDb();
+        if (mgr) {
+          /* routing_rules table cleared on next upsert */
+        }
+      } catch {
+        /* */
+      }
     }
     log('[OK] Routing table reset to defaults');
     if (!args.quiet) console.log(JSON.stringify(defaultTable.summary));
@@ -638,7 +690,9 @@ function main(): void {
 
     if (!args.dryRun) {
       writeFileSync(ROUTING_TABLE_FILE, JSON.stringify(table, null, 2), 'utf-8');
-      log(`[OK] Routing table saved: ${table.summary.totalAgents} agents, ${table.summary.totalDomains} domains, ${table.summary.totalOverrides} overrides`);
+      log(
+        `[OK] Routing table saved: ${table.summary.totalAgents} agents, ${table.summary.totalDomains} domains, ${table.summary.totalOverrides} overrides`,
+      );
 
       // SQLite dual-write: upsert each domain entry as a routing rule
       try {
@@ -664,12 +718,14 @@ function main(): void {
     }
 
     if (!args.quiet) {
-      console.log(JSON.stringify({
-        agents: table.summary.totalAgents,
-        domains: table.summary.totalDomains,
-        overrides: table.summary.totalOverrides,
-        confidence: table.summary.overallConfidence,
-      }));
+      console.log(
+        JSON.stringify({
+          agents: table.summary.totalAgents,
+          domains: table.summary.totalDomains,
+          overrides: table.summary.totalOverrides,
+          confidence: table.summary.overallConfidence,
+        }),
+      );
     }
     return;
   }

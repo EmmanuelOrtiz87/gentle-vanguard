@@ -12,7 +12,10 @@ const ROOT = resolve(import.meta.dirname, '..', '..');
 describe('Auto-Delegation Router', () => {
   it('adaptive-router.ts --status runs successfully', () => {
     const result = spawnSync('npx', ['tsx', 'src/adaptive-router.ts', '--status'], {
-      cwd: ROOT, encoding: 'utf-8', timeout: 15000, shell: true
+      cwd: ROOT,
+      encoding: 'utf-8',
+      timeout: 15000,
+      shell: true,
     });
     assert.ok(result.stdout.length > 0 || result.stderr.length > 0, 'Expected some output');
   });

@@ -3,17 +3,20 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # OODA Loop
 
 ## Overview
 
-The OODA Loop (Observe, Orient, Decide, Act), developed by Colonel John Boyd, is a framework for rapid decision-making in dynamic situations. **Agility beats perfection** — cycle through OODA faster than the situation changes.
+The OODA Loop (Observe, Orient, Decide, Act), developed by Colonel John Boyd, is a framework for
+rapid decision-making in dynamic situations. **Agility beats perfection** — cycle through OODA
+faster than the situation changes.
 
 ## When to Use
 
@@ -40,9 +43,11 @@ See `references/examples.md` for an incident walkthrough.
 
 ### 2. ORIENT — Make sense of observations
 
-Orientation factors (Boyd's framework): cultural traditions, genetic heritage, previous experience, new information, analysis/synthesis
+Orientation factors (Boyd's framework): cultural traditions, genetic heritage, previous experience,
+new information, analysis/synthesis
 
-**This is the CRITICAL phase** — mental models apply here. Misorientation leads to wrong decisions. Challenge your initial framing.
+**This is the CRITICAL phase** — mental models apply here. Misorientation leads to wrong decisions.
+Challenge your initial framing.
 
 ### 3. DECIDE — Select course of action
 
@@ -61,11 +66,14 @@ Orientation factors (Boyd's framework): cultural traditions, genetic heritage, p
 
 ## OODA Loop Speed
 
-Operating faster than the situation (or opponent) creates advantage: your actions change the situation before they decide, keeping you ahead. See `references/reference-tables.md` for speed multipliers and killers.
+Operating faster than the situation (or opponent) creates advantage: your actions change the
+situation before they decide, keeping you ahead. See `references/reference-tables.md` for speed
+multipliers and killers.
 
 ## Application Patterns
 
 See `references/application-patterns.md` for full walkthroughs of:
+
 - Incident Response
 - Competitive Response
 - Debugging Under Pressure
@@ -73,13 +81,13 @@ See `references/application-patterns.md` for full walkthroughs of:
 
 ## Common Failure Modes
 
-| Failure | Symptom | Fix |
-| ------- | ------- | --- |
-| Observation overload | Can't process all data | Filter to key indicators |
-| Orientation lock | Stuck on one hypothesis | Force alternative framing |
-| Decision paralysis | Waiting for certainty | Set decision deadline |
-| Action without observation | Blind execution | Mandate observe after act |
-| Single loop | Not cycling | Time-box each phase |
+| Failure                    | Symptom                 | Fix                       |
+| -------------------------- | ----------------------- | ------------------------- |
+| Observation overload       | Can't process all data  | Filter to key indicators  |
+| Orientation lock           | Stuck on one hypothesis | Force alternative framing |
+| Decision paralysis         | Waiting for certainty   | Set decision deadline     |
+| Action without observation | Blind execution         | Mandate observe after act |
+| Single loop                | Not cycling             | Time-box each phase       |
 
 ## Verification Checklist
 

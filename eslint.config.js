@@ -5,7 +5,16 @@ import securityPlugin from 'eslint-plugin-security';
 
 export default [
   {
-    ignores: ['dist/**', 'node_modules/**', 'coverage/**', 'templates/**', 'apps/web-dashboard/dist/**', '*.js', 'src/v5.0-Convergence/**', 'src/convergence/**'],
+    ignores: [
+      'dist/**',
+      'node_modules/**',
+      'coverage/**',
+      'templates/**',
+      'apps/web-dashboard/dist/**',
+      '*.js',
+      'src/v5.0-Convergence/**',
+      'src/convergence/**',
+    ],
   },
   {
     files: ['src/**/*.ts', 'scripts/**/*.ts'],
@@ -19,14 +28,14 @@ export default [
     },
     plugins: {
       '@typescript-eslint': tsPlugin,
-      'security': securityPlugin,
+      security: securityPlugin,
     },
     rules: {
       // ESLint recommended
       'no-console': 'off',
       'prefer-const': 'error',
       'no-var': 'error',
-      'eqeqeq': ['error', 'always'],
+      eqeqeq: ['error', 'always'],
       // TS recommended
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-explicit-any': 'off',

@@ -6,7 +6,7 @@
     "auditor": "GOV Agent",
     "scope": "Normatives, Configuration, Compliance, Security Governance"
   },
-  
+
   "executive_summary": {
     "total_normatives": 60,
     "total_configs": 112,
@@ -76,7 +76,7 @@
         "status": "MINIMAL_CONTENT"
       }
     },
-    
+
     "auto_enforced": [
       {
         "id": "pre-commit-normative-audit",
@@ -147,7 +147,7 @@
         "note": "Script referenced but file does not exist"
       }
     ],
-    
+
     "manual_enforced": [
       {
         "id": "README-governance",
@@ -174,7 +174,7 @@
         "status": "ACTIVE"
       }
     ],
-    
+
     "outdated": [
       {
         "file": "rules/NORMATIVAS-SECURITY-COMPLIANCE.md",
@@ -208,7 +208,7 @@
         "status": "OUTDATED"
       }
     ],
-    
+
     "missing_normatives": [
       "NORMATIVAS-ENFORCEMENT.md (referenced but missing)",
       "NORMATIVAS-CONFIG.md (referenced but missing)",
@@ -242,9 +242,7 @@
       "without_schema": 111,
       "coverage_percentage": "0.9%"
     },
-    "schemas_available": [
-      "config/timeout-config.schema.json (1 of 112 configs)"
-    ],
+    "schemas_available": ["config/timeout-config.schema.json (1 of 112 configs)"],
     "config_owners": {
       "system_configs": "Owner",
       "security_configs": "Owner",
@@ -360,17 +358,8 @@
       }
     ],
     "security_check_automation": {
-      "pre_commit": [
-        "secretlint",
-        "trufflehog-scan",
-        "skill-scan"
-      ],
-      "pre_push": [
-        "npm-audit",
-        "audit-check",
-        "typecheck",
-        "lint"
-      ],
+      "pre_commit": ["secretlint", "trufflehog-scan", "skill-scan"],
+      "pre_push": ["npm-audit", "audit-check", "typecheck", "lint"],
       "ci_cd": [
         "security-scan.yml - Gitleaks",
         "reusable-security.yml - Gitleaks + Secretlint + Trivy",

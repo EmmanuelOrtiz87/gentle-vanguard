@@ -1,16 +1,16 @@
 # NORMATIVAS-ENFORCEMENT.md — Sistema de Enforcement Automático
 
-> **Propósito**: Define cómo las normativas del stack Gentle-Vanguard son **validadas y aplicadas** automáticamente.
-> **Estado**: ACTIVO (v2.0)
+> **Propósito**: Define cómo las normativas del stack Gentle-Vanguard son **validadas y aplicadas**
+> automáticamente. **Estado**: ACTIVO (v2.0)
 
 ## Niveles de Enforcement
 
-| Nivel | Tag | Acción | Ejemplo |
-|-------|-----|--------|---------|
-| **🔴 BLOQUEANTE** | `[BLOCK]` | Detiene pipeline/commit | Violación de seguridad, schema inválido |
-| **🟡 WARNING** | `[WARN]` | Alerta sin bloquear | Norma de estilo, optimización sugerida |
-| **🟢 ADVISORY** | `[ADV]` | Recomendación | Mejora sugerida, refactor opcional |
-| **🤖 AUTO-CORRECT** | `[AUTO]` | Corrige automáticamente | Formato JSON, hash desactualizado |
+| Nivel               | Tag       | Acción                  | Ejemplo                                 |
+| ------------------- | --------- | ----------------------- | --------------------------------------- |
+| **🔴 BLOQUEANTE**   | `[BLOCK]` | Detiene pipeline/commit | Violación de seguridad, schema inválido |
+| **🟡 WARNING**      | `[WARN]`  | Alerta sin bloquear     | Norma de estilo, optimización sugerida  |
+| **🟢 ADVISORY**     | `[ADV]`   | Recomendación           | Mejora sugerida, refactor opcional      |
+| **🤖 AUTO-CORRECT** | `[AUTO]`  | Corrige automáticamente | Formato JSON, hash desactualizado       |
 
 ## Automatización
 
@@ -40,38 +40,43 @@
 
 ### Gatillos de Enforcement
 
-| Gatillo | Herramienta | Nivel |
-|---------|-------------|-------|
-| `git commit` | lefthook-hooks | 🔴 BLOQUEANTE |
-| `session-start` | security-orchestrator | 🔴 BLOQUEANTE |
-| `pre-process-input` | input-validator | 🟡 WARNING |
-| Cada 30s (background) | maintenance-watchtower | 🟡 WARNING |
-| Post-sesión | auto-norm-learner | 🟢 ADVISORY |
-| Auto-detección | auto-apply-safe (confianza >80%) | 🤖 AUTO-CORRECT |
+| Gatillo               | Herramienta                      | Nivel           |
+| --------------------- | -------------------------------- | --------------- |
+| `git commit`          | lefthook-hooks                   | 🔴 BLOQUEANTE   |
+| `session-start`       | security-orchestrator            | 🔴 BLOQUEANTE   |
+| `pre-process-input`   | input-validator                  | 🟡 WARNING      |
+| Cada 30s (background) | maintenance-watchtower           | 🟡 WARNING      |
+| Post-sesión           | auto-norm-learner                | 🟢 ADVISORY     |
+| Auto-detección        | auto-apply-safe (confianza >80%) | 🤖 AUTO-CORRECT |
 
 ## Reglas de Enforcement por Componente
 
 ### 1. Configs (`config/*.json`)
+
 - **[BLOCK]** Schema inválido → rechazar
 - **[AUTO]** Hash/cache desactualizada → regenerar automáticamente
 - **[WARN]** Config drift detectado → notificar
 
 ### 2. Normativas (`rules/`, `docs/governance/`)
+
 - **[BLOCK]** Normativa requerida faltante → error en CI
 - **[WARN]** Normativa desactualizada (última revisión >90 días) → notificar
 - **[AUTO]** LEARNED-NORMS.md desactualizada → regenerar
 
 ### 3. Skills (`.opencode/skills/`)
+
 - **[WARN]** Skill sin uso en 30 días → sugerir archive
 - **[AUTO]** Skill sin uso en 60 días → archivar automáticamente
 - **[AUTO]** Skill sin SKILL.md → marcar como incompleto
 
 ### 4. Seguridad
+
 - **[BLOCK]** Secret detectado → detener commit
 - **[BLOCK]** Vulnerability crítica → bloquear PR
 - **[WARN]** Dependencia desactualizada → alertar
 
 ### 5. Sesiones
+
 - **[WARN]** Sesión activa >8 horas → sugerir cleanup
 - **[AUTO]** Sesión huérfana >24 horas → cerrar automáticamente
 - **[WARN]** Token budget excedido 90% → alertar
@@ -85,9 +90,9 @@ interface CorrectionRule {
   id: string;
   name: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
-  trigger: string;          // patrón o condición
-  autoFix: boolean;         // ¿se puede aplicar automáticamente?
-  fixScript: string;        // script/función de corrección
+  trigger: string; // patrón o condición
+  autoFix: boolean; // ¿se puede aplicar automáticamente?
+  fixScript: string; // script/función de corrección
   requiresApproval: boolean; // necesita aprobación humana
   maxRetries: number;
 }
@@ -95,14 +100,14 @@ interface CorrectionRule {
 
 ### Reglas Activas
 
-| Regla | Trigger | Auto | Acción |
-|-------|---------|------|--------|
-| `config-drift` | session-start | ✅ | Re-sincronizar configs |
-| `orphan-session` | session-start | ✅ | Cerrar sesiones huérfanas |
-| `stale-checkpoint` | session-start | ✅ | Prune checkpoints >14 días |
-| `wal-size` | watchtower (30s) | ✅ | Checkpoint WAL si >1MB |
-| `token-budget-exceeded` | session-start | ❌ | Alertar solo |
-| `skill-unused-archive` | post-session | ✅ | Archivar skills sin uso |
+| Regla                   | Trigger          | Auto | Acción                     |
+| ----------------------- | ---------------- | ---- | -------------------------- |
+| `config-drift`          | session-start    | ✅   | Re-sincronizar configs     |
+| `orphan-session`        | session-start    | ✅   | Cerrar sesiones huérfanas  |
+| `stale-checkpoint`      | session-start    | ✅   | Prune checkpoints >14 días |
+| `wal-size`              | watchtower (30s) | ✅   | Checkpoint WAL si >1MB     |
+| `token-budget-exceeded` | session-start    | ❌   | Alertar solo               |
+| `skill-unused-archive`  | post-session     | ✅   | Archivar skills sin uso    |
 
 ## Escalation Path
 
@@ -115,12 +120,12 @@ interface CorrectionRule {
 
 ## Métricas de Enforcement
 
-| Métrica | Tracking | Threshold |
-|---------|----------|-----------|
-| Tasa de auto-corrección exitosa | auto-apply-safe | >90% |
-| Tiempo medio de detección | watchtower | <30s |
-| Falsos positivos | action-log | <5% |
-| Compliance score | governance | >95% |
+| Métrica                         | Tracking        | Threshold |
+| ------------------------------- | --------------- | --------- |
+| Tasa de auto-corrección exitosa | auto-apply-safe | >90%      |
+| Tiempo medio de detección       | watchtower      | <30s      |
+| Falsos positivos                | action-log      | <5%       |
+| Compliance score                | governance      | >95%      |
 
 ## Integración CI/CD
 

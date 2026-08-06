@@ -59,14 +59,20 @@ function main(): number {
   // PS1 fallback
   const validateScript = join(repoRoot, 'scripts', 'utilities', 'validate', 'validate-readme.ps1');
   if (!existsSync(validateScript)) {
-    console.log('[WARN] validate-readme not found (neither TS nor PS1) - skipping governance check');
+    console.log(
+      '[WARN] validate-readme not found (neither TS nor PS1) - skipping governance check',
+    );
     return 0;
   }
 
-  const result = runSync('pwsh', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', validateScript, '-Repo', 'both'], {
-    stdio: 'inherit',
-    cwd: repoRoot,
-  });
+  const result = runSync(
+    'pwsh',
+    ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', validateScript, '-Repo', 'both'],
+    {
+      stdio: 'inherit',
+      cwd: repoRoot,
+    },
+  );
 
   const exitCode = result.status ?? 0;
 

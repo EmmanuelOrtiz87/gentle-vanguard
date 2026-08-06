@@ -49,10 +49,10 @@ function isValidJson(filePath: string): boolean {
 
 function scanConfigs(): ConfigEntry[] {
   if (!existsSync(CONFIG_DIR)) return [];
-  
+
   return readdirSync(CONFIG_DIR)
-    .filter(f => extname(f) === '.json')
-    .map(f => {
+    .filter((f) => extname(f) === '.json')
+    .map((f) => {
       const fullPath = join(CONFIG_DIR, f);
       const stat = statSync(fullPath);
       return {
@@ -68,7 +68,9 @@ function scanConfigs(): ConfigEntry[] {
 function loadBaseline(): ConfigEntry[] {
   try {
     if (existsSync(BASELINE_FILE)) return JSON.parse(readFileSync(BASELINE_FILE, 'utf-8'));
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return [];
 }
 
@@ -79,69 +81,83 @@ function saveBaseline(entries: ConfigEntry[]): void {
 
 function computeDiff(current: ConfigEntry[], baseline: ConfigEntry[]): DiffEntry[] {
   const diffs: DiffEntry[] = [];
-  const baselineMap = new Map(baseline.map(e => [e.file, e]));
-  
+  const baselineMap = new Map(baseline.map((e) => [e.file, e]));
+
   for (const entry of current) {
     const base = baselineMap.get(entry.file);
     if (!base) {
       diffs.push({ file: entry.file, type: 'added', newHash: entry.hash, newSize: entry.size });
     } else if (base.hash !== entry.hash) {
-      diffs.push({ 
-        file: entry.file, type: 'modified', 
-        oldHash: base.hash, newHash: entry.hash,
-        oldSize: base.size, newSize: entry.size,
+      diffs.push({
+        file: entry.file,
+        type: 'modified',
+        oldHash: base.hash,
+        newHash: entry.hash,
+        oldSize: base.size,
+        newSize: entry.size,
       });
     } else {
       diffs.push({ file: entry.file, type: 'unchanged' });
     }
     baselineMap.delete(entry.file);
   }
-  
+
   for (const [file] of baselineMap) {
     diffs.push({ file, type: 'removed' });
   }
-  
+
   return diffs;
 }
 
 function main(): void {
   const args = process.argv.slice(2);
-  const action = args.includes('--scan') ? 'scan' 
-    : args.includes('--report') ? 'report' 
-    : args.includes('--diff') ? 'diff' : 'scan';
-  
+  const action = args.includes('--scan')
+    ? 'scan'
+    : args.includes('--report')
+      ? 'report'
+      : args.includes('--diff')
+        ? 'diff'
+        : 'scan';
+
   const current = scanConfigs();
   const baseline = loadBaseline();
-  
+
   if (action === 'scan') {
     saveBaseline(current);
-    console.log(JSON.stringify({
-      action: 'scan',
-      configsFound: current.length,
-      validCount: current.filter(c => c.valid).length,
-      invalidCount: current.filter(c => !c.valid).length,
-      baselineSaved: true,
-    }));
+    console.log(
+      JSON.stringify({
+        action: 'scan',
+        configsFound: current.length,
+        validCount: current.filter((c) => c.valid).length,
+        invalidCount: current.filter((c) => !c.valid).length,
+        baselineSaved: true,
+      }),
+    );
   } else if (action === 'diff') {
     const diffs = computeDiff(current, baseline);
-    const changed = diffs.filter(d => d.type !== 'unchanged');
-    console.log(JSON.stringify({
-      action: 'diff',
-      total: diffs.length,
-      unchanged: diffs.filter(d => d.type === 'unchanged').length,
-      added: diffs.filter(d => d.type === 'added').length,
-      removed: diffs.filter(d => d.type === 'removed').length,
-      modified: diffs.filter(d => d.type === 'modified').length,
-      changes: changed,
-    }));
+    const changed = diffs.filter((d) => d.type !== 'unchanged');
+    console.log(
+      JSON.stringify({
+        action: 'diff',
+        total: diffs.length,
+        unchanged: diffs.filter((d) => d.type === 'unchanged').length,
+        added: diffs.filter((d) => d.type === 'added').length,
+        removed: diffs.filter((d) => d.type === 'removed').length,
+        modified: diffs.filter((d) => d.type === 'modified').length,
+        changes: changed,
+      }),
+    );
   } else if (action === 'report') {
-    console.log(JSON.stringify({
-      action: 'report',
-      configs: current,
-      validRate: current.length > 0 
-        ? Math.round((current.filter(c => c.valid).length / current.length) * 100) 
-        : 0,
-    }));
+    console.log(
+      JSON.stringify({
+        action: 'report',
+        configs: current,
+        validRate:
+          current.length > 0
+            ? Math.round((current.filter((c) => c.valid).length / current.length) * 100)
+            : 0,
+      }),
+    );
   }
 }
 

@@ -10,6 +10,7 @@ One PR may involve several related decisions:
 **Status**: Accepted
 
 ## This ADR covers three decisions:
+
 1. Extract order management from the monolith
 2. Use event-driven communication between order and inventory services
 3. Adopt PostgreSQL for the order service database
@@ -23,20 +24,24 @@ One PR may involve several related decisions:
 # Architecture Review Board Charter
 
 ## Purpose
+
 Ensure architectural consistency and quality across all products.
 
 ## Composition
+
 - 1 Staff Engineer (permanent)
 - 2 Senior Engineers (rotating, 6-month term)
 - 1 Product Manager (non-voting)
 
 ## When to Escalate
+
 - Cross-team architectural decisions
 - Technology stack additions
 - Major refactoring or migrations
 - Decisions with significant cost implications
 
 ## Process
+
 1. Author drafts ADR → send to ARB
 2. ARB reviews within 1 week
 3. ARB meeting to discuss (if needed)
@@ -89,9 +94,11 @@ order_id = uuid.uuid4()
 # ADR-010: Authentication Architecture
 
 ## Status
+
 Accepted (Updated 2024-03-01)
 
 ## Changelog
+
 | Date       | Change                                                   | Author |
 | ---------- | -------------------------------------------------------- | ------ |
 | 2024-01-15 | Initial draft                                            | Alice  |
@@ -103,6 +110,7 @@ Accepted (Updated 2024-03-01)
 ## ADR Tools
 
 ### adr-tools (CLI)
+
 ```bash
 brew install adr-tools
 adr new Use PostgreSQL for analytics store
@@ -112,6 +120,7 @@ adr link 0001 "Amends" 0003
 ```
 
 ### Log4brains (modern ADR manager with UI)
+
 ```bash
 npm install -g @log4brains/cli
 log4brains init

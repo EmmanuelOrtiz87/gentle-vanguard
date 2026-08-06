@@ -11,22 +11,22 @@ verification. In the current environment the native available model is
 
 ## Phase-to-Model Mapping
 
-| Phase        | Cognitive Demand                               | Recommended Model                     | Rationale                                        |
-| ------------ | ---------------------------------------------- | ------------------------------------- | ------------------------------------------------ |
-| BA (Explore) | Research, analysis, requirements gathering     | `opencode/deepseek-v4-flash-free`     | Strong context understanding, good at synthesis  |
-| SAD (Design) | Architecture, API contracts, sequence diagrams | `opencode/deepseek-v4-flash-free`     | Strong reasoning for design decisions            |
-| DEV (Apply)  | Code generation, implementation                | `opencode/deepseek-v4-flash-free`     | Strong code generation, high max tokens          |
-| QA (Verify)  | Testing, validation, edge case analysis        | `opencode/deepseek-v4-flash-free`     | Strict mode, low temperature for reproducibility |
-| DOC          | Documentation, guides, markdown                | `opencode/deepseek-v4-flash-free`     | Good prose, cost-effective                       |
-| OPS          | CI/CD, infrastructure, deployments             | `opencode/deepseek-v4-flash-free`     | Precision required for infra changes             |
-| GOV          | Compliance, security, audit                    | `opencode/deepseek-v4-flash-free`     | Strong analytical reasoning                      |
-| Session      | Session management, state tracking             | `opencode/deepseek-v4-flash-free`     | Lightweight, fast response                       |
-| Premortem    | Risk analysis, stress testing                  | `opencode/deepseek-v4-flash-free`     | Systematic analysis                              |
-| Finance      | Financial modeling                             | `opencode/deepseek-v4-flash-free`     | Precision required                               |
-| Legal        | Compliance, regulatory                         | `opencode/deepseek-v4-flash-free`     | Strong analytical reasoning                      |
-| Marketing    | Copywriting, SEO                               | `opencode/deepseek-v4-flash-free`     | Good prose, cost-effective                       |
-| Sales        | Pipeline management                            | `opencode/deepseek-v4-flash-free`     | Fast, efficient                                  |
-| HR           | People processes                               | `opencode/deepseek-v4-flash-free`     | Fast, efficient                                  |
+| Phase        | Cognitive Demand                               | Recommended Model                 | Rationale                                        |
+| ------------ | ---------------------------------------------- | --------------------------------- | ------------------------------------------------ |
+| BA (Explore) | Research, analysis, requirements gathering     | `opencode/deepseek-v4-flash-free` | Strong context understanding, good at synthesis  |
+| SAD (Design) | Architecture, API contracts, sequence diagrams | `opencode/deepseek-v4-flash-free` | Strong reasoning for design decisions            |
+| DEV (Apply)  | Code generation, implementation                | `opencode/deepseek-v4-flash-free` | Strong code generation, high max tokens          |
+| QA (Verify)  | Testing, validation, edge case analysis        | `opencode/deepseek-v4-flash-free` | Strict mode, low temperature for reproducibility |
+| DOC          | Documentation, guides, markdown                | `opencode/deepseek-v4-flash-free` | Good prose, cost-effective                       |
+| OPS          | CI/CD, infrastructure, deployments             | `opencode/deepseek-v4-flash-free` | Precision required for infra changes             |
+| GOV          | Compliance, security, audit                    | `opencode/deepseek-v4-flash-free` | Strong analytical reasoning                      |
+| Session      | Session management, state tracking             | `opencode/deepseek-v4-flash-free` | Lightweight, fast response                       |
+| Premortem    | Risk analysis, stress testing                  | `opencode/deepseek-v4-flash-free` | Systematic analysis                              |
+| Finance      | Financial modeling                             | `opencode/deepseek-v4-flash-free` | Precision required                               |
+| Legal        | Compliance, regulatory                         | `opencode/deepseek-v4-flash-free` | Strong analytical reasoning                      |
+| Marketing    | Copywriting, SEO                               | `opencode/deepseek-v4-flash-free` | Good prose, cost-effective                       |
+| Sales        | Pipeline management                            | `opencode/deepseek-v4-flash-free` | Fast, efficient                                  |
+| HR           | People processes                               | `opencode/deepseek-v4-flash-free` | Fast, efficient                                  |
 
 ## Configuration
 

@@ -49,7 +49,8 @@ BAD:  Search "django authentication best practices"
 GOOD: Fetch docs.djangoproject.com/en/6.0/topics/auth/
 ```
 
-After fetching, extract key patterns and note any deprecation warnings. If official sources conflict (e.g. migration guide contradicts API reference), surface the discrepancy to the user.
+After fetching, extract key patterns and note any deprecation warnings. If official sources conflict
+(e.g. migration guide contradicts API reference), surface the discrepancy to the user.
 
 ## Step 3: Implement Following Documented Patterns
 
@@ -101,7 +102,8 @@ pending states automatically"
 **Citation rules:**
 
 - Full URLs, not shortened
-- Prefer deep links with anchors where possible — anchors survive doc restructuring better than top-level pages
+- Prefer deep links with anchors where possible — anchors survive doc restructuring better than
+  top-level pages
 - Quote the relevant passage when it supports a non-obvious decision
 - Include browser/runtime support data when recommending platform features
 - If you cannot find documentation, say so explicitly:

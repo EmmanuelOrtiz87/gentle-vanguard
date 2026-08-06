@@ -50,7 +50,7 @@ Format your response as a markdown table:
 
 ## Ensuring Valid JSON
 
-```python
+````python
 # Always validate structured output
 import json
 
@@ -70,4 +70,4 @@ def extract_json(text: str) -> dict:
         if match:
             return json.loads(match.group())
         raise
-```
+````

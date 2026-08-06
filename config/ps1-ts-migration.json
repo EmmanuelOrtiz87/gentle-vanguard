@@ -594,17 +594,13 @@
     "scripts-unit-test",
     "scripts-integration-test"
   ],
-  "completedWave23": [
-    "delete-61-superseded-test-ps1-files"
-  ],
+  "completedWave23": ["delete-61-superseded-test-ps1-files"],
   "completedWave19": [
     "security-scan-ts-equivalent",
     "confluence-connector-ts-equivalent",
     "jira-connector-ts-equivalent"
   ],
-  "completedWave18": [
-    "skills-batch-delete-18-ps1"
-  ],
+  "completedWave18": ["skills-batch-delete-18-ps1"],
   "completedWave17": [
     "skills-adaptive-mode-engine-deprecation",
     "skills-test-adaptive-mode-deprecation",
@@ -625,9 +621,7 @@
     "skills-pre-commit-security-deprecation",
     "skills-security-scan-deprecation"
   ],
-  "completedWave16": [
-    "batch-delete-84-deprecated-ps1-stubs"
-  ],
+  "completedWave16": ["batch-delete-84-deprecated-ps1-stubs"],
   "completedWave15": [
     "agent-message-bus",
     "auto-norm-enforcer",

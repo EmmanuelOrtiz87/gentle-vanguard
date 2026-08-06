@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 ## Purpose
 
 Run linter/formatter **before** AI agent reads saved files to avoid:

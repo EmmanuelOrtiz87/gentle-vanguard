@@ -1,6 +1,7 @@
 # Service Validator
 
 ## Description
+
 Validates all Gentle-Vanguard service dependencies.
 
 ## Commands
@@ -14,6 +15,7 @@ npx tsx src/tools/service-validator.ts --fix
 ```
 
 ## Validations
+
 - ✅ Node.js version (>=20)
 - ✅ pnpm installed
 - ✅ Dependencies present
@@ -22,5 +24,6 @@ npx tsx src/tools/service-validator.ts --fix
 - ✅ Git remote configured
 
 ## Exit Codes
+
 - 0: All validations passed
 - 1: Some validations failed

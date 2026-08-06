@@ -73,7 +73,7 @@ Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-16 12:25
 | --------- | --------------------------------------------------------------------------------------------------------------------------- | ---------- | --------------------------------- | ---------- |
 | LEARN-001 | daries 6. **No `--no-verify` bypass** — git hooks must not be skipped; pre-commit validation is mandatory --- ## 7....      | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
 | LEARN-001 | Release Process (Source: NORMATIVAS-RELEASE.md) - MUST use `release-automation.ps1` — manual tagging prohibited - Pip...    | medium     | NORMATIVAS-WORKFLOW.md            | 2026-06-16 |
-| LEARN-001 | val.ps1`. 4. `src/agent-verify.ts` must fail if multilingual routing matrix has mismatches. 5. No conf...    | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
+| LEARN-001 | val.ps1`. 4. `src/agent-verify.ts` must fail if multilingual routing matrix has mismatches. 5. No conf...                   | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
 | LEARN-001 | ence = 'SilentlyContinue'`** at script scope. - **Always check `$LASTEXITCODE`\*\* after calling external executables. ...  | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
 | LEARN-001 | t-Content` / Path traversal / / Never expand environment variables from external config without san...                      | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
 | LEARN-001 | Windows 10+/Ubuntu 22.04+/macOS 13+ — all scripts must run on all platforms - TypeScript 7.4+ mandatory; avoid PSCust...    | medium     | NORMATIVAS-ARCHITECTURE.md        | 2026-06-16 |
@@ -151,10 +151,10 @@ Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-16 12:25
 | LEARN-001 | obrescribir memoria sin que el usuario lo sepa. **Rule:** (1) Toda operación de riesgo _high_ o _critical_ sobre Engr...    | medium     | HAND-WRITTEN-NORMS.md             | 2026-06-16 |
 | LEARN-001 | fore responding. The **first call** in a session MUST use the first user message as input. Subsequent calls MUST re-...     | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
 | LEARN-001 | ing via `task` tool, the prompt sent to subagents MUST follow: - System context: Only task-relevant information (not...     | medium     | CONTEXT-ENGINEERING.md            | 2026-06-16 |
-| LEARN-001 | mpty `catch` blocks - No `Should Be` syntax (use `Should -Be` for node:test) - No circular dependencies between modu...    | medium     | DEVELOPMENT-STANDARDS.md          | 2026-06-16 |
+| LEARN-001 | mpty `catch` blocks - No `Should Be` syntax (use `Should -Be` for node:test) - No circular dependencies between modu...     | medium     | DEVELOPMENT-STANDARDS.md          | 2026-06-16 |
 | LEARN-001 | -- ## 6. Review Output Format Every code review MUST be structured: ```markdown ## Review Summary \*\*Files reviewe...      | medium     | CODE-REVIEW-STANDARDS.md          | 2026-06-16 |
 | LEARN-001 | attern' # WRONG (Pester 3.4.0 syntax): $result / Should Be $expected ``` ### Coverage Requirements - \*\*Critical sc...     | medium     | DEVELOPMENT-STANDARDS.md          | 2026-06-16 |
-| LEARN-001 | fig-driven paths) - No empty `catch` blocks - No `Should Be` syntax (use `Should -Be` for node:test) - No circular d...    | medium     | DEVELOPMENT-STANDARDS.md          | 2026-06-16 |
+| LEARN-001 | fig-driven paths) - No empty `catch` blocks - No `Should Be` syntax (use `Should -Be` for node:test) - No circular d...     | medium     | DEVELOPMENT-STANDARDS.md          | 2026-06-16 |
 | LEARN-001 | V2: - What went wrong? - What went right? - What should we change? - Action items with owners --- ## 3. Specific I...       | medium     | INCIDENT-RESPONSE.md              | 2026-06-16 |
 | LEARN-001 | / Code injection / / Never call `[System.Reflection.Assembly]::Load` from user-supplied data / DLL injection ...            | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
 | LEARN-001 | es (`CLAUDE.md`, `AGENTS.md`, `CODEX.md`, etc.) **must NOT** duplicate mapping tables — they reference the canonical ...    | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
@@ -184,7 +184,7 @@ Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-16 12:25
 | LEARN-001 | cted $value / Should -Not -BeNullOrEmpty $array / Should -Contain 'item' $string / Should -Match 'pattern' # WRONG (...     | medium     | DEVELOPMENT-STANDARDS.md          | 2026-06-16 |
 | LEARN-002 | OrEmpty $array / Should -Contain 'item' $string / Should -Match 'pattern' # WRONG (Pester 3.4.0 syntax): $result / S...     | medium     | DEVELOPMENT-STANDARDS.md          | 2026-06-16 |
 | LEARN-003 | ogs in `.session/team-mode/` (no commit) - Skills must exist in `.atl/skill-registry.md` and respond via MCP                | medium     | NORMATIVAS-OPS-DEVOPS.md          | 2026-06-16 |
-| LEARN-004 | mpty `catch` blocks - No `Should Be` syntax (use `Should -Be` for node:test) - No circular dependencies between modu...    | medium     | DEVELOPMENT-STANDARDS.md          | 2026-06-16 |
+| LEARN-004 | mpty `catch` blocks - No `Should Be` syntax (use `Should -Be` for node:test) - No circular dependencies between modu...     | medium     | DEVELOPMENT-STANDARDS.md          | 2026-06-16 |
 | LEARN-005 | / Code injection / / Never call `[System.Reflection.Assembly]::Load` from user-supplied data / DLL injection ...            | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
 | LEARN-006 | ps1` — tests de resiliencia (tamper, fallback). **Rule:** (1) backup-engram.ps1 es el único script que debe copiar en...    | medium     | HAND-WRITTEN-NORMS.md             | 2026-06-16 |
 | LEARN-007 | cted $value / Should -Not -BeNullOrEmpty $array / Should -Contain 'item' $string / Should -Match 'pattern' # WRONG (...     | medium     | DEVELOPMENT-STANDARDS.md          | 2026-06-16 |
@@ -198,7 +198,7 @@ Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-16 12:25
 | LEARN-015 | crets immediately: `echo "::add-mask::$VALUE"`. - Never log secrets with `set -x` or TypeScript's `-Verbose` on secre...    | medium     | CI-HARDENING-STANDARDS.md         | 2026-06-16 |
 | LEARN-016 | path/to/file.md#section)`for cross-references - Never inline-config-values in markdown (reference`config/file.json`...      | medium     | CONTEXT-ENGINEERING.md            | 2026-06-16 |
 | LEARN-017 | ing via `task` tool, the prompt sent to subagents MUST follow: - System context: Only task-relevant information (not...     | medium     | CONTEXT-ENGINEERING.md            | 2026-06-16 |
-| LEARN-018 | val.ps1`. 4. `src/agent-verify.ts` must fail if multilingual routing matrix has mismatches. 5. No conf...    | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
+| LEARN-018 | val.ps1`. 4. `src/agent-verify.ts` must fail if multilingual routing matrix has mismatches. 5. No conf...                   | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
 | LEARN-019 | ------ / / Add new skill under `skills/<name>/` / Must register in `.atl/skill-registry.md` / / Append to `AGENTS.md`...    | medium     | AUTO-CONTRIBUTION.md              | 2026-06-16 |
 | LEARN-020 | ----------------------- / ------------------- / / Never call `Invoke-Expression` on user input ...                          | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
 | LEARN-021 | `pre-process-input.ps1` with first user message — MUST be before any response 2. **Start**: Run `scripts/utilities/se...    | medium     | AI-NORMATIVES.md                  | 2026-06-16 |

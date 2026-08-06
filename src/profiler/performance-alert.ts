@@ -23,13 +23,12 @@ interface PerformanceAlert {
 
 const ALERT_DIR = join(resolve(process.cwd()), '.runtime', 'alerts');
 const ALERT_LOG = join(ALERT_DIR, 'performance-alerts.jsonl');
-const ALERT_STATE = join(ALERT_DIR, 'alert-state.json');
 
 // Severity thresholds
 const THRESHOLDS = {
-  CRITICAL: 50,  // >50% regression
-  WARNING: 20,   // >20% regression
-  INFO: 10       // >10% regression
+  CRITICAL: 50, // >50% regression
+  WARNING: 20, // >20% regression
+  INFO: 10, // >10% regression
 };
 
 function ensureDirs(): void {
@@ -39,7 +38,7 @@ function ensureDirs(): void {
 function loadBaseline(): Record<string, { duration_ms: number }> | null {
   const baselinePath = join(resolve(process.cwd()), '.runtime', 'profiler', 'baseline.json');
   if (!existsSync(baselinePath)) return null;
-  
+
   try {
     const baseline = JSON.parse(readFileSync(baselinePath, 'utf-8'));
     return baseline.benchmarks;
@@ -51,12 +50,15 @@ function loadBaseline(): Record<string, { duration_ms: number }> | null {
 function loadCurrentResults(): Record<string, { duration_ms: number }> | null {
   const resultsPath = join(resolve(process.cwd()), '.runtime', 'profiler', 'results.jsonl');
   if (!existsSync(resultsPath)) return null;
-  
+
   try {
-    const lines = readFileSync(resultsPath, 'utf-8').split('\n').filter(l => l.trim());
+    const lines = readFileSync(resultsPath, 'utf-8')
+      .split('\n')
+      .filter((l) => l.trim());
     const results: Record<string, { duration_ms: number }> = {};
-    
-    for (const line of lines.slice(-5)) { // Last 5 entries
+
+    for (const line of lines.slice(-5)) {
+      // Last 5 entries
       try {
         const result = JSON.parse(line);
         results[result.name] = { duration_ms: result.duration_ms };
@@ -64,7 +66,7 @@ function loadCurrentResults(): Record<string, { duration_ms: number }> | null {
         // Skip invalid lines
       }
     }
-    
+
     return results;
   } catch {
     return null;
@@ -79,22 +81,18 @@ function calculateSeverity(deltaPct: number): 'CRITICAL' | 'WARNING' | 'INFO' {
   return 'INFO';
 }
 
-function generateAlert(
-  metric: string,
-  current: number,
-  baseline: number
-): PerformanceAlert | null {
+function generateAlert(metric: string, current: number, baseline: number): PerformanceAlert | null {
   const delta = ((current - baseline) / baseline) * 100;
   const absDelta = Math.abs(delta);
-  
+
   // Only alert on significant changes (>10%)
   if (absDelta < THRESHOLDS.INFO) return null;
-  
+
   const severity = calculateSeverity(delta);
   const type = delta > 0 ? 'REGRESSION' : 'IMPROVEMENT';
-  
+
   const id = `perf-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  
+
   return {
     id,
     timestamp: new Date().toISOString(),
@@ -105,7 +103,7 @@ function generateAlert(
     deltaPct: Math.round(delta * 100) / 100,
     severity,
     message: `${metric}: ${type} detected (${delta > 0 ? '+' : ''}${delta.toFixed(1)}%)`,
-    acknowledged: false
+    acknowledged: false,
   };
 }
 
@@ -116,13 +114,13 @@ function saveAlert(alert: PerformanceAlert): void {
 
 function loadActiveAlerts(): PerformanceAlert[] {
   if (!existsSync(ALERT_LOG)) return [];
-  
+
   const lines = readFileSync(ALERT_LOG, 'utf-8')
     .split('\n')
-    .filter(l => l.trim());
-  
+    .filter((l) => l.trim());
+
   return lines
-    .map(line => {
+    .map((line) => {
       try {
         return JSON.parse(line) as PerformanceAlert;
       } catch {
@@ -136,31 +134,31 @@ function loadActiveAlerts(): PerformanceAlert[] {
 export function checkPerformance(): PerformanceAlert[] {
   const baseline = loadBaseline();
   const current = loadCurrentResults();
-  
+
   if (!baseline || !current) {
     console.log('❌ No baseline or current results found');
     console.log('   Run: npm run perf:baseline && npm run perf:run');
     return [];
   }
-  
+
   const alerts: PerformanceAlert[] = [];
-  
+
   console.log('\n=== Performance Alert Check ===\n');
-  
+
   for (const [metric, baselineData] of Object.entries(baseline)) {
     const currentData = current[metric];
-    
+
     if (!currentData) {
       console.log(`⚠️  ${metric}: No current data`);
       continue;
     }
-    
+
     const alert = generateAlert(metric, currentData.duration_ms, baselineData.duration_ms);
-    
+
     if (alert) {
       alerts.push(alert);
       saveAlert(alert);
-      
+
       const icon = alert.type === 'REGRESSION' ? '🔴' : '🟢';
       console.log(`${icon} ${alert.message}`);
       console.log(`   Current: ${currentData.duration_ms.toFixed(2)}ms`);
@@ -168,54 +166,57 @@ export function checkPerformance(): PerformanceAlert[] {
       console.log(`   Severity: ${alert.severity}`);
       console.log();
     } else {
-      const delta = ((currentData.duration_ms - baselineData.duration_ms) / baselineData.duration_ms) * 100;
+      const delta =
+        ((currentData.duration_ms - baselineData.duration_ms) / baselineData.duration_ms) * 100;
       console.log(`✅ ${metric}: Stable (${delta > 0 ? '+' : ''}${delta.toFixed(1)}%)`);
     }
   }
-  
+
   // Summary
-  const critical = alerts.filter(a => a.severity === 'CRITICAL').length;
-  const warnings = alerts.filter(a => a.severity === 'WARNING').length;
-  const info = alerts.filter(a => a.severity === 'INFO').length;
-  
+  const critical = alerts.filter((a) => a.severity === 'CRITICAL').length;
+  const warnings = alerts.filter((a) => a.severity === 'WARNING').length;
+  const info = alerts.filter((a) => a.severity === 'INFO').length;
+
   console.log('=== Summary ===');
   console.log(`Total alerts: ${alerts.length}`);
   if (critical > 0) console.log(`🔴 Critical: ${critical}`);
   if (warnings > 0) console.log(`🟡 Warnings: ${warnings}`);
   if (info > 0) console.log(`ℹ️  Info: ${info}`);
   if (alerts.length === 0) console.log('✅ No performance alerts');
-  
+
   return alerts;
 }
 
 // Acknowledge alerts
 export function acknowledgeAlert(alertId?: string): void {
   ensureDirs();
-  
+
   if (!existsSync(ALERT_LOG)) {
     console.log('No alerts to acknowledge');
     return;
   }
-  
-  const lines = readFileSync(ALERT_LOG, 'utf-8').split('\n').filter(l => l.trim());
+
+  const lines = readFileSync(ALERT_LOG, 'utf-8')
+    .split('\n')
+    .filter((l) => l.trim());
   const updated: string[] = [];
   let acknowledged = 0;
-  
+
   for (const line of lines) {
     try {
       const alert = JSON.parse(line) as PerformanceAlert;
-      
+
       if (!alert.acknowledged && (!alertId || alert.id === alertId)) {
         alert.acknowledged = true;
         acknowledged++;
       }
-      
+
       updated.push(JSON.stringify(alert));
     } catch {
       updated.push(line);
     }
   }
-  
+
   writeFileSync(ALERT_LOG, updated.join('\n') + '\n', 'utf-8');
   console.log(`✅ Acknowledged ${acknowledged} alert(s)`);
 }
@@ -223,23 +224,23 @@ export function acknowledgeAlert(alertId?: string): void {
 // Show active alerts
 export function showActiveAlerts(): void {
   const alerts = loadActiveAlerts();
-  
+
   console.log('\n=== Active Performance Alerts ===\n');
-  
+
   if (alerts.length === 0) {
     console.log('✅ No active alerts');
     return;
   }
-  
+
   const bySeverity = {
-    CRITICAL: alerts.filter(a => a.severity === 'CRITICAL'),
-    WARNING: alerts.filter(a => a.severity === 'WARNING'),
-    INFO: alerts.filter(a => a.severity === 'INFO')
+    CRITICAL: alerts.filter((a) => a.severity === 'CRITICAL'),
+    WARNING: alerts.filter((a) => a.severity === 'WARNING'),
+    INFO: alerts.filter((a) => a.severity === 'INFO'),
   };
-  
+
   for (const [severity, sevAlerts] of Object.entries(bySeverity)) {
     if (sevAlerts.length === 0) continue;
-    
+
     console.log(`${severity} (${sevAlerts.length}):`);
     for (const alert of sevAlerts) {
       console.log(`  • ${alert.metric}: ${alert.deltaPct > 0 ? '+' : ''}${alert.deltaPct}%`);
@@ -253,7 +254,7 @@ export function showActiveAlerts(): void {
 // CLI
 if (process.argv[1]?.includes('performance-alert.ts')) {
   const command = process.argv[2];
-  
+
   switch (command) {
     case 'check':
       checkPerformance();

@@ -9,7 +9,10 @@ const SESSIONS_PATH = join(ROOT, '.runtime', 'metrics', 'sessions.json');
 const SESSIONS_HISTORY_PATH = join(ROOT, '.event-bus', 'sessions-history.json');
 function execGit(args: string): string {
   try {
-    const result = runSync('git', args.split(' '), { cwd: ROOT, timeout: getProcessExecutionTimeouts().git_operation_ms ?? 3000 });
+    const result = runSync('git', args.split(' '), {
+      cwd: ROOT,
+      timeout: getProcessExecutionTimeouts().git_operation_ms ?? 3000,
+    });
     return result.stdout?.trim() ?? '';
   } catch {
     return '';
@@ -129,4 +132,3 @@ export function runValidations(
 
   return results;
 }
-

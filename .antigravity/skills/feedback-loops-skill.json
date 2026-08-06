@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "# Feedback Loop Analysis\n\n**Principle:** System behavior emerges from feedback structure. To change behavior, change the loops.\n\n## Quick Reference\n\n| Topic | File |\n| ----- | ---- |\n| Core Concepts (R, B, delays) | [references/core-concepts.md](references/core-concepts.md) |\n| System Archetypes (5 patterns) | [references/system-patterns.md](references/system-patterns.md) |\n| Identification Guide (4-step) | [references/identification-guide.md](references/identification-guide.md) |\n| Leverage Points (Meadows' 12) | [references/leverage-points.md](references/leverage-points.md) |\n| Application Framework | [references/application-framework.md](references/application-framework.md) |\n| Integration & Verification | [references/integration.md](references/integration.md) |\n\n## Key Questions\n\n- \"What feeds back into itself here?\"\n- \"Is this self-reinforcing or self-correcting?\"\n- \"Which loop is currently dominant?\"\n- \"What would shift dominance?\"\n- \"What's the highest-leverage intervention?\"\n- \"If I change X, what loops are affected?\"\n\n## Meadows' Wisdom\n\n> \"We can't control systems or figure them out. But we can dance with them.\"\n\n> \"Pay attention to what is important, not just what is quantifiable.\"",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

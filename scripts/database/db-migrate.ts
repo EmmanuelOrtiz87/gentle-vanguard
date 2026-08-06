@@ -153,7 +153,7 @@ function migrateContractResults(): { count: number; errors: number } {
   const dir = SOURCES[1].jsonDir;
   if (!existsSync(dir)) return { count: 0, errors: 0 };
 
-  const files = readdirSync(dir).filter(f => f.endsWith('.json'));
+  const files = readdirSync(dir).filter((f) => f.endsWith('.json'));
   for (const file of files) {
     try {
       const data = JSON.parse(readFileSync(join(dir, file), 'utf-8'));
@@ -214,7 +214,9 @@ Usage:
   npx tsx scripts/database/db-migrate.ts --help             # This help
 
 Sources:
-${SOURCES.filter(s => s.enabled).map(s => `  ${s.name.padEnd(20)} ${s.label} → ${s.sqliteTable}`).join('\n')}
+${SOURCES.filter((s) => s.enabled)
+  .map((s) => `  ${s.name.padEnd(20)} ${s.label} → ${s.sqliteTable}`)
+  .join('\n')}
 
 Examples:
   npx tsx scripts/database/db-migrate.ts
@@ -226,8 +228,14 @@ Examples:
 function listSources(): void {
   console.log('\nAvailable migration sources:\n');
   for (const src of SOURCES) {
-    const status = src.enabled ? (existsSync(src.jsonDir) ? '📁 has data' : '⭕ empty') : '⏸️  disabled';
-    console.log(`  ${src.name.padEnd(20)} ${src.label.padEnd(25)} ${src.sqliteTable.padEnd(22)} ${status}`);
+    const status = src.enabled
+      ? existsSync(src.jsonDir)
+        ? '📁 has data'
+        : '⭕ empty'
+      : '⏸️  disabled';
+    console.log(
+      `  ${src.name.padEnd(20)} ${src.label.padEnd(25)} ${src.sqliteTable.padEnd(22)} ${status}`,
+    );
   }
   console.log('');
 }
@@ -251,18 +259,26 @@ function main(): void {
 
   if (dryRun) {
     console.log('\n🔍 DRY RUN — No data will be written\n');
-    for (const src of SOURCES.filter(s => s.enabled && (!sourceFilter || s.name === sourceFilter))) {
+    for (const src of SOURCES.filter(
+      (s) => s.enabled && (!sourceFilter || s.name === sourceFilter),
+    )) {
       const exists = existsSync(src.jsonDir);
-      const fileCount = exists ? readdirSync(src.jsonDir, { recursive: true }).filter(f => f.toString().endsWith('.json')).length : 0;
-      console.log(`  ${src.name.padEnd(20)} ${exists ? `📁 ${fileCount} JSON files → ${src.sqliteTable}` : '⭕ no directory'}`);
+      const fileCount = exists
+        ? readdirSync(src.jsonDir, { recursive: true }).filter((f) =>
+            f.toString().endsWith('.json'),
+          ).length
+        : 0;
+      console.log(
+        `  ${src.name.padEnd(20)} ${exists ? `📁 ${fileCount} JSON files → ${src.sqliteTable}` : '⭕ no directory'}`,
+      );
     }
     console.log('');
     process.exit(0);
   }
 
   const targets = sourceFilter
-    ? SOURCES.filter(s => s.name === sourceFilter)
-    : SOURCES.filter(s => s.enabled);
+    ? SOURCES.filter((s) => s.name === sourceFilter)
+    : SOURCES.filter((s) => s.enabled);
 
   if (targets.length === 0) {
     console.error(`Unknown source: ${sourceFilter}`);

@@ -233,7 +233,8 @@
           var toggle = dropdown.previousElementSibling;
           if (toggle && toggle.getAttribute('data-bs-toggle') === 'dropdown') {
             // Try Bootstrap dismiss
-            var bsDropdown = bootstrap && bootstrap.Dropdown && bootstrap.Dropdown.getInstance(toggle);
+            var bsDropdown =
+              bootstrap && bootstrap.Dropdown && bootstrap.Dropdown.getInstance(toggle);
             if (bsDropdown) bsDropdown.hide();
           }
         }

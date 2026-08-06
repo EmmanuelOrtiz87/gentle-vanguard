@@ -21,6 +21,7 @@
 ## Overview
 
 The Gentle-Vanguard API provides programmatic access to:
+
 - Real-time metrics and telemetry
 - Session management and traces
 - Alert configuration and notifications
@@ -31,18 +32,19 @@ The Gentle-Vanguard API provides programmatic access to:
 
 ### Architecture
 
-| Component | Technology | Port |
-|-----------|-----------|------|
-| HTTP Server | Node.js | 8080 |
-| WebSocket | ws library | 8080 |
-| Database | SQLite (Nexus) | - |
-| Metrics | In-memory + persisted | - |
+| Component   | Technology            | Port |
+| ----------- | --------------------- | ---- |
+| HTTP Server | Node.js               | 8080 |
+| WebSocket   | ws library            | 8080 |
+| Database    | SQLite (Nexus)        | -    |
+| Metrics     | In-memory + persisted | -    |
 
 ---
 
 ## Authentication
 
 Currently **no authentication** required for local deployments. Future versions will support:
+
 - API key authentication
 - JWT tokens
 - OAuth 2.0
@@ -58,6 +60,7 @@ Currently **no authentication** required for local deployments. Future versions 
 Returns overall system health status.
 
 **Response:**
+
 ```json
 {
   "status": "healthy",
@@ -83,11 +86,13 @@ Returns overall system health status.
 Returns current system metrics.
 
 **Query Parameters:**
-| Param | Type | Description |
-|-------|------|-------------|
-| type | string | Filter by type: token, cost, quality |
+
+| Param | Type   | Description                          |
+| ----- | ------ | ------------------------------------ |
+| type  | string | Filter by type: token, cost, quality |
 
 **Response:**
+
 ```json
 {
   "sessions": {
@@ -113,6 +118,7 @@ Returns current system metrics.
 Filter metrics with custom criteria.
 
 **Request Body:**
+
 ```json
 {
   "startTime": "2026-08-01T00:00:00Z",
@@ -131,13 +137,15 @@ Filter metrics with custom criteria.
 List all sessions.
 
 **Query Parameters:**
-| Param | Type | Description |
-|-------|------|-------------|
-| limit | int | Max results (default: 50) |
-| offset | int | Pagination offset |
+
+| Param  | Type   | Description                                 |
+| ------ | ------ | ------------------------------------------- |
+| limit  | int    | Max results (default: 50)                   |
+| offset | int    | Pagination offset                           |
 | status | string | Filter by status: active, completed, failed |
 
 **Response:**
+
 ```json
 {
   "sessions": [
@@ -160,6 +168,7 @@ List all sessions.
 Get specific session details.
 
 **Response:**
+
 ```json
 {
   "id": "ses_0355e3267ffeFYPeEFyRE1z32J",
@@ -181,13 +190,15 @@ Get specific session details.
 Get distributed tracing data.
 
 **Query Parameters:**
-| Param | Type | Description |
-|-------|------|-------------|
-| trace_id | string | Filter by trace ID |
-| session_id | string | Filter by session |
-| limit | int | Max results |
+
+| Param      | Type   | Description        |
+| ---------- | ------ | ------------------ |
+| trace_id   | string | Filter by trace ID |
+| session_id | string | Filter by session  |
+| limit      | int    | Max results        |
 
 **Response:**
+
 ```json
 {
   "traces": [
@@ -212,6 +223,7 @@ Get distributed tracing data.
 Get current alerts.
 
 **Response:**
+
 ```json
 {
   "alerts": [
@@ -232,6 +244,7 @@ Get current alerts.
 Acknowledge an alert.
 
 **Request Body:**
+
 ```json
 { "alert_id": "alert_001" }
 ```
@@ -245,16 +258,18 @@ Acknowledge an alert.
 Get collected feedback.
 
 **Query Parameters:**
-| Param | Type | Description |
-|-------|------|-------------|
-| session_id | string | Filter by session |
-| rating | int | Filter by rating (1-5) |
+
+| Param      | Type   | Description            |
+| ---------- | ------ | ---------------------- |
+| session_id | string | Filter by session      |
+| rating     | int    | Filter by rating (1-5) |
 
 #### `POST /api/feedback`
 
 Submit feedback.
 
 **Request Body:**
+
 ```json
 {
   "span_id": "span_123",
@@ -273,6 +288,7 @@ Submit feedback.
 List available skills.
 
 **Response:**
+
 ```json
 {
   "skills": [
@@ -306,6 +322,7 @@ Download/install a skill.
 List MCP servers.
 
 **Response:**
+
 ```json
 {
   "servers": [
@@ -320,6 +337,7 @@ List MCP servers.
 Execute action on MCP server.
 
 **Request Body:**
+
 ```json
 {
   "action": "restart",
@@ -336,6 +354,7 @@ Execute action on MCP server.
 Connect to: `ws://localhost:8080`
 
 **Handshake:**
+
 ```javascript
 const ws = new WebSocket('ws://localhost:8080');
 ws.onopen = () => {
@@ -348,6 +367,7 @@ ws.onopen = () => {
 #### Client → Server
 
 Subscribe to real-time updates:
+
 ```json
 {
   "type": "subscribe",
@@ -359,6 +379,7 @@ Subscribe to real-time updates:
 #### Server → Client
 
 Real-time metric update:
+
 ```json
 {
   "type": "metrics",
@@ -372,6 +393,7 @@ Real-time metric update:
 ```
 
 Alert notification:
+
 ```json
 {
   "type": "alert",
@@ -383,12 +405,12 @@ Alert notification:
 
 ### Channels
 
-| Channel | Description | Update Frequency |
-|---------|-------------|-----------------|
-| metrics | Agent and system metrics | Every 5 seconds |
-| traces | Distributed trace updates | Real-time |
-| alerts | Alert notifications | Real-time |
-| sessions | Session state changes | Real-time |
+| Channel  | Description               | Update Frequency |
+| -------- | ------------------------- | ---------------- |
+| metrics  | Agent and system metrics  | Every 5 seconds  |
+| traces   | Distributed trace updates | Real-time        |
+| alerts   | Alert notifications       | Real-time        |
+| sessions | Session state changes     | Real-time        |
 
 ---
 
@@ -408,23 +430,25 @@ All errors follow this format:
 
 ### Error Codes
 
-| Code | Status | Description |
-|------|--------|-------------|
-| RESOURCE_NOT_FOUND | 404 | Requested resource doesn't exist |
-| INVALID_REQUEST | 400 | Malformed request |
-| RATE_LIMITED | 429 | Too many requests |
-| INTERNAL_ERROR | 500 | Server error |
-| GATEWAY_TIMEOUT | 504 | Upstream timeout |
+| Code               | Status | Description                      |
+| ------------------ | ------ | -------------------------------- |
+| RESOURCE_NOT_FOUND | 404    | Requested resource doesn't exist |
+| INVALID_REQUEST    | 400    | Malformed request                |
+| RATE_LIMITED       | 429    | Too many requests                |
+| INTERNAL_ERROR     | 500    | Server error                     |
+| GATEWAY_TIMEOUT    | 504    | Upstream timeout                 |
 
 ---
 
 ## Rate Limiting
 
 Current limits:
+
 - **REST API**: 100 requests/minute per IP
 - **WebSocket**: 5 concurrent connections per IP
 
 Headers included in responses:
+
 ```
 X-RateLimit-Limit: 100
 X-RateLimit-Remaining: 87
@@ -436,6 +460,7 @@ X-RateLimit-Reset: 1722853200
 ## SDK and Client Libraries
 
 ### TypeScript/JavaScript
+
 ```bash
 npm install @gentle-vanguard/api-client
 ```
@@ -448,6 +473,7 @@ const metrics = await client.metrics.get();
 ```
 
 ### PowerShell
+
 ```powershell
 $api = "http://localhost:8080/api"
 $metrics = Invoke-RestMethod -Uri "$api/metrics" -Method GET
@@ -458,10 +484,11 @@ $metrics = Invoke-RestMethod -Uri "$api/metrics" -Method GET
 ## Changelog
 
 ### v1.0.0 (2026-08-04)
+
 - Initial API documentation
 - 25+ endpoints documented
 - WebSocket real-time API
 
 ---
 
-*For questions or issues, see `docs/operations/procedures/API-TROUBLESHOOTING.md`*
+_For questions or issues, see `docs/operations/procedures/API-TROUBLESHOOTING.md`_

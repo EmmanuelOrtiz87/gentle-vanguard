@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Presentaciones Visuales
 
 Crea presentaciones HTML autocontenidas con diseño profesional, narrativa clara y calidad para

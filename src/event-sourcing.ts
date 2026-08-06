@@ -129,7 +129,13 @@ function saveEvent(event: StoredEvent): void {
   try {
     const mgr = getDb();
     if (mgr) {
-      mgr.insertEvent(event.type, { eventId: event.eventId, aggregateId: event.aggregateId, version: event.version, data: event.data, sessionId: event.sessionId });
+      mgr.insertEvent(event.type, {
+        eventId: event.eventId,
+        aggregateId: event.aggregateId,
+        version: event.version,
+        data: event.data,
+        sessionId: event.sessionId,
+      });
     }
   } catch {
     // Dual-write failure is non-critical

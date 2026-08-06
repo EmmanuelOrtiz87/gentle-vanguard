@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 ## MCP Workflow (MANDATORY If Available)
 
 ** If you have Playwright MCP tools, ALWAYS use them BEFORE creating any test:**

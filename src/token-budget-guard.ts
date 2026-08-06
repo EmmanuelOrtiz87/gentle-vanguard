@@ -84,7 +84,9 @@ function loadConfig(): GuardConfig {
         config.daily_budget_tokens = tb.daily ?? config.daily_budget_tokens;
         config.soft_threshold_pct = tb.softThreshold ?? config.soft_threshold_pct;
         config.hard_threshold_pct = tb.hardThreshold ?? config.hard_threshold_pct;
-        console.log(`[TOKEN-BUDGET] Loaded from token-budget-guard.json: daily_budget=${config.daily_budget_tokens}, soft=${config.soft_threshold_pct}%, hard=${config.hard_threshold_pct}%`);
+        console.log(
+          `[TOKEN-BUDGET] Loaded from token-budget-guard.json: daily_budget=${config.daily_budget_tokens}, soft=${config.soft_threshold_pct}%, hard=${config.hard_threshold_pct}%`,
+        );
         return config;
       }
     } catch (err) {
@@ -96,12 +98,15 @@ function loadConfig(): GuardConfig {
   if (existsSync(ORCHESTRATOR_PATH)) {
     try {
       const raw = JSON.parse(readFileSync(ORCHESTRATOR_PATH, 'utf-8'));
-      const custom = raw?.orchestrator?.token_budget_guard || raw?.subagent_orchestration?.token_budget_guard;
+      const custom =
+        raw?.orchestrator?.token_budget_guard || raw?.subagent_orchestration?.token_budget_guard;
       if (custom) {
         for (const key of Object.keys(DEFAULT_CONFIG)) {
           if (key in custom) (config as Record<string, unknown>)[key] = custom[key];
         }
-        console.log(`[TOKEN-BUDGET] Loaded from orchestrator.json (legacy): daily_budget=${config.daily_budget_tokens}, soft=${config.soft_threshold_pct}%, hard=${config.hard_threshold_pct}%`);
+        console.log(
+          `[TOKEN-BUDGET] Loaded from orchestrator.json (legacy): daily_budget=${config.daily_budget_tokens}, soft=${config.soft_threshold_pct}%, hard=${config.hard_threshold_pct}%`,
+        );
       }
     } catch (err) {
       console.warn(`[TOKEN-BUDGET] Failed to load orchestrator.json: ${err}`);

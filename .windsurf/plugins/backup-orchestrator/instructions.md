@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 Backup orchestration skill for workspace and project backup management
 
 ## Triggers
 
-
 ## Instructions
+
 # Skill: backup-orchestrator
 
 **versión**: 1.0.0 **Created**: 2026-04-20 **Status**: ACTIVE **Priority**: HIGH

@@ -4,7 +4,13 @@ import type { ContractResultRecord } from '../manager';
 export class ContractRepo {
   constructor(private db: Database.Database) {}
 
-  insertContractResult(contractId: string, status: string, sessionId?: string, result?: string, durationMs?: number): void {
+  insertContractResult(
+    contractId: string,
+    status: string,
+    sessionId?: string,
+    result?: string,
+    durationMs?: number,
+  ): void {
     this.db
       .prepare(
         `INSERT INTO contract_results (contract_id, session_id, status, result, duration_ms, created_at)

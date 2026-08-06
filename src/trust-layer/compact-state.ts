@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Compact State 
+ * Compact State
  * Formal state machine with CAS
- * Part of Gentle-Vanguard 
+ * Part of Gentle-Vanguard
  */
 
 import { EventEmitter } from 'events';

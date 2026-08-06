@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Prompt Engineering
 
 Core principles, techniques, and patterns for effective LLM prompting.

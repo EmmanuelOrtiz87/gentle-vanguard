@@ -79,7 +79,8 @@ TechStart - $25K - Demo scheduled - closes Feb 15
 BigCo - $100K - Discovery - closes Mar 30
 ```
 
-**Option C: Describe your territory** "I have 8 deals in pipeline totaling $400K. Two are in
+**Option C: Describe your territory** "I have 8 deals in pipeline totaling
+$400K. Two are in
 negotiation ($120K), three in evaluation ($180K), three in discovery ($100K)."
 
 ### Step 2: Your Targets

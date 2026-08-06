@@ -20,10 +20,10 @@ with a per-run log at `.runtime/autostart-detached-<timestamp>.log`):
 npm run session:autostart:detached
 ```
 
-Use the detached launcher when the caller is a CI step, git hook, or agent shell that must not
-hang on the pipeline's lazy background daemons. The lock is robust (validates the owning process
-is a real `node` running session-autostart), so orphaned `conhost.exe` processes can never wedge
-the pipeline. Logs are pruned automatically after 7 days.
+Use the detached launcher when the caller is a CI step, git hook, or agent shell that must not hang
+on the pipeline's lazy background daemons. The lock is robust (validates the owning process is a
+real `node` running session-autostart), so orphaned `conhost.exe` processes can never wedge the
+pipeline. Logs are pruned automatically after 7 days.
 
 ---
 
@@ -38,14 +38,14 @@ anything else.
 Rules:
 
 - For codebase questions, first run `npm run graphify -- query "<question>"` when
-  graphify-out/graph.json exists. For label-based searches, always use
-  `npm run graphify -- query` instead of `path`/`explain`.
+  graphify-out/graph.json exists. For label-based searches, always use `npm run graphify -- query`
+  instead of `path`/`explain`.
 - Use `npm run graphify -- explain "<node_id>"` for focused explanations by exact node ID (e.g.,
   `adaptive_auto_delegate_orchestrator_start_orchestrator`). Node IDs use underscore-separated paths
   — run `npm run graphify -- query` first to find the correct ID.
-- `npm run graphify -- path "<A>" "<B>"` and `npm run graphify -- affected "X"` are limited — the graph only has
-  `contains`/`calls` edges (AST-only, no `references`/`imports` edges without LLM semantic
-  extraction). Cross-file paths are rare without a paid API key.
+- `npm run graphify -- path "<A>" "<B>"` and `npm run graphify -- affected "X"` are limited — the
+  graph only has `contains`/`calls` edges (AST-only, no `references`/`imports` edges without LLM
+  semantic extraction). Cross-file paths are rare without a paid API key.
 - Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are
   not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph
   output, or the user explicitly says not to use it.
@@ -79,20 +79,20 @@ The LLM observability dashboard lives in `apps/web-dashboard/` (React/TypeScript
 
 ### Lifecycle
 
-| Action                          | Command                                                  |
-| ------------------------------- | -------------------------------------------------------- |
-| Start full (WS + Vite + Chrome) | `npx tsx src/dashboard-start.ts`                         |
-| Start WS only (pipeline)        | `npx tsx src/dashboard-ws-autostart.ts`                  |
-| Stop all                        | `npx tsx src/dashboard-stop.ts`                          |
+| Action                          | Command                                 |
+| ------------------------------- | --------------------------------------- |
+| Start full (WS + Vite + Chrome) | `npx tsx src/dashboard-start.ts`        |
+| Start WS only (pipeline)        | `npx tsx src/dashboard-ws-autostart.ts` |
+| Stop all                        | `npx tsx src/dashboard-stop.ts`         |
 
 ### Auto-recovery
 
-- The WS server watchdog (`src/dashboard-ws-autostart.ts`) monitors the process every 5s via port check
-  (`Test-NetConnection localhost:<port>`). If the process dies or the port closes, it restarts (up
-  to 10 attempts). Uses `cmd /c set WS_PORT=... && npx.cmd tsx ...` for reliable Windows batch
+- The WS server watchdog (`src/dashboard-ws-autostart.ts`) monitors the process every 5s via port
+  check (`Test-NetConnection localhost:<port>`). If the process dies or the port closes, it restarts
+  (up to 10 attempts). Uses `cmd /c set WS_PORT=... && npx.cmd tsx ...` for reliable Windows batch
   execution. Heartbeat logged to `.runtime/dashboard-ws.log`.
-- Watchdog stores its own PID in `.runtime/dashboard-ws-watchdog.pid` — `src/dashboard-stop.ts` kills
-  the watchdog FIRST before the WS process to prevent restart loops.
+- Watchdog stores its own PID in `.runtime/dashboard-ws-watchdog.pid` — `src/dashboard-stop.ts`
+  kills the watchdog FIRST before the WS process to prevent restart loops.
 - Frontend HTTP polling in `useMetrics.ts` always runs regardless of WebSocket state — data loads
   even if the WS server is temporarily down.
 
@@ -120,13 +120,10 @@ npm run build          # must exit 0 with no TS errors
 - `components/TracingDashboard.tsx` — waterfall view + feedback
 - `components/InfoPopup.tsx` — animated popup (fade-in + scale)
 - `config/dashboard-alerts.json` — 8 alert rules
-- `src/dashboard-common.ts` — shared port allocation (Get-FreePort,
-  Save/Read/Clear-DashboardPorts)
-- `src/dashboard-ws-autostart.ts` — watchdog start with auto-recovery (10
-  restarts)
+- `src/dashboard-common.ts` — shared port allocation (Get-FreePort, Save/Read/Clear-DashboardPorts)
+- `src/dashboard-ws-autostart.ts` — watchdog start with auto-recovery (10 restarts)
 - `src/dashboard-start.ts` — full launcher (WS watchdog + Vite + Chrome)
-- `src/dashboard-stop.ts` — cleanup stop (kills watchdog → PID files → port
-  → process name)
+- `src/dashboard-stop.ts` — cleanup stop (kills watchdog → PID files → port → process name)
 - `vite.config.ts` — reads WS_PORT (proxy target) and VITE_DEV_PORT from env
 - `.runtime/dashboard-ports.json` — persisted port assignments for stop/restart
 - `.runtime/dashboard-ws.log` — watchdog heartbeat log
@@ -247,11 +244,11 @@ Verificado: 7/7 responden OK en entorno local.
 
 ### Notes
 
-- **graphify CLI**: Use the stack-local Graphify command through
-  `npm run graphify -- <command>`. It reads `graphify-out/graph.json` and supports `query`,
-  `explain`, `path`, `affected`, `status`, and `update .`. Do not install the unrelated
-  npm package `graphify@1.0.0`; it is a random graph generator, not this stack's knowledge graph
-  CLI. Code freshness is still handled by `.codegraph/` and git hooks.
+- **graphify CLI**: Use the stack-local Graphify command through `npm run graphify -- <command>`. It
+  reads `graphify-out/graph.json` and supports `query`, `explain`, `path`, `affected`, `status`, and
+  `update .`. Do not install the unrelated npm package `graphify@1.0.0`; it is a random graph
+  generator, not this stack's knowledge graph CLI. Code freshness is still handled by `.codegraph/`
+  and git hooks.
 - **`$var:` syntax**: In PowerShell string interpolation, `$varname:` must be written as
   `${varname}:` to avoid parser errors. All instances are fixed.
 
@@ -319,8 +316,8 @@ python research/rlhf-dataset-search/search_datasets.py --source all --query "rew
 
 **Nexus** es la base de datos operacional del stack Gentle-Vanguard (`.runtime/gentle-vanguard.db`).
 Es el sistema nervioso central donde converge toda la información operacional: métricas, sesiones,
-trazas, eventos, alertas, feedback, caché de respuestas, resultados de contratos, uso de skills,
-uso de tokens, reglas de ruteo y session scoring.
+trazas, eventos, alertas, feedback, caché de respuestas, resultados de contratos, uso de skills, uso
+de tokens, reglas de ruteo y session scoring.
 
 ### Identity Manifest
 
@@ -343,10 +340,11 @@ uso de tokens, reglas de ruteo y session scoring.
 
 ### Architecture
 
-**Arquitectura**: Singleton `DatabaseManager` en `apps/web-dashboard/server/database/manager.ts`
-con migraciones automáticas (WAL mode, foreign keys ON). Importable desde cualquier script del stack.
+**Arquitectura**: Singleton `DatabaseManager` en `apps/web-dashboard/server/database/manager.ts` con
+migraciones automáticas (WAL mode, foreign keys ON). Importable desde cualquier script del stack.
 
 #### Migration 001 - Initial Schema (Core operacional)
+
 - `metric_snapshots` — Time-series: tokens, sesiones, latencia, health cada 30s
 - `sessions` — Historial de sesiones (upsert por session_id)
 - `traces` — Distributed tracing spans (árbol trace_id → span_id)
@@ -355,6 +353,7 @@ con migraciones automáticas (WAL mode, foreign keys ON). Importable desde cualq
 - `feedback` — User feedback thumbs up/down por span
 
 #### Migration 002 - Stack Tables (Capa operacional extendida)
+
 - `response_cache` — SHA256 key → response (TTL-aware, hit_count tracking)
 - `contract_results` — SDD contract validation results
 - `skill_usage` — Per-session skill usage tracking
@@ -362,30 +361,31 @@ con migraciones automáticas (WAL mode, foreign keys ON). Importable desde cualq
 - `routing_rules` — Adaptive router persistence with hit_count
 
 #### Migration 003 - Session Scoring (Wave 37 E)
+
 - `session_scoring` — Quality scoring por sesión (delegations, corrections, proactive hits, etc.)
 
 ### Lifecycle
 
-| Comando                         | Descripción                                       |
-| ------------------------------- | ------------------------------------------------- |
-| `npm run db:init`               | Initialize DB + run all migrations (idempotent)   |
-| `npm run db:health`             | Health check: integrity, WAL, tables, rows        |
-| `npm run db:backup`             | Safe online backup to `.runtime/backups/`         |
-| `npm run db:restore`            | Restore latest backup                             |
-| `npm run db:list`               | List available backups                            |
-| `npm run db:optimize`           | WAL checkpoint + REINDEX + VACUUM                 |
-| `npm run db:prune`              | Prune old data from stack tables (events >30d, cache >7d, token_usage >90d) |
-| `npm run db:prune:backup`       | Keep only 10 most recent backups                  |
+| Comando                   | Descripción                                                                 |
+| ------------------------- | --------------------------------------------------------------------------- |
+| `npm run db:init`         | Initialize DB + run all migrations (idempotent)                             |
+| `npm run db:health`       | Health check: integrity, WAL, tables, rows                                  |
+| `npm run db:backup`       | Safe online backup to `.runtime/backups/`                                   |
+| `npm run db:restore`      | Restore latest backup                                                       |
+| `npm run db:list`         | List available backups                                                      |
+| `npm run db:optimize`     | WAL checkpoint + REINDEX + VACUUM                                           |
+| `npm run db:prune`        | Prune old data from stack tables (events >30d, cache >7d, token_usage >90d) |
+| `npm run db:prune:backup` | Keep only 10 most recent backups                                            |
 
 ### Pipeline Integration
 
 3 lazy steps en `config/session-autostart.config.json` (non-blocking):
 
-| Step                | Script                             | Propósito                          |
-| ------------------- | ---------------------------------- | ---------------------------------- |
-| `db-init`           | `src/database/db-init.ts`          | Init + migrations cada sesión      |
-| `db-health-check`   | `scripts/recovery/db-health-check.ts` | Validate SQLite integrity       |
-| `db-prune`          | `scripts/database/db-prune.ts`     | Prune old data cada sesión         |
+| Step              | Script                                | Propósito                     |
+| ----------------- | ------------------------------------- | ----------------------------- |
+| `db-init`         | `src/database/db-init.ts`             | Init + migrations cada sesión |
+| `db-health-check` | `scripts/recovery/db-health-check.ts` | Validate SQLite integrity     |
+| `db-prune`        | `scripts/database/db-prune.ts`        | Prune old data cada sesión    |
 
 ### Watchtower Monitoring
 
@@ -393,26 +393,28 @@ El componente `gentle-vanguard-db` en la watchtower verifica en cada ciclo:
 
 1. **database file** — existencia y tamaño
 2. **WAL file** — tamaño (> 5MB = WARN → checkpoint)
-3. **integrity check** — `PASS` (ok), `WARN` (transient: DB locked, CLI unavailable), `FAIL` (corruption)
+3. **integrity check** — `PASS` (ok), `WARN` (transient: DB locked, CLI unavailable), `FAIL`
+   (corruption)
 4. **size** — conteo de tablas y rows
 
 ### Normativa y Skill
 
 - **Normativa**: `rules/NEXUS-NORMATIVA.md` — identidad, ciclo de vida, guardrails, retention policy
 - **Skill**: `skills/nexus-database/SKILL.md` — cómo gestionar Nexus autónomamente
-- **Comando**: load the skill via `"nexus"`, `"db"`, `"database"`, or `"gentle-vanguard.db"` triggers
+- **Comando**: load the skill via `"nexus"`, `"db"`, `"database"`, or `"gentle-vanguard.db"`
+  triggers
 
 ### Relaciones con el Stack
 
-| Componente          | Relación con Nexus                                    |
-| ------------------- | ----------------------------------------------------- |
-| **Dashboard**       | Lee métricas, sesiones, trazas, alertas, feedback     |
-| **Session Scoring** | Escribe/lee quality scores por sesión                 |
-| **Adaptive Router** | Persiste routing_rules con hit_count                  |
-| **Response Cache**  | Cachea respuestas SHA256 con TTL                      |
-| **Watchtower**      | Monitorea integridad, tamaño, WAL en cada ciclo       |
-| **Token Budget**    | Almacena token_usage por sesión                       |
-| **SDD Contracts**   | Almacena contract_results para validación             |
+| Componente          | Relación con Nexus                                |
+| ------------------- | ------------------------------------------------- |
+| **Dashboard**       | Lee métricas, sesiones, trazas, alertas, feedback |
+| **Session Scoring** | Escribe/lee quality scores por sesión             |
+| **Adaptive Router** | Persiste routing_rules con hit_count              |
+| **Response Cache**  | Cachea respuestas SHA256 con TTL                  |
+| **Watchtower**      | Monitorea integridad, tamaño, WAL en cada ciclo   |
+| **Token Budget**    | Almacena token_usage por sesión                   |
+| **SDD Contracts**   | Almacena contract_results para validación         |
 
 ### Verificación rápida
 
@@ -430,11 +432,13 @@ npm run watchtower:health
 
 **Versión implementada: 1.0** | **Fecha: Agosto 2026**
 
-El stack implementa un sistema de steps adaptativos que auto-escala el presupuesto de pasos para orquestador y subagentes basándose en la complejidad de la tarea.
+El stack implementa un sistema de steps adaptativos que auto-escala el presupuesto de pasos para
+orquestador y subagentes basándose en la complejidad de la tarea.
 
 ### Problema Resuelto
 
-Los subagentes estaban configurados con solo 6 steps (`steps: 6`), lo que causaba que se agotaran rápidamente sin completar tareas complejas. El sistema adaptativo ahora asigna steps basándose en:
+Los subagentes estaban configurados con solo 6 steps (`steps: 6`), lo que causaba que se agotaran
+rápidamente sin completar tareas complejas. El sistema adaptativo ahora asigna steps basándose en:
 
 1. **Tipo de agente** (capacidad base)
 2. **Complejidad de la tarea** (señales de texto)
@@ -465,21 +469,21 @@ npx tsx src/recommend-agent.ts --task "fix broken ps1 references" --topn 3
 
 ### Configuration por Agente (opencode.json)
 
-| Agente | Steps | Tipo | Complejidad |
-|--------|-------|------|-------------|
-| orchestrator | 24 | Primary | Media |
-| sdd-explore | 38 | Subagent | Alta (investigación) |
-| sdd-design | 30 | Subagent | Alta (diseño) |
-| **sdd-apply** | **52** | Subagent | **Muy alta (código)** |
-| sdd-verify | 36 | Subagent | Alta (testing) |
-| doc-agent | 34 | Subagent | Media-alta |
-| ops-agent | 30 | Subagent | Media |
-| gov-agent | 38 | Subagent | Alta (seguridad) |
-| session-agent | 25 | Subagent | Media |
-| premortem-agent | 30 | Subagent | Media-alta |
-| maintenance-agent | 30 | Subagent | Media |
+| Agente              | Steps  | Tipo     | Complejidad            |
+| ------------------- | ------ | -------- | ---------------------- |
+| orchestrator        | 24     | Primary  | Media                  |
+| sdd-explore         | 38     | Subagent | Alta (investigación)   |
+| sdd-design          | 30     | Subagent | Alta (diseño)          |
+| **sdd-apply**       | **52** | Subagent | **Muy alta (código)**  |
+| sdd-verify          | 36     | Subagent | Alta (testing)         |
+| doc-agent           | 34     | Subagent | Media-alta             |
+| ops-agent           | 30     | Subagent | Media                  |
+| gov-agent           | 38     | Subagent | Alta (seguridad)       |
+| session-agent       | 25     | Subagent | Media                  |
+| premortem-agent     | 30     | Subagent | Media-alta             |
+| maintenance-agent   | 30     | Subagent | Media                  |
 | **self-diag-agent** | **38** | Subagent | **Alta (diagnóstico)** |
-| sia-agent | 35 | Subagent | Alta (refinamiento) |
+| sia-agent           | 35     | Subagent | Alta (refinamiento)    |
 
 ### Señales de Complejidad Detectadas
 
@@ -492,6 +496,7 @@ npx tsx src/recommend-agent.ts --task "fix broken ps1 references" --topn 3
 ### Routing Table Learnable
 
 Para auto-asignación inteligente, el sistema usa `.session/routing/routing-table.json` con:
+
 - 17 dominios pre-configurados (requirements, architecture, implementation, etc.)
 - 10 overrides de alta prioridad (security audit, code review, bug fix, etc.)
 - Success rate tracking por agente
@@ -542,7 +547,8 @@ npm run watchtower:health
 
 ## Auto-Fixer para Migraciones
 
-Durante la migración PS1→TS se creó `src/auto-ps1-fixer.ts` para automatizar correcciones de referencias rotas.
+Durante la migración PS1→TS se creó `src/auto-ps1-fixer.ts` para automatizar correcciones de
+referencias rotas.
 
 ### Uso
 
@@ -559,10 +565,10 @@ npx tsx src/auto-ps1-fixer-configs.ts
 
 ### Resultados de la Migración
 
-| Métrica | Valor |
-|---------|-------|
-| Scripts PS1 migrados | 390+ |
-| Scripts PS1 restantes | ~60 (entrad, helpers, templates) |
-| Referencias corregidas | 77+ en esta sesión |
-| TS Files totales | 231+ |
-| Migration Waves | 1-24 completadas |
+| Métrica                | Valor                            |
+| ---------------------- | -------------------------------- |
+| Scripts PS1 migrados   | 390+                             |
+| Scripts PS1 restantes  | ~60 (entrad, helpers, templates) |
+| Referencias corregidas | 77+ en esta sesión               |
+| TS Files totales       | 231+                             |
+| Migration Waves        | 1-24 completadas                 |

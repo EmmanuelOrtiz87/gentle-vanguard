@@ -1,6 +1,8 @@
 ---
 name: using-agent-skills
-description: Discover and invoke agent skills. Use when starting a session or when you need to discover which skill applies.
+description:
+  Discover and invoke agent skills. Use when starting a session or when you need to discover which
+  skill applies.
 triggers:
   - skill
   - discover skill

@@ -51,7 +51,10 @@ const C = {
 
 // ─── Helpers ──────────────────────────────────────────────────────────
 
-function run(cmd: string, args: string[]): { stdout: string; stderr: string; status: number | null } {
+function run(
+  cmd: string,
+  args: string[],
+): { stdout: string; stderr: string; status: number | null } {
   const r = runSync(cmd, args, { stdio: 'pipe' });
   return { stdout: r.stdout.trim(), stderr: r.stderr.trim(), status: r.status };
 }
@@ -77,7 +80,9 @@ const INSTALL_MAP: Record<string, () => boolean> = {
   scoop: () => {
     console.log(C.cyan('\n  Installing Scoop (Windows package manager)...'));
     const r = runInteractive('powershell', [
-      '-NoProfile', '-ExecutionPolicy', 'Bypass',
+      '-NoProfile',
+      '-ExecutionPolicy',
+      'Bypass',
       '-Command',
       'Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; iex "& {$(irm get.scoop.sh)} -RunAsAdmin"',
     ]);
@@ -86,8 +91,8 @@ const INSTALL_MAP: Record<string, () => boolean> = {
 };
 
 export async function installMissing(deps: DepSpec[], results: DepResult[]): Promise<number> {
-  const failed = results.filter(r => r.status === 'FAIL');
-  const warned = results.filter(r => r.status === 'WARN' && process.argv.includes('--all'));
+  const failed = results.filter((r) => r.status === 'FAIL');
+  const warned = results.filter((r) => r.status === 'WARN' && process.argv.includes('--all'));
   const toInstall = [...failed, ...warned];
 
   if (toInstall.length === 0) {
@@ -125,7 +130,7 @@ export async function installMissing(deps: DepSpec[], results: DepResult[]): Pro
     console.log(C.cyan(`\n  ── Installing ${item.name} ──`));
 
     // Find the dep spec
-    const spec = deps.find(d => d.name === item.name);
+    const spec = deps.find((d) => d.name === item.name);
     if (!spec || !spec.autoInstall || spec.autoInstall.length === 0) {
       console.log(C.yellow(`  No auto-install available for ${item.name}.`));
       if (spec) console.log(C.yellow(`  Manual: ${spec.installHint}`));
@@ -200,17 +205,112 @@ async function main(): Promise<void> {
 function getDepsInternal(): DepSpec[] {
   // Minimal dep list for standalone usage — avoids importing the full validator
   return [
-    { name: 'Node.js', binary: 'node', category: 'core', required: true, description: '', installHint: '', autoInstall: [] },
-    { name: 'pnpm', binary: 'pnpm', category: 'core', required: true, description: '', installHint: '', autoInstall: ['npm', 'install', '-g', 'pnpm'] },
-    { name: 'Git', binary: 'git', category: 'core', required: true, description: '', installHint: '', autoInstall: IS_WIN ? ['scoop', 'install', 'git'] : ['apt', 'install', '-y', 'git'] },
-    { name: 'Lefthook', binary: 'lefthook', category: 'stack', required: true, description: '', installHint: '', autoInstall: ['npm', 'install', '-g', 'lefthook'] },
-    { name: 'TruffleHog', binary: 'trufflehog', category: 'stack', required: false, description: '', installHint: '', autoInstall: IS_WIN ? ['scoop', 'install', 'trufflehog'] : ['pip3', 'install', 'trufflehog'] },
-    { name: 'Engram', binary: 'engram', category: 'stack', required: false, description: '', installHint: '', autoInstall: ['go', 'install', 'github.com/gentle-vanguard/engram/cmd/engram@latest'] },
-    { name: 'CodeGraph', binary: 'codegraph', category: 'stack', required: false, description: '', installHint: '', autoInstall: ['npm', 'install', '-g', '@opencode/codegraph'] },
-    { name: 'gh (GitHub CLI)', binary: 'gh', category: 'stack', required: false, description: '', installHint: '', autoInstall: IS_WIN ? ['scoop', 'install', 'gh'] : ['apt', 'install', '-y', 'gh'] },
-    { name: 'Go', binary: 'go', category: 'optional', required: false, description: '', installHint: '', autoInstall: IS_WIN ? ['scoop', 'install', 'go'] : ['apt', 'install', '-y', 'golang-go'] },
-    { name: 'Python', binary: IS_WIN ? 'python' : 'python3', category: 'optional', required: false, description: '', installHint: '', autoInstall: IS_WIN ? ['scoop', 'install', 'python'] : ['apt', 'install', '-y', 'python3'] },
-    { name: 'Scoop', binary: 'scoop', category: 'optional', required: false, description: '', installHint: '', autoInstall: IS_WIN ? ['powershell', '-NoProfile', '-Command', 'Set-ExecutionPolicy RemoteSigned -Scope CurrentUser; iex "& {$(irm get.scoop.sh)} -RunAsAdmin"'] : undefined },
+    {
+      name: 'Node.js',
+      binary: 'node',
+      category: 'core',
+      required: true,
+      description: '',
+      installHint: '',
+      autoInstall: [],
+    },
+    {
+      name: 'pnpm',
+      binary: 'pnpm',
+      category: 'core',
+      required: true,
+      description: '',
+      installHint: '',
+      autoInstall: ['npm', 'install', '-g', 'pnpm'],
+    },
+    {
+      name: 'Git',
+      binary: 'git',
+      category: 'core',
+      required: true,
+      description: '',
+      installHint: '',
+      autoInstall: IS_WIN ? ['scoop', 'install', 'git'] : ['apt', 'install', '-y', 'git'],
+    },
+    {
+      name: 'Lefthook',
+      binary: 'lefthook',
+      category: 'stack',
+      required: true,
+      description: '',
+      installHint: '',
+      autoInstall: ['npm', 'install', '-g', 'lefthook'],
+    },
+    {
+      name: 'TruffleHog',
+      binary: 'trufflehog',
+      category: 'stack',
+      required: false,
+      description: '',
+      installHint: '',
+      autoInstall: IS_WIN ? ['scoop', 'install', 'trufflehog'] : ['pip3', 'install', 'trufflehog'],
+    },
+    {
+      name: 'Engram',
+      binary: 'engram',
+      category: 'stack',
+      required: false,
+      description: '',
+      installHint: '',
+      autoInstall: ['go', 'install', 'github.com/gentle-vanguard/engram/cmd/engram@latest'],
+    },
+    {
+      name: 'CodeGraph',
+      binary: 'codegraph',
+      category: 'stack',
+      required: false,
+      description: '',
+      installHint: '',
+      autoInstall: ['npm', 'install', '-g', '@opencode/codegraph'],
+    },
+    {
+      name: 'gh (GitHub CLI)',
+      binary: 'gh',
+      category: 'stack',
+      required: false,
+      description: '',
+      installHint: '',
+      autoInstall: IS_WIN ? ['scoop', 'install', 'gh'] : ['apt', 'install', '-y', 'gh'],
+    },
+    {
+      name: 'Go',
+      binary: 'go',
+      category: 'optional',
+      required: false,
+      description: '',
+      installHint: '',
+      autoInstall: IS_WIN ? ['scoop', 'install', 'go'] : ['apt', 'install', '-y', 'golang-go'],
+    },
+    {
+      name: 'Python',
+      binary: IS_WIN ? 'python' : 'python3',
+      category: 'optional',
+      required: false,
+      description: '',
+      installHint: '',
+      autoInstall: IS_WIN ? ['scoop', 'install', 'python'] : ['apt', 'install', '-y', 'python3'],
+    },
+    {
+      name: 'Scoop',
+      binary: 'scoop',
+      category: 'optional',
+      required: false,
+      description: '',
+      installHint: '',
+      autoInstall: IS_WIN
+        ? [
+            'powershell',
+            '-NoProfile',
+            '-Command',
+            'Set-ExecutionPolicy RemoteSigned -Scope CurrentUser; iex "& {$(irm get.scoop.sh)} -RunAsAdmin"',
+          ]
+        : undefined,
+    },
   ];
 }
 
@@ -220,21 +320,40 @@ async function validateInternal(deps: DepSpec[]): Promise<DepResult[]> {
     const which = IS_WIN ? 'where' : 'which';
     const found = run(which, [dep.binary]).status === 0;
     if (found) {
-      results.push({ name: dep.name, found: true, version: '', status: 'PASS', message: 'Installed' });
+      results.push({
+        name: dep.name,
+        found: true,
+        version: '',
+        status: 'PASS',
+        message: 'Installed',
+      });
     } else if (dep.required) {
-      results.push({ name: dep.name, found: false, version: '', status: 'FAIL', message: `Not found. ${dep.installHint}` });
+      results.push({
+        name: dep.name,
+        found: false,
+        version: '',
+        status: 'FAIL',
+        message: `Not found. ${dep.installHint}`,
+      });
     } else {
-      results.push({ name: dep.name, found: false, version: '', status: 'WARN', message: `Not found (optional). ${dep.installHint}` });
+      results.push({
+        name: dep.name,
+        found: false,
+        version: '',
+        status: 'WARN',
+        message: `Not found (optional). ${dep.installHint}`,
+      });
     }
   }
   return results;
 }
 
 // Only run standalone if called directly
-const isMain = process.argv[1]?.replace(/\\/g, '/').endsWith('dependency-installer.ts') ||
-               process.argv[1]?.replace(/\\/g, '/').endsWith('dependency-installer.js');
+const isMain =
+  process.argv[1]?.replace(/\\/g, '/').endsWith('dependency-installer.ts') ||
+  process.argv[1]?.replace(/\\/g, '/').endsWith('dependency-installer.js');
 if (isMain) {
-  main().catch(err => {
+  main().catch((err) => {
     console.error('FATAL:', err.message);
     process.exit(1);
   });

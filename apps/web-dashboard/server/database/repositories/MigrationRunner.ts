@@ -322,12 +322,12 @@ export class MigrationRunner {
     for (const migration of MIGRATIONS) {
       if (!applied.has(migration.id)) {
         this.db.exec(migration.sql);
-        this.db
-          .prepare('INSERT INTO _migrations (id) VALUES (?)')
-          .run(migration.id);
+        this.db.prepare('INSERT INTO _migrations (id) VALUES (?)').run(migration.id);
         console.log(`[DB] Migration applied: ${migration.id}`);
       }
     }
-    console.log(`[DB] ${this.db.pragma('page_count', { simple: true })} pages, ${MIGRATIONS.length} migrations`);
+    console.log(
+      `[DB] ${this.db.pragma('page_count', { simple: true })} pages, ${MIGRATIONS.length} migrations`,
+    );
   }
 }

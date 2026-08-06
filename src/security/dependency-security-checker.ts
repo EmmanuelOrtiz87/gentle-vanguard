@@ -7,7 +7,7 @@
 
 // Mock function to simulate dependency security checking
 // In a real implementation, this would integrate with pnpm audit or similar tools
-export function checkDependencySecurity(): { 
+export function checkDependencySecurity(): {
   compliant: boolean;
   issues?: string[];
   recommendations?: string[];
@@ -41,7 +41,7 @@ export function checkDependencySecurity(): {
   return {
     compliant: !hasVulnerabilities && !hasPolicyViolations,
     issues: issues.length > 0 ? issues : undefined,
-    recommendations: recommendations.length > 0 ? recommendations : undefined
+    recommendations: recommendations.length > 0 ? recommendations : undefined,
   };
 }
 

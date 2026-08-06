@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 ## Purpose
 
 Automate the creation of new skills and synchronize base instructions across all AI agents

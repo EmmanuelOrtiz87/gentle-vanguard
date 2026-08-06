@@ -16,7 +16,8 @@ triggers:
 
 # Dashboard Skill
 
-Self-contained React/TypeScript/Vite observability system. No mock data — all metrics derive from real `.session/context-log/` traces.
+Self-contained React/TypeScript/Vite observability system. No mock data — all metrics derive from
+real `.session/context-log/` traces.
 
 ## Quick Start
 
@@ -26,16 +27,17 @@ npx tsx src/dashboard-ws-autostart.ts  # WS server only (pipeline)
 npx tsx src/dashboard-stop.ts          # Kill watchdog → WS → cleanup ports
 ```
 
-Dynamic ports persisted to `.runtime/dashboard-ports.json`. See [architecture](./references/architecture.md).
+Dynamic ports persisted to `.runtime/dashboard-ports.json`. See
+[architecture](./references/architecture.md).
 
 ## Reference Files
 
-| File | Content |
-|------|---------|
-| `references/architecture.md` | File tree, data flow diagram, scripts, resilience |
-| `references/key-concepts.md` | Real data pipeline, i18n/metric info, dynamic ports, alerts |
-| `references/common-tasks.md` | Adding metrics/alerts/i18n, testing checklist |
-| `references/troubleshooting.md` | WS down, stale data, build errors, port conflicts |
+| File                            | Content                                                     |
+| ------------------------------- | ----------------------------------------------------------- |
+| `references/architecture.md`    | File tree, data flow diagram, scripts, resilience           |
+| `references/key-concepts.md`    | Real data pipeline, i18n/metric info, dynamic ports, alerts |
+| `references/common-tasks.md`    | Adding metrics/alerts/i18n, testing checklist               |
+| `references/troubleshooting.md` | WS down, stale data, build errors, port conflicts           |
 
 ## Core Rules
 

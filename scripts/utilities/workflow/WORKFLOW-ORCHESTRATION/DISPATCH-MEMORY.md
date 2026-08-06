@@ -193,11 +193,11 @@ Save-DispatchContext -ExecutionId $result.execution_id -Context $dispatchContext
 ## Beneficios
 
 **Continuidad**: Mantiene contexto entre dispatches  
- **Recuperabilidad**: Puede recuperar informacin de ejecuciónes anteriores  
- **Trazabilidad**: Registro completo de todas las ejecuciónes  
- **Aprendizaje**: Los agentes pueden acceder a contexto histrico  
- **Debugging**: Facilita diagnstico de problemas en ejecuciónes anteriores  
- **Optimizacin**: Permite mejorar basndose en resultados previos
+**Recuperabilidad**: Puede recuperar informacin de ejecuciónes anteriores  
+**Trazabilidad**: Registro completo de todas las ejecuciónes  
+**Aprendizaje**: Los agentes pueden acceder a contexto histrico  
+**Debugging**: Facilita diagnstico de problemas en ejecuciónes anteriores  
+**Optimizacin**: Permite mejorar basndose en resultados previos
 
 ## Casos de Uso
 

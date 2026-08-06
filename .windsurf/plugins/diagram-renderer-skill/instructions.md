@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 ## When to Use
 
 - Generating architecture diagrams from DOT descriptions
@@ -54,18 +55,19 @@ npx tsx src/cli/diagram-renderer.ts --from-codegraph --module src/core --depth 2
 
 ## Supported Formats
 
-| Input    | Output          | Engine       |
-|----------|-----------------|--------------|
-| `.dot`   | SVG, PNG        | Graphviz     |
-| `.gv`    | SVG, PNG        | Graphviz     |
-| `.puml`  | SVG, PNG        | PlantUML     |
-| `.wsd`   | SVG, PNG        | PlantUML     |
-| `--dot`  | SVG, PNG        | Graphviz     |
-| `--from-codegraph` | SVG | CodeGraph AST |
+| Input              | Output   | Engine        |
+| ------------------ | -------- | ------------- |
+| `.dot`             | SVG, PNG | Graphviz      |
+| `.gv`              | SVG, PNG | Graphviz      |
+| `.puml`            | SVG, PNG | PlantUML      |
+| `.wsd`             | SVG, PNG | PlantUML      |
+| `--dot`            | SVG, PNG | Graphviz      |
+| `--from-codegraph` | SVG      | CodeGraph AST |
 
 ## Graphviz Examples
 
 ### Flowchart
+
 ```dot
 digraph Workflow {
   rankdir=LR;
@@ -79,6 +81,7 @@ digraph Workflow {
 ```
 
 ### Network Topology
+
 ```dot
 graph Network {
   rankdir=TB;
@@ -90,6 +93,7 @@ graph Network {
 ```
 
 ### Architecture Layer
+
 ```dot
 digraph Layers {
   rankdir=TB;
@@ -102,6 +106,7 @@ digraph Layers {
 ## PlantUML Examples
 
 ### Sequence Diagram
+
 ```puml
 @startuml
 actor User
@@ -119,6 +124,7 @@ FE --> User: Dashboard
 ```
 
 ### Class Diagram
+
 ```puml
 @startuml
 class User {

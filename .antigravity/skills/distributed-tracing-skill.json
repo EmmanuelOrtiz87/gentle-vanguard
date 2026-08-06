@@ -2,13 +2,7 @@
   "name": "distributed-tracing-skill",
   "version": "1.0.0",
   "description": "Distributed tracing with OpenTelemetry for workspace sessions",
-  "triggers": [
-    "tracing",
-    "telemetry",
-    "distributed",
-    "correlation",
-    "span"
-  ],
+  "triggers": ["tracing", "telemetry", "distributed", "correlation", "span"],
   "mission": {
     "name": "distributed-tracing-skill Mission",
     "max_agents": 1,
@@ -18,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "# Distributed Tracing Skill\n\n## Descripcin\n\nEste skill proporciona capacidades de tracing distribuido para el gentle-vanguard, permitiendo\nrastrear la ejecucin de dispatches, orchestration y automatización con:\n\n- **OpenTelemetry Integration**: Implementacin compatible con estndares de observabilidad\n- **Correlation IDs**: Identificadores nicos para rastrear operaciónes a travs de mltiples\n  componentes\n- **Span Hierarchy**: estructura jerrquica de spans para visualizar relaciones entre operaciónes\n- **Performance Metrics**: Mtricas de rendimiento en tiempo real\n- **Centralized Reporting**: Reportes centralizados en un nico directorio\n\n## Caractersticas\n\n### 1. Correlation IDs\n\n- Generacin automtica de IDs nicos por sesin\n- Propagacin a travs de todas las operaciónes\n- Formato: `session-YYYY-MM-DD-XX-XXXXXXXX` (UUID)\n\n### 2. Span Hierarchy\n\n```\nRoot Span (Session)\n Dispatch Span\n    Task Routing Span\n    Agent Execution Span\n    Result Processing Span\n Orchestration Span\n    Phase Execution Span\n    State Management Span\n Automation Span\n     Event Processing Span\n     Action Execution Span\n```\n\n### 3. Performance Metrics\n\n- Latencia de operaciónes\n- Throughput de dispatches\n- Tasa de xito/error\n- Utilizacin de recursos\n\n### 4. Reportes Centralizados\n\nestructura de directorios:\n\n```\n.telemetry/\n traces/\n    dispatch-traces-YYYY-MM-DD.jsonl\n    orchestration-traces-YYYY-MM-DD.jsonl\n    automation-traces-YYYY-MM-DD.jsonl\n metrics/\n    performance-metrics-YYYY-MM-DD.json\n    dispatch-metrics-YYYY-MM-DD.json\n    system-metrics-YYYY-MM-DD.json\n reports/\n    daily-summary-YYYY-MM-DD.md\n    performance-analysis-YYYY-MM-DD.md\n    error-analysis-YYYY-MM-DD.md\n index.json\n```\n\n## Uso\n\n### Inicializar Tracing\n\n```powershell\n. ./skills/distributed-tracing-skill/distributed-tracing-core.ps1\n\n$tracing = Initialize-DistributedTracing -SessionId \"session-2026-04-23-24\"\n```\n\n### Crear Spans\n\n```powershell\n$span = Start-Span -Name \"dispatch-task\" -ParentSpanId $parentSpan.SpanId -Attributes @{\n    TaskType = \"feature-implementation\"\n    Priority = \"high\"\n}\n\n# ... realizar operacin ...\n\nEnd-Span -Span $span -Status \"success\"\n```\n\n### Registrar Mtricas\n\n```powershell\nRecord-Metric -Name \"dispatch-latency\" -Value 1250 -Unit \"ms\" -Tags @{\n    DispatchType = \"auto-delegation\"\n    AgentType = \"code-review\"\n}\n```\n\n### Generar Reportes\n\n```powershell\nGenerate-DailyReport -Date (Get-Date) -OutputPath \".telemetry/reports\"\n```\n\n## Integracin con Componentes Existentes\n\n### Auto-Delegation Router\n\n- Cada dispatch genera un span raz\n- Sub-spans para keyword extraction, decisión tree, confidence scoring\n- Mtricas de routing accuracy\n\n### Judgment Day Orchestrator\n\n- Span para cada fase de judgment\n- Mtricas de review time y approval rate\n- Trazabilidad de decisiónes\n\n### Session Manager\n\n- Correlation ID propagado a toda la sesin\n- Mtricas de session lifecycle\n- Anlisis de session performance\n\n## configuración\n\nVer: `config/distributed-tracing-config.json`\n\n## archivos Relacionados\n\n- `skills/distributed-tracing-skill/distributed-tracing-core.ps1` - Core implementation\n- `skills/distributed-tracing-skill/otel-exporter.ps1` - OpenTelemetry exporter\n- `skills/distributed-tracing-skill/metrics-collector.ps1` - Metrics collection\n- `skills/distributed-tracing-skill/report-generator.ps1` - Report generation\n- `scripts/utilities/telemetry-dashboard.ps1` - Dashboard para visualizar traces",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

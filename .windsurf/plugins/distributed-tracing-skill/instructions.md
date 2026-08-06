@@ -3,9 +3,11 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 Distributed tracing with OpenTelemetry for workspace sessions
 
 ## Triggers
+
 - tracing
 - telemetry
 - distributed
@@ -13,6 +15,7 @@ Distributed tracing with OpenTelemetry for workspace sessions
 - span
 
 ## Instructions
+
 # Distributed Tracing Skill
 
 ## Descripcin

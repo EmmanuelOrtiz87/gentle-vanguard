@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
  * Dashboard CMD Launcher - 100% CMD Native, Zero PowerShell Dependency
- * 
+ *
  * SOLUCIONA EL ROOT CAUSE:
  * - Probema: ChildProcess.kill falla con PowerShell
  * - Solución: CMD nativo exclusivo, spawn directo sin shell intermedio
  * - Arquitectura: Single-shot launcher, no watchers, no doble ejecución
- * 
+ *
  * USO: npx tsx src/dashboard-cmd-launcher.ts [--port 8080]
  */
 
@@ -20,11 +20,6 @@ const RUNTIME_DIR = join(ROOT, '.runtime');
 const WS_SCRIPT = join(ROOT, 'apps', 'web-dashboard', 'server', 'websocket-server.ts');
 const PID_FILE = join(RUNTIME_DIR, 'dashboard-ws.pid');
 const LOG_FILE = join(RUNTIME_DIR, 'dashboard-cmd.log');
-
-interface LauncherOptions {
-  port: number;
-  detached: boolean;
-}
 
 function log(message: string): void {
   const timestamp = new Date().toISOString();
@@ -84,26 +79,17 @@ function launchDashboard(port: number): Promise<number> {
   return new Promise((resolve, reject) => {
     // CMD NATIVO: Usar spawn con cmd.exe para ejecutar el batch
     // ¡Este es el truco! ejecutar cmd.exe que corra tsx.cmd
-    const child = spawn(
-      'cmd.exe',
-      [
-        '/c',
-        'npx',
-        'tsx',
-        WS_SCRIPT
-      ],
-      {
-        cwd: join(ROOT, 'apps', 'web-dashboard'),
-        windowsHide: true,
-        detached: false, // NO detached para evitar orphans
-        stdio: ['ignore', 'pipe', 'pipe'],
-        env: {
-          ...process.env,
-          WS_PORT: String(port),
-          NODE_ENV: 'development'
-        }
-      }
-    );
+    const child = spawn('cmd.exe', ['/c', 'npx', 'tsx', WS_SCRIPT], {
+      cwd: join(ROOT, 'apps', 'web-dashboard'),
+      windowsHide: true,
+      detached: false, // NO detached para evitar orphans
+      stdio: ['ignore', 'pipe', 'pipe'],
+      env: {
+        ...process.env,
+        WS_PORT: String(port),
+        NODE_ENV: 'development',
+      },
+    });
 
     if (child.pid) {
       writeFileSync(PID_FILE, String(child.pid), 'utf-8');
@@ -139,7 +125,7 @@ async function waitForHealth(port: number, timeoutMs: number = 10000): Promise<b
   while (Date.now() - start < timeoutMs) {
     const healthy = await isPortInUse(port);
     if (healthy) return true;
-    await new Promise(r => setTimeout(r, 500));
+    await new Promise((r) => setTimeout(r, 500));
   }
   return false;
 }
@@ -171,12 +157,12 @@ async function main() {
 
   // Lanzar dashboard
   try {
-    const pid = await launchDashboard(port);
-    
+    await launchDashboard(port);
+
     // Esperar health check
     log('Waiting for health check...');
     const healthy = await waitForHealth(port);
-    
+
     if (healthy) {
       log(`✓ Dashboard healthy on http://localhost:${port}`);
       return 0;
@@ -190,4 +176,9 @@ async function main() {
   }
 }
 
-main().then(code => process.exit(code));
+main()
+  .then((code) => process.exit(code))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

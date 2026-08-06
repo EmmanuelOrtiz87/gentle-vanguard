@@ -2,12 +2,6 @@
   "name": "distributed-tracing-skill",
   "version": "1.0.0",
   "description": "Distributed tracing with OpenTelemetry for workspace sessions",
-  "triggers": [
-    "tracing",
-    "telemetry",
-    "distributed",
-    "correlation",
-    "span"
-  ],
+  "triggers": ["tracing", "telemetry", "distributed", "correlation", "span"],
   "author": "Gentle-Vanguard"
 }

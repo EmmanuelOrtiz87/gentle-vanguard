@@ -12,8 +12,11 @@ const ROOT = resolve(import.meta.dirname, '..', '..');
 describe('Detect Tool', () => {
   it('detects OpenCode from env', () => {
     const result = spawnSync('npx', ['tsx', 'src/core/detect-tool.ts', '--json'], {
-      cwd: ROOT, encoding: 'utf-8', timeout: 15000, shell: true,
-      env: { ...process.env, OPENCODE_SERVER_USERNAME: 'test-user' }
+      cwd: ROOT,
+      encoding: 'utf-8',
+      timeout: 15000,
+      shell: true,
+      env: { ...process.env, OPENCODE_SERVER_USERNAME: 'test-user' },
     });
     const parsed = JSON.parse(result.stdout);
     assert.ok(parsed.name || parsed.isOpenCode !== undefined, `output: ${result.stdout}`);
@@ -21,7 +24,10 @@ describe('Detect Tool', () => {
 
   it('returns valid JSON', () => {
     const result = spawnSync('npx', ['tsx', 'src/core/detect-tool.ts', '--json'], {
-      cwd: ROOT, encoding: 'utf-8', timeout: 15000, shell: true
+      cwd: ROOT,
+      encoding: 'utf-8',
+      timeout: 15000,
+      shell: true,
     });
     const parsed = JSON.parse(result.stdout);
     assert.ok(typeof parsed === 'object' && parsed !== null, 'Expected JSON object');

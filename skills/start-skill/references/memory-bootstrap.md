@@ -1,7 +1,8 @@
 ---
 name: memory-bootstrap
-description: Full bootstrap workflow for first-run memory setup — interactive task decoding,
-  comprehensive scan, and memory file creation.
+description:
+  Full bootstrap workflow for first-run memory setup — interactive task decoding, comprehensive
+  scan, and memory file creation.
 ---
 
 # Memory Bootstrap

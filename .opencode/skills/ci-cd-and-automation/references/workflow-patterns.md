@@ -34,7 +34,8 @@ if (featureFlags.isEnabled('new-checkout-flow', { userId })) {
 return renderLegacyCheckout();
 ```
 
-**Flag lifecycle:** Create → Enable for testing → Canary → Full rollout → Remove the flag and dead code. Flags that live forever become technical debt — set a cleanup date when you create them.
+**Flag lifecycle:** Create → Enable for testing → Canary → Full rollout → Remove the flag and dead
+code. Flags that live forever become technical debt — set a cleanup date when you create them.
 
 ## Staged Rollouts
 
@@ -94,7 +95,8 @@ updates:
 
 ### Build Cop Role
 
-Designate someone responsible for keeping CI green. When the build breaks, the Build Cop's job is to fix or revert — not the person whose change caused the break.
+Designate someone responsible for keeping CI green. When the build breaks, the Build Cop's job is to
+fix or revert — not the person whose change caused the break.
 
 ### PR Checks
 

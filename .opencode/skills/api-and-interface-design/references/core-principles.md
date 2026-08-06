@@ -2,19 +2,25 @@
 
 ## Hyrum's Law
 
-> With a sufficient number of users of an API, all observable behaviors of your system will be depended on by somebody, regardless of what you promise in the contract.
+> With a sufficient number of users of an API, all observable behaviors of your system will be
+> depended on by somebody, regardless of what you promise in the contract.
 
-This means: every public behavior — including undocumented quirks, error message text, timing, and ordering — becomes a de facto contract once users depend on it.
+This means: every public behavior — including undocumented quirks, error message text, timing, and
+ordering — becomes a de facto contract once users depend on it.
 
 **Design implications:**
+
 - **Be intentional about what you expose.** Every observable behavior is a potential commitment.
 - **Don't leak implementation details.** If users can observe it, they will depend on it.
 - **Plan for deprecation at design time.**
-- **Tests are not enough.** Even with perfect contract tests, Hyrum's Law means "safe" changes can break real users who depend on undocumented behavior.
+- **Tests are not enough.** Even with perfect contract tests, Hyrum's Law means "safe" changes can
+  break real users who depend on undocumented behavior.
 
 ## The One-Version Rule
 
-Avoid forcing consumers to choose between multiple versions of the same dependency or API. Diamond dependency problems arise when different consumers need different versions of the same thing. Design for a world where only one version exists at a time — extend rather than fork.
+Avoid forcing consumers to choose between multiple versions of the same dependency or API. Diamond
+dependency problems arise when different consumers need different versions of the same thing. Design
+for a world where only one version exists at a time — extend rather than fork.
 
 ## 1. Contract First
 
@@ -62,10 +68,10 @@ interface CreateTaskInput {
 
 ## 3. Predictable Naming
 
-| Pattern | Convention | Example |
-|---------|------------|---------|
-| REST endpoints | Plural nouns, no verbs | `GET /api/tasks`, `POST /api/tasks` |
-| Query params | camelCase | `?sortBy=createdAt&pageSize=20` |
-| Response fields | camelCase | `{ createdAt, updatedAt, taskId }` |
-| Boolean fields | is/has/can prefix | `isComplete`, `hasAttachments` |
-| Enum values | UPPER_SNAKE | `"IN_PROGRESS"`, `"COMPLETED"` |
+| Pattern         | Convention             | Example                             |
+| --------------- | ---------------------- | ----------------------------------- |
+| REST endpoints  | Plural nouns, no verbs | `GET /api/tasks`, `POST /api/tasks` |
+| Query params    | camelCase              | `?sortBy=createdAt&pageSize=20`     |
+| Response fields | camelCase              | `{ createdAt, updatedAt, taskId }`  |
+| Boolean fields  | is/has/can prefix      | `isComplete`, `hasAttachments`      |
+| Enum values     | UPPER_SNAKE            | `"IN_PROGRESS"`, `"COMPLETED"`      |

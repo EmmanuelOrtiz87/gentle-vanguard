@@ -43,10 +43,10 @@ View Report:
 ## Features
 
 Validacin de esquemas  
- Polticas de seguridad  
- Rate limiting  
- Auditora completa  
- Monitoreo pasivo  
- Alertas automticas
+Polticas de seguridad  
+Rate limiting  
+Auditora completa  
+Monitoreo pasivo  
+Alertas automticas
 
 Ver `docs/EVENT-GOVERNANCE-IMPLEMENTATION.md` para detalles.

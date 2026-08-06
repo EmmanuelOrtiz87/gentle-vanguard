@@ -155,18 +155,26 @@ function main(): GitFlowResult {
       console.log('');
       console.log('Do you want to create a valid branch now? (Y/n)');
       // In a CLI tool, we can't easily prompt, but we can note it
-      writeInfo('Interactive branch creation not available in headless mode. Use --interactive with a TTY.', args.quiet);
+      writeInfo(
+        'Interactive branch creation not available in headless mode. Use --interactive with a TTY.',
+        args.quiet,
+      );
     }
 
     showGitFlowHelp(branch, 'unknown', 'N/A');
     return { exitCode: 1 };
   }
 
-  const expectedBase = ['feature', 'bugfix', 'chore'].includes(kind) ? 'develop'
-    : ['hotfix', 'release'].includes(kind) ? 'main'
-    : branch;
+  const expectedBase = ['feature', 'bugfix', 'chore'].includes(kind)
+    ? 'develop'
+    : ['hotfix', 'release'].includes(kind)
+      ? 'main'
+      : branch;
 
-  writeOk(`Branch '${branch}' classified as '${kind}' (expected PR base: ${expectedBase}).`, args.quiet);
+  writeOk(
+    `Branch '${branch}' classified as '${kind}' (expected PR base: ${expectedBase}).`,
+    args.quiet,
+  );
 
   if (args.enforcePrBase) {
     if (!args.prBase) {
@@ -175,7 +183,9 @@ function main(): GitFlowResult {
     }
 
     if (args.prBase !== expectedBase) {
-      writeFail(`PR base '${args.prBase}' violates GitFlow for branch '${branch}'. Expected base: '${expectedBase}'.`);
+      writeFail(
+        `PR base '${args.prBase}' violates GitFlow for branch '${branch}'. Expected base: '${expectedBase}'.`,
+      );
       showGitFlowHelp(branch, kind, expectedBase);
       return { exitCode: 1 };
     }

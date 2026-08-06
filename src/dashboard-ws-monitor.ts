@@ -30,10 +30,10 @@ const DEFAULT_PORT = 8080;
 const WS_SCRIPT = path.join(ROOT, 'apps', 'web-dashboard', 'server', 'websocket-server.ts');
 
 interface MonitorConfig {
-  interval: number;     // Health check interval in seconds
-  maxRetries: number;     // Max restart attempts per failure
-  retryDelay: number;   // Delay between restart attempts in ms
-  daemon: boolean;      // Run as daemon (detach from parent)
+  interval: number; // Health check interval in seconds
+  maxRetries: number; // Max restart attempts per failure
+  retryDelay: number; // Delay between restart attempts in ms
+  daemon: boolean; // Run as daemon (detach from parent)
 }
 
 function log(msg: string): void {
@@ -100,20 +100,16 @@ async function startWsServer(port: number): Promise<boolean> {
   }
 
   return new Promise((resolve) => {
-    const child = spawn(
-      'cmd.exe',
-      ['/c', 'npx.cmd', 'tsx', WS_SCRIPT],
-      {
-        cwd: ROOT,
-        stdio: 'ignore',
-        detached: true,
-        windowsHide: true,
-        env: {
-          ...process.env,
-          WS_PORT: String(port),
-        },
-      }
-    );
+    const child = spawn('cmd.exe', ['/c', 'npx.cmd', 'tsx', WS_SCRIPT], {
+      cwd: ROOT,
+      stdio: 'ignore',
+      detached: true,
+      windowsHide: true,
+      env: {
+        ...process.env,
+        WS_PORT: String(port),
+      },
+    });
 
     child.unref();
 
@@ -198,7 +194,10 @@ async function main(): Promise<void> {
 }
 
 // Run if called directly
-if (process.argv[1] && import.meta.url === (await import('url')).pathToFileURL(process.argv[1]).href) {
+if (
+  process.argv[1] &&
+  import.meta.url === (await import('url')).pathToFileURL(process.argv[1]).href
+) {
   main().catch((err) => {
     log(`[FATAL] ${err}`);
     removePid();

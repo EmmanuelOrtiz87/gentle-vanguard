@@ -1,6 +1,6 @@
 ## INTIGRITI REPORT TEMPLATE
 
-```markdown
+`````markdown
 # [Bug Class]: [Exact Impact] in [Endpoint/Feature]
 
 ## Description
@@ -22,7 +22,7 @@ endpoint, method, parameter, data exposed, required privileges.]
 
 2. Send the following HTTP request:
 
-```http METHOD /endpoint HTTP/1.1 Host: target.com Authorization: Bearer ATTACKER_TOKEN
+````http METHOD /endpoint HTTP/1.1 Host: target.com Authorization: Bearer ATTACKER_TOKEN
 Content-Type: application/json
 
 {"param": "victim_id_here"} ```
@@ -44,6 +44,9 @@ CVSS 3.1 Score: X.X ([Severity]) — AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N
 ## Attachments
 
 [Screenshot or Loom video showing the impact — Intigriti triagers prefer video for complex bugs]
+````
+`````
+
 ```
 
 **Intigriti-specific notes:**
@@ -53,3 +56,4 @@ CVSS 3.1 Score: X.X ([Severity]) — AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N
 - CVSS 3.1 is standard (CVSS 4.0 also accepted on newer programs)
 - PoC video is valued much more than screenshot alone — record with Loom
 - Safe harbor: Intigriti enforces it, be comfortable going slightly aggressive with testing
+```

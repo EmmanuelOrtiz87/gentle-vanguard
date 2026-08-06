@@ -21,23 +21,23 @@ import { join, resolve } from 'node:path';
 
 interface DependencySpec {
   name: string;
-  binary: string;           // command to check
+  binary: string; // command to check
   category: 'core' | 'stack' | 'optional' | 'platform';
-  minVersion?: string;       // semver or plain string comparison
+  minVersion?: string; // semver or plain string comparison
   maxVersion?: string;
-  versionCmd?: string;       // how to get version (default: '<binary> --version')
-  versionExtract?: string;   // regex to extract version from output
-  required: boolean;         // FAIL if missing?
+  versionCmd?: string; // how to get version (default: '<binary> --version')
+  versionExtract?: string; // regex to extract version from output
+  required: boolean; // FAIL if missing?
   description: string;
-  installHint: string;       // how to install
-  autoInstall?: string[];    // [cmd, arg1, arg2, ...] for auto-install
+  installHint: string; // how to install
+  autoInstall?: string[]; // [cmd, arg1, arg2, ...] for auto-install
 
   // For `platform` category — file/directory existence check instead of binary
-  checkPath?: string;        // relative path to check for existence
-  isDir?: boolean;           // true = directory check, false = file check
-  detailCmd?: string;        // optional command to get details (e.g., node count)
-  detailExtract?: string;    // regex to extract detail from output
-  installCmd?: string;       // command to auto-install/initialize this component
+  checkPath?: string; // relative path to check for existence
+  isDir?: boolean; // true = directory check, false = file check
+  detailCmd?: string; // optional command to get details (e.g., node count)
+  detailExtract?: string; // regex to extract detail from output
+  installCmd?: string; // command to auto-install/initialize this component
 }
 
 interface DepResult {
@@ -52,10 +52,15 @@ interface DepResult {
 
 // ─── Platform Detection ───────────────────────────────────────────────
 
-const PLATFORM: string = process.platform === 'win32' ? 'windows' : process.platform === 'darwin' ? 'macos' : 'linux';
+const PLATFORM: string =
+  process.platform === 'win32' ? 'windows' : process.platform === 'darwin' ? 'macos' : 'linux';
 
-function win(): boolean { return PLATFORM === 'windows'; }
-function mac(): boolean { return PLATFORM === 'macos'; }
+function win(): boolean {
+  return PLATFORM === 'windows';
+}
+function mac(): boolean {
+  return PLATFORM === 'macos';
+}
 
 // ─── Helpers ──────────────────────────────────────────────────────────
 
@@ -65,7 +70,10 @@ function cmdExists(cmd: string): boolean {
   return r.status === 0;
 }
 
-function run(cmd: string, args: string[]): { stdout: string; stderr: string; status: number | null } {
+function run(
+  cmd: string,
+  args: string[],
+): { stdout: string; stderr: string; status: number | null } {
   const r = runSync(cmd, args, { stdio: 'pipe' });
   return { stdout: r.stdout.trim(), stderr: r.stderr.trim(), status: r.status };
 }
@@ -77,7 +85,9 @@ function getVersion(binary: string, versionCmd?: string, extract?: string): stri
     const parts = cmd.split(/\s+/);
     const r = run(parts[0], parts.slice(1));
     raw = r.stdout || r.stderr;
-  } catch { return ''; }
+  } catch {
+    return '';
+  }
 
   if (extract) {
     const m = raw.match(new RegExp(extract));
@@ -92,7 +102,17 @@ function versionSatisfies(version: string, constraint: string | undefined): bool
   const v = parseVersion(version);
   if (!v) return true; // can't parse, skip check
 
-  const op = constraint.startsWith('>=') ? '>=' : constraint.startsWith('>') ? '>' : constraint.startsWith('<=') ? '<=' : constraint.startsWith('<') ? '<' : constraint.startsWith('=') ? '=' : '>=';
+  const op = constraint.startsWith('>=')
+    ? '>='
+    : constraint.startsWith('>')
+      ? '>'
+      : constraint.startsWith('<=')
+        ? '<='
+        : constraint.startsWith('<')
+          ? '<'
+          : constraint.startsWith('=')
+            ? '='
+            : '>=';
   const rawVer = constraint.replace(/^[>=<]+/, '');
   const c = parseVersion(rawVer);
   if (!c) return true;
@@ -150,7 +170,11 @@ function getDependencies(): DependencySpec[] {
         : mac()
           ? 'brew install node'
           : 'curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && apt install -y nodejs',
-      autoInstall: win() ? ['scoop', 'install', 'nodejs'] : mac() ? ['brew', 'install', 'node'] : ['apt', 'install', '-y', 'nodejs'],
+      autoInstall: win()
+        ? ['scoop', 'install', 'nodejs']
+        : mac()
+          ? ['brew', 'install', 'node']
+          : ['apt', 'install', '-y', 'nodejs'],
     },
     {
       name: 'pnpm',
@@ -178,7 +202,11 @@ function getDependencies(): DependencySpec[] {
         : mac()
           ? 'brew install git'
           : 'apt install -y git',
-      autoInstall: win() ? ['scoop', 'install', 'git'] : mac() ? ['brew', 'install', 'git'] : ['apt', 'install', '-y', 'git'],
+      autoInstall: win()
+        ? ['scoop', 'install', 'git']
+        : mac()
+          ? ['brew', 'install', 'git']
+          : ['apt', 'install', '-y', 'git'],
     },
     {
       name: 'npm',
@@ -206,7 +234,11 @@ function getDependencies(): DependencySpec[] {
         : mac()
           ? 'brew install trufflehog'
           : 'pip3 install trufflehog',
-      autoInstall: win() ? ['scoop', 'install', 'trufflehog'] : mac() ? ['brew', 'install', 'trufflehog'] : ['pip3', 'install', 'trufflehog'],
+      autoInstall: win()
+        ? ['scoop', 'install', 'trufflehog']
+        : mac()
+          ? ['brew', 'install', 'trufflehog']
+          : ['pip3', 'install', 'trufflehog'],
     },
     {
       name: 'Lefthook',
@@ -254,7 +286,11 @@ function getDependencies(): DependencySpec[] {
         : mac()
           ? 'brew install gh'
           : 'apt install -y gh',
-      autoInstall: win() ? ['scoop', 'install', 'gh'] : mac() ? ['brew', 'install', 'gh'] : ['apt', 'install', '-y', 'gh'],
+      autoInstall: win()
+        ? ['scoop', 'install', 'gh']
+        : mac()
+          ? ['brew', 'install', 'gh']
+          : ['apt', 'install', '-y', 'gh'],
     },
 
     // ═══ OPTIONAL ════════════════════════════════════════════════════
@@ -271,7 +307,11 @@ function getDependencies(): DependencySpec[] {
         : mac()
           ? 'brew install go'
           : 'apt install -y golang-go',
-      autoInstall: win() ? ['scoop', 'install', 'go'] : mac() ? ['brew', 'install', 'go'] : ['apt', 'install', '-y', 'golang-go'],
+      autoInstall: win()
+        ? ['scoop', 'install', 'go']
+        : mac()
+          ? ['brew', 'install', 'go']
+          : ['apt', 'install', '-y', 'golang-go'],
     },
     {
       name: 'Python',
@@ -286,7 +326,11 @@ function getDependencies(): DependencySpec[] {
         : mac()
           ? 'brew install python'
           : 'apt install -y python3 python3-pip',
-      autoInstall: win() ? ['scoop', 'install', 'python'] : mac() ? ['brew', 'install', 'python'] : ['apt', 'install', '-y', 'python3'],
+      autoInstall: win()
+        ? ['scoop', 'install', 'python']
+        : mac()
+          ? ['brew', 'install', 'python']
+          : ['apt', 'install', '-y', 'python3'],
     },
     {
       name: 'Scoop',
@@ -296,9 +340,15 @@ function getDependencies(): DependencySpec[] {
       versionExtract: '(\\d+\\.\\d+\\.\\d+)',
       required: false,
       description: 'Windows package manager — installs dev tools easily (Windows only)',
-      installHint: 'powershell -Command "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser; iex \"& {$(irm get.scoop.sh)} -RunAsAdmin\""',
+      installHint:
+        'powershell -Command "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser; iex \"& {$(irm get.scoop.sh)} -RunAsAdmin\""',
       autoInstall: win()
-        ? ['powershell', '-NoProfile', '-Command', 'Set-ExecutionPolicy RemoteSigned -Scope CurrentUser; iex "& {$(irm get.scoop.sh)} -RunAsAdmin"']
+        ? [
+            'powershell',
+            '-NoProfile',
+            '-Command',
+            'Set-ExecutionPolicy RemoteSigned -Scope CurrentUser; iex "& {$(irm get.scoop.sh)} -RunAsAdmin"',
+          ]
         : undefined,
     },
 
@@ -322,7 +372,8 @@ function getDependencies(): DependencySpec[] {
       category: 'platform',
       checkPath: 'graphify-out/graph.json',
       isDir: false,
-      detailCmd: 'node -e "const f=require(\'fs\');const j=JSON.parse(f.readFileSync(\'graphify-out/graph.json\',\'utf8\'));console.log((j.nodes||[]).length+\' \'+(j.links||[]).length)"',
+      detailCmd:
+        "node -e \"const f=require('fs');const j=JSON.parse(f.readFileSync('graphify-out/graph.json','utf8'));console.log((j.nodes||[]).length+' '+(j.links||[]).length)\"",
       detailExtract: '(\\d+) (\\d+)',
       required: true,
       description: 'Knowledge graph — codebase analysis with node/edge relationships',
@@ -355,7 +406,9 @@ function getDependencies(): DependencySpec[] {
       category: 'platform',
       checkPath: '.opencode/skills',
       isDir: true,
-      detailCmd: win() ? 'cmd /c "dir /b .opencode\\skills 2>nul | find /c /v \"\""' : 'ls -1 .opencode/skills 2>/dev/null | wc -l',
+      detailCmd: win()
+        ? 'cmd /c "dir /b .opencode\\skills 2>nul | find /c /v \"\""'
+        : 'ls -1 .opencode/skills 2>/dev/null | wc -l',
       detailExtract: '(\\d+)',
       required: true,
       description: 'OpenCode skills — specialized workflow instructions for agents',
@@ -495,12 +548,22 @@ async function validateAll(deps: DependencySpec[]): Promise<DepResult[]> {
             } else {
               detail = out;
             }
-          } catch { detail = 'available'; }
+          } catch {
+            detail = 'available';
+          }
         }
         status = 'PASS';
-        message = detail ? detail : (dep.isDir ? 'Directory exists' : 'File exists');
+        message = detail ? detail : dep.isDir ? 'Directory exists' : 'File exists';
       }
-      results.push({ name: dep.name, category: 'platform', found, version: '', required: dep.required, status, message });
+      results.push({
+        name: dep.name,
+        category: 'platform',
+        found,
+        version: '',
+        required: dep.required,
+        status,
+        message,
+      });
       continue;
     }
 
@@ -528,7 +591,15 @@ async function validateAll(deps: DependencySpec[]): Promise<DepResult[]> {
         message = `v${version}`;
       }
     }
-    results.push({ name: dep.name, category: dep.category, found, version, required: dep.required, status, message });
+    results.push({
+      name: dep.name,
+      category: dep.category,
+      found,
+      version,
+      required: dep.required,
+      status,
+      message,
+    });
   }
   return results;
 }
@@ -558,15 +629,21 @@ function printResults(results: DepResult[], quiet: boolean, json: boolean): void
   }
 
   const categories = ['core', 'stack', 'optional', 'platform'] as const;
-  const labels: Record<string, string> = { core: 'CORE', stack: 'STACK', optional: 'OPTIONAL', platform: 'PLATFORM' };
+  const labels: Record<string, string> = {
+    core: 'CORE',
+    stack: 'STACK',
+    optional: 'OPTIONAL',
+    platform: 'PLATFORM',
+  };
 
   for (const cat of categories) {
-    const items = results.filter(r => r.category === cat);
+    const items = results.filter((r) => r.category === cat);
     if (items.length === 0) continue;
     if (!quiet) console.log(C.bold(C.cyan(`  ── ${labels[cat]} ──`)));
 
     for (const item of items) {
-      const icon = item.status === 'PASS' ? C.green('✔') : item.status === 'WARN' ? C.yellow('⚠') : C.red('✘');
+      const icon =
+        item.status === 'PASS' ? C.green('✔') : item.status === 'WARN' ? C.yellow('⚠') : C.red('✘');
       const msg = item.status === 'PASS' ? C.dim(item.message) : item.message;
       if (!quiet) {
         console.log(`  ${icon} ${item.name.padEnd(18)} ${msg}`);
@@ -581,13 +658,17 @@ function printResults(results: DepResult[], quiet: boolean, json: boolean): void
   }
 
   // Summary
-  const passed = results.filter(r => r.status === 'PASS').length;
-  const warned = results.filter(r => r.status === 'WARN').length;
-  const failed = results.filter(r => r.status === 'FAIL').length;
-  const skipped = results.filter(r => r.status === 'SKIP').length;
+  const passed = results.filter((r) => r.status === 'PASS').length;
+  const warned = results.filter((r) => r.status === 'WARN').length;
+  const failed = results.filter((r) => r.status === 'FAIL').length;
+  const skipped = results.filter((r) => r.status === 'SKIP').length;
   const total = results.length;
 
-  console.log(C.bold(`  Result: ${C.green(`${passed} PASS`)} | ${C.yellow(`${warned} WARN`)} | ${failed > 0 ? C.red(`${failed} FAIL`) : `${failed} FAIL`} | ${C.dim(`${skipped} SKIP`)} | ${total} total`));
+  console.log(
+    C.bold(
+      `  Result: ${C.green(`${passed} PASS`)} | ${C.yellow(`${warned} WARN`)} | ${failed > 0 ? C.red(`${failed} FAIL`) : `${failed} FAIL`} | ${C.dim(`${skipped} SKIP`)} | ${total} total`,
+    ),
+  );
 
   if (failed > 0) {
     console.log(C.red('\n  ✘ Some required dependencies are missing. Run with --install to fix.'));
@@ -612,7 +693,7 @@ async function main(): Promise<void> {
   const results = await validateAll(deps);
   printResults(results, quiet, json);
 
-  const failed = results.filter(r => r.status === 'FAIL');
+  const failed = results.filter((r) => r.status === 'FAIL');
   const exitCode = failed.length > 0 ? 1 : 0;
 
   if (doInstall && failed.length > 0) {
@@ -625,10 +706,11 @@ async function main(): Promise<void> {
 }
 
 // Only run main() when called directly, not when imported
-const isMain = process.argv[1]?.replace(/\\/g, '/').endsWith('dependency-validator.ts') ||
-               process.argv[1]?.replace(/\\/g, '/').endsWith('dependency-validator.js');
+const isMain =
+  process.argv[1]?.replace(/\\/g, '/').endsWith('dependency-validator.ts') ||
+  process.argv[1]?.replace(/\\/g, '/').endsWith('dependency-validator.js');
 if (isMain) {
-  main().catch(err => {
+  main().catch((err) => {
     console.error('FATAL:', err.message);
     process.exit(1);
   });

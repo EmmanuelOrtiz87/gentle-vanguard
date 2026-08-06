@@ -214,7 +214,7 @@ copy "C:\Program Files\Gentle-Vanguard\backup-YYYYMMDD-HHMMSS\protected\*" `
 | protect-gentle-vanguard.ps1 | Encriptar scripts                  | build/                   |
 | create-installer.ps1        | Compilar .exe                      | build/                   |
 | sync-skills.ps1             | Sincronizar skills                 | scripts/gentle-vanguard/ |
-| src/cli/gv.ts                      | CLI principal                      | bin/                     |
+| src/cli/gv.ts               | CLI principal                      | bin/                     |
 
 ## Ejemplos de Uso
 

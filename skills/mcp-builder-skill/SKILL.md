@@ -1,9 +1,9 @@
 ---
 name: mcp-builder-skill
 description: >
-  Guide for creating high-quality MCP servers that enable LLMs to interact
-  with external services through well-designed tools. Use when building MCP
-  servers in Python (FastMCP) or Node/TypeScript (MCP SDK).
+  Guide for creating high-quality MCP servers that enable LLMs to interact with external services
+  through well-designed tools. Use when building MCP servers in Python (FastMCP) or Node/TypeScript
+  (MCP SDK).
 metadata:
   source: anthropic-skills
   original-name: mcp-builder
@@ -14,8 +14,8 @@ metadata:
 
 ## Overview
 
-Create MCP servers that enable LLMs to interact with external services.
-Quality is measured by how well tools enable LLMs to accomplish real tasks.
+Create MCP servers that enable LLMs to interact with external services. Quality is measured by how
+well tools enable LLMs to accomplish real tasks.
 
 ---
 
@@ -25,8 +25,10 @@ Quality is measured by how well tools enable LLMs to accomplish real tasks.
 
 ### Phase 1: Deep Research and Planning
 
-1. [Design Philosophy](./reference/design-philosophy.md) — API coverage vs workflow tools, naming, context mgmt, error messages
-2. **MCP Protocol**: Start at `https://modelcontextprotocol.io/sitemap.xml`, fetch `.md` pages for spec details
+1. [Design Philosophy](./reference/design-philosophy.md) — API coverage vs workflow tools, naming,
+   context mgmt, error messages
+2. **MCP Protocol**: Start at `https://modelcontextprotocol.io/sitemap.xml`, fetch `.md` pages for
+   spec details
 3. **Recommended stack**: TypeScript + Streamable HTTP (remote) or stdio (local)
 4. **Plan implementation**: Review API docs, list endpoints, prioritize coverage
 
@@ -59,12 +61,12 @@ See [Evaluation Guide](./reference/evaluation.md) for full details.
 
 # Reference Files
 
-| File | When to Load |
-|---|---|
-| [Best Practices](./reference/mcp_best_practices.md) | Phase 1 — naming, pagination, transport, security |
-| [Design Philosophy](./reference/design-philosophy.md) | Phase 1 — coverage vs workflow, naming, context |
-| [Core Implementation](./reference/implementation-core.md) | Phase 2 — infra, schemas, annotations |
-| [TypeScript Guide](./reference/node_mcp_server.md) | Phase 2 — full TS patterns and examples |
-| [Python Guide](./reference/python_mcp_server.md) | Phase 2 — full Python/FastMCP patterns |
-| [Evaluation Guide](./reference/evaluation.md) | Phase 4 — question creation, XML format, running |
-| MCP SDK READMEs | Phase 1/2 — fetch from GitHub raw URLs |
+| File                                                      | When to Load                                      |
+| --------------------------------------------------------- | ------------------------------------------------- |
+| [Best Practices](./reference/mcp_best_practices.md)       | Phase 1 — naming, pagination, transport, security |
+| [Design Philosophy](./reference/design-philosophy.md)     | Phase 1 — coverage vs workflow, naming, context   |
+| [Core Implementation](./reference/implementation-core.md) | Phase 2 — infra, schemas, annotations             |
+| [TypeScript Guide](./reference/node_mcp_server.md)        | Phase 2 — full TS patterns and examples           |
+| [Python Guide](./reference/python_mcp_server.md)          | Phase 2 — full Python/FastMCP patterns            |
+| [Evaluation Guide](./reference/evaluation.md)             | Phase 4 — question creation, XML format, running  |
+| MCP SDK READMEs                                           | Phase 1/2 — fetch from GitHub raw URLs            |

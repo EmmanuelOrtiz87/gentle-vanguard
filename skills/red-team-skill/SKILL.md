@@ -12,9 +12,8 @@ metadata:
 
 ## Overview
 
-Red teaming means deliberately attacking your own plans, systems, or ideas to find
-weaknesses. A dedicated "red team" assumes an adversarial role against the "blue
-team's" defenses.
+Red teaming means deliberately attacking your own plans, systems, or ideas to find weaknesses. A
+dedicated "red team" assumes an adversarial role against the "blue team's" defenses.
 
 **Core Principle:** Attack yourself before others do.
 
@@ -24,31 +23,37 @@ team's" defenses.
 - Validating critical decisions / Stress-testing plans
 - Disaster preparedness / Competitive strategy / Code review
 
-**Decision flow:** Building something important? → Tried to break it? → RED TEAM IT.
-Confident in defenses? → RED TEAM YOUR CONFIDENCE. No adversary tested you? → BE YOUR OWN ADVERSARY.
+**Decision flow:** Building something important? → Tried to break it? → RED TEAM IT. Confident in
+defenses? → RED TEAM YOUR CONFIDENCE. No adversary tested you? → BE YOUR OWN ADVERSARY.
 
 ## Red Team Process (6 Steps)
 
 ### Step 1: Define the Target
+
 What are you attacking? Scope (in/out), goal (e.g. unauthorized access, session hijacking).
 
 ### Step 2: Adopt Adversary Mindset
-Profile likely attackers (script kiddies, sophisticated, insiders, competitors) and their motivations.
+
+Profile likely attackers (script kiddies, sophisticated, insiders, competitors) and their
+motivations.
 
 ### Step 3: Enumerate Attack Surfaces
+
 Map entry points (login, API, admin panel, DB), exposure, attacker access, and trust boundaries.
 
 ### Step 4: Execute Attack Scenarios
+
 Systematically try attacks (credential stuffing, session hijacking, token prediction, XSS, etc.).
 Document each attempt with execution steps and findings.
 
 ### Step 5: Attempt Bypass
-For each defense, try to bypass it — distribute across IPs, vary inputs, target weaker
-endpoints.
+
+For each defense, try to bypass it — distribute across IPs, vary inputs, target weaker endpoints.
 
 ### Step 6: Document Findings
-Produce an actionable report with severity ratings (Critical/High/Medium/Low) and
-remediation timelines.
+
+Produce an actionable report with severity ratings (Critical/High/Medium/Low) and remediation
+timelines.
 
 ## Verification Checklist
 

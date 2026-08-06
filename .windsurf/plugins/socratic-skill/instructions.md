@@ -3,15 +3,17 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Socratic Questioning
 
-**Core Principle:** Questions are more powerful than answers. The right question reveals what we don't know we don't know.
+**Core Principle:** Questions are more powerful than answers. The right question reveals what we
+don't know we don't know.
 
 ## When to Use
 
@@ -24,6 +26,7 @@
 - When someone says "obvious" or "everyone knows"
 
 Decision flow:
+
 ```
 Understanding seems shallow? → yes → APPLY SOCRATIC QUESTIONING
 Assumptions unexamined?     → yes → APPLY SOCRATIC QUESTIONING
@@ -39,7 +42,8 @@ Root cause unclear?         → yes → APPLY SOCRATIC QUESTIONING
 5. **Implication & Consequence** — explore downstream effects
 6. **Questions About the Question** — meta-level examination of the inquiry itself
 
-→ Full tables, questions, and examples in [`references/socratic-questions.md`](references/socratic-questions.md)
+→ Full tables, questions, and examples in
+[`references/socratic-questions.md`](references/socratic-questions.md)
 
 ## Facilitation Tips
 
@@ -67,10 +71,12 @@ Root cause unclear?         → yes → APPLY SOCRATIC QUESTIONING
 - "Who knows more about this than I do?"
 - "What's the question behind the question?"
 
-→ Application patterns for requirements, debugging, and design review in [`references/application-patterns.md`](references/application-patterns.md)
+→ Application patterns for requirements, debugging, and design review in
+[`references/application-patterns.md`](references/application-patterns.md)
 
 ## Socrates' Reminder
 
 "I know that I know nothing."
 
-The goal is not to prove others wrong but to discover truth together. The best questions reveal what everyone—including the questioner—doesn't yet understand.
+The goal is not to prove others wrong but to discover truth together. The best questions reveal what
+everyone—including the questioner—doesn't yet understand.

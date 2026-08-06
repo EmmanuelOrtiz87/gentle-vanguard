@@ -4,11 +4,10 @@
 
 ## Description
 
-
 ## Triggers
 
-
 ## Instructions
+
 ## Activation Contract
 
 Use when creating or refactoring scripts under scripts/, hooks/, or .githooks/; defining startup

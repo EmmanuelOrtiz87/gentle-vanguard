@@ -704,6 +704,7 @@ be a single `forge test` invocation that proves the impact, with explicit `asser
 balance / minted token / corrupted state.
 
 Severity claims must use Immunefi's severity matrix exactly; don't invent severities. The matrix
-gates on direct economic loss percentage of TVL — a critical against a $500K protocol pays
-differently than a critical against a $500M one. Read the program's specific severity assignment
-before claiming Critical.
+gates on direct economic loss percentage of TVL — a critical against a
+$500K protocol pays
+differently than a critical against a $500M one. Read the program's specific
+severity assignment before claiming Critical.

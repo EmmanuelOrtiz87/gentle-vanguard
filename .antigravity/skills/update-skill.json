@@ -12,10 +12,7 @@
         "role": "generalist",
         "model": "gemini-3-pro",
         "instructions": "# Update Command\n\n> If you see unfamiliar placeholders or need to check which tools are connected, see\n> [CONNECTORS.md](../../CONNECTORS.md).\n\nKeep your task list and memory current. Two modes:\n\n- **Default:** Sync tasks from external tools, triage stale items, check memory for gaps\n- **`--comprehensive`:** Deep scan chat, email, calendar, docs — flag missed todos and suggest new\n  memories\n\n## Usage\n\n```bash\n/productivity:update\n/productivity:update --comprehensive\n```\n\n## Default Mode\n\n1. [Load Current State](references/default-mode.md#1-load-current-state)\n2. [Sync Tasks from External Sources](references/default-mode.md#2-sync-tasks-from-external-sources)\n3. [Triage Stale Items](references/default-mode.md#3-triage-stale-items)\n4. [Decode Tasks for Memory Gaps](references/default-mode.md#4-decode-tasks-for-memory-gaps)\n5. [Fill Gaps](references/default-mode.md#5-fill-gaps)\n6. [Capture Enrichment](references/default-mode.md#6-capture-enrichment)\n7. [Report](references/default-mode.md#7-report)\n\n## Comprehensive Mode (`--comprehensive`)\n\nEverything in Default Mode, plus:\n\n1. [Scan Activity Sources](references/comprehensive-mode.md#1-scan-activity-sources)\n2. [Flag Missed Todos](references/comprehensive-mode.md#2-flag-missed-todos)\n3. [Suggest New Memories](references/comprehensive-mode.md#3-suggest-new-memories)\n\n## Notes\n\n- Never auto-add tasks or memories without user confirmation\n- External source links are preserved when available\n- Fuzzy matching on task titles handles minor wording differences\n- Safe to run frequently — only updates when there's new info\n- `--comprehensive` always runs interactively",
-        "tools": [
-          "file_reader",
-          "code_executor"
-        ]
+        "tools": ["file_reader", "code_executor"]
       }
     ]
   }

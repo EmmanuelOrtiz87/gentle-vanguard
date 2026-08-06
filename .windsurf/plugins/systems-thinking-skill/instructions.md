@@ -3,15 +3,18 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Systems Thinking
 
-Systems thinking views problems as part of interconnected wholes. Focuses on relationships, feedback loops, and emergent properties—behaviors that arise from interactions and can't be predicted from parts alone.
+Systems thinking views problems as part of interconnected wholes. Focuses on relationships, feedback
+loops, and emergent properties—behaviors that arise from interactions and can't be predicted from
+parts alone.
 
 ## When to Use
 
@@ -27,25 +30,31 @@ Systems thinking views problems as part of interconnected wholes. Focuses on rel
 
 ### 1. Feedback Loops
 
-**Reinforcing (Positive):** Amplify change. E.g., technical debt: deadline pressure → shortcuts → bugs → firefighting → less time for quality.
+**Reinforcing (Positive):** Amplify change. E.g., technical debt: deadline pressure → shortcuts →
+bugs → firefighting → less time for quality.
 
-**Balancing (Negative):** Counteract change. E.g., auto-scaling: load increases → more instances → load per instance decreases.
+**Balancing (Negative):** Counteract change. E.g., auto-scaling: load increases → more instances →
+load per instance decreases.
 
 ### 2. Stocks and Flows
 
-**Stocks** are accumulated quantities (users, tech debt, cache size). **Flows** are rates of change (registrations/day, bugs fixed/sprint). Stocks change slowly even when flows change quickly.
+**Stocks** are accumulated quantities (users, tech debt, cache size). **Flows** are rates of change
+(registrations/day, bugs fixed/sprint). Stocks change slowly even when flows change quickly.
 
 ### 3. Delays
 
-Time lags between cause and effect obscure relationships. Acting before feedback arrives leads to overcorrection.
+Time lags between cause and effect obscure relationships. Acting before feedback arrives leads to
+overcorrection.
 
 ### 4. Non-Linear Relationships
 
-Small changes can have large effects. E.g., 2x traffic crossing a threshold can cause 10x latency due to queue buildup.
+Small changes can have large effects. E.g., 2x traffic crossing a threshold can cause 10x latency
+due to queue buildup.
 
 ### 5. Emergent Properties
 
-Behaviors arising from interactions, not components. E.g., no single service is slow but the system is slow due to cascading delays.
+Behaviors arising from interactions, not components. E.g., no single service is slow but the system
+is slow due to cascading delays.
 
 ## Systems Debugging Process
 

@@ -34,39 +34,20 @@
     "downloads": 4436,
     "likes": 38,
     "cardData": {
-      "annotations_creators": [
-        "machine-generated"
-      ],
-      "language_creators": [
-        "crowdsourced",
-        "machine-generated"
-      ],
-      "language": [
-        "en"
-      ],
-      "license": [
-        "apache-2.0"
-      ],
-      "multilinguality": [
-        "monolingual"
-      ],
-      "size_categories": [
-        "10K<n<100K"
-      ],
-      "source_datasets": [
-        "original"
-      ],
+      "annotations_creators": ["machine-generated"],
+      "language_creators": ["crowdsourced", "machine-generated"],
+      "language": ["en"],
+      "license": ["apache-2.0"],
+      "multilinguality": ["monolingual"],
+      "size_categories": ["10K<n<100K"],
+      "source_datasets": ["original"],
       "task_categories": [
         "text-generation",
         "fill-mask",
         "token-classification",
         "text-classification"
       ],
-      "task_ids": [
-        "dialogue-modeling",
-        "multi-class-classification",
-        "parsing"
-      ],
+      "task_ids": ["dialogue-modeling", "multi-class-classification", "parsing"],
       "paperswithcode_id": "multiwoz",
       "pretty_name": "Multi-domain Wizard-of-Oz",
       "dataset_info": [
@@ -471,30 +452,14 @@
     "downloads": 462856,
     "likes": 504,
     "cardData": {
-      "annotations_creators": [
-        "other"
-      ],
-      "language_creators": [
-        "other"
-      ],
-      "language": [
-        "en"
-      ],
-      "license": [
-        "other"
-      ],
-      "multilinguality": [
-        "monolingual"
-      ],
-      "size_categories": [
-        "10K<n<100K"
-      ],
-      "source_datasets": [
-        "original"
-      ],
-      "task_categories": [
-        "text-classification"
-      ],
+      "annotations_creators": ["other"],
+      "language_creators": ["other"],
+      "language": ["en"],
+      "license": ["other"],
+      "multilinguality": ["monolingual"],
+      "size_categories": ["10K<n<100K"],
+      "source_datasets": ["original"],
+      "task_categories": ["text-classification"],
       "task_ids": [
         "acceptability-classification",
         "natural-language-inference",
@@ -518,11 +483,7 @@
         "stsb",
         "wnli"
       ],
-      "tags": [
-        "qa-nli",
-        "coreference-nli",
-        "paraphrase-identification"
-      ],
+      "tags": ["qa-nli", "coreference-nli", "paraphrase-identification"],
       "dataset_info": [
         {
           "config_name": "ax",
@@ -1561,9 +1522,7 @@
     "likes": 1783,
     "cardData": {
       "license": "mit",
-      "tags": [
-        "human-feedback"
-      ]
+      "tags": ["human-feedback"]
     },
     "siblings": [
       {
@@ -1666,15 +1625,11 @@
           "data_files": [
             {
               "split": "train",
-              "path": [
-                "data/Alpaca-7B/train.jsonl"
-              ]
+              "path": ["data/Alpaca-7B/train.jsonl"]
             },
             {
               "split": "test",
-              "path": [
-                "data/Alpaca-7B/test.jsonl"
-              ]
+              "path": ["data/Alpaca-7B/test.jsonl"]
             }
           ]
         },
@@ -1683,15 +1638,11 @@
           "data_files": [
             {
               "split": "train",
-              "path": [
-                "data/Alpaca2-7B/train.jsonl"
-              ]
+              "path": ["data/Alpaca2-7B/train.jsonl"]
             },
             {
               "split": "test",
-              "path": [
-                "data/Alpaca2-7B/test.jsonl"
-              ]
+              "path": ["data/Alpaca2-7B/test.jsonl"]
             }
           ]
         },
@@ -1700,39 +1651,20 @@
           "data_files": [
             {
               "split": "train",
-              "path": [
-                "data/Alpaca3-8B/train.jsonl"
-              ]
+              "path": ["data/Alpaca3-8B/train.jsonl"]
             },
             {
               "split": "test",
-              "path": [
-                "data/Alpaca3-8B/test.jsonl"
-              ]
+              "path": ["data/Alpaca3-8B/test.jsonl"]
             }
           ]
         }
       ],
       "license": "cc-by-nc-4.0",
-      "task_categories": [
-        "text-generation"
-      ],
-      "language": [
-        "en"
-      ],
-      "tags": [
-        "safe",
-        "safety",
-        "ai-safety",
-        "llm",
-        "lm",
-        "human-feedback",
-        "rlhf",
-        "safe-rlhf"
-      ],
-      "size_categories": [
-        "100K<n<1M"
-      ]
+      "task_categories": ["text-generation"],
+      "language": ["en"],
+      "tags": ["safe", "safety", "ai-safety", "llm", "lm", "human-feedback", "rlhf", "safe-rlhf"],
+      "size_categories": ["100K<n<1M"]
     },
     "siblings": [
       {
@@ -1795,12 +1727,8 @@
     "downloads": 33248,
     "likes": 84,
     "cardData": {
-      "language_creators": [
-        "expert-generated"
-      ],
-      "language": [
-        "code"
-      ],
+      "language_creators": ["expert-generated"],
+      "language": ["code"],
       "license": "apache-2.0",
       "pretty_name": "BigCodeBench",
       "dataset_info": {
@@ -1899,10 +1827,7 @@
           ]
         }
       ],
-      "tags": [
-        "croissant",
-        "code"
-      ]
+      "tags": ["croissant", "code"]
     },
     "siblings": [
       {
@@ -1963,9 +1888,7 @@
     "likes": 1783,
     "cardData": {
       "license": "mit",
-      "tags": [
-        "human-feedback"
-      ]
+      "tags": ["human-feedback"]
     },
     "siblings": [
       {
@@ -2036,34 +1959,16 @@
     "downloads": 3480,
     "likes": 497,
     "cardData": {
-      "annotations_creators": [
-        "no-annotation"
-      ],
-      "language_creators": [
-        "found"
-      ],
-      "language": [
-        "en"
-      ],
+      "annotations_creators": ["no-annotation"],
+      "language_creators": ["found"],
+      "language": ["en"],
       "license": "other",
-      "multilinguality": [
-        "monolingual"
-      ],
+      "multilinguality": ["monolingual"],
       "pretty_name": "the Pile",
-      "size_categories": [
-        "100B<n<1T"
-      ],
-      "source_datasets": [
-        "original"
-      ],
-      "task_categories": [
-        "text-generation",
-        "fill-mask"
-      ],
-      "task_ids": [
-        "language-modeling",
-        "masked-language-modeling"
-      ],
+      "size_categories": ["100B<n<1T"],
+      "source_datasets": ["original"],
+      "task_categories": ["text-generation", "fill-mask"],
+      "task_ids": ["language-modeling", "masked-language-modeling"],
       "paperswithcode_id": "the-pile"
     },
     "siblings": [
@@ -2373,33 +2278,15 @@
     "downloads": 44013,
     "likes": 100,
     "cardData": {
-      "annotations_creators": [
-        "crowdsourced"
-      ],
-      "language_creators": [
-        "found"
-      ],
-      "language": [
-        "en"
-      ],
-      "license": [
-        "cc-by-sa-3.0"
-      ],
-      "multilinguality": [
-        "monolingual"
-      ],
-      "size_categories": [
-        "10K<n<100K"
-      ],
-      "source_datasets": [
-        "original"
-      ],
-      "task_categories": [
-        "text-classification"
-      ],
-      "task_ids": [
-        "natural-language-inference"
-      ],
+      "annotations_creators": ["crowdsourced"],
+      "language_creators": ["found"],
+      "language": ["en"],
+      "license": ["cc-by-sa-3.0"],
+      "multilinguality": ["monolingual"],
+      "size_categories": ["10K<n<100K"],
+      "source_datasets": ["original"],
+      "task_categories": ["text-classification"],
+      "task_ids": ["natural-language-inference"],
       "paperswithcode_id": "boolq",
       "pretty_name": "BoolQ",
       "dataset_info": {
@@ -2487,12 +2374,8 @@
     "downloads": 2445,
     "likes": 1167,
     "cardData": {
-      "task_categories": [
-        "text-generation"
-      ],
-      "language": [
-        "en"
-      ],
+      "task_categories": ["text-generation"],
+      "language": ["en"],
       "pretty_name": "Red Pajama 1T"
     },
     "siblings": [
@@ -2560,37 +2443,17 @@
     "downloads": 192351,
     "likes": 230,
     "cardData": {
-      "annotations_creators": [
-        "crowdsourced",
-        "expert-generated"
-      ],
-      "language_creators": [
-        "crowdsourced",
-        "expert-generated"
-      ],
-      "language": [
-        "en"
-      ],
-      "license": [
-        "cc-by-4.0"
-      ],
-      "multilinguality": [
-        "monolingual"
-      ],
-      "size_categories": [
-        "n<1K"
-      ],
-      "source_datasets": [
-        "original"
-      ],
-      "task_categories": [
-        "text2text-generation"
-      ],
+      "annotations_creators": ["crowdsourced", "expert-generated"],
+      "language_creators": ["crowdsourced", "expert-generated"],
+      "language": ["en"],
+      "license": ["cc-by-4.0"],
+      "multilinguality": ["monolingual"],
+      "size_categories": ["n<1K"],
+      "source_datasets": ["original"],
+      "task_categories": ["text2text-generation"],
       "task_ids": [],
       "pretty_name": "Mostly Basic Python Problems",
-      "tags": [
-        "code-generation"
-      ],
+      "tags": ["code-generation"],
       "dataset_info": [
         {
           "config_name": "full",

@@ -4,13 +4,13 @@ Canonical entry: `docs/AGENTS.md`
 
 ## Tool Detection (turn 1)
 
-All tool detection is handled automatically by the agent's built-in tool routing.
-No manual `pwsh` commands needed.
+All tool detection is handled automatically by the agent's built-in tool routing. No manual `pwsh`
+commands needed.
 
 ## Pre-response Hook (every turn)
 
-Pre-processing is handled automatically by the stack pipeline (`session-autostart.ts`).
-No manual hook execution needed.
+Pre-processing is handled automatically by the stack pipeline (`session-autostart.ts`). No manual
+hook execution needed.
 
 ## Core Rules
 
@@ -29,14 +29,14 @@ No manual hook execution needed.
     reasons. Only proceed if user explicitly confirms. Otherwise follow normativa.
 12. Goal-Driven: For multi-step tasks, state a brief plan: `1. [Step] → verify: [check]` format.
     Every changed line must trace to the user's request.
-13. TypeScript-First: ALL scripts are TS via `npx tsx`. No PowerShell scripts.
-    See `rules/TYPESCRIPT-FIRST-POLICY.md`.
+13. TypeScript-First: ALL scripts are TS via `npx tsx`. No PowerShell scripts. See
+    `rules/TYPESCRIPT-FIRST-POLICY.md`.
 
 ## Break Glass
 
 If 3+ turns w/o completion, loop detected, or output truncated:
-`npx tsx src/self-diagnosis.ts --profile "<p>" --chat-level "<l>" --turn-count <N>`
-Override to `lleno`/`chat-balanced`. Notify: `[BREAK GLASS] motivo: {reason}`
+`npx tsx src/self-diagnosis.ts --profile "<p>" --chat-level "<l>" --turn-count <N>` Override to
+`lleno`/`chat-balanced`. Notify: `[BREAK GLASS] motivo: {reason}`
 
 ## Response Profile
 

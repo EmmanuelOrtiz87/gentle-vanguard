@@ -7,9 +7,7 @@
       "type": "builtin",
       "transport": "stdio",
       "command": "node",
-      "args": [
-        "dist/scripts/mcp/skill-server.js"
-      ],
+      "args": ["dist/scripts/mcp/skill-server.js"],
       "enabled": true,
       "autoStart": true,
       "description": "143+ internal skills via MCP: list_skills, get_skill, search_skills"
@@ -19,10 +17,7 @@
       "type": "builtin",
       "transport": "stdio",
       "command": "npx",
-      "args": [
-        "engram",
-        "mcp"
-      ],
+      "args": ["engram", "mcp"],
       "enabled": true,
       "autoStart": true,
       "description": "Persistent memory via Engram MCP"
@@ -32,10 +27,7 @@
       "type": "builtin",
       "transport": "stdio",
       "command": "npx",
-      "args": [
-        "tsx",
-        "src/mcp/mcp-lsp-server.ts"
-      ],
+      "args": ["tsx", "src/mcp/mcp-lsp-server.ts"],
       "enabled": true,
       "autoStart": true,
       "description": "TypeScript Language Service via MCP: go_to_definition, find_references, get_hover_info, get_completions, get_diagnostics, get_symbol_info, get_file_symbols"

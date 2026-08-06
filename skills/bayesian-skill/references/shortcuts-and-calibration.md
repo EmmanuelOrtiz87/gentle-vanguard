@@ -13,11 +13,13 @@
 ## When to Update
 
 **Update strongly when:**
+
 - Evidence is surprising under your current belief
 - Evidence comes from reliable source
 - Evidence is specific to your hypothesis
 
 **Update weakly when:**
+
 - Evidence is expected regardless of hypothesis
 - Source has unknown reliability
 - Evidence is circumstantial
@@ -32,6 +34,7 @@ Right: "Positive test shifts probability, but base rate matters"
 ## Calibration Check
 
 Track predictions and outcomes:
+
 - Of things you said were "70% likely," did ~70% happen?
 - If you're always overconfident, widen your uncertainty
 - If you're always underconfident, trust your assessments more

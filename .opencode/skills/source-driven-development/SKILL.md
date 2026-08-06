@@ -7,7 +7,8 @@ triggers:
 
 # Source-Driven Development
 
-Every framework-specific code decision must be backed by official documentation. Training data goes stale, APIs get deprecated, best practices evolve. Verify, cite, and let the user see your sources.
+Every framework-specific code decision must be backed by official documentation. Training data goes
+stale, APIs get deprecated, best practices evolve. Verify, cite, and let the user see your sources.
 
 ## When to Use
 
@@ -17,7 +18,8 @@ Every framework-specific code decision must be backed by official documentation.
 - Reviewing or improving framework-specific code
 - **Anytime** you're about to write framework code from memory
 
-**Skip**: pure logic (loops, conditionals, data structures), typos, file moves, or when the user explicitly says "just do it quickly."
+**Skip**: pure logic (loops, conditionals, data structures), typos, file moves, or when the user
+explicitly says "just do it quickly."
 
 ## Process
 
@@ -27,11 +29,14 @@ DETECT → FETCH → IMPLEMENT → CITE
 
 **1. Detect** — Read the project's dependency file for exact versions. If missing, ask.
 
-**2. Fetch** — Fetch the *relevant* docs page (not the homepage). Priority: official docs → official blog/changelog → web standards (MDN) → browser compat.
+**2. Fetch** — Fetch the _relevant_ docs page (not the homepage). Priority: official docs → official
+blog/changelog → web standards (MDN) → browser compat.
 
-**3. Implement** — Follow API signatures from the docs. Use new patterns, avoid deprecated ones. Surface doc-vs-codebase conflicts explicitly.
+**3. Implement** — Follow API signatures from the docs. Use new patterns, avoid deprecated ones.
+Surface doc-vs-codebase conflicts explicitly.
 
-**4. Cite** — Full URLs with deep links and anchors. Quote relevant passages. If unverifiable, say so.
+**4. Cite** — Full URLs with deep links and anchors. Quote relevant passages. If unverifiable, say
+so.
 
 ## Reference Files
 

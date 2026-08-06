@@ -29,8 +29,8 @@ observabilidad, continuidad y auditora en Gentle-Vanguard.
 
 ## 3. Normativas y Protocolos
 
-- **docs/governance/normatives/NORMATIVAS-ORQUESTADOR.md**: Normativas de orquestador y autorizaciones globales
-  (debe estar SIEMPRE dentro del proyecto Gentle-Vanguard)
+- **docs/governance/normatives/NORMATIVAS-ORQUESTADOR.md**: Normativas de orquestador y
+  autorizaciones globales (debe estar SIEMPRE dentro del proyecto Gentle-Vanguard)
 - **docs/reference/OPERATING-DECISIONS-\*.md**: decisiónes y reglas clave
 
 ## 4. Engram

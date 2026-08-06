@@ -3,15 +3,17 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Cynefin Framework
 
-Classifies problems by cause-effect relationship into five domains. Match your approach to the domain.
+Classifies problems by cause-effect relationship into five domains. Match your approach to the
+domain.
 
 **Core Principle:** The nature of the problem determines the nature of the solution.
 
@@ -35,28 +37,29 @@ Facing a problem?
 ## The Five Domains
 
 ### 1. Clear (formerly Simple/Obvious)
-Cause and effect obvious to everyone. Best practices exist and work.
-**Approach:** Sense → Categorize → Respond
-**Failure mode:** Complacency — treating complex problems as clear.
+
+Cause and effect obvious to everyone. Best practices exist and work. **Approach:** Sense →
+Categorize → Respond **Failure mode:** Complacency — treating complex problems as clear.
 
 ### 2. Complicated
-Cause and effect require expertise. Multiple right answers exist.
-**Approach:** Sense → Analyze → Respond
-**Failure mode:** Analysis paralysis — over-analyzing when action is needed.
+
+Cause and effect require expertise. Multiple right answers exist. **Approach:** Sense → Analyze →
+Respond **Failure mode:** Analysis paralysis — over-analyzing when action is needed.
 
 ### 3. Complex
-Cause and effect only visible in retrospect. Emergent patterns.
-**Approach:** Probe → Sense → Respond
-**Failure mode:** Trying to analyze/plan your way through complexity.
+
+Cause and effect only visible in retrospect. Emergent patterns. **Approach:** Probe → Sense →
+Respond **Failure mode:** Trying to analyze/plan your way through complexity.
 
 ### 4. Chaotic
-No perceivable cause and effect. High turbulence. Must act first.
-**Approach:** Act → Sense → Respond
-**Failure mode:** Trying to analyze during chaos — prioritize stability.
+
+No perceivable cause and effect. High turbulence. Must act first. **Approach:** Act → Sense →
+Respond **Failure mode:** Trying to analyze during chaos — prioritize stability.
 
 ### 5. Disorder
-Don't know which domain you're in. Multiple stakeholders disagree.
-**Approach:** Break the problem into parts, classify each part.
+
+Don't know which domain you're in. Multiple stakeholders disagree. **Approach:** Break the problem
+into parts, classify each part.
 
 ## Domain Assessment
 
@@ -68,12 +71,12 @@ See `references/assessment-guide.md` for full steps, test table, and common mism
 
 ## Common Mismatches (Quick Reference)
 
-| Mistake | Symptom | Fix |
-|---|---|---|
-| Complex as Complicated | Planning surprises | Probe with experiments |
-| Complicated as Clear | "Just do it" to expert problems | Engage experts |
-| Chaotic as Complex | Experiments during crisis | Act decisively first |
-| Clear as Complicated | Over-engineering simple | Apply best practice |
+| Mistake                | Symptom                         | Fix                    |
+| ---------------------- | ------------------------------- | ---------------------- |
+| Complex as Complicated | Planning surprises              | Probe with experiments |
+| Complicated as Clear   | "Just do it" to expert problems | Engage experts         |
+| Chaotic as Complex     | Experiments during crisis       | Act decisively first   |
+| Clear as Complicated   | Over-engineering simple         | Apply best practice    |
 
 ## Reference Files
 

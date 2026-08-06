@@ -9,7 +9,8 @@ import { join, resolve } from 'path';
 import { runSync } from './core/run-command.js';
 import { pathToFileURL } from 'url';
 
-type Action = 'init' | 'create-note' | 'list' | 'search' | 'sync-engram' | 'archive' | 'stats' | 'validate';
+type Action =
+  'init' | 'create-note' | 'list' | 'search' | 'sync-engram' | 'archive' | 'stats' | 'validate';
 
 interface CliArgs {
   action: Action;
@@ -199,10 +200,10 @@ function createNote(
 
   const tagList: string[] = tags
     .split(',')
-    .map(t => t.trim())
-    .filter(t => t.length > 0);
+    .map((t) => t.trim())
+    .filter((t) => t.length > 0);
   if (type) tagList.push(type);
-  const tagsYaml = tagList.map(t => `#${t}`).join(', ');
+  const tagsYaml = tagList.map((t) => `#${t}`).join(', ');
 
   const templatePath = join(vaultPath, '06-templates', `${type}.md`);
   let noteContent: string;
@@ -287,10 +288,14 @@ function syncEngramToVault(): void {
   }
 
   try {
-    runSync('engram', ['search', 'session_summary', '--project', 'gentle-vanguard', '--limit', '50'], {
-      timeout: 30000,
-      windowsHide: true,
-    });
+    runSync(
+      'engram',
+      ['search', 'session_summary', '--project', 'gentle-vanguard', '--limit', '50'],
+      {
+        timeout: 30000,
+        windowsHide: true,
+      },
+    );
     log('Synced session summaries from Engram', 'OK');
   } catch (e: unknown) {
     log(`Failed to sync from Engram: ${e instanceof Error ? e.message : String(e)}`, 'ERROR');
@@ -363,14 +368,38 @@ function main(): void {
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--action': case '-a': parsed.action = args[++i] as Action; break;
-      case '--note-type': case '-t': parsed.noteType = args[++i]; break;
-      case '--title': case '--name': if (args[i].startsWith('--title')) parsed.title = args[++i]; else parsed.title = args[++i]; break;
-      case '--content': case '-c': parsed.content = args[++i]; break;
-      case '--tags': case '--tag': if (args[i] === '--tags' || args[i] === '--tag') parsed.tags = args[++i]; break;
-      case '--folder': case '-f': parsed.folder = args[++i]; break;
-      case '--query': case '-q': parsed.query = args[++i]; break;
-      case '--quiet': parsed.quiet = true; break;
+      case '--action':
+      case '-a':
+        parsed.action = args[++i] as Action;
+        break;
+      case '--note-type':
+      case '-t':
+        parsed.noteType = args[++i];
+        break;
+      case '--title':
+      case '--name':
+        if (args[i].startsWith('--title')) parsed.title = args[++i];
+        else parsed.title = args[++i];
+        break;
+      case '--content':
+      case '-c':
+        parsed.content = args[++i];
+        break;
+      case '--tags':
+      case '--tag':
+        if (args[i] === '--tags' || args[i] === '--tag') parsed.tags = args[++i];
+        break;
+      case '--folder':
+      case '-f':
+        parsed.folder = args[++i];
+        break;
+      case '--query':
+      case '-q':
+        parsed.query = args[++i];
+        break;
+      case '--quiet':
+        parsed.quiet = true;
+        break;
     }
   }
 

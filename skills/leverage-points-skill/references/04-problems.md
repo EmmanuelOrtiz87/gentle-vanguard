@@ -31,8 +31,11 @@
 
 ## Meadows' Wisdom
 
-"People who manage to intervene in systems at the level of paradigm hit a leverage point that totally transforms systems."
+"People who manage to intervene in systems at the level of paradigm hit a leverage point that
+totally transforms systems."
 
-"Magical leverage points are not easily accessible, even if we know where they are. There are no cheap tickets to mastery."
+"Magical leverage points are not easily accessible, even if we know where they are. There are no
+cheap tickets to mastery."
 
-The highest leverage requires the most skill and often the most patience. But knowing where leverage exists helps you stop wasting effort at the bottom of the hierarchy.
+The highest leverage requires the most skill and often the most patience. But knowing where leverage
+exists helps you stop wasting effort at the bottom of the hierarchy.

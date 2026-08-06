@@ -4,7 +4,7 @@
 # -------------------------------------------------------------------
 # Badge: ![status](https://img.shields.io/github/actions/workflow/status/<owner>/<repo>/deploy-presentations.yml?label=Presentations)
 
-name: "Deploy Presentations Book"
+name: 'Deploy Presentations Book'
 
 on:
   push:
@@ -25,7 +25,9 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: github.repository_owner == github.event.repository.owner.login && !github.event.repository.fork
+    if:
+      github.repository_owner == github.event.repository.owner.login &&
+      !github.event.repository.fork
 
     environment:
       name: github-pages

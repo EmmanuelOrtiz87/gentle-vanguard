@@ -3,12 +3,13 @@
 > Gentle-Vanguard Skill
 
 ## Description
+
 >
 
 ## Triggers
 
-
 ## Instructions
+
 # Digest Command
 
 > If you see unfamiliar placeholders or need to check which tools are connected, see
@@ -56,7 +57,8 @@ See [references/activity-gathering.md](references/activity-gathering.md) for per
 
 ### 4. Identify Key Items
 
-From all gathered activity, extract and categorize into action items, decisions, mentions, and updates. See [references/key-items.md](references/key-items.md) for the full categorization.
+From all gathered activity, extract and categorize into action items, decisions, mentions, and
+updates. See [references/key-items.md](references/key-items.md) for the full categorization.
 
 ### 5. Group by Topic
 
@@ -78,7 +80,8 @@ sources:
 
 ### 6. Format the Digest
 
-See [references/output-format.md](references/output-format.md) for the full output template and summary stats.
+See [references/output-format.md](references/output-format.md) for the full output template and
+summary stats.
 
 ### 7. Handle Unavailable Sources
 

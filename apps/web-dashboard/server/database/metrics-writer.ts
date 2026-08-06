@@ -18,7 +18,11 @@ import { fileURLToPath } from 'url';
 import os from 'os';
 import { runSync } from '@gentle-vanguard/core/run-command';
 import { DatabaseManager, type MetricSnapshot } from './manager.ts';
-import { getAggregatedMetrics, listSessions, readSessionState } from '@gentle-vanguard/core/session-context-log';
+import {
+  getAggregatedMetrics,
+  listSessions,
+  readSessionState,
+} from '@gentle-vanguard/core/session-context-log';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -65,7 +69,7 @@ export class MetricsWriter {
   /** Start the auto-write cycle (every 30s) */
   start(intervalMs = 30000): void {
     if (this.intervalId) return;
-    console.log('[MW] MetricsWriter started (every ' + (intervalMs / 1000) + 's)');
+    console.log('[MW] MetricsWriter started (every ' + intervalMs / 1000 + 's)');
     // Write immediately on start
     this.writeSnapshot();
     // Then every interval
@@ -96,7 +100,10 @@ export class MetricsWriter {
         this.db.housekeeping();
       }
     } catch (err) {
-      console.error('[MW] Error writing snapshot:', err instanceof Error ? err.message : String(err));
+      console.error(
+        '[MW] Error writing snapshot:',
+        err instanceof Error ? err.message : String(err),
+      );
     }
   }
 
@@ -113,15 +120,15 @@ export class MetricsWriter {
       const ctxMetrics = getAggregatedMetrics();
       sessionsTotal = ctxMetrics.totalSessions;
       sessionsActive = ctxMetrics.activeSessions;
-      
+
       const today = new Date().toISOString().slice(0, 10);
       const allSessionIds = listSessions();
-      sessionsToday = allSessionIds.filter(id => {
+      sessionsToday = allSessionIds.filter((id) => {
         const state = readSessionState(id);
         if (!state) return false;
         return state.createdAt.startsWith(today);
       }).length;
-      
+
       // Sync sessions to DB
       for (const sid of allSessionIds) {
         const state = readSessionState(sid);
@@ -166,7 +173,9 @@ export class MetricsWriter {
     try {
       if (existsSync(REGISTRY_PATH)) {
         const content = readFileSync(REGISTRY_PATH, 'utf-8');
-        registrySkills = content.split('\n').filter((l) => l.startsWith('|') && l.includes('|') && !l.includes('Agent')).length;
+        registrySkills = content
+          .split('\n')
+          .filter((l) => l.startsWith('|') && l.includes('|') && !l.includes('Agent')).length;
       }
     } catch {
       // best-effort
@@ -238,10 +247,15 @@ export class MetricsWriter {
         token: {
           used: snapshot.tokens_used ?? 0,
           budget: snapshot.tokens_limit ?? 120000,
-          pct: snapshot.tokens_limit ? Math.round(((snapshot.tokens_used ?? 0) / snapshot.tokens_limit) * 100) : 0,
+          pct: snapshot.tokens_limit
+            ? Math.round(((snapshot.tokens_used ?? 0) / snapshot.tokens_limit) * 100)
+            : 0,
           usedToday: snapshot.tokens_used ?? 0,
           estCost: snapshot.cost ?? 0,
-          status: (snapshot.tokens_used ?? 0) > (snapshot.tokens_limit ?? 120000) * 0.9 ? 'YELLOW' : 'GREEN',
+          status:
+            (snapshot.tokens_used ?? 0) > (snapshot.tokens_limit ?? 120000) * 0.9
+              ? 'YELLOW'
+              : 'GREEN',
         },
         sessions: {
           total: snapshot.sessions_total ?? 0,
@@ -273,8 +287,8 @@ export class MetricsWriter {
             usagePercent: Math.round(((totalMem - freeMem) / totalMem) * 100),
           },
           cpu: {
-            user: Math.round((process.cpuUsage().user) / 1000),
-            system: Math.round((process.cpuUsage().system) / 1000),
+            user: Math.round(process.cpuUsage().user / 1000),
+            system: Math.round(process.cpuUsage().system / 1000),
             cores: cpus.length,
             loadAverage: os.loadavg(),
           },
@@ -291,7 +305,10 @@ export class MetricsWriter {
       if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
       writeFileSync(CONSOLIDATED_PATH, JSON.stringify(consolidated, null, 2));
     } catch (err) {
-      console.warn('[MW] Failed to write consolidated.json:', err instanceof Error ? err.message : String(err));
+      console.warn(
+        '[MW] Failed to write consolidated.json:',
+        err instanceof Error ? err.message : String(err),
+      );
     }
   }
 
