@@ -146,9 +146,11 @@ function readFileContent(filePath: string): string | null {
 function invokeSecurityReview(path: string): void {
   writeReviewHeader('Security Review (security-expert-skill)');
 
-  const securityScript = join(skillDir, 'skills', 'security-expert-skill', 'security-scan.ps1');
+  // Use the native TS security scanner (migrated from security-scan.ps1).
+  // The PS1 no longer exists; the TS replacement is the source of truth.
+  const securityScript = join(skillDir, 'security-scan.ts');
   if (existsSync(securityScript)) {
-    runSync('pwsh', ['-NoProfile', '-File', securityScript, '-Path', path], { stdio: 'pipe' });
+    runSync('npx', ['tsx', securityScript, '--path', path], { stdio: 'pipe' });
   }
 
   writeReviewHeader('Scanning for code quality issues...');
