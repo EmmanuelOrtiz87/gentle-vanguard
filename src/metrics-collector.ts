@@ -3,6 +3,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync, copyFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { runSync, runSyncShell } from './core/run-command.js';
+import { getTokenUsage } from './token-usage-reader.js';
 
 type Scope = 'full' | 'sessions' | 'token' | 'live' | 'git' | 'pr' | 'cost';
 
@@ -364,14 +365,11 @@ function collectTokenMetrics(quiet: boolean): TokenMetrics {
   const tokenData = tryReadJson(tokenState);
   if (tokenData) tm.status = (tokenData.lastStatus as string) || 'unknown';
 
-  const obs = tryReadJson(liveObsPath);
-  if (obs?.token) {
-    const t = obs.token as Record<string, unknown>;
-    tm.usedToday = (t.used_today as number) || 0;
-    tm.budget = (t.budget as number) || 120000;
-    tm.pct = (t.projected_pct as number) || 0;
-    tm.status = (t.status as string) || 'unknown';
-  }
+  const usage = getTokenUsage();
+  tm.usedToday = usage.used;
+  tm.budget = usage.budget;
+  tm.pct = usage.percentage;
+  tm.status = usage.status;
 
   const ratePer1M = 10;
   tm.estCost = Math.round((tm.usedToday / 1e6) * ratePer1M * 10000) / 10000;
