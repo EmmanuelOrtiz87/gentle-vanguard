@@ -30,7 +30,7 @@ import {
   type ChildProcess,
 } from 'child_process';
 import { createRequire } from 'module';
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { dirname, join } from 'path';
 
 const require = createRequire(import.meta.url);
@@ -95,6 +95,15 @@ export function run(command: string, args: string[] = [], options: RunOptions = 
     cmd = w.command;
     cmdArgs = w.args;
     spawnOpts.shell = w.shell;
+  } else if (process.platform === 'win32') {
+    // Bare command may resolve to a .cmd/.bat shim via PATHEXT — route through shell
+    const resolved = resolveWindowsCommand(command);
+    if (resolved !== command && isWindowsScript(resolved)) {
+      const w = windowsScriptSpawn(resolved, args);
+      cmd = w.command;
+      cmdArgs = w.args;
+      spawnOpts.shell = w.shell;
+    }
   }
 
   return spawn(cmd, cmdArgs, spawnOpts);
@@ -109,6 +118,30 @@ const WINDOWS_SCRIPT_RE = /\.(cmd|bat)$/i;
 
 function isWindowsScript(command: string): boolean {
   return process.platform === 'win32' && WINDOWS_SCRIPT_RE.test(command);
+}
+
+/**
+ * On Windows, a bare command like `codegraph` may resolve via PATHEXT to a
+ * `.cmd`/`.bat` shim (e.g. npm global shims). Node's spawnSync cannot execute
+ * `.cmd`/`.bat` directly without a shell, so we resolve the real shim path and
+ * route it through the shell wrapper. Returns the resolved command (unchanged
+ * if it's a real executable or not found).
+ */
+function resolveWindowsCommand(command: string): string {
+  if (process.platform !== 'win32' || WINDOWS_SCRIPT_RE.test(command)) return command;
+  if (command.includes('\\') || command.includes('/')) return command; // explicit path
+
+  const pathext = (process.env.PATHEXT ?? '.COM;.EXE;.BAT;.CMD').split(';').filter(Boolean);
+  const pathDirs = (process.env.PATH ?? '').split(';').filter(Boolean);
+
+  for (const dir of pathDirs) {
+    const base = join(dir, command);
+    for (const ext of pathext) {
+      const candidate = base + ext;
+      if (existsSync(candidate)) return candidate;
+    }
+  }
+  return command;
 }
 
 function quoteArg(a: string): string {
@@ -155,6 +188,15 @@ export function runSync(
     cmd = w.command;
     cmdArgs = w.args;
     spawnOpts.shell = w.shell;
+  } else if (process.platform === 'win32') {
+    // Bare command may resolve to a .cmd/.bat shim via PATHEXT — route through shell
+    const resolved = resolveWindowsCommand(command);
+    if (resolved !== command && isWindowsScript(resolved)) {
+      const w = windowsScriptSpawn(resolved, args);
+      cmd = w.command;
+      cmdArgs = w.args;
+      spawnOpts.shell = w.shell;
+    }
   }
 
   try {
