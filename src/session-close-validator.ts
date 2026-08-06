@@ -18,7 +18,7 @@
  *   npx tsx src/session-close-validator.ts --verify (alias para --mode quick)
  */
 
-/* eslint-disable security/detect-unsafe-regex */
+ 
 /* The import regex below is safe - it only parses TypeScript import statements, not user input */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync } from 'fs';

@@ -36,9 +36,9 @@ function extractPs1Refs(line: string): string[] {
 }
 
 let commentRefs = 0;
-let functionalMissing: Array<{ file: string; line: number; ref: string }> = [];
-let functionalExists: Array<{ file: string; line: number; ref: string }> = [];
-let unclassifiable: Array<{ file: string; line: number; ref: string }> = [];
+const functionalMissing: Array<{ file: string; line: number; ref: string }> = [];
+const functionalExists: Array<{ file: string; line: number; ref: string }> = [];
+const unclassifiable: Array<{ file: string; line: number; ref: string }> = [];
 
 function walk(dir: string): void {
   if (!fs.existsSync(dir)) return;
@@ -71,7 +71,7 @@ function analyzeFile(file: string): void {
       // Skip pure extension references
       if (ref === '.ps1' || ref === '.ps1"' || ref === '.ps1\'') continue;
       // Resolve relative to ROOT (best effort) or config/skills dirs
-      let candidates = [path.join(ROOT, ref.replace(/\\/g, '/'))];
+      const candidates = [path.join(ROOT, ref.replace(/\\/g, '/'))];
       const exists = candidates.some((c) => fs.existsSync(c));
       const entry = { file, line: i + 1, ref };
       if (isComment) {
