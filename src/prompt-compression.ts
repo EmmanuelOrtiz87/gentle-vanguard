@@ -19,6 +19,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
+import { getTokenUsage } from './token-usage-reader.js';
 
 // ---- Types ----
 
@@ -132,16 +133,7 @@ function getSkillConfig(skill: string): SkillCompressionConfig {
 // ---- Token budget awareness ----
 
 function getTokenBudgetUsage(): number {
-  try {
-    const budgetPath = join(ROOT, '.session', 'token-budget.json');
-    if (!existsSync(budgetPath)) return 0;
-    const budget = JSON.parse(readFileSync(budgetPath, 'utf-8'));
-    const used = budget.usedToday ?? 0;
-    const limit = budget.dailyLimit ?? 120000;
-    return limit > 0 ? used / limit : 0;
-  } catch {
-    return 0;
-  }
+  return getTokenUsage().percentage / 100;
 }
 
 function adjustRatioForBudget(baseRatio: number): number {
@@ -254,19 +246,20 @@ function parseSections(input: string): ParsedSection[] {
     }
 
     // Text
-    if (!current || current.type === 'code') {
-      // If we were in code and this line doesn't close it, keep it in code
-      // Actually for code blocks we already handle the closing above
-      if (current && current.type === 'code') {
-        current.lines.push(line);
-        continue;
-      }
-      if (current) sections.push(current);
-      current = { type: 'text', lines: [line], startLine: i };
+    if (current && current.type === 'code') {
+      // Inside a code block — keep the line in the code section
+      current.lines.push(line);
       continue;
     }
-
-    current.lines.push(line);
+    if (current && current.type === 'text') {
+      // Continue an existing text section
+      current.lines.push(line);
+      continue;
+    }
+    // Header or list section: close it and start a new text section
+    if (current) sections.push(current);
+    current = { type: 'text', lines: [line], startLine: i };
+    continue;
   }
 
   if (current) sections.push(current);
@@ -364,10 +357,20 @@ function compressPrompt(input: string, skill: string = 'default'): CompressionRe
           preserved: true,
         });
       } else {
-        // Keep first 60% of target from start, 40% from end
-        const firstCount = Math.ceil(targetLines * 0.6);
-        const lastCount = targetLines - firstCount;
-        const kept = [...textLines.slice(0, firstCount), ...textLines.slice(-lastCount)];
+        // Keep first 60% of target from start, 40% from end.
+        // IMPORTANT: guard against lastCount === 0 — slice(-0) === slice(0)
+        // returns the WHOLE array, causing duplicated lines.
+        const firstCount = Math.min(textLines.length, Math.ceil(targetLines * 0.6));
+        let lastCount = targetLines - firstCount;
+        let kept: string[];
+        if (lastCount <= 0) {
+          kept = textLines.slice(0, firstCount);
+        } else {
+          // Prevent overlap when firstCount + lastCount exceeds the available lines
+          const maxLast = Math.max(0, textLines.length - firstCount);
+          lastCount = Math.min(lastCount, maxLast);
+          kept = [...textLines.slice(0, firstCount), ...textLines.slice(-lastCount)];
+        }
         compressedLines.push(...kept);
         sectionInfos.push({
           type: 'text',

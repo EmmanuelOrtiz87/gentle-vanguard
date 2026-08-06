@@ -17,6 +17,7 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
+import { getTokenUsage } from './token-usage-reader.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -130,7 +131,6 @@ export interface CompressionMetrics {
 
 const ROOT = resolve(process.env.GENTLE_VANGUARD_BASE_DIR ?? process.cwd());
 const CONFIG_PATH = join(ROOT, 'config', 'output-compression.json');
-const TOKEN_BUDGET_PATH = join(ROOT, 'config', 'token-budget-guard.json');
 
 // ─── Config Loader ────────────────────────────────────────────────────────────
 
@@ -255,44 +255,12 @@ interface TokenBudgetInfo {
 }
 
 export function getTokenBudgetUsage(): TokenBudgetInfo {
-  try {
-    if (existsSync(TOKEN_BUDGET_PATH)) {
-      const budget = JSON.parse(readFileSync(TOKEN_BUDGET_PATH, 'utf-8'));
-      const used = budget?.tokenBudget?.tracking?.usedToday ?? 0;
-      const total = budget?.tokenBudget?.limits?.daily ?? 120000;
-      return {
-        used,
-        budget: total,
-        percentage: total > 0 ? (used / total) * 100 : 0,
-      };
-    }
-  } catch {
-    /* ignore */
-  }
-
-  // Fallback to metrics file if exists
-  const metricsPath = join(ROOT, 'docs', 'sessions', 'metrics', 'token-guard-usage.csv');
-  try {
-    if (existsSync(metricsPath)) {
-      const content = readFileSync(metricsPath, 'utf-8');
-      const lines = content.split('\n').filter((l) => l.trim());
-      const today = new Date().toISOString().slice(0, 10);
-      let used = 0;
-
-      for (const line of lines.slice(1)) {
-        const cols = line.split(',');
-        if (cols[1] === today && /\d+/.test(cols[4])) {
-          used += parseInt(cols[4], 10);
-        }
-      }
-
-      return { used, budget: 120000, percentage: (used / 120000) * 100 };
-    }
-  } catch {
-    /* ignore */
-  }
-
-  return { used: 0, budget: 120000, percentage: 0 };
+  const usage = getTokenUsage();
+  return {
+    used: usage.used,
+    budget: usage.budget,
+    percentage: usage.percentage,
+  };
 }
 
 export function selectProfileForBudget(budgetPct: number): CompressionProfile {
