@@ -381,7 +381,9 @@ try {
   const result = invokeRollback(checkpointId);
 
   const ckptMgr = join(ROOT, 'src', 'checkpoint-manager.ts');
-  const spawnResult = runNpxTsxSync(ckptMgr, ['verify', ROOT, checkpointId], {});
+  // CLI signature: checkpoint-manager.ts verify <checkpointId>
+  // (root defaults to cwd — the checkpoint store lives under <root>/.session).
+  const spawnResult = runNpxTsxSync(ckptMgr, ['verify', checkpointId], {});
   let verification: VerificationResult | null = null;
   try {
     verification = JSON.parse(spawnResult.stdout) as VerificationResult;
