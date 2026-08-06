@@ -20,7 +20,7 @@ describe('Timeout Config', () => {
     const content = readFileSync(TIMEOUT_CONFIG_PATH, 'utf-8');
     const config = JSON.parse(content);
     assert.ok(config.version, 'Should have version');
-    assert.ok(config.timeouts, 'Should have timeouts');
+    assert.ok(config.global, 'Should have global defaults');
   });
 
   it('should have required categories', () => {
