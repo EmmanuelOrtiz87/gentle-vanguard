@@ -305,12 +305,13 @@ function cmdSession(args: string[]): CommandResult {
 }
 
 function isDashboardRunning(): boolean {
-  try {
-    runSync('curl', ['-s', 'http://localhost:8080/health'], { timeout: 2000, stdio: 'pipe' });
-    return true;
-  } catch {
-    return false;
-  }
+  // runSync never throws on non-zero exit — it returns {status, error}.
+  // Check the status field directly, not via try/catch.
+  const r = runSync('curl', ['-s', 'http://localhost:8080/health'], {
+    timeout: 2000,
+    stdio: 'pipe',
+  });
+  return r.status === 0;
 }
 
 function cmdDashboard(args: string[]): CommandResult {
