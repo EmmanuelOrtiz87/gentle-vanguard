@@ -11,7 +11,7 @@
  *   validate    Validate stack installation
  *   info        Show stack information
  *   list        List available skills
- *   health      Show Nexus DB health
+ *   health      Full stack health (watchtower); --db for Nexus DB only
  *   prune       Prune old Nexus data
  *   backup      Backup Nexus DB
  *   optimize    Optimize Nexus DB (WAL + VACUUM)
@@ -58,7 +58,7 @@ COMMANDS:
   validate    Validate stack installation
   info        Show stack information
   list        List available skills
-  health      Show Nexus DB health
+  health      Full stack health (watchtower); --db for Nexus DB only
   prune       Prune old Nexus data
   backup      Backup Nexus DB
   optimize    Optimize Nexus DB (WAL + VACUUM)
@@ -136,6 +136,16 @@ function runCommand(command: string, args: string[], label: string): boolean {
   }
 }
 
+/**
+ * Run a command and exit with 0 on success or 1 on failure.
+ * Used for health/check commands so the CLI returns a meaningful exit code
+ * (0 = all OK, 1 = any FAIL) for scripting/CI.
+ */
+function runCommandExit(command: string, args: string[], label: string): never {
+  const ok = runCommand(command, args, label);
+  process.exit(ok ? 0 : 1);
+}
+
 // ─── Command Routing ────────────────────────────────────────────────
 
 async function main(): Promise<void> {
@@ -152,7 +162,7 @@ async function main(): Promise<void> {
       break;
 
     case 'check':
-      runCommand(
+      runCommandExit(
         'npx',
         ['tsx', 'src/core/maintenance-watchtower.ts', '--action', 'health'],
         'WATCHTOWER',
@@ -238,7 +248,17 @@ async function main(): Promise<void> {
     }
 
     case 'health':
-      runCommand('npm', ['run', 'db:health'], 'NEXUS');
+      // Full stack health (watchtower) — aligns with `check`. Use `gv health --db`
+      // for Nexus DB-only health.
+      if (args.includes('--db')) {
+        runCommandExit('npm', ['run', 'db:health'], 'NEXUS');
+      } else {
+        runCommandExit(
+          'npx',
+          ['tsx', 'src/core/maintenance-watchtower.ts', '--action', 'health'],
+          'WATCHTOWER',
+        );
+      }
       break;
 
     case 'prune':

@@ -213,10 +213,10 @@
       "stage": "pre-push",
       "enforced": true,
       "enforcer": "lefthook - audit-check",
-      "tool": "gv.ts",
+      "tool": "audit-ps1-refs.ts",
       "required": true,
       "description": "Quick audit sweep before push",
-      "command": "npx tsx src/gv.ts -Scope quick",
+      "command": "npx tsx src/audit-ps1-refs.ts",
       "failureAction": "block"
     },
     {
@@ -293,14 +293,14 @@
     },
     {
       "id": "ci-tests",
-      "name": "Test Suite (PowerShell)",
+      "name": "Test Suite (TypeScript)",
       "stage": "ci",
       "enforced": true,
-      "enforcer": "CI via pnpm test",
-      "tool": "Pester",
+      "enforcer": "CI via npm test",
+      "tool": "test-runner.ts",
       "required": true,
-      "description": "48 PowerShell tests (unit, integration, security, performance)",
-      "command": "npx tsx src/gv.ts",
+      "description": "TypeScript test suites via test-runner",
+      "command": "npx tsx src/test-runner.ts",
       "failureAction": "block"
     },
     {

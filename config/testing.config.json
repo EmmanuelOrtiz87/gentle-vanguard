@@ -16,28 +16,28 @@
       "enabled": true,
       "description": "Unit tests for individual functions",
       "location": "tests/unit",
-      "pattern": "src/gv.ts",
+      "pattern": "src/cli/gv.ts",
       "timeout": 30
     },
     "integration": {
       "enabled": true,
       "description": "Integration tests for component interactions",
       "location": "tests/integration",
-      "pattern": "src/gv.ts",
+      "pattern": "src/cli/gv.ts",
       "timeout": 60
     },
     "regression": {
       "enabled": true,
       "description": "Regression tests to prevent known issues",
       "location": "tests/regression",
-      "pattern": "src/gv.ts",
+      "pattern": "src/cli/gv.ts",
       "timeout": 45
     },
     "performance": {
       "enabled": true,
       "description": "Performance and load tests",
       "location": "tests/performance",
-      "pattern": "src/gv.ts",
+      "pattern": "src/cli/gv.ts",
       "timeout": 120,
       "thresholds": {
         "engram_creation": 50,
@@ -50,7 +50,7 @@
       "enabled": true,
       "description": "Security and vulnerability tests",
       "location": "tests/security",
-      "pattern": "src/gv.ts",
+      "pattern": "src/cli/gv.ts",
       "timeout": 60
     }
   },
@@ -132,3 +132,4 @@
     "channels": ["console", "log", "email"]
   }
 }
+
