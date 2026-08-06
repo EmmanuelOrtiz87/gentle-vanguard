@@ -18,6 +18,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } fr
 import { dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { getTokenUsage } from './token-usage-reader.js';
+import { compressStructural } from './structural-compression.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -531,6 +532,13 @@ export function compressOutput(
   let abbreviationsContracted = 0;
   let fillersRemoved = 0;
   let causalNotationsApplied = 0;
+
+  // Step 0: Structural compression (JSON arrays, logs, prose) — complements
+  // the extractive engine below. Only applied when it yields a smaller result.
+  const structural = compressStructural(input);
+  if (structural.strategy !== 'none' && structural.compressed.length < input.length) {
+    compressed = structural.compressed;
+  }
 
   // Step 1: Expand abbreviations if requested (for lite mode)
   if (options.expandOnly || profileConfig.expandContractions) {

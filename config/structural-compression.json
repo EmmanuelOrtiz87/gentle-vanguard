@@ -1,0 +1,39 @@
+{
+  "version": "1.0.0",
+  "enabled": true,
+  "smartCrusher": {
+    "enabled": true,
+    "maxItemsAfterCrush": 20,
+    "losslessMinSavingsRatio": 0.15,
+    "relevanceThreshold": 0.2
+  },
+  "tabular": {
+    "enabled": true,
+    "minRows": 5,
+    "minSavingsRatio": 0.15
+  },
+  "logCompressor": {
+    "enabled": true,
+    "maxErrors": 20,
+    "maxWarnings": 15,
+    "maxStackTraces": 5,
+    "contextLines": 2,
+    "collapseFrames": true
+  },
+  "textCrusher": {
+    "enabled": true,
+    "targetRatio": 0.5,
+    "minSegmentLength": 40,
+    "nearDupThreshold": 0.8,
+    "useBm25": true
+  },
+  "crossCompression": {
+    "enabled": true,
+    "minLines": 3,
+    "minChars": 40
+  },
+  "metrics": {
+    "enabled": true,
+    "storagePath": ".runtime/structural-compression-metrics.json"
+  }
+}
