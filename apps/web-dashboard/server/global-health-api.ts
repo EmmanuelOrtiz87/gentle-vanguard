@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url';
 import { existsSync, readdirSync, readFileSync } from 'fs';
 import type { GlobalHealth, RepositoryHealth } from '../src/types/dashboard';
 import { getProcessExecutionTimeouts } from '@gentle-vanguard/core/timeout-config';
-import { runSync, runSyncShell } from '@gentle-vanguard/core/run-command';
+import { runSync } from '@gentle-vanguard/core/run-command';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -11,7 +11,10 @@ const ROOT = resolve(__dirname, '../../..');
 
 function execGit(args: string, cwd: string = ROOT): string {
   try {
-    const result = runSync('git', args.split(' '), { cwd, timeout: getProcessExecutionTimeouts().git_operation_ms ?? 3000 });
+    const result = runSync('git', args.split(' '), {
+      cwd,
+      timeout: getProcessExecutionTimeouts().git_operation_ms ?? 3000,
+    });
     return result.stdout?.trim() ?? '';
   } catch {
     return '';
@@ -186,4 +189,3 @@ export function getGlobalHealth(): GlobalHealth {
     lastUpdated: new Date().toISOString(),
   };
 }
-

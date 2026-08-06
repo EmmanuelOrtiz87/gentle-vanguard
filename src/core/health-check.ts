@@ -3,7 +3,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { runSync, runNpxTsxSync } from '../../adapters/command-runner.js';
-import * as net from 'net';
 import { getEffectiveProcessTimeout } from './timeout-config';
 import { printBanner } from '../cli/banner.js';
 
@@ -44,17 +43,6 @@ function readJson(...parts: string[]) {
   return JSON.parse(fs.readFileSync(path.resolve(ROOT, ...parts), 'utf-8'));
 }
 
-async function tcpCheck(port: number, host = '127.0.0.1', timeoutMs = 2000): Promise<boolean> {
-  return new Promise((resolve) => {
-    const sock = new net.Socket();
-    sock.setTimeout(timeoutMs);
-    sock.on('connect', () => { sock.destroy(); resolve(true); });
-    sock.on('error', () => { sock.destroy(); resolve(false); });
-    sock.on('timeout', () => { sock.destroy(); resolve(false); });
-    sock.connect(port, host);
-  });
-}
-
 /** Try to run a TS script via npx tsx if it exists. */
 function tryRunTs(tsPath: string, args: string[] = []): { status: number; stdout: string } {
   const fullPath = path.resolve(ROOT, tsPath);
@@ -62,7 +50,11 @@ function tryRunTs(tsPath: string, args: string[] = []): { status: number; stdout
     return { status: -1, stdout: '' };
   }
   try {
-    const r = spawnPortable(bin('npx'), ['tsx', tsPath, ...args], getEffectiveProcessTimeout('health_check'));
+    const r = spawnPortable(
+      bin('npx'),
+      ['tsx', tsPath, ...args],
+      getEffectiveProcessTimeout('health_check'),
+    );
     return { status: r.status ?? -1, stdout: (r.stdout ?? '').toString() };
   } catch {
     return { status: -1, stdout: '' };
@@ -83,32 +75,46 @@ function checkMCP() {
     const r = spawnPortable(
       bin('npx'),
       ['tsc', '--noEmit', '--noEmitOnError', '-p', 'tsconfig.json', '--skipLibCheck'],
-      getEffectiveProcessTimeout('tsc')
+      getEffectiveProcessTimeout('tsc'),
     );
     writeCheck('MCP TS compiles clean', r.status === 0);
   } catch {
     writeCheck('MCP TS compiles clean', false);
   }
   try {
-    const input = [
-      JSON.stringify({
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'initialize',
-        params: {
-          protocolVersion: '2024-11-05',
-          capabilities: {},
-          clientInfo: { name: 'gentle-vanguard-health-check', version: '1.0.0' },
-        },
-      }),
-      JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} }),
-    ].join('\n') + '\n';
-    const r = runSync('node', [mcpJs], { cwd: ROOT, timeout: getEffectiveProcessTimeout('default'), maxBuffer: 1024 * 1024, env: process.env, });
+    const input =
+      [
+        JSON.stringify({
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'initialize',
+          params: {
+            protocolVersion: '2024-11-05',
+            capabilities: {},
+            clientInfo: { name: 'gentle-vanguard-health-check', version: '1.0.0' },
+          },
+        }),
+        JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} }),
+      ].join('\n') + '\n';
+    const r = runSync('node', [mcpJs], {
+      cwd: ROOT,
+      timeout: getEffectiveProcessTimeout('default'),
+      maxBuffer: 1024 * 1024,
+      env: process.env,
+      input,
+    });
     const allOutput = (r.stdout ?? '') + '\n' + (r.stderr ?? '');
     const lines = allOutput.split('\n').filter((l) => l.trim());
     let toolsCount = 0;
     for (const line of lines) {
-      try { const parsed = JSON.parse(line); const tools = parsed.result?.tools || []; toolsCount = tools.length; if (toolsCount > 0) break; } catch { /* skip */ }
+      try {
+        const parsed = JSON.parse(line);
+        const tools = parsed.result?.tools || [];
+        toolsCount = tools.length;
+        if (toolsCount > 0) break;
+      } catch {
+        /* skip */
+      }
     }
     writeCheck('MCP tools/list responds', toolsCount > 0, `${toolsCount} tools`);
   } catch (e: unknown) {
@@ -122,19 +128,30 @@ function checkTeamMode() {
   const tsScript = 'src/team-orchestrator.ts';
   writeCheck('Team Orchestrator (TS)', exists(tsScript), tsScript);
   if (exists(tsScript)) {
-    const r = runNpxTsxSync(tsScript, ['--task', 'health-check'], { cwd: ROOT, timeout: getEffectiveProcessTimeout('default') });
+    const r = runNpxTsxSync(tsScript, ['--task', 'health-check'], {
+      cwd: ROOT,
+      timeout: getEffectiveProcessTimeout('default'),
+    });
     writeCheck('Team orchestrator responds', r.status === 0);
   }
 }
 
 function checkSessionRef() {
   header('Session Reference System');
-  writeCheck('Session Ref (TS)', exists('src/session-reference-system.ts'), 'src/session-reference-system.ts');
+  writeCheck(
+    'Session Ref (TS)',
+    exists('src/session-reference-system.ts'),
+    'src/session-reference-system.ts',
+  );
 }
 
 function checkSkillFactory() {
   header('Skill Factory');
-  writeCheck('Skill Factory (TS)', exists('src/skills/skill-factory.ts'), 'src/skills/skill-factory.ts');
+  writeCheck(
+    'Skill Factory (TS)',
+    exists('src/skills/skill-factory.ts'),
+    'src/skills/skill-factory.ts',
+  );
   writeCheck('Skill registry exists', exists('.atl', 'skill-registry.md'));
   const regPath = path.resolve(ROOT, '.atl/skill-registry.md');
   if (fs.existsSync(regPath)) {
@@ -166,7 +183,11 @@ function checkLefthook() {
   const candidates = ['.lefthook.yml', 'config/lefthook.yml'];
   let found = false;
   for (const f of candidates) {
-    if (exists(f)) { writeCheck('lefthook config', true, f); found = true; break; }
+    if (exists(f)) {
+      writeCheck('lefthook config', true, f);
+      found = true;
+      break;
+    }
   }
   if (!found) writeCheck('lefthook config', false);
 }
@@ -174,7 +195,11 @@ function checkLefthook() {
 function checkOptimizationStack() {
   header('Optimization Stack');
   // No dedicated TS equivalent — check cross-workspace-validator as proxy
-  writeCheck('Cross-workspace validator (TS)', exists('src/cross-workspace-validator.ts'), 'src/cross-workspace-validator.ts');
+  writeCheck(
+    'Cross-workspace validator (TS)',
+    exists('src/cross-workspace-validator.ts'),
+    'src/cross-workspace-validator.ts',
+  );
 }
 
 function checkGateGuard() {
@@ -188,7 +213,11 @@ function checkGateGuard() {
       if (jsonMatch) {
         try {
           const parsed = JSON.parse(jsonMatch[0]);
-          writeCheck('GateGuard responds', true, `server=${parsed.Status || parsed.status} latency=${parsed.LatencyMs || '?'}ms`);
+          writeCheck(
+            'GateGuard responds',
+            true,
+            `server=${parsed.Status || parsed.status} latency=${parsed.LatencyMs || '?'}ms`,
+          );
         } catch {
           writeCheck('GateGuard responds', true, 'responded');
         }
@@ -206,24 +235,28 @@ function checkMlEmbeddings() {
   // Check both ml-index.json and skill-embeddings.json
   const mlIndexPath = path.resolve(ROOT, '.atl/ml-index.json');
   const skillEmbeddingsPath = path.resolve(ROOT, '.atl/skill-embeddings.json');
-  
+
   const hasMlIndex = fs.existsSync(mlIndexPath);
   const hasSkillEmbeddings = fs.existsSync(skillEmbeddingsPath);
-  
+
   writeCheck('ml-index.json exists', hasMlIndex, '.atl/ml-index.json');
   writeCheck('skill-embeddings.json exists', hasSkillEmbeddings, '.atl/skill-embeddings.json');
-  writeCheck('skill-embedder.ts exists', exists('src/skills/skill-embedder.ts'), 'src/skills/skill-embedder.ts');
+  writeCheck(
+    'skill-embedder.ts exists',
+    exists('src/skills/skill-embedder.ts'),
+    'src/skills/skill-embedder.ts',
+  );
   writeCheck('ml-router.ts exists', exists('src/ml-router.ts'), 'src/ml-router.ts');
-  
+
   // Use skill-embeddings.json as primary source if available
   const primaryPath = hasSkillEmbeddings ? skillEmbeddingsPath : mlIndexPath;
   if (fs.existsSync(primaryPath)) {
-    try { 
-      const data = JSON.parse(fs.readFileSync(primaryPath, 'utf-8')); 
-      const cnt = Object.keys(data).length; 
-      writeCheck('embeddings parseable', true, `${cnt} skills indexed`); 
-    } catch { 
-      writeCheck('embeddings parseable', false); 
+    try {
+      const data = JSON.parse(fs.readFileSync(primaryPath, 'utf-8'));
+      const cnt = Object.keys(data).length;
+      writeCheck('embeddings parseable', true, `${cnt} skills indexed`);
+    } catch {
+      writeCheck('embeddings parseable', false);
     }
     const stat = fs.statSync(primaryPath);
     const ageHours = (Date.now() - stat.mtimeMs) / (1000 * 60 * 60);
@@ -233,13 +266,29 @@ function checkMlEmbeddings() {
 
 async function checkEngramRag() {
   header('Engram RAG Index');
-  writeCheck('engram-rag-reindex.ts exists', exists('src/engram-rag-reindex.ts'), 'src/engram-rag-reindex.ts');
+  writeCheck(
+    'engram-rag-reindex.ts exists',
+    exists('src/engram-rag-reindex.ts'),
+    'src/engram-rag-reindex.ts',
+  );
   try {
-    const r = process.platform === 'win32'
-      ? runSync(process.env.ComSpec || 'cmd.exe', ['/c', 'engram', 'doctor', '--json'], { cwd: ROOT, timeout: getEffectiveProcessTimeout('health_check'), maxBuffer: 1024 * 1024 })
-      : runSync('engram', ['doctor', '--json'], { cwd: ROOT, timeout: getEffectiveProcessTimeout('health_check'), maxBuffer: 1024 * 1024 });
+    const r =
+      process.platform === 'win32'
+        ? runSync(process.env.ComSpec || 'cmd.exe', ['/c', 'engram', 'doctor', '--json'], {
+            cwd: ROOT,
+            timeout: getEffectiveProcessTimeout('health_check'),
+            maxBuffer: 1024 * 1024,
+          })
+        : runSync('engram', ['doctor', '--json'], {
+            cwd: ROOT,
+            timeout: getEffectiveProcessTimeout('health_check'),
+            maxBuffer: 1024 * 1024,
+          });
     const output = (r.stdout ?? '') + (r.stderr ?? '');
-    const healthy = output.includes('"status":"ok"') || output.includes('"status": "ok"') || output.includes('Engram Doctor: ok');
+    const healthy =
+      output.includes('"status":"ok"') ||
+      output.includes('"status": "ok"') ||
+      output.includes('Engram Doctor: ok');
     writeCheck('engram doctor', healthy);
   } catch (e: unknown) {
     writeCheck('engram doctor', false, e instanceof Error ? e.message : 'Not accessible');
@@ -250,21 +299,33 @@ async function checkDashboardV3() {
   header('Dashboard v3');
   const dashboardDir = path.resolve(ROOT, 'apps/web-dashboard');
   writeCheck('apps/web-dashboard exists', fs.existsSync(dashboardDir));
-  
+
   // Import and use the new robust health checker
   const { checkDashboardHealth } = await import('../dashboard-health-checker.js');
   const health = await checkDashboardHealth(8080, 5173);
-  
+
   // Map the health result to pass/fail
   switch (health.status) {
     case 'healthy':
-      writeCheck(`dashboard WS server (port ${health.port})`, true, `HTTP API responding, Vite:${health.vitePort}`);
+      writeCheck(
+        `dashboard WS server (port ${health.port})`,
+        true,
+        `HTTP API responding, Vite:${health.vitePort}`,
+      );
       writeCheck('dashboard dev server', true, `Vite running on ${health.vitePort}`);
       break;
     case 'degraded':
       // Degraded means the port is open but HTTP API not working
-      writeCheck(`dashboard WS server (port ${health.port})`, false, 'TCP open but HTTP API not responding');
-      writeCheck('dashboard dev server', health.vitePort === 5173, health.vitePort === 5173 ? 'running' : 'not running');
+      writeCheck(
+        `dashboard WS server (port ${health.port})`,
+        false,
+        'TCP open but HTTP API not responding',
+      );
+      writeCheck(
+        'dashboard dev server',
+        health.vitePort === 5173,
+        health.vitePort === 5173 ? 'running' : 'not running',
+      );
       break;
     case 'down':
       writeCheck(`dashboard WS server (port ${health.port})`, false, 'Not responding');
@@ -284,12 +345,18 @@ function checkMcpBridge() {
 function checkCostTracking() {
   header('Cost Tracking');
   const configPath = path.resolve(ROOT, 'config/model-router.json');
-  if (!fs.existsSync(configPath)) { writeCheck('model-router.json exists', false); return; }
+  if (!fs.existsSync(configPath)) {
+    writeCheck('model-router.json exists', false);
+    return;
+  }
   writeCheck('model-router.json exists', true);
   try {
     const config = readJson('config/model-router.json');
     writeCheck('costTracking section present', config.costTracking !== undefined);
-    writeCheck('routingPolicy section present', config.routingPolicy?.fastCheapToStrongReasoning !== undefined);
+    writeCheck(
+      'routingPolicy section present',
+      config.routingPolicy?.fastCheapToStrongReasoning !== undefined,
+    );
   } catch (e: unknown) {
     writeCheck('costTracking section present', false, e instanceof Error ? e.message : String(e));
     writeCheck('routingPolicy section present', false);
@@ -323,8 +390,12 @@ async function main() {
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--quiet': case '-q': quiet = true; break;
-      case '--component': case '-c':
+      case '--quiet':
+      case '-q':
+        quiet = true;
+        break;
+      case '--component':
+      case '-c':
         if (i + 1 < args.length) components.push(...args[++i].split(',').map((s) => s.trim()));
         break;
       default:
@@ -341,13 +412,20 @@ async function main() {
 
   for (const comp of components) {
     const fn = checkMap[comp];
-    if (fn) { const result = fn(); if (result instanceof Promise) await result; }
-    else { console.error(`\x1b[33mUnknown component: ${comp}\x1b[0m`); exitCode++; }
+    if (fn) {
+      const result = fn();
+      if (result instanceof Promise) await result;
+    } else {
+      console.error(`\x1b[33mUnknown component: ${comp}\x1b[0m`);
+      exitCode++;
+    }
   }
 
   console.log(`\n\x1b[36m=== Health Check Complete ===\x1b[0m`);
   const ok = exitCode === 0;
-  console.log(`${ok ? '\x1b[32m' : '\x1b[31m'}Status: ${ok ? 'ALL PASS' : `${exitCode} FAILURES`}\x1b[0m`);
+  console.log(
+    `${ok ? '\x1b[32m' : '\x1b[31m'}Status: ${ok ? 'ALL PASS' : `${exitCode} FAILURES`}\x1b[0m`,
+  );
   process.exit(exitCode);
 }
 

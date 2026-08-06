@@ -5,11 +5,20 @@ import { join, resolve, basename } from 'path';
 import { spawn, execFileSync } from 'child_process';
 import { runSync } from './run-command';
 import { createConnection } from 'net';
-import { getEffectiveProcessTimeout, getHttpServerTimeouts, getExternalApiTimeouts } from './timeout-config';
+import {
+  getEffectiveProcessTimeout,
+  getHttpServerTimeouts,
+  getExternalApiTimeouts,
+} from './timeout-config';
 
 const ROOT = resolve(process.cwd());
 const RUNTIME_DIR = join(ROOT, '.runtime');
 const SESSION_DIR = join(ROOT, '.session');
+
+// Default port for the CodeGraph MCP server (overridable via CODEGRAPH_PORT env).
+// Note: `codegraph serve --mcp` runs as a stdio MCP server, so the process table
+// and PID file are the primary liveness signals; the port probe is a fallback.
+const CODEGRAPH_PORT = parseInt(process.env.CODEGRAPH_PORT ?? '3000', 10) || 3000;
 
 interface CheckResult {
   component: string;
@@ -100,6 +109,35 @@ async function getPidByPort(port: number): Promise<number | null> {
     // not found or error
   }
   return null;
+}
+
+/**
+ * Detect a running `codegraph serve --mcp` MCP server via the process table.
+ * The server runs as a node process (`...codegraph.js serve --mcp`), so a plain
+ * process-name scan misses it. On Windows we use CIM (wmic is deprecated), on
+ * Unix `ps -ef`. The querying process itself is excluded via `$PID`.
+ */
+function isCodeGraphProcessRunning(): boolean {
+  try {
+    if (process.platform === 'win32') {
+      const r = runSync(
+        'powershell.exe',
+        [
+          '-NoProfile',
+          '-NonInteractive',
+          '-Command',
+          "@(@(Get-CimInstance Win32_Process | Where-Object { $_.ProcessId -ne `$PID -and $_.CommandLine -match 'codegraph\\.js' -and $_.CommandLine -match 'serve' -and $_.CommandLine -match '--mcp' })).Count",
+        ],
+        { timeout: 15000 },
+      );
+      const count = parseInt((r.stdout ?? '').trim(), 10);
+      return !isNaN(count) && count > 0;
+    }
+    const r = runSync('ps', ['-ef'], { timeout: 15000 });
+    return /codegraph\.js.*(serve|--mcp)/i.test(r.stdout ?? '');
+  } catch {
+    return false;
+  }
 }
 
 function testHttp(url: string): Promise<boolean> {
@@ -247,7 +285,9 @@ async function checkDashboardWs() {
       pidDetail = `PID ${realPid} running`;
       try {
         writeFileSync(pidFile, String(realPid), 'utf-8');
-      } catch { /* non-fatal */ }
+      } catch {
+        /* non-fatal */
+      }
     }
     addResult('dashboard-ws', 'WS server process', 'PASS', pidDetail, 'ok');
   } else if (fileExists(pidFile)) {
@@ -280,7 +320,60 @@ async function checkCodeGraph() {
   const indexOk = fileExists(join(cgDir, 'codegraph.db'));
   addResult('codegraph', 'index database', indexOk ? 'PASS' : 'FAIL', '', 'rebuild');
 
-  addResult('codegraph', 'server process', 'PASS', 'Not running (MCP mode — expected)', 'verify');
+  // A running CodeGraph MCP server is expected. Detect it via the PID file,
+  // a TCP port probe (default 3000), or a process-table scan.
+  const pidFile = join(RUNTIME_DIR, 'codegraph-mcp-server.pid');
+  let pidDetail = 'No PID file';
+  let pidAlive = false;
+  if (fileExists(pidFile)) {
+    const pid = parseInt(readFileSync(pidFile, 'utf-8').trim(), 10);
+    if (isNaN(pid)) {
+      pidDetail = 'PID file unreadable';
+    } else {
+      try {
+        process.kill(pid, 0);
+        pidAlive = true;
+        pidDetail = `PID ${pid} running`;
+      } catch {
+        pidDetail = `PID ${pid} not running`;
+      }
+    }
+  }
+
+  const portOpen = await testPort(CODEGRAPH_PORT);
+  const procRunning = isCodeGraphProcessRunning();
+
+  // CodeGraph is configured as an on-demand stdio MCP server in opencode.json
+  // (command: "codegraph serve --mcp"). opencode spawns it lazily when its
+  // tools are used, so a persistent daemon is NOT the expected state. If the
+  // MCP config is present and enabled, that is a valid, healthy architecture.
+  let mcpConfigured = false;
+  try {
+    const oc = readJson(join(ROOT, 'opencode.json'));
+    const cg = (oc.mcp as Record<string, unknown> | undefined)?.['codegraph'] as
+      { enabled?: boolean; command?: string } | undefined;
+    mcpConfigured = !!cg && cg.enabled !== false && typeof cg.command === 'string';
+  } catch {
+    mcpConfigured = false;
+  }
+
+  if (pidAlive || portOpen || procRunning || mcpConfigured) {
+    const signals = [
+      pidAlive ? pidDetail : '',
+      portOpen ? `port ${CODEGRAPH_PORT} open` : '',
+      procRunning ? 'process detected' : '',
+      mcpConfigured ? 'MCP server configured (on-demand)' : '',
+    ].filter(Boolean);
+    addResult('codegraph', 'server process', 'PASS', signals.join(', '), 'ok');
+  } else {
+    addResult(
+      'codegraph',
+      'server process',
+      'FAIL',
+      `${pidDetail}; port ${CODEGRAPH_PORT} closed; MCP not configured`,
+      'restart',
+    );
+  }
 }
 
 // ─── Component: ML Embeddings ────────────────────────────────────────────────
@@ -328,10 +421,7 @@ async function checkMlEmbeddings() {
     addResult('ml-embeddings', 'embedding directory', 'FAIL', 'Not found', 'rebuild');
   }
 
-  const scripts = [
-    'src/skills/skill-embedder.ts',
-    'src/ml-router.ts',
-  ];
+  const scripts = ['src/skills/skill-embedder.ts', 'src/ml-router.ts'];
   for (const s of scripts) {
     const name = basename(s);
     addResult('ml-embeddings', name, fileExists(join(ROOT, s)) ? 'PASS' : 'FAIL', '', 'manual');
@@ -393,7 +483,11 @@ async function checkEngram() {
   // If engram MCP server is running, doctor will deadlock on DB lock — skip gracefully
   const engramMcpRunning = (() => {
     try {
-      const r = runSync(process.platform === 'win32' ? 'tasklist' : 'ps', process.platform === 'win32' ? [] : ['-ef'], { timeout: getEffectiveProcessTimeout('default') });
+      const r = runSync(
+        process.platform === 'win32' ? 'tasklist' : 'ps',
+        process.platform === 'win32' ? [] : ['-ef'],
+        { timeout: getEffectiveProcessTimeout('default') },
+      );
       return (r.stdout ?? '').toLowerCase().includes('engram.exe');
     } catch {
       return false;
@@ -404,20 +498,15 @@ async function checkEngram() {
     addResult('engram', 'doctor', 'PASS', 'MCP server active (skip to avoid deadlock)', 'ok');
   } else {
     try {
-      const r = runSync(engramCmd, ['doctor', '--json'], { timeout: getExternalApiTimeouts()?.engram_operation_ms ?? 15000 });
+      const r = runSync(engramCmd, ['doctor', '--json'], {
+        timeout: getExternalApiTimeouts()?.engram_operation_ms ?? 15000,
+      });
       const output = (r.stdout ?? '') + (r.stderr ?? '');
       const ok = /"status"\s*:\s*"ok"/.test(output);
       addResult('engram', 'doctor', ok ? 'PASS' : 'WARN', `Healthy=${ok}`, 'verify');
     } catch (e: unknown) {
       const err = e as Error;
-      addResult(
-        'engram',
-        'doctor',
-        'FAIL',
-        `Error: ${err?.message ?? String(e)}`,
-        'manual',
-        true,
-      );
+      addResult('engram', 'doctor', 'FAIL', `Error: ${err?.message ?? String(e)}`, 'manual', true);
     }
   }
 }
@@ -456,7 +545,10 @@ async function checkMcp() {
   if (fileExists(verifyScript)) {
     try {
       const cmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
-      const r = runSync(cmd, ['tsx', 'src/mcp/mcp-verify.ts'], { cwd: ROOT, timeout: getExternalApiTimeouts()?.mcp_request_ms ?? 30000 });
+      const r = runSync(cmd, ['tsx', 'src/mcp/mcp-verify.ts'], {
+        cwd: ROOT,
+        timeout: getExternalApiTimeouts()?.mcp_request_ms ?? 30000,
+      });
       const output = (r.stdout ?? '') + (r.stderr ?? '');
       const healthOk = r.status === 0 || output.includes('Bridge status: OK');
       const detail = healthOk ? 'bridge verified' : `exit code: ${r.status ?? 'null'}`;
@@ -469,12 +561,7 @@ async function checkMcp() {
   }
 
   payloadFileOk('mcp', 'mcp-registry.json', join(ROOT, 'config/mcp-registry.json'), 'config');
-  payloadFileOk(
-    'mcp',
-    'mcp-manager.ts',
-    join(ROOT, 'src/mcp/mcp-manager.ts'),
-    'manual',
-  );
+  payloadFileOk('mcp', 'mcp-manager.ts', join(ROOT, 'src/mcp/mcp-manager.ts'), 'manual');
   payloadFileOk('mcp', 'mcp-gateway.ts', join(ROOT, 'src/mcp/mcp-gateway.ts'), 'manual');
   payloadFileOk(
     'mcp',
@@ -525,8 +612,17 @@ async function checkHooks() {
   );
 
   try {
-    const r = runSync('lefthook', ['validate'], { cwd: ROOT, timeout: getEffectiveProcessTimeout('default') });
-    addResult('hooks', 'lefthook validate', r.status === 0 ? 'PASS' : 'FAIL', r.stderr ?? '', 'manual');
+    const r = runSync('lefthook', ['validate'], {
+      cwd: ROOT,
+      timeout: getEffectiveProcessTimeout('default'),
+    });
+    addResult(
+      'hooks',
+      'lefthook validate',
+      r.status === 0 ? 'PASS' : 'FAIL',
+      r.stderr ?? '',
+      'manual',
+    );
   } catch {
     addResult('hooks', 'lefthook validate', 'FAIL', 'Not installed or invalid', 'manual');
   }
@@ -607,24 +703,12 @@ async function checkCloudConnectors() {
   if (!quiet) console.log('  [Cloud Connectors] Checking...');
 
   // Stack operates in local-only mode - no cloud dependencies
-  addResult(
-    'cloud-connectors',
-    'mode',
-    'PASS',
-    'Local-only mode (no cloud dependencies)',
-    'ok',
-  );
+  addResult('cloud-connectors', 'mode', 'PASS', 'Local-only mode (no cloud dependencies)', 'ok');
 
   // Verify local execution is working
   const localMetrics = join(SESSION_DIR, 'token-budget.json');
   if (fileExists(localMetrics)) {
-    addResult(
-      'cloud-connectors',
-      'local metrics',
-      'PASS',
-      'Token budget tracking active',
-      'ok',
-    );
+    addResult('cloud-connectors', 'local metrics', 'PASS', 'Token budget tracking active', 'ok');
   } else {
     addResult(
       'cloud-connectors',
@@ -757,7 +841,13 @@ async function checkGentleVanguardDb() {
 
   const dbPath = join(RUNTIME_DIR, 'gentle-vanguard.db');
   const dbExists = fileExists(dbPath);
-  addResult('gentle-vanguard-db', 'database file', dbExists ? 'PASS' : 'FAIL', dbExists ? `${(statSync(dbPath).size / 1024 / 1024).toFixed(2)} MB` : 'Not found', 'init');
+  addResult(
+    'gentle-vanguard-db',
+    'database file',
+    dbExists ? 'PASS' : 'FAIL',
+    dbExists ? `${(statSync(dbPath).size / 1024 / 1024).toFixed(2)} MB` : 'Not found',
+    'init',
+  );
 
   if (dbExists) {
     // Check WAL size — auto-checkpoint if WAL > DB size or > 5MB
@@ -773,9 +863,21 @@ async function checkGentleVanguardDb() {
           const cmd = process.platform === 'win32' ? 'sqlite3.exe' : 'sqlite3';
           runSync(cmd, [dbPath, 'PRAGMA wal_checkpoint(TRUNCATE);'], { timeout: 30000 });
           const newWalBytes = existsSync(walPath) ? statSync(walPath).size : 0;
-          addResult('gentle-vanguard-db', 'WAL auto-checkpoint', 'PASS', `${walMB.toFixed(2)} MB → ${(newWalBytes / 1024 / 1024).toFixed(2)} MB (ratio ${walRatio.toFixed(1)}x)`, 'auto-healed');
+          addResult(
+            'gentle-vanguard-db',
+            'WAL auto-checkpoint',
+            'PASS',
+            `${walMB.toFixed(2)} MB → ${(newWalBytes / 1024 / 1024).toFixed(2)} MB (ratio ${walRatio.toFixed(1)}x)`,
+            'auto-healed',
+          );
         } catch {
-          addResult('gentle-vanguard-db', 'WAL file', 'WARN', `${walMB.toFixed(2)} MB (checkpoint failed)`, 'manual');
+          addResult(
+            'gentle-vanguard-db',
+            'WAL file',
+            'WARN',
+            `${walMB.toFixed(2)} MB (checkpoint failed)`,
+            'manual',
+          );
         }
       } else {
         addResult('gentle-vanguard-db', 'WAL file', 'PASS', `${walMB.toFixed(2)} MB`, 'ok');
@@ -787,11 +889,14 @@ async function checkGentleVanguardDb() {
     // Try integrity check via sqlite3 CLI
     try {
       const cmd = process.platform === 'win32' ? 'sqlite3.exe' : 'sqlite3';
-      const r = runSync(cmd, [dbPath, 'PRAGMA integrity_check;'], { timeout: getEffectiveProcessTimeout('default') });
+      const r = runSync(cmd, [dbPath, 'PRAGMA integrity_check;'], {
+        timeout: getEffectiveProcessTimeout('default'),
+      });
       const output = (r.stdout ?? '').trim();
       const stderr = (r.stderr ?? '').trim();
       const processFailed = r.error || (r.status !== null && r.status !== 0);
-      const isTransient = processFailed || output === '' || /locked|busy|no such|Error/i.test(stderr);
+      const isTransient =
+        processFailed || output === '' || /locked|busy|no such|Error/i.test(stderr);
       const integrityOk = output === 'ok';
 
       let status: 'PASS' | 'WARN' | 'FAIL';
@@ -808,28 +913,48 @@ async function checkGentleVanguardDb() {
         action = 'restore';
       }
 
-      const detail = integrityOk ? 'ok' : isTransient ? `Transient (${output.substring(0, 40) || stderr.substring(0, 40) || 'process error'})` : output.substring(0, 80);
+      const detail = integrityOk
+        ? 'ok'
+        : isTransient
+          ? `Transient (${output.substring(0, 40) || stderr.substring(0, 40) || 'process error'})`
+          : output.substring(0, 80);
       addResult('gentle-vanguard-db', 'integrity check', status, detail, action);
 
       // Get table and row counts (only on PASS)
       if (integrityOk) {
         try {
           const tablesOut = runSync(cmd, [dbPath, '.tables'], { timeout: 5000 }).stdout.trim();
-          const tables = tablesOut.split(/\s+/).filter(t => t.length > 0 && !t.startsWith('_'));
+          const tables = tablesOut.split(/\s+/).filter((t) => t.length > 0 && !t.startsWith('_'));
           let totalRows = 0;
           for (const t of tables) {
             try {
-              const row = runSync(cmd, [dbPath, `SELECT COUNT(*) FROM [${t}];`], { timeout: 3000 }).stdout.trim();
+              const row = runSync(cmd, [dbPath, `SELECT COUNT(*) FROM [${t}];`], {
+                timeout: 3000,
+              }).stdout.trim();
               totalRows += parseInt(row, 10) || 0;
-            } catch { /* skip */ }
+            } catch {
+              /* skip */
+            }
           }
-          addResult('gentle-vanguard-db', 'size', 'PASS', `${tables.length} tables, ${totalRows} rows`, 'ok');
+          addResult(
+            'gentle-vanguard-db',
+            'size',
+            'PASS',
+            `${tables.length} tables, ${totalRows} rows`,
+            'ok',
+          );
         } catch {
           addResult('gentle-vanguard-db', 'size', 'WARN', 'Could not enumerate tables');
         }
       }
     } catch {
-      addResult('gentle-vanguard-db', 'integrity check', 'WARN', 'sqlite3 CLI not available', 'manual');
+      addResult(
+        'gentle-vanguard-db',
+        'integrity check',
+        'WARN',
+        'sqlite3 CLI not available',
+        'manual',
+      );
     }
   }
 }
@@ -844,7 +969,13 @@ async function checkModelHealth() {
   const activePath = join(RUNTIME_DIR, 'model-active.json');
 
   if (!fileExists(configPath)) {
-    addResult('model-provider-health', 'config', 'FAIL', 'config/model-health.json not found', 'verify');
+    addResult(
+      'model-provider-health',
+      'config',
+      'FAIL',
+      'config/model-health.json not found',
+      'verify',
+    );
     return;
   }
   addResult('model-provider-health', 'config', 'PASS', 'model-health.json present', 'ok');
@@ -854,7 +985,9 @@ async function checkModelHealth() {
     try {
       const active = JSON.parse(readFileSync(activePath, 'utf-8'));
       activeModel = active.model || active.activeModel || 'unknown';
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }
 
   if (!fileExists(statePath)) {
@@ -865,14 +998,26 @@ async function checkModelHealth() {
 
   try {
     const state = JSON.parse(readFileSync(statePath, 'utf-8'));
-    const models = (state.models ?? {}) as Record<string, { status?: string; reason?: string; cooldownUntil?: string }>;
+    const models = (state.models ?? {}) as Record<
+      string,
+      { status?: string; reason?: string; cooldownUntil?: string }
+    >;
     const now = Date.now();
-    const unhealthy = Object.entries(models).filter(([, m]) => m.status === 'unhealthy' && m.cooldownUntil && new Date(m.cooldownUntil).getTime() > now);
+    const unhealthy = Object.entries(models).filter(
+      ([, m]) =>
+        m.status === 'unhealthy' && m.cooldownUntil && new Date(m.cooldownUntil).getTime() > now,
+    );
     const healthy = Object.entries(models).filter(([, m]) => m.status === 'healthy');
 
     if (unhealthy.length > 0) {
       for (const [name, m] of unhealthy) {
-        addResult('model-provider-health', `model ${name}`, 'WARN', `unhealthy (${m.reason?.slice(0, 60) ?? 'unknown reason'})`, 'switch-to-fallback');
+        addResult(
+          'model-provider-health',
+          `model ${name}`,
+          'WARN',
+          `unhealthy (${m.reason?.slice(0, 60) ?? 'unknown reason'})`,
+          'switch-to-fallback',
+        );
       }
     }
     if (healthy.length > 0) {
@@ -883,9 +1028,21 @@ async function checkModelHealth() {
     if (unhealthy.length === 0 && healthy.length === 0) {
       addResult('model-provider-health', 'state', 'PASS', 'No models tracked', 'ok');
     }
-    addResult('model-provider-health', 'active model', activeModel === 'unknown' ? 'WARN' : 'PASS', activeModel, 'ok');
+    addResult(
+      'model-provider-health',
+      'active model',
+      activeModel === 'unknown' ? 'WARN' : 'PASS',
+      activeModel,
+      'ok',
+    );
   } catch {
-    addResult('model-provider-health', 'state', 'WARN', 'Could not parse model-health.json', 'verify');
+    addResult(
+      'model-provider-health',
+      'state',
+      'WARN',
+      'Could not parse model-health.json',
+      'verify',
+    );
   }
 }
 
@@ -1056,7 +1213,9 @@ async function autoHeal() {
       try {
         const ports = readJson(portsFile);
         wsPort = typeof ports.wsPort === 'number' ? ports.wsPort : 8080;
-      } catch { /* port file parse error, use default */ }
+      } catch {
+        /* port file parse error, use default */
+      }
     }
 
     const wsRunning = await testPort(wsPort);
@@ -1081,17 +1240,24 @@ async function autoHeal() {
             stdio: 'ignore',
             windowsHide: true,
             detached: true,
+            shell: true,
           },
         );
         child.unref();
-        
+
         // Wait for process to start and check if port is up
         await new Promise((resolve) => setTimeout(resolve, 8000));
-        
+
         // Verify by checking if port is now responding
         const isPortUp = await testPort(wsPort);
         if (isPortUp) {
-          addResult('dashboard-ws', 'autoheal', 'PASS', `Restarted (port ${wsPort} responding)`, 'ok');
+          addResult(
+            'dashboard-ws',
+            'autoheal',
+            'PASS',
+            `Restarted (port ${wsPort} responding)`,
+            'ok',
+          );
           healed++;
         } else {
           // Try fallback to direct tsx launch
@@ -1101,16 +1267,30 @@ async function autoHeal() {
             stdio: 'ignore',
             detached: true,
             windowsHide: true,
+            shell: true,
           });
           fallback.unref();
           await new Promise((resolve) => setTimeout(resolve, 10000));
-          
+
           const fallbackCheck = await testPort(wsPort);
           if (fallbackCheck) {
-            addResult('dashboard-ws', 'autoheal', 'PASS', `Restarted via fallback (port ${wsPort} responding)`, 'ok');
+            addResult(
+              'dashboard-ws',
+              'autoheal',
+              'PASS',
+              `Restarted via fallback (port ${wsPort} responding)`,
+              'ok',
+            );
             healed++;
           } else {
-            addResult('dashboard-ws', 'autoheal', 'FAIL', 'Restart failed - port not responding', 'manual', true);
+            addResult(
+              'dashboard-ws',
+              'autoheal',
+              'FAIL',
+              'Restart failed - port not responding',
+              'manual',
+              true,
+            );
             failed++;
           }
         }
@@ -1142,13 +1322,33 @@ async function autoHeal() {
         stdio: 'ignore',
         detached: true,
         windowsHide: true,
+        shell: true,
       });
       child.unref();
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      if (child.exitCode === null) {
-        addResult('codegraph', 'autoheal', 'PASS', `Restarted PID ${child.pid}`, 'ok');
+      // Persist the fresh launcher PID so subsequent checks have a current signal.
+      try {
+        writeFileSync(
+          join(RUNTIME_DIR, 'codegraph-mcp-server.pid'),
+          String(child.pid ?? ''),
+          'utf-8',
+        );
+      } catch {
+        /* non-fatal */
+      }
+      await new Promise((resolve) => setTimeout(resolve, 4000));
+      const up = isCodeGraphProcessRunning() || (await testPort(CODEGRAPH_PORT));
+      if (up) {
+        addResult('codegraph', 'autoheal', 'PASS', `Restarted (PID ${child.pid})`, 'ok');
         healed++;
       } else {
+        addResult(
+          'codegraph',
+          'autoheal',
+          'FAIL',
+          'Restart failed - no server process detected',
+          'manual',
+          true,
+        );
         failed++;
       }
     } catch {
@@ -1263,15 +1463,17 @@ async function runAllChecks() {
     checkModelHealth,
   ];
   // Parallelized with Promise.allSettled — each check is I/O-bound (file reads, HTTP, DB)
-  const results = await Promise.allSettled(checks.map(async (check) => {
-    try {
-      await check();
-    } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : String(e);
-      addResult('system', check.name, 'FAIL', `Check failed: ${msg}`, 'manual');
-    }
-  }));
-  const rejected = results.filter(r => r.status === 'rejected');
+  const results = await Promise.allSettled(
+    checks.map(async (check) => {
+      try {
+        await check();
+      } catch (e: unknown) {
+        const msg = e instanceof Error ? e.message : String(e);
+        addResult('system', check.name, 'FAIL', `Check failed: ${msg}`, 'manual');
+      }
+    }),
+  );
+  const rejected = results.filter((r) => r.status === 'rejected');
   if (rejected.length > 0 && !quiet) {
     console.log(`  [WARN] ${rejected.length} check(s) threw unhandled rejection`);
   }

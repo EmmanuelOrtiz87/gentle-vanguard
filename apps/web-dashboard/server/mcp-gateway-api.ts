@@ -15,7 +15,7 @@ const REGISTRY_PATH = join(ROOT, 'config', 'mcp-registry.json');
 function tsx(script: string): string {
   try {
     const timeout = getExternalApiTimeouts()?.mcp_request_ms ?? 15000;
-    const result = runNpxTsxSync(script, { timeout });
+    const result = runNpxTsxSync(script, [], { timeout });
     return result.status === 0 ? result.stdout : '';
   } catch {
     return '';

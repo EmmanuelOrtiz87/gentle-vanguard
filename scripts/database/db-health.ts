@@ -19,7 +19,7 @@
 
 import { existsSync, statSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSyncShell } from '../../src/core/run-command.js';
+import Database from 'better-sqlite3';
 
 const ROOT = resolve(process.cwd());
 const DB_PATH = join(ROOT, '.runtime', 'gentle-vanguard.db');
@@ -95,63 +95,60 @@ async function main(): Promise<number> {
     }
   }
 
-  // 4. Integrity check (using sqlite3 CLI)
+  // 4. Integrity check (via better-sqlite3 — no external CLI dependency)
   try {
-    const integrityOut = runSyncShell(`sqlite3 "${DB_PATH}" "PRAGMA integrity_check;"`, {
-      timeout: 15000,
-    }).stdout.trim();
-    result.integrity = integrityOut === 'ok' ? 'ok' : 'error';
-    if (result.integrity === 'error') {
-      issues.push(`PRAGMA integrity_check failed: ${integrityOut}`);
-      log(`Integrity: FAILED — ${integrityOut}`, 'error');
-    } else {
-      log('Integrity: ok');
+    const db = new Database(DB_PATH, { readonly: true });
+    try {
+      const rows = db.pragma('integrity_check') as Array<{ integrity_check: string }>;
+      const integrityOut = rows
+        .map((r) => r.integrity_check)
+        .join('\n')
+        .trim();
+      result.integrity = integrityOut === 'ok' ? 'ok' : 'error';
+      if (result.integrity === 'error') {
+        issues.push(`PRAGMA integrity_check failed: ${integrityOut}`);
+        log(`Integrity: FAILED — ${integrityOut}`, 'error');
+      } else {
+        log('Integrity: ok');
+      }
+
+      // 5. Table and row counts
+      const tablesOut = (
+        db.prepare("SELECT name FROM sqlite_master WHERE type='table'").all() as Array<{
+          name: string;
+        }>
+      )
+        .map((t) => t.name)
+        .filter((t: string) => t.length > 0 && !t.startsWith('_'));
+
+      result.tables = tablesOut.length;
+      for (const t of tablesOut) {
+        try {
+          const row = db.prepare(`SELECT COUNT(*) AS c FROM [${t}];`).get() as { c: number };
+          result.rows += row.c || 0;
+        } catch {
+          // skip individual table count errors
+        }
+      }
+      log(`${result.tables} tables, ${result.rows} rows`);
+
+      // Get migrations
+      try {
+        const migOut = db
+          .prepare('SELECT id, applied_at FROM _migrations ORDER BY applied_at;')
+          .all() as Array<{ id: string; applied_at: string }>;
+        result.migrations = migOut.map((m) => `${m.id} @ ${m.applied_at}`);
+        for (const m of result.migrations) log(`Migration: ${m}`);
+      } catch {
+        // _migrations table may not exist yet
+      }
+    } finally {
+      db.close();
     }
   } catch (e) {
     result.integrity = 'error';
     issues.push(`Integrity check error: ${(e as Error).message}`);
     log(`Integrity: ERROR — ${(e as Error).message}`, 'error');
-  }
-
-  // 5. Table and row counts
-  try {
-    const tablesOut = runSyncShell(`sqlite3 "${DB_PATH}" ".tables"`, {
-      timeout: 5000,
-    })
-      .stdout.trim()
-      .split(/\s+/)
-      .filter((t) => t.length > 0 && !t.startsWith('_'));
-
-    result.tables = tablesOut.length;
-    for (const t of tablesOut) {
-      try {
-        const row = runSyncShell(`sqlite3 "${DB_PATH}" "SELECT COUNT(*) FROM [${t}];"`, {
-          timeout: 5000,
-        }).stdout.trim();
-        result.rows += parseInt(row, 10) || 0;
-      } catch {
-        // skip individual table count errors
-      }
-    }
-    log(`${result.tables} tables, ${result.rows} rows`);
-
-    // Get migrations
-    try {
-      const migOut = runSyncShell(
-        `sqlite3 "${DB_PATH}" "SELECT id, applied_at FROM _migrations ORDER BY applied_at;"`,
-        { timeout: 5000 },
-      )
-        .stdout.trim()
-        .split('\n')
-        .filter((l) => l.length > 0);
-      result.migrations = migOut;
-      for (const m of migOut) log(`Migration: ${m}`);
-    } catch {
-      // _migrations table may not exist yet
-    }
-  } catch (e) {
-    issues.push(`Table scan error: ${(e as Error).message}`);
-    log(`Table scan: ERROR — ${(e as Error).message}`, 'error');
   }
 
   // 6. Determine overall status
