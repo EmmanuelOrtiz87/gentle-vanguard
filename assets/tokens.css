@@ -1,35 +1,35 @@
 /* Gentle-Vanguard Design Tokens */
 /* Auto-generated from config/brand.json — DO NOT EDIT DIRECTLY */
-/* Generated: 2026-08-06T13:32:12.880Z */
+/* Generated: 2026-08-06T21:54:06.720Z */
 
 :root {
-  --gv-color-primary: #00bfff;
-  --gv-color-primary-light: #4dcfff;
-  --gv-color-primary-dark: #0055bb;
-  --gv-color-accent: #a855f7;
-  --gv-color-accent-teal: #06b6d4;
-  --gv-color-background: #0d1117;
-  --gv-color-surface: #1a2035;
-  --gv-color-surface-icon: #2a2d3a;
-  --gv-color-circuit: #1a3050;
-  --gv-color-text-primary: #ffffff;
-  --gv-color-text-brand: #00bfff;
-  --gv-color-text-muted: #6b7280;
-  --gv-color-border: #1e3a5f;
-  --gv-color-success: #22c55e;
-  --gv-color-warning: #f59e0b;
-  --gv-color-error: #ef4444;
-  --gv-color-selected: #4dcfff;
+  --gv-color-primary: #00BFFF;
+  --gv-color-primary-light: #4DCFFF;
+  --gv-color-primary-dark: #0055BB;
+  --gv-color-accent: #A855F7;
+  --gv-color-accent-teal: #06B6D4;
+  --gv-color-background: #0D1117;
+  --gv-color-surface: #1A2035;
+  --gv-color-surface-icon: #2A2D3A;
+  --gv-color-circuit: #1A3050;
+  --gv-color-text-primary: #FFFFFF;
+  --gv-color-text-brand: #00BFFF;
+  --gv-color-text-muted: #6B7280;
+  --gv-color-border: #1E3A5F;
+  --gv-color-success: #22C55E;
+  --gv-color-warning: #F59E0B;
+  --gv-color-error: #EF4444;
+  --gv-color-selected: #4DCFFF;
 
   /* CLI Theme */
-  --gv-cli-banner-color: #00bfff;
-  --gv-cli-subtitle-color: #6b7280;
-  --gv-cli-success-color: #22c55e;
-  --gv-cli-error-color: #ef4444;
-  --gv-cli-warning-color: #f59e0b;
-  --gv-cli-selected-color: #4dcfff;
-  --gv-cli-override-color: #f59e0b;
-  --gv-cli-muted-color: #6b7280;
+  --gv-cli-banner-color: #00BFFF;
+  --gv-cli-subtitle-color: #6B7280;
+  --gv-cli-success-color: #22C55E;
+  --gv-cli-error-color: #EF4444;
+  --gv-cli-warning-color: #F59E0B;
+  --gv-cli-selected-color: #4DCFFF;
+  --gv-cli-override-color: #F59E0B;
+  --gv-cli-muted-color: #6B7280;
 
   /* Typography */
   --gv-font-display: Orbitron, Rajdhani, 'Share Tech Mono', monospace;
@@ -42,11 +42,11 @@
   --gv-letter-spacing-heading: 0.05em;
 
   /* Gradients */
-  --gv-gradient-logo-primary: linear-gradient(to bottom, #4dcfff, #0055bb);
-  --gv-gradient-logo-icon: linear-gradient(135deg, #a855f7, #06b6d4);
-  --gv-gradient-github-header: linear-gradient(135deg, #a855f7, #06b6d4);
+  --gv-gradient-logo-primary: linear-gradient(to bottom, #4DCFFF, #0055BB);
+  --gv-gradient-logo-icon: linear-gradient(135deg, #A855F7, #06B6D4);
+  --gv-gradient-github-header: linear-gradient(135deg, #A855F7, #06B6D4);
 
   /* Brand */
-  --gv-brand-name: 'GENTLE-VANGUARD';
-  --gv-brand-tagline: 'ADVANCED TECHNOLOGY SOLUTIONS';
+  --gv-brand-name: "GENTLE-VANGUARD";
+  --gv-brand-tagline: "ADVANCED TECHNOLOGY SOLUTIONS";
 }
