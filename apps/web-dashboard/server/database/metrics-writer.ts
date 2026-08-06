@@ -15,8 +15,8 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { execSync } from 'child_process';
 import os from 'os';
+import { runSync } from '@gentle-vanguard/core/run-command';
 import { DatabaseManager, type MetricSnapshot } from './manager.ts';
 import { getAggregatedMetrics, listSessions, readSessionState } from '@gentle-vanguard/core/session-context-log';
 
@@ -42,13 +42,10 @@ function readJson<T>(path: string): T | null {
   }
 }
 
-function execGit(args: string): string {
+function execGit(args: string[]): string {
   try {
-    return execSync(`git ${args}`, {
-      cwd: ROOT,
-      encoding: 'utf-8',
-      timeout: 5000,
-    }).trim();
+    const result = runSync('git', args, { cwd: ROOT, timeout: 5000 });
+    return result.status === 0 ? result.stdout.trim() : '';
   } catch {
     return '';
   }
@@ -106,7 +103,7 @@ export class MetricsWriter {
   /** Collect real metrics from all sources */
   private collectMetrics(): Partial<MetricSnapshot> {
     // 1. Git stats (REAL — from git)
-    const commitCount = parseInt(execGit('rev-list --count HEAD'), 10) || 0;
+    const commitCount = parseInt(execGit(['rev-list', '--count', 'HEAD']), 10) || 0;
 
     // 2. Sessions (REAL — from unified SessionContextLog)
     let sessionsTotal = 0;

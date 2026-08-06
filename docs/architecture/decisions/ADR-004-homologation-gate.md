@@ -34,7 +34,7 @@ Before implementing the homologation gate, release process risked:
 
 **Implement mandatory homologation gate that blocks publish if repos are misaligned.**
 
-Gate runs BEFORE any other validation (first thing in `gv.ps1 publish`).
+Gate runs BEFORE any other validation (first thing in `src/cli/gv.ts publish`).
 
 If gate fails, publish is blocked with clear remediation steps.
 
@@ -67,7 +67,7 @@ If gate fails, publish is blocked with clear remediation steps.
 ### Gate Location
 
 ```
-gv.ps1 publish
+src/cli/gv.ts publish
   ↓
 1. ✓ Mandatory Homologation Gate  ← FIRST CHECK
   ├─ Check: VERSION file matches
@@ -120,7 +120,7 @@ Resolution:
   1. Update gentle-vanguard-public/VERSION to 1.0.1
   2. git add VERSION && git commit -m "chore: align VERSION for vX.Y.Z"
   3. Push: git push origin main
-  4. Retry: gv.ps1 publish
+  4. Retry: src/cli/gv.ts publish
 ```
 
 **Scenario 2: Branch Misalignment**
@@ -136,7 +136,7 @@ Resolution:
   1. Fetch latest: git fetch origin
   2. Pull: git pull origin main
   3. Verify alignment: git log --oneline main | head -5
-  4. Retry: gv.ps1 publish
+  4. Retry: src/cli/gv.ts publish
 ```
 
 **Scenario 3: Dirty Working Tree**
@@ -153,14 +153,14 @@ Resolution:
   2. OR revert changes: git checkout -- opencode.json
   3. Remove untracked: rm test.tmp
   4. Verify: git status (should be "clean")
-  5. Retry: gv.ps1 publish
+  5. Retry: src/cli/gv.ts publish
 ```
 
 ### Bypass (Emergency Only)
 
 ```TypeScript
 # Skip gate (NOT RECOMMENDED)
-gv.ps1 publish -SkipHomologationGate
+src/cli/gv.ts publish -SkipHomologationGate
 
 # This requires explicit flag, flags responsibility
 ```
@@ -207,7 +207,7 @@ cd gentle-vanguard
 git status
 # On branch develop, everything committed
 
-gv.ps1 publish
+src/cli/gv.ts publish
 # [✓] Homologation Gate: PASSED
 # [✓] VERSION files aligned: 1.0.1
 # [✓] Branches aligned: main/develop
@@ -218,7 +218,7 @@ gv.ps1 publish
 **Recovery Path: VERSION Mismatch**
 
 ```TypeScript
-gv.ps1 publish
+src/cli/gv.ts publish
 # ❌ Homologation Gate: FAILED
 #    VERSION mismatch: gentle-vanguard=1.0.1, gentle-vanguard-public=1.0.0
 
@@ -232,7 +232,7 @@ cd ../gentle-vanguard
 git push origin main  # Sync the commit
 git push origin develop
 
-gv.ps1 publish
+src/cli/gv.ts publish
 # [✓] Homologation Gate: PASSED
 # → Continues with publish
 ```
@@ -278,7 +278,7 @@ gv.ps1 publish
 cd gentle-vanguard
 
 # Run gate manually
-.\scripts\utilities\gv.ps1 release-homologation
+.\scripts\utilities\src/cli/gv.ts release-homologation
 
 # Check result
 $LASTEXITCODE

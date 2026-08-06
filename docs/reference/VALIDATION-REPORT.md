@@ -143,12 +143,12 @@ Ensuring all development tools are active and ready...
 
 ```TypeScript
 # Health monitoring
-.\scripts\utilities\gv.ps1 health          #  Validated
+.\scripts\utilities\src/cli/gv.ts health          #  Validated
 
 # Development workflow
-.\scripts\utilities\gv.ps1 status          #  Ready
-.\scripts\utilities\gv.ps1 review          #  Ready
-.\scripts\utilities\gv.ps1 audit           #  Ready
+.\scripts\utilities\src/cli/gv.ts status          #  Ready
+.\scripts\utilities\src/cli/gv.ts review          #  Ready
+.\scripts\utilities\src/cli/gv.ts audit           #  Ready
 ```
 
 ### Maintenance
@@ -221,4 +221,4 @@ The Gentle-Vanguard Suite is now ready for production use with:
 
 ** The future of AI-powered development is here and fully operational!**
 
-**Start developing with `.\scripts\utilities\gv.ps1 health` in any project directory.**
+**Start developing with `.\scripts\utilities\src/cli/gv.ts health` in any project directory.**

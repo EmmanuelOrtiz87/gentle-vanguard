@@ -1,0 +1,22 @@
+{
+  "name": "daily-workflow",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "daily-workflow Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Daily Workflow Skill\n\n## Trigger\n\n\"daily check\", \"daily workflow\", \"morning routine\", \"start day\", \"daily tasks\"\n\n## Description\n\nAutomates daily Gentle-Vanguard tasks: status check, context tracking, audit, and sync verification.\n\n## Workflow\n\n### Morning Routine\n\n1. Run `gv daily-check` - Quick status (git, stack health, context)\n2. Run `gv compact-start \"objective\"` - Initialize context tracking\n3. Check public repo sync: `cd gentle-vanguard-public && git pull`\n\n### Daily Tasks\n\n- **Check stack health**: `gv verify`\n- **Review audits**: Check `docs/audits/` for recent reports\n- **Sync public repo**: Ensure installer and docs are current\n- **Context efficiency**: Monitor prompt chars and adoption rate\n\n### Evening Routine\n\n1. Run `gv status` - Final status check\n2. Commit pending work with proper conventional commits\n3. Push to private repo\n4. Update public repo if needed\n\n## Commands Reference\n\n| Command                  | Purpose                                |\n| ------------------------ | -------------------------------------- |\n| `gv daily-check`         | Morning status (git + stack + context) |\n| `gv compact-start \"obj\"` | Start context tracking                 |\n| `gv verify`              | 14 quality gates                       |\n| `gv status`              | Context efficiency + git status        |\n| `gentle-vanguard audit`  | Generate audit report                  |\n\n## Key Files\n\n- `scripts/utilities/WORKFLOW-ORCHESTRATION/daily-check.ps1`\n- `scripts/utilities/WORKFLOW-ORCHESTRATION/compact-start.ps1`\n- `scripts/utilities/gv.ps1`\n- `docs/audits/` - Audit reports\n\n## Notes\n\n- Keep $env:GENTLE_VANGUARD_VERBOSE empty for quiet operation\n- Public repo: https://github.com/EmmanuelOrtiz87/gentle-vanguard-public\n- Private repo: https://github.com/EmmanuelOrtiz87/gentle-vanguard",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

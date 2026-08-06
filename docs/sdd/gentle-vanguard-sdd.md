@@ -48,8 +48,8 @@ projects. It provides:
 ```
 Gentle-Vanguard
  Core Components
-    Bootstrap System (scripts/gentle-vanguard/bootstrap.ps1)
-    Setup Scripts (scripts/gentle-vanguard/setup.sh, scripts/utilities/gv.ps1)
+    Bootstrap System (src/bootstrap.ts)
+    Setup Scripts (scripts/gentle-vanguard/setup.sh, src/cli/gv.ts)
     Template Engine (templates/)
     Skill Registry (skills/)
  Governance Layer
@@ -90,7 +90,7 @@ Gentle-Vanguard
 
 **Key Files:**
 
-- `scripts/gentle-vanguard/bootstrap.ps1` - Canonical TypeScript bootstrap script
+- `src/bootstrap.ts` - Canonical TypeScript bootstrap script
 - `scripts/project/new-project.ps1` - Canonical project creation entrypoint
 - `templates/` - Project templates
 - `config/` - Configuration templates

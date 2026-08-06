@@ -3,7 +3,8 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, unlinkSync } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
-import { spawn, execSync } from 'child_process';
+import { spawn } from 'child_process';
+import { runSync } from '../../adapters/command-runner.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const ROOT = resolve(dirname(__filename), '..');
@@ -494,7 +495,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
   if (build) {
     log(`  Building (${lang})...`);
     try {
-      execSync(buildCmd, { cwd: serverDir, stdio: 'inherit' });
+      const parts = buildCmd.split(' ').filter(Boolean);
+      const cmd = parts[0];
+      const args = parts.slice(1);
+      const r = runSync(cmd, args, { cwd: serverDir, stdio: 'inherit' as any, timeout: 120000 });
+      if (r.status !== 0) throw new Error(r.error?.message || r.stderr || 'build failed');
     } catch {
       err(`build failed for ${name}`);
     }

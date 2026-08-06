@@ -14,7 +14,7 @@
  *     --quiet         Minimal output
  */
 
-import { execSync } from 'child_process';
+import { runSyncShell } from './core/run-command.js';
 import { writeFileSync } from 'fs';
 import { resolve } from 'path';
 
@@ -34,7 +34,7 @@ function fetchFromConfluence(pageId: string, baseUrl: string, token: string): an
   try {
     const url = `${baseUrl}/rest/api/content/${pageId}?expand=body.storage,version`;
     const curlCmd = `curl -s -H "Authorization: Basic ${Buffer.from(`:${token}`).toString('base64')}" -H "Accept: application/json" "${url}"`;
-    const output = execSync(curlCmd, { encoding: 'utf-8', stdio: 'pipe' });
+    const output = runSyncShell(curlCmd, { stdio: 'pipe' }).stdout;
     return JSON.parse(output);
   } catch {
     return { error: 'Failed to fetch from Confluence API' };

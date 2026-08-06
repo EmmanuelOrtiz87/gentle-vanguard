@@ -9,7 +9,7 @@
  * Replaces the fragmented JSON-file persistence with a single ACID database.
  */
 import Database from 'better-sqlite3';
-import { join, dirname } from 'path';
+import { join, dirname, resolve } from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import { fileURLToPath } from 'url';
 
@@ -28,8 +28,8 @@ import { BacklogRepo } from './repositories/BacklogRepo';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT = join(__dirname, '..', '..', '..', '..');
-const DB_DIR = join(ROOT, '.runtime');
-const DB_PATH = join(DB_DIR, 'gentle-vanguard.db');
+const DB_DIR = resolve(process.env.GENTLE_VANGUARD_DB_DIR ?? join(ROOT, '.runtime'));
+const DB_PATH = join(DB_DIR, process.env.GENTLE_VANGUARD_DB_FILE ?? 'gentle-vanguard.db');
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -121,7 +121,7 @@ export interface ContractResultRecord {
 
 export class DatabaseManager {
   private db: Database.Database;
-  private static instance: DatabaseManager;
+  private static instance: DatabaseManager | null = null;
 
   // Public repos
   readonly migrations: MigrationRunner;
@@ -165,6 +165,17 @@ export class DatabaseManager {
       DatabaseManager.instance = new DatabaseManager();
     }
     return DatabaseManager.instance;
+  }
+
+  static resetInstance(): void {
+    if (DatabaseManager.instance) {
+      try {
+        DatabaseManager.instance.db.close();
+      } catch {
+        // ignore close errors during test cleanup
+      }
+      DatabaseManager.instance = null;
+    }
   }
 
   /** Run all pending migrations (idempotent) */

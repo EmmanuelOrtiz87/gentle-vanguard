@@ -4,16 +4,12 @@
       {
         "name": "json-validate",
         "trigger": "ToolCall",
-        "command": "pwsh",
+        "command": "npx",
         "args": [
-          "-NoProfile",
-          "-File",
-          "C:/Workspace_local/gentle-vanguard/hooks/pre-tool-call-validate.ps1",
-          "-ToolName",
+          "tsx",
+          "C:/Workspace_local/gentle-vanguard/src/hooks/pre-tool-call-validate.ts",
           "{{tool}}",
-          "-JsonPayload",
-          "{{args}}",
-          "-AutoFix"
+          "{{args}}"
         ],
         "blocking": true,
         "onFailure": "warn"
@@ -23,14 +19,11 @@
       {
         "name": "token-usage-log",
         "trigger": "ToolCall",
-        "command": "pwsh",
+        "command": "npx",
         "args": [
-          "-NoProfile",
-          "-File",
-          "C:/Workspace_local/gentle-vanguard/hooks/post-tool-use-log.ps1",
-          "-ToolName",
+          "tsx",
+          "C:/Workspace_local/gentle-vanguard/src/hooks/post-tool-use-log.ts",
           "{{tool}}",
-          "-ToolArgs",
           "{{args}}"
         ],
         "blocking": false,

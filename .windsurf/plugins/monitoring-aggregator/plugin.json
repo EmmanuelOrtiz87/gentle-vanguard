@@ -1,0 +1,7 @@
+{
+  "name": "monitoring-aggregator",
+  "version": "1.0.0",
+  "description": "Monitoring aggregation skill for collecting and analyzing workspace metrics",
+  "triggers": [],
+  "author": "Gentle-Vanguard"
+}

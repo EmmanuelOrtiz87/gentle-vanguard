@@ -9,7 +9,6 @@
  */
 import { existsSync, readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
-import { execSync } from 'child_process';
 import os from 'os';
 import { ROOT, readJson, countSkills as _countSkills } from './shared.ts';
 import type { CloudMetrics, DashboardData, SwarmWorkerData } from '../src/types/dashboard.ts';
@@ -17,6 +16,7 @@ import { getProcessExecutionTimeouts } from '@gentle-vanguard/core/timeout-confi
 import { DatabaseManager } from './database/manager.ts';
 import { getAggregatedDashboardMetrics } from '@gentle-vanguard/core/metrics-aggregator';
 import { OperationalMetricsTracker } from '@gentle-vanguard/core/operational-metrics-tracker';
+import { runSync } from '@gentle-vanguard/core/run-command';
 
 // ─── Fallback JSON paths (used only when DB has no data) ──────────────
 const CONSOLIDATED_PATH = join(ROOT, '.runtime', 'metrics', 'consolidated.json');
@@ -62,11 +62,11 @@ function readWithCache(path: string): string {
 
 function execGit(args: string): string {
   try {
-    return execSync(`git ${args}`, {
+    const result = runSync('git', args.split(' '), {
       cwd: ROOT,
-      encoding: 'utf-8',
       timeout: getProcessExecutionTimeouts().git_operation_ms ?? 3000,
-    }).trim();
+    });
+    return result.stdout?.trim() ?? '';
   } catch {
     return '';
   }

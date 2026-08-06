@@ -8,7 +8,7 @@
  *   npx tsx src/workload-guard.ts --diff (reads from git diff --stat)
  */
 
-import { execSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 
@@ -63,7 +63,7 @@ function parseArgs(): { files: string[]; lines: number; fileLimit: number; diff:
 
 function getGitDiffStats(): { files: string[]; totalLines: number } {
   try {
-    const output = execSync('git diff --stat HEAD', { encoding: 'utf8', maxBuffer: 1024 * 1024 });
+    const output = runSync('git', ['diff', '--stat', 'HEAD'], { maxBuffer: 1024 * 1024 }).stdout;
     const lines = output.trim().split('\n');
     const changedFiles: string[] = [];
     let totalChangedLines = 0;

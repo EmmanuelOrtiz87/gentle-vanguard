@@ -33,18 +33,19 @@
     "autoRunOnStartSessionWhenRed": true
   },
   "compactionPolicy": {
-    "enabled": true,
-    "slidingWindowTurns": 10,
+    "enabled": false,
+    "slidingWindowTurns": 6,
     "pruneToolResults": true,
-    "summarizeOlderTurns": true,
-    "maxSummaryTokens": 500,
-    "inputTokenBudgetPct": 80,
-    "note": "Syncs with opencode.json compaction config. slidingWindowTurns must match maxTurns."
+    "summarizeOlderTurns": false,
+    "maxSummaryTokens": 200,
+    "inputTokenBudgetPct": 60,
+    "note": "DISABLED for Kimi2-5: compaction causes model hang. Manual compaction via skill context-engineering recommended."
   },
   "tokenAutopilot": {
-    "enabled": true,
-    "profile": "hard",
+    "enabled": false,
+    "profile": "balanced",
     "triggerStatuses": ["WARN", "HARD_LIMIT"],
+    "note": "DISABLED auto-compaction - manual trigger via /compact command only for Kimi2-5",
     "minConsecutiveAlerts": 1,
     "autoApplyOnCommands": [
       "context-pack",

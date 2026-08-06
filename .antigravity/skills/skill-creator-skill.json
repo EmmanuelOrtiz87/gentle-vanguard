@@ -1,0 +1,22 @@
+{
+  "name": "skill-creator-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "skill-creator-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Skill Creator\n\nCreate new skills and iteratively improve them.\n\n## Process Overview\n\n1. Capture intent — what should the skill do? When should it trigger?\n2. Write draft SKILL.md (name, description, instructions)\n3. Create test prompts, save to `evals/evals.json`\n4. Run test cases — spawn with-skill AND baseline subagents in parallel\n5. While runs run, draft quantitative assertions\n6. Grade, aggregate into benchmark, launch viewer\n7. User reviews feedback; improve the skill\n8. Repeat until satisfied (or no meaningful progress)\n9. Optimize description for triggering accuracy\n10. Package final `.skill` file\n\n## Communication\n\nAdjust language to user's familiarity. \"Evaluation\" and \"benchmark\" are borderline; explain \"JSON\" and \"assertion\" unless the user shows familiarity. Brief definitions are OK when unsure.\n\n## Detailed Instructions\n\nRead the relevant reference file:\n\n- `references/creating-a-skill.md` — Capture intent, interview, skill anatomy, writing patterns, test cases\n- `references/running-evaluations.md` — Full 5-step eval cycle: spawn, draft assertions, grade, aggregate, launch viewer\n- `references/improving-the-skill.md` — Generalize from feedback, keep lean, explain the why, bundle repeated work\n- `references/blind-comparison.md` — Optional A/B comparison between versions\n- `references/description-optimization.md` — Generate trigger evals, review, run optimization loop\n- `references/platform-guide.md` — Claude.ai and Cowork-specific adaptations\n- `references/package-and-present.md` — Package final `.skill` file\n\n## Reference Files\n\n- `agents/grader.md` — Evaluate assertions against outputs\n- `agents/comparator.md` — Blind A/B comparison\n- `agents/analyzer.md` — Analyze benchmark results\n\n## Core Loop\n\n- Figure out what the skill is about\n- Draft or edit the skill\n- Run with-skill on test prompts\n- Evaluate with user: create benchmark, run viewer\n- Repeat until satisfied\n- Package the final skill\n\nAdd steps to TodoList to track progress. Good luck!",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

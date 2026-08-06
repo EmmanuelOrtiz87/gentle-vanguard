@@ -2,7 +2,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { execSync } from 'child_process';
+import { runSync } from '../core/run-command.js';
 
 interface RollbackConfig {
   autoRollback: boolean;
@@ -63,10 +63,9 @@ function loadConfig(repoRoot: string): { rollback: RollbackConfig } {
 }
 
 function gitCmd(repoRoot: string, args: string[]): string {
-  return execSync(`git -C "${repoRoot}" ${args.join(' ')}`, {
-    encoding: 'utf-8',
+  return runSync('git', ['-C', repoRoot, ...args], {
     windowsHide: true,
-  }).trim();
+  }).stdout.trim();
 }
 
 function getCurrentBranch(repoRoot: string): string {
@@ -153,8 +152,8 @@ function doRollback(repoRoot: string, config: { rollback: RollbackConfig }, jobN
   };
 
   try {
-    execSync(`git -C "${repoRoot}" revert HEAD --no-edit`, { stdio: 'pipe', windowsHide: true });
-    execSync(`git -C "${repoRoot}" push origin ${currentBranch}`, { stdio: 'pipe', windowsHide: true });
+    runSync('git', ['-C', repoRoot, 'revert', 'HEAD', '--no-edit'], { stdio: 'pipe', windowsHide: true });
+    runSync('git', ['-C', repoRoot, 'push', 'origin', currentBranch], { stdio: 'pipe', windowsHide: true });
 
     const commitAfter = getCommitHash(repoRoot);
     rollbackRecord.commitAfter = commitAfter;

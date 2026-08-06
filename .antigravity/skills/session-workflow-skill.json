@@ -1,0 +1,22 @@
+{
+  "name": "session-workflow",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "session-workflow Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Session Workflow\n\n## Activation Contract\n\nLoad when user triggers session commands: \"inicia sesion\" / \"start session\" (inicio), \"continuar\" /\n\"continue\" (reanudar), \"estado\" / \"status\" (consulta), \"guardar sesion\" (guardar), \"cerrar sesion\" /\n\"close session\" / \"session end\" / \"fin de sesion\" / \"finalizar sesion\" (cierre). Coordinates with\nproject-orchestrator for technical decisions.\n\n## Hard Rules\n\n- MUST generate AUDIT DOCUMENT before any push\n- MUST run code review before PR creation\n- MUST create todowrite at session start\n- MUST save session summary via mem_save after significant work\n- MUST coordinate with project-orchestrator for technical guidance\n- MUST run self-improving pipeline during session close (usage-tracker → skill-nudge →\n  skill-auto-patch)\n\n## Notes\n\n- **Session start** (`inicia sesion` / `start session`) is handled by the canonical startup protocol\n  defined in `CLAUDE.md` (Phase A + Phase B). This skill handles all other session commands.\n- **Self-improving pipeline**: at session close, run usage-tracker → skill-nudge → skill-auto-patch\n  to maintain skill health and auto-fix failure patterns.\n\n## Decision Gates\n\n| Command  | Trigger Words           | Action                                                     |\n| -------- | ----------------------- | ---------------------------------------------------------- |\n| Continue | \"continuar\", \"continue\" | mem_context, git status, show next step, resume            |\n| Status   | \"estado\", \"status\"      | Show project, git branch/status, todos, suggest next       |\n| Push     | \"push\", \"guardar\"       | Review todos, generate audit doc, commit, push, mem_save   |\n| Review   | \"review\", \"auditar\"     | Quick scan (Security + Quality), classify, present, decide |\n| PR       | \"pr\"                    | Validate spec, run review, handle findings, create PR      |\n\n## Execution Steps\n\n1. **Continue session**: `mem_context` → `git status` → show next step → resume work\n2. **Show status**: Show project info → git branch/status → todos → suggest next step\n3. **Push / Guardar**: Review todos completed → generate audit doc → git status/diff → commit → push\n   → mem_save summary\n4. **Review / Auditar**: Run code review (7 dimensions) → classify findings by severity → present\n   summary → ask decision options → execute choice\n5. **Create PR**: Validate spec → run code review → handle findings → ask: met spec? → ask: create\n   PR? → branch → commit → push → create PR with template\n\n## Output Contract\n\n- **Push**: Audit document + session summary + git commit/push + mem_save\n- **Review**: Findings summary with severity classification (CRITICAL/HIGH/MEDIUM/LOW)\n- **PR**: GitHub PR created with template\n- **Session start**: todowrite + status presentation\n- **Session summary**: Structured mem_save with goal, accomplishments, findings, next steps\n\n## References\n\n- Templates (audit doc, code review, session summary, todo): `references/templates.md`\n- Scripts: `scripts/utilities/session-autostart.cmd`\n- Coordination: `../project-orchestrator-skill/SKILL.md`",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

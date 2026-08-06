@@ -12,7 +12,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { createHash } from 'crypto';
-import { execSync } from 'child_process';
+import { runSyncShell } from '../../../../src/core/run-command.js';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -74,20 +74,20 @@ function log(message: string, level: 'INFO' | 'WARN' | 'ERROR' | 'SUCCESS' = 'IN
 
 function getGitCandidate(stagedOnly = false): GitCandidate {
   try {
-    const sha = execSync('git rev-parse HEAD', { encoding: 'utf-8', cwd: ROOT }).trim();
-    const author = execSync('git log -1 --format="%an"', { encoding: 'utf-8', cwd: ROOT }).trim();
-    const email = execSync('git log -1 --format="%ae"', { encoding: 'utf-8', cwd: ROOT }).trim();
-    const date = execSync('git log -1 --format="%ai"', { encoding: 'utf-8', cwd: ROOT }).trim();
-    const message = execSync('git log -1 --format="%s"', { encoding: 'utf-8', cwd: ROOT }).trim();
+    const sha = runSyncShell('git rev-parse HEAD', { cwd: ROOT }).stdout.trim();
+    const author = runSyncShell('git log -1 --format="%an"', { cwd: ROOT }).stdout.trim();
+    const email = runSyncShell('git log -1 --format="%ae"', { cwd: ROOT }).stdout.trim();
+    const date = runSyncShell('git log -1 --format="%ai"', { cwd: ROOT }).stdout.trim();
+    const message = runSyncShell('git log -1 --format="%s"', { cwd: ROOT }).stdout.trim();
 
     let files: string[];
     if (stagedOnly) {
-      files = execSync('git diff --cached --name-only', { encoding: 'utf-8', cwd: ROOT })
-        .split('\n')
+      files = runSyncShell('git diff --cached --name-only', { cwd: ROOT })
+        .stdout.split('\n')
         .filter((f) => f.trim());
     } else {
-      files = execSync('git diff --name-only', { encoding: 'utf-8', cwd: ROOT })
-        .split('\n')
+      files = runSyncShell('git diff --name-only', { cwd: ROOT })
+        .stdout.split('\n')
         .filter((f) => f.trim());
     }
 
@@ -95,8 +95,8 @@ function getGitCandidate(stagedOnly = false): GitCandidate {
     for (const file of files) {
       try {
         const content = stagedOnly
-          ? execSync(`git show :${file}`, { encoding: 'utf-8', cwd: ROOT })
-          : execSync(`git show HEAD:${file}`, { encoding: 'utf-8', cwd: ROOT });
+          ? runSyncShell(`git show :${file}`, { cwd: ROOT }).stdout
+          : runSyncShell(`git show HEAD:${file}`, { cwd: ROOT }).stdout;
         stagedContent.set(file, content);
       } catch {
         // File might be new/untracked

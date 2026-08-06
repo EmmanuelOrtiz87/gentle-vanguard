@@ -5,7 +5,7 @@
  * Improves tool detection to handle newer tools and frameworks
  */
 
-import { execSync } from 'child_process';
+import { runSyncShell } from './run-command.js';
 import { promises as fs } from 'fs';
 import { join } from 'path';
 
@@ -77,7 +77,7 @@ export class EnhancedToolDetector {
   private async detectSingleTool(tool: { name: string; command: string }): Promise<ToolDetectionResult> {
     try {
       // Try to get version information
-      const versionOutput = execSync(tool.command, { encoding: 'utf8', timeout: 5000 });
+      const versionOutput = runSyncShell(tool.command, { timeout: 5000 }).stdout;
 
       // Extract version from output
       let version = 'unknown';
@@ -89,10 +89,9 @@ export class EnhancedToolDetector {
       // Try to get the tool path
       let path = 'unknown';
       try {
-        const pathOutput = execSync(`which ${tool.name} || where ${tool.name}`, {
-          encoding: 'utf8',
-          timeout: 500
-        });
+        const pathOutput = runSyncShell(`which ${tool.name} || where ${tool.name}`, {
+          timeout: 500,
+        }).stdout;
         path = pathOutput.trim();
       } catch {
         // If path detection fails, keep 'unknown'

@@ -1,0 +1,22 @@
+{
+  "name": "leverage-points-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "leverage-points-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Leverage Points\n\nDonella Meadows' \"Places to Intervene in a System\" ranks intervention points by power to change system behavior. Most effort goes to low-leverage points (parameters, buffers) when high-leverage points (goals, paradigms) offer transformation.\n\n**Core Principle:** Higher leverage = more power + more resistance. Find the highest point you can actually move.\n\n## When to Use\n\nChoosing focus areas, prioritizing improvements, organizational change, architecture decisions, process optimization — especially when incremental changes aren't working.\n\n```\nWant to change system behavior?\n  → Have you tried high-leverage interventions? → no → START HIGHER\n  → Are you stuck at low leverage? → yes → MOVE UP THE HIERARCHY\n  → Is change not sticking? → yes → LOOK FOR BALANCING LOOPS\n```\n\n## The 12 Leverage Points\n\n| # | Level | Leverage |\n|---|-------|----------|\n| 12 | Constants & Parameters | Lowest — tuning numbers rarely changes behavior |\n| 11 | Buffer Sizes | Low — absorbs fluctuation, doesn't change dynamics |\n| 10 | Stock-and-Flow Structures | Medium — architecture matters but is locked in |\n| 9 | Delays | Medium-High — shorter delays = more responsive system |\n| 8 | Balancing Feedback Loops | Medium-High — stability through negative feedback |\n| 7 | Reinforcing Feedback Loops | High — amplifying loops drive growth or collapse |\n| 6 | Information Flows | High — visibility changes behavior without mandates |\n| 5 | System Rules | High — rules define what's allowed and rewarded |\n| 4 | Self-Organization | Very High — ability to evolve determines survival |\n| 3 | System Goals | Very High — everything downstream serves the goal |\n| 2 | Paradigm (Mindset) | Transformational — upstream of goals and rules |\n| 1 | Transcending Paradigms | Highest — freedom from ideological constraints |\n\n## Quick Apply\n\n1. **Map** current interventions to the hierarchy\n2. **Look higher** — ask \"what's the higher-leverage version?\"\n3. **Assess feasibility** — higher leverage = more resistance\n4. **Choose** the highest leverage you can actually execute\n\n## Reference Files\n\n| File | Content |\n|------|---------|\n| `references/01-levels.md` | Full detail of each leverage point with examples and tradeoffs |\n| `references/02-application.md` | Step-by-step application guide with templates |\n| `references/03-patterns.md` | Common anti-patterns: Parameter Trap, Information Unlock, Goal Inversion, Paradigm Shift |\n| `references/04-problems.md` | Common problem mappings, checklist, key questions, and Meadows quotes |",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

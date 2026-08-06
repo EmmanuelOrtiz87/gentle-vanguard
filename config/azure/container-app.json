@@ -32,11 +32,11 @@
     "username": "",
     "password": ""
   },
-  "deployScript": "scripts/utilities/ops/CLOUD-CONNECTORS/azure-deploy.ps1",
+  "deployScript": "src/azure-deploy.ts",
   "notes": [
     "1. Set subscriptionId, registry username/password before deploying",
     "2. Run: az login && az acr login --name gentlevanguard",
-    "3. Run: & ./scripts/utilities/ops/CLOUD-CONNECTORS/azure-deploy.ps1",
+    "3. Run: & ./src/azure-deploy.ts",
     "4. Or use GitHub Actions with Azure/login action"
   ]
 }

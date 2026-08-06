@@ -9,8 +9,8 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { execSync } from 'child_process';
 import { pathToFileURL } from 'url';
+import { runSync } from '../adapters/command-runner.js';
 import {
   readDashboardPorts,
   clearDashboardPorts,
@@ -45,10 +45,11 @@ function stopWatchdog(): void {
 function killNodeProcesses(): void {
   if (process.platform !== 'win32') return;
   try {
-    const output = execSync(
-      'wmic process where "name=\'node.exe\'" get ProcessId,CommandLine /format:csv',
-      { encoding: 'utf-8', timeout: getEffectiveProcessTimeout('default'), windowsHide: true },
-    );
+    const result = runSync('wmic', ['process', 'where', "name='node.exe'", 'get', 'ProcessId,CommandLine', '/format:csv'], {
+      timeout: getEffectiveProcessTimeout('default'),
+    });
+    if (result.status !== 0) return;
+    const output = (result.stdout ?? '').toString();
     for (const line of output.split('\n')) {
       if (line.includes('websocket-server') || line.includes('vite')) {
         const parts = line.trim().split(',');

@@ -26,7 +26,7 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync, appendFileSync, statSync, openSync, readSync, closeSync } from 'fs';
 import { join, dirname, resolve } from 'path';
 import { homedir } from 'os';
-import { spawnSync } from 'child_process';
+import { runNpxTsxSync } from './core/run-command.js';
 import { pathToFileURL } from 'url';
 
 const ROOT = resolve(process.cwd());
@@ -226,7 +226,7 @@ function switchToFallback(config: HealthConfig): boolean {
   const target = config.fallbackModel || 'opencode/deepseek-v4-flash-free';
   const modelSwitch = join(ROOT, 'scripts', 'utilities', 'MODEL-ROUTER', 'model-switch.ts');
   if (existsSync(modelSwitch)) {
-    const res = spawnSync('npx', ['tsx', modelSwitch, 'switch', target], {
+    const res = runNpxTsxSync(modelSwitch, ['switch', target], {
       cwd: ROOT,
       stdio: 'pipe',
       timeout: 30000,

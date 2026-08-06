@@ -1,0 +1,22 @@
+{
+  "name": "typescript-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "typescript-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "## When to Use\n\n- TypeScript projects\n- Type safety implementation\n- API type definitions\n- Generic utilities\n\n## Core Types\n\n```typescript\n// Primitives\ntype String = string;\ntype Number = number;\ntype Boolean = boolean;\n\n// Arrays\ntype StringArray = string[];\ntype NumberArray = Array<number>;\n\n// Objects\ntype User = {\n  id: number;\n  name: string;\n  email: string;\n  createdAt: Date;\n};\n```\n\n## Interfaces vs Types\n\n```typescript\n// Interface - for object shapes\ninterface User {\n  id: number;\n  name: string;\n}\n\n// Can be extended\ninterface AdminUser extends User {\n  permissions: string[];\n}\n\n// Type - for unions, intersections, aliases\ntype Status = 'pending' | 'active' | 'deleted';\ntype UserOrAdmin = User | AdminUser;\n```\n\n## Generics\n\n```typescript\n// Generic function\nfunction first<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\n\n// Generic interface\ninterface Repository<T> {\n  findById(id: number): Promise<T | null>;\n  findAll(): Promise<T[]>;\n  create(data: Omit<T, 'id'>): Promise<T>;\n  update(id: number, data: Partial<T>): Promise<T>;\n  delete(id: number): Promise<void>;\n}\n\n// Generic constraint\nfunction longestItem<T extends { length: number }>(a: T, b: T): T {\n  return a.length > b.length ? a : b;\n}\n```\n\n## Utility Types\n\n```typescript\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n  password: string;\n}\n\n// Partial - all properties optional\ntype PartialUser = Partial<User>;\n\n// Required - all properties required\ntype RequiredUser = Required<Partial<User>>;\n\n// Pick - select properties\ntype UserPreview = Pick<User, 'id' | 'name'>;\n\n// Omit - remove properties\ntype UserWithoutPassword = Omit<User, 'password'>;\n\n// Record - key-value object\ntype UserMap = Record<string, User>;\n\n// NonNullable - remove null/undefined\ntype NonNullEmail = NonNullable<User['email']>;\n\n// ReturnType - get function return type\n\n---\n\n> **Referencia detallada**: [\neferences/detail.md](references/detail.md)\n```",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

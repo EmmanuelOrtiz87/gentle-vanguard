@@ -11,7 +11,7 @@
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
-import { execSync } from 'child_process';
+import { runSync, runSyncShell } from './core/run-command.js';
 
 interface Norm {
   id: string;
@@ -92,8 +92,8 @@ function loadRecentSessions(days = 7): SessionData[] {
   const sessions: SessionData[] = [];
   try {
     // Look for session files
-    const files = execSync(`find "${SESSION_DIR}" -name "session-*.json" -mtime -${days} 2>/dev/null || dir /b "${SESSION_DIR}\\session-*.json" 2>nul`, 
-      { encoding: 'utf-8', cwd: ROOT }).toString().trim();
+    const files = runSyncShell(`find "${SESSION_DIR}" -name "session-*.json" -mtime -${days} 2>/dev/null || dir /b "${SESSION_DIR}\\session-*.json" 2>nul`, 
+      { cwd: ROOT }).stdout.trim();
     
     if (!files) return sessions;
 
@@ -318,7 +318,7 @@ function saveMarkdownReport(content: string): void {
 function logToEngram(norms: Norm[], context: LearningContext): void {
   try {
     // Check if engram CLI is available
-    execSync('engram --version', { stdio: 'pipe' });
+    runSync('engram', ['--version'], { stdio: 'pipe' });
     
     const summary = {
       timestamp: context.timestamp,
@@ -328,8 +328,9 @@ function logToEngram(norms: Norm[], context: LearningContext): void {
       activeNorms: norms.filter(n => n.status === 'active').length
     };
 
-    execSync(
-      `engram remember "auto-norm-learner: Analyzed ${summary.totalNorms} norms, ${summary.newNorms} new, ${summary.activeNorms} active" --category learning`,
+    runSync(
+      'engram',
+      ['remember', `auto-norm-learner: Analyzed ${summary.totalNorms} norms, ${summary.newNorms} new, ${summary.activeNorms} active`, '--category', 'learning'],
       { stdio: 'pipe', cwd: ROOT }
     );
   } catch {

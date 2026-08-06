@@ -1,0 +1,22 @@
+{
+  "name": "sdd-lifecycle",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "sdd-lifecycle Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# SDD Lifecycle Skill\n\nComplete Spec-Driven Development workflow with all phases.\n\n## Phases\n\n```\n\n                    SDD LIFECYCLE\n\n\n\n    INIT    EXPLORE  PROPOSE   SPEC\n\n\n\n         TASKS    DESIGN\n\n\n\n\n                   APPLY\n\n\n\n\n                  VERIFY\n\n\n\n\n                  ARCHIVE\n\n\n\n```\n\n## Phase Details\n\n### Phase 1: INIT\n\n**Trigger:** `sdd init`, `initialize sdd`, `start sdd`\n\nDetect project stack, conventions, bootstrap persistence:\n\n```\n1. Detect tech stack (package.json, go.mod, etc.)\n2. Detect existing conventions\n3. Bootstrap persistence backend (engram/openspec/hybrid)\n4. Initialize SDD directory structure\n```\n\n### Phase 2: EXPLORE\n\n**Trigger:** `sdd explore`, `explore feature`, `analyze requirements`\n\nExplore and understand the problem space:\n\n```\n1. Understand user needs and context\n2. Identify constraints and dependencies\n3. Map existing system behavior\n4. Document exploration findings\n```\n\n### Phase 3: PROPOSE\n\n**Trigger:** `sdd propose`, `propose solution`, `create proposal`\n\nPropose solution approaches:\n\n```\n1. Explore solution options\n2. Evaluate tradeoffs\n3. Select recommended approach\n4. Document proposal with rationale\n```\n\n### Phase 4: SPEC\n\n**Trigger:** `sdd spec`, `write spec`, `create specification`\n\nWrite formal specification:\n\n```\n1. Problem statement\n2. Scope and non-goals\n3. Functional requirements\n4. Acceptance criteria\n5. BDD scenarios (Given/When/Then)\n```\n\n### Phase 5: DESIGN\n\n**Trigger:** `sdd design`, `design solution`, `architecture`\n\nDesign the implementation:\n\n```\n\n---\n\n> **Referencia detallada**: [\neferences/detail.md](references/detail.md)\n```",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

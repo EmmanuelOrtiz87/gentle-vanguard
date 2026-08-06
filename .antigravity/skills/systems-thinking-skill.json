@@ -1,0 +1,22 @@
+{
+  "name": "systems-thinking-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "systems-thinking-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Systems Thinking\n\nSystems thinking views problems as part of interconnected wholes. Focuses on relationships, feedback loops, and emergent properties—behaviors that arise from interactions and can't be predicted from parts alone.\n\n## When to Use\n\n- Debugging issues spanning multiple services\n- Understanding unexpected emergent behavior\n- Designing resilient architectures\n- Analyzing incidents and outages\n- When fixing one thing breaks another\n- Performance issues with non-obvious causes\n- Organizational/process problems\n\n## Key Concepts\n\n### 1. Feedback Loops\n\n**Reinforcing (Positive):** Amplify change. E.g., technical debt: deadline pressure → shortcuts → bugs → firefighting → less time for quality.\n\n**Balancing (Negative):** Counteract change. E.g., auto-scaling: load increases → more instances → load per instance decreases.\n\n### 2. Stocks and Flows\n\n**Stocks** are accumulated quantities (users, tech debt, cache size). **Flows** are rates of change (registrations/day, bugs fixed/sprint). Stocks change slowly even when flows change quickly.\n\n### 3. Delays\n\nTime lags between cause and effect obscure relationships. Acting before feedback arrives leads to overcorrection.\n\n### 4. Non-Linear Relationships\n\nSmall changes can have large effects. E.g., 2x traffic crossing a threshold can cause 10x latency due to queue buildup.\n\n### 5. Emergent Properties\n\nBehaviors arising from interactions, not components. E.g., no single service is slow but the system is slow due to cascading delays.\n\n## Systems Debugging Process\n\n1. **Map the System** — Draw components, connections, and flows\n2. **Identify Feedback Loops** — Reinforcing or balancing? Delays? Stability?\n3. **Trace Upstream** — Follow symptom backward to root cause\n4. **Look for Interactions** — Circuit breakers, cascading timeouts, contention\n5. **Consider Time Dynamics** — When did it start? What changed? Periodic?\n\nSee `references/systems-debugging.md` for diagrams and full explanation.\n\n## Common System Patterns\n\n- **Cascading Failure** — Mitigation: circuit breakers, bulkheads, graceful degradation\n- **Thundering Herd** — Mitigation: jittered expiration, cache warming, coalescing\n- **Queue Backup** — Mitigation: backpressure, rate limiting, bounded queues\n- **Resource Contention** — Mitigation: sharding, optimistic locking, isolation\n\nSee `references/common-system-patterns.md` for diagrams.\n\n## Leverage Points\n\nWhere small changes have large effects (Donella Meadows):\n\n| Leverage          | Example              | Impact           |\n| ----------------- | -------------------- | ---------------- |\n| Parameters        | Timeout values       | Low              |\n| Buffer sizes      | Queue limits         | Low-Medium       |\n| Feedback loops    | Add monitoring       | Medium           |\n| Information flows | Make metrics visible | Medium-High      |\n| Rules             | Change retry policy  | High             |\n| Goals             | Redefine SLOs        | Very High        |\n| Paradigm          | Rethink architecture | Transformational |\n\n## Key Questions\n\n- \"What feeds back into what?\"\n- \"Where are the delays in this system?\"\n- \"If I fix this here, what breaks over there?\"\n- \"Where is the smallest change with the largest effect?\"\n\n## Meadows' Reminder\n\n\"We can't control systems or figure them out. But we can dance with them.\"\n\nSystems resist simple fixes. Find leverage points, influence the whole.\n\n## References\n\n- `references/systems-debugging.md` — Full debugging process with diagrams\n- `references/common-system-patterns.md` — Pattern diagrams and mitigations\n- `references/causal-loop-diagram-template.md` — CLD template with legend\n- `references/verification-checklist.md` — Checklist for systems analysis",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

@@ -18,12 +18,12 @@ Central inventory of automation scripts with ownership, risk level, and executio
 | scripts/utilities/auto-init-dev-environment.ps1                | Startup                | A     | yes       | platform       | Quiet-safe activation checks                                                                                                                                 |
 | scripts/utilities/ensure-tools-active.ps1                      | Tooling                | B     | yes       | platform       | Avoids heavy auto-installs unless forced                                                                                                                     |
 | scripts/utilities/run-engram.ps1                               | Memory Runtime         | B     | manual    | platform       | Canonical launcher for Engram session persistence                                                                                                            |
-| scripts/utilities/gv.ps1                                       | Operator CLI           | B     | manual    | dev-experience | Entrypoint for workflow commands                                                                                                                             |
+| src/cli/gv.ts                                       | Operator CLI           | B     | manual    | dev-experience | Entrypoint for workflow commands                                                                                                                             |
 | src/deployment/validate-release-homologation.ts | Release Governance     | B     | manual    | dev-experience | Complementary pre-release multi-repo gate (VERSION/branch/tag alignment)                                                                                     |
 | scripts/utilities/enable-optional-post-commit.ps1              | Optional Hook Coverage | B     | manual    | dev-experience | Enables/disables optional post-commit automation (disabled by default)                                                                                       |
 | scripts/gentle-vanguard/setup.sh                               | Gentle-Vanguard Setup  | B     | manual    | platform       | Cross-platform bootstrap entrypoint for Linux/macOS/WSL                                                                                                      |
-| scripts/gentle-vanguard/bootstrap.ps1                          | Gentle-Vanguard Setup  | B     | manual    | platform       | Canonical TypeScript bootstrap entrypoint for workspace initialization                                                                                       |
-| scripts/gentle-vanguard/gv.ps1                                 | Gentle-Vanguard CLI    | B     | manual    | platform       | Workspace bootstrap and scaffolding CLI (`init`, `new`, `validate`, `tools`, `skills`)                                                                       |
+| src/bootstrap.ts                          | Gentle-Vanguard Setup  | B     | manual    | platform       | Canonical TypeScript bootstrap entrypoint for workspace initialization                                                                                       |
+| scripts/gentle-vanguard/src/cli/gv.ts                                 | Gentle-Vanguard CLI    | B     | manual    | platform       | Workspace bootstrap and scaffolding CLI (`init`, `new`, `validate`, `tools`, `skills`)                                                                       |
 | scripts/project/new-project.ps1                                | Project Scaffolding    | B     | manual    | dev-experience | Canonical new-project entrypoint backed by bootstrap-workspace                                                                                               |
 | scripts/utilities/end-session.ps1                              | Session Closure        | B     | manual    | dev-experience | Runs review/audit/governance checks and generates delivery closure artifact                                                                                  |
 | scripts/utilities/context-pack.ps1                             | Context Budgeting      | B     | manual    | dev-experience | Generates compact continuation summary to reduce token usage                                                                                                 |
@@ -81,10 +81,10 @@ Default policy: keep development flow unblocked for advisory gaps, but never hid
 
 ```TypeScript
 # IDE and session readiness
-.\scripts\utilities\gv.ps1 ide-status
+.\scripts\utilities\src/cli/gv.ts ide-status
 
 # Health + cleanup drift gate (CI-friendly)
-.\scripts\utilities\gv.ps1 health -StrictCleanup
+.\scripts\utilities\src/cli/gv.ts health -StrictCleanup
 
 # Startup path
 .\scripts\utilities\auto-init-dev-environment.ps1 -Quiet
@@ -99,26 +99,26 @@ TypeScript -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\valida
 TypeScript -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1 -EnforceCanonicalStructure
 
 # Guided migration of loose scripts (preflight + rollback)
-.\scripts\utilities\gv.ps1 migrate-structure          # dry-run preflight
-.\scripts\utilities\gv.ps1 migrate-structure -Force    # execute with rollback output
+.\scripts\utilities\src/cli/gv.ts migrate-structure          # dry-run preflight
+.\scripts\utilities\src/cli/gv.ts migrate-structure -Force    # execute with rollback output
 
 # Compact context pack for new chat thread (token optimization)
-.\scripts\utilities\gv.ps1 context-pack "current objective"
+.\scripts\utilities\src/cli/gv.ts context-pack "current objective"
 
 # One-step compact handoff (generates context pack + prompt)
-.\scripts\utilities\gv.ps1 compact-start "current objective"
+.\scripts\utilities\src/cli/gv.ts compact-start "current objective"
 
 # Context usage metrics report (7 days default)
-.\scripts\utilities\gv.ps1 context-metrics
-.\scripts\utilities\gv.ps1 context-metrics 14
+.\scripts\utilities\src/cli/gv.ts context-metrics
+.\scripts\utilities\src/cli/gv.ts context-metrics 14
 
 # Workspace homologation (dry-run / apply)
-.\scripts\utilities\gv.ps1 homologate
-.\scripts\utilities\gv.ps1 homologate apply
+.\scripts\utilities\src/cli/gv.ts homologate
+.\scripts\utilities\src/cli/gv.ts homologate apply
 
 # Release homologation complementary gate (multi-repo)
-.\scripts\utilities\gv.ps1 release-homologation
-.\scripts\utilities\gv.ps1 release-homologation v1.0.0
+.\scripts\utilities\src/cli/gv.ts release-homologation
+.\scripts\utilities\src/cli/gv.ts release-homologation v1.0.0
 
 # Context efficiency thresholds for audit semaphore
 Get-Content .\config\context-efficiency.json

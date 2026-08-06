@@ -1,0 +1,22 @@
+{
+  "name": "ai-agent-design-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "ai-agent-design-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# AI Agent Design\n\n## Core Principles\n\n1. **Agents Are Tools, Not Teammates** — Design agents as tools with clear boundaries\n2. **Autonomy is a Spectrum** — More oversight for critical actions, more autonomy for routine\n3. **Cache Everything, Guess Nothing** — Store every interaction explicitly\n4. **Fail Predictably** — When uncertain ask, when stuck escalate, when broken stop\n5. **Safety First, Speed Second** — Build guardrails before features\n\n## Agent Maturity Model\n\n| Level | Name | Tool Use | Memory | Autonomy |\n|---|---|---|---|---|\n| **L1** | Reactive | None | None | None |\n| **L2** | Scripted | Basic calls | Session-only | Low |\n| **L3** | Tool-Using | Multiple tools | Short-term | Medium |\n| **L4** | Memory-Augmented | Complex tools | Long-term | High |\n| **L5** | Autonomous Orchestrator | Tool composition | Semantic | Full |\n\n**Progression**: L1→L2: conditional logic | L2→L3: tool schemas | L3→L4: persistent storage | L4→L5: planning + delegation\n\n## Reference Files\n\nDetailed content extracted to `references/`:\n\n| File | Coverage |\n|---|---|\n| `TOOL-DEFINITION.md` | Tool schemas, best practices, categories, implementation |\n| `MEMORY-SYSTEMS.md` | STM/LTM/episodic/semantic memory, retrieval strategies |\n| `ORCHESTRATION.md` | Single/multi-agent, supervisor, routing patterns |\n| `PLANNING.md` | ReAct, Plan-and-Execute, comparison |\n| `ERROR-RECOVERY.md` | Failure modes, recovery, human-in-the-loop |\n| `SAFETY.md` | Guardrails, input/output validation, action auth |\n| `COMMON-MISTAKES.md` | 10 common mistakes with fixes |\n\n## Quick Reference\n\n| Component | Best Practice | Common Mistake |\n|---|---|---|\n| Tools | Detailed descriptions, validated params | Vague names, no error handling |\n| Memory | Separate STM/LTM/episodic/semantic | One-size-fits-all storage |\n| Orchestration | Start single, evolve to multi-agent | Over-engineering from day one |\n| Planning | ReAct for exploration, P&E for stability | No planning at all |\n| Safety | Input + output + action guardrails | Safety as an afterthought |\n| Error Recovery | Retry + fallback + escalate | Assume success |",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

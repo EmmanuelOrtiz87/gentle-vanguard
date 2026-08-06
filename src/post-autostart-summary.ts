@@ -8,7 +8,7 @@
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'fs';
 import { join } from 'path';
-import { execSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 
 interface Args {
   TimeZone?: string;
@@ -47,10 +47,10 @@ function resolveRoot(): string {
 
 function gitCmd(root: string, cmd: string): string | null {
   try {
-    return execSync(`git -C "${root}" ${cmd}`, {
-      encoding: 'utf-8',
+    const r = runSync('git', ['-C', root, ...cmd.split(/\s+/)], {
       stdio: ['pipe', 'pipe', 'pipe'],
-    }).trim();
+    });
+    return r.stdout.trim();
   } catch {
     return null;
   }

@@ -3,7 +3,7 @@
 import { existsSync, readdirSync, rmSync, statSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
-import { spawnSync } from 'child_process';
+import { runSync, runNpxTsxSync } from './core/run-command.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -56,7 +56,7 @@ function restartSession(projectName: string, scriptsDir: string): boolean {
     log('session-manager.ts not found', 'yellow');
     return false;
   }
-  const result = spawnSync('npx', ['tsx', 'src/session-manager.ts', '--mode', 'Manual', '--project', projectName], { stdio: 'inherit', shell: true });
+  const result = runNpxTsxSync('src/session-manager.ts', ['--mode', 'Manual', '--project', projectName], { stdio: 'inherit' });
   if (result.status === 0) {
     log('Session tracking restarted', 'green');
     return true;
@@ -69,7 +69,7 @@ function recoverCleanup(scriptsDir: string): boolean {
   const engramBin = join(scriptsDir, 'engram.exe');
   if (existsSync(engramBin)) {
     log('Retrieving context from Engram...');
-    spawnSync(engramBin, ['context', '--project', 'gentle-vanguard'], { stdio: 'inherit' });
+    runSync(engramBin, ['context', '--project', 'gentle-vanguard'], { stdio: 'inherit' });
     log('Context recovered from Engram', 'green');
   }
   return true;

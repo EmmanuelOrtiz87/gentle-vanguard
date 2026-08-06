@@ -10,9 +10,9 @@
   "capabilities": ["mcp", "skills", "subagents", "terminal", "hooks", "plugins"],
   "configFiles": ["CLAUDE.md", ".claude/settings.json", "docs/AGENTS.md", "config/plugins.json"],
   "hooks": {
-    "preToolCall": "scripts/utilities/pre-process-input.ps1",
-    "sessionStart": "scripts/utilities/session-autostart.cmd",
-    "adaptiveProfile": "scripts/utilities/adaptive-claude-cline-profile.ps1",
+    "preToolCall": "src/pre-process-input.ts",
+    "sessionStart": "npm run session:autostart:detached",
+    "adaptiveProfile": "src/adaptive-opencode-profile.ts",
     "sessionStartPlatform": {
       "windows": "scripts/utilities/session-autostart.cmd",
       "linux": "bash ./scripts/utilities/session-autostart.sh",

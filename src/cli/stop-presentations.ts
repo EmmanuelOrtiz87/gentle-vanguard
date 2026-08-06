@@ -8,7 +8,7 @@
  *   npx tsx src/cli/stop-presentations.ts [--port 3000] [--quiet]
  */
 
-import { execSync, type ExecSyncOptions } from 'node:child_process';
+import { runSyncShell } from '../core/run-command.js';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
@@ -26,18 +26,14 @@ function killProcessOnPort(port: number): boolean {
   try {
     if (process.platform === 'win32') {
       // Windows: use netstat to find PID on port
-      const sh = process.platform === 'win32' ? 'cmd.exe' : '/bin/sh';
-      const result = execSync(
-        `netstat -ano | findstr :${port}`,
-        { encoding: 'utf-8' as const, shell: sh, stdio: ['pipe', 'pipe', 'pipe'] }
-      ) as unknown as string;
+      const result = runSyncShell(`netstat -ano | findstr :${port}`, { stdio: ['pipe', 'pipe', 'pipe'] }).stdout;
       const lines = result.split('\n').filter(l => l.includes('LISTENING'));
       for (const line of lines) {
         const parts = line.trim().split(/\s+/);
         const pid = parts[parts.length - 1];
         if (pid && /^\d+$/.test(pid)) {
           try {
-            execSync(`taskkill /PID ${pid} /F`, { stdio: 'ignore' as unknown as ExecSyncOptions['stdio'], shell: sh });
+            runSyncShell(`taskkill /PID ${pid} /F`, { stdio: 'ignore' });
             log(`  Killed process PID ${pid} on port ${port}`);
             stopped = true;
           } catch {
@@ -47,15 +43,14 @@ function killProcessOnPort(port: number): boolean {
       }
     } else {
       // Unix: use lsof or fuser
-      const sh = '/bin/sh';
       try {
-        execSync(`fuser -k ${port}/tcp 2>/dev/null`, { stdio: 'ignore' as unknown as ExecSyncOptions['stdio'], shell: sh });
+        runSyncShell(`fuser -k ${port}/tcp 2>/dev/null`, { stdio: 'ignore' });
         stopped = true;
       } catch {
         try {
-          const result = execSync(`lsof -ti:${port} 2>/dev/null`, { encoding: 'utf-8' as const, shell: sh }) as unknown as string;
+          const result = runSyncShell(`lsof -ti:${port} 2>/dev/null`, { stdio: ['pipe', 'pipe', 'pipe'] }).stdout;
           if (result.trim()) {
-            execSync(`kill -9 ${result.trim().split('\n').join(' ')}`, { stdio: 'ignore' as unknown as ExecSyncOptions['stdio'], shell: sh });
+            runSyncShell(`kill -9 ${result.trim().split('\n').join(' ')}`, { stdio: 'ignore' });
             stopped = true;
           }
         } catch {

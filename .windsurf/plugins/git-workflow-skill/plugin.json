@@ -1,0 +1,7 @@
+{
+  "name": "git-workflow-skill",
+  "version": "1.0.0",
+  "description": "Use when managing git branches, commits, pull requests, merge conflicts, or git workflows. Triggers: \"git branch\", \"git merge\", \"conflict\", \"pull request\", \"commit\", \"rebase\", \"cherry-pick\", \"stash\".",
+  "triggers": [],
+  "author": "Gentle-Vanguard"
+}

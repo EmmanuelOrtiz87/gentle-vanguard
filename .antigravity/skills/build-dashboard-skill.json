@@ -1,0 +1,22 @@
+{
+  "name": "build-dashboard-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "build-dashboard-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# /build-dashboard - Build Interactive Dashboards\n\n> If you see unfamiliar placeholders or need to check which tools are connected, see\n> [CONNECTORS.md](../../CONNECTORS.md).\n\nBuild a self-contained interactive HTML dashboard with charts, filters, tables, and professional\nstyling. Opens directly in a browser -- no server or dependencies required.\n\n## Usage\n\n```\n/build-dashboard <description of dashboard> [data source]\n```\n\n## Workflow\n\n### 1. Understand Requirements\nDetermine purpose, audience, key metrics, dimensions, and data source.\n\n### 2. Gather Data\nFrom live query, pasted data, CSV, or create sample data.\n\n### 3. Design Layout\n2-4 KPI cards, 1-3 charts, optional detail table, filters in header or sidebar.\n\n### 4. Build Dashboard\nSingle self-contained HTML using the [base template](references/BASE_TEMPLATE.md).\n\n### 5. Implement Charts\nChart.js patterns: line, bar, doughnut, stacked bar, mixed — see [chart patterns](references/CHART_PATTERNS.md).\n\n### 6. Add Interactivity\nDropdown filters, date range, sortable tables, combined filter logic — see [filters](references/FILTERS.md).\n\n### 7. Save and Open\nSave as `descriptive_name.html`, open in browser, confirm rendering.\n\n## Reference Files\n\n| File | Contents |\n|------|----------|\n| [BASE_TEMPLATE.md](references/BASE_TEMPLATE.md) | Full HTML template with embedded JS and CSS hooks |\n| [KPI_CARDS.md](references/KPI_CARDS.md) | KPI card HTML/CSS/JS with number formatting |\n| [CHART_PATTERNS.md](references/CHART_PATTERNS.md) | Chart.js line, bar, doughnut, and update patterns |\n| [FILTERS.md](references/FILTERS.md) | Dropdown, date range, combined filter, sortable table |\n| [CSS_STYLING.md](references/CSS_STYLING.md) | Complete CSS: colors, layout, cards, charts, tables, responsive |\n| [PERFORMANCE.md](references/PERFORMANCE.md) | Data size guidelines, pre-aggregation, chart/DOM performance |\n| [EXAMPLES.md](references/EXAMPLES.md) | Usage examples and tips |",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

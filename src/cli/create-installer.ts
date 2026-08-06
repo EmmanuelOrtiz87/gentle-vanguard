@@ -11,7 +11,7 @@
  *   npx tsx src/cli/create-installer.ts --dry-run       # Dry run
  */
 
-import { execSync } from 'child_process';
+import { runSyncShell } from '../core/run-command.js';
 import { existsSync, mkdirSync, copyFileSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
 
@@ -31,7 +31,7 @@ function err(msg: string): void { console.error(`  [ERROR] ${msg}`); }
 function run(cmd: string, label: string): boolean {
   try {
     step(`Running: ${label}`);
-    if (!dryRun) execSync(cmd, { stdio: 'inherit', timeout: 300000 });
+    if (!dryRun) runSyncShell(cmd, { stdio: 'inherit', timeout: 300000 });
     else warn(`Dry run: would execute ${label}`);
     return true;
   } catch (e) {
@@ -64,8 +64,8 @@ function main(): void {
   // Phase 2: Verify NSIS
   step('Phase 2: Verifying NSIS');
   try {
-    execSync('makensis /VERSION', { stdio: 'pipe', timeout: 10000 });
-    ok('NSIS found');
+    const nsis = runSyncShell('makensis /VERSION', { stdio: 'pipe', timeout: 10000 });
+    if (nsis.status === 0) ok('NSIS found'); else throw new Error('makensis not in PATH');
   } catch {
     warn('makensis not found in PATH. Install NSIS 3+ from https://nsis.sourceforge.io/');
     warn('Continuing with artifact preparation only...');

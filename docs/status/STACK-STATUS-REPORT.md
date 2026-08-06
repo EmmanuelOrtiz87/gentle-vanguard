@@ -9,7 +9,7 @@
 
 ```
 Layer 5: AGENTES  — 18 agents (Orchestrator + 17 sub-agentes: BA, SAD, DEV, QA, OPS, GOV, DOC, etc.)
-Layer 4: COMANDOS — gv.ps1, pre-process-input.ps1, detect-tool.ps1
+Layer 4: COMANDOS — src/cli/gv.ts, pre-process-input.ps1, detect-tool.ps1
 Layer 3: MCP      — skill-server.ts (MCP protocol), mcp-bridge.ps1
 Layer 2: SKILLS   — ~386 skills en skills/ (SDD, seguridad, web, mobile, AI/ML, etc.)
 Layer 1: MEMORIA  — Engram persistent memory (tools/engram.exe v1.15.10)
@@ -27,7 +27,7 @@ VS Code, Copilot, Antigravity.
 | Componente          | Archivo(s)                                 | Estado    | Automatización             |
 | ------------------- | ------------------------------------------ | --------- | -------------------------- |
 | Bootstrap workspace | `scripts/core/bootstrap*.ps1`              | ✅ Activo | Manual (setup inicial)     |
-| CLI principal       | `gv.ps1`                                   | ✅ Activo | Manual                     |
+| CLI principal       | `src/cli/gv.ts`                                   | ✅ Activo | Manual                     |
 | Tool detection      | `src/detect-tool.ts` | ✅ Activo | Automático (cada turno)    |
 | Pre-process hook    | `src/pre-process-input.ts`  | ✅ Activo | Automático (cada turno)    |
 | Session manager     | `src/session-manager.ts`    | ✅ Activo | Automático (start/end)     |
@@ -294,7 +294,7 @@ Maintenance Watchtower:
 | --------------------- | -------------------------------------------------------- |
 | Entry point canónico  | `docs/AGENTS.md`                                         |
 | Bootstrap workspace   | `scripts/core/bootstrap-workspace.ps1`                   |
-| CLI                   | `scripts/core/gv.ps1`                                    |
+| CLI                   | `scripts/core/src/cli/gv.ts`                                    |
 | Orquestador principal | `config/orchestrator.json`                               |
 | Auto-delegación       | `config/auto-delegation.json`                            |
 | Routing de modelos    | `config/model-router.json`                               |

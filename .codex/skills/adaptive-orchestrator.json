@@ -1,0 +1,20 @@
+{
+  "type": "function",
+  "function": {
+    "name": "adaptive_orchestrator",
+    "description": "Skill: adaptive-orchestrator",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "type": "string",
+          "description": "Task to execute"
+        }
+      },
+      "required": [
+        "task"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -150,7 +150,7 @@
       "apiKey": "",
       "localOutputLog": "logs/siem-forwarded.jsonl",
       "alertLog": "logs/siem-alerts.jsonl",
-      "bridgeScript": "scripts/security/siem-audit-bridge.ps1",
+      "bridgeScript": "src/siem-audit-bridge.ts",
       "schedule": {
         "enabled": false,
         "cron": "*/15 * * * *",

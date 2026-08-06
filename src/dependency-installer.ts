@@ -12,7 +12,7 @@
  *   npx tsx src/dependency-installer.ts --yes     # non-interactive (auto-yes)
  */
 
-import { spawnSync } from 'node:child_process';
+import { runSync } from './core/run-command.js';
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -52,13 +52,13 @@ const C = {
 // ─── Helpers ──────────────────────────────────────────────────────────
 
 function run(cmd: string, args: string[]): { stdout: string; stderr: string; status: number | null } {
-  const r = spawnSync(cmd, args, { encoding: 'utf-8', stdio: 'pipe', windowsHide: true });
-  return { stdout: (r.stdout ?? '').trim(), stderr: (r.stderr ?? '').trim(), status: r.status };
+  const r = runSync(cmd, args, { stdio: 'pipe' });
+  return { stdout: r.stdout.trim(), stderr: r.stderr.trim(), status: r.status };
 }
 
 function runInteractive(cmd: string, args: string[]): { status: number | null } {
   console.log(C.dim(`  > ${cmd} ${args.join(' ')}`));
-  const r = spawnSync(cmd, args, { stdio: 'inherit', windowsHide: true });
+  const r = runSync(cmd, args, { stdio: 'inherit' });
   return { status: r.status };
 }
 

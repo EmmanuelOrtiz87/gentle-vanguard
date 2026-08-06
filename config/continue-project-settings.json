@@ -53,10 +53,10 @@
     "REPORT": ["management-reporting-skill"]
   },
   "gitflowCapabilities": {
-    "branch": ["create-gitflow-branch.ps1"],
-    "pr": ["create-pull-request.ps1"],
-    "hooks": ["pre-commit-validation.ps1"],
-    "merge": ["post-merge-sync.ps1"],
+    "branch": ["src/create-gitflow-branch.ts"],
+    "pr": ["src/create-pull-request.ts"],
+    "hooks": ["src/pre-commit-validation.ts"],
+    "merge": ["src/post-merge-sync.ts"],
     "workflow": ["git-workflow-skill"],
     "commit": ["git-workflow-skill"],
     "conflict": ["git-workflow-skill"]
@@ -68,7 +68,7 @@
   "preProcessing": {
     "enabled": true,
     "mandatory": true,
-    "script": "scripts/utilities/pre-process-input.ps1",
+    "script": "src/pre-process-input.ts",
     "scriptArgs": {
       "UserInput": "USER_INPUT_HERE",
       "WorkspaceRoot": "."

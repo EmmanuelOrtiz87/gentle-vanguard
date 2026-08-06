@@ -1,0 +1,22 @@
+{
+  "name": "report-writing-skill",
+  "version": "1.0.0",
+  "description": "Bug bounty report writing for H1/Bugcrowd/Intigriti/Immunefi — templates, human tone, impact-first writing, CVSS 3.1 scoring, title formula, severity guide, downgrade counters, checklist. Never use \"could potentially\".",
+  "triggers": [],
+  "mission": {
+    "name": "report-writing-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# REPORT WRITING\n\nImpact-first. Human tone. No theoretical language. Triagers are people.\n\n---\n\n## THE MOST IMPORTANT RULE\n\n> **Never use \"could potentially\" or \"could be used to\" or \"may allow\".** Either it does the thing or it doesn't.\n\nBAD: \"could potentially allow an attacker to access user data.\"\nGOOD: \"An attacker can access any user's order history by changing the user_id parameter. Confirmed using two test accounts (attacker@test.com ID 123 retrieved victim@test.com ID 456 orders, shipping address, payment last 4).\"\n\n---\n\n## TITLE FORMULA\n\n`[Bug Class] in [Endpoint] allows [role] to [impact] [scope]`\n\n**Good:** IDOR in /api/v2/invoices/{id} allows user to read any customer's invoices | Missing auth on POST /api/admin/users allows unauthenticated admin creation | SSRF via image import reaches AWS metadata | Race condition in coupon redemption allows unlimited use\n\n**Bad:** IDOR vulnerability found / Broken access control / XSS in user input / Security issue in API\n\n---\n\n## PLATFORM TEMPLATES\n\nSee `references/`:\n- `hackerone-template.md` — Summary → Steps → Impact → Fix\n- `bugcrowd-template.md` — VRT → Title → Body → Remediation\n- `intigriti-template.md` — Summary → PoC → Impact → Rec\n- `immunefi-template.md` — Working PoC → Walkthrough → Impact\n\n---\n\n## CVSS & SEVERITY\n\nSee `references/cvss-scoring.md`, `references/severity-guide.md`, `references/downgrade-counters.md`, `references/pre-submit-checklist.md`\n\n---\n\n## STEPS TO REPRODUCE\n\n**Setup:** Account A (attacker), Account B (victim) — normal accounts\n**Steps:** Login → Send request with victim ID → Show response with victim's data\n**Expected:** 403 | **Actual:** 200 OK. Include copy-paste-ready HTTP request in code block.\n\n---\n\n## HUMAN TONE\n\n- Get to impact in sentence 1. Use \"I\" not \"the researcher\".\n- Short paragraphs, bullet points for steps.\n- **Escalation:** \"Only a free account required\" / \"PII subject to GDPR\" / \"Automate all N records in minutes\"\n- **Avoid:** Jargon, IDOR explanations, theoretical chains, passive voice, \"seems to\" / \"appears to\"\n\n---\n\n## RELATED SKILLS\n\n- **`triage-validation`** — Never write before 7-Question Gate passes\n- **`bugcrowd-reporting`** — VRT selection + severity-request overlay\n- **`evidence-hygiene`** — Cookie/PII redaction before attaching artifacts\n- **`redteam-report-template`** — Red team engagements (not bug bounty)\n- **`bb-methodology`** — Phase 5 loads this skill for platform template\n\n---\n\n## OPERATOR NOTES (Claude-BugHunter)\n\n**Title in practice:** `<asset> | <bug class> | <impact>` — triagers read in ~3s.\n\n**Reading sequence:** Title(3s) → First paragraph(15s) → HTTP request(30s) → Steps → Rest. Optimize top ruthlessly.\n\n**Severity mismatch:** CVSS, platform default, VRT disagree ~30%. File severity-request paragraph anchored in vector + business impact.\n\n**Evidence:** Throwaway accounts, rotate tokens per submission, redact screenshots, no production PII.\n\n**Biggest mistake:** Claiming \"could be chained to\" without demonstrating it. Show end-to-end or downgrade claim.",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

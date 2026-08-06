@@ -423,3 +423,146 @@ npm run db:init
 # Verificar integridad via watchtower
 npm run watchtower:health
 ```
+
+---
+
+## Adaptive Steps System
+
+**Versión implementada: 1.0** | **Fecha: Agosto 2026**
+
+El stack implementa un sistema de steps adaptativos que auto-escala el presupuesto de pasos para orquestador y subagentes basándose en la complejidad de la tarea.
+
+### Problema Resuelto
+
+Los subagentes estaban configurados con solo 6 steps (`steps: 6`), lo que causaba que se agotaran rápidamente sin completar tareas complejas. El sistema adaptativo ahora asigna steps basándose en:
+
+1. **Tipo de agente** (capacidad base)
+2. **Complejidad de la tarea** (señales de texto)
+3. **Cantidad de archivos** (heurística de tamaño)
+4. **Historial de ejecuciones** (learning data en `.session/routing/routing-table.json`)
+
+### Comandos del Sistema Adaptativo
+
+```bash
+# Estimar steps para una tarea
+npx tsx src/adaptive-steps.ts --estimate "fix broken ps1 refs in 20 files"
+
+# Aplicar steps a un agente específico
+npx tsx src/adaptive-steps.ts --apply sdd-apply --steps 40
+
+# Auto-estimar y aplicar
+npx tsx src/adaptive-steps.ts --auto "complex refactoring task" --agent sdd-apply
+
+# Reactivar agente con más steps (cuando agota)
+npx tsx src/adaptive-steps.ts --resume sdd-apply --task_id ses_xxx
+
+# Ver estado actual de todos los agentes
+npx tsx src/adaptive-steps.ts --status
+
+# Consultar agente recomendado para una tarea
+npx tsx src/recommend-agent.ts --task "fix broken ps1 references" --topn 3
+```
+
+### Configuration por Agente (opencode.json)
+
+| Agente | Steps | Tipo | Complejidad |
+|--------|-------|------|-------------|
+| orchestrator | 24 | Primary | Media |
+| sdd-explore | 38 | Subagent | Alta (investigación) |
+| sdd-design | 30 | Subagent | Alta (diseño) |
+| **sdd-apply** | **52** | Subagent | **Muy alta (código)** |
+| sdd-verify | 36 | Subagent | Alta (testing) |
+| doc-agent | 34 | Subagent | Media-alta |
+| ops-agent | 30 | Subagent | Media |
+| gov-agent | 38 | Subagent | Alta (seguridad) |
+| session-agent | 25 | Subagent | Media |
+| premortem-agent | 30 | Subagent | Media-alta |
+| maintenance-agent | 30 | Subagent | Media |
+| **self-diag-agent** | **38** | Subagent | **Alta (diagnóstico)** |
+| sia-agent | 35 | Subagent | Alta (refinamiento) |
+
+### Señales de Complejidad Detectadas
+
+- **+12 steps**: `files`, `refactor`, `migrate`, `implement`, `feature`, `module`
+- **+8 steps**: `explore`, `investigate`, `research`, `audit`, `analyze`, `parallel`
+- **+6 steps**: `test`, `verify`, `validate`, `typecheck`, `lint`
+- **+4 steps**: `config`, `doc`, `readme`, `guide`, `schema`
+- **+10 steps**: `complex`, `large`, `big`, `deep`, `nested`, `integrate`
+
+### Routing Table Learnable
+
+Para auto-asignación inteligente, el sistema usa `.session/routing/routing-table.json` con:
+- 17 dominios pre-configurados (requirements, architecture, implementation, etc.)
+- 10 overrides de alta prioridad (security audit, code review, bug fix, etc.)
+- Success rate tracking por agente
+- Auto-update con cada ejecución
+
+### Auto-Reassignment
+
+Cuando un agente reporta "maximum steps reached", el orquestador:
+
+1. **Detecta** el evento en la respuesta del agente
+2. **Re-asigna** automáticamente con `adaptive-steps.ts --resume`
+3. **Incrementa** steps en +20 (máx 80)
+4. **Preserva** el contexto y continúa desde donde quedó
+
+### Archivos Clave del Sistema
+
+- `src/adaptive-steps.ts` — Motor de estimación y escalado
+- `src/recommend-agent.ts` — Bridge de auto-asignación con routing table
+- `.session/routing/routing-table.json` — Tabla de aprendizaje (creada automáticamente)
+- `opencode.json` — Configuración de steps por agente
+- `src/auto-ps1-fixer.ts` — Herramienta para migración PS1→TS
+
+### Integración en el Orquestador
+
+El orquestador aplica automáticamente steps optimizados para cada delegación basándose en:
+
+```typescript
+// Prioridad de asignación:
+// 1. routing-table.json (si existe historial)
+// 2. adaptive-steps.ts --auto (estimación por tarea)
+// 3. opencode.json defaults (fallback)
+```
+
+### Verificación de Funcionamiento
+
+```bash
+# 1. Verificar steps aplicados
+npx tsx src/adaptive-steps.ts --status
+
+# 2. Verificar routing table
+npx tsx src/recommend-agent.ts --task "code review" --topn 3
+
+# 3. Verificar health completo
+npm run watchtower:health
+```
+
+---
+
+## Auto-Fixer para Migraciones
+
+Durante la migración PS1→TS se creó `src/auto-ps1-fixer.ts` para automatizar correcciones de referencias rotas.
+
+### Uso
+
+```bash
+# Modo dry-run (ver qué se arreglaría)
+npx tsx src/auto-ps1-fixer.ts --dry-run
+
+# Aplicar correcciones
+npx tsx src/auto-ps1-fixer.ts
+
+# Para archivos de configuración específicos
+npx tsx src/auto-ps1-fixer-configs.ts
+```
+
+### Resultados de la Migración
+
+| Métrica | Valor |
+|---------|-------|
+| Scripts PS1 migrados | 390+ |
+| Scripts PS1 restantes | ~60 (entrad, helpers, templates) |
+| Referencias corregidas | 77+ en esta sesión |
+| TS Files totales | 231+ |
+| Migration Waves | 1-24 completadas |

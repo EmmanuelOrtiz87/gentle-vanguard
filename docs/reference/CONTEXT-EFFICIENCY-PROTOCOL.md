@@ -167,8 +167,8 @@ At session end:
 
 Regular status checks via:
 
-- `gv.ps1 status`: Show current efficiency rating
-- `gv.ps1 diagnose`: Detailed efficiency analysis
+- `src/cli/gv.ts status`: Show current efficiency rating
+- `src/cli/gv.ts diagnose`: Detailed efficiency analysis
 - `engram mem_search "efficiency"`: Find related optimizations
 
 ### 8.2 Alerting

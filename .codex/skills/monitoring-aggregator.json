@@ -1,0 +1,20 @@
+{
+  "type": "function",
+  "function": {
+    "name": "monitoring_aggregator",
+    "description": "Monitoring aggregation skill for collecting and analyzing workspace metrics",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "type": "string",
+          "description": "Task to execute"
+        }
+      },
+      "required": [
+        "task"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

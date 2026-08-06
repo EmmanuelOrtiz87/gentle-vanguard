@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { execSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 import { existsSync } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -117,7 +117,7 @@ function main(): GitFlowResult {
 
   let branch: string;
   try {
-    branch = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8', stdio: 'pipe' }).trim();
+    branch = runSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { stdio: 'pipe' }).stdout.trim();
   } catch {
     writeFail('Unable to detect current git branch.');
     return { exitCode: 1 };

@@ -24,7 +24,7 @@ import {
 } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { spawnSync, execSync } from 'child_process';
+import { runSyncShell } from './core/run-command.js';
 import { randomBytes } from 'crypto';
 
 // ---- Types ----
@@ -116,11 +116,9 @@ function leaderDecompose(task: string, explicitSkills: string[]): SubTask[] {
   try {
     const routerPath = join(ROOT, 'src', 'skills', 'skill-router.ts').replace(/\\/g, '/');
     const escapedTask = task.replace(/"/g, '\\"');
-    const result = spawnSync(`npx tsx "${routerPath}" --query "${escapedTask}" --top-k 5 --json`, {
+    const result = runSyncShell(`npx tsx "${routerPath}" --query "${escapedTask}" --top-k 5 --json`, {
       cwd: ROOT,
-      encoding: 'utf-8',
       timeout: 15000,
-      shell: true,
     });
 
     if (result.status === 0 && result.stdout) {
@@ -179,11 +177,9 @@ function spawnWorker(
 
     const escapedScript = workerScript.replace(/\\/g, '/');
     const escapedQuery = subTask.replace(/"/g, '\\"');
-    const proc = spawnSync(`npx tsx "${escapedScript}" --query "${escapedQuery}" --json`, {
+    const proc = runSyncShell(`npx tsx "${escapedScript}" --query "${escapedQuery}" --json`, {
       cwd: workerDir,
-      encoding: 'utf-8',
       timeout: timeoutSec * 1000,
-      shell: true,
       env: {
         ...process.env,
         GENTLE_VANGUARD_BASE_DIR: ROOT,
@@ -351,9 +347,9 @@ function actionStop(): void {
   try {
     // Kill any lingering npx tsx processes spawned by team-orchestrator
     if (process.platform === 'win32') {
-      execSync('taskkill /F /IM node.exe /FI "WINDOWTITLE eq *.tsx*" 2>nul', { stdio: 'ignore' });
+      runSyncShell('taskkill /F /IM node.exe /FI "WINDOWTITLE eq *.tsx*" 2>nul', { stdio: 'ignore' });
     } else {
-      execSync('pkill -f "team-orchestrator" 2>/dev/null', { stdio: 'ignore' });
+      runSyncShell('pkill -f "team-orchestrator" 2>/dev/null', { stdio: 'ignore' });
     }
     log('Swarm workers stopped.', 'SUCCESS');
   } catch {

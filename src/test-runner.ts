@@ -12,7 +12,7 @@
  * Usage: npx tsx src/test-runner.ts [--all] [--verbose]
  */
 
-import { spawnSync } from 'child_process';
+import { runSyncShell } from './core/run-command.js';
 import { existsSync } from 'fs';
 
 interface Suite {
@@ -186,11 +186,9 @@ function parseArgs(): { all: boolean; verbose: boolean } {
 function runSuite(suite: Suite, verbose: boolean): { passed: boolean; output: string } {
   const label = `[${suite.name}]`;
   try {
-    const result = spawnSync(suite.cmd, suite.args, {
-      encoding: 'utf8',
+    const result = runSyncShell(`${suite.cmd} ${suite.args.join(' ')}`, {
       timeout: suite.timeout ?? 120_000,
       stdio: ['pipe', 'pipe', 'pipe'],
-      shell: true,
     });
     const output = result.stdout + result.stderr;
     const passed = result.status === 0;

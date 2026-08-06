@@ -23,7 +23,7 @@
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync } from 'fs';
 import { join, resolve, relative } from 'path';
-import { spawnSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 import { pathToFileURL } from 'url';
 import {
   loadRegistry,
@@ -32,6 +32,8 @@ import {
   listEntries,
   pruneRegistry,
 } from './temp-file-registry.js';
+
+import { extractRealImports, type ImportInfo } from './ast-import-parser.js';
 
 const ROOT = resolve(process.cwd());
 const SESSION_DIR = join(ROOT, '.session');
@@ -108,7 +110,7 @@ function getSessionData(): Record<string, unknown> {
 
 function getChangedFiles(): Set<string> {
   try {
-    const r = spawnSync('git', ['diff', '--name-only', 'HEAD'], { cwd: ROOT, stdio: 'pipe', timeout: 15000 });
+    const r = runSync('git', ['diff', '--name-only', 'HEAD'], { cwd: ROOT, stdio: 'pipe', timeout: 15000 });
     if (r.status === 0) {
       return new Set(r.stdout.toString().split('\n').filter(l => l.trim()).map(l => l.trim()));
     }
@@ -146,23 +148,18 @@ function validateCrossReferences(_mode: ValidationMode, _autoFix: boolean): Cros
     }
   }
 
-  // Scan each file for import statements
+  // Scan each file for import statements using AST (not regex)
+  // This avoids false positives from strings containing "import" text
   for (const file of srcFiles) {
     const content = readFileSync(file, 'utf-8');
-    const lines = content.split('\n');
     const relPath = relative(ROOT, file).replace(/\\/g, '/');
 
-    // Strip comments to avoid false positives from JSDoc examples and commented code
-    const codeOnly = content
-      .replace(/\/\/.*$/gm, '')          // Remove single-line comments
-      .replace(/\/\*[\s\S]*?\*\//g, ''); // Remove multi-line comments (incl. JSDoc)
+    // Use AST-based extraction (much more accurate than regex)
+    // This correctly ignores strings like: target.includes(`import './${sourceName}'`)
+    const imports: ImportInfo[] = extractRealImports(content, file);
 
-    // Match import ... from '...' and import '...'
-    const importRegex = /(?:import\s+(?:[\w*{}, \n]+\s+from\s+)?['"])([^'"]+)(['"])/g;
-    let match: RegExpExecArray | null;
-
-    while ((match = importRegex.exec(codeOnly)) !== null) {
-      const importPath = match[1];
+    for (const imp of imports) {
+      const importPath = imp.path;
 
       // Skip node_modules, built-in modules, and external packages
       if (!importPath.startsWith('.') && !importPath.startsWith('/')) continue;
@@ -202,8 +199,7 @@ function validateCrossReferences(_mode: ValidationMode, _autoFix: boolean): Cros
       const found = canExist.some(p => existsSync(p));
 
       if (!found) {
-        // Calculate line number
-        const lineIdx = lines.findIndex(l => l.includes(importPath));
+        // Use line number from AST (accurate)
         broken++;
 
         const issue: ValidationIssue = {
@@ -211,7 +207,7 @@ function validateCrossReferences(_mode: ValidationMode, _autoFix: boolean): Cros
           category: 'cross-reference',
           message: `Broken import: "${importPath}" in ${relPath} — file not found`,
           file: relPath,
-          line: lineIdx >= 0 ? lineIdx + 1 : undefined,
+          line: imp.line,
           autoFixable: false,
         };
         issues.push(issue);

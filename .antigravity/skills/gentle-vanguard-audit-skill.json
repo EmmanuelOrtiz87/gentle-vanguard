@@ -1,0 +1,22 @@
+{
+  "name": "gentle-vanguard-audit-skill",
+  "version": "1.0.0",
+  "description": "",
+  "triggers": [],
+  "mission": {
+    "name": "gentle-vanguard-audit-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Gentle-Vanguard Audit Skill\n\n## Activation Contract\n\nLoad when user requests any audit/validation/deduplication/sweep operation for Gentle-Vanguard\nworkspace. Use before judgment-day when structural integrity check is needed first.\n\n## Hard Rules\n\n- Run audit before judgment-day (zero-token batch scripts before AI review)\n- Never modify files during audit — only report issues\n- Exit code must reflect outcome: 0=success, 1=issues-found, 2=fatal\n\n## Decision Gates\n\n| Scope    | When                        | Checks                               |\n| -------- | --------------------------- | ------------------------------------ |\n| quick    | Pre-commit or session start | Deprecated refs, skill structure     |\n| standard | Pre-commit or CI            | + markdown links, README links       |\n| full     | Pre-merge or weekly         | + duplicates, SKILL_INDEX sync       |\n| deep     | Monthly deep-clean          | + orphaned docs                      |\n| judgment | Before release              | Full batch + AI adversarial review   |\n| unified  | Interactive                 | Full batch, then prompt for judgment |\n\n## Execution Steps\n\n1. Resolve audit scope: quick → standard → full → deep → judgment (ascending)\n2. Run `audit-sweep.ps1 -Scope <resolved>` via `npx tsx src/audit-sweep.ts --scope <scope>`\n3. Parse exit code and output\n4. If judgment scope: prompt user for adversarial AI review\n5. Report results in requested format\n\n## Output Contract\n\n- Exit 0: success; Exit 1: issues found; Exit 2: fatal error\n- Output formats: human-readable text, JSON (`-Output json`), or markdown (`-Output markdown`)\n- Each issue includes file path, severity, description\n\n## References\n\n- Scripts: [scripts/](scripts/) — audit-sweep.ps1, audit-workflow.ps1, sync-local.ps1\n- Details (JD comparison, scopes, commands): [references/details.md](references/details.md)",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

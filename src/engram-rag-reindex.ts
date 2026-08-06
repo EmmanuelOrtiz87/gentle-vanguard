@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { execSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -62,10 +62,10 @@ function main(): void {
   if (!existsSync(indexScript)) {
     log('Vector index script removed in Phase 1 cleanup — using engram export for freshness', 'Yellow');
     try {
-      execSync('engram --version', { stdio: 'pipe' });
+      runSync('engram', ['--version'], { stdio: 'pipe' });
       const exportArgs = ['export', tmpExport];
       if (args.project) exportArgs.push('--project', args.project);
-      execSync(`engram ${exportArgs.join(' ')}`, { stdio: 'pipe' });
+      runSync('engram', exportArgs, { stdio: 'pipe' });
       if (existsSync(tmpExport)) rmSync(tmpExport, { force: true });
       log('engram export completed', 'Green');
     } catch {
@@ -87,7 +87,7 @@ function main(): void {
 
   log(`Running: engram-vector-index.ps1 ${argsList.join(' ')}`);
   try {
-    execSync(`powershell -File "${indexScript}" ${argsList.join(' ')}`, { stdio: 'inherit' });
+    runSync('powershell', ['-File', indexScript, ...argsList], { stdio: 'inherit' });
   } catch (e) {
     const code = (e as { status?: number }).status;
     log(`Re-index failed with exit code ${code}`, 'Red');

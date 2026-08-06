@@ -3,7 +3,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync, statSync, copyFileSync } from 'fs';
 import { join, dirname } from 'path';
 
-import { spawnSync } from 'child_process';
+import { runNpxTsxSync } from './core/run-command.js';
 
 const ROOT = process.cwd();
 const SESSION_DIR = join(ROOT, '.session');
@@ -354,7 +354,7 @@ try {
   const result = invokeRollback(checkpointId);
 
   const ckptMgr = join(ROOT, 'src', 'checkpoint-manager.ts');
-  const spawnResult = spawnSync('npx', ['tsx', ckptMgr, 'verify', ROOT, checkpointId], { encoding: 'utf8' });
+  const spawnResult = runNpxTsxSync(ckptMgr, ['verify', ROOT, checkpointId], {});
   let verification: VerificationResult | null = null;
   try {
     verification = JSON.parse(spawnResult.stdout) as VerificationResult;

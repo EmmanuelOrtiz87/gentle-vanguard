@@ -23,7 +23,7 @@ Based on detection, load `config/orchestrator.json#toolProfiles.<name>`.
 ### Phase A — Init
 
 0. `pre-process-input.ps1 -UserInput "<msg>" -WorkspaceRoot "."` BEFORE first response
-1. Run `scripts/utilities/session-start-optimized.ps1` (autostart pipeline)
+1. Run `src/session-start-optimized.ts` (autostart pipeline)
 2. Read `scripts/.session/startup-summary.json`
 3. `todowrite` — create task list
 4. Report peak/off-peak, session ID, workspace state to user

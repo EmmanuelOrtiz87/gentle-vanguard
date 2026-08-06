@@ -57,8 +57,8 @@ Gentle-Vanguard Suite
 
 | Tool                   | Status   | Command                             | Description                             |
 | ---------------------- | -------- | ----------------------------------- | --------------------------------------- |
-| **Workflow CLI**       | Ready    | `.\scripts\utilities\gv.ps1`        | Project coordination & automation       |
-| **Health Check**       | Ready    | `.\scripts\utilities\gv.ps1 health` | Tool validation & activation            |
+| **Workflow CLI**       | Ready    | `.\scripts\utilities\src/cli/gv.ts`        | Project coordination & automation       |
+| **Health Check**       | Ready    | `.\scripts\utilities\src/cli/gv.ts health` | Tool validation & activation            |
 | **Auto-Init**          | Ready    | `auto-init-dev-environment.ps1`     | Environment setup                       |
 | **TypeScript Profile** | Optional | `$PROFILE`                          | Windows convenience for auto-activation |
 
@@ -122,7 +122,7 @@ Copy-Item "scripts/utilities/Microsoft.TypeScript_profile.ps1" $PROFILE
 . $PROFILE
 
 # Initialize environment
-.\scripts\utilities\gv.ps1 health
+.\scripts\utilities\src/cli/gv.ts health
 ```
 
 ### 2. Project Development (Per Session)
@@ -135,9 +135,9 @@ cd .\bitbucket-dashboard
 # (Orchestrator detects project type, loads skills)
 
 # Development workflow
-.\scripts\utilities\gv.ps1 status    # Project status
-.\scripts\utilities\gv.ps1 review    # Code review
-.\scripts\utilities\gv.ps1 audit     # Generate reports
+.\scripts\utilities\src/cli/gv.ts status    # Project status
+.\scripts\utilities\src/cli/gv.ts review    # Code review
+.\scripts\utilities\src/cli/gv.ts audit     # Generate reports
 ```
 
 ### 3. Quality Gates (Automatic)
@@ -210,7 +210,7 @@ git commit -m "feat: add new dashboard component"
 
 ```TypeScript
 # Health check (run daily)
-.\scripts\utilities\gv.ps1 health
+.\scripts\utilities\src/cli/gv.ts health
 
 # Update tools (weekly)
 .\scripts\utilities\update-tools.ps1
@@ -230,7 +230,7 @@ git commit -m "feat: add new dashboard component"
 
 - **Automatic**: Health checks and workflow entrypoints keep tools aligned; the TypeScript profile
   is optional on Windows
-- **Manual**: `.\scripts\utilities\gv.ps1 update` for explicit updates
+- **Manual**: `.\scripts\utilities\src/cli/gv.ts update` for explicit updates
 - **Skills**: AI skills update automatically via orchestrator
 
 ---
@@ -274,10 +274,10 @@ git commit -m "feat: add new dashboard component"
 
 ```TypeScript
 # Get help
-.\scripts\utilities\gv.ps1 --help
+.\scripts\utilities\src/cli/gv.ts --help
 
 # Health check
-.\scripts\utilities\gv.ps1 health
+.\scripts\utilities\src/cli/gv.ts health
 
 # Start session
 # (AI agents will guide you)
@@ -306,4 +306,4 @@ The suite provides:
 
 **Ready to experience the future of AI-powered development?**
 
-Start with `.\scripts\utilities\gv.ps1 health` in any project directory!
+Start with `.\scripts\utilities\src/cli/gv.ts health` in any project directory!

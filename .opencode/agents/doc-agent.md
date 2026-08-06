@@ -4,7 +4,7 @@ mode: subagent
 hidden: true
 model: opencode/deepseek-v4-flash-free
 temperature: 0.4
-steps: 6
+steps: 34
 permission:
   websearch: deny
   webfetch: deny

@@ -2,7 +2,8 @@
 
 import { readFileSync, existsSync, readdirSync, writeFileSync, statSync } from 'fs';
 import { join, resolve, basename } from 'path';
-import { spawn, spawnSync, execFileSync } from 'child_process';
+import { spawn, execFileSync } from 'child_process';
+import { runSync } from './run-command';
 import { createConnection } from 'net';
 import { getEffectiveProcessTimeout, getHttpServerTimeouts, getExternalApiTimeouts } from './timeout-config';
 
@@ -392,10 +393,7 @@ async function checkEngram() {
   // If engram MCP server is running, doctor will deadlock on DB lock — skip gracefully
   const engramMcpRunning = (() => {
     try {
-      const r = spawnSync('tasklist', [], {
-        encoding: 'utf-8',
-        timeout: getEffectiveProcessTimeout('default'),
-      });
+      const r = runSync(process.platform === 'win32' ? 'tasklist' : 'ps', process.platform === 'win32' ? [] : ['-ef'], { timeout: getEffectiveProcessTimeout('default') });
       return (r.stdout ?? '').toLowerCase().includes('engram.exe');
     } catch {
       return false;
@@ -406,23 +404,19 @@ async function checkEngram() {
     addResult('engram', 'doctor', 'PASS', 'MCP server active (skip to avoid deadlock)', 'ok');
   } else {
     try {
-      const output = execFileSync(engramCmd, ['doctor', '--json'], {
-        encoding: 'utf-8',
-        timeout: getExternalApiTimeouts()?.engram_operation_ms ?? 15000,
-      });
+      const r = runSync(engramCmd, ['doctor', '--json'], { timeout: getExternalApiTimeouts()?.engram_operation_ms ?? 15000 });
+      const output = (r.stdout ?? '') + (r.stderr ?? '');
       const ok = /"status"\s*:\s*"ok"/.test(output);
       addResult('engram', 'doctor', ok ? 'PASS' : 'WARN', `Healthy=${ok}`, 'verify');
     } catch (e: unknown) {
-      const err = e as { stdout?: string; stderr?: string };
-      const output = ((err.stdout ?? '') + (err.stderr ?? '')).toString();
-      const ok = /"status"\s*:\s*"ok"/.test(output);
+      const err = e as Error;
       addResult(
         'engram',
         'doctor',
-        ok ? 'PASS' : 'FAIL',
-        ok ? 'Healthy (stderr)' : 'Not accessible',
-        ok ? 'verify' : 'manual',
-        !ok,
+        'FAIL',
+        `Error: ${err?.message ?? String(e)}`,
+        'manual',
+        true,
       );
     }
   }
@@ -461,13 +455,8 @@ async function checkMcp() {
   const verifyScript = join(ROOT, 'src/mcp/mcp-verify.ts');
   if (fileExists(verifyScript)) {
     try {
-      const r = spawnSync('npx', ['tsx', 'src/mcp/mcp-verify.ts'], {
-        cwd: ROOT,
-        stdio: 'pipe',
-        timeout: getExternalApiTimeouts()?.mcp_request_ms ?? 30000,
-        encoding: 'utf-8',
-        shell: true,
-      });
+      const cmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+      const r = runSync(cmd, ['tsx', 'src/mcp/mcp-verify.ts'], { cwd: ROOT, timeout: getExternalApiTimeouts()?.mcp_request_ms ?? 30000 });
       const output = (r.stdout ?? '') + (r.stderr ?? '');
       const healthOk = r.status === 0 || output.includes('Bridge status: OK');
       const detail = healthOk ? 'bridge verified' : `exit code: ${r.status ?? 'null'}`;
@@ -536,8 +525,8 @@ async function checkHooks() {
   );
 
   try {
-    const r = spawnSync('lefthook', ['validate'], { cwd: ROOT, stdio: 'pipe', timeout: getEffectiveProcessTimeout('default') });
-    addResult('hooks', 'lefthook validate', r.status === 0 ? 'PASS' : 'FAIL', '', 'manual');
+    const r = runSync('lefthook', ['validate'], { cwd: ROOT, timeout: getEffectiveProcessTimeout('default') });
+    addResult('hooks', 'lefthook validate', r.status === 0 ? 'PASS' : 'FAIL', r.stderr ?? '', 'manual');
   } catch {
     addResult('hooks', 'lefthook validate', 'FAIL', 'Not installed or invalid', 'manual');
   }
@@ -781,7 +770,8 @@ async function checkGentleVanguardDb() {
       const needsCheckpoint = walMB > 5 || walRatio > 1.5;
       if (needsCheckpoint) {
         try {
-          spawnSync('sqlite3', [dbPath, 'PRAGMA wal_checkpoint(TRUNCATE);'], { encoding: 'utf8', timeout: 30000, shell: true });
+          const cmd = process.platform === 'win32' ? 'sqlite3.exe' : 'sqlite3';
+          runSync(cmd, [dbPath, 'PRAGMA wal_checkpoint(TRUNCATE);'], { timeout: 30000 });
           const newWalBytes = existsSync(walPath) ? statSync(walPath).size : 0;
           addResult('gentle-vanguard-db', 'WAL auto-checkpoint', 'PASS', `${walMB.toFixed(2)} MB → ${(newWalBytes / 1024 / 1024).toFixed(2)} MB (ratio ${walRatio.toFixed(1)}x)`, 'auto-healed');
         } catch {
@@ -796,11 +786,8 @@ async function checkGentleVanguardDb() {
 
     // Try integrity check via sqlite3 CLI
     try {
-      const r = spawnSync('sqlite3', [dbPath, 'PRAGMA integrity_check;'], {
-        encoding: 'utf8',
-        timeout: getEffectiveProcessTimeout('default'),
-        shell: false, // Security: shell false to avoid argument injection
-      });
+      const cmd = process.platform === 'win32' ? 'sqlite3.exe' : 'sqlite3';
+      const r = runSync(cmd, [dbPath, 'PRAGMA integrity_check;'], { timeout: getEffectiveProcessTimeout('default') });
       const output = (r.stdout ?? '').trim();
       const stderr = (r.stderr ?? '').trim();
       const processFailed = r.error || (r.status !== null && r.status !== 0);
@@ -827,12 +814,12 @@ async function checkGentleVanguardDb() {
       // Get table and row counts (only on PASS)
       if (integrityOk) {
         try {
-          const tablesOut = execFileSync('sqlite3', [dbPath, '.tables'], { encoding: 'utf8', timeout: 5000 }).trim();
+          const tablesOut = runSync(cmd, [dbPath, '.tables'], { timeout: 5000 }).stdout.trim();
           const tables = tablesOut.split(/\s+/).filter(t => t.length > 0 && !t.startsWith('_'));
           let totalRows = 0;
           for (const t of tables) {
             try {
-              const row = execFileSync('sqlite3', [dbPath, `SELECT COUNT(*) FROM [${t}];`], { encoding: 'utf8', timeout: 3000 }).trim();
+              const row = runSync(cmd, [dbPath, `SELECT COUNT(*) FROM [${t}];`], { timeout: 3000 }).stdout.trim();
               totalRows += parseInt(row, 10) || 0;
             } catch { /* skip */ }
           }
@@ -986,7 +973,7 @@ async function rebuildMlEmbeddings() {
   const skillEmbedder = join(ROOT, 'src/skills/skill-embedder.ts');
   if (fileExists(skillEmbedder)) {
     try {
-      const r = spawnSync('npx', ['tsx', 'src/skills/skill-embedder.ts'], {
+      const r = runSync('npx', ['tsx', 'src/skills/skill-embedder.ts'], {
         cwd: ROOT,
         stdio: 'pipe',
         timeout: getEffectiveProcessTimeout('long_running'),
@@ -1010,19 +997,19 @@ async function rebuildMlEmbeddings() {
 async function reindexEngramRag() {
   if (!quiet) console.log('  [Rebuild] Engram RAG...');
   const ragReindexTs = join(ROOT, 'src', 'engram-rag-reindex.ts');
-  const ragReindexPs1 = join(ROOT, 'scripts/utilities/memory/ENGRAM-RAG/engram-rag-reindex.ps1');
+  const ragReindexPs1 = join(ROOT, 'src/engram-rag-reindex.ts');
   const hasTs = fileExists(ragReindexTs);
   if (hasTs || fileExists(ragReindexPs1)) {
     try {
       let r: { status: number | null };
       if (hasTs) {
-        r = spawnSync('npx', ['tsx', ragReindexTs], {
+        r = runSync('npx', ['tsx', ragReindexTs], {
           cwd: ROOT,
           stdio: 'pipe',
           timeout: getEffectiveProcessTimeout('long_running'),
         });
       } else {
-        r = spawnSync('pwsh', ['-NoProfile', '-File', ragReindexPs1], {
+        r = runSync('pwsh', ['-NoProfile', '-File', ragReindexPs1], {
           cwd: ROOT,
           stdio: 'pipe',
           timeout: getEffectiveProcessTimeout('long_running'),

@@ -2,7 +2,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { pathToFileURL } from 'url';
-import { execSync } from 'child_process';
+import { runSyncShell } from './core/run-command.js';
 
 interface CircuitState {
   state: string;
@@ -194,8 +194,8 @@ function getUserSuggestion(fallback: string): string {
 
 function invokeWithTimeout(command: string, timeoutSec: number): { output: string | null; timedOut: boolean } {
   try {
-    const result = execSync(command, { timeout: timeoutSec * 1000, cwd: REPO_ROOT });
-    const output = typeof result === 'string' ? result : result.toString('utf-8');
+    const result = runSyncShell(command, { timeout: timeoutSec * 1000, cwd: REPO_ROOT });
+    const output = result.stdout;
     return { output, timedOut: false };
   } catch (e: unknown) {
     if (e instanceof Error && 'killed' in e && (e as { killed?: boolean }).killed) {

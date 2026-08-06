@@ -1,0 +1,22 @@
+{
+  "name": "judgment-day",
+  "version": "1.0.0",
+  "description": "",
+  "triggers": [],
+  "mission": {
+    "name": "judgment-day Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Judgment Day\n\n## Activation Contract\n\nLoad this skill when:\n\n- User explicitly says \"judgment day\", \"judgment-day\", or equivalent trigger phrases\n- After significant implementations before merging\n- When high-confidence review with multiple perspectives is needed\n- When the cost of a production bug is higher than the cost of two review rounds\n- Spanish input → respond in Rioplatense. English input → respond in English.\n\n## Hard Rules\n\n1. **MUST NOT** declare APPROVED until: Round 1 judges return CLEAN, OR Round 2+ confirms 0\n   CRITICALs + 0 confirmed real WARNINGs (theoretical warnings and suggestions may remain)\n2. **MUST NOT** push, commit, or code-modify until re-judgment completes after fixes\n3. **MUST NOT** save summary or say \"done\" until every JD reaches APPROVED or ESCALATED\n4. After Fix Agent returns, **IMMEDIATE** next action is re-launching judges in parallel\n5. Multiple JDs run independently — one completing does NOT skip rounds on another\n6. **MUST preserve MINORITY POSITIONS** in output — never suppress dissenting views (Gemini\n   Principle)\n7. **MUST flag SYCOPHANCY** when a judge changes verdict between rounds without citing new evidence\n8. **Orchestrator NEVER reviews code itself** — only launches judges, reads results, synthesizes\n9. Judges MUST be launched as `delegate` (async) so they run in **parallel**\n10. Fix Agent MUST be a separate delegation — never reuse a judge as fixer\n11. Always wait for BOTH judges to complete before synthesizing\n12. Suspect findings (only one judge) reported but NOT auto-fixed — triage and escalate if needed\n13. Theoretical warnings reported as INFO, NOT fixed, do NOT trigger re-judgment\n\n## Decision Gates\n\n```\nTarget scope clear?\n  YES → continue\n  NO  → ask user to specify scope\n\nSkill registry exists (Pattern 0)?\n  YES → build Project Standards block\n  NO  → warn user, proceed generic review\n\nJudges return findings?\n  Clean (0 CRITICAL + 0 real WARNING) → JUDGMENT: APPROVED\n  Issues found → present verdict, ask user\n\nUser response to fix offer (Round 1)?\n  YES → delegate Fix Agent → re-judge\n  NO  → JUDGMENT: ESCALATED\n  Custom feedback → adjust fix list accordingly\n\nAfter 2 fix iterations still issues?\n  Ask \"Continuar iterando? / Should I continue iterating?\"\n  YES → continue fix+judge cycle\n  NO  → JUDGMENT: ESCALATED\n```\n\n## Execution Steps\n\n1. **Skill Resolution (Pattern 0)** — Search engram for skill registry\n   (`mem_search(query: \"skill-registry\")`) → match skills by code and task context → build\n   `## Project Standards (auto-resolved)` block. Inject into all judge and fix prompts.\n2. **Launch blind judges** — Delegate Judge A + Judge B in parallel (async). Both receive identical\n   prompts with Project Standards. Neither knows about the other.\n3. **Wait and synthesize** — Use `delegation_read` for both. Classify each finding: Confirmed (both\n   judges), Suspect A/A only, Suspect B/B only, Contradiction (disagree on same item).\n4. **Convergence check** — If 0 CRITICALs + 0 confirmed real WARNINGs → JUDGMENT: APPROVED.\n   Theoretical warnings and suggestions may remain.\n5. **Fix cycle** — Present verdict to user. ASK before fixing. On confirmation: delegate Fix Agent\n   with confirmed issues list. After fix: re-launch both judges in parallel.\n\n---\n\n> **Referencia detallada**: [ eferences/detail.md](references/detail.md)",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

@@ -2,7 +2,7 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { spawnSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 
 type PhaseName = 'INIT' | 'EXPLORE' | 'PROPOSE' | 'SPEC' | 'TASKS' | 'DESIGN' | 'APPLY' | 'VERIFY' | 'ARCHIVE';
 
@@ -43,7 +43,7 @@ function writePhaseGate(sddDir: string, phase: string, status: PhaseGate['status
 
 function runGit(args: string[], cwd: string): string {
   try {
-    const result = spawnSync('git', args, { cwd, encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
+    const result = runSync('git', args, { cwd, stdio: ['pipe', 'pipe', 'pipe'] });
     return result.status === 0 ? result.stdout.trim() : 'unknown';
   } catch {
     return 'unknown';

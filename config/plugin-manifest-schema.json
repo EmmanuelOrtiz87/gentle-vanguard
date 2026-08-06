@@ -54,7 +54,7 @@
     },
     "commands": {
       "type": "array",
-      "description": "gv.ps1 subcommands provided by this plugin",
+      "description": "src/cli/gv.ts subcommands provided by this plugin",
       "items": {
         "oneOf": [
           { "type": "string" },

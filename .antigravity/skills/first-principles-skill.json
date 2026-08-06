@@ -1,0 +1,22 @@
+{
+  "name": "first-principles-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "first-principles-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# First Principles Reasoning\n\n## Overview\n\nFirst principles thinking strips away assumptions and conventions to reveal fundamental truths, then\nreconstructs solutions from those basics. This approach, championed by Elon Musk and rooted in\nAristotle's philosophy, enables breakthrough solutions by escaping the trap of reasoning by analogy.\n\n**Core Principle:** Don't accept \"that's how it's always done.\" Reduce to fundamentals, then rebuild.\n\n## When to Use\n\n- Conventional approaches have failed or seem inadequate\n- You're told something is \"impossible\" or \"too expensive\"\n- Designing new systems/products from scratch\n- Challenging industry assumptions or pricing\n- Problem seems intractable using existing mental models\n- You need innovation rather than incremental improvement\n\nDecision flow:\n\n```\nProblem intractable? → reasoning from analogy? → yes → APPLY FIRST PRINCIPLES\n                                                ↘ no → Already at fundamentals\n                   ↘ no → Standard problem-solving\n```\n\n## The Process\n\n### Step 1: Identify Current Assumptions\n\nList everything you \"know\" or assume about the problem:\n\n- What are the constraints everyone accepts?\n- What costs/limitations are considered fixed?\n- What's the conventional wisdom?\n- Why do people say it can't be done?\n\n```\nRocket cost $65M → Assumptions: existing suppliers, designs optimal,\n                   aerospace-grade materials, vertical integration too hard\n```\n\n### Step 2: Break Down to Fundamentals\n\nAsk repeatedly: \"What are we absolutely certain is true?\"\n\nDecomposition questions:\n\n- What are the physical/mathematical constraints?\n- What are the raw inputs required?\n- What laws of physics/economics apply?\n- What would this cost if built from raw materials?\n- What is the minimum viable version?\n\n```\nRocket materials (aluminum, titanium, etc.) = ~2% of price\n→ Fundamental: manufacturing/overhead/margins, not materials\n```\n\n### Step 3: Challenge Each Assumption\n\nFor each assumption, ask:\n\n- Is this actually true, or just convention?\n- What evidence supports this?\n- Under what conditions would this be false?\n- Who benefits from this assumption persisting?\n\nUse the \"5 Whys\" to drill deeper:\n\n```\nExpensive → high margins → limited competition → entry barriers\n→ assumption: must use existing supply chain → nobody questioned it\n```\n\n### Step 4: Rebuild from Fundamentals\n\nStarting ONLY from verified truths:\n\n- What's the simplest solution that satisfies fundamental requirements?\n- What new approaches become possible without false constraints?\n- How would you solve this if starting from scratch today?\n- What would a solution look like with 10x less resources?\n\n```\nIn-house rockets with commodity materials → SpaceX 10x cost reduction\n```\n\n### Step 5: Validate Against Reality\n\n- Does your reconstructed solution violate any physics/laws?\n- What practical constraints remain?\n- What's the minimum viable test?\n- How can you prove/disprove this quickly?\n\n## Verification Checklist\n\n- [ ] Listed all assumptions about the problem\n- [ ] Identified which assumptions are physics/math vs convention\n- [ ] Challenged at least 3 \"obvious\" constraints\n- [ ] Rebuilt solution using only verified fundamentals\n- [ ] Validated that solution doesn't violate actual constraints\n- [ ] Identified minimum viable test to prove/disprove approach\n\n## Key Questions\n\n- \"What do we know to be absolutely true?\"\n- \"Why does everyone assume this constraint exists?\"\n- \"What would we do if we had to solve this with 10% of the budget?\"\n- \"If we were starting from scratch today, would we build it this way?\"\n- \"What would a complete outsider try?\"",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

@@ -6,11 +6,11 @@
 
 Run BEFORE any action:
 
-```powershell
-$detected = pwsh -NoProfile -File scripts/utilities/detect-tool.ps1 -AsJson | ConvertFrom-Json
-$detected.name  # opencode|claude-code|cline|cursor|windsurf|unknown
-$detected.os.platform  # windows|linux|macos
-$detected.os.shell     # powershell|bash|zsh
+```bash
+# Tool detection via TypeScript
+npx tsx src/detect-tool.ts --json | jq -r '.name'  # opencode|claude-code|cline|cursor|windsurf|unknown
+npx tsx src/detect-tool.ts --json | jq -r '.os.platform'  # windows|linux|macos
+npx tsx src/detect-tool.ts --json | jq -r '.os.shell'  # powershell|bash|zsh
 ```
 
 Load config from `config/orchestrator.json#toolProfiles.<name>`.
@@ -24,20 +24,20 @@ Run `docs/AGENTS.md#Mandatory-Startup-Sequence` — no shortcuts.
 ## Core Rules (condensed)
 
 1. **LOCAL-FIRST**: project knowledge before external sources
-2. **pre-process-input.ps1** BEFORE every response (`-UserInput`, `-PrevInputTokens`,
-   `-PrevOutputTokens`, `-PrevContextChars`, `-Model`). Track token usage from previous turn:
-   estimate input as `[Math]::Floor(contextChars/4)`, output as actual response length/4. On first
-   turn omit prev params.
+     2. **pre-process-input.ts** BEFORE every response (`--input`, `--prev-input-tokens`,
+    `--prev-output-tokens`, `--prev-context-chars`, `--model`). Track token usage from previous turn:
+    estimate input as `Math.floor(contextChars/4)`, output as actual response length/4. On first
+    turn omit prev params.
 3. **SDD FLOW RULE**: new features -> BA/EXPLORE first, no exceptions
 4. **Delegation Rules** -> `rules/DELEGATION-RULES.md` mandatory for multi-step
-5. **AUTONOMOUS LEARNING** -> `mem_save` after every significant task
-6. **TOKEN NOTIFICATION** -> Automatico via `pre-process-input.ps1` hook. Se ejecuta CADA turno sin
-   intervención. User puede `/notif off` para silenciar. Toggles individuales:
-   `/notif token on/off`, `/notif context on/off`, `/notif cost on/off`,
-   `/notif accumulated on/off`, `/notif compact on/off`. Estado persiste entre sesiones.
+     5. **AUTONOMOUS LEARNING** -> `mem_save` after every significant task
+     6. **TOKEN NOTIFICATION** -> Automatico via `pre-process-input.ts` hook. Se ejecuta CADA turno sin
+        intervención. User puede `/notif off` para silenciar. Toggles individuales:
+        `/notif token on/off`, `/notif context on/off`, `/notif cost on/off`,
+        `/notif accumulated on/off`, `/notif compact on/off`. Estado persiste entre sesiones.
 7. **CodeGraph** -> `codegraph_context` before modifying code
 8. **mem_search "lessons learned"** at session start
-9. **Review Workload Guard** -> `review-workload-guard.ps1` before multi-file impl
+     9. **Review Workload Guard** -> `npx tsx src/workload-guard.ts` before multi-file impl
 10. **Tool output discipline** -> limit read/grep/bash results; use `-First 30`, `Select-Object`,
     `head -50` on large output
 11. **JSON VALIDITY** -> Verify quotes/braces/brackets balanced BEFORE any tool call with JSON

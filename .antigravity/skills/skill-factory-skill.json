@@ -1,0 +1,22 @@
+{
+  "name": "skill-factory-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "skill-factory-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "## Purpose\n\nAutomate the creation of new skills and synchronize base instructions across all AI agents\n(OpenCode, Claude, Copilot, Gemini).\n\n## Skill Creation Workflow\n\n1. **Intake:** User requests a new skill or agent detects repetitive patterns.\n2. **Validation:** Check if skill already exists or if it overlaps with existing ones.\n3. **Generation:** Create `skills/{skill-name}/SKILL.md` using the standard template.\n4. **Registration:** Update `skills/SKILL_INDEX.md` and `config/orchestrator.json` if needed.\n5. **Documentation:** Add entry to `docs/reference/script-registry.md` if scripts are involved.\n\n### Standard Skill Template\n\n```markdown\n---\nname: { skill-name }\ndescription: >\n  {Brief description}. Trigger: \"{keyword1}\", \"{keyword2}\"\n---\n\n## When to Use\n\n[Specific triggers for this skill]\n\n## Core Rules\n\n1. [Rule 1]\n2. [Rule 2]\n\n## Workflow\n\n1. [Step 1]\n2. [Step 2]\n\n## Output Expectations\n\n[What the user should see]\n```\n\n## Cross-Platform Synchronization\n\nMaintain consistency across all AI tools by syncing from a single source of truth.\n\n### Source of Truth\n\n`docs/reference/master-instructions.md` contains the global baseline for all agents.\n\n### Target Files\n\n| Platform       | Path                              | Sync Strategy  |\n| -------------- | --------------------------------- | -------------- |\n| OpenCode       | `AGENTS.md`                       | Full overwrite |\n| GitHub Copilot | `.github/copilot-instructions.md` | Full overwrite |\n| Claude Code    | `.claude/CLAUDE.md`               | Full overwrite |\n| Gemini CLI     | `.gemini/instructions.md`         | Full overwrite |\n\n### Sync Script\n\nUse `scripts/utilities/sync-agent-instructions.ps1` to propagate changes.\n\n```powershell\n# Sync all platforms\n.\\scripts\\utilities\\sync-agent-instructions.ps1 -All\n\n# Sync specific platform\n.\\scripts\\utilities\\sync-agent-instructions.ps1 -Target Copilot\n```\n\n## Automation Rules\n\n- **Duplicate Detection:** Before creating a skill, search `skills/` for similar names or keywords.\n- **Naming Convention:** Use `kebab-case` for skill directories and `PascalCase` for internal\n  references.\n- **Validation:** Every new skill must pass `gv validate` before being committed.",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

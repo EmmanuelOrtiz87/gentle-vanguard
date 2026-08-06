@@ -1,0 +1,22 @@
+{
+  "name": "bdd-scenarios",
+  "version": "1.0.0",
+  "description": "",
+  "triggers": [],
+  "mission": {
+    "name": "bdd-scenarios Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# BDD Scenarios\n\nLearn to write clear, maintainable BDD scenarios that effectively capture business requirements and\ndrive implementation.\n\n## Writing Good Scenarios\n\nA good scenario should be:\n\n- **Specific**: Test one behavior\n- **Declarative**: Describe what, not how\n- **Business-focused**: Use domain language\n- **Independent**: No dependencies on other scenarios\n\n```gherkin\n# Good scenario - specific and declarative\nScenario: Customer receives loyalty discount\n  Given a customer with Gold membership status\n  And a cart total of $100\n  When the customer proceeds to checkout\n  Then a 10% loyalty discount should be applied\n  And the final total should be $90\n\n# Bad scenario - too implementation-focused\nScenario: Apply discount\n  Given I click the membership dropdown\n  And I select \"Gold\" from the list\n  When I click the checkout button\n  Then the JavaScript calculates 10% off\n```\n\n## Acceptance Criteria Format\n\n```gherkin\nFeature: Order Refunds\n\n  # Rule-based acceptance criteria\n  Rule: Full refunds are available within 30 days\n\n    Scenario: Refund requested within return window\n      Given an order placed 15 days ago\n      When the customer requests a refund\n      Then a full refund should be processed\n\n    Scenario: Refund requested after return window\n      Given an order placed 45 days ago\n      When the customer requests a refund\n      Then the refund should be denied\n      And the customer should see \"Return window expired\"\n```\n\n## Edge Case Scenarios\n\n```gherkin\nFeature: User Registration\n\n  Scenario: Successful registration\n    Given I am on the registration page\n    When I submit valid registration details\n    Then my account should be created\n\n  # Edge cases\n  Scenario: Registration with existing email\n    Given a user exists with email \"existing@example.com\"\n    When I try to register with email \"existing@example.com\"\n    Then I should see \"Email already registered\"\n\n  Scenario: Registration with invalid email format\n    When I try to register with email \"not-an-email\"\n    Then I should see \"Please enter a valid email\"\n\n  Scenario: Registration with empty required fields\n    When I submit the registration form with empty fields\n    Then I should see validation errors for required fields\n```\n\n## Scenario Tags and Organization\n\n```gherkin\n@authentication @critical\nFeature: User Login\n\n  @smoke\n  Scenario: Basic login flow\n    # ...\n\n  @security\n  Scenario: Account lockout after failed attempts\n    # ...\n\n  @wip\n  Scenario: Two-factor authentication\n    # Work in progress\n```\n\n## When to Use This Skill\n\nUse bdd-scenarios when you need to:\n\n- Define acceptance criteria for user stories\n- Document expected system behavior\n- Create comprehensive test coverage\n- Identify edge cases early in development\n- Communicate requirements clearly\n\n## Best Practices\n\n- Start with the happy path scenario\n- Add edge cases systematically\n- Use tags for organization and filtering\n- Keep scenarios at 3-7 steps\n- Write scenarios before implementation\n- Review scenarios with stakeholders\n\n## Common Pitfalls\n\n- Writing scenarios after implementation\n- Including too many steps per scenario\n- Using vague or ambiguous language\n- Forgetting negative test cases\n- Not organizing with tags effectively",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

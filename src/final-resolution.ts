@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { existsSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { spawnSync } from 'child_process';
+import { runSync, runNpxTsxSync } from './core/run-command.js';
 
 interface CliArgs {
   quiet: boolean;
@@ -66,11 +66,9 @@ function runStep(script: string, args: string[], label: string, quiet: boolean):
   if (!existsSync(scriptPath)) {
     return { step: label, ok: false, message: `Script not found: ${script}` };
   }
-  const result = spawnSync('npx', ['tsx', scriptPath, ...args], {
+  const result = runNpxTsxSync(scriptPath, args, {
     cwd: ROOT,
     stdio: quiet ? 'pipe' : 'inherit',
-    windowsHide: true,
-    encoding: 'utf-8',
   });
   if (result.status === 0) {
     log(`  ✓ ${label}`, quiet);
@@ -86,10 +84,8 @@ function runStep(script: string, args: string[], label: string, quiet: boolean):
 function checkEngram(quiet: boolean): ResolutionResult {
   log(`  → Checking Engram...`, quiet);
   try {
-    const result = spawnSync('engram', ['--version'], {
+    const result = runSync('engram', ['--version'], {
       stdio: quiet ? 'pipe' : 'inherit',
-      windowsHide: true,
-      encoding: 'utf-8',
     });
     if (result.status === 0) {
       log(`  ✓ Engram available: ${result.stdout?.trim() || result.stderr?.trim() || 'OK'}`, quiet);
@@ -127,11 +123,9 @@ function validateConfigs(quiet: boolean): ResolutionResult[] {
 
 function checkDependencies(quiet: boolean): ResolutionResult {
   log(`  → Auditing dependencies...`, quiet);
-  const result = spawnSync('pnpm', ['audit'], {
+  const result = runSync('pnpm', ['audit'], {
     cwd: ROOT,
     stdio: quiet ? 'pipe' : 'inherit',
-    windowsHide: true,
-    encoding: 'utf-8',
   });
   const ok = result.status === 0;
   return {
@@ -147,11 +141,9 @@ function checkHealth(quiet: boolean): ResolutionResult {
   if (!existsSync(scriptPath)) {
     return { step: 'HealthCheck', ok: false, message: 'src/health-check.ts not found' };
   }
-  const result = spawnSync('npx', ['tsx', scriptPath, '--quiet'], {
+  const result = runNpxTsxSync(scriptPath, ['--quiet'], {
     cwd: ROOT,
     stdio: quiet ? 'pipe' : 'inherit',
-    windowsHide: true,
-    encoding: 'utf-8',
   });
   const ok = result.status === 0;
   return {

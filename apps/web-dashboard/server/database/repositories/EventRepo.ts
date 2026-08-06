@@ -44,7 +44,13 @@ export class EventRepo {
   getTriggeredAlerts(): AlertRecord[] {
     return this.db
       .prepare(
-        "SELECT * FROM alerts WHERE triggered = 1 ORDER BY created_at DESC LIMIT 10",
+        `SELECT * FROM alerts
+         WHERE id IN (
+           SELECT MAX(id) FROM alerts GROUP BY rule
+         )
+         AND triggered = 1
+         ORDER BY created_at DESC
+         LIMIT 10`,
       )
       .all() as AlertRecord[];
   }

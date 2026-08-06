@@ -6,27 +6,27 @@
   "assets": [
     {
       "type": "script",
-      "path": "scripts/gentle-vanguard/bootstrap.ps1",
+      "path": "src/bootstrap.ts",
       "description": "Portable Bootstrap - Initializes a fresh clone on a new machine"
     },
     {
       "type": "script",
-      "path": "scripts/gentle-vanguard/bootstrap-machine.ps1",
+      "path": "src/bootstrap-machine.ts",
       "description": "Global Bootstrap - Installs Gentle-Vanguard into a user-scoped machine layout"
     },
     {
       "type": "script",
-      "path": "scripts/gentle-vanguard/setup-multi-machine.ps1",
+      "path": "src/setup-multi-machine.ts",
       "description": "Multi-PC Setup - Clones/updates gentle-vanguard and gentle-vanguard-public and runs bootstrap"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/SESSION-MANAGEMENT/ensure-github-bypass.ps1",
+      "path": "src/ensure-github-bypass.ts",
       "description": "Session Bypass Guard - Ensures owner bypass is active on develop rulesets for gentle-vanguard and gentle-vanguard-public"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/DEPLOYMENT/install-github-runner.ps1",
+      "path": "src/install-github-runner.ts",
       "description": "GitHub Runner Installer - Portable self-hosted runner setup without committed secrets"
     },
     {
@@ -51,7 +51,7 @@
     },
     {
       "type": "script",
-      "path": "scripts/utilities/DEPLOYMENT/migrate-gentle-vanguard-remotes.ps1",
+      "path": "src/migrate-gentle-vanguard-remotes.ts",
       "description": "Remote Migration Script - Updates local origin remotes after repository rename"
     },
     {
@@ -61,63 +61,63 @@
     },
     {
       "type": "script",
-      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-cloud-agent.ps1",
+      "path": "src/invoke-cloud-agent.ts",
       "description": "Cloud Agent Connector - Invoke external AI models (Bedrock, Difi, Azure, etc.)"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-judgment.ps1",
+      "path": "src/invoke-judgment.ts",
       "description": "Judgment Day - Dual-agent adversarial review protocol"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/UTILITIES/manage-backlog.ps1",
+      "path": "src/manage-backlog.ts",
       "description": "Backlog Management - JSON-based task management"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/SKILLS-TOOLS/create-skill.ps1",
+      "path": "src/create-skill.ts",
       "description": "Skill Factory - Automated skill generation"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/TELEMETRY-METRICS/consolidate-telemetry.ps1",
+      "path": "src/consolidate-telemetry.ts",
       "description": "Business Telemetry - Centralized metrics reporting"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/PERFORMANCE-OPTIMIZATION/compact-memory.ps1",
+      "path": "src/compact-memory.ts",
       "description": "Compact Memory - Session summarization"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/UTILITIES/read-once-guard.ps1",
+      "path": "src/read-once-guard.ts",
       "description": "Read Once Guard - Prevent redundant file reads"
     },
 
     {
       "type": "script",
-      "path": "scripts/utilities/DEPLOYMENT/setup-wizard.ps1",
+      "path": "src/setup-wizard.ts",
       "description": "Setup Wizard - Interactive dependency installation"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/sync-agent-instructions.ps1",
+      "path": "src/sync-agent-instructions.ts",
       "description": "Agent Instructions Sync - Cross-platform sync for Claude, Copilot, etc."
     },
     {
       "type": "script",
-      "path": "scripts/utilities/UTILITIES/manual-recovery.ps1",
+      "path": "src/manual-recovery.ts",
       "description": "Manual Recovery - Fallback when self-healing fails"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-ai-review.ps1",
+      "path": "src/invoke-ai-review.ts",
       "description": "AI Review - Multi-provider code review with caching"
     },
     {
       "type": "hook",
-      "path": "hooks/pre-tool-format.ps1",
+      "path": "src/hooks/pre-tool-format.ts",
       "description": "PreTool Auto-Format Hook - Lint/format before AI agent access"
     },
     {
@@ -222,27 +222,27 @@
     },
     {
       "type": "script",
-      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/collect-provider-telemetry.ps1",
+      "path": "src/collect-provider-telemetry.ts",
       "description": "Provider Telemetry Collection - Probes configured AI providers and records real status/latency"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/TELEMETRY-METRICS/generate-dashboard.ps1",
+      "path": "src/generate-dashboard.ts",
       "description": "Dashboard Generator - HTML dashboard with PDF/PNG export and configurable thresholds"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1",
+      "path": "src/cli/gv.ts",
       "description": "Workflow CLI - Main orchestrator entry point"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/gv.ps1",
+      "path": "src/cli/gv.ts",
       "description": "Workflow CLI Wrapper - Stable entrypoint that forwards to the canonical CLI"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/UTILITIES/gentle-vanguard-sync.ps1",
+      "path": "src/sync-to-public.ts",
       "description": "Gentle-Vanguard Sync Runner - Syncs managed assets from the gentle-vanguard manifest"
     },
     {
@@ -255,7 +255,7 @@
   "newInThisVersion": [
     {
       "type": "script",
-      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/collect-provider-telemetry.ps1",
+      "path": "src/collect-provider-telemetry.ts",
       "description": "Real provider telemetry collection with latency/status probing"
     },
     {
@@ -265,13 +265,13 @@
     },
     {
       "type": "script",
-      "path": "scripts/utilities/TELEMETRY-METRICS/generate-dashboard.ps1",
+      "path": "src/generate-dashboard.ts",
       "description": "Dashboard PDF/PNG export buttons and config-driven thresholds"
     }
   ],
   "migrationNotes": [
     "cloud-agents.local.json is now gitignored - create from cloud-agents.local.example",
-    "PreTool hooks install to ~/.pretool-hooks/ via bootstrap-machine.ps1",
+    "PreTool hooks install to ~/.pretool-hooks/ via npx tsx src/bootstrap-machine.ts",
     "Gentle-Vanguard operates with Opencode + judgment-day for code review",
     "Scripts reorganized into subdirectories: AI-AGENT-MANAGEMENT, UTILITIES, SKILLS-TOOLS, TELEMETRY-METRICS, PERFORMANCE-OPTIMIZATION, DEPLOYMENT, WORKFLOW-ORCHESTRATION"
   ]

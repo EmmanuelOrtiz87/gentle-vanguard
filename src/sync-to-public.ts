@@ -25,7 +25,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { execSync } from 'child_process';
+import { runSyncShell } from './core/run-command.js';
 
 interface SyncOptions {
   privateRepo: string;
@@ -318,7 +318,7 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
 function pushToAllBranches(opts: SyncOptions): void {
   const { publicRepo } = opts;
   const run = (cmd: string, cwd?: string): string =>
-    execSync(cmd, { cwd: cwd ?? publicRepo, encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
+    runSyncShell(cmd, { cwd: cwd ?? publicRepo, stdio: ['pipe', 'pipe', 'pipe'] }).stdout;
 
   try {
     run('git fetch origin --prune');

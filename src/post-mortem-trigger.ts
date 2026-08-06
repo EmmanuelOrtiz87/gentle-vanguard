@@ -10,7 +10,7 @@
  *   npx tsx src/post-mortem-trigger.ts --incident "DB down" --severity critical
  */
 
-import { spawnSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { resolve, join } from 'path';
 
@@ -70,10 +70,10 @@ function extractArg(args: string[], name: string): string | undefined {
 
 function runSelfDiagnosis(): Record<string, unknown> {
   try {
-    const result = spawnSync(
+    const result = runSync(
       process.execPath,
       ['--experimental-specifier-resolution=node', '--loader', 'tsx', resolve(process.cwd(), 'src/self-diagnosis.ts'), '--json'],
-      { encoding: 'utf8', timeout: 15000 }
+      { timeout: 15000 }
     );
     if (result.status === 0) {
       return JSON.parse(result.stdout);

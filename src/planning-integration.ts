@@ -4,7 +4,7 @@
  * TS migration of scripts/utilities/planning/planning-integration.ps1
  */
 
-import { execSync } from 'child_process';
+import { runSync, runSyncShell } from './core/run-command.js';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -44,7 +44,7 @@ function loadConfig(): PlanningConfig {
 
 function getGitDiffStats(): { files: number; insertions: number; deletions: number } {
   try {
-    const diffStat = execSync('git diff --stat --cached 2>/dev/null || git diff --stat', { encoding: 'utf-8' });
+    const diffStat = runSyncShell('git diff --stat --cached 2>/dev/null || git diff --stat').stdout;
     const lines = diffStat.split('\n');
     const summaryLine = lines.find(l => l.includes('changed') && l.includes('insertions'));
     
@@ -75,7 +75,7 @@ function getDiffComplexityHint(files: number): number {
 
 function inferTaskTypeFromBranch(): string {
   try {
-    const branch = execSync('git branch --show-current', { encoding: 'utf-8' }).trim();
+    const branch = runSync('git', ['branch', '--show-current']).stdout.trim();
     if (branch.startsWith('feature/') || branch.startsWith('feat/')) return 'feature';
     if (branch.startsWith('bugfix/') || branch.startsWith('fix/')) return 'bugfix';
     if (branch.startsWith('refactor/')) return 'refactor';

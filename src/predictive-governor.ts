@@ -15,7 +15,7 @@
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { execSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 import { pathToFileURL } from 'url';
 
 // ─── Types ────────────────────────────────────────────────────────────
@@ -250,10 +250,10 @@ function getCodegraphAge(): number | null {
   const indexPath = join(CODE_GRAPH_DIR, 'codegraph.db');
   if (!existsSync(indexPath)) return null;
   try {
-    const stat = execSync(
-      `powershell -Command "(Get-Item '${indexPath}').LastWriteTime.ToString('o')"`,
-      { cwd: ROOT, encoding: 'utf-8', timeout: 5000, windowsHide: true }
-    ).trim();
+    const stat = runSync(
+      'powershell', ['-Command', `(Get-Item '${indexPath}').LastWriteTime.ToString('o')`],
+      { cwd: ROOT, timeout: 5000 }
+    ).stdout.trim();
     const mtime = new Date(stat).getTime();
     return Math.round((Date.now() - mtime) / 60000); // age in minutes
   } catch {

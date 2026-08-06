@@ -1,0 +1,22 @@
+{
+  "name": "cloud-agent-connector",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "cloud-agent-connector Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "## Purpose\n\nEnable Gentle-Vanguard to delegate tasks to high-performance cloud models while maintaining\nsecurity, traceability, and strict tool-use protocols.\n\n## Execution Modes\n\n### 1. Command Mode (Single task)\n\n```powershell\n.\\scripts\\utilities\\invoke-cloud-agent.ps1 -Provider openai -Command \"Explain REST pagination\"\n```\n\n### 2. Script Mode (Execute file)\n\n```powershell\n.\\scripts\\utilities\\invoke-cloud-agent.ps1 -Provider openai -Script \".\\tasks\\analyze.ps1\"\n```\n\n### 3. Interactive Mode (Manual)\n\n```powershell\n.\\scripts\\utilities\\invoke-cloud-agent.ps1 -Interactive\n```\n\n### 4. Agent Mode (Delegated task)\n\n```powershell\n.\\scripts\\utilities\\invoke-cloud-agent.ps1 -Provider anthropic -Agent \"Refactor auth module\"\n```\n\n### 5. Strict JSON Mode (Automation)\n\n```powershell\n.\\scripts\\utilities\\invoke-cloud-agent.ps1 -Provider openai -StrictJson -Command \"Return JSON\"\n```\n\n## Supported Providers\n\n| Provider            | Env Variable                                           | Use Case                       |\n| ------------------- | ------------------------------------------------------ | ------------------------------ |\n| AWS Bedrock (proxy) | Proxy-specific credentials (`auth_type: proxy_signed`) | Claude on AWS via signed proxy |\n| OpenAI              | OPENAI_API_KEY                                         | GPT models                     |\n| Anthropic           | ANTHROPIC_API_KEY                                      | Direct Claude                  |\n| Azure               | AZURE_OPENAI_KEY                                       | GPT on Azure                   |\n| Difi                | DIFI_API_KEY                                           | Custom platform                |\n| Ollama              | None (local)                                           | Local models                   |\n\n## Security Model\n\n### Secret Management Hierarchy\n\n1. **Environment variables** (highest security) - For production\n2. **cloud-agents.local.json** (gitignored) - For provider metadata only (no secrets)\n3. **config/cloud-agents.json** (committed) - Template only\n\n### Configuration Files\n\n```\nconfig/\n cloud-agents.json          # SHARED template (no secrets)\n cloud-agents.local.json    # LOCAL provider metadata (GITIGNORED)\n```\n\n## Protocol: Preventing \"Narration Errors\"\n\nAlways use `-StrictJson` flag for automation:\n\n```powershell\n.\\scripts\\utilities\\invoke-cloud-agent.ps1 -Provider openai -StrictJson -Command \"...\"\n```\n\nThis injects:\n\n> \"STRICT MODE: You are an execution engine. Return ONLY valid JSON tool calls. No narration.\"\n\n## Workflow\n\n1. **Load Config:** Read from `cloud-agents.local.json` or `config/cloud-agents.json`\n2. **Auth:** Inject API keys from environment\n3. **Dispatch:** Send with default `temperature=0.1` (configurable) and optional strict JSON mode\n4. **Validate:** Prefer strict JSON mode (`-StrictJson`) and validate responses in caller workflows\n5. **Log:** Record runtime telemetry to `.runtime/telemetry/cloud-agent-telemetry.csv`\n\n## Quick Commands\n\n```powershell\ninvoke-cloud-agent.ps1 -ListProviders    # Show all providers\ninvoke-cloud-agent.ps1 -TestConnection    # Test current provider\ninvoke-cloud-agent.ps1 -Config           # Interactive config\n```",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

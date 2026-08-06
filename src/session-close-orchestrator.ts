@@ -18,9 +18,14 @@
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync } from 'fs';
 import { join, resolve, relative } from 'path';
-import { spawnSync, execSync } from 'child_process';
+import { runSync, runSyncShell, runNpxTsxSync } from './core/run-command.js';
 import http from 'http';
 import { pathToFileURL } from 'url';
+import { sessionEnd } from './engram-session-bridge.js';
+
+// ─── Guardian Protection ────────────────────────────────────────────────────────
+// Importa protección contra cierres informales
+import { guardianCheck, detectInformalClosure, learnFromMistake } from './session-close-guardian.js';
 
 const ROOT = resolve(process.cwd());
 const SESSION_DIR = join(ROOT, '.session');
@@ -61,8 +66,13 @@ function runScript(script: string, args: string[], timeout = 60000): { status: n
   const fullPath = join(ROOT, script);
   if (!existsSync(fullPath)) return { status: -1, stdout: '' };
   try {
-    const r = spawnSync('npx', ['tsx', fullPath, ...args], { cwd: ROOT, stdio: 'pipe', timeout, maxBuffer: 1024 * 1024 });
-    return { status: r.status ?? -1, stdout: (r.stdout?.toString() ?? '') };
+    const r = runNpxTsxSync(fullPath, args, {
+      cwd: ROOT,
+      stdio: 'pipe',
+      timeout,
+      maxBuffer: 1024 * 1024,
+    });
+    return { status: r.status ?? -1, stdout: r.stdout };
   } catch {
     return { status: -1, stdout: '' };
   }
@@ -70,8 +80,8 @@ function runScript(script: string, args: string[], timeout = 60000): { status: n
 
 function runCmd(cmd: string, args: string[], timeout = 30000): { status: number; stdout: string } {
   try {
-    const r = spawnSync(cmd, args, { cwd: ROOT, stdio: 'pipe', timeout, maxBuffer: 1024 * 1024 });
-    return { status: r.status ?? -1, stdout: (r.stdout?.toString() ?? '') };
+    const r = runSync(cmd, args, { cwd: ROOT, stdio: 'pipe', timeout, maxBuffer: 1024 * 1024 });
+    return { status: r.status ?? -1, stdout: r.stdout };
   } catch {
     return { status: -1, stdout: '' };
   }
@@ -98,7 +108,21 @@ function phasePreClose(reason: string): PhaseResult[] {
     warn(`Timestamp write failed: ${msg}`);
   }
 
-  // 1.2 Close tracing span (resilient — find any .jsonl span file)
+  // 1.2 Detect previous informal close attempt marker (.informal-close-attempt)
+  const informalMarker = join(SESSION_DIR, '.informal-close-attempt');
+  if (existsSync(informalMarker)) {
+    let detail = 'Informal close marker found: sesión previa cerrada fuera del protocolo oficial';
+    try {
+      const markerData = JSON.parse(readFileSync(informalMarker, 'utf-8')) as Record<string, unknown>;
+      if (markerData.reason) detail += ` (reason: ${String(markerData.reason)})`;
+    } catch { /* keep generic detail if marker is not valid JSON */ }
+    results.push({ phase: 'informal-close-attempt', status: 'SKIP', detail });
+    warn(`Informal close attempt marker detected at ${informalMarker} — review guardian-warnings.log`);
+  } else {
+    results.push({ phase: 'informal-close-attempt', status: 'PASS', detail: 'No informal close marker found' });
+  }
+
+  // 1.3 Close tracing span (resilient — find any .jsonl span file)
   const spanDir = join(ROOT, '.telemetry', 'spans');
   if (existsSync(spanDir)) {
     try {
@@ -160,9 +184,9 @@ function getAllFiles(dir: string, ext: string): string[] {
 
 function getChangedFiles(): Set<string> {
   try {
-    const r = spawnSync('git', ['diff', '--name-only', 'HEAD'], { cwd: ROOT, stdio: 'pipe', timeout: 10000 });
+    const r = runSync('git', ['diff', '--name-only', 'HEAD'], { cwd: ROOT, stdio: 'pipe', timeout: 10000 });
     if (r.status === 0) {
-      return new Set(r.stdout.toString().split('\n').filter(l => l.trim()).map(l => l.trim()));
+      return new Set(r.stdout.split('\n').filter(l => l.trim()).map(l => l.trim()));
     }
   } catch { /* fallback */ }
   return new Set();
@@ -180,11 +204,13 @@ function phasePreValidate(): PhaseResult[] {
 
     for (const file of srcFiles) {
       const content = readFileSync(file, 'utf-8');
-      // Strip comments to avoid false positives from JSDoc examples
+      // Strip comments AND template literals to avoid false positives
       const codeOnly = content
         .replace(/\/\/.*$/gm, '')
-        .replace(/\/\*[\s\S]*?\*\//g, '');
-      const importRegex = /from\s+['"](\.[^'"]+)['"]/g;
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/`[\s\S]*?`/g, '');  // Remove template literals (includes import strings)
+      // Only match actual ES6 import statements at line start
+      const importRegex = /^\s*import\s+.*?\s+from\s+['"](\.[^'"]+)['"];?\s*$/gm;
       let match: RegExpExecArray | null;
 
       while ((match = importRegex.exec(codeOnly)) !== null) {
@@ -278,74 +304,56 @@ async function phasePersist(reason: string): Promise<PhaseResult[]> {
   const results: PhaseResult[] = [];
   log('=== FASE 2: PERSIST ===');
 
-  // 2.1 Save engram session summary — official HTTP API (POST /sessions/{id}/end).
-  // Per gentle-ai alignment: the stack session lifecycle is registered by the
-  // official OpenCode plugin (engram setup opencode); this phase only persists
-  // the stack session's summary via the documented HTTP endpoint. Skips
-  // gracefully when the engram server is not reachable (non-blocking).
+  // 2.1 Save engram session summary — UNIFIED BRIDGE (MCP + HTTP fallback).
+  // Funciona en TODAS las herramientas (OpenCode, Claude, Cline, Cursor, etc.)
+  // NO depende del plugin OpenCode automático — usa llamadas MCP explícitas
   const sessionData = readSessionData();
   const sessionId = String(sessionData.sessionId || sessionData.id || 'unknown');
-  const summaryContent = [
-    `## Goal`,
-    sessionData.goal ? String(sessionData.goal) : `Session completed with reason: ${reason}`,
-    ``,
-    `## Discoveries`,
-    ...(Array.isArray(sessionData.discoveries) ? sessionData.discoveries.map((d: unknown) => `- ${d}`) : [`- Session completed`]),
-    ``,
-    `## Accomplished`,
-    ...(Array.isArray(sessionData.accomplished) ? sessionData.accomplished.map((a: unknown) => `- ✅ ${a}`) : [`- ✅ Session ${reason} completed`]),
-    ``,
-    `## Next Steps`,
-    `- Review session artifacts in .session/`,
-    `- Verify Nexus DB health with npm run db:health`,
-    ``,
-    `## Relevant Files`,
-    `- .session/session-current.json`,
-    `- .runtime/gentle-vanguard.db`,
-    `- .engram-data/`,
-  ].join('\n');
-
-  const engramPort = Number(process.env.ENGRAM_PORT || 7437);
-
-  // Minimal HTTP POST to 127.0.0.1:{port} using Node native http (no CLI).
-  const postSummary = (): Promise<boolean> =>
-    new Promise((resolveP) => {
-      const payload = JSON.stringify({ summary: summaryContent });
-      const req = http.request(
-        {
-          host: '127.0.0.1',
-          port: engramPort,
-          path: `/sessions/${encodeURIComponent(sessionId)}/end`,
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) },
-          timeout: 3000,
-        },
-        (res) => {
-          res.resume();
-          resolveP(res.statusCode === 200 || res.statusCode === 201);
-        },
-      );
-      req.on('error', () => resolveP(false));
-      req.on('timeout', () => {
-        req.destroy();
-        resolveP(false);
-      });
-      req.write(payload);
-      req.end();
-    });
+  
+  const summary = {
+    goal: sessionData.goal ? String(sessionData.goal) : `Session completed with reason: ${reason}`,
+    discoveries: Array.isArray(sessionData.discoveries) 
+      ? sessionData.discoveries.map((d: unknown) => String(d)) 
+      : ['Session completed'],
+    accomplished: Array.isArray(sessionData.accomplished) 
+      ? sessionData.accomplished.map((a: unknown) => String(a)) 
+      : [`Session ${reason} completed`],
+    nextSteps: [
+      'Review session artifacts in .session/',
+      'Verify Nexus DB health with npm run db:health'
+    ]
+  };
 
   try {
-    const saved = await postSummary();
-    if (saved) {
-      results.push({ phase: 'engram-summary', status: 'PASS', detail: `Summary saved via POST /sessions/${sessionId}/end` });
-      ok('Engram session summary saved');
+    // Usar bridge unificado que intenta MCP primero, luego HTTP fallback
+    const engramResult = await sessionEnd(sessionId, summary);
+    
+    if (engramResult.mcpSuccess) {
+      results.push({ 
+        phase: 'engram-summary', 
+        status: 'PASS', 
+        detail: `Session closed via MCP (MCP: ${engramResult.mcpSuccess}, HTTP: ${engramResult.httpSuccess})` 
+      });
+      ok('Engram session closed successfully');
+    } else if (engramResult.httpSuccess) {
+      results.push({ 
+        phase: 'engram-summary', 
+        status: 'PASS', 
+        detail: `Session closed via HTTP fallback` 
+      });
+      ok('Engram session closed via HTTP');
     } else {
-      results.push({ phase: 'engram-summary', status: 'SKIP', detail: 'Engram server not reachable — summary handled by agent MCP mem_session_summary' });
+      results.push({ 
+        phase: 'engram-summary', 
+        status: 'SKIP', 
+        detail: `Engram not reachable: ${engramResult.error || 'Unknown error'} (non-blocking)` 
+      });
+      warn(`Engram session close skipped: ${engramResult.error || 'Unknown'}`);
     }
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'Unknown error';
     results.push({ phase: 'engram-summary', status: 'SKIP', detail: msg });
-    warn(`Engram summary skipped: ${msg}`);
+    warn(`Engram session close error: ${msg}`);
   }
 
   // 2.2 Save session scoring
@@ -376,17 +384,48 @@ async function phasePersist(reason: string): Promise<PhaseResult[]> {
     detail: er.status === 0 ? 'Event recorded' : `Exit: ${er.status}`
   });
 
-  // 2.4 Save final token metrics
-  const tm = runScript('src/token-metrics-store.ts', [
+  // 2.4 Save final token metrics (close summary with segmented totals)
+  const closeTokenArgs = [
     '--action', 'close',
     '--session-id', String(sessionData.sessionId || sessionData.id || 'unknown'),
-    '--quiet'
-  ], 15000);
-  results.push({
-    phase: 'token-metrics',
-    status: tm.status === 0 ? 'PASS' : 'SKIP',
-    detail: tm.status === 0 ? 'Metrics stored' : 'Token metrics store skipped'
-  });
+  ];
+  const tm = runScript('src/token-metrics-store.ts', closeTokenArgs, 15000);
+  const closeSummaryFile = join(SESSION_DIR, 'token-close-summary.json');
+  if (existsSync(closeSummaryFile)) {
+    try {
+      const summary = JSON.parse(readFileSync(closeSummaryFile, 'utf-8')) as Record<string, unknown>;
+      const seg = `in=${summary.input_tokens} out=${summary.output_tokens} total=${summary.total_tokens} cost=$${Number(summary.cost_usd ?? 0).toFixed(4)} (${summary.source})`;
+      results.push({
+        phase: 'token-metrics',
+        status: tm.status === 0 ? 'PASS' : 'SKIP',
+        detail: `Metrics stored — ${seg}`,
+      });
+      console.log('');
+      console.log('══════════════════════════════════════════════════════');
+      console.log('  SESSION TOKEN SUMMARY');
+      console.log('══════════════════════════════════════════════════════');
+      console.log(`  Session:    ${summary.session_id}`);
+      console.log(`  Input:      ${Number(summary.input_tokens ?? 0).toLocaleString()} tokens`);
+      console.log(`  Output:     ${Number(summary.output_tokens ?? 0).toLocaleString()} tokens`);
+      console.log(`  Total:      ${Number(summary.total_tokens ?? 0).toLocaleString()} tokens`);
+      console.log(`  Cost:       $${Number(summary.cost_usd ?? 0).toFixed(4)} USD`);
+      console.log(`  Source:     ${summary.source}`);
+      console.log('══════════════════════════════════════════════════════');
+      console.log('');
+    } catch {
+      results.push({
+        phase: 'token-metrics',
+        status: tm.status === 0 ? 'PASS' : 'SKIP',
+        detail: tm.status === 0 ? 'Metrics stored' : 'Token metrics store skipped',
+      });
+    }
+  } else {
+    results.push({
+      phase: 'token-metrics',
+      status: tm.status === 0 ? 'PASS' : 'SKIP',
+      detail: tm.status === 0 ? 'Metrics stored' : 'Token metrics store skipped',
+    });
+  }
 
   return results;
 }
@@ -502,14 +541,15 @@ function killProcessByCommandLine(matcher: string): boolean {
       //     (protects the whole process tree: npx → tsx → orchestrator)
       const selfName = 'session-close-orchestrator';
       const psCmd = `Get-CimInstance Win32_Process -Filter "Name='node.exe' OR Name='tsx.exe'" | Where-Object { $_.CommandLine -match '${matcher}' -and $_.ProcessId -ne ${process.pid} -and $_.ProcessId -ne ${process.ppid ?? -1} -and $_.CommandLine -notmatch '${selfName}' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force; Write-Output "Killed PID $($_.ProcessId)" }`;
-      const r = execSync(`powershell -NoProfile -Command "${psCmd.replace(/"/g, '\\"')}"`, { timeout: 15000, stdio: 'pipe', encoding: 'utf-8' });
-      const out = (r as string).toString().trim();
+      const r = runSync('powershell', ['-NoProfile', '-Command', psCmd], { timeout: 15000, stdio: 'pipe' });
+      const out = r.stdout.trim();
       return out.length > 0; // true if at least one process was killed
     } else {
       // Unix: use pkill -f, excluding the current process
-      try { execSync(`pkill -f "${matcher}"`, { timeout: 10000, stdio: 'pipe' }); } catch { /* ignore */ }
+      runSyncShell(`pkill -f "${matcher}"`, { timeout: 10000, stdio: 'pipe' });
       // Verify if any matching processes (other than self) were killed
-      try { execSync(`pgrep -f "${matcher}"`, { timeout: 5000 }); return false; } catch { return true; }
+      const pgrep = runSyncShell(`pgrep -f "${matcher}"`, { timeout: 5000 });
+      return pgrep.status !== 0;
     }
   } catch {
     return false;
@@ -622,9 +662,17 @@ function phaseVerify(): PhaseResult[] {
     detail: healthy ? 'Nexus DB healthy' : 'Nexus DB may have issues'
   });
 
-  // 6.3 Verify checkpoint exists
+  // 6.3 Verify checkpoint exists (ckpt-* are directories, not .json files)
   const ckptDir = join(SESSION_DIR, 'checkpoints');
-  const ckpts = existsSync(ckptDir) ? readdirSync(ckptDir).filter(f => f.endsWith('.json')) : [];
+  const ckpts: string[] = [];
+  if (existsSync(ckptDir)) {
+    const entries = readdirSync(ckptDir, { withFileTypes: true });
+    for (const entry of entries) {
+      if (entry.isDirectory() && entry.name.startsWith('ckpt-')) {
+        ckpts.push(entry.name);
+      }
+    }
+  }
   results.push({
     phase: 'checkpoint-exists',
     status: ckpts.length > 0 ? 'PASS' : 'SKIP',
@@ -734,7 +782,16 @@ export async function runCloseOrchestrator(reason = 'session-end'): Promise<Clos
 
 async function main() {
   const args = process.argv.slice(2);
-  
+
+  // ─── Guardian Protection ────────────────────────────────────────────────────
+  // Detect previous informal close attempts before proceeding with the official
+  // close protocol. If a prior informal attempt is detected, record the learning
+  // so the pattern is registered for future sessions.
+  const guardian = guardianCheck();
+  if (!guardian.passed) {
+    learnFromMistake(`Orchestrator invoked after informal close attempt: ${guardian.warning || 'unknown reason'}`);
+  }
+
   // Lightweight mode for session-start cleanup (skip pre-validate, backup, audit, verify)
   if (args.includes('--lightweight') || args.includes('-l')) {
     let reason = 'startup-cleanup';

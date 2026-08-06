@@ -1,0 +1,20 @@
+{
+  "type": "function",
+  "function": {
+    "name": "git_workflow_skill",
+    "description": "Use when managing git branches, commits, pull requests, merge conflicts, or git workflows. Triggers: \"git branch\", \"git merge\", \"conflict\", \"pull request\", \"commit\", \"rebase\", \"cherry-pick\", \"stash\".",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "type": "string",
+          "description": "Task to execute"
+        }
+      },
+      "required": [
+        "task"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

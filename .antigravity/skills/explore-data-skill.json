@@ -1,0 +1,22 @@
+{
+  "name": "explore-data-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "explore-data-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# /explore-data - Profile and Explore a Dataset\n\n> If you see unfamiliar placeholders or need to check which tools are connected, see\n> [CONNECTORS.md](../../CONNECTORS.md).\n\nGenerate a comprehensive data profile for a table or uploaded file. Understand its shape, quality,\nand patterns before diving into analysis.\n\n## Usage\n\n```\n/explore-data <table_name or file>\n```\n\n## Workflow\n\n### 1. Access the Data\n\n**If a data warehouse MCP server is connected:** resolve table name, query metadata, run profiling queries.\n\n**If a file is provided (CSV, Excel, Parquet, JSON):** read file, infer column types.\n\n**If neither:** ask user for a table name or file upload.\n\n### 2. Understand Structure\n\nAnalyze table-level: row/column count, grain, primary key, last updated, date range.\n\nClassify columns: **Identifier**, **Dimension**, **Metric**, **Temporal**, **Text**, **Boolean**, **Structural**.\n\n### 3. Generate Data Profile\n\nRun profiling per column type. See [references/quality-assessment-framework.md] for rating guides.\n\n**Numeric:** min, max, mean, median, stddev, percentiles (p1/p5/p25/p75/p95/p99), zero/negative counts.\n\n**String:** min/max/avg length, empty count, pattern/case/whitespace analysis.\n\n**Date:** min/max, nulls, future dates, monthly/weekly distribution, gaps.\n\n**Boolean:** true/false/null counts, true rate.\n\n### 4. Identify Data Quality Issues\n\nFlag: high null rates (>5% warn, >20% alert), unexpected cardinality, suspicious values, duplicate natural keys, distribution skew, encoding issues. See [references/quality-assessment-framework.md].\n\n### 5. Discover Relationships and Patterns\n\nForeign key candidates, hierarchies, correlations, derived/redundant columns. See [references/pattern-discovery.md].\n\n### 6. Suggest Interesting Dimensions and Metrics\n\nRecommend best dimension columns (3-50 values), key metrics, time columns, natural groupings, potential join keys.\n\n### 7. Recommend Follow-Up Analyses\n\nSuggest 3-5 specific analyses: trend, distribution deep-dive, data quality investigation, correlation, cohort analysis.\n\n## Output Format\n\n```\n## Data Profile: [table_name]\n\n### Overview\n- Rows: 2,340,891\n- Columns: 23 (8 dimensions, 6 metrics, 4 dates, 5 IDs)\n- Date range: 2021-03-15 to 2024-01-22\n\n### Column Details\n[summary table]\n\n### Data Quality Issues\n[flagged issues with severity]\n\n### Recommended Explorations\n[numbered list of suggested follow-up analyses]\n```\n\n## Reference Files\n\n- [references/quality-assessment-framework.md] — completeness, consistency, accuracy, timeliness\n- [references/pattern-discovery.md] — distribution, temporal patterns, segmentation, correlation\n- [references/schema-documentation.md] — schema template, exploration queries, lineage",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

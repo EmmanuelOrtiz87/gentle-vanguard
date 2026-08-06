@@ -1,0 +1,22 @@
+{
+  "name": "e2e-testing-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "e2e-testing-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# E2E Testing\n\nEnd-to-end testing with Playwright and Cypress.\n\n## Tool Choice\n\n| Factor             | Playwright                | Cypress                   |\n| ------------------ | ------------------------- | ------------------------- |\n| Language           | JS/TS, Python, C#, Java   | JS/TS only                |\n| Browser support    | Chromium, Firefox, WebKit | Chromium, Firefox, WebKit |\n| Iframe support     | Native                    | Limited                   |\n| Network mocking    | Route API                 | intercept()               |\n| Parallel execution | Built-in                  | Dashboard required        |\n\n## Playwright Patterns\n\n### Selector Strategy (Priority Order)\n\n1. `getByRole()` — best for accessibility\n2. `getByText()` — for text content\n3. `getByTestId()` — for complex components\n4. `getByLabel()` — for form fields\n5. `locator(CSS)` — last resort\n\n### Test Structure\n\n```typescript\ntest.describe('Checkout Flow', () => {\n  test('completes purchase with valid card', async ({ page }) => {\n    await page.goto('/products');\n    await page.getByText('Add to Cart').first().click();\n    await page.getByRole('button', { name: 'Checkout' }).click();\n    await page.getByLabel('Card Number').fill('4242424242424242');\n    await page.getByRole('button', { name: 'Pay' }).click();\n    await expect(page.getByText('Thank you')).toBeVisible();\n  });\n});\n```\n\n## Visual Testing\n\n- Use `await expect(page).toHaveScreenshot()`\n- Maintain baseline screenshots in version control\n- Run visual tests on CI with 1% threshold\n- Use percy.io or Chromatic for cloud-based visual review\n\n## CI Integration\n\n```yaml\n# GitHub Actions\n- name: E2E Tests\n  run: npx playwright test\n- uses: actions/upload-artifact\n  if: failure()\n  with:\n    name: playwright-report\n    path: playwright-report/\n```",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

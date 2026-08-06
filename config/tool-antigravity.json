@@ -15,7 +15,7 @@
     "status": "ready"
   },
   "hooks": {
-    "preToolCall": "scripts/utilities/pre-process-input.ps1",
+    "preToolCall": "src/pre-process-input.ts",
     "sessionStart": "scripts/utilities/session-autostart.cmd",
     "sessionStartPlatform": {
       "windows": "scripts/utilities/session-autostart.cmd",

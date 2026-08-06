@@ -51,7 +51,7 @@
   "preProcessing": {
     "enabled": true,
     "mandatory": true,
-    "script": "scripts/utilities/pre-process-input.ps1",
+    "script": "npx tsx src/pre-process-input.ts",
     "scriptArgs": { "UserInput": "USER_INPUT_HERE", "WorkspaceRoot": "." },
     "fallbackBehavior": "continue"
   },
@@ -73,7 +73,7 @@
   },
   "adaptiveOptimization": {
     "enabled": true,
-    "controller": "scripts/utilities/adaptive-antigravity-profile.ps1",
+    "controller": "npx tsx src/adaptive-codex-windsurf-profile.ts",
     "mode": "temporary",
     "autoRestore": true
   },

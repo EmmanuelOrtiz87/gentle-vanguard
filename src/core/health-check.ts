@@ -2,7 +2,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { spawnSync } from 'child_process';
+import { runSync, runNpxTsxSync } from '../../adapters/command-runner.js';
 import * as net from 'net';
 import { getEffectiveProcessTimeout } from './timeout-config';
 import { printBanner } from '../cli/banner.js';
@@ -33,16 +33,11 @@ function bin(name: string): string {
 }
 
 function spawnPortable(command: string, args: string[], timeout: number, maxBuffer?: number) {
-  const opts: any = {
-    cwd: ROOT,
-    stdio: 'pipe',
-    timeout,
-    maxBuffer: maxBuffer || 1024 * 1024, // 1MB default
-  };
+  const opts: any = { cwd: ROOT, timeout, maxBuffer: maxBuffer || 1024 * 1024 };
   if (process.platform === 'win32' && command.endsWith('.cmd')) {
-    return spawnSync(process.env.ComSpec || 'cmd.exe', ['/c', command, ...args], opts);
+    return runSync(process.env.ComSpec || 'cmd.exe', ['/c', command, ...args], opts);
   }
-  return spawnSync(command, args, opts);
+  return runSync(command, args, opts);
 }
 
 function readJson(...parts: string[]) {
@@ -84,8 +79,12 @@ function checkMCP() {
   writeCheck('MCP TS exists', fs.existsSync(mcpTs), 'scripts/mcp/skill-server.ts');
   if (!fs.existsSync(mcpJs)) return;
   try {
-    // Use npx to resolve tsc — reliable on both Unix and Windows
-    const r = spawnPortable(bin('npx'), ['tsc', '--noEmit', '--noEmitOnError'], getEffectiveProcessTimeout('tsc'));
+    // Fixed: Use tsconfig.json scope and skipLibCheck to avoid node_modules errors
+    const r = spawnPortable(
+      bin('npx'),
+      ['tsc', '--noEmit', '--noEmitOnError', '-p', 'tsconfig.json', '--skipLibCheck'],
+      getEffectiveProcessTimeout('tsc')
+    );
     writeCheck('MCP TS compiles clean', r.status === 0);
   } catch {
     writeCheck('MCP TS compiles clean', false);
@@ -104,8 +103,8 @@ function checkMCP() {
       }),
       JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} }),
     ].join('\n') + '\n';
-    const r = spawnSync('node', [mcpJs], { input, stdio: ['pipe', 'pipe', 'pipe'], timeout: getEffectiveProcessTimeout('default'), maxBuffer: 1024 * 1024 });
-    const allOutput = ((r.stdout || '').toString()) + '\n' + ((r.stderr || '').toString());
+    const r = runSync('node', [mcpJs], { cwd: ROOT, timeout: getEffectiveProcessTimeout('default'), maxBuffer: 1024 * 1024, env: process.env, });
+    const allOutput = (r.stdout ?? '') + '\n' + (r.stderr ?? '');
     const lines = allOutput.split('\n').filter((l) => l.trim());
     let toolsCount = 0;
     for (const line of lines) {
@@ -123,7 +122,7 @@ function checkTeamMode() {
   const tsScript = 'src/team-orchestrator.ts';
   writeCheck('Team Orchestrator (TS)', exists(tsScript), tsScript);
   if (exists(tsScript)) {
-    const r = tryRunTs(tsScript, ['--task', 'health-check']);
+    const r = runNpxTsxSync(tsScript, ['--task', 'health-check'], { cwd: ROOT, timeout: getEffectiveProcessTimeout('default') });
     writeCheck('Team orchestrator responds', r.status === 0);
   }
 }
@@ -236,11 +235,10 @@ async function checkEngramRag() {
   header('Engram RAG Index');
   writeCheck('engram-rag-reindex.ts exists', exists('src/engram-rag-reindex.ts'), 'src/engram-rag-reindex.ts');
   try {
-    // Use spawnSync with shell:true for reliable Windows execution
-    const r = spawnSync(process.platform === 'win32' ? 'cmd.exe' : 'engram',
-      process.platform === 'win32' ? ['/c', 'engram', 'doctor', '--json'] : ['doctor', '--json'],
-      { cwd: ROOT, stdio: 'pipe', timeout: getEffectiveProcessTimeout('health_check'), maxBuffer: 1024 * 1024 });
-    const output = (r.stdout?.toString() ?? '') + (r.stderr?.toString() ?? '');
+    const r = process.platform === 'win32'
+      ? runSync(process.env.ComSpec || 'cmd.exe', ['/c', 'engram', 'doctor', '--json'], { cwd: ROOT, timeout: getEffectiveProcessTimeout('health_check'), maxBuffer: 1024 * 1024 })
+      : runSync('engram', ['doctor', '--json'], { cwd: ROOT, timeout: getEffectiveProcessTimeout('health_check'), maxBuffer: 1024 * 1024 });
+    const output = (r.stdout ?? '') + (r.stderr ?? '');
     const healthy = output.includes('"status":"ok"') || output.includes('"status": "ok"') || output.includes('Engram Doctor: ok');
     writeCheck('engram doctor', healthy);
   } catch (e: unknown) {
@@ -252,20 +250,27 @@ async function checkDashboardV3() {
   header('Dashboard v3');
   const dashboardDir = path.resolve(ROOT, 'apps/web-dashboard');
   writeCheck('apps/web-dashboard exists', fs.existsSync(dashboardDir));
-  let wsPort = 8080;
-  const portsPath = path.resolve(ROOT, '.runtime', 'dashboard-ports.json');
-  if (fs.existsSync(portsPath)) {
-    try {
-      const ports = JSON.parse(fs.readFileSync(portsPath, 'utf-8'));
-      if (typeof ports.wsPort === 'number') wsPort = ports.wsPort;
-    } catch {
-      // Keep default.
-    }
+  
+  // Import and use the new robust health checker
+  const { checkDashboardHealth } = await import('../dashboard-health-checker.js');
+  const health = await checkDashboardHealth(8080, 5173);
+  
+  // Map the health result to pass/fail
+  switch (health.status) {
+    case 'healthy':
+      writeCheck(`dashboard WS server (port ${health.port})`, true, `HTTP API responding, Vite:${health.vitePort}`);
+      writeCheck('dashboard dev server', true, `Vite running on ${health.vitePort}`);
+      break;
+    case 'degraded':
+      // Degraded means the port is open but HTTP API not working
+      writeCheck(`dashboard WS server (port ${health.port})`, false, 'TCP open but HTTP API not responding');
+      writeCheck('dashboard dev server', health.vitePort === 5173, health.vitePort === 5173 ? 'running' : 'not running');
+      break;
+    case 'down':
+      writeCheck(`dashboard WS server (port ${health.port})`, false, 'Not responding');
+      writeCheck('dashboard dev server', false, 'Not running');
+      break;
   }
-  const wsOpen = await tcpCheck(wsPort);
-  writeCheck(`dashboard WS server (port ${wsPort})`, wsOpen);
-  const viteOpen = await tcpCheck(5173);
-  writeCheck('dashboard dev server optional (port 5173)', true, viteOpen ? 'running' : 'not running; WS backend is healthy');
 }
 
 function checkMcpBridge() {

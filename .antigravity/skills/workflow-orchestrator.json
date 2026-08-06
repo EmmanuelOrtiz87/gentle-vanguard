@@ -1,0 +1,22 @@
+{
+  "name": "workflow-orchestrator",
+  "version": "1.0.0",
+  "description": "",
+  "triggers": [],
+  "mission": {
+    "name": "workflow-orchestrator Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Workflow Orchestrator Skill\n\n## Activation Contract\n\nLoad when user mentions \"workflow\"/\"flujo de trabajo\", needs to automate complex multi-step\nprocesses, workflow complexity exceeds 5 dependent tasks, autonomous execution needed, or error\nrecovery required.\n\n## Hard Rules\n\n- Tasks MUST execute in dependency order (DAG topological sort)\n- NEVER execute a task whose dependencies have not completed\n- Circular dependencies are forbidden — detect and reject\n- Every workflow MUST have state tracking and error recovery strategy\n\n## Decision Gates\n\n| Recovery Strategy | Behavior                                  |\n| ----------------- | ----------------------------------------- |\n| Retry             | Retry up to 3 times with 5s delay         |\n| Skip              | Log warning, continue to next task        |\n| Rollback          | Execute rollback actions in reverse order |\n| Alert             | Notify without stopping                   |\n\n| Schedule Strategy | Behavior                                     |\n| ----------------- | -------------------------------------------- |\n| OptimalTime       | Based on system load                         |\n| ASAP              | Execute immediately when resources available |\n| Scheduled         | Use predefined schedule time                 |\n\n## Execution Steps\n\n1. Define workflow as DAG with Name, Tasks, Dependencies\n2. Detect and reject circular dependencies\n3. Resolve execution order via topological sort (level-order)\n4. For each ready task: execute action, track state, handle errors per strategy\n5. Pass data between tasks (output → input for dependents)\n6. Collect metrics: duration, success rate, anomalies\n\n## Output Contract\n\n- State tracking per task: Name, Status, StartTime, EndTime, Result\n- Workflow metrics: TotalDuration, SuccessRate, anomalies\n- On failure: rollback state with rolled-back task list\n\n## References\n\n- Full code, examples, tables: [references/code.md](references/code.md)",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

@@ -16,8 +16,14 @@
   "preProcessing": {
     "enabled": true,
     "mandatory": true,
-    "script": "scripts/utilities/pre-process-input.ps1",
-    "scriptArgs": { "UserInput": "USER_INPUT_HERE", "WorkspaceRoot": "." }
+    "script": "src/pre-process-input.ts",
+    "scriptArgs": { "UserInput": "USER_INPUT_HERE", "WorkspaceRoot": "." },
+    "adaptiveSteps": {
+      "enabled": true,
+      "baseline": 24,
+      "autoScale": true,
+      "maxSteps": 80
+    }
   },
   "rules": {
     "paths": [
@@ -35,8 +41,13 @@
     "autoSave": true
   },
   "sessionManagement": {
-    "autostart": "scripts/utilities/session-autostart.cmd",
-    "project": "gentle-vanguard"
+    "autostart": "npm run session:autostart:detached",
+    "project": "gentle-vanguard",
+    "adaptiveSteps": {
+      "enabled": true,
+      "orchestrator": 24,
+      "subagents": "auto"
+    }
   },
   "language": { "default": "es", "technicalTerms": "en" },
   "governanceLayers": {

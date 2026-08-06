@@ -1,0 +1,22 @@
+{
+  "name": "cross-workspace-sync",
+  "version": "1.0.0",
+  "description": "Cross-workspace synchronization skill for maintaining consistency across projects",
+  "triggers": [],
+  "mission": {
+    "name": "cross-workspace-sync Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Skill: cross-workspace-sync\n\n**versión**: 1.0.0 **Created**: 2026-04-20 **Status**: ACTIVE **Priority**: MEDIUM\n\n---\n\n## Overview\n\nThe `cross-workspace-sync` skill provides intelligent synchronization between multiple workspaces\nwith advanced conflict resolution and consistency validation. It enables seamless data replication\nacross workspace boundaries.\n\n### Key Capabilities\n\n- Multiple sync modes (One-way, Two-way, Selective, Smart)\n- Intelligent conflict resolution strategies\n- Advanced change detection\n- Pre/Post sync validation\n- Consistency monitoring and drift detection\n\n---\n\n## When to Use This Skill\n\n### Activation Triggers\n\n- User mentions \"sync workspaces\" or \"sincronizar workspaces\"\n- User asks to \"resolve conflict\" or \"resolver conflicto\"\n- Working with multiple workspaces simultaneously\n- Consistency validation needed\n- Cross-workspace data migration\n\n### Use Cases\n\n1. **Multi-Workspace Sync**: \"Sincronizar datos entre workspace A y B\"\n2. **Conflict Resolution**: \"Hay conflictos en la sincronizacin, cmo resolver?\"\n3. **Selective Sync**: \"Sincronizar solo archivos .config entre workspaces\"\n4. **Consistency Check**: \"Verificar que los datos estn sincronizados\"\n5. **Automated Monitoring**: \"Monitorear cambios entre workspaces\"\n\n---\n\n## Core Components\n\n### 1. Sync Modes\n\n#### One-Way Sync\n\n```powershell\n$syncConfig = @{\n    Mode = \"OneWay\"\n    Source = \"C:\\Workspace-A\"\n    Destination = \"C:\\Workspace-B\"\n    Direction = \"Forward\"\n    DeleteMissing = $false\n    Overwrite = $true\n}\n```\n\n#### Two-Way Sync\n\n```powershell\n$syncConfig = @{\n    Mode = \"TwoWay\"\n    Workspace1 = \"C:\\Workspace-A\"\n    Workspace2 = \"C:\\Workspace-B\"\n    ConflictStrategy = \"Newest-Wins\"\n    PreserveDeletes = $true\n}\n```\n\n#### Selective Sync\n\n```powershell\n$syncConfig = @{\n    Mode = \"Selective\"\n    Source = \"C:\\Workspace-A\"\n    Destination = \"C:\\Workspace-B\"\n    IncludePatterns = @(\"*.config\", \"*.json\", \"*.yaml\")\n    ExcludePatterns = @(\"*.tmp\", \"*.log\", \".git*\")\n    Recursive = $true\n}\n```\n\n#### Smart Sync\n\n```powershell\n$syncConfig = @{\n    Mode = \"Smart\"\n    Workspace1 = \"C:\\Workspace-A\"\n    Workspace2 = \"C:\\Workspace-B\"\n    ChangeDetection = \"Hash\"\n    IncrementalOnly = $true\n    DeltaSync = $true\n}\n```\n\n---\n\n---\n\n> **Referencia detallada**: [ eferences/detail.md](references/detail.md)",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

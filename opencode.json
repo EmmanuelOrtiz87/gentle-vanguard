@@ -11,7 +11,7 @@
           "*": "allow"
         }
       },
-      "steps": 12
+      "steps": 24
     },
     "sdd-explore": {
       "description": "BA exploration agent — requirements gathering and analysis",
@@ -21,7 +21,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 38,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -33,7 +33,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 30,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -45,7 +45,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 52,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -57,7 +57,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 36,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -69,7 +69,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 34,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -81,7 +81,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 30,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -94,7 +94,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6
+      "steps": 38
     },
     "session-agent": {
       "description": "Session management agent — state tracking and lifecycle",
@@ -104,7 +104,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 25,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -116,7 +116,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 30,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -128,7 +128,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 30,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -140,7 +140,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 30,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -152,7 +152,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 38,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -164,7 +164,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 25,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -176,7 +176,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 20,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -188,7 +188,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 20,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -200,7 +200,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 20,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -212,7 +212,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 20,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -224,7 +224,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 20,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -236,7 +236,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 20,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     },
@@ -248,7 +248,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 35,
       "model": "opencode/deepseek-v4-flash-free",
       "variant": ""
     }
@@ -294,8 +294,9 @@
   "default_agent": "orchestrator",
   "share": "manual",
   "compaction": {
-    "auto": true,
-    "prune": true
+    "auto": false,
+    "prune": false,
+    "note": "Disabled for Kimi2-5 compatibility — causes model hang on compaction injection"
   },
   "watcher": {
     "ignore": [

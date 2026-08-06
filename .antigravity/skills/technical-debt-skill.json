@@ -1,0 +1,22 @@
+{
+  "name": "technical-debt-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "technical-debt-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "## When to Use\n\n- Auditing a codebase for maintainability issues\n- Prioritizing debt remediation work\n- Proposing refactors with business justification\n- Documenting architectural erosion, coupling, or duplication\n\n## Debt Categories\n\n| Type                    | Examples                                             | Risk                     |\n| ----------------------- | ---------------------------------------------------- | ------------------------ |\n| **Code debt**           | Duplicated logic, poor abstractions, magic numbers   | Bugs, slow development   |\n| **Architecture debt**   | Monolith that should be split, wrong data store      | Scaling limits           |\n| **Test debt**           | Low coverage, flaky tests, missing integration tests | Regressions ship         |\n| **Dependency debt**     | Outdated libraries, unmaintained dependencies        | Security vulns           |\n| **Documentation debt**  | Missing runbooks, outdated READMEs, tribal knowledge | Onboarding pain          |\n| **Infrastructure debt** | Manual deploys, no monitoring, no IaC                | Incidents, slow recovery |\n| **Operational debt**    | Missing alerts, manual processes, poor observability | Slow incident response   |\n\n## Prioritization Model\n\nRank debt by:\n\n1. **Impact × Risk × (6 − Effort)** — Score each item on Impact (1-5), Risk (1-5), Effort (1-5,\n   inverted). Formula: Priority = (Impact + Risk) × (6 - Effort)\n2. **Delivery drag**: how much it slows feature work\n3. **Incident risk**: how likely it causes failures\n4. **Change frequency**: how often the area changes\n5. **Blast radius**: how much breaks if it fails\n\nAddress debt where all four are high.\n\n## Debt Record Template\n\n```markdown\n# Debt Record: {title}\n\n## Problem\n\n{What is wrong now?}\n\n## Impact\n\n- Delivery drag:\n- Risk:\n- Scope:\n\n## Evidence\n\n- Files/modules:\n- Incidents/bugs:\n- Test gaps:\n\n## Remediation Options\n\n1. Minimal containment\n2. Local refactor\n3. Broader redesign\n\n## Recommendation\n\n{Chosen path and why}\n```\n\n## Anti-Patterns\n\n- \"We'll clean it up later\" without a debt record\n- Bundling debt cleanup into unrelated features with no scope control\n- Large refactors without specs, tests, or rollback plan\n- Treating documentation debt as low priority when onboarding or incident recovery suffers\n\n# hook-test: verify multi-file hook with -Command",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

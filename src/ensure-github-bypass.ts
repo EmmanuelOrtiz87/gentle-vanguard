@@ -6,18 +6,16 @@
  * TS migration of scripts/utilities/session/SESSION-MANAGEMENT/ensure-github-bypass.ps1
  */
 
-import { execSync } from 'child_process';
+import { runSyncShell } from './core/run-command.js';
 import { pathToFileURL } from 'url';
 import { getEffectiveProcessTimeout } from './core/timeout-config';
 
 function run(cmd: string, opts: { quiet?: boolean } = {}): string {
   try {
-    return execSync(cmd, {
-      encoding: 'utf-8',
+    return runSyncShell(cmd, {
       timeout: getEffectiveProcessTimeout('default'),
-      windowsHide: true,
-      stdio: opts.quiet ? 'pipe' : 'pipe',
-    }).trim();
+      stdio: 'pipe',
+    }).stdout.trim();
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : String(e);
     throw new Error(msg);

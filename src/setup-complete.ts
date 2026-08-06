@@ -2,7 +2,7 @@
 
 import { existsSync, mkdirSync, writeFileSync, readdirSync, statSync, copyFileSync, appendFileSync } from 'fs';
 import { join, resolve, dirname } from 'path';
-import { spawnSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 import { fileURLToPath } from 'url';
 import { homedir, platform } from 'os';
 
@@ -57,12 +57,12 @@ function writeError(msg: string): void {
 }
 
 function cmdExists(cmd: string): boolean {
-  const result = spawnSync(platform() === 'win32' ? 'where' : 'which', [cmd], { encoding: 'utf-8', stdio: 'pipe' });
+  const result = runSync(platform() === 'win32' ? 'where' : 'which', [cmd], { stdio: 'pipe' });
   return result.status === 0;
 }
 
 function runCmd(cmd: string, args: string[], cwd?: string): { stdout: string; stderr: string; status: number | null } {
-  const result = spawnSync(cmd, args, { encoding: 'utf-8', stdio: 'pipe', cwd });
+  const result = runSync(cmd, args, { stdio: 'pipe', cwd });
   return { stdout: (result.stdout ?? '').trim(), stderr: (result.stderr ?? '').trim(), status: result.status };
 }
 

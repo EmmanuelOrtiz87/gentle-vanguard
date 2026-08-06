@@ -43,7 +43,7 @@ tasks/
 cp ../supplementary/TASK-BRIEF.template.md task-name.md
 
 # Or generate via workflow CLI
-.\scripts\utilities\gv.ps1 task-brief <task-name>
+.\scripts\utilities\src/cli/gv.ts task-brief <task-name>
 ```
 
 ### Task Brief Components#
@@ -85,7 +85,7 @@ Each task brief should include:
 - ✅ For any significant work that spans multiple sessions
 - ✅ When tackling complex problems requiring detailed planning
 - ✅ For tasks that others might need to understand or take over
-- ✅ As part of the session workflow (`gv.ps1 start-session [task-name]`)
+- ✅ As part of the session workflow (`src/cli/gv.ts start-session [task-name]`)
 
 ---
 
@@ -112,5 +112,5 @@ Each task brief should include:
 
 <p align="center">
   <b>📋 Ready to create a task brief?</b><br>
-  <code>.\scripts\utilities\gv.ps1 task-brief &lt;task-name&gt;</code>
+  <code>.\scripts\utilities\src/cli/gv.ts task-brief &lt;task-name&gt;</code>
 </p>

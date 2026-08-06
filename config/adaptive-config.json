@@ -2,7 +2,7 @@
   "adaptiveRules": {
     "enabled": true,
     "compressionRatio": 0.9,
-    "preCompactHook": "scripts/utilities/pre-compact-hook.ps1",
+    "preCompactHook": "src/pre-compact-hook.ts",
     "handoffCompress": true,
     "tiers": {
       "hot": {

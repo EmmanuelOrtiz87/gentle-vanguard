@@ -18,7 +18,7 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { execSync } from 'child_process';
+import { runSync, runSyncShell } from '../core/run-command.js';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -111,7 +111,7 @@ function log(message: string, level: 'INFO' | 'WARN' | 'ERROR' | 'SUCCESS' = 'IN
 
 function getCurrentSha(): string {
   try {
-    return execSync('git rev-parse HEAD', { encoding: 'utf-8', cwd: ROOT }).trim();
+    return runSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT }).stdout.trim();
   } catch (err) {
     throw new Error(`Failed to get current SHA: ${err instanceof Error ? err.message : String(err)}`);
   }
@@ -120,7 +120,7 @@ function getCurrentSha(): string {
 function getTreeSha(sha?: string): string {
   try {
     const target = sha || 'HEAD';
-    return execSync(`git rev-parse ${target}^{tree}`, { encoding: 'utf-8', cwd: ROOT }).trim();
+    return runSync('git', ['rev-parse', `${target}^{tree}`], { cwd: ROOT }).stdout.trim();
   } catch (err) {
     throw new Error(`Failed to get tree SHA: ${err instanceof Error ? err.message : String(err)}`);
   }
@@ -155,10 +155,9 @@ function findLatestReceipt(): ReceiptData | null {
   }
   
   try {
-    const files = execSync('ls -t *.json 2>/dev/null || dir /b /o-d *.json 2>nul', { 
-      encoding: 'utf-8', 
-      cwd: receiptsDir 
-    }).trim().split('\n');
+    const files = runSyncShell('ls -t *.json 2>/dev/null || dir /b /o-d *.json 2>nul', {
+      cwd: receiptsDir,
+    }).stdout.trim().split('\n');
     
     if (files.length === 0 || files[0] === '') {
       return null;
@@ -229,7 +228,7 @@ export function validateGate(
     case 'pre-push': {
       // pre-push: verify commit history includes reviewed SHA
       try {
-        execSync(`git merge-base --is-ancestor ${candidateSha} HEAD`, { cwd: ROOT });
+        runSync('git', ['merge-base', '--is-ancestor', candidateSha, 'HEAD'], { cwd: ROOT });
       } catch {
         errors.push(`Candidate ${candidateSha.slice(0, 7)} not in current history`);
         errors.push('Reviewed commit may have been rebased or lost');
@@ -249,10 +248,10 @@ export function validateGate(
       
       // Check for unreviewed commits
       try {
-        const unreviewed = execSync(
-          `git log ${candidateSha}..HEAD --oneline --no-decorate`,
-          { encoding: 'utf-8', cwd: ROOT }
-        ).trim();
+        const unreviewed = runSync(
+          'git', ['log', `${candidateSha}..HEAD`, '--oneline', '--no-decorate'],
+          { cwd: ROOT }
+        ).stdout.trim();
         
         if (unreviewed) {
           const count = unreviewed.split('\n').filter(l => l).length;
@@ -366,7 +365,7 @@ npm run rdd:gate -- pre-push || exit 1
   
   // Make executable (Unix only)
   try {
-    execSync(`chmod +x ${join(hooksDir, 'pre-commit')} ${join(hooksDir, 'pre-push')}`);
+    runSyncShell(`chmod +x ${join(hooksDir, 'pre-commit')} ${join(hooksDir, 'pre-push')}`);
   } catch {
     // Windows doesn't need chmod
   }
@@ -442,10 +441,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
             // Find latest for each gate
             for (const gate of gates) {
               try {
-                const files = execSync(`ls -t ${gate}-*.json 2>/dev/null || echo ""`, { 
-                  encoding: 'utf-8', 
-                  cwd: GATES_DIR 
-                }).trim();
+                const files = runSyncShell(`ls -t ${gate}-*.json 2>/dev/null || echo ""`, {
+                  cwd: GATES_DIR,
+                }).stdout.trim();
                 
                 if (files) {
                   const latestFile = files.split('\n')[0];

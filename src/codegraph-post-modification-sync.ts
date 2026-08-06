@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { execSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 import { existsSync } from 'fs';
 import { join, resolve } from 'path';
 
@@ -66,7 +66,10 @@ function main(): void {
   let changedFiles = 0;
   if (args.trigger === 'post-commit' || args.trigger === 'git') {
     try {
-      const gitStatus = execSync(`git -C "${repoRoot}" status --porcelain`, { encoding: 'utf8', stdio: 'pipe' }).trim();
+      const gitStatus = runSync('git', ['-C', repoRoot, 'status', '--porcelain'], {
+        cwd: repoRoot,
+        stdio: 'pipe',
+      }).stdout.trim();
       const lines = gitStatus.split('\n').filter(Boolean);
       changedFiles = lines.filter(l => /^\s*[MADRC]/.test(l)).length;
     } catch {
@@ -77,7 +80,8 @@ function main(): void {
   if (args.force || changedFiles >= args.minChangesThreshold || args.trigger === 'manual' || args.trigger === 'branch-switch') {
     console.log(`[INFO] Syncing CodeGraph index (trigger: ${args.trigger}, changed: ${changedFiles} files)...`);
     try {
-      execSync('codegraph sync', { stdio: 'pipe' });
+      const sync = runSync('codegraph', ['sync'], { stdio: 'pipe' });
+      if (sync.error && sync.status === null) throw sync.error;
       writeResult('OK', `CodeGraph index synced (trigger: ${args.trigger}, ${changedFiles} changed files)`, args.asJson, { changedFiles, trigger: args.trigger });
     } catch (e) {
       const exitCode = (e as { status?: number }).status;

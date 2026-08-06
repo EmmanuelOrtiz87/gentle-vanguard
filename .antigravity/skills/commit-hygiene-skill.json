@@ -1,0 +1,22 @@
+{
+  "name": "commit-hygiene",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "commit-hygiene Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Commit Hygiene Skill\n\n## Purpose\n\nEnforce conventional commits format and maintain a clean, readable git history.\n\n## Format\n\n```\ntype(scope): description\n```\n\nValidated by regex:\n\n```\n^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\\([a-z0-9\\._-]+\\))?!?: .+\n```\n\n## Valid Types\n\n| Type     | Use For                                 |\n| -------- | --------------------------------------- |\n| feat     | New feature or behavior                 |\n| fix      | Bug fix                                 |\n| docs     | Documentation only                      |\n| chore    | Maintenance, dependencies, tooling      |\n| refactor | Restructuring without behavior change   |\n| test     | Adding or fixing tests                  |\n| ci       | CI/CD pipeline changes                  |\n| style    | Formatting, whitespace, no logic change |\n| perf     | Performance improvement                 |\n| build    | Build system, Makefile changes          |\n| revert   | Reverting a previous commit             |\n\n## Critical Rules\n\n- One logical change per commit\n- Use imperative mood: \"add\" not \"added\"\n- Keep subject line 72 characters\n- Reference issue numbers when relevant: `feat(auth): add JWT support (#123)`\n- If commit needs explanation, add body separated by blank line\n\n## Anti-patterns\n\n```\n# BAD  vague\nupdate stuff\n\n# BAD  multiple concerns\nfeat: add login and fix bug and update docs\n\n# BAD  past tense\nfix: fixed the cache issue\n```\n\n## Pre-commit Validation\n\nUse `invoke-ai-review.ps1` with commit-msg hook:\n\n```powershell\n.\\invoke-ai-review.ps1 install --commit-msg\n```",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

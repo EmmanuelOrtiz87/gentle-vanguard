@@ -23,7 +23,7 @@
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { execSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 import { pathToFileURL } from 'url';
 
 // ─── Types ────────────────────────────────────────────────────────────
@@ -265,10 +265,10 @@ function getMetricsSummary(): Record<string, number> {
 function getGitActivity(): { commits: number; changedFiles: number; recentMessages: string[] } {
   try {
     const since = new Date(Date.now() - 14 * 86400000).toISOString().slice(0, 10);
-    const log = execSync(
-      `git log --since="${since}" --format="%s" --name-only`,
-      { cwd: ROOT, encoding: 'utf-8', timeout: 5000, windowsHide: true }
-    ).trim();
+    const log = runSync(
+      'git', ['log', `--since=${since}`, '--format=%s', '--name-only'],
+      { cwd: ROOT, timeout: 5000 }
+    ).stdout.trim();
     if (!log) return { commits: 0, changedFiles: 0, recentMessages: [] };
     const sections = log.split('\n\n');
     const messages = sections.map(s => s.split('\n')[0]).filter(Boolean);

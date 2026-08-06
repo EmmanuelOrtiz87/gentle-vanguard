@@ -14,7 +14,7 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync, watchFile } from 'fs';
 import { resolve, dirname, basename } from 'path';
-import { execSync } from 'child_process';
+import { runSyncShell } from './core/run-command.js';
 
 interface BrandConfig {
   name: string;
@@ -200,8 +200,8 @@ function main(): void {
 
   // Also regenerate SVG banners
   try {
-    execSync(`npx tsx src/cli/svg-generator.ts --brand "${args.brand}" 2>nul`, {
-      encoding: 'utf8', timeout: 30000, stdio: ['pipe', 'pipe', 'ignore'],
+    runSyncShell(`npx tsx src/cli/svg-generator.ts --brand "${args.brand}" 2>nul`, {
+      timeout: 30000, stdio: ['pipe', 'pipe', 'ignore'],
     });
     generated.push({
       path: resolve(process.cwd(), 'assets/'),

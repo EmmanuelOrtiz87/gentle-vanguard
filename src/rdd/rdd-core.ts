@@ -13,7 +13,7 @@
  */
 
 import { pathToFileURL } from 'url';
-import { execSync } from 'child_process';
+import { runSync, runSyncShell, runNpxTsxSync } from '../core/run-command.js';
 import { join, resolve } from 'path';
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 
@@ -66,7 +66,7 @@ function log(message: string, level: 'INFO' | 'WARN' | 'ERROR' | 'SUCCESS' = 'IN
 // ─── Workflow Management ──────────────────────────────────────────────────────
 
 function generateWorkflowId(): string {
-  const sha = execSync('git rev-parse --short HEAD', { encoding: 'utf-8', cwd: ROOT }).trim();
+  const sha = runSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: ROOT }).stdout.trim();
   return `rdd-${sha}-${Date.now()}`;
 }
 
@@ -117,10 +117,9 @@ function loadLatestWorkflow(): RDDWorkflow | null {
   if (!existsSync(RDD_DIR)) return null;
   
   try {
-    const files = execSync('ls -t *.json 2>/dev/null || echo ""', { 
-      encoding: 'utf-8', 
-      cwd: RDD_DIR 
-    }).trim().split('\n').filter(f => f);
+    const files = runSyncShell('ls -t *.json 2>/dev/null || echo ""', {
+      cwd: RDD_DIR,
+    }).stdout.trim().split('\n').filter(f => f);
     
     if (files.length === 0) return null;
     
@@ -197,17 +196,15 @@ async function stepReceipt(workflow: RDDWorkflow): Promise<RDDWorkflow> {
   
   try {
     // Run receipt manager
-    execSync('npx tsx scripts/utilities/ops/REVIEW/receipt-manager.ts create --approved', {
-      encoding: 'utf-8',
+    runNpxTsxSync('scripts/utilities/ops/REVIEW/receipt-manager.ts', ['create', '--approved'], {
       cwd: ROOT,
     });
     
     // Find the created receipt
     const receiptsDir = join(ROOT, '.session', 'receipts');
-    const files = execSync('ls -t *.json 2>/dev/null || echo ""', { 
-      encoding: 'utf-8', 
-      cwd: receiptsDir 
-    }).trim().split('\n').filter(f => f);
+    const files = runSyncShell('ls -t *.json 2>/dev/null || echo ""', {
+      cwd: receiptsDir,
+    }).stdout.trim().split('\n').filter(f => f);
     
     if (files.length > 0) {
       const receiptData = JSON.parse(readFileSync(join(receiptsDir, files[0]), 'utf-8'));
@@ -237,8 +234,7 @@ async function stepGate(workflow: RDDWorkflow, gate: string): Promise<RDDWorkflo
   log(`Validating ${gate} gate...`, 'INFO');
   
   try {
-    execSync(`npx tsx src/rdd/rdd-gates.ts validate ${gate} --receipt=${workflow.receipt.id}`, {
-      encoding: 'utf-8',
+    runNpxTsxSync('src/rdd/rdd-gates.ts', ['validate', gate, `--receipt=${workflow.receipt.id}`], {
       cwd: ROOT,
     });
     

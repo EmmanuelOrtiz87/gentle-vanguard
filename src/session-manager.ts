@@ -18,7 +18,7 @@
  */
 import { existsSync } from 'fs';
 import { join, resolve } from 'path';
-import { spawnSync } from 'child_process';
+import { runNpxTsxSync } from './core/run-command.js';
 
 const ROOT = resolve(process.cwd());
 
@@ -37,14 +37,14 @@ function run(): void {
   // Delegate to session-cleanup-start.ts (startup cleanup)
   const targetPath = join(ROOT, 'src', 'session-cleanup-start.ts');
   if (existsSync(targetPath)) {
-    const npxArgs: string[] = ['tsx', targetPath];
-    if (quiet) npxArgs.push('-Quiet');
+    const tsArgs: string[] = [];
+    if (quiet) tsArgs.push('-Quiet');
     if (lightweight) {
-      npxArgs.push('-SkipOrphanCleanup');
-      npxArgs.push('-SkipCompression');
+      tsArgs.push('-SkipOrphanCleanup');
+      tsArgs.push('-SkipCompression');
     }
 
-    const result = spawnSync('npx', npxArgs, { stdio: 'inherit', cwd: ROOT, shell: true });
+    const result = runNpxTsxSync(targetPath, tsArgs, { stdio: 'inherit', cwd: ROOT });
     process.exit(result.status ?? 0);
   } else {
     console.warn('[session-manager] Target not found:', targetPath);

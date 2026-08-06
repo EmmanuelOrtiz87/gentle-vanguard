@@ -67,7 +67,7 @@
         "description": "Low confidence \u00e2\u20ac\u201d activate BA before dispatching"
       }
     },
-    "_comment": "Consumed by auto-delegate-orchestrator.ps1 Invoke-TieredRouting"
+    "_comment": "Consumed by src/auto-delegation-orchestrator.ts via tiered-routing logic"
   },
   "thresholds": {
     "highConfidence": 80,
@@ -95,7 +95,7 @@
     "GITFLOW-WORKFLOW": "git-workflow-and-versioning",
     "GITFLOW-COMMIT": "git-workflow-and-versioning",
     "GITFLOW-CONFLICT": "git-workflow-and-versioning",
-    "SELF-DIAG": "debugging-and-error-recovery",
+    "SELF-DIAG": "self-diag",
     "DAILY": "planning-and-task-breakdown",
     "MKT": "marketing-content-writer",
     "SALES": "sales-account-executive",
@@ -108,9 +108,8 @@
     "SIA": "spec-driven-development",
     "MAINTENANCE": "maintenance",
     "GITFLOW": "gitflow",
-    "KNOWLEDGE": "knowledge",
-    "SELF-DIAG": "self-diag",
-    "KNOWLEDGE": "knowledge-base"
+    "KNOWLEDGE": "knowledge-base",
+    "SELF-DIAG": "self-diag"
   },
   "skillToAgentProfile": {
     "maintenance-skill": "MAINTENANCE",

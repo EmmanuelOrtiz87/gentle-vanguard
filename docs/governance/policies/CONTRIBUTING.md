@@ -41,10 +41,10 @@ git checkout -b feat/your-feature-name
 ./scripts/project/init-workspace.ps1
 
 # Validate your changes
-./scripts/gentle-vanguard/gv.ps1 validate
+./scripts/gentle-vanguard/src/cli/gv.ts validate
 
 # Check workflow health
-./scripts/utilities/gv.ps1 health
+./src/cli/gv.ts health
 ```
 
 ### 4. Make Changes
@@ -88,7 +88,7 @@ git commit -m "docs(readme): update installation guide"
 
 ```bash
 # Validate workspace
-./scripts/gentle-vanguard/gv.ps1 validate
+./scripts/gentle-vanguard/src/cli/gv.ts validate
 
 # Test specific functionality
 ./scripts/project/new-project.ps1 --name test-project --kind service
@@ -158,10 +158,10 @@ gentle-vanguard/
 
 | Script                                                      | Purpose                                   |
 | ----------------------------------------------------------- | ----------------------------------------- |
-| `scripts/gentle-vanguard/gv.ps1 init`                       | Initialize workspace                      |
+| `scripts/gentle-vanguard/src/cli/gv.ts init`                       | Initialize workspace                      |
 | `scripts/project/new-project.ps1 -Name <name> -Kind <kind>` | Create new project                        |
-| `scripts/gentle-vanguard/gv.ps1 validate`                   | Validate workspace                        |
-| `scripts/utilities/gv.ps1 health`                           | Check tool activation and workflow health |
+| `scripts/gentle-vanguard/src/cli/gv.ts validate`                   | Validate workspace                        |
+| `src/cli/gv.ts health`                           | Check tool activation and workflow health |
 | `scripts/validation/validate-project.ps1`                   | Run repository validation gate            |
 
 ## Questions?

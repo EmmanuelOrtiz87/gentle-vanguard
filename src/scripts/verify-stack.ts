@@ -12,7 +12,7 @@
  *   - Performance monitoring
  */
 
-import { execSync } from 'child_process';
+import { runSyncShell } from '../core/run-command.js';
 import { getTimeoutConfig, getTimeout } from '../core/timeout-config';
 import { trackExecution, getPerformanceMetrics } from '../core/timeout-monitor';
 import { getResilienceConfig } from '../core/resilience-bridge';
@@ -48,17 +48,12 @@ function check(name: string, fn: () => boolean | Promise<boolean>, timeoutMs = 3
 }
 
 function exec(cmd: string, opts?: { cwd?: string; timeout?: number }): { code: number; output: string } {
-  try {
-    const out = execSync(cmd, {
-      encoding: 'utf-8',
-      timeout: opts?.timeout ?? 60000,
-      stdio: 'pipe',
-      cwd: opts?.cwd,
-    });
-    return { code: 0, output: out };
-  } catch (e: any) {
-    return { code: e.status ?? 1, output: e.stdout ?? e.message };
-  }
+  const r = runSyncShell(cmd, {
+    timeout: opts?.timeout ?? 60000,
+    stdio: 'pipe',
+    cwd: opts?.cwd,
+  });
+  return { code: r.status ?? 1, output: r.stdout || r.stderr };
 }
 
 function printSection(title: string): void {

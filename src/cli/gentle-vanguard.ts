@@ -11,7 +11,7 @@
  *   npx tsx src/cli/gentle-vanguard.ts --help        Show help
  */
 
-import { execSync, spawn } from 'child_process';
+import { run, runSync, runSyncShell } from '../../adapters/command-runner.js';
 import { existsSync } from 'fs';
 import { join, resolve } from 'path';
 
@@ -69,22 +69,26 @@ async function main(): Promise<void> {
     }
 
     // Start the WebSocket server
-    const wsServer = spawn('npx.cmd', ['tsx', 'apps/web-dashboard/server/websocket-server.ts'], {
+    const wsServer = run('npx', ['tsx', 'apps/web-dashboard/server/websocket-server.ts'], {
       cwd: ROOT,
       stdio: 'pipe',
-      shell: true,
     });
     wsServer.stdout?.on('data', (d: Buffer) => process.stdout.write(`[WS] ${d}`));
     wsServer.stderr?.on('data', (d: Buffer) => process.stderr.write(`[WS] ${d}`));
 
     // Start the Vite dev server
     console.log('Opening browser at http://localhost:5173');
-    execSync(`start http://localhost:5173`, { stdio: 'ignore', timeout: 5000 });
+    if (process.platform === 'win32') {
+      runSyncShell('start http://localhost:5173', { timeout: 5000 });
+    } else if (process.platform === 'darwin') {
+      runSync('open', ['http://localhost:5173'], { timeout: 5000 });
+    } else {
+      runSync('xdg-open', ['http://localhost:5173'], { timeout: 5000 });
+    }
 
-    const vite = spawn('pnpm', ['dev'], {
+    const vite = run('pnpm', ['dev'], {
       cwd: dashboardPath,
       stdio: 'inherit',
-      shell: true,
     });
 
     vite.on('close', (code: number | null) => {

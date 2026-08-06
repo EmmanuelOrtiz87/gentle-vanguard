@@ -15,7 +15,7 @@
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { execSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 import { pathToFileURL } from 'url';
 import { getEffectiveProcessTimeout } from './core/timeout-config';
 
@@ -145,10 +145,10 @@ function collectConfigChanges(log: LogFn): DecisionChange[] {
       const cfgPath = join(CONFIG_DIR, cfg);
       if (!existsSync(cfgPath)) continue;
       try {
-        const logOut = execSync(
-          `git log --since="${since}" --format="%aI|%s" -- "${cfgPath}"`,
-          { cwd: ROOT, encoding: 'utf-8', timeout: getEffectiveProcessTimeout('default'), windowsHide: true }
-        ).trim();
+        const logOut = runSync(
+          'git', ['log', `--since=${since}`, '--format=%aI|%s', '--', cfgPath],
+          { cwd: ROOT, timeout: getEffectiveProcessTimeout('default') }
+        ).stdout.trim();
         if (logOut) {
           for (const line of logOut.split('\n')) {
             const parts = line.split('|');

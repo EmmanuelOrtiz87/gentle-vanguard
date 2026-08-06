@@ -1,0 +1,22 @@
+{
+  "name": "adr-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "adr-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Architecture Decision Records\n\nCapture architectural decisions systematically so your team understands not just *what* was decided, but *why* — and what alternatives were considered.\n\n## Core Principles\n\n### 1. Decisions Are More Important Than Diagrams\nA diagram shows the current architecture. An ADR explains *why* it is that way.\n\n### 2. Capture Context, Not Just Conclusions\nIf you only record the conclusion, future engineers will wonder if you considered the obvious alternative.\n\n### 3. Lightweight Is Sustainable\nA structured 1-page record is infinitely better than nothing. If the process is heavy, people won't follow it.\n\n### 4. Accept and Track Superseded Decisions\nArchitecture evolves. Old ADRs remain valuable as historical records of the team's thinking.\n\n## ADR Maturity Model\n\n| Level | Capture | Storage | Review | Enforcement |\n| ----- | ------- | ------- | ------ | ----------- |\n| **1: Tribal** | Decisions in Slack/meetings | Nobody remembers | None | None |\n| **2: Documented** | Some decisions written down | Shared drive or wiki | Sporadic | None |\n| **3: Systematic** | All significant decisions as ADRs | In repository alongside code | PR review requires ADR for arch changes | Basic: \"needs ADR\" check |\n| **4: Integrated** | ADRs linked to implementation | Searchable, indexed, cross-referenced | Mandatory ADR review for arch changes | Automated: lint checks for ADR format |\n| **5: Governance** | ADRs drive architecture reviews | Catalog with status dashboard | Regular architecture review board | Automated compliance checks |\n\nTarget: **Level 3** for most teams. **Level 4+** for regulated or long-lived systems.\n\n## Usage\n\nWhen asked to create or review an ADR, use the standard template below. For detailed guidance on workflows, alternative templates, governance, and tooling, see the reference files in `references/`.\n\n### Standard ADR Template\n\n```markdown\n# ADR-{NNN}: {Title}\n\n## Status\n\n[Proposed | Accepted | Deprecated | Superseded]\n\n_If Superseded, list the replacing ADR: Superseded by ADR-{NNN}_\n\n## Context\n\n{Describe the problem, constraints, and forces at play.}\n\n## Decision\n\n{State the decision clearly. What are we doing? What are we NOT doing?}\n\n## Consequences\n\n{List the positive and negative consequences. What tradeoffs are we accepting?}\n\n## Alternatives Considered\n\n{List alternatives and why they were rejected.}\n\n### Option A: {Name}\n- **Pros**: ...\n- **Cons**: ...\n- **Why rejected**: ...\n\n### Option B: {Name}\n- **Pros**: ...\n- **Cons**: ...\n- **Why rejected**: ...\n\n## Compliance\n\n{How will we verify this decision is followed?}\n```\n\n## Common Mistakes\n\n1. **Writing ADRs after implementation** — capture before or during, not months later.\n2. **No alternatives section** — this is the most valuable part for future readers.\n3. **Status never updated** — keep status current (Superseded/Deprecated are valid).\n4. **ADRs stored outside the repository** — keep ADRs with the code they describe.\n5. **Too many ADRs for trivial decisions** — reserve for meaningful architectural choices.\n6. **No review process** — ADRs nobody reads might as well not exist.\n\n---\n\n*See `references/adr-workflow.md` for the full workflow, `references/adr-templates.md` for lightweight/Y-statement/rejected templates, and `references/adr-advanced.md` for governance, linting, tools, and change tracking.*",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

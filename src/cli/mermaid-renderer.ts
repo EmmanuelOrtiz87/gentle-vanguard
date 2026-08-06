@@ -15,7 +15,7 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync } from 'fs';
 import { join, extname, basename, dirname } from 'path';
-import { execSync } from 'child_process';
+import { runSyncShell } from '../core/run-command.js';
 
 const args = process.argv.slice(2);
 
@@ -65,8 +65,8 @@ function resolveTheme(t: string): string {
  */
 function hasMmdc(): boolean {
   try {
-    execSync('npx.cmd mmdc --version', { stdio: 'pipe', timeout: 10000 });
-    return true;
+    const r = runSyncShell('npx.cmd mmdc --version', { stdio: 'pipe', timeout: 10000 });
+    return r.status === 0;
   } catch {
     return false;
   }
@@ -81,11 +81,11 @@ function renderWithMmdc(inputFile: string, outputFile: string): boolean {
   const width = options.width;
 
   try {
-    execSync(
+    const r = runSyncShell(
       `npx.cmd mmdc -i "${inputFile}" -o "${outputFile}" -t ${theme} -b ${bgColor} -w ${width}`,
       { stdio: 'pipe', timeout: 60000 }
     );
-    return true;
+    return r.status === 0;
   } catch (e) {
     err(`mmdc render failed for ${basename(inputFile)}: ${(e as Error).message}`);
     return false;

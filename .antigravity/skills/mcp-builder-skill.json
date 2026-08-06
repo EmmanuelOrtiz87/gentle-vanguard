@@ -1,0 +1,22 @@
+{
+  "name": "mcp-builder-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "mcp-builder-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# MCP Server Development Guide\n\n## Overview\n\nCreate MCP servers that enable LLMs to interact with external services.\nQuality is measured by how well tools enable LLMs to accomplish real tasks.\n\n---\n\n# Process\n\n## High-Level Workflow\n\n### Phase 1: Deep Research and Planning\n\n1. [Design Philosophy](./reference/design-philosophy.md) — API coverage vs workflow tools, naming, context mgmt, error messages\n2. **MCP Protocol**: Start at `https://modelcontextprotocol.io/sitemap.xml`, fetch `.md` pages for spec details\n3. **Recommended stack**: TypeScript + Streamable HTTP (remote) or stdio (local)\n4. **Plan implementation**: Review API docs, list endpoints, prioritize coverage\n\n### Phase 2: Implementation\n\n1. [Core Implementation Patterns](./reference/implementation-core.md) — infra, schemas, annotations\n2. Language guides:\n   - [TypeScript](./reference/node_mcp_server.md) — project structure, Zod, registerTool\n   - [Python](./reference/python_mcp_server.md) — module org, Pydantic, @mcp.tool\n3. Build shared: API client, auth, error handling, pagination\n4. Per tool: input/output schema, description, async impl, annotations\n\n### Phase 3: Review and Test\n\n- Check: DRY, consistent errors, full types, clear descriptions\n- TypeScript: `npm run build` + `npx @modelcontextprotocol/inspector`\n- Python: `python -m py_compile server.py` + MCP Inspector\n\n### Phase 4: Create Evaluations\n\n1. Inspect available tools\n2. Explore data with READ-ONLY operations\n3. Create 10 complex, independent, verifiable questions\n4. Verify answers yourself\n5. Format as XML `<evaluation>` with `<qa_pair>` entries\n\nSee [Evaluation Guide](./reference/evaluation.md) for full details.\n\n---\n\n# Reference Files\n\n| File | When to Load |\n|---|---|\n| [Best Practices](./reference/mcp_best_practices.md) | Phase 1 — naming, pagination, transport, security |\n| [Design Philosophy](./reference/design-philosophy.md) | Phase 1 — coverage vs workflow, naming, context |\n| [Core Implementation](./reference/implementation-core.md) | Phase 2 — infra, schemas, annotations |\n| [TypeScript Guide](./reference/node_mcp_server.md) | Phase 2 — full TS patterns and examples |\n| [Python Guide](./reference/python_mcp_server.md) | Phase 2 — full Python/FastMCP patterns |\n| [Evaluation Guide](./reference/evaluation.md) | Phase 4 — question creation, XML format, running |\n| MCP SDK READMEs | Phase 1/2 — fetch from GitHub raw URLs |",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

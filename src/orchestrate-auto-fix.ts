@@ -2,7 +2,7 @@
 
 import { existsSync } from 'fs';
 import { resolve, join } from 'path';
-import { spawnSync } from 'child_process';
+import { runSync, runNpxTsxSync } from './core/run-command.js';
 import { pathToFileURL } from 'url';
 
 const ROOT = resolve(process.cwd());
@@ -86,22 +86,22 @@ function success(validator: string, details: string): void {
 
 function findFirstFile(root: string, pattern: string, recursive = true): string | null {
   const cmd = `Get-ChildItem -Path "${root}" -Filter "${pattern}" ${recursive ? '-Recurse' : ''} -File -ErrorAction SilentlyContinue | Select-Object -First 1 | Select-Object -ExpandProperty FullName`;
-  const result = spawnSync('pwsh', ['-NoProfile', '-Command', cmd], { windowsHide: true });
-  const out = result.stdout?.toString().trim();
+  const result = runSync('pwsh', ['-NoProfile', '-Command', cmd], { stdio: 'pipe' });
+  const out = result.stdout.trim();
   return out || null;
 }
 
 function findFirstFileWithExtension(root: string, pattern: string, extensions: string[]): string | null {
   const cmd = `Get-ChildItem -Path "${root}" -Filter "${pattern}" -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Extension -in @(${extensions.map(e => `'${e}'`).join(',')}) } | Select-Object -First 1 | Select-Object -ExpandProperty FullName`;
-  const result = spawnSync('pwsh', ['-NoProfile', '-Command', cmd], { windowsHide: true });
-  const out = result.stdout?.toString().trim();
+  const result = runSync('pwsh', ['-NoProfile', '-Command', cmd], { stdio: 'pipe' });
+  const out = result.stdout.trim();
   return out || null;
 }
 
 function findInDir(root: string, regex: string): string | null {
   const cmd = `Get-ChildItem -Path "${root}" -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.DirectoryName -match "${regex}" } | Select-Object -First 1 | Select-Object -ExpandProperty FullName`;
-  const result = spawnSync('pwsh', ['-NoProfile', '-Command', cmd], { windowsHide: true });
-  const out = result.stdout?.toString().trim();
+  const result = runSync('pwsh', ['-NoProfile', '-Command', cmd], { stdio: 'pipe' });
+  const out = result.stdout.trim();
   return out || null;
 }
 
@@ -144,9 +144,9 @@ function initializeValidators(): void {
 function runPwsh(scriptPath: string, args: string[] = []): string {
   const tsAlt = getTsEquivalent(scriptPath);
   const result = tsAlt
-    ? spawnSync('npx', ['tsx', tsAlt, ...args], { windowsHide: true })
-    : spawnSync('pwsh', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', scriptPath, ...args], { windowsHide: true });
-  return result.stdout?.toString() || '';
+    ? runNpxTsxSync(tsAlt, args, { stdio: 'pipe' })
+    : runSync('pwsh', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', scriptPath, ...args], { stdio: 'pipe' });
+  return result.stdout || '';
 }
 
 function invokeScriptsValidation(v: Validator): void {
@@ -202,8 +202,8 @@ function invokeConfigValidation(v: Validator): void {
   try {
     const tsAlt = getTsEquivalent(v.path);
     const result = tsAlt
-      ? spawnSync('npx', ['tsx', tsAlt], { windowsHide: true })
-      : spawnSync('pwsh', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', v.path], { windowsHide: true });
+      ? runNpxTsxSync(tsAlt, [], { stdio: 'pipe' })
+      : runSync('pwsh', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', v.path], { stdio: 'pipe' });
     if (result.status === 0) {
       success('Configuration', 'No inconsistencies');
     } else {

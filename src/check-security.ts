@@ -2,7 +2,7 @@
 
 import { existsSync } from 'fs';
 import { pathToFileURL } from 'url';
-import { spawnSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 
 interface SecretPattern {
   name: string;
@@ -21,19 +21,18 @@ const CRITICAL_PATTERNS: SecretPattern[] = [
 
 const EXCLUDED_PATHS = new Set([
   'docs/reference/ARCHITECTURE.md',
-  'hooks/pre-commit.ps1',
-  'hooks/pre-commit-privacy.ps1',
-  'scripts/hooks/check-security.ps1',
-  'scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1',
+  'src/hooks/pre-commit.ts',
+  'src/hooks/pre-commit-privacy.ts',
+  'src/check-security.ts',
+  'src/cli/gv.ts',
   'skills/docker-devops-skill/SKILL.md',
   'skills/security-expert-skill/references/security-patterns.md',
   'config/security-privacy.json',
   'config/security-policy.json',
-  'scripts/hooks/hook-output-safety.ps1',
 ]);
 
 function execGit(args: string[], cwd: string = process.cwd()): string {
-  const result = spawnSync('git', args, { cwd, encoding: 'utf-8', windowsHide: true });
+  const result = runSync('git', args, { cwd });
   return result.stdout?.trim() ?? '';
 }
 
@@ -62,11 +61,7 @@ function main(): number {
   }
 
   if (existsSync('package.json')) {
-    const auditResult = spawnSync('npm', ['audit', '--json'], {
-      cwd,
-      encoding: 'utf-8',
-      windowsHide: true,
-    });
+    const auditResult = runSync('npm', ['audit', '--json'], { cwd });
     try {
       const audit = JSON.parse(auditResult.stdout || '{}');
       if (audit.metadata?.vulnerabilities?.critical > 0) {

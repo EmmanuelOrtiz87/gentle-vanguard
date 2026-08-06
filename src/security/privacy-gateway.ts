@@ -3,7 +3,7 @@
 /* eslint-disable security/detect-unsafe-regex */
 /* These regex patterns are intentionally complex for injection detection - not user-input parsing */
 
-import { spawnSync } from 'child_process';
+import { runNpxTsxSync } from '../core/run-command.js';
 import { existsSync } from 'fs';
 import { resolve } from 'path';
 import { pathToFileURL } from 'url';
@@ -122,8 +122,7 @@ function tryOrchestrator(text: string): string | null {
   if (!existsSync(orchestratorTs)) return null;
 
   try {
-    const result = spawnSync('npx', ['tsx', orchestratorTs, 'sanitize', text, 'prompt'], {
-      encoding: 'utf-8',
+    const result = runNpxTsxSync(orchestratorTs, ['sanitize', text, 'prompt'], {
       stdio: 'pipe',
       timeout: 10000,
     });

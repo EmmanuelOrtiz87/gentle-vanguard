@@ -3,7 +3,7 @@
 import { existsSync, writeFileSync, copyFileSync, unlinkSync } from 'fs';
 import { join, resolve, dirname, extname } from 'path';
 import { fileURLToPath } from 'url';
-import { spawnSync } from 'child_process';
+import { runSync, runNpxTsxSync } from './core/run-command.js';
 import * as readline from 'readline';
 import { tmpdir } from 'os';
 
@@ -80,10 +80,10 @@ function findExePath(projectRoot: string): string {
 
   log(`Executable not found at ${exePath}. Searching project root...`, 'Yellow');
 
-  const { stdout } = spawnSync('powershell', [
+  const { stdout } = runSync('powershell', [
     '-Command',
     `Get-ChildItem -Path '${projectRoot}' -Recurse -Filter '${exeName}' -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName`,
-  ], { encoding: 'utf-8', stdio: 'pipe' });
+  ], { stdio: 'pipe' });
 
   const found = stdout?.trim();
   if (found) return found;
@@ -96,8 +96,7 @@ async function main(): Promise<void> {
   const checkScript = getCheckScriptPath();
 
   try {
-    const checkProc = spawnSync('npx', ['tsx', checkScript, '--quiet'], {
-      encoding: 'utf-8',
+    const checkProc = runNpxTsxSync(checkScript, ['--quiet'], {
       stdio: 'pipe',
     });
     const exitCode = checkProc.status ?? -1;
@@ -194,8 +193,7 @@ async function main(): Promise<void> {
       process.exit(0);
     } else {
       try {
-        const verProc = spawnSync(exePath, ['-Version'], {
-          encoding: 'utf-8',
+        const verProc = runSync(exePath, ['-Version'], {
           stdio: 'pipe',
         });
         if (verProc.status !== 0) {

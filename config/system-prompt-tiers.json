@@ -55,7 +55,7 @@
   },
   "resolver": {
     "enabled": true,
-    "script": "scripts/utilities/normativa-resolver.ps1",
+    "script": "src/normativa-resolver.ts",
     "cacheDir": ".session/normativa-cache"
   }
 }

@@ -1,0 +1,22 @@
+{
+  "name": "cynefin-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "cynefin-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Cynefin Framework\n\nClassifies problems by cause-effect relationship into five domains. Match your approach to the domain.\n\n**Core Principle:** The nature of the problem determines the nature of the solution.\n\n## When to Use\n\n- Choosing the right methodology for a project\n- Understanding why an approach isn't working\n- Designing processes for different problem types\n- Deciding how much to plan vs. experiment\n- Incident response and crisis management\n\n```\nFacing a problem?\n  → What's the relationship between cause and effect?\n    → Obvious? → CLEAR\n    → Requires analysis? → COMPLICATED\n    → Only visible in retrospect? → COMPLEX\n    → Cannot perceive? → CHAOTIC\n```\n\n## The Five Domains\n\n### 1. Clear (formerly Simple/Obvious)\nCause and effect obvious to everyone. Best practices exist and work.\n**Approach:** Sense → Categorize → Respond\n**Failure mode:** Complacency — treating complex problems as clear.\n\n### 2. Complicated\nCause and effect require expertise. Multiple right answers exist.\n**Approach:** Sense → Analyze → Respond\n**Failure mode:** Analysis paralysis — over-analyzing when action is needed.\n\n### 3. Complex\nCause and effect only visible in retrospect. Emergent patterns.\n**Approach:** Probe → Sense → Respond\n**Failure mode:** Trying to analyze/plan your way through complexity.\n\n### 4. Chaotic\nNo perceivable cause and effect. High turbulence. Must act first.\n**Approach:** Act → Sense → Respond\n**Failure mode:** Trying to analyze during chaos — prioritize stability.\n\n### 5. Disorder\nDon't know which domain you're in. Multiple stakeholders disagree.\n**Approach:** Break the problem into parts, classify each part.\n\n## Domain Assessment\n\n1. **Assess cause-effect** — is it obvious, analyzable, retrospective, or turbulent?\n2. **Test your assessment** — can experts predict outcomes? Can you experiment?\n3. **Match approach** — decision style, planning depth, methodology, success measure\n\nSee `references/assessment-guide.md` for full steps, test table, and common mismatches.\n\n## Common Mismatches (Quick Reference)\n\n| Mistake | Symptom | Fix |\n|---|---|---|\n| Complex as Complicated | Planning surprises | Probe with experiments |\n| Complicated as Clear | \"Just do it\" to expert problems | Engage experts |\n| Chaotic as Complex | Experiments during crisis | Act decisively first |\n| Clear as Complicated | Over-engineering simple | Apply best practice |\n\n## Reference Files\n\n- `references/assessment-guide.md` — Full assessment steps, test table, common mismatches\n- `references/domain-practices.md` — Practices and examples for each domain\n- `references/cynefin-template.md` — Analysis template for use in conversations\n- `references/quick-reference.md` — Checklist, key questions, Snowden's wisdom",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

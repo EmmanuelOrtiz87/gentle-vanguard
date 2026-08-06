@@ -12,7 +12,7 @@
 The project needed a scripting language for:
 
 - Git hooks (pre-commit, pre-push, commit-msg)
-- CLI orchestration (gv.ps1)
+- CLI orchestration (src/cli/gv.ts)
 - Build automation
 - Test execution
 - Deployment workflows

@@ -1,0 +1,7 @@
+{
+  "name": "report-writing-skill",
+  "version": "1.0.0",
+  "description": "Bug bounty report writing for H1/Bugcrowd/Intigriti/Immunefi — templates, human tone, impact-first writing, CVSS 3.1 scoring, title formula, severity guide, downgrade counters, checklist. Never use \"could potentially\".",
+  "triggers": [],
+  "author": "Gentle-Vanguard"
+}

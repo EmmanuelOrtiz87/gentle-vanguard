@@ -112,7 +112,7 @@
     "last_updated": null
   },
   "alert_thresholds": {
-    "_description": "Configurable thresholds for proactive alert generation in generate-dashboard.ps1",
+    "_description": "Configurable thresholds for proactive alert generation [DEPRECATED: generate-dashboard.ps1 migrated to TS pipeline]",
     "data_stale_days": 3,
     "budget_forecast_red_pct": 90,
     "budget_forecast_yellow_pct": 70,
@@ -125,7 +125,7 @@
     "efficiency_low_threshold": 0.5
   },
   "cost_model": {
-    "_description": "Parameters for token cost estimation and ROI calculations in generate-dashboard.ps1",
+    "_description": "Parameters for token cost estimation and ROI calculations [DEPRECATED: generate-dashboard.ps1 migrated to TS pipeline]",
     "cost_per_1m_tokens_usd": 10.0,
     "baseline_tokens_per_task": 14000,
     "reduction_policy_pct": 40.0

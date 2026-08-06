@@ -1,0 +1,22 @@
+{
+  "name": "writing-plans-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "writing-plans-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Writing Plans\n\n## Overview\n\nWrite comprehensive implementation plans assuming zero codebase context and questionable taste.\nDocument everything: files to touch, code, tests, how to test. Bite-sized tasks. DRY. YAGNI. TDD.\nFrequent commits.\n\n**Announce at start:** \"I'm using the writing-plans skill to create the implementation plan.\"\n\n**Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`\n\n## Scope Check\n\nIf the spec covers multiple independent subsystems, suggest breaking into separate plans — one per\nsubsystem. Each plan must produce working, testable software independently.\n\n## File Structure\n\nSee [references/file-structure.md](references/file-structure.md).\n\n## Plan Document Header\n\nEvery plan MUST start with this header:\n\n```markdown\n# [Feature Name] Implementation Plan\n\n> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development\n> (recommended) or superpowers:executing-plans. Steps use checkbox (`- [ ]`) syntax.\n\n**Goal:** [One sentence describing what this builds]\n**Architecture:** [2-3 sentences about approach]\n**Tech Stack:** [Key technologies/libraries]\n\n---\n```\n\n## Task Structure\n\nSee [references/task-structure.md](references/task-structure.md) for the full template.\n\nKey rule — **each step is one action (2–5 minutes):**\n\n\"Write the failing test\" → \"Run it to verify it fails\" → \"Implement minimal code\" →\n\"Run tests to verify\" → \"Commit\"\n\n## No Placeholders\n\nEvery step must contain actual content. These are **plan failures**:\n\n- \"TBD\", \"TODO\", \"implement later\", \"fill in details\"\n- \"Add appropriate error handling\" / \"add validation\" / \"handle edge cases\"\n- \"Write tests for the above\" (without actual test code)\n- \"Similar to Task N\" (repeat the code — tasks may be read out of order)\n- Steps describing what without showing how\n- References to types not defined in any task\n\nFull list: [references/no-placeholders.md](references/no-placeholders.md)\n\n## Remember\n\n- Exact file paths always\n- Complete code in every step\n- Exact commands with expected output\n- DRY, YAGNI, TDD, frequent commits\n\n## Self-Review\n\nSee [references/self-review.md](references/self-review.md).\n\n## Execution Handoff\n\nAfter saving, offer Subagent-Driven (recommended) or Inline Execution.\nSee [references/execution-handoff.md](references/execution-handoff.md).",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

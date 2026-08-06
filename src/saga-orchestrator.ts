@@ -19,7 +19,7 @@ import {
 } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { spawnSync } from 'child_process';
+import { runSync, runNpxTsxSync } from './core/run-command.js';
 import { randomBytes } from 'crypto';
 
 const ROOT = resolve(process.cwd());
@@ -147,9 +147,9 @@ function invokeStep(
           if (existsSync(fullPath)) {
             const tsAlt = getTsEquivalent(fullPath);
             const r = tsAlt
-              ? spawnSync('npx', ['tsx', tsAlt, ...(step.args ?? [])], { cwd: ROOT, stdio: 'pipe', timeout: 30000 })
-              : spawnSync('pwsh', ['-NoProfile', '-File', fullPath, ...(step.args ?? [])], { cwd: ROOT, stdio: 'pipe', timeout: 30000 });
-            result.output = r.stdout?.toString();
+              ? runNpxTsxSync(tsAlt, step.args ?? [], { cwd: ROOT, stdio: 'pipe', timeout: 30000 })
+              : runSync('pwsh', ['-NoProfile', '-File', fullPath, ...(step.args ?? [])], { cwd: ROOT, stdio: 'pipe', timeout: 30000 });
+            result.output = r.stdout;
             result.success = r.status === 0;
           } else {
             result.success = false;
@@ -161,7 +161,7 @@ function invokeStep(
       case 'http': {
         if (step.url) {
           const body = step.body ? JSON.stringify(step.body) : undefined;
-          const response = spawnSync(
+          const response = runSync(
             'curl',
             [
               '-s',
@@ -178,19 +178,19 @@ function invokeStep(
               timeout: 30000,
             },
           );
-          result.output = response.stdout?.toString();
+          result.output = response.stdout;
           result.success = response.status === 0;
         }
         break;
       }
       case 'pscommand': {
         if (step.command) {
-          const r = spawnSync('pwsh', ['-NoProfile', '-Command', step.command], {
+          const r = runSync('pwsh', ['-NoProfile', '-Command', step.command], {
             cwd: ROOT,
             stdio: 'pipe',
             timeout: 30000,
           });
-          result.output = r.stdout?.toString();
+          result.output = r.stdout;
           result.success = r.status === 0;
         }
         break;
@@ -198,16 +198,12 @@ function invokeStep(
       case 'checkpoint': {
         const ckptScript = join(ROOT, 'src/checkpoint-manager.ts');
         if (existsSync(ckptScript)) {
-          const r = spawnSync(
-            'npx',
-            ['tsx', ckptScript, 'create', '--label', step.label ?? 'saga-checkpoint'],
-            {
+          const r = runNpxTsxSync(ckptScript, ['create', '--label', step.label ?? 'saga-checkpoint'], {
               cwd: ROOT,
               stdio: 'pipe',
               timeout: 15000,
-            },
-          );
-          result.output = r.stdout?.toString();
+            });
+          result.output = r.stdout;
           result.success = r.status === 0;
         } else {
           result.success = false;
@@ -242,13 +238,9 @@ function invokeCompensation(step: SagaStep, context: StepContext): boolean {
           const fullPath = join(ROOT, comp.script);
           if (existsSync(fullPath)) {
             const tsAlt = getTsEquivalent(fullPath);
-            spawnSync(
-              tsAlt ? 'npx' : 'pwsh',
-              tsAlt
-                ? ['tsx', tsAlt, ...(comp.args ?? [])]
-                : ['-NoProfile', '-File', fullPath, ...(comp.args ?? [])],
-              { cwd: ROOT, stdio: 'pipe', timeout: 30000 },
-            );
+            tsAlt
+              ? runNpxTsxSync(tsAlt, comp.args ?? [], { cwd: ROOT, stdio: 'pipe', timeout: 30000 })
+              : runSync('pwsh', ['-NoProfile', '-File', fullPath, ...(comp.args ?? [])], { cwd: ROOT, stdio: 'pipe', timeout: 30000 });
           }
         }
         break;
@@ -258,24 +250,20 @@ function invokeCompensation(step: SagaStep, context: StepContext): boolean {
         if (ckptId) {
           const rollbackScript = join(
             ROOT,
-            'scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1',
+            'src/rollback-orchestrator.ts',
           );
           if (existsSync(rollbackScript)) {
             const tsAlt = getTsEquivalent(rollbackScript);
-            spawnSync(
-              tsAlt ? 'npx' : 'pwsh',
-              tsAlt
-                ? ['tsx', tsAlt, '-CheckpointId', ckptId, '-Force']
-                : ['-NoProfile', '-File', rollbackScript, '-CheckpointId', ckptId, '-Force'],
-              { cwd: ROOT, stdio: 'pipe', timeout: 30000 },
-            );
+            tsAlt
+              ? runNpxTsxSync(tsAlt, ['-CheckpointId', ckptId, '-Force'], { cwd: ROOT, stdio: 'pipe', timeout: 30000 })
+              : runSync('pwsh', ['-NoProfile', '-File', rollbackScript, '-CheckpointId', ckptId, '-Force'], { cwd: ROOT, stdio: 'pipe', timeout: 30000 });
           }
         }
         break;
       }
       case 'pscommand': {
         if (comp.command) {
-          spawnSync('pwsh', ['-NoProfile', '-Command', comp.command], {
+          runSync('pwsh', ['-NoProfile', '-Command', comp.command], {
             cwd: ROOT,
             stdio: 'pipe',
             timeout: 30000,

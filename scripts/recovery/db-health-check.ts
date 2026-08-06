@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+import { runSyncShell } from '../../src/core/run-command.js';
 import { existsSync, mkdirSync, readdirSync, writeFileSync, statSync } from 'fs';
 import { join, resolve } from 'path';
 import { homedir } from 'os';
@@ -83,7 +83,7 @@ function findDbFiles(dir: string): string[] {
 
 function getTables(db: string): string[] {
   try {
-    const r = execSync(`sqlite3 "${db}" ".tables"`, { encoding: 'utf8', timeout: 10000 }).trim();
+    const r = runSyncShell(`sqlite3 "${db}" ".tables"`, { timeout: 10000 }).stdout.trim();
     return r.split(/\s+/).filter((t) => t.length > 0 && !t.startsWith('sqlite_'));
   } catch {
     return [];
@@ -94,10 +94,9 @@ function getTotalRows(db: string, tables: string[]): number {
   let total = 0;
   for (const t of tables) {
     try {
-      const r = execSync(`sqlite3 "${db}" "SELECT COUNT(*) FROM [${t}];"`, {
-        encoding: 'utf8',
+      const r = runSyncShell(`sqlite3 "${db}" "SELECT COUNT(*) FROM [${t}];"`, {
         timeout: 5000,
-      }).trim();
+      }).stdout.trim();
       total += parseInt(r, 10) || 0;
     } catch {
       /* skip */
@@ -108,10 +107,9 @@ function getTotalRows(db: string, tables: string[]): number {
 
 function getIntegrity(db: string): 'ok' | 'error' | 'missing' {
   try {
-    const r = execSync(`sqlite3 "${db}" "PRAGMA integrity_check;"`, {
-      encoding: 'utf8',
+    const r = runSyncShell(`sqlite3 "${db}" "PRAGMA integrity_check;"`, {
       timeout: 10000,
-    }).trim();
+    }).stdout.trim();
     return r === 'ok' ? 'ok' : 'error';
   } catch {
     return 'missing';
@@ -120,10 +118,9 @@ function getIntegrity(db: string): 'ok' | 'error' | 'missing' {
 
 function checkpointWal(db: string): boolean {
   try {
-    execSync(`sqlite3 "${db}" "PRAGMA wal_checkpoint(TRUNCATE);"`, {
-      encoding: 'utf8',
+    runSyncShell(`sqlite3 "${db}" "PRAGMA wal_checkpoint(TRUNCATE);"`, {
       timeout: 30000,
-    });
+    }).stdout;
     return true;
   } catch {
     return false;
@@ -230,7 +227,7 @@ for (const target of TARGETS) {
       LOG(`    -> Attempting WAL checkpoint + REINDEX...`, YELLOW);
       checkpointWal(dbPath);
       try {
-        execSync(`sqlite3 "${dbPath}" "REINDEX;"`, { encoding: 'utf8', timeout: 30000 });
+        runSyncShell(`sqlite3 "${dbPath}" "REINDEX;"`, { timeout: 30000 }).stdout;
       } catch {
         /* skip */
       }

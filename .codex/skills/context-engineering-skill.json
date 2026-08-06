@@ -1,0 +1,20 @@
+{
+  "type": "function",
+  "function": {
+    "name": "context_engineering_skill",
+    "description": "Skill: context-engineering-skill",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "type": "string",
+          "description": "Task to execute"
+        }
+      },
+      "required": [
+        "task"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

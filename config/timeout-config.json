@@ -2,6 +2,11 @@
   "$schema": "config/timeout-config.schema.json",
   "version": "1.0.0",
   "description": "Configuración centralizada de timeouts para todo el stack Gentle-Vanguard",
+  "timeouts": {
+    "version": "1.0.0",
+    "categories": ["global", "http_server", "websocket", "external_api", "process_execution", "pipeline", "dashboard", "database", "cache", "session", "hooks", "monitoring", "circuit_breaker"],
+    "description": "Timeout configuration distributed across categories"
+  },
   "global": {
     "default_timeout_ms": 30000,
     "default_retry_attempts": 3,

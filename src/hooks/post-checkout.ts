@@ -2,20 +2,18 @@
 
 import { existsSync } from 'fs';
 import { join } from 'path';
-import { spawnSync } from 'child_process';
+import { runSync } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
 
 function execGit(args: string[], cwd: string = process.cwd()): string {
-  const result = spawnSync('git', args, { cwd, encoding: 'utf-8', windowsHide: true });
+  const result = runSync('git', args, { cwd });
   return result.stdout?.trim() ?? '';
 }
 
 function runPowerShell(scriptPath: string, args: string[]): void {
-  spawnSync(
-    'powershell.exe',
-    ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', scriptPath, ...args],
-    { encoding: 'utf-8', windowsHide: true, stdio: 'inherit' }
-  );
+  runSync('powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', scriptPath, ...args], {
+    stdio: 'inherit',
+  });
 }
 
 function findUpward(startDir: string, relativePath: string): string | null {

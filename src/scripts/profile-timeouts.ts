@@ -13,7 +13,7 @@
 
 import { trackExecution, getPerformanceMetrics, getActiveAlerts, startMonitorDaemon } from '../core/timeout-monitor';
 import { getTimeout, getActiveEnvironment } from '../core/timeout-config';
-import { execSync } from 'child_process';
+import { runSync } from '../core/run-command.js';
 import * as fs from 'fs';
 import * as pathModule from 'path';
 
@@ -87,7 +87,7 @@ async function benchmarkTypecheck(): Promise<void> {
   console.log(`\n\x1b[36m  ── TypeScript Typecheck ──\x1b[0m`);
   const tscTimeout = getTimeout('process_execution.tsc_typecheck_ms', 120000);
   const r = await benchmarkOperation('tsc-typecheck', 'process_execution', tscTimeout, () => {
-    execSync('npx tsc --noEmit', { timeout: tscTimeout, stdio: 'pipe' });
+    runSync('npx', ['tsc', '--noEmit'], { timeout: tscTimeout, stdio: 'pipe' });
   });
   console.log(`    tsc --noEmit:         ${r.durationMs}ms ${r.violated ? '\x1b[31m⚠ VIOLATION\x1b[0m' : '\x1b[32m✓\x1b[0m'} (threshold: ${r.timeoutMs}ms)`);
 }

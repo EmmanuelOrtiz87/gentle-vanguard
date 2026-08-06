@@ -1,0 +1,22 @@
+{
+  "name": "memory-management-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "memory-management-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Memory Management\n\nMemory makes Claude your workplace collaborator — someone who speaks your internal language.\n\n## The Goal\n\nTransform shorthand into understanding:\n\n```\nUser: \"ask todd to do the PSR for oracle\"\n              ↓ Claude decodes\n\"Ask Todd Martinez (Finance lead) to prepare the Pipeline Status Report\n for the Oracle Systems deal ($2.3M, closing Q2)\"\n```\n\nWithout memory, that request is meaningless. With memory, Claude knows:\n\n- **todd** → Todd Martinez, Finance lead, prefers Slack\n- **PSR** → Pipeline Status Report (weekly sales doc)\n- **oracle** → Oracle Systems deal, not the company\n\n## Architecture\n\n```\nCLAUDE.md          ← Hot cache (~30 people, common terms)\nmemory/\n  glossary.md      ← Full decoder ring (everything)\n  people/          ← Complete profiles\n  projects/        ← Project details\n  context/         ← Company, teams, tools\n```\n\n**CLAUDE.md (Hot Cache):**\n\n- Top ~30 people you interact with most\n- ~30 most common acronyms/terms\n- Active projects (5-15)\n- Your preferences\n- **Goal: Cover 90% of daily decoding needs**\n\n**memory/glossary.md (Full Glossary):**\n\n- Complete decoder ring — everyone, every term\n- Searched when something isn't in CLAUDE.md\n- Can grow indefinitely\n\n**memory/people/, projects/, context/:**\n\n- Rich detail when needed for execution\n- Full profiles, history, context\n\n## Lookup Flow\n\n```\nUser: \"ask todd about the PSR for phoenix\"\n\n1. Check CLAUDE.md (hot cache)\n   → Todd? ✓ Todd Martinez, Finance\n   → PSR? ✓ Pipeline Status Report\n   → Phoenix? ✓ DB migration project\n\n2. If not found → search memory/glossary.md\n   → Full glossary has everyone/everything\n\n3. If still not found → ask user\n   → \"What does X mean? I'll remember it.\"\n```\n\n## File Locations\n\n- **Working memory:** `CLAUDE.md` in current working directory\n- **Deep memory:** `memory/` subdirectory\n\n## Working Memory Format (CLAUDE.md)\n\nSee [references/working-memory-format.md](references/working-memory-format.md) for the full template.\n\n## Deep Memory Format (memory/)\n\nSee [references/deep-memory-format.md](references/deep-memory-format.md) for glossary, people, projects, and company context templates.\n\n## Interaction Guide\n\nSee [references/interaction-guide.md](references/interaction-guide.md) for decoding, adding memory, recalling, progressive disclosure, and bootstrapping.\n\n## Conventions\n\n- **Bold** terms in CLAUDE.md for scannability\n- Keep CLAUDE.md under ~100 lines (the \"hot 30\" rule)\n- Filenames: lowercase, hyphens (`todd-martinez.md`, `project-phoenix.md`)\n- Always capture nicknames and alternate names\n- Use glossary tables for easy lookup\n- Promote frequently-used terms to CLAUDE.md; demote stale ones to memory/ only\n\n## What Goes Where\n\n| Type             | CLAUDE.md (Hot Cache)     | memory/ (Full Storage)           |\n| ---------------- | ------------------------- | -------------------------------- |\n| Person           | Top ~30 frequent contacts | glossary.md + people/{name}.md   |\n| Acronym/term     | ~30 most common           | glossary.md (complete list)      |\n| Project          | Active projects only      | glossary.md + projects/{name}.md |\n| Nickname         | In Key People if top 30   | glossary.md (all nicknames)      |\n| Company context  | Quick reference only      | context/company.md               |\n| Preferences      | All preferences           | -                                |\n| Historical/stale | ✗ Remove                  | ✓ Keep in memory/                |\n\n## Promotion / Demotion\n\n**Promote to CLAUDE.md when:**\n\n- You use a term/person frequently\n- It's part of active work\n\n**Demote to memory/ only when:**\n\n- Project completed\n- Person no longer frequent contact\n- Term rarely used",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

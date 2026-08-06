@@ -10,7 +10,7 @@ import {
 } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { spawnSync } from 'child_process';
+import { runNpxTsxSync } from './core/run-command.js';
 import { SessionContextLog } from './core/session-context-log.js';
 
 const ROOT = resolve(process.cwd());
@@ -59,32 +59,11 @@ function removeStaleSessions(sessionDir: string): void {
   }
 }
 
-function flushCaches(sessionDir: string): void {
-  const targets = [
-    { path: join(sessionDir, 'normativa-cache'), type: 'dir' as const },
-    { path: join(sessionDir, 'preprocess-response-cache.json'), type: 'file' as const },
-    { path: join(sessionDir, 'token-usage.json'), type: 'file' as const },
-    { path: join(sessionDir, 'prompt-cache'), type: 'dir' as const },
-  ];
-  let flushed = 0;
-  for (const t of targets) {
-    if (existsSync(t.path)) {
-      if (t.type === 'dir') {
-        rmSync(t.path, { recursive: true, force: true });
-        mkdirSync(t.path, { recursive: true });
-      } else {
-        rmSync(t.path, { force: true });
-      }
-      flushed++;
-    }
-  }
-  for (const d of ['normativa-cache', 'prompt-cache']) {
-    const fp = join(sessionDir, d);
-    if (!existsSync(fp)) mkdirSync(fp, { recursive: true });
-  }
-  ok(`Flushed ${flushed} cache targets`);
-
-  const tokenFile = join(sessionDir, 'token-usage.json');
+// Initialize session data - ALWAYS called regardless of skip flags
+function initSessionData(): { sid: string; sessionData: Record<string, unknown> } {
+  const sessionDir = join(ROOT, '.session');
+  mkdirSync(sessionDir, { recursive: true });
+  
   const sid = `session-${new Date().toISOString().slice(0, 16).replace(/[:-]/g, '')}`;
   const sessionData = {
     sessionId: sid,
@@ -116,10 +95,7 @@ function flushCaches(sessionDir: string): void {
     qualityScore: 100,
   };
   
-  writeFileSync(tokenFile, JSON.stringify(sessionData, null, 2));
-  ok(`Token tracking reset for ${sid}`);
-  
-  // Create session-current.json for downstream components
+  // Create session-current.json for downstream components - ALWAYS
   const currentSessionFile = join(sessionDir, 'session-current.json');
   writeFileSync(currentSessionFile, JSON.stringify(sessionData, null, 2));
   ok(`Session file created: session-current.json`);
@@ -130,9 +106,42 @@ function flushCaches(sessionDir: string): void {
   writeFileSync(datedSessionFile, JSON.stringify(sessionData, null, 2));
   ok(`Dated session file created: session-${dateStr}-01.json`);
   
+  return { sid, sessionData };
+}
+
+function flushCaches(sessionDir: string, sessionData: Record<string, unknown>): void {
+  const targets = [
+    { path: join(sessionDir, 'normativa-cache'), type: 'dir' as const },
+    { path: join(sessionDir, 'preprocess-response-cache.json'), type: 'file' as const },
+    { path: join(sessionDir, 'token-usage.json'), type: 'file' as const },
+    { path: join(sessionDir, 'prompt-cache'), type: 'dir' as const },
+  ];
+  let flushed = 0;
+  for (const t of targets) {
+    if (existsSync(t.path)) {
+      if (t.type === 'dir') {
+        rmSync(t.path, { recursive: true, force: true });
+        mkdirSync(t.path, { recursive: true });
+      } else {
+        rmSync(t.path, { force: true });
+      }
+      flushed++;
+    }
+  }
+  for (const d of ['normativa-cache', 'prompt-cache']) {
+    const fp = join(sessionDir, d);
+    if (!existsSync(fp)) mkdirSync(fp, { recursive: true });
+  }
+  ok(`Flushed ${flushed} cache targets`);
+
+  // Reset token tracking with current session data
+  const tokenFile = join(sessionDir, 'token-usage.json');
+  writeFileSync(tokenFile, JSON.stringify(sessionData, null, 2));
+  ok(`Token tracking reset for ${sessionData.sessionId}`);
+  
   // Guardar en context-log (sistema unificado - dashboard source of truth)
   const ctxLog = new SessionContextLog({
-    sessionId: sid,
+    sessionId: sessionData.sessionId as string,
     agent: 'orchestrator',
     status: 'active',
     totalTokens: 0,
@@ -153,7 +162,7 @@ function flushCaches(sessionDir: string): void {
     },
   });
   ctxLog.save();
-  ok(`Session saved to context-log: ${sid}`);
+  console.log(`[CLEANUP] Session saved to context-log: ${sessionData.sessionId}`);
 }
 
 export function runCleanup(
@@ -169,6 +178,11 @@ export function runCleanup(
   const sessionDir = join(repoRoot, '.session');
   const sessionDir2 = join(repoRoot, 'session');
 
+  // ALWAYS initialize session data first - this creates session-current.json
+  log('Initializing session...');
+  const { sid, sessionData } = initSessionData();
+  ok(`Session initialized: ${sid}`);
+
   if (!opts.skipOrphanCleanup) {
     log('Closing orphaned sessions...');
     removeStaleSessions(sessionDir);
@@ -178,7 +192,7 @@ export function runCleanup(
 
   if (!opts.skipCacheFlush) {
     log('Flushing session caches...');
-    flushCaches(sessionDir);
+    flushCaches(sessionDir, sessionData);
   }
 
   if (!opts.skipCompression) {
@@ -201,11 +215,9 @@ export function runCleanup(
           if (span.name === 'session-start') {
             const tracingScript = join(repoRoot, 'src/tracing-instrument.ts');
             if (existsSync(tracingScript)) {
-              const result = spawnSync(
-                'npx',
+              const result = runNpxTsxSync(
+                tracingScript,
                 [
-                  'tsx',
-                  tracingScript,
                   '-Action',
                   'end',
                   '-TraceId',
@@ -240,18 +252,16 @@ export function runCleanup(
   log('Pruning old checkpoints...');
   const ckptMgr = join(ROOT, 'src/checkpoint-manager.ts');
   if (existsSync(ckptMgr)) {
-    spawnSync('npx', ['tsx', ckptMgr, 'prune'], { cwd: ROOT, stdio: 'pipe', timeout: LONG_TIMEOUT });
+    runNpxTsxSync(ckptMgr, ['prune'], { cwd: ROOT, stdio: 'pipe', timeout: LONG_TIMEOUT });
     ok('Checkpoint prune done');
   }
 
   log('Logging session end to audit...');
   const auditScript = join(ROOT, 'src/audit-pipeline.ts');
   if (existsSync(auditScript)) {
-    spawnSync(
-      'npx',
+    runNpxTsxSync(
+      auditScript,
       [
-        'tsx',
-        auditScript,
         'log',
         '-EventType',
         'session.end',
@@ -276,11 +286,9 @@ export function runCleanup(
   const evtStore = join(ROOT, 'src/event-sourcing.ts');
   if (existsSync(evtStore)) {
     const aggId = `session-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}`;
-    spawnSync(
-      'npx',
+    runNpxTsxSync(
+      evtStore,
       [
-        'tsx',
-        evtStore,
         '-Action',
         'append',
         '-AggregateId',

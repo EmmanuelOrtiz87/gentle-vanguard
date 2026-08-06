@@ -1,0 +1,20 @@
+{
+  "type": "function",
+  "function": {
+    "name": "release_management_skill",
+    "description": "Skill: release-management-skill",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "type": "string",
+          "description": "Task to execute"
+        }
+      },
+      "required": [
+        "task"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

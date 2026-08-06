@@ -1,0 +1,22 @@
+{
+  "name": "data-storytelling-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "data-storytelling-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Data Storytelling for Slides\n\nTurn raw data into compelling visual narratives.\n\n## Quick Reference\n\nSee `references/` for details on each topic.\n\n### Core Principles\n- **Data Without Story Is Just Numbers** — narrative over raw data\n- **Show the Relationship** — comparison is the foundation of insight\n- **Maximize the Data-Ink Ratio** — remove non-data pixels\n- **5-Second Rule** — audience must grasp insight in 5 seconds\n→ `references/core-principles.md`\n\n### Chart Selection (Quick)\n| Relationship | Chart |\n|---|---|\n| Change over time | Line chart |\n| Part of whole | Stacked bar / Pie (≤5) |\n| Ranking | Horizontal bar |\n| Distribution | Histogram / Box plot |\n| Correlation | Scatter plot |\n| Progress to goal | Bullet chart / Gauge |\n| Flow / Funnel | Sankey / Funnel |\n→ `references/chart-selection-guide.md`\n\n### Maturity Model\nTarget **Level 3** (Annotated) for internal, **Level 4** (Narrative) for exec presentations.\n→ `references/maturity-model.md`\n\n### Data Story Structure\n**Act 1**: Context → **Act 2**: Insight → **Act 3**: Implication\n→ `references/actionable-guidance.md`\n\n### Data-Ink & Pre-Attentive\nMaximize data-ink; use color/size/position for instant insight (under 500ms).\n→ `references/data-ink-ratio.md`, `references/pre-attentive-attributes.md`\n\n### Dashboard & Annotations\nHero KPI + trend + sparkline; annotate ONE insight per chart.\n→ `references/dashboard-slide-design.md`, `references/annotated-charts.md`\n\n### Avoiding Traps\nTruncated Y-axis, 3D charts, pie >5 slices, no narrative, data overload, no source.\n→ `references/misleading-visuals.md`, `references/data-citations.md`\n\n### Static vs Interactive\nStatic for live presentations/email/PDF; interactive for data rooms/internal reports.\n→ `references/interactive-vs-static.md`\n\n### Common Mistakes\nChart junk, wrong chart type, missing context, no narrative, data overload, misleading scales, no source, over-highlighting, small fonts, no takeaway title.\n→ `references/common-mistakes.md`",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

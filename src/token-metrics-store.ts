@@ -9,10 +9,15 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { pathToFileURL } from 'url';
+import { createRequire } from 'module';
+
+const _require = createRequire(import.meta.url);
 
 const ROOT = path.resolve(process.cwd());
 const RUNTIME_DIR = path.join(ROOT, '.runtime');
 const DB_PATH = path.join(RUNTIME_DIR, 'metrics.json');
+const SESSION_DIR = path.join(ROOT, '.session');
+const NEXUS_DB_PATH = path.join(RUNTIME_DIR, 'gentle-vanguard.db');
 
 interface TokenRecord {
   id: number;
@@ -196,6 +201,133 @@ function getMonthlyData(): AggregatedRow[] {
     .sort((a, b) => (a.month ?? '').localeCompare(b.month ?? ''));
 }
 
+// ─── Close action: compute + persist segmented session totals ────────────────
+
+interface CloseSummary {
+  session_id: string;
+  closed_at: string;
+  input_tokens: number;
+  output_tokens: number;
+  total_tokens: number;
+  cost_usd: number;
+  model: string;
+  provider: string;
+  source: 'nexus' | 'session-file' | 'metrics-store';
+}
+
+/** Read segmented token totals for a session from Nexus token_usage (source of truth). */
+function readNexusSessionTokens(sessionId: string): { prompt: number; completion: number; cost: number } | null {
+  try {
+    const Database = _require('better-sqlite3');
+    if (!fs.existsSync(NEXUS_DB_PATH)) return null;
+    const db = new Database(NEXUS_DB_PATH, { readonly: true });
+    try {
+      const row = db
+        .prepare(
+          `SELECT COALESCE(SUM(prompt_tokens),0) as prompt,
+                  COALESCE(SUM(completion_tokens),0) as completion,
+                  COALESCE(SUM(cost),0) as cost
+           FROM token_usage WHERE session_id = ?`,
+        )
+        .get(sessionId) as { prompt: number; completion: number; cost: number };
+      return row;
+    } finally {
+      db.close();
+    }
+  } catch {
+    return null;
+  }
+}
+
+/** Read accumulated tokens from the session file (session-current.json). */
+function readSessionFileTokens(): { input: number; output: number; total: number } {
+  const fp = path.join(SESSION_DIR, 'session-current.json');
+  try {
+    if (fs.existsSync(fp)) {
+      const data = JSON.parse(fs.readFileSync(fp, 'utf-8')) as Record<string, unknown>;
+      const input = Number(data.totalInputTokens ?? data.inputTokens ?? 0) || 0;
+      const output = Number(data.totalOutputTokens ?? data.outputTokens ?? 0) || 0;
+      const total = Number(data.totalTokens ?? 0) || input + output;
+      return { input, output, total };
+    }
+  } catch { /* ignore */ }
+  return { input: 0, output: 0, total: 0 };
+}
+
+/** Read accumulated tokens from the JSON metrics store (.runtime/metrics.json). */
+function readMetricsStoreSessionTokens(sessionId: string): { tokens: number; cost: number } {
+  const db = readDb();
+  const records = db.token_usage.filter((r) => r.session_id === sessionId);
+  return {
+    tokens: records.reduce((s, r) => s + r.tokens_used, 0),
+    cost: records.reduce((s, r) => s + r.cost_usd, 0),
+  };
+}
+
+function closeSession(sessionId: string): CloseSummary {
+  const now = new Date().toISOString();
+  const sessionFile = readSessionFileTokens();
+  const nexus = readNexusSessionTokens(sessionId);
+  const metricsStore = readMetricsStoreSessionTokens(sessionId);
+
+  // Prefer Nexus (real per-message data); fall back to session file, then metrics store.
+  let input = 0, output = 0, cost = 0;
+  let source: CloseSummary['source'] = 'session-file';
+
+  if (nexus && (nexus.prompt > 0 || nexus.completion > 0)) {
+    input = nexus.prompt;
+    output = nexus.completion;
+    cost = nexus.cost;
+    source = 'nexus';
+  } else if (sessionFile.total > 0) {
+    input = sessionFile.input;
+    output = sessionFile.output;
+    cost = (sessionFile.total / 1_000_000) * 10.0;
+    source = 'session-file';
+  } else if (metricsStore.tokens > 0) {
+    input = metricsStore.tokens;
+    cost = metricsStore.cost;
+    source = 'metrics-store';
+  }
+
+  const summary: CloseSummary = {
+    session_id: sessionId,
+    closed_at: now,
+    input_tokens: input,
+    output_tokens: output,
+    total_tokens: input + output,
+    cost_usd: Math.round(cost * 10000) / 10000,
+    model: process.env.AI_MODEL || 'unknown',
+    provider: process.env.AI_PROVIDER || 'unknown',
+    source,
+  };
+
+  // Persist close summary to .session/token-close-summary.json
+  ensureRuntimeDir();
+  fs.writeFileSync(path.join(SESSION_DIR, 'token-close-summary.json'), JSON.stringify(summary, null, 2), 'utf-8');
+
+  // Update session-current.json with final metrics ONLY if the target session
+  // matches the current active session. Prevents cross-session contamination
+  // when closing a historical session via --session-id.
+  try {
+    const fp = path.join(SESSION_DIR, 'session-current.json');
+    if (fs.existsSync(fp)) {
+      const data = JSON.parse(fs.readFileSync(fp, 'utf-8')) as Record<string, unknown>;
+      const currentId = String(data.sessionId ?? data.id ?? '').trim();
+      if (currentId === sessionId) {
+        data.totalInputTokens = input;
+        data.totalOutputTokens = output;
+        data.totalTokens = input + output;
+        data.closeTime = now;
+        data.status = 'closed';
+        fs.writeFileSync(fp, JSON.stringify(data, null, 2), 'utf-8');
+      }
+    }
+  } catch { /* ignore */ }
+
+  return summary;
+}
+
 function getDashboardData(): Record<string, unknown> {
   const daily = queryHistory(30);
   const weekly = getWeeklyData();
@@ -271,6 +403,25 @@ function main(): void {
       break;
     }
 
+    case 'close': {
+      const sid = sessionId || readSessionIdFromFiles() || 'unknown';
+      const summary = closeSession(sid);
+      result.status = 'closed';
+      result.sessionId = sid;
+      result.summary = summary;
+      if (!asJson) {
+        console.log(`\n=== Token Usage Close Summary ===`);
+        console.log(`Session:      ${sid}`);
+        console.log(`Input tokens: ${summary.input_tokens.toLocaleString()}`);
+        console.log(`Output tokens:${summary.output_tokens.toLocaleString()}`);
+        console.log(`Total tokens: ${summary.total_tokens.toLocaleString()}`);
+        console.log(`Cost:         $${summary.cost_usd.toFixed(4)} USD`);
+        console.log(`Source:       ${summary.source}`);
+        console.log(`Closed at:    ${summary.closed_at}`);
+      }
+      break;
+    }
+
     case 'dashboard':
       result.status = 'dashboard';
       result.data = getDashboardData();
@@ -287,6 +438,31 @@ function main(): void {
 function extractArg(args: string[], name: string): string | undefined {
   const idx = args.indexOf(name);
   return idx >= 0 ? args[idx + 1] : undefined;
+}
+
+/** Resolve current session ID from session files when not provided explicitly. */
+function readSessionIdFromFiles(): string | undefined {
+  for (const name of ['session-current.json']) {
+    const fp = path.join(SESSION_DIR, name);
+    try {
+      if (fs.existsSync(fp)) {
+        const data = JSON.parse(fs.readFileSync(fp, 'utf-8')) as Record<string, unknown>;
+        const sid = String(data.sessionId ?? data.id ?? '').trim();
+        if (sid) return sid;
+      }
+    } catch { /* ignore */ }
+  }
+  try {
+    const files = fs.readdirSync(SESSION_DIR)
+      .filter((f) => f.startsWith('session-') && f.endsWith('.json') && !f.includes('current'))
+      .sort();
+    for (const f of files.reverse()) {
+      const data = JSON.parse(fs.readFileSync(path.join(SESSION_DIR, f), 'utf-8')) as Record<string, unknown>;
+      const sid = String(data.sessionId ?? data.id ?? '').trim();
+      if (sid) return sid;
+    }
+  } catch { /* ignore */ }
+  return undefined;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

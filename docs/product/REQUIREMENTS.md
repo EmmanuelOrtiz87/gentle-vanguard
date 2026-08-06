@@ -90,7 +90,7 @@ Unified dependency manifest for Gentle-Vanguard. Consolidates data from 7 source
 - `.\scripts\diagnostics\system-diagnostics.ps1` — comprehensive health report (exit codes:
   0=healthy, 1=degraded, 2=critical)
 - `.\scripts\utilities\agent-verify.ps1` — agent self-verification
-- `.\scripts\utilities\gv.ps1 verify` — workflow verification
+- `.\scripts\utilities\src/cli/gv.ts verify` — workflow verification
 
 ---
 
@@ -157,7 +157,7 @@ prerequisites list.
 | ------------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | `install-engram.ps1`            | `src/skills/`                                                                       | `scripts/utilities/` (referenced by system-diagnostics.ts as `scripts/utilities/install-engram.ps1`) |
 | `auto-init-dev-environment.ps1` | `scripts/utilities/UTILITIES/`                                                                          | `scripts/utilities/` (redundant nesting)                                                              |
-| `gv.ps1`                        | 3 copies: `scripts/utilities/`, `scripts/utilities/WORKFLOW-ORCHESTRATION/`, `scripts/gentle-vanguard/` | Should consolidate                                                                                    |
+| `src/cli/gv.ts`                        | 3 copies: `scripts/utilities/`, `scripts/utilities/WORKFLOW-ORCHESTRATION/`, `scripts/gentle-vanguard/` | Should consolidate                                                                                    |
 
 ### 8. Missing dependencies from PREREQUISITES.md not in install-prerequisites
 
@@ -179,7 +179,7 @@ PREREQUISITES.md or any other documentation.
 
 `scripts/gentle-vanguard/bootstrap-machine.ps1` is a **global Gentle-Vanguard installer** (installs
 Gentle-Vanguard to `~/.gentle-vanguard/`), not a machine bootstrap for prerequisites. This is
-distinct from `scripts/gentle-vanguard/bootstrap.ps1` (workspace bootstrap) and
+distinct from `src/bootstrap.ts` (workspace bootstrap) and
 `scripts/utilities/install-prerequisites.ps1` (tool installer). The name `bootstrap-machine.ps1` is
 misleading given docs/getting-started/README.md says "this will install required TypeScript modules,
 configure Git hooks, set up env vars, and validate prerequisites" — the actual script does none of

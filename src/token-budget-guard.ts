@@ -2,7 +2,7 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { execSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 
 const ROOT = resolve(process.cwd());
 
@@ -176,14 +176,14 @@ export function checkEngram(): { available: boolean; source: string } {
   try {
     // Windows compatible: try 'where' first, fallback to direct execution
     const isWindows = process.platform === 'win32';
-    const cmd = isWindows ? 'where engram' : 'which engram';
-    const r = execSync(cmd, { stdio: 'pipe', timeout: 5000 }).toString().trim();
+    const cmd = isWindows ? 'where' : 'which';
+    const r = runSync(cmd, ['engram'], { stdio: 'pipe', timeout: 5000 }).stdout.trim();
     if (r) return { available: true, source: r.split('\n')[0].trim() };
   } catch {
     // Fallback: try to run engram directly
     try {
-      execSync('engram --version', { stdio: 'pipe', timeout: 5000 });
-      return { available: true, source: 'engram (in PATH)' };
+      const ver = runSync('engram', ['--version'], { stdio: 'pipe', timeout: 5000 });
+      if (ver.status === 0) return { available: true, source: 'engram (in PATH)' };
     } catch {
       /* not found */
     }

@@ -13,7 +13,7 @@
  *   npx tsx src/dependency-validator.ts --install # auto-install missing
  */
 
-import { spawnSync } from 'node:child_process';
+import { runSync } from './core/run-command.js';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
@@ -61,13 +61,13 @@ function mac(): boolean { return PLATFORM === 'macos'; }
 
 function cmdExists(cmd: string): boolean {
   const which = win() ? 'where' : 'which';
-  const r = spawnSync(which, [cmd], { encoding: 'utf-8', stdio: 'pipe' });
+  const r = runSync(which, [cmd], { stdio: 'pipe' });
   return r.status === 0;
 }
 
 function run(cmd: string, args: string[]): { stdout: string; stderr: string; status: number | null } {
-  const r = spawnSync(cmd, args, { encoding: 'utf-8', stdio: 'pipe', windowsHide: true });
-  return { stdout: (r.stdout ?? '').trim(), stderr: (r.stderr ?? '').trim(), status: r.status };
+  const r = runSync(cmd, args, { stdio: 'pipe' });
+  return { stdout: r.stdout.trim(), stderr: r.stderr.trim(), status: r.status };
 }
 
 function getVersion(binary: string, versionCmd?: string, extract?: string): string {

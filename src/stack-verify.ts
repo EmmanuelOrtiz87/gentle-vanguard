@@ -15,7 +15,7 @@
  *   npx tsx src/stack-verify.ts --fix        # attempt to fix failures
  */
 
-import { spawnSync } from 'node:child_process';
+import { runSync } from './core/run-command.js';
 import { existsSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
@@ -60,8 +60,8 @@ const C = {
 
 function run(cmd: string, args: string[], timeoutMs?: number): { stdout: string; stderr: string; status: number | null } {
   try {
-    const r = spawnSync(cmd, args, { encoding: 'utf-8', stdio: 'pipe', windowsHide: true, timeout: timeoutMs ?? 30000 });
-    return { stdout: (r.stdout ?? '').trim(), stderr: (r.stderr ?? '').trim(), status: r.status };
+    const r = runSync(cmd, args, { stdio: 'pipe', timeout: timeoutMs ?? 30000 });
+    return { stdout: r.stdout.trim(), stderr: r.stderr.trim(), status: r.status };
   } catch {
     return { stdout: '', stderr: '', status: -1 };
   }
@@ -417,7 +417,7 @@ async function autoFix(results: CheckResult[]): Promise<number> {
     console.log(`  ${C.yellow('→')} Fixing: ${item.name} (${item.fixCmd})`);
     try {
       const parts = item.fixCmd.split(/\s+/);
-      const r = spawnSync(parts[0], parts.slice(1), { encoding: 'utf-8', stdio: 'pipe', windowsHide: true, timeout: 60000 });
+      const r = runSync(parts[0], parts.slice(1), { stdio: 'pipe', timeout: 60000 });
       if (r.status === 0) {
         console.log(`    ${C.green('✔')} Fixed successfully`);
         fixed++;

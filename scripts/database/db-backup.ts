@@ -15,7 +15,7 @@
 
 import { existsSync, mkdirSync, readdirSync, statSync, unlinkSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { execSync } from 'child_process';
+import { runSyncShell } from '../../src/core/run-command.js';
 
 const ROOT = resolve(process.cwd());
 const DB_PATH = join(ROOT, '.runtime', 'gentle-vanguard.db');
@@ -56,7 +56,7 @@ function listBackups(): { name: string; sizeMB: string; date: string }[] {
 
 function doBackup(): number {
   if (!existsSync(DB_PATH)) {
-    log(`ERROR: ${DB_PATH} not found`, );
+    log(`ERROR: ${DB_PATH} not found`);
     return 1;
   }
 
@@ -75,10 +75,7 @@ function doBackup(): number {
 
   // Use SQLite backup API via CLI for safe online backup
   try {
-    execSync(
-      `sqlite3 "${DB_PATH}" ".backup '${targetPath}'"`,
-      { encoding: 'utf8', timeout: 30000 },
-    );
+    runSyncShell(`sqlite3 "${DB_PATH}" ".backup '${targetPath}'"`, { timeout: 30000 }).stdout;
     const sizeMB = (statSync(targetPath).size / 1024 / 1024).toFixed(2);
     log(`Backup created: ${targetPath} (${sizeMB} MB)`);
   } catch (e) {
@@ -93,10 +90,7 @@ function doBackup(): number {
     created_at: new Date().toISOString(),
     size_bytes: statSync(targetPath).size,
   };
-  writeFileSync(
-    join(BACKUP_DIR, `${backupName}.manifest.json`),
-    JSON.stringify(manifest, null, 2),
-  );
+  writeFileSync(join(BACKUP_DIR, `${backupName}.manifest.json`), JSON.stringify(manifest, null, 2));
 
   return 0;
 }
@@ -139,7 +133,12 @@ function doRestore(): number {
     const match = backups.find((b) => b.name.startsWith(restoreArg) || b.name.includes(restoreArg));
     if (!match) {
       log(`ERROR: No backup matching "${restoreArg}"`);
-      log(`Available: ${backups.slice(0, 5).map((b) => b.name).join(', ')}`);
+      log(
+        `Available: ${backups
+          .slice(0, 5)
+          .map((b) => b.name)
+          .join(', ')}`,
+      );
       return 1;
     }
     targetName = match.name;
@@ -156,10 +155,9 @@ function doRestore(): number {
 
   // Safe restore: use .restore CLI command
   try {
-    execSync(`sqlite3 "${DB_PATH}" ".restore '${backupPath}'"`, {
-      encoding: 'utf8',
+    runSyncShell(`sqlite3 "${DB_PATH}" ".restore '${backupPath}'"`, {
       timeout: 60000,
-    });
+    }).stdout;
     log(`Restore complete from ${targetName} (${backupSizeMB} MB)`);
   } catch (e) {
     log(`Restore failed: ${(e as Error).message}`);
@@ -178,26 +176,25 @@ function doOptimize(): number {
   const beforeSize = statSync(DB_PATH).size;
 
   log('Running PRAGMA wal_checkpoint(TRUNCATE)...');
-  execSync(`sqlite3 "${DB_PATH}" "PRAGMA wal_checkpoint(TRUNCATE);"`, {
-    encoding: 'utf8',
+  runSyncShell(`sqlite3 "${DB_PATH}" "PRAGMA wal_checkpoint(TRUNCATE);"`, {
     timeout: 30000,
-  });
+  }).stdout;
 
   log('Running REINDEX...');
-  execSync(`sqlite3 "${DB_PATH}" "REINDEX;"`, {
-    encoding: 'utf8',
+  runSyncShell(`sqlite3 "${DB_PATH}" "REINDEX;"`, {
     timeout: 60000,
-  });
+  }).stdout;
 
   log('Running VACUUM...');
-  execSync(`sqlite3 "${DB_PATH}" "VACUUM;"`, {
-    encoding: 'utf8',
+  runSyncShell(`sqlite3 "${DB_PATH}" "VACUUM;"`, {
     timeout: 120000,
-  });
+  }).stdout;
 
   const afterSize = statSync(DB_PATH).size;
   const savedMB = ((beforeSize - afterSize) / 1024 / 1024).toFixed(2);
-  log(`Optimization complete: ${(beforeSize / 1024 / 1024).toFixed(2)} MB → ${(afterSize / 1024 / 1024).toFixed(2)} MB (saved ${savedMB} MB)`);
+  log(
+    `Optimization complete: ${(beforeSize / 1024 / 1024).toFixed(2)} MB → ${(afterSize / 1024 / 1024).toFixed(2)} MB (saved ${savedMB} MB)`,
+  );
 
   return 0;
 }

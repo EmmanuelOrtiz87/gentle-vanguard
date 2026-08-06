@@ -331,6 +331,14 @@
         "description": "Inicializa sistema de notificaciones de tokens al inicio de sesion (TS)"
       },
       {
+        "id": "token-session-banner",
+        "enabled": true,
+        "script": "src/token-session-banner.ts",
+        "args": "",
+        "required": false,
+        "description": "Muestra al inicio de sesion los tokens consumidos por el stack y los restantes de la sesion (input/output/total)"
+      },
+      {
         "id": "json-validator-verify",
         "enabled": true,
         "script": "src/json-validator.ts",
@@ -642,6 +650,16 @@
         "description": "Prune old data from gentle-vanguard.db stack tables \u00e2\u20ac\u201d events >30d, cache >7d, token_usage >90d, orphaned skill_usage (Wave 37 D)"
       },
       {
+        "id": "token-monthly-summary",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/token-monthly-summary.ts",
+        "args": "--quiet",
+        "required": false,
+        "phase": 99,
+        "description": "Genera resumen automatico del consumo de tokens de los ultimos 30 dias y lo persiste en docs/sessions/metrics/monthly/"
+      },
+      {
         "id": "self-reflection",
         "enabled": true,
         "lazy": true,
@@ -670,6 +688,16 @@
         "required": false,
         "phase": 99,
         "description": "Adaptive Router Din\u00c3\u00a1mico \u00e2\u20ac\u201d dynamic routing from historical performance data"
+      },
+      {
+        "id": "adaptive-steps",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/adaptive-steps.ts",
+        "args": "--status",
+        "required": false,
+        "phase": 99,
+        "description": "Adaptive Steps \u00e2\u20ac\u201d auto-scale orchestrator/subagent step budgets from task complexity so agents never block on insufficient limits"
       },
       {
         "id": "predictive-governor",

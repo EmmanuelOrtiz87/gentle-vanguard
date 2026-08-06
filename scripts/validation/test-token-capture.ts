@@ -5,7 +5,7 @@
  * Verifica si las optimizaciones en tokens están funcionando realmente
  */
 
-import { execSync } from 'child_process';
+import { runSyncShell } from '../../src/core/run-command.js';
 import { existsSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
 
@@ -16,10 +16,9 @@ console.log('🔍 Test de captura de tokens en tiempo real...');
 // 1. Verificar que el sistema esté listo
 console.log('\n1. Verificando estado del sistema...');
 try {
-    const result = execSync('npx tsx src/token-budget-guard.ts -Mode status -Quiet', {
-        cwd: ROOT,
-        encoding: 'utf-8'
-    });
+    const result = runSyncShell('npx tsx src/token-budget-guard.ts -Mode status -Quiet', {
+        cwd: ROOT
+    }).stdout;
     console.log('✅ Token Guard está funcionando:');
     console.log('   ' + result.trim());
 } catch (error) {
@@ -77,10 +76,9 @@ if (existsSync(metricsFile)) {
 console.log('\n4. Probando guard con acción simulada...');
 
 try {
-    const result = execSync('npx tsx src/token-budget-guard.ts -Mode check -Task "test" -Risk "low" -Record -Quiet', {
-        cwd: ROOT,
-        encoding: 'utf-8'
-    });
+    const result = runSyncShell('npx tsx src/token-budget-guard.ts -Mode check -Task "test" -Risk "low" -Record -Quiet', {
+        cwd: ROOT
+    }).stdout;
     console.log('✅ Guard ejecutado con éxito:');
     console.log('   ' + result.trim());
     

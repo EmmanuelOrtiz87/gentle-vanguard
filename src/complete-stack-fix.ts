@@ -1,7 +1,7 @@
-import { execSync } from 'child_process';
 import { existsSync, writeFileSync, mkdirSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { getEffectiveProcessTimeout } from './core/timeout-config';
+import { runSyncShell } from './core/run-command.js';
 
 const ROOT = resolve(process.cwd());
 const TS = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
@@ -9,7 +9,8 @@ const S = (p: string) => join(ROOT, p);
 
 function run(cmd: string): string {
   try {
-    return execSync(cmd, { encoding: 'utf8', timeout: getEffectiveProcessTimeout('long_running'), cwd: ROOT }).trim();
+    const result = runSyncShell(cmd, { timeout: getEffectiveProcessTimeout('long_running'), cwd: ROOT });
+    return result.stdout?.trim() ?? '';
   } catch (e: unknown) {
     return 'ERR: ' + (e instanceof Error ? e.message : String(e));
   }
@@ -49,7 +50,7 @@ log('Timestamp: ' + TS, 'gray');
 // 1. Fix adaptive-common.ps1 - Get-DefaultState
 log('\n[1/6] Fix adaptive-common.ps1 Get-DefaultState...', 'yellow');
 patch(
-  'scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-common.ps1',
+  'src/adaptive-common.ts',
   'function Get-DefaultState {',
   "function Get-DefaultState {\n    return [pscustomobject]@{\n        optimizationActive = $false\n        normalStreak = 0\n        lastAction = 'none'\n        lastReason = 'none'\n        lastChangedAt = $null\n    }\n}",
 );
@@ -57,7 +58,7 @@ patch(
 // 2. Fix adaptive-opencode-profile.ps1 - remove Invoke-AdaptiveNotify calls
 log('[2/6] Fix adaptive-opencode-profile.ps1...', 'yellow');
 patch(
-  'scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-opencode-profile.ps1',
+  'src/adaptive-opencode-profile.ts',
   'Invoke-AdaptiveNotify',
   '# AdaptiveNotify',
 );
@@ -65,7 +66,7 @@ patch(
 // 3. Fix adaptive-codex-windsurf-profile.ps1 - remove Notify-Change calls
 log('[3/6] Fix adaptive-codex-windsurf-profile.ps1...', 'yellow');
 patch(
-  'scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-codex-windsurf-profile.ps1',
+  'src/adaptive-codex-windsurf-profile.ts',
   'Notify-Change',
   '# NotifyChange',
 );

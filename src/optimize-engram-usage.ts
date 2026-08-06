@@ -7,7 +7,7 @@
 
 import { existsSync, unlinkSync } from 'fs';
 import { join, resolve } from 'path';
-import { execSync } from 'child_process';
+import { runSync, runSyncShell } from './core/run-command.js';
 import { tmpdir } from 'os';
 import { randomUUID } from 'crypto';
 import { pathToFileURL } from 'url';
@@ -23,7 +23,7 @@ function resolveEngramBinary(): string | null {
     if (existsSync(c)) return c;
   }
   try {
-    const r = execSync('where engram', { encoding: 'utf-8', timeout: 5000, windowsHide: true }).trim();
+    const r = runSync('where', ['engram'], { timeout: 5000 }).stdout.trim();
     if (r) return r.split('\n')[0].trim();
   } catch { /* not in PATH */ }
   return null;
@@ -34,11 +34,9 @@ function runEngram(args: string[], allowFailure = false): string {
   if (!bin) throw new Error('Engram binary not found');
   const stderrFile = join(tmpdir(), `engram-stderr-${randomUUID()}.txt`);
   try {
-    return execSync(`"${bin}" ${args.join(' ')} 2>"${stderrFile}"`, {
-      encoding: 'utf-8',
+    return runSyncShell(`"${bin}" ${args.join(' ')} 2>"${stderrFile}"`, {
       timeout: 30000,
-      windowsHide: true,
-    });
+    }).stdout;
   } catch (e) {
     if (!allowFailure) throw e;
     return '';

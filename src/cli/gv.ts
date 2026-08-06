@@ -25,7 +25,7 @@
  *   help        Show this help
  */
 
-import { execSync } from 'child_process';
+import { runSync } from '../../adapters/command-runner.js';
 import { existsSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { printBanner } from './banner.js';
@@ -120,13 +120,18 @@ function showInfo(): void {
   footer();
 }
 
-function runCommand(cmd: string, label: string): boolean {
+function runCommand(command: string, args: string[], label: string): boolean {
   try {
     console.log(`[${label}] Running...`);
-    execSync(cmd, { stdio: 'inherit', timeout: 120000 });
+    const r = runSync(command, args, { timeout: 120000 });
+    if (r.status !== 0) {
+      console.error(`[${label}] FAILED (status=${r.status})`);
+      console.error((r.stdout || r.stderr || 'No output').toString().trim());
+      return false;
+    }
     return true;
   } catch (e) {
-    console.error(`[${label}] FAILED:`, (e as Error).message);
+    console.error(`[${label}] FAILED:`, e instanceof Error ? e.message : String(e));
     return false;
   }
 }
@@ -147,7 +152,7 @@ async function main(): Promise<void> {
       break;
 
     case 'check':
-      runCommand('npx tsx src/core/maintenance-watchtower.ts --action health', 'WATCHTOWER');
+      runCommand('npx', ['tsx', 'src/core/maintenance-watchtower.ts', '--action', 'health'], 'WATCHTOWER');
       break;
 
     case 'validate': {
@@ -182,8 +187,9 @@ async function main(): Promise<void> {
 
       // Check npm scripts
       try {
-        execSync('npm run typecheck', { stdio: 'pipe', timeout: 60000 });
-        console.log('  [OK] TypeScript typecheck passes');
+        const r = runSync('npm', ['run', 'typecheck'], { timeout: 60000 });
+        if (r.status === 0) console.log('  [OK] TypeScript typecheck passes');
+        else { console.log('  [FAIL] TypeScript typecheck failed'); ok = false; }
       } catch {
         console.log('  [FAIL] TypeScript typecheck failed');
         ok = false;
@@ -191,7 +197,8 @@ async function main(): Promise<void> {
 
       // Check git
       try {
-        const branch = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8', timeout: 5000 }).trim();
+        const r = runSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { timeout: 5000 });
+        const branch = (r.stdout ?? '').toString().trim();
         console.log(`  [OK] Git branch: ${branch}`);
       } catch {
         console.log('  [WARN] Not a git repository');
@@ -222,19 +229,19 @@ async function main(): Promise<void> {
     }
 
     case 'health':
-      runCommand('npm run db:health', 'NEXUS');
+      runCommand('npm', ['run', 'db:health'], 'NEXUS');
       break;
 
     case 'prune':
-      runCommand('npm run db:prune', 'NEXUS');
+      runCommand('npm', ['run', 'db:prune'], 'NEXUS');
       break;
 
     case 'backup':
-      runCommand('npm run db:backup', 'NEXUS');
+      runCommand('npm', ['run', 'db:backup'], 'NEXUS');
       break;
 
     case 'optimize':
-      runCommand('npm run db:optimize', 'NEXUS');
+      runCommand('npm', ['run', 'db:optimize'], 'NEXUS');
       break;
 
     case 'new':
@@ -251,17 +258,17 @@ async function main(): Promise<void> {
     case 'sync':
       header();
       console.log('Updating stack...\n');
-      runCommand('git pull origin develop', 'GIT');
-      runCommand('npm update', 'NPM');
+      runCommand('git', ['pull', 'origin', 'develop'], 'GIT');
+      runCommand('npm', ['update'], 'NPM');
       footer();
       break;
 
     case 'update-all':
       header();
       console.log('Full stack update...\n');
-      runCommand('git pull origin develop', 'GIT');
-      runCommand('npm update', 'NPM');
-      runCommand('npm run db:optimize', 'NEXUS');
+      runCommand('git', ['pull', 'origin', 'develop'], 'GIT');
+      runCommand('npm', ['update'], 'NPM');
+      runCommand('npm', ['run', 'db:optimize'], 'NEXUS');
       footer();
       break;
 
@@ -269,15 +276,17 @@ async function main(): Promise<void> {
       header();
       console.log('Available Tools:\n');
       const tools = [
-        { name: 'opencode', desc: 'opencode CLI (code editing)', check: 'opencode --version' },
-        { name: 'engram', desc: 'Persistent memory (plugin)', check: 'npx engram --version' },
-        { name: 'node', desc: 'Node.js runtime', check: 'node --version' },
-        { name: 'npx', desc: 'Node package executor', check: 'npx --version' },
+        { name: 'opencode', desc: 'opencode CLI (code editing)', command: 'opencode', args: ['--version'] },
+        { name: 'engram', desc: 'Persistent memory (plugin)', command: 'npx', args: ['engram', '--version'] },
+        { name: 'node', desc: 'Node.js runtime', command: 'node', args: ['--version'] },
+        { name: 'npx', desc: 'Node package executor', command: 'npx', args: ['--version'] },
       ];
       for (const t of tools) {
         try {
-          const ver = execSync(t.check, { encoding: 'utf8', timeout: 5000 }).trim().split('\n')[0];
-          console.log(`  [OK]    ${t.name.padEnd(12)} ${ver}`);
+          const r = runSync(t.command, t.args, { timeout: 5000 });
+          const ver = (r.stdout ?? '').toString().trim().split('\n')[0];
+          if (r.status === 0) console.log(`  [OK]    ${t.name.padEnd(12)} ${ver}`);
+          else console.log(`  [MISS]  ${t.name.padEnd(12)} ${t.desc}`);
         } catch {
           console.log(`  [MISS]  ${t.name.padEnd(12)} ${t.desc}`);
         }
@@ -297,7 +306,7 @@ async function main(): Promise<void> {
       break;
 
     case 'cache':
-      runCommand('npm run db:health', 'NEXUS (cache lives in Nexus DB)');
+      runCommand('npm', ['run', 'db:health'], 'NEXUS (cache lives in Nexus DB)');
       break;
 
     default:

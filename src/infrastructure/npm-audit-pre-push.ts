@@ -2,7 +2,7 @@
 
 import { existsSync } from 'fs';
 import { pathToFileURL } from 'url';
-import { spawnSync } from 'child_process';
+import { runSync } from '../core/run-command.js';
 
 interface VulnCounts {
   critical: number;
@@ -56,10 +56,8 @@ function main(): number {
     return 0;
   }
 
-  const auditResult = spawnSync('npm', ['audit', '--json'], {
+  const auditResult = runSync('npm', ['audit', '--json'], {
     cwd,
-    encoding: 'utf-8',
-    windowsHide: true,
   });
 
   let audit: AuditResult | null = null;
@@ -71,10 +69,8 @@ function main(): number {
 
   if (!audit || !audit.metadata?.vulnerabilities) {
     console.log(`[npm-audit] Invalid audit JSON, retrying with text output...`);
-    const textResult = spawnSync('npm', ['audit'], {
+    const textResult = runSync('npm', ['audit'], {
       cwd,
-      encoding: 'utf-8',
-      windowsHide: true,
     });
     console.log(textResult.stdout || textResult.stderr);
 

@@ -1,0 +1,22 @@
+{
+  "name": "gentle-vanguard-manager-skill",
+  "version": "1.0.0",
+  "description": "",
+  "triggers": [],
+  "mission": {
+    "name": "gentle-vanguard-manager-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# gentle-vanguard-manager-skill (FF-017)\n\nAuto-update and self-maintenance skill for the gentle-vanguard workspace.\n\n## Description\n\nManages skill updates, workspace synchronization, and auto-maintenance workflows. Integrates with\nsession-autostart to keep skills current and workspace aligned.\n\n## Triggers\n\n- auto-update\n- self-update\n- update skill\n- sync workspace\n- maintenance\n\n## Dependencies\n\n- git (for pulling updates)\n- session-autostart (for lifecycle hooks)\n\n## Auto-Update Pattern\n\n1. On session start, check skills/ for outdated entries\n2. If git remote available, `git pull` to refresh\n3. Rebuild skill registry via build-skill-registry.ps1\n4. Log any conflicts or changes\n5. Verify integrity of updated skills and validate no broken references\n\n## Maintenance Tasks\n\n- Skill registry rebuild\n- Cross-reference validation\n- Workspace homologation\n- Config sync from remote",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

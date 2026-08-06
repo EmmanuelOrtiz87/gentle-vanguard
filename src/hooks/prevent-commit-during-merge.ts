@@ -2,14 +2,11 @@
 
 import { existsSync } from 'fs';
 import { pathToFileURL } from 'url';
-import { spawnSync } from 'child_process';
+import { runSync } from '../core/run-command.js';
 import { join } from 'path';
 
 function main(): number {
-  const result = spawnSync('git', ['rev-parse', '--git-dir'], {
-    encoding: 'utf-8',
-    windowsHide: true,
-  });
+  const result = runSync('git', ['rev-parse', '--git-dir']);
 
   const gitDir = result.stdout?.trim();
   if (!gitDir) return 0;
@@ -29,10 +26,7 @@ function main(): number {
     return 1;
   }
 
-  const unmergedResult = spawnSync('git', ['diff', '--name-only', '--diff-filter=U'], {
-    encoding: 'utf-8',
-    windowsHide: true,
-  });
+  const unmergedResult = runSync('git', ['diff', '--name-only', '--diff-filter=U']);
   const unmergedFiles = unmergedResult.stdout?.trim() ? unmergedResult.stdout.trim().split('\n').filter(Boolean) : [];
 
   if (existsSync(mergeHead) && unmergedFiles.length > 0) {

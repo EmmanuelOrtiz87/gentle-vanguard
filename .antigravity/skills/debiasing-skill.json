@@ -1,0 +1,22 @@
+{
+  "name": "debiasing-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "debiasing-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Cognitive Debiasing\n\n## Overview\n\nBased on Kahneman, Lovallo & Sibony's research, this skill provides a systematic\nchecklist to identify cognitive biases that distort decisions.\n\n**Core Principle:** Your brain is systematically wrong in predictable ways. Use\nchecklists to catch errors your intuition will miss.\n\n## When to Use\n\n- Before making or approving major decisions\n- Evaluating recommendations from others\n- When stakes are high and errors costly\n- When you feel very confident (overconfidence is a bias)\n- During investment, hiring, or strategic decisions\n- When a decision \"feels right\" but you can't articulate why\n\n## System 1 vs System 2\n\n| System 1 (Fast) | System 2 (Slow) |\n|---|---|\n| Automatic, intuitive | Deliberate, analytical |\n| Prone to biases | Can catch biases |\n\n**Goal:** Activate System 2 for important decisions using structured processes.\n\n## The 12-Point Decision Quality Checklist\n\nBefore approving any significant recommendation, evaluate:\n\n### Self-Interest Biases\n\n1. Is there self-interest at play?\n2. Is there emotional attachment (affect heuristic)?\n\n### Group Dynamics\n\n3. Has dissenting opinion been suppressed (groupthink)?\n4. Is there appropriate diversity of opinion?\n\n### Pattern Recognition Errors\n\n5. Are we over-relying on a single analogy (saliency bias)?\n6. Are we anchored on an initial number?\n\n### Confirmation Bias\n\n7. Were credible alternatives seriously considered?\n8. Are we seeking confirming evidence only?\n\n### Planning Fallacies\n\n9. Is the base case realistic?\n10. Is the worst case bad enough?\n11. Are we discounting sunk costs appropriately?\n\n### Halo Effects\n\n12. Are we assuming success transfers?\n\n## Quick Debiasing Techniques\n\n- **Anchoring:** Generate estimate before seeing others' numbers; ask \"What if 2x or 0.5x?\"; use multiple estimators.\n- **Confirmation Bias:** Assign someone to argue the opposite; ask \"What would make us wrong?\"; seek critics.\n- **Overconfidence:** Widen confidence intervals; use reference class forecasting; check base rates.\n- **Sunk Cost:** Ask \"Would we start today knowing what we know?\"; ignore past investment.\n- **Groupthink:** Collect independent opinions before discussion; assign devil's advocate.\n\n## Decision Quality Audit\n\nThe full audit template has been extracted to [`references/decision-audit-template.md`](references/decision-audit-template.md).\n\n## Verification Checklist\n\n- [ ] Systematically evaluated all 12 bias categories\n- [ ] Identified at least 2 potential biases affecting this decision\n- [ ] Applied specific debiasing technique to each identified bias\n- [ ] Sought independent/outside perspective\n- [ ] Documented reasoning for future reference\n- [ ] Comfortable defending decision process (not just outcome)\n\n## Key Questions\n\n- \"What would have to be true for this to be wrong?\"\n- \"How confident am I, and what's driving that confidence?\"\n- \"What would an outsider with fresh eyes conclude?\"\n- \"Am I reasoning toward a conclusion I already want?\"\n- \"What's the base rate of success for decisions like this?\"\n- \"If I'm wrong, how will I know, and when?\"\n\n## Kahneman's Warning\n\n\"We can be blind to the obvious, and we are also blind to our blindness.\"\n\nYou cannot debias through willpower alone. Use checklists, processes, and outside perspectives to\ncatch what your intuition misses.",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

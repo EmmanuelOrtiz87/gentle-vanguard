@@ -2,7 +2,7 @@
 
 import { readFileSync, existsSync } from 'fs';
 import { pathToFileURL } from 'url';
-import { spawnSync } from 'child_process';
+import { runSync } from '../core/run-command.js';
 import { extname, basename, dirname, join } from 'path';
 
 interface FormatCommand {
@@ -188,9 +188,7 @@ function invokeFormatter(filePath: string, formatter: FormatterConfig, dryRun: b
   for (const formatCmd of formatter.formats) {
     try {
       const args = substitutePath(formatCmd.args, filePath);
-      const result = spawnSync(formatCmd.cmd, args, {
-        encoding: 'utf-8',
-        windowsHide: true,
+      const result = runSync(formatCmd.cmd, args, {
         stdio: 'pipe',
       });
       if (result.status === 0 || result.status === null) {

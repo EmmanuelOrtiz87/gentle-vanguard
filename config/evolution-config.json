@@ -41,9 +41,9 @@
     "enabled": true,
     "layer": "v6.1",
     "configRef": "config/safety-layer.json",
-    "guardrailsScript": "scripts/utilities/SAFETY/safety-guardrails.ps1",
-    "scorerScript": "scripts/utilities/SAFETY/mutation-safety-scorer.ps1",
-    "injectionGuardScript": "scripts/utilities/SAFETY/prompt-injection-guard.ps1",
+    "guardrailsScript": "src/safety-guardrails.ts",
+    "scorerScript": "src/mutation-safety-scorer.ts",
+    "injectionGuardScript": "src/prompt-injection-guard.ts",
     "blockOnViolation": true,
     "escalateMediumRisk": true
   },

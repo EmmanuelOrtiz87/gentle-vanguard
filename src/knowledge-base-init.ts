@@ -6,7 +6,7 @@
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { execSync } from 'child_process';
+import { runSync, runNpxTsxSync } from './core/run-command.js';
 import { pathToFileURL } from 'url';
 
 const ROOT = resolve(process.cwd());
@@ -114,9 +114,9 @@ function runFullSync(quiet: boolean): boolean {
   if (hasTs || existsSync(syncScriptPs1)) {
     try {
       if (hasTs) {
-        execSync(`npx tsx "${syncScriptTs}" --mode full --quiet`, { cwd: projectRoot, timeout: 60000, windowsHide: true });
+        runNpxTsxSync(syncScriptTs, ['--mode', 'full', '--quiet'], { cwd: projectRoot, timeout: 60000 });
       } else {
-        execSync(`pwsh -NoProfile "${syncScriptPs1}" -Mode full -Quiet`, { cwd: projectRoot, timeout: 60000, windowsHide: true });
+        runSync('pwsh', ['-NoProfile', syncScriptPs1, '-Mode', 'full', '-Quiet'], { cwd: projectRoot, timeout: 60000 });
       }
       if (!quiet) console.log('[OK] Full sync completed');
       return true;

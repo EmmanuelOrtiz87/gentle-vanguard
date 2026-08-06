@@ -8,7 +8,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { execSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 import { pathToFileURL } from 'url';
 
 type Trigger = 'session-start' | 'pre-commit' | 'code-review' | 'task-complete';
@@ -242,13 +242,11 @@ function testGoalDriven(changedFiles: string[]): string[] {
 
 function getChangedFiles(targetPath: string): string[] {
   try {
-    const output = execSync('git diff --name-only HEAD~1...HEAD', {
+    const output = runSync('git', ['diff', '--name-only', 'HEAD~1...HEAD'], {
       cwd: targetPath,
-      encoding: 'utf-8',
       timeout: 5000,
-      windowsHide: true,
     });
-    return output.trim().split('\n').filter((f) => f.trim().length > 0);
+    return output.stdout.trim().split('\n').filter((f: string) => f.trim().length > 0);
   } catch {
     return [];
   }

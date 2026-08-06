@@ -22,7 +22,8 @@
   },
   "automation": {
     "triggerOn": ["end-session", "day-end-closure"],
-    "manualCommand": ".\\scripts\\utilities\\rotate-artifacts.ps1",
+    "_manualCommand": "DEPRECATED: rotate-artifacts.ps1 removed in Wave 24 migration",
+    "_note": "Artifact rotation now handled by src/session-close-orchestrator.ts",
     "ciIntegration": true
   }
 }

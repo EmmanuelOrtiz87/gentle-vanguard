@@ -15,7 +15,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { createHash } from 'crypto';
-import { execSync } from 'child_process';
+import { runSyncShell } from '../../../../src/core/run-command.js';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -62,10 +62,9 @@ function log(message: string, level: 'INFO' | 'WARN' | 'ERROR' | 'SUCCESS' = 'IN
 function getStagedFiles(): StagedFile[] {
   try {
     // Get staged files with status
-    const statusOutput = execSync('git diff --cached --name-status', {
-      encoding: 'utf-8',
+    const statusOutput = runSyncShell('git diff --cached --name-status', {
       cwd: ROOT,
-    });
+    }).stdout;
     const lines = statusOutput.split('\n').filter((l) => l.trim());
 
     const files: StagedFile[] = [];
@@ -83,7 +82,7 @@ function getStagedFiles(): StagedFile[] {
       // Get diff for this file
       let diff = '';
       try {
-        diff = execSync(`git diff --cached -- "${path}"`, { encoding: 'utf-8', cwd: ROOT });
+        diff = runSyncShell(`git diff --cached -- "${path}"`, { cwd: ROOT }).stdout;
       } catch {
         // May fail for new files
       }
@@ -100,7 +99,7 @@ function getStagedFiles(): StagedFile[] {
 }
 
 function getCurrentSHA(): string {
-  return execSync('git rev-parse HEAD', { encoding: 'utf-8', cwd: ROOT }).trim();
+  return runSyncShell('git rev-parse HEAD', { cwd: ROOT }).stdout.trim();
 }
 
 function computeSnapshotHash(files: StagedFile[]): string {
@@ -118,7 +117,7 @@ function computeSnapshotHash(files: StagedFile[]): string {
 
 function hasUnstagedChanges(): boolean {
   try {
-    const output = execSync('git status --porcelain', { encoding: 'utf-8', cwd: ROOT });
+    const output = runSyncShell('git status --porcelain', { cwd: ROOT }).stdout;
     return output.trim().length > 0;
   } catch {
     return false;

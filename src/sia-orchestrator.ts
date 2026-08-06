@@ -9,7 +9,7 @@ import {
 } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { spawnSync } from 'child_process';
+import { runSync, runNpxTsxSync } from './core/run-command.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -468,7 +468,7 @@ function cmdOptimize(sid: string, outputDir: string, scoreThreshold: number, asJ
   const recommendedThreshold = Math.max(50, Math.round(avgScore - stdev));
 
   // Run git log as a sub-process (spawnSync) to correlate commits with scores
-  const gitLog = spawnSync('git', ['log', '--oneline', '-5'], { cwd: ROOT, encoding: 'utf-8' });
+  const gitLog = runSync('git', ['log', '--oneline', '-5'], { cwd: ROOT });
   const recentCommits = gitLog.status === 0 ? gitLog.stdout.trim().split('\n') : [];
 
   const optimization: Record<string, unknown> = {
@@ -559,9 +559,8 @@ function learningLoop(
     // 2. Simulate target generation via sub-process call
     const dir = sessionDir(sessionId, outputDir);
     const targetPath = join(dir, `target-${i}.ps1`);
-    const genResult = spawnSync('npx', ['tsx', 'src/sia-orchestrator.ts', '--action', 'init', '--task-spec', 'placeholder'], {
+    const genResult = runNpxTsxSync('src/sia-orchestrator.ts', ['--action', 'init', '--task-spec', 'placeholder'], {
       cwd: ROOT,
-      encoding: 'utf-8',
       timeout: 10000,
     });
     if (genResult.status !== 0) {

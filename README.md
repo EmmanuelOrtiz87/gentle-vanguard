@@ -9,8 +9,9 @@
   <img src="https://img.shields.io/badge/TypeScript-7+-A855F7?style=flat-square&labelColor=0D1117" alt="TypeScript">
   <img src="https://img.shields.io/badge/TypeScript-100%25-3178C6?style=flat-square&labelColor=0D1117" alt="TypeScript">
   <img src="https://img.shields.io/badge/Tests-19%2F19-22C55E?style=flat-square&labelColor=0D1117" alt="Tests">
-  <img src="https://img.shields.io/badge/Health-82%2F82-22C55E?style=flat-square&labelColor=0D1117" alt="Health">
+  <img src="https://img.shields.io/badge/Health-85%2F85-22C55E?style=flat-square&labelColor=0D1117" alt="Health">
   <img src="https://img.shields.io/badge/Dashboard_Ready-%E2%9C%93-22C55E?style=flat-square&labelColor=0D1117" alt="Dashboard Ready">
+  <img src="https://img.shields.io/badge/Quick_Start-npm_run_start-22C55E?style=flat-square&labelColor=0D1117" alt="Quick Start">
 </p>
 
 <p align="center">
@@ -36,9 +37,12 @@ git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
 cd gentle-vanguard
 
 # Auto-install (prerequisites, hooks, dashboard build)
-.\scripts\setup-complete.ps1
+npx tsx src/setup-complete.ts
 
-# Run the dashboard (WS server + Vite + auto-open browser)
+# Quick start (optimized - 0.76s)
+npm run start
+
+# Or run dashboard directly
 npx tsx src/dashboard-start.ts
 ```
 
@@ -176,6 +180,8 @@ apps/web-dashboard/
 
 | Command | Description |
 |---|---|
+| `npm start` | **Quick start** dashboard (optimized - 0.76s) |
+| `npm run start:complete` | Start with full verification checks |
 | `npm test` | Run all **19 test suites** |
 | `npx tsx src/session-autostart.ts` | Run the **100-step session pipeline** |
 | `npx tsx src/auto-apply-safe.ts --check` | Check safe optimizations pending |

@@ -1,0 +1,22 @@
+{
+  "name": "red-team-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "red-team-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Red Team Thinking\n\n## Overview\n\nRed teaming means deliberately attacking your own plans, systems, or ideas to find\nweaknesses. A dedicated \"red team\" assumes an adversarial role against the \"blue\nteam's\" defenses.\n\n**Core Principle:** Attack yourself before others do.\n\n## When to Use\n\n- Security architecture review / Pre-launch preparation\n- Validating critical decisions / Stress-testing plans\n- Disaster preparedness / Competitive strategy / Code review\n\n**Decision flow:** Building something important? → Tried to break it? → RED TEAM IT.\nConfident in defenses? → RED TEAM YOUR CONFIDENCE. No adversary tested you? → BE YOUR OWN ADVERSARY.\n\n## Red Team Process (6 Steps)\n\n### Step 1: Define the Target\nWhat are you attacking? Scope (in/out), goal (e.g. unauthorized access, session hijacking).\n\n### Step 2: Adopt Adversary Mindset\nProfile likely attackers (script kiddies, sophisticated, insiders, competitors) and their motivations.\n\n### Step 3: Enumerate Attack Surfaces\nMap entry points (login, API, admin panel, DB), exposure, attacker access, and trust boundaries.\n\n### Step 4: Execute Attack Scenarios\nSystematically try attacks (credential stuffing, session hijacking, token prediction, XSS, etc.).\nDocument each attempt with execution steps and findings.\n\n### Step 5: Attempt Bypass\nFor each defense, try to bypass it — distribute across IPs, vary inputs, target weaker\nendpoints.\n\n### Step 6: Document Findings\nProduce an actionable report with severity ratings (Critical/High/Medium/Low) and\nremediation timelines.\n\n## Verification Checklist\n\n- [ ] Defined clear scope and adversary model\n- [ ] Adopted genuine adversary mindset\n- [ ] Enumerated attack surfaces\n- [ ] Executed multiple attack scenarios\n- [ ] Attempted to bypass defenses\n- [ ] Documented findings with severity\n- [ ] Provided actionable remediation\n- [ ] Updated defenses based on findings\n\n## Key Questions\n\n- \"How would an attacker approach this?\"\n- \"What assumptions am I making that an attacker wouldn't?\"\n- \"What's the weakest point in this system?\"\n- \"If I wanted to cause maximum damage, how would I?\"\n- \"What am I confident about that I haven't actually tested?\"\n\n## Sun Tzu's Wisdom (Applied)\n\n\"If you know the enemy and know yourself, you need not fear the result of a hundred battles.\"\n\nRed teaming is knowing yourself as the enemy would. The purpose isn't pessimism — it's preparation.",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

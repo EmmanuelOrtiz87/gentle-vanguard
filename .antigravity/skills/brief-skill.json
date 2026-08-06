@@ -1,0 +1,22 @@
+{
+  "name": "brief-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "brief-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# /brief -- Legal Team Briefing\n\n> If you see unfamiliar placeholders or need to check which tools are connected, see\n> [CONNECTORS.md](../../CONNECTORS.md).\n\nGenerate contextual briefings for legal work. Supports three modes: daily brief, topic brief, and\nincident brief.\n\n**Important**: This command assists with legal workflows but does not provide legal advice.\nBriefings should be reviewed by qualified legal professionals before being relied upon.\n\n## Invocation\n\n```\n/brief daily              # Morning brief of legal-relevant items\n/brief topic [query]      # Research brief on a specific legal question\n/brief incident [topic]   # Rapid brief on a developing situation\n```\n\nIf no mode is specified, ask the user which type of brief they need.\n\n## Modes\n\n### Daily Brief\n\nMorning summary of what a legal team member needs to start their day. Scans email, calendar, chat,\nCLM, and CRM for legal-relevant items. See [references/daily-brief.md](references/daily-brief.md)\nfor sources and output format.\n\n### Topic Brief\n\nResearch a specific legal question across documents, email, chat, and CLM. Synthesizes findings\ninto a structured brief. See [references/topic-brief.md](references/topic-brief.md) for workflow\nand output format.\n\n### Incident Brief\n\nRapid brief for developing situations (data breaches, litigation threats, regulatory inquiries).\nScans all sources for relevant context. See [references/incident-brief.md](references/incident-brief.md)\nfor workflow and output format.\n\n## General Notes\n\n- If sources are unavailable, note the gaps prominently so the user knows what was not checked\n- For daily briefs, learn the user's preferences over time (what they find useful, what they want\n  filtered out)\n- Briefs should be actionable: every item should have a clear next step or reason for inclusion\n- Keep briefs concise. Link to source materials rather than reproducing them in full",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

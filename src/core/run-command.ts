@@ -23,6 +23,11 @@
  */
 
 import { spawn, spawnSync, type SpawnOptions, type SpawnSyncOptions, type ChildProcess } from 'child_process';
+import { createRequire } from 'module';
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+
+const require = createRequire(import.meta.url);
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -34,13 +39,13 @@ export interface RunSyncResult {
   signal: string | null;
 }
 
-export interface RunOptions {
+export type RunOptions = Partial<SpawnOptions> & Partial<SpawnSyncOptions> & {
   cwd?: string;
   timeout?: number;
   env?: Record<string, string | undefined>;
-  stdio?: SpawnOptions['stdio'];
   maxBuffer?: number;
-}
+  encoding?: BufferEncoding | 'utf-8';
+};
 
 // ─── Defaults ─────────────────────────────────────────────────────────
 
@@ -73,14 +78,42 @@ export function run(
   options: RunOptions = {},
 ): ChildProcess {
   const spawnOpts: SpawnOptions = {
-    ...DEFAULT_OPTIONS,
+    ...(DEFAULT_OPTIONS as SpawnOptions),
+    ...(options as SpawnOptions),
     cwd: options.cwd ?? process.cwd(),
-    timeout: options.timeout,
-    env: options.env ? { ...process.env, ...options.env } : undefined,
+    env: options.env ? { ...process.env, ...options.env } : process.env,
     stdio: options.stdio ?? 'pipe',
   };
 
-  return spawn(command, args, spawnOpts);
+  let cmd = command;
+  let cmdArgs = args;
+  if (isWindowsScript(command)) {
+    const w = windowsScriptSpawn(command, args);
+    cmd = w.command;
+    cmdArgs = w.args;
+    spawnOpts.shell = w.shell;
+  }
+
+  return spawn(cmd, cmdArgs, spawnOpts);
+}
+
+// ─── Windows .cmd/.bat support ────────────────────────────────────────
+// On Windows, `.cmd`/`.bat` shims cannot be spawned directly (EINVAL) and
+// passing args with `shell:true` triggers DEP0190. We build the command line
+// ourselves and run it via the shell with NO args array — portable and warning-free.
+
+const WINDOWS_SCRIPT_RE = /\.(cmd|bat)$/i;
+
+function isWindowsScript(command: string): boolean {
+  return process.platform === 'win32' && WINDOWS_SCRIPT_RE.test(command);
+}
+
+function quoteArg(a: string): string {
+  return /[\s"]/.test(a) ? `"${a.replace(/"/g, '""')}"` : a;
+}
+
+function windowsScriptSpawn(command: string, args: string[]): { command: string; args: string[]; shell: boolean } {
+  return { command: [command, ...args].map(quoteArg).join(' '), args: [], shell: true };
 }
 
 // ─── Sync spawn ───────────────────────────────────────────────────────
@@ -100,16 +133,26 @@ export function runSync(
   options: RunOptions = {},
 ): RunSyncResult {
   const spawnOpts: SpawnSyncOptions = {
-    ...DEFAULT_SYNC_OPTIONS,
+    ...(DEFAULT_SYNC_OPTIONS as SpawnSyncOptions),
+    ...(options as SpawnSyncOptions),
     cwd: options.cwd ?? process.cwd(),
     timeout: options.timeout,
-    env: options.env ? { ...process.env, ...options.env } : undefined,
+    env: options.env ? { ...process.env, ...options.env } : process.env,
     stdio: options.stdio ?? 'pipe',
     maxBuffer: options.maxBuffer ?? 1024 * 1024,
   };
 
+  let cmd = command;
+  let cmdArgs = args;
+  if (isWindowsScript(command)) {
+    const w = windowsScriptSpawn(command, args);
+    cmd = w.command;
+    cmdArgs = w.args;
+    spawnOpts.shell = w.shell;
+  }
+
   try {
-    const result = spawnSync(command, args, spawnOpts);
+    const result = spawnSync(cmd, cmdArgs, spawnOpts);
     return {
       stdout: (result.stdout ?? '') as string,
       stderr: (result.stderr ?? '') as string,
@@ -176,28 +219,42 @@ export function runSyncShell(
 // ─── Windows-specific: npx wrapper ────────────────────────────────────
 
 /**
- * Run npx with tsx (the most common pattern in the stack).
- * Automatically handles npx.cmd vs npx on Windows.
+ * Resolve the tsx CLI entry point (dist/cli.mjs) from the installed package.
+ * Running `node <cli>` avoids spawning `.cmd`/`.bat` shims, which fail with
+ * EINVAL on Windows when used without a shell (and shell:true triggers the
+ * DEP0190 deprecation warning). This keeps execution portable and warning-free.
+ */
+function resolveTsxCli(): string {
+  const pkgJson = require.resolve('tsx/package.json');
+  const pkg = JSON.parse(readFileSync(pkgJson, 'utf-8')) as { bin?: string | Record<string, string> };
+  const bin = typeof pkg.bin === 'string' ? pkg.bin : pkg.bin?.tsx;
+  if (!bin) throw new Error('Cannot resolve tsx bin entry');
+  return join(dirname(pkgJson), bin);
+}
+
+/**
+ * Run a script with tsx (the most common pattern in the stack).
+ * Uses `node <tsx-cli>` directly — no shell, no `.cmd` shim, portable across
+ * Windows/Unix.
  */
 export function runNpxTsx(
   script: string,
   scriptArgs: string[] = [],
   options: RunOptions = {},
 ): ChildProcess {
-  const isWindows = process.platform === 'win32';
-  const npxCmd = isWindows ? 'npx.cmd' : 'npx';
-  return run(npxCmd, ['tsx', script, ...scriptArgs], options);
+  const tsxCli = resolveTsxCli();
+  return run(process.execPath, [tsxCli, script, ...scriptArgs], options);
 }
 
 /**
- * Run npx with tsx synchronously.
+ * Run a script with tsx synchronously.
+ * Uses `node <tsx-cli>` directly — no shell, no `.cmd` shim.
  */
 export function runNpxTsxSync(
   script: string,
   scriptArgs: string[] = [],
   options: RunOptions = {},
 ): RunSyncResult {
-  const isWindows = process.platform === 'win32';
-  const npxCmd = isWindows ? 'npx.cmd' : 'npx';
-  return runSync(npxCmd, ['tsx', script, ...scriptArgs], options);
+  const tsxCli = resolveTsxCli();
+  return runSync(process.execPath, [tsxCli, script, ...scriptArgs], options);
 }

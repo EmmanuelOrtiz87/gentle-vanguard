@@ -4,13 +4,13 @@
  * TS migration of scripts/utilities/memory/ENGRAM/engram-auto-compact.ps1
  */
 
-import { execSync } from 'child_process';
+import { runSyncShell } from './core/run-command.js';
 import { pathToFileURL } from 'url';
 
 function run(cmd: string): { ok: boolean; output: string } {
   try {
-    const out = execSync(cmd, { encoding: 'utf-8', timeout: 60000, windowsHide: true });
-    return { ok: true, output: out.trim() };
+    const r = runSyncShell(cmd, { timeout: 60000 });
+    return { ok: r.status === 0, output: r.stdout.trim() };
   } catch (e: unknown) {
     return { ok: false, output: e instanceof Error ? e.message : String(e) };
   }

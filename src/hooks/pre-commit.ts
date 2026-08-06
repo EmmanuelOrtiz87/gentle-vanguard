@@ -2,7 +2,7 @@
 
 import { existsSync } from 'fs';
 import { pathToFileURL } from 'url';
-import { spawnSync } from 'child_process';
+import { runSync, runNpxTsxSync } from '../../adapters/command-runner.js';
 import { join, basename } from 'path';
 
 interface CriticalPattern {
@@ -22,10 +22,10 @@ const CRITICAL_PATTERNS: CriticalPattern[] = [
 
 const EXCLUDED_PATHS = new Set([
   'docs/reference/ARCHITECTURE.md',
-  'hooks/pre-commit.ps1',
-  'hooks/pre-commit-privacy.ps1',
-  'scripts/hooks/check-security.ps1',
-  'scripts/utilities/workflow/WORKFLOW-ORCHESTRATION/gv.ps1',
+  'src/hooks/pre-commit.ts',
+  'src/hooks/pre-commit-privacy.ts',
+  'src/check-security.ts',
+  'src/gv.ts',
   'skills/docker-devops-skill/SKILL.md',
   'skills/security-expert-skill/references/security-patterns.md',
   'config/security-privacy.json',
@@ -34,12 +34,8 @@ const EXCLUDED_PATHS = new Set([
 ]);
 
 function execGit(args: string[], cwd?: string): string {
-  const result = spawnSync('git', args, {
-    encoding: 'utf-8',
-    windowsHide: true,
-    ...(cwd ? { cwd } : {}),
-  });
-  return result.stdout?.trim() ?? '';
+  const r = runSync('git', args, { cwd: cwd ?? process.cwd() });
+  return (r.stdout ?? '').toString().trim();
 }
 
 /** Run a script via npx tsx if TS exists, else pwsh if PS1 exists. Returns true on success. */
@@ -49,23 +45,15 @@ function runScript(scriptPath: string, cwd?: string): boolean {
 
   // Try TS first
   if (existsSync(tsFull)) {
-    const result = spawnSync('npx', ['tsx', tsPath], {
-      encoding: 'utf-8',
-      windowsHide: true,
-      stdio: 'inherit',
-      cwd: cwd || process.cwd(),
-      shell: true,
-    });
-    return result.status === 0;
+    const r = runNpxTsxSync(tsPath, [], { cwd: cwd ?? process.cwd() });
+    return r.status === 0;
   }
 
   // PS1 fallback
   if (existsSync(scriptPath)) {
-    const result = spawnSync('pwsh', ['-NoProfile', '-File', scriptPath], {
-      encoding: 'utf-8',
-      windowsHide: true,
+    const result = runSync('pwsh', ['-NoProfile', '-File', scriptPath], {
+      cwd: cwd ?? process.cwd(),
       stdio: 'inherit',
-      ...(cwd ? { cwd } : {}),
     });
     return result.status === 0;
   }
@@ -103,7 +91,7 @@ function main(_args?: string[]): number {
   console.log('[INFO] Running 7-dimension checks...');
 
   const checks = [
-    { ts: 'src/check-security.ts', ps1: 'scripts/hooks/check-security.ps1', blocking: true, label: 'Security' },
+    { ts: 'src/check-security.ts', ps1: 'src/check-security.ts', blocking: true, label: 'Security' },
     { ts: '', ps1: 'scripts/hooks/check-quality.ps1', blocking: true, label: 'Quality' },
     { ts: '', ps1: 'scripts/hooks/check-architecture.ps1', blocking: true, label: 'Architecture' },
     { ts: '', ps1: 'scripts/hooks/check-testing.ps1', blocking: true, label: 'Testing' },
@@ -151,14 +139,8 @@ function main(_args?: string[]): number {
     // Try TS first
     const validateTs = join(gitRoot, 'src', 'validate-readme.ts');
     if (existsSync(validateTs)) {
-      const result = spawnSync('npx', ['tsx', 'src/validate-readme.ts', '--repo', 'both'], {
-        encoding: 'utf-8',
-        windowsHide: true,
-        stdio: 'inherit',
-        cwd: gitRoot,
-        shell: true,
-      });
-      if (result.status !== 0) {
+        const r = runNpxTsxSync('src/validate-readme.ts', ['--repo', 'both'], { cwd: gitRoot });
+        if (r.status !== 0) {
         console.log('[BLOCK] README governance validation failed. See rules/README-GOVERNANCE.md');
         return 1;
       }
@@ -169,13 +151,8 @@ function main(_args?: string[]): number {
       if (!existsSync(validateScript)) {
         console.log('[WARN] validate-readme not found - skipping governance check');
       } else {
-        const result = spawnSync('pwsh', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', validateScript, '-Repo', 'both'], {
-          encoding: 'utf-8',
-          windowsHide: true,
-          stdio: 'inherit',
-          cwd: gitRoot,
-        });
-        if (result.status !== 0) {
+        const r = runSync('pwsh', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', validateScript, '-Repo', 'both'], { cwd: gitRoot });
+        if (r.status !== 0) {
           console.log('[BLOCK] README governance validation failed. See rules/README-GOVERNANCE.md');
           return 1;
         }
@@ -222,14 +199,8 @@ function main(_args?: string[]): number {
   const docHookTs = join(gitRoot, 'src', 'document-analysis-init.ts');
   if (existsSync(docHookTs)) {
     try {
-      const result = spawnSync('npx', ['tsx', 'src/document-analysis-init.ts'], {
-        encoding: 'utf-8',
-        windowsHide: true,
-        stdio: 'inherit',
-        cwd: gitRoot,
-        shell: true,
-      });
-      if (result.status !== 0) {
+      const r = runNpxTsxSync('src/document-analysis-init.ts', [], { cwd: gitRoot });
+      if (r.status !== 0) {
         console.log('[WARN] Document analysis hook failed (non-blocking)');
       }
     } catch (e) {

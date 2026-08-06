@@ -19,7 +19,7 @@
 
 import { existsSync, mkdirSync, writeFileSync, readFileSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
-import { spawnSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 import { createHash } from 'crypto';
 
 const ROOT = resolve(process.cwd());
@@ -72,8 +72,7 @@ async function exportFromEngram(_sessionId?: string): Promise<{ exported: number
 
   try {
     // Buscar observaciones recientes de Engram
-    const result = spawnSync('engram', ['search', '--limit', '50', '--json'], {
-      encoding: 'utf-8',
+    const result = runSync('engram', ['search', '--limit', '50', '--json'], {
       timeout: 10000,
     });
 
@@ -169,10 +168,10 @@ function saveToEngram(title: string, content: string): { ok: boolean; id?: strin
   const safeTitle = title.slice(0, 200).replace(/\r?\n/g, ' ');
   const safeContent = content.slice(0, 3000).replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
 
-  const result = spawnSync(
+  const result = runSync(
     'engram',
     ['save', safeTitle, safeContent, '--type', 'discovery', '--project', ENGRAM_PROJECT, '--scope', 'project'],
-    { encoding: 'utf-8', timeout: 15000 }
+    { timeout: 15000 }
   );
 
   if (result.status !== 0) {
@@ -197,7 +196,7 @@ async function importToEngram(): Promise<{ imported: number; skipped: number; er
   let skipped = 0;
 
   // Verificar que el CLI de engram esté disponible
-  const check = spawnSync('engram', ['--version'], { encoding: 'utf-8', timeout: 5000 });
+  const check = runSync('engram', ['--version'], { timeout: 5000 });
   if (check.status !== 0) {
     log('Engram CLI unavailable — cannot import', 'WARN');
     return { imported: 0, skipped: 0, errors: ['Engram CLI unavailable'] };

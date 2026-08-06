@@ -18,21 +18,21 @@
   "priorities": [
     {
       "id": "security-orchestrator",
-      "script": "scripts/security/security-orchestrator.ps1",
+      "script": "src/security/security-orchestrator.ts",
       "target": "src/security-orchestrator.ts",
       "priority": "high",
       "status": "implemented"
     },
     {
       "id": "hybrid-executor",
-      "script": "scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1",
+      "script": "src/hybrid-executor.ts",
       "target": "src/hybrid-executor.ts",
       "priority": "high",
       "status": "implemented"
     },
     {
       "id": "checkpoint-manager",
-      "script": "scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1",
+      "script": "src/checkpoint-manager.ts",
       "target": "src/checkpoint-manager.ts",
       "priority": "medium",
       "status": "implemented"
@@ -46,7 +46,7 @@
     },
     {
       "id": "session-scoring",
-      "script": "scripts/adaptive/session-scoring.ps1",
+      "script": "src/session-scoring.ts",
       "target": "src/session-scoring.ts",
       "priority": "high",
       "status": "implemented",
@@ -56,7 +56,7 @@
     },
     {
       "id": "token-budget-guard",
-      "script": "scripts/utilities/telemetry/TELEMETRY-METRICS/token-budget-guard.ps1",
+      "script": "src/token-budget-guard.ts",
       "target": "src/token-budget-guard.ts",
       "priority": "high",
       "status": "implemented",
@@ -76,7 +76,7 @@
     },
     {
       "id": "session-cleanup-start",
-      "script": "scripts/utilities/session/session-cleanup-start.ps1",
+      "script": "src/session-cleanup-start.ts",
       "target": "src/session-cleanup-start.ts",
       "priority": "high",
       "status": "implemented",
@@ -86,7 +86,7 @@
     },
     {
       "id": "correction-rules-engine",
-      "script": "scripts/adaptive/correction-rules-engine.ps1",
+      "script": "src/correction-rules-engine.ts",
       "target": "src/correction-rules-engine.ts",
       "priority": "medium",
       "status": "implemented",
@@ -96,7 +96,7 @@
     },
     {
       "id": "tracing-instrument",
-      "script": "scripts/utilities/ops/TRACING/tracing-instrument.ps1",
+      "script": "src/tracing-instrument.ts",
       "target": "src/tracing-instrument.ts",
       "priority": "high",
       "status": "implemented",
@@ -106,7 +106,7 @@
     },
     {
       "id": "event-sourcing",
-      "script": "scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1",
+      "script": "src/event-sourcing.ts",
       "target": "src/event-sourcing.ts",
       "priority": "high",
       "status": "implemented",
@@ -116,7 +116,7 @@
     },
     {
       "id": "saga-orchestrator",
-      "script": "scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1",
+      "script": "src/saga-orchestrator.ts",
       "target": "src/saga-orchestrator.ts",
       "priority": "medium",
       "status": "implemented",
@@ -126,7 +126,7 @@
     },
     {
       "id": "engram-integrity-check",
-      "script": "scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1",
+      "script": "src/engram-integrity-check.ts",
       "target": "src/engram-integrity-check.ts",
       "priority": "high",
       "status": "implemented",
@@ -146,7 +146,7 @@
     },
     {
       "id": "post-autostart-summary",
-      "script": "scripts/utilities/post-autostart-summary.ps1",
+      "script": "src/post-autostart-summary.ts",
       "target": "src/post-autostart-summary.ts",
       "priority": "medium",
       "status": "implemented",
@@ -156,7 +156,7 @@
     },
     {
       "id": "engram-auto-sync",
-      "script": "scripts/utilities/memory/ENGRAM/engram-auto-sync.ps1",
+      "script": "src/engram-auto-sync.ts",
       "target": "src/engram-auto-sync.ts",
       "priority": "high",
       "status": "implemented",
@@ -176,7 +176,7 @@
     },
     {
       "id": "dashboard-common",
-      "script": "scripts/utilities/dashboard/dashboard-common.ps1",
+      "script": "src/dashboard-common.ts",
       "target": "src/dashboard-common.ts",
       "priority": "high",
       "status": "implemented",
@@ -184,7 +184,7 @@
     },
     {
       "id": "dashboard-ws-autostart",
-      "script": "scripts/utilities/dashboard/dashboard-ws-autostart.ps1",
+      "script": "src/dashboard-ws-autostart.ts",
       "target": "src/dashboard-ws-autostart.ts",
       "priority": "high",
       "status": "implemented",
@@ -192,7 +192,7 @@
     },
     {
       "id": "dashboard-start",
-      "script": "scripts/utilities/dashboard/dashboard-start.ps1",
+      "script": "src/dashboard-start.ts",
       "target": "src/dashboard-start.ts",
       "priority": "high",
       "status": "implemented",
@@ -200,7 +200,7 @@
     },
     {
       "id": "dashboard-stop",
-      "script": "scripts/utilities/dashboard/dashboard-stop.ps1",
+      "script": "src/dashboard-stop.ts",
       "target": "src/dashboard-stop.ts",
       "priority": "high",
       "status": "implemented",
@@ -216,7 +216,7 @@
     },
     {
       "id": "lefthook-verify",
-      "script": "scripts/utilities/lefthook-verify.ps1",
+      "script": "src/lefthook-verify.ts",
       "target": "src/lefthook-verify.ts",
       "priority": "high",
       "status": "implemented",
@@ -224,7 +224,7 @@
     },
     {
       "id": "karpathy-enforcer",
-      "script": "scripts/adaptive/karpathy-enforcer.ps1",
+      "script": "src/karpathy-enforcer.ts",
       "target": "src/karpathy-enforcer.ts",
       "priority": "medium",
       "status": "implemented",
@@ -232,7 +232,7 @@
     },
     {
       "id": "session-notification",
-      "script": "scripts/utilities/session/session-notification.ps1",
+      "script": "src/session-notification.ts",
       "target": "src/session-notification.ts",
       "priority": "high",
       "status": "implemented",
@@ -240,7 +240,7 @@
     },
     {
       "id": "token-metrics-store",
-      "script": "scripts/utilities/telemetry/TELEMETRY-METRICS/token-metrics-store.ps1",
+      "script": "src/token-metrics-store.ts",
       "target": "src/token-metrics-store.ts",
       "priority": "high",
       "status": "implemented",
@@ -248,7 +248,7 @@
     },
     {
       "id": "session-metrics-tracker",
-      "script": "scripts/utilities/session/session-metrics-tracker.ps1",
+      "script": "src/session-metrics-tracker.ts",
       "target": "src/session-metrics-tracker.ts",
       "priority": "high",
       "status": "implemented",
@@ -264,7 +264,7 @@
     },
     {
       "id": "adaptive-opencode-profile",
-      "script": "scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-opencode-profile.ps1",
+      "script": "src/adaptive-opencode-profile.ts",
       "target": "src/adaptive-opencode-profile.ts",
       "priority": "medium",
       "status": "implemented",
@@ -288,7 +288,7 @@
     },
     {
       "id": "snapshot-manager",
-      "script": "scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1",
+      "script": "src/snapshot-manager.ts",
       "target": "src/snapshot-manager.ts",
       "priority": "medium",
       "status": "implemented",
@@ -296,7 +296,7 @@
     },
     {
       "id": "rollback-orchestrator",
-      "script": "scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1",
+      "script": "src/rollback-orchestrator.ts",
       "target": "src/rollback-orchestrator.ts",
       "priority": "medium",
       "status": "implemented",
@@ -304,7 +304,7 @@
     },
     {
       "id": "privacy-gateway",
-      "script": "scripts/security/privacy-gateway.ps1",
+      "script": "src/security/privacy-gateway.ts",
       "target": "src/privacy-gateway.ts",
       "priority": "high",
       "status": "implemented",
@@ -320,7 +320,7 @@
     },
     {
       "id": "final-resolution",
-      "script": "scripts/utilities/final-resolution.ps1",
+      "script": "src/final-resolution.ts",
       "target": "src/final-resolution.ts",
       "priority": "high",
       "status": "implemented",
@@ -328,7 +328,7 @@
     },
     {
       "id": "knowledge-base-manager",
-      "script": "scripts/utilities/knowledge-base/knowledge-base-manager.ps1",
+      "script": "src/knowledge-base-manager.ts",
       "target": "src/knowledge-base-manager.ts",
       "priority": "medium",
       "status": "implemented",
@@ -336,7 +336,7 @@
     },
     {
       "id": "knowledge-base-sync",
-      "script": "scripts/utilities/knowledge-base/knowledge-base-sync.ps1",
+      "script": "src/knowledge-base-sync.ts",
       "target": "src/knowledge-base-sync.ts",
       "priority": "medium",
       "status": "implemented",
@@ -344,7 +344,7 @@
     },
     {
       "id": "check-sdd-gate",
-      "script": "scripts/hooks/check-sdd-gate.ps1",
+      "script": "src/check-sdd-gate.ts",
       "target": "src/check-sdd-gate.ts",
       "priority": "high",
       "status": "implemented",
@@ -352,7 +352,7 @@
     },
     {
       "id": "check-security",
-      "script": "scripts/hooks/check-security.ps1",
+      "script": "src/check-security.ts",
       "target": "src/check-security.ts",
       "priority": "high",
       "status": "implemented",
@@ -360,7 +360,7 @@
     },
     {
       "id": "lockfile-lint-pre-commit",
-      "script": "scripts/hooks/lockfile-lint-pre-commit.ps1",
+      "script": "src/lockfile-lint-pre-commit.ts",
       "target": "src/lockfile-lint-pre-commit.ts",
       "priority": "medium",
       "status": "implemented",

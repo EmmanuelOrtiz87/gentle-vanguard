@@ -1,0 +1,20 @@
+{
+  "type": "function",
+  "function": {
+    "name": "judgment_day",
+    "description": "Skill: judgment-day",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "type": "string",
+          "description": "Task to execute"
+        }
+      },
+      "required": [
+        "task"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

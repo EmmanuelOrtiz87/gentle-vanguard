@@ -1,0 +1,7 @@
+{
+  "name": "backup-orchestrator",
+  "version": "1.0.0",
+  "description": "Backup orchestration skill for workspace and project backup management",
+  "triggers": [],
+  "author": "Gentle-Vanguard"
+}

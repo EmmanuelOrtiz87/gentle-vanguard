@@ -1,0 +1,22 @@
+{
+  "name": "start-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "start-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Start Command\n\n> If you see unfamiliar placeholders or need to check which tools are connected, see\n> [CONNECTORS.md](../../CONNECTORS.md).\n\nInitialize the task and memory systems, then open the unified dashboard.\n\n## Instructions\n\n### 1. Check What Exists\n\nCheck the working directory for:\n\n- `TASKS.md` — task list\n- `CLAUDE.md` — working memory\n- `memory/` — deep memory directory\n- `dashboard.html` — the visual UI\n\n### 2. Create What's Missing\n\n**If `TASKS.md` doesn't exist:** Create it with the standard template (see task-management skill).\nPlace it in the current working directory.\n\n**If `dashboard.html` doesn't exist:** Copy it from `${CLAUDE_PLUGIN_ROOT}/skills/dashboard.html` to\nthe current working directory.\n\n**If `CLAUDE.md` and `memory/` don't exist:** This is a fresh setup — after opening the dashboard,\nbegin the memory bootstrap workflow (see `references/memory-bootstrap.md`).\n\n### 3. Open the Dashboard\n\nDo NOT use `open` or `xdg-open` — in Cowork, the agent runs in a VM and shell open commands won't\nreach the user's browser. Instead, tell the user: \"Dashboard is ready at `dashboard.html`. Open it\nfrom your file browser to get started.\"\n\n### 4. Orient the User\n\nIf everything was already initialized:\n\n```\nDashboard open. Your tasks and memory are both loaded.\n- /productivity:update to sync tasks and check memory\n- /productivity:update --comprehensive for a deep scan of all activity\n```\n\nIf memory hasn't been bootstrapped yet, see `references/memory-bootstrap.md`.\n\n### 5. Bootstrap Memory (First Run Only)\n\nOnly do this if `CLAUDE.md` and `memory/` don't exist yet. See `references/memory-bootstrap.md`\nfor the full workflow: interactive task decoding → comprehensive scan → memory file creation.\n\n### 6. Report Results\n\n```\nProductivity system ready:\n- Tasks: TASKS.md (X items)\n- Memory: X people, X terms, X projects\n- Dashboard: open in browser\n\nUse /productivity:update to keep things current (add --comprehensive for a deep scan).\n```\n\n## Notes\n\n- If memory is already initialized, this just opens the dashboard\n- Nicknames are critical — always capture how people are actually referred to\n- If a source isn't available, skip it and note the gap\n- Memory grows organically through natural conversation after bootstrap",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

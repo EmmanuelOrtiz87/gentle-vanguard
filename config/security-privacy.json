@@ -154,8 +154,8 @@
   },
 
   "hooks": {
-    "prePrompt": "scripts/security/privacy-gateway.ps1",
-    "preCommit": "hooks/pre-commit-privacy.ps1"
+    "prePrompt": "src/security/privacy-gateway.ts",
+    "preCommit": "src/hooks/pre-commit-privacy.ts"
   },
 
   "reporting": {

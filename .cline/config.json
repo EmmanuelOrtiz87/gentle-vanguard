@@ -16,14 +16,19 @@
   "preProcessing": {
     "enabled": true,
     "mandatory": true,
-    "script": "scripts/utilities/pre-process-input.ps1",
+    "script": "src/pre-process-input.ts",
     "scriptArgs": {
       "UserInput": "USER_INPUT_HERE",
       "WorkspaceRoot": "."
+    },
+    "adaptiveSteps": {
+      "enabled": true,
+      "baseline": 24,
+      "autoScale": true
     }
   },
   "sessionManagement": {
-    "autostart": "scripts/utilities/session-autostart.cmd",
+    "autostart": "npm run session:autostart:detached",
     "project": "foundation"
   },
   "language": {

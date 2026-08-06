@@ -12,7 +12,7 @@
 import { existsSync, readFileSync, writeFileSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { spawnSync, execSync } from 'child_process';
+import { runSync, runSyncShell, runNpxTsxSync } from './core/run-command.js';
 
 const ROOT = resolve(process.cwd());
 const SESSION_DIR = join(ROOT, '.session');
@@ -93,7 +93,7 @@ function saveToEngram(session: SessionInfo): boolean {
 Ready for next session start.`;
 
   // Usar engram CLI directamente
-  const result = spawnSync(
+  const result = runSync(
     'engram',
     ['save', '--title', title, '--type', 'decision', '--content', content],
     { cwd: ROOT, stdio: 'pipe', timeout: 30000 }
@@ -121,12 +121,13 @@ function identifySessionProcesses(session: SessionInfo): number[] {
   
   // Buscar procesos node/tsx iniciados después de la sesión
   try {
-    const result = execSync(
-      'Get-Process | Where-Object { $_.ProcessName -eq "node" -and $_.StartTime -gt (Get-Date -Date "' + session.startTime + '") } | Select-Object -ExpandProperty Id',
-      { encoding: 'utf-8', shell: 'powershell' }
-    );
+const result = runSync(
+  'powershell',
+  ['-NoProfile', '-Command', 'Get-Process | Where-Object { $_.ProcessName -eq "node" -and $_.StartTime -gt (Get-Date -Date "' + session.startTime + '") } | Select-Object -ExpandProperty Id'],
+  { stdio: 'pipe' }
+);
     
-    const pids = result.trim().split('\n').map(p => parseInt(p.trim())).filter(p => !isNaN(p));
+    const pids = result.stdout.trim().split('\n').map(p => parseInt(p.trim())).filter(p => !isNaN(p));
     processes.push(...pids);
   } catch {
     // Fallback: buscar en archivos de sesión
@@ -134,12 +135,13 @@ function identifySessionProcesses(session: SessionInfo): number[] {
 
   // Buscar dashboard processes
   try {
-    const dashboardResult = execSync(
-      'Get-Process | Where-Object { $_.ProcessName -match "dashboard|websocket" } | Select-Object -ExpandProperty Id',
-      { encoding: 'utf-8', shell: 'powershell' }
+    const dashboardResult = runSync(
+  'powershell',
+  ['-NoProfile', '-Command', 'Get-Process | Where-Object { $_.ProcessName -match "dashboard|websocket" } | Select-Object -ExpandProperty Id'],
+  { stdio: 'pipe' }
     );
     
-    const dashboardPids = dashboardResult.trim().split('\n').map(p => parseInt(p.trim())).filter(p => !isNaN(p));
+    const dashboardPids = dashboardResult.stdout.trim().split('\n').map(p => parseInt(p.trim())).filter(p => !isNaN(p));
     processes.push(...dashboardPids);
   } catch {
     // No dashboard processes
@@ -197,7 +199,7 @@ function closeSessionProcesses(processes: number[], hasOthers: boolean): void {
     }
 
     try {
-      execSync(`taskkill /PID ${pid} /F 2>nul`, { stdio: 'ignore' });
+      runSyncShell(`taskkill /PID ${pid} /F 2>nul`, { stdio: 'ignore' });
       log(`Closed process ${pid}`);
     } catch {
       warn(`Failed to close process ${pid} (may already be closed)`);
@@ -213,11 +215,12 @@ function closeSessionProcesses(processes: number[], hasOthers: boolean): void {
 function isSharedProcess(pid: number): boolean {
   // Dashboard WS, Engram, CodeGraph son compartidos
   try {
-    const result = execSync(
-      `Get-Process -Id ${pid} | Select-Object -ExpandProperty ProcessName`,
-      { encoding: 'utf-8', shell: 'powershell' }
+    const result = runSync(
+      'powershell',
+      ['-NoProfile', '-Command', `Get-Process -Id ${pid} | Select-Object -ExpandProperty ProcessName`],
+      { stdio: 'pipe' }
     );
-    const name = result.trim();
+    const name = result.stdout.trim();
     return ['dashboard-ws', 'engram', 'codegraph'].includes(name);
   } catch {
     return false;
@@ -232,7 +235,7 @@ function runStackCleanup(): void {
   
   const cleanupScript = join(ROOT, 'src/session-cleanup-start.ts');
   if (existsSync(cleanupScript)) {
-    const result = spawnSync('npx', ['tsx', cleanupScript], {
+    const result = runNpxTsxSync(cleanupScript, [], {
       cwd: ROOT,
       stdio: 'inherit',
       timeout: 60000,

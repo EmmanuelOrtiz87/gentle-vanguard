@@ -1,16 +1,13 @@
 #!/usr/bin/env node
 
-import { spawnSync } from 'child_process';
+import { runSync } from '../core/run-command.js';
 import { join, resolve } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 function resolveRepoRoot(): string {
-  const result = spawnSync('git', ['rev-parse', '--show-toplevel'], {
-    encoding: 'utf-8',
-    windowsHide: true,
-  });
+  const result = runSync('git', ['rev-parse', '--show-toplevel']);
   return result.stdout?.trim() || resolve(__dirname, '..', '..');
 }
 
@@ -20,7 +17,7 @@ function main(): number {
 
   const scriptBlock = `& '${join(repoRoot, 'scripts', 'adaptive', 'auto-norm-enforcer.ps1').replace(/\\/g, '\\\\')}' -Trigger karpathy`;
 
-  const result = spawnSync(
+  const result = runSync(
     'powershell.exe',
     [
       '-NoProfile',
@@ -28,7 +25,7 @@ function main(): number {
       '-Command',
       `& '${handlerScript}' -ScriptBlock { ${scriptBlock} } -TimeoutSeconds 30 -OperationName karpathy-enforcer -FallbackAction warn_skip`,
     ],
-    { encoding: 'utf-8', windowsHide: true, stdio: 'inherit' }
+    { stdio: 'inherit' }
   );
 
   return result.status ?? 0;

@@ -57,7 +57,7 @@
     "metricsPath": "/metrics",
     "collectors": ["process", "os"]
   },
-  "deployScript": "scripts/utilities/ops/CLOUD-CONNECTORS/prometheus-deploy.ps1",
+  "deployScript": "src/prometheus-deploy.ts",
   "notes": [
     "1. Install Prometheus: https://prometheus.io/download/",
     "2. Install Grafana: https://grafana.com/grafana/download/",

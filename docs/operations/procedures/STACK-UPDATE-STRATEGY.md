@@ -69,10 +69,10 @@ cd C:\Workspace_local\gentle-vanguard
 
 # 1. Encriptar scripts actualizados
 $env:GENTLE_VANGUARD_BASE_DIR='c:\Workspace_local\gentle-vanguard'
-pwsh -NoProfile -ExecutionPolicy Bypass -File "build\protect-gentle-vanguard.ps1"
+npx tsx src/gv.ts"
 
 # 2. Compilar nuevo instalador
-pwsh -NoProfile -ExecutionPolicy Bypass -File "build\create-installer.ps1" -SkipEncrypt
+npx tsx src/gv.ts" -SkipEncrypt
 
 # Output: dist\Gentle-Vanguard-Setup.exe (versión actualizada)
 ```
@@ -116,7 +116,7 @@ scripts\gentle-vanguard\sync-stack.ps1 -Source local -Force    # Aplicar cambios
 ## Flujo de Decisión: ¿Cuál usar?
 
 ```
-¿Hay cambios en los scripts core (comprehensive-validation, gv.ps1)?
+¿Hay cambios en los scripts core (comprehensive-validation, src/cli/gv.ts)?
 ├─ SÍ → Generar nuevo .exe (Opción B)
 │       └─ Distribución: Gentle-Vanguard-Setup.exe en releases
 │
@@ -214,7 +214,7 @@ copy "C:\Program Files\Gentle-Vanguard\backup-YYYYMMDD-HHMMSS\protected\*" `
 | protect-gentle-vanguard.ps1 | Encriptar scripts                  | build/                   |
 | create-installer.ps1        | Compilar .exe                      | build/                   |
 | sync-skills.ps1             | Sincronizar skills                 | scripts/gentle-vanguard/ |
-| gv.ps1                      | CLI principal                      | bin/                     |
+| src/cli/gv.ts                      | CLI principal                      | bin/                     |
 
 ## Ejemplos de Uso
 

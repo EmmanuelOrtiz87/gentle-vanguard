@@ -2,7 +2,7 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync, copyFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { execSync } from 'child_process';
+import { runSync, runSyncShell } from './core/run-command.js';
 
 type Scope = 'full' | 'sessions' | 'token' | 'live' | 'git' | 'pr' | 'cost';
 
@@ -51,7 +51,7 @@ function log(m: string, quiet: boolean): void {
 
 function runGit(args: string[], cwd?: string): string {
   try {
-    return execSync(`git ${args.join(' ')}`, { cwd: cwd || repoRoot, encoding: 'utf8', stdio: 'pipe' }).trim();
+    return runSync('git', args, { cwd: cwd || repoRoot, stdio: 'pipe' }).stdout.trim();
   } catch {
     return '';
   }
@@ -147,7 +147,7 @@ function collectPRMetrics(quiet: boolean): PRMetrics {
   };
 
   try {
-    execSync('gh --version', { stdio: 'pipe' });
+    runSync('gh', ['--version'], { stdio: 'pipe' });
   } catch {
     writeJson(join(outDir, 'pr.json'), pm);
     log('PR: gh CLI not available', quiet);
@@ -155,7 +155,7 @@ function collectPRMetrics(quiet: boolean): PRMetrics {
   }
 
   try {
-    const raw = execSync('gh pr list --state all --limit 100 --json number,title,state,createdAt,closedAt,mergedAt,additions,deletions,author', { encoding: 'utf8', stdio: 'pipe' }).trim();
+    const raw = runSync('gh', ['pr', 'list', '--state', 'all', '--limit', '100', '--json', 'number,title,state,createdAt,closedAt,mergedAt,additions,deletions,author'], { stdio: 'pipe' }).stdout.trim();
     const prs = JSON.parse(raw) as Array<Record<string, unknown>>;
     pm.total = prs.length;
     pm.merged = prs.filter(p => (p.state as string)?.toUpperCase() === 'MERGED').length;
@@ -217,7 +217,7 @@ function collectSessionMetrics(quiet: boolean): SessionEntry[] {
   today.setHours(0, 0, 0, 0);
 
   if (existsSync(sessionsDir)) {
-    const files = execSync(`dir /b "${sessionsDir}\\session-*.json" 2>nul`, { encoding: 'utf8', stdio: 'pipe' }).trim();
+    const files = runSyncShell(`dir /b "${sessionsDir}\\session-*.json" 2>nul`, { stdio: 'pipe' }).stdout.trim();
     if (files) {
       for (const f of files.split('\n')) {
         const fp = join(sessionsDir, f.trim());

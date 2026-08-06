@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "description": "MCP Native registry — managed by mcp-manager.ps1",
+  "description": "MCP Native registry — managed by mcp-manager.ts (TypeScript)",
   "servers": [
     {
       "name": "skill-server",

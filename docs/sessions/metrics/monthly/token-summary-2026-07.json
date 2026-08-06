@@ -1,0 +1,60 @@
+{
+  "generated_at": "2026-08-06T05:12:31.596Z",
+  "period": "2026-07",
+  "days": 2,
+  "totals": {
+    "input": 1650,
+    "output": 770,
+    "total": 2420,
+    "cost": 0
+  },
+  "daily_avg": {
+    "input": 825,
+    "output": 385,
+    "total": 1210
+  },
+  "by_day": [
+    {
+      "day": "2026-07-28",
+      "input": 1350,
+      "output": 620,
+      "total": 1970,
+      "cost": 0,
+      "sessions": 2
+    },
+    {
+      "day": "2026-08-04",
+      "input": 300,
+      "output": 150,
+      "total": 450,
+      "cost": 0,
+      "sessions": 1
+    }
+  ],
+  "by_model": [
+    {
+      "model": "gpt-4o",
+      "input": 1650,
+      "output": 770,
+      "total": 2420,
+      "cost": 0
+    }
+  ],
+  "top_sessions": [
+    {
+      "session_id": "session-20260728T0555",
+      "total": 1270,
+      "cost": 0
+    },
+    {
+      "session_id": "test-nexus-connection",
+      "total": 700,
+      "cost": 0
+    },
+    {
+      "session_id": "session-20260804T1220",
+      "total": 450,
+      "cost": 0
+    }
+  ]
+}

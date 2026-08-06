@@ -1,0 +1,40 @@
+name: OpenCode Validation
+
+on:
+  pull_request:
+    paths:
+      - 'opencode.json'
+      - '.opencode/**'
+      - 'src/**'
+      - 'tests/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run unit tests
+        run: node --version && node --test tests/unit/opencode-guards.test.ts
+
+      - name: Run integration tests
+        run: node --test tests/integration/opencode-validation.test.ts
+
+      - name: Validate OpenCode (integration)
+        run: pnpm exec tsx src/hooks/validate-opencode-all.ts
+
+      - name: Check OpenCode validation alerts
+        run: pnpm exec tsx src/monitor/opencode-validation-monitor.ts

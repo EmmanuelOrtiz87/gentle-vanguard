@@ -2,7 +2,7 @@
 
 import { existsSync, readFileSync, mkdirSync, writeFileSync, readdirSync, statSync } from 'fs';
 import { join, resolve, dirname, basename } from 'path';
-import { spawnSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 import { pathToFileURL } from 'url';
 
 interface CodeIssue {
@@ -123,7 +123,7 @@ function invokeSecurityReview(path: string): void {
 
   const securityScript = join(skillDir, 'skills', 'security-expert-skill', 'security-scan.ps1');
   if (existsSync(securityScript)) {
-    spawnSync('pwsh', ['-NoProfile', '-File', securityScript, '-Path', path], { windowsHide: true });
+    runSync('pwsh', ['-NoProfile', '-File', securityScript, '-Path', path], { stdio: 'pipe' });
   }
 
   writeReviewHeader('Scanning for code quality issues...');

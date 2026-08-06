@@ -200,7 +200,7 @@ gentle-vanguard/
     engram-cache/
  scripts/
     adaptive/         # All autonomous systems (8 scripts)
-    utilities/        # Workflow tools (gv.ps1 symlink)
+    utilities/        # Workflow tools (src/cli/gv.ts symlink)
  rules/
     adaptive/         # Learned norms and rules
        LEARNED-NORMS.md

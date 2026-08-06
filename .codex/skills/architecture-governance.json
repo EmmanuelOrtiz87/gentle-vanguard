@@ -1,0 +1,20 @@
+{
+  "type": "function",
+  "function": {
+    "name": "architecture_governance",
+    "description": "Skill: architecture-governance",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "type": "string",
+          "description": "Task to execute"
+        }
+      },
+      "required": [
+        "task"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -6,7 +6,7 @@ Interactive Terminal User Interface for Gentle-Vanguard onboarding.
 
 ```TypeScript
 # Via gv CLI (recommended)
-.\scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1 install
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\src/cli/gv.ts install
 
 # Direct execution
 .\scripts\utilities\gentle-vanguard-installer-tui.ps1
@@ -49,14 +49,14 @@ Interactive Terminal User Interface for Gentle-Vanguard onboarding.
    - Installs git hooks
    - Creates initial config
 
-## Integration with gv.ps1
+## Integration with src/cli/gv.ts
 
 The installer is integrated into the main CLI:
 
 ```TypeScript
-gv.ps1 install          # Run installer
-gv.ps1 install -Silent  # Non-interactive mode (future)
-gv.ps1 install -Force   # Overwrite existing installation
+src/cli/gv.ts install          # Run installer
+src/cli/gv.ts install -Silent  # Non-interactive mode (future)
+src/cli/gv.ts install -Force   # Overwrite existing installation
 ```
 
 ## Requirements

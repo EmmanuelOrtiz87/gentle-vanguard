@@ -3,6 +3,6 @@
 
 - Always verify health before claiming completion
 - Use pre-process-input for command routing
-- Session management via session-start-optimized.ps1
+- Session management via src/session-start-optimized.ts
 - All changes must pass tsc --noEmit
 - Maintenance checks via maintenance-watchtower.ps1

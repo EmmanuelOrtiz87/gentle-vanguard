@@ -1,0 +1,20 @@
+{
+  "type": "function",
+  "function": {
+    "name": "report_writing_skill",
+    "description": "Bug bounty report writing for H1/Bugcrowd/Intigriti/Immunefi — templates, human tone, impact-first writing, CVSS 3.1 scoring, title formula, severity guide, downgrade counters, checklist. Never use \"could potentially\".",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "type": "string",
+          "description": "Task to execute"
+        }
+      },
+      "required": [
+        "task"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

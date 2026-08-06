@@ -1,6 +1,6 @@
 # gentle-vanguard — Entry Point
 
-Canonical entry: `docs/AGENTS.md`
+Canonical entry: `docs/agents/AGENTS.md`
 
 ## Tool Detection (turn 1)
 

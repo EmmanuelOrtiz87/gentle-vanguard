@@ -23,6 +23,7 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
+import { runSync } from './core/run-command.js';
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -406,12 +407,12 @@ function captureContext(): ContextSnapshot {
   
   try {
     // Get git info
-    const gitStatus = require('child_process').execSync('git status --porcelain', { cwd: ROOT, encoding: 'utf-8' });
+    const gitStatus = runSync('git', ['status', '--porcelain'], { cwd: ROOT }).stdout;
     activeFiles = gitStatus.split('\n').filter((l: string) => l.trim()).map((l: string) => l.slice(3));
     
-    branch = require('child_process').execSync('git rev-parse --abbrev-ref HEAD', { cwd: ROOT, encoding: 'utf-8' }).trim();
+    branch = runSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { cwd: ROOT }).stdout.trim();
     
-    const gitLog = require('child_process').execSync('git log --oneline -5', { cwd: ROOT, encoding: 'utf-8' });
+    const gitLog = runSync('git', ['log', '--oneline', '-5'], { cwd: ROOT }).stdout;
     recentCommits = gitLog.split('\n').filter(Boolean);
   } catch {
     // Git not available or error

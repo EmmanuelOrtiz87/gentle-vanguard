@@ -1,0 +1,20 @@
+{
+  "type": "function",
+  "function": {
+    "name": "cognitive_doc_design",
+    "description": ">",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "type": "string",
+          "description": "Task to execute"
+        }
+      },
+      "required": [
+        "task"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

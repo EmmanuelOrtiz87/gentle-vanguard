@@ -5,7 +5,7 @@
     "pre_process": {
       "enabled": true,
       "mandatory": true,
-      "script": "scripts/utilities/pre-process-input.ps1",
+      "script": "src/pre-process-input.ts",
       "timeout": 30000,
       "args": {
         "UserInput": "${user_input}",
@@ -25,7 +25,7 @@
     },
     "post_session": {
       "enabled": true,
-      "script": "scripts/utilities/telemetry/TELEMETRY-METRICS/generate-management-report.ps1",
+      "script": "src/generate-management-report.ts",
       "timeout": 60000,
       "args": {
         "SessionId": "${session_id}",
@@ -44,7 +44,7 @@
     },
     "pre_commit": {
       "enabled": true,
-      "script": "scripts/utilities/git/GIT-VERSION-CONTROL/pre-commit-validation.ps1",
+      "script": "src/pre-commit-validation.ts",
       "timeout": 45000,
       "args": {
         "StagedFiles": "${staged_files}",
@@ -62,7 +62,7 @@
     },
     "post_merge": {
       "enabled": true,
-      "script": "scripts/utilities/git/GIT-VERSION-CONTROL/post-merge-sync.ps1",
+      "script": "src/post-merge-sync.ts",
       "timeout": 60000,
       "args": {
         "MergeBranch": "${merge_branch}",

@@ -9,7 +9,7 @@
  *   npx tsx src/semantic-search.ts "error handling" --max-results 15 --format detailed
  */
 
-import { execSync } from 'child_process';
+import { runSyncShell } from './core/run-command.js';
 import { existsSync } from 'fs';
 import { resolve } from 'path';
 
@@ -85,10 +85,10 @@ function grepSearch(query: string, maxResults: number): SearchResult[] {
     if (seen.size >= maxResults) break;
     try {
       // Use Node.js exec with error suppression (cross-platform)
-      const output = execSync(
+      const output = runSyncShell(
         `rg -n --no-heading -m 3 "${pattern}" --type ts "${srcDir}"`,
-        { encoding: 'utf8', maxBuffer: 1024 * 1024, stdio: ['pipe', 'pipe', 'ignore'] }
-      );
+        { maxBuffer: 1024 * 1024, stdio: ['pipe', 'pipe', 'ignore'] }
+      ).stdout;
 
       for (const line of output.trim().split('\n')) {
         if (seen.size >= maxResults) break;
@@ -130,7 +130,7 @@ function tryCodeGraphSearch(query: string, maxResults: number): SearchResult[] |
 
     // Simple graphify query as extra source
     try {
-      const output = execSync(
+      const output = runSyncShell(
         `npx --yes tsx -e "
           const fs = require('fs');
           const g = JSON.parse(fs.readFileSync('${codegraphIndex.replace(/\\/g, '\\\\')}', 'utf8'));
@@ -142,8 +142,8 @@ function tryCodeGraphSearch(query: string, maxResults: number): SearchResult[] |
             .map((n: any) => ({ file: n.id || '', line: 0, content: n.label || '', relevance: 3 }));
           console.log(JSON.stringify(matches));
         " 2>nul || echo []`,
-        { encoding: 'utf8', maxBuffer: 1024 * 1024, timeout: 10000 }
-      );
+        { maxBuffer: 1024 * 1024, timeout: 10000 }
+      ).stdout;
       const parsed = JSON.parse(output.trim());
       if (Array.isArray(parsed) && parsed.length > 0) {
         return parsed as SearchResult[];

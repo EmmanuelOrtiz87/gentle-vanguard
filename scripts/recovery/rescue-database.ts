@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+import { runSyncShell } from '../../src/core/run-command.js';
 import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync, cpSync } from 'fs';
 import { join, resolve } from 'path';
 
@@ -35,10 +35,9 @@ for (const c of checks) {
     continue;
   }
   try {
-    const r = execSync('sqlite3 "' + dbs[0] + '" "SELECT COUNT(*) FROM nodes"', {
-      encoding: 'utf8',
+    const r = runSyncShell('sqlite3 "' + dbs[0] + '" "SELECT COUNT(*) FROM nodes"', {
       timeout: 5000,
-    }).trim();
+    }).stdout.trim();
     console.log('  ' + c.name + ': OK (' + r + ' nodos)');
   } catch {
     console.log('  ' + c.name + ': CORRUPT');

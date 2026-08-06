@@ -6,7 +6,7 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { execSync } from 'child_process';
+import { runNpxTsxSync } from '../core/run-command.js';
 import { createHash } from 'crypto';
 import { pathToFileURL } from 'url';
 
@@ -122,7 +122,7 @@ function main(): void {
     if (dryRun) { log(`[DRY-RUN] Would run full rebuild via skill-embedder.ts`); return; }
     log(`${force ? 'Force flag set' : `${Math.round(changePercent)}% skills changed (>50%)`}, doing full rebuild`);
     try {
-      execSync(`npx tsx src/skill-embedder.ts`, { cwd: projectRoot, timeout: 60000 });
+      runNpxTsxSync('src/skill-embedder.ts', [], { cwd: projectRoot, timeout: 60000 });
     } catch (e: unknown) { log(`Full rebuild failed: ${e instanceof Error ? e.message : String(e)}`, 'ERROR'); }
     return;
   }
@@ -133,7 +133,7 @@ function main(): void {
 
   if (modified.length > 0 || added.length > 0) {
     try {
-      execSync(`npx tsx src/skill-embedder.ts`, { cwd: projectRoot, timeout: 60000 });
+      runNpxTsxSync('src/skill-embedder.ts', [], { cwd: projectRoot, timeout: 60000 });
     } catch (e: unknown) { log(`Rebuild failed: ${e instanceof Error ? e.message : String(e)}`, 'ERROR'); }
   } else {
     // Only removals

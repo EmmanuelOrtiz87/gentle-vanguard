@@ -1,0 +1,22 @@
+{
+  "name": "presentaciones-visuales-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "presentaciones-visuales-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Presentaciones Visuales\n\nCrea presentaciones HTML autocontenidas con diseño profesional, narrativa clara y calidad para\nreuniones, clases, vídeos o propuestas.\n\n## Proceso paso a paso\n\n### 1. Analiza el input\n\nExtrae: tema/objetivo, público, número de slides, tono\n(formal/divulgativo/comercial/educativo/técnico), uso previsto (reunión/vídeo/formación/pitch)\n\nSi falta información crítica (público, objetivo, duración), pregunta antes de generar.\n\n### 2. Define la estructura narrativa\n\n| Sección           | Propósito                         |\n| ----------------- | --------------------------------- |\n| Portada           | Captar atención, enmarcar el tema |\n| Contexto/problema | Por qué importa                   |\n| Desarrollo        | Contenido principal, ideas clave  |\n| Ejemplos/datos    | Prueba, evidencia                 |\n| Cierre            | Resumen o llamada a la acción     |\n\n### 3. Elige un estilo visual\n\n| Estilo                  | Cuándo usarlo                      |\n| ----------------------- | ---------------------------------- |\n| Profesional minimalista | Propuestas, reuniones corporativas |\n| Tecnológico/oscuro      | IA, producto digital, startups     |\n| Educativo/claro         | Formaciones, clases                |\n| Premium/editorial       | Marca personal, lujo               |\n| Creativo                | Agencias, diseño                   |\n| Corporativo             | Empresas grandes, informes         |\n\n### 4. Reglas de diseño\n\n**Estructura visual:** una idea por slide, jerarquía clara, márgenes amplios, tipografía legible\n\n**Variedad de layouts:** no repitas el mismo layout - usa centrada, dos columnas, tarjetas, lista\ncon iconos, timeline, comparativa\n\n**Prohibido:** párrafos largos, más de 5-6 puntos, colores sin coherencia, fondos con imágenes\nexternas\n\n### 5. Genera el HTML\n\nÚnico archivo HTML autocontenido: CSS incluido en `<style>`, sin dependencias externas, navegación\npor teclado (← →), responsive.\n\n```html\n<!DOCTYPE html>\n<html lang=\"es\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>Presentación</title>\n    <style>\n      :root {\n        --primary: #...;\n        --accent: #...;\n        --bg: #...;\n        --text: #...;\n      }\n      /* Reset, slides, navegación, animaciones */\n    </style>\n  </head>\n  <body>\n    <!-- slides como divs o sections -->\n    <script>\n      // navegación\n    </script>\n  </body>\n</html>\n```\n\n### 6. Formatos especiales\n\n**Para vídeo:** frases muy cortas, elementos grandes, fondo sólido, sin listas largas\n\n**Para reunión/formación:** claridad sobre espectacularidad, más contenido por slide, numeración\nvisible\n\n## Formato de salida\n\n**Resumen de enfoque:**\n\n> [objetivo, público asumido, estilo elegido]\n\n**Estructura de slides:**\n\n> [títulos numerados]\n\n**Presentación HTML:**\n\n> [código completo listo para abrir en navegador]",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

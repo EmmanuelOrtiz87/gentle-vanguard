@@ -9,7 +9,7 @@ import { spawn } from 'child_process';
 import { existsSync, writeFileSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
-import { execSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 
 const PID_FILE = join(process.cwd(), '.runtime', 'codegraph-mcp-server.pid');
 
@@ -24,8 +24,8 @@ function findCodeGraph(): string {
   
   // Try which/where first
   try {
-    const cmd = isWindows ? 'where codegraph' : 'which codegraph';
-    const output = execSync(cmd, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'ignore'] });
+    const cmd = isWindows ? 'where' : 'which';
+    const output = runSync(cmd, ['codegraph'], { stdio: ['pipe', 'pipe', 'ignore'] }).stdout;
     const path = output.split('\n')[0].trim();
     if (existsSync(path)) {
       log(`[INFO] Found codegraph at: ${path}`);

@@ -16,28 +16,28 @@
       "enabled": true,
       "description": "Unit tests for individual functions",
       "location": "tests/unit",
-      "pattern": "*.tests.ps1",
+      "pattern": "src/gv.ts",
       "timeout": 30
     },
     "integration": {
       "enabled": true,
       "description": "Integration tests for component interactions",
       "location": "tests/integration",
-      "pattern": "*.integration.tests.ps1",
+      "pattern": "src/gv.ts",
       "timeout": 60
     },
     "regression": {
       "enabled": true,
       "description": "Regression tests to prevent known issues",
       "location": "tests/regression",
-      "pattern": "*.regression.tests.ps1",
+      "pattern": "src/gv.ts",
       "timeout": 45
     },
     "performance": {
       "enabled": true,
       "description": "Performance and load tests",
       "location": "tests/performance",
-      "pattern": "*.perf.tests.ps1",
+      "pattern": "src/gv.ts",
       "timeout": 120,
       "thresholds": {
         "engram_creation": 50,
@@ -50,7 +50,7 @@
       "enabled": true,
       "description": "Security and vulnerability tests",
       "location": "tests/security",
-      "pattern": "*.security.tests.ps1",
+      "pattern": "src/gv.ts",
       "timeout": 60
     }
   },
@@ -114,15 +114,15 @@
   "hooks": {
     "preTest": {
       "enabled": true,
-      "script": "scripts/testing/pre-test.ps1"
+      "script": "src/testing/pre-test.ts"
     },
     "postTest": {
       "enabled": true,
-      "script": "scripts/testing/post-test.ps1"
+      "script": "src/testing/post-test.ts"
     },
     "onFailure": {
       "enabled": true,
-      "script": "scripts/testing/on-failure.ps1"
+      "script": "src/testing/on-failure.ts"
     }
   },
   "notifications": {

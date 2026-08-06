@@ -21,10 +21,10 @@
       "stage": "pre-commit",
       "enforced": true,
       "enforcer": "lefthook - json-lint",
-      "tool": "json-lint.ps1",
+      "tool": "src/json-lint.ts",
       "required": true,
       "description": "Validate JSON syntax",
-      "command": "pwsh hooks/json-lint.ps1",
+      "command": "src/json-lint.ts",
       "failureAction": "block"
     },
     {
@@ -33,10 +33,10 @@
       "stage": "pre-commit",
       "enforced": true,
       "enforcer": "lefthook - workflow-lint",
-      "tool": "workflow-lint.ps1",
+      "tool": "src/workflow-lint.ts",
       "required": true,
       "description": "Validate GitHub Actions workflow syntax",
-      "command": "pwsh hooks/workflow-lint.ps1",
+      "command": "src/workflow-lint.ts",
       "failureAction": "block"
     },
     {
@@ -69,10 +69,10 @@
       "stage": "pre-commit",
       "enforced": true,
       "enforcer": "lefthook - opencode-validation",
-      "tool": "pre-commit-opencode-validation.ps1",
+      "tool": "pre-commit-opencode-validation.ts",
       "required": true,
       "description": "Validate opencode configuration compliance",
-      "command": "pwsh hooks/pre-commit-opencode-validation.ps1",
+      "command": "npx tsx src/hooks/pre-commit-opencode-validation.ts",
       "failureAction": "block"
     },
     {
@@ -81,10 +81,10 @@
       "stage": "pre-commit",
       "enforced": true,
       "enforcer": "lefthook - validate-tool-configs",
-      "tool": "validate-tool-configs.ps1",
+      "tool": "validate-tool-configs.ts",
       "required": true,
       "description": "Validate tool configuration files",
-      "command": "pwsh scripts/utilities/config/validate-tool-configs.ps1 -Quiet",
+      "command": "npx tsx src/core/validate-tool-configs.ts -Quiet",
       "failureAction": "block"
     },
     {
@@ -93,10 +93,10 @@
       "stage": "pre-commit",
       "enforced": true,
       "enforcer": "lefthook - normative-audit",
-      "tool": "normative-audit-hook.ps1",
+      "tool": "normative-audit-hook.ts",
       "required": true,
       "description": "Enforce normative compliance against rules/",
-      "command": "pwsh hooks/normative-audit-hook.ps1",
+      "command": "npx tsx src/hooks/normative-audit-hook.ts",
       "failureAction": "block"
     },
     {
@@ -105,10 +105,10 @@
       "stage": "pre-commit",
       "enforced": true,
       "enforcer": "lefthook - karpathy-enforcer",
-      "tool": "karpathy-enforcer-hook.ps1",
+      "tool": "karpathy-enforcer-hook.ts",
       "required": true,
       "description": "Enforce Karpathy coding guidelines",
-      "command": "pwsh hooks/karpathy-enforcer-hook.ps1",
+      "command": "npx tsx src/hooks/karpathy-enforcer-hook.ts",
       "failureAction": "block"
     },
     {
@@ -117,10 +117,10 @@
       "stage": "pre-commit",
       "enforced": true,
       "enforcer": "lefthook - markdown-accent-check",
-      "tool": "markdown-accent-check-hook.ps1",
+      "tool": "markdown-accent-check-hook.ts",
       "required": true,
       "description": "Check for accent/internationalization issues in markdown",
-      "command": "pwsh hooks/markdown-accent-check-hook.ps1 -StagedFiles {staged_files}",
+      "command": "npx tsx src/hooks/markdown-accent-check-hook.ts -StagedFiles {staged_files}",
       "failureAction": "block"
     },
     {
@@ -129,10 +129,10 @@
       "stage": "pre-commit",
       "enforced": true,
       "enforcer": "lefthook - emoji-detector",
-      "tool": "emoji-detector-hook.ps1",
+      "tool": "emoji-detector-hook.ts",
       "required": true,
       "description": "Detect emoji usage in PowerShell scripts",
-      "command": "pwsh hooks/emoji-detector-hook.ps1 -StagedFiles {staged_files}",
+      "command": "npx tsx src/hooks/emoji-detector-hook.ts -StagedFiles {staged_files}",
       "failureAction": "block"
     },
     {
@@ -141,10 +141,10 @@
       "stage": "pre-commit",
       "enforced": true,
       "enforcer": "lefthook - sensitive-files-check",
-      "tool": "sensitive-files-check-hook.ps1",
+      "tool": "sensitive-files-check-hook.ts",
       "required": true,
       "description": "Check for sensitive files being committed",
-      "command": "pwsh hooks/sensitive-files-check-hook.ps1 -StagedFiles {staged_files}",
+      "command": "npx tsx src/hooks/sensitive-files-check-hook.ts -StagedFiles {staged_files}",
       "failureAction": "block"
     },
     {
@@ -153,10 +153,10 @@
       "stage": "pre-commit",
       "enforced": true,
       "enforcer": "lefthook - skill-scan",
-      "tool": "scan-skill-hook.ps1",
+      "tool": "src/scan-skill-hook.ts",
       "required": true,
       "description": "Security scan for skill files",
-      "command": "pwsh scripts/security/scan-skill-hook.ps1 -StagedFiles {staged_files}",
+      "command": "npx tsx src/scan-skill-hook.ts -StagedFiles {staged_files}",
       "failureAction": "block"
     },
     {
@@ -165,10 +165,10 @@
       "stage": "commit-msg",
       "enforced": true,
       "enforcer": "lefthook - commitlint",
-      "tool": "commitlint.ps1",
+      "tool": "commitlint.ts",
       "required": true,
       "description": "Validate commit message format",
-      "command": "pwsh hooks/commitlint.ps1 {1}",
+      "command": "npx tsx src/hooks/commitlint.ts {1}",
       "failureAction": "block"
     },
     {
@@ -177,10 +177,10 @@
       "stage": "commit-msg",
       "enforced": true,
       "enforcer": "lefthook - commit-msg-session-track",
-      "tool": "commit-msg-session-track-hook.ps1",
+      "tool": "commit-msg-session-track-hook.ts",
       "required": true,
       "description": "Track sessions via commit messages",
-      "command": "pwsh hooks/commit-msg-session-track-hook.ps1 -CommitMsgFile {1}",
+      "command": "npx tsx src/hooks/commit-msg-session-track-hook.ts -CommitMsgFile {1}",
       "failureAction": "warn"
     },
     {
@@ -189,10 +189,10 @@
       "stage": "post-commit",
       "enforced": true,
       "enforcer": "lefthook - codegraph-sync",
-      "tool": "codegraph-post-modification-sync.ps1",
+      "tool": "src/codegraph-post-modification-sync.ts",
       "required": true,
       "description": "Sync codegraph index after commit",
-      "command": "pwsh scripts/utilities/codegraph/codegraph-post-modification-sync.ps1 -Trigger post-commit -Force",
+      "command": "npx tsx src/codegraph-post-modification-sync.ts -Trigger post-commit -Force",
       "failureAction": "warn"
     },
     {
@@ -201,10 +201,10 @@
       "stage": "post-commit",
       "enforced": true,
       "enforcer": "lefthook - hashline-snapshot",
-      "tool": "hashline-snapshot-hook.ps1",
+      "tool": "hashline-snapshot-hook.ts",
       "required": false,
       "description": "Snapshot hashline after commit",
-      "command": "pwsh scripts/editing/hashline-snapshot-hook.ps1",
+      "command": "npx tsx src/infrastructure/hashline-snapshot-hook.ts",
       "failureAction": "warn"
     },
     {
@@ -213,10 +213,10 @@
       "stage": "pre-push",
       "enforced": true,
       "enforcer": "lefthook - audit-check",
-      "tool": "audit-sweep.ps1",
+      "tool": "gv.ts",
       "required": true,
       "description": "Quick audit sweep before push",
-      "command": "pwsh skills/gentle-vanguard-audit-skill/scripts/audit-sweep.ps1 -Scope quick",
+      "command": "npx tsx src/gv.ts -Scope quick",
       "failureAction": "block"
     },
     {
@@ -225,10 +225,10 @@
       "stage": "pre-push",
       "enforced": true,
       "enforcer": "lefthook - npm-audit",
-      "tool": "npm-audit-pre-push.ps1",
+      "tool": "npm-audit-pre-push.ts",
       "required": true,
       "description": "Check dependency vulnerabilities",
-      "command": "pwsh scripts/hooks/npm-audit-pre-push.ps1 -AuditLevel moderate",
+      "command": "npx tsx src/infrastructure/npm-audit-pre-push.ts -AuditLevel moderate",
       "failureAction": "warn"
     },
     {
@@ -237,10 +237,10 @@
       "stage": "pre-push",
       "enforced": true,
       "enforcer": "lefthook - orchestrator-auto-fix",
-      "tool": "orchestrate-auto-fix.ps1",
+      "tool": "src/orchestrate-auto-fix.ts",
       "required": false,
       "description": "Auto-fix detected issues before push",
-      "command": "pwsh scripts/hooks/orchestrate-auto-fix.ps1 -Fix",
+      "command": "npx tsx src/orchestrate-auto-fix.ts -Fix",
       "failureAction": "warn"
     },
     {
@@ -300,7 +300,7 @@
       "tool": "Pester",
       "required": true,
       "description": "48 PowerShell tests (unit, integration, security, performance)",
-      "command": "pwsh scripts/run-tests-simple.ps1",
+      "command": "npx tsx src/gv.ts",
       "failureAction": "block"
     },
     {
@@ -333,10 +333,10 @@
       "stage": "governance",
       "enforced": false,
       "enforcer": "not enforced — script may not exist",
-      "tool": "check-sdd-gate.ps1",
+      "tool": "src/check-sdd-gate.ts",
       "required": false,
       "description": "Validate SDD spec status for feature branches",
-      "command": "pwsh -NoProfile -File scripts/hooks/check-sdd-gate.ps1",
+      "command": "src/check-sdd-gate.ts",
       "failureAction": "block"
     },
     {

@@ -43,6 +43,13 @@
       "description": "Rate limit/quota. Solo se registra; el fallback nativo es gratuito y no deberia agotarse."
     },
     {
+      "id": "QueueFull",
+      "pattern": "request queue is full|503.*queue|streaming.*failed.*503|queue.*capacity",
+      "severity": "critical",
+      "action": "switch-to-fallback",
+      "description": "Cola de requests del proveedor LLM llena (503). Auto-switch inmediato al modelo nativo."
+    },
+    {
       "id": "ConnectionError",
       "pattern": "APIConnectionError|ECONNREFUSED|ENOTFOUND|connection refused|socket hang up",
       "severity": "high",

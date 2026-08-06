@@ -5,7 +5,7 @@
  * Enforces all dependency security policies from PNPM-SECURITY.md
  */
 
-import { execSync, ExecSyncOptions } from 'child_process';
+import { runSync, runSyncShell } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
 // import { readFileSync } from 'fs'; // Removed unused import
 // import { join } from 'path'; // Removed unused import
@@ -88,8 +88,8 @@ export class DependencySecurityEnforcer {
 
   private checkPnpmAvailable(): boolean {
     try {
-      execSync('pnpm --version', { stdio: 'pipe', timeout: 5000 });
-      return true;
+      const r = runSync('pnpm', ['--version'], { stdio: 'pipe', timeout: 5000 });
+      return r.status === 0;
     } catch {
       console.log('[SECURITY] pnpm not available, using npm fallbacks');
       return false;
@@ -119,23 +119,13 @@ export class DependencySecurityEnforcer {
       try {
         console.log(`Checking: ${policy.name} - ${policy.description}`);
 
-        // Execute the check command with proper options
-        const options: ExecSyncOptions = {
-          encoding: 'utf8',
-          timeout: 60000, // 60 second timeout
-          stdio: ['pipe', 'pipe', 'pipe']
-        };
-
         // Some commands (pnpm outdated, pnpm audit) exit non-zero on findings
-        // but still emit useful stdout — we must capture it from the thrown error
-        let result: string;
-        try {
-          const output = execSync(policy.checkCommand, options);
-          result = output.toString('utf8');
-        } catch (execError: any) {
-          // Capture stdout from commands that exit non-zero (e.g. pnpm outdated)
-          result = execError.stdout?.toString('utf8') || execError.message;
-        }
+        // but still emit useful stdout — runSyncShell captures stdout regardless.
+        const output = runSyncShell(policy.checkCommand, {
+          stdio: ['pipe', 'pipe', 'pipe'],
+          timeout: 60000,
+        });
+        const result = output.stdout;
 
         // Parse the result to determine if it passes
         const status = this.evaluateCheckResult(policy, result);

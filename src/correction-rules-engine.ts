@@ -2,7 +2,7 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, rmSync, appendFileSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { spawnSync } from 'child_process';
+import { runSync, runNpxTsxSync } from './core/run-command.js';
 import { getEffectiveProcessTimeout } from './core/timeout-config';
 
 const ROOT = resolve(process.cwd());
@@ -193,7 +193,7 @@ function executeRule(rule: CorrectionRule, _score: number): CorrectionResult {
       case 'MemoryFragmentation': {
         const integrityScript = join(ROOT, 'src/engram-integrity-check.ts');
         if (existsSync(integrityScript)) {
-          spawnSync('npx', ['tsx', integrityScript, '-Mode', 'checksums', '-Quiet'], {
+          runNpxTsxSync(integrityScript, ['-Mode', 'checksums', '-Quiet'], {
             cwd: ROOT,
             stdio: 'pipe',
             timeout: getEffectiveProcessTimeout('default'),
@@ -207,12 +207,12 @@ function executeRule(rule: CorrectionRule, _score: number): CorrectionResult {
       case 'ModelProviderUnsupported': {
         const healer = join(ROOT, 'src', 'model-provider-healer.ts');
         if (existsSync(healer)) {
-          const res = spawnSync('npx', ['tsx', healer, '--quiet'], {
+          const res = runNpxTsxSync(healer, ['--quiet'], {
             cwd: ROOT,
             stdio: 'pipe',
             timeout: getEffectiveProcessTimeout('default'),
           });
-          const out = res.stdout?.toString() || '';
+          const out = res.stdout;
           let switched = false;
           try {
             const parsed = JSON.parse(out.split('\n').filter(l => l.trim().startsWith('{')).join('\n'));
@@ -240,7 +240,7 @@ function executeRule(rule: CorrectionRule, _score: number): CorrectionResult {
       log(`Correction failed: ${result.reason}. Rolling back...`, 'WARN');
       if (rule.rollback) {
         try {
-          spawnSync('pwsh', ['-Command', rule.rollback], { cwd: ROOT, stdio: 'pipe' });
+          runSync('pwsh', ['-Command', rule.rollback], { cwd: ROOT, stdio: 'pipe' });
         } catch {
           log('Rollback failed', 'ERROR');
         }

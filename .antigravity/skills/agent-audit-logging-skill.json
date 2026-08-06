@@ -1,0 +1,22 @@
+{
+  "name": "agent-audit-logging-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "agent-audit-logging-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Agent Audit Log Reporting\n\nWhen agents make decisions, take actions, and spend money, every step must be traceable. Audit logs\nanswer questions like: \"What did the agent do?\", \"Why did it do that?\", \"Who asked for it?\", and\n\"Can we prove it followed the rules?\" This skill covers event sourcing, structured logging,\ntraceability chains, compliance reporting, and forensic analysis for production multi-agent systems.\n\n## References\n\nDetailed content is split into focused reference files under `references/`:\n\n| File | Contents |\n| ---- | -------- |\n| `references/01-core-concepts.md` | Why audit logging matters, what to log (priority tables) |\n| `references/02-implementation.md` | Full Python code: schema, logger, traceability, compliance, dashboard, storage |\n| `references/03-report-templates.md` | Daily audit summary, incident forensics report templates |\n| `references/04-triggers-and-anti-patterns.md` | Trigger phrases table, anti-patterns table |\n\n## Quick Start\n\n```python\nfrom audit_logger import AuditLogger, AuditEvent, EventType\n\nlogger = AuditLogger(storage_backend)\nawait logger.log_invocation(\"support-agent\", \"process refund\", session_id)\nawait logger.log_tool_call(\"support-agent\", \"get_order\", {\"order_id\": 123}, trace_id)\nawait logger.log_decision(\"support-agent\", \"escalate\", \"refund exceeds threshold\", 0.85, trace_id)\n```",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

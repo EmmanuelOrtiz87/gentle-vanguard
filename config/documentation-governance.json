@@ -125,7 +125,7 @@
       }
     },
     "automation": {
-      "validator": "skills/documentation-manager.ps1",
+      "validator": "[DEPRECATED] skills/documentation-manager.ps1 -> removed in TS migration",
       "actions": ["validate", "consolidate", "cleanup", "audit"],
       "schedule": {
         "validation": "on-commit",

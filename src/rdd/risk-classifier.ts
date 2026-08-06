@@ -21,7 +21,7 @@
 
 import { existsSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { execSync } from 'child_process';
+import { runSync, runSyncShell } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
@@ -264,7 +264,7 @@ function log(message: string, level: 'INFO' | 'WARN' | 'ERROR' | 'SUCCESS' = 'IN
 function _getChangedFiles(stagedOnly = false): { files: string[]; lines: { insertions: number; deletions: number } } {
   try {
     const diffCommand = stagedOnly ? 'git diff --cached --numstat' : 'git diff --numstat';
-    const diff = execSync(diffCommand, { encoding: 'utf-8', cwd: ROOT });
+    const diff = runSyncShell(diffCommand, { cwd: ROOT }).stdout;
     
     let insertions = 0;
     let deletions = 0;
@@ -295,7 +295,7 @@ function _getChangedFiles(stagedOnly = false): { files: string[]; lines: { inser
 
 function getCommitMessage(): string {
   try {
-    return execSync('git log -1 --format="%s%n%b"', { encoding: 'utf-8', cwd: ROOT }).trim();
+    return runSync('git', ['log', '-1', '--format=%s%n%b'], { cwd: ROOT }).stdout.trim();
   } catch {
     return '';
   }

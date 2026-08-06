@@ -2,7 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { McpError, ErrorCode } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
-import { execSync } from 'child_process';
+import { runSyncShell } from '../../src/core/run-command.js';
 import { readFileSync, readdirSync, existsSync, statSync, mkdirSync, writeFileSync } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -399,11 +399,10 @@ server.tool(
       if (commandField !== undefined && commandField !== '') {
         log('INFO', 'execute_skill (running command)', { skill: name, command: commandField });
         try {
-          const result = execSync(commandField, {
-            encoding: 'utf-8',
+          const result = runSyncShell(commandField, {
             timeout: 60000,
             cwd: SKILLS_DIR,
-          });
+          }).stdout;
           return {
             content: [{ type: 'text', text: result }],
           };

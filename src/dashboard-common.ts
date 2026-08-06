@@ -7,7 +7,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as net from 'net';
-import { execSync } from 'child_process';
+import { runSync } from '../adapters/command-runner.js';
 import { pathToFileURL } from 'url';
 
 const RUNTIME_DIR = path.resolve(process.cwd(), '.runtime');
@@ -76,24 +76,27 @@ export function clearDashboardPorts(): void {
 export async function getProcessIdByPort(port: number): Promise<number | null> {
   try {
     if (process.platform === 'win32') {
-      const output = execSync(`netstat -ano -p TCP | findstr "LISTENING" | findstr ":${port} "`, {
-        encoding: 'utf-8',
-        timeout: 5000,
-        windowsHide: true,
-      });
-      const match = output.trim().split(/\s+/).pop();
-      if (match && /^\d+$/.test(match)) return parseInt(match, 10);
+      const r = runSync('netstat', ['-ano', '-p', 'TCP'], { timeout: 5000 });
+      const output = (r.stdout ?? '').toString();
+      for (const line of output.trim().split('\n')) {
+        if (line.includes('LISTENING') && line.includes(`:${port} `)) {
+          const parts = line.trim().split(/\s+/);
+          const pid = parts[parts.length - 1];
+          if (/^\d+$/.test(pid)) return parseInt(pid, 10);
+        }
+      }
     } else {
-      const output = execSync(`lsof -ti :${port} 2>/dev/null || ss -tlnp sport = :${port}`, {
-        encoding: 'utf-8',
-        timeout: 5000,
-      });
-      const lines = output.trim().split('\n');
-      for (const line of lines) {
-        const pidMatch = line.match(/pid=(\d+)/i);
-        if (pidMatch) return parseInt(pidMatch[1], 10);
-        const num = line.trim();
-        if (/^\d+$/.test(num)) return parseInt(num, 10);
+      const r = runSync('lsof', ['-ti', `:${port}`], { timeout: 5000 });
+      if (r.status === 0) {
+        const line = (r.stdout ?? '').toString().trim().split('\n')[0];
+        if (/^\d+$/.test(line)) return parseInt(line, 10);
+      } else {
+        const r2 = runSync('ss', ['-tlnp', `sport = :${port}`], { timeout: 5000 });
+        const output = (r2.stdout ?? '').toString();
+        for (const line of output.trim().split('\n')) {
+          const pidMatch = line.match(/pid=(\d+)/i);
+          if (pidMatch) return parseInt(pidMatch[1], 10);
+        }
       }
     }
   } catch {
@@ -111,11 +114,8 @@ export function isProcessAlive(pid: number): boolean {
       // (it prints "INFO: No tasks are running..."). We must parse the output
       // instead of relying on the exit code — otherwise stale PID files are
       // never cleaned and the watchdog falsely believes processes are alive.
-      const output = execSync(`tasklist /FI "PID eq ${pid}" /NH /FO CSV`, {
-        encoding: 'utf-8',
-        windowsHide: true,
-        timeout: 3000,
-      });
+      const r = runSync('tasklist', ['/FI', `PID eq ${pid}`, '/NH', '/FO', 'CSV'], { timeout: 3000 });
+      const output = (r.stdout ?? '').toString();
       // CSV row looks like: "node.exe","26316","Console","1","12,345 K"
       return output.includes(`"${pid}"`);
     }
@@ -129,15 +129,15 @@ export function isProcessAlive(pid: number): boolean {
 
 /** Kill a process by PID */
 export function killProcess(pid: number): void {
-  try {
-    if (process.platform === 'win32') {
-      execSync(`taskkill /F /PID ${pid}`, { windowsHide: true, timeout: 3000 });
-    } else {
-      process.kill(pid, 'SIGTERM');
+    try {
+      if (process.platform === 'win32') {
+        runSync('taskkill', ['/F', '/PID', String(pid)], { timeout: 3000 });
+      } else {
+        process.kill(pid, 'SIGTERM');
+      }
+    } catch {
+      // ignore
     }
-  } catch {
-    // ignore
-  }
 }
 
 /** Read a PID from a file and kill the process, then remove the file */

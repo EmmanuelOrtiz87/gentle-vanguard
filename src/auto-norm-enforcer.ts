@@ -8,7 +8,7 @@
 
 import { existsSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { execSync } from 'child_process';
+import { runSyncShell } from './core/run-command.js';
 
 const ROOT = resolve(process.cwd());
 // const _LEARNED_NORMS = join(ROOT, 'rules', 'adaptive', 'LEARNED-NORMS.md'); // reserved
@@ -88,10 +88,13 @@ function checkNorm(norm: Norm): EnforcementResult {
       // Check if expected pattern exists in codebase
       if (norm.check) {
         try {
-          execSync(`grep -r "${norm.check}" --include="*.ts" --include="*.md" src/ rules/ | head -3`, {
-            cwd: ROOT, encoding: 'utf-8', timeout: 5000,
+          const r = runSyncShell(`grep -r "${norm.check}" --include="*.ts" --include="*.md" src/ rules/ | head -3`, {
+            cwd: ROOT, timeout: 5000,
           });
-          return { normId: norm.id, description: norm.description, status: 'pass', detail: 'Pattern found' };
+          if (r.status === 0) {
+            return { normId: norm.id, description: norm.description, status: 'pass', detail: 'Pattern found' };
+          }
+          return { normId: norm.id, description: norm.description, status: 'fail', detail: 'Pattern not found' };
         } catch {
           return { normId: norm.id, description: norm.description, status: 'fail', detail: 'Pattern not found' };
         }

@@ -1,4 +1,4 @@
-﻿import { execSync } from 'child_process';
+﻿import { runSyncShell } from '../../src/core/run-command.js';
 import { existsSync, mkdirSync, readdirSync, writeFileSync, copyFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { homedir } from 'os';
@@ -145,10 +145,9 @@ function findDbFiles(dir: string): string[] {
 
 function getPragmaTableInfo(db: string, table: string): string {
   try {
-    return execSync(`sqlite3 "${db}" "PRAGMA table_info(${table});"`, {
-      encoding: 'utf8',
+    return runSyncShell(`sqlite3 "${db}" "PRAGMA table_info(${table});"`, {
       timeout: 5000,
-    }).trim();
+    }).stdout.trim();
   } catch {
     return '';
   }
@@ -156,10 +155,9 @@ function getPragmaTableInfo(db: string, table: string): string {
 
 function getTables(db: string): string[] {
   try {
-    const r = execSync(`sqlite3 "${db}" ".tables"`, {
-      encoding: 'utf8',
+    const r = runSyncShell(`sqlite3 "${db}" ".tables"`, {
       timeout: 10000,
-    }).trim();
+    }).stdout.trim();
     return r.split(/\s+/).filter((t) => t.length > 0 && !t.startsWith('sqlite_'));
   } catch {
     return [];
@@ -168,10 +166,9 @@ function getTables(db: string): string[] {
 
 function getIntegrityCheck(db: string): string {
   try {
-    return execSync(`sqlite3 "${db}" "PRAGMA integrity_check;"`, {
-      encoding: 'utf8',
+    return runSyncShell(`sqlite3 "${db}" "PRAGMA integrity_check;"`, {
       timeout: 10000,
-    }).trim();
+    }).stdout.trim();
   } catch {
     return 'error';
   }
@@ -194,7 +191,7 @@ function backupDb(dbPath: string, backupDir: string): boolean {
 
 function rebuildIndex(dbPath: string): boolean {
   try {
-    execSync(`sqlite3 "${dbPath}" "REINDEX;"`, { encoding: 'utf8', timeout: 30000 });
+    runSyncShell(`sqlite3 "${dbPath}" "REINDEX;"`, { timeout: 30000 }).stdout;
     return true;
   } catch {
     return false;
@@ -203,7 +200,7 @@ function rebuildIndex(dbPath: string): boolean {
 
 function vacuumDb(dbPath: string): boolean {
   try {
-    execSync(`sqlite3 "${dbPath}" "VACUUM;"`, { encoding: 'utf8', timeout: 60000 });
+    runSyncShell(`sqlite3 "${dbPath}" "VACUUM;"`, { timeout: 60000 }).stdout;
     return true;
   } catch {
     return false;
@@ -212,10 +209,9 @@ function vacuumDb(dbPath: string): boolean {
 
 function getRowCount(db: string, table: string): number {
   try {
-    const r = execSync(`sqlite3 "${db}" "SELECT COUNT(*) FROM [${table}];"`, {
-      encoding: 'utf8',
+    const r = runSyncShell(`sqlite3 "${db}" "SELECT COUNT(*) FROM [${table}];"`, {
       timeout: 5000,
-    }).trim();
+    }).stdout.trim();
     return parseInt(r, 10) || 0;
   } catch {
     return -1;

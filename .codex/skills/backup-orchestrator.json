@@ -1,0 +1,20 @@
+{
+  "type": "function",
+  "function": {
+    "name": "backup_orchestrator",
+    "description": "Backup orchestration skill for workspace and project backup management",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "type": "string",
+          "description": "Task to execute"
+        }
+      },
+      "required": [
+        "task"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

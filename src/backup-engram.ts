@@ -6,7 +6,7 @@
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, copyFileSync, writeFileSync, statSync } from 'fs';
 import { join, resolve } from 'path';
-import { execSync } from 'child_process';
+import { runNpxTsxSync } from './core/run-command.js';
 import { createHash } from 'crypto';
 import { pathToFileURL } from 'url';
 import { getEffectiveProcessTimeout } from './core/timeout-config';
@@ -74,11 +74,11 @@ function invokeBackup(date: string, outputDir: string, integrityCheck: boolean, 
     const icChecksumPath = join(root, '.engram', 'checksums.sha256');
     if (!existsSync(icChecksumPath)) {
       log('Generating initial SHA256 checksums...', 'INFO', quiet);
-      try { execSync(`npx tsx "${integrityScript}" -Mode checksums -Quiet`, { cwd: root, timeout: getEffectiveProcessTimeout('long_running'), windowsHide: true }); } catch { /* ignore */ }
+      try { runNpxTsxSync(integrityScript, ['-Mode', 'checksums', '-Quiet'], { cwd: root, timeout: getEffectiveProcessTimeout('long_running') }); } catch { /* ignore */ }
     }
     log('Pre-backup integrity check...', 'INFO', quiet);
     try {
-      execSync(`npx tsx "${integrityScript}" -Mode check -Quiet`, { cwd: root, timeout: getEffectiveProcessTimeout('long_running'), windowsHide: true });
+      runNpxTsxSync(integrityScript, ['-Mode', 'check', '-Quiet'], { cwd: root, timeout: getEffectiveProcessTimeout('long_running') });
       log('Pre-backup integrity PASSED', 'OK', quiet);
     } catch {
       log(`Integrity check FAILED — run repair first: ${integrityScript} -Mode repair`, 'ERR', quiet);

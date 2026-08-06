@@ -12,7 +12,7 @@
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { execSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 import { getExternalApiTimeouts } from './core/timeout-config';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
@@ -145,7 +145,7 @@ function getCurrentVersion(): string | null {
     // Include Go bin path to find engram
     const goBinPath = join(process.env.GOPATH || join(process.env.HOME || process.env.USERPROFILE || '', 'go'), 'bin');
     const enhancedPath = `${goBinPath}${process.platform === 'win32' ? ';' : ':'}${process.env.PATH || ''}`;
-    const output = execSync('engram --version', { encoding: 'utf-8', env: { ...process.env, PATH: enhancedPath } });
+    const output = runSync('engram', ['--version'], { env: { ...process.env, PATH: enhancedPath } }).stdout;
     return parseVersion(output);
   } catch {
     return null;
@@ -155,8 +155,7 @@ function getCurrentVersion(): string | null {
 function installEngram(): boolean {
   try {
     log('Installing engram@latest...', 'INFO');
-    execSync('go install github.com/Gentleman-Programming/engram/cmd/engram@latest', {
-      encoding: 'utf-8',
+    runSync('go', ['install', 'github.com/Gentleman-Programming/engram/cmd/engram@latest'], {
       stdio: 'pipe',
     });
     return true;
@@ -179,7 +178,7 @@ function validateEngram(): boolean {
     const enhancedPath = `${goBinPath}${process.platform === 'win32' ? ';' : ':'}${process.env.PATH || ''}`;
 
     // Try a simple engram command to verify it works
-    execSync('engram doctor --json', { encoding: 'utf-8', stdio: 'pipe', env: { ...process.env, PATH: enhancedPath } });
+    runSync('engram', ['doctor', '--json'], { stdio: 'pipe', env: { ...process.env, PATH: enhancedPath } });
     log(`Validation passed: engram ${version} is working`, 'SUCCESS');
     return true;
   } catch (err) {

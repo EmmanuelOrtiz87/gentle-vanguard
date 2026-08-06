@@ -99,7 +99,7 @@ Evaluate and configure Renovate Bot for:
 - ✅ `npm audit` in pre-push catches CVEs before they reach main
 - ✅ `lockfile-lint` prevents lockfile tampering
 - ✅ Quarterly cadence ensures stale deps don't accumulate
-- ✅ Clear ownership: whoever runs `gv.ps1 publish` is accountable for audit check
+- ✅ Clear ownership: whoever runs `src/cli/gv.ts publish` is accountable for audit check
 - ✅ Zero new tooling required for Layers 1-3
 
 ### Negative

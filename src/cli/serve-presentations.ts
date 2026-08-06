@@ -21,6 +21,7 @@ import * as http from 'node:http';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as os from 'node:os';
+import { runSyncShell } from '../core/run-command.js';
 import { printBanner } from './banner.js';
 
 const PORT = parseInt(process.argv.find(a => a.startsWith('--port='))?.split('=')[1] ?? process.env.PORT ?? '3000', 10);
@@ -126,15 +127,14 @@ server.listen(PORT, () => {
 
   // Open browser
   if (!NO_BROWSER) {
-    const { execSync } = require('node:child_process');
     const platform = process.platform;
     try {
       if (platform === 'win32') {
-        execSync(`start http://localhost:${PORT}`, { shell: true, stdio: 'ignore' });
+        runSyncShell(`start http://localhost:${PORT}`, { stdio: 'ignore' });
       } else if (platform === 'darwin') {
-        execSync(`open http://localhost:${PORT}`, { stdio: 'ignore' });
+        runSyncShell(`open http://localhost:${PORT}`, { stdio: 'ignore' });
       } else {
-        execSync(`xdg-open http://localhost:${PORT}`, { stdio: 'ignore' });
+        runSyncShell(`xdg-open http://localhost:${PORT}`, { stdio: 'ignore' });
       }
     } catch {
       // Browser open is best-effort

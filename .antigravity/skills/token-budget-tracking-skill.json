@@ -1,0 +1,22 @@
+{
+  "name": "token-budget-tracking-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "token-budget-tracking-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Token Budget Tracking & Optimization\n\n## Overview\n\nA single runaway agent (50K tokens/loop × 100 iters) can cost $50-$150 in minutes. This skill covers budgets, tracking, cost attribution, and optimization.\n\n## Core Concepts\n\n| Dimension        | What It Tracks                    | Why It Matters               |\n| ---------------- | --------------------------------- | ---------------------------- |\n| Per Agent        | Tokens consumed by each agent     | Identify expensive agents    |\n| Per Task         | Cost per completed task           | Measure ROI per task type    |\n| Per User         | Cost attributed to a user/session | Bill-back, abuse detection   |\n| Per Model        | Cost by LLM provider/model        | Model selection decisions    |\n| Daily/Weekly     | Aggregate burn rate               | Budget forecasting           |\n| Per Step         | Tokens per reasoning step         | Detect inefficient reasoning |\n\n## Implementation Steps\n\nCode and detailed examples in `references/`.\n\n1. **[Token Counter](references/step-1-token-counter.md)** — Thread-safe counter with per-agent-task tracking and cost calculation.\n2. **[Budget Enforcement](references/step-2-budget-enforcement.md)** — Per-agent and global period budgets with pre-flight checks.\n3. **[Token Optimization](references/step-3-token-optimization.md)** — Context compression, summarization, and truncation.\n4. **[Real-Time Dashboard](references/step-4-budget-dashboard.md)** — Live status with percent-used and alerts.\n5. **[Proactive Cost Controls](references/step-5-cost-controls.md)** — Usage-ratio-driven compression and model selection.\n6. **[Budget Alerting Rules](references/step-6-alerting-rules.md)** — YAML rules for daily budget, spikes, runaway detection.\n\n## Budget Planning\n\n| Agent Type       | Suggested Daily Limit | Monthly Cost Cap |\n| ---------------- | --------------------- | ---------------- |\n| Customer Support | 500K tokens           | ~$150            |\n| Research Agent   | 2M tokens             | ~$600            |\n| Code Generation  | 3M tokens             | ~$900            |\n| Data Analysis    | 1M tokens             | ~$300            |\n| Internal Tooling | 200K tokens           | ~$60             |\n\n[Pricing table & optimization impact](references/budget-planning.md)\n\n## Trigger Phrases\n\n| Phrase                       | Action                                |\n| ---------------------------- | ------------------------------------- |\n| \"Show token usage\"           | Display current consumption by agent  |\n| \"What's the budget status?\"  | Show budget vs. actual for all agents |\n| \"Set budget for agent X\"     | Configure per-agent token limit       |\n| \"What's costing the most?\"   | Show top spenders and cost breakdown  |\n| \"Optimize this request\"      | Compress context to reduce tokens     |\n| \"Alert on budget thresholds\" | Set up budget alerting rules          |\n\n## Anti-Patterns\n\n| Anti-Pattern             | Why It Fails                         | Fix                           |\n| ------------------------ | ------------------------------------ | ----------------------------- |\n| No budget tracking       | Bills are a surprise each month      | Real-time per-agent tracking  |\n| Same model for all tasks | Overpaying for simple tasks          | Model tiering by difficulty   |\n| No per-agent limits      | One runaway agent costs everything   | Hard per-agent budgets        |\n| Ignoring output tokens   | Output costs more than input (2-4x)  | Track input/output separately |\n| No proactive alerts      | Find out about spikes at billing     | Real-time budget alerts       |\n| Caching nothing          | Pay for identical prompts repeatedly | Implement response caching    |",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

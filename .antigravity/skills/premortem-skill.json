@@ -1,0 +1,22 @@
+{
+  "name": "premortem-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "premortem-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Premortem Skill\n\n## Activation Contract\n\nExecute when user triggers a premortem request. A premortem is the opposite of a postmortem: instead\nof figuring out what went wrong after something fails, you imagine it already failed and work\nbackward to find every reason why — before starting.\n\n## Core Method\n\nFrom psychologist Gary Klein (HBR). Daniel Kahneman called it his most valuable decision-making\ntechnique. Used by Google, Goldman Sachs, Procter & Gamble.\n\n**Key insight**: When asked \"what could go wrong?\", people give cautious, vague answers. When you\nsay \"this already failed, tell me why\", the brain shifts to narrative mode and generates much more\nspecific, creative, and honest reasons.\n\n## Hard Rules\n\n1. MUST set the premortem frame explicitly before generating failure reasons\n2. MUST gather sufficient context (What, For Whom, Success criteria) before executing\n3. MUST launch ALL deep-dive sub-agents in parallel, not sequentially\n4. MUST generate a visual HTML report + markdown transcript\n5. MUST produce a concise 3-sentence chat summary at the end\n6. MUST NOT soften findings — the goal is to tell the user what they don't want to hear\n\n## When To Execute\n\n**Good targets**: product launches, pricing changes, hires, strategic pivots, partnerships, any\ncommitment where the cost of being wrong is high.\n\n**Bad targets**: vague ideas with no concrete plan yet, single-answer factual questions, creative\nfeedback on drafts, already-irreversible decisions.\n\n## Execution Steps\n\n### 1. Context Gathering (minimum viable)\n\nScan current conversation and workspace for existing context. Need three things:\n\n- **What** — clear understanding of what is being premortemed\n- **For Whom** — audience, stakeholders, who it affects\n- **Success** — what winning looks like\n\nIf context is insufficient, ask ONE question at a time until threshold is met.\n\n### 2. Set The Frame\n\n\"Han pasado 6 meses. [El plan] ha fallado. Esta muerto. Miramos hacia atras intentando entender que\nsalio mal.\"\n\nThis shifts from \"evaluate this plan\" (compliant mode) to \"explain why this died\" (honest failure\nidentification mode).\n\n### 3. Raw Premortem — Generate Failure Reasons\n\nSingle comprehensive analysis. No preset categories, no lenses, no constraints. Pure Klein method.\nEach reason must be:\n\n- Specific to this plan (not generic advice)\n- Grounded in real details the user provided\n- A genuine threat (not a minor inconvenience)\n\n### 4. Deep-Dive Sub-Agents (ALL IN PARALLEL)\n\nLaunch one sub-agent per failure reason, all in parallel. Each agent:\n\n**Prompt template:** \"You are a researcher in a premortem analysis. The frame: 6 months have passed,\nthis plan has failed. Your assigned failure reason: [specific reason]. Write the story of how it\n\n---\n\n> **Referencia detallada**: [ eferences/detail.md](references/detail.md)",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

@@ -48,6 +48,9 @@ export interface SessionTurn {
   outputTokens?: number;
   timestamp?: string;
   message?: string;
+  inputSummary?: string;
+  outputSummary?: string;
+  toolCalls?: string;
 }
 
 export interface SessionState {

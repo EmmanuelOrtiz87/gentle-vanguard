@@ -1,0 +1,20 @@
+{
+  "type": "function",
+  "function": {
+    "name": "systems_thinking_skill",
+    "description": ">",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "type": "string",
+          "description": "Task to execute"
+        }
+      },
+      "required": [
+        "task"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "post-session-learning",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "post-session-learning Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Post-Session Learning Skill\n\n## When to Use\n\nAFTER completing significant work, before or during session closure:\n\n1. User triggers \"cerrar sesion\", \"close session\", \"guardar sesion\"\n2. After `mem_session_summary` is saved\n3. Before `mem_session_end`\n\n## Learning Analysis Workflow\n\n### Step 1 — Collect Session Data\n\n```powershell\nnpx tsx src/session-learning-capture.ts -Trigger close\n```\n\nThis script reads:\n\n- `scripts/.session/startup-summary.json` — platform, tool, peak hour\n- Recent engram session summary — what was accomplished\n- Git log for the session — files changed, patterns\n- Past improvement proposals — what was already identified\n\n### Step 1b — Update Skill Usage Metrics\n\n```powershell\nnpx tsx src/skills/usage-tracker.ts\nnpx tsx src/skills/usage-tracker.ts -Nudge\n```\n\nScans all registered skills and initializes or updates `.session/skill-usage/*.json` files. The\n`-Nudge` flag checks for auto-nudge conditions (3+ failures, declining success rate).\n\n### Step 1c — Generate Skill Nudges\n\n```powershell\nnpx tsx src/skills/skill-nudge.ts -SessionDir \".session\"\n```\n\nReads usage metrics, identifies skills with failure patterns in the current session, and generates\nstructured nudge JSON files in `.session/skill-nudges/`.\n\n### Step 2 — Analyze for Gaps\n\nThe script returns structured data. Review these categories:\n\n| Category                | What to Look For                                  | Action                      |\n| ----------------------- | ------------------------------------------------- | --------------------------- |\n| **Missing skills**      | User asked for something not covered by any skill | Create new skill            |\n| **Repeated errors**     | Same command failed multiple times                | Fix script or config        |\n| **Config gaps**         | Configuration that would have saved tokens        | Update config               |\n| **Token waste**         | Commands that failed and were retried             | Add OS check, doc, or guard |\n| **Pattern opportunity** | Repetitive manual steps                           | Create skill or script      |\n\n### Step 3 — Generate Proposals\n\nFor each identified gap, create a structured proposal saved to\n`.local/improvement-proposals/YYYY-MM-DD-proposal-N.json`:\n\n```json\n{\n  \"id\": \"prop-2026-05-14-001\",\n  \"date\": \"2026-05-14\",\n  \"category\": \"missing-skill\",\n  \"severity\": \"medium\",\n  \"description\": \"User asked for X but no skill covers it\",\n  \"evidence\": \"Session logs show 3 requests for X\",\n  \"proposedAction\": \"Create skills/business/X-skill/SKILL.md\",\n  \"autoApply\": false,\n  \"applied\": false\n}\n```\n\n### Step 4 — Apply or Queue\n\n- **Auto-apply**: If severity is `low` and `autoApply` is true, apply immediately\n- **Queue**: If severity is `medium`/`high`, save for user review\n- **Already fixed**: If proposal matches a previous one that was applied, skip\n\n### Step 4b — Auto-Apply Skill Patches\n\n```powershell\npwsh -NoProfile -File scripts/skills/skill-auto-patch.ps1 -AutoApply\n```\n\nReads `.session/skill-nudges/*.json` for pending nudge recommendations. Appends a \"## Known Issues\"\nsection to the skill's SKILL.md for urgent or repeated failures. Use `-Report` flag for a dry run\nwithout applying.\n\n### Step 5 — Save Learnings\n\n```powershell\n# Save key findings to engram for cross-session memory\nengram_mem_save -title \"Learning: {key finding}\" -type \"learning\"\n```\n\n## Integration Points\n\n---\n\n> **Referencia detallada**: [ eferences/detail.md](references/detail.md)",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

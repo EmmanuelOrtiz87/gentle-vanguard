@@ -1,0 +1,22 @@
+{
+  "name": "git-workflow-skill",
+  "version": "1.0.0",
+  "description": "Use when managing git branches, commits, pull requests, merge conflicts, or git workflows. Triggers: \"git branch\", \"git merge\", \"conflict\", \"pull request\", \"commit\", \"rebase\", \"cherry-pick\", \"stash\".",
+  "triggers": [],
+  "mission": {
+    "name": "git-workflow-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Git Workflow Skill\n\n## Purpose\n\nStandardize git usage, branch strategies, commit conventions, and collaborative workflows across\nprojects.\n\n## Branch Strategy\n\n```\nmain (production)\n   develop (integration)\n        feature/user-authentication\n        feature/payment-integration\n        bugfix/login-error\n        release/v1.2.0\n```\n\n| Branch      | Purpose                 | Protection            |\n| ----------- | ----------------------- | --------------------- |\n| `main`      | Production code         | Required PR + review  |\n| `develop`   | Integration branch      | Required PR + review  |\n| `feature/*` | New features            | PR after completion   |\n| `bugfix/*`  | Bug fixes               | PR after completion   |\n| `release/*` | Release preparation     | Direct commit allowed |\n| `hotfix/*`  | Urgent production fixes | Direct commit allowed |\n\n## Enforcement Profile (Repository Runtime)\n\n1. Direct push to `main` and `develop` is blocked by default.\n2. Branch names must follow GitFlow patterns: `feature/*`, `bugfix/*`, `chore/*`, `hotfix/*`,\n   `release/*`.\n3. PR base mapping is enforced:\n\n- `feature/*`, `bugfix/*`, `chore/*` -> `develop`\n- `hotfix/*`, `release/*` -> `main`\n\n4. Override for protected direct push is allowed only with explicit environment variable\n   `GITFLOW_ALLOW_PROTECTED_PUSH=1`.\n\n## Commit Convention (Conventional Commits)\n\n```\n<type>(<scope>): <description>\n\n[optional body]\n\n[optional footer]\n```\n\n### Types\n\n| Type       | Description                 |\n| ---------- | --------------------------- |\n| `feat`     | New feature                 |\n| `fix`      | Bug fix                     |\n| `docs`     | Documentation only          |\n| `style`    | Formatting, no code change  |\n| `refactor` | Code change, no feature/fix |\n| `test`     | Adding tests                |\n| `chore`    | Maintenance, deps update    |\n| `perf`     | Performance improvement     |\n| `ci`       | CI/CD changes               |\n| `build`    | Build system changes        |\n| `revert`   | Revert previous commit      |\n\n### Examples\n\n```bash\nfeat(auth): add OAuth2 login with Google\n\nCloses #123\nBreaks: #456 (use JWT refresh instead)\n```\n\n```bash\nfix(api): handle null response from payment provider\n\nThe payment provider sometimes returns null instead of\nan error object. Added null check to prevent crash.\n```\n\n## Branch Naming\n\n```\nfeature/add-user-profile-page\nfeature/US-123-user-profile\nbugfix/fix-login-timeout\nbugfix/gh-456-login-error\nhotfix/security-patch-cve-2024\nrelease/v1.2.0\nchore/update-dependencies\n```\n\n## Daily Workflow\n\n```bash\n# Start fresh\ngit checkout develop\n\n---\n\n> **Referencia detallada**: [\neferences/detail.md](references/detail.md)\n```",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

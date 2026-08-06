@@ -1,0 +1,22 @@
+{
+  "name": "subagent-driven-dev-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "subagent-driven-dev-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Subagent-Driven Development\n\nExecute plan by dispatching fresh subagent per task, with two-stage review after each: spec compliance review first, then code quality review.\n\n**Why subagents:** Delegate tasks to specialized agents with isolated context. Construct exactly what they need — they should never inherit your session's context or history. This preserves your context for coordination.\n\n**Core principle:** Fresh subagent per task + two-stage review (spec then quality) = high quality, fast iteration.\n\n**Continuous execution:** Do not pause to check in between tasks. Only stop for: BLOCKED status you cannot resolve, ambiguity preventing progress, or all tasks complete.\n\n## When to Use\n\nUse when you have an implementation plan with mostly independent tasks and you stay in the same session. For tightly coupled tasks, execute manually. For parallel sessions, use the executing-plans skill.\n\n## The Process\n\n1. **Read plan** — extract all tasks with full text and context, create TodoWrite\n2. **Per task, dispatch implementer** (via implementer-prompt.md) — provide task text + context. Answer questions and re-dispatch if needed\n3. **Implementer implements** — writes code, tests, commits, self-reviews, reports status\n4. **Dispatch spec reviewer** (via spec-reviewer-prompt.md) — confirms code matches spec. If issues: implementer fixes, re-review\n5. **Dispatch code quality reviewer** (via code-quality-reviewer-prompt.md) — if issues: implementer fixes, re-review\n6. **Mark task complete** — proceed to next task\n7. **After all tasks** — dispatch final code reviewer for entire implementation, then finishing-a-development-branch\n\n## Model Selection\n\nUse the least powerful model that can handle each role.\n\n- **Mechanical** (1-2 files, complete spec) → fast/cheap model\n- **Integration** (multi-file, coordination) → standard model\n- **Architecture/design/review** → most capable model\n\n## Handling Implementer Status\n\n- **DONE** — proceed to spec compliance review\n- **DONE_WITH_CONCERNS** — read concerns; address correctness/scope issues before review, or note observations and proceed\n- **NEEDS_CONTEXT** — provide missing context and re-dispatch\n- **BLOCKED** — context problem? re-dispatch; need more reasoning? upgrade model; task too large? split; plan wrong? escalate to human\n\n## Red Flags\n\n- Never start implementation on main/master without consent\n- Never skip spec compliance or code quality review\n- Never dispatch multiple implementers in parallel\n- Never skip review loops (reviewer found issues = fix + re-review)\n- Never accept \"close enough\" on spec compliance\n- Never start code quality review before spec compliance is ✅\n- Never move to next task while either review has open issues\n- Answer subagent questions before letting them proceed\n- Never ignore subagent escalations\n\n## Prompt Templates\n\n- `references/implementer-prompt.md`\n- `references/spec-reviewer-prompt.md`\n- `references/code-quality-reviewer-prompt.md`\n\n## Integration\n\nRequires: git-worktrees, writing-plans, requesting-code-review, finishing-a-development-branch.\nSubagents should use test-driven-development.\n\n## See Also\n\n- `references/example-workflow.md` — full worked example\n- `references/advantages.md` — detailed advantages breakdown",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

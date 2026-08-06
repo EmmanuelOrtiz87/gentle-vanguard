@@ -51,13 +51,13 @@
     "preCompactHook": {
       "enabled": true,
       "triggerAt": 15000,
-      "script": "scripts/utilities/pre-compact-hook.ps1",
+      "script": "src/pre-compact-hook.ts",
       "preservePatterns": ["FIXME", "TODO", "BUG", "DECISION", "RESULT"],
       "compressionRatio": 0.9
     },
     "handoffCompression": {
       "enabled": true,
-      "script": "scripts/utilities/handoff-compress.ps1",
+      "script": "src/handoff-compress.ts",
       "preserves": ["decisions", "results", "FIXMEs", "status flags"],
       "truncates": ["verbose outputs", "repeated patterns"],
       "expectedReduction": "30%"

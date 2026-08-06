@@ -16,7 +16,7 @@
  *   npm run stack:setup -- --dry-run # preview only, no changes
  */
 
-import { spawnSync } from 'node:child_process';
+import { runSync } from './core/run-command.js';
 import { resolve } from 'node:path';
 
 // ─── Config ───────────────────────────────────────────────────────────
@@ -81,7 +81,7 @@ const C = {
 function runInteractive(cmd: string, args: string[]): number | null {
   console.log(C.dim(`  > ${cmd} ${args.join(' ')}`));
   try {
-    const r = spawnSync(cmd, args, { stdio: 'inherit', windowsHide: true, timeout: 300000 });
+    const r = runSync(cmd, args, { stdio: 'inherit', timeout: 300000 });
     return r.status;
   } catch {
     return -1;
@@ -97,7 +97,7 @@ function prompt(msg: string): boolean {
   console.log(C.cyan(`\n  ? ${msg} (Y/n)`));
   // Simple read from stdin
   try {
-    spawnSync(process.platform === 'win32' ? 'powershell' : 'read', 
+    runSync(process.platform === 'win32' ? 'powershell' : 'read', 
       process.platform === 'win32' ? ['-NoProfile', '-Command', '$host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown").Key'] : [],
       { stdio: 'inherit', timeout: 30000 });
     return true; // default proceed

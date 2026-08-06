@@ -6,7 +6,7 @@
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { execSync, spawnSync } from 'child_process';
+import { runSync } from './core/run-command.js';
 import { pathToFileURL } from 'url';
 
 type Action = 'init' | 'create-note' | 'list' | 'search' | 'sync-engram' | 'archive' | 'stats' | 'validate';
@@ -279,7 +279,7 @@ function searchNotes(query: string): VaultNote[] {
 }
 
 function syncEngramToVault(): void {
-  const engramCheck = spawnSync('where', ['engram'], { encoding: 'utf-8', windowsHide: true });
+  const engramCheck = runSync('where', ['engram']);
 
   if (engramCheck.status !== 0) {
     log('Engram not found in PATH', 'WARN');
@@ -287,8 +287,7 @@ function syncEngramToVault(): void {
   }
 
   try {
-    execSync('engram search "session_summary" --project gentle-vanguard --limit 50', {
-      encoding: 'utf-8',
+    runSync('engram', ['search', 'session_summary', '--project', 'gentle-vanguard', '--limit', '50'], {
       timeout: 30000,
       windowsHide: true,
     });

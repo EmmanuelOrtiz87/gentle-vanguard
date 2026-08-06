@@ -12,7 +12,7 @@
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync, statSync } from 'fs';
 import { resolve, dirname, extname, basename, relative, join } from 'path';
-import { execSync, spawnSync } from 'child_process';
+import { runSync, runSyncShell } from '../core/run-command.js';
 
 interface RenderArgs {
   input: string;
@@ -87,14 +87,14 @@ function parseArgs(): RenderArgs {
 function detectEngine(): 'graphviz-cli' | 'viz-js' | 'plantuml-cli' | 'plantuml-http' | 'unknown' {
   // Try native Graphviz
   try {
-    const result = spawnSync('dot', ['-V'], { encoding: 'utf8', timeout: 5000 });
+    const result = runSync('dot', ['-V'], { timeout: 5000 });
     if (result.status === 0) return 'graphviz-cli';
   } catch { /* not found */ }
 
   // Try native PlantUML
   try {
-    const result = spawnSync('java', ['-jar', 'plantuml.jar', '-version'], {
-      encoding: 'utf8', timeout: 5000,
+    const result = runSync('java', ['-jar', 'plantuml.jar', '-version'], {
+      timeout: 5000,
     });
     if (result.status === 0) return 'plantuml-cli';
   } catch { /* not found */ }
@@ -116,15 +116,16 @@ async function renderGraphviz(dotContent: string, format: string, outputPath: st
 
     const outFormat = format === 'svg' ? 'svg' : format === 'png' ? 'png' : 'svg';
     try {
-      execSync(`dot -T${outFormat} "${tmpFile}" -o "${outputPath}"`, {
-        encoding: 'utf8', timeout: 30000,
+      const r = runSyncShell(`dot -T${outFormat} "${tmpFile}" -o "${outputPath}"`, {
+        timeout: 30000,
       });
+      if (r.status !== 0) throw new Error(r.stderr || `dot exited ${r.status}`);
       return outputPath;
     } catch (err) {
       console.error(`[DIAGRAM] Graphviz render failed: ${err}`);
       return null;
     } finally {
-      try { execSync(`del "${tmpFile}" 2>nul || rm "${tmpFile}" 2>/dev/null`); } catch { /* ignore */ }
+      try { runSyncShell(`del "${tmpFile}" 2>nul || rm "${tmpFile}" 2>/dev/null`); } catch { /* ignore */ }
     }
   }
 
@@ -161,15 +162,16 @@ function renderPlantUml(pumlContent: string, format: string, outputPath: string)
     writeFileSync(tmpFile, pumlContent);
 
     try {
-      execSync(`java -jar "${jarPath}" -t${outFormat} "${tmpFile}" -o "${dirname(outputPath)}"`, {
-        encoding: 'utf8', timeout: 30000,
+      const r = runSyncShell(`java -jar "${jarPath}" -t${outFormat} "${tmpFile}" -o "${dirname(outputPath)}"`, {
+        timeout: 30000,
       });
+      if (r.status !== 0) throw new Error(r.stderr || `java exited ${r.status}`);
       return outputPath;
     } catch (err) {
       console.error(`[DIAGRAM] PlantUML render failed: ${err}`);
       return null;
     } finally {
-      try { execSync(`del "${tmpFile}" 2>nul || rm "${tmpFile}" 2>/dev/null`); } catch { /* ignore */ }
+      try { runSyncShell(`del "${tmpFile}" 2>nul || rm "${tmpFile}" 2>/dev/null`); } catch { /* ignore */ }
     }
   }
 

@@ -1,0 +1,22 @@
+{
+  "name": "systematic-debugging-skill",
+  "version": "1.0.0",
+  "description": ">",
+  "triggers": [],
+  "mission": {
+    "name": "systematic-debugging-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Systematic Debugging\n\n## Overview\n\nRandom fixes waste time and create new bugs. Quick patches mask underlying issues.\n\n**Core principle:** ALWAYS find root cause before attempting fixes. Symptom fixes are failure.\n\n**Violating this process is violating the spirit of debugging.**\n\n## The Iron Law\n\n```\nNO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST\n```\n\nIf you haven't completed Phase 1, you cannot propose fixes.\n\n## When to Use\n\nUse for ANY technical issue: test failures, production bugs, unexpected behavior, performance problems, build failures, integration issues.\n\n**Use ESPECIALLY when:** under time pressure, \"just one quick fix\" seems obvious, you've already tried multiple fixes, previous fix didn't work, you don't fully understand the issue.\n\n**Don't skip when:** issue seems simple, you're in a hurry, manager wants it fixed NOW.\n\n## The Four Phases\n\nYou MUST complete each phase before proceeding to the next.\n\n### Phase 1: Root Cause Investigation\n\n1. Read error messages carefully\n2. Reproduce consistently\n3. Check recent changes\n4. Gather evidence across component boundaries\n5. Trace data flow backward from symptom\n\n→ See `references/evidence-gathering.md` for multi-component diagnostic techniques.\n\n### Phase 2: Pattern Analysis\n\n1. Find working examples in the same codebase\n2. Compare against reference implementations\n3. Identify differences between working and broken\n4. Understand dependencies and assumptions\n\n### Phase 3: Hypothesis and Testing\n\n1. Form a single hypothesis with clear reasoning\n2. Test with the smallest possible change\n3. Verify before continuing — one variable at a time\n4. If stuck, say \"I don't understand X\" and research more\n\n### Phase 4: Implementation\n\n1. Create a failing test case first\n2. Implement a single fix addressing the root cause\n3. Verify the fix and check for regressions\n4. If fix doesn't work, return to Phase 1\n5. **After 3 failed fixes: question the architecture**\n\n→ See `references/advanced-patterns.md` for architectural questioning and edge cases.\n\n## Red Flags — STOP and Follow Process\n\n- \"Quick fix for now, investigate later\"\n- \"Just try changing X and see if it works\"\n- \"Skip the test, I'll manually verify\"\n- Proposing solutions before tracing data flow\n- \"One more fix attempt\" (when already tried 2+)\n- Each fix reveals a new problem in a different place\n\n**ALL of these mean: STOP. Return to Phase 1.**\n\n→ See `references/common-pitfalls.md` for rationalizations and partner signals.\n\n## Quick Reference\n\n| Phase | Key Activities | Success Criteria |\n|---|---|---|\n| **1. Root Cause** | Read errors, reproduce, check changes, gather evidence | Understand WHAT and WHY |\n| **2. Pattern** | Find working examples, compare | Identify differences |\n| **3. Hypothesis** | Form theory, test minimally | Confirmed or new hypothesis |\n| **4. Implementation** | Create test, fix, verify | Bug resolved, tests pass |\n\n## Supporting Techniques\n\n- `references/evidence-gathering.md` — Multi-component diagnostic instrumentation\n- `references/advanced-patterns.md` — Architecture questioning, no-root-cause handling, real-world impact\n- `references/common-pitfalls.md` — Rationalizations table, partner redirection signals",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

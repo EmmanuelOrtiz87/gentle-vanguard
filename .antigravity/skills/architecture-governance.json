@@ -1,0 +1,22 @@
+{
+  "name": "architecture-governance",
+  "version": "1.0.0",
+  "description": "",
+  "triggers": [],
+  "mission": {
+    "name": "architecture-governance Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Architecture Governance\n\n## Activation Contract\n\nLoad this skill when defining or updating project architecture, layering, naming conventions,\nrepository structure, scaffolding defaults, compatibility constraints, or architecture decision\ndocuments.\n\n## Hard Rules\n\n1. Prefer defaults that are safe and portable.\n2. Ask the user only when a choice changes structure, compatibility, or operational cost.\n3. Keep architecture decisions independent from IDE, LLM, or language unless a constraint requires\n   otherwise.\n4. Document the chosen shape in `docs/project-context.md` and `ARCHITECTURE.md`.\n5. Record decision rationale, impact, and fallback options.\n6. Avoid embedding vendor-specific or OS-specific assumptions unless explicitly required.\n\n## Decision Gates\n\n| Situation             | Action                                                   |\n| --------------------- | -------------------------------------------------------- |\n| Project type known?   | Use defaults from `references/architecture-standards.md` |\n| High-impact decision? | Ask user; document in decision record                    |\n| Repeatable choice?    | Use project parameters and config defaults               |\n| After decisions made  | Capture in short decision record                         |\n\n## Execution Steps\n\n1. Identify the project type and starting state.\n2. Ask only for missing high-impact decisions.\n3. Prefer project parameters and config defaults for repeatable choices.\n4. Capture the architecture in a short decision record.\n5. Validate that the resulting structure matches the repo layout and scripts.\n\n## Output Contract\n\n- Start with the selected project shape.\n- List the core layers or folders.\n- State the defaults and why they are safe.\n- State any user-selected exceptions.\n- Keep the output technology-agnostic unless the repository requires a concrete choice.\n\n## References\n\n- `references/architecture-standards.md` — project structure outline, layered architecture summary,\n  decision template, compatibility checklist, migration/refactor decision record",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

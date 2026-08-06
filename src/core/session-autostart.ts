@@ -1,19 +1,23 @@
 #!/usr/bin/env node
 import { appendFileSync, mkdirSync, readFileSync, existsSync, writeFileSync, unlinkSync } from 'fs';
 import { join, resolve } from 'path';
-import { execSync, spawn, type ChildProcess } from 'child_process';
+import { spawn, type ChildProcess } from 'child_process';
+import { runSync, runNpxTsxSync } from './run-command.js';
 import { getPipelineTimeouts } from './timeout-config';
 import { log as createLogger } from '../utils/logger.js';
 import { printBanner } from '../cli/banner.js';
 import { newAuditEvent, saveAuditEvent } from '../infrastructure/audit-pipeline.js';
+import { sessionStart } from '../engram-session-bridge.js';
 
 const LOG = createLogger('SESSION-AUTOSTART');
 
 // ─── Auto-Checkpoint Helper ──────────────────────────────────────────────
 async function createAutoCheckpoint(): Promise<void> {
   try {
-    const checkpointCmd = 'npx tsx src/checkpoint-manager.ts create --label auto-session-start';
-    execSync(checkpointCmd, { encoding: 'utf-8', timeout: 30000 });
+    const r = runNpxTsxSync('src/checkpoint-manager.ts', ['create', '--label', 'auto-session-start'], {
+      timeout: 30000,
+    });
+    if (r.status !== 0) throw r.error ?? new Error(`checkpoint exited ${r.status}`);
     auditLog('checkpoint.create', 'session-autostart', 'auto_checkpoint', 'success', 'Auto-checkpoint created on session start');
     LOG.info('[CHECKPOINT] Auto-checkpoint created successfully');
   } catch (err) {
@@ -86,10 +90,12 @@ function isLockOwnerAlive(pid: number): boolean {
   // PID exists; on Windows confirm it is a node process running session-autostart.
   if (process.platform === 'win32') {
     try {
-      const cmd = execSync(
-        `powershell -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \\"ProcessId=${pid}\\").CommandLine"`,
-        { encoding: 'utf-8', windowsHide: true, timeout: 5000, stdio: ['ignore', 'pipe', 'ignore'] },
-      ).trim();
+      const psCmd = `(Get-CimInstance Win32_Process -Filter "ProcessId=${pid}").CommandLine`;
+      const r = runSync('powershell', ['-NoProfile', '-Command', psCmd], {
+        timeout: 5000,
+        stdio: ['ignore', 'pipe', 'ignore'],
+      });
+      const cmd = r.stdout.trim();
       if (!cmd) return false; // no command line info -> treat as stale
       return /node(\.exe)?/i.test(cmd) && /session-autostart/i.test(cmd);
     } catch {
@@ -278,6 +284,16 @@ async function main() {
   });
 
   if (!process.env.GV_QUIET) printBanner('Session Autostart');
+  
+  // Iniciar sesión explícitamente (funciona en TODAS las herramientas, no depende del plugin automático)
+  const sessionId = `session-${sessionStartTime.replace(/[:.]/g, '-').slice(0, 19)}`;
+  const engramSession = sessionStart(sessionId);
+  if (engramSession.success) {
+    LOG.info(`[ENGRAM] Session started explicitly: ${engramSession.sessionId}`);
+  } else {
+    LOG.warn(`[ENGRAM] Session start warning: ${engramSession.error || 'Unknown error'} (continuing without Engram)`);
+  }
+  
   LOG.info(`[SESSION-AUTOSTART] Loading pipeline from ${CONFIG_PATH}\n`);
 
   const timeoutConfig = getPipelineTimeouts();

@@ -15,7 +15,7 @@
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { execSync } from 'child_process';
+import { runNpxTsxSync } from './core/run-command.js';
 import { pathToFileURL } from 'url';
 
 // ─── Types ────────────────────────────────────────────────────────────
@@ -162,10 +162,9 @@ function now(): string {
 
 function runWatchtowerHealth(log: LogFn): ComponentHealth[] {
   try {
-    const out = execSync(
-      `npx tsx "${WATCHTOWER_SCRIPT}" --action health --quiet 2>&1`,
-      { cwd: ROOT, encoding: 'utf-8', timeout: 30000, windowsHide: true }
-    );
+    const out = runNpxTsxSync(WATCHTOWER_SCRIPT, ['--action', 'health', '--quiet'], {
+      cwd: ROOT, timeout: 30000,
+    }).stdout;
     const components: ComponentHealth[] = [];
     const lines = out.split('\n');
 

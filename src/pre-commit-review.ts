@@ -2,7 +2,7 @@
 
 import { existsSync, mkdirSync, writeFileSync, unlinkSync } from 'fs';
 import { join, resolve, dirname } from 'path';
-import { spawnSync } from 'child_process';
+import { runSync, runNpxTsxSync } from './core/run-command.js';
 import { pathToFileURL } from 'url';
 
 interface SecretPattern {
@@ -27,7 +27,7 @@ function main(): void {
 
   const cwd = resolve(process.cwd());
 
-  const gitResult = spawnSync('git', ['rev-parse', '--show-toplevel'], { cwd, windowsHide: true, encoding: 'utf-8' });
+  const gitResult = runSync('git', ['rev-parse', '--show-toplevel'], { cwd });
   const gitRoot = gitResult.stdout?.trim();
 
   if (!gitRoot || gitResult.status !== 0) {
@@ -43,7 +43,7 @@ function main(): void {
     process.exit(0);
   }
 
-  const stagedResult = spawnSync('git', ['diff', '--cached', '--name-only', '--diff-filter=ACM'], { cwd: gitRoot, windowsHide: true, encoding: 'utf-8' });
+  const stagedResult = runSync('git', ['diff', '--cached', '--name-only', '--diff-filter=ACM'], { cwd: gitRoot });
   const stagedFiles = stagedResult.stdout?.trim();
 
   if (!stagedFiles) {
@@ -87,7 +87,7 @@ function main(): void {
     for (const file of files) {
       if (!file.trim()) continue;
 
-      const showResult = spawnSync('git', ['show', `:0:${file}`], { cwd: gitRoot, windowsHide: true, encoding: 'utf-8' });
+      const showResult = runSync('git', ['show', `:0:${file}`], { cwd: gitRoot });
       const content = showResult.stdout;
       if (!content) continue;
 
@@ -127,7 +127,7 @@ function main(): void {
 
     console.log('Running full orchestrator scan...\n');
 
-    const scanResult = spawnSync('npx', ['tsx', reviewScript, '--scope', 'quick', '--path', gitRoot], { cwd: gitRoot, windowsHide: true, encoding: 'utf-8' });
+    const scanResult = runNpxTsxSync(reviewScript, ['--scope', 'quick', '--path', gitRoot], { cwd: gitRoot });
 
     const exitCode = scanResult.status ?? 0;
 

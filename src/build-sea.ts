@@ -24,7 +24,7 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync, copyFileSync } from 'fs';
 import { resolve, dirname, basename, extname } from 'path';
-import { execSync, spawnSync } from 'child_process';
+import { runSync, runSyncShell } from './core/run-command.js';
 
 interface SEATarget {
   name: string;
@@ -101,17 +101,17 @@ function compileTS(entry: string): string | null {
 
   // Use esbuild for fast bundling (preferred) or fallback to tsc
   try {
-    execSync(
-      `npx esbuild "${resolve(process.cwd(), entry)}" --bundle --platform=node --target=node20 --outfile="${outJs}" --format=cjs --external:better-sqlite3 2>&1`,
-      { encoding: 'utf8', timeout: 60000, stdio: ['pipe', 'pipe', 'inherit'] }
+    runSyncShell(
+      `npx esbuild "${resolve(process.cwd(), entry)}" --bundle --platform=node --target=node20 --outfile="${outJs}" --format=cjs --external:better-sqlite3`,
+      { timeout: 60000 }
     );
     return outJs;
   } catch {
     // esbuild not available, try tsc
     try {
-      execSync(
-        `npx tsc "${resolve(process.cwd(), entry)}" --outDir "${resolve(process.cwd(), SEA_DIR)}" --module commonjs --target es2020 --moduleResolution node --skipLibCheck 2>&1`,
-        { encoding: 'utf8', timeout: 60000, stdio: ['pipe', 'pipe', 'inherit'] }
+      runSyncShell(
+        `npx tsc "${resolve(process.cwd(), entry)}" --outDir "${resolve(process.cwd(), SEA_DIR)}" --module commonjs --target es2020 --moduleResolution node --skipLibCheck`,
+        { timeout: 60000 }
       );
       return outJs;
     } catch {
@@ -169,14 +169,12 @@ function buildSEA(target: SEATarget, nodePath: string, skipBuild: boolean): Buil
     const nodeMajor = parseInt(process.version.match(/^v(\d+)/)?.[1] ?? '0', 10);
     const seaConfigFlag = nodeMajor >= 22 ? '--experimental-sea-config' : '--experimental-sea-config';
 
-    const blobResult = spawnSync(process.execPath, [seaConfigFlag, configPath], {
-      encoding: 'utf8',
+    const blobResult = runSync('node', [seaConfigFlag, configPath], {
       timeout: 30000,
-      stdio: ['pipe', 'pipe', 'inherit'],
     });
 
     if (blobResult.status !== 0) {
-      result.error = `SEA blob generation failed (exit code: ${blobResult.status})`;
+      result.error = `SEA blob generation failed (exit code: ${blobResult.status ?? 'unknown'})`;
       return result;
     }
 
@@ -186,7 +184,7 @@ function buildSEA(target: SEATarget, nodePath: string, skipBuild: boolean): Buil
 
     // Remove existing output first to ensure clean copy (prevents locked file issues)
     if (existsSync(outputPath)) {
-      try { execSync(`del "${outputPath}" 2>nul`, { stdio: 'ignore' }); }
+      try { runSyncShell(`del "${outputPath}" 2>nul`); }
       catch { try { require('fs').unlinkSync(outputPath); } catch {} }
     }
 
@@ -237,13 +235,13 @@ function buildSEA(target: SEATarget, nodePath: string, skipBuild: boolean): Buil
       '--overwrite',
     ];
 
-    const postjectResult = spawnSync(
+    const postjectResult = runSync(
       postjectCmd,
       postjectCallArgs,
-      { encoding: 'utf8', timeout: 30000, stdio: ['pipe', 'pipe', 'inherit'] }
+      { timeout: 30000 }
     );
 
-    if (postjectResult.status !== 0) {
+    if (postjectResult.status !== 0 && postjectResult.status !== null) {
       // postject not available or failed — the blob was still generated,
       // but the .exe won't be self-contained. Provide instructions.
       result.error = `Postject failed (install with: npm install -g postject). Blob available at ${blobFile}`;

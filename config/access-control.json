@@ -21,7 +21,6 @@
     "developers": {
       "files": [
         "skills/*/SKILL.md",
-        "skills/*/*/*.ps1",
         "AGENTS.md",
         "scripts/utilities/session-autostart.*",
         "scripts/utilities/*config*.json",

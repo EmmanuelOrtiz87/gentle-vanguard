@@ -16,7 +16,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { spawnSync } from 'child_process';
+import { runSync } from './run-command.js';
 
 const ROOT = process.cwd();
 let quiet = false;
@@ -77,7 +77,7 @@ async function checkMcp(): Promise<void> {
   await checkFileBatch(checks);
   
   // Compile check in parallel
-  const r = spawnSync('npx.cmd', ['tsx', '--noEmit', 'scripts/mcp/skill-server.ts'], { 
+  const r = runSync('npx.cmd', ['tsx', '--noEmit', 'scripts/mcp/skill-server.ts'], { 
     cwd: ROOT, 
     stdio: 'pipe',
     timeout: 10000

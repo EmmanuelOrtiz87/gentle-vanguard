@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+import { runSyncShell } from '../../src/core/run-command.js';
 import {
   existsSync,
   mkdirSync,
@@ -56,10 +56,9 @@ function findDbFiles(dir: string): string[] {
 
 function getIntegrity(db: string): 'ok' | 'error' | 'missing' {
   try {
-    const r = execSync(`sqlite3 "${db}" "PRAGMA integrity_check;"`, {
-      encoding: 'utf8',
+    const r = runSyncShell(`sqlite3 "${db}" "PRAGMA integrity_check;"`, {
       timeout: 10000,
-    }).trim();
+    }).stdout.trim();
     return r === 'ok' ? 'ok' : 'error';
   } catch {
     return 'missing';
@@ -69,11 +68,9 @@ function getIntegrity(db: string): 'ok' | 'error' | 'missing' {
 function rebuildDb(dbPath: string): boolean {
   try {
     const tmpPath = dbPath + '.rebuild';
-    execSync(`sqlite3 "${dbPath}" ".dump" | sqlite3 "${tmpPath}"`, {
-      encoding: 'utf8',
+    runSyncShell(`sqlite3 "${dbPath}" ".dump" | sqlite3 "${tmpPath}"`, {
       timeout: 60000,
-      shell: 'true',
-    });
+    }).stdout;
     const integrity = getIntegrity(tmpPath);
     if (integrity === 'ok') {
       copyFileSync(dbPath, dbPath + '.pre-rebuild');
@@ -250,24 +247,23 @@ function repairDb(dbPath: string): void {
   LOG(`    Backup created`, GRAY);
 
   try {
-    execSync(`sqlite3 "${dbPath}" "PRAGMA wal_checkpoint(TRUNCATE);"`, {
-      encoding: 'utf8',
+    runSyncShell(`sqlite3 "${dbPath}" "PRAGMA wal_checkpoint(TRUNCATE);"`, {
       timeout: 30000,
-    });
+    }).stdout;
     LOG(`    WAL checkpoint done`, GRAY);
   } catch {
     /* skip */
   }
 
   try {
-    execSync(`sqlite3 "${dbPath}" "REINDEX;"`, { encoding: 'utf8', timeout: 30000 });
+    runSyncShell(`sqlite3 "${dbPath}" "REINDEX;"`, { timeout: 30000 }).stdout;
     LOG(`    REINDEX done`, GRAY);
   } catch {
     /* skip */
   }
 
   try {
-    execSync(`sqlite3 "${dbPath}" "VACUUM;"`, { encoding: 'utf8', timeout: 60000 });
+    runSyncShell(`sqlite3 "${dbPath}" "VACUUM;"`, { timeout: 60000 }).stdout;
     LOG(`    VACUUM done`, GRAY);
   } catch {
     /* skip */

@@ -19,7 +19,7 @@
 
 import { existsSync, statSync } from 'fs';
 import { join, resolve } from 'path';
-import { execSync } from 'child_process';
+import { runSyncShell } from '../../src/core/run-command.js';
 
 const ROOT = resolve(process.cwd());
 const DB_PATH = join(ROOT, '.runtime', 'gentle-vanguard.db');
@@ -97,10 +97,9 @@ async function main(): Promise<number> {
 
   // 4. Integrity check (using sqlite3 CLI)
   try {
-    const integrityOut = execSync(`sqlite3 "${DB_PATH}" "PRAGMA integrity_check;"`, {
-      encoding: 'utf8',
+    const integrityOut = runSyncShell(`sqlite3 "${DB_PATH}" "PRAGMA integrity_check;"`, {
       timeout: 15000,
-    }).trim();
+    }).stdout.trim();
     result.integrity = integrityOut === 'ok' ? 'ok' : 'error';
     if (result.integrity === 'error') {
       issues.push(`PRAGMA integrity_check failed: ${integrityOut}`);
@@ -116,21 +115,19 @@ async function main(): Promise<number> {
 
   // 5. Table and row counts
   try {
-    const tablesOut = execSync(`sqlite3 "${DB_PATH}" ".tables"`, {
-      encoding: 'utf8',
+    const tablesOut = runSyncShell(`sqlite3 "${DB_PATH}" ".tables"`, {
       timeout: 5000,
     })
-      .trim()
+      .stdout.trim()
       .split(/\s+/)
       .filter((t) => t.length > 0 && !t.startsWith('_'));
 
     result.tables = tablesOut.length;
     for (const t of tablesOut) {
       try {
-        const row = execSync(`sqlite3 "${DB_PATH}" "SELECT COUNT(*) FROM [${t}];"`, {
-          encoding: 'utf8',
+        const row = runSyncShell(`sqlite3 "${DB_PATH}" "SELECT COUNT(*) FROM [${t}];"`, {
           timeout: 5000,
-        }).trim();
+        }).stdout.trim();
         result.rows += parseInt(row, 10) || 0;
       } catch {
         // skip individual table count errors
@@ -140,11 +137,11 @@ async function main(): Promise<number> {
 
     // Get migrations
     try {
-      const migOut = execSync(
+      const migOut = runSyncShell(
         `sqlite3 "${DB_PATH}" "SELECT id, applied_at FROM _migrations ORDER BY applied_at;"`,
-        { encoding: 'utf8', timeout: 5000 },
+        { timeout: 5000 },
       )
-        .trim()
+        .stdout.trim()
         .split('\n')
         .filter((l) => l.length > 0);
       result.migrations = migOut;

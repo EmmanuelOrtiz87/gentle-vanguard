@@ -1,0 +1,7 @@
+{
+  "name": "cross-workspace-sync",
+  "version": "1.0.0",
+  "description": "Cross-workspace synchronization skill for maintaining consistency across projects",
+  "triggers": [],
+  "author": "Gentle-Vanguard"
+}

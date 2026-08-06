@@ -15,9 +15,9 @@
     "status": "ready"
   },
   "hooks": {
-    "preToolCall": "scripts/utilities/pre-process-input.ps1",
+    "preToolCall": "src/pre-process-input.ts",
     "sessionStart": "scripts/utilities/session-autostart.cmd",
-    "adaptiveProfile": "scripts/utilities/adaptive-codex-windsurf-profile.ps1",
+    "adaptiveProfile": "src/adaptive-codex-windsurf-profile.ts",
     "sessionStartPlatform": {
       "windows": "scripts/utilities/session-autostart.cmd",
       "linux": "bash ./scripts/utilities/session-autostart.sh",

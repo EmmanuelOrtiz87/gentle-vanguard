@@ -19,6 +19,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve, extname, basename, dirname } from 'path';
 import { pathToFileURL } from 'url';
+import { runSyncShell } from './core/run-command.js';
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -203,12 +204,10 @@ async function processPdfFile(filePath: string, _options: ProcessOptions): Promi
   
   // Try pdftotext first (more reliable)
   try {
-    const { execSync } = require('child_process');
-    const result = execSync(`pdftotext -layout "${filePath}" - 2>&1`, {
-      encoding: 'utf-8',
+    const result = runSyncShell(`pdftotext -layout "${filePath}" - 2>&1`, {
       maxBuffer: 50 * 1024 * 1024,
       timeout: 30000,
-    });
+    }).stdout;
     
     const words = result.split(/\s+/).filter((w: string) => w.length > 0);
     

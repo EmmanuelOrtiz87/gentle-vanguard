@@ -1,0 +1,22 @@
+{
+  "name": "context-engineering-skill",
+  "version": "1.0.0",
+  "description": "",
+  "triggers": [],
+  "mission": {
+    "name": "context-engineering-skill Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "# Context Engineering\n\n## Activation Contract\n\nLoad when: starting a new AI session that continues from a previous one, context window >60% used,\nhanding off between sessions or agents, measuring token usage, or building session summaries/review\nartifacts.\n\n## Hard Rules\n\n- MUST reference files by path instead of repeating file contents already in context\n- MUST NOT include full file trees when only 2-3 files changed — use `git diff --stat`\n- MUST NOT re-explain prior decisions already made — reference the session artifact\n- MUST NOT load all skills and all docs at once when only 1-2 are needed\n\n## Decision Gates\n\n| Context Used | Action                                              |\n| ------------ | --------------------------------------------------- |\n| < 40%        | Work normally                                       |\n| 40-60%       | Consider `context-pack` for next session            |\n| > 60%        | Run `compact-start` before next message             |\n| > 80%        | Must compact or start new session with context pack |\n\n## Execution Steps\n\n1. **Session Start (resuming work)**: `gv compact-start -Objective \"...\"` (or\n   `.\\scripts\\utilities\\compact-start.ps1 -Objective \"...\"`) → paste output into new session. Output\n   includes git diff, last N commits, branch+status, objective.\n2. **Mid-Session Context Pack**: `gentle-vanguard context-pack -Objective \"...\"` (or\n   `.\\scripts\\utilities\\context-pack.ps1 -Objective \"...\" -MaxChangedFiles 12 -MaxCommits 8`)\n3. **Token Metrics**: `.\\scripts\\utilities\\context-metrics-report.ps1` (stored in\n   `docs/sessions/metrics/context-usage.csv`)\n4. **Session Handoff**: Run `gv end-session` → `context-pack` → save objective + next steps → new\n   session starts with `compact-start -Objective \"...\"`\n\n## Output Contract\n\n- **compact-start**: Structured prompt <8000 chars with git diff, commits, branch, objective\n- **context-pack**: Snapshot file <15000 chars tracking event, prompt_chars, changed_count\n- **metrics**: `docs/sessions/metrics/context-usage.csv` with `event`, `prompt_chars`,\n  `changed_count`\n\n## Activation Policy (compact-start)\n\n| Condition                      | Action                                                  |\n| ------------------------------ | ------------------------------------------------------- |\n| Context health RED (>60% used) | Run `compact-start` before next message                 |\n| Starting new thread/session    | Run `compact-start` OR check `.session/.compact-marker` |\n| Health GREEN or YELLOW         | Skip — no handoff needed yet                            |\n| `.compact-marker` <60 min old  | Skip — already ran recently                             |\n\n**Objective rules:**\n\n- MUST be ≤100 chars — one sentence, no filler\n- MUST describe what to resume, not how\n- Examples: ✅ `\"fix ci noise in build pipeline\"` — ❌\n  `\"we need to continue working on the issue with the CI pipeline where...\"`\n\n## When to Use the Reference Files\n\nRead `references/scripts.md` when you need:\n\n- exact script paths, parameters, defaults, and usage examples\n\nRead `references/decision-gates.md` when you need:\n\n- threshold values for context usage, token budgets per task, objective rules\n\nRead `references/session-handoff-protocol.md` when you need:\n\n- the full handoff sequence and marker-based dedup protocol\n\n## References\n\n- Scripts: `scripts/utilities/compact-start.ps1`, `context-pack.ps1`, `context-metrics-report.ps1`\n- Metrics: `scripts/utilities/token-efficiency-estimator.ps1`\n- Config: `config/context-efficiency.json`",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}

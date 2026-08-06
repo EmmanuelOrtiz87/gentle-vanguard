@@ -2,8 +2,9 @@
 
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
-import { spawnSync } from 'child_process';
+import { runSync } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
+import { validateOpencodeJsonSteps, validateAgentMdSteps } from './opencode-guards.js';
 
 const LOG_COLORS: Record<string, string> = {
   Success: '32',
@@ -18,7 +19,7 @@ function writeLog(message: string, level: string = 'Info'): void {
 }
 
 function execGit(args: string[], cwd: string = process.cwd()): string {
-  const result = spawnSync('git', args, { cwd, encoding: 'utf-8', windowsHide: true });
+  const result = runSync('git', args, { cwd });
   return result.stdout?.trim() ?? '';
 }
 
@@ -224,7 +225,7 @@ function testNormativas(jsonPath: string, gitRoot: string): boolean {
   }
 }
 
-function main(): number {
+async function main(): Promise<number> {
   const verbose = process.argv.includes('--verbose') || process.argv.includes('-v');
   const cwd = process.cwd();
 
@@ -238,9 +239,11 @@ function main(): number {
   if (!stagedRaw) return 0;
 
   const stagedFiles = stagedRaw.split('\n').filter(Boolean);
-  const configFiles = stagedFiles.filter(
-    (f) => f.endsWith('.json') && /(config|opencode)/.test(f)
-  );
+  const configFiles = stagedFiles.filter((f) => {
+    if (f.endsWith('.json') && /(config|opencode)/.test(f)) return true;
+    if (f.endsWith('.md') && f.startsWith('.opencode/agents/')) return true;
+    return false;
+  });
 
   if (configFiles.length === 0) {
     writeLog('No configuration changes', 'Success');
@@ -282,6 +285,28 @@ function main(): number {
         hasErrors = true;
       }
     }
+
+    if (file === 'opencode.json') {
+      writeLog('  Validating opencode steps...', 'Info');
+      const errors = validateOpencodeJsonSteps(json);
+      if (errors.length > 0) {
+        for (const err of errors) {
+          writeLog(`  ${err}`, 'Error');
+        }
+        hasErrors = true;
+      }
+    }
+
+    if (file.endsWith('.md') && file.startsWith('.opencode/agents/')) {
+      writeLog('  Validating agent MD steps...', 'Info');
+      const errors = validateAgentMdSteps(file);
+      if (errors.length > 0) {
+        for (const err of errors) {
+          writeLog(`  ${err}`, 'Error');
+        }
+        hasErrors = true;
+      }
+    }
   }
 
   if (hasErrors) {
@@ -294,7 +319,12 @@ function main(): number {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  process.exit(main());
+  main()
+    .then((code) => process.exit(code))
+    .catch((err) => {
+      console.error(err);
+      process.exit(1);
+    });
 }
 
 export { main as preCommitOpencodeValidation };

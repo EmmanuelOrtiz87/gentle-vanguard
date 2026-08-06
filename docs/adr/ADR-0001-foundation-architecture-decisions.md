@@ -40,7 +40,7 @@ decisions are stored in Engram for future reference.
 ### 5. 5-Layer Architecture
 
 - Layer 1: AGENTS — Role-based AI agents (BA, DEV, QA, OPS, GOV, DOC, SAD)
-- Layer 2: COMMANDS — gv.ps1 CLI, pre-process-input.ps1 routing
+- Layer 2: COMMANDS — src/cli/gv.ts CLI, pre-process-input.ps1 routing
 - Layer 3: MCP SERVERS — Model Context Protocol servers
 - Layer 4: SKILLS — 126+ specialized skills with SKILL.md manifests
 - Layer 5: MEMORY — Engram persistent storage

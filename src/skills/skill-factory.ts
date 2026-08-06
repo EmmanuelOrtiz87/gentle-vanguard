@@ -3,7 +3,7 @@
 import { existsSync, mkdirSync, writeFileSync, readFileSync, appendFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { spawnSync } from 'child_process';
+import { runSync } from '../core/run-command.js';
 
 export interface SkillFactoryArgs {
   Name: string;
@@ -185,11 +185,11 @@ ${description}
 
   console.log('\x1b[36m[SKILL] Rebuilding MCP server...\x1b[0m');
   try {
-    const result = spawnSync('pnpm', ['build:mcp'], { cwd: ROOT, stdio: 'pipe' });
+    const result = runSync('pnpm', ['build:mcp'], { cwd: ROOT, stdio: 'pipe' });
     if (result.status === 0) {
       console.log('\x1b[32m[SKILL] MCP server rebuilt\x1b[0m');
     } else {
-      const errMsg = result.stderr?.toString() || result.stdout?.toString() || 'unknown error';
+      const errMsg = result.stderr || result.stdout || 'unknown error';
       console.log(`\x1b[33m[WARN] MCP rebuild failed: ${errMsg}\x1b[0m`);
     }
   } catch (e: unknown) {

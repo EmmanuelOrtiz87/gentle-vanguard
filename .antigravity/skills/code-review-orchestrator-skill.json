@@ -1,0 +1,22 @@
+{
+  "name": "code-review-orchestrator",
+  "version": "1.0.0",
+  "description": "",
+  "triggers": [],
+  "mission": {
+    "name": "code-review-orchestrator Mission",
+    "max_agents": 1,
+    "timeout": 3600,
+    "agents": [
+      {
+        "role": "generalist",
+        "model": "gemini-3-pro",
+        "instructions": "## Activation Contract\n\nTriggered on pre-commit hook or when user says \"code review\", \"review all\", \"quality check\", \"audit\ncode\", \"orchestrator\", or similar.\n\n## Hard Rules\n\n- MUST run Security + Quality quick scan on every pre-commit\n- MUST run all 7 dimensions pre-merge\n- MUST block commit on CRITICAL findings (exit code 1)\n- MUST generate a report at docs/code-reviews/\n- MUST classify every finding by severity\n- MUST NOT modify source files during review\n- MUST keep quick scan under 30 seconds\n\n## Decision Gates\n\n| Gate            | Options                                                      | Rule                                   |\n| --------------- | ------------------------------------------------------------ | -------------------------------------- |\n| Scope           | all, security, quality, testing, docs, api, git, quick, full | quick = Security+Quality; full = all 7 |\n| Severity action | CRITICAL block, HIGH warn+review, MEDIUM info, LOW suggest   | CRITICAL always blocks (exit 1)        |\n| Trigger         | pre-commit auto vs manual                                    | Auto runs quick scope only             |\n\n## Execution Steps\n\n1. Detect trigger (pre-commit hook or manual request)\n2. Resolve scope — quick (Security+Quality) or full (all 7)\n3. Load config from configs/review-config.json\n4. Execute scans for selected dimensions\n5. Classify each finding by severity\n6. Generate report (console + file at docs/code-reviews/)\n7. Block if CRITICAL found (exit 1), otherwise allow (exit 0)\n\n## Output Contract\n\nReturn severity breakdown, categorized issues (file:line, description, recommendation), report file\npath, and exit code (1 if blocked).\n\n## References\n\n- `references/seven-dimensions.md` — Dimension descriptions and scope mapping\n- `references/severity-matrix.md` — Severity levels with actions\n- `references/commands.md` — Full command reference and performance\n- `references/report-format.md` — Console and file report templates\n- `references/judgment-day.md` — Dual review protocol\n- `references/config-example.md` — Review configuration JSON\n- `references/integration.md` — Git hooks and CI/CD setup\n\n> **See also**: [code-review-skill](../code-review-skill/SKILL.md) for structured\n> security/performance/correctness reviews",
+        "tools": [
+          "file_reader",
+          "code_executor"
+        ]
+      }
+    ]
+  }
+}
