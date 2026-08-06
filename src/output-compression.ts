@@ -484,6 +484,8 @@ export function compressOutput(
     maxLines?: number;
     maxTokens?: number;
     expandOnly?: boolean;
+    previousTurns?: string[];
+    query?: string;
   } = {},
 ): CompressionResult {
   const startTime = Date.now();
@@ -535,7 +537,11 @@ export function compressOutput(
 
   // Step 0: Structural compression (JSON arrays, logs, prose) — complements
   // the extractive engine below. Only applied when it yields a smaller result.
-  const structural = compressStructural(input);
+  const structural = compressStructural(input, {
+    query: options.query,
+    previousTurns: options.previousTurns,
+    mode: 'output',
+  });
   if (structural.strategy !== 'none' && structural.compressed.length < input.length) {
     compressed = structural.compressed;
   }

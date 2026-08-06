@@ -43,6 +43,8 @@ export interface LLMCallOptions {
   skipCache?: boolean;
   skipCompression?: boolean;
   context?: string;
+  previousTurns?: string[];
+  query?: string;
 }
 
 export interface LLMCallResult {

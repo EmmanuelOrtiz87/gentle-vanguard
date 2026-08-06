@@ -36,6 +36,14 @@ export type StructuralKind = 'json' | 'tabular' | 'log' | 'prose' | 'code' | 'no
 export interface StructuralConfig {
   version: string;
   enabled: boolean;
+  input: {
+    enabled: boolean;
+    allowLossy: boolean;
+  };
+  output: {
+    enabled: boolean;
+    allowLossy: boolean;
+  };
   smartCrusher: {
     enabled: boolean;
     maxItemsAfterCrush: number;
@@ -91,13 +99,23 @@ export interface StructuralResult {
 interface CompressOptions {
   query?: string;
   previousTurns?: string[];
+  /** 'input' = prompt path (lossless-only by default); 'output' = response path (lossy OK). */
+  mode?: 'input' | 'output';
 }
 
 // ─── Default config ───────────────────────────────────────────────────────────
 
 const DEFAULT_CONFIG: StructuralConfig = {
-  version: '1.0.0',
+  version: '1.1.0',
   enabled: true,
+  input: {
+    enabled: true,
+    allowLossy: false,
+  },
+  output: {
+    enabled: true,
+    allowLossy: true,
+  },
   smartCrusher: {
     enabled: true,
     maxItemsAfterCrush: 20,
@@ -544,16 +562,32 @@ export function compressStructural(
   let strategy = 'none';
   const details: Record<string, unknown> = { kind };
 
+  // SAFETY: determine whether lossy strategies are allowed for this path.
+  // input mode is lossless-only by default (protects model reasoning); output
+  // mode may use lossy strategies (model already reasoned).
+  const mode = options.mode ?? 'output';
+  const allowLossy = mode === 'output' ? config.output.allowLossy : config.input.allowLossy;
+
   try {
     if (kind === 'tabular') {
       const rows = JSON.parse(input) as Record<string, unknown>[];
-      const crushed = crushJsonArray(rows, { maxItemsAfterCrush: config.smartCrusher.maxItemsAfterCrush });
-      if (crushed.dropped > 0) {
-        compressed = JSON.stringify(crushed.kept);
-        strategy = 'smart-crusher';
-        details.dropped = crushed.dropped;
-        details.strategy = crushed.strategy;
+      if (allowLossy) {
+        const crushed = crushJsonArray(rows, { maxItemsAfterCrush: config.smartCrusher.maxItemsAfterCrush });
+        if (crushed.dropped > 0) {
+          compressed = JSON.stringify(crushed.kept);
+          strategy = 'smart-crusher';
+          details.dropped = crushed.dropped;
+          details.strategy = crushed.strategy;
+        } else {
+          const csv = compactTabular(rows);
+          if (csv) {
+            compressed = csv;
+            strategy = 'tabular-compaction';
+            details.rows = rows.length;
+          }
+        }
       } else {
+        // Lossless-only: tabular compaction preserves all rows as CSV+schema.
         const csv = compactTabular(rows);
         if (csv) {
           compressed = csv;
@@ -562,13 +596,19 @@ export function compressStructural(
         }
       }
     } else if (kind === 'log') {
-      compressed = compressLogs(input, config.logCompressor);
-      strategy = 'log-compressor';
-      details.collapsed = input.split('\n').length - compressed.split('\n').length;
+      if (allowLossy) {
+        compressed = compressLogs(input, config.logCompressor);
+        strategy = 'log-compressor';
+        details.collapsed = input.split('\n').length - compressed.split('\n').length;
+      }
+      // In input mode, logs are left intact (lossy collapse could hide errors).
     } else if (kind === 'prose') {
-      compressed = compressProse(input, options.query ?? '', config.textCrusher);
-      strategy = 'text-crusher';
-      details.segments = input.split('\n').length;
+      if (allowLossy) {
+        compressed = compressProse(input, options.query ?? '', config.textCrusher);
+        strategy = 'text-crusher';
+        details.segments = input.split('\n').length;
+      }
+      // In input mode, prose is left intact (lossy dropping could hide context).
     }
 
     if (config.crossCompression.enabled && options.previousTurns?.length) {

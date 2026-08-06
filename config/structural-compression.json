@@ -1,6 +1,17 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "enabled": true,
+  "description": "Structural compression engine (Headroom strategies in pure TS). SAFETY: input mode is lossless-only by default to protect model reasoning; output mode may use lossy strategies.",
+  "input": {
+    "enabled": true,
+    "allowLossy": false,
+    "note": "Input/prompt path: only lossless strategies (tabular compaction) by default. Lossy row/prose dropping is disabled to avoid degrading model reasoning. Set allowLossy=true only when token budget is critical."
+  },
+  "output": {
+    "enabled": true,
+    "allowLossy": true,
+    "note": "Output path: lossy strategies OK (model already reasoned). Compressed output becomes next-turn context, so lossy is acceptable here."
+  },
   "smartCrusher": {
     "enabled": true,
     "maxItemsAfterCrush": 20,

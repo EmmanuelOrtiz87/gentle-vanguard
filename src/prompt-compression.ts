@@ -20,6 +20,7 @@ import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { getTokenUsage } from './token-usage-reader.js';
+import { compressStructural } from './structural-compression.js';
 
 // ---- Types ----
 
@@ -268,7 +269,11 @@ function parseSections(input: string): ParsedSection[] {
 
 // ---- Core compression ----
 
-function compressPrompt(input: string, skill: string = 'default'): CompressionResult {
+function compressPrompt(
+  input: string,
+  skill: string = 'default',
+  options: { previousTurns?: string[]; query?: string } = {},
+): CompressionResult {
   const startTime = Date.now();
 
   if (!input || input.trim().length === 0) {
@@ -291,6 +296,29 @@ function compressPrompt(input: string, skill: string = 'default'): CompressionRe
   const effectiveRatio = adjustRatioForBudget(baseRatio);
   const config = getConfig();
   const maxLines = config.maxPreservedLines;
+
+  // Structural compression (JSON arrays, logs, prose) — complements the
+  // extractive section processing below. Applied first when it yields a
+  // smaller result, so prompts/delegation prompts also benefit.
+  const structural = compressStructural(input, {
+    query: options.query,
+    previousTurns: options.previousTurns,
+    mode: 'input',
+  });
+  if (structural.strategy !== 'none' && structural.compressed.length < input.length) {
+    return {
+      original: input,
+      compressed: structural.compressed,
+      originalChars: input.length,
+      compressedChars: structural.compressed.length,
+      originalLines: input.split('\n').length,
+      compressedLines: structural.compressed.split('\n').length,
+      compressionRatio: structural.compressed.length / input.length,
+      skill,
+      sections: [{ type: 'text', originalLines: 1, compressedLines: 1, preserved: true }],
+      durationMs: Date.now() - startTime,
+    };
+  }
 
   // Parse sections
   const sections = parseSections(input);
