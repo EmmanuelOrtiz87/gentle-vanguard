@@ -298,6 +298,68 @@ python research/rlhf-dataset-search/search_datasets.py --source all --query "rew
 - 15 referencias a `model-routing.json` fueron actualizadas a `model-router.json` en toda la
   codebase
 
+## Integraciones Nativas (Headroom / gentle-ai / awesome-llm)
+
+Estrategias absorbidas de repos externos como TypeScript nativo (sin sidecars Python/Rust/Go):
+
+### Structural Compression (`src/structural-compression.ts`)
+
+Absorbe 5 estrategias de compresión de Headroom en TS puro, complementando la compresión
+extractiva (`prompt-compression.ts` / `output-compression.ts`):
+
+| Estrategia | Qué hace |
+| ---------- | -------- |
+| SmartCrusher | Comprime arrays JSON con decisión estadística (preserva outliers) |
+| Tabular compaction | JSON tabular → CSV con esquema (lossless) |
+| LogCompressor | Colapsa logs/stack-traces de build/test |
+| TextCrusher + BM25 | Prosa con relevancia a la query + dedup de shingles |
+| CrossCompression | Dedup de bytes entre turnos |
+
+**Seguridad por modo** (crítico): `compressStructural(input, { mode })`.
+- `mode: 'input'` (prompt/delegación) → **lossless-only** por defecto (`input.allowLossy: false`).
+  Protege el razonamiento del modelo: no descarta filas/prosa que el modelo necesita.
+- `mode: 'output'` (respuesta) → lossy OK (`output.allowLossy: true`). El modelo ya razonó.
+
+`compressPrompt` usa `mode:'input'`; `compressOutput` usa `mode:'output'`. Config en
+`config/structural-compression.json`. Tests: `tests/unit/structural-compression.test.ts`.
+
+### Multi-perfiles por fase SDD (`src/model-profile-switcher.ts`)
+
+Convención de gentle-ai absorbida nativamente. `config/model-router.json` sección `profiles`
+define perfiles `cheap`/`balanced`/`premium`, cada uno con temperature + hallucinationGuard por
+fase SDD (BA/SAD/DEV/QA):
+
+```bash
+npm run profile:list    # listar perfiles
+npm run profile:status  # perfil activo
+npm run profile:set -- premium   # dry-run
+npm run profile:apply -- premium # aplicar y persistir
+```
+
+### Hash-Chained Audit (`src/event-sourcing.ts`)
+
+Patrón de awesome-llm (trust-gated audit trail). Cada evento guarda `prevHash` + `hash` (SHA-256),
+formando una cadena a prueba de manipulación:
+
+```bash
+npx tsx src/event-sourcing.ts -Action append -AggregateId <id> -EventType <type> -EventData '{}'
+npx tsx src/event-sourcing.ts -Action verify -AggregateId <id>   # valida integridad de la cadena
+```
+
+`verify` detecta manipulación (`tamper-mismatch` / `broken`). Tests:
+`tests/unit/event-sourcing-hashchain.test.ts`.
+
+### Retrieval Grader CRAG (`src/retrieval-grader.ts`)
+
+Patrón Corrective RAG de `awesome-llm-apps`. Gradúa la relevancia de chunks recuperados con BM25
+lexical (sin ML) y dispara `keyword-fallback` si el retrieval es pobre (evita alucinación):
+
+```bash
+npx tsx src/retrieval-grader.ts --query "..." --chunks '["...","..."]'
+```
+
+Tests: `tests/unit/retrieval-grader.test.ts`.
+
 ## CI/CD Pipeline
 
 - `.github/workflows/ci.yml` — 6 jobs: lint-typecheck, test, dashboard-tests, dashboard-build,
