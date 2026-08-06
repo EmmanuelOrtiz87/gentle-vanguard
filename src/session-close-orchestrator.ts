@@ -445,7 +445,7 @@ function phaseBackup(): PhaseResult[] {
   // 3.2 Backup Nexus DB
   const dbBackupScript = join(ROOT, 'scripts', 'database', 'db-backup.ts');
   if (existsSync(dbBackupScript)) {
-    const br = runScript('scripts/database/db-backup.ts', ['--quiet'], 30000);
+    const br = runScript('scripts/database/db-backup.ts', ['backup', '--quiet'], 30000);
     results.push({
       phase: 'nexus-backup',
       status: br.status === 0 ? 'PASS' : 'FAIL',
@@ -454,7 +454,7 @@ function phaseBackup(): PhaseResult[] {
   } else {
     // Fallback: use npm run db:backup
     try {
-      const br = runCmd('npx', ['tsx', 'scripts/database/db-backup.ts', '--quiet'], 30000);
+      const br = runCmd('npx', ['tsx', 'scripts/database/db-backup.ts', 'backup', '--quiet'], 30000);
       results.push({
         phase: 'nexus-backup',
         status: br.status === 0 ? 'PASS' : 'FAIL',
@@ -489,7 +489,7 @@ function phaseAudit(): PhaseResult[] {
   log('=== FASE 4: AUDIT ===');
 
   // 4.1 Audit pipeline log
-  const ar = runScript('src/audit-pipeline.ts', [
+  const ar = runScript('src/infrastructure/audit-pipeline.ts', [
     'log',
     '-EventType', 'session.end',
     '-Component', 'system',

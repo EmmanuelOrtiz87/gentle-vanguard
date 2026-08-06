@@ -15,7 +15,7 @@
 
 import { existsSync, mkdirSync, readdirSync, statSync, unlinkSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSyncShell } from '../../src/core/run-command.js';
+import { runSync } from '../../src/core/run-command.js';
 
 const ROOT = resolve(process.cwd());
 const DB_PATH = join(ROOT, '.runtime', 'gentle-vanguard.db');
@@ -75,7 +75,16 @@ function doBackup(): number {
 
   // Use SQLite backup API via CLI for safe online backup
   try {
-    runSyncShell(`sqlite3 "${DB_PATH}" ".backup '${targetPath}'"`, { timeout: 30000 }).stdout;
+    const result = runSync('sqlite3', [DB_PATH, `.backup '${targetPath}'`], { timeout: 30000 });
+    if (result.status !== 0) {
+      log(`Backup failed: ${result.stderr || 'Unknown error'}`);
+      return 1;
+    }
+    // Verify backup was created
+    if (!existsSync(targetPath)) {
+      log('Backup failed: File was not created');
+      return 1;
+    }
     const sizeMB = (statSync(targetPath).size / 1024 / 1024).toFixed(2);
     log(`Backup created: ${targetPath} (${sizeMB} MB)`);
   } catch (e) {
@@ -155,9 +164,13 @@ function doRestore(): number {
 
   // Safe restore: use .restore CLI command
   try {
-    runSyncShell(`sqlite3 "${DB_PATH}" ".restore '${backupPath}'"`, {
+    const restoreResult = runSync('sqlite3', [DB_PATH, `.restore '${backupPath}'`], {
       timeout: 60000,
-    }).stdout;
+    });
+    if (restoreResult.status !== 0) {
+      log(`Restore failed: ${restoreResult.stderr || 'Unknown error'}`);
+      return 1;
+    }
     log(`Restore complete from ${targetName} (${backupSizeMB} MB)`);
   } catch (e) {
     log(`Restore failed: ${(e as Error).message}`);
@@ -176,19 +189,19 @@ function doOptimize(): number {
   const beforeSize = statSync(DB_PATH).size;
 
   log('Running PRAGMA wal_checkpoint(TRUNCATE)...');
-  runSyncShell(`sqlite3 "${DB_PATH}" "PRAGMA wal_checkpoint(TRUNCATE);"`, {
+  runSync('sqlite3', [DB_PATH, 'PRAGMA wal_checkpoint(TRUNCATE);'], {
     timeout: 30000,
-  }).stdout;
+  });
 
   log('Running REINDEX...');
-  runSyncShell(`sqlite3 "${DB_PATH}" "REINDEX;"`, {
+  runSync('sqlite3', [DB_PATH, 'REINDEX;'], {
     timeout: 60000,
-  }).stdout;
+  });
 
   log('Running VACUUM...');
-  runSyncShell(`sqlite3 "${DB_PATH}" "VACUUM;"`, {
+  runSync('sqlite3', [DB_PATH, 'VACUUM;'], {
     timeout: 120000,
-  }).stdout;
+  });
 
   const afterSize = statSync(DB_PATH).size;
   const savedMB = ((beforeSize - afterSize) / 1024 / 1024).toFixed(2);
