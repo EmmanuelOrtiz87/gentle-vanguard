@@ -40,11 +40,11 @@ const PATTERNS = [
   // Comandos pwsh genéricos -> npx tsx
   {
     from: /pwsh\s+-NoProfile\s+-ExecutionPolicy\s+Bypass\s+-File\s+[^\s]+\.ps1/g,
-    to: 'npx tsx src/gv.ts',
+    to: 'npx tsx src/cli/gv.ts',
   },
-  { from: /pwsh\s+-File\s+[^\s]+\.ps1/g, to: 'npx tsx src/gv.ts' },
-  { from: /powershell\s+-File\s+[^\s]+\.ps1/g, to: 'npx tsx src/gv.ts' },
-  { from: /\.\\scripts\\[^\\]+\.ps1/g, to: 'npx tsx src/gv.ts' },
+  { from: /pwsh\s+-File\s+[^\s]+\.ps1/g, to: 'npx tsx src/cli/gv.ts' },
+  { from: /powershell\s+-File\s+[^\s]+\.ps1/g, to: 'npx tsx src/cli/gv.ts' },
+  { from: /\.\\scripts\\[^\\]+\.ps1/g, to: 'npx tsx src/cli/gv.ts' },
 
   // Scripts sin equivalente -> placeholder
   { from: /create-gitflow-branch\.ps1/g, to: null },

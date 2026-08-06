@@ -65,7 +65,7 @@ if %errorlevel%==0 (
   echo       ✓ Dashboard iniciado exitosamente
 ) else (
   echo       ⚠ El dashboard está iniciando...
-  echo         (Verifica con: npx tsx src/gv.ts status)
+  echo         (Verifica con: npx tsx src/cli/gv.ts status)
 )
 
 echo.
@@ -76,7 +76,7 @@ echo ║  Web UI:  http://localhost:5173                   ║
 echo ║  WS API:  http://localhost:8080                   ║
 echo ╠═══════════════════════════════════════════════════╣
 echo ║  Logs:    .runtime/dashboard.log                  ║
-echo ║  Status:  npx tsx src/gv.ts status                ║
+echo ║  Status:  npx tsx src/cli/gv.ts status                ║
 echo ║  Stop:    npx tsx src/dashboard-stop.ts         ║
 echo ╚═══════════════════════════════════════════════════╝
 echo.

@@ -69,10 +69,10 @@ cd C:\Workspace_local\gentle-vanguard
 
 # 1. Encriptar scripts actualizados
 $env:GENTLE_VANGUARD_BASE_DIR='c:\Workspace_local\gentle-vanguard'
-npx tsx src/gv.ts"
+npx tsx src/cli/gv.ts"
 
 # 2. Compilar nuevo instalador
-npx tsx src/gv.ts" -SkipEncrypt
+npx tsx src/cli/gv.ts" -SkipEncrypt
 
 # Output: dist\Gentle-Vanguard-Setup.exe (versión actualizada)
 ```

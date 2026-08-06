@@ -142,7 +142,7 @@ gv verify
 #### Run Real Coverage Gate
 
 ```TypeScript
-npx tsx src/gv.ts
+npx tsx src/cli/gv.ts
 ```
 
 - Executes declared Pester `CodeCoverage` targets from `tests/coverage-config.json`
@@ -152,7 +152,7 @@ npx tsx src/gv.ts
 #### Run Post-Session Learning Explicitly
 
 ```TypeScript
-npx tsx src/gv.ts -SessionId "session-YYYY-MM-DD-01"
+npx tsx src/cli/gv.ts -SessionId "session-YYYY-MM-DD-01"
 ```
 
 - Persists learning summaries or improvement proposals to Engram

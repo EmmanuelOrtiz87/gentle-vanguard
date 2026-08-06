@@ -103,7 +103,7 @@ const REPLACEMENTS = [
   },
   {
     pattern: /\.\\scripts\\utilities\\gv\.ps1/g,
-    replacement: 'npx tsx src/gv.ts',
+    replacement: 'npx tsx src/cli/gv.ts',
   },
 
   // Git

@@ -81,8 +81,8 @@ start.bat
 
 ```bash
 # Para gestión completa del stack
-npx tsx src/gv.ts dashboard start
-npx tsx src/gv.ts status
+npx tsx src/cli/gv.ts dashboard start
+npx tsx src/cli/gv.ts status
 ```
 
 **Para**: Gestión avanzada, scripts de automatización
@@ -106,6 +106,6 @@ casos específicos de desarrollo.
 | ------------------- | -------------------------------- | -------------------- |
 | **Inicio rápido**   | `start-optimized.bat`            | `start.bat`          |
 | **Inicio completo** | `start-optimized.bat --complete` | `dashboard-start.ts` |
-| **Ver estado**      | `npx tsx src/gv.ts status`       | -                    |
+| **Ver estado**      | `npx tsx src/cli/gv.ts status`       | -                    |
 | **Detener**         | `npx tsx src/dashboard-stop.ts`  | -                    |
-| **Limpiar**         | `npx tsx src/gv.ts cleanup`      | -                    |
+| **Limpiar**         | `npx tsx src/cli/gv.ts cleanup`      | -                    |

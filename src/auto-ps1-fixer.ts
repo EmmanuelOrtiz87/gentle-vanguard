@@ -120,7 +120,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/gentle-vanguard/setup-multi-machine.ps1': 'src/setup-multi-machine.ts',
 
   // Workflow orchestration
-  'scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1': 'src/gv.ts',
+  'scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1': 'src/cli/gv.ts',
 
   // Final
   'scripts/utilities/final-resolution.ps1': 'src/final-resolution.ts',

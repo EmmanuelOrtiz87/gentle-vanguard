@@ -76,5 +76,5 @@ src/cli/gv.ts install -Force   # Overwrite existing installation
 ## Files
 
 - `scripts/utilities/gentle-vanguard-installer-tui.ps1` - Main installer script
-- `src/gv.ts` - CLI integration (has `install` command)
+- `src/cli/gv.ts` - CLI integration (has `install` command)
 - `docs/reference/GENTLE_VANGUARD-INSTALLER.md` - This documentation

@@ -595,7 +595,7 @@ function scanTechnicalDebt(): ValidationIssue[] {
     if (relPath.startsWith('src/scripts/')) continue;
     // 🛡️ Skip CLI entry points and dashboard utilities — they use console.log as intended stdout
     if (relPath.startsWith('src/cli/')) continue;
-    if (relPath === 'src/gv.ts' || relPath === 'src/timeout-monitor.ts') continue;
+    if (relPath === 'src/timeout-monitor.ts') continue;
     if (relPath.startsWith('src/dashboard-') || relPath === 'src/dashboard-common.ts') continue;
     if (relPath.startsWith('src/hooks/')) continue;
     // 🛡️ Skip security/mcp CLI tools — they use console.log as intended stdout

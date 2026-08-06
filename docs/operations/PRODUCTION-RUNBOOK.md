@@ -73,7 +73,7 @@ kubectl get svc -n gentle-vanguard
 ### MCP Bridge Failure
 
 ```TypeScript
-npx tsx src/gv.ts -SkillId __healthcheck__ -InvocationType DryRun
+npx tsx src/cli/gv.ts -SkillId __healthcheck__ -InvocationType DryRun
 # If this fails, restart MCP:
 docker compose restart mcp-server
 ```
@@ -81,9 +81,9 @@ docker compose restart mcp-server
 ### Checkpoint Rollback
 
 ```TypeScript
-npx tsx src/gv.ts -Action list
-npx tsx src/gv.ts -CheckpointId ckpt-20260619-103000 -DryRun
-npx tsx src/gv.ts -CheckpointId ckpt-20260619-103000 -AutoBackup
+npx tsx src/cli/gv.ts -Action list
+npx tsx src/cli/gv.ts -CheckpointId ckpt-20260619-103000 -DryRun
+npx tsx src/cli/gv.ts -CheckpointId ckpt-20260619-103000 -AutoBackup
 ```
 
 ### Dashboard WS Recovery

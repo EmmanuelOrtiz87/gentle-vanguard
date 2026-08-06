@@ -24,14 +24,14 @@ start.bat --complete
 
 ```bash
 # Limpiar y verificar estado
-npx tsx src/gv.ts status
+npx tsx src/cli/gv.ts status
 
 # Iniciar dashboard
 npx tsx src/dashboard-start.ts
 
 # O iniciar todo (sesión + dashboard)
-npx tsx src/gv.ts session start
-npx tsx src/gv.ts dashboard start
+npx tsx src/cli/gv.ts session start
+npx tsx src/cli/gv.ts dashboard start
 ```
 
 ## 🎯 Comandos Principales
@@ -40,23 +40,23 @@ npx tsx src/gv.ts dashboard start
 
 ```bash
 # Ver estado completo del stack
-npx tsx src/gv.ts status
+npx tsx src/cli/gv.ts status
 
 # Gestionar sesión
-npx tsx src/gv.ts session start    # Iniciar sesión
-npx tsx src/gv.ts session stop     # Detener sesión
-npx tsx src/gv.ts session status   # Ver estado
+npx tsx src/cli/gv.ts session start    # Iniciar sesión
+npx tsx src/cli/gv.ts session stop     # Detener sesión
+npx tsx src/cli/gv.ts session status   # Ver estado
 
 # Controlar dashboard
-npx tsx src/gv.ts dashboard start   # Iniciar dashboard
-npx tsx src/gv.ts dashboard stop    # Detener dashboard
-npx tsx src/gv.ts dashboard status  # Ver estado
+npx tsx src/cli/gv.ts dashboard start   # Iniciar dashboard
+npx tsx src/cli/gv.ts dashboard stop    # Detener dashboard
+npx tsx src/cli/gv.ts dashboard status  # Ver estado
 
 # Limpieza de procesos zombie
-npx tsx src/gv.ts cleanup
+npx tsx src/cli/gv.ts cleanup
 
 # Verificar salud del sistema
-npx tsx src/gv.ts health
+npx tsx src/cli/gv.ts health
 ```
 
 ### Health Check
@@ -128,7 +128,7 @@ Todas las herramientas funcionan **sin PowerShell**:
 
 ```bash
 # Limpiar todo y reiniciar
-npx tsx src/gv.ts cleanup
+npx tsx src/cli/gv.ts cleanup
 npx tsx src/dashboard-start.ts
 ```
 
@@ -137,7 +137,7 @@ npx tsx src/dashboard-start.ts
 ```bash
 # Reiniciar stack completo
 npx tsx src/dashboard-stop.ts
-npx tsx src/gv.ts cleanup
+npx tsx src/cli/gv.ts cleanup
 timeout /t 5
 npx tsx src/dashboard-start.ts
 ```

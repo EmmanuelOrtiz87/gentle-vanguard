@@ -183,9 +183,9 @@ function processFile(filePath: string, dryRun: boolean): { changes: number; acti
   // Reemplazar comandos pwsh
   content = content.replace(
     /pwsh\s+-NoProfile\s+-ExecutionPolicy\s+Bypass\s+-File\s+[^\s]+\.ps1/g,
-    'npx tsx src/gv.ts',
+    'npx tsx src/cli/gv.ts',
   );
-  content = content.replace(/powershell\s+-File\s+[^\s]+\.ps1/g, 'npx tsx src/gv.ts');
+  content = content.replace(/powershell\s+-File\s+[^\s]+\.ps1/g, 'npx tsx src/cli/gv.ts');
 
   // Reemplazar ./gv.ps1 con npx tsx src/cli/gv.ts
   content = content.replace(/\.\/gv\.ps1/g, 'npx tsx src/cli/gv.ts');

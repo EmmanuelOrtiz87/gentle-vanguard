@@ -37,7 +37,7 @@ const EXCLUDED_PATHS = new Set([
   'src/hooks/pre-commit.ts',
   'src/check-security.ts',
   'docs/reference/ARCHITECTURE.md',
-  'src/gv.ts',
+  'src/cli/gv.ts',
   'skills/docker-devops-skill/SKILL.md',
   'skills/security-expert-skill/references/security-patterns.md',
 ]);

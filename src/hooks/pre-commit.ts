@@ -28,7 +28,7 @@ const EXCLUDED_PATHS = new Set([
   'src/hooks/pre-commit.ts',
   'src/hooks/pre-commit-privacy.ts',
   'src/check-security.ts',
-  'src/gv.ts',
+  'src/cli/gv.ts',
   'skills/docker-devops-skill/SKILL.md',
   'skills/security-expert-skill/references/security-patterns.md',
   'config/security-privacy.json',

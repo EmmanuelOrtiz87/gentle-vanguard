@@ -108,7 +108,7 @@ function printSuccess(): void {
   console.log('║  Web UI:  http://localhost:5173                       ║');
   console.log('║  WS API:  http://localhost:8080                       ║');
   console.log('╠════════════════════════════════════════════════════════╣');
-  console.log('║  Status:  npx tsx src/gv.ts status                    ║');
+  console.log('║  Status:  npx tsx src/cli/gv.ts status                  ║');
   console.log('║  Stop:    npx tsx src/dashboard-stop.ts               ║');
   console.log('╚════════════════════════════════════════════════════════╝');
   console.log();

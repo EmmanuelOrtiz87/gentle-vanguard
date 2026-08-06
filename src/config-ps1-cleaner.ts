@@ -90,7 +90,7 @@ const PS1_TO_TS: Record<string, string | null> = {
   'scripts/utilities/knowledge-base/knowledge-base-sync.ps1': 'src/knowledge-base-sync.ts',
 
   // Workflow
-  'scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1': 'src/gv.ts',
+  'scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1': 'src/cli/gv.ts',
   'scripts/utilities/WORKFLOW-ORCHESTRATION/validate-system-health.ps1':
     'src/validate-system-health.ts',
   'scripts/utilities/WORKFLOW-ORCHESTRATION/orchestrator-next-steps.ps1':

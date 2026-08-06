@@ -96,7 +96,7 @@ function main(): void {
       gv: join(gentleVanguardRepoRoot, adaptivePath),
     });
 
-  const gvPath = 'src/gv.ts';
+  const gvPath = 'src/cli/gv.ts';
   const gvTarget = join(gentleVanguardRepoRoot, gvPath);
   if (existsSync(gvPath) && existsSync(gvTarget))
     checks.push({ name: 'Workflow Script (gv.ps1)', local: gvPath, gv: gvTarget });
