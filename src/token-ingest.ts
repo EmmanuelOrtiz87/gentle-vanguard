@@ -289,6 +289,203 @@ function writeObservabilityReport(rows: SessionUsage[]): void {
 }
 
 /** Pasada de ingesta completa. Devuelve resumen. */
+interface TransactionUsage {
+  sessionId: string;
+  messageId: string;
+  role: string;
+  agent: 'orchestrator' | 'subagent';
+  model: string;
+  input: number;
+  output: number;
+  reasoning: number;
+  cacheRead: number;
+  cacheWrite: number;
+  cost: number;
+  timeCreated: number;
+}
+
+/**
+ * Trazabilidad granular: lee los mensajes assistant con tokens reales de la
+ * tabla `message` (data JSON) + jerarquía de sesiones (parent_id) para
+ * distinguir orquestador (parent ROOT) de subagentes.
+ */
+export function readOpencodeTransactions(
+  dbPath: string,
+  sinceTimeCreated = 0,
+): TransactionUsage[] {
+  const db = new Database(dbPath, { readonly: true });
+  try {
+    // jerarquía: session_id -> es subagente si parent_id != 'ROOT'
+    const sessions = db
+      .prepare(`SELECT id, parent_id FROM session`)
+      .all() as Array<{ id: string; parent_id: string | null }>;
+    const agentOf = new Map<string, 'orchestrator' | 'subagent'>();
+    for (const s of sessions) {
+      agentOf.set(s.id, !s.parent_id || s.parent_id === 'ROOT' ? 'orchestrator' : 'subagent');
+    }
+    const rows = db
+      .prepare(
+        `SELECT id, session_id, data, time_created FROM message
+         WHERE data LIKE '%assistant%' AND time_created >= ? ORDER BY time_created ASC`,
+      )
+      .all(sinceTimeCreated) as Array<{
+      id: string;
+      session_id: string;
+      data: string;
+      time_created: number;
+    }>;
+    const out: TransactionUsage[] = [];
+    for (const r of rows) {
+      try {
+        const d = JSON.parse(r.data) as {
+          role?: string;
+          modelID?: string;
+          cost?: number;
+          tokens?: {
+            input?: number;
+            output?: number;
+            reasoning?: number;
+            cache?: { read?: number; write?: number };
+          };
+        };
+        if (d.role !== 'assistant' || !d.tokens) continue;
+        out.push({
+          sessionId: r.session_id,
+          messageId: r.id,
+          role: d.role,
+          agent: agentOf.get(r.session_id) ?? 'orchestrator',
+          model: d.modelID || '',
+          input: d.tokens.input ?? 0,
+          output: d.tokens.output ?? 0,
+          reasoning: d.tokens.reasoning ?? 0,
+          cacheRead: d.tokens.cache?.read ?? 0,
+          cacheWrite: d.tokens.cache?.write ?? 0,
+          cost: d.cost ?? 0,
+          timeCreated: r.time_created,
+        });
+      } catch {
+        /* línea malformada */
+      }
+    }
+    return out;
+  } finally {
+    db.close();
+  }
+}
+
+/** Persiste transacciones en Nexus `token_transactions` (idempotente por message_id). */
+export function writeTransactionsToNexus(
+  txns: TransactionUsage[],
+): { inserted: number; skipped: number } {
+  if (!existsSync(NEXUS_DB) || txns.length === 0) return { inserted: 0, skipped: 0 };
+  let inserted = 0;
+  let skipped = 0;
+  try {
+    const db = new Database(NEXUS_DB);
+    try {
+      db.exec(`CREATE TABLE IF NOT EXISTS token_transactions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        message_id TEXT UNIQUE,
+        session_id TEXT,
+        agent TEXT,
+        model TEXT,
+        input_tokens INTEGER,
+        output_tokens INTEGER,
+        reasoning_tokens INTEGER,
+        cache_read_tokens INTEGER,
+        cache_write_tokens INTEGER,
+        cost REAL,
+        created_at TEXT
+      )`);
+      const ins = db.prepare(
+        `INSERT OR IGNORE INTO token_transactions
+         (message_id, session_id, agent, model, input_tokens, output_tokens, reasoning_tokens,
+          cache_read_tokens, cache_write_tokens, cost, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      );
+      const tx = db.transaction(() => {
+        for (const t of txns) {
+          const info = ins.run(
+            t.messageId,
+            t.sessionId,
+            t.agent,
+            t.model,
+            t.input,
+            t.output,
+            t.reasoning,
+            t.cacheRead,
+            t.cacheWrite,
+            t.cost,
+            toSqliteDate(t.timeCreated),
+          );
+          if (info.changes > 0) inserted++;
+          else skipped++;
+        }
+      });
+      tx();
+    } finally {
+      db.close();
+    }
+  } catch (e) {
+    log(`Nexus txn write error: ${e instanceof Error ? e.message : String(e)}`);
+  }
+  return { inserted, skipped };
+}
+
+/** Ledger de ahorros (cache reads, compresión futura). Idempotente por message_id+category. */
+export function writeSavingsToNexus(
+  savings: Array<{
+    sessionId: string;
+    messageId: string;
+    category: string;
+    savedTokens: number;
+    source: string;
+    timeCreated: number;
+  }>,
+): { inserted: number } {
+  if (!existsSync(NEXUS_DB)) return { inserted: 0 };
+  let inserted = 0;
+  try {
+    const db = new Database(NEXUS_DB);
+    try {
+      db.exec(`CREATE TABLE IF NOT EXISTS token_savings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        message_id TEXT,
+        session_id TEXT,
+        category TEXT,
+        saved_tokens INTEGER,
+        source TEXT,
+        created_at TEXT DEFAULT (datetime('now')),
+        UNIQUE(message_id, category)
+      )`);
+      const ins = db.prepare(
+        `INSERT OR IGNORE INTO token_savings (message_id, session_id, category, saved_tokens, source, created_at)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+      );
+      const tx = db.transaction(() => {
+        for (const s of savings) {
+          if (s.savedTokens <= 0) continue;
+          const info = ins.run(
+            s.messageId,
+            s.sessionId,
+            s.category,
+            s.savedTokens,
+            s.source,
+            toSqliteDate(s.timeCreated),
+          );
+          if (info.changes > 0) inserted++;
+        }
+      });
+      tx();
+    } finally {
+      db.close();
+    }
+  } catch (e) {
+    log(`Nexus savings write error: ${e instanceof Error ? e.message : String(e)}`);
+  }
+  return { inserted };
+}
+
 export function ingestOnce(): {
   source: string | null;
   sessions: number;
@@ -307,12 +504,24 @@ export function ingestOnce(): {
     return { source: dbPath, sessions: 0, inserted: 0, updated: 0 };
   }
   const { inserted, updated } = writeToNexus(rows);
+  // Trazabilidad granular: transacciones por mensaje + ahorros por cache.
+  const txns = readOpencodeTransactions(dbPath, since);
+  const txnRes = writeTransactionsToNexus(txns);
+  const savings = txns.map((t) => ({
+    sessionId: t.sessionId,
+    messageId: t.messageId,
+    category: 'cache',
+    savedTokens: t.cacheRead,
+    source: 'opencode cache read',
+    timeCreated: t.timeCreated,
+  }));
+  const savRes = writeSavingsToNexus(savings);
   updateStackSession(rows);
   writeObservabilityReport(rows);
   const maxT = rows[rows.length - 1].timeUpdated;
   saveLastIngested(maxT);
   log(
-    `Ingestadas ${rows.length} sesiones (insert=${inserted}, update=${updated}) desde ${dbPath}`,
+    `Ingestadas ${rows.length} sesiones (insert=${inserted}, update=${updated}) + ${txnRes.inserted} transacciones + ${savRes.inserted} ahorros desde ${dbPath}`,
   );
   return { source: dbPath, sessions: rows.length, inserted, updated };
 }
@@ -334,12 +543,58 @@ export async function watch(intervalSec = 30): Promise<void> {
 
 // ─── CLI ───────────────────────────────────────────────────────────────────────
 
+/** Reporte de trazabilidad: por sesión, por agente, costos y ahorros. */
+export function generateTraceabilityReport(): string {
+  if (!existsSync(NEXUS_DB)) return 'Nexus DB no existe.';
+  const db = new Database(NEXUS_DB, { readonly: true });
+  try {
+    const dayStart = new Date();
+    dayStart.setHours(0, 0, 0, 0);
+    const dayStr = dayStart.toISOString().replace('T', ' ').slice(0, 19);
+
+    const txnsToday = db
+      .prepare(
+        `SELECT agent, COUNT(*) n, SUM(input_tokens) i, SUM(output_tokens) o,
+                SUM(cache_read_tokens) cacheR, SUM(cost) cost
+         FROM token_transactions WHERE created_at >= datetime(?) GROUP BY agent`,
+      )
+      .all(dayStr) as Array<{ agent: string; n: number; i: number; o: number; cacheR: number; cost: number }>;
+    const savToday = db
+      .prepare(`SELECT COALESCE(SUM(saved_tokens),0) s FROM token_savings WHERE created_at >= datetime(?)`)
+      .get(dayStr) as { s: number };
+    const perSession = db
+      .prepare(
+        `SELECT session_id, COUNT(*) txns,
+                SUM(input_tokens) i, SUM(output_tokens) o, SUM(cache_read_tokens) cacheR, SUM(cost) cost
+         FROM token_transactions GROUP BY session_id ORDER BY o DESC LIMIT 8`,
+      )
+      .all() as Array<{ session_id: string; txns: number; i: number; o: number; cacheR: number; cost: number }>;
+
+    const L = (n: number): string => (n ?? 0).toLocaleString();
+    let out = `════════ TRACEABILITY REPORT ════════\n`;
+    out += `Hoy (${dayStr}):\n`;
+    for (const a of txnsToday) {
+      out += `  [${a.agent}] transacciones=${a.n} in=${L(a.i)} out=${L(a.o)} cacheRead=${L(a.cacheR)} cost=$${(a.cost ?? 0).toFixed(4)}\n`;
+    }
+    out += `  Ahorro por cache hoy: ${L(savToday.s)} tokens\n`;
+    out += `\nTop sesiones por output:\n`;
+    for (const s of perSession) {
+      out += `  ${s.session_id?.slice(0, 18)} txns=${s.txns} in=${L(s.i)} out=${L(s.o)} cacheR=${L(s.cacheR)} cost=$${(s.cost ?? 0).toFixed(4)}\n`;
+    }
+    return out;
+  } finally {
+    db.close();
+  }
+}
+
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   if (args.includes('--watch')) {
     const idx = args.indexOf('--watch');
     const secs = idx + 1 < args.length ? parseInt(args[idx + 1], 10) : 30;
     await watch(isNaN(secs) ? 30 : secs);
+  } else if (args.includes('--report')) {
+    console.log(generateTraceabilityReport());
   } else {
     const r = ingestOnce();
     console.log(JSON.stringify(r, null, 2));

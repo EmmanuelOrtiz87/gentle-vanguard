@@ -74,6 +74,8 @@
     "ft:collect": "npx tsx src/ft-data-collector.ts",
     "skill:factory": "npx tsx src/skill-factory.ts",
     "token:usage-auto": "npx tsx src/token-usage-auto.ts",
+    "token:ingest": "npx tsx src/token-ingest.ts --once",
+    "token:trace": "npx tsx src/token-ingest.ts --report",
     "token:status": "npx tsx src/token-status.ts",
     "token:status:json": "npx tsx src/token-status.ts --json",
     "token:banner": "npx tsx src/token-session-banner.ts",
