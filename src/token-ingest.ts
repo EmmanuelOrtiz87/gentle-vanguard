@@ -238,6 +238,23 @@ function updateStackSession(rows: SessionUsage[]): void {
   }
 }
 
+/** Daily budget desde la fuente única (token-budget-guard.json). */
+function dailyBudget(): number {
+  try {
+    const cfg = join(ROOT, 'config', 'token-budget-guard.json');
+    if (existsSync(cfg)) {
+      const c = JSON.parse(readFileSync(cfg, 'utf-8')) as {
+        tokenBudget?: { limits?: { daily?: number } };
+      };
+      const d = c?.tokenBudget?.limits?.daily;
+      if (typeof d === 'number' && d > 0) return d;
+    }
+  } catch {
+    /* fallback */
+  }
+  return 5000000;
+}
+
 /** Regenera el report observability con datos REALES (hoy). */
 function writeObservabilityReport(rows: SessionUsage[]): void {
   try {
@@ -246,15 +263,16 @@ function writeObservabilityReport(rows: SessionUsage[]): void {
     const today = rows.filter((r) => r.timeUpdated >= dayStart);
     const usedToday = today.reduce((a, r) => a + r.tokensInput + r.tokensOutput, 0);
     const costToday = today.reduce((a, r) => a + r.cost, 0);
+    const budget = dailyBudget();
     mkdirSync(join(ROOT, 'reports'), { recursive: true });
     const report = {
       timestamp: now.toISOString(),
       generated_by: 'token-ingest (tool-agnostic daemon)',
       token: {
-        status: 'PASS',
+        status: usedToday < budget ? 'PASS' : 'OVER',
         used_today: usedToday,
-        budget: 120000,
-        projected_pct: Math.min(100, Math.round((usedToday / 120000) * 100)),
+        budget,
+        projected_pct: Math.min(100, Math.round((usedToday / budget) * 100)),
         sessions_today: today.length,
       },
       cost: {
@@ -262,7 +280,7 @@ function writeObservabilityReport(rows: SessionUsage[]): void {
         actualCost: costToday,
         currency: 'USD',
       },
-      executive_traffic_light: usedToday < 120000 ? 'GREEN' : 'AMBER',
+      executive_traffic_light: usedToday < budget ? 'GREEN' : 'AMBER',
     };
     writeFileSync(REPORT, JSON.stringify(report, null, 2));
   } catch {

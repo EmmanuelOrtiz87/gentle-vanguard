@@ -322,8 +322,8 @@
     "enabled": true,
     "immutable": true,
     "budgetLimits": {
-      "dailyTokens": 30000,
-      "perSessionTokens": 15000,
+      "dailyTokens": 5000000,
+      "perSessionTokens": 3000000,
       "hardCapEnabled": true
     },
     "trackingLevel": "per_call"

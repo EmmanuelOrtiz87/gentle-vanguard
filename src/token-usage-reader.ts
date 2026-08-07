@@ -46,7 +46,16 @@ const LIVE_OBS_PATH = join(ROOT, 'reports', 'stack-live-observability-latest.jso
 const METRICS_TOKEN_PATH = join(ROOT, '.runtime', 'metrics', 'token.json');
 const BUDGET_CONFIG_PATH = join(ROOT, 'config', 'token-budget-guard.json');
 
-const DEFAULT_BUDGET = 120000;
+const DEFAULT_BUDGET = 5000000;
+
+/** Daily budget from the single source of truth (token-budget-guard.json). */
+export function getDailyBudget(): number {
+  const config = readJsonSafe(BUDGET_CONFIG_PATH);
+  const daily = toNum(
+    (config?.tokenBudget as { limits?: { daily?: unknown } } | undefined)?.limits?.daily,
+  );
+  return daily > 0 ? daily : DEFAULT_BUDGET;
+}
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -82,7 +91,11 @@ function readNexusToday(): { used: number; budget: number; source: string } | nu
         )
         .get(dayStart.toISOString().replace('T', ' ').slice(0, 19)) as { used: number };
       if (row && row.used > 0) {
-        return { used: row.used, budget: DEFAULT_BUDGET, source: 'Nexus token_usage (real, tool-agnostic)' };
+        return {
+          used: row.used,
+          budget: getDailyBudget(),
+          source: 'Nexus token_usage (real, tool-agnostic)',
+        };
       }
     } finally {
       db.close();
