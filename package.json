@@ -221,6 +221,7 @@
     "rag:retrieve": "npx tsx src/rag-retrieval.ts"
   },
   "devDependencies": {
+    "@colbymchenry/codegraph": "0.8.0",
     "@playwright/test": "^1.54.2",
     "@secretlint/secretlint-rule-preset-recommend": "^9.0.0",
     "@types/better-sqlite3": "^7.6.13",
