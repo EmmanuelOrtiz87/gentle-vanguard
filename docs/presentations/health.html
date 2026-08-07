@@ -17,232 +17,9 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="assets/css/gv.css" />
     <style>
-      :root {
-        --p: #00bfff;
-        --pl: #4dcfff;
-        --a: #a855f7;
-        --ok: #22c55e;
-        --wn: #f59e0b;
-        --er: #ef4444;
-        --bg: #0a0e1a;
-        --bg2: #0f1525;
-        --card: #131a2e;
-        --br: #1e2a45;
-      }
-      * {
-        scroll-behavior: smooth;
-      }
-      body {
-        font-family: 'Inter', sans-serif;
-        background: var(--bg);
-        color: #e2e8f0;
-        overflow-x: hidden;
-      }
-      code,
-      .mono {
-        font-family: 'JetBrains Mono', monospace;
-      }
-      .nav-blur {
-        background: rgba(10, 14, 26, 0.85);
-        -webkit-backdrop-filter: blur(12px);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--br);
-        z-index: 1050;
-      }
-      .nav-blur .nav-link {
-        color: #94a3b8;
-        font-size: 0.82rem;
-        font-weight: 500;
-        padding: 0.5rem 0.7rem;
-        transition: 0.2s;
-        white-space: nowrap;
-      }
-      .nav-blur .nav-link:hover,
-      .nav-blur .nav-link.active {
-        color: var(--p);
-      }
-      .hero {
-        min-height: 70vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        padding: 8rem 1rem 4rem;
-      }
-      .hero::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background:
-          radial-gradient(ellipse at 30% 50%, rgba(0, 191, 255, 0.08), transparent 70%),
-          radial-gradient(ellipse at 70% 50%, rgba(168, 85, 247, 0.06), transparent 70%);
-        pointer-events: none;
-      }
-      .hero h1 {
-        font-size: 3.2rem;
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        line-height: 1.15;
-      }
-      .glow {
-        background: linear-gradient(135deg, var(--p), var(--a));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-      .hero .lead {
-        font-size: 1.15rem;
-        color: #94a3b8;
-        max-width: 720px;
-        margin: 1.5rem auto 0;
-      }
-      .section-card {
-        background: var(--card);
-        border: 1px solid var(--br);
-        border-radius: 16px;
-        padding: 1.75rem;
-        transition:
-          transform 0.3s,
-          box-shadow 0.3s;
-        position: relative;
-        overflow: hidden;
-      }
-      .section-card:hover {
-        transform: translateY(-3px);
-        box-shadow:
-          0 0 30px rgba(0, 191, 255, 0.08),
-          0 8px 40px rgba(0, 0, 0, 0.3);
-      }
-      .section-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, var(--p), var(--a));
-        opacity: 0;
-        transition: opacity 0.3s;
-      }
-      .section-card:hover::before {
-        opacity: 1;
-      }
-      .section-card .card-title {
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: #f1f5f9;
-        margin-bottom: 0.75rem;
-      }
-      .section-card .card-text {
-        color: #94a3b8;
-        font-size: 0.9rem;
-        line-height: 1.65;
-      }
-      .stat-n {
-        font-size: 2.4rem;
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        background: linear-gradient(135deg, var(--p), var(--pl));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        line-height: 1;
-      }
-      .stat-l {
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: #64748b;
-        margin-top: 0.25rem;
-      }
-      .badge-gv {
-        font-size: 0.7rem;
-        font-weight: 600;
-        padding: 0.3em 0.7em;
-        border-radius: 6px;
-        letter-spacing: 0.02em;
-      }
-      .badge-p {
-        background: rgba(0, 191, 255, 0.15);
-        color: var(--p);
-      }
-      .badge-a {
-        background: rgba(168, 85, 247, 0.15);
-        color: var(--a);
-      }
-      .badge-ok {
-        background: rgba(34, 197, 94, 0.15);
-        color: var(--ok);
-      }
-      .badge-wn {
-        background: rgba(245, 158, 11, 0.15);
-        color: var(--wn);
-      }
-      .badge-er {
-        background: rgba(239, 68, 68, 0.15);
-        color: var(--er);
-      }
-      section {
-        padding: 4rem 1rem;
-        max-width: 1400px;
-        margin: 0 auto;
-      }
-      .section-title {
-        text-align: center;
-        margin-bottom: 2.5rem;
-      }
-      .section-title h2 {
-        font-size: clamp(1.5rem, 3vw, 2.2rem);
-        font-weight: 800;
-      }
-      .section-title p {
-        color: #94a3b8;
-        max-width: 600px;
-        margin: 0 auto;
-      }
-      .fade-in {
-        opacity: 0;
-        transform: translateY(25px);
-        transition:
-          opacity 0.7s ease,
-          transform 0.7s ease;
-      }
-      .fade-in.visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      footer {
-        background: var(--bg2);
-        border-top: 1px solid var(--br);
-        padding: 2rem 0;
-        text-align: center;
-        color: #475569;
-        font-size: 0.85rem;
-      }
-      footer a {
-        color: var(--p);
-        text-decoration: none;
-      }
-      @media (max-width: 991.98px) {
-        .nav-blur .nav-link {
-          font-size: 0.75rem;
-          padding: 0.35rem 0.5rem;
-        }
-        .hero h1 {
-          font-size: 2.2rem;
-        }
-        .hero {
-          min-height: 50vh;
-          padding: 6rem 1rem 3rem;
-        }
-        .stat-n {
-          font-size: 1.8rem;
-        }
-      }
+      /* --- Estilos específicos de health.html (complementan el design system) --- */
       .metric-ring {
         width: 120px;
         height: 120px;
@@ -292,31 +69,34 @@
     </style>
     <script src="assets/js/i18n.js"></script>
   </head>
-  <body>
-    <!-- Navbar -->
+  <body class="grain">
+    <div class="scroll-progress"></div>
+    <div class="aurora" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
     <nav class="navbar navbar-expand-xl nav-blur fixed-top">
-      <div class="container-fluid px-3 px-xl-4">
-        <a class="navbar-brand fw-bold text-white me-3" href="index.html" style="font-size: 1.1rem"
-          >GV</a
+      <div class="container-fluid px-3">
+        <a class="navbar-brand text-light fw-bold mono" href="index.html" style="font-size: 0.85rem"
+          ><i class="bi bi-robot me-2" style="color: var(--p)"></i>GV</a
         >
         <button
-          class="navbar-toggler border-0 p-0"
+          class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#nav"
+          data-bs-target="#navMain"
         >
-          <span class="navbar-toggler-icon"></span>
+          <i class="bi bi-list" style="color: var(--p)"></i>
         </button>
-        <div class="collapse navbar-collapse" id="nav">
-          <ul class="navbar-nav me-auto mb-2 mb-xl-0 flex-wrap">
+        <div class="collapse navbar-collapse" id="navMain">
+          <ul class="navbar-nav ms-auto" style="max-height: 85vh; overflow-y: auto">
             <li class="nav-item">
               <a class="nav-link" href="index.html"
-                ><i class="bi bi-house-fill me-1"></i><span data-i18n="nav_home">Home</span></a
+                ><i class="bi bi-house me-1"></i><span data-i18n="nav_home">Home</span></a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="architecture.html"
-                ><i class="bi bi-layers me-1"></i><span data-i18n="nav_arch">Arch</span></a
+                ><i class="bi bi-diagram-3 me-1"></i><span data-i18n="nav_arch">Arch</span></a
               >
             </li>
             <li class="nav-item">
@@ -326,13 +106,13 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="dashboard.html"
-                ><i class="bi bi-bar-chart me-1"></i
+                ><i class="bi bi-speedometer2 me-1"></i
                 ><span data-i18n="nav_dashboard">Dashboard</span></a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="quickstart.html"
-                ><i class="bi bi-rocket me-1"></i
+                ><i class="bi bi-rocket-takeoff me-1"></i
                 ><span data-i18n="nav_quickstart">Quickstart</span></a
               >
             </li>
@@ -343,12 +123,13 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="security-governance.html"
-                ><i class="bi bi-shield me-1"></i><span data-i18n="nav_security">Security</span></a
+                ><i class="bi bi-shield-check me-1"></i
+                ><span data-i18n="nav_security">Security</span></a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="agents-pipeline.html"
-                ><i class="bi bi-diagram-3 me-1"></i><span data-i18n="nav_agents">Agents</span></a
+                ><i class="bi bi-diagram-2 me-1"></i><span data-i18n="nav_agents">Agents</span></a
               >
             </li>
             <li class="nav-item">
@@ -358,12 +139,18 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="patterns-conventions.html"
-                ><i class="bi bi-book me-1"></i><span data-i18n="nav_patterns">Patterns</span></a
+                ><i class="bi bi-file-code me-1"></i
+                ><span data-i18n="nav_patterns">Patterns</span></a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link active" href="health.html"
                 ><i class="bi bi-heart-pulse me-1"></i><span data-i18n="nav_health">Health</span></a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#diagrams"
+                ><i class="bi bi-images me-1"></i><span data-i18n="nav_diagrams">Diagrams</span></a
               >
             </li>
             <li class="nav-item dropdown ms-1">
@@ -390,11 +177,21 @@
     <!-- Hero -->
     <section class="hero">
       <div>
+        <span class="hero-badge mb-3">✦ v3.5.0 — 112/112 PASS · 18 componentes</span>
         <h1 class="glow"><i class="bi bi-heart-pulse me-2"></i>Stack Health & Metrics</h1>
         <p class="lead">
-          Monitoreo continuo, 82 health checks, 19 tests automatizados, y trazabilidad total del
+          Monitoreo continuo, 112 health checks, 97 tests automatizados, y trazabilidad total del
           stack Gentle-Vanguard
         </p>
+        <div class="mt-4 d-flex gap-2 flex-wrap justify-content-center z-1">
+          <a href="index.html" class="btn-gv"><i class="bi bi-book me-1"></i>The Book</a>
+          <a href="operations-cloud.html" class="btn-gv-alt"
+            ><i class="bi bi-cloud me-1"></i>Operations</a
+          >
+          <a href="architecture.html" class="btn-gv-alt"
+            ><i class="bi bi-diagram-3 me-1"></i>Architecture</a
+          >
+        </div>
       </div>
     </section>
 
@@ -420,7 +217,7 @@
               />
             </svg>
             <div class="metric-ring-inner" style="margin-top: -90px">
-              <div class="stat-n">82<span style="font-size: 1rem">/82</span></div>
+              <div class="stat-n">112<span style="font-size: 1rem">/112</span></div>
               <div class="stat-l">Health Checks</div>
             </div>
           </div>
@@ -440,7 +237,7 @@
               />
             </svg>
             <div class="metric-ring-inner" style="margin-top: -90px">
-              <div class="stat-n">19<span style="font-size: 1rem">/19</span></div>
+              <div class="stat-n">97<span style="font-size: 1rem">/97</span></div>
               <div class="stat-l">Tests Passing</div>
             </div>
           </div>
@@ -492,9 +289,9 @@
     <section class="fade-in">
       <div class="section-title">
         <h2>
-          <i class="bi bi-shield-check me-2" style="color: var(--ok)"></i>Watchtower — 82 Checks
+          <i class="bi bi-shield-check me-2" style="color: var(--ok)"></i>Watchtower — 112 Checks
         </h2>
-        <p>16 componentes monitoreados en cada ciclo de health check</p>
+        <p>18 componentes monitoreados en cada ciclo de health check</p>
       </div>
       <div class="table-responsive">
         <table class="table-health">
@@ -517,7 +314,13 @@
               <td><span class="badge-gv badge-ok">codegraph</span></td>
               <td>5</td>
               <td><span class="badge-gv badge-ok">PASS</span></td>
-              <td>Index exists, 133 files, 1410 nodes, 1763 edges</td>
+              <td>Index exists, 677 files, 10,663 nodes, 21,746 edges, 28MB</td>
+            </tr>
+            <tr>
+              <td><span class="badge-gv badge-ok">timeout-daemon</span></td>
+              <td>4</td>
+              <td><span class="badge-gv badge-ok">PASS</span></td>
+              <td>Timeout daemon, watchdog PIDs, restart loop protection</td>
             </tr>
             <tr>
               <td><span class="badge-gv badge-ok">ml-embeddings</span></td>
@@ -529,7 +332,7 @@
               <td><span class="badge-gv badge-ok">engram</span></td>
               <td>4</td>
               <td><span class="badge-gv badge-ok">PASS</span></td>
-              <td>DB integrity, reindex log, RAG pipeline, 2219 obs</td>
+              <td>DB integrity, reindex log, RAG pipeline, 2078 obs</td>
             </tr>
             <tr>
               <td><span class="badge-gv badge-ok">mcp</span></td>
@@ -568,24 +371,6 @@
               <td>Opencode structure, auth config, security orchestrator</td>
             </tr>
             <tr>
-              <td><span class="badge-gv badge-ok">governance</span></td>
-              <td>4</td>
-              <td><span class="badge-gv badge-ok">PASS</span></td>
-              <td>Policy files, rules directory, 53 normatives</td>
-            </tr>
-            <tr>
-              <td><span class="badge-gv badge-ok">gentle-vanguard-db</span></td>
-              <td>5</td>
-              <td><span class="badge-gv badge-ok">PASS</span></td>
-              <td>Nexus DB file, WAL, integrity check, 7 migrations</td>
-            </tr>
-            <tr>
-              <td><span class="badge-gv badge-ok">adaptive</span></td>
-              <td>5</td>
-              <td><span class="badge-gv badge-ok">PASS</span></td>
-              <td>Adaptive profiles, norms, scores</td>
-            </tr>
-            <tr>
               <td><span class="badge-gv badge-ok">cloud-connectors</span></td>
               <td>4</td>
               <td><span class="badge-gv badge-ok">PASS</span></td>
@@ -598,16 +383,34 @@
               <td>Tracing spans, OTLP export, span files</td>
             </tr>
             <tr>
-              <td><span class="badge-gv badge-ok">checkpoints</span></td>
+              <td><span class="badge-gv badge-ok">state-persistence</span></td>
               <td>4</td>
               <td><span class="badge-gv badge-ok">PASS</span></td>
               <td>Checkpoint dir, snapshots, rollback readiness</td>
             </tr>
             <tr>
-              <td><span class="badge-gv badge-ok">audit</span></td>
+              <td><span class="badge-gv badge-ok">gentle-vanguard-db</span></td>
+              <td>5</td>
+              <td><span class="badge-gv badge-ok">PASS</span></td>
+              <td>Nexus DB file, WAL, integrity check, 7 migrations, 21 tables</td>
+            </tr>
+            <tr>
+              <td><span class="badge-gv badge-ok">model-provider</span></td>
+              <td>4</td>
+              <td><span class="badge-gv badge-ok">PASS</span></td>
+              <td>Model router, profiles, fallback configuration</td>
+            </tr>
+            <tr>
+              <td><span class="badge-gv badge-ok">audit-pipeline</span></td>
               <td>4</td>
               <td><span class="badge-gv badge-ok">PASS</span></td>
               <td>Audit logs, pipeline, archive</td>
+            </tr>
+            <tr>
+              <td><span class="badge-gv badge-ok">governance</span></td>
+              <td>4</td>
+              <td><span class="badge-gv badge-ok">PASS</span></td>
+              <td>Policy files, rules directory, 65 normatives</td>
             </tr>
           </tbody>
         </table>
@@ -620,7 +423,7 @@
         <h2>
           <i class="bi bi-database me-2" style="color: var(--p)"></i>Nexus DB — Operational Database
         </h2>
-        <p>SQLite WAL mode, 7 migrations, monitoreado por watchtower</p>
+        <p>SQLite WAL mode, 7 migrations, 21 tables, monitoreado por watchtower</p>
       </div>
       <div class="row g-4">
         <div class="col-md-4">
@@ -632,7 +435,7 @@
         </div>
         <div class="col-md-4">
           <div class="section-card text-center">
-            <div class="stat-n">12</div>
+            <div class="stat-n">21</div>
             <div class="stat-l">Tables</div>
             <p class="card-text small mt-2">Core + stack + scoring + backlog</p>
           </div>
@@ -818,8 +621,8 @@
       <div class="row g-4">
         <div class="col-md-3 col-6">
           <div class="section-card text-center">
-            <div class="stat-n">19</div>
-            <div class="stat-l">Unit Tests</div>
+            <div class="stat-n">97</div>
+            <div class="stat-l">Test Files</div>
             <span class="badge-gv badge-ok mt-2">npm test</span>
           </div>
         </div>
@@ -839,7 +642,7 @@
         </div>
         <div class="col-md-3 col-6">
           <div class="section-card text-center">
-            <div class="stat-n">82</div>
+            <div class="stat-n">112</div>
             <div class="stat-l">Health Checks</div>
             <span class="badge-gv badge-ok mt-2">watchtower:health</span>
           </div>
@@ -860,9 +663,9 @@
                 <code>npm run lint</code> — ESLint with <code>--max-warnings 0</code>. Zero
                 tolerance for warnings.
               </li>
-              <li><code>npm test</code> — 19 test suites, all must pass</li>
+              <li><code>npm test</code> — 97 test files, all must pass</li>
               <li>
-                <code>npm run watchtower:health</code> — 82 checks across 16 components, 100% PASS
+                <code>npm run watchtower:health</code> — 112 checks across 18 components, 100% PASS
                 required
               </li>
               <li>
@@ -906,8 +709,42 @@
           <div class="section-card">
             <div class="stat-n" style="font-size: 1.6rem">100%</div>
             <div class="stat-l">Health Uptime</div>
-            <p class="card-text small mt-2">Watchtower expects 82/82 PASS every cycle</p>
+            <p class="card-text small mt-2">Watchtower expects 112/112 PASS every cycle</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Diagramas -->
+    <section class="fade-in" id="diagrams">
+      <div class="section-title">
+        <h2><i class="bi bi-images me-2" style="color: var(--p)"></i>Diagramas</h2>
+        <p>Arquitectura y observabilidad del stack en un vistazo</p>
+      </div>
+      <div class="row g-3">
+        <div class="col-lg-6">
+          <img
+            src="diagrams/stack-dashboard.svg"
+            alt="Stack Dashboard Overview"
+            class="svg-diagram img-fluid w-100 border-soft radius-lg shadow-glow"
+            loading="lazy"
+          />
+          <p class="text-secondary small mt-2">
+            <i class="bi bi-speedometer2 me-1"></i>Observabilidad en tiempo real: WS + HTTP, 7
+            secciones, i18n, alertas.
+          </p>
+        </div>
+        <div class="col-lg-6">
+          <img
+            src="diagrams/architecture-layers.svg"
+            alt="Architecture Layers Diagram"
+            class="svg-diagram img-fluid w-100 border-soft radius-lg shadow-glow"
+            loading="lazy"
+          />
+          <p class="text-secondary small mt-2">
+            <i class="bi bi-stack me-1"></i>6 capas: Tools → Agents → Pipeline → Memory → Data →
+            Executive.
+          </p>
         </div>
       </div>
     </section>
@@ -936,14 +773,16 @@
           <a href="patterns-conventions.html" class="mx-2">Patterns</a>
           <span style="color: var(--br)">|</span>
           <a href="health.html" class="mx-2"><strong>Health</strong></a>
+          <span style="color: var(--br)">|</span>
+          <a href="index.html" class="mx-2"><i class="bi bi-book me-1"></i>The Book</a>
         </p>
         <p class="mt-3 mb-0">
-          <span class="badge-gv badge-p">v8.0.1</span>
-          <span class="badge-gv badge-ok">263 TS</span>
-          <span class="badge-gv badge-ok">19/19 tests</span>
-          <span class="badge-gv badge-ok">82/82 health</span>
+          <span class="badge-gv badge-p">v3.5.0</span>
+          <span class="badge-gv badge-ok">328 TS</span>
+          <span class="badge-gv badge-ok">97 test files</span>
+          <span class="badge-gv badge-ok">112/112 health</span>
           <span class="badge-gv badge-ok">7 migrations</span>
-          <span class="badge-gv badge-a">12 tables</span>
+          <span class="badge-gv badge-a">21 tables</span>
           <span class="badge-gv badge-p">8 backlog items</span>
         </p>
         <p class="mt-3 mb-0" style="color: #475569; font-size: 0.8rem">
@@ -953,18 +792,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((e) => {
-              if (e.isIntersecting) e.target.classList.add('visible');
-            });
-          },
-          { threshold: 0.1 },
-        );
-        document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
-      });
-    </script>
+    <script src="assets/js/gv.js"></script>
   </body>
 </html>

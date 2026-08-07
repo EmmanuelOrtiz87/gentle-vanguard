@@ -17,216 +17,9 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="assets/css/gv.css" />
     <style>
-      :root {
-        --p: #00bfff;
-        --pl: #4dcfff;
-        --a: #a855f7;
-        --ok: #22c55e;
-        --wn: #f59e0b;
-        --er: #ef4444;
-        --bg: #0a0e1a;
-        --bg2: #0f1525;
-        --card: #131a2e;
-        --br: #1e2a45;
-      }
-      * {
-        scroll-behavior: smooth;
-      }
-      body {
-        font-family: 'Inter', sans-serif;
-        background: var(--bg);
-        color: #e2e8f0;
-        overflow-x: hidden;
-      }
-      code,
-      .mono {
-        font-family: 'JetBrains Mono', monospace;
-      }
-      .nav-blur {
-        background: rgba(10, 14, 26, 0.85);
-        -webkit-backdrop-filter: blur(12px);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--br);
-        z-index: 1050;
-      }
-      .nav-blur .nav-link {
-        color: #94a3b8;
-        font-size: 0.82rem;
-        font-weight: 500;
-        padding: 0.5rem 0.7rem;
-        transition: 0.2s;
-        white-space: nowrap;
-      }
-      .nav-blur .nav-link:hover,
-      .nav-blur .nav-link.active {
-        color: var(--p);
-      }
-      .hero {
-        min-height: 70vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        padding: 8rem 1rem 4rem;
-      }
-      .hero::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background:
-          radial-gradient(ellipse at 30% 50%, rgba(0, 191, 255, 0.08), transparent 70%),
-          radial-gradient(ellipse at 70% 50%, rgba(168, 85, 247, 0.06), transparent 70%);
-        pointer-events: none;
-      }
-      .hero h1 {
-        font-size: 3.2rem;
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        line-height: 1.15;
-      }
-      .glow {
-        background: linear-gradient(135deg, var(--p), var(--a));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-      .hero .lead {
-        font-size: 1.15rem;
-        color: #94a3b8;
-        max-width: 720px;
-        margin: 1.5rem auto 0;
-      }
-      .section-card {
-        background: var(--card);
-        border: 1px solid var(--br);
-        border-radius: 16px;
-        padding: 1.75rem;
-        transition:
-          transform 0.3s,
-          box-shadow 0.3s;
-        position: relative;
-        overflow: hidden;
-      }
-      .section-card:hover {
-        transform: translateY(-3px);
-        box-shadow:
-          0 0 30px rgba(0, 191, 255, 0.08),
-          0 8px 40px rgba(0, 0, 0, 0.3);
-      }
-      .section-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, var(--p), var(--a));
-        opacity: 0;
-        transition: opacity 0.3s;
-      }
-      .section-card:hover::before {
-        opacity: 1;
-      }
-      .section-card .card-title {
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: #f1f5f9;
-        margin-bottom: 0.75rem;
-      }
-      .section-card .card-text {
-        color: #94a3b8;
-        font-size: 0.9rem;
-        line-height: 1.65;
-      }
-      .stat-n {
-        font-size: 2.4rem;
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        background: linear-gradient(135deg, var(--p), var(--pl));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        line-height: 1;
-      }
-      .stat-l {
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: #64748b;
-        margin-top: 0.25rem;
-      }
-      .badge-gv {
-        font-size: 0.7rem;
-        font-weight: 600;
-        padding: 0.3em 0.7em;
-        border-radius: 6px;
-        letter-spacing: 0.02em;
-      }
-      .badge-p {
-        background: rgba(0, 191, 255, 0.15);
-        color: var(--p);
-      }
-      .badge-a {
-        background: rgba(168, 85, 247, 0.15);
-        color: var(--a);
-      }
-      .badge-ok {
-        background: rgba(34, 197, 94, 0.15);
-        color: var(--ok);
-      }
-      .badge-wn {
-        background: rgba(245, 158, 11, 0.15);
-        color: var(--wn);
-      }
-      .badge-er {
-        background: rgba(239, 68, 68, 0.15);
-        color: var(--er);
-      }
-      section {
-        padding: 4rem 1rem;
-        max-width: 1400px;
-        margin: 0 auto;
-      }
-      .section-title {
-        text-align: center;
-        margin-bottom: 2.5rem;
-      }
-      .section-title h2 {
-        font-size: clamp(1.5rem, 3vw, 2.2rem);
-        font-weight: 800;
-      }
-      .section-title p {
-        color: #94a3b8;
-        max-width: 600px;
-        margin: 0 auto;
-      }
-      .fade-in {
-        opacity: 0;
-        transform: translateY(25px);
-        transition:
-          opacity 0.7s ease,
-          transform 0.7s ease;
-      }
-      .fade-in.visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      footer {
-        background: var(--bg2);
-        border-top: 1px solid var(--br);
-        padding: 2rem 0;
-        text-align: center;
-        color: #475569;
-        font-size: 0.85rem;
-      }
-      footer a {
-        color: var(--p);
-        text-decoration: none;
-      }
+      /* --- Estilos específicos de autonomy.html (complementan el design system) --- */
       .flow-row {
         display: flex;
         align-items: center;
@@ -234,21 +27,6 @@
         gap: 0.5rem;
         flex-wrap: wrap;
         padding: 1rem 0;
-      }
-      .flow-step {
-        background: var(--card);
-        border: 1px solid var(--br);
-        border-radius: 10px;
-        padding: 0.6rem 1.1rem;
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: var(--p);
-        white-space: nowrap;
-      }
-      .flow-arrow {
-        color: var(--a);
-        font-size: 1.2rem;
-        font-weight: 300;
       }
       .progress-gv {
         height: 8px;
@@ -261,33 +39,12 @@
         border-radius: 4px;
         transition: width 1s ease;
       }
-      .bi-list {
-        font-size: 1.5rem;
-      }
-      .navbar-toggler {
-        border: 1px solid var(--br);
-        padding: 0.35rem 0.5rem;
-      }
-      @media (max-width: 991.98px) {
-        .nav-blur .nav-link {
-          font-size: 0.75rem;
-          padding: 0.35rem 0.5rem;
-        }
-        .hero h1 {
-          font-size: 2.2rem;
-        }
-        .hero {
-          min-height: 50vh;
-          padding: 6rem 1rem 3rem;
-        }
-        .stat-n {
-          font-size: 1.8rem;
-        }
-      }
     </style>
     <script src="assets/js/i18n.js"></script>
   </head>
-  <body>
+  <body class="grain">
+    <div class="scroll-progress"></div>
+    <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
     <nav class="navbar navbar-expand-xl nav-blur fixed-top">
       <div class="container-fluid px-3">
         <a class="navbar-brand text-light fw-bold mono" href="index.html" style="font-size: 0.85rem"
@@ -362,6 +119,11 @@
                 ><i class="bi bi-heart-pulse me-1"></i><span data-i18n="nav_health">Health</span></a
               >
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#diagrams"
+                ><i class="bi bi-images me-1"></i><span data-i18n="nav_diagrams">Diagrams</span></a
+              >
+            </li>
             <li class="nav-item dropdown ms-1">
               <a
                 class="nav-link dropdown-toggle py-1 px-2"
@@ -383,16 +145,15 @@
       </div>
     </nav>
 
-    <section class="hero">
+    <header class="hero" id="overview">
       <div>
-        <span class="badge badge-p mb-3 mono"
-          ><i class="bi bi-robot me-1"></i>Layer 6 — Executive</span
-        >
+        <span class="hero-badge mb-3">✦ v3.5.0 — Autonomous Executive Layer</span>
         <h1><span class="glow">Autonomous Systems</span></h1>
         <p class="lead">
-          The Autonomous Executive Layer coordinates 8 core systems operating in a continuous
-          Detection → Evaluation → Decision → Execution → Verification → Learning cycle — enabling
-          100% autonomous operation with human oversight at critical decision points.
+          The Autonomous Executive Layer coordinates 12 interconnected executive systems operating
+          in a continuous Detection → Evaluation → Decision → Execution → Verification → Learning
+          cycle — enabling 100% autonomous operation with human oversight at critical decision
+          points.
         </p>
         <div class="flow-row mt-4">
           <span class="flow-step"><i class="bi bi-radar me-1"></i>Detection</span>
@@ -407,33 +168,42 @@
           <span class="flow-arrow"><i class="bi bi-arrow-right"></i></span>
           <span class="flow-step"><i class="bi bi-mortarboard me-1"></i>Learning</span>
         </div>
+        <div class="mt-4 d-flex gap-2 flex-wrap justify-content-center">
+          <a href="index.html" class="btn-gv"><i class="bi bi-book me-1"></i>Overview</a>
+          <a href="architecture.html" class="btn-gv-alt"
+            ><i class="bi bi-diagram-3 me-1"></i>Architecture</a
+          >
+          <a href="agents-pipeline.html" class="btn-gv-alt"
+            ><i class="bi bi-diagram-2 me-1"></i>Agents</a
+          >
+        </div>
       </div>
-    </section>
+    </header>
 
     <div class="container-fluid px-4 pb-5" style="max-width: 1400px">
       <!-- Row 1: Overview Stats -->
       <div class="row g-4 mb-5 fade-in">
         <div class="col-md-3 col-6">
           <div class="section-card text-center">
-            <div class="stat-n">8</div>
-            <div class="stat-l">Core Systems</div>
+            <div class="stat-n" data-count="12">12</div>
+            <div class="stat-l">Executive Systems</div>
           </div>
         </div>
         <div class="col-md-3 col-6">
           <div class="section-card text-center">
-            <div class="stat-n">60</div>
+            <div class="stat-n" data-count="112">112</div>
             <div class="stat-l">Health Checks</div>
           </div>
         </div>
         <div class="col-md-3 col-6">
           <div class="section-card text-center">
-            <div class="stat-n">16</div>
+            <div class="stat-n" data-count="18">18</div>
             <div class="stat-l">Monitored Components</div>
           </div>
         </div>
         <div class="col-md-3 col-6">
           <div class="section-card text-center">
-            <div class="stat-n">82/82</div>
+            <div class="stat-n"><span data-count="112">112</span>/112</div>
             <div class="stat-l">Watchtower Score</div>
           </div>
         </div>
@@ -450,9 +220,9 @@
           <div class="section-card">
             <p class="card-text mb-3">
               The <strong>Autonomous Executive Layer (Layer 6)</strong> is the pinnacle of the
-              Gentle-Vanguard stack — enabling 100% autonomous operation through 8 interconnected
-              systems. Each system handles a specific domain of autonomy while sharing state through
-              the centralized Nexus database and coordinating via the event bus.
+              Gentle-Vanguard stack — enabling 100% autonomous operation through 12 interconnected
+              executive systems. Each system handles a specific domain of autonomy while sharing
+              state through the centralized Nexus database and coordinating via the event bus.
             </p>
             <div class="row g-3">
               <div class="col-md-3 col-6">
@@ -556,7 +326,59 @@
                   "
                 >
                   <small class="stat-l d-block mb-1">Watchtower</small
-                  ><span class="badge badge-er">82/82</span>
+                  ><span class="badge badge-er">112/112</span>
+                </div>
+              </div>
+              <div class="col-md-3 col-6">
+                <div
+                  class="p-3"
+                  style="
+                    background: var(--bg2);
+                    border-radius: 10px;
+                    border-left: 3px solid var(--er);
+                  "
+                >
+                  <small class="stat-l d-block mb-1">Security Orchestrator</small
+                  ><span class="badge badge-er">Guardrails</span>
+                </div>
+              </div>
+              <div class="col-md-3 col-6">
+                <div
+                  class="p-3"
+                  style="
+                    background: var(--bg2);
+                    border-radius: 10px;
+                    border-left: 3px solid var(--p);
+                  "
+                >
+                  <small class="stat-l d-block mb-1">State Persistence</small
+                  ><span class="badge badge-p">Checkpoints</span>
+                </div>
+              </div>
+              <div class="col-md-3 col-6">
+                <div
+                  class="p-3"
+                  style="
+                    background: var(--bg2);
+                    border-radius: 10px;
+                    border-left: 3px solid var(--a);
+                  "
+                >
+                  <small class="stat-l d-block mb-1">Distributed Tracing</small
+                  ><span class="badge badge-a">OTLP Spans</span>
+                </div>
+              </div>
+              <div class="col-md-3 col-6">
+                <div
+                  class="p-3"
+                  style="
+                    background: var(--bg2);
+                    border-radius: 10px;
+                    border-left: 3px solid var(--ok);
+                  "
+                >
+                  <small class="stat-l d-block mb-1">Cloud Connectors</small
+                  ><span class="badge badge-ok">Hybrid Routing</span>
                 </div>
               </div>
             </div>
@@ -942,14 +764,14 @@
           <h2 class="fw-bold mb-3" style="color: var(--er)">
             <i class="bi bi-eye-fill me-2"></i>9. Watchtower
             <span class="badge badge-ok" style="font-size: 0.6rem; vertical-align: middle"
-              >82/82</span
+              >112/112</span
             >
           </h2>
         </div>
         <div class="col-lg-8">
           <div class="section-card h-100">
             <p class="card-text">
-              60 health checks across 11 components with 6 operational modes. Scored 82/82 — all
+              112 health checks across 18 components with 6 operational modes. Scored 112/112 — all
               systems operational.
             </p>
             <div class="d-flex flex-wrap gap-2 mt-3">
@@ -966,7 +788,9 @@
               ><span class="badge badge-ok">state-persistence</span
               ><span class="badge badge-wn">audit</span
               ><span class="badge badge-er">governance</span
-              ><span class="badge badge-p">gv-db</span>
+              ><span class="badge badge-p">gv-db</span
+              ><span class="badge badge-a">event-sourcing</span
+              ><span class="badge badge-ok">saga</span>
             </div>
           </div>
         </div>
@@ -981,7 +805,7 @@
             <hr style="border-color: var(--br)" />
             <div><span class="stat-l">Score</span></div>
             <div class="progress-gv mt-2"><div class="progress-bar" style="width: 100%"></div></div>
-            <small class="d-block mt-1 text-end" style="color: var(--ok)">82/82 — 100%</small>
+            <small class="d-block mt-1 text-end" style="color: var(--ok)">112/112 — 100%</small>
           </div>
         </div>
       </div>
@@ -1030,9 +854,33 @@
       </div>
     </div>
 
+    <!-- Diagramas -->
+    <section class="fade-in" id="diagrams">
+      <div class="section-title">
+        <div class="display-4 mb-2">🖼️</div>
+        <h2>Diagrama — Executive Loop</h2>
+        <p>
+          Detection → Evaluation → Decision → Execution → Verification → Learning — el ciclo
+          continuo del Executive Layer. Pasa el cursor sobre los nodos para explorar cada etapa.
+        </p>
+      </div>
+      <div class="container" style="max-width: 1000px">
+        <img
+          src="diagrams/executive-loop.svg"
+          alt="Executive Autonomous Loop"
+          class="svg-diagram img-fluid w-100 border-soft radius-lg shadow-glow"
+          loading="lazy"
+        />
+        <p class="text-secondary small mt-2 text-center">
+          <i class="bi bi-arrow-repeat me-1"></i>Executive loop con los 12 sistemas del Layer 6
+          coordinados vía event bus y Nexus DB.
+        </p>
+      </div>
+    </section>
+
     <footer>
       <p class="mb-2">
-        Gentle-Vanguard <strong>v8.0.1</strong> — 100% Autonomous AI Stack ·
+        Gentle-Vanguard <strong>v3.5.0</strong> — 100% Autonomous AI Stack ·
         <span class="text-secondary">✦ Plataforma Autónoma de Orquestración AI</span>
       </p>
       <p class="mb-2 d-flex flex-wrap justify-content-center gap-3">
@@ -1055,32 +903,32 @@
         <span
           class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1"
           style="font-size: 0.6rem"
-          >263 TS Files</span
+          >328 TS Files</span
         >
         <span
           class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1"
           style="font-size: 0.6rem"
-          >19/19 Tests</span
+          >97 Test Files</span
         >
         <span
           class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-2 py-1"
           style="font-size: 0.6rem"
-          >82/82 Health</span
+          >112/112 Health</span
         >
         <span
           class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-2 py-1"
           style="font-size: 0.6rem"
-          >10 DAOs</span
+          >11 Repos</span
         >
         <span
           class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1"
           style="font-size: 0.6rem"
-          >118 Skills</span
+          >170 Skills</span
         >
         <span
           class="badge bg-light bg-opacity-10 text-light border border-light border-opacity-25 px-2 py-1"
           style="font-size: 0.6rem"
-          >52 Normatives</span
+          >65 Normatives</span
         >
       </div>
       <p class="mt-2 mb-0">
@@ -1089,24 +937,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) e.target.classList.add('visible');
-          });
-        },
-        { threshold: 0.1 },
-      );
-      document.querySelectorAll('section').forEach((s) => observer.observe(s));
-      document.querySelectorAll('.navbar-nav .nav-link').forEach((link) => {
-        link.addEventListener('click', () => {
-          document
-            .querySelectorAll('.navbar-nav .nav-link')
-            .forEach((l) => l.classList.remove('active'));
-          link.classList.add('active');
-        });
-      });
-    </script>
+    <script src="assets/js/gv.js"></script>
   </body>
 </html>

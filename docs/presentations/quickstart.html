@@ -16,233 +16,9 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="assets/css/gv.css" />
     <style>
-      :root {
-        --p: #00bfff;
-        --pl: #4dcfff;
-        --a: #a855f7;
-        --ok: #22c55e;
-        --wn: #f59e0b;
-        --er: #ef4444;
-        --bg: #0a0e1a;
-        --bg2: #0f1525;
-        --card: #131a2e;
-        --br: #1e2a45;
-      }
-      * {
-        scroll-behavior: smooth;
-      }
-      body {
-        font-family: 'Inter', sans-serif;
-        background: var(--bg);
-        color: #e2e8f0;
-        overflow-x: hidden;
-      }
-      code,
-      .mono {
-        font-family: 'JetBrains Mono', monospace;
-      }
-      .nav-blur {
-        background: rgba(10, 14, 26, 0.85);
-        -webkit-backdrop-filter: blur(12px);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--br);
-        z-index: 1050;
-      }
-      .nav-blur .nav-link {
-        color: #94a3b8;
-        font-size: 0.82rem;
-        font-weight: 500;
-        padding: 0.5rem 0.7rem;
-        transition: 0.2s;
-        white-space: nowrap;
-      }
-      .nav-blur .nav-link:hover,
-      .nav-blur .nav-link.active {
-        color: var(--p);
-      }
-      .hero {
-        min-height: 70vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        padding: 8rem 1rem 4rem;
-      }
-      .hero::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background:
-          radial-gradient(ellipse at 30% 50%, rgba(0, 191, 255, 0.08), transparent 70%),
-          radial-gradient(ellipse at 70% 50%, rgba(168, 85, 247, 0.06), transparent 70%);
-        pointer-events: none;
-      }
-      .hero h1 {
-        font-size: 3.2rem;
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        line-height: 1.15;
-      }
-      .glow {
-        background: linear-gradient(135deg, var(--p), var(--a));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-      .hero .lead {
-        font-size: 1.15rem;
-        color: #94a3b8;
-        max-width: 720px;
-        margin: 1.5rem auto 0;
-      }
-      .section-card {
-        background: var(--card);
-        border: 1px solid var(--br);
-        border-radius: 16px;
-        padding: 1.75rem;
-        transition:
-          transform 0.3s,
-          box-shadow 0.3s;
-        position: relative;
-        overflow: hidden;
-      }
-      .section-card:hover {
-        transform: translateY(-3px);
-        box-shadow:
-          0 0 30px rgba(0, 191, 255, 0.08),
-          0 8px 40px rgba(0, 0, 0, 0.3);
-      }
-      .section-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, var(--p), var(--a));
-        opacity: 0;
-        transition: opacity 0.3s;
-      }
-      .section-card:hover::before {
-        opacity: 1;
-      }
-      .section-card .card-title {
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: #f1f5f9;
-        margin-bottom: 0.75rem;
-      }
-      .section-card .card-text {
-        color: #94a3b8;
-        font-size: 0.9rem;
-        line-height: 1.65;
-      }
-      .stat-n {
-        font-size: 2.4rem;
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        background: linear-gradient(135deg, var(--p), var(--pl));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        line-height: 1;
-      }
-      .stat-l {
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: #64748b;
-        margin-top: 0.25rem;
-      }
-      .badge-gv {
-        font-size: 0.7rem;
-        font-weight: 600;
-        padding: 0.3em 0.7em;
-        border-radius: 6px;
-        letter-spacing: 0.02em;
-      }
-      .badge-p {
-        background: rgba(0, 191, 255, 0.15);
-        color: var(--p);
-      }
-      .badge-a {
-        background: rgba(168, 85, 247, 0.15);
-        color: var(--a);
-      }
-      .badge-ok {
-        background: rgba(34, 197, 94, 0.15);
-        color: var(--ok);
-      }
-      .badge-wn {
-        background: rgba(245, 158, 11, 0.15);
-        color: var(--wn);
-      }
-      .badge-er {
-        background: rgba(239, 68, 68, 0.15);
-        color: var(--er);
-      }
-      section {
-        padding: 4rem 1rem;
-        max-width: 1400px;
-        margin: 0 auto;
-      }
-      .section-title {
-        text-align: center;
-        margin-bottom: 2.5rem;
-      }
-      .section-title h2 {
-        font-size: clamp(1.5rem, 3vw, 2.2rem);
-        font-weight: 800;
-      }
-      .section-title p {
-        color: #94a3b8;
-        max-width: 600px;
-        margin: 0 auto;
-      }
-      .fade-in {
-        opacity: 0;
-        transform: translateY(25px);
-        transition:
-          opacity 0.7s ease,
-          transform 0.7s ease;
-      }
-      .fade-in.visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      footer {
-        background: var(--bg2);
-        border-top: 1px solid var(--br);
-        padding: 2rem 0;
-        text-align: center;
-        color: #475569;
-        font-size: 0.85rem;
-      }
-      footer a {
-        color: var(--p);
-        text-decoration: none;
-      }
-      .cmd-block {
-        background: #0d1117;
-        border: 1px solid var(--br);
-        border-radius: 12px;
-        padding: 1.2rem;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.85rem;
-        color: #e6edf3;
-        overflow-x: auto;
-      }
-      .cmd-block .prompt {
-        color: var(--ok);
-      }
-      .cmd-block .comment {
-        color: #8b949e;
-        font-style: italic;
-      }
+      /* --- Estilos específicos de quickstart.html (complementan el design system) --- */
       .step-num {
         display: inline-flex;
         align-items: center;
@@ -271,90 +47,14 @@
         padding: 0.15em 0.5em;
         border-radius: 4px;
       }
-      .arch-layer {
-        background: var(--card);
-        border: 1px solid var(--br);
-        border-radius: 16px;
-        padding: 1rem 1.5rem;
-        margin-bottom: 0.8rem;
-        transition: all 0.3s ease;
-      }
-      .arch-layer:hover {
-        border-color: var(--p);
-        box-shadow: 0 0 30px rgba(0, 191, 255, 0.08);
-      }
-      .arch-layer .layer-name {
-        font-size: 0.72rem;
-        font-weight: 700;
-        color: var(--p);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        margin-bottom: 0.4rem;
-      }
-      .arch-layer .items {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-      }
-      .arch-layer .items span {
-        background: var(--bg2);
-        padding: 0.25em 0.7em;
-        border-radius: 6px;
-        font-size: 0.72rem;
-        color: #94a3b8;
-        border: 1px solid transparent;
-        transition: all 0.3s ease;
-      }
-      .arch-layer:hover .items span {
-        border-color: rgba(0, 191, 255, 0.2);
-        color: #f1f5f9;
-      }
-      .section-card h3 {
-        font-size: 1.05rem;
-        font-weight: 700;
-        margin-bottom: 0.6rem;
-      }
-      .section-card p {
-        font-size: 0.82rem;
-        color: #94a3b8;
-        line-height: 1.6;
-      }
-      .section-card .badge-tag {
-        display: inline-block;
-        background: rgba(0, 191, 255, 0.1);
-        color: var(--p);
-        padding: 0.2em 0.6em;
-        border-radius: 6px;
-        font-size: 0.68rem;
-        font-weight: 600;
-      }
-      .navbar-toggler {
-        border: 1px solid var(--br);
-        padding: 0.35rem 0.5rem;
-      }
-      .bi-list {
-        font-size: 1.5rem;
-      }
-      @media (max-width: 991.98px) {
-        .nav-blur .nav-link {
-          font-size: 0.75rem;
-          padding: 0.35rem 0.5rem;
-        }
-        .hero h1 {
-          font-size: 2.2rem;
-        }
-        .hero {
-          min-height: 50vh;
-          padding: 6rem 1rem 3rem;
-        }
-        .stat-n {
-          font-size: 1.8rem;
-        }
-      }
     </style>
     <script src="assets/js/i18n.js"></script>
   </head>
-  <body>
+  <body class="grain">
+    <div class="scroll-progress"></div>
+    <div class="aurora" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
     <nav class="navbar navbar-expand-xl nav-blur fixed-top">
       <div class="container-fluid px-3">
         <a class="navbar-brand text-light fw-bold mono" href="index.html" style="font-size: 0.85rem"
@@ -371,55 +71,84 @@
         <div class="collapse navbar-collapse" id="navMain">
           <ul class="navbar-nav ms-auto" style="max-height: 85vh; overflow-y: auto">
             <li class="nav-item">
-              <a class="nav-link" href="index.html"><i class="bi bi-house me-1"></i>Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="architecture.html"
-                ><i class="bi bi-diagram-3 me-1"></i>Arch</a
+              <a class="nav-link" href="index.html"
+                ><i class="bi bi-house me-1"></i><span data-i18n="nav_home">Home</span></a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="autonomy.html"><i class="bi bi-robot me-1"></i>Autonomy</a>
+              <a class="nav-link" href="architecture.html"
+                ><i class="bi bi-diagram-3 me-1"></i><span data-i18n="nav_arch">Arch</span></a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="autonomy.html"
+                ><i class="bi bi-robot me-1"></i><span data-i18n="nav_autonomy">Autonomy</span></a
+              >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="dashboard.html"
-                ><i class="bi bi-speedometer2 me-1"></i>Dashboard</a
+                ><i class="bi bi-speedometer2 me-1"></i
+                ><span data-i18n="nav_dashboard">Dashboard</span></a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link active" href="quickstart.html"
-                ><i class="bi bi-rocket-takeoff me-1"></i>Quickstart</a
+                ><i class="bi bi-rocket-takeoff me-1"></i
+                ><span data-i18n="nav_quickstart">Quickstart</span></a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="memory-knowledge.html"
-                ><i class="bi bi-brain me-1"></i>Memory</a
+                ><i class="bi bi-brain me-1"></i><span data-i18n="nav_memory">Memory</span></a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="security-governance.html"
-                ><i class="bi bi-shield-check me-1"></i>Security</a
+                ><i class="bi bi-shield-check me-1"></i
+                ><span data-i18n="nav_security">Security</span></a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="agents-pipeline.html"
-                ><i class="bi bi-diagram-2 me-1"></i>Agents</a
+                ><i class="bi bi-diagram-2 me-1"></i><span data-i18n="nav_agents">Agents</span></a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="operations-cloud.html"
-                ><i class="bi bi-cloud me-1"></i>Cloud</a
+                ><i class="bi bi-cloud me-1"></i><span data-i18n="nav_cloud">Cloud</span></a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="patterns-conventions.html"
-                ><i class="bi bi-file-code me-1"></i>Patterns</a
+                ><i class="bi bi-file-code me-1"></i
+                ><span data-i18n="nav_patterns">Patterns</span></a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="health.html"
-                ><i class="bi bi-heart-pulse me-1"></i>Health</a
+                ><i class="bi bi-heart-pulse me-1"></i><span data-i18n="nav_health">Health</span></a
               >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#diagrams"
+                ><i class="bi bi-images me-1"></i><span data-i18n="nav_diagrams">Diagrams</span></a
+              >
+            </li>
+            <li class="nav-item dropdown ms-1">
+              <a
+                class="nav-link dropdown-toggle py-1 px-2"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                title="Language"
+                ><i class="bi bi-translate"></i
+              ></a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><button class="dropdown-item" data-lang="en">🇬🇧 English</button></li>
+                <li><button class="dropdown-item" data-lang="es">🇪🇸 Español</button></li>
+                <li><button class="dropdown-item" data-lang="pt-BR">🇧🇷 Português</button></li>
+              </ul>
             </li>
           </ul>
         </div>
@@ -428,11 +157,7 @@
 
     <header class="hero">
       <div>
-        <span
-          class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2 rounded-pill mb-3 z-1"
-          style="font-size: 0.75rem"
-          >✦ SETUP GUIDE — v8.0.1</span
-        >
+        <span class="hero-badge mb-3">✦ SETUP GUIDE — v3.5.0</span>
         <h1
           class="display-1 fw-bold z-1"
           style="font-size: clamp(2.5rem, 6vw, 5rem); letter-spacing: -0.02em; line-height: 1.05"
@@ -444,8 +169,8 @@
           style="max-width: 650px; font-size: clamp(1rem, 2vw, 1.3rem)"
         >
           From zero to autonomous AI stack in under 2 minutes.
-          <strong class="text-light">34 pipeline steps</strong> ·
-          <strong class="text-light">65 lazy services</strong> ·
+          <strong class="text-light">101 pipeline steps</strong> ·
+          <strong class="text-light">70 lazy services</strong> ·
           <strong class="text-light">100% operational</strong>
         </p>
         <div class="d-flex flex-wrap gap-4 justify-content-center z-1 mt-3">
@@ -458,15 +183,15 @@
             <div class="stat-l">Required</div>
           </div>
           <div class="text-center">
-            <div class="stat-n">34</div>
+            <div class="stat-n">101</div>
             <div class="stat-l">Pipeline Steps</div>
           </div>
           <div class="text-center">
-            <div class="stat-n">65</div>
+            <div class="stat-n">70</div>
             <div class="stat-l">Lazy Steps</div>
           </div>
           <div class="text-center">
-            <div class="stat-n">82/82</div>
+            <div class="stat-n">112/112</div>
             <div class="stat-l">Health PASS</div>
           </div>
         </div>
@@ -547,7 +272,7 @@
       <div class="d-flex justify-content-center mt-3">
         <span
           class="badge bg-success bg-opacity-10 text-success p-2 border border-success border-opacity-25"
-          >✅ 34 steps OK — system ready</span
+          >✅ 101 steps OK — system ready</span
         >
       </div>
     </section>
@@ -577,17 +302,17 @@
                   >MANDATORY</span
                 >
               </td>
-              <td><span class="badge bg-success bg-opacity-10 text-success">34 steps OK</span></td>
+              <td><span class="badge bg-success bg-opacity-10 text-success">101 steps OK</span></td>
             </tr>
             <tr>
               <td><code>npm test</code></td>
               <td>Run all test suites</td>
-              <td><span class="badge bg-success bg-opacity-10 text-success">19/19 PASS</span></td>
+              <td><span class="badge bg-success bg-opacity-10 text-success">97 files PASS</span></td>
             </tr>
             <tr>
               <td><code>npm run watchtower:health</code></td>
               <td>Run health checks</td>
-              <td><span class="badge bg-success bg-opacity-10 text-success">82/82 PASS</span></td>
+              <td><span class="badge bg-success bg-opacity-10 text-success">112/112 PASS</span></td>
             </tr>
             <tr>
               <td><code>npx tsx src/auto-apply-safe.ts --check</code></td>
@@ -712,7 +437,7 @@
               <div class="d-flex align-items-start">
                 <span class="step-num">2</span>
                 <div>
-                  <strong>34 pipeline steps</strong> run in parallel (Phase 1)<br /><small
+                  <strong>101 pipeline steps</strong> run in parallel (Phase 1: 31)<br /><small
                     class="text-secondary"
                     >All core services initialize: tool detection, session manager, token budget,
                     engram, security, codegraph, DB</small
@@ -722,7 +447,7 @@
               <div class="d-flex align-items-start">
                 <span class="step-num">3</span>
                 <div>
-                  <strong>65 lazy steps</strong> start in background<br /><small
+                  <strong>70 lazy steps</strong> start in background<br /><small
                     class="text-secondary"
                     >Non-blocking services: dashboard WS, ML embeddings, checkpoint, audit, event
                     sourcing</small
@@ -734,7 +459,7 @@
                 <div>
                   <strong>All health checks</strong> verify system readiness<br /><small
                     class="text-secondary"
-                    >82 checks across 16 components — all must PASS</small
+                    >112 checks across 18 components — all must PASS</small
                   >
                 </div>
               </div>
@@ -788,25 +513,27 @@
       </div>
       <div class="arch-layer">
         <div class="layer-name">
-          <i class="bi bi-robot me-1"></i> Layer 2 — Agents (18 Specialized)
+          <i class="bi bi-robot me-1"></i> Layer 2 — Agents (21 Specialized)
         </div>
         <div class="items">
-          <span>Orchestrator</span><span>BA Explore</span><span>SAD Design</span
-          ><span>DEV Implement</span><span>QA Verify</span><span>GOV Compliance</span
-          ><span>OPS Deploy</span><span>DOC Docs</span><span>Audit</span><span>Session</span
-          ><span>Premortem</span><span>Adaptive Router</span><span class="new">SDD Apply</span
-          ><span class="new">SDD Explore</span>
+          <span>Orchestrator</span><span>BA (sdd-explore)</span><span>SAD (sdd-design)</span
+          ><span>DEV (sdd-apply)</span><span>QA (sdd-verify)</span><span>GOV Compliance</span
+          ><span>OPS Deploy</span><span>DOC Docs</span><span>Session</span><span>Premortem</span
+          ><span>Maintenance</span><span>Self-Diag</span><span>SIA</span><span>GitFlow</span
+          ><span>Knowledge</span><span>Mkt</span><span>Sales</span><span>Finance</span
+          ><span>HR</span><span>Legal</span><span class="new">Bus-Tele</span>
         </div>
       </div>
       <div class="arch-layer">
         <div class="layer-name">
-          <i class="bi bi-gear me-1"></i> Layer 3 — Pipeline (34 Steps + 65 Lazy)
+          <i class="bi bi-gear me-1"></i> Layer 3 — Pipeline (101 Steps + 70 Lazy)
         </div>
         <div class="items">
           <span>tool-detection</span><span>session-manager</span><span>token-budget</span
           ><span>karpathy-guidelines</span><span>codegraph-sync</span><span>security-orch</span
           ><span>db-init</span><span class="new">auto-apply-safe</span
-          ><span class="new">predictive-governor</span><span class="new">auto-norm-learner</span>
+          ><span class="new">predictive-governor</span><span class="new">auto-norm-learner</span
+          ><span class="new">+70 background</span>
         </div>
       </div>
       <div class="arch-layer">
@@ -814,20 +541,20 @@
           <i class="bi bi-memory me-1"></i> Layer 4 — Memory &amp; Knowledge
         </div>
         <div class="items">
-          <span>Engram (2219 obs)</span><span>CodeGraph (1410 nodes)</span
-          ><span>Graphify (23MB)</span><span>ML Embeddings</span><span>Nexus DB</span
+          <span>Engram (2078 obs)</span><span>CodeGraph (10663 nodes)</span
+          ><span>Graphify (18MB)</span><span>ML Embeddings</span><span>Nexus DB</span
           ><span>Knowledge Vault</span>
         </div>
       </div>
       <div class="arch-layer">
         <div class="layer-name">
-          <i class="bi bi-database me-1"></i> Layer 5 — Data (10 DAOs, 5 Migrations)
+          <i class="bi bi-database me-1"></i> Layer 5 — Data (11 Repos, 7 Migrations)
         </div>
         <div class="items">
           <span>MetricsRepo</span><span>SessionRepo</span><span>TraceRepo</span
           ><span>EventRepo</span><span>CacheRepo</span><span>SkillRepo</span
           ><span>ContractRepo</span><span>ErrorMemoryRepo</span><span>HousekeepingRepo</span
-          ><span>MigrationRunner</span>
+          ><span>BacklogRepo</span><span>MigrationRunner</span>
         </div>
       </div>
       <div class="arch-layer">
@@ -837,7 +564,7 @@
         <div class="items">
           <span>Auto-Apply Safe</span><span>Circuit Breaker</span><span>Auto-Escalation</span
           ><span>Dependency Graph</span><span>AB Testing</span><span>Session Scoring</span
-          ><span>Norms Learner</span><span>Watchtower 82/82</span>
+          ><span>Norms Learner</span><span>Watchtower 112/112</span>
         </div>
       </div>
     </section>
@@ -990,9 +717,54 @@
       </div>
     </section>
 
+    <!-- Diagramas -->
+    <section class="fade-in" id="diagrams">
+      <div class="section-title">
+        <div class="display-4 mb-2">🖼️</div>
+        <h2>Diagramas &amp; Visualizaciones</h2>
+        <p>
+          Arquitectura del stack — de lo simple a lo complejo. Pasa el cursor sobre los nodos para
+          explorar cada capa.
+        </p>
+      </div>
+      <div class="row g-3">
+        <div class="col-lg-6">
+          <div class="section-card">
+            <h3 class="mb-3"><i class="bi bi-stack text-info me-2"></i>Arquitectura en Capas</h3>
+            <img
+              src="diagrams/architecture-layers.svg"
+              alt="Architecture Layers Diagram"
+              class="svg-diagram img-fluid w-100"
+              loading="lazy"
+            />
+            <p class="text-secondary small mt-2 mb-0">
+              <i class="bi bi-info-circle me-1"></i>6 capas: Tools → Agents → Pipeline → Memory →
+              Data → Executive. <strong class="text-info">Hover en las capas</strong> para ver
+              detalles.
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="section-card">
+            <h3 class="mb-3"><i class="bi bi-diagram-2 text-info me-2"></i>Pipeline de Sesión</h3>
+            <img
+              src="diagrams/pipeline-flow.svg"
+              alt="Session Pipeline Flow"
+              class="svg-diagram img-fluid w-100"
+              loading="lazy"
+            />
+            <p class="text-secondary small mt-2 mb-0">
+              <i class="bi bi-info-circle me-1"></i>101 pasos habilitados: 31 Phase 1 paralelos +
+              70 lazy background en batches.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <footer>
       <p class="mb-2">
-        Gentle-Vanguard <strong>v8.0.1</strong> — 100% Autonomous AI Stack ·
+        Gentle-Vanguard <strong>v3.5.0</strong> — 100% Autonomous AI Stack ·
         <span class="text-secondary">✦ Plataforma Autónoma de Orquestración AI</span>
       </p>
       <p class="mb-2 d-flex flex-wrap justify-content-center gap-3">
@@ -1015,32 +787,32 @@
         <span
           class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1"
           style="font-size: 0.6rem"
-          >263 TS Files</span
+          >328 TS Files</span
         >
         <span
           class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1"
           style="font-size: 0.6rem"
-          >19/19 Tests</span
+          >97 Test Files</span
         >
         <span
           class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-2 py-1"
           style="font-size: 0.6rem"
-          >82/82 Health</span
+          >112/112 Health</span
         >
         <span
           class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-2 py-1"
           style="font-size: 0.6rem"
-          >10 DAOs</span
+          >11 Repos</span
         >
         <span
           class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1"
           style="font-size: 0.6rem"
-          >118 Skills</span
+          >170 Skills</span
         >
         <span
           class="badge bg-light bg-opacity-10 text-light border border-light border-opacity-25 px-2 py-1"
           style="font-size: 0.6rem"
-          >52 Normatives</span
+          >65 Normatives</span
         >
       </div>
       <p class="mt-2 mb-0">
@@ -1049,24 +821,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) e.target.classList.add('visible');
-          });
-        },
-        { threshold: 0.1 },
-      );
-      document.querySelectorAll('section, .fade-in').forEach((s) => observer.observe(s));
-      document.querySelectorAll('.navbar-nav .nav-link').forEach((link) => {
-        link.addEventListener('click', () => {
-          document
-            .querySelectorAll('.navbar-nav .nav-link')
-            .forEach((l) => l.classList.remove('active'));
-          link.classList.add('active');
-        });
-      });
-    </script>
+    <script src="assets/js/gv.js"></script>
   </body>
 </html>
