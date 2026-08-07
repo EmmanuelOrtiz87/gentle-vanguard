@@ -222,7 +222,7 @@ interface CloseSummary {
   cost_usd: number;
   model: string;
   provider: string;
-  source: 'nexus' | 'session-file' | 'metrics-store';
+  source: 'nexus' | 'token-ingest' | 'session-file' | 'metrics-store';
 }
 
 /** Read segmented token totals for a session from Nexus token_usage (source of truth). */
@@ -268,6 +268,27 @@ function readSessionFileTokens(): { input: number; output: number; total: number
   return { input: 0, output: 0, total: 0 };
 }
 
+/**
+ * Read the REAL totals written by the token-ingest daemon
+ * (.session/token-usage.json), keyed by the tool's own session id.
+ */
+function readIngestSessionTokens(): { input: number; output: number; cost: number; total: number } {
+  const fp = path.join(SESSION_DIR, 'token-usage.json');
+  try {
+    if (fs.existsSync(fp)) {
+      const data = JSON.parse(fs.readFileSync(fp, 'utf-8')) as Record<string, unknown>;
+      const input = Number(data.totalInputTokens ?? 0) || 0;
+      const output = Number(data.totalOutputTokens ?? 0) || 0;
+      const cost = Number(data.cost_usd ?? 0) || 0;
+      const total = Number(data.totalTokens ?? 0) || input + output;
+      return { input, output, cost, total };
+    }
+  } catch {
+    /* ignore */
+  }
+  return { input: 0, output: 0, cost: 0, total: 0 };
+}
+
 /** Read accumulated tokens from the JSON metrics store (.runtime/metrics.json). */
 function readMetricsStoreSessionTokens(sessionId: string): { tokens: number; cost: number } {
   const db = readDb();
@@ -283,8 +304,11 @@ function closeSession(sessionId: string): CloseSummary {
   const sessionFile = readSessionFileTokens();
   const nexus = readNexusSessionTokens(sessionId);
   const metricsStore = readMetricsStoreSessionTokens(sessionId);
+  const ingestFile = readIngestSessionTokens();
 
-  // Prefer Nexus (real per-message data); fall back to session file, then metrics store.
+  // Prefer Nexus (real per-message data); fall back to the token-ingest file
+  // (which carries the REAL totals keyed by the tool's own session id), then
+  // session file, then metrics store.
   let input = 0,
     output = 0,
     cost = 0;
@@ -295,6 +319,11 @@ function closeSession(sessionId: string): CloseSummary {
     output = nexus.completion;
     cost = nexus.cost;
     source = 'nexus';
+  } else if (ingestFile.total > 0) {
+    input = ingestFile.input;
+    output = ingestFile.output;
+    cost = ingestFile.cost;
+    source = 'token-ingest';
   } else if (sessionFile.total > 0) {
     input = sessionFile.input;
     output = sessionFile.output;
