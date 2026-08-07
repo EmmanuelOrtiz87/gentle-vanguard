@@ -164,26 +164,59 @@ function startCodeGraphServer(): Promise<void> {
     // Spawn `node <codegraph.js> serve --mcp` directly — no shell, no .cmd shim.
     // This keeps the PID file pointing at the real node process so the
     // watchtower can reliably detect it.
+    //
+    // CRITICAL: `serve --mcp` uses the stdio transport — it reads JSON-RPC
+    // messages from stdin and exits as soon as stdin hits EOF. Spawning with
+    // `stdio: ['ignore', ...]` (the old behaviour) closes stdin immediately,
+    // so the server exits right after boot. We must keep stdin as an OPEN PIPE
+    // and hold it from this parent process, which stays alive as the daemon.
     const child = spawn(
       process.execPath,
       jsEntry ? [jsEntry, 'serve', '--mcp', '--no-watch'] : ['codegraph', 'serve', '--mcp'],
       {
         detached: true,
-        stdio: ['ignore', 'pipe', 'pipe'],
+        stdio: ['pipe', 'pipe', 'pipe'],
         windowsHide: true,
         shell: !jsEntry, // only use shell as a last resort (PATH resolution)
       },
     );
 
-    // Write PID file
+    // Write PID file (the real codegraph node process, for watchtower checks)
     writeFileSync(PID_FILE, child.pid?.toString() || '');
+
+    // Keep the child's stdin open so the MCP server never sees EOF. As long as
+    // this parent process is alive, the pipe stays open and the server runs.
+    // We deliberately do NOT close child.stdin and do NOT unref+exit.
+    if (child.stdin) {
+      // Hold a reference so the pipe is never garbage-collected/closed.
+      child.stdin.on('error', () => {
+        /* ignore EPIPE when the child exits */
+      });
+    }
+
+    // When the codegraph child exits (e.g. killed by session close), this
+    // parent daemon should also exit so no orphan process is left behind.
+    child.on('exit', (code, signal) => {
+      log(`[CodeGraph] server exited (code=${code}, signal=${signal})`);
+      process.exit(0);
+    });
+
+    // Graceful shutdown: forward SIGTERM/SIGINT to the child, then exit.
+    const shutdown = () => {
+      try {
+        child.kill();
+      } catch {
+        /* already dead */
+      }
+      setTimeout(() => process.exit(0), 500);
+    };
+    process.on('SIGTERM', shutdown);
+    process.on('SIGINT', shutdown);
 
     // Give it time to start
     setTimeout(() => {
       if (child.pid) {
         log(`[OK] CodeGraph MCP server started (PID: ${child.pid})`);
-        // Unref so parent can exit
-        child.unref();
         if (isCodeGraphProcessAlive()) {
           log('[OK] CodeGraph MCP server process verified running');
         } else {
@@ -216,7 +249,10 @@ function startCodeGraphServer(): Promise<void> {
 async function main() {
   try {
     await startCodeGraphServer();
-    process.exit(0);
+    // Do NOT exit — this process is the daemon. It holds the child's stdin
+    // pipe open (keeping the MCP server alive) and exits when the child exits
+    // or when it receives SIGTERM/SIGINT from the session close orchestrator.
+    log('[OK] CodeGraph MCP daemon running (holding stdin open)');
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     log(`[FAIL] ${msg}`);

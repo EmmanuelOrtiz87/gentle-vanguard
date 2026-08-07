@@ -366,10 +366,13 @@ function phasePreValidate(): PhaseResult[] {
         detail: `${entries.length} total tracked files`,
       });
     } else {
+      // No registry file means no temp files were created this session — a
+      // clean state, not a skipped step. Report PASS so the close report is
+      // honest (no false SKIPs for a healthy condition).
       results.push({
         phase: 'temp-registry',
-        status: 'SKIP',
-        detail: 'No temp-file-registry.json found',
+        status: 'PASS',
+        detail: 'No temp files tracked — clean state',
       });
     }
   } catch (e: unknown) {
@@ -389,12 +392,22 @@ function phasePreValidate(): PhaseResult[] {
       tsIgnoreCount = 0;
 
     for (const file of tsFiles) {
+      // The close orchestrator/validator contain the detection strings themselves
+      // (e.g. `content.includes('TODO:')`); scanning them would self-match and
+      // produce false-positive SKIPs. Exclude the scanners from the scan.
+      if (file.includes('session-close-orchestrator') || file.includes('session-close-validator')) {
+        continue;
+      }
       const fullPath = join(ROOT, file);
       if (!existsSync(fullPath)) continue;
       const content = readFileSync(fullPath, 'utf-8');
-      if (content.includes('TODO:')) todoCount++;
-      if (content.includes('FIXME')) fixmeCount++;
-      if (content.includes('@ts-expect-error') || content.includes('@ts-ignore')) tsIgnoreCount++;
+      // Comment-aware detection: only count TODO/FIXME that appear in actual
+      // comments (not inside string literals such as the scanner's own code).
+      if (/\/\/\s*TODO:|(\/\*|\*)\s*TODO:/m.test(content)) todoCount++;
+      if (/\/\/\s*FIXME|(\/\*|\*)\s*FIXME/m.test(content)) fixmeCount++;
+      // Compiler directives (ts-expect-error / ts-ignore) are detected only as
+      // real annotations on their own line, not inside string literals.
+      if (/^\s*\/\/\s*@ts-(?:expect-error|ignore)/m.test(content)) tsIgnoreCount++;
     }
 
     if (todoCount > 0 || fixmeCount > 0 || tsIgnoreCount > 0) {
@@ -678,13 +691,50 @@ function phaseAudit(): PhaseResult[] {
 interface KillTarget {
   name: string;
   matcher: string;
+  /** Required daemons are started by session-autostart and MUST be running at close. */
+  required: boolean;
 }
 
 const KILL_TARGETS: KillTarget[] = [
-  { name: 'CodeGraph MCP', matcher: 'codegraph.*mcp' },
-  { name: 'Dashboard WS', matcher: 'websocket-server' },
-  { name: 'Timeout Daemon', matcher: 'timeout-monitor.*daemon' },
+  { name: 'CodeGraph MCP', matcher: 'codegraph.*mcp', required: true },
+  { name: 'Dashboard WS', matcher: 'websocket-server', required: false },
+  { name: 'Timeout Daemon', matcher: 'timeout-monitor.*daemon', required: true },
 ];
+
+/** True if at least one process (node/tsx) matches the command-line matcher. */
+function isProcessRunning(matcher: string): boolean {
+  const isWin = process.platform === 'win32';
+  try {
+    if (isWin) {
+      const psCmd = `@(@(Get-CimInstance Win32_Process -Filter "Name='node.exe' OR Name='tsx.exe'" | Where-Object { $_.CommandLine -match '${matcher}' -and $_.ProcessId -ne ${process.pid} -and $_.CommandLine -notmatch 'session-close-orchestrator' })).Count`;
+      const r = runSync('powershell', ['-NoProfile', '-Command', psCmd], {
+        timeout: 10000,
+        stdio: 'pipe',
+      });
+      const count = parseInt((r.stdout ?? '').trim(), 10);
+      return !isNaN(count) && count > 0;
+    }
+    const r = runSyncShell(`pgrep -f "${matcher}"`, { timeout: 5000 });
+    return r.status === 0;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Poll for a matching process to appear, up to timeoutMs. The daemons are
+ * started lazily by session-autostart and can still be booting if the session
+ * closes quickly, so we give them a short window before deciding they're down.
+ */
+function waitForProcess(matcher: string, timeoutMs: number): boolean {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    if (isProcessRunning(matcher)) return true;
+    // Synchronous ~500ms sleep (Atomics.wait on a shared buffer).
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 500);
+  }
+  return isProcessRunning(matcher);
+}
 
 function killProcessByCommandLine(matcher: string): boolean {
   const isWin = process.platform === 'win32';
@@ -721,20 +771,45 @@ function phaseCleanup(): PhaseResult[] {
   log('=== FASE 5: CLEANUP ===');
 
   // 5.1 Kill child processes (CodeGraph MCP, Dashboard WS, Timeout Daemon)
+  const DAEMON_WAIT_MS = 10000; // give lazy daemons time to finish booting
   for (const target of KILL_TARGETS) {
+    const phase = `kill-${target.name.toLowerCase().replace(/\s+/g, '-')}`;
     try {
-      const killed = killProcessByCommandLine(target.matcher);
-      results.push({
-        phase: `kill-${target.name.toLowerCase().replace(/\s+/g, '-')}`,
-        status: killed ? 'PASS' : 'SKIP',
-        detail: killed ? `${target.name} terminated` : `${target.name} not running`,
-      });
-      if (killed) ok(`${target.name} process killed`);
+      // Wait for the daemon to be up (it's started lazily at session start and
+      // may still be booting if the session closed quickly).
+      const appeared = waitForProcess(target.matcher, DAEMON_WAIT_MS);
+      if (appeared) {
+        const killed = killProcessByCommandLine(target.matcher);
+        results.push({
+          phase,
+          status: killed ? 'PASS' : 'FAIL',
+          detail: killed
+            ? `${target.name} terminated`
+            : `${target.name} found but could not be terminated`,
+        });
+        if (killed) ok(`${target.name} process killed`);
+      } else if (target.required) {
+        // A required daemon should have been running all session. Its absence
+        // is a real problem — surface it instead of hiding it as a SKIP.
+        results.push({
+          phase,
+          status: 'FAIL',
+          detail: `${target.name} was not running at session close (expected a running daemon)`,
+        });
+        warn(`${target.name} was not running at session close`);
+      } else {
+        // Optional daemon (e.g. Dashboard WS) legitimately not started.
+        results.push({
+          phase,
+          status: 'PASS',
+          detail: `${target.name} not running (optional, not started)`,
+        });
+      }
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : 'Unknown error';
       results.push({
-        phase: `kill-${target.name.toLowerCase().replace(/\s+/g, '-')}`,
-        status: 'SKIP',
+        phase,
+        status: 'FAIL',
         detail: msg,
       });
     }
@@ -799,10 +874,20 @@ function phaseCleanup(): PhaseResult[] {
         });
         ok(`Temp cleanup: removed ${cleanedCount} unregistered files`);
       } else {
-        results.push({ phase: 'temp-cleanup', status: 'SKIP', detail: 'No temp files to clean' });
+        // Clean state — nothing to remove. PASS, not SKIP.
+        results.push({
+          phase: 'temp-cleanup',
+          status: 'PASS',
+          detail: 'No temp files to clean — clean state',
+        });
       }
     } else {
-      results.push({ phase: 'temp-cleanup', status: 'SKIP', detail: 'No temp registry' });
+      // No registry file => no temp files were created this session. Clean.
+      results.push({
+        phase: 'temp-cleanup',
+        status: 'PASS',
+        detail: 'No temp registry — clean state',
+      });
     }
   } catch (e: unknown) {
     results.push({

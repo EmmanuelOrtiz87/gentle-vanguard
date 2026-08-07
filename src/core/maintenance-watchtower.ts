@@ -345,8 +345,9 @@ async function checkCodeGraph() {
 
   // CodeGraph is configured as an on-demand stdio MCP server in opencode.json
   // (command: "codegraph serve --mcp"). opencode spawns it lazily when its
-  // tools are used, so a persistent daemon is NOT the expected state. If the
-  // MCP config is present and enabled, that is a valid, healthy architecture.
+  // tools are used. HOWEVER, the stack ALSO runs a standalone warm daemon
+  // (codegraph-mcp-server-start.ts) that must be alive during the session.
+  // A config entry alone is NOT a healthy state — the daemon must be running.
   let mcpConfigured = false;
   try {
     const oc = readJson(join(ROOT, 'opencode.json'));
@@ -357,12 +358,15 @@ async function checkCodeGraph() {
     mcpConfigured = false;
   }
 
-  if (pidAlive || portOpen || procRunning || mcpConfigured) {
+  // The daemon is genuinely running only if a process is alive (PID file or
+  // process-table scan) or the MCP port is open. A bare config entry is not
+  // enough — it must be surfaced as a failure so a dead daemon is detected.
+  const daemonRunning = pidAlive || procRunning || portOpen;
+  if (daemonRunning) {
     const signals = [
       pidAlive ? pidDetail : '',
       portOpen ? `port ${CODEGRAPH_PORT} open` : '',
       procRunning ? 'process detected' : '',
-      mcpConfigured ? 'MCP server configured (on-demand)' : '',
     ].filter(Boolean);
     addResult('codegraph', 'server process', 'PASS', signals.join(', '), 'ok');
   } else {
@@ -370,7 +374,72 @@ async function checkCodeGraph() {
       'codegraph',
       'server process',
       'FAIL',
-      `${pidDetail}; port ${CODEGRAPH_PORT} closed; MCP not configured`,
+      `${pidDetail}; port ${CODEGRAPH_PORT} closed; daemon not running${
+        mcpConfigured ? ' (MCP configured but daemon down)' : ''
+      }`,
+      'restart',
+    );
+  }
+}
+
+// ─── Component: Timeout Daemon ────────────────────────────────────────────────
+
+async function checkTimeoutDaemon() {
+  if (!quiet) console.log('  [Timeout Daemon] Checking...');
+
+  // The timeout/performance monitor daemon is started by session-autostart
+  // (start-monitor-daemon.ts -> timeout-monitor.ts --daemon). It must be alive
+  // during the session. Check the PID file and the process table.
+  const pidFile = join(RUNTIME_DIR, 'monitor-daemon.pid');
+  let pidAlive = false;
+  let pidDetail = 'No PID file';
+  if (fileExists(pidFile)) {
+    const pid = parseInt(readFileSync(pidFile, 'utf-8').trim(), 10);
+    if (isNaN(pid)) {
+      pidDetail = 'PID file unreadable';
+    } else {
+      try {
+        process.kill(pid, 0);
+        pidAlive = true;
+        pidDetail = `PID ${pid} running`;
+      } catch {
+        pidDetail = `PID ${pid} not running`;
+      }
+    }
+  }
+
+  // Process-table scan as a second source of truth (the PID file can point at
+  // a dead cmd.exe wrapper while the real node process is still alive).
+  let procRunning = false;
+  try {
+    if (process.platform === 'win32') {
+      const psCmd = `@(@(Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -match 'timeout-monitor' -and $_.CommandLine -match '--daemon' })).Count`;
+      const r = runSync('powershell', ['-NoProfile', '-Command', psCmd], {
+        timeout: 15000,
+        stdio: 'pipe',
+      });
+      const count = parseInt((r.stdout ?? '').trim(), 10);
+      procRunning = !isNaN(count) && count > 0;
+    } else {
+      const r = runSync('ps', ['-ef'], { timeout: 15000 });
+      procRunning = /timeout-monitor.*--daemon/.test(r.stdout ?? '');
+    }
+  } catch {
+    procRunning = false;
+  }
+
+  if (pidAlive || procRunning) {
+    const signals = [
+      pidAlive ? pidDetail : '',
+      procRunning ? 'process detected' : '',
+    ].filter(Boolean);
+    addResult('timeout-daemon', 'daemon process', 'PASS', signals.join(', '), 'ok');
+  } else {
+    addResult(
+      'timeout-daemon',
+      'daemon process',
+      'FAIL',
+      `${pidDetail}; timeout-monitor daemon not running`,
       'restart',
     );
   }
@@ -1446,6 +1515,7 @@ async function runAllChecks() {
   const checks = [
     checkDashboardWs,
     checkCodeGraph,
+    checkTimeoutDaemon,
     checkMlEmbeddings,
     checkEngram,
     checkMcp,

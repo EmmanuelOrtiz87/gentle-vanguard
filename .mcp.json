@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "codegraph": {
+      "command": "codegraph",
+      "args": ["serve", "--mcp"],
+      "type": "stdio",
+      "description": "CodeGraph: indexed code intelligence and knowledge graph"
+    },
+    "engram": {
+      "command": "engram",
+      "args": ["mcp", "--tools=agent"],
+      "type": "stdio",
+      "description": "Engram: persistent memory across sessions"
+    },
+    "gentle-vanguard-skills": {
+      "command": "node",
+      "args": ["dist/scripts/mcp/skill-server.js"],
+      "type": "stdio",
+      "description": "143+ skills via MCP: list_skills, get_skill, search_skills"
+    }
+  }
+}
