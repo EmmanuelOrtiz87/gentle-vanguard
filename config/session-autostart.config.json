@@ -930,6 +930,16 @@
         "required": false,
         "phase": 90,
         "description": "Model provider health \u00e2\u20ac\u201d detecta errores de proveedor LLM (UnsupportedParamsError/Bedrock/Model not found) en opencode.log y auto-switch al modelo nativo"
+      },
+      {
+        "id": "token-ingest-init",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/token-ingest.ts",
+        "args": "--watch 30",
+        "required": false,
+        "phase": 90,
+        "description": "Token Ingest AGN\u00c3\u0093STICO \u00e2\u20ac\u201d lee los tokens reales de las sesiones persistidas por la herramienta en uso (opencode/claude/cursor) y los consolida en Nexus token_usage + session files + report observability. Corre cada 30s desde el inicio de sesi\u00c3\u00b3n hasta el cierre."
       }
     ],
     "onStepFailure": "continue",
