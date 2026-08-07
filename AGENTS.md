@@ -634,3 +634,42 @@ npx tsx src/auto-ps1-fixer-configs.ts
 | Referencias corregidas | 77+ en esta sesión               |
 | TS Files totales       | 231+                             |
 | Migration Waves        | 1-24 completadas                 |
+
+---
+
+## Token Tracking y Trazabilidad (Real y Agnóstico)
+
+El stack mide el consumo REAL de tokens de forma **agnóstica a la herramienta** (no depende de plugins de opencode/claude/cursor). Un daemon lee los datos de sesión que CADA herramienta persiste en disco y los consolida en Nexus.
+
+### Arquitectura
+
+- **`src/token-ingest.ts`** — daemon de ingesta agnóstica:
+  - Lee la DB de opencode (`~/.local/share/opencode/opencode.db`, tablas `session` y `message`).
+  - Extensible a otras herramientas (registry `detectSources()`: opencode/codex/claude/cursor).
+  - Escribe en Nexus: `token_usage` (por sesión), `token_transactions` (por mensaje, con agente orquestador/subagente), `token_savings` (cache + compresión).
+  - Actualiza `.session/token-usage.json`, `session-current.json` y `reports/stack-live-observability-latest.json`.
+- **`src/token-usage-reader.ts`** — fuente única de verdad: lee Nexus primero, luego el report, luego fallbacks.
+- **`src/token-metrics-store.ts`** — el close report lee tokens REALES (Nexus → token-ingest → session-file).
+
+### Comandos
+
+| Comando               | Descripción                                          |
+| --------------------- | ---------------------------------------------------- |
+| `npm run token:ingest`| Ingesta una pasada (--once)                          |
+| `npm run token:trace` | Report de trazabilidad (transacciones/agentes/ahorros) |
+| `npm run token:status`| Budget real: usado / presupuesto / %                  |
+
+### Ciclo de vida
+
+El lazy step `token-ingest-init` (`--watch 30`) en `config/session-autostart.config.json` arranca con la sesión y captura en vivo hasta el cierre.
+
+### Presupuestos (fuente única)
+
+`config/token-budget-guard.json` — daily **5M**, perSession **3M** (valores realistas vs ~1.5M/día real). `model-router.json` alineado.
+
+### Trazabilidad disponible
+
+- **Por transacción**: `token_transactions` (input/output/reasoning/cache/cost/model por mensaje).
+- **Por sesión**: `token_usage` (241 sesiones, 658M tokens históricos).
+- **Por agente**: orquestador (parent ROOT) vs subagentes (parent_id != ROOT), agrupados e individuales.
+- **Ahorros**: `token_savings` — cache reads (1.061M tokens) + compresión del stack (prompt/output/structural).
