@@ -128,9 +128,9 @@ function persistSession(root: string, state: State, sessionID: string): void {
 export const TokenTracker = async ({ directory }: { directory?: string }) => {
   // Root resolution: prefer the opencode-provided cwd, fall back to the repo
   // root derived from this plugin's own location (.opencode/plugins/ -> repo root).
-  const root =
-    directory ||
-    join(import.meta.dirname || __dirname || process.cwd(), "..", "..");
+  // NOTE: opencode runs plugins under Bun where import.meta.dirname is defined;
+  // do NOT reference __dirname here (the plugin is ESM and it would throw).
+  const root = directory || join(import.meta.dirname || process.cwd(), "..", "..");
 
   // Persist the in-memory state across message events (loaded once at startup).
   const state = loadState(root);
