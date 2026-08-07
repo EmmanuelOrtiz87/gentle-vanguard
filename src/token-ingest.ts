@@ -605,6 +605,21 @@ export async function watch(intervalSec = 30): Promise<void> {
 
 // ─── CLI ───────────────────────────────────────────────────────────────────────
 
+/** Detecta qué herramientas tienen datos de sesión disponibles (cobertura agnóstica). */
+export function detectSources(): Array<{ tool: string; status: string; path: string }> {
+  const h = process.env.USERPROFILE || process.env.HOME || '';
+  const out: Array<{ tool: string; status: string; path: string }> = [];
+  const oc = opencodeDbPath();
+  out.push({ tool: 'opencode', status: oc ? 'ACTIVE' : 'absent', path: oc ?? '' });
+  const codex = join(h, '.codex', 'sessions');
+  out.push({ tool: 'codex', status: existsSync(codex) ? 'present' : 'absent', path: codex });
+  const claude = join(h, '.claude', 'projects');
+  out.push({ tool: 'claude', status: existsSync(claude) ? 'present' : 'absent', path: claude });
+  const cursor = join(process.env.APPDATA || '', 'Cursor');
+  out.push({ tool: 'cursor', status: existsSync(cursor) ? 'present' : 'absent', path: cursor });
+  return out;
+}
+
 /** Reporte de trazabilidad: por sesión, por agente, costos y ahorros. */
 export function generateTraceabilityReport(): string {
   if (!existsSync(NEXUS_DB)) return 'Nexus DB no existe.';
@@ -647,6 +662,8 @@ export function generateTraceabilityReport(): string {
 
     const L = (n: number): string => (n ?? 0).toLocaleString();
     let out = `════════ TRACEABILITY REPORT ════════\n`;
+    const sources = detectSources();
+    out += `Fuentes detectadas: ${sources.map((s) => `${s.tool}=${s.status}`).join(' | ')}\n`;
     out += `Hoy (${dayStr}):\n`;
     for (const a of txnsToday) {
       out += `  [${a.agent}] transacciones=${a.n} in=${L(a.i)} out=${L(a.o)} cacheRead=${L(a.cacheR)} cost=$${(a.cost ?? 0).toFixed(4)}\n`;
