@@ -570,6 +570,16 @@ export function generateTraceabilityReport(): string {
       )
       .all() as Array<{ session_id: string; txns: number; i: number; o: number; cacheR: number; cost: number }>;
 
+    // Subagentes individuales (iteraciones de agentes hijos).
+    const subagents = db
+      .prepare(
+        `SELECT session_id, agent, COUNT(*) txns,
+                SUM(input_tokens) i, SUM(output_tokens) o, SUM(cost) cost
+         FROM token_transactions WHERE agent = 'subagent'
+         GROUP BY session_id ORDER BY o DESC LIMIT 10`,
+      )
+      .all() as Array<{ session_id: string; agent: string; txns: number; i: number; o: number; cost: number }>;
+
     const L = (n: number): string => (n ?? 0).toLocaleString();
     let out = `════════ TRACEABILITY REPORT ════════\n`;
     out += `Hoy (${dayStr}):\n`;
@@ -580,6 +590,12 @@ export function generateTraceabilityReport(): string {
     out += `\nTop sesiones por output:\n`;
     for (const s of perSession) {
       out += `  ${s.session_id?.slice(0, 18)} txns=${s.txns} in=${L(s.i)} out=${L(s.o)} cacheR=${L(s.cacheR)} cost=$${(s.cost ?? 0).toFixed(4)}\n`;
+    }
+    if (subagents.length > 0) {
+      out += `\nSubagentes (iteraciones individuales):\n`;
+      for (const a of subagents) {
+        out += `  ${a.session_id?.slice(0, 18)} txns=${a.txns} in=${L(a.i)} out=${L(a.o)} cost=$${(a.cost ?? 0).toFixed(4)}\n`;
+      }
     }
     return out;
   } finally {
