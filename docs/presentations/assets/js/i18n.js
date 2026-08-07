@@ -95,6 +95,23 @@
       sec_testing_infra: 'Testing Infrastructure',
       sec_ops_cmds: 'Operations Commands',
       sec_pipe_integ: 'Pipeline Integration',
+      /* Info tips (modal de la "i") */
+      info_kicker: 'More information',
+      info_title: 'About this feature',
+      info_hint: 'Press ESC or click outside to close',
+      tip_pipeline: 'Session autostart: 31 parallel Phase-1 steps + 70 lazy background steps launched in batches of 5. Includes tool detection, token budget, Karpathy guidelines, codegraph sync, security orchestration and DB init.',
+      tip_engram: 'Persistent memory with automatic sync, SHA256 integrity checks and compaction. Currently holding 2,078 observations across 369 sessions. Survives across sessions and compactions.',
+      tip_codegraph: 'SQLite knowledge graph for symbol intelligence. 10,663 nodes and 21,746 edges across 677 files with sub-millisecond symbol queries.',
+      tip_dashboard: 'React + TypeScript + Vite observability SPA. WebSocket real-time updates every 5s with HTTP polling fallback, 7 dashboard sections, i18n in 3 languages and 8 alert rules.',
+      tip_circuit: '3-state circuit breaker (CLOSED / OPEN / HALF_OPEN). 5 failures open the circuit, 2 successes recover it. Prevents cascading failures across the stack.',
+      tip_autoapply: 'Executive engine that follows trigger → evaluate (≥80% confidence) → apply → verify → rollback. Maximum 5 auto-applies per day with rollback if degradation exceeds 15%.',
+      tip_depgraph: 'Dynamically discovers component relationships from the pipeline config, replacing the hardcoded dependency map. Self-maintaining architecture.',
+      tip_escalation: '3-tier escalation: warning (3 failures) → critical (5) → emergency (10). Every escalation is recorded with full audit trail in the findings ledger.',
+      tip_abtest: 'Statistical A/B testing framework: createExperiment, assignVariant, evaluateExperiment with automatic rollback on statistical degradation.',
+      tip_scoring: 'Per-session quality scoring tracking delegations, corrections and proactive hits. Automatic comparison, regression detection above 15% and anomaly alerts.',
+      tip_watchtower: 'Central health orchestrator: 112 checks across 18 components with Promise.allSettled parallel execution and auto-heal modes (health, rebuild, autoheal, report, continuous).',
+      tip_nexus: 'Operational SQLite database (WAL mode, FK ON) with 11 repositories, 7 migrations and 21 tables. Auto-init, auto-prune, auto-backup and watchtower monitoring.',
+      tip_layers: 'The stack is organized in 6 layers: Tools (10 IDEs) → Agents (21 specialized) → Pipeline (101 enabled steps) → Memory & Knowledge → Data (11 repos) → Executive systems.',
       section_overview: 'Overview',
       section_architecture: 'Architecture',
       section_metrics: 'Metrics',
@@ -222,6 +239,23 @@
       sec_testing_infra: 'Infraestructura de Testing',
       sec_ops_cmds: 'Comandos de Operaciones',
       sec_pipe_integ: 'Integración de Pipeline',
+      /* Info tips (modal de la "i") */
+      info_kicker: 'Más información',
+      info_title: 'Acerca de esta función',
+      info_hint: 'Pulsa ESC o haz clic fuera para cerrar',
+      tip_pipeline: 'Autostart de sesión: 31 pasos Phase-1 en paralelo + 70 pasos lazy en background lanzados en lotes de 5. Incluye detección de herramientas, presupuesto de tokens, guías Karpathy, sync de codegraph, orquestación de seguridad e init de BD.',
+      tip_engram: 'Memoria persistente con sincronización automática, checks de integridad SHA256 y compactación. Actualmente con 2,078 observaciones en 369 sesiones. Sobrevive entre sesiones y compactaciones.',
+      tip_codegraph: 'Grafo de conocimiento SQLite para inteligencia de símbolos. 10,663 nodos y 21,746 aristas en 677 archivos con consultas de símbolos en menos de un milisegundo.',
+      tip_dashboard: 'SPA de observabilidad React + TypeScript + Vite. WebSocket con actualizaciones en tiempo real cada 5s con fallback de polling HTTP, 7 secciones del dashboard, i18n en 3 idiomas y 8 reglas de alerta.',
+      tip_circuit: 'Circuit breaker de 3 estados (CLOSED / OPEN / HALF_OPEN). 5 fallos abren el circuito, 2 éxitos lo recuperan. Previene fallos en cascada en todo el stack.',
+      tip_autoapply: 'Motor ejecutivo que sigue trigger → evaluar (confianza ≥80%) → aplicar → verificar → rollback. Máximo 5 auto-aplicaciones por día con rollback si la degradación supera el 15%.',
+      tip_depgraph: 'Descubre dinámicamente las relaciones entre componentes desde la config del pipeline, reemplazando el mapa de dependencias hardcodeado. Arquitectura auto-mantenible.',
+      tip_escalation: 'Escalación de 3 niveles: advertencia (3 fallos) → crítico (5) → emergencia (10). Cada escalación queda registrada con trazabilidad completa en el ledger de hallazgos.',
+      tip_abtest: 'Framework estadístico de A/B testing: createExperiment, assignVariant, evaluateExperiment con rollback automático ante degradación estadística.',
+      tip_scoring: 'Scoring de calidad por sesión que rastrea delegaciones, correcciones y aciertos proactivos. Comparación automática, detección de regresión mayor al 15% y alertas de anomalías.',
+      tip_watchtower: 'Orquestador central de salud: 112 checks en 18 componentes con ejecución paralela Promise.allSettled y modos de auto-healing (health, rebuild, autoheal, report, continuous).',
+      tip_nexus: 'Base de datos operacional SQLite (modo WAL, FK ON) con 11 repositorios, 7 migraciones y 21 tablas. Auto-init, auto-prune, auto-backup y monitoreo por watchtower.',
+      tip_layers: 'El stack se organiza en 6 capas: Tools (10 IDEs) → Agents (21 especializados) → Pipeline (101 pasos habilitados) → Memoria y Conocimiento → Datos (11 repos) → Sistemas ejecutivos.',
       section_overview: 'Resumen',
       section_architecture: 'Arquitectura',
       section_metrics: 'Métricas',
@@ -349,6 +383,23 @@
       sec_testing_infra: 'Infraestrutura de Testes',
       sec_ops_cmds: 'Comandos de Operações',
       sec_pipe_integ: 'Integração de Pipeline',
+      /* Info tips (modal da "i") */
+      info_kicker: 'Mais informações',
+      info_title: 'Sobre este recurso',
+      info_hint: 'Pressione ESC ou clique fora para fechar',
+      tip_pipeline: 'Autostart de sessão: 31 passos Phase-1 em paralelo + 70 passos lazy em background lançados em lotes de 5. Inclui detecção de ferramentas, orçamento de tokens, guias Karpathy, sync de codegraph, orquestração de segurança e init de BD.',
+      tip_engram: 'Memória persistente com sincronização automática, checks de integridade SHA256 e compactação. Atualmente com 2.078 observações em 369 sessões. Sobrevive entre sessões e compactações.',
+      tip_codegraph: 'Grafo de conhecimento SQLite para inteligência de símbolos. 10.663 nós e 21.746 arestas em 677 arquivos com consultas de símbolos em menos de um milissegundo.',
+      tip_dashboard: 'SPA de observabilidade React + TypeScript + Vite. WebSocket com atualizações em tempo real a cada 5s com fallback de polling HTTP, 7 seções do dashboard, i18n em 3 idiomas e 8 regras de alerta.',
+      tip_circuit: 'Circuit breaker de 3 estados (CLOSED / OPEN / HALF_OPEN). 5 falhas abrem o circuito, 2 sucessos o recuperam. Previne falhas em cascata em toda a stack.',
+      tip_autoapply: 'Motor executivo que segue trigger → avaliar (confiança ≥80%) → aplicar → verificar → rollback. Máximo 5 auto-aplicações por dia com rollback se a degradação ultrapassar 15%.',
+      tip_depgraph: 'Descobre dinamicamente as relações entre componentes a partir da config do pipeline, substituindo o mapa de dependências hardcoded. Arquitetura auto-mantida.',
+      tip_escalation: 'Escalação de 3 níveis: aviso (3 falhas) → crítico (5) → emergência (10). Cada escalação fica registrada com rastreabilidade completa no ledger de descobertas.',
+      tip_abtest: 'Framework estatístico de A/B testing: createExperiment, assignVariant, evaluateExperiment com rollback automático diante de degradação estatística.',
+      tip_scoring: 'Scoring de qualidade por sessão que rastreia delegações, correções e acertos proativos. Comparação automática, detecção de regressão acima de 15% e alertas de anomalias.',
+      tip_watchtower: 'Orquestrador central de saúde: 112 checks em 18 componentes com execução paralela Promise.allSettled e modos de auto-healing (health, rebuild, autoheal, report, continuous).',
+      tip_nexus: 'Banco de dados operacional SQLite (modo WAL, FK ON) com 11 repositórios, 7 migrações e 21 tabelas. Auto-init, auto-prune, auto-backup e monitoramento por watchtower.',
+      tip_layers: 'A stack se organiza em 6 camadas: Tools (10 IDEs) → Agents (21 especializados) → Pipeline (101 passos habilitados) → Memória e Conhecimento → Dados (11 repos) → Sistemas executivos.',
       section_overview: 'Visão Geral',
       section_architecture: 'Arquitetura',
       section_metrics: 'Métricas',
@@ -399,7 +450,11 @@
   const STORAGE_KEY = 'gv-lang';
 
   function getCurrentLang() {
-    return localStorage.getItem(STORAGE_KEY) || 'en';
+    try {
+      return localStorage.getItem(STORAGE_KEY) || 'en';
+    } catch (e) {
+      return 'en';
+    }
   }
 
   const FLAGS = { en: '🇬🇧', es: '🇪🇸', 'pt-BR': '🇧🇷' };
@@ -407,36 +462,38 @@
 
   function translate(lang) {
     const dict = DICT[lang] || DICT.en;
+    // Mezclar diccionario de contenido externo (i18n-content.js) si existe
+    const contentDict = window.__GV_CONTENT && window.__GV_CONTENT[lang]
+      ? window.__GV_CONTENT[lang]
+      : {};
+    const merged = Object.assign({}, DICT.en, contentDict, dict);
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
       const key = el.getAttribute('data-i18n');
-      if (dict[key] !== undefined) {
-        el.textContent = dict[key];
+      if (merged[key] !== undefined) {
+        el.textContent = merged[key];
+      }
+    });
+    // Traducir atributos title de elementos con data-i18n-title
+    document.querySelectorAll('[data-i18n-title]').forEach(function (el) {
+      const key = el.getAttribute('data-i18n-title');
+      if (merged[key] !== undefined) {
+        el.setAttribute('title', merged[key]);
       }
     });
     document.documentElement.setAttribute('lang', lang);
-    localStorage.setItem(STORAGE_KEY, lang);
-    // Update active state on language buttons (Bootstrap dropdown + custom menu)
+    try {
+      localStorage.setItem(STORAGE_KEY, lang);
+    } catch (e) {
+      /* localStorage no disponible (file:// o modo restringido) */
+    }
+    // Update active state on language buttons (segmented control)
     document.querySelectorAll('[data-lang]').forEach(function (btn) {
       const isActive = btn.getAttribute('data-lang') === lang;
       btn.classList.toggle('active', isActive);
-      const check = btn.querySelector('.lang-check');
-      if (check) check.textContent = isActive ? '✓' : '';
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      const code = btn.querySelector('.lang-code');
+      if (code) code.textContent = LANG_SHORT[btn.getAttribute('data-lang')];
     });
-    // Update visible language button (flag + short name)
-    const langBtn = document.querySelector('.lang-btn');
-    if (langBtn) {
-      const flag = langBtn.querySelector('.lang-flag');
-      const name = langBtn.querySelector('.lang-name');
-      const chevron = langBtn.querySelector('.lang-chevron');
-      if (flag) flag.textContent = FLAGS[lang] || '🌐';
-      if (name) name.textContent = LANG_SHORT[lang] || lang;
-      if (!chevron) {
-        const c = document.createElement('span');
-        c.className = 'lang-chevron';
-        c.textContent = '▼';
-        langBtn.appendChild(c);
-      }
-    }
     // Dispatch event for other scripts
     document.dispatchEvent(new CustomEvent('langchange', { detail: { lang: lang } }));
   }
@@ -454,57 +511,7 @@
         if (DICT[lang]) {
           translate(lang);
         }
-        closeLangMenu();
-        // Close Bootstrap dropdown
-        var dropdown = btn.closest('.dropdown-menu');
-        if (dropdown) {
-          var toggle = dropdown.previousElementSibling;
-          if (toggle && toggle.getAttribute('data-bs-toggle') === 'dropdown') {
-            var bsDropdown =
-              bootstrap && bootstrap.Dropdown && bootstrap.Dropdown.getInstance(toggle);
-            if (bsDropdown) bsDropdown.hide();
-          }
-        }
-        return;
       }
-      // Toggle custom language menu
-      var toggleBtn = e.target.closest('.lang-btn');
-      if (toggleBtn) {
-        e.preventDefault();
-        e.stopPropagation();
-        var menu = document.getElementById(toggleBtn.getAttribute('aria-controls'));
-        if (menu) {
-          var isOpen = menu.classList.contains('open');
-          closeLangMenu();
-          if (!isOpen) {
-            // Posicionar el menú cerca del botón (fixed para no ser recortado por overflow del navbar)
-            var r = toggleBtn.getBoundingClientRect();
-            var menuW = menu.offsetWidth || 190;
-            var menuH = menu.offsetHeight || 140;
-            var left = Math.min(r.left, window.innerWidth - menuW - 12);
-            var top = r.bottom + 8;
-            if (top + menuH > window.innerHeight) top = Math.max(8, r.top - menuH - 8);
-            menu.style.left = Math.max(8, left) + 'px';
-            menu.style.top = top + 'px';
-            menu.classList.add('open');
-            toggleBtn.setAttribute('aria-expanded', 'true');
-          }
-        }
-        return;
-      }
-      closeLangMenu();
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closeLangMenu();
-    });
-  }
-
-  function closeLangMenu() {
-    document.querySelectorAll('.lang-menu.open').forEach(function (m) {
-      m.classList.remove('open');
-    });
-    document.querySelectorAll('.lang-btn[aria-expanded="true"]').forEach(function (b) {
-      b.setAttribute('aria-expanded', 'false');
     });
   }
 
@@ -516,5 +523,16 @@
   }
 
   // Expose for debugging
-  window.__i18n = { DICT: DICT, translate: translate, getCurrentLang: getCurrentLang };
+  window.__i18n = {
+    DICT: DICT,
+    getDict: function (lang) {
+      const current = lang || getCurrentLang();
+      const contentDict = window.__GV_CONTENT && window.__GV_CONTENT[current]
+        ? window.__GV_CONTENT[current]
+        : {};
+      return Object.assign({}, DICT.en, contentDict, DICT[current] || {});
+    },
+    translate: translate,
+    getCurrentLang: getCurrentLang,
+  };
 })();

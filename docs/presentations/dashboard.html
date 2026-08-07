@@ -17,7 +17,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/css/gv.css" />
+    <link rel="stylesheet" href="assets/css/gv.css?v=2.1" />
     <style>
       /* --- Clases específicas de dashboard.html (no presentes en gv.css) --- */
       .section-card .card-title {
@@ -86,7 +86,8 @@
         transition: width 1s ease;
       }
     </style>
-    <script src="assets/js/i18n.js"></script>
+    <script src="assets/js/i18n-content.js?v=2.1"></script>
+<script src="assets/js/i18n.js?v=2.1"></script>
   </head>
   <body class="grain">
     <div class="scroll-progress"></div>
@@ -167,22 +168,14 @@
                 ><i class="bi bi-heart-pulse me-1"></i><span data-i18n="nav_health">Health</span></a
               >
             </li>
-                        <li class="nav-item ms-1">
-              <div class="lang-wrap">
-                <button class="lang-btn" id="langBtn" type="button" aria-expanded="false" aria-controls="langMenu" aria-haspopup="true">
-                  <span class="lang-flag">🌐</span><span class="lang-name">EN</span>
-                </button>
-                <div class="lang-menu" id="langMenu" role="menu">
-                  <button type="button" role="menuitem" data-lang="en"><span class="lang-flag">🇬🇧</span> English<span class="lang-check"></span></button>
-                  <button type="button" role="menuitem" data-lang="es"><span class="lang-flag">🇪🇸</span> Español<span class="lang-check"></span></button>
-                  <button type="button" role="menuitem" data-lang="pt-BR"><span class="lang-flag">🇧🇷</span> Português<span class="lang-check"></span></button>
-                </div>
+                                    <li class="nav-item ms-2">
+              <div class="lang-seg" role="group" aria-label="Language">
+                <button type="button" data-lang="en" aria-pressed="false"><span class="lang-flag">🇬🇧</span><span class="lang-code">EN</span></button>
+                <button type="button" data-lang="es" aria-pressed="false"><span class="lang-flag">🇪🇸</span><span class="lang-code">ES</span></button>
+                <button type="button" data-lang="pt-BR" aria-pressed="false"><span class="lang-flag">🇧🇷</span><span class="lang-code">PT</span></button>
               </div>
             </li>
-                <li><button class="dropdown-item" data-lang="es">🇪🇸 Español</button></li>
-                <li><button class="dropdown-item" data-lang="pt-BR">🇧🇷 Português</button></li>
-              </ul>
-            </li>
+                
           </ul>
         </div>
       </div>
@@ -192,7 +185,7 @@
       <div>
         <span class="hero-badge mb-3">✦ v3.5.0 — LLM Observability</span>
         <h1><span class="glow">Observability Dashboard</span></h1>
-        <p class="lead">
+        <p class="lead" data-i18n="c_dashboard_2">
           Real-time WebSocket-powered SPA with 7 sections, 25+ REST endpoints, i18n (en/es/pt-BR),
           resilient HTTP polling fallback, and auto-recovery watchdog — all driven by live trace
           data, zero mocks.
@@ -309,7 +302,7 @@
           <div class="section-card h-100">
             <i class="bi bi-speedometer2" style="color: var(--p); font-size: 1.3rem"></i>
             <div class="card-title mt-1">Metrics Dashboard</div>
-            <p class="card-text small">
+            <p class="card-text small" data-i18n="c_dashboard_3">
               Real-time token usage, latency P50/P95/P99, session counts, health status
             </p>
           </div>
@@ -318,7 +311,7 @@
           <div class="section-card h-100">
             <i class="bi bi-diagram-2" style="color: var(--a); font-size: 1.3rem"></i>
             <div class="card-title mt-1">Tracing Dashboard</div>
-            <p class="card-text small">
+            <p class="card-text small" data-i18n="c_dashboard_4">
               Waterfall view with span details, drill-down, and user feedback collection
             </p>
           </div>
@@ -327,7 +320,7 @@
           <div class="section-card h-100">
             <i class="bi bi-exclamation-triangle" style="color: var(--wn); font-size: 1.3rem"></i>
             <div class="card-title mt-1">Alerts Panel</div>
-            <p class="card-text small">
+            <p class="card-text small" data-i18n="c_dashboard_5">
               8 alert rules evaluated in real-time, color-coded severity levels
             </p>
           </div>
@@ -336,7 +329,7 @@
           <div class="section-card h-100">
             <i class="bi bi-brain" style="color: var(--ok); font-size: 1.3rem"></i>
             <div class="card-title mt-1">Knowledge Panel</div>
-            <p class="card-text small">
+            <p class="card-text small" data-i18n="c_dashboard_6">
               Engram memory browser with full-text search across observations
             </p>
           </div>
@@ -345,21 +338,21 @@
           <div class="section-card h-100">
             <i class="bi bi-folder2-open" style="color: var(--p); font-size: 1.3rem"></i>
             <div class="card-title mt-1">Multi-Repo Panel</div>
-            <p class="card-text small">Cross-workspace context awareness and navigation</p>
+            <p class="card-text small" data-i18n="c_dashboard_7">Cross-workspace context awareness and navigation</p>
           </div>
         </div>
         <div class="col-md-4 mt-3">
           <div class="section-card h-100">
             <i class="bi bi-hdd-network" style="color: var(--a); font-size: 1.3rem"></i>
             <div class="card-title mt-1">MCP Panel</div>
-            <p class="card-text small">Model Context Protocol server status and health</p>
+            <p class="card-text small" data-i18n="c_dashboard_8">Model Context Protocol server status and health</p>
           </div>
         </div>
         <div class="col-md-4 mt-3">
           <div class="section-card h-100">
             <i class="bi bi-people" style="color: var(--wn); font-size: 1.3rem"></i>
             <div class="card-title mt-1">Tenant Panel</div>
-            <p class="card-text small">Multi-tenant configuration and isolation management</p>
+            <p class="card-text small" data-i18n="c_dashboard_9">Multi-tenant configuration and isolation management</p>
           </div>
         </div>
       </div>
@@ -474,26 +467,26 @@
           <div class="section-card h-100">
             <span class="badge badge-er mb-2">error_rate &gt; 5%</span>
             <div class="progress-gv mb-2"><div class="progress-bar" style="width: 5%"></div></div>
-            <small style="color: #64748b">Threshold: 5% error rate triggers critical alert</small>
+            <small style="color: #64748b" data-i18n="c_dashboard_10">Threshold: 5% error rate triggers critical alert</small>
           </div>
         </div>
         <div class="col-md-6">
           <div class="section-card h-100">
             <span class="badge badge-wn mb-2">latency_p95 &gt; 2000ms</span>
             <div class="progress-gv mb-2"><div class="progress-bar" style="width: 65%"></div></div>
-            <small style="color: #64748b">Threshold: P95 latency exceeds 2 seconds</small>
+            <small style="color: #64748b" data-i18n="c_dashboard_11">Threshold: P95 latency exceeds 2 seconds</small>
           </div>
         </div>
         <div class="col-md-4 mt-3">
           <div class="section-card h-100">
             <span class="badge badge-er mb-2">health_ok &lt; 100%</span>
-            <p class="card-text small">Any component not reporting 100% health</p>
+            <p class="card-text small" data-i18n="c_dashboard_12">Any component not reporting 100% health</p>
           </div>
         </div>
         <div class="col-md-4 mt-3">
           <div class="section-card h-100">
             <span class="badge badge-wn mb-2">throughput drop</span>
-            <p class="card-text small">Sudden drop in request throughput</p>
+            <p class="card-text small" data-i18n="c_dashboard_13">Sudden drop in request throughput</p>
           </div>
         </div>
         <div class="col-md-4 mt-3">
@@ -635,7 +628,7 @@
             <code class="mono" style="font-size: 0.75rem; word-break: break-all"
               >npm run dashboard:dev</code
             >
-            <p class="card-text small mt-2">Vite + WS proxy (port 5173)</p>
+            <p class="card-text small mt-2" data-i18n="c_dashboard_14">Vite + WS proxy (port 5173)</p>
           </div>
         </div>
         <div class="col-md-4">
@@ -645,7 +638,7 @@
             <code class="mono" style="font-size: 0.75rem; word-break: break-all"
               >npm run dashboard:server</code
             >
-            <p class="card-text small mt-2">WebSocket + HTTP server (port 8080)</p>
+            <p class="card-text small mt-2" data-i18n="c_dashboard_15">WebSocket + HTTP server (port 8080)</p>
           </div>
         </div>
         <div class="col-md-4">
@@ -655,7 +648,7 @@
             <code class="mono" style="font-size: 0.75rem; word-break: break-all"
               >npm run dashboard:build</code
             >
-            <p class="card-text small mt-2">Bundle production dashboard</p>
+            <p class="card-text small mt-2" data-i18n="c_dashboard_16">Bundle production dashboard</p>
           </div>
         </div>
       </div>
@@ -693,7 +686,7 @@
             </div>
             <div class="stat-l">Components Responding</div>
             <div class="progress-gv mt-3"><div class="progress-bar" style="width: 100%"></div></div>
-            <small class="d-block mt-1" style="color: var(--ok)">All 7 components report ok</small>
+            <small class="d-block mt-1" data-i18n="c_dashboard_17" style="color: var(--ok)">All 7 components report ok</small>
           </div>
         </div>
       </div>
@@ -704,7 +697,7 @@
       <div class="section-title">
         <div class="display-4 mb-2">🖼️</div>
         <h2 data-i18n="sec_diagrams">Diagramas &amp; Visualizaciones</h2>
-        <p>Arquitectura del dashboard de observabilidad — WS + REST, 7 secciones, i18n, alertas</p>
+        <p data-i18n="c_dashboard_18">Arquitectura del dashboard de observabilidad — WS + REST, 7 secciones, i18n, alertas</p>
       </div>
       <div class="d-flex justify-content-center">
         <div class="col-lg-10">
@@ -777,6 +770,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/gv.js"></script>
+    <script src="assets/js/gv.js?v=2.1"></script>
   </body>
 </html>

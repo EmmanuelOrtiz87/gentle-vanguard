@@ -259,6 +259,82 @@
     });
   }
 
+  /* --- 9c. Info modal (click en la "i" → modal con detalle) ---------------------- */
+  function initInfoModal() {
+    var triggers = document.querySelectorAll('.info-trigger');
+    if (!triggers.length) return;
+
+    var overlay = document.createElement('div');
+    overlay.className = 'gv-info-modal';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.innerHTML =
+      '<div class="gv-info-backdrop"></div>' +
+      '<div class="gv-info-box" role="document">' +
+      '<button class="gv-info-close" aria-label="Close">✕</button>' +
+      '<div class="gv-info-head">' +
+      '<span class="gv-info-ico" aria-hidden="true">i</span>' +
+      '<div class="gv-info-titles">' +
+      '<div class="gv-info-kicker" data-i18n="info_kicker">More information</div>' +
+      '<div class="gv-info-title" data-i18n="info_title">About this feature</div>' +
+      '</div>' +
+      '</div>' +
+      '<div class="gv-info-body"></div>' +
+      '<div class="gv-info-foot">' +
+      '<span data-i18n="info_hint">Press ESC or click outside to close</span>' +
+      '</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    var box = overlay.querySelector('.gv-info-box');
+    var body = overlay.querySelector('.gv-info-body');
+
+    function close() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function resolveText(trigger) {
+      var key = trigger.getAttribute('data-i18n-title');
+      if (key) {
+        var dict = window.__i18n && window.__i18n.getDict
+          ? window.__i18n.getDict()
+          : null;
+        if (dict && dict[key] !== undefined) return dict[key];
+      }
+      // Fallback: atributo title real (inyectado en el HTML) o aria-label
+      return trigger.getAttribute('title') || trigger.getAttribute('aria-label') || '';
+    }
+
+    triggers.forEach(function (trigger) {
+      trigger.style.cursor = 'pointer';
+      trigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        body.textContent = resolveText(trigger);
+        // Re-traducir el encabezado al idioma actual
+        if (window.__i18n && window.__i18n.translate) {
+          window.__i18n.translate(window.__i18n.getCurrentLang());
+        }
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay || e.target.classList.contains('gv-info-backdrop')) close();
+    });
+    overlay.querySelector('.gv-info-close').addEventListener('click', close);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') close();
+    });
+
+    // Cerrar al cambiar idioma (el contenido se refresca)
+    document.addEventListener('langchange', function () {
+      if (overlay.classList.contains('open')) close();
+    });
+  }
+
   /* --- 10. Init all ---------------------------------------------------------- */
   function init() {
     initNavbar();
@@ -271,6 +347,7 @@
     initTyping();
     initActiveNav();
     initDiagramModal();
+    initInfoModal();
   }
 
   if (document.readyState === 'loading') {

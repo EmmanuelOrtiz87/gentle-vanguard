@@ -1,4 +1,4 @@
-﻿<!doctype html>
+﻿﻿<!doctype html>
 <html lang="es" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8" />
@@ -16,7 +16,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/css/gv.css" />
+    <link rel="stylesheet" href="assets/css/gv.css?v=2.1" />
     <style>
       /* --- Estilos específicos de index.html (complementan el design system) --- */
       .book-card {
@@ -121,7 +121,8 @@
         transform: translateY(-3px);
       }
     </style>
-    <script src="assets/js/i18n.js"></script>
+    <script src="assets/js/i18n-content.js?v=2.1"></script>
+<script src="assets/js/i18n.js?v=2.1"></script>
   </head>
   <body class="grain">
     <div class="scroll-progress"></div>
@@ -207,22 +208,14 @@
                 ><i class="bi bi-images me-1"></i><span data-i18n="nav_diagrams">Diagrams</span></a
               >
             </li>
-                        <li class="nav-item ms-1">
-              <div class="lang-wrap">
-                <button class="lang-btn" id="langBtn" type="button" aria-expanded="false" aria-controls="langMenu" aria-haspopup="true">
-                  <span class="lang-flag">🌐</span><span class="lang-name">EN</span>
-                </button>
-                <div class="lang-menu" id="langMenu" role="menu">
-                  <button type="button" role="menuitem" data-lang="en"><span class="lang-flag">🇬🇧</span> English<span class="lang-check"></span></button>
-                  <button type="button" role="menuitem" data-lang="es"><span class="lang-flag">🇪🇸</span> Español<span class="lang-check"></span></button>
-                  <button type="button" role="menuitem" data-lang="pt-BR"><span class="lang-flag">🇧🇷</span> Português<span class="lang-check"></span></button>
-                </div>
+                                    <li class="nav-item ms-2">
+              <div class="lang-seg" role="group" aria-label="Language">
+                <button type="button" data-lang="en" aria-pressed="false"><span class="lang-flag">🇬🇧</span><span class="lang-code">EN</span></button>
+                <button type="button" data-lang="es" aria-pressed="false"><span class="lang-flag">🇪🇸</span><span class="lang-code">ES</span></button>
+                <button type="button" data-lang="pt-BR" aria-pressed="false"><span class="lang-flag">🇧🇷</span><span class="lang-code">PT</span></button>
               </div>
             </li>
-                <li><button class="dropdown-item" data-lang="es">🇪🇸 Español</button></li>
-                <li><button class="dropdown-item" data-lang="pt-BR">🇧🇷 Português</button></li>
-              </ul>
-            </li>
+                
           </ul>
         </div>
       </div>
@@ -283,7 +276,7 @@
       <div class="section-title">
         <div class="display-4 mb-2">🏗️</div>
         <h2 data-i18n="sec_architecture">System Architecture</h2>
-        <p>6-layer architecture — every layer purpose-built for autonomous operation</p>
+        <p data-i18n="c_index_2">6-layer architecture — every layer purpose-built for autonomous operation</p>
       </div>
       <div class="arch-layer">
         <div class="layer-name">
@@ -366,18 +359,18 @@
       <div class="section-title">
         <div class="display-4 mb-2">🧩</div>
         <h2 data-i18n="sec_components">Stack Components</h2>
-        <p>20+ subsystems powering full autonomous lifecycle</p>
+        <p data-i18n="c_index_3">20+ subsystems powering full autonomous lifecycle</p>
       </div>
       <div class="row g-3">
         <div class="col-md-6 col-lg-4">
           <div class="section-card">
             <div class="icon">⚙️</div>
             <h3>
-              Session Pipeline<span class="info-trigger" title="34 steps, 65 lazy, parallel exec"
+              Session Pipeline<span class="info-trigger" data-i18n-title="tip_pipeline" title="Session autostart: 31 parallel Phase-1 steps + 70 lazy background steps launched in batches of 5. Includes tool detection, token budget, Karpathy guidelines, codegraph sync, security orchestration and DB init."
                 >i</span
               >
             </h3>
-            <p>
+            <p data-i18n="c_index_4">
               34-step autostart with parallel Phase 1, 65 lazy background steps, auto-apply
               integration
             </p>
@@ -388,11 +381,11 @@
           <div class="section-card">
             <div class="icon">🧠</div>
             <h3>
-              Engram Memory<span class="info-trigger" title="2078 obs, auto-sync, integrity SHA256"
+              Engram Memory<span class="info-trigger" data-i18n-title="tip_engram" title="Persistent memory with automatic sync, SHA256 integrity checks and compaction. Currently holding 2,078 observations across 369 sessions. Survives across sessions and compactions."
                 >i</span
               >
             </h3>
-            <p>Persistent memory with auto-sync, integrity checks, compaction. 2078 observations</p>
+            <p data-i18n="c_index_5">Persistent memory with auto-sync, integrity checks, compaction. 2078 observations</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
@@ -400,19 +393,19 @@
           <div class="section-card">
             <div class="icon">🔗</div>
             <h3>
-              CodeGraph<span class="info-trigger" title="SQLite knowledge graph, sub-ms reads"
+              CodeGraph<span class="info-trigger" data-i18n-title="tip_codegraph" title="SQLite knowledge graph for symbol intelligence. 10,663 nodes and 21,746 edges across 677 files with sub-millisecond symbol queries."
                 >i</span
               >
             </h3>
-            <p>Knowledge graph: 10,663 nodes, 21,746 edges, sub-millisecond symbol queries</p>
+            <p data-i18n="c_index_6">Knowledge graph: 10,663 nodes, 21,746 edges, sub-millisecond symbol queries</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="section-card">
             <div class="icon">📊</div>
-            <h3>Dashboard<span class="info-trigger" title="React/Vite, WS+HTTP, i18n">i</span></h3>
-            <p>React+TypeScript observability with WebSocket, 25+ REST endpoints, 8 alert rules</p>
+            <h3>Dashboard<span class="info-trigger" data-i18n-title="tip_dashboard" title="React + TypeScript + Vite observability SPA. WebSocket real-time updates every 5s with HTTP polling fallback, 7 dashboard sections, i18n in 3 languages and 8 alert rules.">i</span></h3>
+            <p data-i18n="c_index_7">React+TypeScript observability with WebSocket, 25+ REST endpoints, 8 alert rules</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
@@ -420,9 +413,9 @@
           <div class="section-card">
             <div class="icon">🔒</div>
             <h3>
-              Circuit Breaker<span class="info-trigger" title="Prevents cascading failures">i</span>
+              Circuit Breaker<span class="info-trigger" data-i18n-title="tip_circuit" title="3-state circuit breaker (CLOSED / OPEN / HALF_OPEN). 5 failures open the circuit, 2 successes recover it. Prevents cascading failures across the stack.">i</span>
             </h3>
-            <p>3-state (CLOSED/OPEN/HALF_OPEN), auto-reset, stale timeout recovery</p>
+            <p data-i18n="c_index_8">3-state (CLOSED/OPEN/HALF_OPEN), auto-reset, stale timeout recovery</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
@@ -430,11 +423,11 @@
           <div class="section-card">
             <div class="icon">🤖</div>
             <h3>
-              Auto-Apply Safe<span class="info-trigger" title="Executive engine with rollback"
+              Auto-Apply Safe<span class="info-trigger" data-i18n-title="tip_autoapply" title="Executive engine that follows trigger -&gt; evaluate (=80% confidence) -&gt; apply -&gt; verify -&gt; rollback. Maximum 5 auto-applies per day with rollback if degradation exceeds 15%."
                 >i</span
               >
             </h3>
-            <p>Executive engine: trigger→apply→verify→rollback. Reads 3 trigger sources</p>
+            <p data-i18n="c_index_9">Executive engine: trigger→apply→verify→rollback. Reads 3 trigger sources</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
@@ -442,11 +435,11 @@
           <div class="section-card">
             <div class="icon">🔍</div>
             <h3>
-              Dependency Graph<span class="info-trigger" title="Dynamic discovery from config"
+              Dependency Graph<span class="info-trigger" data-i18n-title="tip_depgraph" title="Dynamically discovers component relationships from the pipeline config, replacing the hardcoded dependency map. Self-maintaining architecture."
                 >i</span
               >
             </h3>
-            <p>
+            <p data-i18n="c_index_10">
               Auto-discovers component relationships from pipeline config, replaces hardcoded map
             </p>
             <span class="badge-tag ok">Active</span>
@@ -456,11 +449,11 @@
           <div class="section-card">
             <div class="icon">🚨</div>
             <h3>
-              Auto-Escalation<span class="info-trigger" title="3-level: warning→critical→emergency"
+              Auto-Escalation<span class="info-trigger" data-i18n-title="tip_escalation" title="3-tier escalation: warning (3 failures) -&gt; critical (5) -&gt; emergency (10). Every escalation is recorded with full audit trail in the findings ledger."
                 >i</span
               >
             </h3>
-            <p>3-tier escalation (3→5→10 failures) with audit trail and findings ledger</p>
+            <p data-i18n="c_index_11">3-tier escalation (3→5→10 failures) with audit trail and findings ledger</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
@@ -468,9 +461,9 @@
           <div class="section-card">
             <div class="icon">📋</div>
             <h3>
-              AB Testing<span class="info-trigger" title="Statistical experiment framework">i</span>
+              AB Testing<span class="info-trigger" data-i18n-title="tip_abtest" title="Statistical A/B testing framework: createExperiment, assignVariant, evaluateExperiment with automatic rollback on statistical degradation.">i</span>
             </h3>
-            <p>createExperiment, assignVariant, evaluateExperiment, auto-rollback on degradation</p>
+            <p data-i18n="c_index_12">createExperiment, assignVariant, evaluateExperiment, auto-rollback on degradation</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
@@ -478,9 +471,9 @@
           <div class="section-card">
             <div class="icon">🔄</div>
             <h3>
-              Session Scoring<span class="info-trigger" title="Quality scoring per session">i</span>
+              Session Scoring<span class="info-trigger" data-i18n-title="tip_scoring" title="Per-session quality scoring tracking delegations, corrections and proactive hits. Automatic comparison, regression detection above 15% and anomaly alerts.">i</span>
             </h3>
-            <p>Auto-compare scores, detect regression >15%, anomaly detection</p>
+            <p data-i18n="c_index_13">Auto-compare scores, detect regression >15%, anomaly detection</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
@@ -488,17 +481,17 @@
           <div class="section-card">
             <div class="icon">⚡</div>
             <h3>
-              Watchtower v2<span class="info-trigger" title="Parallel 112 checks, auto-heal">i</span>
+              Watchtower v2<span class="info-trigger" data-i18n-title="tip_watchtower" title="Central health orchestrator: 112 checks across 18 components with Promise.allSettled parallel execution and auto-heal modes (health, rebuild, autoheal, report, continuous).">i</span>
             </h3>
-            <p>112 checks across 18 components. Promise.allSettled parallel exec. Auto-heal modes</p>
+            <p data-i18n="c_index_14">112 checks across 18 components. Promise.allSettled parallel exec. Auto-heal modes</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="section-card">
             <div class="icon">💾</div>
-            <h3>Nexus DB<span class="info-trigger" title="SQLite with 11 repos">i</span></h3>
-            <p>SQLite WAL mode, 7 migrations, 21 tables, 11 repos. Cache LRU, WAL auto-checkpoint &gt;1MB</p>
+            <h3>Nexus DB<span class="info-trigger" data-i18n-title="tip_nexus" title="Operational SQLite database (WAL mode, FK ON) with 11 repositories, 7 migrations and 21 tables. Auto-init, auto-prune, auto-backup and watchtower monitoring.">i</span></h3>
+            <p data-i18n="c_index_15">SQLite WAL mode, 7 migrations, 21 tables, 11 repos. Cache LRU, WAL auto-checkpoint &gt;1MB</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
@@ -510,7 +503,7 @@
       <div class="section-title">
         <div class="display-4 mb-2">🤖</div>
         <h2 data-i18n="sec_autonomous">Autonomous Systems</h2>
-        <p>Self-learning, self-healing, self-evolving — 100% autonomous operation</p>
+        <p data-i18n="c_index_16">Self-learning, self-healing, self-evolving — 100% autonomous operation</p>
       </div>
       <div class="row g-4">
         <div class="col-lg-6">
@@ -542,7 +535,7 @@
                 >↩ Rollback (if >15%)</span
               >
             </div>
-            <p class="mb-0 text-secondary small">
+            <p class="mb-0 text-secondary small" data-i18n="c_index_17">
               3 trigger sources: predictive-governor (budget), skill-evolution (deprecation),
               auto-norm-learner (norms)
             </p>
@@ -564,7 +557,7 @@
                 >🔒 Threshold ≥80%</span
               >
             </div>
-            <p class="mb-0 mt-2 text-secondary small">
+            <p class="mb-0 mt-2 text-secondary small" data-i18n="c_index_18">
               Max 5 auto-applies/day. Rollback si degradación >15%. System stability check before
               apply.
             </p>
@@ -578,13 +571,13 @@
       <div class="section-title">
         <div class="display-4 mb-2">💾</div>
         <h2 data-i18n="sec_data_layer">Data Layer</h2>
-        <p>DatabaseManager refactored from 1066→250 lines into modular repositories</p>
+        <p data-i18n="c_index_19">DatabaseManager refactored from 1066→250 lines into modular repositories</p>
       </div>
       <div class="row g-3">
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
             <h3><i class="bi bi-graph-up text-info me-1"></i> MetricsRepo</h3>
-            <p class="small text-secondary mb-0">
+            <p class="small text-secondary mb-0" data-i18n="c_index_20">
               metric_snapshots CRUD — time-series token/latency/health data every 30s
             </p>
           </div>
@@ -592,7 +585,7 @@
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
             <h3><i class="bi bi-people text-info me-1"></i> SessionRepo</h3>
-            <p class="small text-secondary mb-0">
+            <p class="small text-secondary mb-0" data-i18n="c_index_21">
               sessions + session_scoring — upsert, active queries, quality scoring
             </p>
           </div>
@@ -600,7 +593,7 @@
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
             <h3><i class="bi bi-activity text-info me-1"></i> TraceRepo</h3>
-            <p class="small text-secondary mb-0">
+            <p class="small text-secondary mb-0" data-i18n="c_index_22">
               traces + feedback — waterfall, latency stats, thumbs up/down
             </p>
           </div>
@@ -608,7 +601,7 @@
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
             <h3><i class="bi bi-megaphone text-info me-1"></i> EventRepo</h3>
-            <p class="small text-secondary mb-0">
+            <p class="small text-secondary mb-0" data-i18n="c_index_23">
               events + alerts — append-only event sourcing, alert rules
             </p>
           </div>
@@ -616,7 +609,7 @@
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
             <h3><i class="bi bi-database text-info me-1"></i> CacheRepo</h3>
-            <p class="small text-secondary mb-0">
+            <p class="small text-secondary mb-0" data-i18n="c_index_24">
               response_cache + semantic cache — SHA256 + embedding, TTL-aware
             </p>
           </div>
@@ -624,7 +617,7 @@
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
             <h3><i class="bi bi-tools text-info me-1"></i> SkillRepo</h3>
-            <p class="small text-secondary mb-0">
+            <p class="small text-secondary mb-0" data-i18n="c_index_25">
               skill_usage, token_usage, routing_rules — usage tracking
             </p>
           </div>
@@ -632,7 +625,7 @@
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
             <h3><i class="bi bi-file-check text-info me-1"></i> ContractRepo</h3>
-            <p class="small text-secondary mb-0">
+            <p class="small text-secondary mb-0" data-i18n="c_index_26">
               contract_results — SDD contract validation persistence
             </p>
           </div>
@@ -640,7 +633,7 @@
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
             <h3><i class="bi bi-bug text-info me-1"></i> ErrorMemoryRepo</h3>
-            <p class="small text-secondary mb-0">
+            <p class="small text-secondary mb-0" data-i18n="c_index_27">
               error_memory + embeddings — bug tracking with vector search
             </p>
           </div>
@@ -648,7 +641,7 @@
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
             <h3><i class="bi bi-brush text-info me-1"></i> HousekeepingRepo</h3>
-            <p class="small text-secondary mb-0">
+            <p class="small text-secondary mb-0" data-i18n="c_index_28">
               pruneAll, housekeeping, vacuum — WAL checkpoint >1MB auto
             </p>
           </div>
@@ -673,102 +666,102 @@
       <div class="section-title">
         <div class="display-4 mb-2">⚙️</div>
         <h2 data-i18n="sec_executive">Executive Systems</h2>
-        <p>12 autonomous subsystems powering the self-evolving stack</p>
+        <p data-i18n="c_index_29">12 autonomous subsystems powering the self-evolving stack</p>
       </div>
       <div class="row g-3">
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">🤖</div>
-            <h3>Auto-Apply Safe</h3>
-            <p>trigger→apply→verify→rollback. Max 5/day. Rollback on >15% degradation</p>
+            <h3 data-i18n="c_index_30">Auto-Apply Safe</h3>
+            <p data-i18n="c_index_31">trigger→apply→verify→rollback. Max 5/day. Rollback on >15% degradation</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">⚡</div>
-            <h3>Circuit Breaker</h3>
-            <p>3-state CLOSED/OPEN/HALF_OPEN. 5 failures→OPEN, 2 successes→CLOSED</p>
+            <h3 data-i18n="c_index_32">Circuit Breaker</h3>
+            <p data-i18n="c_index_33">3-state CLOSED/OPEN/HALF_OPEN. 5 failures→OPEN, 2 successes→CLOSED</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">📈</div>
-            <h3>Auto-Escalation</h3>
-            <p>3-tier: warning(3)→critical(5)→emergency(10). Audit trail + findings ledger</p>
+            <h3 data-i18n="c_index_34">Auto-Escalation</h3>
+            <p data-i18n="c_index_35">3-tier: warning(3)→critical(5)→emergency(10). Audit trail + findings ledger</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">🔗</div>
-            <h3>Dependency Graph</h3>
-            <p>Auto-discovers relationships from pipeline config. Dynamic, no hardcoded map</p>
+            <h3 data-i18n="c_index_36">Dependency Graph</h3>
+            <p data-i18n="c_index_37">Auto-discovers relationships from pipeline config. Dynamic, no hardcoded map</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">🧪</div>
-            <h3>AB Testing</h3>
-            <p>createExperiment→assign→evaluate. Auto-rollback on statistical degradation</p>
+            <h3 data-i18n="c_index_38">AB Testing</h3>
+            <p data-i18n="c_index_39">createExperiment→assign→evaluate. Auto-rollback on statistical degradation</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">📊</div>
-            <h3>Session Scoring</h3>
-            <p>Quality scoring per session. Anomaly detection. >15% regression alert</p>
+            <h3 data-i18n="c_index_40">Session Scoring</h3>
+            <p data-i18n="c_index_41">Quality scoring per session. Anomaly detection. >15% regression alert</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">🧠</div>
-            <h3>Norms Learner</h3>
-            <p>Auto-discovers patterns. Writes LEARNED-NORMS.md. Adaptive evolution</p>
+            <h3 data-i18n="c_index_42">Norms Learner</h3>
+            <p data-i18n="c_index_43">Auto-discovers patterns. Writes LEARNED-NORMS.md. Adaptive evolution</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">🏗️</div>
-            <h3>Watchtower</h3>
-            <p>82 checks × 18 components. Promise.allSettled. Auto-heal modes</p>
+            <h3 data-i18n="c_index_44">Watchtower</h3>
+            <p data-i18n="c_index_45">82 checks × 18 components. Promise.allSettled. Auto-heal modes</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">🔒</div>
-            <h3>Security Orchestrator</h3>
-            <p>Pre-input scanning, audit pipeline, policy enforcement, guardrails</p>
+            <h3 data-i18n="c_index_46">Security Orchestrator</h3>
+            <p data-i18n="c_index_47">Pre-input scanning, audit pipeline, policy enforcement, guardrails</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">💾</div>
-            <h3>State Persistence</h3>
-            <p>Checkpoints, snapshots, rollback. Dry-run validation. Auto-create</p>
+            <h3 data-i18n="c_index_48">State Persistence</h3>
+            <p data-i18n="c_index_49">Checkpoints, snapshots, rollback. Dry-run validation. Auto-create</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">📡</div>
-            <h3>Distributed Tracing</h3>
-            <p>Span-based tracing. OTLP export. JSONL spans in .telemetry/</p>
+            <h3 data-i18n="c_index_50">Distributed Tracing</h3>
+            <p data-i18n="c_index_51">Span-based tracing. OTLP export. JSONL spans in .telemetry/</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">☁️</div>
-            <h3>Cloud Connectors</h3>
-            <p>Hybrid AWS/Azure routing. Cost/latency/load aware. Circuit breaker</p>
+            <h3 data-i18n="c_index_52">Cloud Connectors</h3>
+            <p data-i18n="c_index_53">Hybrid AWS/Azure routing. Cost/latency/load aware. Circuit breaker</p>
             <span class="badge-tag ok">Active</span>
           </div>
         </div>
@@ -792,7 +785,7 @@
       <div class="section-title">
         <div class="display-4 mb-2">📋</div>
         <h2 data-i18n="sec_feature_matrix">Feature Matrix</h2>
-        <p>Complete inventory of stack capabilities — 40+ features across 8 categories</p>
+        <p data-i18n="c_index_54">Complete inventory of stack capabilities — 40+ features across 8 categories</p>
       </div>
       <div class="table-responsive">
         <table class="feature-table">
@@ -810,7 +803,7 @@
                 6-Layer Stack
                 <span
                   class="info-trigger"
-                  title="Tools → Agents → Pipeline → Memory → Data → Executive"
+                  data-i18n-title="tip_layers"
                   >i</span
                 >
               </td>
@@ -818,192 +811,192 @@
             </tr>
             <tr>
               <td><span class="text-info">Architecture</span></td>
-              <td>11 Repos (11 Repos + MigrationRunner)</td>
+              <td data-i18n="c_index_55">11 Repos (11 Repos + MigrationRunner)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-info">Architecture</span></td>
-              <td>7 DB Migrations / 21 Tables (WAL mode, FK ON)</td>
+              <td data-i18n="c_index_56">7 DB Migrations / 21 Tables (WAL mode, FK ON)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-info">Architecture</span></td>
-              <td>6-Layer Design (scalable, decoupled)</td>
+              <td data-i18n="c_index_57">6-Layer Design (scalable, decoupled)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-warning">Pipeline</span></td>
-              <td>31 Phase-1 Steps (parallel exec)</td>
+              <td data-i18n="c_index_58">31 Phase-1 Steps (parallel exec)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-warning">Pipeline</span></td>
-              <td>70 Lazy Background Tasks</td>
+              <td data-i18n="c_index_59">70 Lazy Background Tasks</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-warning">Pipeline</span></td>
-              <td>Parallel Execution (Promise.allSettled)</td>
+              <td data-i18n="c_index_60">Parallel Execution (Promise.allSettled)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-primary">Autonomous</span></td>
-              <td>Auto-Apply Safe (executive engine)</td>
+              <td data-i18n="c_index_61">Auto-Apply Safe (executive engine)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-primary">Autonomous</span></td>
-              <td>Circuit Breaker (3-state, auto-reset)</td>
+              <td data-i18n="c_index_62">Circuit Breaker (3-state, auto-reset)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-primary">Autonomous</span></td>
-              <td>Auto-Escalation (3-tier)</td>
+              <td data-i18n="c_index_63">Auto-Escalation (3-tier)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-primary">Autonomous</span></td>
-              <td>Dynamic Dependency Graph</td>
+              <td data-i18n="c_index_64">Dynamic Dependency Graph</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-primary">Autonomous</span></td>
-              <td>AB Testing Framework</td>
+              <td data-i18n="c_index_65">AB Testing Framework</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-primary">Autonomous</span></td>
-              <td>Session Scoring (quality + anomaly)</td>
+              <td data-i18n="c_index_66">Session Scoring (quality + anomaly)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-primary">Autonomous</span></td>
-              <td>Norms Learner (adaptive evolution)</td>
+              <td data-i18n="c_index_67">Norms Learner (adaptive evolution)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-info">Memory</span></td>
-              <td>Engram (2078 obs, auto-sync)</td>
+              <td data-i18n="c_index_68">Engram (2078 obs, auto-sync)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-info">Memory</span></td>
-              <td>CodeGraph (10,663 nodes, 21,746 edges)</td>
+              <td data-i18n="c_index_69">CodeGraph (10,663 nodes, 21,746 edges)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-info">Memory</span></td>
-              <td>Graphify (18MB knowledge graph)</td>
+              <td data-i18n="c_index_70">Graphify (18MB knowledge graph)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-info">Memory</span></td>
-              <td>Nexus DB (SQLite WAL, 21 tables)</td>
+              <td data-i18n="c_index_71">Nexus DB (SQLite WAL, 21 tables)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-info">Memory</span></td>
-              <td>ML Embeddings (vector index)</td>
+              <td data-i18n="c_index_72">ML Embeddings (vector index)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-danger">Security</span></td>
-              <td>Security Orchestrator</td>
+              <td data-i18n="c_index_73">Security Orchestrator</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-danger">Security</span></td>
-              <td>Audit Pipeline (JSONL, query, archive)</td>
+              <td data-i18n="c_index_74">Audit Pipeline (JSONL, query, archive)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-danger">Security</span></td>
-              <td>Governance (policies, rules enforcement)</td>
+              <td data-i18n="c_index_75">Governance (policies, rules enforcement)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-danger">Security</span></td>
-              <td>Guardrails (pre-input validation)</td>
+              <td data-i18n="c_index_76">Guardrails (pre-input validation)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-danger">Security</span></td>
-              <td>65 Normatives (rules + policies)</td>
+              <td data-i18n="c_index_77">65 Normatives (rules + policies)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-success">Dashboard</span></td>
-              <td>Real-time WebSocket (5s broadcast)</td>
+              <td data-i18n="c_index_78">Real-time WebSocket (5s broadcast)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-success">Dashboard</span></td>
-              <td>HTTP Fallback (resilient polling)</td>
+              <td data-i18n="c_index_79">HTTP Fallback (resilient polling)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-success">Dashboard</span></td>
-              <td>7 Dashboard Sections</td>
+              <td data-i18n="c_index_80">7 Dashboard Sections</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-success">Dashboard</span></td>
-              <td>i18n (en/es/pt-BR)</td>
+              <td data-i18n="c_index_81">i18n (en/es/pt-BR)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-success">Dashboard</span></td>
-              <td>8 Alert Rules (auto-eval)</td>
+              <td data-i18n="c_index_82">8 Alert Rules (auto-eval)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-secondary">Operations</span></td>
-              <td>CI/CD Pipeline (6 jobs + 3 security)</td>
+              <td data-i18n="c_index_83">CI/CD Pipeline (6 jobs + 3 security)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-secondary">Operations</span></td>
-              <td>Cloud Connectors (AWS/Azure routing)</td>
+              <td data-i18n="c_index_84">Cloud Connectors (AWS/Azure routing)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-secondary">Operations</span></td>
-              <td>Distributed Tracing (OTLP, spans)</td>
+              <td data-i18n="c_index_85">Distributed Tracing (OTLP, spans)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-secondary">Operations</span></td>
-              <td>State Persistence (checkpoint/snapshot)</td>
+              <td data-i18n="c_index_86">State Persistence (checkpoint/snapshot)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-secondary">Operations</span></td>
-              <td>Event Sourcing + Saga Orchestrator</td>
+              <td data-i18n="c_index_87">Event Sourcing + Saga Orchestrator</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-warning">Quality</span></td>
-              <td>97 Test Files (12 suites)</td>
+              <td data-i18n="c_index_88">97 Test Files (12 suites)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-warning">Quality</span></td>
-              <td>112 Health Checks (18 components)</td>
+              <td data-i18n="c_index_89">112 Health Checks (18 components)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-warning">Quality</span></td>
-              <td>Code Review Standards (multi-axis)</td>
+              <td data-i18n="c_index_90">Code Review Standards (multi-axis)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-warning">Quality</span></td>
-              <td>Karpathy Guidelines (coding standards)</td>
+              <td data-i18n="c_index_91">Karpathy Guidelines (coding standards)</td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-warning">Quality</span></td>
-              <td>SDD (Spec-Driven Development) workflow</td>
+              <td data-i18n="c_index_92">SDD (Spec-Driven Development) workflow</td>
               <td><span class="text-success">✅</span></td>
             </tr>
           </tbody>
@@ -1016,7 +1009,7 @@
       <div class="section-title">
         <div class="display-4 mb-2">🧰</div>
         <h2 data-i18n="sec_skills_rules">Skills</h2>
-        <p>118 skills · 52 normatives — organized intelligence across 9 categories</p>
+        <p data-i18n="c_index_93">118 skills · 52 normatives — organized intelligence across 9 categories</p>
       </div>
       <div class="row g-3">
         <div class="col-md-6 col-lg-4">
@@ -1109,7 +1102,7 @@
       <div class="section-title">
         <div class="display-4 mb-2">📊</div>
         <h2 data-i18n="sec_stack_metrics">Stack Metrics</h2>
-        <p>Real-time health and performance data — 112/112 PASS across 18 components</p>
+        <p data-i18n="c_index_94">Real-time health and performance data — 112/112 PASS across 18 components</p>
       </div>
       <div class="row g-4">
         <div class="col-md-6">
@@ -1240,86 +1233,86 @@
       <div class="section-title">
         <div class="display-4 mb-2">📖</div>
         <h2 data-i18n="sec_the_book">El Libro — The Book</h2>
-        <p>10 chapters covering the complete Gentle-Vanguard stack</p>
+        <p data-i18n="c_index_95">10 chapters covering the complete Gentle-Vanguard stack</p>
       </div>
       <div class="row g-3">
         <div class="col-md-6 col-lg-4">
           <div class="book-card">
             <div class="page-num">PAGE 01</div>
-            <h4>🏗️ Architecture</h4>
-            <p>Deep architecture, 6 layers, 11 Repos, pipeline topology, system design decisions</p>
+            <h4 data-i18n="c_index_96">🏗️ Architecture</h4>
+            <p data-i18n="c_index_97">Deep architecture, 6 layers, 11 Repos, pipeline topology, system design decisions</p>
             <span class="badge-count">architecture.html →</span>
           </div>
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="book-card">
             <div class="page-num">PAGE 02</div>
-            <h4>🤖 Autonomy</h4>
-            <p>Auto-apply safe, circuit breaker, auto-escalation, AB testing, session scoring</p>
+            <h4 data-i18n="c_index_98">🤖 Autonomy</h4>
+            <p data-i18n="c_index_99">Auto-apply safe, circuit breaker, auto-escalation, AB testing, session scoring</p>
             <span class="badge-count">autonomy.html →</span>
           </div>
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="book-card">
             <div class="page-num">PAGE 03</div>
-            <h4>📊 Dashboard</h4>
-            <p>Real-time observability, WebSocket metrics, 7 sections, i18n, 8 alert rules</p>
+            <h4 data-i18n="c_index_100">📊 Dashboard</h4>
+            <p data-i18n="c_index_101">Real-time observability, WebSocket metrics, 7 sections, i18n, 8 alert rules</p>
             <span class="badge-count">dashboard.html →</span>
           </div>
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="book-card">
             <div class="page-num">PAGE 04</div>
-            <h4>🚀 Quick Start</h4>
-            <p>Setup guide, commands, environment config, first run, common workflows</p>
+            <h4 data-i18n="c_index_102">🚀 Quick Start</h4>
+            <p data-i18n="c_index_103">Setup guide, commands, environment config, first run, common workflows</p>
             <span class="badge-count">quickstart.html →</span>
           </div>
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="book-card" onclick="location.href = 'memory-knowledge.html'">
             <div class="page-num">PAGE 05</div>
-            <h4>🧠 Memory & Knowledge</h4>
-            <p>Engram persistence, CodeGraph KG, Graphify, Nexus DB, ML embeddings, RAG</p>
+            <h4 data-i18n="c_index_104">🧠 Memory & Knowledge</h4>
+            <p data-i18n="c_index_105">Engram persistence, CodeGraph KG, Graphify, Nexus DB, ML embeddings, RAG</p>
             <span class="badge-count">memory-knowledge.html →</span>
           </div>
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="book-card" onclick="location.href = 'security-governance.html'">
             <div class="page-num">PAGE 06</div>
-            <h4>🔒 Security & Governance</h4>
-            <p>Audit pipeline, policy enforcement, 52 normatives, guardrails, incident response</p>
+            <h4 data-i18n="c_index_106">🔒 Security & Governance</h4>
+            <p data-i18n="c_index_107">Audit pipeline, policy enforcement, 52 normatives, guardrails, incident response</p>
             <span class="badge-count">security-governance.html →</span>
           </div>
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="book-card" onclick="location.href = 'agents-pipeline.html'">
             <div class="page-num">PAGE 07</div>
-            <h4>👥 Agents & Pipeline</h4>
-            <p>Agent delegation, SDD workflow, pipeline orchestration, session lifecycle</p>
+            <h4 data-i18n="c_index_108">👥 Agents & Pipeline</h4>
+            <p data-i18n="c_index_109">Agent delegation, SDD workflow, pipeline orchestration, session lifecycle</p>
             <span class="badge-count">agents-pipeline.html →</span>
           </div>
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="book-card" onclick="location.href = 'operations-cloud.html'">
             <div class="page-num">PAGE 08</div>
-            <h4>☁️ Operations & Cloud</h4>
-            <p>CI/CD pipeline, cloud connectors, distributed tracing, state persistence</p>
+            <h4 data-i18n="c_index_110">☁️ Operations & Cloud</h4>
+            <p data-i18n="c_index_111">CI/CD pipeline, cloud connectors, distributed tracing, state persistence</p>
             <span class="badge-count">operations-cloud.html →</span>
           </div>
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="book-card" onclick="location.href = 'patterns-conventions.html'">
             <div class="page-num">PAGE 09</div>
-            <h4>📐 Patterns & Conventions</h4>
-            <p>Karpathy guidelines, design patterns, SDD contracts, coding conventions</p>
+            <h4 data-i18n="c_index_112">📐 Patterns & Conventions</h4>
+            <p data-i18n="c_index_113">Karpathy guidelines, design patterns, SDD contracts, coding conventions</p>
             <span class="badge-count">patterns-conventions.html →</span>
           </div>
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="book-card">
             <div class="page-num">PAGE 10</div>
-            <h4>📈 Stack Health & Metrics</h4>
-            <p>
+            <h4 data-i18n="c_index_114">📈 Stack Health & Metrics</h4>
+            <p data-i18n="c_index_115">
               112 health checks, watchtower, performance KPIs, system observability, backlog tracking
             </p>
             <a href="health.html" class="badge-count text-decoration-none">health.html →</a>
@@ -1333,7 +1326,7 @@
       <div class="section-title">
         <div class="display-4 mb-2">🖼️</div>
         <h2 data-i18n="sec_diagrams">Diagramas</h2>
-        <p>
+        <p data-i18n="c_index_116">
           Arquitectura, estructura y funcionalidad — de lo simple a lo complejo. Pasa el cursor
           sobre los nodos para explorar cada capa.
         </p>
@@ -1423,7 +1416,7 @@
       <div class="section-title">
         <div class="display-4 mb-2">🛠️</div>
         <h2 data-i18n="sec_tools">Tools Ecosystem</h2>
-        <p>10 supported tools — one unified autonomous stack</p>
+        <p data-i18n="c_index_117">10 supported tools — one unified autonomous stack</p>
       </div>
       <div class="d-flex flex-wrap justify-content-center gap-2">
         <span class="tool-badge"><i class="bi bi-terminal text-info"></i>OpenCode</span>
@@ -1498,6 +1491,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/gv.js"></script>
+    <script src="assets/js/gv.js?v=2.1"></script>
   </body>
 </html>

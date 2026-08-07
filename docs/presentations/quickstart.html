@@ -16,7 +16,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/css/gv.css" />
+    <link rel="stylesheet" href="assets/css/gv.css?v=2.1" />
     <style>
       /* --- Estilos específicos de quickstart.html (complementan el design system) --- */
       .step-num {
@@ -48,7 +48,8 @@
         border-radius: 4px;
       }
     </style>
-    <script src="assets/js/i18n.js"></script>
+    <script src="assets/js/i18n-content.js?v=2.1"></script>
+<script src="assets/js/i18n.js?v=2.1"></script>
   </head>
   <body class="grain">
     <div class="scroll-progress"></div>
@@ -134,22 +135,14 @@
                 ><i class="bi bi-images me-1"></i><span data-i18n="nav_diagrams">Diagrams</span></a
               >
             </li>
-                        <li class="nav-item ms-1">
-              <div class="lang-wrap">
-                <button class="lang-btn" id="langBtn" type="button" aria-expanded="false" aria-controls="langMenu" aria-haspopup="true">
-                  <span class="lang-flag">🌐</span><span class="lang-name">EN</span>
-                </button>
-                <div class="lang-menu" id="langMenu" role="menu">
-                  <button type="button" role="menuitem" data-lang="en"><span class="lang-flag">🇬🇧</span> English<span class="lang-check"></span></button>
-                  <button type="button" role="menuitem" data-lang="es"><span class="lang-flag">🇪🇸</span> Español<span class="lang-check"></span></button>
-                  <button type="button" role="menuitem" data-lang="pt-BR"><span class="lang-flag">🇧🇷</span> Português<span class="lang-check"></span></button>
-                </div>
+                                    <li class="nav-item ms-2">
+              <div class="lang-seg" role="group" aria-label="Language">
+                <button type="button" data-lang="en" aria-pressed="false"><span class="lang-flag">🇬🇧</span><span class="lang-code">EN</span></button>
+                <button type="button" data-lang="es" aria-pressed="false"><span class="lang-flag">🇪🇸</span><span class="lang-code">ES</span></button>
+                <button type="button" data-lang="pt-BR" aria-pressed="false"><span class="lang-flag">🇧🇷</span><span class="lang-code">PT</span></button>
               </div>
             </li>
-                <li><button class="dropdown-item" data-lang="es">🇪🇸 Español</button></li>
-                <li><button class="dropdown-item" data-lang="pt-BR">🇧🇷 Português</button></li>
-              </ul>
-            </li>
+                
           </ul>
         </div>
       </div>
@@ -201,7 +194,7 @@
     <section id="prerequisites" class="fade-in">
       <div class="section-title">
         <h2 data-i18n="sec_prereq">📋 Prerequisites</h2>
-        <p>Ensure your environment meets these minimum requirements</p>
+        <p data-i18n="c_quickstart_2">Ensure your environment meets these minimum requirements</p>
       </div>
       <div class="row g-3">
         <div class="col-md-6 col-lg-3">
@@ -209,7 +202,7 @@
             <div class="icon" style="font-size: 2.5rem; margin-bottom: 0.75rem">
               <i class="bi bi-terminal text-info"></i>
             </div>
-            <h3>PowerShell 7+</h3>
+            <h3 data-i18n="c_quickstart_3">PowerShell 7+</h3>
             <p class="mb-1">REQUIRED — tested on <strong class="text-light">7.4.x</strong></p>
             <span class="badge-tag">Minimum</span>
           </div>
@@ -219,8 +212,8 @@
             <div class="icon" style="font-size: 2.5rem; margin-bottom: 0.75rem">
               <i class="bi bi-node-plus text-success"></i>
             </div>
-            <h3>Node.js 18+</h3>
-            <p class="mb-1">LTS recommended — required for dashboard</p>
+            <h3 data-i18n="c_quickstart_4">Node.js 18+</h3>
+            <p class="mb-1" data-i18n="c_quickstart_5">LTS recommended — required for dashboard</p>
             <span class="badge-tag ok">Recommended</span>
           </div>
         </div>
@@ -229,8 +222,8 @@
             <div class="icon" style="font-size: 2.5rem; margin-bottom: 0.75rem">
               <i class="bi bi-git text-warning"></i>
             </div>
-            <h3>Git</h3>
-            <p class="mb-1">Recommended for version control &amp; hooks</p>
+            <h3 data-i18n="c_quickstart_6">Git</h3>
+            <p class="mb-1" data-i18n="c_quickstart_7">Recommended for version control &amp; hooks</p>
             <span class="badge-tag">Optional</span>
           </div>
         </div>
@@ -239,7 +232,7 @@
             <div class="icon" style="font-size: 2.5rem; margin-bottom: 0.75rem">
               <i class="bi bi-memory text-a" style="color: var(--a)"></i>
             </div>
-            <h3>4GB RAM</h3>
+            <h3 data-i18n="c_quickstart_8">4GB RAM</h3>
             <p class="mb-1">
               Minimum — <strong class="text-light">8GB</strong> recommended for full stack
             </p>
@@ -252,7 +245,7 @@
     <section id="setup" class="fade-in">
       <div class="section-title">
         <h2 data-i18n="sec_setup">⚡ One-Command Setup</h2>
-        <p>Clone, install, and launch — three commands, under 60 seconds</p>
+        <p data-i18n="c_quickstart_9">Clone, install, and launch — three commands, under 60 seconds</p>
       </div>
       <div class="cmd-block">
         <div><span class="comment"># Clone the repository</span></div>
@@ -280,7 +273,7 @@
     <section id="daily-commands" class="fade-in">
       <div class="section-title">
         <h2 data-i18n="sec_daily">📟 Daily Commands</h2>
-        <p>Essential commands for daily operation</p>
+        <p data-i18n="c_quickstart_10">Essential commands for daily operation</p>
       </div>
       <div class="table-responsive">
         <table class="table table-dark table-striped table-hover table-cmd align-middle mb-0">
@@ -306,34 +299,34 @@
             </tr>
             <tr>
               <td><code>npm test</code></td>
-              <td>Run all test suites</td>
+              <td data-i18n="c_quickstart_11">Run all test suites</td>
               <td><span class="badge bg-success bg-opacity-10 text-success">97 files PASS</span></td>
             </tr>
             <tr>
               <td><code>npm run watchtower:health</code></td>
-              <td>Run health checks</td>
+              <td data-i18n="c_quickstart_12">Run health checks</td>
               <td><span class="badge bg-success bg-opacity-10 text-success">112/112 PASS</span></td>
             </tr>
             <tr>
               <td><code>npx tsx src/auto-apply-safe.ts --check</code></td>
-              <td>Check pending auto-applies</td>
+              <td data-i18n="c_quickstart_13">Check pending auto-applies</td>
               <td>
                 <span class="badge bg-secondary bg-opacity-10 text-secondary">0 pending</span>
               </td>
             </tr>
             <tr>
               <td><code>npm run db:health</code></td>
-              <td>Database health check</td>
+              <td data-i18n="c_quickstart_14">Database health check</td>
               <td><span class="badge bg-success bg-opacity-10 text-success">All OK</span></td>
             </tr>
             <tr>
               <td><code>npm run graphify -- query "&lt;q&gt;"</code></td>
-              <td>Knowledge graph query</td>
+              <td data-i18n="c_quickstart_15">Knowledge graph query</td>
               <td><span class="badge bg-info bg-opacity-10 text-info">Results</span></td>
             </tr>
             <tr>
               <td><code>cd apps/web-dashboard &amp;&amp; npm run build</code></td>
-              <td>Build dashboard</td>
+              <td data-i18n="c_quickstart_16">Build dashboard</td>
               <td><span class="badge bg-success bg-opacity-10 text-success">Exit 0</span></td>
             </tr>
           </tbody>
@@ -344,7 +337,7 @@
     <section id="dashboard-cmds" class="fade-in">
       <div class="section-title">
         <h2 data-i18n="sec_dash_cmds">📊 Dashboard Commands</h2>
-        <p>Start, manage, and stop the LLM observability dashboard</p>
+        <p data-i18n="c_quickstart_17">Start, manage, and stop the LLM observability dashboard</p>
       </div>
       <div class="table-responsive">
         <table class="table table-dark table-striped table-hover table-cmd align-middle mb-0">
@@ -357,15 +350,15 @@
           <tbody>
             <tr>
               <td><code>npm run dashboard:dev</code></td>
-              <td>Start full dashboard (Vite dev + WS proxy)</td>
+              <td data-i18n="c_quickstart_18">Start full dashboard (Vite dev + WS proxy)</td>
             </tr>
             <tr>
               <td><code>npm run dashboard:server</code></td>
-              <td>Start WS server only (WebSocket + HTTP API)</td>
+              <td data-i18n="c_quickstart_19">Start WS server only (WebSocket + HTTP API)</td>
             </tr>
             <tr>
               <td><code>npm run dashboard:build</code></td>
-              <td>Build production dashboard bundle</td>
+              <td data-i18n="c_quickstart_20">Build production dashboard bundle</td>
             </tr>
           </tbody>
         </table>
@@ -375,7 +368,7 @@
     <section id="db-cmds" class="fade-in">
       <div class="section-title">
         <h2 data-i18n="sec_db_cmds">💾 Database Commands</h2>
-        <p>Manage the Nexus operational database (SQLite WAL mode)</p>
+        <p data-i18n="c_quickstart_21">Manage the Nexus operational database (SQLite WAL mode)</p>
       </div>
       <div class="table-responsive">
         <table class="table table-dark table-striped table-hover table-cmd align-middle mb-0">
@@ -388,11 +381,11 @@
           <tbody>
             <tr>
               <td><code>npm run db:init</code></td>
-              <td>Initialize DB + run all migrations (idempotent)</td>
+              <td data-i18n="c_quickstart_22">Initialize DB + run all migrations (idempotent)</td>
             </tr>
             <tr>
               <td><code>npm run db:health</code></td>
-              <td>Health check — integrity, WAL, tables, rows</td>
+              <td data-i18n="c_quickstart_23">Health check — integrity, WAL, tables, rows</td>
             </tr>
             <tr>
               <td><code>npm run db:backup</code></td>
@@ -400,11 +393,11 @@
             </tr>
             <tr>
               <td><code>npm run db:prune</code></td>
-              <td>Prune old data (events &gt;30d, cache &gt;7d, tokens &gt;90d)</td>
+              <td data-i18n="c_quickstart_24">Prune old data (events &gt;30d, cache &gt;7d, tokens &gt;90d)</td>
             </tr>
             <tr>
               <td><code>npm run db:optimize</code></td>
-              <td>WAL checkpoint + REINDEX + VACUUM</td>
+              <td data-i18n="c_quickstart_25">WAL checkpoint + REINDEX + VACUUM</td>
             </tr>
           </tbody>
         </table>
@@ -414,7 +407,7 @@
     <section id="workflow" class="fade-in">
       <div class="section-title">
         <h2 data-i18n="sec_workflow">🔄 Development Workflow</h2>
-        <p>Standard daily routine — from autostart to productive work</p>
+        <p data-i18n="c_quickstart_26">Standard daily routine — from autostart to productive work</p>
       </div>
       <div class="row g-3">
         <div class="col-lg-8 mx-auto">
@@ -499,7 +492,7 @@
     <section id="architecture-overview" class="fade-in">
       <div class="section-title">
         <h2 data-i18n="sec_arch_overview">🏗️ Architecture Overview</h2>
-        <p>6-layer autonomous AI stack — from IDE tools to governance</p>
+        <p data-i18n="c_quickstart_27">6-layer autonomous AI stack — from IDE tools to governance</p>
       </div>
       <div class="arch-layer">
         <div class="layer-name">
@@ -572,7 +565,7 @@
     <section id="troubleshooting" class="fade-in">
       <div class="section-title">
         <h2 data-i18n="sec_troubleshoot">🔧 Troubleshooting</h2>
-        <p>Common issues and their solutions</p>
+        <p data-i18n="c_quickstart_28">Common issues and their solutions</p>
       </div>
       <div class="row g-3">
         <div class="col-md-6">
@@ -654,14 +647,14 @@
     <section id="references" class="fade-in">
       <div class="section-title">
         <h2 data-i18n="sec_references">🔗 Reference Links</h2>
-        <p>Navigate the full presentation book</p>
+        <p data-i18n="c_quickstart_29">Navigate the full presentation book</p>
       </div>
       <div class="row g-3 justify-content-center">
         <div class="col-sm-6 col-md-4 col-lg-3">
           <a href="index.html" class="text-decoration-none"
             ><div class="section-card text-center">
-              <h3>📘 Full Book</h3>
-              <p class="mb-0">Complete stack reference</p>
+              <h3 data-i18n="c_quickstart_30">📘 Full Book</h3>
+              <p class="mb-0" data-i18n="c_quickstart_31">Complete stack reference</p>
               <span class="badge-tag">Start here</span>
             </div></a
           >
@@ -669,8 +662,8 @@
         <div class="col-sm-6 col-md-4 col-lg-3">
           <a href="architecture.html" class="text-decoration-none"
             ><div class="section-card text-center">
-              <h3>🏗️ Architecture</h3>
-              <p class="mb-0">6-layer deep dive</p>
+              <h3 data-i18n="c_quickstart_32">🏗️ Architecture</h3>
+              <p class="mb-0" data-i18n="c_quickstart_33">6-layer deep dive</p>
               <span class="badge-tag">Explore</span>
             </div></a
           >
@@ -678,8 +671,8 @@
         <div class="col-sm-6 col-md-4 col-lg-3">
           <a href="autonomy.html" class="text-decoration-none"
             ><div class="section-card text-center">
-              <h3>🤖 Autonomy</h3>
-              <p class="mb-0">Self-healing systems</p>
+              <h3 data-i18n="c_quickstart_34">🤖 Autonomy</h3>
+              <p class="mb-0" data-i18n="c_quickstart_35">Self-healing systems</p>
               <span class="badge-tag">Explore</span>
             </div></a
           >
@@ -687,8 +680,8 @@
         <div class="col-sm-6 col-md-4 col-lg-3">
           <a href="dashboard.html" class="text-decoration-none"
             ><div class="section-card text-center">
-              <h3>📊 Dashboard</h3>
-              <p class="mb-0">Observability UI</p>
+              <h3 data-i18n="c_quickstart_36">📊 Dashboard</h3>
+              <p class="mb-0" data-i18n="c_quickstart_37">Observability UI</p>
               <span class="badge-tag">Explore</span>
             </div></a
           >
@@ -696,8 +689,8 @@
         <div class="col-sm-6 col-md-4 col-lg-3">
           <a href="memory-knowledge.html" class="text-decoration-none"
             ><div class="section-card text-center">
-              <h3>🧠 Memory</h3>
-              <p class="mb-0">Knowledge systems</p>
+              <h3 data-i18n="c_quickstart_38">🧠 Memory</h3>
+              <p class="mb-0" data-i18n="c_quickstart_39">Knowledge systems</p>
               <span class="badge-tag">Explore</span>
             </div></a
           >
@@ -709,7 +702,7 @@
             class="text-decoration-none"
             ><div class="section-card text-center">
               <h3><i class="bi bi-github me-1"></i> GitHub</h3>
-              <p class="mb-0">Source repository</p>
+              <p class="mb-0" data-i18n="c_quickstart_40">Source repository</p>
               <span class="badge-tag">External</span>
             </div></a
           >
@@ -722,7 +715,7 @@
       <div class="section-title">
         <div class="display-4 mb-2">🖼️</div>
         <h2 data-i18n="sec_diagrams">Diagramas &amp; Visualizaciones</h2>
-        <p>
+        <p data-i18n="c_quickstart_41">
           Arquitectura del stack — de lo simple a lo complejo. Pasa el cursor sobre los nodos para
           explorar cada capa.
         </p>
@@ -821,6 +814,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/gv.js"></script>
+    <script src="assets/js/gv.js?v=2.1"></script>
   </body>
 </html>

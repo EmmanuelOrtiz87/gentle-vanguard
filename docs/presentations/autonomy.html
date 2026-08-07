@@ -17,7 +17,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/css/gv.css" />
+    <link rel="stylesheet" href="assets/css/gv.css?v=2.1" />
     <style>
       /* --- Estilos específicos de autonomy.html (complementan el design system) --- */
       .flow-row {
@@ -40,7 +40,8 @@
         transition: width 1s ease;
       }
     </style>
-    <script src="assets/js/i18n.js"></script>
+    <script src="assets/js/i18n-content.js?v=2.1"></script>
+<script src="assets/js/i18n.js?v=2.1"></script>
   </head>
   <body class="grain">
     <div class="scroll-progress"></div>
@@ -124,22 +125,14 @@
                 ><i class="bi bi-images me-1"></i><span data-i18n="nav_diagrams">Diagrams</span></a
               >
             </li>
-                        <li class="nav-item ms-1">
-              <div class="lang-wrap">
-                <button class="lang-btn" id="langBtn" type="button" aria-expanded="false" aria-controls="langMenu" aria-haspopup="true">
-                  <span class="lang-flag">🌐</span><span class="lang-name">EN</span>
-                </button>
-                <div class="lang-menu" id="langMenu" role="menu">
-                  <button type="button" role="menuitem" data-lang="en"><span class="lang-flag">🇬🇧</span> English<span class="lang-check"></span></button>
-                  <button type="button" role="menuitem" data-lang="es"><span class="lang-flag">🇪🇸</span> Español<span class="lang-check"></span></button>
-                  <button type="button" role="menuitem" data-lang="pt-BR"><span class="lang-flag">🇧🇷</span> Português<span class="lang-check"></span></button>
-                </div>
+                                    <li class="nav-item ms-2">
+              <div class="lang-seg" role="group" aria-label="Language">
+                <button type="button" data-lang="en" aria-pressed="false"><span class="lang-flag">🇬🇧</span><span class="lang-code">EN</span></button>
+                <button type="button" data-lang="es" aria-pressed="false"><span class="lang-flag">🇪🇸</span><span class="lang-code">ES</span></button>
+                <button type="button" data-lang="pt-BR" aria-pressed="false"><span class="lang-flag">🇧🇷</span><span class="lang-code">PT</span></button>
               </div>
             </li>
-                <li><button class="dropdown-item" data-lang="es">🇪🇸 Español</button></li>
-                <li><button class="dropdown-item" data-lang="pt-BR">🇧🇷 Português</button></li>
-              </ul>
-            </li>
+                
           </ul>
         </div>
       </div>
@@ -407,7 +400,7 @@
                     class="bi bi-clock-history d-block mb-2"
                     style="color: var(--p); font-size: 1.5rem"
                   ></i
-                  ><small class="fw-semibold">Predictive Governor</small><br /><span
+                  ><small class="fw-semibold" data-i18n="c_autonomy_2">Predictive Governor</small><br /><span
                     class="badge badge-p mt-1"
                     >Timed</span
                   >
@@ -416,7 +409,7 @@
               <div class="col-md-4">
                 <div class="p-3 text-center" style="background: var(--bg2); border-radius: 10px">
                   <i class="bi bi-stars d-block mb-2" style="color: var(--a); font-size: 1.5rem"></i
-                  ><small class="fw-semibold">Skill Evolution</small><br /><span
+                  ><small class="fw-semibold" data-i18n="c_autonomy_3">Skill Evolution</small><br /><span
                     class="badge badge-a mt-1"
                     >Quality</span
                   >
@@ -428,7 +421,7 @@
                     class="bi bi-pattern d-block mb-2"
                     style="color: var(--ok); font-size: 1.5rem"
                   ></i
-                  ><small class="fw-semibold">Auto-Norm Learner</small><br /><span
+                  ><small class="fw-semibold" data-i18n="c_autonomy_4">Auto-Norm Learner</small><br /><span
                     class="badge badge-ok mt-1"
                     >Pattern</span
                   >
@@ -464,7 +457,7 @@
                     class="bi bi-lightning-charge d-block mb-2"
                     style="color: var(--p); font-size: 1.2rem"
                   ></i
-                  ><small class="fw-semibold">trigger-manager</small>
+                  ><small class="fw-semibold" data-i18n="c_autonomy_5">trigger-manager</small>
                 </div>
               </div>
               <div class="col-md-3">
@@ -473,7 +466,7 @@
                     class="bi bi-check2-circle d-block mb-2"
                     style="color: var(--a); font-size: 1.2rem"
                   ></i
-                  ><small class="fw-semibold">safe-executor</small>
+                  ><small class="fw-semibold" data-i18n="c_autonomy_6">safe-executor</small>
                 </div>
               </div>
               <div class="col-md-3">
@@ -482,7 +475,7 @@
                     class="bi bi-arrow-counterclockwise d-block mb-2"
                     style="color: var(--wn); font-size: 1.2rem"
                   ></i
-                  ><small class="fw-semibold">rollback-handler</small>
+                  ><small class="fw-semibold" data-i18n="c_autonomy_7">rollback-handler</small>
                 </div>
               </div>
               <div class="col-md-3">
@@ -491,7 +484,7 @@
                     class="bi bi-file-earmark-text d-block mb-2"
                     style="color: var(--ok); font-size: 1.2rem"
                   ></i
-                  ><small class="fw-semibold">report-generator</small>
+                  ><small class="fw-semibold" data-i18n="c_autonomy_8">report-generator</small>
                 </div>
               </div>
             </div>
@@ -551,7 +544,7 @@
               ><span class="mono" style="color: var(--p)">300s</span>
             </div>
             <div style="background: var(--bg2); border-radius: 10px; padding: 0.75rem">
-              <small class="text-light fw-semibold">Auto Transitions</small>
+              <small class="text-light fw-semibold" data-i18n="c_autonomy_9">Auto Transitions</small>
               <div class="mt-2">
                 <code style="color: var(--er); font-size: 0.8rem">OPEN</code>
                 <span style="color: #475569">→ (timeout) →</span>
@@ -565,7 +558,7 @@
         <div class="col-lg-4">
           <div class="section-card h-100">
             <i class="bi bi-shield-check" style="color: var(--ok); font-size: 2rem"></i>
-            <p class="card-text mt-2">
+            <p class="card-text mt-2" data-i18n="c_autonomy_10">
               Prevents cascading failures across the stack. When a service exceeds the failure
               threshold, the circuit opens — blocking requests and allowing the system to recover
               before resuming operations.
@@ -585,7 +578,7 @@
             <div class="badge badge-wn mb-2">Warning</div>
             <div class="stat-n mb-0">3</div>
             <div class="stat-l">Events</div>
-            <p class="card-text mt-2 small">
+            <p class="card-text mt-2 small" data-i18n="c_autonomy_11">
               Protocol: monitoring alert, log entry, notification to operator
             </p>
           </div>
@@ -595,7 +588,7 @@
             <div class="badge badge-er mb-2">Critical</div>
             <div class="stat-n mb-0">5</div>
             <div class="stat-l">Events</div>
-            <p class="card-text mt-2 small">
+            <p class="card-text mt-2 small" data-i18n="c_autonomy_12">
               Protocol: circuit breaker engagement, automated mitigation, escalation to on-call
             </p>
           </div>
@@ -607,7 +600,7 @@
             </div>
             <div class="stat-n mb-0">10</div>
             <div class="stat-l">Events</div>
-            <p class="card-text mt-2 small">
+            <p class="card-text mt-2 small" data-i18n="c_autonomy_13">
               Protocol: full system halt, human override required, post-mortem trigger
             </p>
           </div>
@@ -683,7 +676,7 @@
           <div class="section-card h-100">
             <span class="badge badge-ok mb-2">Statistical Significance</span
             ><span class="badge badge-wn">Auto Rollback</span>
-            <p class="card-text mt-2 small">
+            <p class="card-text mt-2 small" data-i18n="c_autonomy_14">
               Experiments are evaluated with statistical rigor. Negative results trigger automatic
               rollback to the control variant.
             </p>
@@ -770,7 +763,7 @@
         </div>
         <div class="col-lg-8">
           <div class="section-card h-100">
-            <p class="card-text">
+            <p class="card-text" data-i18n="c_autonomy_15">
               112 health checks across 18 components with 6 operational modes. Scored 112/112 — all
               systems operational.
             </p>
@@ -859,7 +852,7 @@
       <div class="section-title">
         <div class="display-4 mb-2">🖼️</div>
         <h2 data-i18n="sec_diagrams">Diagrama — Executive Loop</h2>
-        <p>
+        <p data-i18n="c_autonomy_16">
           Detection → Evaluation → Decision → Execution → Verification → Learning — el ciclo
           continuo del Executive Layer. Pasa el cursor sobre los nodos para explorar cada etapa.
         </p>
@@ -937,6 +930,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/gv.js"></script>
+    <script src="assets/js/gv.js?v=2.1"></script>
   </body>
 </html>
