@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8" />
@@ -134,18 +134,18 @@
                 ><i class="bi bi-images me-1"></i><span data-i18n="nav_diagrams">Diagrams</span></a
               >
             </li>
-            <li class="nav-item dropdown ms-1">
-              <a
-                class="nav-link dropdown-toggle py-1 px-2"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                title="Language"
-                ><i class="bi bi-translate"></i
-              ></a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><button class="dropdown-item" data-lang="en">🇬🇧 English</button></li>
+                        <li class="nav-item ms-1">
+              <div class="lang-wrap">
+                <button class="lang-btn" id="langBtn" type="button" aria-expanded="false" aria-controls="langMenu" aria-haspopup="true">
+                  <span class="lang-flag">🌐</span><span class="lang-name">EN</span>
+                </button>
+                <div class="lang-menu" id="langMenu" role="menu">
+                  <button type="button" role="menuitem" data-lang="en"><span class="lang-flag">🇬🇧</span> English<span class="lang-check"></span></button>
+                  <button type="button" role="menuitem" data-lang="es"><span class="lang-flag">🇪🇸</span> Español<span class="lang-check"></span></button>
+                  <button type="button" role="menuitem" data-lang="pt-BR"><span class="lang-flag">🇧🇷</span> Português<span class="lang-check"></span></button>
+                </div>
+              </div>
+            </li>
                 <li><button class="dropdown-item" data-lang="es">🇪🇸 Español</button></li>
                 <li><button class="dropdown-item" data-lang="pt-BR">🇧🇷 Português</button></li>
               </ul>
@@ -200,7 +200,7 @@
 
     <section id="prerequisites" class="fade-in">
       <div class="section-title">
-        <h2>📋 Prerequisites</h2>
+        <h2 data-i18n="sec_prereq">📋 Prerequisites</h2>
         <p>Ensure your environment meets these minimum requirements</p>
       </div>
       <div class="row g-3">
@@ -251,7 +251,7 @@
 
     <section id="setup" class="fade-in">
       <div class="section-title">
-        <h2>⚡ One-Command Setup</h2>
+        <h2 data-i18n="sec_setup">⚡ One-Command Setup</h2>
         <p>Clone, install, and launch — three commands, under 60 seconds</p>
       </div>
       <div class="cmd-block">
@@ -279,7 +279,7 @@
 
     <section id="daily-commands" class="fade-in">
       <div class="section-title">
-        <h2>📟 Daily Commands</h2>
+        <h2 data-i18n="sec_daily">📟 Daily Commands</h2>
         <p>Essential commands for daily operation</p>
       </div>
       <div class="table-responsive">
@@ -343,7 +343,7 @@
 
     <section id="dashboard-cmds" class="fade-in">
       <div class="section-title">
-        <h2>📊 Dashboard Commands</h2>
+        <h2 data-i18n="sec_dash_cmds">📊 Dashboard Commands</h2>
         <p>Start, manage, and stop the LLM observability dashboard</p>
       </div>
       <div class="table-responsive">
@@ -374,7 +374,7 @@
 
     <section id="db-cmds" class="fade-in">
       <div class="section-title">
-        <h2>💾 Database Commands</h2>
+        <h2 data-i18n="sec_db_cmds">💾 Database Commands</h2>
         <p>Manage the Nexus operational database (SQLite WAL mode)</p>
       </div>
       <div class="table-responsive">
@@ -413,7 +413,7 @@
 
     <section id="workflow" class="fade-in">
       <div class="section-title">
-        <h2>🔄 Development Workflow</h2>
+        <h2 data-i18n="sec_workflow">🔄 Development Workflow</h2>
         <p>Standard daily routine — from autostart to productive work</p>
       </div>
       <div class="row g-3">
@@ -498,7 +498,7 @@
 
     <section id="architecture-overview" class="fade-in">
       <div class="section-title">
-        <h2>🏗️ Architecture Overview</h2>
+        <h2 data-i18n="sec_arch_overview">🏗️ Architecture Overview</h2>
         <p>6-layer autonomous AI stack — from IDE tools to governance</p>
       </div>
       <div class="arch-layer">
@@ -521,7 +521,7 @@
           ><span>OPS Deploy</span><span>DOC Docs</span><span>Session</span><span>Premortem</span
           ><span>Maintenance</span><span>Self-Diag</span><span>SIA</span><span>GitFlow</span
           ><span>Knowledge</span><span>Mkt</span><span>Sales</span><span>Finance</span
-          ><span>HR</span><span>Legal</span><span class="new">Bus-Tele</span>
+          ><span>HR</span><span>Legal</span><span>Bus-Tele</span>
         </div>
       </div>
       <div class="arch-layer">
@@ -531,9 +531,9 @@
         <div class="items">
           <span>tool-detection</span><span>session-manager</span><span>token-budget</span
           ><span>karpathy-guidelines</span><span>codegraph-sync</span><span>security-orch</span
-          ><span>db-init</span><span class="new">auto-apply-safe</span
-          ><span class="new">predictive-governor</span><span class="new">auto-norm-learner</span
-          ><span class="new">+70 background</span>
+          ><span>db-init</span><span>auto-apply-safe</span
+          ><span>predictive-governor</span><span>auto-norm-learner</span
+          ><span>+70 background</span>
         </div>
       </div>
       <div class="arch-layer">
@@ -571,7 +571,7 @@
 
     <section id="troubleshooting" class="fade-in">
       <div class="section-title">
-        <h2>🔧 Troubleshooting</h2>
+        <h2 data-i18n="sec_troubleshoot">🔧 Troubleshooting</h2>
         <p>Common issues and their solutions</p>
       </div>
       <div class="row g-3">
@@ -653,7 +653,7 @@
 
     <section id="references" class="fade-in">
       <div class="section-title">
-        <h2>🔗 Reference Links</h2>
+        <h2 data-i18n="sec_references">🔗 Reference Links</h2>
         <p>Navigate the full presentation book</p>
       </div>
       <div class="row g-3 justify-content-center">
@@ -721,7 +721,7 @@
     <section class="fade-in" id="diagrams">
       <div class="section-title">
         <div class="display-4 mb-2">🖼️</div>
-        <h2>Diagramas &amp; Visualizaciones</h2>
+        <h2 data-i18n="sec_diagrams">Diagramas &amp; Visualizaciones</h2>
         <p>
           Arquitectura del stack — de lo simple a lo complejo. Pasa el cursor sobre los nodos para
           explorar cada capa.

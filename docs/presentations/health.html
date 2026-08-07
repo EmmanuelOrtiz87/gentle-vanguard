@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8" />
@@ -153,18 +153,18 @@
                 ><i class="bi bi-images me-1"></i><span data-i18n="nav_diagrams">Diagrams</span></a
               >
             </li>
-            <li class="nav-item dropdown ms-1">
-              <a
-                class="nav-link dropdown-toggle py-1 px-2"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                title="Language"
-                ><i class="bi bi-translate"></i
-              ></a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><button class="dropdown-item" data-lang="en">🇬🇧 English</button></li>
+                        <li class="nav-item ms-1">
+              <div class="lang-wrap">
+                <button class="lang-btn" id="langBtn" type="button" aria-expanded="false" aria-controls="langMenu" aria-haspopup="true">
+                  <span class="lang-flag">🌐</span><span class="lang-name">EN</span>
+                </button>
+                <div class="lang-menu" id="langMenu" role="menu">
+                  <button type="button" role="menuitem" data-lang="en"><span class="lang-flag">🇬🇧</span> English<span class="lang-check"></span></button>
+                  <button type="button" role="menuitem" data-lang="es"><span class="lang-flag">🇪🇸</span> Español<span class="lang-check"></span></button>
+                  <button type="button" role="menuitem" data-lang="pt-BR"><span class="lang-flag">🇧🇷</span> Português<span class="lang-check"></span></button>
+                </div>
+              </div>
+            </li>
                 <li><button class="dropdown-item" data-lang="es">🇪🇸 Español</button></li>
                 <li><button class="dropdown-item" data-lang="pt-BR">🇧🇷 Português</button></li>
               </ul>
@@ -198,7 +198,7 @@
     <!-- 1. Health Dashboard Overview -->
     <section class="fade-in">
       <div class="section-title">
-        <h2><i class="bi bi-speedometer2 me-2" style="color: var(--p)"></i>Health Dashboard</h2>
+        <h2 data-i18n="sec_health_dash"><i class="bi bi-speedometer2 me-2" style="color: var(--p)"></i>Health Dashboard</h2>
         <p>Estado actual del stack en tiempo real</p>
       </div>
       <div class="row g-4">
@@ -685,7 +685,7 @@
     <!-- 6. Performance SLOs -->
     <section class="fade-in">
       <div class="section-title">
-        <h2><i class="bi bi-lightning me-2" style="color: var(--wn)"></i>Performance SLOs</h2>
+        <h2 data-i18n="sec_perf_slos"><i class="bi bi-lightning me-2" style="color: var(--wn)"></i>Performance SLOs</h2>
         <p>Métricas de rendimiento del stack</p>
       </div>
       <div class="row g-4">
@@ -718,7 +718,7 @@
     <!-- 7. Diagramas -->
     <section class="fade-in" id="diagrams">
       <div class="section-title">
-        <h2><i class="bi bi-images me-2" style="color: var(--p)"></i>Diagramas</h2>
+        <h2 data-i18n="sec_diagrams"><i class="bi bi-images me-2" style="color: var(--p)"></i>Diagramas</h2>
         <p>Arquitectura y observabilidad del stack en un vistazo</p>
       </div>
       <div class="row g-3">

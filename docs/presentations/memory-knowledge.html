@@ -160,18 +160,18 @@
                 ><i class="bi bi-images me-1"></i><span data-i18n="nav_diagrams">Diagrams</span></a
               >
             </li>
-            <li class="nav-item dropdown ms-1">
-              <a
-                class="nav-link dropdown-toggle py-1 px-2"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                title="Language"
-                ><i class="bi bi-translate"></i
-              ></a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><button class="dropdown-item" data-lang="en">🇬🇧 English</button></li>
+                        <li class="nav-item ms-1">
+              <div class="lang-wrap">
+                <button class="lang-btn" id="langBtn" type="button" aria-expanded="false" aria-controls="langMenu" aria-haspopup="true">
+                  <span class="lang-flag">🌐</span><span class="lang-name">EN</span>
+                </button>
+                <div class="lang-menu" id="langMenu" role="menu">
+                  <button type="button" role="menuitem" data-lang="en"><span class="lang-flag">🇬🇧</span> English<span class="lang-check"></span></button>
+                  <button type="button" role="menuitem" data-lang="es"><span class="lang-flag">🇪🇸</span> Español<span class="lang-check"></span></button>
+                  <button type="button" role="menuitem" data-lang="pt-BR"><span class="lang-flag">🇧🇷</span> Português<span class="lang-check"></span></button>
+                </div>
+              </div>
+            </li>
                 <li><button class="dropdown-item" data-lang="es">🇪🇸 Español</button></li>
                 <li><button class="dropdown-item" data-lang="pt-BR">🇧🇷 Português</button></li>
               </ul>
@@ -213,7 +213,7 @@
 
     <section id="overview" class="fade-in">
       <div class="section-title">
-        <h2>🔮 The Memory Stack</h2>
+        <h2 data-i18n="sec_mem_stack">🔮 The Memory Stack</h2>
         <p>Four interconnected knowledge systems serving distinct purposes</p>
       </div>
       <div class="row g-3">
@@ -241,7 +241,7 @@
             <h3>Graphify</h3>
             <p class="mb-1">LLM-extracted knowledge graph with community structure</p>
             <span class="badge-tag ok">18MB graph</span>
-            <span class="badge-tag new">LLM</span>
+            <span class="badge-tag ok">LLM</span>
           </div>
         </div>
         <div class="col-md-6 col-lg-3">
@@ -258,7 +258,7 @@
 
     <section id="engram" class="fade-in">
       <div class="section-title">
-        <h2>🧠 Engram — Persistent Memory</h2>
+        <h2 data-i18n="sec_engram">🧠 Engram — Persistent Memory</h2>
         <p>Cross-session, cross-project memory with conflict resolution</p>
       </div>
       <div class="row g-3">
@@ -383,7 +383,7 @@
 
     <section id="codegraph" class="fade-in">
       <div class="section-title">
-        <h2>🔗 CodeGraph — Symbol Intelligence</h2>
+        <h2 data-i18n="sec_codegraph">🔗 CodeGraph — Symbol Intelligence</h2>
         <p>AST-level code graph with cross-file resolution</p>
       </div>
       <div class="row g-3">
@@ -458,7 +458,7 @@
 
     <section id="graphify" class="fade-in">
       <div class="section-title">
-        <h2>🌐 Graphify — Knowledge Graph</h2>
+        <h2 data-i18n="sec_graphify">🌐 Graphify — Knowledge Graph</h2>
         <p>LLM-extracted relationships with community structure and god nodes</p>
       </div>
       <div class="row g-3">
@@ -539,7 +539,7 @@
 
     <section id="nexus-db" class="fade-in">
       <div class="section-title">
-        <h2>💾 Nexus DB — Operational Database</h2>
+        <h2 data-i18n="sec_nexus">💾 Nexus DB — Operational Database</h2>
         <p>SQLite WAL-mode central nervous system with 21 tables and 11 repos</p>
       </div>
       <div class="row g-3">
@@ -594,7 +594,7 @@
 
     <section id="daos" class="fade-in">
       <div class="section-title">
-        <h2>📦 10 Data Access Objects</h2>
+        <h2 data-i18n="sec_mem_daos">📦 10 Data Access Objects</h2>
         <p>Modular DAOs for every operational concern</p>
       </div>
       <div class="row g-3">
@@ -666,7 +666,7 @@
 
     <section id="ml-embeddings" class="fade-in">
       <div class="section-title">
-        <h2>🤖 ML Embeddings</h2>
+        <h2 data-i18n="sec_ml_emb">🤖 ML Embeddings</h2>
         <p>Semantic search, skill matching, and error memory with vector retrieval</p>
       </div>
       <div class="row g-3">
@@ -704,7 +704,7 @@
             </div>
             <h3>Vector Search</h3>
             <p class="mb-0">Error memory with vector similarity search for pattern recognition</p>
-            <span class="badge-tag new">New</span>
+            <span class="badge-tag ok">Active</span>
           </div>
         </div>
       </div>
@@ -712,7 +712,7 @@
 
     <section id="knowledge-manager" class="fade-in">
       <div class="section-title">
-        <h2>📚 Knowledge Base Manager</h2>
+        <h2 data-i18n="sec_kb_manager">📚 Knowledge Base Manager</h2>
         <p>Centralized knowledge vault with cross-workspace sync</p>
       </div>
       <div class="row g-3 justify-content-center">
@@ -752,7 +752,7 @@
 
     <section id="data-flow" class="fade-in">
       <div class="section-title">
-        <h2>🔄 Data Flow Diagram</h2>
+        <h2 data-i18n="sec_data_flow">🔄 Data Flow Diagram</h2>
         <p>How data moves from session execution to dashboard visualization</p>
       </div>
       <div class="d-flex flex-wrap align-items-center justify-content-center gap-2">
@@ -808,7 +808,7 @@
     <section class="fade-in" id="diagrams">
       <div class="section-title">
         <div class="display-4 mb-2">🖼️</div>
-        <h2>Diagramas &amp; Visualizaciones</h2>
+        <h2 data-i18n="sec_diagrams">Diagramas &amp; Visualizaciones</h2>
         <p>
           Memoria, conocimiento y datos — del grafo de conocimiento al almacenamiento operacional.
         </p>

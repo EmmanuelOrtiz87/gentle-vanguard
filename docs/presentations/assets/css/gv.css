@@ -894,3 +894,162 @@ section {
 .radius-lg { border-radius: var(--r-lg); }
 .shadow-glow { box-shadow: var(--glow-cyan); }
 .mono-tab { font-variant-numeric: tabular-nums; }
+
+/* --- 30. Diagram modal (click en diagrama → imagen ampliada) ------------------------- */
+.gv-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.gv-modal.open {
+  visibility: visible;
+  opacity: 1;
+}
+.gv-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: oklch(0.12 0.02 262 / 0.82);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.gv-modal-box {
+  position: relative;
+  max-width: min(94vw, 1400px);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: var(--card2);
+  border: 1px solid var(--br-soft);
+  border-radius: var(--r-lg);
+  padding: 1rem;
+  box-shadow: 0 0 80px oklch(0.6 0.15 210 / 0.25), 0 30px 80px oklch(0.1 0.02 262 / 0.6);
+  transform: translateY(12px) scale(0.98);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: gv-modal-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes gv-modal-in {
+  from { transform: translateY(12px) scale(0.98); }
+  to { transform: translateY(0) scale(1); }
+}
+.gv-modal-img {
+  max-width: 100%;
+  max-height: 76vh;
+  width: auto;
+  height: auto;
+  border-radius: var(--r-md);
+  border: 1px solid var(--br-soft);
+  background: oklch(0.14 0.02 262);
+}
+.gv-modal-cap {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  padding: 0.25rem 0.5rem;
+}
+.gv-modal-close {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--br-soft);
+  background: var(--card3);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  z-index: 2;
+}
+.gv-modal-close:hover {
+  background: var(--er);
+  color: #fff;
+  transform: rotate(90deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .gv-modal-box { animation: none; }
+}
+
+/* --- 31. Language selector visible (dropdown premium) -------------------------------- */
+.lang-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid var(--br-soft);
+  background: oklch(0.25 0.02 262 / 0.6);
+  color: var(--text);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+.lang-btn:hover,
+.lang-btn[aria-expanded='true'] {
+  border-color: oklch(0.8 0.14 210 / 0.4);
+  background: oklch(0.28 0.02 262);
+  box-shadow: var(--glow-cyan);
+}
+.lang-btn .lang-flag { font-size: 1rem; line-height: 1; }
+.lang-btn .lang-chevron { font-size: 0.6rem; opacity: 0.6; transition: transform 0.25s ease; }
+.lang-btn[aria-expanded='true'] .lang-chevron { transform: rotate(180deg); }
+.lang-menu {
+  position: fixed;
+  min-width: 190px;
+  background: var(--card3);
+  border: 1px solid var(--br-soft);
+  border-radius: var(--r-md);
+  padding: 0.35rem;
+  box-shadow: 0 16px 50px oklch(0.1 0.02 262 / 0.6);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px) scale(0.98);
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1200;
+}
+.lang-menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+.lang-menu button {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+.lang-menu button:hover {
+  background: oklch(0.8 0.14 210 / 0.1);
+  color: var(--text);
+}
+.lang-menu button.active {
+  background: oklch(0.8 0.14 210 / 0.15);
+  color: var(--p);
+  font-weight: 600;
+}
+.lang-menu button .lang-check { margin-left: auto; font-size: 0.7rem; }
+.lang-wrap { position: relative; display: inline-flex; }

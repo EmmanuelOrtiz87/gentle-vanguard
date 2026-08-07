@@ -209,6 +209,56 @@
     sections.forEach(function (s) { io.observe(s); });
   }
 
+  /* --- 9b. Diagram modal (click en diagrama → imagen ampliada) --------------- */
+  function initDiagramModal() {
+    var imgs = document.querySelectorAll('.svg-diagram');
+    if (!imgs.length) return;
+    var overlay = document.createElement('div');
+    overlay.className = 'gv-modal';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.innerHTML =
+      '<div class="gv-modal-backdrop"></div>' +
+      '<div class="gv-modal-box">' +
+      '<button class="gv-modal-close" aria-label="Close">✕</button>' +
+      '<img class="gv-modal-img" alt="" />' +
+      '<div class="gv-modal-cap"></div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    var box = overlay.querySelector('.gv-modal-box');
+    var img = overlay.querySelector('.gv-modal-img');
+    var cap = overlay.querySelector('.gv-modal-cap');
+
+    function open(el) {
+      var src = el.currentSrc || el.src || el.getAttribute('src');
+      var alt = el.getAttribute('alt') || '';
+      img.src = src;
+      cap.textContent = alt;
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    imgs.forEach(function (el) {
+      el.style.cursor = 'zoom-in';
+      el.addEventListener('click', function (e) {
+        // Si el diagrama es interactivo (tooltips), el click sigue abriendo el modal
+        open(el);
+      });
+    });
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay || e.target.classList.contains('gv-modal-backdrop')) close();
+    });
+    overlay.querySelector('.gv-modal-close').addEventListener('click', close);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') close();
+    });
+  }
+
   /* --- 10. Init all ---------------------------------------------------------- */
   function init() {
     initNavbar();
@@ -220,6 +270,7 @@
     initDiagrams();
     initTyping();
     initActiveNav();
+    initDiagramModal();
   }
 
   if (document.readyState === 'loading') {

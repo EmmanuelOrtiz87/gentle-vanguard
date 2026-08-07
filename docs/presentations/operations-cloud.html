@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8" />
@@ -166,18 +166,18 @@
                 ><i class="bi bi-images me-1"></i><span data-i18n="nav_diagrams">Diagrams</span></a
               >
             </li>
-            <li class="nav-item dropdown ms-1">
-              <a
-                class="nav-link dropdown-toggle py-1 px-2"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                title="Language"
-                ><i class="bi bi-translate"></i
-              ></a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><button class="dropdown-item" data-lang="en">🇬🇧 English</button></li>
+                        <li class="nav-item ms-1">
+              <div class="lang-wrap">
+                <button class="lang-btn" id="langBtn" type="button" aria-expanded="false" aria-controls="langMenu" aria-haspopup="true">
+                  <span class="lang-flag">🌐</span><span class="lang-name">EN</span>
+                </button>
+                <div class="lang-menu" id="langMenu" role="menu">
+                  <button type="button" role="menuitem" data-lang="en"><span class="lang-flag">🇬🇧</span> English<span class="lang-check"></span></button>
+                  <button type="button" role="menuitem" data-lang="es"><span class="lang-flag">🇪🇸</span> Español<span class="lang-check"></span></button>
+                  <button type="button" role="menuitem" data-lang="pt-BR"><span class="lang-flag">🇧🇷</span> Português<span class="lang-check"></span></button>
+                </div>
+              </div>
+            </li>
                 <li><button class="dropdown-item" data-lang="es">🇪🇸 Español</button></li>
                 <li><button class="dropdown-item" data-lang="pt-BR">🇧🇷 Português</button></li>
               </ul>
@@ -235,7 +235,7 @@
       <div class="row">
         <div class="col-lg-6 fade-in">
           <div class="section-card h-100">
-            <h2><i class="bi bi-gear-wide-connected me-2"></i>CI/CD Pipeline</h2>
+            <h2 data-i18n="sec_ci_cd"><i class="bi bi-gear-wide-connected me-2"></i>CI/CD Pipeline</h2>
             <p class="text-muted small">
               Quality gates enforced before every merge — 6 parallel jobs + 3 security scans.
             </p>
@@ -247,7 +247,7 @@
               <span class="badge-sec"><i class="bi bi-shield me-1"></i>security-scan</span>
               <span class="badge-ops"><i class="bi bi-check-lg me-1"></i>workflow-lint</span>
             </div>
-            <h3><i class="bi bi-shield-check"></i>Security Workflow</h3>
+            <h3 data-i18n="sec_security_wf"><i class="bi bi-shield-check"></i>Security Workflow</h3>
             <div class="d-flex flex-wrap gap-2 mb-2">
               <span class="badge-sec"><i class="bi bi-key me-1"></i>gitleaks</span>
               <span class="badge-sec"><i class="bi bi-incognito me-1"></i>secretlint</span>
@@ -263,7 +263,7 @@
         </div>
         <div class="col-lg-6 fade-in">
           <div class="section-card h-100">
-            <h2><i class="bi bi-cloud-arrow-up me-2"></i>Cloud Connectors</h2>
+            <h2 data-i18n="sec_cloud_conn"><i class="bi bi-cloud-arrow-up me-2"></i>Cloud Connectors</h2>
             <p class="text-muted small">
               Hybrid routing engine with circuit breaker, automatic fallback, and cost/latency-aware
               load balancing.
@@ -280,7 +280,7 @@
                 <span class="fw-semibold">Azure Delegator</span><span class="badge-ops">cloud</span>
               </div>
             </div>
-            <h3><i class="bi bi-arrow-repeat"></i>Circuit Breaker States</h3>
+            <h3 data-i18n="sec_cb_states"><i class="bi bi-arrow-repeat"></i>Circuit Breaker States</h3>
             <div class="d-flex gap-4 mt-2">
               <div>
                 <span class="cb-closed"><i class="bi bi-check-circle-fill me-1"></i>CLOSED</span>
@@ -304,7 +304,7 @@
       <div class="row">
         <div class="col-lg-6 fade-in">
           <div class="section-card h-100">
-            <h2><i class="bi bi-diagram-2 me-2"></i>Distributed Tracing</h2>
+            <h2 data-i18n="sec_tracing"><i class="bi bi-diagram-2 me-2"></i>Distributed Tracing</h2>
             <p class="text-muted small">
               Full OpenTelemetry-compatible tracing pipeline with span export and JSONL storage.
             </p>
@@ -327,7 +327,7 @@
         </div>
         <div class="col-lg-6 fade-in">
           <div class="section-card h-100">
-            <h2><i class="bi bi-database me-2"></i>State Persistence</h2>
+            <h2 data-i18n="sec_state_persist"><i class="bi bi-database me-2"></i>State Persistence</h2>
             <p class="text-muted small">
               Three-tier persistence: checkpoints (auto), snapshots (manual), rollback (dry-run
               validated).
@@ -354,7 +354,7 @@
       <div class="row">
         <div class="col-lg-6 fade-in">
           <div class="section-card h-100">
-            <h2><i class="bi bi-arrow-right-circle me-2"></i>Event Sourcing + Saga</h2>
+            <h2 data-i18n="sec_event_saga"><i class="bi bi-arrow-right-circle me-2"></i>Event Sourcing + Saga</h2>
             <p class="text-muted small">
               Append-only event store with projection snapshots and distributed saga orchestration
               with compensation.
@@ -382,7 +382,7 @@
         </div>
         <div class="col-lg-6 fade-in">
           <div class="section-card h-100">
-            <h2><i class="bi bi-heart-pulse me-2"></i>Health API</h2>
+            <h2 data-i18n="sec_health_api"><i class="bi bi-heart-pulse me-2"></i>Health API</h2>
             <p class="text-muted small">
               7-component health endpoint with status granularity — all verified operational.
             </p>
@@ -419,7 +419,7 @@
       <div class="row">
         <div class="col-lg-6 fade-in">
           <div class="section-card">
-            <h2><i class="bi bi-flask me-2"></i>Testing Infrastructure</h2>
+            <h2 data-i18n="sec_testing_infra"><i class="bi bi-flask me-2"></i>Testing Infrastructure</h2>
             <p class="text-muted small">
               Multi-suite test strategy across config, CI/CD, research, and dashboard.
             </p>
@@ -457,7 +457,7 @@
         </div>
         <div class="col-lg-6 fade-in">
           <div class="section-card">
-            <h2><i class="bi bi-terminal me-2"></i>Operations Commands</h2>
+            <h2 data-i18n="sec_ops_cmds"><i class="bi bi-terminal me-2"></i>Operations Commands</h2>
             <table class="table table-ops mb-0">
               <thead>
                 <tr>
@@ -498,7 +498,7 @@
 
       <div class="fade-in">
         <div class="section-card text-center">
-          <h2><i class="bi bi-pipeline me-2"></i>Pipeline Integration</h2>
+          <h2 data-i18n="sec_pipe_integ"><i class="bi bi-pipeline me-2"></i>Pipeline Integration</h2>
           <p class="text-muted small mb-3">
             All ops components integrate as lazy, non-blocking steps in the session autostart
             pipeline.
@@ -516,7 +516,7 @@
       <!-- Diagramas -->
       <div class="fade-in" id="diagrams">
         <div class="section-title">
-          <h2><i class="bi bi-images me-2" style="color: var(--p)"></i>Diagramas</h2>
+          <h2 data-i18n="sec_diagrams"><i class="bi bi-images me-2" style="color: var(--p)"></i>Diagramas</h2>
           <p>Arquitectura de datos y operaciones del stack</p>
         </div>
         <div class="row g-3">

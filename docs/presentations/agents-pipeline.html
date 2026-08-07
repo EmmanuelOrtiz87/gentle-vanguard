@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8" />
@@ -124,18 +124,18 @@
                 ><i class="bi bi-images me-1"></i><span data-i18n="nav_diagrams">Diagrams</span></a
               >
             </li>
-            <li class="nav-item dropdown ms-1">
-              <a
-                class="nav-link dropdown-toggle py-1 px-2"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                title="Language"
-                ><i class="bi bi-translate"></i
-              ></a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><button class="dropdown-item" data-lang="en">🇬🇧 English</button></li>
+                        <li class="nav-item ms-1">
+              <div class="lang-wrap">
+                <button class="lang-btn" id="langBtn" type="button" aria-expanded="false" aria-controls="langMenu" aria-haspopup="true">
+                  <span class="lang-flag">🌐</span><span class="lang-name">EN</span>
+                </button>
+                <div class="lang-menu" id="langMenu" role="menu">
+                  <button type="button" role="menuitem" data-lang="en"><span class="lang-flag">🇬🇧</span> English<span class="lang-check"></span></button>
+                  <button type="button" role="menuitem" data-lang="es"><span class="lang-flag">🇪🇸</span> Español<span class="lang-check"></span></button>
+                  <button type="button" role="menuitem" data-lang="pt-BR"><span class="lang-flag">🇧🇷</span> Português<span class="lang-check"></span></button>
+                </div>
+              </div>
+            </li>
                 <li><button class="dropdown-item" data-lang="es">🇪🇸 Español</button></li>
                 <li><button class="dropdown-item" data-lang="pt-BR">🇧🇷 Português</button></li>
               </ul>
@@ -186,14 +186,14 @@
     <section id="ecosystem" class="fade-in">
       <div class="section-title">
         <div class="display-4 mb-2">🌐</div>
-        <h2>Agent Ecosystem</h2>
+        <h2 data-i18n="sec_agent_eco">Agent Ecosystem</h2>
         <p>Orchestrator + 20 specialized subagents with confidence-based routing</p>
       </div>
       <div class="arch-layer">
         <div class="layer-name"><i class="bi bi-diagram-3 me-1"></i> Core Architecture</div>
         <div class="items">
-          <span>Orchestrator (Main)</span><span class="new">Routing Engine</span
-          ><span class="new">Skill Router</span><span>Confidence Scorer</span
+          <span>Orchestrator (Main)</span><span>Routing Engine</span
+          ><span>Skill Router</span><span>Confidence Scorer</span
           ><span>Task Dispatcher</span>
         </div>
         <p class="small text-secondary mt-2 mb-0">
@@ -356,7 +356,7 @@
     <section id="routing" class="fade-in">
       <div class="section-title">
         <div class="display-4 mb-2">🔄</div>
-        <h2>Routing Rules</h2>
+        <h2 data-i18n="sec_routing">Routing Rules</h2>
         <p>Confidence-driven task dispatching with intelligent fallback</p>
       </div>
       <div class="row g-3">
@@ -409,7 +409,7 @@
     <section id="pipeline" class="fade-in">
       <div class="section-title">
         <div class="display-4 mb-2">⚙️</div>
-        <h2>Session Pipeline</h2>
+        <h2 data-i18n="sec_pipeline">Session Pipeline</h2>
         <p>105 total config — 101 enabled (31 Phase 1 parallel) · 70 lazy background</p>
       </div>
       <div class="row g-3 mb-4">
@@ -544,7 +544,7 @@
     <section id="lifecycle" class="fade-in">
       <div class="section-title">
         <div class="display-4 mb-2">🔄</div>
-        <h2>Session Lifecycle</h2>
+        <h2 data-i18n="sec_lifecycle">Session Lifecycle</h2>
         <p>From START through WORK to END — with full persistence and audit</p>
       </div>
       <div class="row g-3">
@@ -593,7 +593,7 @@
     <section id="delegation" class="fade-in">
       <div class="section-title">
         <div class="display-4 mb-2">🤝</div>
-        <h2>Delegation Model</h2>
+        <h2 data-i18n="sec_delegation">Delegation Model</h2>
         <p>Intelligent task distribution with parallel execution capabilities</p>
       </div>
       <div class="row g-3">
@@ -632,7 +632,7 @@
     <section id="skills" class="fade-in">
       <div class="section-title">
         <div class="display-4 mb-2">📚</div>
-        <h2>Skills System</h2>
+        <h2 data-i18n="sec_skills_system">Skills System</h2>
         <p>170 skill files powering autonomous agent behavior</p>
       </div>
       <div class="row g-3">
@@ -686,8 +686,8 @@
           <span>doubt-driven-development</span>
           <span>planning-and-task-breakdown</span>
           <span>context-engineering</span>
-          <span class="new">dashboard</span>
-          <span class="new">interview-me</span>
+          <span>dashboard</span>
+          <span>interview-me</span>
         </div>
       </div>
     </section>
@@ -696,7 +696,7 @@
     <section class="fade-in" id="diagrams">
       <div class="section-title">
         <div class="display-4 mb-2">🖼️</div>
-        <h2>Diagrama — Pipeline de Sesión</h2>
+        <h2 data-i18n="sec_diagrams">Diagrama — Pipeline de Sesión</h2>
         <p>
           Flujo completo del pipeline: fase de inicio, pasos paralelos y tareas lazy en background.
           Pasa el cursor sobre los nodos para explorar cada etapa.
