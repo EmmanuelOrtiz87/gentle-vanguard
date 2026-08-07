@@ -22,7 +22,7 @@
  */
 
 import Database from 'better-sqlite3';
-import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync, statSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 
@@ -486,6 +486,66 @@ export function writeSavingsToNexus(
   return { inserted };
 }
 
+/** Ledger de ahorros de COMPRESIÓN del stack (prompt/output/structural). */
+export function writeCompressionSavings(): { inserted: number } {
+  const sources: Array<{ key: string; file: string; tokenField: string; label: string }> = [
+    {
+      key: 'compression:structural',
+      file: join(RUNTIME_DIR, 'structural-compression-metrics.json'),
+      tokenField: 'totalSaved',
+      label: 'structural compression',
+    },
+    {
+      key: 'compression:output',
+      file: join(RUNTIME_DIR, 'output-compression-metrics.json'),
+      tokenField: 'totalTokenSavings',
+      label: 'output compression',
+    },
+    {
+      key: 'compression:prompt',
+      file: join(RUNTIME_DIR, 'prompt-compression-stats.json'),
+      tokenField: 'totalSavedTokens',
+      label: 'prompt compression',
+    },
+  ];
+  const rows: Array<{
+    messageId: string;
+    sessionId: string;
+    category: string;
+    savedTokens: number;
+    source: string;
+    timeCreated: number;
+  }> = [];
+  for (const s of sources) {
+    try {
+      if (!existsSync(s.file)) continue;
+      const d = JSON.parse(readFileSync(s.file, 'utf-8')) as Record<string, unknown>;
+      const saved = Number(d[s.tokenField] ?? d.totalSaved ?? 0) || 0;
+      if (saved <= 0) continue;
+      rows.push({
+        messageId: s.key,
+        sessionId: 'stack-compression',
+        category: 'compression',
+        savedTokens: saved,
+        source: s.label,
+        timeCreated: statMtime(s.file),
+      });
+    } catch {
+      /* non-fatal */
+    }
+  }
+  return writeSavingsToNexus(rows);
+}
+
+/** mtime del archivo en epoch ms (0 si no accesible). */
+function statMtime(p: string): number {
+  try {
+    return statSync(p).mtimeMs;
+  } catch {
+    return 0;
+  }
+}
+
 export function ingestOnce(): {
   source: string | null;
   sessions: number;
@@ -516,12 +576,14 @@ export function ingestOnce(): {
     timeCreated: t.timeCreated,
   }));
   const savRes = writeSavingsToNexus(savings);
+  // Ahorros por compresión del stack (prompt/output/structural).
+  const compRes = writeCompressionSavings();
   updateStackSession(rows);
   writeObservabilityReport(rows);
   const maxT = rows[rows.length - 1].timeUpdated;
   saveLastIngested(maxT);
   log(
-    `Ingestadas ${rows.length} sesiones (insert=${inserted}, update=${updated}) + ${txnRes.inserted} transacciones + ${savRes.inserted} ahorros desde ${dbPath}`,
+    `Ingestadas ${rows.length} sesiones (insert=${inserted}, update=${updated}) + ${txnRes.inserted} transacciones + ${savRes.inserted} ahorros cache + ${compRes.inserted} ahorros compresión desde ${dbPath}`,
   );
   return { source: dbPath, sessions: rows.length, inserted, updated };
 }
@@ -562,6 +624,9 @@ export function generateTraceabilityReport(): string {
     const savToday = db
       .prepare(`SELECT COALESCE(SUM(saved_tokens),0) s FROM token_savings WHERE created_at >= datetime(?)`)
       .get(dayStr) as { s: number };
+    const savByCategory = db
+      .prepare(`SELECT category, COALESCE(SUM(saved_tokens),0) s FROM token_savings GROUP BY category`)
+      .all() as Array<{ category: string; s: number }>;
     const perSession = db
       .prepare(
         `SELECT session_id, COUNT(*) txns,
@@ -587,6 +652,9 @@ export function generateTraceabilityReport(): string {
       out += `  [${a.agent}] transacciones=${a.n} in=${L(a.i)} out=${L(a.o)} cacheRead=${L(a.cacheR)} cost=$${(a.cost ?? 0).toFixed(4)}\n`;
     }
     out += `  Ahorro por cache hoy: ${L(savToday.s)} tokens\n`;
+    for (const c of savByCategory) {
+      if (c.category !== 'cache') out += `  Ahorro ${c.category}: ${L(c.s)} tokens\n`;
+    }
     out += `\nTop sesiones por output:\n`;
     for (const s of perSession) {
       out += `  ${s.session_id?.slice(0, 18)} txns=${s.txns} in=${L(s.i)} out=${L(s.o)} cacheR=${L(s.cacheR)} cost=$${(s.cost ?? 0).toFixed(4)}\n`;
