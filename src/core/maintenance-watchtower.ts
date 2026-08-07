@@ -369,6 +369,19 @@ async function checkCodeGraph() {
       procRunning ? 'process detected' : '',
     ].filter(Boolean);
     addResult('codegraph', 'server process', 'PASS', signals.join(', '), 'ok');
+  } else if (mcpConfigured && isCodeGraphRecentlyBooted()) {
+    // The daemon is started lazily by session-autostart and can take ~20s to
+    // boot (npx+tsx resolution under concurrent lazy-step load). During this
+    // boot window a "not running" signal is EXPECTED, not a failure. Report
+    // WARN (no autoheal restart) so the autoheal does NOT spawn a competing
+    // instance that would kill the original daemon once it finishes booting.
+    addResult(
+      'codegraph',
+      'server process',
+      'WARN',
+      `${pidDetail}; daemon still booting (recent PID/session activity)`,
+      'verify',
+    );
   } else {
     addResult(
       'codegraph',
@@ -379,6 +392,40 @@ async function checkCodeGraph() {
       }`,
       'restart',
     );
+  }
+}
+
+/**
+ * True when the codegraph daemon may still be booting: the PID file was written
+ * recently, or the current session is younger than the boot window. This does
+ * NOT depend on session-current.json existing (it can be absent while the
+ * pipeline is still initializing, which previously made the boot tolerance
+ * silently fail and let the autoheal spawn a competing codegraph instance).
+ */
+function isCodeGraphRecentlyBooted(): boolean {
+  const pidFile = join(RUNTIME_DIR, 'codegraph-mcp-server.pid');
+  if (fileExists(pidFile)) {
+    try {
+      const ageMs = Date.now() - statSync(pidFile).mtimeMs;
+      if (ageMs < 90000) return true; // PID file touched in last 90s
+    } catch {
+      /* fall through */
+    }
+  }
+  return getSessionAgeSeconds() < 60;
+}
+
+/** Age of the current session in seconds (0 if unknown / no session file). */
+function getSessionAgeSeconds(): number {
+  try {
+    const sf = join(SESSION_DIR, 'session-current.json');
+    if (!fileExists(sf)) return Number.MAX_SAFE_INTEGER;
+    const data = readJson(sf) as { startTime?: string; timestamp?: string };
+    const t = new Date(data.startTime ?? data.timestamp ?? 0).getTime();
+    if (isNaN(t) || t === 0) return Number.MAX_SAFE_INTEGER;
+    return Math.floor((Date.now() - t) / 1000);
+  } catch {
+    return Number.MAX_SAFE_INTEGER;
   }
 }
 
@@ -1386,25 +1433,28 @@ async function autoHeal() {
   if (cgFail.length > 0) {
     if (!quiet) console.log('  [Heal] Restarting CodeGraph serve...');
     try {
-      const child = spawn('npx.cmd', ['codegraph', 'serve', '--mcp'], {
-        cwd: ROOT,
-        stdio: 'ignore',
-        detached: true,
-        windowsHide: true,
-        shell: true,
-      });
+      // Delegate to the canonical daemon script (src/codegraph-mcp-server-start.ts).
+      // It spawns `node codegraph.js serve --mcp` with an OPEN stdin pipe (keeping
+      // the stdio MCP server alive) and writes the real server PID itself.
+      //
+      // IMPORTANT: spawning `codegraph serve --mcp` directly with stdio:'ignore'
+      // would close stdin -> the server exits instantly, and a second instance
+      // competing for the codegraph index lock can kill an already-running
+      // daemon. Delegating to the daemon script avoids both failure modes.
+      const child = spawn(
+        'npx.cmd',
+        ['tsx', join(ROOT, 'src', 'codegraph-mcp-server-start.ts')],
+        {
+          cwd: ROOT,
+          stdio: 'ignore',
+          detached: true,
+          windowsHide: true,
+          shell: true,
+        },
+      );
       child.unref();
-      // Persist the fresh launcher PID so subsequent checks have a current signal.
-      try {
-        writeFileSync(
-          join(RUNTIME_DIR, 'codegraph-mcp-server.pid'),
-          String(child.pid ?? ''),
-          'utf-8',
-        );
-      } catch {
-        /* non-fatal */
-      }
-      await new Promise((resolve) => setTimeout(resolve, 4000));
+      // Give the daemon time to boot (npx+tsx resolution + server start).
+      await new Promise((resolve) => setTimeout(resolve, 6000));
       const up = isCodeGraphProcessRunning() || (await testPort(CODEGRAPH_PORT));
       if (up) {
         addResult('codegraph', 'autoheal', 'PASS', `Restarted (PID ${child.pid})`, 'ok');

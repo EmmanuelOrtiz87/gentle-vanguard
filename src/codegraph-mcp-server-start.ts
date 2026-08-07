@@ -14,10 +14,19 @@ import { runSync } from './core/run-command.js';
 
 const require = createRequire(import.meta.url);
 const PID_FILE = join(process.cwd(), '.runtime', 'codegraph-mcp-server.pid');
+const LOG_FILE = join(process.cwd(), '.runtime', 'codegraph-mcp-server.log');
 
 function log(message: string) {
   const timestamp = new Date().toISOString();
   console.log(`[${timestamp}] ${message}`);
+  // Also persist to a file so the daemon's lifecycle is observable even when
+  // spawned with stdio:'ignore' (lazy step in the session-autostart pipeline).
+  try {
+    const { appendFileSync } = require('fs') as typeof import('fs');
+    appendFileSync(LOG_FILE, `[${timestamp}] ${message}\n`, 'utf-8');
+  } catch {
+    /* non-fatal */
+  }
 }
 
 function findCodeGraph(): string {

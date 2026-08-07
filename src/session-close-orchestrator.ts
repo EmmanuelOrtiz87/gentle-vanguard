@@ -726,6 +726,17 @@ function isProcessRunning(matcher: string): boolean {
  * started lazily by session-autostart and can still be booting if the session
  * closes quickly, so we give them a short window before deciding they're down.
  */
+/**
+ * True when the close protocol is running at SESSION STARTUP rather than at a
+ * real session end. The autostart pipeline launches this orchestrator with
+ * --reason autostart-close (and the lightweight mode uses 'startup-cleanup').
+ * In those cases the daemons (codegraph, timeout, dashboard WS) were JUST
+ * started by the autostart, so the daemon-kill phase must be skipped.
+ */
+function isStartupClose(reason: string): boolean {
+  return reason === 'autostart-close' || reason === 'startup-cleanup';
+}
+
 function waitForProcess(matcher: string, timeoutMs: number): boolean {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
@@ -766,12 +777,18 @@ function killProcessByCommandLine(matcher: string): boolean {
   }
 }
 
-function phaseCleanup(): PhaseResult[] {
+function phaseCleanup(skipDaemonKill = false): PhaseResult[] {
   const results: PhaseResult[] = [];
   log('=== FASE 5: CLEANUP ===');
 
-  // 5.1 Kill child processes (CodeGraph MCP, Dashboard WS, Timeout Daemon)
-  const DAEMON_WAIT_MS = 10000; // give lazy daemons time to finish booting
+  // 5.1 Kill child processes (CodeGraph MCP, Dashboard WS, Timeout Daemon).
+  // When running at SESSION STARTUP (reason 'autostart-close' / 'startup-cleanup')
+  // this MUST be skipped: the daemons were just started by the autostart pipeline
+  // and killing them would defeat the purpose of the session (see close reports
+  // with reason=autostart-close that killed the freshly-booted codegraph daemon).
+  if (!skipDaemonKill) {
+    // 5.1 Kill child processes (CodeGraph MCP, Dashboard WS, Timeout Daemon)
+    const DAEMON_WAIT_MS = 10000; // give lazy daemons time to finish booting
   for (const target of KILL_TARGETS) {
     const phase = `kill-${target.name.toLowerCase().replace(/\s+/g, '-')}`;
     try {
@@ -814,6 +831,7 @@ function phaseCleanup(): PhaseResult[] {
       });
     }
   }
+  } // end if (!skipDaemonKill)
 
   // 5.2 Also kill any orphan session daemon processes (metrics tracker, cleanup daemons).
   // NOTE: matcher is deliberately specific — it must NOT match this orchestrator
@@ -990,13 +1008,16 @@ export async function runCloseOrchestrator(reason = 'session-end'): Promise<Clos
   // Run pre-validation (Capa 1 — always)
   const preValidateResults = phasePreValidate();
 
+  const isStartup = isStartupClose(reason);
+  if (isStartup) log('[STARTUP] Skipping daemon-kill phase (autostart-close)');
+
   const phases = {
     preClose: phasePreClose(reason),
     preValidate: preValidateResults,
     persist: await phasePersist(reason),
     backup: phaseBackup(),
     audit: phaseAudit(),
-    cleanup: phaseCleanup(),
+    cleanup: phaseCleanup(isStartup),
     verify: phaseVerify(),
   };
 
@@ -1081,7 +1102,7 @@ async function main() {
     // Run only the essential startup-cleanup phases
     phasePreClose(reason);
     await phasePersist(reason);
-    const cleanupResults = phaseCleanup();
+    const cleanupResults = phaseCleanup(isStartupClose(reason));
     const passed = cleanupResults.filter((r) => r.status === 'PASS').length;
     const failed = cleanupResults.filter((r) => r.status === 'FAIL').length;
     ok(`Lightweight cleanup: ${passed} pass, ${failed} fail`);

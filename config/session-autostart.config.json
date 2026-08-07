@@ -162,21 +162,21 @@
       },
       {
         "id": "session-close-orchestrator",
-        "enabled": true,
+        "enabled": false,
         "lazy": true,
         "script": "src/session-close-orchestrator.ts",
         "args": "--reason autostart-close",
         "required": false,
-        "description": "Orquestador de cierre aut\u00c3\u00b3nomo \u00e2\u20ac\u201d 6 fases: pre-close, persist, backup, audit, cleanup, verify. Mata procesos, guarda engram+nexus, crea checkpoint+backup."
+        "description": "DISABLED at autostart: running the close protocol at session START killed the freshly-started daemons (codegraph/timeout/dashboard). Session close must only run on real close (session-close-orchestrator.ts invoked explicitly)."
       },
       {
         "id": "session-close-validator",
-        "enabled": true,
+        "enabled": false,
         "lazy": true,
         "script": "src/session-close-validator.ts",
         "args": "--mode quick --report",
         "required": false,
-        "description": "Validador de cierre de sesi\u00c3\u00b3n (Capa 2) \u00e2\u20ac\u201d cross-references, temp files, errores/warnings, archivos no usados, completitud. Modo quick no bloqueante."
+        "description": "DISABLED at autostart: pairs with the close orchestrator; validation of a close that never ran at startup is meaningless."
       },
       {
         "id": "token-metrics-init",
