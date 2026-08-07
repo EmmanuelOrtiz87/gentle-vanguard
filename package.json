@@ -7,7 +7,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "test": "npx tsx src/test-runner.ts",
+    "test": "npx tsx src/test-runner-optimized.ts",
     "skill:export": "npx tsx src/skill-export.ts",
     "skill:export:dry": "npx tsx src/skill-export.ts --dry-run",
     "lint:json": "npx tsx src/json-lint.ts",
@@ -216,7 +216,9 @@
     "profile:list": "npx tsx src/model-profile-switcher.ts --list",
     "profile:status": "npx tsx src/model-profile-switcher.ts --status",
     "profile:set": "npx tsx src/model-profile-switcher.ts --set",
-    "profile:apply": "npx tsx src/model-profile-switcher.ts --set"
+    "profile:apply": "npx tsx src/model-profile-switcher.ts --set",
+    "retrieval:grade": "npx tsx src/retrieval-grader.ts",
+    "rag:retrieve": "npx tsx src/rag-retrieval.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.2",

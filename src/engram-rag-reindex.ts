@@ -66,50 +66,18 @@ function main(): void {
     rmSync(tmpExport, { force: true });
   }
 
-  const indexScript = join(__dirname, 'engram-vector-index.ps1');
-  if (!existsSync(indexScript)) {
-    log(
-      'Vector index script removed in Phase 1 cleanup — using engram export for freshness',
-      'Yellow',
-    );
-    try {
-      runSync('engram', ['--version'], { stdio: 'pipe' });
-      const exportArgs = ['export', tmpExport];
-      if (args.project) exportArgs.push('--project', args.project);
-      runSync('engram', exportArgs, { stdio: 'pipe' });
-      if (existsSync(tmpExport)) rmSync(tmpExport, { force: true });
-      log('engram export completed', 'Green');
-    } catch {
-      log('engram CLI not available', 'Yellow');
-    }
-
-    const ragLog = join(repoRoot, '.atl', 'rag-reindex.log');
-    const ragLogDir = dirname(ragLog);
-    mkdirSync(ragLogDir, { recursive: true });
-    const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    writeFileSync(
-      ragLog,
-      `[RAG-REINDEX] ${ts} — completed — project=${args.project || 'all'} — method=engram-export`,
-      'utf8',
-    );
-    log(`Freshness log: ${ragLog}`, 'Green');
-    return;
-  }
-
-  const argsList = ['-Force'];
-  if (args.project) argsList.push('-Project', args.project);
-  if (args.exportFile) argsList.push('-ExportFile', args.exportFile);
-
-  log(`Running: engram-vector-index.ps1 ${argsList.join(' ')}`);
+  // The legacy engram-vector-index.ps1 was removed in Phase 1 cleanup.
+  // Freshness is maintained via `engram export` (native CLI).
   try {
-    runSync('powershell', ['-File', indexScript, ...argsList], { stdio: 'inherit' });
-  } catch (e) {
-    const code = (e as { status?: number }).status;
-    log(`Re-index failed with exit code ${code}`, 'Red');
-    process.exit(code ?? 1);
+    runSync('engram', ['--version'], { stdio: 'pipe' });
+    const exportArgs = ['export', tmpExport];
+    if (args.project) exportArgs.push('--project', args.project);
+    runSync('engram', exportArgs, { stdio: 'pipe' });
+    if (existsSync(tmpExport)) rmSync(tmpExport, { force: true });
+    log('engram export completed', 'Green');
+  } catch {
+    log('engram CLI not available', 'Yellow');
   }
-
-  log('Re-index complete', 'Green');
 
   const ragLog = join(repoRoot, '.atl', 'rag-reindex.log');
   const ragLogDir = dirname(ragLog);
@@ -117,7 +85,7 @@ function main(): void {
   const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
   writeFileSync(
     ragLog,
-    `[RAG-REINDEX] ${ts} — completed — project=${args.project || 'all'} — index=${indexFile}`,
+    `[RAG-REINDEX] ${ts} — completed — project=${args.project || 'all'} — method=engram-export`,
     'utf8',
   );
   log(`Freshness log: ${ragLog}`, 'Green');

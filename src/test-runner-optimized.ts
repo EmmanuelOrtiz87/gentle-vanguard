@@ -49,11 +49,11 @@ const CORE_SUITES: Suite[] = [
 // Extended suites - run in normal mode
 const EXTENDED_SUITES: Suite[] = [
   {
-    name: 'Unit Tests (staged-review)',
+    name: 'Unit Tests (all)',
     cmd: 'npx',
-    args: ['tsx', '--test', 'tests/unit/staged-review.test.ts'],
+    args: ['tsx', '--test', 'tests/unit/*.test.ts'],
     required: true,
-    timeout: 60_000,
+    timeout: 90_000,
   },
   {
     name: 'Security Tests',
