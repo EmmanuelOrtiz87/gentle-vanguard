@@ -1,0 +1,17 @@
+{
+  "timestamp": "2026-08-07T03:00:00.000Z",
+  "generated_by": "token-ingest (tool-agnostic daemon)",
+  "token": {
+    "status": "PASS",
+    "used_today": 1525969,
+    "budget": 5000000,
+    "projected_pct": 31,
+    "sessions_today": 1
+  },
+  "cost": {
+    "ratePer1M": 10,
+    "actualCost": 0,
+    "currency": "USD"
+  },
+  "executive_traffic_light": "GREEN"
+}
