@@ -2,16 +2,18 @@
   "$schema": "https://opencode.ai/config.json",
   "agent": {
     "orchestrator": {
-      "description": "Main orchestrator agent — coordinates all subagents autonomously",
+      "description": "Main orchestrator agent - coordinates all subagents autonomously",
       "mode": "primary",
+      "model": "kimi-2-5",
+      "provider": "littellmott",
+      "steps": 12,
       "permission": {
         "websearch": "deny",
         "webfetch": "deny",
         "task": {
           "*": "allow"
         }
-      },
-      "steps": 12
+      }
     },
     "sdd-explore": {
       "description": "BA exploration agent — requirements gathering and analysis",
@@ -22,8 +24,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "sdd-design": {
       "description": "SAD architecture design agent — system design and API contracts",
@@ -34,8 +36,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "sdd-apply": {
       "description": "DEV implementation agent — code generation and feature building",
@@ -46,8 +48,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "sdd-verify": {
       "description": "QA verification agent — testing and validation",
@@ -58,8 +60,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "doc-agent": {
       "description": "Documentation agent — technical docs and guides",
@@ -70,8 +72,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "ops-agent": {
       "description": "Operations agent — deployment, CI/CD, infrastructure",
@@ -82,19 +84,20 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "gov-agent": {
       "description": "Governance agent — compliance, security, audit",
       "mode": "subagent",
       "hidden": true,
-      "model": "opencode/deepseek-v4-flash-free",
       "permission": {
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6
+      "steps": 6,
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "session-agent": {
       "description": "Session management agent — state tracking and lifecycle",
@@ -105,8 +108,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "premortem-agent": {
       "description": "Premortem analysis agent — risk identification and stress testing",
@@ -117,8 +120,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "maintenance-agent": {
       "description": "Maintenance agent — cleanup, optimization, and health monitoring",
@@ -129,8 +132,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "gitflow-agent": {
       "description": "GitFlow agent — branch management, PR automation, and git workflows",
@@ -141,8 +144,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "self-diag-agent": {
       "description": "Self-diagnosis agent — auto-debug and break-glass recovery",
@@ -153,8 +156,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "knowledge-agent": {
       "description": "Knowledge agent — knowledge base operations and vault management",
@@ -165,8 +168,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "mkt-agent": {
       "description": "Marketing agent — content strategy, campaigns, and brand positioning",
@@ -177,8 +180,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "sales-agent": {
       "description": "Sales agent — pipeline management, outreach, and deal qualification",
@@ -189,8 +192,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "finance-agent": {
       "description": "Finance agent — financial analysis, modeling, and forecasting",
@@ -201,8 +204,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "hr-agent": {
       "description": "HR agent — hiring, onboarding, and people operations",
@@ -213,8 +216,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "legal-agent": {
       "description": "Legal agent — compliance, contracts, and regulatory matters",
@@ -225,8 +228,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "bus-tele-agent": {
       "description": "Business telemetry agent — metrics, analytics, and business intelligence",
@@ -237,8 +240,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     },
     "sia-agent": {
       "description": "SIA self-improving agent — iterative refinement and feedback loops",
@@ -249,8 +252,8 @@
         "webfetch": "deny"
       },
       "steps": 6,
-      "model": "opencode/deepseek-v4-flash-free",
-      "variant": ""
+      "variant": "",
+      "model": "kimi-2-5"
     }
   },
   "mcp": {

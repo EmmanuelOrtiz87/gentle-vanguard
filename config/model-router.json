@@ -279,7 +279,10 @@
     "sessionTimeoutMinutes": 60,
     "auditLog": ".logs/model-router-audit.jsonl",
     "maxAuthAttempts": 3,
-    "lockoutDurationMinutes": 15
+    "lockoutDurationMinutes": 15,
+    "requireAuthorization": true,
+    "approvalRequired": true,
+    "changeDocumentation": true
   },
   "failover": {
     "enabled": true,
@@ -328,6 +331,13 @@
     },
     "trackingLevel": "per_call"
   },
+  "authorization": {
+    "requireApproval": true,
+    "userResponsibility": true,
+    "changeAudit": true,
+    "riskAssessment": true,
+    "documentationRequired": true
+  }
   "modelLevels": {
     "description": "Abstract model capability levels used by routing policy — all mapped to the single native available model in this environment",
     "fastCheap": {

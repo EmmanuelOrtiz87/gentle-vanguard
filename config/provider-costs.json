@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Per-provider, per-model cost in USD per 1K tokens (input/output). Used by cost-optimizer.ps1 for cost-aware routing.",
   "providers": {
     "opencode": {
@@ -21,6 +21,7 @@
         "qwen-3.6-plus": { "input": 0.0005, "output": 0.0015, "tier": "standard" },
         "glm-5": { "input": 0.002, "output": 0.006, "tier": "premium" },
         "kimi-k2.6": { "input": 0.001, "output": 0.003, "tier": "standard" },
+        "kimi-k2.5": { "input": 0.001, "output": 0.003, "tier": "standard" },
         "opencode/big-pickle": { "input": 0.0, "output": 0.0, "tier": "free" }
       },
       "monthlyQuota": { "tokens": 10000000, "resetDays": 30 }

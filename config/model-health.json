@@ -1,14 +1,16 @@
 {
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Model Provider Health — firmas de error de proveedor LLM que disparan auto-switch al modelo nativo. Detecta fallos de tool calling, modelos inexistentes, auth y rate limits registrados en el log de opencode.",
-  "lastModified": "2026-08-02",
+  "lastModified": "2026-08-08",
   "modifiedBy": "orchestrator",
   "enabled": true,
-  "fallbackModel": "opencode/deepseek-v4-flash-free",
+  "fallbackModel": "kimi-2-5",
   "cooldownMinutes": 60,
   "maxDetectionsPerModel": 3,
   "stateFile": ".runtime/model-health.json",
   "logSources": ["~/.local/share/opencode/log/opencode.log", ".session/*.log", ".session/*.jsonl"],
+  "approvalRequired": true,
+  "auditLog": ".logs/model-health-audit.jsonl",
   "signatures": [
     {
       "id": "UnsupportedToolCalling",
@@ -16,6 +18,14 @@
       "severity": "critical",
       "action": "switch-to-fallback",
       "description": "Proveedor no soporta tool calling sin param tools= (tipico Bedrock via litellm proxy). Auto-switch al modelo nativo."
+    },
+    {
+      "id": "ReasoningEffortNotSupported",
+      "pattern": "reasoning_effort.*not supported|UnsupportedParamsError.*reasoning_effort|bedrock.*does not support.*reasoning_effort",
+      "severity": "critical",
+      "action": "switch-to-fallback",
+      "description": "Bedrock no soporta el parametro reasoning_effort. Auto-switch al modelo nativo.",
+      "approvalRequired": true
     },
     {
       "id": "ModelNotFound",

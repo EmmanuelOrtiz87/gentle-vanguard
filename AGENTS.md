@@ -360,6 +360,104 @@ npx tsx src/retrieval-grader.ts --query "..." --chunks '["...","..."]'
 
 Tests: `tests/unit/retrieval-grader.test.ts`.
 
+## Integraciones Nativas (Capability Stack)
+
+Herramientas de capacidad absorbidas como TypeScript nativo — operativas desde la CLI, sin
+dependencias de servicios externos para su funcionamiento core.
+
+### Web Crawler dual-provider (`src/web-crawler.ts`)
+
+Motor de adquisición de contenido web con **doble proveedor**:
+
+| Operación | Primario | Fallback (sin API key, cero-config) |
+| --------- | -------- | ----------------------------------- |
+| Scrape    | Firecrawl (`FIRECRAWL_API_KEY`) | **Jina Reader** `r.jina.ai/<url>` → markdown |
+| Search    | Firecrawl (`FIRECRAWL_API_KEY`) | **Bing RSS** `&format=rss` → XML parseable |
+| Crawl/Map | Firecrawl (requiere key)        | Error descriptivo                    |
+
+- `fallbackEnabled: true` por defecto en `config/web-crawler.json`; el health reporta
+  `provider: firecrawl | jina-reader+bing` y `fallbackActive`.
+- Cache SHA256 por provider (`cacheKey` con tag `fb`/`fc`) — evita envenenar resultados entre
+  proveedores. Compresión estructural + logging a Nexus (`web-crawler.usage`).
+- **GOTCHA**: Jina Reader bloquea User-Agents de navegador (Chrome → 403); usa `curl/8.0.1`.
+  Bing search HTML sirve bot-detection a fetch de Node — usar el endpoint RSS.
+
+```bash
+npx tsx src/web-crawler-cli.ts search --query "typescript" --limit 5
+npx tsx src/web-crawler-cli.ts scrape --url https://example.com
+npx tsx src/web-crawler-cli.ts health
+```
+
+Tests: `tests/unit/web-crawler.test.ts` (13).
+
+### witr trace (`src/witr-wrapper.ts` + `src/witr-cli.ts`)
+
+Wrapper TS del binario [witr](https://github.com/pranshuparmar/witr) — "Why Is This Running?".
+Traza procesos/puertos/archivos/contenedores hasta su cadena causal, con auto-install y redacción
+de secrets del entorno (`***REDACTED***` para claves).
+
+```bash
+npx tsx src/witr-cli.ts process <pid>
+npx tsx src/witr-cli.ts port <port>
+```
+
+Integrado en la watchtower para trazar la cadena causal de componentes con FAIL/WARN.
+Tests: `tests/unit/witr-wrapper.test.ts`.
+
+### Research Trends (`src/research-trends.ts` + `src/research-trends-cli.ts`)
+
+Agregador de tendencias Last30Days desde GitHub, Hacker News, Stack Overflow, Dev.to y Reddit en
+un `TrendReport` normalizado (themes, hottest, emerging). Alimenta el skill `web-research` y puede
+cruzar páginas trending vía web-crawler (Firecrawl/scrape).
+
+```bash
+npx tsx src/research-trends-cli.ts fetch --timeframe 7d --sources github,hackernews
+npx tsx src/research-trends-cli.ts themes --query "typescript OR rust"
+npx tsx src/research-trends-cli.ts report
+```
+
+Funciones puras exportadas: `buildReport`, `queryThemes` (soporta `OR`), `renderMarkdown`,
+`deserializeReport`. Tests: `tests/unit/research-trends.test.ts`.
+
+### Humanizer (`src/humanizer.ts` + `src/humanizer-cli.ts`)
+
+Transforma texto técnico/IA en prosa humana con análisis de legibilidad y scoring.
+
+```bash
+npm run humanize:analyze -- <texto>
+npm run humanize:transform -- <texto>
+npm run humanize:score -- <texto>
+```
+
+Tests: `tests/unit/humanizer.test.ts`.
+
+### Design Tokens (`src/design-tokens.ts` + `src/design-system-cli.ts`)
+
+Sistema de tokens de diseño (colores, tipografía, spacing) con generación de CSS/JSON y
+validación de escala.
+
+```bash
+npm run design:generate   # regenera tokens desde config/design-tokens.json
+npm run design:check      # valida consistencia
+npm run design:scale      # comprueba escala
+```
+
+Tests: `tests/unit/design-tokens.test.ts`.
+
+### Planning Templates (`src/planning-templates.ts` + `src/planning-templates.ts`)
+
+Plantillas de planificación pre-write (planes de sesión, desglose de tareas, ADRs) con validación
+de estructura. Tests: `tests/unit/planning-templates.test.ts`.
+
+### Animations (`src/animations/`)
+
+Motor de animaciones para la dashboard (fade-in, scale, transitions) con CLI de creación/análisis.
+
+```bash
+npm run animation:create -- <name>
+npm run animation:analyze -- <name>
+```
+
 ## CI/CD Pipeline
 
 - `.github/workflows/ci.yml` — 6 jobs: lint-typecheck, test, dashboard-tests, dashboard-build,

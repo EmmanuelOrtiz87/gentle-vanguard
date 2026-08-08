@@ -276,7 +276,7 @@
       "action": {
         "type": "switch_to_fallback_model",
         "target": "model-provider-healer",
-        "fallbackModel": "opencode/deepseek-v4-flash-free",
+        "fallbackModel": "kimi-2-5",
         "description": "Run model-provider-healer to mark the failing model unhealthy and auto-switch the active model to the native fallback"
       },
       "metadata": {
@@ -289,6 +289,30 @@
       "rollback": {
         "enabled": true,
         "strategy": "switch_back_to_requested_model"
+      }
+    },
+    {
+      "id": "ReasoningEffortIncompatible",
+      "trigger": {
+        "condition": "provider_error_signature",
+        "description": "Bedrock provider reported incompatibility with reasoning_effort parameter"
+      },
+      "action": {
+        "type": "apply_provider_specific_fix",
+        "target": "litellm_config",
+        "fixType": "drop_reasoning_effort",
+        "description": "Apply provider-specific configuration to drop reasoning_effort parameter for Bedrock-compatible providers"
+      },
+      "metadata": {
+        "pattern": "reasoning_effort.*not supported|UnsupportedParamsError.*reasoning_effort",
+        "confidence": 0.95,
+        "successRate": 0.98,
+        "impactLevel": "high",
+        "estimatedRecoveryTime": "5s"
+      },
+      "rollback": {
+        "enabled": true,
+        "strategy": "restore_normal_config"
       }
     },
     {
