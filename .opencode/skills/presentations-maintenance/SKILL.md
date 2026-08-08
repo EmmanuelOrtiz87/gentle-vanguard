@@ -72,6 +72,7 @@ Verificación en Chrome real (CDP): scripts en `C:\Users\emman\AppData\Local\Tem
    colisionar con leyendas (reposicionar o ampliar viewBox).
 8. **node --check** = test de sintaxis del JS del navegador (no usa TS).
 9. **Commit**: solo archivos de trabajo de presentations; no tocar archivos automáticos de daemons.
+10. **Doble convención de bloques**: `i18n.js` declara bloques como `en: {`, `es: {`, `'pt-BR': {` (pt-BR CON comillas simples, los otros sin). `i18n-content.js` usa `__GV_CONTENT.en = {`, `__GV_CONTENT.es = {`, `__GV_CONTENT['pt-BR'] = {` (corchetes). Cualquier regex de extracción que asuma un solo formato romperá: al recorrer TODOS los bloques sobrescribe con el último (pt-BR); al buscar el fin de un bloque con el formato equivocado captura todo el resto del archivo. Extraer SIEMPRE el bloque `en` de forma delimitada (entre su apertura y el siguiente bloque).
 
 ## Patrón de info-trigger (estándar)
 
@@ -100,8 +101,19 @@ Herramientas reutilizables, parametrizadas y probadas. Todas con `-DryRun` para 
 | `insert-tips.ps1`         | Inserta claves `tip_*` desde JSON en i18n.js (por bloque) | `pwsh scripts/insert-tips.ps1 -DryRun` |
 | `dedupe-i18n.ps1`         | Elimina duplicados en un bloque de idioma            | `pwsh scripts/dedupe-i18n.ps1 -Block en` |
 | `homologate-matrix.ps1`   | Convierte tds de la Feature Matrix en span + trigger | `pwsh scripts/homologate-matrix.ps1 -DryRun` |
-| `cdp-verify-final.js`     | Verificación en Chrome real (CDP), 6 checks          | `node scripts/cdp-verify-final.js --cdp 9225` |
+| `homologate-pages.ps1`    | Homologa tds en TODAS las páginas (title fallback EN desde i18n-content.js) | `pwsh scripts/homologate-pages.ps1 -Page health.html` |
+| `gen-tips-c.ps1`          | Genera claves `tip_c_*` en 3 idiomas desde i18n-content.js (traducción automática de modales) | `pwsh scripts/gen-tips-c.ps1 -DryRun` |
+| `cdp-verify-final.js`     | Verificación en Chrome real (CDP), 6 checks (index.html) | `node scripts/cdp-verify-final.js --cdp 9225` |
 | `tips-new.json`           | Claves `tip_*` genéricas (en/es/pt-BR) para insertar | dato para `insert-tips.ps1`               |
 | `tips-fm.json`            | Claves `tip_fm_*` de la Feature Matrix               | dato para `homologate-matrix.ps1`         |
 
-Los scripts detectan el repo por defecto (paths relativos desde el cwd) y aceptan `-JsonPath`/`-JsPath`/`-HtmlPath`/`--origin`/`--page` explícitos. Se verificaron en seco: insert-tips idempotente (0 claves reinsertadas), dedupe 0 duplicados (208/bloque), homologate 0 filas restantes.
+Los scripts detectan el repo por defecto (paths relativos desde el cwd) y aceptan `-JsonPath`/`-JsPath`/`-HtmlPath`/`--origin`/`--page` explícitos. Se verificaron en seco: insert-tips idempotente (0 claves reinsertadas), dedupe 0 duplicados (353/bloque), homologate 0 filas restantes.
+
+## Flujo completo de homologación multi-idioma
+
+1. `homologate-pages.ps1 -DryRun` — ver alcance (tds sin trigger)
+2. `homologate-pages.ps1` — transforma tds → `span + info-trigger` (title fallback EN)
+3. `gen-tips-c.ps1 -DryRun` — ver claves `tip_c_*` a generar
+4. `gen-tips-c.ps1` — inserta traducciones en los 3 bloques (modales multi-idioma)
+5. `npm run presentations:validate` — 11/11 PASS esperado
+6. Verificación CDP en Chrome real (health/security-governance/quickstart): modales EN+ES traducidos

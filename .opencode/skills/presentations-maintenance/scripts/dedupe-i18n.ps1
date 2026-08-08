@@ -24,13 +24,24 @@ $idx = [Array]::IndexOf($order, $Block)
 if ($idx -lt 0) { throw "Bloque inválido: $Block (en|es|pt-BR)" }
 
 $startMarker = "${Block}`r?`n\s*\{|${Block}`:\s*\{"
-$blockStart = $t.IndexOf("${Block}: {")
+# Buscar inicio del bloque en ambos formatos: "en: {" y "'pt-BR': {"
+$blockStart = -1
+foreach ($fmt in @("$Block`: {", "'$Block': {")) {
+  $cand = $t.IndexOf($fmt)
+  if ($cand -ge 0 -and ($blockStart -lt 0 -or $cand -lt $blockStart)) { $blockStart = $cand }
+}
 if ($blockStart -lt 0) { throw "Bloque '$Block' no encontrado en i18n.js" }
 
 # Fin del bloque: el siguiente idioma en el orden, o el cierre final
+# Soporta ambos formatos: "es: {" y "'pt-BR': {"
 $endPos = $t.Length
 for ($i = $idx + 1; $i -lt $order.Count; $i++) {
-  $nextIdx = $t.IndexOf("$($order[$i]): {", $blockStart + $Block.Length)
+  $nextName = $order[$i]
+  $nextIdx = -1
+  foreach ($fmt in @("$nextName`: {", "'$nextName': {")) {
+    $cand = $t.IndexOf($fmt, $blockStart + $Block.Length)
+    if ($cand -ge 0 -and ($nextIdx -lt 0 -or $cand -lt $nextIdx)) { $nextIdx = $cand }
+  }
   if ($nextIdx -ge 0) { $endPos = $nextIdx; break }
 }
 
