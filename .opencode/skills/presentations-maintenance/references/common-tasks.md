@@ -40,18 +40,24 @@
 El validador estructural NO comprueba render. Para verificación visual/DOM en Chrome:
 
 ```powershell
-# 1. Servir con no-store (evita caché de modales)
-node C:\Users\emman\AppData\Local\Temp\opencode\gv-probe\serve.js
+# 1. Servir con no-store (evita caché de modales i18n en recargas)
+npm run presentations:serve -- --port 8899 --no-browser --no-store
 
-# 2. Lanzar Chrome con CDP remoto (puerto 9225)
+# 2. Lanzar Chrome con CDP remoto (puerto 9225):
+#    chrome --remote-debugging-port=9225
 
-# 3. Ejecutar verificación
-node C:\Users\emman\AppData\Local\Temp\opencode\gv-probe\cdp-verify-final.js
+# 3. Ejecutar verificación (página específica, 3 idiomas)
+node .opencode/skills/presentations-maintenance/scripts/cdp-verify-page.cjs --page=health.html
+
+# 3b. Verificación completa de index.html (6 checks: icono, secciones, modales EN/ES/PT, lightbox)
+node .opencode/skills/presentations-maintenance/scripts/cdp-verify-final.cjs
 ```
 
-Checks CDP: icono Layer 4 (bi-book presente, bi-brain ausente), conteo de triggers por sección,
-traducción de modales (abrir y leer texto en los 3 idiomas), centrado del lightbox (comparar
-transform scale/translate contra lo esperado matemáticamente).
+Checks CDP de `cdp-verify-page.cjs`: triggers por página (todos con data-i18n-title), apertura del
+modal con texto (EN), traducción activa en ES y pt-BR (no fallback en inglés).
+`cdp-verify-final.cjs` añade: icono Layer 4 (bi-book presente, bi-brain ausente), conteos por
+sección de index.html, y centrado matemático del lightbox (comparar transform scale/translate
+contra lo esperado).
 
 ## Lightbox
 

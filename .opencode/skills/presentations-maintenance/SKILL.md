@@ -29,13 +29,16 @@ diagramas SVG.
 
 ```powershell
 npm run presentations:serve          # Sirve la carpeta (puerto 3000, abre navegador)
+npm run presentations:serve -- --port 8899 --no-browser --no-store   # Modo verificación CDP (sin caché)
 npm run presentations:stop           # Detiene el servidor
 npm run presentations:validate       # Validación estructural (11 archivos, 0 deps)
 npx tsx src/cli/validate-presentations.ts --dir <path>   # Validar con ruta custom
 ```
 
-Verificación en Chrome real (CDP): scripts en `C:\Users\emman\AppData\Local\Temp\opencode\gv-probe\`
-(`serve.js` puerto 8899 + Chrome CDP 9225 + `cdp-verify-final.js`).
+Verificación en Chrome real (CDP): el servidor nativo con `--no-store` + Chrome CDP
+(`--remote-debugging-port=9225`) + `scripts/cdp-verify-page.cjs` (cualquier página) o
+`scripts/cdp-verify-final.cjs` (index.html completo). No depende de herramientas externas:
+el flag `--no-store` del servidor TS evita la caché de modales i18n en recargas.
 
 ## Arquitectura de archivos
 
