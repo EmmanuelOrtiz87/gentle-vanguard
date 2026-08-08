@@ -32,6 +32,7 @@ npm run presentations:serve          # Sirve la carpeta (puerto 3000, abre naveg
 npm run presentations:serve -- --port 8899 --no-browser --no-store   # Modo verificación CDP (sin caché)
 npm run presentations:stop           # Detiene el servidor
 npm run presentations:validate       # Validación estructural (11 archivos, 0 deps)
+npm run presentations:verify:cdp -- --page=health.html   # Verificación CDP en Chrome real (3 idiomas)
 npx tsx src/cli/validate-presentations.ts --dir <path>   # Validar con ruta custom
 ```
 
