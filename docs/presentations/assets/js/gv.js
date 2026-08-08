@@ -213,47 +213,162 @@
   function initDiagramModal() {
     var imgs = document.querySelectorAll('.svg-diagram');
     if (!imgs.length) return;
+
+    // Lightbox con pan/zoom nativo (patrón estándar Google Photos / MapLibre)
     var overlay = document.createElement('div');
-    overlay.className = 'gv-modal';
+    overlay.className = 'gv-lightbox';
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
     overlay.innerHTML =
-      '<div class="gv-modal-backdrop"></div>' +
-      '<div class="gv-modal-box">' +
-      '<button class="gv-modal-close" aria-label="Close">✕</button>' +
-      '<img class="gv-modal-img" alt="" />' +
-      '<div class="gv-modal-cap"></div>' +
+      '<div class="gv-lightbox-backdrop"></div>' +
+      '<div class="gv-lightbox-stage">' +
+      '<img class="gv-lightbox-img" alt="" draggable="false" />' +
+      '</div>' +
+      '<div class="gv-lightbox-toolbar">' +
+      '<button class="gv-lightbox-btn" data-zoom="out" aria-label="Zoom out">−</button>' +
+      '<button class="gv-lightbox-btn" data-zoom="reset" aria-label="Reset zoom">⟲</button>' +
+      '<button class="gv-lightbox-btn" data-zoom="in" aria-label="Zoom in">+</button>' +
+      '</div>' +
+      '<button class="gv-lightbox-close" aria-label="Close">✕</button>' +
+      '<div class="gv-lightbox-cap"></div>' +
+      '<div class="gv-lightbox-hint">' +
+      '<span data-i18n="lbox_hint_wheel">Scroll to zoom</span> · ' +
+      '<span data-i18n="lbox_hint_drag">Drag to pan</span> · ' +
+      '<span data-i18n="lbox_hint_dbl">Double-click to toggle</span>' +
       '</div>';
     document.body.appendChild(overlay);
 
-    var box = overlay.querySelector('.gv-modal-box');
-    var img = overlay.querySelector('.gv-modal-img');
-    var cap = overlay.querySelector('.gv-modal-cap');
+    var stage = overlay.querySelector('.gv-lightbox-stage');
+    var img = overlay.querySelector('.gv-lightbox-img');
+    var cap = overlay.querySelector('.gv-lightbox-cap');
+
+    // Estado de pan/zoom
+    var scale = 1, tx = 0, ty = 0;
+    var minScale = 0.5, maxScale = 12;
+    var dragging = false, startX = 0, startY = 0, origTx = 0, origTy = 0;
+    var moved = false;
+
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+    function apply() {
+      img.style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + scale + ')';
+    }
+
+    function fitToStage() {
+      var sw = stage.clientWidth, sh = stage.clientHeight;
+      var iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
+      if (!iw || !ih) { scale = 1; tx = 0; ty = 0; apply(); return; }
+      // Ajustar imagen a la vista (sin overflow) y permitir zoom hasta 12x
+      scale = Math.min(sw / iw, sh / ih, 1);
+      minScale = scale * 0.8;
+      tx = (sw - iw * scale) / 2;
+      ty = (sh - ih * scale) / 2;
+      apply();
+    }
+
+    function zoomAt(px, py, factor) {
+      var newScale = clamp(scale * factor, minScale, maxScale);
+      var k = newScale / scale;
+      // Mantener el punto bajo el cursor fijo (zoom centrado en cursor)
+      tx = px - (px - tx) * k;
+      ty = py - (py - ty) * k;
+      scale = newScale;
+      apply();
+    }
+
+    function resetZoom() {
+      fitToStage();
+    }
 
     function open(el) {
       var src = el.currentSrc || el.src || el.getAttribute('src');
       var alt = el.getAttribute('alt') || '';
+      // Resetear transform para evitar parpadeo mientras carga
+      img.style.transform = 'none';
+      scale = 1; tx = 0; ty = 0;
       img.src = src;
       cap.textContent = alt;
       overlay.classList.add('open');
       document.body.style.overflow = 'hidden';
+      // Ajustar una vez la imagen esté realmente decodificada (funciona también
+      // con imágenes cacheadas, donde naturalWidth puede tardar en estar listo).
+      function afterLoad() { fitToStage(); }
+      if (img.complete && img.naturalWidth > 0) {
+        // Imagen ya lista (mismo src que antes): re-encajar
+        afterLoad();
+      } else if (typeof img.decode === 'function') {
+        img.decode().then(afterLoad).catch(afterLoad);
+      } else {
+        img.addEventListener('load', afterLoad, { once: true });
+      }
     }
+
     function close() {
       overlay.classList.remove('open');
       document.body.style.overflow = '';
     }
 
+    // Click en diagrama → abrir lightbox
     imgs.forEach(function (el) {
       el.style.cursor = 'zoom-in';
-      el.addEventListener('click', function (e) {
-        // Si el diagrama es interactivo (tooltips), el click sigue abriendo el modal
-        open(el);
+      el.addEventListener('click', function () { open(el); });
+    });
+
+    // Cerrar con backdrop (solo si no hubo drag) o botón
+    overlay.addEventListener('click', function (e) {
+      if ((e.target === overlay || e.target.classList.contains('gv-lightbox-backdrop')) && !moved) close();
+    });
+    overlay.querySelector('.gv-lightbox-close').addEventListener('click', close);
+
+    // Rueda → zoom centrado en cursor
+    stage.addEventListener('wheel', function (e) {
+      e.preventDefault();
+      var rect = stage.getBoundingClientRect();
+      var factor = e.deltaY < 0 ? 1.18 : 1 / 1.18;
+      zoomAt(e.clientX - rect.left, e.clientY - rect.top, factor);
+    }, { passive: false });
+
+    // Botones +/−/reset
+    overlay.querySelectorAll('[data-zoom]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var rect = stage.getBoundingClientRect();
+        var cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+        if (btn.getAttribute('data-zoom') === 'in') zoomAt(rect.left, rect.top, 1.6);
+        else if (btn.getAttribute('data-zoom') === 'out') zoomAt(rect.left, rect.top, 1 / 1.6);
+        else resetZoom();
       });
     });
-    overlay.addEventListener('click', function (e) {
-      if (e.target === overlay || e.target.classList.contains('gv-modal-backdrop')) close();
+
+    // Drag → panear
+    stage.addEventListener('pointerdown', function (e) {
+      dragging = true; moved = false;
+      startX = e.clientX; startY = e.clientY;
+      origTx = tx; origTy = ty;
+      stage.setPointerCapture(e.pointerId);
+      stage.style.cursor = 'grabbing';
     });
-    overlay.querySelector('.gv-modal-close').addEventListener('click', close);
+    stage.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      var dx = e.clientX - startX, dy = e.clientY - startY;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
+      tx = origTx + dx; ty = origTy + dy;
+      apply();
+    });
+    stage.addEventListener('pointerup', function () {
+      dragging = false;
+      stage.style.cursor = 'grab';
+    });
+    stage.style.cursor = 'grab';
+
+    // Doble click → alternar zoom 2x / ajustar
+    stage.addEventListener('dblclick', function (e) {
+      var rect = stage.getBoundingClientRect();
+      if (scale > 1.01) resetZoom();
+      else zoomAt(e.clientX - rect.left, e.clientY - rect.top, 2.2);
+    });
+
+    // ESC → cerrar
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') close();
     });

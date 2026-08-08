@@ -896,7 +896,8 @@ section {
 .mono-tab { font-variant-numeric: tabular-nums; }
 
 /* --- 30. Diagram modal (click en diagrama → imagen ampliada) ------------------------- */
-.gv-modal {
+/* --- 30a. Diagram lightbox with pan/zoom (Google-Photos style) ------------------- */
+.gv-lightbox {
   position: fixed;
   inset: 0;
   z-index: 4000;
@@ -908,78 +909,135 @@ section {
   opacity: 0;
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
-.gv-modal.open {
+.gv-lightbox.open {
   visibility: visible;
   opacity: 1;
 }
-.gv-modal-backdrop {
+.gv-lightbox-backdrop {
   position: absolute;
   inset: 0;
-  background: oklch(0.12 0.02 262 / 0.82);
+  background: oklch(0.1 0.02 262 / 0.88);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
-.gv-modal-box {
+.gv-lightbox-stage {
   position: relative;
-  max-width: min(94vw, 1400px);
-  max-height: 90vh;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  background: var(--card2);
-  border: 1px solid var(--br-soft);
+  align-items: center;
+  justify-content: center;
   border-radius: var(--r-lg);
-  padding: 1rem;
-  box-shadow: 0 0 80px oklch(0.6 0.15 210 / 0.25), 0 30px 80px oklch(0.1 0.02 262 / 0.6);
-  transform: translateY(12px) scale(0.98);
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-  animation: gv-modal-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
-@keyframes gv-modal-in {
-  from { transform: translateY(12px) scale(0.98); }
-  to { transform: translateY(0) scale(1); }
+.gv-lightbox-stage:active {
+  cursor: grabbing;
 }
-.gv-modal-img {
-  max-width: 100%;
-  max-height: 76vh;
+.gv-lightbox-img {
   width: auto;
   height: auto;
   border-radius: var(--r-md);
-  border: 1px solid var(--br-soft);
   background: oklch(0.14 0.02 262);
+  box-shadow: 0 0 60px oklch(0.1 0.02 262 / 0.8);
+  will-change: transform;
+  transform-origin: 0 0;
+  transition: transform 0.08s ease-out;
 }
-.gv-modal-cap {
-  text-align: center;
-  color: var(--text-dim);
-  font-size: 0.85rem;
-  padding: 0.25rem 0.5rem;
+.gv-lightbox-img.no-anim {
+  transition: none;
 }
-.gv-modal-close {
+.gv-lightbox-toolbar {
   position: absolute;
-  top: -14px;
-  right: -14px;
-  width: 34px;
-  height: 34px;
+  bottom: 1.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.4rem;
+  background: oklch(0.18 0.03 262 / 0.85);
+  border: 1px solid var(--br-soft);
+  border-radius: 999px;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 30px oklch(0.1 0.02 262 / 0.5);
+}
+.gv-lightbox-btn {
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   border: 1px solid var(--br-soft);
   background: var(--card3);
   color: var(--text);
-  font-size: 0.9rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+.gv-lightbox-btn:hover {
+  background: linear-gradient(135deg, var(--p), var(--a));
+  color: #fff;
+  transform: scale(1.08);
+}
+.gv-lightbox-btn[data-zoom="reset"] {
+  font-size: 1rem;
+}
+.gv-lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--br-soft);
+  background: var(--card3);
+  color: var(--text);
+  font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.25s ease;
-  z-index: 2;
+  z-index: 3;
 }
-.gv-modal-close:hover {
+.gv-lightbox-close:hover {
   background: var(--er);
   color: #fff;
   transform: rotate(90deg);
 }
+.gv-lightbox-cap {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  max-width: calc(100% - 5rem);
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  padding: 0.35rem 0.8rem;
+  background: oklch(0.18 0.03 262 / 0.7);
+  border: 1px solid var(--br-soft);
+  border-radius: 999px;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.gv-lightbox-hint {
+  position: absolute;
+  bottom: 1.4rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(3.2rem);
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0.85;
+}
 @media (prefers-reduced-motion: reduce) {
-  .gv-modal-box { animation: none; }
+  .gv-lightbox-img { transition: none; }
 }
 
 /* --- 30b. Info modal (click en la "i" → detalle ampliado) -------------------------- */

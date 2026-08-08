@@ -70,12 +70,12 @@
 <text x="60" y="332" fill="#cbd5e1" font-family="system-ui,sans-serif" font-size="10.5">6 nodes · Persistent knowledge</text>
 <text x="60" y="362" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="9">Hover: detalle</text>
 <g fill="#1e293b" stroke="#fbbf24" stroke-opacity=".55" stroke-width="1" rx="6" font-family="system-ui,sans-serif" font-size="9.5" text-anchor="middle">
-<rect x="180" y="306" width="118" height="28"/><text x="239" y="324" fill="#e2e8f0">Engram (2078)</text>
-<rect x="306" y="306" width="128" height="28"/><text x="370" y="324" fill="#e2e8f0">CodeGraph</text>
-<rect x="442" y="306" width="100" height="28"/><text x="492" y="324" fill="#e2e8f0">Graphify</text>
-<rect x="550" y="306" width="112" height="28"/><text x="606" y="324" fill="#e2e8f0">ML Embeddings</text>
-<rect x="670" y="306" width="90" height="28"/><text x="715" y="324" fill="#e2e8f0">Nexus DB</text>
-<rect x="768" y="306" width="120" height="28"/><text x="828" y="324" fill="#e2e8f0">Knowledge Vault</text>
+<rect x="180" y="304" width="118" height="24"/><text x="239" y="320" fill="#e2e8f0">Engram (2078)</text>
+<rect x="306" y="304" width="128" height="24"/><text x="370" y="320" fill="#e2e8f0">CodeGraph</text>
+<rect x="442" y="304" width="100" height="24"/><text x="492" y="320" fill="#e2e8f0">Graphify</text>
+<rect x="550" y="304" width="112" height="24"/><text x="606" y="320" fill="#e2e8f0">ML Embeddings</text>
+<rect x="670" y="304" width="90" height="24"/><text x="715" y="320" fill="#e2e8f0">Nexus DB</text>
+<rect x="768" y="304" width="120" height="24"/><text x="828" y="320" fill="#e2e8f0">Knowledge Vault</text>
 </g>
 <rect x="880" y="296" width="26" height="18" rx="9" fill="#fcd34d"/><text x="893" y="309" text-anchor="middle" fill="#0a0e1a" font-family="system-ui,sans-serif" font-size="10" font-weight="800">6</text>
 </g>

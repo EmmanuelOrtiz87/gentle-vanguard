@@ -1,4 +1,4 @@
-﻿﻿<!doctype html>
+﻿<!doctype html>
 <html lang="es" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8" />
@@ -313,7 +313,7 @@
         </div>
       </div>
       <div class="arch-layer">
-        <div class="layer-name"><i class="bi bi-brain me-1"></i>Layer 4 — Memory & Knowledge</div>
+        <div class="layer-name"><i class="bi bi-book me-1"></i>Layer 4 — Memory & Knowledge</div>
         <div class="items">
           <span>Engram (2078 obs)</span><span>CodeGraph (10663 nodes)</span
           ><span>Graphify (18MB)</span><span>ML Embeddings</span><span>Nexus DB</span
@@ -508,7 +508,11 @@
       <div class="row g-4">
         <div class="col-lg-6">
           <div class="section-card">
-            <h3><i class="bi bi-arrow-repeat text-info me-2"></i>Executive Loop</h3>
+            <h3>
+              <i class="bi bi-arrow-repeat text-info me-2"></i>Executive Loop<span class="info-trigger" data-i18n-title="tip_auto_loop" title="Detection → Evaluation → Decision → Execution → Verification → Learning. Reads 3 trigger sources: predictive-governor (budget), skill-evolution (deprecation) and auto-norm-learner (norms). Auto-apply safe with rollback if degradation &gt;15%."
+                >i</span
+              >
+            </h3>
             <div class="d-flex align-items-center gap-2 flex-wrap mt-3 mb-3">
               <span
                 class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 p-2"
@@ -543,7 +547,11 @@
         </div>
         <div class="col-lg-6">
           <div class="section-card">
-            <h3><i class="bi bi-shield-check text-success me-2"></i>Health & Safety</h3>
+            <h3>
+              <i class="bi bi-shield-check text-success me-2"></i>Health & Safety<span class="info-trigger" data-i18n-title="tip_auto_safety" title="Health &amp; safety envelope: 112/112 checks PASS across 18 components, circuit breaker (5 failures → OPEN, 2 successes → CLOSED), 3-tier auto-escalation (3→5→10), auto-rollback and a minimum apply threshold of 80% confidence."
+                >i</span
+              >
+            </h3>
             <div class="d-flex align-items-center gap-2 flex-wrap mt-3">
               <span class="badge bg-success bg-opacity-10 text-success p-2">🟢 112/112 PASS</span>
               <span class="badge bg-info bg-opacity-10 text-info p-2">🔌 Circuit Breaker</span>
@@ -576,7 +584,7 @@
       <div class="row g-3">
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
-            <h3><i class="bi bi-graph-up text-info me-1"></i> MetricsRepo</h3>
+            <h3><i class="bi bi-graph-up text-info me-1"></i> MetricsRepo<span class="info-trigger" data-i18n-title="tip_metricsrepo" title="CRUD for metric_snapshots — time-series of tokens, latency and health sampled every 30s. Powers the real-time dashboard charts and trend analysis.">i</span></h3>
             <p class="small text-secondary mb-0" data-i18n="c_index_20">
               metric_snapshots CRUD — time-series token/latency/health data every 30s
             </p>
@@ -584,7 +592,7 @@
         </div>
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
-            <h3><i class="bi bi-people text-info me-1"></i> SessionRepo</h3>
+            <h3><i class="bi bi-people text-info me-1"></i> SessionRepo<span class="info-trigger" data-i18n-title="tip_sessionrepo" title="sessions + session_scoring — upsert by session_id, active session queries and per-session quality scoring (delegations, corrections, proactive hits).">i</span></h3>
             <p class="small text-secondary mb-0" data-i18n="c_index_21">
               sessions + session_scoring — upsert, active queries, quality scoring
             </p>
@@ -592,7 +600,7 @@
         </div>
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
-            <h3><i class="bi bi-activity text-info me-1"></i> TraceRepo</h3>
+            <h3><i class="bi bi-activity text-info me-1"></i> TraceRepo<span class="info-trigger" data-i18n-title="tip_tracerepo" title="traces + feedback — distributed tracing spans with waterfall view, latency statistics and thumbs up/down per span from the observability dashboard.">i</span></h3>
             <p class="small text-secondary mb-0" data-i18n="c_index_22">
               traces + feedback — waterfall, latency stats, thumbs up/down
             </p>
@@ -600,7 +608,7 @@
         </div>
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
-            <h3><i class="bi bi-megaphone text-info me-1"></i> EventRepo</h3>
+            <h3><i class="bi bi-megaphone text-info me-1"></i> EventRepo<span class="info-trigger" data-i18n-title="tip_eventrepo" title="events + alerts — append-only event sourcing with SHA-256 hash chain (tamper-proof) plus the 8 alert rules evaluated on a 5s broadcast cycle.">i</span></h3>
             <p class="small text-secondary mb-0" data-i18n="c_index_23">
               events + alerts — append-only event sourcing, alert rules
             </p>
@@ -608,7 +616,7 @@
         </div>
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
-            <h3><i class="bi bi-database text-info me-1"></i> CacheRepo</h3>
+            <h3><i class="bi bi-database text-info me-1"></i> CacheRepo<span class="info-trigger" data-i18n-title="tip_cacherepo" title="response_cache + semantic cache — SHA256 key → response with TTL awareness and hit_count tracking; semantic cache adds embedding similarity lookup.">i</span></h3>
             <p class="small text-secondary mb-0" data-i18n="c_index_24">
               response_cache + semantic cache — SHA256 + embedding, TTL-aware
             </p>
@@ -616,7 +624,7 @@
         </div>
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
-            <h3><i class="bi bi-tools text-info me-1"></i> SkillRepo</h3>
+            <h3><i class="bi bi-tools text-info me-1"></i> SkillRepo<span class="info-trigger" data-i18n-title="tip_skillrepo" title="skill_usage, token_usage, routing_rules — per-session skill usage tracking, real token accounting with generated total_tokens column and adaptive router persistence with hit_count.">i</span></h3>
             <p class="small text-secondary mb-0" data-i18n="c_index_25">
               skill_usage, token_usage, routing_rules — usage tracking
             </p>
@@ -624,7 +632,7 @@
         </div>
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
-            <h3><i class="bi bi-file-check text-info me-1"></i> ContractRepo</h3>
+            <h3><i class="bi bi-file-check text-info me-1"></i> ContractRepo<span class="info-trigger" data-i18n-title="tip_contractrepo" title="contract_results — persistence of SDD (Spec-Driven Development) contract validation: input/output contracts evaluated per delegation.">i</span></h3>
             <p class="small text-secondary mb-0" data-i18n="c_index_26">
               contract_results — SDD contract validation persistence
             </p>
@@ -632,7 +640,7 @@
         </div>
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
-            <h3><i class="bi bi-bug text-info me-1"></i> ErrorMemoryRepo</h3>
+            <h3><i class="bi bi-bug text-info me-1"></i> ErrorMemoryRepo<span class="info-trigger" data-i18n-title="tip_errormemrepo" title="error_memory + embeddings — bug tracking with vector search so past errors and their fixes are retrievable by semantic similarity.">i</span></h3>
             <p class="small text-secondary mb-0" data-i18n="c_index_27">
               error_memory + embeddings — bug tracking with vector search
             </p>
@@ -640,7 +648,7 @@
         </div>
         <div class="col-sm-6 col-lg-4">
           <div class="section-card">
-            <h3><i class="bi bi-brush text-info me-1"></i> HousekeepingRepo</h3>
+            <h3><i class="bi bi-brush text-info me-1"></i> HousekeepingRepo<span class="info-trigger" data-i18n-title="tip_housekeepingrepo" title="pruneAll, housekeeping, vacuum — automatic WAL checkpoint when &gt;1MB, retention pruning and DB optimization (REINDEX, VACUUM).">i</span></h3>
             <p class="small text-secondary mb-0" data-i18n="c_index_28">
               pruneAll, housekeeping, vacuum — WAL checkpoint >1MB auto
             </p>
@@ -656,7 +664,12 @@
         />
         <p class="text-secondary small mt-2">
           <i class="bi bi-database me-1"></i>Nexus DB in the center surrounded by 10 specialized
-          DAOs — SQLite WAL mode with auto-prune &amp; backup
+          DAOs — SQLite WAL mode with auto-prune &amp; backup<span
+            class="info-trigger"
+            data-i18n-title="tip_nexus_arch"
+            title="Nexus is the operational brain: SQLite in WAL mode with FK ON. 11 repositories (10 DAOs + MigrationRunner), 7 migrations (m001 initial schema, m002 stack tables, m003 session scoring, …) and 21 tables. Each component persists its live state to .state.json files under .session/context-log/. Auto-init, auto-prune, auto-backup and watchtower monitoring (gentle-vanguard-db component)."
+            >i</span
+          >
         </p>
       </div>
     </section>
@@ -672,7 +685,7 @@
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">🤖</div>
-            <h3 data-i18n="c_index_30">Auto-Apply Safe</h3>
+            <h3 data-i18n="c_index_30">Auto-Apply Safe</h3><span class="info-trigger" data-i18n-title="tip_exe_autoapply" title="Executive engine: trigger→apply→verify→rollback with a safety cap of 5 auto-applies per day. Any change that degrades performance more than 15% is rolled back automatically.">i</span>
             <p data-i18n="c_index_31">trigger→apply→verify→rollback. Max 5/day. Rollback on >15% degradation</p>
             <span class="badge-tag ok">Active</span>
           </div>
@@ -680,7 +693,7 @@
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">⚡</div>
-            <h3 data-i18n="c_index_32">Circuit Breaker</h3>
+            <h3 data-i18n="c_index_32">Circuit Breaker</h3><span class="info-trigger" data-i18n-title="tip_exe_circuit" title="3-state CLOSED/OPEN/HALF_OPEN pattern: 5 consecutive failures open the circuit, 2 successes move it to HALF_OPEN then CLOSED. Prevents cascade failures in cloud and pipeline calls.">i</span>
             <p data-i18n="c_index_33">3-state CLOSED/OPEN/HALF_OPEN. 5 failures→OPEN, 2 successes→CLOSED</p>
             <span class="badge-tag ok">Active</span>
           </div>
@@ -688,7 +701,7 @@
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">📈</div>
-            <h3 data-i18n="c_index_34">Auto-Escalation</h3>
+            <h3 data-i18n="c_index_34">Auto-Escalation</h3><span class="info-trigger" data-i18n-title="tip_exe_escalation" title="3-tier escalation: warning (3 failures) → critical (5) → emergency (10). Every escalation writes a full audit trail into the findings ledger.">i</span>
             <p data-i18n="c_index_35">3-tier: warning(3)→critical(5)→emergency(10). Audit trail + findings ledger</p>
             <span class="badge-tag ok">Active</span>
           </div>
@@ -696,7 +709,7 @@
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">🔗</div>
-            <h3 data-i18n="c_index_36">Dependency Graph</h3>
+            <h3 data-i18n="c_index_36">Dependency Graph</h3><span class="info-trigger" data-i18n-title="tip_exe_depgraph" title="Auto-discovers component relationships by reading the pipeline configuration — no hardcoded dependency map. The graph stays correct as steps are added or removed.">i</span>
             <p data-i18n="c_index_37">Auto-discovers relationships from pipeline config. Dynamic, no hardcoded map</p>
             <span class="badge-tag ok">Active</span>
           </div>
@@ -704,7 +717,7 @@
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">🧪</div>
-            <h3 data-i18n="c_index_38">AB Testing</h3>
+            <h3 data-i18n="c_index_38">AB Testing</h3><span class="info-trigger" data-i18n-title="tip_exe_abtest" title="Statistical A/B testing: createExperiment → assign → evaluate. Auto-rollback when the winning variant shows statistical degradation against the control.">i</span>
             <p data-i18n="c_index_39">createExperiment→assign→evaluate. Auto-rollback on statistical degradation</p>
             <span class="badge-tag ok">Active</span>
           </div>
@@ -712,7 +725,7 @@
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">📊</div>
-            <h3 data-i18n="c_index_40">Session Scoring</h3>
+            <h3 data-i18n="c_index_40">Session Scoring</h3><span class="info-trigger" data-i18n-title="tip_exe_scoring" title="Per-session quality scoring tracking delegations, corrections and proactive hits. Compares scores automatically and alerts on &gt;15% regression or anomalies.">i</span>
             <p data-i18n="c_index_41">Quality scoring per session. Anomaly detection. >15% regression alert</p>
             <span class="badge-tag ok">Active</span>
           </div>
@@ -720,7 +733,7 @@
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">🧠</div>
-            <h3 data-i18n="c_index_42">Norms Learner</h3>
+            <h3 data-i18n="c_index_42">Norms Learner</h3><span class="info-trigger" data-i18n-title="tip_exe_norms" title="Auto-discovers recurring patterns in executions and writes them to LEARNED-NORMS.md — the stack literally evolves its own rules over time.">i</span>
             <p data-i18n="c_index_43">Auto-discovers patterns. Writes LEARNED-NORMS.md. Adaptive evolution</p>
             <span class="badge-tag ok">Active</span>
           </div>
@@ -728,7 +741,7 @@
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">🏗️</div>
-            <h3 data-i18n="c_index_44">Watchtower</h3>
+            <h3 data-i18n="c_index_44">Watchtower</h3><span class="info-trigger" data-i18n-title="tip_exe_watchtower" title="Central health orchestrator: 112 checks across 18 components running with Promise.allSettled parallelism. Modes: health, rebuild, autoheal, report, continuous, all.">i</span>
             <p data-i18n="c_index_45">82 checks × 18 components. Promise.allSettled. Auto-heal modes</p>
             <span class="badge-tag ok">Active</span>
           </div>
@@ -736,7 +749,7 @@
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">🔒</div>
-            <h3 data-i18n="c_index_46">Security Orchestrator</h3>
+            <h3 data-i18n="c_index_46">Security Orchestrator</h3><span class="info-trigger" data-i18n-title="tip_exe_security" title="Pre-input scanning of every prompt, audit pipeline (JSONL logs with query/archive/prune), policy enforcement and guardrails. Governed by 65+ normatives.">i</span>
             <p data-i18n="c_index_47">Pre-input scanning, audit pipeline, policy enforcement, guardrails</p>
             <span class="badge-tag ok">Active</span>
           </div>
@@ -744,7 +757,7 @@
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">💾</div>
-            <h3 data-i18n="c_index_48">State Persistence</h3>
+            <h3 data-i18n="c_index_48">State Persistence</h3><span class="info-trigger" data-i18n-title="tip_exe_state" title="Checkpoint, snapshot and rollback with dry-run validation. Checkpoints auto-create at session start; rollback restores state safely from the last good checkpoint.">i</span>
             <p data-i18n="c_index_49">Checkpoints, snapshots, rollback. Dry-run validation. Auto-create</p>
             <span class="badge-tag ok">Active</span>
           </div>
@@ -752,7 +765,7 @@
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">📡</div>
-            <h3 data-i18n="c_index_50">Distributed Tracing</h3>
+            <h3 data-i18n="c_index_50">Distributed Tracing</h3><span class="info-trigger" data-i18n-title="tip_exe_tracing" title="Span-based distributed tracing with OTLP export to http://localhost:4318/v1/traces. Spans persist as JSONL under .telemetry/spans/ and .telemetry/traces/.">i</span>
             <p data-i18n="c_index_51">Span-based tracing. OTLP export. JSONL spans in .telemetry/</p>
             <span class="badge-tag ok">Active</span>
           </div>
@@ -760,7 +773,7 @@
         <div class="col-md-4 col-lg-3">
           <div class="section-card">
             <div class="icon">☁️</div>
-            <h3 data-i18n="c_index_52">Cloud Connectors</h3>
+            <h3 data-i18n="c_index_52">Cloud Connectors</h3><span class="info-trigger" data-i18n-title="tip_exe_cloud" title="Hybrid AWS/Azure executor routing by cost, latency and load with automatic fallback. Circuit breaker: 5 failures → OPEN, 2 successes → HALF_OPEN → CLOSED.">i</span>
             <p data-i18n="c_index_53">Hybrid AWS/Azure routing. Cost/latency/load aware. Circuit breaker</p>
             <span class="badge-tag ok">Active</span>
           </div>
@@ -811,192 +824,192 @@
             </tr>
             <tr>
               <td><span class="text-info">Architecture</span></td>
-              <td data-i18n="c_index_55">11 Repos (11 Repos + MigrationRunner)</td>
+              <td><span data-i18n="c_index_55">11 Repos (11 Repos + MigrationRunner)</span><span class="info-trigger" data-i18n-title="tip_fm_55" title="11 repositories total: 10 DAOs + MigrationRunner. The MigrationRunner applies schema migrations in order with FK ON and WAL mode.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-info">Architecture</span></td>
-              <td data-i18n="c_index_56">7 DB Migrations / 21 Tables (WAL mode, FK ON)</td>
+              <td><span data-i18n="c_index_56">7 DB Migrations / 21 Tables (WAL mode, FK ON)</span><span class="info-trigger" data-i18n-title="tip_fm_56" title="7 schema migrations create 21 tables. Migration 001 = initial schema, 002 = stack tables, 003 = session scoring, applied automatically by DatabaseManager at session start.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-info">Architecture</span></td>
-              <td data-i18n="c_index_57">6-Layer Design (scalable, decoupled)</td>
+              <td><span data-i18n="c_index_57">6-Layer Design (scalable, decoupled)</span><span class="info-trigger" data-i18n-title="tip_fm_57" title="6-layer decoupled design: Tools -&gt; Agents -&gt; Pipeline -&gt; Memory -&gt; Data -&gt; Executive.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-warning">Pipeline</span></td>
-              <td data-i18n="c_index_58">31 Phase-1 Steps (parallel exec)</td>
+              <td><span data-i18n="c_index_58">31 Phase-1 Steps (parallel exec)</span><span class="info-trigger" data-i18n-title="tip_fm_58" title="31 Phase-1 steps run in parallel at session start using Promise.allSettled. Non-blocking and idempotent.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-warning">Pipeline</span></td>
-              <td data-i18n="c_index_59">70 Lazy Background Tasks</td>
+              <td><span data-i18n="c_index_59">70 Lazy Background Tasks</span><span class="info-trigger" data-i18n-title="tip_fm_59" title="70 lazy background tasks are queued in batches after session start (batch delay 500ms -&gt; 100ms).">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-warning">Pipeline</span></td>
-              <td data-i18n="c_index_60">Parallel Execution (Promise.allSettled)</td>
+              <td><span data-i18n="c_index_60">Parallel Execution (Promise.allSettled)</span><span class="info-trigger" data-i18n-title="tip_fm_60" title="All batch tasks use Promise.allSettled so a single failure never blocks the pipeline.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-primary">Autonomous</span></td>
-              <td data-i18n="c_index_61">Auto-Apply Safe (executive engine)</td>
+              <td><span data-i18n="c_index_61">Auto-Apply Safe (executive engine)</span><span class="info-trigger" data-i18n-title="tip_fm_61" title="Executive engine: trigger -&gt; apply -&gt; verify -&gt; rollback. Max 5 auto-applies/day, rollback on &gt;15% degradation.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-primary">Autonomous</span></td>
-              <td data-i18n="c_index_62">Circuit Breaker (3-state, auto-reset)</td>
+              <td><span data-i18n="c_index_62">Circuit Breaker (3-state, auto-reset)</span><span class="info-trigger" data-i18n-title="tip_fm_62" title="3-state CLOSED/OPEN/HALF_OPEN pattern. 5 failures -&gt; OPEN, 2 successes -&gt; CLOSED.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-primary">Autonomous</span></td>
-              <td data-i18n="c_index_63">Auto-Escalation (3-tier)</td>
+              <td><span data-i18n="c_index_63">Auto-Escalation (3-tier)</span><span class="info-trigger" data-i18n-title="tip_fm_63" title="3-tier escalation: warning(3) -&gt; critical(5) -&gt; emergency(10) with audit trail + findings ledger.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-primary">Autonomous</span></td>
-              <td data-i18n="c_index_64">Dynamic Dependency Graph</td>
+              <td><span data-i18n="c_index_64">Dynamic Dependency Graph</span><span class="info-trigger" data-i18n-title="tip_fm_64" title="Auto-discovers component relationships from the pipeline config. No hardcoded dependency map.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-primary">Autonomous</span></td>
-              <td data-i18n="c_index_65">AB Testing Framework</td>
+              <td><span data-i18n="c_index_65">AB Testing Framework</span><span class="info-trigger" data-i18n-title="tip_fm_65" title="createExperiment -&gt; assign -&gt; evaluate with automatic rollback on statistical degradation.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-primary">Autonomous</span></td>
-              <td data-i18n="c_index_66">Session Scoring (quality + anomaly)</td>
+              <td><span data-i18n="c_index_66">Session Scoring (quality + anomaly)</span><span class="info-trigger" data-i18n-title="tip_fm_66" title="Per-session quality scoring tracking delegations, corrections and proactive hits. Anomaly detection.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-primary">Autonomous</span></td>
-              <td data-i18n="c_index_67">Norms Learner (adaptive evolution)</td>
+              <td><span data-i18n="c_index_67">Norms Learner (adaptive evolution)</span><span class="info-trigger" data-i18n-title="tip_fm_67" title="Auto-discovers patterns in executions and writes LEARNED-NORMS.md. Adaptive evolution.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-info">Memory</span></td>
-              <td data-i18n="c_index_68">Engram (2078 obs, auto-sync)</td>
+              <td><span data-i18n="c_index_68">Engram (2078 obs, auto-sync)</span><span class="info-trigger" data-i18n-title="tip_fm_68" title="Engram persistent memory: 2078 observations, auto-sync across sessions and projects.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-info">Memory</span></td>
-              <td data-i18n="c_index_69">CodeGraph (10,663 nodes, 21,746 edges)</td>
+              <td><span data-i18n="c_index_69">CodeGraph (10,663 nodes, 21,746 edges)</span><span class="info-trigger" data-i18n-title="tip_fm_69" title="CodeGraph knowledge graph: 10,663 nodes and 21,746 edges derived from AST analysis.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-info">Memory</span></td>
-              <td data-i18n="c_index_70">Graphify (18MB knowledge graph)</td>
+              <td><span data-i18n="c_index_70">Graphify (18MB knowledge graph)</span><span class="info-trigger" data-i18n-title="tip_fm_70" title="Graphify 18MB knowledge graph with god nodes, community structure and cross-file relationships.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-info">Memory</span></td>
-              <td data-i18n="c_index_71">Nexus DB (SQLite WAL, 21 tables)</td>
+              <td><span data-i18n="c_index_71">Nexus DB (SQLite WAL, 21 tables)</span><span class="info-trigger" data-i18n-title="tip_fm_71" title="Nexus operational DB: SQLite WAL mode, 21 tables, auto-init, auto-prune, auto-backup and watchtower monitoring.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-info">Memory</span></td>
-              <td data-i18n="c_index_72">ML Embeddings (vector index)</td>
+              <td><span data-i18n="c_index_72">ML Embeddings (vector index)</span><span class="info-trigger" data-i18n-title="tip_fm_72" title="ML Embeddings vector index for semantic search over skills, norms and documentation.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-danger">Security</span></td>
-              <td data-i18n="c_index_73">Security Orchestrator</td>
+              <td><span data-i18n="c_index_73">Security Orchestrator</span><span class="info-trigger" data-i18n-title="tip_fm_73" title="Pre-input scanning, audit pipeline, policy enforcement and guardrails before every prompt.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-danger">Security</span></td>
-              <td data-i18n="c_index_74">Audit Pipeline (JSONL, query, archive)</td>
+              <td><span data-i18n="c_index_74">Audit Pipeline (JSONL, query, archive)</span><span class="info-trigger" data-i18n-title="tip_fm_74" title="JSONL audit logs with log/status/query/archive/prune actions under .session/audit/logs/.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-danger">Security</span></td>
-              <td data-i18n="c_index_75">Governance (policies, rules enforcement)</td>
+              <td><span data-i18n="c_index_75">Governance (policies, rules enforcement)</span><span class="info-trigger" data-i18n-title="tip_fm_75" title="Governance policies + rules enforcement across all 18 watchtower components.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-danger">Security</span></td>
-              <td data-i18n="c_index_76">Guardrails (pre-input validation)</td>
+              <td><span data-i18n="c_index_76">Guardrails (pre-input validation)</span><span class="info-trigger" data-i18n-title="tip_fm_76" title="Guardrails: pre-input validation that rejects unsafe prompts before they reach the model.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-danger">Security</span></td>
-              <td data-i18n="c_index_77">65 Normatives (rules + policies)</td>
+              <td><span data-i18n="c_index_77">65 Normatives (rules + policies)</span><span class="info-trigger" data-i18n-title="tip_fm_77" title="65 normatives covering rules and policies for autonomous operation.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-success">Dashboard</span></td>
-              <td data-i18n="c_index_78">Real-time WebSocket (5s broadcast)</td>
+              <td><span data-i18n="c_index_78">Real-time WebSocket (5s broadcast)</span><span class="info-trigger" data-i18n-title="tip_fm_78" title="WebSocket push to the dashboard every 5 seconds with real metrics computed from traces.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-success">Dashboard</span></td>
-              <td data-i18n="c_index_79">HTTP Fallback (resilient polling)</td>
+              <td><span data-i18n="c_index_79">HTTP Fallback (resilient polling)</span><span class="info-trigger" data-i18n-title="tip_fm_79" title="HTTP polling fallback keeps the dashboard alive even when the WS server is temporarily down.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-success">Dashboard</span></td>
-              <td data-i18n="c_index_80">7 Dashboard Sections</td>
+              <td><span data-i18n="c_index_80">7 Dashboard Sections</span><span class="info-trigger" data-i18n-title="tip_fm_80" title="7 dashboard sections: overview, metrics, tracing, alerts, feedback, i18n and info popups.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-success">Dashboard</span></td>
-              <td data-i18n="c_index_81">i18n (en/es/pt-BR)</td>
+              <td><span data-i18n="c_index_81">i18n (en/es/pt-BR)</span><span class="info-trigger" data-i18n-title="tip_fm_81" title="Full UI translation in English, Spanish and Brazilian Portuguese (14 metric descriptions).">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-success">Dashboard</span></td>
-              <td data-i18n="c_index_82">8 Alert Rules (auto-eval)</td>
+              <td><span data-i18n="c_index_82">8 Alert Rules (auto-eval)</span><span class="info-trigger" data-i18n-title="tip_fm_82" title="8 alert rules auto-evaluated every broadcast cycle with status ok/degraded/fail.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-secondary">Operations</span></td>
-              <td data-i18n="c_index_83">CI/CD Pipeline (6 jobs + 3 security)</td>
+              <td><span data-i18n="c_index_83">CI/CD Pipeline (6 jobs + 3 security)</span><span class="info-trigger" data-i18n-title="tip_fm_83" title="6 CI jobs + 3 security jobs (gitleaks, secretlint, trivy) on every push.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-secondary">Operations</span></td>
-              <td data-i18n="c_index_84">Cloud Connectors (AWS/Azure routing)</td>
+              <td><span data-i18n="c_index_84">Cloud Connectors (AWS/Azure routing)</span><span class="info-trigger" data-i18n-title="tip_fm_84" title="Hybrid AWS/Azure routing by cost, latency and load with circuit breaker fallback.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-secondary">Operations</span></td>
-              <td data-i18n="c_index_85">Distributed Tracing (OTLP, spans)</td>
+              <td><span data-i18n="c_index_85">Distributed Tracing (OTLP, spans)</span><span class="info-trigger" data-i18n-title="tip_fm_85" title="Span-based distributed tracing with OTLP export. JSONL spans under .telemetry/.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-secondary">Operations</span></td>
-              <td data-i18n="c_index_86">State Persistence (checkpoint/snapshot)</td>
+              <td><span data-i18n="c_index_86">State Persistence (checkpoint/snapshot)</span><span class="info-trigger" data-i18n-title="tip_fm_86" title="Checkpoints, snapshots and rollback with dry-run validation. Auto-create at session start.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-secondary">Operations</span></td>
-              <td data-i18n="c_index_87">Event Sourcing + Saga Orchestrator</td>
+              <td><span data-i18n="c_index_87">Event Sourcing + Saga Orchestrator</span><span class="info-trigger" data-i18n-title="tip_fm_87" title="Append-only event store + saga orchestrator with compensation steps for consistency.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-warning">Quality</span></td>
-              <td data-i18n="c_index_88">97 Test Files (12 suites)</td>
+              <td><span data-i18n="c_index_88">97 Test Files (12 suites)</span><span class="info-trigger" data-i18n-title="tip_fm_88" title="97 test files across 12 suites covering units, configs, workflows and CI/CD.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-warning">Quality</span></td>
-              <td data-i18n="c_index_89">112 Health Checks (18 components)</td>
+              <td><span data-i18n="c_index_89">112 Health Checks (18 components)</span><span class="info-trigger" data-i18n-title="tip_fm_89" title="112 health checks across 18 components. All green: 112/112 PASS, 0 WARN, 0 FAIL.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-warning">Quality</span></td>
-              <td data-i18n="c_index_90">Code Review Standards (multi-axis)</td>
+              <td><span data-i18n="c_index_90">Code Review Standards (multi-axis)</span><span class="info-trigger" data-i18n-title="tip_fm_90" title="Multi-axis code review: correctness, readability, architecture, security and performance.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-warning">Quality</span></td>
-              <td data-i18n="c_index_91">Karpathy Guidelines (coding standards)</td>
+              <td><span data-i18n="c_index_91">Karpathy Guidelines (coding standards)</span><span class="info-trigger" data-i18n-title="tip_fm_91" title="Karpathy guidelines: Think First, Simplicity, Surgical Changes, Goal-Driven.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
             <tr>
               <td><span class="text-warning">Quality</span></td>
-              <td data-i18n="c_index_92">SDD (Spec-Driven Development) workflow</td>
+              <td><span data-i18n="c_index_92">SDD (Spec-Driven Development) workflow</span><span class="info-trigger" data-i18n-title="tip_fm_92" title="SDD workflow: explore -&gt; design -&gt; apply -&gt; verify with formal input/output contracts.">i</span></td>
               <td><span class="text-success">✅</span></td>
             </tr>
           </tbody>
@@ -1014,7 +1027,7 @@
       <div class="row g-3">
         <div class="col-md-6 col-lg-4">
           <div class="skill-cat">
-            <h4><i class="bi bi-robot me-1"></i>Autonomous Systems</h4>
+            <h4><i class="bi bi-robot me-1"></i>Autonomous Systems<span class="info-trigger" data-i18n-title="tip_sk_auto" title="Skills that power self-management: auto-apply-safe, circuit-breaker, auto-escalation, session-scoring, predictive-governor and auto-norm-learner — the executive brain of the stack.">i</span></h4>
             <span class="tag">auto-apply-safe</span><span class="tag">circuit-breaker</span
             ><span class="tag">auto-escalation</span><span class="tag">session-scoring</span
             ><span class="tag">predictive-governor</span><span class="tag">auto-norm-learner</span>
@@ -1022,7 +1035,7 @@
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="skill-cat">
-            <h4><i class="bi bi-shield me-1"></i>Security & Governance</h4>
+            <h4><i class="bi bi-shield me-1"></i>Security & Governance<span class="info-trigger" data-i18n-title="tip_sk_sec" title="Security skill, security-audit, governance-agent, AI-NORMATIVES, SECRETS-MGMT and INCIDENT-RESPONSE — enforce policy and guardrails across every prompt.">i</span></h4>
             <span class="tag">security-skill</span><span class="tag">security-audit</span
             ><span class="tag">governance-agent</span><span class="tag">AI-NORMATIVES</span
             ><span class="tag">SECRETS-MGMT</span><span class="tag">INCIDENT-RESPONSE</span>
@@ -1030,7 +1043,7 @@
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="skill-cat">
-            <h4><i class="bi bi-code-slash me-1"></i>Development</h4>
+            <h4><i class="bi bi-code-slash me-1"></i>Development<span class="info-trigger" data-i18n-title="tip_sk_dev" title="typescript-skill, testing-skill, testing-coverage, technical-debt, code-review and shellcheck — coding quality gates applied before every change lands.">i</span></h4>
             <span class="tag">typescript-skill</span><span class="tag">testing-skill</span
             ><span class="tag">testing-coverage</span><span class="tag">technical-debt</span
             ><span class="tag">code-review</span><span class="tag">shellcheck</span>
@@ -1038,7 +1051,7 @@
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="skill-cat">
-            <h4><i class="bi bi-diagram-3 me-1"></i>Architecture & Design</h4>
+            <h4><i class="bi bi-diagram-3 me-1"></i>Architecture & Design<span class="info-trigger" data-i18n-title="tip_sk_arch" title="The SDD pipeline: sdd-explore (BA), sdd-design (SAD), sdd-apply (DEV) and sdd-verify (QA) plus systems-thinking and api-interface — spec-driven development from idea to verified code.">i</span></h4>
             <span class="tag">sdd-explore</span><span class="tag">sdd-design</span
             ><span class="tag">sdd-apply</span><span class="tag">sdd-verify</span
             ><span class="tag">systems-thinking</span><span class="tag">api-interface</span>
@@ -1046,7 +1059,7 @@
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="skill-cat">
-            <h4><i class="bi bi-magic me-1"></i>Quality & Process</h4>
+            <h4><i class="bi bi-magic me-1"></i>Quality & Process<span class="info-trigger" data-i18n-title="tip_sk_quality" title="testing-evidence, eval-gates, CI-HARDENING, Karpathy, HALLUCINATION and SDD-STRICT-TDD — evidence-based gates that block low-quality output.">i</span></h4>
             <span class="tag">testing-evidence</span><span class="tag">eval-gates</span
             ><span class="tag">CI-HARDENING</span><span class="tag">Karpathy</span
             ><span class="tag">HALLUCINATION</span><span class="tag">SDD-STRICT-TDD</span>
@@ -1054,7 +1067,7 @@
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="skill-cat">
-            <h4><i class="bi bi-cpu me-1"></i>Infrastructure & Ops</h4>
+            <h4><i class="bi bi-cpu me-1"></i>Infrastructure & Ops<span class="info-trigger" data-i18n-title="tip_sk_infra" title="ci-cd-automation, observability, performance-opt, cloud-connectors, NORMATIVAS-OPS and SELF-HEALING-CI — the operational layer that keeps the stack running.">i</span></h4>
             <span class="tag">ci-cd-automation</span><span class="tag">observability</span
             ><span class="tag">performance-opt</span><span class="tag">cloud-connectors</span
             ><span class="tag">NORMATIVAS-OPS</span><span class="tag">SELF-HEALING-CI</span>
@@ -1062,7 +1075,7 @@
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="skill-cat">
-            <h4><i class="bi bi-pencil me-1"></i>Documentation</h4>
+            <h4><i class="bi bi-pencil me-1"></i>Documentation<span class="info-trigger" data-i18n-title="tip_sk_docs" title="doc-agent, writing-plans, write-spec, visual-content, documentation and standup-skill — produce and maintain high-quality documentation natively.">i</span></h4>
             <span class="tag">doc-agent</span><span class="tag">writing-plans</span
             ><span class="tag">write-spec</span><span class="tag">visual-content</span
             ><span class="tag">documentation</span><span class="tag">standup-skill</span>
@@ -1070,7 +1083,7 @@
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="skill-cat">
-            <h4><i class="bi bi-graph-up me-1"></i>Analysis & Strategy</h4>
+            <h4><i class="bi bi-graph-up me-1"></i>Analysis & Strategy<span class="info-trigger" data-i18n-title="tip_sk_analysis" title="idea-refine, doubt-driven-dev, premortem, socratic-skill, interview-me and source-driven — thinking frameworks that stress-test ideas before execution.">i</span></h4>
             <span class="tag">idea-refine</span><span class="tag">doubt-driven-dev</span
             ><span class="tag">premortem</span><span class="tag">socratic-skill</span
             ><span class="tag">interview-me</span><span class="tag">source-driven</span>
@@ -1078,7 +1091,7 @@
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="skill-cat">
-            <h4><i class="bi bi-tools me-1"></i>Tooling & Workflow</h4>
+            <h4><i class="bi bi-tools me-1"></i>Tooling & Workflow<span class="info-trigger" data-i18n-title="tip_sk_tooling" title="start-skill, workflow-orch, session-workflow, task-mgmt, semantic-matcher and skill-creator — the meta-skills that manage how all other skills are used.">i</span></h4>
             <span class="tag">start-skill</span><span class="tag">workflow-orch</span
             ><span class="tag">session-workflow</span><span class="tag">task-mgmt</span
             ><span class="tag">semantic-matcher</span><span class="tag">skill-creator</span>
@@ -1107,7 +1120,7 @@
       <div class="row g-4">
         <div class="col-md-6">
           <div class="section-card">
-            <h3 class="mb-3"><i class="bi bi-heart-pulse text-success me-2"></i>Health Overview</h3>
+            <h3 class="mb-3"><i class="bi bi-heart-pulse text-success me-2"></i>Health Overview<span class="info-trigger" data-i18n-title="tip_met_health" title="112/112 checks PASS across 18 components: dashboard-ws, codegraph, ml-embeddings, engram, mcp, session, hooks, configs, tool-configs, security, cloud-connectors, tracing, state-persistence, audit, governance, gentle-vanguard-db, dashboard-ws and more. Measured by the maintenance watchtower.">i</span></h3>
             <div class="d-flex flex-wrap gap-2 mb-3">
               <span class="badge bg-success fs-6 px-3 py-2">112/112 PASS</span>
               <span class="badge bg-secondary fs-6 px-3 py-2">0 WARN</span>
@@ -1190,7 +1203,7 @@
         </div>
         <div class="col-md-6">
           <div class="section-card">
-            <h3 class="mb-3"><i class="bi bi-bar-chart text-info me-2"></i>Performance</h3>
+            <h3 class="mb-3"><i class="bi bi-bar-chart text-info me-2"></i>Performance<span class="info-trigger" data-i18n-title="tip_met_perf" title="Key performance indicators: watchtower checks went from sequential to parallel execution, lazy batch delay optimized 500ms → 100ms (5x faster), DB Manager refactored 1066 → 250 lines (-77%) and autonomy climbed from 73% to 100%.">i</span></h3>
             <div class="mb-3">
               <div class="d-flex justify-content-between small mb-1">
                 <span>Watchtower Checks</span><span class="text-info">Sequential → Parallel</span>
