@@ -73,6 +73,7 @@ Verificación en Chrome real (CDP): scripts en `C:\Users\emman\AppData\Local\Tem
 8. **node --check** = test de sintaxis del JS del navegador (no usa TS).
 9. **Commit**: solo archivos de trabajo de presentations; no tocar archivos automáticos de daemons.
 10. **Doble convención de bloques**: `i18n.js` declara bloques como `en: {`, `es: {`, `'pt-BR': {` (pt-BR CON comillas simples, los otros sin). `i18n-content.js` usa `__GV_CONTENT.en = {`, `__GV_CONTENT.es = {`, `__GV_CONTENT['pt-BR'] = {` (corchetes). Cualquier regex de extracción que asuma un solo formato romperá: al recorrer TODOS los bloques sobrescribe con el último (pt-BR); al buscar el fin de un bloque con el formato equivocado captura todo el resto del archivo. Extraer SIEMPRE el bloque `en` de forma delimitada (entre su apertura y el siguiente bloque).
+11. **ESM vs CommonJS**: el repo tiene `"type": "module"` en package.json → cualquier `.js` dentro del repo se trata como ES module y `require()` falla con "ReferenceError: require is not defined". Los scripts node que usan `require('ws')` deben llamarse `.cjs` (cdp-verify-final.cjs, cdp-verify-page.cjs). Fuera del repo (temp) pueden ser `.js`.
 
 ## Patrón de info-trigger (estándar)
 
@@ -103,7 +104,8 @@ Herramientas reutilizables, parametrizadas y probadas. Todas con `-DryRun` para 
 | `homologate-matrix.ps1`   | Convierte tds de la Feature Matrix en span + trigger | `pwsh scripts/homologate-matrix.ps1 -DryRun` |
 | `homologate-pages.ps1`    | Homologa tds en TODAS las páginas (title fallback EN desde i18n-content.js) | `pwsh scripts/homologate-pages.ps1 -Page health.html` |
 | `gen-tips-c.ps1`          | Genera claves `tip_c_*` en 3 idiomas desde i18n-content.js (traducción automática de modales) | `pwsh scripts/gen-tips-c.ps1 -DryRun` |
-| `cdp-verify-final.js`     | Verificación en Chrome real (CDP), 6 checks (index.html) | `node scripts/cdp-verify-final.js --cdp 9225` |
+| `cdp-verify-final.cjs`    | Verificación en Chrome real (CDP), 6 checks (index.html) | `node scripts/cdp-verify-final.cjs --cdp 9225` |
+| `cdp-verify-page.cjs`     | Verificación genérica de info-triggers + modales EN/ES/PT en CUALQUIER página | `node scripts/cdp-verify-page.cjs --page=health.html` |
 | `tips-new.json`           | Claves `tip_*` genéricas (en/es/pt-BR) para insertar | dato para `insert-tips.ps1`               |
 | `tips-fm.json`            | Claves `tip_fm_*` de la Feature Matrix               | dato para `homologate-matrix.ps1`         |
 
