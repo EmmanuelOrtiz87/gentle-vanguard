@@ -151,6 +151,7 @@
     "gv:sea": "npx tsx src/build-sea.ts",
     "presentations:serve": "npx tsx src/cli/serve-presentations.ts",
     "presentations:stop": "npx tsx src/cli/stop-presentations.ts",
+    "presentations:validate": "npx tsx src/cli/validate-presentations.ts",
     "backlog": "npx tsx src/cli/backlog.ts",
     "backlog:add": "npx tsx src/cli/backlog.ts add",
     "backlog:list": "npx tsx src/cli/backlog.ts list",

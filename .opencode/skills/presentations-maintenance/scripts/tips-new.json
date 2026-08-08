@@ -1,0 +1,177 @@
+{
+  "tip_auto_loop": {
+    "en": "Detection → Evaluation → Decision → Execution → Verification → Learning. Reads 3 trigger sources: predictive-governor (budget), skill-evolution (deprecation) and auto-norm-learner (norms). Auto-apply safe with rollback if degradation >15%.",
+    "es": "Detección → Evaluación → Decisión → Ejecución → Verificación → Aprendizaje. Lee 3 fuentes de disparo: predictive-governor (presupuesto), skill-evolution (deprecación) y auto-norm-learner (normas). Auto-apply safe con rollback si degradación >15%.",
+    "pt-BR": "Detecção → Avaliação → Decisão → Execução → Verificação → Aprendizado. Lê 3 fontes de gatilho: predictive-governor (orçamento), skill-evolution (deprecação) e auto-norm-learner (normas). Auto-apply safe com rollback se degradação >15%."
+  },
+  "tip_auto_safety": {
+    "en": "Health & safety envelope: 112/112 checks PASS across 18 components, circuit breaker (5 failures → OPEN, 2 successes → CLOSED), 3-tier auto-escalation (3→5→10), auto-rollback and a minimum apply threshold of 80% confidence.",
+    "es": "Envoltura de salud y seguridad: 112/112 checks PASS en 18 componentes, circuit breaker (5 fallos → OPEN, 2 éxitos → CLOSED), auto-escalación de 3 niveles (3→5→10), auto-rollback y umbral mínimo de aplicación del 80% de confianza.",
+    "pt-BR": "Envelope de saúde e segurança: 112/112 checks PASS em 18 componentes, circuit breaker (5 falhas → OPEN, 2 sucessos → CLOSED), auto-escalação de 3 níveis (3→5→10), auto-rollback e limite mínimo de aplicação de 80% de confiança."
+  },
+  "tip_metricsrepo": {
+    "en": "CRUD for metric_snapshots — time-series of tokens, latency and health sampled every 30s. Powers the real-time dashboard charts and trend analysis.",
+    "es": "CRUD de metric_snapshots — series temporales de tokens, latencia y salud muestreadas cada 30s. Alimenta las gráficas del dashboard en tiempo real y el análisis de tendencias.",
+    "pt-BR": "CRUD de metric_snapshots — séries temporais de tokens, latência e saúde amostradas a cada 30s. Alimenta os gráficos do dashboard em tempo real e a análise de tendências."
+  },
+  "tip_sessionrepo": {
+    "en": "sessions + session_scoring — upsert by session_id, active session queries and per-session quality scoring (delegations, corrections, proactive hits).",
+    "es": "sessions + session_scoring — upsert por session_id, consultas de sesiones activas y scoring de calidad por sesión (delegaciones, correcciones, aciertos proactivos).",
+    "pt-BR": "sessions + session_scoring — upsert por session_id, consultas de sessões ativas e scoring de qualidade por sessão (delegações, correções, acertos proativos)."
+  },
+  "tip_tracerepo": {
+    "en": "traces + feedback — distributed tracing spans with waterfall view, latency statistics and thumbs up/down per span from the observability dashboard.",
+    "es": "traces + feedback — spans de tracing distribuido con vista waterfall, estadísticas de latencia y pulgar arriba/abajo por span desde el dashboard de observabilidad.",
+    "pt-BR": "traces + feedback — spans de tracing distribuído com visão waterfall, estatísticas de latência e polegar para cima/baixo por span do dashboard de observabilidade."
+  },
+  "tip_eventrepo": {
+    "en": "events + alerts — append-only event sourcing with SHA-256 hash chain (tamper-proof) plus the 8 alert rules evaluated on a 5s broadcast cycle.",
+    "es": "events + alerts — event sourcing append-only con cadena de hash SHA-256 (a prueba de manipulación) más las 8 reglas de alerta evaluadas en un ciclo de broadcast de 5s.",
+    "pt-BR": "events + alerts — event sourcing append-only com cadeia de hash SHA-256 (à prova de adulteração) mais as 8 regras de alerta avaliadas em um ciclo de broadcast de 5s."
+  },
+  "tip_cacherepo": {
+    "en": "response_cache + semantic cache — SHA256 key → response with TTL awareness and hit_count tracking; semantic cache adds embedding similarity lookup.",
+    "es": "response_cache + semantic cache — clave SHA256 → respuesta con TTL y tracking de hit_count; el cache semántico añade búsqueda por similitud de embeddings.",
+    "pt-BR": "response_cache + semantic cache — chave SHA256 → resposta com TTL e rastreio de hit_count; o cache semântico adiciona busca por similaridade de embeddings."
+  },
+  "tip_skillrepo": {
+    "en": "skill_usage, token_usage, routing_rules — per-session skill usage tracking, real token accounting with generated total_tokens column and adaptive router persistence with hit_count.",
+    "es": "skill_usage, token_usage, routing_rules — tracking de uso de skills por sesión, contabilidad real de tokens con columna total_tokens generada y persistencia del router adaptativo con hit_count.",
+    "pt-BR": "skill_usage, token_usage, routing_rules — rastreio de uso de skills por sessão, contabilidade real de tokens com coluna total_tokens gerada e persistência do router adaptativo com hit_count."
+  },
+  "tip_contractrepo": {
+    "en": "contract_results — persistence of SDD (Spec-Driven Development) contract validation: input/output contracts evaluated per delegation.",
+    "es": "contract_results — persistencia de la validación de contratos SDD (Spec-Driven Development): contratos de entrada/salida evaluados por delegación.",
+    "pt-BR": "contract_results — persistência da validação de contratos SDD (Spec-Driven Development): contratos de entrada/saída avaliados por delegação."
+  },
+  "tip_errormemrepo": {
+    "en": "error_memory + embeddings — bug tracking with vector search so past errors and their fixes are retrievable by semantic similarity.",
+    "es": "error_memory + embeddings — tracking de bugs con búsqueda vectorial para que errores pasados y sus soluciones sean recuperables por similitud semántica.",
+    "pt-BR": "error_memory + embeddings — rastreio de bugs com busca vetorial para que erros passados e suas soluções sejam recuperáveis por similaridade semântica."
+  },
+  "tip_housekeepingrepo": {
+    "en": "pruneAll, housekeeping, vacuum — automatic WAL checkpoint when >1MB, retention pruning and DB optimization (REINDEX, VACUUM).",
+    "es": "pruneAll, housekeeping, vacuum — checkpoint WAL automático cuando >1MB, poda por retención y optimización de BD (REINDEX, VACUUM).",
+    "pt-BR": "pruneAll, housekeeping, vacuum — checkpoint WAL automático quando >1MB, poda por retenção e otimização do BD (REINDEX, VACUUM)."
+  },
+  "tip_nexus_arch": {
+    "en": "Nexus is the operational brain: SQLite in WAL mode with FK ON. 11 repositories (10 DAOs + MigrationRunner), 7 migrations (m001 initial schema, m002 stack tables, m003 session scoring, …) and 21 tables. Each component persists its live state to .state.json files under .session/context-log/. Auto-init, auto-prune, auto-backup and watchtower monitoring (gentle-vanguard-db component).",
+    "es": "Nexus es el cerebro operacional: SQLite en modo WAL con FK ON. 11 repositorios (10 DAOs + MigrationRunner), 7 migraciones (m001 esquema inicial, m002 tablas del stack, m003 session scoring, …) y 21 tablas. Cada componente persiste su estado vivo en archivos .state.json bajo .session/context-log/. Auto-init, auto-prune, auto-backup y monitoreo del watchtower (componente gentle-vanguard-db).",
+    "pt-BR": "Nexus é o cérebro operacional: SQLite em modo WAL com FK ON. 11 repositórios (10 DAOs + MigrationRunner), 7 migrações (m001 esquema inicial, m002 tabelas do stack, m003 session scoring, …) e 21 tabelas. Cada componente persiste seu estado vivo em arquivos .state.json sob .session/context-log/. Auto-init, auto-prune, auto-backup e monitoramento do watchtower (componente gentle-vanguard-db)."
+  },
+  "tip_exe_autoapply": {
+    "en": "Executive engine: trigger→apply→verify→rollback with a safety cap of 5 auto-applies per day. Any change that degrades performance more than 15% is rolled back automatically.",
+    "es": "Motor ejecutivo: trigger→apply→verify→rollback con un tope de seguridad de 5 auto-aplicaciones diarias. Cualquier cambio que degrade el rendimiento más del 15% se revierte automáticamente.",
+    "pt-BR": "Motor executivo: trigger→apply→verify→rollback com um teto de segurança de 5 auto-aplicações diárias. Qualquer mudança que degrade o desempenho mais de 15% é revertida automaticamente."
+  },
+  "tip_exe_circuit": {
+    "en": "3-state CLOSED/OPEN/HALF_OPEN pattern: 5 consecutive failures open the circuit, 2 successes move it to HALF_OPEN then CLOSED. Prevents cascade failures in cloud and pipeline calls.",
+    "es": "Patrón de 3 estados CLOSED/OPEN/HALF_OPEN: 5 fallos consecutivos abren el circuito, 2 éxitos lo mueven a HALF_OPEN y luego CLOSED. Previene fallos en cascada en llamadas cloud y pipeline.",
+    "pt-BR": "Padrão de 3 estados CLOSED/OPEN/HALF_OPEN: 5 falhas consecutivas abrem o circuito, 2 sucessos o movem para HALF_OPEN e depois CLOSED. Previne falhas em cascata em chamadas cloud e pipeline."
+  },
+  "tip_exe_escalation": {
+    "en": "3-tier escalation: warning (3 failures) → critical (5) → emergency (10). Every escalation writes a full audit trail into the findings ledger.",
+    "es": "Escalación de 3 niveles: warning (3 fallos) → critical (5) → emergency (10). Cada escalación escribe un registro de auditoría completo en el findings ledger.",
+    "pt-BR": "Escalação de 3 níveis: warning (3 falhas) → critical (5) → emergency (10). Cada escalação escreve um registro de auditoria completo no findings ledger."
+  },
+  "tip_exe_depgraph": {
+    "en": "Auto-discovers component relationships by reading the pipeline configuration — no hardcoded dependency map. The graph stays correct as steps are added or removed.",
+    "es": "Descubre automáticamente las relaciones entre componentes leyendo la configuración del pipeline — sin mapa de dependencias hardcoded. El grafo se mantiene correcto al añadir o quitar pasos.",
+    "pt-BR": "Descobre automaticamente as relações entre componentes lendo a configuração do pipeline — sem mapa de dependências hardcoded. O grafo permanece correto ao adicionar ou remover etapas."
+  },
+  "tip_exe_abtest": {
+    "en": "Statistical A/B testing: createExperiment → assign → evaluate. Auto-rollback when the winning variant shows statistical degradation against the control.",
+    "es": "Testing A/B estadístico: createExperiment → assign → evaluate. Auto-rollback cuando la variante ganadora muestra degradación estadística frente al control.",
+    "pt-BR": "Teste A/B estatístico: createExperiment → assign → evaluate. Auto-rollback quando a variante vencedora mostra degradação estatística contra o controle."
+  },
+  "tip_exe_scoring": {
+    "en": "Per-session quality scoring tracking delegations, corrections and proactive hits. Compares scores automatically and alerts on >15% regression or anomalies.",
+    "es": "Scoring de calidad por sesión que rastrea delegaciones, correcciones y aciertos proactivos. Compara puntuaciones automáticamente y alerta sobre regresión >15% o anomalías.",
+    "pt-BR": "Scoring de qualidade por sessão que rastreia delegações, correções e acertos proativos. Compara pontuações automaticamente e alerta sobre regressão >15% ou anomalias."
+  },
+  "tip_exe_norms": {
+    "en": "Auto-discovers recurring patterns in executions and writes them to LEARNED-NORMS.md — the stack literally evolves its own rules over time.",
+    "es": "Descubre automáticamente patrones recurrentes en las ejecuciones y los escribe en LEARNED-NORMS.md — el stack evoluciona sus propias reglas con el tiempo.",
+    "pt-BR": "Descobre automaticamente padrões recorrentes nas execuções e os escreve em LEARNED-NORMS.md — o stack literalmente evolui suas próprias regras ao longo do tempo."
+  },
+  "tip_exe_watchtower": {
+    "en": "Central health orchestrator: 112 checks across 18 components running with Promise.allSettled parallelism. Modes: health, rebuild, autoheal, report, continuous, all.",
+    "es": "Orquestador central de salud: 112 checks en 18 componentes ejecutados con paralelismo Promise.allSettled. Modos: health, rebuild, autoheal, report, continuous, all.",
+    "pt-BR": "Orquestador central de saúde: 112 checks em 18 componentes executados com paralelismo Promise.allSettled. Modos: health, rebuild, autoheal, report, continuous, all."
+  },
+  "tip_exe_security": {
+    "en": "Pre-input scanning of every prompt, audit pipeline (JSONL logs with query/archive/prune), policy enforcement and guardrails. Governed by 65+ normatives.",
+    "es": "Escaneo pre-input de cada prompt, pipeline de auditoría (logs JSONL con query/archive/prune), enforcement de políticas y guardrails. Regido por 65+ normativas.",
+    "pt-BR": "Escaneamento pre-input de cada prompt, pipeline de auditoria (logs JSONL com query/archive/prune), aplicação de políticas e guardrails. Regido por 65+ normativas."
+  },
+  "tip_exe_state": {
+    "en": "Checkpoint, snapshot and rollback with dry-run validation. Checkpoints auto-create at session start; rollback restores state safely from the last good checkpoint.",
+    "es": "Checkpoint, snapshot y rollback con validación dry-run. Los checkpoints se crean automáticamente al inicio de sesión; el rollback restaura el estado de forma segura desde el último checkpoint bueno.",
+    "pt-BR": "Checkpoint, snapshot e rollback com validação dry-run. Os checkpoints são criados automaticamente no início da sessão; o rollback restaura o estado com segurança a partir do último checkpoint bom."
+  },
+  "tip_exe_tracing": {
+    "en": "Span-based distributed tracing with OTLP export to http://localhost:4318/v1/traces. Spans persist as JSONL under .telemetry/spans/ and .telemetry/traces/.",
+    "es": "Tracing distribuido basado en spans con exportación OTLP a http://localhost:4318/v1/traces. Los spans se persisten como JSONL en .telemetry/spans/ y .telemetry/traces/.",
+    "pt-BR": "Tracing distribuído baseado em spans com exportação OTLP para http://localhost:4318/v1/traces. Os spans persistem como JSONL em .telemetry/spans/ e .telemetry/traces/."
+  },
+  "tip_exe_cloud": {
+    "en": "Hybrid AWS/Azure executor routing by cost, latency and load with automatic fallback. Circuit breaker: 5 failures → OPEN, 2 successes → HALF_OPEN → CLOSED.",
+    "es": "Ejecutor híbrido AWS/Azure con routing por costo, latencia y carga con fallback automático. Circuit breaker: 5 fallos → OPEN, 2 éxitos → HALF_OPEN → CLOSED.",
+    "pt-BR": "Executor híbrido AWS/Azure com roteamento por custo, latência e carga com fallback automático. Circuit breaker: 5 falhas → OPEN, 2 sucessos → HALF_OPEN → CLOSED."
+  },
+  "tip_sk_auto": {
+    "en": "Skills that power self-management: auto-apply-safe, circuit-breaker, auto-escalation, session-scoring, predictive-governor and auto-norm-learner — the executive brain of the stack.",
+    "es": "Skills que impulsan la autogestión: auto-apply-safe, circuit-breaker, auto-escalation, session-scoring, predictive-governor y auto-norm-learner — el cerebro ejecutivo del stack.",
+    "pt-BR": "Skills que impulsionam a autogestão: auto-apply-safe, circuit-breaker, auto-escalation, session-scoring, predictive-governor e auto-norm-learner — o cérebro executivo do stack."
+  },
+  "tip_sk_sec": {
+    "en": "Security skill, security-audit, governance-agent, AI-NORMATIVES, SECRETS-MGMT and INCIDENT-RESPONSE — enforce policy and guardrails across every prompt.",
+    "es": "Security skill, security-audit, governance-agent, AI-NORMATIVES, SECRETS-MGMT e INCIDENT-RESPONSE — aplican políticas y guardrails en cada prompt.",
+    "pt-BR": "Security skill, security-audit, governance-agent, AI-NORMATIVES, SECRETS-MGMT e INCIDENT-RESPONSE — aplicam políticas e guardrails em cada prompt."
+  },
+  "tip_sk_dev": {
+    "en": "typescript-skill, testing-skill, testing-coverage, technical-debt, code-review and shellcheck — coding quality gates applied before every change lands.",
+    "es": "typescript-skill, testing-skill, testing-coverage, technical-debt, code-review y shellcheck — compuertas de calidad de código aplicadas antes de que cada cambio llegue.",
+    "pt-BR": "typescript-skill, testing-skill, testing-coverage, technical-debt, code-review e shellcheck — portões de qualidade de código aplicados antes de cada mudança chegar."
+  },
+  "tip_sk_arch": {
+    "en": "The SDD pipeline: sdd-explore (BA), sdd-design (SAD), sdd-apply (DEV) and sdd-verify (QA) plus systems-thinking and api-interface — spec-driven development from idea to verified code.",
+    "es": "El pipeline SDD: sdd-explore (BA), sdd-design (SAD), sdd-apply (DEV) y sdd-verify (QA) más systems-thinking y api-interface — desarrollo guiado por especificación, de la idea al código verificado.",
+    "pt-BR": "O pipeline SDD: sdd-explore (BA), sdd-design (SAD), sdd-apply (DEV) e sdd-verify (QA) mais systems-thinking e api-interface — desenvolvimento guiado por especificação, da ideia ao código verificado."
+  },
+  "tip_sk_quality": {
+    "en": "testing-evidence, eval-gates, CI-HARDENING, Karpathy, HALLUCINATION and SDD-STRICT-TDD — evidence-based gates that block low-quality output.",
+    "es": "testing-evidence, eval-gates, CI-HARDENING, Karpathy, HALLUCINATION y SDD-STRICT-TDD — compuertas basadas en evidencia que bloquean salida de baja calidad.",
+    "pt-BR": "testing-evidence, eval-gates, CI-HARDENING, Karpathy, HALLUCINATION e SDD-STRICT-TDD — portões baseados em evidência que bloqueiam saída de baixa qualidade."
+  },
+  "tip_sk_infra": {
+    "en": "ci-cd-automation, observability, performance-opt, cloud-connectors, NORMATIVAS-OPS and SELF-HEALING-CI — the operational layer that keeps the stack running.",
+    "es": "ci-cd-automation, observability, performance-opt, cloud-connectors, NORMATIVAS-OPS y SELF-HEALING-CI — la capa operativa que mantiene el stack funcionando.",
+    "pt-BR": "ci-cd-automation, observability, performance-opt, cloud-connectors, NORMATIVAS-OPS e SELF-HEALING-CI — a camada operacional que mantém o stack rodando."
+  },
+  "tip_sk_docs": {
+    "en": "doc-agent, writing-plans, write-spec, visual-content, documentation and standup-skill — produce and maintain high-quality documentation natively.",
+    "es": "doc-agent, writing-plans, write-spec, visual-content, documentation y standup-skill — producen y mantienen documentación de alta calidad de forma nativa.",
+    "pt-BR": "doc-agent, writing-plans, write-spec, visual-content, documentation e standup-skill — produzem e mantêm documentação de alta qualidade de forma nativa."
+  },
+  "tip_sk_analysis": {
+    "en": "idea-refine, doubt-driven-dev, premortem, socratic-skill, interview-me and source-driven — thinking frameworks that stress-test ideas before execution.",
+    "es": "idea-refine, doubt-driven-dev, premortem, socratic-skill, interview-me y source-driven — marcos de pensamiento que ponen a prueba las ideas antes de ejecutar.",
+    "pt-BR": "idea-refine, doubt-driven-dev, premortem, socratic-skill, interview-me e source-driven — estruturas de pensamento que testam ideias antes da execução."
+  },
+  "tip_sk_tooling": {
+    "en": "start-skill, workflow-orch, session-workflow, task-mgmt, semantic-matcher and skill-creator — the meta-skills that manage how all other skills are used.",
+    "es": "start-skill, workflow-orch, session-workflow, task-mgmt, semantic-matcher y skill-creator — las meta-skills que gestionan cómo se usan todas las demás.",
+    "pt-BR": "start-skill, workflow-orch, session-workflow, task-mgmt, semantic-matcher e skill-creator — as meta-skills que gerenciam como todas as outras são usadas."
+  },
+  "tip_met_health": {
+    "en": "112/112 checks PASS across 18 components: dashboard-ws, codegraph, ml-embeddings, engram, mcp, session, hooks, configs, tool-configs, security, cloud-connectors, tracing, state-persistence, audit, governance and gentle-vanguard-db. Measured by the maintenance watchtower.",
+    "es": "112/112 checks PASS en 18 componentes: dashboard-ws, codegraph, ml-embeddings, engram, mcp, session, hooks, configs, tool-configs, security, cloud-connectors, tracing, state-persistence, audit, governance y gentle-vanguard-db. Medidos por el maintenance watchtower.",
+    "pt-BR": "112/112 checks PASS em 18 componentes: dashboard-ws, codegraph, ml-embeddings, engram, mcp, session, hooks, configs, tool-configs, security, cloud-connectors, tracing, state-persistence, audit, governance e gentle-vanguard-db. Medidos pelo maintenance watchtower."
+  },
+  "tip_met_perf": {
+    "en": "Key performance indicators: watchtower checks went from sequential to parallel execution, lazy batch delay optimized 500ms → 100ms (5x faster), DB Manager refactored 1066 → 250 lines (-77%) and autonomy climbed from 73% to 100%.",
+    "es": "Indicadores clave de rendimiento: los checks del watchtower pasaron de secuencial a paralelo, el delay de batches lazy se optimizó de 500ms → 100ms (5x más rápido), el DB Manager se refactorizó de 1066 → 250 líneas (-77%) y la autonomía subió del 73% al 100%.",
+    "pt-BR": "Indicadores-chave de desempenho: os checks do watchtower passaram de sequencial para paralelo, o delay de batches lazy foi otimizado de 500ms → 100ms (5x mais rápido), o DB Manager foi refatorado de 1066 → 250 linhas (-77%) e a autonomia subiu de 73% para 100%."
+  }
+}

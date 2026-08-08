@@ -1,0 +1,61 @@
+# Common Tasks — Presentations Maintenance
+
+## Añadir un info-trigger "i"
+
+1. Insertar en el HTML donde corresponda (span HERMANO del texto, NUNCA hijo — ver gotcha #2):
+
+```html
+<span class="info-trigger" data-i18n-title="tip_mi_clave" title="Fallback en inglés">i</span>
+```
+
+2. Añadir la clave `tip_mi_clave` en los 3 bloques de idioma de `assets/js/i18n.js`
+   (`const en = {...}`, `const es = {...}`, `const pt = {...}`). El formato es
+   `tip_mi_clave: { en: "...", es: "...", "pt-BR": "..." }`.
+
+3. Si el texto que acompaña también es traducible y está en un `<td>`, usar:
+   `<td><span data-i18n="key">texto</span><span class="info-trigger" ...>i</span></td>`
+
+4. Validar: `npm run presentations:validate` (el validador comprueba que todos los
+   `.info-trigger` tengan `data-i18n-title`).
+
+## Añadir una clave al diccionario i18n.js
+
+- **Idempotencia**: comprobar POR BLOQUE de idioma si la clave existe. Si se comprueba globalmente,
+  el primer idioma detectado hace que el resto se omita (gotcha #3).
+- Después de editar: `node --check docs/presentations/assets/js/i18n.js` para sintaxis.
+- Estado sano: 208 claves por bloque (en/es/pt-BR), 0 duplicados. Verificar con
+  `scripts/dedupe-i18n.ps1 -DryRun` (reporta total y duplicados sin escribir).
+
+## Editar un SVG de diagrama
+
+- Verificar que el icono/bootstrap class existe (gotcha #1).
+- Tras reposicionar elementos, comprobar:
+  - `viewBox` suficiente para todo el contenido (ampliar altura si se añade leyenda).
+  - Balance de grupos: `<g>` == `</g>`.
+  - Footer no colisiona con contenido nuevo (reposicionar y, o ampliar viewBox).
+- Validador global: el HTML que referencia el SVG debe seguir pasando `presentations:validate`.
+
+## Verificación en Chrome real (CDP)
+
+El validador estructural NO comprueba render. Para verificación visual/DOM en Chrome:
+
+```powershell
+# 1. Servir con no-store (evita caché de modales)
+node C:\Users\emman\AppData\Local\Temp\opencode\gv-probe\serve.js
+
+# 2. Lanzar Chrome con CDP remoto (puerto 9225)
+
+# 3. Ejecutar verificación
+node C:\Users\emman\AppData\Local\Temp\opencode\gv-probe\cdp-verify-final.js
+```
+
+Checks CDP: icono Layer 4 (bi-book presente, bi-brain ausente), conteo de triggers por sección,
+traducción de modales (abrir y leer texto en los 3 idiomas), centrado del lightbox (comparar
+transform scale/translate contra lo esperado matemáticamente).
+
+## Lightbox
+
+- **CSS**: `.gv-lightbox-img` NO debe tener `max-width/max-height` (gotcha #6).
+- **JS**: `open()` debe usar `img.decode().then(afterLoad)` + comprobación `naturalWidth > 0`.
+- Centrado matemático: imagen con ancho W en viewport V → `scale = min(0.9, V/W)`,
+  `translateX = (V - W*scale)/2`. Si W*scale > V, scale = V/W.

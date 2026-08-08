@@ -1,0 +1,192 @@
+{
+  "tip_fm_55": {
+    "en": "11 repositories total: 10 DAOs + MigrationRunner. The MigrationRunner applies schema migrations in order with FK ON and WAL mode.",
+    "es": "11 repositorios en total: 10 DAOs + MigrationRunner. El MigrationRunner aplica las migraciones de esquema en orden con FK ON y modo WAL.",
+    "pt-BR": "11 repositórios no total: 10 DAOs + MigrationRunner. O MigrationRunner aplica as migrações de esquema em ordem com FK ON e modo WAL."
+  },
+  "tip_fm_56": {
+    "en": "7 schema migrations create 21 tables. Migration 001 = initial schema, 002 = stack tables, 003 = session scoring, applied automatically by DatabaseManager at session start.",
+    "es": "7 migraciones de esquema crean 21 tablas. Migración 001 = esquema inicial, 002 = tablas del stack, 003 = session scoring, aplicadas automáticamente por DatabaseManager al inicio de sesión.",
+    "pt-BR": "7 migrações de esquema criam 21 tabelas. Migração 001 = esquema inicial, 002 = tabelas do stack, 003 = session scoring, aplicadas automaticamente pelo DatabaseManager no início da sessão."
+  },
+  "tip_fm_57": {
+    "en": "6-layer decoupled design: Tools -> Agents -> Pipeline -> Memory -> Data -> Executive.",
+    "es": "Diseño desacoplado de 6 capas: Tools -> Agents -> Pipeline -> Memory -> Data -> Executive.",
+    "pt-BR": "Design desacoplado de 6 camadas: Tools -> Agents -> Pipeline -> Memory -> Data -> Executive."
+  },
+  "tip_fm_58": {
+    "en": "31 Phase-1 steps run in parallel at session start using Promise.allSettled. Non-blocking and idempotent.",
+    "es": "31 pasos Phase-1 se ejecutan en paralelo al inicio de sesión usando Promise.allSettled. No bloqueante e idempotente.",
+    "pt-BR": "31 etapas Phase-1 executam em paralelo no início da sessão usando Promise.allSettled. Não bloqueante e idempotente."
+  },
+  "tip_fm_59": {
+    "en": "70 lazy background tasks are queued in batches after session start (batch delay 500ms -> 100ms).",
+    "es": "70 tareas lazy en background se encolan en batches tras el inicio de sesión (delay de batch 500ms -> 100ms).",
+    "pt-BR": "70 tarefas lazy em background são enfileiradas em batches após o início da sessão (delay de batch 500ms -> 100ms)."
+  },
+  "tip_fm_60": {
+    "en": "All batch tasks use Promise.allSettled so a single failure never blocks the pipeline.",
+    "es": "Todas las tareas de batch usan Promise.allSettled para que un solo fallo nunca bloquee el pipeline.",
+    "pt-BR": "Todas as tarefas de batch usam Promise.allSettled para que uma única falha nunca bloqueie o pipeline."
+  },
+  "tip_fm_61": {
+    "en": "Executive engine: trigger -> apply -> verify -> rollback. Max 5 auto-applies/day, rollback on >15% degradation.",
+    "es": "Motor ejecutivo: trigger -> apply -> verify -> rollback. Máx. 5 auto-aplicaciones/día, rollback si degradación >15%.",
+    "pt-BR": "Motor executivo: trigger -> apply -> verify -> rollback. Máx. 5 auto-aplicações/dia, rollback se degradação >15%."
+  },
+  "tip_fm_62": {
+    "en": "3-state CLOSED/OPEN/HALF_OPEN pattern. 5 failures -> OPEN, 2 successes -> CLOSED.",
+    "es": "Patrón de 3 estados CLOSED/OPEN/HALF_OPEN. 5 fallos -> OPEN, 2 éxitos -> CLOSED.",
+    "pt-BR": "Padrão de 3 estados CLOSED/OPEN/HALF_OPEN. 5 falhas -> OPEN, 2 sucessos -> CLOSED."
+  },
+  "tip_fm_63": {
+    "en": "3-tier escalation: warning(3) -> critical(5) -> emergency(10) with audit trail + findings ledger.",
+    "es": "Escalación de 3 niveles: warning(3) -> critical(5) -> emergency(10) con auditoría + findings ledger.",
+    "pt-BR": "Escalação de 3 níveis: warning(3) -> critical(5) -> emergency(10) com auditoria + findings ledger."
+  },
+  "tip_fm_64": {
+    "en": "Auto-discovers component relationships from the pipeline config. No hardcoded dependency map.",
+    "es": "Descubre automáticamente las relaciones entre componentes desde la config del pipeline. Sin mapa hardcoded.",
+    "pt-BR": "Descobre automaticamente as relações entre componentes a partir da config do pipeline. Sem mapa hardcoded."
+  },
+  "tip_fm_65": {
+    "en": "createExperiment -> assign -> evaluate with automatic rollback on statistical degradation.",
+    "es": "createExperiment -> assign -> evaluate con rollback automático ante degradación estadística.",
+    "pt-BR": "createExperiment -> assign -> evaluate com rollback automático ante degradação estatística."
+  },
+  "tip_fm_66": {
+    "en": "Per-session quality scoring tracking delegations, corrections and proactive hits. Anomaly detection.",
+    "es": "Scoring de calidad por sesión que rastrea delegaciones, correcciones y aciertos proactivos. Detección de anomalías.",
+    "pt-BR": "Scoring de qualidade por sessão que rastreia delegações, correções e acertos proativos. Detecção de anomalias."
+  },
+  "tip_fm_67": {
+    "en": "Auto-discovers patterns in executions and writes LEARNED-NORMS.md. Adaptive evolution.",
+    "es": "Descubre automáticamente patrones en las ejecuciones y escribe LEARNED-NORMS.md. Evolución adaptativa.",
+    "pt-BR": "Descobre automaticamente padrões nas execuções e escreve LEARNED-NORMS.md. Evolução adaptativa."
+  },
+  "tip_fm_68": {
+    "en": "Engram persistent memory: 2078 observations, auto-sync across sessions and projects.",
+    "es": "Memoria persistente Engram: 2078 observaciones, auto-sync entre sesiones y proyectos.",
+    "pt-BR": "Memória persistente Engram: 2078 observações, auto-sync entre sessões e projetos."
+  },
+  "tip_fm_69": {
+    "en": "CodeGraph knowledge graph: 10,663 nodes and 21,746 edges derived from AST analysis.",
+    "es": "Grafo de conocimiento CodeGraph: 10.663 nodos y 21.746 aristas derivadas del análisis AST.",
+    "pt-BR": "Grafo de conhecimento CodeGraph: 10.663 nós e 21.746 arestas derivadas da análise AST."
+  },
+  "tip_fm_70": {
+    "en": "Graphify 18MB knowledge graph with god nodes, community structure and cross-file relationships.",
+    "es": "Grafo de conocimiento Graphify de 18MB con god nodes, estructura de comunidades y relaciones entre archivos.",
+    "pt-BR": "Grafo de conhecimento Graphify de 18MB com god nodes, estrutura de comunidades e relações entre arquivos."
+  },
+  "tip_fm_71": {
+    "en": "Nexus operational DB: SQLite WAL mode, 21 tables, auto-init, auto-prune, auto-backup and watchtower monitoring.",
+    "es": "BD operacional Nexus: SQLite modo WAL, 21 tablas, auto-init, auto-prune, auto-backup y monitoreo del watchtower.",
+    "pt-BR": "BD operacional Nexus: SQLite modo WAL, 21 tabelas, auto-init, auto-prune, auto-backup e monitoramento do watchtower."
+  },
+  "tip_fm_72": {
+    "en": "ML Embeddings vector index for semantic search over skills, norms and documentation.",
+    "es": "Índice vectorial ML Embeddings para búsqueda semántica sobre skills, normas y documentación.",
+    "pt-BR": "Índice vetorial ML Embeddings para busca semântica sobre skills, normas e documentação."
+  },
+  "tip_fm_73": {
+    "en": "Pre-input scanning, audit pipeline, policy enforcement and guardrails before every prompt.",
+    "es": "Escaneo pre-input, pipeline de auditoría, enforcement de políticas y guardrails antes de cada prompt.",
+    "pt-BR": "Escaneamento pre-input, pipeline de auditoria, aplicação de políticas e guardrails antes de cada prompt."
+  },
+  "tip_fm_74": {
+    "en": "JSONL audit logs with log/status/query/archive/prune actions under .session/audit/logs/.",
+    "es": "Logs de auditoría JSONL con acciones log/status/query/archive/prune bajo .session/audit/logs/.",
+    "pt-BR": "Logs de auditoria JSONL com ações log/status/query/archive/prune sob .session/audit/logs/."
+  },
+  "tip_fm_75": {
+    "en": "Governance policies + rules enforcement across all 18 watchtower components.",
+    "es": "Políticas de governance + enforcement de reglas en los 18 componentes del watchtower.",
+    "pt-BR": "Políticas de governance + aplicação de regras nos 18 componentes do watchtower."
+  },
+  "tip_fm_76": {
+    "en": "Guardrails: pre-input validation that rejects unsafe prompts before they reach the model.",
+    "es": "Guardrails: validación pre-input que rechaza prompts inseguros antes de que lleguen al modelo.",
+    "pt-BR": "Guardrails: validação pre-input que rejeita prompts inseguros antes de chegarem ao modelo."
+  },
+  "tip_fm_77": {
+    "en": "65 normatives covering rules and policies for autonomous operation.",
+    "es": "65 normativas que cubren reglas y políticas para la operación autónoma.",
+    "pt-BR": "65 normativas que cobrem regras e políticas para a operação autônoma."
+  },
+  "tip_fm_78": {
+    "en": "WebSocket push to the dashboard every 5 seconds with real metrics computed from traces.",
+    "es": "Push WebSocket al dashboard cada 5 segundos con métricas reales calculadas desde traces.",
+    "pt-BR": "Push WebSocket ao dashboard a cada 5 segundos com métricas reais calculadas a partir de traces."
+  },
+  "tip_fm_79": {
+    "en": "HTTP polling fallback keeps the dashboard alive even when the WS server is temporarily down.",
+    "es": "El fallback HTTP polling mantiene el dashboard vivo incluso si el servidor WS cae temporalmente.",
+    "pt-BR": "O fallback HTTP polling mantém o dashboard vivo mesmo se o servidor WS cair temporariamente."
+  },
+  "tip_fm_80": {
+    "en": "7 dashboard sections: overview, metrics, tracing, alerts, feedback, i18n and info popups.",
+    "es": "7 secciones del dashboard: overview, metrics, tracing, alerts, feedback, i18n e info popups.",
+    "pt-BR": "7 seções do dashboard: overview, metrics, tracing, alerts, feedback, i18n e info popups."
+  },
+  "tip_fm_81": {
+    "en": "Full UI translation in English, Spanish and Brazilian Portuguese (14 metric descriptions).",
+    "es": "Traducción completa de la UI en inglés, español y portugués brasileño (14 descripciones de métricas).",
+    "pt-BR": "Tradução completa da UI em inglês, espanhol e português brasileiro (14 descrições de métricas)."
+  },
+  "tip_fm_82": {
+    "en": "8 alert rules auto-evaluated every broadcast cycle with status ok/degraded/fail.",
+    "es": "8 reglas de alerta auto-evaluadas cada ciclo de broadcast con estado ok/degraded/fail.",
+    "pt-BR": "8 regras de alerta auto-avaliadas a cada ciclo de broadcast com status ok/degraded/fail."
+  },
+  "tip_fm_83": {
+    "en": "6 CI jobs + 3 security jobs (gitleaks, secretlint, trivy) on every push.",
+    "es": "6 jobs CI + 3 jobs de seguridad (gitleaks, secretlint, trivy) en cada push.",
+    "pt-BR": "6 jobs CI + 3 jobs de segurança (gitleaks, secretlint, trivy) em cada push."
+  },
+  "tip_fm_84": {
+    "en": "Hybrid AWS/Azure routing by cost, latency and load with circuit breaker fallback.",
+    "es": "Routing híbrido AWS/Azure por costo, latencia y carga con fallback de circuit breaker.",
+    "pt-BR": "Roteamento híbrido AWS/Azure por custo, latência e carga com fallback de circuit breaker."
+  },
+  "tip_fm_85": {
+    "en": "Span-based distributed tracing with OTLP export. JSONL spans under .telemetry/.",
+    "es": "Tracing distribuido basado en spans con exportación OTLP. Spans JSONL bajo .telemetry/.",
+    "pt-BR": "Tracing distribuído baseado em spans com exportação OTLP. Spans JSONL sob .telemetry/."
+  },
+  "tip_fm_86": {
+    "en": "Checkpoints, snapshots and rollback with dry-run validation. Auto-create at session start.",
+    "es": "Checkpoints, snapshots y rollback con validación dry-run. Auto-creación al inicio de sesión.",
+    "pt-BR": "Checkpoints, snapshots e rollback com validação dry-run. Auto-criação no início da sessão."
+  },
+  "tip_fm_87": {
+    "en": "Append-only event store + saga orchestrator with compensation steps for consistency.",
+    "es": "Event store append-only + saga orchestrator con pasos de compensación para consistencia.",
+    "pt-BR": "Event store append-only + saga orchestrator com passos de compensação para consistência."
+  },
+  "tip_fm_88": {
+    "en": "97 test files across 12 suites covering units, configs, workflows and CI/CD.",
+    "es": "97 archivos de test en 12 suites que cubren units, configs, workflows y CI/CD.",
+    "pt-BR": "97 arquivos de teste em 12 suítes cobrindo units, configs, workflows e CI/CD."
+  },
+  "tip_fm_89": {
+    "en": "112 health checks across 18 components. All green: 112/112 PASS, 0 WARN, 0 FAIL.",
+    "es": "112 health checks en 18 componentes. Todo verde: 112/112 PASS, 0 WARN, 0 FAIL.",
+    "pt-BR": "112 health checks em 18 componentes. Tudo verde: 112/112 PASS, 0 WARN, 0 FAIL."
+  },
+  "tip_fm_90": {
+    "en": "Multi-axis code review: correctness, readability, architecture, security and performance.",
+    "es": "Code review multi-eje: correctness, readability, architecture, security y performance.",
+    "pt-BR": "Code review multi-eixo: correctness, readability, architecture, security e performance."
+  },
+  "tip_fm_91": {
+    "en": "Karpathy guidelines: Think First, Simplicity, Surgical Changes, Goal-Driven.",
+    "es": "Guías Karpathy: Think First, Simplicity, Surgical Changes, Goal-Driven.",
+    "pt-BR": "Diretrizes Karpathy: Think First, Simplicity, Surgical Changes, Goal-Driven."
+  },
+  "tip_fm_92": {
+    "en": "SDD workflow: explore -> design -> apply -> verify with formal input/output contracts.",
+    "es": "Workflow SDD: explore -> design -> apply -> verify con contratos formales de entrada/salida.",
+    "pt-BR": "Workflow SDD: explore -> design -> apply -> verify com contratos formais de entrada/saída."
+  }
+}
