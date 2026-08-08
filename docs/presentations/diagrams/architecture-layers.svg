@@ -15,7 +15,7 @@
 <text x="480" y="54" text-anchor="middle" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="11.5">Autonomous Stack — Layered Component Architecture</text>
 
 <!-- ================= L6 EXECUTIVE ================= -->
-<g class="gv-node" data-group="executive" data-tip="Executive Systems — 12 subsistemas autónomos: Auto-Apply Safe, Circuit Breaker, Auto-Escalation, Dynamic Dependency Graph, AB Testing, Session Scoring, Norms Learner, Watchtower, Security Orchestrator, State Persistence, Distributed Tracing, Cloud Connectors">
+<g class="gv-node gv-hotspot" data-group="executive" data-i18n-title="tip_hs_executive" role="button" tabindex="0" data-tip="Executive Systems — 12 subsistemas autónomos: Auto-Apply Safe, Circuit Breaker, Auto-Escalation, Dynamic Dependency Graph, AB Testing, Session Scoring, Norms Learner, Watchtower, Security Orchestrator, State Persistence, Distributed Tracing, Cloud Connectors">
 <g filter="url(#s)"><rect x="40" y="72" width="880" height="84" rx="12" fill="url(#bar)" stroke="#1e3a5f" stroke-width="1"/><rect x="40" y="72" width="880" height="84" rx="12" fill="url(#l6)"/></g>
 <text x="60" y="96" fill="#67e8f9" font-family="system-ui,sans-serif" font-size="13" font-weight="800" letter-spacing="1.2">EXECUTIVE</text>
 <text x="60" y="112" fill="#cbd5e1" font-family="system-ui,sans-serif" font-size="10.5">12 systems · Orchestration layer</text>
@@ -40,7 +40,7 @@
 <line x1="480" y1="160" x2="480" y2="178" stroke="#64748b" stroke-width="1.5" marker-end="url(#a)"/>
 
 <!-- ================= L5 DATA ================= -->
-<g class="gv-node" data-group="data" data-tip="Data Layer — Nexus SQLite DB con 11 repositorios (10 DAOs + MigrationRunner), 7 migraciones y 21 tablas">
+<g class="gv-node gv-hotspot" data-group="data" data-i18n-title="tip_hs_data" role="button" tabindex="0" data-tip="Data Layer — Nexus SQLite DB con 11 repositorios (10 DAOs + MigrationRunner), 7 migraciones y 21 tablas">
 <g filter="url(#s)"><rect x="40" y="182" width="880" height="84" rx="12" fill="url(#bar)" stroke="#1e3a5f" stroke-width="1"/><rect x="40" y="182" width="880" height="84" rx="12" fill="url(#l5)"/></g>
 <text x="60" y="206" fill="#fca5a5" font-family="system-ui,sans-serif" font-size="13" font-weight="800" letter-spacing="1.2">DATA</text>
 <text x="60" y="222" fill="#cbd5e1" font-family="system-ui,sans-serif" font-size="10.5">11 repos · SQLite Nexus · 21 tables</text>
@@ -64,7 +64,7 @@
 <line x1="480" y1="270" x2="480" y2="288" stroke="#64748b" stroke-width="1.5" marker-end="url(#a)"/>
 
 <!-- ================= L4 MEMORY ================= -->
-<g class="gv-node" data-group="memory" data-tip="Memory Layer — Engram (2078 obs), CodeGraph (10,663 nodos), Graphify, ML Embeddings, Nexus DB y Knowledge Vault">
+<g class="gv-node gv-hotspot" data-group="memory" data-i18n-title="tip_hs_memory" role="button" tabindex="0" data-tip="Memory Layer — Engram (2078 obs), CodeGraph (10,663 nodos), Graphify, ML Embeddings, Nexus DB y Knowledge Vault">
 <g filter="url(#s)"><rect x="40" y="292" width="880" height="84" rx="12" fill="url(#bar)" stroke="#1e3a5f" stroke-width="1"/><rect x="40" y="292" width="880" height="84" rx="12" fill="url(#l4)"/></g>
 <text x="60" y="316" fill="#fcd34d" font-family="system-ui,sans-serif" font-size="13" font-weight="800" letter-spacing="1.2">MEMORY</text>
 <text x="60" y="332" fill="#cbd5e1" font-family="system-ui,sans-serif" font-size="10.5">6 nodes · Persistent knowledge</text>
@@ -83,7 +83,7 @@
 <line x1="480" y1="380" x2="480" y2="398" stroke="#64748b" stroke-width="1.5" marker-end="url(#a)"/>
 
 <!-- ================= L3 PIPELINE ================= -->
-<g class="gv-node" data-group="pipeline" data-tip="Pipeline — 105 pasos configurados, 101 habilitados: 31 Phase 1 paralelos + 70 lazy background en batches de 5">
+<g class="gv-node gv-hotspot" data-group="pipeline" data-i18n-title="tip_hs_pipeline" role="button" tabindex="0" data-tip="Pipeline — 105 pasos configurados, 101 habilitados: 31 Phase 1 paralelos + 70 lazy background en batches de 5">
 <g filter="url(#s)"><rect x="40" y="402" width="880" height="84" rx="12" fill="url(#bar)" stroke="#1e3a5f" stroke-width="1"/><rect x="40" y="402" width="880" height="84" rx="12" fill="url(#l3)"/></g>
 <text x="60" y="426" fill="#6ee7b7" font-family="system-ui,sans-serif" font-size="13" font-weight="800" letter-spacing="1.2">PIPELINE</text>
 <text x="60" y="442" fill="#cbd5e1" font-family="system-ui,sans-serif" font-size="10.5">101 steps · Parallel + lazy</text>
@@ -111,7 +111,7 @@
 <line x1="480" y1="490" x2="480" y2="508" stroke="#64748b" stroke-width="1.5" marker-end="url(#a)"/>
 
 <!-- ================= L2 AGENTS ================= -->
-<g class="gv-node" data-group="agents" data-tip="Agents — 21 subagentes especializados: Orchestrator, SDD (explore/design/apply/verify), Doc, Ops, Gov, Session, Premortem, Maintenance, Self-Diag, SIA, GitFlow, Knowledge + business (Mkt, Sales, Finance, HR, Legal, Bus-Tele)">
+<g class="gv-node gv-hotspot" data-group="agents" data-i18n-title="tip_hs_agents" role="button" tabindex="0" data-tip="Agents — 21 subagentes especializados: Orchestrator, SDD (explore/design/apply/verify), Doc, Ops, Gov, Session, Premortem, Maintenance, Self-Diag, SIA, GitFlow, Knowledge + business (Mkt, Sales, Finance, HR, Legal, Bus-Tele)">
 <g filter="url(#s)"><rect x="40" y="512" width="880" height="84" rx="12" fill="url(#bar)" stroke="#1e3a5f" stroke-width="1"/><rect x="40" y="512" width="880" height="84" rx="12" fill="url(#l2)"/></g>
 <text x="60" y="536" fill="#c4b5fd" font-family="system-ui,sans-serif" font-size="13" font-weight="800" letter-spacing="1.2">AGENTS</text>
 <text x="60" y="552" fill="#cbd5e1" font-family="system-ui,sans-serif" font-size="10.5">21 types · Specialized subagents</text>
@@ -140,7 +140,7 @@
 <line x1="480" y1="600" x2="480" y2="618" stroke="#64748b" stroke-width="1.5" marker-end="url(#a)"/>
 
 <!-- ================= L1 TOOLS ================= -->
-<g class="gv-node" data-group="tools" data-tip="Tools — 10 integraciones IDE: OpenCode, Claude Code, Cursor, Windsurf, Cline, Codex, Copilot, Continue.dev, Aider, Roo Code">
+<g class="gv-node gv-hotspot" data-group="tools" data-i18n-title="tip_hs_tools" role="button" tabindex="0" data-tip="Tools — 10 integraciones IDE: OpenCode, Claude Code, Cursor, Windsurf, Cline, Codex, Copilot, Continue.dev, Aider, Roo Code">
 <g filter="url(#s)"><rect x="40" y="622" width="880" height="56" rx="12" fill="url(#bar)" stroke="#1e3a5f" stroke-width="1"/><rect x="40" y="622" width="880" height="56" rx="12" fill="url(#l1)"/></g>
 <text x="60" y="646" fill="#67e8f9" font-family="system-ui,sans-serif" font-size="13" font-weight="800" letter-spacing="1.2">TOOLS</text>
 <text x="60" y="662" fill="#cbd5e1" font-family="system-ui,sans-serif" font-size="10.5">10 IDEs · Execution primitives</text>

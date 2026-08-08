@@ -201,4 +201,18 @@
   <!-- Footer -->
   <line x1="50" y1="523" x2="750" y2="523" stroke="#1e3a5f" stroke-width="0.5"/>
   <text x="400" y="535" text-anchor="middle" fill="#4b5563" font-family="system-ui,-apple-system,sans-serif" font-size="9">Gentle-Vanguard v3.5.0 — Autonomous AI Stack</text>
+
+  
+  <!-- ===== HOTSPOTS INTERACTIVOS (gv-hotspot) ===== -->
+    <rect class="gv-hotspot" x="356" y="111" width="88" height="88" rx="6" data-i18n-title="tip_hs_loop_detection" role="button" tabindex="0" fill="transparent" aria-label="Phase 1 - Detection: identifies anomalies, new signals or degradation events in the environment, tool outputs and session traces."/>
+    <rect class="gv-hotspot" x="526" y="204" width="88" height="88" rx="6" data-i18n-title="tip_hs_loop_evaluation" role="button" tabindex="0" fill="transparent" aria-label="Phase 2 - Evaluation: scores each candidate action against quality rubrics, cost and risk before deciding."/>
+    <rect class="gv-hotspot" x="486" y="311" width="88" height="88" rx="6" data-i18n-title="tip_hs_loop_decision" role="button" tabindex="0" fill="transparent" aria-label="Phase 3 - Decision: chooses the winning action with confidence thresholds; escalates when uncertainty is high."/>
+    <rect class="gv-hotspot" x="356" y="341" width="88" height="88" rx="6" data-i18n-title="tip_hs_loop_execution" role="button" tabindex="0" fill="transparent" aria-label="Phase 4 - Execution: applies the selected action through the safe auto-apply gate, tracking every mutation."/>
+    <rect class="gv-hotspot" x="226" y="311" width="88" height="88" rx="6" data-i18n-title="tip_hs_loop_verification" role="button" tabindex="0" fill="transparent" aria-label="Phase 5 - Verification: runs typecheck, lint and tests; if verification fails, the action is rolled back."/>
+    <rect class="gv-hotspot" x="186" y="204" width="88" height="88" rx="6" data-i18n-title="tip_hs_loop_learning" role="button" tabindex="0" fill="transparent" aria-label="Phase 6 - Learning: records outcomes in Engram and the routing table, improving future decisions."/>
+    <rect class="gv-hotspot" x="350" y="215" width="100" height="100" rx="6" data-i18n-title="tip_hs_loop_autoapply" role="button" tabindex="0" fill="transparent" aria-label="Auto-Apply SAFE: the central verification gate - changes are only applied when they pass all safety checks."/>
+    <rect class="gv-hotspot" x="610" y="140" width="130" height="36" rx="6" data-i18n-title="tip_hs_loop_circuit_breaker" role="button" tabindex="0" fill="transparent" aria-label="Guard rail - Circuit Breaker: opens after repeated failures to stop cascading errors and halts the loop."/>
+    <rect class="gv-hotspot" x="610" y="340" width="140" height="36" rx="6" data-i18n-title="tip_hs_loop_auto_escalation" role="button" tabindex="0" fill="transparent" aria-label="Guard rail - Auto-Escalation: promotes unresolved issues to a higher authority (orchestrator or human)."/>
+    <rect class="gv-hotspot" x="50" y="340" width="140" height="36" rx="6" data-i18n-title="tip_hs_loop_session_scoring" role="button" tabindex="0" fill="transparent" aria-label="Guard rail - Session Scoring: grades each session (delegations, corrections, proactive hits) and feeds the routing table."/>
+    <rect class="gv-hotspot" x="50" y="140" width="140" height="36" rx="6" data-i18n-title="tip_hs_loop_norms_learner" role="button" tabindex="0" fill="transparent" aria-label="Guard rail - Norms Learner: learns project conventions and injects them as adaptive norms into new sessions."/>
 </svg>

@@ -82,4 +82,15 @@
 
 <line x1="60" y1="390" x2="940" y2="390" stroke="#1e3a5f" stroke-width=".5"/>
 <text x="500" y="396" text-anchor="middle" fill="#4b5563" font-family="system-ui,sans-serif" font-size="9">Gentle-Vanguard v3.5.0 — Autonomous AI Stack</text>
+
+  
+  <!-- ===== HOTSPOTS INTERACTIVOS (gv-hotspot) ===== -->
+    <rect class="gv-hotspot" x="61" y="66" width="350" height="22" rx="6" data-i18n-title="tip_hs_flow_phase1" role="button" tabindex="0" fill="transparent" aria-label="Phase 1 - 31 parallel steps: fast, independent initializers that run concurrently and never block on failure."/>
+    <rect class="gv-hotspot" x="435" y="66" width="370" height="22" rx="6" data-i18n-title="tip_hs_flow_phase2" role="button" tabindex="0" fill="transparent" aria-label="Phase 2 - 70 lazy background steps: deferred heavy work executed in batches of 5 workers after session start."/>
+    <rect class="gv-hotspot" x="60" y="110" width="170" height="70" rx="6" data-i18n-title="tip_hs_flow_tool_detection" role="button" tabindex="0" fill="transparent" aria-label="Tool Detection: maps the 8 available tools (Bash, Read, Write, Edit, Grep, Glob, Task, Skill)."/>
+    <rect class="gv-hotspot" x="250" y="110" width="170" height="70" rx="6" data-i18n-title="tip_hs_flow_session_manager" role="button" tabindex="0" fill="transparent" aria-label="Session Manager: generates the session ID, syncs Engram and tracks the session lifecycle."/>
+    <rect class="gv-hotspot" x="60" y="200" width="170" height="70" rx="6" data-i18n-title="tip_hs_flow_token_budget" role="button" tabindex="0" fill="transparent" aria-label="Token Budget: allocates the 5M daily / 3M per-session budget and enforces guard thresholds."/>
+    <rect class="gv-hotspot" x="250" y="200" width="170" height="70" rx="6" data-i18n-title="tip_hs_flow_karpathy" role="button" tabindex="0" fill="transparent" aria-label="Karpathy Guidelines: 3 rules (Think First, Simplicity, Surgical Changes) with quality rubrics and self-critique."/>
+    <rect class="gv-hotspot" x="470" y="135" width="470" height="110" rx="6" data-i18n-title="tip_hs_flow_lazy_batch" role="button" tabindex="0" fill="transparent" aria-label="Lazy Batch - 5 background workers: runs deferred steps like Tracing Init, Cloud Connectors, Event Sourcing, Audit Pipeline and Dashboard WS."/>
+    <rect class="gv-hotspot" x="60" y="305" width="880" height="18" rx="6" data-i18n-title="tip_hs_flow_process_bar" role="button" tabindex="0" fill="transparent" aria-label="Process bar: parallel steps (31) then lazy background (70) then DONE - the full 101-step session pipeline."/>
 </svg>

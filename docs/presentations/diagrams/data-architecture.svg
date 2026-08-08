@@ -213,4 +213,12 @@
   <!-- Footer -->
   <line x1="60" y1="483" x2="840" y2="483" stroke="#1e3a5f" stroke-width="0.5"/>
   <text x="450" y="495" text-anchor="middle" fill="#4b5563" font-family="system-ui,-apple-system,sans-serif" font-size="9">Gentle-Vanguard v3.5.0 — Autonomous AI Stack</text>
+
+  
+  <!-- ===== HOTSPOTS INTERACTIVOS (gv-hotspot) ===== -->
+    <rect class="gv-hotspot" x="370" y="240" width="160" height="70" rx="6" data-i18n-title="tip_hs_data_nexus" role="button" tabindex="0" fill="transparent" aria-label="NEXUS DB: operational SQLite database (gentle-vanguard.db) with WAL mode, FK ON, 12 tables and 3 migrations."/>
+    <rect class="gv-hotspot" x="130" y="75" width="650" height="48" rx="6" data-i18n-title="tip_hs_data_repos_blue" role="button" tabindex="0" fill="transparent" aria-label="Data DAOs (blue): MetricsRepo (metric_snapshots), SessionRepo (sessions) and TraceRepo (traces) - time-series and session history."/>
+    <rect class="gv-hotspot" x="60" y="195" width="720" height="38" rx="6" data-i18n-title="tip_hs_data_repos_green" role="button" tabindex="0" fill="transparent" aria-label="Quality DAOs (green): CacheRepo (response_cache) and EventRepo (events) - caching and event sourcing audit trail."/>
+    <rect class="gv-hotspot" x="310" y="370" width="470" height="48" rx="6" data-i18n-title="tip_hs_data_repos_purple" role="button" tabindex="0" fill="transparent" aria-label="Memory DAOs (purple): SkillRepo (skill_usage), ContractRepo (contract_results) and ErrMemoryRepo (scoring) - usage and scoring."/>
+    <rect class="gv-hotspot" x="60" y="290" width="720" height="118" rx="6" data-i18n-title="tip_hs_data_repos_orange" role="button" tabindex="0" fill="transparent" aria-label="Ops DAOs (orange): HousekeepingRepo (token_usage) and MigrationRunner (7 migrations) - maintenance and schema evolution."/>
 </svg>

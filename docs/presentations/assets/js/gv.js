@@ -223,6 +223,7 @@
       '<div class="gv-lightbox-backdrop"></div>' +
       '<div class="gv-lightbox-stage">' +
       '<img class="gv-lightbox-img" alt="" draggable="false" />' +
+      '<div class="gv-lightbox-svg" hidden></div>' +
       '</div>' +
       '<div class="gv-lightbox-toolbar">' +
       '<button class="gv-lightbox-btn" data-zoom="out" aria-label="Zoom out">−</button>' +
@@ -240,6 +241,7 @@
 
     var stage = overlay.querySelector('.gv-lightbox-stage');
     var img = overlay.querySelector('.gv-lightbox-img');
+    var svgBox = overlay.querySelector('.gv-lightbox-svg');
     var cap = overlay.querySelector('.gv-lightbox-cap');
 
     // Estado de pan/zoom
@@ -248,21 +250,49 @@
     var dragging = false, startX = 0, startY = 0, origTx = 0, origTy = 0;
     var moved = false;
 
+    // Hotspots del SVG inline (delegación de eventos)
+    svgBox.addEventListener('click', function (e) {
+      var hot = e.target.closest ? e.target.closest('.gv-hotspot') : null;
+      if (hot && !moved && window.__gvShowInfo) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.__gvShowInfo(hot.getAttribute('data-i18n-title'));
+      }
+    });
+
     function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
+    // El transform se aplica al elemento activo (img o svg inline)
+    function activeEl() {
+      return svgBox.hidden ? img : svgBox;
+    }
+
     function apply() {
-      img.style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + scale + ')';
+      activeEl().style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + scale + ')';
+    }
+
+    function measure() {
+      var el = activeEl();
+      if (el === img) {
+        return { w: img.naturalWidth || img.width || 0, h: img.naturalHeight || img.height || 0 };
+      }
+      var svg = svgBox.querySelector('svg');
+      if (!svg) return { w: 0, h: 0 };
+      var vb = (svg.getAttribute('viewBox') || '').split(/[\s,]+/).map(parseFloat);
+      if (vb.length === 4 && vb[2] > 0 && vb[3] > 0) return { w: vb[2], h: vb[3] };
+      var rect = svg.getBoundingClientRect();
+      return { w: rect.width || 0, h: rect.height || 0 };
     }
 
     function fitToStage() {
       var sw = stage.clientWidth, sh = stage.clientHeight;
-      var iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
-      if (!iw || !ih) { scale = 1; tx = 0; ty = 0; apply(); return; }
+      var m = measure();
+      if (!m.w || !m.h) { scale = 1; tx = 0; ty = 0; apply(); return; }
       // Ajustar imagen a la vista (sin overflow) y permitir zoom hasta 12x
-      scale = Math.min(sw / iw, sh / ih, 1);
+      scale = Math.min(sw / m.w, sh / m.h, 1);
       minScale = scale * 0.8;
-      tx = (sw - iw * scale) / 2;
-      ty = (sh - ih * scale) / 2;
+      tx = (sw - m.w * scale) / 2;
+      ty = (sh - m.h * scale) / 2;
       apply();
     }
 
@@ -284,22 +314,48 @@
       var src = el.currentSrc || el.src || el.getAttribute('src');
       var alt = el.getAttribute('alt') || '';
       // Resetear transform para evitar parpadeo mientras carga
-      img.style.transform = 'none';
+      activeEl().style.transform = 'none';
       scale = 1; tx = 0; ty = 0;
-      img.src = src;
       cap.textContent = alt;
       overlay.classList.add('open');
       document.body.style.overflow = 'hidden';
+
+      var isSvg = /\.svg(\?|#|$)/.test(src || '');
+      if (isSvg) {
+        // Cargar inline: permite hotspots interactivos (.gv-hotspot)
+        fetch(src).then(function (r) { return r.text(); }).then(function (svgText) {
+          img.hidden = true;
+          svgBox.hidden = false;
+          svgBox.innerHTML = svgText;
+          // Asegurar que los hotspots con data-i18n-title se abren con el modal
+          fitToStage();
+        }).catch(function () {
+          // Fallback a imagen estática si fetch falla (file:// etc.)
+          img.hidden = false;
+          svgBox.hidden = true;
+          img.src = src;
+          afterImgLoad();
+        });
+        return;
+      }
+
+      img.hidden = false;
+      svgBox.hidden = true;
+      img.style.transform = 'none';
+      img.src = src;
+      afterImgLoad();
+
       // Ajustar una vez la imagen esté realmente decodificada (funciona también
       // con imágenes cacheadas, donde naturalWidth puede tardar en estar listo).
-      function afterLoad() { fitToStage(); }
-      if (img.complete && img.naturalWidth > 0) {
-        // Imagen ya lista (mismo src que antes): re-encajar
-        afterLoad();
-      } else if (typeof img.decode === 'function') {
-        img.decode().then(afterLoad).catch(afterLoad);
-      } else {
-        img.addEventListener('load', afterLoad, { once: true });
+      function afterImgLoad() {
+        function afterLoad() { fitToStage(); }
+        if (img.complete && img.naturalWidth > 0) {
+          afterLoad();
+        } else if (typeof img.decode === 'function') {
+          img.decode().then(afterLoad).catch(afterLoad);
+        } else {
+          img.addEventListener('load', afterLoad, { once: true });
+        }
       }
     }
 
@@ -377,7 +433,9 @@
   /* --- 9c. Info modal (click en la "i" → modal con detalle) ---------------------- */
   function initInfoModal() {
     var triggers = document.querySelectorAll('.info-trigger');
-    if (!triggers.length) return;
+    var diagrams = document.querySelectorAll('.svg-diagram');
+    // El modal también lo necesitan los hotspots SVG (páginas sin info-trigger)
+    if (!triggers.length && !diagrams.length) return;
 
     var overlay = document.createElement('div');
     overlay.className = 'gv-info-modal';
@@ -420,6 +478,20 @@
       // Fallback: atributo title real (inyectado en el HTML) o aria-label
       return trigger.getAttribute('title') || trigger.getAttribute('aria-label') || '';
     }
+
+    // API global: abre el modal con la clave del diccionario (usada por hotspots SVG)
+    window.__gvShowInfo = function (key) {
+      var dict = window.__i18n && window.__i18n.getDict ? window.__i18n.getDict() : null;
+      var text = (dict && dict[key] !== undefined)
+        ? dict[key]
+        : (key || '');
+      body.textContent = text;
+      if (window.__i18n && window.__i18n.translate) {
+        window.__i18n.translate(window.__i18n.getCurrentLang());
+      }
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
 
     triggers.forEach(function (trigger) {
       trigger.style.cursor = 'pointer';

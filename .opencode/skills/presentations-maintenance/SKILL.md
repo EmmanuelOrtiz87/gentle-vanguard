@@ -51,8 +51,11 @@ el flag `--no-store` del servidor TS evita la caché de modales i18n en recargas
 | `assets/js/i18n.js`                                 | Diccionario `tip_*` + `sec_*` (208 claves × 3 idiomas)     |
 | `assets/js/i18n-content.js`                         | Diccionario de contenido `c_*` (485 × 3)                   |
 | `assets/css/gv.css`                                 | Estilos: `.info-trigger`, `.gv-lightbox`, `.lang-seg`      |
-| `diagrams/architecture-layers.svg`                  | Capas de la arquitectura (L1-L4)                           |
-| `diagrams/executive-loop.svg`                       | Loop ejecutivo con leyenda de colores                      |
+| `diagrams/architecture-layers.svg`                  | Capas de la arquitectura (6 hotspots)                  |
+| `diagrams/executive-loop.svg`                       | Loop ejecutivo (11 hotspots)                          |
+| `diagrams/pipeline-flow.svg`                        | Pipeline de 101 pasos (8 hotspots)                    |
+| `diagrams/data-architecture.svg`                    | Arquitectura Nexus DB (5 hotspots)                    |
+| `diagrams/stack-dashboard.svg`                      | Arquitectura del dashboard (5 hotspots)               |
 | `src/cli/serve-presentations.ts`                    | Servidor estático TS (nativo)                              |
 | `src/cli/stop-presentations.ts`                     | Parada del servidor (nativo)                               |
 | `src/cli/validate-presentations.ts`                 | Validador estructural TS (nativo, 11/11 PASS)              |
@@ -78,6 +81,11 @@ el flag `--no-store` del servidor TS evita la caché de modales i18n en recargas
 9. **Commit**: solo archivos de trabajo de presentations; no tocar archivos automáticos de daemons.
 10. **Doble convención de bloques**: `i18n.js` declara bloques como `en: {`, `es: {`, `'pt-BR': {` (pt-BR CON comillas simples, los otros sin). `i18n-content.js` usa `__GV_CONTENT.en = {`, `__GV_CONTENT.es = {`, `__GV_CONTENT['pt-BR'] = {` (corchetes). Cualquier regex de extracción que asuma un solo formato romperá: al recorrer TODOS los bloques sobrescribe con el último (pt-BR); al buscar el fin de un bloque con el formato equivocado captura todo el resto del archivo. Extraer SIEMPRE el bloque `en` de forma delimitada (entre su apertura y el siguiente bloque).
 11. **ESM vs CommonJS**: el repo tiene `"type": "module"` en package.json → cualquier `.js` dentro del repo se trata como ES module y `require()` falla con "ReferenceError: require is not defined". Los scripts node que usan `require('ws')` deben llamarse `.cjs` (cdp-verify-final.cjs, cdp-verify-page.cjs). Fuera del repo (temp) pueden ser `.js`.
+12. **Hotspots SVG**: el lightbox carga el SVG inline (fetch) y delega clicks en `.gv-hotspot` (closest) → `__gvShowInfo(data-i18n-title)`. Los hotspots pueden ser `<g>` existentes (convertidos con `homologate-svg.ps1`) o `<rect>` transparentes inyectados (`inject-hotspots.ps1`). El CSS `.gv-lightbox-svg .gv-hotspot` da fill transparente + hover púrpura.
+13. **`\n` literal en PS**: escribir `"\n"` en PowerShell NO crea un salto de línea real (backslash-n literal). Usar `` "`n" `` (backtick-n) o `[Environment]::NewLine`. Un `\n` literal dentro del XML SVG es texto inofensivo pero sucio.
+14. **`$args` es automático en PowerShell**: no usarlo como nombre de variable propia dentro de un script (colisiona con los argumentos posicionales del script). Usar `$passArgs` o splatting de hashtable `@{ param = valor }`.
+15. **CDP con `returnByValue`**: `Runtime.evaluate` con `returnByValue:true` + `awaitPromise:true` devuelve el objeto YA deserializado en `result.value` — NO hacer `JSON.parse` encima. Plantillas de string con interpolación de variables Node: usar `${var}` dentro del template literal, nunca concatenar con `' + var + '` (queda como texto literal en el navegador).
+16. **localStorage `gv-lang` persiste entre páginas CDP**: al navegar en una verificación, forzar el idioma base con `localStorage.setItem('gv-lang','en')` + click en `[data-lang="en"]` antes de evaluar EN.
 
 ## Patrón de info-trigger (estándar)
 
@@ -110,8 +118,17 @@ Herramientas reutilizables, parametrizadas y probadas. Todas con `-DryRun` para 
 | `gen-tips-c.ps1`          | Genera claves `tip_c_*` en 3 idiomas desde i18n-content.js (traducción automática de modales) | `pwsh scripts/gen-tips-c.ps1 -DryRun` |
 | `cdp-verify-final.cjs`    | Verificación en Chrome real (CDP), 6 checks (index.html) | `node scripts/cdp-verify-final.cjs --cdp 9225` |
 | `cdp-verify-page.cjs`     | Verificación genérica de info-triggers + modales EN/ES/PT en CUALQUIER página | `node scripts/cdp-verify-page.cjs --page=health.html` |
+| `homologate-svg.ps1`      | Convierte `<g class="gv-node">` → `gv-hotspot` + `data-i18n-title` en SVG | `pwsh scripts/homologate-svg.ps1 -File architecture-layers.svg -DryRun` |
+| `inject-hotspots.ps1`     | Inyecta rects `<rect class="gv-hotspot">` transparentes (zona clicable) antes de `</svg>` | `pwsh scripts/inject-hotspots.ps1 -DryRun` |
+| `insert-zones.ps1`        | Aplana `svg-zones.json` → formato insert-tips y delega (87 claves en 3 idiomas) | `pwsh scripts/insert-zones.ps1 -DryRun` |
+| `cdp-verify-svg.cjs`      | Verifica SVG inline en lightbox (hotspots, viewBox, fit) | `node scripts/cdp-verify-svg.cjs` |
+| `cdp-verify-hotspot.cjs`  | Verifica click en hotspot → modal info (un SVG, idioma actual) | `node scripts/cdp-verify-hotspot.cjs` |
+| `cdp-verify-hotspot-multilang.cjs` | Verifica hotspot en los 3 idiomas (cambia con botones data-lang) | `node scripts/cdp-verify-hotspot-multilang.cjs` |
+| `cdp-verify-hotspots-all.cjs` | Verifica 1 hotspot de cada diagrama en 3 idiomas (autonomy/agents-pipeline/operations-cloud/dashboard) | `node scripts/cdp-verify-hotspots-all.cjs` |
 | `tips-new.json`           | Claves `tip_*` genéricas (en/es/pt-BR) para insertar | dato para `insert-tips.ps1`               |
 | `tips-fm.json`            | Claves `tip_fm_*` de la Feature Matrix               | dato para `homologate-matrix.ps1`         |
+| `tips-hs.json`            | Claves `tip_hs_*` de hotspots gv-node (en/es/pt-BR) | dato para `insert-tips.ps1`               |
+| `svg-zones.json`          | Zonas hotspot de los 4 SVG: `{archivo: {tipKey: {rect, en, es, pt-BR}}}` | dato para `inject-hotspots.ps1` + `insert-zones.ps1` |
 
 Los scripts detectan el repo por defecto (paths relativos desde el cwd) y aceptan `-JsonPath`/`-JsPath`/`-HtmlPath`/`--origin`/`--page` explícitos. Se verificaron en seco: insert-tips idempotente (0 claves reinsertadas), dedupe 0 duplicados (353/bloque), homologate 0 filas restantes.
 
@@ -123,3 +140,19 @@ Los scripts detectan el repo por defecto (paths relativos desde el cwd) y acepta
 4. `gen-tips-c.ps1` — inserta traducciones en los 3 bloques (modales multi-idioma)
 5. `npm run presentations:validate` — 11/11 PASS esperado
 6. Verificación CDP en Chrome real (health/security-governance/quickstart): modales EN+ES traducidos
+
+## Flujo de hotspots SVG interactivos
+
+Los diagramas ampliados en el lightbox son clicables: cada zona (`data-i18n-title="tip_hs_*"`) abre
+el modal info multi-idioma vía `__gvShowInfo()`.
+
+1. **Definir zonas**: en `scripts/svg-zones.json` — `{ "<archivo>.svg": { "<tipKey>": { "rect": [x,y,w,h], "en": "..", "es": "..", "pt-BR": ".." } } }`.
+   - Las coordenadas `rect` son del viewBox del SVG (obtenerlas del `<rect>`/`<circle>` existente del elemento).
+   - Para `gv-node` existentes (architecture-layers) usar `homologate-svg.ps1` que añade la clase + atributo sin coordenadas.
+2. **Inyectar rects**: `pwsh scripts/inject-hotspots.ps1 -DryRun` → luego sin flag. Añade `<rect class="gv-hotspot" ... fill="transparent">` antes de `</svg>`. Idempotente.
+3. **Insertar claves i18n**: `pwsh scripts/insert-zones.ps1 -DryRun` → luego sin flag (87 claves = 29 zonas × 3 idiomas).
+4. **Validar**: `node --check assets/js/i18n.js` + `npm run presentations:validate` (11/11 PASS).
+5. **Verificar CDP**: `node scripts/cdp-verify-hotspots-all.cjs` (4 diagramas × 3 idiomas, ALL PASS esperado).
+   - Páginas: autonomy→executive-loop, agents-pipeline→pipeline-flow, operations-cloud→data-architecture, dashboard→stack-dashboard.
+   - Forzar `gv-lang` en localStorage al inicio (gotcha #16).
+6. **Piloto concreto (architecture-layers)**: sus 6 `gv-node` usan `homologate-svg.ps1` + `tips-hs.json` (18 claves).

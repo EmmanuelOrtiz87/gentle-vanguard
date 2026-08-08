@@ -1,0 +1,184 @@
+{
+  "executive-loop.svg": {
+    "tip_hs_loop_detection": {
+      "rect": [356, 111, 88, 88],
+      "en": "Phase 1 - Detection: identifies anomalies, new signals or degradation events in the environment, tool outputs and session traces.",
+      "es": "Fase 1 - Detección: identifica anomalías, nuevas señales o eventos de degradación en el entorno, salidas de herramientas y trazas de sesión.",
+      "pt-BR": "Fase 1 - Detecção: identifica anomalias, novas sinalizações ou eventos de degradação no ambiente, saídas de ferramentas e rastros de sessão."
+    },
+    "tip_hs_loop_evaluation": {
+      "rect": [526, 204, 88, 88],
+      "en": "Phase 2 - Evaluation: scores each candidate action against quality rubrics, cost and risk before deciding.",
+      "es": "Fase 2 - Evaluación: puntúa cada acción candidata según rúbricas de calidad, coste y riesgo antes de decidir.",
+      "pt-BR": "Fase 2 - Avaliação: pontua cada ação candidata segundo rubricas de qualidade, custo e risco antes de decidir."
+    },
+    "tip_hs_loop_decision": {
+      "rect": [486, 311, 88, 88],
+      "en": "Phase 3 - Decision: chooses the winning action with confidence thresholds; escalates when uncertainty is high.",
+      "es": "Fase 3 - Decisión: elige la acción ganadora con umbrales de confianza; escala cuando la incertidumbre es alta.",
+      "pt-BR": "Fase 3 - Decisão: escolhe a ação vencedora com limiares de confiança; escala quando a incerteza é alta."
+    },
+    "tip_hs_loop_execution": {
+      "rect": [356, 341, 88, 88],
+      "en": "Phase 4 - Execution: applies the selected action through the safe auto-apply gate, tracking every mutation.",
+      "es": "Fase 4 - Ejecución: aplica la acción seleccionada a través del portón seguro auto-apply, rastreando cada mutación.",
+      "pt-BR": "Fase 4 - Execução: aplica a ação selecionada através do portão seguro auto-apply, rastreando cada mutação."
+    },
+    "tip_hs_loop_verification": {
+      "rect": [226, 311, 88, 88],
+      "en": "Phase 5 - Verification: runs typecheck, lint and tests; if verification fails, the action is rolled back.",
+      "es": "Fase 5 - Verificación: ejecuta typecheck, lint y tests; si la verificación falla, la acción se revierte.",
+      "pt-BR": "Fase 5 - Verificação: executa typecheck, lint e testes; se a verificação falhar, a ação é revertida."
+    },
+    "tip_hs_loop_learning": {
+      "rect": [186, 204, 88, 88],
+      "en": "Phase 6 - Learning: records outcomes in Engram and the routing table, improving future decisions.",
+      "es": "Fase 6 - Aprendizaje: registra los resultados en Engram y la tabla de ruteo, mejorando decisiones futuras.",
+      "pt-BR": "Fase 6 - Aprendizado: registra os resultados no Engram e na tabela de roteamento, melhorando decisões futuras."
+    },
+    "tip_hs_loop_autoapply": {
+      "rect": [350, 215, 100, 100],
+      "en": "Auto-Apply SAFE: the central verification gate - changes are only applied when they pass all safety checks.",
+      "es": "Auto-Apply SAFE: el portón central de verificación - los cambios solo se aplican cuando superan todas las comprobaciones de seguridad.",
+      "pt-BR": "Auto-Apply SAFE: o portão central de verificação - as mudanças só são aplicadas quando passam em todas as verificações de segurança."
+    },
+    "tip_hs_loop_circuit_breaker": {
+      "rect": [610, 140, 130, 36],
+      "en": "Guard rail - Circuit Breaker: opens after repeated failures to stop cascading errors and halts the loop.",
+      "es": "Guard rail - Circuit Breaker: se abre tras fallos repetidos para detener errores en cascada y pausa el bucle.",
+      "pt-BR": "Guard rail - Circuit Breaker: abre após falhas repetidas para interromper erros em cascata e pausa o ciclo."
+    },
+    "tip_hs_loop_auto_escalation": {
+      "rect": [610, 340, 140, 36],
+      "en": "Guard rail - Auto-Escalation: promotes unresolved issues to a higher authority (orchestrator or human).",
+      "es": "Guard rail - Auto-Escalation: promueve problemas no resueltos a una autoridad superior (orquestador o humano).",
+      "pt-BR": "Guard rail - Auto-Escalation: promove problemas não resolvidos a uma autoridade superior (orquestador ou humano)."
+    },
+    "tip_hs_loop_session_scoring": {
+      "rect": [50, 340, 140, 36],
+      "en": "Guard rail - Session Scoring: grades each session (delegations, corrections, proactive hits) and feeds the routing table.",
+      "es": "Guard rail - Session Scoring: puntúa cada sesión (delegaciones, correcciones, aciertos proactivos) y alimenta la tabla de ruteo.",
+      "pt-BR": "Guard rail - Session Scoring: pontua cada sessão (delegações, correções, acertos proativos) e alimenta a tabela de roteamento."
+    },
+    "tip_hs_loop_norms_learner": {
+      "rect": [50, 140, 140, 36],
+      "en": "Guard rail - Norms Learner: learns project conventions and injects them as adaptive norms into new sessions.",
+      "es": "Guard rail - Norms Learner: aprende las convenciones del proyecto y las inyecta como normas adaptativas en nuevas sesiones.",
+      "pt-BR": "Guard rail - Norms Learner: aprende as convenções do projeto e as injeta como normas adaptativas em novas sessões."
+    }
+  },
+  "pipeline-flow.svg": {
+    "tip_hs_flow_phase1": {
+      "rect": [61, 66, 350, 22],
+      "en": "Phase 1 - 31 parallel steps: fast, independent initializers that run concurrently and never block on failure.",
+      "es": "Fase 1 - 31 pasos paralelos: inicializadores rápidos e independientes que corren en concurrencia y nunca bloquean ante fallos.",
+      "pt-BR": "Fase 1 - 31 etapas paralelas: inicializadores rápidos e independentes que rodam em concorrência e nunca bloqueiam ante falhas."
+    },
+    "tip_hs_flow_phase2": {
+      "rect": [435, 66, 370, 22],
+      "en": "Phase 2 - 70 lazy background steps: deferred heavy work executed in batches of 5 workers after session start.",
+      "es": "Fase 2 - 70 pasos lazy background: trabajo pesado diferido ejecutado en batches de 5 workers tras el inicio de sesión.",
+      "pt-BR": "Fase 2 - 70 etapas lazy background: trabalho pesado adiado executado em lotes de 5 workers após o início da sessão."
+    },
+    "tip_hs_flow_tool_detection": {
+      "rect": [60, 110, 170, 70],
+      "en": "Tool Detection: maps the 8 available tools (Bash, Read, Write, Edit, Grep, Glob, Task, Skill).",
+      "es": "Tool Detection: mapea las 8 herramientas disponibles (Bash, Read, Write, Edit, Grep, Glob, Task, Skill).",
+      "pt-BR": "Tool Detection: mapeia as 8 ferramentas disponíveis (Bash, Read, Write, Edit, Grep, Glob, Task, Skill)."
+    },
+    "tip_hs_flow_session_manager": {
+      "rect": [250, 110, 170, 70],
+      "en": "Session Manager: generates the session ID, syncs Engram and tracks the session lifecycle.",
+      "es": "Session Manager: genera el ID de sesión, sincroniza Engram y rastrea el ciclo de vida de la sesión.",
+      "pt-BR": "Session Manager: gera o ID da sessão, sincroniza o Engram e rastreia o ciclo de vida da sessão."
+    },
+    "tip_hs_flow_token_budget": {
+      "rect": [60, 200, 170, 70],
+      "en": "Token Budget: allocates the 5M daily / 3M per-session budget and enforces guard thresholds.",
+      "es": "Token Budget: asigna el presupuesto de 5M diario / 3M por sesión y aplica los umbrales de guardia.",
+      "pt-BR": "Token Budget: aloca o orçamento de 5M diário / 3M por sessão e aplica os limiares de guarda."
+    },
+    "tip_hs_flow_karpathy": {
+      "rect": [250, 200, 170, 70],
+      "en": "Karpathy Guidelines: 3 rules (Think First, Simplicity, Surgical Changes) with quality rubrics and self-critique.",
+      "es": "Karpathy Guidelines: 3 reglas (Think First, Simplicity, Surgical Changes) con rúbricas de calidad y autocrítica.",
+      "pt-BR": "Karpathy Guidelines: 3 regras (Think First, Simplicity, Surgical Changes) com rubricas de qualidade e autocrítica."
+    },
+    "tip_hs_flow_lazy_batch": {
+      "rect": [470, 135, 470, 110],
+      "en": "Lazy Batch - 5 background workers: runs deferred steps like Tracing Init, Cloud Connectors, Event Sourcing, Audit Pipeline and Dashboard WS.",
+      "es": "Lazy Batch - 5 workers en background: ejecuta pasos diferidos como Tracing Init, Cloud Connectors, Event Sourcing, Audit Pipeline y Dashboard WS.",
+      "pt-BR": "Lazy Batch - 5 workers em background: executa etapas adiadas como Tracing Init, Cloud Connectors, Event Sourcing, Audit Pipeline e Dashboard WS."
+    },
+    "tip_hs_flow_process_bar": {
+      "rect": [60, 305, 880, 18],
+      "en": "Process bar: parallel steps (31) then lazy background (70) then DONE - the full 101-step session pipeline.",
+      "es": "Barra de proceso: pasos paralelos (31), luego lazy background (70) y DONE - el pipeline completo de 101 pasos.",
+      "pt-BR": "Barra de processo: etapas paralelas (31), depois lazy background (70) e DONE - o pipeline completo de 101 etapas."
+    }
+  },
+  "data-architecture.svg": {
+    "tip_hs_data_nexus": {
+      "rect": [370, 240, 160, 70],
+      "en": "NEXUS DB: operational SQLite database (gentle-vanguard.db) with WAL mode, FK ON, 12 tables and 3 migrations.",
+      "es": "NEXUS DB: base de datos operacional SQLite (gentle-vanguard.db) con modo WAL, FK ON, 12 tablas y 3 migraciones.",
+      "pt-BR": "NEXUS DB: banco operacional SQLite (gentle-vanguard.db) com modo WAL, FK ON, 12 tabelas e 3 migrações."
+    },
+    "tip_hs_data_repos_blue": {
+      "rect": [130, 75, 650, 48],
+      "en": "Data DAOs (blue): MetricsRepo (metric_snapshots), SessionRepo (sessions) and TraceRepo (traces) - time-series and session history.",
+      "es": "DAOs de datos (azul): MetricsRepo (metric_snapshots), SessionRepo (sessions) y TraceRepo (traces) - series temporales e historial de sesiones.",
+      "pt-BR": "DAOs de dados (azul): MetricsRepo (metric_snapshots), SessionRepo (sessions) e TraceRepo (traces) - séries temporais e histórico de sessões."
+    },
+    "tip_hs_data_repos_green": {
+      "rect": [60, 195, 720, 38],
+      "en": "Quality DAOs (green): CacheRepo (response_cache) and EventRepo (events) - caching and event sourcing audit trail.",
+      "es": "DAOs de calidad (verde): CacheRepo (response_cache) y EventRepo (events) - caché y auditoría de event sourcing.",
+      "pt-BR": "DAOs de qualidade (verde): CacheRepo (response_cache) e EventRepo (events) - cache e auditoria de event sourcing."
+    },
+    "tip_hs_data_repos_purple": {
+      "rect": [310, 370, 470, 48],
+      "en": "Memory DAOs (purple): SkillRepo (skill_usage), ContractRepo (contract_results) and ErrMemoryRepo (scoring) - usage and scoring.",
+      "es": "DAOs de memoria (púrpura): SkillRepo (skill_usage), ContractRepo (contract_results) y ErrMemoryRepo (scoring) - uso y puntuación.",
+      "pt-BR": "DAOs de memória (roxo): SkillRepo (skill_usage), ContractRepo (contract_results) e ErrMemoryRepo (scoring) - uso e pontuação."
+    },
+    "tip_hs_data_repos_orange": {
+      "rect": [60, 290, 720, 118],
+      "en": "Ops DAOs (orange): HousekeepingRepo (token_usage) and MigrationRunner (7 migrations) - maintenance and schema evolution.",
+      "es": "DAOs de ops (naranja): HousekeepingRepo (token_usage) y MigrationRunner (7 migraciones) - mantenimiento y evolución de esquema.",
+      "pt-BR": "DAOs de ops (laranja): HousekeepingRepo (token_usage) e MigrationRunner (7 migrações) - manutenção e evolução de esquema."
+    }
+  },
+  "stack-dashboard.svg": {
+    "tip_hs_dash_sources": {
+      "rect": [30, 80, 200, 280],
+      "en": "Data Sources: real trace data read from .session/context-log/*.state.json and *.meta.json - no mock data.",
+      "es": "Data Sources: datos de trazas reales leídos de .session/context-log/*.state.json y *.meta.json - sin datos simulados.",
+      "pt-BR": "Data Sources: dados de rastros reais lidos de .session/context-log/*.state.json e *.meta.json - sem dados simulados."
+    },
+    "tip_hs_dash_backend": {
+      "rect": [340, 80, 220, 280],
+      "en": "Backend Server: real-data.ts computes metrics from state files; WebSocket Server pushes every 5s on port 8080.",
+      "es": "Backend Server: real-data.ts calcula métricas desde los state files; WebSocket Server empuja cada 5s en el puerto 8080.",
+      "pt-BR": "Backend Server: real-data.ts calcula métricas a partir dos state files; WebSocket Server envia a cada 5s na porta 8080."
+    },
+    "tip_hs_dash_frontend": {
+      "rect": [600, 80, 270, 170],
+      "en": "Frontend - React/Vite: 7 sections (Metrics, Traces, Alerts, Feedback, Scoring, Waterfall, Info Popup) with i18n.",
+      "es": "Frontend - React/Vite: 7 secciones (Metrics, Traces, Alerts, Feedback, Scoring, Waterfall, Info Popup) con i18n.",
+      "pt-BR": "Frontend - React/Vite: 7 seções (Metrics, Traces, Alerts, Feedback, Scoring, Waterfall, Info Popup) com i18n."
+    },
+    "tip_hs_dash_fallback": {
+      "rect": [600, 275, 270, 85],
+      "en": "HTTP Polling Fallback: useMetrics.ts always polls HTTP, so data loads even if the WebSocket server is down.",
+      "es": "HTTP Polling Fallback: useMetrics.ts siempre hace polling HTTP, así los datos cargan aunque el servidor WebSocket esté caído.",
+      "pt-BR": "HTTP Polling Fallback: useMetrics.ts sempre faz polling HTTP, então os dados carregam mesmo se o servidor WebSocket estiver fora."
+    },
+    "tip_hs_dash_watchdog": {
+      "rect": [340, 380, 530, 40],
+      "en": "Watchdog Auto-Recovery: monitors :8080 every 5s, restarts up to 10 times, and kills the watchdog first to avoid loops.",
+      "es": "Watchdog Auto-Recovery: monitoriza :8080 cada 5s, reinicia hasta 10 veces y mata el watchdog primero para evitar bucles.",
+      "pt-BR": "Watchdog Auto-Recovery: monitora :8080 a cada 5s, reinicia até 10 vezes e mata o watchdog primeiro para evitar loops."
+    }
+  }
+}

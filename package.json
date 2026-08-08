@@ -230,6 +230,9 @@
     "humanize:transform": "npx tsx src/humanizer-cli.ts transform",
     "humanize:score": "npx tsx src/humanizer-cli.ts score",
     "rag:retrieve": "npx tsx src/rag-retrieval.ts",
+    "process:trace": "npx tsx src/witr-cli.ts process",
+    "port:trace": "npx tsx src/witr-cli.ts port",
+    "file:trace": "npx tsx src/witr-cli.ts file",
     "plan:new": "npx tsx src/planning-templates.ts --plan",
     "plan:template": "npx tsx src/planning-templates.ts --template",
     "plan:list": "npx tsx src/planning-templates.ts --list",
@@ -247,7 +250,8 @@
     "trends:themes": "npx tsx src/research-trends-cli.ts themes",
     "trends:report": "npx tsx src/research-trends-cli.ts report",
     "trends:browse": "npx tsx src/research-trends-cli.ts browse",
-    "trends:status": "npx tsx src/research-trends-cli.ts status"
+    "trends:status": "npx tsx src/research-trends-cli.ts status",
+    "presentations:verify:cdp:hotspots": "node .opencode/skills/presentations-maintenance/scripts/cdp-verify-hotspots-all.cjs"
   },
   "devDependencies": {
     "@colbymchenry/codegraph": "0.8.0",

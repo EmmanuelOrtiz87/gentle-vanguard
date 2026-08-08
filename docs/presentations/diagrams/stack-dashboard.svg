@@ -203,4 +203,12 @@
   <!-- Footer -->
   <line x1="40" y1="433" x2="860" y2="433" stroke="#1e3a5f" stroke-width="0.5"/>
   <text x="450" y="445" text-anchor="middle" fill="#4b5563" font-family="system-ui,-apple-system,sans-serif" font-size="9">Gentle-Vanguard v3.5.0 — Autonomous AI Stack</text>
+
+  
+  <!-- ===== HOTSPOTS INTERACTIVOS (gv-hotspot) ===== -->
+    <rect class="gv-hotspot" x="30" y="80" width="200" height="280" rx="6" data-i18n-title="tip_hs_dash_sources" role="button" tabindex="0" fill="transparent" aria-label="Data Sources: real trace data read from .session/context-log/*.state.json and *.meta.json - no mock data."/>
+    <rect class="gv-hotspot" x="340" y="80" width="220" height="280" rx="6" data-i18n-title="tip_hs_dash_backend" role="button" tabindex="0" fill="transparent" aria-label="Backend Server: real-data.ts computes metrics from state files; WebSocket Server pushes every 5s on port 8080."/>
+    <rect class="gv-hotspot" x="600" y="80" width="270" height="170" rx="6" data-i18n-title="tip_hs_dash_frontend" role="button" tabindex="0" fill="transparent" aria-label="Frontend - React/Vite: 7 sections (Metrics, Traces, Alerts, Feedback, Scoring, Waterfall, Info Popup) with i18n."/>
+    <rect class="gv-hotspot" x="600" y="275" width="270" height="85" rx="6" data-i18n-title="tip_hs_dash_fallback" role="button" tabindex="0" fill="transparent" aria-label="HTTP Polling Fallback: useMetrics.ts always polls HTTP, so data loads even if the WebSocket server is down."/>
+    <rect class="gv-hotspot" x="340" y="380" width="530" height="40" rx="6" data-i18n-title="tip_hs_dash_watchdog" role="button" tabindex="0" fill="transparent" aria-label="Watchdog Auto-Recovery: monitors :8080 every 5s, restarts up to 10 times, and kills the watchdog first to avoid loops."/>
 </svg>

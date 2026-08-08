@@ -1,0 +1,32 @@
+{
+  "tip_hs_executive": {
+    "en": "Executive Systems - 12 autonomous subsystems: Auto-Apply Safe, Circuit Breaker, Auto-Escalation, Dynamic Dependency Graph, AB Testing, Session Scoring, Norms Learner, Watchtower, Security Orchestrator, State Persistence, Distributed Tracing, Cloud Connectors",
+    "es": "Executive Systems - 12 subsistemas autónomos: Auto-Apply Safe, Circuit Breaker, Auto-Escalation, Dynamic Dependency Graph, AB Testing, Session Scoring, Norms Learner, Watchtower, Security Orchestrator, State Persistence, Distributed Tracing, Cloud Connectors",
+    "pt-BR": "Executive Systems - 12 subsistemas autônomos: Auto-Apply Safe, Circuit Breaker, Auto-Escalation, Dynamic Dependency Graph, AB Testing, Session Scoring, Norms Learner, Watchtower, Security Orchestrator, State Persistence, Distributed Tracing, Cloud Connectors"
+  },
+  "tip_hs_data": {
+    "en": "Data Layer - Nexus SQLite DB with 11 repositories (10 DAOs + MigrationRunner), 7 migrations and 21 tables. WAL mode and FK ON enabled.",
+    "es": "Data Layer - Base Nexus SQLite con 11 repositorios (10 DAOs + MigrationRunner), 7 migraciones y 21 tablas. Modo WAL y FK ON habilitados.",
+    "pt-BR": "Data Layer - Banco Nexus SQLite com 11 repositórios (10 DAOs + MigrationRunner), 7 migrações e 21 tabelas. Modo WAL e FK ON habilitados."
+  },
+  "tip_hs_memory": {
+    "en": "Memory Layer - Engram (2078 observations), CodeGraph (10,663 nodes), Graphify 18MB knowledge graph, ML Embeddings vector index, Nexus DB and Knowledge Vault.",
+    "es": "Memory Layer - Engram (2078 observaciones), CodeGraph (10.663 nodos), Graphify 18MB grafo de conocimiento, ML Embeddings índice vectorial, Nexus DB y Knowledge Vault.",
+    "pt-BR": "Memory Layer - Engram (2078 observações), CodeGraph (10.663 nós), Graphify 18MB grafo de conhecimento, ML Embeddings índice vetorial, Nexus DB e Knowledge Vault."
+  },
+  "tip_hs_pipeline": {
+    "en": "Pipeline - 105 steps configured, 101 enabled: 31 Phase 1 parallel + 70 lazy background in batches of 5. Promise.allSettled never blocks on failure.",
+    "es": "Pipeline - 105 pasos configurados, 101 habilitados: 31 Phase 1 paralelos + 70 lazy background en batches de 5. Promise.allSettled nunca bloquea ante fallos.",
+    "pt-BR": "Pipeline - 105 etapas configuradas, 101 habilitadas: 31 Phase 1 paralelas + 70 lazy background em lotes de 5. Promise.allSettled nunca bloqueia ante falhas."
+  },
+  "tip_hs_agents": {
+    "en": "Agents - 21 specialized subagents: Orchestrator, SDD (explore/design/apply/verify), Doc, Ops, Gov, Session, Premortem, Maintenance, Self-Diag, SIA, GitFlow, Knowledge + business (Mkt, Sales, Finance, HR, Legal, Bus-Tele).",
+    "es": "Agents - 21 subagentes especializados: Orchestrator, SDD (explore/design/apply/verify), Doc, Ops, Gov, Session, Premortem, Maintenance, Self-Diag, SIA, GitFlow, Knowledge + business (Mkt, Sales, Finance, HR, Legal, Bus-Tele).",
+    "pt-BR": "Agents - 21 subagentes especializados: Orchestrator, SDD (explore/design/apply/verify), Doc, Ops, Gov, Session, Premortem, Maintenance, Self-Diag, SIA, GitFlow, Knowledge + business (Mkt, Sales, Finance, HR, Legal, Bus-Tele)."
+  },
+  "tip_hs_tools": {
+    "en": "Tools - 10 IDE integrations: OpenCode, Claude Code, Cursor, Windsurf, Cline, Codex, Copilot, Continue.dev, Aider, Roo Code.",
+    "es": "Tools - 10 integraciones IDE: OpenCode, Claude Code, Cursor, Windsurf, Cline, Codex, Copilot, Continue.dev, Aider, Roo Code.",
+    "pt-BR": "Tools - 10 integrações IDE: OpenCode, Claude Code, Cursor, Windsurf, Cline, Codex, Copilot, Continue.dev, Aider, Roo Code."
+  }
+}

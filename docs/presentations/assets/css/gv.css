@@ -950,6 +950,45 @@ section {
 .gv-lightbox-img.no-anim {
   transition: none;
 }
+/* Contenedor del SVG inline (hotspots interactivos) */
+.gv-lightbox-svg {
+  position: relative;
+  width: auto;
+  height: auto;
+  border-radius: var(--r-md);
+  background: oklch(0.14 0.02 262);
+  box-shadow: 0 0 60px oklch(0.1 0.02 262 / 0.8);
+  will-change: transform;
+  transform-origin: 0 0;
+  transition: transform 0.08s ease-out;
+}
+.gv-lightbox-svg svg {
+  display: block;
+  max-width: none;
+  max-height: none;
+  overflow: visible;
+}
+.gv-lightbox-svg svg text,
+.gv-lightbox-svg svg tspan {
+  user-select: none;
+  -webkit-user-select: none;
+}
+/* Hotspots: zonas clicables dentro del diagrama */
+.gv-hotspot {
+  cursor: pointer;
+  transition: opacity 0.2s ease, filter 0.2s ease;
+}
+.gv-lightbox-svg .gv-hotspot {
+  fill: transparent;
+}
+.gv-lightbox-svg .gv-hotspot:hover {
+  fill: rgba(168, 85, 247, 0.16);
+  filter: brightness(1.25) drop-shadow(0 0 6px rgba(168, 85, 247, 0.8));
+}
+.gv-lightbox-svg .gv-hotspot:focus-visible {
+  outline: 2px solid var(--a, #a855f7);
+  outline-offset: 1px;
+}
 .gv-lightbox-toolbar {
   position: absolute;
   bottom: 1.4rem;
