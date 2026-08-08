@@ -1,0 +1,51 @@
+{
+  "version": "1.0.0",
+  "name": "web-crawler-config",
+  "description": "Web content acquisition engine (dual-provider): Firecrawl API cuando hay FIRECRAWL_API_KEY, o fallback nativo sin API key (Jina Reader para scrape + Bing RSS para search). Transforms web content into LLM-ready markdown with disk cache, compression and Nexus usage logging.",
+  "enabled": true,
+  "apiKey": "",
+  "baseUrl": "https://api.firecrawl.dev/v1",
+  "fallbackEnabled": true,
+  "jinaReaderUrl": "https://r.jina.ai",
+  "bingSearchUrl": "https://www.bing.com/search",
+  "timeoutMs": 30000,
+  "maxRetries": 3,
+  "retryDelayMs": 1000,
+  "maxBackoffMs": 30000,
+  "rateLimitPerMinute": 20,
+  "cacheEnabled": true,
+  "cacheTtlMinutes": 1440,
+  "cacheDir": ".session/response-cache/firecrawl",
+  "compressContent": true,
+  "maxContentChars": 100000,
+  "logUsageToNexus": true,
+  "search": {
+    "limit": 5,
+    "fetchFullContent": true,
+    "onlyMainContent": true,
+    "formats": ["markdown"]
+  },
+  "scrape": {
+    "formats": ["markdown"],
+    "onlyMainContent": true,
+    "waitForMs": 0,
+    "maxDepth": 0,
+    "ignoreSitemap": false,
+    "actions": []
+  },
+  "crawl": {
+    "limit": 10,
+    "maxPages": 10,
+    "formats": ["markdown"],
+    "onlyMainContent": true,
+    "pollIntervalMs": 5000,
+    "pollTimeoutMs": 300000
+  },
+  "map": {
+    "limit": 100
+  },
+  "health": {
+    "checkIntervalHours": 24,
+    "lastCheckFile": ".runtime/web-crawler-health.json"
+  }
+}
