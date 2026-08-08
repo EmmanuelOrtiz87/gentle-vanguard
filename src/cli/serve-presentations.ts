@@ -6,7 +6,7 @@
  * Replaces start-presentations-server.ps1 (migrated to TS).
  *
  * Usage:
- *   npx tsx src/cli/serve-presentations.ts [--port 3000] [--no-browser] [--quiet]
+ *   npx tsx src/cli/serve-presentations.ts [--port 3000] [--no-browser] [--quiet] [--no-store]
  *
  * Features:
  *   - Serves docs/presentations/ directory via built-in http module
@@ -30,6 +30,7 @@ const PORT = parseInt(
 );
 const NO_BROWSER = process.argv.includes('--no-browser');
 const QUIET = process.argv.includes('--quiet');
+const NO_STORE = process.argv.includes('--no-store');
 const ROOT = path.resolve(process.cwd(), 'docs/presentations');
 const LOG_PATH = path.resolve(process.cwd(), '.runtime/presentations-server.log');
 
@@ -87,7 +88,10 @@ function sendFile(res: http.ServerResponse, filePath: string): void {
   try {
     const content = fs.readFileSync(filePath);
     const ext = path.extname(filePath).toLowerCase();
-    res.writeHead(200, { 'Content-Type': MIME_TYPES[ext] ?? 'application/octet-stream' });
+    const headers: Record<string, string> = { 'Content-Type': MIME_TYPES[ext] ?? 'application/octet-stream' };
+    // --no-store: evita caché (necesario para verificar modales i18n en Chrome/CDP con recargas)
+    if (NO_STORE) headers['Cache-Control'] = 'no-store, must-revalidate';
+    res.writeHead(200, headers);
     res.end(content);
   } catch {
     res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
