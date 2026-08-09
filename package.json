@@ -282,6 +282,5 @@
     "@modelcontextprotocol/sdk": "^1.30.0",
     "glob": "^13.0.6",
     "zod": "^4.4.3"
-  },
-  "pnpm": {}
+  }
 }
