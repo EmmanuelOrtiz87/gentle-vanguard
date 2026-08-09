@@ -280,6 +280,17 @@ async function main(): Promise<void> {
     });
   }
 
+  // Show failed suite output (observability: CI must reveal WHICH test failed)
+  const failedResults = results.filter((r: any) => !r.passed);
+  if (failedResults.length > 0) {
+    process.stdout.write(`\n🔴 FAILED SUITES — full output:\n`);
+    failedResults.forEach((r: any) => {
+      process.stdout.write(`\n========== ${r.name} (${(r.duration / 1000).toFixed(1)}s) ==========\n`);
+      process.stdout.write(`${r.output || '(no output captured)'}\n`);
+      process.stdout.write(`========== end ${r.name} ==========\n`);
+    });
+  }
+
   // Recommendations
   if (options.all && failed > 0) {
     process.stdout.write(`\n💡 Try running without --all for faster execution\n`);
