@@ -1,7 +1,7 @@
 ---
 description: Main orchestrator agent — coordinates all subagents autonomously
 mode: primary
-model: inherit-from-session
+model: opencode/deepseek-v4-flash-free
 temperature: 0.3
 steps: 24
 permission:

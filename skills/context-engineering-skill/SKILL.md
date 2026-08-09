@@ -42,8 +42,8 @@ artifacts.
    `.\scripts\utilities\compact-start.ps1 -Objective "..."`) → paste output into new session. Output
    includes git diff, last N commits, branch+status, objective.
 2. **Mid-Session Context Pack**: `gentle-vanguard context-pack -Objective "..."` (or
-   `.\scripts\utilities\context-pack.ps1 -Objective "..." -MaxChangedFiles 12 -MaxCommits 8`)
-3. **Token Metrics**: `.\scripts\utilities\context-metrics-report.ps1` (stored in
+   `.\scripts\utilities\src/compact-state.ts -Objective "..." -MaxChangedFiles 12 -MaxCommits 8`)
+3. **Token Metrics**: `.\scripts\utilities\src/session-metrics-tracker.ts` (stored in
    `docs/sessions/metrics/context-usage.csv`)
 4. **Session Handoff**: Run `gv end-session` → `context-pack` → save objective + next steps → new
    session starts with `compact-start -Objective "..."`
@@ -87,6 +87,6 @@ Read `references/session-handoff-protocol.md` when you need:
 
 ## References
 
-- Scripts: `scripts/utilities/compact-start.ps1`, `context-pack.ps1`, `context-metrics-report.ps1`
-- Metrics: `scripts/utilities/token-efficiency-estimator.ps1`
+- Scripts: `src/compact-state.ts`, `src/compact-state.ts`, `src/session-metrics-tracker.ts`
+- Metrics: `src/token-optimization-orchestrator.ts`
 - Config: `config/context-efficiency.json`

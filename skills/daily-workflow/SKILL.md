@@ -51,9 +51,9 @@ Automates daily Gentle-Vanguard tasks: status check, context tracking, audit, an
 
 ## Key Files
 
-- `scripts/utilities/WORKFLOW-ORCHESTRATION/daily-check.ps1`
-- `scripts/utilities/WORKFLOW-ORCHESTRATION/compact-start.ps1`
-- `scripts/utilities/gv.ps1`
+- `src/engram-auto-sync.ts`
+- `src/compact-state.ts`
+- `C:/Workspace_local/gentle-vanguard/src/cli/gv.ts`
 - `docs/audits/` - Audit reports
 
 ## Notes

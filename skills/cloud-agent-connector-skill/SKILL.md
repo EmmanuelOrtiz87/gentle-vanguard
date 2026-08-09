@@ -19,31 +19,31 @@ security, traceability, and strict tool-use protocols.
 ### 1. Command Mode (Single task)
 
 ```powershell
-.\scripts\utilities\invoke-cloud-agent.ps1 -Provider openai -Command "Explain REST pagination"
+.\scripts\utilities\src/hybrid-executor.ts -Provider openai -Command "Explain REST pagination"
 ```
 
 ### 2. Script Mode (Execute file)
 
 ```powershell
-.\scripts\utilities\invoke-cloud-agent.ps1 -Provider openai -Script ".\tasks\analyze.ps1"
+.\scripts\utilities\src/hybrid-executor.ts -Provider openai -Script ".\tasks\analyze.ps1"
 ```
 
 ### 3. Interactive Mode (Manual)
 
 ```powershell
-.\scripts\utilities\invoke-cloud-agent.ps1 -Interactive
+.\scripts\utilities\src/hybrid-executor.ts -Interactive
 ```
 
 ### 4. Agent Mode (Delegated task)
 
 ```powershell
-.\scripts\utilities\invoke-cloud-agent.ps1 -Provider anthropic -Agent "Refactor auth module"
+.\scripts\utilities\src/hybrid-executor.ts -Provider anthropic -Agent "Refactor auth module"
 ```
 
 ### 5. Strict JSON Mode (Automation)
 
 ```powershell
-.\scripts\utilities\invoke-cloud-agent.ps1 -Provider openai -StrictJson -Command "Return JSON"
+.\scripts\utilities\src/hybrid-executor.ts -Provider openai -StrictJson -Command "Return JSON"
 ```
 
 ## Supported Providers
@@ -78,7 +78,7 @@ config/
 Always use `-StrictJson` flag for automation:
 
 ```powershell
-.\scripts\utilities\invoke-cloud-agent.ps1 -Provider openai -StrictJson -Command "..."
+.\scripts\utilities\src/hybrid-executor.ts -Provider openai -StrictJson -Command "..."
 ```
 
 This injects:
@@ -96,7 +96,7 @@ This injects:
 ## Quick Commands
 
 ```powershell
-invoke-cloud-agent.ps1 -ListProviders    # Show all providers
-invoke-cloud-agent.ps1 -TestConnection    # Test current provider
-invoke-cloud-agent.ps1 -Config           # Interactive config
+src/hybrid-executor.ts -ListProviders    # Show all providers
+src/hybrid-executor.ts -TestConnection    # Test current provider
+src/hybrid-executor.ts -Config           # Interactive config
 ```

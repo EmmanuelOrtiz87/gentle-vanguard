@@ -36,15 +36,15 @@ drift", "run tests autonomous", "restore from backup". Auto-triggers from sessio
 
 ## Execution Steps
 
-1. **Backup Orchestrator**: `auto-backup-orchestrator.ps1 -Action restore` (start) or
+1. **Backup Orchestrator**: `src/backup-engram.ts -Action restore` (start) or
    `-Action backup` (close)
-2. **Norm Enforcer**: `auto-norm-enforcer.ps1 -Trigger <event> -AutoFix` — creates missing dirs,
+2. **Norm Enforcer**: `C:/Workspace_local/gentle-vanguard/src/auto-norm-enforcer.ts -Trigger <event> -AutoFix` — creates missing dirs,
    applies standards
-3. **Norm Learner**: `auto-norm-learner.ps1 -Trigger <event>` — extracts patterns from Engram,
+3. **Norm Learner**: `C:/Workspace_local/gentle-vanguard/src/auto-norm-learner.ts -Trigger <event>` — extracts patterns from Engram,
    promotes to `rules/custom/`
-4. **Doc-Drift Detector**: `auto-doc-drift-detector.ps1 -Trigger <event>` — compares code vs doc
+4. **Doc-Drift Detector**: `src/core/health-check.ts -Trigger <event>` — compares code vs doc
    timestamps, auto-delegates fixes
-5. **Testing Orchestrator**: `auto-testing-final.ps1 -Trigger <event>` — detects project type
+5. **Testing Orchestrator**: `src/agents/sdd-verify.ts -Trigger <event>` — detects project type
    (Node/Go/Python), runs tests, auto-repairs
 
 ## Output Contract

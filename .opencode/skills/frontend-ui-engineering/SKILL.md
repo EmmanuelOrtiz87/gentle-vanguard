@@ -2,7 +2,8 @@
 name: frontend-ui-engineering
 description:
   Build production-quality, accessible, responsive user interfaces. Implement layouts, components,
-  manage state, meet WCAG requirements.
+  manage state, meet WCAG requirements, and apply design systems (typography, color palettes,
+  spacing, tokens).
 triggers:
   - frontend
   - ui
@@ -10,6 +11,12 @@ triggers:
   - react
   - accessible
   - responsive
+  - design-system
+  - design tokens
+  - typography
+  - color palette
+  - ui/ux
+  - styling
 ---
 
 # Frontend UI Engineering
@@ -46,9 +53,76 @@ interaction patterns, and no generic "AI aesthetic."
 | Component Architecture  | [references/component-architecture.md](references/component-architecture.md) |
 | State Management        | [references/state-management.md](references/state-management.md)             |
 | Design System Adherence | [references/design-system.md](references/design-system.md)                   |
+| Design Patterns         | [references/design-patterns.md](references/design-patterns.md)               |
 | Accessibility           | [references/accessibility.md](references/accessibility.md)                   |
 | Responsive & Loading    | [references/responsive-and-loading.md](references/responsive-and-loading.md) |
 | Quality Checks          | [references/quality-checks.md](references/quality-checks.md)                 |
+
+## Design System
+
+A design system is the single source of truth for typography, color, spacing, radius and
+elevation. Use **design tokens** everywhere — never hardcode raw values.
+
+The stack ships native design system tooling:
+
+```bash
+# Generate a full token set from a primary color + neutral palette
+npm run design:generate -- --primary "#6366f1" --neutral slate
+
+# Export tokens as CSS variables, JSON, or SCSS variables
+npm run design:tokens -- --format css|json|scss
+
+# Compute a modular typography scale (base size + musical ratio)
+npm run design:scale -- --base 16 --ratio 1.25 --levels 12
+
+# Check color contrast/accessibility (explicit pair or scan a component file)
+npm run design:check -- --fg "#FFFFFF" --bg "#0F172A"
+npm run design:check -- ./components/Button.tsx
+```
+
+Default token set lives in `config/design-tokens.json`. Typography scales use musical ratios
+(minor/major third, perfect fourth, ...); color scales generate 11 steps (50-950) from any base hue;
+spacing follows a 4px/8px base grid; shadows encode elevation.
+
+### Typography
+
+- Use a **modular scale** from one ratio — never ad-hoc sizes
+- Body ≥ 16px; never below 14px for reading content
+- Line-height 1.5 for body, 1.1-1.3 for headings
+- One `h1` per page; don't skip heading levels
+- Max line length 45-75 characters
+- Uppercase + letter-spacing only for micro-labels, never body text
+- Keep to two families (display + body); mono is a utility
+
+### Color Theory
+
+- **Primary** — brand color, used sparingly for emphasis and key actions
+- **Secondary / Accent** — supporting and highlight hues (complementary or analogous)
+- **Neutral** — grays for text, borders, surfaces (the real workhorse)
+- Every hue needs a **scale** (50-950), not a single shade
+- **Semantic colors**: success, warning, error, info — always paired with an icon or label
+- Follow the **60-30-10 rule**: 60% neutral, 30% secondary, 10% primary/accent
+
+### Component Patterns
+
+- **Buttons** — one primary action per view; secondary + ghost for the rest; ≥ 40px height
+- **Forms** — labels always visible (placeholder is not a label); errors via `aria-describedby`
+- **Cards** — consistent scale padding; elevation communicates interaction (flat → lift → selected)
+- **Navigation** — current state evident beyond color (icon/underline + color); ≥ 44px touch targets
+- **States** — every interactive component needs hover/active/focus-visible/disabled/loading states
+
+### Accessibility Requirements (WCAG 2.1 AA minimum)
+
+| Requirement        | Threshold | Applies to                              |
+| ------------------ | --------- | --------------------------------------- |
+| Text contrast      | 4.5:1     | Normal text (≤ 18px / ≤ 14px bold)      |
+| Large text contrast| 3:1       | Text ≥ 18pt or 14pt bold                |
+| UI component contrast | 3:1     | Inputs, focus indicators, icons         |
+
+- Never rely on color alone to convey meaning (WCAG 1.4.1)
+- Focus indicators must have 3:1 contrast against adjacent colors
+- Verify every primary step before using it for text — white-on-primary often fails AA
+- Test in grayscale: if meaning is lost, add icons/labels
 
 ## Quick Reference: State Management Decision Ladder
 
@@ -71,4 +145,6 @@ Avoid prop drilling deeper than 3 levels.
 - [ ] Responsive at 320px / 768px / 1024px / 1440px
 - [ ] Loading, error, empty states handled
 - [ ] Follows design system (spacing, colors, typography)
+- [ ] Uses design tokens, not raw hex/px values
+- [ ] Color pairs pass WCAG 2.1 AA (4.5:1 text, 3:1 large/UI)
 - [ ] No a11y warnings in axe-core or dev tools

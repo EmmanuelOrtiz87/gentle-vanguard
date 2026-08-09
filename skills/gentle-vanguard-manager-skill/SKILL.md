@@ -34,7 +34,7 @@ session-autostart to keep skills current and workspace aligned.
 
 1. On session start, check skills/ for outdated entries
 2. If git remote available, `git pull` to refresh
-3. Rebuild skill registry via build-skill-registry.ps1
+3. Rebuild skill registry via src/skill-frontmatter-sync.ts
 4. Log any conflicts or changes
 5. Verify integrity of updated skills and validate no broken references
 

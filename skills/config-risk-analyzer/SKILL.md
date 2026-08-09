@@ -113,7 +113,7 @@ errores de configuración que puedan afectar la funcionalidad del proyecto.
 Este skill se integra con:
 
 - `config-validator` agent - Para aplicar validaciones
-- `cross-workspace-validator.ps1` - Para sincronización
+- `C:/Workspace_local/gentle-vanguard/src/cross-workspace-validator.ts` - Para sincronización
 - Hooks pre-commit - Para validación automática
 - Engram - Para almacenar lecciones aprendidas
 

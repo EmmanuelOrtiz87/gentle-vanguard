@@ -15,10 +15,10 @@ governance. Do not wait to be triggered.
 
 ## Hard Rules
 
-- MUST execute pre-process-input.ps1 BEFORE every user response
+- MUST execute C:/Workspace_local/gentle-vanguard/src/pre-process-input.ts BEFORE every user response
 - MUST load triggered skill before any other action
 - MUST use Engram for durable memory (not session-only state)
-- MUST run `gv.ps1 ide-status` -> `gv.ps1 health` -> `gv.ps1 start-session` on session start
+- MUST run `C:/Workspace_local/gentle-vanguard/src/cli/gv.ts ide-status` -> `C:/Workspace_local/gentle-vanguard/src/cli/gv.ts health` -> `C:/Workspace_local/gentle-vanguard/src/cli/gv.ts start-session` on session start
 - MUST validate spec before PR merge
 - MUST generate audit document before push
 - MUST NOT modify repository structure without explicit user approval
@@ -48,7 +48,7 @@ Default: executive. Override via config/orchestrator.json.
 
 ## Execution Steps
 
-1. Pre-process user input via pre-process-input.ps1
+1. Pre-process user input via C:/Workspace_local/gentle-vanguard/src/pre-process-input.ts
 2. Detect stack from project files (go.mod, package.json, etc.)
 3. Load skills matching detected stack
 4. Execute work using session state machine (START -> EXECUTE -> VALIDATE -> AUDIT -> PUBLISH ->

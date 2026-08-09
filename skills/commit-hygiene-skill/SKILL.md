@@ -64,8 +64,8 @@ fix: fixed the cache issue
 
 ## Pre-commit Validation
 
-Use `invoke-ai-review.ps1` with commit-msg hook:
+Use `src/auto-code-review.ts` with commit-msg hook:
 
 ```powershell
-.\invoke-ai-review.ps1 install --commit-msg
+.\src/auto-code-review.ts install --commit-msg
 ```

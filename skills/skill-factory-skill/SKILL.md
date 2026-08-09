@@ -67,7 +67,7 @@ Maintain consistency across all AI tools by syncing from a single source of trut
 
 ### Sync Script
 
-Use `scripts/utilities/sync-agent-instructions.ps1` to propagate changes.
+Use `src/skills/skill-usage-tracker.ts` to propagate changes.
 
 ```powershell
 # Sync all platforms

@@ -26,7 +26,7 @@ AFTER completing significant work, before or during session closure:
 ### Step 1 — Collect Session Data
 
 ```powershell
-pwsh -NoProfile -File scripts/utilities/session-learning-capture.ps1 -Trigger close
+pwsh -NoProfile -File src/learning-engine.ts -Trigger close
 ```
 
 This script reads:
@@ -39,8 +39,8 @@ This script reads:
 ### Step 1b — Update Skill Usage Metrics
 
 ```powershell
-pwsh -NoProfile -File scripts/skills/usage-tracker.ps1
-pwsh -NoProfile -File scripts/skills/usage-tracker.ps1 -Nudge
+pwsh -NoProfile -File src/skills/skill-usage-tracker.ts
+pwsh -NoProfile -File src/skills/skill-usage-tracker.ts -Nudge
 ```
 
 Scans all registered skills and initializes or updates `.session/skill-usage/*.json` files. The
@@ -49,7 +49,7 @@ Scans all registered skills and initializes or updates `.session/skill-usage/*.j
 ### Step 1c — Generate Skill Nudges
 
 ```powershell
-pwsh -NoProfile -File scripts/skills/skill-nudge.ps1 -SessionDir ".session"
+pwsh -NoProfile -File C:/Workspace_local/gentle-vanguard/src/skills/skill-nudge.ts -SessionDir ".session"
 ```
 
 Reads usage metrics, identifies skills with failure patterns in the current session, and generates
@@ -95,7 +95,7 @@ For each identified gap, create a structured proposal saved to
 ### Step 4b — Auto-Apply Skill Patches
 
 ```powershell
-pwsh -NoProfile -File scripts/skills/skill-auto-patch.ps1 -AutoApply
+pwsh -NoProfile -File C:/Workspace_local/gentle-vanguard/src/skills/skill-auto-patch.ts -AutoApply
 ```
 
 Reads `.session/skill-nudges/*.json` for pending nudge recommendations. Appends a "## Known Issues"

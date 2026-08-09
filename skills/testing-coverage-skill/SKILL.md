@@ -26,8 +26,8 @@ Invoke-Pester -Path .\tests\
 # Bash - ShellSpec
 shellspec spec/
 
-# Via gv.ps1
-.\gv.ps1 test
+# Via C:/Workspace_local/gentle-vanguard/src/cli/gv.ts
+.\C:/Workspace_local/gentle-vanguard/src/cli/gv.ts test
 ```
 
 ## Test Structure

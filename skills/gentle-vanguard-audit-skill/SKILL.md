@@ -36,7 +36,7 @@ workspace. Use before judgment-day when structural integrity check is needed fir
 ## Execution Steps
 
 1. Resolve audit scope: quick → standard → full → deep → judgment (ascending)
-2. Run `audit-sweep.ps1 -Scope <resolved>` via `gv.ps1 audit <scope>`
+2. Run `src/infrastructure/audit-pipeline.ts -Scope <resolved>` via `C:/Workspace_local/gentle-vanguard/src/cli/gv.ts audit <scope>`
 3. Parse exit code and output
 4. If judgment scope: prompt user for adversarial AI review
 5. Report results in requested format
@@ -49,5 +49,5 @@ workspace. Use before judgment-day when structural integrity check is needed fir
 
 ## References
 
-- Scripts: [scripts/](scripts/) — audit-sweep.ps1, audit-workflow.ps1, sync-local.ps1
+- Scripts: [scripts/](scripts/) — src/infrastructure/audit-pipeline.ts, src/infrastructure/audit-pipeline.ts, src/infrastructure/audit-pipeline.ts
 - Details (JD comparison, scopes, commands): [references/details.md](references/details.md)

@@ -56,7 +56,7 @@ Return object with:
 
 ## References
 
-- Implementation: [auto-delegation-router.ps1](auto-delegation-router.ps1)
+- Implementation: [src/agent-delegator.ts](src/agent-delegator.ts)
 - Integration guide: [INTEGRATION.md](INTEGRATION.md)
 - Config: `config/auto-delegation.json`
 - Subagent mapping: `config/subagent-mapping.json`

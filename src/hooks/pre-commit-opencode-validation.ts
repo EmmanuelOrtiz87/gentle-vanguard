@@ -282,6 +282,21 @@ async function main(): Promise<number> {
   for (const file of configFiles) {
     writeLog(`Validating: ${file}`, 'Info');
 
+    // Agent MD files use YAML frontmatter (not JSON) — validate via agent-specific guard.
+    if (file.endsWith('.md') && file.startsWith('.opencode/agents/')) {
+      writeLog('  Validating agent MD steps...', 'Info');
+      const agentErrors = validateAgentMdSteps(file);
+      if (agentErrors.length > 0) {
+        for (const err of agentErrors) {
+          writeLog(`  ${err}`, 'Error');
+        }
+        hasErrors = true;
+      } else {
+        writeLog('  Agent MD steps valid', 'Success');
+      }
+      continue;
+    }
+
     const json = tryParseJson(file);
     if (!json) {
       writeLog(`  Invalid JSON in ${file}`, 'Error');
@@ -308,17 +323,6 @@ async function main(): Promise<number> {
     if (file === 'opencode.json') {
       writeLog('  Validating opencode steps...', 'Info');
       const errors = validateOpencodeJsonSteps(json);
-      if (errors.length > 0) {
-        for (const err of errors) {
-          writeLog(`  ${err}`, 'Error');
-        }
-        hasErrors = true;
-      }
-    }
-
-    if (file.endsWith('.md') && file.startsWith('.opencode/agents/')) {
-      writeLog('  Validating agent MD steps...', 'Info');
-      const errors = validateAgentMdSteps(file);
       if (errors.length > 0) {
         for (const err of errors) {
           writeLog(`  ${err}`, 'Error');

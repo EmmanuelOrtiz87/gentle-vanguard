@@ -50,8 +50,8 @@ development, QA, DevOps, governance, and documentation domains.
 
 1. **Receive** user request → orchestrator decomposes task
 2. **Route** to appropriate agent(s) via `config/subagent-mapping.json` using the lane table above
-3. **Execute** agents via `gv.ps1 dispatch "<agents>" "<task>" -Mode <mode>` or per-agent
-   `gv.ps1 agent <CODE> "<task>"`
+3. **Execute** agents via `C:/Workspace_local/gentle-vanguard/src/cli/gv.ts dispatch "<agents>" "<task>" -Mode <mode>` or per-agent
+   `C:/Workspace_local/gentle-vanguard/src/cli/gv.ts agent <CODE> "<task>"`
 4. **Coordinate** cross-agent results (orchestrator)
 5. **Validate** final output and handoff to user
 

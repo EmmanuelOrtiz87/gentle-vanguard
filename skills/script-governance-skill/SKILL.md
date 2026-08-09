@@ -16,7 +16,7 @@ failure behavior.
 
 ## Hard Rules
 
-- MUST use verb-noun naming (e.g., detect-ide-session.ps1)
+- MUST use verb-noun naming (e.g., src/agent-delegator.ts)
 - MUST keep utility scripts in scripts/utilities/
 - MUST keep scripts idempotent — safe to run multiple times
 - MUST NOT mutate state in detection scripts

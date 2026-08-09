@@ -27,10 +27,22 @@ leaves the system in a working, testable state.
 
 When NOT: single-file, single-function changes with minimal scope.
 
+## Plan First (Pre-Write)
+
+Before the first increment, ensure a written plan exists. Use the pre-write planning workflow from
+`planning-and-task-breakdown` (scope → approach → risk → breakdown), scaffolded via:
+
+```bash
+npx tsx src/planning-templates.ts --plan --type feature --name <id> --title "<title>"
+```
+
+Plans are stored in `.session/sdd-pipeline/plans/` and linked to todo tasks. Skip the pre-write
+phase only for trivial single-file changes (see `--plan` doc in `src/planning-templates.ts`).
+
 ## The Increment Cycle
 
 ```
-Implement → Test → Verify → Commit → Next slice
+Plan → Implement → Test → Verify → Commit → Next slice
 ```
 
 1. **Implement** the smallest complete piece of functionality

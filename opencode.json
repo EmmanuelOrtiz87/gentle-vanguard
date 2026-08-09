@@ -4,9 +4,12 @@
     "orchestrator": {
       "description": "Main orchestrator agent - coordinates all subagents autonomously",
       "mode": "primary",
-      "model": "kimi-2-5",
-      "provider": "littellmott",
+      "model": "opencode/deepseek-v4-flash-free",
+      "provider": "opencode",
       "steps": 12,
+      "litellm_settings": {
+        "drop_params": true
+      },
       "permission": {
         "websearch": "deny",
         "webfetch": "deny",
@@ -23,9 +26,12 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 38,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "sdd-design": {
       "description": "SAD architecture design agent — system design and API contracts",
@@ -35,9 +41,12 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 30,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "sdd-apply": {
       "description": "DEV implementation agent — code generation and feature building",
@@ -47,9 +56,12 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 52,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "sdd-verify": {
       "description": "QA verification agent — testing and validation",
@@ -59,9 +71,12 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 36,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "doc-agent": {
       "description": "Documentation agent — technical docs and guides",
@@ -71,9 +86,12 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 34,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "ops-agent": {
       "description": "Operations agent — deployment, CI/CD, infrastructure",
@@ -85,7 +103,10 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "gov-agent": {
       "description": "Governance agent — compliance, security, audit",
@@ -97,7 +118,10 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "session-agent": {
       "description": "Session management agent — state tracking and lifecycle",
@@ -109,7 +133,10 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "premortem-agent": {
       "description": "Premortem analysis agent — risk identification and stress testing",
@@ -121,7 +148,10 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "maintenance-agent": {
       "description": "Maintenance agent — cleanup, optimization, and health monitoring",
@@ -133,7 +163,10 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "gitflow-agent": {
       "description": "GitFlow agent — branch management, PR automation, and git workflows",
@@ -143,9 +176,12 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 30,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "self-diag-agent": {
       "description": "Self-diagnosis agent — auto-debug and break-glass recovery",
@@ -155,9 +191,12 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 38,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "knowledge-agent": {
       "description": "Knowledge agent — knowledge base operations and vault management",
@@ -167,9 +206,12 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 25,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "mkt-agent": {
       "description": "Marketing agent — content strategy, campaigns, and brand positioning",
@@ -179,9 +221,12 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 20,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "sales-agent": {
       "description": "Sales agent — pipeline management, outreach, and deal qualification",
@@ -191,9 +236,12 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 20,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "finance-agent": {
       "description": "Finance agent — financial analysis, modeling, and forecasting",
@@ -203,9 +251,12 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 20,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "hr-agent": {
       "description": "HR agent — hiring, onboarding, and people operations",
@@ -215,9 +266,12 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 20,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "legal-agent": {
       "description": "Legal agent — compliance, contracts, and regulatory matters",
@@ -227,9 +281,12 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 20,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "bus-tele-agent": {
       "description": "Business telemetry agent — metrics, analytics, and business intelligence",
@@ -239,9 +296,12 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 20,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     },
     "sia-agent": {
       "description": "SIA self-improving agent — iterative refinement and feedback loops",
@@ -251,9 +311,12 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 35,
       "variant": "",
-      "model": "kimi-2-5"
+      "model": "opencode/deepseek-v4-flash-free",
+      "litellm_settings": {
+        "drop_params": true
+      }
     }
   },
   "mcp": {

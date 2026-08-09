@@ -21,7 +21,7 @@ historical aggregation.
 ```
 Agent Turn
    ↓
-token-usage-auto.ps1        ← call AFTER each response with actual metrics
+C:/Workspace_local/gentle-vanguard/src/token-usage-auto.ts        ← call AFTER each response with actual metrics
    ↓
 .session/context-log/       ← .state.json (turn data)
    ↓
@@ -35,7 +35,7 @@ dashboard browser           ← polls /api/traceability/* every 5s
 1. **Log a turn** (call after each agent response):
 
    ```powershell
-   pwsh -NoProfile -File scripts/utilities/TOKEN/token-usage-auto.ps1 `
+   pwsh -NoProfile -File scripts/utilities/TOKEN/C:/Workspace_local/gentle-vanguard/src/token-usage-auto.ts `
      -InputTokens <N> -OutputTokens <N> -ContextChars <N> `
      -TurnLabel "<label>" -Model "<model>"
    ```

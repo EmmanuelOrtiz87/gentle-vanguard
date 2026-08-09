@@ -367,19 +367,21 @@ dependencias de servicios externos para su funcionamiento core.
 
 ### Web Crawler dual-provider (`src/web-crawler.ts`)
 
-Motor de adquisición de contenido web con **doble proveedor**:
+Motor de adquisición de contenido web con **proveedores en cadena**:
 
 | Operación | Primario | Fallback (sin API key, cero-config) |
 | --------- | -------- | ----------------------------------- |
 | Scrape    | Firecrawl (`FIRECRAWL_API_KEY`) | **Jina Reader** `r.jina.ai/<url>` → markdown |
-| Search    | Firecrawl (`FIRECRAWL_API_KEY`) | **Bing RSS** `&format=rss` → XML parseable |
+| Search    | Firecrawl (`FIRECRAWL_API_KEY`) | **DuckDuckGo HTML** `html.duckduckgo.com/html/` → parse `result__a`/`result__snippet`; segundo fallback **Bing RSS** `&format=rss` |
 | Crawl/Map | Firecrawl (requiere key)        | Error descriptivo                    |
 
 - `fallbackEnabled: true` por defecto en `config/web-crawler.json`; el health reporta
-  `provider: firecrawl | jina-reader+bing` y `fallbackActive`.
+  `provider: firecrawl | jina-reader+ddg+bing` y `fallbackActive`.
 - Cache SHA256 por provider (`cacheKey` con tag `fb`/`fc`) — evita envenenar resultados entre
   proveedores. Compresión estructural + logging a Nexus (`web-crawler.usage`).
 - **GOTCHA**: Jina Reader bloquea User-Agents de navegador (Chrome → 403); usa `curl/8.0.1`.
+  Los href de DuckDuckGo son redirects `//duckduckgo.com/l/?uddg=<encoded>` — decodificar el param
+  `uddg` con `decodeURIComponent` para obtener la URL real.
   Bing search HTML sirve bot-detection a fetch de Node — usar el endpoint RSS.
 
 ```bash

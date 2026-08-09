@@ -22,7 +22,7 @@ Automates synchronization between local Gentle-Vanguard and public repository.
 ## Execution
 
 1. Check `config/sync-config.json` for settings
-2. Run `scripts/utilities/gentle-vanguard-sync.ps1 -Mode sync`
+2. Run `src/engram-auto-sync.ts -Mode sync`
 3. Validate sync with `git status` and `git log`
 4. Report sync status to user
 

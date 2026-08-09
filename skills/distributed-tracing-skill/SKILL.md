@@ -77,7 +77,7 @@ estructura de directorios:
 ### Inicializar Tracing
 
 ```powershell
-. ./skills/distributed-tracing-skill/distributed-tracing-core.ps1
+. .src/tracing-instrument.ts
 
 $tracing = Initialize-DistributedTracing -SessionId "session-2026-04-23-24"
 ```
@@ -136,8 +136,8 @@ Ver: `config/distributed-tracing-config.json`
 
 ## archivos Relacionados
 
-- `skills/distributed-tracing-skill/distributed-tracing-core.ps1` - Core implementation
-- `skills/distributed-tracing-skill/otel-exporter.ps1` - OpenTelemetry exporter
-- `skills/distributed-tracing-skill/metrics-collector.ps1` - Metrics collection
-- `skills/distributed-tracing-skill/report-generator.ps1` - Report generation
-- `scripts/utilities/telemetry-dashboard.ps1` - Dashboard para visualizar traces
+- `src/tracing-instrument.ts` - Core implementation
+- `src/tracing-instrument.ts` - OpenTelemetry exporter
+- `C:/Workspace_local/gentle-vanguard/src/metrics-collector.ts` - Metrics collection
+- `C:/Workspace_local/gentle-vanguard/src/report-generator.ts` - Report generation
+- `src/dashboard-ws-autostart.ts` - Dashboard para visualizar traces
