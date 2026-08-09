@@ -1,0 +1,206 @@
+/* ==========================================================================
+   Gentle-Vanguard animation tokens — elegant, compositor-friendly UI motion.
+
+   Three layers:
+     1. CSS variables  — duration / easing / distance tokens (single source)
+     2. Helpers        — hardware-acceleration utilities (.gv-gpu, .gv-will-animate)
+     3. Utilities      — .anim-* classes backed by @keyframes for the presets
+
+   Reduced-motion support is global: when the user asks for it, every
+   animation and transition collapses to an instant state change.
+
+   Imported by the dashboard via `apps/web-dashboard/src/styles/index.css`.
+   ========================================================================== */
+
+:root {
+  /* Duration tokens */
+  --anim-duration-fast: 120ms;
+  --anim-duration-base: 200ms;
+  --anim-duration-slow: 320ms;
+  --anim-duration-slower: 500ms;
+
+  /* Easing tokens */
+  --anim-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --anim-ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --anim-ease-accelerate: cubic-bezier(0.4, 0, 1, 1);
+  --anim-ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --anim-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --anim-ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
+  --anim-ease-in-out-back: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  --anim-ease-linear: linear;
+
+  /* Motion distance scale */
+  --anim-distance-sm: 8px;
+  --anim-distance-md: 16px;
+  --anim-distance-lg: 24px;
+
+  /* GPU acceleration */
+  --anim-gpu: translateZ(0);
+  --anim-will-change: transform, opacity;
+}
+
+/* --------------------------------------------------------------------------
+   Hardware acceleration — promote to the compositor thread. Animating
+   transform/opacity never triggers layout or paint; these helpers ensure the
+   browser keeps the element on its own layer.
+   -------------------------------------------------------------------------- */
+
+.gv-gpu {
+  transform: var(--anim-gpu);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.gv-will-animate {
+  will-change: var(--anim-will-change);
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion (accessibility) — collapse all motion for users who request
+   it. Kept high-specificity with !important so it wins over inline styles.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Keyframes — all motion uses transform/opacity only (compositor-friendly).
+   -------------------------------------------------------------------------- */
+
+@keyframes gv-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes gv-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes gv-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(var(--anim-distance-lg));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gv-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--anim-distance-lg) * -1));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gv-scale-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes gv-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-25%);
+  }
+}
+
+@keyframes gv-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes gv-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes gv-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Utility classes — one class per preset, using the tokens above.
+   -------------------------------------------------------------------------- */
+
+.anim-fade-in {
+  animation: gv-fade-in var(--anim-duration-base) var(--anim-ease-decelerate) both;
+}
+
+.anim-fade-out {
+  animation: gv-fade-out var(--anim-duration-base) var(--anim-ease-accelerate) both;
+}
+
+.anim-slide-up {
+  animation: gv-slide-up var(--anim-duration-slow) var(--anim-ease-emphasized) both;
+}
+
+.anim-slide-down {
+  animation: gv-slide-down var(--anim-duration-slow) var(--anim-ease-decelerate) both;
+}
+
+.anim-scale-pop {
+  animation: gv-scale-pop var(--anim-duration-base) var(--anim-ease-spring) both;
+}
+
+.anim-bounce {
+  animation: gv-bounce 600ms var(--anim-ease-standard) infinite;
+}
+
+.anim-shimmer {
+  animation: gv-shimmer 1400ms var(--anim-ease-linear) infinite;
+}
+
+.anim-pulse {
+  animation: gv-pulse 1000ms var(--anim-ease-in-out-circ) infinite;
+}
+
+.anim-spin {
+  animation: gv-spin 900ms var(--anim-ease-linear) infinite;
+}
