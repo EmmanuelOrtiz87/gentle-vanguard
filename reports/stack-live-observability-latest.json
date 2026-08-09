@@ -3,7 +3,7 @@
   "generated_by": "token-ingest (tool-agnostic daemon)",
   "token": {
     "status": "PASS",
-    "used_today": 1040499,
+    "used_today": 1042081,
     "budget": 5000000,
     "projected_pct": 21,
     "sessions_today": 1
