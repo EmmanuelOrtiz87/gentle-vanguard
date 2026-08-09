@@ -872,29 +872,31 @@ export class WebCrawlerClient implements WebCrawler {
       };
     }
     if (apiKeyConfigured) {
+      const cacheOk = !this.config.cacheEnabled || cacheDir;
       return {
-        status: cacheDir ? 'ok' : 'degraded',
+        status: cacheOk ? 'ok' : 'degraded',
         apiKeyConfigured,
         fallbackActive: false,
         provider: 'firecrawl',
         configFile,
         cacheDir,
         enabled: true,
-        detail: cacheDir
+        detail: cacheOk
           ? 'Firecrawl configured — cache directory present'
           : 'Firecrawl configured — cache directory missing',
       };
     }
     if (fallbackActive) {
+      const cacheOk = !this.config.cacheEnabled || cacheDir;
       return {
-        status: cacheDir ? 'ok' : 'degraded',
+        status: cacheOk ? 'ok' : 'degraded',
         apiKeyConfigured,
         fallbackActive: true,
         provider: 'jina-reader+ddg+bing',
         configFile,
         cacheDir,
         enabled: true,
-        detail: cacheDir
+        detail: cacheOk
           ? 'No API key — fallback activo (Jina Reader scrape + DDG HTML search → Bing RSS), sin coste'
           : 'No API key — fallback activo pero cache directory missing',
       };
