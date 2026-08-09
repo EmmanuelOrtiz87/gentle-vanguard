@@ -35,24 +35,34 @@ jobs:
           prerelease: false
 
   build-installer:
-    name: Build Installer (.exe)
+    name: Build Binario (.exe SEA)
     runs-on: windows-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - name: Install NSIS
-        run: |
-          choco install nsis -y --no-progress
-          echo "NSIS_DIR=C:\Program Files (x86)\NSIS" >> $env:GITHUB_ENV
       - name: Setup Node.js
         uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
         with:
-          node-version: '20'
-      - name: Build installer
-        run: npx tsx src/cli/create-installer.ts
+          node-version: '22'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Compile TS (dist/)
+        run: pnpm build:mcp
+      - name: Install postject (SEA injection)
+        run: npm install -g postject
+      - name: Build SEA launcher
+        run: npx tsx src/build-sea.ts --target launcher --skip-build
         shell: pwsh
+      - name: Prepare versioned asset
+        shell: pwsh
+        run: |
+          $version = "${{ inputs.tag }}".TrimStart('v')
+          $asset = "build/gentle-vanguard-$version.exe"
+          Copy-Item -Path "build/Gentle-Vanguard.exe" -Destination $asset -Force
+          Write-Output "Asset listo: $asset"
+          Get-ChildItem build/gentle-vanguard-*.exe
       - name: Upload installer to release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.tag }}
-          files: dist/Gentle-Vanguard.exe
+          files: build/gentle-vanguard-*.exe

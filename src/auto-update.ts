@@ -71,20 +71,25 @@ function getProjectRoot(): string {
 }
 
 function findExePath(projectRoot: string): string {
-  const exeName = 'gentle-vanguard.exe';
-  let exePath = join(projectRoot, exeName);
-  if (existsSync(exePath)) return exePath;
+  // El binario SEA se genera como build/Gentle-Vanguard.exe (mayúsculas).
+  // Buscar case-insensitive en build/, bin/ y la raíz.
+  const candidates = [
+    join(projectRoot, 'build', 'Gentle-Vanguard.exe'),
+    join(projectRoot, 'bin', 'gentle-vanguard.exe'),
+    join(projectRoot, 'gentle-vanguard.exe'),
+    join(projectRoot, 'build', 'gentle-vanguard.exe'),
+  ];
+  for (const exePath of candidates) {
+    if (existsSync(exePath)) return exePath;
+  }
 
-  exePath = join(projectRoot, 'bin', exeName);
-  if (existsSync(exePath)) return exePath;
-
-  log(`Executable not found at ${exePath}. Searching project root...`, 'Yellow');
+  log('Executable not found at the standard paths. Searching project root...', 'Yellow');
 
   const { stdout } = runSync(
     'powershell',
     [
       '-Command',
-      `Get-ChildItem -Path '${projectRoot}' -Recurse -Filter '${exeName}' -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName`,
+      `Get-ChildItem -Path '${projectRoot}' -Recurse -Filter '*.exe' -ErrorAction SilentlyContinue | Where-Object { $_.Name -match 'gentle.?vanguard' } | Select-Object -First 1 -ExpandProperty FullName`,
     ],
     { stdio: 'pipe' },
   );
