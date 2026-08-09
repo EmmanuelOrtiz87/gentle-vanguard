@@ -1,0 +1,15 @@
+{
+  "id": "example-hello",
+  "name": "Example Hello",
+  "version": "1.0.0",
+  "description": "Plugin de ejemplo local-first: imprime 'Hello from plugin' como CLI y responde al evento session-start con un hook.",
+  "author": "Gentle-Vanguard",
+  "entry": "index.ts",
+  "hooks": [
+    {
+      "event": "session-start",
+      "script": "hooks/session-start.ts"
+    }
+  ],
+  "enabled": true
+}

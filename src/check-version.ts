@@ -69,7 +69,10 @@ function log(msg: string, color?: string): void {
 }
 
 async function getLatestRelease(preRelease: boolean): Promise<GitHubRelease> {
-  const baseUrl = 'https://api.github.com/repos/EmmanuelOrtiz87/gentle-vanguard/releases';
+  // Repo público de releases (el repo privado `gentle-vanguard` devuelve 404).
+  // Override opcional via GENTLE_VANGUARD_GH_REPO (formato owner/repo).
+  const ghRepo = process.env.GENTLE_VANGUARD_GH_REPO || 'EmmanuelOrtiz87/gentle-vanguard-public';
+  const baseUrl = `https://api.github.com/repos/${ghRepo}/releases`;
   const url = preRelease ? baseUrl : `${baseUrl}/latest`;
 
   const response = await fetch(url, {

@@ -51,8 +51,7 @@ import { useStackTables } from '../hooks/useStackTables';
 import type { Locale } from '../hooks/useLocale';
 import type { ModelCost, CostInsight } from '../types/dashboard';
 
-function SectionHeader({ title, infoKey }: { title: string; infoKey?: string }) {
-  const { locale } = useLocale();
+function SectionHeader({ title, infoKey }: { title: string; infoKey?: string }) {  const { locale } = useLocale();
   const [showPopup, setShowPopup] = useState(false);
   const info = infoKey ? t(locale, infoKey) : undefined;
 
@@ -75,12 +74,30 @@ function SectionHeader({ title, infoKey }: { title: string; infoKey?: string }) 
   );
 }
 
+function OfflineBanner({ isOffline, lastUpdated }: { isOffline: boolean; lastUpdated: number }) {
+  if (!isOffline) return null;
+
+  const secondsAgo = lastUpdated > 0 ? Math.max(0, Math.round((Date.now() - lastUpdated) / 1000)) : null;
+  const ageLabel = secondsAgo !== null ? `${secondsAgo}s` : 'unknown';
+
+  return (
+    <div className="bg-amber-50 dark:bg-amber-900/30 border-b border-amber-200 dark:border-amber-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center gap-2">
+        <Cloud className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+        <p className="text-sm text-amber-700 dark:text-amber-300">
+          Offline mode — showing cached data from {ageLabel} ago
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function DashboardInner() {
   const [darkMode, setDarkMode] = useState(false);
   const [useWebSocket, setUseWebSocket] = useState(true);
   const [searchParams] = useSearchParams();
   const urlTenantId = searchParams.get('tenantId') || undefined;
-  const { data, history, loading, wsConnected, refetch, notifications, dismissNotification } =
+  const { data, history, loading, wsConnected, refetch, notifications, dismissNotification, isOffline, lastUpdated } =
     useMetrics(useWebSocket, urlTenantId);
   const { session: agentSession, bridgeConnected, createSession } = useAgentStream();
   const { triggeredAlerts } = useAlerts();
@@ -206,6 +223,8 @@ function DashboardInner() {
           </div>
         </div>
       </header>
+
+      <OfflineBanner isOffline={isOffline} lastUpdated={lastUpdated} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Row 1: Core KPIs */}

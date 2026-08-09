@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "description": "Plugin registry — estado persistido de plugins instalados y su estado enabled/disabled. Fuente de verdad para enable/disable; config/plugins.json define los paths de descubrimiento y la política de seguridad.",
+  "plugins": {
+    "example-hello": {
+      "enabled": true,
+      "source": "repo",
+      "installedAt": "2026-08-09T00:00:00.000Z"
+    }
+  }
+}

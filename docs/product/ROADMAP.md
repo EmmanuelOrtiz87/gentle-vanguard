@@ -55,25 +55,54 @@ seguro, extensible, zero-drama.**
 
 ## Backlog — Mejoras Local-First
 
-| #   | Feature                               | Prioridad | Tiempo est. | Descripción                                                             |
-| --- | ------------------------------------- | --------- | ----------- | ----------------------------------------------------------------------- |
-| 1   | **Dashboard offline mode**            | Media     | ~2h         | Funcionar sin dependencia del WS server, datos cacheados localmente     |
-| 2   | **Auto-update desde GitHub Releases** | Media     | ~1h         | El stack se actualiza solo: detecta nueva versión, descarga, aplica     |
-| 3   | **create-gentle-vanguard template**   | Baja      | ~2h         | `npx create-gentle-vanguard` para bootstrap de proyectos                |
-| 4   | **Plugin system local-first**         | Baja      | ~3h         | Plugins comunitarios sin dependencia cloud, solo git + archivos locales |
-| 5   | **Dashboard modo offline completo**   | Baja      | ~2h         | Toda la funcionalidad del dashboard sin conexión a WS                   |
+| #   | Feature                               | Prioridad | Tiempo est. | Descripción                                                             | Estado |
+| --- | ------------------------------------- | --------- | ----------- | ----------------------------------------------------------------------- | ------ |
+| 1   | **Dashboard offline mode**            | Media     | ~2h         | Funcionar sin dependencia del WS server, datos cacheados localmente     | ✅ Done |
+| 2   | **Auto-update desde GitHub Releases** | Media     | ~1h         | El stack se actualiza solo: detecta nueva versión, descarga, aplica     | ✅ Done |
+| 3   | **create-gentle-vanguard template**   | Baja      | ~2h         | `npx create-gentle-vanguard` para bootstrap de proyectos                | ✅ Done |
+| 4   | **Plugin system local-first**         | Baja      | ~3h         | Plugins comunitarios sin dependencia cloud, solo git + archivos locales | ✅ Done |
+| 5   | **Dashboard modo offline completo**   | Baja      | ~2h         | Toda la funcionalidad del dashboard sin conexión a WS                   | ✅ Done (metrics/traces/alerts) |
+
+**Entregables Backlog Local-First (2026-08-09):**
+
+- `apps/web-dashboard/src/lib/offlineCache.ts` — caché localStorage por-key (cap 200KB, staleness 5 min).
+- `apps/web-dashboard/src/hooks/useMetrics.ts` + `useAlerts.ts` + `Dashboard.tsx` + `TracingDashboard.tsx` —
+  modo offline: `isOffline`, `lastUpdated`, banner amber "Offline mode — cached data".
+- `src/check-version.ts` — fix: apunta al repo público `EmmanuelOrtiz87/gentle-vanguard-public` (el privado
+  devolvía 404), override vía `GENTLE_VANGUARD_GH_REPO`. `src/auto-update.ts` + `npm run update:check` OK.
+- `src/create-gentle-vanguard.ts` + `tests/unit/create-gentle-vanguard.test.ts` (12 tests) +
+  `docs/product/CREATE-GENTLE-VANGUARD.md` — bootstrap `npx tsx src/create-gentle-vanguard.ts --name <app>`.
+- `src/plugin-manager.ts` + `plugins/example-hello/` + `config/plugin-manifest-schema.json` +
+  `config/plugin-registry.json` + `docs/product/PLUGIN-SYSTEM.md` — plugins local-first con hooks en
+  procesos separados (seguridad), step lazy `plugin-registry-load`.
 
 ## Fase 1 — Consolidación corta (ahora)
 
-| Acción                                                             | Objetivo                                           | Impacto |
-| ------------------------------------------------------------------ | -------------------------------------------------- | ------- |
-| Definir módulos core vs experimental                               | Reducir ambigüedad operativa                       | Alto    |
-| Marcar módulos experimentales como opt-in                          | Evitar que se usen por defecto                     | Alto    |
-| Añadir validación de configuración de madurez                      | Sustituir intuición por contrato                   | Medio   |
-| Documentar la ruta de maduración del stack                         | Hacerla ejecutable y priorizada                    | Medio   |
-| Aplicar política explícita de activación                           | Obligar opt-in para módulos riesgosos              | Alto    |
-| Añadir gates de gobernanza antes de activar módulos experimentales | Evitar activaciones sin validación mínima          | Alto    |
-| Definir workflow formal de activación de módulos experimentales    | Garantizar revisión y aprobación antes del rollout | Alto    |
+| Acción                                                             | Objetivo                                           | Impacto | Estado |
+| ------------------------------------------------------------------ | -------------------------------------------------- | ------- | ------ |
+| Definir módulos core vs experimental                               | Reducir ambigüedad operativa                       | Alto    | ✅ Done |
+| Marcar módulos experimentales como opt-in                          | Evitar que se usen por defecto                     | Alto    | ✅ Done |
+| Añadir validación de configuración de madurez                      | Sustituir intuición por contrato                   | Medio   | ✅ Done |
+| Documentar la ruta de maduración del stack                         | Hacerla ejecutable y priorizada                    | Medio   | ✅ Done |
+| Aplicar política explícita de activación                           | Obligar opt-in para módulos riesgosos              | Alto    | ✅ Done |
+| Añadir gates de gobernanza antes de activar módulos experimentales | Evitar activaciones sin validación mínima          | Alto    | ✅ Done |
+| Definir workflow formal de activación de módulos experimentales    | Garantizar revisión y aprobación antes del rollout | Alto    | ✅ Done |
+
+**Entregables Fase 1:**
+
+- `config/module-maturity.json` — registro de 24 módulos: 14 core, 8 experimental (opt-in) y 2
+  deprecated, con criterios de activación y owner.
+- `src/module-maturity.ts` — CLI y API de validación/gates:
+  `list | --status | --validate <id> | --gate <id> [--run-checks]`.
+- `docs/governance/MODULE-ACTIVATION-WORKFLOW.md` — proceso formal propuesta → revisión gov → gates
+  mínimos → aprobación → activación/rollout.
+- `docs/governance/activation-decisions/` — registro de aprobaciones (template incluido).
+
+```bash
+npx tsx src/module-maturity.ts --status
+npx tsx src/module-maturity.ts --validate <module-id> --run-checks
+npx tsx src/module-maturity.ts --gate <module-id>
+```
 
 ## Guía de adopción
 

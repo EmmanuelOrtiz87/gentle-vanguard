@@ -107,6 +107,8 @@
     "stack:setup": "npx tsx src/stack-setup.ts",
     "stack:setup:yes": "npx tsx src/stack-setup.ts --yes",
     "stack:setup:dry": "npx tsx src/stack-setup.ts --dry-run",
+    "create": "npx tsx src/create-gentle-vanguard.ts",
+    "create:template": "npx tsx src/create-gentle-vanguard.ts --name gentle-vanguard-app --target ../gentle-vanguard-app --dry-run",
     "dashboard:build": "cd apps/web-dashboard && pnpm build",
     "dashboard:dev": "cd apps/web-dashboard && pnpm dev",
     "dashboard:server": "npx tsx apps/web-dashboard/server/websocket-server.ts",
@@ -253,6 +255,13 @@
     "trends:report": "npx tsx src/research-trends-cli.ts report",
     "trends:browse": "npx tsx src/research-trends-cli.ts browse",
     "trends:status": "npx tsx src/research-trends-cli.ts status",
+    "plugin:list": "npx tsx src/plugin-manager.ts list",
+    "plugin:status": "npx tsx src/plugin-manager.ts --status",
+    "plugin:install": "npx tsx src/plugin-manager.ts install",
+    "plugin:remove": "npx tsx src/plugin-manager.ts remove",
+    "plugin:enable": "npx tsx src/plugin-manager.ts enable",
+    "plugin:disable": "npx tsx src/plugin-manager.ts disable",
+    "plugin:hooks": "npx tsx src/plugin-manager.ts hooks",
     "presentations:verify:cdp:hotspots": "node .opencode/skills/presentations-maintenance/scripts/cdp-verify-hotspots-all.cjs"
   },
   "devDependencies": {

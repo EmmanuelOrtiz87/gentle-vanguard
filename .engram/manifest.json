@@ -1424,6 +1424,30 @@
       "sessions": 0,
       "memories": 6,
       "prompts": 0
+    },
+    {
+      "id": "d34503d3",
+      "created_by": "emman",
+      "created_at": "2026-08-09T21:44:46Z",
+      "sessions": 0,
+      "memories": 9,
+      "prompts": 0
+    },
+    {
+      "id": "125cf1d8",
+      "created_by": "emman",
+      "created_at": "2026-08-09T21:57:07Z",
+      "sessions": 0,
+      "memories": 1,
+      "prompts": 0
+    },
+    {
+      "id": "3d3531cb",
+      "created_by": "emman",
+      "created_at": "2026-08-09T22:03:01Z",
+      "sessions": 0,
+      "memories": 3,
+      "prompts": 0
     }
   ]
 }

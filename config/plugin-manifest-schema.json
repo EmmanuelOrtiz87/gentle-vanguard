@@ -1,77 +1,81 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Plugin Manifest",
-  "description": "Plugin manifest for Gentle-Vanguard plugins. Validates plugin.json structure for FF-011.",
+  "description": "Manifesto de un plugin local-first para Gentle-Vanguard (PLUGIN-SYSTEM). Valida la estructura de plugin.json. Local-first: los plugins son directorios locales con este manifest; se cargan desde plugins/ (repo) o ~/.gentle-vanguard/plugins (usuario).",
   "type": "object",
-  "required": ["name", "version", "author", "description"],
+  "required": ["id", "version"],
   "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Identificador único del plugin en kebab-case (obligatorio)"
+    },
     "name": {
       "type": "string",
-      "pattern": "^[a-z0-9-]+$",
-      "description": "Plugin identifier in kebab-case"
+      "description": "Nombre legible del plugin (por defecto se usa id)"
     },
     "version": {
       "type": "string",
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
-      "description": "Semantic version (MAJOR.MINOR.PATCH)"
-    },
-    "author": {
-      "type": "string",
-      "description": "Plugin author name or organization"
+      "description": "Versión semver (MAJOR.MINOR.PATCH) — obligatorio"
     },
     "description": {
       "type": "string",
-      "description": "Human-readable plugin description"
+      "description": "Descripción legible de qué hace el plugin"
     },
-    "main": {
+    "author": {
       "type": "string",
-      "description": "Entry point script relative to plugin directory (e.g. plugin.ps1)",
-      "default": "plugin.ps1"
+      "description": "Autor del plugin (persona u organización)"
     },
-    "minGentle-VanguardVersion": {
+    "entry": {
       "type": "string",
-      "description": "Minimum Gentle-Vanguard version required (semver)"
-    },
-    "provides": {
-      "type": "array",
-      "items": { "type": "string" },
-      "description": "Capabilities or skills provided by this plugin"
-    },
-    "requires": {
-      "type": "array",
-      "items": { "type": "string" },
-      "description": "Other plugin names this plugin depends on"
-    },
-    "dependencies": {
-      "type": "object",
-      "description": "Runtime dependency requirements (e.g. PowerShell version)",
-      "additionalProperties": { "type": "string" }
+      "description": "Script de entrada relativo al directorio del plugin (TS o JS). Se ejecuta como proceso separado (nunca se importa en el proceso principal del stack). Por defecto index.ts. Backward-compat: se acepta 'main' como alias.",
+      "default": "index.ts"
     },
     "hooks": {
       "type": "array",
-      "items": { "enum": ["pre-commit", "pre-push", "post-checkout", "commit-msg", "pre-receive"] },
-      "description": "Git hooks the plugin registers"
-    },
-    "commands": {
-      "type": "array",
-      "description": "src/cli/gv.ts subcommands provided by this plugin",
+      "description": "Eventos del stack que el plugin escucha. Cada hook ejecuta su script en un proceso separado.",
       "items": {
         "oneOf": [
-          { "type": "string" },
+          {
+            "type": "string",
+            "description": "Nombre de evento (p.ej. 'session-start'); el script por defecto es el entry"
+          },
           {
             "type": "object",
-            "required": ["name"],
+            "required": ["event"],
             "properties": {
-              "name": { "type": "string", "description": "Command name" },
-              "description": { "type": "string", "description": "Command description" },
+              "event": {
+                "type": "string",
+                "description": "Nombre del evento (session-start, session-end, pre-commit, post-commit, pre-deploy, ...)"
+              },
               "script": {
                 "type": "string",
-                "description": "Script to execute relative to plugin dir"
+                "description": "Script TS/JS relativo al directorio del plugin que maneja el evento"
               }
             }
           }
         ]
       }
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "Estado por defecto del plugin al descubrirlo (el registry config/plugin-registry.json tiene prioridad). Default: true"
+    },
+    "main": {
+      "type": "string",
+      "description": "Backward-compat con el formato FF-011: alias del entry. Se usa solo si 'entry' no está presente."
+    },
+    "minGentleVanguardVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Versión mínima del stack Gentle-Vanguard requerida (semver)"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "IDs de otros plugins de los que depende este plugin"
     }
-  }
+  },
+  "additionalProperties": true
 }

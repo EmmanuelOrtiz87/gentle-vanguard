@@ -1,0 +1,466 @@
+{
+  "version": "1.0.0",
+  "name": "module-maturity-config",
+  "description": "Maturity registry for stack modules: core vs experimental vs deprecated, opt-in policy, and governance activation gates. Consumed by src/module-maturity.ts and enforced by docs/governance/MODULE-ACTIVATION-WORKFLOW.md.",
+  "policy": {
+    "coreDefault": true,
+    "experimentalOptIn": true,
+    "approvalRoles": ["gov-agent", "orchestrator"],
+    "minimumGates": ["tests", "typecheck", "security-scan"],
+    "approvalFileDir": "docs/governance/activation-decisions",
+    "moduleDocDir": "docs/modules"
+  },
+  "modules": [
+    {
+      "id": "session-pipeline",
+      "name": "Session Autostart Pipeline",
+      "category": "core",
+      "maturity": "stable",
+      "optIn": false,
+      "activated": true,
+      "risk": "low",
+      "owner": "orchestrator",
+      "script": "src/session-autostart.ts",
+      "description": "Idempotent session bootstrap pipeline (config/session-autostart.config.json) that initializes session state, security, tracing, dashboards and all lazy background daemons.",
+      "activationCriteria": [
+        { "check": "config-valid", "required": true },
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": false },
+        { "check": "security-scan", "required": false }
+      ]
+    },
+    {
+      "id": "watchtower",
+      "name": "Maintenance Watchtower",
+      "category": "core",
+      "maturity": "stable",
+      "optIn": false,
+      "activated": true,
+      "risk": "low",
+      "owner": "maintenance-agent",
+      "script": "src/core/maintenance-watchtower.ts",
+      "description": "Central health-check, auto-healing and continuous monitoring orchestrator (60+ checks across 11 components, 6 modes).",
+      "activationCriteria": [
+        { "check": "config-valid", "required": true },
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": false },
+        { "check": "security-scan", "required": false }
+      ]
+    },
+    {
+      "id": "nexus-db",
+      "name": "Nexus Operational Database",
+      "category": "core",
+      "maturity": "stable",
+      "optIn": false,
+      "activated": true,
+      "risk": "low",
+      "owner": "ops-agent",
+      "script": "src/database/db-init.ts",
+      "description": "SQLite operational database (.runtime/gentle-vanguard.db) with auto-migrations, health, backup and prune lifecycle.",
+      "activationCriteria": [
+        { "check": "config-valid", "required": true },
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": false },
+        { "check": "security-scan", "required": false }
+      ]
+    },
+    {
+      "id": "dashboard",
+      "name": "LLM Observability Dashboard",
+      "category": "core",
+      "maturity": "stable",
+      "optIn": false,
+      "activated": true,
+      "risk": "low",
+      "owner": "ops-agent",
+      "script": "src/dashboard-start.ts",
+      "description": "React/TypeScript/Vite SPA + WebSocket data pipeline (apps/web-dashboard/) with real metrics, traces, alerts and i18n.",
+      "activationCriteria": [
+        { "check": "config-valid", "required": true },
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": false },
+        { "check": "security-scan", "required": false }
+      ]
+    },
+    {
+      "id": "token-tracking",
+      "name": "Token Tracking and Traceability",
+      "category": "core",
+      "maturity": "stable",
+      "optIn": false,
+      "activated": true,
+      "risk": "low",
+      "owner": "ops-agent",
+      "script": "src/token-ingest.ts",
+      "description": "Agnostic token ingestion daemon (src/token-ingest.ts) that reads real session data from opencode/claude/cursor and consolidates into Nexus token_usage/transactions/savings.",
+      "activationCriteria": [
+        { "check": "config-valid", "required": true },
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": false },
+        { "check": "security-scan", "required": false }
+      ]
+    },
+    {
+      "id": "engram-integration",
+      "name": "Engram Persistent Memory",
+      "category": "core",
+      "maturity": "stable",
+      "optIn": false,
+      "activated": true,
+      "risk": "low",
+      "owner": "session-agent",
+      "script": "src/engram-integrity-check.ts",
+      "description": "Persistent cross-session memory via the engram MCP server, with integrity checks, auto-sync, reindex and compaction.",
+      "activationCriteria": [
+        { "check": "config-valid", "required": true },
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": false },
+        { "check": "security-scan", "required": false }
+      ]
+    },
+    {
+      "id": "security-orchestrator",
+      "name": "Security Orchestrator",
+      "category": "core",
+      "maturity": "stable",
+      "optIn": false,
+      "activated": true,
+      "risk": "medium",
+      "owner": "gov-agent",
+      "script": "src/security/security-orchestrator.ts",
+      "description": "Security policy initialization, dependency security, audit logging, secret detection and hardening gates.",
+      "activationCriteria": [
+        { "check": "config-valid", "required": true },
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": true },
+        { "check": "security-scan", "required": true }
+      ]
+    },
+    {
+      "id": "skill-system",
+      "name": "Skill System and Router",
+      "category": "core",
+      "maturity": "stable",
+      "optIn": false,
+      "activated": true,
+      "risk": "low",
+      "owner": "orchestrator",
+      "script": "src/skills/skill-router.ts",
+      "description": "Skill registry (135+ skills), router, recommender, usage tracking and size audit.",
+      "activationCriteria": [
+        { "check": "config-valid", "required": true },
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": false },
+        { "check": "security-scan", "required": false }
+      ]
+    },
+    {
+      "id": "adaptive-router",
+      "name": "Adaptive Model Router",
+      "category": "core",
+      "maturity": "stable",
+      "optIn": false,
+      "activated": true,
+      "risk": "medium",
+      "owner": "orchestrator",
+      "script": "src/adaptive-router.ts",
+      "description": "Dynamic model routing from historical performance data (config/model-router.json), with cost tracking and model levels.",
+      "activationCriteria": [
+        { "check": "config-valid", "required": true },
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": true },
+        { "check": "security-scan", "required": true }
+      ]
+    },
+    {
+      "id": "event-sourcing",
+      "name": "Event Sourcing + Hash-Chain Audit",
+      "category": "core",
+      "maturity": "beta",
+      "optIn": false,
+      "activated": true,
+      "risk": "medium",
+      "owner": "gov-agent",
+      "script": "src/event-sourcing.ts",
+      "description": "Append-only event store with SHA-256 hash-chaining (prevHash) for tamper-evident audit trails; append/project/snapshot/prune.",
+      "activationCriteria": [
+        { "check": "config-valid", "required": true },
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": true },
+        { "check": "security-scan", "required": true }
+      ]
+    },
+    {
+      "id": "checkpoint-restore",
+      "name": "State Persistence (Checkpoint/Snapshot/Rollback)",
+      "category": "core",
+      "maturity": "stable",
+      "optIn": false,
+      "activated": true,
+      "risk": "low",
+      "owner": "ops-agent",
+      "script": "src/checkpoint-manager.ts",
+      "description": "Checkpoint create/list/diff/verify/prune, snapshots and dry-run rollback restoration for session state safety.",
+      "activationCriteria": [
+        { "check": "config-valid", "required": true },
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": false },
+        { "check": "security-scan", "required": false }
+      ]
+    },
+    {
+      "id": "audit-pipeline",
+      "name": "Audit Pipeline",
+      "category": "core",
+      "maturity": "stable",
+      "optIn": false,
+      "activated": true,
+      "risk": "low",
+      "owner": "gov-agent",
+      "script": "src/infrastructure/audit-pipeline.ts",
+      "description": "JSONL audit logging (log/status/query/archive/prune) for SOC2/GDPR compliance, wired into session start.",
+      "activationCriteria": [
+        { "check": "config-valid", "required": true },
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": false },
+        { "check": "security-scan", "required": false }
+      ]
+    },
+    {
+      "id": "tracing",
+      "name": "Distributed Tracing",
+      "category": "core",
+      "maturity": "stable",
+      "optIn": false,
+      "activated": true,
+      "risk": "low",
+      "owner": "ops-agent",
+      "script": "src/tracing-instrument.ts",
+      "description": "OTLP distributed tracing (start/end/error spans) persisted to .telemetry/ with export to the local OTLP collector.",
+      "activationCriteria": [
+        { "check": "config-valid", "required": true },
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": false },
+        { "check": "security-scan", "required": false }
+      ]
+    },
+    {
+      "id": "web-crawler",
+      "name": "Web Crawler (dual-provider)",
+      "category": "core",
+      "maturity": "beta",
+      "optIn": false,
+      "activated": true,
+      "risk": "medium",
+      "owner": "orchestrator",
+      "script": "src/web-crawler.ts",
+      "description": "Firecrawl-first web acquisition with zero-config fallback chain (Jina Reader scrape, DuckDuckGo/Bing search), SHA-256 cache and structural compression.",
+      "activationCriteria": [
+        { "check": "config-valid", "required": true },
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": true },
+        { "check": "security-scan", "required": true }
+      ]
+    },
+    {
+      "id": "predictive-governor",
+      "name": "Predictive Resource Governor",
+      "category": "experimental",
+      "maturity": "experimental",
+      "optIn": true,
+      "activated": false,
+      "risk": "high",
+      "owner": "ops-agent",
+      "script": "src/predictive-governor.ts",
+      "description": "Anticipates load, prewarms resources and adjusts budgets ahead of demand. High risk: can over-consume local resources.",
+      "activationCriteria": [
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": true },
+        { "check": "security-scan", "required": true },
+        { "check": "governance-approval", "required": true },
+        { "check": "owner-signoff", "required": true }
+      ]
+    },
+    {
+      "id": "proactive-intelligence",
+      "name": "Proactive Intelligence Engine",
+      "category": "experimental",
+      "maturity": "experimental",
+      "optIn": true,
+      "activated": false,
+      "risk": "high",
+      "owner": "orchestrator",
+      "script": "src/proactive-intelligence-engine.ts",
+      "description": "Anticipates user needs from usage patterns and context. High risk: autonomous actions require tight guardrails.",
+      "activationCriteria": [
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": true },
+        { "check": "security-scan", "required": true },
+        { "check": "governance-approval", "required": true },
+        { "check": "owner-signoff", "required": true }
+      ]
+    },
+    {
+      "id": "root-cause-correlator",
+      "name": "Root-Cause Correlator",
+      "category": "experimental",
+      "maturity": "beta",
+      "optIn": true,
+      "activated": false,
+      "risk": "medium",
+      "owner": "self-diag-agent",
+      "script": "src/root-cause-correlator.ts",
+      "description": "Cross-component failure correlation and cascade detection to speed up diagnosis of FAIL/WARN events.",
+      "activationCriteria": [
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": true },
+        { "check": "security-scan", "required": true },
+        { "check": "governance-approval", "required": true },
+        { "check": "owner-signoff", "required": true }
+      ]
+    },
+    {
+      "id": "convergence-monitor",
+      "name": "Convergence Monitor",
+      "category": "experimental",
+      "maturity": "experimental",
+      "optIn": true,
+      "activated": false,
+      "risk": "medium",
+      "owner": "orchestrator",
+      "script": "src/convergence-monitor.ts",
+      "description": "Tracks whether the stack is converging, oscillating or diverging (stage #7 meta-monitoring).",
+      "activationCriteria": [
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": true },
+        { "check": "security-scan", "required": true },
+        { "check": "governance-approval", "required": true },
+        { "check": "owner-signoff", "required": true }
+      ]
+    },
+    {
+      "id": "trust-layer-stage8",
+      "name": "Trust Layer (stage 8)",
+      "category": "experimental",
+      "maturity": "beta",
+      "optIn": true,
+      "activated": false,
+      "risk": "high",
+      "owner": "gov-agent",
+      "script": "src/review-lenses.ts",
+      "description": "Review lenses, result gatekeeper, publication gates (TOCTOU prevention), findings ledger and compact state machine for review trust.",
+      "activationCriteria": [
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": true },
+        { "check": "security-scan", "required": true },
+        { "check": "governance-approval", "required": true },
+        { "check": "owner-signoff", "required": true }
+      ]
+    },
+    {
+      "id": "skill-evolution-engine",
+      "name": "Skill & Agent Evolution Engine",
+      "category": "experimental",
+      "maturity": "beta",
+      "optIn": true,
+      "activated": false,
+      "risk": "medium",
+      "owner": "orchestrator",
+      "script": "src/skills/skill-evolution-engine.ts",
+      "description": "Analyzes skill/agent usage, detects gaps, suggests refinements and deprecates unused capabilities.",
+      "activationCriteria": [
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": true },
+        { "check": "security-scan", "required": true },
+        { "check": "governance-approval", "required": true },
+        { "check": "owner-signoff", "required": true }
+      ]
+    },
+    {
+      "id": "fine-tuning-collector",
+      "name": "Fine-Tuning Data Collector",
+      "category": "experimental",
+      "maturity": "experimental",
+      "optIn": true,
+      "activated": false,
+      "risk": "high",
+      "owner": "ops-agent",
+      "script": "src/fine-tuning-data-collector.ts",
+      "description": "Auto-collects session, engram and skill data into a fine-tuning dataset. High risk: data privacy and leakage.",
+      "activationCriteria": [
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": true },
+        { "check": "security-scan", "required": true },
+        { "check": "governance-approval", "required": true },
+        { "check": "owner-signoff", "required": true }
+      ]
+    },
+    {
+      "id": "cross-workspace-mesh",
+      "name": "Cross-Workspace Mesh",
+      "category": "experimental",
+      "maturity": "experimental",
+      "optIn": true,
+      "activated": false,
+      "risk": "high",
+      "owner": "ops-agent",
+      "script": "src/cross-workspace-validator.ts",
+      "description": "Workspace discovery, manifest and task delegation across workspaces. High risk: cross-boundary access and federation auth.",
+      "activationCriteria": [
+        { "check": "tests", "required": true },
+        { "check": "typecheck", "required": true },
+        { "check": "lint", "required": true },
+        { "check": "security-scan", "required": true },
+        { "check": "governance-approval", "required": true },
+        { "check": "owner-signoff", "required": true }
+      ]
+    },
+    {
+      "id": "agi-safety-layer",
+      "name": "AGI Safety Layer (v9.0)",
+      "category": "deprecated",
+      "maturity": "experimental",
+      "optIn": false,
+      "activated": false,
+      "risk": "high",
+      "owner": "gov-agent",
+      "description": "Deprecated: requires cloud/server infrastructure which breaks the local-first principle. Do not activate.",
+      "activationCriteria": []
+    },
+    {
+      "id": "legacy-session-cleanup",
+      "name": "Legacy Session Cleanup",
+      "category": "deprecated",
+      "maturity": "experimental",
+      "optIn": false,
+      "activated": false,
+      "risk": "low",
+      "owner": "ops-agent",
+      "script": "src/session-cleanup-start.ts",
+      "description": "Deprecated: superseded by session-pipeline lazy daemons. Kept only for reference; do not re-enable.",
+      "activationCriteria": []
+    }
+  ]
+}

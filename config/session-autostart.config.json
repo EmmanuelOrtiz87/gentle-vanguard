@@ -976,6 +976,24 @@
         "args": "--query \"AI agent orchestration and LLM observability best practices\" --limit 3 --threshold 0.3",
         "required": false,
         "description": "M5 selective web acquisition: search (Firecrawl→DDG→Bing) → BM25 grade → filter → persist to .session/web-research/"
+      },
+      {
+        "id": "module-maturity-validate",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/module-maturity.ts",
+        "args": "--status",
+        "required": false,
+        "description": "Validate module maturity registry — surface gated experimental modules and deprecated entries at session start (Phase 1 maturity governance)"
+      },
+      {
+        "id": "plugin-registry-load",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/plugin-manager.ts",
+        "args": "list --quiet",
+        "required": false,
+        "description": "Load local-first plugin registry at session start — discovers plugins/ and ~/.gentle-vanguard/plugins, validates manifests, persists enabled state (non-blocking)"
       }
     ],
     "onStepFailure": "continue",
