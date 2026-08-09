@@ -30,6 +30,7 @@ import { compressPrompt } from './prompt-compression.js';
 import { compressOutput } from './output-compression.js';
 import { enforceChatLevel } from './chat-level-enforcer.js';
 import { ResponseCache } from './response-cache.js';
+import { runSync } from './core/run-command.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -357,25 +358,71 @@ function parseCLIArgs(): CLIOptions {
   return options;
 }
 
-// Simulated LLM call for CLI testing
+// Simulated LLM call for CLI testing (explicit --simulate only)
 async function simulatedLLMCall(prompt: string, options?: LLMCallOptions): Promise<string> {
   // In real implementation, this would call the actual LLM API
   void options; // Mark as intentionally unused
   return `[Simulated LLM response for: ${prompt.slice(0, 50)}...]`;
 }
 
+// Real LLM call via the opencode CLI (the stack's native model runtime).
+// Falls back to a simulated response ONLY when opencode is unavailable.
+async function opencodeLLMCall(prompt: string, options?: LLMCallOptions): Promise<string> {
+  const args = ['run', prompt];
+  if (options?.model) {
+    args.push('--model', options.model);
+  }
+  try {
+    const result = runSync('opencode', args, {
+      stdio: ['ignore', 'pipe', 'pipe'],
+      timeout: 120_000,
+    });
+    if (result.status === 0 && result.stdout && result.stdout.trim().length > 0) {
+      return result.stdout.trim();
+    }
+    const detail = result.stderr?.trim() || `exit code ${result.status}`;
+    throw new Error(`opencode run failed: ${detail}`);
+  } catch (error: any) {
+    const msg = String(error?.message ?? '');
+    const isMissing = /not recognized|ENOENT|not found/i.test(msg);
+    if (isMissing) {
+      console.warn(
+        '[llm-call-wrapper] ⚠ opencode CLI not available — returning SIMULATED response (install opencode for real LLM calls)',
+      );
+      return simulatedLLMCall(prompt, options);
+    }
+    const isBrokenBinary = /no es compatible|not compatible|Win32|StandardOutputEncoding/i.test(msg);
+    if (isBrokenBinary) {
+      throw new Error(
+        `[llm-call-wrapper] ❌ opencode CLI binary is not operational on this platform ` +
+          `(incompatible executable). Real LLM calls are unavailable. Fix with: ` +
+          `pnpm add -g opencode-ai@latest (or use --simulate for testing only). Raw: ${msg}`,
+      );
+    }
+    throw error;
+  }
+}
+
 // CLI execution
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const options = parseCLIArgs();
+  const simulate = process.argv.slice(2).includes('--simulate');
 
   if (!options.prompt) {
     console.error(
-      'Usage: npx tsx src/llm-call-wrapper.ts --prompt "..." [--model "..."] [--profile ultra|lleno|lite|simple]',
+      'Usage: npx tsx src/llm-call-wrapper.ts --prompt "..." [--model "..."] [--profile ultra|lleno|lite|simple] [--simulate]',
     );
     process.exit(1);
   }
 
-  wrapLLMCall(simulatedLLMCall, options.prompt, options as LLMCallOptions)
+  const backend: LLMFunction = simulate ? simulatedLLMCall : opencodeLLMCall;
+  if (simulate) {
+    console.warn(
+      '[llm-call-wrapper] ⚠ --simulate mode: returning SIMULATED response (testing only, not a real LLM call)',
+    );
+  }
+
+  wrapLLMCall(backend, options.prompt, options as LLMCallOptions)
     .then((result) => {
       if (options.json) {
         console.log(JSON.stringify(result, null, 2));

@@ -767,6 +767,12 @@ Examples:
   npx tsx src/token-optimization-orchestrator.ts --mode optimize-prompt --input "Long prompt..."
   npx tsx src/token-optimization-orchestrator.ts --mode optimize-response --input "Long response..." --level chat-compact
   npx tsx src/token-optimization-orchestrator.ts --mode pipeline --input "Create a function..." --skill typescript
+
+Note:
+  The "process" stage of --mode pipeline uses a SIMULATED LLM response.
+  This mode benchmarks the compression pipeline and measures token savings
+  WITHOUT making real LLM calls. For real LLM calls use the LLM Call Wrapper:
+    npx tsx src/llm-call-wrapper.ts --prompt "..." [--model "..."]
 `);
 }
 
@@ -1014,6 +1020,11 @@ async function main(): Promise<void> {
 
     case 'pipeline':
     default: {
+      if (!quietFlag) {
+        console.warn(
+          '[token-optimization] ℹ Mode "pipeline" uses a SIMULATED LLM response — benchmarks the compression pipeline without real LLM calls. Use src/llm-call-wrapper.ts for real calls.',
+        );
+      }
       const pipelineInput: PipelineInput = {
         prompt: input,
         context,

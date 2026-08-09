@@ -297,45 +297,67 @@ export class DependencySecurityEnforcer {
   }
 
   /**
-   * Apply security policy remediations
+   * Apply security policy remediations.
+   * DRY-RUN by default (prints commands without executing). Pass { apply: true }
+   * to actually execute remediation commands.
    * @param issues Issues that need remediation
+   * @param options { apply?: boolean } — apply:true executes, otherwise dry-run
    * @returns Remediation results
    */
-  async applyRemediations(issues: any[]): Promise<{
+  async applyRemediations(
+    issues: any[],
+    options: { apply?: boolean } = {},
+  ): Promise<{
     success: boolean;
     applied: string[];
     failed: string[];
+    dryRun: boolean;
   }> {
+    const dryRun = options.apply !== true;
     const applied: string[] = [];
     const failed: string[] = [];
 
-    console.log('Applying security policy remediations...\n');
+    console.log(
+      `Applying security policy remediations${dryRun ? ' (DRY-RUN — no changes applied)' : ''}...\n`,
+    );
+
+    // Commands that are safe to run automatically. Package removals require
+    // explicit package names, so those policies run inspection commands instead
+    // of destructive removal.
+    const remediationCommands: Record<string, string> = {
+      'vulnerability-scan': 'pnpm audit fix',
+      'security-updates': 'pnpm update',
+      'deprecated-packages': 'pnpm outdated --json',
+      'unused-dependencies': 'pnpm ls --depth 0',
+    };
 
     for (const issue of issues) {
       try {
-        console.log(`Applying remediation for: ${issue.policy}`);
-
-        // In a real implementation, this would execute remediation commands
-        // For now, we'll just simulate
-        switch (issue.policy) {
-          case 'vulnerability-scan':
-            console.log('  Running: pnpm audit fix');
-            break;
-          case 'security-updates':
-            console.log('  Running: pnpm update');
-            break;
-          case 'deprecated-packages':
-            console.log('  Running: pnpm remove <deprecated-package>');
-            break;
-          case 'unused-dependencies':
-            console.log('  Running: pnpm remove <unused-package>');
-            break;
-          default:
-            console.log('  No specific remediation for this policy');
+        const cmd = remediationCommands[issue.policy];
+        if (!cmd) {
+          console.log(`  No specific remediation for policy: ${issue.policy}`);
+          applied.push(issue.policy);
+          continue;
         }
 
-        applied.push(issue.policy);
-        console.log(`  Applied: ${issue.policy}\n`);
+        console.log(`  ${dryRun ? '[DRY-RUN] would run' : 'Running'}: ${cmd}`);
+        if (dryRun) {
+          applied.push(issue.policy);
+          continue;
+        }
+
+        const result = runSyncShell(cmd, {
+          stdio: ['pipe', 'pipe', 'pipe'],
+          timeout: 120_000,
+        });
+        if (result.status === 0) {
+          applied.push(issue.policy);
+          console.log(`  Applied: ${issue.policy}\n`);
+        } else {
+          throw new Error(
+            `command failed (exit ${result.status}): ${(result.stderr ?? '').slice(0, 200)}`,
+          );
+        }
       } catch (error) {
         failed.push(issue.policy);
         console.log(`  Failed: ${issue.policy} - ${error}\n`);
@@ -346,6 +368,7 @@ export class DependencySecurityEnforcer {
       success: failed.length === 0,
       applied,
       failed,
+      dryRun,
     };
   }
 

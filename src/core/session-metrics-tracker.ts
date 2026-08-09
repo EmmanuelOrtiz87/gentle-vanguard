@@ -275,6 +275,11 @@ export function getAllLiveMetrics(): {
   totalFeedbackUp: number;
   totalFeedbackDown: number;
   avgLatency: number;
+  p50Latency: number;
+  p95Latency: number;
+  sloCompliance: number;
+  sloViolations: number;
+  sloTotal: number;
   sessions: string[];
 } {
   const metrics: SessionMetrics[] = [];
@@ -292,6 +297,24 @@ export function getAllLiveMetrics(): {
     }
   }
 
+  // Recolectar todas las latencias de turnos para percentiles reales y SLO
+  const allLatencies: number[] = [];
+  for (const m of metrics) {
+    for (const t of m.turns ?? []) {
+      if (typeof t.latencyMs === 'number' && t.latencyMs >= 0) allLatencies.push(t.latencyMs);
+    }
+  }
+  const sorted = [...allLatencies].sort((a, b) => a - b);
+  const pct = (p: number): number => {
+    if (sorted.length === 0) return 0;
+    const idx = Math.min(sorted.length - 1, Math.ceil((p / 100) * sorted.length) - 1);
+    return sorted[Math.max(0, idx)];
+  };
+
+  const SLO_THRESHOLD_MS = 5000; // mismo umbral que getSLOCompliance()
+  const sloViolations = allLatencies.filter((l) => l > SLO_THRESHOLD_MS).length;
+  const sloTotal = allLatencies.length;
+
   return {
     totalTokens: metrics.reduce((sum, m) => sum + m.totalTokens, 0),
     totalCost: metrics.reduce((sum, m) => sum + m.totalCost, 0),
@@ -300,6 +323,11 @@ export function getAllLiveMetrics(): {
     totalFeedbackDown: metrics.reduce((sum, m) => sum + m.feedbackDown, 0),
     avgLatency:
       metrics.length > 0 ? metrics.reduce((sum, m) => sum + m.avgLatency, 0) / metrics.length : 0,
+    p50Latency: pct(50),
+    p95Latency: pct(95),
+    sloCompliance: sloTotal > 0 ? Math.round(((sloTotal - sloViolations) / sloTotal) * 100) : 100,
+    sloViolations,
+    sloTotal,
     sessions: metrics.map((m) => m.sessionId),
   };
 }

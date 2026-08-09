@@ -83,14 +83,22 @@ function detectType(values: unknown[]): ColumnInfo['type'] {
   const nonNull = values.filter((v) => v !== null && v !== undefined && v !== '');
   if (nonNull.length === 0) return 'text';
 
+  // Datetime detection FIRST: parseable dates that are NOT pure numbers.
+  // (e.g. "2026-08-01", "2026/08/01 10:30", "08/01/2026").
+  // Pure numbers ("42", "2026") stay numeric — Date.parse accepts them, so we
+  // exclude anything Number() accepts before testing date parseability.
+  const asDates = nonNull.filter((v) => {
+    const s = String(v).trim();
+    if (s === '' || !isNaN(Number(s))) return false;
+    return !isNaN(Date.parse(s));
+  });
+  if (asDates.length / nonNull.length > 0.9) {
+    return 'datetime';
+  }
+
   // Check numeric
   const numeric = nonNull.filter((v) => !isNaN(Number(v)));
   if (numeric.length / nonNull.length > 0.9) {
-    // Check if it's a date
-    const asDates = nonNull.filter((v) => !isNaN(Date.parse(String(v))));
-    if (asDates.length / nonNull.length > 0.9 && String(nonNull[0]).includes('-')) {
-      return 'datetime';
-    }
     return 'numeric';
   }
 
@@ -508,8 +516,8 @@ Data Analyst
 Commands:
   describe <file>                   - Summary statistics
   correlate <file> --target <col> - Correlation analysis  
-  trend <file> --date <col>         - Time series analysis (not implemented)
-  segment <file> --by <col>         - Grouped summary (not implemented)
+  trend <file> --date <col>         - Time series analysis (daily aggregation)
+  segment <file> --by <col>         - Grouped summary by segment
   anomalies <file> --column <col>    - Find outliers
   query <sql>                       - Query Nexus database
 
@@ -554,6 +562,18 @@ Supported: CSV, JSON
         result = cmdAnomalies(dataset, col);
         break;
       }
+      case 'trend': {
+        const dateIndex = args.indexOf('--date');
+        const dateCol = dateIndex > -1 ? args[dateIndex + 1] : dataset.headers[0];
+        result = cmdTrend(dataset, dateCol);
+        break;
+      }
+      case 'segment': {
+        const byIndex = args.indexOf('--by');
+        const byCol = byIndex > -1 ? args[byIndex + 1] : dataset.headers[0];
+        result = cmdSegment(dataset, byCol);
+        break;
+      }
       default:
         result = cmdDescribe(dataset);
     }
@@ -566,6 +586,186 @@ Supported: CSV, JSON
   }
 }
 
+// ─── Trend (time series) ──────────────────────────────────────────────
+
+function normalizeDateKey(value: unknown): string | null {
+  if (value === null || value === undefined || value === '') return null;
+  const str = String(value).trim();
+  const d = new Date(str);
+  if (isNaN(d.getTime())) return null;
+  // Normalize to YYYY-MM-DD (day granularity)
+  return d.toISOString().slice(0, 10);
+}
+
+function cmdTrend(dataset: Dataset, dateCol: string): AnalysisResult {  const base = cmdDescribe(dataset);
+  const dateIndex = dataset.headers.indexOf(dateCol);
+
+  if (dateIndex === -1 || dataset.columnTypes[dateCol] !== 'datetime') {
+    return {
+      ...base,
+      insights: [
+        {
+          type: 'trend',
+          description: `Column "${dateCol}" is not a valid datetime column — trend analysis requires a date column`,
+          confidence: 1.0,
+        },
+      ],
+      summary: `Trend not computed: "${dateCol}" is not datetime`,
+    };
+  }
+
+  // Identify numeric columns (excluding the date column itself)
+  const numericCols = dataset.headers.filter(
+    (h) => h !== dateCol && dataset.columnTypes[h] === 'numeric',
+  );
+
+  // Group rows by normalized day
+  const groups = new Map<string, unknown[][]>();
+  for (const row of dataset.rows) {
+    const key = normalizeDateKey(row[dateIndex]);
+    if (key === null) continue;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key)!.push(row);
+  }
+
+  if (groups.size === 0) {
+    return {
+      ...base,
+      insights: [
+        {
+          type: 'trend',
+          description: `No valid dates found in "${dateCol}"`,
+          confidence: 1.0,
+        },
+      ],
+      summary: `Trend not computed: no valid dates in "${dateCol}"`,
+    };
+  }
+
+  const sortedKeys = [...groups.keys()].sort();
+  const series = sortedKeys.map((date) => {
+    const rows = groups.get(date)!;
+    const point: Record<string, unknown> = { date, count: rows.length };
+    for (const col of numericCols) {
+      const vals = rows
+        .map((r) => r[dataset.headers.indexOf(col)])
+        .filter((v) => v !== null && v !== undefined && v !== '' && !isNaN(Number(v)))
+        .map(Number);
+      if (vals.length > 0) {
+        point[`${col}.mean`] = vals.reduce((a, b) => a + b, 0) / vals.length;
+        point[`${col}.min`] = Math.min(...vals);
+        point[`${col}.max`] = Math.max(...vals);
+      }
+    }
+    return point;
+  });
+
+  // Trend direction insight from first vs last mean of the first numeric column
+  const insights: DataInsight[] = [
+    {
+      type: 'trend',
+      description: `${sortedKeys.length} time points analyzed from ${sortedKeys[0]} to ${sortedKeys[sortedKeys.length - 1]}`,
+      confidence: 0.9,
+      data: series,
+    },
+  ];
+  const firstNumeric = numericCols[0];
+  if (firstNumeric && series.length >= 2) {
+    const firstVal = series[0][`${firstNumeric}.mean`] as number | undefined;
+    const lastVal = series[series.length - 1][`${firstNumeric}.mean`] as number | undefined;
+    if (firstVal !== undefined && lastVal !== undefined) {
+      const pct = firstVal !== 0 ? ((lastVal - firstVal) / Math.abs(firstVal)) * 100 : 0;
+      const direction = pct > 0 ? 'upward' : pct < 0 ? 'downward' : 'flat';
+      insights.push({
+        type: 'trend',
+        description: `"${firstNumeric}" trend is ${direction} (${pct >= 0 ? '+' : ''}${pct.toFixed(1)}% from first to last point)`,
+        confidence: 0.75,
+        data: { first: firstVal, last: lastVal, changePct: pct },
+      });
+    }
+  }
+
+  return {
+    ...base,
+    insights,
+    summary: `Trend over ${sortedKeys.length} days — ${numericCols.length} numeric series`,
+  };
+}
+
+// ─── Segment (grouped summary) ────────────────────────────────────────
+
+function cmdSegment(dataset: Dataset, byCol: string): AnalysisResult {
+  const base = cmdDescribe(dataset);
+  const byIndex = dataset.headers.indexOf(byCol);
+
+  if (byIndex === -1) {
+    return {
+      ...base,
+      insights: [
+        {
+          type: 'statistical',
+          description: `Column "${byCol}" not found — available: ${dataset.headers.join(', ')}`,
+          confidence: 1.0,
+        },
+      ],
+      summary: `Segment not computed: "${byCol}" not found`,
+    };
+  }
+
+  const numericCols = dataset.headers.filter(
+    (h) => h !== byCol && dataset.columnTypes[h] === 'numeric',
+  );
+
+  // Group rows by segment value
+  const groups = new Map<string, unknown[][]>();
+  for (const row of dataset.rows) {
+    const key = String(row[byIndex] ?? '(empty)');
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key)!.push(row);
+  }
+
+  const segments = [...groups.entries()].map(([segment, rows]) => {
+    const entry: Record<string, unknown> = { segment, count: rows.length };
+    for (const col of numericCols) {
+      const vals = rows
+        .map((r) => r[dataset.headers.indexOf(col)])
+        .filter((v) => v !== null && v !== undefined && v !== '' && !isNaN(Number(v)))
+        .map(Number);
+      if (vals.length > 0) {
+        entry[`${col}.mean`] = vals.reduce((a, b) => a + b, 0) / vals.length;
+        entry[`${col}.min`] = Math.min(...vals);
+        entry[`${col}.max`] = Math.max(...vals);
+      }
+    }
+    return entry;
+  });
+
+  // Dominant segment insight
+  const insights: DataInsight[] = [
+    {
+      type: 'statistical',
+      description: `${segments.length} segments by "${byCol}"`,
+      confidence: 0.9,
+      data: segments,
+    },
+  ];
+  const sorted = [...segments].sort((a, b) => Number(b.count) - Number(a.count));
+  if (sorted.length > 0) {
+    insights.push({
+      type: 'statistical',
+      description: `Dominant segment: "${String(sorted[0].segment)}" (${sorted[0].count} rows, ${((Number(sorted[0].count) / dataset.rows.length) * 100).toFixed(1)}% of total)`,
+      confidence: 0.9,
+      data: sorted[0],
+    });
+  }
+
+  return {
+    ...base,
+    insights,
+    summary: `${segments.length} segments by "${byCol}" across ${dataset.rows.length} rows`,
+  };
+}
+
 // Run if called directly
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch(console.error);
@@ -574,6 +774,8 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
 export {
   cmdDescribe,
   cmdCorrelate,
+  cmdTrend,
+  cmdSegment,
   cmdAnomalies,
   parseCsv,
   parseJson,

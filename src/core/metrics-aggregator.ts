@@ -152,8 +152,10 @@ export function getAggregatedDashboardMetrics(): AggregatedMetrics {
   // Calcular latencia
   const avgLatency = liveMetrics.avgLatency;
 
-  // SLO compliance simple (placeholder, se puede mejorar)
-  const sloCompliance = avgLatency > 0 ? Math.max(0, 100 - avgLatency / 100) : 100;
+  // SLO compliance real: violaciones de latencia (>5s) desde los turnos del tracker
+  const sloCompliance = liveMetrics.sloCompliance ?? 100;
+  const sloViolations = liveMetrics.sloViolations ?? 0;
+  const sloTotal = liveMetrics.sloTotal ?? 0;
 
   // Construir historial para gráficas
   const history = buildHistory(sessions, costData);
@@ -180,12 +182,12 @@ export function getAggregatedDashboardMetrics(): AggregatedMetrics {
     feedbackTotal: feedbackUp + feedbackDown,
 
     avgLatency,
-    p50Latency: avgLatency * 0.9, // Aproximación
-    p95Latency: avgLatency * 1.5, // Aproximación
+    p50Latency: liveMetrics.p50Latency ?? avgLatency * 0.9, // percentil real si está disponible
+    p95Latency: liveMetrics.p95Latency ?? avgLatency * 1.5,
 
     sloCompliance,
-    sloViolations: 0,
-    sloTotal: 0,
+    sloViolations,
+    sloTotal,
 
     sessions,
     history,
