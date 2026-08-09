@@ -245,6 +245,7 @@
     "web:map": "npx tsx src/web-crawler-cli.ts map",
     "web:status": "npx tsx src/web-crawler-cli.ts health",
     "web:select": "npx tsx src/web-research-select.ts",
+    "delegate:run": "npx tsx src/route-and-delegate.ts",
     "animation:create": "npx tsx src/animations/cli.ts create",
     "animation:analyze": "npx tsx src/animations/cli.ts analyze",
     "trends:fetch": "npx tsx src/research-trends-cli.ts fetch",

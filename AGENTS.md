@@ -390,7 +390,25 @@ npx tsx src/web-crawler-cli.ts scrape --url https://example.com
 npx tsx src/web-crawler-cli.ts health
 ```
 
-Tests: `tests/unit/web-crawler.test.ts` (13).
+Tests: `tests/unit/web-crawler.test.ts` (14).
+
+### Web Research Select (`src/web-research-select.ts`)
+
+Pipeline de **búsqueda → selección por relevancia** para research: busca con el web-crawler (cadena
+de proveedores), gradea los resultados con BM25 (retrieval-grader, patrón CRAG) y persiste el
+mejor subconjunto en `.session/web-research/<slug>.json`.
+
+```bash
+npm run web:select -- --query "customer retention strategies" --limit 5
+npm run web:select -- --query "GDPR breach notification" --deep        # scrape + grade full markdown (cap 20K chars)
+npm run web:select -- --query "..." --deep-limit 3                      # top-N candidatos a scrapear
+```
+
+- Modo snippet: gradea títulos + snippets del buscador (rápido, cero scraping).
+- Modo `--deep`: scrapea los top-N candidatos y reemplaza el score del snippet con `deepScore`
+  sobre el markdown completo — más preciso para research profundo.
+- `averageScore` en el output; resultados ordenados desc. Verdict `relevant` si avg ≥ umbral.
+- Tests: `tests/unit/web-crawler.test.ts` (14, incluye DDG redirect decode).
 
 ### witr trace (`src/witr-wrapper.ts` + `src/witr-cli.ts`)
 
@@ -677,9 +695,25 @@ Cuando un agente reporta "maximum steps reached", el orquestador:
 
 - `src/adaptive-steps.ts` — Motor de estimación y escalado
 - `src/recommend-agent.ts` — Bridge de auto-asignación con routing table
+- `src/route-and-delegate.ts` — Delegador multi-dominio cross-platform (recomienda agente + delega con tiering)
 - `.session/routing/routing-table.json` — Tabla de aprendizaje (creada automáticamente)
 - `opencode.json` — Configuración de steps por agente
 - `src/auto-ps1-fixer.ts` — Herramienta para migración PS1→TS
+
+### Delegación Multi-Dominio (`src/route-and-delegate.ts`)
+
+Recomienda el agente nativo adecuado para una petición y delega con el tiering de
+`config/model-router.json` aplicado (`AGENT_TEMPERATURE`):
+
+```bash
+# Recomendar agente + delegar con contexto (cross-platform: npx.cmd en Windows, shellQuote en Unix)
+npm run delegate:run -- --task "build a revenue forecast"
+npm run delegate:run -- --task "audit gdpr compliance" --context "..." --topn 3
+```
+
+- Internamente usa `recommend-agent.ts` (STATIC_MAP 8 dominios de negocio + keywords negocio-primero + routing table aprendida)
+- Inyecta `AGENT_TEMPERATURE` desde el tier del dominio (M6 tiering aplicado)
+- Reporte de validación: `reports/delegation-validation-report.md`
 
 ### Integración en el Orquestador
 
