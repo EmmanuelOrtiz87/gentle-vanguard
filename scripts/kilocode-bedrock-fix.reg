@@ -1,0 +1,18 @@
+Windows Registry Editor Version 5.00
+
+; KiloCode Bedrock Fix - Registry Configuration
+; Purpose: Set environment variables system-wide for LiteLLM compatibility
+; Warning: Only import this file if you understand the changes
+
+; Set LITELLM_DROP_PARAMS for all processes
+[HKEY_CURRENT_USER\Environment]
+"LITELLM_DROP_PARAMS"="true"
+"LITELLM_CONFIG_PATH"="%USERPROFILE%\\.config\\litellm\\config.yaml"
+
+; Optional: Set for VSCode specifically
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders]
+
+; Note: After importing, you need to:
+; 1. Log out and log back in, OR
+; 2. Restart your computer
+; for the changes to take full effect
