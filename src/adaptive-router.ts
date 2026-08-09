@@ -118,6 +118,77 @@ interface CorrectionEntry {
   resolution?: string;
 }
 
+// ─── Seed: cold-start domain routing (17 domains + 10 high-priority overrides) ──
+
+/**
+ * Baseline domains per AGENTS.md routing-table learnable: 17 pre-configured
+ * domains mapping to the agent with native capacity. Used on cold start so
+ * recommend-agent never falls back to static-fallback (confidence 0.3).
+ */
+const SEED_DOMAINS: Array<{ domain: string; bestAgent: string; confidence: number }> = [
+  { domain: 'requirements', bestAgent: 'sdd-explore', confidence: 0.7 },
+  { domain: 'architecture', bestAgent: 'sdd-design', confidence: 0.7 },
+  { domain: 'implementation', bestAgent: 'sdd-apply', confidence: 0.75 },
+  { domain: 'code-apply', bestAgent: 'sdd-apply', confidence: 0.75 },
+  { domain: 'testing', bestAgent: 'sdd-verify', confidence: 0.7 },
+  { domain: 'code-review', bestAgent: 'sdd-verify', confidence: 0.7 },
+  { domain: 'docs', bestAgent: 'doc-agent', confidence: 0.65 },
+  { domain: 'ops', bestAgent: 'ops-agent', confidence: 0.65 },
+  { domain: 'security', bestAgent: 'gov-agent', confidence: 0.7 },
+  { domain: 'governance', bestAgent: 'gov-agent', confidence: 0.7 },
+  { domain: 'session', bestAgent: 'session-agent', confidence: 0.6 },
+  { domain: 'marketing', bestAgent: 'mkt-agent', confidence: 0.7 },
+  { domain: 'sales', bestAgent: 'sales-agent', confidence: 0.7 },
+  { domain: 'finance', bestAgent: 'finance-agent', confidence: 0.7 },
+  { domain: 'hr', bestAgent: 'hr-agent', confidence: 0.7 },
+  { domain: 'legal', bestAgent: 'legal-agent', confidence: 0.7 },
+  { domain: 'business-telemetry', bestAgent: 'bus-tele-agent', confidence: 0.7 },
+  { domain: 'gitflow', bestAgent: 'gitflow-agent', confidence: 0.7 },
+  { domain: 'knowledge', bestAgent: 'knowledge-agent', confidence: 0.65 },
+  { domain: 'sia', bestAgent: 'sia-agent', confidence: 0.7 },
+];
+
+/**
+ * High-priority overrides per AGENTS.md: 10 patterns that should always route
+ * to a specific agent regardless of learned history.
+ */
+const SEED_OVERRIDES: Array<{ domainPattern: string; targetAgent: string; reason: string; confidence: number }> = [
+  { domainPattern: 'security audit', targetAgent: 'gov-agent', reason: 'High-priority: security audit', confidence: 0.9 },
+  { domainPattern: 'code review', targetAgent: 'sdd-verify', reason: 'High-priority: code review', confidence: 0.9 },
+  { domainPattern: 'bug', targetAgent: 'sdd-apply', reason: 'High-priority: bug fix', confidence: 0.8 },
+  { domainPattern: 'gdpr', targetAgent: 'legal-agent', reason: 'High-priority: compliance', confidence: 0.9 },
+  { domainPattern: 'compliance', targetAgent: 'legal-agent', reason: 'High-priority: compliance', confidence: 0.85 },
+  { domainPattern: 'forecast', targetAgent: 'finance-agent', reason: 'High-priority: financial modeling', confidence: 0.85 },
+  { domainPattern: 'revenue', targetAgent: 'finance-agent', reason: 'High-priority: financial modeling', confidence: 0.85 },
+  { domainPattern: 'job description', targetAgent: 'hr-agent', reason: 'High-priority: hiring', confidence: 0.85 },
+  { domainPattern: 'campaign', targetAgent: 'mkt-agent', reason: 'High-priority: marketing campaign', confidence: 0.85 },
+  { domainPattern: 'sales pipeline', targetAgent: 'sales-agent', reason: 'High-priority: sales pipeline', confidence: 0.8 },
+];
+
+function buildSeedDomains(): DomainEntry[] {
+  return SEED_DOMAINS.map((s) => ({
+    domain: s.domain,
+    bestAgent: s.bestAgent,
+    alternatives: [],
+    totalAttempts: 0,
+    avgSuccessRate: s.confidence,
+    confidence: s.confidence,
+    lastRouted: null,
+  }));
+}
+
+function buildSeedOverrides(): RoutingOverride[] {
+  const now_ = now();
+  return SEED_OVERRIDES.map((s) => ({
+    domainPattern: s.domainPattern,
+    targetAgent: s.targetAgent,
+    reason: s.reason,
+    confidence: s.confidence,
+    appliedAt: now_,
+    expiresAt: new Date(Date.now() + 30 * 86400000).toISOString(),
+  }));
+}
+
 // ─── Constants ────────────────────────────────────────────────────────
 
 const ROOT = resolve(process.cwd());
@@ -210,9 +281,68 @@ function collectSkillUsage(log: Logger): SkillMetric[] {
   }
   const files = readdirSync(SKILL_USAGE_DIR).filter((f) => f.endsWith('.json'));
   const metrics: SkillMetric[] = [];
+
   for (const f of files) {
-    const m = loadJson<SkillMetric>(join(SKILL_USAGE_DIR, f), null as unknown as SkillMetric);
-    if (m) metrics.push(m);
+    const raw = loadJson<unknown>(join(SKILL_USAGE_DIR, f), null);
+    if (!raw) continue;
+
+    // Format A: array of usage records — emitted by src/agents/domain-agent-core.ts
+    // [{ agent, domain, timestamp, task, flags: [{severity, advisory?}], ... }]
+    if (Array.isArray(raw)) {
+      const byAgent = new Map<
+        string,
+        { useCount: number; criticalFlags: number; lastOutcome: string | null }
+      >();
+      for (const rec of raw) {
+        const r = rec as Record<string, unknown>;
+        const agent = (r.agent as string) || (r.skillName as string) || f.replace('.json', '');
+        if (!agent) continue;
+        const entry = byAgent.get(agent) || { useCount: 0, criticalFlags: 0, lastOutcome: null };
+        entry.useCount++;
+        const flags = (r.flags as Array<{ severity?: string; advisory?: boolean; message?: string }>) || [];
+        // Non-advisory critical flags are real failures. Advisory flags are
+        // domain design-time notices (e.g. legal escalate-to-counsel) and must
+        // not penalize the agent's success rate. A flag is advisory if it
+        // carries the advisory flag OR its message self-identifies as advisory
+        // (covers legacy records written before the field existed).
+        if (
+          flags.some(
+            (fl) =>
+              fl?.severity === 'critical' &&
+              !fl?.advisory &&
+              !(fl?.message || '').toLowerCase().includes('advisory'),
+          )
+        ) {
+          entry.criticalFlags++;
+        }
+        if (r.timestamp as string) entry.lastOutcome = (r.timestamp as string) || entry.lastOutcome;
+        byAgent.set(agent, entry);
+      }
+      for (const [agent, e] of byAgent) {
+        metrics.push({
+          skillName: agent,
+          useCount: e.useCount,
+          failureCount: e.criticalFlags,
+          successRate: e.useCount > 0 ? (e.useCount - e.criticalFlags) / e.useCount : 0,
+          avgTokensUsed: 0,
+          lastOutcome: e.lastOutcome,
+        });
+      }
+      continue;
+    }
+
+    // Format B: single SkillMetric object { skillName, useCount, failureCount, ... }
+    const obj = raw as Partial<SkillMetric>;
+    const skillName = obj.skillName || f.replace('.json', '');
+    if (!skillName) continue;
+    metrics.push({
+      skillName,
+      useCount: obj.useCount || 1,
+      failureCount: obj.failureCount || 0,
+      successRate: obj.successRate ?? 1,
+      avgTokensUsed: obj.avgTokensUsed || 0,
+      lastOutcome: obj.lastOutcome || null,
+    });
   }
   log(`  Skill usage records: ${metrics.length}`);
   return metrics;
@@ -239,6 +369,36 @@ function collectDelegations(log: Logger): DelegationRecord[] {
         duration: avgDuration,
         timestamp: lastEvent || now(),
       });
+    }
+  }
+
+  // Fallback: derive delegations from skill-usage arrays (domain agents)
+  // when metrics-report.json is absent or empty. Each usage record that has
+  // an agent + domain counts as one (successful) delegation, giving the
+  // adaptive router real execution history on cold start.
+  if (delegations.length === 0 && existsSync(SKILL_USAGE_DIR)) {
+    for (const f of readdirSync(SKILL_USAGE_DIR).filter((x) => x.endsWith('.json'))) {
+      const raw = loadJson<unknown>(join(SKILL_USAGE_DIR, f), null);
+      if (!Array.isArray(raw)) continue;
+      for (const rec of raw) {
+        const r = rec as Record<string, unknown>;
+        const agent = (r.agent as string) || f.replace('.json', '');
+        const domain = (r.domain as string) || 'general';
+        const flags = (r.flags as Array<{ severity?: string; advisory?: boolean; message?: string }>) || [];
+        const hasCritical = flags.some(
+          (fl) =>
+            fl?.severity === 'critical' &&
+            !fl?.advisory &&
+            !(fl?.message || '').toLowerCase().includes('advisory'),
+        );
+        delegations.push({
+          agent,
+          domain,
+          success: !hasCritical,
+          duration: 0,
+          timestamp: (r.timestamp as string) || now(),
+        });
+      }
     }
   }
 
@@ -386,6 +546,12 @@ function computeAgentPerformance(
       lastEvent: null,
       confidence: 0,
     };
+
+    // A delegation with a specific domain upgrades the agent's domain,
+    // overriding the 'general' default assigned from skill-usage metrics.
+    if (d.domain && d.domain !== 'general' && existing.domain === 'general') {
+      existing.domain = d.domain;
+    }
 
     existing.totalDelegations++;
     if (d.success) existing.successes++;
@@ -549,9 +715,18 @@ function buildRoutingTable(config: typeof DEFAULT_CONFIG, log: Logger): RoutingT
   const existingTable = loadJson<RoutingTable>(ROUTING_TABLE_FILE, null as unknown as RoutingTable);
   const existingOverrides = existingTable?.overrides || [];
 
-  // 4. Build overrides
+  // 3b. Cold-start seed: if no learned domains/overrides yet, seed the baseline
+  // so recommend-agent has confidence > 0.3 from day one.
+  const finalDomainEntries =
+    domainEntries.length > 0 ? domainEntries : buildSeedDomains();
+  const seededOverrides =
+    existingOverrides.length > 0 ? existingOverrides : buildSeedOverrides();
+  log(`  Effective domains: ${finalDomainEntries.length} (seed: ${domainEntries.length === 0})`);
+  log(`  Effective overrides: ${seededOverrides.length} (seed: ${existingOverrides.length === 0})`);
+
+  // 4. Build overrides (append learned ones on top of seed baseline)
   log('Building routing overrides...');
-  const overrides = buildOverrides(domainEntries, existingOverrides, config);
+  const overrides = buildOverrides(domainEntries, seededOverrides, config);
   log(`  Overrides: ${overrides.length} (max: ${config.maxOverrides})`);
 
   // 5. Assemble table
@@ -559,16 +734,18 @@ function buildRoutingTable(config: typeof DEFAULT_CONFIG, log: Logger): RoutingT
     version: '1.0.0',
     builtAt: now_,
     agentPerformance,
-    domainEntries,
+    domainEntries: finalDomainEntries,
     overrides,
     summary: {
       totalAgents: agentPerformance.length,
-      totalDomains: domainEntries.length,
+      totalDomains: finalDomainEntries.length,
       totalOverrides: overrides.length,
       overallConfidence:
-        domainEntries.length > 0
+        finalDomainEntries.length > 0
           ? Math.round(
-              (domainEntries.reduce((s, d) => s + d.confidence, 0) / domainEntries.length) * 100,
+              (finalDomainEntries.reduce((s, d) => s + d.confidence, 0) /
+                finalDomainEntries.length) *
+                100,
             ) / 100
           : 0,
     },

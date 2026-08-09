@@ -34,6 +34,15 @@ const STATIC_MAP: Record<string, string[]> = {
   security: ['gov-agent', 'legal-agent', 'premortem-agent'],
   governance: ['gov-agent', 'legal-agent', 'doc-agent'],
   session: ['session-agent', 'maintenance-agent', 'sdd-verify'],
+  // Business domains (native agents — cold-start map)
+  marketing: ['mkt-agent', 'sales-agent', 'bus-tele-agent'],
+  sales: ['sales-agent', 'mkt-agent', 'finance-agent'],
+  finance: ['finance-agent', 'bus-tele-agent', 'sales-agent'],
+  legal: ['legal-agent', 'gov-agent', 'doc-agent'],
+  hr: ['hr-agent', 'finance-agent', 'legal-agent'],
+  'business-telemetry': ['bus-tele-agent', 'finance-agent', 'sia-agent'],
+  gitflow: ['gitflow-agent', 'ops-agent', 'self-diag-agent'],
+  sia: ['sia-agent', 'knowledge-agent', 'session-agent'],
   general: ['sdd-apply', 'explore', 'general'],
 };
 
@@ -60,9 +69,104 @@ function loadRoutingTable(): RoutingTable | null {
   }
 }
 
+/**
+ * Escape regex special chars in a keyword.
+ */
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Keyword matching with false-positive protection.
+ * - Keywords <= 3 chars match as WHOLE WORDS only (prevents 'pr' matching
+ *   "product", or 'doc' matching "docker").
+ * - Longer keywords match as substring OR whole word (covers stems like
+ *   "analy" -> analyze/analysis and full words like "campaign").
+ */
+function taskHasKeyword(normalized: string, kw: string): boolean {
+  if (kw.length <= 3) {
+    return new RegExp(`\\b${escapeRegExp(kw)}\\b`).test(normalized);
+  }
+  return normalized.includes(kw) || new RegExp(`\\b${escapeRegExp(kw)}\\b`).test(normalized);
+}
+
 function matchDomain(task: string, domainHint: string): string {
   const normalized = task.toLowerCase();
+  // ORDER IS CRITICAL: business keywords come FIRST because they are more
+  // specific than generic engineering verbs. Without this, "review this
+  // contract" hits 'review'→code-review before 'contract'→legal, and
+  // "analyze conversion metrics" hits 'analy'→requirements before
+  // 'metric'→business-telemetry.
   const pairs: Array<[string, string]> = [
+    // ── Business domains (native agents, highest specificity) ──────────────
+    // marketing
+    ['campaign', 'marketing'],
+    ['marketing', 'marketing'],
+    ['social media', 'marketing'],
+    ['landing', 'marketing'],
+    ['content', 'marketing'],
+    ['blog', 'marketing'],
+    ['advertis', 'marketing'],
+    ['seo', 'marketing'],
+    ['brand', 'marketing'],
+    // sales
+    ['pipeline', 'sales'],
+    ['prospect', 'sales'],
+    ['quote', 'sales'],
+    ['sales', 'sales'],
+    ['deal', 'sales'],
+    ['lead generation', 'sales'],
+    // finance
+    ['revenue', 'finance'],
+    ['forecast', 'finance'],
+    ['financ', 'finance'],
+    ['budget', 'finance'],
+    ['margin', 'finance'],
+    ['churn', 'finance'],
+    ['investor', 'finance'],
+    ['costs', 'finance'],
+    ['pricing', 'finance'],
+    ['expense', 'finance'],
+    // legal
+    ['gdpr', 'legal'],
+    ['legal', 'legal'],
+    ['contract', 'legal'],
+    ['liability', 'legal'],
+    ['compliance', 'governance'],
+    ['regulation', 'legal'],
+    // hr
+    ['hire', 'hr'],
+    ['hiring', 'hr'],
+    ['recruit', 'hr'],
+    ['job', 'hr'],
+    ['interview', 'hr'],
+    ['candidate', 'hr'],
+    ['onboarding', 'hr'],
+    // business-telemetry
+    ['metric', 'business-telemetry'],
+    ['telemetry', 'business-telemetry'],
+    ['analytics', 'business-telemetry'],
+    ['kpi', 'business-telemetry'],
+    ['conversion', 'business-telemetry'],
+    ['business intelligence', 'business-telemetry'],
+    // gitflow
+    ['branch', 'gitflow'],
+    ['commit', 'gitflow'],
+    ['pull', 'gitflow'],
+    ['merge', 'gitflow'],
+    ['rebase', 'gitflow'],
+    ['pr ', 'gitflow'],
+    ['git', 'gitflow'],
+    // sia
+    ['iteration', 'sia'],
+    ['score', 'sia'],
+    ['refine', 'sia'],
+    // ── Engineering domains (generic verbs, lower specificity) ──────────────
+    // Engineering quality (sdd-apply) — BEFORE 'test' so "debug the failing
+    // test" routes to code-apply, not testing.
+    ['debug', 'code-apply'],
+    ['bug', 'code-apply'],
+    ['performance', 'code-apply'],
     ['review', 'code-review'],
     ['refactor', 'code-apply'],
     ['implement', 'code-apply'],
@@ -72,31 +176,39 @@ function matchDomain(task: string, domainHint: string): string {
     ['architect', 'architecture'],
     ['design', 'architecture'],
     ['test', 'testing'],
-    ['doc', 'docs'],
+    ['document', 'docs'],
+    ['docs', 'docs'],
+    ['readme', 'docs'],
     ['deploy', 'ops'],
+    ['docker', 'ops'],
     ['infra', 'ops'],
     ['secur', 'security'],
     ['audit', 'governance'],
-    ['compliance', 'governance'],
     ['session', 'session'],
+    ['roadmap', 'requirements'],
   ];
   if (domainHint) return domainHint;
   for (const [kw, domain] of pairs) {
-    if (normalized.includes(kw)) return domain;
+    if (taskHasKeyword(normalized, kw)) return domain;
   }
   return 'general';
 }
 
 function recommend(task: string, domainHint: string, topN: number): unknown {
+  const normalizedTask = task.toLowerCase();
   const domain = matchDomain(task, domainHint);
   const table = loadRoutingTable();
 
-  // 1. Check overrides (highest priority — learned routing)
+  // 1. Check overrides (highest priority — learned/high-priority routing).
+  //    Overrides are matched against the FULL task text, not the derived
+  //    domain, so "gdpr compliance audit" hits the gdpr→legal override even
+  //    though matchDomain() would classify it as governance.
   if (table?.overrides) {
     for (const o of table.overrides) {
+      const pattern = o.domainPattern.toLowerCase();
       if (
-        domain.toLowerCase().includes(o.domainPattern.toLowerCase()) ||
-        o.domainPattern.toLowerCase().includes(domain.toLowerCase())
+        taskHasKeyword(normalizedTask, pattern) ||
+        taskHasKeyword(domain.toLowerCase(), pattern)
       ) {
         return {
           domain,

@@ -73,8 +73,9 @@ function validateAgents(agents: any): string[] {
     // Validate agent modes
     if ('mode' in agentConfig) {
       const validModes = ['primary', 'subagent'];
-      if (!validModes.includes(agentConfig.mode)) {
-        errors.push(`Agent ${agentName} has invalid mode: ${agentConfig.mode}`);
+      const modeValue = (agentConfig as Record<string, unknown>).mode;
+      if (typeof modeValue === 'string' && !validModes.includes(modeValue)) {
+        errors.push(`Agent ${agentName} has invalid mode: ${modeValue}`);
       }
     }
     
@@ -111,8 +112,9 @@ function validateMCP(mcp: any): string[] {
     // Validate service types
     if ('type' in service) {
       const validTypes = ['local', 'stdio'];
-      if (!validTypes.includes(service.type)) {
-        errors.push(`MCP service ${name} has invalid type: ${service.type}`);
+      const typeValue = (service as Record<string, unknown>).type;
+      if (typeof typeValue === 'string' && !validTypes.includes(typeValue)) {
+        errors.push(`MCP service ${name} has invalid type: ${typeValue}`);
       }
     }
   }

@@ -1,0 +1,147 @@
+{
+  "$schema": "./model-health-schema.json",
+  "version": "3.0.0",
+  "description": "Model Health Registry - Auto-fallback system for intelligent model routing",
+  "lastUpdated": "2026-08-08T12:00:00Z",
+  "healthCheckInterval": 300,
+  "autoFallbackEnabled": true,
+  "notificationOnSwitch": true,
+  "models": {
+    "kimi-2-5": {
+      "provider": "littellmott-nuevo",
+      "tier": "premium",
+      "costPer1kTokens": {
+        "input": 0.002,
+        "output": 0.006
+      },
+      "health": {
+        "status": "unknown",
+        "lastChecked": null,
+        "consecutiveErrors": 0,
+        "avgLatencyMs": null
+      },
+      "fallbackChain": [
+        "opencode/deepseek-v4-flash-free",
+        "ollama/qwen2.5-coder:14b"
+      ],
+      "capabilities": [
+        "code",
+        "reasoning",
+        "long-context"
+      ],
+      "maxTokens": 128000
+    },
+    "opencode/deepseek-v4-flash-free": {
+      "provider": "opencode",
+      "tier": "free",
+      "costPer1kTokens": {
+        "input": 0,
+        "output": 0
+      },
+      "health": {
+        "status": "available",
+        "lastChecked": "2026-08-08T12:00:00Z",
+        "consecutiveErrors": 0,
+        "avgLatencyMs": 1200
+      },
+      "fallbackChain": [
+        "ollama/qwen2.5-coder:14b"
+      ],
+      "capabilities": [
+        "code",
+        "chat",
+        "tools"
+      ],
+      "maxTokens": 32000
+    },
+    "ollama/qwen2.5-coder:14b": {
+      "provider": "ollama",
+      "tier": "local",
+      "costPer1kTokens": {
+        "input": 0,
+        "output": 0
+      },
+      "health": {
+        "status": "unknown",
+        "lastChecked": null,
+        "checkEndpoint": "http://localhost:11434/api/tags"
+      },
+      "fallbackChain": [],
+      "capabilities": [
+        "code"
+      ],
+      "maxTokens": 32000,
+      "requiresLocal": true
+    },
+    "claude-haiku-4-5": {
+      "provider": "littellmott-nuevo",
+      "tier": "balanced",
+      "costPer1kTokens": {
+        "input": 0.001,
+        "output": 0.003
+      },
+      "health": {
+        "status": "unknown",
+        "lastChecked": null
+      },
+      "fallbackChain": [
+        "opencode/deepseek-v4-flash-free"
+      ],
+      "capabilities": [
+        "code",
+        "reasoning"
+      ],
+      "maxTokens": 64000
+    }
+  },
+  "routingRules": {
+    "orchestrator": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "fallbackStrategy": "availability",
+      "maxSwitchPerHour": 3
+    },
+    "subagents": {
+      "inheritFromOrchestrator": true,
+      "allowOverride": false,
+      "default": "opencode/deepseek-v4-flash-free"
+    }
+  },
+  "errorPatterns": {
+    "quotaExceeded": [
+      "quota exceeded",
+      "rate limit",
+      "too many requests",
+      "credits exhausted"
+    ],
+    "modelNotFound": [
+      "model not found",
+      "invalid model",
+      "unknown model"
+    ],
+    "timeout": [
+      "timeout",
+      "deadline exceeded",
+      "request timed out"
+    ],
+    "authError": [
+      "unauthorized",
+      "invalid api key",
+      "authentication failed"
+    ]
+  },
+  "fallbackStrategies": {
+    "cost-optimized": [
+      "kimi-2-5",
+      "claude-haiku-4-5",
+      "opencode/deepseek-v4-flash-free"
+    ],
+    "performance": [
+      "kimi-2-5",
+      "claude-haiku-4-5"
+    ],
+    "availability": [
+      "opencode/deepseek-v4-flash-free",
+      "ollama/qwen2.5-coder:14b"
+    ]
+  }
+}

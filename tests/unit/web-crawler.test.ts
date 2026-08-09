@@ -193,7 +193,7 @@ describe('WebCrawlerClient', () => {
     assert.equal(health.status, 'ok');
     assert.equal(health.apiKeyConfigured, false);
     assert.equal(health.fallbackActive, true);
-    assert.equal(health.provider, 'jina-reader+bing');
+    assert.equal(health.provider, 'jina-reader+ddg+bing');
   });
 
   it('health() reports unconfigured when no key and fallback disabled', () => {
@@ -213,6 +213,44 @@ describe('WebCrawlerClient', () => {
     assert.equal(results.length, 2);
     assert.equal(results[0].url, 'https://example.com/1');
     assert.ok(results[0].markdown?.includes('Example Post 1'));
+  });
+
+  it('fallback search parses DuckDuckGo HTML results (redirect decode)', async () => {
+    // Local mock that serves DDG-style HTML so no network is needed.
+    const ddgServer = createServer((_req, res) => {
+      res.setHeader('Content-Type', 'text/html');
+      res.end(
+        '<html><body>' +
+          '<a rel="nofollow" class="result__a" href="//duckduckgo.com/l/?uddg=' +
+          encodeURIComponent('https://example.com/retention-playbook') +
+          '&amp;rut=abc">Customer Retention Playbook</a>' +
+          '<a class="result__snippet" href="//duckduckgo.com/l/?uddg=' +
+          encodeURIComponent('https://example.com/retention-playbook') +
+          '&amp;rut=abc">Strategies to keep customers loyal</a>' +
+          '</body></html>',
+      );
+    });
+    await new Promise<void>((r) => ddgServer.listen(0, '127.0.0.1', r));
+    const addr = ddgServer.address();
+    const port = typeof addr === 'object' && addr ? addr.port : 0;
+    try {
+      const client = new WebCrawlerClient({
+        baseUrl,
+        apiKey: '',
+        cacheEnabled: false,
+        fallbackEnabled: true,
+        ddgSearchUrl: `http://127.0.0.1:${port}/html/`,
+        bingSearchUrl: `http://127.0.0.1:${port}/bing`,
+        maxRetries: 0,
+      });
+      const results = await client.search('customer retention', 1);
+      assert.equal(results.length, 1);
+      assert.equal(results[0].url, 'https://example.com/retention-playbook');
+      assert.ok(results[0].title.includes('Retention'));
+      assert.ok(results[0].description?.includes('loyal'));
+    } finally {
+      ddgServer.close();
+    }
   });
 
   it('scrape returns markdown content', async () => {

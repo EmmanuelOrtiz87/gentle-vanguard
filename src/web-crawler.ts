@@ -125,7 +125,7 @@ export interface HealthResult {
   status: 'ok' | 'degraded' | 'unconfigured';
   apiKeyConfigured: boolean;
   fallbackActive: boolean;
-  provider: 'firecrawl' | 'jina-reader+bing' | 'none';
+  provider: 'firecrawl' | 'jina-reader+ddg+bing' | 'none';
   configFile: boolean;
   cacheDir: boolean;
   enabled: boolean;
@@ -167,6 +167,7 @@ const WebCrawlerConfigSchema = z
     fallbackEnabled: z.boolean().default(true),
     jinaReaderUrl: z.string().url().default('https://r.jina.ai'),
     bingSearchUrl: z.string().url().default('https://www.bing.com/search'),
+    ddgSearchUrl: z.string().url().default('https://html.duckduckgo.com/html/'),
     timeoutMs: z.number().int().positive().default(30000),
     maxRetries: z.number().int().min(0).default(3),
     retryDelayMs: z.number().int().positive().default(1000),
@@ -240,6 +241,14 @@ function decodeXml(input: string): string {
       String.fromCharCode(parseInt(code, 16)),
     )
     .replace(/&amp;/g, '&');
+}
+
+/** Strip HTML tags from a fragment (for DDG snippet/title text). */
+function stripTags(input: string): string {
+  return input
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 function loadConfig(): WebCrawlerConfig {
@@ -561,6 +570,44 @@ export class WebCrawlerClient implements WebCrawler {
     return results;
   }
 
+  /**
+   * DuckDuckGo HTML search — higher quality than Bing RSS for business
+   * queries, still zero-config. Parses the classic HTML endpoint
+   * (html.duckduckgo.com/html/) result blocks.
+   *
+   * DDG hrefs are redirects: //duckduckgo.com/l/?uddg=<encoded-url>&rut=...
+   * We extract the real target from the `uddg` query param.
+   */
+  private async ddgSearch(query: string, limit: number): Promise<SearchResult[]> {
+    if (!this.config.enabled) throw new FirecrawlError('Web crawler disabled in config');
+    await this.throttle();
+    const html = await this.requestPlain(
+      `${this.config.ddgSearchUrl}?q=${encodeURIComponent(query)}`,
+    );
+    const results: SearchResult[] = [];
+    // Each result is a <a rel="nofollow" class="result__a" href="...">Title</a>
+    // followed by <a class="result__snippet" href="...">Description</a>.
+    const anchors = html.match(/<a[^>]+class="result__a"[^>]*>[\s\S]*?<\/a>/g) ?? [];
+    const snippets = html.match(/<a[^>]+class="result__snippet"[^>]*>[\s\S]*?<\/a>/g) ?? [];
+    for (let i = 0; i < anchors.length; i++) {
+      const hrefMatch = anchors[i].match(/href="([^"]+)"/);
+      const titleMatch = anchors[i].match(/>([\s\S]*?)<\/a>/);
+      if (!hrefMatch || !titleMatch) continue;
+      const rawUrl = decodeXml(hrefMatch[1]);
+      // Resolve DDG redirect -> real URL
+      const uddg = rawUrl.match(/[?&]uddg=([^&]+)/);
+      const url = uddg ? decodeURIComponent(uddg[1]) : rawUrl;
+      const title = stripTags(decodeXml(titleMatch[1])).trim();
+      if (!url.startsWith('http') || !title) continue;
+      const snippet = snippets[i]
+        ? stripTags(decodeXml(snippets[i].replace(/<a[^>]+>/, '').replace(/<\/a>/, ''))).trim()
+        : undefined;
+      results.push({ url, title, description: snippet || undefined, metadata: { provider: 'ddg-html' } });
+      if (results.length >= limit) break;
+    }
+    return results;
+  }
+
   // ── Public API ──────────────────────────────────────────────────────────────
 
   /** Search the web and fetch full page content for the top results. */
@@ -571,8 +618,23 @@ export class WebCrawlerClient implements WebCrawler {
     const cached = this.cacheGet<SearchResult[]>(cacheKey);
     if (cached) return cached;
 
-    // Fallback: no Firecrawl API key → Bing HTML search (zero-config).
+    // Fallback: no Firecrawl API key → DuckDuckGo HTML first (better business
+    // relevance than Bing RSS), then Bing RSS as second fallback (zero-config).
     if (this.isFallbackActive()) {
+      try {
+        const ddg = await this.ddgSearch(query, n);
+        if (ddg.length > 0) {
+          this.cacheSet(cacheKey, ddg);
+          this.logUsage(
+            'search:fallback',
+            query,
+            ddg.reduce((a, r) => a + (r.description?.length ?? 0), 0),
+          );
+          return ddg;
+        }
+      } catch {
+        // fall through to Bing RSS
+      }
       const results = await this.bingSearch(query, n);
       this.cacheSet(cacheKey, results);
       this.logUsage(
@@ -828,12 +890,12 @@ export class WebCrawlerClient implements WebCrawler {
         status: cacheDir ? 'ok' : 'degraded',
         apiKeyConfigured,
         fallbackActive: true,
-        provider: 'jina-reader+bing',
+        provider: 'jina-reader+ddg+bing',
         configFile,
         cacheDir,
         enabled: true,
         detail: cacheDir
-          ? 'No API key — fallback activo (Jina Reader + Bing RSS), sin coste'
+          ? 'No API key — fallback activo (Jina Reader scrape + DDG HTML search → Bing RSS), sin coste'
           : 'No API key — fallback activo pero cache directory missing',
       };
     }

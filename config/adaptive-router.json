@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "description": "Adaptive Router Dinámico — dynamic routing layer that learns from historical performance",
   "enabled": true,
-  "minDataPoints": 3,
+  "minDataPoints": 1,
   "minConfidenceForOverride": 0.8,
   "maxOverrides": 20,
   "decayDays": 14,

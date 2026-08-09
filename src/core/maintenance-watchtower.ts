@@ -10,6 +10,7 @@ import {
   getHttpServerTimeouts,
   getExternalApiTimeouts,
 } from './timeout-config';
+import { witr, ensureWitrInstalled } from '../witr-wrapper';
 
 const ROOT = resolve(process.cwd());
 const RUNTIME_DIR = join(ROOT, '.runtime');
@@ -845,6 +846,51 @@ async function checkCloudConnectors() {
   );
 }
 
+// ─── Component: Web Crawler (Firecrawl) ──────────────────────────────────────
+
+async function checkWebCrawler() {
+  if (!quiet) console.log('  [Web Crawler] Checking...');
+
+  const cfgPath = join(ROOT, 'config', 'web-crawler.json');
+  if (!fileExists(cfgPath)) {
+    addResult('web-crawler', 'config file', 'WARN', 'Not found', 'manual');
+    return;
+  }
+  payloadFileOk('web-crawler', 'config file', cfgPath, 'manual', true);
+
+  const healthFile = join(RUNTIME_DIR, 'web-crawler-health.json');
+  if (fileExists(healthFile)) {
+    try {
+      const health = readJson(healthFile);
+      const apiKeySet = !!health.apiKeyConfigured;
+      const fallbackActive = !!health.fallbackActive;
+      const cacheReady = !!health.cacheDir;
+      addResult(
+        'web-crawler',
+        'provider ready',
+        apiKeySet || fallbackActive ? 'PASS' : 'WARN',
+        apiKeySet
+          ? 'Firecrawl configured'
+          : fallbackActive
+            ? 'Fallback activo (Jina Reader + DDG HTML + Bing RSS), sin API key'
+            : 'No provider configured',
+        'manual',
+      );
+      addResult(
+        'web-crawler',
+        'cache directory',
+        cacheReady ? 'PASS' : 'WARN',
+        cacheReady ? 'Ready' : 'Missing',
+        'manual',
+      );
+    } catch {
+      addResult('web-crawler', 'health snapshot', 'FAIL', 'Invalid JSON', 'manual');
+    }
+  } else {
+    addResult('web-crawler', 'health snapshot', 'WARN', 'Not generated yet', 'manual');
+  }
+}
+
 // ─── Component: Tracing ──────────────────────────────────────────────────────
 
 async function checkTracing() {
@@ -1581,6 +1627,7 @@ async function runAllChecks() {
     checkGovernance,
     checkGentleVanguardDb,
     checkModelHealth,
+    checkWebCrawler,
   ];
   // Parallelized with Promise.allSettled — each check is I/O-bound (file reads, HTTP, DB)
   const results = await Promise.allSettled(
@@ -1599,6 +1646,63 @@ async function runAllChecks() {
   }
 }
 
+// ─── Witr Trace Integration ──────────────────────────────────────────────────
+
+/** Well-known ports per component, used when a component reports FAIL/WARN. */
+const COMPONENT_PORTS: Record<string, number[]> = {
+  'dashboard-ws': [8080],
+  codegraph: [3000],
+};
+
+/**
+ * After all checks run, use witr to trace the causal chain of any FAIL/WARN
+ * finding back to its root process. Best-effort: witr is auto-installed on
+ * first use; if it is unavailable the run degrades gracefully.
+ */
+async function traceFindings() {
+  if (quiet) return;
+  const findings = results.filter((r) => r.status === 'FAIL' || r.status === 'WARN');
+  if (findings.length === 0) return;
+
+  if (!ensureWitrInstalled()) {
+    console.log(
+      '  [witr] not available — run scripts/utilities/maintenance/witr-installer.ps1 to enable tracing',
+    );
+    return;
+  }
+
+  const ports = new Set<number>();
+  for (const f of findings) {
+    // Ports named explicitly in the check/detail text (e.g. "HTTP API (port 8080)")
+    const text = `${f.component} ${f.check} ${f.detail}`;
+    const matches = text.matchAll(/port\s+(\d+)/g);
+    for (const m of matches) {
+      const p = parseInt(m[1], 10);
+      if (p > 0 && p <= 65535) ports.add(p);
+    }
+    // Well-known component ports
+    for (const p of COMPONENT_PORTS[f.component] ?? []) ports.add(p);
+  }
+
+  if (ports.size === 0) return;
+  console.log('\n  [witr] tracing causal chain for failing components...');
+  for (const port of ports) {
+    try {
+      const chain = await witr.tracePort(port);
+      const names = chain.causalChain
+        .map((link) => `${link.name} (pid ${link.pid})`)
+        .join(' \u2192 ');
+      console.log(`  [witr] port ${port} \u2192 ${names}`);
+    } catch (e) {
+      if (!quiet) {
+        console.log(
+          `  [witr] trace port ${port} failed: ${e instanceof Error ? e.message : String(e)}`,
+        );
+      }
+    }
+  }
+}
+
 async function main() {
   const opts = parseArgs();
   quiet = opts.quiet;
@@ -1611,11 +1715,13 @@ async function main() {
   switch (opts.action) {
     case 'health':
       await runAllChecks();
+      await traceFindings();
       generateReport(opts.output);
       break;
 
     case 'rebuild':
       await runAllChecks();
+      await traceFindings();
       if (!quiet) console.log('\n  -- Auto-Rebuild Phase --');
       {
         const needsRebuild = results.filter(
@@ -1650,12 +1756,14 @@ async function main() {
 
     case 'autoheal':
       await runAllChecks();
+      await traceFindings();
       await autoHeal();
       generateReport(opts.output);
       break;
 
     case 'all':
       await runAllChecks();
+      await traceFindings();
       await autoHeal();
       if (!quiet) console.log('\n  -- Rebuild Phase --');
       if (
@@ -1685,6 +1793,7 @@ async function main() {
         if (!quiet) console.log(`\n=== Cycle ${cycle} (${new Date().toLocaleTimeString()}) ===`);
         results.length = 0;
         await runAllChecks();
+        await traceFindings();
         await autoHeal();
         generateReport();
         if (!quiet) console.log(`  Next cycle in ${opts.interval}s...`);
@@ -1699,6 +1808,7 @@ async function main() {
 
     case 'report':
       await runAllChecks();
+      await traceFindings();
       generateReport(opts.output);
       break;
 

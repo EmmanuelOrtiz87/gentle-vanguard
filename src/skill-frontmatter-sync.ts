@@ -112,7 +112,7 @@ const SKILL_REGISTRY: Record<string, Partial<SkillInfo>> = {
   },
   'incremental-implementation': {
     description:
-      'Deliver changes incrementally. Break features into small, ordered steps that can be implemented, tested, and verified.',
+      'Deliver changes incrementally. Plan first, then break features into small, ordered steps that can be implemented, tested, and verified.',
     triggers: ['incremental', 'small steps', 'break down', 'step by step', 'iterative'],
   },
   'interview-me': {
@@ -122,8 +122,21 @@ const SKILL_REGISTRY: Record<string, Partial<SkillInfo>> = {
   },
   'planning-and-task-breakdown': {
     description:
-      'Break work into small, ordered tasks from specs or vague requirements. Decompose into implementable units with acceptance criteria.',
-    triggers: ['plan', 'breakdown', 'tasks', 'decompose', 'planning', 'task breakdown'],
+      'Plan before you write. Break work into small, ordered tasks from specs or vague requirements. Decompose into implementable units with acceptance criteria, after a structured pre-write planning phase (scope, approach, risk, breakdown) with decision gates before implementation.',
+    triggers: [
+      'plan',
+      'breakdown',
+      'tasks',
+      'decompose',
+      'planning',
+      'task breakdown',
+      'plan before write',
+      'pre-write planning',
+      'scope definition',
+      'approach analysis',
+      'risk assessment',
+      'decision gate',
+    ],
   },
   'spec-driven-development': {
     description:

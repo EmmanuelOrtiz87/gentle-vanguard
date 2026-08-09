@@ -19,6 +19,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import { join, resolve } from 'path';
 import { runSync } from './core/run-command.js';
 import { pathToFileURL } from 'url';
+import { assertConfigIntegrity } from './self-mutation-guard.js';
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -525,6 +526,21 @@ function applySafeSuggestions(suggestions: Suggestion[], quiet: boolean): string
               'Self-reflection loop — analyze patterns, generate insights, suggest improvements',
           });
           writeFileSync(PIPELINE_CONFIG, JSON.stringify(config, null, 2) + '\n', 'utf-8');
+          // M7: verify the written config is still valid JSON + schema before
+          // accepting the mutation. If the write corrupted the file, the guard
+          // reports it so the change is flagged instead of silently breaking
+          // the pipeline on next session.
+          try {
+            assertConfigIntegrity('config/session-autostart.config.json');
+          } catch (guardErr) {
+            log(
+              `M7 guard FAILED after self-mutation: ${
+                guardErr instanceof Error ? guardErr.message : String(guardErr)
+              }`,
+              quiet,
+              'ERR',
+            );
+          }
           applied.push(`Added self-reflection step to ${s.target}`);
           log(`Applied: ${s.change}`, quiet, 'OK');
         }

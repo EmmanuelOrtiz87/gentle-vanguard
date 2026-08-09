@@ -1,0 +1,66 @@
+{
+  "version": "1.0.0",
+  "name": "research-trends-config",
+  "description": "Last30Days trend aggregation — GitHub, Hacker News, Stack Overflow, Dev.to, Reddit. Powers the web-research skill evolution layer.",
+  "enabled": true,
+  "cacheEnabled": true,
+  "cacheTtlMinutes": 1440,
+  "cacheDir": ".session/trends/cache",
+  "reportDir": ".session/trends",
+  "defaultTimeframe": "7d",
+  "hottestCount": 10,
+  "emergingCount": 10,
+  "fetchTimeoutMs": 20000,
+  "maxRetries": 2,
+  "retryDelayMs": 500,
+  "sources": {
+    "github": {
+      "enabled": true,
+      "apiUrl": "https://api.github.com/search/repositories",
+      "tokenEnv": "GITHUB_TOKEN",
+      "sort": "stars",
+      "order": "desc",
+      "perPage": 25,
+      "minStars": 50
+    },
+    "hackernews": {
+      "enabled": true,
+      "apiUrl": "https://hn.algolia.com/api/v1/search_by_date",
+      "hitsPerPage": 50,
+      "minPoints": 5,
+      "tags": "story"
+    },
+    "stackoverflow": {
+      "enabled": true,
+      "apiUrl": "https://api.stackexchange.com/2.3",
+      "site": "stackoverflow",
+      "pageSize": 20,
+      "tagsPageSize": 10,
+      "minScore": 0
+    },
+    "devto": {
+      "enabled": true,
+      "apiUrl": "https://dev.to/api",
+      "top": 7,
+      "perPage": 30
+    },
+    "reddit": {
+      "enabled": true,
+      "apiUrl": "https://www.reddit.com",
+      "subreddits": ["programming", "javascript", "typescript"],
+      "limit": 25,
+      "time": "week",
+      "userAgent": "gentle-vanguard-trends/1.0 (research aggregation)"
+    }
+  },
+  "firecrawl": {
+    "enabled": true,
+    "scrapeTrendingPages": true,
+    "trendingPages": ["https://github.com/trending"],
+    "enrichWithScrape": true
+  },
+  "theme": {
+    "maxThemes": 20,
+    "maxTrendsPerTheme": 8
+  }
+}

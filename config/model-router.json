@@ -337,7 +337,7 @@
     "changeAudit": true,
     "riskAssessment": true,
     "documentationRequired": true
-  }
+  },
   "modelLevels": {
     "description": "Abstract model capability levels used by routing policy — all mapped to the single native available model in this environment",
     "fastCheap": {
@@ -398,5 +398,29 @@
         }
       }
     }
+  },
+  "domainTiering": {
+    "description": "Per-domain quality tier for business agents (M6). finance/legal are correctness-critical -> premium (low temperature, high guard). Marketing/sales are creative -> balanced. Determined by domain risk, mirrored in config/agents.json temperatures.",
+    "tiers": {
+      "premium": {
+        "domains": ["finance", "legal", "gov"],
+        "temperature": 0.1,
+        "hallucinationGuard": "critical",
+        "rationale": "Financial models must balance; legal output escalates on doubt. Zero tolerance for hallucination."
+      },
+      "balanced": {
+        "domains": ["mkt", "sales", "hr", "bus-tele", "knowledge", "sia"],
+        "temperature": 0.25,
+        "hallucinationGuard": "high",
+        "rationale": "Creative/analytical work needs quality without over-constraining."
+      },
+      "fastCheap": {
+        "domains": ["gitflow", "ops", "session"],
+        "temperature": 0.15,
+        "hallucinationGuard": "medium",
+        "rationale": "Deterministic governance/ops - speed over reasoning."
+      }
+    },
+    "defaultTier": "balanced"
   }
 }
