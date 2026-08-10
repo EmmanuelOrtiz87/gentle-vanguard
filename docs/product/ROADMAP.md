@@ -96,7 +96,25 @@ seguro, extensible, zero-drama.**
   `list | --status | --validate <id> | --gate <id> [--run-checks]`.
 - `docs/governance/MODULE-ACTIVATION-WORKFLOW.md` — proceso formal propuesta → revisión gov → gates
   mínimos → aprobación → activación/rollout.
-- `docs/governance/activation-decisions/` — registro de aprobaciones (template incluido).
+- `docs/governance/activation-decisions/` — registro de aprobaciones (8 decisiones registradas,
+  1 por módulo experimental activado).
+
+**Estado de activación (2026-08-10):** los **8 módulos experimentales** están activados con
+6/6 gates satisfied (tests, typecheck, lint, security-scan, governance-approval, owner-signoff):
+
+| Módulo | Madurez | Riesgo | Owner | Gates |
+| ------ | ------- | ------ | ----- | ----- |
+| root-cause-correlator | beta | medium | self-diag-agent | 6/6 |
+| convergence-monitor | experimental | medium | orchestrator | 6/6 |
+| fine-tuning-collector | experimental | high | ops-agent | 6/6 |
+| predictive-governor | experimental | high | ops-agent | 6/6 |
+| proactive-intelligence | experimental | high | orchestrator | 6/6 |
+| trust-layer-stage8 | beta | high | gov-agent | 6/6 |
+| skill-evolution-engine | beta | medium | orchestrator | 6/6 |
+| cross-workspace-mesh | experimental | high | ops-agent | 6/6 |
+
+Commits: `5a75d2ab` (3 módulos) + `4be9c891` (5 módulos). Todos los scripts validados
+operacionalmente y ya integrados como steps lazy en `session-autostart.config.json`.
 
 ```bash
 npx tsx src/module-maturity.ts --status
