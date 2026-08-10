@@ -1,6 +1,6 @@
 {
   "version": "1.1.0",
-  "description": "Per-provider, per-model cost in USD per 1K tokens (input/output). Used by cost-optimizer.ps1 for cost-aware routing.",
+  "description": "Per-provider, per-model cost in USD per 1K tokens (input/output). Consumed by src/cost-tracker.ts and src/cost-efficiency-scorer.ts for cost-aware routing.",
   "providers": {
     "opencode": {
       "models": {
@@ -38,14 +38,6 @@
         "gpt-4o": { "input": 0.005, "output": 0.015, "tier": "premium" },
         "gpt-4o-mini": { "input": 0.0015, "output": 0.006, "tier": "standard" },
         "o3-mini": { "input": 0.0011, "output": 0.0044, "tier": "standard" }
-      },
-      "monthlyQuota": null
-    },
-    "ollama": {
-      "models": {
-        "llama3": { "input": 0.0, "output": 0.0, "tier": "free" },
-        "mistral": { "input": 0.0, "output": 0.0, "tier": "free" },
-        "qwen2.5": { "input": 0.0, "output": 0.0, "tier": "free" }
       },
       "monthlyQuota": null
     }

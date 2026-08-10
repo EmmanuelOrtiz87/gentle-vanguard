@@ -185,20 +185,20 @@ API integrados en la pipeline de sesión.
 
 ### Distributed Tracing
 
-- Script: `scripts/utilities/ops/TRACING/tracing-instrument.ps1`
+- Script: `src/tracing-instrument.ts`
 - Acciones: `start`, `end`, `error`
 - Almacena spans en `.telemetry/spans/` y `.telemetry/traces/` (JSONL)
 - Exporta OTLP a `http://localhost:4318/v1/traces`
 - Pipeline: step `tracing-init` (lazy, session start) + cleanup close
-- Funciones helper: `Start-TracingSpan` / `Stop-TracingSpan` en cloud connectors
+- Funciones helper de tracing en `src/tracing-instrument.ts`
 
 ### State Persistence
 
-| Componente | Script                                                              | Pipeline step                   |
-| ---------- | ------------------------------------------------------------------- | ------------------------------- |
-| Checkpoint | `scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1`    | `checkpoint-auto-create` (lazy) |
-| Snapshot   | `scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1`      | — (manual)                      |
-| Rollback   | `scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1` | — (manual)                      |
+| Componente | Script                         | Pipeline step                   |
+| ---------- | ------------------------------ | ------------------------------- |
+| Checkpoint | `src/checkpoint-manager.ts`    | `checkpoint-auto-create` (lazy) |
+| Snapshot   | `src/snapshot-manager.ts`      | — (manual)                      |
+| Rollback   | `src/rollback-orchestrator.ts` | — (manual)                      |
 
 - Checkpoint: create/list/diff/verify/prune — almacena en `.session/checkpoints/`
 - Snapshot: snapshot/list/prune — almacena en `.session/snapshots/`
@@ -206,29 +206,28 @@ API integrados en la pipeline de sesión.
 
 ### Audit Pipeline
 
-- Script: `scripts/security/audit-pipeline.ps1`
+- Script: `src/infrastructure/audit-pipeline.ts`
 - Acciones: `log`, `status`, `query`, `archive`, `prune`
 - Almacena en `.session/audit/logs/` (JSONL diario)
-- `$root` calculado con 2x `Split-Path -Parent` desde `scripts/security/` → repo root
 - Pipeline: step `audit-pipeline-init` (lazy, session start) + cleanup log
 
 ### Event Sourcing + Saga
 
-| Componente  | Script                                                          | Pipeline step                |
-| ----------- | --------------------------------------------------------------- | ---------------------------- |
-| Event Store | `scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1`    | `event-sourcing-init` (lazy) |
-| Saga        | `scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1` | — (manual)                   |
+| Componente  | Script                     | Pipeline step                |
+| ----------- | -------------------------- | ---------------------------- |
+| Event Store | `src/event-sourcing.ts`    | `event-sourcing-init` (lazy) |
+| Saga        | `src/saga-orchestrator.ts` | — (manual)                   |
 
 - Event sourcing: append/project/snapshot/prune — almacena en `.session/event-store/`
 - Saga: create/register-step/complete/compensate/list — almacena en `.session/sagas/`
 
 ### Cloud Connectors
 
-| Componente      | Script                                                       | Pipeline step                  |
-| --------------- | ------------------------------------------------------------ | ------------------------------ |
-| Hybrid Executor | `scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1` | `cloud-connectors-init` (lazy) |
-| AWS Delegator   | `scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1`   | —                              |
-| Azure Delegator | `scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1` | —                              |
+| Componente      | Script                      | Pipeline step                  |
+| --------------- | --------------------------- | ------------------------------ |
+| Hybrid Executor | `src/hybrid-executor.ts`    | `cloud-connectors-init` (lazy) |
+| Agent Delegator | `src/agent-delegator.ts`    | —                              |
+| Route+Delegate  | `src/route-and-delegate.ts` | —                              |
 
 - Routing por costo/latencia/load con fallback automático
 - Circuit breaker pattern (5 failures → OPEN, 2 successes → HALF_OPEN → CLOSED)
@@ -256,16 +255,16 @@ Verificado: 7/7 responden OK en entorno local.
 
 Los siguientes steps se agregaron al `config/session-autostart.config.json`:
 
-| Step                       | Script                        | Lazy |
-| -------------------------- | ----------------------------- | ---- |
-| `judgment-day-correction`  | `correction-rules-engine.ps1` | ✅   |
-| `cloud-connectors-init`    | `hybrid-executor.ps1`         | ✅   |
-| `cloud-connectors-metrics` | `token-budget-guard.ps1`      | ✅   |
-| `tracing-init`             | `tracing-instrument.ps1`      | ✅   |
-| `checkpoint-auto-create`   | `checkpoint-manager.ps1`      | ✅   |
-| `audit-pipeline-init`      | `audit-pipeline.ps1`          | ✅   |
-| `event-sourcing-init`      | `event-sourcing.ps1`          | ✅   |
-| `post-session-learning`    | `post-autostart-summary.ps1`  | ✅   |
+| Step                       | Script                                 | Lazy |
+| -------------------------- | -------------------------------------- | ---- |
+| `judgment-day-correction`  | `src/correction-rules-engine.ts`       | ✅   |
+| `cloud-connectors-init`    | `src/hybrid-executor.ts`               | ✅   |
+| `cloud-connectors-metrics` | `src/token-budget-guard.ts`            | ✅   |
+| `tracing-init`             | `src/tracing-instrument.ts`            | ✅   |
+| `checkpoint-auto-create`   | `src/checkpoint-manager.ts`            | ✅   |
+| `audit-pipeline-init`      | `src/infrastructure/audit-pipeline.ts` | ✅   |
+| `event-sourcing-init`      | `src/event-sourcing.ts`                | ✅   |
+| `post-session-learning`    | `src/post-autostart-summary.ts`        | ✅   |
 
 ## TypeScript Migrations
 
