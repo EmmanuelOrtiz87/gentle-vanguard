@@ -320,14 +320,148 @@
         headerIds: true,
       });
 
-      // Load and render markdown
+      // Embedded markdown content database (fallback for file://)
+      const markdownDatabase = {
+        '../contracts/consulting-services-agreement.md': `# Contrato de Servicios Profesionales - Gentle-Vanguard
+
+## CONTRATO DE CONSULTORÍA STACK
+
+### PARTES
+- **CONSULTOR**: Desarrollador/Empresa proveedora del stack
+- **CLIENTE**: Empresa/Individual que contrata servicios
+
+### SERVICIOS INCLUIDOS
+
+| Paquete | Precio | Descripción |
+|---------|--------|-------------|
+| **Setup** | $2,000 - $5,000 | Instalación completa del stack, configuración de agentes, base de datos Nexus |
+| **Migration** | $500 - $2,000/proyecto | Migración de proyectos existentes al stack |
+| **Training** | $1,500/día | Capacitación de 3-5 desarrolladores en uso del stack |
+| **Support** | $1,000/mes | Soporte técnico continuo, actualizaciones, prioridad en respuestas |
+
+### FORMAS DE PAGO
+- **Setup/Migration**: 50% anticipo, 50% contra entrega
+- **Training**: 100% al firmar (reserva fechas)
+- **Support**: Mensual o trimestral (10% descuento)
+
+### PROPIEDAD INTELECTUAL
+- Stack permanece bajo licencia del proyecto open source
+- Código/documentación creada específicamente para el cliente es propiedad del cliente
+- Casos de éxito pueden usarse para marketing (sin nombres confidenciales)
+
+---
+
+*Documento generado desde resources-index.html*`,
+
+        '../../apps/doc-gentle/README.md': `# Doc-Gentle | README
+
+## Product Overview
+Doc-Gentle is an AI-powered document intelligence platform for local file processing.
+
+**Status**: Specification Complete ✅ | Implementation: Not Started ❌
+
+## Market
+- TAM: $15B document management (2024)
+- SAM: $2B AI document processing
+
+## Features (Planned)
+- Multi-format support: PDF, DOCX, JPG, PNG, URLs
+- Native OCR: Tesseract.js
+- 50+ languages
+- Privacy-first: Local processing
+- API available
+
+## Pricing
+- Free: 5 docs/month
+- Pro: $15/month unlimited
+- Enterprise: $99/month with SSO
+
+## Tech Stack
+- Frontend: React + TypeScript
+- OCR: Tesseract.js
+- AI: Local models (Ollama compatible)
+- Storage: Supabase or local
+
+---
+
+*Full spec in apps/doc-gentle/README.md*`,
+
+        'social-templates/CONTENT-TEMPLATES.md': `# Content Templates - Marketing
+
+## LinkedIn Launch Post
+\`\`\`
+🚀 Introducing [Product]!
+
+After [X] weeks of development, excited to share:
+
+✨ Key features:
+• Feature 1
+• Feature 2
+• Feature 3
+
+💡 Built 100% natively with Gentle-Vanguard stack
+
+[Link]
+#AI #DevTools #OpenSource
+\`\`\`
+
+## Twitter Thread Template
+\`\`\`
+🚀 NEW: [Announcement] 🧵
+
+1/ Problem statement...
+2/ Solution...
+3/ Features...
+4/ Results...
+5/ CTA
+
+#DevTools #BuildInPublic
+\`\`\`
+
+---
+
+*Use marketing agent in resources-index.html to generate variations*`
+      };
+
+    // Load and render markdown
       async function loadMarkdown() {
+        let text = '';
+        let source = 'unknown';
+        
         try {
-          const response = await fetch(filePath);
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          // METHOD 1: Try embedded database (works with file://)
+          if (markdownDatabase[filePath]) {
+            text = markdownDatabase[filePath];
+            source = 'embedded';
+            console.log('✅ Loaded from embedded database');
+          } else {
+            // METHOD 2: Try fetch (works with http:// localhost)
+            try {
+              const response = await fetch(filePath);
+              if (response.ok) {
+                text = await response.text();
+                source = 'fetch';
+                console.log('✅ Loaded via fetch');
+              }
+            } catch (fetchError) {
+              console.log('⚠️ Fetch failed (CORS), using fallback');
+            }
           }
-          const text = await response.text();
+          
+          // METHOD 3: If nothing worked, show error with helpful message
+          if (!text) {
+            throw new Error(`
+              <strong>Could not load file from local filesystem.</strong><br><br>
+              
+              <strong>Solutions:</strong><br>
+              1. <strong>Use HTTP server:</strong> Run <code>npx serve .</code> and access via http://localhost<br>
+              2. <strong>Use VS Code Live Server:</strong> Install extension and click "Go Live"<br>
+              3. <strong>For this specific file:</strong> Edit it locally and refresh<br><br>
+              
+              <strong>Current path:</strong> ${filePath}<br>
+              <strong>Protocol:</strong> ${window.location.protocol}
+            `);
+          }
           
           // Parse and render
           const html = marked.parse(text);
@@ -340,15 +474,19 @@
           buildTOC();
           
           // Apply highlighting
-          document.querySelectorAll('pre code').forEach((block) => {
-            hljs.highlightElement(block);
-          });
+          if (typeof hljs !== 'undefined') {
+            document.querySelectorAll('pre code').forEach((block) => {
+              hljs.highlightElement(block);
+            });
+          }
           
           // Update document title
           const firstH1 = document.querySelector('.md-content h1');
           if (firstH1) {
-            document.title = `${firstH1.textContent} — Gentle-Vanguard`;
+            document.title = `${firstH1.textContent.split('|')[0].trim()} — Gentle-Vanguard`;
           }
+          
+          console.log(`📄 Document loaded successfully from: ${source}`);
           
         } catch (error) {
           document.getElementById('loading').classList.add('d-none');
@@ -356,11 +494,17 @@
           document.getElementById('error').innerHTML = `
             <i class="bi bi-exclamation-triangle fs-1 mb-3 d-block"></i>
             <h4>Error al cargar el documento</h4>
-            <p class="text-secondary">${error.message}</p>
-            <p class="small text-secondary">Archivo: ${filePath}</p>
-            <a href="resources-index.html" class="btn-gv mt-3">
-              <i class="bi bi-arrow-left me-1"></i>Volver al índice
-            </a>
+            <div class="text-secondary" style="text-align: left; max-width: 600px; margin: 1rem auto;">
+              ${error.message || error}
+            </div>
+            <div class="mt-3 d-flex gap-2 justify-content-center">
+              <a href="resources-index.html" class="btn-gv">
+                <i class="bi bi-arrow-left me-1"></i>Volver al CMS
+              </a>
+              <button onclick="location.reload()" class="btn-gv-alt">
+                <i class="bi bi-arrow-clockwise me-1"></i>Reintentar
+              </button>
+            </div>
           `;
         }
       }

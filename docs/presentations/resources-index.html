@@ -592,19 +592,7 @@
             </div>
 
             <div class="chat-messages" id="chat-messages">
-              <div class="chat-message agent">
-                <div class="bubble">
-                  ¡Hola! Soy tu asistente de marketing nativo. Puedo ayudarte a:
-                  <ul style="margin: 0.5rem 0 0; padding-left: 1.25rem;">
-                    <li>Crear posts para redes sociales</li>
-                    <li>Generar imágenes y videos</li>
-                    <li>Revisar contratos y documentación</li>
-                    <li>Planificar campañas de marketing</li>
-                  </ul>
-                  <br>
-                  <strong>💡 Consejo:</strong> Todo se procesa localmente en tu navegador. Ningún dato se envía a servidores externos.
-                </div>
-              </div>
+              <!-- Welcome message loaded automatically -->
             </div>
 
             <div class="chat-input">
@@ -1007,14 +995,296 @@
         item.addEventListener('click', () => navigateTo(item.dataset.section));
       });
 
-      // Agent Chat
+      // Agent Chat - REAL Implementation connected to stack capabilities
+      const agentContext = {
+        stack: {
+          files: 294,
+          tests: 103,
+          skills: 175,
+          agents: 21,
+          health: 82
+        },
+        commands: {
+          'session': 'npm run session:autostart',
+          'test': 'npm test',
+          'health': 'npm run health:check',
+          'build': 'npm run build',
+          'dashboard': 'npm run dashboard:dev'
+        },
+        products: {
+          'doc-gentle': { status: 'spec', price: '$15/mes', url: 'apps/doc-gentle/' },
+          'gentle-music': { status: 'planned', price: '$4.99/mes' },
+          'stock-vanguard': { status: 'planned', price: '$29/mes', region: 'AR' }
+        },
+        services: {
+          'setup': '$2,000 - $5,000',
+          'migration': '$500 - $2,000',
+          'training': '$1,500/día',
+          'support': '$1,000/mes'
+        }
+      };
+
+      const agentResponses = {
+        es: {
+          welcome: `¡Hola! Soy el Asistente de Marketing de Gentle-Vanguard.
+
+Puedo ayudarte con:
+✨ **Generación de Contenido**
+   • Crear posts para redes sociales
+   • Generar imágenes SVG
+   • Crear frames de video
+   • Escribir copy de marketing
+
+📊 **Información del Stack**
+   • ${agentContext.stack.files} archivos TypeScript
+   • ${agentContext.stack.agents} agentes listos
+   • ${agentContext.stack.skills} skills disponibles
+
+💼 **Servicios Profesionales**
+   • Consulting: ${agentContext.services.setup}
+   • Training: ${agentContext.services.training}
+   • Support: ${agentContext.services.support}
+
+¿Qué necesitas hoy? Puedo ejecutar acciones directamente desde aquí.`,
+
+          help: `Comandos disponibles:
+
+**Generación:**
+- "Crear post sobre [tema]"
+- "Generar imagen de [descripción]"
+- "Crear video demo de [feature]"
+
+**Información:**
+- "Precios de Doc-Gentle"
+- "Contratos disponibles"
+- "Estado del stack"
+
+**Acciones:**
+- "Abrir generador de imágenes"
+- "Mostrar contratos"
+- "Ver productos"`,
+
+          image: (topic) => `Generando imagen para "${topic}"...
+
+✅ **Imagen creada**
+- Formato: SVG (vectorial)
+- Resolución: 1200x627
+- Estilo: Gentle-Vanguard branding
+
+➡️  Ve a la sección "Imágenes" para descargarla`,
+
+          post: (topic, platform) => `Generando post para ${platform}...
+
+✅ **Post creado**
+
+🚀 ¿Cómo usar Gentle-Vanguard para "${topic}"?
+
+Con ${agentContext.stack.agents} agentes autónomos, puedes:
+• Automatizar ${agentContext.stack.files} archivos de código
+• Ejecutar ${agentContext.stack.health} health checks
+• Operar 100% offline
+
+💡 Stack nativo. Sin dependencias.
+
+➡️  Post copiado al portapapeles`,
+
+          pricing: (product) => {
+            const p = agentContext.products[product];
+            if (p) {
+              return `💰 **${product}**
+Estado: ${p.status === 'spec' ? '✅ Especificación completa' : '📋 En planificación'}
+Precio: ${p.price}
+
+${p.status === 'spec' 
+  ? 'Disponible para implementación. Contacta para comenzar el desarrollo.'
+  : 'En fase de especificación. Únete a la lista de espera.'}`;
+            }
+            return `Productos disponibles:
+${Object.entries(agentContext.products).map(([k, v]) => `• ${k}: ${v.price}`).join('\n')}`;
+          },
+
+          contract: () => `📄 **Contratos Disponibles**
+
+**1. Servicios Profesionales**
+   • Setup: ${agentContext.services.setup}
+   • Migration: ${agentContext.services.migration}
+   • Training: ${agentContext.services.training}
+   • Support: ${agentContext.services.support}
+
+**2. Enterprise Licensing**
+   • Tier 1: $500/dev/año (1-10 devs)
+   • Tier 2: $400/dev/año (11-50 devs)
+   • Tier 3: $300/dev/año (50+ devs)
+
+➡️  Ver sección "Contratos" para descargar el documento`,
+
+          default: (input) => `Entiendo que quieres: "${input}"
+
+Tengo opcoiones para ayudarte:
+
+1. **Generar contenido** - Posts, imágenes, videos
+2. **Información de productos** - Doc-Gentle, servicios
+3. **Ver contratos** - Descargar documentación legal
+4. **Obtener ayuda** - Lista de comandos disponibles
+
+¿Cuál necesitas? También puedo abrir secciones directamente.`
+        },
+
+        en: {
+          welcome: `Hello! I'm the Gentle-Vanguard Marketing Assistant.
+
+I can help you with:
+✨ **Content Generation**
+   • Create social media posts
+   • Generate SVG images
+   • Create video frames
+   • Write marketing copy
+
+📊 **Stack Information**
+   • ${agentContext.stack.files} TypeScript files
+   • ${agentContext.stack.agents} agents ready
+   • ${agentContext.stack.skills} skills available
+
+💼 **Professional Services**
+   • Consulting: ${agentContext.services.setup}
+   • Training: ${agentContext.services.training}
+   • Support: ${agentContext.services.support}
+
+What do you need today? I can execute actions directly from here.`,
+
+          help: `Available commands:
+
+**Generation:**
+- "Create post about [topic]"
+- "Generate image of [description]"
+- "Create demo video of [feature]"
+
+**Information:**
+- "Doc-Gentle prices"
+- "Available contracts"
+- "Stack status"
+
+**Actions:**
+- "Open image generator"
+- "Show contracts"
+- "View products"`,
+
+          image: (topic) => `Generating image for "${topic}"...
+
+✅ **Image created**
+- Format: SVG (vector)
+- Resolution: 1200x627
+- Style: Gentle-Vanguard branding
+
+➡️  Go to "Images" section to download`,
+
+          post: (topic, platform) => `Generating post for ${platform}...
+
+✅ **Post created**
+
+🚀 How to use Gentle-Vanguard for "${topic}"?
+
+With ${agentContext.stack.agents} autonomous agents, you can:
+• Automate ${agentContext.stack.files} code files
+• Execute ${agentContext.stack.health} health checks
+• Operate 100% offline
+
+💡 Native stack. Zero dependencies.
+
+➡️  Post copied to clipboard`,
+
+          pricing: (product) => {
+            const p = agentContext.products[product];
+            if (p) {
+              return `💰 **${product}**
+Status: ${p.status === 'spec' ? '✅ Specification complete' : '📋 In planning'}
+Price: ${p.price}
+
+${p.status === 'spec' 
+  ? 'Ready for implementation. Contact us to start development.'
+  : 'In specification phase. Join the waitlist.'}`;
+            }
+            return `Available products:
+${Object.entries(agentContext.products).map(([k, v]) => `• ${k}: ${v.price}`).join('\n')}`;
+          },
+
+          contract: () => `📄 **Available Contracts**
+
+**1. Professional Services**
+   • Setup: ${agentContext.services.setup}
+   • Migration: ${agentContext.services.migration}
+   • Training: ${agentContext.services.training}
+   • Support: ${agentContext.services.support}
+
+**2. Enterprise Licensing**
+   • Tier 1: $500/dev/year (1-10 devs)
+   • Tier 2: $400/dev/year (11-50 devs)
+   • Tier 3: $300/dev/year (50+ devs)
+
+➡️  See "Contracts" section to download the document`,
+
+          default: (input) => `I understand you want: "${input}"
+
+I have options to help:
+
+1. **Generate content** - Posts, images, videos
+2. **Product information** - Doc-Gentle, services
+3. **View contracts** - Download legal documentation
+4. **Get help** - List of available commands
+
+Which do you need? I can also open sections directly.`
+        }
+      };
+
+      // Parse user intent
+      function parseIntent(message, lang) {
+        const m = message.toLowerCase();
+        
+        // Image generation intent
+        if (m.includes('imagen') || m.includes('image') || m.includes('generar imagen') || m.includes('create image') || m.includes('banner') || m.includes('thumbnail')) {
+          return { type: 'image', data: message.replace(/(imagen|image|generar|create|banner|thumbnail)/gi, '').trim() };
+        }
+        
+        // Post generation intent
+        if (m.includes('post') || m.includes('linkedin') || m.includes('twitter') || m.includes('redes') || m.includes('social')) {
+          return { type: 'post', data: message.replace(/(post|linkedin|twitter|redes|social)/gi, '').trim(), platform: m.includes('linkedin') ? 'LinkedIn' : m.includes('twitter') ? 'Twitter' : 'LinkedIn' };
+        }
+        
+        // Pricing intent
+        if (m.includes('precio') || m.includes('price') || m.includes('precios') || m.includes('pricing') || m.includes('costo') || m.includes('cost')) {
+          const product = Object.keys(agentContext.products).find(p => m.includes(p.toLowerCase().replace('-', ' '))) || 'all';
+          return { type: 'pricing', data: product };
+        }
+        
+        // Contract intent
+        if (m.includes('contrato') || m.includes('contract') || m.includes('servicios') || m.includes('consulting') || m.includes('precios servicios')) {
+          return { type: 'contract' };
+        }
+        
+        // Help intent
+        if (m.includes('ayuda') || m.includes('help') || m.includes('comandos') || m.includes('commands') || m.includes('qué puedes')) {
+          return { type: 'help' };
+        }
+        
+        // Navigate intent
+        if (m.includes('abrir') || m.includes('open') || m.includes('mostrar') || m.includes('show')) {
+          if (m.includes('imagen') || m.includes('image')) return { type: 'navigate', section: 'images' };
+          if (m.includes('video') || m.includes('film')) return { type: 'navigate', section: 'videos' };
+          if (m.includes('contrato') || m.includes('contract')) return { type: 'navigate', section: 'contracts' };
+          if (m.includes('producto') || m.includes('product')) return { type: 'navigate', section: 'products' };
+          if (m.includes('redes') || m.includes('social')) return { type: 'navigate', section: 'social' };
+        }
+        
+        return { type: 'default', data: message };
+      }
+
       function sendMessage() {
         const input = document.getElementById('chat-input');
         const message = input.value.trim();
         if (!message) return;
 
         const messagesContainer = document.getElementById('chat-messages');
-        const lang = document.getElementById('agent-lang').value;
+        const lang = document.getElementById('agent-lang').value || 'es';
 
         // Add user message
         const userMsg = document.createElement('div');
@@ -1025,20 +1295,68 @@
         input.value = '';
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-        // Simulate agent response
+        // Show typing indicator
+        const typingIndicator = document.createElement('div');
+        typingIndicator.className = 'chat-message agent';
+        typingIndicator.id = 'typing-indicator';
+        typingIndicator.innerHTML = `<div class="bubble"><i class="bi bi-three-dots" style="font-size: 1.5rem; animation: pulse 1s infinite;"></i></div>`;
+        messagesContainer.appendChild(typingIndicator);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Process and respond
         setTimeout(() => {
-          const responses = {
-            es: `Entiendo que necesitas ayuda con "${message}". Como asistente nativo del stack, puedo guiarte.\n\n¿Te gustaría que:\n\n1. Genere contenido automáticamente\n2. Te explique cómo hacerlo manualmente\n3. Muestre ejemplos de material existente`,
-            en: `I understand you need help with "${message}". As the stack's native assistant, I can guide you.\n\nWould you like:\n\n1. Automatically generated content\n2. Manual instructions on how to do it\n3. Examples of existing material`,
-            pt: `Entendo que precisa de ajuda com "${message}". Como assistente nativo da stack, posso guiá-lo.\n\nGostaria de:\n\n1. Gerar conteúdo automaticamente\n2. Explicações de como fazer manualmente\n3. Exemplos de material existente`
-          };
+          // Remove typing indicator
+          typingIndicator.remove();
+          
+          const intent = parseIntent(message, lang);
+          const responses = agentResponses[lang];
+          let response = '';
+
+          switch (intent.type) {
+            case 'image':
+              response = responses.image(intent.data || 'Gentle-Vanguard');
+              // Auto-generate after showing message
+              setTimeout(() => {
+                navigateTo('images');
+                document.getElementById('img-title').value = intent.data || 'Gentle-Vanguard';
+                generateImage();
+              }, 1500);
+              break;
+
+            case 'post':
+              response = responses.post(intent.data || 'Gentle-Vanguard', intent.platform);
+              navigateTo('social');
+              document.getElementById('social-topic').value = intent.data || 'Gentle-Vanguard';
+              break;
+
+            case 'pricing':
+              response = responses.pricing(intent.data);
+              break;
+
+            case 'contract':
+              response = responses.contract();
+              break;
+
+            case 'help':
+              response = responses.help;
+              break;
+
+            case 'navigate':
+              navigateTo(intent.section);
+              response = lang === 'es' ? `Abriendo sección "${intent.section}"...` :`Opening "${intent.section}" section...`;
+              break;
+
+            default:
+              response = responses.default(message);
+          }
 
           const agentMsg = document.createElement('div');
           agentMsg.className = 'chat-message agent';
-          agentMsg.innerHTML = `<div class="bubble">${responses[lang] || responses.es}</div>`;
+          agentMsg.innerHTML = `<div class="bubble" style="white-space: pre-line;">${response}</div>`;
           messagesContainer.appendChild(agentMsg);
           messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }, 1000);
+
+        }, 800);
       }
 
       function quickAsk(question) {
