@@ -22,6 +22,8 @@
     "prepare": "pnpm lefthook install",
     "coverage": "c8 --reporter=text --reporter=lcov --reporter=html node --test \"tests/**/*.spec.js\"",
     "secretlint": "secretlint \"**/*.{json,yml,yaml,md,env,toml,xml}\" --secretlintrc .secretlintrc.json",
+    "sbom:generate": "npx tsx src/generate-sbom.ts",
+    "sbom:validate": "npx tsx src/generate-sbom.ts --validate",
     "build:mcp": "pnpm tsc",
     "build:mcp:watch": "pnpm tsc --watch",
     "mcp:start": "node dist/scripts/mcp/skill-server.js",
