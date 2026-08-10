@@ -60,6 +60,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Generate report
+        shell: pwsh
         run: |
           $commits = git log --oneline --since="30 days ago" | Measure-Object
           $authors = git shortlog -sn --since="30 days ago" | Measure-Object

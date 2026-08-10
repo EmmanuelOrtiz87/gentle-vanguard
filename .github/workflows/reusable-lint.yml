@@ -31,6 +31,7 @@ jobs:
       - name: Install PSScriptAnalyzer
         run: Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
       - name: Lint PowerShell scripts
+        shell: pwsh
         run: |
           $results = Invoke-ScriptAnalyzer -Path scripts/ -Recurse -Severity Error
           if ($results) { $results | Format-Table; exit 1 }
@@ -101,6 +102,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: Validate OpenAPI specs
+        shell: pwsh
         run: |
           $specs = Get-ChildItem -Recurse -Filter "openapi*" -Name
           if (-not $specs) { echo "No OpenAPI specs found"; exit 0 }

@@ -15,6 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: Validate ADR files
+        shell: pwsh
         run: |
           $adrs = Get-ChildItem -Path docs/architecture/decisions -Filter "ADR-*.md" -ErrorAction SilentlyContinue
           if (-not $adrs) { echo "No ADR files found"; exit 0 }
@@ -63,6 +64,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Check for SDD documents
+        shell: pwsh
         run: |
           $sddFiles = Get-ChildItem -Recurse -Filter "*SDD*" -Name -ErrorAction SilentlyContinue
           if ($sddFiles) { echo "SDD documents found: $($sddFiles.Count)" }
@@ -75,6 +77,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: Validate skills
+        shell: pwsh
         run: |
           $skills = Get-ChildItem -Path skills -Filter "SKILL.md" -Recurse -ErrorAction SilentlyContinue
           if (-not $skills) { echo "No skills found"; exit 0 }
