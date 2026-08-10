@@ -26,7 +26,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 38,
+      "steps": 6,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -41,7 +41,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 30,
+      "steps": 6,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -56,7 +56,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 52,
+      "steps": 6,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -71,7 +71,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 36,
+      "steps": 6,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -86,7 +86,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 34,
+      "steps": 6,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -176,7 +176,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 30,
+      "steps": 6,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -191,7 +191,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 38,
+      "steps": 6,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -206,7 +206,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 25,
+      "steps": 6,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -221,7 +221,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 20,
+      "steps": 6,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -236,7 +236,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 20,
+      "steps": 6,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -251,7 +251,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 20,
+      "steps": 6,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -266,7 +266,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 20,
+      "steps": 6,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -281,7 +281,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 20,
+      "steps": 6,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -296,7 +296,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 20,
+      "steps": 6,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -311,7 +311,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 35,
+      "steps": 6,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
