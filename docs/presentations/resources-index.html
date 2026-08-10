@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Índice de Recursos — Marketing Suite</title>
+    <meta name="description" content="Portal centralizado de recursos Gentle-Vanguard: contratos, productos, estrategias y herramientas de marketing" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/gv.css?v=2.1" />
+    <style>
+      .resource-card {
+        background: var(--card);
+        border: 1px solid var(--br-soft);
+        border-radius: var(--r-lg);
+        padding: 1.5rem;
+        height: 100%;
+        transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        position: relative;
+        overflow: hidden;
+      }
+      .resource-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--p), var(--a));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .resource-card:hover {
+        border-color: oklch(0.8 0.14 210 / 0.4);
+        transform: translateY(-4px);
+        box-shadow: var(--glow-cyan), 0 12px 40px oklch(0.1 0.02 262 / 0.45);
+      }
+      .resource-card:hover::before {
+        opacity: 1;
+      }
+      .resource-card .icon-wrapper {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+      }
+      .lang-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: oklch(0.27 0.02 262);
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        color: var(--text-dim);
+        border: 1px solid oklch(0.8 0.14 210 / 0.15);
+      }
+      .category-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--br);
+      }
+      .category-header h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+      .quick-access-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+      }
+      .stat-card {
+        background: var(--card);
+        border: 1px solid var(--br-soft);
+        border-radius: var(--r-md);
+        padding: 1rem;
+        text-align: center;
+      }
+      .stat-card .number {
+        font-size: 2rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--p), var(--a));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .search-box {
+        background: var(--bg2);
+        border: 1px solid var(--br-soft);
+        border-radius: var(--r-md);
+        padding: 1rem 1.25rem;
+        width: 100%;
+        font-size: 0.95rem;
+        color: var(--text);
+        transition: all 0.3s ease;
+      }
+      .search-box:focus {
+        outline: none;
+        border-color: var(--p);
+        box-shadow: 0 0 0 3px oklch(0.8 0.14 210 / 0.15);
+      }
+      .filter-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        border: 1px solid var(--br-soft);
+        background: var(--bg2);
+        color: var(--text-dim);
+      }
+      .filter-tag:hover,
+      .filter-tag.active {
+        background: oklch(0.8 0.14 210 / 0.15);
+        color: var(--p);
+        border-color: oklch(0.8 0.14 210 / 0.3);
+      }
+    </style>
+  </head>
+  <body class="grain">
+    <div class="scroll-progress"></div>
+    <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+
+    <nav class="navbar navbar-expand-xl nav-blur fixed-top">
+      <div class="container-fluid px-3">
+        <a class="navbar-brand text-light fw-bold mono" href="../index.html" style="font-size: 0.85rem">
+          <i class="bi bi-collection me-2" style="color: var(--p)"></i>Resources
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+          <i class="bi bi-list" style="color: var(--p)"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navMain">
+          <ul class="navbar-nav ms-auto align-items-center">
+            <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house me-1"></i>Presentación</a></li>
+            <li class="nav-item"><a class="nav-link active" href="resources-index.html"><i class="bi bi-grid me-1"></i>Recursos</a></li>
+            <li class="nav-item"><a class="nav-link" href="marketing.html"><i class="bi bi-megaphone me-1"></i>Estrategia</a></li>
+            <li class="nav-item"><a class="nav-link" href="v4-features.html"><i class="bi bi-stars me-1"></i>Features</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-robot me-1"></i>Agent</a></li>
+            <li class="nav-item ms-2">
+              <div class="lang-seg" role="group" aria-label="Idioma">
+                <button type="button" data-lang="es" class="active" aria-pressed="true"><span class="lang-flag">🇪🇸</span><span class="lang-code">ES</span></button>
+                <button type="button" data-lang="en" aria-pressed="false"><span class="lang-flag">🇬🇧</span><span class="lang-code">EN</span></button>
+                <button type="button" data-lang="pt" aria-pressed="false"><span class="lang-flag">🇧🇷</span><span class="lang-code">PT</span></button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <header class="hero" style="min-height: 50vh; padding-top: 6rem;">
+      <div>
+        <span class="hero-badge mb-3">✦ Marketing Suite</span>
+        <h1><span class="glow">Índice de Recursos</span></h1>
+        <p class="lead" style="max-width: 700px;">
+          Portal centralizado de contratos, productos, estrategias y herramientas<br>
+          para el crecimiento y monetización del ecosistema
+        </p>
+      </div>
+      <div class="mt-4" style="max-width: 600px; width: 100%;">
+        <input type="text" 
+               class="search-box" 
+               placeholder="🔍 Buscar recursos... (ej: 'contrato', 'doc-gentle', 'redes')"
+               id="resourceSearch">
+      </div>
+      <div class="mt-3 d-flex flex-wrap justify-content-center gap-2">
+        <span class="filter-tag active" data-filter="all">Todos</span>
+        <span class="filter-tag" data-filter="contracts">Contratos</span>
+        <span class="filter-tag" data-filter="products">Productos</span>
+        <span class="filter-tag" data-filter="marketing">Marketing</span>
+        <span class="filter-tag" data-filter="tools">Herramientas</span>
+        <span class="filter-tag" data-filter="agents">Agentes</span>
+      </div>
+    </header>
+
+    <div class="container-fluid px-4 pb-5" style="max-width: 1400px;">
+      
+      <!-- Stats -->
+      <div class="row g-3 mb-5">
+        <div class="col-6 col-md-3">
+          <div class="stat-card">
+            <div class="number" data-count="12">12</div>
+            <div class="text-secondary small mt-1">Recursos</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card">
+            <div class="number" data-count="6">6</div>
+            <div class="text-secondary small mt-1">Productos</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card">
+            <div class="number" data-count="3">3</div>
+            <div class="text-secondary small mt-1">Idiomas</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card">
+            <div class="number" data-count="4">4</div>
+            <div class="text-secondary small mt-1">Modelos $</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contratos -->
+      <section class="fade-in mb-5" data-category="contracts">
+        <div class="category-header">
+          <div class="badge badge-p p-2" style="font-size: 1rem;"><i class="bi bi-file-earmark-text"></i></div>
+          <h3>Contratos & Legal</h3>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4">
+            <div class="resource-card">
+              <span class="lang-badge">ES/EN/PT</span>
+              <div class="icon-wrapper" style="background: linear-gradient(135deg, oklch(0.8 0.14 210 / 0.15), oklch(0.7 0.18 290 / 0.15)); border: 1px solid oklch(0.8 0.14 210 / 0.2);">
+                <i class="bi bi-briefcase" style="color: var(--p);"></i>
+              </div>
+              <h5>Servicios Profesionales</h5>
+              <p class="text-secondary small">Contrato de consultoría: Setup ($2-5K), Migration ($500-2K), Training ($1.5K/día), Support ($1K/mes)</p>
+              <div class="mt-3 d-flex flex-wrap gap-1">
+                <span class="tag">Setup</span>
+                <span class="tag">Migration</span>
+                <span class="tag">Training</span>
+              </div>
+              <a href="../contracts/consulting-services-agreement.md" class="btn-gv mt-3 w-100" style="font-size: 0.8rem; padding: 0.5rem;">
+                <i class="bi bi-file-earmark-text me-1"></i>Ver Contrato
+              </a>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="resource-card">
+              <span class="lang-badge">ES/EN</span>
+              <div class="icon-wrapper" style="background: linear-gradient(135deg, oklch(0.75 0.15 155 / 0.15), oklch(0.8 0.14 210 / 0.15)); border: 1px solid oklch(0.75 0.15 155 / 0.25);">
+                <i class="bi bi-handshake" style="color: var(--ok);"></i>
+              </div>
+              <h5>Enterprise License</h5>
+              <p class="text-secondary small">Licenciamiento corporativo: Tier 1 ($500/dev), Tier 2 ($400/dev), Tier 3 ($300/dev). Incluye source code.</p>
+              <div class="mt-3 d-flex flex-wrap gap-1">
+                <span class="tag">Enterprise</span>
+                <span class="tag">Source Code</span>
+              </div>
+              <a href="#" class="btn-gv-alt mt-3 w-100" style="font-size: 0.8rem; padding: 0.5rem;">
+                <i class="bi bi-lock me-1"></i>Próximamente
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Productos -->
+      <section class="fade-in mb-5" data-category="products">
+        <div class="category-header">
+          <div class="badge badge-a p-2" style="font-size: 1rem;"><i class="bi bi-box"></i></div>
+          <h3>Productos Derivados</h3>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4">
+            <div class="resource-card">
+              <span class="price-tag" style="position: absolute; top: 1rem; right: 1rem; background: linear-gradient(135deg, oklch(0.75 0.15 155 / 0.2), oklch(0.7 0.18 25 / 0.15)); border: 1px solid oklch(0.75 0.15 155 / 0.3); color: var(--ok); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">$15/mes</span>
+              <div class="icon-wrapper" style="background: linear-gradient(135deg, oklch(0.8 0.14 210 / 0.15), oklch(0.7 0.18 290 / 0.15));">
+                <i class="bi bi-file-earmark-text" style="color: var(--p);"></i>
+              </div>
+              <h5>Doc-Gentle</h5>
+              <p class="text-secondary small">Inteligencia documental. Upload PDFs, Word, imágenes, URLs. Resúmenes AI, Q&A, traducciones.</p>
+              <div class="mt-3 d-flex flex-wrap gap-1">
+                <span class="tag">PDF</span>
+                <span class="tag">OCR</span>
+                <span class="tag">NLP</span>
+              </div>
+              <a href="../../apps/doc-gentle/README.md" class="btn-gv mt-3 w-100" style="font-size: 0.8rem; padding: 0.5rem;">
+                <i class="bi bi-book me-1"></i>Especificación
+              </a>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="resource-card">
+              <span class="price-tag" style="position: absolute; top: 1rem; right: 1rem; background: linear-gradient(135deg, oklch(0.75 0.15 155 / 0.2), oklch(0.7 0.18 25 / 0.15)); border: 1px solid oklch(0.75 0.15 155 / 0.3); color: var(--ok); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">$4.99/mes</span>
+              <div class="icon-wrapper" style="background: linear-gradient(135deg, oklch(0.75 0.15 155 / 0.15), oklch(0.8 0.14 210 / 0.15)); border: 1px solid oklch(0.75 0.15 155 / 0.25);">
+                <i class="bi bi-music-note-beamed" style="color: var(--ok);"></i>
+              </div>
+              <h5>Gentle-Music</h5>
+              <p class="text-secondary small">Streaming musical con IA. Recomendaciones personalizadas, playlists automáticas, modo offline.</p>
+              <div class="mt-3 d-flex flex-wrap gap-1">
+                <span class="tag">Streaming</span>
+                <span class="tag">AI Recs</span>
+              </div>
+              <a href="#" class="btn-gv-alt mt-3 w-100" style="font-size: 0.8rem; padding: 0.5rem;">
+                <i class="bi bi-clock me-1"></i>En desarrollo
+              </a>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="resource-card">
+              <span class="price-tag" style="position: absolute; top: 1rem; right: 1rem; background: linear-gradient(135deg, oklch(0.75 0.15 155 / 0.2), oklch(0.7 0.18 25 / 0.15)); border: 1px solid oklch(0.75 0.15 155 / 0.3); color: var(--ok); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">$29/mes</span>
+              <div class="icon-wrapper" style="background: linear-gradient(135deg, oklch(0.7 0.15 75 / 0.15), oklch(0.8 0.14 210 / 0.15)); border: 1px solid oklch(0.7 0.15 75 / 0.25);">
+                <i class="bi bi-shop" style="color: var(--wn);"></i>
+              </div>
+              <h5>Stock-Vanguard</h5>
+              <p class="text-secondary small">Sistema de stock y facturación Argentina. AFIP integration, Factura A/B/C, Libertya compatible.</p>
+              <div class="mt-3 d-flex flex-wrap gap-1">
+                <span class="tag">AFIP</span>
+                <span class="tag">Libertya</span>
+              </div>
+              <a href="#" class="btn-gv-alt mt-3 w-100" style="font-size: 0.8rem; padding: 0.5rem;">
+                <i class="bi bi-clock me-1"></i>En desarrollo
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Marketing -->
+      <section class="fade-in mb-5" data-category="marketing">
+        <div class="category-header">
+          <div class="badge badge-ok p-2" style="font-size: 1rem;"><i class="bi bi-megaphone"></i></div>
+          <h3>Estrategia de Marketing</h3>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4">
+            <div class="resource-card">
+              <span class="lang-badge">ES/EN/PT</span>
+              <div class="icon-wrapper" style="background: linear-gradient(135deg, oklch(0.8 0.14 210 / 0.15), oklch(0.7 0.18 290 / 0.15));">
+                <i class="bi bi-share" style="color: var(--p);"></i>
+              </div>
+              <h5>Social Media Templates</h5>
+              <p class="text-secondary small">Templates ready-to-use para LinkedIn, Twitter/X, GitHub. Copy, hashtags, calendario editorial.</p>
+              <div class="mt-3 d-flex flex-wrap gap-1">
+                <span class="tag">LinkedIn</span>
+                <span class="tag">Twitter</span>
+                <span class="tag">GitHub</span>
+              </div>
+              <a href="social-templates/CONTENT-TEMPLATES.md" class="btn-gv mt-3 w-100" style="font-size: 0.8rem; padding: 0.5rem;">
+                <i class="bi bi-file-text me-1"></i>Ver Templates
+              </a>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="resource-card">
+              <span class="lang-badge">ES/EN</span>
+              <div class="icon-wrapper" style="background: linear-gradient(135deg, oklch(0.75 0.15 155 / 0.15), oklch(0.8 0.14 210 / 0.15)); border: 1px solid oklch(0.75 0.15 155 / 0.25);">
+                <i class="bi bi-bullseye" style="color: var(--ok);"></i>
+              </div>
+              <h5>Estrategia Completa</h5>
+              <p class="text-secondary small">Audiencias, value props, ROI projections, pricing models, product ecosystem, action plan.</p>
+              <div class="mt-3 d-flex flex-wrap gap-1">
+                <span class="tag">Strategy</span>
+                <span class="tag">Pricing</span>
+              </div>
+              <a href="marketing.html" class="btn-gv mt-3 w-100" style="font-size: 0.8rem; padding: 0.5rem;">
+                <i class="bi bi-window me-1"></i>Ver Página
+              </a>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="resource-card">
+              <span class="lang-badge">ES/EN/PT</span>
+              <div class="icon-wrapper" style="background: linear-gradient(135deg, oklch(0.7 0.15 75 / 0.15), oklch(0.8 0.14 210 / 0.15)); border: 1px solid oklch(0.7 0.15 75 / 0.25);">
+                <i class="bi bi-image" style="color: var(--wn);"></i>
+              </div>
+              <h5>Generador de Imágenes</h5>
+              <p class="text-secondary small">Crea banners, carousels, thumbnails para redes. Multi-formato, multi-tamaño, brand-consistent.</p>
+              <div class="mt-3 d-flex flex-wrap gap-1">
+                <span class="tag">IG</span>
+                <span class="tag">Twitter</span>
+                <span class="tag">LinkedIn</span>
+              </div>
+              <a href="index.html" class="btn-gv mt-3 w-100" style="font-size: 0.8rem; padding: 0.5rem;">
+                <i class="bi bi-robot me-1"></i>Usar Agente
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Herramientas -->
+      <section class="fade-in mb-5" data-category="tools">
+        <div class="category-header">
+          <div class="badge badge-wn p-2" style="font-size: 1rem;"><i class="bi bi-tools"></i></div>
+          <h3>Herramientas Nativas</h3>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4">
+            <div class="resource-card">
+              <span class="lang-badge">TS</span>
+              <div class="icon-wrapper" style="background: linear-gradient(135deg, oklch(0.8 0.14 210 / 0.15), oklch(0.7 0.18 290 / 0.15));">
+                <i class="bi bi-terminal" style="color: var(--p);"></i>
+              </div>
+              <h5>Social Poster</h5>
+              <p class="text-secondary small">CLI en TypeScript para automatizar publicaciones. Templates, analytics, multi-platform.</p>
+              <div class="mt-3 d-flex flex-wrap gap-1">
+                <span class="tag">CLI</span>
+                <span class="tag">LinkedIn</span>
+                <span class="tag">Twitter</span>
+              </div>
+              <a href="../../src/social-poster.ts" class="btn-gv mt-3 w-100" style="font-size: 0.8rem; padding: 0.5rem;">
+                <i class="bi bi-code-square me-1"></i>Ver Código
+              </a>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="resource-card">
+              <span class="lang-badge">JS</span>
+              <div class="icon-wrapper" style="background: linear-gradient(135deg, oklch(0.75 0.15 155 / 0.15), oklch(0.8 0.14 210 / 0.15)); border: 1px solid oklch(0.75 0.15 155 / 0.25);">
+                <i class="bi bi-sun" style="color: var(--ok);"></i>
+              </div>
+              <h5>Theme Toggle</h5>
+              <p class="text-secondary small">Sistema de tema claro/oscuro con persistencia, detección de sistema, ARIA compliant.</p>
+              <div class="mt-3 d-flex flex-wrap gap-1">
+                <span class="tag">CSS</span>
+                <span class="tag">A11y</span>
+              </div>
+              <a href="assets/js/theme-toggle.js" class="btn-gv mt-3 w-100" style="font-size: 0.8rem; padding: 0.5rem;">
+                <i class="bi bi-code me-1"></i>Ver Código
+              </a>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="resource-card">
+              <span class="lang-badge">TS</span>
+              <div class="icon-wrapper" style="background: linear-gradient(135deg, oklch(0.7 0.18 290 / 0.15), oklch(0.8 0.14 210 / 0.15)); border: 1px solid oklch(0.7 0.18 290 / 0.25);">
+                <i class="bi bi-translate" style="color: var(--a);"></i>
+              </div>
+              <h5>i18n Generator</h5>
+              <p class="text-secondary small">Genera contenido multi-idioma automáticamente. ES/EN/PT nativo para todos los recursos.</p>
+              <div class="mt-3 d-flex flex-wrap gap-1">
+                <span class="tag">ES</span>
+                <span class="tag">EN</span>
+                <span class="tag">PT</span>
+              </div>
+              <a href="index.html" class="btn-gv mt-3 w-100" style="font-size: 0.8rem; padding: 0.5rem;">
+                <i class="bi bi-robot me-1"></i>Usar Agente
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Agentes -->
+      <section class="fade-in mb-5" data-category="agents">
+        <div class="category-header">
+          <div class="badge badge-er p-2" style="font-size: 1rem;"><i class="bi bi-robot"></i></div>
+          <h3>Agentes de Marketing</h3>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4">
+            <div class="resource-card" style="border: 2px solid oklch(0.8 0.14 210 / 0.3);">
+              <div class="icon-wrapper" style="background: linear-gradient(135deg, var(--p), var(--a)); color: white; font-size: 1.5rem;">
+                <i class="bi bi-cpu"></i>
+              </div>
+              <h5>Social Media Agent</h5>
+              <p class="text-secondary small">Genera posts, imágenes, copy, hashtags automáticamente. Multi-plataforma, multi-idioma.</p>
+              <div class="mt-3">
+                <span class="badge badge-p">AI-Powered</span>
+                <span class="badge badge-ok">Native</span>
+              </div>
+              <a href="index.html" class="btn-gv mt-3 w-100" style="font-size: 0.8rem; padding: 0.5rem;">
+                <i class="bi bi-play-fill me-1"></i>Lanzar Agente
+              </a>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="resource-card" style="border: 2px solid oklch(0.75 0.15 155 / 0.3);">
+              <div class="icon-wrapper" style="background: linear-gradient(135deg, var(--ok), var(--p)); color: white; font-size: 1.5rem;">
+                <i class="bi bi-image-alt"></i>
+              </div>
+              <h5>Image Generator</h5>
+              <p class="text-secondary small">Crea visuales para redes sociales. Banners, carousels, thumbnails. Brand-consistent auto.</p>
+              <div class="mt-3">
+                <span class="badge badge-ok">SVG/PNG</span>
+                <span class="badge badge-a">Multi-size</span>
+              </div>
+              <a href="index.html" class="btn-gv mt-3 w-100" style="font-size: 0.8rem; padding: 0.5rem;">
+                <i class="bi bi-play-fill me-1"></i>Lanzar Agente
+              </a>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="resource-card" style="border: 2px solid oklch(0.7 0.18 290 / 0.3);">
+              <div class="icon-wrapper" style="background: linear-gradient(135deg, var(--a), var(--p)); color: white; font-size: 1.5rem;">
+                <i class="bi bi-translate"></i>
+              </div>
+              <h5>i18n Agent</h5>
+              <p class="text-secondary small">Traduce y genera contenido en ES/EN/PT nativo. Context-aware, culturally appropriate.</p>
+              <div class="mt-3">
+                <span class="badge badge-a">NLP</span>
+                <span class="badge badge-p">Context</span>
+              </div>
+              <a href="index.html" class="btn-gv mt-3 w-100" style="font-size: 0.8rem; padding: 0.5rem;">
+                <i class="bi bi-play-fill me-1"></i>Lanzar Agente
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Access -->
+      <section class="fade-in" data-category="all">
+        <div class="section-title">
+          <div class="display-4 mb-2">⚡</div>
+          <h2>Acceso Rápido</h2>
+        </div>
+        <div class="quick-access-grid">
+          <a href="../../src/social-poster.ts" class="text-decoration-none">
+            <div class="resource-card">
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-terminal fs-4" style="color: var(--p);"></i>
+                <div>
+                  <h6 class="mb-1">Social Poster CLI</h6>
+                  <small class="text-secondary">npx tsx src/social-poster.ts</small>
+                </div>
+              </div>
+            </div>
+          </a>
+          <a href="../../apps/doc-gentle/README.md" class="text-decoration-none">
+            <div class="resource-card">
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-file-earmark-text fs-4" style="color: var(--ok);"></i>
+                <div>
+                  <h6 class="mb-1">Doc-Gentle Spec</h6>
+                  <small class="text-secondary">Especificación completa del producto</small>
+                </div>
+              </div>
+            </div>
+          </a>
+          <a href="../../apps/discord-bot/package.json" class="text-decoration-none">
+            <div class="resource-card">
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-discord fs-4" style="color: var(--a);"></i>
+                <div>
+                  <h6 class="mb-1">Discord Bot</h6>
+                  <small class="text-secondary">Configuración del bot de comunidad</small>
+                </div>
+              </div>
+            </div>
+          </a>
+          <a href="social-templates/CONTENT-TEMPLATES.md" class="text-decoration-none">
+            <div class="resource-card">
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-pen fs-4" style="color: var(--wn);"></i>
+                <div>
+                  <h6 class="mb-1">Content Templates</h6>
+                  <small class="text-secondary">Templates listos para usar</small>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+    </div>
+
+    <footer>
+      <p class="mb-2">
+        Marketing Suite — Ecosistema Gentle-Vanguard
+      </p>
+      <p class="mb-2 d-flex flex-wrap justify-content-center gap-3">
+        <a href="index.html"><i class="bi bi-house me-1"></i>Presentación</a>
+        <a href="resources-index.html"><i class="bi bi-grid me-1"></i>Recursos</a>
+        <a href="marketing.html"><i class="bi bi-megaphone me-1"></i>Estrategia</a>
+        <a href="v4-features.html"><i class="bi bi-stars me-1"></i>Features</a>
+      </p>
+      <p class="mt-2 mb-0">
+        <small><i class="bi bi-cpu me-1"></i>Recursos nativos del stack</small>
+      </p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/gv.js?v=2.1"></script>
+    <script>
+      // Search functionality
+      const searchInput = document.getElementById('resourceSearch');
+      const cards = document.querySelectorAll('.resource-card');
+      
+      searchInput?.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        cards.forEach(card => {
+          const text = card.textContent.toLowerCase();
+          card.style.display = text.includes(term) ? 'block' : 'none';
+        });
+      });
+
+      // Filter functionality
+      const filters = document.querySelectorAll('.filter-tag');
+      filters.forEach(filter => {
+        filter.addEventListener('click', () => {
+          const category = filter.dataset.filter;
+          
+          // Update active state
+          filters.forEach(f => f.classList.remove('active'));
+          filter.classList.add('active');
+          
+          // Filter sections
+          const sections = document.querySelectorAll('section[data-category]');
+          sections.forEach(section => {
+            if (category === 'all' || section.dataset.category === category) {
+              section.style.display = 'block';
+            } else {
+              section.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      // Language toggle
+      document.querySelectorAll('.lang-seg button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const lang = btn.dataset.lang;
+          document.querySelectorAll('.lang-seg button').forEach(b => {
+            b.classList.remove('active');
+            b.setAttribute('aria-pressed', 'false');
+          });
+          btn.classList.add('active');
+          btn.setAttribute('aria-pressed', 'true');
+          
+          // Dispatch event for i18n
+          document.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
+          console.log(`[i18n] Language changed to: ${lang}`);
+        });
+      });
+    </script>
+  </body>
+</html>
