@@ -145,6 +145,7 @@ npx tsx src/module-maturity.ts --gate <module-id>
 
 | Version | Date       | Highlights                                                                                                                                                              |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| v9.0    | 2026-08-10 | Gobernanza de madurez completa: 8/8 módulos experimentales activados con gates 6/6 (MODULE-ACTIVATION-WORKFLOW), SBOM CycloneDX 1.7 integrado (464 componentes, validación nativa), ADR-002 MCP workspace, roadmap de optimización 100% |
 | v8.0    | 2026-07-08 | Public Release: zero-dependency stack, auto-install, updated README, watchdog auto-recovery, dynamic ports                                                              |
 | v7.1    | 2026-07-08 | Dashboard UI refinement: engram source in Knowledge Panel, auto-refresh 30s, relevance colors, error states                                                             |
 | v7.0    | 2026-07-08 | Multi-repo Mesh API + Engram mem_search integration in knowledge-query                                                                                                  |
