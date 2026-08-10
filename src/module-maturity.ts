@@ -423,9 +423,38 @@ function main(): void {
     return;
   }
 
+  if (has('--validate-all')) {
+    // CI-friendly: validates every experimental module and exits non-zero on any failure
+    const config = loadModuleConfig(options);
+    const experimental = config.modules.filter((m) => m.category === 'experimental');
+    const results = experimental.map((m) => validateActivation(m.id, options));
+    const failures = results.filter((r) => !r.pass);
+
+    console.log(JSON.stringify(
+      {
+        mode: 'validate-all',
+        total: results.length,
+        passed: results.length - failures.length,
+        failed: failures.length,
+        modules: results.map((r) => ({
+          moduleId: r.moduleId,
+          activated: r.activated,
+          pass: r.pass,
+          reason: r.reason,
+          missingRequired: r.missingRequired,
+        })),
+      },
+      null,
+      2,
+    ));
+    process.exit(failures.length > 0 ? 1 : 0);
+  }
+
   const validateId = value('--validate');
   if (validateId) {
     printValidation(validateActivation(validateId, options));
+    const result = validateActivation(validateId, options);
+    process.exit(result.pass ? 0 : 1);
     return;
   }
 
@@ -436,7 +465,7 @@ function main(): void {
   }
 
   console.log(
-    'Usage: list | --status | --validate <module-id> | --gate <module-id> [--run-checks] [--ownerSignoff]',
+    'Usage: list | --status | --validate-all | --validate <module-id> | --gate <module-id> [--run-checks] [--ownerSignoff]',
   );
 }
 
