@@ -25,7 +25,7 @@
         "enabled": false,
         "name": "Polyrepo (v3.x community phase)",
         "description": "Multiple independent repositories",
-        "targetVersion": "3.6.0",
+        "targetVersion": "3.7.0",
         "orchestrator": "gentle-vanguard-sync",
         "repositories": [
           "gentle-vanguard-core",
