@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
  * SDD Apply Agent (sdd-apply) - Native Implementation
- * 
+ *
  * DEV implementation agent for code generation and feature building.
  * Works with ANY AI tool (Claude, Cursor, etc.)
  * No opencode dependency.
- * 
+ *
  * Features:
  *   - Code generation
  *   - File operations
@@ -30,22 +30,22 @@ const AGENT_CONFIG = {
   model: 'opencode/deepseek-v4-flash-free',
   temperature: 0.15,
   maxTokens: 6000,
-  version: '1.0.0'
+  version: '1.0.0',
 };
 
 const CODING_STANDARDS = {
   typescript: {
     strict: true,
     noImplicitAny: true,
-    strictNullChecks: true
+    strictNullChecks: true,
   },
   patterns: [
     'No comments unless explicitly requested',
     'Use Zod for runtime validation',
     'Never commit secrets',
     'Prefer editing existing files',
-    'Follow existing import patterns'
-  ]
+    'Follow existing import patterns',
+  ],
 };
 
 function parseArgs(): ApplyTask {
@@ -54,17 +54,30 @@ function parseArgs(): ApplyTask {
     task: '',
     model: process.env.AGENT_MODEL || AGENT_CONFIG.model,
     temperature: parseFloat(process.env.AGENT_TEMPERATURE || String(AGENT_CONFIG.temperature)),
-    dryRun: false
+    dryRun: false,
   };
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--task': task.task = args[++i]; break;
-      case '--context': task.context = args[++i]; break;
-      case '--model': task.model = args[++i]; break;
-      case '--temperature': task.temperature = parseFloat(args[++i]); break;
-      case '--dry-run': task.dryRun = true; break;
-      case '--help': case '-h': showHelp(); process.exit(0);
+      case '--task':
+        task.task = args[++i];
+        break;
+      case '--context':
+        task.context = args[++i];
+        break;
+      case '--model':
+        task.model = args[++i];
+        break;
+      case '--temperature':
+        task.temperature = parseFloat(args[++i]);
+        break;
+      case '--dry-run':
+        task.dryRun = true;
+        break;
+      case '--help':
+      case '-h':
+        showHelp();
+        process.exit(0);
     }
   }
 
@@ -99,9 +112,13 @@ Examples:
 `);
 }
 
-async function runQualityChecks(): Promise<{ typecheck: boolean; lint: boolean; errors: string[] }> {
+async function runQualityChecks(): Promise<{
+  typecheck: boolean;
+  lint: boolean;
+  errors: string[];
+}> {
   const errors: string[] = [];
-  
+
   // TypeScript check
   console.log('Running TypeScript check...');
   try {
@@ -131,7 +148,7 @@ function runCommand(cmd: string, args: string[]): Promise<void> {
   return new Promise((resolve, reject) => {
     const child = spawn(cmd, args, {
       cwd: process.cwd(),
-      stdio: 'pipe'
+      stdio: 'pipe',
     });
 
     let stderr = '';
@@ -151,32 +168,40 @@ function runCommand(cmd: string, args: string[]): Promise<void> {
   });
 }
 
-function analyzeTask(task: string, context?: string): {
+function analyzeTask(
+  task: string,
+  context?: string,
+): {
   operation: string;
   targetFiles: string[];
   estimatedComplexity: 'low' | 'medium' | 'high';
 } {
   const normalized = (task + ' ' + (context || '')).toLowerCase();
-  
-  const operation = 
-    normalized.includes('fix') ? 'fix' :
-    normalized.includes('refactor') ? 'refactor' :
-    normalized.includes('create') || normalized.includes('new') ? 'create' :
-    normalized.includes('update') || normalized.includes('edit') ? 'update' :
-    'implement';
-  
+
+  const operation = normalized.includes('fix')
+    ? 'fix'
+    : normalized.includes('refactor')
+      ? 'refactor'
+      : normalized.includes('create') || normalized.includes('new')
+        ? 'create'
+        : normalized.includes('update') || normalized.includes('edit')
+          ? 'update'
+          : 'implement';
+
   const targetFiles: string[] = [];
   const fileMatches = normalized.match(/(\w+\.(ts|js|json|md|ps1))/g);
   if (fileMatches) {
     targetFiles.push(...fileMatches);
   }
-  
-  const estimatedComplexity = 
-    (normalized.includes('refactor') && normalized.includes('files')) || 
-    normalized.includes('architecture') ? 'high' :
-    normalized.includes('fix') || normalized.includes('bug') ? 'medium' :
-    'low';
-  
+
+  const estimatedComplexity =
+    (normalized.includes('refactor') && normalized.includes('files')) ||
+    normalized.includes('architecture')
+      ? 'high'
+      : normalized.includes('fix') || normalized.includes('bug')
+        ? 'medium'
+        : 'low';
+
   return { operation, targetFiles, estimatedComplexity };
 }
 
@@ -198,7 +223,7 @@ async function main(): Promise<void> {
   console.log();
 
   const analysis = analyzeTask(task, context);
-  
+
   console.log('Task Analysis:');
   console.log(`  Operation: ${analysis.operation}`);
   console.log(`  Target Files: ${analysis.targetFiles.join(', ') || 'TBD'}`);
@@ -212,7 +237,7 @@ async function main(): Promise<void> {
 
   try {
     console.log('Executing implementation plan...\n');
-    
+
     // Simulate implementation steps
     const implementation = {
       task,
@@ -222,59 +247,74 @@ async function main(): Promise<void> {
         `1. Analyze requirements: "${task}"`,
         `2. Identify affected files`,
         `3. Apply changes with ${AGENT_CONFIG.temperature} temperature`,
-        `4. Run quality checks`
+        `4. Run quality checks`,
       ],
       qualityGates: {
         typescript: CODING_STANDARDS.typescript,
-        patterns: CODING_STANDARDS.patterns
+        patterns: CODING_STANDARDS.patterns,
       },
       filesToModify: analysis.targetFiles,
       notes: [
         'TypeScript strict mode enforced',
         'Zod schemas recommended for validation',
-        'No secrets in code'
-      ]
+        'No secrets in code',
+      ],
     };
 
     // Run actual quality checks
     console.log('Running quality gates...\n');
     const qualityResults = await runQualityChecks();
-    
+
     const duration = Date.now() - startTime;
-    
+
     console.log('\n=== Implementation Result ===\n');
-    console.log(JSON.stringify({
-      ...implementation,
-      qualityCheck: {
-        passed: qualityResults.typecheck && qualityResults.lint,
-        errors: qualityResults.errors
-      }
-    }, null, 2));
-    
+    console.log(
+      JSON.stringify(
+        {
+          ...implementation,
+          qualityCheck: {
+            passed: qualityResults.typecheck && qualityResults.lint,
+            errors: qualityResults.errors,
+          },
+        },
+        null,
+        2,
+      ),
+    );
+
     console.log();
     console.log('=================================================');
-    console.log(`  Status: ${qualityResults.typecheck && qualityResults.lint ? '✅ SUCCESS' : '❌ FAILED'}`);
+    console.log(
+      `  Status: ${qualityResults.typecheck && qualityResults.lint ? '✅ SUCCESS' : '❌ FAILED'}`,
+    );
     console.log(`  Duration: ${duration}ms`);
-    console.log(`  Quality Gates: ${qualityResults.typecheck ? 'TS ✅' : 'TS ❌'} | ${qualityResults.lint ? 'Lint ✅' : 'Lint ❌'}`);
+    console.log(
+      `  Quality Gates: ${qualityResults.typecheck ? 'TS ✅' : 'TS ❌'} | ${qualityResults.lint ? 'Lint ✅' : 'Lint ❌'}`,
+    );
     console.log('=================================================');
-    
+
     console.log('\n=== JSON OUTPUT ===');
-    console.log(JSON.stringify({
-      success: qualityResults.typecheck && qualityResults.lint,
-      agent: AGENT_CONFIG.name,
-      version: AGENT_CONFIG.version,
-      task,
-      model,
-      duration,
-      dryRun,
-      analysis,
-      quality: qualityResults
-    }, null, 2));
+    console.log(
+      JSON.stringify(
+        {
+          success: qualityResults.typecheck && qualityResults.lint,
+          agent: AGENT_CONFIG.name,
+          version: AGENT_CONFIG.version,
+          task,
+          model,
+          duration,
+          dryRun,
+          analysis,
+          quality: qualityResults,
+        },
+        null,
+        2,
+      ),
+    );
 
     if (!qualityResults.typecheck || !qualityResults.lint) {
       process.exit(1);
     }
-
   } catch (error) {
     console.error('\n❌ Error:', error);
     process.exit(1);

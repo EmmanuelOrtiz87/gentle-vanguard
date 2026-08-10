@@ -263,7 +263,11 @@ function cmdStatus(args: CliArgs): void {
   const file = latestReportPath(timeframe);
   if (!existsSync(file)) {
     console.log(
-      JSON.stringify({ timeframe, report: null, message: 'No cached report. Run fetch first.' }, null, 2),
+      JSON.stringify(
+        { timeframe, report: null, message: 'No cached report. Run fetch first.' },
+        null,
+        2,
+      ),
     );
     return;
   }

@@ -1,6 +1,6 @@
-﻿# Flutter Project Structure
+# Flutter Project Structure
 
-```
+````text
 {{project-name}}/
  lib/
     main.dart           # Entry point
@@ -26,7 +26,7 @@
  android/               # Android native code
  ios/                   # iOS native code
  pubspec.yaml
-```
+```text
 
 ## Widget Example
 
@@ -48,7 +48,7 @@ class MyWidget extends StatelessWidget {
     );
   }
 }
-```
+```text
 
 ## Testing
 
@@ -61,4 +61,5 @@ flutter test --coverage
 
 # Run specific test file
 flutter test test/widget_test.dart
-```
+```text
+````

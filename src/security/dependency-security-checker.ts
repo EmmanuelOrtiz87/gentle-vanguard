@@ -44,7 +44,10 @@ function parseAuditOutput(output: string): {
       counts.critical = Number(meta.critical ?? 0);
       counts.moderate = Number(meta.moderate ?? 0);
       counts.low = Number(meta.low ?? 0);
-      counts.total = Object.keys(meta).reduce((sum: number, k: string) => sum + Number(meta[k] ?? 0), 0);
+      counts.total = Object.keys(meta).reduce(
+        (sum: number, k: string) => sum + Number(meta[k] ?? 0),
+        0,
+      );
       return counts;
     }
 
@@ -55,7 +58,11 @@ function parseAuditOutput(output: string): {
       counts.critical = Number(legacy.critical?.length ?? 0);
       counts.moderate = Number(legacy.moderate?.length ?? 0);
       counts.low = Number(legacy.low?.length ?? 0);
-      counts.total = (legacy.high?.length ?? 0) + (legacy.critical?.length ?? 0) + (legacy.moderate?.length ?? 0) + (legacy.low?.length ?? 0);
+      counts.total =
+        (legacy.high?.length ?? 0) +
+        (legacy.critical?.length ?? 0) +
+        (legacy.moderate?.length ?? 0) +
+        (legacy.low?.length ?? 0);
       return counts;
     }
 
@@ -66,7 +73,10 @@ function parseAuditOutput(output: string): {
       counts.critical = Number(meta2.critical ?? 0);
       counts.moderate = Number(meta2.moderate ?? 0);
       counts.low = Number(meta2.low ?? 0);
-      counts.total = Object.keys(meta2).reduce((sum: number, k: string) => sum + Number(meta2[k] ?? 0), 0);
+      counts.total = Object.keys(meta2).reduce(
+        (sum: number, k: string) => sum + Number(meta2[k] ?? 0),
+        0,
+      );
       return counts;
     }
   } catch {
@@ -84,7 +94,9 @@ function parseAuditOutput(output: string): {
   counts.critical = criticalMatch ? Number(criticalMatch[1]) : 0;
   counts.moderate = moderateMatch ? Number(moderateMatch[1]) : 0;
   counts.low = lowMatch ? Number(lowMatch[1]) : 0;
-  counts.total = totalMatch ? Number(totalMatch[1]) : counts.high + counts.critical + counts.moderate + counts.low;
+  counts.total = totalMatch
+    ? Number(totalMatch[1])
+    : counts.high + counts.critical + counts.moderate + counts.low;
 
   return counts;
 }
@@ -144,7 +156,8 @@ export function checkDependencySecurity(): DependencySecurityResult {
   return {
     compliant: false,
     issues: issues.length > 0 ? issues : ['No package manager audit could be executed'],
-    recommendations: recommendations.length > 0 ? recommendations : ['Install pnpm or npm and re-run'],
+    recommendations:
+      recommendations.length > 0 ? recommendations : ['Install pnpm or npm and re-run'],
     audit: { source: 'none', high: 0, critical: 0, moderate: 0, low: 0, total: 0 },
   };
 }

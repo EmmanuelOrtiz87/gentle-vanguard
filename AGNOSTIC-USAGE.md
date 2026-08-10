@@ -2,16 +2,19 @@
 
 ## Resumen Ejecutivo
 
-El stack Gentle-Vanguard ahora es **completamente agnóstico**. Funciona con OpenCode, Claude, Cursor, o cualquier herramienta AI sin dependencias específicas.
+El stack Gentle-Vanguard ahora es **completamente agnóstico**. Funciona con OpenCode, Claude,
+Cursor, o cualquier herramienta AI sin dependencias específicas.
 
 ## Problema Resuelto
 
 ### Antes (Dependiente de OpenCode)
+
 - ❌ Delegación con `task()` fallaba: "Model not found: inherit-from-session"
 - ❌ Skills solo accesibles vía `.opencode/skills/`
 - ❌ Agentes solo funcionaban en entorno OpenCode
 
 ### Ahora (Agnóstico)
+
 - ✅ Delegación nativa via `npx tsx src/agent-delegator.ts`
 - ✅ Skills nativos en `/skills/` accesibles desde cualquier herramienta
 - ✅ 11 agentes nativos funcionando en cualquier entorno
@@ -45,11 +48,13 @@ Stack Gentle-Vanguard (v2.0 - Agnóstico)
 ### 1. Cargar Skills
 
 **OpenCode:**
+
 ```bash
 # Automático - opencode detecta .opencode/skills/
 ```
 
 **Claude/Cursor/Genérico:**
+
 ```bash
 # Listar skills disponibles
 npx tsx src/skill-loader.ts --list
@@ -61,12 +66,14 @@ npx tsx src/skill-loader.ts --load code-review-skill
 ### 2. Delegar a Agentes
 
 **OpenCode (fallback):**
+
 ```bash
 # Si task() falla con "inherit-from-session", usar delegador nativo
 npx tsx src/agent-delegator.ts --agent sdd-apply --task "implement feature"
 ```
 
 **Claude/Cursor/Genérico:**
+
 ```bash
 # Delegar directamente
 npx tsx src/agents/sdd-apply.ts --task "fix bug" --context "auth.ts"
@@ -78,6 +85,7 @@ npx tsx src/agent-delegator.ts --agent sdd-explore --task "analyze requirements"
 ### 3. Ejecutar Verificaciones
 
 **Cualquier herramienta:**
+
 ```bash
 # Health check completo
 npm run watchtower:health
@@ -161,22 +169,22 @@ npx tsx src/agents/sdd-apply.ts --task "test"
 
 ### Skills Migrados (.opencode/skills/ → /skills/)
 
-| Skill | Estado |
-|-------|--------|
-| validate-stack | ✅ Migrated |
-| ab-testing | ✅ Migrated |
-| api-and-interface-design | ✅ Migrated |
-| ci-cd-and-automation | ✅ Migrated |
-| code-review-and-quality | ✅ Migrated |
-| code-simplification | ✅ Migrated |
+| Skill                        | Estado      |
+| ---------------------------- | ----------- |
+| validate-stack               | ✅ Migrated |
+| ab-testing                   | ✅ Migrated |
+| api-and-interface-design     | ✅ Migrated |
+| ci-cd-and-automation         | ✅ Migrated |
+| code-review-and-quality      | ✅ Migrated |
+| code-simplification          | ✅ Migrated |
 | debugging-and-error-recovery | ✅ Migrated |
-| documentation-and-adrs | ✅ Migrated |
-| doubt-driven-development | ✅ Migrated |
-| frontend-ui-engineering | ✅ Migrated |
-| git-workflow-and-versioning | ✅ Migrated |
-| planning-and-task-breakdown | ✅ Migrated |
-| test-driven-development | ✅ Migrated |
-| web-research | ✅ Migrated |
+| documentation-and-adrs       | ✅ Migrated |
+| doubt-driven-development     | ✅ Migrated |
+| frontend-ui-engineering      | ✅ Migrated |
+| git-workflow-and-versioning  | ✅ Migrated |
+| planning-and-task-breakdown  | ✅ Migrated |
+| test-driven-development      | ✅ Migrated |
+| web-research                 | ✅ Migrated |
 
 **Total:** 14 skills de prioridad migrados (49 restantes en backlog)
 
@@ -197,6 +205,7 @@ npx tsx src/skill-migrator.ts --migrate-all
 **Causa:** OpenCode intenta heredar modelo del orquestador.
 
 **Solución:** Usar delegador nativo:
+
 ```bash
 npx tsx src/agent-delegator.ts --agent <name> --task "..."
 ```
@@ -204,12 +213,14 @@ npx tsx src/agent-delegator.ts --agent <name> --task "..."
 ### Skill no encontrado
 
 **Verificar ubicación:**
+
 ```bash
 # Debe estar en /skills/ (no .opencode/skills/)
 ls skills/<skill-name>/SKILL.md
 ```
 
 **Migrar si es necesario:**
+
 ```bash
 npx tsx src/skill-migrator.ts --migrate "skill-name"
 ```
@@ -217,12 +228,14 @@ npx tsx src/skill-migrator.ts --migrate "skill-name"
 ### TypeScript/Lint errors
 
 **Verificar:**
+
 ```bash
 npm run typecheck
 npm run lint
 ```
 
 **Auto-fix:**
+
 ```bash
 npm run lint -- --fix
 ```
@@ -246,6 +259,7 @@ npm run lint -- --fix
 ## Soporte
 
 Para reportar issues de portabilidad:
+
 1. Verificar con `npm run health:check`
 2. Documentar herramienta AI usada
 3. Incluir comandos ejecutados
@@ -253,7 +267,5 @@ Para reportar issues de portabilidad:
 
 ---
 
-**Estado:** ✅ Stack Agnóstico v2.0 - Operativo
-**Última actualización:** 2026-08-08
-**Agentes nativos:** 11/11 ✅
-**Skills nativos:** 135+ (14 migrados de opencode)
+**Estado:** ✅ Stack Agnóstico v2.0 - Operativo **Última actualización:** 2026-08-08 **Agentes
+nativos:** 11/11 ✅ **Skills nativos:** 135+ (14 migrados de opencode)

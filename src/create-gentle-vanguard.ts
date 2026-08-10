@@ -19,14 +19,7 @@
  */
 
 import { createInterface } from 'node:readline/promises';
-import {
-  copyFileSync,
-  existsSync,
-  mkdirSync,
-  readdirSync,
-  statSync,
-  writeFileSync,
-} from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { basename, join, relative, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { runSync } from './core/run-command.js';
@@ -464,9 +457,7 @@ async function main(): Promise<void> {
   } else {
     let name = args.name;
     if (!name && process.stdin.isTTY) {
-      const answer = await askQuestion(
-        'Nombre del proyecto (Enter para "gentle-vanguard-app"): ',
-      );
+      const answer = await askQuestion('Nombre del proyecto (Enter para "gentle-vanguard-app"): ');
       if (answer) name = answer;
     }
     projectName = sanitizeProjectName(name ?? 'gentle-vanguard-app');

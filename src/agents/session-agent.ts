@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Session Agent (session-agent) - Native Implementation
- * 
+ *
  * Session management agent for state tracking and lifecycle.
  * Works with ANY AI tool (Claude, Cursor, etc.)
  * No opencode dependency.
@@ -20,7 +20,7 @@ const AGENT_CONFIG = {
   model: 'opencode/deepseek-v4-flash-free',
   temperature: 0.3,
   maxTokens: 3000,
-  version: '1.0.0'
+  version: '1.0.0',
 };
 
 function parseArgs(): SessionTask {
@@ -28,16 +28,27 @@ function parseArgs(): SessionTask {
   const task: SessionTask = {
     task: '',
     model: process.env.AGENT_MODEL || AGENT_CONFIG.model,
-    temperature: parseFloat(process.env.AGENT_TEMPERATURE || String(AGENT_CONFIG.temperature))
+    temperature: parseFloat(process.env.AGENT_TEMPERATURE || String(AGENT_CONFIG.temperature)),
   };
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--task': task.task = args[++i]; break;
-      case '--context': task.context = args[++i]; break;
-      case '--model': task.model = args[++i]; break;
-      case '--temperature': task.temperature = parseFloat(args[++i]); break;
-      case '--help': case '-h': showHelp(); process.exit(0);
+      case '--task':
+        task.task = args[++i];
+        break;
+      case '--context':
+        task.context = args[++i];
+        break;
+      case '--model':
+        task.model = args[++i];
+        break;
+      case '--temperature':
+        task.temperature = parseFloat(args[++i]);
+        break;
+      case '--help':
+      case '-h':
+        showHelp();
+        process.exit(0);
     }
   }
 
@@ -63,12 +74,15 @@ Usage:
 
 function manageSession(task: string, context?: string): string {
   const normalized = task.toLowerCase();
-  const action = 
-    normalized.includes('start') ? 'START' :
-    normalized.includes('cleanup') || normalized.includes('clean') ? 'CLEANUP' :
-    normalized.includes('score') ? 'SCORE' :
-    normalized.includes('status') ? 'STATUS' :
-    'MANAGE';
+  const action = normalized.includes('start')
+    ? 'START'
+    : normalized.includes('cleanup') || normalized.includes('clean')
+      ? 'CLEANUP'
+      : normalized.includes('score')
+        ? 'SCORE'
+        : normalized.includes('status')
+          ? 'STATUS'
+          : 'MANAGE';
 
   const session = {
     task,
@@ -83,27 +97,23 @@ function manageSession(task: string, context?: string): string {
         '4. Execute task',
         '5. Save session state',
         '6. Score quality',
-        '7. Cleanup if needed'
+        '7. Cleanup if needed',
       ],
       metrics: {
         duration: 'calculated',
         toolCalls: 0,
         filesModified: 0,
         tokensUsed: 0,
-        errors: 0
+        errors: 0,
       },
       directories: {
         session: '.session/',
         runtime: '.runtime/',
         telemetry: '.telemetry/',
-        checkpoints: '.session/checkpoints/'
-      }
+        checkpoints: '.session/checkpoints/',
+      },
     },
-    commands: [
-      'npm run session:autostart',
-      'npm run watchtower:health',
-      'npm run db:health'
-    ]
+    commands: ['npm run session:autostart', 'npm run watchtower:health', 'npm run db:health'],
   };
 
   return JSON.stringify(session, null, 2);
@@ -123,7 +133,7 @@ async function main(): Promise<void> {
   try {
     const result = manageSession(task, context);
     const duration = Date.now() - startTime;
-    
+
     console.log('=== Session Management ===\n');
     console.log(result);
     console.log();
@@ -131,17 +141,22 @@ async function main(): Promise<void> {
     console.log(`  Status: ✅ SUCCESS`);
     console.log(`  Duration: ${duration}ms`);
     console.log('=================================================');
-    
-    console.log('\n=== JSON OUTPUT ===');
-    console.log(JSON.stringify({
-      success: true,
-      agent: AGENT_CONFIG.name,
-      task,
-      model,
-      duration,
-      output: JSON.parse(result)
-    }, null, 2));
 
+    console.log('\n=== JSON OUTPUT ===');
+    console.log(
+      JSON.stringify(
+        {
+          success: true,
+          agent: AGENT_CONFIG.name,
+          task,
+          model,
+          duration,
+          output: JSON.parse(result),
+        },
+        null,
+        2,
+      ),
+    );
   } catch (_error) {
     console.error('\n❌ Error:', _error);
     process.exit(1);

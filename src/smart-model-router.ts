@@ -1,7 +1,7 @@
 #!/usr/bin/env npx tsx
 /**
  * Smart Model Router - Intelligent fallback and health checking
- * 
+ *
  * Monitors model health and auto-switches on errors.
  * Used by orchestrator and subagents for resilient model routing.
  */
@@ -65,7 +65,7 @@ function saveActiveModel(model: string, provider: string, source: string): void 
     model,
     provider,
     changedAt: new Date().toISOString(),
-    source
+    source,
   };
   writeFileSync(ACTIVE_MODEL_PATH, JSON.stringify(entry, null, 2));
 }
@@ -73,40 +73,39 @@ function saveActiveModel(model: string, provider: string, source: string): void 
 // Check model health via simple ping
 async function checkModelHealth(modelId: string, entry: ModelEntry): Promise<ModelHealth> {
   const startTime = Date.now();
-  
+
   try {
     // For local providers like Ollama, check if endpoint is reachable
     if (entry.requiresLocal && entry.checkEndpoint) {
-      const response = await fetch(entry.checkEndpoint, { 
+      const response = await fetch(entry.checkEndpoint, {
         method: 'GET',
-        signal: AbortSignal.timeout(5000)
+        signal: AbortSignal.timeout(5000),
       });
-      
+
       if (response.ok) {
         return {
           status: 'available',
           lastChecked: new Date().toISOString(),
           consecutiveErrors: 0,
-          avgLatencyMs: Date.now() - startTime
+          avgLatencyMs: Date.now() - startTime,
         };
       }
     }
-    
+
     // For API providers, we trust the cache until an error occurs
     return {
       status: entry.health?.status || 'unknown',
       lastChecked: new Date().toISOString(),
       consecutiveErrors: entry.health?.consecutiveErrors || 0,
-      avgLatencyMs: entry.health?.avgLatencyMs
+      avgLatencyMs: entry.health?.avgLatencyMs,
     };
-    
   } catch (error) {
     return {
       status: 'unavailable',
       lastChecked: new Date().toISOString(),
       consecutiveErrors: (entry.health?.consecutiveErrors || 0) + 1,
       avgLatencyMs: null,
-      lastError: error instanceof Error ? error.message : String(error)
+      lastError: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -114,9 +113,9 @@ async function checkModelHealth(modelId: string, entry: ModelEntry): Promise<Mod
 // Detect error type from message
 function detectErrorType(errorMessage: string, patterns: Record<string, string[]>): string | null {
   const lowerMsg = errorMessage.toLowerCase();
-  
+
   for (const [type, patterns_list] of Object.entries(patterns)) {
-    if (patterns_list.some(pattern => lowerMsg.includes(pattern))) {
+    if (patterns_list.some((pattern) => lowerMsg.includes(pattern))) {
       return type;
     }
   }
@@ -125,13 +124,13 @@ function detectErrorType(errorMessage: string, patterns: Record<string, string[]
 
 // Get next fallback model
 function getFallbackModel(
-  currentModel: string, 
+  currentModel: string,
   registry: ModelRegistry,
-  strategy: string = 'cost-optimized'
+  strategy: string = 'cost-optimized',
 ): { model: string; entry: ModelEntry } | null {
   const currentEntry = registry.models[currentModel];
   if (!currentEntry) return null;
-  
+
   // Try fallback chain first
   for (const fallbackId of currentEntry.fallbackChain) {
     const fallbackEntry = registry.models[fallbackId];
@@ -139,9 +138,11 @@ function getFallbackModel(
       return { model: fallbackId, entry: fallbackEntry };
     }
   }
-  
+
   // Try strategy-based fallback
-  const strategyChain = registry.fallbackStrategies?.[strategy as keyof typeof registry.fallbackStrategies] as string[] | undefined;
+  const strategyChain = registry.fallbackStrategies?.[
+    strategy as keyof typeof registry.fallbackStrategies
+  ] as string[] | undefined;
   if (strategyChain) {
     for (const modelId of strategyChain) {
       if (modelId === currentModel) continue;
@@ -151,22 +152,22 @@ function getFallbackModel(
       }
     }
   }
-  
+
   return null;
 }
 
 // Main router function
 async function routeModel(
   requestedModel: string,
-  errorContext?: { error: string; agentType: 'orchestrator' | 'subagent' }
+  errorContext?: { error: string; agentType: 'orchestrator' | 'subagent' },
 ): Promise<{ model: string; provider: string; switched: boolean; reason?: string }> {
   const registry = loadRegistry();
-  
+
   // If error occurred, try to fallback
   if (errorContext) {
     const errorType = detectErrorType(errorContext.error, registry.errorPatterns);
     const currentEntry = registry.models[requestedModel];
-    
+
     // Update health status
     if (currentEntry) {
       currentEntry.health.consecutiveErrors++;
@@ -175,35 +176,35 @@ async function routeModel(
         currentEntry.health.status = 'unavailable';
       }
     }
-    
+
     // Get fallback
     const fallback = getFallbackModel(
-      requestedModel, 
+      requestedModel,
       registry,
-      registry.routingRules.orchestrator.fallbackStrategy
+      registry.routingRules.orchestrator.fallbackStrategy,
     );
-    
+
     if (fallback) {
       saveActiveModel(fallback.model, fallback.entry.provider, `fallback-${errorType}`);
       return {
         model: fallback.model,
         provider: fallback.entry.provider,
         switched: true,
-        reason: `Auto-switched from ${requestedModel} due to ${errorType}: ${errorContext.error}`
+        reason: `Auto-switched from ${requestedModel} due to ${errorType}: ${errorContext.error}`,
       };
     }
   }
-  
+
   // No error or no fallback available, use requested model
   const entry = registry.models[requestedModel];
   if (entry) {
     return {
       model: requestedModel,
       provider: entry.provider,
-      switched: false
+      switched: false,
     };
   }
-  
+
   // Model not found, return default
   const defaultModel = registry.routingRules.orchestrator.primary;
   const defaultEntry = registry.models[defaultModel];
@@ -211,7 +212,7 @@ async function routeModel(
     model: defaultModel,
     provider: defaultEntry?.provider || 'opencode',
     switched: true,
-    reason: `Model ${requestedModel} not found in registry, using default`
+    reason: `Model ${requestedModel} not found in registry, using default`,
   };
 }
 
@@ -219,7 +220,7 @@ async function routeModel(
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const command = args[0];
-  
+
   switch (command) {
     case 'check': {
       const registry = loadRegistry();
@@ -230,18 +231,18 @@ async function main(): Promise<void> {
       }
       break;
     }
-    
+
     case 'route': {
       const model = args[1] || 'kimi-2-5';
       const error = args[2];
       const result = await routeModel(
         model,
-        error ? { error, agentType: 'orchestrator' } : undefined
+        error ? { error, agentType: 'orchestrator' } : undefined,
       );
       console.log(JSON.stringify(result, null, 2));
       break;
     }
-    
+
     case 'get-active': {
       if (existsSync(ACTIVE_MODEL_PATH)) {
         const active = JSON.parse(readFileSync(ACTIVE_MODEL_PATH, 'utf-8'));
@@ -251,7 +252,7 @@ async function main(): Promise<void> {
       }
       break;
     }
-    
+
     case 'health-check': {
       const registry = loadRegistry();
       const modelId = args[1] || registry.routingRules.orchestrator.primary;
@@ -264,7 +265,7 @@ async function main(): Promise<void> {
       console.log(JSON.stringify(health, null, 2));
       break;
     }
-    
+
     default:
       console.log(`
 Smart Model Router v3.0

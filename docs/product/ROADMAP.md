@@ -55,31 +55,35 @@ seguro, extensible, zero-drama.**
 
 ## Backlog — Mejoras Local-First
 
-| #   | Feature                               | Prioridad | Tiempo est. | Descripción                                                             | Estado |
-| --- | ------------------------------------- | --------- | ----------- | ----------------------------------------------------------------------- | ------ |
-| 1   | **Dashboard offline mode**            | Media     | ~2h         | Funcionar sin dependencia del WS server, datos cacheados localmente     | ✅ Done |
-| 2   | **Auto-update desde GitHub Releases** | Media     | ~1h         | El stack se actualiza solo: detecta nueva versión, descarga, aplica     | ✅ Done |
-| 3   | **create-gentle-vanguard template**   | Baja      | ~2h         | `npx create-gentle-vanguard` para bootstrap de proyectos                | ✅ Done |
-| 4   | **Plugin system local-first**         | Baja      | ~3h         | Plugins comunitarios sin dependencia cloud, solo git + archivos locales | ✅ Done |
+| #   | Feature                               | Prioridad | Tiempo est. | Descripción                                                             | Estado                          |
+| --- | ------------------------------------- | --------- | ----------- | ----------------------------------------------------------------------- | ------------------------------- |
+| 1   | **Dashboard offline mode**            | Media     | ~2h         | Funcionar sin dependencia del WS server, datos cacheados localmente     | ✅ Done                         |
+| 2   | **Auto-update desde GitHub Releases** | Media     | ~1h         | El stack se actualiza solo: detecta nueva versión, descarga, aplica     | ✅ Done                         |
+| 3   | **create-gentle-vanguard template**   | Baja      | ~2h         | `npx create-gentle-vanguard` para bootstrap de proyectos                | ✅ Done                         |
+| 4   | **Plugin system local-first**         | Baja      | ~3h         | Plugins comunitarios sin dependencia cloud, solo git + archivos locales | ✅ Done                         |
 | 5   | **Dashboard modo offline completo**   | Baja      | ~2h         | Toda la funcionalidad del dashboard sin conexión a WS                   | ✅ Done (metrics/traces/alerts) |
 
 **Entregables Backlog Local-First (2026-08-09):**
 
-- `apps/web-dashboard/src/lib/offlineCache.ts` — caché localStorage por-key (cap 200KB, staleness 5 min).
-- `apps/web-dashboard/src/hooks/useMetrics.ts` + `useAlerts.ts` + `Dashboard.tsx` + `TracingDashboard.tsx` —
-  modo offline: `isOffline`, `lastUpdated`, banner amber "Offline mode — cached data".
-- `src/check-version.ts` — fix: apunta al repo público `EmmanuelOrtiz87/gentle-vanguard-public` (el privado
-  devolvía 404), override vía `GENTLE_VANGUARD_GH_REPO`. `src/auto-update.ts` + `npm run update:check` OK.
+- `apps/web-dashboard/src/lib/offlineCache.ts` — caché localStorage por-key (cap 200KB, staleness 5
+  min).
+- `apps/web-dashboard/src/hooks/useMetrics.ts` + `useAlerts.ts` + `Dashboard.tsx` +
+  `TracingDashboard.tsx` — modo offline: `isOffline`, `lastUpdated`, banner amber "Offline mode —
+  cached data".
+- `src/check-version.ts` — fix: apunta al repo público `EmmanuelOrtiz87/gentle-vanguard-public` (el
+  privado devolvía 404), override vía `GENTLE_VANGUARD_GH_REPO`. `src/auto-update.ts` +
+  `npm run update:check` OK.
 - `src/create-gentle-vanguard.ts` + `tests/unit/create-gentle-vanguard.test.ts` (12 tests) +
-  `docs/product/CREATE-GENTLE-VANGUARD.md` — bootstrap `npx tsx src/create-gentle-vanguard.ts --name <app>`.
+  `docs/product/CREATE-GENTLE-VANGUARD.md` — bootstrap
+  `npx tsx src/create-gentle-vanguard.ts --name <app>`.
 - `src/plugin-manager.ts` + `plugins/example-hello/` + `config/plugin-manifest-schema.json` +
   `config/plugin-registry.json` + `docs/product/PLUGIN-SYSTEM.md` — plugins local-first con hooks en
   procesos separados (seguridad), step lazy `plugin-registry-load`.
 
 ## Fase 1 — Consolidación corta (ahora)
 
-| Acción                                                             | Objetivo                                           | Impacto | Estado |
-| ------------------------------------------------------------------ | -------------------------------------------------- | ------- | ------ |
+| Acción                                                             | Objetivo                                           | Impacto | Estado  |
+| ------------------------------------------------------------------ | -------------------------------------------------- | ------- | ------- |
 | Definir módulos core vs experimental                               | Reducir ambigüedad operativa                       | Alto    | ✅ Done |
 | Marcar módulos experimentales como opt-in                          | Evitar que se usen por defecto                     | Alto    | ✅ Done |
 | Añadir validación de configuración de madurez                      | Sustituir intuición por contrato                   | Medio   | ✅ Done |
@@ -96,22 +100,22 @@ seguro, extensible, zero-drama.**
   `list | --status | --validate <id> | --gate <id> [--run-checks]`.
 - `docs/governance/MODULE-ACTIVATION-WORKFLOW.md` — proceso formal propuesta → revisión gov → gates
   mínimos → aprobación → activación/rollout.
-- `docs/governance/activation-decisions/` — registro de aprobaciones (8 decisiones registradas,
-  1 por módulo experimental activado).
+- `docs/governance/activation-decisions/` — registro de aprobaciones (8 decisiones registradas, 1
+  por módulo experimental activado).
 
-**Estado de activación (2026-08-10):** los **8 módulos experimentales** están activados con
-6/6 gates satisfied (tests, typecheck, lint, security-scan, governance-approval, owner-signoff):
+**Estado de activación (2026-08-10):** los **8 módulos experimentales** están activados con 6/6
+gates satisfied (tests, typecheck, lint, security-scan, governance-approval, owner-signoff):
 
-| Módulo | Madurez | Riesgo | Owner | Gates |
-| ------ | ------- | ------ | ----- | ----- |
-| root-cause-correlator | beta | medium | self-diag-agent | 6/6 |
-| convergence-monitor | experimental | medium | orchestrator | 6/6 |
-| fine-tuning-collector | experimental | high | ops-agent | 6/6 |
-| predictive-governor | experimental | high | ops-agent | 6/6 |
-| proactive-intelligence | experimental | high | orchestrator | 6/6 |
-| trust-layer-stage8 | beta | high | gov-agent | 6/6 |
-| skill-evolution-engine | beta | medium | orchestrator | 6/6 |
-| cross-workspace-mesh | experimental | high | ops-agent | 6/6 |
+| Módulo                 | Madurez      | Riesgo | Owner           | Gates |
+| ---------------------- | ------------ | ------ | --------------- | ----- |
+| root-cause-correlator  | beta         | medium | self-diag-agent | 6/6   |
+| convergence-monitor    | experimental | medium | orchestrator    | 6/6   |
+| fine-tuning-collector  | experimental | high   | ops-agent       | 6/6   |
+| predictive-governor    | experimental | high   | ops-agent       | 6/6   |
+| proactive-intelligence | experimental | high   | orchestrator    | 6/6   |
+| trust-layer-stage8     | beta         | high   | gov-agent       | 6/6   |
+| skill-evolution-engine | beta         | medium | orchestrator    | 6/6   |
+| cross-workspace-mesh   | experimental | high   | ops-agent       | 6/6   |
 
 Commits: `5a75d2ab` (3 módulos) + `4be9c891` (5 módulos). Todos los scripts validados
 operacionalmente y ya integrados como steps lazy en `session-autostart.config.json`.
@@ -143,22 +147,22 @@ npx tsx src/module-maturity.ts --gate <module-id>
 
 ## Recent Milestones
 
-| Version | Date       | Highlights                                                                                                                                                              |
-| ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Version | Date       | Highlights                                                                                                                                                                                                                              |
+| ------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | v9.0    | 2026-08-10 | Gobernanza de madurez completa: 8/8 módulos experimentales activados con gates 6/6 (MODULE-ACTIVATION-WORKFLOW), SBOM CycloneDX 1.7 integrado (464 componentes, validación nativa), ADR-002 MCP workspace, roadmap de optimización 100% |
-| v8.0    | 2026-07-08 | Public Release: zero-dependency stack, auto-install, updated README, watchdog auto-recovery, dynamic ports                                                              |
-| v7.1    | 2026-07-08 | Dashboard UI refinement: engram source in Knowledge Panel, auto-refresh 30s, relevance colors, error states                                                             |
-| v7.0    | 2026-07-08 | Multi-repo Mesh API + Engram mem_search integration in knowledge-query                                                                                                  |
-| v6.7    | 2026-07-07 | Knowledge Persistence Layer: unified query engine (knowledge-query.ps1) cruza events, traces, feedback, checkpoints                                                     |
-| v6.6    | 2026-07-07 | MCP SDK Scaffolder: create action multi-lenguaje (ts, js, py, go, rs) con auto-build y auto-register                                                                    |
-| v6.5    | 2026-07-07 | MCP Quickstart: pre-built server templates (sqlite, filesystem, browser, memory), 1-command enable via mcp-manager                                                      |
-| v6.4    | 2026-07-07 | MCP Native: local MCP server registry, gateway, CLI manager (mcp-manager.ps1), dashboard management UI (MCPServers.tsx), 3 REST endpoints, session pipeline integration |
-| v6.3    | 2026-07-07 | Dashboard Multi-Tenant: per-tenant metrics filtering, tenant selector UI, /api/tenants endpoint, /api/metrics?tenantId=                                                 |
-| v6.2    | 2026-07-07 | Cross-Org Federation: federation auth with RSA handshake, org registry, capability-based authorization, /api/federation endpoint                                        |
-| v6.1    | 2026-07-07 | AI Safety Layer: safety guardrails, prompt injection protection, mutation risk scoring, /api/safety endpoint                                                            |
-| v6.0    | 2026-07-07 | Self-evolving agents, cross-workspace mesh, auto code review, predictive incident response                                                                              |
-| v5.1    | 2026-07-07 | Multi-tenant isolation, eval/benchmark framework, CI/CD self-healing, 3 new configs, pipeline integration                                                               |
-| v3.3.3  | 2026-06-19 | Watchtower 74/74 PASS, RBAC + CSP, audit pipeline, tracing, cloud connectors, Engram auto-sync                                                                          |
-| v3.3.2  | 2026-06-18 | Dashboard i18n (3 idiomas), alert system, watchtower 60 checks, lifecycle scripts, trace system                                                                         |
-| v3.3.1  | 2026-06-17 | CI/CD 35→12 workflows, structured logging, adapter consolidation, docker compose, health API                                                                            |
-| v3.3.0  | 2026-06-05 | Community skills, CI validation, real marketplace                                                                                                                       |
+| v8.0    | 2026-07-08 | Public Release: zero-dependency stack, auto-install, updated README, watchdog auto-recovery, dynamic ports                                                                                                                              |
+| v7.1    | 2026-07-08 | Dashboard UI refinement: engram source in Knowledge Panel, auto-refresh 30s, relevance colors, error states                                                                                                                             |
+| v7.0    | 2026-07-08 | Multi-repo Mesh API + Engram mem_search integration in knowledge-query                                                                                                                                                                  |
+| v6.7    | 2026-07-07 | Knowledge Persistence Layer: unified query engine (knowledge-query.ps1) cruza events, traces, feedback, checkpoints                                                                                                                     |
+| v6.6    | 2026-07-07 | MCP SDK Scaffolder: create action multi-lenguaje (ts, js, py, go, rs) con auto-build y auto-register                                                                                                                                    |
+| v6.5    | 2026-07-07 | MCP Quickstart: pre-built server templates (sqlite, filesystem, browser, memory), 1-command enable via mcp-manager                                                                                                                      |
+| v6.4    | 2026-07-07 | MCP Native: local MCP server registry, gateway, CLI manager (mcp-manager.ps1), dashboard management UI (MCPServers.tsx), 3 REST endpoints, session pipeline integration                                                                 |
+| v6.3    | 2026-07-07 | Dashboard Multi-Tenant: per-tenant metrics filtering, tenant selector UI, /api/tenants endpoint, /api/metrics?tenantId=                                                                                                                 |
+| v6.2    | 2026-07-07 | Cross-Org Federation: federation auth with RSA handshake, org registry, capability-based authorization, /api/federation endpoint                                                                                                        |
+| v6.1    | 2026-07-07 | AI Safety Layer: safety guardrails, prompt injection protection, mutation risk scoring, /api/safety endpoint                                                                                                                            |
+| v6.0    | 2026-07-07 | Self-evolving agents, cross-workspace mesh, auto code review, predictive incident response                                                                                                                                              |
+| v5.1    | 2026-07-07 | Multi-tenant isolation, eval/benchmark framework, CI/CD self-healing, 3 new configs, pipeline integration                                                                                                                               |
+| v3.3.3  | 2026-06-19 | Watchtower 74/74 PASS, RBAC + CSP, audit pipeline, tracing, cloud connectors, Engram auto-sync                                                                                                                                          |
+| v3.3.2  | 2026-06-18 | Dashboard i18n (3 idiomas), alert system, watchtower 60 checks, lifecycle scripts, trace system                                                                                                                                         |
+| v3.3.1  | 2026-06-17 | CI/CD 35→12 workflows, structured logging, adapter consolidation, docker compose, health API                                                                                                                                            |
+| v3.3.0  | 2026-06-05 | Community skills, CI validation, real marketplace                                                                                                                                                                                       |

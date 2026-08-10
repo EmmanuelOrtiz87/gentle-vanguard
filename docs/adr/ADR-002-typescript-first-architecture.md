@@ -39,7 +39,7 @@ incrementally following TypeScript-first patterns.
 | Aspect              | Before (TypeScript)       | After (TypeScript)                   |
 | ------------------- | ------------------------- | ------------------------------------ |
 | **Entry Point**     | `scripts/utilities/*.ps1` | `src/*.ts`                           |
-| **Execution**       | `npx tsx src/cli/gv.ts`       | `npx tsx src/script.ts`              |
+| **Execution**       | `npx tsx src/cli/gv.ts`   | `npx tsx src/script.ts`              |
 | **Package Manager** | None / TypeScript Gallery | `pnpm`                               |
 | **Testing**         | Pester                    | `node:test` via `tsx --test`         |
 | **Type Safety**     | Runtime checks            | TypeScript compiler (`tsc --noEmit`) |

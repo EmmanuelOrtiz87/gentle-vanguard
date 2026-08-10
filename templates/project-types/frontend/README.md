@@ -1,4 +1,4 @@
-﻿# Frontend Templates
+# Frontend Templates
 
 This directory contains frontend framework templates. Copy the appropriate `package.*.json` to
 `package.json` based on your chosen framework.
@@ -16,35 +16,35 @@ This directory contains frontend framework templates. Copy the appropriate `pack
 
 ### React
 
-```bash
+````bash
 cp package.react.json package.json
 npm install
-```
+```text
 
 ### Vue
 
 ```bash
 cp package.vue.json package.json
 npm install
-```
+```text
 
 ### Next.js
 
 ```bash
 cp package.nextjs.json package.json
 npm install
-```
+```text
 
 ### Angular (with Nx)
 
 ```bash
 cp package.nx.json package.json
 npm install
-```
+```text
 
 ## Structure
 
-```
+```text
 frontend/
  src/
     components/   # Reusable UI components
@@ -56,4 +56,5 @@ frontend/
  tests/            # Test files
  package.*.json    # Framework-specific package files
  tsconfig.*.json   # Framework-specific TypeScript configs
-```
+```text
+````

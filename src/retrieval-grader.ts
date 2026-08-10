@@ -108,7 +108,8 @@ export function gradeRetrieval(
   });
 
   const relevantCount = graded.filter((g) => g.relevant).length;
-  const averageScore = graded.length > 0 ? graded.reduce((a, g) => a + g.score, 0) / graded.length : 0;
+  const averageScore =
+    graded.length > 0 ? graded.reduce((a, g) => a + g.score, 0) / graded.length : 0;
   const relevantRatio = graded.length > 0 ? relevantCount / graded.length : 0;
 
   const needsCorrection = relevantRatio < minRelevantRatio || averageScore < threshold;
@@ -146,7 +147,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   }
 
   if (!query || !chunksRaw) {
-    console.error('Usage: npx tsx src/retrieval-grader.ts --query "..." --chunks \'["...","..."]\' [--file path]');
+    console.error(
+      'Usage: npx tsx src/retrieval-grader.ts --query "..." --chunks \'["...","..."]\' [--file path]',
+    );
     process.exit(1);
   }
 
@@ -158,16 +161,22 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   }
 
   const result = gradeRetrieval(query, chunks);
-  console.log(JSON.stringify(
-    {
-      verdict: result.verdict,
-      averageScore: result.averageScore.toFixed(3),
-      relevantCount: result.relevantCount,
-      totalCount: result.totalCount,
-      correctiveAction: result.correctiveAction,
-      chunks: result.chunks.map((c) => ({ index: c.index, score: c.score.toFixed(2), relevant: c.relevant })),
-    },
-    null,
-    2,
-  ));
+  console.log(
+    JSON.stringify(
+      {
+        verdict: result.verdict,
+        averageScore: result.averageScore.toFixed(3),
+        relevantCount: result.relevantCount,
+        totalCount: result.totalCount,
+        correctiveAction: result.correctiveAction,
+        chunks: result.chunks.map((c) => ({
+          index: c.index,
+          score: c.score.toFixed(2),
+          relevant: c.relevant,
+        })),
+      },
+      null,
+      2,
+    ),
+  );
 }

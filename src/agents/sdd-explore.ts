@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SDD Explore Agent (sdd-explore) - Native Implementation
- * 
+ *
  * BA exploration agent for requirements gathering and analysis.
  * Works with ANY AI tool (Claude, Cursor, etc.)
  * No opencode dependency.
@@ -20,7 +20,7 @@ const AGENT_CONFIG = {
   model: 'opencode/deepseek-v4-flash-free',
   temperature: 0.7,
   maxTokens: 4000,
-  version: '1.0.0'
+  version: '1.0.0',
 };
 
 function parseArgs(): ExploreTask {
@@ -28,7 +28,7 @@ function parseArgs(): ExploreTask {
   const task: ExploreTask = {
     task: '',
     model: process.env.AGENT_MODEL || AGENT_CONFIG.model,
-    temperature: parseFloat(process.env.AGENT_TEMPERATURE || String(AGENT_CONFIG.temperature))
+    temperature: parseFloat(process.env.AGENT_TEMPERATURE || String(AGENT_CONFIG.temperature)),
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -87,30 +87,30 @@ function exploreRequirements(task: string, context?: string): string {
       {
         question: 'What is the expected outcome?',
         guidance: 'Define the success criteria and deliverables',
-        category: 'scope'
+        category: 'scope',
       },
       {
         question: 'What constraints exist (time, budget, technology)?',
         guidance: 'Identify limitations that affect the solution',
-        category: 'constraints'
+        category: 'constraints',
       },
       {
         question: 'What are the edge cases?',
         guidance: 'Consider boundary conditions and error scenarios',
-        category: 'edge-cases'
+        category: 'edge-cases',
       },
       {
         question: 'Who are the stakeholders?',
         guidance: 'Identify users, maintainers, and decision makers',
-        category: 'stakeholders'
+        category: 'stakeholders',
       },
       {
         question: 'What does success look like?',
         guidance: 'Define measurable acceptance criteria',
-        category: 'success'
-      }
+        category: 'success',
+      },
     ],
-    recommendedPhase: determinePhase(task)
+    recommendedPhase: determinePhase(task),
   };
 
   return JSON.stringify(requirementAnalysis, null, 2);
@@ -118,12 +118,24 @@ function exploreRequirements(task: string, context?: string): string {
 
 function determinePhase(task: string): string {
   const normalized = task.toLowerCase();
-  
-  if (normalized.includes('implement') || normalized.includes('code') || normalized.includes('build')) {
+
+  if (
+    normalized.includes('implement') ||
+    normalized.includes('code') ||
+    normalized.includes('build')
+  ) {
     return 'IMPLEMENT';
-  } else if (normalized.includes('design') || normalized.includes('architecture') || normalized.includes('plan')) {
+  } else if (
+    normalized.includes('design') ||
+    normalized.includes('architecture') ||
+    normalized.includes('plan')
+  ) {
     return 'PLAN → TASKS → IMPLEMENT';
-  } else if (normalized.includes('task') || normalized.includes('breakdown') || normalized.includes('spec')) {
+  } else if (
+    normalized.includes('task') ||
+    normalized.includes('breakdown') ||
+    normalized.includes('spec')
+  ) {
     return 'TASKS → IMPLEMENT';
   } else {
     return 'SPECIFY → PLAN → TASKS → IMPLEMENT';
@@ -149,7 +161,7 @@ async function main(): Promise<void> {
   try {
     const result = exploreRequirements(task, context);
     const duration = Date.now() - startTime;
-    
+
     console.log('=== Requirements Analysis ===\n');
     console.log(result);
     console.log();
@@ -158,18 +170,23 @@ async function main(): Promise<void> {
     console.log(`  Duration: ${duration}ms`);
     console.log(`  Recommended Phase: ${JSON.parse(result).recommendedPhase}`);
     console.log('=================================================');
-    
-    console.log('\n=== JSON OUTPUT ===');
-    console.log(JSON.stringify({
-      success: true,
-      agent: AGENT_CONFIG.name,
-      version: AGENT_CONFIG.version,
-      task,
-      model,
-      duration,
-      output: JSON.parse(result)
-    }, null, 2));
 
+    console.log('\n=== JSON OUTPUT ===');
+    console.log(
+      JSON.stringify(
+        {
+          success: true,
+          agent: AGENT_CONFIG.name,
+          version: AGENT_CONFIG.version,
+          task,
+          model,
+          duration,
+          output: JSON.parse(result),
+        },
+        null,
+        2,
+      ),
+    );
   } catch (_error) {
     console.error('\n❌ Error:', _error);
     process.exit(1);

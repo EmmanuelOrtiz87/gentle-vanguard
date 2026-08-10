@@ -18,7 +18,13 @@
  *   --json    print full JSON (default)
  */
 
-import { witr, isWitrInstalled, ensureWitrInstalled, WITR_VERSION, WITR_BIN_PATH } from './witr-wrapper.js';
+import {
+  witr,
+  isWitrInstalled,
+  ensureWitrInstalled,
+  WITR_VERSION,
+  WITR_BIN_PATH,
+} from './witr-wrapper.js';
 import type { ProcessChain, FileChain, ContainerChain } from './witr-wrapper.js';
 
 function printCausalChain(chain: ProcessChain | FileChain | ContainerChain): void {
@@ -29,7 +35,8 @@ function printCausalChain(chain: ProcessChain | FileChain | ContainerChain): voi
 function printSummary(chain: ProcessChain | FileChain | ContainerChain): void {
   console.log(`Process   : ${chain.name} (pid ${chain.pid})`);
   console.log(`Command   : ${chain.command}`);
-  if (chain.source) console.log(`Source    : ${chain.source}${chain.sourceName ? ` (${chain.sourceName})` : ''}`);
+  if (chain.source)
+    console.log(`Source    : ${chain.source}${chain.sourceName ? ` (${chain.sourceName})` : ''}`);
   if (chain.health) console.log(`Health    : ${chain.health}`);
   if ('path' in chain) console.log(`File      : ${(chain as FileChain).path}`);
   if ('containerName' in chain) {

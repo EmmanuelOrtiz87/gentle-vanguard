@@ -21,7 +21,7 @@ interface AgentConfig {
 for (const [name, agent] of Object.entries(config.agent as Record<string, AgentConfig>)) {
   if (agent.mode === 'subagent' && agent.model) {
     delete agent.model;
-    agent.variant = '';  // Break inheritance
+    agent.variant = ''; // Break inheritance
     count++;
     console.log(`Borrado model de: ${name}`);
   }

@@ -117,7 +117,9 @@ function eventHash(event: StoredEvent): string {
 function getLastEvent(aggregateId: string): StoredEvent | null {
   const path = getStorePath(aggregateId);
   if (!path || !existsSync(path)) return null;
-  const lines = readFileSync(path, 'utf-8').split('\n').filter((l) => l.trim());
+  const lines = readFileSync(path, 'utf-8')
+    .split('\n')
+    .filter((l) => l.trim());
   if (lines.length === 0) return null;
   try {
     return JSON.parse(lines[lines.length - 1]) as StoredEvent;
@@ -383,12 +385,22 @@ function verifyChainAction(args: Record<string, string>): {
   valid: number;
   broken: number;
   intact: boolean;
-  checks: Array<{ version: number; type: string; status: 'ok' | 'broken' | 'tamper-mismatch'; detail?: string }>;
+  checks: Array<{
+    version: number;
+    type: string;
+    status: 'ok' | 'broken' | 'tamper-mismatch';
+    detail?: string;
+  }>;
 } {
   const aggregateId = args['AggregateId'];
   if (!aggregateId) throw new Error('AggregateId required');
   const events = loadEvents(aggregateId);
-  const checks: Array<{ version: number; type: string; status: 'ok' | 'broken' | 'tamper-mismatch'; detail?: string }> = [];
+  const checks: Array<{
+    version: number;
+    type: string;
+    status: 'ok' | 'broken' | 'tamper-mismatch';
+    detail?: string;
+  }> = [];
   let valid = 0;
   let broken = 0;
 
@@ -398,14 +410,24 @@ function verifyChainAction(args: Record<string, string>): {
     const selfOk = recomputed === evt.hash;
     if (!selfOk) {
       broken++;
-      checks.push({ version: evt.version, type: evt.type, status: 'tamper-mismatch', detail: 'event hash does not match its content' });
+      checks.push({
+        version: evt.version,
+        type: evt.type,
+        status: 'tamper-mismatch',
+        detail: 'event hash does not match its content',
+      });
       continue;
     }
     if (i > 0) {
       const prev = events[i - 1];
       if (evt.prevHash !== prev.hash) {
         broken++;
-        checks.push({ version: evt.version, type: evt.type, status: 'broken', detail: 'prevHash does not link to previous event hash' });
+        checks.push({
+          version: evt.version,
+          type: evt.type,
+          status: 'broken',
+          detail: 'prevHash does not link to previous event hash',
+        });
         continue;
       }
     }

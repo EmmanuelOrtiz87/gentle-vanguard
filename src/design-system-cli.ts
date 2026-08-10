@@ -84,9 +84,19 @@ function parseArgs(argv: string[]): CliArgs {
   // Positional file path (e.g. `design:check -- ./components/Button.tsx`),
   // skipping any values consumed by flags above.
   const flagNames = new Set([
-    '--primary', '--neutral', '--format', '--base', '--ratio', '--levels',
-    '--fg', '--bg', '--output',
-    '--semantic-success', '--semantic-warning', '--semantic-error', '--semantic-info',
+    '--primary',
+    '--neutral',
+    '--format',
+    '--base',
+    '--ratio',
+    '--levels',
+    '--fg',
+    '--bg',
+    '--output',
+    '--semantic-success',
+    '--semantic-warning',
+    '--semantic-error',
+    '--semantic-info',
   ]);
   const positional = argv.find((a, i) => {
     if (a.startsWith('--')) return false;
@@ -174,9 +184,15 @@ function cmdScale(args: CliArgs): void {
   console.log(`Modular type scale — base ${base}px, ratio ${ratio} (${ratioLabel(ratio)})\n`);
   for (const name of shown) {
     const size = scale[name];
-    console.log(`   ${name.padEnd(12)} ${String(size.px).padStart(3)}px  ${size.rem}rem  lh ${size.lineHeight}`);
+    console.log(
+      `   ${name.padEnd(12)} ${String(size.px).padStart(3)}px  ${size.rem}rem  lh ${size.lineHeight}`,
+    );
   }
-  console.log(`\nAvailable ratios: ${Object.entries(TYPOGRAPHY_RATIOS).map(([k, v]) => `${k}=${v}`).join(', ')}`);
+  console.log(
+    `\nAvailable ratios: ${Object.entries(TYPOGRAPHY_RATIOS)
+      .map(([k, v]) => `${k}=${v}`)
+      .join(', ')}`,
+  );
 }
 
 function ratioLabel(ratio: number): string {
@@ -207,8 +223,12 @@ function cmdCheck(args: CliArgs): void {
   if (args.fg && args.bg) {
     const pair = checkPair(args.fg, args.bg);
     console.log(`Contrast ${args.fg} on ${args.bg}: ${pair.ratio.toFixed(2)}:1`);
-    console.log(`   AA normal: ${pair.aaNormal ? 'PASS' : 'FAIL'} (4.5:1)  AA large: ${pair.aaLarge ? 'PASS' : 'FAIL'} (3:1)`);
-    console.log(`   AAA normal: ${pair.aaaNormal ? 'PASS' : 'FAIL'} (7:1)   AAA large: ${pair.aaaLarge ? 'PASS' : 'FAIL'} (4.5:1)`);
+    console.log(
+      `   AA normal: ${pair.aaNormal ? 'PASS' : 'FAIL'} (4.5:1)  AA large: ${pair.aaLarge ? 'PASS' : 'FAIL'} (3:1)`,
+    );
+    console.log(
+      `   AAA normal: ${pair.aaaNormal ? 'PASS' : 'FAIL'} (7:1)   AAA large: ${pair.aaaLarge ? 'PASS' : 'FAIL'} (4.5:1)`,
+    );
     return;
   }
 
@@ -238,7 +258,9 @@ function cmdCheck(args: CliArgs): void {
         `text ${text} ${ratio.toFixed(2)}:1 ${passes ? 'AA' : '⚠ AA FAIL'}`,
     );
   }
-  console.log(`\n${failures === 0 ? '✅ All colors have an AA text pairing' : `⚠ ${failures} color(s) lack an AA text pairing`}`);
+  console.log(
+    `\n${failures === 0 ? '✅ All colors have an AA text pairing' : `⚠ ${failures} color(s) lack an AA text pairing`}`,
+  );
 }
 
 // ─── Help ─────────────────────────────────────────────────────────────────────

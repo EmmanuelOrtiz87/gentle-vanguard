@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Ops Agent (ops-agent) - Native Implementation
- * 
+ *
  * Operations agent for CI/CD, infrastructure, and deployment.
  * Works with ANY AI tool (Claude, Cursor, etc.)
  * No opencode dependency.
@@ -20,7 +20,7 @@ const AGENT_CONFIG = {
   model: 'opencode/deepseek-v4-flash-free',
   temperature: 0.1,
   maxTokens: 4000,
-  version: '1.0.0'
+  version: '1.0.0',
 };
 
 function parseArgs(): OpsTask {
@@ -28,16 +28,27 @@ function parseArgs(): OpsTask {
   const task: OpsTask = {
     task: '',
     model: process.env.AGENT_MODEL || AGENT_CONFIG.model,
-    temperature: parseFloat(process.env.AGENT_TEMPERATURE || String(AGENT_CONFIG.temperature))
+    temperature: parseFloat(process.env.AGENT_TEMPERATURE || String(AGENT_CONFIG.temperature)),
   };
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--task': task.task = args[++i]; break;
-      case '--context': task.context = args[++i]; break;
-      case '--model': task.model = args[++i]; break;
-      case '--temperature': task.temperature = parseFloat(args[++i]); break;
-      case '--help': case '-h': showHelp(); process.exit(0);
+      case '--task':
+        task.task = args[++i];
+        break;
+      case '--context':
+        task.context = args[++i];
+        break;
+      case '--model':
+        task.model = args[++i];
+        break;
+      case '--temperature':
+        task.temperature = parseFloat(args[++i]);
+        break;
+      case '--help':
+      case '-h':
+        showHelp();
+        process.exit(0);
     }
   }
 
@@ -63,12 +74,15 @@ Usage:
 
 function analyzeOperations(task: string, context?: string): string {
   const normalized = task.toLowerCase();
-  const opsType = 
-    normalized.includes('deploy') ? 'DEPLOYMENT' :
-    normalized.includes('ci/cd') || normalized.includes('pipeline') ? 'CI/CD' :
-    normalized.includes('docker') ? 'DOCKER' :
-    normalized.includes('monitor') ? 'MONITORING' :
-    'GENERAL';
+  const opsType = normalized.includes('deploy')
+    ? 'DEPLOYMENT'
+    : normalized.includes('ci/cd') || normalized.includes('pipeline')
+      ? 'CI/CD'
+      : normalized.includes('docker')
+        ? 'DOCKER'
+        : normalized.includes('monitor')
+          ? 'MONITORING'
+          : 'GENERAL';
 
   const ops = {
     task,
@@ -78,21 +92,21 @@ function analyzeOperations(task: string, context?: string): string {
       workflows: [
         { name: 'ci.yml', jobs: ['lint-typecheck', 'test', 'build'] },
         { name: 'security.yml', jobs: ['gitleaks', 'secretlint', 'trivy'] },
-        { name: 'release.yml', jobs: ['version-bump', 'tag', 'deploy'] }
+        { name: 'release.yml', jobs: ['version-bump', 'tag', 'deploy'] },
       ],
       dockerServices: [
         'web-dashboard (port 8080)',
         'websocket-server (port 8081)',
         'mcp-server (port 3001)',
         'jaeger (tracing)',
-        'prometheus (metrics)'
+        'prometheus (metrics)',
       ],
       monitoring: [
         'Watchtower: 60+ checks',
         'Dashboard: Real-time metrics',
         'Auto-healing: Process recovery',
-        'Health API: /api/health'
-      ]
+        'Health API: /api/health',
+      ],
     },
     deploymentSteps: [
       '1. Run quality checks (typecheck, lint, test)',
@@ -100,8 +114,8 @@ function analyzeOperations(task: string, context?: string): string {
       '3. Tag with version',
       '4. Deploy to target environment',
       '5. Verify with health checks',
-      '6. Monitor for 30 minutes'
-    ]
+      '6. Monitor for 30 minutes',
+    ],
   };
 
   return JSON.stringify(ops, null, 2);
@@ -121,7 +135,7 @@ async function main(): Promise<void> {
   try {
     const result = analyzeOperations(task, context);
     const duration = Date.now() - startTime;
-    
+
     console.log('=== Operations Plan ===\n');
     console.log(result);
     console.log();
@@ -129,17 +143,22 @@ async function main(): Promise<void> {
     console.log(`  Status: ✅ SUCCESS`);
     console.log(`  Duration: ${duration}ms`);
     console.log('=================================================');
-    
-    console.log('\n=== JSON OUTPUT ===');
-    console.log(JSON.stringify({
-      success: true,
-      agent: AGENT_CONFIG.name,
-      task,
-      model,
-      duration,
-      output: JSON.parse(result)
-    }, null, 2));
 
+    console.log('\n=== JSON OUTPUT ===');
+    console.log(
+      JSON.stringify(
+        {
+          success: true,
+          agent: AGENT_CONFIG.name,
+          task,
+          model,
+          duration,
+          output: JSON.parse(result),
+        },
+        null,
+        2,
+      ),
+    );
   } catch (_error) {
     console.error('\n❌ Error:', _error);
     process.exit(1);

@@ -135,7 +135,10 @@ function npmScriptExists(name: string): boolean {
 // ─── Criterion evaluation ─────────────────────────────────────────────────────
 
 function policyDir(config: MaturityConfig, key: 'approvalFileDir' | 'moduleDocDir'): string {
-  return config.policy?.[key] ?? (key === 'approvalFileDir' ? 'docs/governance/activation-decisions' : 'docs/modules');
+  return (
+    config.policy?.[key] ??
+    (key === 'approvalFileDir' ? 'docs/governance/activation-decisions' : 'docs/modules')
+  );
 }
 
 function evaluateCriterion(
@@ -155,7 +158,9 @@ function evaluateCriterion(
         required: criterion.required,
         satisfied,
         verified: true,
-        note: satisfied ? `entry script exists (${module.script})` : `entry script missing (${module.script})`,
+        note: satisfied
+          ? `entry script exists (${module.script})`
+          : `entry script missing (${module.script})`,
       };
     }
     return {
@@ -191,7 +196,9 @@ function evaluateCriterion(
       required: criterion.required,
       satisfied,
       verified: true,
-      note: satisfied ? `documented (${docDir}/${module.id}.md)` : `not documented (${docDir}/${module.id}.md)`,
+      note: satisfied
+        ? `documented (${docDir}/${module.id}.md)`
+        : `not documented (${docDir}/${module.id}.md)`,
     };
   }
 
@@ -202,7 +209,9 @@ function evaluateCriterion(
       required: criterion.required,
       satisfied,
       verified: true,
-      note: satisfied ? 'owner sign-off recorded' : 'owner sign-off pending (--ownerSignoff to simulate)',
+      note: satisfied
+        ? 'owner sign-off recorded'
+        : 'owner sign-off pending (--ownerSignoff to simulate)',
     };
   }
 
@@ -246,7 +255,10 @@ function evaluateCriterion(
 
 // ─── Core API ─────────────────────────────────────────────────────────────────
 
-export function validateActivation(moduleId: string, options: ValidateOptions = {}): ValidationResult {
+export function validateActivation(
+  moduleId: string,
+  options: ValidateOptions = {},
+): ValidationResult {
   const config = loadModuleConfig(options);
   const module = findModule(config, moduleId);
 
@@ -297,7 +309,9 @@ export function validateActivation(moduleId: string, options: ValidateOptions = 
     };
   }
 
-  const criteria = module.activationCriteria.map((c) => evaluateCriterion(module, c, config, options));
+  const criteria = module.activationCriteria.map((c) =>
+    evaluateCriterion(module, c, config, options),
+  );
   const missingRequired = criteria.filter((c) => c.required && !c.satisfied).map((c) => c.check);
   const pass = module.activated || missingRequired.length === 0;
 
@@ -319,7 +333,10 @@ export function validateActivation(moduleId: string, options: ValidateOptions = 
   };
 }
 
-export function evaluateGate(moduleId: string, options: ValidateOptions = {}): {
+export function evaluateGate(
+  moduleId: string,
+  options: ValidateOptions = {},
+): {
   moduleId: string;
   found: boolean;
   gate: 'open' | 'blocked';
@@ -360,7 +377,9 @@ function printStatus(config: MaturityConfig): void {
   const total = config.modules.length;
 
   console.log('=== Module Maturity Status ===');
-  console.log(`total: ${total} | core: ${counts.core} | experimental: ${counts.experimental} | deprecated: ${counts.deprecated}`);
+  console.log(
+    `total: ${total} | core: ${counts.core} | experimental: ${counts.experimental} | deprecated: ${counts.deprecated}`,
+  );
   console.log('');
   console.log('CORE (always active):');
   for (const m of config.modules.filter((x) => x.category === 'core')) {
@@ -369,7 +388,9 @@ function printStatus(config: MaturityConfig): void {
   console.log('');
   console.log('EXPERIMENTAL (opt-in, gated):');
   for (const m of config.modules.filter((x) => x.category === 'experimental')) {
-    console.log(`  [${m.maturity}] ${m.id} — optIn:${m.optIn} activated:${m.activated} risk:${m.risk} owner:${m.owner}`);
+    console.log(
+      `  [${m.maturity}] ${m.id} — optIn:${m.optIn} activated:${m.activated} risk:${m.risk} owner:${m.owner}`,
+    );
   }
   console.log('');
   console.log('DEPRECATED (not activatable):');
@@ -430,23 +451,25 @@ function main(): void {
     const results = experimental.map((m) => validateActivation(m.id, options));
     const failures = results.filter((r) => !r.pass);
 
-    console.log(JSON.stringify(
-      {
-        mode: 'validate-all',
-        total: results.length,
-        passed: results.length - failures.length,
-        failed: failures.length,
-        modules: results.map((r) => ({
-          moduleId: r.moduleId,
-          activated: r.activated,
-          pass: r.pass,
-          reason: r.reason,
-          missingRequired: r.missingRequired,
-        })),
-      },
-      null,
-      2,
-    ));
+    console.log(
+      JSON.stringify(
+        {
+          mode: 'validate-all',
+          total: results.length,
+          passed: results.length - failures.length,
+          failed: failures.length,
+          modules: results.map((r) => ({
+            moduleId: r.moduleId,
+            activated: r.activated,
+            pass: r.pass,
+            reason: r.reason,
+            missingRequired: r.missingRequired,
+          })),
+        },
+        null,
+        2,
+      ),
+    );
     process.exit(failures.length > 0 ? 1 : 0);
   }
 

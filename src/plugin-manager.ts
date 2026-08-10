@@ -373,7 +373,7 @@ export function runHooks(event: string): HookRunResult[] {
         status: r.status,
         stdout: r.stdout.trim(),
         stderr: r.stderr.trim(),
-        error: r.status !== 0 ? (r.stderr.trim() || r.error?.message) : undefined,
+        error: r.status !== 0 ? r.stderr.trim() || r.error?.message : undefined,
       });
     }
   }
@@ -414,8 +414,7 @@ export function installPlugin(
   const destBase = options.user ? USER_PLUGINS_DIR : REPO_PLUGINS_DIR;
   mkdirSync(destBase, { recursive: true });
 
-  const isGit =
-    GIT_URL_RE.test(target) || target.endsWith('.git') || target.startsWith('git@');
+  const isGit = GIT_URL_RE.test(target) || target.endsWith('.git') || target.startsWith('git@');
 
   let stagedDir: string;
   let destName = options.name;
@@ -543,11 +542,15 @@ function printStatus(plugins: DiscoveredPlugin[]): void {
   const invalid = plugins.filter((p) => !p.valid);
 
   console.log('=== Plugin System Status ===');
-  console.log(`total: ${total} | validos: ${valid} | habilitados: ${enabled} | invalidos: ${invalid.length}`);
+  console.log(
+    `total: ${total} | validos: ${valid} | habilitados: ${enabled} | invalidos: ${invalid.length}`,
+  );
   console.log('');
   console.log('HABILITADOS:');
   for (const p of plugins.filter((x) => x.valid && x.enabled)) {
-    console.log(`  [${p.source}] ${p.id}@${p.manifest.version} — hooks: ${p.hooks.map((h) => h.event).join(', ') || '-'}`);
+    console.log(
+      `  [${p.source}] ${p.id}@${p.manifest.version} — hooks: ${p.hooks.map((h) => h.event).join(', ') || '-'}`,
+    );
   }
   console.log('');
   console.log('DESHABILITADOS:');
@@ -571,7 +574,9 @@ function printHooks(event: string, results: HookRunResult[]): void {
     const detail = r.error ? ` — ${r.error}` : r.stdout ? ` — ${r.stdout}` : '';
     console.log(`[${mark}] ${r.pluginId} (${r.event}) ${r.script}${detail}`);
   }
-  console.log(`\n${ok.length}/${results.length} hooks completaron con éxito para el evento "${event}"`);
+  console.log(
+    `\n${ok.length}/${results.length} hooks completaron con éxito para el evento "${event}"`,
+  );
 }
 
 // ─── CLI ─────────────────────────────────────────────────────────────────────
@@ -593,7 +598,8 @@ function main(): void {
     const i = args.indexOf(flag);
     return i >= 0 && i + 1 < args.length ? args[i + 1] : undefined;
   };
-  const positional = (i: number): string | undefined => args.find((a, idx) => !a.startsWith('-') && idx === i) ?? undefined;
+  const positional = (i: number): string | undefined =>
+    args.find((a, idx) => !a.startsWith('-') && idx === i) ?? undefined;
 
   const cmd = args.find((a) => !a.startsWith('-'));
 
@@ -608,7 +614,9 @@ function main(): void {
   }
 
   if (cmd === 'install') {
-    const target = args.find((a, idx) => a !== 'install' && !a.startsWith('--') && idx === args.indexOf('install') + 1);
+    const target = args.find(
+      (a, idx) => a !== 'install' && !a.startsWith('--') && idx === args.indexOf('install') + 1,
+    );
     if (!target) {
       console.error('Falta el target: install <git-url|path>');
       console.error(USAGE);
@@ -620,7 +628,9 @@ function main(): void {
         user: has('--user'),
         name: value('--name'),
       });
-      console.log(`[PLUGIN-MANAGER] Plugin instalado: ${result.id} en ${result.dir} (${result.source})`);
+      console.log(
+        `[PLUGIN-MANAGER] Plugin instalado: ${result.id} en ${result.dir} (${result.source})`,
+      );
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error(`[PLUGIN-MANAGER] Error instalando: ${msg}`);

@@ -18,13 +18,19 @@ const AGENT_CONFIG: DomainAgentConfig = {
   execute: (task, context, prompt) => {
     const normalized = task.toLowerCase();
     const intent =
-      normalized.includes('model') || normalized.includes('projection') ? 'MODEL' :
-      normalized.includes('forecast') ? 'FORECAST' :
-      normalized.includes('metric') || normalized.includes('kpi') ? 'METRICS' :
-      normalized.includes('sensitivity') ? 'SENSITIVITY' :
-      normalized.includes('balance') || normalized.includes('sheet') ? 'BALANCE_SHEET' :
-      normalized.includes('cash') ? 'CASH_FLOW' :
-      'GENERAL';
+      normalized.includes('model') || normalized.includes('projection')
+        ? 'MODEL'
+        : normalized.includes('forecast')
+          ? 'FORECAST'
+          : normalized.includes('metric') || normalized.includes('kpi')
+            ? 'METRICS'
+            : normalized.includes('sensitivity')
+              ? 'SENSITIVITY'
+              : normalized.includes('balance') || normalized.includes('sheet')
+                ? 'BALANCE_SHEET'
+                : normalized.includes('cash')
+                  ? 'CASH_FLOW'
+                  : 'GENERAL';
 
     // Extract optional inputs
     const extractNumber = (label: string): number | null => {
@@ -56,29 +62,29 @@ const AGENT_CONFIG: DomainAgentConfig = {
       computed: {
         grossMarginPct: grossMargin,
         ltvCacRatio: ltvCac,
-        ltvCacHealthy: ltvCac !== null ? ltvCac > 3 : null
+        ltvCacHealthy: ltvCac !== null ? ltvCac > 3 : null,
       },
       errorChecks: [
         'Assets = Liabilities + Equity (must balance)',
         'Cash flow ending cash must match balance sheet cash',
         'Assumptions traced to source',
-        'Unit consistency (never mix thousands and millions)'
+        'Unit consistency (never mix thousands and millions)',
       ],
       documentation: [
         'Version history — date, author, changes',
         'Key drivers — list of assumption cells',
         'Data sources — where inputs come from',
         'Known limitations — what the model does not capture',
-        'Instructions — how to update/use'
+        'Instructions — how to update/use',
       ],
       redFlags: [
         'Circular references (except intentional iteration)',
         'Hardcoded numbers without explanation',
         'Inconsistent periods (months vs quarters)',
         'Missing depreciation schedules',
-        'Manual fudge factors to make it balance'
+        'Manual fudge factors to make it balance',
       ],
-      domainPrompt: prompt.slice(0, 400) + (prompt.length > 400 ? '…' : '')
+      domainPrompt: prompt.slice(0, 400) + (prompt.length > 400 ? '…' : ''),
     };
 
     const checklist = [
@@ -87,24 +93,32 @@ const AGENT_CONFIG: DomainAgentConfig = {
       'Error checks built-in — formulas validate themselves',
       'Sensitivities included — best/base/worst case',
       'Unit consistency maintained',
-      'Version history documented'
+      'Version history documented',
     ];
 
     const flags: DomainOutput['flags'] = [];
     if (ltvCac !== null && ltvCac <= 3) {
-      flags.push({ severity: 'warn', message: `LTV/CAC = ${ltvCac}x (target >3x) — unit economics weak` });
+      flags.push({
+        severity: 'warn',
+        message: `LTV/CAC = ${ltvCac}x (target >3x) — unit economics weak`,
+      });
     }
     if (grossMargin !== null && grossMargin < 0) {
       flags.push({ severity: 'critical', message: 'Negative gross margin — COGS exceeds revenue' });
     }
     if (revenue === null && cac === null) {
-      flags.push({ severity: 'info', message: 'No numeric inputs provided — provide revenue/cogs/cac/ltv via context for computed checks' });
+      flags.push({
+        severity: 'info',
+        message:
+          'No numeric inputs provided — provide revenue/cogs/cac/ltv via context for computed checks',
+      });
     }
 
     const artifacts = [
       {
         name: 'financial-analysis',
-        content: `# Financial Analysis — ${intent.replace(/_/g, ' ')}\n\n` +
+        content:
+          `# Financial Analysis — ${intent.replace(/_/g, ' ')}\n\n` +
           `**Task:** ${task}\n\n` +
           `## Inputs\n\n` +
           `| Input | Value |\n|---|---|\n` +
@@ -115,8 +129,8 @@ const AGENT_CONFIG: DomainAgentConfig = {
           `## Model Structure (per FINANCE.md)\n\n` +
           `### Income Statement\n\`\`\`\nRevenue\n- COGS\n= Gross Profit\n- OpEx\n= Operating Income\n- Interest/Taxes\n= Net Income\n\`\`\`\n\n` +
           `### Balance Sheet\n\`\`\`\nAssets = Liabilities + Equity  # must balance\n\`\`\`\n\n` +
-          `### Cash Flow\n\`\`\`\nOperating + Investing + Financing = Cash Change\n\`\`\`\n`
-      }
+          `### Cash Flow\n\`\`\`\nOperating + Investing + Financing = Cash Change\n\`\`\`\n`,
+      },
     ];
 
     return {
@@ -125,9 +139,9 @@ const AGENT_CONFIG: DomainAgentConfig = {
       checklist,
       artifacts,
       evidence: ['FINANCE.md domain prompt loaded', 'Built-in validation formulas applied'],
-      flags
+      flags,
     };
-  }
+  },
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

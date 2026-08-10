@@ -2,7 +2,8 @@
 
 ## ✅ PROBLEMA RESUELTO:
 
-**Problema original:** 
+**Problema original:**
+
 ```
 1. Todos los agentes configurados como `moonshotai/kimi-k2.5` (opencode.json)
 2. Bedrock tiene incompatibilidad con `reasoning_effort` parameter
@@ -10,6 +11,7 @@
 ```
 
 **Solución implementada:**
+
 ```
 1. Cambiados TODOS los agentes a modelo nativo `opencode/deepseek-v4-flash-free`
 2. Sistema de Model Broker con fallback automático
@@ -19,6 +21,7 @@
 ## 📋 ESTADO ACTUAL:
 
 ### **System Check (Ejecutado):**
+
 - ✅ Todos los agentes cambiados a modelo nativo
 - ✅ Orchestrator: `opencode/deepseek-v4-flash-free`
 - ✅ sdd-apply: `opencode/deepseek-v4-flash-free`
@@ -26,6 +29,7 @@
 - ✅ 21 agentes actualizados en total
 
 ### **Componentes implementados:**
+
 1. **`src/opencode-switch-to-native.ts`** - Script para cambiar a modelo nativo
 2. **`src/model-broker.ts`** - Broker inteligente con auto-fallback
 3. **`src/orchestrator-integration.ts`** - Integración con orchestrator
@@ -34,17 +38,20 @@
 ## 🚀 ¿QUÉ SIGUE?
 
 ### **PASO 1: Verificar que funciona**
+
 ```bash
 # Reiniciar sesión de opencode para que surtan efecto los cambios
 # (Los cambios en opencode.json requieren reinicio)
 ```
 
 ### **PASO 2: Testear delegación**
+
 1. Crear nueva sesión de opencode
 2. Delegar tareas a agentes (e.g., sdd-apply para código)
 3. Verificar que no hay errores de "maximum steps reached" o "model not found"
 
 ### **PASO 3: Monitoreo**
+
 ```bash
 # Ver logs de delegación
 Get-Content .runtime/logs/model-broker.log -Tail 20
@@ -60,6 +67,7 @@ User Request → Orchestrator → Model Broker → Agent
 ```
 
 ### **Fallback Chain configurada:**
+
 ```json
 "kimi-2-5": {
   "fallbackChain": [
@@ -80,9 +88,9 @@ User Request → Orchestrator → Model Broker → Agent
 
 ## ⚠️ NOTA IMPORTANTE:
 
-**Los cambios en opencode.json requieren reinicio de la sesión de opencode.** 
-Cualquier delegación realizada ANTES del cambio seguirá usando kimi-2-5.
-Cualquier delegación DESPUÉS del reinicio usará opencode/deepseek-v4-flash-free.
+**Los cambios en opencode.json requieren reinicio de la sesión de opencode.** Cualquier delegación
+realizada ANTES del cambio seguirá usando kimi-2-5. Cualquier delegación DESPUÉS del reinicio usará
+opencode/deepseek-v4-flash-free.
 
 ## 📊 MÉTRICAS DE ÉXITO:
 

@@ -10,19 +10,15 @@ console.log('Current model from config:');
 import { readFileSync } from 'fs';
 
 // Check global config
-const globalConfig = JSON.parse(readFileSync(
-  `${process.env.USERPROFILE}/.config/opencode/opencode.json`,
-  'utf-8'
-));
+const globalConfig = JSON.parse(
+  readFileSync(`${process.env.USERPROFILE}/.config/opencode/opencode.json`, 'utf-8'),
+);
 
 console.log('Global config model:', globalConfig.model);
 console.log('Global config small_model:', globalConfig.small_model);
 
-// Check project config  
-const projectConfig = JSON.parse(readFileSync(
-  './opencode.json',
-  'utf-8'
-));
+// Check project config
+const projectConfig = JSON.parse(readFileSync('./opencode.json', 'utf-8'));
 
 console.log('\nProject config orchestrator:', projectConfig.agent.orchestrator.model);
 console.log('Project config provider:', projectConfig.agent.orchestrator.provider);

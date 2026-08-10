@@ -234,7 +234,9 @@ function isScoreLike(name: string): boolean {
   return /(score|rating|rank|relevance|confidence|probability|pct|percent)/i.test(name);
 }
 
-function detectArrayPattern(rows: Record<string, unknown>[]): 'time_series' | 'logs' | 'search_results' | 'generic' {
+function detectArrayPattern(
+  rows: Record<string, unknown>[],
+): 'time_series' | 'logs' | 'search_results' | 'generic' {
   if (rows.length === 0) return 'generic';
   const first = rows[0];
   const keys = Object.keys(first);
@@ -341,7 +343,8 @@ function compactTabular(rows: Record<string, unknown>[]): string | null {
 // ─── 3. LogCompressor: log / stack-trace collapse ─────────────────────────────
 
 const STACK_FRAME_RE = /^\s*at\s+.*\(.*:\d+:\d+\)$|^\s*at\s+.*:\d+:\d+$|^\s+at\s+/;
-const LOG_LEVEL_RE = /^\s*\[?(ERROR|FAIL|WARN|WARNING|INFO|DEBUG|TRACE|error|fail|warn|info|debug|trace)\]?\s*[:.-]?\s*/;
+const LOG_LEVEL_RE =
+  /^\s*\[?(ERROR|FAIL|WARN|WARNING|INFO|DEBUG|TRACE|error|fail|warn|info|debug|trace)\]?\s*[:.-]?\s*/;
 const ERROR_KEYWORD_RE = /(error|failed|failure|exception|panic|assert|traceback|fatal|crash)/i;
 
 function collapseStackTraces(text: string, maxStackTraces: number): string {
@@ -534,10 +537,7 @@ export function detectKind(input: string): StructuralKind {
   return 'none';
 }
 
-export function compressStructural(
-  input: string,
-  options: CompressOptions = {},
-): StructuralResult {
+export function compressStructural(input: string, options: CompressOptions = {}): StructuralResult {
   const startTime = Date.now();
   const config = getConfig();
   if (!config.enabled || !input || !input.trim()) {
@@ -572,7 +572,9 @@ export function compressStructural(
     if (kind === 'tabular') {
       const rows = JSON.parse(input) as Record<string, unknown>[];
       if (allowLossy) {
-        const crushed = crushJsonArray(rows, { maxItemsAfterCrush: config.smartCrusher.maxItemsAfterCrush });
+        const crushed = crushJsonArray(rows, {
+          maxItemsAfterCrush: config.smartCrusher.maxItemsAfterCrush,
+        });
         if (crushed.dropped > 0) {
           compressed = JSON.stringify(crushed.kept);
           strategy = 'smart-crusher';

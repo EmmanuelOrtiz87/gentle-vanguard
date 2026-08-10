@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SDD Design Agent (sdd-design) - Native Implementation
- * 
+ *
  * SAD architecture design agent for system design and API contracts.
  * Works with ANY AI tool (Claude, Cursor, etc.)
  * No opencode dependency.
@@ -20,7 +20,7 @@ const AGENT_CONFIG = {
   model: 'opencode/deepseek-v4-flash-free',
   temperature: 0.3,
   maxTokens: 4000,
-  version: '1.0.0'
+  version: '1.0.0',
 };
 
 function parseArgs(): DesignTask {
@@ -28,16 +28,27 @@ function parseArgs(): DesignTask {
   const task: DesignTask = {
     task: '',
     model: process.env.AGENT_MODEL || AGENT_CONFIG.model,
-    temperature: parseFloat(process.env.AGENT_TEMPERATURE || String(AGENT_CONFIG.temperature))
+    temperature: parseFloat(process.env.AGENT_TEMPERATURE || String(AGENT_CONFIG.temperature)),
   };
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--task': task.task = args[++i]; break;
-      case '--context': task.context = args[++i]; break;
-      case '--model': task.model = args[++i]; break;
-      case '--temperature': task.temperature = parseFloat(args[++i]); break;
-      case '--help': case '-h': showHelp(); process.exit(0);
+      case '--task':
+        task.task = args[++i];
+        break;
+      case '--context':
+        task.context = args[++i];
+        break;
+      case '--model':
+        task.model = args[++i];
+        break;
+      case '--temperature':
+        task.temperature = parseFloat(args[++i]);
+        break;
+      case '--help':
+      case '-h':
+        showHelp();
+        process.exit(0);
     }
   }
 
@@ -70,8 +81,8 @@ function designArchitecture(task: string, context?: string): string {
       'Microservices',
       'Event-Driven',
       'CQRS',
-      'Clean Architecture'
-    ].filter(p => {
+      'Clean Architecture',
+    ].filter((p) => {
       const ctx = (task + ' ' + (context || '')).toLowerCase();
       if (p === 'Microservices' && ctx.includes('microservice')) return true;
       if (p === 'Event-Driven' && (ctx.includes('event') || ctx.includes('async'))) return true;
@@ -82,25 +93,25 @@ function designArchitecture(task: string, context?: string): string {
       { name: 'API Gateway', purpose: 'Entry point and routing' },
       { name: 'Service Layer', purpose: 'Business logic' },
       { name: 'Data Layer', purpose: 'Persistence and caching' },
-      { name: 'Event Bus', purpose: 'Async communication' }
+      { name: 'Event Bus', purpose: 'Async communication' },
     ],
     apiContracts: [
       { method: 'GET', endpoint: '/api/resource', description: 'List resources' },
       { method: 'POST', endpoint: '/api/resource', description: 'Create resource' },
       { method: 'PUT', endpoint: '/api/resource/:id', description: 'Update resource' },
-      { method: 'DELETE', endpoint: '/api/resource/:id', description: 'Delete resource' }
+      { method: 'DELETE', endpoint: '/api/resource/:id', description: 'Delete resource' },
     ],
     dataModels: [
       { entity: 'Resource', fields: ['id', 'name', 'createdAt', 'updatedAt'] },
-      { entity: 'User', fields: ['id', 'email', 'role', 'createdAt'] }
+      { entity: 'User', fields: ['id', 'email', 'role', 'createdAt'] },
     ],
     considerations: [
       'Scalability: Horizontal pod autoscaling',
       'Reliability: Circuit breaker pattern',
       'Observability: Distributed tracing',
-      'Security: JWT authentication'
+      'Security: JWT authentication',
     ],
-    mermaidDiagram: generateMermaidDiagram(task)
+    mermaidDiagram: generateMermaidDiagram(task),
   };
 
   return JSON.stringify(design, null, 2);
@@ -135,7 +146,7 @@ async function main(): Promise<void> {
   try {
     const result = designArchitecture(task, context);
     const duration = Date.now() - startTime;
-    
+
     console.log('=== Architecture Design ===\n');
     console.log(result);
     console.log();
@@ -143,18 +154,23 @@ async function main(): Promise<void> {
     console.log(`  Status: ✅ SUCCESS`);
     console.log(`  Duration: ${duration}ms`);
     console.log('=================================================');
-    
-    console.log('\n=== JSON OUTPUT ===');
-    console.log(JSON.stringify({
-      success: true,
-      agent: AGENT_CONFIG.name,
-      version: AGENT_CONFIG.version,
-      task,
-      model,
-      duration,
-      output: JSON.parse(result)
-    }, null, 2));
 
+    console.log('\n=== JSON OUTPUT ===');
+    console.log(
+      JSON.stringify(
+        {
+          success: true,
+          agent: AGENT_CONFIG.name,
+          version: AGENT_CONFIG.version,
+          task,
+          model,
+          duration,
+          output: JSON.parse(result),
+        },
+        null,
+        2,
+      ),
+    );
   } catch (error) {
     console.error('\n❌ Error:', error);
     process.exit(1);

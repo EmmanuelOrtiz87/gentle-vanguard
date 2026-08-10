@@ -597,7 +597,8 @@ function normalizeDateKey(value: unknown): string | null {
   return d.toISOString().slice(0, 10);
 }
 
-function cmdTrend(dataset: Dataset, dateCol: string): AnalysisResult {  const base = cmdDescribe(dataset);
+function cmdTrend(dataset: Dataset, dateCol: string): AnalysisResult {
+  const base = cmdDescribe(dataset);
   const dateIndex = dataset.headers.indexOf(dateCol);
 
   if (dateIndex === -1 || dataset.columnTypes[dateCol] !== 'datetime') {

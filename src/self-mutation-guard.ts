@@ -105,9 +105,7 @@ export function checkConfigIntegrity(file: string): GuardResult {
 export function assertConfigIntegrity(file: string): void {
   const result = checkConfigIntegrity(file);
   if (!result.ok) {
-    throw new Error(
-      `Self-mutation guard BLOCKED write to ${file}: ${result.issues.join('; ')}`,
-    );
+    throw new Error(`Self-mutation guard BLOCKED write to ${file}: ${result.issues.join('; ')}`);
   }
 }
 
@@ -157,9 +155,7 @@ function parseArgs(argv: string[]): { mode: 'check' | 'approve'; file?: string; 
 function main(): void {
   const { mode, file, all } = parseArgs(process.argv);
 
-  const targets = all
-    ? PROTECTED.map((p) => p.file)
-    : [file as string];
+  const targets = all ? PROTECTED.map((p) => p.file) : [file as string];
 
   let failures = 0;
   for (const t of targets) {
@@ -173,7 +169,9 @@ function main(): void {
     if (result.approvedAt) console.log(`       approved ${result.approvedAt}`);
   }
 
-  console.log(`\n${failures === 0 ? 'All protected configs valid.' : `${failures} config(s) FAILED integrity.`}`);
+  console.log(
+    `\n${failures === 0 ? 'All protected configs valid.' : `${failures} config(s) FAILED integrity.`}`,
+  );
   if (failures > 0) process.exitCode = 1;
 }
 

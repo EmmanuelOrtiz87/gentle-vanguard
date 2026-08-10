@@ -477,10 +477,9 @@ async function checkTimeoutDaemon() {
   }
 
   if (pidAlive || procRunning) {
-    const signals = [
-      pidAlive ? pidDetail : '',
-      procRunning ? 'process detected' : '',
-    ].filter(Boolean);
+    const signals = [pidAlive ? pidDetail : '', procRunning ? 'process detected' : ''].filter(
+      Boolean,
+    );
     addResult('timeout-daemon', 'daemon process', 'PASS', signals.join(', '), 'ok');
   } else {
     addResult(
@@ -1487,17 +1486,13 @@ async function autoHeal() {
       // would close stdin -> the server exits instantly, and a second instance
       // competing for the codegraph index lock can kill an already-running
       // daemon. Delegating to the daemon script avoids both failure modes.
-      const child = spawn(
-        'npx.cmd',
-        ['tsx', join(ROOT, 'src', 'codegraph-mcp-server-start.ts')],
-        {
-          cwd: ROOT,
-          stdio: 'ignore',
-          detached: true,
-          windowsHide: true,
-          shell: true,
-        },
-      );
+      const child = spawn('npx.cmd', ['tsx', join(ROOT, 'src', 'codegraph-mcp-server-start.ts')], {
+        cwd: ROOT,
+        stdio: 'ignore',
+        detached: true,
+        windowsHide: true,
+        shell: true,
+      });
       child.unref();
       // Give the daemon time to boot (npx+tsx resolution + server start).
       await new Promise((resolve) => setTimeout(resolve, 6000));

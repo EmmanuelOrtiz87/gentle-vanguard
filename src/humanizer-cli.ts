@@ -112,9 +112,7 @@ function formatAnalysis(analysis: AnalysisResult): string {
     lines.push('Patterns detected:');
     for (const pattern of analysis.patterns) {
       const preview =
-        pattern.matches.length > 0
-          ? `  e.g. "${pattern.matches.slice(0, 3).join('", "')}"`
-          : '';
+        pattern.matches.length > 0 ? `  e.g. "${pattern.matches.slice(0, 3).join('", "')}"` : '';
       lines.push(`  - ${pattern.pattern} (${pattern.count})${preview}`);
     }
   }

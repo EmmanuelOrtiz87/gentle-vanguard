@@ -31,7 +31,8 @@ function main(): void {
       'utf-8',
     );
   } catch (e) {
-    if (!quiet) console.warn(`[web-crawler-init] could not write health file: ${(e as Error).message}`);
+    if (!quiet)
+      console.warn(`[web-crawler-init] could not write health file: ${(e as Error).message}`);
   }
 
   if (!quiet) {

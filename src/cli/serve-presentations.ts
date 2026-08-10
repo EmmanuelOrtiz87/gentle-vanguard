@@ -88,7 +88,9 @@ function sendFile(res: http.ServerResponse, filePath: string): void {
   try {
     const content = fs.readFileSync(filePath);
     const ext = path.extname(filePath).toLowerCase();
-    const headers: Record<string, string> = { 'Content-Type': MIME_TYPES[ext] ?? 'application/octet-stream' };
+    const headers: Record<string, string> = {
+      'Content-Type': MIME_TYPES[ext] ?? 'application/octet-stream',
+    };
     // --no-store: evita caché (necesario para verificar modales i18n en Chrome/CDP con recargas)
     if (NO_STORE) headers['Cache-Control'] = 'no-store, must-revalidate';
     res.writeHead(200, headers);

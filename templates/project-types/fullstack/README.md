@@ -1,10 +1,10 @@
-﻿# Fullstack Project Template
+# Fullstack Project Template
 
-# Monorepo structure with frontend and backend
+Monorepo structure with frontend and backend.
 
 ## Structure
 
-```
+````text
 {{project-name}}/
  apps/
     web/          # Frontend application
@@ -14,7 +14,7 @@
     ui/           # Shared UI components
  docker-compose.yml
  nx.json           # Nx monorepo config
-```
+```text
 
 ## Quick Start
 
@@ -30,7 +30,7 @@ npm run test
 
 # Docker
 docker-compose up
-```
+```text
 
 ## Architecture
 
@@ -48,3 +48,4 @@ docker-compose up
 | `npm run test`      | Run all tests              |
 | `npm run lint`      | Lint all apps              |
 | `docker-compose up` | Run full stack in Docker   |
+````

@@ -81,13 +81,11 @@
       }
     </style>
     <script src="assets/js/i18n-content.js?v=2.1"></script>
-<script src="assets/js/i18n.js?v=2.1"></script>
+    <script src="assets/js/i18n.js?v=2.1"></script>
   </head>
   <body class="grain">
     <div class="scroll-progress"></div>
-    <div class="aurora" aria-hidden="true">
-      <span></span><span></span><span></span>
-    </div>
+    <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
     <nav class="navbar navbar-expand-xl nav-blur fixed-top">
       <div class="container-fluid px-3">
         <a class="navbar-brand text-light fw-bold mono" href="index.html" style="font-size: 0.85rem"
@@ -167,14 +165,19 @@
                 ><i class="bi bi-images me-1"></i><span data-i18n="nav_diagrams">Diagrams</span></a
               >
             </li>
-                                    <li class="nav-item ms-2">
+            <li class="nav-item ms-2">
               <div class="lang-seg" role="group" aria-label="Language">
-                <button type="button" data-lang="en" aria-pressed="false"><span class="lang-flag">🇬🇧</span><span class="lang-code">EN</span></button>
-                <button type="button" data-lang="es" aria-pressed="false"><span class="lang-flag">🇪🇸</span><span class="lang-code">ES</span></button>
-                <button type="button" data-lang="pt-BR" aria-pressed="false"><span class="lang-flag">🇧🇷</span><span class="lang-code">PT</span></button>
+                <button type="button" data-lang="en" aria-pressed="false">
+                  <span class="lang-flag">🇬🇧</span><span class="lang-code">EN</span>
+                </button>
+                <button type="button" data-lang="es" aria-pressed="false">
+                  <span class="lang-flag">🇪🇸</span><span class="lang-code">ES</span>
+                </button>
+                <button type="button" data-lang="pt-BR" aria-pressed="false">
+                  <span class="lang-flag">🇧🇷</span><span class="lang-code">PT</span>
+                </button>
               </div>
             </li>
-                
           </ul>
         </div>
       </div>
@@ -228,7 +231,9 @@
       <div class="row">
         <div class="col-lg-6 fade-in">
           <div class="section-card h-100">
-            <h2 data-i18n="sec_ci_cd"><i class="bi bi-gear-wide-connected me-2"></i>CI/CD Pipeline</h2>
+            <h2 data-i18n="sec_ci_cd">
+              <i class="bi bi-gear-wide-connected me-2"></i>CI/CD Pipeline
+            </h2>
             <p class="text-muted small" data-i18n="c_operationscloud_2">
               Quality gates enforced before every merge — 6 parallel jobs + 3 security scans.
             </p>
@@ -256,7 +261,9 @@
         </div>
         <div class="col-lg-6 fade-in">
           <div class="section-card h-100">
-            <h2 data-i18n="sec_cloud_conn"><i class="bi bi-cloud-arrow-up me-2"></i>Cloud Connectors</h2>
+            <h2 data-i18n="sec_cloud_conn">
+              <i class="bi bi-cloud-arrow-up me-2"></i>Cloud Connectors
+            </h2>
             <p class="text-muted small" data-i18n="c_operationscloud_3">
               Hybrid routing engine with circuit breaker, automatic fallback, and cost/latency-aware
               load balancing.
@@ -273,7 +280,9 @@
                 <span class="fw-semibold">Azure Delegator</span><span class="badge-ops">cloud</span>
               </div>
             </div>
-            <h3 data-i18n="sec_cb_states"><i class="bi bi-arrow-repeat"></i>Circuit Breaker States</h3>
+            <h3 data-i18n="sec_cb_states">
+              <i class="bi bi-arrow-repeat"></i>Circuit Breaker States
+            </h3>
             <div class="d-flex gap-4 mt-2">
               <div>
                 <span class="cb-closed"><i class="bi bi-check-circle-fill me-1"></i>CLOSED</span>
@@ -320,7 +329,9 @@
         </div>
         <div class="col-lg-6 fade-in">
           <div class="section-card h-100">
-            <h2 data-i18n="sec_state_persist"><i class="bi bi-database me-2"></i>State Persistence</h2>
+            <h2 data-i18n="sec_state_persist">
+              <i class="bi bi-database me-2"></i>State Persistence
+            </h2>
             <p class="text-muted small" data-i18n="c_operationscloud_5">
               Three-tier persistence: checkpoints (auto), snapshots (manual), rollback (dry-run
               validated).
@@ -347,7 +358,9 @@
       <div class="row">
         <div class="col-lg-6 fade-in">
           <div class="section-card h-100">
-            <h2 data-i18n="sec_event_saga"><i class="bi bi-arrow-right-circle me-2"></i>Event Sourcing + Saga</h2>
+            <h2 data-i18n="sec_event_saga">
+              <i class="bi bi-arrow-right-circle me-2"></i>Event Sourcing + Saga
+            </h2>
             <p class="text-muted small" data-i18n="c_operationscloud_6">
               Append-only event store with projection snapshots and distributed saga orchestration
               with compensation.
@@ -412,7 +425,9 @@
       <div class="row">
         <div class="col-lg-6 fade-in">
           <div class="section-card">
-            <h2 data-i18n="sec_testing_infra"><i class="bi bi-flask me-2"></i>Testing Infrastructure</h2>
+            <h2 data-i18n="sec_testing_infra">
+              <i class="bi bi-flask me-2"></i>Testing Infrastructure
+            </h2>
             <p class="text-muted small" data-i18n="c_operationscloud_8">
               Multi-suite test strategy across config, CI/CD, research, and dashboard.
             </p>
@@ -461,27 +476,75 @@
               <tbody>
                 <tr>
                   <td><code class="small">npm run test:config</code></td>
-                  <td><span data-i18n="c_operationscloud_9">Validate JSON schemas</span><span class="info-trigger" data-i18n-title="tip_c_operationscloud_9" title="Validate JSON schemas">i</span></td>
+                  <td>
+                    <span data-i18n="c_operationscloud_9">Validate JSON schemas</span
+                    ><span
+                      class="info-trigger"
+                      data-i18n-title="tip_c_operationscloud_9"
+                      title="Validate JSON schemas"
+                      >i</span
+                    >
+                  </td>
                 </tr>
                 <tr>
                   <td><code class="small">npm run test:workflows</code></td>
-                  <td><span data-i18n="c_operationscloud_10">Verify CI/CD workflow syntax</span><span class="info-trigger" data-i18n-title="tip_c_operationscloud_10" title="Verify CI/CD workflow syntax">i</span></td>
+                  <td>
+                    <span data-i18n="c_operationscloud_10">Verify CI/CD workflow syntax</span
+                    ><span
+                      class="info-trigger"
+                      data-i18n-title="tip_c_operationscloud_10"
+                      title="Verify CI/CD workflow syntax"
+                      >i</span
+                    >
+                  </td>
                 </tr>
                 <tr>
                   <td><code class="small">npm run test:research</code></td>
-                  <td><span data-i18n="c_operationscloud_11">Research script integrity</span><span class="info-trigger" data-i18n-title="tip_c_operationscloud_11" title="Research script integrity">i</span></td>
+                  <td>
+                    <span data-i18n="c_operationscloud_11">Research script integrity</span
+                    ><span
+                      class="info-trigger"
+                      data-i18n-title="tip_c_operationscloud_11"
+                      title="Research script integrity"
+                      >i</span
+                    >
+                  </td>
                 </tr>
                 <tr>
                   <td><code class="small">npm run db:health</code></td>
-                  <td><span data-i18n="c_operationscloud_12">Nexus DB health check</span><span class="info-trigger" data-i18n-title="tip_c_operationscloud_12" title="Nexus DB health check">i</span></td>
+                  <td>
+                    <span data-i18n="c_operationscloud_12">Nexus DB health check</span
+                    ><span
+                      class="info-trigger"
+                      data-i18n-title="tip_c_operationscloud_12"
+                      title="Nexus DB health check"
+                      >i</span
+                    >
+                  </td>
                 </tr>
                 <tr>
                   <td><code class="small">npm run db:backup</code></td>
-                  <td><span data-i18n="c_operationscloud_13">Safe online backup</span><span class="info-trigger" data-i18n-title="tip_c_operationscloud_13" title="Safe online backup">i</span></td>
+                  <td>
+                    <span data-i18n="c_operationscloud_13">Safe online backup</span
+                    ><span
+                      class="info-trigger"
+                      data-i18n-title="tip_c_operationscloud_13"
+                      title="Safe online backup"
+                      >i</span
+                    >
+                  </td>
                 </tr>
                 <tr>
                   <td><code class="small">npm run watchtower</code></td>
-                  <td><span data-i18n="c_operationscloud_14">Full maintenance check</span><span class="info-trigger" data-i18n-title="tip_c_operationscloud_14" title="Full maintenance check">i</span></td>
+                  <td>
+                    <span data-i18n="c_operationscloud_14">Full maintenance check</span
+                    ><span
+                      class="info-trigger"
+                      data-i18n-title="tip_c_operationscloud_14"
+                      title="Full maintenance check"
+                      >i</span
+                    >
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -491,7 +554,9 @@
 
       <div class="fade-in">
         <div class="section-card text-center">
-          <h2 data-i18n="sec_pipe_integ"><i class="bi bi-pipeline me-2"></i>Pipeline Integration</h2>
+          <h2 data-i18n="sec_pipe_integ">
+            <i class="bi bi-pipeline me-2"></i>Pipeline Integration
+          </h2>
           <p class="text-muted small mb-3" data-i18n="c_operationscloud_15">
             All ops components integrate as lazy, non-blocking steps in the session autostart
             pipeline.
@@ -509,7 +574,9 @@
       <!-- Diagramas -->
       <div class="fade-in" id="diagrams">
         <div class="section-title">
-          <h2 data-i18n="sec_diagrams"><i class="bi bi-images me-2" style="color: var(--p)"></i>Diagramas</h2>
+          <h2 data-i18n="sec_diagrams">
+            <i class="bi bi-images me-2" style="color: var(--p)"></i>Diagramas
+          </h2>
           <p data-i18n="c_operationscloud_16">Arquitectura de datos y operaciones del stack</p>
         </div>
         <div class="row g-3">
@@ -521,8 +588,8 @@
               loading="lazy"
             />
             <p class="text-secondary small mt-2">
-              <i class="bi bi-database me-1"></i>Nexus DB en el centro con 11 repos especializados
-              — SQLite WAL mode con auto-prune y backup.
+              <i class="bi bi-database me-1"></i>Nexus DB en el centro con 11 repos especializados —
+              SQLite WAL mode con auto-prune y backup.
             </p>
           </div>
         </div>

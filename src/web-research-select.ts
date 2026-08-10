@@ -91,7 +91,9 @@ async function main(): Promise<void> {
   const { query, limit, threshold, deep, deepLimit } = parseArgs(process.argv);
 
   if (!query) {
-    console.error('Usage: --query "search terms" [--limit N] [--threshold 0..1] [--deep] [--deep-limit N]');
+    console.error(
+      'Usage: --query "search terms" [--limit N] [--threshold 0..1] [--deep] [--deep-limit N]',
+    );
     process.exit(1);
   }
 

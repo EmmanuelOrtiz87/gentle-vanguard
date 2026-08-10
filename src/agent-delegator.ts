@@ -1,9 +1,9 @@
 /**
  * Agent Delegator - Native Agent Delegation System
- * 
+ *
  * Agnostic agent delegator that works with ANY AI tool.
  * Replaces opencode task() which has model inheritance bugs.
- * 
+ *
  * Usage:
  *   npx tsx src/agent-delegator.ts --agent sdd-apply --task "implement feature"
  *   npx tsx src/agent-delegator.ts --agent sdd-explore --prompt "Analyze requirements"
@@ -68,7 +68,7 @@ Output Format:
 - Structured requirements document
 - Acceptance criteria list
 - Risk assessment
-- Recommended SDD phase`
+- Recommended SDD phase`,
   },
   'sdd-design': {
     name: 'sdd-design',
@@ -92,7 +92,7 @@ Architecture Principles:
 Output:
 - Component diagrams (Mermaid)
 - API contracts (TypeScript interfaces)
-- Data flow diagrams`
+- Data flow diagrams`,
   },
   'sdd-apply': {
     name: 'sdd-apply',
@@ -117,7 +117,7 @@ Quality Gates (must pass):
 1. npm run typecheck — 0 errors
 2. npm run lint — 0 warnings
 3. Manual review of changed files
-4. No new TODO comments`
+4. No new TODO comments`,
   },
   'sdd-verify': {
     name: 'sdd-verify',
@@ -143,7 +143,7 @@ Verification Checklist:
 Evidence Required:
 - Test execution output
 - Coverage report
-- Impact analysis`
+- Impact analysis`,
   },
   'doc-agent': {
     name: 'doc-agent',
@@ -164,7 +164,7 @@ Documentation Standards:
 - Code examples must be tested
 - Include file paths with line numbers
 - Use tables for structured data
-- Include Mermaid diagrams`
+- Include Mermaid diagrams`,
   },
   'ops-agent': {
     name: 'ops-agent',
@@ -184,7 +184,7 @@ Expertise:
 - GitHub Actions
 - Docker & Kubernetes
 - Prometheus & Grafana
-- Incident response`
+- Incident response`,
   },
   'gov-agent': {
     name: 'gov-agent',
@@ -204,7 +204,7 @@ Areas:
 - OWASP security guidelines
 - GDPR compliance
 - Audit trail validation
-- Access control review`
+- Access control review`,
   },
   'session-agent': {
     name: 'session-agent',
@@ -218,7 +218,7 @@ Core Responsibilities:
 - Manage session lifecycle
 - Track state and context
 - Handle session cleanup
-- Score session quality`
+- Score session quality`,
   },
   'self-diag-agent': {
     name: 'self-diag-agent',
@@ -232,7 +232,7 @@ Core Responsibilities:
 - Diagnose system issues
 - Auto-recovery procedures
 - Break-glass scenarios
-- Error analysis`
+- Error analysis`,
   },
   'premortem-agent': {
     name: 'premortem-agent',
@@ -246,7 +246,7 @@ Core Responsibilities:
 - Identify potential failures
 - Stress test scenarios
 - Risk mitigation planning
-- Failure prediction`
+- Failure prediction`,
   },
   'maintenance-agent': {
     name: 'maintenance-agent',
@@ -260,8 +260,8 @@ Core Responsibilities:
 - Cleanup and optimization
 - Health monitoring
 - Resource management
-- Performance tuning`
-  }
+- Performance tuning`,
+  },
 };
 
 /**
@@ -283,9 +283,7 @@ function loadAgents(): Record<string, AgentConfig> {
  * Delegate task to an agent using npx tsx
  * This is the native approach that works with any tool
  */
-export async function delegate(
-  request: DelegationRequest
-): Promise<DelegationResult> {
+export async function delegate(request: DelegationRequest): Promise<DelegationResult> {
   const startTime = Date.now();
   const agents = loadAgents();
   const agentConfig = agents[request.agent];
@@ -295,7 +293,7 @@ export async function delegate(
       success: false,
       error: `Unknown agent: ${request.agent}`,
       duration: 0,
-      model: 'unknown'
+      model: 'unknown',
     };
   }
 
@@ -306,7 +304,7 @@ export async function delegate(
 
   // Check if native agent implementation exists
   const agentScript = join(AGENTS_DIR, `${request.agent}.ts`);
-  
+
   if (existsSync(agentScript)) {
     // Use native implementation if available
     return runNativeAgent(agentScript, request, agentConfig, startTime, effectiveTemp);
@@ -349,7 +347,7 @@ async function runNativeAgent(
   request: DelegationRequest,
   config: AgentConfig,
   startTime: number,
-  effectiveTemperature: number
+  effectiveTemperature: number,
 ): Promise<DelegationResult> {
   return new Promise((resolve) => {
     const model = request.model || config.model;
@@ -357,8 +355,10 @@ async function runNativeAgent(
       resolveNpx(),
       'tsx',
       scriptPath,
-      '--task', shellQuote(request.task),
-      '--model', shellQuote(model)
+      '--task',
+      shellQuote(request.task),
+      '--model',
+      shellQuote(model),
     ];
 
     if (request.context) {
@@ -374,8 +374,8 @@ async function runNativeAgent(
       env: {
         ...process.env,
         AGENT_MODEL: request.model || config.model,
-        AGENT_TEMPERATURE: String(effectiveTemperature)
-      }
+        AGENT_TEMPERATURE: String(effectiveTemperature),
+      },
     });
 
     let stdout = '';
@@ -391,13 +391,13 @@ async function runNativeAgent(
 
     child.on('close', (code) => {
       const duration = Date.now() - startTime;
-      
+
       if (code === 0) {
         resolve({
           success: true,
           output: stdout.trim(),
           duration,
-          model: request.model || config.model
+          model: request.model || config.model,
         });
       } else {
         resolve({
@@ -405,7 +405,7 @@ async function runNativeAgent(
           output: stdout.trim(),
           error: stderr.trim() || `Exit code: ${code}`,
           duration,
-          model: request.model || config.model
+          model: request.model || config.model,
         });
       }
     });
@@ -415,7 +415,7 @@ async function runNativeAgent(
         success: false,
         error: error.message,
         duration: Date.now() - startTime,
-        model: request.model || config.model
+        model: request.model || config.model,
       });
     });
   });
@@ -432,10 +432,10 @@ async function runNativeAgent(
 async function generateAgentResponse(
   request: DelegationRequest,
   config: AgentConfig,
-  startTime: number
+  startTime: number,
 ): Promise<DelegationResult> {
   const duration = Date.now() - startTime;
-  
+
   const response = `[DELEGATION FAILED — NOT IMPLEMENTED]
 Agent: ${config.name}
 Description: ${config.description}
@@ -455,7 +455,7 @@ Or register a native implementation in src/agents/.
     output: response,
     error: `Native agent implementation not found: ${request.agent}. Create src/agents/${request.agent}.ts to enable.`,
     duration,
-    model: request.model || config.model
+    model: request.model || config.model,
   };
 }
 
@@ -548,12 +548,12 @@ function main(): void {
       const agentName = args[1];
       const taskIndex = args.indexOf('--task');
       const task = taskIndex > -1 ? args[taskIndex + 1] : '';
-      
+
       if (!agentName || !task) {
         console.error('Usage: --agent <name> --task "description"');
         process.exit(1);
       }
-      
+
       void (async () => {
         const result = await delegate({ agent: agentName, task });
         console.log('\n=== Delegation Result ===\n');

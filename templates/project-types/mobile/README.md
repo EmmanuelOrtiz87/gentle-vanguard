@@ -1,4 +1,4 @@
-﻿# Mobile Templates
+# Mobile Templates
 
 This directory contains mobile app framework templates.
 
@@ -11,7 +11,7 @@ This directory contains mobile app framework templates.
 
 ## React Native
 
-```bash
+````bash
 # Copy template
 cp package.react-native.json package.json
 npm install
@@ -24,7 +24,7 @@ npm run ios
 
 # Start Metro bundler
 npm start
-```
+```text
 
 ## Flutter
 
@@ -40,7 +40,7 @@ flutter build apk --release
 
 # Build release IPA
 flutter build ios --release
-```
+```text
 
 ## Expo (Alternative)
 
@@ -48,11 +48,11 @@ For React Native with Expo:
 
 ```bash
 npx create-expo-app {{project-name}}
-```
+```text
 
 ## Structure
 
-```
+```text
 mobile/
  src/                   # Source code
     components/         # Reusable components
@@ -65,4 +65,5 @@ mobile/
  android/               # Android native code
  ios/                   # iOS native code
  package.*.json         # Framework-specific packages
-```
+```text
+````

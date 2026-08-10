@@ -391,7 +391,9 @@ async function opencodeLLMCall(prompt: string, options?: LLMCallOptions): Promis
       );
       return simulatedLLMCall(prompt, options);
     }
-    const isBrokenBinary = /no es compatible|not compatible|Win32|StandardOutputEncoding/i.test(msg);
+    const isBrokenBinary = /no es compatible|not compatible|Win32|StandardOutputEncoding/i.test(
+      msg,
+    );
     if (isBrokenBinary) {
       throw new Error(
         `[llm-call-wrapper] ❌ opencode CLI binary is not operational on this platform ` +

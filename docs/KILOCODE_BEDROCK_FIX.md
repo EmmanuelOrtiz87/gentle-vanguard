@@ -1,6 +1,7 @@
 # KiloCode Bedrock Configuration Fix
 
 ## Problem
+
 KiloCode is sending `reasoning_effort` parameter to Bedrock, which doesn't support it.
 
 ## Solution Options
@@ -27,6 +28,7 @@ Add this to your VSCode settings.json to configure KiloCode to use drop_params:
 ### Option 2: LiteLLM Config File
 
 Create a LiteLLM config file at one of these locations:
+
 - Windows: `%USERPROFILE%\.config\litellm\config.yaml`
 - Cross-platform: `~/.litellm_config.yaml`
 
@@ -45,7 +47,8 @@ litellm_settings:
 
 ### Option 3: Direct Settings in VSCode
 
-In KiloCode's settings, you can often configure the LiteLLM proxy directly. If KiloCode exposes these settings:
+In KiloCode's settings, you can often configure the LiteLLM proxy directly. If KiloCode exposes
+these settings:
 
 1. Open VSCode Settings (Ctrl+,)
 2. Search for "kilo" or "kilocode"
@@ -62,6 +65,7 @@ code
 ```
 
 Or permanently in Windows:
+
 ```powershell
 [Environment]::SetEnvironmentVariable("LITELLM_DROP_PARAMS", "true", "User")
 ```
@@ -81,9 +85,11 @@ This avoids Bedrock entirely and uses the free model that Gentle-Vanguard manage
 
 ## Immediate Fix
 
-Since the error happens immediately, try **Option 4** first (Environment Variable) as it requires no configuration file changes:
+Since the error happens immediately, try **Option 4** first (Environment Variable) as it requires no
+configuration file changes:
 
 Close VSCode completely, then run in PowerShell:
+
 ```powershell
 [Environment]::SetEnvironmentVariable("LITELLM_DROP_PARAMS", "true", "User")
 code
@@ -94,12 +100,14 @@ Then try using KiloCode again.
 ## Verification
 
 After applying any fix, verify it's working:
+
 1. Open a new chat in KiloCode
 2. Send a simple message
 3. Check that the error about `reasoning_effort` no longer appears
 
 ## Notes
 
-- The `drop_params: true` setting tells LiteLLM to automatically discard parameters that the provider doesn't support
+- The `drop_params: true` setting tells LiteLLM to automatically discard parameters that the
+  provider doesn't support
 - This makes the configuration provider-agnostic
 - It's the same setting we applied to all agents in Gentle-Vanguard's opencode.json

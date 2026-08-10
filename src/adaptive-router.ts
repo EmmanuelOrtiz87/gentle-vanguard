@@ -152,17 +152,72 @@ const SEED_DOMAINS: Array<{ domain: string; bestAgent: string; confidence: numbe
  * High-priority overrides per AGENTS.md: 10 patterns that should always route
  * to a specific agent regardless of learned history.
  */
-const SEED_OVERRIDES: Array<{ domainPattern: string; targetAgent: string; reason: string; confidence: number }> = [
-  { domainPattern: 'security audit', targetAgent: 'gov-agent', reason: 'High-priority: security audit', confidence: 0.9 },
-  { domainPattern: 'code review', targetAgent: 'sdd-verify', reason: 'High-priority: code review', confidence: 0.9 },
-  { domainPattern: 'bug', targetAgent: 'sdd-apply', reason: 'High-priority: bug fix', confidence: 0.8 },
-  { domainPattern: 'gdpr', targetAgent: 'legal-agent', reason: 'High-priority: compliance', confidence: 0.9 },
-  { domainPattern: 'compliance', targetAgent: 'legal-agent', reason: 'High-priority: compliance', confidence: 0.85 },
-  { domainPattern: 'forecast', targetAgent: 'finance-agent', reason: 'High-priority: financial modeling', confidence: 0.85 },
-  { domainPattern: 'revenue', targetAgent: 'finance-agent', reason: 'High-priority: financial modeling', confidence: 0.85 },
-  { domainPattern: 'job description', targetAgent: 'hr-agent', reason: 'High-priority: hiring', confidence: 0.85 },
-  { domainPattern: 'campaign', targetAgent: 'mkt-agent', reason: 'High-priority: marketing campaign', confidence: 0.85 },
-  { domainPattern: 'sales pipeline', targetAgent: 'sales-agent', reason: 'High-priority: sales pipeline', confidence: 0.8 },
+const SEED_OVERRIDES: Array<{
+  domainPattern: string;
+  targetAgent: string;
+  reason: string;
+  confidence: number;
+}> = [
+  {
+    domainPattern: 'security audit',
+    targetAgent: 'gov-agent',
+    reason: 'High-priority: security audit',
+    confidence: 0.9,
+  },
+  {
+    domainPattern: 'code review',
+    targetAgent: 'sdd-verify',
+    reason: 'High-priority: code review',
+    confidence: 0.9,
+  },
+  {
+    domainPattern: 'bug',
+    targetAgent: 'sdd-apply',
+    reason: 'High-priority: bug fix',
+    confidence: 0.8,
+  },
+  {
+    domainPattern: 'gdpr',
+    targetAgent: 'legal-agent',
+    reason: 'High-priority: compliance',
+    confidence: 0.9,
+  },
+  {
+    domainPattern: 'compliance',
+    targetAgent: 'legal-agent',
+    reason: 'High-priority: compliance',
+    confidence: 0.85,
+  },
+  {
+    domainPattern: 'forecast',
+    targetAgent: 'finance-agent',
+    reason: 'High-priority: financial modeling',
+    confidence: 0.85,
+  },
+  {
+    domainPattern: 'revenue',
+    targetAgent: 'finance-agent',
+    reason: 'High-priority: financial modeling',
+    confidence: 0.85,
+  },
+  {
+    domainPattern: 'job description',
+    targetAgent: 'hr-agent',
+    reason: 'High-priority: hiring',
+    confidence: 0.85,
+  },
+  {
+    domainPattern: 'campaign',
+    targetAgent: 'mkt-agent',
+    reason: 'High-priority: marketing campaign',
+    confidence: 0.85,
+  },
+  {
+    domainPattern: 'sales pipeline',
+    targetAgent: 'sales-agent',
+    reason: 'High-priority: sales pipeline',
+    confidence: 0.8,
+  },
 ];
 
 function buildSeedDomains(): DomainEntry[] {
@@ -299,7 +354,8 @@ function collectSkillUsage(log: Logger): SkillMetric[] {
         if (!agent) continue;
         const entry = byAgent.get(agent) || { useCount: 0, criticalFlags: 0, lastOutcome: null };
         entry.useCount++;
-        const flags = (r.flags as Array<{ severity?: string; advisory?: boolean; message?: string }>) || [];
+        const flags =
+          (r.flags as Array<{ severity?: string; advisory?: boolean; message?: string }>) || [];
         // Non-advisory critical flags are real failures. Advisory flags are
         // domain design-time notices (e.g. legal escalate-to-counsel) and must
         // not penalize the agent's success rate. A flag is advisory if it
@@ -384,7 +440,8 @@ function collectDelegations(log: Logger): DelegationRecord[] {
         const r = rec as Record<string, unknown>;
         const agent = (r.agent as string) || f.replace('.json', '');
         const domain = (r.domain as string) || 'general';
-        const flags = (r.flags as Array<{ severity?: string; advisory?: boolean; message?: string }>) || [];
+        const flags =
+          (r.flags as Array<{ severity?: string; advisory?: boolean; message?: string }>) || [];
         const hasCritical = flags.some(
           (fl) =>
             fl?.severity === 'critical' &&
@@ -717,10 +774,8 @@ function buildRoutingTable(config: typeof DEFAULT_CONFIG, log: Logger): RoutingT
 
   // 3b. Cold-start seed: if no learned domains/overrides yet, seed the baseline
   // so recommend-agent has confidence > 0.3 from day one.
-  const finalDomainEntries =
-    domainEntries.length > 0 ? domainEntries : buildSeedDomains();
-  const seededOverrides =
-    existingOverrides.length > 0 ? existingOverrides : buildSeedOverrides();
+  const finalDomainEntries = domainEntries.length > 0 ? domainEntries : buildSeedDomains();
+  const seededOverrides = existingOverrides.length > 0 ? existingOverrides : buildSeedOverrides();
   log(`  Effective domains: ${finalDomainEntries.length} (seed: ${domainEntries.length === 0})`);
   log(`  Effective overrides: ${seededOverrides.length} (seed: ${existingOverrides.length === 0})`);
 

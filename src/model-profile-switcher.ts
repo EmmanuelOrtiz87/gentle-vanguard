@@ -103,7 +103,9 @@ function applyProfile(name: string, persist: boolean): void {
   if (persist) {
     profiles.active = name;
     saveRouter(config);
-    console.log(`[OK] Applied profile "${name}" to ${applied} phase bindings and persisted as active.`);
+    console.log(
+      `[OK] Applied profile "${name}" to ${applied} phase bindings and persisted as active.`,
+    );
   } else {
     console.log(`[DRY-RUN] Would apply profile "${name}" to ${applied} phase bindings.`);
   }

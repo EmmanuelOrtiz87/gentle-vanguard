@@ -49,7 +49,7 @@ export function animateValue(options: AnimateValueOptions): () => void {
     typeof options.easing === 'function'
       ? options.easing
       : options.easing
-        ? easings[options.easing as EasingName] ?? linear
+        ? (easings[options.easing as EasingName] ?? linear)
         : linear;
 
   let cancelled = false;

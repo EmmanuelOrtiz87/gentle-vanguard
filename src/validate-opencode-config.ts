@@ -49,7 +49,7 @@ const VALID_PROPS = new Set([
 // Additional structural validation rules
 function validateAgents(agents: any): string[] {
   const errors: string[] = [];
-  
+
   if (!agents || typeof agents !== 'object') {
     errors.push('Invalid agents structure');
     return errors;
@@ -78,7 +78,7 @@ function validateAgents(agents: any): string[] {
         errors.push(`Agent ${agentName} has invalid mode: ${modeValue}`);
       }
     }
-    
+
     // Validate steps if present
     if ('steps' in agentConfig && typeof agentConfig.steps !== 'number') {
       errors.push(`Agent ${agentName} steps must be a number`);
@@ -108,7 +108,7 @@ function validateMCP(mcp: any): string[] {
         errors.push(`MCP service ${name} missing required property: ${prop}`);
       }
     }
-    
+
     // Validate service types
     if ('type' in service) {
       const validTypes = ['local', 'stdio'];
@@ -136,12 +136,12 @@ function validatePermissions(permissions: any): string[] {
     if (perm === 'bash' || perm === 'task') {
       continue;
     }
-    
+
     // For simple permissions, ensure they're valid
     if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
       // If it's an object but not one we specifically allow, check if it has valid sub-properties
       const validSimpleProps = ['websearch', 'webfetch', 'task', 'read', 'glob', 'grep'];
-      if (!validSimpleProps.some(p => p in value)) {
+      if (!validSimpleProps.some((p) => p in value)) {
         // Allow more complex structures for now, we'll trust the config structure
         // We're mainly validating top-level structural errors
         continue;
@@ -229,14 +229,14 @@ function main(): void {
   if (errors.length > 0) {
     if (fix) {
       console.log('Attempting to fix configuration...');
-      
+
       // Basic cleanup: remove lines with unknown properties
       const lines = raw.split('\n');
       const filtered = lines.filter((line) => {
         const trimmed = line.trim();
         return !unknown.some((u) => trimmed.startsWith(`"${u}"`));
       });
-      
+
       // Only apply fix if there are actually unknown properties to remove
       if (unknown.length > 0) {
         writeFileSync(configPath, filtered.join('\n'), 'utf-8');
@@ -248,10 +248,12 @@ function main(): void {
     } else {
       console.log('Configuration validation failed. Please fix the issues and try again.');
     }
-    
+
     process.exit(1);
   } else {
-    console.log('PASS: opencode.json contiene solo propiedades válidas y tiene estructura correcta');
+    console.log(
+      'PASS: opencode.json contiene solo propiedades válidas y tiene estructura correcta',
+    );
     process.exit(0);
   }
 }

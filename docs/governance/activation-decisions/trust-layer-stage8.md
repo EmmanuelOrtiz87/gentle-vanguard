@@ -8,9 +8,9 @@
 ## Proposal
 
 Activar el módulo `trust-layer-stage8` (src/review-lenses.ts) bajo el workflow de activación de
-módulos experimentales (Fase 1 de madurez). Capa de confianza stage #8: lentes de revisión de
-código (security, quality, correctness) con detección de secrets hardcodeados, eval/
-Invoke-Expression y SQL por concatenación.
+módulos experimentales (Fase 1 de madurez). Capa de confianza stage #8: lentes de revisión de código
+(security, quality, correctness) con detección de secrets hardcodeados, eval/ Invoke-Expression y
+SQL por concatenación.
 
 - Scope: lentes de revisión automatizada para el pipeline de revisión y gov-agent.
 - Impact: fortalece la capa de seguridad del stack; no toca el core de sesión.

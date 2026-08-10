@@ -7,7 +7,13 @@
  * consumed anywhere keyframes are used (WAAPI, CSS, tests).
  */
 
-import { resolveSpring, springStep, type AnimationKeyframe, type AnimationSequence, type SpringConfig } from './utils';
+import {
+  resolveSpring,
+  springStep,
+  type AnimationKeyframe,
+  type AnimationSequence,
+  type SpringConfig,
+} from './utils';
 
 export const springPresets = {
   default: { stiffness: 170, damping: 26 },
@@ -58,8 +64,7 @@ export function sampleSpring(
 ): AnimationKeyframe[] {
   const samples = Math.max(2, options.samples ?? 30);
   const duration = options.duration ?? estimateSpringDuration(config);
-  const format =
-    options.format ?? ((value: number) => ({ transform: `translateY(${value}px)` }));
+  const format = options.format ?? ((value: number) => ({ transform: `translateY(${value}px)` }));
   const frames: AnimationKeyframe[] = [];
   let state = { value: from, velocity: 0 };
   const dt = duration / (samples - 1);

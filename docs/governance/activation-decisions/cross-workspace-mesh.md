@@ -14,7 +14,8 @@ verifica la consistencia de referencias entre workspaces y ofrece auto-fix (--fi
 - Scope: integridad del cross-workspace mesh (referencias, configs, agentes entre workspaces).
 - Impact: detecta referencias rotas entre workspaces; no toca el core de sesión.
 - Risk: alto (auto-fix de referencias cruzadas puede romper configs — requiere --detailed primero).
-- Success criteria: CLI ejecutable con --detailed/--fix, typecheck/lint/tests verdes, watchtower 89/89.
+- Success criteria: CLI ejecutable con --detailed/--fix, typecheck/lint/tests verdes, watchtower
+  89/89.
 
 ## Gates
 

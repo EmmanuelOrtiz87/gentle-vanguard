@@ -78,8 +78,8 @@ const KNOWN_RENAMES: Record<string, string> = {
   'daily-check.ps1': 'src/engram-auto-sync.ts',
   'build-skill-registry.ps1': 'src/skill-frontmatter-sync.ts',
   'detect-ide-session.ps1': 'src/agent-delegator.ts',
-'auto-testing-final.ps1': 'src/agents/sdd-verify.ts',
-'auto-doc-drift-detector.ps1': 'src/core/health-check.ts',
+  'auto-testing-final.ps1': 'src/agents/sdd-verify.ts',
+  'auto-doc-drift-detector.ps1': 'src/core/health-check.ts',
   'homologate-svg.ps1': 'src/cli/validate-presentations.ts',
   'homologate-pages.ps1': 'src/cli/validate-presentations.ts',
   'homologate-matrix.ps1': 'src/cli/validate-presentations.ts',
@@ -88,7 +88,7 @@ const KNOWN_RENAMES: Record<string, string> = {
   'insert-zones.ps1': 'src/cli/validate-presentations.ts',
   'gen-tips-c.ps1': 'src/cli/validate-presentations.ts',
   'dedupe-i18n.ps1': 'src/cli/validate-presentations.ts',
-  'audit-workflow.ps1': 'src/infrastructure/audit-pipeline.ts'
+  'audit-workflow.ps1': 'src/infrastructure/audit-pipeline.ts',
 };
 
 function findTsEquivalent(ps1Name: string): string | null {
@@ -104,7 +104,7 @@ function findTsEquivalent(ps1Name: string): string | null {
     join(SRC_DIR, `${base}.ts`),
     join(SRC_DIR, 'agents', `${base}.ts`),
     join(SRC_DIR, 'database', `${base}.ts`),
-    join(SRC_DIR, 'skills', `${base}.ts`)
+    join(SRC_DIR, 'skills', `${base}.ts`),
   ];
   for (const c of candidates) {
     if (existsSync(c)) return c.replace(/\\/g, '/').replace(`${ROOT}/`, '').replace(/\\/g, '/');
@@ -121,7 +121,11 @@ function searchSrc(base: string): string | null {
     while (stack.length > 0 && depth < 5000) {
       const dir = stack.pop()!;
       let entries: import('fs').Dirent[];
-      try { entries = readdirSync(dir, { withFileTypes: true }); } catch { continue; }
+      try {
+        entries = readdirSync(dir, { withFileTypes: true });
+      } catch {
+        continue;
+      }
       for (const e of entries) {
         const full = join(dir, e.name);
         if (e.isDirectory()) stack.push(full);
@@ -142,8 +146,8 @@ function scanSkills(): BrokenRef[] {
   for (const dir of SKILL_DIRS) {
     if (!existsSync(dir)) continue;
     const skills = readdirSync(dir, { withFileTypes: true })
-      .filter(d => d.isDirectory())
-      .map(d => join(dir, d.name));
+      .filter((d) => d.isDirectory())
+      .map((d) => join(dir, d.name));
     for (const skillDir of skills) {
       const skillFile = join(skillDir, 'SKILL.md');
       if (!existsSync(skillFile)) continue;
@@ -158,9 +162,9 @@ function scanSkills(): BrokenRef[] {
           const candidates = [
             ref.startsWith('/') ? ref.slice(1) : ref,
             ref,
-            join(skillDir, ref).replace(/\\/g, '/').replace(`${ROOT}/`, '')
+            join(skillDir, ref).replace(/\\/g, '/').replace(`${ROOT}/`, ''),
           ];
-          const exists = candidates.some(c => existsSync(resolve(ROOT, c)));
+          const exists = candidates.some((c) => existsSync(resolve(ROOT, c)));
           if (!exists) {
             const ts = findTsEquivalent(ref);
             broken.push({
@@ -168,7 +172,7 @@ function scanSkills(): BrokenRef[] {
               ref,
               resolved: candidates[0],
               line: idx + 1,
-              tsEquivalent: ts
+              tsEquivalent: ts,
             });
           }
           re.lastIndex = m.index + m[0].length - 1; // avoid infinite loop on overlapping
@@ -194,7 +198,7 @@ function applyFixes(broken: BrokenRef[], confirm: boolean): { fixed: number; rem
     let content = readFileSync(skillPath, 'utf-8');
     let changed = false;
     for (const ref of refs) {
-      const b = broken.find(x => x.ref === ref && x.tsEquivalent);
+      const b = broken.find((x) => x.ref === ref && x.tsEquivalent);
       if (!b) continue;
       if (confirm) {
         console.log(`\nFix ${b.skill}:${b.line}?\n  ${ref} → ${b.tsEquivalent}`);
@@ -221,8 +225,8 @@ function main(): void {
   const broken = scanSkills();
   console.log(`Broken .ps1 references: ${broken.length}`);
 
-  const withTs = broken.filter(b => b.tsEquivalent);
-  const withoutTs = broken.filter(b => !b.tsEquivalent);
+  const withTs = broken.filter((b) => b.tsEquivalent);
+  const withoutTs = broken.filter((b) => !b.tsEquivalent);
   console.log(`  → have TS equivalent: ${withTs.length}`);
   console.log(`  → no TS equivalent (manual review): ${withoutTs.length}`);
 
@@ -240,7 +244,7 @@ function main(): void {
     total: broken.length,
     withTsEquivalent: withTs.length,
     noTsEquivalent: withoutTs.length,
-    broken
+    broken,
   };
   writeFileSync(REPORT_PATH, JSON.stringify(report, null, 2), 'utf-8');
   console.log(`\nReport: ${REPORT_PATH}`);

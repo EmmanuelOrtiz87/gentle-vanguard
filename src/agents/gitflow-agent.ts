@@ -17,20 +17,25 @@ const AGENT_CONFIG: DomainAgentConfig = {
   temperature: 0.1,
   execute: (task, context, prompt) => {
     const normalized = task.toLowerCase();
-    const intent =
-      normalized.includes('branch') ? 'BRANCH' :
-      normalized.includes('commit') ? 'COMMIT' :
-      normalized.includes('pr') || normalized.includes('pull request') ? 'PR' :
-      normalized.includes('chained') || normalized.includes('split') ? 'CHAINED_PR' :
-      normalized.includes('protect') ? 'PROTECTED' :
-      'GENERAL';
+    const intent = normalized.includes('branch')
+      ? 'BRANCH'
+      : normalized.includes('commit')
+        ? 'COMMIT'
+        : normalized.includes('pr') || normalized.includes('pull request')
+          ? 'PR'
+          : normalized.includes('chained') || normalized.includes('split')
+            ? 'CHAINED_PR'
+            : normalized.includes('protect')
+              ? 'PROTECTED'
+              : 'GENERAL';
 
     // Detect current branch/commit from context if provided
     const branch = context?.match(/branch:?\s*([^\n,]+)/i)?.[1]?.trim() || 'unknown';
     const protectedBranches = ['main', 'develop', 'master'];
 
     // Branch naming convention regex
-    const branchRegex = /^(feat|fix|docs|chore|refactor|test|perf|ci|build|style|revert)(\/|\/)[a-z0-9._-]+$/;
+    const branchRegex =
+      /^(feat|fix|docs|chore|refactor|test|perf|ci|build|style|revert)(\/|\/)[a-z0-9._-]+$/;
     const branchValid = branchRegex.test(branch);
 
     const analysis: Record<string, unknown> = {
@@ -38,16 +43,17 @@ const AGENT_CONFIG: DomainAgentConfig = {
       intent,
       currentBranch: branch,
       branchConventionValid: branchValid,
-      branchConventionRegex: '^(feat|fix|docs|chore|refactor|test|perf|ci|build|style|revert)/[a-z0-9._-]+$',
+      branchConventionRegex:
+        '^(feat|fix|docs|chore|refactor|test|perf|ci|build|style|revert)/[a-z0-9._-]+$',
       protectedBranches,
       commitFormat: 'type(scope): description  (conventional commits)',
       rules: [
         'No push to protected branches (main/develop) without PR',
         'No secrets in the diff — pre-commit validation must pass',
         'PRs over 400 lines must be split into chained PRs',
-        'No merge debris — clean git history'
+        'No merge debris — clean git history',
       ],
-      domainPrompt: prompt.slice(0, 300) + (prompt.length > 300 ? '…' : '')
+      domainPrompt: prompt.slice(0, 300) + (prompt.length > 300 ? '…' : ''),
     };
 
     const checklist = [
@@ -56,30 +62,35 @@ const AGENT_CONFIG: DomainAgentConfig = {
       'No direct push to protected branches (main/develop)',
       'No secrets in diff — pre-commit validation passed',
       'PR over 400 lines split into chained PRs',
-      'No merge debris'
+      'No merge debris',
     ];
 
     const flags: DomainOutput['flags'] = [];
     if (branch !== 'unknown' && !branchValid) {
       flags.push({
         severity: 'critical',
-        message: `Branch "${branch}" does not match convention. Expected e.g. feat/feature-name, fix/bug-name.`
+        message: `Branch "${branch}" does not match convention. Expected e.g. feat/feature-name, fix/bug-name.`,
       });
     }
     if (protectedBranches.includes(branch)) {
       flags.push({
         severity: 'critical',
-        message: `Branch "${branch}" is protected. All changes must flow through PRs with review gates.`
+        message: `Branch "${branch}" is protected. All changes must flow through PRs with review gates.`,
       });
     }
     if (normalized.includes('commit') && !context) {
-      flags.push({ severity: 'warn', message: 'Provide commit message via context to validate conventional commits format (type(scope): description).' });
+      flags.push({
+        severity: 'warn',
+        message:
+          'Provide commit message via context to validate conventional commits format (type(scope): description).',
+      });
     }
 
     const artifacts = [
       {
         name: 'gitflow-governance',
-        content: `# GitFlow Governance — ${intent.replace(/_/g, ' ')}\n\n` +
+        content:
+          `# GitFlow Governance — ${intent.replace(/_/g, ' ')}\n\n` +
           `**Task:** ${task}\n\n` +
           `**Current branch:** ${branch}\n\n` +
           `## Rules\n\n` +
@@ -92,8 +103,8 @@ const AGENT_CONFIG: DomainAgentConfig = {
           `- Branch name does not match convention → block and suggest correction\n` +
           `- Pushing to protected branch → redirect to PR workflow\n\n` +
           `## Commit Format\n\n` +
-          `\`\`\`\nfeat(auth): add OAuth2 login flow\nfix(ui): correct button alignment in header\ndocs(readme): update installation steps\n\`\`\`\n`
-      }
+          `\`\`\`\nfeat(auth): add OAuth2 login flow\nfix(ui): correct button alignment in header\ndocs(readme): update installation steps\n\`\`\`\n`,
+      },
     ];
 
     return {
@@ -101,10 +112,13 @@ const AGENT_CONFIG: DomainAgentConfig = {
       analysis,
       checklist,
       artifacts,
-      evidence: ['GITFLOW.md domain prompt loaded', 'Branch convention + conventional commits rules applied'],
-      flags
+      evidence: [
+        'GITFLOW.md domain prompt loaded',
+        'Branch convention + conventional commits rules applied',
+      ],
+      flags,
     };
-  }
+  },
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

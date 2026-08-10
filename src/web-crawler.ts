@@ -237,9 +237,7 @@ function decodeXml(input: string): string {
     .replace(/&quot;/g, '"')
     .replace(/&apos;/g, "'")
     .replace(/&#(\d+);/g, (_, code: string) => String.fromCharCode(Number(code)))
-    .replace(/&#x([0-9a-fA-F]+);/g, (_, code: string) =>
-      String.fromCharCode(parseInt(code, 16)),
-    )
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, code: string) => String.fromCharCode(parseInt(code, 16)))
     .replace(/&amp;/g, '&');
 }
 
@@ -393,7 +391,10 @@ export class WebCrawlerClient implements WebCrawler {
           throw new FirecrawlError(`Fallback provider server error ${resp.status}`, resp.status);
         }
         if (!resp.ok) {
-          throw new FirecrawlError(`Fallback provider ${resp.status}: ${resp.statusText}`, resp.status);
+          throw new FirecrawlError(
+            `Fallback provider ${resp.status}: ${resp.statusText}`,
+            resp.status,
+          );
         }
         return await resp.text();
       } catch (e) {
@@ -491,10 +492,10 @@ export class WebCrawlerClient implements WebCrawler {
         source: 'web-crawler',
         timestamp: new Date().toISOString(),
       });
-      mgr.getDb().prepare('INSERT INTO events (type, payload) VALUES (?, ?)').run(
-        'web-crawler.usage',
-        payload,
-      );
+      mgr
+        .getDb()
+        .prepare('INSERT INTO events (type, payload) VALUES (?, ?)')
+        .run('web-crawler.usage', payload);
     } catch {
       /* non-blocking — never break the crawl for telemetry */
     }
@@ -511,13 +512,10 @@ export class WebCrawlerClient implements WebCrawler {
   private async jinaScrape(url: string): Promise<ScrapedContent> {
     if (!this.config.enabled) throw new FirecrawlError('Web crawler disabled in config');
     await this.throttle();
-    const text = await this.requestPlain(
-      `${this.config.jinaReaderUrl}/${url}`,
-      {
-        Accept: 'text/markdown, text/plain;q=0.9',
-        'User-Agent': 'curl/8.0.1',
-      },
-    );
+    const text = await this.requestPlain(`${this.config.jinaReaderUrl}/${url}`, {
+      Accept: 'text/markdown, text/plain;q=0.9',
+      'User-Agent': 'curl/8.0.1',
+    });
     const result: ScrapedContent = {
       url,
       markdown: text,
@@ -602,7 +600,12 @@ export class WebCrawlerClient implements WebCrawler {
       const snippet = snippets[i]
         ? stripTags(decodeXml(snippets[i].replace(/<a[^>]+>/, '').replace(/<\/a>/, ''))).trim()
         : undefined;
-      results.push({ url, title, description: snippet || undefined, metadata: { provider: 'ddg-html' } });
+      results.push({
+        url,
+        title,
+        description: snippet || undefined,
+        metadata: { provider: 'ddg-html' },
+      });
       if (results.length >= limit) break;
     }
     return results;
@@ -673,7 +676,11 @@ export class WebCrawlerClient implements WebCrawler {
       }));
 
     this.cacheSet(cacheKey, results);
-    this.logUsage('search', query, results.reduce((a, r) => a + (r.markdown?.length ?? 0), 0));
+    this.logUsage(
+      'search',
+      query,
+      results.reduce((a, r) => a + (r.markdown?.length ?? 0), 0),
+    );
     return results;
   }
 
@@ -768,11 +775,7 @@ export class WebCrawlerClient implements WebCrawler {
   }
 
   /** Poll a crawl job until it completes or times out. */
-  async waitForCrawl(
-    id: string,
-    url: string,
-    _options: CrawlOptions = {},
-  ): Promise<CrawlResult> {
+  async waitForCrawl(id: string, url: string, _options: CrawlOptions = {}): Promise<CrawlResult> {
     const pollInterval = this.config.crawl.pollIntervalMs ?? 5000;
     const pollTimeout = this.config.crawl.pollTimeoutMs ?? 300_000;
     const deadline = Date.now() + pollTimeout;

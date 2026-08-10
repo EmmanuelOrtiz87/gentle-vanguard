@@ -158,8 +158,7 @@ export function getTokenUsage(): TokenUsageInfo {
   // 3. Budget config (limits only — no live usage available)
   const config = readJsonSafe(BUDGET_CONFIG_PATH);
   const tokenBudgetSection = config?.tokenBudget as
-    | { limits?: Record<string, unknown> }
-    | undefined;
+    { limits?: Record<string, unknown> } | undefined;
   const limits = tokenBudgetSection?.limits;
   if (limits) {
     const budget = toNum(limits.daily) || DEFAULT_BUDGET;

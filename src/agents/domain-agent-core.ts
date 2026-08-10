@@ -66,16 +66,26 @@ function parseArgs(): DomainTask {
   const task: DomainTask = {
     task: '',
     model: process.env.AGENT_MODEL || 'opencode/deepseek-v4-flash-free',
-    temperature: parseFloat(process.env.AGENT_TEMPERATURE || '0.3')
+    temperature: parseFloat(process.env.AGENT_TEMPERATURE || '0.3'),
   };
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--task': task.task = args[++i] ?? ''; break;
-      case '--context': task.context = args[++i]; break;
-      case '--model': task.model = args[++i] ?? task.model; break;
-      case '--temperature': task.temperature = parseFloat(args[++i] ?? '0.3'); break;
-      case '--help': case '-h': return task; // handled by wrapper
+      case '--task':
+        task.task = args[++i] ?? '';
+        break;
+      case '--context':
+        task.context = args[++i];
+        break;
+      case '--model':
+        task.model = args[++i] ?? task.model;
+        break;
+      case '--temperature':
+        task.temperature = parseFloat(args[++i] ?? '0.3');
+        break;
+      case '--help':
+      case '-h':
+        return task; // handled by wrapper
     }
   }
   return task;
@@ -109,7 +119,7 @@ function persistArtifacts(config: DomainAgentConfig, task: string, output: Domai
     analysis: output.analysis,
     checklist: output.checklist,
     evidence: output.evidence,
-    flags: output.flags ?? []
+    flags: output.flags ?? [],
   };
   writeFileSync(join(runDir, 'index.json'), JSON.stringify(index, null, 2), 'utf-8');
 
@@ -134,7 +144,7 @@ function emitUsage(config: DomainAgentConfig, task: string, output: DomainOutput
       summary: output.summary,
       artifactCount: output.artifacts.length,
       checklistCount: output.checklist.length,
-      flags: output.flags ?? []
+      flags: output.flags ?? [],
     };
 
     let existing: unknown[] = [];
@@ -202,18 +212,23 @@ export async function runDomainAgent(config: DomainAgentConfig): Promise<void> {
     console.log('=================================================');
 
     console.log('\n=== JSON OUTPUT ===');
-    console.log(JSON.stringify({
-      success: true,
-      agent: config.name,
-      domain: config.domain,
-      task,
-      model,
-      duration,
-      artifactDir,
-      summary: output.summary,
-      output
-    }, null, 2));
-
+    console.log(
+      JSON.stringify(
+        {
+          success: true,
+          agent: config.name,
+          domain: config.domain,
+          task,
+          model,
+          duration,
+          artifactDir,
+          summary: output.summary,
+          output,
+        },
+        null,
+        2,
+      ),
+    );
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     console.error(`\n❌ ${config.name} failed: ${msg}`);

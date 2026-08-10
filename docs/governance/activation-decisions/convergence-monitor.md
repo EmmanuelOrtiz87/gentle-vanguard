@@ -7,8 +7,8 @@
 
 ## Proposal
 
-Activar el módulo `convergence-monitor` (src/convergence-monitor.ts) — monitorea la convergencia
-del stack (que las métricas/estados tiendan a valores esperados) y alerta de divergencias.
+Activar el módulo `convergence-monitor` (src/convergence-monitor.ts) — monitorea la convergencia del
+stack (que las métricas/estados tiendan a valores esperados) y alerta de divergencias.
 
 - Scope: monitoreo de convergencia en la pipeline de sesión.
 - Impact: visibilidad de drift del stack; no modifica comportamiento core.

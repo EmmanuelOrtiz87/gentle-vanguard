@@ -1,7 +1,7 @@
 # Tools Directory
 
-This directory contains build and runtime dependencies that are NOT tracked by git (see .gitignore:
-_.exe, _.dll, \*.lib).
+This directory contains build and runtime dependencies that are NOT tracked by git (see
+`.gitignore`: `*.exe`, `*.dll`, `*.lib`).
 
 ## Required Tools
 

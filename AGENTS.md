@@ -304,18 +304,19 @@ Estrategias absorbidas de repos externos como TypeScript nativo (sin sidecars Py
 
 ### Structural Compression (`src/structural-compression.ts`)
 
-Absorbe 5 estrategias de compresión de Headroom en TS puro, complementando la compresión
-extractiva (`prompt-compression.ts` / `output-compression.ts`):
+Absorbe 5 estrategias de compresión de Headroom en TS puro, complementando la compresión extractiva
+(`prompt-compression.ts` / `output-compression.ts`):
 
-| Estrategia | Qué hace |
-| ---------- | -------- |
-| SmartCrusher | Comprime arrays JSON con decisión estadística (preserva outliers) |
-| Tabular compaction | JSON tabular → CSV con esquema (lossless) |
-| LogCompressor | Colapsa logs/stack-traces de build/test |
-| TextCrusher + BM25 | Prosa con relevancia a la query + dedup de shingles |
-| CrossCompression | Dedup de bytes entre turnos |
+| Estrategia         | Qué hace                                                          |
+| ------------------ | ----------------------------------------------------------------- |
+| SmartCrusher       | Comprime arrays JSON con decisión estadística (preserva outliers) |
+| Tabular compaction | JSON tabular → CSV con esquema (lossless)                         |
+| LogCompressor      | Colapsa logs/stack-traces de build/test                           |
+| TextCrusher + BM25 | Prosa con relevancia a la query + dedup de shingles               |
+| CrossCompression   | Dedup de bytes entre turnos                                       |
 
 **Seguridad por modo** (crítico): `compressStructural(input, { mode })`.
+
 - `mode: 'input'` (prompt/delegación) → **lossless-only** por defecto (`input.allowLossy: false`).
   Protege el razonamiento del modelo: no descarta filas/prosa que el modelo necesita.
 - `mode: 'output'` (respuesta) → lossy OK (`output.allowLossy: true`). El modelo ya razonó.
@@ -325,9 +326,9 @@ extractiva (`prompt-compression.ts` / `output-compression.ts`):
 
 ### Multi-perfiles por fase SDD (`src/model-profile-switcher.ts`)
 
-Convención de gentle-ai absorbida nativamente. `config/model-router.json` sección `profiles`
-define perfiles `cheap`/`balanced`/`premium`, cada uno con temperature + hallucinationGuard por
-fase SDD (BA/SAD/DEV/QA):
+Convención de gentle-ai absorbida nativamente. `config/model-router.json` sección `profiles` define
+perfiles `cheap`/`balanced`/`premium`, cada uno con temperature + hallucinationGuard por fase SDD
+(BA/SAD/DEV/QA):
 
 ```bash
 npm run profile:list    # listar perfiles
@@ -369,20 +370,20 @@ dependencias de servicios externos para su funcionamiento core.
 
 Motor de adquisición de contenido web con **proveedores en cadena**:
 
-| Operación | Primario | Fallback (sin API key, cero-config) |
-| --------- | -------- | ----------------------------------- |
-| Scrape    | Firecrawl (`FIRECRAWL_API_KEY`) | **Jina Reader** `r.jina.ai/<url>` → markdown |
+| Operación | Primario                        | Fallback (sin API key, cero-config)                                                                                                |
+| --------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Scrape    | Firecrawl (`FIRECRAWL_API_KEY`) | **Jina Reader** `r.jina.ai/<url>` → markdown                                                                                       |
 | Search    | Firecrawl (`FIRECRAWL_API_KEY`) | **DuckDuckGo HTML** `html.duckduckgo.com/html/` → parse `result__a`/`result__snippet`; segundo fallback **Bing RSS** `&format=rss` |
-| Crawl/Map | Firecrawl (requiere key)        | Error descriptivo                    |
+| Crawl/Map | Firecrawl (requiere key)        | Error descriptivo                                                                                                                  |
 
 - `fallbackEnabled: true` por defecto en `config/web-crawler.json`; el health reporta
   `provider: firecrawl | jina-reader+ddg+bing` y `fallbackActive`.
 - Cache SHA256 por provider (`cacheKey` con tag `fb`/`fc`) — evita envenenar resultados entre
   proveedores. Compresión estructural + logging a Nexus (`web-crawler.usage`).
-- **GOTCHA**: Jina Reader bloquea User-Agents de navegador (Chrome → 403); usa `curl/8.0.1`.
-  Los href de DuckDuckGo son redirects `//duckduckgo.com/l/?uddg=<encoded>` — decodificar el param
-  `uddg` con `decodeURIComponent` para obtener la URL real.
-  Bing search HTML sirve bot-detection a fetch de Node — usar el endpoint RSS.
+- **GOTCHA**: Jina Reader bloquea User-Agents de navegador (Chrome → 403); usa `curl/8.0.1`. Los
+  href de DuckDuckGo son redirects `//duckduckgo.com/l/?uddg=<encoded>` — decodificar el param
+  `uddg` con `decodeURIComponent` para obtener la URL real. Bing search HTML sirve bot-detection a
+  fetch de Node — usar el endpoint RSS.
 
 ```bash
 npx tsx src/web-crawler-cli.ts search --query "typescript" --limit 5
@@ -395,8 +396,8 @@ Tests: `tests/unit/web-crawler.test.ts` (14).
 ### Web Research Select (`src/web-research-select.ts`)
 
 Pipeline de **búsqueda → selección por relevancia** para research: busca con el web-crawler (cadena
-de proveedores), gradea los resultados con BM25 (retrieval-grader, patrón CRAG) y persiste el
-mejor subconjunto en `.session/web-research/<slug>.json`.
+de proveedores), gradea los resultados con BM25 (retrieval-grader, patrón CRAG) y persiste el mejor
+subconjunto en `.session/web-research/<slug>.json`.
 
 ```bash
 npm run web:select -- --query "customer retention strategies" --limit 5
@@ -405,29 +406,29 @@ npm run web:select -- --query "..." --deep-limit 3                      # top-N 
 ```
 
 - Modo snippet: gradea títulos + snippets del buscador (rápido, cero scraping).
-- Modo `--deep`: scrapea los top-N candidatos y reemplaza el score del snippet con `deepScore`
-  sobre el markdown completo — más preciso para research profundo.
+- Modo `--deep`: scrapea los top-N candidatos y reemplaza el score del snippet con `deepScore` sobre
+  el markdown completo — más preciso para research profundo.
 - `averageScore` en el output; resultados ordenados desc. Verdict `relevant` si avg ≥ umbral.
 - Tests: `tests/unit/web-crawler.test.ts` (14, incluye DDG redirect decode).
 
 ### witr trace (`src/witr-wrapper.ts` + `src/witr-cli.ts`)
 
-Wrapper TS del binario [witr](https://github.com/pranshuparmar/witr) — "Why Is This Running?".
-Traza procesos/puertos/archivos/contenedores hasta su cadena causal, con auto-install y redacción
-de secrets del entorno (`***REDACTED***` para claves).
+Wrapper TS del binario [witr](https://github.com/pranshuparmar/witr) — "Why Is This Running?". Traza
+procesos/puertos/archivos/contenedores hasta su cadena causal, con auto-install y redacción de
+secrets del entorno (`***REDACTED***` para claves).
 
 ```bash
 npx tsx src/witr-cli.ts process <pid>
 npx tsx src/witr-cli.ts port <port>
 ```
 
-Integrado en la watchtower para trazar la cadena causal de componentes con FAIL/WARN.
-Tests: `tests/unit/witr-wrapper.test.ts`.
+Integrado en la watchtower para trazar la cadena causal de componentes con FAIL/WARN. Tests:
+`tests/unit/witr-wrapper.test.ts`.
 
 ### Research Trends (`src/research-trends.ts` + `src/research-trends-cli.ts`)
 
-Agregador de tendencias Last30Days desde GitHub, Hacker News, Stack Overflow, Dev.to y Reddit en
-un `TrendReport` normalizado (themes, hottest, emerging). Alimenta el skill `web-research` y puede
+Agregador de tendencias Last30Days desde GitHub, Hacker News, Stack Overflow, Dev.to y Reddit en un
+`TrendReport` normalizado (themes, hottest, emerging). Alimenta el skill `web-research` y puede
 cruzar páginas trending vía web-crawler (Firecrawl/scrape).
 
 ```bash
@@ -453,8 +454,8 @@ Tests: `tests/unit/humanizer.test.ts`.
 
 ### Design Tokens (`src/design-tokens.ts` + `src/design-system-cli.ts`)
 
-Sistema de tokens de diseño (colores, tipografía, spacing) con generación de CSS/JSON y
-validación de escala.
+Sistema de tokens de diseño (colores, tipografía, spacing) con generación de CSS/JSON y validación
+de escala.
 
 ```bash
 npm run design:generate   # regenera tokens desde config/design-tokens.json
@@ -466,8 +467,8 @@ Tests: `tests/unit/design-tokens.test.ts`.
 
 ### Planning Templates (`src/planning-templates.ts` + `src/planning-templates.ts`)
 
-Plantillas de planificación pre-write (planes de sesión, desglose de tareas, ADRs) con validación
-de estructura. Tests: `tests/unit/planning-templates.test.ts`.
+Plantillas de planificación pre-write (planes de sesión, desglose de tareas, ADRs) con validación de
+estructura. Tests: `tests/unit/planning-templates.test.ts`.
 
 ### Animations (`src/animations/`)
 
@@ -695,7 +696,8 @@ Cuando un agente reporta "maximum steps reached", el orquestador:
 
 - `src/adaptive-steps.ts` — Motor de estimación y escalado
 - `src/recommend-agent.ts` — Bridge de auto-asignación con routing table
-- `src/route-and-delegate.ts` — Delegador multi-dominio cross-platform (recomienda agente + delega con tiering)
+- `src/route-and-delegate.ts` — Delegador multi-dominio cross-platform (recomienda agente + delega
+  con tiering)
 - `.session/routing/routing-table.json` — Tabla de aprendizaje (creada automáticamente)
 - `opencode.json` — Configuración de steps por agente
 - `src/auto-ps1-fixer.ts` — Herramienta para migración PS1→TS
@@ -711,7 +713,8 @@ npm run delegate:run -- --task "build a revenue forecast"
 npm run delegate:run -- --task "audit gdpr compliance" --context "..." --topn 3
 ```
 
-- Internamente usa `recommend-agent.ts` (STATIC_MAP 8 dominios de negocio + keywords negocio-primero + routing table aprendida)
+- Internamente usa `recommend-agent.ts` (STATIC_MAP 8 dominios de negocio + keywords
+  negocio-primero + routing table aprendida)
 - Inyecta `AGENT_TEMPERATURE` desde el tier del dominio (M6 tiering aplicado)
 - Reporte de validación: `reports/delegation-validation-report.md`
 
@@ -773,37 +776,47 @@ npx tsx src/auto-ps1-fixer-configs.ts
 
 ## Token Tracking y Trazabilidad (Real y Agnóstico)
 
-El stack mide el consumo REAL de tokens de forma **agnóstica a la herramienta** (no depende de plugins de opencode/claude/cursor). Un daemon lee los datos de sesión que CADA herramienta persiste en disco y los consolida en Nexus.
+El stack mide el consumo REAL de tokens de forma **agnóstica a la herramienta** (no depende de
+plugins de opencode/claude/cursor). Un daemon lee los datos de sesión que CADA herramienta persiste
+en disco y los consolida en Nexus.
 
 ### Arquitectura
 
 - **`src/token-ingest.ts`** — daemon de ingesta agnóstica:
   - Lee la DB de opencode (`~/.local/share/opencode/opencode.db`, tablas `session` y `message`).
   - Extensible a otras herramientas (registry `detectSources()`: opencode/codex/claude/cursor).
-  - Escribe en Nexus: `token_usage` (por sesión), `token_transactions` (por mensaje, con agente orquestador/subagente), `token_savings` (cache + compresión).
-  - Actualiza `.session/token-usage.json`, `session-current.json` y `reports/stack-live-observability-latest.json`.
-- **`src/token-usage-reader.ts`** — fuente única de verdad: lee Nexus primero, luego el report, luego fallbacks.
-- **`src/token-metrics-store.ts`** — el close report lee tokens REALES (Nexus → token-ingest → session-file).
+  - Escribe en Nexus: `token_usage` (por sesión), `token_transactions` (por mensaje, con agente
+    orquestador/subagente), `token_savings` (cache + compresión).
+  - Actualiza `.session/token-usage.json`, `session-current.json` y
+    `reports/stack-live-observability-latest.json`.
+- **`src/token-usage-reader.ts`** — fuente única de verdad: lee Nexus primero, luego el report,
+  luego fallbacks.
+- **`src/token-metrics-store.ts`** — el close report lee tokens REALES (Nexus → token-ingest →
+  session-file).
 
 ### Comandos
 
-| Comando               | Descripción                                          |
-| --------------------- | ---------------------------------------------------- |
-| `npm run token:ingest`| Ingesta una pasada (--once)                          |
-| `npm run token:trace` | Report de trazabilidad (transacciones/agentes/ahorros) |
-| `npm run token:status`| Budget real: usado / presupuesto / %                  |
+| Comando                | Descripción                                            |
+| ---------------------- | ------------------------------------------------------ |
+| `npm run token:ingest` | Ingesta una pasada (--once)                            |
+| `npm run token:trace`  | Report de trazabilidad (transacciones/agentes/ahorros) |
+| `npm run token:status` | Budget real: usado / presupuesto / %                   |
 
 ### Ciclo de vida
 
-El lazy step `token-ingest-init` (`--watch 30`) en `config/session-autostart.config.json` arranca con la sesión y captura en vivo hasta el cierre.
+El lazy step `token-ingest-init` (`--watch 30`) en `config/session-autostart.config.json` arranca
+con la sesión y captura en vivo hasta el cierre.
 
 ### Presupuestos (fuente única)
 
-`config/token-budget-guard.json` — daily **5M**, perSession **3M** (valores realistas vs ~1.5M/día real). `model-router.json` alineado.
+`config/token-budget-guard.json` — daily **5M**, perSession **3M** (valores realistas vs ~1.5M/día
+real). `model-router.json` alineado.
 
 ### Trazabilidad disponible
 
 - **Por transacción**: `token_transactions` (input/output/reasoning/cache/cost/model por mensaje).
 - **Por sesión**: `token_usage` (241 sesiones, 658M tokens históricos).
-- **Por agente**: orquestador (parent ROOT) vs subagentes (parent_id != ROOT), agrupados e individuales.
-- **Ahorros**: `token_savings` — cache reads (1.061M tokens) + compresión del stack (prompt/output/structural).
+- **Por agente**: orquestador (parent ROOT) vs subagentes (parent_id != ROOT), agrupados e
+  individuales.
+- **Ahorros**: `token_savings` — cache reads (1.061M tokens) + compresión del stack
+  (prompt/output/structural).

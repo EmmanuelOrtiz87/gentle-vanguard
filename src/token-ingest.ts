@@ -137,7 +137,10 @@ function lastIngested(): number {
 function saveLastIngested(t: number): void {
   try {
     mkdirSync(RUNTIME_DIR, { recursive: true });
-    writeFileSync(join(RUNTIME_DIR, 'token-ingest-state.json'), JSON.stringify({ lastTimeUpdated: t }));
+    writeFileSync(
+      join(RUNTIME_DIR, 'token-ingest-state.json'),
+      JSON.stringify({ lastTimeUpdated: t }),
+    );
   } catch {
     /* non-fatal */
   }
@@ -309,16 +312,14 @@ interface TransactionUsage {
  * tabla `message` (data JSON) + jerarquía de sesiones (parent_id) para
  * distinguir orquestador (parent ROOT) de subagentes.
  */
-export function readOpencodeTransactions(
-  dbPath: string,
-  sinceTimeCreated = 0,
-): TransactionUsage[] {
+export function readOpencodeTransactions(dbPath: string, sinceTimeCreated = 0): TransactionUsage[] {
   const db = new Database(dbPath, { readonly: true });
   try {
     // jerarquía: session_id -> es subagente si parent_id != 'ROOT'
-    const sessions = db
-      .prepare(`SELECT id, parent_id FROM session`)
-      .all() as Array<{ id: string; parent_id: string | null }>;
+    const sessions = db.prepare(`SELECT id, parent_id FROM session`).all() as Array<{
+      id: string;
+      parent_id: string | null;
+    }>;
     const agentOf = new Map<string, 'orchestrator' | 'subagent'>();
     for (const s of sessions) {
       agentOf.set(s.id, !s.parent_id || s.parent_id === 'ROOT' ? 'orchestrator' : 'subagent');
@@ -374,9 +375,10 @@ export function readOpencodeTransactions(
 }
 
 /** Persiste transacciones en Nexus `token_transactions` (idempotente por message_id). */
-export function writeTransactionsToNexus(
-  txns: TransactionUsage[],
-): { inserted: number; skipped: number } {
+export function writeTransactionsToNexus(txns: TransactionUsage[]): {
+  inserted: number;
+  skipped: number;
+} {
   if (!existsSync(NEXUS_DB) || txns.length === 0) return { inserted: 0, skipped: 0 };
   let inserted = 0;
   let skipped = 0;
@@ -635,12 +637,23 @@ export function generateTraceabilityReport(): string {
                 SUM(cache_read_tokens) cacheR, SUM(cost) cost
          FROM token_transactions WHERE created_at >= datetime(?) GROUP BY agent`,
       )
-      .all(dayStr) as Array<{ agent: string; n: number; i: number; o: number; cacheR: number; cost: number }>;
+      .all(dayStr) as Array<{
+      agent: string;
+      n: number;
+      i: number;
+      o: number;
+      cacheR: number;
+      cost: number;
+    }>;
     const savToday = db
-      .prepare(`SELECT COALESCE(SUM(saved_tokens),0) s FROM token_savings WHERE created_at >= datetime(?)`)
+      .prepare(
+        `SELECT COALESCE(SUM(saved_tokens),0) s FROM token_savings WHERE created_at >= datetime(?)`,
+      )
       .get(dayStr) as { s: number };
     const savByCategory = db
-      .prepare(`SELECT category, COALESCE(SUM(saved_tokens),0) s FROM token_savings GROUP BY category`)
+      .prepare(
+        `SELECT category, COALESCE(SUM(saved_tokens),0) s FROM token_savings GROUP BY category`,
+      )
       .all() as Array<{ category: string; s: number }>;
     const perSession = db
       .prepare(
@@ -648,7 +661,14 @@ export function generateTraceabilityReport(): string {
                 SUM(input_tokens) i, SUM(output_tokens) o, SUM(cache_read_tokens) cacheR, SUM(cost) cost
          FROM token_transactions GROUP BY session_id ORDER BY o DESC LIMIT 8`,
       )
-      .all() as Array<{ session_id: string; txns: number; i: number; o: number; cacheR: number; cost: number }>;
+      .all() as Array<{
+      session_id: string;
+      txns: number;
+      i: number;
+      o: number;
+      cacheR: number;
+      cost: number;
+    }>;
 
     // Subagentes individuales (iteraciones de agentes hijos).
     const subagents = db
@@ -658,7 +678,14 @@ export function generateTraceabilityReport(): string {
          FROM token_transactions WHERE agent = 'subagent'
          GROUP BY session_id ORDER BY o DESC LIMIT 10`,
       )
-      .all() as Array<{ session_id: string; agent: string; txns: number; i: number; o: number; cost: number }>;
+      .all() as Array<{
+      session_id: string;
+      agent: string;
+      txns: number;
+      i: number;
+      o: number;
+      cost: number;
+    }>;
 
     const L = (n: number): string => (n ?? 0).toLocaleString();
     let out = `════════ TRACEABILITY REPORT ════════\n`;

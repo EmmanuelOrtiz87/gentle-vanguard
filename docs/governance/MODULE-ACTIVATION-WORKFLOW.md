@@ -9,11 +9,11 @@ the default daily path and do **not** require this workflow. Deprecated modules 
 
 ## Roles
 
-| Role          | Responsibility                                                        |
-| ------------- | --------------------------------------------------------------------- |
-| **Owner**     | Module owner (see `owner` field in the registry). Drives the proposal. |
-| **gov-agent** | Governance review, security gates, approval gate keeper.               |
-| **orchestrator** | Final approval + rollout coordination.                              |
+| Role             | Responsibility                                                         |
+| ---------------- | ---------------------------------------------------------------------- |
+| **Owner**        | Module owner (see `owner` field in the registry). Drives the proposal. |
+| **gov-agent**    | Governance review, security gates, approval gate keeper.               |
+| **orchestrator** | Final approval + rollout coordination.                                 |
 
 ## Minimum gates (no exceptions)
 
@@ -123,10 +123,10 @@ An experimental module can be deactivated at any time:
 
 ## Approvals
 
-| Role        | Verdict    | Date       | Signature |
-| ----------- | ---------- | ---------- | --------- |
-| gov-agent   | approved   | <date>     | <name>    |
-| orchestrator| approved   | <date>     | <name>    |
+| Role         | Verdict  | Date   | Signature |
+| ------------ | -------- | ------ | --------- |
+| gov-agent    | approved | <date> | <name>    |
+| orchestrator | approved | <date> | <name>    |
 
 ## Rollout
 

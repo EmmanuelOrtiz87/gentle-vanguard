@@ -1,7 +1,9 @@
 # Model Broker Implementation Guide
 
 ## PROBLEMA RESUELTO:
+
 Model delegation failures due to:
+
 1. Todos los agentes configurados como `moonshotai/kimi-k2.5`
 2. Bedrock incompatibility with `reasoning_effort`
 3. No automatic fallback mechanisms
@@ -9,20 +11,23 @@ Model delegation failures due to:
 ## SOLUCIÓN IMPLEMENTADA:
 
 ### 1. **`src/opencode-switch-to-native.ts`**
-   - Cambia TODOS los agentes a `opencode/deepseek-v4-flash-free` (modelo nativo garantizado)
-   - **Comando**: `npx tsx src/opencode-switch-to-native.ts`
+
+- Cambia TODOS los agentes a `opencode/deepseek-v4-flash-free` (modelo nativo garantizado)
+- **Comando**: `npx tsx src/opencode-switch-to-native.ts`
 
 ### 2. **`src/model-broker.ts`**
-   - Inteligente delegation con auto-fallback
-   - Verifica health del modelo configurado
-   - Usa `fallbackChain` de `model-health-registry.json`
-   - Si falla → switch automático a fallback
-   - Logging completo en `.runtime/logs/model-broker.log`
+
+- Inteligente delegation con auto-fallback
+- Verifica health del modelo configurado
+- Usa `fallbackChain` de `model-health-registry.json`
+- Si falla → switch automático a fallback
+- Logging completo en `.runtime/logs/model-broker.log`
 
 ### 3. **`src/orchestrator-integration.ts`**
-   - Demuestra cómo integrar ModelBroker en el orchestrator
-   - Delegación robusta con retry y emergency fallback
-   - Status reporting y monitoreo
+
+- Demuestra cómo integrar ModelBroker en el orchestrator
+- Delegación robusta con retry y emergency fallback
+- Status reporting y monitoreo
 
 ## ARQUITECTURA DEL SISTEMA:
 
@@ -39,12 +44,14 @@ User Request → Orchestrator → ModelBroker.delegate()
 ## ¿CÓMO USAR?
 
 ### Paso 1: Cambiar a modelo nativo (RECOMENDADO)
+
 ```bash
 # Esto arregla el problema inmediato
 npx tsx src/opencode-switch-to-native.ts
 ```
 
 ### Paso 2: Testear el sistema
+
 ```bash
 # Ver estado actual
 npx tsx src/orchestrator-integration.ts status
@@ -54,6 +61,7 @@ npx tsx src/orchestrator-integration.ts test-delegation sdd-apply "Implement log
 ```
 
 ### Paso 3: Ver logs
+
 ```bash
 Get-Content .runtime/logs/model-broker.log -Tail 20
 ```

@@ -49,10 +49,7 @@ export function keyframesCSS(name: string, keyframes: AnimationKeyframe[]): stri
 }
 
 /** Builds a CSS `animation` shorthand value. */
-export function animationShorthand(
-  name: string,
-  options: CSSAnimationOptions = {},
-): string {
+export function animationShorthand(name: string, options: CSSAnimationOptions = {}): string {
   const duration = options.duration ?? 200;
   const easing = options.easing ?? 'cubic-bezier(0.4, 0, 0.2, 1)';
   const delay = options.delay ?? 0;
@@ -64,10 +61,7 @@ export function animationShorthand(
 }
 
 /** Animation shorthand for a named preset (used by the CSS class builder). */
-export function presetAnimationValue(
-  name: string,
-  preset: AnimationPreset,
-): string {
+export function presetAnimationValue(name: string, preset: AnimationPreset): string {
   return animationShorthand(name, {
     duration: preset.duration,
     easing: resolveEasing(preset),

@@ -14,11 +14,7 @@
  */
 
 import { pathToFileURL } from 'url';
-import {
-  createWebCrawler,
-  type Action,
-  type FirecrawlFormat,
-} from './web-crawler.js';
+import { createWebCrawler, type Action, type FirecrawlFormat } from './web-crawler.js';
 
 interface CliArgs {
   [key: string]: string | undefined;

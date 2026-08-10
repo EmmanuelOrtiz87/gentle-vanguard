@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Skill Migrator - Migrate opencode skills to native format
- * 
+ *
  * Converts skills from .opencode/skills/ to /skills/ with native structure.
  * Usage: npx tsx src/skill-migrator.ts --migrate-all
  */
@@ -47,7 +47,7 @@ const PRIORITY_SKILLS = [
   'planning-and-task-breakdown',
   'test-driven-development',
   'web-research',
-  'work-unit-commits'
+  'work-unit-commits',
 ];
 
 /**
@@ -56,16 +56,16 @@ const PRIORITY_SKILLS = [
 function parseOpenCodeFrontmatter(content: string): Partial<OpenCodeSkill> {
   const match = content.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
   if (!match) return {};
-  
+
   const yaml = match[1];
   const skill: Partial<OpenCodeSkill> = {};
-  
+
   // Parse simple key:value pairs
   const lines = yaml.split('\n');
   let currentKey = '';
   let inArray = false;
   const currentArray: string[] = [];
-  
+
   for (const line of lines) {
     const keyMatch = line.match(/^([a-zA-Z0-9_-]+):\s*(.*)$/);
     if (keyMatch) {
@@ -74,10 +74,10 @@ function parseOpenCodeFrontmatter(content: string): Partial<OpenCodeSkill> {
         (skill as Record<string, unknown>)[currentKey] = currentArray.slice();
         currentArray.length = 0;
       }
-      
+
       currentKey = keyMatch[1];
       const value = keyMatch[2].trim();
-      
+
       if (value) {
         (skill as Record<string, unknown>)[currentKey] = value;
       }
@@ -88,22 +88,19 @@ function parseOpenCodeFrontmatter(content: string): Partial<OpenCodeSkill> {
       currentArray.push(line.trim().slice(2));
     }
   }
-  
+
   // Save final array
   if (inArray && currentKey && currentArray.length > 0) {
     (skill as Record<string, unknown>)[currentKey] = currentArray.slice();
   }
-  
+
   return skill;
 }
 
 /**
  * Convert opencode skill to native format
  */
-function convertToNative(
-  opencodeSkill: OpenCodeSkill,
-  skillPath: string
-): NativeSkill {
+function convertToNative(opencodeSkill: OpenCodeSkill, skillPath: string): NativeSkill {
   return {
     name: opencodeSkill.name || basename(skillPath),
     description: opencodeSkill.description || '',
@@ -113,8 +110,8 @@ function convertToNative(
       source: 'opencode-migrated',
       migrated: true,
       migratedAt: new Date().toISOString(),
-      originalPath: skillPath
-    }
+      originalPath: skillPath,
+    },
   };
 }
 
@@ -124,11 +121,11 @@ function convertToNative(
 function generateNativeSkillMd(skill: NativeSkill, originalContent: string): string {
   const bodyMatch = originalContent.match(/---\s*\n[\s\S]*?\n---\s*\n([\s\S]*)$/);
   const body = bodyMatch ? bodyMatch[1] : originalContent;
-  
+
   const desc = Array.isArray(skill.description)
     ? skill.description.join('\n  ')
     : skill.description || '';
-  
+
   return `---
 name: ${skill.name}
 aliases: ${JSON.stringify(skill.aliases)}
@@ -156,10 +153,10 @@ function listOpenCodeSkills(): string[] {
     console.error(`Directory not found: ${OPENCODE_SKILLS_DIR}`);
     return [];
   }
-  
+
   return readdirSync(OPENCODE_SKILLS_DIR, { withFileTypes: true })
-    .filter(e => e.isDirectory())
-    .map(e => e.name);
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name);
 }
 
 /**
@@ -175,38 +172,34 @@ function existsNative(skillName: string): boolean {
 function migrateSkill(skillName: string): { success: boolean; error?: string } {
   try {
     const opencodePath = join(OPENCODE_SKILLS_DIR, skillName, 'SKILL.md');
-    
+
     if (!existsSync(opencodePath)) {
       return { success: false, error: `SKILL.md not found in ${opencodePath}` };
     }
-    
+
     // Check if already exists natively
     if (existsNative(skillName)) {
       console.log(`  ⚠️  ${skillName} already exists natively, skipping`);
       return { success: true };
     }
-    
+
     // Read opencode skill
     const content = readFileSync(opencodePath, 'utf-8');
     const frontmatter = parseOpenCodeFrontmatter(content);
-    
+
     // Convert to native
-    const nativeSkill = convertToNative(
-      frontmatter as OpenCodeSkill,
-      opencodePath
-    );
-    
+    const nativeSkill = convertToNative(frontmatter as OpenCodeSkill, opencodePath);
+
     // Create native skill directory
     const nativeDir = join(NATIVE_SKILLS_DIR, skillName);
     mkdirSync(nativeDir, { recursive: true });
-    
+
     // Write native SKILL.md
     const nativeContent = generateNativeSkillMd(nativeSkill, content);
     writeFileSync(join(nativeDir, 'SKILL.md'), nativeContent, 'utf-8');
-    
+
     console.log(`  ✅ ${skillName} migrated successfully`);
     return { success: true };
-    
   } catch (error) {
     return { success: false, error: String(error) };
   }
@@ -217,18 +210,18 @@ function migrateSkill(skillName: string): { success: boolean; error?: string } {
  */
 function migratePriority(): void {
   console.log('\n=== Migrating Priority Skills ===\n');
-  
+
   let success = 0;
   let failed = 0;
   let skipped = 0;
-  
+
   for (const skill of PRIORITY_SKILLS) {
     if (existsNative(skill)) {
       console.log(`  ⚠️  ${skill} already exists, skipping`);
       skipped++;
       continue;
     }
-    
+
     const result = migrateSkill(skill);
     if (result.success) {
       success++;
@@ -237,7 +230,7 @@ function migratePriority(): void {
       failed++;
     }
   }
-  
+
   console.log(`\nResults: ${success} migrated, ${failed} failed, ${skipped} skipped`);
 }
 
@@ -246,21 +239,21 @@ function migratePriority(): void {
  */
 function migrateAll(): void {
   console.log('\n=== Migrating All OpenCode Skills ===\n');
-  
+
   const skills = listOpenCodeSkills();
   console.log(`Found ${skills.length} skills in .opencode/skills/\n`);
-  
+
   let success = 0;
   let failed = 0;
   let skipped = 0;
-  
+
   for (const skill of skills) {
     if (existsNative(skill)) {
       console.log(`  ⚠️  ${skill} already exists natively, skipping`);
       skipped++;
       continue;
     }
-    
+
     const result = migrateSkill(skill);
     if (result.success) {
       success++;
@@ -269,7 +262,7 @@ function migrateAll(): void {
       failed++;
     }
   }
-  
+
   console.log(`\n=== Migration Complete ===`);
   console.log(`  ✅ Success: ${success}`);
   console.log(`  ❌ Failed: ${failed}`);
@@ -283,30 +276,30 @@ function migrateAll(): void {
 function main(): void {
   const args = process.argv.slice(2);
   const command = args[0];
-  
+
   switch (command) {
     case '--list-opencode':
       console.log('\n=== OpenCode Skills ===\n');
-      listOpenCodeSkills().forEach(s => console.log(`  ${s}`));
+      listOpenCodeSkills().forEach((s) => console.log(`  ${s}`));
       break;
-      
+
     case '--list-native':
       console.log('\n=== Native Skills ===\n');
       const nativeSkills = readdirSync(NATIVE_SKILLS_DIR, { withFileTypes: true })
-        .filter(e => e.isDirectory())
-        .map(e => e.name);
-      nativeSkills.forEach(s => console.log(`  ${s}`));
+        .filter((e) => e.isDirectory())
+        .map((e) => e.name);
+      nativeSkills.forEach((s) => console.log(`  ${s}`));
       console.log(`\nTotal: ${nativeSkills.length} native skills`);
       break;
-      
+
     case '--migrate-priority':
       migratePriority();
       break;
-      
+
     case '--migrate-all':
       migrateAll();
       break;
-      
+
     case '--migrate':
       const skill = args[1];
       if (!skill) {
@@ -316,7 +309,7 @@ function main(): void {
       const result = migrateSkill(skill);
       console.log(result.success ? '✅ Success' : `❌ Failed: ${result.error}`);
       break;
-      
+
     default:
       console.log(`
 Skill Migrator - Migrate opencode skills to native format

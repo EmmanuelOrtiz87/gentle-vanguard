@@ -285,7 +285,9 @@ async function main(): Promise<void> {
   if (failedResults.length > 0) {
     process.stdout.write(`\n🔴 FAILED SUITES — full output:\n`);
     failedResults.forEach((r: any) => {
-      process.stdout.write(`\n========== ${r.name} (${(r.duration / 1000).toFixed(1)}s) ==========\n`);
+      process.stdout.write(
+        `\n========== ${r.name} (${(r.duration / 1000).toFixed(1)}s) ==========\n`,
+      );
       process.stdout.write(`${r.output || '(no output captured)'}\n`);
       process.stdout.write(`========== end ${r.name} ==========\n`);
     });

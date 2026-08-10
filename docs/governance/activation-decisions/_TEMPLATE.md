@@ -18,10 +18,10 @@
 
 ## Approvals
 
-| Role        | Verdict    | Date       | Signature |
-| ----------- | ---------- | ---------- | --------- |
-| gov-agent   | approved   | <date>     | <name>    |
-| orchestrator| approved   | <date>     | <name>    |
+| Role         | Verdict  | Date   | Signature |
+| ------------ | -------- | ------ | --------- |
+| gov-agent    | approved | <date> | <name>    |
+| orchestrator | approved | <date> | <name>    |
 
 ## Rollout
 

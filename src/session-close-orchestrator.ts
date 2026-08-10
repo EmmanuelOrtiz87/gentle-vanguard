@@ -789,48 +789,48 @@ function phaseCleanup(skipDaemonKill = false): PhaseResult[] {
   if (!skipDaemonKill) {
     // 5.1 Kill child processes (CodeGraph MCP, Dashboard WS, Timeout Daemon)
     const DAEMON_WAIT_MS = 10000; // give lazy daemons time to finish booting
-  for (const target of KILL_TARGETS) {
-    const phase = `kill-${target.name.toLowerCase().replace(/\s+/g, '-')}`;
-    try {
-      // Wait for the daemon to be up (it's started lazily at session start and
-      // may still be booting if the session closed quickly).
-      const appeared = waitForProcess(target.matcher, DAEMON_WAIT_MS);
-      if (appeared) {
-        const killed = killProcessByCommandLine(target.matcher);
-        results.push({
-          phase,
-          status: killed ? 'PASS' : 'FAIL',
-          detail: killed
-            ? `${target.name} terminated`
-            : `${target.name} found but could not be terminated`,
-        });
-        if (killed) ok(`${target.name} process killed`);
-      } else if (target.required) {
-        // A required daemon should have been running all session. Its absence
-        // is a real problem — surface it instead of hiding it as a SKIP.
+    for (const target of KILL_TARGETS) {
+      const phase = `kill-${target.name.toLowerCase().replace(/\s+/g, '-')}`;
+      try {
+        // Wait for the daemon to be up (it's started lazily at session start and
+        // may still be booting if the session closed quickly).
+        const appeared = waitForProcess(target.matcher, DAEMON_WAIT_MS);
+        if (appeared) {
+          const killed = killProcessByCommandLine(target.matcher);
+          results.push({
+            phase,
+            status: killed ? 'PASS' : 'FAIL',
+            detail: killed
+              ? `${target.name} terminated`
+              : `${target.name} found but could not be terminated`,
+          });
+          if (killed) ok(`${target.name} process killed`);
+        } else if (target.required) {
+          // A required daemon should have been running all session. Its absence
+          // is a real problem — surface it instead of hiding it as a SKIP.
+          results.push({
+            phase,
+            status: 'FAIL',
+            detail: `${target.name} was not running at session close (expected a running daemon)`,
+          });
+          warn(`${target.name} was not running at session close`);
+        } else {
+          // Optional daemon (e.g. Dashboard WS) legitimately not started.
+          results.push({
+            phase,
+            status: 'PASS',
+            detail: `${target.name} not running (optional, not started)`,
+          });
+        }
+      } catch (e: unknown) {
+        const msg = e instanceof Error ? e.message : 'Unknown error';
         results.push({
           phase,
           status: 'FAIL',
-          detail: `${target.name} was not running at session close (expected a running daemon)`,
-        });
-        warn(`${target.name} was not running at session close`);
-      } else {
-        // Optional daemon (e.g. Dashboard WS) legitimately not started.
-        results.push({
-          phase,
-          status: 'PASS',
-          detail: `${target.name} not running (optional, not started)`,
+          detail: msg,
         });
       }
-    } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : 'Unknown error';
-      results.push({
-        phase,
-        status: 'FAIL',
-        detail: msg,
-      });
     }
-  }
   } // end if (!skipDaemonKill)
 
   // 5.2 Also kill any orphan session daemon processes (metrics tracker, cleanup daemons).

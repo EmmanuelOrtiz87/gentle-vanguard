@@ -255,7 +255,11 @@ class TrendCache {
     if (!this.enabled) return;
     try {
       mkdirSync(this.dir, { recursive: true });
-      writeFileSync(join(this.dir, `${key}.json`), JSON.stringify({ ts: Date.now(), data }), 'utf-8');
+      writeFileSync(
+        join(this.dir, `${key}.json`),
+        JSON.stringify({ ts: Date.now(), data }),
+        'utf-8',
+      );
     } catch {
       /* non-fatal */
     }
@@ -329,11 +333,7 @@ interface RawTrendInput {
   createdAt: string | number;
 }
 
-function normalizeTrend(
-  source: TrendSource,
-  raw: RawTrendInput,
-  fetchedAt: Date,
-): Trend {
+function normalizeTrend(source: TrendSource, raw: RawTrendInput, fetchedAt: Date): Trend {
   return {
     id: makeId(source, raw.id),
     source,
@@ -347,10 +347,7 @@ function normalizeTrend(
   };
 }
 
-async function fetchGithub(
-  config: ResearchTrendsConfig,
-  timeframe: Timeframe,
-): Promise<Trend[]> {
+async function fetchGithub(config: ResearchTrendsConfig, timeframe: Timeframe): Promise<Trend[]> {
   const src = config.sources.github as {
     enabled: boolean;
     apiUrl?: string;
@@ -406,9 +403,7 @@ async function fetchGithub(
 }
 
 /** Scrape github.com/trending for repos gaining stars today (velocity signal). */
-async function scrapeGithubTrending(
-  config: ResearchTrendsConfig,
-): Promise<TrendingPage[]> {
+async function scrapeGithubTrending(config: ResearchTrendsConfig): Promise<TrendingPage[]> {
   const url = 'https://github.com/trending';
   const fetchedAt = new Date();
   const res = await httpGet(url, config, {
@@ -598,10 +593,7 @@ async function fetchStackOverflow(
   return trends;
 }
 
-async function fetchDevTo(
-  config: ResearchTrendsConfig,
-  _timeframe: Timeframe,
-): Promise<Trend[]> {
+async function fetchDevTo(config: ResearchTrendsConfig, _timeframe: Timeframe): Promise<Trend[]> {
   const src = config.sources.devto as {
     enabled: boolean;
     apiUrl?: string;
@@ -649,10 +641,7 @@ async function fetchDevTo(
     );
 }
 
-async function fetchReddit(
-  config: ResearchTrendsConfig,
-  timeframe: Timeframe,
-): Promise<Trend[]> {
+async function fetchReddit(config: ResearchTrendsConfig, timeframe: Timeframe): Promise<Trend[]> {
   const src = config.sources.reddit as {
     enabled: boolean;
     apiUrl?: string;
@@ -666,8 +655,7 @@ async function fetchReddit(
   const subreddits = src.subreddits ?? ['programming'];
   const limit = src.limit ?? 25;
   const time = src.time ?? timeframeToReddit(timeframe);
-  const userAgent =
-    src.userAgent ?? 'gentle-vanguard-trends/1.0 (research aggregation)';
+  const userAgent = src.userAgent ?? 'gentle-vanguard-trends/1.0 (research aggregation)';
   const trends: Trend[] = [];
 
   for (const sub of subreddits) {
@@ -686,9 +674,10 @@ async function fetchReddit(
             {
               id: `${sub}:${p.id}`,
               title: p.title,
-              url: p.url && p.url.startsWith('http')
-                ? p.url
-                : `https://www.reddit.com${p.permalink ?? ''}`,
+              url:
+                p.url && p.url.startsWith('http')
+                  ? p.url
+                  : `https://www.reddit.com${p.permalink ?? ''}`,
               description: p.selftext ? p.selftext.slice(0, 300) : '',
               engagement: { upvotes: p.score, comments: p.num_comments },
               tags: [sub],
@@ -792,9 +781,7 @@ interface WebCrawlerInstance {
  * Scrape a trending page via the Firecrawl-backed web crawler when configured.
  * Falls back to direct HTTP fetch if the crawler is unavailable/unconfigured.
  */
-export async function scrapeTrendingPages(
-  config?: ResearchTrendsConfig,
-): Promise<TrendingPage[]> {
+export async function scrapeTrendingPages(config?: ResearchTrendsConfig): Promise<TrendingPage[]> {
   const cfg = config ?? loadConfig();
   if (!cfg.firecrawl.enabled || !cfg.firecrawl.scrapeTrendingPages) return [];
 
@@ -859,12 +846,7 @@ function parseTrendingMarkdown(md: string, baseUrl: string): TrendingPage[] {
 
 function engagementScore(t: Trend): number {
   const e = t.engagement;
-  return (
-    (e.stars ?? 0) +
-    (e.upvotes ?? 0) * 3 +
-    (e.comments ?? 0) * 2 +
-    (e.views ?? 0) / 100
-  );
+  return (e.stars ?? 0) + (e.upvotes ?? 0) * 3 + (e.comments ?? 0) * 2 + (e.views ?? 0) / 100;
 }
 
 function dedupeTrends(trends: Trend[]): Trend[] {
@@ -901,16 +883,14 @@ function buildThemes(
       count: arr.length,
       trends: arr.slice(0, maxPerTheme),
     }))
-    .sort((a, b) => b.count - a.count || engagementScore(b.trends[0]) - engagementScore(a.trends[0]))
+    .sort(
+      (a, b) => b.count - a.count || engagementScore(b.trends[0]) - engagementScore(a.trends[0]),
+    )
     .slice(0, config.theme.maxThemes);
   return themes;
 }
 
-function computeEmerging(
-  trends: Trend[],
-  config: ResearchTrendsConfig,
-  hottest: Trend[],
-): Trend[] {
+function computeEmerging(trends: Trend[], config: ResearchTrendsConfig, hottest: Trend[]): Trend[] {
   const hottestIds = new Set(hottest.map((t) => t.id));
   const now = Date.now();
   const scored = trends
@@ -929,9 +909,7 @@ export async function buildReport(
   config: ResearchTrendsConfig,
 ): Promise<TrendReport> {
   const unique = dedupeTrends(trends);
-  const sorted = [...unique].sort(
-    (a, b) => engagementScore(b) - engagementScore(a),
-  );
+  const sorted = [...unique].sort((a, b) => engagementScore(b) - engagementScore(a));
   const hottest = sorted.slice(0, config.hottestCount);
   const emerging = computeEmerging(sorted, config, hottest);
   const themes = buildThemes(unique, config);
@@ -1051,7 +1029,11 @@ export async function fetchTrends(options: FetchOptions = {}): Promise<FetchResu
   }
 
   // Firecrawl integration: scrape trending pages for velocity cross-reference.
-  if (config.firecrawl.enabled && config.firecrawl.scrapeTrendingPages && sources.includes('github')) {
+  if (
+    config.firecrawl.enabled &&
+    config.firecrawl.scrapeTrendingPages &&
+    sources.includes('github')
+  ) {
     try {
       const pages = await scrapeTrendingPages(config);
       const existingGithub = all.filter((t) => t.source === 'github');
@@ -1116,10 +1098,7 @@ export interface ThemeQueryResult {
  * "typescript OR rust") and comma-separated tags. Matches theme tags and
  * trend tags/titles.
  */
-export function queryThemes(
-  report: TrendReport,
-  query: string,
-): ThemeQueryResult {
+export function queryThemes(report: TrendReport, query: string): ThemeQueryResult {
   const q = query.trim().toLowerCase();
   const terms = q
     .split(/\s+OR\s+|,|\|/i)
@@ -1160,7 +1139,13 @@ export function renderMarkdown(report: TrendReport): string {
     lines.push(`${i + 1}. **${t.title}** (${t.source})${eng ? ` — ${eng}` : ''}`);
     lines.push(`   ${t.url}`);
     if (t.description) lines.push(`   ${t.description.slice(0, 200)}`);
-    if (t.tags.length) lines.push(`   Tags: ${t.tags.slice(0, 6).map((x) => `\`${x}\``).join(' ')}`);
+    if (t.tags.length)
+      lines.push(
+        `   Tags: ${t.tags
+          .slice(0, 6)
+          .map((x) => `\`${x}\``)
+          .join(' ')}`,
+      );
     lines.push('');
   });
   lines.push('## Emerging');
@@ -1173,9 +1158,7 @@ export function renderMarkdown(report: TrendReport): string {
   lines.push('## Themes');
   lines.push('');
   report.themes.forEach((th, i) => {
-    lines.push(
-      `${i + 1}. **#${th.tag}** — ${th.count} ${th.count === 1 ? 'trend' : 'trends'}`,
-    );
+    lines.push(`${i + 1}. **#${th.tag}** — ${th.count} ${th.count === 1 ? 'trend' : 'trends'}`);
     for (const t of th.trends.slice(0, 5)) {
       lines.push(`   - ${t.title} (${t.source})`);
     }

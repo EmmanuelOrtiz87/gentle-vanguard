@@ -36,7 +36,10 @@ function main(): number {
     console.error(`ERROR: carpeta no encontrada: ${DIR}`);
     return 1;
   }
-  const files = fs.readdirSync(DIR).filter((f) => f.endsWith('.html')).sort();
+  const files = fs
+    .readdirSync(DIR)
+    .filter((f) => f.endsWith('.html'))
+    .sort();
   if (files.length === 0) {
     console.error('ERROR: no hay archivos .html en', DIR);
     return 1;
@@ -62,7 +65,8 @@ function main(): number {
     // 2. Tags balanceados (heurística de etiquetas principales)
     const divOpen = (html.match(/<div[\s>]/g) || []).length;
     const divClose = (html.match(/<\/div>/g) || []).length;
-    if (Math.abs(divOpen - divClose) > 2) errors.push(`TAGS div desbalanceados (${divOpen}/${divClose})`);
+    if (Math.abs(divOpen - divClose) > 2)
+      errors.push(`TAGS div desbalanceados (${divOpen}/${divClose})`);
     const secOpen = (html.match(/<section[\s>]/g) || []).length;
     const secClose = (html.match(/<\/section>/g) || []).length;
     if (secOpen !== secClose) errors.push(`TAGS section desbalanceados (${secOpen}/${secClose})`);
@@ -80,15 +84,19 @@ function main(): number {
     if (!html.includes('lang-seg')) errors.push('FALTA selector .lang-seg');
     if (html.includes('data-bs-toggle="dropdown"')) errors.push('AÚN dropdown Bootstrap viejo');
     if (html.includes('dropdown-item')) errors.push('RESTOS dropdown-item');
-    if (html.includes('lang-btn') || html.includes('lang-menu')) errors.push('RESTOS selector antiguo');
+    if (html.includes('lang-btn') || html.includes('lang-menu'))
+      errors.push('RESTOS selector antiguo');
 
     // 5. Info-triggers: todos deben tener data-i18n-title (y no estar vacíos)
     const triggers = html.match(/class="info-trigger"/g) || [];
     if (triggers.length > 0) {
       // Contar triggers que NO tienen data-i18n-title en su tag
       const triggerTags = html.split('class="info-trigger"').slice(1);
-      const missingTitle = triggerTags.filter((seg) => !/data-i18n-title=/.test(seg.slice(0, 200))).length;
-      if (missingTitle > 0) errors.push(`${missingTitle}/${triggers.length} info-trigger SIN data-i18n-title`);
+      const missingTitle = triggerTags.filter(
+        (seg) => !/data-i18n-title=/.test(seg.slice(0, 200)),
+      ).length;
+      if (missingTitle > 0)
+        errors.push(`${missingTitle}/${triggers.length} info-trigger SIN data-i18n-title`);
     }
 
     // 6. i18n: títulos sec_* + contenido c_* + diccionario válido

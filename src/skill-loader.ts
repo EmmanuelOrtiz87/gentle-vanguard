@@ -1,9 +1,9 @@
 /**
  * Skill Loader - Native Skill System
- * 
+ *
  * Agnostic skill loader that works with ANY AI tool (Claude, Cursor, etc.)
  * No dependency on opencode. Reads skills from /skills/ directory.
- * 
+ *
  * Usage:
  *   npx tsx src/skill-loader.ts --list
  *   npx tsx src/skill-loader.ts --match "code review"
@@ -49,7 +49,7 @@ function parseFrontmatter(content: string): { frontmatter: SkillFrontmatter; bod
   const lines = yaml.split('\n');
   let currentKey = '';
   let currentArray: string[] = [];
-  
+
   for (const line of lines) {
     const keyMatch = line.match(/^([a-zA-Z0-9_-]+):\s*(.*)$/);
     if (keyMatch) {
@@ -58,16 +58,16 @@ function parseFrontmatter(content: string): { frontmatter: SkillFrontmatter; bod
         frontmatter[currentKey as keyof SkillFrontmatter] = currentArray as any;
         currentArray = [];
       }
-      
+
       currentKey = keyMatch[1];
       const value = keyMatch[2].trim();
-      
+
       if (value.startsWith('[') && value.endsWith(']')) {
         // Array inline: [item1, item2]
         frontmatter[currentKey as keyof SkillFrontmatter] = value
           .slice(1, -1)
           .split(',')
-          .map(s => s.trim()) as any;
+          .map((s) => s.trim()) as any;
       } else if (value.startsWith('>')) {
         // Multi-line string indicator
         frontmatter[currentKey as keyof SkillFrontmatter] = '' as any;
@@ -77,15 +77,19 @@ function parseFrontmatter(content: string): { frontmatter: SkillFrontmatter; bod
     } else if (line.trim().startsWith('- ')) {
       // Array item
       currentArray.push(line.trim().slice(2));
-    } else if (currentKey && line.trim() && !(frontmatter[currentKey as keyof SkillFrontmatter] as any)?.length) {
+    } else if (
+      currentKey &&
+      line.trim() &&
+      !(frontmatter[currentKey as keyof SkillFrontmatter] as any)?.length
+    ) {
       // Continue multi-line value
       const current = frontmatter[currentKey as keyof SkillFrontmatter];
       if (typeof current === 'string') {
-        frontmatter[currentKey as keyof SkillFrontmatter] = current + ' ' + line.trim() as any;
+        frontmatter[currentKey as keyof SkillFrontmatter] = (current + ' ' + line.trim()) as any;
       }
     }
   }
-  
+
   // Save final array
   if (currentKey && currentArray.length > 0) {
     frontmatter[currentKey as keyof SkillFrontmatter] = currentArray as any;
@@ -122,7 +126,7 @@ export function loadSkills(): Skill[] {
         description: frontmatter.description || '',
         triggers: frontmatter.triggers || [],
         content: body,
-        path: skillPath
+        path: skillPath,
       };
 
       skills.push(skill);
@@ -139,36 +143,38 @@ export function loadSkills(): Skill[] {
  */
 export function matchSkill(input: string, skills: Skill[]): Skill | null {
   const normalized = input.toLowerCase();
-  
+
   // Exact match on name
   for (const skill of skills) {
     if (skill.name.toLowerCase() === normalized) {
       return skill;
     }
   }
-  
+
   // Match on aliases
   for (const skill of skills) {
-    if (skill.aliases.some(alias => alias.toLowerCase() === normalized)) {
+    if (skill.aliases.some((alias) => alias.toLowerCase() === normalized)) {
       return skill;
     }
   }
-  
+
   // Match on triggers
   for (const skill of skills) {
-    if (skill.triggers.some(trigger => normalized.includes(trigger.toLowerCase()))) {
+    if (skill.triggers.some((trigger) => normalized.includes(trigger.toLowerCase()))) {
       return skill;
     }
   }
-  
+
   // Partial match on name
   for (const skill of skills) {
-    if (skill.name.toLowerCase().includes(normalized) || 
-        normalized.includes(skill.name.toLowerCase())) {
+    if (
+      skill.name.toLowerCase().includes(normalized) ||
+      normalized.includes(skill.name.toLowerCase())
+    ) {
       return skill;
     }
   }
-  
+
   return null;
 }
 
@@ -176,11 +182,12 @@ export function matchSkill(input: string, skills: Skill[]): Skill | null {
  * Get skill content by name
  */
 export function getSkillContent(name: string, skills: Skill[]): string | null {
-  const skill = skills.find(s => 
-    s.name.toLowerCase() === name.toLowerCase() ||
-    s.aliases.some(a => a.toLowerCase() === name.toLowerCase())
+  const skill = skills.find(
+    (s) =>
+      s.name.toLowerCase() === name.toLowerCase() ||
+      s.aliases.some((a) => a.toLowerCase() === name.toLowerCase()),
   );
-  
+
   return skill ? skill.content : null;
 }
 

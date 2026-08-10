@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Gov Agent (gov-agent) - Native Implementation
- * 
+ *
  * Governance agent for compliance, security, and audit.
  * Works with ANY AI tool (Claude, Cursor, etc.)
  * No opencode dependency.
@@ -20,7 +20,7 @@ const AGENT_CONFIG = {
   model: 'opencode/deepseek-v4-flash-free',
   temperature: 0.1,
   maxTokens: 4000,
-  version: '1.0.0'
+  version: '1.0.0',
 };
 
 const SECURITY_POLICIES = [
@@ -30,7 +30,7 @@ const SECURITY_POLICIES = [
   'Access control validation',
   'Audit trail requirements',
   'GDPR compliance',
-  'Data retention policies'
+  'Data retention policies',
 ];
 
 const AUDIT_CHECKLIST = [
@@ -41,7 +41,7 @@ const AUDIT_CHECKLIST = [
   'Check input validation',
   'Verify error handling',
   'Review logging practices',
-  'Check API rate limiting'
+  'Check API rate limiting',
 ];
 
 function parseArgs(): GovTask {
@@ -49,16 +49,27 @@ function parseArgs(): GovTask {
   const task: GovTask = {
     task: '',
     model: process.env.AGENT_MODEL || AGENT_CONFIG.model,
-    temperature: parseFloat(process.env.AGENT_TEMPERATURE || String(AGENT_CONFIG.temperature))
+    temperature: parseFloat(process.env.AGENT_TEMPERATURE || String(AGENT_CONFIG.temperature)),
   };
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--task': task.task = args[++i]; break;
-      case '--context': task.context = args[++i]; break;
-      case '--model': task.model = args[++i]; break;
-      case '--temperature': task.temperature = parseFloat(args[++i]); break;
-      case '--help': case '-h': showHelp(); process.exit(0);
+      case '--task':
+        task.task = args[++i];
+        break;
+      case '--context':
+        task.context = args[++i];
+        break;
+      case '--model':
+        task.model = args[++i];
+        break;
+      case '--temperature':
+        task.temperature = parseFloat(args[++i]);
+        break;
+      case '--help':
+      case '-h':
+        showHelp();
+        process.exit(0);
     }
   }
 
@@ -84,12 +95,15 @@ Usage:
 
 function analyzeGovernance(task: string, context?: string): string {
   const normalized = task.toLowerCase();
-  const govType = 
-    normalized.includes('security') ? 'SECURITY' :
-    normalized.includes('audit') ? 'AUDIT' :
-    normalized.includes('compliance') ? 'COMPLIANCE' :
-    normalized.includes('policy') ? 'POLICY' :
-    'GENERAL';
+  const govType = normalized.includes('security')
+    ? 'SECURITY'
+    : normalized.includes('audit')
+      ? 'AUDIT'
+      : normalized.includes('compliance')
+        ? 'COMPLIANCE'
+        : normalized.includes('policy')
+          ? 'POLICY'
+          : 'GENERAL';
 
   const gov = {
     task,
@@ -103,8 +117,8 @@ function analyzeGovernance(task: string, context?: string): string {
         'config/security-policy.json',
         'rules/SECURITY.md',
         '.github/CODEOWNERS',
-        '.github/dependabot.yml'
-      ]
+        '.github/dependabot.yml',
+      ],
     },
     findings: generateFindings(govType),
     recommendations: [
@@ -112,8 +126,8 @@ function analyzeGovernance(task: string, context?: string): string {
       'Set up regular penetration testing',
       'Create incident response plan',
       'Document data classification',
-      'Establish change management process'
-    ]
+      'Establish change management process',
+    ],
   };
 
   return JSON.stringify(gov, null, 2);
@@ -125,7 +139,7 @@ function generateFindings(type: string): Record<string, unknown> {
       critical: [],
       high: [],
       medium: ['Review API authentication'],
-      low: ['Update documentation']
+      low: ['Update documentation'],
     };
   }
   return { issuesFound: 0, status: 'PASS' };
@@ -145,7 +159,7 @@ async function main(): Promise<void> {
   try {
     const result = analyzeGovernance(task, context);
     const duration = Date.now() - startTime;
-    
+
     console.log('=== Governance Analysis ===\n');
     console.log(result);
     console.log();
@@ -153,17 +167,22 @@ async function main(): Promise<void> {
     console.log(`  Status: ✅ SUCCESS`);
     console.log(`  Duration: ${duration}ms`);
     console.log('=================================================');
-    
-    console.log('\n=== JSON OUTPUT ===');
-    console.log(JSON.stringify({
-      success: true,
-      agent: AGENT_CONFIG.name,
-      task,
-      model,
-      duration,
-      output: JSON.parse(result)
-    }, null, 2));
 
+    console.log('\n=== JSON OUTPUT ===');
+    console.log(
+      JSON.stringify(
+        {
+          success: true,
+          agent: AGENT_CONFIG.name,
+          task,
+          model,
+          duration,
+          output: JSON.parse(result),
+        },
+        null,
+        2,
+      ),
+    );
   } catch (_error) {
     console.error('\n❌ Error:', _error);
     process.exit(1);

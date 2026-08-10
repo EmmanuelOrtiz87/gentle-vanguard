@@ -81,16 +81,7 @@
       "maxSteps": 52,
       "executionCommand": "npx tsx src/agents/sdd-apply.ts",
       "script": "src/agents/sdd-apply.ts",
-      "triggers": [
-        "implement",
-        "code",
-        "fix",
-        "refactor",
-        "build",
-        "create",
-        "update",
-        "edit"
-      ],
+      "triggers": ["implement", "code", "fix", "refactor", "build", "create", "update", "edit"],
       "permissions": {
         "read": ["**/*"],
         "write": ["**/*.{ts,js,json,md,yml,yaml}"],
@@ -150,14 +141,7 @@
       "maxSteps": 34,
       "executionCommand": "npx tsx src/agents/doc-agent.ts",
       "script": "src/agents/doc-agent.ts",
-      "triggers": [
-        "document",
-        "doc",
-        "readme",
-        "adr",
-        "guide",
-        "tutorial"
-      ],
+      "triggers": ["document", "doc", "readme", "adr", "guide", "tutorial"],
       "permissions": {
         "read": ["**/*.md", "docs/**"],
         "write": ["**/*.md", "docs/**"],
@@ -176,14 +160,7 @@
       "maxSteps": 30,
       "executionCommand": "npx tsx src/agents/ops-agent.ts",
       "script": "src/agents/ops-agent.ts",
-      "triggers": [
-        "deploy",
-        "ci/cd",
-        "docker",
-        "infrastructure",
-        "monitoring",
-        "pipeline"
-      ],
+      "triggers": ["deploy", "ci/cd", "docker", "infrastructure", "monitoring", "pipeline"],
       "permissions": {
         "read": [".github/**", "docker/**", "config/**"],
         "write": [".github/workflows/**", "docker/**"],
@@ -202,14 +179,7 @@
       "maxSteps": 38,
       "executionCommand": "npx tsx src/agents/gov-agent.ts",
       "script": "src/agents/gov-agent.ts",
-      "triggers": [
-        "audit",
-        "compliance",
-        "security",
-        "gdpr",
-        "policy",
-        "governance"
-      ],
+      "triggers": ["audit", "compliance", "security", "gdpr", "policy", "governance"],
       "permissions": {
         "read": ["config/**", "rules/**", ".github/**"],
         "write": ["rules/**"],
@@ -228,12 +198,7 @@
       "maxSteps": 25,
       "executionCommand": "npx tsx src/agents/session-agent.ts",
       "script": "src/agents/session-agent.ts",
-      "triggers": [
-        "session",
-        "cleanup",
-        "lifecycle",
-        "state"
-      ],
+      "triggers": ["session", "cleanup", "lifecycle", "state"],
       "permissions": {
         "read": [".session/**", ".runtime/**"],
         "write": [".session/**"],
@@ -252,14 +217,7 @@
       "maxSteps": 38,
       "executionCommand": "npx tsx src/agents/self-diag-agent.ts",
       "script": "src/agents/self-diag-agent.ts",
-      "triggers": [
-        "diagnose",
-        "debug",
-        "fix",
-        "repair",
-        "health",
-        "error"
-      ],
+      "triggers": ["diagnose", "debug", "fix", "repair", "health", "error"],
       "permissions": {
         "read": ["**/*"],
         "write": ["**/*"],
@@ -278,13 +236,7 @@
       "maxSteps": 30,
       "executionCommand": "npx tsx src/agents/premortem-agent.ts",
       "script": "src/agents/premortem-agent.ts",
-      "triggers": [
-        "risk",
-        "premortem",
-        "what could go wrong",
-        "failure",
-        "stress test"
-      ],
+      "triggers": ["risk", "premortem", "what could go wrong", "failure", "stress test"],
       "permissions": {
         "read": ["**/*"],
         "write": ["docs/risk/**"],
@@ -303,13 +255,7 @@
       "maxSteps": 30,
       "executionCommand": "npx tsx src/agents/maintenance-agent.ts",
       "script": "src/agents/maintenance-agent.ts",
-      "triggers": [
-        "cleanup",
-        "optimize",
-        "prune",
-        "maintenance",
-        "health"
-      ],
+      "triggers": ["cleanup", "optimize", "prune", "maintenance", "health"],
       "permissions": {
         "read": ["**/*"],
         "write": [".runtime/**", "logs/**"],
@@ -328,7 +274,16 @@
       "maxSteps": 20,
       "executionCommand": "npx tsx src/agents/mkt-agent.ts",
       "script": "src/agents/mkt-agent.ts",
-      "triggers": ["marketing", "campaign", "content", "landing page", "email", "seo", "brand", "positioning"],
+      "triggers": [
+        "marketing",
+        "campaign",
+        "content",
+        "landing page",
+        "email",
+        "seo",
+        "brand",
+        "positioning"
+      ],
       "permissions": {
         "read": ["config/agent-prompts/MKT.md", "skills/**", "docs/marketing/**"],
         "write": ["docs/marketing/**", ".session/artifacts/marketing/**"],
@@ -347,7 +302,16 @@
       "maxSteps": 20,
       "executionCommand": "npx tsx src/agents/sales-agent.ts",
       "script": "src/agents/sales-agent.ts",
-      "triggers": ["sales", "meddic", "pipeline", "deal", "outreach", "qualify", "forecast", "account plan"],
+      "triggers": [
+        "sales",
+        "meddic",
+        "pipeline",
+        "deal",
+        "outreach",
+        "qualify",
+        "forecast",
+        "account plan"
+      ],
       "permissions": {
         "read": ["config/agent-prompts/SALES.md", "docs/sales/**"],
         "write": ["docs/sales/**", ".session/artifacts/sales/**"],
@@ -366,7 +330,17 @@
       "maxSteps": 20,
       "executionCommand": "npx tsx src/agents/finance-agent.ts",
       "script": "src/agents/finance-agent.ts",
-      "triggers": ["finance", "financial model", "forecast", "budget", "ltv", "cac", "revenue", "margin", "cash flow"],
+      "triggers": [
+        "finance",
+        "financial model",
+        "forecast",
+        "budget",
+        "ltv",
+        "cac",
+        "revenue",
+        "margin",
+        "cash flow"
+      ],
       "permissions": {
         "read": ["config/agent-prompts/FINANCE.md", "docs/finance/**"],
         "write": ["docs/finance/**", ".session/artifacts/finance/**"],
@@ -385,7 +359,15 @@
       "maxSteps": 20,
       "executionCommand": "npx tsx src/agents/hr-agent.ts",
       "script": "src/agents/hr-agent.ts",
-      "triggers": ["hr", "hiring", "job description", "interview", "onboarding", "recruitment", "people ops"],
+      "triggers": [
+        "hr",
+        "hiring",
+        "job description",
+        "interview",
+        "onboarding",
+        "recruitment",
+        "people ops"
+      ],
       "permissions": {
         "read": ["config/agent-prompts/HR.md", "docs/hr/**"],
         "write": ["docs/hr/**", ".session/artifacts/hr/**"],
@@ -404,7 +386,16 @@
       "maxSteps": 20,
       "executionCommand": "npx tsx src/agents/legal-agent.ts",
       "script": "src/agents/legal-agent.ts",
-      "triggers": ["legal", "compliance", "gdpr", "contract", "dpa", "privacy", "regulatory", "hipaa"],
+      "triggers": [
+        "legal",
+        "compliance",
+        "gdpr",
+        "contract",
+        "dpa",
+        "privacy",
+        "regulatory",
+        "hipaa"
+      ],
       "permissions": {
         "read": ["config/agent-prompts/LEGAL.md", "docs/legal/**"],
         "write": ["docs/legal/**", ".session/artifacts/legal/**"],
@@ -423,7 +414,16 @@
       "maxSteps": 20,
       "executionCommand": "npx tsx src/agents/bus-tele-agent.ts",
       "script": "src/agents/bus-tele-agent.ts",
-      "triggers": ["telemetry", "metrics", "kpi", "dau", "bi", "dashboard", "analytics", "data validation"],
+      "triggers": [
+        "telemetry",
+        "metrics",
+        "kpi",
+        "dau",
+        "bi",
+        "dashboard",
+        "analytics",
+        "data validation"
+      ],
       "permissions": {
         "read": ["config/agent-prompts/BUS-TELE.md", "docs/business/**"],
         "write": ["docs/business/**", ".session/artifacts/business-telemetry/**"],
@@ -442,7 +442,14 @@
       "maxSteps": 30,
       "executionCommand": "npx tsx src/agents/gitflow-agent.ts",
       "script": "src/agents/gitflow-agent.ts",
-      "triggers": ["gitflow", "branch", "commit convention", "pr", "conventional commits", "protected branch"],
+      "triggers": [
+        "gitflow",
+        "branch",
+        "commit convention",
+        "pr",
+        "conventional commits",
+        "protected branch"
+      ],
       "permissions": {
         "read": ["**/*"],
         "write": [],
@@ -461,7 +468,15 @@
       "maxSteps": 25,
       "executionCommand": "npx tsx src/agents/knowledge-agent.ts",
       "script": "src/agents/knowledge-agent.ts",
-      "triggers": ["knowledge", "knowledge base", "note", "adr note", "vault", "kb", "document decision"],
+      "triggers": [
+        "knowledge",
+        "knowledge base",
+        "note",
+        "adr note",
+        "vault",
+        "kb",
+        "document decision"
+      ],
       "permissions": {
         "read": ["knowledge-base/**", "docs/**", ".session/**"],
         "write": ["knowledge-base/**", ".session/artifacts/knowledge/**"],

@@ -89,12 +89,7 @@
       "rationale": "FINANCE calcula — modelo nativo para precisión numérica (incluyendo Bedrock compatible)"
     }
   },
-  "universalFallbacks": [
-    "kimi-2-5",
-    "ollama/qwen2.5",
-    "ollama/llama3",
-    "dify/qwen-plus"
-  ],
+  "universalFallbacks": ["kimi-2-5", "ollama/qwen2.5", "ollama/llama3", "dify/qwen-plus"],
   "agentTypeFallback": {
     "description": "Cuando un tipo de agente específico falla, usar estos tipos como fallback universal",
     "rule": "Intentar con 'general' como fallback universal, luego 'explore' para tareas de análisis",
@@ -102,4 +97,3 @@
     "notes": "general y explore son tipos de agente integrados en OpenCode que usan el system-model y siempre están disponibles"
   }
 }
-

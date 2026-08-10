@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Premortem Agent (premortem-agent) - Native Implementation
- * 
+ *
  * Premortem analysis agent for risk identification and stress testing.
  * Works with ANY AI tool (Claude, Cursor, etc.)
  * No opencode dependency.
@@ -20,7 +20,7 @@ const AGENT_CONFIG = {
   model: 'opencode/deepseek-v4-flash-free',
   temperature: 0.2,
   maxTokens: 4000,
-  version: '1.0.0'
+  version: '1.0.0',
 };
 
 function parseArgs(): PremortemTask {
@@ -28,16 +28,27 @@ function parseArgs(): PremortemTask {
   const task: PremortemTask = {
     task: '',
     model: process.env.AGENT_MODEL || AGENT_CONFIG.model,
-    temperature: parseFloat(process.env.AGENT_TEMPERATURE || String(AGENT_CONFIG.temperature))
+    temperature: parseFloat(process.env.AGENT_TEMPERATURE || String(AGENT_CONFIG.temperature)),
   };
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--task': task.task = args[++i]; break;
-      case '--context': task.context = args[++i]; break;
-      case '--model': task.model = args[++i]; break;
-      case '--temperature': task.temperature = parseFloat(args[++i]); break;
-      case '--help': case '-h': showHelp(); process.exit(0);
+      case '--task':
+        task.task = args[++i];
+        break;
+      case '--context':
+        task.context = args[++i];
+        break;
+      case '--model':
+        task.model = args[++i];
+        break;
+      case '--temperature':
+        task.temperature = parseFloat(args[++i]);
+        break;
+      case '--help':
+      case '-h':
+        showHelp();
+        process.exit(0);
     }
   }
 
@@ -63,11 +74,13 @@ Usage:
 
 function analyzeRisks(task: string, context?: string): string {
   const normalized = task.toLowerCase();
-  const analysisType = 
-    normalized.includes('risk') ? 'RISK' :
-    normalized.includes('fail') ? 'FAILURE' :
-    normalized.includes('stress') ? 'STRESS' :
-    'PREMORTEM';
+  const analysisType = normalized.includes('risk')
+    ? 'RISK'
+    : normalized.includes('fail')
+      ? 'FAILURE'
+      : normalized.includes('stress')
+        ? 'STRESS'
+        : 'PREMORTEM';
 
   const risks = {
     task,
@@ -79,12 +92,12 @@ function analyzeRisks(task: string, context?: string): string {
         {
           category: 'Technical',
           risks: [
-            'Architecture doesn\'t scale',
+            "Architecture doesn't scale",
             'Database becomes bottleneck',
             'Third-party API downtime',
             'Security breach',
-            'Data corruption'
-          ]
+            'Data corruption',
+          ],
         },
         {
           category: 'Organizational',
@@ -93,8 +106,8 @@ function analyzeRisks(task: string, context?: string): string {
             'Budget cuts',
             'Requirements change',
             'Scope creep',
-            'Timeline unrealistic'
-          ]
+            'Timeline unrealistic',
+          ],
         },
         {
           category: 'External',
@@ -103,9 +116,9 @@ function analyzeRisks(task: string, context?: string): string {
             'Market shifts',
             'Competitor release',
             'Vendor discontinuation',
-            'Security vulnerabilities'
-          ]
-        }
+            'Security vulnerabilities',
+          ],
+        },
       ],
       mitigationStrategies: [
         'Design for scale from day 1',
@@ -114,16 +127,16 @@ function analyzeRisks(task: string, context?: string): string {
         'Cross-train team members',
         'Agile methodology',
         'Continuous monitoring',
-        'Disaster recovery plan'
+        'Disaster recovery plan',
       ],
       earlyWarningSigns: [
         'Performance degradation',
         'Increasing error rates',
         'Developer burnout',
         'Missed deadlines',
-        'Quality issues'
-      ]
-    }
+        'Quality issues',
+      ],
+    },
   };
 
   return JSON.stringify(risks, null, 2);
@@ -143,7 +156,7 @@ async function main(): Promise<void> {
   try {
     const result = analyzeRisks(task, context);
     const duration = Date.now() - startTime;
-    
+
     console.log('=== Premortem Analysis ===\n');
     console.log(result);
     console.log();
@@ -151,17 +164,22 @@ async function main(): Promise<void> {
     console.log(`  Status: ✅ SUCCESS`);
     console.log(`  Duration: ${duration}ms`);
     console.log('=================================================');
-    
-    console.log('\n=== JSON OUTPUT ===');
-    console.log(JSON.stringify({
-      success: true,
-      agent: AGENT_CONFIG.name,
-      task,
-      model,
-      duration,
-      output: JSON.parse(result)
-    }, null, 2));
 
+    console.log('\n=== JSON OUTPUT ===');
+    console.log(
+      JSON.stringify(
+        {
+          success: true,
+          agent: AGENT_CONFIG.name,
+          task,
+          model,
+          duration,
+          output: JSON.parse(result),
+        },
+        null,
+        2,
+      ),
+    );
   } catch (_error) {
     console.error('\n❌ Error:', _error);
     process.exit(1);

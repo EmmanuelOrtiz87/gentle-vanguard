@@ -66,7 +66,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   }
 
   if (!query || !chunksRaw) {
-    console.error('Usage: npx tsx src/rag-retrieval.ts --query "..." --chunks \'["...","..."]\' [--file path]');
+    console.error(
+      'Usage: npx tsx src/rag-retrieval.ts --query "..." --chunks \'["...","..."]\' [--file path]',
+    );
     process.exit(1);
   }
 
@@ -88,7 +90,11 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         totalCount: result.totalCount,
         correctiveAction: result.correctiveAction,
         relevantChunks: relevant.length,
-        chunks: result.chunks.map((c) => ({ index: c.index, score: c.score.toFixed(2), relevant: c.relevant })),
+        chunks: result.chunks.map((c) => ({
+          index: c.index,
+          score: c.score.toFixed(2),
+          relevant: c.relevant,
+        })),
       },
       null,
       2,

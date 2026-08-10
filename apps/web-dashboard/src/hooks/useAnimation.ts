@@ -31,8 +31,4 @@ export type {
   GestureAnimationResult,
 } from '../lib/animations/react-hooks';
 
-export type {
-  AnimationPreset,
-  PresetName,
-  TimingInput,
-} from '../../../../src/animations';
+export type { AnimationPreset, PresetName, TimingInput } from '../../../../src/animations';

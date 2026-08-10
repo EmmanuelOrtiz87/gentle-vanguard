@@ -1,8 +1,8 @@
-﻿# Microservices Project Template
+# Microservices Project Template
 
 ## Structure
 
-```
+````text
 {{project-name}}/
  services/
     users/        # User service
@@ -13,7 +13,7 @@
  shared/          # Shared libraries
  infrastructure/  # Docker, K8s, Terraform
  docker-compose.yml
-```
+```text
 
 ## Services
 
@@ -36,7 +36,7 @@ cd services/users && npm run dev
 
 # Run tests
 npm run test --workspace=services/users
-```
+```text
 
 ## Communication
 
@@ -55,4 +55,5 @@ npm run test --workspaces
 
 # Lint all
 npm run lint --workspaces
-```
+```text
+````

@@ -1,10 +1,15 @@
 # KiloCode Bedrock Fix - Complete Solution
+
 # Version: 2.0.0
+
 # Date: 2026-08-08
+
 # Author: Gentle-Vanguard Stack
 
 ## 🚨 Problem
+
 KiloCode throws error when using Bedrock models:
+
 ```
 litellm.UnsupportedParamsError: bedrock does not support parameters: ['reasoning_effort']
 ```
@@ -15,18 +20,20 @@ We've created a multi-layer fix that ensures `drop_params: true` is applied at e
 
 ### Files Created
 
-| File | Purpose | Location |
-|------|---------|----------|
-| `~/.config/litellm/config.yaml` | LiteLLM master config with drop_params | `%USERPROFILE%\.config\litellm\config.yaml` |
-| `KiloCode config.json` | KiloCode-specific settings | `%APPDATA%\Code\User\globalStorage\kilocode.kilo-code\config.json` |
-| `fix-kilocode-bedrock.ps1` | Automated configuration script | `gentle-vanguard/scripts/` |
-| `launch-vscode-bedrock-fix.cmd` | Launcher script with env vars | `gentle-vanguard/scripts/` |
-| `kilocode-bedrock-fix.reg` | Windows registry fix | `gentle-vanguard/scripts/` |
+| File                            | Purpose                                | Location                                                           |
+| ------------------------------- | -------------------------------------- | ------------------------------------------------------------------ |
+| `~/.config/litellm/config.yaml` | LiteLLM master config with drop_params | `%USERPROFILE%\.config\litellm\config.yaml`                        |
+| `KiloCode config.json`          | KiloCode-specific settings             | `%APPDATA%\Code\User\globalStorage\kilocode.kilo-code\config.json` |
+| `fix-kilocode-bedrock.ps1`      | Automated configuration script         | `gentle-vanguard/scripts/`                                         |
+| `launch-vscode-bedrock-fix.cmd` | Launcher script with env vars          | `gentle-vanguard/scripts/`                                         |
+| `kilocode-bedrock-fix.reg`      | Windows registry fix                   | `gentle-vanguard/scripts/`                                         |
 
 ## 🚀 Immediate Action Required
 
 ### Step 1: Apply the Fix (COMPLETED ✅)
+
 The PowerShell script has already:
+
 - Created the LiteLLM config
 - Created the KiloCode config
 - Set environment variables
@@ -55,13 +62,16 @@ The PowerShell script has already:
 ## 🔧 If the Error Persists
 
 ### Option A: Use the Registry Fix
+
 1. Double-click `kilocode-bedrock-fix.reg`
 2. Click "Yes" to import
 3. **Restart your computer**
 4. Test KiloCode again
 
 ### Option B: Use the Launcher Script
+
 Instead of opening VSCode normally, use:
+
 ```
 C:\Workspace_local\gentle-vanguard\scripts\launch-vscode-bedrock-fix.cmd
 ```
@@ -69,7 +79,9 @@ C:\Workspace_local\gentle-vanguard\scripts\launch-vscode-bedrock-fix.cmd
 This script launches VSCode with the correct environment variables pre-set.
 
 ### Option C: Use a Different Model
+
 In KiloCode settings, change the model to:
+
 - `claude-haiku-4-5` instead of `kimi-2-5`
 - Or use `claude-sonnet`
 - Or use `claude-opus`
@@ -79,9 +91,12 @@ All these have `drop_params: true` configured.
 ## 📋 What Was Fixed
 
 ### Root Cause
-LiteLLM was sending the `reasoning_effort` parameter to Bedrock, which doesn't support it. The parameter comes from OpenAI's API but isn't compatible with Bedrock.
+
+LiteLLM was sending the `reasoning_effort` parameter to Bedrock, which doesn't support it. The
+parameter comes from OpenAI's API but isn't compatible with Bedrock.
 
 ### Solution
+
 1. **Global LiteLLM Config** (`~/.config/litellm/config.yaml`):
    - Sets `drop_params: true` globally
    - Configures all Bedrock models with proper settings
@@ -105,15 +120,19 @@ LiteLLM was sending the `reasoning_effort` parameter to Bedrock, which doesn't s
 After applying the fix and restarting VSCode:
 
 1. Open PowerShell in VSCode terminal:
+
    ```powershell
    $env:LITELLM_DROP_PARAMS
    ```
+
    Should output: `true`
 
 2. Check LiteLLM config exists:
+
    ```powershell
    Test-Path ~/.config/litellm/config.yaml
    ```
+
    Should output: `True`
 
 3. Try KiloCode - the error should be gone
@@ -121,22 +140,24 @@ After applying the fix and restarting VSCode:
 ## 📝 Configuration Details
 
 ### LiteLLM Config Structure
+
 ```yaml
 litellm_settings:
-  drop_params: true      # <-- This is the key setting
+  drop_params: true # <-- This is the key setting
   verbose: false
   cache: true
 
 model_list:
-  - model_name: "kimi-2-5"
+  - model_name: 'kimi-2-5'
     litellm_params:
-      model: "bedrock/moonshotai.kimi-k2.5"
-      drop_params: true  # <-- Also set per-model
+      model: 'bedrock/moonshotai.kimi-k2.5'
+      drop_params: true # <-- Also set per-model
       temperature: 0.3
       max_tokens: 4096
 ```
 
 ### What `drop_params: true` Does
+
 - Intercepts all API calls before sending to the provider
 - Removes parameters not supported by the specific provider
 - Logs which parameters were dropped (if verbose mode enabled)
@@ -145,6 +166,7 @@ model_list:
 ## 🌐 Compatibility
 
 This fix makes KiloCode compatible with:
+
 - ✅ AWS Bedrock
 - ✅ OpenAI API
 - ✅ Anthropic API
@@ -159,12 +181,12 @@ This fix makes KiloCode compatible with:
 
 ## 📞 Troubleshooting
 
-| Problem | Solution |
-|---------|----------|
-| Still getting error | Restart computer after applying registry fix |
-| Config file not found | Run the PowerShell script again as admin |
-| Different model error | Change model in KiloCode settings to one from the config |
-| Environment vars not set | Run `launch-vscode-bedrock-fix.cmd` instead |
+| Problem                  | Solution                                                 |
+| ------------------------ | -------------------------------------------------------- |
+| Still getting error      | Restart computer after applying registry fix             |
+| Config file not found    | Run the PowerShell script again as admin                 |
+| Different model error    | Change model in KiloCode settings to one from the config |
+| Environment vars not set | Run `launch-vscode-bedrock-fix.cmd` instead              |
 
 ## 🔒 Security Notes
 
@@ -176,6 +198,7 @@ This fix makes KiloCode compatible with:
 ## 🎉 Expected Result
 
 After completing Step 2 (Restart VSCode):
+
 - ✅ No more `reasoning_effort` errors
 - ✅ KiloCode works with Bedrock models
 - ✅ All agent delegations work normally

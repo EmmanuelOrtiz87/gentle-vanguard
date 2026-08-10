@@ -149,17 +149,17 @@ const OPPORTUNITY_PATTERNS: Array<{
   {
     category: 'pressable',
     hint: 'Click target without press feedback — add a scalePop / active:scale press micro-interaction.',
-    re: /\bonClick=/
+    re: /\bonClick=/,
   },
   {
     category: 'conditional-visibility',
     hint: 'Opacity/hidden toggle — animate the transition instead of an instant swap (useExitAnimation or fade).',
-    re: /\b(?:opacity-0|hidden|invisible)\b/
+    re: /\b(?:opacity-0|hidden|invisible)\b/,
   },
   {
     category: 'list-stagger',
     hint: 'List/grid rendered with map — stagger the entrance with staggerSequences(fadeIn(), count, { stagger: 60 }).',
-    re: /\.map\(/
+    re: /\.map\(/,
   },
 ];
 

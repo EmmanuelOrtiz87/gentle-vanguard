@@ -148,9 +148,13 @@ export function ensureWitrInstalled(): boolean {
   if (!existsSync(INSTALLER_SCRIPT)) return false;
 
   try {
-    const r = runSync('pwsh', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', INSTALLER_SCRIPT], {
-      timeout: 120000,
-    });
+    const r = runSync(
+      'pwsh',
+      ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', INSTALLER_SCRIPT],
+      {
+        timeout: 120000,
+      },
+    );
     return r.status === 0 && isWitrInstalled();
   } catch {
     return false;
@@ -326,7 +330,9 @@ if (
           console.log(isWitrInstalled() ? `installed: ${WITR_BIN_PATH}` : 'not installed');
           break;
         default:
-          console.error('Usage: witr-wrapper.ts <process|pid|port|file|container|install|status> [target]');
+          console.error(
+            'Usage: witr-wrapper.ts <process|pid|port|file|container|install|status> [target]',
+          );
           process.exit(1);
       }
     } catch (e) {

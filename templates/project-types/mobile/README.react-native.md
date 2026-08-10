@@ -1,6 +1,6 @@
-﻿# React Native Project Structure
+# React Native Project Structure
 
-```
+````text
 {{project-name}}/
  src/
     components/      # Reusable UI components
@@ -18,7 +18,7 @@
  index.js             # Entry point
  App.tsx              # Root component
  package.json
-```
+```text
 
 ## Navigation Structure
 
@@ -38,7 +38,7 @@ function AppNavigator() {
     </Stack.Navigator>
   );
 }
-```
+```text
 
 ## Components
 
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-```
+```text
 
 ## Testing
 
@@ -88,4 +88,5 @@ npm test -- --coverage
 
 # Run specific test
 npm test -- --testPathPattern="components"
-```
+```text
+````

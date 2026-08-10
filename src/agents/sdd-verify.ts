@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
  * SDD Verify Agent (sdd-verify) - Native Implementation
- * 
+ *
  * QA verification agent for testing and validation.
  * Works with ANY AI tool (Claude, Cursor, etc.)
  * No opencode dependency.
- * 
+ *
  * Features:
  *   - Test execution
  *   - Quality gate validation
@@ -31,21 +31,21 @@ const AGENT_CONFIG = {
   model: 'opencode/deepseek-v4-flash-free',
   temperature: 0.1,
   maxTokens: 4000,
-  version: '1.0.0'
+  version: '1.0.0',
 };
 
 const TEST_SUITES = [
   { name: 'config', cmd: 'npm', args: ['run', 'test:config'], expected: 6 },
   { name: 'workflows', cmd: 'npm', args: ['run', 'test:workflows'], expected: 2 },
   { name: 'typecheck', cmd: 'npm', args: ['run', 'typecheck'], expected: 0 },
-  { name: 'lint', cmd: 'npm', args: ['run', 'lint'], expected: 0 }
+  { name: 'lint', cmd: 'npm', args: ['run', 'lint'], expected: 0 },
 ];
 
 const SECURITY_CHECKS = [
   'No secrets in code',
   'No hardcoded credentials',
   'Dependency vulnerabilities',
-  'OWASP Top 10 compliance'
+  'OWASP Top 10 compliance',
 ];
 
 function parseArgs(): VerifyTask {
@@ -54,17 +54,30 @@ function parseArgs(): VerifyTask {
     task: '',
     model: process.env.AGENT_MODEL || AGENT_CONFIG.model,
     temperature: parseFloat(process.env.AGENT_TEMPERATURE || String(AGENT_CONFIG.temperature)),
-    skipTests: false
+    skipTests: false,
   };
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--task': task.task = args[++i]; break;
-      case '--context': task.context = args[++i]; break;
-      case '--model': task.model = args[++i]; break;
-      case '--temperature': task.temperature = parseFloat(args[++i]); break;
-      case '--skip-tests': task.skipTests = true; break;
-      case '--help': case '-h': showHelp(); process.exit(0);
+      case '--task':
+        task.task = args[++i];
+        break;
+      case '--context':
+        task.context = args[++i];
+        break;
+      case '--model':
+        task.model = args[++i];
+        break;
+      case '--temperature':
+        task.temperature = parseFloat(args[++i]);
+        break;
+      case '--skip-tests':
+        task.skipTests = true;
+        break;
+      case '--help':
+      case '-h':
+        showHelp();
+        process.exit(0);
     }
   }
 
@@ -99,18 +112,22 @@ Examples:
 `);
 }
 
-async function runTestSuite(name: string, cmd: string, args: string[]): Promise<{
+async function runTestSuite(
+  name: string,
+  cmd: string,
+  args: string[],
+): Promise<{
   passed: boolean;
   duration: number;
   output: string;
   errors: string[];
 }> {
   const startTime = Date.now();
-  
+
   return new Promise((resolve) => {
     const child = spawn(cmd, args, {
       cwd: process.cwd(),
-      stdio: 'pipe'
+      stdio: 'pipe',
     });
 
     let stdout = '';
@@ -130,7 +147,7 @@ async function runTestSuite(name: string, cmd: string, args: string[]): Promise<
         passed: code === 0,
         duration,
         output: stdout.trim(),
-        errors: stderr ? [stderr.trim()] : []
+        errors: stderr ? [stderr.trim()] : [],
       });
     });
 
@@ -140,7 +157,7 @@ async function runTestSuite(name: string, cmd: string, args: string[]): Promise<
         passed: false,
         duration,
         output: '',
-        errors: [error.message]
+        errors: [error.message],
       });
     });
   });
@@ -156,16 +173,16 @@ async function runAllTests(): Promise<{
   let allPassed = true;
 
   console.log('\nRunning test suites...\n');
-  
+
   for (const suite of TEST_SUITES) {
     process.stdout.write(`  ${suite.name.padEnd(15)} ... `);
     const result = await runTestSuite(suite.name, suite.cmd, suite.args);
-    results[suite.name] = { 
-      passed: result.passed, 
+    results[suite.name] = {
+      passed: result.passed,
       duration: result.duration,
-      errors: result.errors
+      errors: result.errors,
     };
-    
+
     if (result.passed) {
       console.log(`✅ (${result.duration}ms)`);
     } else {
@@ -187,25 +204,32 @@ function analyzeVerificationTask(task: string): {
   affected: string[];
 } {
   const normalized = task.toLowerCase();
-  
-  const focus = 
+
+  const focus =
     normalized.includes('test') || normalized.includes('unit') || normalized.includes('integration')
-      ? 'testing' :
-    normalized.includes('security') || normalized.includes('vulnerability') || normalized.includes('scan')
-      ? 'security' :
-    normalized.includes('quality') || normalized.includes('lint') || normalized.includes('type')
-      ? 'quality' :
-    'full';
-  
-  const priority = 
-    normalized.includes('critical') || normalized.includes('urgent') ? 'high' :
-    normalized.includes('important') ? 'medium' : 'low';
-  
+      ? 'testing'
+      : normalized.includes('security') ||
+          normalized.includes('vulnerability') ||
+          normalized.includes('scan')
+        ? 'security'
+        : normalized.includes('quality') ||
+            normalized.includes('lint') ||
+            normalized.includes('type')
+          ? 'quality'
+          : 'full';
+
+  const priority =
+    normalized.includes('critical') || normalized.includes('urgent')
+      ? 'high'
+      : normalized.includes('important')
+        ? 'medium'
+        : 'low';
+
   const affected: string[] = [];
   if (normalized.includes('dashboard')) affected.push('dashboard');
   if (normalized.includes('api')) affected.push('api');
   if (normalized.includes('core')) affected.push('core');
-  
+
   return { focus, priority, affected };
 }
 
@@ -227,7 +251,7 @@ async function main(): Promise<void> {
   console.log();
 
   const analysis = analyzeVerificationTask(task);
-  
+
   console.log('Verification Analysis:');
   console.log(`  Focus: ${analysis.focus}`);
   console.log(`  Priority: ${analysis.priority}`);
@@ -236,26 +260,26 @@ async function main(): Promise<void> {
 
   try {
     // Run all tests
-    const testResults = skipTests 
+    const testResults = skipTests
       ? { results: {}, allPassed: true, totalDuration: 0 }
       : await runAllTests();
-    
+
     // Security checks
     console.log('\nSecurity Checks:');
     for (const check of SECURITY_CHECKS) {
       console.log(`  ✅ ${check}`);
     }
-    
+
     const duration = Date.now() - startTime;
     const totalDuration = duration + testResults.totalDuration;
-    
+
     // Dashboard build check
     console.log('\nAdditional Checks:');
     const dashboardExists = existsSync(join(process.cwd(), 'apps', 'web-dashboard', 'dist'));
     console.log(`  Dashboard Build: ${dashboardExists ? '✅' : '⚠️ Not built'}`);
-    
+
     console.log('\n=== Verification Result ===\n');
-    
+
     const result = {
       task,
       analysis,
@@ -267,34 +291,41 @@ async function main(): Promise<void> {
         'TypeScript compilation',
         'ESLint validation',
         'Test execution',
-        'Security compliance'
-      ]
+        'Security compliance',
+      ],
     };
-    
+
     console.log(JSON.stringify(result, null, 2));
-    
+
     console.log();
     console.log('=================================================');
     console.log(`  Status: ${testResults.allPassed ? '✅ SUCCESS' : '❌ FAILED'}`);
     console.log(`  Duration: ${totalDuration}ms`);
-    console.log(`  Test Suites: ${skipTests ? 'SKIPPED' : `${Object.values(testResults.results).filter(r => r.passed).length}/${Object.keys(testResults.results).length} PASSED`}`);
+    console.log(
+      `  Test Suites: ${skipTests ? 'SKIPPED' : `${Object.values(testResults.results).filter((r) => r.passed).length}/${Object.keys(testResults.results).length} PASSED`}`,
+    );
     console.log('=================================================');
-    
+
     console.log('\n=== JSON OUTPUT ===');
-    console.log(JSON.stringify({
-      success: testResults.allPassed,
-      agent: AGENT_CONFIG.name,
-      version: AGENT_CONFIG.version,
-      task,
-      model,
-      duration: totalDuration,
-      results: result
-    }, null, 2));
+    console.log(
+      JSON.stringify(
+        {
+          success: testResults.allPassed,
+          agent: AGENT_CONFIG.name,
+          version: AGENT_CONFIG.version,
+          task,
+          model,
+          duration: totalDuration,
+          results: result,
+        },
+        null,
+        2,
+      ),
+    );
 
     if (!testResults.allPassed) {
       process.exit(1);
     }
-
   } catch (error) {
     console.error('\n❌ Error:', error);
     process.exit(1);

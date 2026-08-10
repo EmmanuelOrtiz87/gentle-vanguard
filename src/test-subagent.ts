@@ -2,7 +2,7 @@
 /**
  * Test script for subagent model resolution
  * Run after restart to verify task() works
- * 
+ *
  * Note: This is a diagnostic script. The actual `task()` function
  * is provided by the OpenCode runtime environment.
  */
@@ -18,24 +18,23 @@ declare function task(options: {
 
 async function main(): Promise<void> {
   console.log('=== Testing subagent model resolution ===\n');
-  
+
   try {
     console.log('1. Testing sdd-explore...');
     const result = await task({
       subagent_type: 'sdd-explore',
-      prompt: 'Report which model you are using. Reply with exact model name.'
+      prompt: 'Report which model you are using. Reply with exact model name.',
     });
     console.log('✅ SUCCESS:', result);
-    
+
     console.log('\n2. Testing sdd-apply...');
     const result2 = await task({
       subagent_type: 'sdd-apply',
-      prompt: 'What model are you using?'
+      prompt: 'What model are you using?',
     });
     console.log('✅ SUCCESS:', result2);
-    
+
     console.log('\n✅ ALL TESTS PASSED - Subagents working!');
-    
   } catch (error) {
     console.error('\n❌ FAILED:', error);
     console.error('\nStill getting "Model not found inherit-from-session" error');

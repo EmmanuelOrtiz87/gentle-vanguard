@@ -3,11 +3,13 @@
 ## Problema Identificado
 
 La función `task()` de OpenCode **NO soporta herencia de modelo**. Todos los subagentes fallan con:
+
 ```
 Model not found: inherit-from-session/.
 ```
 
 Esto afecta a **TODOS** los subagentes, no solo los SDD:
+
 - sdd-explore, sdd-design, sdd-apply, sdd-verify ❌
 - doc-agent, ops-agent, gov-agent ❌
 - self-diag-agent, session-agent, premortem-agent ❌
@@ -42,12 +44,12 @@ Esto afecta a **TODOS** los subagentes, no solo los SDD:
 
 **Archivos a migrar de opencode a nativo**:
 
-| Archivo Actual | Destino Nativo | Estado |
-|----------------|----------------|--------|
-| .opencode/opencode.json | config/agents.json | 🔲 Pendiente |
-| .opencode/agents/*.md | src/agents/*.ts | 🔲 Pendiente |
-| config/chatmodes/ | config/chatmodes.json | 🔲 Pendiente |
-| MCP servers en opencode.json | config/mcp.json | 🔲 Pendiente |
+| Archivo Actual               | Destino Nativo        | Estado       |
+| ---------------------------- | --------------------- | ------------ |
+| .opencode/opencode.json      | config/agents.json    | 🔲 Pendiente |
+| .opencode/agents/*.md        | src/agents/*.ts       | 🔲 Pendiente |
+| config/chatmodes/            | config/chatmodes.json | 🔲 Pendiente |
+| MCP servers en opencode.json | config/mcp.json       | 🔲 Pendiente |
 
 ### Fase 4: Documentación y Normativas
 
@@ -60,6 +62,7 @@ Esto afecta a **TODOS** los subagentes, no solo los SDD:
 ### Skills en `.opencode/skills/` (64 total)
 
 Skills exclusivos de opencode que deben migrarse:
+
 - ab-testing, api-and-interface-design
 - browser-testing-with-devtools
 - ci-cd-and-automation
@@ -97,7 +100,7 @@ Skills exclusivos de opencode que deben migrarse:
 ```yaml
 ---
 name: skill-name
-aliases: ["alias1", "alias2"]
+aliases: ['alias1', 'alias2']
 description: Description for any AI tool
 triggers:
   - keyword1
@@ -108,12 +111,10 @@ tools:
   - read
   - edit
 ---
-
 ## /skill-name
 
 ### Usage
 ...
-
 ### Instructions
 ...
 ```
@@ -121,15 +122,23 @@ tools:
 ## Implementación Propuesta
 
 ### 1. src/skill-loader.ts
+
 ```typescript
 export class SkillLoader {
-  loadSkills(): Skill[] { /* scan /skills/ */ }
-  matchSkill(input: string): Skill | null { /* match triggers */ }
-  getSkillContent(name: string): string { /* return markdown */ }
+  loadSkills(): Skill[] {
+    /* scan /skills/ */
+  }
+  matchSkill(input: string): Skill | null {
+    /* match triggers */
+  }
+  getSkillContent(name: string): string {
+    /* return markdown */
+  }
 }
 ```
 
 ### 2. src/agent-delegator.ts
+
 ```typescript
 export class AgentDelegator {
   async delegate(agent: string, task: string): Promise<Result> {
@@ -140,6 +149,7 @@ export class AgentDelegator {
 ```
 
 ### 3. src/agents/sdd-apply.ts
+
 ```typescript
 // Standalone agent implementation
 // Reads task from CLI args
@@ -183,10 +193,14 @@ npx tsx src/agent-delegator.ts --agent sdd-apply --task "test"
 
 ## Conclusión
 
-El framework OpenCode tiene limitaciones fundamentales que hacen imposible la herencia de modelo y la delegación real. Es necesario migrar a un sistema nativo completamente agnóstico que funcione en cualquier herramienta AI.
+El framework OpenCode tiene limitaciones fundamentales que hacen imposible la herencia de modelo y
+la delegación real. Es necesario migrar a un sistema nativo completamente agnóstico que funcione en
+cualquier herramienta AI.
 
-El stack actual está **operativo** (88/90 health checks pasan), pero la **delegación está rota** por limitaciones del framework.
+El stack actual está **operativo** (88/90 health checks pasan), pero la **delegación está rota** por
+limitaciones del framework.
 
 ---
-**Estado**: Plan de migración creado, pendiente implementación
-**Próximo paso**: Aprobación y asignación de tareas
+
+**Estado**: Plan de migración creado, pendiente implementación **Próximo paso**: Aprobación y
+asignación de tareas

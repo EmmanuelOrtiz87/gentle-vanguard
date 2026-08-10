@@ -1,7 +1,7 @@
 #!/usr/bin/env npx tsx
 /**
  * Model Broker - Intelligent model delegation with automatic fallback
- * 
+ *
  * Intercepts agent delegations and ensures model availability.
  * If configured model fails, automatically switches to fallback.
  */
@@ -92,7 +92,7 @@ class ModelBroker {
   private async checkModelHealth(modelId: string): Promise<boolean> {
     // Check cache first
     const cached = this.healthCheckCache.get(modelId);
-    if (cached && (Date.now() - cached.timestamp) < this.HEALTH_CACHE_TTL) {
+    if (cached && Date.now() - cached.timestamp < this.HEALTH_CACHE_TTL) {
       return cached.status === 'available';
     }
 
@@ -103,11 +103,11 @@ class ModelBroker {
 
     // For unknown status, assume available
     const isAvailable = entry.health.status !== 'unavailable';
-    
+
     // Cache the result
     this.healthCheckCache.set(modelId, {
       timestamp: Date.now(),
-      status: isAvailable ? 'available' : 'unavailable'
+      status: isAvailable ? 'available' : 'unavailable',
     });
 
     return isAvailable;
@@ -121,13 +121,13 @@ class ModelBroker {
 
     return {
       model: agents[agentName].model || this.registry.routingRules.subagents.default,
-      provider: agents[agentName].provider
+      provider: agents[agentName].provider,
     };
   }
 
   private async findAvailableFallback(
-    currentModel: string, 
-    strategy: string = 'availability'
+    currentModel: string,
+    strategy: string = 'availability',
   ): Promise<{ model: string; entry: ModelEntry } | null> {
     const entry = this.registry.models[currentModel];
     if (!entry) {
@@ -160,13 +160,14 @@ class ModelBroker {
 
   private logEvent(agent: string, model: string, event: string, data?: any): void {
     const timestamp = new Date().toISOString();
-    const logEntry = JSON.stringify({
-      timestamp,
-      agent,
-      model,
-      event,
-      ...data
-    }) + '\n';
+    const logEntry =
+      JSON.stringify({
+        timestamp,
+        agent,
+        model,
+        event,
+        ...data,
+      }) + '\n';
 
     // Ensure log directory exists
     const logDir = join(ROOT, '.runtime', 'logs');
@@ -196,7 +197,7 @@ class ModelBroker {
         model: 'unknown',
         provider: 'unknown',
         switched: false,
-        error: `Agent ${agentName} not found in configuration`
+        error: `Agent ${agentName} not found in configuration`,
       };
     }
 
@@ -211,21 +212,21 @@ class ModelBroker {
 
     try {
       const isAvailable = await this.checkModelHealth(configuredModel);
-      
+
       if (!isAvailable && allowFallback) {
         // Find fallback
         const fallback = await this.findAvailableFallback(configuredModel);
-        
+
         if (fallback) {
           finalModel = fallback.model;
           finalProvider = fallback.entry.provider;
           switched = true;
           reason = `Model ${configuredModel} unavailable, switched to fallback ${finalModel}`;
-          
+
           this.logEvent(agentName, finalModel, 'model_switched', {
             from: configuredModel,
             to: finalModel,
-            reason
+            reason,
           });
         } else {
           throw new Error(`Model ${configuredModel} unavailable and no fallback found`);
@@ -237,7 +238,7 @@ class ModelBroker {
         task_length: task.length,
         model: finalModel,
         provider: finalProvider,
-        switched
+        switched,
       });
 
       // Simulated delegation - in real implementation this would call opencode API
@@ -247,15 +248,14 @@ class ModelBroker {
         model: finalModel,
         provider: finalProvider,
         switched,
-        reason
+        reason,
       };
-
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : String(error);
-      
+
       this.logEvent(agentName, configuredModel, 'delegation_failed', {
         error: errorMsg,
-        attempted_model: finalModel
+        attempted_model: finalModel,
       });
 
       return {
@@ -264,7 +264,7 @@ class ModelBroker {
         model: finalModel,
         provider: finalProvider,
         switched,
-        error: errorMsg
+        error: errorMsg,
       };
     }
   }
@@ -279,12 +279,12 @@ class ModelBroker {
     for (const [agentName, agentConfig] of Object.entries(agents)) {
       const model = (agentConfig as any).model || 'unknown';
       const isAvailable = await this.checkModelHealth(model);
-      
+
       status[agentName] = {
         model,
         available: isAvailable,
         health: this.registry.models[model]?.health?.status || 'unknown',
-        fallbackChain: this.registry.models[model]?.fallbackChain || []
+        fallbackChain: this.registry.models[model]?.fallbackChain || [],
       };
     }
 
@@ -303,7 +303,7 @@ async function main(): Promise<void> {
     case 'delegate': {
       const agent = args[1];
       const task = args.slice(2).join(' ');
-      
+
       if (!agent || !task) {
         console.error('Usage: tsx src/model-broker.ts delegate <agent> <task>');
         process.exit(1);
@@ -312,7 +312,7 @@ async function main(): Promise<void> {
       const result = await broker.delegate({
         agentName: agent,
         task,
-        retryOnFailure: true
+        retryOnFailure: true,
       });
 
       console.log(JSON.stringify(result, null, 2));
@@ -330,19 +330,21 @@ async function main(): Promise<void> {
       const status = await broker.getStatus();
       const totalAgents = Object.keys(status).length;
       const availableAgents = Object.values(status).filter((s: any) => s.available).length;
-      
+
       console.log('📊 Model Broker Health Report');
       console.log(`Total agents: ${totalAgents}`);
-      console.log(`Available agents: ${availableAgents} (${Math.round(availableAgents / totalAgents * 100)}%)`);
-      
+      console.log(
+        `Available agents: ${availableAgents} (${Math.round((availableAgents / totalAgents) * 100)}%)`,
+      );
+
       // Show problematic agents
       const problematic = Object.entries(status)
         .filter(([_, s]: [string, any]) => !s.available)
         .map(([agent, s]: [string, any]) => `${agent}: ${s.model} (${s.health})`);
-      
+
       if (problematic.length > 0) {
         console.log('\n⚠️  Agents with model issues:');
-        problematic.forEach(agent => console.log(`  ${agent}`));
+        problematic.forEach((agent) => console.log(`  ${agent}`));
       }
       break;
     }

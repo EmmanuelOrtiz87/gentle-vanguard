@@ -125,10 +125,7 @@ export function morphValue(
   options: MorphOptions = {},
 ): AnimationSequence {
   const t = resolveTiming('fadeIn');
-  const keyframes: AnimationKeyframe[] = [
-    { [property]: from },
-    { [property]: to },
-  ];
+  const keyframes: AnimationKeyframe[] = [{ [property]: from }, { [property]: to }];
   return {
     keyframes,
     timing: {
