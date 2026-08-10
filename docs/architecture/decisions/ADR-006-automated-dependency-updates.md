@@ -1,8 +1,12 @@
 # ADR-006: Automated Dependency Updates Policy
 
-**Status**: Accepted (Partially Implemented)  
 **Date**: May 13, 2026  
-**Author**: Gentle-Vanguard DevOps Team  
+**Author**: Gentle-Vanguard DevOps Team
+
+## Status
+
+Accepted (Partially Implemented)
+
 **Context**: Supply-chain security posture after npx hardening sprint
 
 ---

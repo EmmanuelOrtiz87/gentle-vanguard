@@ -1,8 +1,12 @@
 # ADR-004: Mandatory Homologation Gate in Release Workflow
 
-**Status**: Accepted (Implemented)  
 **Date**: May 13, 2026  
-**Author**: Gentle-Vanguard Security Team  
+**Author**: Gentle-Vanguard Security Team
+
+## Status
+
+Accepted (Implemented)
+
 **Context**: Preventing release-time repository misalignment issues
 
 ---

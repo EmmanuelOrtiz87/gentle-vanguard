@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: Setup Node.js
-        uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
+        uses: actions/setup-node@v6
         with:
           node-version: '22'
       - name: Enable corepack (pnpm)

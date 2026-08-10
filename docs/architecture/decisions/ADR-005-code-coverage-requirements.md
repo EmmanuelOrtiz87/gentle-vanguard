@@ -1,8 +1,12 @@
 # ADR-005: Code Coverage Requirements and Enforcement Strategy
 
-**Status**: Accepted (Implemented)  
 **Date**: May 13, 2026  
-**Author**: Gentle-Vanguard DevOps Team  
+**Author**: Gentle-Vanguard DevOps Team
+
+## Status
+
+Accepted (Implemented)
+
 **Context**: Establishing measurable quality gates after test suite maturation
 
 ---

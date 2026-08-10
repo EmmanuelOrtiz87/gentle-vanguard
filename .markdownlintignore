@@ -1,0 +1,25 @@
+# Directorios de contenido absorbido de terceros o autogenerado por sesiones.
+# Estas fuentes NO se gobiernan con nuestro estilo de documentación:
+# - skills/ y public/skills/ -> skills absorbidas de repos externos (gentle-ai, awesome-llm, etc.)
+# - .opencode/skills/ y .windsurf/ -> plugins/capacidades de herramientas (se copian desde skills/)
+# - knowledge-base/ -> artefactos autogenerados de sesiones (summaries, audits, reports)
+# - reports/, research/ -> reportes y research autogenerados
+# - node_modules/, **/node_modules/ -> dependencias (redundante con .gitignore)
+# - .archive/, .backups/, build/, .session/, .sdd/ -> artefactos archivados/autogenerados
+skills/
+public/skills/
+.opencode/skills/
+.windsurf/
+knowledge-base/
+reports/
+research/
+.archive/
+.backups/
+build/
+.session/
+.sdd/
+demos/
+adapters/
+graphify-out/
+node_modules/
+**/node_modules/

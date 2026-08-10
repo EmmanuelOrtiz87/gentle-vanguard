@@ -1,8 +1,12 @@
 # ADR-002: MCP Workspace — External (Not Git-Tracked)
 
-**Status**: Accepted (Implemented)  
 **Date**: May 2026  
-**Author**: Gentle-Vanguard Security Team  
+**Author**: Gentle-Vanguard Security Team
+
+## Status
+
+Accepted (Implemented)
+
 **Context**: MCP server management and workspace isolation
 
 ---
@@ -23,12 +27,12 @@ Key drivers:
 
 ### Alternatives Considered
 
-| Option                          | Pros                                              | Cons                                                    | Decision      |
-| ------------------------------- | ------------------------------------------------- | ------------------------------------------------------- | ------------- |
-| **External workspace**          | Isolated from repo, no secret leakage, safe npx   | Requires setup step, not cloned automatically           | ✅ **CHOSEN** |
-| Git-tracked workspace (`mcp/`)  | Ships with repo, zero setup                        | Secrets can leak in public repo, bloats git history     | ❌ Rejected   |
-| System temp directory           | Zero config                                        | Not persistent, lost on reboot, no shared vetted state  | ❌ Rejected   |
-| User home global dir            | Persistent, per-user                               | Not per-project, cross-project pollution, harder cleanup | ❌ Rejected   |
+| Option                         | Pros                                            | Cons                                                     | Decision      |
+| ------------------------------ | ----------------------------------------------- | -------------------------------------------------------- | ------------- |
+| **External workspace**         | Isolated from repo, no secret leakage, safe npx | Requires setup step, not cloned automatically            | ✅ **CHOSEN** |
+| Git-tracked workspace (`mcp/`) | Ships with repo, zero setup                     | Secrets can leak in public repo, bloats git history      | ❌ Rejected   |
+| System temp directory          | Zero config                                     | Not persistent, lost on reboot, no shared vetted state   | ❌ Rejected   |
+| User home global dir           | Persistent, per-user                            | Not per-project, cross-project pollution, harder cleanup | ❌ Rejected   |
 
 ---
 
@@ -90,7 +94,11 @@ MCP servers defined in `opencode.json`:
   "mcp": {
     "codegraph": { "type": "local", "command": "codegraph serve --mcp" },
     "engram": { "type": "stdio", "command": "engram", "args": "mcp --tools=agent" },
-    "filesystem": { "type": "stdio", "command": "npx", "args": "-y @modelcontextprotocol/server-filesystem@latest C:\\Workspace_local" }
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": "-y @modelcontextprotocol/server-filesystem@latest C:\\Workspace_local"
+    }
   }
 }
 ```

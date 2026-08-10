@@ -1,8 +1,12 @@
 # ADR-003: NPX Hardening — Offline Mode with Workspace & Security Policy
 
-**Status**: Accepted (Implemented)  
 **Date**: May 13, 2026  
-**Author**: Gentle-Vanguard Security Team  
+**Author**: Gentle-Vanguard Security Team
+
+## Status
+
+Accepted (Implemented)
+
 **Context**: Mitigating npm supply-chain attacks
 
 ---

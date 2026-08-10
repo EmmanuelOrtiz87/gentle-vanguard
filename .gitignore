@@ -64,6 +64,10 @@ reports/trivy-report.json
 trivy-report.json
 reports/dashboard-v2/package-lock.json
 reports/dashboard-v2/server.err
+reports/stack-benchmark*.json
+reports/stack-benchmark*.jsonl
+reports/stack-live-observability-latest.json
+reports/startup-summary.json
 
 # Rate-limit and event-bus runtime state
 .event-bus/
@@ -84,6 +88,7 @@ scripts/.runtime/
 # Telemetry & engram runtime data
 .telemetry/
 .engram-data/
+.engram/
 .engram/session-*.md
 .engram/lessons-*.md
 logs/session-*.json

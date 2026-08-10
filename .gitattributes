@@ -1,10 +1,59 @@
+# ============================================================
+# Gentle-Vanguard EOL Homologation
+# Every text file in the repo is LF-normalized (eol=lf).
+# Prevents CRLF/LF churn on Windows (core.autocrlf=true) and
+# keeps prettier/editor output consistent across platforms.
+# ============================================================
+
 # Disable symlinks in repository
 *.ps1 -symlink
+
+# Language-specific line endings (all LF)
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.cjs text eol=lf
+*.mjs text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.html text eol=lf
+*.vue text eol=lf
 *.ps1 text eol=lf
+*.psm1 text eol=lf
 *.yml text eol=lf
+*.yaml text eol=lf
 *.md text eol=lf
 *.json text eol=lf
-
-# Additional from remote
+*.toml text eol=lf
+*.ini text eol=lf
+*.cfg text eol=lf
+*.conf text eol=lf
+*.sh text eol=lf
 *.cmd text eol=lf
+*.bat text eol=lf
+
+# Config files (LF)
 .gitignore text eol=lf
+.gitattributes text eol=lf
+.editorconfig text eol=lf
+.prettierignore text eol=lf
+.markdownlintignore text eol=lf
+.eslintignore text eol=lf
+
+# Binary files (never normalize)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.zip binary
+*.tar binary
+*.gz binary
+*.db binary
+*.sqlite binary
+*.pdf binary

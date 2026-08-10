@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
-      - uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
+      - uses: actions/setup-node@v6
         with:
           node-version: '22'
           cache: pnpm
@@ -45,7 +45,7 @@ jobs:
       - name: Docker Compose Integration
         run: |
           docker compose -f docker-compose.test.yml build
-          docker compose -f docker-compose.test.yml up --abort-on-container-exit --exit-code-from node-tests
+          docker compose -f docker-compose.test.yml up --exit-code-from node-tests
 
   dashboard:
     name: Dashboard Tests
@@ -54,7 +54,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
-      - uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
+      - uses: actions/setup-node@v6
         with:
           node-version: '22'
           cache: pnpm
@@ -73,7 +73,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
-      - uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
+      - uses: actions/setup-node@v6
         with:
           node-version: '22'
           cache: pnpm
@@ -111,7 +111,7 @@ jobs:
         run: |
           Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
           Import-Module Pester -PassThru
-          Invoke-Pester -Path tests/smoke/ -Pashtru -Output Detailed
+          Invoke-Pester -Path tests/smoke/ -PassThru -Output Detailed
 
   coverage:
     name: Coverage
@@ -120,7 +120,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
-      - uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858
+      - uses: actions/setup-node@v6
         with:
           node-version: '22'
           cache: pnpm

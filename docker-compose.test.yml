@@ -76,7 +76,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     working_dir: /workspace
     entrypoint: trivy
-    command: ["fs", "--severity", "HIGH,CRITICAL", "--exit-code", "0", "/workspace"]
+    command: ['fs', '--severity', 'HIGH,CRITICAL', '--exit-code', '0', '/workspace']
     networks:
       - gv-test-network
 
