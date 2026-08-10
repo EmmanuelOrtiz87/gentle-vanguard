@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-08-09T03:00:00.000Z",
+  "timestamp": "2026-08-10T03:00:00.000Z",
   "generated_by": "token-ingest (tool-agnostic daemon)",
   "token": {
     "status": "PASS",
-    "used_today": 234947,
+    "used_today": 302463,
     "budget": 5000000,
-    "projected_pct": 5,
+    "projected_pct": 6,
     "sessions_today": 1
   },
   "cost": {
