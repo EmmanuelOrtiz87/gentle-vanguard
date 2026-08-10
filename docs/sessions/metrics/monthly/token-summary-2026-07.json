@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-08-10T16:09:05.883Z",
+  "generated_at": "2026-08-10T20:52:40.656Z",
   "period": "2026-07",
   "days": 22,
   "totals": {
-    "input": 732552300,
-    "output": 7782813,
-    "total": 740335113,
+    "input": 757233243,
+    "output": 8029966,
+    "total": 765263209,
     "cost": 0
   },
   "daily_avg": {
-    "input": 33297832,
-    "output": 353764,
-    "total": 33651596
+    "input": 34419693,
+    "output": 364998,
+    "total": 34784691
   },
   "by_day": [
     {
@@ -184,19 +184,19 @@
     },
     {
       "day": "2026-08-10",
-      "input": 1598310,
-      "output": 210982,
-      "total": 1809292,
+      "input": 26279253,
+      "output": 458135,
+      "total": 26737388,
       "cost": 0,
-      "sessions": 2
+      "sessions": 4
     }
   ],
   "by_model": [
     {
       "model": "kimi-2-5",
-      "input": 576177448,
-      "output": 2657678,
-      "total": 578835126,
+      "input": 600858391,
+      "output": 2904831,
+      "total": 603763222,
       "cost": 0
     },
     {

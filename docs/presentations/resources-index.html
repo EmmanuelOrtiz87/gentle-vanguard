@@ -622,214 +622,330 @@
           </div>
         </section>
 
-        <!-- Images Section -->
+        <!-- Images Section - Image Studio -->
         <section class="content-section" id="images">
-          <h2><i class="bi bi-image me-2" style="color: var(--p);"></i>Generar Imágenes</h2>
-          <p class="text-secondary mb-4">Crear visuales nativos para redes sociales, blogs y documentación.</p>
-
-          <div class="gen-form">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Tipo de Imagen</label>
-                  <select id="img-type">
-                    <option value="social">Post Social Media</option>
-                    <option value="banner">Banner Horizontal</option>
-                    <option value="thumbnail">Thumbnail</option>
-                    <option value="carousel">Carousel (Múltiple)</option>
-                    <option value="diagram">Diagrama</option>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label>Plataforma</label>
-                  <select id="img-platform">
-                    <option value="linkedin">LinkedIn (1200x627)</option>
-                    <option value="twitter">Twitter/X (1600x900)</option>
-                    <option value="instagram">Instagram (1080x1080)</option>
-                    <option value="instagram-story">Instagram Story (1080x1920)</option>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label>Tema / Texto Principal</label>
-                  <input type="text" id="img-title" placeholder="ej: Doc-Gentle Launch">
-                </div>
-
-                <div class="form-group">
-                  <label>Descripción</label>
-                  <textarea id="img-desc" placeholder="Texto adicional, bullet points, etc."></textarea>
-                </div>
-
-                <div class="form-group">
-                  <label>Colores</label>
-                  <div class="d-flex gap-2">
-                    <div class="color-picker active" style="width: 40px; height: 40px; background: linear-gradient(135deg, #22d3ee, #a78bfa); border-radius: 8px; cursor: pointer; border: 2px solid var(--p);"></div>
-                    <div class="color-picker" style="width: 40px; height: 40px; background: linear-gradient(135deg, #34d399, #22d3ee); border-radius: 8px; cursor: pointer; border: 2px solid transparent;"></div>
-                    <div class="color-picker" style="width: 40px; height: 40px; background: linear-gradient(135deg, #fbbf24, #f87171); border-radius: 8px; cursor: pointer; border: 2px solid transparent;"></div>
-                  </div>
+          <h2><i class="bi bi-image me-2" style="color: var(--p);"></i>Image Studio</h2>
+          <p class="text-secondary mb-4">Generador de imágenes 100% nativo - Alternativa local a herramientas cloud como nano-banana.</p>
+          
+          <div class="row mb-4">
+            <div class="col-md-8">
+              <div class="p-3 rounded" style="background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%); border: 1px solid var(--bg2);">
+                <h5 style="color: var(--p); margin-bottom: 0.75rem;">
+                  <i class="bi bi-stars me-2"></i>
+                  ✨ Generación Nativa de Imágenes
+                </h5>
+                <p class="text-secondary mb-2" style="font-size: 0.875rem;">
+                  Sin APIs, sin costos, sin registro. Algoritmos procedurales ejecutándose localmente en tu navegador:
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-grid-3x3 me-1"></i>Grids Futuristas
+                  </span>
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-circle me-1"></i>Partículas
+                  </span>
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-water me-1"></i>Ondas Abstractas
+                  </span>
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-diagram-3 me-1"></i>Network Graphs
+                  </span>
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-shapes me-1"></i>Geométrico
+                  </span>
                 </div>
               </div>
-
-              <div class="col-md-6">
-                <div class="preview-area" id="img-preview">
-                  <div style="text-align: center; color: var(--text-dim);">
-                    <i class="bi bi-image" style="font-size: 3rem; opacity: 0.5;"></i>
-                    <p class="mt-2">La vista previa aparecerá aquí</p>
-                  </div>
-                </div>
-
-                <div class="d-flex gap-2 mt-3">
-                  <button class="btn-gv" onclick="generateImage()">
-                    <i class="bi bi-magic me-1"></i>Generar
-                  </button>
-                  <button class="btn-gv-alt" onclick="downloadImage()" id="btn-download-img" disabled>
-                    <i class="bi bi-download me-1"></i>Descargar SVG
-                  </button>
-                </div>
-
-                <div class="mt-3" style="font-size: 0.8rem; color: var(--text-faint);">
-                  <i class="bi bi-info-circle me-1"></i>
-                  Las imágenes se generan como SVG vectoriales. Puedes convertir a PNG con cualquier herramienta.
+            </div>
+            <div class="col-md-4">
+              <div class="d-flex flex-column gap-2 h-100 justify-content-center">
+                <button class="btn-gv" onclick="window.open('image-studio.html', '_blank', 'width=1400,height=900')" style="font-size: 1rem; padding: 1rem 1.5rem;">
+                  <i class="bi bi-rocket-takeoff me-2"></i>
+                  Abrir Image Studio
+                </button>
+                <div class="text-center" style="font-size: 0.75rem; color: var(--text-faint);">
+                  <i class="bi bi-shield-check me-1" style="color: var(--a);"></i>
+                  100% Offline • Sin APIs • Sin Costos
                 </div>
               </div>
             </div>
           </div>
+          
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
+                <h6 style="color: var(--p);"><i class="bi bi-brush me-2"></i>Estilos Predefinidos</h6>
+                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Neo Cyberpunk</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Minimal Clean</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Gradient Flow</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Dark Tech</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Geometric</li>
+                  <li><i class="bi bi-check2" style="color: var(--a);"></i> Organic</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
+                <h6 style="color: var(--s);"><i class="bi bi-download me-2"></i>Exportar Formatos</h6>
+                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
+                  <li class="mb-2"><i class="bi bi-image me-1"></i> PNG (con transparencia)</li>
+                  <li class="mb-2"><i class="bi bi-file-image me-1"></i> JPG (comprimido)</li>
+                  <li class="mb-2"><i class="bi bi-filetype-webp me-1"></i> WebP (moderno)</li>
+                  <li class="mb-2"><i class="bi bi-vector-pen me-1"></i> SVG (vector)</li>
+                  <li><i class="bi bi-file-code me-1"></i> CSS/SCSS (code)</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
+                <h6 style="color: var(--a);"><i class="bi bi-cpu me-2"></i>Features</h6>
+                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
+                  <li class="mb-2"><i class="bi bi-infinity me-1"></i> Generación ilimitada</li>
+                  <li class="mb-2"><i class="bi bi-eye-slash me-1"></i> 100% privado</li>
+                  <li class="mb-2"><i class="bi bi-wifi-off me-1"></i> Funciona offline</li>
+                  <li class="mb-2"><i class="bi bi-lightning me-1"></i> Instantáneo</li>
+                  <li><i class="bi bi-gear me-1"></i> Totalmente configurable</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-4 p-3 rounded" style="background: var(--bg0); border: 1px dashed var(--bg2);">
+            <h6 style="color: var(--text-dim); margin-bottom: 0.75rem;">
+              <i class="bi bi-terminal me-2"></i>Ejemplos de Prompts
+            </h6>
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openStudioWithPrompt('Banner futurista con neón cian y grid de perspectiva')">
+                "Banner futurista con neón..." <i class="bi bi-arrow-right-short"></i>
+              </button>
+              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openStudioWithPrompt('Fondo orgánico con partículas flotantes de colores')">
+                "Fondo orgánico con partículas..." <i class="bi bi-arrow-right-short"></i>
+              </button>
+              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openStudioWithPrompt('Diagrama de red con nodos brillantes y conexiones')">
+                "Diagrama de red con nodos..." <i class="bi bi-arrow-right-short"></i>
+              </button>
+              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openStudioWithPrompt('Ondas abstractas degradado cian a púrpura')">
+                "Ondas abstractas degradado..." <i class="bi bi-arrow-right-short"></i>
+              </button>
+            </div>
+          </div>
         </section>
 
-        <!-- Videos Section -->
+        <!-- Videos Section - Video Studio -->
         <section class="content-section" id="videos">
-          <h2><i class="bi bi-film me-2" style="color: var(--p);"></i>Generar Videos</h2>
-          <p class="text-secondary mb-4">Crear demos, tutoriales y visualizaciones como secuencias de frames animables.</p>
-
-          <div class="gen-form">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Tipo de Video</label>
-                  <select id="video-type">
-                    <option value="demo">Demo del Stack</option>
-                    <option value="tutorial">Tutorial Paso a Paso</option>
-                    <option value="architecture">Visualización Arquitectura</option>
-                    <option value="product">Showcase Producto</option>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label>Tema</label>
-                  <input type="text" id="video-topic" placeholder="ej: Migración TypeScript">
-                </div>
-
-                <div class="form-group">
-                  <label>Duración (segundos)</label>
-                  <input type="range" id="video-duration" min="5" max="60" value="15" class="form-range" onchange="updateDurationLabel(this.value)">
-                  <div style="text-align: center;" id="duration-label">15 segundos</div>
-                </div>
-
-                <div class="form-group">
-                  <label>Pasos del Demo (uno por línea)</label>
-                  <textarea id="video-steps" rows="6" placeholder="1. Iniciar sesión
-2. Los 21 agentes se activan
-3. Tarea ejecutada
-4. Resultado exitoso">1. npm run session:autostart
-2. 21 agents activated ✓
-3. Pipeline executing autonomously
-4. Task completed successfully ✓</textarea>
+          <h2><i class="bi bi-film me-2" style="color: var(--p);"></i>Video Studio</h2>
+          <p class="text-secondary mb-4">Generador de video 100% nativo - Animaciones procedurales sin APIs externas.</p>
+          
+          <div class="row mb-4">
+            <div class="col-md-8">
+              <div class="p-3 rounded" style="background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%); border: 1px solid var(--bg2);">
+                <h5 style="color: var(--p); margin-bottom: 0.75rem;">
+                  <i class="bi bi-film me-2"></i>
+                  🎬 Generación Nativa de Video
+                </h5>
+                <p class="text-secondary mb-2" style="font-size: 0.875rem;">
+                  Crea videos animados offline con algoritmos Canvas 2D procedurales:
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-grid-3x3 me-1"></i>10+ Animaciones
+                  </span>
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-water me-1"></i>6 Generadores
+                  </span>
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-timeline me-1"></i>Timeline Visual
+                  </span>
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-filetype-gif me-1"></i>Export GIF
+                  </span>
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-images me-1"></i>Frames PNG
+                  </span>
                 </div>
               </div>
-
-              <div class="col-md-6">
-                <div class="preview-area" id="video-preview" style="min-height: 250px;">
-                  <div style="text-align: center; color: var(--text-dim);">
-                    <i class="bi bi-film" style="font-size: 3rem; opacity: 0.5;"></i>
-                    <p class="mt-2">Se generarán frames HTML</p>
-                    <p style="font-size: 0.8rem; margin-top: 0.5rem;">
-                      Compilación a MP4 requiere FFmpeg local
-                    </p>
-                  </div>
-                </div>
-
-                <div class="d-flex gap-2 mt-3">
-                  <button class="btn-gv" onclick="generateVideo()">
-                    <i class="bi bi-magic me-1"></i>Generar Frames
-                  </button>
-                  <button class="btn-gv-alt" onclick="downloadFrames()" id="btn-download-frames" disabled>
-                    <i class="bi bi-download me-1"></i>Descargar Frames
-                  </button>
-                </div>
-
-                <div class="alert mt-3" style="background: oklch(0.8 0.14 210 / 0.1); border: 1px solid oklch(0.8 0.14 210 / 0.2); border-radius: 8px; padding: 1rem; font-size: 0.85rem;">
-                  <strong>💡 Tip:</strong> Los frames HTML se pueden compilar a video con FFmpeg:<br>
-                  <code style="display: block; margin-top: 0.5rem; padding: 0.5rem; background: var(--bg2); border-radius: 4px;">ffmpeg -framerate 30 -i frame-%04d.html output.mp4</code>
+            </div>
+            <div class="col-md-4">
+              <div class="d-flex flex-column gap-2 h-100 justify-content-center">
+                <button class="btn-gv" onclick="window.open('video-studio.html', '_blank', 'width=1600,height=900')" style="font-size: 1rem; padding: 1rem 1.5rem;">
+                  <i class="bi bi-rocket-takeoff me-2"></i>
+                  Abrir Video Studio
+                </button>
+                <div class="text-center" style="font-size: 0.75rem; color: var(--text-faint);">
+                  <i class="bi bi-shield-check me-1" style="color: var(--a);"></i>
+                  100% Offline • Sin APIs • Sin Costos
                 </div>
               </div>
             </div>
           </div>
-        </section>
-
-        <!-- Social Section -->
-        <section class="content-section" id="social">
-          <h2><i class="bi bi-share me-2" style="color: var(--p);"></i>Redes Sociales</h2>
-          <p class="text-secondary mb-4">Generar posts con templates nativos del stack.</p>
-
-          <div class="gen-form">
-            <div class="form-group">
-              <label>Plataforma</label>
-              <div class="d-flex gap-2 flex-wrap">
-                <button class="btn-gv-alt active" data-platform="linkedin" style="padding: 0.5rem 1rem;">
-                  <i class="bi bi-linkedin me-1"></i>LinkedIn
-                </button>
-                <button class="btn-gv-alt" data-platform="twitter" style="padding: 0.5rem 1rem;">
-                  <i class="bi bi-twitter-x me-1"></i>Twitter
-                </button>
-                <button class="btn-gv-alt" data-platform="github" style="padding: 0.5rem 1rem;">
-                  <i class="bi bi-github me-1"></i>GitHub
-                </button>
+          
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
+                <h6 style="color: var(--p);"><i class="bi bi-bounding-box-circles me-2"></i>Generadores</h6>
+                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Futuristic Grid</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Partículas Orgánicas</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Ondas Abstractas</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Network Graph</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Geométrico</li>
+                  <li><i class="bi bi-check2" style="color: var(--a);"></i> Gradiente</li>
+                </ul>
               </div>
             </div>
-
-            <div class="form-group">
-              <label>Tipo de Post</label>
-              <select id="social-type">
-                <option value="launch">🚀 Lanzamiento</option>
-                <option value="feature">✨ Nueva Feature</option>
-                <option value="milestone">🏆 Hito / Milestone</option>
-                <option value="tip">💡 Tip / Tutorial</option>
-                <option value="case-study">📊 Caso de Estudio</option>
-              </select>
+            <div class="col-md-4 mb-3">
+              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
+                <h6 style="color: var(--s);"><i class="bi bi-activity me-2"></i>Animaciones</h6>
+                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Zoom In/Out</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Pan (4 direcciones)</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Fade In/Out</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Rotate 360°</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Pulse</li>
+                </ul>
+              </div>
             </div>
-
-            <div class="form-group">
-              <label>Tema</label>
-              <input type="text" id="social-topic" placeholder="ej: Doc-Gentle, Video Agent, Nueva feature">
+            <div class="col-md-4 mb-3">
+              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
+                <h6 style="color: var(--a);"><i class="bi bi-download me-2"></i>Export</h6>
+                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
+                  <li class="mb-2"><i class="bi bi-image me-1"></i> Frames PNG secuencia</li>
+                  <li class="mb-2"><i class="bi bi-filetype-gif me-1"></i> GIF animado</li>
+                  <li class="mb-2"><i class="bi bi-camera-video me-1"></i> WebM/MP4 (WebCodecs)</li>
+                  <li class="mb-2"><i class="bi bi-timeline me-1"></i> Timeline con preview</li>
+                  <li><i class="bi bi-keyboard me-1"></i> Atajos de teclado</li>
+                </ul>
+              </div>
             </div>
-
-            <div class="form-group">
-              <label>Mensaje Principal</label>
-              <textarea id="social-message" rows="4" placeholder="Describe el contenido del post..."></textarea>
-            </div>
-
-            <div class="form-group">
-              <label>Idioma</label>
-              <select id="social-lang">
-                <option value="es">🇪🇸 Español</option>
-                <option value="en">🇬🇧 English</option>
-                <option value="pt">🇧🇷 Português</option>
-              </select>
-            </div>
-
-            <div class="d-flex gap-2">
-              <button class="btn-gv" onclick="generatePost()">
-                <i class="bi bi-magic me-1"></i>Generar Post
+          </div>
+          
+          <div class="mt-4 p-3 rounded" style="background: var(--bg0); border: 1px dashed var(--bg2);">
+            <h6 style="color: var(--text-dim); margin-bottom: 0.75rem;">
+              <i class="bi bi-terminal me-2"></i>Ejemplos Rápidos
+            </h6>
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openVideoStudioWithConfig({generator: 'futuristic', animation: 'zoomIn', duration: 3})">
+                <i class="bi bi-lightning"></i> Grid + Zoom In
               </button>
-              <button class="btn-gv-alt" onclick="copyPost()" id="btn-copy-post" disabled>
-                <i class="bi bi-clipboard me-1"></i>Copiar
+              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openVideoStudioWithConfig({generator: 'particles', animation: 'fadeIn', duration: 5})">
+                <i class="bi bi-circle"></i> Partículas + Fade In
+              </button>
+              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openVideoStudioWithConfig({generator: 'waves', animation: 'panRight', duration: 4})">
+                <i class="bi bi-water"></i> Ondas + Pan Right
+              </button>
+              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openVideoStudioWithConfig({generator: 'network', animation: 'rotate', duration: 3})">
+                <i class="bi bi-diagram-3"></i> Network + Rotate
               </button>
             </div>
+          </div>
+        </section>
 
-            <div class="mt-4" id="social-output" style="display: none;">
-              <label>Resultado:</label>
-              <div style="background: var(--bg2); border: 1px solid var(--br-soft); border-radius: 8px; padding: 1rem; font-size: 0.95rem; line-height: 1.6; white-space: pre-wrap;"></div>
+        <!-- Social Section - Social Post Generator -->
+        <section class="content-section" id="social">
+          <h2><i class="bi bi-share me-2" style="color: var(--p);"></i>Social Post Generator</h2>
+          <p class="text-secondary mb-4">Generador de contenido social nativo con templates, editor WYSIWYG y preview multiplataforma.</p>
+          
+          <div class="row mb-4">
+            <div class="col-md-8">
+              <div class="p-3 rounded" style="background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%); border: 1px solid var(--bg2);">
+                <h5 style="color: var(--p); margin-bottom: 0.75rem;">
+                  <i class="bi bi-pen me-2"></i>
+                  📝 Generador de Posts Sociales
+                </h5>
+                <p class="text-secondary mb-2" style="font-size: 0.875rem;">
+                  Crea posts optimizados para LinkedIn, Twitter/X y GitHub con templates y editor nativo:
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-file-text me-1"></i>6 Templates
+                  </span>
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-translate me-1"></i>3 Idiomas
+                  </span>
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-display me-1"></i>Preview Live
+                  </span>
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-graph-up me-1"></i>Analytics
+                  </span>
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-calendar-check me-1"></i>Scheduling
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="d-flex flex-column gap-2 h-100 justify-content-center">
+                <button class="btn-gv" onclick="window.open('social-post.html', '_blank', 'width=1400,height=900')" style="font-size: 1rem; padding: 1rem 1.5rem;">
+                  <i class="bi bi-rocket-takeoff me-2"></i>
+                  Abrir Social Post
+                </button>
+                <div class="text-center" style="font-size: 0.75rem; color: var(--text-faint);">
+                  <i class="bi bi-shield-check me-1" style="color: var(--a);"></i>
+                  100% Offline • Auto-save • Biblioteca local
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
+                <h6 style="color: var(--p);"><i class="bi bi-file-text me-2"></i>Templates</h6>
+                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> 🚀 Lanzamiento</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> ✨ Nueva Feature</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> 🏆 Hito / Milestone</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> 💡 Tip / Tutorial</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> 📊 Caso de Estudio</li>
+                  <li><i class="bi bi-check2" style="color: var(--a);"></i> 🧵 Thread</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
+                <h6 style="color: var(--s);"><i class="bi bi-brush me-2"></i>Editor</h6>
+                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> WYSIWYG Nativo</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Formato Bold/Italic</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Bullets • Checks ✓</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Emojis rápidos</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Sugerencias IA</li>
+                  <li><i class="bi bi-check2" style="color: var(--a);"></i> Hashtags automáticos</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
+                <h6 style="color: var(--a);"><i class="bi bi-download me-2"></i>Export & Analytics</h6>
+                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> JSON / CSV / TXT</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Calendario visual</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Biblioteca local</li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Contador por plataforma</li>
+                  <li><i class="bi bi-check2" style="color: var(--a);"></i> Score de calidad</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-4 p-3 rounded" style="background: var(--bg0); border: 1px dashed var(--bg2);">
+            <h6 style="color: var(--text-dim); margin-bottom: 0.75rem;">
+              <i class="bi bi-terminal me-2"></i>Ejemplos Rápidos
+            </h6>
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openSocialPostWithConfig({template: 'launch', platform: 'linkedin', lang: 'es'})">
+                <i class="bi bi-rocket"></i> Post de Lanzamiento
+              </button>
+              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openSocialPostWithConfig({template: 'tip', platform: 'twitter', lang: 'es'})">
+                <i class="bi bi-lightbulb"></i> Tip para Twitter
+              </button>
+              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openSocialPostWithConfig({template: 'milestone', platform: 'linkedin', lang: 'en'})">
+                <i class="bi bi-trophy"></i> Milestone (EN)
+              </button>
+              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openSocialPostWithConfig({template: 'case-study', platform: 'github', lang: 'es'})">
+                <i class="bi bi-graph-up"></i> Caso de Estudio
+              </button>
             </div>
           </div>
         </section>
@@ -861,67 +977,119 @@
 
         <!-- Products Section -->
         <section class="content-section" id="products">
-          <h2><i class="bi bi-box me-2" style="color: var(--p);"></i>Productos Derivados</h2>
+          <h2><i class="bi bi-box me-2" style="color: var(--p);"></i>Product Pages</h2>
+          <p class="text-secondary mb-4">Landing pages profesionales para productos comerciales.</p>
           
-          <div class="alert mb-4" style="background: oklch(0.75 0.15 155 / 0.1); border: 1px solid oklch(0.75 0.15 155 / 0.2); border-radius: 8px; padding: 1rem;">
-            <i class="bi bi-info-circle me-2" style="color: var(--ok);"></i>
-            <strong>Estado Actual:</strong> Los productos están en fase de especificación. Doc-Gentle tiene README completo, falta implementación.
-          </div>
-
           <div class="row g-4">
             <div class="col-md-6">
-              <div class="resource-card" style="border: 2px solid oklch(0.75 0.15 155 / 0.3);">
+              <div class="resource-card" style="border: 2px solid var(--p); position: relative;">
+                <div style="position: absolute; top: -10px; right: 10px; background: linear-gradient(135deg, var(--p), var(--s)); color: var(--bg0); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.625rem; font-weight: 700;">
+                  NUEVO
+                </div>
                 <div class="d-flex justify-content-between align-items-start mb-3">
                   <h4><i class="bi bi-file-earmark-text me-2"></i>Doc-Gentle</h4>
-                  <span style="background: oklch(0.75 0.15 155 / 0.2); color: var(--ok); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">ESPECIFICACIÓN ✅</span>
+                  <span style="background: rgba(34, 211, 238, 0.2); color: var(--p); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">LANDING LIVE</span>
                 </div>
-                <p class="text-secondary small mb-3">Plataforma de inteligencia documental. Especificación completada.</p>
+                <p class="text-secondary small mb-3">Plataforma de inteligencia documental con pricing, ROI calculator y comparativa.</p>
                 <div class="d-flex gap-2">
-                  <a href="md-viewer.html?file=../../apps/doc-gentle/README.md" class="btn-gv" style="font-size: 0.8rem;">
-                    <i class="bi bi-book me-1"></i>Ver Spec
+                  <button class="btn-gv" onclick="window.open('product-doc-gentle.html', '_blank')" style="font-size: 0.8rem;">
+                    <i class="bi bi-rocket me-1"></i>Ver Landing
+                  </button>
+                  <a href="../../apps/doc-gentle/README.md" target="_blank" class="btn-gv-alt" style="font-size: 0.8rem;">
+                    <i class="bi bi-book me-1"></i>Read Spec
                   </a>
-                  <span class="text-secondary" style="font-size: 0.75rem; display: flex; align-items: center;">
-                    <i class="bi bi-clock me-1"></i>Desarrollo: Próximo
-                  </span>
                 </div>
               </div>
             </div>
 
             <div class="col-md-6">
-              <div class="resource-card" style="border: 1px solid var(--br-soft); opacity: 0.7;">
+              <div class="resource-card" style="border: 1px solid var(--bg2);">
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                  <h4><i class="bi bi-music-note-beamed me-2"></i>Gentle-Music</h4>
-                  <span style="background: var(--br); color: var(--text-dim); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">PLANIFICADO</span>
+                  <h4><i class="bi bi-cpu me-2"></i>Gentle-AI Core</h4>
+                  <span style="background: var(--bg2); color: var(--text-dim); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">EN DESARROLLO</span>
                 </div>
-                <p class="text-secondary small mb-3">Streaming musical con IA. En backlog.</p>
+                <p class="text-secondary small mb-3">Stack completo de automatización. Landing en construcción.</p>
+                <div class="d-flex gap-2">
+                  <button class="btn-gv-alt" style="font-size: 0.8rem;" disabled>
+                    <i class="bi bi-clock me-1"></i>Próximamente
+                  </button>
+                </div>
               </div>
             </div>
           </div>
 
           <div class="mt-4">
-            <h4>¿Cómo Desarrollar un Producto?</h4>
+            <h4>¿Cómo Crear un Producto?</h4>
             <ol style="color: var(--text-dim); font-size: 0.95rem; line-height: 1.8;">
-              <li>Crear carpeta en <code>apps/nombre-producto/</code></li>
-              <li>Escribir especificación en <code>README.md</code></li>
-              <li>Generar demo con Video Agent</li>
-              <li>Crear landing en <code>docs/presentations/</code></li>
-              <li>Implementar con stack nativo</li>
+              <li><strong>Especificar:</strong> Crear carpeta en <code>apps/producto/</code> con README.md</li>
+              <li><strong>Diseñar:</strong> Crear landing page en <code>docs/presentations/product-[name].html</code></li>
+              <li><strong>Demo:</strong> Generate demo video with Video Studio</li>
+              <li><strong>Launch:</strong> Deploy con stack nativo</li>
             </ol>
           </div>
         </section>
 
-        <!-- Contracts Section -->
+        <!-- Contracts Section - Contract Viewer -->
         <section class="content-section" id="contracts">
-          <h2><i class="bi bi-file-earmark-text me-2" style="color: var(--p);"></i>Contratos</h2>
+          <h2><i class="bi bi-file-earmark-text me-2" style="color: var(--p);"></i>Contract Viewer</h2>
+          <p class="text-secondary mb-4">Gestión de contratos nativa: visualización, estados, firmas y export.</p>
+          
+          <div class="row mb-4">
+            <div class="col-md-8">
+              <div class="p-3 rounded" style="background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%); border: 1px solid var(--bg2);">
+                <h5 style="color: var(--p); margin-bottom: 0.75rem;">
+                  <i class="bi bi-file-earmark-text me-2"></i>
+                  📋 Gestión de Contratos
+                </h5>
+                <p class="text-secondary mb-2" style="font-size: 0.875rem;">
+                  Visualizador de contratos 100% offline con gestión de estados:
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-eye me-1"></i>Preview Markdown
+                  </span>
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-arrow-repeat me-1"></i>Estados
+                  </span>
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-file-earmark-pdf me-1"></i>Export PDF
+                  </span>
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-plus-lg me-1"></i>Nuevos Contratos
+                  </span>
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                    <i class="bi bi-download me-1"></i>Backup JSON
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="d-flex flex-column gap-2 h-100 justify-content-center">
+                <button class="btn-gv" onclick="window.open('contract-viewer.html', '_blank', 'width=1400,height=900')" style="font-size: 1rem; padding: 1rem 1.5rem;">
+                  <i class="bi bi-rocket-takeoff me-2"></i>
+                  Abrir Contract Viewer
+                </button>
+                <div class="text-center" style="font-size: 0.75rem; color: var(--text-faint);">
+                  <i class="bi bi-shield-check me-1" style="color: var(--a);"></i>
+                  100% Offline • localStorage • Sin APIs
+                </div>
+              </div>
+            </div>
+          </div>
           
           <div class="row g-4">
             <div class="col-md-6">
               <div class="resource-card">
                 <h4><i class="bi bi-briefcase me-2"></i>Servicios Profesionales</h4>
                 <p class="text-secondary small mb-3">Contrato de consultoría: Setup, Migration, Training, Support.</p>
-                <a href="md-viewer.html?file=../contracts/consulting-services-agreement.md" class="btn-gv">
-                  <i class="bi bi-eye me-1"></i>Ver Contrato
-                </a>
+                <div class="d-flex gap-2">
+                  <a href="md-viewer.html?file=../contracts/consulting-services-agreement.md" class="btn-gv-alt">
+                    <i class="bi bi-eye me-1"></i>Ver (Legacy)
+                  </a>
+                  <button class="btn-gv" onclick="openContractViewerWithConfig({contractId: 'consulting-services'})">
+                    <i class="bi bi-window me-1"></i>Viewer
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -1245,9 +1413,48 @@ Which do you need? I can also open sections directly.`
           return { type: 'image', data: message.replace(/(imagen|image|generar|create|banner|thumbnail)/gi, '').trim() };
         }
         
+        // Video generation intent
+        if (m.includes('video') || m.includes('animación') || m.includes('animacion') || m.includes('gif') || m.includes('motion')) {
+          let generator = 'futuristic';
+          let animation = 'zoomIn';
+          
+          // Detectar generator preferido
+          if (m.includes('grid') || m.includes('futur') || m.includes('tech')) generator = 'futuristic';
+          if (m.includes('particula') || m.includes('particle') || m.includes('dot')) generator = 'particles';
+          if (m.includes('onda') || m.includes('wave') || m.includes('curva')) generator = 'waves';
+          if (m.includes('red') || m.includes('network') || m.includes('nodo') || m.includes('node')) generator = 'network';
+          if (m.includes('geometric') || m.includes('shape') || m.includes('forma')) generator = 'geometric';
+          
+          // Detectar animation preferida
+          if (m.includes('zoom out') || m.includes('alejar')) animation = 'zoomOut';
+          if (m.includes('slide') || m.includes('pan right') || m.includes('derecha')) animation = 'panRight';
+          if (m.includes('pan left') || m.includes('izquierda')) animation = 'panLeft';
+          if (m.includes('fade') || m.includes('aparecer')) animation = 'fadeIn';
+          if (m.includes('rotar') || m.includes('spin') || m.includes('girar')) animation = 'rotate';
+          if (m.includes('pulse') || m.includes('pulsar')) animation = 'pulse';
+          
+          return { type: 'video', generator, animation };
+        }
+        
         // Post generation intent
         if (m.includes('post') || m.includes('linkedin') || m.includes('twitter') || m.includes('redes') || m.includes('social')) {
-          return { type: 'post', data: message.replace(/(post|linkedin|twitter|redes|social)/gi, '').trim(), platform: m.includes('linkedin') ? 'LinkedIn' : m.includes('twitter') ? 'Twitter' : 'LinkedIn' };
+          let template = 'tip';
+          let platform = 'linkedin';
+          
+          // Detectar template
+          if (m.includes('lanzamiento') || m.includes('launch')) template = 'launch';
+          if (m.includes('feature') || m.includes('nueva')) template = 'feature';
+          if (m.includes('hito') || m.includes('milestone') || m.includes('logro')) template = 'milestone';
+          if (m.includes('tip') || m.includes('consejo') || m.includes('truco')) template = 'tip';
+          if (m.includes('caso') || m.includes('case') || m.includes('estudio')) template = 'case-study';
+          if (m.includes('thread') || m.includes('hilo')) template = 'thread';
+          
+          // Detectar plataforma
+          if (m.includes('twitter') || m.includes('x')) platform = 'twitter';
+          if (m.includes('github')) platform = 'github';
+          if (m.includes('dev.to') || m.includes('devto')) platform = 'devto';
+          
+          return { type: 'post', template, platform, data: message.replace(/(post|linkedin|twitter|redes|social)/gi, '').trim() };
         }
         
         // Pricing intent
@@ -1315,12 +1522,10 @@ Which do you need? I can also open sections directly.`
           switch (intent.type) {
             case 'image':
               response = responses.image(intent.data || 'Gentle-Vanguard');
-              // Auto-generate after showing message
+              // Auto-open Image Studio with prompt
               setTimeout(() => {
-                navigateTo('images');
-                document.getElementById('img-title').value = intent.data || 'Gentle-Vanguard';
-                generateImage();
-              }, 1500);
+                openStudioWithPrompt(intent.data || 'Banner tecnológico futurista');
+              }, 1000);
               break;
 
             case 'post':
@@ -1362,6 +1567,34 @@ Which do you need? I can also open sections directly.`
       function quickAsk(question) {
         document.getElementById('chat-input').value = question;
         sendMessage();
+      }
+      
+      function openStudioWithPrompt(prompt) {
+        const studioWindow = window.open('image-studio.html', '_blank', 'width=1400,height=900');
+        // Guardar el prompt en localStorage para que el studio lo recupere
+        localStorage.setItem('imageStudioPrompt', prompt);
+        localStorage.setItem('imageStudioLaunchTime', Date.now());
+      }
+      
+      function openVideoStudioWithConfig(config) {
+        const studioWindow = window.open('video-studio.html', '_blank', 'width=1600,height=900');
+        // Guardar configuración en localStorage
+        localStorage.setItem('videoStudioConfig', JSON.stringify(config));
+        localStorage.setItem('videoStudioLaunchTime', Date.now());
+      }
+      
+      function openSocialPostWithConfig(config) {
+        const studioWindow = window.open('social-post.html', '_blank', 'width=1400,height=900');
+        // Guardar configuración en localStorage
+        localStorage.setItem('socialPostConfig', JSON.stringify(config));
+        localStorage.setItem('socialPostLaunchTime', Date.now());
+      }
+      
+      function openContractViewerWithConfig(config) {
+        const viewerWindow = window.open('contract-viewer.html', '_blank', 'width=1400,height=900');
+        // Guardar configuración en localStorage
+        localStorage.setItem('contractViewerConfig', JSON.stringify(config));
+        localStorage.setItem('contractViewerLaunchTime', Date.now());
       }
 
       document.getElementById('chat-input').addEventListener('keypress', (e) => {
@@ -1631,15 +1864,63 @@ The native stack keeps growing. Today we add ${topic} to the ecosystem.
         list.insertBefore(item, list.firstChild);
       }
 
-      function exportAll() {
-        alert('💡 Función de exportación completa:\n\nSe generaría un archivo ZIP con todos los assets del proyecto.\n\nEn una implementación completa, esto empaquetaría automáticamente todos los recursos generados.');
+      // Exportar todo a ZIP usando JSZip
+      async function exportAll() {
+        try {
+          // Verificar si JSZip está disponible
+          if (typeof JSZip === 'undefined') {
+            // Cargar JSZip desde CDN
+            await new Promise((resolve, reject) => {
+              const script = document.createElement('script');
+              script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+              script.onload = resolve;
+              script.onerror = reject;
+              document.head.appendChild(script);
+            });
+          }
+          
+          const exporter = new CMSExporter();
+          const result = await exporter.exportAllToZIP('gentle-vanguard-cms');
+          
+          if (result.success) {
+            alert(`✅ Exportación completada!\n\n📦 Archivo: gentle-vanguard-cms.zip\n📊 Tamaño: ${result.size}\n⏱️ Tiempo: ${result.duration}s`);
+            
+            // Agregar a downloads
+            addToDownloads('gentle-vanguard-cms.zip', 'ZIP Archive', 'Exportado');
+          }
+        } catch (error) {
+          console.error('Error exportando:', error);
+          alert('❌ Error al exportar: ' + error.message + '\n\nIntente de nuevo o contacte soporte.');
+        }
+      }
+      
+      // Función para migrar assets (verificar integridad)
+      async function migrateAssets() {
+        if (confirm('🔄 Esto migrará todos los assets desde localStorage a la biblioteca unificada.\n\nContinuar?')) {
+          try {
+            const manager = new AssetManager();
+            const migrated = await manager.migrateFromLocalStorage();
+            alert(`✅ Migración completada!\n\n${migrated.length} assets migrados al sistema unificado.`);
+          } catch (error) {
+            alert('❌ Error en migración: ' + error.message);
+          }
+        }
       }
 
       // Initialize
       document.addEventListener('DOMContentLoaded', () => {
         console.log('🚀 Gentle-Vanguard CMS initialized');
         console.log('✅ Sistema 100% local operativo');
+        console.log('📦 CMS Exporter: window.CMSExporter');
+        console.log('📂 Asset Manager: window.AssetManager');
+        
+        // Inicializar asset manager
+        window.assetManager = new AssetManager();
       });
     </script>
+    
+    <!-- CMS Exporter Scripts -->
+    <script src="assets/js/cms-exporter.js"></script>
+    <script src="assets/js/asset-manager.js"></script>
   </body>
 </html>
