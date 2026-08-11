@@ -107,25 +107,25 @@ let dashboardContent = fs.readFileSync(dashboardPath, 'utf8');
 // Verificar si ya tiene triggers
 if (!dashboardContent.includes('tip_dashboard_')) {
   // Agregar triggers en secciones clave
-  const triggerReplacements = [
+  const triggerReplacements: Array<{search: RegExp; replace: (match: string) => string; tip: string}> = [
     {
       search: /(WebSocket Real-Time|Real-time WebSocket)/i,
-      replace: (match) => `${match}<span class="info-trigger" data-i18n-title="tip_dashboard_websocket">i</span>`,
+      replace: (match: string) => `${match}<span class="info-trigger" data-i18n-title="tip_dashboard_websocket">i</span>`,
       tip: 'tip_dashboard_websocket'
     },
     {
       search: /(7 Dashboard Sections|7 sections)/i,
-      replace: (match) => `${match}<span class="info-trigger" data-i18n-title="tip_dashboard_sections">i</span>`,
+      replace: (match: string) => `${match}<span class="info-trigger" data-i18n-title="tip_dashboard_sections">i</span>`,
       tip: 'tip_dashboard_sections'
     },
     {
       search: /(8 Alert Rules|configurable alert)/i,
-      replace: (match) => `${match}<span class="info-trigger" data-i18n-title="tip_dashboard_alerts">i</span>`,
+      replace: (match: string) => `${match}<span class="info-trigger" data-i18n-title="tip_dashboard_alerts">i</span>`,
       tip: 'tip_dashboard_alerts'
     },
     {
       search: /(3 Languages|i18n|internationalization)/i,
-      replace: (match) => `${match}<span class="info-trigger" data-i18n-title="tip_dashboard_i18n">i</span>`,
+      replace: (match: string) => `${match}<span class="info-trigger" data-i18n-title="tip_dashboard_i18n">i</span>`,
       tip: 'tip_dashboard_i18n'
     }
   ];
@@ -165,7 +165,7 @@ if (fs.existsSync(patternsPath)) {
   let patternsContent = fs.readFileSync(patternsPath, 'utf8');
 
   if (!patternsContent.includes('tip_patterns_')) {
-    const patternsTriggers = [
+    const patternsTriggers: Array<{search: RegExp; tip: string}> = [
       {
         search: /(Karpathy Guidelines?|Karphy)/i,
         tip: 'tip_patterns_karpathy'
@@ -196,7 +196,7 @@ if (fs.existsSync(patternsPath)) {
     for (const tr of patternsTriggers) {
       const originalContent = patternsContent;
       if (tr.search.test(patternsContent) && !patternsContent.includes(tr.tip)) {
-        patternsContent = patternsContent.replace(tr.search, (match) => {
+        patternsContent = patternsContent.replace(tr.search, (match: string) => {
           return `${match}<span class="info-trigger" data-i18n-title="${tr.tip}">i</span>`;
         });
         if (patternsContent !== originalContent) {

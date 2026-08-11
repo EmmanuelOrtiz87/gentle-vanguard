@@ -5,10 +5,17 @@
 
 import * as fs from 'fs';
 
+interface Trigger {
+  id: string;
+  anchor: string;
+  tip: string;
+  position: string;
+}
+
 console.log('Agregando triggers de forma segura con parser HTML...\n');
 
 // Configuración de triggers para dashboard.html
-const dashboardTriggers = [
+const dashboardTriggers: Trigger[] = [
   {
     id: 'ws-section',
     anchor: 'WebSocket',
@@ -75,7 +82,7 @@ const patternsTriggers = [
   }
 ];
 
-function addTriggersSafely(filePath, triggers, pageName) {
+function addTriggersSafely(filePath: string, triggers: Trigger[], pageName: string): boolean {
   console.log(`\n📄 Procesando ${pageName}...`);
   
   if (!fs.existsSync(filePath)) {
