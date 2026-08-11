@@ -15,10 +15,10 @@
         "output": 0.006
       },
       "health": {
-        "status": "available",
-        "lastChecked": "2026-08-10T23:45:00Z",
+        "status": "unknown",
+        "lastChecked": null,
         "consecutiveErrors": 0,
-        "avgLatencyMs": 1500
+        "avgLatencyMs": null
       },
       "fallbackChain": [
         "opencode/deepseek-v4-flash-free",
@@ -96,17 +96,15 @@
   },
   "routingRules": {
     "orchestrator": {
-      "primary": "kimi-2-5",
+      "primary": "opencode/deepseek-v4-flash-free",
       "fallbackStrategy": "availability",
       "maxSwitchPerHour": 3
     },
     "subagents": {
       "inheritFromOrchestrator": true,
       "allowOverride": true,
-      "default": "kimi-2-5",
+      "default": "opencode/deepseek-v4-flash-free",
       "fallbackChain": [
-        "kimi-2-5",
-        "claude-haiku-4-5",
         "opencode/deepseek-v4-flash-free",
         "ollama/qwen2.5-coder:14b"
       ]

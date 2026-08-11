@@ -6,7 +6,10 @@
  */
 
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
-import { join } from 'path';
+import { join, resolve } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 // Types
 interface Platform {
@@ -281,7 +284,7 @@ class MarketingAgent {
    */
   public generateMultiLang(
     topic: string,
-    _templateName: string
+    templateName: string
   ): Record<string, GeneratedContent[]> {
     const results: Record<string, GeneratedContent[]> = {};
     const languages: ('es' | 'en' | 'pt')[] = ['es', 'en', 'pt'];
@@ -445,9 +448,8 @@ class MarketingAgent {
     };
 
     const toneEmojis = emojis[tone] || emojis.professional;
-    // Don't add if already has emoji (Unicode property escapes — safe, no ambiguous ranges)
-    const hasEmoji = /\p{Emoji}/u.test(content);
-    if (hasEmoji) return content;
+    // Don't add if already has emoji
+    if (/[\u{1F600}-\u{1F64F}]/u.test(content)) return content;
 
     return `${toneEmojis[0]} ${content}`;
   }
