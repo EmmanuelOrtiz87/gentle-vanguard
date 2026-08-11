@@ -1,4 +1,5 @@
 # Pendientes Críticos - Gentle-Vanguard
+
 ## Resumen Ejecutivo para Acción Inmediata
 
 **Fecha**: 2026-08-10  
@@ -9,9 +10,10 @@
 ## 🎯 TOP 5 PENDIENTES CRÍTICOS (Esta Semana)
 
 ### 🔴 #1: Persistencia del CMS (Máxima Prioridad)
+
 **Dónde**: `docs/presentations/resources-index.html`  
-**Problema**: Los archivos generados se pierden al cerrar el navegador
-**Solución**: Implementar localStorage
+**Problema**: Los archivos generados se pierden al cerrar el navegador **Solución**: Implementar
+localStorage
 
 ```javascript
 // Código pendiente a agregar:
@@ -22,7 +24,7 @@ function saveToLocalStorage(asset) {
     name: asset.name,
     type: asset.type, // 'image', 'video', 'post'
     content: asset.content, // Base64 o data URL
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   });
   localStorage.setItem('gv-assets', JSON.stringify(assets));
 }
@@ -33,7 +35,7 @@ function generateImage() {
   saveToLocalStorage({
     name: 'imagen-' + Date.now() + '.svg',
     type: 'image',
-    content: 'data:image/svg+xml;base64,' + btoa(svg)
+    content: 'data:image/svg+xml;base64,' + btoa(svg),
   });
 }
 ```
@@ -43,9 +45,10 @@ function generateImage() {
 ---
 
 ### 🔴 #2: Exportar PNG desde el CMS
+
 **Dónde**: Panel de Imágenes en resources-index.html  
-**Problema**: Solo exporta SVG, la mayoría necesita PNG
-**Solución**: Agregar botón "Convertir a PNG"
+**Problema**: Solo exporta SVG, la mayoría necesita PNG **Solución**: Agregar botón "Convertir a
+PNG"
 
 ```javascript
 // Agregar función:
@@ -53,16 +56,16 @@ function exportAsPNG(svgElement) {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   const img = new Image();
-  
-  img.onload = function() {
+
+  img.onload = function () {
     canvas.width = img.width;
     canvas.height = img.height;
     ctx.drawImage(img, 0, 0);
-    canvas.toBlob(function(blob) {
+    canvas.toBlob(function (blob) {
       // Descargar blob como PNG
     });
   };
-  
+
   img.src = 'data:image/svg+xml;base64,' + btoa(svg);
 }
 ```
@@ -72,19 +75,18 @@ function exportAsPNG(svgElement) {
 ---
 
 ### 🔴 #3: Navegación Consistente
+
 **Dónde**: Todas las páginas .html excepto resources-index  
-**Problema**: Falta link al CMS en el menú superior
-**Solución**: Agregar este item a nav:
+**Problema**: Falta link al CMS en el menú superior **Solución**: Agregar este item a nav:
 
 ```html
 <li class="nav-item">
-  <a class="nav-link" href="resources-index.html">
-    <i class="bi bi-grid me-1"></i>CMS
-  </a>
+  <a class="nav-link" href="resources-index.html"> <i class="bi bi-grid me-1"></i>CMS </a>
 </li>
 ```
 
 **Páginas a actualizar** (10 min cada una):
+
 - [ ] architecture.html
 - [ ] dashboard.html
 - [ ] autonomy.html
@@ -97,9 +99,9 @@ function exportAsPNG(svgElement) {
 ---
 
 ### 🔴 #4: Implementar Doc-Gentle (Primeros pasos)
+
 **Dónde**: `apps/doc-gentle/`  
-**Estado**: Solo especificación, no código
-**Comenzar con**:
+**Estado**: Solo especificación, no código **Comenzar con**:
 
 ```bash
 mkdir apps/doc-gentle/src
@@ -114,6 +116,7 @@ touch src/main.tsx
 ```
 
 **MVP Mínimo** (2 días):
+
 1. Pantalla de subir PDF
 2. Mostrar texto extraído
 3. Input para preguntar
@@ -122,6 +125,7 @@ touch src/main.tsx
 ---
 
 ### 🔴 #5: Agregar Tests para Componentes Nuevos
+
 **Dónde**: `tests/unit/`  
 **Faltan tests**:
 
@@ -153,8 +157,10 @@ test('should generate frames', () => {
 ## 📋 PENDIENTES DE MEDIANA IMPORTANCIA (Mes Siguiente)
 
 ### 🟡 #6: Compilación Real de Video
+
 **Problema**: Solo frames HTML, no MP4  
 **Soluciones**:
+
 - **A) FFmpeg nativo**: Requiere usuario tenga FFmpeg instalado
 - **B) FFmpeg.wasm**: Agrega 25MB al bundle
 - **C** Documentar proceso manual**
@@ -164,13 +170,14 @@ test('should generate frames', () => {
 ---
 
 ### 🟡 #7: Historial en CMS
+
 **Feature**: Ver todos los assets generados previamente  
 **Beneficio**: Reutilizar, modificar, descargar de nuevo
 
 ```javascript
 // Agregar sección "Historial"
 const assets = JSON.parse(localStorage.getItem('gv-assets') || '[]');
-assets.forEach(asset => {
+assets.forEach((asset) => {
   // Mostrar en grid con thumbnail, fecha, botones
 });
 ```
@@ -178,8 +185,10 @@ assets.forEach(asset => {
 ---
 
 ### 🟡 #8: Mejorar UI del Chat
+
 **Problema**: Chat básico, no interactivo  
 **Mejoras**:
+
 - Botones de acción rápida
 - Indicador "escribiendo..."
 - Avatares visuales
@@ -188,8 +197,10 @@ assets.forEach(asset => {
 ---
 
 ### 🟡 #9: Previews Realistas
+
 **Problema**: Preview muy básico  
 **Solución**: Mostrar cómo se vería en cada red social
+
 - Vista previa de LinkedIn feed
 - Vista previa de Instagram
 - Mockup de Twitter/X
@@ -197,8 +208,10 @@ assets.forEach(asset => {
 ---
 
 ### 🟡 #10: Landing de Doc-Gentle
+
 **Dónde**: `docs/presentations/doc-gentle.html`  
 **Contenido**:
+
 - Hero con valor proposition
 - Demo video (generado con Video Agent)
 - Features list
@@ -209,26 +222,27 @@ assets.forEach(asset => {
 
 ## ✅ QUÉ ESTÁ COMPLETAMENTE LISTO
 
-| Componente | Estado | Notas |
-|------------|--------|-------|
-| Stack principal | ✅ | 100% operativo |
-| Orquestación | ✅ | 21 agentes funcionando |
-| Health checks | ✅ | 82/82 pasando |
-| Tests core | ✅ | 103 tests pasando |
-| Presentaciones | ✅ | 12 páginas HTML completas |
-| CMS Dashboard | ✅ | Panel principal operativo |
-| Visor Markdown | ✅ | md-viewer.html funciona |
-| Agente chat | ✅ | Básico pero operativo |
-| Generador SVG | ✅ | Funciona nativo |
-| Generador posts | ✅ | 3 idiomas |
-| Contratos | ✅ | Legales listos |
-| Theme toggle | ✅ | Claro/oscuro |
+| Componente      | Estado | Notas                     |
+| --------------- | ------ | ------------------------- |
+| Stack principal | ✅     | 100% operativo            |
+| Orquestación    | ✅     | 21 agentes funcionando    |
+| Health checks   | ✅     | 82/82 pasando             |
+| Tests core      | ✅     | 103 tests pasando         |
+| Presentaciones  | ✅     | 12 páginas HTML completas |
+| CMS Dashboard   | ✅     | Panel principal operativo |
+| Visor Markdown  | ✅     | md-viewer.html funciona   |
+| Agente chat     | ✅     | Básico pero operativo     |
+| Generador SVG   | ✅     | Funciona nativo           |
+| Generador posts | ✅     | 3 idiomas                 |
+| Contratos       | ✅     | Legales listos            |
+| Theme toggle    | ✅     | Claro/oscuro              |
 
 ---
 
 ## 📊 COMPARATIVO: ANTES vs DESPUÉS
 
 ### Antes de estos pendientes:
+
 ```
 Funcionalidad:    70%
 UX:              60%
@@ -237,6 +251,7 @@ Polish:          50%
 ```
 
 ### Después de estos pendientes:
+
 ```
 Funcionalidad:    95%
 UX:              90%
@@ -248,14 +263,14 @@ Polish:          85%
 
 ## ⏱️ TIEMPO TOTAL ESTIMADO
 
-| Tarea | Tiempo | Costo |
-|-------|--------|-------|
-| #1 Persistencia CMS | 3h | Bajo |
-| #2 Export PNG | 1h | Bajo |
-| #3 Navegación | 1h | Bajo |
-| #4 Tests | 3h | Bajo |
-| #5 Doc-Gentle MVP | 2 días | Medio |
-| Total | ~3 días | ~$500-1000 |
+| Tarea               | Tiempo  | Costo      |
+| ------------------- | ------- | ---------- |
+| #1 Persistencia CMS | 3h      | Bajo       |
+| #2 Export PNG       | 1h      | Bajo       |
+| #3 Navegación       | 1h      | Bajo       |
+| #4 Tests            | 3h      | Bajo       |
+| #5 Doc-Gentle MVP   | 2 días  | Medio      |
+| Total               | ~3 días | ~$500-1000 |
 
 ---
 

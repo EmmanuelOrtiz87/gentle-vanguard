@@ -105,8 +105,8 @@ const FALLBACK_TRIGGERS = [
 
 // Default model chain for fallback
 const DEFAULT_FALLBACK_CHAIN = [
-  'kimi-2-5',                       // Primary: littellmott (orquestador)
-  'claude-haiku-4-5',               // Secondary: Claude via littellmott
+  'kimi-2-5', // Primary: littellmott (orquestador)
+  'claude-haiku-4-5', // Secondary: Claude via littellmott
   'opencode/deepseek-v4-flash-free', // Tertiary: Free tier
 ];
 
@@ -171,9 +171,7 @@ function loadModelRegistry(): Record<string, ModelConfig> {
 
 function shouldTriggerFallback(error: string): boolean {
   const normalizedError = error.toLowerCase();
-  return FALLBACK_TRIGGERS.some(trigger =>
-    normalizedError.includes(trigger.toLowerCase())
-  );
+  return FALLBACK_TRIGGERS.some((trigger) => normalizedError.includes(trigger.toLowerCase()));
 }
 
 function getOrchestratorModel(): string {
@@ -203,9 +201,7 @@ function getOrchestratorModel(): string {
 /**
  * Execute a task with automatic model fallback
  */
-export async function delegateWithFallback(
-  request: DelegationRequest
-): Promise<DelegationResult> {
+export async function delegateWithFallback(request: DelegationRequest): Promise<DelegationResult> {
   const startTime = Date.now();
   const state = loadFallbackState();
   const registry = loadModelRegistry();
@@ -218,7 +214,10 @@ export async function delegateWithFallback(
   const orchestratorModel = getOrchestratorModel();
   const requestedModel = request.model;
 
-  log('info', `Delegating ${request.agent}: orchestrator=${orchestratorModel}, requested=${requestedModel || 'inherit'}`);
+  log(
+    'info',
+    `Delegating ${request.agent}: orchestrator=${orchestratorModel}, requested=${requestedModel || 'inherit'}`,
+  );
 
   // Build fallback chain
   const modelChain: string[] = [];
@@ -229,8 +228,10 @@ export async function delegateWithFallback(
   }
 
   // 2. Orchestrator model (inheritance)
-  if (!modelChain.includes(orchestratorModel) &&
-      !state.exhaustedModels.includes(orchestratorModel)) {
+  if (
+    !modelChain.includes(orchestratorModel) &&
+    !state.exhaustedModels.includes(orchestratorModel)
+  ) {
     modelChain.push(orchestratorModel);
   }
 
@@ -238,8 +239,7 @@ export async function delegateWithFallback(
   const agentConfig = registry[request.agent];
   if (agentConfig?.fallbackChain) {
     for (const fbModel of agentConfig.fallbackChain) {
-      if (!modelChain.includes(fbModel) &&
-          !state.exhaustedModels.includes(fbModel)) {
+      if (!modelChain.includes(fbModel) && !state.exhaustedModels.includes(fbModel)) {
         modelChain.push(fbModel);
       }
     }
@@ -247,8 +247,7 @@ export async function delegateWithFallback(
 
   // 4. Default chain
   for (const fbModel of DEFAULT_FALLBACK_CHAIN) {
-    if (!modelChain.includes(fbModel) &&
-        !state.exhaustedModels.includes(fbModel)) {
+    if (!modelChain.includes(fbModel) && !state.exhaustedModels.includes(fbModel)) {
       modelChain.push(fbModel);
     }
   }
@@ -325,7 +324,6 @@ export async function delegateWithFallback(
         attempts: attempt + 1,
         errors: [...errors, result.error || 'Unknown error'],
       };
-
     } catch (error) {
       const errorStr = String(error);
 
@@ -378,7 +376,7 @@ export async function delegateWithFallback(
  */
 async function executeWithModel(
   request: DelegationRequest,
-  model: string
+  model: string,
 ): Promise<{ success: boolean; output?: string; error?: string }> {
   return new Promise((resolve) => {
     const delegatorPath = join(ROOT, 'src', 'agent-delegator.ts');
@@ -387,9 +385,12 @@ async function executeWithModel(
     const args = [
       'tsx',
       delegatorPath,
-      '--agent', request.agent,
-      '--task', request.task,
-      '--model', model,
+      '--agent',
+      request.agent,
+      '--task',
+      request.task,
+      '--model',
+      model,
     ];
 
     if (request.context) {
@@ -494,7 +495,9 @@ function cli(): void {
 
       console.log(`\nRegistry Status:`);
       for (const [name, config] of Object.entries(registry)) {
-        console.log(`  ${name}: ${config.health?.status || 'unknown'} (${config.health?.consecutiveErrors || 0} errors)`);
+        console.log(
+          `  ${name}: ${config.health?.status || 'unknown'} (${config.health?.consecutiveErrors || 0} errors)`,
+        );
       }
 
       break;
@@ -541,9 +544,4 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
 }
 
 // Exports
-export {
-  getOrchestratorModel,
-  loadFallbackState,
-  saveFallbackState,
-  shouldTriggerFallback,
-};
+export { getOrchestratorModel, loadFallbackState, saveFallbackState, shouldTriggerFallback };

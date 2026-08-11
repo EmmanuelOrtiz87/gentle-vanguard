@@ -4,10 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gentle-Vanguard CMS — Panel de Control de Marketing</title>
-    <meta name="description" content="Sistema nativo de gestión de contenido de marketing: imágenes, videos, posts, contratos — 100% local, sin dependencias externas" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <meta
+      name="description"
+      content="Sistema nativo de gestión de contenido de marketing: imágenes, videos, posts, contratos — 100% local, sin dependencias externas"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="assets/css/gv.css?v=2.1" />
     <style>
       /* ===== PANEL DE CONTROL PRINCIPAL ===== */
@@ -17,7 +29,7 @@
         min-height: 100vh;
         gap: 0;
       }
-      
+
       /* Sidebar */
       .sidebar {
         background: var(--bg2);
@@ -56,7 +68,7 @@
         font-size: 0.75rem;
         color: var(--text-dim);
       }
-      
+
       .nav-section {
         margin-bottom: 1.5rem;
       }
@@ -92,7 +104,7 @@
         width: 24px;
         text-align: center;
       }
-      
+
       /* Main Content */
       .main-content {
         padding: 2rem;
@@ -104,7 +116,7 @@
       .content-section.active {
         display: block;
       }
-      
+
       /* ===== CHAT/AGENT INTERFACE ===== */
       .chat-panel {
         background: var(--card);
@@ -137,8 +149,13 @@
         animation: pulse 2s infinite;
       }
       @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
       }
       .chat-messages {
         flex: 1;
@@ -188,7 +205,7 @@
         outline: none;
         border-color: var(--p);
       }
-      
+
       /* Quick Actions */
       .quick-actions {
         display: grid;
@@ -217,7 +234,7 @@
         color: var(--text-dim);
         margin: 0;
       }
-      
+
       /* Generation Forms */
       .gen-form {
         background: var(--card);
@@ -257,7 +274,7 @@
         outline: none;
         border-color: var(--p);
       }
-      
+
       /* Preview Area */
       .preview-area {
         background: var(--bg);
@@ -286,7 +303,7 @@
         display: flex;
         gap: 0.5rem;
       }
-      
+
       /* Downloads Manager */
       .downloads-list {
         background: var(--card);
@@ -333,7 +350,7 @@
         background: oklch(0.8 0.15 75 / 0.2);
         color: var(--wn);
       }
-      
+
       /* Stats Dashboard */
       .stats-grid {
         display: grid;
@@ -360,7 +377,7 @@
         color: var(--text-dim);
         margin-top: 0.25rem;
       }
-      
+
       /* Process Steps */
       .process-steps {
         display: flex;
@@ -413,7 +430,7 @@
         font-size: 0.8rem;
         color: var(--text-dim);
       }
-      
+
       @media (max-width: 1024px) {
         .control-panel {
           grid-template-columns: 1fr;
@@ -483,7 +500,7 @@
           </div>
         </div>
 
-        <div class="nav-section" style="margin-top: auto;">
+        <div class="nav-section" style="margin-top: auto">
           <h3>Sistema</h3>
           <div class="nav-item" data-section="settings">
             <i class="bi bi-gear"></i>
@@ -498,10 +515,9 @@
 
       <!-- Main Content -->
       <main class="main-content">
-        
         <!-- Dashboard Section -->
         <section class="content-section active" id="dashboard">
-          <h2><i class="bi bi-speedometer2 me-2" style="color: var(--p);"></i>Dashboard</h2>
+          <h2><i class="bi bi-speedometer2 me-2" style="color: var(--p)"></i>Dashboard</h2>
           <p class="text-secondary mb-4">Panel de control del sistema de marketing nativo.</p>
 
           <div class="stats-grid">
@@ -562,28 +578,62 @@
             </div>
           </div>
 
-          <div class="alert" style="background: oklch(0.8 0.14 210 / 0.1); border: 1px solid oklch(0.8 0.14 210 / 0.2); border-radius: 8px; padding: 1rem;">
-            <i class="bi bi-info-circle me-2" style="color: var(--p);"></i>
-            <strong>Sistema 100% Local:</strong> Todo el procesamiento se realiza en tu navegador. No se envían datos a servidores externos.
+          <div
+            class="alert"
+            style="
+              background: oklch(0.8 0.14 210 / 0.1);
+              border: 1px solid oklch(0.8 0.14 210 / 0.2);
+              border-radius: 8px;
+              padding: 1rem;
+            "
+          >
+            <i class="bi bi-info-circle me-2" style="color: var(--p)"></i>
+            <strong>Sistema 100% Local:</strong> Todo el procesamiento se realiza en tu navegador.
+            No se envían datos a servidores externos.
           </div>
         </section>
 
         <!-- AI Agent Section -->
         <section class="content-section" id="agent">
-          <h2><i class="bi bi-robot me-2" style="color: var(--p);"></i>Asistente de Marketing</h2>
-          <p class="text-secondary mb-4">Agente nativo que ayuda con estrategia, contenido y planificación.</p>
+          <h2><i class="bi bi-robot me-2" style="color: var(--p)"></i>Asistente de Marketing</h2>
+          <p class="text-secondary mb-4">
+            Agente nativo que ayuda con estrategia, contenido y planificación.
+          </p>
 
           <div class="chat-panel">
             <div class="chat-header">
               <div class="d-flex align-items-center gap-2">
-                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, var(--p), var(--a)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">🤖</div>
+                <div
+                  style="
+                    width: 40px;
+                    height: 40px;
+                    background: linear-gradient(135deg, var(--p), var(--a));
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.25rem;
+                  "
+                >
+                  🤖
+                </div>
                 <div>
-                  <div style="font-weight: 600;">Marketing Assistant</div>
+                  <div style="font-weight: 600">Marketing Assistant</div>
                   <div class="chat-status">Online — Operando localmente</div>
                 </div>
               </div>
-              <div style="margin-left: auto;">
-                <select id="agent-lang" class="form-select" style="width: auto; background: var(--bg); border: 1px solid var(--br-soft); color: var(--text); font-size: 0.85rem;">
+              <div style="margin-left: auto">
+                <select
+                  id="agent-lang"
+                  class="form-select"
+                  style="
+                    width: auto;
+                    background: var(--bg);
+                    border: 1px solid var(--br-soft);
+                    color: var(--text);
+                    font-size: 0.85rem;
+                  "
+                >
                   <option value="es">🇪🇸 Español</option>
                   <option value="en">🇬🇧 English</option>
                   <option value="pt">🇧🇷 Português</option>
@@ -596,7 +646,11 @@
             </div>
 
             <div class="chat-input">
-              <input type="text" id="chat-input" placeholder="Escribe tu consulta... (ej: 'Crear un post sobre Doc-Gentle')">
+              <input
+                type="text"
+                id="chat-input"
+                placeholder="Escribe tu consulta... (ej: 'Crear un post sobre Doc-Gentle')"
+              />
               <button class="btn-gv" onclick="sendMessage()">
                 <i class="bi bi-send"></i>
               </button>
@@ -624,33 +678,47 @@
 
         <!-- Images Section - Image Studio -->
         <section class="content-section" id="images">
-          <h2><i class="bi bi-image me-2" style="color: var(--p);"></i>Image Studio</h2>
-          <p class="text-secondary mb-4">Generador de imágenes 100% nativo - Alternativa local a herramientas cloud como nano-banana.</p>
-          
+          <h2><i class="bi bi-image me-2" style="color: var(--p)"></i>Image Studio</h2>
+          <p class="text-secondary mb-4">
+            Generador de imágenes 100% nativo - Alternativa local a herramientas cloud como
+            nano-banana.
+          </p>
+
           <div class="row mb-4">
             <div class="col-md-8">
-              <div class="p-3 rounded" style="background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%); border: 1px solid var(--bg2);">
-                <h5 style="color: var(--p); margin-bottom: 0.75rem;">
+              <div
+                class="p-3 rounded"
+                style="
+                  background: linear-gradient(
+                    135deg,
+                    rgba(34, 211, 238, 0.1) 0%,
+                    rgba(167, 139, 250, 0.1) 100%
+                  );
+                  border: 1px solid var(--bg2);
+                "
+              >
+                <h5 style="color: var(--p); margin-bottom: 0.75rem">
                   <i class="bi bi-stars me-2"></i>
                   ✨ Generación Nativa de Imágenes
                 </h5>
-                <p class="text-secondary mb-2" style="font-size: 0.875rem;">
-                  Sin APIs, sin costos, sin registro. Algoritmos procedurales ejecutándose localmente en tu navegador:
+                <p class="text-secondary mb-2" style="font-size: 0.875rem">
+                  Sin APIs, sin costos, sin registro. Algoritmos procedurales ejecutándose
+                  localmente en tu navegador:
                 </p>
                 <div class="d-flex flex-wrap gap-2">
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-grid-3x3 me-1"></i>Grids Futuristas
                   </span>
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-circle me-1"></i>Partículas
                   </span>
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-water me-1"></i>Ondas Abstractas
                   </span>
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-diagram-3 me-1"></i>Network Graphs
                   </span>
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-shapes me-1"></i>Geométrico
                   </span>
                 </div>
@@ -658,36 +726,66 @@
             </div>
             <div class="col-md-4">
               <div class="d-flex flex-column gap-2 h-100 justify-content-center">
-                <button class="btn-gv" onclick="window.open('image-studio.html', '_blank', 'width=1400,height=900')" style="font-size: 1rem; padding: 1rem 1.5rem;">
+                <button
+                  class="btn-gv"
+                  onclick="window.open('image-studio.html', '_blank', 'width=1400,height=900')"
+                  style="font-size: 1rem; padding: 1rem 1.5rem"
+                >
                   <i class="bi bi-rocket-takeoff me-2"></i>
                   Abrir Image Studio
                 </button>
-                <div class="text-center" style="font-size: 0.75rem; color: var(--text-faint);">
-                  <i class="bi bi-shield-check me-1" style="color: var(--a);"></i>
+                <div class="text-center" style="font-size: 0.75rem; color: var(--text-faint)">
+                  <i class="bi bi-shield-check me-1" style="color: var(--a)"></i>
                   100% Offline • Sin APIs • Sin Costos
                 </div>
               </div>
             </div>
           </div>
-          
+
           <div class="row">
             <div class="col-md-4 mb-3">
-              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
-                <h6 style="color: var(--p);"><i class="bi bi-brush me-2"></i>Estilos Predefinidos</h6>
-                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Neo Cyberpunk</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Minimal Clean</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Gradient Flow</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Dark Tech</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Geometric</li>
-                  <li><i class="bi bi-check2" style="color: var(--a);"></i> Organic</li>
+              <div
+                class="p-3 rounded h-100"
+                style="background: var(--bg1); border: 1px solid var(--bg2)"
+              >
+                <h6 style="color: var(--p)">
+                  <i class="bi bi-brush me-2"></i>Estilos Predefinidos
+                </h6>
+                <ul
+                  class="list-unstyled mt-3 mb-0"
+                  style="font-size: 0.8125rem; color: var(--text-dim)"
+                >
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Neo Cyberpunk
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Minimal Clean
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Gradient Flow
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Dark Tech
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Geometric
+                  </li>
+                  <li><i class="bi bi-check2" style="color: var(--a)"></i> Organic</li>
                 </ul>
               </div>
             </div>
             <div class="col-md-4 mb-3">
-              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
-                <h6 style="color: var(--s);"><i class="bi bi-download me-2"></i>Exportar Formatos</h6>
-                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
+              <div
+                class="p-3 rounded h-100"
+                style="background: var(--bg1); border: 1px solid var(--bg2)"
+              >
+                <h6 style="color: var(--s)">
+                  <i class="bi bi-download me-2"></i>Exportar Formatos
+                </h6>
+                <ul
+                  class="list-unstyled mt-3 mb-0"
+                  style="font-size: 0.8125rem; color: var(--text-dim)"
+                >
                   <li class="mb-2"><i class="bi bi-image me-1"></i> PNG (con transparencia)</li>
                   <li class="mb-2"><i class="bi bi-file-image me-1"></i> JPG (comprimido)</li>
                   <li class="mb-2"><i class="bi bi-filetype-webp me-1"></i> WebP (moderno)</li>
@@ -697,9 +795,15 @@
               </div>
             </div>
             <div class="col-md-4 mb-3">
-              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
-                <h6 style="color: var(--a);"><i class="bi bi-cpu me-2"></i>Features</h6>
-                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
+              <div
+                class="p-3 rounded h-100"
+                style="background: var(--bg1); border: 1px solid var(--bg2)"
+              >
+                <h6 style="color: var(--a)"><i class="bi bi-cpu me-2"></i>Features</h6>
+                <ul
+                  class="list-unstyled mt-3 mb-0"
+                  style="font-size: 0.8125rem; color: var(--text-dim)"
+                >
                   <li class="mb-2"><i class="bi bi-infinity me-1"></i> Generación ilimitada</li>
                   <li class="mb-2"><i class="bi bi-eye-slash me-1"></i> 100% privado</li>
                   <li class="mb-2"><i class="bi bi-wifi-off me-1"></i> Funciona offline</li>
@@ -709,22 +813,63 @@
               </div>
             </div>
           </div>
-          
-          <div class="mt-4 p-3 rounded" style="background: var(--bg0); border: 1px dashed var(--bg2);">
-            <h6 style="color: var(--text-dim); margin-bottom: 0.75rem;">
+
+          <div
+            class="mt-4 p-3 rounded"
+            style="background: var(--bg0); border: 1px dashed var(--bg2)"
+          >
+            <h6 style="color: var(--text-dim); margin-bottom: 0.75rem">
               <i class="bi bi-terminal me-2"></i>Ejemplos de Prompts
             </h6>
             <div class="d-flex flex-wrap gap-2">
-              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openStudioWithPrompt('Banner futurista con neón cian y grid de perspectiva')">
+              <button
+                class="btn btn-sm"
+                style="
+                  background: var(--bg2);
+                  color: var(--text);
+                  border: none;
+                  font-size: 0.8125rem;
+                "
+                onclick="
+                  openStudioWithPrompt('Banner futurista con neón cian y grid de perspectiva')
+                "
+              >
                 "Banner futurista con neón..." <i class="bi bi-arrow-right-short"></i>
               </button>
-              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openStudioWithPrompt('Fondo orgánico con partículas flotantes de colores')">
+              <button
+                class="btn btn-sm"
+                style="
+                  background: var(--bg2);
+                  color: var(--text);
+                  border: none;
+                  font-size: 0.8125rem;
+                "
+                onclick="openStudioWithPrompt('Fondo orgánico con partículas flotantes de colores')"
+              >
                 "Fondo orgánico con partículas..." <i class="bi bi-arrow-right-short"></i>
               </button>
-              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openStudioWithPrompt('Diagrama de red con nodos brillantes y conexiones')">
+              <button
+                class="btn btn-sm"
+                style="
+                  background: var(--bg2);
+                  color: var(--text);
+                  border: none;
+                  font-size: 0.8125rem;
+                "
+                onclick="openStudioWithPrompt('Diagrama de red con nodos brillantes y conexiones')"
+              >
                 "Diagrama de red con nodos..." <i class="bi bi-arrow-right-short"></i>
               </button>
-              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openStudioWithPrompt('Ondas abstractas degradado cian a púrpura')">
+              <button
+                class="btn btn-sm"
+                style="
+                  background: var(--bg2);
+                  color: var(--text);
+                  border: none;
+                  font-size: 0.8125rem;
+                "
+                onclick="openStudioWithPrompt('Ondas abstractas degradado cian a púrpura')"
+              >
                 "Ondas abstractas degradado..." <i class="bi bi-arrow-right-short"></i>
               </button>
             </div>
@@ -733,33 +878,45 @@
 
         <!-- Videos Section - Video Studio -->
         <section class="content-section" id="videos">
-          <h2><i class="bi bi-film me-2" style="color: var(--p);"></i>Video Studio</h2>
-          <p class="text-secondary mb-4">Generador de video 100% nativo - Animaciones procedurales sin APIs externas.</p>
-          
+          <h2><i class="bi bi-film me-2" style="color: var(--p)"></i>Video Studio</h2>
+          <p class="text-secondary mb-4">
+            Generador de video 100% nativo - Animaciones procedurales sin APIs externas.
+          </p>
+
           <div class="row mb-4">
             <div class="col-md-8">
-              <div class="p-3 rounded" style="background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%); border: 1px solid var(--bg2);">
-                <h5 style="color: var(--p); margin-bottom: 0.75rem;">
+              <div
+                class="p-3 rounded"
+                style="
+                  background: linear-gradient(
+                    135deg,
+                    rgba(34, 211, 238, 0.1) 0%,
+                    rgba(167, 139, 250, 0.1) 100%
+                  );
+                  border: 1px solid var(--bg2);
+                "
+              >
+                <h5 style="color: var(--p); margin-bottom: 0.75rem">
                   <i class="bi bi-film me-2"></i>
                   🎬 Generación Nativa de Video
                 </h5>
-                <p class="text-secondary mb-2" style="font-size: 0.875rem;">
+                <p class="text-secondary mb-2" style="font-size: 0.875rem">
                   Crea videos animados offline con algoritmos Canvas 2D procedurales:
                 </p>
                 <div class="d-flex flex-wrap gap-2">
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-grid-3x3 me-1"></i>10+ Animaciones
                   </span>
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-water me-1"></i>6 Generadores
                   </span>
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-timeline me-1"></i>Timeline Visual
                   </span>
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-filetype-gif me-1"></i>Export GIF
                   </span>
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-images me-1"></i>Frames PNG
                   </span>
                 </div>
@@ -767,48 +924,90 @@
             </div>
             <div class="col-md-4">
               <div class="d-flex flex-column gap-2 h-100 justify-content-center">
-                <button class="btn-gv" onclick="window.open('video-studio.html', '_blank', 'width=1600,height=900')" style="font-size: 1rem; padding: 1rem 1.5rem;">
+                <button
+                  class="btn-gv"
+                  onclick="window.open('video-studio.html', '_blank', 'width=1600,height=900')"
+                  style="font-size: 1rem; padding: 1rem 1.5rem"
+                >
                   <i class="bi bi-rocket-takeoff me-2"></i>
                   Abrir Video Studio
                 </button>
-                <div class="text-center" style="font-size: 0.75rem; color: var(--text-faint);">
-                  <i class="bi bi-shield-check me-1" style="color: var(--a);"></i>
+                <div class="text-center" style="font-size: 0.75rem; color: var(--text-faint)">
+                  <i class="bi bi-shield-check me-1" style="color: var(--a)"></i>
                   100% Offline • Sin APIs • Sin Costos
                 </div>
               </div>
             </div>
           </div>
-          
+
           <div class="row">
             <div class="col-md-4 mb-3">
-              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
-                <h6 style="color: var(--p);"><i class="bi bi-bounding-box-circles me-2"></i>Generadores</h6>
-                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Futuristic Grid</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Partículas Orgánicas</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Ondas Abstractas</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Network Graph</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Geométrico</li>
-                  <li><i class="bi bi-check2" style="color: var(--a);"></i> Gradiente</li>
+              <div
+                class="p-3 rounded h-100"
+                style="background: var(--bg1); border: 1px solid var(--bg2)"
+              >
+                <h6 style="color: var(--p)">
+                  <i class="bi bi-bounding-box-circles me-2"></i>Generadores
+                </h6>
+                <ul
+                  class="list-unstyled mt-3 mb-0"
+                  style="font-size: 0.8125rem; color: var(--text-dim)"
+                >
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Futuristic Grid
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Partículas Orgánicas
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Ondas Abstractas
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Network Graph
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Geométrico
+                  </li>
+                  <li><i class="bi bi-check2" style="color: var(--a)"></i> Gradiente</li>
                 </ul>
               </div>
             </div>
             <div class="col-md-4 mb-3">
-              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
-                <h6 style="color: var(--s);"><i class="bi bi-activity me-2"></i>Animaciones</h6>
-                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Zoom In/Out</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Pan (4 direcciones)</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Fade In/Out</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Rotate 360°</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Pulse</li>
+              <div
+                class="p-3 rounded h-100"
+                style="background: var(--bg1); border: 1px solid var(--bg2)"
+              >
+                <h6 style="color: var(--s)"><i class="bi bi-activity me-2"></i>Animaciones</h6>
+                <ul
+                  class="list-unstyled mt-3 mb-0"
+                  style="font-size: 0.8125rem; color: var(--text-dim)"
+                >
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Zoom In/Out
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Pan (4 direcciones)
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Fade In/Out
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Rotate 360°
+                  </li>
+                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a)"></i> Pulse</li>
                 </ul>
               </div>
             </div>
             <div class="col-md-4 mb-3">
-              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
-                <h6 style="color: var(--a);"><i class="bi bi-download me-2"></i>Export</h6>
-                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
+              <div
+                class="p-3 rounded h-100"
+                style="background: var(--bg1); border: 1px solid var(--bg2)"
+              >
+                <h6 style="color: var(--a)"><i class="bi bi-download me-2"></i>Export</h6>
+                <ul
+                  class="list-unstyled mt-3 mb-0"
+                  style="font-size: 0.8125rem; color: var(--text-dim)"
+                >
                   <li class="mb-2"><i class="bi bi-image me-1"></i> Frames PNG secuencia</li>
                   <li class="mb-2"><i class="bi bi-filetype-gif me-1"></i> GIF animado</li>
                   <li class="mb-2"><i class="bi bi-camera-video me-1"></i> WebM/MP4 (WebCodecs)</li>
@@ -818,22 +1017,85 @@
               </div>
             </div>
           </div>
-          
-          <div class="mt-4 p-3 rounded" style="background: var(--bg0); border: 1px dashed var(--bg2);">
-            <h6 style="color: var(--text-dim); margin-bottom: 0.75rem;">
+
+          <div
+            class="mt-4 p-3 rounded"
+            style="background: var(--bg0); border: 1px dashed var(--bg2)"
+          >
+            <h6 style="color: var(--text-dim); margin-bottom: 0.75rem">
               <i class="bi bi-terminal me-2"></i>Ejemplos Rápidos
             </h6>
             <div class="d-flex flex-wrap gap-2">
-              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openVideoStudioWithConfig({generator: 'futuristic', animation: 'zoomIn', duration: 3})">
+              <button
+                class="btn btn-sm"
+                style="
+                  background: var(--bg2);
+                  color: var(--text);
+                  border: none;
+                  font-size: 0.8125rem;
+                "
+                onclick="
+                  openVideoStudioWithConfig({
+                    generator: 'futuristic',
+                    animation: 'zoomIn',
+                    duration: 3,
+                  })
+                "
+              >
                 <i class="bi bi-lightning"></i> Grid + Zoom In
               </button>
-              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openVideoStudioWithConfig({generator: 'particles', animation: 'fadeIn', duration: 5})">
+              <button
+                class="btn btn-sm"
+                style="
+                  background: var(--bg2);
+                  color: var(--text);
+                  border: none;
+                  font-size: 0.8125rem;
+                "
+                onclick="
+                  openVideoStudioWithConfig({
+                    generator: 'particles',
+                    animation: 'fadeIn',
+                    duration: 5,
+                  })
+                "
+              >
                 <i class="bi bi-circle"></i> Partículas + Fade In
               </button>
-              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openVideoStudioWithConfig({generator: 'waves', animation: 'panRight', duration: 4})">
+              <button
+                class="btn btn-sm"
+                style="
+                  background: var(--bg2);
+                  color: var(--text);
+                  border: none;
+                  font-size: 0.8125rem;
+                "
+                onclick="
+                  openVideoStudioWithConfig({
+                    generator: 'waves',
+                    animation: 'panRight',
+                    duration: 4,
+                  })
+                "
+              >
                 <i class="bi bi-water"></i> Ondas + Pan Right
               </button>
-              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openVideoStudioWithConfig({generator: 'network', animation: 'rotate', duration: 3})">
+              <button
+                class="btn btn-sm"
+                style="
+                  background: var(--bg2);
+                  color: var(--text);
+                  border: none;
+                  font-size: 0.8125rem;
+                "
+                onclick="
+                  openVideoStudioWithConfig({
+                    generator: 'network',
+                    animation: 'rotate',
+                    duration: 3,
+                  })
+                "
+              >
                 <i class="bi bi-diagram-3"></i> Network + Rotate
               </button>
             </div>
@@ -842,33 +1104,47 @@
 
         <!-- Social Section - Social Post Generator -->
         <section class="content-section" id="social">
-          <h2><i class="bi bi-share me-2" style="color: var(--p);"></i>Social Post Generator</h2>
-          <p class="text-secondary mb-4">Generador de contenido social nativo con templates, editor WYSIWYG y preview multiplataforma.</p>
-          
+          <h2><i class="bi bi-share me-2" style="color: var(--p)"></i>Social Post Generator</h2>
+          <p class="text-secondary mb-4">
+            Generador de contenido social nativo con templates, editor WYSIWYG y preview
+            multiplataforma.
+          </p>
+
           <div class="row mb-4">
             <div class="col-md-8">
-              <div class="p-3 rounded" style="background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%); border: 1px solid var(--bg2);">
-                <h5 style="color: var(--p); margin-bottom: 0.75rem;">
+              <div
+                class="p-3 rounded"
+                style="
+                  background: linear-gradient(
+                    135deg,
+                    rgba(34, 211, 238, 0.1) 0%,
+                    rgba(167, 139, 250, 0.1) 100%
+                  );
+                  border: 1px solid var(--bg2);
+                "
+              >
+                <h5 style="color: var(--p); margin-bottom: 0.75rem">
                   <i class="bi bi-pen me-2"></i>
                   📝 Generador de Posts Sociales
                 </h5>
-                <p class="text-secondary mb-2" style="font-size: 0.875rem;">
-                  Crea posts optimizados para LinkedIn, Twitter/X y GitHub con templates y editor nativo:
+                <p class="text-secondary mb-2" style="font-size: 0.875rem">
+                  Crea posts optimizados para LinkedIn, Twitter/X y GitHub con templates y editor
+                  nativo:
                 </p>
                 <div class="d-flex flex-wrap gap-2">
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-file-text me-1"></i>6 Templates
                   </span>
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-translate me-1"></i>3 Idiomas
                   </span>
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-display me-1"></i>Preview Live
                   </span>
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-graph-up me-1"></i>Analytics
                   </span>
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-calendar-check me-1"></i>Scheduling
                   </span>
                 </div>
@@ -876,74 +1152,181 @@
             </div>
             <div class="col-md-4">
               <div class="d-flex flex-column gap-2 h-100 justify-content-center">
-                <button class="btn-gv" onclick="window.open('social-post.html', '_blank', 'width=1400,height=900')" style="font-size: 1rem; padding: 1rem 1.5rem;">
+                <button
+                  class="btn-gv"
+                  onclick="window.open('social-post.html', '_blank', 'width=1400,height=900')"
+                  style="font-size: 1rem; padding: 1rem 1.5rem"
+                >
                   <i class="bi bi-rocket-takeoff me-2"></i>
                   Abrir Social Post
                 </button>
-                <div class="text-center" style="font-size: 0.75rem; color: var(--text-faint);">
-                  <i class="bi bi-shield-check me-1" style="color: var(--a);"></i>
+                <div class="text-center" style="font-size: 0.75rem; color: var(--text-faint)">
+                  <i class="bi bi-shield-check me-1" style="color: var(--a)"></i>
                   100% Offline • Auto-save • Biblioteca local
                 </div>
               </div>
             </div>
           </div>
-          
+
           <div class="row">
             <div class="col-md-4 mb-3">
-              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
-                <h6 style="color: var(--p);"><i class="bi bi-file-text me-2"></i>Templates</h6>
-                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> 🚀 Lanzamiento</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> ✨ Nueva Feature</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> 🏆 Hito / Milestone</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> 💡 Tip / Tutorial</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> 📊 Caso de Estudio</li>
-                  <li><i class="bi bi-check2" style="color: var(--a);"></i> 🧵 Thread</li>
+              <div
+                class="p-3 rounded h-100"
+                style="background: var(--bg1); border: 1px solid var(--bg2)"
+              >
+                <h6 style="color: var(--p)"><i class="bi bi-file-text me-2"></i>Templates</h6>
+                <ul
+                  class="list-unstyled mt-3 mb-0"
+                  style="font-size: 0.8125rem; color: var(--text-dim)"
+                >
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> 🚀 Lanzamiento
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> ✨ Nueva Feature
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> 🏆 Hito / Milestone
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> 💡 Tip / Tutorial
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> 📊 Caso de Estudio
+                  </li>
+                  <li><i class="bi bi-check2" style="color: var(--a)"></i> 🧵 Thread</li>
                 </ul>
               </div>
             </div>
             <div class="col-md-4 mb-3">
-              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
-                <h6 style="color: var(--s);"><i class="bi bi-brush me-2"></i>Editor</h6>
-                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> WYSIWYG Nativo</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Formato Bold/Italic</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Bullets • Checks ✓</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Emojis rápidos</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Sugerencias IA</li>
-                  <li><i class="bi bi-check2" style="color: var(--a);"></i> Hashtags automáticos</li>
+              <div
+                class="p-3 rounded h-100"
+                style="background: var(--bg1); border: 1px solid var(--bg2)"
+              >
+                <h6 style="color: var(--s)"><i class="bi bi-brush me-2"></i>Editor</h6>
+                <ul
+                  class="list-unstyled mt-3 mb-0"
+                  style="font-size: 0.8125rem; color: var(--text-dim)"
+                >
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> WYSIWYG Nativo
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Formato Bold/Italic
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Bullets • Checks ✓
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Emojis rápidos
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Sugerencias IA
+                  </li>
+                  <li><i class="bi bi-check2" style="color: var(--a)"></i> Hashtags automáticos</li>
                 </ul>
               </div>
             </div>
             <div class="col-md-4 mb-3">
-              <div class="p-3 rounded h-100" style="background: var(--bg1); border: 1px solid var(--bg2);">
-                <h6 style="color: var(--a);"><i class="bi bi-download me-2"></i>Export & Analytics</h6>
-                <ul class="list-unstyled mt-3 mb-0" style="font-size: 0.8125rem; color: var(--text-dim);">
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> JSON / CSV / TXT</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Calendario visual</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Biblioteca local</li>
-                  <li class="mb-2"><i class="bi bi-check2" style="color: var(--a);"></i> Contador por plataforma</li>
-                  <li><i class="bi bi-check2" style="color: var(--a);"></i> Score de calidad</li>
+              <div
+                class="p-3 rounded h-100"
+                style="background: var(--bg1); border: 1px solid var(--bg2)"
+              >
+                <h6 style="color: var(--a)">
+                  <i class="bi bi-download me-2"></i>Export & Analytics
+                </h6>
+                <ul
+                  class="list-unstyled mt-3 mb-0"
+                  style="font-size: 0.8125rem; color: var(--text-dim)"
+                >
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> JSON / CSV / TXT
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Calendario visual
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Biblioteca local
+                  </li>
+                  <li class="mb-2">
+                    <i class="bi bi-check2" style="color: var(--a)"></i> Contador por plataforma
+                  </li>
+                  <li><i class="bi bi-check2" style="color: var(--a)"></i> Score de calidad</li>
                 </ul>
               </div>
             </div>
           </div>
-          
-          <div class="mt-4 p-3 rounded" style="background: var(--bg0); border: 1px dashed var(--bg2);">
-            <h6 style="color: var(--text-dim); margin-bottom: 0.75rem;">
+
+          <div
+            class="mt-4 p-3 rounded"
+            style="background: var(--bg0); border: 1px dashed var(--bg2)"
+          >
+            <h6 style="color: var(--text-dim); margin-bottom: 0.75rem">
               <i class="bi bi-terminal me-2"></i>Ejemplos Rápidos
             </h6>
             <div class="d-flex flex-wrap gap-2">
-              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openSocialPostWithConfig({template: 'launch', platform: 'linkedin', lang: 'es'})">
+              <button
+                class="btn btn-sm"
+                style="
+                  background: var(--bg2);
+                  color: var(--text);
+                  border: none;
+                  font-size: 0.8125rem;
+                "
+                onclick="
+                  openSocialPostWithConfig({ template: 'launch', platform: 'linkedin', lang: 'es' })
+                "
+              >
                 <i class="bi bi-rocket"></i> Post de Lanzamiento
               </button>
-              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openSocialPostWithConfig({template: 'tip', platform: 'twitter', lang: 'es'})">
+              <button
+                class="btn btn-sm"
+                style="
+                  background: var(--bg2);
+                  color: var(--text);
+                  border: none;
+                  font-size: 0.8125rem;
+                "
+                onclick="
+                  openSocialPostWithConfig({ template: 'tip', platform: 'twitter', lang: 'es' })
+                "
+              >
                 <i class="bi bi-lightbulb"></i> Tip para Twitter
               </button>
-              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openSocialPostWithConfig({template: 'milestone', platform: 'linkedin', lang: 'en'})">
+              <button
+                class="btn btn-sm"
+                style="
+                  background: var(--bg2);
+                  color: var(--text);
+                  border: none;
+                  font-size: 0.8125rem;
+                "
+                onclick="
+                  openSocialPostWithConfig({
+                    template: 'milestone',
+                    platform: 'linkedin',
+                    lang: 'en',
+                  })
+                "
+              >
                 <i class="bi bi-trophy"></i> Milestone (EN)
               </button>
-              <button class="btn btn-sm" style="background: var(--bg2); color: var(--text); border: none; font-size: 0.8125rem;" onclick="openSocialPostWithConfig({template: 'case-study', platform: 'github', lang: 'es'})">
+              <button
+                class="btn btn-sm"
+                style="
+                  background: var(--bg2);
+                  color: var(--text);
+                  border: none;
+                  font-size: 0.8125rem;
+                "
+                onclick="
+                  openSocialPostWithConfig({
+                    template: 'case-study',
+                    platform: 'github',
+                    lang: 'es',
+                  })
+                "
+              >
                 <i class="bi bi-graph-up"></i> Caso de Estudio
               </button>
             </div>
@@ -952,20 +1335,26 @@
 
         <!-- Downloads Section -->
         <section class="content-section" id="downloads">
-          <h2><i class="bi bi-download me-2" style="color: var(--p);"></i>Descargas</h2>
+          <h2><i class="bi bi-download me-2" style="color: var(--p)"></i>Descargas</h2>
           <p class="text-secondary mb-4">Archivos generados disponibles para descarga local.</p>
 
           <div class="downloads-list" id="downloads-list">
             <!-- Los archivos generados se guardan en memoria y se muestran aquí -->
-            <div class="download-item" style="padding: 2rem; text-align: center; color: var(--text-dim);">
-              <i class="bi bi-folder" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+            <div
+              class="download-item"
+              style="padding: 2rem; text-align: center; color: var(--text-dim)"
+            >
+              <i
+                class="bi bi-folder"
+                style="font-size: 2rem; display: block; margin-bottom: 0.5rem"
+              ></i>
               <p>No hay archivos generados aún.</p>
-              <p style="font-size: 0.85rem;">Genera imágenes, videos o posts para verlos aquí.</p>
+              <p style="font-size: 0.85rem">Genera imágenes, videos o posts para verlos aquí.</p>
             </div>
           </div>
 
           <div class="mt-4 d-flex justify-content-between align-items-center">
-            <span class="text-secondary" style="font-size: 0.9rem;">
+            <span class="text-secondary" style="font-size: 0.9rem">
               <i class="bi bi-hdd me-1"></i>
               Almacenamiento: Local (navegador) + sistema de archivos
             </span>
@@ -977,25 +1366,58 @@
 
         <!-- Products Section -->
         <section class="content-section" id="products">
-          <h2><i class="bi bi-box me-2" style="color: var(--p);"></i>Product Pages</h2>
+          <h2><i class="bi bi-box me-2" style="color: var(--p)"></i>Product Pages</h2>
           <p class="text-secondary mb-4">Landing pages profesionales para productos comerciales.</p>
-          
+
           <div class="row g-4">
             <div class="col-md-6">
-              <div class="resource-card" style="border: 2px solid var(--p); position: relative;">
-                <div style="position: absolute; top: -10px; right: 10px; background: linear-gradient(135deg, var(--p), var(--s)); color: var(--bg0); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.625rem; font-weight: 700;">
+              <div class="resource-card" style="border: 2px solid var(--p); position: relative">
+                <div
+                  style="
+                    position: absolute;
+                    top: -10px;
+                    right: 10px;
+                    background: linear-gradient(135deg, var(--p), var(--s));
+                    color: var(--bg0);
+                    padding: 0.25rem 0.75rem;
+                    border-radius: 20px;
+                    font-size: 0.625rem;
+                    font-weight: 700;
+                  "
+                >
                   NUEVO
                 </div>
                 <div class="d-flex justify-content-between align-items-start mb-3">
                   <h4><i class="bi bi-file-earmark-text me-2"></i>Doc-Gentle</h4>
-                  <span style="background: rgba(34, 211, 238, 0.2); color: var(--p); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">LANDING LIVE</span>
+                  <span
+                    style="
+                      background: rgba(34, 211, 238, 0.2);
+                      color: var(--p);
+                      padding: 0.2rem 0.6rem;
+                      border-radius: 4px;
+                      font-size: 0.75rem;
+                      font-weight: 600;
+                    "
+                    >LANDING LIVE</span
+                  >
                 </div>
-                <p class="text-secondary small mb-3">Plataforma de inteligencia documental con pricing, ROI calculator y comparativa.</p>
+                <p class="text-secondary small mb-3">
+                  Plataforma de inteligencia documental con pricing, ROI calculator y comparativa.
+                </p>
                 <div class="d-flex gap-2">
-                  <button class="btn-gv" onclick="window.open('product-doc-gentle.html', '_blank')" style="font-size: 0.8rem;">
+                  <button
+                    class="btn-gv"
+                    onclick="window.open('product-doc-gentle.html', '_blank')"
+                    style="font-size: 0.8rem"
+                  >
                     <i class="bi bi-rocket me-1"></i>Ver Landing
                   </button>
-                  <a href="../../apps/doc-gentle/README.md" target="_blank" class="btn-gv-alt" style="font-size: 0.8rem;">
+                  <a
+                    href="../../apps/doc-gentle/README.md"
+                    target="_blank"
+                    class="btn-gv-alt"
+                    style="font-size: 0.8rem"
+                  >
                     <i class="bi bi-book me-1"></i>Read Spec
                   </a>
                 </div>
@@ -1003,14 +1425,26 @@
             </div>
 
             <div class="col-md-6">
-              <div class="resource-card" style="border: 1px solid var(--bg2);">
+              <div class="resource-card" style="border: 1px solid var(--bg2)">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                   <h4><i class="bi bi-cpu me-2"></i>Gentle-AI Core</h4>
-                  <span style="background: var(--bg2); color: var(--text-dim); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">EN DESARROLLO</span>
+                  <span
+                    style="
+                      background: var(--bg2);
+                      color: var(--text-dim);
+                      padding: 0.2rem 0.6rem;
+                      border-radius: 4px;
+                      font-size: 0.75rem;
+                      font-weight: 600;
+                    "
+                    >EN DESARROLLO</span
+                  >
                 </div>
-                <p class="text-secondary small mb-3">Stack completo de automatización. Landing en construcción.</p>
+                <p class="text-secondary small mb-3">
+                  Stack completo de automatización. Landing en construcción.
+                </p>
                 <div class="d-flex gap-2">
-                  <button class="btn-gv-alt" style="font-size: 0.8rem;" disabled>
+                  <button class="btn-gv-alt" style="font-size: 0.8rem" disabled>
                     <i class="bi bi-clock me-1"></i>Próximamente
                   </button>
                 </div>
@@ -1020,9 +1454,15 @@
 
           <div class="mt-4">
             <h4>¿Cómo Crear un Producto?</h4>
-            <ol style="color: var(--text-dim); font-size: 0.95rem; line-height: 1.8;">
-              <li><strong>Especificar:</strong> Crear carpeta en <code>apps/producto/</code> con README.md</li>
-              <li><strong>Diseñar:</strong> Crear landing page en <code>docs/presentations/product-[name].html</code></li>
+            <ol style="color: var(--text-dim); font-size: 0.95rem; line-height: 1.8">
+              <li>
+                <strong>Especificar:</strong> Crear carpeta en <code>apps/producto/</code> con
+                README.md
+              </li>
+              <li>
+                <strong>Diseñar:</strong> Crear landing page en
+                <code>docs/presentations/product-[name].html</code>
+              </li>
               <li><strong>Demo:</strong> Generate demo video with Video Studio</li>
               <li><strong>Launch:</strong> Deploy con stack nativo</li>
             </ol>
@@ -1031,33 +1471,47 @@
 
         <!-- Contracts Section - Contract Viewer -->
         <section class="content-section" id="contracts">
-          <h2><i class="bi bi-file-earmark-text me-2" style="color: var(--p);"></i>Contract Viewer</h2>
-          <p class="text-secondary mb-4">Gestión de contratos nativa: visualización, estados, firmas y export.</p>
-          
+          <h2>
+            <i class="bi bi-file-earmark-text me-2" style="color: var(--p)"></i>Contract Viewer
+          </h2>
+          <p class="text-secondary mb-4">
+            Gestión de contratos nativa: visualización, estados, firmas y export.
+          </p>
+
           <div class="row mb-4">
             <div class="col-md-8">
-              <div class="p-3 rounded" style="background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%); border: 1px solid var(--bg2);">
-                <h5 style="color: var(--p); margin-bottom: 0.75rem;">
+              <div
+                class="p-3 rounded"
+                style="
+                  background: linear-gradient(
+                    135deg,
+                    rgba(34, 211, 238, 0.1) 0%,
+                    rgba(167, 139, 250, 0.1) 100%
+                  );
+                  border: 1px solid var(--bg2);
+                "
+              >
+                <h5 style="color: var(--p); margin-bottom: 0.75rem">
                   <i class="bi bi-file-earmark-text me-2"></i>
                   📋 Gestión de Contratos
                 </h5>
-                <p class="text-secondary mb-2" style="font-size: 0.875rem;">
+                <p class="text-secondary mb-2" style="font-size: 0.875rem">
                   Visualizador de contratos 100% offline con gestión de estados:
                 </p>
                 <div class="d-flex flex-wrap gap-2">
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-eye me-1"></i>Preview Markdown
                   </span>
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-arrow-repeat me-1"></i>Estados
                   </span>
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-file-earmark-pdf me-1"></i>Export PDF
                   </span>
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-plus-lg me-1"></i>Nuevos Contratos
                   </span>
-                  <span class="badge" style="background: var(--bg2); color: var(--text-dim);">
+                  <span class="badge" style="background: var(--bg2); color: var(--text-dim)">
                     <i class="bi bi-download me-1"></i>Backup JSON
                   </span>
                 </div>
@@ -1065,28 +1519,40 @@
             </div>
             <div class="col-md-4">
               <div class="d-flex flex-column gap-2 h-100 justify-content-center">
-                <button class="btn-gv" onclick="window.open('contract-viewer.html', '_blank', 'width=1400,height=900')" style="font-size: 1rem; padding: 1rem 1.5rem;">
+                <button
+                  class="btn-gv"
+                  onclick="window.open('contract-viewer.html', '_blank', 'width=1400,height=900')"
+                  style="font-size: 1rem; padding: 1rem 1.5rem"
+                >
                   <i class="bi bi-rocket-takeoff me-2"></i>
                   Abrir Contract Viewer
                 </button>
-                <div class="text-center" style="font-size: 0.75rem; color: var(--text-faint);">
-                  <i class="bi bi-shield-check me-1" style="color: var(--a);"></i>
+                <div class="text-center" style="font-size: 0.75rem; color: var(--text-faint)">
+                  <i class="bi bi-shield-check me-1" style="color: var(--a)"></i>
                   100% Offline • localStorage • Sin APIs
                 </div>
               </div>
             </div>
           </div>
-          
+
           <div class="row g-4">
             <div class="col-md-6">
               <div class="resource-card">
                 <h4><i class="bi bi-briefcase me-2"></i>Servicios Profesionales</h4>
-                <p class="text-secondary small mb-3">Contrato de consultoría: Setup, Migration, Training, Support.</p>
+                <p class="text-secondary small mb-3">
+                  Contrato de consultoría: Setup, Migration, Training, Support.
+                </p>
                 <div class="d-flex gap-2">
-                  <a href="md-viewer.html?file=../contracts/consulting-services-agreement.md" class="btn-gv-alt">
+                  <a
+                    href="md-viewer.html?file=../contracts/consulting-services-agreement.md"
+                    class="btn-gv-alt"
+                  >
                     <i class="bi bi-eye me-1"></i>Ver (Legacy)
                   </a>
-                  <button class="btn-gv" onclick="openContractViewerWithConfig({contractId: 'consulting-services'})">
+                  <button
+                    class="btn-gv"
+                    onclick="openContractViewerWithConfig({ contractId: 'consulting-services' })"
+                  >
                     <i class="bi bi-window me-1"></i>Viewer
                   </button>
                 </div>
@@ -1097,48 +1563,56 @@
 
         <!-- Settings Section -->
         <section class="content-section" id="settings">
-          <h2><i class="bi bi-gear me-2" style="color: var(--p);"></i>Configuración del Sistema</h2>
-          
+          <h2><i class="bi bi-gear me-2" style="color: var(--p)"></i>Configuración del Sistema</h2>
+
           <div class="gen-form">
             <h4 class="mb-4">Información del Stack</h4>
-            
+
             <div class="row g-3">
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Archivos TypeScript</label>
-                  <div style="font-size: 1.25rem; font-weight: 600; color: var(--p);">294</div>
+                  <div style="font-size: 1.25rem; font-weight: 600; color: var(--p)">294</div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Tests</label>
-                  <div style="font-size: 1.25rem; font-weight: 600; color: var(--p);">103</div>
+                  <div style="font-size: 1.25rem; font-weight: 600; color: var(--p)">103</div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Skills</label>
-                  <div style="font-size: 1.25rem; font-weight: 600; color: var(--p);">175</div>
+                  <div style="font-size: 1.25rem; font-weight: 600; color: var(--p)">175</div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Health Checks</label>
-                  <div style="font-size: 1.25rem; font-weight: 600; color: var(--p);">82</div>
+                  <div style="font-size: 1.25rem; font-weight: 600; color: var(--p)">82</div>
                 </div>
               </div>
             </div>
 
             <div class="mt-4">
               <h4>Modo de Operación</h4>
-              <div class="alert" style="background: oklch(0.75 0.15 155 / 0.1); border: 1px solid oklch(0.75 0.15 155 / 0.2); border-radius: 8px; padding: 1rem;">
-                <i class="bi bi-check-circle me-2" style="color: var(--ok);"></i>
-                <strong>Modo Local:</strong> Todas las operaciones se realizan en este entorno. No hay dependencias de servicios cloud.
+              <div
+                class="alert"
+                style="
+                  background: oklch(0.75 0.15 155 / 0.1);
+                  border: 1px solid oklch(0.75 0.15 155 / 0.2);
+                  border-radius: 8px;
+                  padding: 1rem;
+                "
+              >
+                <i class="bi bi-check-circle me-2" style="color: var(--ok)"></i>
+                <strong>Modo Local:</strong> Todas las operaciones se realizan en este entorno. No
+                hay dependencias de servicios cloud.
               </div>
             </div>
           </div>
         </section>
-
       </main>
     </div>
 
@@ -1147,19 +1621,21 @@
     <script>
       // Navigation
       function navigateTo(sectionId) {
-        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-        document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-        
+        document.querySelectorAll('.nav-item').forEach((item) => item.classList.remove('active'));
+        document
+          .querySelectorAll('.content-section')
+          .forEach((section) => section.classList.remove('active'));
+
         const navItem = document.querySelector(`[data-section="${sectionId}"]`);
         const section = document.getElementById(sectionId);
-        
+
         if (navItem) navItem.classList.add('active');
         if (section) section.classList.add('active');
-        
+
         window.scrollTo(0, 0);
       }
 
-      document.querySelectorAll('.nav-item[data-section]').forEach(item => {
+      document.querySelectorAll('.nav-item[data-section]').forEach((item) => {
         item.addEventListener('click', () => navigateTo(item.dataset.section));
       });
 
@@ -1170,26 +1646,26 @@
           tests: 103,
           skills: 175,
           agents: 21,
-          health: 82
+          health: 82,
         },
         commands: {
-          'session': 'npm run session:autostart',
-          'test': 'npm test',
-          'health': 'npm run health:check',
-          'build': 'npm run build',
-          'dashboard': 'npm run dashboard:dev'
+          session: 'npm run session:autostart',
+          test: 'npm test',
+          health: 'npm run health:check',
+          build: 'npm run build',
+          dashboard: 'npm run dashboard:dev',
         },
         products: {
           'doc-gentle': { status: 'spec', price: '$15/mes', url: 'apps/doc-gentle/' },
           'gentle-music': { status: 'planned', price: '$4.99/mes' },
-          'stock-vanguard': { status: 'planned', price: '$29/mes', region: 'AR' }
+          'stock-vanguard': { status: 'planned', price: '$29/mes', region: 'AR' },
         },
         services: {
-          'setup': '$2,000 - $5,000',
-          'migration': '$500 - $2,000',
-          'training': '$1,500/día',
-          'support': '$1,000/mes'
-        }
+          setup: '$2,000 - $5,000',
+          migration: '$500 - $2,000',
+          training: '$1,500/día',
+          support: '$1,000/mes',
+        },
       };
 
       const agentResponses = {
@@ -1263,12 +1739,16 @@ Con ${agentContext.stack.agents} agentes autónomos, puedes:
 Estado: ${p.status === 'spec' ? '✅ Especificación completa' : '📋 En planificación'}
 Precio: ${p.price}
 
-${p.status === 'spec' 
-  ? 'Disponible para implementación. Contacta para comenzar el desarrollo.'
-  : 'En fase de especificación. Únete a la lista de espera.'}`;
+${
+  p.status === 'spec'
+    ? 'Disponible para implementación. Contacta para comenzar el desarrollo.'
+    : 'En fase de especificación. Únete a la lista de espera.'
+}`;
             }
             return `Productos disponibles:
-${Object.entries(agentContext.products).map(([k, v]) => `• ${k}: ${v.price}`).join('\n')}`;
+${Object.entries(agentContext.products)
+  .map(([k, v]) => `• ${k}: ${v.price}`)
+  .join('\n')}`;
           },
 
           contract: () => `📄 **Contratos Disponibles**
@@ -1295,7 +1775,7 @@ Tengo opcoiones para ayudarte:
 3. **Ver contratos** - Descargar documentación legal
 4. **Obtener ayuda** - Lista de comandos disponibles
 
-¿Cuál necesitas? También puedo abrir secciones directamente.`
+¿Cuál necesitas? También puedo abrir secciones directamente.`,
         },
 
         en: {
@@ -1368,12 +1848,16 @@ With ${agentContext.stack.agents} autonomous agents, you can:
 Status: ${p.status === 'spec' ? '✅ Specification complete' : '📋 In planning'}
 Price: ${p.price}
 
-${p.status === 'spec' 
-  ? 'Ready for implementation. Contact us to start development.'
-  : 'In specification phase. Join the waitlist.'}`;
+${
+  p.status === 'spec'
+    ? 'Ready for implementation. Contact us to start development.'
+    : 'In specification phase. Join the waitlist.'
+}`;
             }
             return `Available products:
-${Object.entries(agentContext.products).map(([k, v]) => `• ${k}: ${v.price}`).join('\n')}`;
+${Object.entries(agentContext.products)
+  .map(([k, v]) => `• ${k}: ${v.price}`)
+  .join('\n')}`;
           },
 
           contract: () => `📄 **Available Contracts**
@@ -1400,88 +1884,160 @@ I have options to help:
 3. **View contracts** - Download legal documentation
 4. **Get help** - List of available commands
 
-Which do you need? I can also open sections directly.`
-        }
+Which do you need? I can also open sections directly.`,
+        },
       };
 
       // Parse user intent
       function parseIntent(message, lang) {
         const m = message.toLowerCase();
-        
+
         // Image generation intent
-        if (m.includes('imagen') || m.includes('image') || m.includes('generar imagen') || m.includes('create image') || m.includes('banner') || m.includes('thumbnail')) {
-          return { type: 'image', data: message.replace(/(imagen|image|generar|create|banner|thumbnail)/gi, '').trim() };
+        if (
+          m.includes('imagen') ||
+          m.includes('image') ||
+          m.includes('generar imagen') ||
+          m.includes('create image') ||
+          m.includes('banner') ||
+          m.includes('thumbnail')
+        ) {
+          return {
+            type: 'image',
+            data: message.replace(/(imagen|image|generar|create|banner|thumbnail)/gi, '').trim(),
+          };
         }
-        
+
         // Video generation intent
-        if (m.includes('video') || m.includes('animación') || m.includes('animacion') || m.includes('gif') || m.includes('motion')) {
+        if (
+          m.includes('video') ||
+          m.includes('animación') ||
+          m.includes('animacion') ||
+          m.includes('gif') ||
+          m.includes('motion')
+        ) {
           let generator = 'futuristic';
           let animation = 'zoomIn';
-          
+
           // Detectar generator preferido
-          if (m.includes('grid') || m.includes('futur') || m.includes('tech')) generator = 'futuristic';
-          if (m.includes('particula') || m.includes('particle') || m.includes('dot')) generator = 'particles';
+          if (m.includes('grid') || m.includes('futur') || m.includes('tech'))
+            generator = 'futuristic';
+          if (m.includes('particula') || m.includes('particle') || m.includes('dot'))
+            generator = 'particles';
           if (m.includes('onda') || m.includes('wave') || m.includes('curva')) generator = 'waves';
-          if (m.includes('red') || m.includes('network') || m.includes('nodo') || m.includes('node')) generator = 'network';
-          if (m.includes('geometric') || m.includes('shape') || m.includes('forma')) generator = 'geometric';
-          
+          if (
+            m.includes('red') ||
+            m.includes('network') ||
+            m.includes('nodo') ||
+            m.includes('node')
+          )
+            generator = 'network';
+          if (m.includes('geometric') || m.includes('shape') || m.includes('forma'))
+            generator = 'geometric';
+
           // Detectar animation preferida
           if (m.includes('zoom out') || m.includes('alejar')) animation = 'zoomOut';
-          if (m.includes('slide') || m.includes('pan right') || m.includes('derecha')) animation = 'panRight';
+          if (m.includes('slide') || m.includes('pan right') || m.includes('derecha'))
+            animation = 'panRight';
           if (m.includes('pan left') || m.includes('izquierda')) animation = 'panLeft';
           if (m.includes('fade') || m.includes('aparecer')) animation = 'fadeIn';
-          if (m.includes('rotar') || m.includes('spin') || m.includes('girar')) animation = 'rotate';
+          if (m.includes('rotar') || m.includes('spin') || m.includes('girar'))
+            animation = 'rotate';
           if (m.includes('pulse') || m.includes('pulsar')) animation = 'pulse';
-          
+
           return { type: 'video', generator, animation };
         }
-        
+
         // Post generation intent
-        if (m.includes('post') || m.includes('linkedin') || m.includes('twitter') || m.includes('redes') || m.includes('social')) {
+        if (
+          m.includes('post') ||
+          m.includes('linkedin') ||
+          m.includes('twitter') ||
+          m.includes('redes') ||
+          m.includes('social')
+        ) {
           let template = 'tip';
           let platform = 'linkedin';
-          
+
           // Detectar template
           if (m.includes('lanzamiento') || m.includes('launch')) template = 'launch';
           if (m.includes('feature') || m.includes('nueva')) template = 'feature';
-          if (m.includes('hito') || m.includes('milestone') || m.includes('logro')) template = 'milestone';
+          if (m.includes('hito') || m.includes('milestone') || m.includes('logro'))
+            template = 'milestone';
           if (m.includes('tip') || m.includes('consejo') || m.includes('truco')) template = 'tip';
-          if (m.includes('caso') || m.includes('case') || m.includes('estudio')) template = 'case-study';
+          if (m.includes('caso') || m.includes('case') || m.includes('estudio'))
+            template = 'case-study';
           if (m.includes('thread') || m.includes('hilo')) template = 'thread';
-          
+
           // Detectar plataforma
           if (m.includes('twitter') || m.includes('x')) platform = 'twitter';
           if (m.includes('github')) platform = 'github';
           if (m.includes('dev.to') || m.includes('devto')) platform = 'devto';
-          
-          return { type: 'post', template, platform, data: message.replace(/(post|linkedin|twitter|redes|social)/gi, '').trim() };
+
+          return {
+            type: 'post',
+            template,
+            platform,
+            data: message.replace(/(post|linkedin|twitter|redes|social)/gi, '').trim(),
+          };
         }
-        
+
         // Pricing intent
-        if (m.includes('precio') || m.includes('price') || m.includes('precios') || m.includes('pricing') || m.includes('costo') || m.includes('cost')) {
-          const product = Object.keys(agentContext.products).find(p => m.includes(p.toLowerCase().replace('-', ' '))) || 'all';
+        if (
+          m.includes('precio') ||
+          m.includes('price') ||
+          m.includes('precios') ||
+          m.includes('pricing') ||
+          m.includes('costo') ||
+          m.includes('cost')
+        ) {
+          const product =
+            Object.keys(agentContext.products).find((p) =>
+              m.includes(p.toLowerCase().replace('-', ' ')),
+            ) || 'all';
           return { type: 'pricing', data: product };
         }
-        
+
         // Contract intent
-        if (m.includes('contrato') || m.includes('contract') || m.includes('servicios') || m.includes('consulting') || m.includes('precios servicios')) {
+        if (
+          m.includes('contrato') ||
+          m.includes('contract') ||
+          m.includes('servicios') ||
+          m.includes('consulting') ||
+          m.includes('precios servicios')
+        ) {
           return { type: 'contract' };
         }
-        
+
         // Help intent
-        if (m.includes('ayuda') || m.includes('help') || m.includes('comandos') || m.includes('commands') || m.includes('qué puedes')) {
+        if (
+          m.includes('ayuda') ||
+          m.includes('help') ||
+          m.includes('comandos') ||
+          m.includes('commands') ||
+          m.includes('qué puedes')
+        ) {
           return { type: 'help' };
         }
-        
+
         // Navigate intent
-        if (m.includes('abrir') || m.includes('open') || m.includes('mostrar') || m.includes('show')) {
-          if (m.includes('imagen') || m.includes('image')) return { type: 'navigate', section: 'images' };
-          if (m.includes('video') || m.includes('film')) return { type: 'navigate', section: 'videos' };
-          if (m.includes('contrato') || m.includes('contract')) return { type: 'navigate', section: 'contracts' };
-          if (m.includes('producto') || m.includes('product')) return { type: 'navigate', section: 'products' };
-          if (m.includes('redes') || m.includes('social')) return { type: 'navigate', section: 'social' };
+        if (
+          m.includes('abrir') ||
+          m.includes('open') ||
+          m.includes('mostrar') ||
+          m.includes('show')
+        ) {
+          if (m.includes('imagen') || m.includes('image'))
+            return { type: 'navigate', section: 'images' };
+          if (m.includes('video') || m.includes('film'))
+            return { type: 'navigate', section: 'videos' };
+          if (m.includes('contrato') || m.includes('contract'))
+            return { type: 'navigate', section: 'contracts' };
+          if (m.includes('producto') || m.includes('product'))
+            return { type: 'navigate', section: 'products' };
+          if (m.includes('redes') || m.includes('social'))
+            return { type: 'navigate', section: 'social' };
         }
-        
+
         return { type: 'default', data: message };
       }
 
@@ -1514,7 +2070,7 @@ Which do you need? I can also open sections directly.`
         setTimeout(() => {
           // Remove typing indicator
           typingIndicator.remove();
-          
+
           const intent = parseIntent(message, lang);
           const responses = agentResponses[lang];
           let response = '';
@@ -1548,7 +2104,10 @@ Which do you need? I can also open sections directly.`
 
             case 'navigate':
               navigateTo(intent.section);
-              response = lang === 'es' ? `Abriendo sección "${intent.section}"...` :`Opening "${intent.section}" section...`;
+              response =
+                lang === 'es'
+                  ? `Abriendo sección "${intent.section}"...`
+                  : `Opening "${intent.section}" section...`;
               break;
 
             default:
@@ -1560,7 +2119,6 @@ Which do you need? I can also open sections directly.`
           agentMsg.innerHTML = `<div class="bubble" style="white-space: pre-line;">${response}</div>`;
           messagesContainer.appendChild(agentMsg);
           messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
         }, 800);
       }
 
@@ -1568,28 +2126,28 @@ Which do you need? I can also open sections directly.`
         document.getElementById('chat-input').value = question;
         sendMessage();
       }
-      
+
       function openStudioWithPrompt(prompt) {
         const studioWindow = window.open('image-studio.html', '_blank', 'width=1400,height=900');
         // Guardar el prompt en localStorage para que el studio lo recupere
         localStorage.setItem('imageStudioPrompt', prompt);
         localStorage.setItem('imageStudioLaunchTime', Date.now());
       }
-      
+
       function openVideoStudioWithConfig(config) {
         const studioWindow = window.open('video-studio.html', '_blank', 'width=1600,height=900');
         // Guardar configuración en localStorage
         localStorage.setItem('videoStudioConfig', JSON.stringify(config));
         localStorage.setItem('videoStudioLaunchTime', Date.now());
       }
-      
+
       function openSocialPostWithConfig(config) {
         const studioWindow = window.open('social-post.html', '_blank', 'width=1400,height=900');
         // Guardar configuración en localStorage
         localStorage.setItem('socialPostConfig', JSON.stringify(config));
         localStorage.setItem('socialPostLaunchTime', Date.now());
       }
-      
+
       function openContractViewerWithConfig(config) {
         const viewerWindow = window.open('contract-viewer.html', '_blank', 'width=1400,height=900');
         // Guardar configuración en localStorage
@@ -1615,7 +2173,7 @@ Which do you need? I can also open sections directly.`
           linkedin: [1200, 627],
           twitter: [1600, 900],
           instagram: [1080, 1080],
-          'instagram-story': [1080, 1920]
+          'instagram-story': [1080, 1920],
         };
         const [w, h] = dims[platform] || [1200, 627];
 
@@ -1673,24 +2231,24 @@ Which do you need? I can also open sections directly.`
 </svg>`;
 
         currentImageSVG = svg;
-        
+
         // Display preview
         const preview = document.getElementById('img-preview');
         preview.innerHTML = svg;
         preview.classList.add('has-content');
-        
+
         document.getElementById('btn-download-img').disabled = false;
-        
+
         // Update stats
         updateStats('images');
-        
+
         // Show success
         alert('✅ Imagen SVG generada correctamente. Puedes descargarla.');
       }
 
       function downloadImage() {
         if (!currentImageSVG) return;
-        
+
         const blob = new Blob([currentImageSVG], { type: 'image/svg+xml' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -1698,7 +2256,7 @@ Which do you need? I can also open sections directly.`
         a.download = `gentle-vanguard-${Date.now()}.svg`;
         a.click();
         URL.revokeObjectURL(url);
-        
+
         // Add to downloads list
         addToDownloads(`imagen-${Date.now()}.svg`, 'SVG', 'Listo');
       }
@@ -1712,8 +2270,11 @@ Which do you need? I can also open sections directly.`
 
       function generateVideo() {
         const topic = document.getElementById('video-topic').value || 'Demo';
-        const steps = document.getElementById('video-steps').value.split('\n').filter(s => s.trim());
-        
+        const steps = document
+          .getElementById('video-steps')
+          .value.split('\n')
+          .filter((s) => s.trim());
+
         // Generate frames as SVG
         currentVideoFrames = [];
         steps.forEach((step, i) => {
@@ -1723,7 +2284,7 @@ Which do you need? I can also open sections directly.`
   <text x="960" y="200" text-anchor="middle" fill="#22d3ee" font-family="Inter" font-size="64" font-weight="800">${topic}</text>
   <text x="960" y="540" text-anchor="middle" fill="#e2e8f0" font-family="Inter" font-size="48">${step}</text>
   <text x="960" y="950" text-anchor="middle" fill="#64748b" font-family="Inter" font-size="24">Frame ${i + 1}/${steps.length}</text>
-  <rect x="0" y="${(i + 1) / steps.length * 100}%" width="${(i + 1) / steps.length * 100}%" height="6" fill="url(#accent)"/>
+  <rect x="0" y="${((i + 1) / steps.length) * 100}%" width="${((i + 1) / steps.length) * 100}%" height="6" fill="url(#accent)"/>
 </svg>`;
           currentVideoFrames.push(frame);
         });
@@ -1736,13 +2297,19 @@ Which do you need? I can also open sections directly.`
             <div style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">${steps.length} frames generados</div>
             <div style="color: var(--text-dim); margin-bottom: 1rem;">Tema: ${topic}</div>
             <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
-              ${steps.slice(0, 4).map((_, i) => `<div style="width: 120px; height: 68px; background: var(--bg2); border: 1px solid var(--br); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem;">Frame ${i + 1}</div>`).join('')}
+              ${steps
+                .slice(0, 4)
+                .map(
+                  (_, i) =>
+                    `<div style="width: 120px; height: 68px; background: var(--bg2); border: 1px solid var(--br); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem;">Frame ${i + 1}</div>`,
+                )
+                .join('')}
               ${steps.length > 4 ? `<div style="width: 120px; height: 68px; background: var(--bg2); border: 1px solid var(--br); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem;">+${steps.length - 4} más</div>` : ''}
             </div>
           </div>
         `;
         preview.classList.add('has-content');
-        
+
         document.getElementById('btn-download-frames').disabled = false;
         updateStats('videos');
       }
@@ -1757,7 +2324,7 @@ Which do you need? I can also open sections directly.`
           setTimeout(() => a.click(), i * 100);
           setTimeout(() => URL.revokeObjectURL(url), (i + 1) * 1000);
         });
-        
+
         addToDownloads(`video-frames-${Date.now()}.zip`, 'Frames SVG', 'Listo');
       }
 
@@ -1766,7 +2333,7 @@ Which do you need? I can also open sections directly.`
         const type = document.getElementById('social-type').value;
         const topic = document.getElementById('social-topic').value || 'Nueva Feature';
         const lang = document.getElementById('social-lang').value;
-        
+
         const templates = {
           es: {
             launch: `🚀 ¡Presentamos ${topic}!
@@ -1790,7 +2357,7 @@ La stack nativa sigue creciendo. Hoy añadimos ${topic} al ecosistema.
 • Sin dependencias externas
 • Documentación completa
 
-#Desarrollo #OpenSource`
+#Desarrollo #OpenSource`,
           },
           en: {
             launch: `🚀 Introducing ${topic}!
@@ -1814,16 +2381,16 @@ The native stack keeps growing. Today we add ${topic} to the ecosystem.
 • No external dependencies
 • Complete documentation
 
-#Development #OpenSource`
-          }
+#Development #OpenSource`,
+          },
         };
-        
+
         const post = templates[lang]?.[type] || templates.es[type] || templates.es.launch;
-        
+
         const output = document.getElementById('social-output');
         output.style.display = 'block';
         output.querySelector('div').textContent = post;
-        
+
         document.getElementById('btn-copy-post').disabled = false;
         updateStats('posts');
       }
@@ -1845,12 +2412,12 @@ The native stack keeps growing. Today we add ${topic} to the ecosystem.
       // Downloads Manager
       function addToDownloads(name, type, status) {
         const list = document.getElementById('downloads-list');
-        
+
         // Remove empty state if exists
         if (list.querySelector('.text-center')) {
           list.innerHTML = '';
         }
-        
+
         const item = document.createElement('div');
         item.className = 'download-item';
         item.innerHTML = `
@@ -1860,7 +2427,7 @@ The native stack keeps growing. Today we add ${topic} to the ecosystem.
           </div>
           <span class="status ready">${status}</span>
         `;
-        
+
         list.insertBefore(item, list.firstChild);
       }
 
@@ -1878,29 +2445,39 @@ The native stack keeps growing. Today we add ${topic} to the ecosystem.
               document.head.appendChild(script);
             });
           }
-          
+
           const exporter = new CMSExporter();
           const result = await exporter.exportAllToZIP('gentle-vanguard-cms');
-          
+
           if (result.success) {
-            alert(`✅ Exportación completada!\n\n📦 Archivo: gentle-vanguard-cms.zip\n📊 Tamaño: ${result.size}\n⏱️ Tiempo: ${result.duration}s`);
-            
+            alert(
+              `✅ Exportación completada!\n\n📦 Archivo: gentle-vanguard-cms.zip\n📊 Tamaño: ${result.size}\n⏱️ Tiempo: ${result.duration}s`,
+            );
+
             // Agregar a downloads
             addToDownloads('gentle-vanguard-cms.zip', 'ZIP Archive', 'Exportado');
           }
         } catch (error) {
           console.error('Error exportando:', error);
-          alert('❌ Error al exportar: ' + error.message + '\n\nIntente de nuevo o contacte soporte.');
+          alert(
+            '❌ Error al exportar: ' + error.message + '\n\nIntente de nuevo o contacte soporte.',
+          );
         }
       }
-      
+
       // Función para migrar assets (verificar integridad)
       async function migrateAssets() {
-        if (confirm('🔄 Esto migrará todos los assets desde localStorage a la biblioteca unificada.\n\nContinuar?')) {
+        if (
+          confirm(
+            '🔄 Esto migrará todos los assets desde localStorage a la biblioteca unificada.\n\nContinuar?',
+          )
+        ) {
           try {
             const manager = new AssetManager();
             const migrated = await manager.migrateFromLocalStorage();
-            alert(`✅ Migración completada!\n\n${migrated.length} assets migrados al sistema unificado.`);
+            alert(
+              `✅ Migración completada!\n\n${migrated.length} assets migrados al sistema unificado.`,
+            );
           } catch (error) {
             alert('❌ Error en migración: ' + error.message);
           }
@@ -1913,12 +2490,12 @@ The native stack keeps growing. Today we add ${topic} to the ecosystem.
         console.log('✅ Sistema 100% local operativo');
         console.log('📦 CMS Exporter: window.CMSExporter');
         console.log('📂 Asset Manager: window.AssetManager');
-        
+
         // Inicializar asset manager
         window.assetManager = new AssetManager();
       });
     </script>
-    
+
     <!-- CMS Exporter Scripts -->
     <script src="assets/js/cms-exporter.js"></script>
     <script src="assets/js/asset-manager.js"></script>

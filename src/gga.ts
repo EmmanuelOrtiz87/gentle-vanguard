@@ -217,10 +217,11 @@ function checkSwitchTrigger(error: string): { shouldSwitch: boolean; reason?: st
 
 function getDetectedModel(): string {
   // Priority 1: Environment variable
-  const envModel = process.env.GGA_MODEL ||
-                   process.env.ORCHESTRATOR_MODEL ||
-                   process.env.AGENT_MODEL ||
-                   process.env.FORCE_MODEL;
+  const envModel =
+    process.env.GGA_MODEL ||
+    process.env.ORCHESTRATOR_MODEL ||
+    process.env.AGENT_MODEL ||
+    process.env.FORCE_MODEL;
 
   if (envModel) {
     log('debug', `Detected model from env: ${envModel}`);
@@ -295,7 +296,7 @@ function getFallbackChain(preferredModel?: string): string[] {
 async function executeWithProvider(
   options: GGADelegationOptions,
   provider: string,
-  attempt: number
+  attempt: number,
 ): Promise<{ success: boolean; output?: string; error?: string }> {
   return new Promise((resolve) => {
     const delegatorPath = join(ROOT, 'src', 'agent-delegator.ts');
@@ -303,9 +304,12 @@ async function executeWithProvider(
     const args = [
       'tsx',
       delegatorPath,
-      '--agent', options.agent,
-      '--task', options.task,
-      '--model', provider,
+      '--agent',
+      options.agent,
+      '--task',
+      options.task,
+      '--model',
+      provider,
     ];
 
     if (options.context) {
@@ -369,9 +373,7 @@ async function executeWithProvider(
 /**
  * Main delegation method with auto-switching
  */
-export async function GuardianAngel(
-  options: GGADelegationOptions
-): Promise<GGADelegationResult> {
+export async function GuardianAngel(options: GGADelegationOptions): Promise<GGADelegationResult> {
   const startTime = Date.now();
   const state = loadGGAState();
 
@@ -472,7 +474,8 @@ export async function GuardianAngel(
           status: 'unavailable',
           lastChecked: new Date().toISOString(),
           consecutiveErrors: (state.health[provider]?.consecutiveErrors || 0) + 1,
-          quotaExhausted: switchCheck.reason.includes('quota') || switchCheck.reason.includes('credit'),
+          quotaExhausted:
+            switchCheck.reason.includes('quota') || switchCheck.reason.includes('credit'),
         };
 
         continue; // Try next provider
@@ -490,7 +493,6 @@ export async function GuardianAngel(
         switchOccurred: false,
         exhaustedProviders,
       };
-
     } catch (error) {
       const errorStr = String(error);
       lastError = errorStr;
@@ -600,7 +602,9 @@ function cli(): void {
       const taskIndex = args.indexOf('--task');
 
       if (agentIndex === -1 || taskIndex === -1) {
-        console.error('Usage: delegate --agent <name> --task "<description>" [--preferred-model <model>]');
+        console.error(
+          'Usage: delegate --agent <name> --task "<description>" [--preferred-model <model>]',
+        );
         process.exit(1);
       }
 
@@ -631,14 +635,18 @@ function cli(): void {
       const state = loadGGAState();
       console.log('\n=== GGA Status ===\n');
       console.log(`Current Provider: ${state.currentProvider}`);
-      console.log(`Exhausted Providers: ${state.exhaustedProviders.length > 0 ? state.exhaustedProviders.join(', ') : 'none'}`);
+      console.log(
+        `Exhausted Providers: ${state.exhaustedProviders.length > 0 ? state.exhaustedProviders.join(', ') : 'none'}`,
+      );
       console.log(`\nHealth Status:`);
       for (const [provider, health] of Object.entries(state.health)) {
         const quotaStatus = health.quotaExhausted ? ' [QUOTA EXHAUSTED]' : '';
-        console.log(`  ${provider}: ${health.status} (${health.consecutiveErrors} errors)${quotaStatus}`);
+        console.log(
+          `  ${provider}: ${health.status} (${health.consecutiveErrors} errors)${quotaStatus}`,
+        );
       }
       console.log(`\nRecent Switches (last 5):`);
-      state.switchHistory.slice(-5).forEach(switch_ => {
+      state.switchHistory.slice(-5).forEach((switch_) => {
         console.log(`  ${switch_.timestamp}: ${switch_.from} → ${switch_.to} (${switch_.reason})`);
       });
       break;

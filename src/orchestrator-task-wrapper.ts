@@ -92,9 +92,7 @@ export async function task(options: OpenCodeTaskOptions): Promise<string> {
  *
  * Útil para debugging y monitoreo del sistema de fallback.
  */
-export async function taskWithMetadata(
-  options: OpenCodeTaskOptions
-): Promise<OpenCodeTaskResult> {
+export async function taskWithMetadata(options: OpenCodeTaskOptions): Promise<OpenCodeTaskResult> {
   const ggaOptions: GGADelegationOptions = {
     agent: options.subagent_type,
     task: options.prompt,
@@ -121,9 +119,7 @@ export async function taskWithMetadata(
  * Solo para compatibilidad, lanza error informativo
  */
 export function taskSync(_options: OpenCodeTaskOptions): never {
-  throw new Error(
-    'taskSync is not supported. Use task() (async) or taskWithMetadata() instead.'
-  );
+  throw new Error('taskSync is not supported. Use task() (async) or taskWithMetadata() instead.');
 }
 
 // =============================================================================

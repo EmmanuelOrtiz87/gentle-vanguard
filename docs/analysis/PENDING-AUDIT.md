@@ -1,25 +1,28 @@
 # Auditoría Completa de Pendientes - Gentle-Vanguard
+
 ## Fecha: 2026-08-10
+
 ## Sistema: Stack Completo + Presentaciones + Recursos
 
 ---
 
 ## 📊 RESUMEN EJECUTIVO
 
-| Categoría | Estado | % Completo | Pendientes Críticos |
-|-----------|--------|------------|---------------------|
-| **Stack Principal** | ✅ Operativo | 95% | 3 |
-| **Presentaciones** | ✅ Operativas | 90% | 5 |
-| **Resources/CMS** | ✅ Operativo | 85% | 4 |
-| **Productos Derivados** | 📝 Especificación | 20% | 4 |
-| **Tests** | ✅ Funcionando | 80% | 2 |
-| **Documentación** | ✅ Completa | 95% | 1 |
+| Categoría               | Estado            | % Completo | Pendientes Críticos |
+| ----------------------- | ----------------- | ---------- | ------------------- |
+| **Stack Principal**     | ✅ Operativo      | 95%        | 3                   |
+| **Presentaciones**      | ✅ Operativas     | 90%        | 5                   |
+| **Resources/CMS**       | ✅ Operativo      | 85%        | 4                   |
+| **Productos Derivados** | 📝 Especificación | 20%        | 4                   |
+| **Tests**               | ✅ Funcionando    | 80%        | 2                   |
+| **Documentación**       | ✅ Completa       | 95%        | 1                   |
 
 ---
 
 ## 1. STACK PRINCIPAL - PENDIENTES
 
 ### ✅ COMPLETADO
+
 - 294 archivos TypeScript
 - 103 test files
 - 82 health checks
@@ -30,10 +33,10 @@
 ### 🔴 CRÍTICO (Alto impacto, debe hacerse)
 
 #### 1.1 Sistema de Persistencia de Estado del CMS
+
 **Ubicación**: `docs/presentations/resources-index.html`  
 **Problema**: Los archivos generados se pierden al cerrar navegador  
-**Solución**: Implementar localStorage/IndexedDB para guardar
-**Prioridad**: 🔴 Alta
+**Solución**: Implementar localStorage/IndexedDB para guardar **Prioridad**: 🔴 Alta
 
 ```typescript
 // src/cms-storage.ts (PENDIENTE)
@@ -46,9 +49,11 @@ interface CMSStorage {
 ```
 
 #### 1.2 Compilación Real de Video (con FFmpeg)
+
 **Ubicación**: `src/video-agent.ts`  
 **Problema**: Solo genera frames HTML, no MP4  
-**Solución**: 
+**Solución**:
+
 - Opción A: Integrar FFmpeg.wasm (WebAssembly)
 - Opción B: Script Node.js que use ffmpeg nativo
 - Opción C: Instrucciones para usuario compilar
@@ -61,17 +66,20 @@ async function compileToMP4(framesDir: string, output: string): Promise<void> {
 ```
 
 #### 1.3 Preview Real de Imágenes/Video
+
 **Problema**: Preview básico, no interactivo  
 **Solución**: Canvas preview con zoom/pan/rotate
 
 ### 🟡 IMPORTANCIA MEDIA
 
 #### 1.4 Optimización de Performance
+
 - [ ] Code splitting para el CMS
 - [ ] Lazy loading de secciones
 - [ ] Minificación de assets
 
 #### 1.5 Offline Mode
+
 - [ ] Service Worker para CMS
 - [ ] Caché de recursos estáticos
 - [ ] Sync cuando vuelva conexión
@@ -81,6 +89,7 @@ async function compileToMP4(framesDir: string, output: string): Promise<void> {
 ## 2. PRESENTACIONES (docs/presentations/) - PENDIENTES
 
 ### Lista de Archivos HTML:
+
 ```
 ✅ index.html - Landing principal
 ✅ resources-index.html - CMS completo
@@ -102,8 +111,10 @@ async function compileToMP4(framesDir: string, output: string): Promise<void> {
 ### 🔴 CRÍTICO
 
 #### 2.1 Actualizar Navegación Consistente
+
 **Problema**: No todas las páginas tienen el nuevo menú con "Recursos"  
 **Acción**: Agregar links a `resources-index.html` en:
+
 - [ ] architecture.html
 - [ ] dashboard.html
 - [ ] autonomy.html
@@ -111,17 +122,23 @@ async function compileToMP4(framesDir: string, output: string): Promise<void> {
 - [ ] memory-knowledge.html
 
 **Code to add**:
+
 ```html
-<li class="nav-item"><a class="nav-link" href="resources-index.html"><i class="bi bi-grid me-1"></i>CMS</a></li>
+<li class="nav-item">
+  <a class="nav-link" href="resources-index.html"><i class="bi bi-grid me-1"></i>CMS</a>
+</li>
 ```
 
 #### 2.2 Footer Consistente
+
 **Problema**: Algunos footers tienen versión desactualizada  
 **Acción**: Revisar todos los footers
 
 #### 2.3 Enlaces Rotos a MD
+
 **Problema**: Algunos enlaces pueden estar apuntando directo a .md sin viewer  
 **Acción**: Buscar y reemplazar:
+
 ```bash
 # Buscar todos los .html que linkean a .md
 # Reemplazar: archivo.md → md-viewer.html?file=archivo.md
@@ -130,11 +147,13 @@ async function compileToMP4(framesDir: string, output: string): Promise<void> {
 ### 🟡 MEJORAS
 
 #### 2.4 Responsive Design
+
 - [ ] Test en móvil de todas las páginas
 - [ ] Sidebar colapsable en CMS
 - [ ] Touch-friendly buttons
 
 #### 2.5 Dark/Light Toggle Global
+
 - [ ] Aplicar theme-toggle.js a todas las páginas
 - [ ] Persistir preferencia en localStorage
 
@@ -143,6 +162,7 @@ async function compileToMP4(framesDir: string, output: string): Promise<void> {
 ## 3. RESOURCES/CMS (resources-index.html) - PENDIENTES
 
 ### ✅ COMPLETADO
+
 - [x] Dashboard con stats
 - [x] Chat de agente
 - [x] Generador de imágenes SVG
@@ -154,6 +174,7 @@ async function compileToMP4(framesDir: string, output: string): Promise<void> {
 ### 🔴 CRÍTICO
 
 #### 3.1 Exportación en Múltiples Formatos
+
 **Problema**: Imágenes solo SVG, no PNG/JPG  
 **Solución**: Convertidor Canvas:
 
@@ -170,29 +191,35 @@ function convertSVGtoPNG(svgString): Promise<Blob> {
 ```
 
 #### 3.2 Templates Guardados
+
 **Problema**: No se guardan templates personalizados  
 **Solución**: localStorage para "Mis Templates"
 
 #### 3.3 Historial de Generaciones
+
 **Problema**: No hay historial navegable  
 **Solución**: Timeline de actividades
 
 #### 3.4 Colaboración (Compartir)
+
 **Problema**: No se pueden compartir assets  
 **Solución**: Exportar JSON para compartir
 
 ### 🟡 MEJORAS
 
 #### 3.5 Previews Más Realistas
+
 - Preview de Instagram story
 - Preview de LinkedIn feed
 - Preview de Twitter card
 
 #### 3.6 Drag & Drop
+
 - Arrastrar imágenes para editar
 - Reordenar frames de video
 
 #### 3.7 Keyboard Shortcuts
+
 - Ctrl+N: Nueva imagen
 - Ctrl+V: Pegar contenido
 - Delete: Eliminar selección
@@ -203,34 +230,38 @@ function convertSVGtoPNG(svgString): Promise<Blob> {
 
 ### 📋 Tabla de Productos
 
-| Producto | Spec | Dev | Tests | Landing | Monetización | Prioridad |
-|----------|------|-----|-------|---------|--------------|-----------|
-| **Doc-Gentle** | ✅ | ❌ | ❌ | ❌ | 📝 | 🔴 Alta |
-| Gentle-Music | ❌ | ❌ | ❌ | ❌ | ❌ | 🟡 Media |
-| Stock-Vanguard | ❌ | ❌ | ❌ | ❌ | ❌ | 🟡 Media |
-| Code-Gentle | ❌ | ❌ | ❌ | ❌ | ❌ | 🟡 Media |
+| Producto       | Spec | Dev | Tests | Landing | Monetización | Prioridad |
+| -------------- | ---- | --- | ----- | ------- | ------------ | --------- |
+| **Doc-Gentle** | ✅   | ❌  | ❌    | ❌      | 📝           | 🔴 Alta   |
+| Gentle-Music   | ❌   | ❌  | ❌    | ❌      | ❌           | 🟡 Media  |
+| Stock-Vanguard | ❌   | ❌  | ❌    | ❌      | ❌           | 🟡 Media  |
+| Code-Gentle    | ❌   | ❌  | ❌    | ❌      | ❌           | 🟡 Media  |
 
 ### 🔴 DOC-GENTLE - PLAN DE IMPLEMENTACIÓN
 
 #### Fase 1: MVP (2 semanas)
+
 - [ ] Setup proyecto React + Vite
 - [ ] Pantalla de upload PDF/DOCX
 - [ ] Integración básica Tesseract.js
 - [ ] Pantalla de resultado simple
 
 #### Fase 2: Core (2 semanas)
+
 - [ ] Sistema de chunking
 - [ ] Integración con modelo local (ollama/llama)
 - [ ] Q&A básico
 - [ ] Export de resumen
 
 #### Fase 3: Features (2 semanas)
+
 - [ ] Multi-documento
 - [ ] Historial
 - [ ] API endpoints
 - [ ] Auth simple
 
 #### Fase 4: Landing (1 semana)
+
 - [ ] Landing page
 - [ ] Pricing page
 - [ ] Demo video
@@ -247,6 +278,7 @@ function convertSVGtoPNG(svgString): Promise<Blob> {
 ### 🔴 Añadir Tests Para:
 
 #### 5.1 Video Agent
+
 ```typescript
 // tests/unit/video-agent.test.ts (PENDIENTE)
 describe('VideoAgent', () => {
@@ -257,6 +289,7 @@ describe('VideoAgent', () => {
 ```
 
 #### 5.2 CMS Functions
+
 ```typescript
 // tests/unit/cms.test.ts (PENDIENTE)
 describe('CMS', () => {
@@ -267,6 +300,7 @@ describe('CMS', () => {
 ```
 
 #### 5.3 Markdown Viewer
+
 ```typescript
 // tests/unit/md-viewer.test.ts (PENDIENTE)
 describe('MarkdownViewer', () => {
@@ -281,6 +315,7 @@ describe('MarkdownViewer', () => {
 ## 6. DOCUMENTACIÓN - PENDIENTES
 
 ### ✅ COMPLETADA
+
 - README principal
 - ARCHITECTURE-STATUS.md
 - Presentaciones HTML
@@ -290,11 +325,13 @@ describe('MarkdownViewer', () => {
 ### 🟡 MEJORAS
 
 #### 6.1 Video Tutoriales
+
 - [ ] Tutorial de uso del CMS
 - [ ] Demo de generación de contenido
 - [ ] Explicación de arquitectura
 
 #### 6.2 API Documentation
+
 - Documentar endpoints (si los hay)
 - Documentar funciones públicas
 
@@ -305,12 +342,16 @@ describe('MarkdownViewer', () => {
 ### 🔴 CRÍTICO
 
 #### 7.1 Deploy Automático
+
 **Configurar GitHub Actions para:**
+
 - [ ] Deploy a GitHub Pages cuando se mergee a main
 - [ ] URL: gentle-vanguard.github.io
 
 #### 7.2 Dependencias Verificación
+
 **Asegurar que todo funcione standalone:**
+
 - [ ] Verificar CDN links (Bootstrap, Icons, Fonts)
 - [ ] Verificar que md-viewer.html funcione offline
 - [ ] Verificar que CMS funcione offline
@@ -318,6 +359,7 @@ describe('MarkdownViewer', () => {
 ### 🟡 MEJORAS
 
 #### 7.3 PWA (Progressive Web App)
+
 - [ ] Web App Manifest
 - [ ] Service Worker
 - [ ] Install prompt
@@ -355,6 +397,7 @@ describe('MarkdownViewer', () => {
 ## 🎯 PRÓXIMOS PASOS RECOMENDADOS
 
 ### Esta Semana:
+
 ```bash
 # Día 1-2:
 - Implementar localStorage para CMS
@@ -372,6 +415,7 @@ describe('MarkdownViewer', () => {
 ```
 
 ### Próximo Mes:
+
 - Implementar Doc-Gentle MVP
 - Compilación de video
 - Deploy GitHub Pages
@@ -382,12 +426,14 @@ describe('MarkdownViewer', () => {
 ## ✅ VERIFICACIÓN FINAL
 
 ### ✅ Todo Funciona:
+
 - Stack: ✅ Operativo
 - CMS: ✅ Genera contenido
 - Presentaciones: ✅ Accesibles
 - Tests: ✅ Pasan
 
 ### ❌ Faltan para Producción:
+
 1. Persistencia CMS
 2. Export formatos
 3. Navegación consistente
@@ -395,6 +441,7 @@ describe('MarkdownViewer', () => {
 5. Doc-Gentle implementación
 
 ### 📈 Métricas Actuales:
+
 ```
 Compleción Stack:     95%
 Compleción CMS:      85%

@@ -109,10 +109,7 @@ const CONFIG: Config = {
 };
 
 // Templates
-const TEMPLATES: Record<
-  string,
-  Record<string, string>
-> = {
+const TEMPLATES: Record<string, Record<string, string>> = {
   launch: {
     LinkedIn: `🚀 Introducing Gentle-Vanguard v4.0 — The first 100% Autonomous AI Stack
 
@@ -244,7 +241,7 @@ function saveAnalytics(
   platform: string,
   content: string,
   success: boolean,
-  postUrl?: string
+  postUrl?: string,
 ): void {
   const analyticsPath = resolve(process.cwd(), CONFIG.analyticsFile);
   const analytics: Analytics = JSON.parse(readFileSync(analyticsPath, 'utf-8'));
@@ -331,7 +328,9 @@ async function main(): Promise<void> {
   // Validate required arguments
   if (!platform) {
     console.error('Error: --platform is required');
-    console.log('Usage: npx tsx src/social-poster.ts --platform=<platform> [--template=<name>] [--contentFile=<path>] [--dryRun]');
+    console.log(
+      'Usage: npx tsx src/social-poster.ts --platform=<platform> [--template=<name>] [--contentFile=<path>] [--dryRun]',
+    );
     console.log('Platforms: LinkedIn, Twitter, GitHub, ProductHunt, DevTo, All');
     process.exit(1);
   }

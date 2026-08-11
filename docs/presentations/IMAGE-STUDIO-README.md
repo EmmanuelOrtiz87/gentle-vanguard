@@ -1,23 +1,25 @@
 # 🎨 Gentle-Vanguard Image Studio
 
-> **Generador de Imágenes 100% Nativo** - Alternativa local a herramientas cloud como Google Nano-Banana, DALL-E, Midjourney, etc.
+> **Generador de Imágenes 100% Nativo** - Alternativa local a herramientas cloud como Google
+> Nano-Banana, DALL-E, Midjourney, etc.
 
 ---
 
 ## 🚀 ¿Qué es?
 
-Image Studio es un generador de imágenes completamente nativo que funciona **offline**, sin APIs de terceros, sin costos, sin registro y sin enviar datos a servidores externos.
+Image Studio es un generador de imágenes completamente nativo que funciona **offline**, sin APIs de
+terceros, sin costos, sin registro y sin enviar datos a servidores externos.
 
 ### ✅ Ventajas vs Cloud
 
-| Característica | Cloud (DALL-E, etc.) | Image Studio |
-|----------------|----------------------|--------------|
-| **Costo** | $$$ por imagen | $ Gratuito ilimitado |
-| **Privacidad** | ⚠️ Datos en servidores externos | 🔒 100% local |
-| **Offline** | ❌ Requiere internet | ✅ Funciona sin conexión |
-| **Latencia** | ⏳ 5-30 segundos | ⚡ Instantáneo |
-| **Control** | ⚠️ Parámetros limitados | 🔧 Totalmente configurable |
-| **Dependencias** | ⚠️ APIs, créditos, rate limits | ✅ Ninguna |
+| Característica   | Cloud (DALL-E, etc.)            | Image Studio               |
+| ---------------- | ------------------------------- | -------------------------- |
+| **Costo**        | $$$ por imagen                  | $ Gratuito ilimitado       |
+| **Privacidad**   | ⚠️ Datos en servidores externos | 🔒 100% local              |
+| **Offline**      | ❌ Requiere internet            | ✅ Funciona sin conexión   |
+| **Latencia**     | ⏳ 5-30 segundos                | ⚡ Instantáneo             |
+| **Control**      | ⚠️ Parámetros limitados         | 🔧 Totalmente configurable |
+| **Dependencias** | ⚠️ APIs, créditos, rate limits  | ✅ Ninguna                 |
 
 ---
 
@@ -53,14 +55,14 @@ Image Studio es un generador de imágenes completamente nativo que funciona **of
 
 ## 📏 Tamaños Soportados
 
-| Plataforma | Dimensiones | Uso |
-|------------|-------------|-----|
-| **LinkedIn** | 1200×627 | Posts y artículos |
-| **Twitter/X** | 1600×900 | Tweets y headers |
-| **Instagram** | 1080×1080 | Feed posts |
-| **Instagram Story** | 1080×1920 | Stories |
-| **YouTube** | 1920×1080 | Thumbnails, banners |
-| **Personalizado** | Hasta 4096×4096 | Cualquier tamaño |
+| Plataforma          | Dimensiones     | Uso                 |
+| ------------------- | --------------- | ------------------- |
+| **LinkedIn**        | 1200×627        | Posts y artículos   |
+| **Twitter/X**       | 1600×900        | Tweets y headers    |
+| **Instagram**       | 1080×1080       | Feed posts          |
+| **Instagram Story** | 1080×1920       | Stories             |
+| **YouTube**         | 1920×1080       | Thumbnails, banners |
+| **Personalizado**   | Hasta 4096×4096 | Cualquier tamaño    |
 
 ---
 
@@ -114,13 +116,13 @@ Abrir archivo: docs/presentations/image-studio.html
 
 ### Palabras Clave por Generador
 
-| Para... | Usar... |
-|---------|---------|
+| Para...            | Usar...                                                  |
+| ------------------ | -------------------------------------------------------- |
 | **Grid Futurista** | "futuristic", "tech", "cyberpunk", "grid", "perspective" |
-| **Partículas** | "particles", "organic", "floating", "dots", "natural" |
-| **Ondas** | "waves", "abstract", "gradient", "flow", "curves" |
-| **Network** | "network", "nodes", "connections", "graph", "diagram" |
-| **Geométrico** | "geometric", "shapes", "circles", "squares", "math" |
+| **Partículas**     | "particles", "organic", "floating", "dots", "natural"    |
+| **Ondas**          | "waves", "abstract", "gradient", "flow", "curves"        |
+| **Network**        | "network", "nodes", "connections", "graph", "diagram"    |
+| **Geométrico**     | "geometric", "shapes", "circles", "squares", "math"      |
 
 ---
 
@@ -144,11 +146,11 @@ Abrir archivo: docs/presentations/image-studio.html
 
 ### Formatos Soportados
 
-| Formato | Características | Mejor Para... |
-|---------|-----------------|---------------|
-| **PNG** | Sin pérdida, transparencia | Logos, íconos |
-| **JPG** | Comprimido, menor tamaño | Fotos, fondos |
-| **WebP** | Moderno, mejor calidad/tamaño | Web, apps |
+| Formato  | Características               | Mejor Para... |
+| -------- | ----------------------------- | ------------- |
+| **PNG**  | Sin pérdida, transparencia    | Logos, íconos |
+| **JPG**  | Comprimido, menor tamaño      | Fotos, fondos |
+| **WebP** | Moderno, mejor calidad/tamaño | Web, apps     |
 
 ### Nomenclatura
 
@@ -209,36 +211,42 @@ Image Studio
 
 ## 🔄 Comparación con Alternativas
 
-| Tool | Precio | Calidad | Control | Offline | Latencia |
-|------|--------|---------|---------|---------|----------|
-| **Image Studio** | Gratis | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ✅ | <1s |
-| **DALL-E 3** | $0.04/img | ⭐⭐⭐⭐⭐ | ⭐⭐ | ❌ | 5-10s |
-| **Midjourney** | $10/mes | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ❌ | 30s+ |
-| **Stable Diffusion** | Gratis* | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ✅** | 2-5s |
+| Tool                 | Precio    | Calidad    | Control    | Offline | Latencia |
+| -------------------- | --------- | ---------- | ---------- | ------- | -------- |
+| **Image Studio**     | Gratis    | ⭐⭐⭐⭐   | ⭐⭐⭐⭐⭐ | ✅      | <1s      |
+| **DALL-E 3**         | $0.04/img | ⭐⭐⭐⭐⭐ | ⭐⭐       | ❌      | 5-10s    |
+| **Midjourney**       | $10/mes   | ⭐⭐⭐⭐⭐ | ⭐⭐⭐     | ❌      | 30s+     |
+| **Stable Diffusion** | Gratis*   | ⭐⭐⭐⭐   | ⭐⭐⭐⭐⭐ | ✅**    | 2-5s     |
 
-\* Requiere GPU potente
-** Requiere instalación local compleja
+\* Requiere GPU potente ** Requiere instalación local compleja
 
 ---
 
 ## ❓ FAQ
 
 ### ¿Es realmente 100% offline?
+
 **Sí.** Todo el procesamiento ocurre en tu navegador. No se envían datos a ningún servidor.
 
 ### ¿Funciona en todos los navegadores?
+
 Funciona en Chrome, Firefox, Safari, Edge. Requiere Canvas 2D API (soportado desde 2012).
 
 ### ¿Puedo generar fotografías realistas?
-No - está diseñado para gráficos abstractos, patterns y visuales técnicos. No es un generador fotorealista.
+
+No - está diseñado para gráficos abstractos, patterns y visuales técnicos. No es un generador
+fotorealista.
 
 ### ¿El texto que escribo aparece en la imagen?
+
 Solo si el prompt es corto (< 50 caracteres). Para texto específico, edita después en un editor.
 
 ### ¿Cuántas imágenes puedo generar?
+
 Ilimitadas - está limitado solo por tu navegador y tu paciencia.
 
 ### ¿Qué tan grandes pueden ser las imágenes?
+
 Hasta 4096×4096 píxeles. Más grande = más lento = más memoria RAM.
 
 ---
@@ -269,18 +277,21 @@ Hasta 4096×4096 píxeles. Más grande = más lento = más memoria RAM.
 ## 📊 Roadmap
 
 ### v1.0 ✅ (Actual)
+
 - 6 algoritmos base
 - Export PNG/JPG/WebP
 - 6 templates
 - Historial (20 items)
 
 ### v1.1 (Próximo)
+
 - Batch processing
 - Presets personalizados
 - Animación simple (GIF)
 - WebGL opcional (mejor rendimiento)
 
 ### v1.2 (Futuro)
+
 - Integración con modelos locales (ONNX)
 - Semantic search de templates
 - Plugin system para algoritmos
@@ -291,11 +302,13 @@ Hasta 4096×4096 píxeles. Más grande = más lento = más memoria RAM.
 ## 📝 Créditos
 
 **Gentle-Vanguard Stack**
+
 - 294 archivos TypeScript
 - 21 agentes especializados
 - 100% Open Source
 
 **Sin dependencias externas**
+
 - Solo HTML5 Canvas API
 - CSS3 para UI
 - Vanilla JavaScript

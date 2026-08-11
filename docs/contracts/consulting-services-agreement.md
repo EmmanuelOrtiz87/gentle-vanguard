@@ -20,12 +20,14 @@ date: 2026-08-10
 ## 1. PARTES
 
 **CONSULTOR** (en adelante, "El Consultor"):
+
 - Razón Social: [Nombre Empresa/Individuo]
 - CUIT/CUIL: [Número]
 - Domicilio: [Dirección]
 - Contacto: [Email] | [Teléfono]
 
 **CLIENTE** (en adelante, "El Cliente"):
+
 - Razón Social: ___________________________
 - CUIT/CUIL: ___________________________
 - Domicilio: ___________________________
@@ -35,27 +37,31 @@ date: 2026-08-10
 
 ## 2. OBJETO DEL CONTRATO
 
-El Consultor se compromete a prestar servicios profesionales de implementación, configuración y capacitación del Gentle-Vanguard Stack (en adelante, "Los Servicios"), según los términos y condiciones establecidos en el presente contrato.
+El Consultor se compromete a prestar servicios profesionales de implementación, configuración y
+capacitación del Gentle-Vanguard Stack (en adelante, "Los Servicios"), según los términos y
+condiciones establecidos en el presente contrato.
 
 ### 2.1 Servicios Incluidos
 
 Dependiendo del paquete contratado:
 
-| Servicio | Descripción | Entregable |
-|----------|-------------|------------|
-| **Setup** | Instalación y configuración inicial del stack | Stack operativo en ambiente del cliente |
-| **Migration** | Migración de proyectos existentes al stack | Proyectos migrados y operativos |
-| **Training** | Capacitación de equipo del cliente | 3-5 desarrolladores capacitados |
-| **Support** | Soporte técnico continuo | Respuesta en <24h SLA |
+| Servicio      | Descripción                                   | Entregable                              |
+| ------------- | --------------------------------------------- | --------------------------------------- |
+| **Setup**     | Instalación y configuración inicial del stack | Stack operativo en ambiente del cliente |
+| **Migration** | Migración de proyectos existentes al stack    | Proyectos migrados y operativos         |
+| **Training**  | Capacitación de equipo del cliente            | 3-5 desarrolladores capacitados         |
+| **Support**   | Soporte técnico continuo                      | Respuesta en <24h SLA                   |
 
 ---
 
 ## 3. PAQUETES Y TARIFAS
 
 ### 3.1 Paquete Básico - Setup
+
 **Inversión**: $2,000 - $5,000 USD (según complejidad)
 
 Incluye:
+
 - [ ] Instalación del Gentle-Vanguard Stack
 - [ ] Configuración inicial de agentes
 - [ ] Setup de base de datos Nexus
@@ -68,9 +74,11 @@ Incluye:
 ---
 
 ### 3.2 Paquete Migration
+
 **Inversión**: $500 - $2,000 USD por proyecto
 
 Incluye:
+
 - [ ] Análisis del proyecto existente
 - [ ] Plan de migración personalizado
 - [ ] Migración de código/fuentes
@@ -83,9 +91,11 @@ Incluye:
 ---
 
 ### 3.3 Paquete Training
+
 **Inversión**: $1,500 USD/día
 
 Incluye:
+
 - [ ] Curso completo Gentle-Vanguard (8h)
 - [ ] Capacitación por desarrollador (3-5 personas)
   - Uso de agentes
@@ -101,9 +111,11 @@ Incluye:
 ---
 
 ### 3.4 Soporte Continuo
+
 **Inversión**: $1,000 USD/mes
 
 Incluye:
+
 - [ ] Soporte técnico por email/chat
 - [ ] Tiempo de respuesta: < 24h
 - [ ] Horario: Lunes-Viernes 9-18hs (GMT-3)
@@ -116,9 +128,11 @@ Incluye:
 ---
 
 ### 3.5 Enterprise Custom
+
 **Inversión**: A convenir (desde $10,000 USD)
 
 Para organizaciones con requerimientos especiales:
+
 - [ ] On-premise deployment
 - [ ] Custom agent development
 - [ ] Integración con sistemas propios
@@ -131,18 +145,22 @@ Para organizaciones con requerimientos especiales:
 ## 4. FORMAS DE PAGO
 
 ### 4.1 Setup y Migration
+
 - **50%** al firmar el contrato
 - **50%** contra entrega y aceptación
 
 ### 4.2 Training
+
 - **100%** al firmar el contrato (reserva de fechas)
 
 ### 4.3 Soporte Mensual
+
 - **Mes a mes** o **Trimestral con 10% descuento**
 - Facturación primer día hábil del período
 - Vencimiento: 15 días
 
 ### 4.4 Métodos de Pago Aceptados
+
 - Transferencia bancaria
 - Mercado Pago
 - PayPal
@@ -162,7 +180,8 @@ Para organizaciones con requerimientos especiales:
 
 5.5 Proveer soporte post-implementación según corresponda.
 
-5.6 **No garantizar resultados específicos** - el rendimiento depende del uso adecuado por parte del Cliente.
+5.6 **No garantizar resultados específicos** - el rendimiento depende del uso adecuado por parte del
+Cliente.
 
 ---
 
@@ -186,7 +205,8 @@ Para organizaciones con requerimientos especiales:
 
 7.1 El Gentle-Vanguard Stack permanece bajo licencia MIT/Apache del proyecto open source.
 
-7.2 El código/documentación creado específicamente para el Cliente en este contrato es propiedad del Cliente.
+7.2 El código/documentación creado específicamente para el Cliente en este contrato es propiedad del
+Cliente.
 
 7.3 El Consultor puede utilizar casos de éxito (sin nombres confidenciales) para marketing.
 
@@ -206,7 +226,8 @@ Para organizaciones con requerimientos especiales:
 
 9.1 Cualquiera de las partes podrá resolver el contrato con **30 días de anticipación**.
 
-9.2 En caso de incumplimiento grave por cualquiera de las partes, el contrato podrá resolverse de inmediato.
+9.2 En caso de incumplimiento grave por cualquiera de las partes, el contrato podrá resolverse de
+inmediato.
 
 9.3 El Cliente deberá abonar los servicios ya prestados al momento de la resolución.
 
@@ -224,7 +245,8 @@ Para organizaciones con requerimientos especiales:
 
 ## 11. LIMITACIÓN DE RESPONSABILIDAD
 
-11.1 La responsabilidad total del Consultor no excederá el monto pagado por los servicios en los últimos 12 meses.
+11.1 La responsabilidad total del Consultor no excederá el monto pagado por los servicios en los
+últimos 12 meses.
 
 11.2 El Consultor no será responsable por daños indirectos, incidentales o consecuenciales.
 
@@ -243,6 +265,7 @@ Para organizaciones con requerimientos especiales:
 ## 13. NOTIFICACIONES
 
 Toda notificación deberá realizarse:
+
 - Por email a: consultor@[dominio] | cliente@[dominio]
 - Por carta documento al domicilio social
 
@@ -264,10 +287,10 @@ Toda notificación deberá realizarse:
 
 En prueba de conformidad, las partes firman el presente contrato en dos ejemplares del mismo tenor.
 
-
 **POR EL CONSULTOR:**
 
-_________________________________
+---
+
 Firma
 
 Nombre: _________________________
@@ -275,11 +298,11 @@ Nombre: _________________________
 Documento: _____________________
 
 Fecha: ________________________
-
 
 **POR EL CLIENTE:**
 
-_________________________________
+---
+
 Firma
 
 Nombre: _________________________
@@ -287,23 +310,23 @@ Nombre: _________________________
 Documento: _____________________
 
 Fecha: ________________________
-
 
 ---
 
 ## ANEXOS
 
 ### Anexo A: Alcance Detallado
+
 [Detalle específico del proyecto]
 
 ### Anexo B: Cronograma
+
 [Fechas de hitos y entregas]
 
 ### Anexo C: Especificaciones Técnicas
+
 [Requisitos técnicos del ambiente cliente]
 
 ---
 
-**DOCUMENTO GENERADO**: 2026-08-10
-**VERSIÓN**: 1.0.0
-**PLANTILLA**: Gentle-Vanguard Legal Templates
+**DOCUMENTO GENERADO**: 2026-08-10 **VERSIÓN**: 1.0.0 **PLANTILLA**: Gentle-Vanguard Legal Templates

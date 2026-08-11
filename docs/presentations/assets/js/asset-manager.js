@@ -1,12 +1,12 @@
 /**
  * Gentle-Vanguard Cross-Tool Asset Manager
- * 
+ *
  * Sistema de gestión de assets que permite:
  * - Compartir imágenes entre Image Studio y otros tools
  * - Usar frames de video como imágenes
  * - Importar assets a proyectos
  * - Biblioteca centralizada de recursos
- * 
+ *
  * @author Gentle-Vanguard Team
  * @version 1.0.0
  */
@@ -22,20 +22,20 @@ class AssetManager {
   async init() {
     // Abrir o crear IndexedDB
     const request = indexedDB.open(this.DB_KEY, this.DB_VERSION);
-    
+
     request.onerror = (event) => {
       console.error('❌ Error abriendo IndexedDB:', event.target.error);
     };
-    
+
     request.onsuccess = (event) => {
       this.store = event.target.result;
       console.log('✅ Asset Manager Inicializado');
       console.log('   IndexedDB versión:', this.DB_VERSION);
     };
-    
+
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
-      
+
       // Almacén de assets
       if (!db.objectStoreNames.contains('assets')) {
         const store = db.createObjectStore('assets', { keyPath: 'id', autoIncrement: true });
@@ -44,7 +44,7 @@ class AssetManager {
         store.createIndex('byDate', 'createdAt', { unique: false });
         store.createIndex('byTags', 'tags', { unique: false, multiEntry: true });
       }
-      
+
       // Almacén de proyectos
       if (!db.objectStoreNames.contains('projects')) {
         const projStore = db.createObjectStore('projects', { keyPath: 'id', autoIncrement: true });
@@ -64,17 +64,17 @@ class AssetManager {
     dataUrl,
     metadata = {},
     tags = [],
-    projectId = null
+    projectId = null,
   }) {
     return new Promise((resolve, reject) => {
       if (!this.store) {
         reject(new Error('Asset Manager no inicializado'));
         return;
       }
-      
+
       const transaction = this.store.transaction(['assets'], 'readwrite');
       const assetStore = transaction.objectStore('assets');
-      
+
       const asset = {
         name: name || `${type}_${Date.now()}`,
         type,
@@ -85,19 +85,19 @@ class AssetManager {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         projectId,
-        size: this.estimateSize(dataUrl)
+        size: this.estimateSize(dataUrl),
       };
-      
+
       const request = assetStore.add(asset);
-      
+
       request.onsuccess = () => {
         console.log('✅ Asset guardado:', asset.name);
         resolve({
           id: request.result,
-          ...asset
+          ...asset,
         });
       };
-      
+
       request.onerror = () => {
         console.error('❌ Error guardando asset:', request.error);
         reject(request.error);
@@ -114,11 +114,11 @@ class AssetManager {
         reject(new Error('Asset Manager no inicializado'));
         return;
       }
-      
+
       const transaction = this.store.transaction(['assets'], 'readonly');
       const store = transaction.objectStore('assets');
       const request = store.get(id);
-      
+
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });
@@ -133,12 +133,12 @@ class AssetManager {
         reject(new Error('Asset Manager no inicializado'));
         return;
       }
-      
+
       const transaction = this.store.transaction(['assets'], 'readonly');
       const store = transaction.objectStore('assets');
       const index = store.index('byType');
       const request = index.getAll(type, limit);
-      
+
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });
@@ -153,12 +153,12 @@ class AssetManager {
         reject(new Error('Asset Manager no inicializado'));
         return;
       }
-      
+
       const transaction = this.store.transaction(['assets'], 'readonly');
       const store = transaction.objectStore('assets');
       const index = store.index('byTool');
       const request = index.getAll(tool, limit);
-      
+
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });
@@ -173,30 +173,31 @@ class AssetManager {
         reject(new Error('Asset Manager no inicializado'));
         return;
       }
-      
+
       try {
         // Obtener todos y filtrar (para búsquedas simples)
         const transaction = this.store.transaction(['assets'], 'readonly');
         const store = transaction.objectStore('assets');
         const request = store.getAll();
-        
+
         request.onsuccess = () => {
           const allAssets = request.result;
           const queryLower = query.toLowerCase();
-          
-          const filtered = allAssets.filter(asset => {
-            const nameMatch = asset.name && asset.name.toLowerCase().includes(queryLower);
-            const tagMatch = asset.tags && asset.tags.some(t => 
-              t.toLowerCase().includes(queryLower)
-            );
-            const typeMatch = asset.type && asset.type.toLowerCase().includes(queryLower);
-            
-            return nameMatch || tagMatch || typeMatch;
-          }).slice(0, limit);
-          
+
+          const filtered = allAssets
+            .filter((asset) => {
+              const nameMatch = asset.name && asset.name.toLowerCase().includes(queryLower);
+              const tagMatch =
+                asset.tags && asset.tags.some((t) => t.toLowerCase().includes(queryLower));
+              const typeMatch = asset.type && asset.type.toLowerCase().includes(queryLower);
+
+              return nameMatch || tagMatch || typeMatch;
+            })
+            .slice(0, limit);
+
           resolve(filtered);
         };
-        
+
         request.onerror = () => reject(request.error);
       } catch (e) {
         reject(e);
@@ -213,11 +214,11 @@ class AssetManager {
         reject(new Error('Asset Manager no inicializado'));
         return;
       }
-      
+
       const transaction = this.store.transaction(['assets'], 'readwrite');
       const store = transaction.objectStore('assets');
       const request = store.delete(id);
-      
+
       request.onsuccess = () => {
         console.log('✅ Asset eliminado:', id);
         resolve(true);
@@ -235,24 +236,24 @@ class AssetManager {
         reject(new Error('Asset Manager no inicializado'));
         return;
       }
-      
+
       const asset = await this.getAsset(id);
       if (!asset) {
         reject(new Error('Asset no encontrado'));
         return;
       }
-      
+
       const transaction = this.store.transaction(['assets'], 'readwrite');
       const store = transaction.objectStore('assets');
-      
+
       const updated = {
         ...asset,
         ...updates,
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       };
-      
+
       const request = store.put(updated);
-      
+
       request.onsuccess = () => resolve(updated);
       request.onerror = () => reject(request.error);
     });
@@ -264,7 +265,7 @@ class AssetManager {
   async migrateFromLocalStorage() {
     console.log('🔄 Migrando assets desde localStorage...');
     const migrated = [];
-    
+
     // Imágenes del Image Studio
     const imgData = localStorage.getItem('imageStudioHistory');
     if (imgData) {
@@ -280,9 +281,9 @@ class AssetManager {
               metadata: {
                 original: img,
                 migrated: true,
-                timestamp: img.timestamp
+                timestamp: img.timestamp,
               },
-              tags: ['migrated', 'imageStudio']
+              tags: ['migrated', 'imageStudio'],
             });
             migrated.push(asset);
           }
@@ -292,7 +293,7 @@ class AssetManager {
         console.warn('⚠️ Error migrando imágenes:', e);
       }
     }
-    
+
     // Videos del Video Studio
     const vidData = localStorage.getItem('videoStudioProjects');
     if (vidData) {
@@ -308,9 +309,9 @@ class AssetManager {
               metadata: {
                 frames: vid.frames.length,
                 migrated: true,
-                config: vid.config
+                config: vid.config,
               },
-              tags: ['migrated', 'videoStudio', 'video']
+              tags: ['migrated', 'videoStudio', 'video'],
             });
             migrated.push(asset);
           }
@@ -320,7 +321,7 @@ class AssetManager {
         console.warn('⚠️ Error migrando videos:', e);
       }
     }
-    
+
     console.log(`✅ Migración completada: ${migrated.length} assets`);
     return migrated;
   }
@@ -334,11 +335,11 @@ class AssetManager {
         reject(new Error('Asset Manager no inicializado'));
         return;
       }
-      
+
       const transaction = this.store.transaction(['assets'], 'readonly');
       const store = transaction.objectStore('assets');
       const request = store.getAll();
-      
+
       request.onsuccess = () => {
         const assets = request.result;
         const stats = {
@@ -347,32 +348,32 @@ class AssetManager {
           byTool: {},
           totalSize: 0,
           oldest: null,
-          newest: null
+          newest: null,
         };
-        
-        assets.forEach(asset => {
+
+        assets.forEach((asset) => {
           // Por tipo
           stats.byType[asset.type] = (stats.byType[asset.type] || 0) + 1;
-          
+
           // Por tool
           stats.byTool[asset.sourceTool] = (stats.byTool[asset.sourceTool] || 0) + 1;
-          
+
           // Tamaño
           if (asset.size) stats.totalSize += asset.size;
-          
+
           // Fechas
           const date = new Date(asset.createdAt);
           if (!stats.oldest || date < stats.oldest) stats.oldest = date;
           if (!stats.newest || date > stats.newest) stats.newest = date;
         });
-        
+
         stats.totalSize = this.formatSize(stats.totalSize);
         stats.oldest = stats.oldest?.toISOString();
         stats.newest = stats.newest?.toISOString();
-        
+
         resolve(stats);
       };
-      
+
       request.onerror = () => reject(request.error);
     });
   }
@@ -383,14 +384,14 @@ class AssetManager {
   async cleanup(olderThanDays = 30) {
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - olderThanDays);
-    
+
     const assets = await this.getAssetsByType('all');
-    const toDelete = assets.filter(a => new Date(a.createdAt) < cutoff);
-    
+    const toDelete = assets.filter((a) => new Date(a.createdAt) < cutoff);
+
     for (const asset of toDelete) {
       await this.deleteAsset(asset.id);
     }
-    
+
     console.log(`🧹 Limpieza completada: ${toDelete.length} assets eliminados`);
     return toDelete.length;
   }
@@ -411,7 +412,7 @@ class AssetManager {
 }
 
 // Plugin para integrar con Image Studio
-AssetManager.prototype.imageStudioExport = async function(imageData) {
+AssetManager.prototype.imageStudioExport = async function (imageData) {
   return this.saveAsset({
     name: `image_${imageData.name || Date.now()}`,
     type: 'image',
@@ -421,14 +422,14 @@ AssetManager.prototype.imageStudioExport = async function(imageData) {
       generator: imageData.generator,
       template: imageData.template,
       dimensiones: `${imageData.width}x${imageData.height}`,
-      complexity: imageData.complexity
+      complexity: imageData.complexity,
     },
-    tags: ['image', imageData.generator, imageData.template]
+    tags: ['image', imageData.generator, imageData.template],
   });
 };
 
-// Plugin para integrar con Video Studio  
-AssetManager.prototype.videoStudioExport = async function(videoData) {
+// Plugin para integrar con Video Studio
+AssetManager.prototype.videoStudioExport = async function (videoData) {
   return this.saveAsset({
     name: videoData.name || `video_${Date.now()}`,
     type: 'video',
@@ -440,9 +441,9 @@ AssetManager.prototype.videoStudioExport = async function(videoData) {
       fps: videoData.fps,
       generator: videoData.generator,
       animation: videoData.animation,
-      framesData: videoData.frames // Guardar todos los frames
+      framesData: videoData.frames, // Guardar todos los frames
     },
-    tags: ['video', videoData.generator, videoData.animation]
+    tags: ['video', videoData.generator, videoData.animation],
   });
 };
 

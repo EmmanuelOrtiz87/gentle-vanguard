@@ -1,4 +1,5 @@
 # Arquitectura Completa de Gentle-Vanguard
+
 ## Documento de Estado y Separación de Componentes
 
 **Fecha**: 2026-08-10  
@@ -9,15 +10,18 @@
 
 ## 🎯 RESUMEN EJECUTIVO
 
-El stack **Gentle-Vanguard** está **listo para uso productivo** como stack de orquestación autónoma. El sistema de marketing (resources-index.html) es ahora un **CMS completo operativo**.
+El stack **Gentle-Vanguard** está **listo para uso productivo** como stack de orquestación autónoma.
+El sistema de marketing (resources-index.html) es ahora un **CMS completo operativo**.
 
 ### ¿Qué está LISTO? ✅
+
 - Stack de orquestación 100% funcional
 - Panel de marketing nativo con generación de contenido
 - Documentación completa
 - Contratos legales
 
 ### ¿Qué está PENDIENTE? 📋
+
 - Productos derivados (Doc-Gentle, Gentle-Music, etc.) solo tienen especificación
 
 ---
@@ -56,27 +60,31 @@ Gentle-Vanguard/
 ## ✅ COMPONENTES OPERATIVOS
 
 ### 1. Stack de Orquestación
+
 **Ubicación**: `src/`  
 **Estado**: ✅ **100% Funcional**
 
-| Componente | Archivos | Estado |
-|------------|----------|--------|
-| Core Agents | 21 agentes | ✅ |
-| Session Pipeline | 53 steps | ✅ |
-| Health System | 82 checks | ✅ |
-| TypeScript Files | 294 | ✅ |
-| Tests | 103 | ✅ |
+| Componente       | Archivos   | Estado |
+| ---------------- | ---------- | ------ |
+| Core Agents      | 21 agentes | ✅     |
+| Session Pipeline | 53 steps   | ✅     |
+| Health System    | 82 checks  | ✅     |
+| TypeScript Files | 294        | ✅     |
+| Tests            | 103        | ✅     |
 
 **Uso**:
+
 ```bash
 npm run session:autostart
 ```
 
 ### 2. Panel de Marketing (CMS) - NUEVO ⭐
+
 **Ubicación**: `docs/presentations/resources-index.html`  
 **Estado**: ✅ **100% Funcional**
 
 **Características**:
+
 - ✅ Dashboard con estadísticas
 - ✅ Agente de chat nativo (asistencia)
 - ✅ Generador de imágenes SVG (local)
@@ -86,11 +94,13 @@ npm run session:autostart
 - ✅ 100% local, sin cloud
 
 **Acceso**:
+
 ```
 Abrir: docs/presentations/resources-index.html
 ```
 
 ### 3. Dashboard Web
+
 **Ubicación**: `apps/web-dashboard/`  
 **Estado**: ✅ **100% Funcional**
 
@@ -101,17 +111,19 @@ npm run dev
 ```
 
 ### 4. Documentación
+
 **Ubicación**: `docs/presentations/`  
 **Estado**: ✅ **100% Completa**
 
-| Documento | Estado |
-|-----------|--------|
-| index.html | ✅ Landing |
-| marketing.html | ✅ Estrategia |
-| v4-features.html | ✅ Features |
-| md-viewer.html | ✅ Visor MD ✅ |
+| Documento        | Estado         |
+| ---------------- | -------------- |
+| index.html       | ✅ Landing     |
+| marketing.html   | ✅ Estrategia  |
+| v4-features.html | ✅ Features    |
+| md-viewer.html   | ✅ Visor MD ✅ |
 
 ### 5. Contratos
+
 **Ubicación**: `docs/contracts/`  
 **Estado**: ✅ **Listos para uso**
 
@@ -121,22 +133,23 @@ npm run dev
 
 ### Clarificación Importante
 
-**Los productos derivados NO son parte del stack principal.** Son aplicaciones INDEPENDIENTES que se pueden construir CON el stack.
+**Los productos derivados NO son parte del stack principal.** Son aplicaciones INDEPENDIENTES que se
+pueden construir CON el stack.
 
 ### Tabla de Estado
 
-| Producto | Especificación | Implementación | Status |
-|----------|----------------|----------------|--------|
+| Producto       | Especificación     | Implementación | Status     |
+| -------------- | ------------------ | -------------- | ---------- |
 | **Doc-Gentle** | ✅ README completo | ❌ No iniciado | Spec listo |
-| Gentle-Music | ❌ Pendiente | ❌ No iniciado | Solo idea |
-| Stock-Vanguard | ❌ Pendiente | ❌ No iniciado | Solo idea |
-| Code-Gentle | ❌ Pendiente | ❌ No iniciado | Solo idea |
+| Gentle-Music   | ❌ Pendiente       | ❌ No iniciado | Solo idea  |
+| Stock-Vanguard | ❌ Pendiente       | ❌ No iniciado | Solo idea  |
+| Code-Gentle    | ❌ Pendiente       | ❌ No iniciado | Solo idea  |
 
 ### Doc-Gentle Detalle
+
 **Ubicación**: `apps/doc-gentle/README.md`  
 **Contenido**: 192 líneas de especificación  
-**Incluye**: Vision, mercado, modelo de negocio, roadmap 4 fases
-**Desarrollo**: No iniciado
+**Incluye**: Vision, mercado, modelo de negocio, roadmap 4 fases **Desarrollo**: No iniciado
 
 ---
 
@@ -144,17 +157,18 @@ npm run dev
 
 ### Stack vs Productos
 
-| | Stack Principal | Productos Derivados |
-|---|---|---|
-| **Propósito** | Orquestación de agentes | Aplicaciones comerciales |
-| **Estado** | ✅ Listo | 📝 Especificación |
-| **Dependencia** | Raíz | Dependen del stack |
-| **Uso** | Interno | Externo/clientes |
-| **Revenue** | Ninguno (open source) | Potencial |
+|                 | Stack Principal         | Productos Derivados      |
+| --------------- | ----------------------- | ------------------------ |
+| **Propósito**   | Orquestación de agentes | Aplicaciones comerciales |
+| **Estado**      | ✅ Listo                | 📝 Especificación        |
+| **Dependencia** | Raíz                    | Dependen del stack       |
+| **Uso**         | Interno                 | Externo/clientes         |
+| **Revenue**     | Ninguno (open source)   | Potencial                |
 
 ### ¿Dónde viven los productos?
 
 **Opción A: Dentro de Gentle-Vanguard** ⭐ (Recomendado)
+
 ```
 apps/
 ├── web-dashboard/       ← Stack
@@ -165,6 +179,7 @@ apps/
 ```
 
 **Opción B: Repos separados**
+
 ```
 gentle-vanguard/         ← Stack
 doc-gentle/              ← Producto
@@ -179,6 +194,7 @@ doc-gentle/              ← Producto
 ### ¿El stack está listo?
 
 **SÍ**, el stack Gentle-Vanguard está **listo para uso productivo** como:
+
 - Framework de orquestación
 - Sistema de agentes autónomos
 - Panel de gestión de marketing
@@ -187,6 +203,7 @@ doc-gentle/              ← Producto
 ### ¿Los productos derivados están listos?
 
 **NO**, solo están especificados. Para usarlos:
+
 1. Doc-Gentle → Requiere implementación
 2. Gentle-Music → Requiere especificación + implementación
 3. Stock-Vanguard → Requiere especificación + implementación
@@ -196,6 +213,7 @@ doc-gentle/              ← Producto
 ## 💰 MODELO DE NEGOCIO ACTUAL
 
 ### Stack Principal (Gentle-Vanguard)
+
 ```
 - Open source
 - Uso interno
@@ -204,6 +222,7 @@ doc-gentle/              ← Producto
 ```
 
 ### Productos Derivados (Futuro)
+
 ```
 - Doc-Gentle: $15/mes (Freemium)
 - Gentle-Music: $4.99/mes
@@ -216,6 +235,7 @@ doc-gentle/              ← Producto
 ## 📋 CHECKLIST DE PRODUCCIÓN
 
 ### Stack principal ✅
+
 - [x] 294 archivos TypeScript
 - [x] 103 tests pasando
 - [x] 82 health checks
@@ -225,6 +245,7 @@ doc-gentle/              ← Producto
 - [x] Contratos legales
 
 ### Para productos (Pendiente)
+
 - [ ] Implementar Doc-Gentle
 - [ ] Especificar Gentle-Music
 - [ ] Especificar Stock-Vanguard
@@ -236,21 +257,26 @@ doc-gentle/              ← Producto
 ## ❓ PREGUNTAS FRECUENTES
 
 ### ¿Puedo usar el stack ahora?
+
 **SÍ**. El stack está operativo.
 
 ### ¿Puedo vender productos ahora?
+
 **NO**. Solo Doc-Gentle tiene especificación. Necesita implementación.
 
 ### ¿Dónde está el código de Doc-Gentle?
+
 **No existe**. Solo hay especificación (`README.md`).
 
 ### ¿Qué debo hacer para lanzar productos?
+
 1. Implementar Doc-Gentle
 2. Crear landing pages
 3. Configurar monetización
 4. Marketing
 
 ### ¿El CMS genera contenido listo para usar?
+
 **SÍ**. Genera imágenes SVG, posts de redes, y frames de video localmente.
 
 ---
@@ -258,15 +284,18 @@ doc-gentle/              ← Producto
 ## 🎯 PRÓXIMOS PASOS SUGERIDOS
 
 ### Prioridad Alta (Stack)
+
 1. ✅ Completado
 
 ### Prioridad Media (Productos)
+
 1. Implementar Doc-Gentle MVP
 2. Crear demo video con Video Agent
 3. Landing page para Doc-Gentle
 4. Sistema de suscripciones
 
 ### Prioridad Baja (Mejoras)
+
 1. Mejorar UI del CMS
 2. Agregar más templates
 3. Integraciones externas (opcionales)
@@ -276,6 +305,7 @@ doc-gentle/              ← Producto
 ## 📞 CONTACTO
 
 Para dudas sobre:
+
 - **Stack**: Ver docs/presentations/
 - **Productos**: Ver apps/*/README.md
 - **Contratos**: Ver docs/contracts/
@@ -283,4 +313,5 @@ Para dudas sobre:
 
 ---
 
-**Conclusión**: El stack está listo. Los productos derivados son el siguiente paso para generar revenue.
+**Conclusión**: El stack está listo. Los productos derivados son el siguiente paso para generar
+revenue.

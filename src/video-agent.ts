@@ -3,7 +3,7 @@
  * video-agent.ts
  * Gentle-Vanguard Video Generator Agent
  * Crea videos demostrativos, tutoriales y simulaciones nativamente
- * 
+ *
  * @module video-agent
  * @version 1.0.0
  */
@@ -101,7 +101,7 @@ class GentleVideoAgent implements VideoAgent {
   }
 
   private ensureDirectories(): void {
-    [this.outputDir, this.tempDir].forEach(dir => {
+    [this.outputDir, this.tempDir].forEach((dir) => {
       if (!existsSync(dir)) {
         mkdirSync(dir, { recursive: true });
       }
@@ -141,7 +141,9 @@ class GentleVideoAgent implements VideoAgent {
       // Fallback: return frames directory for manual compilation
       console.log(`✅ Frames generados en: ${framesDir}`);
       console.log(`   Para compilar video, instala FFmpeg y ejecuta:`);
-      console.log(`   ffmpeg -framerate ${config.fps} -i ${framesDir}/frame-%06d.html -c:v libx264 ${outputPath}`);
+      console.log(
+        `   ffmpeg -framerate ${config.fps} -i ${framesDir}/frame-%06d.html -c:v libx264 ${outputPath}`,
+      );
       return framesDir;
     }
 
@@ -154,14 +156,14 @@ class GentleVideoAgent implements VideoAgent {
    */
   async recordScreen(url: string, duration: number): Promise<string> {
     console.log(`📹 Grabando pantalla: ${url} (${duration}s)`);
-    
+
     // Note: Requires puppeteer or playwright to be installed
     // This is a placeholder implementation
-    
+
     console.log('⚠️ Record de pantalla requiere Puppeteer/Playwright');
     console.log('   Instala con: npm install puppeteer');
     console.log('   O usa la versión simulada: createDemo()');
-    
+
     throw new Error('Screen recording requires puppeteer. Use createDemo() for simulated videos.');
   }
 
@@ -170,10 +172,10 @@ class GentleVideoAgent implements VideoAgent {
    */
   async generateFromScript(script: VideoScript): Promise<string> {
     console.log('📝 Generando video desde script...');
-    
+
     // Implementation would process script scenes
     // and generate corresponding frames/video
-    
+
     throw new Error('Not implemented yet');
   }
 
@@ -182,14 +184,14 @@ class GentleVideoAgent implements VideoAgent {
    */
   async createArchitectureVisual(flow: ArchitectureFlow): Promise<string> {
     console.log('🏗️ Generando visualización de arquitectura...');
-    
+
     const timestamp = Date.now();
     const videoName = `architecture-${timestamp}`;
     const outputPath = join(this.outputDir, `${videoName}.svg`);
-    
+
     const svg = this.generateArchitectureSVG(flow);
     writeFileSync(outputPath, svg, 'utf-8');
-    
+
     console.log(`✅ Diagrama generado: ${outputPath}`);
     return outputPath;
   }
@@ -197,9 +199,14 @@ class GentleVideoAgent implements VideoAgent {
   /**
    * Generate demo frame HTML
    */
-  private generateDemoFrame(step: DemoStep, config: VideoConfig, frameIndex: number, totalFrames: number): string {
+  private generateDemoFrame(
+    step: DemoStep,
+    config: VideoConfig,
+    frameIndex: number,
+    totalFrames: number,
+  ): string {
     const progress = ((frameIndex / totalFrames) * 100).toFixed(1);
-    
+
     return `<!DOCTYPE html>
 <html lang="${config.lang}">
 <head>
@@ -297,7 +304,10 @@ class GentleVideoAgent implements VideoAgent {
       color: #64748b;
       font-size: 14px;
     }
-    ${step.highlight?.map(h => `
+    ${
+      step.highlight
+        ?.map(
+          (h) => `
     .highlight-${h} {
       animation: pulse 1s ease-in-out infinite;
       border: 2px solid #22d3ee;
@@ -307,7 +317,10 @@ class GentleVideoAgent implements VideoAgent {
       0%, 100% { box-shadow: 0 0 0 0 #22d3ee40; }
       50% { box-shadow: 0 0 20px 10px #22d3ee40; }
     }
-    `).join('') || ''}
+    `,
+        )
+        .join('') || ''
+    }
   </style>
 </head>
 <body>
@@ -341,31 +354,37 @@ class GentleVideoAgent implements VideoAgent {
   private generateArchitectureSVG(flow: ArchitectureFlow): string {
     const width = 1200;
     const height = 800;
-    
+
     // Generate nodes
-    const nodeElements = flow.steps.map(step => `
+    const nodeElements = flow.steps
+      .map(
+        (step) => `
       <g transform="translate(${step.x}, ${step.y})">
         <rect x="-60" y="-30" width="120" height="60" 
               fill="#141824" stroke="${step.color}" stroke-width="2" rx="8" />
         <text x="0" y="5" text-anchor="middle" fill="#e2e8f0" font-size="14">${step.label}</text>
       </g>
-    `).join('');
+    `,
+      )
+      .join('');
 
     // Generate connections
-    const connectionElements = flow.connections.map(conn => {
-      const from = flow.steps.find(s => s.id === conn.from);
-      const to = flow.steps.find(s => s.id === conn.to);
-      if (!from || !to) return '';
-      
-      const midX = (from.x + to.x) / 2;
-      const midY = (from.y + to.y) / 2;
-      
-      return `
+    const connectionElements = flow.connections
+      .map((conn) => {
+        const from = flow.steps.find((s) => s.id === conn.from);
+        const to = flow.steps.find((s) => s.id === conn.to);
+        if (!from || !to) return '';
+
+        const midX = (from.x + to.x) / 2;
+        const midY = (from.y + to.y) / 2;
+
+        return `
         <line x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" 
               stroke="#22d3ee" stroke-width="2" marker-end="url(#arrow)" />
         ${conn.label ? `<text x="${midX}" y="${midY - 10}" text-anchor="middle" fill="#94a3b8" font-size="12">${conn.label}</text>` : ''}
       `;
-    }).join('');
+      })
+      .join('');
 
     return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
@@ -394,17 +413,26 @@ class GentleVideoAgent implements VideoAgent {
    */
   private async compileVideo(framesDir: string, outputPath: string, fps: number): Promise<void> {
     return new Promise((resolve, reject) => {
-      const ffmpeg = spawn('ffmpeg', [
-        '-framerate', String(fps),
-        '-pattern_type', 'glob',
-        '-i', `${framesDir}/*.html`,
-        '-c:v', 'libx264',
-        '-pix_fmt', 'yuv420p',
-        '-y',
-        outputPath
-      ], {
-        stdio: ['ignore', 'pipe', 'pipe']
-      });
+      const ffmpeg = spawn(
+        'ffmpeg',
+        [
+          '-framerate',
+          String(fps),
+          '-pattern_type',
+          'glob',
+          '-i',
+          `${framesDir}/*.html`,
+          '-c:v',
+          'libx264',
+          '-pix_fmt',
+          'yuv420p',
+          '-y',
+          outputPath,
+        ],
+        {
+          stdio: ['ignore', 'pipe', 'pipe'],
+        },
+      );
 
       ffmpeg.on('close', (code) => {
         if (code === 0) {
@@ -434,7 +462,7 @@ class GentleVideoAgent implements VideoAgent {
 // CLI
 async function main() {
   const args = process.argv.slice(2);
-  
+
   if (args.includes('--help') || args.includes('-h')) {
     console.log(`
 Gentle-Vanguard Video Agent
@@ -464,36 +492,36 @@ Examples:
     case 'demo': {
       const topic = args[1] || 'features';
       const duration = parseInt(args[2] || '10');
-      
+
       const steps: DemoStep[] = [
         {
           id: '1',
           title: 'Inicio de Sesión',
           description: 'Comenzamos una sesión de trabajo',
           action: 'npx tsx src/session-autostart.ts',
-          duration: 2
+          duration: 2,
         },
         {
           id: '2',
           title: 'Ejecución de Agentes',
           description: '21 agentes se activan automáticamente',
           action: '21 agents ready ✓',
-          duration: 3
+          duration: 3,
         },
         {
           id: '3',
           title: 'Pipeline Activo',
           description: 'El stack opera de forma autónoma',
           action: '100% autonomous operation',
-          duration: 3
+          duration: 3,
         },
         {
           id: '4',
           title: 'Resultado',
           description: 'Tarea completada exitosamente',
           action: '✓ Task completed',
-          duration: 2
-        }
+          duration: 2,
+        },
       ];
 
       const config: VideoConfig = {
@@ -502,7 +530,7 @@ Examples:
         duration,
         resolution: '1080p',
         fps: 30,
-        lang: 'es'
+        lang: 'es',
       };
 
       const output = await agent.createDemo(config, steps);
@@ -518,7 +546,7 @@ Examples:
           { id: 'ba', label: 'BA Agent', x: 700, y: 200, color: '#34d399' },
           { id: 'dev', label: 'DEV Agent', x: 700, y: 400, color: '#34d399' },
           { id: 'qa', label: 'QA Agent', x: 700, y: 600, color: '#34d399' },
-          { id: 'output', label: 'Output', x: 1000, y: 400, color: '#22d3ee' }
+          { id: 'output', label: 'Output', x: 1000, y: 400, color: '#22d3ee' },
         ],
         connections: [
           { from: 'user', to: 'orchestrator', label: 'Request' },
@@ -527,8 +555,8 @@ Examples:
           { from: 'orchestrator', to: 'qa', label: 'Verify' },
           { from: 'ba', to: 'output' },
           { from: 'dev', to: 'output' },
-          { from: 'qa', to: 'output' }
-        ]
+          { from: 'qa', to: 'output' },
+        ],
       };
 
       const output = await agent.createArchitectureVisual(flow);

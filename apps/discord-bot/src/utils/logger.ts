@@ -9,7 +9,7 @@ export const logger = createLogger({
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     format.errors({ stack: true }),
     format.splat(),
-    format.json()
+    format.json(),
   ),
   defaultMeta: { service: 'gentle-vanguard-bot' },
   transports: [
@@ -23,7 +23,7 @@ export const logger = createLogger({
             msg += ` ${JSON.stringify(metadata)}`;
           }
           return msg;
-        })
+        }),
       ),
     }),
     // File output

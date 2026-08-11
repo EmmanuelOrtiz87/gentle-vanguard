@@ -1511,9 +1511,34 @@ section {
 }
 
 /* Carousel Styles */
-.gv-carousel { position: relative; overflow: hidden; }
-.gv-carousel-track { display: flex; transition: transform 0.5s ease; }
-.gv-carousel-slide { min-width: 100%; opacity: 0; transition: opacity 0.5s ease; display: none; }
-.gv-carousel-slide.active { opacity: 1; display: block; }
-.carousel-dots .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--br); margin: 0 5px; cursor: pointer; transition: background 0.3s; }
-.carousel-dots .dot.active { background: var(--p); }
+.gv-carousel {
+  position: relative;
+  overflow: hidden;
+}
+.gv-carousel-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+.gv-carousel-slide {
+  min-width: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  display: none;
+}
+.gv-carousel-slide.active {
+  opacity: 1;
+  display: block;
+}
+.carousel-dots .dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--br);
+  margin: 0 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.carousel-dots .dot.active {
+  background: var(--p);
+}

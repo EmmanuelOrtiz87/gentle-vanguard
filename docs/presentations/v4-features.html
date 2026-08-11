@@ -42,7 +42,9 @@
       .feature-card:hover {
         border-color: oklch(0.8 0.14 210 / 0.4);
         transform: translateY(-6px);
-        box-shadow: var(--glow-cyan), 0 16px 50px oklch(0.1 0.02 262 / 0.5);
+        box-shadow:
+          var(--glow-cyan),
+          0 16px 50px oklch(0.1 0.02 262 / 0.5);
       }
       .feature-card:hover::before {
         opacity: 1;
@@ -158,18 +160,41 @@
 
     <nav class="navbar navbar-expand-xl nav-blur fixed-top">
       <div class="container-fluid px-3">
-        <a class="navbar-brand text-light fw-bold mono" href="index.html" style="font-size: 0.85rem">
+        <a
+          class="navbar-brand text-light fw-bold mono"
+          href="index.html"
+          style="font-size: 0.85rem"
+        >
           <i class="bi bi-robot me-2" style="color: var(--p)"></i>GV
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navMain"
+        >
           <i class="bi bi-list" style="color: var(--p)"></i>
         </button>
         <div class="collapse navbar-collapse" id="navMain">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="architecture.html"><i class="bi bi-diagram-3 me-1"></i>Arch</a></li>
-            <li class="nav-item"><a class="nav-link active" href="v4-features.html"><i class="bi bi-stars me-1"></i>v4.0</a></li>
-            <li class="nav-item"><a class="nav-link" href="marketing.html"><i class="bi bi-megaphone me-1"></i>Marketing</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html"><i class="bi bi-house me-1"></i>Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="architecture.html"
+                ><i class="bi bi-diagram-3 me-1"></i>Arch</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="v4-features.html"
+                ><i class="bi bi-stars me-1"></i>v4.0</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="marketing.html"
+                ><i class="bi bi-megaphone me-1"></i>Marketing</a
+              >
+            </li>
           </ul>
         </div>
       </div>
@@ -177,11 +202,17 @@
 
     <header class="hero" id="overview">
       <span class="hero-badge mb-3">✦ August 2026 Release</span>
-      <h1 class="display-1 fw-bold z-1" style="font-size: clamp(2.5rem, 6vw, 5rem); letter-spacing: -0.02em; line-height: 1.05">
+      <h1
+        class="display-1 fw-bold z-1"
+        style="font-size: clamp(2.5rem, 6vw, 5rem); letter-spacing: -0.02em; line-height: 1.05"
+      >
         What's New in <span class="glow">v4.0</span>
       </h1>
-      <p class="lead text-secondary z-1" style="max-width: 700px; font-size: clamp(1rem, 2vw, 1.3rem)">
-        From 73% to <strong class="text-light">100% Autonomous</strong>.<br>
+      <p
+        class="lead text-secondary z-1"
+        style="max-width: 700px; font-size: clamp(1rem, 2vw, 1.3rem)"
+      >
+        From 73% to <strong class="text-light">100% Autonomous</strong>.<br />
         New capabilities, native integrations, and enterprise-grade features.
       </p>
       <div class="d-flex flex-wrap gap-4 justify-content-center z-1 mt-3">
@@ -204,8 +235,12 @@
       </div>
       <div class="mt-4 d-flex gap-2 flex-wrap justify-content-center z-1">
         <a href="#features" class="btn-gv"><i class="bi bi-stars me-1"></i>Explore Features</a>
-        <a href="#migration" class="btn-gv-alt"><i class="bi bi-arrow-repeat me-1"></i>Migration Guide</a>
-        <a href="quickstart.html" class="btn-gv-alt"><i class="bi bi-rocket-takeoff me-1"></i>Get Started</a>
+        <a href="#migration" class="btn-gv-alt"
+          ><i class="bi bi-arrow-repeat me-1"></i>Migration Guide</a
+        >
+        <a href="quickstart.html" class="btn-gv-alt"
+          ><i class="bi bi-rocket-takeoff me-1"></i>Get Started</a
+        >
       </div>
     </header>
 
@@ -221,7 +256,10 @@
           <div class="feature-card new-feature">
             <div class="icon-wrapper">⚡</div>
             <h4>Adaptive Steps System</h4>
-            <p>Auto-scales step budgets for orchestrator and subagents based on task complexity. Assigns 24-80 steps dynamically.</p>
+            <p>
+              Auto-scales step budgets for orchestrator and subagents based on task complexity.
+              Assigns 24-80 steps dynamically.
+            </p>
             <div class="mt-3">
               <span class="tag">Intelligent Routing</span>
               <span class="tag">Auto-Scaling</span>
@@ -234,7 +272,10 @@
           <div class="feature-card new-feature">
             <div class="icon-wrapper">📊</div>
             <h4>Real Token Tracking</h4>
-            <p>Agnostic token measurement that reads session data from disk. No plugin dependencies—works with OpenCode, Claude, Cursor.</p>
+            <p>
+              Agnostic token measurement that reads session data from disk. No plugin
+              dependencies—works with OpenCode, Claude, Cursor.
+            </p>
             <div class="mt-3">
               <span class="tag">Agnostic</span>
               <span class="tag">Nexus DB</span>
@@ -247,7 +288,10 @@
           <div class="feature-card new-feature">
             <div class="icon-wrapper">🌐</div>
             <h4>Web Crawler Dual-Provider</h4>
-            <p>Firecrawl primary with Jina Reader + DuckDuckGo fallback. Zero-config web scraping and search.</p>
+            <p>
+              Firecrawl primary with Jina Reader + DuckDuckGo fallback. Zero-config web scraping and
+              search.
+            </p>
             <div class="mt-3">
               <span class="tag">Dual Provider</span>
               <span class="tag">Zero Config</span>
@@ -260,7 +304,10 @@
           <div class="feature-card new-feature">
             <div class="icon-wrapper">📈</div>
             <h4>Research Trends</h4>
-            <p>Aggregates Last30Days trends from GitHub, Hacker News, Stack Overflow, Dev.to, and Reddit.</p>
+            <p>
+              Aggregates Last30Days trends from GitHub, Hacker News, Stack Overflow, Dev.to, and
+              Reddit.
+            </p>
             <div class="mt-3">
               <span class="tag">Multi-Source</span>
               <span class="tag">Trend Analysis</span>
@@ -273,7 +320,9 @@
           <div class="feature-card new-feature">
             <div class="icon-wrapper">🔐</div>
             <h4>Hash-Chained Audit</h4>
-            <p>SHA-256 hash chain for tamper-proof event sourcing. Each event stores prevHash + hash.</p>
+            <p>
+              SHA-256 hash chain for tamper-proof event sourcing. Each event stores prevHash + hash.
+            </p>
             <div class="mt-3">
               <span class="tag">SHA-256</span>
               <span class="tag">Tamper-Proof</span>
@@ -286,7 +335,10 @@
           <div class="feature-card new-feature">
             <div class="icon-wrapper">🎯</div>
             <h4>Retrieval Grader (CRAG)</h4>
-            <p>Corrective RAG pattern grading retrieved chunks with BM25 lexical scoring. Keyword fallback on poor retrieval.</p>
+            <p>
+              Corrective RAG pattern grading retrieved chunks with BM25 lexical scoring. Keyword
+              fallback on poor retrieval.
+            </p>
             <div class="mt-3">
               <span class="tag">CRAG</span>
               <span class="tag">BM25</span>
@@ -299,7 +351,10 @@
           <div class="feature-card new-feature">
             <div class="icon-wrapper">🗜️</div>
             <h4>Structural Compression</h4>
-            <p>SmartCrusher, Tabular Compaction, LogCompressor, TextCrusher+BM25, CrossCompression—5 strategies in native TS.</p>
+            <p>
+              SmartCrusher, Tabular Compaction, LogCompressor, TextCrusher+BM25, CrossCompression—5
+              strategies in native TS.
+            </p>
             <div class="mt-3">
               <span class="tag">Lossless</span>
               <span class="tag">Lossy</span>
@@ -312,7 +367,9 @@
           <div class="feature-card new-feature">
             <div class="icon-wrapper">🎭</div>
             <h4>Humanizer</h4>
-            <p>Transforms technical/AI text into human prose with readability analysis and scoring.</p>
+            <p>
+              Transforms technical/AI text into human prose with readability analysis and scoring.
+            </p>
             <div class="mt-3">
               <span class="tag">NLP</span>
               <span class="tag">Readability</span>
@@ -325,7 +382,10 @@
           <div class="feature-card new-feature">
             <div class="icon-wrapper">🎨</div>
             <h4>Design Tokens</h4>
-            <p>System of design tokens (colors, typography, spacing) with CSS/JSON generation and validation.</p>
+            <p>
+              System of design tokens (colors, typography, spacing) with CSS/JSON generation and
+              validation.
+            </p>
             <div class="mt-3">
               <span class="tag">Tokens</span>
               <span class="tag">CSS/JSON</span>
@@ -338,7 +398,10 @@
           <div class="feature-card new-feature">
             <div class="icon-wrapper">📝</div>
             <h4>Planning Templates</h4>
-            <p>Pre-write planning templates for session plans, task breakdown, ADRs with structure validation.</p>
+            <p>
+              Pre-write planning templates for session plans, task breakdown, ADRs with structure
+              validation.
+            </p>
             <div class="mt-3">
               <span class="tag">Templates</span>
               <span class="tag">Validation</span>
@@ -351,7 +414,10 @@
           <div class="feature-card new-feature">
             <div class="icon-wrapper">🗺️</div>
             <h4>Multi-Profile SDD</h4>
-            <p>Cheap/Balanced/Premium profiles per SDD phase with temperature + hallucinationGuard settings.</p>
+            <p>
+              Cheap/Balanced/Premium profiles per SDD phase with temperature + hallucinationGuard
+              settings.
+            </p>
             <div class="mt-3">
               <span class="tag">Profiles</span>
               <span class="tag">Cost Control</span>
@@ -364,7 +430,10 @@
           <div class="feature-card new-feature">
             <div class="icon-wrapper">🔧</div>
             <h4>Witr Wrapper</h4>
-            <p>"Why Is This Running?" process/port/file/container tracing with auto-install and secrets redaction.</p>
+            <p>
+              "Why Is This Running?" process/port/file/container tracing with auto-install and
+              secrets redaction.
+            </p>
             <div class="mt-3">
               <span class="tag">Tracing</span>
               <span class="tag">Causal</span>
@@ -425,7 +494,9 @@
             </div>
             <div class="code-preview mb-3">
               <div><span class="comment"># Session autostart</span></div>
-              <div><span class="cmd">npx tsx</span> <span class="arg">src/session-autostart.ts</span></div>
+              <div>
+                <span class="cmd">npx tsx</span> <span class="arg">src/session-autostart.ts</span>
+              </div>
             </div>
             <div class="code-preview mb-3">
               <div><span class="comment"># Watchtower</span></div>
@@ -460,7 +531,9 @@
             <div class="progress-bar-custom mt-2">
               <div class="progress-bar-fill bg-success" style="width: 100%"></div>
             </div>
-            <p class="text-secondary small mt-3">All 82 health checks now run in parallel. Sequential execution eliminated.</p>
+            <p class="text-secondary small mt-3">
+              All 82 health checks now run in parallel. Sequential execution eliminated.
+            </p>
           </div>
         </div>
 
@@ -474,7 +547,9 @@
             <div class="progress-bar-custom mt-2">
               <div class="progress-bar-fill bg-info" style="width: 80%"></div>
             </div>
-            <p class="text-secondary small mt-3">5× faster background task launch. Improved session startup time.</p>
+            <p class="text-secondary small mt-3">
+              5× faster background task launch. Improved session startup time.
+            </p>
           </div>
         </div>
 
@@ -512,7 +587,9 @@
             <div class="progress-bar-custom mt-2">
               <div class="progress-bar-fill bg-primary" style="width: 77%"></div>
             </div>
-            <p class="text-secondary small mt-3">77% reduction. Modular repositories with single responsibility.</p>
+            <p class="text-secondary small mt-3">
+              77% reduction. Modular repositories with single responsibility.
+            </p>
           </div>
         </div>
       </div>
@@ -618,8 +695,13 @@
         <div class="col-md-6 col-lg-4">
           <div class="code-preview">
             <div class="comment"># Web Crawler</div>
-            <div><span class="cmd">npm</span> <span class="arg">run web:crawl</span> <span class="output">-- --url</span></div>
-            <div><span class="cmd">npx tsx</span> <span class="arg">src/web-crawler-cli.ts</span></div>
+            <div>
+              <span class="cmd">npm</span> <span class="arg">run web:crawl</span>
+              <span class="output">-- --url</span>
+            </div>
+            <div>
+              <span class="cmd">npx tsx</span> <span class="arg">src/web-crawler-cli.ts</span>
+            </div>
           </div>
         </div>
 
@@ -634,8 +716,12 @@
         <div class="col-md-6 col-lg-4">
           <div class="code-preview">
             <div class="comment"># Adaptive Steps</div>
-            <div><span class="cmd">npx tsx</span> <span class="arg">src/adaptive-steps.ts</span></div>
-            <div><span class="cmd">npm</span> <span class="arg">run profile:set -- premium</span></div>
+            <div>
+              <span class="cmd">npx tsx</span> <span class="arg">src/adaptive-steps.ts</span>
+            </div>
+            <div>
+              <span class="cmd">npm</span> <span class="arg">run profile:set -- premium</span>
+            </div>
           </div>
         </div>
 
@@ -650,7 +736,9 @@
         <div class="col-md-6 col-lg-4">
           <div class="code-preview">
             <div class="comment"># Research</div>
-            <div><span class="cmd">npx tsx</span> <span class="arg">src/research-trends-cli.ts</span></div>
+            <div>
+              <span class="cmd">npx tsx</span> <span class="arg">src/research-trends-cli.ts</span>
+            </div>
             <div><span class="cmd">npm</span> <span class="arg">run web:select</span></div>
           </div>
         </div>
@@ -658,8 +746,14 @@
         <div class="col-md-6 col-lg-4">
           <div class="code-preview">
             <div class="comment"># Event Sourcing</div>
-            <div><span class="cmd">npx tsx</span> <span class="arg">src/event-sourcing.ts -Action</span></div>
-            <div><span class="cmd">npx tsx</span> <span class="arg">src/event-sourcing.ts -Action verify</span></div>
+            <div>
+              <span class="cmd">npx tsx</span>
+              <span class="arg">src/event-sourcing.ts -Action</span>
+            </div>
+            <div>
+              <span class="cmd">npx tsx</span>
+              <span class="arg">src/event-sourcing.ts -Action verify</span>
+            </div>
           </div>
         </div>
       </div>
@@ -673,9 +767,18 @@
       </div>
 
       <div class="text-center">
-        <a href="quickstart.html" class="btn-gv me-2 mb-2"><i class="bi bi-rocket-takeoff me-1"></i>Quick Start</a>
-        <a href="architecture.html" class="btn-gv-alt me-2 mb-2"><i class="bi bi-diagram-3 me-1"></i>Architecture</a>
-        <a href="https://github.com/EmmanuelOrtiz87/gentle-vanguard" target="_blank" class="btn-gv-alt mb-2"><i class="bi bi-github me-1"></i>GitHub</a>
+        <a href="quickstart.html" class="btn-gv me-2 mb-2"
+          ><i class="bi bi-rocket-takeoff me-1"></i>Quick Start</a
+        >
+        <a href="architecture.html" class="btn-gv-alt me-2 mb-2"
+          ><i class="bi bi-diagram-3 me-1"></i>Architecture</a
+        >
+        <a
+          href="https://github.com/EmmanuelOrtiz87/gentle-vanguard"
+          target="_blank"
+          class="btn-gv-alt mb-2"
+          ><i class="bi bi-github me-1"></i>GitHub</a
+        >
       </div>
     </section>
 

@@ -107,27 +107,35 @@ let dashboardContent = fs.readFileSync(dashboardPath, 'utf8');
 // Verificar si ya tiene triggers
 if (!dashboardContent.includes('tip_dashboard_')) {
   // Agregar triggers en secciones clave
-  const triggerReplacements: Array<{search: RegExp; replace: (match: string) => string; tip: string}> = [
+  const triggerReplacements: Array<{
+    search: RegExp;
+    replace: (match: string) => string;
+    tip: string;
+  }> = [
     {
       search: /(WebSocket Real-Time|Real-time WebSocket)/i,
-      replace: (match: string) => `${match}<span class="info-trigger" data-i18n-title="tip_dashboard_websocket">i</span>`,
-      tip: 'tip_dashboard_websocket'
+      replace: (match: string) =>
+        `${match}<span class="info-trigger" data-i18n-title="tip_dashboard_websocket">i</span>`,
+      tip: 'tip_dashboard_websocket',
     },
     {
       search: /(7 Dashboard Sections|7 sections)/i,
-      replace: (match: string) => `${match}<span class="info-trigger" data-i18n-title="tip_dashboard_sections">i</span>`,
-      tip: 'tip_dashboard_sections'
+      replace: (match: string) =>
+        `${match}<span class="info-trigger" data-i18n-title="tip_dashboard_sections">i</span>`,
+      tip: 'tip_dashboard_sections',
     },
     {
       search: /(8 Alert Rules|configurable alert)/i,
-      replace: (match: string) => `${match}<span class="info-trigger" data-i18n-title="tip_dashboard_alerts">i</span>`,
-      tip: 'tip_dashboard_alerts'
+      replace: (match: string) =>
+        `${match}<span class="info-trigger" data-i18n-title="tip_dashboard_alerts">i</span>`,
+      tip: 'tip_dashboard_alerts',
     },
     {
       search: /(3 Languages|i18n|internationalization)/i,
-      replace: (match: string) => `${match}<span class="info-trigger" data-i18n-title="tip_dashboard_i18n">i</span>`,
-      tip: 'tip_dashboard_i18n'
-    }
+      replace: (match: string) =>
+        `${match}<span class="info-trigger" data-i18n-title="tip_dashboard_i18n">i</span>`,
+      tip: 'tip_dashboard_i18n',
+    },
   ];
 
   let modified = false;
@@ -165,31 +173,31 @@ if (fs.existsSync(patternsPath)) {
   let patternsContent = fs.readFileSync(patternsPath, 'utf8');
 
   if (!patternsContent.includes('tip_patterns_')) {
-    const patternsTriggers: Array<{search: RegExp; tip: string}> = [
+    const patternsTriggers: Array<{ search: RegExp; tip: string }> = [
       {
         search: /(Karpathy Guidelines?|Karphy)/i,
-        tip: 'tip_patterns_karpathy'
+        tip: 'tip_patterns_karpathy',
       },
       {
         search: /(SDD|Spec-Driven|Explore Design Apply)/i,
-        tip: 'tip_patterns_sdd'
+        tip: 'tip_patterns_sdd',
       },
       {
         search: /(AI Slop|Slop Detection)/i,
-        tip: 'tip_patterns_slop'
+        tip: 'tip_patterns_slop',
       },
       {
         search: /(Architecture Patterns|10 patterns)/i,
-        tip: 'tip_patterns_arch'
+        tip: 'tip_patterns_arch',
       },
       {
         search: /(Development Standards?|Standards)/i,
-        tip: 'tip_patterns_standards'
+        tip: 'tip_patterns_standards',
       },
       {
         search: /(Documentation|Progressive Disclosure)/i,
-        tip: 'tip_patterns_docs'
-      }
+        tip: 'tip_patterns_docs',
+      },
     ];
 
     let modified = false;
@@ -358,7 +366,9 @@ const carouselDAOs = `
 
 // Guardar el HTML del carrusel para referencia
 fs.writeFileSync('.session/dao-carousel-snippet.html', carouselDAOs);
-console.log('   ✅ Estructura de carrusel para DAOs guardada en .session/dao-carousel-snippet.html');
+console.log(
+  '   ✅ Estructura de carrusel para DAOs guardada en .session/dao-carousel-snippet.html',
+);
 
 // ============================================================================
 // PASO 6: Crear estructura de carrusel para dashboard.html (7 secciones)
@@ -452,7 +462,9 @@ const carouselDashboard = `
 `;
 
 fs.writeFileSync('.session/dashboard-carousel-snippet.html', carouselDashboard);
-console.log('   ✅ Estructura de carrusel para dashboard guardada en .session/dashboard-carousel-snippet.html');
+console.log(
+  '   ✅ Estructura de carrusel para dashboard guardada en .session/dashboard-carousel-snippet.html',
+);
 
 // ============================================================================
 // PASO 7: Crear JavaScript para carruseles

@@ -439,11 +439,7 @@
     overlay.addEventListener('click', function (e) {
       if (moved) return;
       var t = e.target;
-      if (
-        t === overlay ||
-        t === stage ||
-        t.classList.contains('gv-lightbox-backdrop')
-      ) {
+      if (t === overlay || t === stage || t.classList.contains('gv-lightbox-backdrop')) {
         close();
       }
     });

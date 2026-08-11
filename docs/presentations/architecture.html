@@ -236,19 +236,25 @@
                 <div class="col-sm-6 col-lg-4">
                   <div class="card-dao">
                     <h6 class="text-info"><i class="bi bi-graph-up me-1"></i>MetricsRepo</h6>
-                    <small class="text-secondary">metric_snapshots CRUD — time-series tokens, latency, health</small>
+                    <small class="text-secondary"
+                      >metric_snapshots CRUD — time-series tokens, latency, health</small
+                    >
                   </div>
                 </div>
                 <div class="col-sm-6 col-lg-4">
                   <div class="card-dao">
                     <h6 class="text-info"><i class="bi bi-people me-1"></i>SessionRepo</h6>
-                    <small class="text-secondary">sessions + session_scoring — upsert, active queries, quality</small>
+                    <small class="text-secondary"
+                      >sessions + session_scoring — upsert, active queries, quality</small
+                    >
                   </div>
                 </div>
                 <div class="col-sm-6 col-lg-4">
                   <div class="card-dao">
                     <h6 class="text-info"><i class="bi bi-activity me-1"></i>TraceRepo</h6>
-                    <small class="text-secondary">traces + feedback — waterfall, latency stats, thumbs</small>
+                    <small class="text-secondary"
+                      >traces + feedback — waterfall, latency stats, thumbs</small
+                    >
                   </div>
                 </div>
               </div>
@@ -258,19 +264,25 @@
                 <div class="col-sm-6 col-lg-4">
                   <div class="card-dao">
                     <h6 class="text-info"><i class="bi bi-megaphone me-1"></i>EventRepo</h6>
-                    <small class="text-secondary" data-i18n="c_architecture_4">events + alerts — append-only event sourcing</small>
+                    <small class="text-secondary" data-i18n="c_architecture_4"
+                      >events + alerts — append-only event sourcing</small
+                    >
                   </div>
                 </div>
                 <div class="col-sm-6 col-lg-4">
                   <div class="card-dao">
                     <h6 class="text-info"><i class="bi bi-database me-1"></i>CacheRepo</h6>
-                    <small class="text-secondary">response_cache + semantic — SHA256 + embedding TTL</small>
+                    <small class="text-secondary"
+                      >response_cache + semantic — SHA256 + embedding TTL</small
+                    >
                   </div>
                 </div>
                 <div class="col-sm-6 col-lg-4">
                   <div class="card-dao">
                     <h6 class="text-info"><i class="bi bi-tools me-1"></i>SkillRepo</h6>
-                    <small class="text-secondary" data-i18n="c_architecture_5">skill_usage, token_usage, routing_rules tracking</small>
+                    <small class="text-secondary" data-i18n="c_architecture_5"
+                      >skill_usage, token_usage, routing_rules tracking</small
+                    >
                   </div>
                 </div>
               </div>
@@ -280,19 +292,25 @@
                 <div class="col-sm-6 col-lg-4">
                   <div class="card-dao">
                     <h6 class="text-info"><i class="bi bi-file-check me-1"></i>ContractRepo</h6>
-                    <small class="text-secondary" data-i18n="c_architecture_6">contract_results — SDD validation persistence</small>
+                    <small class="text-secondary" data-i18n="c_architecture_6"
+                      >contract_results — SDD validation persistence</small
+                    >
                   </div>
                 </div>
                 <div class="col-sm-6 col-lg-4">
                   <div class="card-dao">
                     <h6 class="text-info"><i class="bi bi-bug me-1"></i>ErrorMemoryRepo</h6>
-                    <small class="text-secondary">error_memory + embeddings — bug tracking + vector</small>
+                    <small class="text-secondary"
+                      >error_memory + embeddings — bug tracking + vector</small
+                    >
                   </div>
                 </div>
                 <div class="col-sm-6 col-lg-4">
                   <div class="card-dao">
                     <h6 class="text-info"><i class="bi bi-journal-text me-1"></i>BacklogRepo</h6>
-                    <small class="text-secondary" data-i18n="c_architecture_8">backlog tracking + priorities, persistence</small>
+                    <small class="text-secondary" data-i18n="c_architecture_8"
+                      >backlog tracking + priorities, persistence</small
+                    >
                   </div>
                 </div>
               </div>
@@ -302,27 +320,43 @@
                 <div class="col-sm-6 col-lg-4">
                   <div class="card-dao">
                     <h6 class="text-info"><i class="bi bi-brush me-1"></i>HousekeepingRepo</h6>
-                    <small class="text-secondary" data-i18n="c_architecture_7">pruneAll, vacuum, WAL checkpoint >1MB auto</small>
+                    <small class="text-secondary" data-i18n="c_architecture_7"
+                      >pruneAll, vacuum, WAL checkpoint >1MB auto</small
+                    >
                   </div>
                 </div>
                 <div class="col-sm-6 col-lg-4">
                   <div class="card-dao">
-                    <h6 class="text-info"><i class="bi bi-database-gear me-1"></i>MigrationRunner</h6>
-                    <small class="text-secondary">7 automated DB migrations with rollback support</small>
+                    <h6 class="text-info">
+                      <i class="bi bi-database-gear me-1"></i>MigrationRunner
+                    </h6>
+                    <small class="text-secondary"
+                      >7 automated DB migrations with rollback support</small
+                    >
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="gv-carousel-nav text-center mt-3">
-            <button class="btn btn-sm btn-outline-secondary me-2" onclick="moveCarousel('dao-carousel', -1)">❮</button>
+            <button
+              class="btn btn-sm btn-outline-secondary me-2"
+              onclick="moveCarousel('dao-carousel', -1)"
+            >
+              ❮
+            </button>
             <span class="carousel-dots mx-2">
               <span class="dot active" onclick="goToSlide('dao-carousel', 0)"></span>
               <span class="dot" onclick="goToSlide('dao-carousel', 1)"></span>
               <span class="dot" onclick="goToSlide('dao-carousel', 2)"></span>
               <span class="dot" onclick="goToSlide('dao-carousel', 3)"></span>
             </span>
-            <button class="btn btn-sm btn-outline-secondary ms-2" onclick="moveCarousel('dao-carousel', 1)">❯</button>
+            <button
+              class="btn btn-sm btn-outline-secondary ms-2"
+              onclick="moveCarousel('dao-carousel', 1)"
+            >
+              ❯
+            </button>
           </div>
         </div>
       </section>

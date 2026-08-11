@@ -67,10 +67,10 @@ const FALLBACK_CHAIN = [
   null, // Placeholder - will be replaced with orchestrator model
 
   // Explicit fallbacks in order of preference
-  'kimi-2-5',                        // Premium (littellmott)
-  'claude-haiku-4-5',                // Balanced (littellmott)
+  'kimi-2-5', // Premium (littellmott)
+  'claude-haiku-4-5', // Balanced (littellmott)
   'opencode/deepseek-v4-flash-free', // Free tier (opencode)
-  'ollama/qwen2.5-coder:14b',        // Local (ollama)
+  'ollama/qwen2.5-coder:14b', // Local (ollama)
 ];
 
 // Error patterns that trigger fallback
@@ -150,18 +150,15 @@ function saveState(state: FallbackState): void {
 
 function shouldFallback(error: string): boolean {
   const normalized = error.toLowerCase();
-  return FALLBACK_ERRORS.some(pattern =>
-    normalized.includes(pattern.toLowerCase())
-  );
+  return FALLBACK_ERRORS.some((pattern) => normalized.includes(pattern.toLowerCase()));
 }
 
 function getOrchestratorModel(): string | null {
   // Priority order for model detection:
 
   // 1. Environment variable (set by orchestrator or system)
-  const envModel = process.env.ORCHESTRATOR_MODEL ||
-                   process.env.SESSION_MODEL ||
-                   process.env.AGENT_MODEL;
+  const envModel =
+    process.env.ORCHESTRATOR_MODEL || process.env.SESSION_MODEL || process.env.AGENT_MODEL;
   if (envModel) return envModel;
 
   // 2. Active model file (maintained by session manager)
@@ -222,17 +219,18 @@ export async function taskWithFallback(options: TaskOptions): Promise<TaskResult
   }
 
   // Priority 2: Orchestrator model (inheritance)
-  if (orchestratorModel &&
-      !modelChain.includes(orchestratorModel) &&
-      !state.exhaustedModels.includes(orchestratorModel)) {
+  if (
+    orchestratorModel &&
+    !modelChain.includes(orchestratorModel) &&
+    !state.exhaustedModels.includes(orchestratorModel)
+  ) {
     modelChain.push(orchestratorModel);
   }
 
   // Priority 3: Fallback chain
   for (const model of FALLBACK_CHAIN) {
     if (model === null) continue; // Skip placeholder
-    if (!modelChain.includes(model) &&
-        !state.exhaustedModels.includes(model)) {
+    if (!modelChain.includes(model) && !state.exhaustedModels.includes(model)) {
       modelChain.push(model);
     }
   }
@@ -313,7 +311,6 @@ export async function taskWithFallback(options: TaskOptions): Promise<TaskResult
         fallbackApplied: isRetry,
         originalModel: isRetry ? originalModel : undefined,
       };
-
     } catch (error) {
       lastError = String(error);
 
@@ -360,7 +357,7 @@ export async function taskWithFallback(options: TaskOptions): Promise<TaskResult
  */
 async function executeSubagent(
   options: TaskOptions,
-  model: string
+  model: string,
 ): Promise<{ success: boolean; output?: string; error?: string }> {
   return new Promise((resolve) => {
     const delegatorPath = join(ROOT, 'src', 'agent-delegator.ts');
@@ -368,9 +365,12 @@ async function executeSubagent(
     const args: string[] = [
       'tsx',
       delegatorPath,
-      '--agent', options.subagent_type,
-      '--task', options.prompt,
-      '--model', model,
+      '--agent',
+      options.subagent_type,
+      '--task',
+      options.prompt,
+      '--model',
+      model,
     ];
 
     if (options.context) {

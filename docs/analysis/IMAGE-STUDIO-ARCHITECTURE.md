@@ -1,4 +1,5 @@
 # Sistema de Generación de Imágenes Nativo - Gentle-Vanguard Image Studio
+
 ## Reemplazo 100% local de herramientas cloud tipo nano-banana
 
 ### 🎯 ARQUITECTURA
@@ -6,7 +7,7 @@
 ```
 Image Studio Nativo
 ├── Canvas API + WebGL          ← Renderizado local
-├── Generadores Procedurales    ← Algoritmos matemáticos  
+├── Generadores Procedurales    ← Algoritmos matemáticos
 ├── Sistema de Capas            ← Composición avanzada
 ├── Filtros y Efectos           ← Post-procesamiento
 ├── Export Multi-formato        ← PNG, JPG, WebP, SVG
@@ -16,6 +17,7 @@ Image Studio Nativo
 ### 🚀 CAPACIDADES (Sin APIs cloud)
 
 #### 1. **Generación Procedural**
+
 - Fractales (Mandelbrot, Julia)
 - Perlin noise patterns
 - Voronoi diagrams
@@ -24,6 +26,7 @@ Image Studio Nativo
 - Flow fields
 
 #### 2. **Efectos Visuales**
+
 - Gradient maps
 - Blur/sharpen local
 - Color grading
@@ -32,6 +35,7 @@ Image Studio Nativo
 - Glitch effects
 
 #### 3. **Sistema de Prompts Local**
+
 ```javascript
 // Prompt nativo procesado localmente
 {
@@ -46,19 +50,20 @@ Image Studio Nativo
 ### 📦 IMPLEMENTACIÓN
 
 #### Opción A: WebGL Shaders (Recomendado)
+
 ```html
 <canvas id="glcanvas"></canvas>
 <script>
-// Vertex shader
-const vsSource = `
+  // Vertex shader
+  const vsSource = `
   attribute vec4 aVertexPosition;
   void main() {
     gl_Position = aVertexPosition;
   }
 `;
 
-// Fragment shader - Generativo
-const fsSource = `
+  // Fragment shader - Generativo
+  const fsSource = `
   precision mediump float;
   uniform vec2 uResolution;
   uniform float uTime;
@@ -79,6 +84,7 @@ const fsSource = `
 ```
 
 #### Opción B: Canvas 2D Advanced
+
 ```javascript
 class ImageGenerator {
   constructor(width, height) {
@@ -87,28 +93,38 @@ class ImageGenerator {
     this.canvas.height = height;
     this.ctx = this.canvas.getContext('2d');
   }
-  
+
   // Generación procedural de patrones
   generatePattern(type, params) {
-    switch(type) {
-      case 'perlin': return this.perlinNoise(params);
-      case 'voronoi': return this.voronoiDiagram(params);
-      case 'fractal': return this.fractal(params);
-      case 'flow-field': return this.flowField(params);
+    switch (type) {
+      case 'perlin':
+        return this.perlinNoise(params);
+      case 'voronoi':
+        return this.voronoiDiagram(params);
+      case 'fractal':
+        return this.fractal(params);
+      case 'flow-field':
+        return this.flowField(params);
     }
   }
-  
+
   // Efectos de post-procesamiento
   applyEffect(effect, intensity) {
     const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
     const data = imageData.data;
-    
-    switch(effect) {
-      case 'bloom': this.bloomEffect(data, intensity); break;
-      case 'vignette': this.vignetteEffect(data, intensity); break;
-      case 'chromatic': this.chromaticAberration(data, intensity); break;
+
+    switch (effect) {
+      case 'bloom':
+        this.bloomEffect(data, intensity);
+        break;
+      case 'vignette':
+        this.vignetteEffect(data, intensity);
+        break;
+      case 'chromatic':
+        this.chromaticAberration(data, intensity);
+        break;
     }
-    
+
     this.ctx.putImageData(imageData, 0, 0);
   }
 }
@@ -123,30 +139,30 @@ const templates = {
     bg: 'linear-gradient(45deg, #0a0e1a 0%, #1a0e2e 100%)',
     elements: ['grid', 'glow-lines', 'particles'],
     palette: ['#22d3ee', '#a78bfa', '#f472b6'],
-    effects: ['chromatic-aberration', 'scanlines']
+    effects: ['chromatic-aberration', 'scanlines'],
   },
-  
+
   // Minimal/Professional
   'corporate-clean': {
     bg: '#ffffff',
     elements: ['geometric-shapes', 'subtle-shadows'],
     palette: ['#1e293b', '#64748b', '#cbd5e1'],
-    effects: ['soft-shadow', 'blur']
+    effects: ['soft-shadow', 'blur'],
   },
-  
-  // Abstract/Artistic  
+
+  // Abstract/Artistic
   'fluid-art': {
     algorithm: 'reaction-diffusion',
     palette: ['generative-gradient'],
-    effects: ['blur', 'saturation-boost']
+    effects: ['blur', 'saturation-boost'],
   },
-  
+
   // Data/Technical
   'data-visualization': {
-    elements:['charts-grid', 'nodes', 'connections'],
+    elements: ['charts-grid', 'nodes', 'connections'],
     palette: ['category-10'],
-    effects: ['glow', 'depth']
-  }
+    effects: ['glow', 'depth'],
+  },
 };
 ```
 
@@ -158,22 +174,22 @@ class ImageExporter {
   toPNG(canvas, quality = 1.0) {
     return canvas.toDataURL('image/png', quality);
   }
-  
+
   // JPEG (comprimido)
   toJPEG(canvas, quality = 0.95) {
     return canvas.toDataURL('image/jpeg', quality);
   }
-  
+
   // WebP (moderno)
   toWebP(canvas, quality = 0.9) {
     return canvas.toDataURL('image/webp', quality);
   }
-  
+
   // SVG (vector cuando aplique)
   toSVG(svgString) {
     return 'data:image/svg+xml;base64,' + btoa(svgString);
   }
-  
+
   // Descargar archivo
   download(dataUrl, filename) {
     const link = document.createElement('a');
@@ -190,36 +206,36 @@ class ImageExporter {
 class PromptParser {
   parse(prompt) {
     // Ejemplo: "futuristic tech banner with neon glow and geometric patterns"
-    
+
     const keywords = {
       // Estilos
-      'futuristic': { style: 'neon-cyberpunk', tech: 1.0 },
-      'minimal': { style: 'corporate-clean', simple: 1.0 },
-      'artistic': { style: 'fluid-art', creative: 1.0 },
-      'abstract': { elements: ['shapes', 'lines'], complexity: 'high' },
-      
+      futuristic: { style: 'neon-cyberpunk', tech: 1.0 },
+      minimal: { style: 'corporate-clean', simple: 1.0 },
+      artistic: { style: 'fluid-art', creative: 1.0 },
+      abstract: { elements: ['shapes', 'lines'], complexity: 'high' },
+
       // Elementos
-      'neon': { effects: ['glow', 'bloom'], palette: 'neon' },
-      'geometric': { elements: ['shapes', 'patterns'], type: 'geometric' },
-      'particles': { effects: ['particles'], density: 'medium' },
-      'gradient': { bg: 'gradient', direction: 'diagonal' },
-      
+      neon: { effects: ['glow', 'bloom'], palette: 'neon' },
+      geometric: { elements: ['shapes', 'patterns'], type: 'geometric' },
+      particles: { effects: ['particles'], density: 'medium' },
+      gradient: { bg: 'gradient', direction: 'diagonal' },
+
       // Usos
-      'banner': { aspect: '16:9', purpose: 'header' },
-      'thumbnail': { aspect: '1:1', purpose: 'thumb' },
-      'story': { aspect: '9:16', purpose: 'social' }
+      banner: { aspect: '16:9', purpose: 'header' },
+      thumbnail: { aspect: '1:1', purpose: 'thumb' },
+      story: { aspect: '9:16', purpose: 'social' },
     };
-    
+
     // Parse y construir configuración
     const words = prompt.toLowerCase().split(' ');
     const config = { elements: [], effects: [] };
-    
-    words.forEach(word => {
+
+    words.forEach((word) => {
       if (keywords[word]) {
         Object.assign(config, keywords[word]);
       }
     });
-    
+
     return config;
   }
 }
@@ -251,24 +267,28 @@ const webp = gen.export('webp');
 ### 🔧 IMPLEMENTACIÓN PASO A PASO
 
 #### Paso 1: Crear image-studio.html
+
 - UI avanzada con controles
 - Canvas de alta resolución
 - Panel de capas
 - Timeline de animación
 
 #### Paso 2: Algoritmos base
+
 - Perlin noise (particles, organic)
 - Voronoi (celular, tech)
 - Fractales (arte, recursivo)
 - Flow fields (dinámico, motion)
 
 #### Paso 3: Efectos
+
 - WebGL shaders para rendimiento
 - Bloom (blur + brightness)
 - Vignette (dark edges)
 - Chromatic aberration (RGB shift)
 
 #### Paso 4: UI/UX
+
 - Prompt input natural
 - Previews en tiempo real
 - Ajustes de parámetros
@@ -287,14 +307,14 @@ const webp = gen.export('webp');
 
 ### ✅ VENTAJAS VS CLOUD
 
-| Característica | Cloud (nano-banana) | Nativo (Gentle-Vanguard) |
-|----------------|---------------------|--------------------------|
-| Costo | $$$ Por uso | $ Gratis |
-| Privacidad | ⚠️ Datos en servidores | 🔒 100% local |
-| Offline | ❌ No | ✅ Sí |
-| Latencia | ⏳ Segundos | ⚡ Instantáneo |
-| Control | ⚠️ Limitado | 🔧 Total |
-| Dependencias | ⚠️ APIs externas | ✅ Ninguna |
+| Característica | Cloud (nano-banana)    | Nativo (Gentle-Vanguard) |
+| -------------- | ---------------------- | ------------------------ |
+| Costo          | $$$ Por uso            | $ Gratis                 |
+| Privacidad     | ⚠️ Datos en servidores | 🔒 100% local            |
+| Offline        | ❌ No                  | ✅ Sí                    |
+| Latencia       | ⏳ Segundos            | ⚡ Instantáneo           |
+| Control        | ⚠️ Limitado            | 🔧 Total                 |
+| Dependencias   | ⚠️ APIs externas       | ✅ Ninguna               |
 
 ### 🎁 FEATURES EXTRAS
 
@@ -306,4 +326,5 @@ const webp = gen.export('webp');
 
 ---
 
-**IMPLEMENTAR AHORA**: Crear `docs/presentations/image-studio.html` con capacidades avanzadas 100% nativas.
+**IMPLEMENTAR AHORA**: Crear `docs/presentations/image-studio.html` con capacidades avanzadas 100%
+nativas.

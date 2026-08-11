@@ -284,7 +284,7 @@ class MarketingAgent {
    */
   public generateMultiLang(
     topic: string,
-    templateName: string
+    templateName: string,
   ): Record<string, GeneratedContent[]> {
     const results: Record<string, GeneratedContent[]> = {};
     const languages: ('es' | 'en' | 'pt')[] = ['es', 'en', 'pt'];
@@ -329,7 +329,7 @@ class MarketingAgent {
   public async generateImages(
     content: string,
     platform: string,
-    count: number = 1
+    count: number = 1,
   ): Promise<string[]> {
     const images: string[] = [];
     const timestamp = Date.now();
@@ -337,11 +337,11 @@ class MarketingAgent {
     for (let i = 0; i < count; i++) {
       const filename = `${platform}-image-${timestamp}-${i + 1}.svg`;
       const filepath = join(this.outputDir, filename);
-      
+
       // Generate placeholder SVG with content
       const svg = this.generatePlaceholderSVG(content, platform);
       writeFileSync(filepath, svg, 'utf-8');
-      
+
       images.push(filepath);
       console.log(`🖼️ Image generated: ${filepath}`);
     }
@@ -408,18 +408,15 @@ class MarketingAgent {
 
   private categorizeTopic(topic: string): string {
     const lower = topic.toLowerCase();
-    if (lower.includes('ai') || lower.includes('inteligencia') || lower.includes('agent')) return 'ai';
+    if (lower.includes('ai') || lower.includes('inteligencia') || lower.includes('agent'))
+      return 'ai';
     if (lower.includes('dev') || lower.includes('código') || lower.includes('code')) return 'dev';
     if (lower.includes('product') || lower.includes('startup')) return 'product';
     if (lower.includes('market') || lower.includes('social')) return 'marketing';
     return 'dev';
   }
 
-  private optimizeContent(
-    content: string,
-    platform: Platform,
-    request: ContentRequest
-  ): string {
+  private optimizeContent(content: string, platform: Platform, request: ContentRequest): string {
     let optimized = content;
 
     // Add hashtags if requested
@@ -472,10 +469,15 @@ ${content.content}
   }
 
   private generatePlaceholderSVG(content: string, platform: string): string {
-    const color = platform === 'linkedin' ? '#0a66c2' : 
-                  platform === 'twitter' ? '#1da1f2' : 
-                  platform === 'instagram' ? '#e4405f' : '#22d3ee';
-    
+    const color =
+      platform === 'linkedin'
+        ? '#0a66c2'
+        : platform === 'twitter'
+          ? '#1da1f2'
+          : platform === 'instagram'
+            ? '#e4405f'
+            : '#22d3ee';
+
     return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
       <defs>
         <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -500,7 +502,7 @@ ${content.content}
 // CLI
 async function main() {
   const args = process.argv.slice(2);
-  
+
   if (args.includes('--help') || args.includes('-h')) {
     console.log(`
 Gentle-Vanguard Marketing Agent
@@ -529,13 +531,16 @@ Examples:
   const agent = new MarketingAgent();
 
   // Parse args
-  const topic = args.find(a => a.startsWith('--topic='))?.split('=')[1] || 'Features';
-  const platform = args.find(a => a.startsWith('--platform='))?.split('=')[1] || 'linkedin';
-  const lang = (args.find(a => a.startsWith('--lang='))?.split('=')[1] as 'es' | 'en' | 'pt') || 'es';
-  const tone = (args.find(a => a.startsWith('--tone='))?.split('=')[1] as 'professional' | 'casual' | 'enthusiastic') || 'professional';
-  const template = args.find(a => a.startsWith('--template='))?.split('=')[1] || 'feature';
+  const topic = args.find((a) => a.startsWith('--topic='))?.split('=')[1] || 'Features';
+  const platform = args.find((a) => a.startsWith('--platform='))?.split('=')[1] || 'linkedin';
+  const lang =
+    (args.find((a) => a.startsWith('--lang='))?.split('=')[1] as 'es' | 'en' | 'pt') || 'es';
+  const tone =
+    (args.find((a) => a.startsWith('--tone='))?.split('=')[1] as
+      'professional' | 'casual' | 'enthusiastic') || 'professional';
+  const template = args.find((a) => a.startsWith('--template='))?.split('=')[1] || 'feature';
   const multiLang = args.includes('--multi-lang');
-  const imageCount = parseInt(args.find(a => a.startsWith('--images='))?.split('=')[1] || '0');
+  const imageCount = parseInt(args.find((a) => a.startsWith('--images='))?.split('=')[1] || '0');
 
   console.log('🤖 Gentle-Vanguard Marketing Agent');
   console.log('====================================');
@@ -547,7 +552,7 @@ Examples:
   if (multiLang) {
     console.log('🌍 Generating multi-language content...');
     const content = agent.generateMultiLang(topic, template);
-    
+
     for (const [langKey, posts] of Object.entries(content)) {
       console.log(`\n📄 ${langKey.toUpperCase()}:`);
       for (const post of posts) {

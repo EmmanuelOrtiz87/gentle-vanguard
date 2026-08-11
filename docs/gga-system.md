@@ -2,16 +2,21 @@
 
 ## Overview
 
-GGA es un sistema nativo de **switching automático de proveedores de IA** inspirado en el componente GGA de [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai). Cuando un proveedor falla (por ejemplo, "Free usage exceeded"), GGA automáticamente intenta con el siguiente proveedor en la cadena de fallback.
+GGA es un sistema nativo de **switching automático de proveedores de IA** inspirado en el componente
+GGA de [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai). Cuando un proveedor falla
+(por ejemplo, "Free usage exceeded"), GGA automáticamente intenta con el siguiente proveedor en la
+cadena de fallback.
 
 ## Why This Exists
 
 **The Problem:**
+
 - Los subagentes en OpenCode están configurados con `model: "opencode/deepseek-v4-flash-free"`
 - Cuando se agota la cuota: `"Free usage exceeded, subscribe to Go"`, el subagente falla
 - No existe mecanismo nativo de herencia de modelos en OpenCode's `task()`
 
 **The Solution:**
+
 - GGA intercepta las delegaciones y detecta errores de cuota
 - Automáticamente cambia al siguiente proveedor disponible
 - Persiste el estado de proveedores agotados
@@ -55,6 +60,7 @@ GGA es un sistema nativo de **switching automático de proveedores de IA** inspi
 ## Installation
 
 Los archivos ya están incluidos en el stack:
+
 - `src/gga.ts` - Core GGA implementation
 - `src/orchestrator-task-wrapper.ts` - task() replacement
 - Scripts añadidos a `package.json`
@@ -74,7 +80,7 @@ import { task } from './orchestrator-task-wrapper.js';
 const result = await task({
   subagent_type: 'sdd-apply',
   prompt: 'Implement feature',
-  description: 'optional'
+  description: 'optional',
 });
 ```
 
@@ -87,7 +93,7 @@ const result = await GuardianAngel({
   agent: 'sdd-apply',
   task: 'Implement feature',
   preferredModel: 'kimi-2-5', // optional
-  context: 'extra context',      // optional
+  context: 'extra context', // optional
 });
 
 // Result includes:
@@ -118,18 +124,18 @@ npx tsx src/gga.ts health kimi-2-5
 
 GGA detecta automáticamente estos errores y dispara fallback:
 
-| Error Pattern | Trigger |
-|---------------|---------|
-| `Free usage exceeded` | ✅ Switch |
-| `subscribe to Go` | ✅ Switch |
-| `quota exceeded` | ✅ Switch |
-| `credits exhausted` | ✅ Switch |
-| `429 Too Many Requests` | ✅ Switch |
-| `Model not found` | ✅ Switch |
-| `timeout` | ✅ Switch |
-| `APIConnectionError` | ✅ Switch |
-| `unauthorized` | ✅ Switch |
-| Other errors | ❌ No switch |
+| Error Pattern           | Trigger      |
+| ----------------------- | ------------ |
+| `Free usage exceeded`   | ✅ Switch    |
+| `subscribe to Go`       | ✅ Switch    |
+| `quota exceeded`        | ✅ Switch    |
+| `credits exhausted`     | ✅ Switch    |
+| `429 Too Many Requests` | ✅ Switch    |
+| `Model not found`       | ✅ Switch    |
+| `timeout`               | ✅ Switch    |
+| `APIConnectionError`    | ✅ Switch    |
+| `unauthorized`          | ✅ Switch    |
+| Other errors            | ❌ No switch |
 
 ## Configuration
 
@@ -169,6 +175,7 @@ export FORCE_MODEL=kimi-2-5
 Main delegation function with auto-switching.
 
 **Parameters:**
+
 - `agent` (string): Agent name (e.g., 'sdd-apply')
 - `task` (string): Task description
 - `context` (string, optional): Additional context
@@ -178,6 +185,7 @@ Main delegation function with auto-switching.
 - `timeout` (number, optional): Timeout in ms (default: 300000)
 
 **Returns:** `Promise<GGADelegationResult>`
+
 - `success`: boolean
 - `output`: string
 - `error`: string (if failed)
@@ -192,10 +200,10 @@ Main delegation function with auto-switching.
 
 ```typescript
 import {
-  checkProviderHealth,    // Check health for a provider
-  getCurrentProvider,     // Get current active provider
-  getSwitchHistory,       // Get recent switch history
-  resetProviders,         // Reset exhausted providers
+  checkProviderHealth, // Check health for a provider
+  getCurrentProvider, // Get current active provider
+  getSwitchHistory, // Get recent switch history
+  resetProviders, // Reset exhausted providers
 } from './gga.js';
 ```
 
@@ -217,16 +225,16 @@ Get-Content .logs/gga.log -Tail 50
 
 ## Comparison with Gentle-AI
 
-| Feature | Gentle-AI GGA | Our Implementation |
-|---------|---------------|-------------------|
-| Auto-switching | ✅ Yes | ✅ Yes |
-| Quota detection | ✅ Yes | ✅ Yes |
-| Multi-provider | ✅ Yes | ✅ Yes |
-| State persistence | ✅ Yes | ✅ Yes |
-| CLI interface | ✅ Yes | ✅ Yes |
-| Drop-in replacement | ✅ Yes | ✅ Yes |
-| Model profiles | ✅ Yes | ✅ Basic |
-| Native integration | Go | TypeScript |
+| Feature             | Gentle-AI GGA | Our Implementation |
+| ------------------- | ------------- | ------------------ |
+| Auto-switching      | ✅ Yes        | ✅ Yes             |
+| Quota detection     | ✅ Yes        | ✅ Yes             |
+| Multi-provider      | ✅ Yes        | ✅ Yes             |
+| State persistence   | ✅ Yes        | ✅ Yes             |
+| CLI interface       | ✅ Yes        | ✅ Yes             |
+| Drop-in replacement | ✅ Yes        | ✅ Yes             |
+| Model profiles      | ✅ Yes        | ✅ Basic           |
+| Native integration  | Go            | TypeScript         |
 
 ## Troubleshooting
 
@@ -263,7 +271,8 @@ npm run gga:delegate -- --agent sdd-apply --task "test"
 
 ## Credits
 
-Inspired by [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai)'s GGA (Gentleman Guardian Angel) component.
+Inspired by [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai)'s GGA (Gentleman
+Guardian Angel) component.
 
 ## License
 

@@ -1,20 +1,25 @@
 #!/usr/bin/env node
 /**
  * Comprehensive Integration Test Suite for GGA System
- * 
+ *
  * This script performs exhaustive testing of:
  * 1. Subagent delegation with automatic fallback
  * 2. Model inheritance from orchestrator
  * 3. Step assignment based on task complexity
  * 4. Error detection and recovery
  * 5. State persistence
- * 
+ *
  * Usage: npm run test:gga:comprehensive
  */
 
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import { join } from 'path';
-import { GuardianAngel, checkProviderHealth, getCurrentProvider, resetProviders } from '../src/gga.js';
+import {
+  GuardianAngel,
+  checkProviderHealth,
+  getCurrentProvider,
+  resetProviders,
+} from '../src/gga.js';
 
 // =============================================================================
 // TEST CONFIGURATION
@@ -75,7 +80,7 @@ async function runTest(name: string, testFn: () => Promise<unknown>): Promise<Te
 function saveResults(suite: TestSuite): void {
   const testDir = join(ROOT, '.test-results');
   if (!existsSync(testDir)) mkdirSync(testDir, { recursive: true });
-  
+
   writeFileSync(TEST_RESULTS_FILE, JSON.stringify(suite, null, 2));
   log('info', `Test results saved to: ${TEST_RESULTS_FILE}`);
 }
@@ -101,7 +106,7 @@ async function testBasicDelegation(): Promise<TestResult> {
 
     log('success', `Basic delegation succeeded with model: ${result.model}`);
     log('info', `Attempts: ${result.attempts}, Duration: ${result.duration}ms`);
-    
+
     return result;
   });
 }
@@ -110,7 +115,7 @@ async function testModelInheritance(): Promise<TestResult> {
   return runTest('Model Inheritance from Orchestrator', async () => {
     // Set orchestrator model
     process.env.ORCHESTRATOR_MODEL = 'kimi-2-5';
-    
+
     const result = await GuardianAngel({
       agent: 'sdd-design',
       task: 'Design a simple API endpoint',
@@ -122,12 +127,12 @@ async function testModelInheritance(): Promise<TestResult> {
 
     // Should inherit or use fallback chain
     const expectedModels = ['kimi-2-5', 'claude-haiku-4-5', 'opencode/deepseek-v4-flash-free'];
-    if (!expectedModels.some(m => result.model.includes(m))) {
+    if (!expectedModels.some((m) => result.model.includes(m))) {
       throw new Error(`Unexpected model used: ${result.model}`);
     }
 
     log('success', `Model inheritance working: ${result.model}`);
-    
+
     delete process.env.ORCHESTRATOR_MODEL;
     return result;
   });
@@ -148,25 +153,20 @@ async function testFallbackChain(): Promise<TestResult> {
 
     log('success', `Fallback chain working. Final model: ${result.model}`);
     log('info', `Attempts made: ${result.attempts}, Switch occurred: ${result.switchOccurred}`);
-    
+
     return result;
   });
 }
 
 async function testAllSubagents(): Promise<TestResult> {
   return runTest('All SDD Subagents', async () => {
-    const subagents = [
-      'sdd-explore',
-      'sdd-design',
-      'sdd-apply',
-      'sdd-verify',
-    ];
+    const subagents = ['sdd-explore', 'sdd-design', 'sdd-apply', 'sdd-verify'];
 
     const results: Record<string, unknown> = {};
 
     for (const agent of subagents) {
       log('info', `Testing ${agent}...`);
-      
+
       const result = await GuardianAngel({
         agent,
         task: `Quick test for ${agent} agent`,
@@ -194,7 +194,7 @@ async function testStatePersistence(): Promise<TestResult> {
   return runTest('State Persistence', async () => {
     // Reset first
     resetProviders();
-    
+
     // Check initial state
     const initialProvider = getCurrentProvider();
     log('info', `Initial provider: ${initialProvider}`);
@@ -207,13 +207,13 @@ async function testStatePersistence(): Promise<TestResult> {
 
     // Check state persisted
     const afterProvider = getCurrentProvider();
-    
+
     if (!afterProvider) {
       throw new Error('Provider state not persisted');
     }
 
     log('success', `State persistence working. Current provider: ${afterProvider}`);
-    
+
     return { initial: initialProvider, after: afterProvider };
   });
 }
@@ -221,9 +221,9 @@ async function testStatePersistence(): Promise<TestResult> {
 async function testProviderHealth(): Promise<TestResult> {
   return runTest('Provider Health Tracking', async () => {
     const health = checkProviderHealth('kimi-2-5');
-    
+
     log('info', `Health check result: ${health ? 'Found' : 'Not found'}`);
-    
+
     // Health might be null if no operations yet, which is fine
     return { health, timestamp: new Date().toISOString() };
   });
@@ -243,7 +243,7 @@ async function testComplexTask(): Promise<TestResult> {
 
     log('success', `Complex task completed with ${result.attempts} attempt(s)`);
     log('info', `Duration: ${result.duration}ms, Model: ${result.model}`);
-    
+
     return result;
   });
 }
@@ -252,7 +252,7 @@ async function testErrorRecovery(): Promise<TestResult> {
   return runTest('Error Recovery Simulation', async () => {
     // TODO: In real scenario, we would simulate provider failures
     // For now, verify the system handles normal operations
-    
+
     const result = await GuardianAngel({
       agent: 'ops-agent',
       task: 'Check system status',
@@ -291,8 +291,8 @@ async function runComprehensiveTests(): Promise<void> {
   results.push(await testErrorRecovery());
 
   const totalDuration = Date.now() - startTime;
-  const passed = results.filter(r => r.passed).length;
-  const failed = results.filter(r => !r.passed).length;
+  const passed = results.filter((r) => r.passed).length;
+  const failed = results.filter((r) => !r.passed).length;
 
   const suite: TestSuite = {
     name: 'GGA Comprehensive Test Suite',
@@ -319,7 +319,7 @@ async function runComprehensiveTests(): Promise<void> {
   log('info', '');
 
   // Print failed tests
-  const failedTests = results.filter(r => !r.passed);
+  const failedTests = results.filter((r) => !r.passed);
   if (failedTests.length > 0) {
     log('error', 'FAILED TESTS:');
     for (const test of failedTests) {

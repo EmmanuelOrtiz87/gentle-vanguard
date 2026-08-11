@@ -1067,7 +1067,7 @@
         'skill_usage, token_usage, routing_rules — tracking de uso de skills por sesión, contabilidad real de tokens con columna total_tokens generada y persistencia del router adaptativo con hit_count.',
       tip_tracerepo:
         'traces + feedback — spans de tracing distribuido con vista waterfall, estadísticas de latencia y pulgar arriba/abajo por span desde el dashboard de observabilidad.',
-          // Dashboard tips (ES)
+      // Dashboard tips (ES)
       tip_dashboard_websocket:
         'Actualizaciones WebSocket en tiempo real cada 5 segundos con fallback HTTP.',
       tip_dashboard_sections:
@@ -1080,8 +1080,7 @@
       // Patterns tips (ES)
       tip_patterns_karpathy:
         'Guías Karpathy: Think First, Simplicity, Surgical Changes, Goal-Driven — rúbricas de calidad.',
-      tip_patterns_sdd:
-        'Ciclo SDD: Explore → Design → Apply → Verify con umbrales de confianza.',
+      tip_patterns_sdd: 'Ciclo SDD: Explore → Design → Apply → Verify con umbrales de confianza.',
       tip_patterns_slop:
         'Detección AI Slop: compuertas automáticas para prevenir contenido genérico de IA.',
       tip_patterns_arch:
@@ -1090,8 +1089,7 @@
         'Estándares de desarrollo: convenciones de código, documentación y compuertas de revisión.',
       tip_patterns_docs:
         'Reducción de carga cognitiva y revelación progresiva en documentación técnica.',
-
-},
+    },
     'pt-BR': {
       nav_home: 'Início',
       nav_arch: 'Arq',
@@ -1608,7 +1606,7 @@
         'skill_usage, token_usage, routing_rules — rastreio de uso de skills por sessão, contabilidade real de tokens com coluna total_tokens gerada e persistência do router adaptativo com hit_count.',
       tip_tracerepo:
         'traces + feedback — spans de tracing distribuído com visão waterfall, estatísticas de latência e polegar para cima/baixo por span do dashboard de observabilidade.',
-          // Dashboard tips (pt-BR)
+      // Dashboard tips (pt-BR)
       tip_dashboard_websocket:
         'Atualizações WebSocket em tempo real a cada 5 segundos com fallback HTTP.',
       tip_dashboard_sections:
@@ -1621,8 +1619,7 @@
       // Patterns tips (pt-BR)
       tip_patterns_karpathy:
         'Diretrizes Karpathy: Think First, Simplicity, Surgical Changes, Goal-Driven.',
-      tip_patterns_sdd:
-        'Ciclo SDD: Explore → Design → Apply → Verify com limiares de confiança.',
+      tip_patterns_sdd: 'Ciclo SDD: Explore → Design → Apply → Verify com limiares de confiança.',
       tip_patterns_slop:
         'Detecção AI Slop: portões automáticos para prevenir conteúdo genérico de IA.',
       tip_patterns_arch:
@@ -1631,8 +1628,7 @@
         'Padrões de desenvolvimento: convenções de código, documentação e portões de revisão.',
       tip_patterns_docs:
         'Redução de carga cognitiva e revelação progressiva em documentação técnica.',
-
-},
+    },
   };
 
   const STORAGE_KEY = 'gv-lang';

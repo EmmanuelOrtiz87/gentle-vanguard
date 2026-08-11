@@ -1,45 +1,50 @@
 # NORMATIVA: STACK TYPE-ONLY
+
 # Gentle-Vanguard Architecture Decision
 
-**Título**: Prohibición de Scripts PowerShell - Stack TypeScript-Nativo
-**ID**: NORM-TS-001
-**Fecha**: 2026-08-10
-**Estado**: Active
-**Categoría**: Architecture
+**Título**: Prohibición de Scripts PowerShell - Stack TypeScript-Nativo **ID**: NORM-TS-001
+**Fecha**: 2026-08-10 **Estado**: Active **Categoría**: Architecture
 
 ---
 
 ## Resumen Ejecutivo
 
-**Normativa**: Todo el código del proyecto Gentle-Vanguard debe ser TypeScript nativo. **Queda estrictamente prohibido crear o mantener scripts .ps1 (PowerShell).**
+**Normativa**: Todo el código del proyecto Gentle-Vanguard debe ser TypeScript nativo. **Queda
+estrictamente prohibido crear o mantener scripts .ps1 (PowerShell).**
 
-**Contexto**: Esta normativa reemplaza cualquier práctica anterior que permitiera scripts PowerShell.
+**Contexto**: Esta normativa reemplaza cualquier práctica anterior que permitiera scripts
+PowerShell.
 
 ---
 
 ## Motivación
 
 ### 1. Consistencia de Stack
+
 ```
 ANTES: PS1 (legacy) + TS (nuevo) = Duplicación, confusión
 DESPUÉS: TS-only = Single source of truth
 ```
 
 ### 2. Cross-Platform
+
 - ✅ TypeScript: Windows, macOS, Linux nativo
 - ❌ PowerShell: Windows primario, macOS/Linux con limitaciones
 
 ### 3. Type-Safety
+
 - ✅ Compilación-time errors
 - ✅ Autocomplete y IntelliSense
 - ✅ Refactoring seguro
 
 ### 4. Ecosistema
+
 - ✅ Acceso completo a npm
 - ✅ Testing con vitest/jest
 - ✅ Linting con ESLint
 
 ### 5. Mantenibilidad
+
 - Un solo lenguaje en todo el proyecto
 - Menor curva de aprendizaje
 - Documentación unificada
@@ -51,6 +56,7 @@ DESPUÉS: TS-only = Single source of truth
 ### ❌ PROHIBIDO (Nunca permitido)
 
 1. **Crear archivos .ps1 nuevos**
+
    ```
    ❌ archivo.ps1
    ❌ script-helper.ps1
@@ -67,6 +73,7 @@ DESPUÉS: TS-only = Single source of truth
 ### ✅ REQUERIDO (Siempre usar)
 
 1. **Todo script debe ser .ts**
+
    ```
    ✅ archivo.ts
    ✅ script-helper.ts
@@ -74,15 +81,17 @@ DESPUÉS: TS-only = Single source of truth
    ```
 
 2. **CRonjobs con node/tsx**
+
    ```
    # Antes (prohibido)
    * * * * * scripts/task.ps1
-   
+
    # Después (requerido)
    * * * * * npx tsx src/task.ts
    ```
 
 3. **Git hooks en TypeScript**
+
    ```json
    // package.json
    "husky": {
@@ -117,6 +126,7 @@ find . -name "*.ps1" -type f
 ### Patrón de Migración PS1 → TS
 
 #### PowerShell:
+
 ```powershell
 # ❌ ANTES: deploy.ps1
 param([string]$Platform)
@@ -124,6 +134,7 @@ Write-Host "Deploying to $Platform"
 ```
 
 #### TypeScript:
+
 ```typescript
 // ✅ DESPUÉS: src/deploy.ts
 #!/usr/bin/env node
@@ -138,6 +149,7 @@ console.log(`Deploying to ${values.platform}`);
 ```
 
 #### Package.json (scripts):
+
 ```json
 {
   "scripts": {
@@ -152,6 +164,7 @@ console.log(`Deploying to ${values.platform}`);
 ## Validación Automática
 
 ### Pre-commit hook:
+
 ```yaml
 # .lefthook.yml
 pre-commit:
@@ -165,6 +178,7 @@ pre-commit:
 ```
 
 ### CI/CD Check:
+
 ```yaml
 # .github/workflows/check-ts-only.yml
 jobs:
@@ -186,6 +200,7 @@ jobs:
 Ninguna excepción permitida.
 
 Si crees que necesitas una excepción, debes:
+
 1. Documentar el caso de uso
 2. Proponer alternativa TS
 3. Obtener aprobación de 2+ maintainers
@@ -195,6 +210,7 @@ Si crees que necesitas una excepción, debes:
 ## Ejemplos de Conversión
 
 ### Ejemplo 1: File Operations
+
 ```powershell
 # ❌ ANTES
 Get-ChildItem -Recurse *.ts | Where-Object { $_.Length -gt 1000 }
@@ -207,12 +223,13 @@ import { join } from 'path';
 
 function findLargeFiles(dir: string, minSize: number): string[] {
   return readdirSync(dir, { recursive: true })
-    .filter(f => f.endsWith('.ts'))
-    .filter(f => statSync(join(dir, f)).size > minSize);
+    .filter((f) => f.endsWith('.ts'))
+    .filter((f) => statSync(join(dir, f)).size > minSize);
 }
 ```
 
 ### Ejemplo 2: HTTP Requests
+
 ```powershell
 # ❌ ANTES
 Invoke-RestMethod -Uri "https://api.example.com/data" -Method GET
@@ -227,6 +244,7 @@ const data = await response.json();
 ```
 
 ### Ejemplo 3: Environment Variables
+
 ```powershell
 # ❌ ANTES
 $env:NODE_ENV = "production"
@@ -244,6 +262,7 @@ process.env.NODE_ENV = 'production';
 ## Comandos de Referencia
 
 ### Ejecutar script TS:
+
 ```bash
 # Desarrollo
 npx tsx src/script.ts
@@ -271,14 +290,13 @@ npx tsx watch src/script.ts
 
 ## Historial
 
-| Fecha | Autor | Cambio |
-|-------|-------|--------|
+| Fecha      | Autor                | Cambio            |
+| ---------- | -------------------- | ----------------- |
 | 2026-08-10 | Gentle-Vanguard Team | Normativa inicial |
 
 ---
 
 **¿Preguntas?** Consulta al equipo o revisa ejemplos en `src/`.
 
-**Aprobado por**: Gentle-Vanguard Architecture Committee
-**Revisado**: 2026-08-10
-**Próxima revisión**: 2027-01-01
+**Aprobado por**: Gentle-Vanguard Architecture Committee **Revisado**: 2026-08-10 **Próxima
+revisión**: 2027-01-01
