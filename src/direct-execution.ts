@@ -146,10 +146,15 @@ if (require.main === module) {
     process.exit(1);
   }
   
-  executeDirect(agentType, task, context).then((result) => {
-    console.log(JSON.stringify(result, null, 2));
-    process.exit(result.success ? 0 : 1);
-  });
+  executeDirect(agentType, task, context)
+    .then((result) => {
+      console.log(JSON.stringify(result, null, 2));
+      process.exit(result.success ? 0 : 1);
+    })
+    .catch((err) => {
+      console.error('Error:', err);
+      process.exit(1);
+    });
 }
 
 export type { DirectExecutionResult };

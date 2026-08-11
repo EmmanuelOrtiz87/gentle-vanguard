@@ -818,4 +818,56 @@ real). `model-router.json` alineado.
 - **Por agente**: orquestador (parent ROOT) vs subagentes (parent_id != ROOT), agrupados e
   individuales.
 - **Ahorros**: `token_savings` — cache reads (1.061M tokens) + compresión del stack
+
+---
+
+## Direct Execution System - Ejecución Directa sin Delegación
+
+Cuando la delegación a subagentes falla por problemas de asignación de modelo, el sistema de **ejecución directa** permite que el orquestador ejecute las tareas directamente usando el modelo correcto (kimi-2-5).
+
+### Uso
+
+```typescript
+// Importar el sistema de ejecución directa
+import { executeDirect } from './direct-execution.js';
+
+// Ejecutar tarea directamente (sin delegar a subagente)
+const result = await executeDirect('explore', 'analizar requisitos', context);
+// result: { success: true, output: '...', model: 'kimi-2-5', duration: 1234 }
+```
+
+### CLI
+
+```bash
+# Ejecutar agente directamente
+npx tsx src/direct-execution.ts explore "analizar código" "contexto opcional"
+
+# Agentes disponibles: explore, apply, verify, design, doc
+```
+
+### Diferencia con Session-Based Fallback
+
+| Mecanismo | Cuándo usar | Comportamiento |
+|-----------|-------------|----------------|
+| **Session-Based Fallback** | Delegación normal falla | Intenta otros modelos, luego fallback al orquestador automáticamente |
+| **Direct Execution** | Quieres evitar delegación desde el inicio | Ejecuta directamente con el modelo del orquestador sin intentar subagentes |
+
+### Configuración
+
+El sistema usa el modelo del orquestador detectado desde:
+1. `process.env.ORCHESTRATOR_MODEL`
+2. `.runtime/model-active.json`
+3. Default: `kimi-2-5`
+
+### Ventajas
+
+- **Modelo garantizado**: Siempre usa el modelo del orquestador (con crédito)
+- **Sin overhead**: No hay wrangling de subagentes
+- **Inmediato**: Ejecución directa sin pasos intermedios
+
+### Desventajas
+
+- **Sin paralelización**: El orquestador hace todo el trabajo
+- **Sin aislamiento**: No hay sandbox de subagente
+- **Limitado**: Solo los agentes implementados en `direct-execution.ts` están disponibles
   (prompt/output/structural).
