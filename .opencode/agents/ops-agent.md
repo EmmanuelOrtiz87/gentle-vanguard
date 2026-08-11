@@ -2,7 +2,7 @@
 description: Operations agent — deployment, CI/CD, infrastructure, and Docker
 mode: subagent
 hidden: true
-model: opencode/deepseek-v4-flash-free
+model: kimi-2-5
 temperature: 0.1
 steps: 30
 permission:

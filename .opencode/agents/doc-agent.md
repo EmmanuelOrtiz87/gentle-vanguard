@@ -2,7 +2,7 @@
 description: Documentation agent — technical docs, guides, and ADRs
 mode: subagent
 hidden: true
-model: opencode/deepseek-v4-flash-free
+model: kimi-2-5
 temperature: 0.4
 steps: 34
 permission:

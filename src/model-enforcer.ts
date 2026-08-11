@@ -18,6 +18,7 @@ const ACTIVE_MODEL_PATH = join(ROOT, '.runtime', 'model-active.json');
 
 const FREE_MODEL = 'opencode/deepseek-v4-flash-free';
 const FREE_PROVIDER = 'opencode';
+const OPENCODE_JSON_PATH = join(ROOT, 'opencode.json');
 
 interface ModelEntry {
   provider: string;
@@ -31,6 +32,27 @@ interface ModelRegistry {
     orchestrator: { primary: string };
     subagents: { default: string };
   };
+}
+
+/**
+ * Detecta el modelo REAL del orquestador desde opencode.json.
+ * Fuente de verdad: agent.orchestrator.model + provider.
+ * Si no se encuentra, devuelve null (se usará el fallback).
+ */
+function detectOrchestratorModel(): { model: string; provider: string } | null {
+  try {
+    if (!existsSync(OPENCODE_JSON_PATH)) return null;
+    const cfg = JSON.parse(readFileSync(OPENCODE_JSON_PATH, 'utf-8')) as {
+      agent?: Record<string, { model?: string; provider?: string }>;
+    };
+    const orch = cfg.agent?.orchestrator;
+    if (orch?.model) {
+      return { model: orch.model, provider: orch.provider || 'opencode' };
+    }
+  } catch {
+    /* opencode.json inválido o ilegible */
+  }
+  return null;
 }
 
 type LogEntry = {
@@ -71,9 +93,13 @@ function checkModelHealth(): { healthy: string[]; unhealthy: string[]; free: str
 }
 
 function enforceFreeModel(): void {
-  log('=== INICIANDO ENFORCEMENT DE MODELO GRATUITO ===');
+  log('=== INICIANDO ENFORCEMENT DE MODELO ===');
 
-  // 1. Verificar estado actual
+  // 1. Detectar el modelo REAL del orquestador (dinámico — hereda lo que sea que el orquestador use)
+  const orchestrator = detectOrchestratorModel();
+  const registry: ModelRegistry = JSON.parse(readFileSync(REGISTRY_PATH, 'utf-8'));
+
+  // 2. Verificar estado actual
   const status = checkModelHealth();
   log(`Modelos saludables y gratuitos: ${status.healthy.join(', ')}`);
   log(`Modelos con problemas: ${status.unhealthy.join(', ')}`);
@@ -83,39 +109,58 @@ function enforceFreeModel(): void {
     process.exit(1);
   }
 
-  // 2. Actualizar registry para que el modelo gratuito sea el primario
-  const registry: ModelRegistry = JSON.parse(readFileSync(REGISTRY_PATH, 'utf-8'));
+  // 3. Determinar el modelo primario:
+  //    - Si el modelo del orquestador está disponible en el registry → usarlo (herencia dinámica)
+  //    - Si no → fallback al modelo gratuito
+  let primaryModel = FREE_MODEL;
+  let primaryProvider = FREE_PROVIDER;
+  let reason = 'Auto-enforcement: modelo gratuito y disponible (orquestador no disponible)';
 
-  if (registry.routingRules.orchestrator.primary !== FREE_MODEL) {
-    log(`Cambiando primary: ${registry.routingRules.orchestrator.primary} → ${FREE_MODEL}`);
-    registry.routingRules.orchestrator.primary = FREE_MODEL;
+  if (orchestrator) {
+    const orchEntry = registry.models[orchestrator.model];
+    const orchAvailable = orchEntry?.health?.status === 'available';
+    if (orchAvailable) {
+      primaryModel = orchestrator.model;
+      primaryProvider = orchestrator.provider;
+      reason = `Herencia dinámica: el orquestador usa ${orchestrator.model} y está disponible`;
+    } else {
+      log(`⚠️ Modelo del orquestador (${orchestrator.model}) no disponible → fallback al gratuito`);
+    }
+  } else {
+    log('⚠️ No se pudo detectar el modelo del orquestador → fallback al gratuito');
   }
 
-  if (registry.routingRules.subagents.default !== FREE_MODEL) {
-    log(`Cambiando default: ${registry.routingRules.subagents.default} → ${FREE_MODEL}`);
-    registry.routingRules.subagents.default = FREE_MODEL;
+  // 4. Actualizar registry para que el modelo primario sea el detectado
+  if (registry.routingRules.orchestrator.primary !== primaryModel) {
+    log(`Cambiando primary: ${registry.routingRules.orchestrator.primary} → ${primaryModel}`);
+    registry.routingRules.orchestrator.primary = primaryModel;
   }
 
-  // 3. Guardar cambios
+  if (registry.routingRules.subagents.default !== primaryModel) {
+    log(`Cambiando default: ${registry.routingRules.subagents.default} → ${primaryModel}`);
+    registry.routingRules.subagents.default = primaryModel;
+  }
+
+  // 5. Guardar cambios
   writeFileSync(REGISTRY_PATH, JSON.stringify(registry, null, 2), 'utf-8');
   log('✅ Registry actualizado');
 
-  // 4. Guardar modelo activo
+  // 6. Guardar modelo activo
   const activeModel = {
-    model: FREE_MODEL,
-    provider: FREE_PROVIDER,
+    model: primaryModel,
+    provider: primaryProvider,
     enforcedAt: new Date().toISOString(),
-    reason: 'Auto-enforcement: modelo gratuito y disponible',
+    reason,
     previousModel: process.env.GENTLE_VANGUARD_ACTIVE_MODEL || 'unknown',
   };
 
   writeFileSync(ACTIVE_MODEL_PATH, JSON.stringify(activeModel, null, 2), 'utf-8');
-  log('✅ Modelo activo guardado');
+  log(`✅ Modelo activo guardado: ${primaryModel} (${reason})`);
 
-  // 5. Exportar para el shell
+  // 7. Exportar para el shell
   console.log('\n=== VARIABLES DE ENTORNO ===');
-  console.log(`export GENTLE_VANGUARD_ACTIVE_MODEL="${FREE_MODEL}"`);
-  console.log(`export GENTLE_VANGUARD_PROVIDER="${FREE_PROVIDER}"`);
+  console.log(`export GENTLE_VANGUARD_ACTIVE_MODEL="${primaryModel}"`);
+  console.log(`export GENTLE_VANGUARD_PROVIDER="${primaryProvider}"`);
   console.log(`export GENTLE_VANGUARD_MODEL_ENFORCED="true"`);
 
   log('=== ENFORCEMENT COMPLETADO ===');
@@ -182,9 +227,11 @@ Uso:
   npx tsx src/model-enforcer.ts --force     # Forzar reasignación
 
 Descripción:
-  Garantiza que todo el stack use el modelo gratuito disponible
-  (opencode/deepseek-v4-flash-free) cuando otros modelos
-  tengan cuota agotada o no estén disponibles.
+  Garantiza que todo el stack use el modelo del orquestador (detectado
+  dinámicamente desde opencode.json → agent.orchestrator.model) cuando está
+  disponible. Si el modelo del orquestador no está disponible, hace fallback
+  al modelo gratuito (opencode/deepseek-v4-flash-free). Los subagentes
+  heredan el modelo del orquestador de forma dinámica.
 `);
   }
 }

@@ -79,7 +79,8 @@
   </head>
   <body class="grain">
     <div class="scroll-progress"></div>
-    <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div><div class="gv-particles" aria-hidden="true"></div>
+    <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="gv-particles" aria-hidden="true"></div>
     <nav class="navbar navbar-expand-xl nav-blur fixed-top">
       <div class="container-fluid px-3">
         <a class="navbar-brand text-light fw-bold mono" href="index.html" style="font-size: 0.85rem"
@@ -177,7 +178,7 @@
       </div>
     </nav>
 
-    <header class="hero">
+    <header class="hero" id="overview">
       <span class="hero-badge mb-3">✦ v4.0 — Knowledge Systems</span>
       <h1 class="fw-bold z-1"><span class="glow">Memory &amp; Knowledge Systems</span></h1>
       <p
@@ -266,6 +267,12 @@
     <section id="engram" class="fade-in">
       <div class="section-title">
         <h2 data-i18n="sec_engram">🧠 Engram — Persistent Memory</h2>
+        <span
+          class="info-trigger"
+          data-i18n-title="tip_memory_engram"
+          title="Persistent memory: 2,078 observations, 369 sessions. SHA256 integrity, survives compactions."
+          >i</span
+        >
         <p data-i18n="c_memoryknowledge_12">
           Cross-session, cross-project memory with conflict resolution
         </p>
@@ -393,6 +400,12 @@
     <section id="codegraph" class="fade-in">
       <div class="section-title">
         <h2 data-i18n="sec_codegraph">🔗 CodeGraph — Symbol Intelligence</h2>
+        <span
+          class="info-trigger"
+          data-i18n-title="tip_memory_codegraph"
+          title="Knowledge graph: 10,663 nodes, 21,746 edges. Sub-millisecond symbol queries."
+          >i</span
+        >
         <p data-i18n="c_memoryknowledge_13">AST-level code graph with cross-file resolution</p>
       </div>
       <div class="row g-3">
@@ -468,6 +481,12 @@
     <section id="graphify" class="fade-in">
       <div class="section-title">
         <h2 data-i18n="sec_graphify">🌐 Graphify — Knowledge Graph</h2>
+        <span
+          class="info-trigger"
+          data-i18n-title="tip_memory_graphify"
+          title="Community detection, god nodes, cross-file relationships. GraphML + visualizations."
+          >i</span
+        >
         <p data-i18n="c_memoryknowledge_14">
           LLM-extracted relationships with community structure and god nodes
         </p>
@@ -551,6 +570,12 @@
     <section id="nexus-db" class="fade-in">
       <div class="section-title">
         <h2 data-i18n="sec_nexus">💾 Nexus DB — Operational Database</h2>
+        <span
+          class="info-trigger"
+          data-i18n-title="tip_memory_nexus"
+          title="SQLite WAL mode, 21 tables, 11 repos. Auto-init, prune, backup."
+          >i</span
+        >
         <p data-i18n="c_memoryknowledge_15">
           SQLite WAL-mode central nervous system with 21 tables and 11 repos
         </p>
@@ -694,6 +719,12 @@
     <section id="ml-embeddings" class="fade-in">
       <div class="section-title">
         <h2 data-i18n="sec_ml_emb">🤖 ML Embeddings</h2>
+        <span
+          class="info-trigger"
+          data-i18n-title="tip_memory_ml"
+          title="Embeddings for semantic search, skill matching, pattern recognition."
+          >i</span
+        >
         <p data-i18n="c_memoryknowledge_26">
           Semantic search, skill matching, and error memory with vector retrieval
         </p>
@@ -744,6 +775,12 @@
     <section id="knowledge-manager" class="fade-in">
       <div class="section-title">
         <h2 data-i18n="sec_kb_manager">📚 Knowledge Base Manager</h2>
+        <span
+          class="info-trigger"
+          data-i18n-title="tip_memory_vault"
+          title="Structured knowledge: skills, patterns, decisions, conventions, standards."
+          >i</span
+        >
         <p data-i18n="c_memoryknowledge_32">
           Centralized knowledge vault with cross-workspace sync
         </p>

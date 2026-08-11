@@ -1,638 +1,113 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gentle-Vanguard Contract Viewer</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg0: #0a0e1a;
-      --bg1: #111827;
-      --bg2: #1f2937;
-      --text: #e2e8f0;
-      --text-dim: #94a3b8;
-      --text-faint: #64748b;
-      --p: #22d3ee;
-      --p-dim: #0891b2;
-      --s: #a78bfa;
-      --a: #34d399;
-      --warn: #fbbf24;
-      --err: #f87171;
-    }
-    
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      background: linear-gradient(135deg, var(--bg0) 0%, #1a0e2e 100%);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-    }
-    
-    .navbar {
-      background: rgba(17, 24, 39, 0.95);
-      border-bottom: 1px solid var(--bg2);
-      padding: 0.75rem 1.5rem;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    
-    .navbar-brand {
-      font-weight: 700;
-      font-size: 1.25rem;
-      background: linear-gradient(90deg, var(--p), var(--s));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    
-    .main-container {
-      display: flex;
-      min-height: calc(100vh - 60px);
-    }
-    
-    .sidebar {
-      width: 320px;
-      background: var(--bg1);
-      border-right: 1px solid var(--bg2);
-      padding: 1.25rem;
-      overflow-y: auto;
-      max-height: calc(100vh - 60px);
-    }
-    
-    .sidebar-title {
-      font-size: 0.6875rem;
-      text-transform: uppercase;
-      color: var(--text-faint);
-      letter-spacing: 0.1em;
-      margin-bottom: 0.75rem;
-    }
-    
-    .contract-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.875rem;
-      background: var(--bg0);
-      border: 1px solid var(--bg2);
-      border-radius: 8px;
-      margin-bottom: 0.625rem;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    
-    .contract-item:hover {
-      border-color: var(--p);
-      background: var(--bg2);
-    }
-    
-    .contract-item.active {
-      border-color: var(--p);
-      background: rgba(34, 211, 238, 0.1);
-    }
-    
-    .contract-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--bg2);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.125rem;
-    }
-    
-    .contract-info {
-      flex: 1;
-    }
-    
-    .contract-name {
-      font-size: 0.8125rem;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 0.125rem;
-    }
-    
-    .contract-meta {
-      font-size: 0.6875rem;
-      color: var(--text-faint);
-    }
-    
-    .contract-status {
-      padding: 0.25rem 0.5rem;
-      border-radius: 12px;
-      font-size: 0.625rem;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-    
-    .contract-status.draft {
-      background: var(--bg2);
-      color: var(--text-dim);
-    }
-    
-    .contract-status.sent {
-      background: rgba(34, 211, 238, 0.2);
-      color: var(--p);
-    }
-    
-    .contract-status.signed {
-      background: rgba(52, 211, 153, 0.2);
-      color: var(--a);
-    }
-    
-    .contract-status.expired {
-      background: rgba(248, 113, 113, 0.2);
-      color: var(--err);
-    }
-    
-    .content-area {
-      flex: 1;
-      padding: 2rem;
-      overflow-y: auto;
-    }
-    
-    .contract-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 2rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--bg2);
-    }
-    
-    .contract-title {
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 0.5rem;
-    }
-    
-    .contract-subtitle {
-      font-size: 1rem;
-      color: var(--text-dim);
-    }
-    
-    .contract-actions {
-      display: flex;
-      gap: 0.5rem;
-    }
-    
-    .btn-gv {
-      padding: 0.625rem 1.25rem;
-      background: linear-gradient(135deg, var(--p), var(--s));
-      border: none;
-      border-radius: 6px;
-      color: var(--bg0);
-      font-weight: 600;
-      font-size: 0.8125rem;
-      cursor: pointer;
-      transition: all 0.15s;
-      display: flex;
-      align-items: center;
-      gap: 0.375rem;
-    }
-    
-    .btn-gv:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
-    
-    .btn-gv-alt {
-      padding: 0.625rem 1.25rem;
-      background: var(--bg2);
-      border: 1px solid var(--bg2);
-      border-radius: 6px;
-      color: var(--text);
-      font-size: 0.8125rem;
-      cursor: pointer;
-      transition: all 0.15s;
-      display: flex;
-      align-items: center;
-      gap: 0.375rem;
-    }
-    
-    .btn-gv-alt:hover {
-      border-color: var(--p);
-      color: var(--p);
-    }
-    
-    .contract-content {
-      background: var(--bg1);
-      border: 1px solid var(--bg2);
-      border-radius: 12px;
-      padding: 2rem;
-      line-height: 1.8;
-    }
-    
-    .contract-content h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--p);
-      margin-bottom: 1.5rem;
-      border-bottom: 2px solid var(--p);
-      padding-bottom: 0.75rem;
-    }
-    
-    .contract-content h2 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-    }
-    
-    .contract-content h3 {
-      font-size: 0.9375rem;
-      font-weight: 600;
-      color: var(--text-dim);
-      margin-top: 1.5rem;
-      margin-bottom: 0.75rem;
-    }
-    
-    .contract-content p {
-      margin-bottom: 1rem;
-      color: var(--text-dim);
-    }
-    
-    .contract-content ul, .contract-content ol {
-      margin-bottom: 1rem;
-      padding-left: 1.5rem;
-    }
-    
-    .contract-content li {
-      margin-bottom: 0.5rem;
-      color: var(--text-dim);
-    }
-    
-    .contract-content table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1.5rem 0;
-    }
-    
-    .contract-content th,
-    .contract-content td {
-      padding: 0.75rem;
-      text-align: left;
-      border: 1px solid var(--bg2);
-    }
-    
-    .contract-content th {
-      background: var(--bg2);
-      font-weight: 600;
-      color: var(--text);
-    }
-    
-    .contract-content td {
-      color: var(--text-dim);
-    }
-    
-    .contract-content blockquote {
-      border-left: 3px solid var(--p);
-      padding-left: 1rem;
-      margin: 1.5rem 0;
-      color: var(--text-dim);
-      font-style: italic;
-    }
-    
-    .contract-content code {
-      background: var(--bg0);
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.875rem;
-      color: var(--p);
-    }
-    
-    .contract-content pre {
-      background: var(--bg0);
-      padding: 1rem;
-      border-radius: 8px;
-      overflow-x: auto;
-      margin: 1.5rem 0;
-    }
-    
-    .contract-content pre code {
-      background: transparent;
-      padding: 0;
-    }
-    
-    /* Signature Section */
-    .signature-section {
-      margin-top: 3rem;
-      padding-top: 2rem;
-      border-top: 2px solid var(--bg2);
-    }
-    
-    .signature-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 3rem;
-      margin-top: 2rem;
-    }
-    
-    .signature-box {
-      text-align: center;
-    }
-    
-    .signature-line {
-      border-bottom: 1px solid var(--bg2);
-      padding-bottom: 0.5rem;
-      margin-bottom: 0.5rem;
-      min-height: 60px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-    }
-    
-    .signature-name {
-      font-weight: 600;
-      font-size: 0.9375rem;
-    }
-    
-    .signature-role {
-      font-size: 0.75rem;
-      color: var(--text-faint);
-    }
-    
-    /* Status Badge */
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-size: 0.8125rem;
-      font-weight: 600;
-    }
-    
-    .status-badge.draft {
-      background: var(--bg2);
-      color: var(--text-dim);
-    }
-    
-    .status-badge.sent {
-      background: rgba(34, 211, 238, 0.2);
-      color: var(--p);
-    }
-    
-    .status-badge.signed {
-      background: rgba(52, 211, 153, 0.2);
-      color: var(--a);
-    }
-    
-    .status-badge.expired {
-      background: rgba(248, 113, 113, 0.2);
-      color: var(--err);
-    }
-    
-    /* Info Cards */
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    
-    .info-card {
-      background: var(--bg1);
-      border: 1px solid var(--bg2);
-      border-radius: 8px;
-      padding: 1rem;
-    }
-    
-    .info-label {
-      font-size: 0.6875rem;
-      text-transform: uppercase;
-      color: var(--text-faint);
-      letter-spacing: 0.05em;
-      margin-bottom: 0.25rem;
-    }
-    
-    .info-value {
-      font-size: 0.9375rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-    
-    /* Timeline */
-    .timeline {
-      margin: 2rem 0;
-    }
-    
-    .timeline-item {
-      display: flex;
-      gap: 1rem;
-      padding: 1rem 0;
-      border-left: 2px solid var(--bg2);
-      margin-left: 0.5rem;
-      position: relative;
-    }
-    
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -5px;
-      width: 8px;
-      height: 8px;
-      background: var(--p);
-      border-radius: 50%;
-    }
-    
-    .timeline-content {
-      flex: 1;
-      padding-left: 1rem;
-    }
-    
-    .timeline-date {
-      font-size: 0.75rem;
-      color: var(--text-faint);
-    }
-    
-    .timeline-event {
-      font-size: 0.875rem;
-      color: var(--text);
-    }
-    
-    /* Right Panel */
-    .right-panel {
-      width: 280px;
-      background: var(--bg1);
-      border-left: 1px solid var(--bg2);
-      padding: 1.25rem;
-    }
-    
-    .panel-section {
-      margin-bottom: 1.5rem;
-    }
-    
-    .panel-title {
-      font-size: 0.6875rem;
-      text-transform: uppercase;
-      color: var(--text-faint);
-      letter-spacing: 0.1em;
-      margin-bottom: 0.75rem;
-    }
-    
-    .stat-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid var(--bg2);
-      font-size: 0.8125rem;
-    }
-    
-    .stat-row:last-child {
-      border-bottom: none;
-    }
-    
-    .stat-label {
-      color: var(--text-dim);
-    }
-    
-    .stat-value {
-      color: var(--text);
-      font-weight: 500;
-    }
-    
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s;
-    }
-    
-    .modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-    
-    .modal-content {
-      background: var(--bg1);
-      border: 1px solid var(--bg2);
-      border-radius: 12px;
-      width: 90%;
-      max-width: 500px;
-      padding: 1.5rem;
-      transform: scale(0.9);
-      transition: all 0.3s;
-    }
-    
-    .modal-overlay.active .modal-content {
-      transform: scale(1);
-    }
-    
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-    
-    .modal-title {
-      font-size: 1.125rem;
-      font-weight: 600;
-    }
-    
-    .modal-close {
-      background: none;
-      border: none;
-      color: var(--text-dim);
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-    
-    .modal-close:hover {
-      color: var(--text);
-    }
-    
-    .form-group {
-      margin-bottom: 1rem;
-    }
-    
-    .form-label {
-      display: block;
-      font-size: 0.75rem;
-      color: var(--text-dim);
-      margin-bottom: 0.375rem;
-    }
-    
-    .form-input, .form-select {
-      width: 100%;
-      background: var(--bg0);
-      border: 1px solid var(--bg2);
-      border-radius: 6px;
-      padding: 0.625rem;
-      color: var(--text);
-      font-size: 0.8125rem;
-    }
-    
-    .form-input:focus, .form-select:focus {
-      outline: none;
-      border-color: var(--p);
-    }
-    
-    .modal-actions {
-      display: flex;
-      gap: 0.75rem;
-      margin-top: 1.5rem;
-    }
-    
-    /* Toast */
-    .toast {
-      position: fixed;
-      bottom: 1.5rem;
-      right: 1.5rem;
-      padding: 1rem 1.5rem;
-      background: var(--bg1);
-      border: 1px solid var(--a);
-      border-radius: 8px;
-      color: var(--text);
-      font-size: 0.875rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.3s;
-      z-index: 10000;
-    }
-    
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  </style>
-</head>
-<body>
-  <nav class="navbar">
-    <div class="container-fluid">
-      <div class="d-flex align-items-center">
-        <span class="navbar-brand">Contract Viewer</span>
-      </div>
-      <div class="d-flex gap-2">
-        <button class="btn btn-sm" style="background: transparent; border: 1px solid var(--bg2); color: var(--text-dim);" onclick="showHelp()">
-          <i class="bi bi-question-circle"></i> Ayuda
+<!doctype html>
+<html lang="es" data-bs-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contract Viewer — Gentle-Vanguard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/gv.css?v=3.0" />
+    <script src="assets/js/i18n-content.js?v=3.0"></script>
+    <script src="assets/js/i18n.js?v=3.0"></script>
+  </head>
+  <body class="grain">
+    <div class="scroll-progress"></div>
+    <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="gv-particles" aria-hidden="true"></div>
+    <nav class="navbar navbar-expand-xl nav-blur fixed-top">
+      <div class="container-fluid px-3">
+        <a class="navbar-brand text-light fw-bold mono" href="index.html" style="font-size: 0.85rem">
+          <i class="bi bi-robot me-2" style="color: var(--p)"></i>GV
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+          <i class="bi bi-list" style="color: var(--p)"></i>
         </button>
-        <button class="btn btn-sm" style="background: transparent; border: 1px solid var(--bg2); color: var(--text-dim);" onclick="window.close()">
-          <i class="bi bi-x-lg"></i> Cerrar
-        </button>
+        <div class="collapse navbar-collapse" id="navMain">
+          <ul class="navbar-nav ms-auto" style="max-height: 85vh; overflow-y: auto">
+            <li class="nav-item">
+              <a class="nav-link " href="index.html">
+                <i class="bi bi-house me-1"></i><span data-i18n="nav_home">Home</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="architecture.html">
+                <i class="bi bi-diagram-3 me-1"></i><span data-i18n="nav_arch">Arch</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="autonomy.html">
+                <i class="bi bi-robot me-1"></i><span data-i18n="nav_autonomy">Autonomy</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="dashboard.html">
+                <i class="bi bi-speedometer2 me-1"></i><span data-i18n="nav_dashboard">Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="quickstart.html">
+                <i class="bi bi-rocket-takeoff me-1"></i><span data-i18n="nav_quickstart">Quickstart</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="memory-knowledge.html">
+                <i class="bi bi-brain me-1"></i><span data-i18n="nav_memory">Memory</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="security-governance.html">
+                <i class="bi bi-shield-check me-1"></i><span data-i18n="nav_security">Security</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="agents-pipeline.html">
+                <i class="bi bi-diagram-2 me-1"></i><span data-i18n="nav_agents">Agents</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="operations-cloud.html">
+                <i class="bi bi-cloud me-1"></i><span data-i18n="nav_cloud">Cloud</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="patterns-conventions.html">
+                <i class="bi bi-file-code me-1"></i><span data-i18n="nav_patterns">Patterns</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="health.html">
+                <i class="bi bi-heart-pulse me-1"></i><span data-i18n="nav_health">Health</span>
+              </a>
+            </li>
+            <li class="nav-item ms-2">
+              <div class="lang-seg" role="group" aria-label="Language">
+                <button type="button" data-lang="en" aria-pressed="false">
+                  <span class="lang-flag">🇬🇧</span><span class="lang-code">EN</span>
+                </button>
+                <button type="button" data-lang="es" aria-pressed="false">
+                  <span class="lang-flag">🇪🇸</span><span class="lang-code">ES</span>
+                </button>
+                <button type="button" data-lang="pt-BR" aria-pressed="false">
+                  <span class="lang-flag">🇧🇷</span><span class="lang-code">PT</span>
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </nav>
-  
-  <div class="main-container">
+    </nav>
+
+    <header class="hero" id="overview" style="padding-top: 90px; min-height: 40vh; background: var(--bg);">
+      <div>
+        <span class="hero-badge mb-3">✦ Studio</span>
+        <h1><span class="glow">Contract Viewer</span></h1>
+        <p class="lead" data-i18n="c_contractviewer_desc">Smart contract visualization and analysis with markdown rendering</p>
+      </div>
+    </header>
+
+    <main style="padding-top: 50px; min-height: 60vh;">
+<div class="main-container">
     <aside class="sidebar">
       <div class="sidebar-title">Contratos</div>
       
@@ -1391,5 +866,39 @@ _Pendientes de firma_
       });
     });
   </script>
-</body>
+    <footer class="gv-footer">
+      <p class="mb-2">
+        Gentle-Vanguard <strong>v4.0</strong> — 100% Autonomous AI Stack ·
+        <span class="text-secondary">✦ Plataforma Autónoma de Orquestración AI</span>
+      </p>
+      <p class="mb-2 d-flex flex-wrap justify-content-center gap-3">
+        <a href="architecture.html"><i class="bi bi-diagram-3 me-1"></i>Architecture</a>
+        <a href="autonomy.html"><i class="bi bi-robot me-1"></i>Autonomy</a>
+        <a href="dashboard.html"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a>
+        <a href="quickstart.html"><i class="bi bi-rocket-takeoff me-1"></i>Quick Start</a>
+        <a href="memory-knowledge.html"><i class="bi bi-brain me-1"></i>Memory</a>
+        <a href="security-governance.html"><i class="bi bi-shield me-1"></i>Security</a>
+        <a href="agents-pipeline.html"><i class="bi bi-people me-1"></i>Agents</a>
+        <a href="operations-cloud.html"><i class="bi bi-cloud me-1"></i>Operations</a>
+        <a href="patterns-conventions.html"><i class="bi bi-diagram-2 me-1"></i>Patterns</a>
+        <a href="health.html"><i class="bi bi-heart-pulse me-1"></i>Health</a>
+        <a href="index.html"><i class="bi bi-book me-1"></i>The Book</a>
+        <a href="https://github.com/EmmanuelOrtiz17/gentle-vanguard" target="_blank"><i class="bi bi-github me-1"></i>GitHub</a>
+      </p>
+      <div class="d-flex flex-wrap justify-content-center gap-2 mt-2 mb-2">
+        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1" style="font-size: 0.6rem">294 TS Files</span>
+        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1" style="font-size: 0.6rem">103 Test Files</span>
+        <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-2 py-1" style="font-size: 0.6rem">112/112 Health</span>
+        <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-2 py-1" style="font-size: 0.6rem">11 Repos</span>
+        <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1" style="font-size: 0.6rem">175 Skills</span>
+        <span class="badge bg-light bg-opacity-10 text-light border border-light border-opacity-25 px-2 py-1" style="font-size: 0.6rem">65 Normatives</span>
+      </div>
+      <p class="mt-2 mb-0">
+        <small><i class="bi bi-cpu me-1"></i>Don't let your mellow hustle be faded.</small>
+      </p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/gv.js?v=3.0"></script>
+  </body>
 </html>

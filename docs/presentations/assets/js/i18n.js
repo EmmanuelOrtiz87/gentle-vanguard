@@ -526,6 +526,71 @@
         'skill_usage, token_usage, routing_rules — per-session skill usage tracking, real token accounting with generated total_tokens column and adaptive router persistence with hit_count.',
       tip_tracerepo:
         'traces + feedback — distributed tracing spans with waterfall view, latency statistics and thumbs up/down per span from the observability dashboard.',
+      /* Info tips — autonomy */
+      tip_autonomy_autoapply:
+        'Executive engine: trigger → evaluate (≥80%) → apply → verify → rollback. Max 5/day, rollback on >15% degradation.',
+      tip_autonomy_circuit:
+        '3-state CLOSED/OPEN/HALF_OPEN. 5 failures → OPEN, 2 successes → CLOSED. Prevents cascade failures.',
+      tip_autonomy_escalation:
+        '3-tier: warning (3 events) → critical (5) → emergency (10). Full audit trail.',
+      tip_autonomy_depgraph:
+        'Dynamic discovery from pipeline config. Self-maintaining, no hardcoded map.',
+      tip_autonomy_abtest:
+        'createExperiment → assignVariant → evaluateExperiment. Auto-rollback on degradation.',
+      tip_autonomy_scoring:
+        'Per-session quality: delegations, corrections, proactive hits. >15% regression alert.',
+      tip_autonomy_norms:
+        'Discovers patterns, auto-promotes at ≥80% confidence, writes to LEARNED-NORMS.md',
+      tip_autonomy_watchtower: '112 checks × 18 components. Promise.allSettled parallel execution.',
+      tip_autonomy_security: 'Pre-input scanning, audit pipeline, guardrails. 65+ normatives.',
+      tip_autonomy_state: 'Checkpoints (auto-create), snapshots, rollback with dry-run validation.',
+      tip_autonomy_tracing: 'Span-based distributed tracing. OTLP export to localhost:4318.',
+      tip_autonomy_cloud: 'Hybrid AWS/Azure. Cost/latency/load routing. Circuit breaker pattern.',
+      tip_autonomy_overview:
+        'The Autonomous Executive Layer coordinates 12 interconnected executive systems sharing state through the Nexus database and coordinating via the event bus.',
+      tip_autonomy_perf_parallel:
+        'Watchtower checks run in parallel with Promise.allSettled — a single failure never blocks the pipeline.',
+      tip_autonomy_perf_cache: 'LRU cache Map(20, TTL 2000ms) for repeated lookups.',
+      tip_autonomy_perf_wal: 'Automatic WAL checkpoint when the WAL file exceeds 1MB.',
+      tip_autonomy_perf_lazy:
+        'Lazy batch delay optimized from 500ms → 100ms — 5× faster background task startup.',
+      tip_autonomy_loop:
+        'Detection → Evaluation → Decision → Execution → Verification → Learning. The 12 Layer-6 systems coordinated via event bus and Nexus DB.',
+      /* Info tips — dashboard */
+      tip_dashboard_websocket:
+        'Real-time updates every 5s. WebSocket + HTTP polling fallback. Auto-reconnect.',
+      tip_dashboard_sections:
+        '7 sections: Real-time metrics, Session tracing, Alerts, Skills, System health, Performance, Feedback',
+      tip_dashboard_alerts:
+        '8 alert rules: high token usage, session degradation, health fails, pipeline errors, etc.',
+      tip_dashboard_i18n:
+        '3 languages: English, Español, Português. Auto-detect browser, persist in localStorage.',
+      tip_dashboard_watchdog: 'Auto-restart on failure (10 attempts). Port health check every 5s.',
+      tip_dashboard_budget: 'Daily 5M tokens, per-session 3M. Soft 70%, hard 90% thresholds.',
+      /* Info tips — memory-knowledge */
+      tip_memory_engram:
+        'Persistent memory: 2,078 observations, 369 sessions. SHA256 integrity, survives compactions.',
+      tip_memory_codegraph:
+        'Knowledge graph: 10,663 nodes, 21,746 edges. Sub-millisecond symbol queries.',
+      tip_memory_graphify:
+        'Community detection, god nodes, cross-file relationships. GraphML + visualizations.',
+      tip_memory_ml: 'Embeddings for semantic search, skill matching, pattern recognition.',
+      tip_memory_vault:
+        'Structured knowledge: skills, patterns, decisions, conventions, standards.',
+      tip_memory_nexus: 'SQLite WAL mode, 21 tables, 11 repos. Auto-init, prune, backup.',
+      /* Info tips — patterns-conventions */
+      tip_patterns_sdd:
+        'Spec-Driven Development: explore → design → apply → verify. Contract validation.',
+      tip_patterns_karpathy:
+        'Think First, Simplicity, Surgical Changes, Goal-Driven. Enforced at session start.',
+      tip_patterns_slop:
+        'AI Slop Detection: brand inconsistency, hallucination patterns, quality gates.',
+      tip_patterns_brand:
+        'Voice: warm, direct, collaborative. Visual: glassmorphism, aurora gradients.',
+      tip_patterns_arch:
+        '10 architectural patterns: Layered, Event-Driven, CQRS, Saga, Circuit Breaker, etc.',
+      tip_patterns_docs:
+        'ADRs, API docs, guides. Cognitive load reduction, progressive disclosure.',
     },
     es: {
       nav_home: 'Inicio',
@@ -1043,6 +1108,77 @@
         'skill_usage, token_usage, routing_rules — tracking de uso de skills por sesión, contabilidad real de tokens con columna total_tokens generada y persistencia del router adaptativo con hit_count.',
       tip_tracerepo:
         'traces + feedback — spans de tracing distribuido con vista waterfall, estadísticas de latencia y pulgar arriba/abajo por span desde el dashboard de observabilidad.',
+      /* Info tips — autonomy */
+      tip_autonomy_autoapply:
+        'Motor ejecutivo: trigger → evaluar (≥80%) → aplicar → verificar → rollback. Máx. 5/día, rollback si degradación >15%.',
+      tip_autonomy_circuit:
+        'Patrón de 3 estados CLOSED/OPEN/HALF_OPEN. 5 fallos → OPEN, 2 éxitos → CLOSED. Previene fallos en cascada.',
+      tip_autonomy_escalation:
+        'Escalación de 3 niveles: advertencia (3 eventos) → crítico (5) → emergencia (10). Trazabilidad completa.',
+      tip_autonomy_depgraph:
+        'Descubrimiento dinámico desde la config del pipeline. Auto-mantenible, sin mapa hardcoded.',
+      tip_autonomy_abtest:
+        'createExperiment → assignVariant → evaluateExperiment. Auto-rollback ante degradación.',
+      tip_autonomy_scoring:
+        'Calidad por sesión: delegaciones, correcciones, aciertos proactivos. Alerta de regresión >15%.',
+      tip_autonomy_norms:
+        'Descubre patrones, auto-promueve con confianza ≥80%, escribe en LEARNED-NORMS.md',
+      tip_autonomy_watchtower:
+        '112 checks × 18 componentes. Ejecución paralela Promise.allSettled.',
+      tip_autonomy_security:
+        'Escaneo pre-input, pipeline de auditoría, guardrails. 65+ normativas.',
+      tip_autonomy_state:
+        'Checkpoints (auto-creación), snapshots, rollback con validación dry-run.',
+      tip_autonomy_tracing:
+        'Tracing distribuido basado en spans. Exportación OTLP a localhost:4318.',
+      tip_autonomy_cloud:
+        'Híbrido AWS/Azure. Routing por costo/latencia/carga. Patrón circuit breaker.',
+      tip_autonomy_overview:
+        'La capa ejecutiva coordina 12 sistemas interconectados que comparten estado vía Nexus DB y el event bus.',
+      tip_autonomy_perf_parallel:
+        'Los checks del watchtower se ejecutan en paralelo con Promise.allSettled — un fallo nunca bloquea el pipeline.',
+      tip_autonomy_perf_cache: 'Caché LRU Map(20, TTL 2000ms) para búsquedas repetidas.',
+      tip_autonomy_perf_wal: 'Checkpoint WAL automático cuando el archivo WAL supera 1MB.',
+      tip_autonomy_perf_lazy: 'Delay de batches lazy optimizado de 500ms → 100ms — 5× más rápido.',
+      tip_autonomy_loop:
+        'Detección → Evaluación → Decisión → Ejecución → Verificación → Aprendizaje. Los 12 sistemas del Layer 6 coordinados vía event bus y Nexus DB.',
+      /* Info tips — dashboard */
+      tip_dashboard_websocket:
+        'Actualizaciones en tiempo real cada 5s. WebSocket + fallback de polling HTTP. Reconexión automática.',
+      tip_dashboard_sections:
+        '7 secciones: métricas en tiempo real, tracing de sesión, alertas, skills, salud del sistema, rendimiento, feedback',
+      tip_dashboard_alerts:
+        '8 reglas de alerta: uso alto de tokens, degradación de sesión, fallos de salud, errores de pipeline, etc.',
+      tip_dashboard_i18n:
+        '3 idiomas: English, Español, Português. Auto-detección del navegador, persistencia en localStorage.',
+      tip_dashboard_watchdog:
+        'Auto-reinicio ante fallos (10 intentos). Health check del puerto cada 5s.',
+      tip_dashboard_budget: '5M tokens diarios, 3M por sesión. Umbrales soft 70%, hard 90%.',
+      /* Info tips — memory-knowledge */
+      tip_memory_engram:
+        'Memoria persistente: 2,078 observaciones, 369 sesiones. Integridad SHA256, sobrevive compactaciones.',
+      tip_memory_codegraph:
+        'Grafo de conocimiento: 10,663 nodos, 21,746 aristas. Consultas de símbolos en menos de un milisegundo.',
+      tip_memory_graphify:
+        'Detección de comunidades, god nodes, relaciones entre archivos. GraphML + visualizaciones.',
+      tip_memory_ml:
+        'Embeddings para búsqueda semántica, matching de skills y reconocimiento de patrones.',
+      tip_memory_vault:
+        'Conocimiento estructurado: skills, patrones, decisiones, convenciones, estándares.',
+      tip_memory_nexus: 'SQLite modo WAL, 21 tablas, 11 repos. Auto-init, prune y backup.',
+      /* Info tips — patterns-conventions */
+      tip_patterns_sdd:
+        'Spec-Driven Development: explore → design → apply → verify. Validación de contratos.',
+      tip_patterns_karpathy:
+        'Think First, Simplicity, Surgical Changes, Goal-Driven. Aplicadas al inicio de sesión.',
+      tip_patterns_slop:
+        'Detección de AI Slop: inconsistencia de marca, patrones de alucinación, quality gates.',
+      tip_patterns_brand:
+        'Voz: cálida, directa, colaborativa. Visual: glassmorphism, gradientes aurora.',
+      tip_patterns_arch:
+        '10 patrones arquitectónicos: Layered, Event-Driven, CQRS, Saga, Circuit Breaker, etc.',
+      tip_patterns_docs:
+        'ADRs, docs de API, guías. Reducción de carga cognitiva, divulgación progresiva.',
     },
     'pt-BR': {
       nav_home: 'Início',
@@ -1159,6 +1295,40 @@
         'Banco de dados operacional SQLite (modo WAL, FK ON) com 11 repositórios, 7 migrações e 21 tabelas. Auto-init, auto-prune, auto-backup e monitoramento por watchtower.',
       tip_layers:
         'A stack se organiza em 6 camadas: Tools (10 IDEs) → Agents (21 especializados) → Pipeline (101 passos habilitados) → Memória e Conhecimento → Dados (11 repos) → Sistemas executivos.',
+      /* Info tips — autonomy */
+      tip_autonomy_autoapply:
+        'Motor executivo: trigger → avaliar (≥80%) → aplicar → verificar → rollback. Máx. 5/dia, rollback se degradação >15%.',
+      tip_autonomy_circuit:
+        'Padrão de 3 estados CLOSED/OPEN/HALF_OPEN. 5 falhas → OPEN, 2 sucessos → CLOSED. Evita falhas em cascata.',
+      tip_autonomy_escalation:
+        'Escalonamento de 3 níveis: aviso (3 eventos) → crítico (5) → emergência (10). Rastreabilidade completa.',
+      tip_autonomy_depgraph:
+        'Descoberta dinâmica a partir da config do pipeline. Auto-mantido, sem mapa hardcoded.',
+      tip_autonomy_abtest:
+        'createExperiment → assignVariant → evaluateExperiment. Auto-rollback diante de degradação.',
+      tip_autonomy_scoring:
+        'Qualidade por sessão: delegações, correções, acertos proativos. Alerta de regressão >15%.',
+      tip_autonomy_norms:
+        'Descobre padrões, auto-promove com confiança ≥80%, escreve em LEARNED-NORMS.md',
+      tip_autonomy_watchtower:
+        '112 checks × 18 componentes. Execução paralela Promise.allSettled.',
+      tip_autonomy_security:
+        'Escaneamento pré-input, pipeline de auditoria, guardrails. 65+ normativas.',
+      tip_autonomy_state:
+        'Checkpoints (auto-criação), snapshots, rollback com validação dry-run.',
+      tip_autonomy_tracing:
+        'Tracing distribuído baseado em spans. Exportação OTLP para localhost:4318.',
+      tip_autonomy_cloud:
+        'Híbrido AWS/Azure. Roteamento por custo/latência/carga. Padrão circuit breaker.',
+      tip_autonomy_overview:
+        'A camada executiva coordena 12 sistemas interconectados que compartilham estado via Nexus DB e o event bus.',
+      tip_autonomy_perf_parallel:
+        'Os checks do watchtower rodam em paralelo com Promise.allSettled — uma falha nunca bloqueia o pipeline.',
+      tip_autonomy_perf_cache: 'Cache LRU Map(20, TTL 2000ms) para buscas repetidas.',
+      tip_autonomy_perf_wal: 'Checkpoint WAL automático quando o arquivo WAL excede 1MB.',
+      tip_autonomy_perf_lazy: 'Delay de batches lazy otimizado de 500ms → 100ms — 5× mais rápido.',
+      tip_autonomy_loop:
+        'Detecção → Avaliação → Decisão → Execução → Verificação → Aprendizado. Os 12 sistemas do Layer 6 coordenados via event bus e Nexus DB.',
       section_overview: 'Visão Geral',
       section_architecture: 'Arquitetura',
       section_metrics: 'Métricas',

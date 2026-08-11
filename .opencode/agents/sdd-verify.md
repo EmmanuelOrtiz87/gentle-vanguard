@@ -2,7 +2,7 @@
 description: QA verification agent — testing, validation, and quality assurance
 mode: subagent
 hidden: true
-model: opencode/deepseek-v4-flash-free
+model: kimi-2-5
 temperature: 0.1
 steps: 36
 permission:

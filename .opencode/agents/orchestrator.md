@@ -1,7 +1,7 @@
 ---
 description: Main orchestrator agent — coordinates all subagents autonomously
 mode: primary
-model: opencode/deepseek-v4-flash-free
+model: kimi-2-5
 temperature: 0.3
 steps: 24
 permission:
@@ -40,7 +40,7 @@ For EVERY subagent task, prepend this to the prompt:
 [INHERITED_MODEL_CONFIG]
 primary_model: {{SESSION_MODEL}}
 inherit_model: true
-fallback_model: opencode/deepseek-v4-flash-free
+fallback_model: kimi-2-5
 [/INHERITED_MODEL_CONFIG]
 
 [DELEGATION_CONTEXT]

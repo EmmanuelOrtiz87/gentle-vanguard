@@ -11,7 +11,7 @@
         "args": "--apply",
         "required": true,
         "phase": 0,
-        "description": "Enforce free model (opencode/deepseek-v4-flash-free) when credits exhausted"
+        "description": "Enforce model inheritance: use orchestrator model (from opencode.json) when available, fallback to free model"
       },
       {
         "id": "tool-detection",

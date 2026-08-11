@@ -2,7 +2,7 @@
 description: DEV implementation agent — code generation, feature building, and refactoring
 mode: subagent
 hidden: true
-model: opencode/deepseek-v4-flash-free
+model: kimi-2-5
 temperature: 0.15
 steps: 52
 permission:

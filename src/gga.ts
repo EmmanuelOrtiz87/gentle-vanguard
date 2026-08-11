@@ -26,7 +26,7 @@
 
 import { spawn } from 'child_process';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
 
 // =============================================================================
 // TYPES
@@ -87,6 +87,23 @@ interface GGAState {
     to: string;
     reason: string;
   }[];
+  /**
+   * Session-Based Fallback: ID de sesión para detectar nueva sesión
+   */
+  sessionId?: string;
+  /**
+   * Session-Based Fallback: modo activo cuando los modelos heredados fallan
+   * Persistent during session. Reset on new session.
+   */
+  sessionFallbackMode?: boolean;
+  /**
+   * Session-Based Fallback: contador de fallos consecutivos en esta sesión
+   */
+  consecutiveFailures?: number;
+  /**
+   * Session-Based Fallback: timestamp del último fallo
+   */
+  lastFailureAt?: string;
 }
 
 // =============================================================================
@@ -174,22 +191,30 @@ function log(level: 'info' | 'warn' | 'error' | 'debug', message: string): void 
 }
 
 function loadGGAState(): GGAState {
+  let state: GGAState;
+  
   try {
     if (existsSync(GGA_STATE_FILE)) {
-      return JSON.parse(readFileSync(GGA_STATE_FILE, 'utf-8'));
+      state = JSON.parse(readFileSync(GGA_STATE_FILE, 'utf-8'));
+    } else {
+      throw new Error('State file not found');
     }
   } catch {
     log('warn', 'Could not load GGA state, using defaults');
+    state = {
+      version: '1.0.0',
+      lastUpdated: new Date().toISOString(),
+      currentProvider: 'kimi-2-5',
+      health: {},
+      exhaustedProviders: [],
+      switchHistory: [],
+    };
   }
-
-  return {
-    version: '1.0.0',
-    lastUpdated: new Date().toISOString(),
-    currentProvider: 'kimi-2-5',
-    health: {},
-    exhaustedProviders: [],
-    switchHistory: [],
-  };
+  
+  // Session-Based Fallback: Detectar nueva sesión y resetear estado
+  detectNewSession(state);
+  
+  return state;
 }
 
 function saveGGAState(state: GGAState): void {
@@ -200,6 +225,59 @@ function saveGGAState(state: GGAState): void {
     writeFileSync(GGA_STATE_FILE, JSON.stringify(state, null, 2));
   } catch {
     log('warn', 'Could not save GGA state');
+  }
+}
+
+/**
+ * Session-Based Fallback: Obtiene el ID de sesión actual.
+ * Combina timestamp de inicio + PID para identificar sesión única.
+ */
+function getCurrentSessionId(): string {
+  // Usar SESSION_ID del entorno si existe (seteado por session-autostart)
+  // o generar uno nuevo basado en inicio del proceso
+  const envSession = process.env.GENTLE_VANGUARD_SESSION_ID;
+  if (envSession) return envSession;
+  
+  // Fallback: usar start time aproximado del proceso
+  const startTime = Math.floor(Date.now() / 1000 / 60 / 60) * 60 * 60; // Redondeado a hora
+  return `session-${startTime}-${process.pid}`;
+}
+
+/**
+ * Session-Based Fallback: Detecta si es una nueva sesión.
+ * Si cambió el sessionId, resetea el modo fallback.
+ */
+function detectNewSession(state: GGAState): boolean {
+  const currentSession = getCurrentSessionId();
+  const isNewSession = state.sessionId !== currentSession;
+  
+  if (isNewSession) {
+    log('info', `[Session-Based Fallback] Nueva sesión detectada: ${currentSession} (anterior: ${state.sessionId || 'none'})`);
+    log('info', '[Session-Based Fallback] Resetando estado a normalidad');
+    
+    // Resetear modo fallback para nueva sesión
+    state.sessionId = currentSession;
+    state.sessionFallbackMode = false;
+    state.consecutiveFailures = 0;
+    state.lastFailureAt = undefined;
+    state.exhaustedProviders = []; // Limpiar providers agotados
+    state.switchHistory = []; // Limpiar historial
+    
+    saveGGAState(state);
+  }
+  
+  return isNewSession;
+}
+
+/**
+ * Session-Based Fallback: Activa el modo fallback persistente para esta sesión.
+ * Una vez activado, todos los intentos de delegación en esta sesión usarán fallback.
+ */
+function activateSessionFallbackMode(state: GGAState, reason: string): void {
+  if (!state.sessionFallbackMode) {
+    log('warn', `[Session-Based Fallback] Activando modo fallback para sesión ${state.sessionId}: ${reason}`);
+    state.sessionFallbackMode = true;
+    saveGGAState(state);
   }
 }
 
@@ -290,6 +368,30 @@ function getFallbackChain(preferredModel?: string): string[] {
 // =============================================================================
 
 /**
+ * Resuelve la ruta absoluta del binario npx/npm.
+ * En Windows, `npx.cmd` sin ruta absoluta puede resolver a un npx equivocado
+ * (que intenta leer node_modules/npm/bin/npm-prefix.js inexistente).
+ * Usamos process.execPath para localizar el directorio de Node real.
+ */
+function resolveNpxPath(): string {
+  const isWindows = process.platform === 'win32';
+  // process.execPath → C:\Program Files\nodejs\node.exe → npx.cmd vive al lado
+  const execDir = dirname(process.execPath);
+  const candidates = isWindows
+    ? [join(execDir, 'npx.cmd'), join(execDir, 'npm.cmd'), 'npx.cmd']
+    : [join(execDir, 'npx'), 'npx'];
+
+  for (const candidate of candidates) {
+    try {
+      if (existsSync(candidate)) return candidate;
+    } catch {
+      /* skip */
+    }
+  }
+  return candidates[0];
+}
+
+/**
  * Execute with a specific provider
  */
 async function executeWithProvider(
@@ -316,7 +418,7 @@ async function executeWithProvider(
 
     // Build command with proper escaping for Windows vs Unix
     const isWindows = process.platform === 'win32';
-    const npxCmd = isWindows ? 'npx.cmd' : 'npx';
+    const npxCmd = resolveNpxPath();
 
     // On Windows, we need to use shell mode for proper flag handling
     // Build the full command string for shell execution
@@ -518,8 +620,57 @@ export async function GuardianAngel(
     }
   }
 
-  // All providers exhausted
-  const finalError = `All providers exhausted. Last error: ${lastError || 'Unknown'}`;
+  // =============================================================================
+  // SESSION-BASED FALLBACK FINAL: Todos los modelos agotados
+  // Fallback al orquestador para completar la tarea
+  // =============================================================================
+  
+  log('warn', '[Session-Based Fallback] Todos los modelos agotados. Activando fallback final al orquestador.');
+  activateSessionFallbackMode(state, 'Todos los modelos de la cadena fallaron');
+  
+  // Intentar ejecución directa por el orquestador
+  const orchestratorModel = getDetectedModel();
+  log('info', `[Session-Based Fallback] Intentando ejecución directa con modelo del orquestador: ${orchestratorModel}`);
+  
+  try {
+    const fallbackResult = await executeWithProvider(
+      { ...options, preferredModel: orchestratorModel },
+      orchestratorModel,
+      chain.length + 1
+    );
+    
+    if (fallbackResult.success) {
+      log('info', `[Session-Based Fallback] ✅ Éxito con ejecución directa del orquestador usando ${orchestratorModel}`);
+      
+      state.switchHistory.push({
+        timestamp: new Date().toISOString(),
+        from: originalProvider,
+        to: orchestratorModel,
+        reason: 'session_fallback_orchestrator',
+      });
+      state.currentProvider = orchestratorModel;
+      saveGGAState(state);
+      
+      return {
+        success: true,
+        output: fallbackResult.output || '',
+        error: undefined,
+        model: orchestratorModel,
+        originalModel: originalProvider,
+        duration: Date.now() - startTime,
+        attempts: chain.length + 1,
+        switchOccurred: true,
+        exhaustedProviders: [...exhaustedProviders, orchestratorModel],
+      };
+    } else {
+      log('error', `[Session-Based Fallback] Ejecución directa también falló: ${fallbackResult.error}`);
+    }
+  } catch (fallbackError) {
+    log('error', `[Session-Based Fallback] Excepción en ejecución directa: ${String(fallbackError)}`);
+  }
+  
+  // Último recurso: Si todo falla, registrar para la sesión y devolver error
+  const finalError = `All providers exhausted + orchestrator fallback failed. Last error: ${lastError || 'Unknown'}`;
   log('error', finalError);
 
   state.exhaustedProviders = exhaustedProviders;
@@ -531,7 +682,7 @@ export async function GuardianAngel(
     error: finalError,
     model: 'none',
     duration: Date.now() - startTime,
-    attempts: chain.length,
+    attempts: chain.length + 1,
     switchOccurred: true,
     exhaustedProviders,
   };

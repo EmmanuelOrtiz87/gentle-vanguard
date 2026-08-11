@@ -112,6 +112,32 @@ window.__GV_CONTENT.en = {
     '112 health checks across 18 components with 6 operational modes. Scored 112/112 — all\n              systems operational.',
   c_autonomy_16:
     'Detection → Evaluation → Decision → Execution → Verification → Learning — el ciclo\n          continuo del Executive Layer. Pasa el cursor sobre los nodos para explorar cada etapa.',
+  c_executive_intro:
+    '12 executive systems working in continuous autonomy. Hover over each system to explore its guardrails.',
+  c_executive_1:
+    'Executive engine: trigger → evaluate (≥80%) → apply → verify → rollback. Max 5/day, rollback on >15% degradation.',
+  c_executive_2:
+    '3-state CLOSED/OPEN/HALF_OPEN. 5 failures → OPEN, 2 successes → CLOSED. Prevents cascade failures.',
+  c_executive_3:
+    '3-tier escalation: warning (3 events) → critical (5) → emergency (10). Full audit trail.',
+  c_executive_4:
+    'Dynamic discovery from pipeline config. Self-maintaining, no hardcoded map.',
+  c_executive_5:
+    'createExperiment → assignVariant → evaluateExperiment. Auto-rollback on degradation.',
+  c_executive_6:
+    'Per-session quality: delegations, corrections, proactive hits. >15% regression alert.',
+  c_executive_7:
+    'Discovers patterns, auto-promotes at ≥80% confidence, writes to LEARNED-NORMS.md',
+  c_executive_8:
+    '112 health checks across 18 components with 6 operational modes. Scored 112/112.',
+  c_executive_9:
+    'Pre-input scanning, audit pipeline, guardrails. 65+ normatives.',
+  c_executive_10:
+    'Checkpoints (auto-create), snapshots, rollback with dry-run validation.',
+  c_executive_11:
+    'Span-based distributed tracing. OTLP export to localhost:4318.',
+  c_executive_12:
+    'Hybrid AWS/Azure. Cost/latency/load routing. Circuit breaker pattern.',
   c_dashboard_2:
     'Real-time WebSocket-powered SPA with 7 sections, 25+ REST endpoints, i18n (en/es/pt-BR),\n          resilient HTTP polling fallback, and auto-recovery watchdog — all driven by live trace\n          data, zero mocks.',
   c_dashboard_3: 'Real-time token usage, latency P50/P95/P99, session counts, health status',
@@ -657,6 +683,32 @@ window.__GV_CONTENT.es = {
     '112 health checks en 18 componentes con 6 modos operativos. Puntuación\n              112/112 — todos los sistemas operativos.',
   c_autonomy_16:
     'Detección → Evaluación → Decisión → Ejecución → Verificación → Aprendizaje — el\n          ciclo continuo del Executive Layer. Pasa el cursor sobre los nodos para explorar cada\n          etapa.',
+  c_executive_intro:
+    '12 sistemas ejecutivos trabajando en autonomía continua. Pasa el cursor sobre cada sistema para explorar sus guardrails.',
+  c_executive_1:
+    'Motor ejecutivo: trigger → evaluar (≥80%) → aplicar → verificar → rollback. Máx. 5/día, rollback si degradación >15%.',
+  c_executive_2:
+    'Patrón de 3 estados CLOSED/OPEN/HALF_OPEN. 5 fallos → OPEN, 2 éxitos → CLOSED. Previene fallos en cascada.',
+  c_executive_3:
+    'Escalación de 3 niveles: advertencia (3 eventos) → crítico (5) → emergencia (10). Trazabilidad completa.',
+  c_executive_4:
+    'Descubrimiento dinámico desde la config del pipeline. Auto-mantenible, sin mapa hardcoded.',
+  c_executive_5:
+    'createExperiment → assignVariant → evaluateExperiment. Auto-rollback ante degradación.',
+  c_executive_6:
+    'Calidad por sesión: delegaciones, correcciones, aciertos proactivos. Alerta de regresión >15%.',
+  c_executive_7:
+    'Descubre patrones, auto-promueve con confianza ≥80%, escribe en LEARNED-NORMS.md',
+  c_executive_8:
+    '112 health checks en 18 componentes con 6 modos operativos. Puntuación 112/112.',
+  c_executive_9:
+    'Escaneo pre-input, pipeline de auditoría, guardrails. 65+ normativas.',
+  c_executive_10:
+    'Checkpoints (auto-creación), snapshots, rollback con validación dry-run.',
+  c_executive_11:
+    'Tracing distribuido basado en spans. Exportación OTLP a localhost:4318.',
+  c_executive_12:
+    'Híbrido AWS/Azure. Routing por costo/latencia/carga. Patrón circuit breaker.',
   c_dashboard_2:
     'SPA en tiempo real impulsada por WebSocket con 7 secciones, más de 25 endpoints REST,\n          i18n (en/es/pt-BR), fallback resistente de HTTP polling y watchdog de auto-recuperación\n          — todo impulsado por datos de trazas en vivo, cero mocks.',
   c_dashboard_3:
@@ -1244,6 +1296,32 @@ window.__GV_CONTENT['pt-BR'] = {
     '112 health checks em 18 componentes com 6 modos operacionais. Pontuação\n              112/112 — todos os sistemas operacionais.',
   c_autonomy_16:
     'Detecção → Avaliação → Decisão → Execução → Verificação → Aprendizado — o\n          ciclo contínuo do Executive Layer. Passe o cursor sobre os nós para explorar cada\n          etapa.',
+  c_executive_intro:
+    '12 sistemas executivos trabalhando em autonomia contínua. Passe o cursor sobre cada sistema para explorar seus guardrails.',
+  c_executive_1:
+    'Motor executivo: trigger → avaliar (≥80%) → aplicar → verificar → rollback. Máx. 5/dia, rollback se degradação >15%.',
+  c_executive_2:
+    'Padrão de 3 estados CLOSED/OPEN/HALF_OPEN. 5 falhas → OPEN, 2 sucessos → CLOSED. Evita falhas em cascata.',
+  c_executive_3:
+    'Escalonamento de 3 níveis: aviso (3 eventos) → crítico (5) → emergência (10). Rastreabilidade completa.',
+  c_executive_4:
+    'Descoberta dinâmica a partir da config do pipeline. Auto-mantido, sem mapa hardcoded.',
+  c_executive_5:
+    'createExperiment → assignVariant → evaluateExperiment. Auto-rollback diante de degradação.',
+  c_executive_6:
+    'Qualidade por sessão: delegações, correções, acertos proativos. Alerta de regressão >15%.',
+  c_executive_7:
+    'Descobre padrões, auto-promove com confiança ≥80%, escreve em LEARNED-NORMS.md',
+  c_executive_8:
+    '112 health checks em 18 componentes com 6 modos operacionais. Pontuação 112/112.',
+  c_executive_9:
+    'Escaneamento pré-input, pipeline de auditoria, guardrails. 65+ normativas.',
+  c_executive_10:
+    'Checkpoints (auto-criação), snapshots, rollback com validação dry-run.',
+  c_executive_11:
+    'Tracing distribuído baseado em spans. Exportação OTLP para localhost:4318.',
+  c_executive_12:
+    'Híbrido AWS/Azure. Roteamento por custo/latência/carga. Padrão circuit breaker.',
   c_dashboard_2:
     'SPA em tempo real alimentada por WebSocket com 7 seções, mais de 25 endpoints REST,\n          i18n (en/es/pt-BR), fallback resiliente de HTTP polling e watchdog de auto-recuperação\n          — tudo alimentado por dados de traces ao vivo, zero mocks.',
   c_dashboard_3:

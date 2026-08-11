@@ -4,8 +4,8 @@
     "orchestrator": {
       "description": "Main orchestrator agent - coordinates all subagents autonomously",
       "mode": "primary",
-      "model": "opencode/deepseek-v4-flash-free",
-      "provider": "opencode",
+      "model": "kimi-2-5",
+      "provider": "littellmott-nuevo",
       "steps": 12,
       "litellm_settings": {
         "drop_params": true
@@ -28,7 +28,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -43,7 +43,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -58,7 +58,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -73,7 +73,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -88,7 +88,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -103,7 +103,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -118,7 +118,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -133,7 +133,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -148,7 +148,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -163,7 +163,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -178,7 +178,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -193,7 +193,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -208,7 +208,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -223,7 +223,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -238,7 +238,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -253,7 +253,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -268,7 +268,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -283,7 +283,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -298,7 +298,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }
@@ -313,7 +313,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "kimi-2-5",
       "litellm_settings": {
         "drop_params": true
       }

@@ -288,7 +288,7 @@ function loadAgents(): Record<string, AgentConfig> {
     // Apply model override to ALL agents
     const effectiveModel = envModel || orchestratorModel || agents['sdd-explore']?.model;
 
-    for (const [name, config] of Object.entries(agents)) {
+    for (const [, config] of Object.entries(agents)) {
       // Note: Store original model for reference
       (config as AgentConfig & { _originalModel?: string })._originalModel = config.model;
       config.model = effectiveModel;
@@ -571,8 +571,8 @@ function main(): void {
     case '--list':
       const agents = loadAgents();
       console.log('\n=== Available Agents ===\n');
-      for (const [name, config] of Object.entries(agents)) {
-        console.log(`${name}`);
+      for (const [agentName, config] of Object.entries(agents)) {
+        console.log(`${agentName}`);
         console.log(`  Description: ${config.description}`);
         console.log(`  Model: ${config.model}`);
         console.log(`  Temp: ${config.temperature}`);

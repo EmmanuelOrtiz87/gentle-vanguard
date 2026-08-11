@@ -2,7 +2,7 @@
 description: BA exploration agent — requirements gathering, analysis, and clarification
 mode: subagent
 hidden: true
-model: opencode/deepseek-v4-flash-free
+model: kimi-2-5
 temperature: 0.7
 steps: 38
 permission:
