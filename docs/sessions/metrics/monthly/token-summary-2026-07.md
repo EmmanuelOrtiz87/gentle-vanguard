@@ -1,27 +1,27 @@
 # Token Summary — 2026-07
 
-Generado: 2026-08-10T20:52:40.656Z
+Generado: 2026-08-11T00:08:11.345Z
 
 ## Totales del período
 
 | Métrica | Valor |
 |---|---|
-| Input | 757.233.243 tokens |
-| Output | 8.029.966 tokens |
-| **Total** | **765.263.209 tokens** |
+| Input | 776.420.269 tokens |
+| Output | 8.126.441 tokens |
+| **Total** | **784.546.710 tokens** |
 | Costo | $0.0000 USD |
 | Días con datos | 22 |
-| Promedio diario | 34.784.691 tokens |
+| Promedio diario | 35.661.214 tokens |
 
 ## Por modelo
 
 | Modelo | Input | Output | Total | Costo |
 |---|---|---|---|---|
-| kimi-2-5 | 600.858.391 | 2.904.831 | 603.763.222 | $0.0000 |
-| deepseek-v4-flash-free | 68.923.303 | 4.343.028 | 73.266.331 | $0.0000 |
+| kimi-2-5 | 618.905.590 | 2.978.240 | 621.883.830 | $0.0000 |
+| deepseek-v4-flash-free | 69.048.321 | 4.359.653 | 73.407.974 | $0.0000 |
 | qwen3-coder-30b | 66.788.162 | 701.228 | 67.489.390 | $0.0000 |
 | minimax-m2-5 | 18.558.974 | 66.736 | 18.625.710 | $0.0000 |
-| deepseek-v3-2 | 1.944.818 | 12.428 | 1.957.246 | $0.0000 |
+| deepseek-v3-2 | 2.959.627 | 18.869 | 2.978.496 | $0.0000 |
 | qwen2.5-coder-7b-instruct | 157.945 | 945 | 158.890 | $0.0000 |
 | gpt-4o | 1.650 | 770 | 2.420 | $0.0000 |
 
@@ -32,13 +32,13 @@ Generado: 2026-08-10T20:52:40.656Z
 | ses_057428b52ffej0gThqwdp2qJzr | 64.115.742 | $0.0000 |
 | ses_032ab08e0ffeKQlGiaWDFdxsfc | 49.728.832 | $0.0000 |
 | ses_05be86bcbffeqn8Iwz2UyqQWTT | 39.383.208 | $0.0000 |
+| ses_013919151ffeTyngU07tbWGhc9 | 34.383.919 | $0.0000 |
 | ses_02ca82551ffe14Iw8DDgNYZScs | 33.898.565 | $0.0000 |
 | ses_041c1382bffe2Hvh5dsw62bFAQ | 31.112.734 | $0.0000 |
 | ses_06c42470effe3s3KWC2YIPyna8 | 31.060.048 | $0.0000 |
 | ses_06b13a9d9ffexJxJnBbvoOxZSr | 28.983.328 | $0.0000 |
 | ses_06f3f9616ffeuQifi4p6KViCBI | 27.964.639 | $0.0000 |
 | ses_07a5e9594ffepLigZU2Ryw8kTd | 26.022.288 | $0.0000 |
-| ses_04c2fbf2fffemw5u76P6Z4G4Jh | 25.880.866 | $0.0000 |
 
 ## Consumo diario
 
@@ -65,4 +65,4 @@ Generado: 2026-08-10T20:52:40.656Z
 | 2026-08-07 | 2.491.293 | 387.487 | 2.878.780 | 13 |
 | 2026-08-08 | 69.159.446 | 911.408 | 70.070.854 | 22 |
 | 2026-08-09 | 1.853.861 | 357.003 | 2.210.864 | 8 |
-| 2026-08-10 | 26.279.253 | 458.135 | 26.737.388 | 4 |
+| 2026-08-10 | 45.466.279 | 554.610 | 46.020.889 | 10 |

@@ -102,8 +102,12 @@
     },
     "subagents": {
       "inheritFromOrchestrator": true,
-      "allowOverride": false,
-      "default": "opencode/deepseek-v4-flash-free"
+      "allowOverride": true,
+      "default": "opencode/deepseek-v4-flash-free",
+      "fallbackChain": [
+        "opencode/deepseek-v4-flash-free",
+        "ollama/qwen2.5-coder:14b"
+      ]
     }
   },
   "errorPatterns": {
@@ -111,7 +115,12 @@
       "quota exceeded",
       "rate limit",
       "too many requests",
-      "credits exhausted"
+      "credits exhausted",
+      "Free usage exceeded",
+      "subscribe to Go",
+      "Credits exceeded",
+      "API rate limit",
+      "daily limit exceeded"
     ],
     "modelNotFound": [
       "model not found",
@@ -126,7 +135,9 @@
     "authError": [
       "unauthorized",
       "invalid api key",
-      "authentication failed"
+      "authentication failed",
+      "APIConnectionError",
+      "ECONNREFUSED"
     ]
   },
   "fallbackStrategies": {

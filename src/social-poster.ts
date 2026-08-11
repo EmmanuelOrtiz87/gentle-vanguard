@@ -82,17 +82,20 @@ const CONFIG: Config = {
       maxLength: 5000,
       format: 'Markdown',
       bestTimes: ['14:00', '16:00'],
+      hashtags: 0,
     },
     ProductHunt: {
       maxLength: 5000,
       imageRecommended: true,
       format: 'Structured',
       bestTimes: ['00:01', '8:00'],
+      hashtags: 0,
     },
     DevTo: {
       maxLength: 25000,
       format: 'Markdown',
       bestTimes: ['9:00', '14:00'],
+      hashtags: 0,
     },
   },
 

@@ -261,7 +261,7 @@ class MarketingAgent {
    * Generate content for a specific platform and language
    */
   public generateContent(request: ContentRequest): GeneratedContent {
-    const platform = PLATFORFORMS[request.platform];
+    const platform = PLATFORMS[request.platform];
     if (!platform) {
       throw new Error(`Unknown platform: ${request.platform}`);
     }

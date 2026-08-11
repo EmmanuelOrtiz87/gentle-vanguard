@@ -265,18 +265,39 @@ Core Responsibilities:
 };
 
 /**
- * Load agent configuration
+ * Load agent configuration with dynamic model override support
  */
 function loadAgents(): Record<string, AgentConfig> {
+  let agents: Record<string, AgentConfig> = { ...DEFAULT_AGENTS };
+
+  // Load from config file
   if (existsSync(CONFIG_PATH)) {
     try {
       const config = JSON.parse(readFileSync(CONFIG_PATH, 'utf-8'));
-      return { ...DEFAULT_AGENTS, ...config.agents };
+      agents = { ...agents, ...config.agents };
     } catch {
       console.warn('Failed to load config/agents.json, using defaults');
     }
   }
-  return DEFAULT_AGENTS;
+
+  // CRITICAL: Check for model override from environment (for fallback orchestrator)
+  const envModel = process.env.AGENT_MODEL || process.env.FORCE_MODEL;
+  const orchestratorModel = process.env.ORCHESTRATOR_MODEL;
+
+  if (envModel || orchestratorModel) {
+    // Apply model override to ALL agents
+    const effectiveModel = envModel || orchestratorModel || agents['sdd-explore']?.model;
+
+    for (const [name, config] of Object.entries(agents)) {
+      // Note: Store original model for reference
+      (config as AgentConfig & { _originalModel?: string })._originalModel = config.model;
+      config.model = effectiveModel;
+    }
+
+    console.log(`[agent-delegator] Model override applied: ${effectiveModel}`);
+  }
+
+  return agents;
 }
 
 /**
@@ -350,7 +371,19 @@ async function runNativeAgent(
   effectiveTemperature: number,
 ): Promise<DelegationResult> {
   return new Promise((resolve) => {
-    const model = request.model || config.model;
+    // CRITICAL: Priority for model selection:
+    // 1. Request override (from fallback orchestrator)
+    // 2. Environment variable (AGENT_MODEL, FORCE_MODEL)
+    // 3. Agent config default
+    let model = request.model || config.model;
+
+    // Check for environment override (from fallback system)
+    const envModel = process.env.AGENT_MODEL || process.env.FORCE_MODEL;
+    if (envModel) {
+      model = envModel;
+      console.log(`[agent-delegator] Using environment model: ${model}`);
+    }
+
     const parts = [
       resolveNpx(),
       'tsx',
@@ -373,8 +406,12 @@ async function runNativeAgent(
       windowsHide: true,
       env: {
         ...process.env,
-        AGENT_MODEL: request.model || config.model,
+        // Propagate model to subprocess
+        AGENT_MODEL: model,
         AGENT_TEMPERATURE: String(effectiveTemperature),
+        // Track that this is a delegator spawn for fallback purposes
+        DELEGATOR_SPAWN: 'true',
+        ORIGINAL_AGENT_MODEL: config.model,
       },
     });
 
@@ -397,7 +434,7 @@ async function runNativeAgent(
           success: true,
           output: stdout.trim(),
           duration,
-          model: request.model || config.model,
+          model,
         });
       } else {
         resolve({
@@ -405,7 +442,7 @@ async function runNativeAgent(
           output: stdout.trim(),
           error: stderr.trim() || `Exit code: ${code}`,
           duration,
-          model: request.model || config.model,
+          model,
         });
       }
     });
@@ -415,7 +452,7 @@ async function runNativeAgent(
         success: false,
         error: error.message,
         duration: Date.now() - startTime,
-        model: request.model || config.model,
+        model,
       });
     });
   });

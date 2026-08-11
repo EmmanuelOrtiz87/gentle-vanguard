@@ -59,7 +59,9 @@
 
   /* --- 3. Fade-in reveal ------------------------------------------------ */
   function initReveal() {
-    var els = document.querySelectorAll('.fade-in');
+    var els = document.querySelectorAll(
+      '.fade-in, .slide-in-left, .slide-in-right, .scale-in, .bounce-in',
+    );
     if (!els.length) return;
     if (REDUCED) {
       els.forEach(function (el) {
@@ -366,6 +368,8 @@
       scale = 1;
       tx = 0;
       ty = 0;
+      moved = false;
+      dragging = false;
       cap.textContent = alt;
       overlay.classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -429,10 +433,19 @@
       });
     });
 
-    // Cerrar con backdrop (solo si no hubo drag) o botón
+    // Cerrar con backdrop (solo si no hubo drag) o botón.
+    // El stage ocupa todo el overlay; su área vacía alrededor de la imagen
+    // se comporta como backdrop: click ahí cierra, click sobre la imagen no.
     overlay.addEventListener('click', function (e) {
-      if ((e.target === overlay || e.target.classList.contains('gv-lightbox-backdrop')) && !moved)
+      if (moved) return;
+      var t = e.target;
+      if (
+        t === overlay ||
+        t === stage ||
+        t.classList.contains('gv-lightbox-backdrop')
+      ) {
         close();
+      }
     });
     overlay.querySelector('.gv-lightbox-close').addEventListener('click', close);
 
@@ -588,6 +601,174 @@
     });
   }
 
+  /* --- 9d. Smooth scroll con easing -------------------------------------------- */
+  function initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+      anchor.addEventListener('click', function (e) {
+        var href = anchor.getAttribute('href');
+        if (href === '#') return;
+        var target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({
+            behavior: REDUCED ? 'auto' : 'smooth',
+            block: 'start',
+          });
+        }
+      });
+    });
+  }
+
+  /* --- 9e. Micro-animations: pulse, tooltips, loading, success/error ------------ */
+  function initMicroAnimations() {
+    // Pulse en badges "new"/"active"
+    document.querySelectorAll('.badge-tag.new, .badge-tag.active, .badge-pulse').forEach(function (el) {
+      if (!el.classList.contains('badge-pulse')) el.classList.add('badge-pulse');
+    });
+    // Tooltips nativos de Bootstrap (si bootstrap está presente)
+    if (window.bootstrap && window.bootstrap.Tooltip) {
+      document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+        new window.bootstrap.Tooltip(el, { trigger: 'hover focus' });
+      });
+    }
+    // Auto-ocultar estados de éxito/error
+    document.querySelectorAll('.gv-success, .gv-error').forEach(function (el) {
+      var dur = Number(el.dataset.dur || 2500);
+      setTimeout(function () {
+        el.classList.remove('gv-success', 'gv-error');
+      }, dur);
+    });
+  }
+
+  /* --- 9f. Parallax sutil (transform + rAF, solo desktop) ----------------------- */
+  function initParallax() {
+    if (REDUCED || !window.matchMedia('(hover: hover)').matches) return;
+    var els = document.querySelectorAll('.parallax, [data-parallax]');
+    if (!els.length) return;
+    var ticking = false;
+    function update() {
+      var y = window.pageYOffset || document.documentElement.scrollTop;
+      els.forEach(function (el) {
+        var speed = Number(el.dataset.speed || el.dataset.parallax || 0.5);
+        el.style.transform = 'translateY(' + y * speed + 'px)';
+      });
+      ticking = false;
+    }
+    window.addEventListener(
+      'scroll',
+      function () {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
+    update();
+  }
+
+  /* --- 9g. Carruseles de features ----------------------------------------------- */
+  function initCarousel() {
+    document.querySelectorAll('.gv-carousel').forEach(function (car) {
+      var track = car.querySelector('.gv-carousel-track');
+      var slides = car.querySelectorAll('.gv-carousel-slide');
+      if (!track || slides.length < 2) return;
+      var i = 0;
+      var timer = null;
+      var dotsBox = car.querySelector('.gv-carousel-dots');
+      var dots = [];
+      if (dotsBox) {
+        slides.forEach(function (_, n) {
+          var b = document.createElement('button');
+          b.setAttribute('role', 'tab');
+          b.setAttribute('aria-label', 'Slide ' + (n + 1));
+          b.addEventListener('click', function () {
+            go(n);
+          });
+          dotsBox.appendChild(b);
+          dots.push(b);
+        });
+      }
+      function go(n) {
+        i = (n + slides.length) % slides.length;
+        track.style.transform = 'translateX(-' + i * 100 + '%)';
+        dots.forEach(function (d, k) {
+          d.classList.toggle('active', k === i);
+        });
+        restart();
+      }
+      var prev = car.querySelector('.gv-carousel-arrow.prev');
+      var next = car.querySelector('.gv-carousel-arrow.next');
+      if (prev) prev.addEventListener('click', function () { go(i - 1); });
+      if (next) next.addEventListener('click', function () { go(i + 1); });
+      function restart() {
+        if (timer) clearInterval(timer);
+        var ms = Number(car.dataset.autoplay || 0);
+        if (ms && !REDUCED) timer = setInterval(function () { go(i + 1); }, ms);
+      }
+      car.addEventListener('pointerenter', function () {
+        if (timer) clearInterval(timer);
+      });
+      car.addEventListener('pointerleave', restart);
+      go(0);
+    });
+  }
+
+  /* --- 9h. Expandable inline (gv-expand) ----------------------------------------- */
+  function initExpand() {
+    document.querySelectorAll('.gv-expand').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var panel = document.getElementById(btn.getAttribute('aria-controls'));
+        if (!panel) return;
+        var open = panel.hidden;
+        panel.hidden = !open;
+        btn.setAttribute('aria-expanded', String(open));
+        document.querySelectorAll('.gv-expand[aria-expanded="true"]').forEach(function (other) {
+          if (other !== btn) {
+            other.setAttribute('aria-expanded', 'false');
+            var p = document.getElementById(other.getAttribute('aria-controls'));
+            if (p) p.hidden = true;
+          }
+        });
+      });
+    });
+  }
+
+  /* --- 9i. Efecto magnético en botones -------------------------------------------- */
+  function initMagnetic() {
+    if (REDUCED || !window.matchMedia('(hover: hover)').matches) return;
+    document.querySelectorAll('.btn-magnetic').forEach(function (btn) {
+      btn.addEventListener('pointermove', function (e) {
+        var r = btn.getBoundingClientRect();
+        var dx = e.clientX - (r.left + r.width / 2);
+        var dy = e.clientY - (r.top + r.height / 2);
+        btn.style.transform = 'translate(' + dx * 0.2 + 'px, ' + dy * 0.35 + 'px)';
+      });
+      btn.addEventListener('pointerleave', function () {
+        btn.style.transform = '';
+      });
+    });
+  }
+
+  /* --- 9j. Ripple effect en botones ------------------------------------------------ */
+  function initRipple() {
+    document.querySelectorAll('.btn-ripple').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        var r = btn.getBoundingClientRect();
+        var size = Math.max(r.width, r.height) * 2;
+        var ripple = document.createElement('span');
+        ripple.className = 'gv-ripple';
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = e.clientX - r.left - size / 2 + 'px';
+        ripple.style.top = e.clientY - r.top - size / 2 + 'px';
+        btn.appendChild(ripple);
+        ripple.addEventListener('animationend', function () {
+          ripple.remove();
+        });
+      });
+    });
+  }
+
   /* --- 10. Init all ---------------------------------------------------------- */
   function init() {
     initNavbar();
@@ -601,6 +782,13 @@
     initActiveNav();
     initDiagramModal();
     initInfoModal();
+    initSmoothScroll();
+    initMicroAnimations();
+    initParallax();
+    initCarousel();
+    initExpand();
+    initMagnetic();
+    initRipple();
   }
 
   if (document.readyState === 'loading') {

@@ -1,3 +1,10 @@
+---
+name: review-driven-development
+description: RDD — Receipt-Driven Development
+triggers:
+  - review driven development
+---
+
 # RDD — Receipt-Driven Development
 
 ## Overview

@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-08-10T20:52:40.656Z",
+  "generated_at": "2026-08-11T00:08:11.345Z",
   "period": "2026-07",
   "days": 22,
   "totals": {
-    "input": 757233243,
-    "output": 8029966,
-    "total": 765263209,
+    "input": 776420269,
+    "output": 8126441,
+    "total": 784546710,
     "cost": 0
   },
   "daily_avg": {
-    "input": 34419693,
-    "output": 364998,
-    "total": 34784691
+    "input": 35291830,
+    "output": 369384,
+    "total": 35661214
   },
   "by_day": [
     {
@@ -184,26 +184,26 @@
     },
     {
       "day": "2026-08-10",
-      "input": 26279253,
-      "output": 458135,
-      "total": 26737388,
+      "input": 45466279,
+      "output": 554610,
+      "total": 46020889,
       "cost": 0,
-      "sessions": 4
+      "sessions": 10
     }
   ],
   "by_model": [
     {
       "model": "kimi-2-5",
-      "input": 600858391,
-      "output": 2904831,
-      "total": 603763222,
+      "input": 618905590,
+      "output": 2978240,
+      "total": 621883830,
       "cost": 0
     },
     {
       "model": "deepseek-v4-flash-free",
-      "input": 68923303,
-      "output": 4343028,
-      "total": 73266331,
+      "input": 69048321,
+      "output": 4359653,
+      "total": 73407974,
       "cost": 0
     },
     {
@@ -222,9 +222,9 @@
     },
     {
       "model": "deepseek-v3-2",
-      "input": 1944818,
-      "output": 12428,
-      "total": 1957246,
+      "input": 2959627,
+      "output": 18869,
+      "total": 2978496,
       "cost": 0
     },
     {
@@ -259,6 +259,11 @@
       "cost": 0
     },
     {
+      "session_id": "ses_013919151ffeTyngU07tbWGhc9",
+      "total": 34383919,
+      "cost": 0
+    },
+    {
       "session_id": "ses_02ca82551ffe14Iw8DDgNYZScs",
       "total": 33898565,
       "cost": 0
@@ -286,11 +291,6 @@
     {
       "session_id": "ses_07a5e9594ffepLigZU2Ryw8kTd",
       "total": 26022288,
-      "cost": 0
-    },
-    {
-      "session_id": "ses_04c2fbf2fffemw5u76P6Z4G4Jh",
-      "total": 25880866,
       "cost": 0
     }
   ]
