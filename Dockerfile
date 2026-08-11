@@ -4,6 +4,7 @@
 
 FROM node:22-alpine AS builder
 RUN npm install -g pnpm@11.1.1
+RUN apk add --no-cache git
 WORKDIR /app
 # Full repo copy: the postinstall script (pnpm build:mcp = pnpm tsc)
 # compiles every tsconfig include dir (adapters, scripts/*, src), so the
