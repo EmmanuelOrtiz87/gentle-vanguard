@@ -102,7 +102,7 @@ try {
 // 5. Verificar versión del sistema
 console.log('\n5. Información del sistema...');
 try {
-  const version = require('./package.json').version;
+  const version = require('../../package.json').version;
   console.log(`✅ Versión del stack: ${version}`);
   console.log(`✅ Directorio de trabajo: ${ROOT}`);
 

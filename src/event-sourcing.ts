@@ -32,7 +32,7 @@ let _db: any = null;
 function getDb(): any {
   if (!_db) {
     try {
-      const mod = _require('../../apps/web-dashboard/server/database/manager');
+      const mod = _require('../apps/web-dashboard/server/database/manager');
       _db = mod.DatabaseManager.getInstance();
     } catch {
       // SQLite not available — skip dual-write
