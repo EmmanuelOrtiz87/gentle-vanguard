@@ -14,7 +14,11 @@
  *
  * Usage:
  *   npm run presentations:validate
- *   npx tsx src/cli/validate-presentations.ts [--dir <path>] [--quiet]
+ *   npx tsx src/cli/validate-presentations.ts [--dir <path>] [--quiet] [--main]
+ *
+ *   --main   Valida solo las 11 main presentations (excluye apps CMS con sidebar
+ *            que no usan i18n: contract-viewer, image-studio, marketing, md-viewer,
+ *            product-doc-gentle, resources-index, social-post, v4-features, video-studio).
  *
  * Exit code: 0 si todo PASS, 1 si algún FAIL.
  */
@@ -23,6 +27,28 @@ import * as path from 'node:path';
 
 const DIR = path.resolve(process.cwd(), 'docs/presentations');
 const QUIET = process.argv.includes('--quiet');
+const MAIN_ONLY = process.argv.includes('--main');
+
+/**
+ * Main presentations: páginas de presentación con i18n completo (gv.css, gv.js,
+ * i18n.js, i18n-content.js, selector .lang-seg, títulos sec_* y contenido c_*).
+ * Las apps CMS (contract-viewer, image-studio, marketing, md-viewer,
+ * product-doc-gentle, resources-index, social-post, v4-features, video-studio)
+ * son herramientas con sidebar que NO usan i18n y se excluyen con --main.
+ */
+const MAIN_PRESENTATIONS = new Set([
+  'agents-pipeline.html',
+  'architecture.html',
+  'autonomy.html',
+  'dashboard.html',
+  'health.html',
+  'index.html',
+  'memory-knowledge.html',
+  'operations-cloud.html',
+  'patterns-conventions.html',
+  'quickstart.html',
+  'security-governance.html',
+]);
 
 interface Result {
   file: string;
@@ -39,6 +65,7 @@ function main(): number {
   const files = fs
     .readdirSync(DIR)
     .filter((f) => f.endsWith('.html'))
+    .filter((f) => (MAIN_ONLY ? MAIN_PRESENTATIONS.has(f) : true))
     .sort();
   if (files.length === 0) {
     console.error('ERROR: no hay archivos .html en', DIR);

@@ -191,7 +191,7 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="memory-knowledge.html"
-                ><i class="bi bi-brain me-1"></i><span data-i18n="nav_memory">Memory</span></a
+                ><i class="bi bi-sd-card me-1"></i><span data-i18n="nav_memory">Memory</span></a
               >
             </li>
             <li class="nav-item">
@@ -392,211 +392,255 @@
         <h2 data-i18n="sec_components">Stack Components</h2>
         <p data-i18n="c_index_3">20+ subsystems powering full autonomous lifecycle</p>
       </div>
-      <div class="row g-3">
-        <div class="col-md-6 col-lg-4">
-          <div class="section-card">
-            <div class="icon">⚙️</div>
-            <h3>
-              Session Pipeline<span
-                class="info-trigger"
-                data-i18n-title="tip_pipeline"
-                title="Session autostart: 31 parallel Phase-1 steps + 70 lazy background steps launched in batches of 5. Includes tool detection, token budget, Karpathy guidelines, codegraph sync, security orchestration and DB init."
-                >i</span
-              >
-            </h3>
-            <p data-i18n="c_index_4">
-              34-step autostart with parallel Phase 1, 65 lazy background steps, auto-apply
-              integration
-            </p>
-            <span class="badge-tag ok">Active</span>
+      <div class="container-fluid px-4" style="max-width: 1400px">
+        <div class="gv-carousel" data-autoplay="5000" id="components-carousel">
+          <div class="gv-carousel-track">
+            <!-- Slide 1: Infrastructure -->
+            <div class="gv-carousel-slide active">
+              <div class="row g-4">
+                <div class="col-sm-6 col-md-4">
+                  <div class="section-card h-100">
+                    <div class="icon">⚙️</div>
+                    <h3>
+                      Session Pipeline<span
+                        class="info-trigger"
+                        data-i18n-title="tip_pipeline"
+                        title="Session autostart: 31 parallel Phase-1 steps + 70 lazy background steps launched in batches of 5. Includes tool detection, token budget, Karpathy guidelines, codegraph sync, security orchestration and DB init."
+                        >i</span
+                      >
+                    </h3>
+                    <p data-i18n="c_index_4">
+                      34-step autostart with parallel Phase 1, 65 lazy background steps, auto-apply
+                      integration
+                    </p>
+                    <span class="badge-tag ok">Active</span>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                  <div class="section-card h-100">
+                    <div class="icon">🧠</div>
+                    <h3>
+                      Engram Memory<span
+                        class="info-trigger"
+                        data-i18n-title="tip_engram"
+                        title="Persistent memory with automatic sync, SHA256 integrity checks and compaction. Currently holding 2,078 observations across 369 sessions. Survives across sessions and compactions."
+                        >i</span
+                      >
+                    </h3>
+                    <p data-i18n="c_index_5">
+                      Persistent memory with auto-sync, integrity checks, compaction. 2078 observations
+                    </p>
+                    <span class="badge-tag ok">Active</span>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                  <div class="section-card h-100">
+                    <div class="icon">🔗</div>
+                    <h3>
+                      CodeGraph<span
+                        class="info-trigger"
+                        data-i18n-title="tip_codegraph"
+                        title="SQLite knowledge graph for symbol intelligence. 10,663 nodes and 21,746 edges across 677 files with sub-millisecond symbol queries."
+                        >i</span
+                      >
+                    </h3>
+                    <p data-i18n="c_index_6">
+                      Knowledge graph: 10,663 nodes, 21,746 edges, sub-millisecond symbol queries
+                    </p>
+                    <span class="badge-tag ok">Active</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Slide 2: Executive Systems -->
+            <div class="gv-carousel-slide">
+              <div class="row g-4">
+                <div class="col-sm-6 col-md-4">
+                  <div class="section-card h-100">
+                    <div class="icon">📊</div>
+                    <h3>
+                      Dashboard<span
+                        class="info-trigger"
+                        data-i18n-title="tip_dashboard"
+                        title="React + TypeScript + Vite observability SPA. WebSocket real-time updates every 5s with HTTP polling fallback, 7 dashboard sections, i18n in 3 languages and 8 alert rules."
+                        >i</span
+                      >
+                    </h3>
+                    <p data-i18n="c_index_7">
+                      React+TypeScript observability with WebSocket, 25+ REST endpoints, 8 alert rules
+                    </p>
+                    <span class="badge-tag ok">Active</span>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                  <div class="section-card h-100">
+                    <div class="icon">🔒</div>
+                    <h3>
+                      Circuit Breaker<span
+                        class="info-trigger"
+                        data-i18n-title="tip_circuit"
+                        title="3-state circuit breaker (CLOSED / OPEN / HALF_OPEN). 5 failures open the circuit, 2 successes recover it. Prevents cascading failures across the stack."
+                        >i</span
+                      >
+                    </h3>
+                    <p data-i18n="c_index_8">
+                      3-state (CLOSED/OPEN/HALF_OPEN), auto-reset, stale timeout recovery
+                    </p>
+                    <span class="badge-tag ok">Active</span>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                  <div class="section-card h-100">
+                    <div class="icon">🤖</div>
+                    <h3>
+                      Auto-Apply Safe<span
+                        class="info-trigger"
+                        data-i18n-title="tip_autoapply"
+                        title="Executive engine that follows trigger -&gt; evaluate (=80% confidence) -&gt; apply -&gt; verify -&gt; rollback. Maximum 5 auto-applies per day with rollback if degradation exceeds 15%."
+                        >i</span
+                      >
+                    </h3>
+                    <p data-i18n="c_index_9">
+                      Executive engine: trigger→apply→verify→rollback. Reads 3 trigger sources
+                    </p>
+                    <span class="badge-tag ok">Active</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Slide 3: Performance & Safety -->
+            <div class="gv-carousel-slide">
+              <div class="row g-4">
+                <div class="col-sm-6 col-md-4">
+                  <div class="section-card h-100">
+                    <div class="icon">🔍</div>
+                    <h3>
+                      Dependency Graph<span
+                        class="info-trigger"
+                        data-i18n-title="tip_depgraph"
+                        title="Dynamically discovers component relationships from the pipeline config, replacing the hardcoded dependency map. Self-maintaining architecture."
+                        >i</span
+                      >
+                    </h3>
+                    <p data-i18n="c_index_10">
+                      Auto-discovers component relationships from pipeline config, replaces hardcoded map
+                    </p>
+                    <span class="badge-tag ok">Active</span>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                  <div class="section-card h-100">
+                    <div class="icon">🚨</div>
+                    <h3>
+                      Auto-Escalation<span
+                        class="info-trigger"
+                        data-i18n-title="tip_escalation"
+                        title="3-tier escalation: warning (3 failures) -&gt; critical (5) -&gt; emergency (10). Every escalation is recorded with full audit trail in the findings ledger."
+                        >i</span
+                      >
+                    </h3>
+                    <p data-i18n="c_index_11">
+                      3-tier escalation (3→5→10 failures) with audit trail and findings ledger
+                    </p>
+                    <span class="badge-tag ok">Active</span>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                  <div class="section-card h-100">
+                    <div class="icon">📋</div>
+                    <h3>
+                      AB Testing<span
+                        class="info-trigger"
+                        data-i18n-title="tip_abtest"
+                        title="Statistical A/B testing framework: createExperiment, assignVariant, evaluateExperiment with automatic rollback on statistical degradation."
+                        >i</span
+                      >
+                    </h3>
+                    <p data-i18n="c_index_12">
+                      createExperiment, assignVariant, evaluateExperiment, auto-rollback on degradation
+                    </p>
+                    <span class="badge-tag ok">Active</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Slide 4: Data & Quality -->
+            <div class="gv-carousel-slide">
+              <div class="row g-4">
+                <div class="col-sm-6 col-md-4">
+                  <div class="section-card h-100">
+                    <div class="icon">🔄</div>
+                    <h3>
+                      Session Scoring<span
+                        class="info-trigger"
+                        data-i18n-title="tip_scoring"
+                        title="Per-session quality scoring tracking delegations, corrections and proactive hits. Automatic comparison, regression detection above 15% and anomaly alerts."
+                        >i</span
+                      >
+                    </h3>
+                    <p data-i18n="c_index_13">
+                      Auto-compare scores, detect regression >15%, anomaly detection
+                    </p>
+                    <span class="badge-tag ok">Active</span>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                  <div class="section-card h-100">
+                    <div class="icon">⚡</div>
+                    <h3>
+                      Watchtower v2<span
+                        class="info-trigger"
+                        data-i18n-title="tip_watchtower"
+                        title="Central health orchestrator: 112 checks across 18 components with Promise.allSettled parallel execution and auto-heal modes (health, rebuild, autoheal, report, continuous)."
+                        >i</span
+                      >
+                    </h3>
+                    <p data-i18n="c_index_14">
+                      112 checks across 18 components. Promise.allSettled parallel exec. Auto-heal modes
+                    </p>
+                    <span class="badge-tag ok">Active</span>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                  <div class="section-card h-100">
+                    <div class="icon">💾</div>
+                    <h3>
+                      Nexus DB<span
+                        class="info-trigger"
+                        data-i18n-title="tip_nexus"
+                        title="Operational SQLite database (WAL mode, FK ON) with 11 repositories, 7 migrations and 21 tables. Auto-init, auto-prune, auto-backup and watchtower monitoring."
+                        >i</span
+                      >
+                    </h3>
+                    <p data-i18n="c_index_15">
+                      SQLite WAL mode, 7 migrations, 21 tables, 11 repos. Cache LRU, WAL auto-checkpoint
+                      &gt;1MB
+                    </p>
+                    <span class="badge-tag ok">Active</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="section-card">
-            <div class="icon">🧠</div>
-            <h3>
-              Engram Memory<span
-                class="info-trigger"
-                data-i18n-title="tip_engram"
-                title="Persistent memory with automatic sync, SHA256 integrity checks and compaction. Currently holding 2,078 observations across 369 sessions. Survives across sessions and compactions."
-                >i</span
-              >
-            </h3>
-            <p data-i18n="c_index_5">
-              Persistent memory with auto-sync, integrity checks, compaction. 2078 observations
-            </p>
-            <span class="badge-tag ok">Active</span>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="section-card">
-            <div class="icon">🔗</div>
-            <h3>
-              CodeGraph<span
-                class="info-trigger"
-                data-i18n-title="tip_codegraph"
-                title="SQLite knowledge graph for symbol intelligence. 10,663 nodes and 21,746 edges across 677 files with sub-millisecond symbol queries."
-                >i</span
-              >
-            </h3>
-            <p data-i18n="c_index_6">
-              Knowledge graph: 10,663 nodes, 21,746 edges, sub-millisecond symbol queries
-            </p>
-            <span class="badge-tag ok">Active</span>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="section-card">
-            <div class="icon">📊</div>
-            <h3>
-              Dashboard<span
-                class="info-trigger"
-                data-i18n-title="tip_dashboard"
-                title="React + TypeScript + Vite observability SPA. WebSocket real-time updates every 5s with HTTP polling fallback, 7 dashboard sections, i18n in 3 languages and 8 alert rules."
-                >i</span
-              >
-            </h3>
-            <p data-i18n="c_index_7">
-              React+TypeScript observability with WebSocket, 25+ REST endpoints, 8 alert rules
-            </p>
-            <span class="badge-tag ok">Active</span>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="section-card">
-            <div class="icon">🔒</div>
-            <h3>
-              Circuit Breaker<span
-                class="info-trigger"
-                data-i18n-title="tip_circuit"
-                title="3-state circuit breaker (CLOSED / OPEN / HALF_OPEN). 5 failures open the circuit, 2 successes recover it. Prevents cascading failures across the stack."
-                >i</span
-              >
-            </h3>
-            <p data-i18n="c_index_8">
-              3-state (CLOSED/OPEN/HALF_OPEN), auto-reset, stale timeout recovery
-            </p>
-            <span class="badge-tag ok">Active</span>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="section-card">
-            <div class="icon">🤖</div>
-            <h3>
-              Auto-Apply Safe<span
-                class="info-trigger"
-                data-i18n-title="tip_autoapply"
-                title="Executive engine that follows trigger -&gt; evaluate (=80% confidence) -&gt; apply -&gt; verify -&gt; rollback. Maximum 5 auto-applies per day with rollback if degradation exceeds 15%."
-                >i</span
-              >
-            </h3>
-            <p data-i18n="c_index_9">
-              Executive engine: trigger→apply→verify→rollback. Reads 3 trigger sources
-            </p>
-            <span class="badge-tag ok">Active</span>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="section-card">
-            <div class="icon">🔍</div>
-            <h3>
-              Dependency Graph<span
-                class="info-trigger"
-                data-i18n-title="tip_depgraph"
-                title="Dynamically discovers component relationships from the pipeline config, replacing the hardcoded dependency map. Self-maintaining architecture."
-                >i</span
-              >
-            </h3>
-            <p data-i18n="c_index_10">
-              Auto-discovers component relationships from pipeline config, replaces hardcoded map
-            </p>
-            <span class="badge-tag ok">Active</span>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="section-card">
-            <div class="icon">🚨</div>
-            <h3>
-              Auto-Escalation<span
-                class="info-trigger"
-                data-i18n-title="tip_escalation"
-                title="3-tier escalation: warning (3 failures) -&gt; critical (5) -&gt; emergency (10). Every escalation is recorded with full audit trail in the findings ledger."
-                >i</span
-              >
-            </h3>
-            <p data-i18n="c_index_11">
-              3-tier escalation (3→5→10 failures) with audit trail and findings ledger
-            </p>
-            <span class="badge-tag ok">Active</span>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="section-card">
-            <div class="icon">📋</div>
-            <h3>
-              AB Testing<span
-                class="info-trigger"
-                data-i18n-title="tip_abtest"
-                title="Statistical A/B testing framework: createExperiment, assignVariant, evaluateExperiment with automatic rollback on statistical degradation."
-                >i</span
-              >
-            </h3>
-            <p data-i18n="c_index_12">
-              createExperiment, assignVariant, evaluateExperiment, auto-rollback on degradation
-            </p>
-            <span class="badge-tag ok">Active</span>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="section-card">
-            <div class="icon">🔄</div>
-            <h3>
-              Session Scoring<span
-                class="info-trigger"
-                data-i18n-title="tip_scoring"
-                title="Per-session quality scoring tracking delegations, corrections and proactive hits. Automatic comparison, regression detection above 15% and anomaly alerts."
-                >i</span
-              >
-            </h3>
-            <p data-i18n="c_index_13">
-              Auto-compare scores, detect regression >15%, anomaly detection
-            </p>
-            <span class="badge-tag ok">Active</span>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="section-card">
-            <div class="icon">⚡</div>
-            <h3>
-              Watchtower v2<span
-                class="info-trigger"
-                data-i18n-title="tip_watchtower"
-                title="Central health orchestrator: 112 checks across 18 components with Promise.allSettled parallel execution and auto-heal modes (health, rebuild, autoheal, report, continuous)."
-                >i</span
-              >
-            </h3>
-            <p data-i18n="c_index_14">
-              112 checks across 18 components. Promise.allSettled parallel exec. Auto-heal modes
-            </p>
-            <span class="badge-tag ok">Active</span>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="section-card">
-            <div class="icon">💾</div>
-            <h3>
-              Nexus DB<span
-                class="info-trigger"
-                data-i18n-title="tip_nexus"
-                title="Operational SQLite database (WAL mode, FK ON) with 11 repositories, 7 migrations and 21 tables. Auto-init, auto-prune, auto-backup and watchtower monitoring."
-                >i</span
-              >
-            </h3>
-            <p data-i18n="c_index_15">
-              SQLite WAL mode, 7 migrations, 21 tables, 11 repos. Cache LRU, WAL auto-checkpoint
-              &gt;1MB
-            </p>
-            <span class="badge-tag ok">Active</span>
+          <div class="gv-carousel-nav text-center mt-3">
+            <button
+              class="btn btn-sm btn-outline-secondary me-2"
+              onclick="moveCarousel('components-carousel', -1)"
+            >
+              ❮
+            </button>
+            <span class="carousel-dots mx-2">
+              <span class="dot active" onclick="goToSlide('components-carousel', 0)"></span>
+              <span class="dot" onclick="goToSlide('components-carousel', 1)"></span>
+              <span class="dot" onclick="goToSlide('components-carousel', 2)"></span>
+              <span class="dot" onclick="goToSlide('components-carousel', 3)"></span>
+            </span>
+            <button
+              class="btn btn-sm btn-outline-secondary ms-2"
+              onclick="moveCarousel('components-carousel', 1)"
+            >
+              ❯
+            </button>
           </div>
         </div>
       </div>
@@ -2143,7 +2187,7 @@
         <a href="autonomy.html"><i class="bi bi-robot me-1"></i>Autonomy</a>
         <a href="dashboard.html"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a>
         <a href="quickstart.html"><i class="bi bi-rocket-takeoff me-1"></i>Quick Start</a>
-        <a href="memory-knowledge.html"><i class="bi bi-brain me-1"></i>Memory</a>
+        <a href="memory-knowledge.html"><i class="bi bi-sd-card me-1"></i>Memory</a>
         <a href="security-governance.html"><i class="bi bi-shield me-1"></i>Security</a>
         <a href="agents-pipeline.html"><i class="bi bi-people me-1"></i>Agents</a>
         <a href="operations-cloud.html"><i class="bi bi-cloud me-1"></i>Operations</a>
@@ -2192,6 +2236,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/carousel.js"></script>
     <script src="assets/js/gv.js?v=2.1"></script>
   </body>
 </html>
