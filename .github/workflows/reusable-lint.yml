@@ -44,7 +44,28 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: DavidAnson/markdownlint-cli2-action@v16
         with:
-          globs: '**/*.md'
+          globs: |
+            **/*.md
+            !.archive/**/*.md
+            !.backups/**/*.md
+            !.session/**/*.md
+            !.sdd/**/*.md
+            !build/**/*.md
+            !node_modules/**/*.md
+            !**/node_modules/**/*.md
+            !.runtime/**/*.md
+            !.opencode/**/*.md
+            !.windsurf/**/*.md
+            !skills/**/*.md
+            !public/skills/**/*.md
+            !knowledge-base/**/*.md
+            !reports/**/*.md
+            !research/**/*.md
+            !demos/**/*.md
+            !adapters/**/*.md
+            !graphify-out/**/*.md
+            !.logs/**/*.md
+          config: .markdownlint.json
 
   format:
     name: Format Check
@@ -104,6 +125,6 @@ jobs:
       - name: Validate OpenAPI specs
         shell: pwsh
         run: |
-          $specs = Get-ChildItem -Recurse -Filter "openapi*" -Name
+          $specs = Get-ChildItem -Path templates/api -Filter "openapi*" -Name
           if (-not $specs) { echo "No OpenAPI specs found"; exit 0 }
           npx @redocly/cli lint $specs

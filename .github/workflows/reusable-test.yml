@@ -34,7 +34,18 @@ jobs:
         shell: pwsh
         run: |
           where.exe go 2>$null | Out-Null
-          if ($LASTEXITCODE -eq 0) { go test ./... }
+          if ($LASTEXITCODE -eq 0) {
+            # Go modules live in subdirectories (no go.mod at repo root)
+            $modules = @('demos/shared/task-tracker', 'scripts/utilities/model-router-tui', 'tests/go-tests')
+            foreach ($m in $modules) {
+              Write-Host "=== go test ./... ($m) ==="
+              Push-Location $m
+              go test ./...
+              $code = $LASTEXITCODE
+              Pop-Location
+              if ($code -ne 0) { exit $code }
+            }
+          }
 
   integration:
     name: Integration Tests

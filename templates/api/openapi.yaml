@@ -8,11 +8,20 @@ info:
     email: '{{author-email}}'
   license:
     name: '{{license}}'
+    url: '{{license-url}}'
 servers:
-  - url: '{{base-url}}'
+  - url: '{base-url}'
     description: Production server
-  - url: '{{base-url}}/staging'
+    variables:
+      base-url:
+        default: '{{base-url}}'
+        description: Replace {{base-url}} with the deployed API base URL
+  - url: '{base-url}/staging'
     description: Staging server
+    variables:
+      base-url:
+        default: '{{base-url}}'
+        description: Replace {{base-url}} with the deployed API base URL
 externalDocs:
   description: Find more info here
   url: '{{docs-url}}'
@@ -36,6 +45,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HealthResponse'
+        '500':
+          description: Service is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /users:
     get:
       summary: List users
@@ -43,6 +58,8 @@ paths:
       operationId: listUsers
       tags:
         - Users
+      security:
+        - ApiKeyAuth: []
       parameters:
         - name: page
           in: query
@@ -61,6 +78,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserListResponse'
+        '400':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     post:
       summary: Create user
       description: Creates a new user
@@ -80,6 +103,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /users/{id}:
     get:
       summary: Get user by ID
@@ -101,8 +136,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Invalid user id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     put:
       summary: Update user
       description: Updates an existing user
@@ -129,6 +174,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       summary: Delete user
       description: Deletes a user
@@ -145,6 +202,12 @@ paths:
       responses:
         '204':
           description: User deleted
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     HealthResponse:
