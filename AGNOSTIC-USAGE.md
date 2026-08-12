@@ -114,6 +114,7 @@ npm run test:workflows
 1. **Subir proyecto** a Claude
 2. **Ejecutar:** `npm run watchtower:health`
 3. **Delegar tareas:**
+
    ```
    Assistant: Voy a delegar a sdd-apply...
    npx tsx src/agents/sdd-apply.ts --task "implementar feature X"
@@ -123,15 +124,18 @@ npm run test:workflows
 
 1. **Abrir proyecto** en Cursor
 2. **En terminal:**
+
    ```bash
    npx tsx src/agent-delegator.ts --agent sdd-design --task "diseñar API"
    ```
+
 3. **Usar resultados** en el chat
 
 ### VS Code + Copilot
 
 1. **Abrir proyecto**
 2. **Ejecutar en terminal integrado:**
+
    ```bash
    npx tsx src/skill-loader.ts --match "code review"
    npx tsx src/agents/sdd-verify.ts --task "verify build"

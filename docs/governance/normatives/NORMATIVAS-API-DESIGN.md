@@ -54,15 +54,15 @@ GraphQL, y WebSocket desarrolladas o consumidas por el framework.
 
 #### Request
 
-`json {     "email": "user@example.com",     "name": "John Doe" } `
+`json {     "email": "user@example.com",     "name": "John Doe" }`
 
 #### Success Response (200)
 
-`json {     "data": {         "id": "usr_abc123",         "email": "user@example.com",         "name": "John Doe",         "createdAt": "2026-05-11T10:00:00Z"     },     "meta": {         "requestId": "req_xyz789"     } } `
+`json {     "data": {         "id": "usr_abc123",         "email": "user@example.com",         "name": "John Doe",         "createdAt": "2026-05-11T10:00:00Z"     },     "meta": {         "requestId": "req_xyz789"     } }`
 
 #### Error Response
 
-`json {     "error": {         "code": "VALIDATION_ERROR",         "message": "Email format is invalid",         "details": [             {                 "field": "email",                 "reason": "must be a valid email address",                 "code": "INVALID_FORMAT"             }         ],         "requestId": "req_xyz789"     } } `
+`json {     "error": {         "code": "VALIDATION_ERROR",         "message": "Email format is invalid",         "details": [             {                 "field": "email",                 "reason": "must be a valid email address",                 "code": "INVALID_FORMAT"             }         ],         "requestId": "req_xyz789"     } }`
 
 ### 3.4 HTTP Status Codes
 
@@ -88,7 +88,7 @@ GraphQL, y WebSocket desarrolladas o consumidas por el framework.
 
 ### 3.5 Pagination
 
-`json {     "data": [...],     "pagination": {         "page": 1,         "pageSize": 20,         "total": 142,         "totalPages": 8,         "hasNext": true,         "hasPrev": false     } } `
+`json {     "data": [...],     "pagination": {         "page": 1,         "pageSize": 20,         "total": 142,         "totalPages": 8,         "hasNext": true,         "hasPrev": false     } }`
 
 1. **MUST** usar cursor-based pagination para listas grandes
 2. **MUST** limitar pageSize a maximo 100

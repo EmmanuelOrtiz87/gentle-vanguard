@@ -329,13 +329,13 @@ Para documentacin detallada, consulta:
 
 Se ha implementado exitosamente un **sistema completo de distributed tracing** que:
 
-1.  Proporciona **Correlation IDs** nicos para cada sesin
-2.  Implementa **Span Hierarchy** para relaciones entre operaciónes
-3.  Recopila **Performance Metrics** automticamente
-4.  Centraliza todos los **reportes en `.telemetry/`**
-5.  Se **integra automticamente** en session-autostart
-6.  Proporciona **dashboard de telemetra** para visualizacin
-7.  Incluye **documentacin completa** para uso
+1. Proporciona **Correlation IDs** nicos para cada sesin
+2. Implementa **Span Hierarchy** para relaciones entre operaciónes
+3. Recopila **Performance Metrics** automticamente
+4. Centraliza todos los **reportes en `.telemetry/`**
+5. Se **integra automticamente** en session-autostart
+6. Proporciona **dashboard de telemetra** para visualizacin
+7. Incluye **documentacin completa** para uso
 
 El sistema est **100% funcional** y listo para ser utilizado en todos los componentes del
 gentle-vanguard.

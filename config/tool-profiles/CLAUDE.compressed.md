@@ -73,12 +73,15 @@ Run `docs/AGENTS.md#Mandatory-Startup-Sequence` — no shortcuts.
       - Use abbreviations (e.g., "impl" for "impl")
       - For very long content, save to file first, then ref it
    4. **Auto-Validation Hook** (if configured):
+
       ```powershell
       # This runs automatically before tool calls
       pwsh -NoProfile -File hooks/pre-tool-call-validate.ps1 `
         -ToolName "<tool>" -JsonPayload '<json>' -AutoFix
       ```
+
    5. **Emergency Repair** (if you detect malformed JSON after the fact):
+
       ```powershell
       # Quick syntax check
       $test = '{"incomplete": "string}'

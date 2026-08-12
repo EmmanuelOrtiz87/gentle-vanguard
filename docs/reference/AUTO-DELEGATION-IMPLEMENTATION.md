@@ -347,13 +347,13 @@ Ejecutar suite de pruebas:
 
 ## Prximos Pasos
 
-1.  Crear skill de auto-delegation router
-2.  Implementar todas las funcionalidades
-3.  Crear configuración
-4.  Crear tests de integracin
-5.  Integrar en orchestrator principal
-6.  Ejecutar tests en ambiente de staging
-7.  Habilitar en produccin (opt-in)
+1. Crear skill de auto-delegation router
+2. Implementar todas las funcionalidades
+3. Crear configuración
+4. Crear tests de integracin
+5. Integrar en orchestrator principal
+6. Ejecutar tests en ambiente de staging
+7. Habilitar en produccin (opt-in)
 
 ---
 

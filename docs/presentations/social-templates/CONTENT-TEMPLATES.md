@@ -151,7 +151,7 @@ The system learns and adjusts. No more step exhaustion.
 
 Try it: `npx tsx src/adaptive-steps.ts`
 
-#AI #AdaptiveIntelligence
+# AI #AdaptiveIntelligence
 
 ```
 
@@ -172,7 +172,7 @@ No plugins. No dependencies. Just real data.
 
 npm run token:status
 
-#AI #Tokens #Observability
+# AI #Tokens #Observability
 
 ```
 
@@ -188,7 +188,7 @@ Every. Single. Script.
 
 Why we did it: → Native performance → Compile-time safety → Better IDE support → Full npm ecosystem
 
-#TypeScript #Refactoring #Performance
+# TypeScript #Refactoring #Performance
 
 ```
 
@@ -209,7 +209,7 @@ Enterprise ($299/mo): ✓ On-premise deployment ✓ SLA guarantee ✓ 24/7 suppo
 
 Start free. Scale as you grow.
 
-#SaaS #Pricing #Enterprise
+# SaaS #Pricing #Enterprise
 
 ```
 
@@ -229,7 +229,7 @@ Email: hello@gentle-vanguard.io
 
 First consultation free.
 
-#Consulting #Implementation
+# Consulting #Implementation
 
 ```
 

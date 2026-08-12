@@ -280,12 +280,12 @@ El `scripts/utilities/session-autostart.config.json` incluye la seccin de Token 
 
 ### Inicio de Sesin
 
-1.  Ejecutar `scripts/utilities/session-autostart.cmd`
-2.  Optimizar Engram
-3.  Validar cross-workspace
-4.  Inicializar sesin
-5.  **Inicializar Token Guard** NUEVO
-6.  Inicializar orquestador
+1. Ejecutar `scripts/utilities/session-autostart.cmd`
+2. Optimizar Engram
+3. Validar cross-workspace
+4. Inicializar sesin
+5. **Inicializar Token Guard** NUEVO
+6. Inicializar orquestador
 
 ### Durante la Sesin
 

@@ -238,7 +238,7 @@ pwsh -File src/agent-verify.ts
 | `PASS_WITH_WARNINGS` | Non-blocking issues found | Review warnings, then proceed       |
 | `FAIL`               | One or more checks failed | **Fix all FAILs before proceeding** |
 
-Targeted checks: `-Domain config|tests|hooks|structure|skills Machine-readable output: `-Json`
+Targeted checks: `-Domain config|tests|hooks|structure|skills Machine-readable output:`-Json`
 
 The agent uses this tool to:
 

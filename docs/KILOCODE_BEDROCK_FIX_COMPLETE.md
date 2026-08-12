@@ -46,6 +46,7 @@ The PowerShell script has already:
    - Close all VSCode windows
    - Check system tray (may have icon there)
    - Kill any remaining VSCode processes:
+
      ```powershell
      Get-Process code | Stop-Process -Force
      ```

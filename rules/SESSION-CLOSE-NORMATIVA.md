@@ -88,9 +88,11 @@ ejecutar este protocolo. El orquestador:
 
 1. Se ejecuta **automáticamente** al detectar fin de sesión
 2. Puede ejecutarse **a demanda** vía:
+
    ```bash
    npx tsx src/session-close-orchestrator.ts --reason "manual"
    ```
+
 3. Reporta el resultado de cada fase (PASS/FAIL)
 4. Si una fase falla, registra el error pero **continúa** (resiliencia)
 5. Al final, emite un reporte consolidado

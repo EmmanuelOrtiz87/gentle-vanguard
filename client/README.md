@@ -33,10 +33,13 @@ To use full Gentle-Vanguard capabilities:
 1. **Subscribe** at https://gentle-vanguard.dev/pricing
 2. **Get API key** from dashboard
 3. **Configure client**:
+
    ```powershell
    .\gv-client.exe config --api-key "your-key"
    ```
+
 4. **Use normally**:
+
    ```powershell
    .\gv-client.exe health
    .\gv-client.exe verify

@@ -54,7 +54,7 @@ Tasa developer:     $50/hora
 Valor:              $225 USD
 Costo efectivo:     $0.00 USD
 Ahorros:            $4,165 USD
-			(cloud + desarrollo tradicional)
+   (cloud + desarrollo tradicional)
 ```
 
 ---

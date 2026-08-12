@@ -18,9 +18,11 @@ Cargar config desde `config/orchestrator.json#toolProfiles.<name>`.
 **Antes de responder a CUALQUIER input del usuario:**
 
 1. Ejecutar con `-UserInput` (no `-Prompt`):
+
    ```powershell
    pwsh -NoProfile -File scripts/utilities/pre-process-input.ps1 -UserInput "INPUT" -WorkspaceRoot "."
    ```
+
 2. El script tiene **response cache** (SHA256, TTL 30min, -33-41% latency). Usar `-DisableCache`
    para bypass cuando sea necesario.
 3. Parsear output:

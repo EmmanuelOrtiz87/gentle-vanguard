@@ -39,12 +39,12 @@ Gentle AI ecosystem and methodologies from:
 
 - a pipeline step + the `engram mem session-summary` CLI subcommand). All three were wrong:
 
-* `engram mem session-summary` is NOT a CLI command — `mem_session_summary` is an **MCP tool**
+- `engram mem session-summary` is NOT a CLI command — `mem_session_summary` is an **MCP tool**
   (verified against Engram v1.20.0 `--help` and the official README/ARCHITECTURE).
-* `engram setup opencode` installs the **official OpenCode plugin** that already handles session
+- `engram setup opencode` installs the **official OpenCode plugin** that already handles session
   tracking automatically (session.created → `POST /sessions`, chat.message → `POST /prompts`,
   tool.execute.after → passive capture).
-* gentle-ai's own philosophy (README): _"Engram works automatically. You don't need to do
+- gentle-ai's own philosophy (README): _"Engram works automatically. You don't need to do
   anything."_
 
 **Adopted pattern (native, aligned with gentle-ai)**:

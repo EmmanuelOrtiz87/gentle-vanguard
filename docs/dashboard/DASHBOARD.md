@@ -312,6 +312,7 @@ Analytics data is:
    ```
 
 3. Restart dashboard:
+
    ```TypeScript
    npx tsx src/dashboard-stop.ts
    npx tsx src/dashboard-start.ts

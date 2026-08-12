@@ -102,6 +102,7 @@ DESPUÉS: TS-only = Single source of truth
    ```
 
 4. **Scripts CLI con shebang**
+
    ```typescript
    #!/usr/bin/env node
    // src/my-script.ts
