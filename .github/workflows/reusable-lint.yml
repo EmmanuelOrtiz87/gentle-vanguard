@@ -125,6 +125,6 @@ jobs:
       - name: Validate OpenAPI specs
         shell: pwsh
         run: |
-          $specs = Get-ChildItem -Path templates/api -Filter "openapi*" -Name
+          $specs = Get-ChildItem -Path templates/api -Filter "openapi*" | ForEach-Object { $_.FullName }
           if (-not $specs) { echo "No OpenAPI specs found"; exit 0 }
           npx @redocly/cli lint $specs

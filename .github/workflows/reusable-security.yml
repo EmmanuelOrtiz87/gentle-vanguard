@@ -7,6 +7,7 @@ permissions:
   contents: read
   security-events: write
   pull-requests: write
+  actions: read
 
 jobs:
   gitleaks:
@@ -20,6 +21,7 @@ jobs:
       - uses: gitleaks/gitleaks-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: "false"
 
   npm-audit:
     name: npm Audit
