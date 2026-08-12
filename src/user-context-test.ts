@@ -18,10 +18,10 @@ console.log('\n📊 Testing functions:');
 try {
   const domains = listDomainTemplates();
   console.log(`  ✅ listDomainTemplates(): ${domains.length} domains found`);
-  
+
   const devCopilot = getDomainTemplate('developer-copilot');
   console.log(`  ✅ getDomainTemplate('developer-copilot'): ${devCopilot?.name ?? 'NOT FOUND'}`);
-  
+
   console.log('\n🎉 All modules loaded successfully!');
 } catch (error) {
   console.error('❌ Error loading modules:', error);

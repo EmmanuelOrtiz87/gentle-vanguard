@@ -100,13 +100,13 @@ function Invoke-ChaosExperiment { param( [string], [string], [hashtable], [scrip
 
 ## 5. AUTOMATION EN CI/CD
 
-`yaml
+    - name: Chaos Experiment - Network Latency
+      shell: pwsh
+      run: |
 
-- name: Chaos Experiment - Network Latency shell: pwsh run: |
+        # Run integration
 
-  # Run integration
-
-  tests under chaos Invoke-Pester tests/integration/ -Tag Chaos `
+        tests under chaos Invoke-Pester tests/integration/ -Tag Chaos `
 
 ---
 

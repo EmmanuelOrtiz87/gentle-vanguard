@@ -1,4 +1,4 @@
-# 📋 Task Briefs #
+# 📋 Task Briefs
 
 <p align="center">
   <b>Lightweight documentation for development tasks</b>
@@ -6,7 +6,7 @@
 
 ---
 
-## 📋 Purpose #
+## 📋 Purpose
 
 Task briefs provide context, scope, and acceptance criteria for development work.
 
@@ -22,7 +22,7 @@ Task briefs provide context, scope, and acceptance criteria for development work
 
 ---
 
-## 📂 Directory Structure #
+## 📂 Directory Structure
 
 ```
 tasks/
@@ -34,9 +34,9 @@ tasks/
 
 ---
 
-## 🚀 Quick Start #
+## 🚀 Quick Start
 
-### Create New Task Brief #
+### Create New Task Brief
 
 ```TypeScript
 # Use the template
@@ -46,7 +46,7 @@ cp ../supplementary/TASK-BRIEF.template.md task-name.md
 .\scripts\utilities\src/cli/gv.ts task-brief <task-name>
 ```
 
-### Task Brief Components #
+### Task Brief Components
 
 Each task brief should include:
 
@@ -62,16 +62,16 @@ Each task brief should include:
 
 ---
 
-## 📊 Active Task Briefs #
+## 📊 Active Task Briefs
 
-### Active Development #
+### Active Development
 
 | Task                              | Description                  | Link                                                                                 |
 | --------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------ |
 | **🏗️ Session Governance**         | Governance improvements      | [PENDING-TASKS.md](PENDING-TASKS.md)                                                 |
 | **📊 Chat Baseline Architecture** | Chat architecture validation | [chat-baseline-architecture-validation.md](chat-baseline-architecture-validation.md) |
 
-### Templates #
+### Templates
 
 | Template                   | Description                  | Link                                                                                           |
 | -------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------- |
@@ -80,7 +80,7 @@ Each task brief should include:
 
 ---
 
-## 🔍 When to Create a Task Brief #
+## 🔍 When to Create a Task Brief
 
 - ✅ For any significant work that spans multiple sessions
 - ✅ When tackling complex problems requiring detailed planning
@@ -89,7 +89,7 @@ Each task brief should include:
 
 ---
 
-## 📚 Related Documentation #
+## 📚 Related Documentation
 
 | Document             | Purpose                                                  |
 | -------------------- | -------------------------------------------------------- |
@@ -100,7 +100,7 @@ Each task brief should include:
 
 ---
 
-## 🚀 Quick Commands Reference #
+## 🚀 Quick Commands Reference
 
 | Command                   | Description             | Output                                                |
 | ------------------------- | ----------------------- | ----------------------------------------------------- |

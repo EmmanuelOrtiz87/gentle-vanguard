@@ -6,7 +6,7 @@ Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-16 12:25
 
 | ID       | Norm                                                                                                                       | Confidence | Source                    | Date       |
 | -------- | -------------------------------------------------------------------------------------------------------------------------- | ---------- | ------------------------- | ---------- |
-| CORR-001 | ]`** in public-facing scripts. - **No`$args`** — always use named params. - Mandatory params use`[Parameter(Mandato...   | medium     | TypeScript-STANDARDS.md   | 2026-06-16 |
+| CORR-001 | ]`** in public-facing scripts. - **No`$args`** — always use named params. - Mandatory params use`[Parameter(Mandato...     | medium     | TypeScript-STANDARDS.md   | 2026-06-16 |
 | CORR-001 | les:\*\* `.secretlintignore`, `.secretlintrc.json` ## NORM-003: Las promesas no manejadas deben prefixearse con `void`...  | medium     | HAND-WRITTEN-NORMS.md     | 2026-06-16 |
 | CORR-001 | sed variables, imports, helper functions ### 5.3 Always Check in AI Code - [ ] Dependencies exist and are correct v...     | medium     | CODE-REVIEW-STANDARDS.md  | 2026-06-16 |
 | CORR-001 | ry.md`/ / Append to`AGENTS.md` section / Must not break existing structure / / Create new rule under...                    | medium     | AUTO-CONTRIBUTION.md      | 2026-06-16 |
@@ -30,7 +30,7 @@ Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-16 12:25
 | CORR-002 | UnusedParameters`están en`error` en tsconfig. **Rule:** Toda variable o parámetro declarado pero no usado debe pref...     | medium     | HAND-WRITTEN-NORMS.md     | 2026-06-16 |
 | CORR-003 | ontinue-on-error: true` only for advisory steps — never for blocking gates. --- ## 9. Secrets Handling - Access se...      | medium     | CI-HARDENING-STANDARDS.md | 2026-06-16 |
 | CORR-004 | --------------------------------- / / "This skill always fails with X error" / Fix the script, add Known Issues se...      | medium     | AUTO-CONTRIBUTION.md      | 2026-06-16 |
-| CORR-005 | ]`** in public-facing scripts. - **No`$args`** — always use named params. - Mandatory params use`[Parameter(Mandato...   | medium     | TypeScript-STANDARDS.md   | 2026-06-16 |
+| CORR-005 | ]`** in public-facing scripts. - **No`$args`** — always use named params. - Mandatory params use`[Parameter(Mandato...     | medium     | TypeScript-STANDARDS.md   | 2026-06-16 |
 | CORR-006 | ry.md`/ / Append to`AGENTS.md` section / Must not break existing structure / / Create new rule under...                    | medium     | AUTO-CONTRIBUTION.md      | 2026-06-16 |
 | CORR-007 | \*File:\*\* `.github/workflows/dashboard-ts-ci.yml` ## NORM-006: Las variables no usadas en TypeScript deben prefixears... | medium     | HAND-WRITTEN-NORMS.md     | 2026-06-16 |
 | CORR-008 | G.md` ### Reference Validation in CI/CD All PRs must pass reference validation: ```bash pwsh -NoProfile -File scri...      | medium     | DEVELOPMENT-STANDARDS.md  | 2026-06-16 |
@@ -73,8 +73,8 @@ Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-16 12:25
 | --------- | --------------------------------------------------------------------------------------------------------------------------- | ---------- | --------------------------------- | ---------- |
 | LEARN-001 | daries 6. **No `--no-verify` bypass** — git hooks must not be skipped; pre-commit validation is mandatory --- ## 7....      | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
 | LEARN-001 | Release Process (Source: NORMATIVAS-RELEASE.md) - MUST use `release-automation.ps1` — manual tagging prohibited - Pip...    | medium     | NORMATIVAS-WORKFLOW.md            | 2026-06-16 |
-| LEARN-001 | val.ps1`. 4.`src/agent-verify.ts` must fail if multilingual routing matrix has mismatches. 5. No conf...                   | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
-| LEARN-001 | ence = 'SilentlyContinue'`** at script scope. - **Always check`$LASTEXITCODE`\*\* after calling external executables. ...  | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
+| LEARN-001 | val.ps1`. 4.`src/agent-verify.ts` must fail if multilingual routing matrix has mismatches. 5. No conf...                    | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
+| LEARN-001 | ence = 'SilentlyContinue'`** at script scope. - **Always check`$LASTEXITCODE`\*\* after calling external executables. ...   | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
 | LEARN-001 | t-Content` / Path traversal / / Never expand environment variables from external config without san...                      | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
 | LEARN-001 | Windows 10+/Ubuntu 22.04+/macOS 13+ — all scripts must run on all platforms - TypeScript 7.4+ mandatory; avoid PSCust...    | medium     | NORMATIVAS-ARCHITECTURE.md        | 2026-06-16 |
 | LEARN-001 | --- ## 4. Severity Classification Every finding MUST be classified: / Severity / Label / Meaning ...                        | medium     | CODE-REVIEW-STANDARDS.md          | 2026-06-16 |
@@ -121,7 +121,7 @@ Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-16 12:25
 | LEARN-001 | \*stop rules\*\*. Once any trigger fires, the parent MUST either delegate or explicitly tell the user why delegation wou... | medium     | DELEGATION-RULES.md               | 2026-06-16 |
 | LEARN-001 | get) ``` ### Optimization Rules 1. **Levels 1-4 should consume ≤ 20%** of the total context window 2. \*\*Level 3 (re...    | medium     | CONTEXT-ENGINEERING.md            | 2026-06-16 |
 | LEARN-001 | ecrets - [ ] Secure key distribution (pull-based, never push) - [ ] Implement breach response procedures - [ ] Zero-t...    | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
-| LEARN-001 | ITCODE`** after calling external executables. - **Always`exit 1`** (not`throw`) when a script encounters a fatal co...    | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
+| LEARN-001 | ITCODE`** after calling external executables. - **Always`exit 1`** (not`throw`) when a script encounters a fatal co...      | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
 | LEARN-001 | essages: Always retained in full - System prompt: Always retained in full (compressed per section 3) ### 4.3 Input T...     | medium     | CONTEXT-ENGINEERING.md            | 2026-06-16 |
 | LEARN-001 | crets immediately: `echo "::add-mask::$VALUE"`. - Never log secrets with `set -x` or TypeScript's `-Verbose` on secre...    | medium     | CI-HARDENING-STANDARDS.md         | 2026-06-16 |
 | LEARN-001 | ipts to improve autonomy over time. Every session should leave the agent slightly better than it found it. ## Princi...     | medium     | AUTO-CONTRIBUTION.md              | 2026-06-16 |
@@ -146,7 +146,7 @@ Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-16 12:25
 | LEARN-001 | re) ### Config JSON Standards Every config JSON MUST include: - `version` field - `description` field - Comments v...       | medium     | DEVELOPMENT-STANDARDS.md          | 2026-06-16 |
 | LEARN-001 | LOCAL-FIRST: metrics live in `.runtime/metrics/`, never committed - Single source of truth: collector.ps1 → `.runtime...    | medium     | NORMATIVAS-CODE-QUALITY.md        | 2026-06-16 |
 | LEARN-001 | MUST have a clear version and last-updated date - MUST reference related rules (not duplicate them) - MUST use consis...    | medium     | CONTEXT-ENGINEERING.md            | 2026-06-16 |
-| LEARN-001 | eck.ps1`,`config/session-autostart.config.json` ## NORM-009: Critical changes require explicit consent \*_Context:_...     | medium     | HAND-WRITTEN-NORMS.md             | 2026-06-16 |
+| LEARN-001 | eck.ps1`,`config/session-autostart.config.json` ## NORM-009: Critical changes require explicit consent \*_Context:_...      | medium     | HAND-WRITTEN-NORMS.md             | 2026-06-16 |
 | LEARN-001 | cit user override with justification 6. Agents MUST NOT skip EXPLORE/SPEC phases. Violation is a CRITICAL non-comp...       | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
 | LEARN-001 | obrescribir memoria sin que el usuario lo sepa. **Rule:** (1) Toda operación de riesgo _high_ o _critical_ sobre Engr...    | medium     | HAND-WRITTEN-NORMS.md             | 2026-06-16 |
 | LEARN-001 | fore responding. The **first call** in a session MUST use the first user message as input. Subsequent calls MUST re-...     | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
@@ -161,7 +161,7 @@ Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-16 12:25
 | LEARN-001 | er completing **any significant work**, the agent MUST run: ```TypeScript pwsh -File scripts/utilities/agent-verify....     | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
 | LEARN-001 | tection, startup sequence, routing, break glass - MUST NOT contain project-specific code standards (those go in `rule...    | medium     | CONTEXT-ENGINEERING.md            | 2026-06-16 |
 | LEARN-001 | E domain (testing, security, performance, etc.) - MUST have a clear version and last-updated date - MUST reference re...    | medium     | CONTEXT-ENGINEERING.md            | 2026-06-16 |
-| LEARN-001 | scripts**: >70% code coverage -**All new code\*\*: Must have tests before merge ### Test Tags - `CI` - Run on every ...    | medium     | DEVELOPMENT-STANDARDS.md          | 2026-06-16 |
+| LEARN-001 | scripts**: >70% code coverage -**All new code\*\*: Must have tests before merge ### Test Tags - `CI` - Run on every ...     | medium     | DEVELOPMENT-STANDARDS.md          | 2026-06-16 |
 | LEARN-001 | nt Checklist (MANDATORY BEFORE DEPLOYMENT) - [ ] Never hardcode secrets in code or configs - [ ] Retrieve secrets fr...     | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
 | LEARN-001 | rns 1. **CmdletBinding**: All advanced functions must have `[CmdletBinding()]` 2. **Parameter Validation**: Use `[Pa...     | medium     | DEVELOPMENT-STANDARDS.md          | 2026-06-16 |
 | LEARN-001 | ST reference related rules (not duplicate them) - MUST use consistent heading structure for AI-scanability - Max 200 ...    | medium     | CONTEXT-ENGINEERING.md            | 2026-06-16 |
@@ -170,7 +170,7 @@ Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-16 12:25
 | LEARN-001 | ppropriate Model Selection (MUST) Each SDD phase MUST use the recommended model tier: - **BA/SAD/GOV/LEGAL**: `kimi...      | medium     | PER-PHASE-MODEL-ROUTING.md        | 2026-06-16 |
 | LEARN-001 | r memory packs ### Script Performance - Scripts must complete in <2s for interactive use - Use `-ProgressAction Sil...      | medium     | DEVELOPMENT-STANDARDS.md          | 2026-06-16 |
 | LEARN-001 | Nunca ignorar promesas sin `void` o `.catch()`. ## NORM-004: Non-null assertions (!) deben reemplazarse con type gua...     | medium     | HAND-WRITTEN-NORMS.md             | 2026-06-16 |
-| LEARN-001 | crets in output**— API keys, tokens, passwords → always `<REDACTED>` 2.**No path disclosure\*\* — home/user paths → `...  | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
+| LEARN-001 | crets in output**— API keys, tokens, passwords → always `<REDACTED>` 2.**No path disclosure\*\* — home/user paths → `...    | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
 | LEARN-001 | ogs in `.session/team-mode/` (no commit) - Skills must exist in `.atl/skill-registry.md` and respond via MCP                | medium     | NORMATIVAS-OPS-DEVOPS.md          | 2026-06-16 |
 | LEARN-001 | radas por auto-norm-learner. Mantenidas a pulso. ## NORM-001: ESLint strict-boolean-expressions debe desactivarse en...     | medium     | HAND-WRITTEN-NORMS.md             | 2026-06-16 |
 | LEARN-001 | no package-lock.json - `engines` in package.json must declare `pnpm >=11.0.0` - Approved commands: `pnpm install --ig...    | medium     | NORMATIVAS-SECURITY-COMPLIANCE.md | 2026-06-16 |
@@ -194,11 +194,11 @@ Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-16 12:25
 | LEARN-011 | l. **File:** `apps/web-dashboard/.eslintrc.json` ## NORM-002: Los archivos .session/ y .runtime/ deben excluirse de ...     | medium     | HAND-WRITTEN-NORMS.md             | 2026-06-16 |
 | LEARN-012 | ecrets - [ ] Secure key distribution (pull-based, never push) - [ ] Implement breach response procedures - [ ] Zero-t...    | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
 | LEARN-013 | t-Content` / Path traversal / / Never expand environment variables from external config without san...                      | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
-| LEARN-014 | eck.ps1`,`config/session-autostart.config.json` ## NORM-009: Critical changes require explicit consent \*_Context:_...     | medium     | HAND-WRITTEN-NORMS.md             | 2026-06-16 |
+| LEARN-014 | eck.ps1`,`config/session-autostart.config.json` ## NORM-009: Critical changes require explicit consent \*_Context:_...      | medium     | HAND-WRITTEN-NORMS.md             | 2026-06-16 |
 | LEARN-015 | crets immediately: `echo "::add-mask::$VALUE"`. - Never log secrets with `set -x` or TypeScript's `-Verbose` on secre...    | medium     | CI-HARDENING-STANDARDS.md         | 2026-06-16 |
 | LEARN-016 | path/to/file.md#section)`for cross-references - Never inline-config-values in markdown (reference`config/file.json`...      | medium     | CONTEXT-ENGINEERING.md            | 2026-06-16 |
 | LEARN-017 | ing via `task` tool, the prompt sent to subagents MUST follow: - System context: Only task-relevant information (not...     | medium     | CONTEXT-ENGINEERING.md            | 2026-06-16 |
-| LEARN-018 | val.ps1`. 4.`src/agent-verify.ts` must fail if multilingual routing matrix has mismatches. 5. No conf...                   | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
+| LEARN-018 | val.ps1`. 4.`src/agent-verify.ts` must fail if multilingual routing matrix has mismatches. 5. No conf...                    | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
 | LEARN-019 | ------ / / Add new skill under `skills/<name>/` / Must register in `.atl/skill-registry.md` / / Append to `AGENTS.md`...    | medium     | AUTO-CONTRIBUTION.md              | 2026-06-16 |
 | LEARN-020 | ----------------------- / ------------------- / / Never call `Invoke-Expression` on user input ...                          | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
 | LEARN-021 | `pre-process-input.ps1` with first user message — MUST be before any response 2. **Start**: Run `scripts/utilities/se...    | medium     | AI-NORMATIVES.md                  | 2026-06-16 |
@@ -208,8 +208,8 @@ Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-16 12:25
 | LEARN-025 | Pruned to `[result: {summary}]` - User messages: Always retained in full - System prompt: Always retained in full (co...    | medium     | CONTEXT-ENGINEERING.md            | 2026-06-16 |
 | LEARN-026 | Handling ```TypeScript # CORRECT: use Join-Path, never string concatenation $path = Join-Path $repoRoot 'scripts\uti...     | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
 | LEARN-027 | get) ``` ### Optimization Rules 1. **Levels 1-4 should consume ≤ 20%** of the total context window 2. \*\*Level 3 (re...    | medium     | CONTEXT-ENGINEERING.md            | 2026-06-16 |
-| LEARN-028 | ITCODE`** after calling external executables. - **Always`exit 1`** (not`throw`) when a script encounters a fatal co...    | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
-| LEARN-029 | ence = 'SilentlyContinue'`** at script scope. - **Always check`$LASTEXITCODE`\*\* after calling external executables. ...  | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
+| LEARN-028 | ITCODE`** after calling external executables. - **Always`exit 1`** (not`throw`) when a script encounters a fatal co...      | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
+| LEARN-029 | ence = 'SilentlyContinue'`** at script scope. - **Always check`$LASTEXITCODE`\*\* after calling external executables. ...   | medium     | TypeScript-STANDARDS.md           | 2026-06-16 |
 
 ## Statistics
 

@@ -42,7 +42,7 @@ Run `docs/AGENTS.md#Mandatory-Startup-Sequence` — no shortcuts.
 7. **JSON VALIDITY** -> Verify quotes/braces/brackets balanced BEFORE any tool call with JSON
    params. See `rules/NORMATIVAS-JSON-CONSTRUCTION.md`
 
-   ### JSON Validation Protocol (Mandatory)
+### JSON Validation Protocol (Mandatory)
 
    Before EVERY tool call with JSON parameters, you MUST:
    1. **Mental Check** (takes 2 seconds):

@@ -571,7 +571,7 @@ function main(): void {
     case '--list':
       const agents = loadAgents();
       console.log('\n=== Available Agents ===\n');
-    for (const [name, config] of Object.entries(agents)) {
+      for (const [name, config] of Object.entries(agents)) {
         console.log(`${name}`);
         console.log(`  Description: ${config.description}`);
         console.log(`  Model: ${config.model}`);
