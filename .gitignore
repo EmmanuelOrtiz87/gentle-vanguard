@@ -64,6 +64,8 @@ reports/trivy-report.json
 trivy-report.json
 reports/dashboard-v2/package-lock.json
 reports/dashboard-v2/server.err
+# npm lockfiles (NORMATIVA: pnpm only, no package-lock.json)
+apps/web-dashboard/package-lock.json
 reports/stack-benchmark*.json
 reports/stack-benchmark*.jsonl
 reports/stack-live-observability-latest.json

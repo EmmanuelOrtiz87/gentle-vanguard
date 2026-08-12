@@ -44,49 +44,50 @@ Run `docs/AGENTS.md#Mandatory-Startup-Sequence` — no shortcuts.
 
 ### JSON Validation Protocol (Mandatory)
 
-   Before EVERY tool call with JSON parameters, you MUST:
-   1. **Mental Check** (takes 2 seconds):
-      - Count opening `"` quotes → must be EVEN
-      - Count `{` and `}` → must be EQUAL
-      - Count `[` and `]` → must be EQUAL
-      - Last character must be `}` or `]`
-   2. **Common Error Patterns to Avoid**:
+Before EVERY tool call with JSON parameters, you MUST:
 
-      ```powershell
-      # ❌ BAD - Unterminated string
-      {"command": "pwsh -NoProfile -File detect-tool.ps1}
+1.  **Mental Check** (takes 2 seconds):
+    - Count opening `"` quotes → must be EVEN
+    - Count `{` and `}` → must be EQUAL
+    - Count `[` and `]` → must be EQUAL
+    - Last character must be `}` or `]`
+2.  **Common Error Patterns to Avoid**:
 
-      # ❌ BAD - Missing closing brace
-      {"id": "session-2025-05-27", "dir": "C:\\path
+    ```powershell
+    # ❌ BAD - Unterminated string
+    {"command": "pwsh -NoProfile -File detect-tool.ps1}
 
-      # ❌ BAD - Trailing comma
-      {"key": "value",}
+    # ❌ BAD - Missing closing brace
+    {"id": "session-2025-05-27", "dir": "C:\\path
 
-      # ✅ GOOD
-      {"command": "pwsh -NoProfile -File detect-tool.ps1"}
-      {"id": "session-2025-05-27", "dir": "C:\\path"}
-      {"key": "value"}
-      ```
+    # ❌ BAD - Trailing comma
+    {"key": "value",}
 
-   3. **For Long Text Fields** (summary, content, description):
-      - Keep under 500 characters when possible
-      - Use abbreviations (e.g., "impl" for "impl")
-      - For very long content, save to file first, then ref it
-   4. **Auto-Validation Hook** (if configured):
+    # ✅ GOOD
+    {"command": "pwsh -NoProfile -File detect-tool.ps1"}
+    {"id": "session-2025-05-27", "dir": "C:\\path"}
+    {"key": "value"}
+    ```
 
-      ```powershell
-      # This runs automatically before tool calls
-      pwsh -NoProfile -File hooks/pre-tool-call-validate.ps1 `
-        -ToolName "<tool>" -JsonPayload '<json>' -AutoFix
-      ```
+3.  **For Long Text Fields** (summary, content, description):
+    - Keep under 500 characters when possible
+    - Use abbreviations (e.g., "impl" for "impl")
+    - For very long content, save to file first, then ref it
+4.  **Auto-Validation Hook** (if configured):
 
-   5. **Emergency Repair** (if you detect malformed JSON after the fact):
+    ```powershell
+    # This runs automatically before tool calls
+    pwsh -NoProfile -File hooks/pre-tool-call-validate.ps1 `
+      -ToolName "<tool>" -JsonPayload '<json>' -AutoFix
+    ```
 
-      ```powershell
-      # Quick syntax check
-      $test = '{"incomplete": "string}'
-      try { $test | ConvertFrom-Json } catch { Write-Host "Invalid JSON: $_" }
-      ```
+5.  **Emergency Repair** (if you detect malformed JSON after the fact):
+
+    ```powershell
+    # Quick syntax check
+    $test = '{"incomplete": "string}'
+    try { $test | ConvertFrom-Json } catch { Write-Host "Invalid JSON: $_" }
+    ```
 
 ## Break Glass — Auto-Override Harmful Config
 
