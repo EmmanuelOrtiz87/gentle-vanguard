@@ -12,7 +12,7 @@
  *   npm run model:fallback -- --action watch --agent sdd-apply
  */
 
-import { readFileSync, writeFileSync, existsSync, watch } from 'fs';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
 const ROOT = process.cwd();
@@ -20,7 +20,6 @@ const HEALTH_REGISTRY_PATH = join(ROOT, 'config', 'model-health-registry.json');
 const ACTIVE_MODEL_PATH = join(ROOT, '.runtime', 'model-active.json');
 const SESSION_STATE_PATH = join(ROOT, '.session', 'session-current.json');
 const AGENT_STATE_DIR = join(ROOT, '.session', 'agent-states');
-const MODEL_FALLBACK_CONFIG = join(ROOT, 'config', 'model-fallback.json');
 
 interface ModelHealthRegistry {
   models: Record<
@@ -49,11 +48,6 @@ interface ActiveModel {
   enforcedAt: string;
   reason: string;
   previousModel?: string;
-}
-
-interface AgentConfig {
-  model: string;
-  provider: string;
 }
 
 /**
@@ -217,8 +211,6 @@ function watchAgentErrors(agentName: string): void {
   console.log(`👁️  Monitoreando: ${sessionWatchPath}`);
 
   // Monitoreo simple con polling cada 5 segundos
-  const lastSize = 0;
-
   setInterval(() => {
     try {
       const currentState = readFileSync(sessionWatchPath, 'utf-8');
@@ -254,7 +246,7 @@ function watchAgentErrors(agentName: string): void {
           }
         });
       }
-    } catch (error) {
+    } catch {
       // Ignorar errores temporales
     }
   }, 5000); // Check cada 5 segundos

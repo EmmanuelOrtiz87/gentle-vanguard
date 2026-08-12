@@ -503,7 +503,7 @@ function main() {
           console.error('Error: --title and --desc are required');
           process.exit(1);
         }
-        createObjective(title, desc, timeframe, priority, tags, criteria);
+        void createObjective(title, desc, timeframe, priority, tags, criteria);
       } else if (sub === 'list') {
         const status = getArg(args, '--status') as ObjectiveStatus | undefined;
         const timeframe = getArg(args, '--timeframe') as ObjectiveTimeframe | undefined;

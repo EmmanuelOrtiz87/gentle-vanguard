@@ -6,9 +6,6 @@
  */
 
 import { spawn } from 'child_process';
-import { promisify } from 'util';
-
-const execPromise = promisify(() => Promise.resolve());
 
 interface AppendEventOptions {
   aggregateId: string;

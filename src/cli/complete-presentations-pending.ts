@@ -4,7 +4,6 @@
  */
 
 import * as fs from 'fs';
-import * as path from 'path';
 
 console.log('🚀 COMPLETADO MASIVO - Pendientes de Presentations\n');
 

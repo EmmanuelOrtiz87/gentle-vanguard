@@ -9,11 +9,8 @@
  */
 
 import { spawn } from 'child_process';
-import { mkdirSync, existsSync, writeFileSync, readdirSync, rmSync } from 'fs';
-import { join, resolve } from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
+import { mkdirSync, existsSync, writeFileSync, rmSync } from 'fs';
+import { join } from 'path';
 
 // Types
 interface VideoConfig {
@@ -92,7 +89,7 @@ class GentleVideoAgent implements VideoAgent {
   private checkFFmpeg(): boolean {
     try {
       // Check if ffmpeg is available
-      const result = spawn('ffmpeg', ['-version'], { stdio: 'pipe' });
+      spawn('ffmpeg', ['-version'], { stdio: 'pipe' });
       return true;
     } catch {
       console.log('⚠️ FFmpeg no disponible. Videos se generarán como frames secuenciales.');
@@ -170,7 +167,7 @@ class GentleVideoAgent implements VideoAgent {
   /**
    * Generate video from script
    */
-  async generateFromScript(script: VideoScript): Promise<string> {
+  async generateFromScript(_script: VideoScript): Promise<string> {
     console.log('📝 Generando video desde script...');
 
     // Implementation would process script scenes
