@@ -8,6 +8,7 @@ import { log as createLogger } from '../utils/logger.js';
 import { printBanner } from '../cli/banner.js';
 import { newAuditEvent, saveAuditEvent } from '../infrastructure/audit-pipeline.js';
 import { sessionStart } from '../engram-session-bridge.js';
+import { ProcessLock } from './process-lock-manager.js';
 
 const LOG = createLogger('SESSION-AUTOSTART');
 
@@ -330,6 +331,7 @@ function isScriptRunning(scriptPath: string): boolean {
 /**
  * Start a lazy step with windowsHide:true.
  * Lazy steps are batched to avoid spawning 56 processes simultaneously.
+ * ROBUST DEDUPE: Uses file-based locking with PID validation.
  */
 function startLazyStep(step: PipelineStep): { success: boolean; error?: string } {
   const scriptPath = join(ROOT, step.script);
@@ -337,11 +339,25 @@ function startLazyStep(step: PipelineStep): { success: boolean; error?: string }
     return { success: false, error: `Script not found: ${step.script}` };
   }
 
-  // Dedupe: skip if a process for this script is already running.
+  // ROBUST DEDUPE: Try to acquire lock before starting
+  const lockName = `lazy-${step.id}`;
+  const lock = new ProcessLock(lockName);
+  
+  // Primary dedupe: check with old method (fast)
   if (isScriptRunning(scriptPath)) {
     LOG.info(`[DEDUPE] ${step.id} already running — skipping duplicate launch`);
     return { success: true, error: 'skipped-duplicate' };
   }
+  
+  // Secondary dedupe: try to acquire file lock
+  if (!lock.acquire()) {
+    const holderPid = lock.getHolderPid();
+    LOG.info(`[DEDUPE-LOCK] ${step.id} already running (PID ${holderPid}) — skipping`);
+    return { success: true, error: 'skipped-duplicate-lock' };
+  }
+  
+  // Success: we acquired the lock, proceed to start
+  LOG.info(`[DEDUPE-LOCK] ${step.id}: Lock acquired, proceeding`);
 
   mkdirSync(LOG_DIR, { recursive: true });
   appendFileSync(
@@ -360,6 +376,11 @@ function startLazyStep(step: PipelineStep): { success: boolean; error?: string }
     //   daemons (setInterval watchers) never keep the
     //   calling shell waiting on an open stdout pipe.
   });
+  
+  // The lock will auto-release when the child process exits
+  // We don't need to maintain our lock - the child will have its own
+  lock.release();
+  
   child.unref();
   return { success: true };
 }

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://opencode.ai/tui.json",
+  "theme": "auto",
+  "scroll_speed": 2,
+  "cursor": {
+    "style": "line",
+    "blinking": false
+  },
+  "mouse": true,
+  "attention": {
+    "enabled": true,
+    "notifications": true,
+    "sound": false
+  }
+}

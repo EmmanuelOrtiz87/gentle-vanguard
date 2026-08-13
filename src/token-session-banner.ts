@@ -213,6 +213,12 @@ function render(b: BannerData): string {
   );
   lines.push(`    Restantes: ${b.daily.remaining.toLocaleString()} tokens`);
   lines.push(`    Umbrales:  soft ${b.thresholds.soft}% / hard ${b.thresholds.hard}%`);
+  lines.push('');
+  lines.push('  ── Gestión de Contexto ──');
+  lines.push('    Nota: Cada turno envía TODO el historial. Después de 15-20 turnos,');
+  lines.push('    cree una nueva sesión o restaure un checkpoint para evitar');
+  lines.push('    consumo masivo (>50K tokens por turno).');
+  lines.push('    Ver: docs/reference/CONTEXT-OPTIMIZATION-GUIDE.md');
   lines.push('══════════════════════════════════════════════════════');
   if (b.status === 'HARD_LIMIT')
     lines.push('  ⚠️  HARD LIMIT alcanzado — considere compactar o cerrar sesión.');

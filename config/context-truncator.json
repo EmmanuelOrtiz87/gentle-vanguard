@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "description": "Context truncation configuration - sliding window for conversation history",
+  "maxTurns": 10,
+  "maxTokens": 8000,
+  "minTurns": 3,
+  "summaryThreshold": 15,
+  "compressionRatio": 0.3,
+  "preserveSystemMessages": true,
+  "preserveFirstUserMessage": true,
+  "autoTruncate": true,
+  "monitorInterval": 30
+}

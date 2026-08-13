@@ -20,12 +20,14 @@ describe('Dashboard API Health', () => {
     const body = await res.json();
     assert.equal(body.type, 'metrics');
     assert.ok(body.data);
-    assert.ok(body.data.timestamp);
     assert.ok(body.data.tokens);
     assert.ok(body.data.sessions);
     assert.ok(body.data.git);
     assert.ok(body.data.health);
     assert.ok(body.data.mcp);
+    // Timestamp is exposed via operational.lastUpdated (server no longer emits data.timestamp)
+    assert.ok(body.data.operational);
+    assert.ok(body.data.operational.lastUpdated);
   });
 
   it('GET /api/agent/tools returns tools array', async () => {
@@ -120,14 +122,20 @@ describe('WebSocket Connection', () => {
   it('responds to ping with pong', async () => {
     ws.send(JSON.stringify({ type: 'ping' }));
     const msg = await new Promise((resolve, reject) => {
-      ws.onmessage = (event) => resolve(event.data);
+      // The server emits periodic broadcasts (state_tasks, bridge_status) right
+      // after connect — filter for the actual pong instead of the first message.
+      ws.onmessage = (event) => {
+        try {
+          const parsed = JSON.parse(event.data);
+          if (parsed.type === 'pong') resolve(event.data);
+        } catch {
+          /* ignore non-JSON frames */
+        }
+      };
       setTimeout(() => reject(new Error('Timeout waiting for pong')), 5000);
     });
     const parsed = JSON.parse(msg);
-    assert.ok(
-      ['pong', 'bridge_status'].includes(parsed.type),
-      `Expected pong/bridge_status, got ${parsed.type}`,
-    );
+    assert.equal(parsed.type, 'pong');
   });
 
   it('can create an agent session via WebSocket', async () => {
