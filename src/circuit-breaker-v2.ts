@@ -19,6 +19,7 @@
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
+import { pathToFileURL } from 'url';
 
 const ROOT = resolve(process.cwd());
 const STATE_DIR = join(ROOT, '.runtime', 'circuit-breaker-v2');
@@ -497,7 +498,7 @@ async function main(): Promise<void> {
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch(err => {
     log('ERROR', 'Fatal error', { error: String(err) });
     process.exit(1);

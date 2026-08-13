@@ -20,6 +20,7 @@
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
+import { pathToFileURL } from 'url';
 import Database from 'better-sqlite3';
 
 const ROOT = resolve(process.cwd());
@@ -531,7 +532,7 @@ async function main(): Promise<void> {
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch(err => {
     log('ERROR', 'Fatal error', { error: String(err) });
     process.exit(1);
