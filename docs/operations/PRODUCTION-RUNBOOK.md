@@ -111,6 +111,7 @@ npx tsx src/dashboard-start.ts
 ```TypeScript
 # System health
 npx tsx src/maintenance-watchtower.ts --action health
+<!-- REF-OBSOLETA: src/maintenance-watchtower.ts no existe (ruta migrada o eliminada) -->
 
 # Session quality
 npx tsx src/session-scoring.ts -Action report
@@ -120,6 +121,7 @@ Get-Content .session/cloud-metrics.json | ConvertFrom-Json | Select-Object -Expa
 
 # Audit trail
 npx tsx src/audit-pipeline.ts -Action query -EventType correction -LastHour
+<!-- REF-OBSOLETA: src/audit-pipeline.ts no existe (ruta migrada o eliminada) -->
 
 # Checkpoint list
 npx tsx src/checkpoint-manager.ts list

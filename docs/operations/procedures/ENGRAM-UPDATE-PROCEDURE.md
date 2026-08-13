@@ -63,6 +63,7 @@ engram --version
 ## Automatic Update Script
 
 See: `scripts/utilities/update-engram.ps1`
+<!-- REF-OBSOLETA: scripts/utilities/update-engram.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 ## Important Notes
 

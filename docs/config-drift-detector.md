@@ -9,9 +9,11 @@ Detects unauthorized or unexpected changes to configuration files.
 ```bash
 # Create baseline
 npx tsx src/tools/config-drift-detector.ts --baseline
+<!-- REF-OBSOLETA: src/tools/config-drift-detector.ts no existe (ruta migrada o eliminada) -->
 
 # Check for drift
 npx tsx src/tools/config-drift-detector.ts
+<!-- REF-OBSOLETA: src/tools/config-drift-detector.ts no existe (ruta migrada o eliminada) -->
 ```
 
 ## Drift Types

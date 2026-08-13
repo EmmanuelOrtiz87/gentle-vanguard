@@ -45,8 +45,10 @@ estandar internacional de gestion de seguridad de la informacion.
 | A.8.11     | Data masking                            | `privacy-sanitizer.ps1` + `privacy-gateway.ps1`    | PII redaction                      |
 | A.8.12     | Data leakage prevention                 | `security-hardening.json#outputFiltering`          | Output validation                  |
 | A.8.13     | Backup                                  | `scripts/adaptive/auto-backup-orchestrator.ps1`    | Auto backup                        |
+<!-- REF-OBSOLETA: scripts/adaptive/auto-backup-orchestrator.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | A.8.14     | Redundancy                              | `.session/` state persistence                      | Session recovery                   |
 | A.8.15     | Logging                                 | `scripts/security/security-logger.ps1`             | Centralized logging                |
+<!-- REF-OBSOLETA: scripts/security/security-logger.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | A.8.16     | Monitoring activities                   | `scripts/monitoring/`                              | Dashboard + alerts                 |
 | A.8.20     | Network security                        | `config/security-deploy.json` + GitHub Runners     | Deploy hardening                   |
 | A.8.24     | Use of cryptography                     | `encryption-manager.ps1` + `backup-master-key.ps1` | Key management                     |
@@ -109,6 +111,7 @@ _(Aplican al entorno de ejecucion, no directamente al framework)_
 ### 6.2 Periodic Audit
 
 Ejecutar semanalmente: `scripts/security/security-audit.ps1 -Standard ISO27001`
+<!-- REF-OBSOLETA: scripts/security/security-audit.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 ---
 

@@ -39,6 +39,7 @@ git checkout -b feat/your-feature-name
 ```bash
 # Install dependencies
 ./scripts/project/init-workspace.ps1
+<!-- REF-OBSOLETA: scripts/project/init-workspace.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 # Validate your changes
 ./scripts/gentle-vanguard/src/cli/gv.ts validate
@@ -92,6 +93,7 @@ git commit -m "docs(readme): update installation guide"
 
 # Test specific functionality
 ./scripts/project/new-project.ps1 --name test-project --kind service
+<!-- REF-OBSOLETA: scripts/project/new-project.ps1 no tiene equivalente TS (migración PS1→TS) -->
 ```
 
 ### 6. Push and Create PR
@@ -160,9 +162,11 @@ gentle-vanguard/
 | ----------------------------------------------------------- | ----------------------------------------- |
 | `scripts/gentle-vanguard/src/cli/gv.ts init`                | Initialize workspace                      |
 | `scripts/project/new-project.ps1 -Name <name> -Kind <kind>` | Create new project                        |
+<!-- REF-OBSOLETA: scripts/project/new-project.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | `scripts/gentle-vanguard/src/cli/gv.ts validate`            | Validate workspace                        |
 | `src/cli/gv.ts health`                                      | Check tool activation and workflow health |
 | `scripts/validation/validate-project.ps1`                   | Run repository validation gate            |
+<!-- REF-OBSOLETA: scripts/validation/validate-project.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 ## Questions?
 

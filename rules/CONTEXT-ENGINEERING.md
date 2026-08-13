@@ -197,6 +197,8 @@ AI agents scan tables more reliably than paragraphs:
 | Handoff retention | Anchored content saved to Engram | No loss of critical state               |
 
 Config: `src/pre-compact-hook.ts`, `src/handoff-compress.ts`
+<!-- REF-OBSOLETA: src/pre-compact-hook.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/handoff-compress.ts no existe (ruta migrada o eliminada) -->
 
 ### 7.8 Behavior Prompts Optimization
 
@@ -257,6 +259,7 @@ When delegating via `task` tool, the prompt sent to subagents MUST follow:
 | Compaction Config       | `opencode.json#compaction`                |
 | Pre-process Caching     | `src/pre-process-input.ts`                |
 | Pre-Compact Hook        | `src/pre-compact-hook.ts`                 |
+<!-- REF-OBSOLETA: src/pre-compact-hook.ts no existe (ruta migrada o eliminada) -->
 | Behavior Prompts        | `config/behavior-prompts.json` (74 lines) |
 | Quick Commands          | `docs/QUICK-COMMANDS.md`                  |
 | Response Profile        | `CLAUDE.md#Response-Profile`              |

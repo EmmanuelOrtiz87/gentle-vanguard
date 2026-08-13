@@ -21,6 +21,7 @@ Every script MUST begin with a documentation block:
 # script-name.ps1
 # PURPOSE: One-sentence description of what this script does.
 # USAGE: npx tsx src/path/script-name.ts [-Param value]
+<!-- REF-OBSOLETA: src/path/script-name.ts no existe (ruta migrada o eliminada) -->
 # CALLED BY: gv command, hook name, or CI step name
 ```
 

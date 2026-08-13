@@ -139,6 +139,7 @@ FFmpeg.wasm
 ### 2.2 SDK de Video Nativo
 
 **Nuevo archivo**: `src/video-studio.ts`
+<!-- REF-OBSOLETA: src/video-studio.ts no existe (ruta migrada o eliminada) -->
 
 **API para programación**:
 

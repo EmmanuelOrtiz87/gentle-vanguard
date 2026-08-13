@@ -153,6 +153,7 @@ Some policies support automated remediation:
 To customize policies:
 
 1. Modify the `src/dependency-security-enforcer.ts` file
+<!-- REF-OBSOLETA: src/dependency-security-enforcer.ts no existe (ruta migrada o eliminada) -->
 2. Add new policies to the `policies` array
 3. Configure severity levels and remediation steps
 4. Test the changes with the verification script

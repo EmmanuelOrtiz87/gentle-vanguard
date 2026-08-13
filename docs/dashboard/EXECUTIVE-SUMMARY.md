@@ -231,7 +231,9 @@ PRs                  →         →         →
 - **Documentation**: `docs/DASHBOARD.md`
 - **Standards**: `rules/NORMATIVAS-*.md`
 - **Testing**: `scripts/tests/dashboard-validator.ps1`
+<!-- REF-OBSOLETA: scripts/tests/dashboard-validator.ps1 no tiene equivalente TS (migración PS1→TS) -->
 - **Health**: `scripts/metrics/dashboard-health-check.ps1`
+<!-- REF-OBSOLETA: scripts/metrics/dashboard-health-check.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 ### Contact
 

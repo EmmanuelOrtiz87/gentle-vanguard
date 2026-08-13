@@ -68,7 +68,9 @@ Files excluded from coverage measurement (see `tests/coverage-config.json`):
 
 - `src/setup-complete.ts` — one-time machine bootstrap
 - `scripts/run-tests-simple.ps1` — test orchestrator (not subject to self-test)
+<!-- REF-OBSOLETA: scripts/run-tests-simple.ps1 no tiene equivalente TS (migración PS1→TS) -->
 - `scripts/testing/run-tests.ps1` — legacy test runner
+<!-- REF-OBSOLETA: scripts/testing/run-tests.ps1 no tiene equivalente TS (migración PS1→TS) -->
 - `build/**` — build tooling, not runtime code
 - `bin/**` — launcher shims
 
@@ -78,6 +80,7 @@ Coverage is measured via Pester's built-in `-CodeCoverage` parameter:
 
 ```TypeScript
 # scripts/run-tests-simple.ps1
+<!-- REF-OBSOLETA: scripts/run-tests-simple.ps1 no tiene equivalente TS (migración PS1→TS) -->
 .\run-tests-simple.ps1 -WithCoverage
 ```
 
@@ -120,5 +123,6 @@ CI workflow uploads coverage reports as artifacts.
 
 - `tests/coverage-config.json` — threshold configuration
 - `scripts/run-tests-simple.ps1` — coverage flag implementation
+<!-- REF-OBSOLETA: scripts/run-tests-simple.ps1 no tiene equivalente TS (migración PS1→TS) -->
 - `.github/workflows/test-suite.yml` — CI integration
 - ADR-002 (TypeScript language choice) — explains why Pester is the test framework

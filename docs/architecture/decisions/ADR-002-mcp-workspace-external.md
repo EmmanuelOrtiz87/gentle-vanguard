@@ -81,6 +81,7 @@ registered in the MCP config as a pre-vetted workspace.
 
 - `src/stack-setup.ts` and `src/setup-complete.ts` create/verify the workspace during setup.
 - `config/mcp-registry.json` + `src/mcp-manager.ts` centralize server definitions and paths.
+<!-- REF-OBSOLETA: src/mcp-manager.ts no existe (ruta migrada o eliminada) -->
 - Watchtower health check verifies the workspace exists and is writable.
 
 ---

@@ -32,6 +32,9 @@ Based on detection, load `config/orchestrator.json#toolProfiles.<name>`.
 ### Phase B — Analysis
 
 6. Verify workspace: `src/agent-verify.ts` (SHOULD) <!-- REF-OBSOLETA: src/agent-verify.ts no existe; candidato: protected/scripts/utilities/agent-verify.ps1.enc (sin equivalente TS activo) -->
+<!-- REF-OBSOLETA: scripts/utilities/agent-verify.ps1 no tiene equivalente TS (migración PS1→TS) -->
+<!-- REF-OBSOLETA: src/agent-verify.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/agent-verify.ts no existe (ruta migrada o eliminada) -->
 7. SDD Preflight: `sdd-preflight.ps1` before first SDD flow <!-- REF-OBSOLETA: sdd-preflight.ps1 eliminado en migración PS1→TS; solo queda scripts/.session/sdd-preflight.json (dato, no script) -->
 8. Review Workload Guard: `src/workload-guard.ts` before multi-file >400 lines
 
@@ -79,7 +82,11 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 | ------------------- | --------------------------------------------------------------------------------------------------- |
 | Memory tiering      | Hot (active) -> Warm (1d, 90%) -> Cold (7d, 70%)                                                    |
 | Handoff compression | `src/handoff-compress.ts` <!-- REF-OBSOLETA: src/handoff-compress.ts no existe; solo scripts/utilities/utils/UTILITIES/handoff-compress.sh y .ps1.enc protegidos -->                                                                           |
+<!-- REF-OBSOLETA: src/handoff-compress.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/handoff-compress.ts no existe (ruta migrada o eliminada) -->
 | Pre-compact hook    | `src/pre-compact-hook.ts` <!-- REF-OBSOLETA: src/pre-compact-hook.ts no existe (solo pre-compact-hook.ps1.enc en protected/) -->                                                                           |
+<!-- REF-OBSOLETA: src/pre-compact-hook.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/pre-compact-hook.ts no existe (ruta migrada o eliminada) -->
 | Response cache      | `src/pre-process-input.ts` — SHA256 cache, TTL 30min, -33-41% latency (flag `-DisableCache` to bypass) |
 | Lazy autostart      | `config/session-autostart.config.json` — 6 non-critical steps deferred post-pipeline                       |
 | In-process pipeline | `src/session-start-optimized.ts` — removed `Start-Job`, runs `&` directo in-process                    |
@@ -152,14 +159,23 @@ See `docs/operations/procedures/QUICK-COMMANDS.md` for full list.
 | JSON Validator               | `src/json-validator.ts`    |
 | JSON Construction            | `rules/NORMATIVAS-JSON-CONSTRUCTION.md` <!-- REF-OBSOLETA: rules/NORMATIVAS-JSON-CONSTRUCTION.md no existe -->   |
 | **Feedback Collector**       | `src/feedback/feedback-collector.ts` <!-- REF-OBSOLETA: src/feedback/ no existe; feedback migrado a Nexus -->      |
+<!-- REF-OBSOLETA: src/feedback/feedback-collector.ts no existe (ruta migrada o eliminada) -->
 | **Feedback Analyzer**        | `src/feedback/feedback-analyzer.ts` <!-- REF-OBSOLETA: src/feedback/ no existe; feedback migrado a Nexus -->       |
+<!-- REF-OBSOLETA: src/feedback/feedback-analyzer.ts no existe (ruta migrada o eliminada) -->
 | **Digest Generator**         | `src/digest-generator.ts`          |
 | **NORMATIVAS-FEEDBACK**      | `rules/NORMATIVAS-FEEDBACK.md` <!-- REF-OBSOLETA: rules/NORMATIVAS-FEEDBACK.md no existe -->            |
 | **Release Automation**       | `src/deployment/release-automation.ts` <!-- REF-OBSOLETA: src/deployment/ no existe; candidato: src/deployment/validate-release-homologation.ts (ausente también) -->    |
+<!-- REF-OBSOLETA: src/deployment/release-automation.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/deployment/validate-release-homologation.ts no existe (ruta migrada o eliminada) -->
 | **NORMATIVAS-RELEASE**       | `rules/NORMATIVAS-RELEASE.md` <!-- REF-OBSOLETA: rules/NORMATIVAS-RELEASE.md no existe -->             |
 | **Fine-Tuning Pipeline**     | `src/fine-tuning/ft-pipeline.ts` <!-- REF-OBSOLETA: src/fine-tuning/ no existe; solo protected/scripts/utilities/FINE-TUNING/*.ps1.enc -->          |
+<!-- REF-OBSOLETA: src/fine-tuning/ft-pipeline.ts no existe (ruta migrada o eliminada) -->
 | **FT Trainer**               | `src/fine-tuning/ft-trainer.ts` <!-- REF-OBSOLETA: src/fine-tuning/ no existe -->           |
+<!-- REF-OBSOLETA: src/fine-tuning/ft-trainer.ts no existe (ruta migrada o eliminada) -->
 | **FT Status**                | `src/fine-tuning/ft-status.ts` <!-- REF-OBSOLETA: src/fine-tuning/ no existe -->            |
+<!-- REF-OBSOLETA: src/fine-tuning/ft-status.ts no existe (ruta migrada o eliminada) -->
 | **FT Threshold Detect**      | `src/fine-tuning/ft-threshold-detect.ts` <!-- REF-OBSOLETA: src/fine-tuning/ no existe -->  |
+<!-- REF-OBSOLETA: src/fine-tuning/ft-threshold-detect.ts no existe (ruta migrada o eliminada) -->
 | **FT Auto-Prune**            | `src/fine-tuning/ft-auto-prune.ts` <!-- REF-OBSOLETA: src/fine-tuning/ no existe -->        |
+<!-- REF-OBSOLETA: src/fine-tuning/ft-auto-prune.ts no existe (ruta migrada o eliminada) -->
 | **FT Registry**              | `.ft/registry.json`                       |

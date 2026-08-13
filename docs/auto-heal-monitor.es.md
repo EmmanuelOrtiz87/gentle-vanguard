@@ -9,12 +9,15 @@ Herramienta nativa de Gentle-Vanguard para monitorear y auto-curar servicios cr√
 ```bash
 # Ejecutar una vez
 npx tsx src/tools/auto-heal-monitor.ts
+<!-- REF-OBSOLETA: src/tools/auto-heal-monitor.ts no existe (ruta migrada o eliminada) -->
 
 # Modo daemon (monitoreo continuo)
 npx tsx src/tools/auto-heal-monitor.ts --daemon
+<!-- REF-OBSOLETA: src/tools/auto-heal-monitor.ts no existe (ruta migrada o eliminada) -->
 
 # Ver estado
 npx tsx src/tools/auto-heal-monitor.ts --status
+<!-- REF-OBSOLETA: src/tools/auto-heal-monitor.ts no existe (ruta migrada o eliminada) -->
 ```
 
 ## Servicios Monitoreados

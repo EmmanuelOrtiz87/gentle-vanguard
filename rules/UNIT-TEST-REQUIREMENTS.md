@@ -11,6 +11,7 @@ garantizando cobertura suficiente para mantener la calidad y prevenir regresione
 
 - Todo archivo `src/**/*.ts` debe tener su correspondiente archivo de prueba
 - Quedan excluidos: archivos de tipos `*.d.ts`, entry points `src/index.ts`, barrel exports
+<!-- REF-OBSOLETA: src/index.ts no existe (ruta migrada o eliminada) -->
 - Las pruebas se ubican en `tests/unit/` siguiendo la convención `<module>.test.ts`
 
 ## 3. Cobertura Mínima
@@ -25,8 +26,10 @@ garantizando cobertura suficiente para mantener la calidad y prevenir regresione
 ## 4. Archivos Críticos (80%)
 
 - `src/health-check.ts`
+<!-- REF-OBSOLETA: src/health-check.ts no existe (ruta migrada o eliminada) -->
 - `src/session-autostart.ts`
 - `src/maintenance-watchtower.ts`
+<!-- REF-OBSOLETA: src/maintenance-watchtower.ts no existe (ruta migrada o eliminada) -->
 - Todo archivo en `src/security/`
 
 ## 5. Convención de Nomenclatura
@@ -38,8 +41,10 @@ tests/unit/<module>.test.ts
 Ejemplos:
 
 - `src/health-check.ts` → `tests/unit/health-check.test.ts`
+<!-- REF-OBSOLETA: src/health-check.ts no existe (ruta migrada o eliminada) -->
 - `src/session-autostart.ts` → `tests/unit/session-autostart.test.ts`
 - `src/maintenance-watchtower.ts` → `tests/unit/maintenance-watchtower.test.ts`
+<!-- REF-OBSOLETA: src/maintenance-watchtower.ts no existe (ruta migrada o eliminada) -->
 
 ## 6. Ejecución y Verificación
 

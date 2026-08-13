@@ -177,7 +177,10 @@ Every config JSON MUST include:
 ### Token Efficiency
 
 - **Context packing**: Use `src/handoff-compress.ts` <!-- REF-OBSOLETA: src/handoff-compress.ts no existe; ver src/structural-compression.ts y scripts/utilities/utils/UTILITIES/handoff-compress.sh --> for large sessions
+<!-- REF-OBSOLETA: src/handoff-compress.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/handoff-compress.ts no existe (ruta migrada o eliminada) -->
 - **Token budgeting**: All AI interactions must call `src/token-budget-guard.ts` <!-- REF-OBSOLETA: scripts/utilities/token-guard.ps1 eliminado; candidato: src/token-budget-guard.ts -->
+<!-- REF-OBSOLETA: scripts/utilities/token-guard.ps1 no tiene equivalente TS (migración PS1→TS) -->
 - **Compression**: Apply 0.90 ratio for memory packs
 
 ### Script Performance
@@ -355,16 +358,23 @@ Violations result in:
 
 All scripts must maintain valid references to other scripts, configurations, and documentation. Use
 `scripts/utilities/validate-cross-references.ps1` <!-- REF-OBSOLETA: validate-cross-references.ps1 no existe en scripts/ ni src/ --> to audit:
+<!-- REF-OBSOLETA: scripts/utilities/validate-cross-references.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 ```TypeScript
 # Full validation
 npx tsx src/utilities/validate-cross-references.ts <!-- REF-OBSOLETA: src/utilities/validate-cross-references.ts no existe -->
+<!-- REF-OBSOLETA: src/utilities/validate-cross-references.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/utilities/validate-cross-references.ts no existe (ruta migrada o eliminada) -->
 
 # Only broken references
 npx tsx src/utilities/validate-cross-references.ts -BrokenRefsOnly <!-- REF-OBSOLETA: src/utilities/validate-cross-references.ts no existe -->
+<!-- REF-OBSOLETA: src/utilities/validate-cross-references.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/utilities/validate-cross-references.ts no existe (ruta migrada o eliminada) -->
 
 # Only unreferenced files
 npx tsx src/utilities/validate-cross-references.ts -UnreferencedOnly <!-- REF-OBSOLETA: src/utilities/validate-cross-references.ts no existe -->
+<!-- REF-OBSOLETA: src/utilities/validate-cross-references.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/utilities/validate-cross-references.ts no existe (ruta migrada o eliminada) -->
 ```
 
 ### Deprecation Lifecycle
@@ -382,6 +392,7 @@ When deprecating a script or feature:
        Status: DEPRECATED
        Since: 2026-05-16
        Replacement: scripts/utilities/new-script.ps1 <!-- REF-OBSOLETA: new-script.ps1 es ejemplo genérico, no archivo real -->
+<!-- REF-OBSOLETA: scripts/utilities/new-script.ps1 no tiene equivalente TS (migración PS1→TS) -->
        Reason: Functionality moved to unified orchestrator
        RemovalDate: 2026-08-16 (90 days)
    #>
@@ -411,6 +422,7 @@ All PRs must pass reference validation:
 
 ```bash
 npx tsx src/utilities/validate-cross-references.ts
+<!-- REF-OBSOLETA: src/utilities/validate-cross-references.ts no existe (ruta migrada o eliminada) -->
 ```
 
 Broken references block merge. Fix before committing.

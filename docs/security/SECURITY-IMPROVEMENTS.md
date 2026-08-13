@@ -15,6 +15,7 @@ priority suggestions from gentle-ai-monitor.
 ### Files Modified:
 
 - `src/security-orchestrator.ts` - Extended critical patterns and sanitization functions
+<!-- REF-OBSOLETA: src/security-orchestrator.ts no existe (ruta migrada o eliminada) -->
 
 ## 2. Hallucination Prevention Enhancement
 
@@ -32,6 +33,7 @@ priority suggestions from gentle-ai-monitor.
 ### Files Modified:
 
 - `src/security-orchestrator.ts` - Added hallucination detection function
+<!-- REF-OBSOLETA: src/security-orchestrator.ts no existe (ruta migrada o eliminada) -->
 
 ## 3. Dependency Security Policy Enforcement
 
@@ -47,7 +49,9 @@ priority suggestions from gentle-ai-monitor.
 ### Files Added:
 
 - `src/dependency-security-enforcer.ts` - Security policy enforcement logic
+<!-- REF-OBSOLETA: src/dependency-security-enforcer.ts no existe (ruta migrada o eliminada) -->
 - `src/dependency-security-checker.ts` - Basic dependency security checking
+<!-- REF-OBSOLETA: src/dependency-security-checker.ts no existe (ruta migrada o eliminada) -->
 
 ## 4. Enhanced Audit Logging
 
@@ -61,6 +65,7 @@ priority suggestions from gentle-ai-monitor.
 ### Files Added:
 
 - `src/audit-logger-enhanced.ts` - Enhanced audit logging functionality
+<!-- REF-OBSOLETA: src/audit-logger-enhanced.ts no existe (ruta migrada o eliminada) -->
 
 ## 5. Integration with Existing Systems
 

@@ -202,7 +202,9 @@ and ensure reliable operation of the Gentle-Vanguard system.
 
 - `scripts/utilities/ops/TRACING/tracing-instrument.ps1`
 - `scripts/utilities/telemetry/TELEMETRY-METRICS/structured-logger.ps1`
+<!-- REF-OBSOLETA: scripts/utilities/telemetry/TELEMETRY-METRICS/structured-logger.ps1 no tiene equivalente TS (migración PS1→TS) -->
 - `scripts/utilities/telemetry/TELEMETRY-METRICS/slo-monitor.ps1`
+<!-- REF-OBSOLETA: scripts/utilities/telemetry/TELEMETRY-METRICS/slo-monitor.ps1 no tiene equivalente TS (migración PS1→TS) -->
 - `apps/web-dashboard/` (dashboard)
 - `rules/NORMATIVAS-PERFORMANCE.md`
 - `rules/INCIDENT-RESPONSE.md`

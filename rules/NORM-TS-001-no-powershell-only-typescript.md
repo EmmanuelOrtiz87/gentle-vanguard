@@ -85,9 +85,11 @@ DESPUÉS: TS-only = Single source of truth
    ```
    # Antes (prohibido)
    * * * * * scripts/task.ps1
+<!-- REF-OBSOLETA: scripts/task.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
    # Después (requerido)
    * * * * * npx tsx src/task.ts
+<!-- REF-OBSOLETA: src/task.ts no existe (ruta migrada o eliminada) -->
    ```
 
 3. **Git hooks en TypeScript**
@@ -106,6 +108,7 @@ DESPUÉS: TS-only = Single source of truth
    ```typescript
    #!/usr/bin/env node
    // src/my-script.ts
+<!-- REF-OBSOLETA: src/my-script.ts no existe (ruta migrada o eliminada) -->
    ```
 
 ---
@@ -138,6 +141,7 @@ Write-Host "Deploying to $Platform"
 
 ```typescript
 // ✅ DESPUÉS: src/deploy.ts
+<!-- REF-OBSOLETA: src/deploy.ts no existe (ruta migrada o eliminada) -->
 #!/usr/bin/env node
 import { parseArgs } from 'util';
 
@@ -155,7 +159,9 @@ console.log(`Deploying to ${values.platform}`);
 {
   "scripts": {
     "deploy": "tsx src/deploy.ts",
+<!-- REF-OBSOLETA: src/deploy.ts no existe (ruta migrada o eliminada) -->
     "deploy:prod": "tsx src/deploy.ts --platform=production"
+<!-- REF-OBSOLETA: src/deploy.ts no existe (ruta migrada o eliminada) -->
   }
 }
 ```
@@ -267,6 +273,7 @@ process.env.NODE_ENV = 'production';
 ```bash
 # Desarrollo
 npx tsx src/script.ts
+<!-- REF-OBSOLETA: src/script.ts no existe (ruta migrada o eliminada) -->
 
 # Producción (compilado)
 npm run build
@@ -274,9 +281,11 @@ node dist/script.js
 
 # Con argumentos
 npx tsx src/script.ts --env=prod --verbose
+<!-- REF-OBSOLETA: src/script.ts no existe (ruta migrada o eliminada) -->
 
 # Con watch
 npx tsx watch src/script.ts
+<!-- REF-OBSOLETA: src/script.ts no existe (ruta migrada o eliminada) -->
 ```
 
 ---

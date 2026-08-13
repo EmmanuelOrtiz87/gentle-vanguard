@@ -79,7 +79,9 @@ Run locally on every `git push`. Catch issues before GHA minutes are consumed:
 - **Key files**:
   - `.lefthook.yml` — hook configuration
   - `scripts/run-tests-simple.ps1` — test runner
+<!-- REF-OBSOLETA: scripts/run-tests-simple.ps1 no tiene equivalente TS (migración PS1→TS) -->
   - `skills/gentle-vanguard-audit-skill/scripts/audit-sweep.ps1` — audit
+<!-- REF-OBSOLETA: scripts/audit-sweep.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 ## How to Operate from Another Machine
 

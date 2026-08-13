@@ -87,6 +87,7 @@ commands:
 3. Add to gentle-vanguard lefthook config:
 
 Create `scripts/hooks/lockfile-lint-check.ps1`:
+<!-- REF-OBSOLETA: scripts/hooks/lockfile-lint-check.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 ```TypeScript
 # Quick validation of package-lock.json structure
@@ -134,6 +135,7 @@ if (Test-Path $LockfilePath) {
 
 ```TypeScript
 # scripts/hooks/audit-pre-push.ps1
+<!-- REF-OBSOLETA: scripts/hooks/audit-pre-push.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 Write-Host "[AUDIT] Running npm audit..." -ForegroundColor Cyan
 

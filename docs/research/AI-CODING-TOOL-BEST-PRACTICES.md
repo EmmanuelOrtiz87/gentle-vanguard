@@ -478,6 +478,7 @@ it('tool configs reference valid script paths', () => {
 
 ```bash
 npx json2ts config/opencode.schema.json > src/types/config.ts
+<!-- REF-OBSOLETA: src/types/config.ts no existe (ruta migrada o eliminada) -->
 ```
 
 Generates TypeScript interfaces that stay in sync with the schema. This is used by webpack, Nx, and
@@ -533,6 +534,7 @@ Multiple versions in one file using `$id`:
 
 2. **Generate TypeScript types from schemas** — Add `npx json2ts` step to generate
    `src/types/config.ts` from `opencode.schema.json` and `plugin-manifest-schema.json`.
+<!-- REF-OBSOLETA: src/types/config.ts no existe (ruta migrada o eliminada) -->
 
 3. **Extend validate-opencode-config.ps1 to all tool configs** — Currently validates only
    `opencode.json`. Extend to check `.claude/settings.json`, `.cursor/rules/*.mdc`,

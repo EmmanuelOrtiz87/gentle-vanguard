@@ -107,6 +107,7 @@ schedule:
 ```bash
 # Correct annotation format:
 echo "::error file=scripts/foo.ps1,line=42::Description of error"
+<!-- REF-OBSOLETA: scripts/foo.ps1 no tiene equivalente TS (migración PS1→TS) -->
 ```
 
 ---

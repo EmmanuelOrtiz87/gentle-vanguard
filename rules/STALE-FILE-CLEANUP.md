@@ -14,7 +14,9 @@ código muerto. La limpieza es trimestral, controlada y siempre preserva el hist
 
 - Los archivos obsoletos se mueven a `.archive/<año>/<mes>/` conservando la estructura original
 - Ejemplo: `scripts/health-check/old-script.ps1` →
+<!-- REF-OBSOLETA: scripts/health-check/old-script.ps1 no tiene equivalente TS (migración PS1→TS) -->
   `.archive/2026/07/scripts/health-check/old-script.ps1`
+<!-- REF-OBSOLETA: scripts/health-check/old-script.ps1 no tiene equivalente TS (migración PS1→TS) -->
 - No se permite `git rm` como primera acción; siempre mover primero y luego commit del movimiento
 
 ### 2.2 Qué se Archiva
@@ -53,6 +55,7 @@ código muerto. La limpieza es trimestral, controlada y siempre preserva el hist
 
 - La limpieza se realiza el primer viernes de cada trimestre (enero, abril, julio, octubre)
 - Se genera un reporte preview antes de ejecutar: `scripts/utilities/stale-file-report.ps1`
+<!-- REF-OBSOLETA: scripts/utilities/stale-file-report.ps1 no tiene equivalente TS (migración PS1→TS) -->
 - El reporte lista candidatos con: ruta, última modificación, último commit, referencias activas
 - Se requiere aprobación humana antes de proceder al archivado
 

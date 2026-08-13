@@ -20,6 +20,7 @@ y validable en cada fase del ciclo de vida.
 | Sub-caracteristica         | Control Gentle-Vanguard         | Verification         |
 | -------------------------- | ------------------------------- | -------------------- |
 | Functional completeness    | `scripts/testing/run-tests.ps1` | Test coverage >= 80% |
+<!-- REF-OBSOLETA: scripts/testing/run-tests.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Functional correctness     | `tests/unit/*.tests.ps1`        | Zero test failures   |
 | Functional appropriateness | `sdd-gate.yml` + BA review      | SDD spec approval    |
 

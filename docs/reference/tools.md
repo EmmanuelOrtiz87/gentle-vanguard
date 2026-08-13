@@ -60,8 +60,10 @@ file and uses one of these strategies:
 ## Engram Runtime State
 
 - Run `scripts/project/init-workspace.ps1` or `scripts/git-hooks/init-workspace.sh` first so old
+<!-- REF-OBSOLETA: scripts/project/init-workspace.ps1 no tiene equivalente TS (migración PS1→TS) -->
   embedded runtime state gets cleaned automatically.
 - Use `scripts/utilities/run-engram.ps1` or `scripts/git-hooks/run-engram.sh` to launch Engram.
+<!-- REF-OBSOLETA: scripts/utilities/run-engram.ps1 no tiene equivalente TS (migración PS1→TS) -->
 - The launcher creates the workspace data directory automatically and sets `ENGRAM_DATA_DIR` for
   that process.
 - This keeps `.engram/` out of tool and project checkouts.
@@ -77,3 +79,4 @@ instead of looking for a fake executable.
 ## Validation
 
 Use `scripts/validation/validate-workspace.ps1` or the equivalent TypeScript command on Linux/macOS.
+<!-- REF-OBSOLETA: scripts/validation/validate-workspace.ps1 no tiene equivalente TS (migración PS1→TS) -->

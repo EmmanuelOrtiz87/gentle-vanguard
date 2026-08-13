@@ -155,6 +155,7 @@ AWAITING: Your approval to proceed
   "session_id": "session-123",
   "action": "delete-file",
   "target": "src/old-file.ts",
+<!-- REF-OBSOLETA: src/old-file.ts no existe (ruta migrada o eliminada) -->
   "gate_level": 2,
   "confidence": 0.65,
   "human_decision": "approved",

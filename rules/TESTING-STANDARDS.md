@@ -77,6 +77,7 @@ Describe '<ComponentName> Tests' {
         It '<expectation in plain English>' {
             # Arrange
             $script = Join-Path $script:root 'scripts/path/to/script.ps1'
+<!-- REF-OBSOLETA: scripts/path/to/script.ps1 no tiene equivalente TS (migración PS1→TS) -->
             # Assert
             Test-Path $script | Should -Be $true
         }
@@ -142,6 +143,7 @@ Describe 'my-new-script.ps1' {
     BeforeAll {
         $script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
         $script:path = Join-Path $script:root 'scripts/utilities/my-new-script.ps1'
+<!-- REF-OBSOLETA: scripts/utilities/my-new-script.ps1 no tiene equivalente TS (migración PS1→TS) -->
     }
 
     It 'exists' { Test-Path $script:path | Should -Be $true }
@@ -163,6 +165,7 @@ Describe 'my-new-script.ps1' {
 ```TypeScript
 # Run all unit tests (used by agent-verify + CI)
 pwsh -File src/agent-verify.ts
+<!-- REF-OBSOLETA: src/agent-verify.ts no existe (ruta migrada o eliminada) -->
 
 # Run specific test file
 Invoke-Pester tests/unit/gentle-vanguard-core.tests.ps1 -Output Detailed

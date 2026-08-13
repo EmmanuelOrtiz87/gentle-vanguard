@@ -50,6 +50,7 @@ All npm scripts MUST use `npx tsx` (not `pwsh`, not `node dist/`):
 ```json
 "scripts": {
   "my-script": "npx tsx src/cli/my-script.ts"
+<!-- REF-OBSOLETA: src/cli/my-script.ts no existe (ruta migrada o eliminada) -->
 }
 ```
 

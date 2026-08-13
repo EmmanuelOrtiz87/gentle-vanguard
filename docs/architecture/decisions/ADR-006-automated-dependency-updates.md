@@ -45,6 +45,7 @@ review. Defer Renovate/Dependabot automation until Q3 2026.**
 ### Layer 1: Automated Audit (Implemented)
 
 `npm audit` runs in the pre-push hook (`scripts/hooks/check-npm-audit.ps1`):
+<!-- REF-OBSOLETA: scripts/hooks/check-npm-audit.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 ```TypeScript
 npm audit --audit-level=moderate
@@ -147,5 +148,7 @@ Evaluate and configure Renovate Bot for:
 - ADR-003 — npx offline hardening (supply-chain gentle-vanguard)
 - `config/lefthook.yml` — hook configuration
 - `scripts/hooks/check-npm-audit.ps1` — audit hook implementation
+<!-- REF-OBSOLETA: scripts/hooks/check-npm-audit.ps1 no tiene equivalente TS (migración PS1→TS) -->
 - `src/deployment/generate-sbom.ts` — SBOM generation
+<!-- REF-OBSOLETA: src/deployment/generate-sbom.ts no existe (ruta migrada o eliminada) -->
 - OWASP A06:2021 — Vulnerable and Outdated Components

@@ -40,6 +40,7 @@
 
 ```typescript
 // src/cms-storage.ts (PENDIENTE)
+<!-- REF-OBSOLETA: src/cms-storage.ts no existe (ruta migrada o eliminada) -->
 interface CMSStorage {
   saveAsset(asset: GeneratedAsset): void;
   getAssets(): GeneratedAsset[];
@@ -60,6 +61,7 @@ interface CMSStorage {
 
 ```typescript
 // src/video-compiler.ts (PENDIENTE)
+<!-- REF-OBSOLETA: src/video-compiler.ts no existe (ruta migrada o eliminada) -->
 async function compileToMP4(framesDir: string, output: string): Promise<void> {
   // Requiere ffmpeg instalado
 }

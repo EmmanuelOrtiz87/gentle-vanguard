@@ -47,15 +47,21 @@ This project implements the following security controls:
 | Action pinning        | Dependabot weekly updates (`.github/dependabot.yml`)                                              |
 | Access control        | `config/access-control.json` + `config/security-policy.json`                                      |
 | Hook output safety    | `scripts/hooks/hook-output-safety.ps1` (redacts secrets from hook logs)                           |
+<!-- REF-OBSOLETA: scripts/hooks/hook-output-safety.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | RBAC                  | `config/owner-auth.json` (owner-only operations)                                                  |
 | Secret Vault          | `scripts/security/secret-vault.ps1` — DPAPI-encrypted local vault, rotation, breach response      |
+<!-- REF-OBSOLETA: scripts/security/secret-vault.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Secrets Manager       | `scripts/security/secrets-manager.ps1` (v2.0) — delegates to vault, no plain-text storage         |
+<!-- REF-OBSOLETA: scripts/security/secrets-manager.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Security Orchestrator | `src/security/security-orchestrator.ts` — PII sanitization, critical pattern blocking, audit |
 | Privacy Gateway       | `src/security/privacy-gateway.ts` — auto-sanitization of prompts/outputs                     |
 | SIEM Bridge           | `src/infrastructure/siem-audit-bridge.ts` — Splunk/ELK/Datadog integration                         |
 | Encryption Manager    | `scripts/security/encryption-manager.ps1` — AES-256 key management                                |
+<!-- REF-OBSOLETA: scripts/security/encryption-manager.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Secure Auth           | `scripts/security/secure-auth.ps1` — DPAPI encryption, lockout after 3 attempts                   |
+<!-- REF-OBSOLETA: scripts/security/secure-auth.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Input Validator       | `scripts/security/input-validator.ps1` — type validation, injection prevention                    |
+<!-- REF-OBSOLETA: scripts/security/input-validator.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Pre-commit hooks      | `.lefthook.yml` — gitleaks, trufflehog, JSON lint, workflow lint, lockfile lint                   |
 
 ### Changelog (Security Fixes)
@@ -94,4 +100,6 @@ This project implements the following security controls:
 - [ ] External URLs only from the allow-list in `config/security-privacy.json`
 - [ ] Run `tests/security/*.tests.ps1` before submitting PRs with security changes
 - [ ] Use `scripts/security/secret-vault.ps1` for secrets — never env vars or plain files
+<!-- REF-OBSOLETA: scripts/security/secret-vault.ps1 no tiene equivalente TS (migración PS1→TS) -->
 - [ ] All PII must be sanitized via `scripts/security/privacy-sanitizer.ps1` before logging
+<!-- REF-OBSOLETA: scripts/security/privacy-sanitizer.ps1 no tiene equivalente TS (migración PS1→TS) -->

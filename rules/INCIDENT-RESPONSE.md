@@ -198,6 +198,7 @@ ETA: {estimated resolution}
 | SRE Practices           | `docs/NORMATIVAS-SRE.md`                  |
 | Incident Response Skill | `skills/incident-response-skill/SKILL.md` |
 | Watchtower              | `scripts/utilities/watchtower.ps1`        |
+<!-- REF-OBSOLETA: scripts/utilities/watchtower.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 ---
 

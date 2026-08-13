@@ -9,6 +9,7 @@ The autonomous validation system continuously monitors workspace health and conf
 ### Comprehensive Validation
 
 - **Script**: `src/comprehensive-validation.ts`
+<!-- REF-OBSOLETA: src/comprehensive-validation.ts no existe (ruta migrada o eliminada) -->
 - **Purpose**: End-to-end validation of entire workspace
 - **Run**: `.\comprehensive-validation.ps1 -Verbose`
 

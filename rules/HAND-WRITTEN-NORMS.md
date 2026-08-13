@@ -64,6 +64,7 @@ debe delegar a backup-engram.ps1, nunca duplicar. (3) backup-engram.ps1 corre pr
 SHA256 + post-backup verification. (4) Scheduling automático via session-autostart.config.json (step
 `engram-backup` lazy). **Files:** `scripts/utilities/ops/BACKUP-RESTORE/backup-engram.ps1`,
 `scripts/adaptive/auto-backup-orchestrator.ps1`,
+<!-- REF-OBSOLETA: scripts/adaptive/auto-backup-orchestrator.ps1 no tiene equivalente TS (migración PS1→TS) -->
 `scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1`, `config/session-autostart.config.json`
 
 ## NORM-009: Critical changes require explicit consent
@@ -74,3 +75,4 @@ _critical_ sobre Engram requiere autorización explícita del usuario vía `engr
 (2) Fingerprint SHA256 previo y posterior para detectar modificaciones no autorizadas. (3) El agente
 debe notificar al usuario _antes_ de modificar observaciones existentes. **File:**
 `scripts/utilities/memory/ENGRAM/engram-change-guard.ps1`
+<!-- REF-OBSOLETA: scripts/utilities/memory/ENGRAM/engram-change-guard.ps1 no tiene equivalente TS (migración PS1→TS) -->

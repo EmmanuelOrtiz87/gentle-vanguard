@@ -48,6 +48,7 @@ Get-ChildItem -Recurse -Filter "*.md" -LiteralPath "skills/" | Select-Object -Fi
 
 # 3. Validate current state
 pwsh -NoProfile -File src/validate-configs.ts
+<!-- REF-OBSOLETA: src/validate-configs.ts no existe (ruta migrada o eliminada) -->
 
 # 4. Run codegraph impact if modifying shared files
 # codegraph_context "impact of changes to X" (tool call)
@@ -58,9 +59,11 @@ pwsh -NoProfile -File src/validate-configs.ts
 ```TypeScript
 # 1. Validate configs
 pwsh -NoProfile -File src/validate-configs.ts
+<!-- REF-OBSOLETA: src/validate-configs.ts no existe (ruta migrada o eliminada) -->
 
 # 2. Rebuild skill registry if skills changed
 npx tsx src/utilities/build-skill-registry.ts
+<!-- REF-OBSOLETA: src/utilities/build-skill-registry.ts no existe (ruta migrada o eliminada) -->
 
 # 3. Save to Engram
 # mem_save -title "Self-mod: <summary>" -type "config" (tool call)

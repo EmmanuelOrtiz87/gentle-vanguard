@@ -71,6 +71,7 @@ Workspace + Gentle-Vanguard operating flow.
 - Session startup compatibility checks integrated into workspace startup manager.
 - Complementary release homologation gate automated via
   `src/deployment/validate-release-homologation.ts` and exposed as
+<!-- REF-OBSOLETA: src/deployment/validate-release-homologation.ts no existe (ruta migrada o eliminada) -->
   `src/cli/gv.ts release-homologation`.
 
 ### Definitions

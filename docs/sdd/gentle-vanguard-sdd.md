@@ -92,6 +92,7 @@ Gentle-Vanguard
 
 - `src/bootstrap.ts` - Canonical TypeScript bootstrap script
 - `scripts/project/new-project.ps1` - Canonical project creation entrypoint
+<!-- REF-OBSOLETA: scripts/project/new-project.ps1 no tiene equivalente TS (migración PS1→TS) -->
 - `templates/` - Project templates
 - `config/` - Configuration templates
 

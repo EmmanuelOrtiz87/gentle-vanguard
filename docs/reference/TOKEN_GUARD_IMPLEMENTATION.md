@@ -12,7 +12,9 @@ los umbrales configurados. Existen dos scripts; solo uno es operacional.
 | Script                                | Estado             | Fuente de config                                                     |
 | ------------------------------------- | ------------------ | -------------------------------------------------------------------- |
 | `src/telemetry/token-budget-guard.ts` | ✅ **OPERACIONAL** | `config/orchestrator.json#subagent_orchestration.token_budget_guard` |
+<!-- REF-OBSOLETA: src/telemetry/token-budget-guard.ts no existe (ruta migrada o eliminada) -->
 | `scripts/utilities/token-guard.ps1`   | ⛔ **DEPRECATED**  | `token-guard-config.json` (no existe en disco)                       |
+<!-- REF-OBSOLETA: scripts/utilities/token-guard.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 **Usar solo el script operacional.** El legacy tiene thresholds distintos y referencia un archivo de
 config inexistente.
@@ -22,6 +24,7 @@ config inexistente.
 ### 1. Token Budget Guard (Operacional)
 
 - **Script**: `src/telemetry/token-budget-guard.ts`
+<!-- REF-OBSOLETA: src/telemetry/token-budget-guard.ts no existe (ruta migrada o eliminada) -->
 - **Configuración canónica**: `config/orchestrator.json` →
   `subagent_orchestration.token_budget_guard`
 - **Estado**: `.session/token-guard-state.json`
@@ -58,11 +61,13 @@ config inexistente.
 ```
 Token Budget Guard System (Operacional)
  src/telemetry/token-budget-guard.ts  ← motor principal
+<!-- REF-OBSOLETA: src/telemetry/token-budget-guard.ts no existe (ruta migrada o eliminada) -->
  config/orchestrator.json#subagent_orchestration.token_budget_guard  ← config canónica
  docs/sessions/metrics/token-guard-usage.csv  ← historial de uso
 
 [DEPRECATED — no usar]
  scripts/utilities/token-guard.ps1
+<!-- REF-OBSOLETA: scripts/utilities/token-guard.ps1 no tiene equivalente TS (migración PS1→TS) -->
  scripts/utilities/token-guard-config.json  (no existe en disco)
 ```
 
@@ -330,6 +335,7 @@ Test-Path "scripts/utilities/token-guard-config.json"
 
 # Verificar que el script existe
 Test-Path "scripts/utilities/token-guard.ps1"
+<!-- REF-OBSOLETA: scripts/utilities/token-guard.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 # Ejecutar manualmente
 .\tools\token-guard.ps1 -Mode "monitor"
@@ -360,6 +366,7 @@ Get-Content ".\.session\token-guard-state.json" | ConvertFrom-Json
 | Archivo                                           | Descripcin                               |
 | ------------------------------------------------- | ---------------------------------------- |
 | `scripts/utilities/token-guard.ps1`               | Motor principal del Token Guard          |
+<!-- REF-OBSOLETA: scripts/utilities/token-guard.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | `scripts/utilities/token-guard-config.json`       | configuración de presupuestos y umbrales |
 | `scripts/utilities/session-autostart.cmd`         | Integracin en autostart (modificado)     |
 | `scripts/utilities/session-autostart.config.json` | Config de sesin (modificado)             |

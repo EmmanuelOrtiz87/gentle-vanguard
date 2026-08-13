@@ -36,6 +36,7 @@ and self-scaling capabilities. All systems operate without human intervention in
 ### 1. Auto-Backup Orchestrator
 
 **File**: `scripts/adaptive/auto-backup-orchestrator.ps1` **Trigger**: session-start, session-close,
+<!-- REF-OBSOLETA: scripts/adaptive/auto-backup-orchestrator.ps1 no tiene equivalente TS (migración PS1→TS) -->
 manual **Function**:
 
 - AES-256 encrypted backups of:
@@ -81,6 +82,7 @@ orchestrator, manual **Function**:
 ### 4. Auto-Doc-Drift Detector
 
 **File**: `scripts/adaptive/auto-doc-drift-detector.ps1` **Trigger**: session-start, session-close,
+<!-- REF-OBSOLETA: scripts/adaptive/auto-doc-drift-detector.ps1 no tiene equivalente TS (migración PS1→TS) -->
 manual **Function**:
 
 - Scans code files vs documentation files
@@ -93,6 +95,7 @@ manual **Function**:
 ### 5. Auto-Testing Orchestrator
 
 **File**: `scripts/adaptive/auto-testing-final.ps1` **Trigger**: session-start, session-close,
+<!-- REF-OBSOLETA: scripts/adaptive/auto-testing-final.ps1 no tiene equivalente TS (migración PS1→TS) -->
 manual **Function**:
 
 - Non-blocking test execution
@@ -105,6 +108,7 @@ manual **Function**:
 ### 6. Auto-Scaling Delegation
 
 **File**: `scripts/adaptive/auto-scaling.ps1` **Trigger**: session-start, session-close, manual
+<!-- REF-OBSOLETA: scripts/adaptive/auto-scaling.ps1 no tiene equivalente TS (migración PS1→TS) -->
 **Function**:
 
 - Learns which subagent works best for each task type
@@ -123,6 +127,7 @@ manual **Function**:
 ### 7. Backup Resilience Test
 
 **File**: `scripts/adaptive/backup-resilience-test.ps1` **Trigger**: manual (for validation)
+<!-- REF-OBSOLETA: scripts/adaptive/backup-resilience-test.ps1 no tiene equivalente TS (migración PS1→TS) -->
 **Function**:
 
 - Test 1: Tamper detection (modify encrypted backup, attempt restore)
@@ -133,6 +138,7 @@ manual **Function**:
 ### 8. Judgment Day Bridge
 
 **File**: `scripts/adaptive/judgment-day-bridge.ps1` **Trigger**: session-close, manual
+<!-- REF-OBSOLETA: scripts/adaptive/judgment-day-bridge.ps1 no tiene equivalente TS (migración PS1→TS) -->
 **Function**:
 
 - Collects logs from all autonomous systems

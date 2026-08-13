@@ -40,6 +40,7 @@ VS Code, Copilot, Antigravity.
 | Engram CLI          | `tools/engram.exe` v1.15.10                        | ✅ Activo | Automático (mem_save/mem_search en cada sesión)   |
 | Engram RAG          | `src/engram-rag-reindex.ts`          <!-- REF-OBSOLETA: scripts/utilities/ENGRAM-RAG/ eliminado; candidato: src/engram-rag-reindex.ts -->       | ✅ Activo | Manual (query) / Automático (reindex en pipeline) |
 | Engram orchestrator | `src/engram-session-bridge.ts` <!-- REF-OBSOLETA: scripts/utilities/ENGRAM/engram-orchestrator.ps1 eliminado; candidato: src/engram-session-bridge.ts / src/engram-auto-sync.ts --> | ✅ Activo | Automático (sesión)                               |
+<!-- REF-OBSOLETA: scripts/utilities/ENGRAM/engram-orchestrator.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Vector index        | TF-IDF 1,289 docs × 7,317 términos                 | ✅ Activo | Incremental rebuild                               |
 
 ### 2.3 ML / Auto-Delegación
@@ -49,6 +50,7 @@ VS Code, Copilot, Antigravity.
 | ML Router         | `src/ml-router.ts`                                  | ✅ Activo | Automático (pre-process)  |
 | Skill embedder    | `src/skills/skill-embedder.ts`                      | ✅ Activo | Automático (reindex)      |
 | Context analyzer  | `scripts/utilities/AUTO-DELEGATION/context-analyzer.ps1` <!-- REF-OBSOLETA: eliminado en migración PS1→TS; sin equivalente TS directo en src/ -->  | ✅ Activo | Automático (sesión start) |
+<!-- REF-OBSOLETA: scripts/utilities/AUTO-DELEGATION/context-analyzer.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Skill recommender | `src/skills/skill-recommender.ts`                   | ✅ Activo | Automático (sesión start) |
 | Routing tiers     | ≥80% directo / ≥60% confirmar / <60% → BA explore         | ✅ Activo | Automático                |
 
@@ -57,10 +59,15 @@ VS Code, Copilot, Antigravity.
 | Componente            | Archivo(s)                                           | Estado      | Automatización         |
 | --------------------- | ---------------------------------------------------- | ----------- | ---------------------- |
 | FT pipeline           | `src/fine-tuning/ft-pipeline.ts` <!-- REF-OBSOLETA: src/fine-tuning/ no existe (solo protected FINE-TUNING/*.ps1.enc) -->                     | ✅ Activo   | Automático (CI weekly) |
+<!-- REF-OBSOLETA: src/fine-tuning/ft-pipeline.ts no existe (ruta migrada o eliminada) -->
 | FT trainer            | `src/fine-tuning/ft-trainer.ts` <!-- REF-OBSOLETA: src/fine-tuning/ no existe -->                      | ✅ Activo   | Manual / CI            |
+<!-- REF-OBSOLETA: src/fine-tuning/ft-trainer.ts no existe (ruta migrada o eliminada) -->
 | FT evaluator          | `src/fine-tuning/ft-evaluator.ts` <!-- REF-OBSOLETA: src/fine-tuning/ no existe -->                    | ✅ Activo   | Manual / CI            |
+<!-- REF-OBSOLETA: src/fine-tuning/ft-evaluator.ts no existe (ruta migrada o eliminada) -->
 | FT threshold detector | `src/fine-tuning/ft-threshold-detect.ts` <!-- REF-OBSOLETA: src/fine-tuning/ no existe -->             | ✅ Activo   | Automático (CI)        |
+<!-- REF-OBSOLETA: src/fine-tuning/ft-threshold-detect.ts no existe (ruta migrada o eliminada) -->
 | FT auto-prune         | `src/fine-tuning/ft-auto-prune.ts` <!-- REF-OBSOLETA: src/fine-tuning/ no existe -->                   | ✅ Activo   | Automático (CI)        |
+<!-- REF-OBSOLETA: src/fine-tuning/ft-auto-prune.ts no existe (ruta migrada o eliminada) -->
 | FT registry           | `.ft/registry.json`                                  | ✅ Activo   | Automático             |
 | Adapters activos      | BA, DEV (mistral-7b-lora, v1.0.0)                    | ✅ Activo   | LoRA fine-tuned        |
 | Python trainer        | `scripts/utilities/FINE-TUNING/python/train_lora.py` | ⚠️ Presente | Manual (stub)          |
@@ -72,12 +79,18 @@ VS Code, Copilot, Antigravity.
 | Dashboard v3 (Chart.js) | `reports/dashboard-v2/dashboard.html` <!-- REF-OBSOLETA: reports/dashboard-v2/ no existe; dashboard actual en apps/web-dashboard/ --> | ✅ Activo | CI/CD genera artifact   |
 | Metrics collector       | `src/metrics-collector.ts`              | ✅ Activo | Automático (sesión)     |
 | Dashboard render        | `src/dashboard-start.ts` <!-- REF-OBSOLETA: scripts/metrics/dashboard-render.ps1 eliminado; candidato: src/dashboard-start.ts --> | ✅ Activo | Manual / CI             |
+<!-- REF-OBSOLETA: scripts/metrics/dashboard-render.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Dashboard health        | `src/dashboard-health-checker.ts` | ✅ Activo | CI                      |
 | Live feed               | `scripts/metrics/live-feed.ps1` <!-- REF-OBSOLETA: eliminado (live-feed deprecated en pipeline) -->              | ✅ Activo | Automático              |
+<!-- REF-OBSOLETA: scripts/metrics/live-feed.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Metrics server          | `apps/web-dashboard/server/websocket-server.ts` <!-- REF-OBSOLETA: scripts/metrics/metrics-server.ps1 eliminado --> | ✅ Activo | Manual (HTTP server)    |
+<!-- REF-OBSOLETA: scripts/metrics/metrics-server.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Telemetry writer        | `scripts/metrics/telemetry-writer.ps1` <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->       | ✅ Activo | Automático              |
+<!-- REF-OBSOLETA: scripts/metrics/telemetry-writer.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Weekly metrics          | `src/core/operational-metrics-tracker.ts` <!-- REF-OBSOLETA: scripts/monitoring/weekly-metrics.ps1 eliminado --> | ✅ Activo | Manual / CI             |
+<!-- REF-OBSOLETA: scripts/monitoring/weekly-metrics.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Executive dashboard     | `scripts/monitoring/executive-dashboard.ps1` <!-- REF-OBSOLETA: eliminado (cubierto por dashboard v3) --> | ✅ Activo | Manual                  |
+<!-- REF-OBSOLETA: scripts/monitoring/executive-dashboard.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Token monitor           | `src/token-usage-reader.ts` <!-- REF-OBSOLETA: scripts/utilities/TOKEN/ eliminado; equivalentes TS: src/token-*.ts -->       | ✅ Activo | Automático (cada turno) |
 
 ### 2.6 Seguridad
@@ -85,14 +98,20 @@ VS Code, Copilot, Antigravity.
 | Componente            | Archivo(s)                                   | Estado    | Automatización                 |
 | --------------------- | -------------------------------------------- | --------- | ------------------------------ |
 | Secrets manager       | `scripts/security/secrets-manager.ps1` <!-- REF-OBSOLETA: eliminado; ver rules/SECRETS-MANAGEMENT.md y config/secrets-governance.json -->       | ✅ Activo | Manual                         |
+<!-- REF-OBSOLETA: scripts/security/secrets-manager.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Encryption (AES-256)  | `scripts/security/encryption-manager.ps1` <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->    | ✅ Activo | Manual                         |
+<!-- REF-OBSOLETA: scripts/security/encryption-manager.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Input validator       | `scripts/security/input-validator.ps1` <!-- REF-OBSOLETA: eliminado; validación en src/pre-process-input.ts -->       | ✅ Activo | Automático (pre-commit)        |
+<!-- REF-OBSOLETA: scripts/security/input-validator.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Security logger       | `scripts/security/security-logger.ps1` <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->       | ✅ Activo | Automático                     |
+<!-- REF-OBSOLETA: scripts/security/security-logger.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Security orchestrator | `src/security/security-orchestrator.ts` | ✅ Activo | Automático (pre-push)          |
 | Privacy sanitizer     | `scripts/security/privacy-sanitizer.ps1` <!-- REF-OBSOLETA: eliminado; ver src/security/privacy-gateway.ts -->     | ✅ Activo | Automático (pre-commit)        |
+<!-- REF-OBSOLETA: scripts/security/privacy-sanitizer.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Gitleaks              | Lefthook + CI                                | ✅ Activo | Automático (pre-commit + push) |
 | Trivy (deps)          | CI weekly                                    | ✅ Activo | CI automático                  |
 | SBOM validation       | `src/generate-sbom.ts` <!-- REF-OBSOLETA: scripts/security/sbom-validate.ps1 eliminado; candidato: src/generate-sbom.ts -->         | ✅ Activo | CI                             |
+<!-- REF-OBSOLETA: scripts/security/sbom-validate.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | SIEM audit bridge     | `src/infrastructure/siem-audit-bridge.ts`     | ✅ Activo | Manual                         |
 
 ### 2.7 CI/CD (28 workflows)
@@ -144,11 +163,16 @@ VS Code, Copilot, Antigravity.
 | Auto-norm learner        | `src/auto-norm-learner.ts`                       | ⚠️ Activo | Manual (bajo demanda)        |
 | Auto-norm enforcer       | `src/auto-norm-enforcer.ts`        | ✅ Activo | Automático (cada 5 turnos)   |
 | Failure learning         | `src/learning-engine.ts` <!-- REF-OBSOLETA: scripts/adaptive/failure-learning-system.ps1 eliminado; candidato: src/learning-engine.ts -->   | ⚠️ Activo | Manual                       |
+<!-- REF-OBSOLETA: scripts/adaptive/failure-learning-system.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Cache manager            | `src/response-cache.ts` <!-- REF-OBSOLETA: scripts/adaptive/cache-manager.ps1 eliminado; candidato: src/response-cache.ts -->             | ✅ Activo | Automático (sesión)          |
+<!-- REF-OBSOLETA: scripts/adaptive/cache-manager.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Auto-doc drift detector  | `scripts/adaptive/auto-doc-drift-detector.ps1` <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->   | ⚠️ Activo | Manual                       |
+<!-- REF-OBSOLETA: scripts/adaptive/auto-doc-drift-detector.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Agent message bus        | `src/agent-message-bus.ts`         | ⚠️ Activo | Manual                       |
 | Auto-backup              | `src/backup-engram.ts` <!-- REF-OBSOLETA: scripts/adaptive/auto-backup-orchestrator.ps1 eliminado; candidato: src/backup-engram.ts -->  | ✅ Activo | Automático (scheduled)       |
+<!-- REF-OBSOLETA: scripts/adaptive/auto-backup-orchestrator.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Judgment Day bridge      | `src/correction-rules-engine.ts` <!-- REF-OBSOLETA: scripts/adaptive/judgment-day-bridge.ps1 eliminado; candidato: src/correction-rules-engine.ts -->       | ⚠️ Activo | Event-driven                 |
+<!-- REF-OBSOLETA: scripts/adaptive/judgment-day-bridge.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Karpathy enforcer        | `src/karpathy-enforcer.ts`         | ✅ Activo | Automático (pre-commit)      |
 | Normative audit pipeline | `src/infrastructure/normative-audit-pipeline.ts` | ✅ Activo | Automático (pre-commit + CI) |
 | Event bus                | `.event-bus/` (1 sub: judgment-day)              | ✅ Activo | Event-driven                 |
@@ -159,10 +183,14 @@ VS Code, Copilot, Antigravity.
 | -------------------------- | ------------------------------------------------ | --------- | -------------------------- |
 | System prompt optimization | `config/system-prompt-optimization.json` <!-- REF-OBSOLETA: scripts/utilities/PROMPT/ eliminado; configs JSON en config/ -->          | ✅ Activo | Automático (pre-sesión)    |
 | A/B testing prompts        | `src/ab-testing-framework.ts` <!-- REF-OBSOLETA: scripts/utilities/PROMPT/prompt-ab-testing.ps1 eliminado; candidato: src/ab-testing-framework.ts --> | ✅ Activo | Manual                     |
+<!-- REF-OBSOLETA: scripts/utilities/PROMPT/prompt-ab-testing.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Prompt cache               | `src/response-cache.ts` <!-- REF-OBSOLETA: scripts/utilities/PROMPT/prompt-cache.ps1 eliminado; candidato: src/response-cache.ts -->      | ✅ Activo | Automático                 |
+<!-- REF-OBSOLETA: scripts/utilities/PROMPT/prompt-cache.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Prompt versioning          | `scripts/utilities/PROMPT/prompt-versioning.ps1` <!-- REF-OBSOLETA: eliminado en migración PS1→TS --> | ✅ Activo | Automático                 |
+<!-- REF-OBSOLETA: scripts/utilities/PROMPT/prompt-versioning.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Semantic compression       | `config/system-prompt-optimization.json`         | ✅ Activo | Automático (98% reducción) |
 | Context budget audit       | `scripts/optimization/context-budget-audit.ps1`  | ⚠️ Activo | Manual                     |
+<!-- REF-OBSOLETA: scripts/optimization/context-budget-audit.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Token budget guard         | `src/token-budget-guard.ts` | ✅ Activo | Automático (cada turno)    |
 
 ### 2.11 Skills / Plugins
@@ -294,6 +322,7 @@ Maintenance Watchtower:
 | --------------------- | -------------------------------------------------------- |
 | Entry point canónico  | `docs/AGENTS.md`                                         |
 | Bootstrap workspace   | `src/bootstrap.ts` <!-- REF-OBSOLETA: scripts/core/bootstrap-workspace.ps1 eliminado; candidato: src/bootstrap.ts -->                   |
+<!-- REF-OBSOLETA: scripts/core/bootstrap-workspace.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | CLI                   | `src/cli/gv.ts`                             |
 | Orquestador principal | `config/orchestrator.json`                               |
 | Auto-delegación       | `config/auto-delegation.json`                            |

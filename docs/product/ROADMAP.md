@@ -66,8 +66,10 @@ seguro, extensible, zero-drama.**
 **Entregables Backlog Local-First (2026-08-09):**
 
 - `apps/web-dashboard/src/lib/offlineCache.ts` — caché localStorage por-key (cap 200KB, staleness 5
+<!-- REF-OBSOLETA: src/lib/offlineCache.ts no existe (ruta migrada o eliminada) -->
   min).
 - `apps/web-dashboard/src/hooks/useMetrics.ts` + `useAlerts.ts` + `Dashboard.tsx` +
+<!-- REF-OBSOLETA: src/hooks/useMetrics.ts no existe (ruta migrada o eliminada) -->
   `TracingDashboard.tsx` — modo offline: `isOffline`, `lastUpdated`, banner amber "Offline mode —
   cached data".
 - `src/check-version.ts` — fix: apunta al repo público `EmmanuelOrtiz87/gentle-vanguard-public` (el

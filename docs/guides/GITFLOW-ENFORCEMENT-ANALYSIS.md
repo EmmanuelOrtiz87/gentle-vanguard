@@ -150,6 +150,7 @@ function Show-GitFlowHelp {
 #### 1.2 Crear Script Interactivo de Rama
 
 **Archivo**: `scripts/utilities/create-gitflow-branch.ps1`
+<!-- REF-OBSOLETA: scripts/utilities/create-gitflow-branch.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 ```TypeScript
 param(

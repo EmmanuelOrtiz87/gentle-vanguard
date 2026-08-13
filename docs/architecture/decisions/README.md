@@ -188,6 +188,7 @@ Is there uncertainty or tradeoffs?
 **Related Code**:
 
 - `src/deployment/validate-release-homologation.ts` — Implements ADR-004
+<!-- REF-OBSOLETA: src/deployment/validate-release-homologation.ts no existe (ruta migrada o eliminada) -->
 - `scripts/hooks/*.ps1` — Implements ADR-001
 - `$HOME\mcp-workspace/` — Implements ADR-002
 

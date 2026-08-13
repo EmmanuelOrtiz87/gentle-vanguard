@@ -88,6 +88,7 @@ src/cli/gv.ts publish
 ### Validations Performed
 
 **In `src/deployment/validate-release-homologation.ts`**:
+<!-- REF-OBSOLETA: src/deployment/validate-release-homologation.ts no existe (ruta migrada o eliminada) -->
 
 ```TypeScript
 # 1. VERSION alignment (REQUIRED)
@@ -296,6 +297,7 @@ $LASTEXITCODE
 
 - [RELEASE-PROCESS.md §2.5](../../guides/RELEASE-PROCESS.md#25-homologation-gate-mandatory--auto-runs-on-publish)
 - Historical implementation: `src/deployment/validate-release-homologation.ts` (removed during
+<!-- REF-OBSOLETA: src/deployment/validate-release-homologation.ts no existe (ruta migrada o eliminada) -->
   script migration)
 - [TROUBLESHOOTING-RUNBOOK.md §Release Workflow Issues](../../guides/TROUBLESHOOTING-RUNBOOK.md#release-workflow-issues)
 

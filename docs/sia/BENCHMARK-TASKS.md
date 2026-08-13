@@ -8,6 +8,7 @@ Tareas internas para probar y calibrar el loop SIA.
 directorio, mostrando nombre, trigger principal, y source. Output en tabla formateada.
 
 **Expected**: `scripts/sia/bench/skill-lister.ps1`
+<!-- REF-OBSOLETA: scripts/sia/bench/skill-lister.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 **Success criteria**:
 

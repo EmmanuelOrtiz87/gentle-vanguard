@@ -143,7 +143,10 @@ Operational requirements:
 3. Regressions are blocked by automated matrix validation in
    `tests/e2e/routing-language-matrix.json` executed by
    `scripts/utilities/routing-quality-eval.ps1` <!-- REF-OBSOLETA: routing-quality-eval.ps1 eliminado en migración PS1→TS; sin equivalente TS en src/ -->.
+<!-- REF-OBSOLETA: scripts/utilities/routing-quality-eval.ps1 no tiene equivalente TS (migración PS1→TS) -->
 4. `src/agent-verify.ts` <!-- REF-OBSOLETA: src/agent-verify.ts no existe → ver src/stack-compliance.ts / src/lefthook-verify.ts --> must fail if multilingual routing matrix has mismatches.
+<!-- REF-OBSOLETA: src/agent-verify.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/agent-verify.ts no existe (ruta migrada o eliminada) -->
 5. No confidence threshold gates SDD flow — if the skill matches `sdd-lifecycle` and the input
    contains a development/feature intent keyword (in any supported language), PLAN_MODE_REQUIRED is
    triggered unconditionally.
@@ -194,6 +197,8 @@ Do **NOT** invent skill paths or fake tool calls.
 - All commits follow Conventional Commits: `type(scope): message`
 - `pre-commit` hook runs `src/hooks/pre-commit.ts` <!-- REF-OBSOLETA: hooks/pre-commit eliminado; hooks TS en src/hooks/ --> — validates JSON, privacy rules, script safety
 - Install hooks with `pwsh -File src/install-hooks.ts` <!-- REF-OBSOLETA: src/install-hooks.ts no existe; ver src/hooks/pre-commit.ts y .lefthook.yml --> (idempotent)
+<!-- REF-OBSOLETA: src/install-hooks.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/install-hooks.ts no existe (ruta migrada o eliminada) -->
 - **Never** use `git commit --no-verify` unless authorized by GOV agent
 
 Valid types: `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`, `test`, `ci`
@@ -206,8 +211,12 @@ Valid types: `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`, `test`, `ci`
 - Temperature: 0.3 (focused) — overridden per agent profile
 - Max tokens: 4500 (default agent)
 - Context compression: `src/handoff-compress.ts` <!-- REF-OBSOLETA: src/handoff-compress.ts no existe; ver scripts/utilities/utils/UTILITIES/handoff-compress.sh y src/structural-compression.ts --> for agent-to-agent handoffs
+<!-- REF-OBSOLETA: src/handoff-compress.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/handoff-compress.ts no existe (ruta migrada o eliminada) -->
 - Pre-compact hook:
   `src/pre-compact-hook.ts` <!-- REF-OBSOLETA: src/pre-compact-hook.ts no existe (solo pre-compact-hook.ps1.enc en protected/) --> -ProjectName workspace_gentle_vanguard -CompressionRatio 0.90
+<!-- REF-OBSOLETA: src/pre-compact-hook.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/pre-compact-hook.ts no existe (ruta migrada o eliminada) -->
 
 ---
 
@@ -217,6 +226,8 @@ Before any release or major commit:
 
 ```TypeScript
 pwsh -File src/validate-configs.ts <!-- REF-OBSOLETA: src/validate-configs.ts no existe; candidato: src/validate-opencode-config.ts / src/json-validator.ts -->
+<!-- REF-OBSOLETA: src/validate-configs.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/validate-configs.ts no existe (ruta migrada o eliminada) -->
 ```
 
 Checks: JSON syntax, required keys, script paths, root file declarations **FAIL** = block release.
@@ -230,6 +241,8 @@ After completing **any significant work**, the agent MUST run:
 
 ```TypeScript
 pwsh -File src/agent-verify.ts <!-- REF-OBSOLETA: src/agent-verify.ts no existe → ver src/stack-compliance.ts / src/lefthook-verify.ts -->
+<!-- REF-OBSOLETA: src/agent-verify.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/agent-verify.ts no existe (ruta migrada o eliminada) -->
 ```
 
 | Result               | Meaning                   | Action                              |
@@ -349,6 +362,8 @@ permissions:
 - Convert local time to UTC explicitly before editing workflow cron.
 
 Validation gate: `src/agent-verify.ts` <!-- REF-OBSOLETA: src/agent-verify.ts no existe → ver src/stack-compliance.ts --> enforces this standard for scheduled workflows.
+<!-- REF-OBSOLETA: src/agent-verify.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/agent-verify.ts no existe (ruta migrada o eliminada) -->
 
 ---
 
@@ -481,3 +496,5 @@ security compliance)
 | ESLint Config                | `eslint.config.js` <!-- REF-OBSOLETA: .eslintrc.json no existe; ESLint flat config en eslint.config.js -->                                               |
 | TypeScript Config            | `tsconfig.json`                                                |
 | Self-verification            | `src/agent-verify.ts` <!-- REF-OBSOLETA: src/agent-verify.ts no existe → ver src/stack-compliance.ts -->                                          |
+<!-- REF-OBSOLETA: src/agent-verify.ts no existe (ruta migrada o eliminada) -->
+<!-- REF-OBSOLETA: src/agent-verify.ts no existe (ruta migrada o eliminada) -->
