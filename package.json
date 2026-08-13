@@ -35,7 +35,7 @@
     "watchtower": "npx tsx src/core/maintenance-watchtower.ts",
     "watchtower:health": "npx tsx src/core/maintenance-watchtower.ts --action health",
     "session:autostart:ts": "npx tsx src/session-autostart.ts",
-    "session:autostart:detached": "npx tsx src/session-autostart-detached.ts",
+    "session:autostart:detached": "node --import tsx src/session-autostart-detached.ts",
     "checkpoint:create": "npx tsx src/checkpoint-manager.ts create",
     "checkpoint:list": "npx tsx src/checkpoint-manager.ts list",
     "checkpoint:verify": "npx tsx src/checkpoint-manager.ts verify",
