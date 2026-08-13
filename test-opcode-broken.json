@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "compaction": {
+    "auto": false,
+    "prune": false
+  },
+  "tools": {
+    "bash": false,
+    "readFile": false,
+    "writeFile": false,
+    "editFile": false
+  },
+  "model": "invalid-model/unknown"
+}

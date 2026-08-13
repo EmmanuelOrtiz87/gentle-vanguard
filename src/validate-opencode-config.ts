@@ -29,6 +29,8 @@ const VALID_PROPS = new Set([
   'mcp',
   'mode',
   'model',
+  'name',           // OpenCode no lo reconoce pero permite
+  'description',    // OpenCode no lo reconoce pero permite
   'permission',
   'plugin',
   'provider',
@@ -46,47 +48,158 @@ const VALID_PROPS = new Set([
   'watcher',
 ]);
 
-// Additional structural validation rules
-function validateAgents(agents: any): string[] {
-  const errors: string[] = [];
+  // Additional structural validation rules
+  function validateAgents(agents: any): string[] {
+    const errors: string[] = [];
 
-  if (!agents || typeof agents !== 'object') {
-    errors.push('Invalid agents structure');
+    if (!agents || typeof agents !== 'object') {
+      errors.push('Invalid agents structure');
+      return errors;
+    }
+
+    // Check for proper agent structure
+    for (const [agentName, agentConfig] of Object.entries(agents)) {
+      if (typeof agentConfig !== 'object' || agentConfig === null) {
+        errors.push(`Agent ${agentName} has invalid configuration structure`);
+        continue;
+      }
+
+      // Required properties for each agent
+      const requiredProps = ['mode', 'model'];
+      for (const prop of requiredProps) {
+        if (!(prop in agentConfig)) {
+          errors.push(`Agent ${agentName} missing required property: ${prop}`);
+        }
+      }
+
+      // Validate agent modes
+      if ('mode' in agentConfig) {
+        const validModes = ['primary', 'subagent'];
+        const modeValue = (agentConfig as Record<string, unknown>).mode;
+        if (typeof modeValue === 'string' && !validModes.includes(modeValue)) {
+          errors.push(`Agent ${agentName} has invalid mode: ${modeValue}`);
+        }
+      }
+
+      // Validate steps if present
+      if ('steps' in agentConfig && typeof agentConfig.steps !== 'number') {
+        errors.push(`Agent ${agentName} steps must be a number`);
+      }
+    }
+
     return errors;
   }
 
-  // Check for proper agent structure
-  for (const [agentName, agentConfig] of Object.entries(agents)) {
-    if (typeof agentConfig !== 'object' || agentConfig === null) {
-      errors.push(`Agent ${agentName} has invalid configuration structure`);
-      continue;
+  // Validate stack-critical configurations
+  function validateStackCritical(config: Record<string, unknown>): string[] {
+    const errors: string[] = [];
+    
+    // Check if we have a centralized OR agent-based configuration
+    const hasCentralizedConfig = 'compaction' in config || 'model' in config || 'tools' in config;
+    const hasAgentConfig = 'agent' in config && config.agent && typeof config.agent === 'object';
+    
+    if (!hasCentralizedConfig && !hasAgentConfig) {
+      errors.push('CRITICAL: No valid OpenCode configuration found - missing both centralized and agent configs');
+      return errors;
     }
 
-    // Required properties for each agent
-    const requiredProps = ['mode', 'model'];
-    for (const prop of requiredProps) {
-      if (!(prop in agentConfig)) {
-        errors.push(`Agent ${agentName} missing required property: ${prop}`);
+    // 1. Validate centralized configurations if present
+    if ('compaction' in config) {
+      if (config.compaction && typeof config.compaction === 'object') {
+        const compaction = config.compaction as Record<string, unknown>;
+        if (compaction.auto !== true) {
+          errors.push('WARN: compaction.auto should be true for token optimization');
+        }
+        // keep.tokens is optional in latest OpenCode but recommended
+      }
+    } else if (hasAgentConfig) {
+      // Check if any agent has proper compaction settings
+      errors.push('INFO: Centralized compaction missing, using agent-level compaction');
+    }
+
+    // 2. Ensure model is set somewhere
+    if (!('model' in config)) {
+      // Check if any agent has model configured
+      if (hasAgentConfig) {
+        const agents = config.agent as Record<string, unknown>;
+        let hasModel = false;
+        for (const [_, agentConfig] of Object.entries(agents)) {
+          if (agentConfig && typeof agentConfig === 'object') {
+            const agent = agentConfig as Record<string, unknown>;
+            if ('model' in agent) {
+              hasModel = true;
+              break;
+            }
+          }
+        }
+        if (!hasModel) {
+          errors.push('CRITICAL: No model configured in any agent');
+        }
+      } else {
+        errors.push('CRITICAL: model property missing - required for stack operation');
       }
     }
 
-    // Validate agent modes
-    if ('mode' in agentConfig) {
-      const validModes = ['primary', 'subagent'];
-      const modeValue = (agentConfig as Record<string, unknown>).mode;
-      if (typeof modeValue === 'string' && !validModes.includes(modeValue)) {
-        errors.push(`Agent ${agentName} has invalid mode: ${modeValue}`);
+    // 3. Ensure tools are enabled for automation
+    if ('tools' in config && config.tools && typeof config.tools === 'object') {
+      const tools = config.tools as Record<string, unknown>;
+      // Verify essential tools are enabled for Gabriel's workflow
+      const essentialTools = ['bash', 'readFile', 'writeFile', 'editFile', 'listFiles'];
+      for (const tool of essentialTools) {
+        if (typeof tools[tool] !== 'boolean') {
+          errors.push(`WARN: tools.${tool} should be explicitly set (true/false)`);
+        } else if (tools[tool] !== true) {
+          errors.push(`CRITICAL: tools.${tool} must be true for Gabriel's automation pipeline`);
+        }
+      }
+    } else if (hasAgentConfig) {
+      // Agent-based tools configuration may be in permission blocks
+      errors.push('INFO: Centralized tools config missing, using agent-level permissions');
+    }
+
+    // 4. Check for critical Gabriel-specific configurations
+    if (hasAgentConfig) {
+      const agents = config.agent as Record<string, unknown>;
+      
+      // Must have orchestrator agent
+      if (!('orchestrator' in agents)) {
+        errors.push('CRITICAL: orchestrator agent missing - required for Gentle-Vanguard stack');
+      } else {
+        const orchestrator = agents.orchestrator as Record<string, unknown>;
+        
+        // Check orchestrator has minimum required properties
+        if (!('model' in orchestrator)) {
+          errors.push('CRITICAL: orchestrator.model missing');
+        }
+        if (!('steps' in orchestrator) || typeof orchestrator.steps !== 'number') {
+          errors.push('CRITICAL: orchestrator.steps missing or invalid');
+        }
+        if (!('mode' in orchestrator) || orchestrator.mode !== 'primary') {
+          errors.push('CRITICAL: orchestrator must have mode:primary');
+        }
+      }
+      
+      // Must have key subagents for SDD workflow
+      const requiredSubagents = ['sdd-explore', 'sdd-design', 'sdd-apply', 'sdd-verify'];
+      for (const agentName of requiredSubagents) {
+        if (!(agentName in agents)) {
+          errors.push(`WARN: ${agentName} missing - SDD workflow incomplete`);
+        }
       }
     }
 
-    // Validate steps if present
-    if ('steps' in agentConfig && typeof agentConfig.steps !== 'number') {
-      errors.push(`Agent ${agentName} steps must be a number`);
+    // 5. Check watcher configuration for performance
+    if ('watcher' in config) {
+      if (config.watcher && typeof config.watcher === 'object') {
+        const watcher = config.watcher as Record<string, unknown>;
+        if (!('ignore' in watcher) || !Array.isArray(watcher.ignore)) {
+          errors.push('WARN: watcher.ignore missing - performance may be impacted');
+        }
+      }
     }
+
+    return errors;
   }
-
-  return errors;
-}
 
 function validateMCP(mcp: any): string[] {
   const errors: string[] = [];
@@ -226,35 +339,76 @@ function main(): void {
     }
   }
 
+  // Validate stack-critical configurations
+  const stackErrors = validateStackCritical(config);
+  errors.push(...stackErrors);
+  if (stackErrors.length > 0) {
+    console.log('\n🚨 STACK-CRITICAL VALIDATION ERRORS 🚨');
+    console.log('The following issues would break Gentle-Vanguard stack operation:');
+    for (const error of stackErrors) {
+      console.log(`  - ${error}`);
+    }
+    console.log('\n⚠️  DO NOT commit these changes - they will break the stack!');
+  }
+
   if (errors.length > 0) {
     if (fix) {
       console.log('Attempting to fix configuration...');
 
-      // Basic cleanup: remove lines with unknown properties
-      const lines = raw.split('\n');
-      const filtered = lines.filter((line) => {
-        const trimmed = line.trim();
-        return !unknown.some((u) => trimmed.startsWith(`"${u}"`));
-      });
+      // Only fix unknown properties, NOT stack-critical errors
+      if (unknown.length > 0 && stackErrors.length === 0) {
+        // Basic cleanup: remove lines with unknown properties
+        const lines = raw.split('\n');
+        const filtered = lines.filter((line) => {
+          const trimmed = line.trim();
+          return !unknown.some((u) => trimmed.startsWith(`"${u}"`));
+        });
 
-      // Only apply fix if there are actually unknown properties to remove
-      if (unknown.length > 0) {
         writeFileSync(configPath, filtered.join('\n'), 'utf-8');
         console.log(`FIXED: Removed unknown properties from ${configPath}`);
         console.log('Verification required - please review the changes carefully.');
       } else {
-        console.log('No fixable issues found.');
+        if (stackErrors.length > 0) {
+          console.log('🚨 CANNOT AUTO-FIX: Stack-critical errors detected');
+          console.log('   These issues require manual review:');
+          for (const error of stackErrors.filter(e => e.startsWith('CRITICAL:'))) {
+            console.log(`   ${error}`);
+          }
+        } else {
+          console.log('No fixable issues found.');
+        }
       }
     } else {
-      console.log('Configuration validation failed. Please fix the issues and try again.');
+      console.log('\n🚨 Configuration validation incomplete. Stack may break.');
+      console.log('   Fix issues before committing to prevent operational failures.');
     }
 
     process.exit(1);
   } else {
-    console.log(
-      'PASS: opencode.json contiene solo propiedades válidas y tiene estructura correcta',
-    );
-    process.exit(0);
+    // Check for stack-critical configurations even if no errors
+    const stackErrors = validateStackCritical(config);
+    const criticalErrors = stackErrors.filter(e => e.startsWith('CRITICAL:'));
+    
+    if (criticalErrors.length > 0) {
+      console.log('\n🚨 STACK-CRITICAL VALIDATION ERRORS (structure ok, but critical config missing) 🚨');
+      for (const error of criticalErrors) {
+        console.log(`  - ${error}`);
+      }
+      console.log('\n⚠️  Stack will not operate correctly without these configurations.');
+      process.exit(1);
+    } else if (stackErrors.length > 0) {
+      console.log('\n⚠️  Stack warnings (functionality may be suboptimal):');
+      for (const error of stackErrors) {
+        console.log(`  - ${error}`);
+      }
+      console.log('PASS: opencode.json contiene solo propiedades válidas y tiene estructura correcta');
+      process.exit(0);
+    } else {
+      console.log(
+        '✅ PASS: opencode.json es válido para OpenCode y contiene todas las configuraciones críticas para Gentle-Vanguard',
+      );
+      process.exit(0);
+    }
   }
 }
 

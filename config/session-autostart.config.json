@@ -360,8 +360,10 @@
         "enabled": true,
         "script": "src/validate-opencode-config.ts",
         "args": "--config opencode.json",
-        "required": false,
-        "description": "Valida que opencode.json no tenga props no reconocidas por OpenCode (previene crash al iniciar) (TS)"
+        "required": true,
+        "description": "Valida que opencode.json tenga configuraciones críticas para Gentle-Vanguard (previene crash y protege stack) (TS)",
+        "phase": 1,
+        "skipOnFailure": false
       },
       {
         "id": "validate-tool-configs",
