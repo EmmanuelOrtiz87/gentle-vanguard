@@ -1,7 +1,7 @@
 # Reporte Final de Salud del Stack — Gentle-Vanguard
 
 **Fecha:** 2026-08-12 | **Sesión:** session-20260812T0442 | **Branch:** develop
-**Commits:** `c4ceac7a` (fixes código) + `e968e47b` (docs + embeddings) + `2320ace0` (watchtower autoheal) + `192972f5` (66 refs PS1→TS)
+**Commits:** `c4ceac7a` + `e968e47b` + `2320ace0` + `192972f5` + `1fc0cc51` (perf autostart wrapper) + `bbd26033` (perf dedupe cache) + `f02efb65` (417 refs obsoletas) + `677e0b24` (OpenChamber + cache + compression)
 
 ---
 
@@ -63,7 +63,21 @@
 ### 2.7 Refs docs secundarias corregidas (lote automático verificado)
 
 - **66 refs `scripts/*.ps1` → `src/*.ts`** corregidas en 33 archivos MD (41 rutas únicas, todos los targets verificados en filesystem) — commit `192972f5`.
-- **Deuda restante medida con escaneo real:** 238 refs PS1 sin equivalente TS + 105 refs `src/*.ts` inexistentes (documentadas, no silenciosas).
+- **417 refs obsoletas marcadas** con `<!-- REF-OBSOLETA -->` en 120 docs secundarios (refs PS1 sin equivalente TS + `src/*.ts` inexistentes) — commit `f02efb65`. Deuda ahora explícita y greppable.
+
+### 2.8 Rendimiento del autostart restaurado (219s → 0.41s)
+
+- **Causa raíz:** `npm run` → `npx.cmd` (wrapper batch Windows) espera EOF de todos los procesos del árbol, ignorando `child.unref()`. El pipeline en sí siempre terminó en ~40s.
+- **Fix `1fc0cc51`:** `session:autostart:detached` usa `node --import tsx` directo → **0.41s** (verificado).
+- **Fix `bbd26033`:** dedupe con UNA consulta PowerShell cacheada (antes 1 llamada por lazy step = ~75s extra) + `MAX_LAZY_CONCURRENCY` 5→2 → **pipeline síncrono 101s → 28.5s**, 0 fallos, 0 duplicados.
+
+### 2.9 Integración OpenChamber + Response Cache (`677e0b24`)
+
+- `src/integrations/openchamber-bridge.ts`: `GentleVanguardBridge` (init/orchestrate) — integración nativa con OpenChamber.
+- `src/core/cache-hook-system.ts` + `orchestrator-cache-plugin.ts` + `orchestrator-cache-wrapper.ts`: ResponseCache SQLite-backed (get/set/stats/clear).
+- `config/output-compression.json`: perfil lite corregido (85% efficiency, antes 109.8% inflado) — ahorro 40-70% tokens.
+- `opencode.json`: steps adaptativos por agente (6→30-52, alineado con adaptive-steps).
+- Verificado: typecheck ✅ lint ✅ watchtower 89/89 ✅.
 
 ---
 
