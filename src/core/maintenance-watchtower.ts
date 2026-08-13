@@ -341,6 +341,10 @@ async function checkCodeGraph() {
     }
   }
 
+  // CodeGraph runs as a stdio MCP server (`codegraph serve --mcp`), so it does
+  // NOT open a TCP port. The port probe is kept only as an optional secondary
+  // signal for non-stdio deployments; the authoritative liveness signals are
+  // the PID file and the process-table scan.
   const portOpen = await testPort(CODEGRAPH_PORT);
   const procRunning = isCodeGraphProcessRunning();
 
@@ -1495,8 +1499,35 @@ async function autoHeal() {
       });
       child.unref();
       // Give the daemon time to boot (npx+tsx resolution + server start).
-      await new Promise((resolve) => setTimeout(resolve, 6000));
-      const up = isCodeGraphProcessRunning() || (await testPort(CODEGRAPH_PORT));
+      // The stdio MCP server does NOT open a TCP port, so liveness must be
+      // determined by the process table and the PID file written by the
+      // daemon script. A single 6s probe is racy (spawn + npx+tsx resolution
+      // can exceed it), so poll with retries up to ~20s.
+      let up = false;
+      for (let attempt = 0; attempt < 5 && !up; attempt++) {
+        await new Promise((resolve) => setTimeout(resolve, 4000));
+        up = isCodeGraphProcessRunning();
+        if (!up) {
+          // The daemon script writes the real server PID; trust it as a
+          // secondary signal even if the process-table scan is still racing.
+          const pidFile = join(RUNTIME_DIR, 'codegraph-mcp-server.pid');
+          if (fileExists(pidFile)) {
+            try {
+              const pid = parseInt(readFileSync(pidFile, 'utf-8').trim(), 10);
+              if (!isNaN(pid)) {
+                try {
+                  process.kill(pid, 0);
+                  up = true;
+                } catch {
+                  /* PID not alive yet */
+                }
+              }
+            } catch {
+              /* unreadable PID file */
+            }
+          }
+        }
+      }
       if (up) {
         addResult('codegraph', 'autoheal', 'PASS', `Restarted (PID ${child.pid})`, 'ok');
         healed++;
@@ -1505,7 +1536,7 @@ async function autoHeal() {
           'codegraph',
           'autoheal',
           'FAIL',
-          'Restart failed - no server process detected',
+          'Restart failed - no server process detected after 20s',
           'manual',
           true,
         );
