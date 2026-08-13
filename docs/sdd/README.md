@@ -57,7 +57,7 @@ Valid exemption reasons include:
 - **Trivial changes**: One-line fixes, typo corrections, dependency updates
 
 Exemptions are validated by `scripts/diagnostics/validate-sdd-governance.ps1` in CI. The SDD gate
-(`scripts/hooks/check-sdd-gate.ps1`) enforces this on PRs to `main`/`develop`.
+(`src/check-sdd-gate.ts`) enforces this on PRs to `main`/`develop`.
 
 ## Current Specs
 

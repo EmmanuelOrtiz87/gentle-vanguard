@@ -39,19 +39,19 @@ seguro, extensible, zero-drama.**
 
 | #   | Script                                                              | Tamaño | Prioridad | Estado                                    |
 | --- | ------------------------------------------------------------------- | ------ | --------- | ----------------------------------------- |
-| 1   | `scripts/security/security-orchestrator.ps1`                        | 22 KB  | Alta      | ✅ Done (`src/security/security-orchestrator.ts`)  |
-| 2   | `scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1`        | —      | Alta      | ✅ Done (`src/hybrid-executor.ts`)        |
-| 3   | `scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1`          | —      | Alta      | ✅ Done (`src/aws-delegator.ts`)          |
-| 4   | `scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1`        | —      | Alta      | ✅ Done (`src/azure-delegator.ts`)        |
-| 5   | `scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1`    | —      | Media     | ✅ Done (`src/checkpoint-manager.ts`)     |
-| 6   | `scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1`      | —      | Media     | ✅ Done (`src/snapshot-manager.ts`)       |
-| 7   | `scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1` | —      | Media     | ✅ Done (`src/rollback-orchestrator.ts`)  |
-| 8   | `scripts/security/audit-pipeline.ps1`                               | —      | Media     | ✅ Done (`src/infrastructure/audit-pipeline.ts`)         |
-| 9   | `scripts/utilities/ops/TRACING/tracing-instrument.ps1`              | —      | Media     | ✅ Done (`src/tracing-instrument.ts`)     |
-| 10  | `scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1`        | —      | Media     | ✅ Done (`src/event-sourcing.ts`)         |
-| 11  | `scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1`     | —      | Media     | ✅ Done (`src/saga-orchestrator.ts`)      |
-| 12  | `scripts/utilities/session/session-autostart.ps1`                   | —      | Baja      | ✅ Done (`src/session-autostart.ts`)      |
-| 13  | `scripts/maintenance/maintenance-watchtower.ps1`                    | —      | Baja      | ✅ Done (`src/core/maintenance-watchtower.ts`) |
+| 1   | `src/security/security-orchestrator.ts`                        | 22 KB  | Alta      | ✅ Done (`src/security/security-orchestrator.ts`)  |
+| 2   | `src/hybrid-executor.ts`        | —      | Alta      | ✅ Done (`src/hybrid-executor.ts`)        |
+| 3   | `src/aws-delegator.ts`          | —      | Alta      | ✅ Done (`src/aws-delegator.ts`)          |
+| 4   | `src/azure-delegator.ts`        | —      | Alta      | ✅ Done (`src/azure-delegator.ts`)        |
+| 5   | `src/checkpoint-manager.ts`    | —      | Media     | ✅ Done (`src/checkpoint-manager.ts`)     |
+| 6   | `src/snapshot-manager.ts`      | —      | Media     | ✅ Done (`src/snapshot-manager.ts`)       |
+| 7   | `src/rollback-orchestrator.ts` | —      | Media     | ✅ Done (`src/rollback-orchestrator.ts`)  |
+| 8   | `src/infrastructure/audit-pipeline.ts`                               | —      | Media     | ✅ Done (`src/infrastructure/audit-pipeline.ts`)         |
+| 9   | `src/tracing-instrument.ts`              | —      | Media     | ✅ Done (`src/tracing-instrument.ts`)     |
+| 10  | `src/event-sourcing.ts`        | —      | Media     | ✅ Done (`src/event-sourcing.ts`)         |
+| 11  | `src/saga-orchestrator.ts`     | —      | Media     | ✅ Done (`src/saga-orchestrator.ts`)      |
+| 12  | `src/session-autostart.ts`                   | —      | Baja      | ✅ Done (`src/session-autostart.ts`)      |
+| 13  | `src/core/maintenance-watchtower.ts`                    | —      | Baja      | ✅ Done (`src/core/maintenance-watchtower.ts`) |
 
 ## Backlog — Mejoras Local-First
 

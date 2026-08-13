@@ -53,7 +53,7 @@ manual **Function**:
 
 ### 2. Auto-Norm Enforcer
 
-**File**: `scripts/adaptive/auto-norm-enforcer.ps1` **Trigger**: session-start, session-close,
+**File**: `src/auto-norm-enforcer.ts` **Trigger**: session-start, session-close,
 orchestrator, manual **Function**:
 
 - Validates directory structure (`docs/`, `rules/adaptive/`)

@@ -14,13 +14,13 @@ The autonomous validation system continuously monitors workspace health and conf
 
 ### Cross-Workspace Validation
 
-- **Script**: `scripts/monitoring/cross-workspace-validator.ps1`
+- **Script**: `src/cross-workspace-validator.ts`
 - **Purpose**: Ensures local and gentle-vanguard stay in sync
 - **Run**: `.\cross-workspace-validator.ps1 -Fix`
 
 ### Engram Optimization
 
-- **Script**: `scripts/utilities/optimize-engram-usage.ps1`
+- **Script**: `src/optimize-engram-usage.ts`
 - **Purpose**: Optimizes Engram memory usage
 - **Trigger**: Automatic during session autostart
 

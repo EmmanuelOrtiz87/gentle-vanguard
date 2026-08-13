@@ -14,7 +14,7 @@
 
 | ID     | Título                     | Prioridad | Estado      | Owner          | Resuelto por                                                                       |
 | ------ | -------------------------- | --------- | ----------- | -------------- | ---------------------------------------------------------------------------------- |
-| FF-001 | SDD CI Hardening           | high      | ✅ done     | orchestrator   | `scripts/hooks/check-sdd-gate.ps1` + `.github/workflows/sdd-gate.yml`              |
+| FF-001 | SDD CI Hardening           | high      | ✅ done     | orchestrator   | `src/check-sdd-gate.ts` + `.github/workflows/sdd-gate.yml`              |
 | FF-002 | Process Metrics            | high      | ✅ done     | orchestrator   | `src/telemetry/sdd-process-metrics.ts`                                             |
 | FF-003 | Check Noise Reduction      | medium    | ✅ done     | orchestrator   | `scripts/hooks/hook-advisory-classifier.ps1`                                       |
 | FF-004 | Sync Drift Prevention      | medium    | ✅ done     | orchestrator   | `scripts/utilities/sync-drift-report.ps1`                                          |

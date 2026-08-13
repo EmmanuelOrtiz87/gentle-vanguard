@@ -27,7 +27,7 @@ estandar internacional de gestion de seguridad de la informacion.
 | A.5.14     | Information transfer          | `privacy-gateway.ps1` + `privacy-sanitizer.ps1`                | Redaccion automatica                    |
 | A.5.15     | Access control                | `config/access-control.json` + `secure-auth.ps1`               | ACL enforce                             |
 | A.5.16     | Identity management           | `owner-auth.json` + auth session                               | Identity verification                   |
-| A.5.25     | Assessment of security events | `scripts/security/security-orchestrator.ps1`                   | Event logging + alerting                |
+| A.5.25     | Assessment of security events | `src/security/security-orchestrator.ts`                   | Event logging + alerting                |
 
 ---
 

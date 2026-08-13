@@ -135,8 +135,8 @@ User Session
 
 ## Related Files
 
-- `scripts/utilities/knowledge-base/knowledge-base-manager.ps1`
-- `scripts/utilities/knowledge-base/knowledge-base-sync.ps1`
+- `src/knowledge-base-manager.ts`
+- `src/knowledge-base-sync.ts`
 - `config/knowledge-base-config.json`
 - `docs/knowledge-base/README.md` for the current live documentation entry point.
 - `.archive/docs/stale-guides/knowledge-base-USAGE.md` for the archived legacy usage guide.

@@ -177,7 +177,7 @@ PREREQUISITES.md or any other documentation.
 
 ### 11. `bootstrap-machine.ps1` naming collision
 
-`scripts/gentle-vanguard/bootstrap-machine.ps1` is a **global Gentle-Vanguard installer** (installs
+`src/bootstrap-machine.ts` is a **global Gentle-Vanguard installer** (installs
 Gentle-Vanguard to `~/.gentle-vanguard/`), not a machine bootstrap for prerequisites. This is
 distinct from `src/bootstrap.ts` (workspace bootstrap) and
 `scripts/utilities/install-prerequisites.ps1` (tool installer). The name `bootstrap-machine.ps1` is

@@ -20,7 +20,7 @@ directorio, mostrando nombre, trigger principal, y source. Output en tabla forma
 **Spec**: Generar script TypeScript que valide un archivo JSON contra un schema dado, mostrando
 errores con ruta completa del campo fallido.
 
-**Expected**: `scripts/sia/bench/json-validator.ps1`
+**Expected**: `src/json-validator.ts`
 
 **Success criteria**:
 
@@ -33,7 +33,7 @@ errores con ruta completa del campo fallido.
 **Spec**: Crear función TypeScript que implemente búsqueda semántica simple usando cosine similarity
 sobre embeddings basados en palabras clave (sin dependencias externas).
 
-**Expected**: `scripts/sia/bench/semantic-search.ps1`
+**Expected**: `src/semantic-search.ts`
 
 **Success criteria**:
 

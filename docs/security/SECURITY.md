@@ -50,9 +50,9 @@ This project implements the following security controls:
 | RBAC                  | `config/owner-auth.json` (owner-only operations)                                                  |
 | Secret Vault          | `scripts/security/secret-vault.ps1` — DPAPI-encrypted local vault, rotation, breach response      |
 | Secrets Manager       | `scripts/security/secrets-manager.ps1` (v2.0) — delegates to vault, no plain-text storage         |
-| Security Orchestrator | `scripts/security/security-orchestrator.ps1` — PII sanitization, critical pattern blocking, audit |
-| Privacy Gateway       | `scripts/security/privacy-gateway.ps1` — auto-sanitization of prompts/outputs                     |
-| SIEM Bridge           | `scripts/security/siem-audit-bridge.ps1` — Splunk/ELK/Datadog integration                         |
+| Security Orchestrator | `src/security/security-orchestrator.ts` — PII sanitization, critical pattern blocking, audit |
+| Privacy Gateway       | `src/security/privacy-gateway.ts` — auto-sanitization of prompts/outputs                     |
+| SIEM Bridge           | `src/infrastructure/siem-audit-bridge.ts` — Splunk/ELK/Datadog integration                         |
 | Encryption Manager    | `scripts/security/encryption-manager.ps1` — AES-256 key management                                |
 | Secure Auth           | `scripts/security/secure-auth.ps1` — DPAPI encryption, lockout after 3 attempts                   |
 | Input Validator       | `scripts/security/input-validator.ps1` — type validation, injection prevention                    |

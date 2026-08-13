@@ -28,7 +28,7 @@ y validable en cada fase del ciclo de vida.
 | Sub-caracteristica   | Control Gentle-Vanguard                            | Verification               |
 | -------------------- | -------------------------------------------------- | -------------------------- |
 | Time behaviour       | `config/orchestrator.json#SLOs`                    | Dispatch < 500ms           |
-| Resource utilisation | `scripts/monitoring/cross-workspace-validator.ps1` | Token budget < 30K/session |
+| Resource utilisation | `src/cross-workspace-validator.ts` | Token budget < 30K/session |
 | Capacity             | `config/orchestrator.json#concurrencyLimits`       | Max 3 parallel agents      |
 
 ### 2.3 Compatibility (Compatibilidad)
@@ -84,7 +84,7 @@ y validable en cada fase del ciclo de vida.
 | Sub-caracteristica | Control Gentle-Vanguard                         | Verification         |
 | ------------------ | ----------------------------------------------- | -------------------- |
 | Adaptability       | `config/orchestrator.json#platform`             | Windows/Linux/macOS  |
-| Installability     | `scripts/gentle-vanguard/bootstrap-machine.ps1` | Machine bootstrap    |
+| Installability     | `src/bootstrap-machine.ts` | Machine bootstrap    |
 | Replaceability     | `config/tool-*.json` multi-tool support         | Tool-agnostic design |
 
 ---

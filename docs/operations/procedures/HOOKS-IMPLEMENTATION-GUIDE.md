@@ -26,7 +26,7 @@ This document describes the hooks system implemented in gentle-vanguard.
 
 ### Post-Merge
 
-- **Script**: `scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1`
+- **Script**: `src/post-merge-sync.ts`
 - **Purpose**: Sync after git merge
 - **Trigger**: After git merge
 

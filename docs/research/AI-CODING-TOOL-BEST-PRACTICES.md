@@ -178,7 +178,7 @@ TODO, BUG, decisions, RESULT. Implemented via `pre-compact-hook.ps1`.
 
 ### 3.2 Allowlist Validation (gentle-vanguard pattern)
 
-`scripts/utilities/CONFIG/validate-opencode-config.ps1` uses a strict **allowlist**:
+`src/validate-opencode-config.ts` uses a strict **allowlist**:
 
 ```TypeScript
 $validProps = @(
@@ -590,7 +590,7 @@ Multiple versions in one file using `$id`:
   https://opencode.ai/docs/permissions/
 - OpenCode Schema: `config/opencode.schema.json`
 - Orchestrator Config: `config/orchestrator.json`
-- Validate Script: `scripts/utilities/CONFIG/validate-opencode-config.ps1`
+- Validate Script: `src/validate-opencode-config.ts`
 - JSON Normative: `rules/NORMATIVAS-JSON-CONSTRUCTION.md`
 - Token Standards: `docs/guides/TOKEN-CONTEXT-STANDARDS.md`
 - Efficiency Pack: `docs/supplementary/TOKEN-EFFICIENCY-PACK.md`

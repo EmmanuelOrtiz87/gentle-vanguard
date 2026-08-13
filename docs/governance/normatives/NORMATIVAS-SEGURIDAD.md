@@ -124,8 +124,8 @@ debe cumplir estos controles o documentar desvio aprobado.
 
 **Implementacion:**
 
-- `scripts/security/privacy-gateway.ps1` — 10 patrones de deteccion en `$INJECTION_PATTERNS`
-- `scripts/security/security-orchestrator.ps1` — 5 patrones en `$CRITICAL_PATTERNS`
+- `src/security/privacy-gateway.ts` — 10 patrones de deteccion en `$INJECTION_PATTERNS`
+- `src/security/security-orchestrator.ts` — 5 patrones en `$CRITICAL_PATTERNS`
 - `config/security-privacy.json` — 7 patrones en `privacy.injectionBlock[]`
 - Verificado con tests Pester en `tests/security/security-checks.tests.ps1` (7 tests)
 

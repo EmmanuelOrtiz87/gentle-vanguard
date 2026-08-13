@@ -66,7 +66,7 @@ non-blocking warning in CI (Q2 2026) and blocking gate (Q3 2026).**
 
 Files excluded from coverage measurement (see `tests/coverage-config.json`):
 
-- `scripts/setup-complete.ps1` — one-time machine bootstrap
+- `src/setup-complete.ts` — one-time machine bootstrap
 - `scripts/run-tests-simple.ps1` — test orchestrator (not subject to self-test)
 - `scripts/testing/run-tests.ps1` — legacy test runner
 - `build/**` — build tooling, not runtime code

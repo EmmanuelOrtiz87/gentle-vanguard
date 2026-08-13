@@ -152,7 +152,7 @@ At session end:
 
 ### 7.1 Primary Scripts
 
-- `scripts/utilities/optimize-engram-usage.ps1`: Main optimization script
+- `src/optimize-engram-usage.ts`: Main optimization script
 - `src/pre-compact-hook.ts`: Automatic compaction hook
 - `scripts/utilities/session-autostart.cmd`: Enhanced startup with optimization
 
