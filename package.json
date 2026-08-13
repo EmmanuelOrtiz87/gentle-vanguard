@@ -231,6 +231,7 @@
     "profile:set": "npx tsx src/model-profile-switcher.ts --set",
     "profile:apply": "npx tsx src/model-profile-switcher.ts --set",
     "retrieval:grade": "npx tsx src/retrieval-grader.ts",
+    "scan:secrets": "tsx src/secret-scanner-cli.ts",
     "humanize:analyze": "npx tsx src/humanizer-cli.ts analyze",
     "humanize:transform": "npx tsx src/humanizer-cli.ts transform",
     "humanize:score": "npx tsx src/humanizer-cli.ts score",

@@ -158,10 +158,122 @@ const SKILL_REGISTRY: Record<string, Partial<SkillInfo>> = {
       'Validate the full Gentle-Vanguard stack. Run verification steps for pre-process-input, session pipeline, hooks, and tool detection.',
     triggers: ['validate', 'stack verify', 'verify stack', 'check stack', 'validation'],
   },
+  // === Absorbed skills (2026-08-13) ===
+  'ai-provenance': {
+    description:
+      'Inspect and manage AI provenance marks (invisible Unicode, C2PA/Content Credentials, EXIF/XMP metadata, SynthID-class watermarks). DEFAULT is inspection only; removal is strictly on-demand with explicit user request.',
+    triggers: ['provenance', 'watermark detect', 'c2pa', 'ai content check', 'attribution', 'strip watermark', 'remove ai marks'],
+  },
+  'diagram-design': {
+    description:
+      'Create branded editorial diagrams (architecture, flowchart, sequence, state machine, ER, timeline, swimlane, quadrant, radar, loop, tree, org chart, Venn, pyramid, bar, line, Gantt, scatter, process, medallion, data flow, DP integration, DP security matrix) as standalone HTML/SVG/PNG. Redraw drawio/Mermaid sources.',
+    triggers: ['diagram', 'architecture diagram', 'flowchart', 'sequence diagram', 'mermaid', 'drawio', 'data flow', 'swimlane', 'schematic', 'visual diagram'],
+  },
+  'achieving-cmmc-level-2-compliance': {
+    description: 'Achieve CMMC Level 2 compliance: scoping, asset inventory, 110+ practice mapping, POA&M, assessment readiness.',
+    triggers: ['cmmc', 'cmmc level 2', 'dfars', 'cybersecurity maturity model certification'],
+  },
+  'analyzing-sbom-for-supply-chain-vulnerabilities': {
+    description: 'Analyze SBOMs (SPDX/CycloneDX) for supply-chain vulnerabilities: component inventory, CVE correlation, risk triage.',
+    triggers: ['sbom', 'software bill of materials', 'spdx', 'cyclonedx', 'supply chain vulnerability'],
+  },
+  'auditing-mcp-servers-for-tool-poisoning': {
+    description: 'Audit MCP servers for tool poisoning and prompt injection: tool manifest review, permission boundaries, malicious tool detection.',
+    triggers: ['mcp audit', 'tool poisoning', 'mcp server', 'model context protocol'],
+  },
+  'conducting-api-security-testing': {
+    description: 'Conduct API security testing: auth flaws, BOLA/IDOR, mass assignment, rate limiting, OWASP API Top 10 coverage.',
+    triggers: ['api security', 'api testing', 'bola', 'idor', 'owasp api'],
+  },
+  'conducting-cyber-risk-assessment-with-nist-800-30': {
+    description: 'Conduct cyber risk assessment per NIST SP 800-30: threat identification, vulnerability analysis, likelihood/impact, risk register.',
+    triggers: ['nist 800-30', 'risk assessment', 'cyber risk', 'risk register'],
+  },
+  'continuous-llm-red-teaming-with-promptfoo': {
+    description: 'Continuous LLM red-teaming with promptfoo: automated prompt-injection/jailbreak test suites in CI, regression tracking.',
+    triggers: ['promptfoo', 'llm red team', 'prompt injection test', 'jailbreak test', 'llm regression'],
+  },
+  'defending-llms-with-guardrails': {
+    description: 'Defend LLMs with guardrails: input/output filtering, prompt-injection defense, content moderation, safety policies.',
+    triggers: ['guardrails', 'llm defense', 'prompt injection defense', 'content moderation'],
+  },
+  'detecting-ai-model-prompt-injection-attacks': {
+    description: 'Detect AI model prompt-injection attacks: direct/indirect injection patterns, anomaly detection, response validation.',
+    triggers: ['prompt injection', 'detect prompt injection', 'llm attack detection'],
+  },
+  'detecting-dependency-confusion': {
+    description: 'Detect dependency-confusion attacks: package name squatting, private/public registry conflicts, malicious package triage.',
+    triggers: ['dependency confusion', 'package squatting', 'malicious package', 'registry attack'],
+  },
+  'detecting-indirect-prompt-injection': {
+    description: 'Detect indirect prompt-injection: third-party content (web, docs, email) weaponized against LLM agents.',
+    triggers: ['indirect prompt injection', 'second-order injection', 'rag injection'],
+  },
+  'detecting-supply-chain-attacks-in-ci-cd': {
+    description: 'Detect supply-chain attacks in CI/CD: poisoned pipelines, compromised dependencies, build-time tampering.',
+    triggers: ['supply chain ci', 'pipeline attack', 'build tampering', 'ci/cd security'],
+  },
+  'generating-and-analyzing-sboms': {
+    description: 'Generate and analyze SBOMs: tooling (syft/cyclonedx), formats, vulnerability correlation, compliance evidence.',
+    triggers: ['generate sbom', 'sbom analysis', 'software composition', 'dependency inventory'],
+  },
+  'implementing-devsecops-security-scanning': {
+    description: 'Implement DevSecOps security scanning: SAST/DAST/SCA integration, secret scanning, container scanning, gates in CI.',
+    triggers: ['devsecops', 'security scanning', 'sast', 'dast', 'sca', 'shift left'],
+  },
+  'implementing-gdpr-data-protection-controls': {
+    description: 'Implement GDPR data-protection controls: DPIA, data mapping, consent, DSAR workflows, breach notification.',
+    triggers: ['gdpr', 'data protection', 'dsar', 'dpia', 'consent management'],
+  },
+  'implementing-iso-27001-information-security-management': {
+    description: 'Implement ISO 27001 ISMS: scope, risk treatment, SoA, controls (Annex A), internal audit, certification readiness.',
+    triggers: ['iso 27001', 'isms', 'information security management', 'annex a'],
+  },
+  'implementing-secret-scanning-with-gitleaks': {
+    description: 'Implement secret scanning with gitleaks: config, custom rules, pre-commit/CI integration, false-positive tuning.',
+    triggers: ['gitleaks', 'secret scanning', 'leak detection', 'credential scan'],
+  },
+  'implementing-secrets-scanning-in-ci-cd': {
+    description: 'Implement secrets scanning in CI/CD: tool selection, pipeline gates, remediation workflow, rotation playbook.',
+    triggers: ['secrets ci', 'secret scan pipeline', 'credential rotation', 'leak remediation'],
+  },
+  'performing-api-inventory-and-discovery': {
+    description: 'Perform API inventory and discovery: shadow API detection, endpoint cataloging, version tracking, exposure assessment.',
+    triggers: ['api inventory', 'shadow api', 'api discovery', 'endpoint catalog'],
+  },
+  'performing-nist-csf-maturity-assessment': {
+    description: 'Perform NIST CSF maturity assessment: function/category scoring, gap analysis, prioritized roadmap.',
+    triggers: ['nist csf', 'cybersecurity framework', 'maturity assessment', 'csf gap'],
+  },
+  'red-teaming-llms-with-garak': {
+    description: 'Red-team LLMs with NVIDIA garak: jailbreak, prompt-injection, data-leakage probe suites; hit-rate report triage.',
+    triggers: ['garak', 'llm red team', 'jailbreak probe', 'llm vulnerability scan'],
+  },
+  'securing-agentic-ai-tool-invocation': {
+    description: 'Secure agentic AI tool invocation: tool permissioning, input validation, output verification, MCP/function-call hardening.',
+    triggers: ['agentic ai', 'tool invocation', 'function calling security', 'mcp security'],
+  },
+  'testing-api-security-with-owasp-top-10': {
+    description: 'Test API security against OWASP API Top 10: BOLA, broken auth, excessive data exposure, SSRF, injection.',
+    triggers: ['owasp api top 10', 'api pentest', 'api vulnerability test'],
+  },
+  'testing-for-system-prompt-leakage': {
+    description: 'Test for system-prompt leakage: extraction probes, delimiter attacks, indirect exfiltration of system instructions.',
+    triggers: ['system prompt leak', 'prompt extraction', 'instruction leakage'],
+  },
+  'testing-prompt-injection-in-rag-pipelines': {
+    description: 'Test prompt injection in RAG pipelines: document poisoning, retrieval-time injection, chunk boundary attacks.',
+    triggers: ['rag injection', 'rag security', 'document poisoning', 'retrieval attack'],
+  },
+  'testing-websocket-api-security': {
+    description: 'Test WebSocket API security: origin validation, auth handshake, message injection, DoS via connection abuse.',
+    triggers: ['websocket security', 'ws api test', 'websocket pentest'],
+  },
 };
 
 function parseExistingSkill(content: string): { frontmatter: string | null; body: string } {
-  const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+  // CRLF-tolerant: accept both \n and \r\n line endings
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
   if (match) {
     return { frontmatter: match[1], body: match[2].trim() };
   }
@@ -197,7 +309,7 @@ async function processSkill(skillDir: string): Promise<boolean> {
   const { frontmatter: existingFrontmatter, body } = parseExistingSkill(content);
 
   // Check if already has proper frontmatter with triggers
-  if (existingFrontmatter && content.match(/triggers:\s*\n[\s\S]*-/)) {
+  if (existingFrontmatter && content.match(/triggers:\s*\r?\n[\s\S]*-/)) {
     console.log(`✅ ${skillName}: Already has triggers in frontmatter`);
     return true;
   }

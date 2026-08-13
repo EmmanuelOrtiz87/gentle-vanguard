@@ -178,6 +178,91 @@ Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica
 - `src/dashboard-stop.ts` mata watchdog primero para evitar restart loops
 - Frontend HTTP polling tolera caídas temporales del WS server
 
+---
+
+## absorbed-knowledge
+
+Conocimiento externo absorbido como nativo al stack (ADR-010, 2026-08-13). Ver
+`docs/adr/ADR-010-knowledge-absorption-external-repos.md`.
+
+### Secret Scanner nativo (`src/secret-scanner.ts`)
+
+Detector de secrets/API keys en TS puro, reimplementado (sin copiar código GPL-3.0 de cariddi):
+
+```bash
+npm run scan:secrets -- --scan <path|url>      # archivo, directorio o URL
+npm run scan:secrets -- --dir <dir>            # escaneo recursivo
+npm run scan:secrets -- --scan . --json        # output JSON
+```
+
+- **80 patrones**: AWS, GCP, Azure, GitHub, GitLab, OpenAI, Anthropic, Slack, Stripe, JWT,
+  private keys, y más (categorías: aws/gcp/azure/github/gitlab/llm/slack/payment/cloud/generic/private-key)
+- Entropy Shannon opcional (`--entropy`, ≥3.5 bits/char) para filtrar falsos positivos
+- Redacción automática por defecto (`--redact` / `--no-redact`)
+- Exit codes: 0 = sin secrets, 1 = secrets encontrados, 2 = error
+- Config en `config/secret-scanner.json`; tests en `tests/unit/secret-scanner.test.ts`
+
+#### Integraciones del scanner en el stack
+
+- **Pre-commit**: `.lefthook.yml` comando `secret-scanner` sobre los staged files (todos los tipos
+  relevantes: ts/js/json/yml/yaml/md/env/toml/xml/py/ps1/sh/sql). Complementa a trufflehog y
+  secretlint. Verificar con `npx lefthook validate`.
+- **Watchtower**: componente `secret-scanner` en `src/core/maintenance-watchtower.ts`
+  (`checkSecretScanner` — valida módulo, CLI, config y tests). Se ejecuta con `-Action health`
+  (60+ checks, 11+ componentes). Verificado 94/94 PASS.
+- **Routing de subagentes**: `config/subagent-mapping.json` registra las skills absorbidas por rol:
+  - **DEV**: DevSecOps (devsecops-scanning, secret-scanning gitleaks, secrets CI/CD, SBOM,
+    dependency-confusion, supply-chain CI/CD)
+  - **GOV**: compliance (NIST 800-30, NIST CSF, ISO 27001, GDPR, CMMC), MCP tool-poisoning,
+    ai-provenance
+  - **QA**: API security (OWASP API Top 10, WebSocket, inventory), prompt leakage, RAG injection
+- **`src/recommend-agent.ts`**: keywords de cibersec añadidos a `matchDomain` (sbom, prompt
+  injection, garak, promptfoo, guardrails, nist, iso 27001, cmmc, gitleaks, api security, owasp,
+  mcp server, tool poisoning, etc.) → rutean a dominio `security` → `gov-agent`.
+
+### Skills de ciberseguridad absorbidas (25, Apache-2.0)
+
+En `.opencode/skills/` nivel 1, con frontmatter rico (mapeos MITRE ATT&CK/ATLAS, NIST CSF/AI RMF)
++ triggers. Dominios:
+
+- **AI/LLM Security**: `red-teaming-llms-with-garak`, `continuous-llm-red-teaming-with-promptfoo`,
+  `defending-llms-with-guardrails`, `detecting-ai-model-prompt-injection-attacks`,
+  `detecting-indirect-prompt-injection`, `testing-prompt-injection-in-rag-pipelines`,
+  `testing-for-system-prompt-leakage`, `securing-agentic-ai-tool-invocation`,
+  `auditing-mcp-servers-for-tool-poisoning`
+- **DevSecOps / Supply Chain**: `implementing-devsecops-security-scanning`,
+  `implementing-secret-scanning-with-gitleaks`, `implementing-secrets-scanning-in-ci-cd`,
+  `generating-and-analyzing-sboms`, `analyzing-sbom-for-supply-chain-vulnerabilities`,
+  `detecting-supply-chain-attacks-in-ci-cd`, `detecting-dependency-confusion`
+- **API Security**: `conducting-api-security-testing`, `testing-api-security-with-owasp-top-10`,
+  `testing-websocket-api-security`, `performing-api-inventory-and-discovery`
+- **Compliance**: `conducting-cyber-risk-assessment-with-nist-800-30`,
+  `performing-nist-csf-maturity-assessment`, `implementing-iso-27001-information-security-management`,
+  `implementing-gdpr-data-protection-controls`, `achieving-cmmc-level-2-compliance`
+
+⚠️ Técnicas ofensivas (red-team): uso restringido a entornos autorizados (notice legal en cada skill).
+
+### diagram-design (MIT, v2.3)
+
+`.opencode/skills/diagram-design/` — 27 tipos de diagramas editoriales HTML/SVG self-contained
+(arquitectura, flowchart, sequence, ER, timeline, swimlane, quadrant, radar, loop, Gantt, data-flow…).
+Redibuja fuentes .drawio/Mermaid. Sin build step; abre directo en navegador. Usar para ADRs,
+reportes y documentación de arquitectura en lugar de "Mermaid-slop".
+
+### ai-provenance — política dual (MIT)
+
+`.opencode/skills/ai-provenance/` — gestión de marcas de proveniencia AI (C2PA, Unicode, SynthID,
+EXIF/XMP) en texto y archivos.
+
+| Modo | Comportamiento | Activación |
+| --- | --- | --- |
+| **INSPECCIÓN** (default) | Detectar/reportar/verificar marcas | Automática, comportamiento normal |
+| **REMOCIÓN** (on-demand) | Limpiar C2PA/Unicode/metadatos | **SOLO** solicitud explícita e inequívoca del usuario sobre contenido propio |
+
+**Regla de oro**: el stack NUNCA remueve marcas de proveniencia en comportamiento normal. La
+remoción es una capacidad de emergencia/privacidad que requiere petición explícita del usuario.
+Ante dudas, inspeccionar y reportar; no limpiar.
+
 ## v4.0-infrastructure
 
 Infraestructura de tracing, state persistence, auditoría, event sourcing, cloud connectors y health

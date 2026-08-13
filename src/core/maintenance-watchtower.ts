@@ -815,6 +815,36 @@ async function checkSecurity() {
   }
 }
 
+// ─── Component: Secret Scanner (absorbed knowledge, ADR-010) ─────────────────
+
+async function checkSecretScanner() {
+  if (!quiet) console.log('  [Secret Scanner] Checking...');
+
+  const scannerSrc = join(ROOT, 'src', 'secret-scanner.ts');
+  const scannerCli = join(ROOT, 'src', 'secret-scanner-cli.ts');
+  const scannerCfg = join(ROOT, 'config', 'secret-scanner.json');
+  const scannerTest = join(ROOT, 'tests', 'unit', 'secret-scanner.test.ts');
+
+  payloadFileOk('secret-scanner', 'module (src/secret-scanner.ts)', scannerSrc, 'manual', true);
+  payloadFileOk('secret-scanner', 'CLI (src/secret-scanner-cli.ts)', scannerCli, 'manual', true);
+  payloadFileOk('secret-scanner', 'config (config/secret-scanner.json)', scannerCfg, 'manual', true);
+  payloadFileOk('secret-scanner', 'tests (tests/unit/secret-scanner.test.ts)', scannerTest, 'manual', true);
+
+  // Verify pattern catalog size from config (patterns: builtin|all)
+  if (fileExists(scannerCfg)) {
+    try {
+      const cfg = readJson(scannerCfg) as { patterns?: string };
+      if (cfg.patterns === 'builtin' || cfg.patterns === 'all') {
+        addResult('secret-scanner', 'patterns mode', 'PASS', `patterns=${cfg.patterns}`, 'ok');
+      } else {
+        addResult('secret-scanner', 'patterns mode', 'WARN', `Unexpected patterns value: ${String(cfg.patterns)}`, 'manual');
+      }
+    } catch {
+      addResult('secret-scanner', 'patterns mode', 'FAIL', 'Invalid config JSON', 'manual');
+    }
+  }
+}
+
 // ─── Component: Cloud Connectors ────────────────────────────────────────────
 // NOTE: Cloud connectors deprecated - stack operates in local-only mode
 // This check now verifies local execution mode without cloud dependencies
@@ -1646,6 +1676,7 @@ async function runAllChecks() {
     checkConfigs,
     checkToolConfigs,
     checkSecurity,
+    checkSecretScanner,
     checkCloudConnectors,
     checkTracing,
     checkStatePersistence,

@@ -41,6 +41,9 @@ pre-commit:
     secretlint:
       glob: '*.{json,yml,yaml,md,env,toml,xml}'
       run: npx secretlint --secretlintrc .secretlintrc.json {staged_files} 2>&1
+    secret-scanner:
+      glob: '*.{ts,js,json,yml,yaml,md,env,toml,xml,py,ps1,sh,sql}'
+      run: npx tsx src/secret-scanner-cli.ts --scan {staged_files} --redact
 
 pre-push:
   commands:

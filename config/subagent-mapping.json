@@ -56,7 +56,13 @@
         "angular-spa-skill",
         "react-19-skill",
         "typescript-skill",
-        "security-skill"
+        "security-skill",
+        "implementing-devsecops-security-scanning",
+        "implementing-secret-scanning-with-gitleaks",
+        "implementing-secrets-scanning-in-ci-cd",
+        "generating-and-analyzing-sboms",
+        "detecting-dependency-confusion",
+        "detecting-supply-chain-attacks-in-ci-cd"
       ],
       "triggers": [
         "implement",
@@ -75,18 +81,24 @@
       ],
       "primary_subagent": "sdd-verify",
       "fallback": "general",
-      "skills": [
-        "testing-skill",
-        "playwright"
-      ],
-      "triggers": [
-        "test",
-        "testing",
-        "qa",
-        "validation",
-        "quality",
-        "judgment day"
-      ]
+  "skills": [
+    "testing-skill",
+    "playwright",
+    "conducting-api-security-testing",
+    "testing-api-security-with-owasp-top-10",
+    "testing-websocket-api-security",
+    "performing-api-inventory-and-discovery",
+    "testing-for-system-prompt-leakage",
+    "testing-prompt-injection-in-rag-pipelines"
+  ],
+  "triggers": [
+    "test",
+    "testing",
+    "qa",
+    "validation",
+    "quality",
+    "judgment day"
+  ]
     },
     "OPS": {
       "name": "DevOps",
@@ -138,17 +150,24 @@
       ],
       "primary_subagent": "gov-agent",
       "fallback": "general",
-      "skills": [
-        "security-skill",
-        "documentation-governance"
-      ],
-      "triggers": [
-        "governance",
-        "compliance",
-        "audit",
-        "security audit",
-        "review"
-      ]
+  "skills": [
+    "security-skill",
+    "documentation-governance",
+    "conducting-cyber-risk-assessment-with-nist-800-30",
+    "performing-nist-csf-maturity-assessment",
+    "implementing-iso-27001-information-security-management",
+    "implementing-gdpr-data-protection-controls",
+    "achieving-cmmc-level-2-compliance",
+    "auditing-mcp-servers-for-tool-poisoning",
+    "ai-provenance"
+  ],
+  "triggers": [
+    "governance",
+    "compliance",
+    "audit",
+    "security audit",
+    "review"
+  ]
     },
     "DOC": {
       "name": "Documentation",

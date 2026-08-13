@@ -161,6 +161,41 @@ function matchDomain(task: string, domainHint: string): string {
     ['iteration', 'sia'],
     ['score', 'sia'],
     ['refine', 'sia'],
+    // ── Absorbed cybersecurity domains (ADR-010, high specificity) ───────────
+    // Compliance & risk frameworks → governance
+    ['nist', 'governance'],
+    ['iso 27001', 'governance'],
+    ['cmmc', 'governance'],
+    ['cyber risk', 'governance'],
+    ['risk assessment', 'governance'],
+    ['mitre', 'governance'],
+    ['c2pa', 'governance'],
+    ['provenance', 'governance'],
+    // AI/LLM security → security
+    ['prompt injection', 'security'],
+    ['llm security', 'security'],
+    ['jailbreak', 'security'],
+    ['garak', 'security'],
+    ['promptfoo', 'security'],
+    ['guardrail', 'security'],
+    ['rag injection', 'security'],
+    ['system prompt', 'security'],
+    ['mcp server', 'security'],
+    ['tool poisoning', 'security'],
+    ['agentic', 'security'],
+    // Supply chain / SBOM / secrets → security
+    ['sbom', 'security'],
+    ['supply chain', 'security'],
+    ['dependency confusion', 'security'],
+    ['secret', 'security'],
+    ['secrets', 'security'],
+    ['gitleaks', 'security'],
+    ['api key', 'security'],
+    // API security → security (before generic 'secur')
+    ['api security', 'security'],
+    ['owasp', 'security'],
+    ['websocket', 'security'],
+    ['api inventory', 'security'],
     // ── Engineering domains (generic verbs, lower specificity) ──────────────
     // Engineering quality (sdd-apply) — BEFORE 'test' so "debug the failing
     // test" routes to code-apply, not testing.
