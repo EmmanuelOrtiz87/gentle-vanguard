@@ -138,12 +138,12 @@ Operational requirements:
 
 1. Critical intents (session start/close, SDD start for new project/component, PR actions) must have
    trigger coverage in all three languages in `config/auto-delegation.json#keywordMappings`.
-2. The routing logic itself (`pre-process-input.ps1`) uses English triggers as PRIMARY detection.
+2. The routing logic itself (`src/pre-process-input.ts`) uses English triggers as PRIMARY detection.
    Multilingual patterns are SECONDARY — they map to the same English-based routing decisions.
 3. Regressions are blocked by automated matrix validation in
    `tests/e2e/routing-language-matrix.json` executed by
-   `scripts/utilities/routing-quality-eval.ps1`.
-4. `src/agent-verify.ts` must fail if multilingual routing matrix has mismatches.
+   `scripts/utilities/routing-quality-eval.ps1` <!-- REF-OBSOLETA: routing-quality-eval.ps1 eliminado en migración PS1→TS; sin equivalente TS en src/ -->.
+4. `src/agent-verify.ts` <!-- REF-OBSOLETA: src/agent-verify.ts no existe → ver src/stack-compliance.ts / src/lefthook-verify.ts --> must fail if multilingual routing matrix has mismatches.
 5. No confidence threshold gates SDD flow — if the skill matches `sdd-lifecycle` and the input
    contains a development/feature intent keyword (in any supported language), PLAN_MODE_REQUIRED is
    triggered unconditionally.
@@ -180,20 +180,20 @@ Do **NOT** invent skill paths or fake tool calls.
 
 ## 8. Session Lifecycle
 
-1. **Pre**: Run `pre-process-input.ps1` with first user message — MUST be before any response
+1. **Pre**: Run `src/pre-process-input.ts` with first user message — MUST be before any response
 2. **Start**: Run `npx tsx src/session-autostart.ts` (TypeScript pipeline, 54 steps, idempotent)
 3. **Track**: Session ID pattern `session-YYYY-MM-DD-XX`, project `workspace_gentle_vanguard`
 4. **Analyze**: Read `scripts/.session/startup-summary.json` — report peak hour and warnings to user
-5. **Verify**: Run `agent-verify.ps1` to validate workspace integrity (SHOULD)
-6. **End**: Run `src/pre-close-validator.ts` before closing; save key decisions to engram
+5. **Verify**: Run `agent-verify.ps1` <!-- REF-OBSOLETA: agent-verify.ps1 eliminado en migración PS1→TS; sin equivalente TS activo (solo protected .ps1.enc) --> to validate workspace integrity (SHOULD)
+6. **End**: Run `src/session-close-validator.ts` <!-- REF-OBSOLETA: pre-close-validator.ts no existe; candidato: src/session-close-validator.ts --> before closing; save key decisions to engram
 
 ---
 
 ## 9. Commit & Hook Standards
 
 - All commits follow Conventional Commits: `type(scope): message`
-- `pre-commit` hook runs `hooks/pre-commit` — validates JSON, privacy rules, script safety
-- Install hooks with `pwsh -File src/install-hooks.ts` (idempotent)
+- `pre-commit` hook runs `src/hooks/pre-commit.ts` <!-- REF-OBSOLETA: hooks/pre-commit eliminado; hooks TS en src/hooks/ --> — validates JSON, privacy rules, script safety
+- Install hooks with `pwsh -File src/install-hooks.ts` <!-- REF-OBSOLETA: src/install-hooks.ts no existe; ver src/hooks/pre-commit.ts y .lefthook.yml --> (idempotent)
 - **Never** use `git commit --no-verify` unless authorized by GOV agent
 
 Valid types: `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`, `test`, `ci`
@@ -205,9 +205,9 @@ Valid types: `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`, `test`, `ci`
 - Default: `simple` + `ultra` response mode
 - Temperature: 0.3 (focused) — overridden per agent profile
 - Max tokens: 4500 (default agent)
-- Context compression: `src/handoff-compress.ts` for agent-to-agent handoffs
+- Context compression: `src/handoff-compress.ts` <!-- REF-OBSOLETA: src/handoff-compress.ts no existe; ver scripts/utilities/utils/UTILITIES/handoff-compress.sh y src/structural-compression.ts --> for agent-to-agent handoffs
 - Pre-compact hook:
-  `src/pre-compact-hook.ts -ProjectName workspace_gentle_vanguard -CompressionRatio 0.90`
+  `src/pre-compact-hook.ts` <!-- REF-OBSOLETA: src/pre-compact-hook.ts no existe (solo pre-compact-hook.ps1.enc en protected/) --> -ProjectName workspace_gentle_vanguard -CompressionRatio 0.90
 
 ---
 
@@ -216,7 +216,7 @@ Valid types: `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`, `test`, `ci`
 Before any release or major commit:
 
 ```TypeScript
-pwsh -File src/validate-configs.ts
+pwsh -File src/validate-configs.ts <!-- REF-OBSOLETA: src/validate-configs.ts no existe; candidato: src/validate-opencode-config.ts / src/json-validator.ts -->
 ```
 
 Checks: JSON syntax, required keys, script paths, root file declarations **FAIL** = block release.
@@ -229,7 +229,7 @@ Checks: JSON syntax, required keys, script paths, root file declarations **FAIL*
 After completing **any significant work**, the agent MUST run:
 
 ```TypeScript
-pwsh -File src/agent-verify.ts
+pwsh -File src/agent-verify.ts <!-- REF-OBSOLETA: src/agent-verify.ts no existe → ver src/stack-compliance.ts / src/lefthook-verify.ts -->
 ```
 
 | Result               | Meaning                   | Action                              |
@@ -284,7 +284,7 @@ canonical truth — memory is only a reminder.
 
 ### 13.4 What proactive evolution looks like
 
-- Detecting that `sync-to-public.ps1` resolved a wrong path → fix path + commit (done 2026-05-15)
+- Detecting that `src/sync-to-public.ts` <!-- REF-OBSOLETA: sync-to-public.ps1 eliminado; migrado a src/sync-to-public.ts --> resolved a wrong path → fix path + commit (done 2026-05-15)
 - Detecting that rebase failed on dirty working tree → add stash + commit (done 2026-05-15)
 - NOT asking the user "should I fix this?" — just fix it and report what was done
 
@@ -305,7 +305,7 @@ non-compliance.
 
 ```
 User input
-  └─ pre-process-input.ps1
+  └─ src/pre-process-input.ts
        ├─ TRIGGER_MATCH_FOUND → skill tool → domain agent
        ├─ PLAN_MODE_REQUIRED  → BA → sdd-lifecycle
        └─ NO_TRIGGER_MATCH    → default agent
@@ -348,7 +348,7 @@ permissions:
 - Windows Scheduled Task uses local host timezone.
 - Convert local time to UTC explicitly before editing workflow cron.
 
-Validation gate: `src/agent-verify.ts` enforces this standard for scheduled workflows.
+Validation gate: `src/agent-verify.ts` <!-- REF-OBSOLETA: src/agent-verify.ts no existe → ver src/stack-compliance.ts --> enforces this standard for scheduled workflows.
 
 ---
 
@@ -445,7 +445,7 @@ gv secret audit-report --type [access|rotation|violations]
 gv secret breach-response --compromised-secret API_TOKEN --reason "leaked in logs"
 ```
 
-**Linked Policies**: `rules/NORMATIVAS-GDPR.md` (user data), `rules/NORMATIVAS-SOC2.md` (enterprise
+**Linked Policies**: `rules/NORMATIVAS-GDPR.md` <!-- REF-OBSOLETA: rules/NORMATIVAS-GDPR.md no existe --> (user data), `rules/NORMATIVAS-SOC2.md` <!-- REF-OBSOLETA: rules/NORMATIVAS-SOC2.md no existe; posible: rules/NORMATIVAS-SECURITY-COMPLIANCE.md --> (enterprise
 security compliance)
 
 ---
@@ -462,22 +462,22 @@ security compliance)
 | Structure policy             | `config/structure-policy.json`                                 |
 | Orchestrator                 | `config/orchestrator.json`                                     |
 | Development standards        | `rules/DEVELOPMENT-STANDARDS.md`                               |
-| Code standards               | `rules/NORMATIVAS-CODIGO.md`                                   |
-| Error handling               | `rules/NORMATIVAS-ERROR-HANDLING.md`                           |
+| Code standards               | `rules/NORMATIVAS-CODE-QUALITY.md` <!-- REF-OBSOLETA: NORMATIVAS-CODIGO.md renombrado/inexistente; candidato: rules/NORMATIVAS-CODE-QUALITY.md -->                                  |
+| Error handling               | `rules/NORMATIVAS-ERROR-HANDLING.md` <!-- REF-OBSOLETA: rules/NORMATIVAS-ERROR-HANDLING.md no existe -->                           |
 | Performance & Efficiency     | `rules/NORMATIVAS-PERFORMANCE.md`                              |
-| Session Lifecycle            | `rules/NORMATIVAS-SESSION.md`                                  |
-| **GDPR Compliance**          | `rules/NORMATIVAS-GDPR.md`                                     |
-| **SOC2 Compliance**          | `rules/NORMATIVAS-SOC2.md`                                     |
+| Session Lifecycle            | `rules/NORMATIVAS-SESSION.md` <!-- REF-OBSOLETA: rules/NORMATIVAS-SESSION.md no existe; posible: rules/SESSION-CLOSE-NORMATIVA.md -->                                  |
+| **GDPR Compliance**          | `rules/NORMATIVAS-GDPR.md` <!-- REF-OBSOLETA: rules/NORMATIVAS-GDPR.md no existe -->                                     |
+| **SOC2 Compliance**          | `rules/NORMATIVAS-SOC2.md` <!-- REF-OBSOLETA: rules/NORMATIVAS-SOC2.md no existe; posible: rules/NORMATIVAS-SECURITY-COMPLIANCE.md -->                                     |
 | **Secrets Governance**       | `config/secrets-governance.json`                               |
-| **Accessibility (WCAG 2.2)** | `docs/NORMATIVAS-ACCESIBILIDAD.md`                             |
-| **I18n/L10n Standards**      | `docs/NORMATIVAS-I18N-L10N.md`                                 |
-| **ISO/IEC 25010 Quality**    | `docs/NORMATIVAS-ISO25010.md`                                  |
-| **ISO/IEC 27001 Controls**   | `docs/NORMATIVAS-ISO27001.md`                                  |
-| **SRE Practices**            | `docs/NORMATIVAS-SRE.md`                                       |
-| **Chaos Engineering**        | `docs/NORMATIVAS-CHAOS-ENGINEERING.md`                         |
-| **API Design Standards**     | `docs/NORMATIVAS-API-DESIGN.md`                                |
-| **SBOM Validation**          | `docs/NORMATIVAS-SBOM.md`                                      |
+| **Accessibility (WCAG 2.2)** | `docs/NORMATIVAS-ACCESIBILIDAD.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-ACCESIBILIDAD.md no existe -->                             |
+| **I18n/L10n Standards**      | `docs/NORMATIVAS-I18N-L10N.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-I18N-L10N.md no existe -->                                 |
+| **ISO/IEC 25010 Quality**    | `docs/NORMATIVAS-ISO25010.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-ISO25010.md no existe -->                                  |
+| **ISO/IEC 27001 Controls**   | `docs/NORMATIVAS-ISO27001.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-ISO27001.md no existe -->                                 |
+| **SRE Practices**            | `docs/NORMATIVAS-SRE.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-SRE.md no existe; posible: rules/OBSERVABILITY-SLOS.md -->                                       |
+| **Chaos Engineering**        | `docs/NORMATIVAS-CHAOS-ENGINEERING.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-CHAOS-ENGINEERING.md no existe -->                         |
+| **API Design Standards**     | `docs/NORMATIVAS-API-DESIGN.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-API-DESIGN.md no existe -->                                |
+| **SBOM Validation**          | `docs/NORMATIVAS-SBOM.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-SBOM.md no existe; ver src/generate-sbom.ts -->                                      |
 | PSScriptAnalyzer Config      | `config/PSScriptAnalyzerSettings.psd1`                         |
-| ESLint Config                | `.eslintrc.json`                                               |
+| ESLint Config                | `eslint.config.js` <!-- REF-OBSOLETA: .eslintrc.json no existe; ESLint flat config en eslint.config.js -->                                               |
 | TypeScript Config            | `tsconfig.json`                                                |
-| Self-verification            | `src/agent-verify.ts`                                          |
+| Self-verification            | `src/agent-verify.ts` <!-- REF-OBSOLETA: src/agent-verify.ts no existe → ver src/stack-compliance.ts -->                                          |

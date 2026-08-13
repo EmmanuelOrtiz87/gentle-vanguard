@@ -9,8 +9,8 @@
 
 ```
 Layer 5: AGENTES  — 18 agents (Orchestrator + 17 sub-agentes: BA, SAD, DEV, QA, OPS, GOV, DOC, etc.)
-Layer 4: COMANDOS — src/cli/gv.ts, pre-process-input.ps1, detect-tool.ps1
-Layer 3: MCP      — skill-server.ts (MCP protocol), mcp-bridge.ps1
+Layer 4: COMANDOS — src/cli/gv.ts, src/pre-process-input.ts, src/core/detect-tool.ts | <!-- REF-OBSOLETA: pre-process-input.ps1 y detect-tool.ps1 eliminados; migrados a src/*.ts -->
+Layer 3: MCP      — scripts/mcp/skill-server.ts (MCP protocol), src/mcp/mcp-bridge.ts | <!-- REF-OBSOLETA: mcp-bridge.ps1 eliminado; migrado a src/mcp/mcp-bridge.ts -->
 Layer 2: SKILLS   — ~386 skills en skills/ (SDD, seguridad, web, mobile, AI/ML, etc.)
 Layer 1: MEMORIA  — Engram persistent memory (tools/engram.exe v1.15.10)
 ```
@@ -26,41 +26,41 @@ VS Code, Copilot, Antigravity.
 
 | Componente          | Archivo(s)                     | Estado    | Automatización             |
 | ------------------- | ------------------------------ | --------- | -------------------------- |
-| Bootstrap workspace | `scripts/core/bootstrap*.ps1`  | ✅ Activo | Manual (setup inicial)     |
+| Bootstrap workspace | `src/bootstrap.ts`                      | ✅ Activo | Manual (setup inicial)     |
 | CLI principal       | `src/cli/gv.ts`                | ✅ Activo | Manual                     |
-| Tool detection      | `src/detect-tool.ts`           | ✅ Activo | Automático (cada turno)    |
+| Tool detection      | `src/core/detect-tool.ts`           | ✅ Activo | Automático (cada turno)    |
 | Pre-process hook    | `src/pre-process-input.ts`     | ✅ Activo | Automático (cada turno)    |
 | Session manager     | `src/session-manager.ts`       | ✅ Activo | Automático (start/end)     |
-| Hashline integrity  | `scripts/editing/hashline.ps1` | ✅ Activo | Automático (snapshot hook) |
+| Hashline integrity  | `src/hashline.ts` | ✅ Activo | Automático (snapshot hook) |
 
 ### 2.2 Memoria Persistente (Engram)
 
 | Componente          | Archivo(s)                                         | Estado    | Automatización                                    |
 | ------------------- | -------------------------------------------------- | --------- | ------------------------------------------------- |
 | Engram CLI          | `tools/engram.exe` v1.15.10                        | ✅ Activo | Automático (mem_save/mem_search en cada sesión)   |
-| Engram RAG          | `scripts/utilities/ENGRAM-RAG/` (3 scripts)        | ✅ Activo | Manual (query) / Automático (reindex en pipeline) |
-| Engram orchestrator | `scripts/utilities/ENGRAM/engram-orchestrator.ps1` | ✅ Activo | Automático (sesión)                               |
+| Engram RAG          | `src/engram-rag-reindex.ts`          <!-- REF-OBSOLETA: scripts/utilities/ENGRAM-RAG/ eliminado; candidato: src/engram-rag-reindex.ts -->       | ✅ Activo | Manual (query) / Automático (reindex en pipeline) |
+| Engram orchestrator | `src/engram-session-bridge.ts` <!-- REF-OBSOLETA: scripts/utilities/ENGRAM/engram-orchestrator.ps1 eliminado; candidato: src/engram-session-bridge.ts / src/engram-auto-sync.ts --> | ✅ Activo | Automático (sesión)                               |
 | Vector index        | TF-IDF 1,289 docs × 7,317 términos                 | ✅ Activo | Incremental rebuild                               |
 
 ### 2.3 ML / Auto-Delegación
 
 | Componente        | Archivo(s)                                                | Estado    | Automatización            |
 | ----------------- | --------------------------------------------------------- | --------- | ------------------------- |
-| ML Router         | `scripts/utilities/AUTO-DELEGATION/ml-router.ps1`         | ✅ Activo | Automático (pre-process)  |
-| Skill embedder    | `scripts/utilities/AUTO-DELEGATION/skill-embedder.ps1`    | ✅ Activo | Automático (reindex)      |
-| Context analyzer  | `scripts/utilities/AUTO-DELEGATION/context-analyzer.ps1`  | ✅ Activo | Automático (sesión start) |
-| Skill recommender | `scripts/utilities/AUTO-DELEGATION/skill-recommender.ps1` | ✅ Activo | Automático (sesión start) |
+| ML Router         | `src/ml-router.ts`                                  | ✅ Activo | Automático (pre-process)  |
+| Skill embedder    | `src/skills/skill-embedder.ts`                      | ✅ Activo | Automático (reindex)      |
+| Context analyzer  | `scripts/utilities/AUTO-DELEGATION/context-analyzer.ps1` <!-- REF-OBSOLETA: eliminado en migración PS1→TS; sin equivalente TS directo en src/ -->  | ✅ Activo | Automático (sesión start) |
+| Skill recommender | `src/skills/skill-recommender.ts`                   | ✅ Activo | Automático (sesión start) |
 | Routing tiers     | ≥80% directo / ≥60% confirmar / <60% → BA explore         | ✅ Activo | Automático                |
 
 ### 2.4 Fine-Tuning (LoRA)
 
 | Componente            | Archivo(s)                                           | Estado      | Automatización         |
 | --------------------- | ---------------------------------------------------- | ----------- | ---------------------- |
-| FT pipeline           | `src/fine-tuning/ft-pipeline.ts`                     | ✅ Activo   | Automático (CI weekly) |
-| FT trainer            | `src/fine-tuning/ft-trainer.ts`                      | ✅ Activo   | Manual / CI            |
-| FT evaluator          | `src/fine-tuning/ft-evaluator.ts`                    | ✅ Activo   | Manual / CI            |
-| FT threshold detector | `src/fine-tuning/ft-threshold-detect.ts`             | ✅ Activo   | Automático (CI)        |
-| FT auto-prune         | `src/fine-tuning/ft-auto-prune.ts`                   | ✅ Activo   | Automático (CI)        |
+| FT pipeline           | `src/fine-tuning/ft-pipeline.ts` <!-- REF-OBSOLETA: src/fine-tuning/ no existe (solo protected FINE-TUNING/*.ps1.enc) -->                     | ✅ Activo   | Automático (CI weekly) |
+| FT trainer            | `src/fine-tuning/ft-trainer.ts` <!-- REF-OBSOLETA: src/fine-tuning/ no existe -->                      | ✅ Activo   | Manual / CI            |
+| FT evaluator          | `src/fine-tuning/ft-evaluator.ts` <!-- REF-OBSOLETA: src/fine-tuning/ no existe -->                    | ✅ Activo   | Manual / CI            |
+| FT threshold detector | `src/fine-tuning/ft-threshold-detect.ts` <!-- REF-OBSOLETA: src/fine-tuning/ no existe -->             | ✅ Activo   | Automático (CI)        |
+| FT auto-prune         | `src/fine-tuning/ft-auto-prune.ts` <!-- REF-OBSOLETA: src/fine-tuning/ no existe -->                   | ✅ Activo   | Automático (CI)        |
 | FT registry           | `.ft/registry.json`                                  | ✅ Activo   | Automático             |
 | Adapters activos      | BA, DEV (mistral-7b-lora, v1.0.0)                    | ✅ Activo   | LoRA fine-tuned        |
 | Python trainer        | `scripts/utilities/FINE-TUNING/python/train_lora.py` | ⚠️ Presente | Manual (stub)          |
@@ -69,50 +69,50 @@ VS Code, Copilot, Antigravity.
 
 | Componente              | Archivo(s)                                   | Estado    | Automatización          |
 | ----------------------- | -------------------------------------------- | --------- | ----------------------- |
-| Dashboard v3 (Chart.js) | `reports/dashboard-v2/dashboard.html`        | ✅ Activo | CI/CD genera artifact   |
-| Metrics collector       | `scripts/metrics/collector.ps1`              | ✅ Activo | Automático (sesión)     |
-| Dashboard render        | `scripts/metrics/dashboard-render.ps1`       | ✅ Activo | Manual / CI             |
-| Dashboard health        | `scripts/metrics/dashboard-health-check.ps1` | ✅ Activo | CI                      |
-| Live feed               | `scripts/metrics/live-feed.ps1`              | ✅ Activo | Automático              |
-| Metrics server          | `scripts/metrics/metrics-server.ps1`         | ✅ Activo | Manual (HTTP server)    |
-| Telemetry writer        | `scripts/metrics/telemetry-writer.ps1`       | ✅ Activo | Automático              |
-| Weekly metrics          | `scripts/monitoring/weekly-metrics.ps1`      | ✅ Activo | Manual / CI             |
-| Executive dashboard     | `scripts/monitoring/executive-dashboard.ps1` | ✅ Activo | Manual                  |
-| Token monitor           | `scripts/utilities/TOKEN/` (7 scripts)       | ✅ Activo | Automático (cada turno) |
+| Dashboard v3 (Chart.js) | `reports/dashboard-v2/dashboard.html` <!-- REF-OBSOLETA: reports/dashboard-v2/ no existe; dashboard actual en apps/web-dashboard/ --> | ✅ Activo | CI/CD genera artifact   |
+| Metrics collector       | `src/metrics-collector.ts`              | ✅ Activo | Automático (sesión)     |
+| Dashboard render        | `src/dashboard-start.ts` <!-- REF-OBSOLETA: scripts/metrics/dashboard-render.ps1 eliminado; candidato: src/dashboard-start.ts --> | ✅ Activo | Manual / CI             |
+| Dashboard health        | `src/dashboard-health-checker.ts` | ✅ Activo | CI                      |
+| Live feed               | `scripts/metrics/live-feed.ps1` <!-- REF-OBSOLETA: eliminado (live-feed deprecated en pipeline) -->              | ✅ Activo | Automático              |
+| Metrics server          | `apps/web-dashboard/server/websocket-server.ts` <!-- REF-OBSOLETA: scripts/metrics/metrics-server.ps1 eliminado --> | ✅ Activo | Manual (HTTP server)    |
+| Telemetry writer        | `scripts/metrics/telemetry-writer.ps1` <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->       | ✅ Activo | Automático              |
+| Weekly metrics          | `src/core/operational-metrics-tracker.ts` <!-- REF-OBSOLETA: scripts/monitoring/weekly-metrics.ps1 eliminado --> | ✅ Activo | Manual / CI             |
+| Executive dashboard     | `scripts/monitoring/executive-dashboard.ps1` <!-- REF-OBSOLETA: eliminado (cubierto por dashboard v3) --> | ✅ Activo | Manual                  |
+| Token monitor           | `src/token-usage-reader.ts` <!-- REF-OBSOLETA: scripts/utilities/TOKEN/ eliminado; equivalentes TS: src/token-*.ts -->       | ✅ Activo | Automático (cada turno) |
 
 ### 2.6 Seguridad
 
 | Componente            | Archivo(s)                                   | Estado    | Automatización                 |
 | --------------------- | -------------------------------------------- | --------- | ------------------------------ |
-| Secrets manager       | `scripts/security/secrets-manager.ps1`       | ✅ Activo | Manual                         |
-| Encryption (AES-256)  | `scripts/security/encryption-manager.ps1`    | ✅ Activo | Manual                         |
-| Input validator       | `scripts/security/input-validator.ps1`       | ✅ Activo | Automático (pre-commit)        |
-| Security logger       | `scripts/security/security-logger.ps1`       | ✅ Activo | Automático                     |
-| Security orchestrator | `scripts/security/security-orchestrator.ps1` | ✅ Activo | Automático (pre-push)          |
-| Privacy sanitizer     | `scripts/security/privacy-sanitizer.ps1`     | ✅ Activo | Automático (pre-commit)        |
+| Secrets manager       | `scripts/security/secrets-manager.ps1` <!-- REF-OBSOLETA: eliminado; ver rules/SECRETS-MANAGEMENT.md y config/secrets-governance.json -->       | ✅ Activo | Manual                         |
+| Encryption (AES-256)  | `scripts/security/encryption-manager.ps1` <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->    | ✅ Activo | Manual                         |
+| Input validator       | `scripts/security/input-validator.ps1` <!-- REF-OBSOLETA: eliminado; validación en src/pre-process-input.ts -->       | ✅ Activo | Automático (pre-commit)        |
+| Security logger       | `scripts/security/security-logger.ps1` <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->       | ✅ Activo | Automático                     |
+| Security orchestrator | `src/security/security-orchestrator.ts` | ✅ Activo | Automático (pre-push)          |
+| Privacy sanitizer     | `scripts/security/privacy-sanitizer.ps1` <!-- REF-OBSOLETA: eliminado; ver src/security/privacy-gateway.ts -->     | ✅ Activo | Automático (pre-commit)        |
 | Gitleaks              | Lefthook + CI                                | ✅ Activo | Automático (pre-commit + push) |
 | Trivy (deps)          | CI weekly                                    | ✅ Activo | CI automático                  |
-| SBOM validation       | `scripts/security/sbom-validate.ps1`         | ✅ Activo | CI                             |
-| SIEM audit bridge     | `scripts/security/siem-audit-bridge.ps1`     | ✅ Activo | Manual                         |
+| SBOM validation       | `src/generate-sbom.ts` <!-- REF-OBSOLETA: scripts/security/sbom-validate.ps1 eliminado; candidato: src/generate-sbom.ts -->         | ✅ Activo | CI                             |
+| SIEM audit bridge     | `src/infrastructure/siem-audit-bridge.ts`     | ✅ Activo | Manual                         |
 
 ### 2.7 CI/CD (28 workflows)
 
 | Workflow                                    | Trigger                                    | Estado     |
 | ------------------------------------------- | ------------------------------------------ | ---------- |
-| `test-suite.yml`                            | Push/PR develop/main                       | ✅ Activo  |
-| `security-scan.yml`                         | Push/PR + cron weekly                      | ✅ Activo  |
+| `test-suite.yml` <!-- REF-OBSOLETA: no existe; CI consolidado en .github/workflows/ci.yml -->                            | Push/PR develop/main                       | ✅ Activo  |
+| `security-scan.yml` <!-- REF-OBSOLETA: no existe; seguridad en .github/workflows/security.yml -->                         | Push/PR + cron weekly                      | ✅ Activo  |
 | `release.yml`                               | Push tag v*.*.\*                           | ✅ Activo  |
-| `dashboard-ci.yml`                          | Push metrics + cron daily                  | ✅ Activo  |
-| `maintenance-scheduled.yml`                 | Cron weekly Sun                            | ✅ Activo  |
-| `cross-platform-tests.yml`                  | Push/PR + cron daily                       | ✅ Activo  |
-| `quality-gate.yml`                          | Push/PR scripts/hooks/config               | ✅ Activo  |
-| `sdd-gate.yml`                              | PR a main/develop                          | ✅ Activo  |
-| `script-governance.yml`                     | Push/PR scripts/docs/config                | ✅ Activo  |
+| `dashboard-ci.yml` <!-- REF-OBSOLETA: no existe; ver apps/web-dashboard build en ci.yml -->                          | Push metrics + cron daily                  | ✅ Activo  |
+| `maintenance-scheduled.yml` <!-- REF-OBSOLETA: no existe; mantenimiento en .github/workflows/scheduled.yml -->                 | Cron weekly Sun                            | ✅ Activo  |
+| `cross-platform-tests.yml` <!-- REF-OBSOLETA: no existe -->                  | Push/PR + cron daily                       | ✅ Activo  |
+| `quality-gate.yml` <!-- REF-OBSOLETA: no existe; gates en reusable-governance.yml -->                          | Push/PR scripts/hooks/config               | ✅ Activo  |
+| `sdd-gate.yml` <!-- REF-OBSOLETA: no existe; ver src/check-sdd-gate.ts y reusable-governance.yml -->                              | PR a main/develop                          | ✅ Activo  |
+| `script-governance.yml` <!-- REF-OBSOLETA: no existe -->                     | Push/PR scripts/docs/config                | ✅ Activo  |
 | `sync-public.yml`                           | Push develop/main                          | ✅ Activo  |
-| `monthly-management-report.yml`             | Cron monthly 1st                           | ✅ Activo  |
+| `monthly-management-report.yml` <!-- REF-OBSOLETA: no existe; report en scheduled.yml -->             | Cron monthly 1st                           | ✅ Activo  |
 | `dashboard-auto-refresh.yml`                | Cron daily                                 | ✅ Activo  |
-| `autonomous-validation.yml`                 | Push/PR + cron weekly                      | ✅ Activo  |
-| `normative-enforcement.yml`                 | Push/PR scripts,rules,config + cron weekly | ✅ Activo  |
+| `autonomous-validation.yml` <!-- REF-OBSOLETA: no existe; ver ci.yml -->                 | Push/PR + cron weekly                      | ✅ Activo  |
+| `normative-enforcement.yml` <!-- REF-OBSOLETA: no existe; ver experimental-guard.yml / reusable-governance.yml -->                 | Push/PR scripts,rules,config + cron weekly | ✅ Activo  |
 | Otros 14 (lint, format, audit, stale, etc.) | Varios                                     | ✅ Activos |
 
 ### 2.8 Git Hooks (Lefthook)
@@ -142,28 +142,28 @@ VS Code, Copilot, Antigravity.
 | Componente               | Archivo(s)                                       | Estado    | Automatización               |
 | ------------------------ | ------------------------------------------------ | --------- | ---------------------------- |
 | Auto-norm learner        | `src/auto-norm-learner.ts`                       | ⚠️ Activo | Manual (bajo demanda)        |
-| Auto-norm enforcer       | `scripts/adaptive/auto-norm-enforcer.ps1`        | ✅ Activo | Automático (cada 5 turnos)   |
-| Failure learning         | `scripts/adaptive/failure-learning-system.ps1`   | ⚠️ Activo | Manual                       |
-| Cache manager            | `scripts/adaptive/cache-manager.ps1`             | ✅ Activo | Automático (sesión)          |
-| Auto-doc drift detector  | `scripts/adaptive/auto-doc-drift-detector.ps1`   | ⚠️ Activo | Manual                       |
-| Agent message bus        | `scripts/adaptive/agent-message-bus.ps1`         | ⚠️ Activo | Manual                       |
-| Auto-backup              | `scripts/adaptive/auto-backup-orchestrator.ps1`  | ✅ Activo | Automático (scheduled)       |
-| Judgment Day bridge      | `scripts/adaptive/judgment-day-bridge.ps1`       | ⚠️ Activo | Event-driven                 |
-| Karpathy enforcer        | `scripts/adaptive/karpathy-enforcer.ps1`         | ✅ Activo | Automático (pre-commit)      |
-| Normative audit pipeline | `scripts/utilities/normative-audit-pipeline.ps1` | ✅ Activo | Automático (pre-commit + CI) |
+| Auto-norm enforcer       | `src/auto-norm-enforcer.ts`        | ✅ Activo | Automático (cada 5 turnos)   |
+| Failure learning         | `src/learning-engine.ts` <!-- REF-OBSOLETA: scripts/adaptive/failure-learning-system.ps1 eliminado; candidato: src/learning-engine.ts -->   | ⚠️ Activo | Manual                       |
+| Cache manager            | `src/response-cache.ts` <!-- REF-OBSOLETA: scripts/adaptive/cache-manager.ps1 eliminado; candidato: src/response-cache.ts -->             | ✅ Activo | Automático (sesión)          |
+| Auto-doc drift detector  | `scripts/adaptive/auto-doc-drift-detector.ps1` <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->   | ⚠️ Activo | Manual                       |
+| Agent message bus        | `src/agent-message-bus.ts`         | ⚠️ Activo | Manual                       |
+| Auto-backup              | `src/backup-engram.ts` <!-- REF-OBSOLETA: scripts/adaptive/auto-backup-orchestrator.ps1 eliminado; candidato: src/backup-engram.ts -->  | ✅ Activo | Automático (scheduled)       |
+| Judgment Day bridge      | `src/correction-rules-engine.ts` <!-- REF-OBSOLETA: scripts/adaptive/judgment-day-bridge.ps1 eliminado; candidato: src/correction-rules-engine.ts -->       | ⚠️ Activo | Event-driven                 |
+| Karpathy enforcer        | `src/karpathy-enforcer.ts`         | ✅ Activo | Automático (pre-commit)      |
+| Normative audit pipeline | `src/infrastructure/normative-audit-pipeline.ts` | ✅ Activo | Automático (pre-commit + CI) |
 | Event bus                | `.event-bus/` (1 sub: judgment-day)              | ✅ Activo | Event-driven                 |
 
 ### 2.10 Prompts / Contexto
 
 | Componente                 | Archivo(s)                                       | Estado    | Automatización             |
 | -------------------------- | ------------------------------------------------ | --------- | -------------------------- |
-| System prompt optimization | `scripts/utilities/PROMPT/` (8 scripts)          | ✅ Activo | Automático (pre-sesión)    |
-| A/B testing prompts        | `scripts/utilities/PROMPT/prompt-ab-testing.ps1` | ✅ Activo | Manual                     |
-| Prompt cache               | `scripts/utilities/PROMPT/prompt-cache.ps1`      | ✅ Activo | Automático                 |
-| Prompt versioning          | `scripts/utilities/PROMPT/prompt-versioning.ps1` | ✅ Activo | Automático                 |
+| System prompt optimization | `config/system-prompt-optimization.json` <!-- REF-OBSOLETA: scripts/utilities/PROMPT/ eliminado; configs JSON en config/ -->          | ✅ Activo | Automático (pre-sesión)    |
+| A/B testing prompts        | `src/ab-testing-framework.ts` <!-- REF-OBSOLETA: scripts/utilities/PROMPT/prompt-ab-testing.ps1 eliminado; candidato: src/ab-testing-framework.ts --> | ✅ Activo | Manual                     |
+| Prompt cache               | `src/response-cache.ts` <!-- REF-OBSOLETA: scripts/utilities/PROMPT/prompt-cache.ps1 eliminado; candidato: src/response-cache.ts -->      | ✅ Activo | Automático                 |
+| Prompt versioning          | `scripts/utilities/PROMPT/prompt-versioning.ps1` <!-- REF-OBSOLETA: eliminado en migración PS1→TS --> | ✅ Activo | Automático                 |
 | Semantic compression       | `config/system-prompt-optimization.json`         | ✅ Activo | Automático (98% reducción) |
 | Context budget audit       | `scripts/optimization/context-budget-audit.ps1`  | ⚠️ Activo | Manual                     |
-| Token budget guard         | `scripts/utilities/TOKEN/token-budget-guard.ps1` | ✅ Activo | Automático (cada turno)    |
+| Token budget guard         | `src/token-budget-guard.ts` | ✅ Activo | Automático (cada turno)    |
 
 ### 2.11 Skills / Plugins
 
@@ -205,12 +205,12 @@ VS Code, Copilot, Antigravity.
 
 ### 🔧 Manual (requiere invocación)
 
-- **Fine-tuning trainer**: ejecutar ft-trainer.ps1 manualmente (o vía CI)
+- **Fine-tuning trainer**: ejecutar train_lora.py o pipeline FINE-TUNING manualmente (o vía CI) <!-- REF-OBSOLETA: ft-trainer.ps1 eliminado; solo scripts/utilities/FINE-TUNING/python/train_lora.py -->
 - **Dashboard render**: generar dashboard HTML manualmente (o vía CI)
 - **Auto-norm learner**: bajo demanda
 - **Auto-doc drift detector**: bajo demanda
 - **Profile import/export**: manual
-- **RAG queries**: vía engram-rag-query.ps1
+- **RAG queries**: vía engram-rag-query.ps1 <!-- REF-OBSOLETA: engram-rag-query.ps1 no existe; candidato: src/engram-rag-reindex.ts -->
 - **Release**: push tag v*.*.\*
 - **Multi-repo orchestration**: alpha, manual
 - **Plugin usage**: manual (experimental)
@@ -223,8 +223,8 @@ VS Code, Copilot, Antigravity.
 
 ```
 Usuario escribe mensaje
-  → pre-process-input.ps1 (cache SHA256, token notif, tool detection)
-  → session-start-optimized.ps1 (autostart pipeline)
+  → src/pre-process-input.ts (cache SHA256, token notif, tool detection)
+  → src/session-start-optimized.ts (autostart pipeline)
   → ML router analiza input → recomienda skill
   → Engram context load (memorias previas)
   → Context optimization (compresión, tiers)
@@ -236,7 +236,7 @@ Usuario escribe mensaje
 ```
 Requerimiento → BA/EXPLORE (análisis) → SAD (diseño) → DEV (impl) → QA (verificación)
   Cada fase con gate de validación automático
-  PR bloqueado si falta SDD validado (sdd-gate.yml)
+  PR bloqueado si falta SDD validado (sdd-gate.yml) <!-- REF-OBSOLETA: workflow sdd-gate.yml no existe; gate implementado en src/check-sdd-gate.ts -->
 ```
 
 ### CI/CD semanal (domingo 6am):
@@ -271,7 +271,7 @@ Maintenance Watchtower:
 | 🔮 Largo  | **MCP Native first-class**                        | ⚠️ Parcial (skill-server.ts existe) |
 | 🔮 Largo  | **Web UI para dashboard**                         | ⚠️ Parcial (dashboard HTML existe)  |
 | 🔮 Largo  | **VS Code Extension**                             | 🔮 Visión                           |
-| 🔮 Largo  | **Multi-repo orchestration**                      | ⚠️ Alpha (multi-repo-engine.ps1)    |
+| 🔮 Largo  | **Multi-repo orchestration**                      | ⚠️ Alpha (candidato: src/cross-workspace-validator.ts) <!-- REF-OBSOLETA: multi-repo-engine.ps1 eliminado; sin equivalente TS directo -->    |
 
 ### Observaciones / Deuda técnica detectada:
 
@@ -293,22 +293,22 @@ Maintenance Watchtower:
 | Recurso               | Ruta                                                     |
 | --------------------- | -------------------------------------------------------- |
 | Entry point canónico  | `docs/AGENTS.md`                                         |
-| Bootstrap workspace   | `scripts/core/bootstrap-workspace.ps1`                   |
-| CLI                   | `scripts/core/src/cli/gv.ts`                             |
+| Bootstrap workspace   | `src/bootstrap.ts` <!-- REF-OBSOLETA: scripts/core/bootstrap-workspace.ps1 eliminado; candidato: src/bootstrap.ts -->                   |
+| CLI                   | `src/cli/gv.ts`                             |
 | Orquestador principal | `config/orchestrator.json`                               |
 | Auto-delegación       | `config/auto-delegation.json`                            |
 | Routing de modelos    | `config/model-router.json`                               |
 | SDD config            | `openspec/config.yaml`                                   |
 | Prompts de agentes    | `config/agent-prompts/` (10 roles)                       |
 | Normativas            | `rules/` (~60 archivos)                                  |
-| Hooks                 | `hooks/` (18 scripts)                                    |
+| Hooks                 | `src/hooks/` <!-- REF-OBSOLETA: hooks/ (18 scripts .ps1) eliminado; hooks TS en src/hooks/ --> |
 | Skills                | `skills/` (~386 dirs)                                    |
 | Tests                 | `tests/` (unit, integration, security, performance, e2e) |
 | Adaptadores           | `adapters/` (Windsurf, Codex, Antigravity, Detection)    |
 | Plugins               | `plugins/` (example-hello-world)                         |
 | Fine-tuning data      | `.ft/` (registry, adapters, benchmarks, datasets)        |
 | Event bus             | `.event-bus/` (subscriptions, history)                   |
-| Dashboard             | `reports/dashboard-v2/dashboard.html`                    |
+| Dashboard             | `apps/web-dashboard/` <!-- REF-OBSOLETA: reports/dashboard-v2/dashboard.html no existe; dashboard React en apps/web-dashboard/ -->                    |
 | Telemetría            | `config/telemetry-dashboard-v2.json`                     |
 | Engram data           | `.engram-data/` (memoria persistente)                    |
 

@@ -14,32 +14,32 @@ Central inventory of automation scripts with ownership, risk level, and executio
 
 | Script                                             | Area                   | Level | Auto Mode | Owner          | Notes                                                                                                                                                        |
 | -------------------------------------------------- | ---------------------- | ----- | --------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| scripts/utilities/detect-ide-session.ps1           | Session Detection      | A     | yes       | platform       | Detection only, no mutations                                                                                                                                 |
-| scripts/utilities/auto-init-dev-environment.ps1    | Startup                | A     | yes       | platform       | Quiet-safe activation checks                                                                                                                                 |
-| scripts/utilities/ensure-tools-active.ps1          | Tooling                | B     | yes       | platform       | Avoids heavy auto-installs unless forced                                                                                                                     |
-| scripts/utilities/run-engram.ps1                   | Memory Runtime         | B     | manual    | platform       | Canonical launcher for Engram session persistence                                                                                                            |
+| scripts/utilities/detect-ide-session.ps1 <!-- REF-OBSOLETA: eliminado; candidato: src/core/detect-tool.ts / src/core/tool-detector-enhanced.ts -->  | Session Detection      | A     | yes       | platform       | Detection only, no mutations                                                                                                                                 |
+| scripts/utilities/auto-init-dev-environment.ps1 <!-- REF-OBSOLETA: eliminado; existe scripts/utilities/utils/UTILITIES/auto-init-dev-environment.sh --> | Startup                | A     | yes       | platform       | Quiet-safe activation checks                                                                                                                                 |
+| scripts/utilities/ensure-tools-active.ps1 <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->          | Tooling                | B     | yes       | platform       | Avoids heavy auto-installs unless forced                                                                                                                     |
+| scripts/utilities/run-engram.ps1 <!-- REF-OBSOLETA: eliminado; Engram vía tools/engram.exe -->          | Memory Runtime         | B     | manual    | platform       | Canonical launcher for Engram session persistence                                                                                                            |
 | src/cli/gv.ts                                      | Operator CLI           | B     | manual    | dev-experience | Entrypoint for workflow commands                                                                                                                             |
-| src/deployment/validate-release-homologation.ts    | Release Governance     | B     | manual    | dev-experience | Complementary pre-release multi-repo gate (VERSION/branch/tag alignment)                                                                                     |
-| scripts/utilities/enable-optional-post-commit.ps1  | Optional Hook Coverage | B     | manual    | dev-experience | Enables/disables optional post-commit automation (disabled by default)                                                                                       |
-| scripts/gentle-vanguard/setup.sh                   | Gentle-Vanguard Setup  | B     | manual    | platform       | Cross-platform bootstrap entrypoint for Linux/macOS/WSL                                                                                                      |
+| src/deployment/validate-release-homologation.ts <!-- REF-OBSOLETA: src/deployment/ no existe; solo protected/scripts/utilities/DEPLOYMENT/validate-release-homologation.ps1.enc --> | Release Governance     | B     | manual    | dev-experience | Complementary pre-release multi-repo gate (VERSION/branch/tag alignment)                                                                                     |
+| scripts/utilities/enable-optional-post-commit.ps1 <!-- REF-OBSOLETA: eliminado; candidato: templates/project-root/scripts/enable-optional-post-commit.ts -->  | Optional Hook Coverage | B     | manual    | dev-experience | Enables/disables optional post-commit automation (disabled by default)                                                                                       |
+| scripts/gentle-vanguard/setup.sh <!-- REF-OBSOLETA: eliminado; candidato: scripts/core/setup.sh -->                  | Gentle-Vanguard Setup  | B     | manual    | platform       | Cross-platform bootstrap entrypoint for Linux/macOS/WSL                                                                                                      |
 | src/bootstrap.ts                                   | Gentle-Vanguard Setup  | B     | manual    | platform       | Canonical TypeScript bootstrap entrypoint for workspace initialization                                                                                       |
-| scripts/gentle-vanguard/src/cli/gv.ts              | Gentle-Vanguard CLI    | B     | manual    | platform       | Workspace bootstrap and scaffolding CLI (`init`, `new`, `validate`, `tools`, `skills`)                                                                       |
-| scripts/project/new-project.ps1                    | Project Scaffolding    | B     | manual    | dev-experience | Canonical new-project entrypoint backed by bootstrap-workspace                                                                                               |
-| scripts/utilities/end-session.ps1                  | Session Closure        | B     | manual    | dev-experience | Runs review/audit/governance checks and generates delivery closure artifact                                                                                  |
-| scripts/utilities/context-pack.ps1                 | Context Budgeting      | B     | manual    | dev-experience | Generates compact continuation summary to reduce token usage                                                                                                 |
-| scripts/utilities/compact-start.ps1                | Context Budgeting      | B     | manual    | dev-experience | Generates context pack and compact prompt for new thread                                                                                                     |
-| scripts/utilities/context-metrics-report.ps1       | Context Budgeting      | B     | manual    | dev-experience | Reports context-pack and compact-start usage metrics                                                                                                         |
-| scripts/utilities/generate-audit-report.ps1        | Audit Reporting        | B     | manual    | platform       | Generates weekly/monthly/executive audit reports in markdown                                                                                                 |
-| scripts/utilities/generate-session-audit.ps1       | Session Audit          | B     | manual    | platform       | Manages session lifecycle audit logging                                                                                                                      |
-| scripts/utilities/aggregate-metrics.ps1            | Metrics Aggregation    | B     | manual    | platform       | Aggregates daily/weekly/monthly metrics                                                                                                                      |
-| scripts/validation/homologate-workspace.ps1        | Workspace Hygiene      | B     | manual    | dev-experience | Normalizes artifacts/docs, removes stale files, updates references                                                                                           |
-| scripts/git-hooks/pre-push                         | Git Hook Runtime       | B     | git-event | platform       | Runs governed pre-push checks (native review, governance validation, homologation drift gate); post-commit hook intentionally not enabled in Gentle-Vanguard |
-| scripts/utilities/stack-on-demand.ps1              | Orchestration Mode     | B     | manual    | platform       | Activate/validate/deactivate flow                                                                                                                            |
-| scripts/utilities/orchestrator-status.ps1          | Status                 | A     | manual    | platform       | Read-oriented orchestration checks                                                                                                                           |
-| scripts/diagnostics/system-diagnostics.ps1         | Diagnostics            | B     | manual    | platform       | Health and repair checks                                                                                                                                     |
-| scripts/diagnostics/validate-script-governance.ps1 | Governance             | B     | manual    | platform       | Validates script placement, naming, and governance policy compliance                                                                                         |
-| scripts/diagnostics/validate-sdd-governance.ps1    | Governance             | B     | ci-pr     | platform       | Enforces SDD gate on PRs with branch-aware mandatory/advisory behavior                                                                                       |
-| scripts/diagnostics/validate-gitflow.ps1           | GitFlow Policy         | B     | manual    | platform       | Enforces branch naming, protected branch push policy, and expected PR base                                                                                   |
+| scripts/gentle-vanguard/src/cli/gv.ts <!-- REF-OBSOLETA: eliminado; migrado a src/cli/gv.ts -->          | Gentle-Vanguard CLI    | B     | manual    | platform       | Workspace bootstrap and scaffolding CLI (`init`, `new`, `validate`, `tools`, `skills`)                                                                       |
+| scripts/project/new-project.ps1 <!-- REF-OBSOLETA: eliminado; ver src/create-gentle-vanguard.ts -->                    | Project Scaffolding    | B     | manual    | dev-experience | Canonical new-project entrypoint backed by bootstrap-workspace                                                                                               |
+| scripts/utilities/end-session.ps1 <!-- REF-OBSOLETA: eliminado; ver src/session-close-orchestrator.ts -->                  | Session Closure        | B     | manual    | dev-experience | Runs review/audit/governance checks and generates delivery closure artifact                                                                                  |
+| scripts/utilities/context-pack.ps1 <!-- REF-OBSOLETA: eliminado; candidato: templates/project-root/scripts/context-pack.ts -->                 | Context Budgeting      | B     | manual    | dev-experience | Generates compact continuation summary to reduce token usage                                                                                                 |
+| scripts/utilities/compact-start.ps1 <!-- REF-OBSOLETA: eliminado; candidato: templates/project-root/scripts/compact-start.ts -->                | Context Budgeting      | B     | manual    | dev-experience | Generates context pack and compact prompt for new thread                                                                                                     |
+| scripts/utilities/context-metrics-report.ps1 <!-- REF-OBSOLETA: eliminado; candidato: templates/project-root/scripts/context-metrics-report.ts -->       | Context Budgeting      | B     | manual    | dev-experience | Reports context-pack and compact-start usage metrics                                                                                                         |
+| scripts/utilities/generate-audit-report.ps1 <!-- REF-OBSOLETA: eliminado; ver src/report-generator.ts -->        | Audit Reporting        | B     | manual    | platform       | Generates weekly/monthly/executive audit reports in markdown                                                                                                 |
+| scripts/utilities/generate-session-audit.ps1 <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->       | Session Audit          | B     | manual    | platform       | Manages session lifecycle audit logging                                                                                                                      |
+| scripts/utilities/aggregate-metrics.ps1 <!-- REF-OBSOLETA: eliminado; candidato: src/core/metrics-aggregator.ts -->            | Metrics Aggregation    | B     | manual    | platform       | Aggregates daily/weekly/monthly metrics                                                                                                                      |
+| scripts/validation/homologate-workspace.ps1 <!-- REF-OBSOLETA: eliminado; candidato: src/validate-readme.ts -->        | Workspace Hygiene      | B     | manual    | dev-experience | Normalizes artifacts/docs, removes stale files, updates references                                                                                           |
+| scripts/git-hooks/pre-push <!-- REF-OBSOLETA: eliminado; hooks nativos en src/hooks/ -->                         | Git Hook Runtime       | B     | git-event | platform       | Runs governed pre-push checks (native review, governance validation, homologation drift gate); post-commit hook intentionally not enabled in Gentle-Vanguard |
+| scripts/utilities/stack-on-demand.ps1 <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->              | Orchestration Mode     | B     | manual    | platform       | Activate/validate/deactivate flow                                                                                                                            |
+| scripts/utilities/orchestrator-status.ps1 <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->          | Status                 | A     | manual    | platform       | Read-oriented orchestration checks                                                                                                                           |
+| scripts/diagnostics/system-diagnostics.ps1 <!-- REF-OBSOLETA: eliminado; existe scripts/diagnostics/system-diagnostics.sh -->         | Diagnostics            | B     | manual    | platform       | Health and repair checks                                                                                                                                     |
+| scripts/diagnostics/validate-script-governance.ps1 <!-- REF-OBSOLETA: eliminado; candidato: src/stack-compliance.ts --> | Governance             | B     | manual    | platform       | Validates script placement, naming, and governance policy compliance                                                                                         |
+| scripts/diagnostics/validate-sdd-governance.ps1 <!-- REF-OBSOLETA: eliminado; candidato: src/check-sdd-gate.ts -->    | Governance             | B     | ci-pr     | platform       | Enforces SDD gate on PRs with branch-aware mandatory/advisory behavior                                                                                       |
+| scripts/diagnostics/validate-gitflow.ps1 <!-- REF-OBSOLETA: eliminado; migrado a src/validate-gitflow.ts -->           | GitFlow Policy         | B     | manual    | platform       | Enforces branch naming, protected branch push policy, and expected PR base                                                                                   |
 
 ## Execution Policy
 
@@ -56,10 +56,10 @@ Use this profile only when the project needs commit-time memory/session synchron
 
 ```TypeScript
 # Enable optional post-commit coverage
-.\scripts\utilities\enable-optional-post-commit.ps1
+# <!-- REF-OBSOLETA: enable-optional-post-commit.ps1 eliminado; candidato: templates/project-root/scripts/enable-optional-post-commit.ts o hooks nativos en src/hooks/ -->
 
 # Disable optional post-commit coverage
-.\scripts\utilities\enable-optional-post-commit.ps1 -Disable
+# <!-- REF-OBSOLETA: enable-optional-post-commit.ps1 eliminado; candidato: templates/project-root/scripts/enable-optional-post-commit.ts o hooks nativos en src/hooks/ -->
 ```
 
 Default for Gentle-Vanguard and generated projects remains disabled.
@@ -81,44 +81,40 @@ Default policy: keep development flow unblocked for advisory gaps, but never hid
 
 ```TypeScript
 # IDE and session readiness
-.\scripts\utilities\src/cli/gv.ts ide-status
+# REF-OBSOLETA: subcomando gv ide-status no existe en src/cli/gv.ts actual (comandos: check, validate, info, list, health, new, session, dashboard, status, etc.)
 
 # Health + cleanup drift gate (CI-friendly)
-.\scripts\utilities\src/cli/gv.ts health -StrictCleanup
+.\src\cli\gv.ts health
 
 # Startup path
-.\scripts\utilities\auto-init-dev-environment.ps1 -Quiet
+.\scripts\utilities\utils\UTILITIES\auto-init-dev-environment.sh -Quiet <!-- REF-OBSOLETA: auto-init-dev-environment.ps1 eliminado; existe versión .sh -->
 
 # Governance policy gate (legacy-safe advisory mode)
-TypeScript -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1
+# <!-- REF-OBSOLETA: validate-script-governance.ps1 eliminado; candidato: src/stack-compliance.ts -->
 
 # GitFlow policy gate
-TypeScript -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-gitflow.ps1
+.\src\validate-gitflow.ts
 
 # Canonical structure enforcement (enable only with explicit migration approval)
-TypeScript -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1 -EnforceCanonicalStructure
+# <!-- REF-OBSOLETA: validate-script-governance.ps1 eliminado; candidato: src/stack-compliance.ts -->
 
 # Guided migration of loose scripts (preflight + rollback)
-.\scripts\utilities\src/cli/gv.ts migrate-structure          # dry-run preflight
-.\scripts\utilities\src/cli/gv.ts migrate-structure -Force    # execute with rollback output
+# <!-- REF-OBSOLETA: subcomando gv migrate-structure no existe en src/cli/gv.ts actual; ver src/auto-ps1-fixer.ts -->
 
 # Compact context pack for new chat thread (token optimization)
-.\scripts\utilities\src/cli/gv.ts context-pack "current objective"
+# <!-- REF-OBSOLETA: subcomando gv context-pack no existe en src/cli/gv.ts actual; ver src/handoff-compress.ts y context-engineering skill -->
 
 # One-step compact handoff (generates context pack + prompt)
-.\scripts\utilities\src/cli/gv.ts compact-start "current objective"
+# <!-- REF-OBSOLETA: subcomando gv compact-start no existe en src/cli/gv.ts actual -->
 
 # Context usage metrics report (7 days default)
-.\scripts\utilities\src/cli/gv.ts context-metrics
-.\scripts\utilities\src/cli/gv.ts context-metrics 14
+# <!-- REF-OBSOLETA: subcomando gv context-metrics no existe en src/cli/gv.ts actual -->
 
 # Workspace homologation (dry-run / apply)
-.\scripts\utilities\src/cli/gv.ts homologate
-.\scripts\utilities\src/cli/gv.ts homologate apply
+# <!-- REF-OBSOLETA: subcomando gv homologate no existe en src/cli/gv.ts actual -->
 
 # Release homologation complementary gate (multi-repo)
-.\scripts\utilities\src/cli/gv.ts release-homologation
-.\scripts\utilities\src/cli/gv.ts release-homologation v1.0.0
+# <!-- REF-OBSOLETA: subcomando gv release-homologation no existe en src/cli/gv.ts actual -->
 
 # Context efficiency thresholds for audit semaphore
 Get-Content .\config\context-efficiency.json

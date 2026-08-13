@@ -18,10 +18,10 @@ seguro, extensible, zero-drama.**
 
 | Area                       | Feature                                                                                                                    | Status    |
 | -------------------------- | -------------------------------------------------------------------------------------------------------------------------- | --------- |
-| **Public Release**         | Zero-dependency, auto-installable stack. Updated README, badges, setup-complete.ps1, dynamic ports, watchdog auto-recovery | ✅ v8.0.0 |
+| **Public Release**         | Zero-dependency, auto-installable stack. Updated README, badges, setup-complete.ps1 <!-- REF-OBSOLETA: setup-complete.ps1 eliminado; migrado a src/setup-complete.ts -->, dynamic ports, watchdog auto-recovery | ✅ v8.0.0 |
 | **Dashboard UI**           | Knowledge Panel + Multi-repo View UX refinement, live updates (auto-refresh 30s), engram source, relevance colors          | ✅ v7.1.0 |
 | **Multi-repo Mesh**        | Mesh API REST endpoints, cross-workspace MCP orchestration, dashboard MultiRepoView with real mesh data                    | ✅ v7.0.0 |
-| **Engram Integration**     | knowledge-query.ps1 queries mem_search CLI directly; fallback to file scan + context-log                                   | ✅ v7.0.0 |
+| **Engram Integration**     | knowledge-query.ps1 queries mem_search CLI directly; fallback to file scan + context-log <!-- REF-OBSOLETA: knowledge-query.ps1 eliminado; ver src/engram-rag-reindex.ts y tests/unit/knowledge-query.test.ts -->                                   | ✅ v7.0.0 |
 | **MCP Native**             | MCP protocol as first-class citizen, local server registry, gateway, dashboard UI                                          | ✅ v6.4.0 |
 | **MCP Quickstart**         | Pre-built MCP server templates (sqlite, filesystem, browser, memory) — enable with 1 command                               | ✅ v6.5.0 |
 | **MCP SDK**                | Multi-language scaffold (ts, js, py, go, rs), auto-build, auto-register                                                    | ✅ v6.6.0 |
@@ -39,19 +39,19 @@ seguro, extensible, zero-drama.**
 
 | #   | Script                                                              | Tamaño | Prioridad | Estado                                    |
 | --- | ------------------------------------------------------------------- | ------ | --------- | ----------------------------------------- |
-| 1   | `scripts/security/security-orchestrator.ps1`                        | 22 KB  | Alta      | ✅ Done (`src/security-orchestrator.ts`)  |
+| 1   | `scripts/security/security-orchestrator.ps1`                        | 22 KB  | Alta      | ✅ Done (`src/security/security-orchestrator.ts`)  |
 | 2   | `scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1`        | —      | Alta      | ✅ Done (`src/hybrid-executor.ts`)        |
 | 3   | `scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1`          | —      | Alta      | ✅ Done (`src/aws-delegator.ts`)          |
 | 4   | `scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1`        | —      | Alta      | ✅ Done (`src/azure-delegator.ts`)        |
 | 5   | `scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1`    | —      | Media     | ✅ Done (`src/checkpoint-manager.ts`)     |
 | 6   | `scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1`      | —      | Media     | ✅ Done (`src/snapshot-manager.ts`)       |
 | 7   | `scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1` | —      | Media     | ✅ Done (`src/rollback-orchestrator.ts`)  |
-| 8   | `scripts/security/audit-pipeline.ps1`                               | —      | Media     | ✅ Done (`src/audit-pipeline.ts`)         |
+| 8   | `scripts/security/audit-pipeline.ps1`                               | —      | Media     | ✅ Done (`src/infrastructure/audit-pipeline.ts`)         |
 | 9   | `scripts/utilities/ops/TRACING/tracing-instrument.ps1`              | —      | Media     | ✅ Done (`src/tracing-instrument.ts`)     |
 | 10  | `scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1`        | —      | Media     | ✅ Done (`src/event-sourcing.ts`)         |
 | 11  | `scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1`     | —      | Media     | ✅ Done (`src/saga-orchestrator.ts`)      |
 | 12  | `scripts/utilities/session/session-autostart.ps1`                   | —      | Baja      | ✅ Done (`src/session-autostart.ts`)      |
-| 13  | `scripts/maintenance/maintenance-watchtower.ps1`                    | —      | Baja      | ✅ Done (`src/maintenance-watchtower.ts`) |
+| 13  | `scripts/maintenance/maintenance-watchtower.ps1`                    | —      | Baja      | ✅ Done (`src/core/maintenance-watchtower.ts`) |
 
 ## Backlog — Mejoras Local-First
 
@@ -153,10 +153,10 @@ npx tsx src/module-maturity.ts --gate <module-id>
 | v8.0    | 2026-07-08 | Public Release: zero-dependency stack, auto-install, updated README, watchdog auto-recovery, dynamic ports                                                                                                                              |
 | v7.1    | 2026-07-08 | Dashboard UI refinement: engram source in Knowledge Panel, auto-refresh 30s, relevance colors, error states                                                                                                                             |
 | v7.0    | 2026-07-08 | Multi-repo Mesh API + Engram mem_search integration in knowledge-query                                                                                                                                                                  |
-| v6.7    | 2026-07-07 | Knowledge Persistence Layer: unified query engine (knowledge-query.ps1) cruza events, traces, feedback, checkpoints                                                                                                                     |
+| v6.7    | 2026-07-07 | Knowledge Persistence Layer: unified query engine (knowledge-query.ps1) cruza events, traces, feedback, checkpoints <!-- REF-OBSOLETA: knowledge-query.ps1 eliminado en migración PS1→TS -->                                                                                                                     |
 | v6.6    | 2026-07-07 | MCP SDK Scaffolder: create action multi-lenguaje (ts, js, py, go, rs) con auto-build y auto-register                                                                                                                                    |
-| v6.5    | 2026-07-07 | MCP Quickstart: pre-built server templates (sqlite, filesystem, browser, memory), 1-command enable via mcp-manager                                                                                                                      |
-| v6.4    | 2026-07-07 | MCP Native: local MCP server registry, gateway, CLI manager (mcp-manager.ps1), dashboard management UI (MCPServers.tsx), 3 REST endpoints, session pipeline integration                                                                 |
+| v6.5    | 2026-07-07 | MCP Quickstart: pre-built server templates (sqlite, filesystem, browser, memory), 1-command enable via src/mcp/mcp-manager.ts <!-- REF-OBSOLETA: mcp-manager.ps1 eliminado; migrado a src/mcp/mcp-manager.ts -->                                                                                                                      |
+| v6.4    | 2026-07-07 | MCP Native: local MCP server registry, gateway, CLI manager (src/mcp/mcp-manager.ts), dashboard management UI (MCPServers.tsx), 3 REST endpoints, session pipeline integration <!-- REF-OBSOLETA: mcp-manager.ps1 eliminado; migrado a src/mcp/mcp-manager.ts -->                                                                 |
 | v6.3    | 2026-07-07 | Dashboard Multi-Tenant: per-tenant metrics filtering, tenant selector UI, /api/tenants endpoint, /api/metrics?tenantId=                                                                                                                 |
 | v6.2    | 2026-07-07 | Cross-Org Federation: federation auth with RSA handshake, org registry, capability-based authorization, /api/federation endpoint                                                                                                        |
 | v6.1    | 2026-07-07 | AI Safety Layer: safety guardrails, prompt injection protection, mutation risk scoring, /api/safety endpoint                                                                                                                            |
