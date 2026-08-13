@@ -359,11 +359,14 @@
         "id": "opencode-config-validate",
         "enabled": true,
         "script": "src/validate-opencode-config.ts",
-        "args": "--config opencode.json",
+        "args": "--config opencode.json --timeout 10000",
         "required": true,
         "description": "Valida que opencode.json tenga configuraciones críticas para Gentle-Vanguard (previene crash y protege stack) (TS)",
         "phase": 1,
-        "skipOnFailure": false
+        "skipOnFailure": false,
+        "timeout": 15000,
+        "retries": 2,
+        "retryDelay": 1000
       },
       {
         "id": "validate-tool-configs",

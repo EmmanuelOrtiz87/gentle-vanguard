@@ -271,6 +271,18 @@ function main(): void {
     args.includes('--config') ? args[args.indexOf('--config') + 1] : 'opencode.json',
   );
   const fix = args.includes('--fix') || args.includes('-Fix');
+  
+  // Handle timeout if specified
+  const timeoutIndex = args.indexOf('--timeout');
+  if (timeoutIndex !== -1 && timeoutIndex + 1 < args.length) {
+    const timeoutMs = parseInt(args[timeoutIndex + 1], 10);
+    if (timeoutMs > 0) {
+      setTimeout(() => {
+        console.error('ERROR: Validation timeout exceeded');
+        process.exit(2);
+      }, timeoutMs);
+    }
+  }
 
   if (!existsSync(configPath)) {
     console.error(`ERROR: ${configPath} not found`);
