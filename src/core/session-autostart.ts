@@ -178,8 +178,10 @@ const CONFIG_PATH = join(ROOT, 'config', 'session-autostart.config.json');
 const LOG_DIR = join(ROOT, 'logs');
 const LAZY_LOG_PATH = join(LOG_DIR, 'session-autostart-lazy.log');
 
-// Max concurrent lazy steps to prevent spawning 56 processes at once
-const MAX_LAZY_CONCURRENCY = 5;
+// Max concurrent lazy steps to prevent spawning 56 processes at once.
+// Lowered 5 -> 2 to avoid CPU saturation spikes (77 lazy steps in batches
+// of 5 created ~17 simultaneous node processes on Windows).
+const MAX_LAZY_CONCURRENCY = 2;
 
 function loadConfig(): PipelineConfig {
   try {
@@ -270,6 +272,61 @@ function executeStep(
   });
 }
 
+// Cache of running scripts, populated ONCE per run (avoids 75x PowerShell calls).
+let runningScriptsCache: Set<string> | null = null;
+
+/**
+ * Collect all running node script basenames with a SINGLE PowerShell query.
+ * Populated lazily on first use and reused for the whole run — this avoids
+ * one PowerShell spawn per lazy step (~1s each), which previously ballooned
+ * the pipeline from ~40s to ~100s with 75 lazy steps.
+ */
+function getRunningScripts(): Set<string> {
+  if (runningScriptsCache) return runningScriptsCache;
+  runningScriptsCache = new Set<string>();
+  try {
+    if (process.platform === 'win32') {
+      const psCmd =
+        `Get-CimInstance Win32_Process -Filter "Name='node.exe'" | ` +
+        `Where-Object { $_.CommandLine } | ForEach-Object { $_.CommandLine }`;
+      const r = runSync('powershell', ['-NoProfile', '-Command', psCmd], {
+        timeout: 8000,
+        stdio: ['ignore', 'pipe', 'ignore'],
+      });
+      for (const line of r.stdout.split(/\r?\n/)) {
+        const m = line.match(/[\\/]([A-Za-z0-9_\-]+\.ts)\b/);
+        if (m) runningScriptsCache.add(m[1]);
+      }
+    } else {
+      const r = runSync('pgrep', ['-af', '\\.ts'], {
+        timeout: 5000,
+        stdio: ['ignore', 'pipe', 'ignore'],
+      });
+      for (const line of r.stdout.split(/\r?\n/)) {
+        const m = line.match(/([A-Za-z0-9_\-]+\.ts)/);
+        if (m) runningScriptsCache.add(m[1]);
+      }
+    }
+  } catch {
+    /* empty cache on failure — safe default */
+  }
+  return runningScriptsCache;
+}
+
+/**
+ * Check whether a process for the given script is already running.
+ *
+ * Repeated session-autostart runs were accumulating duplicate lazy daemons
+ * (e.g. 3x token-ingest, 3x codegraph-mcp-server-start) because each run
+ * spawned its own set without killing the previous ones. We skip launching
+ * a lazy step whose script is already alive — the daemon is still healthy.
+ */
+function isScriptRunning(scriptPath: string): boolean {
+  const scriptName = scriptPath.split(/[\\/]/).pop() ?? '';
+  if (!scriptName) return false;
+  return getRunningScripts().has(scriptName);
+}
+
 /**
  * Start a lazy step with windowsHide:true.
  * Lazy steps are batched to avoid spawning 56 processes simultaneously.
@@ -278,6 +335,12 @@ function startLazyStep(step: PipelineStep): { success: boolean; error?: string }
   const scriptPath = join(ROOT, step.script);
   if (!existsSync(scriptPath)) {
     return { success: false, error: `Script not found: ${step.script}` };
+  }
+
+  // Dedupe: skip if a process for this script is already running.
+  if (isScriptRunning(scriptPath)) {
+    LOG.info(`[DEDUPE] ${step.id} already running — skipping duplicate launch`);
+    return { success: true, error: 'skipped-duplicate' };
   }
 
   mkdirSync(LOG_DIR, { recursive: true });
@@ -444,11 +507,15 @@ async function main() {
   if (lazySteps.length > 0) {
     LOG.info(`\n=== Starting Lazy Steps (batch=${MAX_LAZY_CONCURRENCY}) ===`);
     let launched = 0;
+    let deduped = 0;
     for (let i = 0; i < lazySteps.length; i += MAX_LAZY_CONCURRENCY) {
       const batch = lazySteps.slice(i, i + MAX_LAZY_CONCURRENCY);
       for (const step of batch) {
         const result = startLazyStep(step);
-        if (result.success) {
+        if (result.error === 'skipped-duplicate') {
+          deduped++;
+          LOG.info(`  [SKIP] ${step.id} (already running)`);
+        } else if (result.success) {
           launched++;
           LOG.info(`  [OK] ${step.id} (lazy started)`);
         } else {
@@ -457,12 +524,13 @@ async function main() {
       }
       // Small delay between batches to avoid overwhelming the OS
       if (i + MAX_LAZY_CONCURRENCY < lazySteps.length) {
-        await new Promise((r) => setTimeout(r, 100));
+        await new Promise((r) => setTimeout(r, 150));
       }
     }
     LOG.info(`[INFO] Lazy step launch log: ${LAZY_LOG_PATH}`);
     LOG.info(
-      `[INFO] Launched ${launched}/${lazySteps.length} lazy steps in batches of ${MAX_LAZY_CONCURRENCY}`,
+      `[INFO] Launched ${launched}/${lazySteps.length} lazy steps in batches of ${MAX_LAZY_CONCURRENCY}` +
+        (deduped > 0 ? ` (${deduped} deduped, already running)` : ''),
     );
   }
 
