@@ -42,16 +42,16 @@
     },
     "lite": {
       "name": "lite",
-      "description": "Professional concise language with complete sentences; no filler.",
-      "compressionLevel": 0.4,
-      "maxLines": 30,
-      "maxTokens": 1200,
-      "abbreviate": false,
-      "causalNotation": false,
-      "expandContractions": true,
+      "description": "Professional concise language with abbreviations; no filler. Optimized for token efficiency.",
+      "compressionLevel": 0.85,
+      "maxLines": 15,
+      "maxTokens": 700,
+      "abbreviate": true,
+      "causalNotation": true,
+      "expandContractions": false,
       "removeFillers": true,
       "singleLineResponses": false,
-      "guidelines": ["No digressions.", "Keep complete sentences.", "Focus on actionable output."]
+      "guidelines": ["Use abbreviations (db/auth/config/req/res/fn).", "No digressions.", "Keep sentences short.", "Focus on actionable output.", "Prefer X -> Y notation."]
     },
     "simple": {
       "name": "simple",

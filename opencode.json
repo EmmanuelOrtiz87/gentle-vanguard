@@ -26,7 +26,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 38,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -41,7 +41,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 30,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -56,7 +56,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 52,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -71,7 +71,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 36,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -86,7 +86,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 34,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -101,7 +101,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 30,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -116,7 +116,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 38,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -131,7 +131,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 25,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -146,7 +146,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 30,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -161,7 +161,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 30,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -191,7 +191,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 38,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
@@ -311,7 +311,7 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 6,
+      "steps": 35,
       "variant": "",
       "model": "opencode/deepseek-v4-flash-free",
       "litellm_settings": {
