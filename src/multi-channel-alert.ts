@@ -604,4 +604,5 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   });
 }
 
-export { sendAlert, AlertPayload };
+export { sendAlert };
+export type { AlertPayload };

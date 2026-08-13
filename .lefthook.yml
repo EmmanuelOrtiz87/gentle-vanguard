@@ -36,7 +36,7 @@ pre-commit:
         trufflehog filesystem --no-verification --no-update --fail=false --exclude-paths
         .trufflehogignore {staged_files} || exit 0
     skill-scan:
-      glob: 'skills/*/SKILL.md'
+      glob: '{.opencode/,}skills/*/SKILL.md'
       run: npx tsx src/scan-skill-hook.ts --StagedFiles '{staged_files}'
     secretlint:
       glob: '*.{json,yml,yaml,md,env,toml,xml}'
