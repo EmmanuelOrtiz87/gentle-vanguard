@@ -1,7 +1,7 @@
 # Reporte Final de Salud del Stack — Gentle-Vanguard
 
 **Fecha:** 2026-08-12 | **Sesión:** session-20260812T0442 | **Branch:** develop
-**Commits:** `c4ceac7a` (fixes código) + `e968e47b` (docs + embeddings)
+**Commits:** `c4ceac7a` (fixes código) + `e968e47b` (docs + embeddings) + `2320ace0` (watchtower autoheal) + `192972f5` (66 refs PS1→TS)
 
 ---
 
@@ -58,7 +58,12 @@
 
 - El `watchtower --action autoheal` tardó varios minutos: wrapper launch falló → reintento direct spawn; codegraph no aparecía en la tabla de procesos (timing race de ~5s entre spawn y scan).
 - **Causa raíz:** codegraph corre como MCP server sobre stdio (`--mcp --no-watch`), no abre puerto TCP — el check "port 3000" es falso negativo de diseño; el proceso se detecta por tabla de procesos.
-- **Resuelto:** re-ejecución del health check confirma 89/89 PASS. Dashboard-ws y codegraph operativos.
+- **Resuelto en `2320ace0`:** autoheal ahora usa retry loop 5×4s (20s total) verificando tabla de procesos + PID file; el probe de puerto queda como señal secundaria opcional. Verificado: 89/89 PASS.
+
+### 2.7 Refs docs secundarias corregidas (lote automático verificado)
+
+- **66 refs `scripts/*.ps1` → `src/*.ts`** corregidas en 33 archivos MD (41 rutas únicas, todos los targets verificados en filesystem) — commit `192972f5`.
+- **Deuda restante medida con escaneo real:** 238 refs PS1 sin equivalente TS + 105 refs `src/*.ts` inexistentes (documentadas, no silenciosas).
 
 ---
 
@@ -92,17 +97,17 @@
 |---|---|---|
 | **CI GitHub** | Externo | Recargar crédito de billing en GitHub → re-ejecutar runs |
 | **Workflow Lint + Integration Tests** | CI | Bloqueados por billing; diagnóstico documentado en engram (#2767) |
-| **Refs docs restantes** | Deuda baja | ~345 refs en docs no prioritarios (marcadas REF-OBSOLETA en los 6 principales; resto en docs secundarios) |
+| **Refs docs restantes** | Deuda baja | 238 PS1 sin equivalente TS + 105 src/*.ts inexistentes (medido, documentado) |
 | **Sugerencia 4 Codex** | Opcional | Capa de vida diaria/operaciones personales — nunca solicitada, no bloquea nada |
 
 ---
 
 ## 5. Recomendaciones
 
-1. **Regenerar embeddings periódicamente** (el check exige <48h de frescura) — considerar un lazy step en el pipeline.
-2. **Mejorar el check de codegraph**: el check "port 3000" genera falsos negativos; el proceso stdio MCP debería validarse solo por tabla de procesos + PID file.
+1. **Regenerar embeddings periódicamente** — ✅ resuelto: lazy step `ml-embeddings-incremental` ya existe en el pipeline (frescura <48h automática).
+2. **Mejorar el check de codegraph** — ✅ resuelto en `2320ace0`: retry loop 5×4s + PID file; el puerto es señal secundaria opcional.
 3. **Al recargar crédito GitHub**: re-ejecutar CI y cerrar los 2 checks pendientes (Workflow Lint, Integration Tests).
-4. **Continuar limpieza de refs docs** en los archivos secundarios (docs/sdd/*, docs/guides/*) en próximas sesiones.
+4. **Continuar limpieza de refs docs**: 238 refs PS1 sin equivalente TS + 105 refs src/*.ts rotas en docs secundarios — pendiente para próximas sesiones (deuda baja, no bloquea).
 
 ---
 
