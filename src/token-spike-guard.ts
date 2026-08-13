@@ -17,6 +17,7 @@
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';
+import { pathToFileURL } from 'url';
 import { join, resolve } from 'path';
 import { spawn } from 'child_process';
 
@@ -433,7 +434,7 @@ async function main(): Promise<void> {
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch(err => {
     log('ERROR', 'Fatal error', { error: String(err) });
     process.exit(1);

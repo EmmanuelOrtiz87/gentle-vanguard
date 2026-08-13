@@ -17,6 +17,7 @@
  */
 
 import { createServer, IncomingMessage, ServerResponse } from 'http';
+import { pathToFileURL } from 'url';
 import { existsSync, mkdirSync, writeFileSync, rmSync } from 'fs';
 import { join, resolve } from 'path';
 
@@ -343,7 +344,7 @@ async function runTest(scenarioName: string): Promise<boolean> {
 
 // CLI
 const isMain =
-  import.meta.url === `file://${process.argv[1]}` ||
+  process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href ||
   process.argv[1]?.includes('deterministic-test-framework');
 
 if (isMain) {

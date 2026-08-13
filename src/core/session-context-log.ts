@@ -34,6 +34,7 @@
  */
 
 import * as fs from 'fs';
+import { pathToFileURL } from 'url';
 import * as path from 'path';
 import { ROOT } from './repo-root';
 
@@ -224,7 +225,7 @@ export class SessionContextLog {
 
 // ─── CLI para testing ────────────────────────────────────────────────────
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   console.log('[SessionContextLog] Testing...');
 
   // Test write

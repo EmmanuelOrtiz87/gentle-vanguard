@@ -14,6 +14,7 @@
  */
 
 import { runSync } from './core/run-command.js';
+import { pathToFileURL } from 'url';
 import * as http from 'http';
 
 const ENGRAM_PORT = Number(process.env.ENGRAM_PORT || 7437);
@@ -246,7 +247,7 @@ function postSessionEndHttp(
 }
 
 // Auto-ejecutar si es main module
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const command = process.argv[2];
   const sessionId =
     process.argv[3] || `session-${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}`;

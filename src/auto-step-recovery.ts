@@ -15,6 +15,7 @@
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { pathToFileURL } from 'url';
 import { join, resolve } from 'path';
 
 const ROOT = resolve(process.cwd());
@@ -124,7 +125,7 @@ function getCurrentSteps(agentId: string): number {
 }
 
 // Demo/Test
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   console.log('Auto-Step-Recovery System');
   console.log('==========================\n');
 

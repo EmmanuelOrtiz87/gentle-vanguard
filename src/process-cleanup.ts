@@ -5,6 +5,7 @@
  */
 
 import { runSyncShell } from './core/run-command.js';
+import { pathToFileURL } from 'url';
 import { existsSync, unlinkSync } from 'fs';
 import { join } from 'path';
 
@@ -117,6 +118,6 @@ export function fullCleanup(): { killed: number; cleaned: number } {
 }
 
 // CLI
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   fullCleanup();
 }

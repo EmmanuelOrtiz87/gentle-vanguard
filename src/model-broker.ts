@@ -7,6 +7,7 @@
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { pathToFileURL } from 'url';
 import { join } from 'path';
 
 const ROOT = process.cwd();
@@ -367,7 +368,7 @@ Examples:
 }
 
 // Run if called directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch(console.error);
 }
 

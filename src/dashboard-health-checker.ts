@@ -26,6 +26,7 @@
  */
 
 import * as http from 'http';
+import { pathToFileURL } from 'url';
 import * as net from 'net';
 
 export interface DashboardHealthResult {
@@ -214,7 +215,7 @@ export async function checkDashboardHealthWithRetry(
 }
 
 // CLI usage
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   checkDashboardHealth()
     .then((result) => {
       console.log(JSON.stringify(result, null, 2));

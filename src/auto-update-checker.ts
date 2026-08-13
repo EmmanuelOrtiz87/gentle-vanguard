@@ -7,6 +7,7 @@
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { pathToFileURL } from 'url';
 import { join, resolve } from 'path';
 import * as https from 'https';
 
@@ -226,7 +227,7 @@ function showUpdateInstructions(): void {
 
 // CLI usage
 const isMain =
-  import.meta.url === `file://${process.argv[1]}` ||
+  process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href ||
   process.argv[1]?.includes('auto-update-checker');
 
 if (isMain) {

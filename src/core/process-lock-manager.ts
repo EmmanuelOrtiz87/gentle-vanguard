@@ -28,6 +28,7 @@
  */
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync } from 'fs';
+import { pathToFileURL } from 'url';
 import { join, resolve } from 'path';
 import { execSync } from 'child_process';
 
@@ -292,7 +293,7 @@ export function checkProcessLocks(): { name: string; pid: number | null; age: nu
 }
 
 // CLI
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const args = process.argv.slice(2);
   
   if (args.includes('--status')) {

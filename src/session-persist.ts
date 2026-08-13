@@ -8,6 +8,7 @@
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { pathToFileURL } from 'url';
 import { join } from 'path';
 
 const ROOT = process.cwd();
@@ -115,7 +116,7 @@ export function markComponentReady(component: keyof SessionState['components']):
 }
 
 // CLI
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const command = process.argv[2];
 
   switch (command) {

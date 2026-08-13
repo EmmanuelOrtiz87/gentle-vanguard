@@ -6,6 +6,7 @@
  */
 
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
+import { pathToFileURL } from 'url';
 import { join } from 'path';
 
 // Types
@@ -583,7 +584,7 @@ Examples:
   console.log('\n✅ Done!');
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch(console.error);
 }
 

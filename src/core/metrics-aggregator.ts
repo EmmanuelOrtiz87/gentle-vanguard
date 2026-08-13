@@ -12,6 +12,7 @@
  */
 
 import * as fs from 'fs';
+import { pathToFileURL } from 'url';
 import * as path from 'path';
 import { ROOT } from './repo-root';
 import { getAllSessionStates, SessionState } from './session-context-log';
@@ -279,7 +280,7 @@ export function recordMetricEvent(event: {
 
 // ─── CLI para testing ───────────────────────────────────────────────────────
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   console.log('[MetricsAggregator] Testing...');
   const metrics = getAggregatedDashboardMetrics();
   console.log(JSON.stringify(metrics, null, 2));

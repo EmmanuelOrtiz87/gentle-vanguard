@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { existsSync, readFileSync, readdirSync } from 'fs';
+import { pathToFileURL } from 'url';
 import { join } from 'path';
 import { validateOpencodeJsonSteps, validateAgentMdSteps } from '../opencode-guards.js';
 import { db } from '../database/db.js';
@@ -111,7 +112,7 @@ function clearValidationAlert(): void {
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const code = main();
   process.exit(code);
 }

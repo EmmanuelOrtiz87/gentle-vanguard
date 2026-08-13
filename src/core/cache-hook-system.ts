@@ -21,6 +21,7 @@
  */
 
 import { ResponseCache } from '../response-cache.js';
+import { pathToFileURL } from 'url';
 import { mkdirSync, appendFileSync } from 'fs';
 import { join, resolve } from 'path';
 
@@ -293,7 +294,7 @@ if (typeof process !== 'undefined') {
 }
 
 // ─── CLI ─────────────────────────────────────────────────────────────────────
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const args = process.argv.slice(2);
   
   if (args.includes('--stats')) {

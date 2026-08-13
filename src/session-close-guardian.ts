@@ -13,6 +13,7 @@
  */
 
 import { existsSync, readFileSync, writeFileSync, appendFileSync } from 'fs';
+import { pathToFileURL } from 'url';
 import { join, resolve } from 'path';
 import { runNpxTsxSync } from './core/run-command.js';
 
@@ -201,7 +202,7 @@ export function learnFromMistake(context: string): void {
 }
 
 // Auto-check si se importa directamente
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const result = guardianCheck();
   console.log('[GUARIDAN] Check:', result.passed ? 'PASS' : 'WARNING');
 }

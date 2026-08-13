@@ -9,6 +9,7 @@
  */
 
 import { spawn } from 'child_process';
+import { pathToFileURL } from 'url';
 import { mkdirSync, existsSync, writeFileSync, rmSync } from 'fs';
 import { join } from 'path';
 
@@ -570,7 +571,7 @@ Examples:
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch(console.error);
 }
 
