@@ -39,6 +39,7 @@ import { TokenUsagePanel } from './TokenUsagePanel';
 import { ContractResultsPanel } from './ContractResultsPanel';
 import { RoutingRulesPanel } from './RoutingRulesPanel';
 import { SwarmWorkersPanel } from './SwarmWorkersPanel';
+import { StackCapabilitiesPanel } from './StackCapabilitiesPanel';
 import { AlertPanel } from './AlertPanel';
 import { LiveTraceFeed } from './LiveTraceFeed';
 import { SkillHeatmap } from './SkillHeatmap';
@@ -572,6 +573,11 @@ function DashboardInner() {
         {/* Row: Swarm Workers */}
         <div className="mb-8">
           <SwarmWorkersPanel data={data.swarmWorkers} />
+        </div>
+
+        {/* Row: Stack Capabilities (Fase 1/2: anomalies, circuit breakers, DB healing) */}
+        <div className="mb-8">
+          <StackCapabilitiesPanel data={(data as any).stackCapabilities} />
         </div>
 
         {/* Row: SQLite Stack Tables (Wave 37) */}
