@@ -15,7 +15,6 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } fr
 import { pathToFileURL } from 'url';
 import { join, resolve } from 'path';
 import { createServer, IncomingMessage, ServerResponse } from 'http';
-import { execSync } from 'child_process';
 
 const ROOT = resolve(process.cwd());
 const METRICS_DIR = join(ROOT, '.runtime', 'performance-metrics');

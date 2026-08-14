@@ -13,7 +13,7 @@
  *   npx tsx src/context-truncator.ts --info                    # Show current context size
  */
 
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
+import { readFileSync, existsSync, mkdirSync } from "fs";
 import { pathToFileURL } from 'url';
 import { join, resolve } from "path";
 
@@ -139,7 +139,7 @@ export function truncateHistory(
   }
 
   // If way over threshold, summarize the middle section
-  let resultMessages: Message[] = [];
+  const resultMessages: Message[] = [];
   const removedIndexes: number[] = [];
 
   // Keep critical messages first

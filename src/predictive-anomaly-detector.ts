@@ -19,8 +19,6 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';
 import { pathToFileURL } from 'url';
 import { join, resolve } from 'path';
-import { execSync, spawn } from 'child_process';
-import { homedir } from 'os';
 
 const ROOT = resolve(process.cwd());
 const LOG_DIR = join(ROOT, '.runtime', 'anomaly-logs');
@@ -185,7 +183,7 @@ async function collectMetrics(): Promise<MetricSnapshot> {
   const memoryMB = Math.round(memUsage.heapUsed / 1024 / 1024);
   
   // Database
-  let dbMetrics = { connections: 0, slowQueries: 0, walSize: 0 };
+  const dbMetrics = { connections: 0, slowQueries: 0, walSize: 0 };
   try {
     const dbPath = join(ROOT, '.runtime', 'gentle-vanguard.db');
     if (existsSync(dbPath)) {
@@ -198,7 +196,7 @@ async function collectMetrics(): Promise<MetricSnapshot> {
   } catch {}
   
   // Dashboard health
-  let dashboard = { wsConnected: false, healthScore: 100 };
+  const dashboard = { wsConnected: false, healthScore: 100 };
   try {
     const healthCheck = join(ROOT, '.runtime', 'health-report-latest.json');
     if (existsSync(healthCheck)) {

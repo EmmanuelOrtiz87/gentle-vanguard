@@ -308,7 +308,7 @@ async function runGuardLoop(): Promise<void> {
         .sort((a, b) => a[1] - b[1]);
       
       if (thresholds.length > 0) {
-        const [nextLevel, nextValue] = thresholds[0];
+        const [, nextValue] = thresholds[0];
         state.projectedTimeToLimit = projectTimeToLimit(
           metrics.total,
           state.currentBurnRate,

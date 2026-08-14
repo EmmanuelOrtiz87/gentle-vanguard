@@ -123,7 +123,7 @@ const VALID_PROPS = new Set([
       if (hasAgentConfig) {
         const agents = config.agent as Record<string, unknown>;
         let hasModel = false;
-        for (const [_, agentConfig] of Object.entries(agents)) {
+        for (const agentConfig of Object.values(agents)) {
           if (agentConfig && typeof agentConfig === 'object') {
             const agent = agentConfig as Record<string, unknown>;
             if ('model' in agent) {

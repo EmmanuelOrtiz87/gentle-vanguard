@@ -16,10 +16,8 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';
 import { pathToFileURL } from 'url';
 import { join, resolve } from 'path';
-import { spawn } from 'child_process';
 
 const ROOT = resolve(process.cwd());
-const CONFIG_DIR = join(ROOT, 'config');
 const STATE_DIR = join(ROOT, '.runtime', 'alert-system');
 const LOG_FILE = join(STATE_DIR, 'alerts.log');
 
