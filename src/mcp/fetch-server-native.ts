@@ -56,9 +56,7 @@ function getFromCache(url: string): string | null {
   try {
     const file = join(CACHE_DIR, cacheKey(url) + '.txt');
     if (!existsSync(file)) return null;
-    const stat = readFileSync(file);
-    // Verificar TTL
-    const age = Date.now() - stat.length; // placeholder, real check via mtime
+    // Verificar TTL via mtime
     const mtime = require('fs').statSync(file).mtimeMs;
     if (Date.now() - mtime > CONFIG.cacheTtlMs) return null;
     return readFileSync(file, 'utf-8');
@@ -98,56 +96,23 @@ async function fetchViaJinaReader(url: string): Promise<string> {
   }
 }
 
-// ─── Web Search via DuckDuckGo ────────────────────────────────────────────────
-async function searchViaDuckDuckGo(query: string, limit: number): Promise<Array<{ title: string; url: string; snippet: string }>> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), CONFIG.timeoutMs);
+// ─── Web Search via stack native web-crawler ────────────────────────────────
+// DELEGA en src/web-crawler.ts (probado, con fallback DDG→Bing RSS)
+// en lugar de duplicar la lógica de parsing HTML.
+import { createWebCrawler } from '../web-crawler.js';
 
+async function searchViaNativeCrawler(query: string, limit: number): Promise<Array<{ title: string; url: string; snippet: string }>> {
   try {
-    const response = await fetch(
-      `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`,
-      {
-        headers: { 'User-Agent': CONFIG.userAgent },
-        signal: controller.signal,
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`DDG HTTP ${response.status}`);
-    }
-
-    const html = await response.text();
-    const results: Array<{ title: string; url: string; snippet: string }> = [];
-
-    // Parse DDG HTML results (simple regex-based parser)
-    const resultRegex = /<a[^>]*class="result__a"[^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/g;
-    const snippetRegex = /<a[^>]*class="result__snippet"[^>]*>(.*?)<\/a>/g;
-
-    const urlMatches = [...html.matchAll(resultRegex)];
-    const snippetMatches = [...html.matchAll(snippetRegex)];
-
-    for (let i = 0; i < Math.min(limit, urlMatches.length); i++) {
-      const rawHref = urlMatches[i][1];
-      const title = urlMatches[i][2].replace(/<[^>]*>/g, '').trim();
-      const snippet = snippetMatches[i]?.[1]?.replace(/<[^>]*>/g, '').trim() || '';
-
-      // Decode DDG redirect param (uddg)
-      let url = rawHref;
-      const uddgMatch = rawHref.match(/uddg=([^&]+)/);
-      if (uddgMatch) {
-        try {
-          url = decodeURIComponent(uddgMatch[1]);
-        } catch {
-          url = rawHref;
-        }
-      }
-
-      results.push({ title, url, snippet });
-    }
-
-    return results;
-  } finally {
-    clearTimeout(timeout);
+    const crawler = createWebCrawler();
+    const results = await crawler.search(query, limit);
+    return results.map((r) => ({
+      title: r.title || '',
+      url: r.url || '',
+      snippet: r.description || r.content || '',
+    }));
+  } catch (err) {
+    log('ERROR', 'Native crawler search failed', { error: String(err) });
+    return [];
   }
 }
 
@@ -221,7 +186,7 @@ server.tool(
   async ({ query, limit }) => {
     try {
       log('INFO', 'Searching web', { query, limit });
-      const results = await searchViaDuckDuckGo(query, limit || 5);
+      const results = await searchViaNativeCrawler(query, limit || 5);
 
       if (results.length === 0) {
         return {
@@ -291,7 +256,7 @@ async function main() {
   if (process.argv.includes('--test')) {
     log('INFO', 'Running self-test...');
     try {
-      const results = await searchViaDuckDuckGo('typescript', 2);
+      const results = await searchViaNativeCrawler('typescript', 2);
       console.log('search_web test:', results.length > 0 ? 'PASS' : 'FAIL', `(${results.length} results)`);
     } catch (err) {
       console.log('search_web test: FAIL', String(err));
@@ -309,4 +274,4 @@ main().catch((err) => {
   process.exit(1);
 });
 
-export { fetchViaJinaReader, searchViaDuckDuckGo };
+export { fetchViaJinaReader, searchViaNativeCrawler };
