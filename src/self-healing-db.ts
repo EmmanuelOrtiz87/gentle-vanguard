@@ -72,6 +72,8 @@ function log(level: string, message: string, meta?: Record<string, unknown>): vo
 // ─── State Management ─────────────────────────────────────────────────────────
 interface HealState {
   lastHealTime: number;
+  lastCheckTime: number;
+  lastStatus: 'healthy' | 'healed' | 'error';
   healCount: number;
   healAttempts: number;
   lastError: string | null;
@@ -94,6 +96,8 @@ function loadState(): HealState {
   
   return {
     lastHealTime: 0,
+    lastCheckTime: 0,
+    lastStatus: 'healthy',
     healCount: 0,
     healAttempts: 0,
     lastError: null,
@@ -391,6 +395,11 @@ async function runHeal(): Promise<boolean> {
   
   if (actions.length === 0) {
     log('INFO', 'No healing needed, DB healthy');
+    // Persist state so the dashboard observes dbHealing even when healthy
+    state.lastCheckTime = Date.now();
+    state.lastStatus = 'healthy';
+    state.lastHealTime = Date.now();
+    saveState(state);
     return true;
   }
   
@@ -442,10 +451,14 @@ async function runHeal(): Promise<boolean> {
   
   // Update state
   state.lastHealTime = Date.now();
+  state.lastCheckTime = Date.now();
   if (success) {
     state.healCount++;
     state.healAttempts = 0;
+    state.lastStatus = 'healed';
     log('SUCCESS', 'Healing completed successfully');
+  } else {
+    state.lastStatus = 'error';
   }
   
   saveState(state);
