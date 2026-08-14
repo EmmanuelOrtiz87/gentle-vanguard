@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { readFileSync, existsSync, readdirSync, writeFileSync, statSync } from 'fs';
-import { join, resolve, basename } from 'path';
+import { join, resolve, basename, relative } from 'path';
 import { spawn, execFileSync } from 'child_process';
 import { runSync } from './run-command';
 import { createConnection } from 'net';
@@ -845,6 +845,58 @@ async function checkSecretScanner() {
   }
 }
 
+// ─── Component: CLI Guard (Windows pathToFileURL) ────────────────────────────
+
+async function checkCliGuard() {
+  if (!quiet) console.log('  [CLI Guard] Checking...');
+
+  // Detecta el patrón roto `import.meta.url === \`file://${process.argv[1]}\``
+  // que NO normaliza rutas Windows (backslashes) → main() nunca se ejecuta.
+  // El patrón correcto usa pathToFileURL(process.argv[1]).href.
+  const brokenPattern = /import\.meta\.url\s*===\s*`file:\/\/\$\{process\.argv\[1\]\}`/;
+  const srcDir = join(ROOT, 'src');
+  let brokenCount = 0;
+  const brokenFiles: string[] = [];
+
+  const walk = (dir: string): void => {
+    let dirEntries: import('fs').Dirent[];
+    try {
+      dirEntries = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of dirEntries) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(full);
+      } else if (entry.name.endsWith('.ts')) {
+        try {
+          const content = readFileSync(full, 'utf8');
+          if (brokenPattern.test(content)) {
+            brokenCount++;
+            brokenFiles.push(relative(ROOT, full));
+          }
+        } catch {
+          // skip unreadable
+        }
+      }
+    }
+  };
+  walk(srcDir);
+
+  if (brokenCount === 0) {
+    addResult('cli-guard', 'pathToFileURL guard', 'PASS', 'No broken CLI guards found', 'ok');
+  } else {
+    addResult(
+      'cli-guard',
+      'pathToFileURL guard',
+      'FAIL',
+      `${brokenCount} file(s) with broken guard: ${brokenFiles.join(', ')}`,
+      'manual',
+    );
+  }
+}
+
 // ─── Component: Cloud Connectors ────────────────────────────────────────────
 // NOTE: Cloud connectors deprecated - stack operates in local-only mode
 // This check now verifies local execution mode without cloud dependencies
@@ -1677,6 +1729,7 @@ async function runAllChecks() {
     checkToolConfigs,
     checkSecurity,
     checkSecretScanner,
+    checkCliGuard,
     checkCloudConnectors,
     checkTracing,
     checkStatePersistence,
