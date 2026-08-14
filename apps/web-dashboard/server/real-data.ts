@@ -24,6 +24,7 @@ const STATS_PATH = join(ROOT, '.atl', 'skill-stats.json');
 const REGISTRY_PATH = join(ROOT, '.atl', 'skill-registry.md');
 const SESSIONS_HISTORY_PATH = join(ROOT, '.event-bus', 'sessions-history.json');
 const CONTEXT_LOG_DIR = join(ROOT, '.session', 'context-log');
+const TELEMETRY_TRACES_DIR = join(ROOT, '.telemetry', 'traces');
 
 // ─── Model Pricing ────────────────────────────────────────────────────
 const MODEL_PRICING: Record<string, { input: number; output: number }> = {
@@ -900,9 +901,88 @@ export function getTraces(): { traces: Trace[]; stats: TraceStats } {
     }
   }
 
+  // If still no traces, fall back to OTLP spans in .telemetry/traces/*.jsonl
+  if (traces.length === 0) {
+    try {
+      if (existsSync(TELEMETRY_TRACES_DIR)) {
+        const files = readdirSync(TELEMETRY_TRACES_DIR).filter((f) => f.endsWith('.jsonl'));
+        const otlpTraces: Trace[] = [];
+        for (const file of files) {
+          const lines = readFileSync(join(TELEMETRY_TRACES_DIR, file), 'utf-8')
+            .split('\n')
+            .filter((l) => l.trim());
+          for (const line of lines) {
+            try {
+              const span = JSON.parse(line) as {
+                spanId?: string;
+                traceId?: string;
+                parentSpanId?: string;
+                name?: string;
+                startTimeUnixNano?: string | number;
+                endTimeUnixNano?: string | number;
+                status?: { code?: string };
+                attributes?: Array<{ key?: string; value?: { stringValue?: string } }> | null;
+              };
+              if (!span || !span.spanId) continue;
+              // Skip session-start spans: they track session lifetime (days), not
+              // operation latency — they would flood the tracing waterfall.
+              if (span.name === 'session-start') continue;
+              const startTime = Number(span.startTimeUnixNano || 0) / 1e6;
+              const endTime = Number(span.endTimeUnixNano || 0) / 1e6;
+              // Skip spans with invalid timestamps (would skew avgDuration)
+              if (startTime <= 0 || (endTime > 0 && endTime < startTime)) continue;
+              const attrs: Record<string, string> = {};
+              if (Array.isArray(span.attributes)) {
+                for (const a of span.attributes) {
+                  if (a.key && a.value?.stringValue !== undefined) {
+                    attrs[a.key] = a.value.stringValue;
+                  }
+                }
+              }
+              otlpTraces.push({
+                traceId: span.traceId || file,
+                spanId: span.spanId,
+                parentSpanId: span.parentSpanId || undefined,
+                name: span.name || 'span',
+                startTime,
+                endTime: endTime > 0 ? endTime : undefined,
+                duration: endTime > 0 && startTime > 0 ? Math.round(endTime - startTime) : 0,
+                status:
+                  span.status?.code === 'STATUS_CODE_ERROR'
+                    ? 'error'
+                    : span.status?.code === 'STATUS_CODE_OK'
+                      ? 'completed'
+                      : 'running',
+                attributes: {
+                  model: attrs['model'] ?? attrs['llm.model'] ?? 'unknown',
+                  sessionId: attrs['sessionId'] ?? attrs['session_id'] ?? '',
+                  ...attrs,
+                },
+              });
+            } catch {
+              /* skip malformed line */
+            }
+          }
+        }
+        // Most recent spans first, cap at 200 to protect the frontend
+        otlpTraces.sort((a, b) => b.startTime - a.startTime);
+        traces.push(...otlpTraces.slice(0, 200));
+      }
+    } catch {
+      /* best-effort */
+    }
+  }
+
   const activeSpans = traces.filter((t) => Date.now() - t.startTime < 3600000).length;
+  // Exclude session-start spans (session lifetime, not operation latency) and
+  // outliers > 1h from the average — they skew the operational latency metric.
   const durations = traces
-    .filter((t): t is typeof t & { duration: number } => t.duration !== undefined)
+    .filter(
+      (t): t is typeof t & { duration: number } =>
+        t.duration !== undefined &&
+        t.name !== 'session-start' &&
+        t.duration <= 3600000,
+    )
     .map((t) => t.duration);
   const avgDuration =
     durations.length > 0 ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length) : 0;
