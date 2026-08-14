@@ -221,12 +221,9 @@ server.tool(
   },
   async (params) => {
     try {
+      // createThoughtChain() registers the chain in thoughtChains and returns its id,
+      // so the chain is always present here — no second creation is needed.
       const chainId = params.chainId || createThoughtChain();
-      
-      // Create new chain if chainId doesn't exist
-      if (!params.chainId && !thoughtChains.has(chainId)) {
-        createThoughtChain();
-      }
 
       const thought = addThought(chainId, {
         thought: params.thought,
