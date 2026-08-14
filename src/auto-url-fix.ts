@@ -15,7 +15,7 @@
  *   npx tsx src/auto-url-fix.ts --dry-run   # mostrar qué se arreglaría
  *   npx tsx src/auto-url-fix.ts             # aplicar fixes
  */
-import { existsSync, readFileSync, writeFileSync, readdirSync } from 'fs';
+import { readFileSync, writeFileSync, readdirSync } from 'fs';
 import { join, relative, resolve } from 'path';
 
 const ROOT = resolve(process.cwd());
@@ -101,7 +101,6 @@ function applyFix(content: string): string {
 function main(): void {
   const files = collectTsFiles(SRC);
   let fixed = 0;
-  let skipped = 0;
 
   console.log(`auto-url-fix ${DRY_RUN ? '(dry-run)' : '(apply)'} — scanning ${files.length} TS files`);
 
@@ -123,7 +122,7 @@ function main(): void {
     fixed++;
   }
 
-  console.log(`\nDone: ${fixed} file(s) fixed, ${skipped} skipped`);
+  console.log(`\nDone: ${fixed} file(s) fixed`);
 }
 
 void main();
