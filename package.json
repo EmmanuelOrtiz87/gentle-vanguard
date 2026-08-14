@@ -49,6 +49,7 @@
     "snapshot:cleanup": "npx tsx src/snapshot-manager.ts --action cleanup",
     "rollback:execute": "npx tsx src/rollback-orchestrator.ts",
     "mcp:manager": "npx tsx src/mcp/mcp-manager.ts",
+    "mcp:fetch:test": "npx tsx src/mcp/fetch-server-native.ts --test",
     "final:resolution": "npx tsx src/final-resolution.ts",
     "kb:manager": "npx tsx src/knowledge-base-manager.ts",
     "kb:sync": "npx tsx src/knowledge-base-sync.ts",
