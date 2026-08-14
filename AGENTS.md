@@ -136,8 +136,8 @@ Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica
 
 ### Architecture
 
-- **60 checks** en **11 componentes**: dashboard-ws, codegraph, ml-embeddings, engram, mcp, session,
-  hooks, configs, tool-configs, security, governance.
+- **95 checks** en **13 componentes**: dashboard-ws, codegraph, ml-embeddings, engram, mcp, session,
+  hooks, configs, tool-configs, security, governance, secret-scanner, cli-guard.
 - **6 modos**: health, rebuild, report, autoheal, continuous, all.
 - **Pipeline integrado**: corre `-Action autoheal -Quiet` con `lazy: true` al inicio de sesión (no
   bloquea).
@@ -147,7 +147,7 @@ Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica
 
 | Action     | Command                                  | Description                      |
 | ---------- | ---------------------------------------- | -------------------------------- |
-| health     | `-Action health`                         | 60 checks, 11 componentes        |
+| health     | `-Action health`                         | 95 checks, 13 componentes        |
 | rebuild    | `-Action rebuild`                        | health + rebuild ML/RAG indices  |
 | autoheal   | `-Action autoheal`                       | health + restart procesos caídos |
 | report     | `-Action report -OutputFile status.json` | JSON export                      |
@@ -170,13 +170,16 @@ Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica
 
 ### Estabilidad comprobada
 
-- **82/82 PASS — 0 WARN — 0 FAIL — 0 SKIP** (todos los componentes OK)
+- **95/95 PASS — 0 WARN — 0 FAIL — 0 SKIP** (todos los componentes OK)
 - Dashboard WS API 200 OK, watchdog con auto-restart (10 intentos)
 - CodeGraph: 133 files, 1410 nodes, 1763 edges
 - Puertos dinámicos con `Get-FreePort()` en `src/dashboard-common.ts`
 - Pipeline session-autostart con `lazy: true` para steps no bloqueantes
 - `src/dashboard-stop.ts` mata watchdog primero para evitar restart loops
 - Frontend HTTP polling tolera caídas temporales del WS server
+- **CLI Guard**: check anti-regresión que detecta el patrón roto
+  `import.meta.url === \`file://${process.argv[1]}\`` (no normaliza rutas Windows → main() nunca se
+  ejecuta). Ver `src/auto-url-fix.ts` para el fix automático de 33 archivos.
 
 ---
 
@@ -209,7 +212,7 @@ npm run scan:secrets -- --scan . --json        # output JSON
   secretlint. Verificar con `npx lefthook validate`.
 - **Watchtower**: componente `secret-scanner` en `src/core/maintenance-watchtower.ts`
   (`checkSecretScanner` — valida módulo, CLI, config y tests). Se ejecuta con `-Action health`
-  (60+ checks, 11+ componentes). Verificado 94/94 PASS.
+  (95 checks, 13 componentes). Verificado 95/95 PASS.
 - **Routing de subagentes**: `config/subagent-mapping.json` registra las skills absorbidas por rol:
   - **DEV**: DevSecOps (devsecops-scanning, secret-scanning gitleaks, secrets CI/CD, SBOM,
     dependency-confusion, supply-chain CI/CD)
