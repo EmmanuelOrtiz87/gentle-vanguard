@@ -10,6 +10,8 @@ status: accepted|proposed|rejected|deprecated
 
 ## Summary
 
+{{content}}
+
 ## Context
 
 ## Decision

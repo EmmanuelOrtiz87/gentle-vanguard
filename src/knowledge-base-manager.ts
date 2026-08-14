@@ -217,7 +217,8 @@ function createNote(
       .replace(/\{\{session-id\}\}/g, title)
       .replace(/\{\{skill-name\}\}/g, title)
       .replace(/\{\{decision-id\}\}/g, title)
-      .replace(/\{\{decision-title\}\}/g, title);
+      .replace(/\{\{decision-title\}\}/g, title)
+      .replace(/\{\{content\}\}/g, content || '');
   } else {
     noteContent = content;
   }
