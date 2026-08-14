@@ -6,8 +6,8 @@
  * para verificar si las optimizaciones funcionan.
  */
 
-import { existsSync } from 'fs';
-import { join, resolve } from 'path';
+import { existsSync, readFileSync } from 'fs';
+import { join } from 'path';
 import { homedir } from 'os';
 
 console.log('╔════════════════════════════════════════════════════════════════╗');
@@ -33,7 +33,7 @@ console.log();
 const reportPath = join(process.cwd(), 'reports', 'stack-live-observability-latest.json');
 if (existsSync(reportPath)) {
   try {
-    const report = JSON.parse(await Bun.file(reportPath).text());
+    const report = JSON.parse(readFileSync(reportPath, 'utf-8'));
     
     console.log('=== REPORTE DE OBSERVABILIDAD ═══');
     console.log(`Sesión actual: ${report.session?.id || 'N/A'}`);
@@ -79,12 +79,12 @@ if (existsSync(nexusPath)) {
         SUM(input_tokens) as input,
         SUM(output_tokens) as output,
         COUNT(*) as transactions,
-        date(MAX(timestamp)) as date
+        date(MAX(created_at)) as date
       FROM token_transactions 
       GROUP BY session_id
-      ORDER BY MAX(timestamp) DESC
+      ORDER BY MAX(created_at) DESC
       LIMIT 10
-    `).all();
+    `).all() as any[];
     
     if (recent.length > 0) {
       console.log('Session                Total      Input      Output  TXNs  Date');
@@ -121,12 +121,12 @@ if (existsSync(nexusPath)) {
         SUM(input_tokens) as input,
         SUM(output_tokens) as output,
         COUNT(*) as transactions,
-        date(MAX(timestamp)) as date
+        date(MAX(created_at)) as date
       FROM token_transactions 
       GROUP BY session_id
       ORDER BY total DESC
       LIMIT 5
-    `).all();
+    `).all() as any[];
     
     if (heaviest.length > 0) {
       console.log('Session                Total      Input      Output  TXNs');

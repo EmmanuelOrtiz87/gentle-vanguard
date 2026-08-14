@@ -83,6 +83,7 @@
     "token:banner": "npx tsx src/token-session-banner.ts",
     "token:monthly": "npx tsx src/token-monthly-summary.ts",
     "token:monthly:json": "npx tsx src/token-monthly-summary.ts --json",
+    "token:compare": "npx tsx src/compare-tokens-sessions.ts",
     "steps:status": "npx tsx src/adaptive-steps.ts --status",
     "steps:estimate": "npx tsx src/adaptive-steps.ts --estimate",
     "recommend:agent": "npx tsx src/recommend-agent.ts",
