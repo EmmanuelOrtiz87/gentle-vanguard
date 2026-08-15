@@ -148,32 +148,89 @@ streaming refinada).
 
 ## Roadmap en 4 Fases
 
-### Fase 1 — Streaming real + AG-UI Hints (patrones 1 y 2) ✅ EN CURSO
+### Fase 1 — Streaming real + AG-UI Hints (patrones 1 y 2) ✅ COMPLETADA (commit 4f1ce19e, QA 5/5)
 
 - [x] Crear este plan (`docs/plans/COPILOTKIT-ANALYSIS-AND-ADOPTION-PLAN.md`)
-- [ ] `websocket-server.ts` `executeSkillAndStream`: parsear `ui_hints`/`uiHint` → `msg.uiHints`
-- [ ] Broadcast `agent_ui_hints` separado
-- [ ] Emitir `agent_stream_chunk` por cada chunk de `stream`/`chunks` (delay 50ms)
-- [ ] Frontend: manejar `agent_ui_hints` y `agent_stream_chunk` en `useAgentStream.ts`
-- [ ] Verificación: `cd apps/web-dashboard && npm run build`, `npm run typecheck`, `npm run lint`
+- [x] `websocket-server.ts` `executeSkillAndStream`: parsear `ui_hints`/`uiHint` → `msg.uiHints`
+- [x] Broadcast `agent_ui_hints` separado
+- [x] Emitir `agent_stream_chunk` por cada chunk de `stream`/`chunks` (delay 50ms)
+- [x] Frontend: manejar `agent_ui_hints` y `agent_stream_chunk` en `useAgentStream.ts`
+- [x] Verificación: `cd apps/web-dashboard && npm run build`, `npm run typecheck`, `npm run lint`
 
-### Fase 2 — Shared State avanzado (patrón 3)
+### Fase 2 — Shared State avanzado (patrón 3) ✅ COMPLETADA
 
-- [ ] Enriquecer `SharedStateBridge` con suscripciones por tarea
-- [ ] Broadcast de deltas de estado (no solo snapshots)
-- [ ] Persistencia de historial de eventos en Nexus
+- [x] Enriquecer `SharedStateBridge` con suscripciones por tarea
+- [x] Broadcast de deltas de estado (no solo snapshots)
+- [x] Persistencia de historial de eventos en Nexus
 
-### Fase 3 — HITL avanzado (patrón 4)
+#### Contrato de deltas (Fase 2)
 
-- [ ] Tipos de HITL: `selection`, `form`, `review` (además de `confirmation`)
-- [ ] `HitlModal` con formularios dinámicos desde `UIFormField`
-- [ ] Timeout de HITL con resolución automática
+`SharedStateBridge` (EventEmitter) emite los siguientes eventos además de los snapshots
+`history_update`/`task_update`/`event`:
+
+| Evento        | Payload                                | Semántica                                                                                                                |
+| ------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `state_delta` | `{ delta: BusEvent[], since: string }` | Solo los eventos nuevos detectados por poll (nuevo→viejo). `since` = timestamp del último evento ya visto (cursor).      |
+| `task_delta`  | `{ taskId, from, to, at }`             | Transición de estado de una tarea (`pending→running`, `running→completed/error/cancelled`). `at` = timestamp del evento. |
+
+- `state_delta` se emite en `readHistory()` (poll) y en `emitEvent()` (evento local), siempre con
+  `delta` en orden nuevo→viejo para que el cliente haga `[...delta, ...prev]`.
+- `task_delta` se emite en `processEvent()` para `agent.dispatched`, `agent.completed`,
+  `agent.error` y `agent.cancelled`. El snapshot `task_update` se mantiene para compatibilidad.
+- Suscripción por tarea: `bridge.subscribeByTask(taskId, cb)` devuelve `unsubscribe`; el callback se
+  invoca SOLO cuando esa tarea cambia de estado. `bridge.getTask(taskId)` hace lookup directo.
+- Persistencia Nexus: cada evento emitido se inserta en la tabla `events` de
+  `.runtime/gentle-vanguard.db` (`type` = `evt.event`, `payload` = `JSON.stringify(evt)`,
+  `created_at` = `evt.timestamp`). Si Nexus no está disponible, el event-bus file sigue siendo la
+  fuente primaria (try/catch no bloqueante). `bridge.getPersistedEvents(limit)` lee de Nexus con
+  fallback al file.
+- WebSocket: `initSharedState()` reenvía `state_delta`/`task_delta` a todos los clientes como
+  `{ type: 'state_delta', ... }` / `{ type: 'task_delta', ... }`. Endpoint REST:
+  `GET /api/state/events/persisted?limit=20`.
+- Frontend: `useSharedState.ts` consume `state_delta` (prepend de eventos) y `task_delta`
+  (actualización del estado de la tarea por `taskId`).
+
+### Fase 3 — HITL avanzado (patrón 4) ✅ COMPLETADA
+
+- [x] Tipos de HITL: `selection`, `form`, `review` (además de `confirmation`)
+- [x] `HitlModal` con formularios dinámicos desde `UIFormField`
+- [x] Timeout de HITL con resolución automática
+
+#### Contrato HITL (Fase 3)
+
+Tipos centrales en `apps/web-dashboard/src/types/agent.ts`:
+
+| Tipo           | Campos                                                                                                                                                                           |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `HitlKind`     | `'confirmation' \| 'selection' \| 'form' \| 'review'`                                                                                                                            |
+| `HitlRequest`  | `id`, `kind`, `title`, `message?`, `options?` (selection), `fields?` (form, `UIFormField[]`), `review?` (`{label,value,severity?}[]`), `timeoutMs?` (auto-resolve), `sessionId?` |
+| `HitlResponse` | `requestId`, `kind`, `approved?`, `selection?`, `values?` (`Record<string,unknown>`), `reviewed?`, `timedOut?` (auto-resolve por timeout), `sessionId?`                          |
+
+Flujo por WebSocket (server `websocket-server.ts`):
+
+1. Server emite `{ type: 'hitl_request', hitlRequest }` a los suscriptores de la sesión y pone
+   `status: 'awaiting_input'`.
+2. Si `hitlRequest.timeoutMs` está definido, el server programa un `setTimeout`
+   (`Map<requestId, timeout>`) que emite `hitl_resolved` con
+   `{ approved: false, reviewed: false, timedOut: true }` si no hay respuesta a tiempo.
+3. El cliente resuelve con `{ type: 'agent', action: 'hitl_response', ...hitlResponse }` (campos
+   planos). El server cancela el timeout pendiente, restaura `status: 'active'` y reenvía
+   `{ type: 'hitl_resolved', requestId, response }` a todos los suscriptores.
+4. `useAgentStream.ts` escucha `hitl_request`/`hitl_resolved`; `HitlModal.tsx` renderiza según
+   `kind` (confirmation → Approve/Reject; selection → radio list + Confirm; form → campos dinámicos
+   con validación `required`; review → tabla de items con severity badges + Approve/Reject) y
+   muestra cuenta regresiva + barra de progreso cuando hay `timeoutMs`, auto-resolviendo
+   `{ approved: false, reviewed: false, timedOut: true }` al expirar.
+
+Demo desde el chat (detector en `send_message`): mensajes con `approve/confirm/delegate` → confirm,
+`elige/choose/select` → selection, `formulario/form` → form, `revisar/review` → review. Todos con
+`timeoutMs: 60000`.
 
 ### Fase 4 — Chat Interface refinada (patrón 5)
 
-- [ ] Acción `cancel` para interrumpir ejecución de skill
-- [ ] Búsqueda de skills desde el chat (`list_skills`, `search_skills`)
-- [ ] UI de streaming refinada (cursor, chunks acumulados)
+- [x] Acción `cancel` para interrumpir ejecución de skill
+- [x] Búsqueda de skills desde el chat (`list_skills`, `search_skills`)
+- [x] UI de streaming refinada (cursor, chunks acumulados)
 
 ---
 

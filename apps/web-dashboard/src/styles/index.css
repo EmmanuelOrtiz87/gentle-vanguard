@@ -23,3 +23,23 @@
     @apply text-sm text-gray-500 dark:text-gray-400;
   }
 }
+
+.streaming-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  background-color: currentColor;
+  vertical-align: text-bottom;
+  animation: streaming-blink 1s steps(2, start) infinite;
+}
+
+@keyframes streaming-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
