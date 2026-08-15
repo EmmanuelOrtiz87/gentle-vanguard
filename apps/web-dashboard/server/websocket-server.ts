@@ -38,7 +38,7 @@ import { OperationalMetricsTracker } from '@gentle-vanguard/core/operational-met
 
 const FEEDBACK_PATH = join(ROOT, '.runtime', 'metrics', 'feedback.json');
 const ALERTS_CONFIG_PATH = join(ROOT, 'config', 'dashboard-alerts.json');
-import type { AgentSession, AgentMessage, AgentToolCall } from '../src/types/agent.ts';
+import type { AgentSession, AgentMessage, AgentToolCall, UIHint } from '../src/types/agent.ts';
 
 const STATS_PATH = join(ROOT, '.atl', 'skill-stats.json');
 const REGISTRY_PATH = join(ROOT, '.atl', 'skill-registry.md');
@@ -300,6 +300,22 @@ function subscribeToAgentSession(ws: WebSocket, sessionId: string): void {
   if (subs) subs.add(ws);
 }
 
+function extractUiHints(result: unknown): UIHint[] | null {
+  if (!result || typeof result !== 'object') return null;
+  const r = result as Record<string, unknown>;
+  if (Array.isArray(r.ui_hints)) return r.ui_hints as UIHint[];
+  if (r.uiHint && typeof r.uiHint === 'object') return [r.uiHint as UIHint];
+  return null;
+}
+
+function extractChunks(result: unknown): string[] | null {
+  if (!result || typeof result !== 'object') return null;
+  const r = result as Record<string, unknown>;
+  const chunks = Array.isArray(r.chunks) ? r.chunks : Array.isArray(r.stream) ? r.stream : null;
+  if (!chunks) return null;
+  return chunks.filter((c): c is string => typeof c === 'string');
+}
+
 async function executeSkillAndStream(
   _ws: WebSocket,
   session: AgentSession,
@@ -336,14 +352,49 @@ async function executeSkillAndStream(
 
     const result = await bridge.callTool('execute_skill', { name: skillName, params });
 
+    // AG-UI Hints (patrón 2): parsear ui_hints de la respuesta MCP
+    const uiHints = extractUiHints(result);
+    if (uiHints && uiHints.length > 0) {
+      msg.uiHints = uiHints;
+      broadcastToSession(session.id, { type: 'agent_ui_hints', messageId: msg.id, uiHints });
+    }
+
+    // Streaming incremental (patrón 1): emitir chunks antes del mensaje final
+    const chunks = extractChunks(result);
+
     msg.streaming = false;
-    msg.content = `Skill "${skillName}" ejecutado exitosamente.`;
+    msg.content =
+      chunks && chunks.length > 0
+        ? chunks.join('')
+        : `Skill "${skillName}" ejecutado exitosamente.`;
     toolCall.status = 'completed';
     toolCall.result = JSON.stringify(result);
     toolCall.completedAt = new Date().toISOString();
 
-    broadcastToSession(session.id, { type: 'agent_message', message: msg });
-    broadcastToSession(session.id, { type: 'agent_stream_done', messageId: msg.id });
+    if (chunks && chunks.length > 0) {
+      chunks.forEach((chunk, i) => {
+        setTimeout(
+          () => {
+            broadcastToSession(session.id, {
+              type: 'agent_stream_chunk',
+              messageId: msg.id,
+              content: chunk,
+            });
+          },
+          50 * (i + 1),
+        );
+      });
+      setTimeout(
+        () => {
+          broadcastToSession(session.id, { type: 'agent_message', message: msg });
+          broadcastToSession(session.id, { type: 'agent_stream_done', messageId: msg.id });
+        },
+        50 * (chunks.length + 1),
+      );
+    } else {
+      broadcastToSession(session.id, { type: 'agent_message', message: msg });
+      broadcastToSession(session.id, { type: 'agent_stream_done', messageId: msg.id });
+    }
   } catch (err) {
     msg.streaming = false;
     msg.content = `Error ejecutando skill "${skillName}": ${err instanceof Error ? err.message : String(err)}`;

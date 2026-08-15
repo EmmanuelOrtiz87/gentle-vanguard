@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useSharedWs } from './useSharedWs';
-import type { AgentSession, AgentMessage } from '../types/agent';
+import type { AgentSession, AgentMessage, UIHint } from '../types/agent';
 
 interface HitlRequestState {
   id: string;
@@ -69,6 +69,31 @@ export function useAgentStream(opts: UseAgentStreamOptions = {}) {
               messages: prev.messages.map((m) =>
                 m.id === msg.messageId ? { ...m, streaming: false } : m,
               ),
+            };
+          });
+          break;
+        case 'agent_ui_hints':
+          setSession((prev) => {
+            if (!prev) return prev;
+            return {
+              ...prev,
+              messages: prev.messages.map((m) =>
+                m.id === msg.messageId ? { ...m, uiHints: msg.uiHints as UIHint[] } : m,
+              ),
+            };
+          });
+          break;
+        case 'agent_stream_chunk':
+          setSession((prev) => {
+            if (!prev) return prev;
+            return {
+              ...prev,
+              messages: prev.messages.map((m) => {
+                if (m.id !== msg.messageId) return m;
+                const chunk = typeof msg.content === 'string' ? msg.content : '';
+                const base = m.content.startsWith('Ejecutando skill') ? '' : m.content;
+                return { ...m, content: base + chunk, streaming: true };
+              }),
             };
           });
           break;
