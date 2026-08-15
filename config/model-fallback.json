@@ -11,85 +11,85 @@
   },
   "agentFallbacks": {
     "ORCHESTRATOR": {
-      "primary": "kimi-2-5",
+      "primary": "opencode/deepseek-v4-flash-free",
       "chain": ["ollama/llama3", "dify/qwen-plus", "lm-studio2/qwen2.5"],
       "providerPriority": ["opencode", "ollama", "dify", "lm-studio2"],
       "rationale": "Orquestador — modelo nativo estable, fallback a proveedores locales (incluyendo Bedrock compatible)"
     },
     "BA": {
-      "primary": "kimi-2-5",
+      "primary": "opencode/deepseek-v4-flash-free",
       "chain": ["ollama/qwen2.5", "ollama/mistral", "dify/qwen-plus"],
       "providerPriority": ["opencode", "ollama", "dify"],
       "rationale": "BA explora — modelo nativo para razonamiento, fallback a locales (incluyendo Bedrock compatible)"
     },
     "SAD": {
-      "primary": "kimi-2-5",
+      "primary": "opencode/deepseek-v4-flash-free",
       "chain": ["ollama/qwen2.5", "ollama/mistral", "dify/qwen-plus"],
       "providerPriority": ["opencode", "ollama", "dify"],
       "rationale": "SAD diseña — modelo nativo para precisión, fallback a locales (incluyendo Bedrock compatible)"
     },
     "DEV": {
-      "primary": "kimi-2-5",
+      "primary": "opencode/deepseek-v4-flash-free",
       "chain": ["ollama/qwen2.5", "ollama/mistral", "dify/qwen-plus"],
       "providerPriority": ["opencode", "ollama", "dify"],
       "rationale": "DEV implementa — modelo nativo para código, fallback a locales (incluyendo Bedrock compatible)"
     },
     "QA": {
-      "primary": "kimi-2-5",
+      "primary": "opencode/deepseek-v4-flash-free",
       "chain": ["ollama/qwen2.5", "ollama/mistral", "dify/qwen-plus"],
       "providerPriority": ["opencode", "ollama", "dify"],
       "rationale": "QA valida — modelo nativo para precisión, fallback a locales (incluyendo Bedrock compatible)"
     },
     "OPS": {
-      "primary": "kimi-2-5",
+      "primary": "opencode/deepseek-v4-flash-free",
       "chain": ["ollama/qwen2.5", "ollama/mistral", "dify/qwen-plus"],
       "providerPriority": ["opencode", "ollama", "dify"],
       "rationale": "OPS despliega — modelo nativo para precisión, fallback a locales (incluyendo Bedrock compatible)"
     },
     "GOV": {
-      "primary": "kimi-2-5",
+      "primary": "opencode/deepseek-v4-flash-free",
       "chain": ["ollama/qwen2.5", "ollama/mistral", "dify/qwen-plus"],
       "providerPriority": ["opencode", "ollama", "dify"],
       "rationale": "GOV audita — modelo nativo para compliance, fallback a locales (incluyendo Bedrock compatible)"
     },
     "DOC": {
-      "primary": "kimi-2-5",
+      "primary": "opencode/deepseek-v4-flash-free",
       "chain": ["ollama/qwen2.5", "ollama/llama3", "dify/qwen-plus"],
       "providerPriority": ["opencode", "ollama", "dify"],
       "rationale": "DOC documenta — modelo nativo, fallback a locales (incluyendo Bedrock compatible)"
     },
     "SESSION": {
-      "primary": "kimi-2-5",
+      "primary": "opencode/deepseek-v4-flash-free",
       "chain": ["ollama/qwen2.5", "dify/qwen-plus"],
       "providerPriority": ["opencode", "ollama", "dify"],
       "rationale": "SESSION trackea — modelo nativo para sesiones, fallback a locales (incluyendo Bedrock compatible)"
     },
     "PREMORTEM": {
-      "primary": "kimi-2-5",
+      "primary": "opencode/deepseek-v4-flash-free",
       "chain": ["ollama/qwen2.5", "ollama/mistral", "dify/qwen-plus"],
       "providerPriority": ["opencode", "ollama", "dify"],
       "rationale": "PREMORTEM analiza riesgos — modelo nativo para adversarial, fallback a locales (incluyendo Bedrock compatible)"
     },
     "MKT": {
-      "primary": "kimi-2-5",
+      "primary": "opencode/deepseek-v4-flash-free",
       "chain": ["ollama/qwen2.5", "ollama/llama3", "dify/qwen-plus"],
       "providerPriority": ["opencode", "ollama", "dify"],
       "rationale": "MKT crea contenido — modelo nativo, fallback a locales (incluyendo Bedrock compatible)"
     },
     "SALES": {
-      "primary": "kimi-2-5",
+      "primary": "opencode/deepseek-v4-flash-free",
       "chain": ["ollama/qwen2.5", "dify/qwen-plus"],
       "providerPriority": ["opencode", "ollama", "dify"],
       "rationale": "SALES sigue metodología — modelo nativo eficiente (incluyendo Bedrock compatible)"
     },
     "FINANCE": {
-      "primary": "kimi-2-5",
+      "primary": "opencode/deepseek-v4-flash-free",
       "chain": ["ollama/qwen2.5", "ollama/mistral", "dify/qwen-plus"],
       "providerPriority": ["opencode", "ollama", "dify"],
       "rationale": "FINANCE calcula — modelo nativo para precisión numérica (incluyendo Bedrock compatible)"
     }
   },
-  "universalFallbacks": ["kimi-2-5", "ollama/qwen2.5", "ollama/llama3", "dify/qwen-plus"],
+  "universalFallbacks": ["opencode/deepseek-v4-flash-free", "ollama/qwen2.5", "ollama/llama3", "dify/qwen-plus"],
   "agentTypeFallback": {
     "description": "Cuando un tipo de agente específico falla, usar estos tipos como fallback universal",
     "rule": "Intentar con 'general' como fallback universal, luego 'explore' para tareas de análisis",

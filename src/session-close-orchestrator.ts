@@ -16,7 +16,7 @@
  *   npx tsx src/session-close-orchestrator.ts --validate --full --auto-fix
  */
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync, unlinkSync } from 'fs';
 import { join, resolve, relative } from 'path';
 import { runSync, runSyncShell, runNpxTsxSync } from './core/run-command.js';
 import { pathToFileURL } from 'url';
@@ -699,6 +699,10 @@ const KILL_TARGETS: KillTarget[] = [
   { name: 'CodeGraph MCP', matcher: 'codegraph.*mcp', required: true },
   { name: 'Dashboard WS', matcher: 'websocket-server', required: false },
   { name: 'Timeout Daemon', matcher: 'timeout-monitor.*daemon', required: true },
+  // Optional daemon: the token-ingest --watch loop survives the close today and
+  // keeps appending to .runtime/token-ingest.log. Not required → SKIP if it was
+  // never started; never FAILs (avoids false positives in the close report).
+  { name: 'Token Ingest', matcher: 'token-ingest', required: false },
 ];
 
 /** True if at least one process (node/tsx) matches the command-line matcher. */
@@ -831,9 +835,37 @@ function phaseCleanup(skipDaemonKill = false): PhaseResult[] {
         });
       }
     }
+
+    // 5.2 Clean the session-persistence marker (`.active-session.json`). This
+    // file tells smart-autostart / gv.ts that a session is alive; it must not
+    // outlive a real close. At SESSION STARTUP (skipDaemonKill) it is left
+    // untouched — the daemons just booted and the marker may belong to the
+    // fresh session.
+    try {
+      const activeSessionPath = join(SESSION_DIR, '.active-session.json');
+      if (existsSync(activeSessionPath)) {
+        unlinkSync(activeSessionPath);
+        results.push({
+          phase: 'cleanup-active-session',
+          status: 'PASS',
+          detail: '.active-session.json removed',
+        });
+        ok('.active-session.json removed');
+      } else {
+        results.push({
+          phase: 'cleanup-active-session',
+          status: 'PASS',
+          detail: '.active-session.json not present (clean state)',
+        });
+      }
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Unknown error';
+      results.push({ phase: 'cleanup-active-session', status: 'FAIL', detail: msg });
+      warn(`Active-session cleanup failed: ${msg}`);
+    }
   } // end if (!skipDaemonKill)
 
-  // 5.2 Also kill any orphan session daemon processes (metrics tracker, cleanup daemons).
+  // 5.3 Also kill any orphan session daemon processes (metrics tracker, cleanup daemons).
   // NOTE: matcher is deliberately specific — it must NOT match this orchestrator
   // (session-close-orchestrator.ts) or its wrapper, otherwise we kill ourselves
   // mid-run and never write the close report. See killProcessByCommandLine self-exclusion.
@@ -853,7 +885,7 @@ function phaseCleanup(skipDaemonKill = false): PhaseResult[] {
     /* skip silently */
   }
 
-  // 5.3 Clean temp files (unregistered + stale registry entries)
+  // 5.4 Clean temp files (unregistered + stale registry entries)
   try {
     const registryPath = join(ROOT, '.session', 'temp-file-registry.json');
     if (existsSync(registryPath)) {
@@ -915,7 +947,7 @@ function phaseCleanup(skipDaemonKill = false): PhaseResult[] {
     });
   }
 
-  // 5.4 Flush caches and reset
+  // 5.5 Flush caches and reset
   const cr = runScript('src/session-cleanup-start.ts', ['-SkipOrphanCleanup', '-Quiet'], 60000);
   results.push({
     phase: 'cache-flush',

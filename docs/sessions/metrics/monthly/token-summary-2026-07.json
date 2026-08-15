@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-08-13T10:07:43.844Z",
+  "generated_at": "2026-08-15T01:16:37.772Z",
   "period": "2026-07",
-  "days": 25,
+  "days": 26,
   "totals": {
-    "input": 901952233,
-    "output": 9181788,
-    "total": 911134021,
+    "input": 911212972,
+    "output": 9530191,
+    "total": 920743163,
     "cost": 0
   },
   "daily_avg": {
-    "input": 36078089,
-    "output": 367272,
-    "total": 36445361
+    "input": 35046653,
+    "output": 366546,
+    "total": 35413199
   },
   "by_day": [
     {
@@ -208,26 +208,34 @@
     },
     {
       "day": "2026-08-13",
-      "input": 39273215,
-      "output": 271755,
-      "total": 39544970,
+      "input": 35332895,
+      "output": 269806,
+      "total": 35602701,
       "cost": 0,
-      "sessions": 7
+      "sessions": 6
+    },
+    {
+      "day": "2026-08-14",
+      "input": 13201059,
+      "output": 350352,
+      "total": 13551411,
+      "cost": 0,
+      "sessions": 9
     }
   ],
   "by_model": [
     {
       "model": "kimi-2-5",
-      "input": 715744524,
-      "output": 3414324,
-      "total": 719158848,
+      "input": 711521720,
+      "output": 3382321,
+      "total": 714904041,
       "cost": 0
     },
     {
       "model": "deepseek-v4-flash-free",
-      "input": 98756160,
-      "output": 4985357,
-      "total": 103741517,
+      "input": 112239703,
+      "output": 5365763,
+      "total": 117605466,
       "cost": 0
     },
     {

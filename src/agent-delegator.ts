@@ -14,6 +14,7 @@ import { spawn } from 'child_process';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { writeFileSync } from 'fs';
+import { compressStructural, estimateTokens } from './structural-compression.js';
 
 interface AgentConfig {
   name: string;
@@ -39,6 +40,69 @@ interface DelegationResult {
   error?: string;
   duration: number;
   model: string;
+}
+
+/**
+ * Lossless delegation compression result.
+ * `text` holds the compressed form when `applied` is true, otherwise the original.
+ */
+export interface DelegationCompression {
+  text: string;
+  originalChars: number;
+  compressedChars: number;
+  originalTokens: number;
+  compressedTokens: number;
+  ratio: number;
+  saved: number;
+  applied: boolean;
+}
+
+/**
+ * Compress a task/context string with the lossless-only structural pass
+ * (mode 'input'). Falls back to the original when the input is too short,
+ * compression does not improve the size, or the engine throws.
+ */
+export function compressDelegationLossless(text: string): DelegationCompression {
+  const originalTokens = estimateTokens(text);
+  if (!text || text.length < 200) {
+    return {
+      text,
+      originalChars: text.length,
+      compressedChars: text.length,
+      originalTokens,
+      compressedTokens: originalTokens,
+      ratio: 1,
+      saved: 0,
+      applied: false,
+    };
+  }
+  try {
+    const result = compressStructural(text, { mode: 'input' });
+    if (result.compressedChars < result.originalChars && result.compressed.length < text.length) {
+      return {
+        text: result.compressed,
+        originalChars: result.originalChars,
+        compressedChars: result.compressedChars,
+        originalTokens: result.originalTokens,
+        compressedTokens: result.compressedTokens,
+        ratio: result.compressionRatio,
+        saved: result.originalTokens - result.compressedTokens,
+        applied: true,
+      };
+    }
+  } catch {
+    /* fall back to original on any failure */
+  }
+  return {
+    text,
+    originalChars: text.length,
+    compressedChars: text.length,
+    originalTokens,
+    compressedTokens: originalTokens,
+    ratio: 1,
+    saved: 0,
+    applied: false,
+  };
 }
 
 const AGENTS_DIR = join(process.cwd(), 'src', 'agents');
@@ -384,18 +448,35 @@ async function runNativeAgent(
       console.log(`[agent-delegator] Using environment model: ${model}`);
     }
 
+    // Lossless compression of task/context (defense in depth): the original
+    // request stays intact for logging; only the spawned command uses the
+    // compressed forms.
+    const taskCompressed = compressDelegationLossless(request.task);
+    const contextCompressed = request.context ? compressDelegationLossless(request.context) : null;
+
+    if (taskCompressed.applied) {
+      console.log(
+        `[agent-delegator] compressed task: ${taskCompressed.originalChars} -> ${taskCompressed.compressedChars} chars (ratio ${taskCompressed.ratio.toFixed(3)})`,
+      );
+    }
+    if (contextCompressed?.applied) {
+      console.log(
+        `[agent-delegator] compressed context: ${contextCompressed.originalChars} -> ${contextCompressed.compressedChars} chars (ratio ${contextCompressed.ratio.toFixed(3)})`,
+      );
+    }
+
     const parts = [
       resolveNpx(),
       'tsx',
       scriptPath,
       '--task',
-      shellQuote(request.task),
+      shellQuote(taskCompressed.text),
       '--model',
       shellQuote(model),
     ];
 
     if (request.context) {
-      parts.push('--context', shellQuote(request.context));
+      parts.push('--context', shellQuote(contextCompressed ? contextCompressed.text : request.context));
     }
 
     const command = parts.join(' ');

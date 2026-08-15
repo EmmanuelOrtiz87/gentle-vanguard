@@ -67,9 +67,8 @@ const FALLBACK_CHAIN = [
   null, // Placeholder - will be replaced with orchestrator model
 
   // Explicit fallbacks in order of preference
-  'kimi-2-5', // Premium (littellmott)
-  'claude-haiku-4-5', // Balanced (littellmott)
   'opencode/deepseek-v4-flash-free', // Free tier (opencode)
+  'claude-haiku-4-5', // Balanced (littellmott)
   'ollama/qwen2.5-coder:14b', // Local (ollama)
 ];
 

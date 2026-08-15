@@ -267,6 +267,8 @@ function writeObservabilityReport(rows: SessionUsage[]): void {
     const usedToday = today.reduce((a, r) => a + r.tokensInput + r.tokensOutput, 0);
     const costToday = today.reduce((a, r) => a + r.cost, 0);
     const budget = dailyBudget();
+    // Active session = most recent by timeUpdated (same selection as updateStackSession).
+    const active = rows.reduce((a, b) => (b.timeUpdated > a.timeUpdated ? b : a));
     mkdirSync(join(ROOT, 'reports'), { recursive: true });
     const report = {
       timestamp: now.toISOString(),
@@ -277,6 +279,14 @@ function writeObservabilityReport(rows: SessionUsage[]): void {
         budget,
         projected_pct: Math.min(100, Math.round((usedToday / budget) * 100)),
         sessions_today: today.length,
+        current_session: {
+          session_id: active.sessionId,
+          input_tokens: active.tokensInput,
+          output_tokens: active.tokensOutput,
+          total_tokens: active.tokensInput + active.tokensOutput,
+          cost: active.cost,
+          model: active.model,
+        },
       },
       cost: {
         ratePer1M: 10,

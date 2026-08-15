@@ -35,8 +35,8 @@
             "daily": {
               "type": "integer",
               "minimum": 1000,
-              "maximum": 10000000,
-              "description": "Maximum tokens per day"
+              "maximum": 20000000,
+              "description": "Maximum tokens per day (raised 2026-08-14: token-ingest aggregates all sessions of the day; 12.4M observed)"
             },
             "perSession": {
               "type": "integer",

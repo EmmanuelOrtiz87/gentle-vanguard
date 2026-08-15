@@ -142,6 +142,7 @@
       }
     </style>
     <script src="assets/js/i18n-content.js?v=2.1"></script>
+    <script src="assets/js/i18n-extra.js?v=2.1"></script>
     <script src="assets/js/i18n.js?v=2.1"></script>
   </head>
   <body class="grain">
@@ -219,6 +220,22 @@
             <li class="nav-item">
               <a class="nav-link" href="health.html"
                 ><i class="bi bi-heart-pulse me-1"></i><span data-i18n="nav_health">Health</span></a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="commands.html"
+                ><i class="bi bi-terminal me-1"></i><span data-i18n="nav_commands">Commands</span></a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="glossary.html"
+                ><i class="bi bi-journal-bookmark me-1"></i
+                ><span data-i18n="nav_glossary">Glossary</span></a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="study-material.html"
+                ><i class="bi bi-mortarboard me-1"></i><span data-i18n="nav_study">Study</span></a
               >
             </li>
             <li class="nav-item">
@@ -2053,6 +2070,95 @@
               tracking
             </p>
             <a href="health.html" class="badge-count text-decoration-none">health.html →</a>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="book-card">
+            <div class="page-num">PAGE 11</div>
+            <h4 data-i18n="c_index_118">💻 Commands & CLI</h4>
+            <p data-i18n="c_index_119">
+              266 npm scripts cataloged in 12 categories — session, tokens, security, research and
+              more, searchable and copyable
+            </p>
+            <a href="commands.html" class="badge-count text-decoration-none">commands.html →</a>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="book-card">
+            <div class="page-num">PAGE 12</div>
+            <h4 data-i18n="c_index_120">🔤 Glossary & Index</h4>
+            <p data-i18n="c_index_121">
+              280 alphabetical stack terms with A-Z navigation — acronyms, concepts, tools,
+              standards and nomenclatures
+            </p>
+            <a href="glossary.html" class="badge-count text-decoration-none">glossary.html →</a>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="book-card">
+            <div class="page-num">PAGE 13</div>
+            <h4 data-i18n="c_index_122">🎓 Study Material</h4>
+            <p data-i18n="c_index_123">
+              42 concepts across 7 domains — engineering, AI/LLM, infra, databases, protocols,
+              testing and UX, each with exercises
+            </p>
+            <a href="study-material.html" class="badge-count text-decoration-none"
+              >study-material.html →</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Optimización de Consumo -->
+    <section class="fade-in" id="optimization">
+      <div class="section-title">
+        <div class="display-4 mb-2">⚡</div>
+        <h2 data-i18n="sec_optimization">Optimización de Consumo</h2>
+        <p data-i18n="c_optimization_intro">
+          Optimización de tokens en los 4 frentes: inicio de sesión, cierre de sesión, delegación y
+          caché. Ahorros reales por la compresión del stack y el ruteo.
+        </p>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6 col-lg-3">
+          <div class="book-card">
+            <div class="page-num">INICIO</div>
+            <h4>🚀 Inicio de sesión</h4>
+            <p>
+              Pipeline lazy de 70+ background tasks con sesión autostart en ~1.3s. Token ingest
+              arranca en watch para capturar el consumo real desde el primer mensaje.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="book-card">
+            <div class="page-num">CIERRE</div>
+            <h4>🏁 Cierre de sesión</h4>
+            <p>
+              Session-close orchestrator compila reportes y actualiza session-current con los tokens
+              reales medidos por token-ingest, no estimados.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="book-card">
+            <div class="page-num">DELEGACIÓN</div>
+            <h4>🔄 Delegación</h4>
+            <p>
+              Route-and-delegate con tiering de temperatura por dominio + adaptive steps que ajustan
+              el presupuesto a la complejidad, evitando pasos desperdiciados.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="book-card">
+            <div class="page-num">CACHÉ</div>
+            <h4>🧊 Caché</h4>
+            <p>
+              Response cache SHA-256 + caché semántica por embeddings: respuestas reutilizadas sin
+              re-consumir tokens. Ahorro acumulado de 1.061M tokens en cache reads.
+            </p>
           </div>
         </div>
       </div>

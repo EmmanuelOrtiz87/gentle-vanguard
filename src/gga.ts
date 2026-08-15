@@ -14,7 +14,7 @@
  *   const result = await GuardianAngel.delegate({
  *     agent: 'sdd-apply',
  *     task: 'implement feature',
- *     fallback: ['kimi-2-5', 'claude-haiku-4-5', 'opencode/deepseek-v4-flash-free']
+ *     fallback: ['opencode/deepseek-v4-flash-free', 'claude-haiku-4-5']
  *   });
  *
  *   // O con auto-detección de provider
@@ -101,9 +101,8 @@ const GGA_LOG_FILE = join(ROOT, '.logs', 'gga.log');
 
 // Default providers in order of preference (absorbed from gentle-ai pattern)
 const DEFAULT_PROVIDER_CHAIN = [
-  { provider: 'littellmott-nuevo', model: 'kimi-2-5', id: 'kimi-2-5' },
-  { provider: 'littellmott-nuevo', model: 'claude-haiku-4-5', id: 'claude-haiku-4-5' },
   { provider: 'opencode', model: 'deepseek-v4-flash-free', id: 'opencode/deepseek-v4-flash-free' },
+  { provider: 'littellmott-nuevo', model: 'claude-haiku-4-5', id: 'claude-haiku-4-5' },
   { provider: 'ollama', model: 'qwen2.5-coder:14b', id: 'ollama/qwen2.5-coder:14b' },
 ];
 
@@ -185,7 +184,7 @@ function loadGGAState(): GGAState {
   return {
     version: '1.0.0',
     lastUpdated: new Date().toISOString(),
-    currentProvider: 'kimi-2-5',
+    currentProvider: 'opencode/deepseek-v4-flash-free',
     health: {},
     exhaustedProviders: [],
     switchHistory: [],
@@ -257,8 +256,8 @@ function getDetectedModel(): string {
   }
 
   // Default
-  log('debug', 'Using default model: kimi-2-5');
-  return 'kimi-2-5';
+  log('debug', 'Using default model: opencode/deepseek-v4-flash-free');
+  return 'opencode/deepseek-v4-flash-free';
 }
 
 function getFallbackChain(preferredModel?: string): string[] {
@@ -690,7 +689,7 @@ Commands:
     Check health for specific provider
 
 Examples:
-  npx tsx src/gga.ts delegate --agent sdd-apply --task "fix bug" --preferred-model kimi-2-5
+  npx tsx src/gga.ts delegate --agent sdd-apply --task "fix bug" --preferred-model opencode/deepseek-v4-flash-free
   npx tsx src/gga.ts status
   npx tsx src/gga.ts reset
 

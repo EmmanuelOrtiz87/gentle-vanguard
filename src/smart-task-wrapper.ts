@@ -32,7 +32,7 @@ export async function smartTask(
     const active = JSON.parse(readFileSync(ACTIVE_MODEL, 'utf-8'));
     currentModel = active.model;
   } catch {
-    currentModel = 'kimi-2-5'; // Default
+    currentModel = 'opencode/deepseek-v4-flash-free'; // Default
   }
 
   console.log(`[smartTask] Executing ${options.subagent_type} with model: ${currentModel}`);

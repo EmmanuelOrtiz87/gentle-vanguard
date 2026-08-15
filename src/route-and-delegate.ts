@@ -17,14 +17,14 @@
  *   npx tsx src/route-and-delegate.ts --task "audit gdpr compliance" --context "..." --topn 3
  *
  * Output (JSON):
- *   { task, domain, recommended, confidence, source, delegation: {success, ...} }
+ *   { task, domain, recommended, confidence, source, compression: {taskSaved, ...}, delegation: {success, ...} }
  */
 
 import { existsSync, mkdirSync, appendFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { recommend } from './recommend-agent.js';
-import { delegate } from './agent-delegator.js';
+import { delegate, compressDelegationLossless } from './agent-delegator.js';
 import { resolveAgentTier } from './domain-tier.js';
 
 const ROOT = resolve(process.cwd());
@@ -53,6 +53,13 @@ interface RouteResult {
     model: string;
     artifactDir?: string;
     error?: string;
+  };
+  /** Lossless compression applied to task/context before delegation. */
+  compression: {
+    taskSaved: number;
+    contextSaved: number;
+    taskRatio: number;
+    contextRatio: number;
   };
 }
 
@@ -98,13 +105,18 @@ async function main(): Promise<void> {
   // 1b. Resolve the M6 quality tier for the recommended agent
   const tier = resolveAgentTier(rec.recommended);
 
+  // 1c. Lossless compression of task/context (mode 'input' protects model
+  //     reasoning). Falls back to the original when too short / not improved.
+  const taskC = compressDelegationLossless(task);
+  const contextC = context ? compressDelegationLossless(context) : null;
+
   // 2. Delegate natively — pass the M6 tier temperature override so the
   //    agent actually runs with the domain quality tier (premium: low temp /
   //    hallucination guard; fastCheap: higher temp), not the hardcoded default.
   const result = await delegate({
     agent: rec.recommended,
-    task,
-    context,
+    task: taskC.applied ? taskC.text : task,
+    context: contextC?.applied ? contextC.text : context,
     temperature: tier.temperature,
   });
 
@@ -118,6 +130,12 @@ async function main(): Promise<void> {
       name: tier.tier,
       temperature: tier.temperature,
       hallucinationGuard: tier.hallucinationGuard,
+    },
+    compression: {
+      taskSaved: taskC.saved,
+      contextSaved: contextC?.saved ?? 0,
+      taskRatio: taskC.ratio,
+      contextRatio: contextC?.ratio ?? 1,
     },
     delegation: {
       success: result.success,

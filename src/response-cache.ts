@@ -196,7 +196,11 @@ function getSemEmbeddings(): { vocabulary: string[]; idf: Record<string, number>
   return _semEmbeddings;
 }
 
-const SEMANTIC_CACHE_THRESHOLD = 0.85;
+// Semantic similarity gate for cache hits. 0.9 (not 0.85) + a minimum token
+// count: TF-IDF cosine with a small vocabulary biases short inputs to ~87%
+// similarity, causing false-positive semantic hits (verified 2026-08-14).
+const SEMANTIC_CACHE_THRESHOLD = 0.9;
+const MIN_SEMANTIC_INPUT_TOKENS = 40;
 
 /** Try to find a semantically similar cache entry when exact match fails */
 function semanticCacheLookup(
@@ -206,7 +210,8 @@ function semanticCacheLookup(
   if (!emb) return null;
 
   const tokens = semTokenize(input);
-  if (tokens.length === 0) return null;
+  // Short inputs are unreliable under cosine similarity (false-positive risk).
+  if (tokens.length < MIN_SEMANTIC_INPUT_TOKENS) return null;
 
   const queryVec = computeTfIdfVector(tokens, emb.vocabulary, emb.idf);
   if (Object.keys(queryVec).length === 0) return null;

@@ -41,11 +41,12 @@
       },
       {
         "id": "session-cleanup",
-        "enabled": false,
+        "enabled": true,
+        "lazy": true,
         "script": "src/session-cleanup-start.ts",
-        "args": "-Quiet",
+        "args": "-Quiet -SkipSessionInit -SkipCacheFlush",
         "required": false,
-        "description": "Flush caches, close orphans, reset state, generate compressed CLAUDE.min.md"
+        "description": "Cleanup ligero al inicio (lazy): remueve sesiones stale >8h y cierra sesiones huerfanas. -SkipSessionInit impide regenerar la sesion que session-manager (phase 0) ya creo; -SkipCacheFlush evita resetear los caches de tokens que el daemon token-ingest esta escribiendo."
       },
       {
         "id": "github-bypass",
@@ -316,11 +317,12 @@
       },
       {
         "id": "post-autostart-consistency-check",
-        "enabled": false,
+        "enabled": true,
+        "lazy": true,
         "script": "src/post-autostart-summary.ts",
         "args": "",
         "required": false,
-        "description": "Refresca startup-summary.json como ultimo paso para asegurar datos actuales post-pipeline"
+        "description": "Refresca startup-summary.json como ultimo paso para asegurar datos actuales post-pipeline (lazy)"
       },
       {
         "id": "document-analysis-init",

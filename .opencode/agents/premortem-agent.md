@@ -2,7 +2,7 @@
 description: Premortem analysis agent — risk identification, stress testing, and failure prediction
 mode: subagent
 hidden: true
-model: kimi-2-5
+model: opencode/deepseek-v4-flash-free
 temperature: 0.5
 steps: 30
 permission:

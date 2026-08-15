@@ -122,7 +122,7 @@ async function runQualityChecks(): Promise<{
   // TypeScript check
   console.log('Running TypeScript check...');
   try {
-    await runCommand('npm', ['run', 'typecheck']);
+    await runCommand(resolveNpm(), ['run', 'typecheck']);
     console.log('  ✅ TypeScript: PASS');
   } catch {
     console.log('  ❌ TypeScript: FAIL');
@@ -133,7 +133,7 @@ async function runQualityChecks(): Promise<{
   // ESLint check
   console.log('Running ESLint check...');
   try {
-    await runCommand('npm', ['run', 'lint']);
+    await runCommand(resolveNpm(), ['run', 'lint']);
     console.log('  ✅ ESLint: PASS');
   } catch {
     console.log('  ❌ ESLint: FAIL');
@@ -144,11 +144,18 @@ async function runQualityChecks(): Promise<{
   return { typecheck: true, lint: true, errors };
 }
 
+/** Resolve the npm binary for the current platform (npm.cmd on win32). */
+function resolveNpm(): string {
+  return process.platform === 'win32' ? 'npm.cmd' : 'npm';
+}
+
 function runCommand(cmd: string, args: string[]): Promise<void> {
   return new Promise((resolve, reject) => {
     const child = spawn(cmd, args, {
       cwd: process.cwd(),
       stdio: 'pipe',
+      // Windows: .cmd shims (npm.cmd) require shell:true to exec
+      shell: process.platform === 'win32',
     });
 
     let stderr = '';

@@ -173,17 +173,27 @@ export function runCleanup(
     skipOrphanCleanup?: boolean;
     skipCacheFlush?: boolean;
     skipCompression?: boolean;
+    skipSessionInit?: boolean;
     quiet?: boolean;
   } = {},
 ): boolean {
   const repoRoot = opts.workspaceRoot ?? ROOT;
   const sessionDir = join(repoRoot, '.session');
   const sessionDir2 = join(repoRoot, 'session');
+  const skipSessionInit = opts.skipSessionInit ?? false;
+  let sessionData: Record<string, unknown> | null = null;
 
-  // ALWAYS initialize session data first - this creates session-current.json
-  log('Initializing session...');
-  const { sid, sessionData } = initSessionData();
-  ok(`Session initialized: ${sid}`);
+  // Initialize session data - ALWAYS unless the caller requests a pure cleanup
+  // pass (skipSessionInit). The lazy autostart `session-cleanup` step uses this
+  // so it never regenerates the session that the phase-0 session-manager step
+  // already created (which would change the sessionId mid-pipeline and reset
+  // the token caches the token-ingest daemon is writing).
+  if (!skipSessionInit) {
+    log('Initializing session...');
+    const init = initSessionData();
+    sessionData = init.sessionData;
+    ok(`Session initialized: ${init.sid}`);
+  }
 
   if (!opts.skipOrphanCleanup) {
     log('Closing orphaned sessions...');
@@ -192,7 +202,7 @@ export function runCleanup(
     ok('Orphan cleanup done');
   }
 
-  if (!opts.skipCacheFlush) {
+  if (!skipSessionInit && !opts.skipCacheFlush && sessionData) {
     log('Flushing session caches...');
     flushCaches(sessionDir, sessionData);
   }
@@ -201,8 +211,9 @@ export function runCleanup(
     log('Skipping compression (semantic-compression.ps1 removed during cleanup)');
   }
 
-  log('Closing session tracing span...');
-  const spanDir = join(repoRoot, '.telemetry', 'spans');
+  if (!skipSessionInit) {
+    log('Closing session tracing span...');
+    const spanDir = join(repoRoot, '.telemetry', 'spans');
   if (existsSync(spanDir)) {
     const spans = readdirSync(spanDir)
       .filter((f) => f.startsWith('spans-') && f.endsWith('.jsonl'))
@@ -250,6 +261,7 @@ export function runCleanup(
       }
     }
   }
+  }
 
   log('Pruning old checkpoints...');
   const ckptMgr = join(ROOT, 'src/checkpoint-manager.ts');
@@ -258,8 +270,9 @@ export function runCleanup(
     ok('Checkpoint prune done');
   }
 
-  log('Logging session end to audit...');
-  const auditScript = join(ROOT, 'src/audit-pipeline.ts');
+  if (!skipSessionInit) {
+    log('Logging session end to audit...');
+    const auditScript = join(ROOT, 'src/audit-pipeline.ts');
   if (existsSync(auditScript)) {
     runNpxTsxSync(
       auditScript,
@@ -283,8 +296,10 @@ export function runCleanup(
     );
     ok('Audit session-end logged');
   }
+  }
 
-  log('Recording session-close event...');
+  if (!skipSessionInit) {
+    log('Recording session-close event...');
   const evtStore = join(ROOT, 'src/event-sourcing.ts');
   if (existsSync(evtStore)) {
     const aggId = `session-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}`;
@@ -305,6 +320,7 @@ export function runCleanup(
     );
     ok('Session end event recorded');
   }
+  }
 
   ok('Session cleanup complete');
   return true;
@@ -323,6 +339,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         break;
       case '-SkipCacheFlush':
         opts.skipCacheFlush = true;
+        break;
+      case '-SkipSessionInit':
+        opts.skipSessionInit = true;
         break;
       case '-SkipCompression':
         opts.skipCompression = true;

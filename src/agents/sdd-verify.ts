@@ -34,11 +34,16 @@ const AGENT_CONFIG = {
   version: '1.0.0',
 };
 
+/** Resolve the npm binary for the current platform (npm.cmd on win32). */
+function resolveNpm(): string {
+  return process.platform === 'win32' ? 'npm.cmd' : 'npm';
+}
+
 const TEST_SUITES = [
-  { name: 'config', cmd: 'npm', args: ['run', 'test:config'], expected: 6 },
-  { name: 'workflows', cmd: 'npm', args: ['run', 'test:workflows'], expected: 2 },
-  { name: 'typecheck', cmd: 'npm', args: ['run', 'typecheck'], expected: 0 },
-  { name: 'lint', cmd: 'npm', args: ['run', 'lint'], expected: 0 },
+  { name: 'config', cmd: resolveNpm(), args: ['run', 'test:config'], expected: 6 },
+  { name: 'workflows', cmd: resolveNpm(), args: ['run', 'test:workflows'], expected: 2 },
+  { name: 'typecheck', cmd: resolveNpm(), args: ['run', 'typecheck'], expected: 0 },
+  { name: 'lint', cmd: resolveNpm(), args: ['run', 'lint'], expected: 0 },
 ];
 
 const SECURITY_CHECKS = [
@@ -128,6 +133,8 @@ async function runTestSuite(
     const child = spawn(cmd, args, {
       cwd: process.cwd(),
       stdio: 'pipe',
+      // Windows: .cmd shims (npm.cmd) require shell:true to exec
+      shell: process.platform === 'win32',
     });
 
     let stdout = '';

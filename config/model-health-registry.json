@@ -142,12 +142,12 @@
   },
   "fallbackStrategies": {
     "cost-optimized": [
-      "kimi-2-5",
+      "opencode/deepseek-v4-flash-free",
       "claude-haiku-4-5",
-      "opencode/deepseek-v4-flash-free"
+      "kimi-2-5"
     ],
     "performance": [
-      "kimi-2-5",
+      "opencode/deepseek-v4-flash-free",
       "claude-haiku-4-5"
     ],
     "availability": [

@@ -276,7 +276,7 @@
       "action": {
         "type": "switch_to_fallback_model",
         "target": "model-provider-healer",
-        "fallbackModel": "kimi-2-5",
+        "fallbackModel": "opencode/deepseek-v4-flash-free",
         "description": "Run model-provider-healer to mark the failing model unhealthy and auto-switch the active model to the native fallback"
       },
       "metadata": {

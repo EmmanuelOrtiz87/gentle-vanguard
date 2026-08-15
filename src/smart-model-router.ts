@@ -233,7 +233,7 @@ async function main(): Promise<void> {
     }
 
     case 'route': {
-      const model = args[1] || 'kimi-2-5';
+      const model = args[1] || 'opencode/deepseek-v4-flash-free';
       const error = args[2];
       const result = await routeModel(
         model,
@@ -278,8 +278,8 @@ Commands:
 
 Examples:
   npx tsx src/smart-model-router.ts check
-  npx tsx src/smart-model-router.ts route kimi-2-5
-  npx tsx src/smart-model-router.ts route kimi-2-5 "quota exceeded"
+  npx tsx src/smart-model-router.ts route opencode/deepseek-v4-flash-free
+  npx tsx src/smart-model-router.ts route opencode/deepseek-v4-flash-free "quota exceeded"
 `);
   }
 }

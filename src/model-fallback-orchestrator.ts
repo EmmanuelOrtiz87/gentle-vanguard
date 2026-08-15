@@ -105,9 +105,8 @@ const FALLBACK_TRIGGERS = [
 
 // Default model chain for fallback
 const DEFAULT_FALLBACK_CHAIN = [
-  'kimi-2-5', // Primary: littellmott (orquestador)
+  'opencode/deepseek-v4-flash-free', // Primary: opencode free tier
   'claude-haiku-4-5', // Secondary: Claude via littellmott
-  'opencode/deepseek-v4-flash-free', // Tertiary: Free tier
 ];
 
 // =============================================================================
@@ -141,7 +140,7 @@ function loadFallbackState(): FallbackState {
   return {
     version: '1.0.0',
     lastUpdated: new Date().toISOString(),
-    activeModel: 'kimi-2-5',
+    activeModel: 'opencode/deepseek-v4-flash-free',
     exhaustedModels: [],
     agentModelOverrides: {},
   };
@@ -190,8 +189,8 @@ function getOrchestratorModel(): string {
     // Fall through
   }
 
-  // Default to kimi-2-5 (most common for orquestador)
-  return 'kimi-2-5';
+  // Default to opencode/deepseek-v4-flash-free (available free tier)
+  return 'opencode/deepseek-v4-flash-free';
 }
 
 // =============================================================================
@@ -507,7 +506,7 @@ function cli(): void {
       const emptyState: FallbackState = {
         version: '1.0.0',
         lastUpdated: new Date().toISOString(),
-        activeModel: 'kimi-2-5',
+        activeModel: 'opencode/deepseek-v4-flash-free',
         exhaustedModels: [],
         agentModelOverrides: {},
       };

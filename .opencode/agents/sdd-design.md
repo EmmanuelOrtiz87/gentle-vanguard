@@ -2,7 +2,7 @@
 description: SAD architecture design agent — system design, API contracts, and technical architecture
 mode: subagent
 hidden: true
-model: kimi-2-5
+model: opencode/deepseek-v4-flash-free
 temperature: 0.3
 steps: 30
 permission:

@@ -2,7 +2,7 @@
 description: Session management agent — state tracking, lifecycle, and memory management
 mode: subagent
 hidden: true
-model: kimi-2-5
+model: opencode/deepseek-v4-flash-free
 temperature: 0.1
 steps: 25
 permission:

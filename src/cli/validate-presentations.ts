@@ -40,7 +40,9 @@ const MAIN_PRESENTATIONS = new Set([
   'agents-pipeline.html',
   'architecture.html',
   'autonomy.html',
+  'commands.html',
   'dashboard.html',
+  'glossary.html',
   'health.html',
   'index.html',
   'memory-knowledge.html',
@@ -48,6 +50,7 @@ const MAIN_PRESENTATIONS = new Set([
   'patterns-conventions.html',
   'quickstart.html',
   'security-governance.html',
+  'study-material.html',
 ]);
 
 interface Result {
