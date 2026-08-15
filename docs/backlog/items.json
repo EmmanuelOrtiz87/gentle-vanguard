@@ -245,11 +245,16 @@
     "priority": "medium",
     "trigger": "Cuando se decida evolucionar el dashboard de monitoreo pasivo a interfaz activa de agentes. Ideal alineado con milestone v3.x del roadmap.",
     "linked_prs": [],
-    "status": "backlog",
+    "status": "done",
     "type": "feature",
     "resolved_by": "docs/plans/COPILOTKIT-ANALYSIS-AND-ADOPTION-PLAN.md (plan detallado con 4 fases, matriz de decisiones, riesgos y roadmap de implementación)",
     "phase_1_status": "done",
     "phase_1_commit": "4f1ce19e",
-    "phase_1_notes": "AG-UI hints parsing + real chunk streaming over MCP (websocket-server.ts, useAgentStream.ts). Plan file created: docs/plans/COPILOTKIT-ANALYSIS-AND-ADOPTION-PLAN.md. QA approved 5/5. Phases 2-4 pending (shared state wiring, HITL polish, chat polish)."
+    "phase_1_notes": "AG-UI hints parsing + real chunk streaming over MCP (websocket-server.ts, useAgentStream.ts). Plan file created: docs/plans/COPILOTKIT-ANALYSIS-AND-ADOPTION-PLAN.md. QA approved 5/5. Phases 2-4 pending (shared state wiring, HITL polish, chat polish).",
+    "completed_at": "2026-08-15",
+    "completed_commits": "4f1ce19e, f8896972",
+    "phase_2_status": "done",
+    "phase_3_status": "done",
+    "phase_4_status": "done"
   }
 ]
