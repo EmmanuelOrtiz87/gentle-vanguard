@@ -220,6 +220,8 @@
     "rdd:kill-history": "npx tsx src/rdd/rdd-kill-switch.ts history",
     "perf:run": "npx tsx src/profiler/performance-profiler.ts run",
     "perf:baseline": "npx tsx src/profiler/performance-profiler.ts baseline",
+    "perf:baseline:check": "npx tsx src/perf-baseline-check.ts",
+    "test:e2e": "npx tsx --test tests/e2e/*.test.ts",
     "perf:status": "npx tsx src/profiler/performance-profiler.ts status",
     "semantic:build": "npx tsx src/profiler/semantic-code-graph.ts build",
     "semantic:query": "npx tsx src/profiler/semantic-code-graph.ts query",

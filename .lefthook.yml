@@ -58,6 +58,10 @@ pre-push:
     npm-audit:
       glob: 'package.json'
       run: npx tsx src/infrastructure/npm-audit-pre-push.ts --AuditLevel moderate
+    # Perf baseline validation — self-skips (exit 0) when tests/performance/baseline.json
+    # is missing or when --skip is passed, per config/alert policy in baseline.json
+    perf-baseline:
+      run: npm run perf:baseline:check
 
 commit-msg:
   commands:
