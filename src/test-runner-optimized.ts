@@ -87,6 +87,13 @@ const OPTIONAL_SUITES: Suite[] = [
     required: false,
     timeout: 120_000,
   },
+  {
+    name: 'E2E Release Workflow Tests',
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/e2e/release-workflow.test.ts'],
+    required: false,
+    timeout: 120_000,
+  },
 ];
 
 interface RunOptions {
