@@ -238,6 +238,8 @@ npm install --save-dev pester-coverage  # For TypeScript tests
 
 #### 2.2: Add E2E Tests for Release Workflow
 
+> ✅ **COMPLETED** (2026-08-16, commit `ea008b49`) — `tests/e2e/release-workflow.test.ts` (6 tests E2E: SDD gate bloquea en main, advisory en develop, bypass `.sdd-exempt`, RDD release gate `GateValidation`, orden de 5 gates). Correr con `npm run test:e2e`.
+
 **Why**: The `publish` workflow is critical; manual testing is insufficient.
 
 **Implementation** (in `tests/e2e/`):
@@ -419,14 +421,16 @@ Negative:
 
 ⚠️ **Opportunities**:
 
-- No performance baseline (test suite speed over time)
+- ~~No performance baseline (test suite speed over time)~~ ✅ `tests/performance/baseline.json` + pre-push check
 - No profiling of slow operations
 - No caching strategy for expensive computations (e.g., git operations)
-- No load testing for multi-repo scenarios
+- ~~No load testing for multi-repo scenarios~~ ✅ `src/load-test-multi-repo.ts` (`npm run load:test`)
 
 ### Recommendations
 
 #### 4.1: Add Performance Baselines
+
+> ✅ **COMPLETED** (2026-08-16, commit `ea008b49`) — `tests/performance/baseline.json` (6 baselines) + `src/perf-baseline-check.ts` validando en pre-push (hook `perf-baseline` en `.lefthook.yml`). Correr con `npm run perf:baseline:check`.
 
 **Why**: Catch performance regressions early; document growth curve.
 
@@ -498,7 +502,7 @@ Write-Host "[PROFILE] Homologation Gate: $($duration.TotalSeconds)s"
 | ------------------------- | -------------- | ---------- | ------------- |
 | Performance baselines     | 1-2h           | LOW-MEDIUM | Next sprint   |
 | Publish profiling         | 2-3h           | MEDIUM     | Next sprint   |
-| Load testing (multi-repo) | 4-6h           | MEDIUM     | Month 2       |
+| Load testing (multi-repo) | 4-6h           | MEDIUM     | ✅ Done (commit `a65753d6`) |
 | **Total**                 | **7-11 hours** | **MEDIUM** | **Month 1-2** |
 
 ---
@@ -518,14 +522,16 @@ Write-Host "[PROFILE] Homologation Gate: $($duration.TotalSeconds)s"
 
 ⚠️ **Remaining**:
 
-- No SBOM (Software Bill of Materials) generation
+- ~~No SBOM (Software Bill of Materials) generation~~ ✅ `sbom.json` (Syft, 464 componentes)
 - No container image scanning (if using Docker)
 - No supply-chain attestation (SLSA provenance)
-- No annual security audit log
+- ~~No annual security audit log~~ ✅ `docs/security/ANNUAL-AUDIT-PLAN.md` (log inicializado)
 
 ### Recommendations
 
 #### 5.1: Generate SBOM for Release
+
+> ✅ **COMPLETED** (2026-08-16, commit `79ae5435`) — `sbom.json` (CycloneDX 1.7, 464 componentes) generado con Syft 1.51.0 desde `pnpm-lock.yaml`. Escaneado con Grype: 0 vulnerabilidades tras remediación. Nota: generar desde el lockfile (no `dir:.`) evita ruido del cache `.pnpm-store`.
 
 **Why**: Track all dependencies for compliance; easier vulnerability remediation.
 
@@ -550,6 +556,8 @@ cyclonedx-npm --output-format json --output-file sbom.json
 ---
 
 #### 5.2: Add Annual Security Audit
+
+> ✅ **PLAN COMPLETED** (2026-08-16, commit `79ae5435`) — `docs/security/ANNUAL-AUDIT-PLAN.md` (26 controles inventariados, checklist pre-audit de 15 items, log del audit inicializado). Ejecución externa programada Q4 2026.
 
 **Why**: Third-party validation; catch systemic issues.
 
