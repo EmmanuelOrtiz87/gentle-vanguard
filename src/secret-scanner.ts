@@ -127,6 +127,7 @@ export interface SecretScannerConfig {
   contextRadius: number;
   ignoreExtensions: string[];
   skipDirs: string[];
+  ignoreFiles: string[];
   riskLevels: Partial<Record<SecretCategory, RiskLevel>>;
 }
 
@@ -203,6 +204,7 @@ const DEFAULT_CONFIG: SecretScannerConfig = {
     '.claude',
     '.local',
   ],
+  ignoreFiles: [],
   riskLevels: {
     aws: 'high',
     gcp: 'high',
@@ -258,6 +260,9 @@ export function loadConfig(): SecretScannerConfig {
     skipDirs: Array.isArray(raw.skipDirs)
       ? (raw.skipDirs as unknown[]).filter((e): e is string => typeof e === 'string')
       : DEFAULT_CONFIG.skipDirs,
+    ignoreFiles: Array.isArray(raw.ignoreFiles)
+      ? (raw.ignoreFiles as unknown[]).filter((e): e is string => typeof e === 'string')
+      : DEFAULT_CONFIG.ignoreFiles,
     riskLevels: {
       ...DEFAULT_CONFIG.riskLevels,
       ...(typeof raw.riskLevels === 'object' && raw.riskLevels !== null
@@ -1276,7 +1281,15 @@ export async function scanFiles(paths: string[], options: FileScanOptions = {}):
   const files = await expandPaths(paths, skipDirs);
   const results: SecretMatch[] = [];
 
+  const ignoreFileSet = new Set(
+    cfg.ignoreFiles.map((f) => f.replace(/\\/g, '/').toLowerCase()),
+  );
+
   for (const file of files) {
+    const rel = file.replace(/\\/g, '/').toLowerCase();
+    if (ignoreFileSet.has(rel) || [...ignoreFileSet].some((ig) => rel.endsWith(`/${ig}`))) {
+      continue;
+    }
     const ext = extname(file).toLowerCase();
     if (ignoreExt.has(ext)) continue;
     let st;

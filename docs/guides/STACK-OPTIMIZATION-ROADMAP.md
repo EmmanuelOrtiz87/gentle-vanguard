@@ -238,7 +238,9 @@ npm install --save-dev pester-coverage  # For TypeScript tests
 
 #### 2.2: Add E2E Tests for Release Workflow
 
-> ✅ **COMPLETED** (2026-08-16, commit `ea008b49`) — `tests/e2e/release-workflow.test.ts` (6 tests E2E: SDD gate bloquea en main, advisory en develop, bypass `.sdd-exempt`, RDD release gate `GateValidation`, orden de 5 gates). Correr con `npm run test:e2e`.
+> ✅ **COMPLETED** (2026-08-16, commit `ea008b49`) — `tests/e2e/release-workflow.test.ts` (6 tests
+> E2E: SDD gate bloquea en main, advisory en develop, bypass `.sdd-exempt`, RDD release gate
+> `GateValidation`, orden de 5 gates). Correr con `npm run test:e2e`.
 
 **Why**: The `publish` workflow is critical; manual testing is insufficient.
 
@@ -421,16 +423,20 @@ Negative:
 
 ⚠️ **Opportunities**:
 
-- ~~No performance baseline (test suite speed over time)~~ ✅ `tests/performance/baseline.json` + pre-push check
+- ~~No performance baseline (test suite speed over time)~~ ✅ `tests/performance/baseline.json` +
+  pre-push check
 - No profiling of slow operations
 - No caching strategy for expensive computations (e.g., git operations)
-- ~~No load testing for multi-repo scenarios~~ ✅ `src/load-test-multi-repo.ts` (`npm run load:test`)
+- ~~No load testing for multi-repo scenarios~~ ✅ `src/load-test-multi-repo.ts`
+  (`npm run load:test`)
 
 ### Recommendations
 
 #### 4.1: Add Performance Baselines
 
-> ✅ **COMPLETED** (2026-08-16, commit `ea008b49`) — `tests/performance/baseline.json` (6 baselines) + `src/perf-baseline-check.ts` validando en pre-push (hook `perf-baseline` en `.lefthook.yml`). Correr con `npm run perf:baseline:check`.
+> ✅ **COMPLETED** (2026-08-16, commit `ea008b49`) — `tests/performance/baseline.json` (6
+> baselines) + `src/perf-baseline-check.ts` validando en pre-push (hook `perf-baseline` en
+> `.lefthook.yml`). Correr con `npm run perf:baseline:check`.
 
 **Why**: Catch performance regressions early; document growth curve.
 
@@ -474,16 +480,27 @@ Add to pre-push hook validation.
 
 **Implementation**:
 
-Instrument `src/cli/gv.ts publish`:
+✅ **Done** — the stack has no `publish` command; the real release workflow is the RDD Delivery
+Gates (`src/rdd/rdd-gates.ts`) plus the SDD Homologation gate (`src/check-sdd-gate.ts`). Profiling
+was added as a new `release` command in `src/cli/gv.ts`:
 
-```TypeScript
-# Track timing for each gate
-$start = Get-Date
-Write-Step "Running Homologation Gate"
-# ... gate logic ...
-$duration = (Get-Date) - $start
-Write-Host "[PROFILE] Homologation Gate: $($duration.TotalSeconds)s"
+```bash
+npx tsx src/cli/gv.ts release [--skip-tests] [--json]
+npm run release:profile
 ```
+
+Each gate reports `[PROFILE] <Gate Name>: X.XXs [PASS|FAIL|SKIP]`; a final summary shows total time
+and a duration-sorted gate table. Exit code is 0 when all executed gates pass, 1 when any fails.
+Gates profiled:
+
+1. **Homologation Gate** — `src/check-sdd-gate.ts`
+2. **RDD Release Gate** — `npx tsx src/rdd/rdd-gates.ts validate release`
+3. **Tests Gate** — `npm run test:config` (skipped with `--skip-tests`)
+4. **Secrets Gate** — `npm run scan:secrets -- --scan src --json`
+
+Pure profiling helpers (`runGate`, `buildReleaseReport`, `aggregateStatus`, `computeExitCode`,
+`sortGatesByDuration`, `selectReleaseGates`) are exported and covered by
+`tests/unit/gv-release-profile.test.ts` (8 tests).
 
 **Impact**:
 
@@ -498,12 +515,12 @@ Write-Host "[PROFILE] Homologation Gate: $($duration.TotalSeconds)s"
 
 ### Performance Summary
 
-| Action                    | Effort         | Impact     | Timeline      |
-| ------------------------- | -------------- | ---------- | ------------- |
-| Performance baselines     | 1-2h           | LOW-MEDIUM | Next sprint   |
-| Publish profiling         | 2-3h           | MEDIUM     | Next sprint   |
+| Action                    | Effort         | Impact     | Timeline                    |
+| ------------------------- | -------------- | ---------- | --------------------------- |
+| Performance baselines     | 1-2h           | LOW-MEDIUM | Next sprint                 |
+| Publish profiling         | 2-3h           | MEDIUM     | ✅ Done (`gv release`)      |
 | Load testing (multi-repo) | 4-6h           | MEDIUM     | ✅ Done (commit `a65753d6`) |
-| **Total**                 | **7-11 hours** | **MEDIUM** | **Month 1-2** |
+| **Total**                 | **7-11 hours** | **MEDIUM** | **Month 1-2**               |
 
 ---
 
@@ -531,7 +548,9 @@ Write-Host "[PROFILE] Homologation Gate: $($duration.TotalSeconds)s"
 
 #### 5.1: Generate SBOM for Release
 
-> ✅ **COMPLETED** (2026-08-16, commit `79ae5435`) — `sbom.json` (CycloneDX 1.7, 464 componentes) generado con Syft 1.51.0 desde `pnpm-lock.yaml`. Escaneado con Grype: 0 vulnerabilidades tras remediación. Nota: generar desde el lockfile (no `dir:.`) evita ruido del cache `.pnpm-store`.
+> ✅ **COMPLETED** (2026-08-16, commit `79ae5435`) — `sbom.json` (CycloneDX 1.7, 464 componentes)
+> generado con Syft 1.51.0 desde `pnpm-lock.yaml`. Escaneado con Grype: 0 vulnerabilidades tras
+> remediación. Nota: generar desde el lockfile (no `dir:.`) evita ruido del cache `.pnpm-store`.
 
 **Why**: Track all dependencies for compliance; easier vulnerability remediation.
 
@@ -557,7 +576,9 @@ cyclonedx-npm --output-format json --output-file sbom.json
 
 #### 5.2: Add Annual Security Audit
 
-> ✅ **PLAN COMPLETED** (2026-08-16, commit `79ae5435`) — `docs/security/ANNUAL-AUDIT-PLAN.md` (26 controles inventariados, checklist pre-audit de 15 items, log del audit inicializado). Ejecución externa programada Q4 2026.
+> ✅ **PLAN COMPLETED** (2026-08-16, commit `79ae5435`) — `docs/security/ANNUAL-AUDIT-PLAN.md` (26
+> controles inventariados, checklist pre-audit de 15 items, log del audit inicializado). Ejecución
+> externa programada Q4 2026.
 
 **Why**: Third-party validation; catch systemic issues.
 

@@ -218,6 +218,7 @@
     "rdd:enable": "npx tsx src/rdd/rdd-kill-switch.ts enable",
     "rdd:kill-status": "npx tsx src/rdd/rdd-kill-switch.ts status",
     "rdd:kill-history": "npx tsx src/rdd/rdd-kill-switch.ts history",
+    "release:profile": "npx tsx src/cli/gv.ts release",
     "load:test": "npx tsx src/load-test-multi-repo.ts",
     "perf:run": "npx tsx src/profiler/performance-profiler.ts run",
     "perf:baseline": "npx tsx src/profiler/performance-profiler.ts baseline",

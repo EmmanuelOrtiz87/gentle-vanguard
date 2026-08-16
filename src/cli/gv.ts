@@ -27,12 +27,14 @@
  *   cleanup     Kill zombie processes
  *   status      Show complete stack status
  *   fix         Fix PS1 references (--configs, --dry-run)
+ *   release     Run release gates with per-gate profiling (--skip-tests, --json)
  *   help        Show this help
  */
 
 import { run, runSync, runNpxTsxSync, runSyncShell } from '../../adapters/command-runner.js';
 import { existsSync, readdirSync, readFileSync, writeFileSync, unlinkSync, mkdirSync } from 'fs';
 import { join, resolve, dirname } from 'path';
+import { pathToFileURL } from 'url';
 import { printBanner } from './banner.js';
 
 const ROOT = resolve(process.cwd());
@@ -81,6 +83,7 @@ COMMANDS:
   cleanup     Kill zombie processes
   status      Show complete stack status
   fix         Fix PS1 references (--configs, --dry-run)
+  release     Run release gates with per-gate profiling (--skip-tests, --json)
   help        Show this help
 
 EXAMPLES:
@@ -88,6 +91,7 @@ EXAMPLES:
   npx tsx src/cli/gv.ts health
   npx tsx src/cli/gv.ts backup
   npx tsx src/cli/gv.ts check
+  npx tsx src/cli/gv.ts release --skip-tests --json
 `);
   footer();
 }
@@ -413,6 +417,160 @@ function cmdFix(args: string[]): CommandResult {
   }
 }
 
+// ─── Release Profiling (Roadmap 4.2) ─────────────────────────────────
+
+export interface GateProfile {
+  name: string;
+  duration_ms: number;
+  status: 'pass' | 'fail' | 'skip';
+  exit_code: number;
+}
+
+export interface ReleaseReport {
+  command: string;
+  timestamp: string;
+  total_ms: number;
+  gates: GateProfile[];
+  allPassed: boolean;
+  exitCode: number;
+}
+
+export interface GateSpec {
+  name: string;
+  cmd?: string;
+  args?: string[];
+  skip?: boolean;
+}
+
+export const COMMANDS = [
+  'check',
+  'validate',
+  'info',
+  'list',
+  'health',
+  'prune',
+  'backup',
+  'optimize',
+  'new',
+  'update',
+  'update-all',
+  'sync',
+  'tools',
+  'secret',
+  'cache',
+  'session',
+  'dashboard',
+  'cleanup',
+  'status',
+  'fix',
+  'release',
+  'help',
+] as const;
+
+export function makeGateProfile(name: string, exitCode: number, durationMs: number): GateProfile {
+  return {
+    name,
+    duration_ms: durationMs,
+    status: exitCode === 0 ? 'pass' : 'fail',
+    exit_code: exitCode,
+  };
+}
+
+export function skipGate(name: string): GateProfile {
+  return { name, duration_ms: 0, status: 'skip', exit_code: 0 };
+}
+
+export function runGate(
+  name: string,
+  cmd: string,
+  args: string[],
+  opts: { cwd?: string; timeout?: number } = {},
+): GateProfile {
+  const start = Date.now();
+  let exitCode = 0;
+  try {
+    const r = runSync(cmd, args, {
+      cwd: opts.cwd ?? ROOT,
+      timeout: opts.timeout ?? 120000,
+    });
+    exitCode = r.status ?? 1;
+  } catch {
+    exitCode = 1;
+  }
+  return makeGateProfile(name, exitCode, Date.now() - start);
+}
+
+export function aggregateStatus(gates: GateProfile[]): 'pass' | 'fail' {
+  return gates.some((g) => g.status === 'fail') ? 'fail' : 'pass';
+}
+
+export function computeExitCode(gates: GateProfile[]): number {
+  return aggregateStatus(gates) === 'fail' ? 1 : 0;
+}
+
+export function sortGatesByDuration(gates: GateProfile[]): GateProfile[] {
+  return [...gates].sort((a, b) => b.duration_ms - a.duration_ms);
+}
+
+export function buildReleaseReport(gates: GateProfile[]): ReleaseReport {
+  const total_ms = gates.reduce((sum, g) => sum + g.duration_ms, 0);
+  const allPassed = aggregateStatus(gates) === 'pass';
+  return {
+    command: 'release',
+    timestamp: new Date().toISOString(),
+    total_ms,
+    gates,
+    allPassed,
+    exitCode: allPassed ? 0 : 1,
+  };
+}
+
+export function selectReleaseGates(skipTests: boolean): GateSpec[] {
+  const specs: GateSpec[] = [
+    { name: 'Homologation Gate', cmd: 'npx', args: ['tsx', 'src/check-sdd-gate.ts'] },
+    {
+      name: 'RDD Release Gate',
+      cmd: 'npx',
+      args: ['tsx', 'src/rdd/rdd-gates.ts', 'validate', 'release'],
+    },
+  ];
+  if (skipTests) {
+    specs.push({ name: 'Tests Gate', skip: true });
+  } else {
+    specs.push({ name: 'Tests Gate', cmd: 'npm', args: ['run', 'test:config'] });
+  }
+  specs.push({
+    name: 'Secrets Gate',
+    cmd: 'npm',
+    args: ['run', 'scan:secrets', '--', '--scan', 'src', '--json'],
+  });
+  return specs;
+}
+
+export function releaseCommand(args: string[]): ReleaseReport {
+  const skipTests = args.includes('--skip-tests');
+  const gates = selectReleaseGates(skipTests).map((spec) =>
+    spec.skip ? skipGate(spec.name) : runGate(spec.name, spec.cmd ?? '', spec.args ?? []),
+  );
+  return buildReleaseReport(gates);
+}
+
+function printReleaseReport(report: ReleaseReport): void {
+  for (const g of report.gates) {
+    const status = g.status === 'skip' ? 'SKIP' : g.status === 'pass' ? 'PASS' : 'FAIL';
+    console.log(`[PROFILE] ${g.name}: ${(g.duration_ms / 1000).toFixed(2)}s [${status}]`);
+  }
+  console.log('');
+  console.log('Release Profile Summary:');
+  console.log(`  Total: ${(report.total_ms / 1000).toFixed(2)}s`);
+  console.log('  Gates (by duration):');
+  sortGatesByDuration(report.gates).forEach((g, i) => {
+    const status = g.status === 'skip' ? 'SKIP' : g.status === 'pass' ? 'PASS' : 'FAIL';
+    console.log(`    ${i + 1}. ${g.name}: ${(g.duration_ms / 1000).toFixed(2)}s [${status}]`);
+  });
+  console.log(`  Result: ${report.allPassed ? 'PASS' : 'FAIL'}`);
+}
+
 async function main(): Promise<void> {
   switch (command) {
     case 'help':
@@ -647,6 +805,17 @@ async function main(): Promise<void> {
       break;
     }
 
+    case 'release': {
+      const report = releaseCommand(args.slice(1));
+      if (args.includes('--json')) {
+        console.log(JSON.stringify(report, null, 2));
+      } else {
+        printReleaseReport(report);
+      }
+      process.exit(report.exitCode);
+      break;
+    }
+
     default:
       console.error(`Unknown command: ${command}`);
       showHelp();
@@ -654,7 +823,9 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch((err) => {
-  console.error('FATAL:', err.message);
-  process.exit(1);
-});
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch((err) => {
+    console.error('FATAL:', err.message);
+    process.exit(1);
+  });
+}
