@@ -49,14 +49,17 @@ function main(): number {
   const { auditLevel, verbose } = parseArgs();
   const cwd = process.cwd();
 
-  console.log(`\n[npm-audit] Running npm vulnerability scan...`);
+  // Detect package manager: pnpm (pnpm-lock.yaml) vs npm (package-lock.json)
+  const isPnpm = existsSync('pnpm-lock.yaml');
+  const pm = isPnpm ? 'pnpm' : 'npm';
+  console.log(`\n[npm-audit] Running ${pm} vulnerability scan...`);
 
   if (!existsSync('package.json')) {
     console.log(`[npm-audit] No package.json found, skipping audit`);
     return 0;
   }
 
-  const auditResult = runSync('npm', ['audit', '--json'], {
+  const auditResult = runSync(pm, ['audit', '--json'], {
     cwd,
   });
 
@@ -69,16 +72,16 @@ function main(): number {
 
   if (!audit || !audit.metadata?.vulnerabilities) {
     console.log(`[npm-audit] Invalid audit JSON, retrying with text output...`);
-    const textResult = runSync('npm', ['audit'], {
+    const textResult = runSync(pm, ['audit'], {
       cwd,
     });
     console.log(textResult.stdout || textResult.stderr);
 
     if (textResult.status !== 0 && /vulnerabilities/i.test(textResult.stdout)) {
-      console.log(`[BLOCKED] npm audit found vulnerabilities`);
+      console.log(`[BLOCKED] ${pm} audit found vulnerabilities`);
       console.log(`\nTo fix vulnerabilities:`);
-      console.log(`  npm audit fix`);
-      console.log(`  npm audit fix --force  (if needed)`);
+      console.log(`  ${pm} audit fix`);
+      console.log(`  ${pm} audit fix --force  (if needed)`);
       return 1;
     }
     return 0;
