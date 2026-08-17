@@ -1,4 +1,4 @@
-﻿/**
+/**
  * i18n.js — Multilingual support for Gentle-Vanguard presentations
  *
  * Translates data-i18n elements on the fly. Supports en/es/pt-BR.
@@ -123,7 +123,7 @@
       tip_scoring:
         'Per-session quality scoring tracking delegations, corrections and proactive hits. Automatic comparison, regression detection above 15% and anomaly alerts.',
       tip_watchtower:
-        'Central health orchestrator: 112 checks across 18 components with Promise.allSettled parallel execution and auto-heal modes (health, rebuild, autoheal, report, continuous).',
+        'Central health orchestrator: 95 checks across 21 components with Promise.allSettled parallel execution and auto-heal modes (health, rebuild, autoheal, report, continuous).',
       tip_nexus:
         'Operational SQLite database (WAL mode, FK ON) with 11 repositories, 7 migrations and 21 tables. Auto-init, auto-prune, auto-backup and watchtower monitoring.',
       tip_layers:
@@ -288,7 +288,7 @@
       tip_c_health_19: 'Nexus DB file, WAL, integrity check, 7 migrations, 21 tables',
       tip_c_health_20: 'Model router, profiles, fallback configuration',
       tip_c_health_21: 'Audit logs, pipeline, archive',
-      tip_c_health_22: 'Policy files, rules directory, 65 normatives',
+      tip_c_health_22: 'Policy files, rules directory, 60 normatives',
       tip_c_health_27: 'Init DB + run all migrations',
       tip_c_health_28: 'Health check: integrity, WAL, tables, rows',
       tip_c_health_29: 'Safe online backup to .runtime/backups/',
@@ -428,10 +428,10 @@
         'Pre-input scanning, audit pipeline, policy enforcement and guardrails before every prompt.',
       tip_fm_74:
         'JSONL audit logs with log/status/query/archive/prune actions under .session/audit/logs/.',
-      tip_fm_75: 'Governance policies + rules enforcement across all 18 watchtower components.',
+      tip_fm_75: 'Governance policies + rules enforcement across all 21 watchtower components.',
       tip_fm_76:
         'Guardrails: pre-input validation that rejects unsafe prompts before they reach the model.',
-      tip_fm_77: '65 normatives covering rules and policies for autonomous operation.',
+      tip_fm_77: '60 normatives covering rules and policies for autonomous operation.',
       tip_fm_78:
         'WebSocket push to the dashboard every 5 seconds with real metrics computed from traces.',
       tip_fm_79:
@@ -449,8 +449,8 @@
         'Checkpoints, snapshots and rollback with dry-run validation. Auto-create at session start.',
       tip_fm_87:
         'Append-only event store + saga orchestrator with compensation steps for consistency.',
-      tip_fm_88: '97 test files across 12 suites covering units, configs, workflows and CI/CD.',
-      tip_fm_89: '112 health checks across 18 components. All green: 112/112 PASS, 0 WARN, 0 FAIL.',
+      tip_fm_88: '109 test files across 10 suites covering units, configs, workflows and CI/CD.',
+      tip_fm_89: '95 health checks across 21 components. All green: 95/95 PASS, 0 WARN, 0 FAIL.',
       tip_fm_90:
         'Multi-axis code review: correctness, readability, architecture, security and performance.',
       tip_fm_91: 'Karpathy guidelines: Think First, Simplicity, Surgical Changes, Goal-Driven.',
@@ -459,7 +459,7 @@
       tip_auto_loop:
         'Detection → Evaluation → Decision → Execution → Verification → Learning. Reads 3 trigger sources: predictive-governor (budget), skill-evolution (deprecation) and auto-norm-learner (norms). Auto-apply safe with rollback if degradation >15%.',
       tip_auto_safety:
-        'Health & safety envelope: 112/112 checks PASS across 18 components, circuit breaker (5 failures → OPEN, 2 successes → CLOSED), 3-tier auto-escalation (3→5→10), auto-rollback and a minimum apply threshold of 80% confidence.',
+        'Health & safety envelope: 95/95 checks PASS across 21 components, circuit breaker (5 failures → OPEN, 2 successes → CLOSED), 3-tier auto-escalation (3→5→10), auto-rollback and a minimum apply threshold of 80% confidence.',
       tip_cacherepo:
         'response_cache + semantic cache — SHA256 key → response with TTL awareness and hit_count tracking; semantic cache adds embedding similarity lookup.',
       tip_contractrepo:
@@ -485,17 +485,17 @@
       tip_exe_scoring:
         'Per-session quality scoring tracking delegations, corrections and proactive hits. Compares scores automatically and alerts on >15% regression or anomalies.',
       tip_exe_security:
-        'Pre-input scanning of every prompt, audit pipeline (JSONL logs with query/archive/prune), policy enforcement and guardrails. Governed by 65+ normatives.',
+        'Pre-input scanning of every prompt, audit pipeline (JSONL logs with query/archive/prune), policy enforcement and guardrails. Governed by 60+ normatives.',
       tip_exe_state:
         'Checkpoint, snapshot and rollback with dry-run validation. Checkpoints auto-create at session start; rollback restores state safely from the last good checkpoint.',
       tip_exe_tracing:
         'Span-based distributed tracing with OTLP export to http://localhost:4318/v1/traces. Spans persist as JSONL under .telemetry/spans/ and .telemetry/traces/.',
       tip_exe_watchtower:
-        'Central health orchestrator: 112 checks across 18 components running with Promise.allSettled parallelism. Modes: health, rebuild, autoheal, report, continuous, all.',
+        'Central health orchestrator: 95 checks across 21 components running with Promise.allSettled parallelism. Modes: health, rebuild, autoheal, report, continuous, all.',
       tip_housekeepingrepo:
         'pruneAll, housekeeping, vacuum — automatic WAL checkpoint when >1MB, retention pruning and DB optimization (REINDEX, VACUUM).',
       tip_met_health:
-        '112/112 checks PASS across 18 components: dashboard-ws, codegraph, ml-embeddings, engram, mcp, session, hooks, configs, tool-configs, security, cloud-connectors, tracing, state-persistence, audit, governance and gentle-vanguard-db. Measured by the maintenance watchtower.',
+        '95/95 checks PASS across 21 components: dashboard-ws, codegraph, ml-embeddings, engram, mcp, session, hooks, configs, tool-configs, security, cloud-connectors, tracing, state-persistence, audit, governance and gentle-vanguard-db. Measured by the maintenance watchtower.',
       tip_met_perf:
         'Key performance indicators: watchtower checks went from sequential to parallel execution, lazy batch delay optimized 500ms → 100ms (5x faster), DB Manager refactored 1066 → 250 lines (-77%) and autonomy climbed from 73% to 100%.',
       tip_metricsrepo:
@@ -661,7 +661,7 @@
       tip_scoring:
         'Scoring de calidad por sesión que rastrea delegaciones, correcciones y aciertos proactivos. Comparación automática, detección de regresión mayor al 15% y alertas de anomalías.',
       tip_watchtower:
-        'Orquestador central de salud: 112 checks en 18 componentes con ejecución paralela Promise.allSettled y modos de auto-healing (health, rebuild, autoheal, report, continuous).',
+        'Orquestador central de salud: 95 checks en 21 componentes con ejecución paralela Promise.allSettled y modos de auto-healing (health, rebuild, autoheal, report, continuous).',
       tip_nexus:
         'Base de datos operacional SQLite (modo WAL, FK ON) con 11 repositorios, 7 migraciones y 21 tablas. Auto-init, auto-prune, auto-backup y monitoreo por watchtower.',
       tip_layers:
@@ -827,7 +827,7 @@
         'Archivo de Nexus DB, WAL, comprobación de integridad, 7 migrations, 21 tables',
       tip_c_health_20: 'Model router, perfiles, configuración de fallback',
       tip_c_health_21: 'Logs de auditoría, pipeline, archivo',
-      tip_c_health_22: 'Archivos de políticas, directorio de reglas, 65 normativas',
+      tip_c_health_22: 'Archivos de políticas, directorio de reglas, 60 normativas',
       tip_c_health_27: 'Inicializar DB + ejecutar todas las migrations',
       tip_c_health_28: 'Health check: integridad, WAL, tables, rows',
       tip_c_health_29: 'Backup online seguro en .runtime/backups/',
@@ -967,10 +967,10 @@
       tip_fm_74:
         'Logs de auditoría JSONL con acciones log/status/query/archive/prune bajo .session/audit/logs/.',
       tip_fm_75:
-        'Políticas de governance + enforcement de reglas en los 18 componentes del watchtower.',
+        'Políticas de governance + enforcement de reglas en los 21 componentes del watchtower.',
       tip_fm_76:
         'Guardrails: validación pre-input que rechaza prompts inseguros antes de que lleguen al modelo.',
-      tip_fm_77: '65 normativas que cubren reglas y políticas para la operación autónoma.',
+      tip_fm_77: '60 normativas que cubren reglas y políticas para la operación autónoma.',
       tip_fm_78:
         'Push WebSocket al dashboard cada 5 segundos con métricas reales calculadas desde traces.',
       tip_fm_79:
@@ -991,7 +991,7 @@
       tip_fm_87:
         'Event store append-only + saga orchestrator con pasos de compensación para consistencia.',
       tip_fm_88: '97 archivos de test en 12 suites que cubren units, configs, workflows y CI/CD.',
-      tip_fm_89: '112 health checks en 18 componentes. Todo verde: 112/112 PASS, 0 WARN, 0 FAIL.',
+      tip_fm_89: '95 health checks en 21 componentes. Todo verde: 95/95 PASS, 0 WARN, 0 FAIL.',
       tip_fm_90:
         'Code review multi-eje: correctness, readability, architecture, security y performance.',
       tip_fm_91: 'Guías Karpathy: Think First, Simplicity, Surgical Changes, Goal-Driven.',
@@ -1000,7 +1000,7 @@
       tip_auto_loop:
         'Detección → Evaluación → Decisión → Ejecución → Verificación → Aprendizaje. Lee 3 fuentes de disparo: predictive-governor (presupuesto), skill-evolution (deprecación) y auto-norm-learner (normas). Auto-apply safe con rollback si degradación >15%.',
       tip_auto_safety:
-        'Envoltura de salud y seguridad: 112/112 checks PASS en 18 componentes, circuit breaker (5 fallos → OPEN, 2 éxitos → CLOSED), auto-escalación de 3 niveles (3→5→10), auto-rollback y umbral mínimo de aplicación del 80% de confianza.',
+        'Envoltura de salud y seguridad: 95/95 checks PASS en 21 componentes, circuit breaker (5 fallos → OPEN, 2 éxitos → CLOSED), auto-escalación de 3 niveles (3→5→10), auto-rollback y umbral mínimo de aplicación del 80% de confianza.',
       tip_cacherepo:
         'response_cache + semantic cache — clave SHA256 → respuesta con TTL y tracking de hit_count; el cache semántico añade búsqueda por similitud de embeddings.',
       tip_contractrepo:
@@ -1026,17 +1026,17 @@
       tip_exe_scoring:
         'Scoring de calidad por sesión que rastrea delegaciones, correcciones y aciertos proactivos. Compara puntuaciones automáticamente y alerta sobre regresión >15% o anomalías.',
       tip_exe_security:
-        'Escaneo pre-input de cada prompt, pipeline de auditoría (logs JSONL con query/archive/prune), enforcement de políticas y guardrails. Regido por 65+ normativas.',
+        'Escaneo pre-input de cada prompt, pipeline de auditoría (logs JSONL con query/archive/prune), enforcement de políticas y guardrails. Regido por 60+ normativas.',
       tip_exe_state:
         'Checkpoint, snapshot y rollback con validación dry-run. Los checkpoints se crean automáticamente al inicio de sesión; el rollback restaura el estado de forma segura desde el último checkpoint bueno.',
       tip_exe_tracing:
         'Tracing distribuido basado en spans con exportación OTLP a http://localhost:4318/v1/traces. Los spans se persisten como JSONL en .telemetry/spans/ y .telemetry/traces/.',
       tip_exe_watchtower:
-        'Orquestador central de salud: 112 checks en 18 componentes ejecutados con paralelismo Promise.allSettled. Modos: health, rebuild, autoheal, report, continuous, all.',
+        'Orquestador central de salud: 95 checks en 21 componentes ejecutados con paralelismo Promise.allSettled. Modos: health, rebuild, autoheal, report, continuous, all.',
       tip_housekeepingrepo:
         'pruneAll, housekeeping, vacuum — checkpoint WAL automático cuando >1MB, poda por retención y optimización de BD (REINDEX, VACUUM).',
       tip_met_health:
-        '112/112 checks PASS en 18 componentes: dashboard-ws, codegraph, ml-embeddings, engram, mcp, session, hooks, configs, tool-configs, security, cloud-connectors, tracing, state-persistence, audit, governance y gentle-vanguard-db. Medidos por el maintenance watchtower.',
+        '95/95 checks PASS en 21 componentes: dashboard-ws, codegraph, ml-embeddings, engram, mcp, session, hooks, configs, tool-configs, security, cloud-connectors, tracing, state-persistence, audit, governance y gentle-vanguard-db. Medidos por el maintenance watchtower.',
       tip_met_perf:
         'Indicadores clave de rendimiento: los checks del watchtower pasaron de secuencial a paralelo, el delay de batches lazy se optimizó de 500ms → 100ms (5x más rápido), el DB Manager se refactorizó de 1066 → 250 líneas (-77%) y la autonomía subió del 73% al 100%.',
       tip_metricsrepo:
@@ -1200,7 +1200,7 @@
       tip_scoring:
         'Scoring de qualidade por sessão que rastreia delegações, correções e acertos proativos. Comparação automática, detecção de regressão acima de 15% e alertas de anomalias.',
       tip_watchtower:
-        'Orquestrador central de saúde: 112 checks em 18 componentes com execução paralela Promise.allSettled e modos de auto-healing (health, rebuild, autoheal, report, continuous).',
+        'Orquestrador central de saúde: 95 checks em 21 componentes com execução paralela Promise.allSettled e modos de auto-healing (health, rebuild, autoheal, report, continuous).',
       tip_nexus:
         'Banco de dados operacional SQLite (modo WAL, FK ON) com 11 repositórios, 7 migrações e 21 tabelas. Auto-init, auto-prune, auto-backup e monitoramento por watchtower.',
       tip_layers:
@@ -1366,7 +1366,7 @@
         'Arquivo da Nexus DB, WAL, verificação de integridade, 7 migrations, 21 tables',
       tip_c_health_20: 'Model router, perfis, configuração de fallback',
       tip_c_health_21: 'Logs de auditoria, pipeline, arquivo',
-      tip_c_health_22: 'Arquivos de políticas, diretório de regras, 65 normativas',
+      tip_c_health_22: 'Arquivos de políticas, diretório de regras, 60 normativas',
       tip_c_health_27: 'Inicializar DB + executar todas as migrations',
       tip_c_health_28: 'Health check: integridade, WAL, tables, rows',
       tip_c_health_29: 'Backup online seguro em .runtime/backups/',
@@ -1506,10 +1506,10 @@
         'Escaneamento pre-input, pipeline de auditoria, aplicação de políticas e guardrails antes de cada prompt.',
       tip_fm_74:
         'Logs de auditoria JSONL com ações log/status/query/archive/prune sob .session/audit/logs/.',
-      tip_fm_75: 'Políticas de governance + aplicação de regras nos 18 componentes do watchtower.',
+      tip_fm_75: 'Políticas de governance + aplicação de regras nos 21 componentes do watchtower.',
       tip_fm_76:
         'Guardrails: validação pre-input que rejeita prompts inseguros antes de chegarem ao modelo.',
-      tip_fm_77: '65 normativas que cobrem regras e políticas para a operação autônoma.',
+      tip_fm_77: '60 normativas que cobrem regras e políticas para a operação autônoma.',
       tip_fm_78:
         'Push WebSocket ao dashboard a cada 5 segundos com métricas reais calculadas a partir de traces.',
       tip_fm_79:
@@ -1530,7 +1530,7 @@
       tip_fm_87:
         'Event store append-only + saga orchestrator com passos de compensação para consistência.',
       tip_fm_88: '97 arquivos de teste em 12 suítes cobrindo units, configs, workflows e CI/CD.',
-      tip_fm_89: '112 health checks em 18 componentes. Tudo verde: 112/112 PASS, 0 WARN, 0 FAIL.',
+      tip_fm_89: '95 health checks em 21 componentes. Tudo verde: 95/95 PASS, 0 WARN, 0 FAIL.',
       tip_fm_90:
         'Code review multi-eixo: correctness, readability, architecture, security e performance.',
       tip_fm_91: 'Diretrizes Karpathy: Think First, Simplicity, Surgical Changes, Goal-Driven.',
@@ -1539,7 +1539,7 @@
       tip_auto_loop:
         'Detecção → Avaliação → Decisão → Execução → Verificação → Aprendizado. Lê 3 fontes de gatilho: predictive-governor (orçamento), skill-evolution (deprecação) e auto-norm-learner (normas). Auto-apply safe com rollback se degradação >15%.',
       tip_auto_safety:
-        'Envelope de saúde e segurança: 112/112 checks PASS em 18 componentes, circuit breaker (5 falhas → OPEN, 2 sucessos → CLOSED), auto-escalação de 3 níveis (3→5→10), auto-rollback e limite mínimo de aplicação de 80% de confiança.',
+        'Envelope de saúde e segurança: 95/95 checks PASS em 21 componentes, circuit breaker (5 falhas → OPEN, 2 sucessos → CLOSED), auto-escalação de 3 níveis (3→5→10), auto-rollback e limite mínimo de aplicação de 80% de confiança.',
       tip_cacherepo:
         'response_cache + semantic cache — chave SHA256 → resposta com TTL e rastreio de hit_count; o cache semântico adiciona busca por similaridade de embeddings.',
       tip_contractrepo:
@@ -1565,17 +1565,17 @@
       tip_exe_scoring:
         'Scoring de qualidade por sessão que rastreia delegações, correções e acertos proativos. Compara pontuações automaticamente e alerta sobre regressão >15% ou anomalias.',
       tip_exe_security:
-        'Escaneamento pre-input de cada prompt, pipeline de auditoria (logs JSONL com query/archive/prune), aplicação de políticas e guardrails. Regido por 65+ normativas.',
+        'Escaneamento pre-input de cada prompt, pipeline de auditoria (logs JSONL com query/archive/prune), aplicação de políticas e guardrails. Regido por 60+ normativas.',
       tip_exe_state:
         'Checkpoint, snapshot e rollback com validação dry-run. Os checkpoints são criados automaticamente no início da sessão; o rollback restaura o estado com segurança a partir do último checkpoint bom.',
       tip_exe_tracing:
         'Tracing distribuído baseado em spans com exportação OTLP para http://localhost:4318/v1/traces. Os spans persistem como JSONL em .telemetry/spans/ e .telemetry/traces/.',
       tip_exe_watchtower:
-        'Orquestador central de saúde: 112 checks em 18 componentes executados com paralelismo Promise.allSettled. Modos: health, rebuild, autoheal, report, continuous, all.',
+        'Orquestador central de saúde: 95 checks em 21 componentes executados com paralelismo Promise.allSettled. Modos: health, rebuild, autoheal, report, continuous, all.',
       tip_housekeepingrepo:
         'pruneAll, housekeeping, vacuum — checkpoint WAL automático quando >1MB, poda por retenção e otimização do BD (REINDEX, VACUUM).',
       tip_met_health:
-        '112/112 checks PASS em 18 componentes: dashboard-ws, codegraph, ml-embeddings, engram, mcp, session, hooks, configs, tool-configs, security, cloud-connectors, tracing, state-persistence, audit, governance e gentle-vanguard-db. Medidos pelo maintenance watchtower.',
+        '95/95 checks PASS em 21 componentes: dashboard-ws, codegraph, ml-embeddings, engram, mcp, session, hooks, configs, tool-configs, security, cloud-connectors, tracing, state-persistence, audit, governance e gentle-vanguard-db. Medidos pelo maintenance watchtower.',
       tip_met_perf:
         'Indicadores-chave de desempenho: os checks do watchtower passaram de sequencial para paralelo, o delay de batches lazy foi otimizado de 500ms → 100ms (5x mais rápido), o DB Manager foi refatorado de 1066 → 250 linhas (-77%) e a autonomia subiu de 73% para 100%.',
       tip_metricsrepo:

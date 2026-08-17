@@ -1,17 +1,17 @@
 # Gentle-Vanguard — Stack Status Report
 
-**Versión actual**: v3.1.0 **Fecha**: 2026-06-04 **Stack**: AI orchestration layer multi-herramienta
-| ~300+ scripts | ~386 skills | 28 CI/CD workflows
+**Versión actual**: v3.7.0 **Fecha**: 2026-08-16 **Stack**: AI orchestration layer multi-herramienta
+| 436+ TS scripts | 263 skills | 23 CI/CD workflows
 
 ---
 
 ## 1. ARQUITECTURA (5 Capas)
 
 ```
-Layer 5: AGENTES  — 18 agents (Orchestrator + 17 sub-agentes: BA, SAD, DEV, QA, OPS, GOV, DOC, etc.)
+Layer 5: AGENTES  — 21 agents (Orchestrator + 20 sub-agentes: BA, SAD, DEV, QA, OPS, GOV, DOC, etc.)
 Layer 4: COMANDOS — src/cli/gv.ts, src/pre-process-input.ts, src/core/detect-tool.ts | <!-- REF-OBSOLETA: pre-process-input.ps1 y detect-tool.ps1 eliminados; migrados a src/*.ts -->
 Layer 3: MCP      — scripts/mcp/skill-server.ts (MCP protocol), src/mcp/mcp-bridge.ts | <!-- REF-OBSOLETA: mcp-bridge.ps1 eliminado; migrado a src/mcp/mcp-bridge.ts -->
-Layer 2: SKILLS   — ~386 skills en skills/ (SDD, seguridad, web, mobile, AI/ML, etc.)
+Layer 2: SKILLS   — 263 skills (175 en skills/ + 88 en .opencode/skills)
 Layer 1: MEMORIA  — Engram persistent memory (tools/engram.exe v1.15.10)
 ```
 
@@ -114,7 +114,7 @@ VS Code, Copilot, Antigravity.
 <!-- REF-OBSOLETA: scripts/security/sbom-validate.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | SIEM audit bridge     | `src/infrastructure/siem-audit-bridge.ts`     | ✅ Activo | Manual                         |
 
-### 2.7 CI/CD (28 workflows)
+### 2.7 CI/CD (23 workflows)
 
 | Workflow                                    | Trigger                                    | Estado     |
 | ------------------------------------------- | ------------------------------------------ | ---------- |
@@ -197,7 +197,7 @@ VS Code, Copilot, Antigravity.
 
 | Componente                    | Estado          | Automatización      |
 | ----------------------------- | --------------- | ------------------- |
-| Skill registry (386 skills)   | ✅ Activo       | Automático (sync)   |
+| Skill registry (263 skills)   | ✅ Activo       | Automático (sync)   |
 | Skill factory                 | ✅ Activo       | Manual              |
 | Skill auto-patch              | ✅ Activo       | Automático          |
 | Skill nudge                   | ✅ Activo       | Automático (sesión) |
@@ -226,7 +226,7 @@ VS Code, Copilot, Antigravity.
 - **Cada turno**: pre-process-input, token notification, ML routing, context optimization
 - **Cada sesión**: session start/end, engram context, startup summary, skill recommendation
 - **Git hooks**: 13 hooks en pre-commit/pre-push/commit-msg/post-commit
-- **CI/CD**: 27 workflows (push, PR, cron diario/semanal/mensual)
+- **CI/CD**: 23 workflows (push, PR, cron diario/semanal/mensual)
 - **Mantenimiento**: Watchtower (domingo), FT pipeline (semanal), auto-backup
 - **Memoria**: Engram save/search/context en cada operación
 - **Seguridad**: Gitleaks, Trivy, security orchestrator en hooks y CI
@@ -271,7 +271,7 @@ Requerimiento → BA/EXPLORE (análisis) → SAD (diseño) → DEV (impl) → QA
 
 ```
 Maintenance Watchtower:
-  1. Health check (16 checks: Engram, Dashboard, scripts, configs)
+  1. Health check (95 checks en 21 componentes)
   2. Rebuild automático de índices stale
   3. Reporte JSON
   4. Fine-tuning pipeline: collect → build → threshold → auto-prune
@@ -281,7 +281,7 @@ Maintenance Watchtower:
 
 ## 5. ¿QUÉ FALTA / SIGUIENTES PASOS?
 
-### Del ROADMAP oficial (v3.1.0 → v3.x+):
+### Del ROADMAP oficial (v3.7.0 → v3.x+):
 
 | Prioridad | Item                                              | Estado actual                       |
 | --------- | ------------------------------------------------- | ----------------------------------- |
@@ -305,14 +305,14 @@ Maintenance Watchtower:
 
 | Issue                                 | Detalle                                                                                               |
 | ------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| ✅ **Versión unificada**              | v3.1.0 consistente en README, VERSION, badges                                                         |
+| ✅ **Versión unificada**              | v3.7.0 consistente en README, VERSION, badges                                                         |
 | ⚠️ **FT Python stub**                 | `train_lora.py` es stub, no implementado                                                              |
 | ✅ **Adaptive scripts automatizados** | auto-norm-enforcer (cada 5 turnos), karpathy-enforcer (pre-commit), normative-audit (pre-commit + CI) |
 | ⚠️ **Plugins experimentales**         | Plugin system existe pero sin uso real                                                                |
 | ⚠️ **Dashboard v3**                   | Chart.js integrado pero no hay Web UI nativo (HTML estático)                                          |
 | ⚠️ **Multi-repo**                     | Alpha stage, no probado en producción                                                                 |
 | ⚠️ **event-bus sub-utilizado**        | Solo 1 subscription (judgment-day)                                                                    |
-| ⚠️ **Skills ~386**                    | Inventario real no auditado recientemente                                                             |
+| ⚠️ **Skills 263**                    | Inventario real auditado (175 skills/ + 88 .opencode/skills)                                          |
 
 ---
 
@@ -331,7 +331,7 @@ Maintenance Watchtower:
 | Prompts de agentes    | `config/agent-prompts/` (10 roles)                       |
 | Normativas            | `rules/` (~60 archivos)                                  |
 | Hooks                 | `src/hooks/` <!-- REF-OBSOLETA: hooks/ (18 scripts .ps1) eliminado; hooks TS en src/hooks/ --> |
-| Skills                | `skills/` (~386 dirs)                                    |
+| Skills                | `skills/` (175 dirs) + `.opencode/skills/` (88 dirs)                  |
 | Tests                 | `tests/` (unit, integration, security, performance, e2e) |
 | Adaptadores           | `adapters/` (Windsurf, Codex, Antigravity, Detection)    |
 | Plugins               | `plugins/` (example-hello-world)                         |
@@ -354,7 +354,7 @@ Maintenance Watchtower:
 | **Dashboard v3**                                  | ✅ Chart.js, 9 secciones, WCAG 2.1 AA    |
 | **Fine-tuning LoRA**                              | ✅ Pipeline completo, 2 adapters activos |
 | **Seguridad** (AES-256, secrets, Gitleaks, Trivy) | ✅ Multi-capa                            |
-| **CI/CD** (27 workflows)                          | ✅ Automatización completa               |
+| **CI/CD** (23 workflows)                          | ✅ Automatización completa               |
 | **Git hooks** (13)                                | ✅ Protección pre-commit/pre-push        |
 | **Cross-tool** (10 herramientas)                  | ✅ Adaptadores + MCP bridge              |
 | **Token optimization**                            | ✅ 98% compresión, cache SHA256          |
