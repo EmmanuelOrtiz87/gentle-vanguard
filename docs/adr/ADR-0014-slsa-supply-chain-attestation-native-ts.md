@@ -56,6 +56,14 @@ npm run provenance:verify -- -f provenance/gentle-vanguard-provenance.json     #
 npx tsx --test tests/unit/slsa-provenance.test.ts                               # tests (19)
 ```
 
+### Integración RDD (release workflow)
+
+El flujo RDD (`src/rdd/rdd-core.ts`) genera provenance automáticamente cuando el workflow se
+completa (todos los 5 gates pasan): `generateReleaseProvenance()` atestigua `sbom.json` + el
+receipt del workflow contra el git SHA actual, con `invocationId: rdd-<workflowId>`. Es
+best-effort (no bloquea el completado si falla). Verificado con
+`tests/unit/rdd/rdd-provenance.test.ts` (3 tests).
+
 ## Consequences
 
 ### Positive

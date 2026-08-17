@@ -265,9 +265,47 @@ async function stepGate(workflow: RDDWorkflow, gate: string): Promise<RDDWorkflo
     workflow.completedAt = new Date().toISOString();
     log('All gates passed! Workflow complete', 'SUCCESS');
     saveWorkflow(workflow);
+    generateReleaseProvenance(workflow);
   }
 
   return workflow;
+}
+
+/**
+ * Generate SLSA provenance for the release artifacts when the workflow completes.
+ * Best-effort: does NOT block workflow completion on failure.
+ * Attests sbom.json (if present) + the workflow receipt against the current git SHA.
+ * Exported for unit testing.
+ */
+export function generateReleaseProvenance(workflow: RDDWorkflow): void {
+  try {
+    const artifacts: string[] = [];
+    const sbomPath = join(ROOT, 'sbom', 'gentle-vanguard-sbom.json');
+    if (existsSync(sbomPath)) artifacts.push(sbomPath);
+
+    const receiptsDir = join(ROOT, '.session', 'receipts');
+    if (workflow.receipt) {
+      const receiptPath = join(receiptsDir, `${workflow.receipt.id}.json`);
+      if (existsSync(receiptPath)) artifacts.push(receiptPath);
+    }
+
+    if (artifacts.length === 0) {
+      log('Provenance: no release artifacts found (sbom/receipt missing) — skipped', 'WARN');
+      return;
+    }
+
+    runNpxTsxSync(
+      'src/slsa-provenance.ts',
+      ['generate', '-a', ...artifacts, '--invocation-id', `rdd-${workflow.workflowId}`],
+      { cwd: ROOT },
+    );
+    log(`Provenance generated for ${artifacts.length} release artifact(s)`, 'SUCCESS');
+  } catch (err) {
+    log(
+      `Provenance generation failed (non-blocking): ${err instanceof Error ? err.message : String(err)}`,
+      'WARN',
+    );
+  }
 }
 
 // ─── Workflow Runner ──────────────────────────────────────────────────────────

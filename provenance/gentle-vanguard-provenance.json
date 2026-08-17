@@ -3,7 +3,7 @@
   "subject": [
     {
       "name": "gentle-vanguard-sbom.json",
-      "uri": "https://github.com/gentle-vanguard/gentle-vanguard#gentle-vanguard-sbom.json",
+      "uri": "https://github.com/EmmanuelOrtiz87/gentle-vanguard.git#gentle-vanguard-sbom.json",
       "digest": {
         "sha256": "803ad61d0db2d21e6abe5e04d13fe953d5e6dcf2bd5e675478dd60d75918fe58"
       },
@@ -15,7 +15,7 @@
     "buildDefinition": {
       "buildType": "https://github.com/gentle-vanguard/gentle-vanguard@v1",
       "externalParameters": {
-        "repository": "https://github.com/gentle-vanguard/gentle-vanguard",
+        "repository": "https://github.com/EmmanuelOrtiz87/gentle-vanguard.git",
         "ref": "refs/heads/develop"
       },
       "internalParameters": {
@@ -23,9 +23,9 @@
       },
       "resolvedDependencies": [
         {
-          "uri": "https://github.com/gentle-vanguard/gentle-vanguard",
+          "uri": "https://github.com/EmmanuelOrtiz87/gentle-vanguard.git",
           "digest": {
-            "gitCommit": "5b73de378a6f62557c5947301b452bfbf51bd193"
+            "gitCommit": "909ac24c8e478246b03b96d3b4791a433dc045c9"
           },
           "name": "refs/heads/develop"
         }
@@ -39,9 +39,9 @@
         }
       },
       "metadata": {
-        "invocationId": "gentle-vanguard-2026-08-17T03:57:04Z",
-        "startedOn": "2026-08-17T03:57:04Z",
-        "finishedOn": "2026-08-17T03:57:04Z"
+        "invocationId": "rdd-test-wf-001",
+        "startedOn": "2026-08-17T04:14:53Z",
+        "finishedOn": "2026-08-17T04:14:53Z"
       }
     }
   }
