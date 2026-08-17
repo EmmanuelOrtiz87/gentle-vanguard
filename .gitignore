@@ -263,4 +263,6 @@ config/owner-auth.json*
 *.enc
 *.key
 **/*.pem
+# Exception: SLSA provenance public key is intentionally public (verification only)
+!provenance/public-key.pem
 # End sanitization patterns

@@ -76,8 +76,6 @@ best-effort (no bloquea el completado si falla). Verificado con
 
 ### Negative
 
-- ⚠️ **Build L1 solamente**: sin firma criptográfica no alcanza L2/L3 (provenance no falsificable
-  requiere un build service aislado con identidad de firma)
 - ⚠️ `internalParameters.environment` está vacío por defecto (solo node version si no se pasa
   `--env`) — completar en CI con variables reales
 - ⚠️ Los digests de artifacts no se re-verifican contra el filesystem en `verify` (solo estructura)
@@ -86,14 +84,16 @@ best-effort (no bloquea el completado si falla). Verificado con
 ### Mitigation
 
 - En CI, pasar `--env` con variables reales del pipeline para enriquecer `internalParameters`
-- Para L2/L3 futuro: firmar el statement con cosign (`cosign attest-blob`) como paso post-build
+- La firma criptográfica (Build L2/L3) se implementó nativamente en ADR-0015
+  (`src/slsa-signer.ts`, DSSE + Ed25519) — ver ese ADR para la gestión de claves
 - Añadir re-verificación de digests si se requiere (extensiones `gentle_vanguard_*`)
 
 ## Related
 
 - **Supersedes**: nada (nueva capacidad)
-- **Related**: ADR-0006 (code coverage — calidad verificable), ADR-0011 (dependency updates —
-  supply-chain), ADR-0010 (knowledge absorption — patrón nativo TS)
+- **Related**: ADR-0015 (SLSA provenance signing — DSSE + Ed25519, Build L2/L3), ADR-0006 (code
+  coverage — calidad verificable), ADR-0011 (dependency updates — supply-chain), ADR-0010
+  (knowledge absorption — patrón nativo TS)
 - **Roadmap**: `docs/guides/STACK-OPTIMIZATION-ROADMAP.md` — item "supply-chain attestation (SLSA
   provenance)" marcado completado
 

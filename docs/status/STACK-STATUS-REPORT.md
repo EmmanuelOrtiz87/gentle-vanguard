@@ -113,6 +113,7 @@ VS Code, Copilot, Antigravity.
 | SBOM validation       | `src/generate-sbom.ts` <!-- REF-OBSOLETA: scripts/security/sbom-validate.ps1 eliminado; candidato: src/generate-sbom.ts -->         | ✅ Activo | CI                             |
 <!-- REF-OBSOLETA: scripts/security/sbom-validate.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | SLSA provenance       | `src/slsa-provenance.ts` + `src/rdd/rdd-core.ts` (auto en release) | ✅ Activo | Automático (release gate RDD) |
+| SLSA signing (L2/L3)  | `src/slsa-signer.ts` (DSSE + Ed25519) + `provenance/public-key.pem` | ✅ Activo | Automático (release gate RDD) |
 | SIEM audit bridge     | `src/infrastructure/siem-audit-bridge.ts`     | ✅ Activo | Manual                         |
 
 ### 2.7 CI/CD (23 workflows)

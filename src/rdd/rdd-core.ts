@@ -300,6 +300,27 @@ export function generateReleaseProvenance(workflow: RDDWorkflow): void {
       { cwd: ROOT },
     );
     log(`Provenance generated for ${artifacts.length} release artifact(s)`, 'SUCCESS');
+
+    // Sign the provenance (DSSE + Ed25519) if the private key exists — best-effort.
+    const privateKey = join(ROOT, '.runtime', 'provenance', 'private-key.pem');
+    if (existsSync(privateKey)) {
+      runNpxTsxSync(
+        'src/slsa-signer.ts',
+        [
+          'sign',
+          '-f',
+          'provenance/gentle-vanguard-provenance.json',
+          '-k',
+          privateKey,
+          '-o',
+          'provenance/gentle-vanguard-provenance.signed.json',
+        ],
+        { cwd: ROOT },
+      );
+      log('Provenance signed (DSSE + Ed25519)', 'SUCCESS');
+    } else {
+      log('Provenance signing skipped (no private key at .runtime/provenance/)', 'WARN');
+    }
   } catch (err) {
     log(
       `Provenance generation failed (non-blocking): ${err instanceof Error ? err.message : String(err)}`,

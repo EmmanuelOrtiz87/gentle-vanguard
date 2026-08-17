@@ -654,7 +654,7 @@ Total: 11-13 hours
 - Load testing for multi-repo (4-6h)
 - Plan annual security audit (4h)
 - Consider: chaos testing, chaos engineering
-- Consider: supply-chain attestation (SLSA L3)
+- ~~Consider: supply-chain attestation (SLSA L3)~~ ✅ `src/slsa-signer.ts` (DSSE + Ed25519, ADR-0015)
 ```
 
 ---
