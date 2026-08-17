@@ -36,6 +36,7 @@ Each ADR is immutable once accepted. Updates create new ADRs (ADR-0011, etc).
 | **[ADR-0010](ADR-010-knowledge-absorption-external-repos.md)** | Knowledge Absorption (External Repos) | ✅ Accepted | Aug 2026    | Absorb external knowledge as native TS (secret-scanner, skills, ai-provenance)          |
 | **[ADR-0011](ADR-0011-automated-dependency-updates.md)** | Dependency Updates: Audit + Quarterly | ✅ Accepted      | May 2026   | npm audit in pre-push + quarterly review + Renovate Q3 2026                            |
 | **[ADR-0012](ADR-0012-powershell-language-choice.md)**   | Primary Language: PowerShell          | ⚠️ Superseded    | May 2026   | Original PowerShell choice — superseded by ADR-0002 (TypeScript-First)                 |
+| **[ADR-0013](ADR-0013-annual-security-audit-external-firm.md)** | Annual Security Audit (External) | ✅ Accepted      | Aug 2026   | External firm audit, Q4 recurrence, plan in ANNUAL-AUDIT-PLAN.md                       |
 | **[ADR-0014](ADR-0014-slsa-supply-chain-attestation-native-ts.md)** | SLSA Supply-Chain Attestation | ✅ Accepted      | Aug 2026   | SLSA Build L1 provenance native TS (in-toto v1 + SLSA v1.0)                            |
 
 ---
@@ -251,7 +252,6 @@ A: Team consensus. Typically:
 
 **Planned ADRs (Q3-Q4 2026)**:
 
-- [ ] **ADR-0013**: Annual Security Audit Requirements
 - [ ] **ADR-0015**: SLSA Build L2/L3 (signed provenance, cosign)
 
 ---
