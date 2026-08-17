@@ -62,6 +62,10 @@ pre-push:
     # is missing or when --skip is passed, per config/alert policy in baseline.json
     perf-baseline:
       run: npm run perf:baseline:check
+    # Code coverage gate — quick mode (~5s, core suites only). Informational:
+    # quick mode never fails the push (aggregate enforcement is full-mode only).
+    coverage-gate:
+      run: npm run coverage:quick
 
 commit-msg:
   commands:

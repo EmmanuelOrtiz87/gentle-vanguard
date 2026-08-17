@@ -10,28 +10,28 @@
   },
   "coverageTargets": [
     {
-      "name": "session-autostart-critical",
+      "name": "event-sourcing-critical",
       "threshold": 60,
-      "tests": ["tests/integration/session-autostart.test.ts"],
-      "source": ["src/session-autostart.ts"]
+      "tests": ["tests/unit/event-sourcing-hashchain.test.ts"],
+      "source": ["src/event-sourcing.ts"]
     },
     {
-      "name": "engram-orchestrator-critical",
-      "threshold": 60,
-      "tests": ["tests/integration/engram-orchestrator.test.ts"],
-      "source": ["src/engram-orchestrator.ts"]
-    },
-    {
-      "name": "routing-critical-flows",
+      "name": "secret-scanner",
       "threshold": 70,
-      "tests": ["tests/integration/routing-critical-flows.test.ts"],
-      "source": ["src/agent-router.ts"]
+      "tests": ["tests/unit/secret-scanner.test.ts"],
+      "source": ["src/secret-scanner.ts"]
+    },
+    {
+      "name": "structural-compression",
+      "threshold": 60,
+      "tests": ["tests/unit/structural-compression.test.ts"],
+      "source": ["src/structural-compression.ts"]
     },
     {
       "name": "security-orchestrator",
       "threshold": 60,
       "tests": ["tests/security/security-orchestrator.test.ts"],
-      "source": ["src/security-orchestrator.ts"]
+      "source": ["src/security/security-orchestrator.ts"]
     }
   ],
   "include": ["src/**/*.ts", "scripts/**/*.ts"],

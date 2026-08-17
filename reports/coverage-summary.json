@@ -1,0 +1,54 @@
+{
+  "duration": "2.3",
+  "testsPassed": true,
+  "coverageProduced": true,
+  "thresholds": {
+    "lines": 30,
+    "functions": 30,
+    "branches": 25,
+    "statements": 30
+  },
+  "targets": [
+    {
+      "name": "src/ (aggregate)",
+      "statements": 78.3,
+      "lines": 78.3,
+      "functions": 85.2,
+      "branches": 64.3,
+      "passed": true
+    },
+    {
+      "name": "event-sourcing-critical (not loaded)",
+      "statements": 0,
+      "lines": 0,
+      "functions": 0,
+      "branches": 0,
+      "passed": true
+    },
+    {
+      "name": "secret-scanner (not loaded)",
+      "statements": 0,
+      "lines": 0,
+      "functions": 0,
+      "branches": 0,
+      "passed": true
+    },
+    {
+      "name": "structural-compression (not loaded)",
+      "statements": 0,
+      "lines": 0,
+      "functions": 0,
+      "branches": 0,
+      "passed": true
+    },
+    {
+      "name": "security-orchestrator",
+      "statements": 75.9,
+      "lines": 75.9,
+      "functions": 100,
+      "branches": 73.1,
+      "passed": true
+    }
+  ],
+  "reportDir": "coverage"
+}
