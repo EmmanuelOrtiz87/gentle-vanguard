@@ -64,8 +64,10 @@ pre-push:
       run: npm run perf:baseline:check
     # Code coverage gate — quick mode (~5s, core suites only). Informational:
     # quick mode never fails the push (aggregate enforcement is full-mode only).
+    # --no-write: validate without touching reports/coverage-summary.json (keeps
+    # the working tree clean so the push is not aborted by a dirty tree).
     coverage-gate:
-      run: npm run coverage:quick
+      run: npm run coverage:quick -- --no-write
 
 commit-msg:
   commands:

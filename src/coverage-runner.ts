@@ -72,6 +72,7 @@ interface ParseOptions {
   quick: boolean;
   enforce: boolean;
   json: boolean;
+  noWrite: boolean;
 }
 
 function parseArgs(args?: string[]): ParseOptions {
@@ -80,6 +81,7 @@ function parseArgs(args?: string[]): ParseOptions {
     quick: argv.includes('--quick'),
     enforce: !argv.includes('--no-enforce'),
     json: argv.includes('--json'),
+    noWrite: argv.includes('--no-write'),
   };
 }
 
@@ -377,11 +379,13 @@ function main(): void {
 
   if (options.json) {
     process.stdout.write(`\n${JSON.stringify(summary, null, 2)}\n`);
-  } else {
+  } else if (!options.noWrite) {
     const reportPath = resolve(ROOT, 'reports', 'coverage-summary.json');
     mkdirSync(dirname(reportPath), { recursive: true });
     writeFileSync(reportPath, JSON.stringify(summary, null, 2));
     process.stdout.write(`\nSummary written to ${relative(ROOT, reportPath)}\n`);
+  } else {
+    process.stdout.write(`\nSummary validated (--no-write, file untouched)\n`);
   }
 
   const exitCode = options.enforce && (enforceFailed || !testsPassed) ? 1 : 0;
