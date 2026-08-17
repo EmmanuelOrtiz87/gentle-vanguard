@@ -24,6 +24,11 @@ describe('perf-baseline-check', () => {
     assert.equal(evaluate('x', ENTRY, null).status, 'skipped');
   });
 
+  it('degrades max breach to warn when block_on_max is false', () => {
+    assert.equal(evaluate('x', ENTRY, 3.5, false).status, 'warn');
+    assert.equal(evaluate('x', ENTRY, 3.5, true).status, 'fail');
+  });
+
   it('builds a report honoring warn_on_warn policy', () => {
     const baseline = {
       baselines: { a: ENTRY },

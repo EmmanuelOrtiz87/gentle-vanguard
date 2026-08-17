@@ -98,7 +98,12 @@ function measureCommand(command: string, args: string[]): number {
   return (Date.now() - start) / 1000;
 }
 
-export function evaluate(name: string, entry: BaselineEntry, measured: number | null): CheckResult {
+export function evaluate(
+  name: string,
+  entry: BaselineEntry,
+  measured: number | null,
+  blockOnMax = true,
+): CheckResult {
   const base = {
     name,
     baseline_seconds: entry.baseline_seconds,
@@ -109,7 +114,7 @@ export function evaluate(name: string, entry: BaselineEntry, measured: number | 
     return { ...base, measured_seconds: null, status: 'skipped' as const };
   }
   let status: CheckStatus = 'ok';
-  if (measured > entry.max_seconds) status = 'fail';
+  if (measured > entry.max_seconds) status = blockOnMax ? 'fail' : 'warn';
   else if (measured > entry.warn_seconds) status = 'warn';
   return { ...base, measured_seconds: measured, status };
 }
@@ -134,6 +139,10 @@ export function buildReport(
   durations: Map<string, number>,
   measure: boolean,
 ): BaselineReport {
+  const policy = {
+    block_on_max: baseline.alert_policy?.block_on_max ?? false,
+    warn_on_warn: baseline.alert_policy?.warn_on_warn ?? false,
+  };
   const results: CheckResult[] = [];
   const entries = baseline.baselines ?? {};
   for (const [name, entry] of Object.entries(entries)) {
@@ -142,13 +151,8 @@ export function buildReport(
       const cmd = HOOK_COMMANDS[name];
       if (cmd) measured = measureCommand(cmd[0], cmd.slice(1));
     }
-    results.push(evaluate(name, entry, measured));
+    results.push(evaluate(name, entry, measured, policy.block_on_max));
   }
-
-  const policy = {
-    block_on_max: baseline.alert_policy?.block_on_max ?? false,
-    warn_on_warn: baseline.alert_policy?.warn_on_warn ?? false,
-  };
   const hasFail = results.some((r) => r.status === 'fail');
   const hasWarn = results.some((r) => r.status === 'warn');
   const ok = !hasFail && !(hasWarn && policy.warn_on_warn);

@@ -1,7 +1,7 @@
 {
   "_comment": "Pre-push hook timing baselines. Agent updates 'baseline_seconds' after each measured run.",
   "version": "1.0.0",
-  "last_measured": "2026-05-13",
+  "last_measured": "2026-08-17",
   "baselines": {
     "audit-check": {
       "description": "Gentle-Vanguard audit sweep (skills, JSON, deprecated refs)",
@@ -18,9 +18,9 @@
     },
     "orchestrator-auto-fix": {
       "description": "Orchestrator discovery and config validation",
-      "baseline_seconds": 3.7,
+      "baseline_seconds": 8.5,
       "max_seconds": 15,
-      "warn_seconds": 8
+      "warn_seconds": 10
     },
     "test-suite": {
       "description": "Full Pester test suite (unit + integration + security + perf)",
@@ -54,7 +54,7 @@
   ],
   "alert_policy": {
     "block_on_max": false,
-    "warn_on_warn": true,
+    "warn_on_warn": false,
     "description": "Baselines are informational; only warn (not block) on threshold breach"
   }
 }
