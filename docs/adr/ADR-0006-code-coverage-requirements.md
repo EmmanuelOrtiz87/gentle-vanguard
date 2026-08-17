@@ -1,4 +1,4 @@
-# ADR-005: Code Coverage Requirements and Enforcement Strategy
+# ADR-0006: Code Coverage Requirements and Enforcement Strategy
 
 **Date**: May 13, 2026  
 **Author**: Gentle-Vanguard DevOps Team
@@ -76,13 +76,18 @@ Files excluded from coverage measurement (see `tests/coverage-config.json`):
 
 ### Implementation
 
-Coverage is measured via Pester's built-in `-CodeCoverage` parameter:
+Coverage is measured with the **native TypeScript coverage runner** (`src/coverage-runner.ts`),
+which executes the full test suite under c8 and enforces per-target thresholds:
 
-```TypeScript
-# scripts/run-tests-simple.ps1
-<!-- REF-OBSOLETA: scripts/run-tests-simple.ps1 no tiene equivalente TS (migración PS1→TS) -->
-.\run-tests-simple.ps1 -WithCoverage
+```bash
+npm run coverage        # full run + threshold enforcement (CI gate)
+npm run coverage:quick  # quick informational run (pre-push, never blocks)
+npm run coverage:report # generate reports only
 ```
+
+The runner executes each target module independently, parses the V8 coverage JSON (`coverage/`),
+and validates aggregate + per-target percentages against `tests/coverage-config.json`. Targets that
+are not exercised by any test are reported as WARN (not FAIL) so the gate degrades gracefully.
 
 Configuration in `tests/coverage-config.json` controls thresholds, inclusions, and exclusions. The
 CI workflow uploads coverage reports as artifacts.
@@ -95,15 +100,15 @@ CI workflow uploads coverage reports as artifacts.
 
 - ✅ Objective quality gate — replaces "feels tested enough" subjective assessment
 - ✅ Progressive targets avoid big-bang disruption to existing workflow
-- ✅ Pester integration avoids additional tooling (no Istanbul/NYC)
+- ✅ c8 integration stays within the existing TypeScript toolchain (no Istanbul/NYC)
 - ✅ Exclusions list prevents false negatives from infrastructure code
 - ✅ Audit-ready: coverage history via CI artifact retention
 
 ### Negative
 
-- ⚠️ TypeScript coverage is less precise than JavaScript/Go (no branch-level analysis in Pester v3)
+- ⚠️ V8 coverage lacks branch-level analysis in some constructs
 - ⚠️ Initial 70% threshold may be generous — review after first full measurement
-- ⚠️ Requires Pester's `-CodeCoverage` to complete within CI timeout (15 min currently)
+- ⚠️ Full suite run requires the whole test suite to complete within CI timeout
 
 ---
 
@@ -122,7 +127,7 @@ CI workflow uploads coverage reports as artifacts.
 ## References
 
 - `tests/coverage-config.json` — threshold configuration
-- `scripts/run-tests-simple.ps1` — coverage flag implementation
-<!-- REF-OBSOLETA: scripts/run-tests-simple.ps1 no tiene equivalente TS (migración PS1→TS) -->
-- `.github/workflows/test-suite.yml` — CI integration
-- ADR-002 (TypeScript language choice) — explains why Pester is the test framework
+- `src/coverage-runner.ts` — native coverage runner implementation
+- `tests/unit/coverage-runner.test.ts` — runner unit tests
+- `.github/workflows/ci.yml` — CI integration (coverage-report job)
+- ADR-0002 (TypeScript-First) — explains why the stack is TypeScript-native

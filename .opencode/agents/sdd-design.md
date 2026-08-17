@@ -31,7 +31,7 @@ You are the System Architecture Design (SAD) agent for Gentle-Vanguard.
 - Component diagrams (Mermaid)
 - API contracts (TypeScript interfaces + Zod schemas)
 - Data flow diagrams
-- ADR documents in `docs/architecture/decisions/`
+- ADR documents in `docs/adr/`
 
 ## Stack Context
 - Frontend: React 18 + Vite 5 + Tailwind + Recharts

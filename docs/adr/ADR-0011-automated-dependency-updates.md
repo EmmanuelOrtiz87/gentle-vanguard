@@ -1,4 +1,4 @@
-# ADR-006: Automated Dependency Updates Policy
+# ADR-0011: Automated Dependency Updates Policy
 
 **Date**: May 13, 2026  
 **Author**: Gentle-Vanguard DevOps Team
@@ -13,7 +13,7 @@ Accepted (Partially Implemented)
 
 ## Context
 
-gentle-vanguard has strong supply-chain security controls (ADR-003: npx offline hardening, `.npmrc`
+gentle-vanguard has strong supply-chain security controls (ADR-0004: npx offline hardening, `.npmrc`
 global policy, `lockfile-lint` pre-commit hook). However, **keeping dependencies up-to-date**
 requires ongoing manual attention. Without automation:
 
@@ -145,7 +145,7 @@ Evaluate and configure Renovate Bot for:
 
 ## References
 
-- ADR-003 — npx offline hardening (supply-chain gentle-vanguard)
+- ADR-0004 — npx offline hardening (supply-chain gentle-vanguard)
 - `config/lefthook.yml` — hook configuration
 - `scripts/hooks/check-npm-audit.ps1` — audit hook implementation
 <!-- REF-OBSOLETA: scripts/hooks/check-npm-audit.ps1 no tiene equivalente TS (migración PS1→TS) -->

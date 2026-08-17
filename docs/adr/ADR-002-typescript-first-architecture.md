@@ -2,12 +2,12 @@
 
 ## Status
 
-**Accepted** — Supersedes ADR-001 (TypeScript with Multi-Language Support)
+**Accepted** — Supersedes ADR-0001 (Foundation) and ADR-0012 (PowerShell Language Choice)
 
 ## Context
 
-ADR-001 established TypeScript as the primary implementation language for Gentle-Vanguard,
-supplemented by Go, Node.js, and Python for specific use cases. This decision was made in early 2026
+ADR-0001 (Foundation) established TypeScript with multi-language support as the primary
+implementation direction for Gentle-Vanguard. This decision was made in early 2026
 when the ecosystem had:
 
 - Heavy investment in TypeScript automation (390+ scripts)
@@ -29,31 +29,31 @@ However, several factors emerged that challenged this decision:
 
 ## Decision
 
-**Migrate the entire stack from TypeScript to TypeScript.**
+**Migrate the entire stack from PowerShell to TypeScript.**
 
-All new code MUST be written in TypeScript. Existing TypeScript scripts are to be migrated
+All new code MUST be written in TypeScript. Existing PowerShell scripts are to be migrated
 incrementally following TypeScript-first patterns.
 
 ### Implementation Details
 
-| Aspect              | Before (TypeScript)       | After (TypeScript)                   |
-| ------------------- | ------------------------- | ------------------------------------ |
-| **Entry Point**     | `scripts/utilities/*.ps1` | `src/*.ts`                           |
-| **Execution**       | `npx tsx src/cli/gv.ts`   | `npx tsx src/script.ts`              |
+| Aspect              | Before (PowerShell)        | After (TypeScript)                   |
+| ------------------- | -------------------------- | ------------------------------------ |
+| **Entry Point**     | `scripts/utilities/*.ps1`  | `src/*.ts`                           |
+| **Execution**       | `npx tsx src/cli/gv.ts`    | `npx tsx src/script.ts`              |
 <!-- REF-OBSOLETA: src/script.ts no existe (ruta migrada o eliminada) -->
-| **Package Manager** | None / TypeScript Gallery | `pnpm`                               |
-| **Testing**         | Pester                    | `node:test` via `tsx --test`         |
-| **Type Safety**     | Runtime checks            | TypeScript compiler (`tsc --noEmit`) |
-| **Linting**         | PSScriptAnalyzer          | ESLint + security plugin             |
-| **Autostart**       | `session-autostart.ps1`   | `npx tsx src/session-autostart.ts`   |
+| **Package Manager** | None / PowerShell Gallery  | `pnpm`                               |
+| **Testing**         | Pester                     | `node:test` via `tsx --test`         |
+| **Type Safety**     | Runtime checks             | TypeScript compiler (`tsc --noEmit`) |
+| **Linting**         | PSScriptAnalyzer           | ESLint + security plugin             |
+| **Autostart**       | `session-autostart.ps1`    | `npx tsx src/session-autostart.ts`   |
 
 ### Migration Rules
 
-1. **Feature Freeze**: No new TypeScript scripts after 2026-07-01
+1. **Feature Freeze**: No new PowerShell scripts after 2026-07-01
 2. **Critical Path First**: Session lifecycle, routing, and orchestration migrated first
 3. **Parity Testing**: Each TypeScript replacement must pass identical integration tests
 4. **Documentation Sync**: All references updated via `src/migrate-docs.ts`
-5. **Archive**: Original TypeScript scripts archived in `archive/scripts/` for reference
+5. **Archive**: Original PowerShell scripts archived in `archive/scripts/` for reference
 
 ## Consequences
 
@@ -63,14 +63,14 @@ incrementally following TypeScript-first patterns.
 - **Better IDE support**: TypeScript Language Server provides superior IntelliSense
 - **CI/CD simplification**: Single `npm install` vs. multiple runtime installations
 - **Security**: `eslint-plugin-security` provides SAST capabilities
-- **Performance**: V8 JIT compilation vs. TypeScript interpreter overhead
+- **Performance**: V8 JIT compilation vs. PowerShell interpreter overhead
 - **Hiring**: Larger pool of TypeScript/Node.js developers
 
 ### Negative
 
 - **Migration effort**: 390 scripts required porting (completed July 2026)
-- **Learning curve**: Team proficient in TypeScript needed TypeScript training
-- **External dependencies**: More npm packages vs. TypeScript Gallery modules
+- **Learning curve**: Team proficient in PowerShell needed TypeScript training
+- **External dependencies**: More npm packages vs. PowerShell Gallery modules
 - **Breaking changes**: Existing user workflows referencing `.ps1` scripts
 
 ### Mitigations
@@ -93,8 +93,8 @@ Lint/coverage: ✅ Configured
 
 ## Related
 
-- **Supersedes**: ADR-001 (TypeScript with Multi-Language Support)
-- **Related**: ADR-003 (SDD Specification-First Development)
+- **Supersedes**: ADR-0012 (PowerShell Language Choice)
+- **Related**: ADR-0004 (NPX Offline Hardening)
 - **Tools**: `src/migrate-docs.ts` for documentation synchronization
 - **CI/CD**: `.github/workflows/ci.yml` — TypeScript-only pipeline
 

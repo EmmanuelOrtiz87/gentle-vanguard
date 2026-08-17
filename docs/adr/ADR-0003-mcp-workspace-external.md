@@ -1,4 +1,4 @@
-# ADR-002: MCP Workspace — External (Not Git-Tracked)
+# ADR-0003: MCP Workspace — External (Not Git-Tracked)
 
 **Date**: May 2026  
 **Author**: Gentle-Vanguard Security Team
@@ -21,7 +21,7 @@ project had to decide whether the MCP workspace should live inside the git repos
 Key drivers:
 
 - MCP servers can hold **sensitive state** (session context, memory, embeddings, cached queries).
-- The stack follows a **local-first, security-first** philosophy (see ADR-003 npx hardening).
+- The stack follows a **local-first, security-first** philosophy (see ADR-0004 npx hardening).
 - Pre-vetted workspace is a core layer of the npx offline hardening (`--workspace` flag).
 - The repo is public (`gentle-vanguard-public`) — nothing sensitive can be tracked.
 
@@ -49,7 +49,7 @@ registered in the MCP config as a pre-vetted workspace.
    - An external workspace guarantees none of it can be committed to a public repo.
 
 2. **npx Hardening Dependency**
-   - ADR-003 relies on a pre-vetted workspace for offline mode (`--workspace`).
+   - ADR-0004 relies on a pre-vetted workspace for offline mode (`--workspace`).
    - The workspace must be writable and persistent — not versioned — to accumulate vetted packages.
 
 3. **Repository Hygiene**
@@ -110,8 +110,8 @@ Workspace path is resolved at setup time and never tracked; `.gitignore` exclude
 
 ## Related Decisions
 
-- [ADR-003](ADR-003-npx-offline-hardening.md) — npx offline mode with pre-vetted workspace
-- [ADR-004](ADR-004-homologation-gate.md) — mandatory gates before release
+- [ADR-0004](ADR-0004-npx-offline-hardening.md) — npx offline mode with pre-vetted workspace
+- [ADR-0005](ADR-0005-homologation-gate.md) — mandatory gates before release
 - [NORMATIVAS-SBOM](../../governance/normatives/NORMATIVAS-SBOM.md) — SBOM generation for releases
 
 ---

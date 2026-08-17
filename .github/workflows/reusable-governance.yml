@@ -17,7 +17,7 @@ jobs:
       - name: Validate ADR files
         shell: pwsh
         run: |
-          $adrs = Get-ChildItem -Path docs/architecture/decisions -Filter "ADR-*.md" -ErrorAction SilentlyContinue
+          $adrs = Get-ChildItem -Path docs/adr -Filter "ADR-*.md" -ErrorAction SilentlyContinue
           if (-not $adrs) { echo "No ADR files found"; exit 0 }
           foreach ($adr in $adrs) {
             $content = Get-Content $adr.FullName -Raw

@@ -1,4 +1,4 @@
-# ADR-003: NPX Hardening — Offline Mode with Workspace & Security Policy
+# ADR-0004: NPX Hardening — Offline Mode with Workspace & Security Policy
 
 **Date**: May 13, 2026  
 **Author**: Gentle-Vanguard Security Team
@@ -247,7 +247,8 @@ Testing: [what was verified]
 
 ## Related Decisions
 
-- [ADR-001](ADR-001-TypeScript-language-choice.md) — Why TypeScript for hooks
+- [ADR-0012](ADR-0012-powershell-language-choice.md) — Why PowerShell for hooks
+- [ADR-0003](ADR-0003-mcp-workspace-external.md) — external MCP workspace
 
 ---
 

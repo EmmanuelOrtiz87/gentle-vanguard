@@ -16,20 +16,26 @@ ADRs provide:
 - **Consequences**: Tradeoffs and mitigation strategies
 - **Context**: Historical record for future maintainers
 
-Each ADR is immutable once accepted. Updates create new ADRs (ADR-005, etc).
+Each ADR is immutable once accepted. Updates create new ADRs (ADR-0011, etc).
 
 ---
 
 ## Current Decisions
 
-| ID                                                     | Title                                 | Status      | Date     | Summary                                                                                |
-| ------------------------------------------------------ | ------------------------------------- | ----------- | -------- | -------------------------------------------------------------------------------------- |
-| **[ADR-001](ADR-001-TypeScript-language-choice.md)**   | Primary Language: TypeScript          | ✅ Accepted | May 2026 | Why TypeScript over Bash/Python for automation                                         |
-| **ADR-002**                                            | MCP Workspace: External Local         | 📋 Planned  | —        | See [FIRST-TIME-SETUP-CHECKLIST.md](../../guides/FIRST-TIME-SETUP-CHECKLIST.md) Step 3 |
-| **[ADR-003](ADR-003-npx-offline-hardening.md)**        | NPX Hardening: Offline + Workspace    | ✅ Accepted | May 2026 | Why npx uses offline mode with pre-vetted workspace                                    |
-| **[ADR-004](ADR-004-homologation-gate.md)**            | Homologation Gate: Mandatory          | ✅ Accepted | May 2026 | Why release workflow has mandatory repo alignment check                                |
-| **[ADR-005](ADR-005-code-coverage-requirements.md)**   | Code Coverage: Tiered Thresholds      | ✅ Accepted | May 2026 | Coverage thresholds (70%/75%/65%) with quarterly targets                               |
-| **[ADR-006](ADR-006-automated-dependency-updates.md)** | Dependency Updates: Audit + Quarterly | ✅ Accepted | May 2026 | npm audit in pre-push + quarterly review + Renovate Q3 2026                            |
+| ID                                                       | Title                                 | Status           | Date       | Summary                                                                                |
+| -------------------------------------------------------- | ------------------------------------- | ---------------- | ---------- | -------------------------------------------------------------------------------------- |
+| **[ADR-0001](ADR-0001-foundation-architecture-decisions.md)** | Foundation Architecture Decisions | ✅ Accepted      | May 2026   | Meta-ADR: foundational stack decisions (TypeScript, lefthook, node:test, 5-layer)       |
+| **[ADR-0002](ADR-002-typescript-first-architecture.md)** | Primary Language: TypeScript          | ✅ Accepted      | May 2026   | Why TypeScript over PowerShell for automation (supersedes ADR-0012)                     |
+| **[ADR-0003](ADR-0003-mcp-workspace-external.md)**       | MCP Workspace: External Local         | ✅ Accepted      | May 2026   | Why MCP workspace is external (not git-tracked)                                         |
+| **[ADR-0004](ADR-0004-npx-offline-hardening.md)**        | NPX Hardening: Offline + Workspace    | ✅ Accepted      | May 2026   | Why npx uses offline mode with pre-vetted workspace                                    |
+| **[ADR-0005](ADR-0005-homologation-gate.md)**            | Homologation Gate: Mandatory          | ✅ Accepted      | May 2026   | Why release workflow has mandatory repo alignment check                                |
+| **[ADR-0006](ADR-0006-code-coverage-requirements.md)**   | Code Coverage: Tiered Thresholds      | ✅ Accepted      | May 2026   | Coverage thresholds (70%/75%/65%) with quarterly targets, native TS runner              |
+| **[ADR-0007](ADR-007-nexus-operational-database.md)**    | Nexus Operational Database            | ✅ Accepted      | Jul 2026    | SQLite operational DB (WAL, FK ON) — central nervous system of the stack                |
+| **[ADR-0008](ADR-008-session-scoring-metrics.md)**       | Session Scoring Metrics               | ✅ Accepted      | Jul 2026    | Quality scoring per session (delegations, corrections, proactive hits)                  |
+| **[ADR-0009](ADR-009-watchtower-autoheal-false-positive.md)** | Watchtower Autoheal (False Positive) | ✅ Accepted  | Aug 2026    | Maintenance watchtower with auto-healing, 95 checks, 13 components                      |
+| **[ADR-0010](ADR-010-knowledge-absorption-external-repos.md)** | Knowledge Absorption (External Repos) | ✅ Accepted | Aug 2026    | Absorb external knowledge as native TS (secret-scanner, skills, ai-provenance)          |
+| **[ADR-0011](ADR-0011-automated-dependency-updates.md)** | Dependency Updates: Audit + Quarterly | ✅ Accepted      | May 2026   | npm audit in pre-push + quarterly review + Renovate Q3 2026                            |
+| **[ADR-0012](ADR-0012-powershell-language-choice.md)**   | Primary Language: PowerShell          | ⚠️ Superseded    | May 2026   | Original PowerShell choice — superseded by ADR-0002 (TypeScript-First)                 |
 
 ---
 
@@ -179,18 +185,17 @@ Is there uncertainty or tradeoffs?
 
 **Related Guides**:
 
-- [SECURITY-HARDENING.md](../../guides/SECURITY-HARDENING.md) — References ADR-003
+- [SECURITY-HARDENING.md](../../guides/SECURITY-HARDENING.md) — References ADR-0004
 - [FIRST-TIME-SETUP-CHECKLIST.md](../../guides/FIRST-TIME-SETUP-CHECKLIST.md) — MCP workspace setup
   (Step 3)
-- [RELEASE-PROCESS.md](../../guides/RELEASE-PROCESS.md) — References ADR-004
-- [FIRST-TIME-SETUP-CHECKLIST.md](../../guides/FIRST-TIME-SETUP-CHECKLIST.md) — References ADR-001
+- [RELEASE-PROCESS.md](../../guides/RELEASE-PROCESS.md) — References ADR-0005
+- [FIRST-TIME-SETUP-CHECKLIST.md](../../guides/FIRST-TIME-SETUP-CHECKLIST.md) — References ADR-0002
 
 **Related Code**:
 
-- `src/deployment/validate-release-homologation.ts` — Implements ADR-004
-<!-- REF-OBSOLETA: src/deployment/validate-release-homologation.ts no existe (ruta migrada o eliminada) -->
-- `scripts/hooks/*.ps1` — Implements ADR-001
-- `$HOME\mcp-workspace/` — Implements ADR-002
+- `src/coverage-runner.ts` — Implements ADR-0006
+- `scripts/hooks/*.ps1` — Implements ADR-0001/ADR-0012 (original PowerShell hooks)
+- `$HOME\mcp-workspace/` — Implements ADR-0003
 
 ---
 
@@ -198,8 +203,8 @@ Is there uncertainty or tradeoffs?
 
 **Q: Can we change an ADR after accepting it?**
 
-A: No. If circumstances change significantly, create a new ADR (ADR-005) that supersedes or enhances
-the previous decision. Update the old ADR status to "Deprecated" or "Evolved To ADR-005".
+A: No. If circumstances change significantly, create a new ADR (ADR-0011) that supersedes or enhances
+the previous decision. Update the old ADR status to "Deprecated" or "Evolved To ADR-0011".
 
 ---
 
@@ -245,10 +250,8 @@ A: Team consensus. Typically:
 
 **Planned ADRs (Q3-Q4 2026)**:
 
-- [ ] **ADR-005**: Code Coverage Requirements (threshold %)
-- [ ] **ADR-006**: Automated Dependency Updates Policy
-- [ ] **ADR-007**: Annual Security Audit Requirements
-- [ ] **ADR-008**: SLSA Compliance Level (L2 vs L3)
+- [ ] **ADR-0013**: Annual Security Audit Requirements
+- [ ] **ADR-0014**: SLSA Compliance Level (L2 vs L3)
 
 ---
 

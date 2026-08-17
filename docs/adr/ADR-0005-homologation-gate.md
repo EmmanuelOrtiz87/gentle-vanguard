@@ -1,4 +1,4 @@
-# ADR-004: Mandatory Homologation Gate in Release Workflow
+# ADR-0005: Mandatory Homologation Gate in Release Workflow
 
 **Date**: May 13, 2026  
 **Author**: Gentle-Vanguard Security Team
@@ -270,7 +270,8 @@ src/cli/gv.ts publish
 
 ## Related Decisions
 
-- [ADR-001](ADR-001-TypeScript-language-choice.md) — Why gate is written in TypeScript
+- [ADR-0012](ADR-0012-powershell-language-choice.md) — Why gate is written in PowerShell
+- [ADR-0004](ADR-0004-npx-offline-hardening.md) — npx hardening (offline mode with workspace)
 - [RELEASE-PROCESS.md](../../guides/RELEASE-PROCESS.md) — Full release workflow
 
 ---

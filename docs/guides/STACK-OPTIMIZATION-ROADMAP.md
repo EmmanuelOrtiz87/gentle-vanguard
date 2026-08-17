@@ -360,14 +360,14 @@ Describe "Release Workflow E2E" {
 
 #### 3.3: Create Architecture Decision Records (ADRs)
 
-**Location**: `docs/architecture/decisions/`
+**Location**: `docs/adr/`
 
 **Examples**:
 
-1. **ADR-001**: Why we use TypeScript (not Bash/Python)
-2. **ADR-002**: Why MCP workspace is external (not git-tracked)
-3. **ADR-003**: Why npx offline mode with workspace (threat model + mitigation)
-4. **ADR-004**: Why mandatory homologation gate in publish
+1. **ADR-0012**: Why we use PowerShell (superseded by ADR-0002 TypeScript-First)
+2. **ADR-0003**: Why MCP workspace is external (not git-tracked)
+3. **ADR-0004**: Why npx offline mode with workspace (threat model + mitigation)
+4. **ADR-0005**: Why mandatory homologation gate in publish
 
 **Template**:
 
@@ -640,7 +640,7 @@ Sprint 1:
   - E2E release workflow tests (3-4h)
   - npm audit pre-push hook (1h)
   - SBOM generation setup (1h)
-  - ADR-001 through ADR-004 (4h)
+  - ADR-0003 through ADR-0006 + ADR-0012 (4h)
 
 Total: 11-13 hours
 ```

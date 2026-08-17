@@ -280,7 +280,7 @@
       "ADR-005-code-coverage-requirements.md (Accepted)",
       "ADR-006-automated-dependency-updates.md (Accepted)"
     ],
-    "template_usage": "YES - Full ADR template in docs/architecture/decisions/README.md",
+    "template_usage": "YES - Full ADR template in docs/adr/README.md",
     "ci_validation": "YES - reusable-governance.yml validates ADR structure",
     "gaps": [
       "Planned ADR-002 not started",

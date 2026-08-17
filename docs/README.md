@@ -10,7 +10,7 @@ important decisions exist.
 | ------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | Agent runtime       | [agents/](agents/)                                                  | Agent bootstrap, AI behavior rules, tool-specific local-first guidance, prompt behavior. |
 | Architecture        | [architecture/](architecture/)                                      | System architecture, topology, workflows, project structure, architecture diagrams.      |
-| Decisions           | [adr/](adr/) and [architecture/decisions/](architecture/decisions/) | Architecture decision records and durable technical decisions.                           |
+| Decisions           | [adr/](adr/)                                                        | Architecture decision records and durable technical decisions.                           |
 | Dashboard           | [dashboard/](dashboard/)                                            | Dashboard behavior, executive view, observability UI documentation.                      |
 | Governance          | [governance/](governance/)                                          | Normatives, policies, contribution rules, code review standards, compliance guidance.    |
 | Getting started     | [getting-started/](getting-started/)                                | Installation, prerequisites, developer setup, stack setup.                               |
