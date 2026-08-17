@@ -548,7 +548,7 @@ Pure profiling helpers (`runGate`, `buildReleaseReport`, `aggregateStatus`, `com
 
 - ~~No SBOM (Software Bill of Materials) generation~~ ✅ `sbom.json` (Syft, 464 componentes)
 - No container image scanning (if using Docker)
-- No supply-chain attestation (SLSA provenance)
+- ~~No supply-chain attestation (SLSA provenance)~~ ✅ `src/slsa-provenance.ts` (in-toto v1 + SLSA v1.0, native TS)
 - ~~No annual security audit log~~ ✅ `docs/security/ANNUAL-AUDIT-PLAN.md` (log inicializado)
 
 ### Recommendations

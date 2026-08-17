@@ -1,0 +1,48 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "gentle-vanguard-sbom.json",
+      "uri": "https://github.com/gentle-vanguard/gentle-vanguard#gentle-vanguard-sbom.json",
+      "digest": {
+        "sha256": "803ad61d0db2d21e6abe5e04d13fe953d5e6dcf2bd5e675478dd60d75918fe58"
+      },
+      "mediaType": "application/json"
+    }
+  ],
+  "predicateType": "https://slsa.dev/provenance/v1",
+  "predicate": {
+    "buildDefinition": {
+      "buildType": "https://github.com/gentle-vanguard/gentle-vanguard@v1",
+      "externalParameters": {
+        "repository": "https://github.com/gentle-vanguard/gentle-vanguard",
+        "ref": "refs/heads/develop"
+      },
+      "internalParameters": {
+        "environment": {}
+      },
+      "resolvedDependencies": [
+        {
+          "uri": "https://github.com/gentle-vanguard/gentle-vanguard",
+          "digest": {
+            "gitCommit": "5b73de378a6f62557c5947301b452bfbf51bd193"
+          },
+          "name": "refs/heads/develop"
+        }
+      ]
+    },
+    "runDetails": {
+      "builder": {
+        "id": "https://github.com/gentle-vanguard/gentle-vanguard/.github/workflows/ci.yml",
+        "version": {
+          "gentle-vanguard": "3.7.0"
+        }
+      },
+      "metadata": {
+        "invocationId": "gentle-vanguard-2026-08-17T03:57:04Z",
+        "startedOn": "2026-08-17T03:57:04Z",
+        "finishedOn": "2026-08-17T03:57:04Z"
+      }
+    }
+  }
+}

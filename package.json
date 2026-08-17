@@ -26,6 +26,8 @@
     "secretlint": "secretlint \"**/*.{json,yml,yaml,md,env,toml,xml}\" --secretlintrc .secretlintrc.json",
     "sbom:generate": "npx tsx src/generate-sbom.ts",
     "sbom:validate": "npx tsx src/generate-sbom.ts --validate",
+    "provenance:generate": "npx tsx src/slsa-provenance.ts generate",
+    "provenance:verify": "npx tsx src/slsa-provenance.ts verify",
     "build:mcp": "pnpm tsc",
     "build:mcp:watch": "pnpm tsc --watch",
     "mcp:start": "node dist/scripts/mcp/skill-server.js",
