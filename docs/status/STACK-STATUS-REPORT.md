@@ -112,6 +112,7 @@ VS Code, Copilot, Antigravity.
 | Trivy (deps)          | CI weekly                                    | ✅ Activo | CI automático                  |
 | SBOM validation       | `src/generate-sbom.ts` <!-- REF-OBSOLETA: scripts/security/sbom-validate.ps1 eliminado; candidato: src/generate-sbom.ts -->         | ✅ Activo | CI                             |
 <!-- REF-OBSOLETA: scripts/security/sbom-validate.ps1 no tiene equivalente TS (migración PS1→TS) -->
+| SLSA provenance       | `src/slsa-provenance.ts` + `src/rdd/rdd-core.ts` (auto en release) | ✅ Activo | Automático (release gate RDD) |
 | SIEM audit bridge     | `src/infrastructure/siem-audit-bridge.ts`     | ✅ Activo | Manual                         |
 
 ### 2.7 CI/CD (23 workflows)
@@ -229,7 +230,7 @@ VS Code, Copilot, Antigravity.
 - **CI/CD**: 23 workflows (push, PR, cron diario/semanal/mensual)
 - **Mantenimiento**: Watchtower (domingo), FT pipeline (semanal), auto-backup
 - **Memoria**: Engram save/search/context en cada operación
-- **Seguridad**: Gitleaks, Trivy, security orchestrator en hooks y CI
+- **Seguridad**: Gitleaks, Trivy, security orchestrator en hooks y CI, SBOM + SLSA provenance en release
 
 ### 🔧 Manual (requiere invocación)
 
@@ -286,13 +287,14 @@ Maintenance Watchtower:
 | Prioridad | Item                                              | Estado actual                       |
 | --------- | ------------------------------------------------- | ----------------------------------- |
 | 🔜 Alta   | **Secretlint pre-commit**                         | 📋 Planificado                      |
-| 🔜 Alta   | **Coverage reporting (Pester CodeCoverage)**      | 📋 Planificado                      |
+| ✅ Completa | **Coverage reporting (native TS runner + threshold gate)** | ✅ COMPLETADO (`src/coverage-runner.ts`, pre-push gate) |
 | 🔜 Alta   | **EditorConfig + Prettier CI check**              | 📋 Planificado                      |
 | 🔜 Alta   | **Branch strategy / Release process docs**        | 📋 Planificado                      |
 | 🏆 Media  | **`gentle-vanguard init` — project scaffolding**  | 📋 Planificado (v3.0)               |
 | 🏆 Media  | **Automated release workflow (tag → release) ✅** | ✅ COMPLETADO                       |
-| 🏆 Media  | **SBOM generation (CycloneDX) via Trivy**         | ⚠️ Parcial (sbom-validate existe)   |
-| 📋 Baja   | **ADR tooling**                                   | 📋 Planificado                      |
+| 🏆 Media  | **SBOM generation (CycloneDX) via Trivy**         | ✅ COMPLETADO (`sbom/` + `npm run sbom:generate`) |
+| 🏆 Media  | **SLSA provenance (Build L1, native TS)**         | ✅ COMPLETADO (`src/slsa-provenance.ts` + auto en RDD release) |
+| 📋 Baja   | **ADR tooling**                                   | ✅ COMPLETADO (`docs/adr/`, 15 ADRs) |
 | 📋 Baja   | **Cross-platform test matrix (Linux + macOS)**    | ⚠️ Parcial (workflow existe)        |
 | 📋 Baja   | **Token dashboard v2 con tendencias históricas**  | 📋 Planificado                      |
 | 🔮 Largo  | **Plugin Registry / Marketplace**                 | 🔮 Visión                           |
