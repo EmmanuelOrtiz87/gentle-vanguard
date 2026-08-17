@@ -217,7 +217,7 @@ VS Code, Copilot, Antigravity.
 | Error budget enforcement  | ✅ Activo | CI                  |
 | Cross-workspace validator | ✅ Activo | CI                  |
 | Performance baselines     | ✅ Activo | CI                  |
-| Resilience/Chaos          | ⚠️ Activo | Manual              |
+| Resilience/Chaos          | ✅ Activo | Manual (`npm run chaos:run-all`) |
 
 ---
 

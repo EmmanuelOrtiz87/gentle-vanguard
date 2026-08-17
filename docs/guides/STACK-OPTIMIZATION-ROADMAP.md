@@ -187,7 +187,7 @@ exit 0
 
 - No code coverage reporting (% lines/branches covered)
 - No E2E tests for critical flows (e.g., publish workflow)
-- No chaos testing (resilience under failure)
+- ~~No chaos testing (resilience under failure)~~ ✅ `src/chaos-engineering.ts` (3 experiments: config/session/dashboard-ws)
 - No performance benchmarks (baselines)
 
 ### Recommendations
@@ -653,7 +653,7 @@ Total: 11-13 hours
 - Performance baselines + profiling (3-5h)
 - Load testing for multi-repo (4-6h)
 - Plan annual security audit (4h)
-- Consider: chaos testing, chaos engineering
+- ~~Consider: chaos testing, chaos engineering~~ ✅ `src/chaos-engineering.ts` (native TS, ADR-0016 candidate)
 - ~~Consider: supply-chain attestation (SLSA L3)~~ ✅ `src/slsa-signer.ts` (DSSE + Ed25519, ADR-0015)
 ```
 
