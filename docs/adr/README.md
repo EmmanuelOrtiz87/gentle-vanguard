@@ -39,6 +39,7 @@ Each ADR is immutable once accepted. Updates create new ADRs (ADR-0011, etc).
 | **[ADR-0013](ADR-0013-annual-security-audit-external-firm.md)** | Annual Security Audit (External) | ✅ Accepted      | Aug 2026   | External firm audit, Q4 recurrence, plan in ANNUAL-AUDIT-PLAN.md                       |
 | **[ADR-0014](ADR-0014-slsa-supply-chain-attestation-native-ts.md)** | SLSA Supply-Chain Attestation | ✅ Accepted      | Aug 2026   | SLSA Build L1 provenance native TS (in-toto v1 + SLSA v1.0)                            |
 | **[ADR-0015](ADR-0015-slsa-provenance-signing-native-dsse-ed25519.md)** | SLSA Provenance Signing | ✅ Accepted      | Aug 2026   | DSSE + Ed25519 native signing → Build L2/L3 (no falsifiable provenance)                |
+| **[ADR-0016](ADR-0016-chaos-engineering-engine-native-ts.md)** | Chaos Engineering Engine | ✅ Accepted      | Aug 2026   | Native TS controlled experiments (config/session/dashboard-ws), safe restore            |
 
 ---
 
@@ -253,7 +254,7 @@ A: Team consensus. Typically:
 
 **Planned ADRs (Q3-Q4 2026)**:
 
-- [ ] **ADR-0016**: TBD (próximo: chaos engineering o multi-repo orchestration)
+- [ ] **ADR-0017**: TBD (próximo: multi-repo orchestration o container image scanning)
 
 ---
 
