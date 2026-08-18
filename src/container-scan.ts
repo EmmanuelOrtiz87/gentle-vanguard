@@ -95,6 +95,14 @@ function runTool(command: string, args: string[], timeoutMs = 120000): { stdout:
     encoding: 'utf-8',
     timeout: timeoutMs,
     windowsHide: true,
+    // Disable grype's network update checks — they can hang indefinitely when
+    // the update URL is unreachable (observed on Windows). The local DB is
+    // refreshed explicitly via `grype db update` (watchtower task).
+    env: {
+      ...process.env,
+      GRYPE_DB_AUTO_UPDATE: 'false',
+      GRYPE_CHECK_FOR_APP_UPDATE: 'false',
+    },
   });
   return {
     stdout: (res.stdout ?? '') as string,
@@ -268,6 +276,33 @@ export function scanArtifacts(options: ScanOptions = {}): ScanResult {
     return result;
   }
 
+  // Path 1b: scan an existing SBOM with Trivy (fallback when Grype is unavailable
+  // or hangs on its network update check). --skip-db-update avoids the network
+  // fetch that hangs when the update URL is unreachable.
+  if (sbomFile && existsSync(sbomFile) && toolAvailable('trivy')) {
+    const t = runTool(
+      'trivy',
+      ['sbom', sbomFile, '--scanners', 'vuln', '-f', 'json', '--no-progress', '--quiet', '--skip-db-update'],
+      180000,
+    );
+    const vulns = parseTrivyJson(t.stdout);
+    const duration = (Date.now() - started) / 1000;
+    const result: ScanResult = {
+      tool: 'trivy',
+      source: sbomFile,
+      sbom: sbomFile,
+      scannedAt: new Date().toISOString(),
+      totalPackages: countSbomPackages(sbomFile),
+      vulnerabilities: vulns,
+      bySeverity: countBySeverity(vulns),
+      durationSeconds: Math.round(duration * 10) / 10,
+      exitCode: t.code,
+      rawOutput: t.stdout + t.stderr,
+    };
+    saveResult(result);
+    return result;
+  }
+
   // Path 2: generate SBOM from a directory with Syft, then scan with Grype
   const dir = options.dir ?? ROOT;
   if (existsSync(dir) && toolAvailable('syft') && toolAvailable('grype')) {
@@ -296,9 +331,13 @@ export function scanArtifacts(options: ScanOptions = {}): ScanResult {
     }
   }
 
-  // Path 3: Trivy filesystem fallback
+  // Path 3: Trivy filesystem fallback (--skip-db-update to avoid network hang)
   if (existsSync(dir) && toolAvailable('trivy')) {
-    const t = runTool('trivy', ['fs', '--scanners', 'vuln', '-f', 'json', '--no-progress', dir], 300000);
+    const t = runTool(
+      'trivy',
+      ['fs', '--scanners', 'vuln', '-f', 'json', '--no-progress', '--quiet', '--skip-db-update', dir],
+      300000,
+    );
     const vulns = parseTrivyJson(t.stdout);
     const duration = (Date.now() - started) / 1000;
     const result: ScanResult = {

@@ -68,6 +68,11 @@ pre-push:
     # the working tree clean so the push is not aborted by a dirty tree).
     coverage-gate:
       run: npm run coverage:quick -- --no-write
+    # Container/artifact vulnerability gate — scans sbom.json with Syft+Grype
+    # (no Docker required). Exit 1 blocks the push when any vuln >= high is found.
+    # Self-skips (exit 0) when the toolchain is unavailable (no syft/grype/trivy).
+    container-scan:
+      run: npx tsx src/container-scan.ts scan --fail-on high --json
 
 commit-msg:
   commands:
