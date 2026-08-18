@@ -10,9 +10,11 @@ $zip = Join-Path $outDir "gentle-vanguard-content-operations-$stamp.zip"
 
 $items = @(
   'src\content-operations',
+  'tests\unit\content-operations.test.ts',
   'content\operations',
   'config\content-operations',
-  'docs\operations'
+  'docs\operations',
+  'scripts\content-operations'
 ) | Where-Object { Test-Path $_ }
 
 if ($items.Count -eq 0) { throw 'No Content Operations files found.' }
