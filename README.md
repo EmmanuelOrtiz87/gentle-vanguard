@@ -145,6 +145,7 @@ flowchart TB
 | **Governance**               | 60+ normatives, pre-commit hooks, CI/CD, audit pipeline, safety layer                                                            |
 | **Predictive Governor**      | Anticipate load, prewarm resources, adjust token budgets proactively                                                             |
 | **Container Scanning**       | Native Syft+Grype+Trivy scanner — SBOM, directory, and artifact scanning with CI gates                                           |
+| **Content Operations**       | Offline-first content pipeline — manifest + state machine + CLI (21 real launch jobs, 11 platforms)                              |
 | **Chaos Engineering**        | L4 automated — weekly resilience experiments in CI/CD with failure gates                                                         |
 | **SLSA Provenance**          | Native DSSE/Ed25519 signing + SLSA provenance attestation for releases                                                           |
 | **Auto-Update**              | Self-updating `.exe` launcher — detects new versions and updates in place                                                         |
@@ -160,7 +161,7 @@ flowchart TB
 | Health Checks   | **95/95 PASS** — 13 components               |
 | Pipeline Steps  | **111** (32 blocking + 79 lazy)              |
 | Agents / Skills | **21 agents / 88 skills**                    |
-| ADRs            | **17** (ADR-0001 → ADR-0017)                 |
+| ADRs            | **18** (ADR-0001 → ADR-0018)                 |
 | Nexus DB        | **23 tables, 7 migrations, ~7 MB**           |
 | Autonomy        | **100%** — zero manual intervention required |
 | CodeGraph       | **1,410 nodes / 1,763 edges / 133 files**    |
@@ -221,6 +222,13 @@ apps/web-dashboard/
 | `npm run container:scan`                  | Scan SBOM for vulnerabilities (Syft+Grype)    |
 | `npm run container:db-update`             | Refresh grype vulnerability database          |
 | `npx tsx src/chaos-engineering.ts run-all`| Run chaos experiments (resilience testing)    |
+| `npm run content:list`                    | List content jobs (--date, --platform, --id)  |
+| `npm run content:validate`                | Validate jobs against manifest + registry     |
+| `npm run content:prepare`                 | Package validated jobs offline (idempotent)   |
+| `npm run content:status`                  | Content pipeline status summary               |
+| `npm run content:report`                  | Generate markdown content report              |
+| `npm run content:export`                  | Export offline content kit ZIP                |
+| `npm run content:test`                    | Content Operations Engine unit tests (15)     |
 | `npm run sbom:generate`                   | Generate CycloneDX SBOM                       |
 | `npm run sbom:validate`                   | Validate SBOM structure                       |
 | `cd apps/web-dashboard && npm run build`  | Build dashboard for production                |
@@ -240,7 +248,7 @@ Full reference:
 | Quick Commands          | `docs/operations/procedures/QUICK-COMMANDS.md` |
 | Normatives Index        | `rules/NORMATIVES.md`                          |
 | Nexus DB Normativa      | `rules/NEXUS-NORMATIVA.md`                     |
-| ADRs (Architecture)     | `docs/adr/README.md` (17 ADRs)                 |
+| ADRs (Architecture)     | `docs/adr/README.md` (18 ADRs)                 |
 | Changelog               | `CHANGELOG.md`                                 |
 | Dashboard Skill         | `.opencode/skills/dashboard/SKILL.md`          |
 | Vanguards (Stack Rules) | `rules/`                                       |

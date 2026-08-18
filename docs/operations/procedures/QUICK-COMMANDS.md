@@ -95,6 +95,26 @@ npm run test:research      # Research scripts tests
 
 ---
 
+## Content Operations
+
+```bash
+# Content Operations Engine (offline-first content pipeline)
+npm run content:list       # Listar jobs (--date, --platform, --id, --status)
+npm run content:validate   # Validar jobs contra manifest + registry
+npm run content:prepare    # Empaquetar jobs validados offline (idempotente)
+npm run content:status     # Resumen de estados del pipeline
+npm run content:report     # Reporte markdown del pipeline
+npm run content:export     # Exportar kit offline ZIP (Windows)
+npm run content:test       # Tests unitarios del engine (15)
+
+# Ejemplos
+npx tsx src/content-operations/cli.ts list --date=2026-08-18
+npx tsx src/content-operations/cli.ts validate --id=GV-2026-08-18-LINKEDIN
+npx tsx src/content-operations/cli.ts transition --id=GV-2026-08-18-LINKEDIN --to=VALIDATED
+```
+
+---
+
 ## Database (Nexus)
 
 ```bash

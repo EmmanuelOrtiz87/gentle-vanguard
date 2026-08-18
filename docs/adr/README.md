@@ -41,6 +41,7 @@ Each ADR is immutable once accepted. Updates create new ADRs (ADR-0011, etc).
 | **[ADR-0015](ADR-0015-slsa-provenance-signing-native-dsse-ed25519.md)** | SLSA Provenance Signing | ✅ Accepted      | Aug 2026   | DSSE + Ed25519 native signing → Build L2/L3 (no falsifiable provenance)                |
 | **[ADR-0016](ADR-0016-chaos-engineering-engine-native-ts.md)** | Chaos Engineering Engine | ✅ Accepted      | Aug 2026   | Native TS controlled experiments (config/session/dashboard-ws), safe restore            |
 | **[ADR-0017](ADR-0017-container-artifact-vulnerability-scanner-native-ts.md)** | Container/Artifact Scanner | ✅ Accepted      | Aug 2026   | Native TS Syft+Grype+Trivy vulnerability scanning without Docker (SBOM/rootfs)          |
+| **[ADR-0018](ADR-0018-content-operations-engine-native-ts.md)** | Content Operations Engine | ✅ Accepted      | Aug 2026   | Native TS offline-first content pipeline (manifest + state machine + CLI, 21 jobs reales) |
 
 ---
 
@@ -255,7 +256,7 @@ A: Team consensus. Typically:
 
 **Planned ADRs (Q3-Q4 2026)**:
 
-- [ ] **ADR-0017**: TBD (próximo: multi-repo orchestration o container image scanning)
+- [ ] **ADR-0019**: TBD (próximo: multi-repo orchestration o adapters de publicación por plataforma)
 
 ---
 
