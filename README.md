@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-3.7.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-3.8.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/TypeScript-100%25-3178C6?style=flat-square&labelColor=0D1117" alt="TypeScript">
@@ -280,5 +280,5 @@ MIT © 2026 Emmanuel Ortiz
 ---
 
 <p align="center">
-  <sub>Gentle-Vanguard v3.7.0 — Don't let your mellow hustle be faded.</sub>
+  <sub>Gentle-Vanguard v3.8.0 — Don't let your mellow hustle be faded.</sub>
 </p>

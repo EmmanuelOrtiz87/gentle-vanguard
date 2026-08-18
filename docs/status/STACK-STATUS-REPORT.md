@@ -1,6 +1,6 @@
 # Gentle-Vanguard — Stack Status Report
 
-**Versión actual**: v3.7.0 **Fecha**: 2026-08-16 **Stack**: AI orchestration layer multi-herramienta
+**Versión actual**: v3.8.0 **Fecha**: 2026-08-16 **Stack**: AI orchestration layer multi-herramienta
 | 436+ TS scripts | 263 skills | 23 CI/CD workflows
 
 ---
@@ -284,7 +284,7 @@ Maintenance Watchtower:
 
 ## 5. ¿QUÉ FALTA / SIGUIENTES PASOS?
 
-### Del ROADMAP oficial (v3.7.0 → v3.x+):
+### Del ROADMAP oficial (v3.8.0 → v3.x+):
 
 | Prioridad | Item                                              | Estado actual                       |
 | --------- | ------------------------------------------------- | ----------------------------------- |
@@ -309,7 +309,7 @@ Maintenance Watchtower:
 
 | Issue                                 | Detalle                                                                                               |
 | ------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| ✅ **Versión unificada**              | v3.7.0 consistente en README, VERSION, badges                                                         |
+| ✅ **Versión unificada**              | v3.8.0 consistente en README, VERSION, badges                                                         |
 | ⚠️ **FT Python stub**                 | `train_lora.py` es stub, no implementado                                                              |
 | ✅ **Adaptive scripts automatizados** | auto-norm-enforcer (cada 5 turnos), karpathy-enforcer (pre-commit), normative-audit (pre-commit + CI) |
 | ⚠️ **Plugins experimentales**         | Plugin system existe pero sin uso real                                                                |
