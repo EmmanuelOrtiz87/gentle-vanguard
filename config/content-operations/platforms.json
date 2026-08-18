@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "platforms": {
+    "linkedin": {"mode":"adapter","media":true,"approvalRequired":true},
+    "x": {"mode":"adapter","media":true,"approvalRequired":true},
+    "instagram": {"mode":"adapter","media":true,"approvalRequired":true},
+    "youtube": {"mode":"adapter","media":true,"approvalRequired":true},
+    "tiktok": {"mode":"adapter","media":true,"approvalRequired":true},
+    "whatsapp_channel": {"mode":"adapter","media":true,"approvalRequired":true},
+    "whatsapp_status": {"mode":"manual","media":true,"approvalRequired":true},
+    "github": {"mode":"native-repo","media":false,"approvalRequired":true},
+    "devto": {"mode":"adapter","media":true,"approvalRequired":true},
+    "producthunt": {"mode":"adapter","media":true,"approvalRequired":true},
+    "discord": {"mode":"adapter","media":true,"approvalRequired":true}
+  }
+}

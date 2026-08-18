@@ -1,0 +1,48 @@
+[
+  {
+    "id": "GV-2026-08-18-LINKEDIN",
+    "date": "2026-08-18",
+    "timezone": "America/Argentina/San_Juan",
+    "platform": "linkedin",
+    "campaign": "GROWTH-EXPERIMENT-001",
+    "theme": "Presentación",
+    "contentType": "launch",
+    "title": "Estoy construyendo Gentle Vanguard",
+    "copy": "Estoy construyendo Gentle Vanguard: un stack open source para trabajar con IA con más estructura, continuidad, herramientas y automatización.\n\nEstá en evolución y quiero probarlo con usuarios reales, aprender del feedback y mejorar el sistema de forma pública.",
+    "cta": "Probalo y contame qué mejorarías.",
+    "asset": "docs/presentations/social-assets/2026-08-18_LinkedIn.png",
+    "status": "DRAFT",
+    "approvalRequired": true,
+    "variants": ["direct", "technical", "story"]
+  },
+  {
+    "id": "GV-2026-08-18-X",
+    "date": "2026-08-18",
+    "timezone": "America/Argentina/San_Juan",
+    "platform": "x",
+    "campaign": "GROWTH-EXPERIMENT-001",
+    "theme": "Presentación",
+    "contentType": "launch",
+    "copy": "Estoy construyendo Gentle Vanguard: un stack open source para trabajar con IA con más estructura, continuidad, agentes y herramientas reutilizables.\n\nLo estoy construyendo en público y buscando usuarios que lo prueben y me digan qué mejorar.",
+    "cta": "https://github.com/EmmanuelOrtiz87/gentle-vanguard",
+    "asset": "docs/presentations/social-assets/2026-08-18_X.png",
+    "status": "DRAFT",
+    "approvalRequired": true,
+    "variants": ["short", "thread", "technical"]
+  },
+  {
+    "id": "GV-2026-08-18-WHATSAPP-CHANNEL",
+    "date": "2026-08-18",
+    "timezone": "America/Argentina/San_Juan",
+    "platform": "whatsapp_channel",
+    "campaign": "GROWTH-EXPERIMENT-001",
+    "theme": "Presentación",
+    "contentType": "launch",
+    "copy": "Estoy construyendo un stack open source para trabajar con IA con más estructura: memoria, automatización, agentes y herramientas reutilizables.\n\nQuiero probarlo con usuarios reales y mejorarlo con feedback.",
+    "cta": "Probalo y contame qué mejorarías.",
+    "asset": "docs/presentations/social-assets/2026-08-18_WhatsApp_Channel.png",
+    "status": "DRAFT",
+    "approvalRequired": true,
+    "variants": ["short", "community"]
+  }
+]
