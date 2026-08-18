@@ -35,10 +35,14 @@ Below are recommended optimizations across 5 dimensions:
 
 ⚠️ **Gaps**:
 
-- No `npm ci` in CI/CD pipelines (uses `npm install`)
-- No automated dependency scanning (npm audit only manual)
-- No lockfile-lint pre-commit hook
-- No .npmrc in project root (only global)
+- ~~No `npm ci` in CI/CD pipelines~~ ✅ Todos los workflows usan `pnpm install --frozen-lockfile`
+  (equivalente estricto a `npm ci`; proyecto migrado a pnpm v11)
+- ~~No automated dependency scanning~~ ✅ Hooks `audit-check`
+  (`src/infrastructure/siem-audit-bridge.ts`) + `npm-audit` (`src/infrastructure/npm-audit-pre-push.ts`)
+  en `.lefthook.yml`, con detección pnpm (ENOLOCK fix)
+- ~~No lockfile-lint pre-commit hook~~ ✅ Hook `lockfile-lint` → `src/lockfile-lint-pre-commit.ts`
+- ~~No .npmrc in project root~~ ✅ `.npmrc` presente en root (overrides migrados a
+  `pnpm-workspace.yaml`, formato pnpm v11)
 
 ### Recommendations
 
@@ -165,10 +169,10 @@ exit 0
 
 | Action              | Effort     | Impact   | Timeline    |
 | ------------------- | ---------- | -------- | ----------- |
-| Add npm ci to CI/CD | 15 min     | HIGH     | This week   |
-| lockfile-lint hook  | 30 min     | HIGH     | This week   |
-| npm audit pre-push  | 20 min     | MEDIUM   | Next sprint |
-| **Total**           | **65 min** | **HIGH** | **2 weeks** |
+| Add npm ci to CI/CD | 15 min     | HIGH     | ✅ Done (`pnpm install --frozen-lockfile`) |
+| lockfile-lint hook  | 30 min     | HIGH     | ✅ Done (`src/lockfile-lint-pre-commit.ts`) |
+| npm audit pre-push  | 20 min     | MEDIUM   | ✅ Done (`src/infrastructure/npm-audit-pre-push.ts`) |
+| **Total**           | **65 min** | **HIGH** | **COMPLETED** |
 
 ---
 
@@ -315,10 +319,11 @@ Describe "Release Workflow E2E" {
 
 ⚠️ **Gaps**:
 
-- No "First Time Setup" single-page quick start
-- No troubleshooting runbook for common issues
-- No decision tree for git flow branch selection
-- No "Architecture Decision Records" (ADRs) for major choices
+- ~~No "First Time Setup" single-page quick start~~ ✅ `docs/guides/FIRST-TIME-SETUP-CHECKLIST.md`
+- ~~No troubleshooting runbook for common issues~~ ✅ `docs/guides/TROUBLESHOOTING-RUNBOOK.md`
+- ~~No decision tree for git flow branch selection~~ ✅ `docs/guides/GITFLOW-QUICK-REFERENCE.md` +
+  `docs/guides/BRANCH-STRATEGY.md` (decision table hotfix/feature/release)
+- ~~No "Architecture Decision Records" (ADRs) for major choices~~ ✅ 16 ADRs en `docs/adr/` (0001-0016)
 
 ### Recommendations
 
@@ -411,10 +416,10 @@ Negative:
 
 | Action                        | Effort            | Impact     | Timeline    |
 | ----------------------------- | ----------------- | ---------- | ----------- |
-| First-time setup checklist    | 30 min            | MEDIUM     | This week   |
-| Troubleshooting runbook       | 2h                | MEDIUM     | This week   |
-| Architecture Decision Records | 3-4h              | HIGH       | Next week   |
-| **Total**                     | **5.5-6.5 hours** | **MEDIUM** | **2 weeks** |
+| First-time setup checklist    | 30 min            | MEDIUM     | ✅ Done |
+| Troubleshooting runbook       | 2h                | MEDIUM     | ✅ Done |
+| Architecture Decision Records | 3-4h              | HIGH       | ✅ Done (16 ADRs) |
+| **Total**                     | **5.5-6.5 hours** | **MEDIUM** | **COMPLETED** |
 
 ---
 
@@ -547,8 +552,8 @@ Pure profiling helpers (`runGate`, `buildReleaseReport`, `aggregateStatus`, `com
 ⚠️ **Remaining**:
 
 - ~~No SBOM (Software Bill of Materials) generation~~ ✅ `sbom.json` (Syft, 464 componentes)
-- No container image scanning (if using Docker)
-- ~~No supply-chain attestation (SLSA provenance)~~ ✅ `src/slsa-provenance.ts` (in-toto v1 + SLSA v1.0, native TS)
+- ~~No container image scanning (if using Docker)~~ ✅ `src/container-scan.ts` (escaneo del SBOM/artefactos con Syft+Grype sin requerir Docker; ver 5.3)
+- ~~No supply-chain attestation (SLSA provenance)~~ ✅ `src/slsa-provenance.ts` (in-toto v1 + SLSA v1.0, native TS) + `src/slsa-signer.ts` (DSSE + Ed25519, ADR-0015)
 - ~~No annual security audit log~~ ✅ `docs/security/ANNUAL-AUDIT-PLAN.md` (log inicializado)
 
 ### Recommendations
@@ -606,14 +611,45 @@ cyclonedx-npm --output-format json --output-file sbom.json
 
 ---
 
+#### 5.3: Container/Artifact Vulnerability Scanning (Native TS)
+
+> ✅ **COMPLETED** (2026-08-17, ADR-0017) — `src/container-scan.ts` envuelve la cadena
+> **Syft (SBOM) + Grype (correlación CVE)** con fallback a **Trivy filesystem**, sin requerir
+> Docker. Comandos: `npm run container:scan` (escanea `sbom.json`), `container:scan-dir`
+> (SBOM de un directorio), `container:status` (toolchain), `container:report` (último resultado).
+> Exit codes: 0 = limpio / 1 = vulns ≥ `--fail-on` / 2 = error. Resultados persistidos en
+> `.session/container-scan/latest.json`. Verificado: scan real de `sbom.json` → 464 paquetes,
+> 0 vulnerabilidades, exit 0 (1.4s). 14/14 tests (`tests/unit/container-scan.test.ts`).
+
+**Why**: Track known vulnerabilities in the release SBOM and artifacts without depending on Docker.
+
+**Implementation** (in release pipeline):
+
+```bash
+npm run container:scan                    # gate: exit 1 si hay vulns ≥ high
+npm run container:scan -- --fail-on critical --json   # gate estricto, output JSON
+```
+
+**Impact**:
+
+- ✅ Compliance with vulnerability scanning requirements
+- ✅ Faster incident response (know exactly what's in release)
+- ✅ CI-gateable (exit codes + JSON) sin Docker
+
+**Effort**: 2 hours  
+**Value**: HIGH (supply-chain + compliance)
+
+---
+
 ### Security & Compliance Summary
 
 | Action                 | Effort       | Impact   | Timeline      |
 | ---------------------- | ------------ | -------- | ------------- |
-| SBOM generation        | 1h           | HIGH     | Next sprint   |
-| Annual audit (plan)    | 4h           | HIGH     | Q3 planning   |
+| SBOM generation        | 1h           | HIGH     | ✅ Done |
+| Container/artifact scan| 2h           | HIGH     | ✅ Done (ADR-0017) |
+| Annual audit (plan)    | 4h           | HIGH     | ✅ Done (Q3 planning) |
 | Annual audit (execute) | 80h          | HIGH     | Q4 2026       |
-| **Total**              | **85 hours** | **HIGH** | **Year 2026** |
+| **Total**              | **87 hours** | **HIGH** | **Year 2026** |
 
 ---
 
@@ -622,13 +658,14 @@ cyclonedx-npm --output-format json --output-file sbom.json
 ### This Week (Quick Wins)
 
 ```
-Day 1-2:  Add lockfile-lint hook + npm ci to CI/CD
-Day 3-4:  Create First-Time Setup Checklist + Troubleshooting Runbook
-Day 5:    Review & test all changes
+Day 1-2:  Add lockfile-lint hook + npm ci to CI/CD          ✅ DONE
+Day 3-4:  Create First-Time Setup Checklist + Troubleshooting Runbook  ✅ DONE
+Day 5:    Review & test all changes                          ✅ DONE
 ```
 
 **Effort**: ~2 hours dev + testing  
-**Impact**: HIGH (supply-chain + onboarding)
+**Impact**: HIGH (supply-chain + onboarding)  
+**Status**: ✅ COMPLETED
 
 ---
 
@@ -636,13 +673,15 @@ Day 5:    Review & test all changes
 
 ```
 Sprint 1:
-  - Code coverage baseline (2-3h)
-  - E2E release workflow tests (3-4h)
-  - npm audit pre-push hook (1h)
-  - SBOM generation setup (1h)
-  - ADR-0003 through ADR-0006 + ADR-0012 (4h)
+  - Code coverage baseline (2-3h)                            ✅ DONE
+  - E2E release workflow tests (3-4h)                        ✅ DONE
+  - npm audit pre-push hook (1h)                             ✅ DONE
+  - SBOM generation setup (1h)                               ✅ DONE
+  - Container/artifact scanning (2h)                         ✅ DONE (ADR-0017)
+  - ADR-0003 through ADR-0006 + ADR-0012 (4h)                ✅ DONE (16 ADRs)
 
 Total: 11-13 hours
+Status: ✅ COMPLETED
 ```
 
 ---
@@ -650,11 +689,12 @@ Total: 11-13 hours
 ### Q3 2026 (Long Term)
 
 ```
-- Performance baselines + profiling (3-5h)
-- Load testing for multi-repo (4-6h)
-- Plan annual security audit (4h)
-- ~~Consider: chaos testing, chaos engineering~~ ✅ `src/chaos-engineering.ts` (native TS, ADR-0016 candidate)
+- Performance baselines + profiling (3-5h)                   ✅ DONE
+- Load testing for multi-repo (4-6h)                         ✅ DONE
+- Plan annual security audit (4h)                            ✅ DONE (plan Q3, execute Q4)
+- ~~Consider: chaos testing, chaos engineering~~ ✅ `src/chaos-engineering.ts` (native TS, ADR-0016)
 - ~~Consider: supply-chain attestation (SLSA L3)~~ ✅ `src/slsa-signer.ts` (DSSE + Ed25519, ADR-0015)
+- ~~Consider: container image scanning~~ ✅ `src/container-scan.ts` (Syft+Grype, ADR-0017)
 ```
 
 ---
@@ -668,6 +708,8 @@ Total: 11-13 hours
 │      │ (lockfile)│ E2E Tests           │
 │      │ npm audit │ SBOM                │
 │      │ ADRs      │ Audit Plan          │
+│      │ Container │                     │
+│      │ Scan      │                     │
 ├──────┼───────────┼─────────────────────┤
 │MEDIUM│ Perf      │ Troubleshoot Runbook│
 │      │ Baseline  │ First-Setup         │
@@ -680,6 +722,8 @@ Total: 11-13 hours
 **Recommended Priority**: Dependency Mgmt (HIGH impact, LOW effort) → Tests (HIGH impact, MEDIUM
 effort) → Documentation (MEDIUM impact, LOW effort)
 
+**Status**: ✅ All quick wins + sprint 1 items completed (2026-08-17)
+
 ---
 
 ## Stack Summary
@@ -687,11 +731,11 @@ effort) → Documentation (MEDIUM impact, LOW effort)
 | Layer               | Current                     | Recommendation             | Timeline |
 | ------------------- | --------------------------- | -------------------------- | -------- |
 | **Supply Chain**    | ✅ Advanced (npx hardening) | ✅ Complete                | Done     |
-| **Dependency Mgmt** | Good ⚠️                     | Add lockfile-lint + npm ci | Week 1   |
-| **Testing**         | Strong ✅                   | Add coverage + E2E         | Sprint 1 |
-| **Documentation**   | Strong ✅                   | Add ADRs + Runbooks        | Week 1   |
-| **Security**        | Excellent ✅                | Add SBOM                   | Sprint 1 |
-| **Performance**     | Good ⚠️                     | Add baselines              | Sprint 2 |
+| **Dependency Mgmt** | ✅ Complete                 | ✅ lockfile-lint + npm ci  | Done     |
+| **Testing**         | ✅ Strong                   | ✅ coverage + E2E          | Done     |
+| **Documentation**   | ✅ Strong                   | ✅ ADRs + Runbooks         | Done     |
+| **Security**        | ✅ Excellent                | ✅ SBOM + container scan   | Done     |
+| **Performance**     | ✅ Good                     | ✅ baselines + profiling   | Done     |
 
 ---
 
@@ -700,11 +744,12 @@ effort) → Documentation (MEDIUM impact, LOW effort)
 The gentle-vanguard project is **production-ready** with excellent security gentle-vanguards. The
 recent npx hardening represents mature supply-chain thinking.
 
-**Next focus**: Dependency management (lockfile validation + npm ci) and testing completeness
-(coverage + E2E) provide HIGH impact for MEDIUM effort over the next 1-2 sprints.
+**Next focus**: All quick wins and sprint-1 items are complete (2026-08-17). Remaining work is
+long-term: annual security audit execution (Q4 2026), SLSA L3 hardening, and chaos engineering
+maturity (L4 automated in CI/CD).
 
 **12-month vision**: Evolve toward SLSA L3 supply-chain provenance, annual security audits, and
-chaos engineering maturity.
+chaos engineering maturity — all foundations now in place (SBOM + signing + scanning + chaos).
 
 ---
 

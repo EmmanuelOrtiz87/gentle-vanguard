@@ -74,12 +74,13 @@ describe('Coverage Runner', () => {
   });
 
   it('parseArgs supports --quick, --no-enforce, --json', () => {
-    assert.deepStrictEqual(parseArgs(), { quick: false, enforce: true, json: false });
-    assert.deepStrictEqual(parseArgs(['--quick']), { quick: true, enforce: true, json: false });
+    assert.deepStrictEqual(parseArgs(), { quick: false, enforce: true, json: false, noWrite: false });
+    assert.deepStrictEqual(parseArgs(['--quick']), { quick: true, enforce: true, json: false, noWrite: false });
     assert.deepStrictEqual(parseArgs(['--no-enforce', '--json']), {
       quick: false,
       enforce: false,
       json: true,
+      noWrite: false,
     });
   });
 
@@ -87,7 +88,7 @@ describe('Coverage Runner', () => {
     const saved = process.argv;
     process.argv = ['node', 'src/coverage-runner.ts', '--quick', '--json'];
     try {
-      assert.deepStrictEqual(parseArgs(), { quick: true, enforce: true, json: true });
+      assert.deepStrictEqual(parseArgs(), { quick: true, enforce: true, json: true, noWrite: false });
     } finally {
       process.argv = saved;
     }
