@@ -50,6 +50,30 @@ jobs:
           $tempFiles = Get-ChildItem -Recurse -Filter "*.tmp" -Name
           if ($tempFiles) { Remove-Item $tempFiles -Force; Write-Host "Cleaned $($tempFiles.Count) temp files" }
 
+  chaos:
+    name: Chaos Engineering (L4 — automated resilience)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Run chaos experiments (safe restore guaranteed)
+        run: npx tsx src/chaos-engineering.ts run-all --json
+      - name: Verify experiments passed
+        run: |
+          $results = Get-Content .session/chaos/results.json | ConvertFrom-Json
+          $failed = @($results.results | Where-Object { $_.status -eq 'FAILED' })
+          if ($failed.Count -gt 0) {
+            Write-Error "Chaos experiments failed: $($failed.Count)"
+            exit 1
+          }
+          Write-Host "Chaos OK: $($results.results.Count) experiments, $($failed.Count) failed"
+
   monthly-report:
     name: Monthly Management Report
     runs-on: ubuntu-latest

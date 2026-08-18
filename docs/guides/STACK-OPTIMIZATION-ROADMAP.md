@@ -692,7 +692,7 @@ Status: ✅ COMPLETED
 - Performance baselines + profiling (3-5h)                   ✅ DONE
 - Load testing for multi-repo (4-6h)                         ✅ DONE
 - Plan annual security audit (4h)                            ✅ DONE (plan Q3, execute Q4)
-- ~~Consider: chaos testing, chaos engineering~~ ✅ `src/chaos-engineering.ts` (native TS, ADR-0016)
+- ~~Consider: chaos testing, chaos engineering~~ ✅ `src/chaos-engineering.ts` (native TS, ADR-0016) + **L4 automated en CI/CD** (job `chaos` en `scheduled.yml`, semanal)
 - ~~Consider: supply-chain attestation (SLSA L3)~~ ✅ `src/slsa-signer.ts` (DSSE + Ed25519, ADR-0015)
 - ~~Consider: container image scanning~~ ✅ `src/container-scan.ts` (Syft+Grype, ADR-0017)
 ```
@@ -746,10 +746,10 @@ recent npx hardening represents mature supply-chain thinking.
 
 **Next focus**: All quick wins and sprint-1 items are complete (2026-08-17). Remaining work is
 long-term: annual security audit execution (Q4 2026), SLSA L3 hardening, and chaos engineering
-maturity (L4 automated in CI/CD).
+maturity — **L4 (automated in CI/CD) achieved 2026-08-18** (weekly `chaos:run-all` job).
 
 **12-month vision**: Evolve toward SLSA L3 supply-chain provenance, annual security audits, and
-chaos engineering maturity — all foundations now in place (SBOM + signing + scanning + chaos).
+chaos engineering maturity — all foundations now in place (SBOM + signing + scanning + chaos L4).
 
 ---
 

@@ -68,7 +68,7 @@ export interface ScanResult {
 }
 
 export interface ScanCliArgs {
-  action: 'scan' | 'scan-dir' | 'status' | 'report' | 'help';
+  action: 'scan' | 'scan-dir' | 'status' | 'report' | 'db-update' | 'help';
   sbom: string;
   dir: string;
   failOn: Severity;
@@ -452,11 +452,12 @@ export function printToolchainStatus(): string {
 
 export function parseScanArgs(args: string[] = process.argv.slice(2)): ScanCliArgs {
   const first = args[0] ?? 'scan';
-  const action = (['scan', 'scan-dir', 'status', 'report', 'help'].includes(first) ? first : 'scan') as
+  const action = (['scan', 'scan-dir', 'status', 'report', 'db-update', 'help'].includes(first) ? first : 'scan') as
     | 'scan'
     | 'scan-dir'
     | 'status'
     | 'report'
+    | 'db-update'
     | 'help';
   const parsed: ScanCliArgs = {
     action,
@@ -503,6 +504,7 @@ Usage:
   npx tsx src/container-scan.ts scan-dir [<dir>] [--fail-on <sev>] [--json]
   npx tsx src/container-scan.ts status
   npx tsx src/container-scan.ts report
+  npx tsx src/container-scan.ts db-update
 
 Options:
   -s, --sbom <path>    SBOM file to scan (default: sbom.json)
@@ -538,6 +540,20 @@ export function runScanCli(): number {
     const result = JSON.parse(readFileSync(LATEST_FILE, 'utf-8')) as ScanResult;
     console.log(formatResults(result));
     return 0;
+  }
+  if (cli.action === 'db-update') {
+    if (!toolAvailable('grype')) {
+      console.error('grype not available — cannot update vulnerability DB');
+      return 2;
+    }
+    console.log('Updating grype vulnerability database (this may take a while)...');
+    const u = runTool('grype', ['db', 'update'], 300000);
+    if (u.code === 0) {
+      console.log('grype DB updated successfully.');
+      return 0;
+    }
+    console.error(`grype db update failed (exit ${u.code}): ${u.stderr.slice(0, 300)}`);
+    return u.code === 2 ? 2 : 1;
   }
 
   const result = scanArtifacts({

@@ -341,6 +341,7 @@ if (isDirectRun) {
   const args = process.argv.slice(2);
   const action = args[0] ?? 'list';
   const dryRun = args.includes('--dry-run');
+  const asJson = args.includes('--json');
 
   switch (action) {
     case 'list':
@@ -356,14 +357,14 @@ if (isDirectRun) {
         break;
       }
       const result = runExperiment(exp, dryRun);
-      console.log(formatResults([result]));
+      console.log(asJson ? JSON.stringify(result, null, 2) : formatResults([result]));
       saveResults([result]);
       process.exitCode = result.status === 'failed' ? 1 : 0;
       break;
     }
     case 'run-all': {
       const results = runAll(dryRun);
-      console.log(formatResults(results));
+      console.log(asJson ? JSON.stringify(results, null, 2) : formatResults(results));
       saveResults(results);
       process.exitCode = results.some((r) => r.status === 'failed') ? 1 : 0;
       break;
@@ -374,8 +375,12 @@ if (isDirectRun) {
         console.log('No chaos experiment results yet. Run: npx tsx src/chaos-engineering.ts run-all');
         break;
       }
-      console.log(`Last run: ${data.timestamp}`);
-      console.log(formatResults(data.results));
+      if (asJson) {
+        console.log(JSON.stringify(data, null, 2));
+      } else {
+        console.log(`Last run: ${data.timestamp}`);
+        console.log(formatResults(data.results));
+      }
       break;
     }
     default:

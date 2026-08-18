@@ -91,8 +91,10 @@ npx tsx --test tests/unit/chaos-engineering.test.ts   # tests (10)
   instalan (el motor acepta experimentos externos vía el array `EXPERIMENTS`)
 - Para validación de recuperación completa: usar el detached launcher
   (`session:autostart:detached`) que retorna en ~1.3s sin colgar
-- Madurez objetivo: L3 (Game Days) alcanzado con `chaos:run-all` manual; L4 (automated en CI/CD)
-  como siguiente paso (job de CI que ejecute `chaos:run-all` semanal)
+- Madurez objetivo: L3 (Game Days) alcanzado con `chaos:run-all` manual; **L4 (automated en CI/CD)
+  alcanzado (2026-08-18)** — job `chaos` en `.github/workflows/scheduled.yml` ejecuta
+  `chaos:run-all --json` semanal (cron `0 6 * * 0`) y falla si algún experimento reporta FAILED.
+  El CLI soporta `--json` para salida máquina-legible en CI.
 
 ## Related
 
