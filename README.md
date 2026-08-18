@@ -3,13 +3,14 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-3.5.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
-  <img src="https://img.shields.io/badge/Status-Public%20Release-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
+  <img src="https://img.shields.io/badge/Version-3.7.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
-  <img src="https://img.shields.io/badge/TypeScript-7+-A855F7?style=flat-square&labelColor=0D1117" alt="TypeScript">
   <img src="https://img.shields.io/badge/TypeScript-100%25-3178C6?style=flat-square&labelColor=0D1117" alt="TypeScript">
-  <img src="https://img.shields.io/badge/Tests-19%2F19-22C55E?style=flat-square&labelColor=0D1117" alt="Tests">
-  <img src="https://img.shields.io/badge/Health-85%2F85-22C55E?style=flat-square&labelColor=0D1117" alt="Health">
+  <img src="https://img.shields.io/badge/Tests-367%2F367-22C55E?style=flat-square&labelColor=0D1117" alt="Tests">
+  <img src="https://img.shields.io/badge/Health-95%2F95-22C55E?style=flat-square&labelColor=0D1117" alt="Health">
+  <img src="https://img.shields.io/badge/Agents-21-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
+  <img src="https://img.shields.io/badge/Skills-88-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
   <img src="https://img.shields.io/badge/Dashboard_Ready-%E2%9C%93-22C55E?style=flat-square&labelColor=0D1117" alt="Dashboard Ready">
   <img src="https://img.shields.io/badge/Quick_Start-npm_run_start-22C55E?style=flat-square&labelColor=0D1117" alt="Quick Start">
 </p>
@@ -19,12 +20,13 @@
   <a href="CHANGELOG.md">Changelog</a> &nbsp;·&nbsp;
   <a href="rules/NORMATIVES.md">Normatives</a> &nbsp;·&nbsp;
   <a href="docs/operations/procedures/QUICK-COMMANDS.md">Quick Commands</a> &nbsp;·&nbsp;
-  <a href="rules/NEXUS-NORMATIVA.md">Nexus DB</a>
+  <a href="rules/NEXUS-NORMATIVA.md">Nexus DB</a> &nbsp;·&nbsp;
+  <a href="docs/adr/README.md">ADRs</a>
 </p>
 
 <p align="center">
   <strong>AI-powered development orchestrator — zero-dependency, self-healing, fully autonomous</strong><br>
-  <em>SDD Lifecycle · Engram Memory · Adaptive Feedback · 100 Pipeline Steps · 82 Health Checks</em>
+  <em>SDD Lifecycle · Engram Memory · Adaptive Feedback · 111 Pipeline Steps · 95 Health Checks · 21 Agents · 88 Skills</em>
 </p>
 
 ---
@@ -39,7 +41,7 @@ cd gentle-vanguard
 # Auto-install (prerequisites, hooks, dashboard build)
 npx tsx src/setup-complete.ts
 
-# Quick start (optimized - 0.76s)
+# Quick start (optimized)
 npm run start
 
 # Or run dashboard directly
@@ -47,6 +49,10 @@ npx tsx src/dashboard-start.ts
 ```
 
 Works on Windows, macOS, and Linux.
+
+> **¿Prefieres un instalador?** Descarga el ejecutable desde
+> [Releases](https://github.com/EmmanuelOrtiz87/gentle-vanguard/releases) — un solo `.exe` que
+> instala, configura y lanza todo el stack automáticamente (incluye auto-update).
 
 ---
 
@@ -56,9 +62,22 @@ An **AI orchestration layer** that gives structure, memory, and governance to AI
 development. Tool-agnostic across OpenCode, Claude Code, Cline, Cursor, Windsurf, Codex, Copilot,
 Continue.dev — with **zero cloud services, zero API keys, zero external dependencies**.
 
-The stack runs a **100-step autonomous pipeline** at session start, monitors **82 health checks**
-across 13 components, persists state in a **SQLite operational database** (15 tables, 10 DAOs), and
-powers a **real-time observability dashboard** with WebSocket push.
+The stack runs a **111-step autonomous pipeline** at session start, monitors **95 health checks**
+across 13 components, persists state in a **SQLite operational database** (23 tables, 7 migrations),
+and powers a **real-time observability dashboard** with WebSocket push.
+
+---
+
+## 📸 Dashboard
+
+Real-time LLM observability dashboard — React + TypeScript + Vite + WebSocket:
+
+<p align="center">
+  <img src="docs/assets/dashboard.png" alt="Gentle-Vanguard Dashboard" width="85%"/>
+</p>
+
+**Start**: `npx tsx src/dashboard-start.ts`  
+**Stop**: `npx tsx src/dashboard-stop.ts`
 
 ---
 
@@ -74,25 +93,25 @@ flowchart TB
     A1[Auto-Apply Safe · Circuit Breaker · Auto-Escalation · Session Scoring]
     A2[Dynamic Dependency Graph · AB Testing · Predictive Governor · Convergence Monitor]
   end
-  subgraph L5["Layer 5: AGENTS — 18 Specialized Roles"]
+  subgraph L5["Layer 5: AGENTS — 21 Specialized Roles"]
     B1[BA · SAD · DEV · QA · OPS · GOV · DOC · SEC · PREMORTEM · SDD-EXPLORE]
-    B2[SDD-DESIGN · SDD-APPLY · SDD-VERIFY · SESSION · OPS · PREMORTEM · GOV · DOC]
+    B2[SDD-DESIGN · SDD-APPLY · SDD-VERIFY · SESSION · SELF-DIAG · SIA · MAINTENANCE]
   end
   subgraph L4["Layer 4: DASHBOARD — Real-time Observability"]
     D1[7-section UI · WebSocket push / 5s · HTTP REST API]
     D2[i18n en/es/pt-BR · 14 metrics · Tracing Waterfall · Alerts · Feedback]
-    D3[Nexus DB · 10 DAOs · 15 tables · WAL mode · Auto-prune]
+    D3[Nexus DB · 23 tables · WAL mode · Auto-prune]
   end
   subgraph L3["Layer 3: MCP — Model Context Protocol"]
     M1[Gateway · Bridge · Registry · Multi-language SDK]
     M2[8 pre-built templates · ts/js/py/go/rs]
   end
   subgraph L2["Layer 2: MEMORY & KNOWLEDGE"]
-    K1[Engram (hot/warm/cold) · CodeGraph (1410 nodes) · Event Store]
+    K1[Engram (hot/warm/cold) · CodeGraph · Event Store]
     K2[Checkpoints · Snapshots · Knowledge Base · Findings Ledger]
   end
   subgraph L1["Layer 1: ORCHESTRATION"]
-    O1[100-step pipeline · 82 health checks · Auto-healing watchdog]
+    O1[111-step pipeline · 95 health checks · Auto-healing watchdog]
     O2[SDD lifecycle · Audit · Tracing · Cloud connectors · Security orchestrator]
   end
 
@@ -113,17 +132,22 @@ flowchart TB
 | **Session Scoring**          | Auto-compare quality scores across sessions (delegations, corrections, proactive hits)                                           |
 | **10 DAOs**                  | Database Repository pattern — Cache, Contract, ErrorMemory, Event, Housekeeping, Metrics, Session, Skill, Trace, MigrationRunner |
 | **Cache LRU + WAL**          | SHA256 response cache with TTL + automatic WAL checkpoint when >5MB                                                              |
-| **Parallel Watchtower**      | 82 health checks across 13 components — runs in parallel with auto-heal                                                          |
+| **Parallel Watchtower**      | 95 health checks across 13 components — runs in parallel with auto-heal                                                          |
 | **Session Consolidation**    | Context compaction engine — token-budget-aware, auto-summarize and wipe                                                          |
 | **Engram Memory**            | Persistent memory across sessions with hot/warm/cold tiers and auto-repair                                                       |
 | **Dashboard UI**             | Real-time: 7-section view, tracing waterfall, alerts, feedback, i18n (en/es/pt-BR)                                               |
-| **Nexus Database**           | SQLite operational DB (WAL mode, FK ON) — 15 tables, auto-migrate, auto-prune                                                    |
-| **100 Pipeline Steps**       | Session autostart pipeline with lazy/blocking phases, on-failure=continue                                                        |
-| **18 Specialized Agents**    | BA, SAD, DEV, QA, OPS, GOV, DOC, SEC — each with model routing                                                                   |
+| **Nexus Database**           | SQLite operational DB (WAL mode, FK ON) — 23 tables, auto-migrate, auto-prune                                                    |
+| **111 Pipeline Steps**       | Session autostart pipeline with lazy/blocking phases, on-failure=continue                                                        |
+| **21 Specialized Agents**    | BA, SAD, DEV, QA, OPS, GOV, DOC, SEC, SELF-DIAG, SIA — each with model routing                                                   |
+| **88 Skills**                | On-demand skills: security, compliance, diagram-design, web-research, data-analyst, and more                                     |
 | **SDD Lifecycle**            | Explore → Design → Implement → Verify — full spec-driven development                                                             |
 | **Adaptive Feedback**        | Auto-learn norms from corrections, session scoring, pattern detection                                                            |
 | **Governance**               | 60+ normatives, pre-commit hooks, CI/CD, audit pipeline, safety layer                                                            |
 | **Predictive Governor**      | Anticipate load, prewarm resources, adjust token budgets proactively                                                             |
+| **Container Scanning**       | Native Syft+Grype+Trivy scanner — SBOM, directory, and artifact scanning with CI gates                                           |
+| **Chaos Engineering**        | L4 automated — weekly resilience experiments in CI/CD with failure gates                                                         |
+| **SLSA Provenance**          | Native DSSE/Ed25519 signing + SLSA provenance attestation for releases                                                           |
+| **Auto-Update**              | Self-updating `.exe` launcher — detects new versions and updates in place                                                         |
 | **Zero-dependency**          | Works with just TypeScript 7+ — no cloud, no API keys, no external services                                                      |
 
 ---
@@ -132,22 +156,22 @@ flowchart TB
 
 | Metric          | Value                                        |
 | --------------- | -------------------------------------------- |
-| Test Suites     | **19/19 passed**                             |
-| Health Checks   | **82/82 PASS** — 13 components               |
-| Pipeline Steps  | **100** (blocking + lazy)                    |
-| DAOs / Tables   | **10 DAOs / 15 tables**                      |
+| Test Suites     | **367/367 passed**                           |
+| Health Checks   | **95/95 PASS** — 13 components               |
+| Pipeline Steps  | **111** (32 blocking + 79 lazy)              |
+| Agents / Skills | **21 agents / 88 skills**                    |
+| ADRs            | **17** (ADR-0001 → ADR-0017)                 |
+| Nexus DB        | **23 tables, 7 migrations, ~7 MB**           |
 | Autonomy        | **100%** — zero manual intervention required |
 | CodeGraph       | **1,410 nodes / 1,763 edges / 133 files**    |
 | Dashboard APIs  | **25+ REST endpoints + WebSocket**           |
 | i18n Locales    | **3** — en, es, pt-BR                        |
 | Uptime Recovery | **Auto-heal watchdog** — 10 restart attempts |
-| DB Size         | **~0.27 MB** (operational + historical)      |
+| Supply Chain    | **SBOM CycloneDX 1.7 + SLSA L2/L3 signing**  |
 
 ---
 
-## 📈 Dashboard
-
-Real-time LLM observability dashboard — React + TypeScript + Vite + WebSocket:
+## 📈 Dashboard Structure
 
 ```
 apps/web-dashboard/
@@ -175,30 +199,31 @@ apps/web-dashboard/
     └── ...
 ```
 
-**Start**: `npx tsx src/dashboard-start.ts`  
-**Stop**: `npx tsx src/dashboard-stop.ts`
-
 ---
 
 ## 📋 Quick Commands
 
 | Command                                   | Description                                   |
 | ----------------------------------------- | --------------------------------------------- |
-| `npm start`                               | **Quick start** dashboard (optimized - 0.76s) |
+| `npm start`                               | **Quick start** dashboard (optimized)         |
 | `npm run start:complete`                  | Start with full verification checks           |
-| `npm test`                                | Run all **19 test suites**                    |
-| `npx tsx src/session-autostart.ts`        | Run the **100-step session pipeline**         |
+| `npm test`                                | Run all **367 test suites**                   |
+| `npx tsx src/session-autostart.ts`        | Run the **111-step session pipeline**         |
 | `npx tsx src/auto-apply-safe.ts --check`  | Check safe optimizations pending              |
 | `npx tsx src/auto-apply-safe.ts --apply`  | Apply safe optimizations with rollback        |
 | `npx tsx src/auto-apply-safe.ts --report` | Report optimization status                    |
-| `npm run watchtower`                      | Run **82 health checks**                      |
+| `npm run watchtower`                      | Run **95 health checks**                      |
 | `npm run watchtower:health`               | Health-check only mode                        |
 | `npm run db:health`                       | Nexus DB health (integrity, WAL, tables)      |
 | `npm run db:init`                         | Init DB + run migrations (idempotent)         |
 | `npm run db:backup`                       | Safe online backup                            |
 | `npm run db:prune`                        | Prune old data (events >30d, cache >7d)       |
+| `npm run container:scan`                  | Scan SBOM for vulnerabilities (Syft+Grype)    |
+| `npm run container:db-update`             | Refresh grype vulnerability database          |
+| `npx tsx src/chaos-engineering.ts run-all`| Run chaos experiments (resilience testing)    |
+| `npm run sbom:generate`                   | Generate CycloneDX SBOM                       |
+| `npm run sbom:validate`                   | Validate SBOM structure                       |
 | `cd apps/web-dashboard && npm run build`  | Build dashboard for production                |
-| `.\scripts\setup-complete.ps1`            | Auto-install (prerequisites + hooks + build)  |
 | `npm run graphify -- query "<question>"`  | Knowledge graph semantic search               |
 | `npm run graphify -- update .`            | Update code graph snapshot                    |
 
@@ -215,6 +240,7 @@ Full reference:
 | Quick Commands          | `docs/operations/procedures/QUICK-COMMANDS.md` |
 | Normatives Index        | `rules/NORMATIVES.md`                          |
 | Nexus DB Normativa      | `rules/NEXUS-NORMATIVA.md`                     |
+| ADRs (Architecture)     | `docs/adr/README.md` (17 ADRs)                 |
 | Changelog               | `CHANGELOG.md`                                 |
 | Dashboard Skill         | `.opencode/skills/dashboard/SKILL.md`          |
 | Vanguards (Stack Rules) | `rules/`                                       |
@@ -229,6 +255,16 @@ Full reference:
 
 ---
 
+## 🔒 Security & Supply Chain
+
+- **SBOM**: CycloneDX 1.7 generated natively (`npm run sbom:generate`)
+- **SLSA**: Provenance attestation + DSSE/Ed25519 signing on releases
+- **Container scanning**: Syft+Grype+Trivy native scanner with CI gates
+- **Secret scanning**: 80+ patterns, entropy analysis, pre-commit hooks
+- **Chaos engineering**: L4 automated — weekly resilience experiments in CI
+
+---
+
 ## 📄 License
 
 MIT © 2026 Emmanuel Ortiz
@@ -236,5 +272,5 @@ MIT © 2026 Emmanuel Ortiz
 ---
 
 <p align="center">
-  <sub>Gentle-Vanguard v3.5.0 — Don't let your mellow hustle be faded.</sub>
+  <sub>Gentle-Vanguard v3.7.0 — Don't let your mellow hustle be faded.</sub>
 </p>
