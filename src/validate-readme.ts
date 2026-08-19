@@ -83,6 +83,17 @@ function getActualStats(root: string): ActualStats {
       skills = 0;
     }
   }
+  // Include .opencode/skills (absorbed/community skills) in the total
+  const opencodeSkillsDir = path.join(root, '.opencode', 'skills');
+  if (fs.existsSync(opencodeSkillsDir)) {
+    try {
+      skills += fs
+        .readdirSync(opencodeSkillsDir, { withFileTypes: true })
+        .filter((d) => d.isDirectory()).length;
+    } catch {
+      /* ignore */
+    }
+  }
 
   let workflows = 0;
   const workflowsDir = path.join(root, '.github', 'workflows');
@@ -106,20 +117,35 @@ function getActualStats(root: string): ActualStats {
 
   let agentCount = 0;
   let keywordMappings = 0;
-  const delegPath = path.join(root, 'config', 'auto-delegation.json');
-  if (fs.existsSync(delegPath)) {
+  // Prefer opencode.json agent registry (source of truth for agent count)
+  const opencodePath = path.join(root, 'opencode.json');
+  if (fs.existsSync(opencodePath)) {
     try {
-      const deleg = JSON.parse(fs.readFileSync(delegPath, 'utf-8'));
-      const routingProfiles = ['hallucinationGuardLevels', 'GITFLOW', 'SCRIPT'];
-      if (deleg.agentProfiles) {
-        agentCount =
-          Object.keys(deleg.agentProfiles).filter((k) => !routingProfiles.includes(k)).length + 1;
-      }
-      if (deleg.keywordMappings) {
-        keywordMappings = Object.keys(deleg.keywordMappings).length;
+      const oc = JSON.parse(fs.readFileSync(opencodePath, 'utf-8'));
+      if (oc.agent && typeof oc.agent === 'object') {
+        agentCount = Object.keys(oc.agent).length;
       }
     } catch {
       /* ignore */
+    }
+  }
+  // Fallback: auto-delegation.json agentProfiles (+1 for orchestrator)
+  if (agentCount === 0) {
+    const delegPath = path.join(root, 'config', 'auto-delegation.json');
+    if (fs.existsSync(delegPath)) {
+      try {
+        const deleg = JSON.parse(fs.readFileSync(delegPath, 'utf-8'));
+        const routingProfiles = ['hallucinationGuardLevels', 'GITFLOW', 'SCRIPT'];
+        if (deleg.agentProfiles) {
+          agentCount =
+            Object.keys(deleg.agentProfiles).filter((k) => !routingProfiles.includes(k)).length + 1;
+        }
+        if (deleg.keywordMappings) {
+          keywordMappings = Object.keys(deleg.keywordMappings).length;
+        }
+      } catch {
+        /* ignore */
+      }
     }
   }
 

@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/badge/Tests-367%2F367-22C55E?style=flat-square&labelColor=0D1117" alt="Tests">
   <img src="https://img.shields.io/badge/Health-95%2F95-22C55E?style=flat-square&labelColor=0D1117" alt="Health">
   <img src="https://img.shields.io/badge/Agents-21-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
-  <img src="https://img.shields.io/badge/Skills-88-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
+  <img src="https://img.shields.io/badge/Skills-263-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
   <img src="https://img.shields.io/badge/Dashboard_Ready-%E2%9C%93-22C55E?style=flat-square&labelColor=0D1117" alt="Dashboard Ready">
   <img src="https://img.shields.io/badge/Quick_Start-npm_run_start-22C55E?style=flat-square&labelColor=0D1117" alt="Quick Start">
 </p>
@@ -26,7 +26,7 @@
 
 <p align="center">
   <strong>AI-powered development orchestrator — zero-dependency, self-healing, fully autonomous</strong><br>
-  <em>SDD Lifecycle · Engram Memory · Adaptive Feedback · 111 Pipeline Steps · 95 Health Checks · 21 Agents · 88 Skills</em>
+  <em>SDD Lifecycle · Engram Memory · Adaptive Feedback · 111 Pipeline Steps · 95 Health Checks · 21 Agents · 263 Skills</em>
 </p>
 
 ---
@@ -43,6 +43,9 @@ npx tsx src/setup-complete.ts
 
 # Quick start (optimized)
 npm run start
+
+# Verify the stack is healthy (agents, skills, hooks, configs)
+gv verify
 
 # Or run dashboard directly
 npx tsx src/dashboard-start.ts
@@ -61,6 +64,10 @@ Works on Windows, macOS, and Linux.
 An **AI orchestration layer** that gives structure, memory, and governance to AI-assisted
 development. Tool-agnostic across OpenCode, Claude Code, Cline, Cursor, Windsurf, Codex, Copilot,
 Continue.dev — with **zero cloud services, zero API keys, zero external dependencies**.
+
+**Routes work** to the right specialized agent, **Enforces SDD** (spec-driven development) from
+exploration to verification, and **Persists memory** across sessions via Engram — so nothing learned
+is ever lost.
 
 The stack runs a **111-step autonomous pipeline** at session start, monitors **95 health checks**
 across 13 components, persists state in a **SQLite operational database** (23 tables, 7 migrations),
@@ -122,6 +129,51 @@ flowchart TB
   <img src="docs/assets/architecture-5-layers.png" alt="Gentle-Vanguard 5-Layer Architecture" width="85%"/>
 </p>
 
+The **Work Routing Ladder** escalates every request through the right agent tier, and the
+**Delegation Rules** in `config/auto-delegation.json` define which agent owns which domain — with
+adaptive routing learned from execution history.
+
+```mermaid
+flowchart TD
+  classDef route fill:#1a2035,stroke:#00bfff,color:#e0e0e0,stroke-width:2px
+
+  REQ["User Request"] --> ORCH["Orchestrator<br/>Route + Delegate"]
+  ORCH -->|"conf < 60%"| BA["BA — Explore<br/>Clarify requirements"]
+  ORCH -->|"60-79%"| BA
+  ORCH -->|"conf ≥ 80%"| AGENTS["Specialized Agents"]
+  AGENTS --> SAD["SAD — Design"]
+  AGENTS --> DEV["DEV — Apply"]
+  AGENTS --> QA["QA — Verify"]
+  AGENTS --> GOV["GOV — Governance"]
+  AGENTS --> DOC["DOC — Document"]
+  SAD --> VERIFY["Session Scoring<br/>Quality feedback loop"]
+  DEV --> VERIFY
+  QA --> VERIFY
+  VERIFY --> LEARN["Adaptive Router<br/>learns success rate"]:::route
+  LEARN --> ORCH
+
+  class ORCH,LEARN route
+```
+
+---
+
+## 🤖 Agent Ecosystem
+
+| Agent            | Role                                                                 |
+| ---------------- | -------------------------------------------------------------------- |
+| **Orchestrator** | Routes requests, enforces Karpathy guidelines, manages session lifecycle |
+| **BA**           | Requirements exploration and clarification (sdd-explore)             |
+| **SAD**          | System architecture design and API contracts (sdd-design)            |
+| **DEV**          | Implementation and refactoring (sdd-apply)                           |
+| **QA**           | Verification, testing, and quality gates (sdd-verify)                |
+| **OPS**          | Deployment, CI/CD, infrastructure                                     |
+| **GOV**          | Compliance, security, audit, policy enforcement                       |
+| **DOC**          | Technical documentation and ADRs                                      |
+| **Model Profile**| Per-phase temperature + hallucination guard (cheap/balanced/premium)  |
+
+Every agent runs with an adaptive step budget (up to 80 steps) and a **Model Profile** tuned per
+SDD phase — BA/SAD/DEV/QA each get their own temperature and hallucination guard settings.
+
 ---
 
 ## ✨ Features
@@ -143,7 +195,7 @@ flowchart TB
 | **Nexus Database**           | SQLite operational DB (WAL mode, FK ON) — 23 tables, auto-migrate, auto-prune                                                    |
 | **111 Pipeline Steps**       | Session autostart pipeline with lazy/blocking phases, on-failure=continue                                                        |
 | **21 Specialized Agents**    | BA, SAD, DEV, QA, OPS, GOV, DOC, SEC, SELF-DIAG, SIA — each with model routing                                                   |
-| **88 Skills**                | On-demand skills: security, compliance, diagram-design, web-research, data-analyst, and more                                     |
+| **263 Skills**               | On-demand skills: security, compliance, diagram-design, web-research, data-analyst, and more                                     |
 | **SDD Lifecycle**            | Explore → Design → Implement → Verify — full spec-driven development                                                             |
 | **Adaptive Feedback**        | Auto-learn norms from corrections, session scoring, pattern detection                                                            |
 | **Governance**               | 60+ normatives, pre-commit hooks, CI/CD, audit pipeline, safety layer                                                            |
@@ -157,6 +209,40 @@ flowchart TB
 
 ---
 
+## 🧩 Key Capabilities
+
+| Capability              | Description                                                                 |
+| ----------------------- | --------------------------------------------------------------------------- |
+| **SDD Lifecycle**       | Explore → Design → Implement → Verify with contract validation between phases |
+| **Review Workload Guard** | Auto-balances review load across agents to prevent burnout and missed reviews |
+| **Skill Registry**      | 263 on-demand skills (175 native + 88 absorbed) with trigger-based loading    |
+| **Chain-Delivery**      | Sequential multi-agent delivery: BA → SAD → DEV → QA with handoff contracts    |
+| **Cross-Tool**          | Works identically across OpenCode, Claude Code, Cursor, Windsurf, Codex       |
+
+The **Review Workload Guard** monitors pending reviews and redistributes them, the **Skill
+Registry** auto-loads the right skill per task, **Chain-Delivery** guarantees each SDD phase hands
+off a validated contract, and **Cross-Tool** compatibility means the same stack runs in any AI
+coding tool.
+
+```mermaid
+flowchart LR
+  classDef phase fill:#1a2035,stroke:#22c55e,color:#e0e0e0,stroke-width:2px
+  classDef gate fill:#1a2035,stroke:#a855f7,color:#e0e0e0
+
+  BA["BA — Explore<br/>Requirements + Contracts"] --> G1{{"Gate: scope frozen"}}
+  G1 --> SAD["SAD — Design<br/>Architecture + API contracts"]
+  SAD --> G2{{"Gate: design approved"}}
+  G2 --> DEV["DEV — Implement<br/>Code + typecheck + lint"]
+  DEV --> G3{{"Gate: code verified"}}
+  G3 --> QA["QA — Verify<br/>Tests + security + health"]
+  QA --> DONE["Shippable increment"]:::phase
+
+  class BA,SAD,DEV,QA phase
+  class G1,G2,G3 gate
+```
+
+---
+
 ## 📊 Key Metrics
 
 | Metric          | Value                                        |
@@ -164,7 +250,7 @@ flowchart TB
 | Test Suites     | **367/367 passed**                           |
 | Health Checks   | **95/95 PASS** — 13 components               |
 | Pipeline Steps  | **111** (32 blocking + 79 lazy)              |
-| Agents / Skills | **21 agents / 88 skills**                    |
+| Agents / Skills | **21 agents / 263 skills**                 |
 | ADRs            | **18** (ADR-0001 → ADR-0018)                 |
 | Nexus DB        | **23 tables, 7 migrations, ~7 MB**           |
 | Autonomy        | **100%** — zero manual intervention required |
@@ -256,6 +342,61 @@ Full reference:
 | Changelog               | `CHANGELOG.md`                                 |
 | Dashboard Skill         | `.opencode/skills/dashboard/SKILL.md`          |
 | Vanguards (Stack Rules) | `rules/`                                       |
+
+---
+
+## 🛠️ Development
+
+| Command                          | Description                                        |
+| -------------------------------- | -------------------------------------------------- |
+| `npm run typecheck`              | TypeScript strict type checking                    |
+| `npm run lint`                   | ESLint across the codebase                         |
+| `npm test`                       | Run all test suites (367/367)                      |
+| `Invoke-Pester`                  | PowerShell test runner for PS1 scripts             |
+| `gv verify`                      | Full stack verification (health + configs + hooks) |
+| `npm run build`                  | Build dashboard and SEA executable                 |
+
+The stack uses **Invoke-Pester** for PowerShell unit tests, **gv verify** as the single entry point
+for stack validation, and `npm run build` for production artifacts.
+
+---
+
+## 🔄 CI/CD Pipeline
+
+| Workflow                        | Purpose                                              |
+| ------------------------------- | ---------------------------------------------------- |
+| `gentle-vanguard-quality-gate`  | Lint + typecheck + tests + coverage gate on every PR |
+| `test-suite`                    | Full test matrix across Node versions                |
+| `sync-public`                   | Automated sync of public artifacts to the public repo |
+| `security.yml`                  | Gitleaks + secretlint + trivy scans                  |
+| `release.yml`                   | Tagged releases with SLSA provenance                 |
+
+The **gentle-vanguard-quality-gate** blocks merges on quality regressions, **test-suite** runs the
+full matrix, and **sync-public** keeps the public repository in sync automatically.
+
+---
+
+## 📊 Project Status
+
+| Area           | Status                                              |
+| -------------- | --------------------------------------------------- |
+| **Configuration** | 5 JSON configs validated by schema + JSON validator |
+| **Skills**     | 263 skills (175 native + 88 absorbed)               |
+| **Tests**      | 367/367 passing across 10 suites                    |
+| **Hooks**      | pre-commit, post-commit, post-merge, pre-push       |
+| **Structure**  | 231+ TS files, 108 PowerShell scripts, 13 components |
+
+---
+
+## 📚 Key Documentation
+
+| Resource                          | Path                                          |
+| --------------------------------- | --------------------------------------------- |
+| **AGENTS.md**                     | Agent bootstrap and orchestration rules       |
+| **Delegation Rules**              | `config/auto-delegation.json` + `src/recommend-agent.ts` |
+| **Model Routing**                 | `config/model-router.json` (profiles + tiers) |
+| **SDD Config**                    | `config/sdd-contracts.json` + phase contracts |
+| **Skill Registry**                | `config/subagent-mapping.json` + `skills/`    |
 
 ---
 
