@@ -498,6 +498,10 @@
             <i class="bi bi-box"></i>
             <span>Productos</span>
           </div>
+          <div class="nav-item" data-section="content-ops">
+            <i class="bi bi-kanban"></i>
+            <span>Content Ops</span>
+          </div>
         </div>
 
         <div class="nav-section" style="margin-top: auto">
@@ -1329,6 +1333,24 @@
               >
                 <i class="bi bi-graph-up"></i> Caso de Estudio
               </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Content Operations Section (COE Integration) -->
+        <section class="content-section" id="content-ops">
+          <h2><i class="bi bi-kanban me-2" style="color: var(--p)"></i>Content Operations</h2>
+          <p class="text-secondary mb-4">
+            Motor de operaciones de contenido: calendario real de la campaña
+            <code class="text-info">GROWTH-EXPERIMENT-001</code> gestionado por el COE
+            (<code class="text-info">content/operations/master-manifest.json</code>). Operá los
+            jobs con transiciones de estado, filtros y export.
+          </p>
+
+          <div id="coe-root">
+            <!-- Renderizado por assets/js/coe-cms.js -->
+            <div class="text-center py-5" style="color: var(--text-faint)">
+              <i class="bi bi-kanban me-2"></i>Cargando Content Operations...
             </div>
           </div>
         </section>
@@ -2499,5 +2521,9 @@ The native stack keeps growing. Today we add ${topic} to the ecosystem.
     <!-- CMS Exporter Scripts -->
     <script src="assets/js/cms-exporter.js"></script>
     <script src="assets/js/asset-manager.js"></script>
+
+    <!-- Content Operations Engine Integration -->
+    <script src="assets/js/coe-manifest.js"></script>
+    <script src="assets/js/coe-cms.js"></script>
   </body>
 </html>
