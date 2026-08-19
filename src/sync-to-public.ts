@@ -9,6 +9,7 @@
  * Copies ONLY public-safe files:
  *   - Bootstrap scripts (plain text - needed for onboarding)
  *   - Public documentation (README, LICENSE, docs/, demos/)
+ *   - Marketing CMS & presentations (docs/presentations/ — resources-index.html, studios, social assets)
  *   - Example configs (no secrets)
  *   - Pre-built encrypted artifacts (build/protected/)
  *   - Public skill stubs (build/public/)
@@ -132,6 +133,7 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
     'docs/guides',
     'docs/marketing',
     'docs/supplementary',
+    'docs/presentations',
   ]) {
     const src = path.join(privateRepo, dir);
     if (fs.existsSync(src)) {
