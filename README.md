@@ -90,33 +90,37 @@ flowchart TB
   classDef dash fill:#1a2035,stroke:#22c55e,color:#e0e0e0
 
   subgraph L6["Layer 6: EXECUTIVE — Autonomous Operations"]
-    A1[Auto-Apply Safe · Circuit Breaker · Auto-Escalation · Session Scoring]
-    A2[Dynamic Dependency Graph · AB Testing · Predictive Governor · Convergence Monitor]
+    A1["Auto-Apply Safe · Circuit Breaker · Auto-Escalation · Session Scoring"]
+    A2["Dynamic Dependency Graph · AB Testing · Predictive Governor · Convergence Monitor"]
   end
   subgraph L5["Layer 5: AGENTS — 21 Specialized Roles"]
-    B1[BA · SAD · DEV · QA · OPS · GOV · DOC · SEC · PREMORTEM · SDD-EXPLORE]
-    B2[SDD-DESIGN · SDD-APPLY · SDD-VERIFY · SESSION · SELF-DIAG · SIA · MAINTENANCE]
+    B1["BA · SAD · DEV · QA · OPS · GOV · DOC · SEC · PREMORTEM · SDD-EXPLORE"]
+    B2["SDD-DESIGN · SDD-APPLY · SDD-VERIFY · SESSION · SELF-DIAG · SIA · MAINTENANCE"]
   end
   subgraph L4["Layer 4: DASHBOARD — Real-time Observability"]
-    D1[7-section UI · WebSocket push / 5s · HTTP REST API]
-    D2[i18n en/es/pt-BR · 14 metrics · Tracing Waterfall · Alerts · Feedback]
-    D3[Nexus DB · 23 tables · WAL mode · Auto-prune]
+    D1["7-section UI · WebSocket push / 5s · HTTP REST API"]
+    D2["i18n en/es/pt-BR · 14 metrics · Tracing Waterfall · Alerts · Feedback"]
+    D3["Nexus DB · 23 tables · WAL mode · Auto-prune"]
   end
   subgraph L3["Layer 3: MCP — Model Context Protocol"]
-    M1[Gateway · Bridge · Registry · Multi-language SDK]
-    M2[8 pre-built templates · ts/js/py/go/rs]
+    M1["Gateway · Bridge · Registry · Multi-language SDK"]
+    M2["8 pre-built templates · ts/js/py/go/rs"]
   end
   subgraph L2["Layer 2: MEMORY & KNOWLEDGE"]
-    K1[Engram (hot/warm/cold) · CodeGraph · Event Store]
-    K2[Checkpoints · Snapshots · Knowledge Base · Findings Ledger]
+    K1["Engram (hot/warm/cold) · CodeGraph · Event Store"]
+    K2["Checkpoints · Snapshots · Knowledge Base · Findings Ledger"]
   end
   subgraph L1["Layer 1: ORCHESTRATION"]
-    O1[111-step pipeline · 95 health checks · Auto-healing watchdog]
-    O2[SDD lifecycle · Audit · Tracing · Cloud connectors · Security orchestrator]
+    O1["111-step pipeline · 95 health checks · Auto-healing watchdog"]
+    O2["SDD lifecycle · Audit · Tracing · Cloud connectors · Security orchestrator"]
   end
 
   L6 --> L5 --> L4 --> L3 --> L2 --> L1
 ```
+
+<p align="center">
+  <img src="docs/assets/architecture-5-layers.png" alt="Gentle-Vanguard 5-Layer Architecture" width="85%"/>
+</p>
 
 ---
 
