@@ -1,27 +1,19 @@
 {
-  "generated_at": "2026-08-18T00:20:53.746Z",
+  "generated_at": "2026-08-19T02:25:11.874Z",
   "period": "2026-07",
-  "days": 29,
+  "days": 28,
   "totals": {
-    "input": 917933409,
-    "output": 10308716,
-    "total": 928242125,
+    "input": 895701557,
+    "output": 10499945,
+    "total": 906201502,
     "cost": 0
   },
   "daily_avg": {
-    "input": 31652876,
-    "output": 355473,
-    "total": 32008349
+    "input": 31989341,
+    "output": 374998,
+    "total": 32364339
   },
   "by_day": [
-    {
-      "day": "2026-07-20",
-      "input": 26387115,
-      "output": 167290,
-      "total": 26554405,
-      "cost": 0,
-      "sessions": 16
-    },
     {
       "day": "2026-07-21",
       "input": 26813337,
@@ -239,12 +231,12 @@
       "sessions": 3
     },
     {
-      "day": "2026-08-17",
-      "input": 2041027,
-      "output": 275213,
-      "total": 2316240,
+      "day": "2026-08-18",
+      "input": 6196290,
+      "output": 633732,
+      "total": 6830022,
       "cost": 0,
-      "sessions": 1
+      "sessions": 2
     }
   ],
   "by_model": [
@@ -257,16 +249,16 @@
     },
     {
       "model": "deepseek-v4-flash-free",
-      "input": 118960140,
-      "output": 6144288,
-      "total": 125104428,
+      "input": 122744953,
+      "output": 6432550,
+      "total": 129177503,
       "cost": 0
     },
     {
       "model": "qwen3-coder-30b",
-      "input": 66788162,
-      "output": 701228,
-      "total": 67489390,
+      "input": 40771497,
+      "output": 604195,
+      "total": 41375692,
       "cost": 0
     },
     {
