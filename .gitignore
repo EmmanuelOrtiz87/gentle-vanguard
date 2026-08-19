@@ -44,6 +44,7 @@ tmp-session-debug/
 .DS_Store
 Thumbs.db
 *.bak
+*.chaos-bak
 
 # Environment
 .env
