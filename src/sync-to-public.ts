@@ -140,6 +140,11 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
       copyIf(src, path.join(targetDir, dir), { recurse: true });
     }
   }
+  // Public architecture and publication guidance. Keep the technical reference
+  // explicit so README links remain valid without exposing internal docs.
+  for (const file of ['docs/technical/STACK-DOCUMENTATION.md', 'docs/REPOSITORY-PUBLICATION.md']) {
+    copyIf(path.join(privateRepo, file), path.join(targetDir, file));
+  }
   const refDir = path.join(targetDir, 'docs', 'reference');
   mkdirp(refDir);
   for (const f of [
