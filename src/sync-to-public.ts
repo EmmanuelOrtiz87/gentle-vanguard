@@ -286,6 +286,7 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
     'VERSION',
     'INSTALLATION.md',
     'pnpm-lock.yaml',
+    'pnpm-workspace.yaml',
   ]) {
     copyIf(path.join(privateRepo, f), path.join(targetDir, f));
   }
