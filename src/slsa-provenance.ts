@@ -204,7 +204,7 @@ export function buildProvenance(options: ProvenanceOptions): InTotoStatement {
           id: options.builderId,
           ...(options.builderVersion
             ? { version: options.builderVersion }
-            : { version: { 'gentle-vanguard': '3.8.0' } }),
+            : { version: { 'gentle-vanguard': '3.8.1' } }),
         },
         metadata: {
           invocationId,

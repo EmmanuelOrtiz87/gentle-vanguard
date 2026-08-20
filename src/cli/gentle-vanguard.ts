@@ -16,7 +16,7 @@ import { existsSync } from 'fs';
 import { join, resolve } from 'path';
 
 const ROOT = resolve(process.cwd());
-const VERSION = '3.8.0';
+const VERSION = '3.8.1';
 
 const args = process.argv.slice(2);
 const flags = {

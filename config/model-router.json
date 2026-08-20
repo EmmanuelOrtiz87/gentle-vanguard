@@ -9,7 +9,7 @@
     "provider": "opencode",
     "temperature": 0.3,
     "hallucinationGuard": "medium",
-    "notes": "Base model for agents without specific override. All agents use the native available model opencode/deepseek-v4-flash-free (free tier). Fallback to local providers (ollama/dify/lm-studio2) if the native model is unavailable."
+    "notes": "Base model for agents without specific override. All agents use the native available model opencode/deepseek-v4-flash-free (free tier). Fallback to local providers (ollama/lm-studio2) if the native model is unavailable."
   },
   "fallback": {
     "model": "opencode/deepseek-v4-flash-free",
@@ -287,7 +287,7 @@
   "failover": {
     "enabled": true,
     "script": "scripts/utilities/MODEL-ROUTER/provider-failover.ts",
-    "chain": ["opencode", "ollama", "dify", "lm-studio2"],
+    "chain": ["opencode", "ollama", "lm-studio2"],
     "autoCheck": "on-route",
     "cacheMinutes": 5,
     "fallbackModel": "opencode/deepseek-v4-flash-free",
@@ -295,11 +295,11 @@
     "stateFile": ".runtime/model-fallback-state.json",
     "agentFallbackEnabled": true,
     "notifyOnFallback": true,
-    "description": "FAILOVER ACTIVO — cuando un modelo no está disponible, provider-failover.ts consulta model-fallback.json para cadenas de fallback por agente. El modelo nativo opencode/deepseek-v4-flash-free es el primario; fallback a proveedores locales (ollama/dify/lm-studio2)."
+    "description": "FAILOVER ACTIVO — cuando un modelo no está disponible, provider-failover.ts consulta model-fallback.json para cadenas de fallback por agente. El modelo nativo opencode/deepseek-v4-flash-free es el primario; fallback a proveedores locales (ollama/lm-studio2)."
   },
   "providerPriority": {
     "description": "Ordered list for model selection UI (first = default)",
-    "order": ["opencode", "ollama", "dify", "lm-studio2", "custom"]
+    "order": ["opencode", "ollama", "lm-studio2", "custom"]
   },
   "audit": {
     "enabled": true,

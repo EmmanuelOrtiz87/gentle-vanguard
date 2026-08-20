@@ -191,8 +191,6 @@ function main(): void {
     'config/quality-gates.json',
     'config/ps1-ts-migration.json',
     'config/gentle-vanguard-sync.json',
-    'config/cline-dify-optimized.config.json',
-    'config/cline-dify.config.json',
     'config/testing.config.json',
     'config/tool-opencode.json',
     'config/tool-cline.json',
