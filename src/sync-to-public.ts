@@ -285,6 +285,7 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
     '.prettierignore',
     'VERSION',
     'INSTALLATION.md',
+    'pnpm-lock.yaml',
   ]) {
     copyIf(path.join(privateRepo, f), path.join(targetDir, f));
   }
@@ -315,6 +316,10 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
   for (const wf of [
     'ci.yml',
     'security.yml',
+    'reusable-lint.yml',
+    'reusable-security.yml',
+    'reusable-test.yml',
+    'reusable-governance.yml',
     'dashboard-auto-refresh.yml',
     'labeler.yml',
     'pr.yml',
