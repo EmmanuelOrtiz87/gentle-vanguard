@@ -33,19 +33,19 @@
     "autoRunOnStartSessionWhenRed": true
   },
   "compactionPolicy": {
-    "enabled": false,
-    "slidingWindowTurns": 6,
+    "enabled": true,
+    "slidingWindowTurns": 8,
     "pruneToolResults": true,
-    "summarizeOlderTurns": false,
-    "maxSummaryTokens": 200,
+    "summarizeOlderTurns": true,
+    "maxSummaryTokens": 400,
     "inputTokenBudgetPct": 60,
-    "note": "DISABLED for Kimi2-5: compaction causes model hang. Manual compaction via skill context-engineering recommended."
+    "note": "Enabled for the enforced DeepSeek free model; disable before routing to Kimi2-5."
   },
   "tokenAutopilot": {
-    "enabled": false,
+    "enabled": true,
     "profile": "balanced",
     "triggerStatuses": ["WARN", "HARD_LIMIT"],
-    "note": "DISABLED auto-compaction - manual trigger via /compact command only for Kimi2-5",
+    "note": "Auto-apply only on explicit lifecycle commands; ordinary chat turns remain non-blocking.",
     "minConsecutiveAlerts": 1,
     "autoApplyOnCommands": [
       "context-pack",

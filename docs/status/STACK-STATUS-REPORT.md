@@ -69,19 +69,19 @@ VS Code, Copilot, Antigravity.
 | FT auto-prune         | `src/fine-tuning/ft-auto-prune.ts` <!-- REF-OBSOLETA: src/fine-tuning/ no existe -->                   | ✅ Activo   | Automático (CI)        |
 <!-- REF-OBSOLETA: src/fine-tuning/ft-auto-prune.ts no existe (ruta migrada o eliminada) -->
 | FT registry           | `.ft/registry.json`                                  | ✅ Activo   | Automático             |
-| Adapters activos      | BA, DEV (mistral-7b-lora, v1.0.0)                    | ✅ Activo   | LoRA fine-tuned        |
+| Adapters activos      | `.ft/adapters/`                                      | ⚠️ No implementado | Solo data-collector disponible |
 | Python trainer        | `scripts/utilities/FINE-TUNING/python/train_lora.py` | ⚠️ Presente | Manual (stub)          |
 
 ### 2.5 Dashboard / Métricas
 
 | Componente              | Archivo(s)                                   | Estado    | Automatización          |
 | ----------------------- | -------------------------------------------- | --------- | ----------------------- |
-| Dashboard v3 (Chart.js) | `reports/dashboard-v2/dashboard.html` <!-- REF-OBSOLETA: reports/dashboard-v2/ no existe; dashboard actual en apps/web-dashboard/ --> | ✅ Activo | CI/CD genera artifact   |
+| Dashboard canónico (React) | `apps/web-dashboard/`                              | ✅ Activo | CI/CD genera artifact   |
 | Metrics collector       | `src/metrics-collector.ts`              | ✅ Activo | Automático (sesión)     |
 | Dashboard render        | `src/dashboard-start.ts` <!-- REF-OBSOLETA: scripts/metrics/dashboard-render.ps1 eliminado; candidato: src/dashboard-start.ts --> | ✅ Activo | Manual / CI             |
 <!-- REF-OBSOLETA: scripts/metrics/dashboard-render.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Dashboard health        | `src/dashboard-health-checker.ts` | ✅ Activo | CI                      |
-| Live feed               | `scripts/metrics/live-feed.ps1` <!-- REF-OBSOLETA: eliminado (live-feed deprecated en pipeline) -->              | ✅ Activo | Automático              |
+| Live feed               | WebSocket de `apps/web-dashboard/`                  | ✅ Activo | Automático              |
 <!-- REF-OBSOLETA: scripts/metrics/live-feed.ps1 no tiene equivalente TS (migración PS1→TS) -->
 | Metrics server          | `apps/web-dashboard/server/websocket-server.ts` <!-- REF-OBSOLETA: scripts/metrics/metrics-server.ps1 eliminado --> | ✅ Activo | Manual (HTTP server)    |
 <!-- REF-OBSOLETA: scripts/metrics/metrics-server.ps1 no tiene equivalente TS (migración PS1→TS) -->

@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["preferredModel", "preferredProvider", "fallbackModel"],
+  "properties": {
+    "preferredModel": { "type": "string", "minLength": 1 },
+    "preferredProvider": { "type": "string", "minLength": 1 },
+    "fallbackModel": { "type": "string", "minLength": 1 },
+    "policy": { "type": "string" },
+    "updatedAt": { "type": "string" }
+  },
+  "additionalProperties": false
+}

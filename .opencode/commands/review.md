@@ -7,10 +7,10 @@ Run a comprehensive code review on the current changes:
 
 1. Check staged files: `git status`
 2. Review diff: `git diff` (or `git diff --cached` for staged)
-3. Run auto-code review: `pwsh scripts/utilities/EVOLVE/auto-code-review.ps1 -Action pre-commit`
-4. Run Karpathy enforcer: `pwsh hooks/karpathy-enforcer-hook.ps1`
-5. Run normative audit: `pwsh hooks/normative-audit-hook.ps1`
-6. Run security scan: `pwsh scripts/security/scan-skill-hook.ps1`
+3. Run auto-code review: `npx tsx src/auto-code-review.ts --action pre-commit`
+4. Run Karpathy enforcer: `npx tsx src/hooks/karpathy-enforcer-hook.ts`
+5. Run normative audit: `npx tsx src/hooks/normative-audit-hook.ts`
+6. Run security scan: `npm run scan:secrets -- --scan .`
 7. Check formatting: `pnpm prettier --check {staged_files}`
 
 Review axes:

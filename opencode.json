@@ -4,8 +4,8 @@
     "orchestrator": {
       "description": "Main orchestrator agent - coordinates all subagents autonomously",
       "mode": "primary",
-      "model": "opencode/deepseek-v4-flash-free",
-      "provider": "opencode",
+      "model": "opencode-go/gpt-5.6-luna",
+      "provider": "opencode-go",
       "steps": 12,
       "litellm_settings": {
         "drop_params": true
@@ -26,9 +26,9 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 38,
+      "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -41,9 +41,9 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 30,
+      "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -56,9 +56,9 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 52,
+      "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -71,9 +71,9 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 36,
+      "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -86,9 +86,9 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 34,
+      "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -101,9 +101,9 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 30,
+      "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -116,9 +116,9 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 38,
+      "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -131,9 +131,9 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 25,
+      "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -146,9 +146,9 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 30,
+      "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -161,9 +161,9 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 30,
+      "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -178,7 +178,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -191,9 +191,9 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 38,
+      "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -208,7 +208,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -223,7 +223,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -238,7 +238,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -253,7 +253,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -268,7 +268,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -283,7 +283,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -298,7 +298,7 @@
       },
       "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }
@@ -311,9 +311,9 @@
         "websearch": "deny",
         "webfetch": "deny"
       },
-      "steps": 35,
+      "steps": 6,
       "variant": "",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode-go/gpt-5.6-luna",
       "litellm_settings": {
         "drop_params": true
       }

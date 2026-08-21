@@ -97,7 +97,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run:
-          npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{
+           npx commitlint --config config/commitlint.config.js --from ${{ github.event.pull_request.base.sha }} --to ${{
           github.event.pull_request.head.sha }}
 
   workflows:

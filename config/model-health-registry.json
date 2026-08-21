@@ -7,6 +7,31 @@
   "autoFallbackEnabled": true,
   "notificationOnSwitch": true,
   "models": {
+    "opencode-go/gpt-5.6-luna": {
+      "provider": "opencode-go",
+      "tier": "subscription",
+      "costPer1kTokens": {
+        "input": 0,
+        "output": 0
+      },
+      "health": {
+        "status": "available",
+        "lastChecked": "2026-08-20T17:20:00Z",
+        "consecutiveErrors": 0,
+        "avgLatencyMs": null
+      },
+      "fallbackChain": [
+        "opencode/deepseek-v4-flash-free"
+      ],
+      "capabilities": [
+        "code",
+        "chat",
+        "reasoning",
+        "tools",
+        "long-context"
+      ],
+      "maxTokens": 200000
+    },
     "kimi-2-5": {
       "provider": "littellmott-nuevo",
       "tier": "premium",
@@ -96,14 +121,14 @@
   },
   "routingRules": {
     "orchestrator": {
-      "primary": "opencode/deepseek-v4-flash-free",
+      "primary": "opencode-go/gpt-5.6-luna",
       "fallbackStrategy": "availability",
       "maxSwitchPerHour": 3
     },
     "subagents": {
       "inheritFromOrchestrator": true,
       "allowOverride": true,
-      "default": "opencode/deepseek-v4-flash-free",
+      "default": "opencode-go/gpt-5.6-luna",
       "fallbackChain": [
         "opencode/deepseek-v4-flash-free",
         "ollama/qwen2.5-coder:14b"

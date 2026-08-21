@@ -1,6 +1,8 @@
 {
   "name": "@gentle-vanguard/doc-gentle",
   "version": "1.0.0",
+  "private": true,
+  "deprecated": true,
   "description": "AI Document Intelligence Platform - Upload, summarize, and get insights from your documents",
   "type": "module",
   "scripts": {

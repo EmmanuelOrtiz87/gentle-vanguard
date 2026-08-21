@@ -109,7 +109,7 @@ check_dependencies() {
 detect_project_type() {
     if [ -f "$PROJECT_ROOT/go.mod" ] && [ -f "$PROJECT_ROOT/angular.json" ]; then
         echo "bitbucket-dashboard"
-    elif [ -f "$PROJECT_ROOT/scripts/gentle-vanguard/bootstrap.ps1" ]; then
+    elif [ -f "$PROJECT_ROOT/src/bootstrap.ts" ]; then
         echo "gentle-vanguard"
     else
         echo "unknown"
@@ -227,9 +227,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$SCRIPT_DIR"
 
 # Detect what we're running with
-if command -v powershell &> /dev/null && [ -f "$PROJECT_ROOT/scripts/utilities/gv.ps1" ]; then
-    # Try PowerShell if available
-    powershell -NoProfile -ExecutionPolicy Bypass -File "$PROJECT_ROOT/scripts/utilities/gv.ps1" "$@"
+if command -v npx &> /dev/null && [ -f "$PROJECT_ROOT/src/cli/gv.ts" ]; then
+    # Native TypeScript CLI
+    npx tsx "$PROJECT_ROOT/src/cli/gv.ts" "$@"
 elif [ -f "$PROJECT_ROOT/scripts/utilities/gv.sh" ]; then
     # Fall back to bash version
     bash "$PROJECT_ROOT/scripts/utilities/gv.sh" "$@"
@@ -310,4 +310,3 @@ main() {
 
 # Run main
 main "$@"
-

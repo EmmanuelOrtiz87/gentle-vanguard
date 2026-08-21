@@ -1,5 +1,9 @@
 # Gentle-Vanguard Dashboard v2
 
+> **Legacy dashboard — archived.** The supported dashboard is
+> `apps/web-dashboard/`. Do not start this copy for production or add new
+> features here; it remains for historical comparison only.
+
 Real-time metrics dashboard with compact tooltip-style modal for metric information.
 
 ## Features
