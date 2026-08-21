@@ -255,6 +255,7 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
   // 10. CI scripts (TS migration: original .ps1 paths were migrated to src/)
   const ciScripts = [
     'src/installer-doctor.ts',
+    'src/installer-bootstrap.ts',
     'src/npm-ci-check.ts',
     'src/validate-tool-configs.ts',
     'src/cross-workspace-validator.ts',
