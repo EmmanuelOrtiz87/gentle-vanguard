@@ -1,27 +1,19 @@
 {
-  "generated_at": "2026-08-20T20:28:39.665Z",
+  "generated_at": "2026-08-21T14:00:53.713Z",
   "period": "2026-07",
-  "days": 28,
+  "days": 27,
   "totals": {
-    "input": 872052777,
-    "output": 10492825,
-    "total": 882545602,
-    "cost": 1.17547774
+    "input": 871968393,
+    "output": 10514834,
+    "total": 882483227,
+    "cost": 2.5966477399999994
   },
   "daily_avg": {
-    "input": 31144742,
-    "output": 374744,
-    "total": 31519486
+    "input": 32295126,
+    "output": 389438,
+    "total": 32684564
   },
   "by_day": [
-    {
-      "day": "2026-07-22",
-      "input": 85023,
-      "output": 15802,
-      "total": 100825,
-      "cost": 0,
-      "sessions": 2
-    },
     {
       "day": "2026-07-23",
       "input": 1971530,
@@ -232,11 +224,11 @@
     },
     {
       "day": "2026-08-20",
-      "input": 3273587,
-      "output": 348972,
-      "total": 3622559,
-      "cost": 1.17547774,
-      "sessions": 10
+      "input": 3274226,
+      "output": 386783,
+      "total": 3661009,
+      "cost": 2.5966477399999994,
+      "sessions": 12
     }
   ],
   "by_model": [
@@ -249,9 +241,9 @@
     },
     {
       "model": "deepseek-v4-flash-free",
-      "input": 124999337,
-      "output": 6509243,
-      "total": 131508580,
+      "input": 124914314,
+      "output": 6493441,
+      "total": 131407755,
       "cost": 0
     },
     {
@@ -284,10 +276,10 @@
     },
     {
       "model": "gpt-5.6-luna",
-      "input": 1219,
-      "output": 34092,
-      "total": 35311,
-      "cost": 1.17547774
+      "input": 1858,
+      "output": 71903,
+      "total": 73761,
+      "cost": 2.5966477399999994
     },
     {
       "model": "gpt-4o",
