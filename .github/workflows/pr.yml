@@ -25,7 +25,7 @@ jobs:
     secrets: inherit
 
   security:
-    uses: ./.github/workflows/reusable-security.yml
+    uses: ./.github/workflows/reusable-security-scan.yml
     secrets: inherit
 
   label:
