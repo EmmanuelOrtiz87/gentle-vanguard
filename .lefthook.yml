@@ -58,6 +58,10 @@ pre-push:
     npm-audit:
       glob: 'package.json'
       run: npx tsx src/infrastructure/npm-audit-pre-push.ts --AuditLevel moderate
+    # Static shell-quoting audit — fails the push when runSyncShell embeds quoted
+    # interpolation (cmd /d /s /c strips inner quotes → broken paths / injection).
+    shell-quoting:
+      run: npm run audit:shell-quoting
     # Perf baseline validation — self-skips (exit 0) when tests/performance/baseline.json
     # is missing or when --skip is passed, per config/alert policy in baseline.json
     perf-baseline:

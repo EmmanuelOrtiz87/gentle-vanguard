@@ -37,6 +37,9 @@ jobs:
       - name: TypeScript check
         run: pnpm typecheck
 
+      - name: Shell-quoting audit
+        run: npm run audit:shell-quoting
+
       - name: JSON validation
         run: pnpm test:config
 
