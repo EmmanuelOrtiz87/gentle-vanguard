@@ -16,7 +16,7 @@
       "buildType": "https://github.com/gentle-vanguard/gentle-vanguard@v1",
       "externalParameters": {
         "repository": "https://github.com/EmmanuelOrtiz87/gentle-vanguard.git",
-        "ref": "refs/heads/develop"
+        "ref": "refs/heads/tmp-stash0-autostart"
       },
       "internalParameters": {
         "environment": {}
@@ -25,9 +25,9 @@
         {
           "uri": "https://github.com/EmmanuelOrtiz87/gentle-vanguard.git",
           "digest": {
-            "gitCommit": "afe4e3311e209a605c7be7613b294d142449a74a"
+            "gitCommit": "f356e3ac0a500f2faae5e838adc43a94b2016160"
           },
-          "name": "refs/heads/develop"
+          "name": "refs/heads/tmp-stash0-autostart"
         }
       ]
     },
@@ -35,13 +35,13 @@
       "builder": {
         "id": "https://github.com/gentle-vanguard/gentle-vanguard/.github/workflows/ci.yml",
         "version": {
-          "gentle-vanguard": "3.7.0"
+          "gentle-vanguard": "3.8.1"
         }
       },
       "metadata": {
         "invocationId": "rdd-test-wf-001",
-        "startedOn": "2026-08-17T05:27:11Z",
-        "finishedOn": "2026-08-17T05:27:11Z"
+        "startedOn": "2026-08-21T10:11:04Z",
+        "finishedOn": "2026-08-21T10:11:04Z"
       }
     }
   }
