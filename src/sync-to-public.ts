@@ -256,6 +256,7 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
   const ciScripts = [
     'src/installer-doctor.ts',
     'src/installer-bootstrap.ts',
+    'src/core/run-command.ts',
     'src/npm-ci-check.ts',
     'src/validate-tool-configs.ts',
     'src/cross-workspace-validator.ts',
