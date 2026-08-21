@@ -254,6 +254,7 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
 
   // 10. CI scripts (TS migration: original .ps1 paths were migrated to src/)
   const ciScripts = [
+    'src/installer-doctor.ts',
     'src/validate-tool-configs.ts',
     'src/cross-workspace-validator.ts',
     'src/enforce-error-budget.ts',
@@ -276,6 +277,11 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
       fs.copyFileSync(src, dst);
     }
   }
+
+  copyIf(
+    path.join(privateRepo, 'config', 'installer-manifest.json'),
+    path.join(targetDir, 'config', 'installer-manifest.json'),
+  );
 
   // 10b. CI root files
   for (const f of [
