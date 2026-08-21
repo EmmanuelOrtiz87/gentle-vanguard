@@ -253,6 +253,11 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
   }
 
   // 10. CI scripts (TS migration: original .ps1 paths were migrated to src/)
+  // The public distribution is executable source, not a documentation-only mirror.
+  // Copy the complete TypeScript runtime so transitive imports cannot be orphaned.
+  rmIf(path.join(targetDir, 'src'), { recurse: true });
+  copyIf(path.join(privateRepo, 'src'), path.join(targetDir, 'src'), { recurse: true });
+
   const ciScripts = [
     'src/installer-doctor.ts',
     'src/installer-bootstrap.ts',
