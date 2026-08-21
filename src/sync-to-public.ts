@@ -282,6 +282,9 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
     path.join(privateRepo, 'config', 'installer-manifest.json'),
     path.join(targetDir, 'config', 'installer-manifest.json'),
   );
+  for (const runtimeConfig of ['config/session-autostart.config.json', 'config/model-router.json']) {
+    copyIf(path.join(privateRepo, runtimeConfig), path.join(targetDir, runtimeConfig));
+  }
 
   // 10b. CI root files
   for (const f of [
