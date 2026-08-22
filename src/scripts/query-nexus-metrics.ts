@@ -138,7 +138,7 @@ try {
     ORDER BY day DESC LIMIT 10
   `,
     )
-    .all() as any[];
+    .all() as SnapshotRow[];
 
   console.log('┌──────────────────────────────────────────────┐');
   console.log('│ METRIC SNAPSHOTS — Promedios diarios          │');
@@ -146,15 +146,15 @@ try {
   if (snap.length === 0) {
     console.log('│ (sin datos — tabla vacía)                     │');
   } else {
-    snap.forEach((r: any) => {
+    snap.forEach((r) => {
       console.log(
         `│ ${r.day} │ tokens: ${String(r.avg_tokens ?? 0).padStart(10)} │ sessions: ${String(r.avg_sessions ?? 0).padStart(5)} │`,
       );
     });
   }
   console.log('└──────────────────────────────────────────────┘\n');
-} catch (e: any) {
-  console.log('metric_snapshots table error:', e.message, '\n');
+} catch (e) {
+  console.log('metric_snapshots table error:', (e as Error).message, '\n');
 }
 
 // 4. Overall stats
@@ -171,7 +171,7 @@ try {
     FROM session_scoring
   `,
     )
-    .get() as any;
+    .get() as GlobalStatsRow;
 
   console.log('┌──────────────────────────────────────────────┐');
   console.log('│ ESTADÍSTICAS GLOBALES                         │');
@@ -192,8 +192,8 @@ try {
     `│ Total Proactive: ${String(stats.total_proactive ?? 0).padStart(9)}               │`,
   );
   console.log('└──────────────────────────────────────────────┘\n');
-} catch (e: any) {
-  console.log('global stats error:', e.message, '\n');
+} catch (e) {
+  console.log('global stats error:', (e as Error).message, '\n');
 }
 
 d.close();

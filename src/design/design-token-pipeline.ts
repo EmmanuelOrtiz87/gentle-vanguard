@@ -6,15 +6,15 @@
  *   3. assets/tokens.scss — SCSS variables for Sass projects
  *
  * Usage:
- *   npx tsx src/design-token-pipeline.ts                    # Generate all formats
- *   npx tsx src/design-token-pipeline.ts --watch             # Watch brand.json for changes
- *   npx tsx src/design-token-pipeline.ts --format css        # CSS only
- *   npx tsx src/design-token-pipeline.ts --json              # JSON output of generated files
+ *   npx tsx src/design/design-token-pipeline.ts                    # Generate all formats
+ *   npx tsx src/design/design-token-pipeline.ts --watch             # Watch brand.json for changes
+ *   npx tsx src/design/design-token-pipeline.ts --format css        # CSS only
+ *   npx tsx src/design/design-token-pipeline.ts --json              # JSON output of generated files
  */
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync, watchFile } from 'fs';
 import { resolve, dirname, basename } from 'path';
-import { runNpxTsxSync } from './core/run-command.js';
+import { runNpxTsxSync } from '../core/run-command.js';
 
 interface BrandConfig {
   name: string;

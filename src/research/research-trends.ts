@@ -7,7 +7,7 @@
  * web-research skill as an evolution layer for staying current.
  *
  * Usage (library):
- *   import { fetchTrends, queryThemes, renderMarkdown } from './research-trends.js';
+ *   import { fetchTrends, queryThemes, renderMarkdown } from './research/research-trends.js';
  *   const report = await fetchTrends({ timeframe: '7d', sources: ['github', 'hackernews'] });
  */
 
@@ -761,7 +761,7 @@ function parseRedditRss(xml: string): RssEntry[] {
 
 async function importWebCrawler(): Promise<WebCrawlerModule | null> {
   try {
-    const mod = await import('./web/web-crawler.js');
+    const mod = await import('../web/web-crawler.js');
     return mod as WebCrawlerModule;
   } catch {
     return null;

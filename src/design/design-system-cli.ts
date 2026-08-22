@@ -4,11 +4,11 @@
  * scales and check color contrast/accessibility in source files.
  *
  * Usage:
- *   npx tsx src/design-system-cli.ts --generate --primary #6366f1 --neutral slate
- *   npx tsx src/design-system-cli.ts --tokens --format css|json|scss
- *   npx tsx src/design-system-cli.ts --scale --base 16 --ratio 1.25 --levels 12
- *   npx tsx src/design-system-cli.ts --check ./components/Button.tsx
- *   npx tsx src/design-system-cli.ts --check --fg #ffffff --bg #1f2937
+ *   npx tsx src/design/design-system-cli.ts --generate --primary #6366f1 --neutral slate
+ *   npx tsx src/design/design-system-cli.ts --tokens --format css|json|scss
+ *   npx tsx src/design/design-system-cli.ts --scale --base 16 --ratio 1.25 --levels 12
+ *   npx tsx src/design/design-system-cli.ts --check ./components/Button.tsx
+ *   npx tsx src/design/design-system-cli.ts --check --fg #ffffff --bg #1f2937
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'fs';

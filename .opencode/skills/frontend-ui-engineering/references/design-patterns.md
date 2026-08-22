@@ -1,8 +1,8 @@
 # Design System Patterns
 
 Premium UI design system patterns: typography, color theory, component design and
-accessibility. Complemented by the native tooling in `src/design-tokens.ts` and
-`src/design-system-cli.ts`.
+accessibility. Complemented by the native tooling in `src/design/design-tokens.ts` and
+`src/design/design-system-cli.ts`.
 
 ## Design Tokens
 

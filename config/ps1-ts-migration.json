@@ -775,7 +775,7 @@
     "src/digest-generator.ts",
     "src/engram-auto-compact.ts",
     "src/tenant-context.ts",
-    "src/planning-estimator.ts",
+    "src/planning/planning-estimator.ts",
     "src/cost-tracker.ts",
     "src/backup-engram.ts",
     "src/metrics-collector.ts",

@@ -7,13 +7,13 @@
  * `.session/sdd-pipeline/plans/`, and link them to todo tasks before implementation.
  *
  * Usage:
- *   npx tsx src/planning-templates.ts --template feature
- *   npx tsx src/planning-templates.ts --plan --type feature --name user-auth \
+ *   npx tsx src/planning/planning-templates.ts --template feature
+ *   npx tsx src/planning/planning-templates.ts --plan --type feature --name user-auth \
  *     --title "User Authentication" --problem "..." --out-of-scope "admin UI" \
  *     --constraints "Node 20, must not break OAuth"
- *   npx tsx src/planning-templates.ts --list
- *   npx tsx src/planning-templates.ts --show user-auth
- *   npx tsx src/planning-templates.ts --link user-auth T3
+ *   npx tsx src/planning/planning-templates.ts --list
+ *   npx tsx src/planning/planning-templates.ts --show user-auth
+ *   npx tsx src/planning/planning-templates.ts --link user-auth T3
  */
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
@@ -182,13 +182,13 @@ function printHelp(): void {
   console.log(`Planning Templates — pre-write planning scaffold
 
 Usage:
-  npx tsx src/planning-templates.ts --template <feature|refactor|bugfix>
-  npx tsx src/planning-templates.ts --plan --type <type> --name <id> --title "<title>"
+  npx tsx src/planning/planning-templates.ts --template <feature|refactor|bugfix>
+  npx tsx src/planning/planning-templates.ts --plan --type <type> --name <id> --title "<title>"
       [--problem "..."] [--in-scope "a;b"] [--out-of-scope "a;b"] [--constraints "a;b"]
-  npx tsx src/planning-templates.ts --list [--json]
-  npx tsx src/planning-templates.ts --show <name>
-  npx tsx src/planning-templates.ts --link <name> <task>
-  npx tsx src/planning-templates.ts --stats
+  npx tsx src/planning/planning-templates.ts --list [--json]
+  npx tsx src/planning/planning-templates.ts --show <name>
+  npx tsx src/planning/planning-templates.ts --link <name> <task>
+  npx tsx src/planning/planning-templates.ts --stats
 
 Plans are stored in .session/sdd-pipeline/plans/`);
 }
@@ -245,7 +245,7 @@ function main(): void {
     });
     console.log(`[OK] Plan "${record.name}" (${record.type}) created`);
     console.log(`     ${join(getPlanRoot(), `${record.name}.md`)}`);
-    console.log('     Run: npx tsx src/planning-templates.ts --show ' + record.name);
+    console.log('     Run: npx tsx src/planning/planning-templates.ts --show ' + record.name);
     return;
   }
 
@@ -277,7 +277,7 @@ function main(): void {
     const name = args[i + 1] ?? '';
     const task = args[i + 2] ?? '';
     if (!name || !task) {
-      console.error('Usage: npx tsx src/planning-templates.ts --link <name> <task>');
+      console.error('Usage: npx tsx src/planning/planning-templates.ts --link <name> <task>');
       process.exit(1);
     }
     if (!linkPlanTask(name, task)) {

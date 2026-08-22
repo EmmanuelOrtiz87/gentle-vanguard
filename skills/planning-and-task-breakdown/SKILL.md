@@ -48,7 +48,7 @@ well-defined tasks.
 
 Pre-write planning turns a vague request into an approved, buildable plan before a single line of
 code changes. This is the "superpowers" discipline: **plans come first, code second**. Use the
-templates in `references/pre-write-planning.md` and the CLI in `src/planning-templates.ts`.
+templates in `references/pre-write-planning.md` and the CLI in `src/planning/planning-templates.ts`.
 
 ### Step 1: Scope Definition
 
@@ -92,9 +92,9 @@ Do **not** start implementation until every gate passes. Reject or re-plan at th
 Plans are stored in `.session/sdd-pipeline/plans/` and linked to tasks in the todo list:
 
 ```bash
-npx tsx src/planning-templates.ts --plan --type feature --name user-auth --title "User Authentication"
-npx tsx src/planning-templates.ts --list
-npx tsx src/planning-templates.ts --show user-auth
+npx tsx src/planning/planning-templates.ts --plan --type feature --name user-auth --title "User Authentication"
+npx tsx src/planning/planning-templates.ts --list
+npx tsx src/planning/planning-templates.ts --show user-auth
 ```
 
 ## Planning Process
@@ -178,4 +178,4 @@ An agent performs best on S and M tasks. Break L/XL tasks into smaller units.
 - `references/parallelization.md` — Parallelizing across agents
 - `references/common-rationalizations.md` — Planning myths debunked
 - `references/dependency-graph.md` — Example dependency graph
-- `src/planning-templates.ts` — CLI to scaffold, store, and link plans
+- `src/planning/planning-templates.ts` — CLI to scaffold, store, and link plans

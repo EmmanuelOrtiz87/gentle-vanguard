@@ -517,22 +517,22 @@ npx tsx src/web/witr-cli.ts port <port>
 Integrado en la watchtower para trazar la cadena causal de componentes con FAIL/WARN. Tests:
 `tests/unit/witr-wrapper.test.ts`.
 
-### Research Trends (`src/research-trends.ts` + `src/research-trends-cli.ts`)
+### Research Trends (`src/research/research-trends.ts` + `src/research/research-trends-cli.ts`)
 
 Agregador de tendencias Last30Days desde GitHub, Hacker News, Stack Overflow, Dev.to y Reddit en un
 `TrendReport` normalizado (themes, hottest, emerging). Alimenta el skill `web-research` y puede
 cruzar páginas trending vía web-crawler (Firecrawl/scrape).
 
 ```bash
-npx tsx src/research-trends-cli.ts fetch --timeframe 7d --sources github,hackernews
-npx tsx src/research-trends-cli.ts themes --query "typescript OR rust"
-npx tsx src/research-trends-cli.ts report
+npx tsx src/research/research-trends-cli.ts fetch --timeframe 7d --sources github,hackernews
+npx tsx src/research/research-trends-cli.ts themes --query "typescript OR rust"
+npx tsx src/research/research-trends-cli.ts report
 ```
 
 Funciones puras exportadas: `buildReport`, `queryThemes` (soporta `OR`), `renderMarkdown`,
 `deserializeReport`. Tests: `tests/unit/research-trends.test.ts`.
 
-### Humanizer (`src/humanizer.ts` + `src/humanizer-cli.ts`)
+### Humanizer (`src/humanize/humanizer.ts` + `src/humanize/humanizer-cli.ts`)
 
 Transforma texto técnico/IA en prosa humana con análisis de legibilidad y scoring.
 
@@ -544,7 +544,7 @@ npm run humanize:score -- <texto>
 
 Tests: `tests/unit/humanizer.test.ts`.
 
-### Design Tokens (`src/design-tokens.ts` + `src/design-system-cli.ts`)
+### Design Tokens (`src/design/design-tokens.ts` + `src/design/design-system-cli.ts`)
 
 Sistema de tokens de diseño (colores, tipografía, spacing) con generación de CSS/JSON y validación
 de escala.
@@ -557,7 +557,7 @@ npm run design:scale      # comprueba escala
 
 Tests: `tests/unit/design-tokens.test.ts`.
 
-### Planning Templates (`src/planning-templates.ts` + `src/planning-templates.ts`)
+### Planning Templates (`src/planning/planning-templates.ts` + `src/planning/planning-templates.ts`)
 
 Plantillas de planificación pre-write (planes de sesión, desglose de tareas, ADRs) con validación de
 estructura. Tests: `tests/unit/planning-templates.test.ts`.

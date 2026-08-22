@@ -400,7 +400,7 @@
         "id": "design-token-pipeline",
         "enabled": true,
         "lazy": true,
-        "script": "src/design-token-pipeline.ts",
+        "script": "src/design/design-token-pipeline.ts",
         "args": "",
         "required": false,
         "description": "Design Token Pipeline â€” generates assets/tokens.css, tokens.json, tokens.scss from config/brand.json."
@@ -507,7 +507,7 @@
         "id": "planning-estimator-verify",
         "enabled": true,
         "lazy": true,
-        "script": "src/planning-estimator.ts",
+        "script": "src/planning/planning-estimator.ts",
         "args": "--action report --task-type feature --complexity 1 --files-changed 1 --lines-changed 10 --quiet",
         "required": false,
         "description": "Verify planning estimator is operational at session start (TS)"

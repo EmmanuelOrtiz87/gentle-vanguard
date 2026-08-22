@@ -23,7 +23,7 @@ import {
   WCAG,
   type ColorScale,
   type DesignTokens,
-} from '../../src/design-tokens.ts';
+} from '../../src/design/design-tokens.ts';
 
 describe('Design Token System', () => {
   describe('color math', () => {

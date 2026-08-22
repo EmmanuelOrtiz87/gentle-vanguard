@@ -33,11 +33,11 @@ Before the first increment, ensure a written plan exists. Use the pre-write plan
 `planning-and-task-breakdown` (scope → approach → risk → breakdown), scaffolded via:
 
 ```bash
-npx tsx src/planning-templates.ts --plan --type feature --name <id> --title "<title>"
+npx tsx src/planning/planning-templates.ts --plan --type feature --name <id> --title "<title>"
 ```
 
 Plans are stored in `.session/sdd-pipeline/plans/` and linked to todo tasks. Skip the pre-write
-phase only for trivial single-file changes (see `--plan` doc in `src/planning-templates.ts`).
+phase only for trivial single-file changes (see `--plan` doc in `src/planning/planning-templates.ts`).
 
 ## The Increment Cycle
 

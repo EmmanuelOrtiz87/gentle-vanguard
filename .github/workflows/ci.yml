@@ -176,7 +176,7 @@ jobs:
       - name: Generate planning estimate
         run: |
           echo "## Planning Estimate" >> $GITHUB_STEP_SUMMARY
-          npx tsx src/planning-integration.ts pr-description >> $GITHUB_STEP_SUMMARY
+          npx tsx src/planning/planning-integration.ts pr-description >> $GITHUB_STEP_SUMMARY
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

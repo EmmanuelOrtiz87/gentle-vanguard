@@ -4,7 +4,7 @@
  * TS migration of scripts/utilities/planning/planning-integration.ps1
  */
 
-import { runSync, runSyncShell } from './core/run-command.js';
+import { runSync, runSyncShell } from '../core/run-command.js';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -148,7 +148,9 @@ function main(): void {
       break;
     }
     default:
-      console.log('Usage: npx tsx src/planning-integration.ts [pr-description|commit-msg|check]');
+      console.log(
+        'Usage: npx tsx src/planning/planning-integration.ts [pr-description|commit-msg|check]',
+      );
       process.exit(1);
   }
 }

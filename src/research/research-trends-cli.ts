@@ -3,11 +3,11 @@
  * Research Trends CLI — command-line interface for the Last30Days trend engine.
  *
  * Commands:
- *   npx tsx src/research-trends-cli.ts fetch --timeframe 7d --sources github,hackernews
- *   npx tsx src/research-trends-cli.ts themes --query "typescript OR rust"
- *   npx tsx src/research-trends-cli.ts report --output markdown [--json]
- *   npx tsx src/research-trends-cli.ts browse
- *   npx tsx src/research-trends-cli.ts status
+ *   npx tsx src/research/research-trends-cli.ts fetch --timeframe 7d --sources github,hackernews
+ *   npx tsx src/research/research-trends-cli.ts themes --query "typescript OR rust"
+ *   npx tsx src/research/research-trends-cli.ts report --output markdown [--json]
+ *   npx tsx src/research/research-trends-cli.ts browse
+ *   npx tsx src/research/research-trends-cli.ts status
  */
 
 import { existsSync, readFileSync, statSync, writeFileSync } from 'fs';
@@ -57,7 +57,7 @@ function printUsage(): void {
 Last30Days Research Trends CLI
 
 Usage:
-  npx tsx src/research-trends-cli.ts <command> [options]
+  npx tsx src/research/research-trends-cli.ts <command> [options]
 
 Commands:
   fetch   Fetch trends from live sources (cached 24h)
@@ -75,10 +75,10 @@ Options:
   --json                     Machine-readable JSON output
 
 Examples:
-  npx tsx src/research-trends-cli.ts fetch --timeframe 7d --sources github,hackernews
-  npx tsx src/research-trends-cli.ts themes --query "typescript OR rust"
-  npx tsx src/research-trends-cli.ts report --output markdown
-  npx tsx src/research-trends-cli.ts browse
+  npx tsx src/research/research-trends-cli.ts fetch --timeframe 7d --sources github,hackernews
+  npx tsx src/research/research-trends-cli.ts themes --query "typescript OR rust"
+  npx tsx src/research/research-trends-cli.ts report --output markdown
+  npx tsx src/research/research-trends-cli.ts browse
 `);
 }
 

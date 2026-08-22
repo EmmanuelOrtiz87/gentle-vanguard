@@ -24,10 +24,10 @@
  * retained. Tone controls how aggressively informal markers and contractions
  * are applied.
  *
- * CLI lives in src/humanizer-cli.ts:
- *   npx tsx src/humanizer-cli.ts analyze --text "The system ..."
- *   npx tsx src/humanizer-cli.ts transform --file ./docs/readme.md --tone professional
- *   npx tsx src/humanizer-cli.ts score --file ./content/blog-post.md
+ * CLI lives in src/humanize/humanizer-cli.ts:
+ *   npx tsx src/humanize/humanizer-cli.ts analyze --text "The system ..."
+ *   npx tsx src/humanize/humanizer-cli.ts transform --file ./docs/readme.md --tone professional
+ *   npx tsx src/humanize/humanizer-cli.ts score --file ./content/blog-post.md
  */
 
 // ─── Types ────────────────────────────────────────────────────────────────────

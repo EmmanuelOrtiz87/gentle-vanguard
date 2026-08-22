@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * Humanizer CLI — command-line interface for src/humanizer.ts.
+ * Humanizer CLI — command-line interface for src/humanize/humanizer.ts.
  *
  * Usage:
- *   npx tsx src/humanizer-cli.ts analyze --text "The system ..." [--json]
- *   npx tsx src/humanizer-cli.ts transform --file ./docs/readme.md --tone professional
- *   npx tsx src/humanizer-cli.ts score --file ./content/blog-post.md [--json]
+ *   npx tsx src/humanize/humanizer-cli.ts analyze --text "The system ..." [--json]
+ *   npx tsx src/humanize/humanizer-cli.ts transform --file ./docs/readme.md --tone professional
+ *   npx tsx src/humanize/humanizer-cli.ts score --file ./content/blog-post.md [--json]
  *
  * Options:
  *   --text <string>    Analyze/transform inline text
@@ -25,7 +25,7 @@ import {
   scoreHumanization,
   type AnalysisResult,
   type Tone,
-} from './humanizer';
+} from './humanizer.js';
 
 interface CliArgs {
   command: 'analyze' | 'transform' | 'score';
@@ -124,9 +124,9 @@ function runCli(): void {
   const parsed = parseArgs(process.argv.slice(2));
   if (!parsed) {
     console.error(`Usage:
-  npx tsx src/humanizer-cli.ts analyze --text "The system ..." [--json]
-  npx tsx src/humanizer-cli.ts transform --file ./docs/readme.md --tone professional [--intensity 0.6]
-  npx tsx src/humanizer-cli.ts score --file ./content/blog-post.md [--json]
+  npx tsx src/humanize/humanizer-cli.ts analyze --text "The system ..." [--json]
+  npx tsx src/humanize/humanizer-cli.ts transform --file ./docs/readme.md --tone professional [--intensity 0.6]
+  npx tsx src/humanize/humanizer-cli.ts score --file ./content/blog-post.md [--json]
 
 Options:
   --text <string>    Analyze/transform inline text
