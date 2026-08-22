@@ -36,7 +36,44 @@ function db(): Database.Database {
   return _db;
 }
 
-// (types are inferred from SQLite rows)
+// ─── Row types (inferred from SQL columns + usage) ─────────────────
+
+/** Row of `backlog_items` (+ aggregated `tags` from GROUP_CONCAT when joined). */
+interface BacklogItemRow {
+  id: string;
+  type: string;
+  title: string;
+  severity: string;
+  status: string;
+  description?: string | null;
+  source?: string | null;
+  tags?: string | null;
+  created_at?: string | null;
+  resolved_at?: string | null;
+  resolution_notes?: string | null;
+}
+
+interface BacklogCommentRow {
+  author: string;
+  content: string;
+  created_at?: string | null;
+}
+
+interface BacklogHistoryRow {
+  created_at: string;
+  from_status: string | null;
+  to_status: string;
+}
+
+interface BacklogRelatedRow {
+  related_item_id: string;
+  relation_type: string;
+}
+
+interface GroupCountRow {
+  count: number;
+}
+
 
 // ─── Colors ────────────────────────────────────────────────────────
 const C = {
@@ -186,7 +223,7 @@ function cmdList(args: Record<string, string>): void {
     ORDER BY CASE bi.severity WHEN 'critical' THEN 0 WHEN 'high' THEN 1 WHEN 'medium' THEN 2 WHEN 'low' THEN 3 END, bi.created_at DESC
     LIMIT ? OFFSET ?`,
     )
-    .all(...params, limit, offset) as any[];
+    .all(...params, limit, offset) as BacklogItemRow[];
 
   const count = (
     d.prepare(`SELECT COUNT(*) as c FROM backlog_items bi ${where}`).get(...params) as { c: number }
@@ -200,7 +237,7 @@ function cmdList(args: Record<string, string>): void {
   for (const r of rows) {
     const t = r.tags ? ` [${r.tags}]` : '';
     console.log(
-      `  ${sevColor(r.severity)}${r.severity.padEnd(8)}${C.reset} ${staColor(r.status)}${r.status.padEnd(12)}${C.reset} ${(r.id as string).padEnd(20)} ${(r.title as string).substring(0, 70)}${t}`,
+      `  ${sevColor(r.severity)}${r.severity.padEnd(8)}${C.reset} ${staColor(r.status)}${r.status.padEnd(12)}${C.reset} ${r.id.padEnd(20)} ${r.title.substring(0, 70)}${t}`,
     );
   }
   console.log(`\nTotal: ${count}`);
@@ -214,7 +251,7 @@ function cmdGet(id: string): void {
     FROM backlog_items bi LEFT JOIN backlog_item_tags bit ON bi.id=bit.item_id LEFT JOIN backlog_tags bt ON bit.tag_id=bt.id
     WHERE bi.id=? GROUP BY bi.id`,
     )
-    .get(id) as any;
+    .get(id) as BacklogItemRow | undefined;
   if (!r) {
     console.error(`Not found: ${id}`);
     process.exit(1);
@@ -222,13 +259,13 @@ function cmdGet(id: string): void {
 
   const comments = d
     .prepare('SELECT * FROM backlog_comments WHERE item_id=? ORDER BY created_at')
-    .all(id) as any[];
+    .all(id) as BacklogCommentRow[];
   const history = d
     .prepare('SELECT * FROM backlog_status_history WHERE item_id=? ORDER BY created_at')
-    .all(id) as any[];
+    .all(id) as BacklogHistoryRow[];
   const related = d
     .prepare('SELECT related_item_id,relation_type FROM backlog_related_items WHERE item_id=?')
-    .all(id) as any[];
+    .all(id) as BacklogRelatedRow[];
 
   console.log(`\n  ID:       ${r.id}`);
   console.log(`  Type:     ${r.type}`);
@@ -244,19 +281,19 @@ function cmdGet(id: string): void {
 
   if (comments.length) {
     console.log(`\n  Comments:`);
-    comments.forEach((c: any) => console.log(`    [${c.author}] ${c.content}`));
+    comments.forEach((c) => console.log(`    [${c.author}] ${c.content}`));
   }
   if (history.length > 1) {
     console.log(`\n  History:`);
-    history.forEach((h: any) =>
+    history.forEach((h) =>
       console.log(
-        `    ${(h.created_at as string).substring(0, 16)}  ${h.from_status ?? '-'} → ${h.to_status}`,
+        `    ${h.created_at.substring(0, 16)}  ${h.from_status ?? '-'} → ${h.to_status}`,
       ),
     );
   }
   if (related.length) {
     console.log(`\n  Related:`);
-    related.forEach((r: any) => console.log(`    ${r.related_item_id}  [${r.relation_type}]`));
+    related.forEach((r) => console.log(`    ${r.related_item_id}  [${r.relation_type}]`));
   }
   console.log('');
 }
@@ -273,7 +310,9 @@ function cmdUpdate(args: Record<string, string>): void {
   const params: unknown[] = [now];
 
   if (args.status) {
-    const cur = d.prepare('SELECT status FROM backlog_items WHERE id=?').get(id) as any;
+    const cur = d.prepare('SELECT status FROM backlog_items WHERE id=?').get(id) as
+      | { status: string }
+      | undefined;
     fields.push('status=?');
     params.push(args.status);
     if (args.status === 'resolved') {
@@ -403,13 +442,13 @@ function cmdSearch(query: string): void {
     FROM backlog_items bi LEFT JOIN backlog_item_tags bit ON bi.id=bit.item_id LEFT JOIN backlog_tags bt ON bit.tag_id=bt.id
     WHERE bi.title LIKE ? OR bi.description LIKE ? GROUP BY bi.id ORDER BY bi.created_at DESC LIMIT 10`,
     )
-    .all(`%${query}%`, `%${query}%`) as any[];
+    .all(`%${query}%`, `%${query}%`) as BacklogItemRow[];
   if (!rows.length) {
     console.log(`No similar items for "${query}"`);
     return;
   }
   console.log(`Similar items for "${query}":\n`);
-  rows.forEach((r: any) =>
+  rows.forEach((r) =>
     console.log(`  ${r.id} [${r.type}/${r.severity}/${r.status}]  ${r.title}`),
   );
 }
@@ -426,26 +465,26 @@ function cmdStats(): void {
   ).c;
   const byStatus = d
     .prepare('SELECT status,COUNT(*) as count FROM backlog_items GROUP BY status')
-    .all() as any[];
+    .all() as (GroupCountRow & { status: string })[];
   const bySeverity = d
     .prepare('SELECT severity,COUNT(*) as count FROM backlog_items GROUP BY severity')
-    .all() as any[];
+    .all() as (GroupCountRow & { severity: string })[];
   const byType = d
     .prepare('SELECT type,COUNT(*) as count FROM backlog_items GROUP BY type')
-    .all() as any[];
+    .all() as (GroupCountRow & { type: string })[];
 
   console.log(`\n  Backlog Stats:`);
   console.log(`  ${C.cyan}Total: ${total}  |  Open: ${open}${C.reset}\n`);
   console.log('  By Status:');
-  byStatus.forEach((s: any) =>
+  byStatus.forEach((s) =>
     console.log(`    ${staColor(s.status)}${s.status.padEnd(12)}${C.reset} ${s.count}`),
   );
   console.log('\n  By Severity:');
-  bySeverity.forEach((s: any) =>
+  bySeverity.forEach((s) =>
     console.log(`    ${sevColor(s.severity)}${s.severity.padEnd(10)}${C.reset} ${s.count}`),
   );
   console.log('\n  By Type:');
-  byType.forEach((s: any) => console.log(`    ${s.type.padEnd(14)} ${s.count}`));
+  byType.forEach((s) => console.log(`    ${s.type.padEnd(14)} ${s.count}`));
   console.log('');
 }
 
@@ -458,16 +497,16 @@ function cmdReport(args: Record<string, string>): void {
     FROM backlog_items bi LEFT JOIN backlog_item_tags bit ON bi.id=bit.item_id LEFT JOIN backlog_tags bt ON bit.tag_id=bt.id
     GROUP BY bi.id ORDER BY CASE bi.severity WHEN 'critical' THEN 0 WHEN 'high' THEN 1 WHEN 'medium' THEN 2 WHEN 'low' THEN 3 END, bi.created_at DESC`,
     )
-    .all() as any[];
+    .all() as BacklogItemRow[];
 
   if (fmt === 'markdown') {
     console.log('# Backlog Report\n');
     console.log(`Generated: ${new Date().toISOString().substring(0, 10)}\n`);
     console.log('| ID | Type | Severity | Status | Title | Tags |');
     console.log('|---|---|---|---|---|---|');
-    rows.forEach((r: any) =>
+    rows.forEach((r) =>
       console.log(
-        `| ${r.id} | ${r.type} | ${r.severity} | ${r.status} | ${(r.title as string).replace(/\|/g, '/')} | ${r.tags ?? ''} |`,
+        `| ${r.id} | ${r.type} | ${r.severity} | ${r.status} | ${r.title.replace(/\|/g, '/')} | ${r.tags ?? ''} |`,
       ),
     );
     console.log(`\n*Total: ${rows.length} items*`);
@@ -481,7 +520,9 @@ function cmdDelete(id: string): void {
     console.error('<id> required');
     process.exit(1);
   }
-  const r = db().prepare('SELECT title FROM backlog_items WHERE id=?').get(id) as any;
+  const r = db().prepare('SELECT title FROM backlog_items WHERE id=?').get(id) as
+    | { title: string }
+    | undefined;
   if (!r) {
     console.error(`Not found: ${id}`);
     process.exit(1);

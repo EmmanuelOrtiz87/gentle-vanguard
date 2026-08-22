@@ -207,13 +207,13 @@ async function testConcurrentFetch(): Promise<DiagnosticResult> {
       message: `${successCount}/${urls.length} requests succeeded`,
       duration: Date.now() - start,
     };
-  } catch (err: any) {
+  } catch (err: unknown) {
     return {
       test: 'Concurrent Fetch Requests',
       status: 'fail',
       message: 'Concurrent fetch failed',
       duration: Date.now() - start,
-      error: err?.message || String(err),
+      error: (err as Error)?.message || String(err),
     };
   }
 }
