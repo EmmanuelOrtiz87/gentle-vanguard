@@ -118,7 +118,7 @@ server) |
 <!-- REF-OBSOLETA: eliminado (cubierto por dashboard v3) --> | ✅ Activo | Manual |
 <!-- REF-OBSOLETA: scripts/monitoring/executive-dashboard.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
-| Token monitor | `src/token-usage-reader.ts`
+| Token monitor | `src/tokens/token-usage-reader.ts`
 <!-- REF-OBSOLETA: scripts/utilities/TOKEN/ eliminado; equivalentes TS: src/token-*.ts --> | ✅
 
 Activo | Automático (cada turno) |
@@ -269,7 +269,7 @@ reducción) | | Context budget audit | `scripts/optimization/context-budget-audi
 Manual |
 <!-- REF-OBSOLETA: scripts/optimization/context-budget-audit.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
-| Token budget guard | `src/token-budget-guard.ts` | ✅ Activo | Automático (cada turno) |
+| Token budget guard | `src/tokens/token-budget-guard.ts` | ✅ Activo | Automático (cada turno) |
 
 ### 2.11 Skills / Plugins
 

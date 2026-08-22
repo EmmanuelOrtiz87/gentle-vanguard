@@ -99,7 +99,7 @@ npx tsx src/knowledge-base-sync.ts --mode full # Full sync
 npm run graphify -- query "search term"
 
 # Token budget
-npx tsx src/token-budget-guard.ts -Mode status
+npx tsx src/tokens/token-budget-guard.ts -Mode status
 ```
 
 ---

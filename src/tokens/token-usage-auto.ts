@@ -3,10 +3,10 @@
 import { existsSync, readFileSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { runNpxTsxSync } from './core/run-command.js';
+import { runNpxTsxSync } from '../core/run-command.js';
 import { createRequire } from 'module';
-import { recordMessage } from './message-token-logger.js';
-import { readSessionState, saveSessionState } from './core/session-context-log.js';
+import { recordMessage } from '../message-token-logger.js';
+import { readSessionState, saveSessionState } from '../core/session-context-log.js';
 
 const _require = createRequire(import.meta.url);
 
@@ -149,8 +149,8 @@ function main() {
     }
   }
 
-  // TS migration: token-usage-notifier.ps1 → src/token-usage-notifier.ts
-  const notifierTs = join(ROOT, 'src', 'token-usage-notifier.ts');
+  // TS migration: token-usage-notifier.ps1 → src/tokens/token-usage-notifier.ts
+  const notifierTs = join(ROOT, 'src', 'tokens', 'token-usage-notifier.ts');
   if (existsSync(notifierTs)) {
     if (InputTokens === 0 && OutputTokens === 0) {
       InputTokens = Math.max(1, Math.floor(ContextChars / 4));

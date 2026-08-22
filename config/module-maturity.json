@@ -96,8 +96,8 @@
       "activated": true,
       "risk": "low",
       "owner": "ops-agent",
-      "script": "src/token-ingest.ts",
-      "description": "Agnostic token ingestion daemon (src/token-ingest.ts) that reads real session data from opencode/claude/cursor and consolidates into Nexus token_usage/transactions/savings.",
+      "script": "src/tokens/token-ingest.ts",
+      "description": "Agnostic token ingestion daemon (src/tokens/token-ingest.ts) that reads real session data from opencode/claude/cursor and consolidates into Nexus token_usage/transactions/savings.",
       "activationCriteria": [
         { "check": "config-valid", "required": true },
         { "check": "tests", "required": true },

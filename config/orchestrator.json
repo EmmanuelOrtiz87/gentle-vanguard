@@ -232,7 +232,7 @@
         "soft": "WARN — log and continue",
         "hard": "BLOCK — refuse dispatch until reset or override"
       },
-      "operational_script": "src/token-budget-guard.ts",
+      "operational_script": "src/tokens/token-budget-guard.ts",
       "metrics_path": "docs/sessions/metrics/token-guard-usage.csv"
     },
     "constraint_optimization": {

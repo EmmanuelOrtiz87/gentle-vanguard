@@ -17,7 +17,7 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { getTokenUsage } from './token-usage-reader.js';
+import { getTokenUsage } from './tokens/token-usage-reader.js';
 import { compressStructural } from './structural-compression.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────

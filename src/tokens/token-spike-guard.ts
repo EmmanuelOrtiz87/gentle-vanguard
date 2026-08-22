@@ -11,9 +11,9 @@
  * - Kill switch de emergencia
  *
  * Usage:
- *   npx tsx src/token-spike-guard.ts --attach    # Adjuntar a sesión actual
- *   npx tsx src/token-spike-guard.ts --monitor   # Monitoreo continuo
- *   npx tsx src/token-spike-guard.ts --status    # Ver estado actual
+ *   npx tsx src/tokens/token-spike-guard.ts --attach    # Adjuntar a sesión actual
+ *   npx tsx src/tokens/token-spike-guard.ts --monitor   # Monitoreo continuo
+ *   npx tsx src/tokens/token-spike-guard.ts --status    # Ver estado actual
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';

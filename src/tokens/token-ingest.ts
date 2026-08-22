@@ -16,9 +16,9 @@
  *   - .runtime/token-ingest.log          (historial append-only)
  *
  * Uso:
- *   npx tsx src/token-ingest.ts --once            # una pasada
- *   npx tsx src/token-ingest.ts --watch [secs]    # bucle cada N segundos
- *   npx tsx src/token-ingest.ts --session <id>    # solo una sesión (debug)
+ *   npx tsx src/tokens/token-ingest.ts --once            # una pasada
+ *   npx tsx src/tokens/token-ingest.ts --watch [secs]    # bucle cada N segundos
+ *   npx tsx src/tokens/token-ingest.ts --session <id>    # solo una sesión (debug)
  */
 
 import Database from 'better-sqlite3';

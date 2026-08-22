@@ -189,7 +189,7 @@
     "linked_prs": [],
     "status": "deferred",
     "type": "feature",
-    "resolved_by": "Evaluation complete. Current stack sufficient. See: src/token-budget-guard.ts, pre-compact-hook.ps1, handoff-compress.ps1"
+    "resolved_by": "Evaluation complete. Current stack sufficient. See: src/tokens/token-budget-guard.ts, pre-compact-hook.ps1, handoff-compress.ps1"
   },
   {
     "id": "FF-018",

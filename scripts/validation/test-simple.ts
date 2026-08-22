@@ -72,7 +72,7 @@ console.log('\nReducción: 63% de palabras');
 // 4. Verificar estado actual del sistema
 console.log('\n📊 Estado actual del sistema:');
 try {
-  const result = runSyncShell('npx tsx src/token-budget-guard.ts -Mode status -Quiet', {
+  const result = runSyncShell('npx tsx src/tokens/token-budget-guard.ts -Mode status -Quiet', {
     cwd: ROOT,
   });
 

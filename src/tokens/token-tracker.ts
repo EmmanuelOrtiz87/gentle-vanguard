@@ -22,7 +22,7 @@ import { existsSync, mkdirSync, readFileSync, appendFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { createRequire } from 'module';
-import type { DatabaseManager } from '../apps/web-dashboard/server/database/manager.js';
+import type { DatabaseManager } from '../../apps/web-dashboard/server/database/manager.js';
 
 const _require = createRequire(import.meta.url);
 
@@ -31,7 +31,7 @@ let _db: DatabaseManager | null = null;
 function getDb(): DatabaseManager | null {
   if (!_db) {
     try {
-      const mod = _require('../apps/web-dashboard/server/database/manager');
+      const mod = _require('../../apps/web-dashboard/server/database/manager');
       _db = mod.DatabaseManager.getInstance();
     } catch {
       // SQLite not available — skip dual-write
@@ -378,7 +378,7 @@ function printUsage(): void {
 Token Tracker API Integration
 
 Usage:
-  npx tsx src/token-tracker.ts <command> [options]
+  npx tsx src/tokens/token-tracker.ts <command> [options]
 
 Commands:
   today                    Show today's token usage
@@ -387,8 +387,8 @@ Commands:
   pricing                  Show provider pricing
 
 Examples:
-  npx tsx src/token-tracker.ts today
-  npx tsx src/token-tracker.ts stats 2026-07-20 2026-07-24
+  npx tsx src/tokens/token-tracker.ts today
+  npx tsx src/tokens/token-tracker.ts stats 2026-07-20 2026-07-24
 `);
 }
 

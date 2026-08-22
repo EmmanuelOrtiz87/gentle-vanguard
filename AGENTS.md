@@ -352,7 +352,7 @@ Los siguientes steps se agregaron al `config/session-autostart.config.json`:
 | -------------------------- | -------------------------------------- | ---- |
 | `judgment-day-correction`  | `src/correction-rules-engine.ts`       | ✅   |
 | `cloud-connectors-init`    | `src/hybrid-executor.ts`               | ✅   |
-| `cloud-connectors-metrics` | `src/token-budget-guard.ts`            | ✅   |
+| `cloud-connectors-metrics` | `src/tokens/token-budget-guard.ts`            | ✅   |
 | `tracing-init`             | `src/tracing-instrument.ts`            | ✅   |
 | `checkpoint-auto-create`   | `src/checkpoint-manager.ts`            | ✅   |
 | `audit-pipeline-init`      | `src/infrastructure/audit-pipeline.ts` | ✅   |
@@ -874,16 +874,16 @@ en disco y los consolida en Nexus.
 
 ### Arquitectura
 
-- **`src/token-ingest.ts`** — daemon de ingesta agnóstica:
+- **`src/tokens/token-ingest.ts`** — daemon de ingesta agnóstica:
   - Lee la DB de opencode (`~/.local/share/opencode/opencode.db`, tablas `session` y `message`).
   - Extensible a otras herramientas (registry `detectSources()`: opencode/codex/claude/cursor).
   - Escribe en Nexus: `token_usage` (por sesión), `token_transactions` (por mensaje, con agente
     orquestador/subagente), `token_savings` (cache + compresión).
   - Actualiza `.session/token-usage.json`, `session-current.json` y
     `reports/stack-live-observability-latest.json`.
-- **`src/token-usage-reader.ts`** — fuente única de verdad: lee Nexus primero, luego el report,
+- **`src/tokens/token-usage-reader.ts`** — fuente única de verdad: lee Nexus primero, luego el report,
   luego fallbacks.
-- **`src/token-metrics-store.ts`** — el close report lee tokens REALES (Nexus → token-ingest →
+- **`src/tokens/token-metrics-store.ts`** — el close report lee tokens REALES (Nexus → token-ingest →
   session-file).
 
 ### Comandos

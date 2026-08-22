@@ -5,9 +5,9 @@
  * segmentado por input/output/total.
  *
  * Uso:
- *   npx tsx src/token-session-banner.ts            # banner completo
- *   npx tsx src/token-session-banner.ts --json     # salida JSON
- *   npx tsx src/token-session-banner.ts --quiet    # solo si hay alerta
+ *   npx tsx src/tokens/token-session-banner.ts            # banner completo
+ *   npx tsx src/tokens/token-session-banner.ts --json     # salida JSON
+ *   npx tsx src/tokens/token-session-banner.ts --quiet    # solo si hay alerta
  */
 
 import * as fs from 'fs';

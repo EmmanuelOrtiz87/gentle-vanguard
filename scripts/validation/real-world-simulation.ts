@@ -77,7 +77,7 @@ console.log('\n⚡ 4. EJECUCIÓN EN SISTEMA DE TOKENS');
 try {
   // Simular una llamada al token guard
   const result = runSyncShell(
-    'npx tsx src/token-budget-guard.ts -Mode check -Task factorial-calculation -Risk medium -EstimatedChars 200 -Record -Quiet',
+    'npx tsx src/tokens/token-budget-guard.ts -Mode check -Task factorial-calculation -Risk medium -EstimatedChars 200 -Record -Quiet',
     {
       cwd: ROOT,
     },
@@ -131,7 +131,7 @@ export function factorial(n: number): number {
 // 6. Monitoreo de uso en tiempo real
 console.log('\n📊 6. MONITOREO EN TIEMPO REAL');
 try {
-  const result = runSyncShell('npx tsx src/token-budget-guard.ts -Mode status -Quiet', {
+  const result = runSyncShell('npx tsx src/tokens/token-budget-guard.ts -Mode status -Quiet', {
     cwd: ROOT,
   });
 

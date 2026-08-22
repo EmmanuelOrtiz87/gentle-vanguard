@@ -5,10 +5,10 @@
  * comportamiento del stack en consumos.
  *
  * Uso:
- *   npx tsx src/token-monthly-summary.ts                 # resumen de los últimos 30 días
- *   npx tsx src/token-monthly-summary.ts --month 2026-07 # mes específico
- *   npx tsx src/token-monthly-summary.ts --json          # salida JSON
- *   npx tsx src/token-monthly-summary.ts --quiet         # solo escribe archivo, sin stdout
+ *   npx tsx src/tokens/token-monthly-summary.ts                 # resumen de los últimos 30 días
+ *   npx tsx src/tokens/token-monthly-summary.ts --month 2026-07 # mes específico
+ *   npx tsx src/tokens/token-monthly-summary.ts --json          # salida JSON
+ *   npx tsx src/tokens/token-monthly-summary.ts --quiet         # solo escribe archivo, sin stdout
  *
  * Salida: docs/sessions/metrics/monthly/token-summary-YYYY-MM.md (+ .json)
  */

@@ -5,9 +5,9 @@
  * por input/output/total.
  *
  * Uso:
- *   npx tsx src/token-status.ts              # estado completo
- *   npx tsx src/token-status.ts --json       # salida JSON
- *   npx tsx src/token-status.ts --compact    # solo info de compactación
+ *   npx tsx src/tokens/token-status.ts              # estado completo
+ *   npx tsx src/tokens/token-status.ts --json       # salida JSON
+ *   npx tsx src/tokens/token-status.ts --compact    # solo info de compactación
  */
 
 import * as fs from 'fs';

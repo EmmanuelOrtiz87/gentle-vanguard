@@ -108,7 +108,7 @@ Automatico vía `src/pre-process-input.ts`. Se ejecuta CADA turno sin intervenci
 Muestra el acumulado de la sesión al inicio de cada turno.
 
 Startup: `config/session-autostart.config.json` → paso `token-notification-init` →
-`src/token-usage-notifier.ts -Action status`.
+`src/tokens/token-usage-notifier.ts -Action status`.
 
 Commands: | `/notif on/off` | Master toggle | | `/notif status` | Show current notification state |
 | `/notif token on/off` | Toggle token display only | | `/notif context on/off` | Toggle context
@@ -118,7 +118,7 @@ Toggle session accumulated | | `/notif compact on/off` | Toggle compact/verbose 
 For context logging (post-response), run manually when needed:
 
 ```TypeScript
-pwsh -NoProfile -File src/token-usage-auto.ts -InputTokens <N> -OutputTokens <N> -ContextChars <N> -InputSummary "<...>" -OutputSummary "<...>" -TurnLabel "<...>" -Model "<model>"
+pwsh -NoProfile -File src/tokens/token-usage-auto.ts -InputTokens <N> -OutputTokens <N> -ContextChars <N> -InputSummary "<...>" -OutputSummary "<...>" -TurnLabel "<...>" -Model "<model>"
 ```
 
 Creates `.session/context-log/<session-id>/turn-NNN.md` and `context-summary.md`. On close:

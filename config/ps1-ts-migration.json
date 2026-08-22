@@ -56,8 +56,8 @@
     },
     {
       "id": "token-budget-guard",
-      "script": "src/token-budget-guard.ts",
-      "target": "src/token-budget-guard.ts",
+      "script": "src/tokens/token-budget-guard.ts",
+      "target": "src/tokens/token-budget-guard.ts",
       "priority": "high",
       "status": "implemented",
       "migratedAt": "2026-07-10",
@@ -240,8 +240,8 @@
     },
     {
       "id": "token-metrics-store",
-      "script": "src/token-metrics-store.ts",
-      "target": "src/token-metrics-store.ts",
+      "script": "src/tokens/token-metrics-store.ts",
+      "target": "src/tokens/token-metrics-store.ts",
       "priority": "high",
       "status": "implemented",
       "migratedAt": "2026-07-17"
@@ -522,7 +522,7 @@
   ],
   "delegatedSteps": {
     "session-manager": "src/session-cleanup-start.ts",
-    "token-notification-init": "src/token-metrics-store.ts"
+    "token-notification-init": "src/tokens/token-metrics-store.ts"
   },
   "completedWave14": [
     "health-check",
@@ -735,7 +735,7 @@
     "src/hybrid-executor.ts",
     "src/checkpoint-manager.ts",
     "src/session-scoring.ts",
-    "src/token-budget-guard.ts",
+    "src/tokens/token-budget-guard.ts",
     "src/audit-pipeline.ts",
     "src/session-cleanup-start.ts",
     "src/correction-rules-engine.ts",
@@ -755,7 +755,7 @@
     "src/lefthook-verify.ts",
     "src/karpathy-enforcer.ts",
     "src/session-notification.ts",
-    "src/token-metrics-store.ts",
+    "src/tokens/token-metrics-store.ts",
     "src/session-metrics-tracker.ts",
     "src/validate-tool-configs.ts",
     "src/adaptive-opencode-profile.ts",
@@ -818,7 +818,7 @@
     "src/eval-runner.ts",
     "src/ft-data-collector.ts",
     "src/skill-factory.ts",
-    "src/token-usage-auto.ts",
+    "src/tokens/token-usage-auto.ts",
     "src/session-reference-system.ts",
     "src/orchestrate-auto-fix.ts",
     "src/knowledge-base-autoinit.ts",
@@ -846,7 +846,7 @@
     "src/fix-typescript-errors.ts",
     "src/session-manager.ts",
     "src/session-start-optimized.ts",
-    "src/token-usage-notifier.ts",
+    "src/tokens/token-usage-notifier.ts",
     "src/normative-audit-pipeline.ts",
     "src/resilience-handler.ts",
     "src/validate-readme.ts",

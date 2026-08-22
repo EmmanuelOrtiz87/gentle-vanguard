@@ -186,8 +186,8 @@ Every config JSON MUST include:
 <!-- REF-OBSOLETA: src/handoff-compress.ts no existe (ruta migrada o eliminada) -->
 <!-- REF-OBSOLETA: src/handoff-compress.ts no existe (ruta migrada o eliminada) -->
 
-- **Token budgeting**: All AI interactions must call `src/token-budget-guard.ts`
-  <!-- REF-OBSOLETA: scripts/utilities/token-guard.ps1 eliminado; candidato: src/token-budget-guard.ts -->
+- **Token budgeting**: All AI interactions must call `src/tokens/token-budget-guard.ts`
+  <!-- REF-OBSOLETA: scripts/utilities/token-guard.ps1 eliminado; candidato: src/tokens/token-budget-guard.ts -->
 
 <!-- REF-OBSOLETA: scripts/utilities/token-guard.ps1 no tiene equivalente TS (migración PS1→TS) -->
 

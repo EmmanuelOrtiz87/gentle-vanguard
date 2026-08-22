@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import * as fs from 'fs';
 import * as path from 'path';
-import { runSync, runNpxTsxSync } from './core/run-command.js';
+import { runSync, runNpxTsxSync } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
 
 interface CliArgs {
@@ -25,12 +25,12 @@ function parseArgs(): CliArgs {
 const ROOT = path.resolve(process.cwd());
 const SCRIPT_DIR = path.join(ROOT, 'scripts', 'utilities');
 const LEGACY_PS1 = path.join(SCRIPT_DIR, 'token', 'token-metrics-store.ps1');
-const TS_ENTRY = path.join(ROOT, 'src', 'token-metrics-store.ts');
+const TS_ENTRY = path.join(ROOT, 'src', 'tokens', 'token-metrics-store.ts');
 
 function run(): void {
   const { action, quiet } = parseArgs();
 
-  // TS migration: token-metrics-store.ps1 → src/token-metrics-store.ts
+  // TS migration: token-metrics-store.ps1 → src/tokens/token-metrics-store.ts
   if (fs.existsSync(TS_ENTRY)) {
     const tsArgs: string[] = [TS_ENTRY];
     if (action) {

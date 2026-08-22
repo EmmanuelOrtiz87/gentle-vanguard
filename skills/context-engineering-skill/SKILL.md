@@ -88,5 +88,5 @@ Read `references/session-handoff-protocol.md` when you need:
 ## References
 
 - Scripts: `src/compact-state.ts`, `src/compact-state.ts`, `src/session-metrics-tracker.ts`
-- Metrics: `src/token-optimization-orchestrator.ts`
+- Metrics: `src/tokens/token-optimization-orchestrator.ts`
 - Config: `config/context-efficiency.json`

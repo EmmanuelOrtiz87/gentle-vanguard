@@ -16,7 +16,7 @@ console.log('🔍 Test de captura de tokens en tiempo real...');
 // 1. Verificar que el sistema esté listo
 console.log('\n1. Verificando estado del sistema...');
 try {
-  const result = runSyncShell('npx tsx src/token-budget-guard.ts -Mode status -Quiet', {
+  const result = runSyncShell('npx tsx src/tokens/token-budget-guard.ts -Mode status -Quiet', {
     cwd: ROOT,
   }).stdout;
   console.log('✅ Token Guard está funcionando:');
@@ -76,7 +76,7 @@ console.log('\n4. Probando guard con acción simulada...');
 
 try {
   const result = runSyncShell(
-    'npx tsx src/token-budget-guard.ts -Mode check -Task "test" -Risk "low" -Record -Quiet',
+    'npx tsx src/tokens/token-budget-guard.ts -Mode check -Task "test" -Risk "low" -Record -Quiet',
     {
       cwd: ROOT,
     },

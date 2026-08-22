@@ -113,7 +113,7 @@ _No deprecated norms._
    - **Impacto**: 33-41% reducción de latencia, 25-35% reducción de costos
    - Estado: ✅ Funcionando (66.7% hit rate en tests)
 
-2. **Token Tracker API Integration** (`src/token-tracker.ts`)
+2. **Token Tracker API Integration** (`src/tokens/token-tracker.ts`)
    - Extracción automática de tokens de respuestas API
    - Tracking de input/output tokens separados
    - Cálculo de costos basado en pricing de proveedores

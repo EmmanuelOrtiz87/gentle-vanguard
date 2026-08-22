@@ -70,7 +70,7 @@ for (let i = 1; i <= 3; i++) {
 
   // Ejecutar comando real del token guard con métricas
   const result = runSyncShell(
-    `npx tsx src/token-budget-guard.ts -Mode check -Task ${taskName} -Risk ${i === 1 ? 'medium' : i === 2 ? 'high' : 'low'} -EstimatedChars ${i === 1 ? '150' : i === 2 ? '200' : '100'} -Record -Quiet`,
+    `npx tsx src/tokens/token-budget-guard.ts -Mode check -Task ${taskName} -Risk ${i === 1 ? 'medium' : i === 2 ? 'high' : 'low'} -EstimatedChars ${i === 1 ? '150' : i === 2 ? '200' : '100'} -Record -Quiet`,
     {
       cwd: ROOT,
     },

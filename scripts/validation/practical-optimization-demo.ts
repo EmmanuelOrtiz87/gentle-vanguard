@@ -41,7 +41,7 @@ console.log('\n📊 Ejecutando prueba con sistema real:');
 try {
   // Registrar una prueba en el token guard
   const result = runSyncShell(
-    'npx tsx src/token-budget-guard.ts -Mode check -Task factorial-test -Risk low -EstimatedChars 100 -Record -Quiet',
+    'npx tsx src/tokens/token-budget-guard.ts -Mode check -Task factorial-test -Risk low -EstimatedChars 100 -Record -Quiet',
     {
       cwd: ROOT,
     },

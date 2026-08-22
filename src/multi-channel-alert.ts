@@ -92,6 +92,28 @@ const DEFAULT_CONFIG: MCASConfig = {
 };
 
 // ─── Logger ─────────────────────────────────────────────────────────────────────
+type Severity = AlertPayload['severity'];
+
+const SEVERITIES: readonly Severity[] = ['info', 'warning', 'critical', 'emergency'];
+
+function isSeverity(value: string | undefined): value is Severity {
+  return value !== undefined && (SEVERITIES as readonly string[]).includes(value);
+}
+
+/** Discord embed field shape (per Discord webhook API). */
+interface DiscordEmbedField {
+  name: string;
+  value: string;
+  inline: boolean;
+}
+
+/** Slack attachment field shape (per Slack incoming-webhook API). */
+interface SlackAttachmentField {
+  title: string;
+  value: string;
+  short: boolean;
+}
+
 function log(message: string, level: 'INFO' | 'WARN' | 'ERROR' = 'INFO'): void {
   const timestamp = new Date().toISOString();
   const line = `[${timestamp}] [${level}] ${message}`;
@@ -248,7 +270,7 @@ async function sendToDiscord(alert: AlertPayload, config: AlertConfig): Promise<
     description: alert.message,
     color: parseInt(color.replace('#', ''), 16),
     timestamp: alert.timestamp,
-    fields: [] as any[],
+    fields: [] as DiscordEmbedField[],
     footer: {
       text: 'Gentle-Vanguard Alert System',
     },
@@ -317,7 +339,7 @@ async function sendToSlack(alert: AlertPayload, config: AlertConfig): Promise<bo
     title: `${emoji} ${alert.severity.toUpperCase()}: ${alert.category}`,
     text: alert.message,
     ts: Math.floor(new Date(alert.timestamp).getTime() / 1000),
-    fields: [] as any[],
+    fields: [] as SlackAttachmentField[],
   };
 
   if (alert.details) {

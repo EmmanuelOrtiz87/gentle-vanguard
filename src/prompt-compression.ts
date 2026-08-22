@@ -19,7 +19,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { getTokenUsage } from './token-usage-reader.js';
+import { getTokenUsage } from './tokens/token-usage-reader.js';
 import { compressStructural } from './structural-compression.js';
 
 // ---- Types ----

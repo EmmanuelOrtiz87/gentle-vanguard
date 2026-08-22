@@ -27,7 +27,7 @@ const LEGACY_FALLBACK_FILES = new Set([
   'src/hooks/validate-readme-hook.ts',
   'src/knowledge-base-autoinit.ts',
   'src/knowledge-base-init.ts',
-  'src/token-usage-notifier.ts',
+  'src/tokens/token-usage-notifier.ts',
   'src/witr-wrapper.ts',
   'src/infrastructure/normative-audit-pipeline.ts',
   'src/karpathy-enforcer.ts',

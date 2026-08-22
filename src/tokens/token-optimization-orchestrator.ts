@@ -13,10 +13,10 @@
  * Metrics collection and reporting
  *
  * Usage:
- *   npx tsx src/token-optimization-orchestrator.ts --mode optimize --input "..."
- *   npx tsx src/token-optimization-orchestrator.ts --mode pipeline --file input.txt
- *   npx tsx src/token-optimization-orchestrator.ts --metrics
- *   npx tsx src/token-optimization-orchestrator.ts --status
+ *   npx tsx src/tokens/token-optimization-orchestrator.ts --mode optimize --input "..."
+ *   npx tsx src/tokens/token-optimization-orchestrator.ts --mode pipeline --file input.txt
+ *   npx tsx src/tokens/token-optimization-orchestrator.ts --metrics
+ *   npx tsx src/tokens/token-optimization-orchestrator.ts --status
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
@@ -25,13 +25,13 @@ import { pathToFileURL } from 'url';
 import {
   compressPrompt,
   CompressionResult as PromptCompressionResult,
-} from './prompt-compression.js';
+} from '../prompt-compression.js';
 import {
   compressOutput,
   CompressionResult as OutputCompressionResult,
-} from './output-compression.js';
-import { enforceChatLevel, ChatLevelEnforcementResult, ChatLevel } from './chat-level-enforcer.js';
-import { ResponseCache, generateCacheKey } from './response-cache.js';
+} from '../output-compression.js';
+import { enforceChatLevel, ChatLevelEnforcementResult, ChatLevel } from '../chat-level-enforcer.js';
+import { ResponseCache, generateCacheKey } from '../response-cache.js';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -733,12 +733,12 @@ function printUsage(): void {
 Token Optimization Orchestrator
 
 Usage:
-  npx tsx src/token-optimization-orchestrator.ts --mode pipeline --input "prompt text"
-  npx tsx src/token-optimization-orchestrator.ts --mode optimize-prompt --input "..." [--skill name]
-  npx tsx src/token-optimization-orchestrator.ts --mode optimize-response --input "..." [--level chat-compact]
-  npx tsx src/token-optimization-orchestrator.ts --cache-check --input "prompt"
-  npx tsx src/token-optimization-orchestrator.ts --stats
-  npx tsx src/token-optimization-orchestrator.ts --report
+  npx tsx src/tokens/token-optimization-orchestrator.ts --mode pipeline --input "prompt text"
+  npx tsx src/tokens/token-optimization-orchestrator.ts --mode optimize-prompt --input "..." [--skill name]
+  npx tsx src/tokens/token-optimization-orchestrator.ts --mode optimize-response --input "..." [--level chat-compact]
+  npx tsx src/tokens/token-optimization-orchestrator.ts --cache-check --input "prompt"
+  npx tsx src/tokens/token-optimization-orchestrator.ts --stats
+  npx tsx src/tokens/token-optimization-orchestrator.ts --report
 
 Modes:
   pipeline         - Run full optimization pipeline
@@ -764,9 +764,9 @@ Options:
   --clear-metrics       Clear all stored metrics
 
 Examples:
-  npx tsx src/token-optimization-orchestrator.ts --mode optimize-prompt --input "Long prompt..."
-  npx tsx src/token-optimization-orchestrator.ts --mode optimize-response --input "Long response..." --level chat-compact
-  npx tsx src/token-optimization-orchestrator.ts --mode pipeline --input "Create a function..." --skill typescript
+  npx tsx src/tokens/token-optimization-orchestrator.ts --mode optimize-prompt --input "Long prompt..."
+  npx tsx src/tokens/token-optimization-orchestrator.ts --mode optimize-response --input "Long response..." --level chat-compact
+  npx tsx src/tokens/token-optimization-orchestrator.ts --mode pipeline --input "Create a function..." --skill typescript
 
 Note:
   The "process" stage of --mode pipeline uses a SIMULATED LLM response.
