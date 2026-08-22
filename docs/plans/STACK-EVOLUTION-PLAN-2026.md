@@ -25,7 +25,13 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
   token-tracker, event-sourcing, adaptive-router), rows Nexus tipadas en compare-tokens-sessions,
   severidad como union. 218→193 `any` (erradicación incremental continúa).
 - ✅ Commit checkpoint fase 0+1: `2267d6eb` (91 archivos).
-- 🔄 F5 Sprint A (dedup MASTER con backup 99_BACKUP_PRE_DEDUP) en ejecución.
+- ✅ **F5 Sprint A (dedup MASTER)**: 488 → **401 archivos activos**, 87 duplicados exactos (SHA-256)
+  movidos a backup (cero borrados, backup íntegro verificado), **0 hashes duplicados** fuera del
+  backup, 18 MB liberados, manifiesto auditable `99_DEDUP_MANIFEST_2026-08-22.json`. Corrección del
+  estimado: el piso del dedup exacto es 401 (no ~300) — las 78 canónicas de los grupos duplicados
+  son contenido único; bajar más requiere retirar generaciones enteras (decisión de contenido del
+  dueño, documentada en el plan del MASTER).
+- ✅ Commit sesión 2: `d3ac8fea` (graphify nativo + watchtower 95/95 + cobertura 40% + tipados).
 
 ### Ejecutado — Sesión 1 (2026-08-22, verificado: typecheck ✓ · eslint ✓ · full test suite 5/5 ✓ · vitest 52/52 ✓ · markdownlint ✓ · lefthook ✓ · dashboard build ✓)
 
