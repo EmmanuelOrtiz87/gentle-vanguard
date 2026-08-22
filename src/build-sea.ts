@@ -304,7 +304,7 @@ function buildSEA(target: SEATarget, nodePath: string, skipBuild: boolean): Buil
         postjectCandidates.push(join(globalDir, '@postject', 'cli.js'));
       }
     } catch {
-      /* global root unavailable — local/npx paths still apply */
+      // global root unavailable; local node_modules path still applies
     }
 
     let postjectArgs: [string, string[]] = ['postject', []];
