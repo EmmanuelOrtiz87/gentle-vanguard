@@ -300,8 +300,19 @@ const DEFAULT_CONFIG: CacheConfig = {
 
 // ─── DB helper ────────────────────────────────────────────────────────────────
 
-let _dbCached: any = null;
-function getDb(): any {
+/** Minimal DatabaseManager surface used by this module. */
+interface DbManagerLike {
+  getDb(): {
+    prepare(sql: string): {
+      get(...params: unknown[]): unknown;
+      all(...params: unknown[]): unknown;
+      run(...params: unknown[]): { changes: number };
+    };
+  };
+}
+
+let _dbCached: DbManagerLike | null = null;
+function getDb(): DbManagerLike | null {
   if (!_dbCached) {
     try {
       _dbCached = getDbSingleton();
@@ -364,7 +375,16 @@ function sqliteGet(key: string, input?: string): CacheEntry | null {
          FROM response_cache WHERE key = ?
          AND (expires_at IS NULL OR expires_at > datetime('now'))`,
       )
-      .get(key) as any;
+      .get(key) as
+    | {
+        key: string;
+        response: string;
+        created_at: string;
+        hit_count: number;
+        expires_at: string | null;
+        tokens_saved: number | null;
+      }
+    | undefined;
 
     if (row) {
       // Exact hit — increment hit count
@@ -478,7 +498,10 @@ function sqliteCount(): number {
   const db = getDb();
   if (!db) return 0;
   try {
-    const row = db.getDb().prepare('SELECT COUNT(*) as c FROM response_cache').get() as any;
+    const row = db
+      .getDb()
+      .prepare('SELECT COUNT(*) as c FROM response_cache')
+      .get() as { c: number } | undefined;
     return row?.c ?? 0;
   } catch {
     return 0;

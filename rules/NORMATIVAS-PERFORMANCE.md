@@ -78,7 +78,7 @@ Versión: 1.0.0 | Actualización: 2026-08-04
 
 ### Scripts Nativos
 
-- `npx tsx src/semantic-search.ts` → Busqueda semántica (vs grep)
+- `npx tsx src/retrieval/semantic-search.ts` → Busqueda semántica (vs grep)
 - `npx tsx src/session-cleanup-start.ts` → Flush caches
 - `npx tsx src/workload-guard.ts` → Pre-validación de carga
 - `npx tsx src/tokens/token-optimization-orchestrator.ts` → Compresión

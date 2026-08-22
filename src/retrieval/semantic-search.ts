@@ -4,12 +4,12 @@
  * TS migration of codegraph-semantic-search.ps1 concept.
  *
  * Usage:
- *   npx tsx src/semantic-search.ts "authentication middleware"
- *   npx tsx src/semantic-search.ts "database connection" --json
- *   npx tsx src/semantic-search.ts "error handling" --max-results 15 --format detailed
+ *   npx tsx src/retrieval/semantic-search.ts "authentication middleware"
+ *   npx tsx src/retrieval/semantic-search.ts "database connection" --json
+ *   npx tsx src/retrieval/semantic-search.ts "error handling" --max-results 15 --format detailed
  */
 
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 
@@ -185,7 +185,7 @@ function main(): void {
 
   if (!args.query) {
     console.error(
-      '[SEMANTIC-SEARCH] Usage: npx tsx src/semantic-search.ts "<query>" [--max-results N] [--json]',
+      '[SEMANTIC-SEARCH] Usage: npx tsx src/retrieval/semantic-search.ts "<query>" [--max-results N] [--json]',
     );
     process.exit(1);
   }

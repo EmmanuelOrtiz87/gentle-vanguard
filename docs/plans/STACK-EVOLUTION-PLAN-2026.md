@@ -161,7 +161,7 @@ Todo cambio de este plan debe respetar las definiciones base del stack:
   .md (directorios muertos); `src/auto-code-review.ts` convive con
   `src/autonomous-review/auto-code-review.ts`.
 - **Duplicación**: `parseArgs()` definido **29 veces**; `process.argv.slice(2)` en 227 archivos;
-  `tokenize()` ×6; **BM25 duplicado con drift funcional** (`src/retrieval-grader.ts:66` vs
+  `tokenize()` ×6; **BM25 duplicado con drift funcional** (`src/retrieval/retrieval-grader.ts:66` vs
   `src/structural-compression.ts:207` — el segundo suma un bonus `+0.3` que el primero no tiene, con
   las mismas constantes duplicadas); 84 helpers `ensureDir/readJson/writeJson` repetidos.
 - **Logging**: existe `src/utils/logger.ts` estructurado pero solo **4 archivos lo importan** vs

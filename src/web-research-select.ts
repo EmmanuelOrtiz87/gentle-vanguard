@@ -30,7 +30,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { createWebCrawler } from './web-crawler.js';
-import { gradeRetrieval } from './retrieval-grader.js';
+import { gradeRetrieval } from './retrieval/retrieval-grader.js';
 
 const ROOT = resolve(process.cwd());
 const OUTPUT_DIR = join(ROOT, '.session', 'web-research');

@@ -34,7 +34,7 @@ errores con ruta completa del campo fallido.
 **Spec**: Crear función TypeScript que implemente búsqueda semántica simple usando cosine similarity
 sobre embeddings basados en palabras clave (sin dependencias externas).
 
-**Expected**: `src/semantic-search.ts`
+**Expected**: `src/retrieval/semantic-search.ts`
 
 **Success criteria**:
 

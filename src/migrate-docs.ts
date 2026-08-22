@@ -53,7 +53,7 @@ const REPLACEMENTS: Replacement[] = [
   },
   {
     from: /scripts\/utilities\/semantic-search\.ps1/g,
-    to: 'src/semantic-search.ts',
+    to: 'src/retrieval/semantic-search.ts',
     description: 'Semantic search',
   },
   {

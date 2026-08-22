@@ -544,7 +544,8 @@ async function main(): Promise<void> {
     const message = args[messageIndex] || 'Test alert';
 
     const severityIndex = args.indexOf('--severity') + 1;
-    const severity = (args[severityIndex] as any) || 'info';
+    const severityArg = args[severityIndex];
+    const severity: Severity = isSeverity(severityArg) ? severityArg : 'info';
 
     const categoryIndex = args.indexOf('--category') + 1;
     const category = args[categoryIndex] || 'cli';

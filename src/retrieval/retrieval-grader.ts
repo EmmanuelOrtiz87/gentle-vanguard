@@ -14,8 +14,8 @@
  * is available.
  *
  * Usage:
- *   npx tsx src/retrieval-grader.ts --query "..." --chunks '["...","..."]'
- *   npx tsx src/retrieval-grader.ts --query "..." --file chunks.json
+ *   npx tsx src/retrieval/retrieval-grader.ts --query "..." --chunks '["...","..."]'
+ *   npx tsx src/retrieval/retrieval-grader.ts --query "..." --file chunks.json
  */
 
 import { existsSync, readFileSync } from 'fs';
@@ -118,7 +118,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 
   if (!query || !chunksRaw) {
     console.error(
-      'Usage: npx tsx src/retrieval-grader.ts --query "..." --chunks \'["...","..."]\' [--file path]',
+      'Usage: npx tsx src/retrieval/retrieval-grader.ts --query "..." --chunks \'["...","..."]\' [--file path]',
     );
     process.exit(1);
   }

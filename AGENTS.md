@@ -442,13 +442,13 @@ npx tsx src/event-sourcing.ts -Action verify -AggregateId <id>   # valida integr
 `verify` detecta manipulación (`tamper-mismatch` / `broken`). Tests:
 `tests/unit/event-sourcing-hashchain.test.ts`.
 
-### Retrieval Grader CRAG (`src/retrieval-grader.ts`)
+### Retrieval Grader CRAG (`src/retrieval/retrieval-grader.ts`)
 
 Patrón Corrective RAG de `awesome-llm-apps`. Gradúa la relevancia de chunks recuperados con BM25
 lexical (sin ML) y dispara `keyword-fallback` si el retrieval es pobre (evita alucinación):
 
 ```bash
-npx tsx src/retrieval-grader.ts --query "..." --chunks '["...","..."]'
+npx tsx src/retrieval/retrieval-grader.ts --query "..." --chunks '["...","..."]'
 ```
 
 Tests: `tests/unit/retrieval-grader.test.ts`.
