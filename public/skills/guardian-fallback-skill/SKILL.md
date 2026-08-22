@@ -42,11 +42,11 @@ Use fallback when:
 
 | Condition                     | Action                  |
 | ----------------------------- | ----------------------- |
-| Unknown error blocks progress | ` run` for diagnosis    |
-| PR needs final review         | ` run --pr-mode`        |
+| Unknown error blocks progress | `run` for diagnosis    |
+| PR needs final review         | `run --pr-mode`        |
 | Complex decisión needed       | reasoning assist        |
 | Blocked on coding standards   | review                  |
-| Commit message validation     | ` install --commit-msg` |
+| Commit message validation     | `install --commit-msg` |
 
 ## Invocation
 

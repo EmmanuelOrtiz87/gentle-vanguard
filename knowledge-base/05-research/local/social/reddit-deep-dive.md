@@ -11,4 +11,4 @@ No more context loss. No more starting from zero.
 
 What patterns do YOU use for AI memory?
 
-#AI #Memory #Engineering
+# AI #Memory #Engineering

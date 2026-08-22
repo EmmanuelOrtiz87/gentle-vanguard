@@ -1,11 +1,13 @@
 # Implementation Directive — Content Operations
 
 ## Objective
+
 Integrate Content Operations into Gentle-Vanguard without creating a parallel framework.
 
 ## Inspect and reuse first
 
 Before coding, inspect:
+
 - `src/marketing-agent.ts`
 - `src/social-poster.ts`
 - `docs/presentations/resources-index.html`

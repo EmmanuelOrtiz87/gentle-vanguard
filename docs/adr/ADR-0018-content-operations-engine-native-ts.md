@@ -24,10 +24,10 @@ Instagram, YouTube, Discord) con assets dimensionados por plataforma.
 
 ### Opciones consideradas
 
-| Opción | Pros | Cons | Decisión |
-| --- | --- | --- | --- |
-| Framework de publicación externo (Buffer/Hootsuite) | Publicación multi-plataforma lista | SaaS, costos, sin control del pipeline, datos fuera del stack | ❌ Rechazada |
-| Scripts sueltos por plataforma | Rápido de escribir | Sin estados, sin validación, sin idempotencia, no reproducible | ❌ Rechazada |
+| Opción                                                  | Pros                                                                                                                               | Cons                                                                 | Decisión      |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | ------------- |
+| Framework de publicación externo (Buffer/Hootsuite)     | Publicación multi-plataforma lista                                                                                                 | SaaS, costos, sin control del pipeline, datos fuera del stack        | ❌ Rechazada  |
+| Scripts sueltos por plataforma                          | Rápido de escribir                                                                                                                 | Sin estados, sin validación, sin idempotencia, no reproducible       | ❌ Rechazada  |
 | **Content Operations Engine nativo TS (offline-first)** | Cero dependencias nuevas, manifest como fuente de verdad, state machine auditable, idempotente, funciona sin red, patrón del stack | Publicación remota requiere adapters por plataforma (fase posterior) | ✅ **CHOSEN** |
 
 ## Decision
@@ -39,17 +39,18 @@ que define un contrato de dominio `ContentJob` y un pipeline offline-first:
   de lanzamiento `GROWTH-EXPERIMENT-001` (fecha, plataforma, tema, copy, CTA, asset, estado).
 - **`platforms.json`** (`config/content-operations/`) — registry de capacidades por plataforma
   (mode: adapter/manual/native-repo, media, approvalRequired).
-- **`engine.ts`** — state machine (`DRAFT → VALIDATED → PACKAGED → REVIEW → APPROVED → PUBLISHED →
-  MEASURED`, `FAILED → DRAFT`), `canTransition()`/`transition()` inmutable, validación contra
-  registry, `packageJob()` idempotente, `saveManifest()`.
+- **`engine.ts`** — state machine
+  (`DRAFT → VALIDATED → PACKAGED → REVIEW → APPROVED → PUBLISHED → MEASURED`, `FAILED → DRAFT`),
+  `canTransition()`/`transition()` inmutable, validación contra registry, `packageJob()`
+  idempotente, `saveManifest()`.
 - **`cli.ts`** — 8 comandos: list, validate, prepare, status, report, transition, export, help.
 - **`export-kit.ps1`** — exporta el kit offline ZIP en Windows.
 - **Assets** — 21 PNGs dimensionados por plataforma en `docs/presentations/social-assets/`.
 
 ### Principios de diseño
 
-- **Local-first**: empaquetar funciona sin Internet; la publicación remota es una fase posterior
-  con adapters por plataforma.
+- **Local-first**: empaquetar funciona sin Internet; la publicación remota es una fase posterior con
+  adapters por plataforma.
 - **Human-in-the-loop**: `APPROVED` es gate obligatorio para publicación remota.
 - **Idempotencia**: `packageJob()` no reescribe paquetes existentes con el mismo contenido (evita
   publicaciones duplicadas por reintentos).
@@ -84,8 +85,8 @@ npm run content:test       # tests unitarios (15)
 - La publicación remota automática requiere implementar adapters por plataforma (LinkedIn, X,
   YouTube, etc.) contra sus APIs oficiales — fuera de alcance en esta fase.
 - El CMS local (`resources-index.html`) aún no consume el manifest directamente (fase 2).
-- `marketing-agent.ts` y `social-poster.ts` aún no se refactorizan para consumir el manifest
-  (fase 2/3) — riesgo de modelos duplicados hasta entonces.
+- `marketing-agent.ts` y `social-poster.ts` aún no se refactorizan para consumir el manifest (fase
+  2/3) — riesgo de modelos duplicados hasta entonces.
 
 ## Referencias
 

@@ -154,9 +154,11 @@ MCPs one at a time during this phase.
 After all customizations are applied, package the plugin as a `.plugin` file for the user:
 
 1. **Zip the plugin directory** (excluding `setup/` since it's no longer needed):
+
    ```bash
    cd /path/to/plugin && zip -r /tmp/plugin-name.plugin . -x "setup/*" && cp /tmp/plugin-name.plugin /path/to/outputs/plugin-name.plugin
    ```
+
 2. **Present the file to the user** with the `.plugin` extension so they can install it directly.
    (Presenting the .plugin file will show to the user as a rich preview where they can look through
    the plugin files, and they can accept the customization by pressing a button.)

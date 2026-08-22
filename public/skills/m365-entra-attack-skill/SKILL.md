@@ -399,7 +399,7 @@ Every M365 attempt logs to JSONL:
 **IP rotation log** (per-day):
 
 ```
-2026-05-08	<src-ip>	<ISP-AS>	<operator-handle>	Round 2 spray
+2026-05-08 <src-ip> <ISP-AS> <operator-handle> Round 2 spray
 ```
 
 These three artifacts are deliverable evidence for the report. They survive into the next engagement

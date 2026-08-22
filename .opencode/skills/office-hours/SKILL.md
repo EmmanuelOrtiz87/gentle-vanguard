@@ -11,6 +11,7 @@ triggers:
 # Office Hours Skill
 
 ## Overview
+
 Structured product interrogation using 6 forcing questions.
 
 ## The 6 Forcing Questions
@@ -44,10 +45,12 @@ Structured product interrogation using 6 forcing questions.
    - North star
 
 ## Process
+
 1. Pose all 6 questions
 2. Document answers
 3. Reframe based on insights
 4. Create strategic decisions doc
 
 ## Output
+
 Strategic decisions document with rationale

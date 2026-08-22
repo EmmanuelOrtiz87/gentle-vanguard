@@ -1,12 +1,15 @@
 # NIST CSF 2.0 Maturity Assessment Scorecard
 
 ## Organization: ________________
+
 ## Assessment Date: ________________
+
 ## Assessor: ________________
 
 ---
 
 ## Scoring Guide
+
 | Tier | Name | Criteria |
 |------|------|----------|
 | 1 | Partial | Ad hoc; limited awareness; no formal process |

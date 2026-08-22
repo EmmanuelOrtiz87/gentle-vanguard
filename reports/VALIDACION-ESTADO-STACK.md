@@ -1,4 +1,5 @@
 # Validación del Stack - Reporte de Estado Completo
+
 ## Fecha: 2026-08-13 04:35
 
 ---
@@ -124,6 +125,7 @@ PID    Estado
 ## ⚠️ RECURSOS ACTUALES
 
 ### Token Budget Status
+
 ```
 Daily: 20M / 5M tokens (401% - HARD LIMIT alcanzado)
 Session: 0 / 3M tokens (0%)
@@ -135,6 +137,7 @@ Session: 0 / 3M tokens (0%)
 - No consume tokens adicionales
 
 ### Context Size
+
 - Clean - no hay duplicación de contexto detectada
 - Cache funcionando correctamente
 

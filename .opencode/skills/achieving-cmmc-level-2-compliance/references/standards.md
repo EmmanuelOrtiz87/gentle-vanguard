@@ -1,6 +1,7 @@
 # CMMC Level 2 — Standards & Reference
 
 ## Governing rules
+
 | Rule | Citation | Status / effective date |
 |---|---|---|
 | CMMC Program rule | 32 CFR Part 170 | Effective **December 16, 2024** |
@@ -11,6 +12,7 @@
 > Always confirm current status at the source — acquisition rules and phase dates have moved before. Authoritative: https://dodcio.defense.gov/CMMC/ and the eCFR for 32 CFR Part 170.
 
 ## Phased rollout (per the acquisition rule)
+
 | Phase | Begins | What applies |
 |---|---|---|
 | Phase 1 | **Nov 10, 2025** | Level 1 and some Level 2 **self-assessment** required in solicitations |
@@ -19,6 +21,7 @@
 | Phase 4 | **Nov 10, 2028** | Full implementation across applicable DoD contracts |
 
 ## The three CMMC levels
+
 | Level | Protects | Requirements | Assessment |
 |---|---|---|---|
 | Level 1 | FCI | 15 requirements (FAR 52.204-21) | Annual self-assessment + affirmation |
@@ -28,6 +31,7 @@
 Certification validity: **3 years**, with **annual affirmation** by a senior official in SPRS.
 
 ## NIST SP 800-171 Rev 2 — the 14 families (110 requirements)
+
 | § | Family | # reqs |
 |---|---|---|
 | 3.1 | Access Control | 22 |
@@ -49,6 +53,7 @@ Certification validity: **3 years**, with **annual affirmation** by a senior off
 (Assessment objectives for each requirement are in **NIST SP 800-171A**.)
 
 ## DoD Assessment Methodology — SPRS scoring
+
 - Start at **110**. Subtract the weighted value of each **NOT MET** requirement.
 - Weights: **1, 3, or 5 points**. The most security-significant requirements are weighted 3 or 5.
 - **Partial credit** applies to a small number of requirements (notably MFA at 3.5.3 and FIPS-validated cryptography at 3.13.11) where partial implementation reduces the deduction.
@@ -56,11 +61,13 @@ Certification validity: **3 years**, with **annual affirmation** by a senior off
 - The complete per-requirement point assignment is published in the **DoD NIST SP 800-171 Assessment Methodology** — use that document for the authoritative weight of each control rather than estimating.
 
 ## POA&M rules under the CMMC rule (32 CFR Part 170)
+
 - A **Conditional** Level 2 status is allowed only if the assessment score is **at least 80% (≥ 88 of 110)**.
 - Only **POA&M-eligible** requirements may be deferred. The highest-weighted security requirements generally **must be fully met** and **cannot** sit on a POA&M — verify each item's eligibility against the rule.
 - All POA&M items must be **closed within 180 days**; a closeout assessment then converts **Conditional → Final**.
 
 ## Scoping categories (CMMC Level 2 Scoping Guide)
+
 | Category | Treatment |
 |---|---|
 | CUI Assets | Process/store/transmit CUI — assessed against applicable requirements. |
@@ -70,10 +77,12 @@ Certification validity: **3 years**, with **annual affirmation** by a senior off
 | Out-of-Scope Assets | Isolated from CUI — not assessed. |
 
 ## External Service Providers / cloud
+
 - Cloud services that store/process/transmit CUI must be **FedRAMP Moderate authorized or meet FedRAMP Moderate equivalency**.
 - Document the customer/provider responsibility split (CRM) and inherited controls in the SSP.
 
 ## NIST CSF 2.0 alignment
+
 | CSF 2.0 ID | Relevance |
 |---|---|
 | GV.OC-03 | Legal/regulatory (DFARS/CMMC) requirements understood. |

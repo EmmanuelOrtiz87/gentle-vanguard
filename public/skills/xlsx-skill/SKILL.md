@@ -172,9 +172,11 @@ should be able to recalculate when source data changes.
 3. **Modify**: Add/edit data, formulas, and formatting
 4. **Save**: Write to file
 5. **Recalculate formulas (MANDATORY IF USING FORMULAS)**: Use the scripts/recalc.py script
+
    ```bash
    python scripts/recalc.py output.xlsx
    ```
+
 6. **Verify and fix any errors**:
    - The script returns JSON with error details
    - If `status` is `errors_found`, check `error_summary` for specific error types and locations

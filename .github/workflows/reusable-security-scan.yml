@@ -89,5 +89,5 @@ jobs:
         run: |
           curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
           curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
-      - name: "Scan SBOM (gate: fail on high+)"
+      - name: 'Scan SBOM (gate: fail on high+)'
         run: npx tsx src/container-scan.ts scan --fail-on high --json

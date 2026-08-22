@@ -20,16 +20,8 @@
         "consecutiveErrors": 0,
         "avgLatencyMs": null
       },
-      "fallbackChain": [
-        "opencode/deepseek-v4-flash-free"
-      ],
-      "capabilities": [
-        "code",
-        "chat",
-        "reasoning",
-        "tools",
-        "long-context"
-      ],
+      "fallbackChain": ["opencode/deepseek-v4-flash-free"],
+      "capabilities": ["code", "chat", "reasoning", "tools", "long-context"],
       "maxTokens": 200000
     },
     "kimi-2-5": {
@@ -45,15 +37,8 @@
         "consecutiveErrors": 0,
         "avgLatencyMs": null
       },
-      "fallbackChain": [
-        "opencode/deepseek-v4-flash-free",
-        "ollama/qwen2.5-coder:14b"
-      ],
-      "capabilities": [
-        "code",
-        "reasoning",
-        "long-context"
-      ],
+      "fallbackChain": ["opencode/deepseek-v4-flash-free", "ollama/qwen2.5-coder:14b"],
+      "capabilities": ["code", "reasoning", "long-context"],
       "maxTokens": 128000
     },
     "opencode/deepseek-v4-flash-free": {
@@ -69,14 +54,8 @@
         "consecutiveErrors": 0,
         "avgLatencyMs": 1200
       },
-      "fallbackChain": [
-        "ollama/qwen2.5-coder:14b"
-      ],
-      "capabilities": [
-        "code",
-        "chat",
-        "tools"
-      ],
+      "fallbackChain": ["ollama/qwen2.5-coder:14b"],
+      "capabilities": ["code", "chat", "tools"],
       "maxTokens": 32000
     },
     "ollama/qwen2.5-coder:14b": {
@@ -92,9 +71,7 @@
         "checkEndpoint": "http://localhost:11434/api/tags"
       },
       "fallbackChain": [],
-      "capabilities": [
-        "code"
-      ],
+      "capabilities": ["code"],
       "maxTokens": 32000,
       "requiresLocal": true
     },
@@ -109,13 +86,8 @@
         "status": "unknown",
         "lastChecked": null
       },
-      "fallbackChain": [
-        "opencode/deepseek-v4-flash-free"
-      ],
-      "capabilities": [
-        "code",
-        "reasoning"
-      ],
+      "fallbackChain": ["opencode/deepseek-v4-flash-free"],
+      "capabilities": ["code", "reasoning"],
       "maxTokens": 64000
     }
   },
@@ -129,10 +101,7 @@
       "inheritFromOrchestrator": true,
       "allowOverride": true,
       "default": "opencode-go/gpt-5.6-luna",
-      "fallbackChain": [
-        "opencode/deepseek-v4-flash-free",
-        "ollama/qwen2.5-coder:14b"
-      ]
+      "fallbackChain": ["opencode/deepseek-v4-flash-free", "ollama/qwen2.5-coder:14b"]
     }
   },
   "errorPatterns": {
@@ -147,16 +116,8 @@
       "API rate limit",
       "daily limit exceeded"
     ],
-    "modelNotFound": [
-      "model not found",
-      "invalid model",
-      "unknown model"
-    ],
-    "timeout": [
-      "timeout",
-      "deadline exceeded",
-      "request timed out"
-    ],
+    "modelNotFound": ["model not found", "invalid model", "unknown model"],
+    "timeout": ["timeout", "deadline exceeded", "request timed out"],
     "authError": [
       "unauthorized",
       "invalid api key",
@@ -166,18 +127,8 @@
     ]
   },
   "fallbackStrategies": {
-    "cost-optimized": [
-      "opencode/deepseek-v4-flash-free",
-      "claude-haiku-4-5",
-      "kimi-2-5"
-    ],
-    "performance": [
-      "opencode/deepseek-v4-flash-free",
-      "claude-haiku-4-5"
-    ],
-    "availability": [
-      "opencode/deepseek-v4-flash-free",
-      "ollama/qwen2.5-coder:14b"
-    ]
+    "cost-optimized": ["opencode/deepseek-v4-flash-free", "claude-haiku-4-5", "kimi-2-5"],
+    "performance": ["opencode/deepseek-v4-flash-free", "claude-haiku-4-5"],
+    "availability": ["opencode/deepseek-v4-flash-free", "ollama/qwen2.5-coder:14b"]
   }
 }

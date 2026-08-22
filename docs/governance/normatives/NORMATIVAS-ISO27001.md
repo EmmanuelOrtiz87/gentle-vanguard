@@ -27,36 +27,40 @@ estandar internacional de gestion de seguridad de la informacion.
 | A.5.14     | Information transfer          | `privacy-gateway.ps1` + `privacy-sanitizer.ps1`                | Redaccion automatica                    |
 | A.5.15     | Access control                | `config/access-control.json` + `secure-auth.ps1`               | ACL enforce                             |
 | A.5.16     | Identity management           | `owner-auth.json` + auth session                               | Identity verification                   |
-| A.5.25     | Assessment of security events | `src/security/security-orchestrator.ts`                   | Event logging + alerting                |
+| A.5.25     | Assessment of security events | `src/security/security-orchestrator.ts`                        | Event logging + alerting                |
 
 ---
 
 ## 3. CONTROLES DE TECNOLOGIA (A.8)
 
-| Control ID | Control Name                            | Implementacion Gentle-Vanguard                     | Verification                       |
-| ---------- | --------------------------------------- | -------------------------------------------------- | ---------------------------------- |
-| A.8.4      | Privileged access                       | `config/security-hardening.json#leastPrivilege`    | Least privilege por agente         |
-| A.8.5      | Secure authentication                   | `secure-auth.ps1` + `auth-session.ps1`             | Session-based auth                 |
-| A.8.6      | Capacity management                     | `config/orchestrator.json#token_budget_guard`      | Token budget enforcement           |
-| A.8.7      | Protection against malware              | Trivy + Gitleaks + CodeQL scans                    | Weekly automated scanning          |
-| A.8.8      | Management of technical vulnerabilities | `dependabot.yml` + `security-scan.yml`             | Dependency updates + vuln scanning |
-| A.8.9      | Configuration management                | `config/*.json` + `validate-configs.ps1`           | Config validation                  |
-| A.8.10     | Information deletion                    | `docs/NORMATIVAS-SESSION.md#cleanup`               | Session cleanup                    |
-| A.8.11     | Data masking                            | `privacy-sanitizer.ps1` + `privacy-gateway.ps1`    | PII redaction                      |
-| A.8.12     | Data leakage prevention                 | `security-hardening.json#outputFiltering`          | Output validation                  |
-| A.8.13     | Backup                                  | `scripts/adaptive/auto-backup-orchestrator.ps1`    | Auto backup                        |
+| Control ID | Control Name                            | Implementacion Gentle-Vanguard                  | Verification                       |
+| ---------- | --------------------------------------- | ----------------------------------------------- | ---------------------------------- |
+| A.8.4      | Privileged access                       | `config/security-hardening.json#leastPrivilege` | Least privilege por agente         |
+| A.8.5      | Secure authentication                   | `secure-auth.ps1` + `auth-session.ps1`          | Session-based auth                 |
+| A.8.6      | Capacity management                     | `config/orchestrator.json#token_budget_guard`   | Token budget enforcement           |
+| A.8.7      | Protection against malware              | Trivy + Gitleaks + CodeQL scans                 | Weekly automated scanning          |
+| A.8.8      | Management of technical vulnerabilities | `dependabot.yml` + `security-scan.yml`          | Dependency updates + vuln scanning |
+| A.8.9      | Configuration management                | `config/*.json` + `validate-configs.ps1`        | Config validation                  |
+| A.8.10     | Information deletion                    | `docs/NORMATIVAS-SESSION.md#cleanup`            | Session cleanup                    |
+| A.8.11     | Data masking                            | `privacy-sanitizer.ps1` + `privacy-gateway.ps1` | PII redaction                      |
+| A.8.12     | Data leakage prevention                 | `security-hardening.json#outputFiltering`       | Output validation                  |
+| A.8.13     | Backup                                  | `scripts/adaptive/auto-backup-orchestrator.ps1` | Auto backup                        |
+
 <!-- REF-OBSOLETA: scripts/adaptive/auto-backup-orchestrator.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| A.8.14     | Redundancy                              | `.session/` state persistence                      | Session recovery                   |
-| A.8.15     | Logging                                 | `scripts/security/security-logger.ps1`             | Centralized logging                |
+
+| A.8.14 | Redundancy | `.session/` state persistence | Session recovery | | A.8.15 | Logging |
+`scripts/security/security-logger.ps1` | Centralized logging |
 <!-- REF-OBSOLETA: scripts/security/security-logger.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| A.8.16     | Monitoring activities                   | `scripts/monitoring/`                              | Dashboard + alerts                 |
-| A.8.20     | Network security                        | `config/security-deploy.json` + GitHub Runners     | Deploy hardening                   |
-| A.8.24     | Use of cryptography                     | `encryption-manager.ps1` + `backup-master-key.ps1` | Key management                     |
-| A.8.25     | Secure development lifecycle            | `rules/NORMATIVAS-CODIGO.md` + `sdd-gate.yml`      | SDD + code standards               |
-| A.8.27     | Secure operations                       | `config/orchestrator.json#subagent_orchestration`  | Agent ops security                 |
-| A.8.28     | Prompt injection prevention             | `docs/NORMATIVAS-SEGURIDAD.md#2.1`                 | Input sanitization                 |
-| A.8.29     | Excessive agency prevention             | `docs/NORMATIVAS-SEGURIDAD.md#2.2`                 | Tool permission scoping            |
-| A.8.30     | Secure AI agent communication           | `docs/NORMATIVAS-SEGURIDAD.md#2.8`                 | Inter-agent validation             |
+
+| A.8.16 | Monitoring activities | `scripts/monitoring/` | Dashboard + alerts | | A.8.20 | Network
+security | `config/security-deploy.json` + GitHub Runners | Deploy hardening | | A.8.24 | Use of
+cryptography | `encryption-manager.ps1` + `backup-master-key.ps1` | Key management | | A.8.25 |
+Secure development lifecycle | `rules/NORMATIVAS-CODIGO.md` + `sdd-gate.yml` | SDD + code standards
+| | A.8.27 | Secure operations | `config/orchestrator.json#subagent_orchestration` | Agent ops
+security | | A.8.28 | Prompt injection prevention | `docs/NORMATIVAS-SEGURIDAD.md#2.1` | Input
+sanitization | | A.8.29 | Excessive agency prevention | `docs/NORMATIVAS-SEGURIDAD.md#2.2` | Tool
+permission scoping | | A.8.30 | Secure AI agent communication | `docs/NORMATIVAS-SEGURIDAD.md#2.8` |
+Inter-agent validation |
 
 ---
 

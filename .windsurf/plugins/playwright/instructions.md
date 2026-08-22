@@ -12,7 +12,7 @@
 
 ## MCP Workflow (MANDATORY If Available)
 
-** If you have Playwright MCP tools, ALWAYS use them BEFORE creating any test:**
+**If you have Playwright MCP tools, ALWAYS use them BEFORE creating any test:**
 
 1. **Navigate** to target page
 2. **Take snapshot** to see page structure and elements

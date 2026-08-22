@@ -3,11 +3,13 @@
 ## requests Library
 
 ### Installation
+
 ```bash
 pip install requests
 ```
 
 ### Key Methods
+
 | Method | Description |
 |--------|-------------|
 | `requests.get(url, headers=, params=, timeout=)` | Send GET request |
@@ -18,6 +20,7 @@ pip install requests
 | `requests.options(url, headers=)` | Send OPTIONS preflight |
 
 ### Response Object
+
 | Attribute | Description |
 |-----------|-------------|
 | `resp.status_code` | HTTP status code (200, 401, 403, 429) |
@@ -27,6 +30,7 @@ pip install requests
 | `resp.elapsed` | Response time as timedelta |
 
 ## OWASP API Security Top 10 (2023)
+
 | ID | Risk | Test Approach |
 |----|------|---------------|
 | API1 | Broken Object Level Auth | Iterate object IDs with another user's token |
@@ -41,6 +45,7 @@ pip install requests
 | API10 | Unsafe Consumption of APIs | Test trust boundaries with third-party data |
 
 ## Security Header Checks
+
 | Header | Expected Value |
 |--------|---------------|
 | `Strict-Transport-Security` | `max-age=31536000; includeSubDomains` |
@@ -49,6 +54,7 @@ pip install requests
 | `Content-Security-Policy` | Restrictive policy |
 
 ## References
+
 - OWASP API Security Top 10: https://owasp.org/API-Security/
 - OWASP Testing Guide: https://owasp.org/www-project-web-security-testing-guide/
 - requests docs: https://docs.python-requests.org/

@@ -15,14 +15,18 @@ This document describes the hooks system implemented in gentle-vanguard.
 ### Post Session
 
 - **Script**: `scripts/utilities/session-end-hook.ps1`
+
 <!-- REF-OBSOLETA: scripts/utilities/session-end-hook.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 - **Purpose**: Cleanup and save session artifacts
 - **Trigger**: When session ends
 
 ### Pre-Commit
 
 - **Script**: `scripts/utilities/pre-commit-hook.ps1`
+
 <!-- REF-OBSOLETA: scripts/utilities/pre-commit-hook.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 - **Purpose**: Validate before git commit
 - **Trigger**: Before git commit
 

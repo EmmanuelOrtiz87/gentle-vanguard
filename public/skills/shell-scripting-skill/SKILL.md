@@ -287,7 +287,7 @@ assert '[[ -n "${AWS_REGION:-}" ]]' "AWS_REGION is not set"
 | Associative arrays   | `declare -A map`       | Not supported   | Avoid or use external files                    |
 | [[]] test            | `[[ "$a" == "$b" ]]`   | `["$a" = "$b"]` | Use `[ ]` for POSIX                            |
 | Here strings         | `grep <<< "$var"`      | Not supported   | `echo "$var"                                   | grep` |
-| ${var^} (case mod)   | `echo "${var^}"`      | Not supported   |`tr '[:lower:]' '[:upper:]'`                  | | Process substitution |`diff <(cmd1) <(cmd2)`| Not supported   | Use temp files                                 | | let / (( ))          |`(( x++ ))`           | Not supported   |`x=$(( x + 1 ))`                               |
+| ${var^} (case mod)   | `echo "${var^}"`| Not supported   |`tr '[:lower:]' '[:upper:]'`| | Process substitution |`diff <(cmd1) <(cmd2)`| Not supported   | Use temp files                                 | | let / (( ))          |`(( x++ ))`| Not supported   |`x=$(( x + 1 ))`                               |
 
 **Rule of thumb**: Start with `#!/bin/sh` unless you genuinely need Bash-specific features. If you
 need arrays or associative maps, use Bash but document the requirement.

@@ -3,23 +3,27 @@
 ## NVD API 2.0 - Vulnerability Lookup
 
 ### Base URL
+
 ```
 https://services.nvd.nist.gov/rest/json/cves/2.0
 ```
 
 ### Authentication
+
 ```
 Header: apiKey: <your-api-key>
 Get free key: https://nvd.nist.gov/developers/request-an-api-key
 ```
 
 ### Rate Limits
+
 | Condition | Limit |
 |-----------|-------|
 | Without API key | 5 requests per 30 seconds |
 | With API key | 50 requests per 30 seconds |
 
 ### Search by CPE Name
+
 ```bash
 GET /rest/json/cves/2.0?cpeName=cpe:2.3:a:apache:log4j:2.14.1:*:*:*:*:*:*:*
 ```
@@ -40,16 +44,19 @@ for vuln in data.get("vulnerabilities", []):
 ```
 
 ### Search by Keyword
+
 ```bash
 GET /rest/json/cves/2.0?keywordSearch=lodash+prototype+pollution
 ```
 
 ### Search by CVE ID
+
 ```bash
 GET /rest/json/cves/2.0?cveId=CVE-2021-44228
 ```
 
 ### Response Structure
+
 ```json
 {
   "resultsPerPage": 50,
@@ -80,6 +87,7 @@ GET /rest/json/cves/2.0?cveId=CVE-2021-44228
 ## CycloneDX JSON Format (v1.5)
 
 ### Minimal Structure
+
 ```json
 {
   "bomFormat": "CycloneDX",
@@ -96,6 +104,7 @@ GET /rest/json/cves/2.0?cveId=CVE-2021-44228
 ```
 
 ### Component Object
+
 ```json
 {
   "type": "library",
@@ -109,6 +118,7 @@ GET /rest/json/cves/2.0?cveId=CVE-2021-44228
 ```
 
 ### Dependency Graph
+
 ```json
 {
   "dependencies": [
@@ -126,6 +136,7 @@ GET /rest/json/cves/2.0?cveId=CVE-2021-44228
 ## SPDX JSON Format (v2.3)
 
 ### Minimal Structure
+
 ```json
 {
   "spdxVersion": "SPDX-2.3",
@@ -138,6 +149,7 @@ GET /rest/json/cves/2.0?cveId=CVE-2021-44228
 ```
 
 ### Package Object
+
 ```json
 {
   "SPDXID": "SPDXRef-Package-npm-express",
@@ -154,6 +166,7 @@ GET /rest/json/cves/2.0?cveId=CVE-2021-44228
 ```
 
 ### Relationship Types
+
 ```json
 {
   "spdxElementId": "SPDXRef-Package-npm-express",
@@ -165,11 +178,13 @@ GET /rest/json/cves/2.0?cveId=CVE-2021-44228
 ## syft - SBOM Generation
 
 ### Installation
+
 ```bash
 curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
 ```
 
 ### Generate CycloneDX SBOM
+
 ```bash
 syft <source> -o cyclonedx-json > sbom.json
 
@@ -180,6 +195,7 @@ syft file:archive.tar.gz -o spdx-json
 ```
 
 ### Output Formats
+
 | Format | Flag |
 |--------|------|
 | CycloneDX JSON | `-o cyclonedx-json` |
@@ -192,11 +208,13 @@ syft file:archive.tar.gz -o spdx-json
 ## grype - Vulnerability Scanning
 
 ### Installation
+
 ```bash
 curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
 ```
 
 ### Scan SBOM for Vulnerabilities
+
 ```bash
 # Scan CycloneDX SBOM
 grype sbom:sbom-cyclonedx.json
@@ -212,6 +230,7 @@ grype sbom:sbom.json -o table --only-fixed
 ```
 
 ### Grype Vulnerability Sources
+
 - NVD (National Vulnerability Database)
 - GitHub Security Advisories (GHSA)
 - Alpine SecDB
@@ -225,6 +244,7 @@ grype sbom:sbom.json -o table --only-fixed
 ## Python Libraries
 
 ### nvdlib - NVD API Wrapper
+
 ```python
 import nvdlib
 
@@ -238,6 +258,7 @@ results = nvdlib.searchCVE(keywordSearch="lodash prototype pollution")
 ```
 
 ### networkx - Dependency Graph
+
 ```python
 import networkx as nx
 

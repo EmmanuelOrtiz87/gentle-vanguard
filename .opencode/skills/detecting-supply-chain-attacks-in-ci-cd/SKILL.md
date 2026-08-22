@@ -40,7 +40,6 @@ mitre_attack:
 
 # Detecting Supply Chain Attacks in CI/CD
 
-
 ## When to Use
 
 - When investigating security incidents that require detecting supply chain attacks in ci cd

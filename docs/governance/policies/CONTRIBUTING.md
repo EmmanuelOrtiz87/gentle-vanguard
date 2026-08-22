@@ -158,14 +158,16 @@ gentle-vanguard/
 
 ## Scripts
 
-| Script                                                      | Purpose                                   |
-| ----------------------------------------------------------- | ----------------------------------------- |
-| `scripts/gentle-vanguard/src/cli/gv.ts init`                | Initialize workspace                      |
-| `scripts/project/new-project.ps1 -Name <name> -Kind <kind>` | Create new project                        |
+| Script                                                      | Purpose              |
+| ----------------------------------------------------------- | -------------------- |
+| `scripts/gentle-vanguard/src/cli/gv.ts init`                | Initialize workspace |
+| `scripts/project/new-project.ps1 -Name <name> -Kind <kind>` | Create new project   |
+
 <!-- REF-OBSOLETA: scripts/project/new-project.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| `scripts/gentle-vanguard/src/cli/gv.ts validate`            | Validate workspace                        |
-| `src/cli/gv.ts health`                                      | Check tool activation and workflow health |
-| `scripts/validation/validate-project.ps1`                   | Run repository validation gate            |
+
+| `scripts/gentle-vanguard/src/cli/gv.ts validate` | Validate workspace | | `src/cli/gv.ts health` |
+Check tool activation and workflow health | | `scripts/validation/validate-project.ps1` | Run
+repository validation gate |
 <!-- REF-OBSOLETA: scripts/validation/validate-project.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 ## Questions?

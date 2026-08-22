@@ -1,8 +1,8 @@
 # Doc-Gentle - Document Intelligence Platform
 
-> **Archived specification — not a publishable application.** Retained as
-> product research only. The supported document-processing capability lives in
-> the root TypeScript stack and its `document-processor` skill.
+> **Archived specification — not a publishable application.** Retained as product research only. The
+> supported document-processing capability lives in the root TypeScript stack and its
+> `document-processor` skill.
 
 ## 🎯 Product Vision
 

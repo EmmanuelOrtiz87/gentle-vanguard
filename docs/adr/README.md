@@ -22,26 +22,26 @@ Each ADR is immutable once accepted. Updates create new ADRs (ADR-0011, etc).
 
 ## Current Decisions
 
-| ID                                                       | Title                                 | Status           | Date       | Summary                                                                                |
-| -------------------------------------------------------- | ------------------------------------- | ---------------- | ---------- | -------------------------------------------------------------------------------------- |
-| **[ADR-0001](ADR-0001-foundation-architecture-decisions.md)** | Foundation Architecture Decisions | ✅ Accepted      | May 2026   | Meta-ADR: foundational stack decisions (TypeScript, lefthook, node:test, 5-layer)       |
-| **[ADR-0002](ADR-002-typescript-first-architecture.md)** | Primary Language: TypeScript          | ✅ Accepted      | May 2026   | Why TypeScript over PowerShell for automation (supersedes ADR-0012)                     |
-| **[ADR-0003](ADR-0003-mcp-workspace-external.md)**       | MCP Workspace: External Local         | ✅ Accepted      | May 2026   | Why MCP workspace is external (not git-tracked)                                         |
-| **[ADR-0004](ADR-0004-npx-offline-hardening.md)**        | NPX Hardening: Offline + Workspace    | ✅ Accepted      | May 2026   | Why npx uses offline mode with pre-vetted workspace                                    |
-| **[ADR-0005](ADR-0005-homologation-gate.md)**            | Homologation Gate: Mandatory          | ✅ Accepted      | May 2026   | Why release workflow has mandatory repo alignment check                                |
-| **[ADR-0006](ADR-0006-code-coverage-requirements.md)**   | Code Coverage: Tiered Thresholds      | ✅ Accepted      | May 2026   | Coverage thresholds (70%/75%/65%) with quarterly targets, native TS runner              |
-| **[ADR-0007](ADR-007-nexus-operational-database.md)**    | Nexus Operational Database            | ✅ Accepted      | Jul 2026    | SQLite operational DB (WAL, FK ON) — central nervous system of the stack                |
-| **[ADR-0008](ADR-008-session-scoring-metrics.md)**       | Session Scoring Metrics               | ✅ Accepted      | Jul 2026    | Quality scoring per session (delegations, corrections, proactive hits)                  |
-| **[ADR-0009](ADR-009-watchtower-autoheal-false-positive.md)** | Watchtower Autoheal (False Positive) | ✅ Accepted  | Aug 2026    | Maintenance watchtower with auto-healing, 95 checks, 13 components                      |
-| **[ADR-0010](ADR-010-knowledge-absorption-external-repos.md)** | Knowledge Absorption (External Repos) | ✅ Accepted | Aug 2026    | Absorb external knowledge as native TS (secret-scanner, skills, ai-provenance)          |
-| **[ADR-0011](ADR-0011-automated-dependency-updates.md)** | Dependency Updates: Audit + Quarterly | ✅ Accepted      | May 2026   | npm audit in pre-push + quarterly review + Renovate Q3 2026                            |
-| **[ADR-0012](ADR-0012-powershell-language-choice.md)**   | Primary Language: PowerShell          | ⚠️ Superseded    | May 2026   | Original PowerShell choice — superseded by ADR-0002 (TypeScript-First)                 |
-| **[ADR-0013](ADR-0013-annual-security-audit-external-firm.md)** | Annual Security Audit (External) | ✅ Accepted      | Aug 2026   | External firm audit, Q4 recurrence, plan in ANNUAL-AUDIT-PLAN.md                       |
-| **[ADR-0014](ADR-0014-slsa-supply-chain-attestation-native-ts.md)** | SLSA Supply-Chain Attestation | ✅ Accepted      | Aug 2026   | SLSA Build L1 provenance native TS (in-toto v1 + SLSA v1.0)                            |
-| **[ADR-0015](ADR-0015-slsa-provenance-signing-native-dsse-ed25519.md)** | SLSA Provenance Signing | ✅ Accepted      | Aug 2026   | DSSE + Ed25519 native signing → Build L2/L3 (no falsifiable provenance)                |
-| **[ADR-0016](ADR-0016-chaos-engineering-engine-native-ts.md)** | Chaos Engineering Engine | ✅ Accepted      | Aug 2026   | Native TS controlled experiments (config/session/dashboard-ws), safe restore            |
-| **[ADR-0017](ADR-0017-container-artifact-vulnerability-scanner-native-ts.md)** | Container/Artifact Scanner | ✅ Accepted      | Aug 2026   | Native TS Syft+Grype+Trivy vulnerability scanning without Docker (SBOM/rootfs)          |
-| **[ADR-0018](ADR-0018-content-operations-engine-native-ts.md)** | Content Operations Engine | ✅ Accepted      | Aug 2026   | Native TS offline-first content pipeline (manifest + state machine + CLI, 21 jobs reales) |
+| ID                                                                             | Title                                 | Status        | Date     | Summary                                                                                   |
+| ------------------------------------------------------------------------------ | ------------------------------------- | ------------- | -------- | ----------------------------------------------------------------------------------------- |
+| **[ADR-0001](ADR-0001-foundation-architecture-decisions.md)**                  | Foundation Architecture Decisions     | ✅ Accepted   | May 2026 | Meta-ADR: foundational stack decisions (TypeScript, lefthook, node:test, 5-layer)         |
+| **[ADR-0002](ADR-002-typescript-first-architecture.md)**                       | Primary Language: TypeScript          | ✅ Accepted   | May 2026 | Why TypeScript over PowerShell for automation (supersedes ADR-0012)                       |
+| **[ADR-0003](ADR-0003-mcp-workspace-external.md)**                             | MCP Workspace: External Local         | ✅ Accepted   | May 2026 | Why MCP workspace is external (not git-tracked)                                           |
+| **[ADR-0004](ADR-0004-npx-offline-hardening.md)**                              | NPX Hardening: Offline + Workspace    | ✅ Accepted   | May 2026 | Why npx uses offline mode with pre-vetted workspace                                       |
+| **[ADR-0005](ADR-0005-homologation-gate.md)**                                  | Homologation Gate: Mandatory          | ✅ Accepted   | May 2026 | Why release workflow has mandatory repo alignment check                                   |
+| **[ADR-0006](ADR-0006-code-coverage-requirements.md)**                         | Code Coverage: Tiered Thresholds      | ✅ Accepted   | May 2026 | Coverage thresholds (70%/75%/65%) with quarterly targets, native TS runner                |
+| **[ADR-0007](ADR-007-nexus-operational-database.md)**                          | Nexus Operational Database            | ✅ Accepted   | Jul 2026 | SQLite operational DB (WAL, FK ON) — central nervous system of the stack                  |
+| **[ADR-0008](ADR-008-session-scoring-metrics.md)**                             | Session Scoring Metrics               | ✅ Accepted   | Jul 2026 | Quality scoring per session (delegations, corrections, proactive hits)                    |
+| **[ADR-0009](ADR-009-watchtower-autoheal-false-positive.md)**                  | Watchtower Autoheal (False Positive)  | ✅ Accepted   | Aug 2026 | Maintenance watchtower with auto-healing, 95 checks, 13 components                        |
+| **[ADR-0010](ADR-010-knowledge-absorption-external-repos.md)**                 | Knowledge Absorption (External Repos) | ✅ Accepted   | Aug 2026 | Absorb external knowledge as native TS (secret-scanner, skills, ai-provenance)            |
+| **[ADR-0011](ADR-0011-automated-dependency-updates.md)**                       | Dependency Updates: Audit + Quarterly | ✅ Accepted   | May 2026 | npm audit in pre-push + quarterly review + Renovate Q3 2026                               |
+| **[ADR-0012](ADR-0012-powershell-language-choice.md)**                         | Primary Language: PowerShell          | ⚠️ Superseded | May 2026 | Original PowerShell choice — superseded by ADR-0002 (TypeScript-First)                    |
+| **[ADR-0013](ADR-0013-annual-security-audit-external-firm.md)**                | Annual Security Audit (External)      | ✅ Accepted   | Aug 2026 | External firm audit, Q4 recurrence, plan in ANNUAL-AUDIT-PLAN.md                          |
+| **[ADR-0014](ADR-0014-slsa-supply-chain-attestation-native-ts.md)**            | SLSA Supply-Chain Attestation         | ✅ Accepted   | Aug 2026 | SLSA Build L1 provenance native TS (in-toto v1 + SLSA v1.0)                               |
+| **[ADR-0015](ADR-0015-slsa-provenance-signing-native-dsse-ed25519.md)**        | SLSA Provenance Signing               | ✅ Accepted   | Aug 2026 | DSSE + Ed25519 native signing → Build L2/L3 (no falsifiable provenance)                   |
+| **[ADR-0016](ADR-0016-chaos-engineering-engine-native-ts.md)**                 | Chaos Engineering Engine              | ✅ Accepted   | Aug 2026 | Native TS controlled experiments (config/session/dashboard-ws), safe restore              |
+| **[ADR-0017](ADR-0017-container-artifact-vulnerability-scanner-native-ts.md)** | Container/Artifact Scanner            | ✅ Accepted   | Aug 2026 | Native TS Syft+Grype+Trivy vulnerability scanning without Docker (SBOM/rootfs)            |
+| **[ADR-0018](ADR-0018-content-operations-engine-native-ts.md)**                | Content Operations Engine             | ✅ Accepted   | Aug 2026 | Native TS offline-first content pipeline (manifest + state machine + CLI, 21 jobs reales) |
 
 ---
 
@@ -209,8 +209,8 @@ Is there uncertainty or tradeoffs?
 
 **Q: Can we change an ADR after accepting it?**
 
-A: No. If circumstances change significantly, create a new ADR (ADR-0011) that supersedes or enhances
-the previous decision. Update the old ADR status to "Deprecated" or "Evolved To ADR-0011".
+A: No. If circumstances change significantly, create a new ADR (ADR-0011) that supersedes or
+enhances the previous decision. Update the old ADR status to "Deprecated" or "Evolved To ADR-0011".
 
 ---
 

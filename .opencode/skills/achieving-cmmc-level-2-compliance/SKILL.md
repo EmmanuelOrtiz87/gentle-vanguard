@@ -67,9 +67,11 @@ mitre_attack:
 ## Workflow
 
 ### 1. Determine applicability and CUI categories
+
 Confirm the contract requires CMMC Level 2 (CUI present, not just FCI). FCI-only contracts are **Level 1** (the 15 FAR 52.204-21 requirements). Identify CUI categories from the contract and the DoD CUI Registry.
 
 ### 2. Scope the environment
+
 Classify every asset into one of the CMMC scoping categories:
 - **CUI Assets** — process/store/transmit CUI (in scope, assessed against all applicable controls).
 - **Security Protection Assets** — provide security to the CUI environment (in scope).
@@ -80,21 +82,26 @@ Classify every asset into one of the CMMC scoping categories:
 Minimize scope deliberately — a smaller, well-segmented CUI enclave is far cheaper to certify than a flat network.
 
 ### 3. Implement the 110 requirements (NIST SP 800-171 Rev 2)
+
 Work the **14 families** (3.1–3.14). For each requirement, implement, then write the **how** in the SSP. High-leverage early wins: MFA (3.5.3), FIPS-validated cryptography (3.13.11), audit logging (3.3.x), access control + least privilege (3.1.x), and incident response (3.6.x).
 
 ### 4. Score with the DoD Assessment Methodology (SPRS)
+
 Start at **110** and subtract the weighted value (**1, 3, or 5 points**) of each **unmet** requirement; partial credit applies to a small number of controls (e.g., MFA, FIPS crypto). The result is the **SPRS score** (maximum 110; the methodology floor is −203). Post the score, the SSP date, and the assessment scope to **SPRS** (or eMASS for higher assessments).
 
 ### 5. Build a compliant POA&M
+
 Document every unmet requirement with owner, remediation, and milestone. **Constraints under the CMMC rule:** a **Conditional** status requires a score of at least **80%** (≥ 88 of 110), only **POA&M-eligible** requirements may be deferred (the highest-weighted security requirements must be fully met — verify eligibility against 32 CFR Part 170), and all POA&M items must be **closed within 180 days** to convert Conditional → **Final**.
 
 ### 6. Assess (self or C3PAO)
+
 - **Level 1** and a subset of Level 2 = annual **self-assessment** with an affirmation in SPRS.
 - **Level 2 (most CUI contracts)** = triennial **C3PAO** certification assessment.
 - **Level 3** = DoD (DIBCAC) assessment on top of Level 2, adding SP 800-172 enhanced requirements.
 Assessors evaluate each objective as **MET / NOT MET / N/A** with evidence (examine/interview/test). A senior official files the **annual affirmation** of continued compliance.
 
 ### 7. Maintain certification
+
 Certification is valid **three years** with **annual affirmations**. Maintain the SSP, re-score on change, keep evidence current, and feed significant changes back into the assessment.
 
 ## Key Concepts

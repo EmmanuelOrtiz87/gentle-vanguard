@@ -13,18 +13,22 @@ console.log('Opening Nexus DB:', DB_PATH);
 const db = new Database(DB_PATH, { readonly: true });
 
 // Check if token_transactions table exists
-const tableCheck = db.prepare(`SELECT name FROM sqlite_master WHERE type='table' AND name='token_transactions'`).get();
+const tableCheck = db
+  .prepare(`SELECT name FROM sqlite_master WHERE type='table' AND name='token_transactions'`)
+  .get();
 if (!tableCheck) {
-    console.log('Table token_transactions not found. Checking available tables:');
-    const tables = db.prepare(`SELECT name FROM sqlite_master WHERE type='table'`).all();
-    console.table(tables);
-    db.close();
-    process.exit(1);
+  console.log('Table token_transactions not found. Checking available tables:');
+  const tables = db.prepare(`SELECT name FROM sqlite_master WHERE type='table'`).all();
+  console.table(tables);
+  db.close();
+  process.exit(1);
 }
 
 // Top sessions by input tokens desde la tabla token_transactions
 console.log('\n=== TOP 15 SESSIONS BY INPUT TOKENS (Nexus) ===');
-const topSessions = db.prepare(`
+const topSessions = db
+  .prepare(
+    `
     SELECT 
         session_id,
         SUM(input_tokens) as total_input,
@@ -41,12 +45,16 @@ const topSessions = db.prepare(`
     HAVING total_input > 100000
     ORDER BY total_input DESC 
     LIMIT 15
-`).all();
+`,
+  )
+  .all();
 console.table(topSessions);
 
 // Total stats
 console.log('\n=== OVERALL NEXUS TOKEN STATISTICS ===');
-const totals = db.prepare(`
+const totals = db
+  .prepare(
+    `
     SELECT 
         COUNT(DISTINCT session_id) as total_sessions,
         SUM(input_tokens) as total_input,
@@ -56,12 +64,16 @@ const totals = db.prepare(`
         SUM(cost) as total_cost,
         COUNT(*) as total_transactions
     FROM token_transactions
-`).get();
+`,
+  )
+  .get();
 console.table([totals]);
 
 // Agent breakdown
 console.log('\n=== TOKEN CONSUMPTION BY AGENT TYPE ===');
-const byAgent = db.prepare(`
+const byAgent = db
+  .prepare(
+    `
     SELECT 
         agent,
         COUNT(*) as transactions,
@@ -71,7 +83,9 @@ const byAgent = db.prepare(`
     FROM token_transactions
     GROUP BY agent
     ORDER BY input_tokens DESC
-`).all();
+`,
+  )
+  .all();
 console.table(byAgent);
 
 db.close();

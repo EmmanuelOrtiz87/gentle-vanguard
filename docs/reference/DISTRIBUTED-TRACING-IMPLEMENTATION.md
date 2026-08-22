@@ -113,10 +113,13 @@ Todos los reportes en un nico directorio `.telemetry/`:
 | Archivo                                                | Descripcin              |
 | ------------------------------------------------------ | ----------------------- |
 | `scripts/utilities/initialize-distributed-tracing.ps1` | Script de inicializacin |
+
 <!-- REF-OBSOLETA: scripts/utilities/initialize-distributed-tracing.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| `scripts/utilities/telemetry-dashboard.ps1`            | Dashboard de telemetra  |
+
+| `scripts/utilities/telemetry-dashboard.ps1` | Dashboard de telemetra |
 <!-- REF-OBSOLETA: scripts/utilities/telemetry-dashboard.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| `scripts/utilities/session-autostart.cmd`              | Autostart actualizado   |
+
+| `scripts/utilities/session-autostart.cmd` | Autostart actualizado |
 
 ## Uso Rpido
 

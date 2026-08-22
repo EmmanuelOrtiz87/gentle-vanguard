@@ -68,9 +68,13 @@ Files excluded from coverage measurement (see `tests/coverage-config.json`):
 
 - `src/setup-complete.ts` — one-time machine bootstrap
 - `scripts/run-tests-simple.ps1` — test orchestrator (not subject to self-test)
+
 <!-- REF-OBSOLETA: scripts/run-tests-simple.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 - `scripts/testing/run-tests.ps1` — legacy test runner
+
 <!-- REF-OBSOLETA: scripts/testing/run-tests.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 - `build/**` — build tooling, not runtime code
 - `bin/**` — launcher shims
 
@@ -85,9 +89,9 @@ npm run coverage:quick  # quick informational run (pre-push, never blocks)
 npm run coverage:report # generate reports only
 ```
 
-The runner executes each target module independently, parses the V8 coverage JSON (`coverage/`),
-and validates aggregate + per-target percentages against `tests/coverage-config.json`. Targets that
-are not exercised by any test are reported as WARN (not FAIL) so the gate degrades gracefully.
+The runner executes each target module independently, parses the V8 coverage JSON (`coverage/`), and
+validates aggregate + per-target percentages against `tests/coverage-config.json`. Targets that are
+not exercised by any test are reported as WARN (not FAIL) so the gate degrades gracefully.
 
 Configuration in `tests/coverage-config.json` controls thresholds, inclusions, and exclusions. The
 CI workflow uploads coverage reports as artifacts.

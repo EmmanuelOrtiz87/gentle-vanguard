@@ -52,15 +52,19 @@ This skill maps to the MITRE ATLAS techniques **AML.T0051 (LLM Prompt Injection)
 
 - Python 3.10+ (3.12 recommended) and a virtual environment.
 - Install garak from PyPI:
+
   ```bash
   python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
   python -m pip install -U garak
   garak --version
   ```
+
 - For the bleeding-edge version:
+
   ```bash
   python -m pip install -U git+https://github.com/NVIDIA/garak.git@main
   ```
+
 - An API key for the target if probing a hosted model (for example `export OPENAI_API_KEY="sk-..."`).
 - Written authorization to test the target, and awareness of token cost (probes generate thousands of calls).
 
@@ -85,15 +89,20 @@ This skill uses MITRE ATLAS (the adversarial-ML companion to ATT&CK) technique I
 ## Workflow
 
 ### Phase 1: Enumerate Probes and Detectors
+
 1. List every probe garak ships so you can scope the run:
+
    ```bash
    garak --list_probes
    ```
+
 2. List detectors (the modules that score whether a probe succeeded) and generators (target connectors):
+
    ```bash
    garak --list_detectors
    garak --list_generators
    ```
+
 3. Read the probe taxonomy. Key families:
    - `promptinject` — PromptInject-framework direct injection.
    - `latentinjection` — instructions hidden in documents/encoded text (indirect injection).
@@ -104,11 +113,15 @@ This skill uses MITRE ATLAS (the adversarial-ML companion to ATT&CK) technique I
    - `malwaregen` — request AV-evading or malicious code.
 
 ### Phase 2: Probe a Local Hugging Face Model
+
 1. Run a single jailbreak probe against a local model to validate setup:
+
    ```bash
    python -m garak --target_type huggingface --target_name gpt2 --probes dan.Dan_11_0
    ```
+
 2. Run a fuller suite against a chat model:
+
    ```bash
    python -m garak \
      --target_type huggingface \
@@ -118,7 +131,9 @@ This skill uses MITRE ATLAS (the adversarial-ML companion to ATT&CK) technique I
    ```
 
 ### Phase 3: Probe an OpenAI-Compatible API
+
 1. Export the key and run injection + leakage probes:
+
    ```bash
    export OPENAI_API_KEY="sk-..."
    python -m garak \
@@ -129,11 +144,14 @@ This skill uses MITRE ATLAS (the adversarial-ML companion to ATT&CK) technique I
      --parallel_attempts 8 \
      --report_prefix gpt4omini_injection
    ```
+
    - `--generations` controls how many completions per prompt (more = more statistical confidence, more cost).
    - `--parallel_attempts` raises throughput for remote APIs.
 
 ### Phase 4: Probe an Arbitrary REST Endpoint
+
 1. garak can target any HTTP API via a JSON generator spec. Create `rest.json`:
+
    ```json
    {
      "rest": {
@@ -149,7 +167,9 @@ This skill uses MITRE ATLAS (the adversarial-ML companion to ATT&CK) technique I
      }
    }
    ```
+
 2. Run garak against it:
+
    ```bash
    export ENV_TOKEN="..."
    python -m garak \
@@ -160,10 +180,13 @@ This skill uses MITRE ATLAS (the adversarial-ML companion to ATT&CK) technique I
    ```
 
 ### Phase 5: Run a Curated Config and Full Sweep
+
 1. For repeatable assessments, pin everything in a YAML/JSON config and pass `--config`:
+
    ```bash
    python -m garak --config assessment.yaml
    ```
+
    ```yaml
    # assessment.yaml
    plugins:
@@ -176,20 +199,25 @@ This skill uses MITRE ATLAS (the adversarial-ML companion to ATT&CK) technique I
    reporting:
      report_prefix: quarterly_llm_assessment
    ```
+
 2. For an exhaustive sweep (slow, expensive) run all probes by omitting `--probes` entirely.
 
 ### Phase 6: Interpret the Hit-Rate Report
+
 1. Read the terminal summary. Each row is `probe.Class  detector: PASS|FAIL  ok on N/M`. A FAIL with a low `ok` fraction means the model frequently produced the unsafe behavior — a high-severity finding.
 2. Open the machine-readable report and aggregate failures:
+
    ```bash
    # Every attempt with detector verdicts is one JSON line
    jq -r 'select(.entry_type=="eval") | "\(.probe)\t\(.detector)\t\(.passed)/\(.total)"' \
      garak.<timestamp>.report.jsonl | sort
    ```
+
 3. Open the generated `.report.html` in a browser for the formatted scorecard and per-probe breakdown.
 4. Pull the actual successful attack strings from the hit log to use as proof-of-concept evidence.
 
 ### Phase 7: Mitigate and Re-Test
+
 1. Apply a control (tighten the system prompt, add an input/output guardrail such as Llama Guard or LLM Guard, or change the model).
 2. Re-run the identical probe set with a new `--report_prefix`.
 3. Compare hit rates between runs to quantify risk reduction for the report.

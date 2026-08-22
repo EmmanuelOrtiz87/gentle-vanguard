@@ -367,6 +367,7 @@ operar. Con las correcciones propuestas, alcanzaría una puntuación de **9/10**
    ```
 
 3. **Esta semana:**
+
    ```bash
    # Reiniciar dashboard
    npm run dashboard:server

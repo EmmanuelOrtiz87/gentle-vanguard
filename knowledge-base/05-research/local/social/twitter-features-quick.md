@@ -10,4 +10,4 @@
 
 Which one interests you?
 
-#Gentle-VanguardStack #AI
+# Gentle-VanguardStack #AI

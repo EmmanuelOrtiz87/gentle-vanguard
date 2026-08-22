@@ -316,15 +316,19 @@ done
 ## Common Scenarios
 
 ### Scenario 1: BOLA in E-commerce API
+
 User A can access User B's order details by changing the order ID in `/api/v1/orders/{id}`. The API only checks authentication but not authorization on the object level.
 
 ### Scenario 2: Mass Assignment on User Profile
+
 The user update endpoint accepts a `role` field in the JSON body. By adding `"role":"admin"` to a profile update request, a regular user escalates to administrator privileges.
 
 ### Scenario 3: Deprecated API Version Bypass
+
 The `/api/v2/users` endpoint has proper rate limiting, but `/api/v1/users` (still active) has no rate limiting. Attackers use the old version to brute-force credentials.
 
 ### Scenario 4: GraphQL Introspection Data Leak
+
 GraphQL introspection is enabled in production, exposing the entire schema including internal queries, mutations, and sensitive field names that are not used in the frontend.
 
 ## Output Format

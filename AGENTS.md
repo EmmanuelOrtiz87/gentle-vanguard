@@ -178,8 +178,8 @@ Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica
 - `src/dashboard-stop.ts` mata watchdog primero para evitar restart loops
 - Frontend HTTP polling tolera caídas temporales del WS server
 - **CLI Guard**: check anti-regresión que detecta el patrón roto
-  `import.meta.url === \`file://${process.argv[1]}\`` (no normaliza rutas Windows → main() nunca se
-  ejecuta). Ver `src/auto-url-fix.ts` para el fix automático de 33 archivos.
+  `import.meta.url === \`file://${process.argv[1]}\``(no normaliza rutas Windows → main() nunca se ejecuta). Ver`src/auto-url-fix.ts`
+  para el fix automático de 33 archivos.
 
 ---
 
@@ -198,8 +198,8 @@ npm run scan:secrets -- --dir <dir>            # escaneo recursivo
 npm run scan:secrets -- --scan . --json        # output JSON
 ```
 
-- **80 patrones**: AWS, GCP, Azure, GitHub, GitLab, OpenAI, Anthropic, Slack, Stripe, JWT,
-  private keys, y más (categorías: aws/gcp/azure/github/gitlab/llm/slack/payment/cloud/generic/private-key)
+- **80 patrones**: AWS, GCP, Azure, GitHub, GitLab, OpenAI, Anthropic, Slack, Stripe, JWT, private
+  keys, y más (categorías: aws/gcp/azure/github/gitlab/llm/slack/payment/cloud/generic/private-key)
 - Entropy Shannon opcional (`--entropy`, ≥3.5 bits/char) para filtrar falsos positivos
 - Redacción automática por defecto (`--redact` / `--no-redact`)
 - Exit codes: 0 = sin secrets, 1 = secrets encontrados, 2 = error
@@ -211,8 +211,8 @@ npm run scan:secrets -- --scan . --json        # output JSON
   relevantes: ts/js/json/yml/yaml/md/env/toml/xml/py/ps1/sh/sql). Complementa a trufflehog y
   secretlint. Verificar con `npx lefthook validate`.
 - **Watchtower**: componente `secret-scanner` en `src/core/maintenance-watchtower.ts`
-  (`checkSecretScanner` — valida módulo, CLI, config y tests). Se ejecuta con `-Action health`
-  (95 checks, 13 componentes). Verificado 95/95 PASS.
+  (`checkSecretScanner` — valida módulo, CLI, config y tests). Se ejecuta con `-Action health` (95
+  checks, 13 componentes). Verificado 95/95 PASS.
 - **Routing de subagentes**: `config/subagent-mapping.json` registra las skills absorbidas por rol:
   - **DEV**: DevSecOps (devsecops-scanning, secret-scanning gitleaks, secrets CI/CD, SBOM,
     dependency-confusion, supply-chain CI/CD)
@@ -220,13 +220,14 @@ npm run scan:secrets -- --scan . --json        # output JSON
     ai-provenance
   - **QA**: API security (OWASP API Top 10, WebSocket, inventory), prompt leakage, RAG injection
 - **`src/recommend-agent.ts`**: keywords de cibersec añadidos a `matchDomain` (sbom, prompt
-  injection, garak, promptfoo, guardrails, nist, iso 27001, cmmc, gitleaks, api security, owasp,
-  mcp server, tool poisoning, etc.) → rutean a dominio `security` → `gov-agent`.
+  injection, garak, promptfoo, guardrails, nist, iso 27001, cmmc, gitleaks, api security, owasp, mcp
+  server, tool poisoning, etc.) → rutean a dominio `security` → `gov-agent`.
 
 ### Skills de ciberseguridad absorbidas (25, Apache-2.0)
 
 En `.opencode/skills/` nivel 1, con frontmatter rico (mapeos MITRE ATT&CK/ATLAS, NIST CSF/AI RMF)
-+ triggers. Dominios:
+
+- triggers. Dominios:
 
 - **AI/LLM Security**: `red-teaming-llms-with-garak`, `continuous-llm-red-teaming-with-promptfoo`,
   `defending-llms-with-guardrails`, `detecting-ai-model-prompt-injection-attacks`,
@@ -240,31 +241,33 @@ En `.opencode/skills/` nivel 1, con frontmatter rico (mapeos MITRE ATT&CK/ATLAS,
 - **API Security**: `conducting-api-security-testing`, `testing-api-security-with-owasp-top-10`,
   `testing-websocket-api-security`, `performing-api-inventory-and-discovery`
 - **Compliance**: `conducting-cyber-risk-assessment-with-nist-800-30`,
-  `performing-nist-csf-maturity-assessment`, `implementing-iso-27001-information-security-management`,
+  `performing-nist-csf-maturity-assessment`,
+  `implementing-iso-27001-information-security-management`,
   `implementing-gdpr-data-protection-controls`, `achieving-cmmc-level-2-compliance`
 
-⚠️ Técnicas ofensivas (red-team): uso restringido a entornos autorizados (notice legal en cada skill).
+⚠️ Técnicas ofensivas (red-team): uso restringido a entornos autorizados (notice legal en cada
+skill).
 
 ### diagram-design (MIT, v2.3)
 
 `.opencode/skills/diagram-design/` — 27 tipos de diagramas editoriales HTML/SVG self-contained
-(arquitectura, flowchart, sequence, ER, timeline, swimlane, quadrant, radar, loop, Gantt, data-flow…).
-Redibuja fuentes .drawio/Mermaid. Sin build step; abre directo en navegador. Usar para ADRs,
-reportes y documentación de arquitectura en lugar de "Mermaid-slop".
+(arquitectura, flowchart, sequence, ER, timeline, swimlane, quadrant, radar, loop, Gantt,
+data-flow…). Redibuja fuentes .drawio/Mermaid. Sin build step; abre directo en navegador. Usar para
+ADRs, reportes y documentación de arquitectura en lugar de "Mermaid-slop".
 
 ### ai-provenance — política dual (MIT)
 
 `.opencode/skills/ai-provenance/` — gestión de marcas de proveniencia AI (C2PA, Unicode, SynthID,
 EXIF/XMP) en texto y archivos.
 
-| Modo | Comportamiento | Activación |
-| --- | --- | --- |
-| **INSPECCIÓN** (default) | Detectar/reportar/verificar marcas | Automática, comportamiento normal |
-| **REMOCIÓN** (on-demand) | Limpiar C2PA/Unicode/metadatos | **SOLO** solicitud explícita e inequívoca del usuario sobre contenido propio |
+| Modo                     | Comportamiento                     | Activación                                                                   |
+| ------------------------ | ---------------------------------- | ---------------------------------------------------------------------------- |
+| **INSPECCIÓN** (default) | Detectar/reportar/verificar marcas | Automática, comportamiento normal                                            |
+| **REMOCIÓN** (on-demand) | Limpiar C2PA/Unicode/metadatos     | **SOLO** solicitud explícita e inequívoca del usuario sobre contenido propio |
 
 **Regla de oro**: el stack NUNCA remueve marcas de proveniencia en comportamiento normal. La
-remoción es una capacidad de emergencia/privacidad que requiere petición explícita del usuario.
-Ante dudas, inspeccionar y reportar; no limpiar.
+remoción es una capacidad de emergencia/privacidad que requiere petición explícita del usuario. Ante
+dudas, inspeccionar y reportar; no limpiar.
 
 ## v4.0-infrastructure
 

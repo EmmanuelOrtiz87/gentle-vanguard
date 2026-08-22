@@ -241,28 +241,29 @@ When delegating via `task` tool, the prompt sent to subagents MUST follow:
 
 ## 9. References
 
-| Resource                | Path                                      |
-| ----------------------- | ----------------------------------------- |
-| NORMATIVES (index)      | `rules/NORMATIVES.md` (120 lines)         |
-| NORMATIVAS-ARCHITECTURE | `rules/NORMATIVAS-ARCHITECTURE.md`        |
-| NORMATIVAS-CONFIG       | `rules/NORMATIVAS-CONFIG.md`              |
-| NORMATIVAS-DEVOPS       | `rules/NORMATIVAS-DEVOPS.md`              |
-| NORMATIVAS-DOCS         | `rules/NORMATIVAS-DOCS.md`                |
-| NORMATIVAS-ENFORCEMENT  | `rules/NORMATIVAS-ENFORCEMENT.md`         |
-| NORMATIVAS-GIT          | `rules/NORMATIVAS-GIT.md`                 |
-| AI Normatives           | `rules/AI-NORMATIVES.md`                  |
-| Development Standards   | `rules/DEVELOPMENT-STANDARDS.md`          |
-| AGENTS.md               | `docs/AGENTS.md`                          |
-| Break Glass             | `docs/AGENTS.md#break-glass`              |
-| Orchestrator Config     | `config/orchestrator.json`                |
-| Context Efficiency      | `config/context-efficiency.json`          |
-| Compaction Config       | `opencode.json#compaction`                |
-| Pre-process Caching     | `src/pre-process-input.ts`                |
-| Pre-Compact Hook        | `src/pre-compact-hook.ts`                 |
+| Resource                | Path                               |
+| ----------------------- | ---------------------------------- |
+| NORMATIVES (index)      | `rules/NORMATIVES.md` (120 lines)  |
+| NORMATIVAS-ARCHITECTURE | `rules/NORMATIVAS-ARCHITECTURE.md` |
+| NORMATIVAS-CONFIG       | `rules/NORMATIVAS-CONFIG.md`       |
+| NORMATIVAS-DEVOPS       | `rules/NORMATIVAS-DEVOPS.md`       |
+| NORMATIVAS-DOCS         | `rules/NORMATIVAS-DOCS.md`         |
+| NORMATIVAS-ENFORCEMENT  | `rules/NORMATIVAS-ENFORCEMENT.md`  |
+| NORMATIVAS-GIT          | `rules/NORMATIVAS-GIT.md`          |
+| AI Normatives           | `rules/AI-NORMATIVES.md`           |
+| Development Standards   | `rules/DEVELOPMENT-STANDARDS.md`   |
+| AGENTS.md               | `docs/AGENTS.md`                   |
+| Break Glass             | `docs/AGENTS.md#break-glass`       |
+| Orchestrator Config     | `config/orchestrator.json`         |
+| Context Efficiency      | `config/context-efficiency.json`   |
+| Compaction Config       | `opencode.json#compaction`         |
+| Pre-process Caching     | `src/pre-process-input.ts`         |
+| Pre-Compact Hook        | `src/pre-compact-hook.ts`          |
+
 <!-- REF-OBSOLETA: src/pre-compact-hook.ts no existe (ruta migrada o eliminada) -->
-| Behavior Prompts        | `config/behavior-prompts.json` (74 lines) |
-| Quick Commands          | `docs/QUICK-COMMANDS.md`                  |
-| Response Profile        | `CLAUDE.md#Response-Profile`              |
+
+| Behavior Prompts | `config/behavior-prompts.json` (74 lines) | | Quick Commands |
+`docs/QUICK-COMMANDS.md` | | Response Profile | `CLAUDE.md#Response-Profile` |
 
 ---
 

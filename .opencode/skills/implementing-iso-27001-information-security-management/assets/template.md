@@ -1,6 +1,7 @@
 # ISO 27001:2022 Implementation Audit Checklist
 
 ## Organization Information
+
 | Field | Value |
 |-------|-------|
 | Organization Name | |
@@ -14,6 +15,7 @@
 ## Clause 4: Context of the Organization
 
 ### 4.1 Understanding the Organization and its Context
+
 - [ ] Internal issues identified and documented
 - [ ] External issues identified and documented
 - [ ] PESTLE analysis completed
@@ -23,6 +25,7 @@
 - **Notes**: _______________
 
 ### 4.2 Understanding the Needs and Expectations of Interested Parties
+
 - [ ] Interested parties identified
 - [ ] Requirements of interested parties documented
 - [ ] Legal, regulatory, and contractual requirements identified
@@ -31,6 +34,7 @@
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 4.3 Determining the Scope of the ISMS
+
 - [ ] ISMS scope defined and documented
 - [ ] Scope considers internal and external issues (4.1)
 - [ ] Scope considers interested party requirements (4.2)
@@ -40,6 +44,7 @@
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 4.4 Information Security Management System
+
 - [ ] ISMS processes established
 - [ ] ISMS implemented and maintained
 - [ ] Continual improvement processes in place
@@ -51,6 +56,7 @@
 ## Clause 5: Leadership
 
 ### 5.1 Leadership and Commitment
+
 - [ ] Top management demonstrates commitment to the ISMS
 - [ ] Information security policy and objectives aligned with strategic direction
 - [ ] ISMS requirements integrated into business processes
@@ -63,6 +69,7 @@
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 5.2 Information Security Policy
+
 - [ ] Policy appropriate to the purpose of the organization
 - [ ] Policy includes information security objectives or framework for setting objectives
 - [ ] Policy includes commitment to satisfy applicable requirements
@@ -74,6 +81,7 @@
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 5.3 Organizational Roles, Responsibilities and Authorities
+
 - [ ] Information security roles and responsibilities assigned and communicated
 - [ ] Responsibility for ISMS conformance assigned
 - [ ] Responsibility for reporting ISMS performance assigned
@@ -85,6 +93,7 @@
 ## Clause 6: Planning
 
 ### 6.1.1 General (Actions to Address Risks and Opportunities)
+
 - [ ] Risks and opportunities considered (referencing 4.1 and 4.2)
 - [ ] Actions planned to address risks and opportunities
 - [ ] Plans for integrating actions into ISMS processes
@@ -93,6 +102,7 @@
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 6.1.2 Information Security Risk Assessment
+
 - [ ] Risk assessment process defined and documented
 - [ ] Risk acceptance criteria established
 - [ ] Criteria for performing risk assessments defined
@@ -106,6 +116,7 @@
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 6.1.3 Information Security Risk Treatment
+
 - [ ] Risk treatment options selected (mitigate, accept, avoid, transfer)
 - [ ] Controls determined for risk treatment
 - [ ] Controls compared with Annex A
@@ -116,6 +127,7 @@
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 6.2 Information Security Objectives and Planning to Achieve Them
+
 - [ ] Objectives established at relevant functions and levels
 - [ ] Objectives consistent with information security policy
 - [ ] Objectives measurable (where practicable)
@@ -127,6 +139,7 @@
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 6.3 Planning of Changes
+
 - [ ] Changes to ISMS carried out in a planned manner
 - **Evidence**: _______________
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
@@ -136,11 +149,13 @@
 ## Clause 7: Support
 
 ### 7.1 Resources
+
 - [ ] Resources needed for ISMS determined and provided
 - **Evidence**: _______________
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 7.2 Competence
+
 - [ ] Competence requirements determined for ISMS roles
 - [ ] Competence ensured through education, training, or experience
 - [ ] Actions taken to acquire competence where needed
@@ -149,6 +164,7 @@
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 7.3 Awareness
+
 - [ ] Persons aware of information security policy
 - [ ] Persons aware of their contribution to ISMS effectiveness
 - [ ] Persons aware of implications of not conforming to ISMS requirements
@@ -156,6 +172,7 @@
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 7.4 Communication
+
 - [ ] Internal and external communication needs determined
 - [ ] What to communicate defined
 - [ ] When to communicate defined
@@ -165,6 +182,7 @@
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 7.5 Documented Information
+
 - [ ] Documented information required by ISO 27001 maintained
 - [ ] Additional documented information determined by organization maintained
 - [ ] Appropriate identification and description
@@ -184,6 +202,7 @@
 ## Clause 8: Operation
 
 ### 8.1 Operational Planning and Control
+
 - [ ] Processes needed to meet ISMS requirements planned, implemented, and controlled
 - [ ] Criteria for processes established
 - [ ] Control of processes in accordance with criteria implemented
@@ -195,6 +214,7 @@
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 8.2 Information Security Risk Assessment
+
 - [ ] Risk assessments performed at planned intervals
 - [ ] Risk assessments performed when significant changes occur
 - [ ] Results of risk assessments documented
@@ -202,6 +222,7 @@
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 8.3 Information Security Risk Treatment
+
 - [ ] Risk treatment plan implemented
 - [ ] Results of risk treatment documented
 - **Evidence**: _______________
@@ -212,6 +233,7 @@
 ## Clause 9: Performance Evaluation
 
 ### 9.1 Monitoring, Measurement, Analysis and Evaluation
+
 - [ ] What needs to be monitored and measured determined
 - [ ] Monitoring and measurement methods determined
 - [ ] When monitoring and measuring shall be performed determined
@@ -223,6 +245,7 @@
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 9.2 Internal Audit
+
 - [ ] Internal audit programme planned (frequency, methods, responsibilities)
 - [ ] Audit programme considers importance of processes and previous audit results
 - [ ] Audit criteria and scope defined for each audit
@@ -233,6 +256,7 @@
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 9.3 Management Review
+
 - [ ] Management review conducted at planned intervals
 - [ ] Review considers status of actions from previous reviews
 - [ ] Review considers changes in external and internal issues
@@ -250,11 +274,13 @@
 ## Clause 10: Improvement
 
 ### 10.1 Continual Improvement
+
 - [ ] Suitability, adequacy, and effectiveness of ISMS continually improved
 - **Evidence**: _______________
 - **Status**: Conforming / Minor NC / Major NC / Not Assessed
 
 ### 10.2 Nonconformity and Corrective Action
+
 - [ ] Nonconformities identified and reacted to
 - [ ] Actions taken to control and correct nonconformities
 - [ ] Consequences dealt with
@@ -282,6 +308,7 @@
 | **Total** | | | | | |
 
 ## Annex A Control Assessment (attach separately)
+
 - Total Applicable Controls: _____ / 93
 - Fully Implemented: _____
 - Partially Implemented: _____
@@ -289,11 +316,13 @@
 - Not Applicable: _____
 
 ## Recommendations
+
 1. _______________
 2. _______________
 3. _______________
 
 ## Sign-off
+
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
 | Assessor | | | |

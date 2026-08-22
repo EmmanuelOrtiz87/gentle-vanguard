@@ -13,4 +13,4 @@ Get it: github.com/EmmanuelOrtiz87/gentle-vanguard
 
 Questions? Drop them here!
 
-#Gentle-VanguardStack
+# Gentle-VanguardStack

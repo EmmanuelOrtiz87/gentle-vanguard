@@ -3,6 +3,7 @@
 ## Primary Legislation
 
 ### Regulation (EU) 2016/679 - General Data Protection Regulation
+
 - **Adopted**: April 14, 2016
 - **Effective**: May 25, 2018
 - **Scope**: Applies to any organization processing personal data of EU/EEA residents
@@ -13,6 +14,7 @@
 ## Key Articles Reference
 
 ### Chapter II - Principles (Articles 5-11)
+
 - **Art. 5**: Core processing principles (lawfulness, fairness, transparency, purpose limitation, data minimization, accuracy, storage limitation, integrity and confidentiality, accountability)
 - **Art. 6**: Six lawful bases for processing
 - **Art. 7**: Conditions for consent
@@ -21,6 +23,7 @@
 - **Art. 10**: Criminal conviction data
 
 ### Chapter III - Rights of the Data Subject (Articles 12-23)
+
 - **Art. 12**: Transparent communication (one month response deadline)
 - **Art. 13**: Information for direct collection
 - **Art. 14**: Information for indirect collection
@@ -33,6 +36,7 @@
 - **Art. 22**: Automated individual decision-making including profiling
 
 ### Chapter IV - Controller and Processor (Articles 24-43)
+
 - **Art. 24**: Responsibility of the controller
 - **Art. 25**: Data protection by design and by default
 - **Art. 26**: Joint controllers
@@ -46,6 +50,7 @@
 - **Art. 37-39**: Data Protection Officer
 
 ### Chapter V - International Transfers (Articles 44-49)
+
 - **Art. 45**: Adequacy decision (EU Commission determines adequate countries)
 - **Art. 46**: Appropriate safeguards (SCCs, BCRs, codes of conduct, certification)
 - **Art. 47**: Binding Corporate Rules
@@ -54,11 +59,13 @@
 ## Supporting Standards and Guidance
 
 ### ISO/IEC 27701:2019
+
 - Privacy Information Management System (PIMS) extension to ISO 27001
 - Maps GDPR requirements to ISO management system controls
 - Provides controller and processor-specific guidance
 
 ### EDPB Guidelines
+
 - Guidelines on Data Protection Impact Assessment (WP 248)
 - Guidelines on Data Breach Notification (WP 250)
 - Guidelines on Consent (updated 2020)
@@ -66,6 +73,7 @@
 - Guidelines on Data Protection by Design and Default (04/2019)
 
 ### Transfer Mechanisms Post-Schrems II
+
 - **Standard Contractual Clauses (SCCs)**: New modular SCCs adopted June 2021
   - Module 1: Controller to Controller
   - Module 2: Controller to Processor
@@ -76,6 +84,7 @@
 - **EU-US Data Privacy Framework**: Adequacy decision adopted July 2023
 
 ### DPIA Criteria (Article 35(3) and EDPB)
+
 DPIA required when processing involves:
 1. Systematic and extensive evaluation of personal aspects (profiling)
 2. Large-scale processing of special categories or criminal data
@@ -89,6 +98,7 @@ DPIA required when processing involves:
 10. Processing that prevents data subjects from exercising rights
 
 ## Supervisory Authorities
+
 | Country | Authority | Website |
 |---------|-----------|---------|
 | EU-wide | European Data Protection Board (EDPB) | edpb.europa.eu |
@@ -101,6 +111,7 @@ DPIA required when processing involves:
 | UK | ICO (UK GDPR post-Brexit) | ico.org.uk |
 
 ## Key Enforcement Decisions (Benchmark)
+
 - Meta (Ireland DPC, 2023): EUR 1.2 billion - Transfers to US without adequate safeguards
 - Amazon (Luxembourg CNPD, 2021): EUR 746 million - Advertising targeting
 - WhatsApp (Ireland DPC, 2021): EUR 225 million - Transparency failures

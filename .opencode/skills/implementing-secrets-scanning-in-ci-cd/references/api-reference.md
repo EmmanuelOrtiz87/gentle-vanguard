@@ -3,6 +3,7 @@
 ## Gitleaks CLI
 
 ### Subcommands
+
 ```bash
 gitleaks git    # Scan git repositories
 gitleaks dir    # Scan directories or files
@@ -10,6 +11,7 @@ gitleaks stdin  # Detect secrets from stdin
 ```
 
 ### Key Flags
+
 | Flag | Description |
 |------|-------------|
 | `--source, -s` | Path to source directory or repository |
@@ -27,6 +29,7 @@ gitleaks stdin  # Detect secrets from stdin
 | `--gitleaks-ignore-path, -i` | Path to .gitleaksignore file |
 
 ### Pre-commit Hook
+
 ```yaml
 # .pre-commit-config.yaml
 repos:
@@ -37,6 +40,7 @@ repos:
 ```
 
 ### Protect Staged Files
+
 ```bash
 gitleaks protect --staged --report-format json --report-path staged-report.json
 ```
@@ -44,6 +48,7 @@ gitleaks protect --staged --report-format json --report-path staged-report.json
 ## TruffleHog CLI
 
 ### Subcommands
+
 ```bash
 trufflehog git <repo-url>            # Scan git repository
 trufflehog filesystem <path>         # Scan local filesystem
@@ -54,6 +59,7 @@ trufflehog docker --image=<img>      # Scan Docker image
 ```
 
 ### Key Flags
+
 | Flag | Description |
 |------|-------------|
 | `--json, -j` | Output in JSON format (one object per line) |
@@ -69,12 +75,14 @@ trufflehog docker --image=<img>      # Scan Docker image
 ## GitHub Secret Scanning API
 
 ### List Alerts
+
 ```bash
 curl -H "Authorization: Bearer $TOKEN" \
   https://api.github.com/repos/{owner}/{repo}/secret-scanning/alerts
 ```
 
 ### Update Alert State
+
 ```bash
 curl -X PATCH \
   -H "Authorization: Bearer $TOKEN" \

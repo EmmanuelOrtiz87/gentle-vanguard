@@ -15,5 +15,5 @@ Tech: Works on Win/Linux/macOS. Agnostic to AI provider.
 
 Would love feedback. What would make this useful for your team?
 
-#Gentle-VanguardStack #DevTools #AI #AIDevelopment #Engineering #Governance #SoftwareEngineering
-#Productivity #AutoDelegation
+# Gentle-VanguardStack #DevTools #AI #AIDevelopment #Engineering #Governance #SoftwareEngineering
+# Productivity #AutoDelegation

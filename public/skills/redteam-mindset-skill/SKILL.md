@@ -108,8 +108,8 @@ failure modes explicit:
    e.g. SAML acs raw POST vs SAML acs replay is a _technical_ decision the operator can make and
    document — it does not require user pre-approval.
 10. **Skill-gap-as-stop-condition.** "No `hunt-zoho` skill exists, so I logged a v1.1 gap and moved
-    on." NO. If a hunt-* skill doesn't exist for a discovered tech stack, do the same work
-    _manually_ using the vendor's public check matrix. Log the gap in v1.1 roadmap *and\* run the
+    on." NO. If a hunt-*skill doesn't exist for a discovered tech stack, do the same work
+    _manually_ using the vendor's public check matrix. Log the gap in v1.1 roadmap*and\* run the
     checks now.
 
 ### Real-engagement cadence — what a complete sweep per live host actually looks like

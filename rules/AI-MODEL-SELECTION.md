@@ -139,9 +139,11 @@ When changing a model assignment:
 | Agent Config (OpenCode) | `opencode.json`                                               |
 | Provider Health Runbook | `docs/operations/procedures/MODEL-PROVIDER-HEALTH-RUNBOOK.md` |
 | Token Budget Guard      | `src/telemetry/token-budget-guard.ts`                         |
+
 <!-- REF-OBSOLETA: src/telemetry/token-budget-guard.ts no existe (ruta migrada o eliminada) -->
-| Performance Normatives  | `rules/NORMATIVAS-PERFORMANCE.md`                             |
-| Context Engineering     | `rules/CONTEXT-ENGINEERING.md`                                |
+
+| Performance Normatives | `rules/NORMATIVAS-PERFORMANCE.md` | | Context Engineering |
+`rules/CONTEXT-ENGINEERING.md` |
 
 ---
 

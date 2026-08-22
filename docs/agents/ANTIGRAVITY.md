@@ -107,14 +107,23 @@ When trigger detected, load corresponding skill:
 ### Scripts
 
 - Compress: `scripts/utilities/semantic-compression.ps1`
+
 <!-- REF-OBSOLETA: scripts/utilities/semantic-compression.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 - Cache: `scripts/utilities/prompt-cache.ps1`
+
 <!-- REF-OBSOLETA: scripts/utilities/prompt-cache.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 - Security: `scripts/utilities/prompt-security-scanner.ps1`
+
 <!-- REF-OBSOLETA: scripts/utilities/prompt-security-scanner.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 - Version: `scripts/utilities/prompt-versioning.ps1`
+
 <!-- REF-OBSOLETA: scripts/utilities/prompt-versioning.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 - Monitor: `scripts/utilities/prompt-optimization-monitor.ps1`
+
 <!-- REF-OBSOLETA: scripts/utilities/prompt-optimization-monitor.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 ## Configuration Files

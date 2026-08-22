@@ -1,25 +1,28 @@
 # Content Operations Integration Status
 
-**Branch:** `develop` (integrado vía PR #159)
-**Base:** `develop`
+**Branch:** `develop` (integrado vía PR #159) **Base:** `develop`
 
 ## Completed
 
 - Offline-first `ContentJob` domain contract.
-- Manifest at `content/operations/master-manifest.json` — **21 jobs reales** del sprint de lanzamiento `GROWTH-EXPERIMENT-001` (18/08 → 01/09/2026).
+- Manifest at `content/operations/master-manifest.json` — **21 jobs reales** del sprint de
+  lanzamiento `GROWTH-EXPERIMENT-001` (18/08 → 01/09/2026).
 - Platform capability registry at `config/content-operations/platforms.json` (11 plataformas).
 - Validation and packet generation in `src/content-operations/engine.ts`:
   - State machine con `TRANSITIONS`, `canTransition()` y `transition()` inmutable.
-  - `loadPlatformRegistry()` + validación contra registry (plataforma, approvalRequired, media → asset).
+  - `loadPlatformRegistry()` + validación contra registry (plataforma, approvalRequired, media →
+    asset).
   - Validación de fecha `YYYY-MM-DD` y campos obligatorios (theme, contentType, status).
   - `packageJob()` idempotente (no reescribe paquetes existentes con el mismo contenido).
   - `saveManifest()` para persistir transiciones.
-- CLI completo en `src/content-operations/cli.ts` (8 comandos: list, validate, prepare, status, report, transition, export, help) con filtros `--date/--platform/--id/--status`.
+- CLI completo en `src/content-operations/cli.ts` (8 comandos: list, validate, prepare, status,
+  report, transition, export, help) con filtros `--date/--platform/--id/--status`.
 - Unit coverage en `tests/unit/content-operations.test.ts` — **15 tests PASS**.
 - Offline export script at `scripts/content-operations/export-kit.ps1`.
 - Architecture and implementation directives (docs/operations/).
 - Assets reales del calendario en `docs/presentations/social-assets/` (21 PNGs).
-- npm scripts: `content:list`, `content:validate`, `content:prepare`, `content:status`, `content:report`, `content:export`, `content:test`.
+- npm scripts: `content:list`, `content:validate`, `content:prepare`, `content:status`,
+  `content:report`, `content:export`, `content:test`.
 - No remote credentials or API calls.
 - Import-safe engine: importing the library does not execute a publication workflow.
 
@@ -61,7 +64,8 @@ npx tsx src/content-operations/cli.ts prepare --date=2026-08-18
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/content-operations/export-kit.ps1
 ```
 
-Remote publication is intentionally out of scope until each provider adapter has been implemented and tested against its current official API requirements.
+Remote publication is intentionally out of scope until each provider adapter has been implemented
+and tested against its current official API requirements.
 
 ## Acceptance gates for merge
 

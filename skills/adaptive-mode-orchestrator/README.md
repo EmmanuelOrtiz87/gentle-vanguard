@@ -264,7 +264,7 @@ automtica **Monitoreo Real-time**: Visibilidad completa **Escalabilidad**: Manej
 
 ## Estado
 
-** READY FOR PRODUCTION**
+**READY FOR PRODUCTION**
 
 - Todos los componentes implementados
 - Tests pasando exitosamente

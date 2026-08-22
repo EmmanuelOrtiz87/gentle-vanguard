@@ -1,4 +1,4 @@
-# 📅 Audits#
+# 📅 Audits #
 
 <p align="center">
   <b>Systematic governance-validated repository audits</b>
@@ -6,7 +6,7 @@
 
 ---
 
-## 📋 Purpose#
+## 📋 Purpose #
 
 | Goal                          | Description                                                 |
 | ----------------------------- | ----------------------------------------------------------- |
@@ -18,7 +18,7 @@
 
 ---
 
-## 📂 Directory Structure#
+## 📂 Directory Structure #
 
 ```
 docs/audits/
@@ -30,23 +30,23 @@ docs/audits/
 
 ---
 
-## 🚀 Quick Start#
+## 🚀 Quick Start #
 
-### Generate New Audit#
+### Generate New Audit #
 
 ```powershell
 .\scripts\gv.ps1 audit
 # Output: docs/audits/YYYY-MM-DD-HHmmss-audit.md
 ```
 
-### Validate Governance#
+### Validate Governance #
 
 ```powershell
 .\scripts\diagnostics\validate-script-governance.ps1
 # Expected: EXIT:0 (all checks passed)
 ```
 
-### Strict Cleanup (CI)#
+### Strict Cleanup (CI) #
 
 ```powershell
 .\scripts\gv.ps1 health -StrictCleanup
@@ -55,7 +55,7 @@ docs/audits/
 
 ---
 
-## 📊 Audit Reports#
+## 📊 Audit Reports #
 
 | Report               | Description                  | Link                                                             |
 | -------------------- | ---------------------------- | ---------------------------------------------------------------- |
@@ -64,9 +64,9 @@ docs/audits/
 
 ---
 
-## 🔍 Audit Workflow#
+## 🔍 Audit Workflow #
 
-### Step 1: Generate Context Pack#
+### Step 1: Generate Context Pack #
 
 ```powershell
 .\scripts\gv.ps1 context-pack
@@ -75,7 +75,7 @@ docs/audits/
 
 Captures: branch, recent commits, changed files, platform health.
 
-### Step 2: Activate Compact Context#
+### Step 2: Activate Compact Context #
 
 ```powershell
 .\scripts\gv.ps1 compact-start
@@ -85,7 +85,7 @@ Captures: branch, recent commits, changed files, platform health.
 
 Auto-activates on `gv.ps1 start-session` if health is RED.
 
-### Step 3: Generate Audit Document#
+### Step 3: Generate Audit Document #
 
 ```powershell
 .\scripts\gv.ps1 audit
@@ -94,7 +94,7 @@ Auto-activates on `gv.ps1 start-session` if health is RED.
 
 Full report with: delivery status, operational risk, test suite, git tracking.
 
-### Step 4: Governance Validation#
+### Step 4: Governance Validation #
 
 ```powershell
 .\scripts\diagnostics\validate-script-governance.ps1
@@ -102,7 +102,7 @@ Full report with: delivery status, operational risk, test suite, git tracking.
 
 Validates canonical path references and no deprecated dependencies.
 
-### Step 5: Review Session Metrics#
+### Step 5: Review Session Metrics #
 
 ```powershell
 .\scripts\gv.ps1 context-metrics
@@ -111,7 +111,7 @@ Validates canonical path references and no deprecated dependencies.
 
 Displays: total events, context-pack calls, compact-start calls, efficiency indicators.
 
-### Step 6: Manual Homologation (Optional)#
+### Step 6: Manual Homologation (Optional) #
 
 ```powershell
 # Preview cleanup actions
@@ -125,7 +125,7 @@ Normalizes workspace before release or when strict cleanup reports drift.
 
 ---
 
-## 📚 Related Documentation#
+## 📚 Related Documentation #
 
 | Document              | Purpose                                                    |
 | --------------------- | ---------------------------------------------------------- |
@@ -136,7 +136,7 @@ Normalizes workspace before release or when strict cleanup reports drift.
 
 ---
 
-## 🚀 Quick Commands Reference#
+## 🚀 Quick Commands Reference #
 
 | Command               | Description              | Output                                            |
 | --------------------- | ------------------------ | ------------------------------------------------- |

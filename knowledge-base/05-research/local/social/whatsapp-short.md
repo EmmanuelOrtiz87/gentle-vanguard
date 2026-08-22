@@ -10,4 +10,4 @@ AI Development Stack:
 
 More info: Check GitHub
 
-#Gentle-VanguardStack
+# Gentle-VanguardStack

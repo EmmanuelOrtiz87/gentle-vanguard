@@ -21,16 +21,16 @@ license: MIT
 metadata:
   version: "2.3"
 triggers:
-  - diagram
-  - architecture diagram
-  - flowchart
-  - sequence diagram
-  - mermaid
-  - drawio
-  - data flow
-  - swimlane
-  - schematic
-  - visual diagram
+- diagram
+- architecture diagram
+- flowchart
+- sequence diagram
+- mermaid
+- drawio
+- data flow
+- swimlane
+- schematic
+- visual diagram
 ---
 
 # Diagram Design

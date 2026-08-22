@@ -126,6 +126,7 @@ The `scripts/model_utils.py` provides importable functions for custom workflows:
    ```
 
 3. **Batch information**: Specify batch_key for integration
+
    ```python
    scvi.model.SCVI.setup_anndata(adata, layer="counts", batch_key="batch")
    ```

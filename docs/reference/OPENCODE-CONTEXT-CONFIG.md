@@ -16,17 +16,18 @@ This repository includes optimized OpenCode configuration to minimize token cons
 ```json
 {
   "compaction": {
-    "auto": true,      // Automatic compaction enabled (default)
-    "prune": true,     // ✅ ACTIVATED - Removes old tool outputs
+    "auto": true, // Automatic compaction enabled (default)
+    "prune": true, // ✅ ACTIVATED - Removes old tool outputs
     "keep": {
-      "tokens": 15000  // Keep 15K tokens of recent context
+      "tokens": 15000 // Keep 15K tokens of recent context
     },
-    "buffer": 20000    // 20K token safety buffer
+    "buffer": 20000 // 20K token safety buffer
   }
 }
 ```
 
 **Impact**: With `prune: true`, OpenCode will automatically:
+
 - Remove old tool call outputs (saves 40K+ tokens per operation)
 - Summarize conversation history when approaching context limits
 - Retain only recent 15K tokens of actual conversation
@@ -40,6 +41,7 @@ Using `opencode/deepseek-v4-flash` - free tier with good performance.
 #### 3. Tool Permissions
 
 All write operations require approval (`"ask"`):
+
 - Prevents accidental large modifications
 - Gives control over token-expensive operations
 
@@ -57,6 +59,7 @@ If context grows too large, manually trigger compaction:
 ### Expected Behavior
 
 With these settings:
+
 - ✅ Automatic compaction triggers before overflow
 - ✅ Old tool outputs are pruned (40K+ tokens saved)
 - ✅ Conversation summarized when needed
@@ -81,6 +84,7 @@ To verify compaction is working:
 ### Troubleshooting
 
 **If still hitting limits:**
+
 1. Reduce `keep.tokens` to 10000
 2. Increase `buffer` to 25000
 3. Manually run `/compact` more frequently

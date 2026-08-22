@@ -3,18 +3,22 @@
 ## LLM Guard
 
 ### Pipeline functions
+
 | Function | Signature | Returns |
 |----------|-----------|---------|
 | `scan_prompt` | `scan_prompt(scanners, prompt)` | `(sanitized_prompt, results_valid: dict, results_score: dict)` |
 | `scan_output` | `scan_output(scanners, prompt, output)` | `(sanitized_output, results_valid: dict, results_score: dict)` |
 
 ### Input scanners (15)
+
 `Anonymize`, `BanCode`, `BanCompetitors`, `BanSubstrings`, `BanTopics`, `Code`, `Gibberish`, `InvisibleText`, `Language`, `PromptInjection`, `Regex`, `Secrets`, `Sentiment`, `TokenLimit`, `Toxicity`
 
 ### Output scanners (20)
+
 `BanCode`, `BanCompetitors`, `BanSubstrings`, `BanTopics`, `Bias`, `Code`, `Deanonymize`, `JSON`, `Language`, `LanguageSame`, `MaliciousURLs`, `NoRefusal`, `ReadingTime`, `FactualConsistency`, `Gibberish`, `Regex`, `Relevance`, `Sensitive`, `Sentiment`, `Toxicity`, `URLReachability`
 
 ### Common scanner parameters
+
 | Scanner | Key params |
 |---------|-----------|
 | `PromptInjection` | `threshold=0.5`, `match_type=MatchType.FULL\|SENTENCE` |
@@ -39,6 +43,7 @@ Role of last message determines mode: last turn `user` = prompt classification; 
 ## NeMo Guardrails
 
 ### Config structure
+
 ```
 config/
   config.yml      # models, rails, prompts
@@ -47,6 +52,7 @@ config/
 ```
 
 ### config.yml key sections
+
 | Section | Purpose |
 |---------|---------|
 | `models:` | list of `{type, engine, model}`; `type: main` is the app LLM, `type: content_safety` for Llama Guard |
@@ -55,6 +61,7 @@ config/
 | `prompts:` | task templates (`self_check_input`, `self_check_output`) |
 
 ### Python API
+
 | Call | Purpose |
 |------|---------|
 | `RailsConfig.from_path("./config")` | Load configuration |
@@ -63,6 +70,7 @@ config/
 | `rails.generate_async(...)` | Async variant |
 
 ### CLI
+
 | Command | Purpose |
 |---------|---------|
 | `nemoguardrails chat --config=./config` | Interactive chat with rails applied |

@@ -58,6 +58,7 @@ Valid exemption reasons include:
 
 Exemptions are validated by `scripts/diagnostics/validate-sdd-governance.ps1` in CI. The SDD gate
 <!-- REF-OBSOLETA: scripts/diagnostics/validate-sdd-governance.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 (`src/check-sdd-gate.ts`) enforces this on PRs to `main`/`develop`.
 
 ## Current Specs

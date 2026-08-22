@@ -29,8 +29,8 @@ mitre_attack:
 # Performing NIST CSF Maturity Assessment
 
 ## Overview
-The NIST Cybersecurity Framework (CSF) 2.0, released in February 2024, provides a comprehensive taxonomy for managing cybersecurity risk through six core Functions: Govern, Identify, Protect, Detect, Respond, and Recover. This skill covers conducting a maturity assessment against the CSF, using the four Implementation Tiers (Partial, Risk-Informed, Repeatable, Adaptive) to measure organizational cybersecurity posture and create improvement roadmaps.
 
+The NIST Cybersecurity Framework (CSF) 2.0, released in February 2024, provides a comprehensive taxonomy for managing cybersecurity risk through six core Functions: Govern, Identify, Protect, Detect, Respond, and Recover. This skill covers conducting a maturity assessment against the CSF, using the four Implementation Tiers (Partial, Risk-Informed, Repeatable, Adaptive) to measure organizational cybersecurity posture and create improvement roadmaps.
 
 ## When to Use
 
@@ -40,6 +40,7 @@ The NIST Cybersecurity Framework (CSF) 2.0, released in February 2024, provides 
 - When validating security controls through hands-on testing
 
 ## Prerequisites
+
 - Understanding of cybersecurity risk management principles
 - Access to NIST CSF 2.0 documentation and reference tool
 - Knowledge of organizational IT/OT environment and security controls
@@ -59,6 +60,7 @@ The NIST Cybersecurity Framework (CSF) 2.0, released in February 2024, provides 
 | **Recover** | RC | 2 | Restore capabilities impaired by cybersecurity incidents |
 
 ### Govern Function (New in CSF 2.0)
+
 - GV.OC: Organizational Context
 - GV.RM: Risk Management Strategy
 - GV.RR: Roles, Responsibilities, and Authorities
@@ -67,6 +69,7 @@ The NIST Cybersecurity Framework (CSF) 2.0, released in February 2024, provides 
 - GV.SC: Cybersecurity Supply Chain Risk Management
 
 ### Implementation Tiers
+
 | Tier | Name | Description |
 |------|------|-------------|
 | Tier 1 | Partial | Ad hoc, reactive; limited awareness of cybersecurity risk |
@@ -77,6 +80,7 @@ The NIST Cybersecurity Framework (CSF) 2.0, released in February 2024, provides 
 ## Workflow
 
 ### Phase 1: Scoping and Preparation (Weeks 1-2)
+
 1. Define assessment scope (enterprise-wide vs. business unit)
 2. Identify stakeholders and schedule interviews
 3. Gather existing documentation (policies, procedures, architecture diagrams)
@@ -84,6 +88,7 @@ The NIST Cybersecurity Framework (CSF) 2.0, released in February 2024, provides 
 5. Select assessment methodology (self-assessment, facilitated, third-party)
 
 ### Phase 2: Current State Assessment (Weeks 3-6)
+
 1. Assess each CSF Category and Subcategory against Implementation Tiers
 2. For each subcategory, evaluate:
    - Policy/documentation maturity
@@ -96,6 +101,7 @@ The NIST Cybersecurity Framework (CSF) 2.0, released in February 2024, provides 
 5. Identify strengths, gaps, and improvement areas
 
 ### Phase 3: Target State Definition (Weeks 7-8)
+
 1. Define target tier for each Function based on:
    - Risk appetite and tolerance
    - Industry requirements and benchmarks
@@ -105,6 +111,7 @@ The NIST Cybersecurity Framework (CSF) 2.0, released in February 2024, provides 
 3. Validate target state with executive leadership
 
 ### Phase 4: Gap Analysis and Roadmap (Weeks 9-12)
+
 1. Compare Current Profile to Target Profile
 2. Prioritize gaps based on risk reduction potential
 3. Develop improvement roadmap with:
@@ -115,6 +122,7 @@ The NIST Cybersecurity Framework (CSF) 2.0, released in February 2024, provides 
 5. Assign ownership and timelines
 
 ### Phase 5: Implementation and Reassessment (Ongoing)
+
 1. Execute improvement roadmap initiatives
 2. Track progress against milestones
 3. Conduct periodic reassessments (annually recommended)
@@ -122,6 +130,7 @@ The NIST Cybersecurity Framework (CSF) 2.0, released in February 2024, provides 
 5. Adjust roadmap based on evolving threats and business changes
 
 ## Key Artifacts
+
 - CSF Current Profile (by Function/Category/Subcategory)
 - CSF Target Profile
 - Gap Analysis Report
@@ -130,6 +139,7 @@ The NIST Cybersecurity Framework (CSF) 2.0, released in February 2024, provides 
 - Executive Summary and Dashboard
 
 ## Common Pitfalls
+
 - Assessing technology only without evaluating governance and people
 - Setting unrealistic target tiers without resource commitment
 - Treating assessment as one-time rather than continuous process
@@ -137,6 +147,7 @@ The NIST Cybersecurity Framework (CSF) 2.0, released in February 2024, provides 
 - Not aligning CSF assessment with existing compliance requirements (ISO 27001, SOC 2)
 
 ## References
+
 - NIST CSF 2.0: https://csf.tools/reference/nist-cybersecurity-framework/v2-0/
 - NIST SP 800-53 Rev 5 (control catalog that maps to CSF)
 - NIST CSF 2.0 Quick Start Guides

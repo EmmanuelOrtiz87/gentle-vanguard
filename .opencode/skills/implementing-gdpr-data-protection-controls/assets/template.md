@@ -1,6 +1,7 @@
 # GDPR Compliance Audit Checklist
 
 ## Organization Information
+
 | Field | Value |
 |-------|-------|
 | Organization Name | |
@@ -13,6 +14,7 @@
 ---
 
 ## Article 5: Data Processing Principles
+
 - [ ] Lawfulness: All processing has documented lawful basis (Art. 6)
 - [ ] Fairness: Processing is fair and does not cause unjustified adverse effects
 - [ ] Transparency: Privacy notices provided at point of collection (Art. 13/14)
@@ -24,6 +26,7 @@
 - [ ] Accountability: Ability to demonstrate compliance with all principles
 
 ## Article 6: Lawful Basis
+
 - [ ] Lawful basis identified for each processing activity
 - [ ] Consent is freely given, specific, informed, and unambiguous where used
 - [ ] Consent withdrawal mechanism available and easy to use
@@ -31,6 +34,7 @@
 - [ ] Legal bases recorded in ROPA
 
 ## Articles 13-14: Transparency
+
 - [ ] Privacy notice provided at time of data collection (Art. 13)
 - [ ] Privacy notice provided when data obtained indirectly (Art. 14)
 - [ ] Notices include: controller identity, purposes, lawful basis, recipients, retention, rights, DPO contact
@@ -38,6 +42,7 @@
 - [ ] Notices available in appropriate languages
 
 ## Articles 15-22: Data Subject Rights
+
 - [ ] Process for receiving and handling DSRs documented
 - [ ] Identity verification procedure before fulfilling requests
 - [ ] Response within one month (extendable by two months for complex requests)
@@ -50,12 +55,14 @@
 - [ ] Automated decision-making (Art. 22): safeguards for solely automated decisions
 
 ## Article 25: Data Protection by Design and Default
+
 - [ ] Privacy considerations integrated into system design processes
 - [ ] Default settings are most privacy-protective
 - [ ] Only personal data necessary for each purpose is processed by default
 - [ ] Data protection integrated into development lifecycle
 
 ## Article 28: Processors
+
 - [ ] All processors identified and documented
 - [ ] Data Processing Agreements (DPAs) in place with all processors
 - [ ] DPAs include required Art. 28 provisions
@@ -63,12 +70,14 @@
 - [ ] Sub-processor notification process in place
 
 ## Article 30: Records of Processing Activities (ROPA)
+
 - [ ] ROPA maintained and up to date
 - [ ] All processing activities documented
 - [ ] Controller details, purposes, data categories, recipients, transfers, retention, security measures recorded
 - [ ] Available for supervisory authority on request
 
 ## Article 32: Security of Processing
+
 - [ ] Risk-appropriate technical measures:
   - [ ] Encryption of personal data (at rest and in transit)
   - [ ] Pseudonymization implemented where appropriate
@@ -84,6 +93,7 @@
 - [ ] Regular testing and evaluation of security measures
 
 ## Articles 33-34: Breach Notification
+
 - [ ] Breach detection and assessment procedures documented
 - [ ] 72-hour notification to supervisory authority process in place
 - [ ] Data subject notification process for high-risk breaches
@@ -91,6 +101,7 @@
 - [ ] Breach response plan tested within last 12 months
 
 ## Article 35: Data Protection Impact Assessment
+
 - [ ] DPIA criteria documented (when DPIA is required)
 - [ ] DPIA process documented
 - [ ] DPIAs conducted for all high-risk processing
@@ -98,6 +109,7 @@
 - [ ] DPIAs reviewed when processing changes
 
 ## Articles 44-49: International Transfers
+
 - [ ] All international transfers identified and documented
 - [ ] Transfer mechanisms in place (adequacy, SCCs, BCRs)
 - [ ] Transfer Impact Assessments conducted for non-adequate countries
@@ -105,6 +117,7 @@
 - [ ] Standard Contractual Clauses (new 2021 modular version) executed
 
 ## Articles 37-39: Data Protection Officer
+
 - [ ] DPO appointed (if required: public authority, core activity large-scale monitoring, core activity special categories)
 - [ ] DPO has expert knowledge of data protection law
 - [ ] DPO involved in all data protection matters
@@ -132,6 +145,7 @@
 | **Total** | | | | |
 
 ## Sign-off
+
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
 | DPO | | | |

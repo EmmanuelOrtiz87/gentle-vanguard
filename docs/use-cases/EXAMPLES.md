@@ -279,16 +279,19 @@ gv daily
 
 **What happens:**
 
-| Step | Agent        | Skill                        | Action                                                                 |
-| ---- | ------------ | ---------------------------- | ---------------------------------------------------------------------- |
-| 1    | ORCHESTRATOR | `project-orchestrator-skill` | Detects `daily` keyword, routes to DAILY agent                         |
-| 2    | DAILY        | `daily-workflow`             | Runs `src/daily-check.ts`                                              |
+| Step | Agent        | Skill                        | Action                                         |
+| ---- | ------------ | ---------------------------- | ---------------------------------------------- |
+| 1    | ORCHESTRATOR | `project-orchestrator-skill` | Detects `daily` keyword, routes to DAILY agent |
+| 2    | DAILY        | `daily-workflow`             | Runs `src/daily-check.ts`                      |
+
 <!-- REF-OBSOLETA: src/daily-check.ts no existe (ruta migrada o eliminada) -->
-| 3    | DAILY        | `session-workflow-skill`     | Checks: git status, branch hygiene, stale checkpoints (>7d), CI status |
-| 4    | DAILY        | `project-orchestrator-skill` | Validates: config integrity, skill registry health, gv version         |
-| 5    | GOV          | `quality-skill`              | Context efficiency: prompt adoption %, avg chars, trend vs last week   |
-| 6    | SESSION      | `session-workflow-skill`     | Starts session `session-YYYY-MM-DD-NN` in Engram                       |
-| 7    | DAILY        | `daily-workflow`             | Prints morning report: 5 sections with status indicators               |
+
+| 3 | DAILY | `session-workflow-skill` | Checks: git status, branch hygiene, stale checkpoints
+(>7d), CI status | | 4 | DAILY | `project-orchestrator-skill` | Validates: config integrity, skill
+registry health, gv version | | 5 | GOV | `quality-skill` | Context efficiency: prompt adoption %,
+avg chars, trend vs last week | | 6 | SESSION | `session-workflow-skill` | Starts session
+`session-YYYY-MM-DD-NN` in Engram | | 7 | DAILY | `daily-workflow` | Prints morning report: 5
+sections with status indicators |
 
 **📋 Morning report output:**
 

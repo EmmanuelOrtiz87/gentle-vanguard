@@ -109,4 +109,4 @@ const userSlice = createSlice({
 
 ---
 
-> **Referencia detallada**: [ eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [eferences/detail.md](references/detail.md)

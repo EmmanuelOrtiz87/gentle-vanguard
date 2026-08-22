@@ -170,6 +170,7 @@ TODO implementacion DEBE verificar:
 | Error Handling        | rules/NORMATIVAS-ERROR-HANDLING.md         |
 | Quality Gates         | config/quality-gates.json                  |
 | Monitoring Dashboard  | scripts/monitoring/executive-dashboard.ps1 |
+
 <!-- REF-OBSOLETA: scripts/monitoring/executive-dashboard.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 ---

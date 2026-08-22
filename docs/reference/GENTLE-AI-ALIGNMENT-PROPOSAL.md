@@ -57,10 +57,11 @@ Gentle AI ecosystem and methodologies from:
    summary via the documented endpoint `POST /sessions/{id}/end` (idempotent, graceful SKIP when the
    server is unreachable).
 4. **No custom registration scripts** — deleted `src/engram-session-register.ts`; no pipeline step
+
 <!-- REF-OBSOLETA: src/engram-session-register.ts no existe (ruta migrada o eliminada) -->
-   added.
-5. **Project name** — canonical `gentle-vanguard` (from git remote) fixed in
-   `config/engram-policy.json`.
+
+added. 5. **Project name** — canonical `gentle-vanguard` (from git remote) fixed in
+`config/engram-policy.json`.
 
 **Guardrail**: do NOT re-introduce custom Engram CLI/session scripts. If something is missing,
 extend the official plugin or use the documented HTTP API / MCP tools.

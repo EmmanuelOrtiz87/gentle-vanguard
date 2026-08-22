@@ -88,6 +88,7 @@ pip install beautifulsoup4 pypdf pillow pytesseract
 ## Workflow
 
 ### 1. Extract hidden text from web content
+
 Pull comments, hidden elements, and metadata that a human never sees but the model does.
 
 ```python
@@ -108,6 +109,7 @@ def extract_hidden(html: str):
 ```
 
 ### 2. Normalize and de-obfuscate
+
 Strip zero-width / Unicode-tag characters and decode common encodings so detectors see the real payload.
 
 ```python
@@ -133,6 +135,7 @@ def normalize(text: str) -> str:
 ```
 
 ### 3. Scan with LLM Guard's PromptInjection scanner
+
 LLM Guard wraps a transformer classifier and returns a risk score per input.
 
 ```python
@@ -148,6 +151,7 @@ def scan(text: str):
 ```
 
 ### 4. Add a dedicated detector model (Prompt Guard 2 / deberta)
+
 Run Meta Prompt Guard 2 (or the open ProtectAI deberta classifier) for a second opinion.
 
 ```python
@@ -164,6 +168,7 @@ def is_injection(text: str, threshold: float = 0.5) -> bool:
 ```
 
 ### 5. Extract and scan text rendered inside images
+
 Multimodal agents read text painted into pixels; OCR it and run the same scanners.
 
 ```python
@@ -177,6 +182,7 @@ def ocr(path: str) -> str:
 ```
 
 ### 6. Enforce a decision and emit telemetry
+
 Combine signals into block / sanitize / allow, and log a structured event for the SIEM.
 
 ```python
@@ -200,6 +206,7 @@ def decide(source, raw, normalized, llmguard_invalid, model_flag):
 ```
 
 ### 7. Validate against a corpus and tune thresholds
+
 Run the pipeline over a labeled set of clean + injected artifacts, measure precision/recall, and tune `threshold` to balance false positives against missed injections. Re-test whenever the agent's model or ingestion sources change.
 
 ## Tools and Resources

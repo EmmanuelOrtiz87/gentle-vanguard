@@ -153,12 +153,15 @@ prerequisites list.
 
 ### 7. Script location inconsistencies
 
-| Script                          | Actual Location                                                                                         | Expected Location                                                                                    |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `install-engram.ps1`            | `src/skills/`                                                                                           | `scripts/utilities/` (referenced by system-diagnostics.ts as `scripts/utilities/install-engram.ps1`) |
+| Script               | Actual Location | Expected Location                                                                                    |
+| -------------------- | --------------- | ---------------------------------------------------------------------------------------------------- |
+| `install-engram.ps1` | `src/skills/`   | `scripts/utilities/` (referenced by system-diagnostics.ts as `scripts/utilities/install-engram.ps1`) |
+
 <!-- REF-OBSOLETA: scripts/utilities/install-engram.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| `auto-init-dev-environment.ps1` | `scripts/utilities/UTILITIES/`                                                                          | `scripts/utilities/` (redundant nesting)                                                             |
-| `src/cli/gv.ts`                 | 3 copies: `scripts/utilities/`, `scripts/utilities/WORKFLOW-ORCHESTRATION/`, `scripts/gentle-vanguard/` | Should consolidate                                                                                   |
+
+| `auto-init-dev-environment.ps1` | `scripts/utilities/UTILITIES/` | `scripts/utilities/` (redundant
+nesting) | | `src/cli/gv.ts` | 3 copies: `scripts/utilities/`,
+`scripts/utilities/WORKFLOW-ORCHESTRATION/`, `scripts/gentle-vanguard/` | Should consolidate |
 
 ### 8. Missing dependencies from PREREQUISITES.md not in install-prerequisites
 
@@ -178,11 +181,12 @@ PREREQUISITES.md or any other documentation.
 
 ### 11. `bootstrap-machine.ps1` naming collision
 
-`src/bootstrap-machine.ts` is a **global Gentle-Vanguard installer** (installs
-Gentle-Vanguard to `~/.gentle-vanguard/`), not a machine bootstrap for prerequisites. This is
-distinct from `src/bootstrap.ts` (workspace bootstrap) and
-`scripts/utilities/install-prerequisites.ps1` (tool installer). The name `bootstrap-machine.ps1` is
+`src/bootstrap-machine.ts` is a **global Gentle-Vanguard installer** (installs Gentle-Vanguard to
+`~/.gentle-vanguard/`), not a machine bootstrap for prerequisites. This is distinct from
+`src/bootstrap.ts` (workspace bootstrap) and `scripts/utilities/install-prerequisites.ps1` (tool
+installer). The name `bootstrap-machine.ps1` is
 <!-- REF-OBSOLETA: scripts/utilities/install-prerequisites.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 misleading given docs/getting-started/README.md says "this will install required TypeScript modules,
 configure Git hooks, set up env vars, and validate prerequisites" — the actual script does none of
 those things (it installs Gentle-Vanguard itself to a user directory).

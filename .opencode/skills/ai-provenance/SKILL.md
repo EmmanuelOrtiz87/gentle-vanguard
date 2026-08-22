@@ -23,13 +23,13 @@ description: >
   request) hygiene on user-owned content. Triggers: provenance, watermark detection,
   C2PA verify, AI content check; removal triggers only on explicit user request.
 triggers:
-  - provenance
-  - watermark detect
-  - c2pa
-  - ai content check
-  - attribution
-  - strip watermark (explicit request only)
-  - remove ai marks (explicit request only)
+- provenance
+- watermark detect
+- c2pa
+- ai content check
+- attribution
+- strip watermark (explicit request only)
+- remove ai marks (explicit request only)
 ---
 
 # AI Provenance (Inspección por defecto · Remoción a demanda)

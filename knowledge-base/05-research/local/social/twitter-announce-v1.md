@@ -13,4 +13,4 @@ PowerShell-based. Agnostic.
 
 Link in thread
 
-#Gentle-VanguardStack #DevTools #AI
+# Gentle-VanguardStack #DevTools #AI

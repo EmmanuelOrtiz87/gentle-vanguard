@@ -3,6 +3,7 @@
 ## Primary Standards
 
 ### ISO/IEC 27001:2022
+
 - **Title**: Information Security, Cybersecurity and Privacy Protection - Information Security Management Systems - Requirements
 - **Published**: October 2022
 - **Scope**: Specifies requirements for establishing, implementing, maintaining, and continually improving an ISMS
@@ -15,6 +16,7 @@
   - Clause 6.3 added for planning changes to the ISMS
 
 ### ISO/IEC 27002:2022
+
 - **Title**: Information Security, Cybersecurity and Privacy Protection - Information Security Controls
 - **Role**: Implementation guidance for Annex A controls
 - **Key Addition**: Each control now includes attribute taxonomy:
@@ -27,38 +29,48 @@
 ## Supporting Standards in the ISO 27000 Family
 
 ### ISO/IEC 27000:2018
+
 - Overview and vocabulary for ISMS
 
 ### ISO/IEC 27003:2017
+
 - Guidance on ISMS implementation
 
 ### ISO/IEC 27004:2016
+
 - Information security management monitoring, measurement, analysis, and evaluation
 
 ### ISO/IEC 27005:2022
+
 - Guidance on managing information security risks
 - Aligns with ISO 31000 risk management framework
 - Provides asset-based and event-based risk assessment approaches
 
 ### ISO/IEC 27006-1:2024
+
 - Requirements for bodies providing audit and certification of ISMS
 
 ### ISO/IEC 27007:2020
+
 - Guidelines for ISMS auditing
 
 ### ISO/IEC 27017:2015
+
 - Code of practice for cloud services information security controls
 
 ### ISO/IEC 27018:2019
+
 - Code of practice for protection of PII in public clouds
 
 ### ISO/IEC 27701:2019
+
 - Extension to ISO 27001 for Privacy Information Management System (PIMS)
 - Supports GDPR compliance
 
 ## Annex A Control Categories Detail
 
 ### A.5 Organizational Controls (37 controls)
+
 | Control | Title |
 |---------|-------|
 | A.5.1 | Policies for information security |
@@ -100,6 +112,7 @@
 | A.5.37 | Documented operating procedures |
 
 ### A.6 People Controls (8 controls)
+
 | Control | Title |
 |---------|-------|
 | A.6.1 | Screening |
@@ -112,6 +125,7 @@
 | A.6.8 | Information security event reporting |
 
 ### A.7 Physical Controls (14 controls)
+
 | Control | Title |
 |---------|-------|
 | A.7.1 | Physical security perimeters |
@@ -130,6 +144,7 @@
 | A.7.14 | Secure disposal or re-use of equipment |
 
 ### A.8 Technological Controls (34 controls)
+
 | Control | Title |
 |---------|-------|
 | A.8.1 | User endpoint devices |
@@ -168,12 +183,14 @@
 | A.8.34 | Protection of information systems during audit testing |
 
 ## Certification Process
+
 1. **Stage 1 Audit** (Document Review): Auditor reviews ISMS documentation, scope, SoA, risk assessment methodology
 2. **Stage 2 Audit** (Certification Audit): On-site assessment of ISMS implementation and effectiveness
 3. **Surveillance Audits**: Annual audits in Years 1 and 2 to verify continued compliance
 4. **Recertification Audit**: Full re-assessment in Year 3 before certificate expiry
 
 ## Accreditation Bodies
+
 - UKAS (United Kingdom)
 - ANAB (United States)
 - DAkkS (Germany)

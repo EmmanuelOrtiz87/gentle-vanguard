@@ -1,5 +1,5 @@
 {
-  "duration": "1.2",
+  "duration": "16.0",
   "testsPassed": true,
   "coverageProduced": true,
   "thresholds": {
@@ -11,42 +11,42 @@
   "targets": [
     {
       "name": "src/ (aggregate)",
-      "statements": 78.3,
-      "lines": 78.3,
-      "functions": 85.2,
-      "branches": 64.3,
+      "statements": 61.9,
+      "lines": 61.9,
+      "functions": 62.6,
+      "branches": 62.1,
       "passed": true
     },
     {
-      "name": "event-sourcing-critical (not loaded)",
-      "statements": 0,
-      "lines": 0,
-      "functions": 0,
-      "branches": 0,
+      "name": "event-sourcing-critical",
+      "statements": 65.8,
+      "lines": 65.8,
+      "functions": 76.2,
+      "branches": 63.3,
       "passed": true
     },
     {
-      "name": "secret-scanner (not loaded)",
-      "statements": 0,
-      "lines": 0,
-      "functions": 0,
-      "branches": 0,
+      "name": "secret-scanner",
+      "statements": 94.4,
+      "lines": 94.4,
+      "functions": 100,
+      "branches": 62.2,
       "passed": true
     },
     {
-      "name": "structural-compression (not loaded)",
-      "statements": 0,
-      "lines": 0,
-      "functions": 0,
-      "branches": 0,
+      "name": "structural-compression",
+      "statements": 75.5,
+      "lines": 75.5,
+      "functions": 84.2,
+      "branches": 69.8,
       "passed": true
     },
     {
       "name": "security-orchestrator",
-      "statements": 75.9,
-      "lines": 75.9,
+      "statements": 81.7,
+      "lines": 81.7,
       "functions": 100,
-      "branches": 73.1,
+      "branches": 75.7,
       "passed": true
     }
   ],

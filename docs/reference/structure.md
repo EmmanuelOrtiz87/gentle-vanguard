@@ -44,9 +44,13 @@ Every new project should contain:
 - `templates/project-root/` contains the shared base.
 - `templates/project-types/` contains overlays for `service`, `cli`, and `library`.
 - `scripts/new-project.ps1` and `scripts/new-project.sh` create projects with the same interface.
+
 <!-- REF-OBSOLETA: scripts/new-project.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 - `scripts/run-engram.ps1` and `scripts/run-engram.sh` launch Engram with isolated state.
+
 <!-- REF-OBSOLETA: scripts/run-engram.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 - `skills/documentation-governance/` contains the reusable documentation skill.
 - `skills/architecture-governance/` contains the reusable architecture skill.
 
@@ -59,5 +63,7 @@ No project should depend on an embedded local copy of external tools.
 1. `config/workspace.config.json` should prefer workspace-resolved paths such as
    `{workspaceRoot}/.engram-data`.
 2. `scripts/utilities/run-engram.ps1` creates the Engram session directory on first use.
+
 <!-- REF-OBSOLETA: scripts/utilities/run-engram.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 3. A missing `.engram-data/` directory on a fresh machine is normal and should not block demos.

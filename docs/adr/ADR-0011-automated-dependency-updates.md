@@ -148,7 +148,11 @@ Evaluate and configure Renovate Bot for:
 - ADR-0004 — npx offline hardening (supply-chain gentle-vanguard)
 - `config/lefthook.yml` — hook configuration
 - `scripts/hooks/check-npm-audit.ps1` — audit hook implementation
+
 <!-- REF-OBSOLETA: scripts/hooks/check-npm-audit.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 - `src/deployment/generate-sbom.ts` — SBOM generation
+
 <!-- REF-OBSOLETA: src/deployment/generate-sbom.ts no existe (ruta migrada o eliminada) -->
+
 - OWASP A06:2021 — Vulnerable and Outdated Components

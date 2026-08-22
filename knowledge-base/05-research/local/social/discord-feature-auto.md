@@ -10,4 +10,4 @@ Not one AI doing everything. Multiple specialists.
 
 What would YOU delegate first?
 
-#Gentle-VanguardStack
+# Gentle-VanguardStack

@@ -148,11 +148,13 @@ open http://localhost:3000
 ## 💡 CARACTERÍSTICAS IMPLEMENTADAS
 
 ### Triggers (i)
+
 - Posicionados estratégicamente junto a términos clave
 - Funcionan con data-i18n-title para tooltips internacionalizados
 - Estilo coherente con el resto del sitio
 
 ### Carruseles
+
 - Auto-play con intervalos configurables
 - Controles manuales (anterior/siguiente)
 - Indicadores de posición (dots)

@@ -908,7 +908,7 @@ sensitive.txt      # Sensitive paths (.env, config.json, backup, etc.)
 
 - **`hunt-xss`** / **`hunt-ssrf`** / **`hunt-sqli`** / **`hunt-ssti`** / **`hunt-idor`** — When a
   hunter is actively testing a parameter and needs payloads. Workflow primitive: this skill is the
-  payload library those hunt-_ skills reach for; the hunt-_ skill identifies the sink, this skill
+  payload library those hunt-_skills reach for; the hunt-_ skill identifies the sink, this skill
   provides the syntax.
 - **`triage-validation`** — When deciding if a finding is reportable at all. Workflow primitive: the
   "Always Rejected" and "Conditionally Valid — Requires Chain" tables in both skills must agree;

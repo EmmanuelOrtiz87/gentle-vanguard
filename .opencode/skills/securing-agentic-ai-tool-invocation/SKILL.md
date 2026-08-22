@@ -85,6 +85,7 @@ pip install boto3
 ## Workflow
 
 ### 1. Inventory tools and classify impact
+
 List every tool the agent can call, its arguments, and an impact tier (read-only / write / high-impact). High-impact tools require HITL.
 
 ```python
@@ -99,6 +100,7 @@ TOOL_POLICY = {
 ```
 
 ### 2. Define per-tool argument allowlists (deny-by-default)
+
 Validate every call against a JSON schema; reject anything not explicitly allowed.
 
 ```python
@@ -130,6 +132,7 @@ def validate_args(tool: str, args: dict) -> bool:
 ```
 
 ### 3. Bind a scoped, short-lived identity per call
+
 Never run tools with a single broad service account. Issue per-session scoped credentials (here: AWS STS with an inline least-privilege policy).
 
 ```python
@@ -156,6 +159,7 @@ def scoped_session(role_arn: str, session_user: str, allowed_actions: list[str])
 ```
 
 ### 4. Enforce a policy decision before each invocation
+
 A deterministic wrapper that the agent must route every tool call through.
 
 ```python
@@ -186,6 +190,7 @@ def _decision(decision, tool, args, actor, reason):
 ```
 
 ### 5. Add a human-in-the-loop approval gate
+
 For `require_approval` decisions, block until an authorized human approves out-of-band.
 
 ```python
@@ -200,6 +205,7 @@ def request_approval(event: dict, approver_channel) -> bool:
 ```
 
 ### 6. Enforce rails with NeMo Guardrails
+
 Use NeMo Guardrails to wrap the LLM and constrain tool/flow behavior declaratively. Minimal config:
 
 ```python
@@ -234,6 +240,7 @@ rails:
 `guardrails_config/prompts.yml` enforces a self-check that blocks injection and disallowed tool requests (the `self check input`/`self check output` flows are NeMo Guardrails built-ins driven by these prompts).
 
 ### 7. Audit, alert, and review
+
 Every decision from steps 4-6 is logged with actor, tool, argument hash, and decision. Forward to a SIEM, alert on `deny`/`require_approval` spikes (a signal of injection), and periodically review which tools the agent actually needs to tighten the allowlist further.
 
 ## Tools and Resources

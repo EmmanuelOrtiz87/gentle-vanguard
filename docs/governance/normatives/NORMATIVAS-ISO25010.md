@@ -17,20 +17,22 @@ y validable en cada fase del ciclo de vida.
 
 ### 2.1 Funcional Suitability (Adecuacion Funcional)
 
-| Sub-caracteristica         | Control Gentle-Vanguard         | Verification         |
-| -------------------------- | ------------------------------- | -------------------- |
-| Functional completeness    | `scripts/testing/run-tests.ps1` | Test coverage >= 80% |
+| Sub-caracteristica      | Control Gentle-Vanguard         | Verification         |
+| ----------------------- | ------------------------------- | -------------------- |
+| Functional completeness | `scripts/testing/run-tests.ps1` | Test coverage >= 80% |
+
 <!-- REF-OBSOLETA: scripts/testing/run-tests.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| Functional correctness     | `tests/unit/*.tests.ps1`        | Zero test failures   |
-| Functional appropriateness | `sdd-gate.yml` + BA review      | SDD spec approval    |
+
+| Functional correctness | `tests/unit/*.tests.ps1` | Zero test failures | | Functional
+appropriateness | `sdd-gate.yml` + BA review | SDD spec approval |
 
 ### 2.2 Performance Efficiency (Eficiencia de Rendimiento)
 
-| Sub-caracteristica   | Control Gentle-Vanguard                            | Verification               |
-| -------------------- | -------------------------------------------------- | -------------------------- |
-| Time behaviour       | `config/orchestrator.json#SLOs`                    | Dispatch < 500ms           |
-| Resource utilisation | `src/cross-workspace-validator.ts` | Token budget < 30K/session |
-| Capacity             | `config/orchestrator.json#concurrencyLimits`       | Max 3 parallel agents      |
+| Sub-caracteristica   | Control Gentle-Vanguard                      | Verification               |
+| -------------------- | -------------------------------------------- | -------------------------- |
+| Time behaviour       | `config/orchestrator.json#SLOs`              | Dispatch < 500ms           |
+| Resource utilisation | `src/cross-workspace-validator.ts`           | Token budget < 30K/session |
+| Capacity             | `config/orchestrator.json#concurrencyLimits` | Max 3 parallel agents      |
 
 ### 2.3 Compatibility (Compatibilidad)
 
@@ -82,11 +84,11 @@ y validable en cada fase del ciclo de vida.
 
 ### 2.8 Portability (Portabilidad)
 
-| Sub-caracteristica | Control Gentle-Vanguard                         | Verification         |
-| ------------------ | ----------------------------------------------- | -------------------- |
-| Adaptability       | `config/orchestrator.json#platform`             | Windows/Linux/macOS  |
-| Installability     | `src/bootstrap-machine.ts` | Machine bootstrap    |
-| Replaceability     | `config/tool-*.json` multi-tool support         | Tool-agnostic design |
+| Sub-caracteristica | Control Gentle-Vanguard                 | Verification         |
+| ------------------ | --------------------------------------- | -------------------- |
+| Adaptability       | `config/orchestrator.json#platform`     | Windows/Linux/macOS  |
+| Installability     | `src/bootstrap-machine.ts`              | Machine bootstrap    |
+| Replaceability     | `config/tool-*.json` multi-tool support | Tool-agnostic design |
 
 ---
 

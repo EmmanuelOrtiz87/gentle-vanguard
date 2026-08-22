@@ -81,6 +81,7 @@ pip install requests mcp
 ## Workflow
 
 ### 1. Static scan of installed MCP configs
+
 mcp-scan auto-discovers known config locations; you can also pass a path explicitly.
 
 ```bash
@@ -97,6 +98,7 @@ uvx mcp-scan@latest --json ~/.cursor/mcp.json > mcp_scan_report.json
 mcp-scan flags tool poisoning, tool shadowing, cross-origin escalation, rug pulls, and toxic flows.
 
 ### 2. Inspect raw tool descriptions
+
 Print every tool/prompt/resource description without verification, then read them for hidden instructions, `<important>`-style blocks, or imperative text aimed at the model.
 
 ```bash
@@ -106,6 +108,7 @@ uvx mcp-scan@latest inspect ~/.cursor/mcp.json
 Look for red flags: instructions to the assistant ("do not tell the user", "read ~/.ssh/id_rsa"), nested fake documentation, zero-width/Unicode-smuggled text, or directives to call other tools.
 
 ### 3. Pin tool hashes to detect rug pulls
+
 mcp-scan tracks tool description hashes so a later silent change is flagged. Run scans on a schedule; a hash mismatch on a previously approved tool indicates a rug pull.
 
 ```bash
@@ -114,6 +117,7 @@ uvx mcp-scan@latest ~/.cursor/mcp.json
 ```
 
 ### 4. Enumerate tools programmatically and audit metadata
+
 Connect to the server with the official MCP SDK and inspect the advertised schema directly.
 
 ```python
@@ -136,6 +140,7 @@ asyncio.run(main())
 ```
 
 ### 5. Test URL-fetching tools for SSRF
+
 If a tool accepts a URL and fetches it server-side, attempt to reach internal metadata/loopback targets (only on systems you own).
 
 ```python
@@ -163,6 +168,7 @@ asyncio.run(main())
 ```
 
 ### 6. Verify authentication and network exposure
+
 Check that remote MCP servers (HTTP/SSE transport) require authentication and are not bound to `0.0.0.0` on untrusted networks.
 
 ```bash
@@ -176,6 +182,7 @@ ss -tlnp | grep -E ':(8000|3000|6277)'
 An MCP endpoint that returns tool listings or accepts `tools/call` without auth is unauthenticated exposure — remediate with a token/OAuth and bind to localhost or an authenticated gateway.
 
 ### 7. Enforce runtime guardrails (optional)
+
 For continuous protection, route agent MCP traffic through the mcp-scan proxy, which checks tool calls, data-flow constraints, PII, and indirect injection in real time.
 
 ```bash
@@ -183,6 +190,7 @@ uvx --with "mcp-scan[proxy]" mcp-scan@latest proxy
 ```
 
 ### 8. Report findings
+
 Document each finding with server, tool, evidence (the poisoned description / SSRF response / unauth listing), severity, and ATLAS mapping. Recommend removing or sandboxing poisoned servers, adding auth, pinning approved tools, and enabling the proxy.
 
 ## Tools and Resources

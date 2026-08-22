@@ -1,6 +1,7 @@
 # API Reference: DevSecOps Security Scanning
 
 ## Semgrep CLI (SAST)
+
 ```bash
 # Scan with auto-detected rules
 semgrep scan --config auto --json /path/to/code
@@ -16,6 +17,7 @@ semgrep scan --config auto --sarif -o results.sarif /path/to/code
 ```
 
 ## Trivy CLI (SCA / Container)
+
 ```bash
 # Scan container image
 trivy image --format json --quiet nginx:latest
@@ -31,6 +33,7 @@ trivy config --format json /path/to/terraform/
 ```
 
 ## Gitleaks CLI (Secret Detection)
+
 ```bash
 # Detect secrets in git repo
 gitleaks detect --source /path/to/repo --report-format json --report-path report.json
@@ -43,6 +46,7 @@ gitleaks protect --staged --report-format json
 ```
 
 ## CI/CD Pipeline Gate Logic
+
 | Severity | Exit Code | Action |
 |----------|-----------|--------|
 | CRITICAL | 1 (fail) | Block merge/deploy |
@@ -51,6 +55,7 @@ gitleaks protect --staged --report-format json
 | LOW | 0 (pass) | Informational only |
 
 ## JSON Output Schema (Semgrep)
+
 | Field | Description |
 |-------|------------|
 | results[].check_id | Rule identifier |
@@ -60,6 +65,7 @@ gitleaks protect --staged --report-format json
 | results[].extra.message | Finding description |
 
 ## JSON Output Schema (Trivy)
+
 | Field | Description |
 |-------|------------|
 | Results[].Target | Scanned target name |

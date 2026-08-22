@@ -20,4 +20,4 @@ The change wasn't the tool. It was the SYSTEM.
 
 What's your biggest friction?
 
-#AI #Productivity #SoftwareEngineering
+# AI #Productivity #SoftwareEngineering

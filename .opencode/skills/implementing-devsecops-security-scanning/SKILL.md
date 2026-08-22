@@ -274,15 +274,15 @@ DAST runs against a deployed staging environment. It is slower than SAST/SCA and
 Create `.zap/rules.tsv` to configure alert thresholds:
 
 ```tsv
-10010	IGNORE	(Cookie No HttpOnly Flag - acceptable for non-sensitive cookies)
-10011	IGNORE	(Cookie Without Secure Flag - staging uses HTTP)
-90033	WARN	(Loosely Scoped Cookie)
-10038	FAIL	(Content Security Policy Header Not Set)
-40012	FAIL	(Cross Site Scripting - Reflected)
-40014	FAIL	(Cross Site Scripting - Persistent)
-40018	FAIL	(SQL Injection)
-90019	FAIL	(Server Side Code Injection)
-90020	FAIL	(Remote OS Command Injection)
+10010 IGNORE (Cookie No HttpOnly Flag - acceptable for non-sensitive cookies)
+10011 IGNORE (Cookie Without Secure Flag - staging uses HTTP)
+90033 WARN (Loosely Scoped Cookie)
+10038 FAIL (Content Security Policy Header Not Set)
+40012 FAIL (Cross Site Scripting - Reflected)
+40014 FAIL (Cross Site Scripting - Persistent)
+40018 FAIL (SQL Injection)
+90019 FAIL (Server Side Code Injection)
+90020 FAIL (Remote OS Command Injection)
 ```
 
 ### Step 5: Aggregate Results and Enforce Security Gates

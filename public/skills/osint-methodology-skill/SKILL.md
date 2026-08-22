@@ -1475,7 +1475,7 @@ curl -sk -H "Host: target.example.com" https://<candidate-IP>/
 If the response matches the public site (same title, same body fingerprint) — you've found the
 origin. CDN-only IPs return generic CDN error pages or 403 to wrong Host.
 
-### 27.5 mail._ / ftp._ / cpanel.\* exception
+### 27.5 mail._/ ftp._ / cpanel.\* exception
 
 Targets often forget to put auxiliary subdomains behind the CDN:
 

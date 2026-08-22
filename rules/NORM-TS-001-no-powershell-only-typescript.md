@@ -85,31 +85,39 @@ DESPUÉS: TS-only = Single source of truth
    ```
    # Antes (prohibido)
    * * * * * scripts/task.ps1
+   ```
+
 <!-- REF-OBSOLETA: scripts/task.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
-   # Después (requerido)
-   * * * * * npx tsx src/task.ts
+# Después (requerido)
+
+- - - - - npx tsx src/task.ts
+
 <!-- REF-OBSOLETA: src/task.ts no existe (ruta migrada o eliminada) -->
-   ```
+
+````
 
 3. **Git hooks en TypeScript**
 
-   ```json
-   // package.json
-   "husky": {
-     "hooks": {
-       "pre-commit": "npx tsx src/hooks/pre-commit.ts"
-     }
-   }
-   ```
+```json
+// package.json
+"husky": {
+  "hooks": {
+    "pre-commit": "npx tsx src/hooks/pre-commit.ts"
+  }
+}
+````
 
 4. **Scripts CLI con shebang**
 
    ```typescript
    #!/usr/bin/env node
    // src/my-script.ts
-<!-- REF-OBSOLETA: src/my-script.ts no existe (ruta migrada o eliminada) -->
    ```
+
+<!-- REF-OBSOLETA: src/my-script.ts no existe (ruta migrada o eliminada) -->
+
+````
 
 ---
 
@@ -125,7 +133,7 @@ find . -name "*.ps1" -type f
 # Etiqueta: "migration-ps1-ts"
 
 # 3. Migrar siguiendo el patrón
-```
+````
 
 ### Patrón de Migración PS1 → TS
 
@@ -159,9 +167,9 @@ console.log(`Deploying to ${values.platform}`);
 {
   "scripts": {
     "deploy": "tsx src/deploy.ts",
-<!-- REF-OBSOLETA: src/deploy.ts no existe (ruta migrada o eliminada) -->
+    <!-- REF-OBSOLETA: src/deploy.ts no existe (ruta migrada o eliminada) -->
     "deploy:prod": "tsx src/deploy.ts --platform=production"
-<!-- REF-OBSOLETA: src/deploy.ts no existe (ruta migrada o eliminada) -->
+    <!-- REF-OBSOLETA: src/deploy.ts no existe (ruta migrada o eliminada) -->
   }
 }
 ```

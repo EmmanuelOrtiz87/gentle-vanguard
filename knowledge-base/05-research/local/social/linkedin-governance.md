@@ -14,4 +14,4 @@ Some call it overhead. I call it discipline.
 
 What's YOUR approach?
 
-#Engineering #Governance #AIDevelopment
+# Engineering #Governance #AIDevelopment

@@ -21,7 +21,9 @@ chore/*     ──► tooling/config/maintenance, branched from develop
 ## Public repo sync (`gentle-vanguard-public`)
 
 - After each `main` merge, sync via `scripts/sync-public.ps1`
+
 <!-- REF-OBSOLETA: scripts/sync-public.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 - Public mirror gets squashed commits — no feature/\* branches
 
 ## CI triggers

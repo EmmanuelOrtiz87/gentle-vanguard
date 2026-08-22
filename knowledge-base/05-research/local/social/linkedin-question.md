@@ -11,4 +11,4 @@ I've been building Gentle-Vanguard and genuinely want to understand:
 
 Not selling. Really want your feedback.
 
-#AIDevelopment #Engineering #DevTools
+# AIDevelopment #Engineering #DevTools

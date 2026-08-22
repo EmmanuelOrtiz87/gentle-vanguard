@@ -10,19 +10,71 @@
     "persistState": true
   },
   "agentFallbacks": {
-    "ORCHESTRATOR": { "primary": "opencode/deepseek-v4-flash-free", "chain": ["ollama/llama3", "lm-studio2/qwen2.5"], "providerPriority": ["opencode", "ollama", "lm-studio2"] },
-    "BA": { "primary": "opencode/deepseek-v4-flash-free", "chain": ["ollama/qwen2.5", "ollama/mistral"], "providerPriority": ["opencode", "ollama"] },
-    "SAD": { "primary": "opencode/deepseek-v4-flash-free", "chain": ["ollama/qwen2.5", "ollama/mistral"], "providerPriority": ["opencode", "ollama"] },
-    "DEV": { "primary": "opencode/deepseek-v4-flash-free", "chain": ["ollama/qwen2.5", "ollama/mistral"], "providerPriority": ["opencode", "ollama"] },
-    "QA": { "primary": "opencode/deepseek-v4-flash-free", "chain": ["ollama/qwen2.5", "ollama/mistral"], "providerPriority": ["opencode", "ollama"] },
-    "OPS": { "primary": "opencode/deepseek-v4-flash-free", "chain": ["ollama/qwen2.5", "ollama/mistral"], "providerPriority": ["opencode", "ollama"] },
-    "GOV": { "primary": "opencode/deepseek-v4-flash-free", "chain": ["ollama/qwen2.5", "ollama/mistral"], "providerPriority": ["opencode", "ollama"] },
-    "DOC": { "primary": "opencode/deepseek-v4-flash-free", "chain": ["ollama/qwen2.5", "ollama/llama3"], "providerPriority": ["opencode", "ollama"] },
-    "SESSION": { "primary": "opencode/deepseek-v4-flash-free", "chain": ["ollama/qwen2.5"], "providerPriority": ["opencode", "ollama"] },
-    "PREMORTEM": { "primary": "opencode/deepseek-v4-flash-free", "chain": ["ollama/qwen2.5", "ollama/mistral"], "providerPriority": ["opencode", "ollama"] },
-    "MKT": { "primary": "opencode/deepseek-v4-flash-free", "chain": ["ollama/qwen2.5", "ollama/llama3"], "providerPriority": ["opencode", "ollama"] },
-    "SALES": { "primary": "opencode/deepseek-v4-flash-free", "chain": ["ollama/qwen2.5"], "providerPriority": ["opencode", "ollama"] },
-    "FINANCE": { "primary": "opencode/deepseek-v4-flash-free", "chain": ["ollama/qwen2.5", "ollama/mistral"], "providerPriority": ["opencode", "ollama"] }
+    "ORCHESTRATOR": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/llama3", "lm-studio2/qwen2.5"],
+      "providerPriority": ["opencode", "ollama", "lm-studio2"]
+    },
+    "BA": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/mistral"],
+      "providerPriority": ["opencode", "ollama"]
+    },
+    "SAD": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/mistral"],
+      "providerPriority": ["opencode", "ollama"]
+    },
+    "DEV": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/mistral"],
+      "providerPriority": ["opencode", "ollama"]
+    },
+    "QA": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/mistral"],
+      "providerPriority": ["opencode", "ollama"]
+    },
+    "OPS": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/mistral"],
+      "providerPriority": ["opencode", "ollama"]
+    },
+    "GOV": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/mistral"],
+      "providerPriority": ["opencode", "ollama"]
+    },
+    "DOC": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/llama3"],
+      "providerPriority": ["opencode", "ollama"]
+    },
+    "SESSION": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5"],
+      "providerPriority": ["opencode", "ollama"]
+    },
+    "PREMORTEM": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/mistral"],
+      "providerPriority": ["opencode", "ollama"]
+    },
+    "MKT": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/llama3"],
+      "providerPriority": ["opencode", "ollama"]
+    },
+    "SALES": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5"],
+      "providerPriority": ["opencode", "ollama"]
+    },
+    "FINANCE": {
+      "primary": "opencode/deepseek-v4-flash-free",
+      "chain": ["ollama/qwen2.5", "ollama/mistral"],
+      "providerPriority": ["opencode", "ollama"]
+    }
   },
   "universalFallbacks": ["opencode/deepseek-v4-flash-free", "ollama/qwen2.5", "ollama/llama3"],
   "agentTypeFallback": {

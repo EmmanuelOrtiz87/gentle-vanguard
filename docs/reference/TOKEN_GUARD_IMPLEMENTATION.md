@@ -12,8 +12,11 @@ los umbrales configurados. Existen dos scripts; solo uno es operacional.
 | Script                                | Estado             | Fuente de config                                                     |
 | ------------------------------------- | ------------------ | -------------------------------------------------------------------- |
 | `src/telemetry/token-budget-guard.ts` | ✅ **OPERACIONAL** | `config/orchestrator.json#subagent_orchestration.token_budget_guard` |
+
 <!-- REF-OBSOLETA: src/telemetry/token-budget-guard.ts no existe (ruta migrada o eliminada) -->
-| `scripts/utilities/token-guard.ps1`   | ⛔ **DEPRECATED**  | `token-guard-config.json` (no existe en disco)                       |
+
+| `scripts/utilities/token-guard.ps1` | ⛔ **DEPRECATED** | `token-guard-config.json` (no existe en
+disco) |
 <!-- REF-OBSOLETA: scripts/utilities/token-guard.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 **Usar solo el script operacional.** El legacy tiene thresholds distintos y referencia un archivo de
@@ -24,7 +27,9 @@ config inexistente.
 ### 1. Token Budget Guard (Operacional)
 
 - **Script**: `src/telemetry/token-budget-guard.ts`
+
 <!-- REF-OBSOLETA: src/telemetry/token-budget-guard.ts no existe (ruta migrada o eliminada) -->
+
 - **Configuración canónica**: `config/orchestrator.json` →
   `subagent_orchestration.token_budget_guard`
 - **Estado**: `.session/token-guard-state.json`
@@ -363,15 +368,17 @@ Get-Content ".\.session\token-guard-state.json" | ConvertFrom-Json
 
 ## Resumen de Archivos Creados
 
-| Archivo                                           | Descripcin                               |
-| ------------------------------------------------- | ---------------------------------------- |
-| `scripts/utilities/token-guard.ps1`               | Motor principal del Token Guard          |
+| Archivo                             | Descripcin                      |
+| ----------------------------------- | ------------------------------- |
+| `scripts/utilities/token-guard.ps1` | Motor principal del Token Guard |
+
 <!-- REF-OBSOLETA: scripts/utilities/token-guard.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| `scripts/utilities/token-guard-config.json`       | configuración de presupuestos y umbrales |
-| `scripts/utilities/session-autostart.cmd`         | Integracin en autostart (modificado)     |
-| `scripts/utilities/session-autostart.config.json` | Config de sesin (modificado)             |
-| `.session/token-guard-state.json`                 | Estado en tiempo real (generado)         |
-| `docs/TOKEN_GUARD_IMPLEMENTATION.md`              | Esta documentacin                        |
+
+| `scripts/utilities/token-guard-config.json` | configuración de presupuestos y umbrales | |
+`scripts/utilities/session-autostart.cmd` | Integracin en autostart (modificado) | |
+`scripts/utilities/session-autostart.config.json` | Config de sesin (modificado) | |
+`.session/token-guard-state.json` | Estado en tiempo real (generado) | |
+`docs/TOKEN_GUARD_IMPLEMENTATION.md` | Esta documentacin |
 
 ## Conclusin
 

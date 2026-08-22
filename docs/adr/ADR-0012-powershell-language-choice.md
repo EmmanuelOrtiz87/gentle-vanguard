@@ -1,7 +1,6 @@
 # ADR-0012: Primary Language Choice — PowerShell (Not Bash/Python)
 
-**Date**: May 2026
-**Author**: Gentle-Vanguard Security Team
+**Date**: May 2026 **Author**: Gentle-Vanguard Security Team
 
 ## Status
 
@@ -136,5 +135,4 @@ git status
 
 ---
 
-**Review Date**: Q3 2026
-**Reviewers**: Security team, DevOps team
+**Review Date**: Q3 2026 **Reviewers**: Security team, DevOps team

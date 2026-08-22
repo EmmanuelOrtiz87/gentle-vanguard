@@ -32,27 +32,33 @@ aprendizaje continuo. Los 10 items del premortem backlog están completados y ve
 ## Detalle de Capacidades
 
 ### M1 — 9 Agentes de Dominio Nativos
+
 Agent-cores TS en `src/agents/` ejecutables con `npx tsx` (sin dependencia de opencode task()).
 Cada uno: análisis de dominio, checklist, flags (critical/warn), artifacts persistidos a
 `.session/artifacts/<domain>/<timestamp>/`.
 
 ### M2 — Delegador Cross-Platform
+
 `src/agent-delegator.ts`: spawn('npx') falla ENOENT en win32 → `resolveNpx()` devuelve npx.cmd;
 con shell:true Node no escapa args → comando completo quoteado. Inyecta AGENT_MODEL y
 AGENT_TEMPERATURE en el env del proceso hijo.
 
 ### M3 — route-and-delegate
+
 `src/route-and-delegate.ts`: entrada unificada de lenguaje natural. recommend() → resolveAgentTier()
 → delegate() → persistHit() feedback loop a `.session/routing/hits.jsonl`.
 
 ### M5 — Web Selectiva (NUEVO en este ciclo)
+
 `src/web-research-select.ts`: search (Firecrawl → Jina+Bing fallback) → grade BM25 (CRAG,
 retrieval-grader) → filter relevantes → persistir `.session/web-research/<slug>.json`.
 Output con todos los scores para calibración de threshold.
+
 ```bash
 npm run web:select -- --query "customer retention best practices" --limit 4 --threshold 0.3
 npm run web:select -- --query "customer retention best practices" --deep --deep-limit 2
 ```
+
 Modos: snippet (título+descripción, rápido) y **--deep** (scrape top-N → BM25 sobre markdown
 completo, cap 20K chars; deepScore reemplaza el snippet score).
 Verificado: "typescript strict mode best practices" → 5/5 relevantes, avg 0.95.
@@ -63,6 +69,7 @@ Forbes, HubSpot). Health: provider 'jina-reader+ddg+bing'. Tests: 14/14 PASS.
 Bugs corregidos: firma `search(query, limit)` (objeto rompe la query).
 
 ### M6 — Tiering por Dominio Aplicado
+
 `config/model-router.json` domainTiering: premium (finance/legal/gov, temp 0.1, guard critical),
 balanced (creativos, temp 0.25, guard high), fastCheap (gitflow/ops, temp 0.15, guard medium).
 `src/domain-tier.ts` resuelve el tier. **Nuevo**: DelegationRequest.temperature override +
@@ -70,18 +77,21 @@ effectiveTemp + AGENT_TEMPERATURE env. route-and-delegate pasa tier.temperature.
 Verificado: "analyze customer churn" → finance-agent, tier premium, temp 0.1, success.
 
 ### M7 — Guard Auto-Mutación
+
 `src/self-mutation-guard.ts`: protege 5 configs críticos (opencode.json, model-router,
 session-autostart, adaptive-router, agents.json) contra mutaciones inválidas durante
 auto-correcciones. Integrado en self-reflection-loop L534 (assertConfigIntegrity post-escritura).
 Pipeline arranca OK con el guard activo.
 
 ### M8 — Poda de Pipeline
+
 `config/session-autostart.config.json`: 108 steps → 100 enabled (8 disabled/deprecados),
 74 lazy. Autostart verificado: 29 steps ejecutados, 71 lazy, 0 fails, workspace READY.
 **Mejora posterior**: +1 step lazy `web-research-adhoc` (adquisición web selectiva por sesión,
 M5) y `adaptive-router-build` re-habilitado → 109 steps / 102 enabled / 73 lazy.
 
 ### M10 — Routing Adaptativo Aprendible
+
 `config/adaptive-router.json` minDataPoints 1 (cold start habilitado). Tabla:
 20 dominios + 10 overrides. 8 dominios de negocio mapean a agentes nativos.
 Verificado: conf 0.85 source=override para finance.

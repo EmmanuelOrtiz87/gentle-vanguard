@@ -112,4 +112,4 @@ engram_mem_save -title "Learning: {key finding}" -type "learning"
 
 ---
 
-> **Referencia detallada**: [ eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [eferences/detail.md](references/detail.md)

@@ -63,9 +63,11 @@ Map the complete API attack surface:
 - **Import API documentation**: Load OpenAPI/Swagger specs into Postman or Burp Suite to catalog all endpoints, methods, parameters, and authentication requirements
 - **Reverse-engineer undocumented APIs**: Proxy the mobile app or web frontend through Burp Suite and exercise all features to capture API calls. Export the Burp sitemap as the baseline endpoint inventory.
 - **GraphQL introspection**: Send an introspection query to discover the full schema:
+
   ```json
   {"query": "{__schema{types{name,fields{name,args{name,type{name}}}}}}"}
   ```
+
 - **Endpoint enumeration**: Fuzz for hidden API versions (`/api/v1/`, `/api/v2/`, `/api/internal/`), debug endpoints (`/api/debug`, `/api/health`, `/api/metrics`), and administrative endpoints
 - **Document authentication mechanisms**: Identify if the API uses API keys, OAuth 2.0 Bearer tokens, JWT, session cookies, or mutual TLS
 
@@ -95,10 +97,12 @@ Test for Broken Object Level Authorization (BOLA) and Broken Function Level Auth
   - `PUT /api/users/456/role` (role modification)
   - `GET /api/admin/dashboard` (admin panel data)
 - **Mass assignment**: Send additional JSON properties not shown in the documentation:
+
   ```json
   PUT /api/users/123
   {"name": "Test", "role": "admin", "isVerified": true, "balance": 99999}
   ```
+
 - **HTTP method testing**: If GET works on an endpoint, try PUT, PATCH, DELETE, and OPTIONS to discover unprotected methods
 
 ### Step 4: Input Validation and Injection Testing

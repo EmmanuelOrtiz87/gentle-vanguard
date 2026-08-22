@@ -138,6 +138,7 @@ When looking for improvements, check these areas in order:
 | Audit Skill           | `skills/gentle-vanguard-audit-skill/`             |
 | Improvement Proposals | `.local/improvement-proposals/`                   |
 | Judgment Day          | `scripts/utilities/judgment-day-orchestrator.ps1` |
+
 <!-- REF-OBSOLETA: scripts/utilities/judgment-day-orchestrator.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 ---

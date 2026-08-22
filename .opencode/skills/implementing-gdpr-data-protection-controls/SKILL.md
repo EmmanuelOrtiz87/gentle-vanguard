@@ -39,8 +39,8 @@ mitre_attack:
 # Implementing GDPR Data Protection Controls
 
 ## Overview
-The General Data Protection Regulation (EU) 2016/679 (GDPR) is the EU's comprehensive data protection law governing the collection, processing, storage, and transfer of personal data. This skill covers implementing the technical and organizational measures required by GDPR, including data protection by design and by default, Data Protection Impact Assessments (DPIAs), data subject rights management, breach notification procedures, and cross-border data transfer mechanisms.
 
+The General Data Protection Regulation (EU) 2016/679 (GDPR) is the EU's comprehensive data protection law governing the collection, processing, storage, and transfer of personal data. This skill covers implementing the technical and organizational measures required by GDPR, including data protection by design and by default, Data Protection Impact Assessments (DPIAs), data subject rights management, breach notification procedures, and cross-border data transfer mechanisms.
 
 ## When to Use
 
@@ -50,6 +50,7 @@ The General Data Protection Regulation (EU) 2016/679 (GDPR) is the EU's comprehe
 - When conducting security assessments that require this implementation
 
 ## Prerequisites
+
 - Understanding of EU data protection law and its territorial scope
 - Knowledge of personal data processing activities within the organization
 - Familiarity with data architecture, databases, and application systems
@@ -74,6 +75,7 @@ The General Data Protection Regulation (EU) 2016/679 (GDPR) is the EU's comprehe
 | Art. 44-49 | Cross-border data transfers (adequacy, SCCs, BCRs) |
 
 ### Article 32 Security Measures
+
 The regulation requires organizations to implement measures appropriate to the risk:
 - **Pseudonymization** and encryption of personal data
 - **Confidentiality, integrity, availability, and resilience** of processing systems
@@ -81,6 +83,7 @@ The regulation requires organizations to implement measures appropriate to the r
 - **Regular testing** and evaluation of technical and organizational measures
 
 ### Data Subject Rights (Articles 12-22)
+
 | Right | Article | Description |
 |-------|---------|-------------|
 | Right to be informed | 13-14 | Transparent information about processing |
@@ -95,6 +98,7 @@ The regulation requires organizations to implement measures appropriate to the r
 ## Workflow
 
 ### Phase 1: Data Mapping and Assessment (Weeks 1-6)
+
 1. Create comprehensive data inventory:
    - What personal data is collected
    - From whom (data subjects)
@@ -109,6 +113,7 @@ The regulation requires organizations to implement measures appropriate to the r
 5. Identify processing activities requiring DPIA
 
 ### Phase 2: Gap Analysis and Risk Assessment (Weeks 7-10)
+
 1. Assess current state against GDPR requirements
 2. Perform DPIAs for high-risk processing activities
 3. Identify security gaps in Article 32 compliance
@@ -116,6 +121,7 @@ The regulation requires organizations to implement measures appropriate to the r
 5. Assess data subject rights request handling capabilities
 
 ### Phase 3: Technical Controls Implementation (Weeks 11-24)
+
 1. **Encryption**:
    - Data at rest: AES-256 for databases, file systems, backups
    - Data in transit: TLS 1.2+ for all personal data transfers
@@ -146,6 +152,7 @@ The regulation requires organizations to implement measures appropriate to the r
    - Anomalous access detection
 
 ### Phase 4: Organizational Controls (Weeks 11-24)
+
 1. Appoint Data Protection Officer (DPO) if required
 2. Develop data protection policies and procedures
 3. Create breach notification procedures (72-hour timeline)
@@ -155,6 +162,7 @@ The regulation requires organizations to implement measures appropriate to the r
 7. Create data protection by design guidance for development teams
 
 ### Phase 5: Documentation and Compliance Evidence (Weeks 25-30)
+
 1. Finalize ROPA documentation
 2. Document all DPIAs and outcomes
 3. Create data protection policies
@@ -163,6 +171,7 @@ The regulation requires organizations to implement measures appropriate to the r
 6. Create international transfer documentation (SCCs, TIAs)
 
 ### Phase 6: Ongoing Compliance (Continuous)
+
 1. Regular DPIA reviews for new processing activities
 2. Annual data mapping refresh
 3. Periodic security measure testing (Art. 32 requirement)
@@ -171,6 +180,7 @@ The regulation requires organizations to implement measures appropriate to the r
 6. Training refresh and awareness campaigns
 
 ## Key Artifacts
+
 - Records of Processing Activities (ROPA)
 - Data Protection Impact Assessments (DPIAs)
 - Data Processing Agreements (DPAs)
@@ -181,6 +191,7 @@ The regulation requires organizations to implement measures appropriate to the r
 - Technical and Organizational Measures Documentation
 
 ## Common Pitfalls
+
 - Treating GDPR as only a legal/compliance exercise without technical implementation
 - Incomplete data mapping missing shadow IT or legacy systems
 - Failing to maintain consent audit trails
@@ -189,6 +200,7 @@ The regulation requires organizations to implement measures appropriate to the r
 - Over-reliance on consent as lawful basis when legitimate interest applies
 
 ## References
+
 - GDPR Official Text: https://gdpr-info.eu/
 - European Data Protection Board (EDPB) Guidelines
 - ICO (UK) GDPR Guidance: https://ico.org.uk/for-organisations/guide-to-data-protection/guide-to-the-general-data-protection-regulation-gdpr/

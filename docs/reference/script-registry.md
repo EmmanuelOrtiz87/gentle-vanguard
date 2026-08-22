@@ -12,55 +12,139 @@ Central inventory of automation scripts with ownership, risk level, and executio
 
 ## Script Inventory
 
-| Script                                             | Area                   | Level | Auto Mode | Owner          | Notes                                                                                                                                                        |
-| -------------------------------------------------- | ---------------------- | ----- | --------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| scripts/utilities/detect-ide-session.ps1 <!-- REF-OBSOLETA: eliminado; candidato: src/core/detect-tool.ts / src/core/tool-detector-enhanced.ts -->  | Session Detection      | A     | yes       | platform       | Detection only, no mutations                                                                                                                                 |
+| Script                                                                                                                                             | Area              | Level | Auto Mode | Owner    | Notes                        |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ----- | --------- | -------- | ---------------------------- |
+| scripts/utilities/detect-ide-session.ps1 <!-- REF-OBSOLETA: eliminado; candidato: src/core/detect-tool.ts / src/core/tool-detector-enhanced.ts --> | Session Detection | A     | yes       | platform | Detection only, no mutations |
+
 <!-- REF-OBSOLETA: scripts/utilities/detect-ide-session.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/utilities/auto-init-dev-environment.ps1 <!-- REF-OBSOLETA: eliminado; existe scripts/utilities/utils/UTILITIES/auto-init-dev-environment.sh --> | Startup                | A     | yes       | platform       | Quiet-safe activation checks                                                                                                                                 |
+
+| scripts/utilities/auto-init-dev-environment.ps1
+<!-- REF-OBSOLETA: eliminado; existe scripts/utilities/utils/UTILITIES/auto-init-dev-environment.sh -->
+
+| Startup | A | yes | platform | Quiet-safe activation checks |
 <!-- REF-OBSOLETA: scripts/utilities/auto-init-dev-environment.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/utilities/ensure-tools-active.ps1 <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->          | Tooling                | B     | yes       | platform       | Avoids heavy auto-installs unless forced                                                                                                                     |
+
+| scripts/utilities/ensure-tools-active.ps1 <!-- REF-OBSOLETA: eliminado en migración PS1→TS --> |
+Tooling | B | yes | platform | Avoids heavy auto-installs unless forced |
 <!-- REF-OBSOLETA: scripts/utilities/ensure-tools-active.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/utilities/run-engram.ps1 <!-- REF-OBSOLETA: eliminado; Engram vía tools/engram.exe -->          | Memory Runtime         | B     | manual    | platform       | Canonical launcher for Engram session persistence                                                                                                            |
+
+| scripts/utilities/run-engram.ps1 <!-- REF-OBSOLETA: eliminado; Engram vía tools/engram.exe --> |
+Memory Runtime | B | manual | platform | Canonical launcher for Engram session persistence |
 <!-- REF-OBSOLETA: scripts/utilities/run-engram.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| src/cli/gv.ts                                      | Operator CLI           | B     | manual    | dev-experience | Entrypoint for workflow commands                                                                                                                             |
-| src/deployment/validate-release-homologation.ts <!-- REF-OBSOLETA: src/deployment/ no existe; solo protected/scripts/utilities/DEPLOYMENT/validate-release-homologation.ps1.enc --> | Release Governance     | B     | manual    | dev-experience | Complementary pre-release multi-repo gate (VERSION/branch/tag alignment)                                                                                     |
+
+| src/cli/gv.ts | Operator CLI | B | manual | dev-experience | Entrypoint for workflow commands | |
+src/deployment/validate-release-homologation.ts
+<!-- REF-OBSOLETA: src/deployment/ no existe; solo protected/scripts/utilities/DEPLOYMENT/validate-release-homologation.ps1.enc -->
+
+| Release Governance | B | manual | dev-experience | Complementary pre-release multi-repo gate
+(VERSION/branch/tag alignment) |
 <!-- REF-OBSOLETA: scripts/utilities/DEPLOYMENT/validate-release-homologation.ps1 no tiene equivalente TS (migración PS1→TS) -->
 <!-- REF-OBSOLETA: src/deployment/validate-release-homologation.ts no existe (ruta migrada o eliminada) -->
-| scripts/utilities/enable-optional-post-commit.ps1 <!-- REF-OBSOLETA: eliminado; candidato: templates/project-root/scripts/enable-optional-post-commit.ts -->  | Optional Hook Coverage | B     | manual    | dev-experience | Enables/disables optional post-commit automation (disabled by default)                                                                                       |
+
+| scripts/utilities/enable-optional-post-commit.ps1
+<!-- REF-OBSOLETA: eliminado; candidato: templates/project-root/scripts/enable-optional-post-commit.ts -->
+
+| Optional Hook Coverage | B | manual | dev-experience | Enables/disables optional post-commit
+automation (disabled by default) |
 <!-- REF-OBSOLETA: scripts/utilities/enable-optional-post-commit.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/gentle-vanguard/setup.sh <!-- REF-OBSOLETA: eliminado; candidato: scripts/core/setup.sh -->                  | Gentle-Vanguard Setup  | B     | manual    | platform       | Cross-platform bootstrap entrypoint for Linux/macOS/WSL                                                                                                      |
-| src/bootstrap.ts                                   | Gentle-Vanguard Setup  | B     | manual    | platform       | Canonical TypeScript bootstrap entrypoint for workspace initialization                                                                                       |
-| scripts/gentle-vanguard/src/cli/gv.ts <!-- REF-OBSOLETA: eliminado; migrado a src/cli/gv.ts -->          | Gentle-Vanguard CLI    | B     | manual    | platform       | Workspace bootstrap and scaffolding CLI (`init`, `new`, `validate`, `tools`, `skills`)                                                                       |
-| scripts/project/new-project.ps1 <!-- REF-OBSOLETA: eliminado; ver src/create-gentle-vanguard.ts -->                    | Project Scaffolding    | B     | manual    | dev-experience | Canonical new-project entrypoint backed by bootstrap-workspace                                                                                               |
+
+| scripts/gentle-vanguard/setup.sh
+<!-- REF-OBSOLETA: eliminado; candidato: scripts/core/setup.sh --> | Gentle-Vanguard Setup | B |
+
+manual | platform | Cross-platform bootstrap entrypoint for Linux/macOS/WSL | | src/bootstrap.ts |
+Gentle-Vanguard Setup | B | manual | platform | Canonical TypeScript bootstrap entrypoint for
+workspace initialization | | scripts/gentle-vanguard/src/cli/gv.ts
+<!-- REF-OBSOLETA: eliminado; migrado a src/cli/gv.ts --> | Gentle-Vanguard CLI | B | manual |
+
+platform | Workspace bootstrap and scaffolding CLI (`init`, `new`, `validate`, `tools`, `skills`) |
+| scripts/project/new-project.ps1
+<!-- REF-OBSOLETA: eliminado; ver src/create-gentle-vanguard.ts --> | Project Scaffolding | B |
+
+manual | dev-experience | Canonical new-project entrypoint backed by bootstrap-workspace |
 <!-- REF-OBSOLETA: scripts/project/new-project.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/utilities/end-session.ps1 <!-- REF-OBSOLETA: eliminado; ver src/session-close-orchestrator.ts -->                  | Session Closure        | B     | manual    | dev-experience | Runs review/audit/governance checks and generates delivery closure artifact                                                                                  |
+
+| scripts/utilities/end-session.ps1
+<!-- REF-OBSOLETA: eliminado; ver src/session-close-orchestrator.ts --> | Session Closure | B |
+
+manual | dev-experience | Runs review/audit/governance checks and generates delivery closure
+artifact |
 <!-- REF-OBSOLETA: scripts/utilities/end-session.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/utilities/context-pack.ps1 <!-- REF-OBSOLETA: eliminado; candidato: templates/project-root/scripts/context-pack.ts -->                 | Context Budgeting      | B     | manual    | dev-experience | Generates compact continuation summary to reduce token usage                                                                                                 |
+
+| scripts/utilities/context-pack.ps1
+<!-- REF-OBSOLETA: eliminado; candidato: templates/project-root/scripts/context-pack.ts --> |
+
+Context Budgeting | B | manual | dev-experience | Generates compact continuation summary to reduce
+token usage |
 <!-- REF-OBSOLETA: scripts/utilities/context-pack.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/utilities/compact-start.ps1 <!-- REF-OBSOLETA: eliminado; candidato: templates/project-root/scripts/compact-start.ts -->                | Context Budgeting      | B     | manual    | dev-experience | Generates context pack and compact prompt for new thread                                                                                                     |
+
+| scripts/utilities/compact-start.ps1
+<!-- REF-OBSOLETA: eliminado; candidato: templates/project-root/scripts/compact-start.ts --> |
+
+Context Budgeting | B | manual | dev-experience | Generates context pack and compact prompt for new
+thread |
 <!-- REF-OBSOLETA: scripts/utilities/compact-start.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/utilities/context-metrics-report.ps1 <!-- REF-OBSOLETA: eliminado; candidato: templates/project-root/scripts/context-metrics-report.ts -->       | Context Budgeting      | B     | manual    | dev-experience | Reports context-pack and compact-start usage metrics                                                                                                         |
+
+| scripts/utilities/context-metrics-report.ps1
+<!-- REF-OBSOLETA: eliminado; candidato: templates/project-root/scripts/context-metrics-report.ts -->
+
+| Context Budgeting | B | manual | dev-experience | Reports context-pack and compact-start usage
+metrics |
 <!-- REF-OBSOLETA: scripts/utilities/context-metrics-report.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/utilities/generate-audit-report.ps1 <!-- REF-OBSOLETA: eliminado; ver src/report-generator.ts -->        | Audit Reporting        | B     | manual    | platform       | Generates weekly/monthly/executive audit reports in markdown                                                                                                 |
+
+| scripts/utilities/generate-audit-report.ps1
+<!-- REF-OBSOLETA: eliminado; ver src/report-generator.ts --> | Audit Reporting | B | manual |
+
+platform | Generates weekly/monthly/executive audit reports in markdown |
 <!-- REF-OBSOLETA: scripts/utilities/generate-audit-report.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/utilities/generate-session-audit.ps1 <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->       | Session Audit          | B     | manual    | platform       | Manages session lifecycle audit logging                                                                                                                      |
+
+| scripts/utilities/generate-session-audit.ps1 <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->
+| Session Audit | B | manual | platform | Manages session lifecycle audit logging |
 <!-- REF-OBSOLETA: scripts/utilities/generate-session-audit.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/utilities/aggregate-metrics.ps1 <!-- REF-OBSOLETA: eliminado; candidato: src/core/metrics-aggregator.ts -->            | Metrics Aggregation    | B     | manual    | platform       | Aggregates daily/weekly/monthly metrics                                                                                                                      |
+
+| scripts/utilities/aggregate-metrics.ps1
+<!-- REF-OBSOLETA: eliminado; candidato: src/core/metrics-aggregator.ts --> | Metrics Aggregation |
+
+B | manual | platform | Aggregates daily/weekly/monthly metrics |
 <!-- REF-OBSOLETA: scripts/utilities/aggregate-metrics.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/validation/homologate-workspace.ps1 <!-- REF-OBSOLETA: eliminado; candidato: src/validate-readme.ts -->        | Workspace Hygiene      | B     | manual    | dev-experience | Normalizes artifacts/docs, removes stale files, updates references                                                                                           |
+
+| scripts/validation/homologate-workspace.ps1
+<!-- REF-OBSOLETA: eliminado; candidato: src/validate-readme.ts --> | Workspace Hygiene | B | manual
+
+| dev-experience | Normalizes artifacts/docs, removes stale files, updates references |
 <!-- REF-OBSOLETA: scripts/validation/homologate-workspace.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/git-hooks/pre-push <!-- REF-OBSOLETA: eliminado; hooks nativos en src/hooks/ -->                         | Git Hook Runtime       | B     | git-event | platform       | Runs governed pre-push checks (native review, governance validation, homologation drift gate); post-commit hook intentionally not enabled in Gentle-Vanguard |
-| scripts/utilities/stack-on-demand.ps1 <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->              | Orchestration Mode     | B     | manual    | platform       | Activate/validate/deactivate flow                                                                                                                            |
+
+| scripts/git-hooks/pre-push <!-- REF-OBSOLETA: eliminado; hooks nativos en src/hooks/ --> | Git
+Hook Runtime | B | git-event | platform | Runs governed pre-push checks (native review, governance
+validation, homologation drift gate); post-commit hook intentionally not enabled in Gentle-Vanguard
+| | scripts/utilities/stack-on-demand.ps1 <!-- REF-OBSOLETA: eliminado en migración PS1→TS --> |
+Orchestration Mode | B | manual | platform | Activate/validate/deactivate flow |
 <!-- REF-OBSOLETA: scripts/utilities/stack-on-demand.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/utilities/orchestrator-status.ps1 <!-- REF-OBSOLETA: eliminado en migración PS1→TS -->          | Status                 | A     | manual    | platform       | Read-oriented orchestration checks                                                                                                                           |
+
+| scripts/utilities/orchestrator-status.ps1 <!-- REF-OBSOLETA: eliminado en migración PS1→TS --> |
+Status | A | manual | platform | Read-oriented orchestration checks |
 <!-- REF-OBSOLETA: scripts/utilities/orchestrator-status.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/diagnostics/system-diagnostics.ps1 <!-- REF-OBSOLETA: eliminado; existe scripts/diagnostics/system-diagnostics.sh -->         | Diagnostics            | B     | manual    | platform       | Health and repair checks                                                                                                                                     |
+
+| scripts/diagnostics/system-diagnostics.ps1
+<!-- REF-OBSOLETA: eliminado; existe scripts/diagnostics/system-diagnostics.sh --> | Diagnostics | B
+
+| manual | platform | Health and repair checks |
 <!-- REF-OBSOLETA: scripts/diagnostics/system-diagnostics.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/diagnostics/validate-script-governance.ps1 <!-- REF-OBSOLETA: eliminado; candidato: src/stack-compliance.ts --> | Governance             | B     | manual    | platform       | Validates script placement, naming, and governance policy compliance                                                                                         |
+
+| scripts/diagnostics/validate-script-governance.ps1
+<!-- REF-OBSOLETA: eliminado; candidato: src/stack-compliance.ts --> | Governance | B | manual |
+
+platform | Validates script placement, naming, and governance policy compliance |
 <!-- REF-OBSOLETA: scripts/diagnostics/validate-script-governance.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| scripts/diagnostics/validate-sdd-governance.ps1 <!-- REF-OBSOLETA: eliminado; candidato: src/check-sdd-gate.ts -->    | Governance             | B     | ci-pr     | platform       | Enforces SDD gate on PRs with branch-aware mandatory/advisory behavior                                                                                       |
+
+| scripts/diagnostics/validate-sdd-governance.ps1
+<!-- REF-OBSOLETA: eliminado; candidato: src/check-sdd-gate.ts --> | Governance | B | ci-pr |
+
+platform | Enforces SDD gate on PRs with branch-aware mandatory/advisory behavior |
 <!-- REF-OBSOLETA: scripts/diagnostics/validate-sdd-governance.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| src/validate-gitflow.ts <!-- REF-OBSOLETA: eliminado; migrado a src/validate-gitflow.ts -->           | GitFlow Policy         | B     | manual    | platform       | Enforces branch naming, protected branch push policy, and expected PR base                                                                                   |
+
+| src/validate-gitflow.ts <!-- REF-OBSOLETA: eliminado; migrado a src/validate-gitflow.ts --> |
+GitFlow Policy | B | manual | platform | Enforces branch naming, protected branch push policy, and
+expected PR base |
 
 ## Execution Policy
 

@@ -90,6 +90,7 @@ Syft supports over 30 package ecosystems including npm, PyPI, Maven, Go modules,
 Parse the SBOM to extract all software components with their identifiers:
 
 **CycloneDX JSON Structure:**
+
 ```json
 {
   "bomFormat": "CycloneDX",
@@ -111,6 +112,7 @@ Parse the SBOM to extract all software components with their identifiers:
 ```
 
 **SPDX JSON Structure:**
+
 ```json
 {
   "spdxVersion": "SPDX-2.3",

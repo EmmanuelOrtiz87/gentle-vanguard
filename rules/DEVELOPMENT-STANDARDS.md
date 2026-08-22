@@ -13,7 +13,8 @@ Standards and best practices for Gentle-Vanguard project development. Last updat
 3. **Comment-Based Help**: All public functions must have `.SYNOPSIS`, `.DESCRIPTION`, `.EXAMPLE`
 4. **Output Type**: Specify `[OutputType([type])` when returning objects
 5. **Error Handling**: Use `try/catch` with meaningful error messages (see
-   `rules/NORMATIVAS-ERROR-HANDLING.md` <!-- REF-OBSOLETA: rules/NORMATIVAS-ERROR-HANDLING.md no existe; posible: rules/NORMATIVAS-CODE-QUALITY.md -->)
+   `rules/NORMATIVAS-ERROR-HANDLING.md`
+   <!-- REF-OBSOLETA: rules/NORMATIVAS-ERROR-HANDLING.md no existe; posible: rules/NORMATIVAS-CODE-QUALITY.md -->)
 
 ### Naming Conventions
 
@@ -80,7 +81,8 @@ $result | Should Be $expected
 ### Testing Policy Source
 
 Canonical testing configuration: `config/testing-policy.json` Detailed testing norms:
-`rules/TESTING-STANDARDS.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-TESTING.md no existe; candidato: rules/TESTING-STANDARDS.md -->
+`rules/TESTING-STANDARDS.md`
+<!-- REF-OBSOLETA: docs/NORMATIVAS-TESTING.md no existe; candidato: rules/TESTING-STANDARDS.md -->
 
 ---
 
@@ -159,7 +161,8 @@ Every config JSON MUST include:
 2. **Gitleaks** - No secrets in code (CI)
 3. **PSScriptAnalyzer** - All scripts must pass
 4. **Input Validation** - All user input must be validated
-5. **OWASP LLM Top 10** - Follow `rules/NORMATIVAS-SECURITY-COMPLIANCE.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-SEGURIDAD.md no existe; candidato: rules/NORMATIVAS-SECURITY-COMPLIANCE.md -->
+5. **OWASP LLM Top 10** - Follow `rules/NORMATIVAS-SECURITY-COMPLIANCE.md`
+   <!-- REF-OBSOLETA: docs/NORMATIVAS-SEGURIDAD.md no existe; candidato: rules/NORMATIVAS-SECURITY-COMPLIANCE.md -->
 
 ### Forbidden Practices
 
@@ -176,11 +179,18 @@ Every config JSON MUST include:
 
 ### Token Efficiency
 
-- **Context packing**: Use `src/handoff-compress.ts` <!-- REF-OBSOLETA: src/handoff-compress.ts no existe; ver src/structural-compression.ts y scripts/utilities/utils/UTILITIES/handoff-compress.sh --> for large sessions
+- **Context packing**: Use `src/handoff-compress.ts`
+  <!-- REF-OBSOLETA: src/handoff-compress.ts no existe; ver src/structural-compression.ts y scripts/utilities/utils/UTILITIES/handoff-compress.sh -->
+  for large sessions
+
 <!-- REF-OBSOLETA: src/handoff-compress.ts no existe (ruta migrada o eliminada) -->
 <!-- REF-OBSOLETA: src/handoff-compress.ts no existe (ruta migrada o eliminada) -->
-- **Token budgeting**: All AI interactions must call `src/token-budget-guard.ts` <!-- REF-OBSOLETA: scripts/utilities/token-guard.ps1 eliminado; candidato: src/token-budget-guard.ts -->
+
+- **Token budgeting**: All AI interactions must call `src/token-budget-guard.ts`
+  <!-- REF-OBSOLETA: scripts/utilities/token-guard.ps1 eliminado; candidato: src/token-budget-guard.ts -->
+
 <!-- REF-OBSOLETA: scripts/utilities/token-guard.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 - **Compression**: Apply 0.90 ratio for memory packs
 
 ### Script Performance
@@ -197,13 +207,16 @@ Every config JSON MUST include:
 Before marking ANY task as complete:
 
 - [ ] All tests pass (`Invoke-Pester`)
-- [ ] No broken links in docs (run `audit-sweep.ps1` <!-- REF-OBSOLETA: audit-sweep.ps1 no existe en scripts/ ni src/ -->)
-- [ ] Agent self-verification passed (`agent-verify.ps1` <!-- REF-OBSOLETA: agent-verify.ps1 eliminado en migración PS1→TS; sin equivalente TS activo -->)
+- [ ] No broken links in docs (run `audit-sweep.ps1`
+      <!-- REF-OBSOLETA: audit-sweep.ps1 no existe en scripts/ ni src/ -->)
+- [ ] Agent self-verification passed (`agent-verify.ps1`
+      <!-- REF-OBSOLETA: agent-verify.ps1 eliminado en migración PS1→TS; sin equivalente TS activo -->)
 - [ ] PSScriptAnalyzer passes (no errors)
 - [ ] Comment-based help present
 - [ ] CHANGELOG updated
 - [ ] No hardcoded paths
-- [ ] Error handling implemented per NORMATIVAS-ERROR-HANDLING.md <!-- REF-OBSOLETA: rules/NORMATIVAS-ERROR-HANDLING.md no existe -->
+- [ ] Error handling implemented per NORMATIVAS-ERROR-HANDLING.md
+      <!-- REF-OBSOLETA: rules/NORMATIVAS-ERROR-HANDLING.md no existe -->
 - [ ] Engram persisted (`mem_save` for significant work)
 - [ ] es docs, en code (project rule)
 
@@ -251,7 +264,9 @@ BEFORE modifying any existing file, follow this protocol to avoid incomplete/wro
 1. **Run affected tests**: not just the full suite, specifically touched modules
 2. **Run linter/typecheck**: ensure no new warnings
 3. **Verify integration points**: APIs, database migrations, UI components
-4. **Run `agent-verify.ps1`** <!-- REF-OBSOLETA: agent-verify.ps1 eliminado en migración PS1→TS; sin equivalente TS activo --> if modifying gentle-vanguard itself
+4. **Run `agent-verify.ps1`**
+   <!-- REF-OBSOLETA: agent-verify.ps1 eliminado en migración PS1→TS; sin equivalente TS activo -->
+   if modifying gentle-vanguard itself
 5. **Persist to engram** if architecture/pattern changed significantly
 
 **Why**: Existing projects have established conventions. Blind modifications break builds, introduce
@@ -294,11 +309,15 @@ understand before changing.
 
 These standards are enforced by:
 
-1. **Pre-commit hooks** (Lefthook) - `src/hooks/pre-commit-opencode-validation.ts` <!-- REF-OBSOLETA: hooks/pre-commit-opencode-validation.ps1 eliminado; candidato: src/hooks/pre-commit-opencode-validation.ts -->
-2. **CI/CD pipeline** (GitHub Actions) - `.github/workflows/ci.yml` <!-- REF-OBSOLETA: gentle-vanguard-quality-gate.yml no existe; CI actual en .github/workflows/ci.yml -->
+1. **Pre-commit hooks** (Lefthook) - `src/hooks/pre-commit-opencode-validation.ts`
+   <!-- REF-OBSOLETA: hooks/pre-commit-opencode-validation.ps1 eliminado; candidato: src/hooks/pre-commit-opencode-validation.ts -->
+2. **CI/CD pipeline** (GitHub Actions) - `.github/workflows/ci.yml`
+   <!-- REF-OBSOLETA: gentle-vanguard-quality-gate.yml no existe; CI actual en .github/workflows/ci.yml -->
 3. **Code review** (mandatory for `develop` -> `main`)
-4. **Audit sweeps** (weekly) - `gentle-vanguard-audit-skill` <!-- REF-OBSOLETA: skill no encontrado; ver skills/ y .github/workflows/community-skill-review.yml -->
-5. **Agent self-verification** (`agent-verify.ps1` <!-- REF-OBSOLETA: agent-verify.ps1 eliminado en migración PS1→TS; sin equivalente TS activo -->)
+4. **Audit sweeps** (weekly) - `gentle-vanguard-audit-skill`
+   <!-- REF-OBSOLETA: skill no encontrado; ver skills/ y .github/workflows/community-skill-review.yml -->
+5. **Agent self-verification** (`agent-verify.ps1`
+   <!-- REF-OBSOLETA: agent-verify.ps1 eliminado en migración PS1→TS; sin equivalente TS activo -->)
 
 Violations result in:
 
@@ -310,45 +329,45 @@ Violations result in:
 
 ## References
 
-| Resource                     | Path                                      |
-| ---------------------------- | ----------------------------------------- |
-| AI Normatives                | `rules/AI-NORMATIVES.md`                  |
-| AI Safety                    | `rules/NORMATIVAS-AI-SAFETY.md`           |
-| Cost Optimization            | `rules/NORMATIVAS-COST-OPTIMIZATION.md`   |
-| Disaster Recovery            | `rules/NORMATIVAS-DISASTER-RECOVERY.md`   |
-| Incident Management          | `rules/NORMATIVAS-INCIDENT-MANAGEMENT.md` |
-| Code Normatives              | `rules/NORMATIVAS-CODE-QUALITY.md` <!-- REF-OBSOLETA: NORMATIVAS-CODIGO.md renombrado/inexistente; candidato: rules/NORMATIVAS-CODE-QUALITY.md -->              |
-| Error Handling               | `rules/NORMATIVAS-ERROR-HANDLING.md` <!-- REF-OBSOLETA: rules/NORMATIVAS-ERROR-HANDLING.md no existe -->      |
-| Testing Normatives           | `rules/TESTING-STANDARDS.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-TESTING.md no existe; candidato: rules/TESTING-STANDARDS.md -->              |
-| Security Normatives          | `rules/NORMATIVAS-SECURITY-COMPLIANCE.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-SEGURIDAD.md no existe; candidato: rules/NORMATIVAS-SECURITY-COMPLIANCE.md -->            |
-| **Accessibility (WCAG 2.2)** | `docs/NORMATIVAS-ACCESIBILIDAD.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-ACCESIBILIDAD.md no existe -->        |
-| **I18n/L10n Standards**      | `docs/NORMATIVAS-I18N-L10N.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-I18N-L10N.md no existe -->            |
-| **ISO/IEC 25010 Quality**    | `docs/NORMATIVAS-ISO25010.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-ISO25010.md no existe -->             |
-| **ISO/IEC 27001 Controls**   | `docs/NORMATIVAS-ISO27001.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-ISO27001.md no existe -->             |
-| **SRE Practices**            | `docs/NORMATIVAS-SRE.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-SRE.md no existe; posible: rules/OBSERVABILITY-SLOS.md -->                  |
-| **Chaos Engineering**        | `docs/NORMATIVAS-CHAOS-ENGINEERING.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-CHAOS-ENGINEERING.md no existe -->    |
-| **API Design Standards**     | `docs/NORMATIVAS-API-DESIGN.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-API-DESIGN.md no existe -->           |
-| **SBOM Validation**          | `docs/NORMATIVAS-SBOM.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-SBOM.md no existe; ver src/generate-sbom.ts -->                 |
-| C# Hardening                 | `rules/CI-HARDENING-STANDARDS.md`         |
-| Skill Style Guide            | `rules/SKILL-STYLE-GUIDE.md`              |
-| Orchestrator Config          | `config/orchestrator.json`                |
-| Quality Gates                | `config/quality-gates.json`               |
-| Structure Policy             | `config/structure-policy.json`            |
-| Testing Policy               | `config/testing-policy.json`              |
-| PSScriptAnalyzer Config      | `config/PSScriptAnalyzerSettings.psd1`    |
-| ESLint Config                | `eslint.config.js` <!-- REF-OBSOLETA: .eslintrc.json no existe; ESLint flat config en eslint.config.js -->                          |
-| TypeScript Config            | `tsconfig.json`                           |
-| JS/TS Quality CI             | `.github/workflows/ci.yml` <!-- REF-OBSOLETA: js-ts-quality.yml no existe; CI actual en ci.yml -->     |
-| Python Quality CI            | `.github/workflows/python-quality.yml` <!-- REF-OBSOLETA: workflow no existe -->    |
-| Coverage CI                  | `.github/workflows/coverage.yml` <!-- REF-OBSOLETA: workflow no existe -->          |
-| Markdown Lint CI             | `.github/workflows/markdown-lint.yml` <!-- REF-OBSOLETA: workflow no existe -->     |
-| npm Audit CI                 | `.github/workflows/npm-audit.yml` <!-- REF-OBSOLETA: workflow no existe -->         |
-| Stale Issues CI              | `.github/workflows/scheduled.yml` <!-- REF-OBSOLETA: stale.yml no existe; stale job en scheduled.yml -->             |
-| PR Labeler CI                | `.github/workflows/labeler.yml`           |
-| OpenAPI Validate CI          | `.github/workflows/openapi-validate.yml` <!-- REF-OBSOLETA: workflow no existe -->  |
-| Commit Lint CI               | `.github/workflows/commitlint.yml` <!-- REF-OBSOLETA: workflow no existe -->        |
-| Devcontainer                 | `.devcontainer/devcontainer.json`         |
-| Coverage Tool                | `c8` (via `pnpm coverage`)                |
+| Resource                     | Path                                                                                                                                                        |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AI Normatives                | `rules/AI-NORMATIVES.md`                                                                                                                                    |
+| AI Safety                    | `rules/NORMATIVAS-AI-SAFETY.md`                                                                                                                             |
+| Cost Optimization            | `rules/NORMATIVAS-COST-OPTIMIZATION.md`                                                                                                                     |
+| Disaster Recovery            | `rules/NORMATIVAS-DISASTER-RECOVERY.md`                                                                                                                     |
+| Incident Management          | `rules/NORMATIVAS-INCIDENT-MANAGEMENT.md`                                                                                                                   |
+| Code Normatives              | `rules/NORMATIVAS-CODE-QUALITY.md` <!-- REF-OBSOLETA: NORMATIVAS-CODIGO.md renombrado/inexistente; candidato: rules/NORMATIVAS-CODE-QUALITY.md -->          |
+| Error Handling               | `rules/NORMATIVAS-ERROR-HANDLING.md` <!-- REF-OBSOLETA: rules/NORMATIVAS-ERROR-HANDLING.md no existe -->                                                    |
+| Testing Normatives           | `rules/TESTING-STANDARDS.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-TESTING.md no existe; candidato: rules/TESTING-STANDARDS.md -->                             |
+| Security Normatives          | `rules/NORMATIVAS-SECURITY-COMPLIANCE.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-SEGURIDAD.md no existe; candidato: rules/NORMATIVAS-SECURITY-COMPLIANCE.md --> |
+| **Accessibility (WCAG 2.2)** | `docs/NORMATIVAS-ACCESIBILIDAD.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-ACCESIBILIDAD.md no existe -->                                                        |
+| **I18n/L10n Standards**      | `docs/NORMATIVAS-I18N-L10N.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-I18N-L10N.md no existe -->                                                                |
+| **ISO/IEC 25010 Quality**    | `docs/NORMATIVAS-ISO25010.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-ISO25010.md no existe -->                                                                  |
+| **ISO/IEC 27001 Controls**   | `docs/NORMATIVAS-ISO27001.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-ISO27001.md no existe -->                                                                  |
+| **SRE Practices**            | `docs/NORMATIVAS-SRE.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-SRE.md no existe; posible: rules/OBSERVABILITY-SLOS.md -->                                      |
+| **Chaos Engineering**        | `docs/NORMATIVAS-CHAOS-ENGINEERING.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-CHAOS-ENGINEERING.md no existe -->                                                |
+| **API Design Standards**     | `docs/NORMATIVAS-API-DESIGN.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-API-DESIGN.md no existe -->                                                              |
+| **SBOM Validation**          | `docs/NORMATIVAS-SBOM.md` <!-- REF-OBSOLETA: docs/NORMATIVAS-SBOM.md no existe; ver src/generate-sbom.ts -->                                                |
+| C# Hardening                 | `rules/CI-HARDENING-STANDARDS.md`                                                                                                                           |
+| Skill Style Guide            | `rules/SKILL-STYLE-GUIDE.md`                                                                                                                                |
+| Orchestrator Config          | `config/orchestrator.json`                                                                                                                                  |
+| Quality Gates                | `config/quality-gates.json`                                                                                                                                 |
+| Structure Policy             | `config/structure-policy.json`                                                                                                                              |
+| Testing Policy               | `config/testing-policy.json`                                                                                                                                |
+| PSScriptAnalyzer Config      | `config/PSScriptAnalyzerSettings.psd1`                                                                                                                      |
+| ESLint Config                | `eslint.config.js` <!-- REF-OBSOLETA: .eslintrc.json no existe; ESLint flat config en eslint.config.js -->                                                  |
+| TypeScript Config            | `tsconfig.json`                                                                                                                                             |
+| JS/TS Quality CI             | `.github/workflows/ci.yml` <!-- REF-OBSOLETA: js-ts-quality.yml no existe; CI actual en ci.yml -->                                                          |
+| Python Quality CI            | `.github/workflows/python-quality.yml` <!-- REF-OBSOLETA: workflow no existe -->                                                                            |
+| Coverage CI                  | `.github/workflows/coverage.yml` <!-- REF-OBSOLETA: workflow no existe -->                                                                                  |
+| Markdown Lint CI             | `.github/workflows/markdown-lint.yml` <!-- REF-OBSOLETA: workflow no existe -->                                                                             |
+| npm Audit CI                 | `.github/workflows/npm-audit.yml` <!-- REF-OBSOLETA: workflow no existe -->                                                                                 |
+| Stale Issues CI              | `.github/workflows/scheduled.yml` <!-- REF-OBSOLETA: stale.yml no existe; stale job en scheduled.yml -->                                                    |
+| PR Labeler CI                | `.github/workflows/labeler.yml`                                                                                                                             |
+| OpenAPI Validate CI          | `.github/workflows/openapi-validate.yml` <!-- REF-OBSOLETA: workflow no existe -->                                                                          |
+| Commit Lint CI               | `.github/workflows/commitlint.yml` <!-- REF-OBSOLETA: workflow no existe -->                                                                                |
+| Devcontainer                 | `.devcontainer/devcontainer.json`                                                                                                                           |
+| Coverage Tool                | `c8` (via `pnpm coverage`)                                                                                                                                  |
 
 ---
 
@@ -357,7 +376,8 @@ Violations result in:
 ### Cross-Reference Validation
 
 All scripts must maintain valid references to other scripts, configurations, and documentation. Use
-`scripts/utilities/validate-cross-references.ps1` <!-- REF-OBSOLETA: validate-cross-references.ps1 no existe en scripts/ ni src/ --> to audit:
+`scripts/utilities/validate-cross-references.ps1`
+<!-- REF-OBSOLETA: validate-cross-references.ps1 no existe en scripts/ ni src/ --> to audit:
 <!-- REF-OBSOLETA: scripts/utilities/validate-cross-references.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 ```TypeScript
@@ -383,7 +403,7 @@ When deprecating a script or feature:
 
 1. **Mark as Deprecated**: Add comment block at file start
 
-   ```TypeScript
+   ```powershell
    <#
    .SYNOPSIS
        [DEPRECATED] Use new-script.ps1 instead
@@ -391,18 +411,21 @@ When deprecating a script or feature:
    .DEPRECATION
        Status: DEPRECATED
        Since: 2026-05-16
-       Replacement: scripts/utilities/new-script.ps1 <!-- REF-OBSOLETA: new-script.ps1 es ejemplo genérico, no archivo real -->
-<!-- REF-OBSOLETA: scripts/utilities/new-script.ps1 no tiene equivalente TS (migración PS1→TS) -->
+       Replacement: scripts/utilities/new-script.ps1
+
        Reason: Functionality moved to unified orchestrator
        RemovalDate: 2026-08-16 (90 days)
    #>
    ```
 
+<!-- REF-OBSOLETA: scripts/utilities/new-script.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 2. **Update All References**: Change all callers to use replacement script
 
 3. **Wait 90 Days**: Allow transition period for dependent code
 
-4. **Remove**: After 90 days with no references, delete file and update `docs/DEPRECATION-LOG.md` <!-- REF-OBSOLETA: docs/DEPRECATION-LOG.md no existe -->
+4. **Remove**: After 90 days with no references, delete file and update `docs/DEPRECATION-LOG.md`
+   <!-- REF-OBSOLETA: docs/DEPRECATION-LOG.md no existe -->
 
 ### Before Deleting Files
 
@@ -412,9 +435,11 @@ When deprecating a script or feature:
 - [ ] All references updated or removed
 - [ ] Documentation updated
 - [ ] Tests updated or removed
-- [ ] `validate-cross-references.ps1` <!-- REF-OBSOLETA: validate-cross-references.ps1 no existe --> returns PASS
+- [ ] `validate-cross-references.ps1` <!-- REF-OBSOLETA: validate-cross-references.ps1 no existe -->
+      returns PASS
 - [ ] Reviewed by at least 1 team member
-- [ ] Entry added to `docs/DEPRECATION-LOG.md` <!-- REF-OBSOLETA: docs/DEPRECATION-LOG.md no existe -->
+- [ ] Entry added to `docs/DEPRECATION-LOG.md`
+      <!-- REF-OBSOLETA: docs/DEPRECATION-LOG.md no existe -->
 
 ### Reference Validation in CI/CD
 

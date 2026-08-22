@@ -92,16 +92,16 @@ La arquitectura completa, los contratos y los diagramas ampliados están en
 
 El stack incluye **21 agentes** y **263 skills**. Los roles principales son:
 
-| Rol | Propósito |
-| --- | --- |
+| Rol          | Propósito                                  |
+| ------------ | ------------------------------------------ |
 | Orchestrator | Coordina la sesión y deriva cada solicitud |
-| BA | Explora requisitos y detecta ambigüedades |
-| SAD | Diseña arquitectura y contratos |
-| DEV | Implementa y refactoriza |
-| QA | Ejecuta pruebas y validaciones |
-| OPS | Automatiza infraestructura y CI/CD |
-| GOV | Revisa seguridad, cumplimiento y políticas |
-| DOC | Mantiene documentación y decisiones |
+| BA           | Explora requisitos y detecta ambigüedades  |
+| SAD          | Diseña arquitectura y contratos            |
+| DEV          | Implementa y refactoriza                   |
+| QA           | Ejecuta pruebas y validaciones             |
+| OPS          | Automatiza infraestructura y CI/CD         |
+| GOV          | Revisa seguridad, cumplimiento y políticas |
+| DOC          | Mantiene documentación y decisiones        |
 
 El **Model Profile** adapta el comportamiento por fase. La **Skill Registry** carga solo las
 capacidades necesarias. El **Chain-Delivery** conserva el contrato entre BA, SAD, DEV y QA.
@@ -136,28 +136,28 @@ flowchart TD
 
 ## Comandos frecuentes
 
-| Comando | Uso |
-| --- | --- |
-| `npm run start` | Iniciar el dashboard |
+| Comando                            | Uso                             |
+| ---------------------------------- | ------------------------------- |
+| `npm run start`                    | Iniciar el dashboard            |
 | `npx tsx src/session-autostart.ts` | Inicializar una sesión completa |
-| `npm run watchtower:health` | Revisar salud del stack |
-| `npm run typecheck` | Comprobar TypeScript |
-| `npm run lint` | Ejecutar lint |
-| `npm test` | Ejecutar las pruebas |
-| `npm run db:health` | Revisar Nexus |
-| `npm run graphify -- query "..."` | Consultar el grafo del código |
+| `npm run watchtower:health`        | Revisar salud del stack         |
+| `npm run typecheck`                | Comprobar TypeScript            |
+| `npm run lint`                     | Ejecutar lint                   |
+| `npm test`                         | Ejecutar las pruebas            |
+| `npm run db:health`                | Revisar Nexus                   |
+| `npm run graphify -- query "..."`  | Consultar el grafo del código   |
 
 ## Documentación
 
-| Documento | Para quién |
-| --- | --- |
-| [Documentación técnica](docs/technical/STACK-DOCUMENTATION.md) | Arquitectura, componentes y operación |
-| [Guía de inicio](docs/getting-started/README.md) | Instalación paso a paso |
-| [Comandos rápidos](docs/operations/procedures/QUICK-COMMANDS.md) | Referencia operativa |
-| [Arquitectura](docs/architecture/README.md) | Decisiones y límites del sistema |
-| [Seguridad](docs/security/README.md) | Controles y prácticas de seguridad |
-| [ADRs](docs/adr/README.md) | Decisiones arquitectónicas |
-| [Changelog](CHANGELOG.md) | Historial de cambios |
+| Documento                                                        | Para quién                            |
+| ---------------------------------------------------------------- | ------------------------------------- |
+| [Documentación técnica](docs/technical/STACK-DOCUMENTATION.md)   | Arquitectura, componentes y operación |
+| [Guía de inicio](docs/getting-started/README.md)                 | Instalación paso a paso               |
+| [Comandos rápidos](docs/operations/procedures/QUICK-COMMANDS.md) | Referencia operativa                  |
+| [Arquitectura](docs/architecture/README.md)                      | Decisiones y límites del sistema      |
+| [Seguridad](docs/security/README.md)                             | Controles y prácticas de seguridad    |
+| [ADRs](docs/adr/README.md)                                       | Decisiones arquitectónicas            |
+| [Changelog](CHANGELOG.md)                                        | Historial de cambios                  |
 
 ## Development
 
@@ -171,8 +171,8 @@ npm run build
 ```
 
 El proyecto usa SDD: requisitos, diseño, implementación y verificación. Las contribuciones deben
-mantener las pruebas, la documentación y los controles de seguridad correspondientes.
-Para automatizaciones PowerShell también se puede ejecutar `Invoke-Pester`.
+mantener las pruebas, la documentación y los controles de seguridad correspondientes. Para
+automatizaciones PowerShell también se puede ejecutar `Invoke-Pester`.
 
 ## CI/CD Pipeline
 
@@ -184,12 +184,12 @@ un espejo indiscriminado del repositorio interno.
 
 El proceso de release es dual-repo con binario nativo:
 
-| Paso | Mecanismo |
-| --- | --- |
-| 1. Versionado | Bump en `package.json` + commit `chore(release)` |
-| 2. Tag anotado | `git tag -a vX.Y.Z && git push origin vX.Y.Z` — dispara `release.yml` |
-| 3. Build binario | Job SEA (windows-latest): bundle → blob → inyección postject → `.exe` autocontenido |
-| 4. Release privado | GitHub Release + manifest de auto-update |
+| Paso                    | Mecanismo                                                                                       |
+| ----------------------- | ----------------------------------------------------------------------------------------------- |
+| 1. Versionado           | Bump en `package.json` + commit `chore(release)`                                                |
+| 2. Tag anotado          | `git tag -a vX.Y.Z && git push origin vX.Y.Z` — dispara `release.yml`                           |
+| 3. Build binario        | Job SEA (windows-latest): bundle → blob → inyección postject → `.exe` autocontenido             |
+| 4. Release privado      | GitHub Release + manifest de auto-update                                                        |
 | 5. Distribución pública | Asset `.exe` replicado al release de `gentle-vanguard-public`; docs vía `src/sync-to-public.ts` |
 
 Notas operativas: para re-disparar un release fallido, mover el tag (delete + recreate) sobre el
@@ -198,13 +198,13 @@ curado); el README interno nunca se publica.
 
 ## Project Status
 
-| Área | Estado |
-| --- | --- |
-| Configuration | JSON validado por schema y lint |
-| Skills | 263 skills disponibles |
-| Tests | Verificados por CI antes de publicar |
-| Hooks | Pre-commit, post-commit, post-merge y pre-push |
-| Structure | TypeScript, dashboard, MCP y automatizaciones |
+| Área          | Estado                                         |
+| ------------- | ---------------------------------------------- |
+| Configuration | JSON validado por schema y lint                |
+| Skills        | 263 skills disponibles                         |
+| Tests         | Verificados por CI antes de publicar           |
+| Hooks         | Pre-commit, post-commit, post-merge y pre-push |
+| Structure     | TypeScript, dashboard, MCP y automatizaciones  |
 
 ## Repository Strategy
 

@@ -67,6 +67,7 @@ mitre_attack:
 NIST SP 800-30 Rev 1 defines four steps. Steps 1 and 4 bookend the assessment; Step 2 is the analytic core.
 
 ### 1. Prepare for the assessment
+
 Define and document:
 - **Purpose** (e.g., support an authorization decision, inform control selection, satisfy ISO 6.1.2).
 - **Scope** — organizational tier (Tier 1/2/3), systems, and time horizon.
@@ -75,6 +76,7 @@ Define and document:
 - **Risk model and analytic approach** — the factors (threat source, threat event, vulnerability, likelihood, impact) and the scales (qualitative Very Low–Very High, or semi-quantitative 0–10). Lock these now.
 
 ### 2. Conduct the assessment
+
 Work through the analytic tasks in order. The 800-30 appendices provide the reference taxonomies (D–I).
 
 **2a. Identify threat sources (Appendix D).** Classify by type: **Adversarial** (individuals, groups, nation-states — characterize capability, intent, targeting), **Accidental** (user error), **Structural** (equipment/software failure), **Environmental** (natural disasters, infrastructure outages).
@@ -90,12 +92,15 @@ Work through the analytic tasks in order. The 800-30 appendices provide the refe
 **2f. Determine risk (Appendix I).** Risk is a function of likelihood and impact. Plot each threat event on the risk matrix (e.g., likelihood × impact → Very Low … Very High). Record the risk level, the contributing factors, and uncertainty/assumptions.
 
 ### 3. Communicate and share results
+
 Produce the **risk register** and an executive briefing. For each risk: the threat event, affected assets, likelihood, impact, risk level, key contributing vulnerabilities, and a recommended treatment. Rank by risk level so decision-makers see the top risks first.
 
 ### 4. Maintain the assessment
+
 Risk is not static. Define a refresh cadence and the triggers that force re-assessment (new system, major architecture change, significant incident, new threat intel). Track risk-acceptance decisions and treatment progress over time.
 
 ### 5. Drive treatment decisions
+
 Hand the ranked register to risk owners. For each risk choose a treatment — **mitigate** (add/strengthen controls), **transfer** (insurance, contractual), **avoid** (stop the activity), or **accept** (document residual risk with an authorizing signature). Re-score residual risk after planned controls to show the post-treatment position.
 
 ## Key Concepts

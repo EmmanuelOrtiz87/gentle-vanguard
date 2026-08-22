@@ -42,6 +42,7 @@ Remote                              │                           │
 ## Gitleaks Rule Configuration Deep Dive
 
 ### Rule Anatomy
+
 ```toml
 [[rules]]
 id = "rule-unique-identifier"          # Unique rule ID
@@ -55,6 +56,7 @@ path = '''\.env$'''                     # Path filter regex (optional)
 ```
 
 ### Built-in Rule Categories
+
 | Category | Example Rules | Count |
 |----------|--------------|-------|
 | Cloud Provider Keys | aws-access-key-id, gcp-service-account | 15+ |
@@ -64,6 +66,7 @@ path = '''\.env$'''                     # Path filter regex (optional)
 | Service Tokens | stripe-api-key, sendgrid-api-key | 30+ |
 
 ### Entropy Scoring
+
 - Entropy measures string randomness (Shannon entropy)
 - Random-looking strings (API keys) have entropy > 3.5
 - Regular English text has entropy around 2.0-3.0
@@ -73,6 +76,7 @@ path = '''\.env$'''                     # Path filter regex (optional)
 ## Remediation Process
 
 ### Secret Rotation Checklist
+
 1. Identify the exposed secret type and associated service
 2. Log into the service provider and revoke the exposed credential
 3. Generate a new credential with the same permissions
@@ -83,6 +87,7 @@ path = '''\.env$'''                     # Path filter regex (optional)
 8. Optionally clean git history with git-filter-repo
 
 ### History Cleanup Decision Matrix
+
 | Factor | Clean History | Keep History |
 |--------|--------------|--------------|
 | Secret is rotated | Optional | Acceptable |

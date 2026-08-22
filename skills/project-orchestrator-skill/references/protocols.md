@@ -70,7 +70,7 @@ Architecture: ORCHESTRATOR (primary) → self-healing → (optional) → manual 
 | ----------------- | -------------------- |
 | Unknown error     | Invoke for diagnosis |
 | Complex decision  | reasoning assist     |
-| PR needs review   | ` run --pr-mode`     |
+| PR needs review   | `run --pr-mode`     |
 | Commit validation | commit-msg hook      |
 
 Dependency: is enhancement, not requirement. Gentle-Vanguard operates fully without it.

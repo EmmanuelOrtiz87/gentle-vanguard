@@ -1,13 +1,16 @@
 # NIST SP 800-30 — Standards & Reference
 
 ## Primary standard
+
 ### NIST SP 800-30 Revision 1 — Guide for Conducting Risk Assessments
+
 - **Publisher**: NIST
 - **Published**: September 2012
 - **Scope**: The risk-assessment component of the broader risk-management process.
 - **URL**: https://csrc.nist.gov/pubs/sp/800/30/r1/final
 
 ## Companion standards
+
 | Document | Role |
 |---|---|
 | NIST SP 800-39 | Managing Information Security Risk — three-tier context (Tier 1 organization, Tier 2 mission/business process, Tier 3 information system). |
@@ -18,12 +21,14 @@
 | FAIR (Open Group) | Optional quantitative risk model (dollar-range loss exposure). |
 
 ## The four-step process (800-30 Rev 1)
+
 1. **Prepare** — purpose, scope, assumptions/constraints, sources, risk model and scales.
 2. **Conduct** — tasks 2a–2f below.
 3. **Communicate** — risk register + briefing.
 4. **Maintain** — monitoring and refresh.
 
 ### Conduct tasks and their reference appendices
+
 | Task | Appendix | Output |
 |---|---|---|
 | Identify threat sources | D | Adversarial / Accidental / Structural / Environmental sources |
@@ -34,12 +39,14 @@
 | Determine risk | I | Risk level = f(likelihood, impact) |
 
 ## Threat source types (Appendix D)
+
 - **Adversarial** — individuals, groups, organizations, nation-states. Characterize by capability, intent, and targeting.
 - **Accidental** — erroneous actions by authorized users.
 - **Structural** — failures of equipment, software, or environmental controls.
 - **Environmental** — natural or man-made disasters, infrastructure outages.
 
 ## Assessment scales (qualitative / semi-quantitative)
+
 800-30 uses five-level scales. A common qualitative mapping:
 
 | Level | Semi-quantitative (0–10) |
@@ -51,6 +58,7 @@
 | Very High | 96–100 |
 
 ### Reference 5×5 risk matrix (likelihood × impact → risk)
+
 | Likelihood ↓ / Impact → | Very Low | Low | Moderate | High | Very High |
 |---|---|---|---|---|---|
 | Very High | Very Low | Low | Moderate | High | Very High |
@@ -62,6 +70,7 @@
 > Document whichever matrix the organization adopts during Prepare; the engine in `scripts/process.py` defaults to the table above and is configurable.
 
 ## NIST CSF 2.0 alignment
+
 | CSF 2.0 ID | Relevance |
 |---|---|
 | GV.RM-01 | Risk management objectives established |
@@ -71,6 +80,7 @@
 | ID.RA-05 | Threats, vulnerabilities, likelihoods, and impacts used to understand inherent risk and prioritize response |
 
 ## Risk treatment options
+
 - **Mitigate** — implement/strengthen controls (re-score residual risk).
 - **Transfer** — insurance or contractual shift.
 - **Avoid** — discontinue the risk-generating activity.

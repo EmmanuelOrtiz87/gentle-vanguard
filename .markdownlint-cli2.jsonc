@@ -1,0 +1,20 @@
+{
+  "ignorePatterns": [
+    "skills/**",
+    "public/skills/**",
+    ".opencode/skills/**",
+    ".windsurf/**",
+    "knowledge-base/**",
+    "reports/**",
+    "research/**",
+    ".archive/**",
+    ".backups/**",
+    "build/**",
+    ".session/**",
+    ".sdd/**",
+    "demos/**",
+    "adapters/**",
+    "graphify-out/**",
+    "**/node_modules/**"
+  ]
+}

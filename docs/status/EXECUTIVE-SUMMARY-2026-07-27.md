@@ -24,14 +24,18 @@
 ### 1. Dashboard Offline Mode
 
 - **Archivo:** `apps/web-dashboard/src/lib/offline-storage.ts`
+
 <!-- REF-OBSOLETA: src/lib/offline-storage.ts no existe (ruta migrada o eliminada) -->
+
 - **Descripción:** Cache localStorage con TTL de 5 minutos
 - **Estado:** ✅ Implementado y operativo
 
 ### 2. Cloud Metrics Collector
 
 - **Archivo:** `src/cloud-metrics-collector.ts`
+
 <!-- REF-OBSOLETA: src/cloud-metrics-collector.ts no existe (ruta migrada o eliminada) -->
+
 - **Descripción:** Métricas reales de AWS y Azure delegators
 - **Estado:** ✅ Implementado e integrado
 
@@ -126,17 +130,19 @@ Componentes OK:
 
 ## 🛠️ Herramientas Operativas
 
-| Herramienta         | Comando                                              | Estado |
-| ------------------- | ---------------------------------------------------- | ------ |
-| Health Check        | `npm run watchtower:health`                          | ✅     |
-| Type Check          | `npm run typecheck`                                  | ✅     |
-| Lint                | `npm run lint`                                       | ✅     |
-| Tests               | `pnpm test`                                          | ✅     |
-| Dashboard           | `pnpm run dashboard:start`                           | ✅     |
-| Auto-Update         | `npx tsx src/auto-update-checker.ts`                 | ✅     |
-| Cloud Metrics       | `npx tsx src/cloud-metrics-collector.ts show`        | ✅     |
+| Herramienta   | Comando                                       | Estado |
+| ------------- | --------------------------------------------- | ------ |
+| Health Check  | `npm run watchtower:health`                   | ✅     |
+| Type Check    | `npm run typecheck`                           | ✅     |
+| Lint          | `npm run lint`                                | ✅     |
+| Tests         | `pnpm test`                                   | ✅     |
+| Dashboard     | `pnpm run dashboard:start`                    | ✅     |
+| Auto-Update   | `npx tsx src/auto-update-checker.ts`          | ✅     |
+| Cloud Metrics | `npx tsx src/cloud-metrics-collector.ts show` | ✅     |
+
 <!-- REF-OBSOLETA: src/cloud-metrics-collector.ts no existe (ruta migrada o eliminada) -->
-| Deterministic Tests | `npx tsx src/deterministic-test-framework.ts --list` | ✅     |
+
+| Deterministic Tests | `npx tsx src/deterministic-test-framework.ts --list` | ✅ |
 
 ---
 
@@ -147,10 +153,14 @@ Componentes OK:
 1. `src/auto-update-checker.ts`
 2. `src/deterministic-test-framework.ts`
 3. `src/cloud-metrics-collector.ts`
+
 <!-- REF-OBSOLETA: src/cloud-metrics-collector.ts no existe (ruta migrada o eliminada) -->
+
 4. `src/npm-ci-check.ts`
 5. `apps/web-dashboard/src/lib/offline-storage.ts`
+
 <!-- REF-OBSOLETA: src/lib/offline-storage.ts no existe (ruta migrada o eliminada) -->
+
 6. `src/lockfile-lint-pre-commit.ts`
 7. `docs/guides/DETERMINISTIC-TESTING.md`
 8. `docs/guides/OPERATION-GUIDE.md`
@@ -160,13 +170,17 @@ Componentes OK:
 1. `src/aws-delegator.ts` — Integración cloud-metrics
 2. `src/azure-delegator.ts` — Integración cloud-metrics
 3. `apps/web-dashboard/src/hooks/useMetrics.ts` — Offline mode
+
 <!-- REF-OBSOLETA: src/hooks/useMetrics.ts no existe (ruta migrada o eliminada) -->
+
 4. `.github/workflows/experimental-gates.yml` — Fix frozen lockfile
 5. `.github/workflows/ci.yml` — Agregado npm-ci-check
 6. `docs/product/ROADMAP.md` — Actualizado
 7. `src/auto-update-checker.ts` — Corregidos imports
 8. `src/cloud-metrics-collector.ts` — Corregidos imports
+
 <!-- REF-OBSOLETA: src/cloud-metrics-collector.ts no existe (ruta migrada o eliminada) -->
+
 9. `src/deterministic-test-framework.ts` — Corregidos imports
 10. `tests/unit/karpathy-guidelines.test.ts` — Corregida ruta
 

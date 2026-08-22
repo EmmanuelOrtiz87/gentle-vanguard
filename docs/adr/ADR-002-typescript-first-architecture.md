@@ -7,8 +7,8 @@
 ## Context
 
 ADR-0001 (Foundation) established TypeScript with multi-language support as the primary
-implementation direction for Gentle-Vanguard. This decision was made in early 2026
-when the ecosystem had:
+implementation direction for Gentle-Vanguard. This decision was made in early 2026 when the
+ecosystem had:
 
 - Heavy investment in TypeScript automation (390+ scripts)
 - Windows-centric development environment
@@ -36,16 +36,17 @@ incrementally following TypeScript-first patterns.
 
 ### Implementation Details
 
-| Aspect              | Before (PowerShell)        | After (TypeScript)                   |
-| ------------------- | -------------------------- | ------------------------------------ |
-| **Entry Point**     | `scripts/utilities/*.ps1`  | `src/*.ts`                           |
-| **Execution**       | `npx tsx src/cli/gv.ts`    | `npx tsx src/script.ts`              |
+| Aspect          | Before (PowerShell)       | After (TypeScript)      |
+| --------------- | ------------------------- | ----------------------- |
+| **Entry Point** | `scripts/utilities/*.ps1` | `src/*.ts`              |
+| **Execution**   | `npx tsx src/cli/gv.ts`   | `npx tsx src/script.ts` |
+
 <!-- REF-OBSOLETA: src/script.ts no existe (ruta migrada o eliminada) -->
-| **Package Manager** | None / PowerShell Gallery  | `pnpm`                               |
-| **Testing**         | Pester                     | `node:test` via `tsx --test`         |
-| **Type Safety**     | Runtime checks             | TypeScript compiler (`tsc --noEmit`) |
-| **Linting**         | PSScriptAnalyzer           | ESLint + security plugin             |
-| **Autostart**       | `session-autostart.ps1`    | `npx tsx src/session-autostart.ts`   |
+
+| **Package Manager** | None / PowerShell Gallery | `pnpm` | | **Testing** | Pester | `node:test`
+via `tsx --test` | | **Type Safety** | Runtime checks | TypeScript compiler (`tsc --noEmit`) | |
+**Linting** | PSScriptAnalyzer | ESLint + security plugin | | **Autostart** |
+`session-autostart.ps1` | `npx tsx src/session-autostart.ts` |
 
 ### Migration Rules
 

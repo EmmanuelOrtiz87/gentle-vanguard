@@ -114,7 +114,9 @@ Si performance < 80%:
 1. Ejecutar `npx tsx src/self-diagnosis.ts --profile performance`
 2. Revisar `.session/metrics-report.json`
 3. Considerar `npx tsx src/session-compact.ts` para limpieza
+
 <!-- REF-OBSOLETA: src/session-compact.ts no existe (ruta migrada o eliminada) -->
+
 4. Escalar a orchestrator si degradación persiste
 
 ---

@@ -44,10 +44,12 @@ This matters because LLM applications change constantly — prompts, models, RAG
 
 - Node.js 18+ (Promptfoo is distributed via npm) and Python 3.9+ (for DeepTeam).
 - Install Promptfoo and DeepTeam:
+
   ```bash
   npm install -g promptfoo            # or: npx promptfoo@latest
   pip install -U deepteam
   ```
+
 - API access/credentials for the target LLM endpoint (and a grader model, e.g. an OpenAI key) exposed as environment variables.
 - A CI/CD platform (GitHub Actions, GitLab CI) with secret storage.
 - Authorization to test the target application.
@@ -73,6 +75,7 @@ This matters because LLM applications change constantly — prompts, models, RAG
 ## Workflow
 
 ### 1. Scaffold the red-team configuration
+
 Initialize an interactive config; it writes `promptfooconfig.yaml` where targets, plugins, and strategies live.
 
 ```bash
@@ -81,6 +84,7 @@ promptfoo redteam init
 ```
 
 ### 2. Define targets, OWASP presets, and attack strategies
+
 Edit `promptfooconfig.yaml`. The `purpose` grounds attack generation; `plugins` are adversarial input generators; `strategies` are delivery techniques (jailbreak/injection wrappers).
 
 ```yaml
@@ -109,15 +113,18 @@ redteam:
 ```
 
 ### 3. Run the suite and view the report
+
 `redteam run` combines generation + evaluation; then open the interactive report.
 
 ```bash
 promptfoo redteam run
 promptfoo redteam report            # launches the web report (pass/fail per plugin)
 ```
+
 Each row shows the plugin (mapped to OWASP/ATLAS), the strategy, the attack prompt, the model's response, and the grader's verdict. The **attack success rate** per plugin is your headline metric — track it per release.
 
 ### 4. Add DeepTeam for programmatic, research-backed attacks
+
 Use DeepTeam to cover additional vulnerabilities/attacks and to script bespoke suites in Python.
 
 ```python
@@ -136,12 +143,15 @@ red_team(
     attacks=[PromptInjection()],
 )
 ```
+
 DeepTeam can also be driven from a YAML config:
+
 ```bash
 deepteam run config.yaml
 ```
 
 ### 5. Gate the build in CI/CD (GitHub Actions)
+
 Fail the pipeline when red-team assertions fail. Promptfoo returns a non-zero exit code on failures, which blocks the merge.
 
 ```yaml
@@ -169,6 +179,7 @@ jobs:
 ```
 
 ### 6. Track regressions over time
+
 Persist `results.json` per run and compare attack-success-rate per plugin between releases. A rising rate for any OWASP LLM category is a regression to triage before release. Promptfoo's `--filter-failing` lets you re-run only previously failing cases to confirm a fix.
 
 ```bash

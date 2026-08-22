@@ -51,7 +51,13 @@
       "expandContractions": false,
       "removeFillers": true,
       "singleLineResponses": false,
-      "guidelines": ["Use abbreviations (db/auth/config/req/res/fn).", "No digressions.", "Keep sentences short.", "Focus on actionable output.", "Prefer X -> Y notation."]
+      "guidelines": [
+        "Use abbreviations (db/auth/config/req/res/fn).",
+        "No digressions.",
+        "Keep sentences short.",
+        "Focus on actionable output.",
+        "Prefer X -> Y notation."
+      ]
     },
     "simple": {
       "name": "simple",

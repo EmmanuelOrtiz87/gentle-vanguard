@@ -12,32 +12,32 @@ Accepted
 
 El roadmap de seguridad (`docs/guides/STACK-OPTIMIZATION-ROADMAP.md`, item 5.2) identificaba la
 necesidad de una **auditoría de seguridad externa anual**. El stack cuenta con defensas nativas
-extensas (secret-scanner, SBOM, SLSA provenance, npx hardening, homologation gate, watchtower con
-95 checks) pero ninguna validación third-party independiente.
+extensas (secret-scanner, SBOM, SLSA provenance, npx hardening, homologation gate, watchtower con 95
+checks) pero ninguna validación third-party independiente.
 
 ### Opciones consideradas
 
-| Opción | Pros | Cons | Decisión |
-| --- | --- | --- | --- |
-| Solo auditoría interna | Cero costo, sin fricción | Sesgo del equipo que construyó las defensas; no detecta problemas sistémicos normalizados | ❌ Rechazada |
-| **Auditoría externa anual** | Validación independiente, board/audit-ready, catch systemic issues | Costo ($5-20k), requiere preparación | ✅ **CHOSEN** |
-| Auditoría externa bianual | Menor costo recurrente | Ventana de riesgo más larga entre auditorías | ❌ Rechazada |
+| Opción                      | Pros                                                               | Cons                                                                                      | Decisión      |
+| --------------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- | ------------- |
+| Solo auditoría interna      | Cero costo, sin fricción                                           | Sesgo del equipo que construyó las defensas; no detecta problemas sistémicos normalizados | ❌ Rechazada  |
+| **Auditoría externa anual** | Validación independiente, board/audit-ready, catch systemic issues | Costo ($5-20k), requiere preparación                                                      | ✅ **CHOSEN** |
+| Auditoría externa bianual   | Menor costo recurrente                                             | Ventana de riesgo más larga entre auditorías                                              | ❌ Rechazada  |
 
 ## Decision
 
-**Contratar una firma de seguridad externa para una auditoría anual**, con recurrencia en Q4 de
-cada año. El plan operativo completo está en `docs/security/ANNUAL-AUDIT-PLAN.md` (26 controles
+**Contratar una firma de seguridad externa para una auditoría anual**, con recurrencia en Q4 de cada
+año. El plan operativo completo está en `docs/security/ANNUAL-AUDIT-PLAN.md` (26 controles
 inventariados, checklist pre-audit de 15 items, log de hallazgos inicializado).
 
 ### Timeline
 
-| Fase | Ventana | Estado |
-| --- | --- | --- |
-| Plan | Q3 2026 (creado 2026-08-16) | ✅ ACTIVO |
-| Preparación | Q3 2026 (Sep) | ⏳ Pendiente |
-| Ejecución | Q4 2026 (Oct-Nov) | ⏳ Pendiente |
-| Reporte + remediación | Q4 2026 (Nov-Dic) | ⏳ Pendiente |
-| Recurrencia | Anual (Q4) | 🔁 Recurrente |
+| Fase                  | Ventana                     | Estado        |
+| --------------------- | --------------------------- | ------------- |
+| Plan                  | Q3 2026 (creado 2026-08-16) | ✅ ACTIVO     |
+| Preparación           | Q3 2026 (Sep)               | ⏳ Pendiente  |
+| Ejecución             | Q4 2026 (Oct-Nov)           | ⏳ Pendiente  |
+| Reporte + remediación | Q4 2026 (Nov-Dic)           | ⏳ Pendiente  |
+| Recurrencia           | Anual (Q4)                  | 🔁 Recurrente |
 
 ### Alcance
 
@@ -79,5 +79,4 @@ inventariados, checklist pre-audit de 15 items, log de hallazgos inicializado).
 
 ---
 
-**Review Date**: Q1 2027
-**Reviewers**: GOV (Governance Agent), OPS
+**Review Date**: Q1 2027 **Reviewers**: GOV (Governance Agent), OPS

@@ -43,6 +43,7 @@ During compaction, these content types are preserved:
 
 Pre-compact hook located at: `src/pre-compact-hook.ts` Configuration:
 <!-- REF-OBSOLETA: src/pre-compact-hook.ts no existe (ruta migrada o eliminada) -->
+
 `scripts/utilities/context-efficiency-config.json`
 
 ## 3. Engram Optimization
@@ -155,7 +156,9 @@ At session end:
 
 - `src/optimize-engram-usage.ts`: Main optimization script
 - `src/pre-compact-hook.ts`: Automatic compaction hook
+
 <!-- REF-OBSOLETA: src/pre-compact-hook.ts no existe (ruta migrada o eliminada) -->
+
 - `scripts/utilities/session-autostart.cmd`: Enhanced startup with optimization
 
 ### 7.2 Configuration Files

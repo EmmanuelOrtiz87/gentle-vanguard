@@ -90,6 +90,7 @@ This skill is anchored in MITRE ATLAS (the AI-specific companion to ATT&CK). Nam
 ## Workflow
 
 ### 1. Map the retrieval surface
+
 Identify every path by which content reaches the vector store, and confirm the target endpoint contract. Capture a baseline benign request.
 
 ```bash
@@ -101,6 +102,7 @@ curl -s -X POST https://target.example.com/api/chat \
 ```
 
 ### 2. Run garak prompt-injection probes against the target
+
 garak ships dedicated probes for prompt injection. `promptinject` implements the Agency Enterprise PromptInject framework; `latentinjection` covers injection planted in retrieved/latent context; `leakreplay` tests for verbatim training/context leakage.
 
 ```bash
@@ -141,6 +143,7 @@ A minimal `rest_target.json` for garak's REST generator (maps the request/respon
 ```
 
 ### 3. Build a Promptfoo RAG red-team config
+
 Promptfoo's `indirect-prompt-injection` and `rag-document-exfiltration` plugins generate adversarial documents/queries specifically for RAG. Initialize and run:
 
 ```bash
@@ -182,6 +185,7 @@ promptfoo redteam report
 ```
 
 ### 4. Drive a PyRIT multi-turn injection campaign
+
 PyRIT automates single- and multi-turn adversarial prompting with scorers. Use it to escalate an injection against the live target.
 
 ```python
@@ -215,6 +219,7 @@ python pyrit_rag_inject.py
 ```
 
 ### 5. Demonstrate embedding-space retrieval poisoning
+
 Craft a chunk that lands near a target query in embedding space so it is retrieved regardless of human relevance. This proves the poisoning primitive offline against the same embedding model the target uses.
 
 ```python
@@ -249,6 +254,7 @@ python embed_poison_poc.py \
 A high cosine score (typically > 0.6) shows the chunk will be retrieved for that query; ingest it into a test corpus and confirm the model executes the embedded instruction.
 
 ### 6. Triage, score, and report
+
 Collect garak's HTML/JSONL report, Promptfoo's report, and PyRIT memory transcripts. For each successful injection, record: the entry point, the retrieved chunk, the model output, whether guardrails fired, and severity. Map every finding to OWASP LLM01:2025 and ATLAS AML.T0051, and recommend mitigations (context isolation, instruction-data separation, output filtering, retrieval provenance, allowlisted corpus sources).
 
 ## Tools and Resources

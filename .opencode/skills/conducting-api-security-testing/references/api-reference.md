@@ -31,24 +31,31 @@ python agent.py --base-url https://api.target.com --token <jwt> \
 ## Key Functions
 
 ### `test_bola(base_url, endpoint_template, id_field, valid_id, other_id, auth_token)`
+
 Tests Broken Object Level Authorization by accessing another user's resource with own credentials.
 
 ### `test_bfla(base_url, admin_endpoints, low_priv_token)`
+
 Tests admin endpoints with low-privilege tokens using GET, POST, DELETE methods.
 
 ### `test_mass_assignment(base_url, endpoint, auth_token, extra_fields)`
+
 Sends undocumented fields (role, isAdmin) to update endpoints and verifies if they persist.
 
 ### `test_rate_limiting(base_url, endpoint, num_requests)`
+
 Sends rapid requests to detect absence of rate limiting on authentication endpoints.
 
 ### `test_jwt_none_algorithm(base_url, endpoint, jwt_token)`
+
 Forges JWT with `alg: none` to test for algorithm confusion vulnerabilities.
 
 ### `test_graphql_introspection(base_url, graphql_endpoint)`
+
 Sends introspection query to check if full schema disclosure is enabled.
 
 ### `test_excessive_data_exposure(base_url, endpoint, auth_token, expected_fields)`
+
 Compares API response fields against expected fields to identify over-exposure.
 
 ## OWASP API Top 10 Coverage

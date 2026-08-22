@@ -189,6 +189,7 @@ Ejecución #3 (prime-number-checker):
    ```
 
 3. **Configuraciones activas:**
+
    ```
    config/token-budget-guard.json
    - daily: 60000 tokens

@@ -914,7 +914,7 @@ starting significant work
 
 ### guardian-fallback-skill
 
-**Trigger**: `guardian fallback`, ` blocked`, `agent fallback`
+**Trigger**: `guardian fallback`, `blocked`, `agent fallback`
 
 **Use when**: Alternative execution when is blocked or unavailable
 

@@ -27,16 +27,19 @@ docker pull ghcr.io/gitleaks/gitleaks:latest
 ## CLI Commands
 
 ### Scan a Git Repository
+
 ```bash
 gitleaks git --source=/path/to/repo --report-format=json --report-path=results.json
 ```
 
 ### Scan a Directory (Non-Git)
+
 ```bash
 gitleaks dir --source=/path/to/code --report-format=json --report-path=results.json
 ```
 
 ### Scan from stdin
+
 ```bash
 echo "aws_secret_access_key=AKIAIOSFODNN7EXAMPLE" | gitleaks stdin
 ```
@@ -93,6 +96,7 @@ sha = "abc123def456"
 ## Python Integration
 
 ### Run Gitleaks and Parse Results
+
 ```python
 import subprocess
 import json
@@ -120,6 +124,7 @@ def scan_repository(repo_path, config_path=None):
 ```
 
 ### Categorize Findings by Severity
+
 ```python
 HIGH_SEVERITY_RULES = {
     "aws-access-key", "aws-secret-key", "gcp-api-key",

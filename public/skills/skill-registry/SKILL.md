@@ -104,4 +104,4 @@ receive. Invest time making them accurate and concise.
 
 ---
 
-> **Referencia detallada**: [ eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [eferences/detail.md](references/detail.md)

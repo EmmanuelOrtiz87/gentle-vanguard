@@ -40,32 +40,66 @@ If the user confirms, append the item. If not confirmed, do not register it.
 
 ## Backlog Items
 
-| ID     | Date       | Theme                          | Description                                                                                                                                   | Priority | Status  | Owner          | Trigger to Revisit                                                                                         |
-| ------ | ---------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- | -------------- | ---------------------------------------------------------------------------------------------------------- |
-| FF-001 | 2026-04-13 | SDD CI Hardening               | Tighten SDD gate to require `validated`/`done` on PRs to protected branches.                                                                  | high     | done    | orchestrator   | Resuelto: `src/check-sdd-gate.ts` + `.github/workflows/sdd-gate.yml`                            |
-| FF-002 | 2026-04-13 | Process Metrics                | Add SDD process KPIs (spec coverage, lead time impact, rework ratio).                                                                         | high     | done    | orchestrator   | Resuelto: `src/telemetry/sdd-process-metrics.ts`                                                           |
+| ID     | Date       | Theme            | Description                                                                  | Priority | Status | Owner        | Trigger to Revisit                                                   |
+| ------ | ---------- | ---------------- | ---------------------------------------------------------------------------- | -------- | ------ | ------------ | -------------------------------------------------------------------- |
+| FF-001 | 2026-04-13 | SDD CI Hardening | Tighten SDD gate to require `validated`/`done` on PRs to protected branches. | high     | done   | orchestrator | Resuelto: `src/check-sdd-gate.ts` + `.github/workflows/sdd-gate.yml` |
+| FF-002 | 2026-04-13 | Process Metrics  | Add SDD process KPIs (spec coverage, lead time impact, rework ratio).        | high     | done   | orchestrator | Resuelto: `src/telemetry/sdd-process-metrics.ts`                     |
+
 <!-- REF-OBSOLETA: src/telemetry/sdd-process-metrics.ts no existe (ruta migrada o eliminada) -->
-| FF-003 | 2026-04-13 | Check Noise Reduction          | Reduce non-actionable CI warnings and improve blocking/advisory classification.                                                               | medium   | done    | orchestrator   | Resuelto: `scripts/hooks/hook-advisory-classifier.ps1`                                                     |
+
+| FF-003 | 2026-04-13 | Check Noise Reduction | Reduce non-actionable CI warnings and improve
+blocking/advisory classification. | medium | done | orchestrator | Resuelto:
+`scripts/hooks/hook-advisory-classifier.ps1` |
 <!-- REF-OBSOLETA: scripts/hooks/hook-advisory-classifier.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| FF-004 | 2026-04-13 | Sync Drift Prevention          | Add periodic drift report for Gentle-Vanguard vs consumers manifests/skills.                                                                  | medium   | done    | orchestrator   | Resuelto: `scripts/utilities/sync-drift-report.ps1` + `gv sync-drift`                                      |
+
+| FF-004 | 2026-04-13 | Sync Drift Prevention | Add periodic drift report for Gentle-Vanguard vs
+consumers manifests/skills. | medium | done | orchestrator | Resuelto:
+`scripts/utilities/sync-drift-report.ps1` + `gv sync-drift` |
 <!-- REF-OBSOLETA: scripts/utilities/sync-drift-report.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| FF-005 | 2026-04-13 | PR Template Quality            | Standardize PR templates to include spec traceability and validation evidence.                                                                | medium   | done    | orchestrator   | Resuelto: `.github/PULL_REQUEST_TEMPLATE.md` con SDD ref + spec status + validation evidence               |
-| FF-006 | 2026-04-13 | Local Workflow Performance     | Profile and optimize `gv health/verify` runtime for faster local loops.                                                                       | medium   | done    | orchestrator   | Resuelto: `scripts/utilities/gv-benchmark.ps1` — PASS en SLOs (status 1.8s, health 2.1s)                   |
+
+| FF-005 | 2026-04-13 | PR Template Quality | Standardize PR templates to include spec traceability
+and validation evidence. | medium | done | orchestrator | Resuelto:
+`.github/PULL_REQUEST_TEMPLATE.md` con SDD ref + spec status + validation evidence | | FF-006 |
+2026-04-13 | Local Workflow Performance | Profile and optimize `gv health/verify` runtime for faster
+local loops. | medium | done | orchestrator | Resuelto: `scripts/utilities/gv-benchmark.ps1` — PASS
+en SLOs (status 1.8s, health 2.1s) |
 <!-- REF-OBSOLETA: scripts/utilities/gv-benchmark.ps1 no tiene equivalente TS (migración PS1→TS) -->
-| FF-007 | 2026-04-15 | Agent Result Schema            | Structured JSON output schema for sub-agent results to enable merge/consolidation.                                                            | high     | pending | agent-router   | When parallel execution is implemented.                                                                    |
-| FF-008 | 2026-04-15 | Skills Auto-Discovery          | Script to auto-detect available skills in skills/ directory and generate mapping.                                                             | high     | pending | agent-router   | When new skills are added frequently.                                                                      |
-| FF-009 | 2026-04-15 | Parallel Agent Dispatch        | Support `-Parallel` flag in agent-router for concurrent sub-agent execution.                                                                  | high     | done    | agent-router   | When agent result schema is stable.                                                                        |
-| FF-010 | 2026-04-15 | Event Bus System               | Basic pub/sub event system for script hooks and automation triggers.                                                                          | medium   | done    | framework-core | When orchestration complexity increases.                                                                   |
-| FF-011 | 2026-04-15 | Plugin Architecture            | Extensibility contract for third-party plugins with standardized interface.                                                                   | medium   | pending | framework-core | When community adoption grows.                                                                             |
-| FF-012 | 2026-04-15 | Unified Metrics Dashboard      | Centralized metrics collection with HTML dashboard (Grafana postergado).                                                                      | medium   | done    | framework-core | Resuelto: `src/telemetry/generate-dashboard.ts` — HTML + PDF/PNG export                                    |
+
+| FF-007 | 2026-04-15 | Agent Result Schema | Structured JSON output schema for sub-agent results to
+enable merge/consolidation. | high | pending | agent-router | When parallel execution is
+implemented. | | FF-008 | 2026-04-15 | Skills Auto-Discovery | Script to auto-detect available
+skills in skills/ directory and generate mapping. | high | pending | agent-router | When new skills
+are added frequently. | | FF-009 | 2026-04-15 | Parallel Agent Dispatch | Support `-Parallel` flag
+in agent-router for concurrent sub-agent execution. | high | done | agent-router | When agent result
+schema is stable. | | FF-010 | 2026-04-15 | Event Bus System | Basic pub/sub event system for script
+hooks and automation triggers. | medium | done | framework-core | When orchestration complexity
+increases. | | FF-011 | 2026-04-15 | Plugin Architecture | Extensibility contract for third-party
+plugins with standardized interface. | medium | pending | framework-core | When community adoption
+grows. | | FF-012 | 2026-04-15 | Unified Metrics Dashboard | Centralized metrics collection with
+HTML dashboard (Grafana postergado). | medium | done | framework-core | Resuelto:
+`src/telemetry/generate-dashboard.ts` — HTML + PDF/PNG export |
 <!-- REF-OBSOLETA: src/telemetry/generate-dashboard.ts no existe (ruta migrada o eliminada) -->
-| FF-013 | 2026-04-15 | SDD Governance Enforcement     | Mandatory SDD gate pre-merge with validated/done status.                                                                                      | high     | done    | AGENT-GOV      | Resuelto: `src/check-sdd-gate.ts` + `.github/workflows/sdd-gate.yml`                            |
-| FF-014 | 2026-04-17 | Legacy Toolchain Cleanup       | Complete removal of legacy optional integrations references and finalize native-only documentation/flows.                                     | high     | done    | AGENT-GOV      | Completed in current release.                                                                              |
-| FF-015 | 2026-04-19 | Git Hooks Robustness           | Automatizar la verificación e instalación de hooks en setup/bootstrap de Gentle-Vanguard.                                                     | high     | done    | orchestrator   | Resuelto: `src/install-hooks.ts` — auto-instala todos los hooks con logging                                |
+
+| FF-013 | 2026-04-15 | SDD Governance Enforcement | Mandatory SDD gate pre-merge with
+validated/done status. | high | done | AGENT-GOV | Resuelto: `src/check-sdd-gate.ts` +
+`.github/workflows/sdd-gate.yml` | | FF-014 | 2026-04-17 | Legacy Toolchain Cleanup | Complete
+removal of legacy optional integrations references and finalize native-only documentation/flows. |
+high | done | AGENT-GOV | Completed in current release. | | FF-015 | 2026-04-19 | Git Hooks
+Robustness | Automatizar la verificación e instalación de hooks en setup/bootstrap de
+Gentle-Vanguard. | high | done | orchestrator | Resuelto: `src/install-hooks.ts` — auto-instala
+todos los hooks con logging |
 <!-- REF-OBSOLETA: src/install-hooks.ts no existe (ruta migrada o eliminada) -->
-| FF-016 | 2026-04-19 | Token Efficiency               | Evaluar integracin de RTK (Rust Token Killer) solo si los hooks/skills actuales no logran reducir el consumo de tokens en casos reales.       | low      | pending | orchestrator   | Cuando se detecte un cuello de botella real de consumo de tokens no mitigable por los mecanismos actuales. |
-| FF-017 | 2026-04-19 | Auto-Actualizacin Skills/Tools | Implementar mecanismo de auto-actualizacin para skills y herramientas nativas para reducir mantenimiento manual y asegurar mejoras continuas. | medium   | pending | orchestrator   | Prxima release o cuando se detecten skills/herramientas desactualizadas.                                   |
-| FF-018 | 2026-04-19 | Instalador Interactivo (TUI)   | Desarrollar instalador y configurador interactivo tipo TUI para facilitar onboarding y setup nativo de Gentle-Vanguard.                       | low      | pending | orchestrator   | Prxima release o cuando se priorice experiencia de onboarding.                                             |
+
+| FF-016 | 2026-04-19 | Token Efficiency | Evaluar integracin de RTK (Rust Token Killer) solo si los
+hooks/skills actuales no logran reducir el consumo de tokens en casos reales. | low | pending |
+orchestrator | Cuando se detecte un cuello de botella real de consumo de tokens no mitigable por los
+mecanismos actuales. | | FF-017 | 2026-04-19 | Auto-Actualizacin Skills/Tools | Implementar
+mecanismo de auto-actualizacin para skills y herramientas nativas para reducir mantenimiento manual
+y asegurar mejoras continuas. | medium | pending | orchestrator | Prxima release o cuando se
+detecten skills/herramientas desactualizadas. | | FF-018 | 2026-04-19 | Instalador Interactivo (TUI)
+| Desarrollar instalador y configurador interactivo tipo TUI para facilitar onboarding y setup
+nativo de Gentle-Vanguard. | low | pending | orchestrator | Prxima release o cuando se priorice
+experiencia de onboarding. |
 
 ## Notes
 

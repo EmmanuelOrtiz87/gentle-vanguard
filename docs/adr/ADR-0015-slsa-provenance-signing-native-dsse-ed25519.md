@@ -12,12 +12,12 @@ Accepted
 
 El ADR-0014 implementó generación de provenance SLSA v1.0 nativa en TypeScript
 (`src/slsa-provenance.ts`), alcanzando **Build L1** (provenance generation). La limitación
-documentada era la ausencia de **firma criptográfica**: sin firma, el provenance no es
-falsificable y no alcanza los niveles L2/L3 de SLSA (provenance no falsificable requiere
-identidad de firma del build service).
+documentada era la ausencia de **firma criptográfica**: sin firma, el provenance no es falsificable
+y no alcanza los niveles L2/L3 de SLSA (provenance no falsificable requiere identidad de firma del
+build service).
 
-Las herramientas estándar para firmar attestations (cosign, slsa-verifier) no están disponibles
-en el entorno local (Windows, sin Docker, sin binarios Go). El patrón del stack es **capacidades
+Las herramientas estándar para firmar attestations (cosign, slsa-verifier) no están disponibles en
+el entorno local (Windows, sin Docker, sin binarios Go). El patrón del stack es **capacidades
 nativas en TypeScript puro** — y Node.js incluye `crypto` con soporte **Ed25519** nativo.
 
 El formato DSSE (Dead Simple Signing Envelope, de secure-systems-lab) es el estándar que usan
@@ -33,11 +33,11 @@ in-toto y sigstore para envolver attestations firmadas:
 
 ### Opciones consideradas
 
-| Opción | Pros | Cons | Decisión |
-| --- | --- | --- | --- |
-| cosign attest-blob | Estándar de la industria, integración sigstore | No disponible en el entorno, dependencia Go | ❌ Rechazada |
-| GitHub Actions sigstore | Firma automática en CI | Solo aplica a releases GitHub, no a builds locales | ❌ Rechazada (parcial) |
-| **Firma nativa TS (DSSE + Ed25519)** | Cero dependencias externas, Node crypto nativo, patrón del stack | Gestión de claves manual (no sigstore/Rekor) | ✅ **CHOSEN** |
+| Opción                               | Pros                                                             | Cons                                               | Decisión               |
+| ------------------------------------ | ---------------------------------------------------------------- | -------------------------------------------------- | ---------------------- |
+| cosign attest-blob                   | Estándar de la industria, integración sigstore                   | No disponible en el entorno, dependencia Go        | ❌ Rechazada           |
+| GitHub Actions sigstore              | Firma automática en CI                                           | Solo aplica a releases GitHub, no a builds locales | ❌ Rechazada (parcial) |
+| **Firma nativa TS (DSSE + Ed25519)** | Cero dependencias externas, Node crypto nativo, patrón del stack | Gestión de claves manual (no sigstore/Rekor)       | ✅ **CHOSEN**          |
 
 ## Decision
 
@@ -48,10 +48,10 @@ firma) sin tooling externo.
 
 ### Características
 
-- **Formato**: DSSE envelope (`payload` base64 + `payloadType` + `signatures[]` con `keyid` y
-  `sig` base64) — compatible con el ecosistema in-toto/sigstore.
-- **Criptografía**: Ed25519 (Node `crypto.generateKeyPairSync('ed25519')`), firma y verificación
-  con `crypto.sign`/`crypto.verify`.
+- **Formato**: DSSE envelope (`payload` base64 + `payloadType` + `signatures[]` con `keyid` y `sig`
+  base64) — compatible con el ecosistema in-toto/sigstore.
+- **Criptografía**: Ed25519 (Node `crypto.generateKeyPairSync('ed25519')`), firma y verificación con
+  `crypto.sign`/`crypto.verify`.
 - **Keyid**: SHA-256 del SPKI DER de la clave pública (estable y verificable).
 - **Gestión de claves**:
   - Privada: `.runtime/provenance/private-key.pem` (gitignored, nunca se commitea).
@@ -106,10 +106,10 @@ existe la clave privada (best-effort, no bloquea el completado). Verificado con
 ## Related
 
 - **Supersedes**: nada (extiende ADR-0014)
-- **Related**: ADR-0014 (SLSA provenance generation), ADR-0006 (code coverage), ADR-0011
-  (dependency updates), ADR-0010 (knowledge absorption — patrón nativo TS)
-- **Roadmap**: `docs/guides/STACK-OPTIMIZATION-ROADMAP.md` — item "supply-chain attestation
-  (SLSA L3)" ahora cubierto por firma nativa
+- **Related**: ADR-0014 (SLSA provenance generation), ADR-0006 (code coverage), ADR-0011 (dependency
+  updates), ADR-0010 (knowledge absorption — patrón nativo TS)
+- **Roadmap**: `docs/guides/STACK-OPTIMIZATION-ROADMAP.md` — item "supply-chain attestation (SLSA
+  L3)" ahora cubierto por firma nativa
 
 ## References
 
@@ -121,5 +121,4 @@ existe la clave privada (best-effort, no bloquea el completado). Verificado con
 
 ---
 
-**Review Date**: Q1 2027
-**Reviewers**: Security/DevOps Team
+**Review Date**: Q1 2027 **Reviewers**: Security/DevOps Team

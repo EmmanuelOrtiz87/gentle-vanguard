@@ -9,4 +9,4 @@ Which Gentle-Vanguard feature would you want to see in action?
 
 Reply with your vote!
 
-#Gentle-VanguardStack
+# Gentle-VanguardStack

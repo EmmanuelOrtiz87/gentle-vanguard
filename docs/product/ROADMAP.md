@@ -16,42 +16,42 @@ seguro, extensible, zero-drama.**
 
 ## Current (v6.4 — v8.0)
 
-| Area                       | Feature                                                                                                                    | Status    |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------------------- | --------- |
-| **Public Release**         | Zero-dependency, auto-installable stack. Updated README, badges, setup-complete.ps1 <!-- REF-OBSOLETA: setup-complete.ps1 eliminado; migrado a src/setup-complete.ts -->, dynamic ports, watchdog auto-recovery | ✅ v8.0.0 |
-| **Dashboard UI**           | Knowledge Panel + Multi-repo View UX refinement, live updates (auto-refresh 30s), engram source, relevance colors          | ✅ v7.1.0 |
-| **Multi-repo Mesh**        | Mesh API REST endpoints, cross-workspace MCP orchestration, dashboard MultiRepoView with real mesh data                    | ✅ v7.0.0 |
-| **Engram Integration**     | knowledge-query.ps1 queries mem_search CLI directly; fallback to file scan + context-log <!-- REF-OBSOLETA: knowledge-query.ps1 eliminado; ver src/engram-rag-reindex.ts y tests/unit/knowledge-query.test.ts -->                                   | ✅ v7.0.0 |
-| **MCP Native**             | MCP protocol as first-class citizen, local server registry, gateway, dashboard UI                                          | ✅ v6.4.0 |
-| **MCP Quickstart**         | Pre-built MCP server templates (sqlite, filesystem, browser, memory) — enable with 1 command                               | ✅ v6.5.0 |
-| **MCP SDK**                | Multi-language scaffold (ts, js, py, go, rs), auto-build, auto-register                                                    | ✅ v6.6.0 |
-| **Knowledge Layer**        | Unified query: events, traces, feedback, checkpoints with relevance scoring                                                | ✅ v6.7.0 |
-| **Multi-Tenant**           | Tenant isolation: session, engram, codegraph, audit, RBAC                                                                  | ✅ v5.1.0 |
-| **Eval/Benchmark**         | Eval runner, registry, A/B prompt testing, quality gates                                                                   | ✅ v5.1.0 |
-| **CI/CD Self-Healing**     | Retry engine, rollback, incident logger, GitHub Action                                                                     | ✅ v5.1.0 |
-| **Self-Evolving Agents**   | Agent mutation via eval feedback with A/B safety guard                                                                     | ✅ v6.0   |
-| **Cross-Workspace Mesh**   | Workspace discovery, manifest, task delegation                                                                             | ✅ v6.0   |
-| **Auto Code Review**       | Pre-commit + PR review, style/security/SDD checks, autofix                                                                 | ✅ v6.0   |
-| **Predictive Incidents**   | Anomaly detection (3σ), preemptive heal, false-positive learning                                                           | ✅ v6.0   |
-| **Dashboard Multi-Tenant** | Per-tenant metrics, tenant selector in UI                                                                                  | ✅ v6.3.0 |
+| Area                       | Feature                                                                                                                                                                                                           | Status    |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| **Public Release**         | Zero-dependency, auto-installable stack. Updated README, badges, setup-complete.ps1 <!-- REF-OBSOLETA: setup-complete.ps1 eliminado; migrado a src/setup-complete.ts -->, dynamic ports, watchdog auto-recovery   | ✅ v8.0.0 |
+| **Dashboard UI**           | Knowledge Panel + Multi-repo View UX refinement, live updates (auto-refresh 30s), engram source, relevance colors                                                                                                 | ✅ v7.1.0 |
+| **Multi-repo Mesh**        | Mesh API REST endpoints, cross-workspace MCP orchestration, dashboard MultiRepoView with real mesh data                                                                                                           | ✅ v7.0.0 |
+| **Engram Integration**     | knowledge-query.ps1 queries mem_search CLI directly; fallback to file scan + context-log <!-- REF-OBSOLETA: knowledge-query.ps1 eliminado; ver src/engram-rag-reindex.ts y tests/unit/knowledge-query.test.ts --> | ✅ v7.0.0 |
+| **MCP Native**             | MCP protocol as first-class citizen, local server registry, gateway, dashboard UI                                                                                                                                 | ✅ v6.4.0 |
+| **MCP Quickstart**         | Pre-built MCP server templates (sqlite, filesystem, browser, memory) — enable with 1 command                                                                                                                      | ✅ v6.5.0 |
+| **MCP SDK**                | Multi-language scaffold (ts, js, py, go, rs), auto-build, auto-register                                                                                                                                           | ✅ v6.6.0 |
+| **Knowledge Layer**        | Unified query: events, traces, feedback, checkpoints with relevance scoring                                                                                                                                       | ✅ v6.7.0 |
+| **Multi-Tenant**           | Tenant isolation: session, engram, codegraph, audit, RBAC                                                                                                                                                         | ✅ v5.1.0 |
+| **Eval/Benchmark**         | Eval runner, registry, A/B prompt testing, quality gates                                                                                                                                                          | ✅ v5.1.0 |
+| **CI/CD Self-Healing**     | Retry engine, rollback, incident logger, GitHub Action                                                                                                                                                            | ✅ v5.1.0 |
+| **Self-Evolving Agents**   | Agent mutation via eval feedback with A/B safety guard                                                                                                                                                            | ✅ v6.0   |
+| **Cross-Workspace Mesh**   | Workspace discovery, manifest, task delegation                                                                                                                                                                    | ✅ v6.0   |
+| **Auto Code Review**       | Pre-commit + PR review, style/security/SDD checks, autofix                                                                                                                                                        | ✅ v6.0   |
+| **Predictive Incidents**   | Anomaly detection (3σ), preemptive heal, false-positive learning                                                                                                                                                  | ✅ v6.0   |
+| **Dashboard Multi-Tenant** | Per-tenant metrics, tenant selector in UI                                                                                                                                                                         | ✅ v6.3.0 |
 
 ## Backlog — Migración PS1 → TS
 
-| #   | Script                                                              | Tamaño | Prioridad | Estado                                    |
-| --- | ------------------------------------------------------------------- | ------ | --------- | ----------------------------------------- |
-| 1   | `src/security/security-orchestrator.ts`                        | 22 KB  | Alta      | ✅ Done (`src/security/security-orchestrator.ts`)  |
-| 2   | `src/hybrid-executor.ts`        | —      | Alta      | ✅ Done (`src/hybrid-executor.ts`)        |
-| 3   | `src/aws-delegator.ts`          | —      | Alta      | ✅ Done (`src/aws-delegator.ts`)          |
-| 4   | `src/azure-delegator.ts`        | —      | Alta      | ✅ Done (`src/azure-delegator.ts`)        |
-| 5   | `src/checkpoint-manager.ts`    | —      | Media     | ✅ Done (`src/checkpoint-manager.ts`)     |
-| 6   | `src/snapshot-manager.ts`      | —      | Media     | ✅ Done (`src/snapshot-manager.ts`)       |
-| 7   | `src/rollback-orchestrator.ts` | —      | Media     | ✅ Done (`src/rollback-orchestrator.ts`)  |
-| 8   | `src/infrastructure/audit-pipeline.ts`                               | —      | Media     | ✅ Done (`src/infrastructure/audit-pipeline.ts`)         |
-| 9   | `src/tracing-instrument.ts`              | —      | Media     | ✅ Done (`src/tracing-instrument.ts`)     |
-| 10  | `src/event-sourcing.ts`        | —      | Media     | ✅ Done (`src/event-sourcing.ts`)         |
-| 11  | `src/saga-orchestrator.ts`     | —      | Media     | ✅ Done (`src/saga-orchestrator.ts`)      |
-| 12  | `src/session-autostart.ts`                   | —      | Baja      | ✅ Done (`src/session-autostart.ts`)      |
-| 13  | `src/core/maintenance-watchtower.ts`                    | —      | Baja      | ✅ Done (`src/core/maintenance-watchtower.ts`) |
+| #   | Script                                  | Tamaño | Prioridad | Estado                                            |
+| --- | --------------------------------------- | ------ | --------- | ------------------------------------------------- |
+| 1   | `src/security/security-orchestrator.ts` | 22 KB  | Alta      | ✅ Done (`src/security/security-orchestrator.ts`) |
+| 2   | `src/hybrid-executor.ts`                | —      | Alta      | ✅ Done (`src/hybrid-executor.ts`)                |
+| 3   | `src/aws-delegator.ts`                  | —      | Alta      | ✅ Done (`src/aws-delegator.ts`)                  |
+| 4   | `src/azure-delegator.ts`                | —      | Alta      | ✅ Done (`src/azure-delegator.ts`)                |
+| 5   | `src/checkpoint-manager.ts`             | —      | Media     | ✅ Done (`src/checkpoint-manager.ts`)             |
+| 6   | `src/snapshot-manager.ts`               | —      | Media     | ✅ Done (`src/snapshot-manager.ts`)               |
+| 7   | `src/rollback-orchestrator.ts`          | —      | Media     | ✅ Done (`src/rollback-orchestrator.ts`)          |
+| 8   | `src/infrastructure/audit-pipeline.ts`  | —      | Media     | ✅ Done (`src/infrastructure/audit-pipeline.ts`)  |
+| 9   | `src/tracing-instrument.ts`             | —      | Media     | ✅ Done (`src/tracing-instrument.ts`)             |
+| 10  | `src/event-sourcing.ts`                 | —      | Media     | ✅ Done (`src/event-sourcing.ts`)                 |
+| 11  | `src/saga-orchestrator.ts`              | —      | Media     | ✅ Done (`src/saga-orchestrator.ts`)              |
+| 12  | `src/session-autostart.ts`              | —      | Baja      | ✅ Done (`src/session-autostart.ts`)              |
+| 13  | `src/core/maintenance-watchtower.ts`    | —      | Baja      | ✅ Done (`src/core/maintenance-watchtower.ts`)    |
 
 ## Backlog — Mejoras Local-First
 
@@ -66,12 +66,18 @@ seguro, extensible, zero-drama.**
 **Entregables Backlog Local-First (2026-08-09):**
 
 - `apps/web-dashboard/src/lib/offlineCache.ts` — caché localStorage por-key (cap 200KB, staleness 5
+
 <!-- REF-OBSOLETA: src/lib/offlineCache.ts no existe (ruta migrada o eliminada) -->
-  min).
+
+min).
+
 - `apps/web-dashboard/src/hooks/useMetrics.ts` + `useAlerts.ts` + `Dashboard.tsx` +
+
 <!-- REF-OBSOLETA: src/hooks/useMetrics.ts no existe (ruta migrada o eliminada) -->
-  `TracingDashboard.tsx` — modo offline: `isOffline`, `lastUpdated`, banner amber "Offline mode —
-  cached data".
+
+`TracingDashboard.tsx` — modo offline: `isOffline`, `lastUpdated`, banner amber "Offline mode —
+cached data".
+
 - `src/check-version.ts` — fix: apunta al repo público `EmmanuelOrtiz87/gentle-vanguard-public` (el
   privado devolvía 404), override vía `GENTLE_VANGUARD_GH_REPO`. `src/auto-update.ts` +
   `npm run update:check` OK.
@@ -149,22 +155,22 @@ npx tsx src/module-maturity.ts --gate <module-id>
 
 ## Recent Milestones
 
-| Version | Date       | Highlights                                                                                                                                                                                                                              |
-| ------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| v9.0    | 2026-08-10 | Gobernanza de madurez completa: 8/8 módulos experimentales activados con gates 6/6 (MODULE-ACTIVATION-WORKFLOW), SBOM CycloneDX 1.7 integrado (464 componentes, validación nativa), ADR-002 MCP workspace, roadmap de optimización 100% |
-| v8.0    | 2026-07-08 | Public Release: zero-dependency stack, auto-install, updated README, watchdog auto-recovery, dynamic ports                                                                                                                              |
-| v7.1    | 2026-07-08 | Dashboard UI refinement: engram source in Knowledge Panel, auto-refresh 30s, relevance colors, error states                                                                                                                             |
-| v7.0    | 2026-07-08 | Multi-repo Mesh API + Engram mem_search integration in knowledge-query                                                                                                                                                                  |
-| v6.7    | 2026-07-07 | Knowledge Persistence Layer: unified query engine (knowledge-query.ps1) cruza events, traces, feedback, checkpoints <!-- REF-OBSOLETA: knowledge-query.ps1 eliminado en migración PS1→TS -->                                                                                                                     |
-| v6.6    | 2026-07-07 | MCP SDK Scaffolder: create action multi-lenguaje (ts, js, py, go, rs) con auto-build y auto-register                                                                                                                                    |
-| v6.5    | 2026-07-07 | MCP Quickstart: pre-built server templates (sqlite, filesystem, browser, memory), 1-command enable via src/mcp/mcp-manager.ts <!-- REF-OBSOLETA: mcp-manager.ps1 eliminado; migrado a src/mcp/mcp-manager.ts -->                                                                                                                      |
-| v6.4    | 2026-07-07 | MCP Native: local MCP server registry, gateway, CLI manager (src/mcp/mcp-manager.ts), dashboard management UI (MCPServers.tsx), 3 REST endpoints, session pipeline integration <!-- REF-OBSOLETA: mcp-manager.ps1 eliminado; migrado a src/mcp/mcp-manager.ts -->                                                                 |
-| v6.3    | 2026-07-07 | Dashboard Multi-Tenant: per-tenant metrics filtering, tenant selector UI, /api/tenants endpoint, /api/metrics?tenantId=                                                                                                                 |
-| v6.2    | 2026-07-07 | Cross-Org Federation: federation auth with RSA handshake, org registry, capability-based authorization, /api/federation endpoint                                                                                                        |
-| v6.1    | 2026-07-07 | AI Safety Layer: safety guardrails, prompt injection protection, mutation risk scoring, /api/safety endpoint                                                                                                                            |
-| v6.0    | 2026-07-07 | Self-evolving agents, cross-workspace mesh, auto code review, predictive incident response                                                                                                                                              |
-| v5.1    | 2026-07-07 | Multi-tenant isolation, eval/benchmark framework, CI/CD self-healing, 3 new configs, pipeline integration                                                                                                                               |
-| v3.3.3  | 2026-06-19 | Watchtower 74/74 PASS, RBAC + CSP, audit pipeline, tracing, cloud connectors, Engram auto-sync                                                                                                                                          |
-| v3.3.2  | 2026-06-18 | Dashboard i18n (3 idiomas), alert system, watchtower 60 checks, lifecycle scripts, trace system                                                                                                                                         |
-| v3.3.1  | 2026-06-17 | CI/CD 35→12 workflows, structured logging, adapter consolidation, docker compose, health API                                                                                                                                            |
-| v3.3.0  | 2026-06-05 | Community skills, CI validation, real marketplace                                                                                                                                                                                       |
+| Version | Date       | Highlights                                                                                                                                                                                                                                                        |
+| ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| v9.0    | 2026-08-10 | Gobernanza de madurez completa: 8/8 módulos experimentales activados con gates 6/6 (MODULE-ACTIVATION-WORKFLOW), SBOM CycloneDX 1.7 integrado (464 componentes, validación nativa), ADR-002 MCP workspace, roadmap de optimización 100%                           |
+| v8.0    | 2026-07-08 | Public Release: zero-dependency stack, auto-install, updated README, watchdog auto-recovery, dynamic ports                                                                                                                                                        |
+| v7.1    | 2026-07-08 | Dashboard UI refinement: engram source in Knowledge Panel, auto-refresh 30s, relevance colors, error states                                                                                                                                                       |
+| v7.0    | 2026-07-08 | Multi-repo Mesh API + Engram mem_search integration in knowledge-query                                                                                                                                                                                            |
+| v6.7    | 2026-07-07 | Knowledge Persistence Layer: unified query engine (knowledge-query.ps1) cruza events, traces, feedback, checkpoints <!-- REF-OBSOLETA: knowledge-query.ps1 eliminado en migración PS1→TS -->                                                                      |
+| v6.6    | 2026-07-07 | MCP SDK Scaffolder: create action multi-lenguaje (ts, js, py, go, rs) con auto-build y auto-register                                                                                                                                                              |
+| v6.5    | 2026-07-07 | MCP Quickstart: pre-built server templates (sqlite, filesystem, browser, memory), 1-command enable via src/mcp/mcp-manager.ts <!-- REF-OBSOLETA: mcp-manager.ps1 eliminado; migrado a src/mcp/mcp-manager.ts -->                                                  |
+| v6.4    | 2026-07-07 | MCP Native: local MCP server registry, gateway, CLI manager (src/mcp/mcp-manager.ts), dashboard management UI (MCPServers.tsx), 3 REST endpoints, session pipeline integration <!-- REF-OBSOLETA: mcp-manager.ps1 eliminado; migrado a src/mcp/mcp-manager.ts --> |
+| v6.3    | 2026-07-07 | Dashboard Multi-Tenant: per-tenant metrics filtering, tenant selector UI, /api/tenants endpoint, /api/metrics?tenantId=                                                                                                                                           |
+| v6.2    | 2026-07-07 | Cross-Org Federation: federation auth with RSA handshake, org registry, capability-based authorization, /api/federation endpoint                                                                                                                                  |
+| v6.1    | 2026-07-07 | AI Safety Layer: safety guardrails, prompt injection protection, mutation risk scoring, /api/safety endpoint                                                                                                                                                      |
+| v6.0    | 2026-07-07 | Self-evolving agents, cross-workspace mesh, auto code review, predictive incident response                                                                                                                                                                        |
+| v5.1    | 2026-07-07 | Multi-tenant isolation, eval/benchmark framework, CI/CD self-healing, 3 new configs, pipeline integration                                                                                                                                                         |
+| v3.3.3  | 2026-06-19 | Watchtower 74/74 PASS, RBAC + CSP, audit pipeline, tracing, cloud connectors, Engram auto-sync                                                                                                                                                                    |
+| v3.3.2  | 2026-06-18 | Dashboard i18n (3 idiomas), alert system, watchtower 60 checks, lifecycle scripts, trace system                                                                                                                                                                   |
+| v3.3.1  | 2026-06-17 | CI/CD 35→12 workflows, structured logging, adapter consolidation, docker compose, health API                                                                                                                                                                      |
+| v3.3.0  | 2026-06-05 | Community skills, CI validation, real marketplace                                                                                                                                                                                                                 |

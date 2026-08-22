@@ -21,4 +21,4 @@ PowerShell-based. Provider-agnostic.
 
 What feature would you like to learn more about?
 
-#AIDevelopment #SoftwareEngineering #DevTools #Gentle-VanguardStack
+# AIDevelopment #SoftwareEngineering #DevTools #Gentle-VanguardStack

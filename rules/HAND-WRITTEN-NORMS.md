@@ -65,6 +65,7 @@ SHA256 + post-backup verification. (4) Scheduling automático via session-autost
 `engram-backup` lazy). **Files:** `scripts/utilities/ops/BACKUP-RESTORE/backup-engram.ps1`,
 `scripts/adaptive/auto-backup-orchestrator.ps1`,
 <!-- REF-OBSOLETA: scripts/adaptive/auto-backup-orchestrator.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 `scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1`, `config/session-autostart.config.json`
 
 ## NORM-009: Critical changes require explicit consent

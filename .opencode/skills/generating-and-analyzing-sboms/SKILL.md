@@ -51,15 +51,19 @@ This skill covers producing standards-compliant SBOMs, correlating them with vul
 ## Prerequisites
 
 - Install Syft and Grype (official install scripts):
+
   ```bash
   curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
   curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
   ```
+
 - Install Cosign for signing/attestation:
+
   ```bash
   # via Go, or download a release from https://github.com/sigstore/cosign/releases
   go install github.com/sigstore/cosign/v2/cmd/cosign@latest
   ```
+
 - Access to the target images/source and (for signing) a registry plus keys or keyless OIDC.
 
 ## Objectives
@@ -80,19 +84,25 @@ This is a defensive supply-chain skill; the mapping reflects the adversary techn
 ## Workflow
 
 ### 1. Generate a CycloneDX SBOM from a container image
+
 `-o <format>` selects output; `cyclonedx-json` is security-oriented.
+
 ```bash
 syft alpine:latest -o cyclonedx-json=alpine.cdx.json
 ```
 
 ### 2. Generate an SPDX SBOM from a source directory
+
 Use the `dir:` source to inventory a checked-out repository; `spdx-json` for the SPDX standard.
+
 ```bash
 syft dir:. -o spdx-json=app.spdx.json
 ```
 
 ### 3. Emit multiple formats at once
+
 Produce both standards in a single pass for different consumers.
+
 ```bash
 syft myorg/app:1.4.2 \
   -o cyclonedx-json=app.cdx.json \
@@ -101,7 +111,9 @@ syft myorg/app:1.4.2 \
 ```
 
 ### 4. Scan the SBOM for vulnerabilities with Grype
+
 Decoupling generation from scanning lets you re-scan stored SBOMs as new CVEs land — without rebuilding.
+
 ```bash
 # Scan an existing SBOM
 grype sbom:app.cdx.json -o table
@@ -109,23 +121,31 @@ grype sbom:app.cdx.json -o table
 # JSON report for automation
 grype sbom:app.cdx.json -o json > app.vulns.json
 ```
+
 You can also scan an image directly (Grype generates the SBOM internally):
+
 ```bash
 grype myorg/app:1.4.2 -o table
 ```
 
 ### 5. Gate CI/CD on severity
+
 `--fail-on` exits non-zero at or above a severity, failing the pipeline.
+
 ```bash
 grype sbom:app.cdx.json --fail-on high
 ```
+
 Filter out unfixable noise with a `.grype.yaml` policy (`only-fixed: true`) or `--only-fixed`:
+
 ```bash
 grype sbom:app.cdx.json --only-fixed --fail-on critical
 ```
 
 ### 6. Sign and attach the SBOM as an attestation
+
 Cosign records the SBOM as a signed, in-toto attestation alongside the image in the registry.
+
 ```bash
 # Key-based signing
 cosign attest --key cosign.key \
@@ -141,13 +161,17 @@ COSIGN_EXPERIMENTAL=1 cosign attest \
 ```
 
 ### 7. Verify the attestation downstream
+
 Consumers verify provenance before trusting an image.
+
 ```bash
 cosign verify-attestation --key cosign.pub --type spdxjson myorg/app:1.4.2
 ```
 
 ### 8. Retrieve and re-scan attached SBOMs
+
 Pull the attested SBOM from the registry and re-run Grype as part of continuous monitoring.
+
 ```bash
 cosign download attestation myorg/app:1.4.2 \
   | jq -r '.payload' | base64 -d | jq '.predicate' > pulled.spdx.json
@@ -155,6 +179,7 @@ grype sbom:pulled.spdx.json -o table
 ```
 
 ### 9. Correlate to vulnerability intelligence
+
 Feed Grype JSON into your vulnerability management workflow: deduplicate by CVE, enrich with EPSS/KEV for prioritization, and track remediation SLAs. Re-scan stored SBOMs on each Grype DB update to catch newly disclosed CVEs in unchanged artifacts.
 
 ## Tools and Resources

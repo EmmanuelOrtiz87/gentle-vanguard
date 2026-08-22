@@ -22,7 +22,15 @@
  *   https://nodejs.org/api/single-executable-applications.html
  */
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync, copyFileSync, statSync, unlinkSync } from 'fs';
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  writeFileSync,
+  copyFileSync,
+  statSync,
+  unlinkSync,
+} from 'fs';
 import { resolve, dirname, basename, extname, join } from 'path';
 import { createRequire } from 'module';
 import { runSync, runSyncShell } from './core/run-command.js';

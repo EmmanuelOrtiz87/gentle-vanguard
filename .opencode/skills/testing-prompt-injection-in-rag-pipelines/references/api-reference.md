@@ -17,6 +17,7 @@ Install: `python -m pip install -U garak`
 Relevant probe modules: `promptinject`, `latentinjection`, `leakreplay`, `xss`, `dan`, `encoding`, `goodside`.
 
 Example:
+
 ```bash
 python -m garak --model_type openai --model_name gpt-4o-mini \
   --probes promptinject,latentinjection --generations 5 --report_prefix rag_run

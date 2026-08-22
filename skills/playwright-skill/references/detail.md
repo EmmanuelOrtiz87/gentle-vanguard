@@ -203,13 +203,11 @@ test.describe('Login', () => {
 
 ## Commands
 
-```bash
-npx playwright test                    # Run all
-npx playwright test --grep "login"     # Filter by name
-npx playwright test --ui               # Interactive UI
-npx playwright test --debug            # Debug mode
-npx playwright test tests/login/       # Run specific folder
-```
+    npx playwright test                    # Run all
+    npx playwright test --grep "login"     # Filter by name
+    npx playwright test --ui               # Interactive UI
+    npx playwright test --debug            # Debug mode
+    npx playwright test tests/login/       # Run specific folder
 
 ## Keywords
 

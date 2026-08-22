@@ -21,7 +21,9 @@
 
 - Severity: CRITICAL(3) = block pipeline → HIGH(2) = block merge → MEDIUM(1) = warn → LOW(0) = log
 - Central handler in `scripts/utilities/error-handler.ps1`
+
 <!-- REF-OBSOLETA: scripts/utilities/error-handler.ps1 no tiene equivalente TS (migración PS1→TS) -->
+
 - Error categories: auth, config, dependency, execution, security, validation
 - OWASP LLM06 (Excessive Agency): cascade timeout after 3 retries, escalate to orchestrator
 

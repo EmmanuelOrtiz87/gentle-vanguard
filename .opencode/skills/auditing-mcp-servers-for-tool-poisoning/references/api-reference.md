@@ -12,6 +12,7 @@ Run via uvx (no global install): `uvx mcp-scan@latest`
 | `--json` | Emit machine-readable JSON report |
 
 Examples:
+
 ```bash
 uvx mcp-scan@latest ~/.vscode/mcp.json
 uvx mcp-scan@latest inspect ~/.cursor/mcp.json
