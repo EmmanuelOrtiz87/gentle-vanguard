@@ -1,6 +1,6 @@
 # gentle-vanguard — Entry Point
 
-Canonical entry: `docs/AGENTS.md`
+Canonical entry: `AGENTS.md`
 
 ## Tool Detection (turn 1)
 
@@ -56,4 +56,4 @@ workspace_gentle_vanguard
 
 ## Refs
 
-See `docs/AGENTS.md#Key-References` for full resource table.
+See `AGENTS.md` for full resource table.

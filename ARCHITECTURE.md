@@ -97,7 +97,7 @@ local-first operation with enterprise-grade observability.
 #### Nexus DB (SQLite)
 
 - **Location**: `.runtime/gentle-vanguard.db`
-- **Tables**: 20 operational tables
+- **Tables**: 23 operational tables
 - **Features**: WAL mode, migrations, backups
 - **Migrations**: 7 applied
 
@@ -123,7 +123,7 @@ local-first operation with enterprise-grade observability.
 
 #### Health Checks
 
-- **Watchtower**: 85/85 checks PASS
+- **Watchtower**: 95 checks in 21 components (`npm run watchtower:health`)
 - **Components**: Dashboard, CodeGraph, ML, Engram, MCP, Session, etc.
 - **Command**: `npm run health:check`
 
@@ -228,7 +228,7 @@ User Input → Pre-Process → Skill Router → Agent Selection
 
 ```bash
 npm run health:check          # 19 checks
-npm run watchtower:health     # 85 checks
+npm run watchtower:health     # 95 checks
 npm run test                  # 36 tests
 ```
 

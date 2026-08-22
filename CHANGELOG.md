@@ -1,5 +1,39 @@
 # Changelog — Gentle-Vanguard
 
+## [Unreleased]
+
+### Fixed (Fase 0 — plan de evolución `docs/plans/STACK-EVOLUTION-PLAN-2026.md`)
+
+- **Auto-update integrity**: `releases/latest-version.json` apuntaba a v3.5.0 (URL 404, `sha256`
+  vacío). Regenerado contra el release real v3.8.2 con hash verificado del binario publicado.
+- **Workspace pnpm**: `pnpm-workspace.yaml` ahora declara `packages:` (apps/_, packages/_); el
+  dashboard deja de resolver dependencias por ascenso de directorios (`better-sqlite3` movido a
+  `dependencies`).
+- **Docker**: imagen runner ya no corre como root (usuario `app` dedicado) y el stage runner no
+  instala pnpm innecesario.
+- **Repositorio**: purgados artefactos trackeados por error (`.pnpm-store/`, `.local/`, log de
+  tests, fixtures de debug en raíz, SBOM commiteado).
+- **CI**: gates de seguridad que nunca fallaban eliminadas o activadas de verdad (audit, Trivy,
+  pseudo-SAST); workflows duplicados consolidados; matriz Node 22/24.
+- **Docs**: cifras caducadas corregidas (Nexus 23 tablas/7 migraciones, watchtower 95 checks/21
+  componentes); onboarding reparado (`gv check`, setup TS).
+
+## [3.8.2] — 2026-08-22
+
+### Fixed
+
+- CI: la suite de integración corre con `tsx --test` y globs explícitos de archivos de test.
+- CI: el servidor WS del dashboard arranca en el contenedor de integración; tests de API se saltan
+  limpiamente si es inalcanzable.
+- Deps: eliminado el bloque legacy `resolutions` que rompía el `--frozen-lockfile`.
+
+### Style
+
+- Formateo prettier repo-wide y limpieza de markdownlint.
+
+> Nota: las versiones 3.6.x/3.7.0 no registraron entrada en este CHANGELOG. v3.7.0 fue publicada con
+> binario (ver releases del repo público).
+
 ## [3.8.1] — 2026-08-20
 
 ### Changed

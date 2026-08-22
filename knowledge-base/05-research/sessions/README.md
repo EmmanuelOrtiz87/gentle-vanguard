@@ -92,7 +92,7 @@ gv start-session
 
 ```powershell
 # Daily commands
-gv verify  # Check all 14 quality gates
+gv check  # Check all 14 quality gates
 gv version # Show stack version + skills count
 gv dashboard       # Open HTML metrics dashboard
 ```

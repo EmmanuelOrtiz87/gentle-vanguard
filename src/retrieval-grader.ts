@@ -21,6 +21,7 @@
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { pathToFileURL } from 'url';
+import { bm25Score } from '@gentle-vanguard/shared';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -49,38 +50,7 @@ export interface GraderOptions {
   minRelevantRatio?: number;
 }
 
-// ─── BM25 lexical scorer (shared with structural-compression) ─────────────────
-
-const BM25_K1 = 1.5;
-const BM25_B = 0.75;
-const BM25_IDF = Math.log(2);
-
-function tokenize(text: string): string[] {
-  const tokens: string[] = [];
-  const re = /[A-Za-z0-9_]+/g;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(text)) !== null) tokens.push(m[0].toLowerCase());
-  return tokens;
-}
-
-function bm25Score(query: string, doc: string): number {
-  if (!query || !doc) return 0;
-  const qTokens = tokenize(query);
-  const dTokens = tokenize(doc);
-  if (qTokens.length === 0 || dTokens.length === 0) return 0;
-  const docLen = dTokens.length;
-  const avgDocLen = Math.max(docLen, 1);
-  const freq = new Map<string, number>();
-  for (const t of dTokens) freq.set(t, (freq.get(t) ?? 0) + 1);
-  let score = 0;
-  for (const qt of qTokens) {
-    const tf = freq.get(qt) ?? 0;
-    if (tf === 0) continue;
-    const denom = tf + BM25_K1 * (1 - BM25_B + BM25_B * (docLen / avgDocLen));
-    score += (tf / denom) * BM25_IDF;
-  }
-  return score;
-}
+// ─── BM25 lexical scorer: canonical implementation in @gentle-vanguard/shared ─
 
 // ─── Normalize a raw BM25 score to 0..1 ───────────────────────────────────────
 

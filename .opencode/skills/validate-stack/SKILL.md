@@ -72,7 +72,7 @@ Expected: JSON output with tier, score, reviewLenses.
 npm run db:health
 ```
 
-Expected: SQLite integrity PASS, 12 tables, migrations OK.
+Expected: SQLite integrity PASS, 23 tables, migrations OK.
 
 ## 8. Watchtower Health
 

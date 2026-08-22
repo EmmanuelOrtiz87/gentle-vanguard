@@ -30,7 +30,7 @@ Automates daily Gentle-Vanguard tasks: status check, context tracking, audit, an
 
 ### Daily Tasks
 
-- **Check stack health**: `gv verify`
+- **Check stack health**: `gv check`
 - **Review audits**: Check `docs/audits/` for recent reports
 - **Sync public repo**: Ensure installer and docs are current
 - **Context efficiency**: Monitor prompt chars and adoption rate
@@ -48,7 +48,7 @@ Automates daily Gentle-Vanguard tasks: status check, context tracking, audit, an
 | ------------------------ | -------------------------------------- |
 | `gv daily-check`         | Morning status (git + stack + context) |
 | `gv compact-start "obj"` | Start context tracking                 |
-| `gv verify`              | 14 quality gates                       |
+| `gv check`              | 14 quality gates                       |
 | `gv status`              | Context efficiency + git status        |
 | `gentle-vanguard audit`  | Generate audit report                  |
 

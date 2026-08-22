@@ -45,7 +45,7 @@ appropriateness | `sdd-gate.yml` + BA review | SDD spec approval |
 
 | Sub-caracteristica              | Control Gentle-Vanguard              | Verification                           |
 | ------------------------------- | ------------------------------------ | -------------------------------------- |
-| Appropriateness recognisability | `docs/AGENTS.md` + `rules/README.md` | Docs actualizados                      |
+| Appropriateness recognisability | `AGENTS.md` + `rules/README.md` | Docs actualizados                      |
 | Learnability                    | `skills/` con SKILL.md               | Cada skill documentada                 |
 | Operability                     | `src/cli/gv.ts`                      | Comandos gv funcionales                |
 | User error protection           | `config/security-hardening.json`     | Input validation en todas las entradas |

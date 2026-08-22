@@ -30,11 +30,9 @@ pre-commit:
     lockfile-lint:
       glob: 'package-lock.json'
       run: npx tsx src/lockfile-lint-pre-commit.ts
-    trufflehog-scan:
-      glob: '*.{ts,js,json,yml,yaml,md,env,toml,xml,py,ps1,sh,sql}'
-      run:
-        trufflehog filesystem --no-verification --no-update --fail=false --exclude-paths
-        .trufflehogignore {staged_files} || exit 0
+    # trufflehog removed 2026-08-22: it ran with --fail=false AND `|| exit 0`
+    # (never blocked anything). Secret coverage is provided by secretlint +
+    # secret-scanner here, and gitleaks in CI.
     skill-scan:
       glob: '{.opencode/,}skills/*/SKILL.md'
       run: npx tsx src/scan-skill-hook.ts --StagedFiles '{staged_files}'
@@ -72,11 +70,15 @@ pre-push:
     # the working tree clean so the push is not aborted by a dirty tree).
     coverage-gate:
       run: npm run coverage:quick -- --no-write
-    # Container/artifact vulnerability gate — scans sbom.json with Syft+Grype
+    # Container/artifact vulnerability gate — scans the SBOM with Syft+Grype
     # (no Docker required). Exit 1 blocks the push when any vuln >= high is found.
     # Self-skips (exit 0) when the toolchain is unavailable (no syft/grype/trivy).
+    # The SBOM is regenerated first: sbom.json is gitignored (CI owns the
+    # canonical artifact) so the local copy must not go stale.
     container-scan:
-      run: npx tsx src/container-scan.ts scan --fail-on high --json
+      run:
+        npx tsx src/generate-sbom.ts --output sbom.json --format json && npx tsx
+        src/container-scan.ts scan --fail-on high --json
 
 commit-msg:
   commands:

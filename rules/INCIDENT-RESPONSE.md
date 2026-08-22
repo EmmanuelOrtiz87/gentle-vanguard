@@ -62,7 +62,7 @@ Sources:
 1. Fix verified in staging/CI
 2. All quality gates pass
 3. No regressions detected
-4. `gv verify` returns clean
+4. `gv check` returns clean
 
 ### 2.6 Document
 

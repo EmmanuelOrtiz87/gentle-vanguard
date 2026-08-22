@@ -85,7 +85,7 @@ El stack ya implementa defensas nativas. El audit externo **valida** esta tabla 
 | 2   | Secret scanning (pre-commit)            | `.lefthook.yml` → `secret-scanner` + `secretlint` + `trufflehog-scan`                                                                            | `npx lefthook validate`                           |
 | 3   | Secret scanning (CI)                    | `.github/workflows/security.yml` → gitleaks, secretlint, trivy                                                                                   | Ejecutar workflow en PR                           |
 | 4   | Secretlint (config)                     | `secretlint` + `.secretlintrc.json`                                                                                                              | `npm run secretlint`                              |
-| 5   | Watchtower (95 checks / 13 componentes) | `src/core/maintenance-watchtower.ts`                                                                                                             | `npm run watchtower:health`                       |
+| 5   | Watchtower (95 checks / 21 componentes) | `src/core/maintenance-watchtower.ts`                                                                                                             | `npm run watchtower:health`                       |
 | 6   | Privacy gateway (sanitización PII)      | `src/security/privacy-gateway.ts`                                                                                                                | `npm run privacy:gateway`                         |
 | 7   | Security orchestrator                   | `src/security/security-orchestrator.ts`                                                                                                          | `npm run security:orchestrator`                   |
 | 8   | GateGuard MCP (validación MCP)          | `src/gateguard-mcp.ts`                                                                                                                           | `npm run gateguard:mcp`                           |
@@ -123,7 +123,7 @@ comando de verificación.
 | #   | Item                                            | Comando de verificación                                                   | Estado |
 | --- | ----------------------------------------------- | ------------------------------------------------------------------------- | ------ |
 | 1   | Escaneo completo de secrets (repo completo)     | `npm run scan:secrets -- --scan . --json`                                 | ⬜     |
-| 2   | Watchtower health (95 checks / 13 componentes)  | `npm run watchtower:health`                                               | ⬜     |
+| 2   | Watchtower health (95 checks / 21 componentes)  | `npm run watchtower:health`                                               | ⬜     |
 | 3   | Escaneo SBOM con grype (fail-on high)           | `grype sbom:sbom.json --fail-on high`                                     | ⬜     |
 | 4   | Escaneo SBOM con trivy (filesystem)             | `trivy fs . --severity CRITICAL,HIGH`                                     | ⬜     |
 | 5   | CI security.yml (gitleaks + secretlint + trivy) | Push/PR a `main` → revisar checks                                         | ⬜     |

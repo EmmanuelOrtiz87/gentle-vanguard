@@ -134,7 +134,7 @@ gv health
 #### Verify Code Quality
 
 ```TypeScript
-gv verify
+gv check
 ```
 
 - Runs the configured quality gates, including tests and hook validation
@@ -174,7 +174,7 @@ gv start-session
 gv dashboard live &
 
 # Before commit
-gv verify
+gv check
 
 # Check regression after changes
 gv benchmark full

@@ -27,4 +27,4 @@ Comandos de compilación, prueba y linting para el proyecto.
 ## Quality Gate completo
 
 - `gv judgment-day` — revisión adversarial pre-merge
-- `gv verify` — verificación rápida del stack
+- `gv check` — verificación rápida del stack

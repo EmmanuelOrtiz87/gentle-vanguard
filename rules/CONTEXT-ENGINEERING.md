@@ -39,7 +39,7 @@ Level 5 — Task Context            (current prompt, files, ~80% token budget)
 
 ### 3.1 AGENTS.md (Tool-Agnostic Bootstrap)
 
-- MUST exist at `docs/AGENTS.md`
+- MUST exist at `AGENTS.md`
 - Contains: tool detection, startup sequence, routing, break glass
 - MUST NOT contain project-specific code standards (those go in `rules/`)
 - Max 200 lines (enforced: current ~172)
@@ -47,8 +47,8 @@ Level 5 — Task Context            (current prompt, files, ~80% token budget)
 
 ### 3.2 CLAUDE.md / .clinerules / .cursorrules (Tool-Specific)
 
-- MUST reference `docs/AGENTS.md` as primary entry point
-- MUST NOT duplicate content from AGENTS.md (use `(see docs/AGENTS.md)`)
+- MUST reference `AGENTS.md` as primary entry point
+- MUST NOT duplicate content from AGENTS.md (use `(see AGENTS.md)`)
 - Contains: model selection, tool permissions, environment-specific overrides
 - Max 100 lines (enforced: current ~97)
 
@@ -252,8 +252,8 @@ When delegating via `task` tool, the prompt sent to subagents MUST follow:
 | NORMATIVAS-GIT          | `rules/NORMATIVAS-GIT.md`          |
 | AI Normatives           | `rules/AI-NORMATIVES.md`           |
 | Development Standards   | `rules/DEVELOPMENT-STANDARDS.md`   |
-| AGENTS.md               | `docs/AGENTS.md`                   |
-| Break Glass             | `docs/AGENTS.md#break-glass`       |
+| AGENTS.md               | `AGENTS.md`                   |
+| Break Glass             | `AGENTS.md`       |
 | Orchestrator Config     | `config/orchestrator.json`         |
 | Context Efficiency      | `config/context-efficiency.json`   |
 | Compaction Config       | `opencode.json#compaction`         |

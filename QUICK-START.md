@@ -101,7 +101,7 @@ npx tsx src/adaptive-steps.ts --auto "task description" --agent sdd-apply
 
 ## ✅ Estado Actual del Stack
 
-- **Health Check**: 84/85 PASS (0 FAIL)
+- **Health Check**: 95 checks (ver `npm run watchtower:health`)
 - **Dashboard**: ✅ Corriendo (PID 6520)
 - **WebSocket**: ✅ Puerto 8080 activo
 - **Vite**: ✅ Puerto 5173 activo

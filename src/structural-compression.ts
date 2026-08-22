@@ -25,6 +25,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { createHash } from 'crypto';
+import { bm25Score as bm25ScoreShared, tokenize } from '@gentle-vanguard/shared';
 
 const ROOT = resolve(process.env.GENTLE_VANGUARD_BASE_DIR ?? process.cwd());
 const CONFIG_PATH = join(ROOT, 'config', 'structural-compression.json');
@@ -187,45 +188,10 @@ function sha256(text: string): string {
 
 // ─── BM25 scorer (query relevance) ────────────────────────────────────────────
 // Port of headroom bm25.rs: k1=1.5, b=0.75, idf=ln(2), normalize ≤ max_score(10),
-// +0.3 bonus for tokens ≥ 8 chars.
-
-const BM25_K1 = 1.5;
-const BM25_B = 0.75;
-const BM25_IDF = Math.log(2);
-const BM25_MAX_SCORE = 10;
-
-function tokenize(text: string): string[] {
-  const tokens: string[] = [];
-  const re = /[A-Za-z0-9_]+/g;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(text)) !== null) {
-    tokens.push(m[0].toLowerCase());
-  }
-  return tokens;
-}
+// +0.3 bonus for tokens ≥ 8 chars. Base algorithm lives in @gentle-vanguard/shared.
 
 function bm25Score(query: string, doc: string): number {
-  if (!query || !doc) return 0;
-  const qTokens = tokenize(query);
-  if (qTokens.length === 0) return 0;
-  const dTokens = tokenize(doc);
-  if (dTokens.length === 0) return 0;
-
-  const docLen = dTokens.length;
-  const avgDocLen = Math.max(docLen, 1);
-  const freq = new Map<string, number>();
-  for (const t of dTokens) freq.set(t, (freq.get(t) ?? 0) + 1);
-
-  let score = 0;
-  for (const qt of qTokens) {
-    const tf = freq.get(qt) ?? 0;
-    if (tf === 0) continue;
-    const denom = tf + BM25_K1 * (1 - BM25_B + BM25_B * (docLen / avgDocLen));
-    let s = (tf / denom) * BM25_IDF;
-    if (qt.length >= 8) s += 0.3;
-    score += s;
-  }
-  return Math.min(score, BM25_MAX_SCORE);
+  return bm25ScoreShared(query, doc, { longTokenBonus: 0.3, maxScore: 10 });
 }
 
 // ─── SmartCrusher: JSON array compression ─────────────────────────────────────

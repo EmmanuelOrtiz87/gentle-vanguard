@@ -76,7 +76,7 @@ This included:
 - **Single backup/restore** point for the entire operational stack
 - **Query capability** via SQL across all data domains
 - **Migration system** enables schema evolution with version tracking
-- **12 tables, 3 migrations** covering all operational needs
+- **23 tables, 7 migrations** covering all operational needs
 - **Auto-init, auto-prune, auto-backup** via lazy pipeline steps (53 steps total)
 - **Watchtower monitoring** with 98 checks including DB-specific checks
 - **Identity** as a first-class stack component (Nexus)
@@ -107,3 +107,6 @@ This included:
 - Pros: Independent lifecycle per domain
 - Cons: No cross-domain queries, more complex backup/restore
 - Rejected: Nexus is designed for cross-domain correlation (e.g., session → traces → scoring)
+
+> **Update 2026-08-22:** el schema evolucionó a 23 tablas y 7 migraciones (001-007). Ver
+> `MigrationRunner` y `npm run db:health`.

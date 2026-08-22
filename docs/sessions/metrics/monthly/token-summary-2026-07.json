@@ -1,27 +1,19 @@
 {
-  "generated_at": "2026-08-21T18:52:59.808Z",
+  "generated_at": "2026-08-22T15:53:31.262Z",
   "period": "2026-07",
   "days": 28,
   "totals": {
-    "input": 872863401,
-    "output": 10624075,
-    "total": 883487476,
+    "input": 874636258,
+    "output": 10810669,
+    "total": 885446927,
     "cost": 4.832006559999998
   },
   "daily_avg": {
-    "input": 31173693,
-    "output": 379431,
-    "total": 31553124
+    "input": 31237009,
+    "output": 386095,
+    "total": 31623105
   },
   "by_day": [
-    {
-      "day": "2026-07-23",
-      "input": 1971530,
-      "output": 43549,
-      "total": 2015079,
-      "cost": 0,
-      "sessions": 4
-    },
     {
       "day": "2026-07-24",
       "input": 93695200,
@@ -232,26 +224,34 @@
     },
     {
       "day": "2026-08-21",
-      "input": 895017,
-      "output": 109674,
-      "total": 1004691,
+      "input": 1733909,
+      "output": 175678,
+      "total": 1909587,
       "cost": 2.248670159999999,
       "sessions": 2
+    },
+    {
+      "day": "2026-08-22",
+      "input": 2905495,
+      "output": 164139,
+      "total": 3069634,
+      "cost": 0,
+      "sessions": 1
     }
   ],
   "by_model": [
     {
       "model": "kimi-2-5",
-      "input": 711521720,
-      "output": 3382321,
-      "total": 714904041,
+      "input": 709606459,
+      "output": 3343308,
+      "total": 712949767,
       "cost": 0
     },
     {
       "model": "deepseek-v4-flash-free",
-      "input": 124914314,
-      "output": 6493441,
-      "total": 131407755,
+      "input": 124858045,
+      "output": 6488905,
+      "total": 131346950,
       "cost": 0
     },
     {
@@ -269,18 +269,18 @@
       "cost": 0
     },
     {
+      "model": "big-pickle",
+      "input": 4639404,
+      "output": 339817,
+      "total": 4979221,
+      "cost": 2.248670159999999
+    },
+    {
       "model": "deepseek-v3-2",
       "input": 1944818,
       "output": 12428,
       "total": 1957246,
       "cost": 0
-    },
-    {
-      "model": "big-pickle",
-      "input": 895017,
-      "output": 109674,
-      "total": 1004691,
-      "cost": 2.248670159999999
     },
     {
       "model": "qwen2.5-coder-7b-instruct",

@@ -28,7 +28,7 @@
 | ------ | ----------------------------------------------- | ------------------------------------------------- |
 | **1️⃣** | Check [PREREQUISITES.md](PREREQUISITES.md)      | Review system requirements                        |
 | **2️⃣** | Follow [DEVELOPER-SETUP.md](DEVELOPER-SETUP.md) | Complete setup steps                              |
-| **3️⃣** | Run bootstrap                                   | `.\scripts\gentle-vanguard\bootstrap-machine.ps1` |
+| **3️⃣** | Run complete setup                              | `npm run setup:complete`                           |
 
 > 💡 **TIP:** Start here for a smooth onboarding experience.
 
@@ -39,9 +39,9 @@
 | Requirement                          | Version | Status      | Notes                                 |
 | ------------------------------------ | ------- | ----------- | ------------------------------------- |
 | **🪟 Windows 10/11 / Linux / macOS** | Any     | ✅ Required | Cross-platform support                |
-| **⚡ TypeScript 7+**                 | 7.0+    | ✅ Required | `winget install Microsoft.TypeScript` |
+| **🟢 Node.js**                       | 20+     | ✅ Required | Runtime for all TS scripts            |
+| **📦 pnpm**                          | 11+     | ✅ Required | Package manager                       |
 | **🌿 Git**                           | 2.30+   | ✅ Required | Version control system                |
-| **🟢 Node.js**                       | 18+     | ⚠️ Optional | For some tools                        |
 | **🐹 Go**                            | 1.19+   | ⚠️ Optional | For compiled components               |
 
 ---
@@ -85,7 +85,7 @@ npm run dashboard:start
 ```TypeScript
 # Session management
 npx tsx src/session-autostart.ts    # Start session
-npm run watchtower:health           # Health check (82 checks)
+npm run watchtower:health           # Health check (95 checks)
 
 # Dashboard
 npm run dashboard:start             # Start dashboard
@@ -107,9 +107,8 @@ npx tsx src/token-budget-guard.ts -Mode status
 ## 🎯 Next Steps
 
 1. **[Read the Architecture Overview](../architecture/README.md)** — Understand the 5-layer topology
-2. **[Explore Available Skills](../reference/SKILL-ORGANIZATION.md)** — 127 specialized skills
-3. **[Set Up Your First Project](../guides/GETTING-STARTED.md)** — Use scaffolding tools
-4. **[Configure AI Agent](../guides/COMPATIBILITY-MATRIX.md)** — OpenCode, Claude, Cursor, etc.
+2. **[Explore Available Skills](../reference/SKILL-ORGANIZATION.md)** — 263 specialized skills
+3. **[Configure AI Agent](../guides/COMPATIBILITY-MATRIX.md)** — OpenCode, Claude, Cursor, etc.
 
 ---
 

@@ -12,7 +12,7 @@ entre todos los mundos. Esta base de datos es exactamente eso: el centro donde c
 sesiones, trazas, eventos, alertas, feedback, caché, contratos, scoring y ruteo del stack
 Gentle-Vanguard. No es un componente más — es el sistema nervioso central.
 
-## Schema (12 tablas, 3 migraciones)
+## Schema (23 tablas, 7 migraciones — verificar con `npm run db:health`)
 
 ### Migration 001 — Initial Schema (Core operacional)
 
@@ -191,8 +191,8 @@ en cada ciclo de auto-heal:
   "type": "SQLite (WAL mode)",
   "path": ".runtime/gentle-vanguard.db",
   "manager": "DatabaseManager (singleton)",
-  "tables": 12,
-  "migrations": 3,
+  "tables": 23,
+  "migrations": 7,
   "purpose": "Operational database — metrics, sessions, traces, events, alerts, feedback, cache, contracts, scoring, routing",
   "autoInit": true,
   "autoPrune": true,

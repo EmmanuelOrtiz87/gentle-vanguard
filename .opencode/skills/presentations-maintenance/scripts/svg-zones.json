@@ -120,9 +120,9 @@
   "data-architecture.svg": {
     "tip_hs_data_nexus": {
       "rect": [370, 240, 160, 70],
-      "en": "NEXUS DB: operational SQLite database (gentle-vanguard.db) with WAL mode, FK ON, 12 tables and 3 migrations.",
-      "es": "NEXUS DB: base de datos operacional SQLite (gentle-vanguard.db) con modo WAL, FK ON, 12 tablas y 3 migraciones.",
-      "pt-BR": "NEXUS DB: banco operacional SQLite (gentle-vanguard.db) com modo WAL, FK ON, 12 tabelas e 3 migrações."
+      "en": "NEXUS DB: operational SQLite database (gentle-vanguard.db) with WAL mode, FK ON, 23 tables and 7 migrations.",
+      "es": "NEXUS DB: base de datos operacional SQLite (gentle-vanguard.db) con modo WAL, FK ON, 23 tablas y 7 migraciones.",
+      "pt-BR": "NEXUS DB: banco operacional SQLite (gentle-vanguard.db) com modo WAL, FK ON, 23 tabelas e 7 migrações."
     },
     "tip_hs_data_repos_blue": {
       "rect": [130, 75, 650, 48],

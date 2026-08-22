@@ -52,7 +52,7 @@ npx tsx src/session-autostart.ts
 Para verificar la instalación:
 
 ```bash
-gv verify
+gv check
 npm run watchtower:health
 ```
 

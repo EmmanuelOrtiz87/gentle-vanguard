@@ -69,7 +69,7 @@ inventariados, checklist pre-audit de 15 items, log de hallazgos inicializado).
 ## Related
 
 - **Related**: ADR-0014 (SLSA provenance — supply-chain attestation), ADR-0011 (dependency updates),
-  ADR-0009 (watchtower — 95 checks internos)
+  ADR-0009 (watchtower — 95 checks internos en 21 componentes)
 - **Plan operativo**: `docs/security/ANNUAL-AUDIT-PLAN.md`
 
 ## References

@@ -1,6 +1,6 @@
 # gentle-vanguard — Entry Point for Claude-Compatible Tools
 
-**Loaded by**: OpenCode, Claude Code, Windsurf, Claude | Canonical entry: `docs/AGENTS.md`
+**Loaded by**: OpenCode, Claude Code, Windsurf, Claude | Canonical entry: `AGENTS.md`
 
 ## CRITICAL: First Action — Tool Detection
 
@@ -19,7 +19,7 @@ Load config from `config/orchestrator.json#toolProfiles.<name>`.
 
 ## Startup Sequence
 
-Run `docs/AGENTS.md#Mandatory-Startup-Sequence` — no shortcuts.
+Run `AGENTS.md` — no shortcuts.
 
 ## Core Rules (condensed)
 
@@ -120,4 +120,4 @@ workspace_gentle_vanguard
 
 ## Key Refs
 
-See `docs/AGENTS.md#Key-References` for full resource table.
+See `AGENTS.md` for full resource table.

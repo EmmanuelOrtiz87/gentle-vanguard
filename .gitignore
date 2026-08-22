@@ -270,3 +270,7 @@ config/owner-auth.json*
 # Exception: SLSA provenance public key is intentionally public (verification only)
 !provenance/public-key.pem
 # End sanitization patterns
+
+# SBOM is generated in CI (artifact) — never commit stale copies
+sbom.json
+sbom/

@@ -29,13 +29,16 @@ pipeline. Logs are pruned automatically after 7 days.
 
 ## graphify
 
-This project has a knowledge graph at graphify-out/ with god nodes, community structure, and
-cross-file relationships.
+> **STATUS: INACTIVE (2026-08-22).** `graphify-out/graph.json` does not exist in this clone — it was
+> never committed (graphify-out/ is gitignored) and no builder exists in the codebase (the CLI only
+> reads/validates a snapshot; `update` cannot rebuild from scratch). Do NOT spend session time on
+> graphify commands until a native builder lands (STACK-EVOLUTION-PLAN F2 follow-up: port the graph
+> build into `src/cli/graphify.ts build`, then re-enable this section).
 
 When the user types `/graphify`, invoke the `skill` tool with `skill: "graphify"` before doing
 anything else.
 
-Rules:
+Rules (apply only when graphify-out/graph.json exists):
 
 - For codebase questions, first run `npm run graphify -- query "<question>"` when
   graphify-out/graph.json exists. For label-based searches, always use `npm run graphify -- query`
@@ -136,7 +139,7 @@ Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica
 
 ### Architecture
 
-- **95 checks** en **13 componentes**: dashboard-ws, codegraph, ml-embeddings, engram, mcp, session,
+- **95 checks** en **21 componentes**: dashboard-ws, codegraph, ml-embeddings, engram, mcp, session,
   hooks, configs, tool-configs, security, governance, secret-scanner, cli-guard.
 - **6 modos**: health, rebuild, report, autoheal, continuous, all.
 - **Pipeline integrado**: corre `-Action autoheal -Quiet` con `lazy: true` al inicio de sesión (no
@@ -147,7 +150,7 @@ Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica
 
 | Action     | Command                                  | Description                      |
 | ---------- | ---------------------------------------- | -------------------------------- |
-| health     | `-Action health`                         | 95 checks, 13 componentes        |
+| health     | `-Action health`                         | 95 checks, 21 componentes        |
 | rebuild    | `-Action rebuild`                        | health + rebuild ML/RAG indices  |
 | autoheal   | `-Action autoheal`                       | health + restart procesos caídos |
 | report     | `-Action report -OutputFile status.json` | JSON export                      |
@@ -212,7 +215,7 @@ npm run scan:secrets -- --scan . --json        # output JSON
   secretlint. Verificar con `npx lefthook validate`.
 - **Watchtower**: componente `secret-scanner` en `src/core/maintenance-watchtower.ts`
   (`checkSecretScanner` — valida módulo, CLI, config y tests). Se ejecuta con `-Action health` (95
-  checks, 13 componentes). Verificado 95/95 PASS.
+  checks, 21 componentes). Verificado 95/95 PASS.
 - **Routing de subagentes**: `config/subagent-mapping.json` registra las skills absorbidas por rol:
   - **DEV**: DevSecOps (devsecops-scanning, secret-scanning gitleaks, secrets CI/CD, SBOM,
     dependency-confusion, supply-chain CI/CD)
@@ -598,8 +601,8 @@ de tokens, reglas de ruteo y session scoring.
   "type": "SQLite (WAL mode, FK ON)",
   "path": ".runtime/gentle-vanguard.db",
   "manager": "DatabaseManager (singleton)",
-  "tables": 12,
-  "migrations": 3,
+  "tables": 23,
+  "migrations": 7,
   "purpose": "Operational database — all stack operational data",
   "autoInit": true,
   "autoPrune": true,
