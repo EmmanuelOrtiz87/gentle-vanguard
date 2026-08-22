@@ -7,7 +7,7 @@
  * watchtower can surface the component status. Non-blocking and idempotent.
  *
  * Usage:
- *   npx tsx src/web-crawler-init.ts [--quiet]
+ *   npx tsx src/web/web-crawler-init.ts [--quiet]
  */
 
 import { mkdirSync, writeFileSync } from 'fs';

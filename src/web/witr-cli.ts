@@ -3,14 +3,14 @@
  * witr-cli.ts — Command-line interface for the witr wrapper.
  *
  * Usage:
- *   npx tsx src/witr-cli.ts process <pid>
- *   npx tsx src/witr-cli.ts pid <pid>
- *   npx tsx src/witr-cli.ts port <port>
- *   npx tsx src/witr-cli.ts file <path>
- *   npx tsx src/witr-cli.ts container <name>
- *   npx tsx src/witr-cli.ts install
- *   npx tsx src/witr-cli.ts status
- *   npx tsx src/witr-cli.ts --help
+ *   npx tsx src/web/witr-cli.ts process <pid>
+ *   npx tsx src/web/witr-cli.ts pid <pid>
+ *   npx tsx src/web/witr-cli.ts port <port>
+ *   npx tsx src/web/witr-cli.ts file <path>
+ *   npx tsx src/web/witr-cli.ts container <name>
+ *   npx tsx src/web/witr-cli.ts install
+ *   npx tsx src/web/witr-cli.ts status
+ *   npx tsx src/web/witr-cli.ts --help
  *
  * Flags:
  *   --short   print only the causal chain (name -> name -> name)
@@ -52,12 +52,12 @@ function printSummary(chain: ProcessChain | FileChain | ContainerChain): void {
 
 function usage(): void {
   console.log(`witr v${WITR_VERSION} — why is this running?
-  npx tsx src/witr-cli.ts process <pid>
-  npx tsx src/witr-cli.ts port <port>
-  npx tsx src/witr-cli.ts file <path>
-  npx tsx src/witr-cli.ts container <name>
-  npx tsx src/witr-cli.ts install
-  npx tsx src/witr-cli.ts status`);
+  npx tsx src/web/witr-cli.ts process <pid>
+  npx tsx src/web/witr-cli.ts port <port>
+  npx tsx src/web/witr-cli.ts file <path>
+  npx tsx src/web/witr-cli.ts container <name>
+  npx tsx src/web/witr-cli.ts install
+  npx tsx src/web/witr-cli.ts status`);
 }
 
 async function main() {

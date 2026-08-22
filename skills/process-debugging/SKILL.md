@@ -48,21 +48,21 @@ sensitive env vars before anything reaches logs or reports.
 | Trace a process by PID    | `npm run process:trace -- <pid>`               |
 | Trace what owns a port    | `npm run port:trace -- <port>`                 |
 | Trace what holds a file   | `npm run file:trace -- <path>`                 |
-| Trace a container         | `npx tsx src/witr-cli.ts container <name>`     |
-| Install the witr binary   | `npx tsx src/witr-cli.ts install`              |
-| Check witr availability   | `npx tsx src/witr-cli.ts status`               |
+| Trace a container         | `npx tsx src/web/witr-cli.ts container <name>`     |
+| Install the witr binary   | `npx tsx src/web/witr-cli.ts install`              |
+| Check witr availability   | `npx tsx src/web/witr-cli.ts status`               |
 | Causal chain only (short) | `npm run port:trace -- 8080 --short`           |
 | Machine-readable JSON     | `npm run port:trace -- 8080` (default is JSON) |
 
 Direct invocations are equivalent:
 
 ```bash
-npx tsx src/witr-cli.ts process 1234
-npx tsx src/witr-cli.ts port 8080
-npx tsx src/witr-cli.ts file /var/lib/dpkg/lock
-npx tsx src/witr-cli.ts container redis
-npx tsx src/witr-cli.ts install
-npx tsx src/witr-cli.ts status
+npx tsx src/web/witr-cli.ts process 1234
+npx tsx src/web/witr-cli.ts port 8080
+npx tsx src/web/witr-cli.ts file /var/lib/dpkg/lock
+npx tsx src/web/witr-cli.ts container redis
+npx tsx src/web/witr-cli.ts install
+npx tsx src/web/witr-cli.ts status
 ```
 
 ## How to Read Causal Chains
@@ -131,8 +131,8 @@ won't start", "file locked". Diagnose _who owns the resource_ before guessing at
 
 ## Resources
 
-- `src/witr-wrapper.ts` — typed TS wrapper (`witr.traceProcess/Port/File/Container`)
-- `src/witr-cli.ts` — CLI front-end
+- `src/web/witr-wrapper.ts` — typed TS wrapper (`witr.traceProcess/Port/File/Container`)
+- `src/web/witr-cli.ts` — CLI front-end
 - `scripts/utilities/maintenance/witr-installer.ps1` — binary installer
 - `src/core/maintenance-watchtower.ts` — automatic FAIL/WARN → port trace integration
 - `.runtime/tools/witr/witr[.exe]` — installed binary location

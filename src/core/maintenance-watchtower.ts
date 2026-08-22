@@ -10,7 +10,7 @@ import {
   getHttpServerTimeouts,
   getExternalApiTimeouts,
 } from './timeout-config';
-import { witr, ensureWitrInstalled } from '../witr-wrapper';
+import { witr, ensureWitrInstalled } from '../web/witr-wrapper';
 
 const ROOT = resolve(process.cwd());
 const RUNTIME_DIR = join(ROOT, '.runtime');

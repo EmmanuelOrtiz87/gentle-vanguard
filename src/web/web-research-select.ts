@@ -16,9 +16,9 @@
  * only results that actually match the query's intent survive the grade.
  *
  * Usage:
- *   npx tsx src/web-research-select.ts --query "typescript strict mode best practices" --limit 5
- *   npx tsx src/web-research-select.ts --query "gdpr breach notification" --limit 10 --threshold 0.5
- *   npx tsx src/web-research-select.ts --query "customer retention playbook" --deep --deep-limit 3
+ *   npx tsx src/web/web-research-select.ts --query "typescript strict mode best practices" --limit 5
+ *   npx tsx src/web/web-research-select.ts --query "gdpr breach notification" --limit 10 --threshold 0.5
+ *   npx tsx src/web/web-research-select.ts --query "customer retention playbook" --deep --deep-limit 3
  *
  * Output (JSON):
  *   { query, mode, searchCount, gradedCount, relevantCount, verdict,
@@ -30,7 +30,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { createWebCrawler } from './web-crawler.js';
-import { gradeRetrieval } from './retrieval/retrieval-grader.js';
+import { gradeRetrieval } from '../retrieval/retrieval-grader.js';
 
 const ROOT = resolve(process.cwd());
 const OUTPUT_DIR = join(ROOT, '.session', 'web-research');

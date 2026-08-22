@@ -8,21 +8,21 @@
  * binary, auto-installs it on first use, and exposes typed query methods.
  *
  * Usage:
- *   import { witr } from './witr-wrapper.js';
+ *   import { witr } from './web/witr-wrapper.js';
  *   const chain = await witr.traceProcess(1234);
  *   const portChain = await witr.tracePort(8080);
  *   const fileChain = await witr.traceFile('/var/lib/dpkg/lock');
  *   const containerChain = await witr.traceContainer('redis');
  *
  * CLI:
- *   npx tsx src/witr-cli.ts process <pid>
- *   npx tsx src/witr-cli.ts port <port>
+ *   npx tsx src/web/witr-cli.ts process <pid>
+ *   npx tsx src/web/witr-cli.ts port <port>
  */
 
 import { join } from 'path';
 import { existsSync } from 'fs';
-import { runSync } from './core/run-command.js';
-import { ROOT } from './core/repo-root';
+import { runSync } from '../core/run-command.js';
+import { ROOT } from '../core/repo-root';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

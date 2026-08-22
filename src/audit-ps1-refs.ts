@@ -28,7 +28,7 @@ const LEGACY_FALLBACK_FILES = new Set([
   'src/knowledge-base-autoinit.ts',
   'src/knowledge-base-init.ts',
   'src/tokens/token-usage-notifier.ts',
-  'src/witr-wrapper.ts',
+  'src/web/witr-wrapper.ts',
   'src/infrastructure/normative-audit-pipeline.ts',
   'src/karpathy-enforcer.ts',
   'src/orchestrate-auto-fix.ts',

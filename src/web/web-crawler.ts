@@ -14,20 +14,20 @@
  * Nexus usage logging for cost tracking.
  *
  * Usage:
- *   npx tsx src/web-crawler-cli.ts search --query "firecrawl api"
- *   npx tsx src/web-crawler-cli.ts scrape --url https://example.com
- *   npx tsx src/web-crawler-cli.ts crawl --url https://example.com --limit 5
- *   npx tsx src/web-crawler-cli.ts map --url https://example.com
- *   npx tsx src/web-crawler-cli.ts health
+ *   npx tsx src/web/web-crawler-cli.ts search --query "firecrawl api"
+ *   npx tsx src/web/web-crawler-cli.ts scrape --url https://example.com
+ *   npx tsx src/web/web-crawler-cli.ts crawl --url https://example.com --limit 5
+ *   npx tsx src/web/web-crawler-cli.ts map --url https://example.com
+ *   npx tsx src/web/web-crawler-cli.ts health
  */
 
 import { createHash } from 'crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { z } from 'zod';
-import { compressStructural } from './compression/structural-compression.js';
+import { compressStructural } from '../compression/structural-compression.js';
 // Note: .js extension is used for ESM compatibility; TypeScript resolves .ts files
-import { db as getDb } from './database/db.js';
+import { db as getDb } from '../database/db.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

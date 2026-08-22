@@ -2,15 +2,15 @@
 /**
  * Web Crawler CLI — command-line interface for the Firecrawl wrapper.
  *
- * Wraps src/web-crawler.ts with convenient commands for search, scrape,
+ * Wraps src/web/web-crawler.ts with convenient commands for search, scrape,
  * crawl, map and health. Results are printed as JSON for machine consumption.
  *
  * Usage:
- *   npx tsx src/web-crawler-cli.ts search --query "..." [--limit 5]
- *   npx tsx src/web-crawler-cli.ts scrape --url https://example.com [--formats markdown]
- *   npx tsx src/web-crawler-cli.ts crawl --url https://example.com [--limit 10]
- *   npx tsx src/web-crawler-cli.ts map --url https://example.com
- *   npx tsx src/web-crawler-cli.ts health
+ *   npx tsx src/web/web-crawler-cli.ts search --query "..." [--limit 5]
+ *   npx tsx src/web/web-crawler-cli.ts scrape --url https://example.com [--formats markdown]
+ *   npx tsx src/web/web-crawler-cli.ts crawl --url https://example.com [--limit 10]
+ *   npx tsx src/web/web-crawler-cli.ts map --url https://example.com
+ *   npx tsx src/web/web-crawler-cli.ts health
  */
 
 import { pathToFileURL } from 'url';
@@ -41,7 +41,7 @@ function printUsage(): void {
 Firecrawl Web Crawler CLI
 
 Usage:
-  npx tsx src/web-crawler-cli.ts <command> [options]
+  npx tsx src/web/web-crawler-cli.ts <command> [options]
 
 Commands:
   search <--query "..." [--limit N]>   Search web + fetch full page content
@@ -60,11 +60,11 @@ Options:
   --action "json"      Single browser action, e.g. '{"type":"wait","milliseconds":2000}'
 
 Examples:
-  npx tsx src/web-crawler-cli.ts search --query "firecrawl api" --limit 5
-  npx tsx src/web-crawler-cli.ts scrape --url https://example.com
-  npx tsx src/web-crawler-cli.ts crawl --url https://docs.firecrawl.dev --limit 10
-  npx tsx src/web-crawler-cli.ts map --url https://example.com
-  npx tsx src/web-crawler-cli.ts health
+  npx tsx src/web/web-crawler-cli.ts search --query "firecrawl api" --limit 5
+  npx tsx src/web/web-crawler-cli.ts scrape --url https://example.com
+  npx tsx src/web/web-crawler-cli.ts crawl --url https://docs.firecrawl.dev --limit 10
+  npx tsx src/web/web-crawler-cli.ts map --url https://example.com
+  npx tsx src/web/web-crawler-cli.ts health
 `);
 }
 

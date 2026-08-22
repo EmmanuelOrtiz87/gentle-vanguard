@@ -321,7 +321,7 @@ Usuario: "Research sobre últimas tendencias de AI"
 Asistente: "Buscando información..." → Abre web-research.html
 ```
 
-**Tiempo estimado**: 2 horas **Complejidad**: Media **Dependencias**: src/web-research-select.ts (ya
+**Tiempo estimado**: 2 horas **Complejidad**: Media **Dependencias**: src/web/web-research-select.ts (ya
 existe)
 
 ---

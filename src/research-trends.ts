@@ -761,7 +761,7 @@ function parseRedditRss(xml: string): RssEntry[] {
 
 async function importWebCrawler(): Promise<WebCrawlerModule | null> {
   try {
-    const mod = await import('./web-crawler.js');
+    const mod = await import('./web/web-crawler.js');
     return mod as WebCrawlerModule;
   } catch {
     return null;

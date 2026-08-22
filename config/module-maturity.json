@@ -267,7 +267,7 @@
       "activated": true,
       "risk": "medium",
       "owner": "orchestrator",
-      "script": "src/web-crawler.ts",
+      "script": "src/web/web-crawler.ts",
       "description": "Firecrawl-first web acquisition with zero-config fallback chain (Jina Reader scrape, DuckDuckGo/Bing search), SHA-256 cache and structural compression.",
       "activationCriteria": [
         { "check": "config-valid", "required": true },

@@ -961,7 +961,7 @@
         "id": "web-crawler-init",
         "enabled": true,
         "lazy": true,
-        "script": "src/web-crawler-init.ts",
+        "script": "src/web/web-crawler-init.ts",
         "args": "--quiet",
         "required": false,
         "description": "Initialize Firecrawl web crawler â€” validate config + API key, snapshot health to .runtime/web-crawler-health.json (web research)"
@@ -979,7 +979,7 @@
         "id": "web-research-adhoc",
         "enabled": true,
         "lazy": true,
-        "script": "src/web-research-select.ts",
+        "script": "src/web/web-research-select.ts",
         "args": "--query \"AI agent orchestration and LLM observability best practices\" --limit 3 --threshold 0.3",
         "required": false,
         "description": "M5 selective web acquisition: search (Firecrawl→DDG→Bing) → BM25 grade → filter → persist to .session/web-research/"

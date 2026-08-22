@@ -69,7 +69,7 @@ context.
 Direct invocations are equivalent:
 
 ```bash
-npx tsx src/web-crawler-cli.ts search --query "firecrawl api" --limit 5
+npx tsx src/web/web-crawler-cli.ts search --query "firecrawl api" --limit 5
 npx tsx src/research-trends-cli.ts fetch --timeframe 7d --sources github,hackernews
 npx tsx src/research-trends-cli.ts themes --query "typescript OR rust"
 ```
@@ -201,8 +201,8 @@ Combine live API docs with an offline contract/spec for a complete answer.
 
 ## Resources
 
-- `src/web-crawler.ts` — core Firecrawl API client (`WebCrawlerClient` class)
-- `src/web-crawler-cli.ts` — Firecrawl CLI wrapper
+- `src/web/web-crawler.ts` — core Firecrawl API client (`WebCrawlerClient` class)
+- `src/web/web-crawler-cli.ts` — Firecrawl CLI wrapper
 - `src/research-trends.ts` — Last30Days aggregation engine
 - `src/research-trends-cli.ts` — trends CLI wrapper
 - `config/web-crawler.json` — Firecrawl configuration

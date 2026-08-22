@@ -458,7 +458,7 @@ Tests: `tests/unit/retrieval-grader.test.ts`.
 Herramientas de capacidad absorbidas como TypeScript nativo — operativas desde la CLI, sin
 dependencias de servicios externos para su funcionamiento core.
 
-### Web Crawler dual-provider (`src/web-crawler.ts`)
+### Web Crawler dual-provider (`src/web/web-crawler.ts`)
 
 Motor de adquisición de contenido web con **proveedores en cadena**:
 
@@ -478,14 +478,14 @@ Motor de adquisición de contenido web con **proveedores en cadena**:
   fetch de Node — usar el endpoint RSS.
 
 ```bash
-npx tsx src/web-crawler-cli.ts search --query "typescript" --limit 5
-npx tsx src/web-crawler-cli.ts scrape --url https://example.com
-npx tsx src/web-crawler-cli.ts health
+npx tsx src/web/web-crawler-cli.ts search --query "typescript" --limit 5
+npx tsx src/web/web-crawler-cli.ts scrape --url https://example.com
+npx tsx src/web/web-crawler-cli.ts health
 ```
 
 Tests: `tests/unit/web-crawler.test.ts` (14).
 
-### Web Research Select (`src/web-research-select.ts`)
+### Web Research Select (`src/web/web-research-select.ts`)
 
 Pipeline de **búsqueda → selección por relevancia** para research: busca con el web-crawler (cadena
 de proveedores), gradea los resultados con BM25 (retrieval-grader, patrón CRAG) y persiste el mejor
@@ -503,15 +503,15 @@ npm run web:select -- --query "..." --deep-limit 3                      # top-N 
 - `averageScore` en el output; resultados ordenados desc. Verdict `relevant` si avg ≥ umbral.
 - Tests: `tests/unit/web-crawler.test.ts` (14, incluye DDG redirect decode).
 
-### witr trace (`src/witr-wrapper.ts` + `src/witr-cli.ts`)
+### witr trace (`src/web/witr-wrapper.ts` + `src/web/witr-cli.ts`)
 
 Wrapper TS del binario [witr](https://github.com/pranshuparmar/witr) — "Why Is This Running?". Traza
 procesos/puertos/archivos/contenedores hasta su cadena causal, con auto-install y redacción de
 secrets del entorno (`***REDACTED***` para claves).
 
 ```bash
-npx tsx src/witr-cli.ts process <pid>
-npx tsx src/witr-cli.ts port <port>
+npx tsx src/web/witr-cli.ts process <pid>
+npx tsx src/web/witr-cli.ts port <port>
 ```
 
 Integrado en la watchtower para trazar la cadena causal de componentes con FAIL/WARN. Tests:
