@@ -43,6 +43,9 @@ importers:
       '@types/glob':
         specifier: ^9.0.0
         version: 9.0.0
+      '@types/js-yaml':
+        specifier: ^4.0.9
+        version: 4.0.9
       '@types/node':
         specifier: ^25.9.1
         version: 25.9.5
@@ -67,6 +70,9 @@ importers:
       eslint-plugin-security:
         specifier: ^4.0.1
         version: 4.0.1
+      js-yaml:
+        specifier: ^5.2.3
+        version: 5.2.3
       lefthook:
         specifier: ^2.1.8
         version: 2.1.10
@@ -597,6 +603,9 @@ packages:
 
   '@types/istanbul-lib-coverage@2.0.6':
     resolution: {integrity: sha512-2QF/t/auWm0lsy8XtKVPG19v3sSOQlJe/YHZgfjb/KBBHOGSV+J2q/S671rcq9uTBrLAXmZpqJiaQbMT+zNU1w==}
+
+  '@types/js-yaml@4.0.9':
+    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -2553,6 +2562,8 @@ snapshots:
       glob: 13.0.6
 
   '@types/istanbul-lib-coverage@2.0.6': {}
+
+  '@types/js-yaml@4.0.9': {}
 
   '@types/json-schema@7.0.15': {}
 
