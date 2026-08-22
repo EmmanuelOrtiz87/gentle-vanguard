@@ -4,12 +4,16 @@
 
 ### Added
 
-- **src/ por dominios (F2.2)**: `src/tokens/` (13 archivos), `src/retrieval/` (3),
-  `src/compression/` (3) — 58+ referencias actualizadas (scripts npm, configs de pipeline, hooks,
+- **src/ por dominios (F2.2) — 8 dominios**: `src/tokens/` (13), `src/retrieval/` (3),
+  `src/compression/` (3), `src/web/` (6), `src/research/` (2), `src/design/` (3), `src/humanize/`
+  (2), `src/planning/` (3) — ~120 referencias actualizadas (scripts npm, configs de pipeline, hooks,
   docs, tests), grafo regenerado tras cada move.
 - **Sprint A comercial 100%** y **Sprint B drafts** (pricing model con benchmarks, 3 borradores
   legales, landing) en GENTLE_VANGUARD_MASTER/11-SPRINT-B-SELL-ENABLE/.
-- **Tipado batch 2**: 65 `any` eliminados en 17 módulos (218→128, -41%). Fix ESM preexistente en
+- **Skills sin duplicación (F4.3)**: 60 duplicadas resueltas (43+7 merges, 60 stubs DEPRECATED, cero
+  borrados; 31 descripciones recuperadas del bug de YAML multilinea del migrador); `skills/INDEX.md`
+  (263 filas) generado por `npm run skills:index`.
+- **Tipado**: 165 `any` eliminados en 45 módulos (218→35, **-84%**). Fix ESM preexistente en
   `model-fallback-runtime.ts` (crasheaba al ejecutarse directo).
 
 - **Graphify nativo**: `src/cli/graphify-build.ts` construye el knowledge graph desde cero (AST

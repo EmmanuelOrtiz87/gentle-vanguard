@@ -8,6 +8,26 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ## ⚡ Registro de progreso
 
+### Ejecutado — Sesión 4 (2026-08-22, dominios ×8 + tipado -84% + skills)
+
+- ✅ **F2.2: 8 dominios completados** (35 archivos fuera de la raíz): `src/tokens/` (13),
+  `src/retrieval/` (3), `src/compression/` (3), `src/web/` (6), `src/research/` (2), `src/design/`
+  (3), `src/humanize/` (2), `src/planning/` (3). ~120 referencias reescritas (scripts npm, configs
+  pipeline, hooks, rutas por segmentos, docs, tests); grafo regenerado; tests por dominio
+  verificados (web 14/14, witr 10/10, domains 53/53, retrieval 5/5). Quedan ~250 archivos raíz para
+  ~10 dominios más (security, orchestration, ops, content…).
+- ✅ **F2.4 batch 3: 218 → 35 `any` (-84%)** — 100 eliminados en 28 archivos (interfaces
+  SecurityIssue, filas SQLite ×4, skill-loader re-tipado con paridad de 175 skills, trust-layer
+  contracts, global tipado). Los 35 restantes viven en archivos pendientes de su propia migración de
+  dominio.
+- ✅ **F4.3 completo — skills sin duplicación**: 60 duplicadas resueltas (43 merges de frontmatter —
+  se recuperaron 31 descripciones que el migrador perdía por un bug de YAML multilinea —, 7 merges
+  de cuerpo, 60 stubs DEPRECATED en .opencode, cero borrados); `skills/INDEX.md` regenerado (263
+  filas) por `src/skills-index-generator.ts` + `npm run skills:index`; 11 links rotos `[eferences/`
+  reparados.
+- Commits sesión 4: `7052c976` (web), `8b6dd659` (research/design/humanize/planning), `7b5d5d6a`
+  (any batch 3 + parte de skills), `b9a3e2d8` (skills F4.3 + index).
+
 ### Ejecutado — Sesión 3 (2026-08-22, dominios + Sprint A/B comercial)
 
 - ✅ **F2.2 iniciado de verdad — 3 dominios movidos** con patrón replicable (git mv → fix imports →
