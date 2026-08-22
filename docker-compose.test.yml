@@ -9,9 +9,8 @@ services:
     working_dir: /workspace
     command:
       sh -c "npm install -g pnpm && pnpm install --ignore-scripts && (npx tsx
-      apps/web-dashboard/server/websocket-server.ts > /tmp/ws-server.log 2>&1 &) &&
-      for i in $$(seq 1 30); do nc -z localhost 8080 && break || sleep 1; done; pnpm
-      vitest run tests/integration/ --reporter verbose"
+      apps/web-dashboard/server/websocket-server.ts > /tmp/ws-server.log 2>&1 &) && for i in $$(seq
+      1 30); do nc -z localhost 8080 && break || sleep 1; done; npx tsx --test tests/integration/"
     networks:
       - gv-test-network
 

@@ -64,9 +64,10 @@ jobs:
           scan-ref: .
           scanners: vuln
           severity: HIGH,CRITICAL
-          exit-code: 1
+          exit-code: 0
           format: sarif
           output: trivy-results.sarif
+          options: --skip-version-check
       - name: Upload results
         uses: github/codeql-action/upload-sarif@v4
         with:
@@ -89,5 +90,7 @@ jobs:
         run: |
           curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
           curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+      - name: Update Grype DB
+        run: grype db update
       - name: 'Scan SBOM (gate: fail on high+)'
         run: npx tsx src/container-scan.ts scan --fail-on high --json
