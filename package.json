@@ -182,7 +182,7 @@
     "semantic-search": "npx tsx src/retrieval/semantic-search.ts",
     "workload-guard": "npx tsx src/workload-guard.ts",
     "self-diagnosis": "npx tsx src/self-diagnosis.ts",
-    "optimize:output": "npx tsx src/output-compression.ts",
+    "optimize:output": "npx tsx src/compression/output-compression.ts",
     "optimize:chat": "npx tsx src/chat-level-enforcer.ts",
     "optimize:pipeline": "npx tsx src/tokens/token-optimization-orchestrator.ts",
     "optimize:stats": "npx tsx src/tokens/token-optimization-orchestrator.ts --stats",

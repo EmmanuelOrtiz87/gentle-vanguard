@@ -10,16 +10,16 @@
  * - Token-budget aware: reads daily budget, adapts compression aggressiveness
  *
  * Usage:
- *   npx tsx src/prompt-compression.ts --input "long prompt text..." --skill react-19
- *   npx tsx src/prompt-compression.ts --input "..." --skill security-skill --max-tokens 2000
- *   npx tsx src/prompt-compression.ts --file prompt.txt --skill testing-skill
- *   npx tsx src/prompt-compression.ts --stats          # show compression metrics
+ *   npx tsx src/compression/prompt-compression.ts --input "long prompt text..." --skill react-19
+ *   npx tsx src/compression/prompt-compression.ts --input "..." --skill security-skill --max-tokens 2000
+ *   npx tsx src/compression/prompt-compression.ts --file prompt.txt --skill testing-skill
+ *   npx tsx src/compression/prompt-compression.ts --stats          # show compression metrics
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { getTokenUsage } from './tokens/token-usage-reader.js';
+import { getTokenUsage } from '../tokens/token-usage-reader.js';
 import { compressStructural } from './structural-compression.js';
 
 // ---- Types ----
@@ -590,10 +590,12 @@ function main(): void {
     if (!stdin) {
       console.error('Usage:');
       console.error(
-        '  npx tsx src/prompt-compression.ts --input "prompt text" [--skill <name>] [--json]',
+        '  npx tsx src/compression/prompt-compression.ts --input "prompt text" [--skill <name>] [--json]',
       );
-      console.error('  npx tsx src/prompt-compression.ts --file prompt.txt [--skill <name>]');
-      console.error('  npx tsx src/prompt-compression.ts --stats');
+      console.error(
+        '  npx tsx src/compression/prompt-compression.ts --file prompt.txt [--skill <name>]',
+      );
+      console.error('  npx tsx src/compression/prompt-compression.ts --stats');
       console.error('');
       console.error('Options:');
       console.error('  --input TEXT     Prompt text to compress');

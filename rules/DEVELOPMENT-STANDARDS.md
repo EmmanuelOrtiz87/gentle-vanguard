@@ -180,7 +180,7 @@ Every config JSON MUST include:
 ### Token Efficiency
 
 - **Context packing**: Use `src/handoff-compress.ts`
-  <!-- REF-OBSOLETA: src/handoff-compress.ts no existe; ver src/structural-compression.ts y scripts/utilities/utils/UTILITIES/handoff-compress.sh -->
+  <!-- REF-OBSOLETA: src/handoff-compress.ts no existe; ver src/compression/structural-compression.ts y scripts/utilities/utils/UTILITIES/handoff-compress.sh -->
   for large sessions
 
 <!-- REF-OBSOLETA: src/handoff-compress.ts no existe (ruta migrada o eliminada) -->

@@ -25,7 +25,7 @@
       "name": "structural-compression",
       "threshold": 60,
       "tests": ["tests/unit/structural-compression.test.ts"],
-      "source": ["src/structural-compression.ts"]
+      "source": ["src/compression/structural-compression.ts"]
     },
     {
       "name": "security-orchestrator",

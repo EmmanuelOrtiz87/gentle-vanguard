@@ -506,7 +506,7 @@
     "orchestratorConfig": "config/orchestrator.json",
     "tokenBudgetGuard": "config/token-budget-guard.json",
     "responseCache": "src/response-cache.ts",
-    "promptCompression": "src/prompt-compression.ts",
+    "promptCompression": "src/compression/prompt-compression.ts",
     "preProcessInput": "src/pre-process-input.ts"
   }
 }

@@ -227,7 +227,7 @@ Valid types: `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`, `test`, `ci`
 - Temperature: 0.3 (focused) — overridden per agent profile
 - Max tokens: 4500 (default agent)
 - Context compression: `src/handoff-compress.ts`
-  <!-- REF-OBSOLETA: src/handoff-compress.ts no existe; ver scripts/utilities/utils/UTILITIES/handoff-compress.sh y src/structural-compression.ts -->
+  <!-- REF-OBSOLETA: src/handoff-compress.ts no existe; ver scripts/utilities/utils/UTILITIES/handoff-compress.sh y src/compression/structural-compression.ts -->
   for agent-to-agent handoffs
 
 <!-- REF-OBSOLETA: src/handoff-compress.ts no existe (ruta migrada o eliminada) -->

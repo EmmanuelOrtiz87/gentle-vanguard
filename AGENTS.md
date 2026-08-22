@@ -394,7 +394,7 @@ python research/rlhf-dataset-search/search_datasets.py --source all --query "rew
 
 Estrategias absorbidas de repos externos como TypeScript nativo (sin sidecars Python/Rust/Go):
 
-### Structural Compression (`src/structural-compression.ts`)
+### Structural Compression (`src/compression/structural-compression.ts`)
 
 Absorbe 5 estrategias de compresión de Headroom en TS puro, complementando la compresión extractiva
 (`prompt-compression.ts` / `output-compression.ts`):

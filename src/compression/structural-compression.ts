@@ -16,9 +16,9 @@
  * Python/Rust sidecar. Config-driven from config/structural-compression.json.
  *
  * Usage:
- *   npx tsx src/structural-compression.ts --input "..." [--query "..."]
- *   npx tsx src/structural-compression.ts --file response.json
- *   npx tsx src/structural-compression.ts --stats
+ *   npx tsx src/compression/structural-compression.ts --input "..." [--query "..."]
+ *   npx tsx src/compression/structural-compression.ts --file response.json
+ *   npx tsx src/compression/structural-compression.ts --stats
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
@@ -669,7 +669,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   if (file) input = readFileSync(file, 'utf-8');
   if (!input) {
     console.error(
-      'Usage: npx tsx src/structural-compression.ts --input "..." [--query "..."] [--file path] [--stats]',
+      'Usage: npx tsx src/compression/structural-compression.ts --input "..." [--query "..."] [--file path] [--stats]',
     );
     process.exit(1);
   }

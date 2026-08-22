@@ -25,7 +25,7 @@ import { createHash } from 'crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { z } from 'zod';
-import { compressStructural } from './structural-compression.js';
+import { compressStructural } from './compression/structural-compression.js';
 // Note: .js extension is used for ESM compatibility; TypeScript resolves .ts files
 import { db as getDb } from './database/db.js';
 

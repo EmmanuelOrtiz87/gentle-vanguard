@@ -8,16 +8,16 @@
  * Token budget awareness
  *
  * Usage:
- *   npx tsx src/output-compression.ts --input "long response text..." --profile ultra
- *   npx tsx src/output-compression.ts --input "..." --profile simple --max-lines 10
- *   npx tsx src/output-compression.ts --file response.txt --profile ultra
- *   npx tsx src/output-compression.ts --stats
+ *   npx tsx src/compression/output-compression.ts --input "long response text..." --profile ultra
+ *   npx tsx src/compression/output-compression.ts --input "..." --profile simple --max-lines 10
+ *   npx tsx src/compression/output-compression.ts --file response.txt --profile ultra
+ *   npx tsx src/compression/output-compression.ts --stats
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { getTokenUsage } from './tokens/token-usage-reader.js';
+import { getTokenUsage } from '../tokens/token-usage-reader.js';
 import { compressStructural } from './structural-compression.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -731,9 +731,9 @@ function printUsage(): void {
 Output Compression Engine
 
 Usage:
-  npx tsx src/output-compression.ts --input "response text" [--profile <name>] [--options]
-  npx tsx src/output-compression.ts --file response.txt [--profile <name>]
-  npx tsx src/output-compression.ts --stats
+  npx tsx src/compression/output-compression.ts --input "response text" [--profile <name>] [--options]
+  npx tsx src/compression/output-compression.ts --file response.txt [--profile <name>]
+  npx tsx src/compression/output-compression.ts --stats
 
 Profiles:
   ultra    - Aggressive compression (10 lines, 500 tokens max)
@@ -753,8 +753,8 @@ Options:
   --quiet               Suppress extra output
 
 Examples:
-  npx tsx src/output-compression.ts --input "Hello world" --profile ultra
-  npx tsx src/output-compression.ts --file large-response.md --profile simple --max-lines 5
+  npx tsx src/compression/output-compression.ts --input "Hello world" --profile ultra
+  npx tsx src/compression/output-compression.ts --file large-response.md --profile simple --max-lines 5
 `);
 }
 

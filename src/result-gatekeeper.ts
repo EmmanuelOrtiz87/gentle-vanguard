@@ -31,8 +31,19 @@ import { createRequire } from 'module';
 const _require = createRequire(import.meta.url);
 
 // Lazy db import for SQLite dual-write
-let _db: any = null;
-function getDb(): any {
+
+/** Minimal DatabaseManager surface used for contract-result dual-write. */
+interface DbManagerLike {
+  insertContractResult(
+    phase: string,
+    status: string,
+    sessionId: string | undefined,
+    detailsJson: string,
+  ): unknown;
+}
+
+let _db: DbManagerLike | null = null;
+function getDb(): DbManagerLike | null {
   if (!_db) {
     try {
       const mod = _require('../apps/web-dashboard/server/database/manager');

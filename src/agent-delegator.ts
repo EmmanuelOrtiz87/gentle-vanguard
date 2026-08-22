@@ -14,7 +14,7 @@ import { spawn } from 'child_process';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { writeFileSync } from 'fs';
-import { compressStructural, estimateTokens } from './structural-compression.js';
+import { compressStructural, estimateTokens } from './compression/structural-compression.js';
 
 interface AgentConfig {
   name: string;

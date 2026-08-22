@@ -25,11 +25,11 @@ import { pathToFileURL } from 'url';
 import {
   compressPrompt,
   CompressionResult as PromptCompressionResult,
-} from '../prompt-compression.js';
+} from '../compression/prompt-compression.js';
 import {
   compressOutput,
   CompressionResult as OutputCompressionResult,
-} from '../output-compression.js';
+} from '../compression/output-compression.js';
 import { enforceChatLevel, ChatLevelEnforcementResult, ChatLevel } from '../chat-level-enforcer.js';
 import { ResponseCache, generateCacheKey } from '../response-cache.js';
 
