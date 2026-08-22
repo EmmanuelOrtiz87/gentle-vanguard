@@ -23,7 +23,7 @@
  */
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync, copyFileSync, statSync, unlinkSync } from 'fs';
-import { resolve, dirname, basename, extname } from 'path';
+import { resolve, dirname, basename, extname, join } from 'path';
 import { createRequire } from 'module';
 import { runSync, runSyncShell } from './core/run-command.js';
 
@@ -292,11 +292,20 @@ function buildSEA(target: SEATarget, nodePath: string, skipBuild: boolean): Buil
     }
 
     // Find postject's cli.js (call via node directly — avoids .cmd argument issues)
+    // Resolution order: local node_modules → npm global prefix (any user/machine) → npx fallback.
     const postjectCandidates = [
       resolve(process.cwd(), 'node_modules', 'postject', 'dist', 'cli.js'),
-      'C:\\Users\\emman\\AppData\\Roaming\\npm\\node_modules\\postject\\dist\\cli.js',
-      'C:\\Users\\emman\\AppData\\Roaming\\npm\\node_modules\\@postject\\cli.js',
     ];
+    try {
+      const globalRoot = runSync('npm', ['root', '-g'], { timeout: 15000 });
+      const globalDir = globalRoot.stdout?.toString().trim();
+      if (globalDir) {
+        postjectCandidates.push(join(globalDir, 'postject', 'dist', 'cli.js'));
+        postjectCandidates.push(join(globalDir, '@postject', 'cli.js'));
+      }
+    } catch {
+      /* global root unavailable — local/npx paths still apply */
+    }
 
     let postjectArgs: [string, string[]] = ['postject', []];
     for (const cliPath of postjectCandidates) {
