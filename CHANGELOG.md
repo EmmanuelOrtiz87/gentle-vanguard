@@ -2,7 +2,18 @@
 
 ## [Unreleased]
 
-### Fixed (Fase 0 — plan de evolución `docs/plans/STACK-EVOLUTION-PLAN-2026.md`)
+### Added
+
+- **Graphify nativo**: `src/cli/graphify-build.ts` construye el knowledge graph desde cero (AST
+  TypeScript, dos pasadas, resolución de imports, comunidades por label propagation) —
+  `npm run graphify -- build|update .`. Grafo actual: 4.435 nodos / 8.500 edges. El workflow
+  graphify vuelve a estar ACTIVO (antes dependía de un snapshot externo inexistente).
+- **Cache de embeddings por skill**: `skill-embedder.ts` ahora escribe `.atl/ml-embeddings/` (419
+  archivos) — el directorio que la watchtower vigilaba sin que nadie lo generara.
+- **Umbral de cobertura 30→40%** (lines/functions/statements; branches 30) — baseline real medido:
+  62% agregado de src/.
+
+### Fixed (Fase 0/1 — plan de evolución `docs/plans/STACK-EVOLUTION-PLAN-2026.md`)
 
 - **Auto-update integrity**: `releases/latest-version.json` apuntaba a v3.5.0 (URL 404, `sha256`
   vacío). Regenerado contra el release real v3.8.2 con hash verificado del binario publicado.
@@ -17,6 +28,11 @@
   pseudo-SAST); workflows duplicados consolidados; matriz Node 22/24.
 - **Docs**: cifras caducadas corregidas (Nexus 23 tablas/7 migraciones, watchtower 95 checks/21
   componentes); onboarding reparado (`gv check`, setup TS).
+- **Watchtower 95/95**: componente security valida `renovate.json` (política single-bot); daemons
+  revivibles; ml-embeddings generado de raíz.
+- **Tipado**: singletons DB (`error-memory`, `token-tracker`, `event-sourcing`, `adaptive-router`)
+  tipados con `DatabaseManager`; rows de Nexus tipadas en `compare-tokens-sessions`; 16 `any`
+  eliminados (quedan 193, erradicación incremental F2.4).
 
 ## [3.8.2] — 2026-08-22
 

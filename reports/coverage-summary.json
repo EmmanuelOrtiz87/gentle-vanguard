@@ -1,6 +1,6 @@
 {
-  "duration": "16.0",
-  "testsPassed": true,
+  "duration": "13.5",
+  "testsPassed": false,
   "coverageProduced": true,
   "thresholds": {
     "lines": 30,
@@ -11,10 +11,10 @@
   "targets": [
     {
       "name": "src/ (aggregate)",
-      "statements": 61.9,
-      "lines": 61.9,
-      "functions": 62.6,
-      "branches": 62.1,
+      "statements": 62,
+      "lines": 62,
+      "functions": 62.9,
+      "branches": 62.7,
       "passed": true
     },
     {
@@ -27,18 +27,18 @@
     },
     {
       "name": "secret-scanner",
-      "statements": 94.4,
-      "lines": 94.4,
+      "statements": 94.3,
+      "lines": 94.3,
       "functions": 100,
       "branches": 62.2,
       "passed": true
     },
     {
       "name": "structural-compression",
-      "statements": 75.5,
-      "lines": 75.5,
-      "functions": 84.2,
-      "branches": 69.8,
+      "statements": 74.3,
+      "lines": 74.3,
+      "functions": 83.3,
+      "branches": 71.2,
       "passed": true
     },
     {

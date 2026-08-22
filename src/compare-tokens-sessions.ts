@@ -70,6 +70,23 @@ if (existsSync(nexusPath)) {
     console.log('=== DATOS HISTÓRICOS (NEXUS) ═══');
     console.log();
 
+    interface SessionTokenRow {
+      session_id: string;
+      total: number | null;
+      input: number | null;
+      output: number | null;
+      transactions: number;
+      date: string | null;
+    }
+
+    interface TokenTotalsRow {
+      sessions: number;
+      total_input: number | null;
+      total_output: number | null;
+      total_cache_read: number | null;
+      transactions: number;
+    }
+
     // Últimas 10 sesiones
     console.log('─ Últimas 10 sesiones ─');
     const recent = db
@@ -88,12 +105,12 @@ if (existsSync(nexusPath)) {
       LIMIT 10
     `,
       )
-      .all() as any[];
+      .all() as SessionTokenRow[];
 
     if (recent.length > 0) {
       console.log('Session                Total      Input      Output  TXNs  Date');
       console.log('─'.repeat(80));
-      recent.forEach((r: any) => {
+      recent.forEach((r) => {
         console.log(
           `${r.session_id.padEnd(20)} ` +
             `${(r.total || 0).toLocaleString().padStart(10)} ` +
@@ -134,12 +151,12 @@ if (existsSync(nexusPath)) {
       LIMIT 5
     `,
       )
-      .all() as any[];
+      .all() as SessionTokenRow[];
 
     if (heaviest.length > 0) {
       console.log('Session                Total      Input      Output  TXNs');
       console.log('─'.repeat(80));
-      heaviest.forEach((r: any) => {
+      heaviest.forEach((r) => {
         console.log(
           `${r.session_id.padEnd(20)} ` +
             `${(r.total || 0).toLocaleString().padStart(10)} ` +
@@ -164,17 +181,17 @@ if (existsSync(nexusPath)) {
       FROM token_transactions
     `,
       )
-      .get() as any;
+      .get() as TokenTotalsRow;
 
     console.log();
     console.log('=== TOTALES HISTÓRICOS ═══');
     console.log(`Total sesiones:      ${totals.sessions}`);
     console.log(`Total transacciones: ${totals.transactions}`);
     console.log(
-      `Total tokens:        ${(totals.total_input + totals.total_output).toLocaleString()}`,
+      `Total tokens:        ${((totals.total_input ?? 0) + (totals.total_output ?? 0)).toLocaleString()}`,
     );
-    console.log(`  - Input:           ${totals.total_input.toLocaleString()}`);
-    console.log(`  - Output:          ${totals.total_output.toLocaleString()}`);
+    console.log(`  - Input:           ${(totals.total_input ?? 0).toLocaleString()}`);
+    console.log(`  - Output:          ${(totals.total_output ?? 0).toLocaleString()}`);
     console.log(`  - Cache Read:      ${(totals.total_cache_read || 0).toLocaleString()}`);
 
     db.close();

@@ -1,12 +1,12 @@
 {
   "_comment": "TypeScript code coverage thresholds for CI gates",
   "version": "2.0.0",
-  "minimumCoverage": 30,
+  "minimumCoverage": 40,
   "thresholds": {
-    "lines": 30,
-    "functions": 30,
-    "branches": 25,
-    "statements": 30
+    "lines": 40,
+    "functions": 40,
+    "branches": 30,
+    "statements": 40
   },
   "coverageTargets": [
     {

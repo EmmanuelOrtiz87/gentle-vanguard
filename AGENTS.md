@@ -29,17 +29,16 @@ pipeline. Logs are pruned automatically after 7 days.
 
 ## graphify
 
-> **STATUS: INACTIVE (2026-08-22).** `graphify-out/graph.json` does not exist in this clone — it was
-> never committed (graphify-out/ is gitignored) and no builder exists in the codebase (the CLI only
-> reads/validates a snapshot; `update` cannot rebuild from scratch). Do NOT spend session time on
-> graphify commands until a native builder lands (STACK-EVOLUTION-PLAN F2 follow-up: port the graph
-> build into `src/cli/graphify.ts build`, then re-enable this section).
+Native knowledge graph at graphify-out/ (AST-built: file/function/class/method nodes,
+`contains`/`calls` edges, label-propagation communities). Built by `src/cli/graphify-build.ts` —
+deterministic, no LLM, no network.
 
 When the user types `/graphify`, invoke the `skill` tool with `skill: "graphify"` before doing
 anything else.
 
-Rules (apply only when graphify-out/graph.json exists):
+Rules:
 
+- If graphify-out/graph.json is missing, run `npm run graphify -- build` first (seconds, native).
 - For codebase questions, first run `npm run graphify -- query "<question>"` when
   graphify-out/graph.json exists. For label-based searches, always use `npm run graphify -- query`
   instead of `path`/`explain`.

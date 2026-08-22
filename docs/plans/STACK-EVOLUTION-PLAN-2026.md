@@ -8,7 +8,26 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ## ⚡ Registro de progreso
 
-### Ejecutado — 2026-08-22 (verificado: typecheck ✓ · eslint ✓ · full test suite 5/5 ✓ · vitest 52/52 ✓ · markdownlint ✓ · lefthook ✓ · dashboard build ✓)
+### Ejecutado — Sesión 2 (2026-08-22, "cero errores/warnings/inactivos")
+
+- ✅ **Watchtower 95/95 — 0 WARN — 0 FAIL** (primera vez): ml-embeddings arreglado de raíz (el
+  directorio `.atl/ml-embeddings/` que la watchtower vigilaba no lo generaba nadie — ahora
+  `skill-embedder.ts` escribe 419 archivos de embedding por skill); daemons codegraph/dashboard-ws
+  revividos; check security valida `renovate.json` (política single-bot).
+- ✅ **F0.6 resuelto de verdad — graphify NATIVO**: `src/cli/graphify-build.ts` construye el grafo
+  desde cero (TypeScript compiler API, dos pasadas para resolución completa de calls, comunidades
+  por label propagation). Grafo: **4.435 nodos / 8.500 edges** (histórico: 1.410/1.763). `build` y
+  `update` son el mismo comando nativo; query/explain verificados; 4 tests unit propios; AGENTS.md
+  reactivado.
+- ✅ **F1.5 completo**: baseline de cobertura real medido (62% agregado src/) y umbral subido 30→40%
+  (branches 30) en `tests/coverage-config.json`.
+- ✅ **F2.4 batch 1**: singletons DB tipados con `DatabaseManager` real (error-memory,
+  token-tracker, event-sourcing, adaptive-router), rows Nexus tipadas en compare-tokens-sessions,
+  severidad como union. 218→193 `any` (erradicación incremental continúa).
+- ✅ Commit checkpoint fase 0+1: `2267d6eb` (91 archivos).
+- 🔄 F5 Sprint A (dedup MASTER con backup 99_BACKUP_PRE_DEDUP) en ejecución.
+
+### Ejecutado — Sesión 1 (2026-08-22, verificado: typecheck ✓ · eslint ✓ · full test suite 5/5 ✓ · vitest 52/52 ✓ · markdownlint ✓ · lefthook ✓ · dashboard build ✓)
 
 - ✅ **F0.1** — `VERSION`=3.8.2 sincronizado; entrada 3.8.2 + nota 3.6/3.7 en CHANGELOG;
   `releases/latest-version.json` reparado contra el release real v3.8.2 del repo público (sha256

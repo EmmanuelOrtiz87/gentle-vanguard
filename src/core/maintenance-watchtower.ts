@@ -808,7 +808,9 @@ async function checkSecurity() {
     'src/security/security-orchestrator.ts',
     'SECURITY.md',
     '.github/CODEOWNERS',
-    '.github/dependabot.yml',
+    // Dependency bots: Renovate is the single bot (ADR: dependabot removed
+    // 2026-08-22 to stop duplicated dependency PRs)
+    'renovate.json',
   ];
   for (const f of secFiles) {
     addResult('security', f, fileExists(join(ROOT, f)) ? 'PASS' : 'WARN', '', 'manual');
