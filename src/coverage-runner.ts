@@ -252,6 +252,7 @@ function main(): void {
   const result = spawnSync(process.execPath, [c8Entry, ...c8Args], {
     cwd: ROOT,
     stdio: 'inherit',
+    windowsHide: true,
   });
   const duration = ((Date.now() - startTime) / 1000).toFixed(1);
 
