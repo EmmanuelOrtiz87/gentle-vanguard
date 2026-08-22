@@ -310,7 +310,8 @@
     "plugin:disable": "npx tsx src/plugin-manager.ts disable",
     "plugin:hooks": "npx tsx src/plugin-manager.ts hooks",
     "presentations:verify:cdp:hotspots": "node .opencode/skills/presentations-maintenance/scripts/cdp-verify-hotspots-all.cjs",
-    "version:check": "npx tsx src/version-sync.ts"
+    "version:check": "npx tsx src/version-sync.ts",
+    "skills:index": "npx tsx src/skills-index-generator.ts"
   },
   "devDependencies": {
     "@colbymchenry/codegraph": "0.8.0",

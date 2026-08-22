@@ -110,4 +110,4 @@ interface ButtonSpec {
 
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [references/detail.md](references/detail.md)
