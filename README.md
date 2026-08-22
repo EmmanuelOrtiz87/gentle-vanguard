@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-3.8.1-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-3.8.2-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/Agents-21-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
   <img src="https://img.shields.io/badge/Skills-263-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
@@ -179,6 +179,22 @@ Para automatizaciones PowerShell también se puede ejecutar `Invoke-Pester`.
 Los workflows principales son `gentle-vanguard-quality-gate`, `test-suite`, `security.yml` y
 `sync-public`. El repositorio público se actualiza mediante una lista controlada de archivos; no es
 un espejo indiscriminado del repositorio interno.
+
+## Release & Distribution
+
+El proceso de release es dual-repo con binario nativo:
+
+| Paso | Mecanismo |
+| --- | --- |
+| 1. Versionado | Bump en `package.json` + commit `chore(release)` |
+| 2. Tag anotado | `git tag -a vX.Y.Z && git push origin vX.Y.Z` — dispara `release.yml` |
+| 3. Build binario | Job SEA (windows-latest): bundle → blob → inyección postject → `.exe` autocontenido |
+| 4. Release privado | GitHub Release + manifest de auto-update |
+| 5. Distribución pública | Asset `.exe` replicado al release de `gentle-vanguard-public`; docs vía `src/sync-to-public.ts` |
+
+Notas operativas: para re-disparar un release fallido, mover el tag (delete + recreate) sobre el
+commit corregido. El README público se alimenta exclusivamente de `README-PUBLIC.md` (showcase
+curado); el README interno nunca se publica.
 
 ## Project Status
 
