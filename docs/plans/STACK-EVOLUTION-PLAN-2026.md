@@ -798,3 +798,96 @@ licenciamiento del currículo.
 5. Corregir las 6 ubicaciones de "12 tablas/3 migraciones" → 23/7 (F4.1) — 1 hora.
 
 _Fin del plan. Documento vivo — revisar y actualizar al cierre de cada fase._
+
+---
+
+## 9. FASE 6 — Análisis transversal de optimización (añadido 2026-08-22, sesión de cierre)
+
+Evaluación de ~20 áreas (cache, memoria, DB, grafos, delegaciones, autoasignaciones, ahorro
+token/contexto, prompts, gestión skills/contenido/subagentes, ciclo sesión, commits,
+autoaprendizaje, autorecuperación, docs, publicación, referencias, arquitectura, disponibilidad)
+sobre la evidencia real de las sesiones 1-4. Lo ya cubierto por fases existentes no se repite; aquí
+van los hallazgos NUEVOS.
+
+### N1 — Schema drift en Nexus (ALTO, pequeño) — base de datos
+
+`token_transactions` y `token_savings` se crean ad-hoc en `src/tokens/token-ingest.ts` (FUERA del
+MigrationRunner) mientras migraciones 001-007 viven en
+`apps/web-dashboard/server/database/repositories/MigrationRunner.ts`. Dos fuentes de schema = drift
+garantizado. **Acción:** migración 008 que adopte esas tablas (CREATE IF NOT EXISTS + verificación
+de columnas idénticas) y eliminar los CREATE ad-hoc.
+
+### N2 — Dos grafos de código superpuestos (ALTO, arquitectura)
+
+`.codegraph/` (codegraph.db, freshness por hooks) y `graphify-out/graph.json` (query semántico,
+builder nativo nuevo) hacen trabajo solapado con interfaces distintas. **Acción (ADR-0019):**
+definir roles explícitos — CodeGraph = índice incremental post-hook para tooling MCP; graphify =
+grafo de análisis/query para agentes — o fusionar graphify como consumidor del índice de CodeGraph.
+Documentar en AGENTS.md.
+
+### N3 — Compresión aplicada a sí mismo: AGENTS.md (MEDIO, ahorro de token/contexto)
+
+AGENTS.md paga tokens en CADA sesión de CADA agente (~800 líneas). El stack tiene compresión de
+prompts — pero no se aplica a sus propias instrucciones. **Acción:** versión comprimida
+AGENTS-fast.md (≤150 líneas: comandos críticos + punteros) y que los tool-profiles la usen por
+defecto; la completa queda como referencia. Estimar ahorro con `npm run token:trace` antes/después.
+
+### N4 — Auto-heal continuo de daemons (ALTO, disponibilidad/autorecuperación)
+
+Esta sesión los daemons (dashboard-ws, codegraph) murieron 2 veces y NADA los revivió solo — el
+autoheal del watchtower corre al inicio de sesión (lazy), no continuo; el watchdog del dashboard
+murió con su hijo. **Acción:** `scheduled.yml` ya corre watchtower periódicamente — verificar que
+use `-Action autoheal` (no solo health) y que el watchdog del dashboard sea supervisor-resilient
+(respawneo del propio watchdog). KPI: 95/95 sostenido sin intervención manual entre sesiones.
+
+### N5 — Profiles multi-tool con fuente única (MEDIO, gestión de subagentes/prompt)
+
+`config/tool-profiles/` (CLAUDE.md, CLAUDE.compressed.md, cursorrules, …) duplican prompts de
+agentes con drift ya observado. **Acción:** un YAML canónico de profiles + generador
+(`gv profiles:build`) que emita los archivos por herramienta; CI gate de sincronía (diff contra
+generados).
+
+### N6 — Cache con telemetría (MEDIO, cache)
+
+`response_cache` existe (SHA256+TTL+hit_count) pero el hit-rate no se reporta en ningún dashboard ni
+alerta. **Acción:** métrica hit/miss por hora → Nexus (`metric_snapshots`) + alerta si hit-rate <
+umbral; política de evicción LRU además del prune por TTL.
+
+### N7 — Verificar índice de embeddings (MEDIO, autoasignación de skills)
+
+Watchtower reporta "index parseable: **6 skills**" pero el embedder regeneró **419**. Posible
+contador incorrecto del check o índice parcialmente parseado. **Acción:** revisar
+`checkMlEmbeddings` (¿cuenta solo un sub-arreglo?) y alinear con `.atl/skill-embeddings.json`
+metadata.totalSkills.
+
+### N8 — Pre-push compuesto (BAJO, proceso de commit)
+
+10 checks secuenciales en pre-push = fricción. **Acción:** un solo script `prepush-gate.ts` paralelo
+(Promise.allSettled) con fail-fast y caché de resultados por hash de árbol (si nada cambió desde el
+último push verde, skip). Meta: <60s en cold, <5s warm.
+
+### N9 — Cerrar el loop de aprendizaje (MEDIO, autoaprendizaje/delegaciones)
+
+error-memory + session_scoring + routing-table existen pero no hay verificación de que el
+éxito/fracaso de delegaciones actualice la routing-table (success-rate) de forma demostrable.
+**Acción:** test E2E del loop: delegación simulada → resultado → routing-table
+hit_count/success_rate cambian → siguiente recomendación usa el dato. Documentar el circuito en un
+diagrama (skill diagram-design).
+
+### Áreas ya cubiertas por fases existentes (no duplicar)
+
+Cache/DB→N1+N6; grafos→N2; memoria/engram→auto-reindex verificado (0.4h); delegaciones y
+autoasignaciones de pasos/modelos→adaptive-steps+profiles M6 OK (lo pendiente es N9); ahorro
+token→compresión al 98% verificada + N3; gestión de contenido→engine 21 jobs canónico; inicio de
+sesión→pipeline lazy OK; cierre de sesión→F4.5 backlog (17 TODOs); commits→N8; docs→F4.1/F4.2;
+publicación→sha256 verificado + F1.3 changesets pendiente; referencias→F4.4 (144 REF-OBSOLETA);
+arquitectura/diseño→F2.2 (8/18 dominios) + F3.3 ports; disponibilidad→N4 + StoragePort F3.3.
+
+### Prioridad de ejecución sugerida (enlazado al backlog existente)
+
+1. N1 (schema drift) — pequeño, riesgoso de dejar.
+2. N4 (auto-heal continuo) — disponibilidad visible.
+3. N7 (embeddings) — verificar antes de tocar el embedder.
+4. N2 (ADR grafos) — decisión arquitectónica temprana.
+5. N9 (loop de aprendizaje) — demostrable, vende bien.
+6. N3, N5, N6, N8 — mejoras incrementales.

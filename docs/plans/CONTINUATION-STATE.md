@@ -25,6 +25,12 @@
 
 ## 2. Pendiente priorizado (siguiente sesión)
 
+0. **Fase 6 (§9 del plan) — análisis transversal del cierre**: N1 schema drift Nexus
+   (token_transactions/savings fuera del MigrationRunner), N2 consolidar CodeGraph/graphify
+   (ADR-0019), N3 AGENTS.md comprimido (ahorro de contexto por sesión), N4 auto-heal continuo de
+   daemons, N5 profiles multi-tool fuente única, N6 telemetría response_cache, N7 verificar contador
+   embeddings (6 vs 419), N8 pre-push compuesto paralelo, N9 loop de aprendizaje cerrado. Orden:
+   N1→N4→N7→N2→N9→N3/N5/N6/N8.
 1. **F2.2 continuación** — dominios restantes (~250 archivos): security, orchestration (sia-*,
    team-orchestrator, session-close-\*), ops (dashboard-\*, health-\*), content (content-operations
    ya está en src/content-operations/), review (code-review, auto-code-review vs
