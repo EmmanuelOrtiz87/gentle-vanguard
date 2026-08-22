@@ -1,7 +1,9 @@
 ---
 name: using-agent-skills
 aliases: ["using-agent-skills"]
-description: >
+description:
+  Discover and invoke agent skills. Use when starting a session or when you need to discover which
+  skill applies.
   
 triggers:
   - skill

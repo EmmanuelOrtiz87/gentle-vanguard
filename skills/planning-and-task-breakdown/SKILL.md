@@ -1,7 +1,10 @@
 ---
 name: planning-and-task-breakdown
 aliases: ["planning-and-task-breakdown"]
-description: >
+description:
+  Plan before you write. Break work into small, ordered tasks from specs or vague requirements.
+  Decompose into implementable units with acceptance criteria, after a structured pre-write planning
+  phase (scope, approach, risk, breakdown) with decision gates before implementation.
   
 triggers:
   - plan

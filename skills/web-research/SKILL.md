@@ -1,7 +1,10 @@
 ---
 name: web-research
 aliases: ["web-research"]
-description: >
+description:
+  Unified web research skill — Firecrawl crawling/scraping, Last30Days trend aggregation across
+  GitHub/HN/SO/Dev.to/Reddit, and document research (PDF/DOCX). Use for web research, crawling,
+  scraping, trend discovery, GitHub trending, and finding documentation.
   
 triggers:
   - web research

@@ -1,7 +1,10 @@
 ---
 name: data-analyst
 aliases: ["data-analyst"]
-description: >
+description:
+  Analyze datasets, generate insights, create visualizations, and perform statistical analysis. Use
+  when working with data, CSV/JSON files, creating reports, or extracting insights from any
+  structured data.
   
 triggers:
   - analyze data

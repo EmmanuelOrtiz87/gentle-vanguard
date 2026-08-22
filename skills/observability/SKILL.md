@@ -1,7 +1,9 @@
 ---
 name: observability
 aliases: ["observability"]
-description: >
+description:
+  Three-tier observability stack: circuit breaker health gates, dynamic dependency graph discovery,
+  and auto-escalation with warning→critical→emergency levels.
   
 triggers:
   - observability

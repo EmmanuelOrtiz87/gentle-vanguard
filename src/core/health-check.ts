@@ -32,7 +32,11 @@ function bin(name: string): string {
 }
 
 function spawnPortable(command: string, args: string[], timeout: number, maxBuffer?: number) {
-  const opts: any = { cwd: ROOT, timeout, maxBuffer: maxBuffer || 1024 * 1024 };
+  const opts: { cwd: string; timeout: number; maxBuffer: number } = {
+    cwd: ROOT,
+    timeout,
+    maxBuffer: maxBuffer || 1024 * 1024,
+  };
   if (process.platform === 'win32' && command.endsWith('.cmd')) {
     return runSync(process.env.ComSpec || 'cmd.exe', ['/c', command, ...args], opts);
   }

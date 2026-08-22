@@ -1,7 +1,9 @@
 ---
 name: doubt-driven-development
 aliases: ["doubt-driven-development"]
-description: >
+description:
+  Fresh-context adversarial review. Use when correctness matters, working in unfamiliar code, or
+  stakes are high.
   
 triggers:
   - doubt

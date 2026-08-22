@@ -3,12 +3,18 @@ name: work-unit-commits
 description:
   'Plan commits as reviewable work units. Trigger: implementation, commit splitting, chained PRs, or
   keeping tests and docs with code.'
+
+triggers:
+  - commit
+  - work-unit
+  - split commits
+  - chained pr
+  - reviewable units
 license: Apache-2.0
 metadata:
   author: gentleman-programming
   version: '1.0'
   origin: https://github.com/Gentleman-Programming/gentle-ai
-metadata:
   source: GV-native
 ---
 
@@ -45,6 +51,10 @@ Before committing, confirm:
 - [ ] Tests or docs for this unit are included when relevant.
 - [ ] Rollback is reasonable without reverting unrelated work.
 - [ ] The commit message explains the outcome, not the file list.
+- [ ] Focused test command and exact result are recorded.
+- [ ] Runtime harness command/scenario and exact result are recorded, or explicit `N/A` explains why
+      no runtime boundary exists.
+- [ ] Rollback boundary names the exact files/behavior removable without unrelated work.
 
 ## Split Examples
 
@@ -57,12 +67,16 @@ Before committing, confirm:
 
 ## PR Relationship
 
-Use work-unit commits as the gentle-vanguard for chained PRs:
+Use work-unit commits as the foundation for chained PRs:
 
 1. Build the smallest independent work unit.
 2. Include verification for that unit.
 3. Commit it with a Conventional Commit message.
 4. If the PR approaches 400 changed lines, promote commits or groups of commits into chained PRs.
+
+Count authored additions plus deletions for the `>400` threshold. Exclude generated goldens from
+that authored count, but include every generated file in complete snapshot identity and receipt
+validation.
 
 ## SDD Relationship
 
@@ -80,6 +94,26 @@ Each SDD work unit should map cleanly to a commit or PR with:
 - clear finished state,
 - verification in the same unit,
 - rollback that does not remove unrelated work.
+
+Its implementation evidence MUST include:
+
+- Focused test command and exact result.
+- Runtime harness command/scenario and exact result, or explicit `N/A` with reason.
+- Rollback boundary stated independently of commit creation; uncommitted work units still require
+  it.
+- When fixing a bounded review ledger, group atomic work units inside the single correction
+  transaction; work-unit count never creates another fix budget.
+
+## Commands
+
+```bash
+# Review the story before committing
+git diff --stat
+git diff --cached --stat
+
+# Check recent commit style
+git log --oneline -5
+```
 
 ---
 

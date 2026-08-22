@@ -1,7 +1,9 @@
 ---
 name: context-engineering
 aliases: ["context-engineering"]
-description: >
+description:
+  Optimize context for new sessions. Manage context budget, compression, and efficiency for AI
+  interactions.
   
 triggers:
   - context

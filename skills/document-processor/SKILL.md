@@ -1,7 +1,10 @@
 ---
 name: document-processor
 aliases: ["document-processor"]
-description: >
+description:
+  Process, extract and analyze content from PDF, DOCX, TXT and other document formats. Use when
+  reading documents, extracting text, analyzing reports, parsing contracts, or processing
+  documentation.
   
 triggers:
   - process document

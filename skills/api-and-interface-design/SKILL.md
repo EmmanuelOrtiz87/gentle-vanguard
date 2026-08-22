@@ -1,7 +1,9 @@
 ---
 name: api-and-interface-design
 aliases: ["api-and-interface-design"]
-description: >
+description:
+  Design stable APIs and module boundaries. Use for REST/GraphQL endpoints, component props, or
+  public interface changes.
   
 triggers:
   - api design

@@ -4,11 +4,18 @@ description: >
   Split large changes into chained or stacked pull requests that protect reviewer focus and stay
   within Gentle-Vanguard's 400-line cognitive review budget. Trigger: when a PR would exceed 400
   changed lines, when planning chained PRs, stacked PRs, or reviewable slices.
+
+triggers:
+  - chained pr
+  - stacked pr
+  - split pr
+  - large pr
+  - review slices
+  - 400 line budget
 license: Apache-2.0
 metadata:
   author: gentle-vanguard (adapted for Gentle-Vanguard)
   version: '1.0'
-metadata:
   source: GV-native
 ---
 
@@ -54,8 +61,38 @@ care instead of skimming. Big PRs create fatigue, hide defects, and slow merge v
 | Each slice can land independently       | Stacked PRs to `main` | Reduces long-lived branch drift                |
 | Docs refactor + new skills              | Feature branch chain  | Allows integration before final merge          |
 
+## Decision Gates (Gentle-Vanguard) #
+
+| Condition                                            | Action                                 |
+| ---------------------------------------------------- | -------------------------------------- |
+| PR ≤400 changed lines and focused                    | Keep single PR.                        |
+| PR >400, each slice can land independently           | Use Stacked PRs to main.               |
+| PR >400, feature must integrate before main          | Use Feature Branch Chain with tracker. |
+| Generated/vendor/migration diff cannot split cleanly | Ask maintainer for `size:exception`.   |
+| SDD provides `delivery_strategy`                     | Follow it before apply/PR creation.    |
+
+## Execution Steps (Gentle-Vanguard) #
+
+1. Estimate changed lines and identify independent work units.
+2. Ask for a chain strategy when none is cached and the budget is exceeded.
+3. Create branches/PRs using the chosen strategy only.
+4. Add Chain Context to each PR without replacing the repo PR template.
+5. Verify each PR independently: CI/tests/docs/manual checks, rollback scope, and clean diff.
+6. Keep tracker PR draft/no-merge until all child PRs are reviewed and integrated.
+
+## Output Contract (Gentle-Vanguard) #
+
+Return the chosen strategy, PR order, current PR boundary, dependency diagram, review budget
+(`additions + deletions`), verification plan, and any `size:exception` rationale.
+
 ## Chain Boundaries #
+
+Every PR in a chain needs explicit boundaries — see
+[references/detail.md](references/detail.md).
 
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencias detalladas**:
+> [references/detail.md](references/detail.md) — chain boundaries;
+> [references/chaining-details.md](references/chaining-details.md) — strategy notes, comparison
+> table, and reviewer guidance (merged from `.opencode/skills/chained-pr`).

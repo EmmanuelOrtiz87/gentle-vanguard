@@ -1,7 +1,10 @@
 ---
 name: process-debugging
 aliases: ["process-debugging"]
-description: >
+description:
+  Trace running processes, ports, containers and files back to their root cause with witr. Use when
+  the watchtower reports FAIL/WARN, a port is unexpectedly bound, a process is running that
+  shouldn't be, or you need to answer "why is this running?".
   
 triggers:
   - process debug

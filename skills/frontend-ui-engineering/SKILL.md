@@ -1,7 +1,10 @@
 ---
 name: frontend-ui-engineering
 aliases: ["frontend-ui-engineering"]
-description: >
+description:
+  Build production-quality, accessible, responsive user interfaces. Implement layouts, components,
+  manage state, meet WCAG requirements, and apply design systems (typography, color palettes,
+  spacing, tokens).
   
 triggers:
   - frontend

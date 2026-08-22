@@ -1,7 +1,10 @@
 ---
 name: dashboard
 aliases: ["dashboard"]
-description: >
+description:
+  LLM Observability Dashboard — React/TypeScript/Vite SPA with real-time WebSocket data pipeline,
+  i18n (en/es/pt-BR), and 14 metric descriptions.
+version: 2.1.0
   
 triggers:
   - dashboard

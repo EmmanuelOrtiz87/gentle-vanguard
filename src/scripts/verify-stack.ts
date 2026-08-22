@@ -52,9 +52,9 @@ function check(name: string, fn: () => boolean | Promise<boolean>, timeoutMs = 3
       }
       stop(true);
     }
-  } catch (e: any) {
+  } catch (e) {
     failed++;
-    process.stdout.write(`  ❌ ${name}: ${e.message}\n`);
+    process.stdout.write(`  ❌ ${name}: ${(e as Error).message}\n`);
     stop(false);
   }
 }
@@ -119,7 +119,7 @@ async function main() {
       'resilience bridge loads (' + opCount + ' ops, ' + cbCount + ' CBs)',
       () => opCount > 0 && cbCount >= 0,
     );
-  } catch (e: any) {
+  } catch (e) {
     check('resilience bridge loads', () => {
       throw e;
     });
@@ -150,9 +150,12 @@ async function main() {
         'monitoring',
         'circuit_breaker',
       ];
-      return cats.filter((c) => (cfg as any)[c] !== undefined).length >= 12;
+      return (
+        cats.filter((c) => (cfg as unknown as Record<string, unknown>)[c] !== undefined).length >=
+        12
+      );
     });
-  } catch (e: any) {
+  } catch (e) {
     check('timeout config values', () => {
       throw e;
     });

@@ -1,7 +1,9 @@
 ---
 name: gentle-ai-monitor
 aliases: ["gentle-ai-monitor"]
-description: >
+description:
+  Monitor gentle-ai releases without installation. Absorb updates and generate actionable
+  suggestions.
   
 triggers:
   - gentle-ai

@@ -1,7 +1,11 @@
 ---
 name: presentations-maintenance
 aliases: ["presentations-maintenance"]
-description: >
+description:
+  Mantenimiento de la pantalla de inicio y el libro de presentaciones (docs/presentations/):
+  info-triggers "i", i18n multi-idioma (en/es/pt-BR), lightbox de diagramas, capas SVG y
+  validación estructural. Absorbe el conocimiento de la ronda de mejora de la home screen.
+version: 1.0.0
   
 triggers:
   - presentations

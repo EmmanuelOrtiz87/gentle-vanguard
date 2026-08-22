@@ -1,7 +1,9 @@
 ---
 name: interview-me
 aliases: ["interview-me"]
-description: >
+description:
+  Extract what the user actually wants. One-question-at-a-time interviewing with hypothesis
+  attached.
   
 triggers:
   - interview

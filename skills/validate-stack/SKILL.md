@@ -1,7 +1,9 @@
 ---
 name: validate-stack
 aliases: ["validate-stack"]
-description: >
+description:
+  Validate the full Gentle-Vanguard stack. Run verification steps for TypeScript components, session
+  pipeline, hooks, and RDD system.
   
 triggers:
   - validate

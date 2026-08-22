@@ -1,7 +1,9 @@
 ---
 name: documentation-and-adrs
 aliases: ["documentation-and-adrs"]
-description: >
+description:
+  Record architectural decisions and documentation. Use when shipping features, changing APIs, or
+  recording context for future engineers.
   
 triggers:
   - document

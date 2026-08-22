@@ -1,7 +1,9 @@
 ---
 name: technical-writer
 aliases: ["technical-writer"]
-description: >
+description:
+  Create, edit and improve technical documentation. Use when writing docs, READMEs, API docs, ADRs,
+  or any technical writing task. Covers Markdown, Confluence, Notion-compatible output.
   
 triggers:
   - write documentation

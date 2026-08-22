@@ -1,7 +1,9 @@
 ---
 name: deprecation-and-migration
 aliases: ["deprecation-and-migration"]
-description: >
+description:
+  Manage deprecation and migration. Remove old systems, migrate users between implementations,
+  decide on feature sunsetting.
   
 triggers:
   - deprecate

@@ -1,7 +1,9 @@
 ---
 name: browser-testing-with-devtools
 aliases: ["browser-testing-with-devtools"]
-description: >
+description:
+  Test in real browsers via Chrome DevTools MCP. Inspect DOM, capture console errors, analyze
+  network requests, profile performance.
   
 triggers:
   - browser test

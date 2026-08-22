@@ -3,14 +3,22 @@ name: comment-writer
 description:
   'Write warm, direct collaboration comments. Trigger: PR feedback, issue replies, reviews, Slack
   messages, or GitHub comments.'
+
+triggers:
+  - comment
+  - review feedback
+  - pr feedback
+  - issue reply
+  - slack message
 license: Apache-2.0
 metadata:
   author: gentleman-programming
   version: '1.0'
   origin: https://github.com/Gentleman-Programming/gentle-ai
-metadata:
   source: GV-native
 ---
+
+# Comment Writer
 
 ## When to Use
 
@@ -71,7 +79,7 @@ navegable.
 Este PR supera el presupuesto de 400 líneas cambiadas, así que necesitamos dividirlo o justificar
 `size:exception`.
 
-Mi sugerencia: primero gentle-vanguard + tests, después integración, después docs. Así cada review
+Mi sugerencia: primero foundation + tests, después integración, después docs. Así cada review
 tiene inicio y fin claros.
 ```
 

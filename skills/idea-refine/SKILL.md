@@ -1,7 +1,9 @@
 ---
 name: idea-refine
 aliases: ["idea-refine"]
-description: >
+description:
+  Refine raw ideas into sharp concepts. Divergent then convergent thinking to stress-test
+  assumptions and expand options.
   
 triggers:
   - idea

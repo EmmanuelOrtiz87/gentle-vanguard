@@ -382,8 +382,8 @@ async function opencodeLLMCall(prompt: string, options?: LLMCallOptions): Promis
     }
     const detail = result.stderr?.trim() || `exit code ${result.status}`;
     throw new Error(`opencode run failed: ${detail}`);
-  } catch (error: any) {
-    const msg = String(error?.message ?? '');
+  } catch (error) {
+    const msg = String((error as Error)?.message ?? '');
     const isMissing = /not recognized|ENOENT|not found/i.test(msg);
     if (isMissing) {
       console.warn(

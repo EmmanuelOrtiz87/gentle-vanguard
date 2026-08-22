@@ -1,7 +1,9 @@
 ---
 name: code-simplification
 aliases: ["code-simplification"]
-description: >
+description:
+  Simplify code for clarity without changing behavior. Refactor complex code to be more readable and
+  maintainable.
   
 triggers:
   - simplify

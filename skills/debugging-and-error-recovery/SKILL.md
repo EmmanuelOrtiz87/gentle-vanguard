@@ -1,7 +1,9 @@
 ---
 name: debugging-and-error-recovery
 aliases: ["debugging-and-error-recovery"]
-description: >
+description:
+  Systematic root-cause debugging. Use when tests fail, builds break, or behavior does not match
+  expectations.
   
 triggers:
   - debug

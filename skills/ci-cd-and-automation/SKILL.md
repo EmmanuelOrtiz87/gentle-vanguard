@@ -1,7 +1,9 @@
 ---
 name: ci-cd-and-automation
 aliases: ["ci-cd-and-automation"]
-description: >
+description:
+  Automate CI/CD pipelines. Configure build processes, test runners, deployment strategies, and
+  quality gates.
   
 triggers:
   - ci/cd

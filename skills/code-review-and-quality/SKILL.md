@@ -1,7 +1,9 @@
 ---
 name: code-review-and-quality
 aliases: ["code-review-and-quality"]
-description: >
+description:
+  Multi-axis code review. Assess correctness, readability, architecture, security, and performance
+  before merging.
   
 triggers:
   - code review

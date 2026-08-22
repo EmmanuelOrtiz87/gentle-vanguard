@@ -4,11 +4,19 @@ description: >
   Design documentation that reduces reader cognitive load through progressive disclosure, chunking,
   signposting, tables, checklists, and recognition over recall. Trigger: when writing guides,
   READMEs, RFCs, onboarding docs, architecture docs, or review-facing documentation.
+
+triggers:
+  - documentation
+  - guides
+  - readme
+  - rfc
+  - onboarding
+  - architecture docs
+  - review-facing docs
 license: Apache-2.0
 metadata:
   author: gentle-vanguard (adapted for Gentle-Vanguard)
   version: '1.0'
-metadata:
   source: GV-native
 ---
 
@@ -111,6 +119,24 @@ Use this structure for all Gentle-Vanguard docs (adapted from native-tools):
 
 ### 5. Review Empathy (Gentle-Vanguard Rule)
 
+When documenting a PR, reduce reviewer burnout by making the review path explicit:
+
+- State what to review first.
+- State what is intentionally out of scope.
+- Link the previous and next PR when work is chained.
+- Keep each section focused on one decision or unit of work.
+- Use checklists for acceptance criteria and verification.
+
+## Commands
+
+```bash
+# Check markdown files changed in the current branch
+git diff --name-only -- '*.md'
+
+# Inspect PR changed-line count for cognitive load
+gh pr view <PR_NUMBER> --json additions,deletions,changedFiles
+```
+
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [references/detail.md](references/detail.md)

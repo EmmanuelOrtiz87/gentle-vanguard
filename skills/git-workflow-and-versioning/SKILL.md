@@ -1,7 +1,9 @@
 ---
 name: git-workflow-and-versioning
 aliases: ["git-workflow-and-versioning"]
-description: >
+description:
+  Structure git workflow practices. Commit, branch, resolve conflicts, organize parallel work, cut
+  releases, version bumping.
   
 triggers:
   - git

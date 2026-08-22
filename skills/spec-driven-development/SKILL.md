@@ -1,7 +1,9 @@
 ---
 name: spec-driven-development
 aliases: ["spec-driven-development"]
-description: >
+description:
+  Create specs before coding. Use when starting new projects or when requirements are unclear or
+  ambiguous.
   
 triggers:
   - spec

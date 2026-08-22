@@ -1,7 +1,9 @@
 ---
 name: test-driven-development
 aliases: ["test-driven-development"]
-description: >
+description:
+  Drive development with tests. Write failing tests before code. Use when implementing logic, fixing
+  bugs, or modifying behavior.
   
 triggers:
   - tdd

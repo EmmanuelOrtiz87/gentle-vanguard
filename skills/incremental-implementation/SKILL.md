@@ -1,7 +1,9 @@
 ---
 name: incremental-implementation
 aliases: ["incremental-implementation"]
-description: >
+description:
+  Deliver changes incrementally. Break features into small, ordered steps that can be implemented,
+  tested, and verified.
   
 triggers:
   - incremental

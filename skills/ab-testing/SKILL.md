@@ -1,7 +1,9 @@
 ---
 name: ab-testing
 aliases: ["ab-testing"]
-description: >
+description:
+  A/B experimentation framework for comparing configuration variants, routing strategies, and
+  behavioral changes. Determines statistical winners with auto-rollback on degradation.
   
 triggers:
   - ab-test
