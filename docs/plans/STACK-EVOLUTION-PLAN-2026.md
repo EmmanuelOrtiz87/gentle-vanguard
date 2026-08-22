@@ -8,6 +8,27 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ## ⚡ Registro de progreso
 
+### Ejecutado — Sesión 3 (2026-08-22, dominios + Sprint A/B comercial)
+
+- ✅ **F2.2 iniciado de verdad — 3 dominios movidos** con patrón replicable (git mv → fix imports →
+  rewrite refs string+segment → typecheck/tests/smoke): `src/tokens/` (13 archivos, 58 refs),
+  `src/retrieval/` (3, 12), `src/compression/` (3, 17). 19 archivos fuera de la raíz; grafo
+  regenerado tras cada move. Quedan ~10 dominios (security, orchestration, ops, content…).
+- ✅ **F2.4 batch 2**: 65 `any` eliminados en 17 archivos (interfaces de filas SQLite en backlog,
+  DbManagerLike facades, Severity unions + type-guards, catch-unknown). Total: **218 → 128 (-41%)**.
+- ✅ **Fix ESM preexistente**: `model-fallback-runtime.ts` crasheaba al ejecutarse directo
+  (`require.main` en ESM) — reemplazado por el check canónico `import.meta.url` del stack.
+- ✅ **F5 Sprint A 100%**: A2 manifiesto auto-consistente (fixed-point, idempotente, 383 archivos),
+  A3 rutas 15D reparadas (65/65 assets verifican con gv_publisher), A4 kit 06 HISTÓRICO, A5 verdad
+  de métricas (`99_METRICS_TRUTH`, 0 publicaciones reales documentadas).
+- 🔄 **F5 Sprint B drafts completos** (`11-SPRINT-B-SELL-ENABLE/`): modelo de pricing con benchmarks
+  verificados (USD 495/4h Improving, Maven/MIT/JHU como comparables de academia), sección 13 de
+  propuesta lista, 3 borradores legales (25.326/24.240 citadas, disclaimer profesional), landing
+  self-contained con contador honesto "casos: 0". Pendiente del dueño: números finales, beachhead,
+  revisión legal, demo 90s, payment links (B4).
+- Commits sesión 3: `20a02875` (tokens), `40bef389` (retrieval), `466676a4` (compression), tipados
+  batch 2, fix ESM.
+
 ### Ejecutado — Sesión 2 (2026-08-22, "cero errores/warnings/inactivos")
 
 - ✅ **Watchtower 95/95 — 0 WARN — 0 FAIL** (primera vez): ml-embeddings arreglado de raíz (el
@@ -162,8 +183,9 @@ Todo cambio de este plan debe respetar las definiciones base del stack:
   `src/autonomous-review/auto-code-review.ts`.
 - **Duplicación**: `parseArgs()` definido **29 veces**; `process.argv.slice(2)` en 227 archivos;
   `tokenize()` ×6; **BM25 duplicado con drift funcional** (`src/retrieval/retrieval-grader.ts:66` vs
-  `src/compression/structural-compression.ts:207` — el segundo suma un bonus `+0.3` que el primero no tiene, con
-  las mismas constantes duplicadas); 84 helpers `ensureDir/readJson/writeJson` repetidos.
+  `src/compression/structural-compression.ts:207` — el segundo suma un bonus `+0.3` que el primero
+  no tiene, con las mismas constantes duplicadas); 84 helpers `ensureDir/readJson/writeJson`
+  repetidos.
 - **Logging**: existe `src/utils/logger.ts` estructurado pero solo **4 archivos lo importan** vs
   **5.293 llamadas `console.*`**; ~46 `catch {}` vacíos tragan errores.
 - **Tipado**: 218 `any`/`as any` (`eslint.config.js:41` tiene `no-explicit-any` apagada);

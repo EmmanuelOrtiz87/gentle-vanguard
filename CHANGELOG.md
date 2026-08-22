@@ -4,6 +4,14 @@
 
 ### Added
 
+- **src/ por dominios (F2.2)**: `src/tokens/` (13 archivos), `src/retrieval/` (3),
+  `src/compression/` (3) — 58+ referencias actualizadas (scripts npm, configs de pipeline, hooks,
+  docs, tests), grafo regenerado tras cada move.
+- **Sprint A comercial 100%** y **Sprint B drafts** (pricing model con benchmarks, 3 borradores
+  legales, landing) en GENTLE_VANGUARD_MASTER/11-SPRINT-B-SELL-ENABLE/.
+- **Tipado batch 2**: 65 `any` eliminados en 17 módulos (218→128, -41%). Fix ESM preexistente en
+  `model-fallback-runtime.ts` (crasheaba al ejecutarse directo).
+
 - **Graphify nativo**: `src/cli/graphify-build.ts` construye el knowledge graph desde cero (AST
   TypeScript, dos pasadas, resolución de imports, comunidades por label propagation) —
   `npm run graphify -- build|update .`. Grafo actual: 4.435 nodos / 8.500 edges. El workflow
