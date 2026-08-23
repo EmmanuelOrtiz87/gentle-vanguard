@@ -77,9 +77,10 @@ async function findFreePort(startPort: number): Promise<number> {
 
 function launchDashboard(port: number): Promise<number> {
   return new Promise((resolve, reject) => {
-    // CMD NATIVO: Usar spawn con cmd.exe para ejecutar el batch
-    // ¡Este es el truco! ejecutar cmd.exe que corra tsx.cmd
-    const child = spawn('cmd.exe', ['/c', 'npx', 'tsx', WS_SCRIPT], {
+    // Run tsx through Node directly so this fallback launcher does not leave
+    // a cmd.exe wrapper or flash a console during startup.
+    const tsxCli = join(ROOT, 'node_modules', 'tsx', 'dist', 'cli.mjs');
+    const child = spawn(process.execPath, [tsxCli, WS_SCRIPT], {
       cwd: join(ROOT, 'apps', 'web-dashboard'),
       windowsHide: true,
       detached: false, // NO detached para evitar orphans

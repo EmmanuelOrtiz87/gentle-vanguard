@@ -325,7 +325,8 @@ export function getAllLiveMetrics(): {
       metrics.length > 0 ? metrics.reduce((sum, m) => sum + m.avgLatency, 0) / metrics.length : 0,
     p50Latency: pct(50),
     p95Latency: pct(95),
-    sloCompliance: sloTotal > 0 ? Math.round(((sloTotal - sloViolations) / sloTotal) * 100) : 100,
+    // No samples means no measured SLO, not 100% compliance.
+    sloCompliance: sloTotal > 0 ? Math.round(((sloTotal - sloViolations) / sloTotal) * 100) : 0,
     sloViolations,
     sloTotal,
     sessions: metrics.map((m) => m.sessionId),

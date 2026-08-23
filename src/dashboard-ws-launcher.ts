@@ -67,11 +67,13 @@ async function launch(): Promise<void> {
     process.exit(1);
   }
 
-  // Spawn detached process using cmd /c for proper Windows process management
-  const cmd = process.platform === 'win32' ? 'cmd.exe' : '/bin/sh';
+  // Run the TypeScript entry through Node directly on Windows. The old
+  // cmd.exe -> npx.cmd chain could leave visible console wrappers behind.
+  const tsxCli = path.resolve(ROOT, 'node_modules', 'tsx', 'dist', 'cli.mjs');
+  const cmd = process.platform === 'win32' ? process.execPath : '/bin/sh';
   const args =
     process.platform === 'win32'
-      ? ['/c', 'set', `WS_PORT=${WS_PORT}`, '&&', 'npx.cmd', 'tsx', wsScript]
+      ? [tsxCli, wsScript]
       : ['-c', `WS_PORT=${WS_PORT} npx tsx "${wsScript}"`];
 
   const child = spawn(cmd, args, {
@@ -80,6 +82,7 @@ async function launch(): Promise<void> {
     detached: true,
     windowsHide: true,
     shell: false,
+    env: { ...process.env, WS_PORT: String(WS_PORT) },
   });
 
   child.unref();
