@@ -80,3 +80,25 @@ alerts in the Executive section.
 - `reports/dashboard-v2/styles.css` — Trace styles (`.trace-*` classes)
 - `.session/context-log/` — Real session data directory
 - `config/model-router.json` — Agent profiles for mechanism detection
+
+## Usage
+
+Use **live-traceability** when a task matches its triggers (live traceability).
+
+Purpose: Capture and visualize real-time agent session data — turns, tokens, mechanisms, profiles, and cost —
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+Agent Turn
+   ↓
+C:/Workspace_local/gentle-vanguard/src/tokens/token-usage-auto.ts        ← call AFTER each response with actual metrics
+   ↓
+.session/context-log/       ← .state.json (turn data)
+   ↓
+dashboard server.js         ← reads .state.json → REST API
+   ↓
+dashboard browser           ← polls /api/traceability/* every 5s
+```

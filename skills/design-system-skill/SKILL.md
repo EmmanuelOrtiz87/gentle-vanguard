@@ -222,3 +222,13 @@ If **~~knowledge base** is connected:
 2. **Document as you build** — It's easier to document a component while designing it.
 3. **Prioritize coverage over perfection** — 80% of components documented beats 100% of 10
    components.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+/design-system audit                    # Full system audit
+/design-system document [component]     # Document a component
+/design-system extend [pattern]         # Design a new component or pattern
+```

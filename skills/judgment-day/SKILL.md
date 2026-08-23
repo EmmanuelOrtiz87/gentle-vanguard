@@ -83,3 +83,31 @@ After 2 fix iterations still issues?
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+Target scope clear?
+  YES → continue
+  NO  → ask user to specify scope
+
+Skill registry exists (Pattern 0)?
+  YES → build Project Standards block
+  NO  → warn user, proceed generic review
+
+Judges return findings?
+  Clean (0 CRITICAL + 0 real WARNING) → JUDGMENT: APPROVED
+  Issues found → present verdict, ask user
+
+User response to fix offer (Round 1)?
+  YES → delegate Fix Agent → re-judge
+  NO  → JUDGMENT: ESCALATED
+  Custom feedback → adjust fix list accordingly
+
+After 2 fix iterations still issues?
+  Ask "Continuar iterando? / Should I continue iterating?"
+  YES → continue fix+judge cycle
+  NO  → JUDGMENT: ESCALATED
+```

@@ -71,3 +71,9 @@ audit document + session summary persisted to Engram.
 - `references/templates.md` — Session start/end and audit templates
 - `references/agent-mapping.md` — Agent-to-dimension mapping
 - `references/code-review.md` — 7-dimension review protocol and findings workflow
+
+## Examples
+
+**Input:** a task matching `project-orchestrator` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Trigger:

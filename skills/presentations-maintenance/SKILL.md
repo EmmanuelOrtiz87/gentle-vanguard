@@ -164,3 +164,22 @@ el modal info multi-idioma vía `__gvShowInfo()`.
    - Páginas: autonomy→executive-loop, agents-pipeline→pipeline-flow, operations-cloud→data-architecture, dashboard→stack-dashboard.
    - Forzar `gv-lang` en localStorage al inicio (gotcha #16).
 6. **Piloto concreto (architecture-layers)**: sus 6 `gv-node` usan `src/cli/validate-presentations.ts` + `tips-hs.json` (18 claves).
+
+## Usage
+
+Use **presentations-maintenance** when a task matches its triggers (presentations - info-trigger - home screen - pantalla de inicio - lightbox - i18n - executive-loop - architecture-layers - gv.js - gv.css - tip_).
+
+Purpose: Mantenimiento de la pantalla de inicio y el libro de presentaciones (docs/presentations/):
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```powershell
+npm run presentations:serve          # Sirve la carpeta (puerto 3000, abre navegador)
+npm run presentations:serve -- --port 8899 --no-browser --no-store   # Modo verificación CDP (sin caché)
+npm run presentations:stop           # Detiene el servidor
+npm run presentations:validate       # Validación estructural (11 archivos, 0 deps)
+npm run presentations:verify:cdp -- --page=health.html   # Verificación CDP en Chrome real (3 idiomas)
+npx tsx src/cli/validate-presentations.ts --dir <path>   # Validar con ruta custom
+```

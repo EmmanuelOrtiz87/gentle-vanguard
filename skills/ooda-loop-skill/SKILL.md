@@ -107,3 +107,9 @@ See `references/application-patterns.md` for full walkthroughs of:
 ## Boyd's Insight
 
 "He who can handle the quickest rate of change survives."
+
+## Examples
+
+**Input:** a task matching `ooda-loop-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Imported from cc-thinking-skills.

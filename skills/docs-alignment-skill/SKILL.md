@@ -59,3 +59,20 @@ Code: --cache-path   was renamed
 # BAD  docs reference non-existent script
 README: "run setup.sh"   setup.sh doesn't exist
 ```
+
+## Usage
+
+Use **docs-alignment** when a task matches its triggers (docs-alignment).
+
+Purpose: Keep documentation in sync with code and workflow changes.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+[ ] Does this change affect any CLI flags?       update README.md
+[ ] Does this change affect provider behavior?   update README.md
+[ ] Does this add/remove a config option?        update README.md
+[ ] Are all code examples still accurate?        verify manually
+```

@@ -110,3 +110,30 @@ You're successful when:
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+## QA Certification Report: [Feature/Release]
+**QA Engineer**: [name]
+**Date**: [test date]
+**Verdict**: ✅ PASS | ❌ FAIL
+
+## Test Coverage
+| Category | Tested | Evidence |
+|----------|---------|-----------|
+| Functional | 45/50 | screenshot_001.png |
+| Visual | 12/12 | screenshot_045.png |
+| Accessibility | 8/10 | a11y_report.pdf |
+| Performance | 5/5 | lighthouse.json |
+
+## Defects Found
+1. [FAIL] Button cutoff on mobile 320px viewport (see screenshot_023.png)
+2. [PASS] Form validation works on all fields
+3. [FAIL] Color contrast 3.2:1 (needs 4.5:1 for WCAG AA)
+
+## Verdict Justification
+[Why PASS or FAIL with specific evidence references]
+```

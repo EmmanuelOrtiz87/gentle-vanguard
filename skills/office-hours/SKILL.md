@@ -62,3 +62,15 @@ Structured product interrogation using 6 forcing questions.
 ## Output
 
 Strategic decisions document with rationale
+
+## Usage
+
+Use **office-hours** when a task matches its triggers (office hours - product review - forcing questions - strategic review).
+
+Purpose: Product interrogation with 6 forcing questions
+
+## Examples
+
+**Input:** a task matching `office-hours` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Product interrogation with 6 forcing questions

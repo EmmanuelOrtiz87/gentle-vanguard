@@ -56,3 +56,9 @@ to `.backups/`. Report any escalation cases (3 retries exhausted).
 
 - All scripts: `scripts/adaptive/`
 - On-demand commands, diagrams, test scripts, status notes: `references/appendix.md`
+
+## Examples
+
+**Input:** a task matching `adaptive-orchestrator` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Trigger:

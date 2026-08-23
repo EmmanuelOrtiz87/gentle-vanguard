@@ -49,3 +49,9 @@ verification steps.
 ## References
 
 - `references/CHANGELOG-template.md` — CHANGELOG entry format
+
+## Examples
+
+**Input:** a task matching `release-management-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Trigger:

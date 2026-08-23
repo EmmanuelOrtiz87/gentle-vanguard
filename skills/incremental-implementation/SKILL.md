@@ -103,3 +103,11 @@ Each increment should be independently revertable.
 
 Per-increment verification is the local check. Before declaring a task done, apply the project-wide
 Definition of Done. See `references/definition-of-done.md`.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```bash
+npx tsx src/planning/planning-templates.ts --plan --type feature --name <id> --title "<title>"
+```

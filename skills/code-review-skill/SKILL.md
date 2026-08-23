@@ -119,3 +119,11 @@ When **~~source control** is connected: pull PR diff, check CI, link findings.
 1. **Provide context** — "Hot path" or "handles PII" helps me focus.
 2. **Specify concerns** — "Focus on security" narrows the review.
 3. **Include tests** — I'll check coverage and quality too.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+/code-review <PR URL or file path>
+```

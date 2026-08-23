@@ -108,3 +108,26 @@ and documentation.
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+## Usage
+
+Use **visual-content-skill** when a task matches its triggers (visual-content-skill).
+
+Purpose: Creates visual content for Gentle-Vanguard:
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+
+
+
+
+
+
+
+
+        Gentle-Vanguard
+
+```

@@ -67,3 +67,26 @@ test.describe('Checkout Flow', () => {
     name: playwright-report
     path: playwright-report/
 ```
+
+## Usage
+
+Use **e2e-testing-skill** when a task matches its triggers (e2e-testing-skill).
+
+Purpose: Imported from mercury-agent-skills.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```typescript
+test.describe('Checkout Flow', () => {
+  test('completes purchase with valid card', async ({ page }) => {
+    await page.goto('/products');
+    await page.getByText('Add to Cart').first().click();
+    await page.getByRole('button', { name: 'Checkout' }).click();
+    await page.getByLabel('Card Number').fill('4242424242424242');
+    await page.getByRole('button', { name: 'Pay' }).click();
+    await expect(page.getByText('Thank you')).toBeVisible();
+  });
+});
+```

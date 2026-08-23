@@ -71,3 +71,15 @@ deps; SSRF (user-supplied URLs); LLM output fed into query/DOM/shell; secrets/PI
 - [ ] Rate limiting on auth endpoints
 - [ ] No SSRF (server-side URL fetches allowlisted)
 - [ ] LLM output validated and encoded before use
+
+## Usage
+
+Use **security-and-hardening** when a task matches its triggers (security and hardening).
+
+Purpose: Security and Hardening
+
+## Examples
+
+**Input:** a task matching `security-and-hardening` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Security and Hardening

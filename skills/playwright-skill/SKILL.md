@@ -116,3 +116,23 @@ export class BasePage {
 > **Referencia detallada**: [
 eferences/detail.md](references/detail.md)
 ```
+
+## Usage
+
+Use **playwright** when a task matches its triggers (playwright).
+
+Purpose: Playwright E2E testing patterns.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+tests/
+ base-page.ts              # Parent class for ALL pages
+ helpers.ts                # Shared utilities
+ {page-name}/
+     {page-name}-page.ts   # Page Object Model
+     {page-name}.spec.ts   # ALL tests here (NO separate files!)
+     {page-name}.md        # Test documentation
+```

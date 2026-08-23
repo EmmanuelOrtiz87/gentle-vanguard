@@ -112,3 +112,26 @@ type NonNullEmail = NonNullable<User['email']>;
 > **Referencia detallada**: [
 eferences/detail.md](references/detail.md)
 ```
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```typescript
+// Primitives
+type String = string;
+type Number = number;
+type Boolean = boolean;
+
+// Arrays
+type StringArray = string[];
+type NumberArray = Array<number>;
+
+// Objects
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  createdAt: Date;
+};
+```

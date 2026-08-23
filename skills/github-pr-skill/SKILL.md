@@ -113,3 +113,23 @@ Closes #42"
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+<type>(<scope>): <short description>
+
+feat        New feature
+fix         Bug fix
+docs        Documentation
+refactor   Code refactoring
+test        Adding tests
+chore       Maintenance
+build        Build system
+ci          CI configuration
+style       Formatting (no logic change)
+perf        Performance improvement
+revert      Reverts a previous commit
+```

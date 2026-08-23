@@ -62,3 +62,15 @@ Audit developer experience to reduce friction and improve adoption.
 ## Output
 
 DX audit report with prioritized friction points
+
+## Usage
+
+Use **dx-review** when a task matches its triggers (dx review - developer experience - tthw - time to hello world).
+
+Purpose: Developer Experience auditing - TTHW, friction points
+
+## Examples
+
+**Input:** a task matching `dx-review` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Developer Experience auditing - TTHW, friction points

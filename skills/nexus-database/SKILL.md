@@ -164,3 +164,36 @@ These are non-blocking (`lazy: true`, `onStepFailure: continue`).
 5. **Monitor WAL size** — large WAL = performance degradation
 6. **Handle transient locks** — integrity check WARN does not mean corruption
 7. **Backup before restore** — never overwrite without a recovery point
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```bash
+# Init + run all pending migrations (idempotent)
+npm run db:init
+
+# Health check (6-point: file, size, WAL, integrity, tables, rows, migrations)
+npm run db:health
+npm run db:health -- --json     # Machine-readable for automation
+
+# Online safe backup
+npm run db:backup
+npm run db:backup -- --dir D:\backups   # Custom path
+
+# List available backups
+npm run db:list
+
+# Restore latest or specific backup
+npm run db:restore                     # Latest
+npm run db:restore -- <backup-name>    # Specific
+
+# Optimize (WAL checkpoint + REINDEX + VACUUM)
+npm run db:optimize
+
+# Prune old data (events >30d, cache >7d, tokens >90d, orphaned skills)
+npm run db:prune
+
+# Prune backups (keep 10 most recent)
+npm run db:prune:backup
+```

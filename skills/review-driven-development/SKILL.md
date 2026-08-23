@@ -241,3 +241,18 @@ Emergency bypass with reason:
 
 > Every code change gets a receipt. Every receipt validates at gates. Risk is evidence, not lines of
 > code. The code is the source of truth.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+Receipt = {
+  id: string,
+  candidateHash: Git SHA of reviewed code,
+  contentHash: SHA-256 of file contents,
+  approved: boolean,
+  findings: Array,
+  timestamp: ISO8601,
+}
+```

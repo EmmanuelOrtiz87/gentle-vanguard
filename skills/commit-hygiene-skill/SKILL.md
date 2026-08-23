@@ -69,3 +69,17 @@ Use `src/auto-code-review.ts` with commit-msg hook:
 ```powershell
 .\src/auto-code-review.ts install --commit-msg
 ```
+
+## Usage
+
+Use **commit-hygiene** when a task matches its triggers (commit-hygiene).
+
+Purpose: Enforce conventional commits and clean commit history.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+type(scope): description
+```

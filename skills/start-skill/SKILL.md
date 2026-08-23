@@ -77,3 +77,13 @@ Use /productivity:update to keep things current (add --comprehensive for a deep 
 - Nicknames are critical — always capture how people are actually referred to
 - If a source isn't available, skip it and note the gap
 - Memory grows organically through natural conversation after bootstrap
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+Dashboard open. Your tasks and memory are both loaded.
+- /productivity:update to sync tasks and check memory
+- /productivity:update --comprehensive for a deep scan of all activity
+```

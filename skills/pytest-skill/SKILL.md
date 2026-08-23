@@ -116,3 +116,27 @@ def test_with_mock_object():
 > **Referencia detallada**: [
 eferences/detail.md](references/detail.md)
 ```
+
+## Usage
+
+Use **pytest** when a task matches its triggers (pytest).
+
+Purpose: Pytest testing patterns for Python.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```python
+import pytest
+
+class TestUserService:
+    def test_create_user_success(self):
+        user = create_user(name="John", email="john@test.com")
+        assert user.name == "John"
+        assert user.email == "john@test.com"
+
+    def test_create_user_invalid_email_fails(self):
+        with pytest.raises(ValueError, match="Invalid email"):
+            create_user(name="John", email="invalid")
+```

@@ -69,3 +69,15 @@ Systematic design audit with 6 dimensions and AI-generated content detection.
 ## Output
 
 Design scorecard with improvement recommendations
+
+## Usage
+
+Use **design-review** when a task matches its triggers (design review - visual audit - ui polish - ai slop).
+
+Purpose: Design auditing with AI-slop detection
+
+## Examples
+
+**Input:** a task matching `design-review` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Design auditing with AI-slop detection

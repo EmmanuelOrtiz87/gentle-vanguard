@@ -92,3 +92,9 @@ Compare before and after. Is it genuinely easier to understand? See
 
 See [references/reference.md](references/reference.md) for the full rationalizations table, red
 flags, and verification checklist.
+
+## Examples
+
+**Input:** a task matching `code-simplification` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Simplify code for clarity without changing behavior.

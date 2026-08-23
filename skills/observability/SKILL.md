@@ -94,3 +94,31 @@ npx tsx src/circuit-breaker-api.ts status
 npx tsx src/dynamic-dependency-graph.ts scan
 npx tsx src/auto-escalation.ts status
 ```
+
+## Usage
+
+Use **observability** when a task matches its triggers (observability - circuit-breaker - dependency-graph - escalation - health - monitoring).
+
+Purpose: Three-tier observability stack:
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```typescript
+import {
+  registerComponent,
+  recordSuccess,
+  recordFailure,
+  isComponentHealthy,
+} from './circuit-breaker-api';
+
+registerComponent({ name: 'ml-embeddings', threshold: 3, timeoutMs: 15000 });
+if (isComponentHealthy('ml-embeddings')) {
+  // proceed
+  recordSuccess('ml-embeddings');
+} else {
+  recordFailure('ml-embeddings');
+  // fallback
+}
+```

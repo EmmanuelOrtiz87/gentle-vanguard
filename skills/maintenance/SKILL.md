@@ -60,3 +60,11 @@ Output: `{ pruned: N, compacted: N, cleaned: N, freed_mb: N }`
 - `C:/Workspace_local/gentle-vanguard/src/event-sourcing.ts`
 - `C:/Workspace_local/gentle-vanguard/src/engram-auto-compact.ts`
 - `config/session-autostart.config.json` — step `maintenance-auto-prune`
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+C:/Workspace_local/gentle-vanguard/src/checkpoint-manager.ts -Action list -Quiet
+```

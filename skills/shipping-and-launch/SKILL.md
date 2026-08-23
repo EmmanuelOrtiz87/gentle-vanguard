@@ -116,3 +116,9 @@ the full template.
 - `references/security-checklist.md` — security pre-launch checks
 - `references/performance-checklist.md` — performance pre-launch checks
 - `references/accessibility-checklist.md` — accessibility verification before launch
+
+## Examples
+
+**Input:** a task matching `shipping-and-launch` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Shipping and Launch

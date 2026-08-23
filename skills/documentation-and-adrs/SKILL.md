@@ -91,3 +91,9 @@ See [ADR Template & Lifecycle](references/adr-template.md) for the full template
 - [ ] Known gotchas are documented inline where they matter
 - [ ] No commented-out code remains
 - [ ] Rules files (CLAUDE.md etc.) are current and accurate
+
+## Examples
+
+**Input:** a task matching `documentation-and-adrs` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Record architectural decisions and documentation.

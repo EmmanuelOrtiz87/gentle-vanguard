@@ -107,3 +107,18 @@ $syncConfig = @{
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```powershell
+$syncConfig = @{
+    Mode = "OneWay"
+    Source = "C:\Workspace-A"
+    Destination = "C:\Workspace-B"
+    Direction = "Forward"
+    DeleteMissing = $false
+    Overwrite = $true
+}
+```

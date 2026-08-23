@@ -46,3 +46,9 @@ lint/format commands or quality gate checks.
 ## References
 
 (No local reference files yet)
+
+## Examples
+
+**Input:** a task matching `quality` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Trigger:

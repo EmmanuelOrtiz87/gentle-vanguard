@@ -98,3 +98,11 @@ correlation, cohort analysis.
 - [references/quality-assessment-framework.md] — completeness, consistency, accuracy, timeliness
 - [references/pattern-discovery.md] — distribution, temporal patterns, segmentation, correlation
 - [references/schema-documentation.md] — schema template, exploration queries, lineage
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+/explore-data <table_name or file>
+```

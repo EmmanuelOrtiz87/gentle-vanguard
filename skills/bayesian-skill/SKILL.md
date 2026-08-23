@@ -71,3 +71,15 @@ Intuitive: Posterior odds = Prior odds × Likelihood ratio
 | Noise             | ~1x              |
 
 → Calibration, checklist, and Kahneman's warning in `references/shortcuts-and-calibration.md`
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+                P(E|H) × P(H)
+P(H|E) = ─────────────────────────
+                   P(E)
+
+Intuitive: Posterior odds = Prior odds × Likelihood ratio
+```

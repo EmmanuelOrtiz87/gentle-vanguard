@@ -62,3 +62,9 @@ Return object with:
 - Subagent mapping: `config/subagent-mapping.json`
 - Behavior prompts: `config/behavior-prompts.json`
 - Full code, examples, tables: [references/code.md](references/code.md)
+
+## Examples
+
+**Input:** a task matching `auto-delegation-router` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Trigger:

@@ -101,3 +101,11 @@ You MUST complete each phase before proceeding to the next.
 - `references/advanced-patterns.md` — Architecture questioning, no-root-cause handling, real-world
   impact
 - `references/common-pitfalls.md` — Rationalizations table, partner redirection signals
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST
+```

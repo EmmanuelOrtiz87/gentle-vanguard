@@ -109,3 +109,49 @@ _If Superseded, list the replacing ADR: Superseded by ADR-{NNN}_
 _See `references/adr-workflow.md` for the full workflow, `references/adr-templates.md` for
 lightweight/Y-statement/rejected templates, and `references/adr-advanced.md` for governance,
 linting, tools, and change tracking._
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```markdown
+# ADR-{NNN}: {Title}
+
+## Status
+
+[Proposed | Accepted | Deprecated | Superseded]
+
+_If Superseded, list the replacing ADR: Superseded by ADR-{NNN}_
+
+## Context
+
+{Describe the problem, constraints, and forces at play.}
+
+## Decision
+
+{State the decision clearly. What are we doing? What are we NOT doing?}
+
+## Consequences
+
+{List the positive and negative consequences. What tradeoffs are we accepting?}
+
+## Alternatives Considered
+
+{List alternatives and why they were rejected.}
+
+### Option A: {Name}
+
+- **Pros**: ...
+- **Cons**: ...
+- **Why rejected**: ...
+
+### Option B: {Name}
+
+- **Pros**: ...
+- **Cons**: ...
+- **Why rejected**: ...
+
+## Compliance
+
+{How will we verify this decision is followed?}
+```

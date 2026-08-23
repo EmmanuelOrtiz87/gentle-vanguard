@@ -182,3 +182,13 @@ An agent performs best on S and M tasks. Break L/XL tasks into smaller units.
 - `references/common-rationalizations.md` — Planning myths debunked
 - `references/dependency-graph.md` — Example dependency graph
 - `src/planning/planning-templates.ts` — CLI to scaffold, store, and link plans
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```bash
+npx tsx src/planning/planning-templates.ts --plan --type feature --name user-auth --title "User Authentication"
+npx tsx src/planning/planning-templates.ts --list
+npx tsx src/planning/planning-templates.ts --show user-auth
+```

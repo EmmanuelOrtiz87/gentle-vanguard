@@ -63,3 +63,15 @@ Read the relevant reference file:
 - Package the final skill
 
 Add steps to TodoList to track progress. Good luck!
+
+## Usage
+
+Use **skill-creator-skill** when a task matches its triggers (skill-creator-skill).
+
+Purpose: Create new skills, modify and improve existing skills, and measure skill performance.
+
+## Examples
+
+**Input:** a task matching `skill-creator-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Create new skills, modify and improve existing skills, and measure skill performance.

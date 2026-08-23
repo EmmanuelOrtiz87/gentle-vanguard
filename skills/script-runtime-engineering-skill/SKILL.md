@@ -115,3 +115,18 @@ exit 1
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```powershell
+$null = $tokens = $null
+$errors = $null
+[System.Management.Automation.Language.Parser]::ParseFile(
+  '.\scripts\utilities\example.ps1',
+  [ref]$tokens,
+  [ref]$errors
+) | Out-Null
+$errors
+```

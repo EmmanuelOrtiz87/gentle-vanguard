@@ -83,3 +83,33 @@ Use `src/skills/skill-usage-tracker.ts` to propagate changes.
 - **Naming Convention:** Use `kebab-case` for skill directories and `PascalCase` for internal
   references.
 - **Validation:** Every new skill must pass `gv validate` before being committed.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```markdown
+---
+name: { skill-name }
+description: >
+  {Brief description}. Trigger: "{keyword1}", "{keyword2}"
+---
+
+## When to Use
+
+[Specific triggers for this skill]
+
+## Core Rules
+
+1. [Rule 1]
+2. [Rule 2]
+
+## Workflow
+
+1. [Step 1]
+2. [Step 2]
+
+## Output Expectations
+
+[What the user should see]
+```

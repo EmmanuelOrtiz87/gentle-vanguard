@@ -26,3 +26,15 @@ Core principles, techniques, and patterns for effective LLM prompting.
 - [Iterative Refinement](references/iterative-refinement.md)
 - [Common Mistakes](references/common-mistakes.md)
 - [Summary Cheat Sheet](references/summary-cheat-sheet.md)
+
+## Usage
+
+Use **prompt-engineering-skill** when a task matches its triggers (prompt-engineering-skill).
+
+Purpose: Imported from mercury-agent-skills.
+
+## Examples
+
+**Input:** a task matching `prompt-engineering-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Imported from mercury-agent-skills.

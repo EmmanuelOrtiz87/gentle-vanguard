@@ -110,3 +110,39 @@ visible
 **Presentación HTML:**
 
 > [código completo listo para abrir en navegador]
+
+## Usage
+
+Use **presentaciones-visuales-skill** when a task matches its triggers (presentaciones-visuales-skill).
+
+Purpose: Creates self-contained HTML presentations with modern design and clear narrative from any content.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Presentación</title>
+    <style>
+      :root {
+        --primary: #...;
+        --accent: #...;
+        --bg: #...;
+        --text: #...;
+      }
+      /* Reset, slides, navegación, animaciones */
+    </style>
+  </head>
+  <body>
+    <!-- slides como divs o sections -->
+    <script>
+      // navegación
+    </script>
+  </body>
+</html>
+```

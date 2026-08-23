@@ -131,3 +131,24 @@ Use bdd-scenarios when you need to:
 - Using vague or ambiguous language
 - Forgetting negative test cases
 - Not organizing with tags effectively
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```gherkin
+# Good scenario - specific and declarative
+Scenario: Customer receives loyalty discount
+  Given a customer with Gold membership status
+  And a cart total of $100
+  When the customer proceeds to checkout
+  Then a 10% loyalty discount should be applied
+  And the final total should be $90
+
+# Bad scenario - too implementation-focused
+Scenario: Apply discount
+  Given I click the membership dropdown
+  And I select "Gold" from the list
+  When I click the checkout button
+  Then the JavaScript calculates 10% off
+```

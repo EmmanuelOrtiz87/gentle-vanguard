@@ -54,3 +54,18 @@ See [docs/guides/PRETOOL-FORMAT-HOOK.md](../../docs/guides/PRETOOL-FORMAT-HOOK.m
 - Claude Code integration
 - VS Code tasks
 - Troubleshooting
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```powershell
+# Format single file
+.\hooks\pre-tool-format.ps1 -FilePath ".\src\index.ts"
+
+# Dry run (preview)
+.\hooks\pre-tool-format.ps1 -FilePath ".\src\index.ts" -DryRun
+
+# Verbose
+.\hooks\pre-tool-format.ps1 -FilePath ".\src\index.ts" -Verbose
+```

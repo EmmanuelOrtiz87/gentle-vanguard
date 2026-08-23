@@ -118,3 +118,20 @@ Bad examples:
 > **See also**: [monitoring-observability-skill](../monitoring-observability-skill/SKILL.md) for
 > Prometheus/Grafana/metrics deep-dive, [monitoring-aggregator](../monitoring-aggregator/SKILL.md)
 > for metrics aggregation
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```json
+{
+  "timestamp": "2026-04-13T12:00:00Z",
+  "level": "error",
+  "service": "billing-api",
+  "env": "prod",
+  "requestId": "req-123",
+  "operation": "create-invoice",
+  "durationMs": 481,
+  "error": "timeout contacting tax provider"
+}
+```

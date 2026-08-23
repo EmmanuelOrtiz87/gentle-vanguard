@@ -94,3 +94,15 @@ See [Budgets Reference](references/budgets.md) for recommended targets and CI en
 | [Measurement](references/measurement.md)     | Synthetic & RUM approaches, diagnostic tree, Core Web Vitals table |
 | [Anti-Patterns](references/anti-patterns.md) | Bottleneck tables, all code examples with BAD/GOOD patterns        |
 | [Budgets](references/budgets.md)             | Budget targets, CI commands, verification checklist                |
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+1. MEASURE  → Establish baseline with real data
+2. IDENTIFY → Find the actual bottleneck (not assumed)
+3. FIX      → Address the specific bottleneck
+4. VERIFY   → Measure again, confirm improvement
+5. GUARD    → Add monitoring or tests to prevent regression
+```

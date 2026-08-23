@@ -51,3 +51,9 @@ workspace. Use before judgment-day when structural integrity check is needed fir
 
 - Scripts: [scripts/](scripts/) — src/infrastructure/audit-pipeline.ts, src/infrastructure/audit-pipeline.ts, src/infrastructure/audit-pipeline.ts
 - Details (JD comparison, scopes, commands): [references/details.md](references/details.md)
+
+## Examples
+
+**Input:** a task matching `gentle-vanguard-audit-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Trigger:

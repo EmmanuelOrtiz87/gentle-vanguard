@@ -85,3 +85,37 @@ Address debt where all four are high.
 - Treating documentation debt as low priority when onboarding or incident recovery suffers
 
 # hook-test: verify multi-file hook with -Command
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```markdown
+# Debt Record: {title}
+
+## Problem
+
+{What is wrong now?}
+
+## Impact
+
+- Delivery drag:
+- Risk:
+- Scope:
+
+## Evidence
+
+- Files/modules:
+- Incidents/bugs:
+- Test gaps:
+
+## Remediation Options
+
+1. Minimal containment
+2. Local refactor
+3. Broader redesign
+
+## Recommendation
+
+{Chosen path and why}
+```

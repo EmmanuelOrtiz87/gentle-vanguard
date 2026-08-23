@@ -65,3 +65,11 @@ Save as `descriptive_name.html`, open in browser, confirm rendering.
 | [CSS_STYLING.md](references/CSS_STYLING.md)       | Complete CSS: colors, layout, cards, charts, tables, responsive |
 | [PERFORMANCE.md](references/PERFORMANCE.md)       | Data size guidelines, pre-aggregation, chart/DOM performance    |
 | [EXAMPLES.md](references/EXAMPLES.md)             | Usage examples and tips                                         |
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+/build-dashboard <description of dashboard> [data source]
+```

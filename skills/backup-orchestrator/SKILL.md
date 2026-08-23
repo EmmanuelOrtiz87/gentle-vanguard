@@ -110,3 +110,18 @@ function Select-BackupStrategy {
 > **Referencia detallada**: [
 eferences/detail.md](references/detail.md)
 ```
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```powershell
+$strategy = @{
+    Type = "Full"
+    Scope = "All files"
+    Compression = "7z"
+    Encryption = "AES-256"
+    Verification = "SHA256"
+    UseCase = "Initial, monthly archive, disaster recovery"
+}
+```

@@ -59,3 +59,15 @@ Data-driven retrospectives using actual session metrics.
 ## Template
 
 Retro document with metrics and actions
+
+## Usage
+
+Use **retro** when a task matches its triggers (retro - retrospective - sprint review).
+
+Purpose: Engineering retrospective using session data
+
+## Examples
+
+**Input:** a task matching `retro` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Engineering retrospective using session data

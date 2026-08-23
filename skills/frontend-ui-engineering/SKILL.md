@@ -156,3 +156,22 @@ Avoid prop drilling deeper than 3 levels.
 - [ ] Uses design tokens, not raw hex/px values
 - [ ] Color pairs pass WCAG 2.1 AA (4.5:1 text, 3:1 large/UI)
 - [ ] No a11y warnings in axe-core or dev tools
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```bash
+# Generate a full token set from a primary color + neutral palette
+npm run design:generate -- --primary "#6366f1" --neutral slate
+
+# Export tokens as CSS variables, JSON, or SCSS variables
+npm run design:tokens -- --format css|json|scss
+
+# Compute a modular typography scale (base size + musical ratio)
+npm run design:scale -- --base 16 --ratio 1.25 --levels 12
+
+# Check color contrast/accessibility (explicit pair or scan a component file)
+npm run design:check -- --fg "#FFFFFF" --bg "#0F172A"
+npm run design:check -- ./components/Button.tsx
+```

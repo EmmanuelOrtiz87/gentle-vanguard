@@ -117,3 +117,9 @@ Pick one error strategy and use it everywhere. Never mix patterns.
 | `references/rest-api-patterns.md`     | Resource design, pagination, PATCH                    |
 | `references/typescript-interfaces.md` | Discriminated unions, I/O separation, branded IDs     |
 | `references/common-pitfalls.md`       | Rationalizations, red flags, checklist                |
+
+## Examples
+
+**Input:** a task matching `api-and-interface-design` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Design stable APIs and module boundaries.

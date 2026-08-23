@@ -151,3 +151,15 @@ See [references/quality-gates.md](references/quality-gates.md). Budget:
 - [references/quality-gates.md](references/quality-gates.md)
 - `security-and-hardening` skill
 - `performance-optimization` skill
+
+## Usage
+
+Use **code-review-and-quality** when a task matches its triggers (code review - quality - review code - assess - pre-merge review).
+
+Purpose: Multi-axis code review.
+
+## Examples
+
+**Input:** a task matching `code-review-and-quality` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Multi-axis code review.

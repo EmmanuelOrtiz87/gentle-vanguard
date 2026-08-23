@@ -56,3 +56,19 @@ Scans all sources for relevant context. See
   filtered out)
 - Briefs should be actionable: every item should have a clear next step or reason for inclusion
 - Keep briefs concise. Link to source materials rather than reproducing them in full
+
+## Usage
+
+Use **brief-skill** when a task matches its triggers (brief-skill).
+
+Purpose: Knowledge work plugin from legal department.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+/brief daily              # Morning brief of legal-relevant items
+/brief topic [query]      # Research brief on a specific legal question
+/brief incident [topic]   # Rapid brief on a developing situation
+```

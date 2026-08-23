@@ -69,3 +69,11 @@ Detailed guidance for each section:
   criteria
 - [Metrics & Scope](references/metrics-and-scope.md) — leading/lagging indicators, scope management
 - [Output Format & Tips](references/output-format.md) — markdown format, best practices
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+/write-spec $ARGUMENTS
+```

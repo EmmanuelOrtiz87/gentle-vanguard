@@ -106,3 +106,13 @@ consistently not stupid, instead of trying to be very intelligent."
 
 The power of inversion is in avoiding obvious errors that optimism blinds us to. Simple avoidance
 often beats clever optimization.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+Have a goal? → yes → Can you list ways to achieve it? → maybe → INVERT FIRST
+                                                       ↘ no → Definitely invert
+            ↘ no → Define goal, then invert
+```

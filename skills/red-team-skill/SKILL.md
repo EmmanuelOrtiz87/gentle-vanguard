@@ -79,3 +79,9 @@ timelines.
 "If you know the enemy and know yourself, you need not fear the result of a hundred battles."
 
 Red teaming is knowing yourself as the enemy would. The purpose isn't pessimism — it's preparation.
+
+## Examples
+
+**Input:** a task matching `red-team-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Imported from cc-thinking-skills.

@@ -74,3 +74,41 @@ Task arrives
 - `references/failure-modes.md` — 10 subtle errors to avoid
 - `references/lifecycle-sequence.md` — Typical skill sequence for a full feature
 - `references/quick-reference.md` — Phase/skill/summary table
+
+## Usage
+
+Use **using-agent-skills** when a task matches its triggers (skill - discover skill - invoke skill - which skill - find skill).
+
+Purpose: Discover and invoke agent skills.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+Task arrives
+    │
+    ├── Don't know what you want yet? ──────→ interview-me
+    ├── Have a rough concept, need variants? → idea-refine
+    ├── New project/feature/change? ──→ spec-driven-development
+    ├── Have a spec, need tasks? ──────→ planning-and-task-breakdown
+    ├── Implementing code? ────────────→ incremental-implementation
+    │   ├── UI work? ─────────────────→ frontend-ui-engineering
+    │   ├── API work? ────────────────→ api-and-interface-design
+    │   ├── Need better context? ─────→ context-engineering
+    │   ├── Need doc-verified code? ───→ source-driven-development
+    │   └── Stakes high / unfamiliar code? ──→ doubt-driven-development
+    ├── Writing/running tests? ────────→ test-driven-development
+    │   └── Browser-based? ───────────→ browser-testing-with-devtools
+    ├── Something broke? ──────────────→ debugging-and-error-recovery
+    ├── Reviewing code? ───────────────→ code-review-and-quality
+    │   ├── Too complex? ─────────────→ code-simplification
+    │   ├── Security concerns? ───────→ security-and-hardening
+    │   └── Performance concerns? ────→ performance-optimization
+    ├── Committing/branching? ─────────→ git-workflow-and-versioning
+    ├── CI/CD pipeline work? ──────────→ ci-cd-and-automation
+    ├── Deprecating/migrating? ────────→ deprecation-and-migration
+    ├── Writing docs/ADRs? ───────────→ documentation-and-adrs
+    ├── Adding logs/metrics/alerts? ───→ observability-and-instrumentation
+    └── Deploying/launching? ─────────→ shipping-and-launch
+```

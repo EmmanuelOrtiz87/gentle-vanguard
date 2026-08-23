@@ -112,3 +112,26 @@ This skill activates when:
 > **Referencia detallada**: [
 eferences/detail.md](references/detail.md)
 ```
+
+## Usage
+
+Use **security-expert** when a task matches its triggers (security-expert).
+
+Purpose: AI-powered security assistant for pre-commit validation, security audits, and secure coding.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+1. Run secret detection (gitleaks, trufflehog patterns)
+2. Scan for common vulnerability patterns
+3. Check dependency vulnerabilities (npm audit, safety)
+4. Generate security report
+5. If critical issues found:
+   - Block commit with detailed report
+   - Offer interactive remediation
+6. If warnings only:
+   - Allow commit with warning
+   - Generate security report in docs/
+```

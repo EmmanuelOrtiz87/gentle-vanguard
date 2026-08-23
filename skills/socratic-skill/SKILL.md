@@ -77,3 +77,13 @@ Root cause unclear?         → yes → APPLY SOCRATIC QUESTIONING
 
 The goal is not to prove others wrong but to discover truth together. The best questions reveal what
 everyone—including the questioner—doesn't yet understand.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+Understanding seems shallow? → yes → APPLY SOCRATIC QUESTIONING
+Assumptions unexamined?     → yes → APPLY SOCRATIC QUESTIONING
+Root cause unclear?         → yes → APPLY SOCRATIC QUESTIONING
+```

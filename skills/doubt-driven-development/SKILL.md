@@ -100,3 +100,16 @@ the full table of common rationalizations and the red flags checklist.
 See [references/verification-and-interactions.md](references/verification-and-interactions.md) for
 the post-application verification checklist and interaction with other skills (code-review,
 source-driven-dev, TDD, debugging).
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+Doubt cycle:
+- [ ] Step 1: CLAIM — wrote the claim + why-it-matters
+- [ ] Step 2: EXTRACT — isolated artifact + contract, stripped reasoning
+- [ ] Step 3: DOUBT — invoked fresh-context reviewer with adversarial prompt
+- [ ] Step 4: RECONCILE — classified every finding against the artifact text
+- [ ] Step 5: STOP — met stop condition (trivial findings, 3 cycles, or user override)
+```

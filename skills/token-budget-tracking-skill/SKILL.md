@@ -76,3 +76,15 @@ Code and detailed examples in `references/`.
 | Ignoring output tokens   | Output costs more than input (2-4x)  | Track input/output separately |
 | No proactive alerts      | Find out about spikes at billing     | Real-time budget alerts       |
 | Caching nothing          | Pay for identical prompts repeatedly | Implement response caching    |
+
+## Usage
+
+Use **token-budget-tracking-skill** when a task matches its triggers (token-budget-tracking-skill).
+
+Purpose: Imported from mercury-agent-skills.
+
+## Examples
+
+**Input:** a task matching `token-budget-tracking-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Imported from mercury-agent-skills.

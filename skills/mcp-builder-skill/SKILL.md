@@ -70,3 +70,15 @@ See [Evaluation Guide](./reference/evaluation.md) for full details.
 | [Python Guide](./reference/python_mcp_server.md)          | Phase 2 — full Python/FastMCP patterns            |
 | [Evaluation Guide](./reference/evaluation.md)             | Phase 4 — question creation, XML format, running  |
 | MCP SDK READMEs                                           | Phase 1/2 — fetch from GitHub raw URLs            |
+
+## Usage
+
+Use **mcp-builder-skill** when a task matches its triggers (mcp-builder-skill).
+
+Purpose: Guide for creating high-quality MCP servers that enable LLMs to interact with external services through well-designed tools.
+
+## Examples
+
+**Input:** a task matching `mcp-builder-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Guide for creating high-quality MCP servers that enable LLMs to interact with external services through well-designed tools.

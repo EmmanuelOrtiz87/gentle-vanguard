@@ -37,3 +37,22 @@ await logger.log_invocation("support-agent", "process refund", session_id)
 await logger.log_tool_call("support-agent", "get_order", {"order_id": 123}, trace_id)
 await logger.log_decision("support-agent", "escalate", "refund exceeds threshold", 0.85, trace_id)
 ```
+
+## Usage
+
+Use **agent-audit-logging-skill** when a task matches its triggers (agent-audit-logging-skill).
+
+Purpose: Imported from mercury-agent-skills.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```python
+from audit_logger import AuditLogger, AuditEvent, EventType
+
+logger = AuditLogger(storage_backend)
+await logger.log_invocation("support-agent", "process refund", session_id)
+await logger.log_tool_call("support-agent", "get_order", {"order_id": 123}, trace_id)
+await logger.log_decision("support-agent", "escalate", "refund exceeds threshold", 0.85, trace_id)
+```

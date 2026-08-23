@@ -78,3 +78,12 @@ thinking is deep, complex, and convoluted."
 
 The crowd uses first-order thinking. Competitive advantage comes from thinking one level
 deeper—seeing what happens after the obvious effect.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+Decision with consequences beyond immediate? → yes → APPLY SECOND-ORDER THINKING
+                                            ↘ no → First-order may suffice
+```

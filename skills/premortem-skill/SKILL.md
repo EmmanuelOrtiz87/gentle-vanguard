@@ -87,3 +87,9 @@ this plan has failed. Your assigned failure reason: [specific reason]. Write the
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+## Examples
+
+**Input:** a task matching `premortem-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Premortem analysis for plans, launches, products, hires, strategies, or decisions.

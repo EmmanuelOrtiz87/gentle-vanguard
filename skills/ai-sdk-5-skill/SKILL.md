@@ -112,3 +112,18 @@ const result = await generateText({
 > **Referencia detallada**: [
 eferences/detail.md](references/detail.md)
 ```
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```typescript
+import { createAI } from 'ai-sdk';
+import { openai } from '@ai-sdk/openai';
+import { anthropic } from '@ai-sdk/anthropic';
+
+export const ai = createAI({
+  providers: [openai('gpt-4o'), anthropic('claude-3-5-sonnet')],
+  defaultId: 'openai',
+});
+```

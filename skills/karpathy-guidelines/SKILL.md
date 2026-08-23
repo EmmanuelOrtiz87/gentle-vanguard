@@ -110,3 +110,15 @@ When active, this skill:
 - Original: https://github.com/forrestchang/andrej-karpathy-skills
 - Andrej Karpathy's post: https://x.com/karpathy/status/2015883857489522876
 - Gentle-Vanguard integration: See src/learning-engine.ts, src/learning-engine.ts
+
+## Usage
+
+Use **karpathy-guidelines** when a task matches its triggers (karpathy-guidelines).
+
+Purpose: Four principles for LLM coding excellence (Andrej Karpathy inspired).
+
+## Examples
+
+**Input:** a task matching `karpathy-guidelines` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Four principles for LLM coding excellence (Andrej Karpathy inspired).

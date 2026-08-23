@@ -100,3 +100,11 @@ src/hybrid-executor.ts -ListProviders    # Show all providers
 src/hybrid-executor.ts -TestConnection    # Test current provider
 src/hybrid-executor.ts -Config           # Interactive config
 ```
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```powershell
+.\scripts\utilities\src/hybrid-executor.ts -Provider openai -Command "Explain REST pagination"
+```

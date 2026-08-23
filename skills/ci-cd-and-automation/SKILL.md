@@ -96,3 +96,9 @@ Detailed YAML configurations, deployment strategies, and optimization guides:
   automation
 - [quality-gates.md](references/quality-gates.md) — CI optimization, parallelism, caching, gate
   pipeline
+
+## Examples
+
+**Input:** a task matching `ci-cd-and-automation` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Automate CI/CD pipelines.

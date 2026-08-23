@@ -90,3 +90,15 @@ Effectuation, Jobs to be Done
 
 What domain? | What problem type? | Default model? | One model or combine? | Familiar fit or actual
 fit?
+
+## Usage
+
+Use **model-router-skill** when a task matches its triggers (model-router-skill).
+
+Purpose: Imported from cc-thinking-skills.
+
+## Examples
+
+**Input:** a task matching `model-router-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Imported from cc-thinking-skills.

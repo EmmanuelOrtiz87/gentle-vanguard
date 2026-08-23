@@ -114,3 +114,11 @@ engram_mem_save -title "Learning: {key finding}" -type "learning"
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```powershell
+pwsh -NoProfile -File src/learning-engine.ts -Trigger close
+```

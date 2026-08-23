@@ -113,3 +113,23 @@ server.prompt(
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
 ```
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+
+   AI Agent   MCP Server
+  (Client)
+        - Tools
+                       - Resources
+                       - Prompts
+
+
+
+
+                        External
+                         System
+
+```

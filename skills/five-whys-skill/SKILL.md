@@ -73,3 +73,9 @@ The extension: Five is not magic. The real guidance is:
 - `references/example.md` — Production outage worked example
 - `references/common-patterns.md` — Common failure patterns to catch
 - `references/verification-checklist.md` — Verification checklist
+
+## Examples
+
+**Input:** a task matching `five-whys-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Imported from cc-thinking-skills.

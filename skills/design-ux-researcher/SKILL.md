@@ -110,3 +110,24 @@ You're successful when:
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+## UX Research Plan
+**Research Goal**: [what you want to learn]
+**Methodology**: [interviews/surveys/usability testing/analytics]
+**Participants**: [target user profile, n=number]
+**Timeline**: [research duration]
+
+## Research Questions
+1. [Primary question]
+2. [Secondary question]
+
+## Success Metrics
+- Task success rate: >80%
+- Time on task: <2 minutes
+- SUS Score: >68
+```

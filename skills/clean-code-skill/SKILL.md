@@ -89,3 +89,15 @@ Detailed guidance for each area is in `references/`:
 4. **Ignoring the team's conventions**: Consistency within a codebase matters more than personal
    preference for a particular style.
 5. **Applying rules blindly**: All rules have exceptions. Context matters.
+
+## Usage
+
+Use **clean-code-skill** when a task matches its triggers (clean-code-skill).
+
+Purpose: Imported from mercury-agent-skills.
+
+## Examples
+
+**Input:** a task matching `clean-code-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Imported from mercury-agent-skills.

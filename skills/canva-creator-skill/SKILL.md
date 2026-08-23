@@ -364,3 +364,11 @@ Anything to change before we're done?
   skill has hit in production
 - [reference/examples/boutique-brief-campaign.md](reference/examples/boutique-brief-campaign.md) —
   full worked examples (single-slot social, multi-slot template)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+brief → calendar → asset inventory → Canva designs → copy → HubSpot staging
+```

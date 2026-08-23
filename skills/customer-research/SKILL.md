@@ -61,3 +61,15 @@ Systematic research to understand customers and validate assumptions.
 
 - References web-research for online research
 - Feeds into product-marketing context
+
+## Usage
+
+Use **customer-research** when a task matches its triggers (customer research - user interviews - personas - icp - validation - customer discovery).
+
+Purpose: Customer research methodology - personas, interviews, validation
+
+## Examples
+
+**Input:** a task matching `customer-research` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Customer research methodology - personas, interviews, validation

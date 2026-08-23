@@ -118,3 +118,16 @@ git log --oneline -5
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```bash
+# Review the story before committing
+git diff --stat
+git diff --cached --stat
+
+# Check recent commit style
+git log --oneline -5
+```

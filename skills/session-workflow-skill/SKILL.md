@@ -68,3 +68,9 @@ project-orchestrator for technical decisions.
 - Templates (audit doc, code review, session summary, todo): `references/templates.md`
 - Scripts: `scripts/utilities/session-autostart.cmd`
 - Coordination: `../project-orchestrator-skill/SKILL.md`
+
+## Examples
+
+**Input:** a task matching `session-workflow` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Session workflow executor.

@@ -57,3 +57,9 @@ fallback scenario).
 
 - `references/commands.md` — Common script commands reference
 - `references/validation.md` — Validation checklist, enforcement, and change admission criteria
+
+## Examples
+
+**Input:** a task matching `script-governance-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Trigger:

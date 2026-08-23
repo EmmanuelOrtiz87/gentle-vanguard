@@ -50,3 +50,9 @@ cancel across factors, yielding useful order-of-magnitude results.
 ---
 
 _Examples, template, patterns, tips, and checklist moved to `references/`._
+
+## Examples
+
+**Input:** a task matching `fermi-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Imported from cc-thinking-skills.

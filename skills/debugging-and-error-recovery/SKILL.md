@@ -112,3 +112,16 @@ After fixing a bug:
 - [ ] Regression test fails without the fix
 - [ ] All tests pass, build succeeds
 - [ ] Original bug scenario verified end-to-end
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+1. STOP adding features or making changes
+2. PRESERVE evidence (error output, logs, repro steps)
+3. DIAGNOSE using the triage checklist
+4. FIX the root cause
+5. GUARD against recurrence
+6. RESUME only after verification passes
+```

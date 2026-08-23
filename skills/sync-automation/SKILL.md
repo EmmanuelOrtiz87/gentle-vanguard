@@ -30,3 +30,15 @@ Automates synchronization between local Gentle-Vanguard and public repository.
 
 - Supports auto-sync via git hooks or scheduled tasks
 - Logs sync activity to `.runtime/sync-log.csv`
+
+## Usage
+
+Use **sync-automation** when a task matches its triggers (sync-automation).
+
+Purpose: Auto-sync for Gentle-Vanguard.
+
+## Examples
+
+**Input:** a task matching `sync-automation` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Auto-sync for Gentle-Vanguard.

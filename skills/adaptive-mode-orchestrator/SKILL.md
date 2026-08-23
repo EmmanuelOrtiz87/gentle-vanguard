@@ -119,3 +119,32 @@ DEPLOYMENT (OPS)
 > **Referencia detallada**: [
 eferences/detail.md](references/detail.md)
 ```
+
+## Usage
+
+Use **adaptive-mode-orchestrator** when a task matches its triggers (adaptive-mode-orchestrator).
+
+Purpose: Adaptive Mode Mejorado - Orquestacin inteligente con DAG dinmico, feedback loops automticos y rollback inteligente.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+PLANNING (BA)
+
+DESIGN (SAD)
+
+IMPLEMENTATION (DEV)
+     GOVERNANCE (GOV) [paralelo]
+     DOCUMENTATION (DOC) [paralelo]
+
+QUALITY_ASSURANCE (QA)
+     Si falla  FEEDBACK LOOP  IMPLEMENTATION
+     Si falla seguridad  FEEDBACK LOOP  GOVERNANCE
+     Si pasa  DEPLOYMENT
+
+DEPLOYMENT (OPS)
+     Si falla  AUTO-ROLLBACK
+     Si pasa  COMPLETE
+```

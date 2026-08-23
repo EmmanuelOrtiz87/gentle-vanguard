@@ -140,3 +140,34 @@ gh pr view <PR_NUMBER> --json additions,deletions,changedFiles
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```markdown
+# <Outcome-oriented title>
+
+<One paragraph: what changed, who it helps, and why it matters.>
+
+## Quick Path
+
+1. <First action>
+2. <Second action>
+3. <Verification or expected result>
+
+## Details
+
+| Topic  | Decision              |
+| ------ | --------------------- |
+| <area> | <concise explanation> |
+
+## Checklist
+
+- [ ] <Reader can confirm this>
+- [ ] <Reader can confirm that>
+
+## Next Step
+
+<Link or action that continues the workflow.>
+```

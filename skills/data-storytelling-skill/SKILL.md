@@ -71,3 +71,15 @@ Static for live presentations/email/PDF; interactive for data rooms/internal rep
 
 Chart junk, wrong chart type, missing context, no narrative, data overload, misleading scales, no
 source, over-highlighting, small fonts, no takeaway title. → `references/common-mistakes.md`
+
+## Usage
+
+Use **data-storytelling-skill** when a task matches its triggers (data-storytelling-skill).
+
+Purpose: Imported from mercury-agent-skills.
+
+## Examples
+
+**Input:** a task matching `data-storytelling-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Imported from mercury-agent-skills.

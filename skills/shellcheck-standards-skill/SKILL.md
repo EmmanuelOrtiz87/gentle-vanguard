@@ -119,3 +119,21 @@ $uri = "https://example.com/path"
 | `$?` without check       | Use `if command; then`            |
 | Global vars in functions | Add `local` keyword               |
 | eval usage               | Use arrays or parameter expansion |
+
+## Usage
+
+Use **shellcheck-standards** when a task matches its triggers (shellcheck-standards).
+
+Purpose: Shell script quality and portability standards.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```powershell
+# PowerShell
+Invoke-ScriptAnalyzer -Path .\scripts\
+
+# Bash
+shellcheck -x bin/* lib/*.sh
+```

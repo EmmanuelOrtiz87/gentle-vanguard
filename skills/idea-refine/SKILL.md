@@ -133,3 +133,35 @@ step further without exhausting.
 - [ ] Hidden assumptions listed with validation strategies
 - [ ] "Not Doing" list makes trade-offs explicit
 - [ ] User confirmed direction before implementation
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```md
+# [Idea]
+
+## Problem Statement
+
+[One-line "How Might We"]
+
+## Recommended Direction
+
+[Chosen direction + why — 2-3 paragraphs max]
+
+## Key Assumptions
+
+- [ ] [Assumption] — [how to test]
+
+## MVP Scope
+
+[Minimum version testing core assumptions]
+
+## Not Doing
+
+- [Thing] — [reason]
+
+## Open Questions
+
+[What needs answering before building]
+```

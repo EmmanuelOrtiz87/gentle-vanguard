@@ -122,3 +122,13 @@ Report in JSON:
 - Always validate after update to prevent broken sessions
 - Log all update attempts to `.session/audit/logs/`
 - Respect user's choice if they opt out of auto-updates
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```bash
+/engram-auto-update
+/engram-auto-update --check-only
+/engram-auto-update --force
+```

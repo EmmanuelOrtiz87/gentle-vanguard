@@ -52,3 +52,11 @@ so.
 - [Common Rationalizations](references/rationalizations.md) — Why confidence is not evidence
 - [Red Flags](references/red-flags.md) — Signs you're going off track
 - [Verification Checklist](references/verification.md) — Post-implementation quality check
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+DETECT → FETCH → IMPLEMENT → CITE
+```

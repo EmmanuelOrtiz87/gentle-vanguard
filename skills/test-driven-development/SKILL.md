@@ -115,3 +115,17 @@ without knowledge of the fix.
 - [`references/framework-guide.md`](references/framework-guide.md) — Browser testing with DevTools,
   subagents
 - `browser-testing-with-devtools` skill — DevTools setup
+
+## Usage
+
+Use **test-driven-development** when a task matches its triggers (tdd - test driven - write test first - failing test - test before code).
+
+Purpose: Drive development with tests.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+RED → write failing test → GREEN → minimal code to pass → REFACTOR → improve → repeat
+```

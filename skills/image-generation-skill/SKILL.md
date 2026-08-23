@@ -130,3 +130,19 @@ Create `config/image-gen.json`:
 - All providers fail → fallback to SVG template
 - Missing API key → clear error with config instructions
 - Rate limits → queued batch processing
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+User Request
+  ↓
+image-gen.ts (CLI / API client)
+  ├── Provider: DALL-E 3 (OpenAI API)
+  ├── Provider: Stable Diffusion (Replicate / StabilityAI)
+  ├── Provider: FLUX.1 (Replicate)
+  └── Fallback: SVG template engine (offline)
+        ↓
+  Output: PNG / SVG / JPEG file
+```

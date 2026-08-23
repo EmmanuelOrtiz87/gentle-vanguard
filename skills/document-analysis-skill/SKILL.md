@@ -68,3 +68,9 @@ time_estimate (hours, days, weeks), cost_estimate (usd), report_path, confidence
 - `C:/Workspace_local/gentle-vanguard/src/jira-connector.ts` — Jira API connector
 - `C:/Workspace_local/gentle-vanguard/src/confluence-connector.ts` — Confluence REST connector
 - `src/document-analysis-init.ts` — main orchestrator script
+
+## Examples
+
+**Input:** a task matching `document-analysis-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Analisis de documentos de requerimientos (PDF/DOCX/XLSX/PPTX) con deteccion de tecnologias, patrones de diseno, especialistas, areas tecnologicas, dependencias y estimacion de tiempos/costos.

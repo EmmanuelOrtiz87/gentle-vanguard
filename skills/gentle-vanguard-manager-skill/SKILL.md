@@ -44,3 +44,15 @@ session-autostart to keep skills current and workspace aligned.
 - Cross-reference validation
 - Workspace homologation
 - Config sync from remote
+
+## Usage
+
+Use **gentle-vanguard-manager-skill** when a task matches its triggers (gentle-vanguard-manager-skill).
+
+Purpose: Trigger:
+
+## Examples
+
+**Input:** a task matching `gentle-vanguard-manager-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Trigger:

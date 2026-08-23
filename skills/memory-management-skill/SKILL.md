@@ -129,3 +129,20 @@ recalling, progressive disclosure, and bootstrapping.
 - Project completed
 - Person no longer frequent contact
 - Term rarely used
+
+## Usage
+
+Use **memory-management-skill** when a task matches its triggers (memory-management-skill).
+
+Purpose: Knowledge work plugin from productivity department.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+User: "ask todd to do the PSR for oracle"
+              ↓ Claude decodes
+"Ask Todd Martinez (Finance lead) to prepare the Pipeline Status Report
+ for the Oracle Systems deal ($2.3M, closing Q2)"
+```

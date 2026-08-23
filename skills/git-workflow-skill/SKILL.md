@@ -110,3 +110,22 @@ git checkout develop
 > **Referencia detallada**: [
 eferences/detail.md](references/detail.md)
 ```
+
+## Usage
+
+Use **git-workflow-skill** when a task matches its triggers (git-workflow-skill).
+
+Purpose: Use when managing git branches, commits, pull requests, merge conflicts, or git workflows.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+main (production)
+   develop (integration)
+        feature/user-authentication
+        feature/payment-integration
+        bugfix/login-error
+        release/v1.2.0
+```

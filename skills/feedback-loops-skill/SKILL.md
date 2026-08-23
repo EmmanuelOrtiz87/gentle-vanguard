@@ -38,3 +38,15 @@ loops.
 > "We can't control systems or figure them out. But we can dance with them."
 
 > "Pay attention to what is important, not just what is quantifiable."
+
+## Usage
+
+Use **feedback-loops-skill** when a task matches its triggers (feedback-loops-skill).
+
+Purpose: Feedback loop analysis — reinforcing, balancing, delays, system dynamics.
+
+## Examples
+
+**Input:** a task matching `feedback-loops-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Feedback loop analysis — reinforcing, balancing, delays, system dynamics.

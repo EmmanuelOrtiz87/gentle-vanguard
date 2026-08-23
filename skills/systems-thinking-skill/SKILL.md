@@ -105,3 +105,9 @@ Systems resist simple fixes. Find leverage points, influence the whole.
 - `references/common-system-patterns.md` — Pattern diagrams and mitigations
 - `references/causal-loop-diagram-template.md` — CLD template with legend
 - `references/verification-checklist.md` — Checklist for systems analysis
+
+## Examples
+
+**Input:** a task matching `systems-thinking-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Imported from cc-thinking-skills.

@@ -297,3 +297,17 @@ gh issue view <number> --repo EmmanuelOrtiz87/gentle-vanguard
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+1. Search existing issues for duplicates
+2. Choose the correct template (Bug Report or Feature Request)
+3. Fill in ALL required fields
+4. Check pre-flight checkboxes
+5. Submit  issue gets status:needs-review automatically
+6. Wait for maintainer to add status:approved
+7. Only then open a PR linking this issue
+```

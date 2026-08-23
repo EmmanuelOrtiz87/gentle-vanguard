@@ -51,3 +51,12 @@ Everything in Default Mode, plus:
 - Fuzzy matching on task titles handles minor wording differences
 - Safe to run frequently — only updates when there's new info
 - `--comprehensive` always runs interactively
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```bash
+/productivity:update
+/productivity:update --comprehensive
+```

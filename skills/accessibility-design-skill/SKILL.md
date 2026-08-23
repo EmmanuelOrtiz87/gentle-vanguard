@@ -552,3 +552,27 @@ permanently or collapse them to 0 height. Skip links must be accessible when foc
 Focusing exclusively on visual and motor disabilities while ignoring cognitive accessibility. Use
 plain language, consistent navigation, clear error messages, and give users enough time to complete
 tasks. Cognitive accessibility affects the largest segment of users with disabilities.
+
+## Usage
+
+Use **accessibility-design-skill** when a task matches its triggers (accessibility-design-skill).
+
+Purpose: Imported from mercury-agent-skills.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```css
+/* Good contrast */
+.button-primary {
+  background: #0052cc; /* Blue */
+  color: #ffffff; /* White — 5.2:1 ratio ✅ */
+}
+
+/* Insufficient contrast */
+.button-primary {
+  background: #6b9fff; /* Light blue */
+  color: #ffffff; /* White — 2.8:1 ratio ❌ */
+}
+```

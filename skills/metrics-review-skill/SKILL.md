@@ -84,3 +84,11 @@ should get the essential story in 30 seconds.
 - [Goal Setting Frameworks](references/goal-setting-frameworks.md) — OKRs, targets
 - [Review Cadences](references/review-cadences.md) — weekly, monthly, quarterly
 - [Dashboard Design](references/dashboard-design.md) — layout, principles, anti-patterns, alerting
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+/metrics-review $ARGUMENTS
+```

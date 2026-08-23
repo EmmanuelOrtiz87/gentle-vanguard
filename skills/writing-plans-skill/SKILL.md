@@ -81,3 +81,25 @@ See [references/self-review.md](references/self-review.md).
 
 After saving, offer Subagent-Driven (recommended) or Inline Execution. See
 [references/execution-handoff.md](references/execution-handoff.md).
+
+## Usage
+
+Use **writing-plans-skill** when a task matches its triggers (writing-plans-skill).
+
+Purpose: Imported from obra/superpowers.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```markdown
+# [Feature Name] Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development
+> (recommended) or superpowers:executing-plans. Steps use checkbox (`- [ ]`) syntax.
+
+**Goal:** [One sentence describing what this builds] **Architecture:** [2-3 sentences about
+approach] **Tech Stack:** [Key technologies/libraries]
+
+---
+```

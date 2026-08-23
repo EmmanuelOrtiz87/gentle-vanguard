@@ -93,3 +93,15 @@ Before proceeding to implementation, confirm:
 - [ ] Success criteria are specific and testable
 - [ ] Boundaries (Always/Ask First/Never) are defined
 - [ ] The spec is saved to a file in the repository
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+SPECIFY ──→ PLAN ──→ TASKS ──→ IMPLEMENT
+   │          │        │          │
+   ▼          ▼        ▼          ▼
+ Human      Human    Human      Human
+ reviews    reviews  reviews    reviews
+```

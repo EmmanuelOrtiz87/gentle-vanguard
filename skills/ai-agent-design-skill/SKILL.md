@@ -56,3 +56,15 @@ Detailed content extracted to `references/`:
 | Planning       | ReAct for exploration, P&E for stability | No planning at all             |
 | Safety         | Input + output + action guardrails       | Safety as an afterthought      |
 | Error Recovery | Retry + fallback + escalate              | Assume success                 |
+
+## Usage
+
+Use **ai-agent-design-skill** when a task matches its triggers (ai-agent-design-skill).
+
+Purpose: Imported from mercury-agent-skills.
+
+## Examples
+
+**Input:** a task matching `ai-agent-design-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Imported from mercury-agent-skills.

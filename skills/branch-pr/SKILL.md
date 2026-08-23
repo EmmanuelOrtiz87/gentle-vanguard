@@ -276,3 +276,17 @@ gh pr edit <PR-number> --repo EmmanuelOrtiz87/gentle-vanguard --add-label "type:
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+1. Verify issue has `status:approved` label
+2. Create branch: type/description (see Branch Naming below)
+3. Implement changes with conventional commits
+4. Run shellcheck on modified scripts
+5. Open PR using the template
+6. Add exactly one type:* label
+7. Wait for automated checks to pass
+```

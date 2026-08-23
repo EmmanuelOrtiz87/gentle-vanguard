@@ -89,3 +89,18 @@ Full security boundaries: `references/security.md`
 ## Verification
 
 After any browser-facing change, run the checklist in `references/checklists.md`.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```json
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest", "--isolated"]
+    }
+  }
+}
+```

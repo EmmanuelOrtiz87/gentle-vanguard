@@ -96,3 +96,9 @@ Every PR in a chain needs explicit boundaries — see
 > [references/detail.md](references/detail.md) — chain boundaries;
 > [references/chaining-details.md](references/chaining-details.md) — strategy notes, comparison
 > table, and reviewer guidance (merged from `.opencode/skills/chained-pr`).
+
+## Examples
+
+**Input:** a task matching `chained-pr` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Split large changes into chained or stacked pull requests that protect reviewer focus and stay within Gentle-Vanguard's 400-line cognitive review budget.

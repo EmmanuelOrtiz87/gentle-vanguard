@@ -102,3 +102,9 @@ schema changes shipped in the same deploy as code changes, migrations with no do
 
 See the full checklist at
 [`references/red-flags-and-verification.md`](references/red-flags-and-verification.md).
+
+## Examples
+
+**Input:** a task matching `deprecation-and-migration` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Manage deprecation and migration.

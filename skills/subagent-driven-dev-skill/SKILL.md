@@ -86,3 +86,9 @@ Subagents should use test-driven-development.
 
 - `references/example-workflow.md` — full worked example
 - `references/advantages.md` — detailed advantages breakdown
+
+## Examples
+
+**Input:** a task matching `subagent-driven-dev-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Imported from obra/superpowers.

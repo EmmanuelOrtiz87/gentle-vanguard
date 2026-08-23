@@ -75,3 +75,19 @@ http_request_duration_seconds{quantile="0.95"} 0.235
 - Use SLOs to define what's "good enough"
 - Test alerts (fire drills, tabletop exercises)
 - Review dashboards monthly with the team
+
+## Usage
+
+Use **monitoring-observability-skill** when a task matches its triggers (monitoring-observability-skill).
+
+Purpose: Imported from mercury-agent-skills.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```yaml
+# Instrument your app
+http_requests_total{method="GET", endpoint="/api/users", status="200"} 1024
+http_request_duration_seconds{quantile="0.95"} 0.235
+```

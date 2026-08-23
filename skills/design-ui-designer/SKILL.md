@@ -111,3 +111,25 @@ interface ButtonSpec {
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+design-system/
+  tokens/
+    colors.json          # Design tokens for colors
+    typography.json       # Font scales and weights
+    spacing.json          # Spacing and layout tokens
+  components/
+    button.md            # Component specifications
+    input.md
+    modal.md
+  patterns/
+    forms.md             # Reusable patterns
+    navigation.md
+  brand/
+    guidelines.md        # Brand application rules
+    assets/              # Logos, icons, imagery
+```

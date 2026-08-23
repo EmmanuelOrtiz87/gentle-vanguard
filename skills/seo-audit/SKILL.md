@@ -61,3 +61,15 @@ Comprehensive SEO analysis and optimization.
 ## Output
 
 SEO audit report with prioritized fixes
+
+## Usage
+
+Use **seo-audit** when a task matches its triggers (seo audit - search optimization - google ranking - keywords - technical seo).
+
+Purpose: SEO auditing and search optimization
+
+## Examples
+
+**Input:** a task matching `seo-audit` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** SEO auditing and search optimization

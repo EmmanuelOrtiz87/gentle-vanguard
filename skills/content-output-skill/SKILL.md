@@ -101,3 +101,25 @@ PREFER:
 > **Referencia detallada**: [
 eferences/detail.md](references/detail.md)
 ```
+
+## Usage
+
+Use **content-output-skill** when a task matches its triggers (content-output-skill).
+
+Purpose: Unified content generation skill for all output types:
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+REQUIRE:
+- All public APIs require docstrings
+- README minimum: description + quick start
+- Changelog for all releases
+
+PREFER:
+- Usage examples inline
+- Code comments for complex logic
+- Diagrams for architecture
+```

@@ -215,3 +215,20 @@ Insights:
 | Malformed CSV | Attempt recovery with warnings |
 | Memory limit  | Automatic sampling             |
 | Invalid SQL   | Query validation error         |
+
+## Usage
+
+Use **data-analyst** when a task matches its triggers (analyze data - data analysis - CSV analysis - JSON data - statistics - visualization - data insights - generate report).
+
+Purpose: Analyze datasets, generate insights, create visualizations, and perform statistical analysis.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```bash
+# Generate summary statistics
+npx tsx src/data-analyst.ts describe "data.csv"
+
+# Output: count, mean, std, min, 25%, 50%, 75%, max per column
+```

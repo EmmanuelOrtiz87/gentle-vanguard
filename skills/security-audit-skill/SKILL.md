@@ -92,3 +92,15 @@ Detailed checklists and testing guidance → `references/owasp-top10.md`
 ## Common Mistakes
 
 12 common pitfalls → `references/common-mistakes.md`
+
+## Usage
+
+Use **security-audit-skill** when a task matches its triggers (security-audit-skill).
+
+Purpose: Imported from mercury-agent-skills.
+
+## Examples
+
+**Input:** a task matching `security-audit-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Imported from mercury-agent-skills.

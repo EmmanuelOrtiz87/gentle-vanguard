@@ -88,3 +88,14 @@ metadata:
 - Flaky test detection → auto-quarantine → alert
 
 > **Detailed reference**: [references/detail.md](references/detail.md)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+      E2E (5%)
+    Integration (15%)
+  Component/Contract (30%)
+      Unit Tests (50%)
+```

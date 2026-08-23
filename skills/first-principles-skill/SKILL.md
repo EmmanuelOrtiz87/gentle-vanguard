@@ -121,3 +121,13 @@ In-house rockets with commodity materials → SpaceX 10x cost reduction
 - "What would we do if we had to solve this with 10% of the budget?"
 - "If we were starting from scratch today, would we build it this way?"
 - "What would a complete outsider try?"
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+Problem intractable? → reasoning from analogy? → yes → APPLY FIRST PRINCIPLES
+                                                ↘ no → Already at fundamentals
+                   ↘ no → Standard problem-solving
+```

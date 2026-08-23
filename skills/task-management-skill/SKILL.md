@@ -101,3 +101,25 @@ When summarizing meetings or conversations, offer to add extracted tasks:
 - Follow-ups mentioned
 
 Ask before adding - don't auto-add without confirmation.
+
+## Usage
+
+Use **task-management-skill** when a task matches its triggers (task-management-skill).
+
+Purpose: Knowledge work plugin from productivity department.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```markdown
+# Tasks
+
+## Active
+
+## Waiting On
+
+## Someday
+
+## Done
+```

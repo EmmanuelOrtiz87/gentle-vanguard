@@ -134,3 +134,12 @@ Console output with colors:
 - Runs at session start (lazy step in autostart)
 - All analysis saved to audit logs for future reference
 - Suggestions are actionable but require human review before implementation
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```bash
+/gentle-ai-monitor
+/gentle-ai-monitor --analyze-release
+```

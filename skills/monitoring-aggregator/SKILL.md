@@ -108,3 +108,26 @@ function Get-DiskIOMetrics {
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```powershell
+function Get-CPUMetrics {
+    param([int]$SampleCount = 10)
+
+    $samples = @()
+    for ($i = 0; $i -lt $SampleCount; $i++) {
+        $cpu = (Get-CimInstance Win32_Processor | Measure-Object -Property LoadPercentage -Average).Average
+        $samples += $cpu
+        Start-Sleep -Seconds 1
+    }
+
+    return @{
+        Average = ($samples | Measure-Object -Average).Average
+        Peak = ($samples | Measure-Object -Maximum).Maximum
+        Min = ($samples | Measure-Object -Minimum).Minimum
+    }
+}
+```

@@ -54,3 +54,19 @@ Dynamic ports persisted to `.runtime/dashboard-ports.json`. See
 3. **Resilient fetching** — HTTP polling works without WebSocket
 4. **i18n first** — all user text via `useLocale()` hook
 5. **Zero build errors** — `npm run build` must exit 0
+
+## Usage
+
+Use **dashboard** when a task matches its triggers (dashboard - metrics - chart - visualization - cost - latency - tracing).
+
+Purpose: LLM Observability Dashboard — React/TypeScript/Vite SPA with real-time WebSocket data pipeline, i18n (en/es/pt-BR), and 14 metric descriptions.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```powershell
+npx tsx src/dashboard-start.ts         # Full: WS server + Vite + Chrome
+npx tsx src/dashboard-ws-autostart.ts  # WS server only (pipeline)
+npx tsx src/dashboard-stop.ts          # Kill watchdog → WS → cleanup ports
+```

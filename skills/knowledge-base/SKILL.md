@@ -74,3 +74,11 @@ C:/Workspace_local/gentle-vanguard/src/knowledge-base-manager.ts -Action stats
 - `C:/Workspace_local/gentle-vanguard/src/knowledge-base-autoinit.ts`
 - `docs/knowledge-base/ARCHITECTURE.md`
 - `docs/knowledge-base/USAGE.md`
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+C:/Workspace_local/gentle-vanguard/src/knowledge-base-autoinit.ts [-Force]
+```

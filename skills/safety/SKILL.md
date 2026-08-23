@@ -61,3 +61,11 @@ Returns 0.0-1.0 score. Below 0.5 requires human approval.
 - `C:/Workspace_local/gentle-vanguard/src/mutation-safety-scorer.ts`
 - `config/safety-layer.json`
 - `apps/web-dashboard/server/websocket-server.ts` — `/api/safety` endpoint
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+C:/Workspace_local/gentle-vanguard/src/safety-guardrails.ts -Action status
+```

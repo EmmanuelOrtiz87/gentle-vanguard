@@ -56,3 +56,9 @@ recovery required.
 ## References
 
 - Full code, examples, tables: [references/code.md](references/code.md)
+
+## Examples
+
+**Input:** a task matching `workflow-orchestrator` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Trigger:

@@ -124,3 +124,11 @@ Every release:
 - [ ] Version bump matches change (breaking → major, additive → minor, fix → patch)
 - [ ] Release tagged; version derived from tag
 - [ ] Changelog has curated entry grouped by impact
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+Implement slice → Test → Verify → Commit → Next slice
+```

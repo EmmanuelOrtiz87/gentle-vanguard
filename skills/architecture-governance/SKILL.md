@@ -54,3 +54,9 @@ documents.
 
 - `references/architecture-standards.md` — project structure outline, layered architecture summary,
   decision template, compatibility checklist, migration/refactor decision record
+
+## Examples
+
+**Input:** a task matching `architecture-governance` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Trigger:

@@ -86,3 +86,15 @@ Frases problemáticas reescritas en su contexto
 - **Fechas**: lanzamientos, actualizaciones, eventos
 - **Claims de productividad**: "X veces más rápido", "ahorra 80%"
 - **Salud, finanzas o legal**: especialmente sensible por impacto
+
+## Usage
+
+Use **verificador-datos-skill** when a task matches its triggers (verificador-datos-skill).
+
+Purpose: Reviews texts, posts, scripts, articles, reports, or AI responses to verify factual claims.
+
+## Examples
+
+**Input:** a task matching `verificador-datos-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Reviews texts, posts, scripts, articles, reports, or AI responses to verify factual claims.

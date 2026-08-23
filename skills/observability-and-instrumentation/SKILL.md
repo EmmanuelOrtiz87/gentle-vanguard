@@ -68,3 +68,9 @@ See `references/common-pitfalls.md`.
 ## Verification
 
 See `references/observability-checklist.md`.
+
+## Examples
+
+**Input:** a task matching `observability-and-instrumentation` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Observability and Instrumentation

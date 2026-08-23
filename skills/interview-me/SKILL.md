@@ -93,3 +93,9 @@ Optionally persist to `docs/intent/[topic].md` on user confirmation.
 - [Process Guide](references/process-guide.md) — Full rationale and common mistakes
 - [Example](references/example.md) — Before/after walkthrough
 - [Reference Tables](references/reference-tables.md) — Rationalizations, red flags, verification
+
+## Examples
+
+**Input:** a task matching `interview-me` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Extract what the user actually wants.

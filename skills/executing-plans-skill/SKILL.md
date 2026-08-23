@@ -83,3 +83,15 @@ After all tasks complete and verified:
   existing)
 - **superpowers:writing-plans** - Creates the plan this skill executes
 - **superpowers:finishing-a-development-branch** - Complete development after all tasks
+
+## Usage
+
+Use **executing-plans-skill** when a task matches its triggers (executing-plans-skill).
+
+Purpose: Imported from obra/superpowers.
+
+## Examples
+
+**Input:** a task matching `executing-plans-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Imported from obra/superpowers.

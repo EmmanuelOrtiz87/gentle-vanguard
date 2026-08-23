@@ -60,3 +60,14 @@ Want to change system behavior?
 | `references/02-application.md` | Step-by-step application guide with templates                                            |
 | `references/03-patterns.md`    | Common anti-patterns: Parameter Trap, Information Unlock, Goal Inversion, Paradigm Shift |
 | `references/04-problems.md`    | Common problem mappings, checklist, key questions, and Meadows quotes                    |
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+Want to change system behavior?
+  → Have you tried high-leverage interventions? → no → START HIGHER
+  → Are you stuck at low leverage? → yes → MOVE UP THE HIERARCHY
+  → Is change not sticking? → yes → LOOK FOR BALANCING LOOPS
+```

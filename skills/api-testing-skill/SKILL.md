@@ -65,3 +65,31 @@ describe('POST /users', () => {
 - Assert status, response time, required fields
 - Alert on SLA breaches
 - Monitor from multiple regions
+
+## Usage
+
+Use **api-testing-skill** when a task matches its triggers (api-testing-skill).
+
+Purpose: Imported from mercury-agent-skills.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```typescript
+describe('POST /users', () => {
+  it('creates a user with valid data', async () => {
+    const res = await request(app)
+      .post('/api/users')
+      .send({ name: 'Alice', email: 'alice@test.com' });
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty('id');
+  });
+  it('rejects duplicate email', async () => {
+    const res = await request(app)
+      .post('/api/users')
+      .send({ name: 'Alice', email: 'existing@test.com' });
+    expect(res.status).toBe(409);
+  });
+});
+```

@@ -98,3 +98,21 @@ metadata:
 - [ ] Output follows rules file patterns
 - [ ] References actual project files
 - [ ] Context refreshed per task
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+┌─────────────────────────────────────┐
+│  1. Rules Files (CLAUDE.md, etc.)   │ ← Always loaded
+├─────────────────────────────────────┤
+│  2. Spec / Architecture Docs        │ ← Per feature
+├─────────────────────────────────────┤
+│  3. Relevant Source Files            │ ← Per task
+├─────────────────────────────────────┤
+│  4. Error Output / Test Results      │ ← Per iteration
+├─────────────────────────────────────┤
+│  5. Conversation History             │ ← Accumulates
+└─────────────────────────────────────┘
+```

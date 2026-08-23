@@ -125,3 +125,17 @@ Los siguientes archivos fueron **eliminados** después de migración a TS:
 - `AGENTS.md` - Lineas 273-284: Migración PS1→TS
 - `CHANGELOG.md` - Linea 95: 108 PS1 scripts eliminados
 - `rules/RDD-NORMATIVA.md` - Sistema RDD nativo
+
+## Usage
+
+Use **validate-stack** when a task matches its triggers (validate - stack verify - verify stack - check stack - validation).
+
+Purpose: Validate the full Gentle-Vanguard stack.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```bash
+node -e "JSON.parse(require('fs').readFileSync('package.json')); console.log('✓ package.json is valid JSON')"
+```

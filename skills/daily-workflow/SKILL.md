@@ -61,3 +61,9 @@ Automates daily Gentle-Vanguard tasks: status check, context tracking, audit, an
 - Keep $env:GENTLE_VANGUARD_VERBOSE empty for quiet operation
 - Public repo: https://github.com/EmmanuelOrtiz87/gentle-vanguard-public
 - Private repo: https://github.com/EmmanuelOrtiz87/gentle-vanguard
+
+## Examples
+
+**Input:** a task matching `daily-workflow` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Daily Gentle-Vanguard tasks:

@@ -101,3 +101,9 @@ PII.
 
 **Biggest mistake:** Claiming "could be chained to" without demonstrating it. Show end-to-end or
 downgrade claim.
+
+## Examples
+
+**Input:** a task matching `report-writing-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Bug bounty report writing for H1/Bugcrowd/Intigriti/Immunefi — templates, human tone, impact-first writing, CVSS 3.1 scoring, title formula, severity guide, downgrade counters, checklist.

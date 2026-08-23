@@ -113,3 +113,12 @@ Across [N] sources · Covering [time range]
 - If the user has a memory system (CLAUDE.md), use it to decode people names and project references
 - Include enough context in each item that the user can decide whether to dig deeper without
   clicking through
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+To generate a digest, you'll need at least one source connected.
+Check your MCP settings to add ~~chat, ~~email, ~~cloud storage, or other tools.
+```

@@ -147,3 +147,35 @@ Este skill se integra con:
   ],
   "confirmationRequired": true|false }
 ```
+
+## Usage
+
+Use **config-risk-analyzer** when a task matches its triggers (config-risk-analyzer).
+
+Purpose: Analyze risks in configuration files, detect inconsistencies, validate schemas.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+1. Detectar cambio en archivo de configuración
+   ↓
+2. Cargar esquema correspondiente
+   ↓
+3. Validar estructura y tipos
+   ↓
+4. Verificar referencias cruzadas
+   ↓
+5. Buscar en lecciones aprendidas
+   ↓
+6. Generar análisis de riesgos
+   ↓
+7. Proponer soluciones
+   ↓
+8. Delegar a agente correspondiente
+   ↓
+9. Registrar en lecciones aprendidas
+   ↓
+10. Confirmar resolución
+```

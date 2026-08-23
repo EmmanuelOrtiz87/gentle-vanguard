@@ -90,3 +90,9 @@ Read `references/session-handoff-protocol.md` when you need:
 - Scripts: `src/compact-state.ts`, `src/compact-state.ts`, `src/session-metrics-tracker.ts`
 - Metrics: `src/tokens/token-optimization-orchestrator.ts`
 - Config: `config/context-efficiency.json`
+
+## Examples
+
+**Input:** a task matching `context-engineering-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Trigger:

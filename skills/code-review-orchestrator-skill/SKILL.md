@@ -57,3 +57,9 @@ path, and exit code (1 if blocked).
 
 > **See also**: [code-review-skill](../code-review-skill/SKILL.md) for structured
 > security/performance/correctness reviews
+
+## Examples
+
+**Input:** a task matching `code-review-orchestrator` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Trigger:

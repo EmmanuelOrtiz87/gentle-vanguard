@@ -85,3 +85,26 @@ Return a structured security report:
   limiting examples
 - `references/checklists.md` — OWASP Top 10, auth checklist, secrets management, dependency audit,
   security checklist for new features
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+## Security Review — {target}
+
+### Findings
+| Severity | Category | Description | File:Line |
+|----------|----------|-------------|-----------|
+| CRITICAL | {category} | {issue} | {path} |
+
+### Status
+- ✅ PASS — all checks pass
+- ⚠️ WARNING — non-critical issues found
+- ❌ FAIL — critical security issues
+
+### Summary
+- {N} findings total
+- {N} critical, {N} warnings
+- Recommended actions: {list}
+```

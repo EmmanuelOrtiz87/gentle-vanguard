@@ -81,3 +81,24 @@ Describe "Get-Config" {
 | New function  | 80%             |
 | Bug fix       | Regression test |
 | Config change | Smoke test      |
+
+## Usage
+
+Use **testing-coverage** when a task matches its triggers (testing-coverage).
+
+Purpose: Test coverage requirements for script behavior changes.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```powershell
+# PowerShell - Pester
+Invoke-Pester -Path .\tests\
+
+# Bash - ShellSpec
+shellspec spec/
+
+# Via C:/Workspace_local/gentle-vanguard/src/cli/gv.ts
+.\C:/Workspace_local/gentle-vanguard/src/cli/gv.ts test
+```

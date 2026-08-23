@@ -70,3 +70,14 @@ Develop go-to-market for [launch]
 ## References
 
 - `.agents/product-marketing.md` - Context template
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+/product-marketing
+Create positioning for [product]
+Define messaging for [feature]
+Develop go-to-market for [launch]
+```

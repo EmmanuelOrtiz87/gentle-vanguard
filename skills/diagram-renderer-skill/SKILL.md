@@ -185,3 +185,18 @@ Create `config/diagram-renderer.json`:
 - PlantUML jar not found → online renderer fallback (plantuml.com/plantuml/svg/)
 - Syntax errors → clear error message with line number
 - Batch mode → continue on error, report summary at end
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+Input (.dot / .puml / .wsd)
+  ↓
+diagram-renderer.ts
+  ├── Graphviz (.dot → SVG) — viz.js/wasm or local graphviz
+  ├── PlantUML (.puml → SVG) — plantuml.jar or online renderer
+  └── Fallback: Mermaid-compatible output
+        ↓
+  Output: SVG / PNG / Markdown embed
+```

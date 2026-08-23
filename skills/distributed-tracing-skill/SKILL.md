@@ -141,3 +141,21 @@ Ver: `config/distributed-tracing-config.json`
 - `C:/Workspace_local/gentle-vanguard/src/metrics-collector.ts` - Metrics collection
 - `C:/Workspace_local/gentle-vanguard/src/report-generator.ts` - Report generation
 - `src/dashboard-ws-autostart.ts` - Dashboard para visualizar traces
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+Root Span (Session)
+ Dispatch Span
+    Task Routing Span
+    Agent Execution Span
+    Result Processing Span
+ Orchestration Span
+    Phase Execution Span
+    State Management Span
+ Automation Span
+     Event Processing Span
+     Action Execution Span
+```

@@ -70,3 +70,19 @@ Spring, Gin, Axum, ASP.NET, Vapor, React Router, SvelteKit.
 ---
 
 > **Detailed reference**: [references/detail.md](references/detail.md)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```json
+{
+  "mcp": {
+    "codegraph": {
+      "type": "local",
+      "command": ["codegraph", "serve", "--mcp"],
+      "enabled": true
+    }
+  }
+}
+```

@@ -108,3 +108,9 @@ The full audit template has been extracted to
 
 You cannot debias through willpower alone. Use checklists, processes, and outside perspectives to
 catch what your intuition misses.
+
+## Examples
+
+**Input:** a task matching `debiasing-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Imported from cc-thinking-skills.

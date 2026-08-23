@@ -215,3 +215,15 @@ design philosophy but distinctly different as well. Bundle those pages in the sa
 .pngs. Treat the first page as just a single page in a whole coffee table book waiting to be filled.
 Make the next pages unique twists and memories of the original. Have them almost tell a story in a
 very tasteful way. Exercise full creative freedom.
+
+## Usage
+
+Use **canvas-design-skill** when a task matches its triggers (canvas-design-skill).
+
+Purpose: Create beautiful visual art in .png and .pdf documents using design philosophy.
+
+## Examples
+
+**Input:** a task matching `canvas-design-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Create beautiful visual art in .png and .pdf documents using design philosophy.

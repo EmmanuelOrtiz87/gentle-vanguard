@@ -95,3 +95,15 @@ email o mensaje real]
 - No añadas emojis salvo que el texto original ya los use o el usuario los pida
 - No uses negritas ni formato si el texto final es un email o mensaje real
 - El objetivo es que el texto parezca escrito por una persona real, no que parezca peor
+
+## Usage
+
+Use **humanizador-skill** when a task matches its triggers (humanizador-skill).
+
+Purpose: Rewrites AI-generated text to sound natural, human, and credible by eliminating generic phrases, inflated tone, corporate emptiness, and artificial patterns.
+
+## Examples
+
+**Input:** a task matching `humanizador-skill` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Rewrites AI-generated text to sound natural, human, and credible by eliminating generic phrases, inflated tone, corporate emptiness, and artificial patterns.

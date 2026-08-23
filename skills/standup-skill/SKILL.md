@@ -84,3 +84,30 @@ If **~~chat** is connected:
 1. **Run it every morning** — Build a habit and never scramble for standup notes.
 2. **Add context** — After I generate, add any nuance about blockers or priorities.
 3. **Share format** — Ask me to format for Slack, email, or your team's standup tool.
+
+## Usage
+
+Use **standup-skill** when a task matches its triggers (standup-skill).
+
+Purpose: Knowledge work plugin from engineering department.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        STANDUP                                    │
+├─────────────────────────────────────────────────────────────────┤
+│  STANDALONE (always works)                                       │
+│  ✓ Tell me what you worked on and I'll structure it             │
+│  ✓ Format for daily standup (yesterday / today / blockers)      │
+│  ✓ Keep it concise and action-oriented                          │
+├─────────────────────────────────────────────────────────────────┤
+│  SUPERCHARGED (when you connect your tools)                      │
+│  + Source control: Recent commits and PRs                        │
+│  + Project tracker: Ticket status changes                        │
+│  + Chat: Relevant discussions and decisions                      │
+│  + CI/CD: Build and deploy status                                │
+└─────────────────────────────────────────────────────────────────┘
+```

@@ -104,3 +104,27 @@ You're successful when:
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```json
+// .session/skill-embeddings.json
+{
+  "version": "1.0",
+  "last_updated": "2026-05-02T15:30:00Z",
+  "embeddings": {
+    "angular-spa-skill": {
+      "vector": [0.123, 0.456, ...],
+      "keywords": ["angular", "spa", "signals", "zoneless"],
+      "description": "Angular 19+ SPA patterns"
+    },
+    "sdd-apply": {
+      "vector": [0.789, 0.012, ...],
+      "keywords": ["implement", "code", "apply", "tasks"],
+      "description": "Implement code from task definitions"
+    }
+  }
+}
+```

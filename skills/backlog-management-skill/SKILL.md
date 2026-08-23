@@ -62,3 +62,20 @@ docs/backlog/
 3. Generate `items.json`.
 4. Update `README.md` to point to new structure.
 5. Deprecate old markdown file (move to archive).
+
+## Usage
+
+Use **backlog-management-skill** when a task matches its triggers (backlog-management-skill).
+
+Purpose: Backlog management patterns:
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+docs/backlog/
+ items.json              # Source of truth (structured data)
+ README.md               # Human-readable view (generated or manual)
+ archive/                # Completed/discarded items
+```

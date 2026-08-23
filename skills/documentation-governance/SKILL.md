@@ -55,3 +55,9 @@ Select document type from `references/documentation-standards.md`:
 
 - Templates & standards:
   [references/documentation-standards.md](references/documentation-standards.md)
+
+## Examples
+
+**Input:** a task matching `documentation-governance` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** Trigger:

@@ -81,3 +81,16 @@ See `references/assessment-guide.md` for full steps, test table, and common mism
 - `references/domain-practices.md` — Practices and examples for each domain
 - `references/cynefin-template.md` — Analysis template for use in conversations
 - `references/quick-reference.md` — Checklist, key questions, Snowden's wisdom
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+Facing a problem?
+  → What's the relationship between cause and effect?
+    → Obvious? → CLEAR
+    → Requires analysis? → COMPLICATED
+    → Only visible in retrospect? → COMPLEX
+    → Cannot perceive? → CHAOTIC
+```

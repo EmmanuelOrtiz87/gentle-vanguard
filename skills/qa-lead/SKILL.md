@@ -61,3 +61,15 @@ Structured QA methodology for comprehensive testing coverage.
 ## Output
 
 QA test plan + execution report
+
+## Usage
+
+Use **qa-lead** when a task matches its triggers (qa lead - test plan - regression testing).
+
+Purpose: QA methodology for systematic testing
+
+## Examples
+
+**Input:** a task matching `qa-lead` triggers.
+**Action:** apply the workflow described above.
+**Expected result:** QA methodology for systematic testing

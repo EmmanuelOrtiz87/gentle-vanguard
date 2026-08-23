@@ -114,3 +114,44 @@ Design the implementation:
 > **Referencia detallada**: [
 eferences/detail.md](references/detail.md)
 ```
+
+## Usage
+
+Use **sdd-lifecycle** when a task matches its triggers (sdd-lifecycle).
+
+Purpose: Spec-Driven Development (SDD) complete lifecycle - all phases in one skill.
+
+## Examples
+
+Concrete usage drawn from this skill's own documentation:
+
+```
+
+                    SDD LIFECYCLE
+
+
+
+    INIT    EXPLORE  PROPOSE   SPEC
+
+
+
+         TASKS    DESIGN
+
+
+
+
+                   APPLY
+
+
+
+
+                  VERIFY
+
+
+
+
+                  ARCHIVE
+
+
+
+```
