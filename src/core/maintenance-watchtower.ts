@@ -2,8 +2,8 @@
 
 import { readFileSync, existsSync, readdirSync, writeFileSync, statSync } from 'fs';
 import { join, resolve, basename, relative } from 'path';
-import { spawn, execFileSync } from 'child_process';
-import { runSync } from './run-command';
+import { execFileSync } from 'child_process';
+import { runSync, runNpxTsx } from './run-command';
 import { createConnection } from 'net';
 import {
   getEffectiveProcessTimeout,
@@ -1499,17 +1499,12 @@ async function autoHeal() {
       if (!quiet) console.log('  [Heal] Restarting Dashboard WS server via wrapper...');
       try {
         // Launch via TS wrapper - creates truly detached process
-        const child = spawn(
-          process.platform === 'win32' ? 'npx.cmd' : 'npx',
-          ['tsx', wrapperTs, '--quiet'],
-          {
-            cwd: ROOT,
-            stdio: 'ignore',
-            windowsHide: true,
-            detached: true,
-            shell: true,
-          },
-        );
+        const child = runNpxTsx(wrapperTs, ['--quiet'], {
+          cwd: ROOT,
+          stdio: 'ignore',
+          windowsHide: true,
+          detached: true,
+        });
         child.unref();
 
         // Wait for process to start and check if port is up
@@ -1529,12 +1524,11 @@ async function autoHeal() {
         } else {
           // Try fallback to direct tsx launch
           if (!quiet) console.log('  [Heal] Wrapper launch incomplete, trying direct spawn...');
-          const fallback = spawn('npx', ['tsx', wsAutostart, '--quiet'], {
+          const fallback = runNpxTsx(wsAutostart, ['--quiet'], {
             cwd: ROOT,
             stdio: 'ignore',
             detached: true,
             windowsHide: true,
-            shell: true,
           });
           fallback.unref();
           await new Promise((resolve) => setTimeout(resolve, 10000));
@@ -1592,12 +1586,11 @@ async function autoHeal() {
       // would close stdin -> the server exits instantly, and a second instance
       // competing for the codegraph index lock can kill an already-running
       // daemon. Delegating to the daemon script avoids both failure modes.
-      const child = spawn('npx.cmd', ['tsx', join(ROOT, 'src', 'codegraph-mcp-server-start.ts')], {
+      const child = runNpxTsx(join(ROOT, 'src', 'codegraph-mcp-server-start.ts'), [], {
         cwd: ROOT,
         stdio: 'ignore',
         detached: true,
         windowsHide: true,
-        shell: true,
       });
       child.unref();
       // Give the daemon time to boot (npx+tsx resolution + server start).

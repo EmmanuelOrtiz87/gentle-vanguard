@@ -10,7 +10,7 @@ import {
 } from 'fs';
 import { join, resolve } from 'path';
 import { spawn, type ChildProcess } from 'child_process';
-import { runSync, runNpxTsxSync } from './run-command.js';
+import { runSync, run, runNpxTsx, runNpxTsxSync, type RunOptions } from './run-command.js';
 import { getPipelineTimeouts } from './timeout-config';
 import { log as createLogger } from '../utils/logger.js';
 import { printBanner } from '../cli/banner.js';
@@ -240,11 +240,7 @@ function loadConfig(): PipelineConfig {
   }
 }
 
-/**
- * Build shell command string.
- * On Windows, must use `shell: true` for npx.cmd batch files.
- * windowsHide: true is enforced at the spawn() call site.
- */
+/** Human-readable command recorded in the lazy-step audit log. */
 function buildStepCommand(step: PipelineStep): string {
   const scriptPath = join(ROOT, step.script);
   let cmd: string;
@@ -257,6 +253,20 @@ function buildStepCommand(step: PipelineStep): string {
   }
   if (step.args) cmd += ` ${step.args}`;
   return cmd;
+}
+
+/** Preserve simple pipeline arguments without invoking a command shell. */
+function parseStepArgs(args?: string): string[] {
+  if (!args?.trim()) return [];
+  // Linear-time tokenizer (no nested quantifiers → no ReDoS): quoted
+  // segments stay together, unquoted tokens split on whitespace.
+  const out: string[] = [];
+  const re = /"([^"]*)"|(\S+)/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(args)) !== null) {
+    out.push(m[1] ?? m[2] ?? '');
+  }
+  return out;
 }
 
 function killProcessTree(child: ChildProcess): void {
@@ -283,18 +293,17 @@ function executeStep(
   }
 
   return new Promise((resolvePromise) => {
-    const cmd = buildStepCommand(step);
-
-    // shell:true is required on Windows for npx.cmd batch files.
-    // windowsHide:true ensures no flashing cmd.exe windows.
-    const spawnOptions: import('child_process').SpawnOptions = {
+    const spawnOptions: RunOptions = {
       cwd: ROOT,
       stdio: 'inherit', // show output in parent console
       windowsHide: true, // ✅ CRITICAL: hide window on Windows
-      shell: true, // required for npx.cmd on Windows
     };
-
-    const child = spawn(cmd, [], spawnOptions);
+    const args = parseStepArgs(step.args);
+    const child = scriptPath.endsWith('.ts')
+      ? runNpxTsx(scriptPath, args, spawnOptions)
+      : scriptPath.endsWith('.ps1')
+        ? run('pwsh', ['-NoProfile', '-File', scriptPath, ...args], spawnOptions)
+        : run(scriptPath, args, spawnOptions);
     let settled = false;
     const timer = setTimeout(() => {
       if (settled) return;
@@ -411,17 +420,27 @@ function startLazyStep(step: PipelineStep): { success: boolean; error?: string }
     'utf-8',
   );
 
-  const cmd = buildStepCommand(step);
-  const child = spawn(cmd, [], {
-    cwd: ROOT,
-    stdio: 'ignore',
-    windowsHide: true, // ✅ CRITICAL: no flashing window
-    shell: true, // required for npx.cmd on Windows
-    detached: true, // ✅ CRITICAL: detach from parent console/pipe so lazy
-    //   daemons (setInterval watchers) never keep the
-    //   calling shell waiting on an open stdout pipe.
-  });
-
+  const args = parseStepArgs(step.args);
+  const child = scriptPath.endsWith('.ts')
+    ? runNpxTsx(scriptPath, args, {
+        cwd: ROOT,
+        stdio: 'ignore',
+        windowsHide: true,
+        detached: true,
+      })
+    : scriptPath.endsWith('.ps1')
+      ? run('pwsh', ['-NoProfile', '-File', scriptPath, ...args], {
+          cwd: ROOT,
+          stdio: 'ignore',
+          windowsHide: true,
+          detached: true,
+        })
+      : run(scriptPath, args, {
+          cwd: ROOT,
+          stdio: 'ignore',
+          windowsHide: true,
+          detached: true,
+        });
   // The lock will auto-release when the child process exits
   // We don't need to maintain our lock - the child will have its own
   lock.release();
