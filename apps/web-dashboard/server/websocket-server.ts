@@ -1396,9 +1396,15 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
       req.on('end', () => {
         try {
           const payload = body ? JSON.parse(body) : {};
-          const result = applyAllMigrations(Number(payload.limit || 250));
-          res.writeHead(200, headers);
-          res.end(JSON.stringify({ success: true, data: result }));
+          void applyAllMigrations(Number(payload.limit || 250))
+            .then((result) => {
+              res.writeHead(200, headers);
+              res.end(JSON.stringify({ success: true, data: result }));
+            })
+            .catch((err: unknown) => {
+              res.writeHead(400, headers);
+              res.end(JSON.stringify({ success: false, error: err instanceof Error ? err.message : 'Apply migrations failed' }));
+            });
         } catch (err) {
           res.writeHead(400, headers);
           res.end(JSON.stringify({ success: false, error: err instanceof Error ? err.message : 'Apply migrations failed' }));

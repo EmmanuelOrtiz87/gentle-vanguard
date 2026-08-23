@@ -563,14 +563,41 @@ export function applyMigration(listingId: string): { id: string; applied: boolea
   return { id: listingId, applied: true, changes };
 }
 
+/**
+ * Retry a filesystem-touching action with linear backoff. Node on Windows can
+ * hit transient sharing violations (AV/indexer) even when the file is writable.
+ */
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function withRetry<T>(fn: () => T, attempts = 5): Promise<T> {
+  let lastError: unknown;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return fn();
+    } catch (e) {
+      lastError = e;
+      if (i < attempts - 1) await sleep(250 * (i + 1));
+    }
+  }
+  throw lastError;
+}
+
 /** Bulk-apply native migrations to every invalid catalog entry (up to limit). */
-export function applyAllMigrations(limit = 250) {
+export async function applyAllMigrations(limit = 250) {
   const invalid = getCatalogValidationReport().entries
     .filter((entry) => !entry.validation?.valid)
     .slice(0, Math.max(1, Math.min(250, limit)));
-  const results = invalid
-    .map((entry) => applyMigration(entry.id))
-    .filter((r): r is NonNullable<typeof r> => Boolean(r));
+  const results: NonNullable<ReturnType<typeof applyMigration>>[] = [];
+  for (const entry of invalid) {
+    try {
+      const r = await withRetry(() => applyMigration(entry.id));
+      if (r) results.push(r);
+    } catch {
+      // Skip entries that keep failing after retries.
+    }
+  }
   return { total: invalid.length, applied: results.filter((r) => r.applied).length, results };
 }
 
