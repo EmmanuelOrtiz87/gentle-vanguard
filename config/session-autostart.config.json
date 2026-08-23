@@ -251,9 +251,9 @@
         "enabled": true,
         "lazy": true,
         "script": "src/dashboard-ws-autostart.ts",
-        "args": "--quiet",
+        "args": "--quiet --watch",
         "required": false,
-        "description": "Start React WebSocket metrics server with watchdog auto-recovery â€” serves LLM observability dashboard on port 8080/5173 (TS)"
+        "description": "Start React WebSocket metrics server with persistent watchdog auto-recovery (5s health loop, up to 10 restarts) â€” serves LLM observability dashboard on port 8080/5173 (TS)"
       },
       {
         "id": "dashboard-operational-metrics",
