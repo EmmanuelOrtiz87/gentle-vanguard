@@ -739,6 +739,26 @@ function getRealMetricsFromJson(): DashboardData {
     .map(([name]) => name);
 
   const t = consolidated?.token || { usedToday: 0, budget: 120000, estCost: 0 };
+  // Fallback chain for token usage: consolidated (MetricsWriter) →
+  // .session/token-usage.json → Nexus token_usage (source of truth).
+  if (!t.usedToday) {
+    const fileTotal = tokenUsage?.totalTokens ?? 0;
+    if (fileTotal > 0) {
+      t.usedToday = fileTotal;
+    } else if (dbAvailable()) {
+      try {
+        const row = getDb()
+          .getDb()
+          .prepare(
+            "SELECT COALESCE(SUM(input_tokens + output_tokens), 0) AS total FROM token_usage WHERE timestamp >= ?",
+          )
+          .get(new Date(Date.now() - 24 * 3600_000).toISOString()) as { total: number };
+        if (row.total > 0) {
+          t.usedToday = row.total;
+        }
+      } catch { /* keep 0 */ }
+    }
+  }
   const s = consolidated?.sessions || { total: 0, active: 0, today: 0 };
 
   // Try to get session counts from history file

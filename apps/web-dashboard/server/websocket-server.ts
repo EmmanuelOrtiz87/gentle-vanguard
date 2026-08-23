@@ -27,6 +27,8 @@ import {
   getSkillContent,
 } from './marketplace-api.ts';
 import { MetricsWriter } from './database/metrics-writer.ts';
+import { DatabaseManager } from './database/manager.ts';
+import { ingestTelemetrySpans } from './telemetry-ingest.ts';
 import {
   getRealMetrics,
   getMetricHistory,
@@ -1921,6 +1923,20 @@ function evaluateAlerts(metrics: any): Array<{
   }
 }
 
+// Telemetry → Nexus bridge: ingest .telemetry/spans JSONL into the traces
+// table at startup, then keep it current every 60s (incremental by offsets).
+try {
+  const first = ingestTelemetrySpans();
+  if (first.spansIngested > 0) {
+    console.log(`[TELEMETRY] Ingested ${first.spansIngested} spans from ${first.filesScanned} file(s)`);
+  }
+} catch { /* retried by interval */ }
+setInterval(() => {
+  try {
+    ingestTelemetrySpans();
+  } catch { /* next cycle */ }
+}, 60_000);
+
 setInterval(() => {
   const metrics = generateMetrics();
 
@@ -1944,6 +1960,24 @@ setInterval(() => {
   alerts.forEach((a) => prevAlertState.set(a.name, a.triggered));
   const alertMsg = JSON.stringify({ type: 'alerts', data: alerts });
   clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(alertMsg));
+
+  // Persist alert transitions to Nexus (audit trail for the Alerts panel).
+  if (transitions.length > 0) {
+    try {
+      const db = DatabaseManager.getInstance();
+      for (const a of transitions) {
+        db.events.insertAlert({
+          name: a.name,
+          rule: a.rule,
+          severity: a.severity,
+          triggered: a.triggered ? 1 : 0,
+          actual: a.actual,
+          threshold: a.threshold,
+          transition: a.transition ?? undefined,
+        });
+      }
+    } catch { /* DB unavailable — broadcast already sent */ }
+  }
 
   // Broadcast alert transitions as notifications
   if (transitions.length > 0) {
