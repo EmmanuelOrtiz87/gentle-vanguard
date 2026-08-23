@@ -95,6 +95,29 @@ function OfflineBanner({ isOffline, lastUpdated }: { isOffline: boolean; lastUpd
   );
 }
 
+function LiveDataStatus({
+  connected,
+  lastUpdated,
+  source,
+}: {
+  connected: boolean;
+  lastUpdated: number;
+  source?: string;
+}) {
+  const sourceLabel = source === 'sqlite' ? 'SQLite' : source === 'json' ? 'JSON fallback' : 'native aggregator';
+  const timeLabel = lastUpdated > 0 ? new Date(lastUpdated).toLocaleTimeString() : 'waiting';
+  return (
+    <div className="gv-live-status" role="status" aria-live="polite">
+      <span className={`gv-live-status-dot ${connected ? 'is-connected' : 'is-reconnecting'}`} />
+      <span>{connected ? 'Live stream' : 'Recovery polling'}</span>
+      <span className="gv-live-status-divider" aria-hidden="true" />
+      <span>Source: {sourceLabel}</span>
+      <span className="gv-live-status-divider" aria-hidden="true" />
+      <span>Updated {timeLabel}</span>
+    </div>
+  );
+}
+
 function DashboardInner() {
   const [darkMode, setDarkMode] = useState(false);
   const [useWebSocket, setUseWebSocket] = useState(true);
@@ -103,6 +126,8 @@ function DashboardInner() {
   const {
     data,
     history,
+    historyRange,
+    setHistoryRange,
     loading,
     wsConnected,
     refetch,
@@ -148,8 +173,8 @@ function DashboardInner() {
   const locales: Locale[] = ['en', 'es', 'pt-BR'];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+    <div className="gv-dashboard-page min-h-screen bg-gray-50 dark:bg-gray-900">
+      <header className="gv-dashboard-header bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
@@ -237,11 +262,12 @@ function DashboardInner() {
       </header>
 
       <OfflineBanner isOffline={isOffline} lastUpdated={lastUpdated} />
+      <LiveDataStatus connected={wsConnected} lastUpdated={lastUpdated} source={data.source} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="gv-dashboard-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Row 1: Core KPIs */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {loading ? (
+          {loading && lastUpdated === 0 ? (
             <>
               {[1, 2, 3, 4, 5].map((i) => (
                 <div key={i} className="card animate-pulse">
@@ -284,7 +310,7 @@ function DashboardInner() {
               <MetricsCard
                 title="Health Status"
                 value={data.health.status}
-                subtitle={`Routing: ${(data.health.routing * 100).toFixed(0)}%`}
+                subtitle={`Routing: ${data.health.routing.toFixed(0)}%`}
                 icon={Activity}
                 color={data.health.status === 'healthy' ? 'green' : 'red'}
                 infoKey="health"
@@ -301,7 +327,7 @@ function DashboardInner() {
           <MetricsCard
             title="Total Cost"
             value={`$${data.tokens.cost.toFixed(4)}`}
-            subtitle={`Top model: ${topModel ? topModel.model : 'N/A'}`}
+            subtitle={`Model attribution: ${topModel ? topModel.model : 'unavailable'}`}
             icon={DollarSign}
             color="purple"
             infoKey="total_cost"
@@ -404,6 +430,12 @@ function DashboardInner() {
                 </table>
               </div>
             </div>
+          </div>
+        )}
+        {(!data.tokens.byModel || data.tokens.byModel.length === 0) && (
+          <div className="card mb-8 text-sm text-gray-600 dark:text-gray-400">
+            Model attribution is unavailable for the current telemetry source. Record model-level
+            trace events to enable cost comparison and savings recommendations.
           </div>
         )}
 
@@ -688,7 +720,7 @@ function DashboardInner() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <LiveChart data={history} />
+          <LiveChart data={history} range={historyRange} onRangeChange={setHistoryRange} />
           <ActivityTimeline history={history} />
         </div>
 

@@ -11,7 +11,7 @@ import { existsSync, readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import os from 'os';
 import { ROOT, readJson, countSkills as _countSkills } from './shared.ts';
-import type { CloudMetrics, DashboardData, SwarmWorkerData } from '../src/types/dashboard.ts';
+import type { CloudMetrics, CostInsight, DashboardData, ModelCost, SwarmWorkerData } from '../src/types/dashboard.ts';
 import { getProcessExecutionTimeouts } from '@gentle-vanguard/core/timeout-config';
 import { DatabaseManager } from './database/manager.ts';
 import { getAggregatedDashboardMetrics } from '@gentle-vanguard/core/metrics-aggregator';
@@ -26,7 +26,6 @@ const SESSIONS_HISTORY_PATH = join(ROOT, '.event-bus', 'sessions-history.json');
 const CONTEXT_LOG_DIR = join(ROOT, '.session', 'context-log');
 const TELEMETRY_TRACES_DIR = join(ROOT, '.telemetry', 'traces');
 
-// ─── Model Pricing ────────────────────────────────────────────────────
 const MODEL_PRICING: Record<string, { input: number; output: number }> = {
   'big-pickle': { input: 10, output: 30 },
   'gpt-4': { input: 30, output: 60 },
@@ -94,6 +93,18 @@ function dbAvailable(): boolean {
   } catch {
     return false;
   }
+}
+
+const ACTIVE_SESSION_FRESHNESS_MS = 15 * 60 * 1000;
+
+function getFreshActiveSessions(): ReturnType<DatabaseManager['getActiveSessions']> {
+  const cutoff = Date.now() - ACTIVE_SESSION_FRESHNESS_MS;
+  return getDb()
+    .getActiveSessions()
+    .filter((session) => {
+      const updatedAt = Date.parse(session.updated_at || '');
+      return Number.isFinite(updatedAt) && updatedAt >= cutoff;
+    });
 }
 
 // ─── Swarm Workers ────────────────────────────────────────────────────
@@ -249,6 +260,17 @@ export function getRealMetrics(): DashboardData {
   return getRealMetricsFromJson();
 }
 
+export type MetricHistoryRange = '5m' | '1h' | '24h' | '7d' | '30d';
+
+export function getMetricHistory(limit = 120, range?: MetricHistoryRange): Array<Record<string, unknown>> {
+  if (!dbAvailable()) return [];
+  const boundedLimit = Math.max(1, Math.min(2000, Math.floor(limit)));
+  const since = range
+    ? ({ '5m': '-5 minutes', '1h': '-1 hours', '24h': '-24 hours', '7d': '-7 days', '30d': '-30 days' } as const)[range]
+    : undefined;
+  return getDb().getMetricHistory(boundedLimit, since).reverse() as unknown as Array<Record<string, unknown>>;
+}
+
 // Build DashboardData from aggregated metrics (unified source)
 function buildDashboardDataFromAggregated(
   aggregated: ReturnType<typeof getAggregatedDashboardMetrics>,
@@ -257,6 +279,22 @@ function buildDashboardDataFromAggregated(
   // const db = getDb(); // Available if needed
   const gitStats = getGitStats();
   const osMetrics = getOSMetrics();
+
+  // Session cleanup can temporarily leave the live context directory empty.
+  // Keep real counts from SQLite visible while the next live state arrives.
+  let dbSessionTotal = 0;
+  let dbSessionActive = 0;
+  try {
+    if (dbAvailable()) {
+      const db = getDb();
+      dbSessionTotal = db.getAllSessions().length;
+      dbSessionActive = getFreshActiveSessions().length;
+    }
+  } catch {
+    // The aggregated source remains valid when SQLite is unavailable.
+  }
+  const sessionTotal = Math.max(aggregated.sessionsTotal, dbSessionTotal);
+  const sessionActive = Math.max(aggregated.sessionsActive, dbSessionActive);
 
   // Get operational metrics (velocity, efficiency, productivity)
   const operationalMetrics = OperationalMetricsTracker.calculateMetrics();
@@ -269,43 +307,76 @@ function buildDashboardDataFromAggregated(
     lastCall: string | null;
   }>(STATS_PATH) || { totalCalls: 0, callsByTool: {}, callsBySkill: {}, lastCall: null };
 
-  // Compute byModel from pricing and usage
-  const byModel = Object.entries(MODEL_PRICING)
-    .map(([model, pricing]) => {
-      const tokens = aggregated.totalTokens * 0.1; // Simplified distribution
-      const inputTokens = tokens * 0.7;
-      const outputTokens = tokens * 0.3;
-      const cost =
-        (inputTokens / 1_000_000) * pricing.input + (outputTokens / 1_000_000) * pricing.output;
-      return {
-        model,
-        inputTokens: Math.round(inputTokens),
-        outputTokens: Math.round(outputTokens),
-        totalTokens: Math.round(tokens),
-        cost,
-        calls: skillStats.totalCalls,
+  const topSkills = Object.entries(skillStats.callsBySkill || {})
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 5)
+    .map(([name]) => name);
+  const traceData = getTraces();
+  const traceStats = traceData.stats;
+  const traceDurations = traceData.traces
+    .map((trace) => trace.duration || 0)
+    .filter((duration) => duration > 0)
+    .sort((a, b) => a - b);
+  const tracePercentile = (percentile: number): number => {
+    if (traceDurations.length === 0) return 0;
+    const index = Math.min(traceDurations.length - 1, Math.ceil((percentile / 100) * traceDurations.length) - 1);
+    return traceDurations[Math.max(0, index)];
+  };
+  const checkpointDir = join(ROOT, '.session', 'checkpoints');
+  const auditDir = join(ROOT, '.session', 'audit', 'logs');
+  const traceDir = join(ROOT, '.telemetry', 'traces');
+  const checkpointCount = existsSync(checkpointDir)
+    ? readdirSync(checkpointDir).filter((d) => !d.includes('.')).length
+    : 0;
+  const auditFileCount = existsSync(auditDir)
+    ? readdirSync(auditDir).filter((f) => f.endsWith('.jsonl')).length
+    : 0;
+  const traceFileCount = existsSync(traceDir)
+    ? readdirSync(traceDir).filter((f) => f.endsWith('.jsonl')).length
+    : 0;
+  const cloudMetricsFile = readJson<{ executions?: unknown[] }>(
+    join(ROOT, '.session', 'cloud-metrics.json'),
+  );
+  let sqliteMetrics = {
+    skillCount: 0,
+    skillAvgCost: 0,
+    tokenTotalCost: 0,
+    contractPassRate: 0,
+    routingTotalHits: 0,
+  };
+  try {
+    if (dbAvailable()) {
+      const db = getDb();
+      const topSkillsRows = db.getTopSkills(100);
+      const tokenRow = db.getDb().prepare('SELECT COALESCE(SUM(cost), 0) as totalCost FROM token_usage').get() as { totalCost?: number };
+      const contractRows = db.getDb().prepare('SELECT status, result, COUNT(*) as cnt FROM contract_results GROUP BY status, result').all() as Array<{ status?: string; result?: string; cnt: number }>;
+      const totalContracts = contractRows.reduce((sum, row) => sum + row.cnt, 0);
+      const passedContracts = contractRows
+        .filter((row) => ['pass', 'valid', 'success'].includes(row.status || '') || ['pass', 'valid', 'success'].includes(row.result || ''))
+        .reduce((sum, row) => sum + row.cnt, 0);
+      const routingRow = db.getDb().prepare('SELECT COALESCE(SUM(hit_count), 0) as totalHits FROM routing_rules').get() as { totalHits?: number };
+      sqliteMetrics = {
+        skillCount: topSkillsRows.length,
+        skillAvgCost: topSkillsRows.length > 0
+          ? topSkillsRows.reduce((sum: number, skill: any) => sum + (skill.cost || 0), 0) / topSkillsRows.length
+          : 0,
+        tokenTotalCost: tokenRow.totalCost ?? 0,
+        contractPassRate: totalContracts > 0 ? passedContracts / totalContracts : 0,
+        routingTotalHits: routingRow.totalHits ?? 0,
       };
-    })
-    .slice(0, 5);
+    }
+  } catch {
+    // Optional SQLite tables remain explicitly unavailable when empty.
+  }
 
-  // Calculate cost insights
-  const totalCost = aggregated.totalCost;
-  const costInsights = byModel.map((m) => {
-    const pct = totalCost > 0 ? Math.round((m.cost / totalCost) * 100) : 0;
-    return {
-      model: m.model,
-      cost: m.cost,
-      tokens: m.totalTokens,
-      pct,
-      estimatedCost: m.cost,
-      savingsPct: 0,
-      suggestedAction: undefined,
-      potentialSavings: 0,
-      roi: 0,
-    };
-  });
+  // Aggregated session logs do not contain model attribution. Never manufacture a
+  // model split: model-level trace rows are required before this view is shown.
+  const byModel: ModelCost[] = [];
+  const costInsights: CostInsight[] = [];
 
   return {
+    timestamp: new Date().toISOString(),
+    source: 'aggregated',
     tokens: {
       used: aggregated.totalTokens,
       limit: 120000,
@@ -313,30 +384,30 @@ function buildDashboardDataFromAggregated(
       byModel,
     },
     sessions: {
-      total: aggregated.sessionsTotal,
-      active: aggregated.sessionsActive,
-      today: aggregated.sessionsToday,
-      avgDuration: 0,
+      total: sessionTotal,
+      active: sessionActive,
+      today: aggregated.sessionsToday || (dbAvailable() ? getDb().getSessionsToday().length : 0),
+      avgDuration: traceStats.avgDuration || aggregated.avgLatency,
     },
     git: gitStats,
     health: {
-      status: 'healthy',
-      routing: 95,
+      status: skillStats.totalCalls > 0 || sessionTotal > 0 ? 'healthy' : 'unknown',
+      routing: skillStats.totalCalls > 0 ? Math.min(100, skillStats.totalCalls) : 0,
     },
     latency: {
-      avg: aggregated.avgLatency,
-      p50: aggregated.p50Latency,
-      p95: aggregated.p95Latency,
-      p99: aggregated.p95Latency * 1.1, // Estimado
-      max: aggregated.p95Latency * 1.5, // Estimado
-      samples: aggregated.sessionsTotal,
+      avg: aggregated.avgLatency || traceStats.avgDuration,
+      p50: aggregated.p50Latency || tracePercentile(50),
+      p95: aggregated.p95Latency || tracePercentile(95),
+      p99: tracePercentile(99),
+      max: traceDurations[traceDurations.length - 1] || 0,
+      samples: aggregated.sloTotal || traceStats.totalTraces,
       responseTimes: {},
     },
     mcp: {
       skills: {
         total: Object.keys(skillStats.callsBySkill || {}).length,
         byAgent: {},
-        recentlyUsed: [],
+        recentlyUsed: topSkills,
       },
       calls: {
         total: skillStats.totalCalls,
@@ -344,23 +415,40 @@ function buildDashboardDataFromAggregated(
         bySkill: skillStats.callsBySkill || {},
         lastCall: skillStats.lastCall,
       },
-      performance: { avgResponseTime: aggregated.avgLatency, errorRate: 0, responseTimes: {} },
+      performance: { avgResponseTime: aggregated.avgLatency || traceStats.avgDuration, errorRate: traceStats.errorRate, responseTimes: {} },
     },
+    cloud: {
+      executions: cloudMetricsFile?.executions?.length || 0,
+      totalCost: 0,
+    },
+    checkpoints: checkpointCount,
+    auditLogs: auditFileCount,
+    traceFiles: traceFileCount,
+    sqlite: sqliteMetrics,
+    swarmWorkers: getSwarmWorkers(),
     system: osMetrics,
     // Note: cost prop moved to tokens.cost - DashboardData doesn't have top-level cost
     sla: {
-      uptime: 99.9,
-      incidents: 0,
+      uptime: aggregated.sloTotal > 0
+        ? aggregated.sloCompliance
+        : traceStats.totalTraces > 0
+          ? (1 - traceStats.errorRate) * 100
+          : 0,
+      incidents: aggregated.sloViolations,
       lastIncident: null,
-      sloCompliance: aggregated.sloCompliance,
-      responseTime95th: aggregated.p95Latency,
-      throughput: aggregated.sessionsTotal,
+      sloCompliance: aggregated.sloTotal > 0
+        ? aggregated.sloCompliance
+        : traceStats.totalTraces > 0
+          ? (1 - traceStats.errorRate) * 100
+          : 0,
+      responseTime95th: aggregated.p95Latency || traceStats.avgDuration,
+      throughput: sessionTotal,
     },
     feedback: {
       total: aggregated.feedbackTotal,
       thumbsUp: aggregated.feedbackUp,
       thumbsDown: aggregated.feedbackDown,
-      score: aggregated.feedbackTotal > 0 ? aggregated.feedbackUp / aggregated.feedbackTotal : 0,
+      score: aggregated.feedbackTotal > 0 ? (aggregated.feedbackUp / aggregated.feedbackTotal) * 100 : 0,
     },
     costInsights,
     operational: operationalMetrics || {
@@ -373,9 +461,9 @@ function buildDashboardDataFromAggregated(
       },
       efficiency: {
         avgToolLatency: 0,
-        successRate: 100,
-        fastestTool: 'N/A',
-        slowestTool: 'N/A',
+        successRate: 0,
+        fastestTool: 'No data',
+        slowestTool: 'No data',
         responseTimeP95: 0,
       },
       productivity: {
@@ -386,8 +474,8 @@ function buildDashboardDataFromAggregated(
         sessionsCompleted: 0,
       },
       quality: {
-        buildSuccessRate: 100,
-        testPassRate: 100,
+        buildSuccessRate: 0,
+        testPassRate: 0,
         errorsDetected: 0,
         autoCorrections: 0,
         typeCheckFailures: 0,
@@ -413,7 +501,7 @@ function buildDashboardDataFromAggregated(
 function getRealMetricsFromDb(): DashboardData {
   const db = getDb();
   const snapshot = db.getLatestMetricSnapshot();
-  const activeSessions = db.getActiveSessions();
+  const activeSessions = getFreshActiveSessions();
   const allSessions = db.getAllSessions();
   const latencyStats = db.getLatencyStats();
   const feedbackStats = db.getFeedbackStats();
@@ -495,12 +583,11 @@ function getRealMetricsFromDb(): DashboardData {
     .sort((a, b) => b.cost - a.cost);
 
   // SLA
-  const uptime = totalCost > 0 || gitStats.commits > 0 ? 99.95 : 99.5;
   const sla = {
-    uptime,
-    incidents: allSessions.length > 50 ? Math.floor(allSessions.length / 10) : 0,
+    uptime: 0,
+    incidents: 0,
     lastIncident: null,
-    sloCompliance: uptime >= 99.9 ? 100 : uptime >= 99.5 ? 95 : 80,
+    sloCompliance: 0,
     responseTime95th: latencyStats.p95,
     throughput: allSessions.length,
   };
@@ -565,6 +652,8 @@ function getRealMetricsFromDb(): DashboardData {
   }
 
   return {
+    timestamp: new Date().toISOString(),
+    source: 'sqlite',
     tokens: {
       used: snapshot?.tokens_used ?? 0,
       limit: snapshot?.tokens_limit ?? 120000,
@@ -581,8 +670,8 @@ function getRealMetricsFromDb(): DashboardData {
       avg: latencyStats.avg,
       p50: latencyStats.p50,
       p95: latencyStats.p95,
-      p99: latencyStats.p95,
-      max: allSessions.length > 0 ? latencyStats.p95 * 2 : 0,
+      p99: 0,
+      max: 0,
       samples: latencyStats.count,
       responseTimes: {},
     },
@@ -593,7 +682,7 @@ function getRealMetricsFromDb(): DashboardData {
     system: osMetrics,
     health: {
       status: healthStatus,
-      routing: skillStats.totalCalls > 0 ? Math.min(1, skillStats.totalCalls * 0.01) : 0,
+      routing: skillStats.totalCalls > 0 ? Math.min(100, skillStats.totalCalls) : 0,
     },
     mcp: {
       skills: { total: skills.total, byAgent: skills.byAgent, recentlyUsed: topSkills },
@@ -710,6 +799,8 @@ function getRealMetricsFromJson(): DashboardData {
   }
 
   return {
+    timestamp: new Date().toISOString(),
+    source: 'json',
     tokens: {
       used: t.usedToday || tokenUsage?.totalTokens || 0,
       limit: t.budget || 120000,
@@ -734,10 +825,10 @@ function getRealMetricsFromJson(): DashboardData {
     feedback: { thumbsUp: 0, thumbsDown: 0, total: 0, score: 0 },
     costInsights: [],
     sla: {
-      uptime: 99.5,
+      uptime: 0,
       incidents: 0,
       lastIncident: null,
-      sloCompliance: 95,
+      sloCompliance: 0,
       responseTime95th: 0,
       throughput: 0,
     },
@@ -745,7 +836,7 @@ function getRealMetricsFromJson(): DashboardData {
     system: osMetrics,
     health: {
       status: consolidated?.live?.trafficLight === 'GREEN' ? 'healthy' : 'degraded',
-      routing: skillStats.totalCalls > 0 ? Math.min(1, skillStats.totalCalls * 0.01) : 0,
+      routing: skillStats.totalCalls > 0 ? Math.min(100, skillStats.totalCalls) : 0,
     },
     mcp: {
       skills: { total: skills.total, byAgent: skills.byAgent, recentlyUsed: topSkills },
@@ -756,7 +847,7 @@ function getRealMetricsFromJson(): DashboardData {
         lastCall: skillStats.lastCall,
       },
       performance: {
-        avgResponseTime: skillStats.totalCalls > 0 ? 150 : 0,
+        avgResponseTime: 0,
         errorRate: 0,
         responseTimes: {},
       },
@@ -1092,13 +1183,20 @@ export function getTenantScopedMetrics(tenantId: string): DashboardData {
 // ─── Stack Tables (SQLite queries for Wave 36/37) ─────────────────────
 
 export function getSkillUsageFromDb(limit = 20) {
-  if (!dbAvailable()) return { skills: [], total: 0 };
+  const skillStats = readJson<{ callsBySkill?: Record<string, number> }>(STATS_PATH);
+  const fallbackSkills = Object.entries(skillStats?.callsBySkill || {})
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, limit)
+    .map(([skillId, count]) => ({ skillId, count, tokensUsed: 0, cost: 0 }));
+  if (!dbAvailable()) return { skills: fallbackSkills, total: fallbackSkills.length };
   try {
     const db = getDb();
     const skills = db.getTopSkills(limit);
-    return { skills, total: skills.length };
+    return skills.length > 0
+      ? { skills, total: skills.length }
+      : { skills: fallbackSkills, total: fallbackSkills.length };
   } catch {
-    return { skills: [], total: 0, error: 'DB query failed' };
+    return { skills: fallbackSkills, total: fallbackSkills.length, error: 'DB query failed' };
   }
 }
 

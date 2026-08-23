@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { DashboardData, MetricHistory } from '../types/dashboard';
 import { useSharedWs } from './useSharedWs';
 import { saveOfflineCache, loadOfflineCache, hasFreshOfflineCache } from '../lib/offline-storage';
 import { readCached, writeCached } from '../lib/offlineCache';
+import type { HistoryRange } from '../types/dashboard';
 
 const metricsCacheKey = (tenantId?: string) => `metrics:${tenantId || 'default'}`;
 
@@ -28,8 +29,11 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
     const legacy = loadOfflineCache(initialTenantId);
     return legacy ? (legacy as DashboardData) : FALLBACK_DATA;
   });
+  const dataRef = useRef(data);
+  const hasDataRef = useRef(false);
   const [tenantId, setTenantId] = useState<string | undefined>(initialTenantId);
   const [history, setHistory] = useState<MetricHistory[]>([]);
+  const [historyRange, setHistoryRange] = useState<HistoryRange>('1h');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -41,16 +45,18 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
 
   const updateFromPayload = useCallback(
     (payload: Partial<DashboardData> & { timestamp?: string }) => {
+      // Keep the last visible snapshot while the next one arrives.
       const newData = {
+        ...dataRef.current,
         ...payload,
-        system: payload.system ?? data.system,
+        system: payload.system ?? dataRef.current.system,
       } as DashboardData;
-
-      setData((prev) => ({
-        ...prev,
-        ...payload,
-        system: payload.system ?? prev.system,
-      }));
+      dataRef.current = newData;
+      hasDataRef.current = true;
+      setData(newData);
+      setLoading(false);
+      setIsOffline(false);
+      setLastUpdated(payload.timestamp ? Date.parse(payload.timestamp) || Date.now() : Date.now());
 
       // Save to offline cache
       saveOfflineCache(newData, tenantId);
@@ -75,7 +81,7 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
         return [...prev, newEntry].slice(-20);
       });
     },
-    [tenantId, data.system],
+    [tenantId],
   );
 
   const { connected: wsConnected } = useSharedWs(
@@ -99,7 +105,7 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
   );
 
   const fetchMetrics = useCallback(async () => {
-    setLoading(true);
+    if (!hasDataRef.current) setLoading(true);
     try {
       const params = tenantId ? `?tenantId=${encodeURIComponent(tenantId)}` : '';
       const res = await fetch(`/api/metrics${params}`);
@@ -138,14 +144,39 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
     } finally {
       setLoading(false);
     }
-  }, [updateFromPayload, tenantId, data.system]);
+  }, [updateFromPayload, tenantId]);
+
+  const fetchHistory = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/metrics/history?limit=2000&range=${historyRange}`);
+      if (!res.ok) return;
+      const message = await res.json();
+      if (message.type !== 'metrics_history' || !Array.isArray(message.data)) return;
+      setHistory(
+        message.data.map((snapshot: Record<string, unknown>) => ({
+          timestamp: String(snapshot.timestamp || new Date().toISOString()),
+          tokens: Number(snapshot.tokens_used || 0),
+          sessions: Number(snapshot.sessions_active || 0),
+          cost: Number(snapshot.cost || 0),
+          latency: Number(snapshot.latency_avg || 0),
+          mcpSkills: Number(snapshot.mcp_skills || 0),
+          commits: Number(snapshot.commits || 0),
+        })),
+      );
+    } catch {
+      // Live updates remain available when historical storage is temporarily unavailable.
+    }
+  }, [historyRange]);
 
   useEffect(() => {
-    fetchMetrics();
-    const interval = setInterval(fetchMetrics, 5000);
+    void fetchMetrics();
+    void fetchHistory();
+    // WebSocket is the live source; HTTP is a quiet recovery path.
+    const interval = setInterval(() => {
+      if (!_useWebSocketMode || !wsConnected) void fetchMetrics();
+    }, 15000);
     return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Solo ejecutar al montar, evita recarga infinita
+  }, [fetchHistory, fetchMetrics, _useWebSocketMode, wsConnected]);
 
   const dismissNotification = useCallback((index: number) => {
     setNotifications((prev) => prev.filter((_, i) => i !== index));
@@ -154,6 +185,8 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
   return {
     data,
     history,
+    historyRange,
+    setHistoryRange,
     loading,
     error,
     wsConnected,

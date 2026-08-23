@@ -16,6 +16,14 @@ interface SloData {
   checks: SloCheck[];
 }
 
+interface BurnWindow {
+  window: string;
+  samples: number;
+  errors: number;
+  burnRate: number | null;
+  status: 'NO_DATA' | 'BREACH' | 'WITHIN_BUDGET';
+}
+
 const STATUS_ICONS: Record<string, React.ReactNode> = {
   PASS: <ShieldCheck className="w-4 h-4 text-green-500" />,
   WARN: <AlertTriangle className="w-4 h-4 text-yellow-500" />,
@@ -35,16 +43,49 @@ function CheckIcon({ name }: { name: string }) {
   return <Gauge className="w-5 h-5 text-gray-500" />;
 }
 
+function BurnRatePanel({ windows }: { windows: BurnWindow[] }) {
+  return <div className="card mb-4">
+    <div className="flex items-center justify-between mb-3"><div><h3 className="text-sm font-semibold text-gray-900 dark:text-white">Error budget burn rate</h3><p className="text-xs text-gray-500 mt-1">Based on real SQLite metric snapshots. 1.0x consumes the budget at the target pace.</p></div><span className="text-xs text-gray-500">Target 99.9%</span></div>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">{windows.map((item) => <div key={item.window} className="rounded border border-gray-200 dark:border-gray-700 p-3"><div className="flex items-center justify-between"><span className="text-xs text-gray-500">{item.window}</span><span className={`text-[10px] font-semibold ${item.status === 'BREACH' ? 'text-red-400' : item.status === 'NO_DATA' ? 'text-gray-500' : 'text-emerald-400'}`}>{item.status}</span></div><p className="mt-2 text-lg font-semibold text-gray-900 dark:text-white">{item.burnRate === null ? '—' : `${item.burnRate.toFixed(2)}x`}</p><p className="text-[10px] text-gray-500">{item.samples} samples · {item.errors} errors</p></div>)}</div>
+  </div>;
+}
+
 export function SloPanel() {
   const [sloData, setSloData] = useState<SloData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [burnWindows, setBurnWindows] = useState<BurnWindow[]>([]);
 
   useEffect(() => {
     const fetchSlo = () => {
-      fetch('/api/slo')
-        .then((r) => r.json())
-        .then((json) => {
-          if (json?.data) setSloData(json.data);
+      Promise.all([fetch('/api/slo'), fetch('/api/slo/burn-rate')])
+        .then(async ([sloResponse, burnResponse]) => {
+          const sloJson = await sloResponse.json();
+          const burnJson = await burnResponse.json();
+          const windows: BurnWindow[] = burnJson?.data?.windows || [];
+          if (sloJson?.data) {
+            setSloData(sloJson.data);
+          } else if (windows.length > 0) {
+            // Burn rate is a native SLO source when perf:slo has not run.
+            const oneHour = windows.find((item) => item.window === '1h') || windows[0];
+            const errorRate = oneHour.samples > 0 ? (oneHour.errors / oneHour.samples) * 100 : 0;
+            const checks: SloCheck[] = [
+              { name: 'error_rate', status: errorRate <= 0.1 ? 'PASS' : errorRate <= 0.2 ? 'WARN' : 'FAIL', current: Number(errorRate.toFixed(3)), threshold: 0.1, unit: '%' },
+              { name: 'measured_samples', status: oneHour.samples > 0 ? 'PASS' : 'WARN', current: oneHour.samples, threshold: 1, unit: '' },
+              { name: 'error_budget_burn_1h', status: oneHour.status === 'BREACH' ? 'FAIL' : 'PASS', current: oneHour.burnRate ?? 0, threshold: 1, unit: 'x' },
+            ];
+            setSloData({
+              timestamp: new Date().toISOString(),
+              passed: checks.every((check) => check.status === 'PASS'),
+              overall: {
+                total: checks.length,
+                passed: checks.filter((check) => check.status === 'PASS').length,
+                warned: checks.filter((check) => check.status === 'WARN').length,
+                failed: checks.filter((check) => check.status === 'FAIL').length,
+              },
+              checks,
+            });
+          }
+          setBurnWindows(windows);
         })
         .catch(() => {
           /* dashboard not available */
@@ -88,6 +129,7 @@ export function SloPanel() {
             to generate SLO metrics
           </p>
         </div>
+        <BurnRatePanel windows={burnWindows} />
       </div>
     );
   }
@@ -137,6 +179,8 @@ export function SloPanel() {
           <span className="text-gray-400">of {total.total} checks</span>
         </div>
       </div>
+
+      <BurnRatePanel windows={burnWindows} />
 
       {/* SLO Checks grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

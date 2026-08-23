@@ -37,7 +37,12 @@ export class MetricsRepo {
     return row ?? null;
   }
 
-  getMetricHistory(limit = 20): MetricSnapshot[] {
+  getMetricHistory(limit = 20, since?: string): MetricSnapshot[] {
+    if (since) {
+      return this.db
+        .prepare("SELECT * FROM metric_snapshots WHERE timestamp >= datetime('now', ?) ORDER BY timestamp DESC LIMIT ?")
+        .all(since, limit) as MetricSnapshot[];
+    }
     return this.db
       .prepare('SELECT * FROM metric_snapshots ORDER BY timestamp DESC LIMIT ?')
       .all(limit) as MetricSnapshot[];

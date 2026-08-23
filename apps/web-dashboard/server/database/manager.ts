@@ -204,8 +204,8 @@ export class DatabaseManager {
   getLatestMetricSnapshot(): MetricSnapshot | null {
     return this.metrics.getLatestMetricSnapshot();
   }
-  getMetricHistory(limit = 20): MetricSnapshot[] {
-    return this.metrics.getMetricHistory(limit);
+  getMetricHistory(limit = 20, since?: string): MetricSnapshot[] {
+    return this.metrics.getMetricHistory(limit, since);
   }
   pruneMetricSnapshots(keep = 1440): void {
     this.metrics.pruneMetricSnapshots(keep);

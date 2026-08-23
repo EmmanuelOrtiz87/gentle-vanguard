@@ -1,5 +1,5 @@
 import { Suspense, lazy, useState } from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
   Activity,
@@ -13,6 +13,8 @@ import {
   Cpu,
   Library,
   Globe,
+  Workflow,
+  ShieldCheck,
 } from 'lucide-react';
 import { useSharedState } from './hooks/useSharedState';
 import { TenantSelector } from './components/TenantSelector';
@@ -27,6 +29,8 @@ const SessionTimeline = lazy(() => import('./components/SessionTimeline'));
 const MCPServers = lazy(() => import('./components/MCPServers'));
 const KnowledgePanel = lazy(() => import('./components/KnowledgePanel'));
 const MultiRepoView = lazy(() => import('./components/MultiRepoView'));
+const ContentOpsPanel = lazy(() => import('./components/ContentOpsPanel'));
+const AuditPanel = lazy(() => import('./components/AuditPanel'));
 
 const PageLoader = () => (
   <div className="flex items-center justify-center h-screen">
@@ -41,6 +45,8 @@ function Navigation() {
     { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
     { to: '/tracing', icon: Activity, label: 'Tracing' },
     { to: '/marketplace', icon: Store, label: 'Marketplace' },
+    { to: '/content-operations', icon: Workflow, label: 'Content Ops' },
+    { to: '/audit', icon: ShieldCheck, label: 'Audit' },
     { to: '/agents', icon: Bot, label: 'Agents' },
     { to: '/tasks', icon: ListTodo, label: 'Tasks' },
     { to: '/timeline', icon: History, label: 'Timeline' },
@@ -51,44 +57,50 @@ function Navigation() {
   ];
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-3">
-            <span className="text-xl font-bold text-gray-900 dark:text-white">GV Dashboard</span>
-            <TenantSelector />
+    <nav className="gv-topbar">
+      <div className="gv-topbar-inner">
+        <div className="gv-brand-row">
+          <div className="gv-brand-mark" aria-hidden="true">GV</div>
+          <div className="gv-brand-copy">
+            <span className="gv-brand-name">Gentle Vanguard</span>
+            <span className="gv-brand-product">Stack operations</span>
           </div>
+          <div className="gv-live-state"><span className="gv-live-dot" /> Local stack</div>
+            <TenantSelector />
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="lg:hidden p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+            className="gv-menu-button lg:hidden"
+            aria-label="Open navigation"
           >
             {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
-          <div className="hidden lg:flex items-center space-x-1">
+          <div className="gv-nav-links hidden lg:flex">
             {links.map((l) => (
-              <Link
+              <NavLink
                 key={l.to}
                 to={l.to}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                end={l.to === '/'}
+                className={({ isActive }) => `gv-nav-link ${isActive ? 'is-active' : ''}`}
               >
                 <l.icon className="w-4 h-4" />
                 {l.label}
-              </Link>
+              </NavLink>
             ))}
           </div>
         </div>
         {menuOpen && (
-          <div className="lg:hidden pb-3 space-y-1">
+          <div className="gv-mobile-nav lg:hidden">
             {links.map((l) => (
-              <Link
+              <NavLink
                 key={l.to}
                 to={l.to}
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                end={l.to === '/'}
+                className={({ isActive }) => `gv-nav-link ${isActive ? 'is-active' : ''}`}
               >
                 <l.icon className="w-4 h-4" />
                 {l.label}
-              </Link>
+              </NavLink>
             ))}
           </div>
         )}
@@ -138,13 +150,17 @@ function TimelinePage() {
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="gv-app-shell">
         <Navigation />
-        <Suspense fallback={<PageLoader />}>
+        <main className="gv-main">
+          <div className="gv-route-frame">
+          <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/tracing" element={<TracingDashboard />} />
             <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/content-operations" element={<ContentOpsPanel />} />
+            <Route path="/audit" element={<AuditPanel />} />
             <Route path="/docs" element={<InteractiveDocs />} />
             <Route path="/agents" element={<AgentChat />} />
             <Route path="/tasks" element={<TasksPage />} />
@@ -153,7 +169,9 @@ function App() {
             <Route path="/knowledge" element={<KnowledgePanel />} />
             <Route path="/multi-repo" element={<MultiRepoView />} />
           </Routes>
-        </Suspense>
+          </Suspense>
+          </div>
+        </main>
       </div>
     </BrowserRouter>
   );

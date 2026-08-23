@@ -60,6 +60,8 @@ export interface CostInsight {
 }
 
 export interface DashboardData {
+  timestamp?: string;
+  source?: 'aggregated' | 'sqlite' | 'json';
   tokens: { used: number; limit: number; cost: number; byModel: ModelCost[] };
   sessions: { total: number; active: number; today: number; avgDuration: number };
   git: { commits: number; prsMerged: number; contributors: number };
@@ -286,6 +288,8 @@ export interface MetricHistory {
   mcpSkills?: number;
   commits?: number;
 }
+
+export type HistoryRange = '5m' | '1h' | '24h' | '7d' | '30d';
 
 // ─── Stack Tables (Wave 37: SQLite-backed panels) ─────────────────────
 

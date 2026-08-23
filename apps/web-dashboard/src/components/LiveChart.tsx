@@ -9,12 +9,15 @@ import {
   Legend,
 } from 'recharts';
 import type { MetricHistory } from '../types/dashboard';
+import type { HistoryRange } from '../types/dashboard';
 
 interface LiveChartProps {
   data: MetricHistory[];
+  range?: HistoryRange;
+  onRangeChange?: (range: HistoryRange) => void;
 }
 
-export function LiveChart({ data }: LiveChartProps) {
+export function LiveChart({ data, range = '1h', onRangeChange }: LiveChartProps) {
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
@@ -22,7 +25,23 @@ export function LiveChart({ data }: LiveChartProps) {
 
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Metrics History</h3>
+      <div className="flex items-center justify-between gap-3 mb-4">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Metrics History</h3>
+        {onRangeChange && (
+          <select
+            aria-label="History range"
+            value={range}
+            onChange={(event) => onRangeChange(event.target.value as HistoryRange)}
+            className="text-sm border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-800"
+          >
+            <option value="5m">5 min</option>
+            <option value="1h">1 hour</option>
+            <option value="24h">24 hours</option>
+            <option value="7d">7 days</option>
+            <option value="30d">30 days</option>
+          </select>
+        )}
+      </div>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
