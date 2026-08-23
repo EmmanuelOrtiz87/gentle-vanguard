@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Star, Download, Tag, User, Plus, X, AlertCircle, CheckCircle } from 'lucide-react';
+import { Star, Download, Tag, User, Plus, X, AlertCircle, CheckCircle, SlidersHorizontal } from 'lucide-react';
 
 interface SkillListing {
   id: string;
@@ -14,6 +14,20 @@ interface SkillListing {
   triggers?: string[];
   agentType?: string;
   content?: string;
+  reviewStatus?: 'legacy' | 'pending' | 'approved' | 'rejected';
+  validation?: { valid: boolean; errors: string[] };
+}
+
+interface CatalogValidationReport {
+  total: number;
+  valid: number;
+  invalid: number;
+  entries: Array<{
+    id: string;
+    name: string;
+    status?: string;
+    validation?: { valid: boolean; errors: string[] };
+  }>;
 }
 
 interface Review {
@@ -33,6 +47,8 @@ interface SubmitFormData {
   agentType: string;
   skillContent: string;
 }
+
+type SortMode = 'relevance' | 'newest' | 'downloads' | 'rating' | 'name';
 
 const API_BASE = '/api/marketplace';
 
@@ -55,6 +71,12 @@ const AGENT_TYPES = [
   'any',
 ];
 
+// Mirrors the server-side canonical section vocabulary (marketplace-api.ts).
+const USAGE_HEADING_RE =
+  /^##\s+(usage|when to use|uso|cuando usar|how to use|workflow|execution steps|activation contract|instructions|steps)\b/im;
+const EXAMPLES_HEADING_RE =
+  /^##\s+(examples?|ejemplos?|sample|samples|api reference|worked example)\b/im;
+
 function validateSkillStructure(content: string): string[] {
   const errors: string[] = [];
   if (!content || content.trim().length === 0) {
@@ -64,20 +86,22 @@ function validateSkillStructure(content: string): string[] {
   if (!/^---/.test(content)) {
     errors.push('Missing YAML frontmatter (must start with ---)');
   }
-  if (!/##\s+Usage|##\s+When to Use/.test(content)) {
+  if (!USAGE_HEADING_RE.test(content)) {
     errors.push("Missing '## Usage' or '## When to Use' section");
   }
-  if (!/##\s+Examples/.test(content)) {
+  if (!EXAMPLES_HEADING_RE.test(content)) {
     errors.push("Missing '## Examples' section");
   }
   if (content.includes('---')) {
     const match = content.match(/^---\s*\n([\s\S]*?)\n---/);
     if (match) {
       const fm = match[1];
-      if (!/name:\s*\S+/.test(fm)) {
+      if (!/name:\s*\S/.test(fm)) {
         errors.push("Frontmatter missing 'name' field");
       }
-      if (!/description:\s*\S+/.test(fm)) {
+      // Multi-line folded descriptions are valid YAML — only flag when the
+      // key is entirely absent.
+      if (!/^[ \t]*description:/m.test(fm)) {
         errors.push("Frontmatter missing 'description' field");
       }
     }
@@ -101,6 +125,8 @@ export function Marketplace() {
   const [listings, setListings] = useState<SkillListing[]>([]);
   const [selectedListing, setSelectedListing] = useState<SkillListing | null>(null);
   const [filter, setFilter] = useState('');
+  const [sortMode, setSortMode] = useState<SortMode>('relevance');
+  const [agentFilter, setAgentFilter] = useState('ALL');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -118,6 +144,13 @@ export function Marketplace() {
   const [submitErrors, setSubmitErrors] = useState<string[]>([]);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [installing, setInstalling] = useState(false);
+  const [installMessage, setInstallMessage] = useState<string | null>(null);
+  const [installedIds, setInstalledIds] = useState<Set<string>>(new Set());
+  const [catalogReport, setCatalogReport] = useState<CatalogValidationReport | null>(null);
+  const [showReview, setShowReview] = useState(false);
+  const [reviewMessage, setReviewMessage] = useState<string | null>(null);
+  const [migrationLoading, setMigrationLoading] = useState(false);
 
   const loadListings = useCallback(async () => {
     setLoading(true);
@@ -135,6 +168,18 @@ export function Marketplace() {
   useEffect(() => {
     void loadListings();
   }, [loadListings]);
+
+  const loadCatalogReport = useCallback(async () => {
+    try {
+      setCatalogReport(await fetchApi<CatalogValidationReport>(`${API_BASE}/validation`));
+    } catch (err) {
+      setReviewMessage(err instanceof Error ? err.message : 'Failed to load catalog validation');
+    }
+  }, []);
+
+  useEffect(() => {
+    void loadCatalogReport();
+  }, [loadCatalogReport]);
 
   const handleSubmit = async () => {
     setSubmitErrors([]);
@@ -201,12 +246,88 @@ export function Marketplace() {
     }
   };
 
-  const filteredListings = listings.filter(
-    (l) =>
-      l.name.toLowerCase().includes(filter.toLowerCase()) ||
-      (l.tags || []).some((t) => t.toLowerCase().includes(filter.toLowerCase())) ||
-      (l.description || '').toLowerCase().includes(filter.toLowerCase()),
-  );
+  const agentTypes = Array.from(new Set(listings.map((listing) => listing.agentType || 'general'))).sort();
+  const filteredListings = listings
+    .filter((l) => {
+      const query = filter.toLowerCase().trim();
+      const matchesQuery = !query || l.name.toLowerCase().includes(query) ||
+        (l.tags || []).some((t) => t.toLowerCase().includes(query)) ||
+        (l.description || '').toLowerCase().includes(query);
+      return matchesQuery && (agentFilter === 'ALL' || (l.agentType || 'general') === agentFilter);
+    })
+    .sort((a, b) => {
+      if (sortMode === 'downloads') return b.downloads - a.downloads;
+      if (sortMode === 'rating') return b.rating - a.rating;
+      if (sortMode === 'name') return a.name.localeCompare(b.name);
+      if (sortMode === 'newest') return b.version.localeCompare(a.version, undefined, { numeric: true });
+      return 0;
+    });
+
+  const installSelected = async () => {
+    if (!selectedListing) return;
+    setInstalling(true);
+    setInstallMessage(null);
+    try {
+      await fetchApi(`${API_BASE}/${selectedListing.id}/install`, { method: 'POST' });
+      setInstalledIds((current) => new Set(current).add(selectedListing.id));
+      setInstallMessage('Skill installed and registered in the local stack.');
+      await loadListings();
+    } catch (err) {
+      setInstallMessage(err instanceof Error ? err.message : 'Installation failed');
+    } finally {
+      setInstalling(false);
+    }
+  };
+
+  const uninstallSelected = async () => {
+    if (!selectedListing) return;
+    setInstalling(true);
+    setInstallMessage(null);
+    try {
+      await fetchApi(`${API_BASE}/${selectedListing.id}/uninstall`, { method: 'POST' });
+      setInstalledIds((current) => {
+        const next = new Set(current);
+        next.delete(selectedListing.id);
+        return next;
+      });
+      setInstallMessage('Skill deactivated. Its content remains available for rollback.');
+    } catch (err) {
+      setInstallMessage(err instanceof Error ? err.message : 'Uninstall failed');
+    } finally {
+      setInstalling(false);
+    }
+  };
+
+  const prepareMigration = async (id: string) => {
+    try {
+      const draft = await fetchApi<{ path: string; errors: string[] }>(`${API_BASE}/${id}/migrate`, { method: 'POST' });
+      setReviewMessage(`Migration draft created at ${draft.path}`);
+    } catch (err) {
+      setReviewMessage(err instanceof Error ? err.message : 'Migration failed');
+    }
+  };
+
+  const prepareAllMigrations = async () => {
+    setMigrationLoading(true);
+    try {
+      const result = await fetchApi<{ total: number; created: number }>(`${API_BASE}/migrations`, { method: 'POST', body: JSON.stringify({ limit: 250 }) });
+      setReviewMessage(`Migration queue prepared: ${result.created}/${result.total} drafts created.`);
+    } catch (err) {
+      setReviewMessage(err instanceof Error ? err.message : 'Bulk migration failed');
+    } finally {
+      setMigrationLoading(false);
+    }
+  };
+
+  const moderateListing = async (id: string, status: 'approved' | 'rejected') => {
+    try {
+      await fetchApi(`${API_BASE}/${id}/moderate`, { method: 'POST', body: JSON.stringify({ status }) });
+      await Promise.all([loadCatalogReport(), loadListings()]);
+      setReviewMessage(`${id} marked as ${status}.`);
+    } catch (err) {
+      setReviewMessage(err instanceof Error ? err.message : 'Moderation failed');
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -228,13 +349,86 @@ export function Marketplace() {
 
       {/* Search */}
       <div className="card">
-        <input
-          type="text"
-          placeholder="Search skills..."
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-        />
+        <div className="flex items-center gap-2 mb-3 text-xs uppercase tracking-wider text-gray-500">
+          <SlidersHorizontal className="w-4 h-4" /> Discover and compare skills
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_180px_180px] gap-3">
+          <input
+            type="text"
+            placeholder="Search by name, description or tag..."
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            aria-label="Search skills"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+          />
+          <select aria-label="Filter by agent type" value={agentFilter} onChange={(e) => setAgentFilter(e.target.value)} className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
+            <option value="ALL">All agent types</option>
+            {agentTypes.map((agentType) => <option key={agentType} value={agentType}>{agentType}</option>)}
+          </select>
+          <select aria-label="Sort marketplace skills" value={sortMode} onChange={(e) => setSortMode(e.target.value as SortMode)} className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
+            <option value="relevance">Sort: relevance</option>
+            <option value="newest">Sort: newest</option>
+            <option value="downloads">Sort: downloads</option>
+            <option value="rating">Sort: rating</option>
+            <option value="name">Sort: name</option>
+          </select>
+        </div>
+        <p className="mt-3 text-xs text-gray-500">Showing {filteredListings.length} of {listings.length} skills</p>
+      </div>
+
+      <div className="card">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 className="font-semibold text-gray-900 dark:text-white">Catalog governance</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {catalogReport
+                ? `${catalogReport.valid} valid · ${catalogReport.invalid} require migration · ${catalogReport.total} total`
+                : 'Validation report loading...'}
+            </p>
+          </div>
+          <button
+            onClick={() => setShowReview((current) => !current)}
+            className="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+          >
+            {showReview ? 'Hide review queue' : 'Open review queue'}
+          </button>
+          <button onClick={() => void prepareAllMigrations()} disabled={migrationLoading} className="px-3 py-2 text-sm bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 disabled:opacity-50">
+            {migrationLoading ? 'Preparing drafts...' : 'Prepare all migration drafts'}
+          </button>
+        </div>
+        {reviewMessage && <p className="mt-3 text-sm text-blue-600 dark:text-blue-300">{reviewMessage}</p>}
+        {showReview && catalogReport && (
+          <div className="mt-4 max-h-80 overflow-y-auto border-t border-gray-200 dark:border-gray-700">
+            {catalogReport.entries.filter((entry) => !entry.validation?.valid).map((entry) => (
+              <div key={entry.id} className="flex flex-wrap items-center justify-between gap-3 py-3 border-b border-gray-100 dark:border-gray-800">
+                <div>
+                  <p className="font-medium text-gray-900 dark:text-white">{entry.name}</p>
+                  <p className="text-xs text-gray-500">{entry.validation?.errors.join(' · ')}</p>
+                </div>
+                <button
+                  onClick={() => void prepareMigration(entry.id)}
+                  className="px-3 py-1 text-xs bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200"
+                >
+                  Prepare migration draft
+                </button>
+              </div>
+            ))}
+            {catalogReport.entries.filter((entry) => entry.validation?.valid && entry.status !== 'approved').map((entry) => (
+              <div key={entry.id} className="flex flex-wrap items-center justify-between gap-3 py-3 border-b border-gray-100 dark:border-gray-800">
+                <div>
+                  <p className="font-medium text-gray-900 dark:text-white">{entry.name}</p>
+                  <p className="text-xs text-green-600">Validation passed · ready for approval</p>
+                </div>
+                <button
+                  onClick={() => void moderateListing(entry.id, 'approved')}
+                  className="px-3 py-1 text-xs bg-green-100 text-green-800 rounded hover:bg-green-200"
+                >
+                  Approve
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Error State */}
@@ -377,9 +571,26 @@ export function Marketplace() {
                 )}
               </div>
 
-              <button className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                Install Skill
-              </button>
+              {installMessage && (
+                <p className="text-sm text-gray-600 dark:text-gray-300">{installMessage}</p>
+              )}
+              {installedIds.has(selectedListing.id) ? (
+                <button
+                  onClick={() => void uninstallSelected()}
+                  disabled={installing}
+                  className="w-full py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50"
+                >
+                  {installing ? 'Deactivating...' : 'Deactivate Skill'}
+                </button>
+              ) : (
+                <button
+                  onClick={() => void installSelected()}
+                  disabled={installing}
+                  className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {installing ? 'Installing...' : 'Install Skill'}
+                </button>
+              )}
             </div>
           </div>
         </div>

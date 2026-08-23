@@ -12,12 +12,24 @@ import {
   createListing,
   addReview,
   incrementDownloads,
+  installListing,
+  uninstallListing,
+  getListingVersions,
+  createListingVersion,
+  rollbackListing,
+  getCatalogValidationReport,
+  updateListingReviewStatus,
+  createMigrationDraft,
+  createAllMigrationDrafts,
+  applyMigration,
+  applyAllMigrations,
   validateSkillStructure,
   getSkillContent,
 } from './marketplace-api.ts';
 import { MetricsWriter } from './database/metrics-writer.ts';
 import {
   getRealMetrics,
+  getMetricHistory,
   getTraces,
   getCloudMetrics,
   getTenantScopedMetrics,
@@ -33,8 +45,18 @@ import {
 } from './mcp-gateway-api.ts';
 import { meshHandler, meshDiscoverHandler, meshSyncHandler } from './mesh-api.ts';
 import { runValidations } from './validations.ts';
-import { ROOT, readJson, countSkills } from './shared.ts';
+import { ROOT, readJson, countSkills, STACK_VERSION } from './shared.ts';
+import { knowledgeHandler } from './knowledge-api.ts';
 import { OperationalMetricsTracker } from '@gentle-vanguard/core/operational-metrics-tracker';
+import {
+  loadManifest,
+  loadPlatformRegistry,
+  packageJob,
+  saveManifest,
+  transition,
+  validate as validateContentJob,
+  type Status,
+} from '../../../src/content-operations/engine.ts';
 
 const FEEDBACK_PATH = join(ROOT, '.runtime', 'metrics', 'feedback.json');
 const ALERTS_CONFIG_PATH = join(ROOT, 'config', 'dashboard-alerts.json');
@@ -53,6 +75,13 @@ const REGISTRY_PATH = join(ROOT, '.atl', 'skill-registry.md');
 const SESSIONS_HISTORY_PATH = join(ROOT, '.event-bus', 'sessions-history.json');
 
 const PORT = parseInt(process.env.WS_PORT || '8080', 10);
+const DASHBOARD_TOKEN = process.env.GV_DASHBOARD_TOKEN?.trim() || '';
+const AUTH_EXEMPT_PATHS = new Set([
+  '/api/health',
+  '/api/auth/status',
+  '/metrics',
+  '/api/metrics/prometheus',
+]);
 const server = createServer(handleRequest);
 server.on('error', (err: Error) => console.error('[WS-ERROR] HTTP server:', err.message));
 const wss = new WebSocketServer({ server });
@@ -136,6 +165,97 @@ function readTenantRegistry() {
   } catch {
     return { tenants: [] };
   }
+}
+
+function readAuditEntries(limit = 100, query = ''): Array<Record<string, unknown>> {
+  const auditDir = join(ROOT, '.session', 'audit', 'logs');
+  if (!existsSync(auditDir)) return [];
+  const needle = query.trim().toLowerCase();
+  const entries: Array<Record<string, unknown>> = [];
+  const files = readdirSync(auditDir)
+    .filter((file) => file.endsWith('.jsonl'))
+    .sort()
+    .reverse();
+  for (const file of files) {
+    try {
+      const lines = readFileSync(join(auditDir, file), 'utf-8').split(/\r?\n/).filter(Boolean).reverse();
+      for (const line of lines) {
+        try {
+          const entry = JSON.parse(line) as Record<string, unknown>;
+          if (!needle || JSON.stringify(entry).toLowerCase().includes(needle)) entries.push(entry);
+          if (entries.length >= limit) return entries;
+        } catch {
+          // Ignore incomplete JSONL lines while a writer is appending.
+        }
+      }
+    } catch {
+      // Audit viewer is best-effort and must not affect the metrics API.
+    }
+  }
+  return entries;
+}
+
+function prometheusMetrics(): string {
+  const metrics = generateMetrics() as Record<string, any>;
+  const health = getGlobalHealth() as Record<string, any>;
+  const number = (value: unknown): number => typeof value === 'number' && Number.isFinite(value) ? value : 0;
+  const lines = [
+    '# HELP gentle_vanguard_dashboard_up Dashboard process health.',
+    '# TYPE gentle_vanguard_dashboard_up gauge',
+    'gentle_vanguard_dashboard_up 1',
+    '# HELP gentle_vanguard_dashboard_uptime_seconds Dashboard process uptime.',
+    '# TYPE gentle_vanguard_dashboard_uptime_seconds gauge',
+    `gentle_vanguard_dashboard_uptime_seconds ${process.uptime()}`,
+    '# HELP gentle_vanguard_dashboard_ws_connections Current WebSocket clients.',
+    '# TYPE gentle_vanguard_dashboard_ws_connections gauge',
+    `gentle_vanguard_dashboard_ws_connections ${clients.size}`,
+    '# HELP gentle_vanguard_tokens_used Current real token consumption.',
+    '# TYPE gentle_vanguard_tokens_used gauge',
+    `gentle_vanguard_tokens_used ${number(metrics.tokens?.used)}`,
+    '# HELP gentle_vanguard_active_sessions Current active sessions.',
+    '# TYPE gentle_vanguard_active_sessions gauge',
+    `gentle_vanguard_active_sessions ${number(metrics.sessions?.active)}`,
+    '# HELP gentle_vanguard_health_status Health status encoded as 1 healthy, 0 otherwise.',
+    '# TYPE gentle_vanguard_health_status gauge',
+    `gentle_vanguard_health_status ${health.status === 'healthy' || health.status === 'ok' ? 1 : 0}`,
+  ];
+  return `${lines.join('\n')}\n`;
+}
+
+function calculateBurnRate() {
+  const windows = [
+    { label: '1h', range: '1h' as const },
+    { label: '6h', range: '7d' as const, hours: 6 },
+    { label: '24h', range: '24h' as const },
+    { label: '72h', range: '7d' as const, hours: 72 },
+  ];
+  const errorBudget = 1 - 0.999;
+  return windows.map(({ label, range, hours }) => {
+    const history = getMetricHistory(2000, range).filter((row: any) => {
+      if (!hours) return true;
+      const timestamp = Date.parse(String(row.timestamp || ''));
+      return Number.isFinite(timestamp) && Date.now() - timestamp <= hours * 60 * 60 * 1000;
+    });
+    const total = history.length;
+    const errors = history.filter((row: any) => !['healthy', 'ok', 'pass'].includes(String(row.health_status || '').toLowerCase())).length;
+    const errorRate = total > 0 ? errors / total : null;
+    return {
+      window: label,
+      samples: total,
+      errors,
+      errorRate,
+      burnRate: errorRate === null ? null : errorBudget > 0 ? errorRate / errorBudget : null,
+      status: total === 0 ? 'NO_DATA' : errorRate !== null && errorRate > errorBudget ? 'BREACH' : 'WITHIN_BUDGET',
+    };
+  });
+}
+
+function isAuthorized(req: IncomingMessage): boolean {
+  if (!DASHBOARD_TOKEN) return true;
+  const authorization = req.headers.authorization || '';
+  const bearer = authorization.startsWith('Bearer ') ? authorization.slice(7).trim() : '';
+  const supplied = bearer || String(req.headers['x-gv-dashboard-token'] || '').trim();
+  return supplied.length > 0 && supplied === DASHBOARD_TOKEN;
 }
 
 // --- Agent Session Management ---
@@ -636,11 +756,63 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
       return;
     }
 
+    if (DASHBOARD_TOKEN && url.pathname.startsWith('/api/') && !AUTH_EXEMPT_PATHS.has(url.pathname) && !isAuthorized(req)) {
+      res.writeHead(401, { ...headers, 'WWW-Authenticate': 'Bearer' });
+      res.end(JSON.stringify({ success: false, error: 'Dashboard authentication required' }));
+      return;
+    }
+
+    if (url.pathname === '/api/auth/status') {
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ enabled: Boolean(DASHBOARD_TOKEN), mode: DASHBOARD_TOKEN ? 'token' : 'local' }));
+      return;
+    }
+
     if (url.pathname === '/api/metrics') {
       const tenantIdParam = url.searchParams.get('tenantId');
       const tenantId = typeof tenantIdParam === 'string' ? tenantIdParam : undefined;
       res.writeHead(200, headers);
       res.end(JSON.stringify({ type: 'metrics', data: generateMetrics(tenantId) }));
+      return;
+    }
+
+    if (url.pathname === '/api/sse/metrics') {
+      res.writeHead(200, {
+        ...headers,
+        'Content-Type': 'text/event-stream; charset=utf-8',
+        'Cache-Control': 'no-cache, no-transform',
+        Connection: 'keep-alive',
+      });
+      const send = () => {
+        res.write(`event: metrics\ndata: ${JSON.stringify({ type: 'metrics', data: generateMetrics() })}\n\n`);
+      };
+      send();
+      const interval = setInterval(send, 5000);
+      req.on('close', () => clearInterval(interval));
+      return;
+    }
+
+    if (url.pathname === '/api/metrics/history') {
+      const requested = Number(url.searchParams.get('limit') || 120);
+      const requestedRange = url.searchParams.get('range');
+      const ranges = new Set(['5m', '1h', '24h', '7d', '30d']);
+      const range = requestedRange && ranges.has(requestedRange) ? requestedRange as '5m' | '1h' | '24h' | '7d' | '30d' : undefined;
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ type: 'metrics_history', range: range || 'all', data: getMetricHistory(requested, range) }));
+      return;
+    }
+
+    if (url.pathname === '/metrics' || url.pathname === '/api/metrics/prometheus') {
+      res.writeHead(200, { ...headers, 'Content-Type': 'text/plain; version=0.0.4; charset=utf-8' });
+      res.end(prometheusMetrics());
+      return;
+    }
+
+    if (url.pathname === '/api/audit') {
+      const limit = Math.min(Math.max(Number(url.searchParams.get('limit') || 100), 1), 500);
+      const query = url.searchParams.get('q') || '';
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ success: true, data: { entries: readAuditEntries(limit, query), query, limit } }));
       return;
     }
 
@@ -672,6 +844,12 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
       const sloData = existsSync(SLO_PATH) ? JSON.parse(readFileSync(SLO_PATH, 'utf8')) : null;
       res.writeHead(200, headers);
       res.end(JSON.stringify({ type: 'slo', data: sloData }));
+      return;
+    }
+
+    if (url.pathname === '/api/slo/burn-rate') {
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ success: true, data: { target: 99.9, errorBudget: 0.1, windows: calculateBurnRate() } }));
       return;
     }
 
@@ -741,7 +919,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
       res.end(
         JSON.stringify({
           status: 'ok',
-          version: '3.3.1',
+          version: STACK_VERSION,
           uptime: process.uptime(),
           connections: clients.size,
           components: {
@@ -831,6 +1009,10 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
                 return { status: 'unknown', dailyLimit: 0, usedToday: 0 };
               }
             })(),
+            auth: {
+              enabled: Boolean(DASHBOARD_TOKEN),
+              mode: DASHBOARD_TOKEN ? 'token' : 'local',
+            },
           },
           timestamp: new Date().toISOString(),
         }),
@@ -841,6 +1023,11 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
     if (url.pathname === '/api/traces') {
       res.writeHead(200, headers);
       res.end(JSON.stringify(getTraces()));
+      return;
+    }
+
+    if (url.pathname === '/api/knowledge') {
+      knowledgeHandler(req, res, headers);
       return;
     }
 
@@ -889,7 +1076,9 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
         if (existsSync(ALERTS_CONFIG_PATH)) {
           const config = JSON.parse(readFileSync(ALERTS_CONFIG_PATH, 'utf-8'));
           const metrics = generateMetrics();
-          alerts = Object.entries(config.rules || {}).map(([name, rule]: [string, any]) => {
+          alerts = Object.entries(config.rules || {})
+            .filter(([, rule]: [string, any]) => rule.enabled !== false)
+            .map(([name, rule]: [string, any]) => {
             const actual = rule.metric
               .split('.')
               .reduce((obj: any, key: string) => obj?.[key], metrics as any);
@@ -907,7 +1096,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
               triggered,
               unit: rule.unit || '',
             };
-          });
+            });
         }
       } catch {
         /* best-effort */
@@ -1176,6 +1365,133 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
       return;
     }
 
+    if (url.pathname === '/api/marketplace/validation' && req.method === 'GET') {
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ success: true, data: getCatalogValidationReport() }));
+      return;
+    }
+
+    if (url.pathname === '/api/marketplace/migrations' && req.method === 'POST') {
+      let body = '';
+      req.on('data', (chunk) => { body += chunk; });
+      req.on('end', () => {
+        try {
+          const payload = body ? JSON.parse(body) : {};
+          const result = createAllMigrationDrafts(Number(payload.limit || 250));
+          res.writeHead(201, headers);
+          res.end(JSON.stringify({ success: true, data: result }));
+        } catch (err) {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ success: false, error: err instanceof Error ? err.message : 'Migration failed' }));
+        }
+      });
+      return;
+    }
+
+    // Native migration engine: apply (not just draft) canonical structure to
+    // every invalid catalog entry — bulk variant.
+    if (url.pathname === '/api/marketplace/migrations/apply' && req.method === 'POST') {
+      let body = '';
+      req.on('data', (chunk) => { body += chunk; });
+      req.on('end', () => {
+        try {
+          const payload = body ? JSON.parse(body) : {};
+          const result = applyAllMigrations(Number(payload.limit || 250));
+          res.writeHead(200, headers);
+          res.end(JSON.stringify({ success: true, data: result }));
+        } catch (err) {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ success: false, error: err instanceof Error ? err.message : 'Apply migrations failed' }));
+        }
+      });
+      return;
+    }
+
+    if (url.pathname === '/api/content-operations' && req.method === 'GET') {
+      const jobs = loadManifest(ROOT);
+      const registry = loadPlatformRegistry(ROOT);
+      const validation = jobs.map((job) => ({ id: job.id, errors: validateContentJob(job, registry) }));
+      const byStatus = jobs.reduce<Record<string, number>>((counts, job) => {
+        counts[job.status] = (counts[job.status] || 0) + 1;
+        return counts;
+      }, {});
+      const byPlatform = jobs.reduce<Record<string, number>>((counts, job) => {
+        counts[job.platform] = (counts[job.platform] || 0) + 1;
+        return counts;
+      }, {});
+      const byDate = jobs.reduce<Record<string, number>>((counts, job) => {
+        counts[job.date] = (counts[job.date] || 0) + 1;
+        return counts;
+      }, {});
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ success: true, data: { jobs, byStatus, byPlatform, byDate, validation } }));
+      return;
+    }
+
+    if (url.pathname === '/api/content-operations' && req.method === 'POST') {
+      let body = '';
+      req.on('data', (chunk) => { body += chunk; });
+      req.on('end', () => {
+        try {
+          const payload = JSON.parse(body) as { id?: string; action?: 'transition' | 'package'; to?: Status };
+          const jobs = loadManifest(ROOT);
+          const index = jobs.findIndex((job) => job.id === payload.id);
+          if (index < 0) throw new Error('Content job not found');
+          const job = jobs[index];
+          const registry = loadPlatformRegistry(ROOT);
+          const errors = validateContentJob(job, registry);
+          if (payload.action === 'transition') {
+            if (!payload.to) throw new Error('Target status is required');
+            const updated = transition(job, payload.to);
+            jobs[index] = updated;
+            saveManifest(ROOT, jobs);
+            res.writeHead(200, headers);
+            res.end(JSON.stringify({ success: true, data: updated }));
+            return;
+          }
+          if (payload.action === 'package') {
+            if (errors.length) throw new Error(`Validation failed: ${errors.join('; ')}`);
+            const output = packageJob(ROOT, job);
+            res.writeHead(200, headers);
+            res.end(JSON.stringify({ success: true, data: { id: job.id, output, status: 'REVIEW' } }));
+            return;
+          }
+          throw new Error('Unsupported content operation');
+        } catch (err) {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ success: false, error: err instanceof Error ? err.message : 'Invalid content operation' }));
+        }
+      });
+      return;
+    }
+
+    const contentJobMatch = url.pathname.match(/^\/api\/content-operations\/([A-Za-z0-9._-]+)$/);
+    if (contentJobMatch && req.method === 'GET') {
+      const jobId = contentJobMatch[1];
+      const job = loadManifest(ROOT).find((item) => item.id === jobId);
+      if (!job) {
+        res.writeHead(404, headers);
+        res.end(JSON.stringify({ success: false, error: 'Content job not found' }));
+        return;
+      }
+      const packagePath = join(ROOT, '.runtime', 'content-operations', job.date, job.platform, job.id);
+      const captionPath = join(packagePath, 'caption.txt');
+      const publicationPath = join(packagePath, 'publication.json');
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({
+        success: true,
+        data: {
+          job,
+          validation: validateContentJob(job, loadPlatformRegistry(ROOT)),
+          packaged: existsSync(publicationPath),
+          output: existsSync(publicationPath) ? packagePath : null,
+          caption: existsSync(captionPath) ? readFileSync(captionPath, 'utf8') : null,
+          publication: existsSync(publicationPath) ? JSON.parse(readFileSync(publicationPath, 'utf8')) : null,
+        },
+      }));
+      return;
+    }
+
     if (url.pathname === '/api/marketplace' && req.method === 'POST') {
       let body = '';
       req.on('data', (chunk) => {
@@ -1268,13 +1584,102 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
       return;
     }
 
-    // Match /api/marketplace/:id/review and /api/marketplace/:id/download
+    // Match /api/marketplace/:id/review, /download, /install, /uninstall, /versions and /rollback
     const marketplaceMatch = url.pathname.match(
-      /^\/api\/marketplace\/([^/]+)(?:\/(review|download))?$/,
+      /^\/api\/marketplace\/([^/]+)(?:\/(review|download|install|uninstall|versions|rollback|moderate|migrate|apply-migration))?$/,
     );
     if (marketplaceMatch) {
       const listingId = marketplaceMatch[1];
       const action = marketplaceMatch[2];
+
+      if (action === 'versions' && req.method === 'GET') {
+        res.writeHead(200, headers);
+        res.end(JSON.stringify({ success: true, data: getListingVersions(listingId) }));
+        return;
+      }
+
+      if (action === 'versions' && req.method === 'POST') {
+        let body = '';
+        req.on('data', (chunk) => { body += chunk; });
+        req.on('end', () => {
+          try {
+            const payload = JSON.parse(body);
+            const version = createListingVersion(listingId, payload.version, payload.content);
+            res.writeHead(201, headers);
+            res.end(JSON.stringify({ success: true, data: version }));
+          } catch (err) {
+            res.writeHead(400, headers);
+            res.end(JSON.stringify({ success: false, error: err instanceof Error ? err.message : 'Invalid version' }));
+          }
+        });
+        return;
+      }
+
+      if (action === 'rollback' && req.method === 'POST') {
+        let body = '';
+        req.on('data', (chunk) => { body += chunk; });
+        req.on('end', () => {
+          try {
+            const payload = JSON.parse(body);
+            const version = rollbackListing(listingId, payload.version);
+            if (!version) {
+              res.writeHead(404, headers);
+              res.end(JSON.stringify({ success: false, error: 'Version not found' }));
+              return;
+            }
+            res.writeHead(200, headers);
+            res.end(JSON.stringify({ success: true, data: version }));
+          } catch (err) {
+            res.writeHead(400, headers);
+            res.end(JSON.stringify({ success: false, error: err instanceof Error ? err.message : 'Invalid rollback' }));
+          }
+        });
+        return;
+      }
+
+      if (action === 'moderate' && req.method === 'POST') {
+        let body = '';
+        req.on('data', (chunk) => { body += chunk; });
+        req.on('end', () => {
+          try {
+            const payload = JSON.parse(body);
+            if (payload.status !== 'approved' && payload.status !== 'rejected') throw new Error('status must be approved or rejected');
+            const listing = updateListingReviewStatus(listingId, payload.status);
+            if (!listing) throw new Error('Listing not found or validation failed');
+            res.writeHead(200, headers);
+            res.end(JSON.stringify({ success: true, data: listing }));
+          } catch (err) {
+            res.writeHead(400, headers);
+            res.end(JSON.stringify({ success: false, error: err instanceof Error ? err.message : 'Invalid moderation' }));
+          }
+        });
+        return;
+      }
+
+      if (action === 'migrate' && req.method === 'POST') {
+        const draft = createMigrationDraft(listingId);
+        if (!draft) {
+          res.writeHead(404, headers);
+          res.end(JSON.stringify({ success: false, error: 'Listing content not found' }));
+          return;
+        }
+        res.writeHead(201, headers);
+        res.end(JSON.stringify({ success: true, data: draft }));
+        return;
+      }
+
+      // Native migration: apply canonical structure directly to SKILL.md.
+      if (action === 'apply-migration' && req.method === 'POST') {
+        const result = applyMigration(listingId);
+        if (!result) {
+          res.writeHead(404, headers);
+          res.end(JSON.stringify({ success: false, error: 'Listing content not found' }));
+          return;
+        }
+        res.writeHead(200, headers);
+        res.end(JSON.stringify({ success: true, data: result }));
+        return;
+      }
 
       if (!action && req.method === 'GET') {
         const listing = getListing(listingId);
@@ -1332,6 +1737,30 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
         const downloads = incrementDownloads(listingId);
         res.writeHead(200, headers);
         res.end(JSON.stringify({ success: true, data: { id: listingId, downloads } }));
+        return;
+      }
+
+      if (action === 'install' && req.method === 'POST') {
+        const installation = installListing(listingId);
+        if (!installation) {
+          res.writeHead(404, headers);
+          res.end(JSON.stringify({ success: false, error: 'Listing is not installable' }));
+          return;
+        }
+        res.writeHead(200, headers);
+        res.end(JSON.stringify({ success: true, data: installation }));
+        return;
+      }
+
+      if (action === 'uninstall' && req.method === 'POST') {
+        const removed = uninstallListing(listingId);
+        if (!removed) {
+          res.writeHead(404, headers);
+          res.end(JSON.stringify({ success: false, error: 'Listing is not installed' }));
+          return;
+        }
+        res.writeHead(200, headers);
+        res.end(JSON.stringify({ success: true, data: { id: listingId, installed: false } }));
         return;
       }
 
@@ -1447,6 +1876,7 @@ function evaluateAlerts(metrics: any): Array<{
   severity: string;
   triggered: boolean;
   unit: string;
+  direction: 'above' | 'below';
   transition?: string;
 }> {
   try {
@@ -1475,6 +1905,7 @@ function evaluateAlerts(metrics: any): Array<{
           severity: rule.severity || 'info',
           triggered,
           unit: rule.unit || '',
+          direction: below ? 'below' : 'above',
           transition,
         };
       })
@@ -1514,7 +1945,7 @@ setInterval(() => {
       type: a.transition === 'fired' ? 'alert_fired' : 'alert_resolved',
       message:
         a.transition === 'fired'
-          ? `Alert: ${a.rule} triggered (${a.actual}${a.unit} > ${a.threshold}${a.unit})`
+          ? `Alert: ${a.rule} triggered (${a.actual}${a.unit} ${a.direction === 'below' ? '<=' : '>='} ${a.threshold}${a.unit})`
           : `Resolved: ${a.rule} (${a.actual}${a.unit})`,
       severity: a.transition === 'fired' ? a.severity : 'info',
       timestamp: new Date().toISOString(),
