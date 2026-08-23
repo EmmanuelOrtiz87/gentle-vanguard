@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react';
 import { CheckCircle, AlertTriangle, AlertCircle, RefreshCw } from 'lucide-react';
-import { useValidations } from '../hooks/useValidations';
+import { useValidations, type Validation } from '../hooks/useValidations';
 
 const STATUS_ICONS: Record<string, React.ReactNode> = {
   ok: <CheckCircle className="w-4 h-4 text-green-500" />,
@@ -14,7 +15,27 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export function ValidationPanel() {
-  const validations = useValidations();
+  const wsValidations = useValidations();
+  // HTTP fallback for first paint: seed from /api/validations until the
+  // WS broadcast takes over as live source.
+  const [seeded, setSeeded] = useState<Validation[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const res = await fetch('/api/validations');
+        if (!res.ok) return;
+        const json = await res.json();
+        if (!cancelled && Array.isArray(json.data)) setSeeded(json.data);
+      } catch {
+        /* WS will provide */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const validations = wsValidations.length > 0 ? wsValidations : seeded;
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">

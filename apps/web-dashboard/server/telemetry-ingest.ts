@@ -127,9 +127,12 @@ export function ingestTelemetrySpans(): IngestResult {
         if (!span.spanId) continue;
         const startMs = nanoToMs(span.startTimeUnixNano) ?? Date.now();
         const rawEnd = nanoToMs(span.endTimeUnixNano);
-        // Source spans can carry clock-skewed ends (endTime < startTime);
-        // treat those as still-running instead of poisoning durations.
-        const endMs = rawEnd !== null && rawEnd >= startMs ? rawEnd : null;
+        // Source spans can carry clock-skewed ends: endTime < startTime
+        // (negative) or endTime absurdly in the future (multi-billion ms).
+        // Both poison latency percentiles — treat as still-running.
+        const MAX_SPAN_MS = 600_000; // 10 min sane ceiling for a single span
+        const endMs =
+          rawEnd !== null && rawEnd >= startMs && rawEnd - startMs <= MAX_SPAN_MS ? rawEnd : null;
         db.traces.insertTrace({
           span_id: span.spanId,
           trace_id: span.traceId ?? '',

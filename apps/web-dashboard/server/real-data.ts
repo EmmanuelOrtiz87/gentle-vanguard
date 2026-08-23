@@ -184,6 +184,53 @@ export function getSwarmWorkers(): SwarmWorkerData {
       }
     }
 
+    // Nexus fallback: no swarm worker dirs → derive workers from real
+    // subagent activity in token_transactions (agent per message).
+    if (workers.length === 0 && dbAvailable()) {
+      try {
+        const rows = getDb()
+          .getDb()
+          .prepare(
+            `SELECT agent,
+                    COUNT(*) AS messages,
+                    SUM(input_tokens + output_tokens) AS tokens,
+                    MIN(created_at) AS first_seen,
+                    MAX(created_at) AS last_seen,
+                    COALESCE(MAX(model), 'unknown') AS model
+             FROM token_transactions
+             WHERE agent IS NOT NULL AND agent != ''
+             GROUP BY agent
+             ORDER BY last_seen DESC
+             LIMIT 20`,
+          )
+          .all() as Array<{
+          agent: string;
+          messages: number;
+          tokens: number;
+          first_seen: string;
+          last_seen: string;
+          model: string;
+        }>;
+        for (const r of rows) {
+          const isRoot = r.agent === 'ROOT' || r.agent === 'orchestrator';
+          workers.push({
+            skill: r.agent,
+            status: 'completed',
+            started: r.first_seen,
+            finished: r.last_seen,
+            exitCode: 0,
+            output: `${r.messages} mensajes · ${r.tokens ?? 0} tokens · ${r.model}`,
+            error: null,
+            workerDir: 'nexus://token_transactions',
+          });
+          if (isRoot) continue; // orchestrator tracked separately, not a worker
+          completed++;
+        }
+      } catch {
+        /* fall through to empty */
+      }
+    }
+
     return {
       activeCount: active,
       completedCount: completed,
@@ -750,7 +797,7 @@ function getRealMetricsFromJson(): DashboardData {
         const row = getDb()
           .getDb()
           .prepare(
-            "SELECT COALESCE(SUM(input_tokens + output_tokens), 0) AS total FROM token_usage WHERE timestamp >= ?",
+            'SELECT COALESCE(SUM(prompt_tokens + completion_tokens), 0) AS total FROM token_usage WHERE timestamp >= ?',
           )
           .get(new Date(Date.now() - 24 * 3600_000).toISOString()) as { total: number };
         if (row.total > 0) {
@@ -1265,7 +1312,44 @@ export function getRoutingRulesFromDb() {
   try {
     const db = getDb();
     const rules = db.getEnabledRoutingRules();
-    return { rules, total: rules.length };
+    if (rules.length > 0) return { rules, total: rules.length };
+    // Nexus routing_rules empty → derive the stack's ACTUAL static routing
+    // config (subagent-mapping.json) so the panel reflects reality.
+    const mappingPath = join(ROOT, 'config', 'subagent-mapping.json');
+    const mapping = readJson<{
+      mapping?: Record<
+        string,
+        { name?: string; primary_subagent?: string; triggers?: string[] }
+      >;
+    }>(mappingPath);
+    if (!mapping?.mapping) return { rules: [], total: 0 };
+    // Real usage per subagent as hitCount proxy.
+    let hits: Record<string, number> = {};
+    try {
+      const rows = db
+        .getDb()
+        .prepare(
+          'SELECT agent, COUNT(*) AS n FROM token_transactions WHERE agent IS NOT NULL GROUP BY agent',
+        )
+        .all() as Array<{ agent: string; n: number }>;
+      hits = Object.fromEntries(rows.map((r) => [r.agent, r.n]));
+    } catch {
+      /* hitCount stays 0 */
+    }
+    const CORE = ['BA', 'SAD', 'DEV', 'QA'];
+    const EXTENDED = ['OPS', 'GOV', 'DOC', 'SESSION', 'PREMORTEM'];
+    const rulesOut = Object.entries(mapping.mapping)
+      .filter(([, v]) => v.primary_subagent)
+      .map(([domain, v]) => ({
+        pattern:
+          v.triggers && v.triggers.length > 0
+            ? v.triggers.slice(0, 3).join(', ')
+            : `${domain.toLowerCase()} tasks`,
+        target: v.primary_subagent as string,
+        priority: CORE.includes(domain) ? 90 : EXTENDED.includes(domain) ? 70 : 50,
+        hitCount: hits[v.primary_subagent as string] ?? 0,
+      }));
+    return { rules: rulesOut, total: rulesOut.length };
   } catch {
     return { rules: [], total: 0, error: 'DB query failed' };
   }

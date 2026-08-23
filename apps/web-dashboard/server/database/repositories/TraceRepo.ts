@@ -38,12 +38,14 @@ export class TraceRepo {
   }
 
   getLatencyStats(): { avg: number; p50: number; p95: number; count: number } {
+    // Sane window: 0 < duration <= 10min. Clock-skewed spans can produce
+    // multi-billion ms durations that would poison every percentile.
     const stats = this.db
       .prepare(
         `SELECT 
            AVG(duration) as avg,
            COUNT(*) as count
-         FROM traces WHERE duration > 0 AND status = 'completed'`,
+         FROM traces WHERE duration > 0 AND duration <= 600000 AND status = 'completed'`,
       )
       .get() as { avg: number | null; count: number };
 
@@ -53,7 +55,7 @@ export class TraceRepo {
     const durations = this.db
       .prepare(
         `SELECT duration FROM traces 
-         WHERE duration > 0 AND status = 'completed' 
+         WHERE duration > 0 AND duration <= 600000 AND status = 'completed' 
          ORDER BY duration ASC`,
       )
       .all() as { duration: number }[];

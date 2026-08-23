@@ -842,8 +842,79 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
       });
       return;
     }
+    if (url.pathname === '/api/validations') {
+      // HTTP fallback so Validaciones en vivo has data on first paint
+      // (WS broadcast remains the live source afterwards).
+      res.writeHead(200, headers);
+      try {
+        const validations = runValidations(bridgeReady, bridgeToolCount, clients.size);
+        res.end(JSON.stringify({ type: 'validations', data: validations }));
+      } catch (err) {
+        res.end(JSON.stringify({ type: 'validations', data: [] }));
+      }
+      return;
+    }
+
     if (url.pathname === '/api/slo') {
-      const sloData = existsSync(SLO_PATH) ? JSON.parse(readFileSync(SLO_PATH, 'utf8')) : null;
+      let sloData = existsSync(SLO_PATH) ? JSON.parse(readFileSync(SLO_PATH, 'utf8')) : null;
+      // No SLO file → compute live SLOs from real Nexus data so the panel
+      // always reflects actual stack health instead of "waiting".
+      if (!sloData) {
+        try {
+          const db = DatabaseManager.getInstance();
+          const sql = db.getDb();
+          const traceStats = sql
+            .prepare(
+              "SELECT COUNT(*) AS total, SUM(CASE WHEN status = 'error' THEN 1 ELSE 0 END) AS errors FROM traces",
+            )
+            .get() as { total: number; errors: number | null };
+          const lat = db.traces.getLatencyStats();
+          const lastSpan = sql
+            .prepare('SELECT MAX(start_time) AS last FROM traces')
+            .get() as { last: number | null };
+          const alertRows = sql
+            .prepare(
+              'SELECT COUNT(DISTINCT name) AS total, SUM(CASE WHEN triggered = 1 THEN 1 ELSE 0 END) AS fired FROM alerts WHERE id IN (SELECT MAX(id) FROM alerts GROUP BY name)',
+            )
+            .get() as { total: number; fired: number | null };
+
+          const mk = (name: string, current: number, threshold: number, unit: string): any => ({
+            name,
+            current,
+            threshold,
+            unit,
+            status:
+              current <= threshold ? 'PASS' : current <= threshold * 2 ? 'WARN' : 'FAIL',
+          });
+          const errorRatePct =
+            traceStats.total > 0 ? ((traceStats.errors ?? 0) / traceStats.total) * 100 : 0;
+          const freshnessMin = lastSpan.last
+            ? Math.round((Date.now() - lastSpan.last) / 60000)
+            : 9999;
+          const alertFiredPct =
+            alertRows.total > 0 ? ((alertRows.fired ?? 0) / alertRows.total) * 100 : 0;
+
+          const checks = [
+            mk('trace_error_rate_pct', Number(errorRatePct.toFixed(2)), 5, '%'),
+            mk('latency_p95_ms', lat.p95, 60000, 'ms'),
+            mk('telemetry_freshness_min', freshnessMin, 60, 'min'),
+            mk('alerts_firing_pct', Number(alertFiredPct.toFixed(2)), 30, '%'),
+          ];
+          sloData = {
+            timestamp: new Date().toISOString(),
+            passed: checks.every((c) => c.status === 'PASS'),
+            overall: {
+              total: checks.length,
+              passed: checks.filter((c) => c.status === 'PASS').length,
+              warned: checks.filter((c) => c.status === 'WARN').length,
+              failed: checks.filter((c) => c.status === 'FAIL').length,
+            },
+            checks,
+          };
+        } catch {
+          sloData = null;
+        }
+      }
       res.writeHead(200, headers);
       res.end(JSON.stringify({ type: 'slo', data: sloData }));
       return;
@@ -1274,13 +1345,58 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
     }
 
     if (url.pathname === '/api/agent/sessions') {
-      const list = Array.from(sessions.values()).map((s) => ({
+      // Live in-memory agent sessions first…
+      const list: Array<{
+        id: string;
+        agent: string;
+        status: string;
+        messageCount: number;
+        updatedAt: string;
+        startedAt?: string;
+        totalTokens?: number;
+        cost?: number;
+      }> = Array.from(sessions.values()).map((s) => ({
         id: s.id,
         agent: s.agent,
         status: s.status,
         messageCount: s.messages?.length ?? 0,
         updatedAt: s.updatedAt,
       }));
+      // …then real historical sessions from Nexus (source of truth).
+      try {
+        const db = DatabaseManager.getInstance();
+        const rows = db
+          .getDb()
+          .prepare(
+            'SELECT id, agent, status, created_at, updated_at, tokens_used, cost, message_count FROM sessions ORDER BY updated_at DESC LIMIT 50',
+          )
+          .all() as Array<{
+          id: string;
+          agent: string | null;
+          status: string | null;
+          created_at: string;
+          updated_at: string;
+          tokens_used: number;
+          cost: number;
+          message_count: number;
+        }>;
+        const known = new Set(list.map((s) => s.id));
+        for (const r of rows) {
+          if (known.has(r.id)) continue;
+          list.push({
+            id: r.id,
+            agent: r.agent || 'orchestrator',
+            status: r.status === 'active' ? 'active' : 'idle',
+            messageCount: r.message_count ?? 0,
+            updatedAt: r.updated_at || r.created_at,
+            startedAt: r.created_at,
+            totalTokens: r.tokens_used ?? 0,
+            cost: r.cost ?? 0,
+          });
+        }
+      } catch {
+        /* Nexus unavailable — live sessions only */
+      }
       res.writeHead(200, headers);
       res.end(JSON.stringify({ sessions: list }));
       return;
