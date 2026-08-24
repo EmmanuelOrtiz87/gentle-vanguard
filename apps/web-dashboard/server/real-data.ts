@@ -948,17 +948,22 @@ interface TraceStats {
   activeSpans: number;
 }
 
-export function getTraces(): { traces: Trace[]; stats: TraceStats } {
+export function getTraces(rangeMs?: number): { traces: Trace[]; stats: TraceStats } {
   const traces: Trace[] = [];
+  const cutoff = rangeMs && rangeMs > 0 ? Date.now() - rangeMs : 0;
 
   // Try DB first
   if (dbAvailable()) {
     try {
       const db = getDb();
-      const dbTraces = db
-        .getDb()
-        .prepare('SELECT * FROM traces ORDER BY start_time DESC LIMIT 200')
-        .all() as Array<{
+      const dbTraces = (
+        cutoff > 0
+          ? db
+              .getDb()
+              .prepare('SELECT * FROM traces WHERE start_time >= ? ORDER BY start_time DESC LIMIT 200')
+              .all(cutoff)
+          : db.getDb().prepare('SELECT * FROM traces ORDER BY start_time DESC LIMIT 200').all()
+      ) as Array<{
         span_id: string;
         trace_id: string;
         parent_span_id: string | null;
@@ -975,6 +980,22 @@ export function getTraces(): { traces: Trace[]; stats: TraceStats } {
         attributes: string | null;
       }>;
 
+      // Enrich spans lacking a model with the session's most recent model from token_transactions.
+      const sessionModels = new Map<string, string>();
+      try {
+        const rows = db
+          .getDb()
+          .prepare(
+            "SELECT session_id, model FROM token_transactions WHERE session_id IS NOT NULL AND model IS NOT NULL AND model != '' ORDER BY created_at DESC LIMIT 500",
+          )
+          .all() as Array<{ session_id: string; model: string }>;
+        for (const r of rows) {
+          if (!sessionModels.has(r.session_id)) sessionModels.set(r.session_id, r.model);
+        }
+      } catch {
+        // enrichment is best-effort
+      }
+
       for (const t of dbTraces) {
         traces.push({
           traceId: t.trace_id,
@@ -990,7 +1011,7 @@ export function getTraces(): { traces: Trace[]; stats: TraceStats } {
               ? 'completed'
               : 'running') as Trace['status'],
           attributes: {
-            model: t.model ?? '',
+            model: t.model || sessionModels.get(t.session_id ?? '') || '',
             inputTokens: String(t.input_tokens),
             outputTokens: String(t.output_tokens),
             cost: String(t.cost),

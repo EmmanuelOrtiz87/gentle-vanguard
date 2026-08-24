@@ -9,6 +9,7 @@ import {
   ChevronUp,
   ChevronLeft,
   ChevronRight,
+  Download,
   ThumbsUp,
   ThumbsDown,
 } from 'lucide-react';
@@ -231,17 +232,21 @@ export function TracingDashboard() {
   const [filterModel, setFilterModel] = useState('');
   const [tablePage, setTablePage] = useState(0);
   const [wfPage, setWfPage] = useState(0);
+  const [range, setRange] = useState<'all' | '1h' | '24h' | '7d'>('all');
+  const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const [offline, setOffline] = useState(false);
 
   useEffect(() => {
     const loadTraces = async () => {
       try {
-        const response = await fetch('/api/traces');
+        const qs = range === 'all' ? '' : `?range=${range}`;
+        const response = await fetch(`/api/traces${qs}`);
         const data = await response.json();
         setTraces(data.traces || []);
         setStats(data.stats || stats);
         writeCached(TRACES_CACHE_KEY, { traces: data.traces || [], stats: data.stats || stats });
         setOffline(false);
+        setLastUpdate(new Date());
       } catch {
         const cached = readCached<{ traces: Trace[]; stats: TraceStats }>(TRACES_CACHE_KEY);
         if (cached?.data) {
@@ -254,7 +259,31 @@ export function TracingDashboard() {
     void loadTraces();
     const interval = setInterval(loadTraces, 5000);
     return () => clearInterval(interval);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [range]);
+
+  const exportCsv = () => {
+    const header = 'name,status,duration_ms,model,input_tokens,output_tokens,cost,start_time';
+    const lines = recentSpans.map((t) =>
+      [
+        `"${t.name.replace(/"/g, '""')}"`,
+        t.status,
+        t.duration ?? '',
+        t.attributes.model || '',
+        t.attributes.inputTokens,
+        t.attributes.outputTokens,
+        t.attributes.cost,
+        new Date(t.startTime).toISOString(),
+      ].join(','),
+    );
+    const blob = new Blob([[header, ...lines].join('\n')], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `traces-${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   const rootTraces = traces.filter((t) => !t.parentSpanId || t.parentSpanId === t.traceId);
   const models = [...new Set(traces.map((t) => t.attributes.model).filter(Boolean))];
@@ -374,6 +403,30 @@ export function TracingDashboard() {
                 ))}
               </select>
             )}
+            <select
+              value={range}
+              onChange={(e) => {
+                setRange(e.target.value as typeof range);
+                setWfPage(0);
+                setTablePage(0);
+              }}
+              className="px-2 py-1.5 text-xs border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              title={tt('ui.tip_range')}
+            >
+              <option value="all">{tt('ui.range_all')}</option>
+              <option value="1h">{tt('ui.range_1h')}</option>
+              <option value="24h">{tt('ui.range_24h')}</option>
+              <option value="7d">{tt('ui.range_7d')}</option>
+            </select>
+            <button
+              onClick={exportCsv}
+              disabled={recentSpans.length === 0}
+              className="flex items-center gap-1 px-2 py-1.5 text-xs border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed text-gray-600 dark:text-gray-300"
+              title={tt('ui.export_csv')}
+            >
+              <Download className="w-3 h-3" />
+              CSV
+            </button>
           </div>
         </div>
 
@@ -384,20 +437,35 @@ export function TracingDashboard() {
               .replace('{shown}', String(filteredRoots.length))
               .replace('{total}', String(rootTraces.length))}
           </span>
-          {filtersActive && (
-            <button
-              onClick={() => {
-                setSearch('');
-                setFilterModel('');
-                setWfPage(0);
-                setTablePage(0);
-              }}
-              className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
-            >
-              <AlertCircle className="w-3 h-3" />
-              {tt('ui.clear_filters')}
-            </button>
-          )}
+          <span className="flex items-center gap-2">
+            {offline ? (
+              <span className="text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                {tt('ui.offline_cached')}
+              </span>
+            ) : (
+              lastUpdate && (
+                <span className="text-green-600 dark:text-green-400 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                  {tt('ui.live_updated')} {lastUpdate.toLocaleTimeString()}
+                </span>
+              )
+            )}
+            {filtersActive && (
+              <button
+                onClick={() => {
+                  setSearch('');
+                  setFilterModel('');
+                  setWfPage(0);
+                  setTablePage(0);
+                }}
+                className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+              >
+                <AlertCircle className="w-3 h-3" />
+                {tt('ui.clear_filters')}
+              </button>
+            )}
+          </span>
         </div>
 
         {traces.length === 0 ? (

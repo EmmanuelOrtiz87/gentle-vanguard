@@ -1094,8 +1094,17 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
     }
 
     if (url.pathname === '/api/traces') {
+      const rangeParam = url.searchParams.get('range') || '';
+      const rangeMs =
+        rangeParam === '1h'
+          ? 3_600_000
+          : rangeParam === '24h'
+            ? 86_400_000
+            : rangeParam === '7d'
+              ? 604_800_000
+              : 0;
       res.writeHead(200, headers);
-      res.end(JSON.stringify(getTraces()));
+      res.end(JSON.stringify(getTraces(rangeMs)));
       return;
     }
 
