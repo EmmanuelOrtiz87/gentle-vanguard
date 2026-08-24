@@ -81,7 +81,7 @@ function TraceWaterfall({ trace, allTraces }: { trace: Trace; allTraces: Trace[]
           {trace.duration ? `${trace.duration}ms` : '-'}
         </span>
         <span className="text-xs text-gray-400 dark:text-gray-500 w-12 text-right">
-          {trace.attributes.model || ''}
+          {trace.attributes.model || '—'}
         </span>
       </div>
       {expanded && hasChildren && (
@@ -230,6 +230,7 @@ export function TracingDashboard() {
   const [search, setSearch] = useState('');
   const [filterModel, setFilterModel] = useState('');
   const [tablePage, setTablePage] = useState(0);
+  const [wfPage, setWfPage] = useState(0);
   const [offline, setOffline] = useState(false);
 
   useEffect(() => {
@@ -283,6 +284,13 @@ export function TracingDashboard() {
     (safeTablePage + 1) * TABLE_PAGE_SIZE,
   );
 
+  // Waterfall: same filters, paginated roots (10/page).
+  const WF_PAGE_SIZE = 10;
+  const wfPages = Math.max(1, Math.ceil(filteredRoots.length / WF_PAGE_SIZE));
+  const safeWfPage = Math.min(wfPage, wfPages - 1);
+  const wfRows = filteredRoots.slice(safeWfPage * WF_PAGE_SIZE, (safeWfPage + 1) * WF_PAGE_SIZE);
+  const filtersActive = Boolean(search || filterModel);
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
       {offline && (
@@ -294,8 +302,8 @@ export function TracingDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="card">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="metric-label">Total Traces</p>
+            <div title={tt('ui.tip_total_traces')}>
+              <p className="metric-label">{tt('ui.total_traces')}</p>
               <p className="metric-value">{stats.totalTraces}</p>
             </div>
             <Activity className="w-8 h-8 text-blue-500" />
@@ -303,8 +311,8 @@ export function TracingDashboard() {
         </div>
         <div className="card">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="metric-label">Avg Duration</p>
+            <div title={tt('ui.tip_avg_duration')}>
+              <p className="metric-label">{tt('ui.avg_duration')}</p>
               <p className="metric-value">{stats.avgDuration}ms</p>
             </div>
             <Clock className="w-8 h-8 text-yellow-500" />
@@ -312,8 +320,8 @@ export function TracingDashboard() {
         </div>
         <div className="card">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="metric-label">Error Rate</p>
+            <div title={tt('ui.tip_error_rate')}>
+              <p className="metric-label">{tt('ui.error_rate')}</p>
               <p className="metric-value">{(stats.errorRate * 100).toFixed(1)}%</p>
             </div>
             <AlertCircle className="w-8 h-8 text-red-500" />
@@ -321,8 +329,8 @@ export function TracingDashboard() {
         </div>
         <div className="card">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="metric-label">Active Spans</p>
+            <div title={tt('ui.tip_active_spans')}>
+              <p className="metric-label">{tt('ui.active_spans')}</p>
               <p className="metric-value">{stats.activeSpans}</p>
             </div>
             <GitBranch className="w-8 h-8 text-green-500" />
@@ -332,14 +340,21 @@ export function TracingDashboard() {
 
       {/* Waterfall View */}
       <div className="card">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Trace Waterfall</h3>
-          <div className="flex items-center gap-3">
+        <div className="flex items-start justify-between mb-1">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              {tt('ui.trace_waterfall')}
+            </h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 max-w-2xl">
+              {tt('ui.waterfall_subtitle')}
+            </p>
+          </div>
+          <div className="flex items-center gap-3 shrink-0 ml-4">
             <div className="relative">
               <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search traces..."
+                placeholder={tt('ui.search_traces')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-7 pr-3 py-1.5 text-xs border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 w-40"
@@ -351,10 +366,10 @@ export function TracingDashboard() {
                 onChange={(e) => setFilterModel(e.target.value)}
                 className="px-2 py-1.5 text-xs border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               >
-                <option value="">All models</option>
+                <option value="">{tt('ui.all_models')}</option>
                 {models.map((m) => (
                   <option key={m} value={m}>
-                    {m}
+                    {m || '—'}
                   </option>
                 ))}
               </select>
@@ -362,27 +377,71 @@ export function TracingDashboard() {
           </div>
         </div>
 
+        {/* Filter status bar */}
+        <div className="flex items-center justify-between mb-2 text-xs">
+          <span className="text-gray-500 dark:text-gray-400">
+            {tt('ui.showing_of')
+              .replace('{shown}', String(filteredRoots.length))
+              .replace('{total}', String(rootTraces.length))}
+          </span>
+          {filtersActive && (
+            <button
+              onClick={() => {
+                setSearch('');
+                setFilterModel('');
+                setWfPage(0);
+                setTablePage(0);
+              }}
+              className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+            >
+              <AlertCircle className="w-3 h-3" />
+              {tt('ui.clear_filters')}
+            </button>
+          )}
+        </div>
+
         {traces.length === 0 ? (
           <div className="text-center py-12 text-gray-400">
             <Activity className="w-10 h-10 mx-auto mb-3 opacity-50" />
-            <p className="text-sm">No traces available. Start a session to generate trace data.</p>
+            <p className="text-sm">{tt('ui.no_traces')}</p>
             <p className="text-xs text-gray-500 mt-1">
-              Traces are read from .session/context-log/*/.state.json
+              {tt('ui.traces_source')}
             </p>
+          </div>
+        ) : filteredRoots.length === 0 ? (
+          <div className="text-center py-8 text-gray-400">
+            <Search className="w-8 h-8 mx-auto mb-2 opacity-40" />
+            <p className="text-sm">{tt('ui.no_matches')}</p>
           </div>
         ) : (
           <>
+            {/* Legend */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pb-2 text-[11px] text-gray-500 dark:text-gray-400">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-green-500" />
+                {tt('ui.legend_completed')}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                {tt('ui.legend_running')}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-red-500" />
+                {tt('ui.legend_error')}
+              </span>
+              <span className="italic">— {tt('ui.legend_bar')}</span>
+            </div>
             {/* Waterfall header */}
             <div className="flex items-center gap-2 pb-2 border-b border-gray-200 dark:border-gray-700 mb-1 text-xs text-gray-500 font-medium">
               <div className="w-[22px]" />
-              <div className="min-w-[180px]">Name</div>
-              <div className="flex-1">Timeline</div>
-              <div className="w-16 text-right">Duration</div>
-              <div className="w-12 text-right">Model</div>
+              <div className="min-w-[180px]" title={tt('ui.tip_name')}>{tt('ui.col_name')}</div>
+              <div className="flex-1" title={tt('ui.tip_timeline')}>{tt('ui.col_timeline')}</div>
+              <div className="w-16 text-right" title={tt('ui.tip_duration_wf')}>{tt('ui.duration')}</div>
+              <div className="w-12 text-right" title={tt('ui.tip_model')}>{tt('ui.model')}</div>
               <div className="w-16" />
             </div>
             <div className="divide-y divide-gray-100 dark:divide-gray-800">
-              {filteredRoots.map((t) => (
+              {wfRows.map((t) => (
                 <div key={t.spanId} className="group">
                   <div
                     className="flex items-center cursor-pointer"
@@ -399,6 +458,35 @@ export function TracingDashboard() {
                 </div>
               ))}
             </div>
+            {wfPages > 1 && (
+              <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {safeWfPage * WF_PAGE_SIZE + 1}–{Math.min((safeWfPage + 1) * WF_PAGE_SIZE, filteredRoots.length)}{' '}
+                  {tt('ui.of')} {filteredRoots.length}
+                </p>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => setWfPage(Math.max(0, safeWfPage - 1))}
+                    disabled={safeWfPage === 0}
+                    className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed"
+                    aria-label={tt('ui.previous_page')}
+                  >
+                    <ChevronLeft className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                  </button>
+                  <span className="text-xs text-gray-600 dark:text-gray-300 tabular-nums px-2">
+                    {safeWfPage + 1} / {wfPages}
+                  </span>
+                  <button
+                    onClick={() => setWfPage(Math.min(wfPages - 1, safeWfPage + 1))}
+                    disabled={safeWfPage >= wfPages - 1}
+                    className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed"
+                    aria-label={tt('ui.next_page')}
+                  >
+                    <ChevronRight className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                  </button>
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>

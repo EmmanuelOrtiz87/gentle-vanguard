@@ -990,7 +990,7 @@ export function getTraces(): { traces: Trace[]; stats: TraceStats } {
               ? 'completed'
               : 'running') as Trace['status'],
           attributes: {
-            model: t.model ?? 'unknown',
+            model: t.model ?? '',
             inputTokens: String(t.input_tokens),
             outputTokens: String(t.output_tokens),
             cost: String(t.cost),
