@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import {
   Activity,
   Clock,
@@ -132,6 +132,97 @@ function TraceWaterfall({
             />
           ))}
         </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Drag-select time ruler for the focused waterfall. Drag horizontally to zoom
+ * the visible time window; spans outside the selection are hidden and bars rescale.
+ */
+function TimeRulerZoom({
+  totalMs,
+  range,
+  onCommit,
+  onReset,
+}: {
+  totalMs: number;
+  range: { start: number; end: number } | null;
+  onCommit: (r: { start: number; end: number }) => void;
+  onReset: () => void;
+}) {
+  const { tt } = useT();
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [drag, setDrag] = useState<{ x0: number; x1: number } | null>(null);
+
+  const pctFromEvent = (e: React.PointerEvent): number => {
+    const rect = trackRef.current?.getBoundingClientRect();
+    if (!rect || rect.width === 0) return 0;
+    return Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+  };
+
+  const selPct = drag
+    ? { left: Math.min(drag.x0, drag.x1), right: Math.max(drag.x0, drag.x1) }
+    : range
+      ? { left: (range.start / totalMs) * 100, right: (range.end / totalMs) * 100 }
+      : null;
+
+  const fmt = (ms: number) => (ms >= 1000 ? `${(ms / 1000).toFixed(2)}s` : `${Math.round(ms)}ms`);
+
+  return (
+    <div className="flex items-center gap-3 mb-1 px-2">
+      <span className="text-[10px] uppercase tracking-wide text-gray-400 dark:text-gray-500 w-16 shrink-0" title={tt('ui.zoom_hint')}>
+        {tt('ui.time_window')}
+      </span>
+      <div
+        ref={trackRef}
+        role="slider"
+        aria-label={tt('ui.zoom_hint')}
+        className="relative flex-1 h-6 bg-gray-50 dark:bg-gray-900 rounded border border-gray-200/60 dark:border-gray-700/60 cursor-col-resize select-none touch-none"
+        onPointerDown={(e) => {
+          e.currentTarget.setPointerCapture(e.pointerId);
+          const p = pctFromEvent(e);
+          setDrag({ x0: p, x1: p });
+        }}
+        onPointerMove={(e) => {
+          if (drag) setDrag({ ...drag, x1: pctFromEvent(e) });
+        }}
+        onPointerUp={() => {
+          if (drag) {
+            const s = (Math.min(drag.x0, drag.x1) / 100) * totalMs;
+            const en = (Math.max(drag.x0, drag.x1) / 100) * totalMs;
+            if (en - s >= 5) onCommit({ start: s, end: en });
+            setDrag(null);
+          }
+        }}
+      >
+        {/* tick marks at 25/50/75% */}
+        {[25, 50, 75].map((p) => (
+          <div key={p} className="absolute top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-800" style={{ left: `${p}%` }} />
+        ))}
+        {/* active selection or committed range highlight */}
+        {selPct && (
+          <div
+            className={`absolute top-0 bottom-0 ${drag ? 'bg-blue-500/30 border-x-2 border-blue-500' : 'bg-blue-500/15 border-x border-blue-400'}`}
+            style={{ left: `${selPct.left}%`, width: `${selPct.right - selPct.left}%` }}
+          />
+        )}
+        <span className="absolute left-1 top-1/2 -translate-y-1/2 text-[10px] font-mono text-gray-400 pointer-events-none">0</span>
+        <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[10px] font-mono text-gray-400 pointer-events-none">{fmt(totalMs)}</span>
+      </div>
+      <span className="text-[10px] font-mono text-gray-500 dark:text-gray-400 w-28 shrink-0 text-right tabular-nums">
+        {range ? `${fmt(range.start)} → ${fmt(range.end)}` : tt('ui.zoom_hint')}
+      </span>
+      {range && (
+        <button
+          onClick={onReset}
+          className="text-xs text-blue-600 dark:text-blue-400 hover:underline shrink-0 font-medium"
+          title={tt('ui.reset_zoom')}
+        >
+          <X className="w-3 h-3 inline mr-0.5" />
+          {tt('ui.reset_zoom')}
+        </button>
       )}
     </div>
   );
@@ -548,6 +639,28 @@ export function TracingDashboard() {
     : filteredRoots.slice(safeWfPage * WF_PAGE_SIZE, (safeWfPage + 1) * WF_PAGE_SIZE);
   const filtersActive = Boolean(search || filterModel);
 
+  // Time-window zoom (focus mode only): hide spans outside selection, rescale bars.
+  const [zoomRange, setZoomRange] = useState<{ start: number; end: number } | null>(null);
+  useEffect(() => {
+    setZoomRange(null);
+  }, [focusId]);
+  const zoomTotalMs = focusRoot
+    ? Math.max(
+        focusRoot.duration || 1,
+        ...focusSet.map((t) => t.startTime - focusRoot.startTime + (t.duration || 0)),
+        1,
+      )
+    : 1;
+  const zoomedFocusSet = useMemo(() => {
+    if (!focusRoot || !zoomRange) return focusSet;
+    const zs = focusRoot.startTime + zoomRange.start;
+    const ze = focusRoot.startTime + zoomRange.end;
+    return focusSet.filter((t) => {
+      if (t.spanId === focusRoot.spanId) return true;
+      return t.startTime + (t.duration || 0) >= zs && t.startTime <= ze;
+    });
+  }, [focusSet, focusRoot, zoomRange]);
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
       {offline && (
@@ -791,6 +904,14 @@ export function TracingDashboard() {
                   </button>
                 </div>
               )}
+              {focusRoot && (
+                <TimeRulerZoom
+                  totalMs={zoomTotalMs}
+                  range={zoomRange}
+                  onCommit={setZoomRange}
+                  onReset={() => setZoomRange(null)}
+                />
+              )}
               {wfRows.map((t) => (
                 <div key={t.spanId} className="group">
                   <div
@@ -799,7 +920,13 @@ export function TracingDashboard() {
                   >
                     <TraceWaterfall
                       trace={t}
-                      allTraces={focusRoot ? focusSet : traces}
+                      allTraces={focusRoot ? zoomedFocusSet : traces}
+                      treeStart={
+                        focusRoot && zoomRange ? focusRoot.startTime + zoomRange.start : undefined
+                      }
+                      treeDuration={
+                        focusRoot && zoomRange ? zoomRange.end - zoomRange.start : undefined
+                      }
                       onFocus={() => setFocusId(t.spanId)}
                     />
                     <FeedbackButtons traceId={t.traceId} spanId={t.spanId} />
