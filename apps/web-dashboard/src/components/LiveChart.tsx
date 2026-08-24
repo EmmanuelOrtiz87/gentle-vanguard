@@ -45,7 +45,7 @@ export function LiveChart({ data, range = '1h', onRangeChange }: LiveChartProps)
         )}
       </div>
       <div className="h-64">
-        <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-gray-700" />
             <XAxis

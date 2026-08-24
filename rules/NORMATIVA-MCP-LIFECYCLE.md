@@ -58,3 +58,11 @@ El dashboard restringe CORS por defecto a `localhost:5173` y
 `127.0.0.1:5173`. Para una instalación controlada con otro origen se puede
 definir `GV_DASHBOARD_CORS_ORIGINS` como una lista separada por comas. No se
 debe restaurar `Access-Control-Allow-Origin: *` en entornos compartidos.
+
+## Métricas y datos
+
+Las métricas operativas deben provenir de eventos, contadores o muestras reales.
+Cuando no exista una muestra válida, el sistema debe devolver `null`, `NO_DATA` o
+`unverified`; nunca debe generar latencia, error rate, uptime o actividad
+aleatoria para llenar una tarjeta o gráfico. Los módulos de simulación son
+exclusivamente de prueba y deben requerir un modo explícito.
