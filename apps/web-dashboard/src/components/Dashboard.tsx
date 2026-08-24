@@ -46,6 +46,7 @@ import { SkillHeatmap } from './SkillHeatmap';
 import { SessionActivityHeatmap } from './SessionActivityHeatmap';
 import { ActivityTimeline } from './ActivityTimeline';
 import { SloPanel } from './SloPanel';
+import { DashboardRuntimeHealth } from './DashboardRuntimeHealth';
 import { InfoPopup } from './InfoPopup';
 import {
   LocaleContext,
@@ -289,6 +290,7 @@ function DashboardInner() {
       <LiveDataStatus connected={wsConnected} lastUpdated={lastUpdated} source={data.source} />
 
       <main className="gv-dashboard-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <DashboardRuntimeHealth />
         {/* Row 1: Core KPIs */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {loading && lastUpdated === 0 ? (

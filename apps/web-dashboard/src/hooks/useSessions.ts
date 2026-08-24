@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import type { Session } from '../types/dashboard';
 
+const SESSION_STALE_MS = 5 * 60 * 1000;
+
 export function useSessions() {
   const [sessions, setSessions] = useState<Session[]>([]);
   const requestRef = useRef<AbortController | null>(null);
@@ -13,15 +15,26 @@ export function useSessions() {
       const res = await fetch('/api/agent/sessions', { signal: controller.signal });
       if (!res.ok) return;
       const data = await res.json();
-      const list: Session[] = (data.sessions || []).map((s: any) => ({
-        id: s.id || s.sessionId || 'unknown',
-        agent: s.agent || 'DEV',
-        status: s.status === 'active' || s.status === 'awaiting_input' ? 'active' : 'idle',
-        startTime: s.startedAt || s.createdAt || s.startTime || new Date().toISOString(),
-        tokensUsed: s.totalTokens || s.tokensUsed || 0,
-        model: s.model || 'unknown',
-        cost: s.totalCost || s.cost || 0,
-      }));
+      const now = Date.now();
+      const list: Session[] = (data.sessions || []).map((s: any) => {
+        const startTime = s.startedAt || s.createdAt || s.startTime || new Date().toISOString();
+        const lastActivity = s.lastActivityAt || s.lastEventAt || s.updatedAt || startTime;
+        const reportedStatus = s.status;
+        const isFinished = reportedStatus === 'completed' || reportedStatus === 'closed' || Boolean(s.endedAt);
+        const isStale = reportedStatus === 'active' || reportedStatus === 'awaiting_input'
+          ? now - new Date(lastActivity).getTime() > SESSION_STALE_MS
+          : false;
+        return {
+          id: s.id || s.sessionId || 'unknown',
+          agent: s.agent || 'DEV',
+          status: isFinished ? 'completed' : isStale ? 'stale' : reportedStatus === 'active' || reportedStatus === 'awaiting_input' ? 'active' : 'idle',
+          startTime,
+          lastActivity,
+          tokensUsed: s.totalTokens || s.tokensUsed || 0,
+          model: s.model || 'unknown',
+          cost: s.totalCost || s.cost || 0,
+        };
+      });
       setSessions(list);
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') return;

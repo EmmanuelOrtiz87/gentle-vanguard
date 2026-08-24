@@ -11,6 +11,7 @@ const PAGE_SIZE = 15;
 
 const statusIcons: Record<string, React.ComponentType<any>> = {
   active: Activity,
+  stale: Clock,
   idle: Clock,
   completed: CheckCircle,
 };
@@ -18,6 +19,7 @@ const statusIcons: Record<string, React.ComponentType<any>> = {
 const statusColors: Record<string, string> = {
   active: 'text-green-600 bg-green-50 dark:bg-green-900/20 dark:text-green-400',
   idle: 'text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 dark:text-yellow-400',
+  stale: 'text-orange-600 bg-orange-50 dark:bg-orange-900/20 dark:text-orange-400',
   completed: 'text-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-gray-400',
 };
 
@@ -25,8 +27,8 @@ export function SessionTable({ sessions }: SessionTableProps) {
   const [page, setPage] = useState(0);
   const { tt } = useT();
   const sorted = [...sessions].sort((a, b) => {
-    if (a.status === 'active' && b.status !== 'active') return -1;
-    if (b.status === 'active' && a.status !== 'active') return 1;
+     if (a.status === 'active' && b.status !== 'active') return -1;
+     if (b.status === 'active' && a.status !== 'active') return 1;
     return new Date(b.startTime).getTime() - new Date(a.startTime).getTime();
   });
   const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
@@ -114,7 +116,10 @@ export function SessionTable({ sessions }: SessionTableProps) {
                       ${(session.cost || 0).toFixed(4)}
                     </td>
                     <td className="py-3 px-4 text-sm text-gray-500 dark:text-gray-500">
-                      {new Date(session.startTime).toLocaleString()}
+                      <div>{new Date(session.startTime).toLocaleString()}</div>
+                      <div className="text-[10px] text-gray-400 dark:text-gray-600">
+                        {tt('ui.last_activity')}: {session.lastActivity ? new Date(session.lastActivity).toLocaleString() : '-'}
+                      </div>
                     </td>
                   </tr>
                 );

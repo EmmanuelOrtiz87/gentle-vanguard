@@ -175,8 +175,9 @@ export interface SwarmWorkerData {
 export interface Session {
   id: string;
   agent: string;
-  status: 'active' | 'idle' | 'completed';
+  status: 'active' | 'idle' | 'stale' | 'completed';
   startTime: string;
+  lastActivity?: string;
   tokensUsed: number;
   model?: string;
   cost?: number;
