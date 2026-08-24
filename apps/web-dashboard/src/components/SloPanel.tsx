@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Gauge, HardDrive, Cpu, Clock, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { useT } from '../hooks/useLocale';
 
 interface SloCheck {
   name: string;
@@ -44,13 +45,15 @@ function CheckIcon({ name }: { name: string }) {
 }
 
 function BurnRatePanel({ windows }: { windows: BurnWindow[] }) {
+  const { tt } = useT();
   return <div className="card mb-4">
-    <div className="flex items-center justify-between mb-3"><div><h3 className="text-sm font-semibold text-gray-900 dark:text-white">Error budget burn rate</h3><p className="text-xs text-gray-500 mt-1">Based on real SQLite metric snapshots. 1.0x consumes the budget at the target pace.</p></div><span className="text-xs text-gray-500">Target 99.9%</span></div>
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">{windows.map((item) => <div key={item.window} className="rounded border border-gray-200 dark:border-gray-700 p-3"><div className="flex items-center justify-between"><span className="text-xs text-gray-500">{item.window}</span><span className={`text-[10px] font-semibold ${item.status === 'BREACH' ? 'text-red-400' : item.status === 'NO_DATA' ? 'text-gray-500' : 'text-emerald-400'}`}>{item.status}</span></div><p className="mt-2 text-lg font-semibold text-gray-900 dark:text-white">{item.burnRate === null ? '—' : `${item.burnRate.toFixed(2)}x`}</p><p className="text-[10px] text-gray-500">{item.samples} samples · {item.errors} errors</p></div>)}</div>
+    <div className="flex items-center justify-between mb-3"><div><h3 className="text-sm font-semibold text-gray-900 dark:text-white">{tt('ui.burn_rate_title')}</h3><p className="text-xs text-gray-500 mt-1">{tt('ui.burn_rate_desc')}</p></div><span className="text-xs text-gray-500">{tt('ui.target_999')}</span></div>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">{windows.map((item) => <div key={item.window} className="rounded border border-gray-200 dark:border-gray-700 p-3"><div className="flex items-center justify-between"><span className="text-xs text-gray-500">{item.window}</span><span className={`text-[10px] font-semibold ${item.status === 'BREACH' ? 'text-red-400' : item.status === 'NO_DATA' ? 'text-gray-500' : 'text-emerald-400'}`}>{item.status}</span></div><p className="mt-2 text-lg font-semibold text-gray-900 dark:text-white">{item.burnRate === null ? '—' : `${item.burnRate.toFixed(2)}x`}</p><p className="text-[10px] text-gray-500">{item.samples} {tt('ui.samples')} · {item.errors} {tt('ui.errors_word')}</p></div>)}</div>
   </div>;
 }
 
 export function SloPanel() {
+  const { tt } = useT();
   const [sloData, setSloData] = useState<SloData | null>(null);
   const [loading, setLoading] = useState(true);
   const [burnWindows, setBurnWindows] = useState<BurnWindow[]>([]);
@@ -102,7 +105,7 @@ export function SloPanel() {
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-4">
           <Gauge className="w-5 h-5 text-teal-500" />
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Performance SLO</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{tt('ui.slo_metrics')}</h2>
         </div>
         <div className="card animate-pulse">
           <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32 mb-3" />
@@ -117,16 +120,16 @@ export function SloPanel() {
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-4">
           <Gauge className="w-5 h-5 text-teal-500" />
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Performance SLO</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{tt('ui.slo_metrics')}</h2>
         </div>
         <div className="card text-center py-6 text-gray-400 dark:text-gray-500">
           <Gauge className="w-8 h-8 mx-auto mb-2 opacity-50" />
           <p className="text-sm">
-            Run{' '}
+            {tt('ui.run_perf_slo_prefix')}{' '}
             <code className="text-xs bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded">
               npm run perf:slo
             </code>{' '}
-            to generate SLO metrics
+            {tt('ui.run_perf_slo_suffix')}
           </p>
         </div>
         <BurnRatePanel windows={burnWindows} />
@@ -145,7 +148,7 @@ export function SloPanel() {
     <div className="mb-8">
       <div className="flex items-center gap-2 mb-4">
         <Gauge className="w-5 h-5 text-teal-500" />
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Performance SLO</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{tt('ui.slo_metrics')}</h2>
         <span
           className={`ml-2 px-2 py-0.5 rounded text-xs font-medium ${
             sloData.passed
@@ -164,19 +167,21 @@ export function SloPanel() {
       <div className="card mb-4">
         <div className="flex items-center gap-4 text-sm">
           <span className="text-green-600 dark:text-green-400 font-medium">
-            ✅ {total.passed} passed
+            ✅ {total.passed} {tt('ui.passed_checks')}
           </span>
           {total.warned > 0 && (
             <span className="text-yellow-600 dark:text-yellow-400 font-medium">
-              ⚠️ {total.warned} warnings
+              ⚠️ {total.warned} {tt('ui.warnings_badge')}
             </span>
           )}
           {total.failed > 0 && (
             <span className="text-red-600 dark:text-red-400 font-medium">
-              ❌ {total.failed} failed
+              ❌ {total.failed} {tt('ui.failed_plural')}
             </span>
           )}
-          <span className="text-gray-400">of {total.total} checks</span>
+          <span className="text-gray-400">
+            {tt('ui.of')} {total.total} {tt('ui.checks_word')}
+          </span>
         </div>
       </div>
 
@@ -224,7 +229,7 @@ export function SloPanel() {
                 />
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                Target: {'<'}
+                {tt('ui.target_colon')} {'<'}
                 {check.threshold}
                 {check.unit}
               </p>

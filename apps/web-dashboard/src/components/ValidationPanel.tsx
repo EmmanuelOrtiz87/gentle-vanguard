@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { CheckCircle, AlertTriangle, AlertCircle, RefreshCw } from 'lucide-react';
 import { useValidations, type Validation } from '../hooks/useValidations';
+import { useT } from '../hooks/useLocale';
 
 const STATUS_ICONS: Record<string, React.ReactNode> = {
   ok: <CheckCircle className="w-4 h-4 text-green-500" />,
@@ -15,6 +16,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export function ValidationPanel() {
+  const { tt } = useT();
   const wsValidations = useValidations();
   // HTTP fallback for first paint: seed from /api/validations until the
   // WS broadcast takes over as live source.
@@ -42,11 +44,11 @@ export function ValidationPanel() {
       <div className="flex items-center gap-2 mb-3">
         <RefreshCw className="w-4 h-4 text-gray-500" />
         <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-          Validaciones en vivo
+          {tt('ui.validations_en_vivo')}
         </h3>
       </div>
       {validations.length === 0 ? (
-        <p className="text-xs text-gray-400">Esperando datos...</p>
+        <p className="text-xs text-gray-400">{tt('ui.waiting_data')}</p>
       ) : (
         <div className="space-y-2">
           {validations.map((v) => (

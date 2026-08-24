@@ -10,6 +10,7 @@ import {
 } from 'recharts';
 import type { MetricHistory } from '../types/dashboard';
 import type { HistoryRange } from '../types/dashboard';
+import { useT } from '../hooks/useLocale';
 
 interface LiveChartProps {
   data: MetricHistory[];
@@ -18,6 +19,7 @@ interface LiveChartProps {
 }
 
 export function LiveChart({ data, range = '1h', onRangeChange }: LiveChartProps) {
+  const { tt } = useT();
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
@@ -26,7 +28,7 @@ export function LiveChart({ data, range = '1h', onRangeChange }: LiveChartProps)
   return (
     <div className="card">
       <div className="flex items-center justify-between gap-3 mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Metrics History</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{tt('ui.metrics_history')}</h3>
         {onRangeChange && (
           <select
             aria-label="History range"
