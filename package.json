@@ -314,7 +314,7 @@
   "devDependencies": {
     "@colbymchenry/codegraph": "0.8.0",
     "@playwright/test": "^1.54.2",
-    "@secretlint/secretlint-rule-preset-recommend": "^9.0.0",
+    "@secretlint/secretlint-rule-preset-recommend": "^13.0.4",
     "@types/better-sqlite3": "^7.6.13",
     "@types/glob": "^9.0.0",
     "@types/js-yaml": "^4.0.9",
