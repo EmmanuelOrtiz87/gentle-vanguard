@@ -184,6 +184,9 @@ export function StackCapabilitiesPanel({ data }: StackCapabilitiesPanelProps) {
   const { tt } = useT();
   const empty = !data || (!data.anomalies.total && data.circuitBreakers.total === 0 && !data.dbHealing);
 
+  const updatedMs = data?.lastUpdated ? new Date(data.lastUpdated).getTime() : NaN;
+  const ageMin = Number.isFinite(updatedMs) ? Math.round((Date.now() - updatedMs) / 60000) : null;
+
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-4">
@@ -192,6 +195,23 @@ export function StackCapabilitiesPanel({ data }: StackCapabilitiesPanelProps) {
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             {tt('ui.stack_capabilities')}
           </h2>
+          {ageMin !== null && (
+            <span
+              className={`text-[10px] px-2 py-0.5 rounded-full ${
+                ageMin < 60
+                  ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300'
+                  : ageMin < 1440
+                    ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300'
+                    : 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300'
+              }`}
+            >
+              {ageMin < 60
+                ? tt('ui.live')
+                : ageMin < 1440
+                  ? tt('ui.hours_ago').replace('{n}', String(Math.floor(ageMin / 60)))
+                  : tt('ui.days_ago').replace('{n}', String(Math.floor(ageMin / 1440)))}
+            </span>
+          )}
         </div>
         {data && (
           <div className="flex items-center gap-2 text-xs">
