@@ -259,10 +259,10 @@
         "id": "dashboard-ui-start",
         "enabled": true,
         "lazy": true,
-        "script": "src/dashboard-start.ts",
-        "args": "--vite-only --quiet --no-browser",
+        "script": "src/dashboard-vite-watchdog.ts",
+        "args": "--watch",
         "required": false,
-        "description": "Start Vite dev server (dashboard UI on port 5173) so the observability dashboard is available without manual launch. Idempotent: adopts an already-serving Vite instead of spawning a duplicate (TS)"
+        "description": "Start Vite dev server (dashboard UI on port 5173) with the same auto-recovery watchdog contract as the WS server (5s health loop, 2-failure threshold, up to 10 restarts, budget reset after 5min stable). Idempotent: adopts an already-serving Vite instead of spawning a duplicate"
       },
       {
         "id": "dashboard-operational-metrics",
