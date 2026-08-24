@@ -312,7 +312,7 @@
     "presentations:verify:cdp:hotspots": "node .opencode/skills/presentations-maintenance/scripts/cdp-verify-hotspots-all.cjs"
   },
   "devDependencies": {
-    "@colbymchenry/codegraph": "0.8.0",
+    "@colbymchenry/codegraph": "1.5.0",
     "@playwright/test": "^1.54.2",
     "@secretlint/secretlint-rule-preset-recommend": "^9.0.0",
     "@types/better-sqlite3": "^7.6.13",
