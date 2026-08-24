@@ -183,6 +183,20 @@ async function detectRunningWs(): Promise<number | null> {
   return null;
 }
 
+/** Probe whether an HTTP server is already serving at the given URL */
+async function isHttpOk(url: string): Promise<boolean> {
+  return new Promise<boolean>((resolve) => {
+    const req = http.get(url, { timeout: 2000 }, (res) => {
+      resolve((res.statusCode ?? 500) < 500);
+    });
+    req.on('error', () => resolve(false));
+    req.on('timeout', () => {
+      req.destroy();
+      resolve(false);
+    });
+  });
+}
+
 const opts = parseArgs();
 
 /** Main entry */
@@ -199,7 +213,11 @@ async function main(): Promise<void> {
   // right backend (getFreePort alone would skip to 8081 and break the wiring).
   const detectedWs = opts.wsPort > 0 ? null : await detectRunningWs();
   const selectedWs = detectedWs ?? (await getFreePort(opts.wsPort > 0 ? opts.wsPort : 8080));
-  const selectedVite = await getFreePort(opts.viteDevPort > 0 ? opts.viteDevPort : 5173);
+  const desiredVite = opts.viteDevPort > 0 ? opts.viteDevPort : 5173;
+  // Idempotency: adopt an already-serving Vite instead of spawning a duplicate
+  // on a shifted port (getFreePort would jump to 5174 and orphan the known URL).
+  const viteAlreadyUp = await isHttpOk(`http://localhost:${desiredVite}/`);
+  const selectedVite = viteAlreadyUp ? desiredVite : await getFreePort(desiredVite);
 
   saveDashboardPorts(selectedWs, selectedVite);
 
@@ -216,28 +234,36 @@ async function main(): Promise<void> {
 
   // Launch Vite
   if (!opts.wsOnly) {
-    // Ensure node_modules exist
-    const nodeModulesPath = path.join(WEB_APP_DIR, 'node_modules');
-    if (!fs.existsSync(nodeModulesPath)) {
-      console.log('[DASHBOARD] Installing dependencies...');
-      // run() routes `npm` through its .cmd shim safely on Windows (raw
-      // spawn('npm') fails with EINVAL without a shell).
-      const install = run('npm', ['install', '--silent'], {
-        cwd: WEB_APP_DIR,
-        stdio: 'inherit',
-      });
-      await new Promise<void>((resolve, reject) => {
-        install.on('close', (code) =>
-          code === 0 ? resolve() : reject(new Error('npm install failed')),
+    if (viteAlreadyUp) {
+      if (!opts.quiet) {
+        console.log(
+          `[DASHBOARD] Vite already running on port ${selectedVite} — adopting it (no new process)`,
         );
-        install.on('error', reject);
-      });
-    }
+      }
+    } else {
+      // Ensure node_modules exist
+      const nodeModulesPath = path.join(WEB_APP_DIR, 'node_modules');
+      if (!fs.existsSync(nodeModulesPath)) {
+        console.log('[DASHBOARD] Installing dependencies...');
+        // run() routes `npm` through its .cmd shim safely on Windows (raw
+        // spawn('npm') fails with EINVAL without a shell).
+        const install = run('npm', ['install', '--silent'], {
+          cwd: WEB_APP_DIR,
+          stdio: 'inherit',
+        });
+        await new Promise<void>((resolve, reject) => {
+          install.on('close', (code) =>
+            code === 0 ? resolve() : reject(new Error('npm install failed')),
+          );
+          install.on('error', reject);
+        });
+      }
 
-    await startViteDev(selectedWs, selectedVite);
+      await startViteDev(selectedWs, selectedVite);
 
-    if (!opts.noBrowser) {
-      openBrowser(selectedVite);
+      if (!opts.noBrowser) {
+        openBrowser(selectedVite);
+      }
     }
   }
 

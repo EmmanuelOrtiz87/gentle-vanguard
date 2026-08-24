@@ -253,7 +253,16 @@
         "script": "src/dashboard-ws-autostart.ts",
         "args": "--quiet --watch",
         "required": false,
-        "description": "Start React WebSocket metrics server with persistent watchdog auto-recovery (5s health loop, up to 10 restarts) â€” serves LLM observability dashboard on port 8080/5173 (TS)"
+        "description": "Start WebSocket metrics server ONLY (port 8080) with persistent watchdog auto-recovery (5s health loop, up to 10 restarts). Does NOT serve the Vite UI — see dashboard-ui-start (TS)"
+      },
+      {
+        "id": "dashboard-ui-start",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/dashboard-start.ts",
+        "args": "--vite-only --quiet --no-browser",
+        "required": false,
+        "description": "Start Vite dev server (dashboard UI on port 5173) so the observability dashboard is available without manual launch. Idempotent: adopts an already-serving Vite instead of spawning a duplicate (TS)"
       },
       {
         "id": "dashboard-operational-metrics",
