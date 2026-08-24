@@ -37,7 +37,16 @@ interface TraceStats {
   activeSpans: number;
 }
 
-function TraceWaterfall({ trace, allTraces }: { trace: Trace; allTraces: Trace[] }) {
+function TraceWaterfall({
+  trace,
+  allTraces,
+  onFocus,
+}: {
+  trace: Trace;
+  allTraces: Trace[];
+  onFocus?: () => void;
+}) {
+  const { tt } = useT();
   const children = allTraces.filter((t) => t.parentSpanId === trace.spanId);
   const maxDuration = Math.max(...allTraces.map((t) => t.duration || 0), 1);
   const hasChildren = children.length > 0;
@@ -68,7 +77,14 @@ function TraceWaterfall({ trace, allTraces }: { trace: Trace; allTraces: Trace[]
           <span
             className={`w-1.5 h-1.5 rounded-full ${trace.status === 'completed' ? 'bg-green-500' : trace.status === 'running' ? 'bg-blue-500' : 'bg-red-500'}`}
           />
-          <span className="text-xs font-mono text-gray-700 dark:text-gray-300 truncate">
+          <span
+            className="text-xs font-mono text-gray-700 dark:text-gray-300 truncate cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 hover:underline"
+            title={tt('ui.focus_trace')}
+            onClick={(e) => {
+              e.stopPropagation();
+              onFocus?.();
+            }}
+          >
             {trace.name}
           </span>
         </div>
@@ -233,6 +249,7 @@ export function TracingDashboard() {
   const [tablePage, setTablePage] = useState(0);
   const [wfPage, setWfPage] = useState(0);
   const [range, setRange] = useState<'all' | '1h' | '24h' | '7d'>('all');
+  const [focusId, setFocusId] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const [offline, setOffline] = useState(false);
 
@@ -313,11 +330,17 @@ export function TracingDashboard() {
     (safeTablePage + 1) * TABLE_PAGE_SIZE,
   );
 
-  // Waterfall: same filters, paginated roots (10/page).
+  // Waterfall: same filters, paginated roots (10/page). Focus mode drills into one trace subtree.
+  const focusRoot = focusId ? (filteredRoots.find((t) => t.spanId === focusId) ?? null) : null;
+  const focusSet = focusRoot
+    ? [focusRoot, ...traces.filter((t) => t.traceId === focusRoot.traceId && t.parentSpanId)]
+    : [];
   const WF_PAGE_SIZE = 10;
   const wfPages = Math.max(1, Math.ceil(filteredRoots.length / WF_PAGE_SIZE));
   const safeWfPage = Math.min(wfPage, wfPages - 1);
-  const wfRows = filteredRoots.slice(safeWfPage * WF_PAGE_SIZE, (safeWfPage + 1) * WF_PAGE_SIZE);
+  const wfRows = focusRoot
+    ? [focusRoot]
+    : filteredRoots.slice(safeWfPage * WF_PAGE_SIZE, (safeWfPage + 1) * WF_PAGE_SIZE);
   const filtersActive = Boolean(search || filterModel);
 
   return (
@@ -433,9 +456,11 @@ export function TracingDashboard() {
         {/* Filter status bar */}
         <div className="flex items-center justify-between mb-2 text-xs">
           <span className="text-gray-500 dark:text-gray-400">
-            {tt('ui.showing_of')
-              .replace('{shown}', String(filteredRoots.length))
-              .replace('{total}', String(rootTraces.length))}
+            {focusRoot
+              ? tt('ui.focused_on').replace('{name}', focusRoot.name)
+              : tt('ui.showing_of')
+                  .replace('{shown}', String(filteredRoots.length))
+                  .replace('{total}', String(rootTraces.length))}
           </span>
           <span className="flex items-center gap-2">
             {offline ? (
@@ -509,13 +534,26 @@ export function TracingDashboard() {
               <div className="w-16" />
             </div>
             <div className="divide-y divide-gray-100 dark:divide-gray-800">
+              {focusRoot && (
+                <button
+                  onClick={() => setFocusId(null)}
+                  className="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 mb-2"
+                >
+                  <ChevronLeft className="w-3 h-3" />
+                  {tt('ui.back_overview')}
+                </button>
+              )}
               {wfRows.map((t) => (
                 <div key={t.spanId} className="group">
                   <div
                     className="flex items-center cursor-pointer"
                     onClick={() => setSelectedTrace(selectedTrace?.spanId === t.spanId ? null : t)}
                   >
-                    <TraceWaterfall trace={t} allTraces={traces} />
+                    <TraceWaterfall
+                      trace={t}
+                      allTraces={focusRoot ? focusSet : traces}
+                      onFocus={() => setFocusId(t.spanId)}
+                    />
                     <FeedbackButtons traceId={t.traceId} spanId={t.spanId} />
                   </div>
                   {selectedTrace?.spanId === t.spanId && (
@@ -526,7 +564,7 @@ export function TracingDashboard() {
                 </div>
               ))}
             </div>
-            {wfPages > 1 && (
+            {!focusRoot && wfPages > 1 && (
               <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   {safeWfPage * WF_PAGE_SIZE + 1}–{Math.min((safeWfPage + 1) * WF_PAGE_SIZE, filteredRoots.length)}{' '}
