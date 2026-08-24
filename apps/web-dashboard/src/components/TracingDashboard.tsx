@@ -7,10 +7,13 @@ import {
   Search,
   ChevronDown,
   ChevronUp,
+  ChevronLeft,
+  ChevronRight,
   ThumbsUp,
   ThumbsDown,
 } from 'lucide-react';
 import { readCached, writeCached } from '../lib/offlineCache';
+import { useT } from '../hooks/useLocale';
 
 const TRACES_CACHE_KEY = 'traces';
 
@@ -215,6 +218,7 @@ function FeedbackButtons({ traceId, spanId }: { traceId: string; spanId: string 
 }
 
 export function TracingDashboard() {
+  const { tt } = useT();
   const [traces, setTraces] = useState<Trace[]>([]);
   const [stats, setStats] = useState<TraceStats>({
     totalTraces: 0,
@@ -225,6 +229,7 @@ export function TracingDashboard() {
   const [selectedTrace, setSelectedTrace] = useState<Trace | null>(null);
   const [search, setSearch] = useState('');
   const [filterModel, setFilterModel] = useState('');
+  const [tablePage, setTablePage] = useState(0);
   const [offline, setOffline] = useState(false);
 
   useEffect(() => {
@@ -253,7 +258,7 @@ export function TracingDashboard() {
   const rootTraces = traces.filter((t) => !t.parentSpanId || t.parentSpanId === t.traceId);
   const models = [...new Set(traces.map((t) => t.attributes.model).filter(Boolean))];
 
-  const filteredRoots = rootTraces.filter((t) => {
+  const matchesFilters = (t: Trace) => {
     if (
       search &&
       !t.name.toLowerCase().includes(search.toLowerCase()) &&
@@ -262,7 +267,21 @@ export function TracingDashboard() {
       return false;
     if (filterModel && t.attributes.model !== filterModel) return false;
     return true;
-  });
+  };
+
+  const filteredRoots = rootTraces.filter(matchesFilters);
+
+  // Recent spans table: newest first, filtered, paginated (10/page).
+  const recentSpans = traces
+    .filter(matchesFilters)
+    .sort((a, b) => b.startTime - a.startTime);
+  const TABLE_PAGE_SIZE = 10;
+  const tablePages = Math.max(1, Math.ceil(recentSpans.length / TABLE_PAGE_SIZE));
+  const safeTablePage = Math.min(tablePage, tablePages - 1);
+  const tableRows = recentSpans.slice(
+    safeTablePage * TABLE_PAGE_SIZE,
+    (safeTablePage + 1) * TABLE_PAGE_SIZE,
+  );
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
@@ -384,67 +403,118 @@ export function TracingDashboard() {
         )}
       </div>
 
-      {/* Legacy table for quick reference */}
+      {/* Recent spans table */}
       <div className="card">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">All Spans</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            {tt('ui.recent_spans')}
+          </h3>
+          <span className="text-xs text-gray-500">
+            {recentSpans.length} {tt('ui.total')}
+          </span>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-200 dark:border-gray-700">
-                <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">Span ID</th>
-                <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">Name</th>
-                <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">Status</th>
-                <th className="text-right py-2 px-4 text-sm font-medium text-gray-500">Duration</th>
-                <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">Model</th>
-                <th className="text-right py-2 px-4 text-sm font-medium text-gray-500">Input</th>
-                <th className="text-right py-2 px-4 text-sm font-medium text-gray-500">Output</th>
-                <th className="text-right py-2 px-4 text-sm font-medium text-gray-500">Cost</th>
+                <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">{tt('ui.name')}</th>
+                <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">{tt('ui.status')}</th>
+                <th className="text-right py-2 px-4 text-sm font-medium text-gray-500">{tt('ui.duration')}</th>
+                <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">{tt('ui.model')}</th>
+                <th className="text-right py-2 px-4 text-sm font-medium text-gray-500">{tt('ui.tokens')}</th>
+                <th className="text-right py-2 px-4 text-sm font-medium text-gray-500">{tt('ui.cost')}</th>
+                <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">{tt('ui.started')}</th>
               </tr>
             </thead>
             <tbody>
-              {traces.map((t) => (
-                <tr
-                  key={t.spanId}
-                  className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
-                  onClick={() => setSelectedTrace(t)}
-                >
-                  <td className="py-2 px-4 text-sm font-mono text-gray-600 dark:text-gray-400">
-                    {t.spanId.substring(0, 16)}
-                  </td>
-                  <td className="py-2 px-4 text-sm text-gray-900 dark:text-white">{t.name}</td>
-                  <td className="py-2 px-4">
-                    <span
-                      className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
-                        t.status === 'completed'
-                          ? 'text-green-700 bg-green-50 dark:text-green-300 dark:bg-green-900/20'
-                          : t.status === 'running'
-                            ? 'text-blue-700 bg-blue-50 dark:text-blue-300 dark:bg-blue-900/20'
-                            : 'text-red-700 bg-red-50 dark:text-red-300 dark:bg-red-900/20'
-                      }`}
+              {tableRows.map((t) => {
+                const ageMin = Math.round((Date.now() - t.startTime) / 60000);
+                const rel =
+                  ageMin < 1
+                    ? tt('ui.just_now')
+                    : ageMin < 60
+                      ? `${ageMin} ${tt('ui.min_ago')}`
+                      : ageMin < 1440
+                        ? tt('ui.hours_ago').replace('{n}', String(Math.floor(ageMin / 60)))
+                        : tt('ui.days_ago').replace('{n}', String(Math.floor(ageMin / 1440)));
+                return (
+                  <tr
+                    key={t.spanId}
+                    className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+                    onClick={() => setSelectedTrace(t)}
+                  >
+                    <td className="py-2 px-4 text-sm text-gray-900 dark:text-white">{t.name}</td>
+                    <td className="py-2 px-4">
+                      <span
+                        className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
+                          t.status === 'completed'
+                            ? 'text-green-700 bg-green-50 dark:text-green-300 dark:bg-green-900/20'
+                            : t.status === 'running'
+                              ? 'text-blue-700 bg-blue-50 dark:text-blue-300 dark:bg-blue-900/20'
+                              : 'text-red-700 bg-red-50 dark:text-red-300 dark:bg-red-900/20'
+                        }`}
+                      >
+                        {t.status}
+                      </span>
+                    </td>
+                    <td className="py-2 px-4 text-sm text-right text-gray-600 dark:text-gray-400 tabular-nums">
+                      {t.duration ? `${t.duration}ms` : '-'}
+                    </td>
+                    <td className="py-2 px-4 text-sm text-gray-600 dark:text-gray-400">
+                      {t.attributes.model || '-'}
+                    </td>
+                    <td className="py-2 px-4 text-sm text-right text-gray-600 dark:text-gray-400 tabular-nums">
+                      {(Number(t.attributes.inputTokens) || 0) + (Number(t.attributes.outputTokens) || 0)}
+                    </td>
+                    <td className="py-2 px-4 text-sm text-right text-gray-600 dark:text-gray-400 tabular-nums">
+                      ${parseFloat(t.attributes.cost || '0').toFixed(4)}
+                    </td>
+                    <td
+                      className="py-2 px-4 text-sm whitespace-nowrap"
+                      title={new Date(t.startTime).toLocaleString()}
                     >
-                      {t.status}
-                    </span>
-                  </td>
-                  <td className="py-2 px-4 text-sm text-right text-gray-600 dark:text-gray-400 tabular-nums">
-                    {t.duration ? `${t.duration}ms` : '-'}
-                  </td>
-                  <td className="py-2 px-4 text-sm text-gray-600 dark:text-gray-400">
-                    {t.attributes.model || '-'}
-                  </td>
-                  <td className="py-2 px-4 text-sm text-right text-gray-600 dark:text-gray-400 tabular-nums">
-                    {t.attributes.inputTokens}
-                  </td>
-                  <td className="py-2 px-4 text-sm text-right text-gray-600 dark:text-gray-400 tabular-nums">
-                    {t.attributes.outputTokens}
-                  </td>
-                  <td className="py-2 px-4 text-sm text-right text-gray-600 dark:text-gray-400 tabular-nums">
-                    ${parseFloat(t.attributes.cost || '0').toFixed(4)}
-                  </td>
-                </tr>
-              ))}
+                      <span className={`font-medium ${ageMin < 5 ? 'text-green-600 dark:text-green-400' : 'text-gray-600 dark:text-gray-400'}`}>
+                        {rel}
+                      </span>
+                      <span className="block text-xs text-gray-400">
+                        {new Date(t.startTime).toLocaleTimeString()}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
+        {tablePages > 1 && (
+          <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100 dark:border-gray-800">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              {safeTablePage * TABLE_PAGE_SIZE + 1}–{Math.min((safeTablePage + 1) * TABLE_PAGE_SIZE, recentSpans.length)}{' '}
+              {tt('ui.of')} {recentSpans.length}
+            </p>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setTablePage(Math.max(0, safeTablePage - 1))}
+                disabled={safeTablePage === 0}
+                className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed"
+                aria-label={tt('ui.previous_page')}
+              >
+                <ChevronLeft className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+              </button>
+              <span className="text-xs text-gray-600 dark:text-gray-300 tabular-nums px-2">
+                {safeTablePage + 1} / {tablePages}
+              </span>
+              <button
+                onClick={() => setTablePage(Math.min(tablePages - 1, safeTablePage + 1))}
+                disabled={safeTablePage >= tablePages - 1}
+                className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed"
+                aria-label={tt('ui.next_page')}
+              >
+                <ChevronRight className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
