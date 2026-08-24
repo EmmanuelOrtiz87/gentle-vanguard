@@ -77,10 +77,9 @@ async function findFreePort(startPort: number): Promise<number> {
 
 function launchDashboard(port: number): Promise<number> {
   return new Promise((resolve, reject) => {
-    // Run tsx through Node directly so this fallback launcher does not leave
-    // a cmd.exe wrapper or flash a console during startup.
-    const tsxCli = join(ROOT, 'node_modules', 'tsx', 'dist', 'cli.mjs');
-    const child = spawn(process.execPath, [tsxCli, WS_SCRIPT], {
+    // `node --import tsx` runs the server in the spawned process itself —
+    // no CLI wrapper grandchild, no cmd.exe, invisible on Windows.
+    const child = spawn(process.execPath, ['--import', 'tsx', WS_SCRIPT], {
       cwd: join(ROOT, 'apps', 'web-dashboard'),
       windowsHide: true,
       detached: false, // NO detached para evitar orphans

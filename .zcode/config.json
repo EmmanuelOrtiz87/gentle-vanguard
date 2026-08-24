@@ -1,0 +1,30 @@
+{
+  "$comment": "ZCode workspace config. MCP servers migrated from .opencode/mcp.json (autoApprove is an opencode concept; ZCode manages permissions via its own UI). Sync with src/zcode-sync.ts.",
+  "mcp": {
+    "servers": {
+      "codegraph": {
+        "command": "codegraph",
+        "args": ["serve", "--mcp"]
+      },
+      "engram": {
+        "command": "engram",
+        "args": ["mcp", "--tools=agent"]
+      },
+      "chrome-devtools": {
+        "command": "npx",
+        "args": ["-y", "chrome-devtools-mcp@latest", "--isolated"],
+        "env": {
+          "CHROME_DEBUGGING_PORT": "9222"
+        }
+      },
+      "filesystem": {
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-filesystem@latest", "C:\\Workspace_local"]
+      },
+      "memory": {
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-memory@latest"]
+      }
+    }
+  }
+}

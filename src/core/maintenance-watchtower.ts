@@ -917,6 +917,91 @@ async function checkCliGuard() {
   }
 }
 
+// ─── Component: Hidden Spawns (invisible execution guard) ────────────────────
+
+async function checkHiddenSpawns() {
+  if (!quiet) console.log('  [Hidden Spawns] Checking invisible-execution invariants...');
+
+  // Guardarrailes anti-regresión de la ejecución invisible (AGENTS.md
+  // "procesos-ocultos"). Detección best-effort por patrones:
+  // 1. Referencias al CLI de tsx (cli.mjs) → proceso nieto con consola visible.
+  // 2. spawn directo de 'npx.cmd'/'npm' sin shell → EINVAL en Node moderno.
+  // 3. Launchers 'cmd /k' → ventanas persistentes.
+  // 4. exec/execSync con comando string (cmd.exe visible) sin windowsHide cercano.
+  const issues: string[] = [];
+  const scanDirs = [
+    join(ROOT, 'src'),
+    join(ROOT, 'apps', 'web-dashboard', 'server'),
+    join(ROOT, 'build'),
+  ];
+
+  const walk = (dir: string): string[] => {
+    const out: string[] = [];
+    let entries: import('fs').Dirent[];
+    try {
+      entries = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return out;
+    }
+    for (const entry of entries) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) out.push(...walk(full));
+      else if (entry.name.endsWith('.ts')) out.push(full);
+    }
+    return out;
+  };
+
+  for (const dir of scanDirs) {
+    for (const file of walk(dir)) {
+      // Skip self: this check's own detection patterns (literal command
+      // strings) would always flag the watchtower source itself.
+      if (file.endsWith(join('core', 'maintenance-watchtower.ts'))) continue;
+      let content: string;
+      try {
+        content = readFileSync(file, 'utf8');
+      } catch {
+        continue;
+      }
+      const rel = relative(ROOT, file);
+
+      if (/(tsx[\\/-][\w.-]*cli\.mjs|['"]cli\.mjs['"])/.test(content)) {
+        issues.push(`${rel}: referencia al CLI de tsx (cli.mjs) — usar runNpxTsx / node --import tsx`);
+      }
+
+      const npxCmdSpawn = /spawn\(\s*['"`](npx\.cmd|npm)['"`]\s*,/.exec(content);
+      if (npxCmdSpawn) {
+        issues.push(`${rel}: spawn directo de '${npxCmdSpawn[1]}' (EINVAL) — enrutar por run()/runNpxTsx`);
+      }
+
+      if (/cmd\s+\/k/.test(content)) {
+        issues.push(`${rel}: launcher 'cmd /k' (ventana persistente)`);
+      }
+
+      const execRe = /(^|[^\w.])(execSync|exec)\(/g;
+      let m: RegExpExecArray | null;
+      while ((m = execRe.exec(content)) !== null) {
+        const after = content.slice(execRe.lastIndex, execRe.lastIndex + 300);
+        if (/^\s*['"`](powershell|pwsh|npx |cmd )/.test(after) && !after.includes('windowsHide')) {
+          const line = content.slice(0, m.index).split('\n').length;
+          issues.push(`${rel}:${line} ${m[2]}() con comando shell sin windowsHide`);
+        }
+      }
+    }
+  }
+
+  if (issues.length === 0) {
+    addResult('hidden-spawns', 'invisible execution', 'PASS', 'No visible-spawn patterns found', 'ok');
+  } else {
+    addResult(
+      'hidden-spawns',
+      'invisible execution',
+      'FAIL',
+      `${issues.length} issue(s): ${issues.slice(0, 5).join(' | ')}${issues.length > 5 ? ' …' : ''}`,
+      'manual',
+    );
+  }
+}
+
 // ─── Component: Cloud Connectors ────────────────────────────────────────────
 // NOTE: Cloud connectors deprecated - stack operates in local-only mode
 // This check now verifies local execution mode without cloud dependencies
@@ -1743,6 +1828,7 @@ async function runAllChecks() {
     checkSecurity,
     checkSecretScanner,
     checkCliGuard,
+    checkHiddenSpawns,
     checkCloudConnectors,
     checkTracing,
     checkStatePersistence,

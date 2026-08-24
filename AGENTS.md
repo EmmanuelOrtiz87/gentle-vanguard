@@ -1,914 +1,168 @@
-## SESSION START (MANDATORY — run before ANY other action)
+# Gentle-Vanguard — Stack Manual (Slim)
 
-At the very beginning of every session, **before responding to the user**, run:
+> Manual completo: `docs/stack-manual-full.md` (arquitectura, 95 checks, migraciones, ADRs).
+> Este archivo es la versión de bajo contexto para inyección diaria. Cargar el manual completo
+> solo cuando la tarea lo requiera.
 
-```bash
-npx tsx src/session-autostart.ts
-```
+## SESSION START (MANDATORY)
 
-This initializes the full autonomous stack: session ID, engram integrity, security orchestrator,
-codegraph sync, token budget, session scoring, Karpathy guidelines, adaptive profiles, watchtower
-auto-heal, dashboard WS, and all lazy background tasks. The pipeline is idempotent and handles
-errors gracefully (`onStepFailure: continue`).
-
-Do NOT skip, defer, or ask the user whether to run it. It is mandatory and non-blocking.
-
-**Non-blocking alternative** (fire-and-forget, returns in ~1.3s; pipeline runs fully in background
-with a per-run log at `.runtime/autostart-detached-<timestamp>.log`):
+Antes de responder al usuario, ejecutar:
 
 ```bash
-npm run session:autostart:detached
+npm run session:autostart:detached   # fire-and-forget, ~1.3s, pipeline completo en background
 ```
 
-Use the detached launcher when the caller is a CI step, git hook, or agent shell that must not hang
-on the pipeline's lazy background daemons. The lock is robust (validates the owning process is a
-real `node` running session-autostart), so orphaned `conhost.exe` processes can never wedge the
-pipeline. Logs are pruned automatically after 7 days.
+Alternativa bloqueante: `npx tsx src/session-autostart.ts`. Es idempotente y no pide permiso.
+El pipeline inicializa: session ID, engram, security orchestrator, codegraph, token budget,
+watchtower auto-heal, dashboard WS, Nexus DB (lazy steps). Log: `.runtime/autostart-detached-*.log`.
 
----
+## Multi-Tool Integration (ZCode, Codex, MiniMax Code)
+
+- **Agentes**: 21 subagentes del stack sincronizados a `~/.zcode/agents/` vía
+  `npx tsx src/zcode-sync.ts --sync` (re-ejecutar tras editar `.opencode/agents/`).
+- **Skills críticas** (12): `zcode-sync.ts --sync` las copia a las 3 herramientas —
+  `~/.zcode/skills/`, `~/.codex/skills/`, `~/.minimax/agents/mavis/skills/` (pi-agent).
+  Filtrar con `--tools zcode,codex,minimax`. NO copiar todas (~120): ZCode degrada el
+  auto-trigger si se excede su presupuesto de metadata.
+- **Comandos ZCode**: `.zcode/commands/` — `/graphify`, `/token-status`, `/db-health`, `/watchtower`, `/delegate`, `/web-research`.
+- **MCP**: `.zcode/config.json` → `mcp.servers`: codegraph, engram, chrome-devtools, filesystem, memory.
+- **Hooks ZCode**: `~/.zcode/cli/config.json` — SessionStart (autostart, guard por repo) + PostToolUse Write|Edit (graphify update). Scripts en `src/zcode-hooks/`.
+- **Codex/MiniMax leen AGENTS.md nativamente** (estándar), por eso este archivo es slim.
+- **Token tracking multi-tool**: `src/tokens/token-ingest.ts` ingiere 4 fuentes —
+  opencode (SQLite), zcode (`~/.zcode/cli/rollout/`), codex (`~/.codex/sessions/`),
+  minimax (`~/.minimax/v2/sqlite/runtime-state.sqlite`, tabla `local_runtime_token_usage`).
+- Cambios requieren nueva sesión en cada herramienta (no hot-reload).
 
 ## graphify
 
-Native knowledge graph at graphify-out/ (AST-built: file/function/class/method nodes,
-`contains`/`calls` edges, label-propagation communities). Built by `src/cli/graphify-build.ts` —
-deterministic, no LLM, no network.
+Grafo de conocimiento nativo en `graphify-out/` (AST, sin LLM, determinista).
 
-When the user types `/graphify`, invoke the `skill` tool with `skill: "graphify"` before doing
-anything else.
-
-Rules:
-
-- If graphify-out/graph.json is missing, run `npm run graphify -- build` first (seconds, native).
-- For codebase questions, first run `npm run graphify -- query "<question>"` when
-  graphify-out/graph.json exists. For label-based searches, always use `npm run graphify -- query`
-  instead of `path`/`explain`.
-- Use `npm run graphify -- explain "<node_id>"` for focused explanations by exact node ID (e.g.,
-  `adaptive_auto_delegate_orchestrator_start_orchestrator`). Node IDs use underscore-separated paths
-  — run `npm run graphify -- query` first to find the correct ID.
-- `npm run graphify -- path "<A>" "<B>"` and `npm run graphify -- affected "X"` are limited — the
-  graph only has `contains`/`calls` edges (AST-only, no `references`/`imports` edges without LLM
-  semantic extraction). Cross-file paths are rare without a paid API key.
-- Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are
-  not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph
-  output, or the user explicitly says not to use it.
-- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
-- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do
-  not surface enough context.
-- After modifying code, run `npm run graphify -- update .` to validate the graph snapshot and keep
-  the Graphify workflow active. Use CodeGraph sync for freshness in this environment.
-- Community labeling uses Gemini free tier (20 requests/day limit). If labeling fails with 429, wait
-  for daily reset or set a paid API key. Re-run the labeling workflow only when the real labeler is
-  available.
-- For graph.html visualization: set `$env:GRAPHIFY_VIZ_NODE_LIMIT=40000` before `cluster-only` or
-  `label` to handle graphs larger than the 5000-node default.
+- Si falta `graphify-out/graph.json`: `npm run graphify -- build` primero.
+- Preguntas de código: `npm run graphify -- query "<pregunta>"` (siempre preferir query sobre path/explain para búsquedas).
+- Nodo exacto: `npm run graphify -- explain "<node_id>"` (IDs underscore-separated, usar query para encontrarlos).
+- `path`/`affected` son limitados (solo edges contains/calls sin LLM).
+- Tras modificar código: `npm run graphify -- update .`.
+- Navegación amplia: `graphify-out/wiki/index.md`; arquitectura: `graphify-out/GRAPH_REPORT.md`.
+- Labeling usa Gemini free tier (20 req/día); 429 → esperar reset.
+- Viz: `$env:GRAPHIFY_VIZ_NODE_LIMIT=40000` antes de `cluster-only`/`label`.
 
 ## dashboard
 
-The LLM observability dashboard lives in `apps/web-dashboard/` (React/TypeScript/Vite).
+Observabilidad LLM en `apps/web-dashboard/` (React/TS/Vite). **Sin mock data** — todo deriva de trazas reales.
 
-### Architecture
+| Acción | Comando |
+| --- | --- |
+| Start full (WS + Vite + Chrome) | `npx tsx src/dashboard-start.ts` |
+| Start WS only | `npx tsx src/dashboard-ws-autostart.ts` |
+| Stop | `npx tsx src/dashboard-stop.ts` |
 
-- **WS server** (`server/websocket-server.ts`, port via `WS_PORT` env, default 8080) — reads real
-  data from `.session/context-log/*/.state.json`, computes metrics, pushes via WebSocket every 5s,
-  serves REST APIs (`/api/metrics`, `/api/traces`, `/api/alerts`, `/api/feedback`).
-- **Frontend** (port via `VITE_DEV_PORT` env, default 5173, proxied via Vite to WS_PORT) — 7-section
-  dashboard with real-time charts, tracing waterfall, alerts, i18n (en/es/pt-BR), and metric info
-  popups.
-- **No mock data** — everything derives from real traces.
-- **Dynamic port allocation** — `Get-FreePort()` in `src/dashboard-common.ts` scans +100 ports via
-  `Get-NetTCPConnection`, picks first free. Chosen ports persisted to
-  `.runtime/dashboard-ports.json`.
+- WS server: `server/websocket-server.ts` (puerto dinámico vía `Get-FreePort()`, persistido en `.runtime/dashboard-ports.json`), push cada 5s, REST `/api/metrics|traces|alerts|feedback|health`.
+- Watchdog con auto-restart (10 intentos); stop mata watchdog primero. Frontend tolera caídas via HTTP polling.
+- Build verification: `cd apps/web-dashboard && npm run build` (debe salir 0 sin errores TS).
+- i18n en/pt/es, 8 alert rules en `config/dashboard-alerts.json`.
 
-### Lifecycle
+## procesos-ocultos (regla de oro)
 
-| Action                          | Command                                 |
-| ------------------------------- | --------------------------------------- |
-| Start full (WS + Vite + Chrome) | `npx tsx src/dashboard-start.ts`        |
-| Start WS only (pipeline)        | `npx tsx src/dashboard-ws-autostart.ts` |
-| Stop all                        | `npx tsx src/dashboard-stop.ts`         |
+Todo spawn de procesos debe ser **invisible en Windows** — cero ventanas cmd.exe (ni flashes ni
+ventanas persistentes). Reglas:
 
-### Auto-recovery
-
-- The WS server watchdog (`src/dashboard-ws-autostart.ts`) monitors the process every 5s via port
-  check (`Test-NetConnection localhost:<port>`). If the process dies or the port closes, it restarts
-  (up to 10 attempts). Uses `cmd /c set WS_PORT=... && npx.cmd tsx ...` for reliable Windows batch
-  execution. Heartbeat logged to `.runtime/dashboard-ws.log`.
-- Watchdog stores its own PID in `.runtime/dashboard-ws-watchdog.pid` — `src/dashboard-stop.ts`
-  kills the watchdog FIRST before the WS process to prevent restart loops.
-- Frontend HTTP polling in `useMetrics.ts` always runs regardless of WebSocket state — data loads
-  even if the WS server is temporarily down.
-
-### Pipeline integration
-
-- `config/session-autostart.config.json` includes a `lazy: true` step `dashboard-ws-start` that
-  auto-launches the WS server watchdog after session start. It does NOT block the pipeline.
-- Old steps `dashboard-render` and `live-feed-start` are deprecated (`enabled: false`,
-  `deprecated: true`).
-
-### Build verification
-
-```bash
-cd apps/web-dashboard
-npm run build          # must exit 0 with no TS errors
-```
-
-### Key files
-
-- `types/dashboard.ts` — core type definitions
-- `server/real-data.ts` — data pipeline (reads .state.json → computes metrics)
-- `server/websocket-server.ts` — WS + HTTP server (port 8080)
-- `hooks/useLocale.ts` — i18n (14 metrics × 3 languages)
-- `hooks/useMetrics.ts` — resilient HTTP polling + WS
-- `components/TracingDashboard.tsx` — waterfall view + feedback
-- `components/InfoPopup.tsx` — animated popup (fade-in + scale)
-- `config/dashboard-alerts.json` — 8 alert rules
-- `src/dashboard-common.ts` — shared port allocation (Get-FreePort, Save/Read/Clear-DashboardPorts)
-- `src/dashboard-ws-autostart.ts` — watchdog start with auto-recovery (10 restarts)
-- `src/dashboard-start.ts` — full launcher (WS watchdog + Vite + Chrome)
-- `src/dashboard-stop.ts` — cleanup stop (kills watchdog → PID files → port → process name)
-- `vite.config.ts` — reads WS_PORT (proxy target) and VITE_DEV_PORT from env
-- `.runtime/dashboard-ports.json` — persisted port assignments for stop/restart
-- `.runtime/dashboard-ws.log` — watchdog heartbeat log
-- `.runtime/dashboard-ws-watchdog.pid` — watchdog own PID (clean shutdown)
+- Scripts TS del stack: SIEMPRE `runNpxTsx`/`runNpxTsxSync` de `src/core/run-command.ts` — usan
+  `node --import tsx <script>`: el script corre EN el proceso spawned. NUNCA invocar el CLI de tsx
+  (`cli.mjs`) ni `npx tsx` directamente: el CLI relanza el script como proceso NIETO sin
+  `windowsHide` y cada launcher oculto/detached abre una consola visible (ráfagas + daemons con
+  ventana que rompen el stack al cerrarlas).
+- Daemons/launchers directos: `spawn(process.execPath, ['--import','tsx', script], {stdio:'ignore',
+  detached:true, windowsHide:true})` + `child.unref()`; el PID spawned ES el PID real (no requiere
+  re-resolución por puerto).
+- Prohibido: `exec/execSync` con string de comando (cmd.exe visible; usar `runSync`/`runSyncShell`),
+  `spawn('npx.cmd')` sin shell (EINVAL en Node moderno; usar `run`/`runNpxTsx`), `cmd /k`,
+  `start /B` con cadenas npx.
+- Tareas programadas (schtasks): acción `node.exe --import tsx` directa + principal S4U (oculto);
+  si el registro S4U es denegado, fallback con wrapper wscript oculto
+  (`.runtime/codegraph-sync-hidden.vbs`, generado por `src/bootstrap.ts`).
+- Test de regresión: `tests/unit/run-command-hidden.test.ts` — PID del hijo debe ser PID del script
+  (falla si vuelve el nieto del CLI de tsx).
 
 ## maintenance-watchtower
 
-Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica los checks de
-`health-check.ps1`, `stack-health-check.ps1` y el watchdog en un solo punto.
-
-### Architecture
-
-- **95 checks** en **21 componentes**: dashboard-ws, codegraph, ml-embeddings, engram, mcp, session,
-  hooks, configs, tool-configs, security, governance, secret-scanner, cli-guard.
-- **6 modos**: health, rebuild, report, autoheal, continuous, all.
-- **Pipeline integrado**: corre `-Action autoheal -Quiet` con `lazy: true` al inicio de sesión (no
-  bloquea).
-- **Auto-healing**: detecta procesos caídos y los restaura automáticamente.
-
-### Modes
-
-| Action     | Command                                  | Description                      |
-| ---------- | ---------------------------------------- | -------------------------------- |
-| health     | `-Action health`                         | 95 checks, 21 componentes        |
-| rebuild    | `-Action rebuild`                        | health + rebuild ML/RAG indices  |
-| autoheal   | `-Action autoheal`                       | health + restart procesos caídos |
-| report     | `-Action report -OutputFile status.json` | JSON export                      |
-| continuous | `-Action continuous -Interval 30`        | loop each N sec (Ctrl+C to exit) |
-| all        | `-Action all -Force`                     | health + autoheal + rebuild      |
-
-### Checks
-
-- **Dashboard WS**: API 200 OK, watchdog PID alive, WS PID alive
-- **CodeGraph**: index exists, nodes count, age
-- **ML Embeddings**: ml-index.json, embedding files, skill-embeddings.json
-- **Engram**: DB integrity, reindex log, RAG pipeline
-- **MCP**: config files (3), bridge health, bridge status
-- **Session**: session dir, manifest, pipeline config
-- **Hooks**: git hooks (pre-commit, post-commit, post-merge)
-- **Configs**: JSON schemas (5 configs), JSON validator
-- **Tool Configs**: clinerules, cursorrules, continue config
-- **Security**: opencode.json structure, auth config
-- **Governance**: policy files, rules directory
-
-### Estabilidad comprobada
-
-- **95/95 PASS — 0 WARN — 0 FAIL — 0 SKIP** (todos los componentes OK)
-- Dashboard WS API 200 OK, watchdog con auto-restart (10 intentos)
-- CodeGraph: 133 files, 1410 nodes, 1763 edges
-- Puertos dinámicos con `Get-FreePort()` en `src/dashboard-common.ts`
-- Pipeline session-autostart con `lazy: true` para steps no bloqueantes
-- `src/dashboard-stop.ts` mata watchdog primero para evitar restart loops
-- Frontend HTTP polling tolera caídas temporales del WS server
-- **CLI Guard**: check anti-regresión que detecta el patrón roto
-  `import.meta.url === \`file://${process.argv[1]}\``(no normaliza rutas Windows → main() nunca se ejecuta). Ver`src/auto-url-fix.ts`
-  para el fix automático de 33 archivos.
-
----
-
-## absorbed-knowledge
-
-Conocimiento externo absorbido como nativo al stack (ADR-010, 2026-08-13). Ver
-`docs/adr/ADR-010-knowledge-absorption-external-repos.md`.
-
-### Secret Scanner nativo (`src/secret-scanner.ts`)
-
-Detector de secrets/API keys en TS puro, reimplementado (sin copiar código GPL-3.0 de cariddi):
+Orquestador de health/auto-healing: **95 checks / 21 componentes**, 6 modos (health, rebuild, report,
+autoheal, continuous, all). Corre `autoheal -Quiet` lazy al inicio de sesión.
 
 ```bash
-npm run scan:secrets -- --scan <path|url>      # archivo, directorio o URL
-npm run scan:secrets -- --dir <dir>            # escaneo recursivo
-npm run scan:secrets -- --scan . --json        # output JSON
+npm run watchtower:health   # 95/95 PASS esperado
 ```
 
-- **80 patrones**: AWS, GCP, Azure, GitHub, GitLab, OpenAI, Anthropic, Slack, Stripe, JWT, private
-  keys, y más (categorías: aws/gcp/azure/github/gitlab/llm/slack/payment/cloud/generic/private-key)
-- Entropy Shannon opcional (`--entropy`, ≥3.5 bits/char) para filtrar falsos positivos
-- Redacción automática por defecto (`--redact` / `--no-redact`)
-- Exit codes: 0 = sin secrets, 1 = secrets encontrados, 2 = error
-- Config en `config/secret-scanner.json`; tests en `tests/unit/secret-scanner.test.ts`
+CLI Guard: check anti-regresión del patrón roto
+`import.meta.url === \`file://${process.argv[1]}\`` (ver `src/auto-url-fix.ts`).
 
-#### Integraciones del scanner en el stack
+## Nexus — DB operacional
 
-- **Pre-commit**: `.lefthook.yml` comando `secret-scanner` sobre los staged files (todos los tipos
-  relevantes: ts/js/json/yml/yaml/md/env/toml/xml/py/ps1/sh/sql). Complementa a trufflehog y
-  secretlint. Verificar con `npx lefthook validate`.
-- **Watchtower**: componente `secret-scanner` en `src/core/maintenance-watchtower.ts`
-  (`checkSecretScanner` — valida módulo, CLI, config y tests). Se ejecuta con `-Action health` (95
-  checks, 21 componentes). Verificado 95/95 PASS.
-- **Routing de subagentes**: `config/subagent-mapping.json` registra las skills absorbidas por rol:
-  - **DEV**: DevSecOps (devsecops-scanning, secret-scanning gitleaks, secrets CI/CD, SBOM,
-    dependency-confusion, supply-chain CI/CD)
-  - **GOV**: compliance (NIST 800-30, NIST CSF, ISO 27001, GDPR, CMMC), MCP tool-poisoning,
-    ai-provenance
-  - **QA**: API security (OWASP API Top 10, WebSocket, inventory), prompt leakage, RAG injection
-- **`src/recommend-agent.ts`**: keywords de cibersec añadidos a `matchDomain` (sbom, prompt
-  injection, garak, promptfoo, guardrails, nist, iso 27001, cmmc, gitleaks, api security, owasp, mcp
-  server, tool poisoning, etc.) → rutean a dominio `security` → `gov-agent`.
-
-### Skills de ciberseguridad absorbidas (25, Apache-2.0)
-
-En `.opencode/skills/` nivel 1, con frontmatter rico (mapeos MITRE ATT&CK/ATLAS, NIST CSF/AI RMF)
-
-- triggers. Dominios:
-
-- **AI/LLM Security**: `red-teaming-llms-with-garak`, `continuous-llm-red-teaming-with-promptfoo`,
-  `defending-llms-with-guardrails`, `detecting-ai-model-prompt-injection-attacks`,
-  `detecting-indirect-prompt-injection`, `testing-prompt-injection-in-rag-pipelines`,
-  `testing-for-system-prompt-leakage`, `securing-agentic-ai-tool-invocation`,
-  `auditing-mcp-servers-for-tool-poisoning`
-- **DevSecOps / Supply Chain**: `implementing-devsecops-security-scanning`,
-  `implementing-secret-scanning-with-gitleaks`, `implementing-secrets-scanning-in-ci-cd`,
-  `generating-and-analyzing-sboms`, `analyzing-sbom-for-supply-chain-vulnerabilities`,
-  `detecting-supply-chain-attacks-in-ci-cd`, `detecting-dependency-confusion`
-- **API Security**: `conducting-api-security-testing`, `testing-api-security-with-owasp-top-10`,
-  `testing-websocket-api-security`, `performing-api-inventory-and-discovery`
-- **Compliance**: `conducting-cyber-risk-assessment-with-nist-800-30`,
-  `performing-nist-csf-maturity-assessment`,
-  `implementing-iso-27001-information-security-management`,
-  `implementing-gdpr-data-protection-controls`, `achieving-cmmc-level-2-compliance`
-
-⚠️ Técnicas ofensivas (red-team): uso restringido a entornos autorizados (notice legal en cada
-skill).
-
-### diagram-design (MIT, v2.3)
-
-`.opencode/skills/diagram-design/` — 27 tipos de diagramas editoriales HTML/SVG self-contained
-(arquitectura, flowchart, sequence, ER, timeline, swimlane, quadrant, radar, loop, Gantt,
-data-flow…). Redibuja fuentes .drawio/Mermaid. Sin build step; abre directo en navegador. Usar para
-ADRs, reportes y documentación de arquitectura en lugar de "Mermaid-slop".
-
-### ai-provenance — política dual (MIT)
-
-`.opencode/skills/ai-provenance/` — gestión de marcas de proveniencia AI (C2PA, Unicode, SynthID,
-EXIF/XMP) en texto y archivos.
-
-| Modo                     | Comportamiento                     | Activación                                                                   |
-| ------------------------ | ---------------------------------- | ---------------------------------------------------------------------------- |
-| **INSPECCIÓN** (default) | Detectar/reportar/verificar marcas | Automática, comportamiento normal                                            |
-| **REMOCIÓN** (on-demand) | Limpiar C2PA/Unicode/metadatos     | **SOLO** solicitud explícita e inequívoca del usuario sobre contenido propio |
-
-**Regla de oro**: el stack NUNCA remueve marcas de proveniencia en comportamiento normal. La
-remoción es una capacidad de emergencia/privacidad que requiere petición explícita del usuario. Ante
-dudas, inspeccionar y reportar; no limpiar.
-
-## v4.0-infrastructure
-
-Infraestructura de tracing, state persistence, auditoría, event sourcing, cloud connectors y health
-API integrados en la pipeline de sesión.
-
-### Distributed Tracing
-
-- Script: `src/tracing-instrument.ts`
-- Acciones: `start`, `end`, `error`
-- Almacena spans en `.telemetry/spans/` y `.telemetry/traces/` (JSONL)
-- Exporta OTLP a `http://localhost:4318/v1/traces`
-- Pipeline: step `tracing-init` (lazy, session start) + cleanup close
-- Funciones helper de tracing en `src/tracing-instrument.ts`
-
-### State Persistence
-
-| Componente | Script                         | Pipeline step                   |
-| ---------- | ------------------------------ | ------------------------------- |
-| Checkpoint | `src/checkpoint-manager.ts`    | `checkpoint-auto-create` (lazy) |
-| Snapshot   | `src/snapshot-manager.ts`      | — (manual)                      |
-| Rollback   | `src/rollback-orchestrator.ts` | — (manual)                      |
-
-- Checkpoint: create/list/diff/verify/prune — almacena en `.session/checkpoints/`
-- Snapshot: snapshot/list/prune — almacena en `.session/snapshots/`
-- Rollback: restaura desde checkpoint con dry-run validation
-
-### Audit Pipeline
-
-- Script: `src/infrastructure/audit-pipeline.ts`
-- Acciones: `log`, `status`, `query`, `archive`, `prune`
-- Almacena en `.session/audit/logs/` (JSONL diario)
-- Pipeline: step `audit-pipeline-init` (lazy, session start) + cleanup log
-
-### Event Sourcing + Saga
-
-| Componente  | Script                     | Pipeline step                |
-| ----------- | -------------------------- | ---------------------------- |
-| Event Store | `src/event-sourcing.ts`    | `event-sourcing-init` (lazy) |
-| Saga        | `src/saga-orchestrator.ts` | — (manual)                   |
-
-- Event sourcing: append/project/snapshot/prune — almacena en `.session/event-store/`
-- Saga: create/register-step/complete/compensate/list — almacena en `.session/sagas/`
-
-### Cloud Connectors
-
-| Componente      | Script                      | Pipeline step                  |
-| --------------- | --------------------------- | ------------------------------ |
-| Hybrid Executor | `src/hybrid-executor.ts`    | `cloud-connectors-init` (lazy) |
-| Agent Delegator | `src/agent-delegator.ts`    | —                              |
-| Route+Delegate  | `src/route-and-delegate.ts` | —                              |
-
-- Routing por costo/latencia/load con fallback automático
-- Circuit breaker pattern (5 failures → OPEN, 2 successes → HALF_OPEN → CLOSED)
-- Métricas en `.session/cloud-metrics.json` y `.session/hybrid-metrics.json`
-- SkillInput serializado como JSON para paso por CLI (hashtable splatting `@splat`)
-- Pipeline: step `cloud-connectors-init` (lazy, healthcheck ping al iniciar sesión)
-
-### Dashboard Health API
-
-`/api/health` retorna 7 componentes: `websocket`, `mcp`, `adaptive`, `cloud`, `tracing`,
-`checkpoints`, `audit`. Cada uno con status `ok`/`unknown`/`degraded` y métricas específicas.
-Verificado: 7/7 responden OK en entorno local.
-
-### Notes
-
-- **graphify CLI**: Use the stack-local Graphify command through `npm run graphify -- <command>`. It
-  reads `graphify-out/graph.json` and supports `query`, `explain`, `path`, `affected`, `status`, and
-  `update .`. Do not install the unrelated npm package `graphify@1.0.0`; it is a random graph
-  generator, not this stack's knowledge graph CLI. Code freshness is still handled by `.codegraph/`
-  and git hooks.
-- **`$var:` syntax**: In PowerShell string interpolation, `$varname:` must be written as
-  `${varname}:` to avoid parser errors. All instances are fixed.
-
-### Autostart Pipeline (steps v4.0)
-
-Los siguientes steps se agregaron al `config/session-autostart.config.json`:
-
-| Step                       | Script                                 | Lazy |
-| -------------------------- | -------------------------------------- | ---- |
-| `judgment-day-correction`  | `src/correction-rules-engine.ts`       | ✅   |
-| `cloud-connectors-init`    | `src/hybrid-executor.ts`               | ✅   |
-| `cloud-connectors-metrics` | `src/tokens/token-budget-guard.ts`            | ✅   |
-| `tracing-init`             | `src/tracing-instrument.ts`            | ✅   |
-| `checkpoint-auto-create`   | `src/checkpoint-manager.ts`            | ✅   |
-| `audit-pipeline-init`      | `src/infrastructure/audit-pipeline.ts` | ✅   |
-| `event-sourcing-init`      | `src/event-sourcing.ts`                | ✅   |
-| `post-session-learning`    | `src/post-autostart-summary.ts`        | ✅   |
-
-## TypeScript Migrations
-
-Los scripts PS1 core han sido migrados a TypeScript en `src/`:
-
-| PS1 Original                                      | TS Replacement                              | Comando                                            |
-| ------------------------------------------------- | ------------------------------------------- | -------------------------------------------------- |
-| `scripts/health-check/health-check.ps1`           | `src/health-check.ts` (332 lines)           | `npm run health:check`                             |
-| `scripts/utilities/session/session-autostart.ps1` | `src/session-autostart.ts` (168 lines)      | `npx tsx src/session-autostart.ts`                 |
-| `scripts/maintenance/maintenance-watchtower.ps1`  | `src/maintenance-watchtower.ts` (834 lines) | `npm run watchtower` / `npm run watchtower:health` |
-
-Los PS1 originales fueron eliminados tras verificar que las versiones TS cubren toda la
-funcionalidad. Los comandos `npm run` apuntan exclusivamente a las versiones TS.
-
-## Research Scripts
-
-Los ~21 scripts Python duplicados en `research/rlhf-dataset-search/` fueron consolidados en un solo
-script:
+SQLite WAL en `.runtime/gentle-vanguard.db`, 23 tablas, singleton DatabaseManager
+(`apps/web-dashboard/server/database/manager.ts`). Converge: métricas, sesiones, trazas, eventos,
+alertas, feedback, response cache, skills, tokens, routing, scoring.
 
 ```bash
-python research/rlhf-dataset-search/search_datasets.py --source huggingface --query "RLHF" --max-results 20
-python research/rlhf-dataset-search/search_datasets.py --source arxiv --query "preference optimization" --csv
-python research/rlhf-dataset-search/search_datasets.py --source all --query "reward model" --categorize
+npm run db:init && npm run db:health   # verificación rápida
 ```
 
-## Configuration Consolidation
+- Lifecycle completo: `db:backup|db:restore|db:list|db:optimize|db:prune|db:prune:backup`.
+- Pipeline: steps lazy `db-init`, `db-health-check`, `db-prune`.
+- Normativa: `rules/NEXUS-NORMATIVA.md`; skill: `skills/nexus-database/SKILL.md`.
+- Monitoreado por watchtower (integridad, WAL, tamaño).
 
-- `config/model-router.json` ahora contiene los datos de routing policy, cost tracking y model
-  levels (antes en `config/model-routing.json`, eliminado)
-- 15 referencias a `model-routing.json` fueron actualizadas a `model-router.json` en toda la
-  codebase
+## Token Tracking (real, agnóstico)
 
-## Integraciones Nativas (Headroom / gentle-ai / awesome-llm)
-
-Estrategias absorbidas de repos externos como TypeScript nativo (sin sidecars Python/Rust/Go):
-
-### Structural Compression (`src/compression/structural-compression.ts`)
-
-Absorbe 5 estrategias de compresión de Headroom en TS puro, complementando la compresión extractiva
-(`prompt-compression.ts` / `output-compression.ts`):
-
-| Estrategia         | Qué hace                                                          |
-| ------------------ | ----------------------------------------------------------------- |
-| SmartCrusher       | Comprime arrays JSON con decisión estadística (preserva outliers) |
-| Tabular compaction | JSON tabular → CSV con esquema (lossless)                         |
-| LogCompressor      | Colapsa logs/stack-traces de build/test                           |
-| TextCrusher + BM25 | Prosa con relevancia a la query + dedup de shingles               |
-| CrossCompression   | Dedup de bytes entre turnos                                       |
-
-**Seguridad por modo** (crítico): `compressStructural(input, { mode })`.
-
-- `mode: 'input'` (prompt/delegación) → **lossless-only** por defecto (`input.allowLossy: false`).
-  Protege el razonamiento del modelo: no descarta filas/prosa que el modelo necesita.
-- `mode: 'output'` (respuesta) → lossy OK (`output.allowLossy: true`). El modelo ya razonó.
-
-`compressPrompt` usa `mode:'input'`; `compressOutput` usa `mode:'output'`. Config en
-`config/structural-compression.json`. Tests: `tests/unit/structural-compression.test.ts`.
-
-### Multi-perfiles por fase SDD (`src/model-profile-switcher.ts`)
-
-Convención de gentle-ai absorbida nativamente. `config/model-router.json` sección `profiles` define
-perfiles `cheap`/`balanced`/`premium`, cada uno con temperature + hallucinationGuard por fase SDD
-(BA/SAD/DEV/QA):
+Daemon `src/tokens/token-ingest.ts` lee datos persistidos por cada herramienta (opencode.db,
+**zcode** `~/.zcode/v2/`, extensible) y consolida en Nexus: `token_usage`, `token_transactions`
+(por mensaje/agente), `token_savings` (cache + compresión).
 
 ```bash
-npm run profile:list    # listar perfiles
-npm run profile:status  # perfil activo
-npm run profile:set -- premium   # dry-run
-npm run profile:apply -- premium # aplicar y persistir
+npm run token:ingest   # una pasada
+npm run token:trace    # trazabilidad
+npm run token:status   # budget real: usado/presupuesto/%
 ```
 
-### Hash-Chained Audit (`src/event-sourcing.ts`)
+Presupuestos en `config/token-budget-guard.json` (daily 5M, perSession 3M).
 
-Patrón de awesome-llm (trust-gated audit trail). Cada evento guarda `prevHash` + `hash` (SHA-256),
-formando una cadena a prueba de manipulación:
+## Adaptive Steps + Delegación
+
+Steps auto-escalados por complejidad (señales de texto + archivos + historial). Routing table
+aprendible en `.session/routing/routing-table.json` (17 dominios + overrides). Auto-reassignment
++20 steps (máx 80) cuando un agente reporta "maximum steps reached".
 
 ```bash
-npx tsx src/event-sourcing.ts -Action append -AggregateId <id> -EventType <type> -EventData '{}'
-npx tsx src/event-sourcing.ts -Action verify -AggregateId <id>   # valida integridad de la cadena
-```
-
-`verify` detecta manipulación (`tamper-mismatch` / `broken`). Tests:
-`tests/unit/event-sourcing-hashchain.test.ts`.
-
-### Retrieval Grader CRAG (`src/retrieval/retrieval-grader.ts`)
-
-Patrón Corrective RAG de `awesome-llm-apps`. Gradúa la relevancia de chunks recuperados con BM25
-lexical (sin ML) y dispara `keyword-fallback` si el retrieval es pobre (evita alucinación):
-
-```bash
-npx tsx src/retrieval/retrieval-grader.ts --query "..." --chunks '["...","..."]'
-```
-
-Tests: `tests/unit/retrieval-grader.test.ts`.
-
-## Integraciones Nativas (Capability Stack)
-
-Herramientas de capacidad absorbidas como TypeScript nativo — operativas desde la CLI, sin
-dependencias de servicios externos para su funcionamiento core.
-
-### Web Crawler dual-provider (`src/web/web-crawler.ts`)
-
-Motor de adquisición de contenido web con **proveedores en cadena**:
-
-| Operación | Primario                        | Fallback (sin API key, cero-config)                                                                                                |
-| --------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| Scrape    | Firecrawl (`FIRECRAWL_API_KEY`) | **Jina Reader** `r.jina.ai/<url>` → markdown                                                                                       |
-| Search    | Firecrawl (`FIRECRAWL_API_KEY`) | **DuckDuckGo HTML** `html.duckduckgo.com/html/` → parse `result__a`/`result__snippet`; segundo fallback **Bing RSS** `&format=rss` |
-| Crawl/Map | Firecrawl (requiere key)        | Error descriptivo                                                                                                                  |
-
-- `fallbackEnabled: true` por defecto en `config/web-crawler.json`; el health reporta
-  `provider: firecrawl | jina-reader+ddg+bing` y `fallbackActive`.
-- Cache SHA256 por provider (`cacheKey` con tag `fb`/`fc`) — evita envenenar resultados entre
-  proveedores. Compresión estructural + logging a Nexus (`web-crawler.usage`).
-- **GOTCHA**: Jina Reader bloquea User-Agents de navegador (Chrome → 403); usa `curl/8.0.1`. Los
-  href de DuckDuckGo son redirects `//duckduckgo.com/l/?uddg=<encoded>` — decodificar el param
-  `uddg` con `decodeURIComponent` para obtener la URL real. Bing search HTML sirve bot-detection a
-  fetch de Node — usar el endpoint RSS.
-
-```bash
-npx tsx src/web/web-crawler-cli.ts search --query "typescript" --limit 5
-npx tsx src/web/web-crawler-cli.ts scrape --url https://example.com
-npx tsx src/web/web-crawler-cli.ts health
-```
-
-Tests: `tests/unit/web-crawler.test.ts` (14).
-
-### Web Research Select (`src/web/web-research-select.ts`)
-
-Pipeline de **búsqueda → selección por relevancia** para research: busca con el web-crawler (cadena
-de proveedores), gradea los resultados con BM25 (retrieval-grader, patrón CRAG) y persiste el mejor
-subconjunto en `.session/web-research/<slug>.json`.
-
-```bash
-npm run web:select -- --query "customer retention strategies" --limit 5
-npm run web:select -- --query "GDPR breach notification" --deep        # scrape + grade full markdown (cap 20K chars)
-npm run web:select -- --query "..." --deep-limit 3                      # top-N candidatos a scrapear
-```
-
-- Modo snippet: gradea títulos + snippets del buscador (rápido, cero scraping).
-- Modo `--deep`: scrapea los top-N candidatos y reemplaza el score del snippet con `deepScore` sobre
-  el markdown completo — más preciso para research profundo.
-- `averageScore` en el output; resultados ordenados desc. Verdict `relevant` si avg ≥ umbral.
-- Tests: `tests/unit/web-crawler.test.ts` (14, incluye DDG redirect decode).
-
-### witr trace (`src/web/witr-wrapper.ts` + `src/web/witr-cli.ts`)
-
-Wrapper TS del binario [witr](https://github.com/pranshuparmar/witr) — "Why Is This Running?". Traza
-procesos/puertos/archivos/contenedores hasta su cadena causal, con auto-install y redacción de
-secrets del entorno (`***REDACTED***` para claves).
-
-```bash
-npx tsx src/web/witr-cli.ts process <pid>
-npx tsx src/web/witr-cli.ts port <port>
-```
-
-Integrado en la watchtower para trazar la cadena causal de componentes con FAIL/WARN. Tests:
-`tests/unit/witr-wrapper.test.ts`.
-
-### Research Trends (`src/research/research-trends.ts` + `src/research/research-trends-cli.ts`)
-
-Agregador de tendencias Last30Days desde GitHub, Hacker News, Stack Overflow, Dev.to y Reddit en un
-`TrendReport` normalizado (themes, hottest, emerging). Alimenta el skill `web-research` y puede
-cruzar páginas trending vía web-crawler (Firecrawl/scrape).
-
-```bash
-npx tsx src/research/research-trends-cli.ts fetch --timeframe 7d --sources github,hackernews
-npx tsx src/research/research-trends-cli.ts themes --query "typescript OR rust"
-npx tsx src/research/research-trends-cli.ts report
-```
-
-Funciones puras exportadas: `buildReport`, `queryThemes` (soporta `OR`), `renderMarkdown`,
-`deserializeReport`. Tests: `tests/unit/research-trends.test.ts`.
-
-### Humanizer (`src/humanize/humanizer.ts` + `src/humanize/humanizer-cli.ts`)
-
-Transforma texto técnico/IA en prosa humana con análisis de legibilidad y scoring.
-
-```bash
-npm run humanize:analyze -- <texto>
-npm run humanize:transform -- <texto>
-npm run humanize:score -- <texto>
-```
-
-Tests: `tests/unit/humanizer.test.ts`.
-
-### Design Tokens (`src/design/design-tokens.ts` + `src/design/design-system-cli.ts`)
-
-Sistema de tokens de diseño (colores, tipografía, spacing) con generación de CSS/JSON y validación
-de escala.
-
-```bash
-npm run design:generate   # regenera tokens desde config/design-tokens.json
-npm run design:check      # valida consistencia
-npm run design:scale      # comprueba escala
-```
-
-Tests: `tests/unit/design-tokens.test.ts`.
-
-### Planning Templates (`src/planning/planning-templates.ts` + `src/planning/planning-templates.ts`)
-
-Plantillas de planificación pre-write (planes de sesión, desglose de tareas, ADRs) con validación de
-estructura. Tests: `tests/unit/planning-templates.test.ts`.
-
-### Animations (`src/animations/`)
-
-Motor de animaciones para la dashboard (fade-in, scale, transitions) con CLI de creación/análisis.
-
-```bash
-npm run animation:create -- <name>
-npm run animation:analyze -- <name>
-```
-
-## CI/CD Pipeline
-
-- `.github/workflows/ci.yml` — 6 jobs: lint-typecheck, test, dashboard-tests, dashboard-build,
-  security-scan, workflow-lint
-- `.github/workflows/security.yml` — 3 jobs: gitleaks, secretlint, trivy
-
-## Testing
-
-| Suite             | Comando                  | Tests |
-| ----------------- | ------------------------ | ----- |
-| Config validation | `npm run test:config`    | 6     |
-| CI/CD workflows   | `npm run test:workflows` | 2     |
-| Research scripts  | `npm run test:research`  | 5     |
-
-## nexus — Base de Datos Operacional
-
-**Nexus** es la base de datos operacional del stack Gentle-Vanguard (`.runtime/gentle-vanguard.db`).
-Es el sistema nervioso central donde converge toda la información operacional: métricas, sesiones,
-trazas, eventos, alertas, feedback, caché de respuestas, resultados de contratos, uso de skills, uso
-de tokens, reglas de ruteo y session scoring.
-
-### Identity Manifest
-
-```json
-{
-  "name": "Nexus",
-  "type": "SQLite (WAL mode, FK ON)",
-  "path": ".runtime/gentle-vanguard.db",
-  "manager": "DatabaseManager (singleton)",
-  "tables": 23,
-  "migrations": 7,
-  "purpose": "Operational database — all stack operational data",
-  "autoInit": true,
-  "autoPrune": true,
-  "autoBackup": true,
-  "monitoredBy": "watchtower (gentle-vanguard-db component)",
-  "pipelineSteps": ["db-init", "db-health-check", "db-prune"]
-}
-```
-
-### Architecture
-
-**Arquitectura**: Singleton `DatabaseManager` en `apps/web-dashboard/server/database/manager.ts` con
-migraciones automáticas (WAL mode, foreign keys ON). Importable desde cualquier script del stack.
-
-#### Migration 001 - Initial Schema (Core operacional)
-
-- `metric_snapshots` — Time-series: tokens, sesiones, latencia, health cada 30s
-- `sessions` — Historial de sesiones (upsert por session_id)
-- `traces` — Distributed tracing spans (árbol trace_id → span_id)
-- `events` — Event sourcing — append-only (type + JSON payload)
-- `alerts` — Evaluaciones de alertas (5s broadcast cycle)
-- `feedback` — User feedback thumbs up/down por span
-
-#### Migration 002 - Stack Tables (Capa operacional extendida)
-
-- `response_cache` — SHA256 key → response (TTL-aware, hit_count tracking)
-- `contract_results` — SDD contract validation results
-- `skill_usage` — Per-session skill usage tracking
-- `token_usage` — Token accounting with generated `total_tokens` column
-- `routing_rules` — Adaptive router persistence with hit_count
-
-#### Migration 003 - Session Scoring (Wave 37 E)
-
-- `session_scoring` — Quality scoring por sesión (delegations, corrections, proactive hits, etc.)
-
-### Lifecycle
-
-| Comando                   | Descripción                                                                 |
-| ------------------------- | --------------------------------------------------------------------------- |
-| `npm run db:init`         | Initialize DB + run all migrations (idempotent)                             |
-| `npm run db:health`       | Health check: integrity, WAL, tables, rows                                  |
-| `npm run db:backup`       | Safe online backup to `.runtime/backups/`                                   |
-| `npm run db:restore`      | Restore latest backup                                                       |
-| `npm run db:list`         | List available backups                                                      |
-| `npm run db:optimize`     | WAL checkpoint + REINDEX + VACUUM                                           |
-| `npm run db:prune`        | Prune old data from stack tables (events >30d, cache >7d, token_usage >90d) |
-| `npm run db:prune:backup` | Keep only 10 most recent backups                                            |
-
-### Pipeline Integration
-
-3 lazy steps en `config/session-autostart.config.json` (non-blocking):
-
-| Step              | Script                                | Propósito                     |
-| ----------------- | ------------------------------------- | ----------------------------- |
-| `db-init`         | `src/database/db-init.ts`             | Init + migrations cada sesión |
-| `db-health-check` | `scripts/recovery/db-health-check.ts` | Validate SQLite integrity     |
-| `db-prune`        | `scripts/database/db-prune.ts`        | Prune old data cada sesión    |
-
-### Watchtower Monitoring
-
-El componente `gentle-vanguard-db` en la watchtower verifica en cada ciclo:
-
-1. **database file** — existencia y tamaño
-2. **WAL file** — tamaño (> 5MB = WARN → checkpoint)
-3. **integrity check** — `PASS` (ok), `WARN` (transient: DB locked, CLI unavailable), `FAIL`
-   (corruption)
-4. **size** — conteo de tablas y rows
-
-### Normativa y Skill
-
-- **Normativa**: `rules/NEXUS-NORMATIVA.md` — identidad, ciclo de vida, guardrails, retention policy
-- **Skill**: `skills/nexus-database/SKILL.md` — cómo gestionar Nexus autónomamente
-- **Comando**: load the skill via `"nexus"`, `"db"`, `"database"`, or `"gentle-vanguard.db"`
-  triggers
-
-### Relaciones con el Stack
-
-| Componente          | Relación con Nexus                                |
-| ------------------- | ------------------------------------------------- |
-| **Dashboard**       | Lee métricas, sesiones, trazas, alertas, feedback |
-| **Session Scoring** | Escribe/lee quality scores por sesión             |
-| **Adaptive Router** | Persiste routing_rules con hit_count              |
-| **Response Cache**  | Cachea respuestas SHA256 con TTL                  |
-| **Watchtower**      | Monitorea integridad, tamaño, WAL en cada ciclo   |
-| **Token Budget**    | Almacena token_usage por sesión                   |
-| **SDD Contracts**   | Almacena contract_results para validación         |
-
-### Verificación rápida
-
-```powershell
-# Verificar estado de Nexus
-npm run db:health
-npm run db:init
-# Verificar integridad via watchtower
-npm run watchtower:health
-```
-
----
-
-## Adaptive Steps System
-
-**Versión implementada: 1.0** | **Fecha: Agosto 2026**
-
-El stack implementa un sistema de steps adaptativos que auto-escala el presupuesto de pasos para
-orquestador y subagentes basándose en la complejidad de la tarea.
-
-### Problema Resuelto
-
-Los subagentes estaban configurados con solo 6 steps (`steps: 6`), lo que causaba que se agotaran
-rápidamente sin completar tareas complejas. El sistema adaptativo ahora asigna steps basándose en:
-
-1. **Tipo de agente** (capacidad base)
-2. **Complejidad de la tarea** (señales de texto)
-3. **Cantidad de archivos** (heurística de tamaño)
-4. **Historial de ejecuciones** (learning data en `.session/routing/routing-table.json`)
-
-### Comandos del Sistema Adaptativo
-
-```bash
-# Estimar steps para una tarea
-npx tsx src/adaptive-steps.ts --estimate "fix broken ps1 refs in 20 files"
-
-# Aplicar steps a un agente específico
-npx tsx src/adaptive-steps.ts --apply sdd-apply --steps 40
-
-# Auto-estimar y aplicar
-npx tsx src/adaptive-steps.ts --auto "complex refactoring task" --agent sdd-apply
-
-# Reactivar agente con más steps (cuando agota)
-npx tsx src/adaptive-steps.ts --resume sdd-apply --task_id ses_xxx
-
-# Ver estado actual de todos los agentes
 npx tsx src/adaptive-steps.ts --status
-
-# Consultar agente recomendado para una tarea
-npx tsx src/recommend-agent.ts --task "fix broken ps1 references" --topn 3
-```
-
-### Configuration por Agente (opencode.json)
-
-| Agente              | Steps  | Tipo     | Complejidad            |
-| ------------------- | ------ | -------- | ---------------------- |
-| orchestrator        | 24     | Primary  | Media                  |
-| sdd-explore         | 38     | Subagent | Alta (investigación)   |
-| sdd-design          | 30     | Subagent | Alta (diseño)          |
-| **sdd-apply**       | **52** | Subagent | **Muy alta (código)**  |
-| sdd-verify          | 36     | Subagent | Alta (testing)         |
-| doc-agent           | 34     | Subagent | Media-alta             |
-| ops-agent           | 30     | Subagent | Media                  |
-| gov-agent           | 38     | Subagent | Alta (seguridad)       |
-| session-agent       | 25     | Subagent | Media                  |
-| premortem-agent     | 30     | Subagent | Media-alta             |
-| maintenance-agent   | 30     | Subagent | Media                  |
-| **self-diag-agent** | **38** | Subagent | **Alta (diagnóstico)** |
-| sia-agent           | 35     | Subagent | Alta (refinamiento)    |
-
-### Señales de Complejidad Detectadas
-
-- **+12 steps**: `files`, `refactor`, `migrate`, `implement`, `feature`, `module`
-- **+8 steps**: `explore`, `investigate`, `research`, `audit`, `analyze`, `parallel`
-- **+6 steps**: `test`, `verify`, `validate`, `typecheck`, `lint`
-- **+4 steps**: `config`, `doc`, `readme`, `guide`, `schema`
-- **+10 steps**: `complex`, `large`, `big`, `deep`, `nested`, `integrate`
-
-### Routing Table Learnable
-
-Para auto-asignación inteligente, el sistema usa `.session/routing/routing-table.json` con:
-
-- 17 dominios pre-configurados (requirements, architecture, implementation, etc.)
-- 10 overrides de alta prioridad (security audit, code review, bug fix, etc.)
-- Success rate tracking por agente
-- Auto-update con cada ejecución
-
-### Auto-Reassignment
-
-Cuando un agente reporta "maximum steps reached", el orquestador:
-
-1. **Detecta** el evento en la respuesta del agente
-2. **Re-asigna** automáticamente con `adaptive-steps.ts --resume`
-3. **Incrementa** steps en +20 (máx 80)
-4. **Preserva** el contexto y continúa desde donde quedó
-
-### Archivos Clave del Sistema
-
-- `src/adaptive-steps.ts` — Motor de estimación y escalado
-- `src/recommend-agent.ts` — Bridge de auto-asignación con routing table
-- `src/route-and-delegate.ts` — Delegador multi-dominio cross-platform (recomienda agente + delega
-  con tiering)
-- `.session/routing/routing-table.json` — Tabla de aprendizaje (creada automáticamente)
-- `opencode.json` — Configuración de steps por agente
-- `src/auto-ps1-fixer.ts` — Herramienta para migración PS1→TS
-
-### Delegación Multi-Dominio (`src/route-and-delegate.ts`)
-
-Recomienda el agente nativo adecuado para una petición y delega con el tiering de
-`config/model-router.json` aplicado (`AGENT_TEMPERATURE`):
-
-```bash
-# Recomendar agente + delegar con contexto (cross-platform: npx.cmd en Windows, shellQuote en Unix)
-npm run delegate:run -- --task "build a revenue forecast"
-npm run delegate:run -- --task "audit gdpr compliance" --context "..." --topn 3
-```
-
-- Internamente usa `recommend-agent.ts` (STATIC_MAP 8 dominios de negocio + keywords
-  negocio-primero + routing table aprendida)
-- Inyecta `AGENT_TEMPERATURE` desde el tier del dominio (M6 tiering aplicado)
-- Reporte de validación: `reports/delegation-validation-report.md`
-
-### Integración en el Orquestador
-
-El orquestador aplica automáticamente steps optimizados para cada delegación basándose en:
-
-```typescript
-// Prioridad de asignación:
-// 1. routing-table.json (si existe historial)
-// 2. adaptive-steps.ts --auto (estimación por tarea)
-// 3. opencode.json defaults (fallback)
-```
-
-### Verificación de Funcionamiento
-
-```bash
-# 1. Verificar steps aplicados
-npx tsx src/adaptive-steps.ts --status
-
-# 2. Verificar routing table
 npx tsx src/recommend-agent.ts --task "code review" --topn 3
-
-# 3. Verificar health completo
-npm run watchtower:health
+npm run delegate:run -- --task "audit gdpr compliance"
 ```
 
----
+## Skills y capacidades nativas (resumen)
 
-## Auto-Fixer para Migraciones
+- **Secret scanner** (`npm run scan:secrets -- --scan .`): 80 patrones, entropy opcional, redacción. Integrado a pre-commit (lefthook) y watchtower.
+- **25 skills ciberseguridad** (Apache-2.0) en `.opencode/skills/` — red-team solo en entornos autorizados. Mapeo por rol en `config/subagent-mapping.json`.
+- **diagram-design** (27 tipos, HTML/SVG self-contained) — usar para ADRs/reportes en vez de Mermaid-slop.
+- **ai-provenance**: modo INSPECCIÓN default; REMOCIÓN solo con petición explícita del usuario sobre contenido propio.
+- **Compresión estructural** (`src/compression/structural-compression.ts`): 5 estrategias; `mode:'input'` = lossless-only (protege razonamiento), `mode:'output'` = lossy OK.
+- **Perfiles SDD**: `npm run profile:list|status|apply -- <perfil>` (cheap/balanced/premium en `config/model-router.json`).
+- **Hash-chained audit** (`src/event-sourcing.ts`): eventos con prevHash+hash SHA-256; `verify` detecta manipulación.
+- **CRAG retrieval grader** (`src/retrieval/retrieval-grader.ts`): BM25 + keyword-fallback.
+- **Web crawler dual-provider** (`src/web/web-crawler-cli.ts`): Firecrawl → Jina Reader + DuckDuckGo + Bing RSS. GOTCHA: Jina bloquea UA de navegador; decodificar `uddg` de DDG; Bing solo vía RSS.
+- **Web research select** (`npm run web:select -- --query "..." [--deep]`): busca → gradea BM25 → persiste top-N.
+- **witr** (`src/web/witr-cli.ts`): traza causal de procesos/puertos (process|port).
+- **Research trends** (`src/research/research-trends-cli.ts`): GitHub/HN/SO/Dev.to/Reddit → TrendReport.
+- **Humanizer / Design tokens / Planning templates / Animations**: `npm run humanize:*`, `design:*`, `animation:*`.
+- **v4.0 infra**: tracing (`.telemetry/`, OTLP), checkpoints/snapshots/rollback (`.session/`), audit pipeline, event sourcing + saga, cloud connectors con circuit breaker, health API (7 componentes).
 
-Durante la migración PS1→TS se creó `src/auto-ps1-fixer.ts` para automatizar correcciones de
-referencias rotas.
+## CI/CD y Testing
 
-### Uso
+- CI (`.github/workflows/ci.yml`): lint-typecheck, test, dashboard-tests, dashboard-build, security-scan, workflow-lint. Security: gitleaks, secretlint, trivy.
+- Suites: `npm run test:config` (6), `test:workflows` (2), `test:research` (5).
+- Scripts PS1 core migrados a TS (`health-check.ts`, `session-autostart.ts`, `maintenance-watchtower.ts`); los `npm run` apuntan solo a versiones TS.
+- Research scripts consolidados: `python research/rlhf-dataset-search/search_datasets.py --source all --query "..."`.
 
-```bash
-# Modo dry-run (ver qué se arreglaría)
-npx tsx src/auto-ps1-fixer.ts --dry-run
+## Reglas rápidas
 
-# Aplicar correcciones
-npx tsx src/auto-ps1-fixer.ts
-
-# Para archivos de configuración específicos
-npx tsx src/auto-ps1-fixer-configs.ts
-```
-
-### Resultados de la Migración
-
-| Métrica                | Valor                            |
-| ---------------------- | -------------------------------- |
-| Scripts PS1 migrados   | 390+                             |
-| Scripts PS1 restantes  | ~60 (entrad, helpers, templates) |
-| Referencias corregidas | 77+ en esta sesión               |
-| TS Files totales       | 231+                             |
-| Migration Waves        | 1-24 completadas                 |
-
----
-
-## Token Tracking y Trazabilidad (Real y Agnóstico)
-
-El stack mide el consumo REAL de tokens de forma **agnóstica a la herramienta** (no depende de
-plugins de opencode/claude/cursor). Un daemon lee los datos de sesión que CADA herramienta persiste
-en disco y los consolida en Nexus.
-
-### Arquitectura
-
-- **`src/tokens/token-ingest.ts`** — daemon de ingesta agnóstica:
-  - Lee la DB de opencode (`~/.local/share/opencode/opencode.db`, tablas `session` y `message`).
-  - Extensible a otras herramientas (registry `detectSources()`: opencode/codex/claude/cursor).
-  - Escribe en Nexus: `token_usage` (por sesión), `token_transactions` (por mensaje, con agente
-    orquestador/subagente), `token_savings` (cache + compresión).
-  - Actualiza `.session/token-usage.json`, `session-current.json` y
-    `reports/stack-live-observability-latest.json`.
-- **`src/tokens/token-usage-reader.ts`** — fuente única de verdad: lee Nexus primero, luego el report,
-  luego fallbacks.
-- **`src/tokens/token-metrics-store.ts`** — el close report lee tokens REALES (Nexus → token-ingest →
-  session-file).
-
-### Comandos
-
-| Comando                | Descripción                                            |
-| ---------------------- | ------------------------------------------------------ |
-| `npm run token:ingest` | Ingesta una pasada (--once)                            |
-| `npm run token:trace`  | Report de trazabilidad (transacciones/agentes/ahorros) |
-| `npm run token:status` | Budget real: usado / presupuesto / %                   |
-
-### Ciclo de vida
-
-El lazy step `token-ingest-init` (`--watch 30`) en `config/session-autostart.config.json` arranca
-con la sesión y captura en vivo hasta el cierre.
-
-### Presupuestos (fuente única)
-
-`config/token-budget-guard.json` — daily **5M**, perSession **3M** (valores realistas vs ~1.5M/día
-real). `model-router.json` alineado.
-
-### Trazabilidad disponible
-
-- **Por transacción**: `token_transactions` (input/output/reasoning/cache/cost/model por mensaje).
-- **Por sesión**: `token_usage` (241 sesiones, 658M tokens históricos).
-- **Por agente**: orquestador (parent ROOT) vs subagentes (parent_id != ROOT), agrupados e
-  individuales.
-- **Ahorros**: `token_savings` — cache reads (1.061M tokens) + compresión del stack
-  (prompt/output/structural).
+- `$var:` en PowerShell strings → escribir `${var}:` (parser error si no).
+- Graphify CLI = `npm run graphify --` local; NO instalar el paquete npm `graphify@1.0.0` (no relacionado).
+- Config consolidada: `config/model-router.json` (no `model-routing.json`).
+- Detalle completo de todo lo anterior: `docs/stack-manual-full.md`.

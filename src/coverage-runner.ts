@@ -236,7 +236,8 @@ function main(): void {
     ...excludeArgs,
     ...checkArgs,
     process.execPath,
-    resolve(ROOT, 'node_modules', 'tsx', 'dist', 'cli.mjs'),
+    '--import',
+    'tsx',
     '--test',
     ...testFiles,
   ];

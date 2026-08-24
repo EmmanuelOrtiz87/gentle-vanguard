@@ -19,7 +19,7 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';
 import { pathToFileURL } from 'url';
 import { join, resolve } from 'path';
-import { spawn } from 'child_process';
+import { run } from '../core/run-command';
 
 const ROOT = resolve(process.cwd());
 const LOG_DIR = join(ROOT, '.runtime', 'token-guard-logs');
@@ -229,10 +229,11 @@ async function createCheckpoint(reason: string): Promise<boolean> {
   log('INFO', `Creating checkpoint: ${reason}`);
 
   try {
-    const checkpoint = spawn('npm', ['run', 'checkpoint:create'], {
+    // run() resolves the npm .cmd shim safely on Windows (raw spawn('npm')
+    // fails with EINVAL without a shell).
+    const checkpoint = run('npm', ['run', 'checkpoint:create'], {
       cwd: ROOT,
       stdio: 'pipe',
-      windowsHide: true,
     });
 
     return new Promise((resolve) => {

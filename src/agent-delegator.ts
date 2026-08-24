@@ -10,7 +10,7 @@
  *   npx tsx src/agent-delegator.ts --list
  */
 
-import { spawn } from 'child_process';
+import { runNpxTsx } from './core/run-command';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { writeFileSync } from 'fs';
@@ -434,32 +434,11 @@ export async function delegate(request: DelegationRequest): Promise<DelegationRe
 }
 
 /**
- * Resolve the correct npx binary for the current platform.
- * Windows ships `npx.cmd`; spawn('npx') fails with ENOENT on win32.
- */
-function resolveNpx(): string {
-  return process.platform === 'win32' ? 'npx.cmd' : 'npx';
-}
-
-/**
- * Escape a single shell argument for the current platform.
- * On Windows (cmd.exe) arguments containing spaces must be double-quoted
- * and inner quotes doubled; on POSIX shells use single-quote wrapping.
- */
-function shellQuote(value: string): string {
-  if (process.platform === 'win32') {
-    return `"${value.replace(/"/g, '""')}"`;
-  }
-  return `'${value.replace(/'/g, `'\\''`)}'`;
-}
-
-/**
  * Run native agent TypeScript file.
  *
- * Windows note: Node spawn() cannot exec `.cmd` shims without `shell: true`,
- * and with `shell: true` Node only concatenates args (it does not escape them),
- * which truncates args containing spaces. We therefore build the full command
- * line ourselves with proper quoting and run it via the shell.
+ * Uses runNpxTsx (`node --import tsx`): argv-array spawn, no shell, no `.cmd`
+ * shims — arguments with spaces/quotes are passed verbatim with zero
+ * platform-specific quoting hazards, and the child is hidden on Windows.
  */
 async function runNativeAgent(
   scriptPath: string,
@@ -503,31 +482,19 @@ async function runNativeAgent(
       );
     }
 
-    const parts = [
-      resolveNpx(),
-      'tsx',
-      scriptPath,
+    const args = [
       '--task',
-      shellQuote(taskCompressed.text),
+      taskCompressed.text,
       '--model',
-      shellQuote(model),
+      model,
     ];
 
     if (boundedContext) {
-      parts.push(
-        '--context',
-        shellQuote(contextCompressed ? contextCompressed.text : boundedContext),
-      );
+      args.push('--context', contextCompressed ? contextCompressed.text : boundedContext);
     }
 
-    const command = parts.join(' ');
-
-    const child = spawn(command, {
-      cwd: process.cwd(),
-      shell: true,
-      windowsHide: true,
+    const child = runNpxTsx(scriptPath, args, {
       env: {
-        ...process.env,
         // Propagate model to subprocess
         AGENT_MODEL: model,
         AGENT_TEMPERATURE: String(effectiveTemperature),
@@ -540,11 +507,11 @@ async function runNativeAgent(
     let stdout = '';
     let stderr = '';
 
-    child.stdout.on('data', (data) => {
+    child.stdout?.on('data', (data) => {
       stdout += data.toString();
     });
 
-    child.stderr.on('data', (data) => {
+    child.stderr?.on('data', (data) => {
       stderr += data.toString();
     });
 

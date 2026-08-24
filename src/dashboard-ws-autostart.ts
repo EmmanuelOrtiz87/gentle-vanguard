@@ -114,10 +114,9 @@ async function launchServer(preferredPort = 0): Promise<number> {
   // Start WS server detached with windowsHide
   logToFile(`[START] Starting WS server on port ${selectedPort}`);
 
-  // Invoke tsx through Node's ESM loader directly. Avoiding the .cmd shim
-  // removes the transient console wrapper and leaves only the real server.
-  const tsxCli = path.join(WS_SERVER_DIR, 'node_modules', 'tsx', 'dist', 'cli.mjs');
-  const child = spawn(process.execPath, [tsxCli, WS_SCRIPT], {
+  // Load tsx in-process (`node --import tsx`). The spawned PID IS the server
+  // process — no CLI wrapper, no grandchild, no visible console on Windows.
+  const child = spawn(process.execPath, ['--import', 'tsx', WS_SCRIPT], {
     cwd: WS_SERVER_DIR,
     stdio: 'ignore',
     detached: true,
@@ -134,9 +133,8 @@ async function launchServer(preferredPort = 0): Promise<number> {
 
   logToFile(`[START] PID=${procId} port=${selectedPort}`);
 
-  // Wait up to 20s for server to become healthy. NOTE: we must NOT bail out
-  // when the cmd.exe wrapper PID dies — on Windows the real node process is a
-  // descendant and keeps running after cmd.exe exits. Health check is truth.
+  // Wait up to 20s for server to become healthy. Health check is truth —
+  // the PID file below already points at the real server process.
   let healthy = false;
   for (let i = 0; i < 4; i++) {
     await sleep(5000);
@@ -147,12 +145,13 @@ async function launchServer(preferredPort = 0): Promise<number> {
     }
   }
 
-  // Resolve the REAL server PID (the node process listening on the port), not
-  // the cmd.exe wrapper PID. This is what the watchtower and stop scripts use.
+  // Cross-check the server PID against the port owner (defensive: catches
+  // stale PID files from older launches). This is what the watchtower and
+  // stop scripts use.
   const realPid = await getProcessIdByPort(selectedPort);
   if (realPid && realPid !== procId) {
     fs.writeFileSync(PID_FILE, String(realPid), 'utf-8');
-    logToFile(`[PID] Resolved real server PID=${realPid} (was wrapper PID=${procId})`);
+    logToFile(`[PID] Port owner PID=${realPid} differs from spawned PID=${procId} — corrected`);
   }
 
   if (healthy) {

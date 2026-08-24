@@ -47,6 +47,7 @@ function parseArgs(): CliOptions {
 }
 
 import { getEffectiveProcessTimeout } from './core/timeout-config';
+import { run } from './core/run-command';
 
 /** HTTP GET check until a server responds or timeout */
 async function waitForServer(url: string, maxAttempts = 20, delayMs = 1000): Promise<boolean> {
@@ -82,12 +83,12 @@ async function startWsWatchdog(port: number): Promise<void> {
   // Spawn dashboard-ws-autostart.ts DETACHED in --watch mode so the
   // auto-recovery watchdog survives after this launcher exits. Calling
   // startWsServer() in-process would either block forever (--watch) or
-  // leave no recovery loop (one-shot).
-  const tsxCli = path.join(WEB_APP_DIR, 'node_modules', 'tsx', 'dist', 'cli.mjs');
+  // leave no recovery loop (one-shot). `--import tsx` runs the script in the
+  // spawned node process itself — hidden, no CLI-wrapper grandchild.
   const autostartScript = path.join(ROOT, 'src', 'dashboard-ws-autostart.ts');
   const child = spawn(
     process.execPath,
-    [tsxCli, autostartScript, '--watch', '--port', String(port)],
+    ['--import', 'tsx', autostartScript, '--watch', '--port', String(port)],
     {
       cwd: ROOT,
       stdio: 'ignore',
@@ -219,10 +220,11 @@ async function main(): Promise<void> {
     const nodeModulesPath = path.join(WEB_APP_DIR, 'node_modules');
     if (!fs.existsSync(nodeModulesPath)) {
       console.log('[DASHBOARD] Installing dependencies...');
-      const install = spawn('npm', ['install', '--silent'], {
+      // run() routes `npm` through its .cmd shim safely on Windows (raw
+      // spawn('npm') fails with EINVAL without a shell).
+      const install = run('npm', ['install', '--silent'], {
         cwd: WEB_APP_DIR,
         stdio: 'inherit',
-        windowsHide: true,
       });
       await new Promise<void>((resolve, reject) => {
         install.on('close', (code) =>

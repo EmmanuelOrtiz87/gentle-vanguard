@@ -34,7 +34,7 @@ if not exist package.json (
 
 REM Limpiar procesos zombie (crítico para evitar conflictos de puertos)
 echo [1/3] Limpiando procesos zombie...
-start /B /WAIT npx tsx src/process-cleanup.ts >nul 2>&1
+start /B /WAIT node --import tsx src\process-cleanup.ts >nul 2>&1
 timeout /t 1 /nobreak >nul
 echo       ✓ Procesos zombie eliminados
 
@@ -52,9 +52,9 @@ if %COMPLETE%==1 (
   echo       (Usa --complete para verificaciones)
 )
 
-REM Iniciar dashboard en background
+REM Iniciar dashboard en background (oculto: sin ventana propia, sin cmd/npx)
 echo [3/3] Iniciando dashboard...
-start /B npx tsx src\dashboard-start.ts --no-browser >.runtime\dashboard.log 2>&1
+start /B node --import tsx src\dashboard-start.ts --no-browser >.runtime\dashboard.log 2>&1
 
 REM Esperar a que inicie y verificar
 timeout /t 3 /nobreak >nul

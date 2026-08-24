@@ -110,7 +110,7 @@ function checkPrerequisites(): PrereqIssue[] {
 
   // Check Git
   try {
-    execSync('git --version', { stdio: 'pipe', timeout: 5000 });
+    execSync('git --version', { stdio: 'pipe', timeout: 5000, windowsHide: true });
   } catch {
     issues.push({ name: 'Git', message: 'Git not found in PATH' });
   }
@@ -223,7 +223,7 @@ function extractEmbeddedArchive(base64: string, outDir: string): number {
 
   const count = execSync(
     `powershell -NoProfile -Command "Expand-Archive -Path '${tmpZip}' -DestinationPath '${outDir}' -Force; (Get-ChildItem -Path '${outDir}' -Recurse -File).Count"`,
-    { encoding: 'utf8', timeout: 30000 },
+    { encoding: 'utf8', timeout: 30000, windowsHide: true },
   ).trim();
 
   rmSync(tmpZip, { force: true });
@@ -475,12 +475,32 @@ function doLaunch(): void {
   process.env.GENTLE_VANGUARD_APPDATA_DIR = appDataDir;
   process.env.GENTLE_VANGUARD_DATA_DIR = dataDir;
 
-  // Delegate to gv.ts
-  const child = spawn('npx.cmd', ['tsx', gvScript, ...args.filter((a) => a !== '--launch')], {
-    stdio: 'inherit',
-    shell: true,
-    cwd: ROOT,
-  });
+  // Delegate to gv.ts. Preferred: node-direct via in-process tsx loader
+  // (hidden on Windows, no npx.cmd chain). Fallback: `npx --yes tsx` (shell)
+  // when tsx is not installed yet (fresh minimal install).
+  let child: ReturnType<typeof spawn>;
+  let tsxInstalled = false;
+  try {
+    require.resolve('tsx/package.json', { paths: [ROOT] });
+    tsxInstalled = true;
+  } catch {
+    tsxInstalled = false;
+  }
+  const passArgs = args.filter((a) => a !== '--launch');
+  if (tsxInstalled) {
+    child = spawn(process.execPath, ['--import', 'tsx', gvScript, ...passArgs], {
+      stdio: 'inherit',
+      cwd: ROOT,
+      windowsHide: true,
+    });
+  } else {
+    child = spawn(`npx --yes tsx "${gvScript}" ${passArgs.join(' ')}`, {
+      stdio: 'inherit',
+      shell: true,
+      cwd: ROOT,
+      windowsHide: true,
+    });
+  }
   child.on('close', (code) => process.exit(code ?? 0));
 }
 

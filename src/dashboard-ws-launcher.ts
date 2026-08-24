@@ -67,16 +67,11 @@ async function launch(): Promise<void> {
     process.exit(1);
   }
 
-  // Run the TypeScript entry through Node directly on Windows. The old
-  // cmd.exe -> npx.cmd chain could leave visible console wrappers behind.
-  const tsxCli = path.resolve(ROOT, 'node_modules', 'tsx', 'dist', 'cli.mjs');
-  const cmd = process.platform === 'win32' ? process.execPath : '/bin/sh';
-  const args =
-    process.platform === 'win32'
-      ? [tsxCli, wsScript]
-      : ['-c', `WS_PORT=${WS_PORT} npx tsx "${wsScript}"`];
-
-  const child = spawn(cmd, args, {
+  // Run the TypeScript entry through Node's in-process tsx loader on every
+  // platform. The old cmd.exe -> npx.cmd chain (and the tsx CLI wrapper) could
+  // leave visible console wrappers behind; `--import tsx` spawns exactly one
+  // hidden node process.
+  const child = spawn(process.execPath, ['--import', 'tsx', wsScript], {
     cwd: ROOT,
     stdio: ['ignore', 'pipe', 'pipe'],
     detached: true,

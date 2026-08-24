@@ -13,7 +13,7 @@
  *   npx tsx src/test-runner-optimized.ts [--all] [--quick] [--verbose] [--parallel 4]
  */
 
-import { spawn } from 'child_process';
+import { run } from './core/run-command';
 import { existsSync } from 'fs';
 import * as os from 'os';
 
@@ -129,10 +129,8 @@ function runSuite(
     const startTime = Date.now();
     const label = `[${suite.name}]`;
 
-    const child = spawn(suite.cmd, suite.args, {
-      shell: true,
+    const child = run(suite.cmd, suite.args, {
       stdio: ['pipe', 'pipe', 'pipe'],
-      windowsHide: true,
     });
 
     let output = '';
