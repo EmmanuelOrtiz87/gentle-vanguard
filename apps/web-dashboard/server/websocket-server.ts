@@ -94,6 +94,15 @@ const agentSubscriptions = new Map<string, Set<WebSocket>>();
 const sessions = new Map<string, AgentSession>();
 const connPerIp = new Map<string, number>();
 const MAX_CONN_PER_IP = 5;
+const dashboardTelemetry = {
+  httpRequests: 0,
+  httpErrors: 0,
+  httpLatencyTotalMs: 0,
+  httpLatencyMaxMs: 0,
+  httpStatusCounts: new Map<number, number>(),
+  wsConnectionsTotal: 0,
+  wsConnectionsPeak: 0,
+};
 let bridgeReady = false;
 let bridgeToolCount = 0;
 
@@ -762,6 +771,8 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
     'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-GV-Dashboard-Token',
     Vary: 'Origin',
   };
+  const requestStartedAt = Date.now();
+  dashboardTelemetry.httpRequests++;
   try {
     const url = new URL(req.url || '/', `http://${req.headers.host}`);
 
@@ -1010,6 +1021,21 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
           connections: clients.size,
           components: {
             websocket: { status: 'ok', clients: clients.size },
+            dashboard: (() => {
+              const requests = dashboardTelemetry.httpRequests;
+              return {
+                status: dashboardTelemetry.httpErrors === 0 ? 'ok' : 'degraded',
+                httpRequests: requests,
+                httpErrors: dashboardTelemetry.httpErrors,
+                httpErrorRate: requests > 0 ? dashboardTelemetry.httpErrors / requests : 0,
+                httpLatencyAvgMs:
+                  requests > 0 ? dashboardTelemetry.httpLatencyTotalMs / requests : 0,
+                httpLatencyMaxMs: dashboardTelemetry.httpLatencyMaxMs,
+                httpStatusCounts: Object.fromEntries(dashboardTelemetry.httpStatusCounts),
+                wsConnectionsTotal: dashboardTelemetry.wsConnectionsTotal,
+                wsConnectionsPeak: dashboardTelemetry.wsConnectionsPeak,
+              };
+            })(),
             mcp: { status: bridgeReady ? 'ok' : 'degraded', tools: bridgeToolCount },
             adaptive: {
               status: adaptiveNorms ? 'ok' : 'unknown',
@@ -1926,6 +1952,15 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
     } catch {
       /* ignore write errors after crash */
     }
+  } finally {
+    const elapsedMs = Date.now() - requestStartedAt;
+    dashboardTelemetry.httpLatencyTotalMs += elapsedMs;
+    dashboardTelemetry.httpLatencyMaxMs = Math.max(dashboardTelemetry.httpLatencyMaxMs, elapsedMs);
+    dashboardTelemetry.httpStatusCounts.set(
+      res.statusCode,
+      (dashboardTelemetry.httpStatusCounts.get(res.statusCode) || 0) + 1,
+    );
+    if (res.statusCode >= 500) dashboardTelemetry.httpErrors++;
   }
 }
 
@@ -1943,6 +1978,11 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
     return;
   }
   connPerIp.set(ip, current + 1);
+  dashboardTelemetry.wsConnectionsTotal++;
+  dashboardTelemetry.wsConnectionsPeak = Math.max(
+    dashboardTelemetry.wsConnectionsPeak,
+    clients.size + 1,
+  );
   console.log(`[WS] Client connected (${ip}, conns: ${current + 1})`);
   clients.add(ws);
   ws.send(JSON.stringify({ type: 'metrics', data: generateMetrics() }));
