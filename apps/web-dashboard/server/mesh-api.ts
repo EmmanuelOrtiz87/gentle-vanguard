@@ -7,6 +7,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT = resolve(__dirname, '../../..');
 const FED_CONFIG = join(ROOT, 'config', 'federation-config.json');
+const MCP_POLICY = join(ROOT, 'config', 'mcp-lifecycle-policy.json');
+
+function readLifecyclePolicy(): Record<string, Record<string, string>> {
+  try {
+    const policy = JSON.parse(readFileSync(MCP_POLICY, 'utf-8')) as {
+      servers?: Record<string, Record<string, string>>;
+    };
+    return policy.servers || {};
+  } catch {
+    return {};
+  }
+}
 
 // Utility to check if process is running (cross-platform stub)
 function isProcessRunning(pid: number): boolean {
@@ -26,6 +38,10 @@ interface MeshServer {
   pid: number | null;
   autoStart: boolean;
   description: string;
+  lifecycle: string;
+  management: string;
+  verification: string;
+  stateReason: string;
 }
 
 interface MeshWorkspace {
@@ -59,31 +75,42 @@ function getMeshWorkspaces(): MeshWorkspace[] {
 
   return workspaces.map((ws) => {
     const regPath = join(ws.path, 'config', 'mcp-registry.json');
+    const lifecyclePolicy = readLifecyclePolicy();
     let servers: MeshServer[] = [];
 
     if (existsSync(regPath)) {
       try {
         const reg = JSON.parse(readFileSync(regPath, 'utf-8'));
         servers = (reg.servers || []).map((s: any) => {
+          const policy = lifecyclePolicy[s.name] || {};
           const lockPath = join(ws.path, '.runtime', 'mcp', `${s.name}.pid`);
           let pid: number | null = null;
           let status = 'stopped';
+          let stateReason = 'not-observed';
 
           if (existsSync(lockPath)) {
             try {
               pid = parseInt(readFileSync(lockPath, 'utf-8').trim(), 10);
               // Use cross-platform Node.js check instead of PowerShell
-              status = isProcessRunning(pid) ? 'running' : 'error';
-              if (status === 'error') pid = null;
+              if (isProcessRunning(pid)) {
+                status = 'running';
+                stateReason = 'pid-alive';
+              } else {
+                status = 'stopped';
+                stateReason = 'stale-pid';
+                pid = null;
+              }
             } catch {
-              status = 'error';
+              status = 'stopped';
+              stateReason = 'invalid-pid';
               pid = null;
             }
           } else if (s.autoStart) {
             // autoStart means configured for startup, not proof that the
-            // process is currently unhealthy. Only a stale/invalid PID file
-            // is an error; an absent PID is a truthful stopped state.
+            // process is not observed. This is not an error for host-managed
+            // stdio MCPs; the host may start them only when a tool is called.
             status = 'stopped';
+            stateReason = 'configured-not-observed';
           }
 
           return {
@@ -93,6 +120,10 @@ function getMeshWorkspaces(): MeshWorkspace[] {
             pid,
             autoStart: s.autoStart || false,
             description: s.description || '',
+            lifecycle: policy.activation || 'unspecified',
+            management: policy.management || 'unknown',
+            verification: policy.verification || 'not-configured',
+            stateReason,
           };
         });
       } catch {

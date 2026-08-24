@@ -21,6 +21,10 @@ interface MeshServer {
   pid: number | null;
   autoStart: boolean;
   description: string;
+  lifecycle: string;
+  management: string;
+  verification: string;
+  stateReason: string;
 }
 
 interface MeshWorkspace {
@@ -277,8 +281,13 @@ function MultiRepoViewInner() {
                                 >
                                   {s.type}
                                 </span>
-                                <span className="text-xs text-gray-500">{s.description}</span>
-                              </div>
+                                 <span className="text-xs text-gray-500">{s.description}</span>
+                               </div>
+                               <div className="flex flex-wrap gap-1 mt-1 text-[10px] text-gray-400">
+                                 <span className="rounded bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5">{s.management}</span>
+                                 <span className="rounded bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5">{s.lifecycle}</span>
+                                 <span className="rounded bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5">{s.stateReason}</span>
+                               </div>
                               {s.pid && <div className="text-xs text-gray-400">PID {s.pid}</div>}
                             </div>
                           </div>

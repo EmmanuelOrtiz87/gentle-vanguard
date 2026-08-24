@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["version", "principles", "servers"],
+  "properties": {
+    "version": { "type": "string" },
+    "description": { "type": "string" },
+    "principles": { "type": "array", "items": { "type": "string" } },
+    "servers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["role", "criticality", "activation", "management", "verification"],
+        "properties": {
+          "role": { "type": "string" },
+          "criticality": { "enum": ["core", "supporting", "restricted", "optional", "redundant"] },
+          "activation": { "enum": ["always-on", "warm-when-developing", "warm-when-using-skills", "on-demand", "disabled-by-policy"] },
+          "management": { "enum": ["host-managed", "stack-managed"] },
+          "verification": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

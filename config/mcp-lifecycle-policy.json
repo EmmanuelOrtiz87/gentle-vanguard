@@ -1,0 +1,79 @@
+{
+  "$schema": "./mcp-lifecycle-policy.schema.json",
+  "version": "1.0.0",
+  "description": "Canonical MCP lifecycle policy for OpenCode/ZCode hosts and the dashboard.",
+  "principles": [
+    "enabled configuration is not proof of an active process",
+    "stdio MCP lifecycle is host-managed; local PID files are advisory evidence only",
+    "only core capabilities are warm by default; side-effectful or expensive capabilities are on-demand",
+    "Engram is the project memory source of truth; the generic memory server is redundant"
+  ],
+  "servers": {
+    "engram": {
+      "role": "persistent-memory",
+      "criticality": "core",
+      "activation": "always-on",
+      "management": "host-managed",
+      "verification": "handshake-and-tools-list",
+      "notes": "Required for cross-session decisions, discoveries and summaries."
+    },
+    "codegraph": {
+      "role": "code-intelligence",
+      "criticality": "core",
+      "activation": "warm-when-developing",
+      "management": "host-managed",
+      "verification": "health-and-query"
+    },
+    "skill-server": {
+      "role": "skill-catalog",
+      "criticality": "core",
+      "activation": "warm-when-using-skills",
+      "management": "stack-managed",
+      "verification": "tools-list"
+    },
+    "lsp-server": {
+      "role": "language-intelligence",
+      "criticality": "supporting",
+      "activation": "on-demand",
+      "management": "host-managed",
+      "verification": "tools-list"
+    },
+    "filesystem": {
+      "role": "workspace-files",
+      "criticality": "restricted",
+      "activation": "on-demand",
+      "management": "host-managed",
+      "verification": "handshake-and-tools-list",
+      "notes": "Grant the smallest workspace root required; never treat broad filesystem access as a default requirement."
+    },
+    "chrome-devtools": {
+      "role": "browser-verification",
+      "criticality": "supporting",
+      "activation": "on-demand",
+      "management": "host-managed",
+      "verification": "browser-handshake"
+    },
+    "fetch-server": {
+      "role": "web-research",
+      "criticality": "restricted",
+      "activation": "on-demand",
+      "management": "stack-managed",
+      "verification": "tools-list-and-safe-fetch"
+    },
+    "sequential-thinking": {
+      "role": "reasoning-support",
+      "criticality": "optional",
+      "activation": "on-demand",
+      "management": "stack-managed",
+      "verification": "tools-list"
+    },
+    "memory": {
+      "role": "generic-memory",
+      "criticality": "redundant",
+      "activation": "disabled-by-policy",
+      "management": "host-managed",
+      "verification": "not-required",
+      "notes": "Do not use alongside Engram as a second source of truth unless an explicit migration is approved."
+    }
+  }
+}

@@ -145,7 +145,7 @@ export class DatabaseManager {
     this.db.pragma('journal_mode = WAL');
     this.db.pragma('foreign_keys = ON');
     // Keep the write-ahead log bounded during the dashboard's continuous writes.
-    this.db.pragma('wal_autocheckpoint = 400');
+    this.db.pragma('wal_autocheckpoint = 100');
 
     this.migrations = new MigrationRunner(this.db);
     this.metrics = new MetricsRepo(this.db);
@@ -168,7 +168,7 @@ export class DatabaseManager {
   /** Checkpoint WAL without making dashboard requests fail if SQLite is busy. */
   private checkpointWal(): void {
     try {
-      this.db.pragma('wal_checkpoint(PASSIVE)');
+      this.db.pragma('wal_checkpoint(TRUNCATE)');
     } catch {
       // A concurrent writer can temporarily prevent a checkpoint; the next tick retries.
     }
