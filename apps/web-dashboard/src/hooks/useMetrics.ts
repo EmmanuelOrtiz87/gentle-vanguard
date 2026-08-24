@@ -37,6 +37,8 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const metricsRequestRef = useRef<AbortController | null>(null);
+  const historyRequestRef = useRef<AbortController | null>(null);
   const [isOffline, setIsOffline] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<number>(() => {
     const cached = readCached<DashboardData>(metricsCacheKey(initialTenantId));
@@ -105,10 +107,13 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
   );
 
   const fetchMetrics = useCallback(async () => {
+    metricsRequestRef.current?.abort();
+    const controller = new AbortController();
+    metricsRequestRef.current = controller;
     if (!hasDataRef.current) setLoading(true);
     try {
       const params = tenantId ? `?tenantId=${encodeURIComponent(tenantId)}` : '';
-      const res = await fetch(`/api/metrics${params}`);
+      const res = await fetch(`/api/metrics${params}`, { signal: controller.signal });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const message = await res.json();
       if (message.type === 'metrics') {
@@ -122,6 +127,7 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
       setIsOffline(false);
       setLastUpdated(Date.now());
     } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') return;
       // Serve cached data and flag offline mode
       const cached = readCached<DashboardData>(metricsCacheKey(tenantId));
       if (cached?.data) {
@@ -142,13 +148,21 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
         }
       }
     } finally {
-      setLoading(false);
+      if (metricsRequestRef.current === controller) {
+        metricsRequestRef.current = null;
+        setLoading(false);
+      }
     }
   }, [updateFromPayload, tenantId]);
 
   const fetchHistory = useCallback(async () => {
+    historyRequestRef.current?.abort();
+    const controller = new AbortController();
+    historyRequestRef.current = controller;
     try {
-      const res = await fetch(`/api/metrics/history?limit=2000&range=${historyRange}`);
+      const res = await fetch(`/api/metrics/history?limit=2000&range=${historyRange}`, {
+        signal: controller.signal,
+      });
       if (!res.ok) return;
       const message = await res.json();
       if (message.type !== 'metrics_history' || !Array.isArray(message.data)) return;
@@ -163,8 +177,11 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
           commits: Number(snapshot.commits || 0),
         })),
       );
-    } catch {
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') return;
       // Live updates remain available when historical storage is temporarily unavailable.
+    } finally {
+      if (historyRequestRef.current === controller) historyRequestRef.current = null;
     }
   }, [historyRange]);
 
@@ -175,7 +192,11 @@ export function useMetrics(_useWebSocketMode = false, initialTenantId?: string) 
     const interval = setInterval(() => {
       if (!_useWebSocketMode || !wsConnected) void fetchMetrics();
     }, 15000);
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      metricsRequestRef.current?.abort();
+      historyRequestRef.current?.abort();
+    };
   }, [fetchHistory, fetchMetrics, _useWebSocketMode, wsConnected]);
 
   const dismissNotification = useCallback((index: number) => {
