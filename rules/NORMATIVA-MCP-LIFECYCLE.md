@@ -51,3 +51,10 @@ Invoke-RestMethod http://localhost:8080/api/mesh
 La health API prueba la capacidad del stack; la conexión efectiva de un MCP
 host-managed debe verificarse también desde OpenCode/ZCode mediante handshake y
 `tools/list`.
+
+## Dashboard y seguridad de transporte
+
+El dashboard restringe CORS por defecto a `localhost:5173` y
+`127.0.0.1:5173`. Para una instalación controlada con otro origen se puede
+definir `GV_DASHBOARD_CORS_ORIGINS` como una lista separada por comas. No se
+debe restaurar `Access-Control-Allow-Origin: *` en entornos compartidos.

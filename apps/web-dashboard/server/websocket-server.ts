@@ -748,7 +748,20 @@ process.on('unhandledRejection', (err: unknown) => {
 });
 
 async function handleRequest(req: IncomingMessage, res: ServerResponse) {
-  const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+  const configuredOrigins = (process.env.GV_DASHBOARD_CORS_ORIGINS || 'http://localhost:5173,http://127.0.0.1:5173')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+  const requestOrigin = req.headers.origin;
+  const allowedOrigin = requestOrigin && configuredOrigins.includes(requestOrigin)
+    ? requestOrigin
+    : configuredOrigins[0];
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-GV-Dashboard-Token',
+    Vary: 'Origin',
+  };
   try {
     const url = new URL(req.url || '/', `http://${req.headers.host}`);
 
