@@ -5,6 +5,9 @@
  * Lee los datos de uso que CADA herramienta persiste en disco (sin depender
  * de plugins de ninguna tool) y los consolida en el stack:
  *   - opencode : SQLite  ~/.local/share/opencode/opencode.db  (tabla `session`)
+ *   - zcode    : JSONL   ~/.zcode/cli/rollout/model-io-sess_*.jsonl (usage por request)
+ *   - codex    : JSONL   ~/.codex/sessions/ (rollout-*.jsonl anidados por fecha, eventos token_count)
+ *   - minimax  : SQLite  ~/.minimax/v2/sqlite/runtime-state.sqlite (tabla local_runtime_token_usage)
  *   - Claude   : JSONL   ~/.claude/projects (pendiente)
  *   - Cursor   : SQLite/JSON local (pendiente)
  *
@@ -22,9 +25,10 @@
  */
 
 import Database from 'better-sqlite3';
-import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync, statSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync, statSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
+import { recordExternalUsage } from '../core/session-metrics-tracker';
 
 const ROOT = resolve(process.cwd());
 const RUNTIME_DIR = join(ROOT, '.runtime');
@@ -120,13 +124,308 @@ export function readOpencodeSessions(dbPath: string, sinceTimeUpdated = 0): Sess
   }
 }
 
-/** Última time_updated ya ingerida (para incrementales). */
-function lastIngested(): number {
+// ─── Fuente ZCode (~/.zcode/cli/rollout/model-io-*.jsonl) ──────────────────────
+
+function zcodeRolloutDir(): string | null {
+  const candidates = [
+    join(process.env.USERPROFILE || process.env.HOME || '', '.zcode', 'cli', 'rollout'),
+  ];
+  for (const p of candidates) if (existsSync(p)) return p;
+  return null;
+}
+
+interface ZcodeRolloutRecord {
+  requestId: string;
+  sessionId?: string;
+  startedAt?: string;
+  completedAt?: string;
+  model?: { modelId?: string; providerId?: string; role?: string };
+  response?: {
+    usage?: {
+      inputTokens?: number;
+      outputTokens?: number;
+      totalTokens?: number;
+      cacheReadTokens?: number;
+      cacheWriteTokens?: number;
+    };
+  };
+}
+
+/** Parsea los JSONL de rollout de ZCode (un registro por request al modelo). */
+export function readZcodeRollout(sinceCompletedMs = 0): {
+  sessions: SessionUsage[];
+  txns: TransactionUsage[];
+} {
+  const dir = zcodeRolloutDir();
+  if (!dir) return { sessions: [], txns: [] };
+  const bySession = new Map<string, SessionUsage>();
+  const txns: TransactionUsage[] = [];
+  const files: string[] = [];
+  try {
+    for (const f of readdirSync(dir)) {
+      if (f.startsWith('model-io-') && f.endsWith('.jsonl')) files.push(join(dir, f));
+    }
+  } catch {
+    return { sessions: [], txns: [] };
+  }
+  for (const file of files) {
+    let lines: string[];
+    try {
+      lines = readFileSync(file, 'utf8').trim().split('\n');
+    } catch {
+      continue;
+    }
+    for (const line of lines) {
+      let r: ZcodeRolloutRecord;
+      try {
+        r = JSON.parse(line) as ZcodeRolloutRecord;
+      } catch {
+        continue;
+      }
+      const completed = r.completedAt ? Date.parse(r.completedAt) : 0;
+      if (!Number.isFinite(completed) || completed < sinceCompletedMs) continue;
+      const u = r.response?.usage;
+      if (!u || ((u.inputTokens ?? 0) === 0 && (u.outputTokens ?? 0) === 0)) continue;
+      const sessionId = r.sessionId || file.replace(/^model-io-|\.jsonl$/g, '') || 'zcode-unknown';
+      const model = r.model?.modelId || 'unknown';
+      const agent: 'orchestrator' | 'subagent' = r.model?.role && r.model.role !== 'main' ? 'subagent' : 'orchestrator';
+      txns.push({
+        sessionId,
+        messageId: `zcode:${r.requestId}`,
+        role: 'assistant',
+        agent,
+        model,
+        input: u.inputTokens ?? 0,
+        output: u.outputTokens ?? 0,
+        reasoning: 0,
+        cacheRead: u.cacheReadTokens ?? 0,
+        cacheWrite: u.cacheWriteTokens ?? 0,
+        cost: 0, // GLM coding-plan: costo incluido en suscripción, sin metered cost
+        timeCreated: completed,
+      });
+      const cur =
+        bySession.get(sessionId) ??
+        ({
+          sessionId,
+          tokensInput: 0,
+          tokensOutput: 0,
+          tokensReasoning: 0,
+          tokensCacheRead: 0,
+          tokensCacheWrite: 0,
+          cost: 0,
+          model,
+          provider: r.model?.providerId || 'zcode',
+          timeUpdated: 0,
+        } satisfies SessionUsage);
+      cur.tokensInput += u.inputTokens ?? 0;
+      cur.tokensOutput += u.outputTokens ?? 0;
+      cur.tokensCacheRead += u.cacheReadTokens ?? 0;
+      cur.tokensCacheWrite += u.cacheWriteTokens ?? 0;
+      cur.timeUpdated = Math.max(cur.timeUpdated, completed);
+      bySession.set(sessionId, cur);
+    }
+  }
+  return { sessions: [...bySession.values()], txns };
+}
+
+// ─── Fuente Codex (~/.codex/sessions/**/rollout-*.jsonl) ──────────────────────
+
+function codexSessionsDir(): string | null {
+  const p = join(process.env.USERPROFILE || process.env.HOME || '', '.codex', 'sessions');
+  return existsSync(p) ? p : null;
+}
+
+/** Walk recursivo simple para encontrar rollout-*.jsonl. */
+function walkJsonl(dir: string, acc: string[] = []): string[] {
+  try {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const p = join(dir, e.name);
+      if (e.isDirectory()) walkJsonl(p, acc);
+      else if (e.isFile() && e.name.startsWith('rollout-') && e.name.endsWith('.jsonl')) acc.push(p);
+    }
+  } catch {
+    /* non-fatal */
+  }
+  return acc;
+}
+
+/**
+ * Codex persiste eventos `token_count` con usage ACUMULADO (`total_token_usage`) y
+ * DELTA del turno (`last_token_usage`). Ingerimos los deltas como transacciones.
+ */
+export function readCodexRollout(sinceMs = 0): { sessions: SessionUsage[]; txns: TransactionUsage[] } {
+  const dir = codexSessionsDir();
+  if (!dir) return { sessions: [], txns: [] };
+  const bySession = new Map<string, SessionUsage>();
+  const txns: TransactionUsage[] = [];
+  for (const file of walkJsonl(dir)) {
+    let lines: string[];
+    try {
+      lines = readFileSync(file, 'utf8').trim().split('\n');
+    } catch {
+      continue;
+    }
+    const sessionId = file.match(/rollout-[\dT-]*-([0-9a-f-]{36})\.jsonl$/)?.[1] ?? 'codex-unknown';
+    for (const line of lines) {
+      if (!line.includes('token_count')) continue;
+      let evt: {
+        timestamp?: string;
+        payload?: {
+          type?: string;
+          info?: {
+            last_token_usage?: {
+              input_tokens?: number;
+              output_tokens?: number;
+              reasoning_output_tokens?: number;
+              cached_input_tokens?: number;
+              total_tokens?: number;
+            };
+          };
+        };
+      };
+      try {
+        evt = JSON.parse(line) as typeof evt;
+      } catch {
+        continue;
+      }
+      const u = evt.payload?.info?.last_token_usage;
+      if (!u || ((u.input_tokens ?? 0) === 0 && (u.output_tokens ?? 0) === 0)) continue;
+      const ts = evt.timestamp ? Date.parse(evt.timestamp) : 0;
+      if (!Number.isFinite(ts) || ts < sinceMs) continue;
+      txns.push({
+        sessionId,
+        messageId: `codex:${sessionId}:${ts}:${txns.length}`,
+        role: 'assistant',
+        agent: 'orchestrator',
+        model: 'codex',
+        input: u.input_tokens ?? 0,
+        output: u.output_tokens ?? 0,
+        reasoning: u.reasoning_output_tokens ?? 0,
+        cacheRead: u.cached_input_tokens ?? 0,
+        cacheWrite: 0,
+        cost: 0, // plan ChatGPT: sin costo metered
+        timeCreated: ts,
+      });
+      const cur =
+        bySession.get(sessionId) ??
+        ({
+          sessionId,
+          tokensInput: 0,
+          tokensOutput: 0,
+          tokensReasoning: 0,
+          tokensCacheRead: 0,
+          tokensCacheWrite: 0,
+          cost: 0,
+          model: 'codex',
+          provider: 'openai',
+          timeUpdated: 0,
+        } satisfies SessionUsage);
+      cur.tokensInput += u.input_tokens ?? 0;
+      cur.tokensOutput += u.output_tokens ?? 0;
+      cur.tokensReasoning += u.reasoning_output_tokens ?? 0;
+      cur.tokensCacheRead += u.cached_input_tokens ?? 0;
+      cur.timeUpdated = Math.max(cur.timeUpdated, ts);
+      bySession.set(sessionId, cur);
+    }
+  }
+  return { sessions: [...bySession.values()], txns };
+}
+
+// ─── Fuente MiniMax Code (~/.minimax/v2/sqlite/runtime-state.sqlite) ──────────
+
+function minimaxDbPath(): string | null {
+  const p = join(
+    process.env.USERPROFILE || process.env.HOME || '',
+    '.minimax',
+    'v2',
+    'sqlite',
+    'runtime-state.sqlite',
+  );
+  return existsSync(p) ? p : null;
+}
+
+/**
+ * MiniMax Code persiste usage por turno en `local_runtime_token_usage`.
+ * `mavis` es el agente orquestador; explore/verifier/worker son subagentes.
+ */
+export function readMinimaxUsage(sinceMs = 0): { sessions: SessionUsage[]; txns: TransactionUsage[] } {
+  const dbPath = minimaxDbPath();
+  if (!dbPath) return { sessions: [], txns: [] };
+  const db = new Database(dbPath, { readonly: true });
+  try {
+    const rows = db
+      .prepare(
+        `SELECT id, session_id, agent_name, turn_id, model, ts, input_tokens, output_tokens,
+                reasoning_tokens, cache_read_tokens, cache_write_tokens, cost_usd
+         FROM local_runtime_token_usage WHERE ts >= ? ORDER BY ts ASC`,
+      )
+      .all(sinceMs) as Array<{
+      id: number;
+      session_id: string;
+      agent_name: string;
+      turn_id: string | null;
+      model: string | null;
+      ts: number;
+      input_tokens: number;
+      output_tokens: number;
+      reasoning_tokens: number;
+      cache_read_tokens: number;
+      cache_write_tokens: number;
+      cost_usd: number | null;
+    }>;
+    const bySession = new Map<string, SessionUsage>();
+    const txns: TransactionUsage[] = rows.map((r) => {
+      const agent = r.agent_name && r.agent_name !== 'mavis' ? 'subagent' : 'orchestrator';
+      const cur =
+        bySession.get(r.session_id) ??
+        ({
+          sessionId: r.session_id,
+          tokensInput: 0,
+          tokensOutput: 0,
+          tokensReasoning: 0,
+          tokensCacheRead: 0,
+          tokensCacheWrite: 0,
+          cost: 0,
+          model: r.model || 'MiniMax-M3',
+          provider: 'minimax',
+          timeUpdated: 0,
+        } satisfies SessionUsage);
+      cur.tokensInput += r.input_tokens;
+      cur.tokensOutput += r.output_tokens;
+      cur.tokensReasoning += r.reasoning_tokens;
+      cur.tokensCacheRead += r.cache_read_tokens;
+      cur.tokensCacheWrite += r.cache_write_tokens;
+      cur.cost += r.cost_usd ?? 0;
+      cur.timeUpdated = Math.max(cur.timeUpdated, r.ts);
+      bySession.set(r.session_id, cur);
+      return {
+        sessionId: r.session_id,
+        messageId: `minimax:${r.id}`,
+        role: 'assistant',
+        agent,
+        model: r.model || 'MiniMax-M3',
+        input: r.input_tokens,
+        output: r.output_tokens,
+        reasoning: r.reasoning_tokens,
+        cacheRead: r.cache_read_tokens,
+        cacheWrite: r.cache_write_tokens,
+        cost: r.cost_usd ?? 0,
+        timeCreated: r.ts,
+      };
+    });
+    return { sessions: [...bySession.values()], txns };
+  } finally {
+    db.close();
+  }
+}
+
+/** Última time_updated ya ingerida (para incrementales). `key` permite estado por fuente. */
+function lastIngested(key = 'lastTimeUpdated'): number {
   try {
     const p = join(RUNTIME_DIR, 'token-ingest-state.json');
     if (existsSync(p)) {
-      const s = JSON.parse(readFileSync(p, 'utf-8')) as { lastTimeUpdated?: number };
-      return s.lastTimeUpdated ?? 0;
+      const s = JSON.parse(readFileSync(p, 'utf-8')) as Record<string, number | undefined>;
+      return s[key] ?? 0;
     }
   } catch {
     /* fresh */
@@ -134,13 +433,18 @@ function lastIngested(): number {
   return 0;
 }
 
-function saveLastIngested(t: number): void {
+function saveLastIngested(t: number, key = 'lastTimeUpdated'): void {
   try {
     mkdirSync(RUNTIME_DIR, { recursive: true });
-    writeFileSync(
-      join(RUNTIME_DIR, 'token-ingest-state.json'),
-      JSON.stringify({ lastTimeUpdated: t }),
-    );
+    const p = join(RUNTIME_DIR, 'token-ingest-state.json');
+    let s: Record<string, number> = {};
+    try {
+      if (existsSync(p)) s = JSON.parse(readFileSync(p, 'utf-8')) as Record<string, number>;
+    } catch {
+      /* fresh */
+    }
+    s[key] = t;
+    writeFileSync(p, JSON.stringify(s));
   } catch {
     /* non-fatal */
   }
@@ -571,6 +875,49 @@ export function ingestOnce(): {
   }
   const since = lastIngested();
   const rows = readOpencodeSessions(dbPath, since);
+
+  // Deltas reales por sesión → .session/live-metrics (SessionMetricsTracker) en vivo.
+  const liveDeltas = new Map<string, { input: number; output: number; cost: number }>();
+  const accumulateLive = (txns: TransactionUsage[]): void => {
+    for (const t of txns) {
+      if (!t.sessionId) continue;
+      const d = liveDeltas.get(t.sessionId) ?? { input: 0, output: 0, cost: 0 };
+      d.input += t.input;
+      d.output += t.output;
+      d.cost += t.cost ?? 0;
+      liveDeltas.set(t.sessionId, d);
+    }
+  };
+
+  // Fuentes agnósticas adicionales: cada una con su estado incremental propio.
+  const extraSources: Array<{ name: string; stateKey: string; data: { sessions: SessionUsage[]; txns: TransactionUsage[] } }> = [
+    { name: 'ZCode', stateKey: 'zcodeLastCompletedAt', data: readZcodeRollout(lastIngested('zcodeLastCompletedAt')) },
+    { name: 'Codex', stateKey: 'codexLastTs', data: readCodexRollout(lastIngested('codexLastTs')) },
+    { name: 'MiniMax', stateKey: 'minimaxLastTs', data: readMinimaxUsage(lastIngested('minimaxLastTs')) },
+  ];
+  for (const src of extraSources) {
+    if (src.data.sessions.length === 0) continue;
+    const res = writeToNexus(src.data.sessions);
+    const txnRes = writeTransactionsToNexus(src.data.txns);
+    accumulateLive(src.data.txns);
+    writeSavingsToNexus(
+      src.data.txns.map((t) => ({
+        sessionId: t.sessionId,
+        messageId: t.messageId,
+        category: 'cache',
+        savedTokens: t.cacheRead,
+        source: `${src.name.toLowerCase()} cache read`,
+        timeCreated: t.timeCreated,
+      })),
+    );
+    const maxTs = src.data.sessions.reduce((a, b) => Math.max(a, b.timeUpdated), 0);
+    saveLastIngested(maxTs, src.stateKey);
+    rows.push(...src.data.sessions); // incluye la fuente en session file / report
+    log(
+      `${src.name}: ${res.inserted + res.updated} sesiones + ${txnRes.inserted} transacciones nuevas`,
+    );
+  }
+
   if (rows.length === 0) {
     log(`Sin sesiones nuevas desde time_updated=${since}`);
     return { source: dbPath, sessions: 0, inserted: 0, updated: 0 };
@@ -579,6 +926,14 @@ export function ingestOnce(): {
   // Trazabilidad granular: transacciones por mensaje + ahorros por cache.
   const txns = readOpencodeTransactions(dbPath, since);
   const txnRes = writeTransactionsToNexus(txns);
+  accumulateLive(txns);
+  // Volcar deltas reales a live-metrics para reportería en vivo (sin intervals ni singletons).
+  for (const [sessionId, d] of liveDeltas) {
+    recordExternalUsage(sessionId, d.input, d.output, d.cost);
+  }
+  if (liveDeltas.size > 0) {
+    log(`Live-metrics actualizadas para ${liveDeltas.size} sesión(es) con deltas reales`);
+  }
   const savings = txns.map((t) => ({
     sessionId: t.sessionId,
     messageId: t.messageId,
@@ -623,8 +978,12 @@ export function detectSources(): Array<{ tool: string; status: string; path: str
   const out: Array<{ tool: string; status: string; path: string }> = [];
   const oc = opencodeDbPath();
   out.push({ tool: 'opencode', status: oc ? 'ACTIVE' : 'absent', path: oc ?? '' });
-  const codex = join(h, '.codex', 'sessions');
-  out.push({ tool: 'codex', status: existsSync(codex) ? 'present' : 'absent', path: codex });
+  const zc = zcodeRolloutDir();
+  out.push({ tool: 'zcode', status: zc ? 'ACTIVE' : 'absent', path: zc ?? '' });
+  const codex = codexSessionsDir();
+  out.push({ tool: 'codex', status: codex ? 'ACTIVE' : 'absent', path: codex ?? '' });
+  const mm = minimaxDbPath();
+  out.push({ tool: 'minimax', status: mm ? 'ACTIVE' : 'absent', path: mm ?? '' });
   const claude = join(h, '.claude', 'projects');
   out.push({ tool: 'claude', status: existsSync(claude) ? 'present' : 'absent', path: claude });
   const cursor = join(process.env.APPDATA || '', 'Cursor');
