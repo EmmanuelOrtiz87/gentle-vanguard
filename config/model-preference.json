@@ -2,7 +2,7 @@
   "$schema": "./model-preference-schema.json",
   "preferredModel": "opencode-go/gpt-5.6-luna",
   "preferredProvider": "opencode-go",
-  "fallbackModel": "opencode/deepseek-v4-flash-free",
+  "fallbackModel": "opencode/mimo-v2.5-free",
   "policy": "Use the active subscription model when healthy; fallback to the free model only on provider failure.",
   "updatedAt": "2026-08-20"
 }

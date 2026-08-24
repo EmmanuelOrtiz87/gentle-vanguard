@@ -4,7 +4,7 @@
   "providers": {
     "opencode": {
       "models": {
-        "opencode/deepseek-v4-flash-free": { "input": 0.0, "output": 0.0, "tier": "free" }
+        "opencode/mimo-v2.5-free": { "input": 0.0, "output": 0.0, "tier": "free" }
       },
       "monthlyQuota": null
     },

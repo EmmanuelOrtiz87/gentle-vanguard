@@ -43,7 +43,7 @@
       "premortem-agent": { "minTokens": 2000, "maxTokens": 6000, "steps": 6 }
     },
     "modelPricing": {
-      "opencode/deepseek-v4-flash-free": { "input": 0.0, "output": 0.0 },
+      "opencode/mimo-v2.5-free": { "input": 0.0, "output": 0.0 },
       "ollama/llama3": { "input": 0.0, "output": 0.0 },
       "ollama/mistral": { "input": 0.0, "output": 0.0 },
       "ollama/qwen2.5": { "input": 0.0, "output": 0.0 }

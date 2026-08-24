@@ -295,7 +295,7 @@ stack no tenía ningún mecanismo que parseara errores de proveedor LLM de los l
    buscando firmas de error de proveedor (UnsupportedToolCalling, ModelNotFound, AuthFailure,
    RateLimit, ConnectionError, BadRequest). Cuando detecta un modelo fallando, lo marca `unhealthy`
    en `.runtime/model-health.json` con cooldown de 60min y auto-switch al modelo nativo
-   `opencode/deepseek-v4-flash-free`. Flags: `--scan` `--status` `--clear` `--quiet`.
+   `opencode/big-pickle`. Flags: `--scan` `--status` `--clear` `--quiet`.
 
 2. **`config/model-health.json`** (nuevo): 6 firmas de error con severidad/acción, fallbackModel,
    cooldown, max detecciones, logSources.

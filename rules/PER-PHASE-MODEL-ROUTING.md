@@ -7,26 +7,26 @@ Version: 2.0.0 | Framework: Assign optimal AI models per SDD phase
 Each SDD phase has different cognitive demands. Route each phase to the model best suited for its
 task type — cheaper/faster models for exploration, stronger for implementation, strict for
 verification. In the current environment the native available model is
-`opencode/deepseek-v4-flash-free` (free tier); temperatures vary per phase to shape behavior.
+`opencode/big-pickle` (free tier); temperatures vary per phase to shape behavior.
 
 ## Phase-to-Model Mapping
 
 | Phase        | Cognitive Demand                               | Recommended Model                 | Rationale                                        |
 | ------------ | ---------------------------------------------- | --------------------------------- | ------------------------------------------------ |
-| BA (Explore) | Research, analysis, requirements gathering     | `opencode/deepseek-v4-flash-free` | Strong context understanding, good at synthesis  |
-| SAD (Design) | Architecture, API contracts, sequence diagrams | `opencode/deepseek-v4-flash-free` | Strong reasoning for design decisions            |
-| DEV (Apply)  | Code generation, implementation                | `opencode/deepseek-v4-flash-free` | Strong code generation, high max tokens          |
-| QA (Verify)  | Testing, validation, edge case analysis        | `opencode/deepseek-v4-flash-free` | Strict mode, low temperature for reproducibility |
-| DOC          | Documentation, guides, markdown                | `opencode/deepseek-v4-flash-free` | Good prose, cost-effective                       |
-| OPS          | CI/CD, infrastructure, deployments             | `opencode/deepseek-v4-flash-free` | Precision required for infra changes             |
-| GOV          | Compliance, security, audit                    | `opencode/deepseek-v4-flash-free` | Strong analytical reasoning                      |
-| Session      | Session management, state tracking             | `opencode/deepseek-v4-flash-free` | Lightweight, fast response                       |
-| Premortem    | Risk analysis, stress testing                  | `opencode/deepseek-v4-flash-free` | Systematic analysis                              |
-| Finance      | Financial modeling                             | `opencode/deepseek-v4-flash-free` | Precision required                               |
-| Legal        | Compliance, regulatory                         | `opencode/deepseek-v4-flash-free` | Strong analytical reasoning                      |
-| Marketing    | Copywriting, SEO                               | `opencode/deepseek-v4-flash-free` | Good prose, cost-effective                       |
-| Sales        | Pipeline management                            | `opencode/deepseek-v4-flash-free` | Fast, efficient                                  |
-| HR           | People processes                               | `opencode/deepseek-v4-flash-free` | Fast, efficient                                  |
+| BA (Explore) | Research, analysis, requirements gathering     | `opencode/big-pickle` | Strong context understanding, good at synthesis  |
+| SAD (Design) | Architecture, API contracts, sequence diagrams | `opencode/big-pickle` | Strong reasoning for design decisions            |
+| DEV (Apply)  | Code generation, implementation                | `opencode/big-pickle` | Strong code generation, high max tokens          |
+| QA (Verify)  | Testing, validation, edge case analysis        | `opencode/big-pickle` | Strict mode, low temperature for reproducibility |
+| DOC          | Documentation, guides, markdown                | `opencode/big-pickle` | Good prose, cost-effective                       |
+| OPS          | CI/CD, infrastructure, deployments             | `opencode/big-pickle` | Precision required for infra changes             |
+| GOV          | Compliance, security, audit                    | `opencode/big-pickle` | Strong analytical reasoning                      |
+| Session      | Session management, state tracking             | `opencode/big-pickle` | Lightweight, fast response                       |
+| Premortem    | Risk analysis, stress testing                  | `opencode/big-pickle` | Systematic analysis                              |
+| Finance      | Financial modeling                             | `opencode/big-pickle` | Precision required                               |
+| Legal        | Compliance, regulatory                         | `opencode/big-pickle` | Strong analytical reasoning                      |
+| Marketing    | Copywriting, SEO                               | `opencode/big-pickle` | Good prose, cost-effective                       |
+| Sales        | Pipeline management                            | `opencode/big-pickle` | Fast, efficient                                  |
+| HR           | People processes                               | `opencode/big-pickle` | Fast, efficient                                  |
 
 ## Configuration
 
@@ -41,7 +41,7 @@ Model routing is configured in:
 
 ### 1. Phase-Appropriate Model Selection (MUST)
 
-All phases MUST use the native available model `opencode/deepseek-v4-flash-free` (provider
+All phases MUST use the native available model `opencode/big-pickle` (provider
 `opencode`). If additional models become available, re-apply the tier mapping:
 
 - **BA/SAD/GOV/LEGAL**: strong reasoning tier (analytical/reasoning)
@@ -70,6 +70,6 @@ When deviating from the recommended model:
 
 If the primary model is unavailable:
 
-1. `opencode/deepseek-v4-flash-free` ← `ollama/qwen2.5` ← `dify/qwen-plus` (local fallbacks)
+1. `opencode/big-pickle` ← `ollama/qwen2.5` ← `dify/qwen-plus` (local fallbacks)
 2. If all models fail → session agent logs the error and stops
 3. Agent type fallback: `general` first, then `explore` (integrated types, always available)

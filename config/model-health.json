@@ -4,7 +4,7 @@
   "lastModified": "2026-08-08",
   "modifiedBy": "orchestrator",
   "enabled": true,
-  "fallbackModel": "opencode/deepseek-v4-flash-free",
+  "fallbackModel": "opencode/mimo-v2.5-free",
   "cooldownMinutes": 60,
   "maxDetectionsPerModel": 3,
   "stateFile": ".runtime/model-health.json",

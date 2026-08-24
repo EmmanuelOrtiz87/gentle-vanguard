@@ -1,7 +1,6 @@
 ---
 description: Main orchestrator agent — coordinates all subagents autonomously
 mode: primary
-model: opencode/deepseek-v4-flash-free
 temperature: 0.3
 steps: 24
 permission:
@@ -46,7 +45,7 @@ For EVERY subagent task, prepend this to the prompt:
 [INHERITED_MODEL_CONFIG]
 primary_model: {{SESSION_MODEL}}
 inherit_model: true
-fallback_model: opencode/deepseek-v4-flash-free
+fallback_model: opencode/mimo-v2.5-free
 [/INHERITED_MODEL_CONFIG]
 
 [DELEGATION_CONTEXT]
@@ -68,7 +67,7 @@ Subagents should:
 
 When dispatching a task and it FAILS due to "Model not found":
 1. **Do NOT report failure as final.** Try fallback model from config.
-2. **Immediately retry** with fallback model `opencode/deepseek-v4-flash-free`
+2. **Immediately retry** with fallback model `opencode/mimo-v2.5-free`
 3. **If still fails**, use `explore` agent type as universal fallback
 4. **If all fail**: capture error, surface to user with options:
    - Option A: Continue with available models
@@ -78,16 +77,16 @@ When dispatching a task and it FAILS due to "Model not found":
 
 ## Agent Type Reliability
 
-All subagents are configured with the native available model `opencode/deepseek-v4-flash-free` (see `.opencode/agents/*.md` and `opencode.json`):
-- `sdd-explore` (BA): `opencode/deepseek-v4-flash-free`
-- `sdd-design` (SAD): `opencode/deepseek-v4-flash-free`
-- `sdd-apply` (DEV): `opencode/deepseek-v4-flash-free`
-- `sdd-verify` (QA): `opencode/deepseek-v4-flash-free`
-- `ops-agent` (OPS): `opencode/deepseek-v4-flash-free`
-- `gov-agent` (GOV): `opencode/deepseek-v4-flash-free`
-- `doc-agent` (DOC): `opencode/deepseek-v4-flash-free`
-- `session-agent` (SESSION): `opencode/deepseek-v4-flash-free`
-- `premortem-agent` (PREMORTEM): `opencode/deepseek-v4-flash-free`
+All subagents are configured with the native available model `opencode/mimo-v2.5-free` (see `.opencode/agents/*.md` and `opencode.json`):
+- `sdd-explore` (BA): `opencode/mimo-v2.5-free`
+- `sdd-design` (SAD): `opencode/mimo-v2.5-free`
+- `sdd-apply` (DEV): `opencode/mimo-v2.5-free`
+- `sdd-verify` (QA): `opencode/mimo-v2.5-free`
+- `ops-agent` (OPS): `opencode/mimo-v2.5-free`
+- `gov-agent` (GOV): `opencode/mimo-v2.5-free`
+- `doc-agent` (DOC): `opencode/mimo-v2.5-free`
+- `session-agent` (SESSION): `opencode/mimo-v2.5-free`
+- `premortem-agent` (PREMORTEM): `opencode/mimo-v2.5-free`
 - `explore` (universal fallback): system-model, always available
 - `general` (second fallback): system-model, always available
 - See `config/model-fallback.json` for complete fallback chains per agent

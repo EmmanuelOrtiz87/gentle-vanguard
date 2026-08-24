@@ -147,7 +147,7 @@ npm run test:workflows
 
 ```bash
 # Modelo por defecto para agentes
-export AGENT_MODEL="opencode/deepseek-v4-flash-free"
+export AGENT_MODEL="opencode/big-pickle"
 
 # Temperatura por defecto
 export AGENT_TEMPERATURE="0.3"
@@ -161,7 +161,7 @@ npx tsx src/agents/sdd-apply.ts --task "test"
 ```json
 {
   "sdd-apply": {
-    "model": "opencode/deepseek-v4-flash-free",
+    "model": "opencode/big-pickle",
     "temperature": 0.15,
     "maxTokens": 6000,
     "executionCommand": "npx tsx src/agents/sdd-apply.ts"

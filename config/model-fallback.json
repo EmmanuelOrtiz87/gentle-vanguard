@@ -1,7 +1,7 @@
 {
   "version": "2.1.0",
-  "description": "Model fallback chains for agent dispatch. The primary model is opencode/deepseek-v4-flash-free, followed by optional local providers.",
-  "lastModified": "2026-08-20",
+  "description": "Model fallback chains for agent dispatch. Primary inherits the orchestrator session model (opencode/big-pickle). Agent frontmatter no longer pins a model — dynamic inheritance prevents retired-model breakage. Free-tier chain (mimo-v2.5-free, hy3-free) covers quota exhaustion.",
+  "lastModified": "2026-08-24Tinheritance",
   "modifiedBy": "orchestrator",
   "global": {
     "enabled": true,
@@ -11,72 +11,72 @@
   },
   "agentFallbacks": {
     "ORCHESTRATOR": {
-      "primary": "opencode/deepseek-v4-flash-free",
-      "chain": ["ollama/llama3", "lm-studio2/qwen2.5"],
+      "primary": "opencode/big-pickle",
+      "chain": ["opencode/mimo-v2.5-free", "ollama/llama3", "lm-studio2/qwen2.5"],
       "providerPriority": ["opencode", "ollama", "lm-studio2"]
     },
     "BA": {
-      "primary": "opencode/deepseek-v4-flash-free",
-      "chain": ["ollama/qwen2.5", "ollama/mistral"],
+      "primary": "opencode/big-pickle",
+      "chain": ["opencode/mimo-v2.5-free", "hy3-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "SAD": {
-      "primary": "opencode/deepseek-v4-flash-free",
-      "chain": ["ollama/qwen2.5", "ollama/mistral"],
+      "primary": "opencode/big-pickle",
+      "chain": ["opencode/mimo-v2.5-free", "hy3-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "DEV": {
-      "primary": "opencode/deepseek-v4-flash-free",
-      "chain": ["ollama/qwen2.5", "ollama/mistral"],
+      "primary": "opencode/big-pickle",
+      "chain": ["opencode/mimo-v2.5-free", "hy3-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "QA": {
-      "primary": "opencode/deepseek-v4-flash-free",
-      "chain": ["ollama/qwen2.5", "ollama/mistral"],
+      "primary": "opencode/big-pickle",
+      "chain": ["opencode/mimo-v2.5-free", "hy3-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "OPS": {
-      "primary": "opencode/deepseek-v4-flash-free",
-      "chain": ["ollama/qwen2.5", "ollama/mistral"],
+      "primary": "opencode/big-pickle",
+      "chain": ["opencode/mimo-v2.5-free", "hy3-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "GOV": {
-      "primary": "opencode/deepseek-v4-flash-free",
-      "chain": ["ollama/qwen2.5", "ollama/mistral"],
+      "primary": "opencode/big-pickle",
+      "chain": ["opencode/mimo-v2.5-free", "hy3-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "DOC": {
-      "primary": "opencode/deepseek-v4-flash-free",
+      "primary": "opencode/big-pickle",
       "chain": ["ollama/qwen2.5", "ollama/llama3"],
       "providerPriority": ["opencode", "ollama"]
     },
     "SESSION": {
-      "primary": "opencode/deepseek-v4-flash-free",
+      "primary": "opencode/big-pickle",
       "chain": ["ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "PREMORTEM": {
-      "primary": "opencode/deepseek-v4-flash-free",
-      "chain": ["ollama/qwen2.5", "ollama/mistral"],
+      "primary": "opencode/big-pickle",
+      "chain": ["opencode/mimo-v2.5-free", "hy3-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "MKT": {
-      "primary": "opencode/deepseek-v4-flash-free",
+      "primary": "opencode/big-pickle",
       "chain": ["ollama/qwen2.5", "ollama/llama3"],
       "providerPriority": ["opencode", "ollama"]
     },
     "SALES": {
-      "primary": "opencode/deepseek-v4-flash-free",
+      "primary": "opencode/big-pickle",
       "chain": ["ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "FINANCE": {
-      "primary": "opencode/deepseek-v4-flash-free",
-      "chain": ["ollama/qwen2.5", "ollama/mistral"],
+      "primary": "opencode/big-pickle",
+      "chain": ["opencode/mimo-v2.5-free", "hy3-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     }
   },
-  "universalFallbacks": ["opencode/deepseek-v4-flash-free", "ollama/qwen2.5", "ollama/llama3"],
+  "universalFallbacks": ["opencode/mimo-v2.5-free", "ollama/qwen2.5", "ollama/llama3"],
   "agentTypeFallback": {
     "description": "When a specific agent type fails, use the integrated universal fallback agents.",
     "rule": "Try general first, then explore for analysis tasks.",

@@ -22,7 +22,7 @@
  * USAGE:
  *   npx tsx scripts/utilities/MODEL-ROUTER/fix-models.ts            # apply
  *   npx tsx scripts/utilities/MODEL-ROUTER/fix-models.ts --dry-run  # preview
- *   npx tsx scripts/utilities/MODEL-ROUTER/fix-models.ts --model opencode/deepseek-v4-flash-free
+ *   npx tsx scripts/utilities/MODEL-ROUTER/fix-models.ts --model opencode/big-pickle
  *
  * npm run model:fix            (apply)
  * npm run model:fix -- --dry-run
@@ -82,7 +82,7 @@ function loadModelsCache(): Record<string, { models?: Record<string, unknown> }>
 }
 
 /**
- * Returns whether a full model ID (e.g. "opencode/deepseek-v4-flash-free")
+ * Returns whether a full model ID (e.g. "opencode/big-pickle")
  * exists in the models cache. Also accepts bare IDs (searches all providers).
  */
 function isModelValid(
@@ -125,7 +125,7 @@ function resolveRootModel(explicit?: string): { id: string; source: string } {
   const global = loadJsonSafe<OpenCodeConfig>(GLOBAL_OPENCODE_CONFIG);
   if (global?.model) return { id: global.model, source: 'global-config' };
 
-  return { id: 'opencode/deepseek-v4-flash-free', source: 'builtin-default' };
+  return { id: 'opencode/big-pickle', source: 'builtin-default' };
 }
 
 /**

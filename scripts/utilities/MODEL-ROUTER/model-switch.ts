@@ -96,7 +96,7 @@ function getCurrentModel(): { model: string; provider: string; source: string } 
     return { model: config.model, provider, source: 'global-config' };
   }
   return {
-    model: 'opencode/deepseek-v4-flash-free',
+    model: 'opencode/big-pickle',
     provider: 'opencode',
     source: 'builtin-default',
   };
@@ -124,7 +124,7 @@ function listAvailableModels(): Array<{
 
   // 1. Native opencode free models (always available — zero config)
   const nativeModels = [
-    'opencode/deepseek-v4-flash-free',
+    'opencode/big-pickle',
     'opencode/llama-3.3-70b',
     'opencode/qwen2.5-coder-32b',
   ];

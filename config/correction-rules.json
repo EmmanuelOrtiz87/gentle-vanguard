@@ -276,7 +276,7 @@
       "action": {
         "type": "switch_to_fallback_model",
         "target": "model-provider-healer",
-        "fallbackModel": "opencode/deepseek-v4-flash-free",
+        "fallbackModel": "opencode/mimo-v2.5-free",
         "description": "Run model-provider-healer to mark the failing model unhealthy and auto-switch the active model to the native fallback"
       },
       "metadata": {

@@ -12,7 +12,7 @@ Model delegation failures due to:
 
 ### 1. **`src/opencode-switch-to-native.ts`**
 
-- Cambia TODOS los agentes a `opencode/deepseek-v4-flash-free` (modelo nativo garantizado)
+- Cambia TODOS los agentes a `opencode/big-pickle` (modelo nativo garantizado)
 - **Comando**: `npx tsx src/opencode-switch-to-native.ts`
 
 ### 2. **`src/model-broker.ts`**
@@ -76,7 +76,7 @@ Para integrar completamente, modificar el `orchestrator` en `opencode.json`:
     "orchestrator": {
       "description": "Main orchestrator with ModelBroker integration",
       "mode": "primary",
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "opencode/big-pickle",
       "provider": "opencode",
       "steps": 24,
       "litellm_settings": {
@@ -105,7 +105,7 @@ Para integrar completamente, modificar el `orchestrator` en `opencode.json`:
   "provider": "littellmott-nuevo",
   "health": { "status": "unknown" },
   "fallbackChain": [
-    "opencode/deepseek-v4-flash-free",    // Primero: modelo nativo free
+    "opencode/big-pickle",    // Primero: modelo nativo free
     "claude-haiku-4-5",                    // Segundo: modelo balanced
     "ollama/qwen2.5-coder:14b"             // Tercero: modelo local
   ]
@@ -130,7 +130,7 @@ Get-Content .runtime/logs/model-broker.log
 
 ## ¿POR QUÉ ESTO RESUELVE EL PROBLEMA?
 
-1. **Elimina dependencia de modelos externos**: Usa `opencode/deepseek-v4-flash-free` nativo
+1. **Elimina dependencia de modelos externos**: Usa `opencode/big-pickle` nativo
 2. **Sistema robusto**: Si incluso el nativo falla, tiene fallbacks configurados
 3. **Feedback loop**: Logs permiten ajustar configuraciones basado en performance real
 4. **Sin breaking changes**: Modelos se pueden reconfigurar después si se restaura kimi-2-5

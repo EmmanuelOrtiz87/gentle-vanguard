@@ -21,7 +21,7 @@
         "avgLatencyMs": null
       },
       "fallbackChain": [
-        "opencode/deepseek-v4-flash-free"
+        "opencode/mimo-v2.5-free"
       ],
       "capabilities": [
         "code",
@@ -46,7 +46,7 @@
         "avgLatencyMs": null
       },
       "fallbackChain": [
-        "opencode/deepseek-v4-flash-free",
+        "opencode/mimo-v2.5-free",
         "ollama/qwen2.5-coder:14b"
       ],
       "capabilities": [
@@ -56,7 +56,7 @@
       ],
       "maxTokens": 128000
     },
-    "opencode/deepseek-v4-flash-free": {
+    "opencode/mimo-v2.5-free": {
       "provider": "opencode",
       "tier": "free",
       "costPer1kTokens": {
@@ -110,7 +110,7 @@
         "lastChecked": null
       },
       "fallbackChain": [
-        "opencode/deepseek-v4-flash-free"
+        "opencode/mimo-v2.5-free"
       ],
       "capabilities": [
         "code",
@@ -130,7 +130,7 @@
       "allowOverride": true,
       "default": "opencode-go/gpt-5.6-luna",
       "fallbackChain": [
-        "opencode/deepseek-v4-flash-free",
+        "opencode/mimo-v2.5-free",
         "ollama/qwen2.5-coder:14b"
       ]
     }
@@ -167,16 +167,16 @@
   },
   "fallbackStrategies": {
     "cost-optimized": [
-      "opencode/deepseek-v4-flash-free",
+      "opencode/mimo-v2.5-free",
       "claude-haiku-4-5",
       "kimi-2-5"
     ],
     "performance": [
-      "opencode/deepseek-v4-flash-free",
+      "opencode/mimo-v2.5-free",
       "claude-haiku-4-5"
     ],
     "availability": [
-      "opencode/deepseek-v4-flash-free",
+      "opencode/mimo-v2.5-free",
       "ollama/qwen2.5-coder:14b"
     ]
   }

@@ -126,7 +126,7 @@ async function testModelInheritance(): Promise<TestResult> {
     }
 
     // Should inherit or use fallback chain
-    const expectedModels = ['kimi-2-5', 'claude-haiku-4-5', 'opencode/deepseek-v4-flash-free'];
+    const expectedModels = ['kimi-2-5', 'claude-haiku-4-5', 'opencode/big-pickle'];
     if (!expectedModels.some((m) => result.model.includes(m))) {
       throw new Error(`Unexpected model used: ${result.model}`);
     }
@@ -144,7 +144,7 @@ async function testFallbackChain(): Promise<TestResult> {
     const result = await GuardianAngel({
       agent: 'sdd-apply',
       task: 'Create a simple TypeScript interface',
-      preferredModel: 'opencode/deepseek-v4-flash-free',
+      preferredModel: 'opencode/big-pickle',
     });
 
     if (!result.success) {
