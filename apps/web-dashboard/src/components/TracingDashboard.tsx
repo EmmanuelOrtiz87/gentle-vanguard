@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import {
   Activity,
   Clock,
@@ -12,6 +12,12 @@ import {
   Download,
   ThumbsUp,
   ThumbsDown,
+  Coins,
+  Zap,
+  Copy,
+  Check,
+  X,
+  FileText,
 } from 'lucide-react';
 import { readCached, writeCached } from '../lib/offlineCache';
 import { useT } from '../hooks/useLocale';
@@ -40,19 +46,27 @@ interface TraceStats {
 function TraceWaterfall({
   trace,
   allTraces,
+  treeStart,
+  treeDuration,
   onFocus,
 }: {
   trace: Trace;
   allTraces: Trace[];
+  treeStart?: number;
+  treeDuration?: number;
   onFocus?: () => void;
 }) {
   const { tt } = useT();
   const children = allTraces.filter((t) => t.parentSpanId === trace.spanId);
-  const maxDuration = Math.max(...allTraces.map((t) => t.duration || 0), 1);
   const hasChildren = children.length > 0;
   const [expanded, setExpanded] = useState(true);
 
-  const barWidth = trace.duration ? Math.max((trace.duration / maxDuration) * 100, 2) : 0;
+  // Compute relative timeline positioning for real waterfall effect
+  const rootStart = treeStart ?? trace.startTime;
+  const rootDur = treeDuration ?? Math.max(trace.duration || 1, 1);
+  const leftPercent = rootDur > 0 ? Math.max(0, Math.min(99, ((trace.startTime - rootStart) / rootDur) * 100)) : 0;
+  const widthPercent = rootDur > 0 ? Math.max(1, Math.min(100 - leftPercent, ((trace.duration || 1) / rootDur) * 100)) : 100;
+
   const barColor =
     trace.status === 'error'
       ? 'bg-red-500'
@@ -62,9 +76,12 @@ function TraceWaterfall({
 
   return (
     <div className="select-none">
-      <div className="flex items-center gap-2 py-1.5 px-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded group">
+      <div className="flex items-center gap-2 py-1.5 px-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded group transition-colors">
         <button
-          onClick={() => setExpanded(!expanded)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setExpanded(!expanded);
+          }}
           className={`p-0.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${hasChildren ? '' : 'invisible'}`}
         >
           {expanded ? (
@@ -88,23 +105,31 @@ function TraceWaterfall({
             {trace.name}
           </span>
         </div>
-        <div className="flex-1 h-4 bg-gray-100 dark:bg-gray-700 rounded overflow-hidden min-w-[100px]">
+        <div className="flex-1 h-4 bg-gray-100 dark:bg-gray-900 rounded overflow-hidden min-w-[120px] relative border border-gray-200/50 dark:border-gray-700/50">
           <div
-            className={`h-full ${barColor} rounded transition-all duration-300`}
-            style={{ width: `${barWidth}%` }}
+            className={`absolute h-full ${barColor} rounded transition-all duration-300 shadow-sm`}
+            style={{ left: `${leftPercent}%`, width: `${widthPercent}%` }}
+            title={`${trace.name}: ${trace.duration || 0}ms (+${Math.round(trace.startTime - rootStart)}ms offset)`}
           />
         </div>
-        <span className="text-xs text-gray-500 dark:text-gray-400 w-16 text-right tabular-nums">
+        <span className="text-xs text-gray-500 dark:text-gray-400 w-16 text-right tabular-nums font-mono">
           {trace.duration ? `${trace.duration}ms` : '-'}
         </span>
-        <span className="text-xs text-gray-400 dark:text-gray-500 w-12 text-right">
+        <span className="text-xs text-gray-400 dark:text-gray-500 w-16 text-right truncate">
           {trace.attributes.model || '—'}
         </span>
       </div>
       {expanded && hasChildren && (
         <div className="ml-4 border-l-2 border-gray-200 dark:border-gray-700 pl-2">
           {children.map((child) => (
-            <TraceWaterfall key={child.spanId} trace={child} allTraces={allTraces} />
+            <TraceWaterfall
+              key={child.spanId}
+              trace={child}
+              allTraces={allTraces}
+              treeStart={rootStart}
+              treeDuration={rootDur}
+              onFocus={onFocus}
+            />
           ))}
         </div>
       )}
@@ -112,92 +137,253 @@ function TraceWaterfall({
   );
 }
 
-function TraceDetail({ trace, allTraces }: { trace: Trace; allTraces: Trace[] }) {
+function TraceModalDetail({
+  trace,
+  allTraces,
+  onClose,
+  onFocus,
+}: {
+  trace: Trace;
+  allTraces: Trace[];
+  onClose: () => void;
+  onFocus?: (spanId: string) => void;
+}) {
+  const { tt } = useT();
+  const [copiedTrace, setCopiedTrace] = useState(false);
+  const [copiedSpan, setCopiedSpan] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   const children = allTraces.filter((t) => t.parentSpanId === trace.spanId);
+
+  const copyToClipboard = async (text: string, type: 'trace' | 'span') => {
+    try {
+      await navigator.clipboard.writeText(text);
+      if (type === 'trace') {
+        setCopiedTrace(true);
+        setTimeout(() => setCopiedTrace(false), 2000);
+      } else {
+        setCopiedSpan(true);
+        setTimeout(() => setCopiedSpan(false), 2000);
+      }
+    } catch {
+      /* fallback ignore */
+    }
+  };
+
+  const exportJson = () => {
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(trace, null, 2));
+    const a = document.createElement('a');
+    a.href = dataStr;
+    a.download = `trace-${trace.spanId}.json`;
+    a.click();
+  };
+
   return (
-    <div className="space-y-4">
-      <div className="card">
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3">{trace.name}</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-          <div>
-            <p className="text-xs text-gray-500">Trace ID</p>
-            <p className="font-mono text-gray-800 dark:text-gray-200">{trace.traceId}</p>
-          </div>
-          <div>
-            <p className="text-xs text-gray-500">Span ID</p>
-            <p className="font-mono text-gray-800 dark:text-gray-200">{trace.spanId}</p>
-          </div>
-          <div>
-            <p className="text-xs text-gray-500">Duration</p>
-            <p className="font-mono text-gray-800 dark:text-gray-200">{trace.duration}ms</p>
-          </div>
-          <div>
-            <p className="text-xs text-gray-500">Status</p>
+    <div
+      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50">
+          <div className="flex items-center gap-3 min-w-0">
             <span
-              className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+              className={`w-3 h-3 rounded-full shrink-0 ${
                 trace.status === 'completed'
-                  ? 'text-green-700 bg-green-50 dark:text-green-300 dark:bg-green-900/20'
-                  : trace.status === 'error'
-                    ? 'text-red-700 bg-red-50 dark:text-red-300 dark:bg-red-900/20'
-                    : 'text-blue-700 bg-blue-50 dark:text-blue-300 dark:bg-blue-900/20'
+                  ? 'bg-green-500'
+                  : trace.status === 'running'
+                    ? 'bg-blue-500 animate-pulse'
+                    : 'bg-red-500'
               }`}
+            />
+            <div className="truncate">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white truncate">{trace.name}</h2>
+              <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">
+                {new Date(trace.startTime).toLocaleString()}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={exportJson}
+              className="p-1.5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              title={tt('ui.export_trace_json')}
             >
-              {trace.status}
-            </span>
+              <Download className="w-4 h-4" />
+            </button>
+            <button
+              onClick={onClose}
+              className="p-1.5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
         </div>
-        <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-          {Object.entries(trace.attributes).map(([k, v]) => (
-            <div key={k} className="flex gap-1">
-              <span className="text-gray-500 font-medium">{k}:</span>
-              <span className="text-gray-800 dark:text-gray-200 truncate">{v}</span>
+
+        {/* Body */}
+        <div className="p-6 overflow-y-auto space-y-6">
+          {/* Key metrics grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-gray-50 dark:bg-gray-900/50 p-4 rounded-lg border border-gray-100 dark:border-gray-800">
+            <div>
+              <span className="text-xs font-medium text-gray-500 dark:text-gray-400 block">{tt('ui.status')}</span>
+              <span
+                className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium mt-1 ${
+                  trace.status === 'completed'
+                    ? 'text-green-700 bg-green-50 dark:text-green-300 dark:bg-green-900/30'
+                    : trace.status === 'error'
+                      ? 'text-red-700 bg-red-50 dark:text-red-300 dark:bg-red-900/30'
+                      : 'text-blue-700 bg-blue-50 dark:text-blue-300 dark:bg-blue-900/30'
+                }`}
+              >
+                {trace.status}
+              </span>
             </div>
-          ))}
+            <div>
+              <span className="text-xs font-medium text-gray-500 dark:text-gray-400 block">{tt('ui.duration')}</span>
+              <span className="text-sm font-semibold text-gray-900 dark:text-white font-mono mt-0.5 block">
+                {trace.duration ? `${trace.duration}ms` : '-'}
+              </span>
+            </div>
+            <div>
+              <span className="text-xs font-medium text-gray-500 dark:text-gray-400 block">{tt('ui.model')}</span>
+              <span className="text-sm font-semibold text-gray-900 dark:text-white truncate mt-0.5 block">
+                {trace.attributes.model || '—'}
+              </span>
+            </div>
+            <div>
+              <span className="text-xs font-medium text-gray-500 dark:text-gray-400 block">{tt('ui.cost')}</span>
+              <span className="text-sm font-semibold font-mono text-emerald-600 dark:text-emerald-400 mt-0.5 block">
+                ${parseFloat(trace.attributes.cost || '0').toFixed(4)}
+              </span>
+            </div>
+          </div>
+
+          {/* IDs & Identifiers */}
+          <div className="space-y-2">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              {tt('ui.identifiers')}
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
+              <div className="flex items-center justify-between p-2.5 rounded bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800">
+                <span className="text-gray-500">Trace ID:</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-gray-800 dark:text-gray-200 truncate max-w-[180px]">{trace.traceId}</span>
+                  <button
+                    onClick={() => copyToClipboard(trace.traceId, 'trace')}
+                    className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                  >
+                    {copiedTrace ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+              </div>
+              <div className="flex items-center justify-between p-2.5 rounded bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800">
+                <span className="text-gray-500">Span ID:</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-gray-800 dark:text-gray-200 truncate max-w-[180px]">{trace.spanId}</span>
+                  <button
+                    onClick={() => copyToClipboard(trace.spanId, 'span')}
+                    className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                  >
+                    {copiedSpan ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Attributes */}
+          <div className="space-y-2">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              {tt('ui.attributes_metadata')}
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              {Object.entries(trace.attributes).map(([k, v]) => (
+                <div
+                  key={k}
+                  className="flex items-center justify-between p-2 rounded bg-gray-50 dark:bg-gray-900/60 border border-gray-100 dark:border-gray-800"
+                >
+                  <span className="text-gray-500 font-medium">{k}</span>
+                  <span className="text-gray-800 dark:text-gray-200 font-mono truncate max-w-[200px]">{v || '—'}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Children Spans Table */}
+          {children.length > 0 && (
+            <div className="space-y-2">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                {tt('ui.child_spans').replace('{n}', String(children.length))}
+              </h4>
+              <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+                <table className="w-full text-xs">
+                  <thead className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+                    <tr>
+                      <th className="text-left py-2 px-3 font-medium text-gray-500">{tt('ui.name')}</th>
+                      <th className="text-right py-2 px-3 font-medium text-gray-500">{tt('ui.duration')}</th>
+                      <th className="text-right py-2 px-3 font-medium text-gray-500">{tt('ui.input_tokens')}</th>
+                      <th className="text-right py-2 px-3 font-medium text-gray-500">{tt('ui.output_tokens')}</th>
+                      <th className="text-right py-2 px-3 font-medium text-gray-500">{tt('ui.cost')}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                    {children.map((c) => (
+                      <tr key={c.spanId} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                        <td className="py-2 px-3 font-mono text-gray-800 dark:text-gray-200">{c.name}</td>
+                        <td className="py-2 px-3 text-right font-mono text-gray-600 dark:text-gray-400">
+                          {c.duration}ms
+                        </td>
+                        <td className="py-2 px-3 text-right text-gray-600 dark:text-gray-400 font-mono">
+                          {c.attributes.inputTokens || 0}
+                        </td>
+                        <td className="py-2 px-3 text-right text-gray-600 dark:text-gray-400 font-mono">
+                          {c.attributes.outputTokens || 0}
+                        </td>
+                        <td className="py-2 px-3 text-right font-mono text-emerald-600 dark:text-emerald-400">
+                          ${parseFloat(c.attributes.cost || '0').toFixed(4)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between px-6 py-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/80">
+          {onFocus ? (
+            <button
+              onClick={() => {
+                onFocus(trace.spanId);
+                onClose();
+              }}
+              className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-medium"
+            >
+              {tt('ui.focus_subtree')}
+            </button>
+          ) : (
+            <div />
+          )}
+          <button
+            onClick={onClose}
+            className="px-4 py-1.5 text-xs font-medium bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+          >
+            {tt('ui.close')}
+          </button>
         </div>
       </div>
-      {children.length > 0 && (
-        <div className="card">
-          <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-            Child Spans ({children.length})
-          </h4>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-200 dark:border-gray-700">
-                  <th className="text-left py-2 px-3 text-xs font-medium text-gray-500">Name</th>
-                  <th className="text-right py-2 px-3 text-xs font-medium text-gray-500">
-                    Duration
-                  </th>
-                  <th className="text-right py-2 px-3 text-xs font-medium text-gray-500">Input</th>
-                  <th className="text-right py-2 px-3 text-xs font-medium text-gray-500">Output</th>
-                  <th className="text-right py-2 px-3 text-xs font-medium text-gray-500">Cost</th>
-                </tr>
-              </thead>
-              <tbody>
-                {children.map((c) => (
-                  <tr key={c.spanId} className="border-b border-gray-100 dark:border-gray-800">
-                    <td className="py-2 px-3 text-gray-800 dark:text-gray-200 font-mono text-xs">
-                      {c.name}
-                    </td>
-                    <td className="py-2 px-3 text-right text-gray-600 dark:text-gray-400">
-                      {c.duration}ms
-                    </td>
-                    <td className="py-2 px-3 text-right text-gray-600 dark:text-gray-400">
-                      {c.attributes.inputTokens}
-                    </td>
-                    <td className="py-2 px-3 text-right text-gray-600 dark:text-gray-400">
-                      {c.attributes.outputTokens}
-                    </td>
-                    <td className="py-2 px-3 text-right text-gray-600 dark:text-gray-400">
-                      ${parseFloat(c.attributes.cost || '0').toFixed(4)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -219,13 +405,19 @@ function FeedbackButtons({ traceId, spanId }: { traceId: string; spanId: string 
   return (
     <div className="flex items-center gap-1 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
       <button
-        onClick={() => sendFeedback('up')}
+        onClick={(e) => {
+          e.stopPropagation();
+          sendFeedback('up');
+        }}
         className={`p-1 rounded hover:bg-green-100 dark:hover:bg-green-900/30 ${sent === 'up' ? 'text-green-500' : 'text-gray-400'}`}
       >
         <ThumbsUp className="w-3 h-3" />
       </button>
       <button
-        onClick={() => sendFeedback('down')}
+        onClick={(e) => {
+          e.stopPropagation();
+          sendFeedback('down');
+        }}
         className={`p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/30 ${sent === 'down' ? 'text-red-500' : 'text-gray-400'}`}
       >
         <ThumbsDown className="w-3 h-3" />
@@ -318,10 +510,23 @@ export function TracingDashboard() {
 
   const filteredRoots = rootTraces.filter(matchesFilters);
 
+  // Computed Token and Cost totals for current filtered timeframe
+  const totalTokens = useMemo(() => {
+    return traces.reduce(
+      (acc, t) => acc + (Number(t.attributes.inputTokens) || 0) + (Number(t.attributes.outputTokens) || 0),
+      0,
+    );
+  }, [traces]);
+
+  const totalCost = useMemo(() => {
+    return traces.reduce((acc, t) => acc + (Number(t.attributes.cost) || 0), 0);
+  }, [traces]);
+
   // Recent spans table: newest first, filtered, paginated (10/page).
-  const recentSpans = traces
-    .filter(matchesFilters)
-    .sort((a, b) => b.startTime - a.startTime);
+  const recentSpans = useMemo(() => {
+    return traces.filter(matchesFilters).sort((a, b) => b.startTime - a.startTime);
+  }, [traces, search, filterModel]);
+
   const TABLE_PAGE_SIZE = 10;
   const tablePages = Math.max(1, Math.ceil(recentSpans.length / TABLE_PAGE_SIZE));
   const safeTablePage = Math.min(tablePage, tablePages - 1);
@@ -350,49 +555,70 @@ export function TracingDashboard() {
           Offline mode — showing cached traces (server unavailable)
         </div>
       )}
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="card">
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="card p-3.5">
           <div className="flex items-center justify-between">
             <div title={tt('ui.tip_total_traces')}>
-              <p className="metric-label">{tt('ui.total_traces')}</p>
-              <p className="metric-value">{stats.totalTraces}</p>
+              <p className="metric-label text-xs">{tt('ui.total_traces')}</p>
+              <p className="metric-value text-xl font-bold">{stats.totalTraces}</p>
             </div>
-            <Activity className="w-8 h-8 text-blue-500" />
+            <Activity className="w-6 h-6 text-blue-500 opacity-80" />
           </div>
         </div>
-        <div className="card">
+        <div className="card p-3.5">
           <div className="flex items-center justify-between">
             <div title={tt('ui.tip_avg_duration')}>
-              <p className="metric-label">{tt('ui.avg_duration')}</p>
-              <p className="metric-value">{stats.avgDuration}ms</p>
+              <p className="metric-label text-xs">{tt('ui.avg_duration')}</p>
+              <p className="metric-value text-xl font-bold">{stats.avgDuration}ms</p>
             </div>
-            <Clock className="w-8 h-8 text-yellow-500" />
+            <Clock className="w-6 h-6 text-yellow-500 opacity-80" />
           </div>
         </div>
-        <div className="card">
+        <div className="card p-3.5">
           <div className="flex items-center justify-between">
             <div title={tt('ui.tip_error_rate')}>
-              <p className="metric-label">{tt('ui.error_rate')}</p>
-              <p className="metric-value">{(stats.errorRate * 100).toFixed(1)}%</p>
+              <p className="metric-label text-xs">{tt('ui.error_rate')}</p>
+              <p className="metric-value text-xl font-bold">{(stats.errorRate * 100).toFixed(1)}%</p>
             </div>
-            <AlertCircle className="w-8 h-8 text-red-500" />
+            <AlertCircle className="w-6 h-6 text-red-500 opacity-80" />
           </div>
         </div>
-        <div className="card">
+        <div className="card p-3.5">
           <div className="flex items-center justify-between">
             <div title={tt('ui.tip_active_spans')}>
-              <p className="metric-label">{tt('ui.active_spans')}</p>
-              <p className="metric-value">{stats.activeSpans}</p>
+              <p className="metric-label text-xs">{tt('ui.active_spans')}</p>
+              <p className="metric-value text-xl font-bold">{stats.activeSpans}</p>
             </div>
-            <GitBranch className="w-8 h-8 text-green-500" />
+            <GitBranch className="w-6 h-6 text-green-500 opacity-80" />
+          </div>
+        </div>
+        <div className="card p-3.5">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="metric-label text-xs">{tt('ui.total_tokens')}</p>
+              <p className="metric-value text-xl font-bold">{totalTokens.toLocaleString()}</p>
+            </div>
+            <Zap className="w-6 h-6 text-purple-500 opacity-80" />
+          </div>
+        </div>
+        <div className="card p-3.5">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="metric-label text-xs">{tt('ui.total_cost')}</p>
+              <p className="metric-value text-xl font-bold text-emerald-600 dark:text-emerald-400">
+                ${totalCost.toFixed(4)}
+              </p>
+            </div>
+            <Coins className="w-6 h-6 text-emerald-500 opacity-80" />
           </div>
         </div>
       </div>
 
       {/* Waterfall View */}
       <div className="card">
-        <div className="flex items-start justify-between mb-1">
+        <div className="flex items-start justify-between mb-1 flex-wrap gap-3">
           <div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               {tt('ui.trace_waterfall')}
@@ -401,7 +627,7 @@ export function TracingDashboard() {
               {tt('ui.waterfall_subtitle')}
             </p>
           </div>
-          <div className="flex items-center gap-3 shrink-0 ml-4">
+          <div className="flex items-center gap-3 shrink-0 ml-auto">
             <div className="relative">
               <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
@@ -409,14 +635,14 @@ export function TracingDashboard() {
                 placeholder={tt('ui.search_traces')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-7 pr-3 py-1.5 text-xs border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 w-40"
+                className="pl-7 pr-3 py-1.5 text-xs border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 w-40"
               />
             </div>
             {models.length > 0 && (
               <select
                 value={filterModel}
                 onChange={(e) => setFilterModel(e.target.value)}
-                className="px-2 py-1.5 text-xs border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                className="px-2 py-1.5 text-xs border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               >
                 <option value="">{tt('ui.all_models')}</option>
                 {models.map((m) => (
@@ -433,7 +659,7 @@ export function TracingDashboard() {
                 setWfPage(0);
                 setTablePage(0);
               }}
-              className="px-2 py-1.5 text-xs border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="px-2 py-1.5 text-xs border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               title={tt('ui.tip_range')}
             >
               <option value="all">{tt('ui.range_all')}</option>
@@ -444,10 +670,10 @@ export function TracingDashboard() {
             <button
               onClick={exportCsv}
               disabled={recentSpans.length === 0}
-              className="flex items-center gap-1 px-2 py-1.5 text-xs border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed text-gray-600 dark:text-gray-300"
+              className="flex items-center gap-1 px-2.5 py-1.5 text-xs border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed text-gray-600 dark:text-gray-300 font-medium transition-colors"
               title={tt('ui.export_csv')}
             >
-              <Download className="w-3 h-3" />
+              <Download className="w-3.5 h-3.5" />
               CSV
             </button>
           </div>
@@ -464,13 +690,13 @@ export function TracingDashboard() {
           </span>
           <span className="flex items-center gap-2">
             {offline ? (
-              <span className="text-amber-600 dark:text-amber-400 flex items-center gap-1">
+              <span className="text-amber-600 dark:text-amber-400 flex items-center gap-1 font-medium">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                 {tt('ui.offline_cached')}
               </span>
             ) : (
               lastUpdate && (
-                <span className="text-green-600 dark:text-green-400 flex items-center gap-1">
+                <span className="text-green-600 dark:text-green-400 flex items-center gap-1 font-medium">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                   {tt('ui.live_updated')} {lastUpdate.toLocaleTimeString()}
                 </span>
@@ -484,7 +710,7 @@ export function TracingDashboard() {
                   setWfPage(0);
                   setTablePage(0);
                 }}
-                className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+                className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-medium ml-2"
               >
                 <AlertCircle className="w-3 h-3" />
                 {tt('ui.clear_filters')}
@@ -497,9 +723,7 @@ export function TracingDashboard() {
           <div className="text-center py-12 text-gray-400">
             <Activity className="w-10 h-10 mx-auto mb-3 opacity-50" />
             <p className="text-sm">{tt('ui.no_traces')}</p>
-            <p className="text-xs text-gray-500 mt-1">
-              {tt('ui.traces_source')}
-            </p>
+            <p className="text-xs text-gray-500 mt-1">{tt('ui.traces_source')}</p>
           </div>
         ) : filteredRoots.length === 0 ? (
           <div className="text-center py-8 text-gray-400">
@@ -524,20 +748,22 @@ export function TracingDashboard() {
               </span>
               <span className="italic">— {tt('ui.legend_bar')}</span>
             </div>
+
             {/* Waterfall header */}
             <div className="flex items-center gap-2 pb-2 border-b border-gray-200 dark:border-gray-700 mb-1 text-xs text-gray-500 font-medium">
               <div className="w-[22px]" />
               <div className="min-w-[180px]" title={tt('ui.tip_name')}>{tt('ui.col_name')}</div>
               <div className="flex-1" title={tt('ui.tip_timeline')}>{tt('ui.col_timeline')}</div>
               <div className="w-16 text-right" title={tt('ui.tip_duration_wf')}>{tt('ui.duration')}</div>
-              <div className="w-12 text-right" title={tt('ui.tip_model')}>{tt('ui.model')}</div>
-              <div className="w-16" />
+              <div className="w-16 text-right" title={tt('ui.tip_model')}>{tt('ui.model')}</div>
+              <div className="w-12" />
             </div>
+
             <div className="divide-y divide-gray-100 dark:divide-gray-800">
               {focusRoot && (
                 <button
                   onClick={() => setFocusId(null)}
-                  className="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 mb-2"
+                  className="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 mb-2 font-medium"
                 >
                   <ChevronLeft className="w-3 h-3" />
                   {tt('ui.back_overview')}
@@ -547,7 +773,7 @@ export function TracingDashboard() {
                 <div key={t.spanId} className="group">
                   <div
                     className="flex items-center cursor-pointer"
-                    onClick={() => setSelectedTrace(selectedTrace?.spanId === t.spanId ? null : t)}
+                    onClick={() => setSelectedTrace(t)}
                   >
                     <TraceWaterfall
                       trace={t}
@@ -556,14 +782,10 @@ export function TracingDashboard() {
                     />
                     <FeedbackButtons traceId={t.traceId} spanId={t.spanId} />
                   </div>
-                  {selectedTrace?.spanId === t.spanId && (
-                    <div className="ml-6 mb-3">
-                      <TraceDetail trace={t} allTraces={traces} />
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
+
             {!focusRoot && wfPages > 1 && (
               <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
                 <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -597,7 +819,7 @@ export function TracingDashboard() {
         )}
       </div>
 
-      {/* Recent spans table */}
+      {/* Recent Spans Table */}
       <div className="card">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -611,16 +833,16 @@ export function TracingDashboard() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-200 dark:border-gray-700">
-                <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">{tt('ui.name')}</th>
-                <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">{tt('ui.status')}</th>
-                <th className="text-right py-2 px-4 text-sm font-medium text-gray-500">{tt('ui.duration')}</th>
-                <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">{tt('ui.model')}</th>
-                <th className="text-right py-2 px-4 text-sm font-medium text-gray-500">{tt('ui.tokens')}</th>
-                <th className="text-right py-2 px-4 text-sm font-medium text-gray-500">{tt('ui.cost')}</th>
-                <th className="text-left py-2 px-4 text-sm font-medium text-gray-500">{tt('ui.started')}</th>
+                <th className="text-left py-2 px-4 text-xs font-medium text-gray-500 uppercase">{tt('ui.name')}</th>
+                <th className="text-left py-2 px-4 text-xs font-medium text-gray-500 uppercase">{tt('ui.status')}</th>
+                <th className="text-right py-2 px-4 text-xs font-medium text-gray-500 uppercase">{tt('ui.duration')}</th>
+                <th className="text-left py-2 px-4 text-xs font-medium text-gray-500 uppercase">{tt('ui.model')}</th>
+                <th className="text-right py-2 px-4 text-xs font-medium text-gray-500 uppercase">{tt('ui.tokens')}</th>
+                <th className="text-right py-2 px-4 text-xs font-medium text-gray-500 uppercase">{tt('ui.cost')}</th>
+                <th className="text-left py-2 px-4 text-xs font-medium text-gray-500 uppercase">{tt('ui.started')}</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
               {tableRows.map((t) => {
                 const ageMin = Math.round((Date.now() - t.startTime) / 60000);
                 const rel =
@@ -634,13 +856,16 @@ export function TracingDashboard() {
                 return (
                   <tr
                     key={t.spanId}
-                    className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+                    className="hover:bg-gray-50 dark:hover:bg-gray-800/80 cursor-pointer transition-colors"
                     onClick={() => setSelectedTrace(t)}
                   >
-                    <td className="py-2 px-4 text-sm text-gray-900 dark:text-white">{t.name}</td>
-                    <td className="py-2 px-4">
+                    <td className="py-2.5 px-4 text-sm font-medium text-gray-900 dark:text-white flex items-center gap-1.5">
+                      <FileText className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                      <span className="truncate max-w-[220px]">{t.name}</span>
+                    </td>
+                    <td className="py-2.5 px-4">
                       <span
-                        className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
+                        className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
                           t.status === 'completed'
                             ? 'text-green-700 bg-green-50 dark:text-green-300 dark:bg-green-900/20'
                             : t.status === 'running'
@@ -651,26 +876,26 @@ export function TracingDashboard() {
                         {t.status}
                       </span>
                     </td>
-                    <td className="py-2 px-4 text-sm text-right text-gray-600 dark:text-gray-400 tabular-nums">
+                    <td className="py-2.5 px-4 text-xs text-right text-gray-600 dark:text-gray-400 font-mono tabular-nums">
                       {t.duration ? `${t.duration}ms` : '-'}
                     </td>
-                    <td className="py-2 px-4 text-sm text-gray-600 dark:text-gray-400">
+                    <td className="py-2.5 px-4 text-xs text-gray-600 dark:text-gray-400 truncate max-w-[120px]">
                       {t.attributes.model || '-'}
                     </td>
-                    <td className="py-2 px-4 text-sm text-right text-gray-600 dark:text-gray-400 tabular-nums">
-                      {(Number(t.attributes.inputTokens) || 0) + (Number(t.attributes.outputTokens) || 0)}
+                    <td className="py-2.5 px-4 text-xs text-right text-gray-600 dark:text-gray-400 font-mono tabular-nums">
+                      {((Number(t.attributes.inputTokens) || 0) + (Number(t.attributes.outputTokens) || 0)).toLocaleString()}
                     </td>
-                    <td className="py-2 px-4 text-sm text-right text-gray-600 dark:text-gray-400 tabular-nums">
+                    <td className="py-2.5 px-4 text-xs text-right font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">
                       ${parseFloat(t.attributes.cost || '0').toFixed(4)}
                     </td>
                     <td
-                      className="py-2 px-4 text-sm whitespace-nowrap"
+                      className="py-2.5 px-4 text-xs whitespace-nowrap"
                       title={new Date(t.startTime).toLocaleString()}
                     >
                       <span className={`font-medium ${ageMin < 5 ? 'text-green-600 dark:text-green-400' : 'text-gray-600 dark:text-gray-400'}`}>
                         {rel}
                       </span>
-                      <span className="block text-xs text-gray-400">
+                      <span className="block text-[10px] text-gray-400 font-mono">
                         {new Date(t.startTime).toLocaleTimeString()}
                       </span>
                     </td>
@@ -680,6 +905,7 @@ export function TracingDashboard() {
             </tbody>
           </table>
         </div>
+
         {tablePages > 1 && (
           <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100 dark:border-gray-800">
             <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -695,7 +921,7 @@ export function TracingDashboard() {
               >
                 <ChevronLeft className="w-4 h-4 text-gray-600 dark:text-gray-300" />
               </button>
-              <span className="text-xs text-gray-600 dark:text-gray-300 tabular-nums px-2">
+              <span className="text-xs text-gray-600 dark:text-gray-300 tabular-nums px-2 font-mono">
                 {safeTablePage + 1} / {tablePages}
               </span>
               <button
@@ -710,6 +936,16 @@ export function TracingDashboard() {
           </div>
         )}
       </div>
+
+      {/* Modal Detail for selected Trace */}
+      {selectedTrace && (
+        <TraceModalDetail
+          trace={selectedTrace}
+          allTraces={traces}
+          onClose={() => setSelectedTrace(null)}
+          onFocus={(spanId) => setFocusId(spanId)}
+        />
+      )}
     </div>
   );
 }
