@@ -18,6 +18,8 @@ import {
 } from 'lucide-react';
 import { useSharedState } from './hooks/useSharedState';
 import { TenantSelector } from './components/TenantSelector';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { useT } from './hooks/useLocale';
 
 const Dashboard = lazy(() => import('./components/Dashboard'));
 const TracingDashboard = lazy(() => import('./components/TracingDashboard'));
@@ -110,14 +112,15 @@ function Navigation() {
 }
 
 function TasksPage() {
+  const { tt } = useT();
   const { tasks, connected, emitEvent } = useSharedState();
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Agent Tasks</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Monitor and control active agent tasks
-        </p>
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Agent Tasks</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          {tt('ui.tasks_page_subtitle')}
+          </p>
       </div>
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <TaskControl tasks={tasks} connected={connected} onEmitEvent={emitEvent} />
@@ -127,13 +130,14 @@ function TasksPage() {
 }
 
 function TimelinePage() {
+  const { tt } = useT();
   const { events, connected } = useSharedState();
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Event Timeline</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Real-time event history from the event bus
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Event Timeline</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          {tt('ui.timeline_page_subtitle')}
         </p>
         <div className="flex items-center gap-2 mt-2">
           <span className={`w-2 h-2 rounded-full ${connected ? 'bg-green-500' : 'bg-red-500'}`} />
@@ -150,29 +154,31 @@ function TimelinePage() {
 function App() {
   return (
     <BrowserRouter>
-      <div className="gv-app-shell">
-        <Navigation />
-        <main className="gv-main">
-          <div className="gv-route-frame">
-          <Suspense fallback={<PageLoader />}>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/tracing" element={<TracingDashboard />} />
-            <Route path="/marketplace" element={<Marketplace />} />
-            <Route path="/content-operations" element={<ContentOpsPanel />} />
-            <Route path="/audit" element={<AuditPanel />} />
-            <Route path="/docs" element={<InteractiveDocs />} />
-            <Route path="/agents" element={<AgentChat />} />
-            <Route path="/tasks" element={<TasksPage />} />
-            <Route path="/timeline" element={<TimelinePage />} />
-            <Route path="/mcp" element={<MCPServers />} />
-            <Route path="/knowledge" element={<KnowledgePanel />} />
-            <Route path="/multi-repo" element={<MultiRepoView />} />
-          </Routes>
-          </Suspense>
+      <ErrorBoundary>
+        <div className="gv-app-shell">
+          <Navigation />
+          <main className="gv-main">
+            <div className="gv-route-frame">
+            <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/tracing" element={<TracingDashboard />} />
+              <Route path="/marketplace" element={<Marketplace />} />
+              <Route path="/content-operations" element={<ContentOpsPanel />} />
+              <Route path="/audit" element={<AuditPanel />} />
+              <Route path="/docs" element={<InteractiveDocs />} />
+              <Route path="/agents" element={<AgentChat />} />
+              <Route path="/tasks" element={<TasksPage />} />
+              <Route path="/timeline" element={<TimelinePage />} />
+              <Route path="/mcp" element={<MCPServers />} />
+              <Route path="/knowledge" element={<KnowledgePanel />} />
+              <Route path="/multi-repo" element={<MultiRepoView />} />
+            </Routes>
+            </Suspense>
+            </div>
+          </main>
           </div>
-        </main>
-      </div>
+      </ErrorBoundary>
     </BrowserRouter>
   );
 }

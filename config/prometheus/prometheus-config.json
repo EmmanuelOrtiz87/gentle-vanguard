@@ -22,10 +22,10 @@
     "alertRules": [
       {
         "alert": "HighTokenUsage",
-        "expr": "gentle_vanguard_tokens_used > 100000",
+        "expr": "gentle_vanguard_tokens_used > 2100000",
         "for": "5m",
         "labels": { "severity": "warning" },
-        "annotations": { "summary": "Token usage exceeds 100K" }
+        "annotations": { "summary": "Token usage exceeds 70% of the 3M session budget" }
       },
       {
         "alert": "HighErrorRate",

@@ -25,6 +25,21 @@ const REGISTRY_PATH = join(ROOT, '.atl', 'skill-registry.md');
 const SESSIONS_HISTORY_PATH = join(ROOT, '.event-bus', 'sessions-history.json');
 const CONTEXT_LOG_DIR = join(ROOT, '.session', 'context-log');
 const TELEMETRY_TRACES_DIR = join(ROOT, '.telemetry', 'traces');
+const TOKEN_BUDGET_PATH = join(ROOT, 'config', 'token-budget-guard.json');
+
+/** Dashboard token limit from the canonical budget config (not a legacy fallback). */
+function getConfiguredSessionTokenLimit(): number {
+  try {
+    const config = JSON.parse(readFileSync(TOKEN_BUDGET_PATH, 'utf8')) as {
+      tokenBudget?: { limits?: { perSession?: number } };
+    };
+    const limit = config.tokenBudget?.limits?.perSession;
+    if (typeof limit === 'number' && limit > 0) return limit;
+  } catch {
+    // Keep the operational default if config is temporarily unavailable.
+  }
+  return 3_000_000;
+}
 
 const MODEL_PRICING: Record<string, { input: number; output: number }> = {
   'big-pickle': { input: 10, output: 30 },
@@ -426,7 +441,7 @@ function buildDashboardDataFromAggregated(
     source: 'aggregated',
     tokens: {
       used: aggregated.totalTokens,
-      limit: 120000,
+      limit: getConfiguredSessionTokenLimit(),
       cost: aggregated.totalCost,
       byModel,
     },
@@ -703,7 +718,7 @@ function getRealMetricsFromDb(): DashboardData {
     source: 'sqlite',
     tokens: {
       used: snapshot?.tokens_used ?? 0,
-      limit: snapshot?.tokens_limit ?? 120000,
+      limit: getConfiguredSessionTokenLimit(),
       cost: totalCost,
       byModel,
     },
@@ -870,7 +885,7 @@ function getRealMetricsFromJson(): DashboardData {
     source: 'json',
     tokens: {
       used: t.usedToday || tokenUsage?.totalTokens || 0,
-      limit: t.budget || 120000,
+      limit: getConfiguredSessionTokenLimit(),
       cost: t.estCost || 0,
       byModel: [],
     },

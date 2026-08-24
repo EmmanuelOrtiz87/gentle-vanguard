@@ -4,7 +4,7 @@
     "high_token_usage": {
       "label": "High Token Usage",
       "metric": "tokens.used",
-      "threshold": 100000,
+      "threshold": 2100000,
       "severity": "warning",
       "unit": "tokens",
       "enabled": true
@@ -12,7 +12,7 @@
     "budget_limit": {
       "label": "Budget Limit",
       "metric": "tokens.used",
-      "threshold": 120000,
+      "threshold": 2700000,
       "severity": "error",
       "unit": "tokens",
       "enabled": true

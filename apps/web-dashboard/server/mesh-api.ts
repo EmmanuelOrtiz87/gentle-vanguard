@@ -80,7 +80,10 @@ function getMeshWorkspaces(): MeshWorkspace[] {
               pid = null;
             }
           } else if (s.autoStart) {
-            status = 'error';
+            // autoStart means configured for startup, not proof that the
+            // process is currently unhealthy. Only a stale/invalid PID file
+            // is an error; an absent PID is a truthful stopped state.
+            status = 'stopped';
           }
 
           return {

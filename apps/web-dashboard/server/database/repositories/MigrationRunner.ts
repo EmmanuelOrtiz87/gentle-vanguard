@@ -299,6 +299,25 @@ const MIGRATIONS: Array<{ id: string; sql: string }> = [
       ALTER TABLE backlog_items ADD COLUMN impact TEXT DEFAULT 'minor';
     `,
   },
+  {
+    id: '008_operational_indexes',
+    sql: `
+      CREATE INDEX IF NOT EXISTS idx_metric_snapshots_timestamp_desc ON metric_snapshots(timestamp DESC);
+      CREATE INDEX IF NOT EXISTS idx_sessions_created_at_desc ON sessions(created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_sessions_updated_at_desc ON sessions(updated_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_traces_start_time_desc ON traces(start_time DESC);
+      CREATE INDEX IF NOT EXISTS idx_traces_session_start ON traces(session_id, start_time DESC);
+      CREATE INDEX IF NOT EXISTS idx_traces_trace_start ON traces(trace_id, start_time ASC);
+      CREATE INDEX IF NOT EXISTS idx_events_created_type ON events(created_at DESC, type);
+      CREATE INDEX IF NOT EXISTS idx_alerts_triggered_created ON alerts(triggered, created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_feedback_trace ON feedback(trace_id);
+      CREATE INDEX IF NOT EXISTS idx_token_usage_session_timestamp ON token_usage(session_id, timestamp DESC);
+      CREATE INDEX IF NOT EXISTS idx_token_usage_model_timestamp ON token_usage(model, timestamp DESC);
+      CREATE INDEX IF NOT EXISTS idx_contract_results_created ON contract_results(created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_skill_usage_last_used ON skill_usage(last_used DESC);
+      CREATE INDEX IF NOT EXISTS idx_error_memory_session_created ON error_memory(session_id, created_at DESC);
+    `,
+  },
 ];
 
 export class MigrationRunner {

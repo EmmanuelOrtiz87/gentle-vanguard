@@ -43,9 +43,9 @@ interface BannerData {
 
 function loadBudget(): BudgetLimits {
   const def: BudgetLimits = {
-    daily: 60000,
-    perSession: 7500,
-    perAgent: 3000,
+    daily: 5000000,
+    perSession: 3000000,
+    perAgent: 100000,
     softThreshold: 70,
     hardThreshold: 90,
   };

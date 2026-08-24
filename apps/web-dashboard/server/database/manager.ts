@@ -121,6 +121,7 @@ export interface ContractResultRecord {
 
 export class DatabaseManager {
   private db: Database.Database;
+  private walCheckpointTimer: NodeJS.Timeout | null = null;
   private static instance: DatabaseManager | null = null;
 
   // Public repos
@@ -143,6 +144,8 @@ export class DatabaseManager {
     this.db = new Database(DB_PATH);
     this.db.pragma('journal_mode = WAL');
     this.db.pragma('foreign_keys = ON');
+    // Keep the write-ahead log bounded during the dashboard's continuous writes.
+    this.db.pragma('wal_autocheckpoint = 400');
 
     this.migrations = new MigrationRunner(this.db);
     this.metrics = new MetricsRepo(this.db);
@@ -157,6 +160,18 @@ export class DatabaseManager {
     this.housekeepingRepo = new HousekeepingRepo(this.db);
 
     this.migrations.runMigrations();
+    this.checkpointWal();
+    this.walCheckpointTimer = setInterval(() => this.checkpointWal(), 60_000);
+    this.walCheckpointTimer.unref();
+  }
+
+  /** Checkpoint WAL without making dashboard requests fail if SQLite is busy. */
+  private checkpointWal(): void {
+    try {
+      this.db.pragma('wal_checkpoint(PASSIVE)');
+    } catch {
+      // A concurrent writer can temporarily prevent a checkpoint; the next tick retries.
+    }
   }
 
   /** Get or create the singleton instance */
@@ -169,6 +184,10 @@ export class DatabaseManager {
 
   static resetInstance(): void {
     if (DatabaseManager.instance) {
+      if (DatabaseManager.instance.walCheckpointTimer) {
+        clearInterval(DatabaseManager.instance.walCheckpointTimer);
+        DatabaseManager.instance.walCheckpointTimer = null;
+      }
       try {
         DatabaseManager.instance.db.close();
       } catch {

@@ -139,7 +139,9 @@ function parseFrontmatter(raw: string): { fm: OpenCodeFrontmatter; body: string 
     }
     if (val === '' || val === 'true' || val === 'false') {
       (fm as Record<string, unknown>)[key] = val === '' ? undefined : val === 'true';
-    } else if (/^-?\d+(\.\d+)?$/.test(val)) {
+    } else if (val !== '' && Number.isFinite(Number(val))) {
+      // Number() handles the scalar frontmatter values we support without an
+      // unbounded regex that static security analysis can reject as ReDoS-prone.
       (fm as Record<string, unknown>)[key] = Number(val);
     } else {
       (fm as Record<string, unknown>)[key] = val;
