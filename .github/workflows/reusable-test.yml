@@ -70,6 +70,9 @@ jobs:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: i18n gate (all tt() keys defined)
+        working-directory: apps/web-dashboard
+        run: pnpm i18n:check
       - name: Run dashboard tests (vitest)
         working-directory: apps/web-dashboard
         run: pnpm test

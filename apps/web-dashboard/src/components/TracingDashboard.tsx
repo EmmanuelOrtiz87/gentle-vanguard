@@ -761,13 +761,35 @@ export function TracingDashboard() {
 
             <div className="divide-y divide-gray-100 dark:divide-gray-800">
               {focusRoot && (
-                <button
-                  onClick={() => setFocusId(null)}
-                  className="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 mb-2 font-medium"
-                >
-                  <ChevronLeft className="w-3 h-3" />
-                  {tt('ui.back_overview')}
-                </button>
+                <div className="flex items-center gap-4 mb-2">
+                  <button
+                    onClick={() => setFocusId(null)}
+                    className="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-medium"
+                  >
+                    <ChevronLeft className="w-3 h-3" />
+                    {tt('ui.back_overview')}
+                  </button>
+                  <button
+                    onClick={() => {
+                      const payload = {
+                        exportedAt: new Date().toISOString(),
+                        traceId: focusRoot.traceId,
+                        spanCount: focusSet.length,
+                        spans: focusSet,
+                      };
+                      const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(payload, null, 2));
+                      const a = document.createElement('a');
+                      a.href = dataStr;
+                      a.download = `trace-${focusRoot.traceId}.json`;
+                      a.click();
+                    }}
+                    className="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-medium"
+                    title={tt('ui.export_trace_json')}
+                  >
+                    <Download className="w-3 h-3" />
+                    {tt('ui.export_trace_json')}
+                  </button>
+                </div>
               )}
               {wfRows.map((t) => (
                 <div key={t.spanId} className="group">
