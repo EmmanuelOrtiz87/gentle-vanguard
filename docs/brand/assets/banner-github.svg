@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 320" width="1280" height="320" role="img" aria-label="Gentle-Vanguard GitHub Header">
   <defs>
     <linearGradient id="gh-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0D1117"/>
+      <stop offset="0%" stop-color="#121212"/>
       <stop offset="60%" stop-color="#111827"/>
       <stop offset="100%" stop-color="#1A2035"/>
     </linearGradient>
     <filter id="gh-glow-purple" x="-25%" y="-25%" width="150%" height="150%">
       <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
-      <feFlood flood-color="#A855F7" flood-opacity="0.5" result="color"/>
+      <feFlood flood-color="#A78BFA" flood-opacity="0.5" result="color"/>
       <feComposite in="color" in2="blur" operator="in" result="shadow"/>
       <feMerge>
         <feMergeNode in="shadow"/>
@@ -40,7 +40,7 @@
   <rect width="1280" height="320" fill="url(#gh-circuit)" opacity="0.5"/>
 
   <!-- G letter — purple, center (90,160) r=65, opening on right -->
-  <g stroke="#A855F7" stroke-width="11" fill="none"
+  <g stroke="#A78BFA" stroke-width="11" fill="none"
      stroke-linecap="round" stroke-linejoin="round"
      filter="url(#gh-glow-purple)"
      transform="translate(55, 52) scale(0.75)">
@@ -64,7 +64,7 @@
   </g>
 
   <!-- Brand name -->
-  <text x="295" y="148" fill="#00BFFF"
+  <text x="295" y="148" fill="#06B6D4"
         font-family="Orbitron, 'Share Tech Mono', monospace"
         font-size="62" font-weight="700" letter-spacing="4">GENTLE-VANGUARD</text>
   <!-- Tagline -->

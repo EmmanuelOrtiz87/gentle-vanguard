@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 230" width="260" height="230" role="img" aria-label="Gentle-Vanguard Logo">
   <defs>
     <linearGradient id="gv-grad-primary" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#4DCFFF"/>
+      <stop offset="0%" stop-color="#22D3EE"/>
       <stop offset="50%" stop-color="#00AAEE"/>
       <stop offset="100%" stop-color="#0055BB"/>
     </linearGradient>
     <filter id="gv-glow" x="-25%" y="-25%" width="150%" height="150%">
       <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
-      <feFlood flood-color="#00CCFF" flood-opacity="0.55" result="color"/>
+      <feFlood flood-color="#22D3EE" flood-opacity="0.55" result="color"/>
       <feComposite in="color" in2="blur" operator="in" result="shadow"/>
       <feMerge>
         <feMergeNode in="shadow"/>
