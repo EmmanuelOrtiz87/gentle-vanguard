@@ -120,6 +120,56 @@ jobs:
       - name: Verify VERSION/package.json/CHANGELOG alignment
         run: npm run version:check
 
+  static-gates:
+    name: Static Deployment and Artifact Gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Validate production env and generated-artifact hygiene
+        run: pnpm ci:static-gates
+      - name: Report image mutability pending release digest binding
+        run: pnpm ci:static-gates -- --report
+      - name: Report deployment prerequisites and external inputs
+        run: pnpm validate:deployment -- --report
+
+  graphify-affected:
+    name: Graphify Affected Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Build knowledge graph
+        run: pnpm graphify -- build
+      - name: Analyze affected nodes for changed source files
+        shell: bash
+        run: |
+          set -euo pipefail
+          changed=$(git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.sha }}" -- '*.ts' '*.tsx' '*.js' '*.jsx')
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            pnpm graphify -- affected "$file" --max 200 --json || true
+          done <<< "$changed"
+
   sre-informational:
     name: SRE Report (Error Budget + Perf SLO — informational, non-gating)
     runs-on: ubuntu-latest

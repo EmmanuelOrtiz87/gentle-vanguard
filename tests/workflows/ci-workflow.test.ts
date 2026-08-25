@@ -30,6 +30,8 @@ describe('CI/CD Workflows', () => {
     assert.ok(content.includes('pnpm/action-setup'), 'Should use pnpm');
     assert.ok(content.includes('frozen-lockfile'), 'Should use frozen lockfile');
     assert.ok(content.includes('cache: pnpm'), 'Should cache pnpm store');
+    assert.ok(content.includes('static-gates'), 'Should run static deployment/artifact gates');
+    assert.ok(content.includes('ci:static-gates'), 'Should invoke static deployment/artifact validation');
   });
 
   it('security scanning lives in reusable-security-scan.yml with real gates', () => {

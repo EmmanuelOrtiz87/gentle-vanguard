@@ -1,6 +1,12 @@
 {
-  "version": "1.0",
-  "description": "Tenant registry for multi-tenant isolation — tracks known tenants and their last active timestamps",
+  "version": "1.1",
+  "description": "Tenant registry for multi-tenant isolation — tracks known tenants, their last active timestamps, and per-tenant SLO objectives",
+  "sloDefaults": {
+    "availabilityTargetPct": 99.9,
+    "latencyTargetMs": 2000,
+    "errorBudgetPct": 0.1,
+    "burnRateWindows": ["1h", "6h", "24h", "72h"]
+  },
   "tenants": [
     {
       "id": "gentle-vanguard",

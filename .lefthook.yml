@@ -79,6 +79,14 @@ pre-push:
       run:
         npx tsx src/generate-sbom.ts --output sbom.json --format json && npx tsx
         src/container-scan.ts scan --fail-on high --json
+    # Content operations validation (~3s) — catches broken content manifests
+    # before CI does.
+    content-validate:
+      run: npm run content:validate
+    # CI static gates locally (~35s) — same checks CI runs (deployment
+    # prerequisites, image policies) so pushes fail fast instead of in CI.
+    ci-static-gates:
+      run: npm run ci:static-gates
 
 commit-msg:
   commands:

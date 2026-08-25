@@ -274,3 +274,9 @@ config/owner-auth.json*
 # SBOM is generated in CI (artifact) — never commit stale copies
 sbom.json
 sbom/
+update-manifest.json
+
+# Local test runner artifacts (never commit)
+.test-results/
+# Runtime logs (local only)
+logs/

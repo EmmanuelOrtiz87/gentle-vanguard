@@ -6,8 +6,8 @@
 apps/web-dashboard/
 ├── server/
 │   ├── websocket-server.ts    # WebSocket + HTTP API (WS_PORT env, default 8080)
-│   ├── real-data.ts           # Reads .session/context-log/*/.state.json → metrics
-│   └── consolidated.ts        # Writes .runtime/metrics/consolidated.json
+│   ├── real-data.ts           # Reads runtime sources → metrics
+│   └── consolidated.ts        # Writes derived dashboard metrics
 ├── src/
 │   ├── types/dashboard.ts     # ModelCost, LatencyMetrics, etc.
 │   ├── components/
@@ -38,16 +38,20 @@ src/
 ## Data Flow
 
 ```
-.session/context-log/*/.state.json
+Nexus SQLite (.runtime/gentle-vanguard.db)
   ↓ (real-data.ts reads on each poll)
 websocket-server.ts
   ├── WebSocket push every 5s → React state
   ├── GET /api/metrics  → useMetrics.ts
   ├── GET /api/traces   → TracingDashboard
   ├── GET /api/alerts   → useAlerts.ts
-  ├── POST /api/feedback → .runtime/metrics/feedback.json
+  ├── POST /api/feedback → Nexus feedback table (TraceRepo)
   └── POST /api/sessions → useSessions.ts
 ```
+
+> **Authority note:** `.runtime/metrics/feedback.json` and `.session/feedback/*.json` are
+> historical/compatibility paths only. They are not active dashboard write targets and must not be
+> documented as the feedback store.
 
 ## Resilience & Port Flexibility
 

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "role": "source",
   "gentle-vanguardVersion": "2.14.0",
-  "lastUpdated": "2026-05-12",
+  "lastUpdated": "2026-08-25",
   "assets": [
     {
       "type": "script",
@@ -25,11 +25,6 @@
       "description": "Session Bypass Guard - Ensures owner bypass is active on develop rulesets for gentle-vanguard and gentle-vanguard-public"
     },
     {
-      "type": "script",
-      "path": "src/install-github-runner.ts",
-      "description": "GitHub Runner Installer - Portable self-hosted runner setup without committed secrets"
-    },
-    {
       "type": "config",
       "path": "config/workspace.example.json",
       "description": "Workspace Config Template - Standard workspace bootstrap defaults"
@@ -50,70 +45,9 @@
       "description": "GitHub Runner Setup Guide - Portable and secure self-hosted runner instructions"
     },
     {
-      "type": "script",
-      "path": "src/migrate-gentle-vanguard-remotes.ts",
-      "description": "Remote Migration Script - Updates local origin remotes after repository rename"
-    },
-    {
       "type": "guide",
       "path": "docs/guides/REPO-RENAME-MIGRATION.md",
       "description": "Repository Rename Migration Guide - Steps for safe rename from foundation to gentle-vanguard"
-    },
-    {
-      "type": "script",
-      "path": "src/invoke-cloud-agent.ts",
-      "description": "Cloud Agent Connector - Invoke external AI models (Bedrock, Difi, Azure, etc.)"
-    },
-    {
-      "type": "script",
-      "path": "src/invoke-judgment.ts",
-      "description": "Judgment Day - Dual-agent adversarial review protocol"
-    },
-    {
-      "type": "script",
-      "path": "src/manage-backlog.ts",
-      "description": "Backlog Management - JSON-based task management"
-    },
-    {
-      "type": "script",
-      "path": "src/create-skill.ts",
-      "description": "Skill Factory - Automated skill generation"
-    },
-    {
-      "type": "script",
-      "path": "src/consolidate-telemetry.ts",
-      "description": "Business Telemetry - Centralized metrics reporting"
-    },
-    {
-      "type": "script",
-      "path": "src/compact-memory.ts",
-      "description": "Compact Memory - Session summarization"
-    },
-    {
-      "type": "script",
-      "path": "src/read-once-guard.ts",
-      "description": "Read Once Guard - Prevent redundant file reads"
-    },
-
-    {
-      "type": "script",
-      "path": "src/setup-wizard.ts",
-      "description": "Setup Wizard - Interactive dependency installation"
-    },
-    {
-      "type": "script",
-      "path": "src/sync-agent-instructions.ts",
-      "description": "Agent Instructions Sync - Cross-platform sync for Claude, Copilot, etc."
-    },
-    {
-      "type": "script",
-      "path": "src/manual-recovery.ts",
-      "description": "Manual Recovery - Fallback when self-healing fails"
-    },
-    {
-      "type": "script",
-      "path": "src/invoke-ai-review.ts",
-      "description": "AI Review - Multi-provider code review with caching"
     },
     {
       "type": "hook",
@@ -161,11 +95,6 @@
       "description": "Business Telemetry Guide"
     },
     {
-      "type": "guide",
-      "path": "docs/guides/GENTLE_VANGUARD-SYNC.md",
-      "description": "Gentle-Vanguard Sync Guide"
-    },
-    {
       "type": "skill",
       "path": "skills/cloud-agent-connector-skill",
       "description": "Cloud Agent Connector Skill"
@@ -174,11 +103,6 @@
       "type": "skill",
       "path": "skills/pretool-format-hook-skill",
       "description": "PreTool Auto-Format Hook Skill"
-    },
-    {
-      "type": "skill",
-      "path": "skills/business-telemetry-skill",
-      "description": "Business Telemetry Skill"
     },
     {
       "type": "skill",
@@ -216,21 +140,6 @@
       "description": "Testing Coverage Skill"
     },
     {
-      "type": "skill",
-      "path": "skills/guardian-fallback-skill",
-      "description": "Guardian Fallback Skill"
-    },
-    {
-      "type": "script",
-      "path": "src/collect-provider-telemetry.ts",
-      "description": "Provider Telemetry Collection - Probes configured AI providers and records real status/latency"
-    },
-    {
-      "type": "script",
-      "path": "src/generate-dashboard.ts",
-      "description": "Dashboard Generator - HTML dashboard with PDF/PNG export and configurable thresholds"
-    },
-    {
       "type": "script",
       "path": "src/cli/gv.ts",
       "description": "Workflow CLI - Main orchestrator entry point"
@@ -249,6 +158,11 @@
       "type": "config",
       "path": "config/metrics-config.json",
       "description": "Metrics and observability config with configurable alert_thresholds and cost_model blocks"
+    },
+    {
+      "type": "guide",
+      "path": "docs/guides/GENTLE-VANGUARD-SYNC.md",
+      "description": "Gentle-Vanguard Sync Guide - Multi-machine sync workflow"
     }
   ],
   "breakingChanges": [],
@@ -274,5 +188,6 @@
     "PreTool hooks install to ~/.pretool-hooks/ via npx tsx src/bootstrap-machine.ts",
     "Gentle-Vanguard operates with Opencode + judgment-day for code review",
     "Scripts reorganized into subdirectories: AI-AGENT-MANAGEMENT, UTILITIES, SKILLS-TOOLS, TELEMETRY-METRICS, PERFORMANCE-OPTIMIZATION, DEPLOYMENT, WORKFLOW-ORCHESTRATION"
-  ]
+  ],
+  "gentleVanguardVersion": "3.8.2"
 }

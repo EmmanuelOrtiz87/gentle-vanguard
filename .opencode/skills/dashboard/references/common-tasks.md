@@ -29,6 +29,7 @@
 - [ ] Language switch works (EN → ES → PT-BR)
 - [ ] Info popup opens on ℹ click, closes on Escape / click-outside
 - [ ] Alerts evaluate correctly (both directions)
-- [ ] Feedback thumbs persist to `.runtime/metrics/feedback.json`
+- [ ] Feedback thumbs persist to the tenant-scoped Nexus feedback table through `TraceRepo`
+- [ ] Do not use `.runtime/metrics/feedback.json` or `.session/feedback/*.json` (historical/compatibility paths)
 - [ ] `npm run build` exits 0
 - [ ] Session pipeline auto-starts WS server (`dashboard-ws-start` step)
