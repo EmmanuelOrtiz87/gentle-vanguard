@@ -26,6 +26,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { z } from 'zod';
 import { compressStructural } from '../compression/structural-compression.js';
+import { loadConfigFile } from '../core/config-loader.js';
 // Note: .js extension is used for ESM compatibility; TypeScript resolves .ts files
 import { db as getDb } from '../database/db.js';
 
@@ -250,14 +251,10 @@ function stripTags(input: string): string {
 }
 
 function loadConfig(): WebCrawlerConfig {
-  const raw: Record<string, unknown> = {};
-  if (existsSync(CONFIG_PATH)) {
-    try {
-      Object.assign(raw, JSON.parse(readFileSync(CONFIG_PATH, 'utf-8')));
-    } catch {
-      /* fall through to defaults */
-    }
-  }
+  const raw = loadConfigFile<Record<string, unknown>>('web-crawler', {
+    dir: join(ROOT, 'config'),
+    validate: false,
+  }).data;
   const parsed = WebCrawlerConfigSchema.parse(raw);
   return { ...parsed, apiKey: parsed.apiKey || process.env.FIRECRAWL_API_KEY || '' };
 }

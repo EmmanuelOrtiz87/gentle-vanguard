@@ -221,7 +221,7 @@ async function checkDashboardWs() {
   let httpOk = false;
   let respondingPort = wsPort;
   for (const port of portsToTry) {
-    httpOk = await testHttp(`http://127.0.0.1:${port}/api/metrics`);
+    httpOk = await testHttp(`http://127.0.0.1:${port}/api/health`);
     if (httpOk) {
       respondingPort = port;
       break;
@@ -767,6 +767,49 @@ async function checkConfigs() {
   ];
   for (const cfg of configs) {
     payloadFileOk('configs', cfg, join(ROOT, cfg), 'fix', true);
+  }
+
+  // Schema validation via the unified config-loader (validates every
+  // config/*.json that has a sibling .schema.json — currently 8 configs).
+  try {
+    const { loadConfigFile } = await import('./config-loader');
+    const schemaDir = join(ROOT, 'config');
+    const schemas = existsSync(schemaDir)
+      ? readdirSync(schemaDir).filter((f) => f.endsWith('.schema.json'))
+      : [];
+    let violations = 0;
+    for (const schemaFile of schemas) {
+      const name = schemaFile.replace(/\.schema\.json$/, '');
+      const res = loadConfigFile(name, { noCache: true });
+      const errs = res.warnings.filter((w) => w.startsWith('schema violations'));
+      if (errs.length > 0) {
+        violations++;
+        addResult(
+          'configs',
+          `${name}.json (schema)`,
+          'FAIL',
+          errs[0].slice(0, 160),
+          'manual',
+        );
+      }
+    }
+    if (violations === 0) {
+      addResult(
+        'configs',
+        `schema validation (${schemas.length} schemas)`,
+        schemas.length > 0 ? 'PASS' : 'WARN',
+        schemas.length === 0 ? 'no *.schema.json found in config/' : '',
+        'manual',
+      );
+    }
+  } catch (e: unknown) {
+    addResult(
+      'configs',
+      'schema validation',
+      'WARN',
+      `config-loader unavailable: ${e instanceof Error ? e.message : String(e)}`,
+      'manual',
+    );
   }
 }
 

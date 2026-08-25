@@ -545,6 +545,10 @@ function round4(value: number): number {
   return Math.round(value * 10000) / 10000;
 }
 
+function normalizeTokenSegment(name: string): string {
+  return name.replace(/(\d)\.(?=\d)/g, '$1-');
+}
+
 // ─── Serializers ──────────────────────────────────────────────────────────────
 
 export function tokensToCSS(tokens: DesignTokens): string {
@@ -578,7 +582,7 @@ export function tokensToCSS(tokens: DesignTokens): string {
 
   lines.push('  /* Spacing */');
   for (const [name, size] of Object.entries(tokens.spacing)) {
-    lines.push(`  --space-${name}: ${size.px}px;`);
+    lines.push(`  --space-${normalizeTokenSegment(name)}: ${size.px}px;`);
   }
 
   lines.push('  /* Border radius */');
@@ -628,7 +632,7 @@ export function tokensToSCSS(tokens: DesignTokens): string {
   lines.push('');
   lines.push('// Spacing');
   for (const [name, size] of Object.entries(tokens.spacing)) {
-    lines.push(`$space-${name}: ${size.px}px;`);
+    lines.push(`$space-${normalizeTokenSegment(name)}: ${size.px}px;`);
   }
 
   lines.push('');

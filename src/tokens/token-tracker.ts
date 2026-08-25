@@ -18,15 +18,13 @@
  *   const result = await tracker.trackApiCall(apiCallFn, args);
  */
 
-import { existsSync, mkdirSync, readFileSync, appendFileSync } from 'fs';
-import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { createRequire } from 'module';
 import type { DatabaseManager } from '../../apps/web-dashboard/server/database/manager.js';
 
 const _require = createRequire(import.meta.url);
 
-// Lazy db import for SQLite dual-write
+// Lazy db import — Nexus SQLite is the single persistence authority.
 let _db: DatabaseManager | null = null;
 function getDb(): DatabaseManager | null {
   if (!_db) {
@@ -34,7 +32,7 @@ function getDb(): DatabaseManager | null {
       const mod = _require('../../apps/web-dashboard/server/database/manager');
       _db = mod.DatabaseManager.getInstance();
     } catch {
-      // SQLite not available — skip dual-write
+      // SQLite not available — reads return empty aggregates
     }
   }
   return _db;
@@ -87,10 +85,6 @@ const PROVIDER_PRICING: Record<string, Record<string, ProviderPricing>> = {
   },
 };
 
-const ROOT = resolve(process.cwd());
-const METRICS_DIR = join(ROOT, 'docs', 'sessions', 'metrics');
-const TOKEN_LOG_FILE = join(METRICS_DIR, 'token-usage-real.jsonl');
-
 // ─── Token Tracker Class ──────────────────────────────────────────────────────
 
 export class TokenTracker {
@@ -102,13 +96,6 @@ export class TokenTracker {
     this.provider = provider.toLowerCase();
     this.model = model.toLowerCase();
     this.sessionId = sessionId || `session-${Date.now()}`;
-    this.ensureMetricsDir();
-  }
-
-  private ensureMetricsDir(): void {
-    if (!existsSync(METRICS_DIR)) {
-      mkdirSync(METRICS_DIR, { recursive: true });
-    }
   }
 
   /**
@@ -168,34 +155,14 @@ export class TokenTracker {
   }
 
   /**
-   * Log token usage to file
+   * Persist token usage to Nexus SQLite (single authority).
    */
   logTokenUsage(
     task: string,
     usage: TokenUsage,
     cost: CostBreakdown,
-    metadata: Record<string, any> = {},
+    _metadata: Record<string, any> = {},
   ): void {
-    const entry = {
-      timestamp: new Date().toISOString(),
-      date: new Date().toISOString().slice(0, 10),
-      sessionId: this.sessionId,
-      provider: this.provider,
-      model: this.model,
-      task,
-      promptTokens: usage.promptTokens,
-      completionTokens: usage.completionTokens,
-      totalTokens: usage.totalTokens,
-      inputCost: cost.inputCost,
-      outputCost: cost.outputCost,
-      totalCost: cost.totalCost,
-      ...metadata,
-    };
-
-    this.ensureMetricsDir();
-    appendFileSync(TOKEN_LOG_FILE, JSON.stringify(entry) + '\n');
-
-    // SQLite dual-write
     try {
       const mgr = getDb();
       if (mgr) {
@@ -208,7 +175,7 @@ export class TokenTracker {
         );
       }
     } catch {
-      // Dual-write failure is non-critical
+      // Persistence failure is non-critical for the tracked call itself
     }
   }
 
@@ -268,38 +235,29 @@ export class TokenTracker {
   }
 
   /**
-   * Get today's token usage summary
+   * Get today's token usage summary (from Nexus SQLite).
    */
   getTodayUsage(): { tokens: number; cost: number; calls: number } {
-    if (!existsSync(TOKEN_LOG_FILE)) {
+    try {
+      const mgr = getDb();
+      if (!mgr) return { tokens: 0, cost: 0, calls: 0 };
+      const row = mgr.database
+        .prepare(
+          `SELECT COALESCE(SUM(total_tokens), 0) AS tokens,
+                  COALESCE(SUM(cost), 0) AS cost,
+                  COUNT(*) AS calls
+           FROM token_usage
+           WHERE date(timestamp) = date('now')`,
+        )
+        .get() as { tokens: number; cost: number; calls: number };
+      return { tokens: row.tokens, cost: row.cost, calls: row.calls };
+    } catch {
       return { tokens: 0, cost: 0, calls: 0 };
     }
-
-    const today = new Date().toISOString().slice(0, 10);
-    const lines = readFileSync(TOKEN_LOG_FILE, 'utf-8')
-      .split('\n')
-      .filter((line) => line.trim());
-
-    let tokens = 0;
-    let cost = 0;
-    let calls = 0;
-
-    for (const line of lines) {
-      try {
-        const entry = JSON.parse(line);
-        if (entry.date === today && entry.success !== false) {
-          tokens += entry.totalTokens || 0;
-          cost += entry.totalCost || 0;
-          calls++;
-        }
-      } catch {}
-    }
-
-    return { tokens, cost, calls };
   }
 
   /**
-   * Get usage statistics for a date range
+   * Get usage statistics for a date range (from Nexus SQLite).
    */
   getUsageStats(
     startDate: string,
@@ -311,63 +269,64 @@ export class TokenTracker {
     byProvider: Record<string, { tokens: number; cost: number; calls: number }>;
     byModel: Record<string, { tokens: number; cost: number; calls: number }>;
   } {
-    if (!existsSync(TOKEN_LOG_FILE)) {
-      return {
-        totalTokens: 0,
-        totalCost: 0,
-        totalCalls: 0,
-        byProvider: {},
-        byModel: {},
-      };
-    }
-
-    const lines = readFileSync(TOKEN_LOG_FILE, 'utf-8')
-      .split('\n')
-      .filter((line) => line.trim());
-
-    let totalTokens = 0;
-    let totalCost = 0;
-    let totalCalls = 0;
-    const byProvider: Record<string, { tokens: number; cost: number; calls: number }> = {};
-    const byModel: Record<string, { tokens: number; cost: number; calls: number }> = {};
-
-    for (const line of lines) {
-      try {
-        const entry = JSON.parse(line);
-        if (entry.date >= startDate && entry.date <= endDate && entry.success !== false) {
-          const tokens = entry.totalTokens || 0;
-          const cost = entry.totalCost || 0;
-
-          totalTokens += tokens;
-          totalCost += cost;
-          totalCalls++;
-
-          // By provider
-          if (!byProvider[entry.provider]) {
-            byProvider[entry.provider] = { tokens: 0, cost: 0, calls: 0 };
-          }
-          byProvider[entry.provider].tokens += tokens;
-          byProvider[entry.provider].cost += cost;
-          byProvider[entry.provider].calls++;
-
-          // By model
-          if (!byModel[entry.model]) {
-            byModel[entry.model] = { tokens: 0, cost: 0, calls: 0 };
-          }
-          byModel[entry.model].tokens += tokens;
-          byModel[entry.model].cost += cost;
-          byModel[entry.model].calls++;
-        }
-      } catch {}
-    }
-
-    return {
-      totalTokens,
-      totalCost,
-      totalCalls,
-      byProvider,
-      byModel,
+    const empty = {
+      totalTokens: 0,
+      totalCost: 0,
+      totalCalls: 0,
+      byProvider: {} as Record<string, { tokens: number; cost: number; calls: number }>,
+      byModel: {} as Record<string, { tokens: number; cost: number; calls: number }>,
     };
+    try {
+      const mgr = getDb();
+      if (!mgr) return empty;
+      const rows = mgr.database
+        .prepare(
+          `SELECT model,
+                  COALESCE(SUM(total_tokens), 0) AS tokens,
+                  COALESCE(SUM(cost), 0) AS cost,
+                  COUNT(*) AS calls
+           FROM token_usage
+           WHERE date(timestamp) BETWEEN ? AND ?
+           GROUP BY model`,
+        )
+        .all(startDate, endDate) as Array<{
+        model: string | null;
+        tokens: number;
+        cost: number;
+        calls: number;
+      }>;
+
+      let totalTokens = 0;
+      let totalCost = 0;
+      let totalCalls = 0;
+      const byProvider: typeof empty.byProvider = {};
+      const byModel: typeof empty.byModel = {};
+
+      for (const row of rows) {
+        const modelKey = row.model || 'unknown';
+        const slash = modelKey.indexOf('/');
+        const provider = slash > 0 ? modelKey.slice(0, slash) : 'unknown';
+        const model = slash > 0 ? modelKey.slice(slash + 1) : modelKey;
+
+        totalTokens += row.tokens;
+        totalCost += row.cost;
+        totalCalls += row.calls;
+
+        for (const [bucket, key] of [
+          [byProvider, provider],
+          [byModel, model],
+        ] as const) {
+          if (!bucket[key]) bucket[key] = { tokens: 0, cost: 0, calls: 0 };
+          bucket[key].tokens += row.tokens;
+          bucket[key].cost += row.cost;
+          bucket[key].calls += row.calls;
+        }
+      }
+
+      return { totalTokens, totalCost, totalCalls, byProvider, byModel };
+    } catch {
+      return empty;
+    }
   }
 }
 

@@ -15,6 +15,8 @@ const _require = createRequire(import.meta.url);
 
 const ROOT = path.resolve(process.cwd());
 const RUNTIME_DIR = path.join(ROOT, '.runtime');
+// Legacy JSON store — retained READ-ONLY as a close-time fallback for
+// historical data. New writes go to Nexus SQLite (single authority).
 const DB_PATH = path.join(RUNTIME_DIR, 'metrics.json');
 const SESSION_DIR = path.join(ROOT, '.session');
 const NEXUS_DB_PATH = path.join(RUNTIME_DIR, 'gentle-vanguard.db');
@@ -51,6 +53,29 @@ function ensureRuntimeDir(): void {
   }
 }
 
+/** Minimal structural type for the better-sqlite3 connection we use here. */
+interface NexusStatement {
+  all(...args: unknown[]): unknown[];
+  get(...args: unknown[]): unknown;
+  run(...args: unknown[]): { changes: number };
+}
+interface NexusDb {
+  prepare(sql: string): NexusStatement;
+  close(): void;
+}
+
+/** Open the Nexus SQLite database (single write/read authority). */
+function openNexus(): { db: NexusDb; close: () => void } | null {
+  try {
+    const Database = _require('better-sqlite3');
+    if (!fs.existsSync(NEXUS_DB_PATH)) return null;
+    const db = new Database(NEXUS_DB_PATH) as NexusDb;
+    return { db, close: () => db.close() };
+  } catch {
+    return null;
+  }
+}
+
 function readDb(): TokenDb {
   ensureRuntimeDir();
   try {
@@ -60,20 +85,9 @@ function readDb(): TokenDb {
       if (Array.isArray(db.token_usage)) return db;
     }
   } catch {
-    const backupPath = DB_PATH.replace(/\.json$/, `.corrupted.${Date.now()}.json`);
-    try {
-      fs.copyFileSync(DB_PATH, backupPath);
-    } catch {
-      /* ignore */
-    }
-    console.warn(`[METRICS-STORE] Corrupted DB, reinitializing: ${DB_PATH}`);
+    /* legacy store is read-only now; ignore corruption */
   }
   return { token_usage: [], version: '1.0' };
-}
-
-function writeDb(db: TokenDb): void {
-  ensureRuntimeDir();
-  fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2), 'utf-8');
 }
 
 function now(): string {
@@ -85,66 +99,105 @@ function todayDate(): string {
 }
 
 function initDb(): void {
-  const db = readDb();
-  if (!Array.isArray(db.token_usage)) db.token_usage = [];
-  writeDb(db);
-  console.log(`[METRICS-STORE] Database initialized: ${DB_PATH}`);
+  console.log(
+    `[METRICS-STORE] Nexus SQLite is the token authority: ${NEXUS_DB_PATH} (legacy ${DB_PATH} is read-only)`,
+  );
 }
 
+/** Record a usage row directly into Nexus token_usage. */
 function recordUsage(sessionId: string, tokens: number, cost: number): void {
-  const db = readDb();
-  const record: TokenRecord = {
-    id: db.token_usage.length + 1,
-    session_id: sessionId,
-    date: todayDate(),
-    tokens_used: tokens,
-    cost_usd: cost,
-    model: process.env.AI_MODEL || 'unknown',
-    provider: process.env.AI_PROVIDER || 'unknown',
-    created_at: now(),
-  };
-  db.token_usage.push(record);
-  writeDb(db);
-  console.log(`[METRICS-STORE] Recorded: ${tokens} tokens, $${cost} for session ${sessionId}`);
+  const nexus = openNexus();
+  if (!nexus) {
+    console.error('[METRICS-STORE] Nexus database not available; record skipped');
+    process.exit(1);
+  }
+  try {
+    nexus.db
+      .prepare(
+        `INSERT INTO token_usage
+         (session_id, prompt_tokens, completion_tokens, cost, model, timestamp, tenant_id)
+         VALUES (?, ?, 0, ?, ?, datetime('now'), 'gentle-vanguard')`,
+      )
+      .run(sessionId, tokens, cost, process.env.AI_MODEL || 'unknown');
+    console.log(`[METRICS-STORE] Recorded: ${tokens} tokens, $${cost} for session ${sessionId}`);
+  } finally {
+    nexus.close();
+  }
+}
+
+interface DailyRow {
+  d: string;
+  t: number;
+  c: number;
+  s: number;
 }
 
 function queryHistory(days: number): AggregatedRow[] {
-  const db = readDb();
-  const cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - days);
-  const cutoffStr = cutoff.toISOString().slice(0, 10);
-
-  const filtered = db.token_usage.filter((r) => r.date >= cutoffStr);
-  const grouped = new Map<string, { tokens: number; cost: number; sessions: Set<string> }>();
-
-  for (const r of filtered) {
-    let g = grouped.get(r.date);
-    if (!g) {
-      g = { tokens: 0, cost: 0, sessions: new Set() };
-      grouped.set(r.date, g);
-    }
-    g.tokens += r.tokens_used;
-    g.cost += r.cost_usd;
-    g.sessions.add(r.session_id);
+  const nexus = openNexus();
+  if (!nexus) return [];
+  try {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - days);
+    const cutoffStr = cutoff.toISOString().slice(0, 10);
+    const rows = nexus.db
+      .prepare(
+        `SELECT date(timestamp) AS d,
+                COALESCE(SUM(total_tokens), 0) AS t,
+                COALESCE(SUM(cost), 0) AS c,
+                COUNT(DISTINCT session_id) AS s
+         FROM token_usage
+         WHERE date(timestamp) >= ?
+         GROUP BY d ORDER BY d`,
+      )
+      .all(cutoffStr) as DailyRow[];
+    return rows.map((r) => ({
+      date: r.d,
+      total_tokens: r.t,
+      total_cost: r.c,
+      sessions: r.s,
+    }));
+  } catch {
+    return [];
+  } finally {
+    nexus.close();
   }
+}
 
-  return Array.from(grouped.entries())
-    .map(([date, g]) => ({
-      date,
-      total_tokens: g.tokens,
-      total_cost: g.cost,
-      sessions: g.sessions.size,
-    }))
-    .sort((a, b) => (a.date ?? '').localeCompare(b.date ?? ''));
+interface BucketRow {
+  date: string;
+  tokens: number;
+  cost: number;
+  session_id: string;
+}
+
+function loadBucketRows(days: number): BucketRow[] {
+  const nexus = openNexus();
+  if (!nexus) return [];
+  try {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - days);
+    const cutoffStr = cutoff.toISOString().slice(0, 10);
+    return nexus.db
+      .prepare(
+        `SELECT date(timestamp) AS date,
+                COALESCE(SUM(total_tokens), 0) AS tokens,
+                COALESCE(SUM(cost), 0) AS cost,
+                session_id
+         FROM token_usage
+         WHERE date(timestamp) >= ?
+         GROUP BY date, session_id
+         ORDER BY date`,
+      )
+      .all(cutoffStr) as BucketRow[];
+  } catch {
+    return [];
+  } finally {
+    nexus.close();
+  }
 }
 
 function getWeeklyData(): AggregatedRow[] {
-  const db = readDb();
-  const cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - 84);
-  const cutoffStr = cutoff.toISOString().slice(0, 10);
-
-  const filtered = db.token_usage.filter((r) => r.date >= cutoffStr);
+  const filtered = loadBucketRows(84);
   const grouped = new Map<
     string,
     { tokens: number; cost: number; sessions: Set<string>; counts: number[] }
@@ -158,10 +211,10 @@ function getWeeklyData(): AggregatedRow[] {
       g = { tokens: 0, cost: 0, sessions: new Set(), counts: [] };
       grouped.set(weekKey, g);
     }
-    g.tokens += r.tokens_used;
-    g.cost += r.cost_usd;
+    g.tokens += r.tokens;
+    g.cost += r.cost;
     g.sessions.add(r.session_id);
-    g.counts.push(r.tokens_used);
+    g.counts.push(r.tokens);
   }
 
   return Array.from(grouped.entries())
@@ -176,12 +229,7 @@ function getWeeklyData(): AggregatedRow[] {
 }
 
 function getMonthlyData(): AggregatedRow[] {
-  const db = readDb();
-  const cutoff = new Date();
-  cutoff.setMonth(cutoff.getMonth() - 6);
-  const cutoffStr = cutoff.toISOString().slice(0, 10);
-
-  const filtered = db.token_usage.filter((r) => r.date >= cutoffStr);
+  const filtered = loadBucketRows(183);
   const grouped = new Map<
     string,
     { tokens: number; cost: number; sessions: Set<string>; counts: number[] }
@@ -194,10 +242,10 @@ function getMonthlyData(): AggregatedRow[] {
       g = { tokens: 0, cost: 0, sessions: new Set(), counts: [] };
       grouped.set(monthKey, g);
     }
-    g.tokens += r.tokens_used;
-    g.cost += r.cost_usd;
+    g.tokens += r.tokens;
+    g.cost += r.cost;
     g.sessions.add(r.session_id);
-    g.counts.push(r.tokens_used);
+    g.counts.push(r.tokens);
   }
 
   return Array.from(grouped.entries())
@@ -384,10 +432,26 @@ function getDashboardData(): Record<string, unknown> {
   const weekly = getWeeklyData();
   const monthly = getMonthlyData();
   const today = todayDate();
-  const db = readDb();
-  const todayRecords = db.token_usage.filter((r) => r.date === today);
-  const todayTokens = todayRecords.reduce((s, r) => s + r.tokens_used, 0);
-  const todayCost = todayRecords.reduce((s, r) => s + r.cost_usd, 0);
+
+  let todayTokens = 0;
+  let todayCost = 0;
+  const nexus = openNexus();
+  if (nexus) {
+    try {
+      const row = nexus.db
+        .prepare(
+          `SELECT COALESCE(SUM(total_tokens), 0) AS t, COALESCE(SUM(cost), 0) AS c
+           FROM token_usage WHERE date(timestamp) = ?`,
+        )
+        .get(today) as { t: number; c: number };
+      todayTokens = row.t;
+      todayCost = row.c;
+    } catch {
+      /* fall through with zeros */
+    } finally {
+      nexus.close();
+    }
+  }
 
   return {
     daily,
@@ -414,7 +478,7 @@ function main(): void {
     case 'init':
       initDb();
       result.status = 'initialized';
-      result.dbPath = DB_PATH;
+      result.dbPath = NEXUS_DB_PATH;
       break;
 
     case 'record':

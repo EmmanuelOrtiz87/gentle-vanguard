@@ -31,6 +31,10 @@ import {
 } from 'child_process';
 import { existsSync } from 'fs';
 import { join } from 'path';
+import { createRequire } from 'module';
+import { pathToFileURL } from 'url';
+
+const TSX_LOADER = pathToFileURL(createRequire(import.meta.url).resolve('tsx')).href;
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -279,7 +283,7 @@ export function runNpxTsx(
   scriptArgs: string[] = [],
   options: RunOptions = {},
 ): ChildProcess {
-  return run(process.execPath, ['--import', 'tsx', script, ...scriptArgs], options);
+  return run(process.execPath, ['--import', TSX_LOADER, script, ...scriptArgs], options);
 }
 
 /**
@@ -290,5 +294,5 @@ export function runNpxTsxSync(
   scriptArgs: string[] = [],
   options: RunOptions = {},
 ): RunSyncResult {
-  return runSync(process.execPath, ['--import', 'tsx', script, ...scriptArgs], options);
+  return runSync(process.execPath, ['--import', TSX_LOADER, script, ...scriptArgs], options);
 }

@@ -15,6 +15,7 @@ import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { writeFileSync } from 'fs';
 import { compressStructural, estimateTokens } from './compression/structural-compression.js';
+import { executeWithCircuit } from './circuit-breaker-v2';
 
 interface AgentConfig {
   name: string;
@@ -423,8 +424,20 @@ export async function delegate(request: DelegationRequest): Promise<DelegationRe
     const agentScript = join(AGENTS_DIR, `${request.agent}.ts`);
 
     if (existsSync(agentScript)) {
-      // Use native implementation if available
-      return await runNativeAgent(agentScript, request, agentConfig, startTime, effectiveTemp);
+      // Use native implementation if available, guarded by a per-agent circuit
+      // breaker (v2, file-state shared across processes). After repeated
+      // failures the circuit opens and delegations fail fast with the last
+      // error instead of burning the full spawn timeout every time.
+      return await executeWithCircuit(
+        `agent_delegation:${request.agent}`,
+        () => runNativeAgent(agentScript, request, agentConfig, startTime, effectiveTemp),
+        () => ({
+          success: false,
+          error: `circuit open for agent '${request.agent}' — failing fast (retry after cooldown)`,
+          duration: Date.now() - startTime,
+          model: agentConfig.model,
+        }),
+      );
     }
     // Fallback: Generate agent output directly
     return generateAgentResponse(request, agentConfig, startTime);
@@ -629,16 +642,11 @@ function parseArgs(): AgentTask {
 async function main(): Promise<void> {
   const { task, context, model } = parseArgs();
   
-  console.log(\`[\${agentName}] Processing task: \${task}\`);
-  console.log(\`[\${agentName}] Model: \${model}\`);
-  
-  if (context) {
-    console.log(\`[\${agentName}] Context: \${context}\`);
-  }
-  
-  // TODO: Implement agent logic here
-  
-  console.log(\`[\${agentName}] Task completed successfully\`);
+  console.error(\`[\${agentName}] Native agent template does not implement logic.\`);
+  console.error(\`[\${agentName}] Task was not completed: \${task}\`);
+  if (context) console.error(\`[\${agentName}] Context: \${context}\`);
+  console.error(\`[\${agentName}] Model: \${model}\`);
+  process.exitCode = 1;
 }
 
 main().catch(console.error);

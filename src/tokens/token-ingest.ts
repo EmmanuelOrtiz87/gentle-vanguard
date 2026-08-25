@@ -25,7 +25,17 @@
  */
 
 import Database from 'better-sqlite3';
-import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync, statSync, readdirSync } from 'fs';
+import { MigrationRunner } from '../../apps/web-dashboard/server/database/repositories/MigrationRunner';
+import { TokenRepo } from '../../apps/web-dashboard/server/database/repositories/TokenRepo';
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  writeFileSync,
+  appendFileSync,
+  statSync,
+  readdirSync,
+} from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { recordExternalUsage } from '../core/session-metrics-tracker';
@@ -188,7 +198,8 @@ export function readZcodeRollout(sinceCompletedMs = 0): {
       if (!u || ((u.inputTokens ?? 0) === 0 && (u.outputTokens ?? 0) === 0)) continue;
       const sessionId = r.sessionId || file.replace(/^model-io-|\.jsonl$/g, '') || 'zcode-unknown';
       const model = r.model?.modelId || 'unknown';
-      const agent: 'orchestrator' | 'subagent' = r.model?.role && r.model.role !== 'main' ? 'subagent' : 'orchestrator';
+      const agent: 'orchestrator' | 'subagent' =
+        r.model?.role && r.model.role !== 'main' ? 'subagent' : 'orchestrator';
       txns.push({
         sessionId,
         messageId: `zcode:${r.requestId}`,
@@ -241,7 +252,8 @@ function walkJsonl(dir: string, acc: string[] = []): string[] {
     for (const e of readdirSync(dir, { withFileTypes: true })) {
       const p = join(dir, e.name);
       if (e.isDirectory()) walkJsonl(p, acc);
-      else if (e.isFile() && e.name.startsWith('rollout-') && e.name.endsWith('.jsonl')) acc.push(p);
+      else if (e.isFile() && e.name.startsWith('rollout-') && e.name.endsWith('.jsonl'))
+        acc.push(p);
     }
   } catch {
     /* non-fatal */
@@ -253,7 +265,10 @@ function walkJsonl(dir: string, acc: string[] = []): string[] {
  * Codex persiste eventos `token_count` con usage ACUMULADO (`total_token_usage`) y
  * DELTA del turno (`last_token_usage`). Ingerimos los deltas como transacciones.
  */
-export function readCodexRollout(sinceMs = 0): { sessions: SessionUsage[]; txns: TransactionUsage[] } {
+export function readCodexRollout(sinceMs = 0): {
+  sessions: SessionUsage[];
+  txns: TransactionUsage[];
+} {
   const dir = codexSessionsDir();
   if (!dir) return { sessions: [], txns: [] };
   const bySession = new Map<string, SessionUsage>();
@@ -348,7 +363,10 @@ function minimaxDbPath(): string | null {
  * MiniMax Code persiste usage por turno en `local_runtime_token_usage`.
  * `mavis` es el agente orquestador; explore/verifier/worker son subagentes.
  */
-export function readMinimaxUsage(sinceMs = 0): { sessions: SessionUsage[]; txns: TransactionUsage[] } {
+export function readMinimaxUsage(sinceMs = 0): {
+  sessions: SessionUsage[];
+  txns: TransactionUsage[];
+} {
   const dbPath = minimaxDbPath();
   if (!dbPath) return { sessions: [], txns: [] };
   const db = new Database(dbPath, { readonly: true });
@@ -459,7 +477,7 @@ function toSqliteDate(epochMs: number): string {
   )}:${p(d.getSeconds())}`;
 }
 
-/** Inserta/actualiza en Nexus `token_usage`. Idempotente por session_id. */
+/** Compatibility export for callers of the historical ingest API. */
 export function writeToNexus(rows: SessionUsage[]): { inserted: number; updated: number } {
   if (!existsSync(NEXUS_DB)) return { inserted: 0, updated: 0 };
   let inserted = 0;
@@ -467,34 +485,21 @@ export function writeToNexus(rows: SessionUsage[]): { inserted: number; updated:
   try {
     const db = new Database(NEXUS_DB);
     try {
-      db.exec(`CREATE TABLE IF NOT EXISTS token_usage (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        session_id TEXT,
-        prompt_tokens INTEGER,
-        completion_tokens INTEGER,
-        cost REAL,
-        model TEXT,
-        timestamp TEXT DEFAULT (datetime('now'))
-      )`);
-      const ins = db.prepare(
-        `INSERT INTO token_usage (session_id, prompt_tokens, completion_tokens, cost, model, timestamp)
-         VALUES (?, ?, ?, ?, ?, ?)`,
-      );
-      const upd = db.prepare(
-        `UPDATE token_usage SET prompt_tokens=?, completion_tokens=?, cost=?, model=?, timestamp=? WHERE session_id=?`,
-      );
-      const find = db.prepare(`SELECT id FROM token_usage WHERE session_id = ?`);
+      new MigrationRunner(db).runMigrations();
+      const repo = new TokenRepo(db);
+      const tenantId = process.env.GENTLE_TENANT_ID || 'gentle-vanguard';
       const tx = db.transaction(() => {
         for (const r of rows) {
-          const ts = toSqliteDate(r.timeUpdated);
-          const existing = find.get(r.sessionId) as { id: number } | undefined;
-          if (existing) {
-            upd.run(r.tokensInput, r.tokensOutput, r.cost, r.model, ts, r.sessionId);
-            updated++;
-          } else {
-            ins.run(r.sessionId, r.tokensInput, r.tokensOutput, r.cost, r.model, ts);
-            inserted++;
-          }
+          const result = repo.upsertUsage(tenantId, {
+            sessionId: r.sessionId,
+            promptTokens: r.tokensInput,
+            completionTokens: r.tokensOutput,
+            cost: r.cost,
+            model: r.model,
+            timestamp: toSqliteDate(r.timeUpdated),
+          });
+          if (result === 'updated') updated++;
+          else inserted++;
         }
       });
       tx();
@@ -699,46 +704,27 @@ export function writeTransactionsToNexus(txns: TransactionUsage[]): {
   try {
     const db = new Database(NEXUS_DB);
     try {
-      db.exec(`CREATE TABLE IF NOT EXISTS token_transactions (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        message_id TEXT UNIQUE,
-        session_id TEXT,
-        agent TEXT,
-        model TEXT,
-        input_tokens INTEGER,
-        output_tokens INTEGER,
-        reasoning_tokens INTEGER,
-        cache_read_tokens INTEGER,
-        cache_write_tokens INTEGER,
-        cost REAL,
-        created_at TEXT
-      )`);
-      const ins = db.prepare(
-        `INSERT OR IGNORE INTO token_transactions
-         (message_id, session_id, agent, model, input_tokens, output_tokens, reasoning_tokens,
-          cache_read_tokens, cache_write_tokens, cost, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      new MigrationRunner(db).runMigrations();
+      const repo = new TokenRepo(db);
+      const tenantId = process.env.GENTLE_TENANT_ID || 'gentle-vanguard';
+      const result = repo.insertTransactions(
+        tenantId,
+        txns.map((t) => ({
+          messageId: t.messageId,
+          sessionId: t.sessionId,
+          agent: t.agent,
+          model: t.model,
+          inputTokens: t.input,
+          outputTokens: t.output,
+          reasoningTokens: t.reasoning,
+          cacheReadTokens: t.cacheRead,
+          cacheWriteTokens: t.cacheWrite,
+          cost: t.cost,
+          createdAt: toSqliteDate(t.timeCreated),
+        })),
       );
-      const tx = db.transaction(() => {
-        for (const t of txns) {
-          const info = ins.run(
-            t.messageId,
-            t.sessionId,
-            t.agent,
-            t.model,
-            t.input,
-            t.output,
-            t.reasoning,
-            t.cacheRead,
-            t.cacheWrite,
-            t.cost,
-            toSqliteDate(t.timeCreated),
-          );
-          if (info.changes > 0) inserted++;
-          else skipped++;
-        }
-      });
-      tx();
+      inserted = result.inserted;
+      skipped = result.skipped;
     } finally {
       db.close();
     }
@@ -890,10 +876,22 @@ export function ingestOnce(): {
   };
 
   // Fuentes agnósticas adicionales: cada una con su estado incremental propio.
-  const extraSources: Array<{ name: string; stateKey: string; data: { sessions: SessionUsage[]; txns: TransactionUsage[] } }> = [
-    { name: 'ZCode', stateKey: 'zcodeLastCompletedAt', data: readZcodeRollout(lastIngested('zcodeLastCompletedAt')) },
+  const extraSources: Array<{
+    name: string;
+    stateKey: string;
+    data: { sessions: SessionUsage[]; txns: TransactionUsage[] };
+  }> = [
+    {
+      name: 'ZCode',
+      stateKey: 'zcodeLastCompletedAt',
+      data: readZcodeRollout(lastIngested('zcodeLastCompletedAt')),
+    },
     { name: 'Codex', stateKey: 'codexLastTs', data: readCodexRollout(lastIngested('codexLastTs')) },
-    { name: 'MiniMax', stateKey: 'minimaxLastTs', data: readMinimaxUsage(lastIngested('minimaxLastTs')) },
+    {
+      name: 'MiniMax',
+      stateKey: 'minimaxLastTs',
+      data: readMinimaxUsage(lastIngested('minimaxLastTs')),
+    },
   ];
   for (const src of extraSources) {
     if (src.data.sessions.length === 0) continue;

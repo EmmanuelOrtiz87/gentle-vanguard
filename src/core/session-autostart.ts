@@ -489,11 +489,23 @@ async function main() {
   // attributed to ad-hoc sessions.
   process.env.SESSION_ID = sessionId;
   process.env.GENTLE_VANGUARD_SESSION_ID = sessionId;
-  mkdirSync(join(ROOT, '.runtime'), { recursive: true });
+  mkdirSync(join(ROOT, '.session'), { recursive: true });
+  // Single canonical session state file (plan P1: one authority). Merge with
+  // any existing state so richer data from other pipeline steps survives.
+  const canonicalSessionFile = join(ROOT, '.session', 'session-current.json');
+  let sessionState: Record<string, unknown> = {};
+  try {
+    sessionState = JSON.parse(readFileSync(canonicalSessionFile, 'utf-8')) as Record<
+      string,
+      unknown
+    >;
+  } catch {
+    /* no prior state — start fresh */
+  }
   writeFileSync(
-    join(ROOT, '.runtime', 'session-current.json'),
+    canonicalSessionFile,
     JSON.stringify(
-      { sessionId, id: sessionId, startedAt: sessionStartTime, status: 'active' },
+      { ...sessionState, sessionId, id: sessionId, startedAt: sessionStartTime, status: 'active' },
       null,
       2,
     ),

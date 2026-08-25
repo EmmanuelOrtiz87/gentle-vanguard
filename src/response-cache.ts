@@ -29,6 +29,7 @@ import {
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { db as getDbSingleton } from './database/db';
+import { resolveDeploymentTenantContext } from './deployment-tenant-context';
 
 // ─── Semantic Search Helpers (reused from skill-router) ──────────────────────
 
@@ -345,6 +346,26 @@ function ensureTokensColumn(): void {
   }
 }
 
+function resolveCacheTenantId(): string {
+  try {
+    return resolveDeploymentTenantContext().tenantId ?? 'gentle-vanguard';
+  } catch {
+    return 'gentle-vanguard';
+  }
+}
+
+function hasTenantColumn(db: DbManagerLike): boolean {
+  try {
+    const columns = db
+      .getDb()
+      .prepare("PRAGMA table_info('response_cache')")
+      .all() as Array<{ name?: string }>;
+    return columns.some((column) => column.name === 'tenant_id');
+  } catch {
+    return false;
+  }
+}
+
 // ─── Core Functions ───────────────────────────────────────────────────────────
 
 function generateCacheKey(input: string, context: string = ''): string {
@@ -458,13 +479,34 @@ function sqliteSet(
       }
     }
 
-    db.getDb()
-      .prepare(
-        `INSERT OR REPLACE INTO response_cache (key, response, model, input_text, input_embedding, created_at, expires_at, hit_count, tokens_saved)
-         VALUES (?, ?, NULL, ?, ?, datetime('now'), ?,
-           COALESCE((SELECT hit_count FROM response_cache WHERE key = ?), 0), ?)`,
-      )
-      .run(key, response, inputText, inputEmbedding, expiresAt, key, tokensSaved);
+    if (hasTenantColumn(db)) {
+      const tenantId = resolveCacheTenantId();
+      db.getDb()
+        .prepare(
+          `INSERT OR REPLACE INTO response_cache (key, response, model, input_text, input_embedding, created_at, expires_at, hit_count, tokens_saved, tenant_id)
+           VALUES (?, ?, NULL, ?, ?, datetime('now'), ?,
+             COALESCE((SELECT hit_count FROM response_cache WHERE key = ? AND tenant_id = ?), 0), ?, ?)`,
+        )
+        .run(
+          key,
+          response,
+          inputText,
+          inputEmbedding,
+          expiresAt,
+          key,
+          tenantId,
+          tokensSaved,
+          tenantId,
+        );
+    } else {
+      db.getDb()
+        .prepare(
+          `INSERT OR REPLACE INTO response_cache (key, response, model, input_text, input_embedding, created_at, expires_at, hit_count, tokens_saved)
+           VALUES (?, ?, NULL, ?, ?, datetime('now'), ?,
+             COALESCE((SELECT hit_count FROM response_cache WHERE key = ?), 0), ?)`,
+        )
+        .run(key, response, inputText, inputEmbedding, expiresAt, key, tokensSaved);
+    }
   } catch (e) {
     console.warn('[response-cache] SQLite write failed:', (e as Error).message);
   }

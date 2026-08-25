@@ -82,8 +82,8 @@ function launchDashboard(port: number): Promise<number> {
     const child = spawn(process.execPath, ['--import', 'tsx', WS_SCRIPT], {
       cwd: join(ROOT, 'apps', 'web-dashboard'),
       windowsHide: true,
-      detached: false, // NO detached para evitar orphans
-      stdio: ['ignore', 'pipe', 'pipe'],
+      detached: true,
+      stdio: 'ignore',
       env: {
         ...process.env,
         WS_PORT: String(port),
@@ -91,31 +91,17 @@ function launchDashboard(port: number): Promise<number> {
       },
     });
 
-    if (child.pid) {
-      writeFileSync(PID_FILE, String(child.pid), 'utf-8');
-      log(`Dashboard launched with PID ${child.pid} on port ${port}`);
-      resolve(child.pid);
-    } else {
+    if (!child.pid) {
       reject(new Error('Failed to get PID'));
+      return;
     }
-
-    // Log stderr para debugging
-    child.stderr?.on('data', (data) => {
-      log(`[STDERR] ${data.toString().trim()}`);
-    });
+    writeFileSync(PID_FILE, String(child.pid), 'utf-8');
+    log(`Dashboard launched with PID ${child.pid} on port ${port}`);
+    child.unref();
+    resolve(child.pid);
 
     child.on('error', (err) => {
       log(`[ERROR] Child process error: ${err.message}`);
-      reject(err);
-    });
-
-    child.on('exit', (code) => {
-      log(`[EXIT] Child process exited with code ${code}`);
-      try {
-        if (existsSync(PID_FILE)) unlinkSync(PID_FILE);
-      } catch {
-        // Ignorar
-      }
     });
   });
 }

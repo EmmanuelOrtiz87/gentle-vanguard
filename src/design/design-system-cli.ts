@@ -161,15 +161,24 @@ function cmdTokens(args: CliArgs): void {
   const tokens = readConfig() ?? buildDesignTokens(buildConfigFromArgs(args));
   const format = args.format ?? 'css';
 
+  let output: string;
+
   if (format === 'css') {
-    console.log(tokensToCSS(tokens));
+    output = tokensToCSS(tokens);
   } else if (format === 'scss') {
-    console.log(tokensToSCSS(tokens));
+    output = tokensToSCSS(tokens);
   } else if (format === 'json') {
-    console.log(JSON.stringify(tokens, null, 2));
+    output = JSON.stringify(tokens, null, 2);
   } else {
     console.error(`Unknown format: ${format} (expected css|json|scss)`);
     process.exit(1);
+  }
+
+  if (args.output) {
+    writeFileSync(resolve(process.cwd(), args.output), output!);
+    console.log(`🎨 Design tokens exported → ${resolve(process.cwd(), args.output)}`);
+  } else {
+    console.log(output!);
   }
 }
 

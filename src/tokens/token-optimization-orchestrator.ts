@@ -453,6 +453,8 @@ export async function runPipeline(
   const startTime = Date.now();
   const config = getConfig();
   const stages: PipelineStageResult[] = [];
+  const originalPrompt = input.prompt;
+  const originalContext = input.context ?? '';
 
   // Initialize cache (lazy singleton)
   const cache = new ResponseCache({
@@ -513,7 +515,13 @@ export async function runPipeline(
 
   // Stage 5: Cache Store
   const totalSavings = stages.reduce((sum, s) => sum + s.savings, 0);
-  const cacheStore = await runCacheStoreStage(input.prompt, response, totalSavings, context, input);
+  const cacheStore = await runCacheStoreStage(
+    originalPrompt,
+    response,
+    totalSavings,
+    context,
+    { ...input, context: originalContext },
+  );
   stages.push(cacheStore);
 
   const totalTokensIn = stages.reduce((sum, s) => sum + s.tokensIn, 0);
