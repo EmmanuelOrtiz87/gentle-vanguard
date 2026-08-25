@@ -2,10 +2,15 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { McpError, ErrorCode } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
-import { runSyncShell } from '../../src/core/run-command.js';
 import { readFileSync, readdirSync, existsSync, statSync, mkdirSync, writeFileSync } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import {
+  getApprovedCommand,
+  loadSkillExecutionPolicy,
+  parseCommandField,
+} from './skill-execution-policy.js';
+import { executeApprovedCommand } from './execution-worker.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,6 +18,7 @@ const ROOT = resolve(__dirname, '../..');
 const REGISTRY_PATH = join(ROOT, '.atl', 'skill-registry.md');
 const SKILLS_DIR = join(ROOT, 'skills');
 const STATS_PATH = join(ROOT, '.atl', 'skill-stats.json');
+const EXECUTION_POLICY_PATH = join(ROOT, 'config', 'mcp-execution-policy.json');
 
 interface ParsedSkill {
   name: string;
@@ -199,6 +205,7 @@ function trackCall(stats: SkillStats, tool: string, skillName?: string): void {
 
 const skills = buildSkillMap();
 const stats = loadStats();
+const executionPolicy = loadSkillExecutionPolicy(EXECUTION_POLICY_PATH);
 
 const server = new McpServer({
   name: 'gentle-vanguard-skills',
@@ -380,31 +387,28 @@ server.tool(
 
       const skillContent = readFileSync(skillMdPath, 'utf-8');
 
-      let commandField: string | undefined;
-      if (skillContent.startsWith('---')) {
-        const end = skillContent.indexOf('---', 3);
-        if (end !== -1) {
-          const fm = skillContent.slice(3, end).trim();
-          for (const field of ['command', 'run', 'script']) {
-            const re = new RegExp(`^${field}:\\s*(.+)$`, 'm');
-            const match = fm.match(re);
-            if (match !== null && match[1] !== undefined && match[1] !== '') {
-              commandField = match[1].trim();
-              break;
-            }
-          }
-        }
-      }
+      const commandField = parseCommandField(skillContent);
 
       if (commandField !== undefined && commandField !== '') {
-        log('INFO', 'execute_skill (running command)', { skill: name, command: commandField });
+        const approvedCommand = getApprovedCommand(executionPolicy, name, commandField);
+        if (approvedCommand === undefined) {
+          log('WARN', 'execute_skill command denied by policy', { skill: name });
+          throw new McpError(
+            ErrorCode.InvalidRequest,
+            `Command execution for skill "${name}" is not explicitly approved`,
+          );
+        }
+
+        log('INFO', 'execute_skill (running approved command)', {
+          skill: name,
+          executable: approvedCommand.executable,
+        });
         try {
-          const result = runSyncShell(commandField, {
-            timeout: 60000,
-            cwd: SKILLS_DIR,
-          }).stdout;
+          const result = await executeApprovedCommand(approvedCommand);
+          if (result.timedOut) throw new Error('execution timed out');
+          if (result.outputLimited) throw new Error('execution output limit exceeded');
           return {
-            content: [{ type: 'text', text: result }],
+            content: [{ type: 'text', text: result.stdout }],
           };
         } catch (execErr) {
           const msg = execErr instanceof Error ? execErr.message : String(execErr);

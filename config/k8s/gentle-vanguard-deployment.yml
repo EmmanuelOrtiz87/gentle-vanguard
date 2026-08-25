@@ -1,3 +1,11 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gentle-vanguard
+  labels:
+    app.kubernetes.io/name: gentle-vanguard
+    app.kubernetes.io/managed-by: kubectl
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,23 +28,50 @@ spec:
     spec:
       containers:
         - name: dashboard
+          # Pending: replace :latest with the release image tag or digest in the deployment pipeline.
           image: gentle-vanguard/dashboard:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
+              protocol: TCP
           env:
             - name: NODE_ENV
               value: 'production'
             - name: WS_PORT
               value: '8080'
+            - name: GENTLE_TENANT_ID
+              value: 'gentle-vanguard'
+            - name: GV_DASHBOARD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: gentle-vanguard-dashboard-secrets
+                  key: GV_DASHBOARD_TOKEN
+                  optional: false
           volumeMounts:
             - name: session-data
               mountPath: /workspace/.session
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           livenessProbe:
             httpGet:
               path: /api/health
               port: 8080
+            timeoutSeconds: 5
             initialDelaySeconds: 15
             periodSeconds: 30
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 8080
+            timeoutSeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
           resources:
             requests:
               memory: '256Mi'
@@ -44,6 +79,10 @@ spec:
             limits:
               memory: '512Mi'
               cpu: '500m'
+      volumes:
+        - name: session-data
+          persistentVolumeClaim:
+            claimName: gentle-vanguard-session-pvc
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -67,23 +106,61 @@ spec:
     spec:
       containers:
         - name: websocket
+          # Pending: replace :latest with the release image tag or digest in the deployment pipeline.
           image: gentle-vanguard/websocket:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8081
+              protocol: TCP
           env:
             - name: NODE_ENV
               value: 'production'
-            - name: PORT
+            - name: WS_PORT
               value: '8081'
+            - name: GENTLE_TENANT_ID
+              value: 'gentle-vanguard'
+            - name: GV_DASHBOARD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: gentle-vanguard-dashboard-secrets
+                  key: GV_DASHBOARD_TOKEN
+                  optional: false
           volumeMounts:
             - name: session-data
               mountPath: /workspace/.session
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           livenessProbe:
             httpGet:
               path: /api/health
               port: 8081
+            timeoutSeconds: 5
             initialDelaySeconds: 15
             periodSeconds: 30
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 8081
+            timeoutSeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          resources:
+            requests:
+              memory: '256Mi'
+              cpu: '250m'
+            limits:
+              memory: '512Mi'
+              cpu: '500m'
+      volumes:
+        - name: session-data
+          persistentVolumeClaim:
+            claimName: gentle-vanguard-session-pvc
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -107,18 +184,44 @@ spec:
     spec:
       containers:
         - name: mcp
+          # Pending: replace :latest with the release image tag or digest in the deployment pipeline.
           image: gentle-vanguard/mcp:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 3001
+              protocol: TCP
           env:
             - name: NODE_ENV
               value: 'production'
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           livenessProbe:
             httpGet:
               path: /health
               port: 3001
+            timeoutSeconds: 5
             initialDelaySeconds: 15
             periodSeconds: 30
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            timeoutSeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          resources:
+            requests:
+              memory: '128Mi'
+              cpu: '100m'
+            limits:
+              memory: '256Mi'
+              cpu: '250m'
 ---
 apiVersion: v1
 kind: Service

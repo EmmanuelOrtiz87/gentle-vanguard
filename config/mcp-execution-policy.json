@@ -1,0 +1,5 @@
+{
+  "$schema": "./mcp-execution-policy.schema.json",
+  "version": "1.0.0",
+  "skills": {}
+}

@@ -1,0 +1,11 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: operator-approved-placeholder
+spec:
+  podSelector:
+    matchLabels:
+      app: gentle-vanguard
+  policyTypes:
+    - Ingress
+    - Egress
