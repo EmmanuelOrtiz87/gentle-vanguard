@@ -45,7 +45,7 @@ const TRANSLATIONS: Record<Locale, Record<string, MetricInfo>> = {
       label: 'Feedback Score',
       description: 'User satisfaction score from feedback',
       what: 'Percentage of positive feedback (thumbs up) out of total feedback votes. A score above 80% indicates high user satisfaction.',
-      how: 'Collected via the thumbs up/down buttons on each trace. Stored in .runtime/metrics/feedback.json. Score = thumbsUp / (thumbsUp + thumbsDown) × 100.',
+      how: 'Collected via the thumbs up/down buttons on each trace. Stored in tenant-scoped SQLite feedback. Score = thumbsUp / (thumbsUp + thumbsDown) × 100.',
     },
     sla: {
       label: 'SLA Compliance',
@@ -209,7 +209,7 @@ const TRANSLATIONS: Record<Locale, Record<string, MetricInfo>> = {
       label: 'Puntuación de Feedback',
       description: 'Puntuación de satisfacción del usuario',
       what: 'Porcentaje de feedback positivo (pulgar arriba) del total de votos. Una puntuación superior al 80% indica alta satisfacción del usuario.',
-      how: 'Recolectado mediante botones de pulgar arriba/abajo en cada traza. Almacenado en .runtime/metrics/feedback.json. Puntuación = thumbsUp / (thumbsUp + thumbsDown) × 100.',
+      how: 'Recolectado mediante botones de pulgar arriba/abajo en cada traza. Almacenado en SQLite con tenant. Puntuación = thumbsUp / (thumbsUp + thumbsDown) × 100.',
     },
     sla: {
       label: 'Cumplimiento SLA',
@@ -291,7 +291,8 @@ const TRANSLATIONS: Record<Locale, Record<string, MetricInfo>> = {
     },
     stack_capabilities: {
       label: 'Capacidades del Stack',
-      description: 'Resiliencia autónoma: detección de anomalías, circuit breakers y reparación de BD',
+      description:
+        'Resiliencia autónoma: detección de anomalías, circuit breakers y reparación de BD',
       what: 'Agrega tres subsistemas de auto-reparación: anomalías detectadas (con puntuación de confianza y bandera de auto-reparación), estados de circuit breakers (CLOSED/HALF_OPEN/OPEN) y estadísticas de mantenimiento del SQLite de Nexus (vacuum, reindex, prune).',
       how: 'Los datos provienen del ciclo de salud de la watchtower de mantenimiento y la telemetría del DatabaseManager en .runtime/gentle-vanguard.db, enviados en vivo vía WebSocket.',
     },
@@ -373,7 +374,7 @@ const TRANSLATIONS: Record<Locale, Record<string, MetricInfo>> = {
       label: 'Pontuação de Feedback',
       description: 'Pontuação de satisfação do usuário',
       what: 'Percentual de feedback positivo (polegar para cima) do total de votos. Uma pontuação acima de 80% indica alta satisfação do usuário.',
-      how: 'Coletado através dos botões de polegar para cima/baixo em cada trace. Armazenado em .runtime/metrics/feedback.json. Pontuação = thumbsUp / (thumbsUp + thumbsDown) × 100.',
+      how: 'Coletado através dos botões de polegar para cima/baixo em cada trace. Armazenado em SQLite com tenant. Pontuação = thumbsUp / (thumbsUp + thumbsDown) × 100.',
     },
     sla: {
       label: 'Conformidade SLA',
@@ -455,7 +456,8 @@ const TRANSLATIONS: Record<Locale, Record<string, MetricInfo>> = {
     },
     stack_capabilities: {
       label: 'Capacidades do Stack',
-      description: 'Resiliência autônoma: detecção de anomalias, circuit breakers e reparação do BD',
+      description:
+        'Resiliência autônoma: detecção de anomalias, circuit breakers e reparação do BD',
       what: 'Agrega três subsistemas de auto-reparação: anomalias detectadas (com pontuação de confiança e flag de auto-reparação), estados de circuit breakers (CLOSED/HALF_OPEN/OPEN) e estatísticas de manutenção do SQLite do Nexus (vacuum, reindex, prune).',
       how: 'Os dados vêm do ciclo de saúde da watchtower de manutenção e da telemetria do DatabaseManager em .runtime/gentle-vanguard.db, enviados ao vivo via WebSocket.',
     },
@@ -609,7 +611,8 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.just_now': 'just now',
     'ui.min_ago': 'min ago',
     'ui.trace_waterfall': 'Trace Waterfall',
-    'ui.waterfall_subtitle': 'Each row is a root span of a distributed trace; child spans nest below. Bars are positioned by start offset and sized by duration relative to their trace root.',
+    'ui.waterfall_subtitle':
+      'Each row is a root span of a distributed trace; child spans nest below. Bars are positioned by start offset and sized by duration relative to their trace root.',
     'ui.search_traces': 'Search traces...',
     'ui.all_models': 'All models',
     'ui.showing_of': 'Showing {shown} of {total} traces',
@@ -623,9 +626,12 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.legend_bar': 'bar position \u221d start offset · length \u221d duration',
     'ui.col_name': 'Name',
     'ui.col_timeline': 'Timeline',
-    'ui.tip_name': 'Span name: the operation being measured (e.g. agent turn, tool call, ingest cycle).',
-    'ui.tip_timeline': 'Relative bar: length proportional to this span duration vs the slowest span shown.',
-    'ui.tip_duration_wf': 'Wall-clock duration in ms (end \u2212 start, self-healed when clock skew is detected).',
+    'ui.tip_name':
+      'Span name: the operation being measured (e.g. agent turn, tool call, ingest cycle).',
+    'ui.tip_timeline':
+      'Relative bar: length proportional to this span duration vs the slowest span shown.',
+    'ui.tip_duration_wf':
+      'Wall-clock duration in ms (end \u2212 start, self-healed when clock skew is detected).',
     'ui.tip_model': 'LLM model that processed this span, when applicable.',
     'ui.total_traces': 'Total Traces',
     'ui.avg_duration': 'Avg Duration',
@@ -634,7 +640,8 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.tip_total_traces': 'Root spans currently stored in the Nexus traces table.',
     'ui.tip_avg_duration': 'Mean wall-clock time of completed spans with valid timing.',
     'ui.tip_error_rate': 'Fraction of spans ending with status=error. SLO threshold: \u22645%.',
-    'ui.tip_active_spans': 'Spans started but not yet ended (running). They pulse blue in the waterfall.',
+    'ui.tip_active_spans':
+      'Spans started but not yet ended (running). They pulse blue in the waterfall.',
     'ui.range_all': 'All time',
     'ui.range_1h': 'Last hour',
     'ui.range_24h': 'Last 24 hours',
@@ -696,13 +703,15 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.audit_search_placeholder': 'event, actor, resource or status',
     'ui.search': 'Search',
     'ui.no_audit_entries_match': 'No audit entries match',
-    'ui.audit_empty_hint': 'The viewer reads the native session audit directory as events are written.',
+    'ui.audit_empty_hint':
+      'The viewer reads the native session audit directory as events are written.',
     'ui.time': 'Time',
     'ui.event': 'Event',
     'ui.actor': 'Actor',
     'ui.evidence': 'Evidence',
     'ui.knowledge_base': 'Knowledge Base',
-    'ui.kp_unified_search': 'Unified search across events, traces, feedback, checkpoints, and engram',
+    'ui.kp_unified_search':
+      'Unified search across events, traces, feedback, checkpoints, and engram',
     'ui.kp_search_placeholder': 'Search knowledge base... (Ctrl+Enter for new search)',
     'ui.kp_searching': 'Searching...',
     'ui.kp_search': 'Search',
@@ -733,7 +742,8 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.sort_name': 'Sort: name',
     'ui.mkt_showing_of': 'Showing {shown} of {total} skills',
     'ui.catalog_governance': 'Catalog governance',
-    'ui.mkt_catalog_summary': '{valid} valid \u00b7 {invalid} require migration \u00b7 {total} total',
+    'ui.mkt_catalog_summary':
+      '{valid} valid \u00b7 {invalid} require migration \u00b7 {total} total',
     'ui.mkt_validation_loading': 'Validation report loading...',
     'ui.mkt_hide_review_queue': 'Hide review queue',
     'ui.mkt_open_review_queue': 'Open review queue',
@@ -754,7 +764,8 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.mkt_install_skill': 'Install Skill',
     'ui.mkt_submit_skill': 'Submit Community Skill',
     'ui.mkt_share_hint': 'Share your skill with the Gentle-Vanguard community.',
-    'ui.mkt_submitted_success': 'Skill submitted successfully! It will appear in the marketplace shortly.',
+    'ui.mkt_submitted_success':
+      'Skill submitted successfully! It will appear in the marketplace shortly.',
     'ui.submission_errors': 'Submission errors:',
     'ui.mkt_skill_name': 'Skill Name',
     'ui.mkt_kebab_hint': 'Use kebab-case (e.g., my-awesome-skill)',
@@ -767,7 +778,8 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.mkt_triggers': 'Triggers',
     'ui.mkt_triggers_hint': 'Comma-separated words that trigger this skill',
     'ui.mkt_skillmd_content': 'SKILL.md Content',
-    'ui.mkt_skillmd_hint': 'Must include YAML frontmatter, a Usage/When to Use section, and an Examples section.',
+    'ui.mkt_skillmd_hint':
+      'Must include YAML frontmatter, a Usage/When to Use section, and an Examples section.',
     'ui.mkt_submitting': 'Submitting...',
     'ui.mr_title': 'Multi-repo Mesh',
     'ui.mr_orchestration': 'MCP server orchestration across {n} workspace(s)',
@@ -786,8 +798,10 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.mr_configure_hint': 'Configure peers in config/federation-config.json or click Discover.',
     'ui.mr_no_mcp_servers': 'No MCP servers configured',
     'ui.tc_active_tasks': '{n} active task(s)',
-    'ui.tasks_page_subtitle': 'Live task state from the agent event stream; dispatch actions appear here when work starts.',
-    'ui.timeline_page_subtitle': 'Chronological events received from the real-time stack event bus.',
+    'ui.tasks_page_subtitle':
+      'Live task state from the agent event stream; dispatch actions appear here when work starts.',
+    'ui.timeline_page_subtitle':
+      'Chronological events received from the real-time stack event bus.',
     'ui.last_activity': 'Last activity',
     'ui.dashboard_runtime_title': 'Dashboard runtime',
     'ui.dashboard_runtime_source': 'Real metrics from the dashboard API server',
@@ -797,8 +811,10 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.dashboard_http_errors': 'HTTP errors',
     'ui.dashboard_http_latency': 'Avg latency',
     'ui.dashboard_ws_peak': 'WS peak',
-    'ui.agent_page_subtitle': 'Start an agent session, inspect available tools, and follow the live execution stream.',
-    'ui.mr_page_subtitle': 'Discover workspaces and inspect the live status of their registered MCP servers.',
+    'ui.agent_page_subtitle':
+      'Start an agent session, inspect available tools, and follow the live execution stream.',
+    'ui.mr_page_subtitle':
+      'Discover workspaces and inspect the live status of their registered MCP servers.',
     'ui.no_tasks_yet': 'No tasks yet',
     'ui.tasks_appear_when_dispatched': 'Tasks appear when agent activities are dispatched',
     'ui.quick_actions': 'Quick actions',
@@ -823,8 +839,7 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.calls': 'calls',
     'ui.sessions_word': 'sessions',
     'ui.all': 'All',
-    'ui.no_sessions_found':
-      'No sessions found. Run a pipeline to generate data.',
+    'ui.no_sessions_found': 'No sessions found. Run a pipeline to generate data.',
     'ui.no_token_usage_yet': 'No token usage data yet',
     'ui.no_skill_usage_yet': 'No skill usage data yet',
     'ui.no_contract_results_yet': 'No contract results yet',
@@ -872,8 +887,7 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.db_healing': 'DB Healing',
     'ui.auto_healed': 'auto-healed',
     'ui.capabilities_idle': 'Stack capabilities idle',
-    'ui.capabilities_hint':
-      'Anomalies, circuit breakers and DB healing reports will appear here',
+    'ui.capabilities_hint': 'Anomalies, circuit breakers and DB healing reports will appear here',
     'ui.heals': 'Heals',
     'ui.attempts': 'Attempts',
     'ui.vacuums': 'Vacuums',
@@ -911,8 +925,7 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.failing': 'Failing',
     'ui.avg_tokens': 'Avg Tokens',
     'ui.avg_sessions': 'Avg Sessions',
-    'ui.no_temporal_data':
-      'No temporal data yet — activity will appear here as metrics accumulate',
+    'ui.no_temporal_data': 'No temporal data yet — activity will appear here as metrics accumulate',
     'ui.timeline_footer_prefix': 'Average token usage and session activity by hour (last ',
     'ui.data_points_suffix': ' data points)',
     'ui.live': 'Live',
@@ -1047,13 +1060,15 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.just_now': 'ahora mismo',
     'ui.min_ago': 'hace min',
     'ui.trace_waterfall': 'Cascada de Trazas',
-    'ui.waterfall_subtitle': 'Cada fila es un span raíz de una traza distribuida; los spans hijos se anidan debajo. Las barras se posicionan por offset de inicio y su longitud es proporcional a la duración respecto a la raíz de su traza.',
+    'ui.waterfall_subtitle':
+      'Cada fila es un span raíz de una traza distribuida; los spans hijos se anidan debajo. Las barras se posicionan por offset de inicio y su longitud es proporcional a la duración respecto a la raíz de su traza.',
     'ui.search_traces': 'Buscar trazas...',
     'ui.all_models': 'Todos los modelos',
     'ui.showing_of': 'Mostrando {shown} de {total} trazas',
     'ui.clear_filters': 'Limpiar filtros',
     'ui.no_traces': 'No hay trazas disponibles. Inicia una sesión para generar datos.',
-    'ui.traces_source': 'Los spans vienen de Nexus (JSONL de .telemetry ingerido en la tabla traces).',
+    'ui.traces_source':
+      'Los spans vienen de Nexus (JSONL de .telemetry ingerido en la tabla traces).',
     'ui.no_matches': 'Ninguna traza coincide con los filtros activos.',
     'ui.legend_completed': 'Completado',
     'ui.legend_running': 'En ejecución',
@@ -1061,9 +1076,12 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.legend_bar': 'posición de barra \u221d offset de inicio · longitud \u221d duración',
     'ui.col_name': 'Nombre',
     'ui.col_timeline': 'Línea de tiempo',
-    'ui.tip_name': 'Nombre del span: la operación medida (ej. turno de agente, llamada a herramienta, ciclo de ingesta).',
-    'ui.tip_timeline': 'Barra relativa: longitud proporcional a la duración del span vs el más lento mostrado.',
-    'ui.tip_duration_wf': 'Duración real en ms (fin \u2212 inicio, autocorregida si se detecta skew de reloj).',
+    'ui.tip_name':
+      'Nombre del span: la operación medida (ej. turno de agente, llamada a herramienta, ciclo de ingesta).',
+    'ui.tip_timeline':
+      'Barra relativa: longitud proporcional a la duración del span vs el más lento mostrado.',
+    'ui.tip_duration_wf':
+      'Duración real en ms (fin \u2212 inicio, autocorregida si se detecta skew de reloj).',
     'ui.tip_model': 'Modelo LLM que procesó este span, cuando aplica.',
     'ui.total_traces': 'Trazas totales',
     'ui.avg_duration': 'Duración promedio',
@@ -1072,12 +1090,14 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.tip_total_traces': 'Spans raíz almacenados actualmente en la tabla traces de Nexus.',
     'ui.tip_avg_duration': 'Tiempo medio de spans completados con timing válido.',
     'ui.tip_error_rate': 'Fracción de spans que terminaron con status=error. Umbral SLO: \u22645%.',
-    'ui.tip_active_spans': 'Spans iniciados sin finalizar (en ejecución). Pulsan en azul en la cascada.',
+    'ui.tip_active_spans':
+      'Spans iniciados sin finalizar (en ejecución). Pulsan en azul en la cascada.',
     'ui.range_all': 'Todo el histórico',
     'ui.range_1h': 'Última hora',
     'ui.range_24h': 'Últimas 24 horas',
     'ui.range_7d': 'Últimos 7 días',
-    'ui.tip_range': 'Ventana temporal: solo se obtienen y miden los spans iniciados dentro de este período.',
+    'ui.tip_range':
+      'Ventana temporal: solo se obtienen y miden los spans iniciados dentro de este período.',
     'ui.export_csv': 'Exportar los spans filtrados actuales a CSV.',
     'ui.live_updated': 'En vivo · actualizado',
     'ui.offline_cached': 'Sin conexión · mostrando datos en caché',
@@ -1095,7 +1115,8 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.zoom_hint': 'Arrastra en la regla para hacer zoom',
     'ui.reset_zoom': 'Restablecer zoom',
     'ui.content_operations': 'Operaciones de Contenido',
-    'ui.cops_subtitle': 'Pipeline de publicación offline-first con transiciones de estado auditables',
+    'ui.cops_subtitle':
+      'Pipeline de publicación offline-first con transiciones de estado auditables',
     'ui.cops_refresh_title': 'Actualizar operaciones de contenido',
     'ui.cops_load_error': 'No se pudieron cargar las operaciones de contenido',
     'ui.cops_op_failed': 'La operación falló',
@@ -1127,21 +1148,24 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.cops_not_packaged': 'Aún no empaquetado',
     'ui.cops_no_caption': 'No se ha generado ningún paquete de caption.',
     'ui.audit_log': 'Registro de auditoría',
-    'ui.audit_subtitle': 'Actividad de sesión local y de solo anexado con evidencia JSONL buscable.',
+    'ui.audit_subtitle':
+      'Actividad de sesión local y de solo anexado con evidencia JSONL buscable.',
     'ui.audit_refresh': 'Actualizar registro de auditoría',
     'ui.audit_unavailable': 'Registro de auditoría no disponible',
     'ui.search_evidence': 'Buscar evidencia',
     'ui.audit_search_placeholder': 'evento, actor, recurso o estado',
     'ui.search': 'Buscar',
     'ui.no_audit_entries_match': 'Ninguna entrada de auditoría coincide',
-    'ui.audit_empty_hint': 'El visor lee el directorio nativo de auditoría de sesiones a medida que se escriben los eventos.',
+    'ui.audit_empty_hint':
+      'El visor lee el directorio nativo de auditoría de sesiones a medida que se escriben los eventos.',
     'ui.time': 'Hora',
     'ui.event': 'Evento',
     'ui.actor': 'Actor',
     'ui.evidence': 'Evidencia',
     'ui.knowledge_base': 'Base de Conocimiento',
     'ui.kp_unified_search': 'Búsqueda unificada en eventos, trazas, feedback, checkpoints y engram',
-    'ui.kp_search_placeholder': 'Buscar en la base de conocimiento... (Ctrl+Enter para nueva búsqueda)',
+    'ui.kp_search_placeholder':
+      'Buscar en la base de conocimiento... (Ctrl+Enter para nueva búsqueda)',
     'ui.kp_searching': 'Buscando...',
     'ui.kp_search': 'Buscar',
     'ui.kp_retry': 'Reintentar',
@@ -1171,7 +1195,8 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.sort_name': 'Ordenar: nombre',
     'ui.mkt_showing_of': 'Mostrando {shown} de {total} skills',
     'ui.catalog_governance': 'Gobernanza del catálogo',
-    'ui.mkt_catalog_summary': '{valid} válidas \u00b7 {invalid} requieren migración \u00b7 {total} totales',
+    'ui.mkt_catalog_summary':
+      '{valid} válidas \u00b7 {invalid} requieren migración \u00b7 {total} totales',
     'ui.mkt_validation_loading': 'Cargando reporte de validación...',
     'ui.mkt_hide_review_queue': 'Ocultar cola de revisión',
     'ui.mkt_open_review_queue': 'Abrir cola de revisión',
@@ -1205,7 +1230,8 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.mkt_triggers': 'Disparadores',
     'ui.mkt_triggers_hint': 'Palabras separadas por comas que disparan esta skill',
     'ui.mkt_skillmd_content': 'Contenido de SKILL.md',
-    'ui.mkt_skillmd_hint': 'Debe incluir frontmatter YAML, una sección Usage/When to Use y una sección Examples.',
+    'ui.mkt_skillmd_hint':
+      'Debe incluir frontmatter YAML, una sección Usage/When to Use y una sección Examples.',
     'ui.mkt_submitting': 'Enviando...',
     'ui.mr_title': 'Malla Multi-repo',
     'ui.mr_orchestration': 'Orquestación de servidores MCP en {n} workspace(s)',
@@ -1221,11 +1247,14 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.failed_load_mesh': 'No se pudieron cargar los datos de la malla.',
     'ui.mr_retry': 'Reintentar',
     'ui.no_mesh_workspaces': 'No se encontraron workspaces en la malla.',
-    'ui.mr_configure_hint': 'Configura peers en config/federation-config.json o haz clic en Descubrir.',
+    'ui.mr_configure_hint':
+      'Configura peers en config/federation-config.json o haz clic en Descubrir.',
     'ui.mr_no_mcp_servers': 'Sin servidores MCP configurados',
     'ui.tc_active_tasks': '{n} tarea(s) activa(s)',
-    'ui.tasks_page_subtitle': 'Estado vivo de tareas desde el flujo de eventos de agentes; aquí aparecen al comenzar el trabajo.',
-    'ui.timeline_page_subtitle': 'Eventos cronológicos recibidos del bus de eventos en tiempo real del stack.',
+    'ui.tasks_page_subtitle':
+      'Estado vivo de tareas desde el flujo de eventos de agentes; aquí aparecen al comenzar el trabajo.',
+    'ui.timeline_page_subtitle':
+      'Eventos cronológicos recibidos del bus de eventos en tiempo real del stack.',
     'ui.last_activity': 'Última actividad',
     'ui.dashboard_runtime_title': 'Runtime del dashboard',
     'ui.dashboard_runtime_source': 'Métricas reales del servidor API del dashboard',
@@ -1235,10 +1264,13 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.dashboard_http_errors': 'Errores HTTP',
     'ui.dashboard_http_latency': 'Latencia media',
     'ui.dashboard_ws_peak': 'Pico WS',
-    'ui.agent_page_subtitle': 'Inicia una sesión de agente, inspecciona sus herramientas y sigue la ejecución en vivo.',
-    'ui.mr_page_subtitle': 'Descubre workspaces e inspecciona el estado real de sus servidores MCP registrados.',
+    'ui.agent_page_subtitle':
+      'Inicia una sesión de agente, inspecciona sus herramientas y sigue la ejecución en vivo.',
+    'ui.mr_page_subtitle':
+      'Descubre workspaces e inspecciona el estado real de sus servidores MCP registrados.',
     'ui.no_tasks_yet': 'Aún no hay tareas',
-    'ui.tasks_appear_when_dispatched': 'Las tareas aparecen cuando se despachan actividades de agentes',
+    'ui.tasks_appear_when_dispatched':
+      'Las tareas aparecen cuando se despachan actividades de agentes',
     'ui.quick_actions': 'Acciones rápidas',
     'ui.tc_dispatch': 'Despachar {agent}',
     'ui.select_placeholder': 'Seleccionar...',
@@ -1261,13 +1293,11 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.calls': 'llamadas',
     'ui.sessions_word': 'sesiones',
     'ui.all': 'Todas',
-    'ui.no_sessions_found':
-      'No se encontraron sesiones. Ejecuta un pipeline para generar datos.',
+    'ui.no_sessions_found': 'No se encontraron sesiones. Ejecuta un pipeline para generar datos.',
     'ui.no_token_usage_yet': 'Aún no hay datos de uso de tokens',
     'ui.no_skill_usage_yet': 'Aún no hay datos de uso de skills',
     'ui.no_contract_results_yet': 'Aún no hay resultados de contratos',
-    'ui.no_routing_rules_configured':
-      'No hay reglas de enrutamiento configuradas',
+    'ui.no_routing_rules_configured': 'No hay reglas de enrutamiento configuradas',
     'ui.most_used': 'Más usada:',
     'ui.tokens_word': 'tokens',
     'ui.total_skills': 'Skills Totales',
@@ -1297,8 +1327,7 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.total_workers': 'Total de Workers',
     'ui.reports': 'Reportes',
     'ui.no_active_workers': 'No hay workers activos',
-    'ui.workers_hint':
-      'Los workers aparecerán aquí cuando se despachen tareas',
+    'ui.workers_hint': 'Los workers aparecerán aquí cuando se despachen tareas',
     'ui.output': 'Salida',
     'ui.error_word': 'Error',
     'ui.worker_dir': 'Directorio del worker:',
@@ -1488,7 +1517,8 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.just_now': 'agora mesmo',
     'ui.min_ago': 'há min',
     'ui.trace_waterfall': 'Cascata de Rastros',
-    'ui.waterfall_subtitle': 'Cada linha é um span raiz de um rastro distribuído; os spans filhos ficam aninhados abaixo. As barras são posicionadas pelo offset de início e dimensionadas pela duração em relação à raiz do seu rastro.',
+    'ui.waterfall_subtitle':
+      'Cada linha é um span raiz de um rastro distribuído; os spans filhos ficam aninhados abaixo. As barras são posicionadas pelo offset de início e dimensionadas pela duração em relação à raiz do seu rastro.',
     'ui.search_traces': 'Buscar rastros...',
     'ui.all_models': 'Todos os modelos',
     'ui.showing_of': 'Mostrando {shown} de {total} rastros',
@@ -1502,9 +1532,12 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.legend_bar': 'posição da barra \u221d offset de início · comprimento \u221d duração',
     'ui.col_name': 'Nome',
     'ui.col_timeline': 'Linha do tempo',
-    'ui.tip_name': 'Nome do span: a operação medida (ex.: turno do agente, chamada de ferramenta, ciclo de ingestão).',
-    'ui.tip_timeline': 'Barra relativa: comprimento proporcional à duração do span vs o mais lento exibido.',
-    'ui.tip_duration_wf': 'Duração real em ms (fim \u2212 início, autocorrigida se detectado skew de relógio).',
+    'ui.tip_name':
+      'Nome do span: a operação medida (ex.: turno do agente, chamada de ferramenta, ciclo de ingestão).',
+    'ui.tip_timeline':
+      'Barra relativa: comprimento proporcional à duração do span vs o mais lento exibido.',
+    'ui.tip_duration_wf':
+      'Duração real em ms (fim \u2212 início, autocorrigida se detectado skew de relógio).',
     'ui.tip_model': 'Modelo LLM que processou este span, quando aplicável.',
     'ui.total_traces': 'Rastros totais',
     'ui.avg_duration': 'Duração média',
@@ -1513,12 +1546,14 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.tip_total_traces': 'Spans raiz atualmente armazenados na tabela traces do Nexus.',
     'ui.tip_avg_duration': 'Tempo médio dos spans concluídos com timing válido.',
     'ui.tip_error_rate': 'Fração de spans que terminaram com status=error. Limiar SLO: \u22645%.',
-    'ui.tip_active_spans': 'Spans iniciados sem finalizar (em execução). Pulsam em azul na cascata.',
+    'ui.tip_active_spans':
+      'Spans iniciados sem finalizar (em execução). Pulsam em azul na cascata.',
     'ui.range_all': 'Todo o histórico',
     'ui.range_1h': 'Última hora',
     'ui.range_24h': 'Últimas 24 horas',
     'ui.range_7d': 'Últimos 7 dias',
-    'ui.tip_range': 'Janela temporal: apenas os spans iniciados neste período são obtidos e medidos.',
+    'ui.tip_range':
+      'Janela temporal: apenas os spans iniciados neste período são obtidos e medidos.',
     'ui.export_csv': 'Exportar os spans filtrados atuais para CSV.',
     'ui.live_updated': 'Ao vivo · atualizado',
     'ui.offline_cached': 'Offline · exibindo dados em cache',
@@ -1568,14 +1603,16 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.cops_not_packaged': 'Ainda não empacotado',
     'ui.cops_no_caption': 'Nenhum pacote de caption foi gerado.',
     'ui.audit_log': 'Log de auditoria',
-    'ui.audit_subtitle': 'Atividade de sessão local e somente-anexável com evidência JSONL pesquisável.',
+    'ui.audit_subtitle':
+      'Atividade de sessão local e somente-anexável com evidência JSONL pesquisável.',
     'ui.audit_refresh': 'Atualizar log de auditoria',
     'ui.audit_unavailable': 'Log de auditoria indisponível',
     'ui.search_evidence': 'Pesquisar evidência',
     'ui.audit_search_placeholder': 'evento, ator, recurso ou status',
     'ui.search': 'Pesquisar',
     'ui.no_audit_entries_match': 'Nenhuma entrada de auditoria corresponde',
-    'ui.audit_empty_hint': 'O visualizador lê o diretório nativo de auditoria de sessões conforme os eventos são gravados.',
+    'ui.audit_empty_hint':
+      'O visualizador lê o diretório nativo de auditoria de sessões conforme os eventos são gravados.',
     'ui.time': 'Hora',
     'ui.event': 'Evento',
     'ui.actor': 'Ator',
@@ -1612,7 +1649,8 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.sort_name': 'Ordenar: nome',
     'ui.mkt_showing_of': 'Mostrando {shown} de {total} skills',
     'ui.catalog_governance': 'Governança do catálogo',
-    'ui.mkt_catalog_summary': '{valid} válidas \u00b7 {invalid} requerem migração \u00b7 {total} totais',
+    'ui.mkt_catalog_summary':
+      '{valid} válidas \u00b7 {invalid} requerem migração \u00b7 {total} totais',
     'ui.mkt_validation_loading': 'Carregando relatório de validação...',
     'ui.mkt_hide_review_queue': 'Ocultar fila de revisão',
     'ui.mkt_open_review_queue': 'Abrir fila de revisão',
@@ -1646,7 +1684,8 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.mkt_triggers': 'Gatilhos',
     'ui.mkt_triggers_hint': 'Palavras separadas por vírgulas que acionam esta skill',
     'ui.mkt_skillmd_content': 'Conteúdo do SKILL.md',
-    'ui.mkt_skillmd_hint': 'Deve incluir frontmatter YAML, uma seção Usage/When to Use e uma seção Examples.',
+    'ui.mkt_skillmd_hint':
+      'Deve incluir frontmatter YAML, uma seção Usage/When to Use e uma seção Examples.',
     'ui.mkt_submitting': 'Enviando...',
     'ui.mr_title': 'Malha Multi-repo',
     'ui.mr_orchestration': 'Orquestração de servidores MCP em {n} workspace(s)',
@@ -1662,11 +1701,14 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.failed_load_mesh': 'Falha ao carregar os dados da malha.',
     'ui.mr_retry': 'Tentar novamente',
     'ui.no_mesh_workspaces': 'Nenhum workspace da malha encontrado.',
-    'ui.mr_configure_hint': 'Configure peers em config/federation-config.json ou clique em Descobrir.',
+    'ui.mr_configure_hint':
+      'Configure peers em config/federation-config.json ou clique em Descobrir.',
     'ui.mr_no_mcp_servers': 'Sem servidores MCP configurados',
     'ui.tc_active_tasks': '{n} tarefa(s) ativa(s)',
-    'ui.tasks_page_subtitle': 'Estado ao vivo das tarefas a partir do fluxo de eventos dos agentes; aparecem quando o trabalho começa.',
-    'ui.timeline_page_subtitle': 'Eventos cronológicos recebidos do barramento de eventos em tempo real do stack.',
+    'ui.tasks_page_subtitle':
+      'Estado ao vivo das tarefas a partir do fluxo de eventos dos agentes; aparecem quando o trabalho começa.',
+    'ui.timeline_page_subtitle':
+      'Eventos cronológicos recebidos do barramento de eventos em tempo real do stack.',
     'ui.last_activity': 'Última atividade',
     'ui.dashboard_runtime_title': 'Runtime do dashboard',
     'ui.dashboard_runtime_source': 'Métricas reais do servidor API do dashboard',
@@ -1676,10 +1718,13 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.dashboard_http_errors': 'Erros HTTP',
     'ui.dashboard_http_latency': 'Latência média',
     'ui.dashboard_ws_peak': 'Pico WS',
-    'ui.agent_page_subtitle': 'Inicie uma sessão de agente, inspecione ferramentas disponíveis e acompanhe a execução ao vivo.',
-    'ui.mr_page_subtitle': 'Descubra workspaces e inspecione o estado real dos servidores MCP registrados.',
+    'ui.agent_page_subtitle':
+      'Inicie uma sessão de agente, inspecione ferramentas disponíveis e acompanhe a execução ao vivo.',
+    'ui.mr_page_subtitle':
+      'Descubra workspaces e inspecione o estado real dos servidores MCP registrados.',
     'ui.no_tasks_yet': 'Ainda não há tarefas',
-    'ui.tasks_appear_when_dispatched': 'As tarefas aparecem quando atividades de agentes são despachadas',
+    'ui.tasks_appear_when_dispatched':
+      'As tarefas aparecem quando atividades de agentes são despachadas',
     'ui.quick_actions': 'Ações rápidas',
     'ui.tc_dispatch': 'Despachar {agent}',
     'ui.select_placeholder': 'Selecionar...',
@@ -1702,13 +1747,11 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.calls': 'chamadas',
     'ui.sessions_word': 'sessões',
     'ui.all': 'Todas',
-    'ui.no_sessions_found':
-      'Nenhuma sessão encontrada. Execute um pipeline para gerar dados.',
+    'ui.no_sessions_found': 'Nenhuma sessão encontrada. Execute um pipeline para gerar dados.',
     'ui.no_token_usage_yet': 'Ainda não há dados de uso de tokens',
     'ui.no_skill_usage_yet': 'Ainda não há dados de uso de skills',
     'ui.no_contract_results_yet': 'Ainda não há resultados de contratos',
-    'ui.no_routing_rules_configured':
-      'Nenhuma regra de roteamento configurada',
+    'ui.no_routing_rules_configured': 'Nenhuma regra de roteamento configurada',
     'ui.most_used': 'Mais usada:',
     'ui.tokens_word': 'tokens',
     'ui.total_skills': 'Skills Totais',
@@ -1738,8 +1781,7 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.total_workers': 'Total de Workers',
     'ui.reports': 'Relatórios',
     'ui.no_active_workers': 'Nenhum worker ativo',
-    'ui.workers_hint':
-      'Os workers aparecerão aqui quando tarefas forem despachadas',
+    'ui.workers_hint': 'Os workers aparecerão aqui quando tarefas forem despachadas',
     'ui.output': 'Saída',
     'ui.error_word': 'Erro',
     'ui.worker_dir': 'Diretório do worker:',
@@ -1794,8 +1836,7 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.avg_sessions': 'Sessões Média',
     'ui.no_temporal_data':
       'Ainda não há dados temporais — a atividade aparecerá aqui conforme as métricas se acumulam',
-    'ui.timeline_footer_prefix':
-      'Uso médio de tokens e atividade de sessões por hora (últimos ',
+    'ui.timeline_footer_prefix': 'Uso médio de tokens e atividade de sessões por hora (últimos ',
     'ui.data_points_suffix': ' pontos de dados)',
     'ui.live': 'Ao vivo',
     'ui.hours_ago': 'há {n}h',

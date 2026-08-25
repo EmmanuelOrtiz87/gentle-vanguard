@@ -62,11 +62,22 @@ export interface CostInsight {
 export interface DashboardData {
   timestamp?: string;
   source?: 'aggregated' | 'sqlite' | 'json';
+  sourceClassification?: {
+    scope: 'deployment-tenant' | 'system-wide';
+    source: 'database' | 'filesystem' | 'mixed';
+    provenance: 'explicit' | 'unprovenanced';
+    tenantId?: string;
+  };
   tokens: { used: number; limit: number; cost: number; byModel: ModelCost[] };
   sessions: { total: number; active: number; today: number; avgDuration: number };
   git: { commits: number; prsMerged: number; contributors: number };
   health: { status: string; routing: number };
   globalHealth?: GlobalHealth;
+  tenantScope?: {
+    type: 'deployment-tenant' | 'system-wide';
+    tenantId?: string;
+    warning?: string;
+  };
   latency?: LatencyMetrics;
   feedback?: FeedbackMetric;
   costInsights?: CostInsight[];
@@ -192,6 +203,12 @@ export interface CloudConnectorExecution {
 }
 
 export interface CloudMetrics {
+  sourceClassification?: {
+    scope: 'deployment-tenant' | 'system-wide';
+    source: 'database' | 'filesystem' | 'mixed';
+    provenance: 'explicit' | 'unprovenanced';
+    tenantId?: string;
+  };
   executions: CloudConnectorExecution[];
   stats: {
     totalExecutions: number;

@@ -11,12 +11,20 @@ import { existsSync, readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import os from 'os';
 import { ROOT, readJson, countSkills as _countSkills } from './shared.ts';
-import type { CloudMetrics, CostInsight, DashboardData, ModelCost, SwarmWorkerData } from '../src/types/dashboard.ts';
+import type {
+  CloudMetrics,
+  CostInsight,
+  DashboardData,
+  ModelCost,
+  SwarmWorkerData,
+} from '../src/types/dashboard.ts';
 import { getProcessExecutionTimeouts } from '@gentle-vanguard/core/timeout-config';
-import { DatabaseManager } from './database/manager.ts';
+import { DatabaseManager, DEFAULT_TENANT_ID } from './database/manager.ts';
 import { getAggregatedDashboardMetrics } from '@gentle-vanguard/core/metrics-aggregator';
 import { OperationalMetricsTracker } from '@gentle-vanguard/core/operational-metrics-tracker';
 import { runSync } from '@gentle-vanguard/core/run-command';
+import { classifyDashboardSource } from './dashboard-source-provenance.ts';
+import { getOrLoad } from './cache/tenant-lru-cache.ts';
 
 // ─── Fallback JSON paths (used only when DB has no data) ──────────────
 const CONSOLIDATED_PATH = join(ROOT, '.runtime', 'metrics', 'consolidated.json');
@@ -26,6 +34,7 @@ const SESSIONS_HISTORY_PATH = join(ROOT, '.event-bus', 'sessions-history.json');
 const CONTEXT_LOG_DIR = join(ROOT, '.session', 'context-log');
 const TELEMETRY_TRACES_DIR = join(ROOT, '.telemetry', 'traces');
 const TOKEN_BUDGET_PATH = join(ROOT, 'config', 'token-budget-guard.json');
+const SYSTEM_WIDE_FILESYSTEM_METADATA = { scope: 'system-wide' } as const;
 
 /** Dashboard token limit from the canonical budget config (not a legacy fallback). */
 function getConfiguredSessionTokenLimit(): number {
@@ -324,13 +333,26 @@ export function getRealMetrics(): DashboardData {
 
 export type MetricHistoryRange = '5m' | '1h' | '24h' | '7d' | '30d';
 
-export function getMetricHistory(limit = 120, range?: MetricHistoryRange): Array<Record<string, unknown>> {
+export function getMetricHistory(
+  limit = 120,
+  range?: MetricHistoryRange,
+): Array<Record<string, unknown>> {
   if (!dbAvailable()) return [];
   const boundedLimit = Math.max(1, Math.min(2000, Math.floor(limit)));
   const since = range
-    ? ({ '5m': '-5 minutes', '1h': '-1 hours', '24h': '-24 hours', '7d': '-7 days', '30d': '-30 days' } as const)[range]
+    ? (
+        {
+          '5m': '-5 minutes',
+          '1h': '-1 hours',
+          '24h': '-24 hours',
+          '7d': '-7 days',
+          '30d': '-30 days',
+        } as const
+      )[range]
     : undefined;
-  return getDb().getMetricHistory(boundedLimit, since).reverse() as unknown as Array<Record<string, unknown>>;
+  return getDb().getMetricHistory(boundedLimit, since).reverse() as unknown as Array<
+    Record<string, unknown>
+  >;
 }
 
 // Build DashboardData from aggregated metrics (unified source)
@@ -381,7 +403,10 @@ function buildDashboardDataFromAggregated(
     .sort((a, b) => a - b);
   const tracePercentile = (percentile: number): number => {
     if (traceDurations.length === 0) return 0;
-    const index = Math.min(traceDurations.length - 1, Math.ceil((percentile / 100) * traceDurations.length) - 1);
+    const index = Math.min(
+      traceDurations.length - 1,
+      Math.ceil((percentile / 100) * traceDurations.length) - 1,
+    );
     return traceDurations[Math.max(0, index)];
   };
   const checkpointDir = join(ROOT, '.session', 'checkpoints');
@@ -409,19 +434,38 @@ function buildDashboardDataFromAggregated(
   try {
     if (dbAvailable()) {
       const db = getDb();
-      const topSkillsRows = db.getTopSkills(100);
-      const tokenRow = db.getDb().prepare('SELECT COALESCE(SUM(cost), 0) as totalCost FROM token_usage').get() as { totalCost?: number };
-      const contractRows = db.getDb().prepare('SELECT status, result, COUNT(*) as cnt FROM contract_results GROUP BY status, result').all() as Array<{ status?: string; result?: string; cnt: number }>;
+      const topSkillsRows = db.getTopSkills(100, DEFAULT_TENANT_ID);
+      const tokenRow = db
+        .getDb()
+        .prepare('SELECT COALESCE(SUM(cost), 0) as totalCost FROM token_usage')
+        .get() as { totalCost?: number };
+      const contractRows = db
+        .getDb()
+        .prepare(
+          'SELECT status, result, COUNT(*) as cnt FROM contract_results GROUP BY status, result',
+        )
+        .all() as Array<{ status?: string; result?: string; cnt: number }>;
       const totalContracts = contractRows.reduce((sum, row) => sum + row.cnt, 0);
       const passedContracts = contractRows
-        .filter((row) => ['pass', 'valid', 'success'].includes(row.status || '') || ['pass', 'valid', 'success'].includes(row.result || ''))
+        .filter(
+          (row) =>
+            ['pass', 'valid', 'success'].includes(row.status || '') ||
+            ['pass', 'valid', 'success'].includes(row.result || ''),
+        )
         .reduce((sum, row) => sum + row.cnt, 0);
-      const routingRow = db.getDb().prepare('SELECT COALESCE(SUM(hit_count), 0) as totalHits FROM routing_rules').get() as { totalHits?: number };
+      const routingRow = db
+        .getDb()
+        .prepare(
+          'SELECT COALESCE(SUM(hit_count), 0) as totalHits FROM routing_rules WHERE tenant_id = ?',
+        )
+        .get(DEFAULT_TENANT_ID) as { totalHits?: number };
       sqliteMetrics = {
         skillCount: topSkillsRows.length,
-        skillAvgCost: topSkillsRows.length > 0
-          ? topSkillsRows.reduce((sum: number, skill: any) => sum + (skill.cost || 0), 0) / topSkillsRows.length
-          : 0,
+        skillAvgCost:
+          topSkillsRows.length > 0
+            ? topSkillsRows.reduce((sum: number, skill: any) => sum + (skill.cost || 0), 0) /
+              topSkillsRows.length
+            : 0,
         tokenTotalCost: tokenRow.totalCost ?? 0,
         contractPassRate: totalContracts > 0 ? passedContracts / totalContracts : 0,
         routingTotalHits: routingRow.totalHits ?? 0,
@@ -439,6 +483,10 @@ function buildDashboardDataFromAggregated(
   return {
     timestamp: new Date().toISOString(),
     source: 'aggregated',
+    sourceClassification: classifyDashboardSource({
+      source: 'mixed',
+      filesystemMetadata: SYSTEM_WIDE_FILESYSTEM_METADATA,
+    }),
     tokens: {
       used: aggregated.totalTokens,
       limit: getConfiguredSessionTokenLimit(),
@@ -477,7 +525,11 @@ function buildDashboardDataFromAggregated(
         bySkill: skillStats.callsBySkill || {},
         lastCall: skillStats.lastCall,
       },
-      performance: { avgResponseTime: aggregated.avgLatency || traceStats.avgDuration, errorRate: traceStats.errorRate, responseTimes: {} },
+      performance: {
+        avgResponseTime: aggregated.avgLatency || traceStats.avgDuration,
+        errorRate: traceStats.errorRate,
+        responseTimes: {},
+      },
     },
     cloud: {
       executions: cloudMetricsFile?.executions?.length || 0,
@@ -491,18 +543,20 @@ function buildDashboardDataFromAggregated(
     system: osMetrics,
     // Note: cost prop moved to tokens.cost - DashboardData doesn't have top-level cost
     sla: {
-      uptime: aggregated.sloTotal > 0
-        ? aggregated.sloCompliance
-        : traceStats.totalTraces > 0
-          ? (1 - traceStats.errorRate) * 100
-          : 0,
+      uptime:
+        aggregated.sloTotal > 0
+          ? aggregated.sloCompliance
+          : traceStats.totalTraces > 0
+            ? (1 - traceStats.errorRate) * 100
+            : 0,
       incidents: aggregated.sloViolations,
       lastIncident: null,
-      sloCompliance: aggregated.sloTotal > 0
-        ? aggregated.sloCompliance
-        : traceStats.totalTraces > 0
-          ? (1 - traceStats.errorRate) * 100
-          : 0,
+      sloCompliance:
+        aggregated.sloTotal > 0
+          ? aggregated.sloCompliance
+          : traceStats.totalTraces > 0
+            ? (1 - traceStats.errorRate) * 100
+            : 0,
       responseTime95th: aggregated.p95Latency || traceStats.avgDuration,
       throughput: sessionTotal,
     },
@@ -510,7 +564,8 @@ function buildDashboardDataFromAggregated(
       total: aggregated.feedbackTotal,
       thumbsUp: aggregated.feedbackUp,
       thumbsDown: aggregated.feedbackDown,
-      score: aggregated.feedbackTotal > 0 ? (aggregated.feedbackUp / aggregated.feedbackTotal) * 100 : 0,
+      score:
+        aggregated.feedbackTotal > 0 ? (aggregated.feedbackUp / aggregated.feedbackTotal) * 100 : 0,
     },
     costInsights,
     operational: operationalMetrics || {
@@ -560,13 +615,15 @@ function buildDashboardDataFromAggregated(
   };
 }
 
-function getRealMetricsFromDb(): DashboardData {
+function getRealMetricsFromDb(tenantId = DEFAULT_TENANT_ID): DashboardData {
   const db = getDb();
-  const snapshot = db.getLatestMetricSnapshot();
-  const activeSessions = getFreshActiveSessions();
-  const allSessions = db.getAllSessions();
-  const latencyStats = db.getLatencyStats();
-  const feedbackStats = db.getFeedbackStats();
+  const snapshot = db.getLatestMetricSnapshot(tenantId);
+  const activeSessions = db
+    .getActiveSessions(tenantId)
+    .filter((s) => Date.now() - new Date(s.updated_at).getTime() < 3600000);
+  const allSessions = db.getAllSessions(tenantId);
+  const latencyStats = db.getLatencyStats(tenantId);
+  const feedbackStats = db.getFeedbackStats(tenantId);
   const gitStats = getGitStats();
   const osMetrics = getOSMetrics();
 
@@ -589,9 +646,9 @@ function getRealMetricsFromDb(): DashboardData {
   const traces = db
     .getDb()
     .prepare(
-      'SELECT model, SUM(input_tokens) as inputTokens, SUM(output_tokens) as outputTokens, SUM(input_tokens + output_tokens) as totalTokens, SUM(cost) as cost, COUNT(*) as calls FROM traces WHERE model IS NOT NULL GROUP BY model',
+      'SELECT model, SUM(input_tokens) as inputTokens, SUM(output_tokens) as outputTokens, SUM(input_tokens + output_tokens) as totalTokens, SUM(cost) as cost, COUNT(*) as calls FROM traces WHERE tenant_id = ? AND model IS NOT NULL GROUP BY model',
     )
-    .all() as Array<{
+    .all(tenantId) as Array<{
     model: string;
     inputTokens: number;
     outputTokens: number;
@@ -681,7 +738,7 @@ function getRealMetricsFromDb(): DashboardData {
   let sqliteContractPassRate = 0;
   let sqliteRoutingTotalHits = 0;
   try {
-    const topSkills = db.getTopSkills(100);
+    const topSkills = db.getTopSkills(100, tenantId);
     sqliteSkillCount = topSkills.length;
     sqliteSkillAvgCost =
       topSkills.length > 0
@@ -690,8 +747,8 @@ function getRealMetricsFromDb(): DashboardData {
 
     const tokenRows = db
       .getDb()
-      .prepare('SELECT COALESCE(SUM(cost), 0) as totalCost FROM token_usage')
-      .get() as any;
+      .prepare('SELECT COALESCE(SUM(cost), 0) as totalCost FROM token_usage WHERE tenant_id = ?')
+      .get(tenantId) as any;
     sqliteTokenTotalCost = tokenRows?.totalCost ?? 0;
 
     const contractRows = db
@@ -706,8 +763,10 @@ function getRealMetricsFromDb(): DashboardData {
 
     const routingHits = db
       .getDb()
-      .prepare('SELECT COALESCE(SUM(hit_count), 0) as totalHits FROM routing_rules')
-      .get() as any;
+      .prepare(
+        'SELECT COALESCE(SUM(hit_count), 0) as totalHits FROM routing_rules WHERE tenant_id = ?',
+      )
+      .get(tenantId) as any;
     sqliteRoutingTotalHits = routingHits?.totalHits ?? 0;
   } catch {
     // Non-fatal — SQLite metrics default to 0
@@ -716,6 +775,7 @@ function getRealMetricsFromDb(): DashboardData {
   return {
     timestamp: new Date().toISOString(),
     source: 'sqlite',
+    sourceClassification: classifyDashboardSource({ source: 'database', tenantId }),
     tokens: {
       used: snapshot?.tokens_used ?? 0,
       limit: getConfiguredSessionTokenLimit(),
@@ -812,13 +872,17 @@ function getRealMetricsFromJson(): DashboardData {
         const row = getDb()
           .getDb()
           .prepare(
-            'SELECT COALESCE(SUM(prompt_tokens + completion_tokens), 0) AS total FROM token_usage WHERE timestamp >= ?',
+            'SELECT COALESCE(SUM(prompt_tokens + completion_tokens), 0) AS total FROM token_usage WHERE tenant_id = ? AND timestamp >= ?',
           )
-          .get(new Date(Date.now() - 24 * 3600_000).toISOString()) as { total: number };
+          .get(DEFAULT_TENANT_ID, new Date(Date.now() - 24 * 3600_000).toISOString()) as {
+          total: number;
+        };
         if (row.total > 0) {
           t.usedToday = row.total;
         }
-      } catch { /* keep 0 */ }
+      } catch {
+        /* keep 0 */
+      }
     }
   }
   const s = consolidated?.sessions || { total: 0, active: 0, today: 0 };
@@ -883,6 +947,10 @@ function getRealMetricsFromJson(): DashboardData {
   return {
     timestamp: new Date().toISOString(),
     source: 'json',
+    sourceClassification: classifyDashboardSource({
+      source: 'filesystem',
+      filesystemMetadata: SYSTEM_WIDE_FILESYSTEM_METADATA,
+    }),
     tokens: {
       used: t.usedToday || tokenUsage?.totalTokens || 0,
       limit: getConfiguredSessionTokenLimit(),
@@ -963,7 +1031,14 @@ interface TraceStats {
   activeSpans: number;
 }
 
-export function getTraces(rangeMs?: number): { traces: Trace[]; stats: TraceStats } {
+export function getTraces(
+  rangeMs?: number,
+  tenantId = DEFAULT_TENANT_ID,
+): {
+  traces: Trace[];
+  stats: TraceStats;
+  sourceClassification: DashboardData['sourceClassification'];
+} {
   const traces: Trace[] = [];
   const cutoff = rangeMs && rangeMs > 0 ? Date.now() - rangeMs : 0;
 
@@ -975,9 +1050,16 @@ export function getTraces(rangeMs?: number): { traces: Trace[]; stats: TraceStat
         cutoff > 0
           ? db
               .getDb()
-              .prepare('SELECT * FROM traces WHERE start_time >= ? ORDER BY start_time DESC LIMIT 200')
-              .all(cutoff)
-          : db.getDb().prepare('SELECT * FROM traces ORDER BY start_time DESC LIMIT 200').all()
+              .prepare(
+                'SELECT * FROM traces WHERE tenant_id = ? AND start_time >= ? ORDER BY start_time DESC LIMIT 200',
+              )
+              .all(tenantId, cutoff)
+          : db
+              .getDb()
+              .prepare(
+                'SELECT * FROM traces WHERE tenant_id = ? ORDER BY start_time DESC LIMIT 200',
+              )
+              .all(tenantId)
       ) as Array<{
         span_id: string;
         trace_id: string;
@@ -1001,9 +1083,9 @@ export function getTraces(rangeMs?: number): { traces: Trace[]; stats: TraceStat
         const rows = db
           .getDb()
           .prepare(
-            "SELECT session_id, model FROM token_transactions WHERE session_id IS NOT NULL AND model IS NOT NULL AND model != '' ORDER BY created_at DESC LIMIT 500",
+            "SELECT session_id, model FROM token_transactions WHERE tenant_id = ? AND session_id IS NOT NULL AND model IS NOT NULL AND model != '' ORDER BY created_at DESC LIMIT 500",
           )
-          .all() as Array<{ session_id: string; model: string }>;
+          .all(tenantId) as Array<{ session_id: string; model: string }>;
         for (const r of rows) {
           if (!sessionModels.has(r.session_id)) sessionModels.set(r.session_id, r.model);
         }
@@ -1040,7 +1122,7 @@ export function getTraces(rangeMs?: number): { traces: Trace[]; stats: TraceStat
   }
 
   // If no traces from DB, try context-log
-  if (traces.length === 0) {
+  if (traces.length === 0 && !dbAvailable()) {
     try {
       if (existsSync(CONTEXT_LOG_DIR)) {
         const dirs = readdirSync(CONTEXT_LOG_DIR, { withFileTypes: true });
@@ -1096,7 +1178,7 @@ export function getTraces(rangeMs?: number): { traces: Trace[]; stats: TraceStat
   }
 
   // If still no traces, fall back to OTLP spans in .telemetry/traces/*.jsonl
-  if (traces.length === 0) {
+  if (traces.length === 0 && !dbAvailable()) {
     try {
       if (existsSync(TELEMETRY_TRACES_DIR)) {
         const files = readdirSync(TELEMETRY_TRACES_DIR).filter((f) => f.endsWith('.jsonl'));
@@ -1181,6 +1263,11 @@ export function getTraces(rangeMs?: number): { traces: Trace[]; stats: TraceStat
 
   return {
     traces,
+    sourceClassification: classifyDashboardSource({
+      source: dbAvailable() ? 'database' : 'filesystem',
+      tenantId: dbAvailable() ? tenantId : undefined,
+      filesystemMetadata: SYSTEM_WIDE_FILESYSTEM_METADATA,
+    }),
     stats: {
       totalTraces: traces.length,
       avgDuration,
@@ -1240,12 +1327,24 @@ export function getCloudMetrics(): CloudMetrics {
     };
   }
 
-  return { executions: execs, stats };
+  return {
+    executions: execs,
+    stats,
+    sourceClassification: classifyDashboardSource({
+      source: 'filesystem',
+      filesystemMetadata: SYSTEM_WIDE_FILESYSTEM_METADATA,
+    }),
+  };
 }
 
 // ─── Tenant-Scoped Metrics ────────────────────────────────────────────
 
 export function getTenantScopedMetrics(tenantId: string): DashboardData {
+  // LRU-cached (TTL 3s < WS push interval): absorbs REST bursts between pushes.
+  return getOrLoad('tenant-metrics', tenantId, () => computeTenantScopedMetrics(tenantId));
+}
+
+function computeTenantScopedMetrics(tenantId: string): DashboardData {
   const registryPath = join(ROOT, 'config', 'tenant-registry.json');
   let tenantName = tenantId;
   try {
@@ -1258,7 +1357,7 @@ export function getTenantScopedMetrics(tenantId: string): DashboardData {
     /* fallback to tenantId */
   }
 
-  const base = getRealMetrics();
+  const base = dbAvailable() ? getRealMetricsFromDb(tenantId) : emptyTenantMetrics(tenantId);
 
   // Try DB for tenant-specific session count
   let sessionCount = 0;
@@ -1267,8 +1366,8 @@ export function getTenantScopedMetrics(tenantId: string): DashboardData {
       const db = getDb();
       const result = db
         .getDb()
-        .prepare('SELECT COUNT(*) as count FROM sessions WHERE id LIKE ?')
-        .get(`%${tenantId}%`) as { count: number };
+        .prepare('SELECT COUNT(*) as count FROM sessions WHERE tenant_id = ?')
+        .get(tenantId) as { count: number };
       sessionCount = result.count;
     } catch {
       // fallback
@@ -1283,9 +1382,29 @@ export function getTenantScopedMetrics(tenantId: string): DashboardData {
   };
 }
 
+function emptyTenantMetrics(tenantId: string): DashboardData {
+  return {
+    timestamp: new Date().toISOString(),
+    source: 'sqlite',
+    sourceClassification: classifyDashboardSource({ source: 'database', tenantId }),
+    tenantId,
+    tenantName: tenantId,
+    tokens: { used: 0, limit: getConfiguredSessionTokenLimit(), cost: 0, byModel: [] },
+    sessions: { total: 0, active: 0, today: 0, avgDuration: 0 },
+    latency: { avg: 0, p50: 0, p95: 0, p99: 0, max: 0, samples: 0, responseTimes: {} },
+    feedback: { total: 0, thumbsUp: 0, thumbsDown: 0, score: 0 },
+  } as unknown as DashboardData;
+}
+
 // ─── Stack Tables (SQLite queries for Wave 36/37) ─────────────────────
 
-export function getSkillUsageFromDb(limit = 20) {
+export function getSkillUsageFromDb(limit = 20, tenantId = DEFAULT_TENANT_ID) {
+  return getOrLoad('skill-usage', tenantId, () => computeSkillUsage(limit, tenantId), {
+    ttlMs: 4000,
+  });
+}
+
+function computeSkillUsage(limit: number, tenantId: string) {
   const skillStats = readJson<{ callsBySkill?: Record<string, number> }>(STATS_PATH);
   const fallbackSkills = Object.entries(skillStats?.callsBySkill || {})
     .sort(([, a], [, b]) => b - a)
@@ -1294,7 +1413,7 @@ export function getSkillUsageFromDb(limit = 20) {
   if (!dbAvailable()) return { skills: fallbackSkills, total: fallbackSkills.length };
   try {
     const db = getDb();
-    const skills = db.getTopSkills(limit);
+    const skills = db.getTopSkills(limit, tenantId);
     return skills.length > 0
       ? { skills, total: skills.length }
       : { skills: fallbackSkills, total: fallbackSkills.length };
@@ -1303,20 +1422,26 @@ export function getSkillUsageFromDb(limit = 20) {
   }
 }
 
-export function getTokenUsageFromDb(sessionId?: string) {
+export function getTokenUsageFromDb(sessionId?: string, tenantId = DEFAULT_TENANT_ID) {
+  return getOrLoad('token-usage', tenantId, () => computeTokenUsage(sessionId, tenantId), {
+    ttlMs: 4000,
+  });
+}
+
+function computeTokenUsage(sessionId: string | undefined, tenantId: string) {
   if (!dbAvailable()) return { usage: null };
   try {
     const db = getDb();
     if (sessionId) {
-      return { usage: db.getTokenUsageBySession(sessionId), sessionId };
+      return { usage: db.getTokenUsageBySession(sessionId, tenantId), sessionId };
     }
     // Get recent token usage across all sessions
     const rows = db
       .getDb()
       .prepare(
-        'SELECT session_id, SUM(prompt_tokens) as prompt, SUM(completion_tokens) as completion, SUM(cost) as cost, MAX(timestamp) as last_used FROM token_usage GROUP BY session_id ORDER BY last_used DESC LIMIT 20',
+        'SELECT session_id, SUM(prompt_tokens) as prompt, SUM(completion_tokens) as completion, SUM(cost) as cost, MAX(timestamp) as last_used FROM token_usage WHERE tenant_id = ? GROUP BY session_id ORDER BY last_used DESC LIMIT 20',
       )
-      .all() as Array<{
+      .all(tenantId) as Array<{
       session_id: string;
       prompt: number;
       completion: number;
@@ -1343,20 +1468,21 @@ export function getContractResultsFromDb(limit = 20) {
   }
 }
 
-export function getRoutingRulesFromDb() {
+export function getRoutingRulesFromDb(tenantId = DEFAULT_TENANT_ID) {
+  return getOrLoad('routing-rules', tenantId, () => computeRoutingRules(tenantId), { ttlMs: 5000 });
+}
+
+function computeRoutingRules(tenantId: string) {
   if (!dbAvailable()) return { rules: [], total: 0 };
   try {
     const db = getDb();
-    const rules = db.getEnabledRoutingRules();
+    const rules = db.getEnabledRoutingRules(tenantId);
     if (rules.length > 0) return { rules, total: rules.length };
     // Nexus routing_rules empty → derive the stack's ACTUAL static routing
     // config (subagent-mapping.json) so the panel reflects reality.
     const mappingPath = join(ROOT, 'config', 'subagent-mapping.json');
     const mapping = readJson<{
-      mapping?: Record<
-        string,
-        { name?: string; primary_subagent?: string; triggers?: string[] }
-      >;
+      mapping?: Record<string, { name?: string; primary_subagent?: string; triggers?: string[] }>;
     }>(mappingPath);
     if (!mapping?.mapping) return { rules: [], total: 0 };
     // Real usage per subagent as hitCount proxy.
@@ -1365,9 +1491,9 @@ export function getRoutingRulesFromDb() {
       const rows = db
         .getDb()
         .prepare(
-          'SELECT agent, COUNT(*) AS n FROM token_transactions WHERE agent IS NOT NULL GROUP BY agent',
+          'SELECT agent, COUNT(*) AS n FROM token_transactions WHERE tenant_id = ? AND agent IS NOT NULL GROUP BY agent',
         )
-        .all() as Array<{ agent: string; n: number }>;
+        .all(tenantId) as Array<{ agent: string; n: number }>;
       hits = Object.fromEntries(rows.map((r) => [r.agent, r.n]));
     } catch {
       /* hitCount stays 0 */

@@ -8,10 +8,20 @@
  * incrementally (byte offsets persisted per file) so spans become queryable,
  * deduplicated (INSERT OR REPLACE by span_id) and visible in the dashboard.
  */
-import { existsSync, readFileSync, writeFileSync, readdirSync, mkdirSync, statSync, openSync, readSync, closeSync } from 'fs';
+import {
+  existsSync,
+  readFileSync,
+  writeFileSync,
+  readdirSync,
+  mkdirSync,
+  statSync,
+  openSync,
+  readSync,
+  closeSync,
+} from 'fs';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
-import { DatabaseManager } from './database/manager';
+import { DatabaseManager, DEFAULT_TENANT_ID } from './database/manager';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = join(__filename, '..');
@@ -27,7 +37,10 @@ interface RawSpan {
   startTimeUnixNano?: string;
   endTimeUnixNano?: string;
   status?: { code?: string };
-  attributes?: Array<{ key: string; value?: { stringValue?: string; intValue?: string; doubleValue?: number } }>;
+  attributes?: Array<{
+    key: string;
+    value?: { stringValue?: string; intValue?: string; doubleValue?: number };
+  }>;
 }
 
 interface IngestState {
@@ -51,8 +64,10 @@ function saveState(state: IngestState): void {
 
 function attrValue(span: RawSpan, key: string): string | undefined {
   const a = span.attributes?.find((x) => x.key === key);
-  return a?.value?.stringValue ?? a?.value?.intValue ?? (
-    a?.value?.doubleValue !== undefined ? String(a.value.doubleValue) : undefined
+  return (
+    a?.value?.stringValue ??
+    a?.value?.intValue ??
+    (a?.value?.doubleValue !== undefined ? String(a.value.doubleValue) : undefined)
   );
 }
 
@@ -117,7 +132,10 @@ export function ingestTelemetrySpans(): IngestResult {
     const lines = content.split('\n');
     // If the file grew mid-line, keep the remainder for next cycle.
     const completeLines = lines.slice(0, -1);
-    const consumedChars = completeLines.reduce((acc, l) => acc + Buffer.byteLength(l, 'utf-8') + 1, 0);
+    const consumedChars = completeLines.reduce(
+      (acc, l) => acc + Buffer.byteLength(l, 'utf-8') + 1,
+      0,
+    );
 
     for (const line of completeLines) {
       const trimmed = line.trim();
@@ -133,7 +151,7 @@ export function ingestTelemetrySpans(): IngestResult {
         const MAX_SPAN_MS = 600_000; // 10 min sane ceiling for a single span
         const endMs =
           rawEnd !== null && rawEnd >= startMs && rawEnd - startMs <= MAX_SPAN_MS ? rawEnd : null;
-        db.traces.insertTrace({
+        db.traces.insertTrace(DEFAULT_TENANT_ID, {
           span_id: span.spanId,
           trace_id: span.traceId ?? '',
           parent_span_id: span.parentSpanId ?? undefined,
@@ -143,8 +161,10 @@ export function ingestTelemetrySpans(): IngestResult {
           duration: endMs !== null ? endMs - startMs : undefined,
           status: mapStatus(span.status?.code),
           model: attrValue(span, 'model'),
-          input_tokens: Number(attrValue(span, 'inputTokens') ?? attrValue(span, 'input.tokens') ?? 0) || 0,
-          output_tokens: Number(attrValue(span, 'outputTokens') ?? attrValue(span, 'output.tokens') ?? 0) || 0,
+          input_tokens:
+            Number(attrValue(span, 'inputTokens') ?? attrValue(span, 'input.tokens') ?? 0) || 0,
+          output_tokens:
+            Number(attrValue(span, 'outputTokens') ?? attrValue(span, 'output.tokens') ?? 0) || 0,
           cost: Number(attrValue(span, 'cost') ?? 0) || 0,
           session_id: attrValue(span, 'sessionId'),
           attributes: span.attributes ? JSON.stringify(span.attributes) : undefined,
