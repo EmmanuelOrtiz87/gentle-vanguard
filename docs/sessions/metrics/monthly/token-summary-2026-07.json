@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-08-25T14:31:45.133Z",
+  "generated_at": "2026-08-25T16:31:30.385Z",
   "period": "2026-07",
   "days": 28,
   "totals": {
-    "input": 790734622,
-    "output": 10829828,
-    "total": 801564450,
+    "input": 791317881,
+    "output": 10836146,
+    "total": 802154027,
     "cost": 10.535256299999999
   },
   "daily_avg": {
-    "input": 28240522,
-    "output": 386780,
-    "total": 28627302
+    "input": 28261353,
+    "output": 387005,
+    "total": 28648358
   },
   "by_day": [
     {
@@ -232,11 +232,11 @@
     },
     {
       "day": "2026-08-25",
-      "input": 1292711,
-      "output": 242929,
-      "total": 1535640,
+      "input": 1875970,
+      "output": 249247,
+      "total": 2125217,
       "cost": 1.05276725,
-      "sessions": 23
+      "sessions": 26
     }
   ],
   "by_model": [
@@ -270,9 +270,9 @@
     },
     {
       "model": "GLM-5.3",
-      "input": 8291786,
-      "output": 49300,
-      "total": 8341086,
+      "input": 8822396,
+      "output": 55259,
+      "total": 8877655,
       "cost": 0
     },
     {
@@ -329,6 +329,13 @@
       "input": 157945,
       "output": 945,
       "total": 158890,
+      "cost": 0
+    },
+    {
+      "model": "qwen/qwen3.8-max-free",
+      "input": 52649,
+      "output": 359,
+      "total": 53008,
       "cost": 0
     },
     {
