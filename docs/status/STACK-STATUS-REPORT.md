@@ -1,6 +1,6 @@
 # Gentle-Vanguard — Stack Status Report
 
-**Versión actual**: v3.8.0 **Fecha**: 2026-08-16 **Stack**: AI orchestration layer multi-herramienta
+**Versión actual**: v3.8.2 **Última revisión canónica**: 2026-08-24 **Stack**: AI orchestration layer multi-herramienta
 | 436+ TS scripts | 263 skills | 23 CI/CD workflows
 
 ---
@@ -352,7 +352,7 @@ Requerimiento → BA/EXPLORE (análisis) → SAD (diseño) → DEV (impl) → QA
 
 ```
 Maintenance Watchtower:
-  1. Health check (95 checks en 21 componentes)
+  1. Health check (95-96/96 checks; el resultado puede variar por checks transitorios)
   2. Rebuild automático de índices stale
   3. Reporte JSON
   4. Fine-tuning pipeline: collect → build → threshold → auto-prune
@@ -366,7 +366,7 @@ Maintenance Watchtower:
 
 | Prioridad   | Item                                                       | Estado actual                                                                                                                             |
 | ----------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| 🔜 Alta     | **Secretlint pre-commit**                                  | 📋 Planificado                                                                                                                            |
+| ✅ Completa | **Secretlint pre-commit**                                  | ✅ Integrado en los hooks                                                                                                                |
 | ✅ Completa | **Coverage reporting (native TS runner + threshold gate)** | ✅ COMPLETADO (`src/coverage-runner.ts`, pre-push gate)                                                                                   |
 | 🔜 Alta     | **EditorConfig + Prettier CI check**                       | 📋 Planificado                                                                                                                            |
 | 🔜 Alta     | **Branch strategy / Release process docs**                 | 📋 Planificado                                                                                                                            |
@@ -387,7 +387,7 @@ Maintenance Watchtower:
 
 | Issue                                 | Detalle                                                                                               |
 | ------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| ✅ **Versión unificada**              | v3.8.0 consistente en README, VERSION, badges                                                         |
+| ✅ **Versión unificada**              | v3.8.2 es la versión actual canónica; la consistencia de README/VERSION/badges queda pendiente de verificación externa                  |
 | ⚠️ **FT Python stub**                 | `train_lora.py` es stub, no implementado                                                              |
 | ✅ **Adaptive scripts automatizados** | auto-norm-enforcer (cada 5 turnos), karpathy-enforcer (pre-commit), normative-audit (pre-commit + CI) |
 | ⚠️ **Plugins experimentales**         | Plugin system existe pero sin uso real                                                                |

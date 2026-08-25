@@ -1,0 +1,10 @@
+# Plans
+
+Continuity and evolution plans, including the active NEXT-SESSION-PLAN. These documents drive what the next session picks up.
+
+## Contents
+
+- [CONTINUATION-STATE.md](CONTINUATION-STATE.md)
+- [COPILOTKIT-ANALYSIS-AND-ADOPTION-PLAN.md](COPILOTKIT-ANALYSIS-AND-ADOPTION-PLAN.md)
+- [NEXT-SESSION-PLAN-2026-08-25.md](NEXT-SESSION-PLAN-2026-08-25.md)
+- [STACK-EVOLUTION-PLAN-2026.md](STACK-EVOLUTION-PLAN-2026.md)

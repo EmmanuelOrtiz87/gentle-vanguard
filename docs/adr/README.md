@@ -40,7 +40,8 @@ Each ADR is immutable once accepted. Updates create new ADRs (ADR-0011, etc).
 | **[ADR-0014](ADR-0014-slsa-supply-chain-attestation-native-ts.md)**            | SLSA Supply-Chain Attestation         | ✅ Accepted   | Aug 2026 | SLSA Build L1 provenance native TS (in-toto v1 + SLSA v1.0)                               |
 | **[ADR-0015](ADR-0015-slsa-provenance-signing-native-dsse-ed25519.md)**        | SLSA Provenance Signing               | ✅ Accepted   | Aug 2026 | DSSE + Ed25519 native signing → Build L2/L3 (no falsifiable provenance)                   |
 | **[ADR-0016](ADR-0016-chaos-engineering-engine-native-ts.md)**                 | Chaos Engineering Engine              | ✅ Accepted   | Aug 2026 | Native TS controlled experiments (config/session/dashboard-ws), safe restore              |
-| **[ADR-0017](ADR-0017-container-artifact-vulnerability-scanner-native-ts.md)** | Container/Artifact Scanner            | ✅ Accepted   | Aug 2026 | Native TS Syft+Grype+Trivy vulnerability scanning without Docker (SBOM/rootfs)            |
+| **[ADR-0017](ADR-0017-local-first-operating-model.md)**                    | Local-First Operating Model            | ✅ Accepted   | Aug 2026 | Local operation is primary; server/SaaS is opt-in promotion/federation                     |
+| **[ADR-0019](ADR-0019-container-artifact-vulnerability-scanner-native-ts.md)** | Container/Artifact Scanner            | ✅ Accepted   | Aug 2026 | Native TS Syft+Grype+Trivy vulnerability scanning without Docker (SBOM/rootfs)            |
 | **[ADR-0018](ADR-0018-content-operations-engine-native-ts.md)**                | Content Operations Engine             | ✅ Accepted   | Aug 2026 | Native TS offline-first content pipeline (manifest + state machine + CLI, 21 jobs reales) |
 
 ---

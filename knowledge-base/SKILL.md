@@ -102,7 +102,7 @@ El vault se sincroniza automáticamente al inicio de sesión via
 ## Related Files
 
 - `docs/knowledge-base/ARCHITECTURE.md` - Arquitectura completa
-- `docs/knowledge-base/USAGE.md` - Guía de uso detallada
+- `docs/knowledge-base/README.md` - Guía de uso detallada
 - `config/knowledge-base-config.json` - Configuración
 - `scripts/utilities/knowledge-base/knowledge-base-manager.ps1` - Manager
 - `scripts/utilities/knowledge-base/knowledge-base-sync.ps1` - Sync

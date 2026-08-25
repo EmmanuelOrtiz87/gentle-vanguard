@@ -1,27 +1,19 @@
 {
-  "generated_at": "2026-08-24T04:20:19.365Z",
+  "generated_at": "2026-08-25T14:31:45.133Z",
   "period": "2026-07",
   "days": 28,
   "totals": {
-    "input": 788678011,
-    "output": 10145199,
-    "total": 798823210,
-    "cost": 4.832006559999998
+    "input": 790734622,
+    "output": 10829828,
+    "total": 801564450,
+    "cost": 10.535256299999999
   },
   "daily_avg": {
-    "input": 28167072,
-    "output": 362329,
-    "total": 28529400
+    "input": 28240522,
+    "output": 386780,
+    "total": 28627302
   },
   "by_day": [
-    {
-      "day": "2026-07-26",
-      "input": 429594,
-      "output": 42201,
-      "total": 471795,
-      "cost": 0,
-      "sessions": 5
-    },
     {
       "day": "2026-07-27",
       "input": 81412269,
@@ -232,11 +224,19 @@
     },
     {
       "day": "2026-08-24",
-      "input": 9902128,
-      "output": 233746,
-      "total": 10135874,
-      "cost": 0,
-      "sessions": 4
+      "input": 11095622,
+      "output": 717647,
+      "total": 11813269,
+      "cost": 4.650482490000001,
+      "sessions": 43
+    },
+    {
+      "day": "2026-08-25",
+      "input": 1292711,
+      "output": 242929,
+      "total": 1535640,
+      "cost": 1.05276725,
+      "sessions": 23
     }
   ],
   "by_model": [
@@ -249,9 +249,9 @@
     },
     {
       "model": "deepseek-v4-flash-free",
-      "input": 91853523,
-      "output": 5760524,
-      "total": 97614047,
+      "input": 91423929,
+      "output": 5718323,
+      "total": 97142252,
       "cost": 0
     },
     {
@@ -277,10 +277,17 @@
     },
     {
       "model": "big-pickle",
-      "input": 6776997,
-      "output": 609426,
-      "total": 7386423,
+      "input": 6962543,
+      "output": 642456,
+      "total": 7604999,
       "cost": 2.248670159999999
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "input": 1746130,
+      "output": 703820,
+      "total": 2449950,
+      "cost": 7.41519166
     },
     {
       "model": "deepseek-v3-2",
@@ -298,10 +305,24 @@
     },
     {
       "model": "MiniMax-M3",
-      "input": 309456,
-      "output": 15963,
-      "total": 325419,
+      "input": 367982,
+      "output": 18069,
+      "total": 386051,
       "cost": 0
+    },
+    {
+      "model": "muse-spark-1.2-contributor-free",
+      "input": 339774,
+      "output": 45973,
+      "total": 385747,
+      "cost": 0.63429368
+    },
+    {
+      "model": "gemma-4-26b-a4b-it",
+      "input": 158078,
+      "output": 13371,
+      "total": 171449,
+      "cost": 0.23710080000000006
     },
     {
       "model": "qwen2.5-coder-7b-instruct",
@@ -309,13 +330,6 @@
       "output": 945,
       "total": 158890,
       "cost": 0
-    },
-    {
-      "model": "gpt-5.6-luna",
-      "input": 1849,
-      "output": 71470,
-      "total": 73319,
-      "cost": 2.5833363999999994
     },
     {
       "model": "gpt-4o",

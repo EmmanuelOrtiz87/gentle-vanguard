@@ -42,7 +42,7 @@ Grafo de conocimiento nativo en `graphify-out/` (AST, sin LLM, determinista).
 - Nodo exacto: `npm run graphify -- explain "<node_id>"` (IDs underscore-separated, usar query para encontrarlos).
 - `path`/`affected` son limitados (solo edges contains/calls sin LLM).
 - Tras modificar código: `npm run graphify -- update .`.
-- Navegación amplia: `graphify-out/wiki/index.md`; arquitectura: `graphify-out/GRAPH_REPORT.md`.
+- Navegación amplia: `graphify-out/wiki/index.md` (si fue generado); arquitectura: `graphify-out/GRAPH_REPORT.md`.
 - Labeling usa Gemini free tier (20 req/día); 429 → esperar reset.
 - Viz: `$env:GRAPHIFY_VIZ_NODE_LIMIT=40000` antes de `cluster-only`/`label`.
 
@@ -60,6 +60,13 @@ Observabilidad LLM en `apps/web-dashboard/` (React/TS/Vite). **Sin mock data** �
 - Watchdog con auto-restart (10 intentos); stop mata watchdog primero. Frontend tolera caídas via HTTP polling.
 - Build verification: `cd apps/web-dashboard && npm run build` (debe salir 0 sin errores TS).
 - i18n en/pt/es, 8 alert rules en `config/dashboard-alerts.json`.
+
+### Modelo operativo
+
+Gentle-Vanguard es **LOCAL-FIRST / SERVER-OPTIONAL** (ADR-0017). CLI/orquestación, SQLite/Nexus,
+`.session/`, Engram, CodeGraph, MCP local y dashboard loopback son la ruta principal soportada.
+Cloud/Kubernetes/Cosign/CNI/sandbox/OIDC/LDAP son opt-in o inputs futuros de promoción externa, no
+requisitos de operación local.
 
 ## procesos-ocultos (regla de oro)
 
@@ -151,7 +158,7 @@ npm run delegate:run -- --task "audit gdpr compliance"
 - **witr** (`src/web/witr-cli.ts`): traza causal de procesos/puertos (process|port).
 - **Research trends** (`src/research/research-trends-cli.ts`): GitHub/HN/SO/Dev.to/Reddit → TrendReport.
 - **Humanizer / Design tokens / Planning templates / Animations**: `npm run humanize:*`, `design:*`, `animation:*`.
-- **v4.0 infra**: tracing (`.telemetry/`, OTLP), checkpoints/snapshots/rollback (`.session/`), audit pipeline, event sourcing + saga, cloud connectors con circuit breaker, health API (7 componentes).
+- **v4.0 infra**: tracing (`.telemetry/`, OTLP), checkpoints/snapshots/rollback (`.session/`), audit pipeline, event sourcing + saga, health API (7 componentes); cloud connectors con circuit breaker son opt-in para promoción externa.
 
 ## CI/CD y Testing
 

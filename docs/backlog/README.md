@@ -53,5 +53,5 @@ orchestrator | `scripts/utilities/gentle-vanguard-installer-tui.ps1` |
 
 ---
 
-_Generado: 2026-05-10 — sincronizado con items.json_  
-_Total: 11 done, 2 pending — única fuente de verdad: `docs/backlog/items.json`_
+_Generación: pendiente de confirmar externamente — sincronizado con items.json_
+_Total mostrado: 12 done, 1 deferred, 0 pending — única fuente de verdad: `docs/backlog/items.json`_

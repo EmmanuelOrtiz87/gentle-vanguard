@@ -1,3 +1,11 @@
+## Operating model: LOCAL-FIRST / SERVER-OPTIONAL
+
+Gentle-Vanguard's primary supported scope is local operation: CLI/orchestration, local SQLite/Nexus,
+`.session/`, Engram, CodeGraph, local MCP, and the loopback dashboard. Server, SaaS, cloud, and
+Kubernetes paths remain opt-in evolution paths. Registry digests, Cosign identity, CNI/NetworkPolicy,
+OS/runtime sandbox evidence, and OIDC/LDAP identity are external-promotion inputs—not prerequisites
+for the local profile. See `docs/adr/ADR-0017-local-first-operating-model.md`.
+
 ## SESSION START (MANDATORY — run before ANY other action)
 
 At the very beginning of every session, **before responding to the user**, run:
@@ -314,7 +322,7 @@ API integrados en la pipeline de sesión.
 - Event sourcing: append/project/snapshot/prune — almacena en `.session/event-store/`
 - Saga: create/register-step/complete/compensate/list — almacena en `.session/sagas/`
 
-### Cloud Connectors
+### Cloud Connectors (opt-in external promotion)
 
 | Componente      | Script                      | Pipeline step                  |
 | --------------- | --------------------------- | ------------------------------ |
@@ -326,7 +334,8 @@ API integrados en la pipeline de sesión.
 - Circuit breaker pattern (5 failures → OPEN, 2 successes → HALF_OPEN → CLOSED)
 - Métricas en `.session/cloud-metrics.json` y `.session/hybrid-metrics.json`
 - SkillInput serializado como JSON para paso por CLI (hashtable splatting `@splat`)
-- Pipeline: step `cloud-connectors-init` (lazy, healthcheck ping al iniciar sesión)
+- Pipeline: step `cloud-connectors-init` (lazy, healthcheck ping al iniciar sesión); optional for
+  local-first operation and not a local prerequisite.
 
 ### Dashboard Health API
 
@@ -363,11 +372,11 @@ Los siguientes steps se agregaron al `config/session-autostart.config.json`:
 
 Los scripts PS1 core han sido migrados a TypeScript en `src/`:
 
-| PS1 Original                                      | TS Replacement                              | Comando                                            |
-| ------------------------------------------------- | ------------------------------------------- | -------------------------------------------------- |
-| `scripts/health-check/health-check.ps1`           | `src/health-check.ts` (332 lines)           | `npm run health:check`                             |
-| `scripts/utilities/session/session-autostart.ps1` | `src/session-autostart.ts` (168 lines)      | `npx tsx src/session-autostart.ts`                 |
-| `scripts/maintenance/maintenance-watchtower.ps1`  | `src/maintenance-watchtower.ts` (834 lines) | `npm run watchtower` / `npm run watchtower:health` |
+| PS1 Original                                      | TS Replacement                                                              | Comando                                            |
+| ------------------------------------------------- | --------------------------------------------------------------------------- | -------------------------------------------------- |
+| `scripts/health-check/health-check.ps1`           | `src/core/health-check.ts`                                                  | `npm run health:check`                             |
+| `scripts/utilities/session/session-autostart.ps1` | `src/session-autostart.ts` (wrapper de `src/core/session-autostart.ts`)     | `npx tsx src/session-autostart.ts`                 |
+| `scripts/maintenance/maintenance-watchtower.ps1`  | `src/core/maintenance-watchtower.ts`                                        | `npm run watchtower` / `npm run watchtower:health` |
 
 Los PS1 originales fueron eliminados tras verificar que las versiones TS cubren toda la
 funcionalidad. Los comandos `npm run` apuntan exclusivamente a las versiones TS.
@@ -879,12 +888,19 @@ en disco y los consolida en Nexus.
   - Extensible a otras herramientas (registry `detectSources()`: opencode/codex/claude/cursor).
   - Escribe en Nexus: `token_usage` (por sesión), `token_transactions` (por mensaje, con agente
     orquestador/subagente), `token_savings` (cache + compresión).
-  - Actualiza `.session/token-usage.json`, `session-current.json` y
-    `reports/stack-live-observability-latest.json`.
-- **`src/tokens/token-usage-reader.ts`** — fuente única de verdad: lee Nexus primero, luego el report,
-  luego fallbacks.
-- **`src/tokens/token-metrics-store.ts`** — el close report lee tokens REALES (Nexus → token-ingest →
-  session-file).
+  - Actualiza `reports/stack-live-observability-latest.json` y otros snapshots derivados.
+- **Fuentes de tokens** — los rollouts JSONL de cada herramienta son la autoridad de uso bruto cuando
+  la herramienta los produce (por ejemplo, ZCode y Codex). No se deben tratar como una base agregada.
+- **Nexus** (`.runtime/gentle-vanguard.db`) — autoridad operativa para los agregados y transacciones
+  ingeridos (`token_usage`, `token_transactions`, `token_savings`).
+- **`src/tokens/token-usage-reader.ts`** — lector único: Nexus primero, luego el reporte live y
+  fallbacks explícitos.
+- **`src/tokens/token-metrics-store.ts`** — el close report lee tokens REALES desde Nexus y sus
+  reportes derivados.
+
+> **Compatibilidad:** `.session/token-usage.json` y `.session/session-current.json` pueden existir como
+> snapshots/estado de sesión para consumidores heredados; no reemplazan la autoridad de Nexus ni la
+> autoridad de los rollouts JSONL de las herramientas.
 
 ### Comandos
 

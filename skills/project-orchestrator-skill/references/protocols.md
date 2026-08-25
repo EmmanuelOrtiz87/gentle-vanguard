@@ -15,7 +15,7 @@ Recommended policy:
 
 Role split: Orchestrator is source of truth for process and enforcement decisions.
 
-Reference: `docs/reference/SDG-GOVERNANCE-POLICY.md`
+Reference: `docs/reference/SDD-GOVERNANCE-POLICY.md`
 
 ## Tooling Contract
 

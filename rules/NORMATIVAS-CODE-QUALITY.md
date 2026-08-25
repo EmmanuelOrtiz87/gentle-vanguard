@@ -42,6 +42,7 @@
 
 ## Feedback Loop (Source: NORMATIVAS-FEEDBACK.md)
 
-- Every action offers user rating (1-5); stored in `.session/feedback/feedback.jsonl`
+- Every action offers user rating (1-5); persist it through the tenant-scoped Nexus feedback table
+  (`TraceRepo`). The old `.session/feedback/feedback.jsonl` path is historical/compatibility-only.
 - Post-session analysis: detect patterns with avg rating < 3, generate improvement proposals
 - Suggest new normativas if same pattern appears 3+ times

@@ -1,11 +1,11 @@
 # 🚀 Getting Started
 
 <p align="center">
-  <b>Gentle-Vanguard v3.5.0 — Quick Start Guide</b>
+  <b>Gentle-Vanguard v3.8.2 — Quick Start Guide</b>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-3.5.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-3.8.2-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Health-100%25-22C55E?style=flat-square&labelColor=0D1117" alt="Health">
   <img src="https://img.shields.io/badge/Status-Optimized-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
 </p>
@@ -90,7 +90,29 @@ npm run watchtower:health           # Health check (95 checks)
 # Dashboard
 npm run dashboard:start             # Start dashboard
 npm run dashboard:stop              # Stop dashboard
+```
 
+### Dashboard authentication (local-first)
+
+The dashboard API is fail-closed: every endpoint except `GET /api/health` and
+`/api/auth/*` requires a session, and login is only possible when a shared token
+is configured. Two supported local profiles:
+
+```bash
+# Option A — token login (recommended): set once in your User env, then log in
+# via the dashboard login screen (POST /api/auth/login with the token value).
+setx GV_DASHBOARD_TOKEN "choose-a-long-random-secret"
+
+# Option B — loopback bypass (dev only): no login prompt on localhost.
+setx GV_DASHBOARD_DEV_AUTH 1
+```
+
+Without either variable the dashboard server starts but the API returns `401`
+for everything except the public health probe. See
+[Dashboard Admin Status](../security/DASHBOARD-ADMIN-STATUS.md) for sessions,
+RBAC roles, and the `/admin` panel.
+
+```TypeScript
 # Knowledge Base
 npx tsx src/knowledge-base-sync.ts --stats      # Show stats
 npx tsx src/knowledge-base-sync.ts --mode full # Full sync

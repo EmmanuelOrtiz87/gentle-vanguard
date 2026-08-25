@@ -36,7 +36,8 @@ PERFORMANCE
 - Measure before optimize: all cost changes based on metrics
 - Model routing: economic models for routine agents, premium for critical phases (SDD-design,
   verify)
-- Token tracking: `token-usage.json` updated every turn; weekly cost reports
+- Token tracking: Nexus `token_usage`/`token_transactions` is the operational authority; tool JSONL
+  rollouts are raw source authority, and `token-usage.json` is only a derived compatibility snapshot.
 - Caching: SHA256 response cache (30min TTL); pre-task compression ≥25% ratio
 
 ## Performance SLOs (Source: NORMATIVAS-PERFORMANCE.md)

@@ -52,9 +52,9 @@ accessibility compliance.
 ┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
 │   SOURCES       │────▶│   COLLECTOR      │────▶│   STORE         │
 │                 │     │                  │     │                 │
-│ • session/*.json│     │ real-data.ts │     │ .runtime/metrics│
-│ • logs/*.json   │     │   -Scope full    │     │                 │
-│ • .token-state  │     │                  │     │ • consolidated  │
+│ • Nexus DB      │     │ real-data.ts │     │ derived metrics  │
+│ • tool JSONL    │     │   -Scope full    │     │                 │
+│ • session state │     │                  │     │ • consolidated  │
 │ • git log       │     │ Extract→Transform│     │ • sessions      │
 │ • gh pr list    │     │ →Consolidate     │     │ • token         │
 │                 │     │                  │     │ • git           │

@@ -26,7 +26,7 @@ important decisions exist.
 | Research            | [research/](research/)                        | Curated research that supports stack decisions or capabilities.                          |
 | SDD                 | [sdd/](sdd/)                                  | Spec-driven development documents and templates.                                         |
 | Security            | [security/](security/)                        | Security policy, usage examples, hardening, dependency security support.                 |
-| Status              | [status/](status/)                            | Stack status and maturity reports that are intentionally retained.                       |
+| Status              | [status/](status/)                            | [Canonical current status](status/CANONICAL-STATUS.md) and intentionally retained reports. |
 | Supplementary       | [supplementary/](supplementary/)              | Templates and supporting material that do not belong to a core area.                     |
 | Tasks and backlog   | [tasks/](tasks/) and [backlog/](backlog/)     | Current task/backlog tracking. Completed plans should not live here.                     |
 | Technical manual    | [technical/](technical/)                      | Multi-part technical manual and stack documentation.                                     |

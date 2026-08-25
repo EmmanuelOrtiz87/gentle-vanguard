@@ -73,7 +73,7 @@ C:/Workspace_local/gentle-vanguard/src/knowledge-base-manager.ts -Action stats
 - `C:/Workspace_local/gentle-vanguard/src/knowledge-base-sync.ts`
 - `C:/Workspace_local/gentle-vanguard/src/knowledge-base-autoinit.ts`
 - `docs/knowledge-base/ARCHITECTURE.md`
-- `docs/knowledge-base/USAGE.md`
+- `docs/knowledge-base/README.md`
 
 ## Examples
 

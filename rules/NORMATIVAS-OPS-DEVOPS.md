@@ -46,7 +46,9 @@ INCIDENT-MANAGEMENT, OPTIMIZATION-STACK, TEAM-MODE
 ## Optimization Stack (Source: NORMATIVA-OPTIMIZATION-STACK.md)
 
 - CLAUDE.md ≤65 lines; SHA256 cache TTL ≤30min; pre-task compression ≥25%
-- Token tracking per turn (`token-usage.json`); cache file ≤5MB (auto-clean weekly)
+- Token tracking per turn is authoritative in Nexus (`token_usage`/`token_transactions`); tool JSONL
+  rollouts remain the raw authority for JSONL-producing tools. `.session/token-usage.json` is a
+  derived compatibility snapshot (cache file ≤5MB, auto-clean weekly).
 - Validation: `verify-optimization-stack.ps1` in health-check and CI
 
 ## Team Mode (Source: NORMATIVA-TEAM-MODE.md)

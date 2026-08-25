@@ -119,7 +119,9 @@ Todas las herramientas funcionan **sin PowerShell**:
 ### Session Persistence
 
 - Timeout: 30 minutos de inactividad
-- Archivo: `.session/.active-session.json`
+- Marcador activo: `.session/session-current.json`
+- `.session/.active-session.json` es un marcador de persistencia histórico/de compatibilidad; no es la
+  autoridad del ciclo de vida.
 - Si expira, simplemente reinicia con `gv.ts session start`
 
 ## 🆘 Solución de Problemas

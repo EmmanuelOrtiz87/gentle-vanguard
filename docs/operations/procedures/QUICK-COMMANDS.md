@@ -1,6 +1,6 @@
 # Quick Commands — Gentle-Vanguard
 
-> **Versión**: 3.5.0 | **Última actualización**: 2026-08-02
+> **Versión**: 3.8.2 | **Última actualización**: 2026-08-24
 
 ---
 
