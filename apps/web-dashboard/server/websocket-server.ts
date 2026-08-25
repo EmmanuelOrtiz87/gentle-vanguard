@@ -112,7 +112,14 @@ function resolveSessionAccess(req: IncomingMessage): SessionAccess | undefined {
 }
 
 function devBypassActive(req: IncomingMessage): boolean {
-  return dashboardAuth.devMode && dashboardAuth.isLocalhost(req);
+  // devMode bypass (GV_DASHBOARD_DEV_AUTH=1) or the local-default profile:
+  // no configured token + loopback request = trusted owner access (ADR-0017).
+  // Production always resolves sessions through RBAC instead.
+  return (
+    !dashboardAuth.productionMode &&
+    (dashboardAuth.devMode || !dashboardAuth.enabled) &&
+    dashboardAuth.isLocalhost(req)
+  );
 }
 
 /**
@@ -1250,9 +1257,9 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
 
     // ─── Coarse RBAC guard (policy v1) ─────────────────────────────────
     // Reads require viewer; mutations require operator (admin endpoints are
-    // handled above with their own admin gate + CSRF). Dev-localhost bypass
-    // keeps full access; production sessions without a bound principal must
-    // re-login to acquire one.
+    // handled above with their own admin gate + CSRF). Local-default/dev
+    // loopback bypass keeps full access; production sessions without a bound
+    // principal must re-login to acquire one.
     const routePermission = resolveRoutePermission(url.pathname, req.method ?? 'GET');
     if (routePermission && !devBypassActive(req)) {
       const access = resolveSessionAccess(req);
