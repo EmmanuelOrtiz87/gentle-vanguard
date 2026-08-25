@@ -10,6 +10,7 @@
 
 | Document                                                                   | Description                                                                |
 | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| **[GLOSSARY.md](GLOSSARY.md)**                                             | Canonical technical glossary — what/why/how/where for every stack term      |
 | **[ARCHITECTURE.md](ARCHITECTURE.md)**                                     | System architecture and design                                             |
 | **[SUBAGENT-ARCHITECTURE.md](SUBAGENT-ARCHITECTURE.md)**                   | Parallel subagent topology and token-efficient execution model             |
 | **[OPERATING-DECISIONS-2026-04-15.md](OPERATING-DECISIONS-2026-04-15.md)** | Lessons learned, rules, mechanisms, and definitions from session hardening |
