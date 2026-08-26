@@ -1,13 +1,13 @@
 /* Gentle-Vanguard Academy — Track "fundamentos" (10 lecciones, ES).
    Formato: window.GV_CONTENT["<track>"] = { lessons: [...] }. Markdown subset soportado por app.js. */
 window.GV_CONTENT = window.GV_CONTENT || {};
-window.GV_CONTENT["fundamentos"] = {
+window.GV_CONTENT['fundamentos'] = {
   lessons: [
     {
-      id: "que-es-gentle-vanguard",
-      title: "¿Qué es Gentle-Vanguard?",
+      id: 'que-es-gentle-vanguard',
+      title: '¿Qué es Gentle-Vanguard?',
       minutes: 8,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es
 
 ==Gentle-Vanguard== es una **capa de orquestación e ingeniería** que se instala encima de tus herramientas de IA para programar. No es un modelo de lenguaje ni un chat: es un stack local de scripts TypeScript, configuraciones versionadas, una base de datos SQLite operacional, servidores MCP, agentes especializados y un dashboard de observabilidad, todo coordinado para que trabajar con agentes de IA sea un proceso **medible, repetible y auditable**.
@@ -62,13 +62,13 @@ Orientación rápida para no perderse el primer día:
 - Gentle-Vanguard es una ==capa de orquestación== sobre herramientas de IA, no otra herramienta de IA.
 - El stack completo vive en tu máquina: SQLite local, filesystem \`.session/\`, MCP local y dashboard en loopback.
 - Todo lo que muestra está derivado de trazas y datos reales, nunca de datos inventados.
-- El arranque de sesión es obligatorio e idempotente: inicializa memoria, grafo, presupuesto, salud y dashboard sin intervención manual.`
+- El arranque de sesión es obligatorio e idempotente: inicializa memoria, grafo, presupuesto, salud y dashboard sin intervención manual.`,
     },
     {
-      id: "por-que-existe-cinco-dolores",
-      title: "Por qué existe: los 5 dolores que resuelve",
+      id: 'por-que-existe-cinco-dolores',
+      title: 'Por qué existe: los 5 dolores que resuelve',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## El diagnóstico
 
 Gentle-Vanguard no nació como producto de laboratorio: nació de cinco dolores concretos que sufre cualquier developer que usa agentes de IA a diario. Entenderlos es entender el diseño de todo el stack, porque **cada componente responde a uno de ellos**.
@@ -132,13 +132,13 @@ npm run watchtower:health   # 97/97 PASS esperado
 
 - Cada componente del stack existe para responder a un ==dolor concreto==, no por moda arquitectónica.
 - Memoria, proceso, índices, contabilidad y seguridad son las cinco líneas maestras.
-- La solución siempre es local primero: ninguno de estos dolores exige una nube para curarse.`
+- La solución siempre es local primero: ninguno de estos dolores exige una nube para curarse.`,
     },
     {
-      id: "modelo-local-first-server-optional",
-      title: "El modelo LOCAL-FIRST / SERVER-OPTIONAL (ADR-0017)",
+      id: 'modelo-local-first-server-optional',
+      title: 'El modelo LOCAL-FIRST / SERVER-OPTIONAL (ADR-0017)',
       minutes: 8,
-      type: "curso",
+      type: 'curso',
       md: `## La decisión
 
 El 2026-08-25 se aceptó el ADR-0017: Gentle-Vanguard es oficialmente ==LOCAL-FIRST / SERVER-OPTIONAL==. La operación local es el alcance soportado por defecto y el scope primario del producto; servidor, Kubernetes, cloud y SaaS son **rutas de evolución opt-in**, nunca prerrequisitos presentados como tales.
@@ -197,13 +197,13 @@ npm run watchtower:health   # todo verde sin nube, sin registry, sin identidad e
 - Local es el default soportado; ==server/cloud/SaaS son opt-in== y no se eliminan ni se activan silenciosamente.
 - Cuatro perfiles con fronteras distintas de identidad y datos.
 - Los gates de promoción bloquean solo el deployment externo, jamás el uso local.
-- La autenticación local es honesta: RBAC v1 deployment-scoped, sin reclamar OIDC/LDAP/SSO.`
+- La autenticación local es honesta: RBAC v1 deployment-scoped, sin reclamar OIDC/LDAP/SSO.`,
     },
     {
-      id: "conceptos-base-ia",
-      title: "Conceptos base de IA que necesitas",
+      id: 'conceptos-base-ia',
+      title: 'Conceptos base de IA que necesitas',
       minutes: 10,
-      type: "curso",
+      type: 'curso',
       md: `## El vocabulario mínimo
 
 Para operar el stack con criterio no necesitas un doctorado en ML: necesitas dominar seis conceptos que aparecen en cada comando, alerta y reporte.
@@ -264,13 +264,13 @@ npx tsx src/adaptive-steps.ts --status   # límites de autonomía por agente
 - Token = unidad de costo y de contexto; se contabiliza real, no estimado.
 - La ventana de contexto es el recurso escaso que todo el stack optimiza.
 - La temperatura se gestiona por fase SDD, no a mano por prompt.
-- Agente ≠ chat: autonomía multi-paso que exige guardrails, presupuesto y auditoría.`
+- Agente ≠ chat: autonomía multi-paso que exige guardrails, presupuesto y auditoría.`,
     },
     {
-      id: "agentes-y-orquestadores",
-      title: "Qué es un agente de código y un orquestador",
+      id: 'agentes-y-orquestadores',
+      title: 'Qué es un agente de código y un orquestador',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## Agente de código
 
 Un ==agente de código== es un programa con un LLM en su núcleo que persigue un objetivo usando **herramientas**: ejecutar comandos, leer y escribir archivos, buscar en la web, invocar servidores MCP. A diferencia de un chat, mantiene estado entre pasos y decide el siguiente movimiento según el resultado del anterior.
@@ -337,13 +337,13 @@ Autonomía sin límites es riesgo. Los guardrails del stack:
 - Agente = LLM + herramientas + presupuesto; orquestador = el que descompone y delega.
 - ==MCP== es el pegamento estándar entre modelos y herramientas.
 - Los steps adaptativos y el auto-reassignment evitan agentes agotados a mitad de tarea.
-- La autonomía siempre está acotada por guardrails: budgets, normativas, verificación y trazabilidad.`
+- La autonomía siempre está acotada por guardrails: budgets, normativas, verificación y trazabilidad.`,
     },
     {
-      id: "mision-vision-alcance",
-      title: "Misión, visión y alcance del stack y del microemprendimiento",
+      id: 'mision-vision-alcance',
+      title: 'Misión, visión y alcance del stack y del microemprendimiento',
       minutes: 7,
-      type: "curso",
+      type: 'curso',
       md: `## Misión del stack
 
 La misión de Gentle-Vanguard se resume en una frase: **hacer que trabajar con IA sea ingeniería, no suerte**. Eso significa convertir la relación con los agentes de código en un proceso con memoria, medición, verificación y seguridad, operable por una sola persona en su propia máquina.
@@ -403,13 +403,13 @@ Nada de métricas de vanidad: el éxito operativo del stack se verifica con coma
 - Misión: que la IA trabaje **con ingeniería** — memoria, medición, verificación, seguridad.
 - Visión: agnosticismo por capas + evolución opt-in hacia servidor/SaaS.
 - El negocio combina ==producto propio== (el stack) y ==servicios== (aplicarlo a casos reales).
-- La honestidad técnica (nada inventado, todo verificado) es también la propuesta de valor.`
+- La honestidad técnica (nada inventado, todo verificado) es también la propuesta de valor.`,
     },
     {
-      id: "compatibilidad-herramientas",
-      title: "Compatibilidad y herramientas soportadas",
+      id: 'compatibilidad-herramientas',
+      title: 'Compatibilidad y herramientas soportadas',
       minutes: 8,
-      type: "curso",
+      type: 'curso',
       md: `## Filosofía: agnóstico por diseño
 
 Gentle-Vanguard no te pide abandonar tu herramienta favorita. El stack se **sincroniza hacia** las herramientas: los mismos agentes, skills y comandos se replican donde ya trabajas. La topología de capas (\`docs/architecture/layer-topology.md\`) lo garantiza: memoria, skills, MCP, comandos y agentes definen interfaces, no implementaciones atadas a un vendor.
@@ -479,13 +479,13 @@ Comandos ZCode propios (\`.zcode/commands/\`): \`/graphify\`, \`/token-status\`,
 - El stack se ==sincroniza hacia las herramientas==, no las reemplaza.
 - 21 agentes y 12 skills críticas via \`zcode-sync.ts --sync\`; menos es más (presupuesto de metadata).
 - \`AGENTS.md\` es el contrato de instrucciones multi-tool; las 4 fuentes de tokens hacen el tracking agnóstico.
-- Los cambios de configuración requieren nueva sesión: planifica tus ediciones.`
+- Los cambios de configuración requieren nueva sesión: planifica tus ediciones.`,
     },
     {
-      id: "primer-contacto-comandos",
-      title: "Primer contacto: comandos esenciales",
+      id: 'primer-contacto-comandos',
+      title: 'Primer contacto: comandos esenciales',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## Tu primer cuarto de hora
 
 Esta lección es un recorrido guiado por los comandos que usarás todas las semanas. Ejecútalo en orden sobre un clon del repositorio y habrás tocado cada subsystem clave del stack.
@@ -579,13 +579,13 @@ Un último mapa útil: el directorio \`.runtime/\` es tu panel trasero — ahí 
 - El flujo diario mínimo es: ==autostart → watchtower → graphify query → dashboard==.
 - Todo comando crítico tiene versión TS nativa; los \`npm run\` apuntan solo a esas versiones.
 - La salud 97/97 es la línea base de "todo funciona"; cualquier WARN merece autoheal.
-- Los gotchas documentados (graphify npm, config consolidada, detached) te ahorrarán horas.`
+- Los gotchas documentados (graphify npm, config consolidada, detached) te ahorrarán horas.`,
     },
     {
-      id: "configuraciones-y-perfiles",
-      title: "Configuraciones y perfiles",
+      id: 'configuraciones-y-perfiles',
+      title: 'Configuraciones y perfiles',
       minutes: 8,
-      type: "curso",
+      type: 'curso',
       md: `## Una fuente de verdad por dominio
 
 El stack evita la configuración dispersa: cada dominio tiene su archivo canónico en \`config/\`, validado por tests (\`npm run test:config\`) y monitoreado por la watchtower (componente **configs**, con validación de esquemas JSON).
@@ -654,13 +654,13 @@ npm run profile:status   # qué perfil está activo ahora
 - Un archivo canónico por dominio; la configuración está ==versionada, testeada y monitoreada==.
 - Los perfiles cheap/balanced/premium ajustan temperature y guard por ==fase SDD==, no a mano.
 - \`config/model-router.json\` es la fuente consolidada (la ruta \`model-routing.json\` está muerta).
-- Cambios de config se verifican con \`test:config\` y watchtower antes de confiar en ellos.`
+- Cambios de config se verifican con \`test:config\` y watchtower antes de confiar en ellos.`,
     },
     {
-      id: "capacidades-y-limitaciones",
-      title: "Capacidades y limitaciones honestas",
+      id: 'capacidades-y-limitaciones',
+      title: 'Capacidades y limitaciones honestas',
       minutes: 8,
-      type: "curso",
+      type: 'curso',
       md: `## Por qué esta lección existe
 
 Un stack que solo promete es una demo. Gentle-Vanguard mantiene una disciplina de honestidad: distinguir siempre lo ==verificado localmente== de lo experimental, y jamás presentar inputs externos de promoción como logros locales. Esta lección es el mapa realista de qué puedes esperar.
@@ -706,7 +706,7 @@ Fuentes de estado: \`docs/status/CANONICAL-STATUS.md\` (versión vigente del paq
 - Capacidades nucleares ==verificadas==: pipeline, salud 97/97, datos reales, grafo determinista, seguridad base, CI.
 - Capacidades ==opt-in/experimentales==: cloud, promoción externa, labeling con quota, sagas manuales.
 - La honestidad no es modestia: es el requisito para que las cifras del stack signifiquen algo.
-- Antes de asumir que algo funciona, ejecuta el comando que lo verifica.`
-    }
-  ]
+- Antes de asumir que algo funciona, ejecuta el comando que lo verifica.`,
+    },
+  ],
 };

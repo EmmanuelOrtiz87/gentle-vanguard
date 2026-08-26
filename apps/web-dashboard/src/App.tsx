@@ -16,6 +16,7 @@ import {
   Workflow,
   ShieldCheck,
   UserCog,
+  Sparkles,
 } from 'lucide-react';
 import { useSharedState } from './hooks/useSharedState';
 import { TenantSelector } from './components/TenantSelector';
@@ -26,6 +27,7 @@ const Dashboard = lazy(() => import('./components/Dashboard'));
 const TracingDashboard = lazy(() => import('./components/TracingDashboard'));
 const Marketplace = lazy(() => import('./components/Marketplace'));
 const InteractiveDocs = lazy(() => import('./components/InteractiveDocs'));
+const PromptStudio = lazy(() => import('./components/PromptStudio'));
 const AgentChat = lazy(() => import('./components/AgentChat'));
 const TaskControl = lazy(() => import('./components/TaskControl'));
 const SessionTimeline = lazy(() => import('./components/SessionTimeline'));
@@ -55,6 +57,7 @@ function Navigation() {
     { to: '/agents', icon: Bot, label: 'Agents' },
     { to: '/tasks', icon: ListTodo, label: 'Tasks' },
     { to: '/timeline', icon: History, label: 'Timeline' },
+    { to: '/prompts', icon: Sparkles, label: 'Prompts' },
     { to: '/docs', icon: BookOpen, label: 'Docs' },
     { to: '/mcp', icon: Cpu, label: 'MCP' },
     { to: '/knowledge', icon: Library, label: 'Knowledge' },
@@ -238,6 +241,7 @@ function App() {
                     <Route path="/content-operations" element={<ContentOpsPanel />} />
                     <Route path="/audit" element={<AuditPanel />} />
                     <Route path="/admin" element={<AdminPanel />} />
+                    <Route path="/prompts" element={<PromptStudio />} />
                     <Route path="/docs" element={<InteractiveDocs />} />
                     <Route path="/agents" element={<AgentChat />} />
                     <Route path="/tasks" element={<TasksPage />} />

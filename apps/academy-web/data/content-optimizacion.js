@@ -3,13 +3,13 @@
  * Sin dependencias: define window.GV_CONTENT["optimizacion"].
  */
 window.GV_CONTENT = window.GV_CONTENT || {};
-window.GV_CONTENT["optimizacion"] = {
+window.GV_CONTENT['optimizacion'] = {
   lessons: [
     {
-      id: "la-economia-de-los-tokens",
-      title: "La economía de los tokens: input, output, cache y chat",
+      id: 'la-economia-de-los-tokens',
+      title: 'La economía de los tokens: input, output, cache y chat',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## Qué se cobra realmente cuando hablas con un LLM
 
 Cada llamada a un modelo de lenguaje se cobra por **tokens**, no por "mensajes" ni por "tareas". Un token es un fragmento de texto (en inglés ~4 caracteres de promedio; en español algo menos). Cuando un agente de código responde una pregunta, la factura se compone de varias partes que conviene separar mentalmente:
@@ -52,10 +52,10 @@ Presupuestos vigentes en \`config/token-budget-guard.json\`: ==5M tokens diarios
 - Antes de recortar texto, pregunta si ese texto estaba dirigiendo al modelo o solo pesando.`,
     },
     {
-      id: "ahorro-de-contexto",
-      title: "Ahorro de contexto: el recurso más caro",
+      id: 'ahorro-de-contexto',
+      title: 'Ahorro de contexto: el recurso más caro',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## El contexto es el recurso escaso
 
 La "ventana de contexto" es la cantidad máxima de tokens que el modelo puede atender en una llamada. Parece solo un límite de tamaño, pero el verdadero problema es económico: la atención del modelo compara tokens entre sí, y ese cómputo crece de forma ==cuadrática== con la longitud del contexto. Duplicar el contexto no duplica el costo: lo multiplica mucho más allá de 2x en cómputo, y en la práctica el costo por llamada crece linealmente con los tokens enviados, turno tras turno.
@@ -113,10 +113,10 @@ npm run token:status   # ver dónde va el presupuesto de la sesión
 - Referencias > repeticiones; slim > completo; tiering > acumulación.`,
     },
     {
-      id: "indice-local-de-codigo",
-      title: "El índice local de código: responder sin re-leer el repo",
+      id: 'indice-local-de-codigo',
+      title: 'El índice local de código: responder sin re-leer el repo',
       minutes: 10,
-      type: "curso",
+      type: 'curso',
       md: `## La idea: un índice en lugar del repositorio entero
 
 Cuando le preguntas algo a un agente de código sobre un repositorio mediano, la estrategia ingenua es leer archivos y volcarlos al contexto hasta que el modelo "vea" la respuesta. El enfoque alternativo —validado por práctica externa de 2026 ("We Cut 94% of AI Coding Tokens With a Local Code Index")— es construir **antes** un índice local del código y enviar al modelo solo las fracciones relevantes. La cifra de referencia: hasta ==94% menos tokens== que re-leer el repo.
@@ -176,10 +176,10 @@ npm run graphify -- update .       # tras modificar código
 - Nunca instalar el paquete npm \`graphify\`: el CLI del stack es \`npm run graphify --\`.`,
     },
     {
-      id: "response-cache-sha256",
-      title: "Response cache SHA-256: respuestas idénticas, costo cero",
+      id: 'response-cache-sha256',
+      title: 'Response cache SHA-256: respuestas idénticas, costo cero',
       minutes: 8,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es un cache de respuestas
 
 Si dos peticiones tienen exactamente el mismo input y el mismo contexto, la respuesta del modelo será prácticamente idéntica. Pagar dos veces por ella es gasto puro. Un **response cache** guarda la respuesta de la primera petición indexada por una clave derivada del input, y sirve las repeticiones desde disco: latencia mínima y ==costo cero en tokens==.
@@ -234,10 +234,10 @@ npm run token:trace  # ahorro por cache reads en token_savings
 - Mide el hit rate: un cache con hits bajos es costo operativo sin retorno.`,
     },
     {
-      id: "compresion-estructural",
-      title: "Compresión estructural: 5 estrategias y la protección del razonamiento",
+      id: 'compresion-estructural',
+      title: 'Compresión estructural: 5 estrategias y la protección del razonamiento',
       minutes: 10,
-      type: "curso",
+      type: 'curso',
       md: `## Comprimir datos, no solo texto
 
 La compresión extractiva clásica (recortar el prompt, recortar la respuesta) trata el texto como prosa. Pero gran parte del contexto de un agente de código son **estructuras**: arrays JSON, logs de build, resultados de tests, tablas. Comprimirlas con estrategias que entienden su forma rinde mucho más que recortar líneas.
@@ -296,10 +296,10 @@ npm run token:trace                                     # ahorro por compresión
 - Compresión lossy en input = ahorro que se paga en alucinaciones.`,
     },
     {
-      id: "lru-cache-y-prompt-cache-ordering",
-      title: "Caché LRU por tenant y ordenamiento prompt-cache friendly",
+      id: 'lru-cache-y-prompt-cache-ordering',
+      title: 'Caché LRU por tenant y ordenamiento prompt-cache friendly',
       minutes: 8,
-      type: "curso",
+      type: 'curso',
       md: `## Dos niveles de cache que no hay que confundir
 
 Esta lección junta dos técnicas de cacheo que operan en capas distintas:
@@ -355,10 +355,10 @@ npm run watchtower:health       # el ciclo verifica dashboard-ws (API 200, PIDs 
 - Toda capa de cache necesita sus propias métricas de hit rate para justificarse.`,
     },
     {
-      id: "budget-guard",
-      title: "Budget guard: presupuestos, alertas y límites",
+      id: 'budget-guard',
+      title: 'Budget guard: presupuestos, alertas y límites',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## Un presupuesto sin guardia es una esperanza
 
 Saber cuánto gastaste la semana pasada no evita quedarte sin presupuesto hoy. El **token budget guard** es el componente que convierte los límites en enforcement: monitorea el consumo en tiempo real, alerta por umbrales y —en el modo más estricto— bloquea el dispatch de nuevos agentes.
@@ -416,10 +416,10 @@ cat config/token-budget-guard.json   # límites vigentes (fuente única)
 - Un presupuesto calibrado contra consumo real (~1.5M/día) es señal de medición, no de suerte.`,
     },
     {
-      id: "perfiles-de-modelo-y-routing",
-      title: "Perfiles cheap/balanced/premium y routing de modelos",
+      id: 'perfiles-de-modelo-y-routing',
+      title: 'Perfiles cheap/balanced/premium y routing de modelos',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## No todas las tareas merecen el mismo modelo
 
 La intuición es simple: resumir un log no necesita el mismo músculo que diseñar una arquitectura. El error común es extremarla — usar el modelo más caro para todo (caro) o el más barato para todo (incorrecto en lo crítico). La solución del stack es un **router de modelos** con perfiles nombrados y reglas de escalada.
@@ -473,10 +473,10 @@ npm run profile:apply -- premium # aplicar y persistir
 - "Premium" significa más estricto, no más creativo — y la temperatura está auditada y bloqueada fuera del flujo oficial.`,
     },
     {
-      id: "token-tracking-real",
-      title: "Token tracking real: 4 fuentes convergen en Nexus",
+      id: 'token-tracking-real',
+      title: 'Token tracking real: 4 fuentes convergen en Nexus',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## Medir lo que ya está en disco, no instalar nada
 
 El problema clásico del seguimiento de tokens en un entorno multi-herramienta: cada herramienta (ZCode, Codex, MiniMax, opencode) usa su propio formato y su propio lugar de persistencia. La tentación es un plugin por herramienta — frágil y acoplado. La solución del stack es un **daemon de ingesta agnóstico** (\`src/tokens/token-ingest.ts\`) que lee los datos que cada herramienta **ya persiste en disco** y los consolida en un solo lugar: Nexus.
@@ -533,10 +533,10 @@ npm run token:status   # presupuesto real: usado / presupuesto / %
 - 241 sesiones / 658M tokens históricos y ~1.06M tokens recuperados por cache: los números existen porque se midieron.`,
     },
     {
-      id: "checklist-de-optimizacion",
-      title: "Checklist de optimización: audita tu propio consumo",
+      id: 'checklist-de-optimizacion',
+      title: 'Checklist de optimización: audita tu propio consumo',
       minutes: 8,
-      type: "curso",
+      type: 'curso',
       md: `## La auditoría como hábito
 
 Todo lo anterior —cache, compresión, índices, presupuestos, perfiles— solo compone si lo revisas periódicamente. Esta lección ordena la auditoría de consumo propio en un recorrido reproducible de ~15 minutos, con los comandos del stack y qué buscar en cada salida.

@@ -1,13 +1,13 @@
 /* Gentle-Vanguard Academy — Track "arquitectura" (10 lecciones, ES).
    Formato: window.GV_CONTENT["<track>"] = { lessons: [...] }. Markdown subset soportado por app.js. */
 window.GV_CONTENT = window.GV_CONTENT || {};
-window.GV_CONTENT["arquitectura"] = {
+window.GV_CONTENT['arquitectura'] = {
   lessons: [
     {
-      id: "mapa-alto-nivel-capas",
-      title: "Mapa de alto nivel: las capas del stack",
+      id: 'mapa-alto-nivel-capas',
+      title: 'Mapa de alto nivel: las capas del stack',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## La vista de 30.000 pies
 
 Antes de estudiar componentes individuales necesitas el mapa. Gentle-Vanguard se organiza en **seis planos funcionales** que cubren todo el ciclo de operar con agentes de IA:
@@ -77,13 +77,13 @@ npm run graphify -- status           # estado del índice de código
 - Seis planos funcionales (CLI, datos, memoria, grafo, observabilidad, seguridad) y una ==topología interna de 5 capas== agnóstica.
 - La regla de oro del diseño: interfaz sobre implementación, capas pluggables.
 - Ninguna capa asume vendor, SO ni lenguaje: por eso el stack sobrevive a cambios de herramienta.
-- El mapa mental correcto: la sesión es el hilo que cose todas las capas.`
+- El mapa mental correcto: la sesión es el hilo que cose todas las capas.`,
     },
     {
-      id: "nexus-base-de-datos-operacional",
-      title: "Nexus — la base de datos operacional",
+      id: 'nexus-base-de-datos-operacional',
+      title: 'Nexus — la base de datos operacional',
       minutes: 10,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es
 
 ==Nexus== es la base de datos operacional del stack: un SQLite en modo WAL con foreign keys ON, ubicado en \`.runtime/gentle-vanguard.db\`. Es el sistema nervioso central donde converge toda la información operacional: métricas, sesiones, trazas, eventos, alertas, feedback, caché de respuestas, resultados de contratos SDD, uso de skills, uso de tokens, reglas de ruteo y session scoring.
@@ -147,13 +147,13 @@ Tres steps lazy en \`config/session-autostart.config.json\` mantienen a Nexus sa
 - SQLite WAL local con ==27 tablas / 15 migraciones==, singleton DatabaseManager y repos por dominio.
 - Lifecycle completo de comandos \`db:*\` con retención automática (30d eventos, 7d caché, 90d tokens).
 - La watchtower lo vigila en cada ciclo; el pipeline lo inicializa en cada sesión, sin bloquear.
-- Un solo lugar para todos los datos operacionales: auditable, respaldable, local.`
+- Un solo lugar para todos los datos operacionales: auditable, respaldable, local.`,
     },
     {
-      id: "engram-memoria-semantica",
-      title: "Engram — memoria semántica persistente",
+      id: 'engram-memoria-semantica',
+      title: 'Engram — memoria semántica persistente',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## El problema de la amnesia
 
 Cada sesión nueva parte de cero: el agente olvidó las decisiones de arquitectura de ayer, el bug que ya corregiste, el patrón que prefieres. Re-explicarlo todo cuesta tokens y tiempo, y encima se repiten errores. ==Engram== ataca exactamente eso: memoria **entre** sesiones.
@@ -222,13 +222,13 @@ La watchtower lo verifica (integridad de la DB, log de reindex, pipeline RAG). E
 - Engram = memoria persistente con ==observations tipadas, provenance y session summaries==.
 - Conflictos → veredictos explícitos (related, compatible, scoped, conflicts_with, supersedes), nunca overwrite silencioso.
 - Se opera vía MCP (\`mem_*\`), se integra al pipeline de sesión y a las fases SDD.
-- El costo de guardar es mínimo; el de re-aprender cada sesión, enorme.`
+- El costo de guardar es mínimo; el de re-aprender cada sesión, enorme.`,
     },
     {
-      id: "codegraph-graphify-indice",
-      title: "CodeGraph y graphify — el índice de código",
+      id: 'codegraph-graphify-indice',
+      title: 'CodeGraph y graphify — el índice de código',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## Dos índices complementarios
 
 La pregunta más frecuente con un agente es "¿dónde vive X y cómo funciona?". La respuesta clásica —releer archivos— quema ventana de contexto. El stack la responde con dos índices complementarios:
@@ -289,13 +289,13 @@ Reglas de uso del manual:
 - graphify = ==AST determinista== (build/query/explain); CodeGraph = MCP con callers/callees/impact.
 - Consultar el índice antes que leer archivos es el hábito de mayor retorno en tokens.
 - Limitaciones documentadas: edges sin semántica de pago, labeling con quota diaria.
-- Tras editar código: \`npm run graphify -- update .\` para no consultar un grafo viejo.`
+- Tras editar código: \`npm run graphify -- update .\` para no consultar un grafo viejo.`,
     },
     {
-      id: "watchtower-salud-autohealing",
-      title: "Watchtower — salud y auto-healing",
+      id: 'watchtower-salud-autohealing',
+      title: 'Watchtower — salud y auto-healing',
       minutes: 8,
-      type: "curso",
+      type: 'curso',
       md: `## El guardián
 
 ==Watchtower== (\`src/core/maintenance-watchtower.ts\`) es el orquestador central de health checks, auto-healing y monitoreo continuo. Unifica en un solo punto checks que antes vivían dispersos en scripts separados (health-check, stack-health-check, watchdog). Su misión: **detectar drift y degradación antes de que se conviertan en una sesión fallida**.
@@ -374,13 +374,13 @@ Y para dejar evidencia, el modo report exporta el estado completo a JSON (\`-Act
 - 97 checks / 21 componentes / 6 modos, con ==autoheal lazy== en cada sesión.
 - Cobertura total: dashboard, grafo, memoria, MCP, sesión, hooks, configs, seguridad, Nexus.
 - witr añade trazabilidad causal de procesos/puertos a los hallazgos.
-- CLI Guard ejemplifica la filosofía: cada bug estructural se convierte en check permanente.`
+- CLI Guard ejemplifica la filosofía: cada bug estructural se convierte en check permanente.`,
     },
     {
-      id: "pipeline-de-sesion",
-      title: "El pipeline de sesión: autostart y adaptive steps",
+      id: 'pipeline-de-sesion',
+      title: 'El pipeline de sesión: autostart y adaptive steps',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## El arranque
 
 Toda sesión arranca con \`npm run session:autostart:detached\` (o la variante bloqueante \`npx tsx src/session-autostart.ts\`). Es ==obligatorio, idempotente y no pide permiso==: inicializa session ID, integridad de Engram, security orchestrator, sync de CodeGraph, token budget, session scoring, Karpathy guidelines, perfiles adaptativos, watchtower auto-heal y el dashboard WS — con los steps perezosos en background.
@@ -440,13 +440,13 @@ Cuando un subagente reporta "maximum steps reached", el orquestador detecta el e
 - Autostart ==detached = CI-friendly==: ~1.3s de espera, pipeline en background, logs con retención.
 - \~29 steps + \~77 lazy con concurrencia limitada y tolerancia a fallos por step.
 - Adaptive steps + auto-reassignment = agentes que no mueren a mitad de tarea.
-- La config del pipeline es declarativa y versionada: la sesión es reproducible.`
+- La config del pipeline es declarativa y versionada: la sesión es reproducible.`,
     },
     {
-      id: "dashboard-observabilidad",
-      title: "Dashboard — observabilidad en tiempo real",
+      id: 'dashboard-observabilidad',
+      title: 'Dashboard — observabilidad en tiempo real',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es
 
 El dashboard es la ==UI de observabilidad LLM== del stack: una SPA React/TypeScript/Vite en \`apps/web-dashboard/\` que muestra tokens, trazas, alertas, routing y salud **en tiempo real y sin mock data** — todo deriva de trazas reales persistidas.
@@ -511,13 +511,13 @@ El frontend tolera la caída temporal del WS gracias al polling, así que "medio
 - ==Sin mock data==: si el dashboard muestra un número, es medido.
 - Push WS cada 5s + polling HTTP de respaldo + watchdog con 10 reintentos = resiliencia por capas.
 - Puertos dinámicos persistidos y parada ordenada (watchdog primero).
-- Tenancy real: LRU por tenant y provenance database/filesystem validada en el servidor.`
+- Tenancy real: LRU por tenant y provenance database/filesystem validada en el servidor.`,
     },
     {
-      id: "event-sourcing-saga-audit",
-      title: "Event sourcing, saga y audit hash-chain",
+      id: 'event-sourcing-saga-audit',
+      title: 'Event sourcing, saga y audit hash-chain',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## Trazabilidad inmutable
 
 Cuando un agente autónomo modifica tu repo, la pregunta incómoda es: **¿quién hizo qué y puedo demostrarlo?** El stack responde con tres piezas complementarias de la infraestructura v4.0: event sourcing con cadena de hashes, sagas para procesos largos, y un pipeline de auditoría diario.
@@ -591,13 +591,13 @@ npm run watchtower:health   # componentes audit y checkpoints entre los verifica
 - Eventos con ==prevHash + hash SHA-256==: \`verify\` detecta cualquier manipulación.
 - Sagas con compensación para procesos largos; audit JSONL diario con retención.
 - Todo local, en \`.session/\`, sin servicio externo.
-- La tríada tracing + checkpoints + hash-chain convierte "confía en mí" en "verifícalo".`
+- La tríada tracing + checkpoints + hash-chain convierte "confía en mí" en "verifícalo".`,
     },
     {
-      id: "tenancy-aislamiento-datos",
-      title: "Tenancy y aislamiento de datos",
+      id: 'tenancy-aislamiento-datos',
+      title: 'Tenancy y aislamiento de datos',
       minutes: 8,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es un tenant
 
 Un ==tenant== es una frontera lógica de datos dentro de un mismo deployment. Aunque operes solo, el modelo de tenancy importa: es lo que permite pasar de "todo mezclado" a "local-multi-tenant" sin rediseño, y lo que da garantías reales de aislamiento cuando compartes el deployment.
@@ -670,13 +670,13 @@ npm run db:health    # el conteo de tablas/filas refleja el esquema tenant-aware
 - \`tenant_id\` en todas las tablas de dominio, scoping ==en SQL==, default \`gentle-vanguard\`.
 - Provenance database/filesystem validada en el servidor: sin tenant explícito, el dato se rechaza.
 - RBAC v1 con sesiones opacas, CSRF double-submit y bootstrap admin del primer principal.
-- Multi-tenant local es opt-in; enterprise identity es frontera explícita, no promesa implícita.`
+- Multi-tenant local es opt-in; enterprise identity es frontera explícita, no promesa implícita.`,
     },
     {
-      id: "tokens-pipeline-tracking",
-      title: "Tokens: el pipeline de tracking real",
+      id: 'tokens-pipeline-tracking',
+      title: 'Tokens: el pipeline de tracking real',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## Medición agnóstica
 
 El presupuesto de tokens del stack no se estima ni se simula: se ==lee del disco lo que cada herramienta ya persistió==. El daemon \`src/tokens/token-ingest.ts\` ingiere las fuentes y consolida todo en Nexus, sin depender de plugins de opencode/claude/cursor.
@@ -741,7 +741,7 @@ Fuente única: \`config/token-budget-guard.json\` — ==daily 5M, perSession 3M=
 - Ingesta agnóstica de ==4 fuentes reales== (opencode, zcode, codex, minimax) consolidadas en Nexus.
 - Tres tablas: usage (sesión), transactions (mensaje+agente), savings (cache+compresión).
 - Jerarquía clara: rollouts = uso bruto; Nexus = agregados; snapshots legacy = compatibilidad.
-- Presupuestos centralizados (5M/3M) con vigilancia y alertas — el costo deja de ser invisible.`
-    }
-  ]
+- Presupuestos centralizados (5M/3M) con vigilancia y alertas — el costo deja de ser invisible.`,
+    },
+  ],
 };

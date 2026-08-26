@@ -5,13 +5,13 @@
 
 window.GV_CONTENT = window.GV_CONTENT || {};
 
-window.GV_CONTENT["laboratorio"] = {
+window.GV_CONTENT['laboratorio'] = {
   lessons: [
     {
-      id: "lab-0-arranque-y-salud",
-      title: "Lab 0 — Arranque y salud: el stack vivo",
+      id: 'lab-0-arranque-y-salud',
+      title: 'Lab 0 — Arranque y salud: el stack vivo',
       minutes: 15,
-      type: "laboratorio",
+      type: 'laboratorio',
       md: `## Objetivo
 
 Dejar el stack corriendo y **probar con evidencia** que está vivo: pipeline de sesión inicializado, 97 checks de watchtower en PASS y Nexus saludable. Este lab es la puerta de todos los demás.
@@ -66,13 +66,13 @@ npm run token:status
 
 ## Reto extra
 
-Corré \`npm run watchtower:health\` dos veces seguidas y compará: ¿coincide el total? ¿Coincide el estado por componente? Clasificá cualquier diferencia (p. ej. un WARN de DB lock que desaparece) como hecho sobre variabilidad, no como "está roto".`
+Corré \`npm run watchtower:health\` dos veces seguidas y compará: ¿coincide el total? ¿Coincide el estado por componente? Clasificá cualquier diferencia (p. ej. un WARN de DB lock que desaparece) como hecho sobre variabilidad, no como "está roto".`,
     },
     {
-      id: "lab-1-navegar-codigo-sin-leer-archivos",
-      title: "Lab 1 — Navegar código sin leer archivos: graphify",
+      id: 'lab-1-navegar-codigo-sin-leer-archivos',
+      title: 'Lab 1 — Navegar código sin leer archivos: graphify',
       minutes: 20,
-      type: "laboratorio",
+      type: 'laboratorio',
       md: `## Objetivo
 
 Responder preguntas de código sobre el propio repositorio **sin abrir archivos en el editor**, usando el grafo de conocimiento nativo (graphify). Es el mayor ahorro de tokens de la operación diaria: el grafo responde, el contexto no se gasta re-leyendo código.
@@ -131,13 +131,13 @@ npm run graphify -- update .
 
 ## Reto extra
 
-Respondé la misma pregunta de los pasos 1–2 "a la antigua": con \`grep -rn\` y abriendo 2–3 archivos. Estimá cuántas líneas leíste y compará con la salida del grafo. Esa diferencia es tu ahorro de contexto por consulta.`
+Respondé la misma pregunta de los pasos 1–2 "a la antigua": con \`grep -rn\` y abriendo 2–3 archivos. Estimá cuántas líneas leíste y compará con la salida del grafo. Esa diferencia es tu ahorro de contexto por consulta.`,
     },
     {
-      id: "lab-2-delegar-un-code-review",
-      title: "Lab 2 — Delegar un code review",
+      id: 'lab-2-delegar-un-code-review',
+      title: 'Lab 2 — Delegar un code review',
       minutes: 20,
-      type: "laboratorio",
+      type: 'laboratorio',
       md: `## Objetivo
 
 Delegar una revisión de código al subagente adecuado y **leer el resultado**: primero ver qué agente recomienda el routing, después delegar la tarea y consumir su output.
@@ -181,13 +181,13 @@ npm run delegate:run -- --task "audit gdpr compliance del manejo de datos del da
 
 ## Reto extra
 
-Compará los dos reviews (calidad vs. compliance): ¿qué lentes aplicó cada uno? Mapealo contra las Review Lenses (security 0.4, performance/maintainability/compliance 0.2) de la lección de verificación.`
+Compará los dos reviews (calidad vs. compliance): ¿qué lentes aplicó cada uno? Mapealo contra las Review Lenses (security 0.4, performance/maintainability/compliance 0.2) de la lección de verificación.`,
     },
     {
-      id: "lab-3-observar-el-consumo",
-      title: "Lab 3 — Observar el consumo de tokens",
+      id: 'lab-3-observar-el-consumo',
+      title: 'Lab 3 — Observar el consumo de tokens',
       minutes: 20,
-      type: "laboratorio",
+      type: 'laboratorio',
       md: `## Objetivo
 
 Medir el consumo real de tokens del stack, identificar **al mayor consumidor** (orquestador vs. subagentes) y cruzar la medición con el dashboard.
@@ -240,13 +240,13 @@ curl http://localhost:<WS_PORT>/api/metrics
 
 ## Reto extra
 
-Repetí \`npm run token:status\` 10 minutos después (actividad de fondo incluida) y calculá el delta. Redactá 3 líneas: (1) un hecho con número, (2) una hipótesis sobre ese dato, (3) qué medirías para confirmarla. Es exactamente el formato de informe que espera el stack.`
+Repetí \`npm run token:status\` 10 minutos después (actividad de fondo incluida) y calculá el delta. Redactá 3 líneas: (1) un hecho con número, (2) una hipótesis sobre ese dato, (3) qué medirías para confirmarla. Es exactamente el formato de informe que espera el stack.`,
     },
     {
-      id: "lab-4-memoria-engram",
-      title: "Lab 4 — Memoria: guardar y recuperar en Engram",
+      id: 'lab-4-memoria-engram',
+      title: 'Lab 4 — Memoria: guardar y recuperar en Engram',
       minutes: 20,
-      type: "laboratorio",
+      type: 'laboratorio',
       md: `## Objetivo
 
 Guardar una observación en la ==memoria persistente== (Engram), recuperarla por búsqueda semántica y **verificar que sobrevive entre sesiones** — la prueba de que el stack no arranca de cero cada vez.
@@ -296,13 +296,13 @@ tools/engram.exe doctor
 
 ## Reto extra
 
-Guardá una segunda observación que **contradiga** a la primera (p. ej. otro hallazgo sobre el mismo tema con conclusión distinta). Cuando el sistema lo detecte como potencial conflicto, emite un veredicto explícito (\`mem_compare\` con relación \`conflicts_with\`/\`supersedes\`/\`not_conflict\`): Engram no sobrescribe silenciosamente — los conflictos se juzgan.`
+Guardá una segunda observación que **contradiga** a la primera (p. ej. otro hallazgo sobre el mismo tema con conclusión distinta). Cuando el sistema lo detecte como potencial conflicto, emite un veredicto explícito (\`mem_compare\` con relación \`conflicts_with\`/\`supersedes\`/\`not_conflict\`): Engram no sobrescribe silenciosamente — los conflictos se juzgan.`,
     },
     {
-      id: "lab-5-routing-loop",
-      title: "Lab 5 — Routing loop: registrar outcomes y ver el learning",
+      id: 'lab-5-routing-loop',
+      title: 'Lab 5 — Routing loop: registrar outcomes y ver el learning',
       minutes: 25,
-      type: "laboratorio",
+      type: 'laboratorio',
       md: `## Objetivo
 
 Cerrar el ==loop de aprendizaje del routing==: correr una delegación (que registra su outcome), y ver cómo cambian los contadores de éxito en la tabla de routing — el mecanismo por el que el stack "aprende" qué agente resuelve qué.
@@ -353,13 +353,13 @@ cat .session/routing/routing-table.json | head -50
 
 ## Reto extra
 
-Delegá la **misma tarea** tres veces e interpretá la evolución de \`success_rate\`. Después probá el mecanismo de auto-reassignment: buscá en la salida de una delegación la frase "maximum steps reached" (o simulá un agente agotado) y re-activá con \`npx tsx src/adaptive-steps.ts --resume <agente>\` — steps +20, máximo 80, contexto preservado.`
+Delegá la **misma tarea** tres veces e interpretá la evolución de \`success_rate\`. Después probá el mecanismo de auto-reassignment: buscá en la salida de una delegación la frase "maximum steps reached" (o simulá un agente agotado) y re-activá con \`npx tsx src/adaptive-steps.ts --resume <agente>\` — steps +20, máximo 80, contexto preservado.`,
     },
     {
-      id: "lab-6-calidad-suites-y-warning",
-      title: "Lab 6 — Calidad: correr suites y arreglar un warning",
+      id: 'lab-6-calidad-suites-y-warning',
+      title: 'Lab 6 — Calidad: correr suites y arreglar un warning',
       minutes: 25,
-      type: "laboratorio",
+      type: 'laboratorio',
       md: `## Objetivo
 
 Correr las suites de calidad del stack, **introducir un defecto a propósito**, ver cómo el guardrail lo detecta y arreglarlo — el ciclo completo detectar→corregir→verificar.
@@ -423,13 +423,13 @@ npx lefthook run pre-commit --dry-run
 
 ## Reto extra
 
-Compará duración de \`npm run test:quick\` vs \`npm test\` y de \`npm run test:parallel -- 4\`. Después rompé a propósito un archivo JSON de configuración (agregale una coma final) y corré \`npm run test:config\` — mirá cómo la suite de configs atrapa exactamente eso (la normativa JSON prohíbe trailing commas).`
+Compará duración de \`npm run test:quick\` vs \`npm test\` y de \`npm run test:parallel -- 4\`. Después rompé a propósito un archivo JSON de configuración (agregale una coma final) y corré \`npm run test:config\` — mirá cómo la suite de configs atrapa exactamente eso (la normativa JSON prohíbe trailing commas).`,
     },
     {
-      id: "lab-7-capstone-auditoria-deuda",
-      title: "Lab 7 — Capstone: mini-auditoría de deuda técnica",
+      id: 'lab-7-capstone-auditoria-deuda',
+      title: 'Lab 7 — Capstone: mini-auditoría de deuda técnica',
       minutes: 30,
-      type: "laboratorio",
+      type: 'laboratorio',
       md: `## Objetivo
 
 Ejecutar una ==mini-auditoría de deuda técnica== de un directorio usando el stack completo: secret scanning, análisis de código, review delegado y registro de hallazgos a prueba de manipulación. Es el capstone: combina los Labs 1–6.
@@ -487,7 +487,7 @@ npx tsx src/event-sourcing.ts -Action verify -AggregateId lab7-auditoria
 
 ## Reto extra
 
-Programá la re-auditoría: repetí este lab dentro de 30 días sobre el mismo directorio, con el mismo \`AggregateId\` (nuevos eventos se encadenan a los viejos) y compará: ¿los hallazgos HIGH siguen? ¿Los quick wins se resolvieron? Ese diff temporal es la medida honesta de si la deuda baja.`
-    }
-  ]
+Programá la re-auditoría: repetí este lab dentro de 30 días sobre el mismo directorio, con el mismo \`AggregateId\` (nuevos eventos se encadenan a los viejos) y compará: ¿los hallazgos HIGH siguen? ¿Los quick wins se resolvieron? Ese diff temporal es la medida honesta de si la deuda baja.`,
+    },
+  ],
 };

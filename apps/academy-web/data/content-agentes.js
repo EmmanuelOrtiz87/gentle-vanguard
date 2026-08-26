@@ -3,13 +3,13 @@
  * Sin dependencias: define window.GV_CONTENT["agentes"].
  */
 window.GV_CONTENT = window.GV_CONTENT || {};
-window.GV_CONTENT["agentes"] = {
+window.GV_CONTENT['agentes'] = {
   lessons: [
     {
-      id: "los-21-subagentes",
-      title: "Los 21 subagentes del stack: quién hace qué",
+      id: 'los-21-subagentes',
+      title: 'Los 21 subagentes del stack: quién hace qué',
       minutes: 10,
-      type: "curso",
+      type: 'curso',
       md: `## Por qué dividir un agente en veintiuno
 
 Un orquestador monolítico que "sabe de todo" paga dos precios: carga skills que no usa en cada turno y arrastra contexto acumulado. La arquitectura de subagentes del stack ataca ambos: ==21 subagentes especializados== viven en \`.opencode/agents/\`, cada uno con contexto acotado y skills propias. La arquitectura de referencia documentó el resultado: ~60% de ahorro frente al orquestador monolítico (~20K vs ~50K tokens por sesión).
@@ -69,10 +69,10 @@ cat config/subagent-mapping.json                    # mapeo código → subagent
 - Los 21 se sincronizan multi-tool con \`zcode-sync.ts --sync\`.`,
     },
     {
-      id: "delegacion-route-and-delegate",
-      title: "Delegación: cómo una tarea llega al agente correcto",
+      id: 'delegacion-route-and-delegate',
+      title: 'Delegación: cómo una tarea llega al agente correcto',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## El problema del "¿quién debería hacer esto?"
 
 En un stack con 21 subagentes, la primera decisión no es *cómo* ejecutar sino **a quién** enviarle la tarea. Mandar "auditar cumplimiento GDPR" al agente de marketing no es solo ineficiente: produce un resultado confiadamente mediocre. La pieza central del stack es \`src/route-and-delegate.ts\` — el **route-and-delegate** que recomienda el agente nativo adecuado y delega con el tiering de modelo aplicado.
@@ -123,10 +123,10 @@ npx tsx src/recommend-agent.ts --task "code review" --topn 3   # solo recomendar
 - Delegar tiene costo fijo: tareas de 2-3 pasos van directo.`,
     },
     {
-      id: "adaptive-steps",
-      title: "Adaptive steps: escalado de complejidad y re-asignación automática",
+      id: 'adaptive-steps',
+      title: 'Adaptive steps: escalado de complejidad y re-asignación automática',
       minutes: 8,
-      type: "curso",
+      type: 'curso',
       md: `## El problema: el agente que se queda sin pasos a mitad de tarea
 
 Un "step" es una unidad de acción de un agente (una llamada a herramienta, un razonamiento, un ciclo). La configuración original daba a los subagentes ==6 steps== fijos. El síntoma era recurrente: en tareas complejas, el agente reportaba \`maximum steps reached\` y la tarea quedaba a mitad de camino — ni fallada ni terminada. Aumentar los steps para todos era tirar tokens en tareas simples.
@@ -194,10 +194,10 @@ npx tsx src/adaptive-steps.ts --status
 - \`--status\` para auditar la configuración, \`--estimate\` para probar hipótesis de carga antes de delegar.`,
     },
     {
-      id: "routing-learning-loop",
-      title: "El routing learning loop: outcomes reales en Nexus (migración 015)",
+      id: 'routing-learning-loop',
+      title: 'El routing learning loop: outcomes reales en Nexus (migración 015)',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## Recomendar por reglas está bien; recomendar por resultados es mejor
 
 Un router basado solo en keywords y árboles de decisión tiene techo: no sabe que el agente A resolvió 12 de 13 tareas de un dominio y el agente B solo 3 de 10. El **routing learning loop** cierra ese ciclo: cada delegación registra su **outcome** (éxito/fallo) en Nexus, y las recomendaciones futuras priorizan los agentes con mejores resultados medidos.
@@ -276,10 +276,10 @@ npx tsx src/recommend-agent.ts --task "security audit" --topn 3
 - Scope por tenant: cada inquilino aprende su propio mejor agente.`,
     },
     {
-      id: "auto-delegacion-ml",
-      title: "Auto-delegación: routing table aprendible y scoring de confianza",
+      id: 'auto-delegacion-ml',
+      title: 'Auto-delegación: routing table aprendible y scoring de confianza',
       minutes: 10,
-      type: "curso",
+      type: 'curso',
       md: `## De keywords a aprendizaje: la escalera de la delegación automática
 
 La auto-delegación del stack es un sistema de enrutamiento de tareas a subagentes que sube por tres peldaños de inteligencia: reglas → heurística estructurada → aprendizaje por outcomes. La implementación de referencia (\`docs/reference/AUTO-DELEGATION-IMPLEMENTATION.md\`) documenta el recorrido completo.
@@ -342,10 +342,10 @@ npm run delegate:run -- --task "code review" --topn 3
 - "Fix the thing" (score 25) es el test mental honesto: si tu tarea no supera al árbol, descríbela mejor.`,
     },
     {
-      id: "mcp-model-context-protocol",
-      title: "MCP: Model Context Protocol y los servers locales del stack",
+      id: 'mcp-model-context-protocol',
+      title: 'MCP: Model Context Protocol y los servers locales del stack',
       minutes: 8,
-      type: "curso",
+      type: 'curso',
       md: `## El problema que resuelve MCP
 
 Un agente de código necesita capacidades fuera del modelo: buscar en una base de conocimiento, leer archivos, consultar un grafo de código. Históricamente cada herramienta de agente definía sus propias integraciones — escribir un conector para ZCode no servía para Codex ni para Claude. **Model Context Protocol (MCP)** estandariza eso: un protocolo abierto por el que un **server** expone herramientas (**tools**) que cualquier **client** compatible puede invocar. Las herramientas aparecen con el prefijo del server (p. ej. \`mcp__codegraph__codegraph_query\`), el modelo decide cuándo usarlas y el protocola transporta la llamada.
@@ -394,10 +394,10 @@ cat .zcode/config.json      # servers registrados: codegraph, engram, chrome-dev
 - El patrón ganador: exponer consultas a índices locales pre-computados, no acceso crudo a archivos.`,
     },
     {
-      id: "skills-auto-trigger",
-      title: "Skills: auto-trigger, presupuesto de metadata y las 12 críticas",
+      id: 'skills-auto-trigger',
+      title: 'Skills: auto-trigger, presupuesto de metadata y las 12 críticas',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es una skill
 
 Una **skill** es un paquete de instrucciones especializadas que se inyecta en el agente cuando la tarea la necesita: un \`SKILL.md\` con frontmatter (\`name\`, \`description\`) más archivos de soporte (plantillas, ejemplos). No es código que corre: es conocimiento de procedimiento que el modelo carga bajo demanda. El stack tiene ==~120 skills== disponibles entre \`.opencode/skills/\` (nivel 1) y \`skills/\` (stack).
@@ -445,10 +445,10 @@ npx tsx src/zcode-sync.ts --sync --tools zcode,codex   # filtrar destinos
 - Dos skills del mismo dominio no son duplicato si cambia agente, profundidad o fase.`,
     },
     {
-      id: "plugins-y-multi-tool",
-      title: "Plugins y compatibilidad multi-tool: sync, hooks y commands",
+      id: 'plugins-y-multi-tool',
+      title: 'Plugins y compatibilidad multi-tool: sync, hooks y commands',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## Un stack, tres herramientas de agente
 
 Gentle-Vanguard no vive en una sola herramienta: sus agentes y skills se usan desde ==ZCode, Codex y MiniMax Code==. El desafío es que cada herramienta tiene sus convenciones — directorios distintos, formatos con matices, mecanismos propios de extensión. La estrategia es un **sync único** más un contrato de plugins estándar.
@@ -508,10 +508,10 @@ npx tsx src/dashboard-start.ts            # el stack completo sigue local-first
 - Plugins de terceros: manifest validado en CI, sandbox, firma y ciclo de vida de 6 pasos.`,
     },
     {
-      id: "rag-y-crag",
-      title: "RAG y CRAG: retrieval con grader BM25 y web crawler dual-provider",
+      id: 'rag-y-crag',
+      title: 'RAG y CRAG: retrieval con grader BM25 y web crawler dual-provider',
       minutes: 10,
-      type: "curso",
+      type: 'curso',
       md: `## RAG: dar al modelo exactamente lo que necesita, no todo
 
 **RAG** (Retrieval-Augmented Generation) consiste en recuperar los fragmentos relevantes de una fuente de conocimiento e inyectarlos en el prompt antes de generar. La calidad de un sistema RAG no está en el modelo: está en el **retrieval**. Si recuperas fragmentos irrelevantes, el modelo alucina con confianza o responde a la pregunta equivocada.
@@ -577,10 +577,10 @@ npx tsx src/web/web-crawler-cli.ts health
 - \`web:select\` persiste el top-N gradeado; \`--deep\` re-scorea sobre markdown completo (cap 20K chars).`,
     },
     {
-      id: "subagentes-en-la-practica",
-      title: "Subagentes en la práctica: delegar vs hacer directo",
+      id: 'subagentes-en-la-practica',
+      title: 'Subagentes en la práctica: delegar vs hacer directo',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## La decisión de todos los días
 
 Toda la arquitectura de agentes se reduce a una decisión práctica repetida: **¿esto lo hago yo (orquestador) o lo delego?** Esta lección es la guía operativa, con los comandos exactos y los criterios para no delegar de más ni de menos.

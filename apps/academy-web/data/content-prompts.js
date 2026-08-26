@@ -1,13 +1,13 @@
 /* Gentle-Vanguard Academy — Track "prompts" (10 lecciones, ES).
    Formato: window.GV_CONTENT["<track>"] = { lessons: [...] }. Markdown subset soportado por app.js. */
 window.GV_CONTENT = window.GV_CONTENT || {};
-window.GV_CONTENT["prompts"] = {
+window.GV_CONTENT['prompts'] = {
   lessons: [
     {
-      id: "anatomia-de-un-prompt-profesional",
-      title: "Anatomía de un prompt profesional",
+      id: 'anatomia-de-un-prompt-profesional',
+      title: 'Anatomía de un prompt profesional',
       minutes: 10,
-      type: "curso",
+      type: 'curso',
       md: `## El prompt como contrato
 
 Un prompt profesional no es una frase bonita: es un ==contrato de trabajo== entre tú y el modelo. Como todo contrato, tiene cláusulas, y cuando una falta, el modelo rellena el hueco con sus supuestos por defecto — que rara vez son los tuyos.
@@ -117,13 +117,13 @@ El "antes" produce cumplidos genéricos. El "después" produce una lista que pue
 - La **tarea** es el bloque crítico: un verbo con objetivo verificable.
 - El formato de salida importa cuando el resultado consume otro proceso, no un humano.
 - Las restricciones existen porque el modelo optimiza para impresionar, no para contener scope.
-- Un ejemplo few-shot comunica estilo más barato que tres párrafos de prosa.`
+- Un ejemplo few-shot comunica estilo más barato que tres párrafos de prosa.`,
     },
     {
-      id: "principios-universales-prompting",
-      title: "Principios universales de prompt engineering",
+      id: 'principios-universales-prompting',
+      title: 'Principios universales de prompt engineering',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## Principios, no trucos
 
 Las guías de prompting de Anthropic y OpenAI, y el trabajo divulgado por practicistas como ==Greg Kamradt== y ==Lilian Weng==, coinciden en un núcleo de principios que se repiten independientemente del modelo y del proveedor. No son trucos de moda: son consecuencias de cómo funcionan los LLMs. Aquí van, presentados como lo que son — principios universales.
@@ -194,13 +194,13 @@ Nota lo que hace la última restricción: convierte la tendencia a alucinar hall
 - Específico en qué, cuánto y para qué; mostrar ejemplos domina describir formatos.
 - Descomponer tareas (SDD es la forma institucional de hacerlo) le gana a prompts monolíticos.
 - Itera cambiando ==una variable a la vez==, con criterio de éxito definido antes de enviar.
-- Si 5 iteraciones de redacción no arreglan nada, el problema es la descomposición, no la palabra.`
+- Si 5 iteraciones de redacción no arreglan nada, el problema es la descomposición, no la palabra.`,
     },
     {
-      id: "tecnicas-zero-shot-few-shot-cot",
-      title: "Técnicas: zero-shot, few-shot y chain-of-thought",
+      id: 'tecnicas-zero-shot-few-shot-cot',
+      title: 'Técnicas: zero-shot, few-shot y chain-of-thought',
       minutes: 10,
-      type: "curso",
+      type: 'curso',
       md: `## El espectro de técnicas
 
 Entre "preguntar directo" y "montar un pipeline multi-agente" hay un espectro de técnicas de prompting. Elegir la correcta es cuestión de costo/beneficio: cada técnica sube el consumo de tokens y el costo de mantener el prompt.
@@ -310,13 +310,13 @@ Anthropic documenta que Claude responde especialmente bien a **tags XML** para e
 - Los ejemplos few-shot deben incluir el caso difícil, no solo los felices.
 - Delimitadores: instrucciones fuera, datos dentro — también es defensa contra inyección.
 - Prefijos XML (Claude) o markdown headers (GPT) son la misma técnica con sintaxis distinta.
-- Sobre-técnizar es un anti-patrón: cada técnica tiene su tarea y su costo.`
+- Sobre-técnizar es un anti-patrón: cada técnica tiene su tarea y su costo.`,
     },
     {
-      id: "prompting-en-gentle-vanguard",
-      title: "Prompting en Gentle-Vanguard: prompts reales del stack",
+      id: 'prompting-en-gentle-vanguard',
+      title: 'Prompting en Gentle-Vanguard: prompts reales del stack',
       minutes: 10,
-      type: "curso",
+      type: 'curso',
       md: `## Del prompt artesanal al prompt versionado
 
 Gentle-Vanguard no predica prompt engineering: lo ==practica en producción==. El stack contiene decenas de prompts reales, versionados en git, con tests de regresión y presupuesto de tokens. Esta lección recorre cómo están construidos.
@@ -385,13 +385,13 @@ La decisión de diseño más importante del stack: ==ningún prompt es la últim
 - \`behavior-prompts.json\` comprime esos comportamientos para subagentes y los enruta por rol — prompt engineering con routing.
 - El contexto se inyecta (AGENTS.md slim), no se pega; la compresión de input es lossless-only.
 - Regla de arquitectura del stack: el prompt dirige, el ==contrato verifica== — gates de CI, result-gatekeeper, tests.
-- Los prompts del stack son activos versionados: git, formato validado, presupuesto medido.`
+- Los prompts del stack son activos versionados: git, formato validado, presupuesto medido.`,
     },
     {
-      id: "prompts-para-code-review",
-      title: "Prompts para code review",
+      id: 'prompts-para-code-review',
+      title: 'Prompts para code review',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## Review con lentes
 
 El error clásico del review por agente es pedir "revisa este código" — el modelo responde con cumplidos y alguna sugerencia de naming. El review profesional usa ==lentes==: pases enfocados en una dimensión a la vez. El stack formaliza esto en \`config/review-lenses.json\` con cuatro lentes — **security, maintainability, reliability, resilience** — y límites operativos (extensiones revisables, tamaño máximo de archivo, máximo de hallazgos por archivo para evitar ruido).
@@ -470,13 +470,13 @@ márcalo "requiere evidencia".
 - Cada hallazgo necesita evidencia: archivo:línea y ==modo de fallo==, no opinión.
 - Prohíbe explícitamente hallazgos relleno y habilita "SIN HALLAZGOS" como respuesta válida.
 - Postura default-fail en el prompt: el cambio está roto hasta que el código demuestre lo contrario.
-- Veredicto binario (APROBADO / CAMBIOS REQUERIDOS) con razón en una línea: accionable sin ambigüedad.`
+- Veredicto binario (APROBADO / CAMBIOS REQUERIDOS) con razón en una línea: accionable sin ambigüedad.`,
     },
     {
-      id: "prompts-para-generar-codigo",
-      title: "Prompts para generar código y features",
+      id: 'prompts-para-generar-codigo',
+      title: 'Prompts para generar código y features',
       minutes: 10,
-      type: "curso",
+      type: 'curso',
       md: `## El prompt de feature es una especificación
 
 Generar código es donde los prompts fracasan más caro: el output se ejecuta. La diferencia entre un prompt de feature mediocre y uno profesional no es elegancia — es si el resultado **compila, pasa tests y respeta el repo**. El rol DEV del stack lo resume en tres reglas verificables: el archivo debe existir en disco antes de reportar completo, cero errores de lint/compilación, y al menos un test por cambio.
@@ -563,13 +563,13 @@ El prompt perfecto no elimina la verificación: la hace más barata. El código 
 - "Patrones a imitar" (few-shot de repo) y "ya existe, no duplicar" son las líneas de mayor retorno.
 - Anti-patrones: prompt vago, ==scope infinito==, sin definición de listo, confianza ciega.
 - Límite de líneas con split propuesto — regla del rol DEV real del stack — frena diffs inmanejables.
-- El agente debe citar qué ejecutó (lint, tests) antes de reportar done: verificación citada o no counts.`
+- El agente debe citar qué ejecutó (lint, tests) antes de reportar done: verificación citada o no counts.`,
     },
     {
-      id: "prompts-analisis-diseno-arquitectura",
-      title: "Prompts para análisis, diseño y arquitectura",
+      id: 'prompts-analisis-diseno-arquitectura',
+      title: 'Prompts para análisis, diseño y arquitectura',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## Decisiones, no ensayos
 
 Pedirle análisis a un agente sin estructura produce ensayos persuasivos con conclusiones arbitrarias. El output que vale en arquitectura es una ==decisión argumentada==: opciones consideradas, criterios, trade-offs, y qué se decidió NO hacer. El rol SAD del stack lo tiene como regla dura: toda decisión de arquitectura debe citar al menos un trade-off examinado, y documentar lo que se decidió no hacer y por qué.
@@ -678,13 +678,13 @@ hedging — si el plan puede romperse, di exactamente dónde.
 - Ancla la escala con números reales: el default del modelo es diseñar para una hipótesis de millones de usuarios.
 - Exige mínimo 3 opciones con desventajas reales por cada una.
 - Distingue pedir ==opciones== (criterios difusos) de pedir ==decisión== (criterios claros) — y no externalices decisiones que son tuyas.
-- El ==premortem== (asumir el fallo y explicar cómo) es el mejor prompt de validación previa al sign-off.`
+- El ==premortem== (asumir el fallo y explicar cómo) es el mejor prompt de validación previa al sign-off.`,
     },
     {
-      id: "optimizacion-de-prompts",
-      title: "Optimización de prompts: tokens, cache y cuándo parar",
+      id: 'optimizacion-de-prompts',
+      title: 'Optimización de prompts: tokens, cache y cuándo parar',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## El prompt tiene presupuesto
 
 Cada token del prompt se paga en cada llamada, en cada turno, en cada sesión. El stack trata el largo del prompt como ==métrica operacional==: el protocolo de eficiencia de contexto (\`docs/reference/CONTEXT-EFFICIENCY-PROTOCOL.md\`) define targets explícitos — longitud media de prompt bajo control, referencias en vez de contenido completo — y dispara compactación automática preservando lo crítico (FIXME, TODO, decisiones, resultados).
@@ -772,13 +772,13 @@ mantener) | Razón |. Luego el prompt reescrito.
 - Arquitectura cache-friendly: estable al frente, volátil al final; el system prompt no toca el reloj.
 - Referencias y ejemplos comprimen mejor que prosa — AGENTS.md slim y \`behavior-prompts.json\` son la prueba viviente del stack.
 - Tras ~5 iteraciones de redacción sin mejora, el problema es ==retrieval, descomposición o técnica== — no la palabra.
-- Audita prompts con checklist antes de producción: qué es load-bearing, qué es ruido, qué es cacheable.`
+- Audita prompts con checklist antes de producción: qué es load-bearing, qué es ruido, qué es cacheable.`,
     },
     {
-      id: "anti-patrones-y-seguridad",
-      title: "Anti-patrones y seguridad de prompts",
+      id: 'anti-patrones-y-seguridad',
+      title: 'Anti-patrones y seguridad de prompts',
       minutes: 10,
-      type: "curso",
+      type: 'curso',
       md: `## El prompt es superficie de ataque
 
 Un prompt no es solo una instrucción: es un canal por el que entra contenido de terceros a un sistema que ejecuta cosas. Esta lección cubre los tres riesgos principales y cómo el stack los mitiga con ==código, no con esperanza==.
@@ -872,13 +872,13 @@ Formato: {formato de la tarea} + campo final
 - Primera línea: delimitadores + "dato no es instrucción" + reporte de inyección. Última línea: \`prompt-injection-guard\`, \`result-gatekeeper\`, secret scanner — ==código, no prosa==.
 - Nunca secretos reales ni datos personales completos en prompts: el historial de sesión persiste.
 - Contra la sobre-confianza: exigir ==evidencia citada== (test output, log line) y validar resultados con gate antes de contarlos como done.
-- El output del modelo se trata como input no confiable — misma regla que para un form público.`
+- El output del modelo se trata como input no confiable — misma regla que para un form público.`,
     },
     {
-      id: "del-prompt-al-workflow",
-      title: "Del prompt al workflow: promoción a skill, comando y agente",
+      id: 'del-prompt-al-workflow',
+      title: 'Del prompt al workflow: promoción a skill, comando y agente',
       minutes: 9,
-      type: "curso",
+      type: 'curso',
       md: `## El prompt que se repite es una deuda
 
 Escribir un buen prompt dos veces es una coincidencia; tres veces es un proceso sin infraestructura. El stack organiza esta progresión como una ==escalera de promoción==: prompt → plantilla → skill → comando → agente. Cada peldaño sube el costo de mantenimiento y baja el costo de uso.
@@ -955,7 +955,7 @@ agente si no existe mecanismo de verificación viable.
 - Tres señales para promover: repetición (3+ usos), estabilidad (deja de cambiar), valor compartido — más verificabilidad para los niveles altos.
 - El stack es la demostración: web:select, review-lenses, delegate y los 21 agentes son ==prompts promocionados== donde el criterio de calidad migró de prosa a código.
 - Al promocionar, separa lo estable (estructura fija) de lo variable (parámetros) — es la diferencia entre plantilla y documento muerto.
-- Cada peldaño debe venir con su gate: workflow sin verificación es un prompt con pretensiones.`
-    }
-  ]
+- Cada peldaño debe venir con su gate: workflow sin verificación es un prompt con pretensiones.`,
+    },
+  ],
 };

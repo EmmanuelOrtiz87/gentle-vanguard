@@ -5,13 +5,13 @@
 
 window.GV_CONTENT = window.GV_CONTENT || {};
 
-window.GV_CONTENT["negocio"] = {
+window.GV_CONTENT['negocio'] = {
   lessons: [
     {
-      id: "modelo-de-negocio",
-      title: "El modelo de negocio: producto + servicios diversificados",
+      id: 'modelo-de-negocio',
+      title: 'El modelo de negocio: producto + servicios diversificados',
       minutes: 12,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es y para qué sirve
 
 Gentle-Vanguard no es ni una startup que busca escala a cualquier costo ni una consultora que vende horas sueltas. Es un ==microemprendimiento tech local-first== con dos motores complementarios:
@@ -51,13 +51,13 @@ La regla operativa del Lab ordena la prioridad: **construir assets reutilizables
 - Dos motores: producto open-core local-first + servicios (desarrollo, consultoría, capacitación).
 - Diversificación con circuito virtuoso: servicios → mejoran producto → habilitan mejores servicios.
 - El Lab industrializa la demanda: problema real → pack reutilizable.
-- Regla de prioridad: assets reutilizables antes que bespoke.`
+- Regla de prioridad: assets reutilizables antes que bespoke.`,
     },
     {
-      id: "oferta-y-audiencias",
-      title: "Oferta y audiencias: a quién le vende cada formato",
+      id: 'oferta-y-audiencias',
+      title: 'Oferta y audiencias: a quién le vende cada formato',
       minutes: 12,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es y para qué sirve
 
 La oferta educativa es una ==escalera==: cada peldaño da un "recibo de valor" distinto y prepara el siguiente. Vender el formato correcto a la audiencia correcta evita el error clásico: regalar una academia a quien necesitaba una charla, o cobrar una charla a quien quería dominio.
@@ -109,13 +109,13 @@ Cada formato tiene job distinto: la charla **genera confianza**, el workshop **g
 - Cuatro formatos: charla 45–60 / workshop 2–3 h / academy 12 módulos / executive-institucional.
 - La escalera: confianza → primer resultado → habilidad → contrato.
 - A cada audiencia su formato; el deck correcto ya existe por oferta (V3).
-- La licencia institucional se cotiza por cohorte o año — es otra negociación, no un precio por persona.`
+- La licencia institucional se cotiza por cohorte o año — es otra negociación, no un precio por persona.`,
     },
     {
-      id: "pricing-y-propuesta-de-valor",
-      title: "Pricing y propuesta de valor: el modelo de decisión",
+      id: 'pricing-y-propuesta-de-valor',
+      title: 'Pricing y propuesta de valor: el modelo de decisión',
       minutes: 14,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es y para qué sirve
 
 El ==PRICING-MODEL== del kit no es una lista de precios: es un **modelo de decisión** para llegar a ellos. Fija la estructura de costo, el precio mínimo viable (PMV) y los anclajes de mercado; los números finales son decisión del dueño. La regla del plan comercial es tajante: *no publicar precios hasta definir duración, inclusiones, términos de cancelación y límites de soporte*.
@@ -167,13 +167,13 @@ Antes de cotizar: verificá los precios de referencia vigentes (los del modelo s
 - PMV = piso matemático; precio de lista = decisión de posicionamiento sobre el piso.
 - Dos mercados (B2C AR / corporativo USD) con anclas incompatibles: elegir uno primero.
 - Early-adopter se cobra en feedback + testimonio, no solo en plata.
-- Restricciones fiscales AR (Factura C, tope de categoría, exportación de servicios) se verifican con contador antes de cotizar grande.`
+- Restricciones fiscales AR (Factura C, tope de categoría, exportación de servicios) se verifican con contador antes de cotizar grande.`,
     },
     {
-      id: "go-to-market",
-      title: "Go-to-market: campañas, redes y el GTM-BRIDGE",
+      id: 'go-to-market',
+      title: 'Go-to-market: campañas, redes y el GTM-BRIDGE',
       minutes: 12,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es y para qué sirve
 
 ==Go-to-market (GTM)== es el puente entre tener oferta y tener clientes. El stack no improvisa: cada pieza necesaria ya existe como asset, y el **GTM-BRIDGE** (Master Kit) mapea necesidad → asset para que una oportunidad validada pueda salir al mercado **el mismo día**.
@@ -217,13 +217,13 @@ El flujo semanal concreto: publicar contenido de la campaña en 2 redes según e
 - GTM-BRIDGE: cada necesidad comercial ya tiene asset — la venta no espera a que se diseñe nada.
 - Secuencia repetible de 6 pasos: qualify → propose → demo → price → present → close.
 - Cada red con su job: X/LinkedIn tiran B2B, Instagram/TikTok construyen marca y alcance.
-- Todo client-facing sale de los tokens de marca; las demos siempre etiquetadas como demos.`
+- Todo client-facing sale de los tokens de marca; las demos siempre etiquetadas como demos.`,
     },
     {
-      id: "casos-de-uso-verticales",
-      title: "Casos de uso verticales: los 4 solution packs",
+      id: 'casos-de-uso-verticales',
+      title: 'Casos de uso verticales: los 4 solution packs',
       minutes: 12,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es y para qué sirve
 
 Los ==solution packs== son la respuesta industrializada a demanda real repetida: cada pack nace de señales de mercado (requests públicas repetidas 2026), se documenta como propuesta de negocio + receta técnica, y se vende en niveles. Cuatro packs forman el catálogo vertical actual.
@@ -275,13 +275,13 @@ El diagnóstico (OPP-004) es la puerta de entrada más honesta cuando el cliente
 - Cuatro packs verticales, cada uno con propuesta de negocio, receta técnica y alcance client-facing.
 - Todos se venden por niveles L1→L4: entrada accesible, expansión con valor creciente.
 - OPP-004 es el paraguas: diagnostica primero, implementa después.
-- Regla: demo se etiqueta como demo — nunca producción.`
+- Regla: demo se etiqueta como demo — nunca producción.`,
     },
     {
-      id: "marketing-servicios-profesionales",
-      title: "Marketing de servicios profesionales",
+      id: 'marketing-servicios-profesionales',
+      title: 'Marketing de servicios profesionales',
       minutes: 11,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es y para qué sirve
 
 Vender servicios profesionales no es perseguir leads: es construir ==reputación compuesta== — que la evidencia pública de tu competencia haga el pre-venta antes de la primera reunión. El microemprendimiento tech no tiene budget de ads; tiene demostraciones verificables, contenido técnico y referencias. Ese es el marketing.
@@ -325,13 +325,13 @@ Flujo semanal sostenible para una persona: 2 piezas de contenido (reutiliza la c
 - Marketing = reputación compuesta: contenido con evidencia, testimonios canjeados, reputación técnica pública.
 - El early-adopter se cobra en feedback + testimonio + permiso de publicar.
 - Buen contrato = buen fit: qualify con templates del Lab, propose con propuesta estructurada.
-- Señal roja número uno: trabajo a medida por debajo del PMV que no alimenta ningún pack.`
+- Señal roja número uno: trabajo a medida por debajo del PMV que no alimenta ningún pack.`,
     },
     {
-      id: "operacion-como-empresa",
-      title: "Operación como empresa: contratos, soporte y unit economics",
+      id: 'operacion-como-empresa',
+      title: 'Operación como empresa: contratos, soporte y unit economics',
       minutes: 12,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es y para qué sirve
 
 Un microemprendimiento que factura necesita operar como empresa chiquita: contratos claros, soporte acotado, entregas certificadas y **números por unidad económica**. Sin esto, cada cliente exitoso te acerca al colapso operativo; con esto, cada cohorte te dice si el negocio escala.
@@ -384,13 +384,13 @@ Antes de abrir la primera cohorte pagante: T&C y reembolso revisados por profesi
 - Tres contratos base (T&C, privacidad, reembolso) como borradores — requieren revisión legal antes de usar.
 - Soporte publicado con ventana, canal y tope; el precio nunca promete soporte infinito.
 - Certificado en cada entrega: cierre del compromiso + activo de marketing.
-- Unit economics por edición con números reales; restricciones fiscales AR verificadas con contador.`
+- Unit economics por edición con números reales; restricciones fiscales AR verificadas con contador.`,
     },
     {
-      id: "roadmap-de-crecimiento",
-      title: "Roadmap de crecimiento: de local-first a server/SaaS opt-in",
+      id: 'roadmap-de-crecimiento',
+      title: 'Roadmap de crecimiento: de local-first a server/SaaS opt-in',
       minutes: 12,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es y para qué sirve
 
 El destino declarado del stack NO es "mudarse a la nube". Es ==LOCAL-FIRST / SERVER-OPTIONAL== (ADR-0017): la operación local es la ruta soportada; server, Kubernetes, cloud y SaaS son **caminos de evolución opt-in** que nunca se presentan como requisito. El roadmap de crecimiento respeta esa arquitectura: crece el negocio sin traicionar el modelo.
@@ -436,7 +436,7 @@ La decisión mensual es simple: ¿este esfuerzo acerca los packs o la Academy (i
 - Cuatro perfiles (local-default → saas-federated); hoy el soportado es local-default.
 - Promotion gates: informativos en local, bloqueantes en promoción; los inputs los aporta el operador.
 - Invariante: núcleo local, normativas, SDD y honestidad — el método no cambia con el deployment.
-- Secuencia: servicios financian producto; server/SaaS solo con demanda e inputs reales (ADR-0017).`
-    }
-  ]
+- Secuencia: servicios financian producto; server/SaaS solo con demanda e inputs reales (ADR-0017).`,
+    },
+  ],
 };

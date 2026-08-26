@@ -5,13 +5,13 @@
 
 window.GV_CONTENT = window.GV_CONTENT || {};
 
-window.GV_CONTENT["workflows"] = {
+window.GV_CONTENT['workflows'] = {
   lessons: [
     {
-      id: "sdd-ciclo-end-to-end",
-      title: "El ciclo SDD end-to-end: BA → SAD → DEV → QA",
+      id: 'sdd-ciclo-end-to-end',
+      title: 'El ciclo SDD end-to-end: BA → SAD → DEV → QA',
       minutes: 14,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es y para qué sirve
 
 ==Spec-Driven Development (SDD)== es el flujo de trabajo central del stack: antes de escribir código, se escribe y valida una especificación. El objetivo no es burocracia, sino evitar el patrón más caro del desarrollo con IA: generar código sin contrato, descubrir tarde que resuelve el problema equivocado y pagar el re-trabajo en tokens y en tiempo.
@@ -57,13 +57,13 @@ Cuando delegues una tarea al stack, deja que el ciclo haga su trabajo: no saltes
 - Cuatro roles (BA → SAD → DEV → QA) mapeados a fases con artefactos \`gate-*.json\` PASS/FAIL.
 - DryRun antes de ejecución real; \`.sdd/\` nunca se commitea.
 - El sdd-gate bloquea PRs a ramas protegidas sin SDD validado.
-- Los perfiles de modelo por fase alinean costo y rigor: premium para diseñar y verificar, económico para rutina.`
+- Los perfiles de modelo por fase alinean costo y rigor: premium para diseñar y verificar, económico para rutina.`,
     },
     {
-      id: "guardrails-y-gates",
-      title: "Guardrails: qué son y cuáles activa el stack",
+      id: 'guardrails-y-gates',
+      title: 'Guardrails: qué son y cuáles activa el stack',
       minutes: 10,
-      type: "curso",
+      type: 'curso',
       md: `## Qué son y para qué sirven
 
 Un ==guardrail== (barandilla) es un check automático que impide que un cambio malo llegue más lejos de donde puede corregirse barato. La idea es simple: el error más caro es el que se descubre tarde, así que el stack instala barandillas en cada punto de avance — commit, push, PR, merge, release.
@@ -121,13 +121,13 @@ Si un hook te bloquea, no lo saltees con \`--no-verify\`: leelo. Casi siempre es
 - Pre-commit: lint de configs + escaneo de secrets (trufflehog, secretlint, scanner nativo de 80 patrones).
 - Pre-push: typecheck, ESLint, audit, npm audit.
 - Audit sweep: quick/standard/full por costo creciente; \`judgment\` (revisión adversarial) para releases mayores.
-- sdd-gate: sin SDD validado no hay merge a ramas protegidas.`
+- sdd-gate: sin SDD validado no hay merge a ramas protegidas.`,
     },
     {
-      id: "normativas-del-stack",
-      title: "Normativas del stack: las reglas que le dan dirección",
+      id: 'normativas-del-stack',
+      title: 'Normativas del stack: las reglas que le dan dirección',
       minutes: 12,
-      type: "curso",
+      type: 'curso',
       md: `## Qué son y para qué sirven
 
 Las ==normativas== son las reglas escritas del repositorio: convenciones obligatorias que hacen que veinte decisiones dispersas se comporten como un solo sistema. Sin normativas, cada sesión (y cada agente) re-decide todo desde cero; con ellas, el stack tiene **dirección estable** y los cambios son revisables contra una regla citable.
@@ -180,13 +180,13 @@ Antes de discutir un "deberíamos…", chequea la normativa: si existe, la discu
 - Cuatro consolidadas: ARCHITECTURE (estructura), CODE-QUALITY (escritura), OPS-DEVOPS (operación), WORKFLOW (proceso).
 - Reglas clave transversales: TypeScript-First, 80% cobertura, SLOs medidos, git flow protegido, releases automatizadas.
 - Las normativas se citan en review y se actualizan junto a \`AGENTS.md\`.
-- El feedback loop convierte patrones repetidos en normas nuevas.`
+- El feedback loop convierte patrones repetidos en normas nuevas.`,
     },
     {
-      id: "seguridad-por-capas",
-      title: "Seguridad por capas: del secret scanner a los permisos",
+      id: 'seguridad-por-capas',
+      title: 'Seguridad por capas: del secret scanner a los permisos',
       minutes: 11,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es y para qué sirve
 
 La seguridad del stack no es un producto puntual sino ==capas superpuestas==, cada una cubriendo el fallo de la anterior. El modelo asume lo realista: los secrets se filtran por descuido, las dependencias se vulneran, los binarios se distribuyen y los dashboards se exponen. Cada capa tiene un dueño automático — no depende de que alguien se acuerde.
@@ -238,13 +238,13 @@ Si vas a commitear un ejemplo con una key, usa un placeholder obvio y verifica c
 - Seis capas: scanner nativo (80 patrones), CI (gitleaks/secretlint/trivy), installer AES-256, RBAC + CSRF, promotion gates opt-in, higiene de IA.
 - El scanner redacta por defecto y soporta entropía para bajar falsos positivos.
 - RBAC es deployment-scoped: no clama OIDC/LDAP/SSO — eso es input de promoción externa.
-- La regla de oro: el stack nunca remueve marcas de proveniencia AI sin petición explícita.`
+- La regla de oro: el stack nunca remueve marcas de proveniencia AI sin petición explícita.`,
     },
     {
-      id: "auditoria-y-trazabilidad",
-      title: "Auditoría y trazabilidad: la cadena hash",
+      id: 'auditoria-y-trazabilidad',
+      title: 'Auditoría y trazabilidad: la cadena hash',
       minutes: 10,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es y para qué sirve
 
 Auditar no es solo registrar: es poder **demostrar** que lo registrado no fue alterado. La diferencia entre un log cualquiera y un ==audit trail== es que el segundo detecta manipulación. En un stack donde agentes toman decisiones automáticas, la pregunta "¿por qué hizo esto?" necesita una respuesta verificable, no una reconstrucción de memoria.
@@ -307,13 +307,13 @@ Regla mental: **hecho observado = medición con fecha y comando reproducible**. 
 - Audit pipeline JSONL diario en \`.session/audit/logs/\` (log/status/query/archive/prune).
 - Tracing OTLP con árbol trace/span; cada delegación es reconstruible.
 - Judgment-day añade revisión adversarial de 9 dimensiones cuando la integridad no alcanza.
-- witr explica la causa de un proceso/puerto — auditoría con contexto, no solo estado.`
+- witr explica la causa de un proceso/puerto — auditoría con contexto, no solo estado.`,
     },
     {
-      id: "testing-del-stack",
-      title: "Testing del stack: suites y cómo correrlas",
+      id: 'testing-del-stack',
+      title: 'Testing del stack: suites y cómo correrlas',
       minutes: 10,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es y para qué sirve
 
 El stack se prueba a sí mismo. La suite de tests no es un adorno del CI: es la razón por la que se puede refactorizar 390+ scripts de PowerShell a TypeScript sin congelar el desarrollo. La normativa lo dice claro: ==Testing First== — todo cambio llega con tests, cobertura mínima 80%, enforced en CI/CD.
@@ -366,13 +366,13 @@ Cuando arregles un bug, el orden es: **reproducir con un test que falle → arre
 - Suite principal: 463 unit tests (~100 archivos), más config (6), workflows (2), research (5), integration y e2e.
 - Runner optimizado con \`--quick\` y \`--parallel\`; deterministic tests para ciclos sin costo de API.
 - Cobertura mínima 80%, enforced por CI; pre-push corre typecheck + lint + audit.
-- Los tests de regresión documentan decisiones de arquitectura (procesos ocultos, cadena hash, scanner).`
+- Los tests de regresión documentan decisiones de arquitectura (procesos ocultos, cadena hash, scanner).`,
     },
     {
-      id: "watchtower-en-operacion",
-      title: "Watchtower en operación: el runbook mental",
+      id: 'watchtower-en-operacion',
+      title: 'Watchtower en operación: el runbook mental',
       minutes: 12,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es y para qué sirve
 
 La ==Watchtower== es el orquestador de salud y auto-healing del stack: **97 checks sobre 21 componentes** en 6 modos de operación. Su trabajo es detectar drift y degradación *antes* de que se conviertan en una sesión fallida: un índice vencido, un daemon muerto, una base locked, un hook desinstalado.
@@ -430,13 +430,13 @@ Arrancá cada sesión de trabajo serio con \`npm run watchtower:health\`. Si vas
 - 97 checks / 21 componentes / 6 modos; \`autoheal -Quiet\` corre lazy en cada session start.
 - Runbook: reproducir → identificar componente → trazar causa (witr) → autoheal/rebuild → reiniciar por la puerta correcta → leer \`.runtime/\`.
 - El stop del dashboard mata el watchdog antes que el proceso (evita restart loops).
-- Tres warnings transitorios conocidos; el resto se trata.`
+- Tres warnings transitorios conocidos; el resto se trata.`,
     },
     {
-      id: "verificacion-antes-de-listo",
-      title: "Verificación antes de «listo»: gatekeeper, lenses y ledger",
+      id: 'verificacion-antes-de-listo',
+      title: 'Verificación antes de «listo»: gatekeeper, lenses y ledger',
       minutes: 10,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es y para qué sirve
 
 "Listo" es la palabra más peligrosa del desarrollo con agentes. El stack la reemplaza por **evidencia verificada**, con tres componentes del trust-layer que trabajan en secuencia: el ==Result Gatekeeper== decide si un resultado puede avanzar, las ==Review Lenses== lo miran desde ángulos ponderados por riesgo, y el ==Findings Ledger== registra lo encontrado de forma a prueba de manipulación.
@@ -497,13 +497,13 @@ Cuando un agente te diga "terminado", tu respuesta no es "gracias", es la secuen
 - Tres piezas: Result Gatekeeper (contratos PASS/FAIL), Review Lenses (4 lentes, security 0.4), Findings Ledger (cadena hash).
 - La selección de lentes es risk-based: seguridad primero, siempre.
 - Los findings encadenados no se pueden reescribir silenciosamente.
-- "Listo" = gate PASS + lenses ejecutadas + findings registrados — nada menos.`
+- "Listo" = gate PASS + lenses ejecutadas + findings registrados — nada menos.`,
     },
     {
-      id: "catalogo-capacidades",
-      title: "Capacidades concretas del stack — catálogo honesto",
+      id: 'catalogo-capacidades',
+      title: 'Capacidades concretas del stack — catálogo honesto',
       minutes: 12,
-      type: "curso",
+      type: 'curso',
       md: `## Qué es y para qué sirve
 
 Vender (o usar) una herramienta exige saber exactamente **qué hace, cómo lo hace y dónde se corta**. Esta lección es el catálogo honesto de capacidades del stack: cada capacidad con su mecanismo real, y las limitaciones declaradas sin maquillaje. La regla del kit comercial es explícita: no presentar promesas como hechos — cada afirmación debe poder demostrarse con un comando.
@@ -552,7 +552,7 @@ El catálogo de arriba está escrito en hechos: cada fila tiene comando. Cuando 
 - Once capacidades, cada una con mecanismo y comando demostrable.
 - Tres limitaciones grandes declaradas: multi-repo alpha, plugins experimentales, promoción externa pendiente de inputs del operador.
 - El test de honestidad: ¿qué comando lo demuestra? Si no hay comando, es promesa.
-- Las limitaciones no son vergüenza: son el scope. Lo que no está soportado hoy está documentado como no-soportado.`
-    }
-  ]
+- Las limitaciones no son vergüenza: son el scope. Lo que no está soportado hoy está documentado como no-soportado.`,
+    },
+  ],
 };

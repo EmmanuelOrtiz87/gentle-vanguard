@@ -1,12 +1,12 @@
 # Gentle-Vanguard Academy
 
-Web educativa local-first con todo el contenido del stack: fundamentos, arquitectura,
-optimización, agentes, workflows, laboratorio práctico, negocio y glosario completo.
+Web educativa local-first con todo el contenido del stack: fundamentos, arquitectura, optimización,
+agentes, workflows, laboratorio práctico, negocio y glosario completo.
 
 ## Cómo ejecutarla
 
-**Opción 1 — doble click (file://)**: abrir `index.html` en cualquier navegador.
-Funciona porque el contenido está embebido en JS (sin fetch, sin servidor).
+**Opción 1 — doble click (file://)**: abrir `index.html` en cualquier navegador. Funciona porque el
+contenido está embebido en JS (sin fetch, sin servidor).
 
 **Opción 2 — servidor estático** (recomendada para compartir en la red local):
 
@@ -21,21 +21,20 @@ Sin build, sin dependencias externas, sin login, sin red: 100% local.
 
 ## Estructura
 
-| Archivo | Propósito |
-| --- | --- |
-| `index.html` | Shell (header, nav, footer, carga de datos) |
-| `style.css` | Estilos con los brand tokens oficiales (14-BRAND-SYSTEM) |
-| `app.js` | SPA vanilla: hash router + renderer markdown-subset + buscador |
-| `assets/logo*.svg` | Monograma y lockup oficiales |
-| `data/tracks.js` | Registro de rutas de aprendizaje |
-| `data/content-*.js` | Contenido por track (lecciones en markdown-subset embebido) |
-| `data/glossary.js` | Glosario (IA + técnico + negocio + términos propios) |
+| Archivo             | Propósito                                                      |
+| ------------------- | -------------------------------------------------------------- |
+| `index.html`        | Shell (header, nav, footer, carga de datos)                    |
+| `style.css`         | Estilos con los brand tokens oficiales (14-BRAND-SYSTEM)       |
+| `app.js`            | SPA vanilla: hash router + renderer markdown-subset + buscador |
+| `assets/logo*.svg`  | Monograma y lockup oficiales                                   |
+| `data/tracks.js`    | Registro de rutas de aprendizaje                               |
+| `data/content-*.js` | Contenido por track (lecciones en markdown-subset embebido)    |
+| `data/glossary.js`  | Glosario (IA + técnico + negocio + términos propios)           |
 
 ## Markdown soportado en lecciones
 
-`##` `###` · **bold** · `code` · bloques ``` · listas `-` y `1.` · `>` quote ·
-tablas `| |` · `---` · `==resaltado gradiente==`. Sin imágenes ni links (por diseño:
-todo local, sin dependencias).
+`##` `###` · **bold** · `code` · bloques ``` · listas `-` y `1.` · `>` quote · tablas `| |` · `---`
+· `==resaltado gradiente==`. Sin imágenes ni links (por diseño: todo local, sin dependencias).
 
 ## Rutas
 
@@ -47,13 +46,12 @@ todo local, sin dependencias).
 
 ## Actualizar contenido
 
-Editar el `md` de la lección en `data/content-*.js` (o añadir lecciones al array).
-El contenido deriva del stack real (AGENTS.md, stack-manual, GLOSSARY.md, guides,
-normativas y el kit comercial) — al actualizar el stack, actualizar las lecciones
-afectadas en la misma pasada.
+Editar el `md` de la lección en `data/content-*.js` (o añadir lecciones al array). El contenido
+deriva del stack real (AGENTS.md, stack-manual, GLOSSARY.md, guides, normativas y el kit comercial)
+— al actualizar el stack, actualizar las lecciones afectadas en la misma pasada.
 
 ## Publicación futura
 
-Cuando se desee exponer en un servidor con login: servir `apps/academy-web/` como
-estáticos tras el authenticador que se elija (el dashboard WS ya trae RBAC v1
-deployment-scoped reutilizable). El perfil local-first no requiere nada de esto.
+Cuando se desee exponer en un servidor con login: servir `apps/academy-web/` como estáticos tras el
+authenticador que se elija (el dashboard WS ya trae RBAC v1 deployment-scoped reutilizable). El
+perfil local-first no requiere nada de esto.
