@@ -350,3 +350,10 @@
   background: var(--gv-brand-gradient);
   color: #07131f;
 }
+
+/* Official GV monogram in the topbar (replaces the text badge) */
+.gv-brand-logo {
+  height: 34px;
+  width: auto;
+  display: block;
+}
