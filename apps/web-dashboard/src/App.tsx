@@ -16,7 +16,6 @@ import {
   Workflow,
   ShieldCheck,
   UserCog,
-  Sparkles,
 } from 'lucide-react';
 import { useSharedState } from './hooks/useSharedState';
 import { TenantSelector } from './components/TenantSelector';
@@ -27,7 +26,6 @@ const Dashboard = lazy(() => import('./components/Dashboard'));
 const TracingDashboard = lazy(() => import('./components/TracingDashboard'));
 const Marketplace = lazy(() => import('./components/Marketplace'));
 const InteractiveDocs = lazy(() => import('./components/InteractiveDocs'));
-const PromptStudio = lazy(() => import('./components/PromptStudio'));
 const AgentChat = lazy(() => import('./components/AgentChat'));
 const TaskControl = lazy(() => import('./components/TaskControl'));
 const SessionTimeline = lazy(() => import('./components/SessionTimeline'));
@@ -47,44 +45,32 @@ const PageLoader = () => (
 function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Grouped navigation rows: operations first, then content & tooling.
+  // Grouped navigation rows: operations first, then build & govern.
   const navRows = [
-    {
-      group: 'Operate',
-      links: [
+    { group: 'Operate', links: [
         { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
         { to: '/tracing', icon: Activity, label: 'Tracing' },
         { to: '/timeline', icon: History, label: 'Timeline' },
         { to: '/tasks', icon: ListTodo, label: 'Tasks' },
         { to: '/agents', icon: Bot, label: 'Agents' },
-      ],
-    },
-    {
-      group: 'Build & govern',
-      links: [
-        { to: '/content-operations', icon: Workflow, label: 'Content Ops' },
-        { to: '/prompts', icon: Sparkles, label: 'Prompts' },
+    ]},
+    { group: 'Build & govern', links: [
         { to: '/marketplace', icon: Store, label: 'Marketplace' },
-        { to: '/knowledge', icon: Library, label: 'Knowledge' },
+        { to: '/content-operations', icon: Workflow, label: 'Content Ops' },
         { to: '/audit', icon: ShieldCheck, label: 'Audit' },
         { to: '/admin', icon: UserCog, label: 'Admin' },
-        { to: '/mcp', icon: Cpu, label: 'MCP' },
         { to: '/docs', icon: BookOpen, label: 'Docs' },
+        { to: '/mcp', icon: Cpu, label: 'MCP' },
+        { to: '/knowledge', icon: Library, label: 'Knowledge' },
         { to: '/multi-repo', icon: Globe, label: 'Multi-repo' },
-      ],
-    },
+    ]},
   ];
 
   return (
     <nav className="gv-topbar">
       <div className="gv-topbar-inner">
         <div className="gv-brand-row">
-          <img
-            src="/logo-gv.svg"
-            alt="Gentle-Vanguard"
-            className="gv-brand-logo"
-            aria-hidden="true"
-          />
+          <img src="/logo-gv.svg" alt="Gentle-Vanguard" className="gv-brand-logo" aria-hidden="true" />
           <div className="gv-brand-copy">
             <span className="gv-brand-name">Gentle Vanguard</span>
             <span className="gv-brand-product">Stack operations</span>
@@ -111,8 +97,8 @@ function Navigation() {
                     end={l.to === '/'}
                     className={({ isActive }) => `gv-nav-link ${isActive ? 'is-active' : ''}`}
                   >
-                <l.icon className="w-4 h-4" />
-                {l.label}
+                    <l.icon className="w-4 h-4" />
+                    {l.label}
                   </NavLink>
                 ))}
               </div>
@@ -134,7 +120,7 @@ function Navigation() {
             ))}
           </div>
         )}
-      </div>
+        </div>
       </div>
     </nav>
   );
@@ -260,7 +246,6 @@ function App() {
                     <Route path="/content-operations" element={<ContentOpsPanel />} />
                     <Route path="/audit" element={<AuditPanel />} />
                     <Route path="/admin" element={<AdminPanel />} />
-                    <Route path="/prompts" element={<PromptStudio />} />
                     <Route path="/docs" element={<InteractiveDocs />} />
                     <Route path="/agents" element={<AgentChat />} />
                     <Route path="/tasks" element={<TasksPage />} />
