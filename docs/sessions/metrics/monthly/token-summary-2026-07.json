@@ -1,27 +1,19 @@
 {
-  "generated_at": "2026-08-25T16:31:30.385Z",
+  "generated_at": "2026-08-26T10:06:33.958Z",
   "period": "2026-07",
   "days": 28,
   "totals": {
-    "input": 791317881,
-    "output": 10836146,
-    "total": 802154027,
+    "input": 710955390,
+    "output": 10271749,
+    "total": 721227139,
     "cost": 10.535256299999999
   },
   "daily_avg": {
-    "input": 28261353,
-    "output": 387005,
-    "total": 28648358
+    "input": 25391264,
+    "output": 366848,
+    "total": 25758112
   },
   "by_day": [
-    {
-      "day": "2026-07-27",
-      "input": 81412269,
-      "output": 600394,
-      "total": 82012663,
-      "cost": 0,
-      "sessions": 7
-    },
     {
       "day": "2026-07-28",
       "input": 82760856,
@@ -224,34 +216,42 @@
     },
     {
       "day": "2026-08-24",
-      "input": 11095622,
-      "output": 717647,
-      "total": 11813269,
+      "input": 11080273,
+      "output": 713560,
+      "total": 11793833,
       "cost": 4.650482490000001,
-      "sessions": 43
+      "sessions": 42
     },
     {
       "day": "2026-08-25",
-      "input": 1875970,
-      "output": 249247,
-      "total": 2125217,
+      "input": 2244621,
+      "output": 283095,
+      "total": 2527716,
       "cost": 1.05276725,
-      "sessions": 26
+      "sessions": 30
+    },
+    {
+      "day": "2026-08-26",
+      "input": 696476,
+      "output": 6236,
+      "total": 702712,
+      "cost": 0,
+      "sessions": 5
     }
   ],
   "by_model": [
     {
       "model": "kimi-2-5",
-      "input": 645443892,
-      "output": 3069815,
-      "total": 648513707,
+      "input": 564289815,
+      "output": 2482801,
+      "total": 566772616,
       "cost": 0
     },
     {
       "model": "deepseek-v4-flash-free",
-      "input": 91423929,
-      "output": 5718323,
-      "total": 97142252,
+      "input": 91165737,
+      "output": 5704943,
+      "total": 96870680,
       "cost": 0
     },
     {
@@ -270,9 +270,9 @@
     },
     {
       "model": "GLM-5.3",
-      "input": 8822396,
-      "output": 55259,
-      "total": 8877655,
+      "input": 9872174,
+      "output": 91256,
+      "total": 9963430,
       "cost": 0
     },
     {
@@ -318,25 +318,18 @@
       "cost": 0.63429368
     },
     {
+      "model": "qwen2.5-coder-7b-instruct",
+      "input": 210594,
+      "output": 1304,
+      "total": 211898,
+      "cost": 0
+    },
+    {
       "model": "gemma-4-26b-a4b-it",
       "input": 158078,
       "output": 13371,
       "total": 171449,
       "cost": 0.23710080000000006
-    },
-    {
-      "model": "qwen2.5-coder-7b-instruct",
-      "input": 157945,
-      "output": 945,
-      "total": 158890,
-      "cost": 0
-    },
-    {
-      "model": "qwen/qwen3.8-max-free",
-      "input": 52649,
-      "output": 359,
-      "total": 53008,
-      "cost": 0
     },
     {
       "model": "gpt-4o",
@@ -355,11 +348,6 @@
     {
       "session_id": "ses_032ab08e0ffeKQlGiaWDFdxsfc",
       "total": 49728832,
-      "cost": 0
-    },
-    {
-      "session_id": "ses_05be86bcbffeqn8Iwz2UyqQWTT",
-      "total": 39383208,
       "cost": 0
     },
     {
@@ -395,6 +383,11 @@
     {
       "session_id": "ses_006dfc914ffePcViyOK5iGb2jG",
       "total": 25780450,
+      "cost": 0
+    },
+    {
+      "session_id": "ses_0207f0f8fffe1PdQfs2EEdI5vq",
+      "total": 23248530,
       "cost": 0
     }
   ]
