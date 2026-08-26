@@ -204,6 +204,8 @@ Un router basado solo en keywords y árboles de decisión tiene techo: no sabe q
 
 ## El dato: la tabla routing_rules
 
+:::diagram routing-loop:::
+
 Nexus persiste las reglas de ruteo en \`routing_rules\` con columnas de telemetría de outcomes:
 
 | Columna | Significado |

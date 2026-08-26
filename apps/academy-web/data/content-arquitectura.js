@@ -302,6 +302,8 @@ Reglas de uso del manual:
 
 ## Los números
 
+:::stats 97~checks PASS | 21~componentes vigilados | 6~modos de operación:::
+
 - ==97 checks== distribuidos en ==21 componentes==.
 - ==6 modos== de operación (ver tabla).
 - Expectativa en verde: \`npm run watchtower:health\` → **97/97 PASS, 0 WARN, 0 FAIL, 0 SKIP**.
@@ -605,6 +607,8 @@ Un ==tenant== es una frontera lógica de datos dentro de un mismo deployment. Au
 Tres razones prácticas: primero, el scoping temprano evita la migración dolorosa cuando aparece un segundo contexto (por ejemplo, separar datos de dos clientes en servicios); segundo, obliga a que cada dato tenga procedencia explícita, lo que mejora la auditoría incluso con un solo tenant; y tercero, las consultas tenant-scoped en SQL se prueban igual que el código — un bug de aislamiento se detecta en test, no en producción.
 
 ## Tenancy en Nexus
+
+:::diagram tenancy:::
 
 Todas las tablas de dominio llevan \`tenant_id\`. La regla crítica: **el scoping es en SQL**, no filtrado en memoria:
 

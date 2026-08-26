@@ -27,6 +27,8 @@ Las fases del pipeline SDD son: \`INIT → EXPLORE → PROPOSE → SPEC → TASK
 
 ## Cómo funciona
 
+:::diagram sdd-cycle:::
+
 1. **INIT** — se crea el caso SDD con nombre de feature obligatorio (alfanumérico, sin espacios). Sin nombre no hay caso.
 2. **EXPLORE / PROPOSE** — el rol BA explora el repositorio y propone alcance; aquí es donde graphify y CodeGraph ahorran la mayor parte del contexto.
 3. **SPEC / TASKS** — la propuesta se congela como especificación y se descompone en tareas ejecutables.

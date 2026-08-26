@@ -192,6 +192,8 @@ Gentle-Vanguard implementa este cache en \`src/response-cache.ts\` con tres deci
 
 ## Impacto esperado y medido
 
+:::diagram cache-flow:::
+
 El encabezado de la implementación declara el objetivo: ==33-41% de reducción de latencia== y ==25-35% de reducción de costo en tokens==. El ahorro real se contabiliza después en la tabla \`token_savings\` de Nexus: el acumulado histórico del stack registra del orden de ==1.06M de tokens recuperados por cache reads==.
 
 ## TTL e invalidación: la parte difícil
@@ -480,6 +482,8 @@ npm run profile:apply -- premium # aplicar y persistir
 El problema clásico del seguimiento de tokens en un entorno multi-herramienta: cada herramienta (ZCode, Codex, MiniMax, opencode) usa su propio formato y su propio lugar de persistencia. La tentación es un plugin por herramienta — frágil y acoplado. La solución del stack es un **daemon de ingesta agnóstico** (\`src/tokens/token-ingest.ts\`) que lee los datos que cada herramienta **ya persiste en disco** y los consolida en un solo lugar: Nexus.
 
 ## Las cuatro fuentes
+
+:::diagram tokens-pipeline:::
 
 | Herramienta | Formato | Ubicación |
 | --- | --- | --- |

@@ -25,6 +25,8 @@ Es tan importante saber lo que no es como lo que es:
 
 ## Para qué sirve
 
+:::diagram stack-layers:::
+
 El problema de fondo: las herramientas de IA te dan potencia pero no disciplina. Cada sesión empieza de cero, la calidad depende de la suerte del prompt, y nadie sabe cuánto cuesta ni qué riesgos se corrieron. Gentle-Vanguard convierte eso en un proceso de ingeniería con:
 
 - **Memoria** entre sesiones (Engram) para no repetir decisiones.
@@ -102,6 +104,8 @@ Un agente con acceso a shell y archivos puede cometer una API key a git o ejecut
 - **Respuesta del stack**: ==secret scanner== nativo con 80 patrones y entropy check, integrado a pre-commit (lefthook) y a la watchtower; RBAC v1 en el dashboard; auditoría con cadena de hashes; skills ofensivas restringidas a entornos autorizados.
 
 ## La tabla resumen
+
+:::stats 97~checks de salud automáticos | 463~tests sin fallos | 21~agentes especializados | -94%~tokens con índice local:::
 
 | Dolor | Componente que lo resuelve | Dónde vive |
 | --- | --- | --- |

@@ -31,6 +31,12 @@ window.GV_TRACKS = [
     desc: 'Ciclo SDD, guardrails, normativas del stack, verificación, tests, seguridad, auditoría hash-chain y capacidades/limitaciones honestas.'
   },
   {
+    id: 'prompts',
+    type: 'curso',
+    title: 'Prompt engineering',
+    desc: 'Anatomía y optimización de prompts, técnicas (few-shot, CoT, salida estructurada), prompting en el stack, plantillas por caso de uso y anti-patrones. Con generador interactivo.'
+  },
+  {
     id: 'laboratorio',
     type: 'laboratorio',
     title: 'Laboratorio práctico',
