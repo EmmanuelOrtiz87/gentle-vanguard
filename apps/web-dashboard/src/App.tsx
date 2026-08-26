@@ -47,21 +47,32 @@ const PageLoader = () => (
 function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const links = [
-    { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/tracing', icon: Activity, label: 'Tracing' },
-    { to: '/marketplace', icon: Store, label: 'Marketplace' },
-    { to: '/content-operations', icon: Workflow, label: 'Content Ops' },
-    { to: '/audit', icon: ShieldCheck, label: 'Audit' },
-    { to: '/admin', icon: UserCog, label: 'Admin' },
-    { to: '/agents', icon: Bot, label: 'Agents' },
-    { to: '/tasks', icon: ListTodo, label: 'Tasks' },
-    { to: '/timeline', icon: History, label: 'Timeline' },
-    { to: '/prompts', icon: Sparkles, label: 'Prompts' },
-    { to: '/docs', icon: BookOpen, label: 'Docs' },
-    { to: '/mcp', icon: Cpu, label: 'MCP' },
-    { to: '/knowledge', icon: Library, label: 'Knowledge' },
-    { to: '/multi-repo', icon: Globe, label: 'Multi-repo' },
+  // Grouped navigation rows: operations first, then content & tooling.
+  const navRows = [
+    {
+      group: 'Operate',
+      links: [
+        { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
+        { to: '/tracing', icon: Activity, label: 'Tracing' },
+        { to: '/timeline', icon: History, label: 'Timeline' },
+        { to: '/tasks', icon: ListTodo, label: 'Tasks' },
+        { to: '/agents', icon: Bot, label: 'Agents' },
+      ],
+    },
+    {
+      group: 'Build & govern',
+      links: [
+        { to: '/content-operations', icon: Workflow, label: 'Content Ops' },
+        { to: '/prompts', icon: Sparkles, label: 'Prompts' },
+        { to: '/marketplace', icon: Store, label: 'Marketplace' },
+        { to: '/knowledge', icon: Library, label: 'Knowledge' },
+        { to: '/audit', icon: ShieldCheck, label: 'Audit' },
+        { to: '/admin', icon: UserCog, label: 'Admin' },
+        { to: '/mcp', icon: Cpu, label: 'MCP' },
+        { to: '/docs', icon: BookOpen, label: 'Docs' },
+        { to: '/multi-repo', icon: Globe, label: 'Multi-repo' },
+      ],
+    },
   ];
 
   return (
@@ -86,23 +97,27 @@ function Navigation() {
           >
             {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
-          <div className="gv-nav-links hidden lg:flex">
-            {links.map((l) => (
-              <NavLink
-                key={l.to}
-                to={l.to}
-                end={l.to === '/'}
-                className={({ isActive }) => `gv-nav-link ${isActive ? 'is-active' : ''}`}
-              >
+          <div className="gv-nav-links gv-nav-rows hidden lg:flex">
+            {navRows.map((row) => (
+              <div className="gv-nav-row" key={row.group}>
+                <span className="gv-nav-group-label">{row.group}</span>
+                {row.links.map((l) => (
+                  <NavLink
+                    key={l.to}
+                    to={l.to}
+                    end={l.to === '/'}
+                    className={({ isActive }) => `gv-nav-link ${isActive ? 'is-active' : ''}`}
+                  >
                 <l.icon className="w-4 h-4" />
                 {l.label}
-              </NavLink>
+                  </NavLink>
+                ))}
+              </div>
             ))}
           </div>
-        </div>
         {menuOpen && (
           <div className="gv-mobile-nav lg:hidden">
-            {links.map((l) => (
+            {navRows.flatMap((row) => row.links).map((l) => (
               <NavLink
                 key={l.to}
                 to={l.to}
@@ -116,6 +131,7 @@ function Navigation() {
             ))}
           </div>
         )}
+      </div>
       </div>
     </nav>
   );

@@ -44,121 +44,148 @@
       `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img">${inner}</svg>`,
   };
 
-  const DIAGRAMS = {
-    'stack-layers': () =>
-      D.wrap(
-        760,
-        250,
-        [
-          D.box(10, 95, 130, 'CLI / UX', 'gv, comandos, hooks', '#A78BFA'),
-          D.arrow(140, 121, 178, 121),
-          D.box(180, 95, 130, 'Orquestación', 'SDD · routing · delegación'),
-          D.arrow(310, 121, 348, 121),
-          D.box(350, 95, 130, 'Agentes', '21 subagentes · skills', '#A78BFA'),
-          D.box(350, 15, 130, 'Memoria', 'Engram'),
-          D.box(350, 175, 130, 'Grafo', 'CodeGraph / graphify'),
-          D.arrow(415, 67, 415, 95, '#A78BFA'),
-          D.arrow(415, 147, 415, 175, '#A78BFA'),
-          D.arrow(480, 121, 518, 121),
-          D.box(520, 95, 120, 'Nexus', 'SQLite 27 tablas'),
-          D.box(660, 60, 90, 'Watchtower', '97 checks', '#22D3EE'),
-          D.box(660, 135, 90, 'Dashboard', 'WS + Vite', '#22D3EE'),
-        ].join(''),
-      ),
-    'sdd-cycle': () =>
-      D.wrap(
-        760,
-        170,
-        [
-          D.box(10, 60, 120, 'BA · Explorar', 'requirements'),
-          D.arrow(130, 86, 168, 86),
-          D.box(170, 60, 120, 'SAD · Diseñar', 'contracts'),
-          D.arrow(290, 86, 328, 86),
-          D.box(330, 60, 120, 'DEV · Construir', 'implementación'),
-          D.arrow(450, 86, 488, 86),
-          D.box(490, 60, 120, 'QA · Verificar', 'validación'),
-          D.arrow(550, 60, 550, 20, '#A78BFA'),
-          D.arrow(550, 20, 70, 20, '#A78BFA'),
-          D.arrow(70, 20, 70, 60, '#A78BFA'),
-          `<text x="310" y="15" text-anchor="middle" fill="#A78BFA" font-family="Inter" font-size="11" font-weight="700">gates en CI: nada avanza sin verificación</text>`,
-          `<text x="310" y="150" text-anchor="middle" fill="#9CA3AF" font-family="Inter" font-size="11">cada fase deja artefactos versionados · el ciclo nunca salta pasos</text>`,
-        ].join(''),
-      ),
-    'tokens-pipeline': () =>
-      D.wrap(
-        760,
-        200,
-        [
-          D.box(10, 20, 130, 'OpenCode', 'SQLite'),
-          D.box(10, 80, 130, 'ZCode', 'rollouts JSONL'),
-          D.box(10, 140, 130, 'Codex', 'sessions'),
-          D.box(10, 200 - 40, 130, 'MiniMax', 'runtime SQLite'),
-          D.arrow(140, 46, 210, 100),
-          D.arrow(140, 106, 210, 106),
-          D.arrow(140, 146, 210, 112),
-          D.box(212, 75, 140, 'token-ingest', 'consolidación', '#A78BFA'),
-          D.arrow(352, 100, 410, 100),
-          D.box(412, 40, 150, 'Nexus', 'token_usage'),
-          D.box(412, 110, 150, 'Nexus', 'transactions · savings'),
-          D.arrow(562, 65, 620, 65),
-          D.arrow(562, 136, 620, 136),
-          D.box(622, 40, 130, 'Dashboard', 'costo en vivo', '#22D3EE'),
-          D.box(622, 110, 130, 'Budget guard', '5M/3M alertas', '#22D3EE'),
-        ].join(''),
-      ),
-    'routing-loop': () =>
-      D.wrap(
-        760,
-        160,
-        [
-          D.box(10, 55, 130, 'Tarea', 'texto del usuario'),
-          D.arrow(140, 81, 178, 81),
-          D.box(180, 55, 130, 'recommend', 'ranking de agentes', '#A78BFA'),
-          D.arrow(310, 81, 348, 81),
-          D.box(350, 55, 120, 'Agente', 'ejecución'),
-          D.arrow(470, 81, 508, 81),
-          D.box(510, 55, 130, 'Outcome', '¿éxito? ¿fallo?'),
-          D.arrow(575, 107, 245, 107, '#A78BFA'),
-          D.arrow(245, 107, 245, 95, '#A78BFA'),
-          `<text x="410" y="135" text-anchor="middle" fill="#A78BFA" font-family="Inter" font-size="11" font-weight="700">recordRoutingOutcome → routing_rules (success_count / success_rate por tenant)</text>`,
-          `<text x="410" y="150" text-anchor="middle" fill="#9CA3AF" font-family="Inter" font-size="11">la próxima recomendación ya aprendió de este resultado</text>`,
-        ].join(''),
-      ),
-    'cache-flow': () =>
-      D.wrap(
-        760,
-        160,
-        [
-          D.box(10, 55, 130, 'Request', 'prompt + contexto'),
-          D.arrow(140, 81, 178, 81),
-          D.box(180, 40, 140, 'SHA-256', 'clave de caché', '#A78BFA'),
-          D.box(350, 15, 150, 'HIT → respuesta', 'costo 0 · instantáneo', '#22D3EE'),
-          D.box(350, 105, 150, 'MISS → modelo', 'se paga el token'),
-          D.arrow(320, 65, 350, 41, '#22D3EE'),
-          D.arrow(320, 95, 350, 119, '#F87171'),
-          D.arrow(500, 131, 560, 131),
-          D.box(562, 105, 150, 'guardar en caché', 'TTL 30 min'),
-          `<text x="380" y="152" text-anchor="middle" fill="#9CA3AF" font-family="Inter" font-size="11">impacto medido: 25–41% de requests servidas sin gastar tokens</text>`,
-        ].join(''),
-      ),
-    tenancy: () =>
-      D.wrap(
-        760,
-        190,
-        [
-          D.box(10, 70, 150, 'Repositorios', 'metrics · traces · backlog'),
-          D.arrow(160, 96, 198, 96),
-          D.box(200, 70, 140, 'WHERE tenant_id = ?', 'en SQL, no en memoria', '#A78BFA'),
-          D.arrow(340, 96, 378, 96),
-          D.box(380, 20, 160, 'Tenant A', 've solo sus datos'),
-          D.box(380, 70, 160, 'Tenant B', 've solo sus datos'),
-          D.box(380, 120, 160, 'system-wide', 'provenance explícita'),
-          D.box(590, 70, 150, 'RBAC v1', 'viewer<operator<admin', '#22D3EE'),
-          `<text x="380" y="172" text-anchor="middle" fill="#9CA3AF" font-family="Inter" font-size="11">aislamiento verificable por SQL + membresía por principal + auditoría de accesos</text>`,
-        ].join(''),
-      ),
-  };
+  /* Row-lane diagram toolkit: wide canvas, labeled lanes, short arrows between
+     adjacent boxes only. Flow reads top-to-bottom, left-to-right. */
+  const DIAG_W = 960;
+  const LANE_X = 8;
+  const BOX_W = 170, BOX_H = 58, GAP = 26, ROW_D = BOX_H + 36;
+  const COL1 = 132, COL2 = COL1 + BOX_W + GAP, COL3 = COL2 + BOX_W + GAP, COL4 = COL3 + BOX_W + GAP;
 
+  const DEFS = ('<defs>'
+    + '<marker id="dar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#22D3EE"/></marker>'
+    + '<marker id="par" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#A78BFA"/></marker>'
+    + '</defs>');
+
+  function svg(h, inner) {
+    return `<svg viewBox="0 0 ${DIAG_W} ${h}" width="${DIAG_W}" height="${h}" role="img">${DEFS}${inner}</svg>`;
+  }
+  function lane(y, text) {
+    return `<text x="${LANE_X}" y="${y + 34}" fill="#A78BFA" font-family="Inter,sans-serif" font-size="12" font-weight="800" letter-spacing="1.2">${text}</text>`;
+  }
+  function boxAt(x, y, label, sub, accent) {
+    const stroke = accent || 'rgba(167,139,250,.5)';
+    let r = `<rect x="${x}" y="${y}" width="${BOX_W}" height="${BOX_H}" rx="12" fill="rgba(31,41,55,.92)" stroke="${stroke}" stroke-width="1.5"/>`;
+    r += `<text x="${x + BOX_W / 2}" y="${sub ? y + 24 : y + 34}" text-anchor="middle" fill="#E5E7EB" font-family="Inter,sans-serif" font-size="13.5" font-weight="700">${label}</text>`;
+    if (sub) r += `<text x="${x + BOX_W / 2}" y="${y + 43}" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="10.5">${sub}</text>`;
+    return r;
+  }
+  function hArrow(x1, y1, x2, y2) {
+    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#22D3EE" stroke-width="1.8" marker-end="url(#dar)" opacity=".85"/>`;
+  }
+  function vArrow(x, y1, y2) {
+    return `<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}" stroke="#22D3EE" stroke-width="1.8" marker-end="url(#dar)" opacity=".85"/>`;
+  }
+  function row(y, items) {
+    let out = '';
+    const mid = y + BOX_H / 2;
+    items.forEach((it, i) => {
+      const x = COL1 + i * (BOX_W + GAP);
+      out += boxAt(x, y, it[0], it[1], it[2]);
+      if (i < items.length - 1) out += hArrow(x + BOX_W + 3, mid, x + BOX_W + GAP - 4, mid);
+    });
+    return out;
+  }
+  function note(y, text, color) {
+    return `<text x="${DIAG_W / 2}" y="${y}" text-anchor="middle" fill="${color || '#9CA3AF'}" font-family="Inter,sans-serif" font-size="11.5">${text}</text>`;
+  }
+
+  const DIAGRAMS = {
+    'stack-layers': () => {
+      let y = 14, out = '';
+      out += lane(y, 'INTERFAZ');
+      out += row(y, [['CLI / gv', 'comandos', 'rgba(167,139,250,.7)'], ['Hooks', 'pre-commit / push'], ['Dashboard', 'WS + Vite', 'rgba(167,139,250,.7)']]);
+      out += vArrow(320, y + BOX_H + 3, y + ROW_D - 6);
+      y += ROW_D;
+      out += lane(y, 'ORQUESTACIÓN');
+      out += row(y, [['SDD cycle', 'BA→SAD→DEV→QA'], ['Routing', 'recommend-agent'], ['Delegación', '21 agentes', 'rgba(167,139,250,.7)']]);
+      out += vArrow(320, y + BOX_H + 3, y + ROW_D - 6);
+      y += ROW_D;
+      out += lane(y, 'CONOCIMIENTO');
+      out += row(y, [['Engram', 'memoria persistente'], ['CodeGraph', 'índice AST'], ['Nexus', 'SQLite · 27 tablas', 'rgba(167,139,250,.7)']]);
+      out += vArrow(320, y + BOX_H + 3, y + ROW_D - 6);
+      y += ROW_D;
+      out += lane(y, 'SALUD');
+      out += row(y, [['Watchtower', '97 checks', 'rgba(34,211,238,.7)'], ['Budget guard', 'alertas 5M / 3M', 'rgba(34,211,238,.7)']]);
+      return svg(y + BOX_H + 14, out);
+    },
+    'sdd-cycle': () => {
+      let y = 14, out = '';
+      out += lane(y, 'CICLO');
+      out += row(y, [['① BA', 'explorar'], ['② SAD', 'diseñar'], ['③ DEV', 'construir'], ['④ QA', 'verificar']]);
+      const qaX = COL4 + BOX_W / 2, baX = COL1 + BOX_W / 2;
+      out += `<path d="M ${qaX} ${y + BOX_H + 4} V ${y + BOX_H + 34} H ${baX} V ${y + BOX_H + 12}" fill="none" stroke="#A78BFA" stroke-width="1.8" marker-end="url(#par)" opacity=".85"/>`;
+      out += note(y + BOX_H + 52, 'QA realimenta la próxima exploración — el ciclo itera con hallazgos verificados', '#A78BFA');
+      y += ROW_D + 22;
+      out += lane(y, 'GATES');
+      out += row(y, [['CI gate', 'nada avanza sin verificar', 'rgba(34,211,238,.7)'], ['Artefactos', 'versionados por fase']]);
+      return svg(y + BOX_H + 14, out);
+    },
+    'tokens-pipeline': () => {
+      let y = 14, out = '';
+      out += lane(y, 'FUENTES');
+      out += row(y, [['OpenCode', 'sqlite'], ['ZCode', 'jsonl'], ['Codex', 'sesiones'], ['MiniMax', 'sqlite']]);
+      out += vArrow(320, y + BOX_H + 3, y + ROW_D - 6);
+      y += ROW_D;
+      out += lane(y, 'CONSOLIDAR');
+      out += row(y, [['token-ingest', 'daemon local', 'rgba(167,139,250,.7)']]);
+      out += vArrow(320, y + BOX_H + 3, y + ROW_D - 6);
+      y += ROW_D;
+      out += lane(y, 'NEXUS');
+      out += row(y, [['token_usage', 'por día / sesión'], ['transactions', 'por mensaje'], ['savings', 'cache + compresión']]);
+      out += vArrow(320, y + BOX_H + 3, y + ROW_D - 6);
+      y += ROW_D;
+      out += lane(y, 'CONSUMO');
+      out += row(y, [['Dashboard', 'costo en vivo', 'rgba(34,211,238,.7)'], ['Budget guard', 'umbrales 70 / 90', 'rgba(34,211,238,.7)']]);
+      return svg(y + BOX_H + 14, out);
+    },
+    'routing-loop': () => {
+      let y = 14, out = '';
+      out += lane(y, 'DEMANDA');
+      out += row(y, [['Tarea', 'texto del usuario']]);
+      out += vArrow(320, y + BOX_H + 3, y + ROW_D - 6);
+      y += ROW_D;
+      out += lane(y, 'DECISIÓN');
+      out += row(y, [['recommend-agent', 'ranking + aprendizaje', 'rgba(167,139,250,.7)'], ['Agente', 'ejecuta la tarea']]);
+      out += vArrow(320, y + BOX_H + 3, y + ROW_D - 6);
+      y += ROW_D;
+      out += lane(y, 'APRENDIZAJE');
+      out += row(y, [['Outcome', '¿éxito / fallo?'], ['routing_rules', 'success_rate x tenant', 'rgba(34,211,238,.7)']]);
+      const rrX = COL2 + BOX_W / 2;
+      out += `<path d="M ${rrX} ${y + BOX_H + 4} V ${y + ROW_D - 2} H ${COL1 - 18} V ${ROW_D + BOX_H / 2} H ${COL1 - 6}" fill="none" stroke="#A78BFA" stroke-width="1.8" marker-end="url(#par)" opacity=".9"/>`;
+      out += note(y + BOX_H + 30, 'el outcome actualiza success_rate y mejora la próxima recomendación (loop)', '#A78BFA');
+      return svg(y + BOX_H + 44, out);
+    },
+    'cache-flow': () => {
+      let y = 14, out = '';
+      out += lane(y, 'REQUEST');
+      out += row(y, [['Request', 'prompt + contexto']]);
+      out += vArrow(320, y + BOX_H + 3, y + ROW_D - 6);
+      y += ROW_D;
+      out += lane(y, 'CLAVE');
+      out += row(y, [['SHA-256', 'clave de caché', 'rgba(167,139,250,.7)']]);
+      out += vArrow(320, y + BOX_H + 3, y + ROW_D - 6);
+      y += ROW_D;
+      out += lane(y, 'RESULTADO');
+      out += row(y, [['HIT → respuesta', 'costo 0 · al instante', 'rgba(52,211,153,.7)'], ['MISS → modelo', 'se paga el token', 'rgba(248,113,113,.7)'], ['Guardar', 'TTL 30-60 min']]);
+      out += note(y + BOX_H + 26, 'impacto medido: 25–41% de requests servidas sin gastar tokens');
+      return svg(y + BOX_H + 36, out);
+    },
+    'tenancy': () => {
+      let y = 14, out = '';
+      out += lane(y, 'DATOS');
+      out += row(y, [['Repositorios', 'metrics · traces · backlog']]);
+      out += vArrow(320, y + BOX_H + 3, y + ROW_D - 6);
+      y += ROW_D;
+      out += lane(y, 'AISLAMIENTO');
+      out += row(y, [['WHERE tenant_id = ?', 'en SQL, no en memoria', 'rgba(167,139,250,.7)'], ['Provenance', 'explícita db / fs']]);
+      out += vArrow(320, y + BOX_H + 3, y + ROW_D - 6);
+      y += ROW_D;
+      out += lane(y, 'ACCESO');
+      out += row(y, [['Tenant A', 've solo lo suyo'], ['Tenant B', 've solo lo suyo'], ['RBAC v1', 'viewer < operator < admin', 'rgba(34,211,238,.7)']]);
+      out += note(y + BOX_H + 26, 'aislamiento verificable por SQL + membresía por principal + auditoría de accesos');
+      return svg(y + BOX_H + 36, out);
+    },
+  };
   /* ---------- Markdown subset renderer ---------- */
   function esc(s) {
     return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
