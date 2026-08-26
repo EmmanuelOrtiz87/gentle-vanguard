@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gentle-Vanguard Academy</title>
+<meta name="description" content="Academia oficial de Gentle-Vanguard: fundamentos, arquitectura, optimización, agentes, workflows, laboratorio y negocio del stack de orquestación de agentes de IA local-first.">
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="grid-bg"></div><div class="glow-a"></div><div class="glow-b"></div>
+
+<header>
+  <div class="header-inner" style="position:relative">
+    <a class="brand" href="#/">
+      <img src="assets/logo.svg" alt="Gentle-Vanguard">
+      <span class="name">Gentle<span>Vanguard</span> <small style="color:var(--gv-muted);font-weight:600">Academy</small></span>
+    </a>
+    <nav class="main-nav" id="main-nav">
+      <a href="#/" data-route="home">Inicio</a>
+      <a href="#/track/fundamentos" data-route="fundamentos">Fundamentos</a>
+      <a href="#/track/arquitectura" data-route="arquitectura">Arquitectura</a>
+      <a href="#/track/optimizacion" data-route="optimizacion">Optimización</a>
+      <a href="#/track/agentes" data-route="agentes">Agentes</a>
+      <a href="#/track/workflows" data-route="workflows">Workflows</a>
+      <a href="#/track/laboratorio" data-route="laboratorio">Laboratorio</a>
+      <a href="#/track/negocio" data-route="negocio">Negocio</a>
+      <a href="#/glosario" data-route="glosario">Glosario</a>
+    </nav>
+    <div class="search-box">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="search-input" type="text" placeholder="Buscar lecciones y términos…" autocomplete="off">
+      <span class="kbd">/</span>
+    </div>
+    <div id="search-results"></div>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <span class="gv">Gentle-Vanguard</span> · Advanced Technology Solutions ·
+  Academia local-first — funciona sin conexión, sin cuentas y sin dependencias externas.<br>
+  Contenido derivado del stack real (v3.8.2) · <span id="foot-year"></span>
+</footer>
+
+<!-- Content data (order matters: registry first, then tracks, then glossary) -->
+<script src="data/tracks.js"></script>
+<script src="data/content-fundamentos.js"></script>
+<script src="data/content-arquitectura.js"></script>
+<script src="data/content-optimizacion.js"></script>
+<script src="data/content-agentes.js"></script>
+<script src="data/content-workflows.js"></script>
+<script src="data/content-laboratorio.js"></script>
+<script src="data/content-negocio.js"></script>
+<script src="data/glossary.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 200" width="1060" height="200" role="img" aria-label="Gentle Vanguard horizontal lockup">
+  <defs>
+    <linearGradient id="gvGradH" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A78BFA"/>
+      <stop offset="100%" stop-color="#22D3EE"/>
+    </linearGradient>
+  </defs>
+  <rect width="1060" height="200" fill="#121212"/>
+
+  <!-- Monogram (side-by-side G + V), scaled -->
+  <g transform="translate(28,32) scale(0.567)">
+    <path d="M 128 50 A 62 62 0 1 0 150 116 L 112 116"
+          fill="none" stroke="url(#gvGradH)" stroke-width="17" stroke-linecap="round"/>
+    <path d="M 196 96 L 228 170 L 260 108"
+          fill="none" stroke="url(#gvGradH)" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 247 100 L 264 92 L 262 110"
+          fill="none" stroke="#22D3EE" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="268" y="112" font-family="Inter, Poppins, Montserrat, Arial, sans-serif"
+        font-size="64" font-weight="700" fill="#E5E7EB" letter-spacing="1">
+    Gentle<tspan fill="url(#gvGradH)">Vanguard</tspan>
+  </text>
+  <text x="270" y="150" font-family="Inter, Poppins, Montserrat, Arial, sans-serif"
+        font-size="19" font-weight="500" fill="#9CA3AF" letter-spacing="7">
+    ADVANCED TECHNOLOGY SOLUTIONS
+  </text>
+</svg>
