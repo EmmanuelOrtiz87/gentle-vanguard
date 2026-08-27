@@ -5,6 +5,16 @@
   "pipeline": {
     "steps": [
       {
+        "id": "legacy-registration-cleanup",
+        "enabled": true,
+        "script": "src/core/legacy-registration-cleanup.ts",
+        "required": false,
+        "phase": 1,
+        "skipOnFailure": true,
+        "timeout": 20000,
+        "description": "Limpieza de registros OS huerfanos (PS1->TS migration): Run keys y scheduled tasks apuntando a scripts borrados causaban ventanas cmd/pwsh fantasma visibles. Best-effort: tareas elevadas se reintentan cada sesion."
+      },
+      {
         "id": "process-hygiene",
         "enabled": true,
         "script": "src/core/process-hygiene.ts",
