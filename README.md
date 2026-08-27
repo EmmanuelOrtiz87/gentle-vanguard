@@ -109,10 +109,15 @@ capacidades necesarias. El **Chain-Delivery** conserva el contrato entre BA, SAD
 ## Key Capabilities
 
 - **SDD Lifecycle**: Explore → Design → Implement → Verify.
+- **SDD Research Lane**: evidencia externa versionada ligada al caso (`.sdd/<feature>/RESEARCH/`).
+- **RDD (Receipt-Driven Development)**: revisión por riesgo con 4R, recibos ligados a Git SHA,
+  5 gates de entrega y kill-switch de emergencia (expira 24h).
 - **Review Workload Guard**: distribuye revisiones pendientes entre agentes.
 - **Skill Registry**: carga capacidades bajo demanda.
 - **Chain-Delivery**: conserva contratos entre fases.
 - **Cross-Tool**: permite operar con varias herramientas de desarrollo con IA.
+- **Process Hygiene**: reaper nativo de procesos (duplicados, one-shots colgados, daemons
+  envejecidos, pidfiles stale) integrado en autostart/watchtower/session-close.
 
 ## Memoria, observabilidad y seguridad
 
@@ -141,6 +146,9 @@ flowchart TD
 | `npm run start`                    | Iniciar el dashboard            |
 | `npx tsx src/session-autostart.ts` | Inicializar una sesión completa |
 | `npm run watchtower:health`        | Revisar salud del stack         |
+| `npm run process:hygiene`          | Detectar procesos basura (dry-run) |
+| `npm run process:reap`             | Limpiar procesos basura         |
+| `npm run sdd:research -- run -f <feature> -q "q1;q2"` | Research lane SDD |
 | `npm run typecheck`                | Comprobar TypeScript            |
 | `npm run lint`                     | Ejecutar lint                   |
 | `npm test`                         | Ejecutar las pruebas            |

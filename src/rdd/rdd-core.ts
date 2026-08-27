@@ -141,27 +141,46 @@ export interface PruneResult {
 
 /**
  * Retention policy for RDD review artifacts (lesson from gentle-ai #1656:
- * lineages accumulate with no retention policy). Deletes workflow JSONs whose
- * last activity (completedAt ?? startedAt) is older than retentionDays.
+ * lineages accumulate with no retention policy). Two closures per run:
+ *
+ *   1. TERMINAL-EVENT CLOSURE (lesson from gentle-ai v2.5.0-rc.1 — "the
+ *      lifecycle closes where proof ends"): workflows stuck in a
+ *      non-terminal state (started / risk-classified / reviewing /
+ *      receipt-issued) older than the retention window are marked `failed`
+ *      (aborted) — a review that produced no receipt in N days is dead, not
+ *      pending. The state file is kept for audit (only truly terminal
+ *      workflows get deleted on the next pass).
+ *   2. PRUNE: terminal workflows (completed/failed) older than the window are
+ *      deleted.
+ *
  * NEVER touches disable-log.jsonl (audit), the DISABLED flag or any non-json
- * config. Completed workflows older than the window are safe to drop: the
- * receipt evidence they carry has already been consumed by the delivery gates.
+ * config. `dir` is injectable for unit tests.
  */
-export function pruneWorkflows(retentionDays = 30): PruneResult {
+export function pruneWorkflows(retentionDays = 30, dir: string = RDD_DIR): PruneResult {
   const result: PruneResult = { pruned: [], kept: [], retentionDays };
-  if (!existsSync(RDD_DIR)) return result;
+  if (!existsSync(dir)) return result;
   const cutoff = Date.now() - retentionDays * 24 * 3_600_000;
-  for (const f of readdirSync(RDD_DIR)) {
+  const TERMINAL: RDDWorkflow['status'][] = ['completed', 'failed'];
+  for (const f of readdirSync(dir)) {
     if (!f.endsWith('.json')) continue; // disable-log.jsonl / DISABLED are untouchable
-    const p = join(RDD_DIR, f);
+    const p = join(dir, f);
     try {
       const wf = JSON.parse(readFileSync(p, 'utf-8')) as RDDWorkflow;
       const last = new Date(wf.completedAt ?? wf.startedAt).getTime();
-      if (!isNaN(last) && last < cutoff) {
+      if (isNaN(last) || last >= cutoff) {
+        result.kept.push(f);
+        continue;
+      }
+      if (TERMINAL.includes(wf.status)) {
         unlinkSync(p);
         result.pruned.push(f);
       } else {
-        result.kept.push(f);
+        // stuck review: close the lifecycle at a terminal event instead of
+        // letting it linger forever — keep the file, flip the status
+        wf.status = 'failed';
+        wf.completedAt = new Date().toISOString();
+        writeFileSync(p, JSON.stringify(wf, null, 2), 'utf-8');
+        result.kept.push(`${f} (aborted-stale)`);
       }
     } catch {
       result.kept.push(f); // unreadable files are never deleted blindly

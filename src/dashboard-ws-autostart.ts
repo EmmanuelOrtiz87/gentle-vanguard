@@ -232,6 +232,34 @@ async function watchLoop(initialPort: number): Promise<void> {
 
     restarts++;
     logToFile(`[WATCH] Restarting WS server (attempt ${restarts}/${WATCH_MAX_RESTARTS})`);
+    // Kill the unhealthy previous server BEFORE spawning a replacement.
+    // Without this, every restart leaks one more websocket-server process
+    // (duplicate source confirmed 2026-08-27: 4 leaked servers under one
+    // watchdog; process-hygiene reaped them but the source must not leak).
+    try {
+      const prevRaw = fs.readFileSync(PID_FILE, 'utf-8').trim();
+      const prev = parseInt(prevRaw, 10);
+      if (Number.isFinite(prev) && prev > 0 && prev !== process.pid && isProcessAlive(prev)) {
+        // Tree kill: the server spawns skill-server children that must die
+        // with it (taskkill /T on Windows, SIGKILL elsewhere).
+        if (process.platform === 'win32') {
+          spawn('taskkill', ['/T', '/F', '/PID', String(prev)], {
+            stdio: 'ignore',
+            windowsHide: true,
+          });
+        } else {
+          try {
+            process.kill(prev, 'SIGKILL');
+          } catch {
+            /* already gone */
+          }
+        }
+        logToFile(`[WATCH] Killed unhealthy previous server PID=${prev} before relaunch`);
+        await new Promise((r) => setTimeout(r, 1500));
+      }
+    } catch {
+      /* no readable pidfile → nothing to kill */
+    }
     port = await launchServer(port);
     failures = 0;
   }
