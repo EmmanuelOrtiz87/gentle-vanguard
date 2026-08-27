@@ -1,27 +1,19 @@
 {
-  "generated_at": "2026-08-26T22:26:30.265Z",
+  "generated_at": "2026-08-27T04:19:57.586Z",
   "period": "2026-07",
   "days": 28,
   "totals": {
-    "input": 712660265,
-    "output": 10315593,
-    "total": 722975858,
+    "input": 629943887,
+    "output": 9891676,
+    "total": 639835563,
     "cost": 10.535256299999999
   },
   "daily_avg": {
-    "input": 25452152,
-    "output": 368414,
-    "total": 25820566
+    "input": 22497996,
+    "output": 353274,
+    "total": 22851270
   },
   "by_day": [
-    {
-      "day": "2026-07-28",
-      "input": 82760856,
-      "output": 424944,
-      "total": 83185800,
-      "cost": 0,
-      "sessions": 17
-    },
     {
       "day": "2026-07-29",
       "input": 968145,
@@ -232,26 +224,34 @@
     },
     {
       "day": "2026-08-26",
-      "input": 2401351,
-      "output": 50080,
-      "total": 2451431,
+      "input": 1996030,
+      "output": 50622,
+      "total": 2046652,
       "cost": 0,
-      "sessions": 15
+      "sessions": 14
+    },
+    {
+      "day": "2026-08-27",
+      "input": 449799,
+      "output": 485,
+      "total": 450284,
+      "cost": 0,
+      "sessions": 2
     }
   ],
   "by_model": [
     {
       "model": "kimi-2-5",
-      "input": 564289815,
-      "output": 2482801,
-      "total": 566772616,
+      "input": 481871643,
+      "output": 2104216,
+      "total": 483975859,
       "cost": 0
     },
     {
       "model": "deepseek-v4-flash-free",
-      "input": 91165737,
-      "output": 5704943,
-      "total": 96870680,
+      "input": 90824403,
+      "output": 5659204,
+      "total": 96483607,
       "cost": 0
     },
     {
@@ -270,9 +270,9 @@
     },
     {
       "model": "GLM-5.3",
-      "input": 11093005,
-      "output": 98250,
-      "total": 11191255,
+      "input": 11137483,
+      "output": 99277,
+      "total": 11236760,
       "cost": 0
     },
     {
@@ -333,18 +333,13 @@
     },
     {
       "model": "gpt-4o",
-      "input": 1650,
-      "output": 770,
-      "total": 2420,
+      "input": 300,
+      "output": 150,
+      "total": 450,
       "cost": 0
     }
   ],
   "top_sessions": [
-    {
-      "session_id": "ses_057428b52ffej0gThqwdp2qJzr",
-      "total": 64115742,
-      "cost": 0
-    },
     {
       "session_id": "ses_032ab08e0ffeKQlGiaWDFdxsfc",
       "total": 49728832,
@@ -388,6 +383,11 @@
     {
       "session_id": "ses_0207f0f8fffe1PdQfs2EEdI5vq",
       "total": 23248530,
+      "cost": 0
+    },
+    {
+      "session_id": "ses_0356359aaffe16veoXnJ1vHJ5t",
+      "total": 22312530,
       "cost": 0
     }
   ]
