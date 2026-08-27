@@ -3,6 +3,11 @@
    Ordenado alfabéticamente (case-insensitive). cat: ia | tecnico | negocio | stack. */
 window.GV_GLOSSARY = [
   {
+    term: '4R',
+    cat: 'stack',
+    def: "Las cuatro lentes de la revisión de alto riesgo (Tier 2) del protocolo RDD: RISK (seguridad y comportamiento peligroso), READABILITY (claridad y mantenibilidad), RELIABILITY (correctitud y casos borde) y RESILIENCE (modos de fallo y recuperación). Implementación: src/rdd/rdd-4r-review.ts; cada lente emite findings con severidad critical/required/nit/optional/info.",
+  },
+  {
     term: 'Adaptive steps',
     cat: 'stack',
     def: "Mecanismo que auto-escala el número de pasos (steps) de un subagente según señales de complejidad del texto, archivos e historial. Si un agente reporta 'maximum steps reached', el orquestador puede reasignarle +20 steps (máximo 80). Estado: npx tsx src/adaptive-steps.ts --status.",
@@ -36,6 +41,11 @@ window.GV_GLOSSARY = [
     term: 'AST',
     cat: 'tecnico',
     def: 'Árbol de sintaxis abstracta: representación estructurada y jerárquica del código fuente. graphify construye su grafo a partir del AST, sin LLM, lo que lo hace determinista y reproducible.',
+  },
+  {
+    term: 'BDD',
+    cat: 'ia',
+    def: "Behavior-Driven Development: formular el comportamiento esperado en escenarios verificables y legibles (formato clásico Gherkin: Dado/Cuando/Entonces). En Gentle-Vanguard, los criterios de aceptación de la fase SPEC del ciclo SDD son escenarios BDD que sdd-verify convierte en contratos ejecutables.",
   },
   {
     term: 'BM25',
@@ -86,6 +96,11 @@ window.GV_GLOSSARY = [
     term: 'CNI',
     cat: 'tecnico',
     def: 'Container Network Interface: estándar de red de Kubernetes. La evidencia de NetworkPolicy/CNI es un promotion gate que GV exige solo en la promoción a servidor, nunca como requisito local.',
+  },
+  {
+    term: 'Code review',
+    cat: 'stack',
+    def: "Proceso de revisión de cambios con roles y gates: la revisión manual usa prompts por lentes (ver lección 'Prompts para code review'), la delegada usa recommend-agent + delegate:run, y la automatizada es el protocolo RDD con sus tiers de riesgo. El gatekeeper consume los findings antes de declarar listo un cambio.",
   },
   {
     term: 'CodeGraph',
@@ -368,6 +383,11 @@ window.GV_GLOSSARY = [
     def: 'Role-Based Access Control: permisos ligados a roles y no a usuarios individuales. En el dashboard v1: viewer < operator < admin (lecturas viewer.read, mutaciones operator.write, /api/admin/* requiere admin).',
   },
   {
+    term: 'RDD',
+    cat: 'stack',
+    def: "Receipt-Driven Development: protocolo nativo de revisión y entrega del stack. Clasifica el riesgo de un cambio por evidencia (auth, esquema de DB, APIs externas, breaking changes — no por tamaño), orquesta revisión por tiers (0/1/4 lentes), emite un recibo ligado al Git SHA del candidato congelado y valida 5 gates de entrega (post-apply, pre-commit, pre-push, pre-pr, release). Kill switch de emergencia con expiración 24h. Implementación: src/rdd/.",
+  },
+  {
     term: 'Response cache',
     cat: 'stack',
     def: 'Caché de respuestas indexada por hash SHA-256 con TTL, integrada en Nexus. Devuelve resultados idénticos sin repagar tokens: una de las fuentes de token_savings.',
@@ -496,6 +516,11 @@ window.GV_GLOSSARY = [
     term: 'TCO',
     cat: 'negocio',
     def: 'Total Cost of Ownership: coste completo de poseer y operar algo (licencias, infraestructura, personas, tiempo). El argumento local-first de GV: eliminar infra y dependencias baja el TCO drásticamente.',
+  },
+  {
+    term: 'TDD',
+    cat: 'ia',
+    def: "Test-Driven Development: escribir primero el test que falla (rojo), implementar lo mínimo para que pase (verde) y refactorear con el test como red de seguridad. En el ciclo SDD del stack opera dentro de la fase APPLY: el test ancla al agente al contrato de la tarea y convierte el cumplimiento en evidencia mecánica.",
   },
   {
     term: 'Temperatura',

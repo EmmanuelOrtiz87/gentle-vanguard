@@ -1,4 +1,4 @@
-/* Gentle-Vanguard Academy — Track "workflows" (9 lecciones).
+/* Gentle-Vanguard Academy — Track "workflows" (11 lecciones).
    Contenido educativo derivado de: AGENTS.md, docs/stack-manual-full.md,
    rules/NORMATIVAS-*.md, docs/guides/ (TESTING-GUIDE, AUDIT-WORKFLOW,
    OPERATION-GUIDE, TROUBLESHOOTING-RUNBOOK), docs/reference/GLOSSARY.md. */
@@ -58,6 +58,113 @@ Cuando delegues una tarea al stack, deja que el ciclo haga su trabajo: no saltes
 - DryRun antes de ejecución real; \`.sdd/\` nunca se commitea.
 - El sdd-gate bloquea PRs a ramas protegidas sin SDD validado.
 - Los perfiles de modelo por fase alinean costo y rigor: premium para diseñar y verificar, económico para rutina.`,
+    },
+    {
+      id: 'rdd-receipts-y-4r',
+      title: 'RDD y la revisión 4R: riesgo, recibos y cuatro lentes',
+      minutes: 13,
+      type: 'curso',
+      md: `## Qué es y para qué sirve
+
+==RDD (Receipt-Driven Development)== es el protocolo nativo de revisión y entrega del stack (implementación 100% local en \`src/rdd/\`, sin dependencia de herramientas externas). Su premisa: **cada cambio que se entrega debe estar respaldado por un recibo (receipt) verificable, no por una narración**. La filosofía de los gates lo resume: ==confía en el recibo, no en la narración==.
+
+RDD resuelve dos dolores clásicos del desarrollo con IA:
+
+- **Revisar todo igual** desperdicia tokens en cambios triviales y aun así revisa poco los peligrosos.
+- **Aprobar por confianza** ("el agente dijo que pasó los tests") no deja evidencia auditable de qué se revisó y qué se aprobó.
+
+## Cómo funciona: las 4 etapas
+
+1. **Clasificación de riesgo basada en evidencia** (\`src/rdd/risk-classifier.ts\`): el cambio se puntúa 0-100 según lo que TOCA, no según su tamaño. Categorías con evidencia explícita: código de autenticación/seguridad, esquema de base de datos o migraciones, integraciones con APIs externas, y mensajes de commit que indican breaking changes. Regla clave: ==ni líneas ni número de archivos importan; importa qué archivos son==.
+2. **Orquestación de revisión por tier**: el tier decide cuántas lentes se aplican.
+3. **Emisión de recibo ligado a Git SHA** (\`src/rdd/rdd-core.ts\`): el candidato se ==congela== al iniciar la revisión (anti scope-drift); el recibo referencia ese SHA exacto. Si el contenido cambia, el recibo deja de validar.
+4. **Validación en 5 gates de entrega** (\`src/rdd/rdd-gates.ts\`), todos contra el mismo recibo: post-apply, pre-commit, pre-push, pre-pr y release.
+
+## Los tiers de revisión
+
+| Tier | Riesgo | Lentes | Qué significa |
+|---|---|---|---|
+| 0 | low | 0 | Readback estructural: nadie revisa, el sistema confirma que el cambio es lo que dice ser |
+| 1 | standard | 1 | Una lente enfocada en el aspecto que la evidencia señaló |
+| 2 | high | 4 | Revisión 4R completa: las cuatro lentes |
+
+## Las 4 R: las cuatro lentes de la revisión de alto riesgo
+
+- **RISK** — Seguridad y comportamiento peligroso: inyecciones, secretos, permisos, datos sensibles, operaciones irreversibles.
+- **READABILITY** — Claridad y mantenibilidad: ¿un ingeniero nuevo entiende esto en 6 meses? Nombres, complejidad, comentarios que explican el porqué.
+- **RELIABILITY** — Correctitud y casos borde: ¿qué pasa con input vacío, concurrencia, timeout, retry? ¿Los tests cubren el camino que falla, no el que funciona?
+- **RESILIENCE** — Modos de fallo y recuperación: si esto falla en producción, ¿degrada o explota? ¿Hay rollback, retry, circuit breaker?
+
+Cada lente produce findings con severidad explícita (\`critical | required | nit | optional | info\`), archivo y línea. Un \`critical\` bloquea la aprobación; un \`nit\` no. La separación de severidades evita la muerte por mil nits.
+
+## Kill switch: la válvula de emergencia
+
+\`src/rdd/rdd-kill-switch.ts\` permite desactivar RDD en una emergencia (hotfix a las 3 AM):
+
+\`\`\`bash
+npx tsx src/rdd/rdd-kill-switch.ts disable --reason="Emergency hotfix"
+npx tsx src/rdd/rdd-kill-switch.ts status
+\`\`\`
+
+Con garantías: requiere ==motivo explícito==, registra un log de auditoría JSONL de cada disable/enable, notifica al dashboard, y el disable ==expira a las 24h== — una válvula de emergencia que se queda abierta deja de ser de emergencia y se vuelve el nuevo default.
+
+## Por qué importa
+
+El recibo convierte la revisión de opinión en ==evidencia verificable y auditable==: qué tier tuvo el cambio, qué lentes se corrieron, qué findings salieron, contra qué SHA se aprobó. Cuando algo rompe en producción, no preguntas "¿quién aprobó esto?" — miras el recibo. Los artefactos viven en \`.session/rdd/\` (no se commitean, como todo estado operativo del stack).
+
+> La lección [Verificación antes de declarar listo](#/lesson/workflows/verificacion-antes-de-listo) muestra cómo el gatekeeper consume estos hallazgos en la práctica, y [Prompts para code review](#/lesson/prompts/prompts-para-code-review) es el complemento manual cuando la revisión la hace un humano.
+`,
+    },
+    {
+      id: 'sdd-tdd-bdd-rdd',
+      title: 'SDD con TDD, BDD y RDD: cómo se complementan las metodologías',
+      minutes: 12,
+      type: 'curso',
+      md: `## Qué es y para qué sirve
+
+El stack no usa ==una== metodología de desarrollo: usa **cuatro que operan en momentos distintos del mismo pipeline** y se refuerzan entre sí. La confusión habitual ("¿SDD o TDD?") viene de tratarlas como alternativas; en Gentle-Vanguard son capas:
+
+| Metodología | Responde | Momento en el pipeline | Artefacto |
+|---|---|---|---|
+| **SDD** (Spec-Driven) | ¿QUÉ construir y con qué alcance? | Antes del código | Especificación + tareas (\`.sdd/\`) |
+| **BDD** (Behavior-Driven) | ¿QUÉ comportamiento debe cumplir y cómo se demuestra? | Al congelar la spec | Criterios de aceptación tipo Gherkin |
+| **TDD** (Test-Driven) | ¿CÓMO sé que el código hace lo que la spec dice? | Durante APPLY | Tests que pasan de rojo a verde |
+| **RDD** (Receipt-Driven) | ¿ESTÁ verificada la entrega y su riesgo revisado? | Antes de cada gate de entrega | Recibo ligado a Git SHA |
+
+## BDD: el puente entre requisito y verificación
+
+BDD (Behavior-Driven Development) formula el comportamiento en un formato ejecutable y legible por no-programadores — el clásico es ==Gherkin==: Dado un contexto, Cuando pasa algo, Entonces espero un resultado. En el stack, los criterios de aceptación que el rol **BA** escribe en la fase SPEC son efectivamente escenarios BDD: frases verificables, no adjetivos. "El sistema debe ser rápido" no es verificable; "la respuesta debe llegar en <2s con caché caliente" sí.
+
+- El subagente \`sdd-explore\` genera requisitos con **keywords BDD** (requirement, user story, acceptance, gherkin, specification) — su índice RAG está entrenado para reconocer ese vocabulario.
+- En VERIFY, \`sdd-verify\` transforma esos criterios en ==contratos ejecutables==: cada escenario de la spec debe tener un test o una verificación que lo demuestre. Un criterio sin demostración es un FAIL, no un "confía en mí".
+
+## TDD: rojo → verde → refactor dentro de APPLY
+
+TDD (Test-Driven Development) invierte el orden: ==primero el test que falla, después el código que lo hace pasar==. El ciclo red-green-refactor encaja en la fase APPLY del pipeline SDD:
+
+1. **Rojo**: de la tarea SDD se deriva un test concreto (el contrato de esa tarea) — corre y falla.
+2. **Verde**: el rol DEV implementa lo mínimo para que pase.
+3. **Refactor**: se mejora la forma sin tocar el comportamiento, con el test como red de seguridad.
+
+La ventaja con agentes de IA es doble: el test fallando ==ancla al agente al contrato== (no puede "resolver" otra cosa y declarar victoria), y el test pasando es ==evidencia mecánica== de cumplimiento — no requiere confiar en la narración del agente. La skill \`test-driven-development\` es una de las 12 críticas sincronizadas a todas las herramientas, y el stack la sugiere en tareas de implementación.
+
+## Cómo se encadenan en un caso real
+
+1. **SPEC**: "El budget guard debe alertar al 80% del presupuesto diario" — con su escenario: Dado consumo 4.1M de 5M, Cuando corre el guard, Entonces existe alerta WARN en Nexus.
+2. **APPLY (TDD)**: test que crea la condición y afirma la alerta → falla → se implementa → pasa.
+3. **VERIFY (BDD)**: \`sdd-verify\` ejecuta el escenario tal cual está escrito en la spec y registra PASS/FAIL como artefacto gate.
+4. **RDD**: el cambio tocó \`config/token-budget-guard.json\` + lógica de alertas → evidencia de categoría config/costos → tier standard (1 lente) o high (4R) según score → recibo ligado al SHA.
+
+## Anti-patrón: usarlas como religiones separadas
+
+- TDD sin SDD: tests verdes que implementan ==el requisito equivocado== (el test también lo escribió quien entendió mal).
+- SDD sin TDD: specs hermosas y código sin evidencia mecánica — VERIFY se vuelve opinión.
+- RDD sin las anteriores: recibos que certifican procesos vacíos.
+
+La regla del stack: ==la spec dice qué, BDD lo hace demostrable, TDD lo hace mecánico, RDD lo hace auditable==.
+
+> Sigue con [RDD y la revisión 4R](#/lesson/workflows/rdd-receipts-y-4r) para el detalle del protocolo de recibos, y [Testing del stack](#/lesson/workflows/testing-del-stack) para las suites reales (config, workflows, research) y cómo correrlas.
+`,
     },
     {
       id: 'guardrails-y-gates',
