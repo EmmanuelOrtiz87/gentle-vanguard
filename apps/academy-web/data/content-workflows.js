@@ -231,6 +231,94 @@ Si un hook te bloquea, no lo saltees con \`--no-verify\`: leelo. Casi siempre es
 - sdd-gate: sin SDD validado no hay merge a ramas protegidas.`,
     },
     {
+      id: 'resiliencia-autonoma',
+      title: 'Resiliencia autónoma: el orquestador de guardrails',
+      minutes: 12,
+      type: 'curso',
+      md: `## Más allá de los hooks: resiliencia en tiempo de ejecución
+
+Los hooks de git (pre-commit, pre-push) protegen el **ciclo de entrega**. Pero el stack también
+necesita protegerse en **tiempo de ejecución**: cuando un agente falla, cuando la red se cae, cuando
+un modelo no responde, cuando la base de datos se bloquea. Para eso existe el ==orquestador de
+guardrails== (\`src/guardrail-orchestrator.ts\`).
+
+La idea es simple y poderosa: un punto central donde el orquestador pregunta **"¿qué hago ante este
+fallo?"** y obtiene una decisión coherente + aprendizaje. El stack no se queda operando en cosas que
+no corresponden: detecta el fallo, decide la acción, la ejecuta y aprende — sin intervención humana.
+
+## El bucle: clasificar → decidir → ejecutar → aprender
+
+### 1. Clasificar el fallo
+
+El orquestador clasifica el error en una de **10 categorías** usando firmas de texto:
+
+| Categoría   | Ejemplos de error                              |
+| ----------- | ---------------------------------------------- |
+| \`config\`    | config not found, JSON malformado              |
+| \`network\`   | ECONNREFUSED, ETIMEDOUT, fetch failed          |
+| \`model\`     | model not found, 429, rate limit               |
+| \`db\`        | SQLITE, database locked, no such table         |
+| \`git\`       | merge conflict, push rejected                  |
+| \`security\`  | prompt injection, secret leaked, forbidden     |
+| \`resource\`  | token budget, out of memory, workload limit    |
+| \`reasoning\` | anti-loop, same strategy, max steps reached    |
+| \`quality\`   | quality score, hallucination, lint/typecheck   |
+| \`unknown\`   | no clasificado                                 |
+
+### 2. Decidir la acción
+
+Cada categoría mapea a una acción correctiva:
+
+- **\`retry\`** — reintentar con backoff (red, modelo, git).
+- **\`correct\`** — aplicar corrección automática (config, db, calidad).
+- **\`escalate\`** — detener y escalar al usuario (razonamiento).
+- **\`isolate\`** — aislar y limitar recursos (recurso).
+- **\`continue\`** — continuar con advertencia (desconocido).
+- **\`block\`** — detener la operación (seguridad).
+
+### 3. Ejecutar delegando
+
+El orquestador **no duplica** los guardrails existentes — los **reutiliza**. Según la categoría,
+delega a: \`anti-loop-guard\` (razonamiento), \`correction-rules-engine\` (config/calidad),
+\`resilience-handler\` (red), \`self-healing-db\` (db), \`safety-guardrails\` (seguridad),
+\`workload-guard\` (recursos), etc.
+
+### 4. Aprender
+
+Cada incidente se registra en \`.session/guardrails/incidents.jsonl\` con categoría, acción, fuente,
+error y estado de resolución. \`getCategoryStats()\` expone la tasa de resolución por categoría, y
+\`resolveIncident(id, resolution)\` cierra el bucle tras la recuperación. Con el tiempo, el stack
+"aprende" qué acción funciona para cada tipo de fallo y resuelve más rápido.
+
+## Integración en el orquestador
+
+\`src/agent-delegator.ts\` expone \`delegateWithGuardrail()\` que envuelve \`delegateWithAntiLoop()\`:
+
+- Si la delegación falla, clasifica el fallo y registra un incidente.
+- Si el guardrail dice NO proceder (\`block\`/\`isolate\`/\`escalate\`), devuelve un resultado con la
+  guía correctiva en vez de reintentar a ciegas.
+- Si es procedible (\`retry\`/\`correct\`/\`continue\`), adjunta el \`incident.id\` para resolverlo
+  tras la recuperación.
+
+## CLI
+
+\`\`\`bash
+npx tsx src/guardrail-orchestrator.ts classify "<error>"   # categoría
+npx tsx src/guardrail-orchestrator.ts decide "<error>"     # decisión JSON
+npx tsx src/guardrail-orchestrator.ts evaluate "<error>" [src]  # resultado + incidente
+npx tsx src/guardrail-orchestrator.ts stats                # aprendizaje por categoría
+npx tsx src/guardrail-orchestrator.ts resolve <id> [res]   # marcar incidente resuelto
+\`\`\`
+
+## Puntos clave
+
+- Los hooks de git protegen el ciclo de entrega; el orquestador de guardrails protege la ejecución.
+- Clasifica fallos en 10 categorías y decide la acción correctiva (retry/correct/escalate/isolate/continue/block).
+- Reutiliza los guardrails existentes en vez de duplicarlos.
+- Aprende de cada incidente: resolución más rápida sin intervención humana.
+- Complementa al anti-loop guard (bucles de razonamiento) y a la watchtower (salud/auto-healing).`,
+    },
+    {
       id: 'normativas-del-stack',
       title: 'Normativas del stack: las reglas que le dan dirección',
       minutes: 12,

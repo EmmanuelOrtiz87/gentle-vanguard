@@ -194,6 +194,108 @@ Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica
 
 ---
 
+## guardrail-orchestrator — Framework de Resiliencia Unificado
+
+Punto central donde el orquestador (o cualquier agente) consulta **"¿qué hacer ante este fallo?"**
+y obtiene una decisión coherente + aprendizaje. Es el complemento del anti-loop guard: mientras el
+anti-loop detecta *bucles de razonamiento* (misma estrategia fallando repetidamente), el orquestador
+maneja *cualquier tipo de fallo* con una decisión de acción y un bucle de aprendizaje.
+
+### Filosofía
+
+El stack debe ser **autónomo y resiliente**: capaz de detectar fallos, tomar acciones correctivas y
+continuar sin intervención humana, aprendiendo de cada incidente. Los guardrails no sustituyen al
+criterio — lo **escalan**: un humano revisa cuando quiere; el stack decide y actúa siempre, sin días
+malos.
+
+### Clasificación de fallos (10 categorías)
+
+| Categoría   | Firmas típicas                                   | Acción      | ¿Superficie al usuario? |
+| ----------- | ------------------------------------------------ | ----------- | ----------------------- |
+| `config`    | config not found/invalid, JSON malformado        | `correct`   | No                      |
+| `network`   | ECONNREFUSED, ETIMEDOUT, fetch failed            | `retry`     | No                      |
+| `model`     | model not found, 429, rate limit, provider error | `retry`     | No                      |
+| `db`        | SQLITE, database locked/corrupt, no such table   | `correct`   | No                      |
+| `git`       | merge conflict, push rejected, non-fast-forward  | `retry`     | Sí                      |
+| `security`  | prompt injection, blocked pattern, secret leaked | `block`     | Sí                      |
+| `resource`  | token budget, out of memory, workload limit      | `isolate`   | No                      |
+| `reasoning` | anti-loop, same strategy, max steps reached      | `escalate`  | Sí                      |
+| `quality`   | quality score, hallucination, lint/typecheck     | `correct`   | No                      |
+| `unknown`   | no clasificado                                   | `continue`  | Sí                      |
+
+### Decisiones de acción
+
+- **`retry`** — reintentar con backoff (red, modelo, git).
+- **`correct`** — aplicar corrección automática (config, db, calidad).
+- **`escalate`** — detener y escalar al usuario (razonamiento).
+- **`isolate`** — aislar y limitar recursos (recurso).
+- **`continue`** — continuar con advertencia (desconocido).
+- **`block`** — detener la operación (seguridad).
+
+### Aprendizaje (bucle)
+
+Cada incidente se registra en `.session/guardrails/incidents.jsonl` con categoría, acción, fuente,
+error y estado de resolución. `getCategoryStats()` expone la tasa de resolución por categoría, y
+`resolveIncident(id, resolution)` cierra el bucle tras la recuperación. Esto permite que el stack
+"aprenda" qué acción funciona para cada tipo de fallo y resuelva más rápido en el futuro.
+
+### API principal
+
+```ts
+import { evaluateFailure, resolveIncident, getCategoryStats } from './guardrail-orchestrator.js';
+
+// Clasifica, decide, registra incidente y devuelve si proceder
+const guard = evaluateFailure({ error, source: 'delegate:sdd-apply' });
+if (!guard.proceed) {
+  // No reintentar a ciegas — usar guard.decision.guidance
+}
+
+// Cerrar el bucle de aprendizaje tras la recuperación
+resolveIncident(guard.incident.id, 'retried successfully');
+```
+
+### Integración en el orquestador
+
+`src/agent-delegator.ts` expone `delegateWithGuardrail()` que envuelve `delegateWithAntiLoop()`:
+- Si la delegación falla, clasifica el fallo y registra un incidente.
+- Si el guardrail dice NO proceder (`block`/`isolate`/`escalate`), devuelve un resultado sintético
+  con la guía correctiva en vez de dejar que el caller reintente a ciegas.
+- Si es procedible (`retry`/`correct`/`continue`), adjunta el `incident.id` para que el caller lo
+  resuelva tras la recuperación.
+
+### CLI
+
+```bash
+npx tsx src/guardrail-orchestrator.ts classify "<error>"   # categoría
+npx tsx src/guardrail-orchestrator.ts decide "<error>"     # decisión JSON
+npx tsx src/guardrail-orchestrator.ts evaluate "<error>" [src]  # resultado + incidente
+npx tsx src/guardrail-orchestrator.ts stats                # aprendizaje por categoría
+npx tsx src/guardrail-orchestrator.ts resolve <id> [res]   # marcar incidente resuelto
+```
+
+### Guardrails existentes que el orquestador reutiliza (no duplica)
+
+| Guardrail                          | Rol                                                        |
+| ---------------------------------- | ---------------------------------------------------------- |
+| `anti-loop-guard.ts`               | Detecta bucles de razonamiento (3 → change_strategy, 5 → escalate) |
+| `correction-rules-engine.ts`       | Corrige config por scores de calidad                       |
+| `resilience-handler.ts`            | Timeout/retry/circuit-breaker/fallback por operación       |
+| `auto-escalation.ts`               | Escala por conteo de fallos (3/5/10)                       |
+| `safety-guardrails.ts`             | Evalúa mutaciones contra reglas constitucionales           |
+| `self-mutation-guard.ts`           | Protege contra auto-modificación no deseada                |
+| `prompt-injection-guard.ts`        | Protege contra inyección de prompts                        |
+| `workload-guard.ts` / `token-*-guard.ts` | Límites de recursos                                  |
+| `circuit-breaker-v2.ts`            | Circuit breakers por componente                            |
+| `self-healing-db.ts`               | Auto-reparación de la base de datos                        |
+| `session-close-guardian.ts`        | Guardián de cierre de sesión                               |
+
+### Tests
+
+`tests/unit/guardrail-orchestrator.test.ts` — 17 tests (clasificación, decisión por categoría,
+learning loop end-to-end, integración con `delegateWithGuardrail`).
+
+---
+
 ## absorbed-knowledge
 
 Conocimiento externo absorbido como nativo al stack (ADR-010, 2026-08-13). Ver

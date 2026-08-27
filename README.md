@@ -118,6 +118,12 @@ capacidades necesarias. El **Chain-Delivery** conserva el contrato entre BA, SAD
 - **Cross-Tool**: permite operar con varias herramientas de desarrollo con IA.
 - **Process Hygiene**: reaper nativo de procesos (duplicados, one-shots colgados, daemons
   envejecidos, pidfiles stale) integrado en autostart/watchtower/session-close.
+- **Unified Guardrail Orchestrator**: un punto central donde el orquestador consulta "¿qué hacer
+  ante este fallo?" y obtiene una decisión coherente + aprendizaje. Clasifica fallos en 10
+  categorías (config, network, model, db, git, security, resource, reasoning, quality, unknown),
+  decide la acción (retry, correct, escalate, isolate, continue, block), ejecuta delegando a los
+  guardrails especializados y aprende del resultado. Complementa al **anti-loop guard** (detecta
+  bucles de razonamiento) y a la **watchtower** (salud/auto-healing).
 
 ## Memoria, observabilidad y seguridad
 
@@ -125,6 +131,9 @@ capacidades necesarias. El **Chain-Delivery** conserva el contrato entre BA, SAD
 - **Nexus** almacena métricas, eventos, trazas, alertas y resultados.
 - **Dashboard** muestra actividad, costos, salud, trazas y feedback en tiempo real.
 - **Watchtower** ejecuta controles de salud y recuperación automática.
+- **Guardrail Orchestrator** clasifica fallos, decide la acción correctiva y aprende del resultado
+  (resiliencia autónoma sin intervención humana).
+- **Anti-loop guard** detecta bucles de razonamiento y fuerza cambio de estrategia o escalación.
 - **Secret scanner**, SBOM, SLSA y hooks ayudan a proteger el ciclo de entrega.
 
 ```mermaid
@@ -154,6 +163,8 @@ flowchart TD
 | `npm test`                         | Ejecutar las pruebas            |
 | `npm run db:health`                | Revisar Nexus                   |
 | `npm run graphify -- query "..."`  | Consultar el grafo del código   |
+| `npx tsx src/guardrail-orchestrator.ts decide "<error>"` | Decidir acción ante un fallo |
+| `npx tsx src/guardrail-orchestrator.ts stats`            | Ver estadísticas de aprendizaje |
 
 ## Documentación
 
