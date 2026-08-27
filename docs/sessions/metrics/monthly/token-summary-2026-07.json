@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-08-27T04:19:57.586Z",
+  "generated_at": "2026-08-27T09:22:57.825Z",
   "period": "2026-07",
   "days": 28,
   "totals": {
-    "input": 629943887,
-    "output": 9891676,
-    "total": 639835563,
+    "input": 630737186,
+    "output": 9905834,
+    "total": 640643020,
     "cost": 10.535256299999999
   },
   "daily_avg": {
-    "input": 22497996,
-    "output": 353274,
-    "total": 22851270
+    "input": 22526328,
+    "output": 353780,
+    "total": 22880108
   },
   "by_day": [
     {
@@ -224,19 +224,19 @@
     },
     {
       "day": "2026-08-26",
-      "input": 1996030,
-      "output": 50622,
-      "total": 2046652,
+      "input": 1995805,
+      "output": 50254,
+      "total": 2046059,
       "cost": 0,
-      "sessions": 14
+      "sessions": 13
     },
     {
       "day": "2026-08-27",
-      "input": 449799,
-      "output": 485,
-      "total": 450284,
+      "input": 1243323,
+      "output": 15011,
+      "total": 1258334,
       "cost": 0,
-      "sessions": 2
+      "sessions": 6
     }
   ],
   "by_model": [
@@ -270,9 +270,9 @@
     },
     {
       "model": "GLM-5.3",
-      "input": 11137483,
-      "output": 99277,
-      "total": 11236760,
+      "input": 11930782,
+      "output": 113435,
+      "total": 12044217,
       "cost": 0
     },
     {
