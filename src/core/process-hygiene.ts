@@ -165,7 +165,7 @@ const DAEMON_CLASSES: DaemonClass[] = [
   {
     id: 'vite-server',
     label: 'Dashboard Vite dev server',
-    match: /node_modules[\\/](\.pnpm[\\/][^\\/]+[\\/])?vite[\\/](bin[\\/])?vite(\.js|\.mjs)?["'\s\\/]?$|node_modules[\\/]vite[\\/]bin[\\/]vite\.js/,
+    match: /vite[\\/]bin[\\/]vite/,
     pidFile: join(RUNTIME_DIR, 'dashboard-vite.pid'),
     keep: 'pidfile',
     respawn: 'watchdog',

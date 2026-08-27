@@ -68,6 +68,10 @@ const CRITICAL_SKILLS: Array<{ dir: string; root: 'opencode' | 'stack' }> = [
   { dir: 'doc-coauthoring', root: 'stack' },
   { dir: 'copywriting', root: 'stack' },
   { dir: 'product-marketing', root: 'stack' },
+  // Fase 2 & 3 adopción externa (2026-08-27) — decks editables, taste gate, brand GV
+  { dir: 'huashu-design', root: 'stack' },
+  { dir: 'ui-taste', root: 'stack' },
+  { dir: 'brand-guidelines-gv', root: 'stack' },
 ];
 
 /**
