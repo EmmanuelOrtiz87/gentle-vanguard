@@ -30,7 +30,7 @@ Las fases del pipeline SDD son: \`INIT → EXPLORE → PROPOSE → SPEC → TASK
 :::diagram sdd-cycle:::
 
 1. **INIT** — se crea el caso SDD con nombre de feature obligatorio (alfanumérico, sin espacios). Sin nombre no hay caso.
-2. **EXPLORE / PROPOSE** — el rol BA explora el repositorio y propone alcance; aquí es donde graphify y CodeGraph ahorran la mayor parte del contexto.
+2. **EXPLORE / PROPOSE** — el rol BA explora el repositorio y propone alcance; aquí es donde graphify y CodeGraph ahorran la mayor parte del contexto. Entre ambas existe una **lane opcional de research** (\`npm run sdd:research\`): evidencia externa versionada (preguntas, fuentes gradeadas BM25, mapeo claim→fuente) persistida en \`.sdd/<feature>/RESEARCH/\` — la propuesta cita evidencia real, no intuición.
 3. **SPEC / TASKS** — la propuesta se congela como especificación y se descompone en tareas ejecutables.
 4. **DESIGN** — el rol SAD produce el diseño técnico; es fase de ==modelo premium== en el router (diseñar barato sale caro después).
 5. **APPLY** — el rol DEV ejecuta las tareas con verificación continua.

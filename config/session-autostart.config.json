@@ -970,6 +970,16 @@
         "description": "Model provider health â€” detecta errores de proveedor LLM (UnsupportedParamsError/Bedrock/Model not found) en opencode.log y auto-switch al modelo nativo"
       },
       {
+        "id": "rdd-retention",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/rdd/rdd-core.ts",
+        "args": "prune --retention-days=30",
+        "required": false,
+        "phase": 90,
+        "description": "Retencion de artefactos RDD: elimina workflows completados >30 dias (.session/rdd/*.json). Nunca toca disable-log.jsonl ni el flag DISABLED. Leccion de gentle-ai #1656: lineages sin politica de retencion se acumulan indefinidamente."
+      },
+      {
         "id": "token-ingest-init",
         "enabled": true,
         "lazy": true,

@@ -15,7 +15,7 @@
 import { pathToFileURL } from 'url';
 import { runSync, runSyncShell, runNpxTsxSync } from '../core/run-command.js';
 import { join, resolve } from 'path';
-import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync, readdirSync, unlinkSync } from 'fs';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -44,7 +44,7 @@ export interface RDDWorkflow {
 }
 
 export type WorkflowAction =
-  'start' | 'classify' | 'review' | 'receipt' | 'gate' | 'status' | 'abort';
+  'start' | 'classify' | 'review' | 'receipt' | 'gate' | 'status' | 'abort' | 'prune';
 
 // ─── Config ────────────────────────────────────────────────────────────────────
 
@@ -129,6 +129,45 @@ function loadLatestWorkflow(): RDDWorkflow | null {
   } catch {
     return null;
   }
+}
+
+// ─── Retention ────────────────────────────────────────────────────────────────
+
+export interface PruneResult {
+  pruned: string[];
+  kept: string[];
+  retentionDays: number;
+}
+
+/**
+ * Retention policy for RDD review artifacts (lesson from gentle-ai #1656:
+ * lineages accumulate with no retention policy). Deletes workflow JSONs whose
+ * last activity (completedAt ?? startedAt) is older than retentionDays.
+ * NEVER touches disable-log.jsonl (audit), the DISABLED flag or any non-json
+ * config. Completed workflows older than the window are safe to drop: the
+ * receipt evidence they carry has already been consumed by the delivery gates.
+ */
+export function pruneWorkflows(retentionDays = 30): PruneResult {
+  const result: PruneResult = { pruned: [], kept: [], retentionDays };
+  if (!existsSync(RDD_DIR)) return result;
+  const cutoff = Date.now() - retentionDays * 24 * 3_600_000;
+  for (const f of readdirSync(RDD_DIR)) {
+    if (!f.endsWith('.json')) continue; // disable-log.jsonl / DISABLED are untouchable
+    const p = join(RDD_DIR, f);
+    try {
+      const wf = JSON.parse(readFileSync(p, 'utf-8')) as RDDWorkflow;
+      const last = new Date(wf.completedAt ?? wf.startedAt).getTime();
+      if (!isNaN(last) && last < cutoff) {
+        unlinkSync(p);
+        result.pruned.push(f);
+      } else {
+        result.kept.push(f);
+      }
+    } catch {
+      result.kept.push(f); // unreadable files are never deleted blindly
+    }
+  }
+  return result;
 }
 
 // ─── Workflow Steps ────────────────────────────────────────────────────────────
@@ -333,7 +372,7 @@ export function generateReleaseProvenance(workflow: RDDWorkflow): void {
 
 export async function runWorkflow(
   action: WorkflowAction,
-  options: { gate?: string; workflowId?: string } = {},
+  options: { gate?: string; workflowId?: string; retentionDays?: number } = {},
 ): Promise<RDDWorkflow | null> {
   let workflow: RDDWorkflow | null = options.workflowId
     ? loadWorkflow(options.workflowId)
@@ -341,6 +380,17 @@ export async function runWorkflow(
 
   if (action === 'start') {
     workflow = startWorkflow();
+  }
+
+  // prune is a maintenance action: it must run even with no active workflow
+  if (action === 'prune') {
+    const days = options.retentionDays ?? 30;
+    const res = pruneWorkflows(days);
+    log(
+      `Prune: ${res.pruned.length} eliminado(s), ${res.kept.length} retenido(s) (>${days}d)${res.pruned.length > 0 ? ` — ${res.pruned.join(', ')}` : ''}`,
+      'SUCCESS',
+    );
+    return null;
   }
 
   if (!workflow && action !== 'status') {
@@ -436,8 +486,12 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     try {
       const workflowId = args.find((a) => a.startsWith('--workflow='))?.split('=')[1];
       const gate = args.find((a) => a.startsWith('--gate='))?.split('=')[1];
+      const retentionDays = parseInt(
+        args.find((a) => a.startsWith('--retention-days='))?.split('=')[1] ?? '30',
+        10,
+      );
 
-      const workflow = await runWorkflow(action, { workflowId, gate });
+      const workflow = await runWorkflow(action, { workflowId, gate, retentionDays });
 
       if (workflow) {
         if (args.includes('--json')) {

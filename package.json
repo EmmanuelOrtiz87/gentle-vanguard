@@ -277,6 +277,7 @@
     "humanize:transform": "npx tsx src/humanize/humanizer-cli.ts transform",
     "humanize:score": "npx tsx src/humanize/humanizer-cli.ts score",
     "rag:retrieve": "npx tsx src/retrieval/rag-retrieval.ts",
+    "sdd:research": "npx tsx src/sdd/sdd-research.ts",
     "process:trace": "npx tsx src/web/witr-cli.ts process",
     "process:hygiene": "node --import tsx src/core/process-hygiene.ts",
     "process:reap": "node --import tsx src/core/process-hygiene.ts --apply",

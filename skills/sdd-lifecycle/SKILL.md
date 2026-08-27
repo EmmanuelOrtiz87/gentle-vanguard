@@ -3,7 +3,7 @@ name: sdd-lifecycle
 description: >
   Spec-Driven Development (SDD) complete lifecycle - all phases in one skill. Triggers: "sdd",
   "spec", "spec-driven", "write spec", "feature spec", 
-  "sdd init", "sdd explore", "sdd propose", "sdd spec", "sdd design", "sdd tasks", "sdd apply", "sdd
+  "sdd init", "sdd explore", "sdd research", "sdd propose", "sdd spec", "sdd design", "sdd tasks", "sdd apply", "sdd
   verify", "sdd archive"
 metadata:
   source: GV-native
@@ -73,6 +73,24 @@ Explore and understand the problem space:
 3. Map existing system behavior
 4. Document exploration findings
 ```
+
+### Phase 2.5: RESEARCH (optional lane)
+
+**Trigger:** `sdd research`, `research questions`, `external evidence`
+
+External-evidence lane selectable right after EXPLORE. Requires an existing
+case (`.sdd/<feature>/`) — fail-closed. Produces a versioned artifact
+(`gentle-vanguard.sdd-research/v1`) recording questions, graded sources,
+claim-to-source mapping and contradictions:
+
+```
+1. npm run sdd:research -- run -f <feature> -q "q1;q2" --deep   # deterministic base
+2. Agent layer fills "Mapeo claim → fuente" + "Contradicciones" scaffolds
+3. Low-confidence questions must be resolved before PROPOSE
+4. Artifact: .sdd/<feature>/RESEARCH/{artifact.md, research.json}
+```
+
+PROPOSE automatically surfaces the research summary. Command: `/sdd-research`.
 
 ### Phase 3: PROPOSE
 

@@ -189,6 +189,11 @@ npm run delegate:run -- --task "audit gdpr compliance"
 - **Hash-chained audit** (`src/event-sourcing.ts`): eventos con prevHash+hash SHA-256; `verify`
   detecta manipulación.
 - **CRAG retrieval grader** (`src/retrieval/retrieval-grader.ts`): BM25 + keyword-fallback.
+- **SDD research lane** (`npm run sdd:research -- run -f <feature> -q "q1;q2" [--deep]`):
+  evidencia externa versionada (`gentle-vanguard.sdd-research/v1`) ligada al caso SDD — busca,
+  gradea BM25 y persiste `.sdd/<feature>/RESEARCH/{artifact.md,research.json}`; PROPOSE la
+  cita automáticamente. Comando ZCode: `/sdd-research`. Retención RDD:
+  `npx tsx src/rdd/rdd-core.ts prune --retention-days=30` (lazy en autostart).
 - **Web crawler dual-provider** (`src/web/web-crawler-cli.ts`): Firecrawl → Jina Reader +
   DuckDuckGo + Bing RSS. GOTCHA: Jina bloquea UA de navegador; decodificar `uddg` de DDG; Bing solo
   vía RSS.
