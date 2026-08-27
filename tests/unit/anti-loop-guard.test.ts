@@ -4,7 +4,8 @@
  *
  * Verifies that repeated failed attempts at the same goal with the same strategy
  * are detected as a loop, forcing a strategy change or escalation, and that a
- * successful attempt resets the counter.
+ * successful attempt resets the counter. Also verifies the delegateWithAntiLoop
+ * integration blocks delegation when a task is already in a loop.
  */
 
 import { test } from 'node:test';
@@ -24,13 +25,14 @@ import {
 
 // Isolate state per test by pointing the guard at a temp dir via cwd.
 // The guard uses process.cwd() for its state dir, so we run each test in a
-// fresh temp working directory by chdir'ing.
-function withTempDir(fn: () => void): void {
+// fresh temp working directory by chdir'ing. Async-aware so tests that await
+// delegateWithAntiLoop keep the temp cwd until the promise settles.
+async function withTempDir(fn: () => void | Promise<void>): Promise<void> {
   const dir = mkdtempSync(join(tmpdir(), 'gv-antiloop-'));
   const prev = process.cwd();
   process.chdir(dir);
   try {
-    fn();
+    await fn();
   } finally {
     process.chdir(prev);
     rmSync(dir, { recursive: true, force: true });
@@ -46,8 +48,8 @@ test('hashKey: produces a stable 16-char hex hash', () => {
   assert.match(a, /^[0-9a-f]{16}$/, '16-char hex');
 });
 
-test('registerAttempt: success resets the counter', () => {
-  withTempDir(() => {
+test('registerAttempt: success resets the counter', async () => {
+  await withTempDir(() => {
     registerAttempt('goal A', 'strategy 1', 'failed');
     registerAttempt('goal A', 'strategy 1', 'failed');
     const v = registerAttempt('goal A', 'strategy 1', 'success');
@@ -57,8 +59,8 @@ test('registerAttempt: success resets the counter', () => {
   });
 });
 
-test('registerAttempt: same strategy failing N times flags a loop (change_strategy)', () => {
-  withTempDir(() => {
+test('registerAttempt: same strategy failing N times flags a loop (change_strategy)', async () => {
+  await withTempDir(() => {
     let v;
     for (let i = 0; i < DEFAULT_MAX_ATTEMPTS; i++) {
       v = registerAttempt('goal B', 'strategy X', 'failed');
@@ -70,8 +72,8 @@ test('registerAttempt: same strategy failing N times flags a loop (change_strate
   });
 });
 
-test('registerAttempt: escalating after ESCALATE_AFTER attempts', () => {
-  withTempDir(() => {
+test('registerAttempt: escalating after ESCALATE_AFTER attempts', async () => {
+  await withTempDir(() => {
     let v;
     for (let i = 0; i < ESCALATE_AFTER; i++) {
       v = registerAttempt('goal C', 'strategy Y', 'failed');
@@ -81,8 +83,8 @@ test('registerAttempt: escalating after ESCALATE_AFTER attempts', () => {
   });
 });
 
-test('registerAttempt: changing strategy resets the counter', () => {
-  withTempDir(() => {
+test('registerAttempt: changing strategy resets the counter', async () => {
+  await withTempDir(() => {
     registerAttempt('goal D', 'strategy P', 'failed');
     registerAttempt('goal D', 'strategy P', 'failed');
     // Switch strategy → fresh counter, not a loop yet.
@@ -92,16 +94,16 @@ test('registerAttempt: changing strategy resets the counter', () => {
   });
 });
 
-test('detectLoop: no attempts → not a loop', () => {
-  withTempDir(() => {
+test('detectLoop: no attempts → not a loop', async () => {
+  await withTempDir(() => {
     const v = detectLoop('never attempted');
     assert.strictEqual(v.inLoop, false);
     assert.strictEqual(v.action, 'none');
   });
 });
 
-test('detectLoop: reflects current loop state without registering', () => {
-  withTempDir(() => {
+test('detectLoop: reflects current loop state without registering', async () => {
+  await withTempDir(() => {
     registerAttempt('goal E', 'strategy Z', 'failed');
     registerAttempt('goal E', 'strategy Z', 'failed');
     registerAttempt('goal E', 'strategy Z', 'failed');
@@ -111,8 +113,8 @@ test('detectLoop: reflects current loop state without registering', () => {
   });
 });
 
-test('clearGoal: removes tracked state', () => {
-  withTempDir(() => {
+test('clearGoal: removes tracked state', async () => {
+  await withTempDir(() => {
     registerAttempt('goal F', 'strategy W', 'failed');
     registerAttempt('goal F', 'strategy W', 'failed');
     registerAttempt('goal F', 'strategy W', 'failed');
@@ -124,8 +126,8 @@ test('clearGoal: removes tracked state', () => {
   });
 });
 
-test('getLoopStatus: reports active loops', () => {
-  withTempDir(() => {
+test('getLoopStatus: reports active loops', async () => {
+  await withTempDir(() => {
     registerAttempt('goal G', 'strategy V', 'failed');
     registerAttempt('goal G', 'strategy V', 'failed');
     registerAttempt('goal G', 'strategy V', 'failed');
@@ -133,5 +135,35 @@ test('getLoopStatus: reports active loops', () => {
     assert.strictEqual(status.activeLoops, 1);
     const key = hashKey('goal G');
     assert.strictEqual(status.goals[key].inLoop, true);
+  });
+});
+
+test('delegateWithAntiLoop: blocks delegation when task is in a change_strategy loop', async () => {
+  await withTempDir(async () => {
+    // Simulate 3 failed attempts with the same strategy (same agent + task).
+    const goal = 'implement feature X';
+    const strategy = 'sdd-apply::implement feature X';
+    for (let i = 0; i < DEFAULT_MAX_ATTEMPTS; i++) {
+      registerAttempt(goal, strategy, 'failed');
+    }
+    // Now delegateWithAntiLoop should block BEFORE calling delegate().
+    const { delegateWithAntiLoop } = await import('../../src/agent-delegator.ts');
+    const result = await delegateWithAntiLoop({ agent: 'sdd-apply', task: goal });
+    assert.strictEqual(result.success, false);
+    assert.match(result.error || '', /ANTI-LOOP.*Change strategy/i);
+  });
+});
+
+test('delegateWithAntiLoop: escalates when task is in an escalate loop', async () => {
+  await withTempDir(async () => {
+    const goal = 'implement feature Y';
+    const strategy = 'sdd-apply::implement feature Y';
+    for (let i = 0; i < ESCALATE_AFTER; i++) {
+      registerAttempt(goal, strategy, 'failed');
+    }
+    const { delegateWithAntiLoop } = await import('../../src/agent-delegator.ts');
+    const result = await delegateWithAntiLoop({ agent: 'sdd-apply', task: goal });
+    assert.strictEqual(result.success, false);
+    assert.match(result.error || '', /ANTI-LOOP.*Escalating/i);
   });
 });
