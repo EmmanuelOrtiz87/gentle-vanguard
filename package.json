@@ -278,6 +278,8 @@
     "humanize:score": "npx tsx src/humanize/humanizer-cli.ts score",
     "rag:retrieve": "npx tsx src/retrieval/rag-retrieval.ts",
     "process:trace": "npx tsx src/web/witr-cli.ts process",
+    "process:hygiene": "node --import tsx src/core/process-hygiene.ts",
+    "process:reap": "node --import tsx src/core/process-hygiene.ts --apply",
     "port:trace": "npx tsx src/web/witr-cli.ts port",
     "file:trace": "npx tsx src/web/witr-cli.ts file",
     "plan:new": "npx tsx src/planning/planning-templates.ts --plan",

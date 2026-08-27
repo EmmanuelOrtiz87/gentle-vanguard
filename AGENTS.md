@@ -1,6 +1,6 @@
 # Gentle-Vanguard — Stack Manual (Slim)
 
-> Manual completo: `docs/stack-manual-full.md` (arquitectura, 95 checks, migraciones, ADRs). Este
+> Manual completo: `docs/stack-manual-full.md` (arquitectura, 96 checks, migraciones, ADRs). Este
 > archivo es la versión de bajo contexto para inyección diaria. Cargar el manual completo solo
 > cuando la tarea lo requiera.
 
@@ -99,13 +99,33 @@ ventanas persistentes). Reglas:
 - Test de regresión: `tests/unit/run-command-hidden.test.ts` — PID del hijo debe ser PID del script
   (falla si vuelve el nieto del CLI de tsx).
 
+## process-hygiene (reaper nativo)
+
+`src/core/process-hygiene.ts` — detección y limpieza de basura de procesos. Los daemons detached
+sobreviven a su padre POR DISEÑO, así que "padre muerto" NO identifica basura; el reaper clasifica
+por shape: daemons duplicados (keeper = pidfile/port owner), one-shots colgados (padre muerto
+>15min), daemons envejecidos (>24h adoptados de sesiones previas, solo si autostart los re-spawnea),
+pidfiles stale y chrome headless residual.
+
+```bash
+npm run process:hygiene   # dry-run (exit 1 si hay basura)
+npm run process:reap      # limpia de verdad
+```
+
+- Wired: paso 1 del pipeline autostart (ANTES de los lazy daemons), check+autoheal del watchtower
+  (componente `process-hygiene`), sweep en session-close (fase 5.3b).
+- Registro de clases en `DAEMON_CLASSES` (misma lista = fuente de verdad). Reporte:
+  `.runtime/process-hygiene-report.json`. Tests: `tests/unit/process-hygiene.test.ts`.
+- Daemons nuevos DEBEN: escribir su PID en `.runtime/<name>.pid` al arrancar (ver token-ingest) y
+  limpiarlo en SIGTERM/SIGINT.
+
 ## maintenance-watchtower
 
-Orquestador de health/auto-healing: **95 checks / 21 componentes**, 6 modos (health, rebuild,
+Orquestador de health/auto-healing: **96 checks / 22 componentes**, 6 modos (health, rebuild,
 report, autoheal, continuous, all). Corre `autoheal -Quiet` lazy al inicio de sesión.
 
 ```bash
-npm run watchtower:health   # 95/95 PASS esperado
+npm run watchtower:health   # 96/96 PASS esperado
 ```
 
 CLI Guard: check anti-regresión del patrón roto
