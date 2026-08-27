@@ -62,6 +62,12 @@ const CRITICAL_SKILLS: Array<{ dir: string; root: 'opencode' | 'stack' }> = [
   { dir: 'web-research', root: 'stack' },
   { dir: 'diagram-design', root: 'opencode' }, // única con contenido real en .opencode
   { dir: 'security-and-hardening', root: 'stack' },
+  // Fase 1 adopción externa (2026-08-27) — demanda diseño/docs/marketing.
+  // Ver docs/reference/SKILL-UPGRADE-SHORTLIST-2026-08.md para el plan completo.
+  { dir: 'frontend-design', root: 'stack' },
+  { dir: 'doc-coauthoring', root: 'stack' },
+  { dir: 'copywriting', root: 'stack' },
+  { dir: 'product-marketing', root: 'stack' },
 ];
 
 /**

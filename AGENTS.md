@@ -20,7 +20,7 @@ auto-heal, dashboard WS, Nexus DB (lazy steps). Log: `.runtime/autostart-detache
 
 - **Agentes**: 21 subagentes del stack sincronizados a `~/.zcode/agents/` vía
   `npx tsx src/zcode-sync.ts --sync` (re-ejecutar tras editar `.opencode/agents/`).
-- **Skills críticas** (12): `zcode-sync.ts --sync` las copia a las 3 herramientas —
+- **Skills críticas** (16): `zcode-sync.ts --sync` las copia a las 3 herramientas —
   `~/.zcode/skills/`, `~/.codex/skills/`, `~/.minimax/agents/mavis/skills/` (pi-agent). Filtrar con
   `--tools zcode,codex,minimax`. NO copiar todas (~120): ZCode degrada el auto-trigger si se excede
   su presupuesto de metadata.
@@ -188,6 +188,11 @@ npm run delegate:run -- --task "audit gdpr compliance"
   `config/model-router.json`).
 - **Hash-chained audit** (`src/event-sourcing.ts`): eventos con prevHash+hash SHA-256; `verify`
   detecta manipulación.
+- **Skills adoptadas Fase 1 (2026-08-27)**: `frontend-design`, `canvas-design`, `theme-factory`,
+  `doc-coauthoring` (anthropics/skills, Apache-2.0) + familia marketing `copywriting`,
+  `product-marketing`, `cro`, `marketing-plan`, `launch`, `emails`, `marketing-psychology`,
+  `content-strategy` (coreyhaines31/marketingskills, MIT) — en `skills/` con atribución en
+  frontmatter (`source: external-adopted`). Plan: `docs/reference/SKILL-UPGRADE-SHORTLIST-2026-08.md`.
 - **CRAG retrieval grader** (`src/retrieval/retrieval-grader.ts`): BM25 + keyword-fallback.
 - **SDD research lane** (`npm run sdd:research -- run -f <feature> -q "q1;q2" [--deep]`):
   evidencia externa versionada (`gentle-vanguard.sdd-research/v1`) ligada al caso SDD — busca,

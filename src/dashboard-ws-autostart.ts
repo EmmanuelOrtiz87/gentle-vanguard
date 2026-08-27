@@ -36,18 +36,25 @@ const WS_SCRIPT = path.join(WS_SERVER_DIR, 'server', 'websocket-server.ts');
 const PID_FILE = path.join(RUNTIME_DIR, 'dashboard-ws.pid');
 const WATCHDOG_PID_FILE = path.join(RUNTIME_DIR, 'dashboard-ws-watchdog.pid');
 
-/** HTTP health check against localhost:port/api/health */
+/** HTTP health check against localhost:port/api/health — with 1 soft retry.
+ *  A single 3s timeout flake was enough to trip the 2-failure restart budget
+ *  (confirmed in dashboard-ws.log 2026-08-27); retrying once absorbs transient
+ *  latency spikes without masking a real outage (2 consecutive hard fails
+ *  still trigger the restart path). */
 function healthCheck(port: number): Promise<boolean> {
-  return new Promise((resolve) => {
-    const req = http.get(`http://127.0.0.1:${port}/api/health`, { timeout: 3000 }, (res) => {
-      resolve(res.statusCode === 200);
+  const once = (): Promise<boolean> =>
+    new Promise((resolve) => {
+      const req = http.get(`http://127.0.0.1:${port}/api/health`, { timeout: 3000 }, (res) => {
+        resolve(res.statusCode === 200);
+      });
+      req.on('error', () => resolve(false));
+      req.on('timeout', () => {
+        req.destroy();
+        resolve(false);
+      });
     });
-    req.on('error', () => resolve(false));
-    req.on('timeout', () => {
-      req.destroy();
-      resolve(false);
-    });
-  });
+  // soft retry: a flake must fail TWICE in the same check to count as failure
+  return once().then((ok) => (ok ? ok : once()));
 }
 
 /** Clean stale PID/port files */
