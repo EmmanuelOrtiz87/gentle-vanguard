@@ -252,8 +252,8 @@ When delegating via `task` tool, the prompt sent to subagents MUST follow:
 | NORMATIVAS-GIT          | `rules/NORMATIVAS-GIT.md`          |
 | AI Normatives           | `rules/AI-NORMATIVES.md`           |
 | Development Standards   | `rules/DEVELOPMENT-STANDARDS.md`   |
-| AGENTS.md               | `AGENTS.md`                   |
-| Break Glass             | `AGENTS.md`       |
+| AGENTS.md               | `AGENTS.md`                        |
+| Break Glass             | `AGENTS.md`                        |
 | Orchestrator Config     | `config/orchestrator.json`         |
 | Context Efficiency      | `config/context-efficiency.json`   |
 | Compaction Config       | `opencode.json#compaction`         |

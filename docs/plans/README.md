@@ -1,6 +1,7 @@
 # Plans
 
-Continuity and evolution plans, including the active NEXT-SESSION-PLAN. These documents drive what the next session picks up.
+Continuity and evolution plans, including the active NEXT-SESSION-PLAN. These documents drive what
+the next session picks up.
 
 ## Contents
 

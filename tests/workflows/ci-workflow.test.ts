@@ -31,7 +31,10 @@ describe('CI/CD Workflows', () => {
     assert.ok(content.includes('frozen-lockfile'), 'Should use frozen lockfile');
     assert.ok(content.includes('cache: pnpm'), 'Should cache pnpm store');
     assert.ok(content.includes('static-gates'), 'Should run static deployment/artifact gates');
-    assert.ok(content.includes('ci:static-gates'), 'Should invoke static deployment/artifact validation');
+    assert.ok(
+      content.includes('ci:static-gates'),
+      'Should invoke static deployment/artifact validation',
+    );
   });
 
   it('security scanning lives in reusable-security-scan.yml with real gates', () => {
@@ -46,10 +49,7 @@ describe('CI/CD Workflows', () => {
       !content.includes('|| echo "Audit found issues"'),
       'npm audit must not swallow failures',
     );
-    assert.ok(
-      !content.includes('exit-code: 0'),
-      'trivy must gate (exit-code 1), not just report',
-    );
+    assert.ok(!content.includes('exit-code: 0'), 'trivy must gate (exit-code 1), not just report');
   });
 
   it('duplicate entrypoint workflows were removed (single CI surface)', () => {

@@ -17,8 +17,8 @@ Canonical entry: `docs/agents/AGENTS.md`
 3. SDD FLOW: new features -> BA/EXPLORE first, no exceptions
 4. Delegation Rules -> `rules/DELEGATION-RULES.md` mandatory for multi-step
 5. `mem_save` after every significant task
-6. CodeGraph -> MCP `codegraph` tools before modifying code (or `npx tsx src/retrieval/semantic-search.ts` for
-   NL queries)
+6. CodeGraph -> MCP `codegraph` tools before modifying code (or
+   `npx tsx src/retrieval/semantic-search.ts` for NL queries)
 7. `mem_search "lessons learned"` at session start
 8. Review Workload Guard (`npx tsx src/workload-guard.ts`) before multi-file impl >400 lines
 9. Tool output discipline: limit read/grep/bash results to 50 lines
@@ -29,8 +29,8 @@ Canonical entry: `docs/agents/AGENTS.md`
     reasons. Only proceed if user explicitly confirms. Otherwise follow normativa.
 13. Goal-Driven: For multi-step tasks, state a brief plan: `1. [Step] → verify: [check]` format.
     Every changed line must trace to the user's request.
-14. Semantic-First Search: Use `npx tsx src/retrieval/semantic-search.ts` for natural-language code queries
-    before fallback to grep/glob
+14. Semantic-First Search: Use `npx tsx src/retrieval/semantic-search.ts` for natural-language code
+    queries before fallback to grep/glob
 
 ## Break Glass
 

@@ -37,12 +37,6 @@ window.GV_TRACKS = [
     desc: 'Anatomía y optimización de prompts, técnicas (few-shot, CoT, salida estructurada), prompting en el stack, plantillas por caso de uso y anti-patrones. Con generador interactivo.',
   },
   {
-    id: 'automatizaciones',
-    type: 'curso',
-    title: 'Automatizaciones',
-    desc: 'Los procesos automáticos del stack: pipeline de sesión, asignación de modelo y steps, cachés y prompting automáticos, auto-healing y hooks — cada flujo paso a paso.',
-  },
-  {
     id: 'laboratorio',
     type: 'laboratorio',
     title: 'Laboratorio práctico',

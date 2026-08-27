@@ -8,13 +8,13 @@ Scripts for installing and maintaining the gentle-vanguard.
 
 ## Entry Points
 
-| Command                               | Source                       | Description                                       |
-| ------------------------------------- | ---------------------------- | ------------------------------------------------- |
-| `./setup.sh`                          | `scripts/core/setup.sh`      | Cross-platform setup entrypoint (Linux/macOS/WSL) |
-| `npm run bootstrap:machine`           | `src/bootstrap-machine.ts`   | Install gentle-vanguard globally on machine       |
-| `npm run bootstrap:run`               | `src/bootstrap.ts`           | Bootstrap workspace                               |
-| `npm run setup:complete`              | `src/setup-complete.ts`      | Full stack setup (tools, hooks, env, validation)  |
-| `npx tsx src/setup-multi-machine.ts`  | `src/setup-multi-machine.ts` | Clone and bootstrap repos on a new PC             |
+| Command                              | Source                       | Description                                       |
+| ------------------------------------ | ---------------------------- | ------------------------------------------------- |
+| `./setup.sh`                         | `scripts/core/setup.sh`      | Cross-platform setup entrypoint (Linux/macOS/WSL) |
+| `npm run bootstrap:machine`          | `src/bootstrap-machine.ts`   | Install gentle-vanguard globally on machine       |
+| `npm run bootstrap:run`              | `src/bootstrap.ts`           | Bootstrap workspace                               |
+| `npm run setup:complete`             | `src/setup-complete.ts`      | Full stack setup (tools, hooks, env, validation)  |
+| `npx tsx src/setup-multi-machine.ts` | `src/setup-multi-machine.ts` | Clone and bootstrap repos on a new PC             |
 
 ## PC Migration
 

@@ -2,12 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "version",
-    "imagePromotion",
-    "networkPolicy",
-    "mcpSandbox"
-  ],
+  "required": ["version", "imagePromotion", "networkPolicy", "mcpSandbox"],
   "properties": {
     "version": {
       "type": "string",
@@ -16,12 +11,7 @@
     "imagePromotion": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "required",
-        "manifestPath",
-        "requiredContainers",
-        "digestInputs"
-      ],
+      "required": ["required", "manifestPath", "requiredContainers", "digestInputs"],
       "properties": {
         "required": {
           "type": "boolean"
@@ -51,20 +41,13 @@
     "networkPolicy": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "required",
-        "manifestPath",
-        "requiredEvidence"
-      ],
+      "required": ["required", "manifestPath", "requiredEvidence"],
       "properties": {
         "required": {
           "type": "boolean"
         },
         "manifestPath": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "minLength": 1
         },
         "requiredEvidence": {
@@ -80,11 +63,7 @@
     "mcpSandbox": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "required",
-        "policyPath",
-        "requiredEvidence"
-      ],
+      "required": ["required", "policyPath", "requiredEvidence"],
       "properties": {
         "required": {
           "type": "boolean"

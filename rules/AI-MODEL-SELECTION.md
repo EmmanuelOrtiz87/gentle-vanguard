@@ -10,20 +10,20 @@ supported tools
 Different tasks require different model capabilities. Using a large expensive model for a simple
 validation is wasteful. Using a small weak model for complex architecture is risky. This policy
 defines which model to use for which task, based on capability requirements and cost optimization.
-In the current environment the native available model is `opencode/big-pickle` (free
-tier, provider `opencode`); the tier structure below is retained for when additional models become
-available (openrouter/ollama/dify/lm-studio2).
+In the current environment the native available model is `opencode/big-pickle` (free tier, provider
+`opencode`); the tier structure below is retained for when additional models become available
+(openrouter/ollama/dify/lm-studio2).
 
 ---
 
 ## 2. Model Tier Definitions
 
-| Tier                 | Model(s)                                                  | Strengths                                     | Weaknesses                        | Cost/M Tokens |
-| -------------------- | --------------------------------------------------------- | --------------------------------------------- | --------------------------------- | ------------- |
+| Tier                 | Model(s)                                      | Strengths                                     | Weaknesses                        | Cost/M Tokens |
+| -------------------- | --------------------------------------------- | --------------------------------------------- | --------------------------------- | ------------- |
 | **T1 — Heavy**       | opencode/big-pickle                           | Deep reasoning, architecture, code generation | Single model for all tasks        | $0 (free)     |
 | **T2 — Medium**      | opencode/big-pickle                           | Balanced perf/cost, good for most tasks       | Less depth on complex reasoning   | $0 (free)     |
 | **T3 — Light**       | opencode/big-pickle, ollama (llama3, qwen2.5) | Fast, cheap, private (local)                  | Limited context, weaker reasoning | $0-0.5        |
-| **T4 — Specialized** | Fine-tuned models                                         | Domain-specific excellence                    | Narrow applicability              | Varies        |
+| **T4 — Specialized** | Fine-tuned models                             | Domain-specific excellence                    | Narrow applicability              | Varies        |
 
 ---
 

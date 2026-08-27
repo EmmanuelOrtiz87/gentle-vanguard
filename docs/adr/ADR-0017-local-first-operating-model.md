@@ -1,6 +1,6 @@
 # ADR-0017: Local-First Operating Model
-Date: 2026-08-25
-Status: Accepted
+
+Date: 2026-08-25 Status: Accepted
 
 ## Context
 
@@ -25,12 +25,12 @@ Gentle-Vanguard is officially **LOCAL-FIRST / SERVER-OPTIONAL**.
 
 ### Operating profiles
 
-| Profile | Scope | Default | Identity and data boundary |
-| --- | --- | --- | --- |
-| `local-default` | One local workspace and local Nexus/SQLite | Yes | Local deployment scope; loopback dashboard; no enterprise identity assumption |
-| `local-multi-tenant` | Multiple logical tenants in one local deployment | Opt-in | Tenant-scoped records and RBAC memberships remain deployment-local |
-| `server-promotion` | Operator-managed server or Kubernetes deployment | Opt-in/future | Requires external deployment inputs and promotion gates |
-| `saas-federated` | Hosted/federated service outside the local deployment | Opt-in/future | Requires explicit federation and enterprise identity contracts |
+| Profile              | Scope                                                 | Default       | Identity and data boundary                                                    |
+| -------------------- | ----------------------------------------------------- | ------------- | ----------------------------------------------------------------------------- |
+| `local-default`      | One local workspace and local Nexus/SQLite            | Yes           | Local deployment scope; loopback dashboard; no enterprise identity assumption |
+| `local-multi-tenant` | Multiple logical tenants in one local deployment      | Opt-in        | Tenant-scoped records and RBAC memberships remain deployment-local            |
+| `server-promotion`   | Operator-managed server or Kubernetes deployment      | Opt-in/future | Requires external deployment inputs and promotion gates                       |
+| `saas-federated`     | Hosted/federated service outside the local deployment | Opt-in/future | Requires explicit federation and enterprise identity contracts                |
 
 ### Authentication rules
 
@@ -52,8 +52,8 @@ Gentle-Vanguard is officially **LOCAL-FIRST / SERVER-OPTIONAL**.
 - Local users have a clear supported path with no Kubernetes, cloud account, registry, CNI, Cosign,
   or enterprise identity dependency.
 - Existing server/cloud/SaaS implementations remain available for deliberate evolution.
-- Documentation can distinguish locally verified behavior from operator-owned external inputs without
-  inventing metrics, digests, or security evidence.
+- Documentation can distinguish locally verified behavior from operator-owned external inputs
+  without inventing metrics, digests, or security evidence.
 
 ### Negative
 

@@ -1,10 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": [
-    "version",
-    "skills"
-  ],
+  "required": ["version", "skills"],
   "additionalProperties": false,
   "properties": {
     "version": {
@@ -15,11 +12,7 @@
       "type": "object",
       "additionalProperties": {
         "type": "object",
-        "required": [
-          "command",
-          "executable",
-          "args"
-        ],
+        "required": ["command", "executable", "args"],
         "additionalProperties": false,
         "properties": {
           "command": {
@@ -54,10 +47,7 @@
           },
           "filesystem": {
             "type": "string",
-            "enum": [
-              "workspace",
-              "broad"
-            ],
+            "enum": ["workspace", "broad"],
             "default": "workspace"
           }
         }

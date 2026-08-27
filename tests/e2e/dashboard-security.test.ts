@@ -212,14 +212,11 @@ describe('Dashboard security E2E', () => {
     assert.ok(subjects.includes('e2e-viewer'));
 
     // Self role changes are blocked to avoid lockouts.
-    const selfPatch = await fetch(
-      `${baseUrl}/api/admin/principals/${ownPrincipalId}/role`,
-      {
-        method: 'PATCH',
-        headers: { ...authHeaders, 'content-type': 'application/json' },
-        body: JSON.stringify({ role: 'viewer' }),
-      },
-    );
+    const selfPatch = await fetch(`${baseUrl}/api/admin/principals/${ownPrincipalId}/role`, {
+      method: 'PATCH',
+      headers: { ...authHeaders, 'content-type': 'application/json' },
+      body: JSON.stringify({ role: 'viewer' }),
+    });
     assert.equal(selfPatch.status, 409);
 
     // Admin can change other principals' roles.
@@ -253,9 +250,11 @@ describe('Dashboard security E2E', () => {
 
     // Restore admin directly: admin endpoints work again.
     const dbRestore = new Database(join(dbDir, 'gentle-vanguard.db'));
-    dbRestore.prepare(
-      "UPDATE memberships SET role = 'admin' WHERE principal_id = ? AND tenant_id = 'gentle-vanguard'",
-    ).run(ownPrincipalId);
+    dbRestore
+      .prepare(
+        "UPDATE memberships SET role = 'admin' WHERE principal_id = ? AND tenant_id = 'gentle-vanguard'",
+      )
+      .run(ownPrincipalId);
     dbRestore.close();
     const restored = await fetch(
       `${baseUrl}/api/admin/principals/${createdBody.principal!.id}/revoke-sessions`,

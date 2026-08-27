@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-08-26T10:06:33.958Z",
+  "generated_at": "2026-08-26T22:26:30.265Z",
   "period": "2026-07",
   "days": 28,
   "totals": {
-    "input": 710955390,
-    "output": 10271749,
-    "total": 721227139,
+    "input": 712660265,
+    "output": 10315593,
+    "total": 722975858,
     "cost": 10.535256299999999
   },
   "daily_avg": {
-    "input": 25391264,
-    "output": 366848,
-    "total": 25758112
+    "input": 25452152,
+    "output": 368414,
+    "total": 25820566
   },
   "by_day": [
     {
@@ -232,11 +232,11 @@
     },
     {
       "day": "2026-08-26",
-      "input": 696476,
-      "output": 6236,
-      "total": 702712,
+      "input": 2401351,
+      "output": 50080,
+      "total": 2451431,
       "cost": 0,
-      "sessions": 5
+      "sessions": 15
     }
   ],
   "by_model": [
@@ -270,16 +270,16 @@
     },
     {
       "model": "GLM-5.3",
-      "input": 9872174,
-      "output": 91256,
-      "total": 9963430,
+      "input": 11093005,
+      "output": 98250,
+      "total": 11191255,
       "cost": 0
     },
     {
       "model": "big-pickle",
-      "input": 6962543,
-      "output": 642456,
-      "total": 7604999,
+      "input": 7446587,
+      "output": 679306,
+      "total": 8125893,
       "cost": 2.248670159999999
     },
     {

@@ -31,7 +31,7 @@ function procSnapshot(): string {
   try {
     const out = execSync(
       'powershell -NoProfile -Command "Get-CimInstance Win32_Process | ' +
-        'Where-Object { $_.Name -match \'node|pwsh|powershell|cmd\' } | ' +
+        "Where-Object { $_.Name -match 'node|pwsh|powershell|cmd' } | " +
         'Select-Object ProcessId,CreationDate,CommandLine | ' +
         'ConvertTo-Csv -NoTypeInformation" 2>$null',
       { encoding: 'utf-8', timeout: 8000, windowsHide: true },
@@ -40,7 +40,7 @@ function procSnapshot(): string {
       .split('\n')
       .filter((l) => l.trim())
       .slice(0, 40)
-      .map((l) => l.length > 220 ? l.slice(0, 220) : l)
+      .map((l) => (l.length > 220 ? l.slice(0, 220) : l))
       .join(' | ');
   } catch (e) {
     return `SNAPSHOT_FAIL ${(e as Error).message.slice(0, 80)}`;

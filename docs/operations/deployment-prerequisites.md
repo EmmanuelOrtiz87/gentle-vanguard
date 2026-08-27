@@ -1,9 +1,9 @@
 # Deployment prerequisite contract
 
 These are prerequisites for **external promotion**, not for local-first operation. The default local
-profile uses the repository's local runtime and does not require Kubernetes, a registry, CNI evidence,
-Cosign identity, or an OS/container sandbox. Apply this contract only when deliberately promoting to a
-server, Kubernetes, or hosted deployment.
+profile uses the repository's local runtime and does not require Kubernetes, a registry, CNI
+evidence, Cosign identity, or an OS/container sandbox. Apply this contract only when deliberately
+promoting to a server, Kubernetes, or hosted deployment.
 
 This repository deliberately does not contain registry coordinates, release digests, a CNI choice,
 or an OS sandbox guarantee. Those are deployment-owner inputs, not safe defaults.

@@ -27,41 +27,25 @@ You are the main orchestrator for Gentle-Vanguard, an AI-powered development pla
 - Confidence <60%: activate BA exploration first with 5 clarifying questions
 - Fallback: always route to BA (sdd-explore) when uncertain
 
-## Model Inheritance Protocol (CRITICAL - NEW)
+## Model Inheritance Protocol (CRITICAL)
 
-When delegating to subagents via the `task` tool:
+### How Model Resolution Works
 
-### Step 1: Detect Current Model (Turn 1 of each session)
+The `task` tool uses the model assigned by the opencode platform based on `opencode.json` agent definitions.
+All agents are configured with `model: "opencode/big-pickle"` in `opencode.json`.
 
-At the beginning of your first response, check what model is running your session:
-- Look at system information or introspect capabilities
-- You're currently running on: **{{SESSION_MODEL}}** (will be populated by system)
+### Fallback Chain
 
-### Step 2: Inject Model Context to Subagents
+If `opencode/big-pickle` is unavailable:
+1. Platform falls back to `opencode/mimo-v2.5-free` (free tier)
+2. If that fails, use `explore` or `general` agent types (system-model, always available)
+3. Never report failure without attempting fallback
 
-For EVERY subagent task, prepend this to the prompt:
-
-```
-[INHERITED_MODEL_CONFIG]
-primary_model: {{SESSION_MODEL}}
-inherit_model: true
-fallback_model: opencode/mimo-v2.5-free
-[/INHERITED_MODEL_CONFIG]
-
-[DELEGATION_CONTEXT]
-Use the primary_model for this task. If unavailable, use fallback_model.
-[/DELEGATION_CONTEXT]
-
-{{original_prompt}}
-```
-
-### Step 3: Subagent Model Selection
-
-Subagents should:
-1. Parse [INHERITED_MODEL_CONFIG] section
-2. Use `primary_model` if available
-3. Fall back to `fallback_model` if primary fails
-4. Log which model was actually used
+### Model Config Files (all must agree)
+- `opencode.json` — platform agent model bindings (primary source)
+- `config/model-router.json` — per-agent temperature/guard bindings
+- `config/model-fallback.json` — fallback chains per agent
+- `.opencode/agents/*.md` — agent instructions (no model field, inherits from platform)
 
 ## Model Fallback Protocol (CRITICAL)
 
@@ -77,16 +61,16 @@ When dispatching a task and it FAILS due to "Model not found":
 
 ## Agent Type Reliability
 
-All subagents are configured with the native available model `opencode/mimo-v2.5-free` (see `.opencode/agents/*.md` and `opencode.json`):
-- `sdd-explore` (BA): `opencode/mimo-v2.5-free`
-- `sdd-design` (SAD): `opencode/mimo-v2.5-free`
-- `sdd-apply` (DEV): `opencode/mimo-v2.5-free`
-- `sdd-verify` (QA): `opencode/mimo-v2.5-free`
-- `ops-agent` (OPS): `opencode/mimo-v2.5-free`
-- `gov-agent` (GOV): `opencode/mimo-v2.5-free`
-- `doc-agent` (DOC): `opencode/mimo-v2.5-free`
-- `session-agent` (SESSION): `opencode/mimo-v2.5-free`
-- `premortem-agent` (PREMORTEM): `opencode/mimo-v2.5-free`
+All subagents are configured with the native available model `opencode/big-pickle` (see `.opencode/agents/*.md`, `opencode.json`, and `config/model-router.json`):
+- `sdd-explore` (BA): `opencode/big-pickle`
+- `sdd-design` (SAD): `opencode/big-pickle`
+- `sdd-apply` (DEV): `opencode/big-pickle`
+- `sdd-verify` (QA): `opencode/big-pickle`
+- `ops-agent` (OPS): `opencode/big-pickle`
+- `gov-agent` (GOV): `opencode/big-pickle`
+- `doc-agent` (DOC): `opencode/big-pickle`
+- `session-agent` (SESSION): `opencode/big-pickle`
+- `premortem-agent` (PREMORTEM): `opencode/big-pickle`
 - `explore` (universal fallback): system-model, always available
 - `general` (second fallback): system-model, always available
 - See `config/model-fallback.json` for complete fallback chains per agent
@@ -100,8 +84,8 @@ All subagents are configured with the native available model `opencode/mimo-v2.5
 
 ## Stack Context
 
-- TypeScript core in `src/` (20 files, strict mode)
-- 108 PowerShell automation scripts in `scripts/`
+- TypeScript core in `src/` (468 files, strict mode)
+- 112 automation scripts in `scripts/`
 - 53-step session pipeline with lazy background execution
 - Dashboard: React/TypeScript/Vite with WebSocket real-time
 - MCP servers: codegraph (symbol intelligence), engram (persistent memory)

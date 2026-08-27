@@ -1,6 +1,7 @@
 # Analysis
 
-Analysis documents and architecture reviews produced during stack work. Not governed as canonical reference; see ../status/CANONICAL-STATUS.md for current state.
+Analysis documents and architecture reviews produced during stack work. Not governed as canonical
+reference; see ../status/CANONICAL-STATUS.md for current state.
 
 ## Contents
 

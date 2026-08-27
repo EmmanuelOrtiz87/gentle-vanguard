@@ -37,11 +37,11 @@
 - Session start: `session-start.ps1` — loads config, validates health, opens session in engram
 - Session close: `session-close.ps1` — calculates metrics, runs feedback analyzer, backs up engram
 - Session lifecycle authority: `.session/session-current.json`.
-- `.session/.active-session.json` is a historical/compatibility persistence marker, not the lifecycle
-  authority.
+- `.session/.active-session.json` is a historical/compatibility persistence marker, not the
+  lifecycle authority.
 - Token aggregates and transactions are authoritative in Nexus (`.runtime/gentle-vanguard.db`); tool
-  JSONL rollouts are the raw usage authority for JSONL-producing tools, while generated JSON snapshots
-  are derived reports.
+  JSONL rollouts are the raw usage authority for JSONL-producing tools, while generated JSON
+  snapshots are derived reports.
 
 ## Configuration (Source: NORMATIVAS-CONFIG.md)
 

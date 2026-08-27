@@ -14,7 +14,15 @@
         "properties": {
           "role": { "type": "string" },
           "criticality": { "enum": ["core", "supporting", "restricted", "optional", "redundant"] },
-          "activation": { "enum": ["always-on", "warm-when-developing", "warm-when-using-skills", "on-demand", "disabled-by-policy"] },
+          "activation": {
+            "enum": [
+              "always-on",
+              "warm-when-developing",
+              "warm-when-using-skills",
+              "on-demand",
+              "disabled-by-policy"
+            ]
+          },
           "management": { "enum": ["host-managed", "stack-managed"] },
           "verification": { "type": "string" },
           "notes": { "type": "string" }

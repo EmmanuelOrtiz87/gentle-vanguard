@@ -6,13 +6,13 @@ Version: 2.0.0 | Framework: Assign optimal AI models per SDD phase
 
 Each SDD phase has different cognitive demands. Route each phase to the model best suited for its
 task type — cheaper/faster models for exploration, stronger for implementation, strict for
-verification. In the current environment the native available model is
-`opencode/big-pickle` (free tier); temperatures vary per phase to shape behavior.
+verification. In the current environment the native available model is `opencode/big-pickle` (free
+tier); temperatures vary per phase to shape behavior.
 
 ## Phase-to-Model Mapping
 
-| Phase        | Cognitive Demand                               | Recommended Model                 | Rationale                                        |
-| ------------ | ---------------------------------------------- | --------------------------------- | ------------------------------------------------ |
+| Phase        | Cognitive Demand                               | Recommended Model     | Rationale                                        |
+| ------------ | ---------------------------------------------- | --------------------- | ------------------------------------------------ |
 | BA (Explore) | Research, analysis, requirements gathering     | `opencode/big-pickle` | Strong context understanding, good at synthesis  |
 | SAD (Design) | Architecture, API contracts, sequence diagrams | `opencode/big-pickle` | Strong reasoning for design decisions            |
 | DEV (Apply)  | Code generation, implementation                | `opencode/big-pickle` | Strong code generation, high max tokens          |
@@ -41,8 +41,8 @@ Model routing is configured in:
 
 ### 1. Phase-Appropriate Model Selection (MUST)
 
-All phases MUST use the native available model `opencode/big-pickle` (provider
-`opencode`). If additional models become available, re-apply the tier mapping:
+All phases MUST use the native available model `opencode/big-pickle` (provider `opencode`). If
+additional models become available, re-apply the tier mapping:
 
 - **BA/SAD/GOV/LEGAL**: strong reasoning tier (analytical/reasoning)
 - **DEV/QA/OPS/FINANCE/PREMORTEM**: precision/code tier

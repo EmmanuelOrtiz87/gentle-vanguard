@@ -1,6 +1,7 @@
 # Status
 
-Status documents. CANONICAL-STATUS.md is the source of truth for the current version and operating model; other reports are dated snapshots.
+Status documents. CANONICAL-STATUS.md is the source of truth for the current version and operating
+model; other reports are dated snapshots.
 
 ## Contents
 

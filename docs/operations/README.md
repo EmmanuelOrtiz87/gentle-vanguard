@@ -1,6 +1,7 @@
 # Operations
 
-Runbooks, CI/CD docs, operating procedures, and command references. Start with ci-cd.md; deployment gates live in deployment-prerequisites.md.
+Runbooks, CI/CD docs, operating procedures, and command references. Start with ci-cd.md; deployment
+gates live in deployment-prerequisites.md.
 
 ## Contents
 

@@ -1,7 +1,7 @@
 # Gentle-Vanguard — Stack Status Report
 
-**Versión actual**: v3.8.2 **Última revisión canónica**: 2026-08-24 **Stack**: AI orchestration layer multi-herramienta
-| 436+ TS scripts | 263 skills | 23 CI/CD workflows
+**Versión actual**: v3.8.2 **Última revisión canónica**: 2026-08-24 **Stack**: AI orchestration
+layer multi-herramienta | 436+ TS scripts | 263 skills | 23 CI/CD workflows
 
 ---
 
@@ -366,7 +366,7 @@ Maintenance Watchtower:
 
 | Prioridad   | Item                                                       | Estado actual                                                                                                                             |
 | ----------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| ✅ Completa | **Secretlint pre-commit**                                  | ✅ Integrado en los hooks                                                                                                                |
+| ✅ Completa | **Secretlint pre-commit**                                  | ✅ Integrado en los hooks                                                                                                                 |
 | ✅ Completa | **Coverage reporting (native TS runner + threshold gate)** | ✅ COMPLETADO (`src/coverage-runner.ts`, pre-push gate)                                                                                   |
 | 🔜 Alta     | **EditorConfig + Prettier CI check**                       | 📋 Planificado                                                                                                                            |
 | 🔜 Alta     | **Branch strategy / Release process docs**                 | 📋 Planificado                                                                                                                            |
@@ -385,16 +385,16 @@ Maintenance Watchtower:
 
 ### Observaciones / Deuda técnica detectada:
 
-| Issue                                 | Detalle                                                                                               |
-| ------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| ✅ **Versión unificada**              | v3.8.2 es la versión actual canónica; la consistencia de README/VERSION/badges queda pendiente de verificación externa                  |
-| ⚠️ **FT Python stub**                 | `train_lora.py` es stub, no implementado                                                              |
-| ✅ **Adaptive scripts automatizados** | auto-norm-enforcer (cada 5 turnos), karpathy-enforcer (pre-commit), normative-audit (pre-commit + CI) |
-| ⚠️ **Plugins experimentales**         | Plugin system existe pero sin uso real                                                                |
-| ⚠️ **Dashboard v3**                   | Chart.js integrado pero no hay Web UI nativo (HTML estático)                                          |
-| ⚠️ **Multi-repo**                     | Alpha stage, no probado en producción                                                                 |
-| ⚠️ **event-bus sub-utilizado**        | Solo 1 subscription (judgment-day)                                                                    |
-| ⚠️ **Skills 263**                     | Inventario real auditado (175 skills/ + 88 .opencode/skills)                                          |
+| Issue                                 | Detalle                                                                                                                |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| ✅ **Versión unificada**              | v3.8.2 es la versión actual canónica; la consistencia de README/VERSION/badges queda pendiente de verificación externa |
+| ⚠️ **FT Python stub**                 | `train_lora.py` es stub, no implementado                                                                               |
+| ✅ **Adaptive scripts automatizados** | auto-norm-enforcer (cada 5 turnos), karpathy-enforcer (pre-commit), normative-audit (pre-commit + CI)                  |
+| ⚠️ **Plugins experimentales**         | Plugin system existe pero sin uso real                                                                                 |
+| ⚠️ **Dashboard v3**                   | Chart.js integrado pero no hay Web UI nativo (HTML estático)                                                           |
+| ⚠️ **Multi-repo**                     | Alpha stage, no probado en producción                                                                                  |
+| ⚠️ **event-bus sub-utilizado**        | Solo 1 subscription (judgment-day)                                                                                     |
+| ⚠️ **Skills 263**                     | Inventario real auditado (175 skills/ + 88 .opencode/skills)                                                           |
 
 ---
 

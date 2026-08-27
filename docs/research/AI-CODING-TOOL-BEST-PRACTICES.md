@@ -534,6 +534,7 @@ Multiple versions in one file using `$id`:
 
 2. **Generate TypeScript types from schemas** — Add `npx json2ts` step to generate
    `src/types/config.ts` from `opencode.schema.json` and `plugin-manifest-schema.json`.
+
 <!-- REF-OBSOLETA: src/types/config.ts no existe (ruta migrada o eliminada) -->
 
 3. **Extend validate-opencode-config.ps1 to all tool configs** — Currently validates only

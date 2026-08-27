@@ -2,9 +2,10 @@
 
 Gentle-Vanguard's primary supported scope is local operation: CLI/orchestration, local SQLite/Nexus,
 `.session/`, Engram, CodeGraph, local MCP, and the loopback dashboard. Server, SaaS, cloud, and
-Kubernetes paths remain opt-in evolution paths. Registry digests, Cosign identity, CNI/NetworkPolicy,
-OS/runtime sandbox evidence, and OIDC/LDAP identity are external-promotion inputs—not prerequisites
-for the local profile. See `docs/adr/ADR-0017-local-first-operating-model.md`.
+Kubernetes paths remain opt-in evolution paths. Registry digests, Cosign identity,
+CNI/NetworkPolicy, OS/runtime sandbox evidence, and OIDC/LDAP identity are external-promotion
+inputs—not prerequisites for the local profile. See
+`docs/adr/ADR-0017-local-first-operating-model.md`.
 
 ## SESSION START (MANDATORY — run before ANY other action)
 
@@ -361,7 +362,7 @@ Los siguientes steps se agregaron al `config/session-autostart.config.json`:
 | -------------------------- | -------------------------------------- | ---- |
 | `judgment-day-correction`  | `src/correction-rules-engine.ts`       | ✅   |
 | `cloud-connectors-init`    | `src/hybrid-executor.ts`               | ✅   |
-| `cloud-connectors-metrics` | `src/tokens/token-budget-guard.ts`            | ✅   |
+| `cloud-connectors-metrics` | `src/tokens/token-budget-guard.ts`     | ✅   |
 | `tracing-init`             | `src/tracing-instrument.ts`            | ✅   |
 | `checkpoint-auto-create`   | `src/checkpoint-manager.ts`            | ✅   |
 | `audit-pipeline-init`      | `src/infrastructure/audit-pipeline.ts` | ✅   |
@@ -372,11 +373,11 @@ Los siguientes steps se agregaron al `config/session-autostart.config.json`:
 
 Los scripts PS1 core han sido migrados a TypeScript en `src/`:
 
-| PS1 Original                                      | TS Replacement                                                              | Comando                                            |
-| ------------------------------------------------- | --------------------------------------------------------------------------- | -------------------------------------------------- |
-| `scripts/health-check/health-check.ps1`           | `src/core/health-check.ts`                                                  | `npm run health:check`                             |
-| `scripts/utilities/session/session-autostart.ps1` | `src/session-autostart.ts` (wrapper de `src/core/session-autostart.ts`)     | `npx tsx src/session-autostart.ts`                 |
-| `scripts/maintenance/maintenance-watchtower.ps1`  | `src/core/maintenance-watchtower.ts`                                        | `npm run watchtower` / `npm run watchtower:health` |
+| PS1 Original                                      | TS Replacement                                                          | Comando                                            |
+| ------------------------------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------- |
+| `scripts/health-check/health-check.ps1`           | `src/core/health-check.ts`                                              | `npm run health:check`                             |
+| `scripts/utilities/session/session-autostart.ps1` | `src/session-autostart.ts` (wrapper de `src/core/session-autostart.ts`) | `npx tsx src/session-autostart.ts`                 |
+| `scripts/maintenance/maintenance-watchtower.ps1`  | `src/core/maintenance-watchtower.ts`                                    | `npm run watchtower` / `npm run watchtower:health` |
 
 Los PS1 originales fueron eliminados tras verificar que las versiones TS cubren toda la
 funcionalidad. Los comandos `npm run` apuntan exclusivamente a las versiones TS.
@@ -889,8 +890,9 @@ en disco y los consolida en Nexus.
   - Escribe en Nexus: `token_usage` (por sesión), `token_transactions` (por mensaje, con agente
     orquestador/subagente), `token_savings` (cache + compresión).
   - Actualiza `reports/stack-live-observability-latest.json` y otros snapshots derivados.
-- **Fuentes de tokens** — los rollouts JSONL de cada herramienta son la autoridad de uso bruto cuando
-  la herramienta los produce (por ejemplo, ZCode y Codex). No se deben tratar como una base agregada.
+- **Fuentes de tokens** — los rollouts JSONL de cada herramienta son la autoridad de uso bruto
+  cuando la herramienta los produce (por ejemplo, ZCode y Codex). No se deben tratar como una base
+  agregada.
 - **Nexus** (`.runtime/gentle-vanguard.db`) — autoridad operativa para los agregados y transacciones
   ingeridos (`token_usage`, `token_transactions`, `token_savings`).
 - **`src/tokens/token-usage-reader.ts`** — lector único: Nexus primero, luego el reporte live y
@@ -898,9 +900,9 @@ en disco y los consolida en Nexus.
 - **`src/tokens/token-metrics-store.ts`** — el close report lee tokens REALES desde Nexus y sus
   reportes derivados.
 
-> **Compatibilidad:** `.session/token-usage.json` y `.session/session-current.json` pueden existir como
-> snapshots/estado de sesión para consumidores heredados; no reemplazan la autoridad de Nexus ni la
-> autoridad de los rollouts JSONL de las herramientas.
+> **Compatibilidad:** `.session/token-usage.json` y `.session/session-current.json` pueden existir
+> como snapshots/estado de sesión para consumidores heredados; no reemplazan la autoridad de Nexus
+> ni la autoridad de los rollouts JSONL de las herramientas.
 
 ### Comandos
 
