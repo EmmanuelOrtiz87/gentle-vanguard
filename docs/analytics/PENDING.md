@@ -82,6 +82,17 @@ Leyenda: `[ ]` pendiente · `[x]` hecho · `[~]` en curso · `[!]` riesgo.
   (`apiTokenMasked`/`bitbucketApiTokenMasked`, p.ej. `••••771A`) con hint "dejar vacío para
   mantener"; (c) `buildConnection` mantiene el token existente si el campo queda vacío;
   (d) campos obligatorios marcados con `*` (siteUrl, email, apiToken).
+- [x] **Validar tokens URL + fix vault path + mejoras UI** — (a) `buildConnection` rechaza
+  tokens que sean URLs (`isUrlLike`) con mensaje claro (evita pegar la URL del sitio en el
+  campo token — causa raíz del 401 de Bitbucket); (b) fix del path del vault: `vault.ts`
+  resuelve el repo root desde `fileURLToPath(import.meta.url)` en vez de `process.cwd()`
+  (antes el vault se guardaba en `C:\.runtime\` cuando el server corría desde la raíz del
+  repo); vault migrado a `C:\Workspace_local\gentle-vanguard\.runtime\gv-analytics\`;
+  (c) resumen de conexión con formato `campo: valor` y separación visual (`.summary-row`);
+  (d) recuadro OAuth 2.0 oculto por decisión del usuario (la conexión por API token cubre
+  los 3 servicios); (e) columna Export en el historial (exporta por id sin cargar el
+  reporte completo); (f) filtro de modos corregido: "Todos los modos" + etiquetas
+  URL/Pedido legibles (antes mostraba "Modo — Modo"). Landed en `c026c089`.
 
 ## Estado verificado
 
@@ -93,6 +104,8 @@ Leyenda: `[ ]` pendiente · `[x]` hecho · `[~]` en curso · `[!]` riesgo.
 - templates: `GET /api/templates` 200 (brief/sdd/handoff); export MD/HTML/DOCX/PDF
   con `?template=` todos 200 (verificado end-to-end)
 - tests: 11/11 `test:integration` PASS
+- conexión: Jira + Confluence + Bitbucket todos OK (token real de Bitbucket cargado;
+  el 401 previo era por un token que contenía la URL del sitio)
 
 ## Riesgos / Decisiones pendientes
 
