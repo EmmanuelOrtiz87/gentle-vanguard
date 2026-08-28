@@ -13,11 +13,11 @@
  * Pipeline step: lazy (non-blocking) in session-autostart.config.json.
  *
  * Usage:
- *   npx tsx src/summarize-wipe.ts check
- *   npx tsx src/summarize-wipe.ts summarize
- *   npx tsx src/summarize-wipe.ts wipe
- *   npx tsx src/summarize-wipe.ts restore
- *   npx tsx src/summarize-wipe.ts auto
+ *   npx tsx src/tools/summarize-wipe.ts check
+ *   npx tsx src/tools/summarize-wipe.ts summarize
+ *   npx tsx src/tools/summarize-wipe.ts wipe
+ *   npx tsx src/tools/summarize-wipe.ts restore
+ *   npx tsx src/tools/summarize-wipe.ts auto
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, unlinkSync } from 'fs';
@@ -493,7 +493,7 @@ function actionAuto(config: SwConfig): void {
 
 function printHelp(): void {
   console.log(`
-Usage: npx tsx src/summarize-wipe.ts <action>
+Usage: npx tsx src/tools/summarize-wipe.ts <action>
 
 Actions:
   check      Check current token usage and compaction status

@@ -191,7 +191,7 @@
       "activated": true,
       "risk": "medium",
       "owner": "gov-agent",
-      "script": "src/event-sourcing.ts",
+      "script": "src/tools/event-sourcing.ts",
       "description": "Append-only event store with SHA-256 hash-chaining (prevHash) for tamper-evident audit trails; append/project/snapshot/prune.",
       "activationCriteria": [
         { "check": "config-valid", "required": true },

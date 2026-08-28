@@ -24,7 +24,7 @@ import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { randomBytes, createHash } from 'crypto';
 import { createRequire } from 'module';
-import type { DatabaseManager } from '../apps/web-dashboard/server/database/manager.js';
+import type { DatabaseManager } from '../../apps/web-dashboard/server/database/manager.js';
 
 const _require = createRequire(import.meta.url);
 
@@ -33,7 +33,7 @@ let _db: DatabaseManager | null = null;
 function getDb(): DatabaseManager | null {
   if (!_db) {
     try {
-      const mod = _require('../apps/web-dashboard/server/database/manager');
+      const mod = _require('../../apps/web-dashboard/server/database/manager');
       _db = mod.DatabaseManager.getInstance();
     } catch {
       // SQLite not available — skip dual-write

@@ -31,7 +31,7 @@ VS Code, Copilot, Antigravity.
 | Tool detection      | `src/core/detect-tool.ts`  | ✅ Activo | Automático (cada turno)    |
 | Pre-process hook    | `src/pre-process-input.ts` | ✅ Activo | Automático (cada turno)    |
 | Session manager     | `src/session-manager.ts`   | ✅ Activo | Automático (start/end)     |
-| Hashline integrity  | `src/hashline.ts`          | ✅ Activo | Automático (snapshot hook) |
+| Hashline integrity  | `src/tools/hashline.ts`          | ✅ Activo | Automático (snapshot hook) |
 
 ### 2.2 Memoria Persistente (Engram)
 

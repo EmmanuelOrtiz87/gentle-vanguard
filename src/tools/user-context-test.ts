@@ -6,7 +6,7 @@
 // Verify modules load correctly
 import './user-operating-context.js';
 import './decisions-log.js';
-import { getDomainTemplate, listDomainTemplates } from './sdd/domain-templates.js';
+import { getDomainTemplate, listDomainTemplates } from '../sdd/domain-templates.js';
 
 console.log('✅ User Operating Context module loaded');
 console.log('✅ Decisions Log module loaded');

@@ -63,7 +63,7 @@ function askConfirmation(prompt: string): Promise<boolean> {
 }
 
 function getCheckScriptPath(): string {
-  return join(__dirname, 'check-version.ts');
+  return join(__dirname, 'tools', 'check-version.ts');
 }
 
 function getProjectRoot(): string {

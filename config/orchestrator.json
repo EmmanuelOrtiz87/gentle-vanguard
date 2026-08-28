@@ -195,7 +195,7 @@
   "editing": {
     "hashline": {
       "enabled": true,
-      "script": "npx tsx src/hashline.ts",
+      "script": "npx tsx src/tools/hashline.ts",
       "note": "hashline.ts — full migration complete, hashline.ps1 removed",
       "storage": ".runtime/hashline-db.json",
       "hash_algorithm": "SHA-256",
@@ -298,7 +298,7 @@
   },
   "norms": {
     "orchestrator": "docs/NORMATIVAS-ORQUESTADOR.md",
-    "hashline": "src/hashline.ts (full migration complete, hashline.ps1 removed)",
+    "hashline": "src/tools/hashline.ts (full migration complete, hashline.ps1 removed)",
     "team_mode": "disabled — re-enable when TS team orchestrator is built",
     "code_review": "rules/CODE-REVIEW-STANDARDS.md",
     "pr_workflow": "rules/PR-WORKFLOW.md",

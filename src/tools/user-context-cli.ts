@@ -8,7 +8,7 @@
  * - Domain Templates (Sugerencia 5): plantillas especializadas
  *
  * Usage:
- *   npx tsx src/user-context-cli.ts <command> [args]
+ *   npx tsx src/tools/user-context-cli.ts <command> [args]
  *   npm run user:context -- <command> [args]
  */
 
@@ -48,7 +48,7 @@ import {
   listDomainTemplates,
   getDomainsBySkill,
   type DomainId,
-} from './sdd/domain-templates.js';
+} from '../sdd/domain-templates.js';
 
 // ─── CLI Commands ─────────────────────────────────────────────────────────
 
@@ -382,9 +382,9 @@ REPORTS
 
 EXAMPLES
 ────────────────────────────────────────────────────────────────
-  npx tsx src/user-context-cli.ts objective-create --title "Mejorar documentación" --description "Actualizar guía de contribución" --timeframe monthly --priority 7 --tags docs,community
-  npx tsx src/user-context-cli.ts decision-log --title "Usar TypeScript over JavaScript" --description "Migración completa" --type architecture --rationale "Type safety reduces bugs" --context "Team decided" --review 90
-  npx tsx src/user-context-cli.ts domain-get --id developer-copilot
+  npx tsx src/tools/user-context-cli.ts objective-create --title "Mejorar documentación" --description "Actualizar guía de contribución" --timeframe monthly --priority 7 --tags docs,community
+  npx tsx src/tools/user-context-cli.ts decision-log --title "Usar TypeScript over JavaScript" --description "Migración completa" --type architecture --rationale "Type safety reduces bugs" --context "Team decided" --review 90
+  npx tsx src/tools/user-context-cli.ts domain-get --id developer-copilot
 `);
 }
 

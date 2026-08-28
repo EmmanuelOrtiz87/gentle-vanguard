@@ -13,9 +13,9 @@
  * calls are safe and never flagged.
  *
  * Usage:
- *   npx tsx src/check-shell-quoting.ts            # scan src/
- *   npx tsx src/check-shell-quoting.ts --json     # JSON report
- *   npx tsx src/check-shell-quoting.ts --dir src/cli
+ *   npx tsx src/tools/check-shell-quoting.ts            # scan src/
+ *   npx tsx src/tools/check-shell-quoting.ts --json     # JSON report
+ *   npx tsx src/tools/check-shell-quoting.ts --dir src/cli
  *
  * Exit codes: 0 = clean, 1 = findings, 2 = error.
  */

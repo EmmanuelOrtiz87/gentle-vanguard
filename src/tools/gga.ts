@@ -24,7 +24,7 @@
  *   });
  */
 
-import { runNpxTsx } from './core/run-command';
+import { runNpxTsx } from '../core/run-command';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
@@ -298,7 +298,7 @@ async function executeWithProvider(
   attempt: number,
 ): Promise<{ success: boolean; output?: string; error?: string }> {
   return new Promise((resolve) => {
-    const delegatorPath = join(ROOT, 'src', 'agent-delegator.ts');
+    const delegatorPath = join(ROOT, 'src', 'orchestration', 'agent-delegator.ts');
 
     log('info', `[Attempt ${attempt}] Executing with provider: ${provider}`);
 
@@ -668,9 +668,9 @@ Commands:
     Check health for specific provider
 
 Examples:
-  npx tsx src/gga.ts delegate --agent sdd-apply --task "fix bug" --preferred-model opencode/deepseek-v4-flash-free
-  npx tsx src/gga.ts status
-  npx tsx src/gga.ts reset
+  npx tsx src/tools/gga.ts delegate --agent sdd-apply --task "fix bug" --preferred-model opencode/deepseek-v4-flash-free
+  npx tsx src/tools/gga.ts status
+  npx tsx src/tools/gga.ts reset
 
 Environment Variables:
   GGA_MODEL, ORCHESTRATOR_MODEL, AGENT_MODEL, FORCE_MODEL - Override detected model

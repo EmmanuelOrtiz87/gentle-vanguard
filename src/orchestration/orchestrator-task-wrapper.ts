@@ -20,8 +20,8 @@
  *   });
  */
 
-import { GuardianAngel } from '../gga.js';
-import type { GGADelegationOptions, GGADelegationResult } from '../gga.js';
+import { GuardianAngel } from '../tools/gga.js';
+import type { GGADelegationOptions, GGADelegationResult } from '../tools/gga.js';
 
 // =============================================================================
 // TYPES - Compatibilidad con OpenCode task()
@@ -136,4 +136,4 @@ export {
   getCurrentProvider,
   getSwitchHistory,
   resetProviders,
-} from '../gga.js';
+} from '../tools/gga.js';

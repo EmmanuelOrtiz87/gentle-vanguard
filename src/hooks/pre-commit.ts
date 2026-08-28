@@ -142,9 +142,9 @@ function main(_args?: string[]): number {
     console.log('[INFO] README.md changes detected - running governance validation...');
 
     // Try TS first
-    const validateTs = join(gitRoot, 'src', 'validate-readme.ts');
+    const validateTs = join(gitRoot, 'src', 'tools', 'validate-readme.ts');
     if (existsSync(validateTs)) {
-      const r = runNpxTsxSync('src/validate-readme.ts', ['--repo', 'both'], { cwd: gitRoot });
+      const r = runNpxTsxSync('src/tools/validate-readme.ts', ['--repo', 'both'], { cwd: gitRoot });
       if (r.status !== 0) {
         console.log('[BLOCK] README governance validation failed. See rules/README-GOVERNANCE.md');
         return 1;

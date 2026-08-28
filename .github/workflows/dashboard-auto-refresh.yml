@@ -48,7 +48,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Generate management report
-        run: npx tsx src/generate-management-report.ts --on-demand --output-dir reports
+        run: npx tsx src/tools/generate-management-report.ts --on-demand --output-dir reports
 
       - name: Upload report artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a

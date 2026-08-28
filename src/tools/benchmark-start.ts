@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
  * Benchmark: Compara rendimiento de métodos de inicio
- * Ejecuta: npx tsx src/benchmark-start.ts
+ * Ejecuta: npx tsx src/tools/benchmark-start.ts
  */
 
-import { runSync, runSyncShell, runNpxTsxSync } from './core/run-command.js';
+import { runSync, runSyncShell, runNpxTsxSync } from '../core/run-command.js';
 
 const ROOT = process.cwd();
 

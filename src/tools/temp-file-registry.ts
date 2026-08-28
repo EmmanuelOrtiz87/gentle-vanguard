@@ -10,13 +10,13 @@
  * Almacenamiento: .session/temp-file-registry.json
  *
  * Uso CLI:
- *   npx tsx src/temp-file-registry.ts --list
- *   npx tsx src/temp-file-registry.ts --add path/to/file --reason "exploration"
- *   npx tsx src/temp-file-registry.ts --authorize path/to/file --reason "user approved"
- *   npx tsx src/temp-file-registry.ts --integrate path/to/file --into "workflow/name"
- *   npx tsx src/temp-file-registry.ts --prune
- *   npx tsx src/temp-file-registry.ts --clean-unregistered
- *   npx tsx src/temp-file-registry.ts --status path/to/file
+ *   npx tsx src/tools/temp-file-registry.ts --list
+ *   npx tsx src/tools/temp-file-registry.ts --add path/to/file --reason "exploration"
+ *   npx tsx src/tools/temp-file-registry.ts --authorize path/to/file --reason "user approved"
+ *   npx tsx src/tools/temp-file-registry.ts --integrate path/to/file --into "workflow/name"
+ *   npx tsx src/tools/temp-file-registry.ts --prune
+ *   npx tsx src/tools/temp-file-registry.ts --clean-unregistered
+ *   npx tsx src/tools/temp-file-registry.ts --status path/to/file
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, rmSync } from 'fs';
@@ -384,7 +384,7 @@ function main() {
 
   if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
     console.log(`
-Usage: npx tsx src/temp-file-registry.ts [options]
+Usage: npx tsx src/tools/temp-file-registry.ts [options]
 
 Options:
   --list [status]              List registry entries (optional filter: temporary|authorized-pending|permanent)

@@ -77,7 +77,7 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 | Rule                                | Description                                                                                                                                                                       |
 | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **NO custom props in tool configs** | Never add non-standard properties to `opencode.json`, `.cursorrules`, `.windsurf/config.json`, etc. Tools reject unknown props at startup. Use `config/*.json` for custom config. |
-| **Validate before deploy**          | Run `src/validate-opencode-config.ts` before any change to `opencode.json`                                                                                                        |
+| **Validate before deploy**          | Run `src/tools/validate-opencode-config.ts` before any change to `opencode.json`                                                                                                        |
 | **Separate config per concern**     | Prompt optimization → `config/system-prompt-optimization.json`. Never inline into tool configs.                                                                                   |
 
 ## Context Optimization
@@ -167,7 +167,7 @@ See `docs/operations/procedures/QUICK-COMMANDS.md` for full list.
 | PR Labeler CI                | `.github/workflows/labeler.yml`                                                                                                                     |
 | OpenAPI Validate CI          | `.github/workflows/openapi-validate.yml` <!-- REF-OBSOLETA: workflow no existe -->                                                                  |
 | Devcontainer                 | `.devcontainer/devcontainer.json`                                                                                                                   |
-| JSON Validator               | `src/json-validator.ts`                                                                                                                             |
+| JSON Validator               | `src/tools/json-validator.ts`                                                                                                                             |
 | JSON Construction            | `rules/NORMATIVAS-JSON-CONSTRUCTION.md` <!-- REF-OBSOLETA: rules/NORMATIVAS-JSON-CONSTRUCTION.md no existe -->                                      |
 | **Feedback Collector**       | `src/feedback/feedback-collector.ts` <!-- REF-OBSOLETA: src/feedback/ no existe; feedback migrado a Nexus -->                                       |
 
@@ -177,7 +177,7 @@ See `docs/operations/procedures/QUICK-COMMANDS.md` for full list.
 <!-- REF-OBSOLETA: src/feedback/ no existe; feedback migrado a Nexus --> |
 <!-- REF-OBSOLETA: src/feedback/feedback-analyzer.ts no existe (ruta migrada o eliminada) -->
 
-| **Digest Generator** | `src/digest-generator.ts` | | **NORMATIVAS-FEEDBACK** |
+| **Digest Generator** | `src/tools/digest-generator.ts` | | **NORMATIVAS-FEEDBACK** |
 `rules/NORMATIVAS-FEEDBACK.md` <!-- REF-OBSOLETA: rules/NORMATIVAS-FEEDBACK.md no existe --> | |
 **Release Automation** | `src/deployment/release-automation.ts`
 <!-- REF-OBSOLETA: src/deployment/ no existe; candidato: src/deployment/validate-release-homologation.ts (ausente también) -->

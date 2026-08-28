@@ -475,7 +475,7 @@ function printUsage() {
 Decisions Log CLI
 
 Usage:
-  npx tsx src/decisions-log.ts <command> [args]
+  npx tsx src/tools/decisions-log.ts <command> [args]
 
 Commands:
   decision log --title "..." --description "..." --type technical|product|process|architecture|preference --rationale "..." --context "..." [--alternative "..."] [--review 30] [--tags a,b,c]

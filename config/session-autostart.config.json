@@ -342,7 +342,7 @@
         "id": "skill-size-check",
         "enabled": true,
         "lazy": true,
-        "script": "src/check-skill-sizes.ts",
+        "script": "src/tools/check-skill-sizes.ts",
         "args": "--warn-only",
         "required": false,
         "description": "Audita skills que exceden limites de tokens/lineas y recomienda split a references/ (TS)"
@@ -384,7 +384,7 @@
       {
         "id": "json-validator-verify",
         "enabled": true,
-        "script": "src/json-validator.ts",
+        "script": "src/tools/json-validator.ts",
         "args": "--json-string '{\"test\":\"ok\"}' --context startup-verify",
         "required": false,
         "description": "Verifica que el validador JSON esta operativo al inicio de sesion (TS)"
@@ -392,7 +392,7 @@
       {
         "id": "opencode-config-validate",
         "enabled": true,
-        "script": "src/validate-opencode-config.ts",
+        "script": "src/tools/validate-opencode-config.ts",
         "args": "--config opencode.json --timeout 10000",
         "required": true,
         "description": "Valida que opencode.json tenga configuraciones críticas para Gentle-Vanguard (previene crash y protege stack) (TS)",
@@ -441,7 +441,7 @@
         "id": "digest-generator",
         "enabled": true,
         "lazy": true,
-        "script": "src/digest-generator.ts",
+        "script": "src/tools/digest-generator.ts",
         "args": "--mode status --show",
         "required": false,
         "description": "Genera digest de inicio de sesion con health, feedback trends, proposals pendientes (TS)"
@@ -504,7 +504,7 @@
         "id": "event-sourcing-init",
         "enabled": true,
         "lazy": true,
-        "script": "src/event-sourcing.ts",
+        "script": "src/tools/event-sourcing.ts",
         "args": "-Action append -AggregateId session-autostart -EventType session.started -EventData '{}' -Quiet",
         "required": false,
         "description": "Record session start event in append-only event store for traceability (Phase 5)"
@@ -963,7 +963,7 @@
         "id": "summarize-wipe",
         "enabled": true,
         "lazy": true,
-        "script": "src/summarize-wipe.ts",
+        "script": "src/tools/summarize-wipe.ts",
         "args": "auto",
         "required": false,
         "phase": 99,

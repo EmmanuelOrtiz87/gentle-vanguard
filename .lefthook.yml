@@ -23,7 +23,7 @@ pre-commit:
       run: npx tsx src/hooks/pre-commit-opencode-validation.ts {staged_files}
     json-lint:
       glob: '*.json'
-      run: npx tsx src/json-lint.ts {staged_files}
+      run: npx tsx src/tools/json-lint.ts {staged_files}
     workflow-lint:
       glob: '.github/workflows/*.{yml,yaml}'
       run: npx tsx src/review/workflow-lint.ts {staged_files}

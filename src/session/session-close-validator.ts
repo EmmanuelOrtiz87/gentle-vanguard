@@ -30,9 +30,9 @@ import {
   cleanUnregisteredTemps,
   listEntries,
   pruneRegistry,
-} from '../temp-file-registry.js';
+} from '../tools/temp-file-registry.js';
 
-import { extractRealImports, type ImportInfo } from '../ast-import-parser.js';
+import { extractRealImports, type ImportInfo } from '../tools/ast-import-parser.js';
 
 const ROOT = resolve(process.cwd());
 const SESSION_DIR = join(ROOT, '.session');
@@ -453,7 +453,7 @@ function findUnusedFiles(mode: ValidationMode): { files: string[]; issues: Valid
     'src/session/session-autostart.ts',
     'src/session/session-close-orchestrator.ts',
     'src/session/session-close-validator.ts',
-    'src/temp-file-registry.ts',
+    'src/tools/temp-file-registry.ts',
   ]);
 
   // Build an import map: for each file, what does it import

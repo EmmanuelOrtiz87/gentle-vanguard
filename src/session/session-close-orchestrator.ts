@@ -520,7 +520,7 @@ async function phasePersist(reason: string): Promise<PhaseResult[]> {
   // 2.3 Save event to event sourcing
   const aggId = `session-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}`;
   const er = runScript(
-    'src/event-sourcing.ts',
+    'src/tools/event-sourcing.ts',
     [
       '-Action',
       'append',

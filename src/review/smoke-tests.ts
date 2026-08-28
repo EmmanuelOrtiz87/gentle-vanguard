@@ -270,7 +270,7 @@ const check = target.includes(\`from '\${x}'\`);
 `;
 
       try {
-        const { extractRealImports } = require('./ast-import-parser.js');
+        const { extractRealImports } = require('../tools/ast-import-parser.js');
         const imports = extractRealImports(testCode, 'test.ts') as Array<{ path: string }>;
 
         const hasReal = imports.some((i) => i.path === './real-module');

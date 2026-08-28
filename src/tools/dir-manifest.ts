@@ -8,7 +8,7 @@
  * GENTLE_VANGUARD_MASTER/00-FILE_MANIFEST_FINAL.json.
  *
  * Usage:
- *   npx tsx src/dir-manifest.ts <directory> [--out <file>] [--stdout]
+ *   npx tsx src/tools/dir-manifest.ts <directory> [--out <file>] [--stdout]
  *
  * Default output file: <directory>/00-FILE_MANIFEST_FINAL.json
  */
@@ -33,7 +33,7 @@ function parseArgs(): { dir: string; out: string | null; stdout: boolean } {
   const raw = process.argv.slice(2);
   const dirArg = raw.find((a) => !a.startsWith('--'));
   if (!dirArg) {
-    console.error('Usage: npx tsx src/dir-manifest.ts <directory> [--out <file>] [--stdout]');
+    console.error('Usage: npx tsx src/tools/dir-manifest.ts <directory> [--out <file>] [--stdout]');
     process.exit(2);
   }
   const outIdx = raw.indexOf('--out');
@@ -66,7 +66,7 @@ export function buildManifest(root: string): Manifest {
   const totalBytes = files.reduce((sum, f) => sum + f.bytes, 0);
   return {
     created_at: new Date().toISOString(),
-    generated_by: 'gentle-vanguard src/dir-manifest.ts',
+    generated_by: 'gentle-vanguard src/tools/dir-manifest.ts',
     total_files: files.length,
     total_bytes: totalBytes,
     files,

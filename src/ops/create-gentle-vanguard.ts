@@ -203,7 +203,7 @@ export function buildBasePackageJson(projectName: string): Record<string, unknow
       'test:quick': 'npx tsx src/review/test-runner-optimized.ts --quick',
       typecheck: 'tsc --noEmit',
       lint: 'eslint "scripts/**/*.ts" "src/**/*.ts" --max-warnings 0',
-      'lint:json': 'npx tsx src/json-lint.ts',
+      'lint:json': 'npx tsx src/tools/json-lint.ts',
       'format:check': 'npx prettier --check "**/*.{md,json,yml,yaml,ts}"',
       'format:fix': 'npx prettier --write "**/*.{md,json,yml,yaml,ts}"',
     },

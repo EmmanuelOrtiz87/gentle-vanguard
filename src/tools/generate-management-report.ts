@@ -2,7 +2,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { pathToFileURL } from 'url';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 
 interface CliArgs {
   outputDir: string;

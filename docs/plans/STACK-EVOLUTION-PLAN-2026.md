@@ -80,7 +80,7 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
   `releases/latest-version.json` reparado contra el release real v3.8.2 del repo público (sha256
   `6adbee59…ba75` verificado descargando el binario); `RELEASE-v4.0.0.md` y `ARCHITECTURE-STATUS.md`
   archivados en `docs/releases/` como snapshots fechados.
-- ✅ **F0.1b** — `src/version-sync.ts` + `npm run version:check` + job `version-sync` en CI (gate).
+- ✅ **F0.1b** — `src/tools/version-sync.ts` + `npm run version:check` + job `version-sync` en CI (gate).
 - ✅ **F0.2** — Purgados del índice: `.pnpm-store/`, `.local/root-files-20260812/` (15 archivos),
   `sbom.json`/`sbom/` (gitignored ahora, CI genera el canónico), fixtures de debug movidos a
   `tests/fixtures/`, governance audit a `docs/governance/`.
@@ -333,7 +333,7 @@ acumulativas; el workstream comercial (F5) corre en paralelo desde el día 1.
   snapshots fechados.
 - **Por qué**: 4 corrientes de versión + un binario distribuido sin hash = la cadena de supply-chain
   más débil del stack y el daño reputacional más fácil de evitar.
-- **Cómo**: edición manual única + un script `src/version-sync.ts` que compare VERSION ↔
+- **Cómo**: edición manual única + un script `src/tools/version-sync.ts` que compare VERSION ↔
   package.json ↔ CHANGELOG y falle si divergen (hook pre-commit + job CI).
 - **Cuándo**: día 1-2.
 - **Aceptación**: `npm run version:check` verde en CI; `sha256` no vacío; ningún doc raíz con

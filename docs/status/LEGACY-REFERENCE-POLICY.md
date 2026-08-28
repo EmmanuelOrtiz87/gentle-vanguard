@@ -14,7 +14,7 @@ The PS1 reference audit distinguishes three safe cases from broken runtime depen
 Verify with:
 
 ```powershell
-npx tsx src/audit-ps1-refs.ts
+npx tsx src/tools/audit-ps1-refs.ts
 ```
 
 The required result is `Functional refs to MISSING ps1 (BROKEN): 0`.

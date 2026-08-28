@@ -1,7 +1,7 @@
 import { existsSync, writeFileSync, mkdirSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { getEffectiveProcessTimeout } from './core/timeout-config';
-import { runSyncShell } from './core/run-command.js';
+import { getEffectiveProcessTimeout } from '../core/timeout-config';
+import { runSyncShell } from '../core/run-command.js';
 
 const ROOT = resolve(process.cwd());
 const TS = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);

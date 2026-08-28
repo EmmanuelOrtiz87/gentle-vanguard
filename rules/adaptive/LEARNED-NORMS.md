@@ -215,7 +215,7 @@ Multipliers: quality 1.1x, errorFree 1.1x, skillUsage 1.15x, cacheEfficiency 1.0
 
 #### Process.exit() Fixes
 
-- ✅ Creado `src/fix-process-exits.ts` - Script automatizado
+- ✅ Creado `src/tools/fix-process-exits.ts` - Script automatizado
 - ✅ Corregidos 13 process.exit() en archivos críticos
 - ✅ Archivos corregidos: security-initializer, dependency-security-initializer, session-manager,
   session-reference-system, session-scoring, safety-guardrails

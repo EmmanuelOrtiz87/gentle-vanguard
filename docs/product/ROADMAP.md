@@ -78,7 +78,7 @@ min).
 `TracingDashboard.tsx` — modo offline: `isOffline`, `lastUpdated`, banner amber "Offline mode —
 cached data".
 
-- `src/check-version.ts` — fix: apunta al repo público `EmmanuelOrtiz87/gentle-vanguard-public` (el
+- `src/tools/check-version.ts` — fix: apunta al repo público `EmmanuelOrtiz87/gentle-vanguard-public` (el
   privado devolvía 404), override vía `GENTLE_VANGUARD_GH_REPO`. `src/auto-update.ts` +
   `npm run update:check` OK.
 - `src/create-gentle-vanguard.ts` + `tests/unit/create-gentle-vanguard.test.ts` (12 tests) +

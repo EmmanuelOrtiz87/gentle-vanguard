@@ -15,9 +15,9 @@
  *      b) Otherwise emit a WARN so a human/orchestrator can re-write the skill.
  *
  * Usage:
- *   npx tsx src/fix-skill-references.ts            # dry-run (report only)
- *   npx tsx src/fix-skill-references.ts --fix      # apply TS rewrites
- *   npx tsx src/fix-skill-references.ts --fix --confirm  # apply + confirm each
+ *   npx tsx src/tools/fix-skill-references.ts            # dry-run (report only)
+ *   npx tsx src/tools/fix-skill-references.ts --fix      # apply TS rewrites
+ *   npx tsx src/tools/fix-skill-references.ts --fix --confirm  # apply + confirm each
  *
  * Output: summary JSON at .runtime/skill-reference-report.json
  */
@@ -46,7 +46,7 @@ const KNOWN_RENAMES: Record<string, string> = {
   'auto-backup-orchestrator.ps1': 'src/ops/backup-engram.ts',
   'session-metrics-collector.ps1': 'src/session/session-metrics-tracker.ts',
   'compact-start.ps1': 'src/compact-state.ts',
-  'hashline.ps1': 'src/hashline.ts',
+  'hashline.ps1': 'src/tools/hashline.ts',
   'token-efficiency-estimator.ps1': 'src/tokens/token-optimization-orchestrator.ts',
   'maintenance-watchtower.ps1': 'src/core/maintenance-watchtower.ts',
   'health-check.ps1': 'src/core/health-check.ts',

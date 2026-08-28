@@ -21,10 +21,10 @@
       "stage": "pre-commit",
       "enforced": true,
       "enforcer": "lefthook - json-lint",
-      "tool": "src/json-lint.ts",
+      "tool": "src/tools/json-lint.ts",
       "required": true,
       "description": "Validate JSON syntax",
-      "command": "src/json-lint.ts",
+      "command": "src/tools/json-lint.ts",
       "failureAction": "block"
     },
     {
@@ -216,7 +216,7 @@
       "tool": "audit-ps1-refs.ts",
       "required": true,
       "description": "Quick audit sweep before push",
-      "command": "npx tsx src/audit-ps1-refs.ts",
+      "command": "npx tsx src/tools/audit-ps1-refs.ts",
       "failureAction": "block"
     },
     {

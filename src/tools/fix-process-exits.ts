@@ -5,7 +5,7 @@
  * Automatically replaces process.exit() calls with proper error throwing
  * in critical pipeline files to prevent breaking the session-autostart pipeline.
  *
- * Usage: npx tsx src/fix-process-exits.ts [--dry-run]
+ * Usage: npx tsx src/tools/fix-process-exits.ts [--dry-run]
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';

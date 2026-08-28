@@ -359,7 +359,7 @@ async function executeSubagent(
   model: string,
 ): Promise<{ success: boolean; output?: string; error?: string }> {
   return new Promise((resolve) => {
-    const delegatorPath = join(ROOT, 'src', 'agent-delegator.ts');
+    const delegatorPath = join(ROOT, 'src', 'orchestration', 'agent-delegator.ts');
 
     const args: string[] = [
       '--agent',

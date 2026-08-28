@@ -5,7 +5,7 @@
  * desde otros módulos del stack.
  */
 
-import { runNpxTsx } from './core/run-command';
+import { runNpxTsx } from '../core/run-command';
 
 interface AppendEventOptions {
   aggregateId: string;
@@ -30,7 +30,7 @@ export async function appendEvent(options: AppendEventOptions): Promise<void> {
       args.push('-EventData', JSON.stringify(eventData));
     }
 
-    const child = runNpxTsx('src/event-sourcing.ts', args, {
+    const child = runNpxTsx('src/tools/event-sourcing.ts', args, {
       stdio: quiet ? 'ignore' : 'pipe',
     });
 
@@ -83,7 +83,7 @@ export function appendEventFireAndForget(options: AppendEventOptions): void {
     ];
 
     // Spawn detached process (hidden, shell-free)
-    const child = runNpxTsx('src/event-sourcing.ts', args, {
+    const child = runNpxTsx('src/tools/event-sourcing.ts', args, {
       stdio: 'ignore',
       detached: true,
     });
@@ -102,7 +102,7 @@ export async function getEvents(aggregateId: string): Promise<unknown[]> {
   return new Promise((resolve, reject) => {
     const args = ['-Action', 'replay', '-AggregateId', aggregateId];
 
-    const child = runNpxTsx('src/event-sourcing.ts', args, {
+    const child = runNpxTsx('src/tools/event-sourcing.ts', args, {
       stdio: ['ignore', 'pipe', 'pipe'],
     });
 
@@ -141,7 +141,7 @@ export async function getProjection(aggregateId: string): Promise<Record<string,
   return new Promise((resolve, reject) => {
     const args = ['-Action', 'project', '-AggregateId', aggregateId];
 
-    const child = runNpxTsx('src/event-sourcing.ts', args, {
+    const child = runNpxTsx('src/tools/event-sourcing.ts', args, {
       stdio: ['ignore', 'pipe', 'pipe'],
     });
 

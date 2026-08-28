@@ -15,14 +15,14 @@ const EXT = /\.ps1['"]/;
 const MIGRATION_INVENTORIES = new Set([
   path.join(ROOT, 'src', 'auto-ps1-fixer.ts'),
   path.join(ROOT, 'src', 'auto-ps1-fixer-configs.ts'),
-  path.join(ROOT, 'src', 'fix-skill-references.ts'),
+  path.join(ROOT, 'src', 'tools', 'fix-skill-references.ts'),
   path.join(ROOT, 'config', 'ps1-ts-migration.json'),
 ]);
 
 // Historical fallback strings are retained only for migration diagnostics;
 // the native TS path is selected first (or the entry is documentation/data).
 const LEGACY_FALLBACK_FILES = new Set([
-  'src/digest-generator.ts',
+  'src/tools/digest-generator.ts',
   'src/hooks/pre-commit.ts',
   'src/hooks/validate-readme-hook.ts',
   'src/knowledge/knowledge-base-autoinit.ts',
@@ -34,7 +34,7 @@ const LEGACY_FALLBACK_FILES = new Set([
   'src/orchestration/orchestrate-auto-fix.ts',
   'src/ops/setup-complete.ts',
   'src/infrastructure/sync-to-public.ts',
-  'src/validate-readme.ts',
+  'src/tools/validate-readme.ts',
   'config/structure-policy.json',
   'config/tool-profiles/CLAUDE.compressed.md',
   'scripts/.session/claude-settings.baseline.json',

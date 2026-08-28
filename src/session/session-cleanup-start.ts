@@ -304,7 +304,7 @@ export function runCleanup(
 
   if (!skipSessionInit) {
     log('Recording session-close event...');
-    const evtStore = join(ROOT, 'src/event-sourcing.ts');
+    const evtStore = join(ROOT, 'src/tools/event-sourcing.ts');
     if (existsSync(evtStore)) {
       const aggId = `session-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}`;
       runNpxTsxSync(

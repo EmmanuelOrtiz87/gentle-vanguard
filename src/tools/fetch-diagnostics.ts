@@ -6,11 +6,11 @@
  * Helps identify UV_HANDLE_CLOSING and other fetch-related issues.
  *
  * Usage:
- *   npx tsx src/fetch-diagnostics.ts [--test-url <url>] [--verbose]
+ *   npx tsx src/tools/fetch-diagnostics.ts [--test-url <url>] [--verbose]
  */
 
 import { pathToFileURL } from 'url';
-import { getExternalApiTimeouts } from './core/timeout-config';
+import { getExternalApiTimeouts } from '../core/timeout-config';
 
 interface DiagnosticResult {
   test: string;

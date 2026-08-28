@@ -42,7 +42,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1':
     'src/ops/rollback-orchestrator.ts',
   'scripts/utilities/ops/TRACING/tracing-instrument.ps1': 'src/monitor/tracing-instrument.ts',
-  'scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1': 'src/event-sourcing.ts',
+  'scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1': 'src/tools/event-sourcing.ts',
   'scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1': 'src/resilience/saga-orchestrator.ts',
 
   // Engram
@@ -98,7 +98,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/gentle-vanguard/setup-multi-machine.ps1': 'src/ops/setup-multi-machine.ts',
 
   // Hook genericos
-  'scripts/hooks/validate-readme.ps1': 'src/validate-readme.ts',
+  'scripts/hooks/validate-readme.ps1': 'src/tools/validate-readme.ts',
   'hooks/validate-readme-hook.ps1': 'src/hooks/validate-readme-hook.ts',
 };
 

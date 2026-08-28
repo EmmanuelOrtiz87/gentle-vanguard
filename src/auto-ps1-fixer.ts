@@ -57,7 +57,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/ops/TRACING/tracing-instrument.ps1': 'src/monitor/tracing-instrument.ts',
 
   // Event sourcing
-  'scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1': 'src/event-sourcing.ts',
+  'scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1': 'src/tools/event-sourcing.ts',
   'scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1': 'src/resilience/saga-orchestrator.ts',
 
   // Engram
@@ -123,7 +123,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1': 'src/cli/gv.ts',
 
   // Final
-  'scripts/utilities/final-resolution.ps1': 'src/final-resolution.ts',
+  'scripts/utilities/final-resolution.ps1': 'src/tools/final-resolution.ts',
 
   // Testing
   'scripts/run-tests-simple.ps1': 'src/run-tests-simple.ts',
@@ -133,7 +133,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'skills/documentation-manager.ps1': 'src/documentation-manager.ts',
 
   // Review
-  'scripts/hooks/validate-readme.ps1': 'src/validate-readme.ts',
+  'scripts/hooks/validate-readme.ps1': 'src/tools/validate-readme.ts',
 };
 
 interface FixResult {
@@ -236,10 +236,10 @@ function main(): void {
   const criticalFiles = [
     // src/ - prioridad alta
     'src/review/code-review.ts',
-    'src/complete-stack-fix.ts',
+    'src/tools/complete-stack-fix.ts',
     'src/core/maintenance-watchtower.ts',
     'src/integrations/cross-workspace-validator.ts',
-    'src/digest-generator.ts',
+    'src/tools/digest-generator.ts',
     'src/knowledge/engram-rag-reindex.ts',
     'src/hooks/karpathy-enforcer-hook.ts',
     'src/hooks/normative-audit-hook.ts',
@@ -258,7 +258,7 @@ function main(): void {
     'src/ops/setup-multi-machine.ts',
     'src/infrastructure/sync-to-public.ts',
     'src/tokens/token-usage-notifier.ts',
-    'src/validate-readme.ts',
+    'src/tools/validate-readme.ts',
   ];
 
   console.log(`PS1 Auto-Fixer - ${dryRun ? 'DRY RUN' : 'LIVE MODE'}`);

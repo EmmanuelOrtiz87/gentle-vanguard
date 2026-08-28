@@ -46,7 +46,7 @@ const FILES = [
   // Frequently cited source files (lessons reference them inline)
   'src/tokens/token-ingest.ts',
   'src/core/maintenance-watchtower.ts',
-  'src/event-sourcing.ts',
+  'src/tools/event-sourcing.ts',
   'src/compression/structural-compression.ts',
   'src/response-cache.ts',
   'src/recommend-agent.ts',

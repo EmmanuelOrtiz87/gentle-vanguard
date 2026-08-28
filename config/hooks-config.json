@@ -25,7 +25,7 @@
     },
     "post_session": {
       "enabled": true,
-      "script": "src/generate-management-report.ts",
+      "script": "src/tools/generate-management-report.ts",
       "timeout": 60000,
       "args": {
         "SessionId": "${session_id}",

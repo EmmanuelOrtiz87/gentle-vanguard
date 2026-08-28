@@ -11,7 +11,7 @@
  * - Cosas que NO quiere repetir
  *
  * Integración:
- * - Event Sourcing para audit trail (src/event-sourcing.ts)
+ * - Event Sourcing para audit trail (src/tools/event-sourcing.ts)
  * - Nexus DB para queries rápidas (apps/web-dashboard/server/database/manager.ts)
  * - Engram para memoria semántica cross-session
  */
@@ -454,7 +454,7 @@ function printUsage() {
 User Operating Context CLI
 
 Usage:
-  npx tsx src/user-operating-context.ts <command> [args]
+  npx tsx src/tools/user-operating-context.ts <command> [args]
 
 Commands:
   objective create --title "..." --desc "..." --timeframe weekly|monthly|quarterly --priority 1-10 [--tags a,b,c] [--criteria "...","..."]

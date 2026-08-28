@@ -186,7 +186,7 @@ npm run delegate:run -- --task "audit gdpr compliance"
   `mode:'input'` = lossless-only (protege razonamiento), `mode:'output'` = lossy OK.
 - **Perfiles SDD**: `npm run profile:list|status|apply -- <perfil>` (cheap/balanced/premium en
   `config/model-router.json`).
-- **Hash-chained audit** (`src/event-sourcing.ts`): eventos con prevHash+hash SHA-256; `verify`
+- **Hash-chained audit** (`src/tools/event-sourcing.ts`): eventos con prevHash+hash SHA-256; `verify`
   detecta manipulación.
 - **Skills adoptadas Fases 1-3 (2026-08-27)**: `frontend-design`, `canvas-design`, `theme-factory`,
   `doc-coauthoring` (anthropics/skills, Apache-2.0), `huashu-design` (alchaincyf/huashu-design, MIT, PPTX editable),
