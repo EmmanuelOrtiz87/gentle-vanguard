@@ -5,9 +5,9 @@
  * TS migration of scripts/gentle-vanguard/engram-policy.ps1
  */
 
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
-import { getExternalApiTimeouts } from './core/timeout-config';
+import { getExternalApiTimeouts } from '../core/timeout-config';
 
 function log(msg: string): void {
   console.log(`[ENGRAM-POLICY] ${msg}`);

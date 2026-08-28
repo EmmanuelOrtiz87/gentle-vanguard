@@ -15,7 +15,7 @@ import { getPipelineTimeouts } from './timeout-config';
 import { log as createLogger } from '../utils/logger.js';
 import { printBanner } from '../cli/banner.js';
 import { newAuditEvent, saveAuditEvent } from '../infrastructure/audit-pipeline.js';
-import { sessionStart } from '../engram-session-bridge.js';
+import { sessionStart } from '../knowledge/engram-session-bridge.js';
 import { ProcessLock } from './process-lock-manager.js';
 
 const LOG = createLogger('SESSION-AUTOSTART');

@@ -19,7 +19,7 @@
 
 import { existsSync, mkdirSync, writeFileSync, readFileSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { createHash } from 'crypto';
 
 const ROOT = resolve(process.cwd());

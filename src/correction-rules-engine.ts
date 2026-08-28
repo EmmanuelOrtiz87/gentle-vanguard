@@ -193,7 +193,7 @@ function executeRule(rule: CorrectionRule, _score: number): CorrectionResult {
         result = { success: true, message: 'Throttling corrected: reduced rate limit by 50%' };
         break;
       case 'MemoryFragmentation': {
-        const integrityScript = join(ROOT, 'src/engram-integrity-check.ts');
+        const integrityScript = join(ROOT, 'src/knowledge/engram-integrity-check.ts');
         if (existsSync(integrityScript)) {
           runNpxTsxSync(integrityScript, ['-Mode', 'checksums', '-Quiet'], {
             cwd: ROOT,

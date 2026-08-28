@@ -46,10 +46,10 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1': 'src/saga-orchestrator.ts',
 
   // Engram
-  'scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1': 'src/engram-integrity-check.ts',
-  'scripts/utilities/memory/ENGRAM/engram-auto-sync.ps1': 'src/engram-auto-sync.ts',
-  'scripts/utilities/memory/ENGRAM-RAG/engram-rag-reindex.ps1': 'src/engram-rag-reindex.ts',
-  'scripts/utilities/ENGRAM/engram-policy.ps1': 'src/engram-policy.ts',
+  'scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1': 'src/knowledge/engram-integrity-check.ts',
+  'scripts/utilities/memory/ENGRAM/engram-auto-sync.ps1': 'src/knowledge/engram-auto-sync.ts',
+  'scripts/utilities/memory/ENGRAM-RAG/engram-rag-reindex.ps1': 'src/knowledge/engram-rag-reindex.ts',
+  'scripts/utilities/ENGRAM/engram-policy.ps1': 'src/knowledge/engram-policy.ts',
 
   // MCP
   'scripts/utilities/MCP/mcp-gateway.ps1': 'src/mcp-gateway.ts',
@@ -70,7 +70,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/pre-process-input.ps1': 'src/pre-process-input.ts',
   'scripts/utilities/pre-compact-hook.ps1': 'src/pre-compact-hook.ts',
   'scripts/utilities/handoff-compress.ps1': 'src/handoff-compress.ts',
-  'scripts/utilities/optimize-engram-usage.ps1': 'src/optimize-engram-usage.ts',
+  'scripts/utilities/optimize-engram-usage.ps1': 'src/knowledge/optimize-engram-usage.ts',
   'scripts/utilities/token-metrics-store.ps1': 'src/tokens/token-metrics-store.ts',
 
   // Profiles
@@ -81,10 +81,10 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/adaptive-claude-cline-profile.ps1': 'src/adaptive-claude-profile.ts',
 
   // Knowledge
-  'scripts/utilities/knowledge-base/knowledge-base-manager.ps1': 'src/knowledge-base-manager.ts',
-  'scripts/utilities/knowledge-base/knowledge-base-sync.ps1': 'src/knowledge-base-sync.ts',
-  'scripts/utilities/knowledge-base/knowledge-base-autoinit.ps1': 'src/knowledge-base-autoinit.ts',
-  'scripts/utilities/knowledge-base/knowledge-base-init.ps1': 'src/knowledge-base-init.ts',
+  'scripts/utilities/knowledge-base/knowledge-base-manager.ps1': 'src/knowledge/knowledge-base-manager.ts',
+  'scripts/utilities/knowledge-base/knowledge-base-sync.ps1': 'src/knowledge/knowledge-base-sync.ts',
+  'scripts/utilities/knowledge-base/knowledge-base-autoinit.ps1': 'src/knowledge/knowledge-base-autoinit.ts',
+  'scripts/utilities/knowledge-base/knowledge-base-init.ps1': 'src/knowledge/knowledge-base-init.ts',
 
   // Workflow
   'scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1': 'src/cli/gv.ts',

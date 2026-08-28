@@ -16,7 +16,7 @@
  */
 import { existsSync, mkdirSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
-import { loadAdapters } from '../adapters/index.js';
+import { loadAdapters } from '../../adapters/index.js';
 
 const ROOT = resolve(process.cwd());
 const SKILLS_DIR = join(ROOT, 'skills');

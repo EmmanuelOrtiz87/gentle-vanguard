@@ -277,8 +277,8 @@ async function checkEngramRag() {
   header('Engram RAG Index');
   writeCheck(
     'engram-rag-reindex.ts exists',
-    exists('src/engram-rag-reindex.ts'),
-    'src/engram-rag-reindex.ts',
+    exists('src/knowledge/engram-rag-reindex.ts'),
+    'src/knowledge/engram-rag-reindex.ts',
   );
   try {
     const r =

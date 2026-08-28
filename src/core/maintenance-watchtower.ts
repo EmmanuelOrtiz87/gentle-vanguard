@@ -697,7 +697,7 @@ async function checkMlEmbeddings() {
 async function checkEngram() {
   if (!quiet) console.log('  [Engram] Checking...');
 
-  const ragReindexTs = join(ROOT, 'src', 'engram-rag-reindex.ts');
+  const ragReindexTs = join(ROOT, 'src', 'knowledge', 'engram-rag-reindex.ts');
   addResult('engram', 'reindex script', fileExists(ragReindexTs) ? 'PASS' : 'FAIL', '', 'manual');
 
   const ragLog = join(ROOT, '.atl/rag-reindex.log');
@@ -1686,8 +1686,8 @@ async function rebuildMlEmbeddings() {
 
 async function reindexEngramRag() {
   if (!quiet) console.log('  [Rebuild] Engram RAG...');
-  const ragReindexTs = join(ROOT, 'src', 'engram-rag-reindex.ts');
-  const ragReindexPs1 = join(ROOT, 'src/engram-rag-reindex.ts');
+  const ragReindexTs = join(ROOT, 'src', 'knowledge', 'engram-rag-reindex.ts');
+  const ragReindexPs1 = join(ROOT, 'src/knowledge/engram-rag-reindex.ts');
   const hasTs = fileExists(ragReindexTs);
   if (hasTs || fileExists(ragReindexPs1)) {
     try {

@@ -212,15 +212,15 @@ const COMMANDS: Command[] = [
       switch (action) {
         case 'sync':
           printInfo('Syncing Engram...');
-          runNpxTsx('src/engram-auto-sync.ts');
+          runNpxTsx('src/knowledge/engram-auto-sync.ts');
           break;
         case 'compact':
           printInfo('Compacting Engram...');
-          runNpxTsx('src/engram-auto-compact.ts');
+          runNpxTsx('src/knowledge/engram-auto-compact.ts');
           break;
         case 'integrity':
           printInfo('Checking Engram integrity...');
-          runNpxTsx('src/engram-integrity-check.ts');
+          runNpxTsx('src/knowledge/engram-integrity-check.ts');
           break;
         case 'status':
           checkEngramStatus();
@@ -422,7 +422,7 @@ function executeTool(toolName: string, args: string[]): void {
     'maintenance-watchtower': 'src/core/maintenance-watchtower.ts',
     dashboard: 'src/ops/dashboard-start.ts',
     'codegraph-sync': 'src/codegraph-sync-autostart.ts',
-    'engram-sync': 'src/engram-auto-sync.ts',
+    'engram-sync': 'src/knowledge/engram-auto-sync.ts',
     'session-autostart': 'src/core/session-autostart.ts',
     'error-memory': 'src/error-memory.ts',
     'learning-engine': 'src/ml/learning-engine.ts',

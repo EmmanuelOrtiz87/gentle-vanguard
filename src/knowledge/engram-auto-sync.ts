@@ -13,7 +13,7 @@
 
 import { existsSync, writeFileSync, mkdirSync, unlinkSync, statSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSyncShell } from './core/run-command.js';
+import { runSyncShell } from '../core/run-command.js';
 
 interface Args {
   Mode?: 'check' | 'sync' | 'monitor';
@@ -34,7 +34,7 @@ function parseArgs(argv: string[]): Args {
 }
 
 const ROOT = resolve(process.env.GENTLE_VANGUARD_BASE_DIR || process.cwd());
-const integrityScriptTs = join(ROOT, 'src', 'engram-integrity-check.ts');
+const integrityScriptTs = join(ROOT, 'src', 'knowledge', 'engram-integrity-check.ts');
 const integrityScript = integrityScriptTs;
 const engramDataDir = join(ROOT, '.engram-data');
 const dbPath = join(engramDataDir, 'engram.db');

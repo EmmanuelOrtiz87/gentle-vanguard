@@ -35,7 +35,7 @@ pre-commit:
     # secret-scanner here, and gitleaks in CI.
     skill-scan:
       glob: '{.opencode/,}skills/*/SKILL.md'
-      run: npx tsx src/scan-skill-hook.ts --StagedFiles '{staged_files}'
+      run: npx tsx src/knowledge/scan-skill-hook.ts --StagedFiles '{staged_files}'
     secretlint:
       glob: '*.{json,yml,yaml,md,env,toml,xml}'
       run: npx secretlint --secretlintrc .secretlintrc.json {staged_files} 2>&1

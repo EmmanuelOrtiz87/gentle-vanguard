@@ -61,9 +61,9 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1': 'src/saga-orchestrator.ts',
 
   // Engram
-  'scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1': 'src/engram-integrity-check.ts',
-  'scripts/utilities/memory/ENGRAM/engram-auto-sync.ps1': 'src/engram-auto-sync.ts',
-  'scripts/utilities/memory/ENGRAM-RAG/engram-rag-reindex.ps1': 'src/engram-rag-reindex.ts',
+  'scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1': 'src/knowledge/engram-integrity-check.ts',
+  'scripts/utilities/memory/ENGRAM/engram-auto-sync.ps1': 'src/knowledge/engram-auto-sync.ts',
+  'scripts/utilities/memory/ENGRAM-RAG/engram-rag-reindex.ps1': 'src/knowledge/engram-rag-reindex.ts',
 
   // MCP
   'scripts/utilities/MCP/mcp-gateway.ps1': 'src/mcp-gateway.ts',
@@ -93,7 +93,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/pre-compact-hook.ps1': 'src/pre-compact-hook.ts',
   'scripts/utilities/handoff-compress.ps1': 'src/handoff-compress.ts',
 
-  'scripts/utilities/optimize-engram-usage.ps1': 'src/optimize-engram-usage.ts',
+  'scripts/utilities/optimize-engram-usage.ps1': 'src/knowledge/optimize-engram-usage.ts',
   'scripts/utilities/token-metrics-store.ps1': 'src/tokens/token-metrics-store.ts',
 
   // Perfiles adaptativos
@@ -104,8 +104,8 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/adaptive-claude-cline-profile.ps1': 'src/adaptive-claude-profile.ts',
 
   // Knowledge base
-  'scripts/utilities/knowledge-base/knowledge-base-manager.ps1': 'src/knowledge-base-manager.ts',
-  'scripts/utilities/knowledge-base/knowledge-base-sync.ps1': 'src/knowledge-base-sync.ts',
+  'scripts/utilities/knowledge-base/knowledge-base-manager.ps1': 'src/knowledge/knowledge-base-manager.ts',
+  'scripts/utilities/knowledge-base/knowledge-base-sync.ps1': 'src/knowledge/knowledge-base-sync.ts',
 
   // Validators
   'scripts/utilities/WORKFLOW-ORCHESTRATION/validate-system-health.ps1':
@@ -240,7 +240,7 @@ function main(): void {
     'src/core/maintenance-watchtower.ts',
     'src/cross-workspace-validator.ts',
     'src/digest-generator.ts',
-    'src/engram-rag-reindex.ts',
+    'src/knowledge/engram-rag-reindex.ts',
     'src/hooks/karpathy-enforcer-hook.ts',
     'src/hooks/normative-audit-hook.ts',
     'src/hooks/post-checkout.ts',
@@ -249,8 +249,8 @@ function main(): void {
     'src/hooks/validate-readme-hook.ts',
     'src/infrastructure/normative-audit-pipeline.ts',
     'src/karpathy-enforcer.ts',
-    'src/knowledge-base-autoinit.ts',
-    'src/knowledge-base-init.ts',
+    'src/knowledge/knowledge-base-autoinit.ts',
+    'src/knowledge/knowledge-base-init.ts',
     'src/orchestration/orchestrate-auto-fix.ts',
     'src/infrastructure/post-merge-sync.ts',
     'src/saga-orchestrator.ts',

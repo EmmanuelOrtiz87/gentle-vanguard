@@ -94,7 +94,7 @@ function invokeBackup(
     return false;
   }
 
-  const integrityScriptTs = join(root, 'src', 'engram-integrity-check.ts');
+  const integrityScriptTs = join(root, 'src', 'knowledge', 'engram-integrity-check.ts');
   const integrityScript = integrityScriptTs;
 
   if (integrityCheck && existsSync(integrityScript)) {

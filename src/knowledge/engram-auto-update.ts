@@ -12,8 +12,8 @@
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { runSync } from './core/run-command.js';
-import { getExternalApiTimeouts } from './core/timeout-config';
+import { runSync } from '../core/run-command.js';
+import { getExternalApiTimeouts } from '../core/timeout-config';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 

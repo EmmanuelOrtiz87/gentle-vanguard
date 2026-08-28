@@ -153,10 +153,10 @@
       "stage": "pre-commit",
       "enforced": true,
       "enforcer": "lefthook - skill-scan",
-      "tool": "src/scan-skill-hook.ts",
+      "tool": "src/knowledge/scan-skill-hook.ts",
       "required": true,
       "description": "Security scan for skill files",
-      "command": "npx tsx src/scan-skill-hook.ts -StagedFiles {staged_files}",
+      "command": "npx tsx src/knowledge/scan-skill-hook.ts -StagedFiles {staged_files}",
       "failureAction": "block"
     },
     {

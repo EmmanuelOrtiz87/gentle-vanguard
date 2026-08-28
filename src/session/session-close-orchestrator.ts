@@ -29,7 +29,7 @@ import { join, resolve, relative } from 'path';
 import { runSync, runNpxTsxSync } from '../core/run-command.js';
 import { runHygiene } from '../core/process-hygiene.js';
 import { pathToFileURL } from 'url';
-import { sessionEnd } from '../engram-session-bridge.js';
+import { sessionEnd } from '../knowledge/engram-session-bridge.js';
 
 // ─── Guardian Protection ────────────────────────────────────────────────────────
 // Importa protección contra cierres informales

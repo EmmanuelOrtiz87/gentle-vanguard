@@ -4,7 +4,7 @@
  * TS migration of scripts/utilities/memory/ENGRAM/engram-auto-compact.ps1
  */
 
-import { runSyncShell } from './core/run-command.js';
+import { runSyncShell } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
 
 function run(cmd: string): { ok: boolean; output: string } {

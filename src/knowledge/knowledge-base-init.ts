@@ -1,9 +1,15 @@
 #!/usr/bin/env node
+/**
+ * Knowledge Base auto-init — validates, creates vault, runs sync.
+ * TS migration of scripts/utilities/knowledge-base/knowledge-base-autoinit.ps1
+ */
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSync, runNpxTsxSync } from './core/run-command.js';
+import { runSync, runNpxTsxSync } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
+
+const ROOT = resolve(process.cwd());
 
 function findProjectRoot(dir: string): string {
   let current = resolve(dir);
@@ -16,7 +22,6 @@ function findProjectRoot(dir: string): string {
   return dir;
 }
 
-const ROOT = resolve(process.cwd());
 const projectRoot = findProjectRoot(ROOT);
 const vaultPath = join(projectRoot, 'knowledge-base');
 const configPath = join(projectRoot, 'config', 'knowledge-base-config.json');
@@ -40,7 +45,7 @@ function getConfig(): KBConfig | null {
 function initializeVault(force: boolean, quiet: boolean): boolean {
   const config = getConfig();
   if (!config) {
-    if (!quiet) console.log(`[ERROR] Config not found at ${configPath}`);
+    console.log('[ERROR] Config not found');
     return false;
   }
 
@@ -56,7 +61,8 @@ function initializeVault(force: boolean, quiet: boolean): boolean {
   if (needsInit) {
     mkdirSync(vaultPath, { recursive: true });
 
-    for (const folder of Object.values(config.folders)) {
+    const folderValues = Object.values(config.folders);
+    for (const folder of folderValues) {
       const fp = join(vaultPath, folder);
       if (!existsSync(fp)) {
         mkdirSync(fp, { recursive: true });
@@ -65,7 +71,7 @@ function initializeVault(force: boolean, quiet: boolean): boolean {
     }
 
     const templatesFolder = join(vaultPath, '06-templates');
-    if (!existsSync(templatesFolder)) mkdirSync(templatesFolder, { recursive: true });
+    mkdirSync(templatesFolder, { recursive: true });
 
     const templateFiles: Record<string, string> = {
       'project.md': `---\ncreated: {{date}}\ntags: [project, #{{project-name}}]\nstatus: active\n---\n\n# {{project-name}}\n\n## Overview\n**Description:** \n**Owner:** \n**Started:** {{date}}\n**Priority:** \n\n## Goals\n\n- [ ] \n\n## Tasks\n\n- [ ] \n\n## Notes\n\n## Links\n\n- [[]] - \n\n## Metadata\n\n\`\`\`json\n{\n  "project": "{{project-name}}",\n  "created": "{{date}}",\n  "status": "active"\n}\n\`\`\`\n`,
@@ -94,7 +100,8 @@ function initializeVault(force: boolean, quiet: boolean): boolean {
   }
 
   let allFoldersExist = true;
-  for (const folder of Object.values(config.folders)) {
+  const folderVals = Object.values(config.folders);
+  for (const folder of folderVals) {
     const fp = join(vaultPath, folder);
     if (!existsSync(fp)) {
       mkdirSync(fp, { recursive: true });
@@ -120,12 +127,14 @@ function getVaultStats(): { notes: number; sizeKB: number } {
       }
     }
   }
-  if (existsSync(vaultPath)) walk(vaultPath);
+  if (existsSync(vaultPath)) {
+    walk(vaultPath);
+  }
   return { notes, sizeKB: Math.round((size / 1024) * 100) / 100 };
 }
 
 function runFullSync(quiet: boolean): boolean {
-  const syncScriptTs = join(projectRoot, 'src', 'knowledge-base-sync.ts');
+  const syncScriptTs = join(projectRoot, 'src', 'knowledge', 'knowledge-base-sync.ts');
   const syncScriptPs1 = join(
     projectRoot,
     'scripts',
@@ -150,11 +159,11 @@ function runFullSync(quiet: boolean): boolean {
       if (!quiet) console.log('[OK] Full sync completed');
       return true;
     } catch (e: unknown) {
-      if (!quiet) console.log(`[ERROR] Sync failed: ${e instanceof Error ? e.message : String(e)}`);
+      console.log(`[ERROR] Sync failed: ${e instanceof Error ? e.message : String(e)}`);
       return false;
     }
   }
-  if (!quiet) console.log(`[ERROR] Sync script not found: ${syncScriptPs1}`);
+  console.log(`[ERROR] Sync script not found: ${syncScriptPs1}`);
   return false;
 }
 

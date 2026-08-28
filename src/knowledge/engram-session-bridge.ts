@@ -13,7 +13,7 @@
  * NO depende del plugin OpenCode automático - funciona en todas las herramientas
  */
 
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
 import * as http from 'http';
 

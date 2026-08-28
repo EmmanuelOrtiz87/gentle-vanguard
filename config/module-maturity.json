@@ -115,7 +115,7 @@
       "activated": true,
       "risk": "low",
       "owner": "session-agent",
-      "script": "src/engram-integrity-check.ts",
+      "script": "src/knowledge/engram-integrity-check.ts",
       "description": "Persistent cross-session memory via the engram MCP server, with integrity checks, auto-sync, reindex and compaction.",
       "activationCriteria": [
         { "check": "config-valid", "required": true },

@@ -80,9 +80,9 @@ function main(_args?: string[]): number {
 
   // Engram integrity check
   console.log('[PRE] Engram integrity verification...');
-  const engramHook = join(gitRoot, 'src', 'engram-integrity-check.ts');
+  const engramHook = join(gitRoot, 'src', 'knowledge', 'engram-integrity-check.ts');
   if (existsSync(engramHook)) {
-    const engramOk = runScript(join(gitRoot, 'src', 'engram-integrity-check.ts'), gitRoot);
+    const engramOk = runScript(join(gitRoot, 'src', 'knowledge', 'engram-integrity-check.ts'), gitRoot);
     if (!engramOk) return 1;
   } else {
     console.log('[SKIP] Engram integrity check not available');
