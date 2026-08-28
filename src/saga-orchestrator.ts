@@ -205,7 +205,7 @@ function invokeStep(
         break;
       }
       case 'checkpoint': {
-        const ckptScript = join(ROOT, 'src/checkpoint-manager.ts');
+        const ckptScript = join(ROOT, 'src/ops/checkpoint-manager.ts');
         if (existsSync(ckptScript)) {
           const r = runNpxTsxSync(
             ckptScript,
@@ -265,7 +265,7 @@ function invokeCompensation(step: SagaStep, context: StepContext): boolean {
       case 'rollback': {
         const ckptId = context.lastCheckpointId;
         if (ckptId) {
-          const rollbackScript = join(ROOT, 'src/rollback-orchestrator.ts');
+          const rollbackScript = join(ROOT, 'src/ops/rollback-orchestrator.ts');
           if (existsSync(rollbackScript)) {
             const tsAlt = getTsEquivalent(rollbackScript);
             tsAlt

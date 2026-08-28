@@ -43,7 +43,7 @@ interface BrokenRef {
  * Key = ps1 basename, value = src/ relative TS path.
  */
 const KNOWN_RENAMES: Record<string, string> = {
-  'auto-backup-orchestrator.ps1': 'src/backup-engram.ts',
+  'auto-backup-orchestrator.ps1': 'src/ops/backup-engram.ts',
   'session-metrics-collector.ps1': 'src/session/session-metrics-tracker.ts',
   'compact-start.ps1': 'src/compact-state.ts',
   'hashline.ps1': 'src/hashline.ts',
@@ -61,7 +61,7 @@ const KNOWN_RENAMES: Record<string, string> = {
   'distributed-tracing-core.ps1': 'src/tracing-instrument.ts',
   'otel-exporter.ps1': 'src/tracing-instrument.ts',
   'metrics-collector.ps1': 'src/session/session-metrics-tracker.ts',
-  'telemetry-dashboard.ps1': 'src/dashboard-ws-autostart.ts',
+  'telemetry-dashboard.ps1': 'src/ops/dashboard-ws-autostart.ts',
   'auto-delegation-router.ps1': 'src/orchestration/agent-delegator.ts',
   'audit-sweep.ps1': 'src/infrastructure/audit-pipeline.ts',
   'sync-local.ps1': 'src/infrastructure/audit-pipeline.ts',

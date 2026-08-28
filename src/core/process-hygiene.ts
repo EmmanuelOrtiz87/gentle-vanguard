@@ -33,7 +33,7 @@ import { fileURLToPath, pathToFileURL } from 'url';
 import { resolve, join } from 'path';
 import { existsSync, readFileSync, writeFileSync, appendFileSync, unlinkSync, mkdirSync } from 'fs';
 import { runSync } from './run-command.js';
-import { getProcessIdByPort } from '../dashboard-common.js';
+import { getProcessIdByPort } from '../ops/dashboard-common.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

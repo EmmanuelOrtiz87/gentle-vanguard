@@ -20,7 +20,7 @@ Describe "Gentle-Vanguard stack smoke" {
         }
 
         It "dashboard-start.ts exists" {
-            $available = (Test-Path (Join-Path $script:repoRoot "src/dashboard-start.ts")) -or
+            $available = (Test-Path (Join-Path $script:repoRoot "src/ops/dashboard-start.ts")) -or
                 (Test-Path (Join-Path $script:repoRoot "docs/technical/STACK-DOCUMENTATION.md"))
             $available | Should -BeTrue
         }

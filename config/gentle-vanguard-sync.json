@@ -16,7 +16,7 @@
     },
     {
       "type": "script",
-      "path": "src/setup-multi-machine.ts",
+      "path": "src/ops/setup-multi-machine.ts",
       "description": "Multi-PC Setup - Clones/updates gentle-vanguard and gentle-vanguard-public and runs bootstrap"
     },
     {

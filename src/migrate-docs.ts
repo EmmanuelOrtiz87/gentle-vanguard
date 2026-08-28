@@ -128,7 +128,7 @@ const REPLACEMENTS: Replacement[] = [
   },
   {
     from: /scripts\/utilities\/engram\/backup-engram\.ps1/g,
-    to: 'src/backup-engram.ts',
+    to: 'src/ops/backup-engram.ts',
     description: 'Engram backup',
   },
   {

@@ -48,10 +48,10 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1': 'src/azure-delegator.ts',
 
   // State persistence
-  'scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1': 'src/checkpoint-manager.ts',
-  'scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1': 'src/snapshot-manager.ts',
+  'scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1': 'src/ops/checkpoint-manager.ts',
+  'scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1': 'src/ops/snapshot-manager.ts',
   'scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1':
-    'src/rollback-orchestrator.ts',
+    'src/ops/rollback-orchestrator.ts',
 
   // Tracing
   'scripts/utilities/ops/TRACING/tracing-instrument.ps1': 'src/tracing-instrument.ts',
@@ -70,10 +70,10 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/MCP/mcp-manager.ps1': 'src/mcp-manager.ts',
 
   // Dashboard
-  'scripts/utilities/dashboard/dashboard-common.ps1': 'src/dashboard-common.ts',
-  'scripts/utilities/dashboard/dashboard-start.ps1': 'src/dashboard-start.ts',
-  'scripts/utilities/dashboard/dashboard-stop.ps1': 'src/dashboard-stop.ts',
-  'scripts/utilities/dashboard/dashboard-ws-autostart.ps1': 'src/dashboard-ws-autostart.ts',
+  'scripts/utilities/dashboard/dashboard-common.ps1': 'src/ops/dashboard-common.ts',
+  'scripts/utilities/dashboard/dashboard-start.ps1': 'src/ops/dashboard-start.ts',
+  'scripts/utilities/dashboard/dashboard-stop.ps1': 'src/ops/dashboard-stop.ts',
+  'scripts/utilities/dashboard/dashboard-ws-autostart.ps1': 'src/ops/dashboard-ws-autostart.ts',
 
   // Session
   'scripts/utilities/session/session-cleanup-start.ps1': 'src/session/session-cleanup-start.ts',
@@ -116,8 +116,8 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   // Bootstrap
   'scripts/gentle-vanguard/bootstrap.ps1': 'src/bootstrap.ts',
   'scripts/gentle-vanguard/bootstrap-machine.ps1': 'src/bootstrap-machine.ts',
-  'scripts/gentle-vanguard/setup-complete.ps1': 'src/setup-complete.ts',
-  'scripts/gentle-vanguard/setup-multi-machine.ps1': 'src/setup-multi-machine.ts',
+  'scripts/gentle-vanguard/setup-complete.ps1': 'src/ops/setup-complete.ts',
+  'scripts/gentle-vanguard/setup-multi-machine.ps1': 'src/ops/setup-multi-machine.ts',
 
   // Workflow orchestration
   'scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1': 'src/cli/gv.ts',
@@ -254,8 +254,8 @@ function main(): void {
     'src/orchestration/orchestrate-auto-fix.ts',
     'src/post-merge-sync.ts',
     'src/saga-orchestrator.ts',
-    'src/setup-complete.ts',
-    'src/setup-multi-machine.ts',
+    'src/ops/setup-complete.ts',
+    'src/ops/setup-multi-machine.ts',
     'src/sync-to-public.ts',
     'src/tokens/token-usage-notifier.ts',
     'src/validate-readme.ts',

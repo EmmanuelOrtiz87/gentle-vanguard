@@ -24,7 +24,7 @@ Describe "Phase 1.3 / 2 / 3 integration" {
 
     Context "State persistence" {
         It "checkpoint-manager source exists" {
-            Test-Path (Join-Path $script:repoRoot "src/checkpoint-manager.ts") | Should -BeTrue
+            Test-Path (Join-Path $script:repoRoot "src/ops/checkpoint-manager.ts") | Should -BeTrue
         }
 
         It "checkpoint step configured in pipeline" {

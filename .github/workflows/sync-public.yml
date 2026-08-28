@@ -17,7 +17,7 @@ on:
       - 'config/README.md'
       - 'src/sync-to-public.ts'
       - 'src/bootstrap*.ts'
-      - 'src/setup-multi-machine.ts'
+      - 'src/ops/setup-multi-machine.ts'
       - 'VERSION'
       - 'skills/SKILL_INDEX.md'
       - 'docs/**'

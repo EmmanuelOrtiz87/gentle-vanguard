@@ -17,7 +17,7 @@ interface BenchmarkResult {
 
 function stopDashboard(): void {
   try {
-    runNpxTsxSync('src/dashboard-stop.ts', [], {
+    runNpxTsxSync('src/ops/dashboard-stop.ts', [], {
       cwd: ROOT,
       stdio: 'pipe',
       timeout: 10000,
@@ -93,7 +93,7 @@ const results: BenchmarkResult[] = [];
 // Test 1: dashboard-start.ts original
 const r1 = benchmark('dashboard-start.ts (original)', 'npx', [
   'tsx',
-  'src/dashboard-start.ts',
+  'src/ops/dashboard-start.ts',
   '--no-browser',
 ]);
 r1.features = ['Busca puertos libres', 'Abre Chrome (opcional)', 'Registra PIDs'];

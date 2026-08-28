@@ -7,7 +7,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as net from 'net';
-import { runSync } from '../adapters/command-runner.js';
+import { runSync } from '../../adapters/command-runner.js';
 import { pathToFileURL } from 'url';
 
 const RUNTIME_DIR = path.resolve(process.cwd(), '.runtime');

@@ -596,7 +596,7 @@ function scanTechnicalDebt(): ValidationIssue[] {
     // 🛡️ Skip CLI entry points and dashboard utilities — they use console.log as intended stdout
     if (relPath.startsWith('src/cli/')) continue;
     if (relPath === 'src/timeout-monitor.ts') continue;
-    if (relPath.startsWith('src/dashboard-') || relPath === 'src/dashboard-common.ts') continue;
+    if (relPath.startsWith('src/ops/dashboard-') || relPath === 'src/ops/dashboard-common.ts') continue;
     if (relPath.startsWith('src/hooks/')) continue;
     // 🛡️ Skip security/mcp CLI tools — they use console.log as intended stdout
     if (relPath === 'src/mcp/mcp-gateway.ts' || relPath === 'src/security/check-security.ts') continue;

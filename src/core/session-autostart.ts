@@ -24,7 +24,7 @@ const LOG = createLogger('SESSION-AUTOSTART');
 async function createAutoCheckpoint(): Promise<void> {
   try {
     const r = runNpxTsxSync(
-      'src/checkpoint-manager.ts',
+      'src/ops/checkpoint-manager.ts',
       ['create', '--label', 'auto-session-start'],
       {
         timeout: 30000,

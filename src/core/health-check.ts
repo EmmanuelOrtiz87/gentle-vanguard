@@ -310,7 +310,7 @@ async function checkDashboardV3() {
   writeCheck('apps/web-dashboard exists', fs.existsSync(dashboardDir));
 
   // Import and use the new robust health checker
-  const { checkDashboardHealth } = await import('../dashboard-health-checker.js');
+  const { checkDashboardHealth } = await import('../ops/dashboard-health-checker.js');
   const health = await checkDashboardHealth(8080, 5173);
 
   // Map the health result to pass/fail

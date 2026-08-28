@@ -46,8 +46,8 @@ function parseArgs(): CliOptions {
   };
 }
 
-import { getEffectiveProcessTimeout } from './core/timeout-config';
-import { run } from './core/run-command';
+import { getEffectiveProcessTimeout } from '../core/timeout-config';
+import { run } from '../core/run-command';
 
 /** HTTP GET check until a server responds or timeout */
 async function waitForServer(url: string, maxAttempts = 20, delayMs = 1000): Promise<boolean> {

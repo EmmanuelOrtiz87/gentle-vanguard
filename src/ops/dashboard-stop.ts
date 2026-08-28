@@ -10,7 +10,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { pathToFileURL } from 'url';
-import { runSync } from '../adapters/command-runner.js';
+import { runSync } from '../../adapters/command-runner.js';
 import {
   readDashboardPorts,
   clearDashboardPorts,
@@ -18,7 +18,7 @@ import {
   stopByPidFile,
   killProcess,
 } from './dashboard-common';
-import { getEffectiveProcessTimeout } from './core/timeout-config';
+import { getEffectiveProcessTimeout } from '../core/timeout-config';
 
 const ROOT = path.resolve(process.cwd());
 const RUNTIME_DIR = path.join(ROOT, '.runtime');

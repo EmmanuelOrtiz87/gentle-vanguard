@@ -59,9 +59,9 @@ trazas reales.
 
 | Acción                          | Comando                                 |
 | ------------------------------- | --------------------------------------- |
-| Start full (WS + Vite + Chrome) | `npx tsx src/dashboard-start.ts`        |
-| Start WS only                   | `npx tsx src/dashboard-ws-autostart.ts` |
-| Stop                            | `npx tsx src/dashboard-stop.ts`         |
+| Start full (WS + Vite + Chrome) | `npx tsx src/ops/dashboard-start.ts`        |
+| Start WS only                   | `npx tsx src/ops/dashboard-ws-autostart.ts` |
+| Stop                            | `npx tsx src/ops/dashboard-stop.ts`         |
 
 - WS server: `server/websocket-server.ts` (puerto dinámico vía `Get-FreePort()`, persistido en
   `.runtime/dashboard-ports.json`), push cada 5s, REST `/api/metrics|traces|alerts|feedback|health`.

@@ -32,7 +32,7 @@ const LEGACY_FALLBACK_FILES = new Set([
   'src/infrastructure/normative-audit-pipeline.ts',
   'src/karpathy-enforcer.ts',
   'src/orchestration/orchestrate-auto-fix.ts',
-  'src/setup-complete.ts',
+  'src/ops/setup-complete.ts',
   'src/sync-to-public.ts',
   'src/validate-readme.ts',
   'config/structure-policy.json',

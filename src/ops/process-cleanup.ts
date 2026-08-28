@@ -4,7 +4,7 @@
  * Limpia procesos zombie y archivos stale SIN dependencias externas
  */
 
-import { runSyncShell } from './core/run-command.js';
+import { runSyncShell } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
 import { existsSync, unlinkSync } from 'fs';
 import { join } from 'path';

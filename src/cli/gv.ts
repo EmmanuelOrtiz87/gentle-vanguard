@@ -335,7 +335,7 @@ function cmdDashboard(args: string[]): CommandResult {
       cmdCleanup([]);
       try {
         console.log('[GV] Starting dashboard...');
-        const child = run('npx', ['tsx', 'src/dashboard-start.ts'], {
+        const child = run('npx', ['tsx', 'src/ops/dashboard-start.ts'], {
           detached: true,
           stdio: 'ignore',
           windowsHide: true,
@@ -357,7 +357,7 @@ function cmdDashboard(args: string[]): CommandResult {
     }
     case 'stop': {
       try {
-        runNpxTsxSync('src/dashboard-stop.ts', [], { cwd: ROOT, stdio: 'pipe' });
+        runNpxTsxSync('src/ops/dashboard-stop.ts', [], { cwd: ROOT, stdio: 'pipe' });
         return { success: true, message: 'Dashboard stopped' };
       } catch (e) {
         return { success: false, message: `Failed: ${e}` };

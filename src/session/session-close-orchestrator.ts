@@ -597,7 +597,7 @@ function phaseBackup(): PhaseResult[] {
 
   // 3.1 Create checkpoint
   const cp = runScript(
-    'src/checkpoint-manager.ts',
+    'src/ops/checkpoint-manager.ts',
     ['create', '--label', `session-close-${new Date().toISOString().slice(0, 16)}`],
     30000,
   );
@@ -635,7 +635,7 @@ function phaseBackup(): PhaseResult[] {
   }
 
   // 3.3 Backup Engram
-  const eb = runScript('src/backup-engram.ts', ['--mode', 'backup', '--quiet'], 30000);
+  const eb = runScript('src/ops/backup-engram.ts', ['--mode', 'backup', '--quiet'], 30000);
   results.push({
     phase: 'engram-backup',
     status: eb.status === 0 ? 'PASS' : 'SKIP',
@@ -643,7 +643,7 @@ function phaseBackup(): PhaseResult[] {
   });
 
   // 3.4 Prune old checkpoints
-  const pp = runScript('src/checkpoint-manager.ts', ['prune'], 15000);
+  const pp = runScript('src/ops/checkpoint-manager.ts', ['prune'], 15000);
   results.push({
     phase: 'checkpoint-prune',
     status: pp.status === 0 ? 'PASS' : 'SKIP',

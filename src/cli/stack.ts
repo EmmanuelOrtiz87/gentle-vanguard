@@ -125,11 +125,11 @@ const COMMANDS: Command[] = [
       switch (action) {
         case 'start':
           printInfo('Starting dashboard...');
-          runNpxTsx('src/dashboard-start.ts');
+          runNpxTsx('src/ops/dashboard-start.ts');
           break;
         case 'stop':
           printInfo('Stopping dashboard...');
-          runNpxTsx('src/dashboard-stop.ts');
+          runNpxTsx('src/ops/dashboard-stop.ts');
           break;
         case 'status':
           printInfo('Checking dashboard status...');
@@ -239,7 +239,7 @@ const COMMANDS: Command[] = [
     handler: (args) => {
       const full = args.includes('--full') || args.includes('-f');
       printInfo(`Running stack validation${full ? ' (full mode)' : ''}...`);
-      runNpxTsx('src/stack-verify.ts', full ? ['--full'] : []);
+      runNpxTsx('src/ops/stack-verify.ts', full ? ['--full'] : []);
     },
   },
   {
@@ -420,14 +420,14 @@ function executeTool(toolName: string, args: string[]): void {
   const toolMap: Record<string, string> = {
     'health-check': 'src/core/health-check.ts',
     'maintenance-watchtower': 'src/core/maintenance-watchtower.ts',
-    dashboard: 'src/dashboard-start.ts',
+    dashboard: 'src/ops/dashboard-start.ts',
     'codegraph-sync': 'src/codegraph-sync-autostart.ts',
     'engram-sync': 'src/engram-auto-sync.ts',
     'session-autostart': 'src/core/session-autostart.ts',
     'error-memory': 'src/error-memory.ts',
     'learning-engine': 'src/ml/learning-engine.ts',
     'knowledge-acquisition': 'src/ml/knowledge-acquisition.ts',
-    'stack-verify': 'src/stack-verify.ts',
+    'stack-verify': 'src/ops/stack-verify.ts',
     'security-scan': 'src/security/security-scan.ts',
   };
 

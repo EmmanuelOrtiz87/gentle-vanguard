@@ -1,4 +1,4 @@
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync, cpSync } from 'fs';
 import { join, resolve } from 'path';
 

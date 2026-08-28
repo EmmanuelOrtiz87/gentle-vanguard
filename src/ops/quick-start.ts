@@ -6,7 +6,7 @@
  * USO: npx tsx src/quick-start.ts [--complete]
  */
 
-import { runSync, runNpxTsxSync, runNpxTsx } from './core/run-command.js';
+import { runSync, runNpxTsxSync, runNpxTsx } from '../core/run-command.js';
 
 const ROOT = process.cwd();
 

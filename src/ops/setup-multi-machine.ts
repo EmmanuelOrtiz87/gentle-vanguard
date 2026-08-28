@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { runSync, runNpxTsxSync } from './core/run-command.js';
+import { runSync, runNpxTsxSync } from '../core/run-command.js';
 import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 

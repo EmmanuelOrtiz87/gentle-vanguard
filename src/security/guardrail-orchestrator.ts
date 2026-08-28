@@ -250,7 +250,7 @@ const DECISION_MAP: Record<FailureCategory, GuardDecision> = {
     action: 'correct',
     reason: 'Database error — attempt self-healing.',
     guidance:
-      'Run the DB self-healing routine (src/self-healing-db.ts). If the DB is locked, wait and retry. If corrupt, restore from the latest backup.',
+      'Run the DB self-healing routine (src/ops/self-healing-db.ts). If the DB is locked, wait and retry. If corrupt, restore from the latest backup.',
     surfaceToUser: false,
     delegateTo: 'self-healing-db',
   },

@@ -10,7 +10,7 @@ describe('gv-init', () => {
     assert.ok(existsSync(resolve(ROOT, 'src', 'bootstrap.ts')));
   });
 
-  it('src/setup-complete.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'setup-complete.ts')));
+  it('src/ops/setup-complete.ts exists', () => {
+    assert.ok(existsSync(resolve(ROOT, 'src', 'ops', 'setup-complete.ts')));
   });
 });

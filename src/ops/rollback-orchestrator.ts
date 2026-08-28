@@ -11,7 +11,7 @@ import {
 } from 'fs';
 import { join, dirname } from 'path';
 
-import { runNpxTsxSync } from './core/run-command.js';
+import { runNpxTsxSync } from '../core/run-command.js';
 
 const ROOT = process.cwd();
 const SESSION_DIR = join(ROOT, '.session');

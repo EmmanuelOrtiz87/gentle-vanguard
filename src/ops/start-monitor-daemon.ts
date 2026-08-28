@@ -8,7 +8,7 @@
  * Usage: npx tsx src/start-monitor-daemon.ts
  */
 
-import { runNpxTsx } from './core/run-command.js';
+import { runNpxTsx } from '../core/run-command.js';
 import { resolve } from 'path';
 import * as fs from 'fs';
 

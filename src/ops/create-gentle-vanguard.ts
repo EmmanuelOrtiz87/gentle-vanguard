@@ -22,7 +22,7 @@ import { createInterface } from 'node:readline/promises';
 import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { basename, join, relative, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 
 // ─── Template scope ───────────────────────────────────────────────────
 

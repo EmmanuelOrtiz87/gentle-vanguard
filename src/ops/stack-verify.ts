@@ -15,7 +15,7 @@
  *   npx tsx src/stack-verify.ts --fix        # attempt to fix failures
  */
 
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { existsSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
@@ -100,7 +100,7 @@ async function checkDeps(results: CheckResult[]): Promise<void> {
 
   try {
     // Import the validator directly — most reliable approach
-    const { getDeps, validateAll } = await import('./dependency-validator.js');
+    const { getDeps, validateAll } = await import('../dependency-validator.js');
     const deps = getDeps();
     const depResults = await validateAll(deps);
     const passed = depResults.filter((r) => r.status === 'PASS').length;

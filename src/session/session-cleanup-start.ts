@@ -268,7 +268,7 @@ export function runCleanup(
   }
 
   log('Pruning old checkpoints...');
-  const ckptMgr = join(ROOT, 'src/checkpoint-manager.ts');
+  const ckptMgr = join(ROOT, 'src/ops/checkpoint-manager.ts');
   if (existsSync(ckptMgr)) {
     runNpxTsxSync(ckptMgr, ['prune'], { cwd: ROOT, stdio: 'pipe', timeout: LONG_TIMEOUT });
     ok('Checkpoint prune done');

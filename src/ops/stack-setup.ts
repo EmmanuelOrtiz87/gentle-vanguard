@@ -16,7 +16,7 @@
  *   npm run stack:setup -- --dry-run # preview only, no changes
  */
 
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { resolve } from 'node:path';
 
 // ─── Config ───────────────────────────────────────────────────────────

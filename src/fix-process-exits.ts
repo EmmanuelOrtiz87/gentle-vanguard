@@ -22,7 +22,7 @@ const CRITICAL_FILES = [
   'src/session/session-reference-system.ts',
   'src/session/session-scoring.ts',
   'src/security/safety-guardrails.ts',
-  'src/system-check.ts',
+  'src/ops/system-check.ts',
 ];
 
 interface FixResult {

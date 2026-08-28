@@ -37,10 +37,10 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1': 'src/orchestration/hybrid-executor.ts',
   'scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1': 'src/aws-delegator.ts',
   'scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1': 'src/azure-delegator.ts',
-  'scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1': 'src/checkpoint-manager.ts',
-  'scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1': 'src/snapshot-manager.ts',
+  'scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1': 'src/ops/checkpoint-manager.ts',
+  'scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1': 'src/ops/snapshot-manager.ts',
   'scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1':
-    'src/rollback-orchestrator.ts',
+    'src/ops/rollback-orchestrator.ts',
   'scripts/utilities/ops/TRACING/tracing-instrument.ps1': 'src/tracing-instrument.ts',
   'scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1': 'src/event-sourcing.ts',
   'scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1': 'src/saga-orchestrator.ts',
@@ -57,10 +57,10 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/mcp-bridge/mcp-bridge.ps1': 'src/mcp-bridge.ts',
 
   // Dashboard
-  'scripts/utilities/dashboard/dashboard-common.ps1': 'src/dashboard-common.ts',
-  'scripts/utilities/dashboard/dashboard-start.ps1': 'src/dashboard-start.ts',
-  'scripts/utilities/dashboard/dashboard-stop.ps1': 'src/dashboard-stop.ts',
-  'scripts/utilities/dashboard/dashboard-ws-autostart.ps1': 'src/dashboard-ws-autostart.ts',
+  'scripts/utilities/dashboard/dashboard-common.ps1': 'src/ops/dashboard-common.ts',
+  'scripts/utilities/dashboard/dashboard-start.ps1': 'src/ops/dashboard-start.ts',
+  'scripts/utilities/dashboard/dashboard-stop.ps1': 'src/ops/dashboard-stop.ts',
+  'scripts/utilities/dashboard/dashboard-ws-autostart.ps1': 'src/ops/dashboard-ws-autostart.ts',
   'scripts/utilities/dashboard/optimize-dashboard.ps1': 'src/optimize-dashboard.ts',
 
   // Utilities
@@ -94,8 +94,8 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   // Bootstrap
   'scripts/gentle-vanguard/bootstrap.ps1': 'src/bootstrap.ts',
   'scripts/gentle-vanguard/bootstrap-machine.ps1': 'src/bootstrap-machine.ts',
-  'scripts/gentle-vanguard/setup-complete.ps1': 'src/setup-complete.ts',
-  'scripts/gentle-vanguard/setup-multi-machine.ps1': 'src/setup-multi-machine.ts',
+  'scripts/gentle-vanguard/setup-complete.ps1': 'src/ops/setup-complete.ts',
+  'scripts/gentle-vanguard/setup-multi-machine.ps1': 'src/ops/setup-multi-machine.ts',
 
   // Hook genericos
   'scripts/hooks/validate-readme.ps1': 'src/validate-readme.ts',

@@ -1354,9 +1354,9 @@ async function checkStatePersistence() {
     addResult('state-persistence', 'snapshots', 'WARN', 'No snapshots', 'ok');
   }
 
-  const ckptMgr = join(ROOT, 'src/checkpoint-manager.ts');
-  const rollbackOrch = join(ROOT, 'src/rollback-orchestrator.ts');
-  const snapMgr = join(ROOT, 'src/snapshot-manager.ts');
+  const ckptMgr = join(ROOT, 'src/ops/checkpoint-manager.ts');
+  const rollbackOrch = join(ROOT, 'src/ops/rollback-orchestrator.ts');
+  const snapMgr = join(ROOT, 'src/ops/snapshot-manager.ts');
   const allScripts = fileExists(ckptMgr) && fileExists(rollbackOrch) && fileExists(snapMgr);
   addResult(
     'state-persistence',
@@ -1781,7 +1781,7 @@ async function autoHeal() {
     }
 
     const wsRunning = await testPort(wsPort);
-    const wsAutostart = join(ROOT, 'src', 'dashboard-ws-autostart.ts');
+    const wsAutostart = join(ROOT, 'src', 'ops', 'dashboard-ws-autostart.ts');
 
     if (wsRunning) {
       if (!quiet)
@@ -1790,7 +1790,7 @@ async function autoHeal() {
       healed++;
     } else if (wsAutostart.endsWith('.ts')) {
       // Use TS wrapper for reliable Windows process launching
-      const wrapperTs = join(ROOT, 'src', 'dashboard-ws-launcher.ts');
+      const wrapperTs = join(ROOT, 'src', 'ops', 'dashboard-ws-launcher.ts');
       if (!quiet) console.log('  [Heal] Restarting Dashboard WS server via wrapper...');
       try {
         // Launch via TS wrapper - creates truly detached process

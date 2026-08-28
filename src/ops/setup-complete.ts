@@ -10,7 +10,7 @@ import {
   appendFileSync,
 } from 'fs';
 import { join, resolve, dirname } from 'path';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { fileURLToPath } from 'url';
 import { homedir, platform } from 'os';
 

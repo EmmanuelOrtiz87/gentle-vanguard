@@ -124,7 +124,7 @@
         "id": "engram-backup",
         "enabled": true,
         "lazy": true,
-        "script": "src/backup-engram.ts",
+        "script": "src/ops/backup-engram.ts",
         "args": "--mode backup --quiet",
         "required": false,
         "description": "Auto-backup Engram (DB + sessions + SHA256 checksums)"
@@ -273,7 +273,7 @@
         "id": "dashboard-ws-start",
         "enabled": true,
         "lazy": true,
-        "script": "src/dashboard-ws-autostart.ts",
+        "script": "src/ops/dashboard-ws-autostart.ts",
         "args": "--quiet --watch",
         "required": false,
         "description": "Start WebSocket metrics server ONLY (port 8080) with persistent watchdog auto-recovery (5s health loop, up to 10 restarts). Does NOT serve the Vite UI — see dashboard-ui-start (TS)"
@@ -282,7 +282,7 @@
         "id": "dashboard-ui-start",
         "enabled": true,
         "lazy": true,
-        "script": "src/dashboard-vite-watchdog.ts",
+        "script": "src/ops/dashboard-vite-watchdog.ts",
         "args": "--watch",
         "required": false,
         "description": "Start Vite dev server (dashboard UI on port 5173) with the same auto-recovery watchdog contract as the WS server (5s health loop, 2-failure threshold, up to 10 restarts, budget reset after 5min stable). Idempotent: adopts an already-serving Vite instead of spawning a duplicate"
@@ -486,7 +486,7 @@
         "id": "checkpoint-auto-create",
         "enabled": true,
         "lazy": true,
-        "script": "src/checkpoint-manager.ts",
+        "script": "src/ops/checkpoint-manager.ts",
         "args": "create",
         "required": false,
         "description": "Auto-create session state checkpoint at session start for rollback safety (TS)"
@@ -600,7 +600,7 @@
       },
       {
         "id": "maintenance-auto-prune",
-        "script": "src/checkpoint-manager.ts",
+        "script": "src/ops/checkpoint-manager.ts",
         "args": "prune",
         "lazy": true,
         "enabled": true,
@@ -905,7 +905,7 @@
         "id": "timeout-monitor-init",
         "enabled": true,
         "lazy": true,
-        "script": "src/start-monitor-daemon.ts",
+        "script": "src/ops/start-monitor-daemon.ts",
         "args": "",
         "required": false,
         "description": "Start timeout & performance monitoring daemon (detached) â€” tracks violations, measures latencies, emits alerts"

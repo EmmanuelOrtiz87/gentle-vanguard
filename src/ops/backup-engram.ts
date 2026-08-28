@@ -14,10 +14,10 @@ import {
   statSync,
 } from 'fs';
 import { join, resolve } from 'path';
-import { runNpxTsxSync } from './core/run-command.js';
+import { runNpxTsxSync } from '../core/run-command.js';
 import { createHash } from 'crypto';
 import { pathToFileURL } from 'url';
-import { getEffectiveProcessTimeout } from './core/timeout-config';
+import { getEffectiveProcessTimeout } from '../core/timeout-config';
 
 const ROOT = resolve(process.cwd());
 
