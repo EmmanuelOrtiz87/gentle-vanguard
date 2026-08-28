@@ -6,6 +6,9 @@
 
 Leyenda: `[ ]` pendiente · `[x]` hecho · `[~]` en curso · `[!]` riesgo.
 
+> **P0 + P1 + P2: 100% completos.** Solo queda P3 (cross-app). Ver PROGRESS.md
+> para el detalle de cada ola.
+
 ## P0 — Operación del stack (debe estar antes de que otros la usen)
 
 - [x] **Commit del avance actual** — landed (4 commits: 432c01c5, a4b34c2c, c7a13f6a, 020af3b5).
@@ -34,36 +37,41 @@ Leyenda: `[ ]` pendiente · `[x]` hecho · `[~]` en curso · `[!]` riesgo.
 - [x] **Diagramas renderizables** — bloques con copy-to-clipboard y render mermaid
   on-demand (CDN, fallback a texto). Tag "mermaid" visible cuando aplica.
 
-## P2 — Producto / UX (PRIORIDAD SIGUIENTE)
+## P2 — Producto / UX (COMPLETO)
 
-- [ ] **OAuth 2.0 con callback local** — evolución del API token. Servidor de callback
+- [x] **OAuth 2.0 con callback local** — evolución del API token. Servidor de callback
   en `127.0.0.1`, persistencia cifrada AES-GCM en `.runtime/gv-analytics/`.
-  Tamaño: 3-4h. Dependencia: `vault.ts` ya tiene cifrado AES-GCM.
-- [ ] **Validación Atlassian mejorada** — feedback inmediato en la UI al pegar
+  Landed en `b521732a` (3LO + PKCE + state + refresh).
+- [x] **Validación Atlassian mejorada** — feedback inmediato en la UI al pegar
   credenciales (status de Jira/Confluence/Bitbucket con un solo click).
-  Tamaño: 30min. Reutiliza `getConnectionStatus`.
-- [ ] **Templates de reporte** — formatos configurables (executive brief vs full SDD)
-  desde la UI sin tocar código. Tamaño: 1-2h.
-- [ ] **Tests E2E** — suite Vitest/Playwright que cubra: conexión, análisis,
-  persistencia, export PDF, export DOCX. Tamaño: 2-3h.
-- [ ] **Métricas de uso** — cuántas requests/min, qué proveedor de modelo responde,
-  latencia p50/p95. Tabla `gv_analytics_metrics` + dashboard widget. Tamaño: 1h.
+  Landed en `ab7b77ef` (botón "Probar"/"Revalidar").
+- [x] **Templates de reporte** — formatos configurables (executive brief vs full SDD)
+  desde la UI sin tocar código. Landed en `c223d3be` (brief/sdd/handoff + selector UI).
+- [x] **Tests E2E** — suite Vitest/Playwright que cubra: conexión, análisis,
+  persistencia, export PDF, export DOCX. Landed en `5e1ef5fa` (11 casos, `test:integration`).
+- [x] **Métricas de uso** — cuántas requests/min, qué proveedor de modelo responde,
+  latencia p50/p95. Tabla `gv_analytics_metrics` + dashboard widget. Landed en `77221771`
+  (backend + `/api/metrics`; el widget del dashboard queda en P3).
 
-## P3 — Cross-app / futuro
+## P3 — Cross-app / futuro (PRIORIDAD SIGUIENTE)
 
+- [x] **Theme switcher** (light/dark) — actualmente solo dark. Landed en `ab7b77ef`
+  (toggle en cabecera, persistido en localStorage, tokens en `:root[data-theme='light']`).
 - [ ] **Widget en `apps/web-dashboard`** — vista de "últimos análisis" sin necesidad
   de abrir gv-analytics. Tamaño: 1-2h.
 - [ ] **i18n en/pt/es** — siguiendo el patrón del dashboard actual. Tamaño: 2-3h.
-- [ ] **Theme switcher** (light/dark) — actualmente solo dark. Tamaño: 30min.
 - [ ] **Storybook** para componentes UI del reporte. Tamaño: 1h.
 
 ## Estado verificado
 
 - typecheck: verde (raíz + apps/gv-analytics)
-- build: verde (162KB JS / 15KB CSS gzipped)
+- build: verde (170KB JS / 18.5KB CSS gzipped)
 - watchtower health: 6/6 gv-analytics checks PASS
 - process-hygiene: gv-analytics-api + gv-analytics-vite healthy, no duplicates
 - end-to-end: POST /api/analyze con input real → `llmSource=agent` en 5.4s
+- templates: `GET /api/templates` 200 (brief/sdd/handoff); export MD/HTML/DOCX/PDF
+  con `?template=` todos 200 (verificado end-to-end)
+- tests: 11/11 `test:integration` PASS
 
 ## Riesgos / Decisiones pendientes
 
