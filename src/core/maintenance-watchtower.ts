@@ -313,6 +313,104 @@ async function checkDashboardWs() {
   );
 }
 
+// ─── Component: GV Analytics ─────────────────────────────────────────────────
+
+async function checkGvAnalytics() {
+  if (!quiet) console.log('  [GV Analytics] Checking...');
+
+  const apiPort = Number(process.env.GV_ANALYTICS_PORT || 4754);
+  const apiPidFile = join(RUNTIME_DIR, 'gv-analytics-api.pid');
+  const vitePidFile = join(RUNTIME_DIR, 'gv-analytics-vite.pid');
+  const appDir = join(ROOT, 'apps/gv-analytics');
+
+  // 1. Build artifact present?
+  addResult(
+    'gv-analytics',
+    'build (dist/index.html)',
+    fileExists(join(appDir, 'dist/index.html')) ? 'PASS' : 'WARN',
+    fileExists(join(appDir, 'dist/index.html')) ? '' : 'Run: pnpm --filter @gentle-vanguard/gv-analytics build',
+    'ok',
+  );
+
+  // 2. API HTTP health (best-effort, 4 checks: status, connection, reports, mcp config)
+  const apiOk = await testHttp(`http://127.0.0.1:${apiPort}/api/connection/status`);
+  addResult(
+    'gv-analytics',
+    `API HTTP (port ${apiPort})`,
+    apiOk ? 'PASS' : 'WARN',
+    apiOk ? 'Responding' : 'Not running — start with: npm run analytics:start',
+    apiOk ? 'ok' : 'start',
+  );
+
+  // 3. API process via pidfile
+  if (fileExists(apiPidFile)) {
+    const pid = readFileSync(apiPidFile, 'utf-8').trim();
+    try {
+      process.kill(parseInt(pid, 10), 0);
+      addResult('gv-analytics', 'API process', 'PASS', `PID ${pid} running`, 'ok');
+    } catch {
+      addResult('gv-analytics', 'API process', 'WARN', `PID ${pid} stale`, 'verify');
+    }
+  } else if (apiOk) {
+    addResult('gv-analytics', 'API process', 'PASS', 'Running (no pidfile)', 'ok');
+  } else {
+    addResult('gv-analytics', 'API process', 'WARN', 'No pidfile, API not responding', 'start');
+  }
+
+  // 4. Vite dev server (optional, dev mode)
+  if (fileExists(vitePidFile)) {
+    const pid = readFileSync(vitePidFile, 'utf-8').trim();
+    try {
+      process.kill(parseInt(pid, 10), 0);
+      addResult('gv-analytics', 'Vite dev server', 'PASS', `PID ${pid} running`, 'ok');
+    } catch {
+      addResult('gv-analytics', 'Vite dev server', 'WARN', `PID ${pid} stale`, 'verify');
+    }
+  } else {
+    addResult('gv-analytics', 'Vite dev server', 'PASS', 'Not in dev mode (use built artifacts)', 'ok');
+  }
+
+  // 5. MCP server registered
+  const mcpRegistry = join(ROOT, 'config/mcp-registry.json');
+  if (fileExists(mcpRegistry)) {
+    try {
+      const reg = JSON.parse(readFileSync(mcpRegistry, 'utf-8'));
+      const found = (reg.servers || []).some(
+        (s: { name?: string }) => s.name === 'gv-analytics-atlassian',
+      );
+      addResult(
+        'gv-analytics',
+        'MCP registration (mcp-registry.json)',
+        found ? 'PASS' : 'FAIL',
+        found ? 'gv-analytics-atlassian registered' : 'Missing gv-analytics-atlassian entry',
+        found ? 'ok' : 'verify',
+      );
+    } catch {
+      addResult('gv-analytics', 'MCP registration (mcp-registry.json)', 'FAIL', 'Invalid JSON', 'verify');
+    }
+  } else {
+    addResult('gv-analytics', 'MCP registration (mcp-registry.json)', 'WARN', 'Registry not found', 'verify');
+  }
+
+  // 6. OpenCode config integration
+  const opencodeCfg = join(ROOT, 'opencode.json');
+  if (fileExists(opencodeCfg)) {
+    try {
+      const cfg = JSON.parse(readFileSync(opencodeCfg, 'utf-8'));
+      const found = Boolean(cfg?.mcp?.['gv-analytics-atlassian']);
+      addResult(
+        'gv-analytics',
+        'OpenCode MCP wire (opencode.json)',
+        found ? 'PASS' : 'WARN',
+        found ? 'gv-analytics-atlassian enabled' : 'Add gv-analytics-atlassian to opencode.json#mcp',
+        found ? 'ok' : 'verify',
+      );
+    } catch {
+      addResult('gv-analytics', 'OpenCode MCP wire (opencode.json)', 'FAIL', 'Invalid JSON', 'verify');
+    }
+  }
+}
+
 // ─── Component: CodeGraph ───────────────────────────────────────────────────
 
 async function checkCodeGraph() {
@@ -1929,6 +2027,7 @@ async function runAllChecks() {
   const checks = [
     checkDashboardWs,
     checkCodeGraph,
+    checkGvAnalytics,
     checkTimeoutDaemon,
     checkProcessHygiene,
     checkMlEmbeddings,

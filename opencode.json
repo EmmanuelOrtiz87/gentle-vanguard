@@ -348,6 +348,12 @@
       "command": "npx",
       "args": "-y @modelcontextprotocol/server-memory@latest",
       "enabled": true
+    },
+    "gv-analytics-atlassian": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["--import", "tsx", "apps/gv-analytics/server/mcp.ts"],
+      "enabled": true
     }
   },
   "tools": {
