@@ -103,7 +103,20 @@ async function handleExport(req: IncomingMessage, res: ServerResponse, pathname:
     return;
   }
   if (format === 'pdf') {
-    sendFile(res, await toPdf(report, template), 'application/pdf', `gv-analytics-${safeId}.pdf`);
+    const pdfBuf = await toPdf(report, template) as Buffer & { pdfFallbackHtml?: true };
+    if (pdfBuf.pdfFallbackHtml) {
+      // Chrome not available — serve the HTML export with a clear warning header
+      // so the client knows what happened.
+      res.writeHead(200, {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Content-Disposition': `attachment; filename="gv-analytics-${safeId}.html"`,
+        'Cache-Control': 'no-store',
+        'X-GV-PDF-Fallback': 'Chrome not found — serving HTML instead. Set GV_ANALYTICS_CHROME to enable PDF.',
+      });
+      res.end(pdfBuf);
+      return;
+    }
+    sendFile(res, pdfBuf, 'application/pdf', `gv-analytics-${safeId}.pdf`);
     return;
   }
   sendJson(res, 400, { error: `Unsupported format: ${format}` });
@@ -130,8 +143,8 @@ async function routeApi(
       return;
     }
     if (req.method === 'POST' && pathname === '/api/analyze') {
-      const body = (await readBody(req)) as { mode?: 'url' | 'request'; input?: string };
-      const report = await analyzeInput(body.mode || 'request', body.input || '');
+      const body = (await readBody(req)) as { url?: string; request?: string };
+      const report = await analyzeInput({ url: body.url, request: body.request });
       saveReport(report);
       llmMetaRef.current.llmSource = report.llmSource ?? 'heuristic';
       llmMetaRef.current.llmCached = report.llmCached === true;

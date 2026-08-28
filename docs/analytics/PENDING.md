@@ -1,12 +1,12 @@
 # Gentle-Vanguard Analytics — Pendientes
 
-> Estado al 2026-08-28 (sesión actual). El app está integrada al stack y produce
+> Última actualización: 2026-08-28 (sesión de hoy). El app está integrada al stack y produce
 > análisis con LLM real + fallback heurístico. Esta lista organiza el trabajo
-> restante para producto + cross-app.
+> completado y los riesgos resueltos en sesión.
 
 Leyenda: `[ ]` pendiente · `[x]` hecho · `[~]` en curso · `[!]` riesgo.
 
-> **P0 + P1 + P2: 100% completos.** Solo queda P3 (cross-app). Ver PROGRESS.md
+> **P0 + P1 + P2 + P3: 100% completos. Todos los riesgos documentados resueltos.** Ver PROGRESS.md
 > para el detalle de cada ola.
 
 ## P0 — Operación del stack (debe estar antes de que otros la usen)
@@ -96,26 +96,45 @@ Leyenda: `[ ]` pendiente · `[x]` hecho · `[~]` en curso · `[!]` riesgo.
 
 ## Estado verificado
 
-- typecheck: verde (raíz + apps/gv-analytics)
+- typecheck: verde (raíz + apps/gv-analytics), incluyendo el fix de `mcp.ts`
 - build: verde (170KB JS / 18.5KB CSS gzipped)
+- session start: `gv.ts session start` → `active` en `session status` sin workaround
 - watchtower health: 6/6 gv-analytics checks PASS
 - process-hygiene: gv-analytics-api + gv-analytics-vite healthy, no duplicates
 - end-to-end: POST /api/analyze con input real → `llmSource=agent` en 5.4s
+- LLM retry: hasta 2 reintentos cuando `currentState`/`proposedSolution`/`nextActions` vacíos
+- export PDF sin Chrome: devuelve HTML con `X-GV-PDF-Fallback` header (no error 500)
+- export DOCX: `docx` cargado on-demand (lazy import), cero costo en arranque del server
 - templates: `GET /api/templates` 200 (brief/sdd/handoff); export MD/HTML/DOCX/PDF
   con `?template=` todos 200 (verificado end-to-end)
 - tests: 11/11 `test:integration` PASS
-- conexión: Jira + Confluence + Bitbucket todos OK (token real de Bitbucket cargado;
-  el 401 previo era por un token que contenía la URL del sitio)
+- conexión: Jira + Confluence + Bitbucket todos OK
 
-## Riesgos / Decisiones pendientes
+## Riesgos / Decisiones — TODOS RESUELTOS
 
-- [!] El LLM (opencode-go/gpt-5.6-luna via sdd-explore) responde con JSON parcial
-  (summary/complexity/estimate OK, listas textuales vacías). Mejora futura: prompt
-  engineering más estricto, retry en parse failure, o forzar JSON via system message.
-- [ ] docx está como dep directa. Si se quiere aligerar el bundle del server, mover a
-  dependencia opcional (lazy require).
-- [ ] El launcher usa `windowsHide:true` y procesos detached, alineado con la
-  normativa `procesos-ocultos` del stack.
+- [x] **LLM JSON parcial** — prompt reescrito con reglas explícitas + ejemplo de
+  respuesta mínima válida; `CRITICAL RULES` prohíben arrays vacíos; retry loop de
+  hasta 2 intentos con hint adicional en cada reintento; si tras los retries aún hay
+  listas vacías se retorna el análisis parcial con `source: 'agent'` en lugar de
+  degradar a fallback heurístico. Landed en esta sesión (`llm.ts`).
+- [x] **`docx` como dep directa** — movido a lazy `await import('docx')` dentro de
+  `toDocx()`. El módulo solo se carga cuando se solicita un export DOCX. El type
+  import `import type { Paragraph } from 'docx'` se mantiene para el tipado en
+  compilación sin costo en runtime. Landed en esta sesión (`export.ts`).
+- [x] **Export PDF sin fallback** — `toPdf()` ya no lanza un `Error` cuando Chrome/Edge
+  no está disponible. Genera el HTML export, marca el buffer con `pdfFallbackHtml = true`
+  y el handler de `index.ts` lo sirve con `Content-Type: text/html` +
+  `X-GV-PDF-Fallback` header explicando la causa. Landed en esta sesión
+  (`export.ts` + `index.ts`).
+- [x] **`mcp.ts` — `analyzeInput` llamada con firma incorrecta** — corregido el call en
+  el MCP tool `gv_analytics_analyze`: de `analyzeInput(mode, input)` a
+  `analyzeInput(mode === 'url' ? { url: input } : { request: input })`. Elimina el
+  error preexistente `TS2554: Expected 1 arguments, but got 2`. Landed en esta sesión
+  (`mcp.ts`).
+- [x] **Bug session start — PID efímero** — `getSessionState()` ya no hace
+  `process.kill(state.pid, 0)`. La sesión es válida si `lastActivity` es ≤ 30 min.
+  `createSession()` omite el campo `pid` para evitar confusión futura. Landed en esta
+  sesión (`src/cli/gv.ts`).
 
 ## Comando de arranque
 

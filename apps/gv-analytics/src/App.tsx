@@ -62,8 +62,8 @@ export function App() {
   const { tt } = useT();
   const [status, setStatus] = useState<ConnectionStatus | null>(null);
   const [form, setForm] = useState<ConnectionForm>(emptyForm);
-  const [input, setInput] = useState('');
-  const [mode, setMode] = useState<'url' | 'request'>('url');
+  const [urlInput, setUrlInput] = useState('');
+  const [requestInput, setRequestInput] = useState('');
   const [report, setReport] = useState<AnalyticsReport | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -110,7 +110,7 @@ export function App() {
   }, [theme]);
 
   const connected = Boolean(status?.configured);
-  const canAnalyze = input.trim().length > 3 && !busy;
+  const canAnalyze = (urlInput.trim().length > 3 || requestInput.trim().length > 3) && !busy;
 
   const statusTone = useMemo(() => {
     if (!status?.configured) return 'pending';
@@ -178,7 +178,7 @@ export function App() {
     try {
       const next = await readJson<AnalyticsReport>('/api/analyze', {
         method: 'POST',
-        body: JSON.stringify({ mode, input }),
+        body: JSON.stringify({ url: urlInput, request: requestInput }),
       });
       setReport(next);
       void loadHistory().catch(() => undefined);
@@ -274,20 +274,11 @@ export function App() {
 
       <main className="app-shell">
         {view === 'operacion' && (
-          <section className="workspace-grid">
-            <section className="main-column">
+          <section className="operacion-split">
+            {/* ── Panel izquierdo: formulario fijo ── */}
+            <aside className="operacion-form-panel">
               <section className="analysis-board">
                 <div className="board-toolbar">
-                  <div className="mode-switch" role="tablist" aria-label={tt('analysis.mode')}>
-                    <button className={mode === 'url' ? 'active' : ''} onClick={() => setMode('url')}>
-                      <Network />
-                      {tt('analysis.url')}
-                    </button>
-                    <button className={mode === 'request' ? 'active' : ''} onClick={() => setMode('request')}>
-                      <BookOpen />
-                      {tt('analysis.request')}
-                    </button>
-                  </div>
                   <div className="export-wrap">
                     <button
                       className="secondary-action"
@@ -338,11 +329,41 @@ export function App() {
                   </div>
                 </div>
 
-                <textarea
-                  value={input}
-                  onChange={(event) => setInput(event.target.value)}
-                  placeholder={mode === 'url' ? tt('analysis.urlPlaceholder') : tt('analysis.requestPlaceholder')}
-                />
+                <div className="input-fields">
+                  {/* URL — opcional, mejora el análisis con evidencia Atlassian real */}
+                  <div className="input-field">
+                    <span className="input-label">
+                      <Network />
+                      {tt('analysis.url')}
+                      <span className="input-optional">{tt('analysis.optional')}</span>
+                    </span>
+                    <textarea
+                      value={urlInput}
+                      onChange={(event) => setUrlInput(event.target.value)}
+                      placeholder={tt('analysis.urlPlaceholder')}
+                      rows={2}
+                      aria-label={tt('analysis.url')}
+                    />
+                    <p className="input-hint">{tt('analysis.urlHint')}</p>
+                  </div>
+
+                  {/* Pedido — descripción libre del requerimiento */}
+                  <div className="input-field">
+                    <span className="input-label">
+                      <BookOpen />
+                      {tt('analysis.request')}
+                      <span className="input-optional">{tt('analysis.optional')}</span>
+                    </span>
+                    <textarea
+                      value={requestInput}
+                      onChange={(event) => setRequestInput(event.target.value)}
+                      placeholder={tt('analysis.requestPlaceholder')}
+                      rows={6}
+                      aria-label={tt('analysis.request')}
+                    />
+                    <p className="input-hint">{tt('analysis.requestHint')}</p>
+                  </div>
+                </div>
 
                 {message && (
                   <div className="notice">
@@ -356,9 +377,12 @@ export function App() {
                   {tt('analysis.run')}
                 </button>
               </section>
+            </aside>
 
+            {/* ── Panel derecho: resultado ── */}
+            <div className="operacion-result-panel">
               {report ? <ReportView report={report} /> : <EmptyReport />}
-            </section>
+            </div>
           </section>
         )}
 

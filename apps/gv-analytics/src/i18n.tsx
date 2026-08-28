@@ -86,11 +86,14 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'analysis.mode': 'Analysis mode',
     'analysis.url': 'URL',
     'analysis.request': 'Request',
+    'analysis.optional': '(optional)',
     'analysis.export': 'Export',
     'analysis.template': 'Template',
-    'analysis.urlPlaceholder': 'Paste a Jira, Confluence, Bitbucket, PR or repository URL...',
+    'analysis.urlPlaceholder': 'Paste a Bitbucket repository, PR, Jira or Confluence URL to pull real evidence...',
     'analysis.requestPlaceholder':
-      'Paste the functional or technical request to analyze impact, fronts, roles and estimate...',
+      'Describe the functional or technical request, paste a Jira ticket description, or a Jira URL. Combined with the URL above for a full analysis...',
+    'analysis.urlHint': 'Atlassian URL — fetches real evidence (Jira issues, Confluence pages, Bitbucket PRs). Leave blank if you only have a text description.',
+    'analysis.requestHint': 'Free-text description of the requirement or initiative. Can include a URL too — both fields are combined for the analysis.',
     'analysis.run': 'Analyze',
 
     // Report
@@ -200,11 +203,14 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'analysis.mode': 'Modo de análisis',
     'analysis.url': 'URL',
     'analysis.request': 'Pedido',
+    'analysis.optional': '(opcional)',
     'analysis.export': 'Exportar',
     'analysis.template': 'Plantilla',
-    'analysis.urlPlaceholder': 'Pega una URL de Jira, Confluence, Bitbucket, PR o repositorio...',
+    'analysis.urlPlaceholder': 'Pega una URL de repositorio, PR, Jira o Confluence de Bitbucket para traer evidencia real...',
     'analysis.requestPlaceholder':
-      'Pega el pedido funcional o técnico para analizar impacto, frentes, roles y estimación...',
+      'Describe el pedido funcional o técnico, pega la descripción de un ticket de Jira, o una URL de Jira. Se combina con la URL de arriba para un análisis completo...',
+    'analysis.urlHint': 'URL de Atlassian — recupera evidencia real (issues de Jira, páginas de Confluence, PRs de Bitbucket). Podés dejarlo vacío si solo tenés descripción de texto.',
+    'analysis.requestHint': 'Descripción libre del requerimiento o iniciativa. También puede incluir una URL — ambos campos se combinan en el análisis.',
     'analysis.run': 'Analizar',
 
     'report.emptyTitle': 'Listo para interpretar una iniciativa',
@@ -311,11 +317,14 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'analysis.mode': 'Modo de análise',
     'analysis.url': 'URL',
     'analysis.request': 'Pedido',
+    'analysis.optional': '(opcional)',
     'analysis.export': 'Exportar',
     'analysis.template': 'Modelo',
-    'analysis.urlPlaceholder': 'Cole uma URL de Jira, Confluence, Bitbucket, PR ou repositório...',
+    'analysis.urlPlaceholder': 'Cole uma URL de repositório, PR, Jira ou Confluence do Bitbucket para trazer evidência real...',
     'analysis.requestPlaceholder':
-      'Cole o pedido funcional ou técnico para analisar impacto, frentes, papéis e estimativa...',
+      'Descreva o pedido funcional ou técnico, cole a descrição de um ticket do Jira, ou uma URL do Jira. É combinado com a URL acima para uma análise completa...',
+    'analysis.urlHint': 'URL da Atlassian — busca evidências reais (issues do Jira, páginas do Confluence, PRs do Bitbucket). Pode deixar vazio se só tiver descrição em texto.',
+    'analysis.requestHint': 'Descrição livre do requisito ou iniciativa. Também pode incluir uma URL — ambos os campos são combinados na análise.',
     'analysis.run': 'Analisar',
 
     'report.emptyTitle': 'Pronto para interpretar uma iniciativa',

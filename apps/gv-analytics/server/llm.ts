@@ -60,6 +60,20 @@ export interface LLMEnrichment {
 }
 
 const DELEGATION_TIMEOUT_MS = 90_000;
+const DELEGATION_MAX_RETRIES = 2;
+
+/** Lists that must be non-empty for the analysis to be considered complete. */
+const REQUIRED_LIST_FIELDS: (keyof LLMAnalysis)[] = [
+  'currentState',
+  'proposedSolution',
+  'nextActions',
+];
+
+function isAnalysisComplete(analysis: LLMAnalysis): boolean {
+  return REQUIRED_LIST_FIELDS.every(
+    (field) => Array.isArray(analysis[field]) && (analysis[field] as string[]).length > 0,
+  );
+}
 
 function ensureRuntimeDir(): void {
   if (!existsSync(RUNTIME_DIR)) mkdirSync(RUNTIME_DIR, { recursive: true });
@@ -131,30 +145,49 @@ function writeCache(hash: string, analysis: LLMAnalysis): void {
 
 const SYSTEM_PROMPT = `You are a delivery analyst for software delivery teams. Given
 Atlassian evidence (Jira issues, Confluence pages, Bitbucket repos or PRs),
-produce a JSON analysis with EXACTLY this shape:
+produce a JSON analysis with EXACTLY this shape (ALL fields are REQUIRED):
 
 {
   "summary": "string (max 140 chars)",
-  "currentState": ["string", ...] (3-5 bullets describing the present situation),
-  "proposedSolution": ["string", ...] (3-6 bullets describing the recommended path),
-  "impactedFronts": ["Frontend", "Backend", ...] (pick from: Frontend, Backend, Magento, Billing, PNL, Themis, Toolbox, Dataservice, CloudOps, DevOps, Payment Engine, QA, BA, SAD, DEV),
-  "roles": ["string", ...] (e.g. "Tech Lead", "BA", "Frontend Dev", "QA", "DevOps"),
-  "qaScenarios": ["string", ...] (3-6 acceptance / regression scenarios),
-  "nextActions": ["string", ...] (3-6 immediate next steps, ordered),
-  "complexity": { "level": "low|medium|high|critical", "rationale": "string" },
-  "estimate": { "deliveryHours": <number>, "qaHours": <number>, "confidence": "low|medium|high" },
+  "currentState": ["bullet 1", "bullet 2", "bullet 3"],
+  "proposedSolution": ["bullet 1", "bullet 2", "bullet 3"],
+  "impactedFronts": ["Frontend", "Backend"],
+  "roles": ["Tech Lead", "BA", "Frontend Dev"],
+  "qaScenarios": ["Scenario 1", "Scenario 2", "Scenario 3"],
+  "nextActions": ["Step 1", "Step 2", "Step 3"],
+  "complexity": { "level": "low|medium|high|critical", "rationale": "why" },
+  "estimate": { "deliveryHours": 16, "qaHours": 4, "confidence": "low|medium|high" },
   "diagrams": {
-    "current": "ASCII or mermaid of the current state (5-15 lines)",
-    "proposed": "ASCII or mermaid of the proposed state (5-15 lines)"
+    "current": "ASCII or mermaid block showing the current state (min 3 lines)",
+    "proposed": "ASCII or mermaid block showing the proposed state (min 3 lines)"
   },
-  "notes": "optional: caveats or assumptions"
+  "notes": "caveats or assumptions, or empty string"
 }
 
-Rules:
-- Respond ONLY with the JSON object, no prose, no markdown fences.
-- Use Spanish for the content (the team operates in es-AR).
-- Estimate hours are nominal: 1 point ≈ 6h delivery + 2h QA.
-- If evidence is thin, acknowledge it in "notes" and lower the confidence.`;
+CRITICAL RULES — violations will cause the analysis to be discarded:
+1. Respond ONLY with the raw JSON object. No prose, no markdown code fences, no \`\`\`json.
+2. Every array field (currentState, proposedSolution, impactedFronts, roles, qaScenarios,
+   nextActions) MUST have AT LEAST 2 items. Never return an empty array [].
+3. If evidence is thin, still produce best-effort values and lower confidence to "low".
+4. Use Spanish for all content (the team operates in es-AR).
+5. Estimate hours are nominal: 1 story point ≈ 6h delivery + 2h QA.
+6. impactedFronts must pick from: Frontend, Backend, Magento, Billing, PNL, Themis,
+   Toolbox, Dataservice, CloudOps, DevOps, Payment Engine, QA, BA, SAD, DEV.
+
+Example of a VALID minimal response when evidence is thin:
+{
+  "summary": "Tarea sin evidencia suficiente — analisis estimado.",
+  "currentState": ["Sin detalle de estado actual en la evidencia.", "Se requiere relevamiento adicional."],
+  "proposedSolution": ["Relevar requerimientos con el equipo.", "Definir alcance antes de estimar."],
+  "impactedFronts": ["Backend"],
+  "roles": ["BA", "Tech Lead"],
+  "qaScenarios": ["Validar que el flujo principal no se rompa.", "Smoke test en ambiente de QA."],
+  "nextActions": ["Reunión de kick-off.", "Crear ticket de relevamiento."],
+  "complexity": { "level": "low", "rationale": "Evidencia insuficiente para determinar complejidad real." },
+  "estimate": { "deliveryHours": 8, "qaHours": 2, "confidence": "low" },
+  "diagrams": { "current": "Sin diagrama disponible.", "proposed": "Pendiente de relevamiento." },
+  "notes": "Analisis basado en evidencia parcial."
+}`;
 
 function buildPrompt(input: string, evidence: string): string {
   return [
@@ -293,60 +326,101 @@ export async function enrichWithLLM(
     };
   }
 
-  const result = await runDelegator(`${SYSTEM_PROMPT}\n\n${buildPrompt(input, evidence)}`);
-  if (!result.ok) {
+  // Retry loop: up to DELEGATION_MAX_RETRIES attempts when the LLM returns
+  // parseable JSON but with empty critical lists (partial-response problem).
+  let lastError: string | undefined;
+  let lastAnalysis: LLMAnalysis | null = null;
+
+  for (let attempt = 1; attempt <= DELEGATION_MAX_RETRIES; attempt += 1) {
+    // On retries, append a stern reminder about the empty arrays.
+    const retryHint =
+      attempt > 1
+        ? '\n\n\u26a0 RETRY: The previous response had empty arrays. You MUST populate ALL array fields (currentState, proposedSolution, roles, qaScenarios, nextActions) with at least 2 items each. Return ONLY the corrected JSON.'
+        : '';
+
+    const result = await runDelegator(
+      `${SYSTEM_PROMPT}\n\n${buildPrompt(input, evidence)}${retryHint}`,
+    );
+
+    if (!result.ok) {
+      lastError = result.error || 'agent-delegator failed';
+      break;
+    }
+
+    const parsed = extractJson(result.output);
+    if (!parsed) {
+      // Completely unparseable — no point retrying.
+      lastError = 'LLM response did not contain parseable JSON';
+      break;
+    }
+
+    const analysis: LLMAnalysis = {
+      summary: typeof parsed.summary === 'string' ? parsed.summary.slice(0, 200) : 'Analisis LLM',
+      currentState: ensureStringList(parsed.currentState),
+      proposedSolution: ensureStringList(parsed.proposedSolution),
+      impactedFronts: ensureStringList(parsed.impactedFronts),
+      roles: ensureStringList(parsed.roles),
+      qaScenarios: ensureStringList(parsed.qaScenarios),
+      nextActions: ensureStringList(parsed.nextActions),
+      complexity: {
+        level: ensureLevel((parsed.complexity as { level?: unknown })?.level),
+        rationale:
+          typeof (parsed.complexity as { rationale?: unknown })?.rationale === 'string'
+            ? (parsed.complexity as { rationale: string }).rationale
+            : '',
+      },
+      estimate: {
+        deliveryHours: ensureNumber(
+          (parsed.estimate as { deliveryHours?: unknown })?.deliveryHours,
+          8,
+        ),
+        qaHours: ensureNumber((parsed.estimate as { qaHours?: unknown })?.qaHours, 2),
+        confidence: ensureConfidence((parsed.estimate as { confidence?: unknown })?.confidence),
+      },
+      diagrams: {
+        current: typeof parsed.diagrams?.current === 'string' ? parsed.diagrams.current : '',
+        proposed: typeof parsed.diagrams?.proposed === 'string' ? parsed.diagrams.proposed : '',
+      },
+      notes: typeof parsed.notes === 'string' ? parsed.notes : undefined,
+    };
+
+    lastAnalysis = analysis;
+
+    if (isAnalysisComplete(analysis)) {
+      // Full response — cache and return.
+      writeCache(hash, analysis);
+      return { analysis, cached: false, durationMs: Date.now() - start, source: 'agent' };
+    }
+
+    // Partial response: log and retry if attempts remain.
+    const emptyFields = REQUIRED_LIST_FIELDS.filter(
+      (f) => !(analysis[f] as string[]).length,
+    ).join(', ');
+    console.warn(
+      `[gv-analytics] LLM attempt ${attempt}/${DELEGATION_MAX_RETRIES}: partial JSON — empty fields: ${emptyFields}`,
+    );
+  }
+
+  // All retries exhausted. If we got at least a partial analysis, cache and
+  // return it with a warning — better than the heuristic fallback.
+  if (lastAnalysis) {
+    writeCache(hash, lastAnalysis);
     return {
-      analysis: null,
+      analysis: lastAnalysis,
       cached: false,
       durationMs: Date.now() - start,
-      source: 'fallback',
-      error: result.error || 'agent-delegator failed',
+      source: 'agent',
+      error: 'LLM returned partial JSON after retries — some lists may be empty',
     };
   }
 
-  const parsed = extractJson(result.output);
-  if (!parsed) {
-    return {
-      analysis: null,
-      cached: false,
-      durationMs: Date.now() - start,
-      source: 'fallback',
-      error: 'LLM response did not contain parseable JSON',
-    };
-  }
-
-  const analysis: LLMAnalysis = {
-    summary: typeof parsed.summary === 'string' ? parsed.summary.slice(0, 200) : 'Analisis LLM',
-    currentState: ensureStringList(parsed.currentState),
-    proposedSolution: ensureStringList(parsed.proposedSolution),
-    impactedFronts: ensureStringList(parsed.impactedFronts),
-    roles: ensureStringList(parsed.roles),
-    qaScenarios: ensureStringList(parsed.qaScenarios),
-    nextActions: ensureStringList(parsed.nextActions),
-    complexity: {
-      level: ensureLevel((parsed.complexity as { level?: unknown })?.level),
-      rationale:
-        typeof (parsed.complexity as { rationale?: unknown })?.rationale === 'string'
-          ? ((parsed.complexity as { rationale: string }).rationale)
-          : '',
-    },
-    estimate: {
-      deliveryHours: ensureNumber(
-        (parsed.estimate as { deliveryHours?: unknown })?.deliveryHours,
-        8,
-      ),
-      qaHours: ensureNumber((parsed.estimate as { qaHours?: unknown })?.qaHours, 2),
-      confidence: ensureConfidence((parsed.estimate as { confidence?: unknown })?.confidence),
-    },
-    diagrams: {
-      current: typeof parsed.diagrams?.current === 'string' ? parsed.diagrams.current : '',
-      proposed: typeof parsed.diagrams?.proposed === 'string' ? parsed.diagrams.proposed : '',
-    },
-    notes: typeof parsed.notes === 'string' ? parsed.notes : undefined,
+  return {
+    analysis: null,
+    cached: false,
+    durationMs: Date.now() - start,
+    source: 'fallback',
+    error: lastError ?? 'agent-delegator failed',
   };
-
-  writeCache(hash, analysis);
-  return { analysis, cached: false, durationMs: Date.now() - start, source: 'agent' };
 }
 
 export function readCachedOnly(input: string, evidence: string): LLMAnalysis | null {

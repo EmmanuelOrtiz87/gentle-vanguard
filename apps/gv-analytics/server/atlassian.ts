@@ -426,17 +426,26 @@ async function gatherBitbucketEvidence(
 }
 
 async function gatherAtlassianEvidence(
-  input: string,
+  inputs: string[],
 ): Promise<{ evidence: AnalysisEvidence[]; text: string[] }> {
   const connection = loadConnection();
-  if (!connection || !/^https?:\/\//i.test(input)) return { evidence: [], text: [] };
-  const collectors = await Promise.allSettled([
-    gatherJiraEvidence(connection, input),
-    gatherConfluenceEvidence(connection, input),
-    gatherBitbucketEvidence(connection, input),
-  ]);
   const evidence: AnalysisEvidence[] = [];
   const text: string[] = [];
+  if (!connection) return { evidence, text };
+
+  // Process every URL-like input (the URL field and any URL pasted in the request).
+  const urls = inputs
+    .map((input) => input.trim())
+    .filter((input) => /^https?:\/\//i.test(input));
+  if (urls.length === 0) return { evidence, text };
+
+  const collectors = await Promise.allSettled(
+    urls.flatMap((input) => [
+      gatherJiraEvidence(connection, input),
+      gatherConfluenceEvidence(connection, input),
+      gatherBitbucketEvidence(connection, input),
+    ]),
+  );
   for (const result of collectors) {
     if (result.status === 'fulfilled') {
       evidence.push(...result.value.evidence);
@@ -623,9 +632,17 @@ export async function searchEvidence(query: string): Promise<AnalysisEvidence[]>
   return evidence;
 }
 
-export async function analyzeInput(mode: 'url' | 'request', input: string): Promise<AnalyticsReport> {  if (!input.trim()) throw new Error('El analisis necesita una URL o texto de pedido.');
+export async function analyzeInput(options: { url?: string; request?: string }): Promise<AnalyticsReport> {
+  const url = (options.url || '').trim();
+  const request = (options.request || '').trim();
+  if (!url && !request) throw new Error('El analisis necesita una URL o texto de pedido.');
 
-  const remote = await gatherAtlassianEvidence(input);
+  // The report's primary input is the request text (or the URL when no request is given).
+  const input = request || url;
+  const mode: 'url' | 'request' = url && !request ? 'url' : 'request';
+
+  // Gather evidence from BOTH the URL field and any URL pasted in the request.
+  const remote = await gatherAtlassianEvidence([url, request]);
   const evidence = [...buildEvidence(input), ...remote.evidence];
   const hasRemoteEvidence = remote.evidence.some((item) => item.source !== 'stack');
 

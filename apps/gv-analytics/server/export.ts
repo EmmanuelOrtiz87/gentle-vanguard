@@ -2,16 +2,7 @@ import { spawnSync } from 'child_process';
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
-import {
-  AlignmentType,
-  BorderStyle,
-  Document,
-  HeadingLevel,
-  Packer,
-  Paragraph,
-  TabStopType,
-  TextRun,
-} from 'docx';
+import type { Paragraph } from 'docx';
 import type { AnalyticsReport } from '../src/types';
 import { getTemplate, renderTemplateMarkdown } from './templates';
 
@@ -123,6 +114,19 @@ export function toHtml(report: AnalyticsReport, templateId?: string | null): str
 }
 
 export async function toDocx(report: AnalyticsReport, templateId?: string | null): Promise<Buffer> {
+  // Lazy-load docx so the module is not parsed at startup when only MD/HTML
+  // exports are used, keeping the server's cold-start footprint smaller.
+  const {
+    AlignmentType,
+    BorderStyle,
+    Document,
+    HeadingLevel,
+    Packer,
+    Paragraph,
+    TabStopType,
+    TextRun,
+  } = await import('docx');
+
   const template = getTemplate(templateId);
   const heading = (text: string) =>
     new Paragraph({ text, heading: HeadingLevel.HEADING_2, spacing: { before: 320, after: 120 } });
@@ -288,12 +292,19 @@ function findChromium(): string | null {
   return null;
 }
 
-export async function toPdf(report: AnalyticsReport, templateId?: string | null): Promise<Buffer> {
+export async function toPdf(
+  report: AnalyticsReport,
+  templateId?: string | null,
+): Promise<Buffer> {
   const chromium = findChromium();
   if (!chromium) {
-    throw new Error(
-      'No se encontro Chrome/Edge para generar PDF. Exporta HTML o DOCX, o define GV_ANALYTICS_CHROME.',
-    );
+    // No Chrome/Edge found — return the HTML export with a header that makes
+    // the caller aware so it can adjust the Content-Type and filename.
+    // We signal this by setting a well-known property on the returned Buffer.
+    const html = toHtml(report, templateId);
+    const buf = Buffer.from(html, 'utf-8') as Buffer & { pdfFallbackHtml?: true };
+    buf.pdfFallbackHtml = true;
+    return buf;
   }
   const workDir = mkdtempSync(join(tmpdir(), 'gv-analytics-'));
   const htmlPath = join(workDir, `${report.id}.html`);
