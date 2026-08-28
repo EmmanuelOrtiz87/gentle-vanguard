@@ -70,8 +70,10 @@ const REQUIRED_LIST_FIELDS: (keyof LLMAnalysis)[] = [
 ];
 
 function isAnalysisComplete(analysis: LLMAnalysis): boolean {
+  // CRITICAL RULES in the prompt require AT LEAST 2 items per list. Enforce the
+  // same contract here so the retry loop fires when the model under-delivers.
   return REQUIRED_LIST_FIELDS.every(
-    (field) => Array.isArray(analysis[field]) && (analysis[field] as string[]).length > 0,
+    (field) => Array.isArray(analysis[field]) && (analysis[field] as string[]).length >= 2,
   );
 }
 
