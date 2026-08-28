@@ -5,6 +5,7 @@ import {
   BookOpen,
   Braces,
   CheckCircle2,
+  Copy,
   Download,
   FileCode2,
   FileText,
@@ -500,8 +501,8 @@ function ReportView({ report }: { report: AnalyticsReport }) {
       <ReportSection title="Proximas acciones" items={report.nextActions} />
 
       <div className="diagram-grid">
-        <pre>{report.diagrams.current}</pre>
-        <pre>{report.diagrams.proposed}</pre>
+        <DiagramBlock label="Estado actual" content={report.diagrams.current} />
+        <DiagramBlock label="Estado propuesto" content={report.diagrams.proposed} />
       </div>
 
       <section className="evidence-list" id="evidencia">
@@ -545,6 +546,98 @@ function LLMProvenance({ report }: { report: AnalyticsReport }) {
       <strong>{labelMap[source]}</strong>
       <span>{detail}</span>
       {report.llmNotes ? <em>{report.llmNotes}</em> : null}
+    </div>
+  );
+}
+
+interface MermaidGlobal {
+  initialize: (cfg: unknown) => void;
+  render: (id: string, code: string) => Promise<{ svg: string }>;
+}
+
+async function loadMermaid(): Promise<MermaidGlobal | null> {
+  for (let attempt = 0; attempt < 40; attempt += 1) {
+    const candidate = (globalThis as { mermaid?: MermaidGlobal }).mermaid;
+    if (candidate && typeof candidate.render === 'function') return candidate;
+    await new Promise((r) => setTimeout(r, 250));
+  }
+  return null;
+}
+
+function DiagramBlock({ label, content }: { label: string; content: string }) {
+  const [copied, setCopied] = useState(false);
+  const [mermaidHtml, setMermaidHtml] = useState<string | null>(null);
+  const [mermaidError, setMermaidError] = useState<string | null>(null);
+  const text = content || 'Sin contenido.';
+  const isMermaid = /^\s*(```\s*)?(mermaid|graph|sequenceDiagram|flowchart|classDiagram|stateDiagram|erDiagram|gantt|pie|journey)/im.test(
+    text,
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!isMermaid) {
+      setMermaidHtml(null);
+      setMermaidError(null);
+      return () => undefined;
+    }
+    const renderMermaid = async () => {
+      try {
+        const mermaid = await loadMermaid();
+        if (!mermaid) throw new Error('Mermaid no cargo (offline o CDN bloqueado)');
+        mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
+        const { svg } = await mermaid.render(
+          `m-${Math.random().toString(36).slice(2, 8)}`,
+          text.replace(/^```(?:mermaid)?\s*|```$/g, '').trim(),
+        );
+        if (!cancelled) {
+          setMermaidHtml(svg);
+          setMermaidError(null);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setMermaidHtml(null);
+          setMermaidError(error instanceof Error ? error.message : String(error));
+        }
+      }
+    };
+    void renderMermaid();
+    return () => {
+      cancelled = true;
+    };
+  }, [text, isMermaid]);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  return (
+    <div className="diagram-block">
+      <div className="diagram-heading">
+        <span>
+          {label}
+          {isMermaid ? <em className="mermaid-tag">mermaid</em> : null}
+        </span>
+        <button type="button" onClick={() => void copy()} title="Copiar al portapapeles">
+          <Copy />
+          {copied ? 'Copiado' : 'Copiar'}
+        </button>
+      </div>
+      {mermaidHtml ? (
+        <div className="mermaid-render" dangerouslySetInnerHTML={{ __html: mermaidHtml }} />
+      ) : (
+        <pre>
+          {text}
+          {isMermaid && mermaidError ? (
+            <span className="mermaid-fallback"> (render mermaid: {mermaidError})</span>
+          ) : null}
+        </pre>
+      )}
     </div>
   );
 }

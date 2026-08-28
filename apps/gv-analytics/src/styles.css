@@ -763,12 +763,56 @@ form input:focus {
   gap: 12px;
   margin: 22px 0;
 }
-.diagram-grid pre {
-  margin: 0;
+.diagram-block {
   background: rgba(10, 14, 23, 0.92);
   border: 1px solid rgba(167, 139, 250, 0.25);
   border-radius: 14px;
-  padding: 16px 18px;
+  overflow: hidden;
+}
+.diagram-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--gv-glass-border);
+  background: rgba(15, 23, 42, 0.55);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gv-muted);
+  font-weight: 600;
+}
+.diagram-heading button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--gv-glass-border);
+  color: var(--gv-muted);
+  font-family: inherit;
+  font-size: 11.5px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+  padding: 4px 9px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.diagram-heading button:hover {
+  color: var(--gv-text);
+  background: rgba(31, 41, 55, 0.7);
+}
+.diagram-heading button svg {
+  width: 13px;
+  height: 13px;
+}
+.diagram-block pre {
+  margin: 0;
+  background: linear-gradient(180deg, rgba(167, 139, 250, 0.05), rgba(34, 211, 238, 0.03));
+  border: 0;
+  border-radius: 0;
+  padding: 14px 18px;
   font-family: var(--mono);
   font-size: 12.5px;
   line-height: 1.65;
@@ -776,6 +820,36 @@ form input:focus {
   word-break: break-word;
   color: var(--gv-text);
   min-height: 96px;
+}
+.mermaid-render {
+  padding: 14px 18px;
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(167, 139, 250, 0.05), rgba(34, 211, 238, 0.03));
+}
+.mermaid-render svg {
+  max-width: 100%;
+  height: auto;
+}
+.mermaid-fallback {
+  display: block;
+  margin-top: 8px;
+  color: var(--gv-muted);
+  font-size: 11px;
+  font-style: italic;
+}
+.mermaid-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 7px;
+  font-size: 9.5px;
+  font-style: normal;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, #a78bfa, #22d3ee);
+  color: #0a0e17;
+  border-radius: 10px;
+  font-weight: 700;
+  vertical-align: middle;
 }
 
 /* ---------- Evidencia ---------- */
