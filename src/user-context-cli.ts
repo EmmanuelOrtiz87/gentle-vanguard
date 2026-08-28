@@ -48,7 +48,7 @@ import {
   listDomainTemplates,
   getDomainsBySkill,
   type DomainId,
-} from './domain-templates.js';
+} from './sdd/domain-templates.js';
 
 // ─── CLI Commands ─────────────────────────────────────────────────────────
 

@@ -2,7 +2,7 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 
 type PhaseName =
   'INIT' | 'EXPLORE' | 'PROPOSE' | 'SPEC' | 'TASKS' | 'DESIGN' | 'APPLY' | 'VERIFY' | 'ARCHIVE';
@@ -147,7 +147,7 @@ function parseArgs(): PipelineOptions {
         console.log(`SDD Pipeline — Spec-Driven Development Lifecycle Orchestrator
 
 Usage:
-  npx tsx src/sdd-pipeline.ts --feature <name> --description <desc> [options]
+  npx tsx src/sdd/sdd-pipeline.ts --feature <name> --description <desc> [options]
 
 Options:
   --feature, -f <name>        Feature name (required)
@@ -160,8 +160,8 @@ Phases:
   ${PHASE_ORDER.join(', ')}
 
 Examples:
-  npx tsx src/sdd-pipeline.ts --feature auth-login --description "JWT based authentication"
-  npx tsx src/sdd-pipeline.ts --feature auth-login --description "JWT auth" --phase DESIGN
+  npx tsx src/sdd/sdd-pipeline.ts --feature auth-login --description "JWT based authentication"
+  npx tsx src/sdd/sdd-pipeline.ts --feature auth-login --description "JWT auth" --phase DESIGN
 `);
         process.exit(0);
         break;

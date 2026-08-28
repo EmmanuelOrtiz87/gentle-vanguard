@@ -333,10 +333,10 @@
       "stage": "governance",
       "enforced": false,
       "enforcer": "not enforced — script may not exist",
-      "tool": "src/check-sdd-gate.ts",
+      "tool": "src/sdd/check-sdd-gate.ts",
       "required": false,
       "description": "Validate SDD spec status for feature branches",
-      "command": "src/check-sdd-gate.ts",
+      "command": "src/sdd/check-sdd-gate.ts",
       "failureAction": "block"
     },
     {

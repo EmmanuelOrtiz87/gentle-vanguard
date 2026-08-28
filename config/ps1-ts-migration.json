@@ -344,8 +344,8 @@
     },
     {
       "id": "check-sdd-gate",
-      "script": "src/check-sdd-gate.ts",
-      "target": "src/check-sdd-gate.ts",
+      "script": "src/sdd/check-sdd-gate.ts",
+      "target": "src/sdd/check-sdd-gate.ts",
       "priority": "high",
       "status": "implemented",
       "migratedAt": "2026-07-21"
@@ -795,7 +795,7 @@
     "src/final-resolution.ts",
     "src/knowledge-base-manager.ts",
     "src/knowledge-base-sync.ts",
-    "src/check-sdd-gate.ts",
+    "src/sdd/check-sdd-gate.ts",
     "src/check-security.ts",
     "src/lockfile-lint-pre-commit.ts",
     "src/npm-audit-pre-push.ts",
@@ -803,7 +803,7 @@
     "src/pre-process-input.ts",
     "src/system-check.ts",
     "src/team-orchestrator.ts",
-    "src/sdd-pipeline.ts",
+    "src/sdd/sdd-pipeline.ts",
     "src/sia-orchestrator.ts",
     "src/bootstrap.ts",
     "src/bootstrap-machine.ts",

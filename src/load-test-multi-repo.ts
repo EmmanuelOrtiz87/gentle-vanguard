@@ -114,7 +114,7 @@ const OPERATION_MAP: Record<string, OperationSpec> = {
     args: ['--task', 'code review', '--topn', '3'],
   },
   'sdd-gate': {
-    script: 'src/check-sdd-gate.ts',
+    script: 'src/sdd/check-sdd-gate.ts',
     args: [],
     inRepo: true,
   },

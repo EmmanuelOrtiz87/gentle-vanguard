@@ -533,7 +533,7 @@ export function buildReleaseReport(gates: GateProfile[]): ReleaseReport {
 
 export function selectReleaseGates(skipTests: boolean): GateSpec[] {
   const specs: GateSpec[] = [
-    { name: 'Homologation Gate', cmd: 'npx', args: ['tsx', 'src/check-sdd-gate.ts'] },
+    { name: 'Homologation Gate', cmd: 'npx', args: ['tsx', 'src/sdd/check-sdd-gate.ts'] },
     {
       name: 'RDD Release Gate',
       cmd: 'npx',

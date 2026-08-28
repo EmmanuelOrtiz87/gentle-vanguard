@@ -3,7 +3,7 @@
 import { existsSync, readFileSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 
 function execGit(args: string[], cwd: string = process.cwd()): string {
   const result = runSync('git', args, { cwd });

@@ -25,7 +25,7 @@ import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { recommend } from './recommend-agent.js';
 import { delegateWithGuardrail, compressDelegationLossless } from './agent-delegator.js';
-import { resolveAgentTier } from './domain-tier.js';
+import { resolveAgentTier } from './sdd/domain-tier.js';
 import {
   DatabaseManager,
   DEFAULT_TENANT_ID,

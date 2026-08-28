@@ -165,7 +165,7 @@ function checkSkillFactory() {
 
 function checkSDD() {
   header('SDD Pipeline');
-  writeCheck('SDD Pipeline (TS)', exists('src/sdd-pipeline.ts'), 'src/sdd-pipeline.ts');
+  writeCheck('SDD Pipeline (TS)', exists('src/sdd/sdd-pipeline.ts'), 'src/sdd/sdd-pipeline.ts');
 }
 
 function checkPnpm() {

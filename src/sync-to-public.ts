@@ -284,7 +284,7 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
     'src/cross-workspace-validator.ts',
     'src/enforce-error-budget.ts',
     'src/performance-slo-monitor.ts',
-    'src/check-sdd-gate.ts',
+    'src/sdd/check-sdd-gate.ts',
     'src/generate-sbom.ts',
     'src/generate-management-report.ts',
     'scripts/validation/validate-complete-system.ts',

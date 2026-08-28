@@ -10,9 +10,9 @@
  * at fastCheap.
  *
  * Usage:
- *   npx tsx src/domain-tier.ts --domain finance     # { tier: 'premium', ... }
- *   npx tsx src/domain-tier.ts --list               # all tiers
- *   npx tsx src/domain-tier.ts --agent finance-agent # resolve from agent name
+ *   npx tsx src/sdd/domain-tier.ts --domain finance     # { tier: 'premium', ... }
+ *   npx tsx src/sdd/domain-tier.ts --list               # all tiers
+ *   npx tsx src/sdd/domain-tier.ts --agent finance-agent # resolve from agent name
  *
  * Import:
  *   import { getDomainTier, resolveAgentTier } from './domain-tier.js';
