@@ -1456,6 +1456,130 @@ form input:focus {
   padding: 18px 4px;
 }
 
+/* ---------- History view: bulk actions + confirm + pagination ---------- */
+.secondary-action.ghost {
+  border-color: rgba(156, 163, 175, 0.35);
+  color: var(--gv-muted);
+}
+.secondary-action.ghost:hover:not(:disabled) {
+  background: rgba(156, 163, 175, 0.1);
+}
+.danger-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 13.5px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  color: var(--gv-red);
+  border: 1.5px solid rgba(238, 109, 117, 0.5);
+  background: none;
+  transition: all 0.12s;
+}
+.danger-action:hover:not(:disabled) {
+  background: rgba(238, 109, 117, 0.1);
+  transform: translateY(-1px);
+}
+.danger-action:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.danger-action.ghost {
+  border-color: rgba(238, 109, 117, 0.3);
+}
+.danger-action svg {
+  width: 16px;
+  height: 16px;
+}
+.history-bulk-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.history-selection-count {
+  font-size: 12.5px;
+  color: var(--gv-muted);
+  flex: 1 1 auto;
+}
+.confirm-inline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  border: 1.5px solid rgba(238, 109, 117, 0.45);
+  border-radius: 12px;
+  background: rgba(238, 109, 117, 0.08);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--gv-text);
+}
+.confirm-inline svg {
+  width: 18px;
+  height: 18px;
+  color: var(--gv-red);
+  flex-shrink: 0;
+}
+.confirm-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+.history-check-cell {
+  width: 40px;
+  text-align: center;
+}
+.history-check-cell input[type='checkbox'] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--gv-cyan);
+  cursor: pointer;
+}
+.history-date-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--gv-muted);
+  font-weight: 600;
+}
+.history-date-filter input[type='date'] {
+  padding: 7px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--gv-glass-border);
+  background: var(--gv-glass);
+  color: var(--gv-text);
+  font-family: inherit;
+  font-size: 12.5px;
+  color-scheme: dark;
+}
+:root[data-theme='light'] .history-date-filter input[type='date'] {
+  color-scheme: light;
+}
+.history-sort {
+  white-space: nowrap;
+}
+.history-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 14px;
+}
+.history-page-info {
+  font-size: 12.5px;
+  color: var(--gv-muted);
+  font-family: var(--mono);
+  min-width: 110px;
+  text-align: center;
+}
+
 @media (max-width: 860px) {
   .config-grid {
     grid-template-columns: 1fr;

@@ -123,12 +123,18 @@ async function freePort(port: number): Promise<void> {
   }
 }
 
-function spawnDetached(scope: string, script: string, env: Record<string, string>, pidFile: string): number {
+function spawnDetached(
+  scope: string,
+  script: string,
+  env: Record<string, string>,
+  pidFile: string,
+  cwd: string = ROOT,
+): number {
   const child = spawn(
     process.execPath,
     ['--import', 'tsx', script],
     {
-      cwd: ROOT,
+      cwd,
       env: { ...process.env, ...env },
       stdio: 'ignore',
       detached: true,
@@ -176,11 +182,15 @@ async function main(): Promise<void> {
 
   if (!NO_UI) {
     const viteScript = join(APP_DIR, 'node_modules', 'vite', 'bin', 'vite.js');
+    // cwd must be APP_DIR: vite resolves vite.config.ts (port 5174, root=dist
+    // proxy targets) relative to the process cwd. With the repo root as cwd it
+    // fell back to defaults (port 5173, wrong root) and the UI never came up.
     spawnDetached(
       'vite',
       viteScript,
       { GV_ANALYTICS_PORT: String(PORT) },
       VITE_PID,
+      APP_DIR,
     );
   }
 

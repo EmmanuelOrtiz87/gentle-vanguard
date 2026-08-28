@@ -2,9 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   Activity,
   AlertTriangle,
+  ArrowDown,
+  ArrowUp,
   BookOpen,
   Braces,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   Copy,
   Download,
   FileCode2,
@@ -20,6 +24,8 @@ import {
   Settings,
   ShieldCheck,
   Sun,
+  Trash2,
+  X,
 } from 'lucide-react';
 import type { AnalyticsReport, ConnectionForm, ConnectionStatus } from './types';
 import { useT, LocaleSwitcher } from './i18n';
@@ -87,7 +93,8 @@ export function App() {
   };
 
   const loadHistory = async () => {
-    const next = await readJson<{ reports: ReportListItem[] }>('/api/reports?limit=5');
+    // Full window (server caps at 100): the HistoryView paginates client-side.
+    const next = await readJson<{ reports: ReportListItem[] }>('/api/reports?limit=100');
     setHistory(next.reports);
   };
 
@@ -172,6 +179,13 @@ export function App() {
     setTestResult(null);
   };
 
+  // Close the edit form discarding any change and return to the summary view.
+  const cancelEdit = () => {
+    setForm(emptyForm);
+    setEditingConnection(false);
+    setTestResult(null);
+  };
+
   const analyze = async () => {
     setBusy(true);
     setMessage(null);
@@ -194,6 +208,37 @@ export function App() {
     setMessage(null);
     try {
       setReport(await readJson<AnalyticsReport>(`/api/reports/${encodeURIComponent(id)}`));
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : String(error));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const deleteReportById = async (id: string) => {
+    setBusy(true);
+    setMessage(null);
+    try {
+      await readJson(`/api/reports/${encodeURIComponent(id)}`, { method: 'DELETE' });
+      if (report?.id === id) setReport(null);
+      await loadHistory();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : String(error));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const deleteReportsBulk = async (ids: string[], all = false) => {
+    setBusy(true);
+    setMessage(null);
+    try {
+      await readJson('/api/reports/bulk-delete', {
+        method: 'POST',
+        body: JSON.stringify(all ? { all: true } : { ids }),
+      });
+      if (all || ids.includes(report?.id || '')) setReport(null);
+      await loadHistory();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : String(error));
     } finally {
@@ -400,6 +445,7 @@ export function App() {
             onSave={saveConnection}
             onTest={testConnection}
             onEdit={editConnection}
+            onCancelEdit={cancelEdit}
             onRevalidate={loadStatus}
           />
         )}
@@ -411,6 +457,9 @@ export function App() {
             busy={busy}
             onOpen={openReport}
             onExport={exportReport}
+            onDelete={deleteReportById}
+            onDeleteBulk={deleteReportsBulk}
+            notify={setMessage}
           />
         )}
       </main>
@@ -431,6 +480,7 @@ interface ConfigViewProps {
   onSave: (event: React.FormEvent) => Promise<void>;
   onTest: () => Promise<void>;
   onEdit: () => void;
+  onCancelEdit: () => void;
   onRevalidate: () => Promise<void>;
 }
 
@@ -447,6 +497,7 @@ function ConfigView({
   onSave,
   onTest,
   onEdit,
+  onCancelEdit,
   onRevalidate,
 }: ConfigViewProps) {
   const { tt } = useT();
@@ -548,6 +599,18 @@ function ConfigView({
             </fieldset>
 
             <div className="connection-actions">
+              {connected && editingConnection ? (
+                <button
+                  className="secondary-action ghost"
+                  type="button"
+                  onClick={onCancelEdit}
+                  disabled={busy}
+                  title={tt('conn.cancelEdit')}
+                >
+                  <X />
+                  {tt('conn.cancel')}
+                </button>
+              ) : null}
               <button
                 className="secondary-action"
                 type="button"
@@ -596,19 +659,43 @@ interface HistoryViewProps {
   busy: boolean;
   onOpen: (id: string) => Promise<void>;
   onExport: (format: 'md' | 'html' | 'docx' | 'pdf', id?: string) => void;
+  onDelete: (id: string) => Promise<void>;
+  onDeleteBulk: (ids: string[], all?: boolean) => Promise<void>;
+  notify: (message: string | null) => void;
 }
 
-function HistoryView({ history, activeId, busy, onOpen, onExport }: HistoryViewProps) {
+const PAGE_SIZE = 10;
+
+function toLocalInputDate(iso: string): string {
+  // ISO → YYYY-MM-DD in local time, for <input type="date"> comparisons.
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '';
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+function HistoryView({ history, activeId, busy, onOpen, onExport, onDelete, onDeleteBulk, notify }: HistoryViewProps) {
   const { tt } = useT();
   const [query, setQuery] = useState('');
   const [modeFilter, setModeFilter] = useState('');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
+  const [sortDesc, setSortDesc] = useState(true);
+  const [page, setPage] = useState(1);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [confirming, setConfirming] = useState<'none' | 'selected' | 'all'>('none');
 
   const modes = useMemo(() => Array.from(new Set(history.map((item) => item.mode))), [history]);
 
+  // Server list is already created_at DESC; sort toggles direction, filters
+  // narrow by text/mode/date-range. Date range is inclusive on both ends.
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return history.filter((item) => {
+    const rows = history.filter((item) => {
       if (modeFilter && item.mode !== modeFilter) return false;
+      const day = toLocalInputDate(item.createdAt);
+      if (dateFrom && (!day || day < dateFrom)) return false;
+      if (dateTo && (!day || day > dateTo)) return false;
       if (!q) return true;
       return (
         item.summary.toLowerCase().includes(q) ||
@@ -616,7 +703,66 @@ function HistoryView({ history, activeId, busy, onOpen, onExport }: HistoryViewP
         item.input.toLowerCase().includes(q)
       );
     });
-  }, [history, query, modeFilter]);
+    return sortDesc ? rows : [...rows].reverse();
+  }, [history, query, modeFilter, dateFrom, dateTo, sortDesc]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const pageRows = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+  useEffect(() => {
+    setPage(1);
+  }, [query, modeFilter, dateFrom, dateTo, sortDesc]);
+
+  useEffect(() => {
+    // Drop selections that no longer exist after a delete/reload.
+    setSelected((prev) => {
+      const alive = new Set(history.map((item) => item.id));
+      const next = new Set([...prev].filter((id) => alive.has(id)));
+      return next.size === prev.size ? prev : next;
+    });
+  }, [history]);
+
+  const allPageSelected = pageRows.length > 0 && pageRows.every((item) => selected.has(item.id));
+  const toggleAllPage = () => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (allPageSelected) pageRows.forEach((item) => next.delete(item.id));
+      else pageRows.forEach((item) => next.add(item.id));
+      return next;
+    });
+  };
+  const toggleOne = (id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const doDeleteSelected = async () => {
+    const ids = [...selected];
+    setConfirming('none');
+    await onDeleteBulk(ids);
+    setSelected(new Set());
+    notify(tt('history.deletedN').replace('{n}', String(ids.length)));
+  };
+
+  const doDeleteAll = async () => {
+    setConfirming('none');
+    await onDeleteBulk([], true);
+    setSelected(new Set());
+    notify(tt('history.deletedAll'));
+  };
+
+  const resetFilters = () => {
+    setQuery('');
+    setModeFilter('');
+    setDateFrom('');
+    setDateTo('');
+    setSortDesc(true);
+  };
 
   return (
     <section className="history-view">
@@ -624,7 +770,11 @@ function HistoryView({ history, activeId, busy, onOpen, onExport }: HistoryViewP
         <History className="icon" />
         <div>
           <h2>{tt('history.title')}</h2>
-          <p>{tt('history.subtitle')}</p>
+          <p>
+            {tt('history.subtitleCount')
+              .replace('{shown}', String(filtered.length))
+              .replace('{total}', String(history.length))}
+          </p>
         </div>
       </div>
 
@@ -649,6 +799,39 @@ function HistoryView({ history, activeId, busy, onOpen, onExport }: HistoryViewP
             </option>
           ))}
         </select>
+        <label className="history-date-filter">
+          <span>{tt('history.from')}</span>
+          <input
+            type="date"
+            value={dateFrom}
+            max={dateTo || undefined}
+            onChange={(event) => setDateFrom(event.target.value)}
+            aria-label={tt('history.from')}
+          />
+        </label>
+        <label className="history-date-filter">
+          <span>{tt('history.to')}</span>
+          <input
+            type="date"
+            value={dateTo}
+            min={dateFrom || undefined}
+            onChange={(event) => setDateTo(event.target.value)}
+            aria-label={tt('history.to')}
+          />
+        </label>
+        <button
+          type="button"
+          className="secondary-action history-sort"
+          onClick={() => setSortDesc((d) => !d)}
+          title={tt('history.sortToggle')}
+          aria-label={tt('history.sortToggle')}
+        >
+          {sortDesc ? <ArrowDown /> : <ArrowUp />}
+          {sortDesc ? tt('history.newestFirst') : tt('history.oldestFirst')}
+        </button>
+        <button type="button" className="secondary-action ghost" onClick={resetFilters}>
+          {tt('history.resetFilters')}
+        </button>
       </div>
 
       {history.length === 0 ? (
@@ -656,62 +839,174 @@ function HistoryView({ history, activeId, busy, onOpen, onExport }: HistoryViewP
       ) : filtered.length === 0 ? (
         <p className="history-empty">{tt('history.noResults')}</p>
       ) : (
-        <div className="history-table-wrap">
-          <table className="history-table">
-            <thead>
-              <tr>
-                <th>{tt('history.columnDate')}</th>
-                <th>{tt('history.columnTime')}</th>
-                <th>{tt('history.columnTitle')}</th>
-                <th>{tt('history.columnMode')}</th>
-                <th>{tt('history.columnId')}</th>
-                <th>{tt('history.columnExport')}</th>
-                <th aria-label={tt('history.open')} />
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((item) => {
-                const date = new Date(item.createdAt);
-                return (
-                  <tr key={item.id} className={activeId === item.id ? 'active' : ''}>
-                    <td>{date.toLocaleDateString()}</td>
-                    <td>{date.toLocaleTimeString()}</td>
-                    <td className="history-title-cell" title={item.input.slice(0, 200)}>
-                      {item.summary || item.id}
-                    </td>
-                    <td>
-                      <span className="history-mode-badge">
-                        {item.mode === 'url' ? tt('analysis.url') : item.mode === 'request' ? tt('analysis.request') : item.mode}
-                      </span>
-                    </td>
-                    <td className="history-id-cell">{item.id}</td>
-                    <td>
-                      <button
-                        className="secondary-action history-open"
-                        onClick={() => onExport('pdf', item.id)}
-                        title={tt('history.export')}
-                      >
-                        <Download />
-                        {tt('history.export')}
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        className="secondary-action history-open"
-                        onClick={() => void onOpen(item.id)}
-                        disabled={busy}
-                        title={tt('history.open')}
-                      >
-                        <Search />
-                        {tt('history.open')}
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+        <>
+          <div className="history-bulk-bar">
+            <span className="history-selection-count">
+              {selected.size > 0
+                ? tt('history.selectedN').replace('{n}', String(selected.size))
+                : tt('history.selectHint')}
+            </span>
+            {selected.size > 0 && (
+              <button
+                className="danger-action"
+                disabled={busy}
+                onClick={() => setConfirming('selected')}
+              >
+                <Trash2 />
+                {tt('history.deleteSelected').replace('{n}', String(selected.size))}
+              </button>
+            )}
+            <button
+              className="danger-action ghost"
+              disabled={busy || history.length === 0}
+              onClick={() => setConfirming('all')}
+            >
+              <Trash2 />
+              {tt('history.deleteAll')}
+            </button>
+          </div>
+
+          {confirming !== 'none' && (
+            <div className="confirm-inline" role="alertdialog">
+              <AlertTriangle />
+              <span>
+                {confirming === 'all'
+                  ? tt('history.confirmAll')
+                  : tt('history.confirmSelected').replace('{n}', String(selected.size))}
+              </span>
+              <div className="confirm-actions">
+                <button
+                  className="danger-action"
+                  disabled={busy}
+                  onClick={() => void (confirming === 'all' ? doDeleteAll() : doDeleteSelected())}
+                >
+                  <Trash2 />
+                  {tt('history.confirmYes')}
+                </button>
+                <button
+                  className="secondary-action"
+                  onClick={() => setConfirming('none')}
+                  disabled={busy}
+                >
+                  <X />
+                  {tt('history.confirmNo')}
+                </button>
+              </div>
+            </div>
+          )}
+
+          <div className="history-table-wrap">
+            <table className="history-table">
+              <thead>
+                <tr>
+                  <th className="history-check-cell">
+                    <input
+                      type="checkbox"
+                      checked={allPageSelected}
+                      onChange={toggleAllPage}
+                      aria-label={tt('history.selectAllPage')}
+                      title={tt('history.selectAllPage')}
+                    />
+                  </th>
+                  <th>{tt('history.columnDate')}</th>
+                  <th>{tt('history.columnTime')}</th>
+                  <th>{tt('history.columnTitle')}</th>
+                  <th>{tt('history.columnMode')}</th>
+                  <th>{tt('history.columnId')}</th>
+                  <th>{tt('history.columnExport')}</th>
+                  <th aria-label={tt('history.open')} />
+                  <th aria-label={tt('history.delete')} />
+                </tr>
+              </thead>
+              <tbody>
+                {pageRows.map((item) => {
+                  const date = new Date(item.createdAt);
+                  return (
+                    <tr key={item.id} className={activeId === item.id ? 'active' : ''}>
+                      <td className="history-check-cell">
+                        <input
+                          type="checkbox"
+                          checked={selected.has(item.id)}
+                          onChange={() => toggleOne(item.id)}
+                          aria-label={`${tt('history.selectRow')} ${item.id}`}
+                        />
+                      </td>
+                      <td>{date.toLocaleDateString()}</td>
+                      <td>{date.toLocaleTimeString()}</td>
+                      <td className="history-title-cell" title={item.input.slice(0, 200)}>
+                        {item.summary || item.id}
+                      </td>
+                      <td>
+                        <span className="history-mode-badge">
+                          {item.mode === 'url' ? tt('analysis.url') : item.mode === 'request' ? tt('analysis.request') : item.mode}
+                        </span>
+                      </td>
+                      <td className="history-id-cell">{item.id}</td>
+                      <td>
+                        <button
+                          className="secondary-action history-open"
+                          onClick={() => onExport('pdf', item.id)}
+                          title={tt('history.export')}
+                        >
+                          <Download />
+                          {tt('history.export')}
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          className="secondary-action history-open"
+                          onClick={() => void onOpen(item.id)}
+                          disabled={busy}
+                          title={tt('history.open')}
+                        >
+                          <Search />
+                          {tt('history.open')}
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          className="danger-action history-open"
+                          onClick={() => void onDelete(item.id)}
+                          disabled={busy}
+                          title={tt('history.delete')}
+                          aria-label={`${tt('history.delete')} ${item.id}`}
+                        >
+                          <Trash2 />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="history-pagination">
+            <button
+              className="secondary-action"
+              disabled={safePage <= 1 || busy}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              aria-label={tt('history.prevPage')}
+            >
+              <ChevronLeft />
+              {tt('history.prevPage')}
+            </button>
+            <span className="history-page-info">
+              {tt('history.pageOf')
+                .replace('{page}', String(safePage))
+                .replace('{total}', String(totalPages))}
+            </span>
+            <button
+              className="secondary-action"
+              disabled={safePage >= totalPages || busy}
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              aria-label={tt('history.nextPage')}
+            >
+              {tt('history.nextPage')}
+              <ChevronRight />
+            </button>
+          </div>
+        </>
       )}
     </section>
   );

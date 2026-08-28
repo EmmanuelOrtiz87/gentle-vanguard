@@ -3,7 +3,7 @@ import { readFileSync, statSync } from 'fs';
 import { extname, join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { analyzeInput, configureConnection, getConnectionStatus, testConnectionForm } from './atlassian';
-import { getReport, listReports, saveReport } from './reports';
+import { deleteAllReports, deleteReport, deleteReports, getReport, listReports, saveReport } from './reports';
 import { toDocx, toHtml, toMarkdown, toPdf, type ExportFormat } from './export';
 import { recordMetric, summarize as summarizeMetrics } from './metrics';
 import {
@@ -154,8 +154,31 @@ async function routeApi(
     if (req.method === 'GET' && pathname === '/api/reports') {
       const url = new URL(req.url || '/', `http://${req.headers.host || '127.0.0.1'}`);
       const limit = Number(url.searchParams.get('limit') || 5);
-      const safeLimit = Math.min(Math.max(Number.isFinite(limit) ? limit : 5, 1), 25);
+      const safeLimit = Math.min(Math.max(Number.isFinite(limit) ? limit : 5, 1), 100);
       sendJson(res, 200, { reports: listReports(safeLimit) });
+      return;
+    }
+    if (req.method === 'DELETE' && /^\/api\/reports\/[^/]+$/.test(pathname)) {
+      const id = decodeURIComponent(pathname.split('/')[3]);
+      if (!deleteReport(id)) {
+        sendJson(res, 404, { error: 'Report not found' });
+        return;
+      }
+      sendJson(res, 200, { deleted: 1, id });
+      return;
+    }
+    if (req.method === 'POST' && pathname === '/api/reports/bulk-delete') {
+      const body = (await readBody(req)) as { ids?: unknown; all?: unknown };
+      if (body.all === true) {
+        const deleted = deleteAllReports();
+        sendJson(res, 200, { deleted, all: true });
+        return;
+      }
+      const ids = Array.isArray(body.ids)
+        ? body.ids.filter((id): id is string => typeof id === 'string' && id.length > 0)
+        : [];
+      const deleted = deleteReports(ids);
+      sendJson(res, 200, { deleted, requested: ids.length });
       return;
     }
     if (req.method === 'GET' && /^\/api\/reports\/[^/]+$/.test(pathname)) {
