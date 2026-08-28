@@ -1,27 +1,19 @@
 {
-  "generated_at": "2026-08-27T15:13:38.364Z",
+  "generated_at": "2026-08-28T04:55:44.322Z",
   "period": "2026-07",
   "days": 28,
   "totals": {
-    "input": 630705169,
-    "output": 9914047,
-    "total": 640619216,
+    "input": 631503053,
+    "output": 9839892,
+    "total": 641342945,
     "cost": 10.535256299999999
   },
   "daily_avg": {
-    "input": 22525185,
-    "output": 354073,
-    "total": 22879258
+    "input": 22553680,
+    "output": 351425,
+    "total": 22905105
   },
   "by_day": [
-    {
-      "day": "2026-07-29",
-      "input": 968145,
-      "output": 242418,
-      "total": 1210563,
-      "cost": 0,
-      "sessions": 21
-    },
     {
       "day": "2026-07-30",
       "input": 78776447,
@@ -232,11 +224,19 @@
     },
     {
       "day": "2026-08-27",
-      "input": 1211306,
-      "output": 23224,
-      "total": 1234530,
+      "input": 2689005,
+      "output": 188565,
+      "total": 2877570,
       "cost": 0,
-      "sessions": 10
+      "sessions": 11
+    },
+    {
+      "day": "2026-08-28",
+      "input": 288330,
+      "output": 2922,
+      "total": 291252,
+      "cost": 0,
+      "sessions": 3
     }
   ],
   "by_model": [
@@ -249,9 +249,9 @@
     },
     {
       "model": "deepseek-v4-flash-free",
-      "input": 90824403,
-      "output": 5659204,
-      "total": 96483607,
+      "input": 90014203,
+      "output": 5417731,
+      "total": 95431934,
       "cost": 0
     },
     {
@@ -277,9 +277,9 @@
     },
     {
       "model": "big-pickle",
-      "input": 7473058,
-      "output": 679373,
-      "total": 8152431,
+      "input": 8950757,
+      "output": 844714,
+      "total": 9795471,
       "cost": 2.248670159999999
     },
     {
@@ -298,16 +298,16 @@
     },
     {
       "model": "codex",
-      "input": 470007,
-      "output": 1532,
-      "total": 471539,
+      "input": 629327,
+      "output": 4042,
+      "total": 633369,
       "cost": 0
     },
     {
       "model": "MiniMax-M3",
-      "input": 367982,
-      "output": 18069,
-      "total": 386051,
+      "input": 372863,
+      "output": 18447,
+      "total": 391310,
       "cost": 0
     },
     {
@@ -318,18 +318,25 @@
       "cost": 0.63429368
     },
     {
-      "model": "qwen2.5-coder-7b-instruct",
-      "input": 210594,
-      "output": 1304,
-      "total": 211898,
-      "cost": 0
-    },
-    {
       "model": "gemma-4-26b-a4b-it",
       "input": 158078,
       "output": 13371,
       "total": 171449,
       "cost": 0.23710080000000006
+    },
+    {
+      "model": "GLM-5.3-Flash",
+      "input": 124129,
+      "output": 34,
+      "total": 124163,
+      "cost": 0
+    },
+    {
+      "model": "qwen2.5-coder-7b-instruct",
+      "input": 52649,
+      "output": 359,
+      "total": 53008,
+      "cost": 0
     },
     {
       "model": "gpt-4o",

@@ -51,6 +51,16 @@
       "enabled": true,
       "autoStart": false,
       "description": "Sequential thinking chains: think_sequential, get_thought_chain, list_thought_chains, get_thought_summary"
+    },
+    {
+      "name": "gv-analytics-atlassian",
+      "type": "user",
+      "transport": "stdio",
+      "command": "node",
+      "args": ["--import", "tsx", "apps/gv-analytics/server/mcp.ts"],
+      "enabled": true,
+      "autoStart": false,
+      "description": "Gentle-Vanguard Analytics Atlassian MCP: connection status and delivery analysis"
     }
   ]
 }
