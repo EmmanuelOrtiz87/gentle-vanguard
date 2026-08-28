@@ -107,6 +107,10 @@ const SIGNATURES: Record<Exclude<FailureCategory, 'unknown'>, RegExp[]> = {
     // failure. Route it to config so it gets a corrective action.
     /unknown agent/i,
     /agent.*not (found|registered|configured)/i,
+    // Real learning (2026-08-28): spawn ENOENT means a required command/script
+    // is missing from the environment — a config/environment error, not network.
+    /spawn .*enoent/i,
+    /(command|script|binary|executable).*not found/i,
   ],
   network: [
     /ECONNREFUSED/i,
@@ -153,6 +157,7 @@ const SIGNATURES: Record<Exclude<FailureCategory, 'unknown'>, RegExp[]> = {
     /unauthorized/i,
     /forbidden/i,
     /permission denied/i,
+    /eacces/i,
   ],
   resource: [
     /token budget/i,
@@ -162,6 +167,11 @@ const SIGNATURES: Record<Exclude<FailureCategory, 'unknown'>, RegExp[]> = {
     /heap.*(limit|exceeded)/i,
     /too many (open files|requests)/i,
     /resource.*(exhausted|limit)/i,
+    // Real learning (2026-08-28): disk/port exhaustion are resource failures.
+    /enospc/i,
+    /no space left on device/i,
+    /eadinuse/i,
+    /port.*(in use|already in use|taken)/i,
   ],
   reasoning: [
     /anti-loop/i,

@@ -40,6 +40,9 @@ test('classifyFailure: config errors', () => {
   // Real learning (2026-08-28): delegator "Unknown agent" errors are config.
   assert.strictEqual(classifyFailure({ error: 'Unknown agent: api-and-interface-design' }), 'config');
   assert.strictEqual(classifyFailure({ error: 'Agent foo not found in configuration' }), 'config');
+  // Real learning (2026-08-28): spawn ENOENT / missing command is config/env.
+  assert.strictEqual(classifyFailure({ error: 'spawn npx ENOENT' }), 'config');
+  assert.strictEqual(classifyFailure({ error: 'command not found: tsx' }), 'config');
 });
 
 test('classifyFailure: network errors', () => {
@@ -71,12 +74,17 @@ test('classifyFailure: security errors', () => {
   assert.strictEqual(classifyFailure({ error: 'prompt injection detected' }), 'security');
   assert.strictEqual(classifyFailure({ error: 'blocked pattern: rm -rf' }), 'security');
   assert.strictEqual(classifyFailure({ error: 'secret found in file' }), 'security');
+  // Real learning (2026-08-28): EACCES (permission denied) is a security error.
+  assert.strictEqual(classifyFailure({ error: 'EACCES: permission denied, open file' }), 'security');
 });
 
 test('classifyFailure: resource errors', () => {
   assert.strictEqual(classifyFailure({ error: 'token budget exceeded' }), 'resource');
   assert.strictEqual(classifyFailure({ error: 'out of memory' }), 'resource');
   assert.strictEqual(classifyFailure({ error: 'workload limit exceeded' }), 'resource');
+  // Real learning (2026-08-28): disk/port exhaustion are resource failures.
+  assert.strictEqual(classifyFailure({ error: 'ENOSPC: no space left on device' }), 'resource');
+  assert.strictEqual(classifyFailure({ error: 'EADDRINUSE: port 8080 already in use' }), 'resource');
 });
 
 test('classifyFailure: reasoning errors', () => {
