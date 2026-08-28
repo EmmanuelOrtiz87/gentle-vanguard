@@ -2,7 +2,7 @@
 
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSync, runSyncShell } from './core/run-command.js';
+import { runSync, runSyncShell } from '../core/run-command.js';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);

@@ -85,7 +85,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/setup/DETECT/detect-tool.ps1': 'src/detect-tool.ts',
 
   // Utilities
-  'scripts/utilities/lefthook-verify.ps1': 'src/lefthook-verify.ts',
+  'scripts/utilities/lefthook-verify.ps1': 'src/infrastructure/lefthook-verify.ts',
   'scripts/utilities/validate-tool-configs.ps1': 'src/validate-tool-configs.ts',
   'scripts/utilities/post-autostart-summary.ps1': 'src/orchestration/post-autostart-summary.ts',
 
@@ -111,11 +111,11 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/WORKFLOW-ORCHESTRATION/validate-system-health.ps1':
     'src/validate-system-health.ts',
   'scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1': 'src/review/pre-commit-validation.ts',
-  'scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1': 'src/post-merge-sync.ts',
+  'scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1': 'src/infrastructure/post-merge-sync.ts',
 
   // Bootstrap
-  'scripts/gentle-vanguard/bootstrap.ps1': 'src/bootstrap.ts',
-  'scripts/gentle-vanguard/bootstrap-machine.ps1': 'src/bootstrap-machine.ts',
+  'scripts/gentle-vanguard/bootstrap.ps1': 'src/infrastructure/bootstrap.ts',
+  'scripts/gentle-vanguard/bootstrap-machine.ps1': 'src/infrastructure/bootstrap-machine.ts',
   'scripts/gentle-vanguard/setup-complete.ps1': 'src/ops/setup-complete.ts',
   'scripts/gentle-vanguard/setup-multi-machine.ps1': 'src/ops/setup-multi-machine.ts',
 
@@ -252,11 +252,11 @@ function main(): void {
     'src/knowledge-base-autoinit.ts',
     'src/knowledge-base-init.ts',
     'src/orchestration/orchestrate-auto-fix.ts',
-    'src/post-merge-sync.ts',
+    'src/infrastructure/post-merge-sync.ts',
     'src/saga-orchestrator.ts',
     'src/ops/setup-complete.ts',
     'src/ops/setup-multi-machine.ts',
-    'src/sync-to-public.ts',
+    'src/infrastructure/sync-to-public.ts',
     'src/tokens/token-usage-notifier.ts',
     'src/validate-readme.ts',
   ];

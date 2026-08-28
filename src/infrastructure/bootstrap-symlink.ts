@@ -12,7 +12,7 @@
 
 import * as fs from 'fs';
 import { resolve } from 'path';
-import { runSyncShell } from './core/run-command.js';
+import { runSyncShell } from '../core/run-command.js';
 
 const ROOT = resolve(process.cwd());
 const LINK_PARENT = resolve(ROOT, 'apps', 'web-dashboard', 'node_modules', '@gentle-vanguard');

@@ -6,12 +6,12 @@
   "assets": [
     {
       "type": "script",
-      "path": "src/bootstrap.ts",
+      "path": "src/infrastructure/bootstrap.ts",
       "description": "Portable Bootstrap - Initializes a fresh clone on a new machine"
     },
     {
       "type": "script",
-      "path": "src/bootstrap-machine.ts",
+      "path": "src/infrastructure/bootstrap-machine.ts",
       "description": "Global Bootstrap - Installs Gentle-Vanguard into a user-scoped machine layout"
     },
     {
@@ -21,7 +21,7 @@
     },
     {
       "type": "script",
-      "path": "src/ensure-github-bypass.ts",
+      "path": "src/infrastructure/ensure-github-bypass.ts",
       "description": "Session Bypass Guard - Ensures owner bypass is active on develop rulesets for gentle-vanguard and gentle-vanguard-public"
     },
     {
@@ -151,7 +151,7 @@
     },
     {
       "type": "script",
-      "path": "src/sync-to-public.ts",
+      "path": "src/infrastructure/sync-to-public.ts",
       "description": "Gentle-Vanguard Sync Runner - Syncs managed assets from the gentle-vanguard manifest"
     },
     {
@@ -185,7 +185,7 @@
   ],
   "migrationNotes": [
     "cloud-agents.local.json is now gitignored - create from cloud-agents.local.example",
-    "PreTool hooks install to ~/.pretool-hooks/ via npx tsx src/bootstrap-machine.ts",
+    "PreTool hooks install to ~/.pretool-hooks/ via npx tsx src/infrastructure/bootstrap-machine.ts",
     "Gentle-Vanguard operates with Opencode + judgment-day for code review",
     "Scripts reorganized into subdirectories: AI-AGENT-MANAGEMENT, UTILITIES, SKILLS-TOOLS, TELEMETRY-METRICS, PERFORMANCE-OPTIMIZATION, DEPLOYMENT, WORKFLOW-ORCHESTRATION"
   ],

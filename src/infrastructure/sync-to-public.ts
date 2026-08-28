@@ -26,7 +26,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 
 interface SyncOptions {
   privateRepo: string;

@@ -33,7 +33,7 @@ import {
 } from 'fs';
 import { resolve, dirname, basename, extname, join } from 'path';
 import { createRequire } from 'module';
-import { runSync, runSyncShell } from './core/run-command.js';
+import { runSync, runSyncShell } from '../core/run-command.js';
 
 const require = createRequire(import.meta.url);
 

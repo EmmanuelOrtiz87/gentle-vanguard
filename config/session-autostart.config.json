@@ -47,7 +47,7 @@
       {
         "id": "bootstrap-symlink",
         "enabled": true,
-        "script": "src/bootstrap-symlink.ts",
+        "script": "src/infrastructure/bootstrap-symlink.ts",
         "args": "",
         "required": true,
         "phase": 0,
@@ -74,7 +74,7 @@
       {
         "id": "github-bypass",
         "enabled": true,
-        "script": "src/ensure-github-bypass.ts",
+        "script": "src/infrastructure/ensure-github-bypass.ts",
         "args": "--owner EmmanuelOrtiz87 --branch develop",
         "required": false,
         "description": "Ensure GitHub bypass policy for current user (TS)"
@@ -238,7 +238,7 @@
       {
         "id": "lefthook-verify",
         "enabled": true,
-        "script": "src/lefthook-verify.ts",
+        "script": "src/infrastructure/lefthook-verify.ts",
         "args": "",
         "required": false,
         "description": "Verify Lefthook CLI + hooks are installed (post-commit/post-merge for CodeGraph auto-sync) (TS)"

@@ -29,7 +29,7 @@ const DRY_RUN = args.includes('--dry-run') || args.includes('-d');
 const steps: { name: string; cmd: string; desc: string; critical: boolean }[] = [
   {
     name: 'Machine Dependencies',
-    cmd: `npx tsx src/dependency-validator.ts${YES ? ' --install --yes' : ' --install'}`,
+    cmd: `npx tsx src/infrastructure/dependency-validator.ts${YES ? ' --install --yes' : ' --install'}`,
     desc: 'Check and install core tools (Node, pnpm, Git, TruffleHog, Lefthook, etc.)',
     critical: true,
   },

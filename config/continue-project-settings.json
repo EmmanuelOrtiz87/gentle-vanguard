@@ -56,7 +56,7 @@
     "branch": ["src/create-gitflow-branch.ts"],
     "pr": ["src/create-pull-request.ts"],
     "hooks": ["src/review/pre-commit-validation.ts"],
-    "merge": ["src/post-merge-sync.ts"],
+    "merge": ["src/infrastructure/post-merge-sync.ts"],
     "workflow": ["git-workflow-skill"],
     "commit": ["git-workflow-skill"],
     "conflict": ["git-workflow-skill"]

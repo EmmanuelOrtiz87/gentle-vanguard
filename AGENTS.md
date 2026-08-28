@@ -95,7 +95,7 @@ ventanas persistentes). Reglas:
   `start /B` con cadenas npx.
 - Tareas programadas (schtasks): acción `node.exe --import tsx` directa + principal S4U (oculto); si
   el registro S4U es denegado, fallback con wrapper wscript oculto
-  (`.runtime/codegraph-sync-hidden.vbs`, generado por `src/bootstrap.ts`).
+  (`.runtime/codegraph-sync-hidden.vbs`, generado por `src/infrastructure/bootstrap.ts`).
 - Test de regresión: `tests/unit/run-command-hidden.test.ts` — PID del hijo debe ser PID del script
   (falla si vuelve el nieto del CLI de tsx).
 

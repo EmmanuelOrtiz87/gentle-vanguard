@@ -100,7 +100,7 @@ async function checkDeps(results: CheckResult[]): Promise<void> {
 
   try {
     // Import the validator directly — most reliable approach
-    const { getDeps, validateAll } = await import('../dependency-validator.js');
+    const { getDeps, validateAll } = await import('../infrastructure/dependency-validator.js');
     const deps = getDeps();
     const depResults = await validateAll(deps);
     const passed = depResults.filter((r) => r.status === 'PASS').length;

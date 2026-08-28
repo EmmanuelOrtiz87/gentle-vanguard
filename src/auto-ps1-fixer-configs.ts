@@ -64,7 +64,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/dashboard/optimize-dashboard.ps1': 'src/optimize-dashboard.ts',
 
   // Utilities
-  'scripts/utilities/lefthook-verify.ps1': 'src/lefthook-verify.ts',
+  'scripts/utilities/lefthook-verify.ps1': 'src/infrastructure/lefthook-verify.ts',
   'scripts/utilities/validate-tool-configs.ps1': 'src/validate-tool-configs.ts',
   'scripts/utilities/post-autostart-summary.ps1': 'src/orchestration/post-autostart-summary.ts',
   'scripts/utilities/pre-process-input.ps1': 'src/pre-process-input.ts',
@@ -89,11 +89,11 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   // Workflow
   'scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1': 'src/cli/gv.ts',
   'scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1': 'src/review/pre-commit-validation.ts',
-  'scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1': 'src/post-merge-sync.ts',
+  'scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1': 'src/infrastructure/post-merge-sync.ts',
 
   // Bootstrap
-  'scripts/gentle-vanguard/bootstrap.ps1': 'src/bootstrap.ts',
-  'scripts/gentle-vanguard/bootstrap-machine.ps1': 'src/bootstrap-machine.ts',
+  'scripts/gentle-vanguard/bootstrap.ps1': 'src/infrastructure/bootstrap.ts',
+  'scripts/gentle-vanguard/bootstrap-machine.ps1': 'src/infrastructure/bootstrap-machine.ts',
   'scripts/gentle-vanguard/setup-complete.ps1': 'src/ops/setup-complete.ts',
   'scripts/gentle-vanguard/setup-multi-machine.ps1': 'src/ops/setup-multi-machine.ts',
 

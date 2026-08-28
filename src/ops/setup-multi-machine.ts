@@ -87,9 +87,9 @@ function main(): void {
   console.log('[OK] Repositories are ready');
 
   console.log('\n=== Bootstrap gentle-vanguard workspace ===');
-  // TS migration: bootstrap.ps1 → src/bootstrap.ts
-  const bootstrapTs = join(gentleVanguardPath, 'src', 'bootstrap.ts');
-  const bootstrapPs1 = join(gentleVanguardPath, 'src/bootstrap.ts');
+  // TS migration: bootstrap.ps1 → src/infrastructure/bootstrap.ts
+  const bootstrapTs = join(gentleVanguardPath, 'src', 'infrastructure', 'bootstrap.ts');
+  const bootstrapPs1 = join(gentleVanguardPath, 'src/infrastructure/bootstrap.ts');
   if (!existsSync(bootstrapTs) && !existsSync(bootstrapPs1)) {
     throw new Error(`Bootstrap script not found (TS: ${bootstrapTs}, PS1: ${bootstrapPs1})`);
   }

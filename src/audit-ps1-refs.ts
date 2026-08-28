@@ -33,7 +33,7 @@ const LEGACY_FALLBACK_FILES = new Set([
   'src/karpathy-enforcer.ts',
   'src/orchestration/orchestrate-auto-fix.ts',
   'src/ops/setup-complete.ts',
-  'src/sync-to-public.ts',
+  'src/infrastructure/sync-to-public.ts',
   'src/validate-readme.ts',
   'config/structure-policy.json',
   'config/tool-profiles/CLAUDE.compressed.md',

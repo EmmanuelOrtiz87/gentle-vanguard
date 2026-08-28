@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';

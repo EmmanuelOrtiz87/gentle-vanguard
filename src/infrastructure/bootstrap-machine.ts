@@ -2,7 +2,7 @@
 
 import { existsSync, mkdirSync, writeFileSync, readdirSync, copyFileSync, statSync } from 'fs';
 import { join, resolve, basename, dirname } from 'path';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { fileURLToPath } from 'url';
 import { platform, homedir } from 'os';
 

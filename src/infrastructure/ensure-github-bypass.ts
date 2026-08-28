@@ -6,9 +6,9 @@
  * TS migration of scripts/utilities/session/SESSION-MANAGEMENT/ensure-github-bypass.ps1
  */
 
-import { runSyncShell } from './core/run-command.js';
+import { runSyncShell } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
-import { getEffectiveProcessTimeout } from './core/timeout-config';
+import { getEffectiveProcessTimeout } from '../core/timeout-config';
 
 function run(cmd: string, _opts: { quiet?: boolean } = {}): string {
   try {

@@ -12,7 +12,7 @@
  *   npx tsx src/dependency-installer.ts --yes     # non-interactive (auto-yes)
  */
 
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 
 // ─── Types ────────────────────────────────────────────────────────────
 

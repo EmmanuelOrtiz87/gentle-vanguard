@@ -4,7 +4,7 @@
  * TS migration of scripts/utilities/lefthook-verify.ps1
  */
 
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import * as fs from 'fs';
 import * as path from 'path';
 import { pathToFileURL } from 'url';

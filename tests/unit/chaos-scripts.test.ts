@@ -11,6 +11,6 @@ describe('chaos-scripts', () => {
   });
 
   it('session-scoring.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'session-scoring.ts')));
+    assert.ok(existsSync(resolve(ROOT, 'src', 'session', 'session-scoring.ts')));
   });
 });

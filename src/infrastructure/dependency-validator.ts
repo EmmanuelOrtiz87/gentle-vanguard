@@ -13,7 +13,7 @@
  *   npx tsx src/dependency-validator.ts --install # auto-install missing
  */
 
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 

@@ -29,7 +29,7 @@ pre-commit:
       run: npx tsx src/review/workflow-lint.ts {staged_files}
     lockfile-lint:
       glob: 'package-lock.json'
-      run: npx tsx src/lockfile-lint-pre-commit.ts
+      run: npx tsx src/infrastructure/lockfile-lint-pre-commit.ts
     # trufflehog removed 2026-08-22: it ran with --fail=false AND `|| exit 0`
     # (never blocked anything). Secret coverage is provided by secretlint +
     # secret-scanner here, and gitleaks in CI.

@@ -62,7 +62,7 @@
     },
     "post_merge": {
       "enabled": true,
-      "script": "src/post-merge-sync.ts",
+      "script": "src/infrastructure/post-merge-sync.ts",
       "timeout": 60000,
       "args": {
         "MergeBranch": "${merge_branch}",
