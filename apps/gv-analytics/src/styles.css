@@ -1216,6 +1216,40 @@ form input:focus {
   margin-top: 4px;
 }
 
+/* ---------- Resumen de conexión (campo: valor) ---------- */
+.connection-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+.summary-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13.5px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.35);
+  border: 1px solid var(--gv-glass-border);
+}
+:root[data-theme='light'] .summary-row {
+  background: var(--gv-surface-raised);
+}
+.summary-row span {
+  color: var(--gv-muted);
+  font-weight: 600;
+  flex-shrink: 0;
+  min-width: 74px;
+}
+.summary-row strong {
+  color: var(--gv-text);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  word-break: break-all;
+}
+
 /* ---------- History view (tabla filtrable tipo Excel) ---------- */
 .history-view {
   max-width: 1080px;

@@ -143,6 +143,11 @@ export async function getConnectionStatus(): Promise<ConnectionStatus> {
   };
 }
 
+/** Returns true when a value looks like a URL instead of a secret token. */
+function isUrlLike(value: string): boolean {
+  return /^https?:\/\//i.test(value.trim());
+}
+
 /** Builds a StoredConnection from a form, keeping existing tokens when a field is left blank. */
 function buildConnection(form: ConnectionForm): StoredConnection {
   const existing = loadConnection();
@@ -150,11 +155,18 @@ function buildConnection(form: ConnectionForm): StoredConnection {
   if (!form.siteUrl || !form.email || !apiToken) {
     throw new Error('Site URL, email y API token son obligatorios.');
   }
+  if (isUrlLike(apiToken)) {
+    throw new Error('El API token no puede ser una URL. Pega el token real (no la direccion del sitio).');
+  }
+  const bitbucketApiToken = form.bitbucketApiToken?.trim() || existing?.bitbucketApiToken || undefined;
+  if (bitbucketApiToken && isUrlLike(bitbucketApiToken)) {
+    throw new Error('El API token de Bitbucket no puede ser una URL. Pega el token real (no la direccion del sitio).');
+  }
   return {
     siteUrl: cleanSiteUrl(form.siteUrl),
     email: form.email.trim(),
     apiToken,
-    bitbucketApiToken: form.bitbucketApiToken?.trim() || existing?.bitbucketApiToken || undefined,
+    bitbucketApiToken,
     bitbucketWorkspace: form.bitbucketWorkspace.trim(),
     updatedAt: new Date().toISOString(),
   };

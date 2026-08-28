@@ -78,6 +78,9 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'history.columnId': 'ID',
     'history.noResults': 'No reports match the current filters.',
     'history.open': 'Open report',
+    'history.export': 'Export',
+    'history.columnExport': 'Export',
+    'history.allModes': 'All modes',
 
     // Analysis
     'analysis.mode': 'Analysis mode',
@@ -190,6 +193,9 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'history.columnId': 'ID',
     'history.noResults': 'No hay reportes que coincidan con los filtros actuales.',
     'history.open': 'Abrir reporte',
+    'history.export': 'Exportar',
+    'history.columnExport': 'Exportar',
+    'history.allModes': 'Todos los modos',
 
     'analysis.mode': 'Modo de análisis',
     'analysis.url': 'URL',
@@ -298,6 +304,9 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'history.columnId': 'ID',
     'history.noResults': 'Nenhum relatório corresponde aos filtros atuais.',
     'history.open': 'Abrir relatório',
+    'history.export': 'Exportar',
+    'history.columnExport': 'Exportar',
+    'history.allModes': 'Todos os modos',
 
     'analysis.mode': 'Modo de análise',
     'analysis.url': 'URL',

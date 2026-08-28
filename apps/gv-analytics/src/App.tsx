@@ -21,7 +21,7 @@ import {
   ShieldCheck,
   Sun,
 } from 'lucide-react';
-import type { AnalyticsReport, ConnectionForm, ConnectionStatus, OAuthStatus } from './types';
+import type { AnalyticsReport, ConnectionForm, ConnectionStatus } from './types';
 import { useT, LocaleSwitcher } from './i18n';
 
 interface ReportListItem {
@@ -78,51 +78,12 @@ export function App() {
   });
   const [testing, setTesting] = useState(false);
   const [testResult, setTestResult] = useState<ConnectionStatus | null>(null);
-  const [oauth, setOauth] = useState<OAuthStatus | null>(null);
-  const [oauthBusy, setOauthBusy] = useState(false);
   const [templates, setTemplates] = useState<TemplateInfo[]>([]);
   const [template, setTemplate] = useState('sdd');
 
   const loadStatus = async () => {
     const next = await readJson<ConnectionStatus>('/api/connection/status');
     setStatus(next);
-  };
-
-  const loadOauthStatus = async () => {
-    try {
-      const next = await readJson<OAuthStatus>('/api/oauth/status');
-      setOauth(next);
-    } catch (error) {
-      setOauth(null);
-    }
-  };
-
-  const startOauth = async () => {
-    setOauthBusy(true);
-    setMessage(null);
-    try {
-      const next = await readJson<{ url: string; state: string }>('/api/oauth/start', { method: 'POST' });
-      window.open(next.url, '_blank', 'noopener');
-      setMessage(tt('conn.oauthOpened'));
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : String(error));
-    } finally {
-      setOauthBusy(false);
-    }
-  };
-
-  const disconnectOauth = async () => {
-    setOauthBusy(true);
-    setMessage(null);
-    try {
-      await readJson<{ ok: boolean }>('/api/oauth/disconnect', { method: 'POST' });
-      await loadOauthStatus();
-      setMessage(tt('conn.oauthRemoved'));
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : String(error));
-    } finally {
-      setOauthBusy(false);
-    }
   };
 
   const loadHistory = async () => {
@@ -133,7 +94,6 @@ export function App() {
   useEffect(() => {
     void loadStatus().catch((error) => setMessage(error.message));
     void loadHistory().catch(() => undefined);
-    void loadOauthStatus().catch(() => undefined);
     void readJson<{ templates: TemplateInfo[] }>('/api/templates')
       .then((next) => setTemplates(next.templates))
       .catch(() => undefined);
@@ -241,11 +201,12 @@ export function App() {
     }
   };
 
-  const exportReport = (format: 'md' | 'html' | 'docx' | 'pdf') => {
-    if (!report) return;
+  const exportReport = (format: 'md' | 'html' | 'docx' | 'pdf', id?: string) => {
+    const targetId = id || report?.id;
+    if (!targetId) return;
     setExportOpen(false);
     window.open(
-      `/api/reports/${encodeURIComponent(report.id)}/export?format=${format}&template=${encodeURIComponent(template)}`,
+      `/api/reports/${encodeURIComponent(targetId)}/export?format=${format}&template=${encodeURIComponent(template)}`,
       '_blank',
       'noopener',
     );
@@ -412,14 +373,10 @@ export function App() {
             busy={busy}
             testing={testing}
             testResult={testResult}
-            oauth={oauth}
-            oauthBusy={oauthBusy}
             onSave={saveConnection}
             onTest={testConnection}
             onEdit={editConnection}
             onRevalidate={loadStatus}
-            onOauthConnect={startOauth}
-            onOauthDisconnect={disconnectOauth}
           />
         )}
 
@@ -429,6 +386,7 @@ export function App() {
             activeId={report?.id}
             busy={busy}
             onOpen={openReport}
+            onExport={exportReport}
           />
         )}
       </main>
@@ -446,14 +404,10 @@ interface ConfigViewProps {
   busy: boolean;
   testing: boolean;
   testResult: ConnectionStatus | null;
-  oauth: OAuthStatus | null;
-  oauthBusy: boolean;
   onSave: (event: React.FormEvent) => Promise<void>;
   onTest: () => Promise<void>;
   onEdit: () => void;
   onRevalidate: () => Promise<void>;
-  onOauthConnect: () => Promise<void>;
-  onOauthDisconnect: () => Promise<void>;
 }
 
 function ConfigView({
@@ -466,14 +420,10 @@ function ConfigView({
   busy,
   testing,
   testResult,
-  oauth,
-  oauthBusy,
   onSave,
   onTest,
   onEdit,
   onRevalidate,
-  onOauthConnect,
-  onOauthDisconnect,
 }: ConfigViewProps) {
   const { tt } = useT();
   return (
@@ -489,12 +439,12 @@ function ConfigView({
 
         {connected && !editingConnection ? (
           <div className="connection-summary">
-            <div>
-              <span>{tt('conn.site')}</span>
+            <div className="summary-row">
+              <span>{tt('conn.site')}:</span>
               <strong>{status?.siteUrl || 'Atlassian Cloud'}</strong>
             </div>
-            <div>
-              <span>{tt('conn.bitbucket')}</span>
+            <div className="summary-row">
+              <span>{tt('conn.bitbucket')}:</span>
               <strong>{status?.bitbucketWorkspace || tt('conn.workspaceUndefined')}</strong>
             </div>
             <div className="connection-actions">
@@ -507,14 +457,6 @@ function ConfigView({
                 {tt('conn.edit')}
               </button>
             </div>
-            {oauth ? (
-              <OAuthCard
-                oauth={oauth}
-                busy={oauthBusy}
-                onConnect={() => void onOauthConnect()}
-                onDisconnect={() => void onOauthDisconnect()}
-              />
-            ) : null}
           </div>
         ) : (
           <form onSubmit={(event) => void onSave(event)}>
@@ -629,9 +571,10 @@ interface HistoryViewProps {
   activeId?: string;
   busy: boolean;
   onOpen: (id: string) => Promise<void>;
+  onExport: (format: 'md' | 'html' | 'docx' | 'pdf', id?: string) => void;
 }
 
-function HistoryView({ history, activeId, busy, onOpen }: HistoryViewProps) {
+function HistoryView({ history, activeId, busy, onOpen, onExport }: HistoryViewProps) {
   const { tt } = useT();
   const [query, setQuery] = useState('');
   const [modeFilter, setModeFilter] = useState('');
@@ -675,10 +618,10 @@ function HistoryView({ history, activeId, busy, onOpen }: HistoryViewProps) {
           onChange={(event) => setModeFilter(event.target.value)}
           aria-label={tt('history.columnMode')}
         >
-          <option value="">{tt('history.columnMode')} — {tt('history.columnMode')}</option>
+          <option value="">{tt('history.allModes')}</option>
           {modes.map((m) => (
             <option key={m} value={m}>
-              {m}
+              {m === 'url' ? tt('analysis.url') : m === 'request' ? tt('analysis.request') : m}
             </option>
           ))}
         </select>
@@ -698,6 +641,7 @@ function HistoryView({ history, activeId, busy, onOpen }: HistoryViewProps) {
                 <th>{tt('history.columnTitle')}</th>
                 <th>{tt('history.columnMode')}</th>
                 <th>{tt('history.columnId')}</th>
+                <th>{tt('history.columnExport')}</th>
                 <th aria-label={tt('history.open')} />
               </tr>
             </thead>
@@ -712,9 +656,21 @@ function HistoryView({ history, activeId, busy, onOpen }: HistoryViewProps) {
                       {item.summary || item.id}
                     </td>
                     <td>
-                      <span className="history-mode-badge">{item.mode}</span>
+                      <span className="history-mode-badge">
+                        {item.mode === 'url' ? tt('analysis.url') : item.mode === 'request' ? tt('analysis.request') : item.mode}
+                      </span>
                     </td>
                     <td className="history-id-cell">{item.id}</td>
+                    <td>
+                      <button
+                        className="secondary-action history-open"
+                        onClick={() => onExport('pdf', item.id)}
+                        title={tt('history.export')}
+                      >
+                        <Download />
+                        {tt('history.export')}
+                      </button>
+                    </td>
                     <td>
                       <button
                         className="secondary-action history-open"
@@ -819,67 +775,6 @@ function Metric({ label, value }: { label: string; value: string }) {
     <div className="metric">
       <span>{label}</span>
       <strong>{value}</strong>
-    </div>
-  );
-}
-
-function OAuthCard({
-  oauth,
-  busy,
-  onConnect,
-  onDisconnect,
-}: {
-  oauth: OAuthStatus;
-  busy: boolean;
-  onConnect: () => void;
-  onDisconnect: () => void;
-}) {
-  const { tt } = useT();
-  return (
-    <div className="oauth-card">
-      <div className="oauth-heading">
-        <span>{tt('oauth.title')}</span>
-        <em className={oauth.connected ? 'oauth-on' : 'oauth-off'}>
-          {oauth.connected ? tt('oauth.connected') : oauth.configured ? tt('oauth.ready') : tt('oauth.notConfigured')}
-        </em>
-      </div>
-      {oauth.connected ? (
-        <>
-          {typeof oauth.expiresAt === 'number' ? (
-            <p className="oauth-detail">
-              {tt('oauth.expires')} {new Date(oauth.expiresAt).toLocaleString()}
-            </p>
-          ) : null}
-          <div className="connection-actions">
-            <button className="secondary-action" onClick={onDisconnect} disabled={busy}>
-              {tt('oauth.disconnect')}
-            </button>
-          </div>
-        </>
-      ) : (
-        <>
-          <p className="oauth-detail">
-            {tt('oauth.callback')} <code>{oauth.redirectUri}</code>
-          </p>
-          <p className="oauth-detail">
-            {tt('oauth.scopes')} <code>{oauth.scopes.join(' ')}</code>
-          </p>
-          {!oauth.configured ? (
-            <p className="oauth-detail muted">{tt('oauth.configureHint')}</p>
-          ) : null}
-          <div className="connection-actions">
-            <button
-              className="primary-action"
-              onClick={onConnect}
-              disabled={busy || !oauth.configured}
-              title={tt('oauth.connect')}
-            >
-              {busy ? <Loader2 className="spin" /> : <ShieldCheck />}
-              {tt('oauth.connect')}
-            </button>
-          </div>
-        </>
-      )}
     </div>
   );
 }
