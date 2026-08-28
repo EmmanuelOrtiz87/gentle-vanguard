@@ -326,7 +326,7 @@
       "activated": true,
       "risk": "medium",
       "owner": "self-diag-agent",
-      "script": "src/root-cause-correlator.ts",
+      "script": "src/resilience/root-cause-correlator.ts",
       "description": "Cross-component failure correlation and cascade detection to speed up diagnosis of FAIL/WARN events.",
       "activationCriteria": [
         { "check": "tests", "required": true },
@@ -426,7 +426,7 @@
       "activated": true,
       "risk": "high",
       "owner": "ops-agent",
-      "script": "src/cross-workspace-validator.ts",
+      "script": "src/integrations/cross-workspace-validator.ts",
       "description": "Workspace discovery, manifest and task delegation across workspaces. High risk: cross-boundary access and federation auth.",
       "activationCriteria": [
         { "check": "tests", "required": true },

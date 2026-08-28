@@ -7,7 +7,7 @@ const ROOT = resolve(import.meta.dirname, '..', '..');
 
 describe('chaos-scripts', () => {
   it('resilience-handler.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'resilience-handler.ts')));
+    assert.ok(existsSync(resolve(ROOT, 'src', 'resilience', 'resilience-handler.ts')));
   });
 
   it('session-scoring.ts exists', () => {

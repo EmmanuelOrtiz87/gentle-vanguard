@@ -34,7 +34,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
 
   // Scripts de adaptación
   'scripts/adaptive/karpathy-enforcer.ps1': 'src/karpathy-enforcer.ts',
-  'scripts/adaptive/correction-rules-engine.ps1': 'src/correction-rules-engine.ts',
+  'scripts/adaptive/correction-rules-engine.ps1': 'src/resilience/correction-rules-engine.ts',
   'scripts/adaptive/session-scoring.ps1': 'src/session/session-scoring.ts',
 
   // Scripts de seguridad
@@ -44,8 +44,8 @@ const PS1_TO_TS_MAP: Record<string, string> = {
 
   // Cloud connectors
   'scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1': 'src/orchestration/hybrid-executor.ts',
-  'scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1': 'src/aws-delegator.ts',
-  'scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1': 'src/azure-delegator.ts',
+  'scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1': 'src/integrations/aws-delegator.ts',
+  'scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1': 'src/integrations/azure-delegator.ts',
 
   // State persistence
   'scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1': 'src/ops/checkpoint-manager.ts',
@@ -58,7 +58,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
 
   // Event sourcing
   'scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1': 'src/event-sourcing.ts',
-  'scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1': 'src/saga-orchestrator.ts',
+  'scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1': 'src/resilience/saga-orchestrator.ts',
 
   // Engram
   'scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1': 'src/knowledge/engram-integrity-check.ts',
@@ -238,7 +238,7 @@ function main(): void {
     'src/review/code-review.ts',
     'src/complete-stack-fix.ts',
     'src/core/maintenance-watchtower.ts',
-    'src/cross-workspace-validator.ts',
+    'src/integrations/cross-workspace-validator.ts',
     'src/digest-generator.ts',
     'src/knowledge/engram-rag-reindex.ts',
     'src/hooks/karpathy-enforcer-hook.ts',
@@ -253,7 +253,7 @@ function main(): void {
     'src/knowledge/knowledge-base-init.ts',
     'src/orchestration/orchestrate-auto-fix.ts',
     'src/infrastructure/post-merge-sync.ts',
-    'src/saga-orchestrator.ts',
+    'src/resilience/saga-orchestrator.ts',
     'src/ops/setup-complete.ts',
     'src/ops/setup-multi-machine.ts',
     'src/infrastructure/sync-to-public.ts',

@@ -173,7 +173,7 @@ async function checkLefthook(): Promise<void> {
 
 async function checkCrossWorkspace(): Promise<void> {
   header('Cross-Workspace');
-  writeCheck('Cross-workspace validator (TS)', exists('src', 'cross-workspace-validator.ts'));
+  writeCheck('Cross-workspace validator (TS)', exists('src', 'integrations', 'cross-workspace-validator.ts'));
 }
 
 // Main execution with parallel categories

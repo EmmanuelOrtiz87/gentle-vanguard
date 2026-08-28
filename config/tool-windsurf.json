@@ -9,7 +9,7 @@
   },
   "capabilities": ["ai_chat", "code_generation", "mcp", "skills"],
   "configFiles": [".windsurf/config.json", ".codeiumignore", "AGENTS.md"],
-  "mcpBridge": "src/mcp-bridge.ts",
+  "mcpBridge": "src/integrations/mcp-bridge.ts",
   "hooks": {
     "preToolCall": "src/pre-process-input.ts",
     "sessionStart": "scripts/utilities/session-autostart.cmd",

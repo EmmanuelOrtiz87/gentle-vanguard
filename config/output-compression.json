@@ -505,7 +505,7 @@
   "integration": {
     "orchestratorConfig": "config/orchestrator.json",
     "tokenBudgetGuard": "config/token-budget-guard.json",
-    "responseCache": "src/response-cache.ts",
+    "responseCache": "src/resilience/response-cache.ts",
     "promptCompression": "src/compression/prompt-compression.ts",
     "preProcessInput": "src/pre-process-input.ts"
   }

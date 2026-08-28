@@ -240,7 +240,7 @@ function main(): void {
   writeStep('Step 4b: Scheduled Task - CodeGraph Auto-Sync...');
   if (process.platform === 'win32') {
     const taskName = 'Gentle-Vanguard-CodeGraph-Sync';
-    const taskScript = join(root, 'src', 'codegraph-sync-autostart.ts');
+    const taskScript = join(root, 'src', 'integrations', 'codegraph-sync-autostart.ts');
     if (existsSync(taskScript)) {
       // Hidden execution: node.exe directly (no pwsh, no npx.cmd chain) with an
       // S4U principal so the Task Scheduler never shows a console window, even

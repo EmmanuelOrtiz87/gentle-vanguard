@@ -181,7 +181,7 @@ const COMMANDS: Command[] = [
       switch (action) {
         case 'sync':
           printInfo('Syncing codegraph...');
-          runNpxTsx('src/codegraph-sync-autostart.ts');
+          runNpxTsx('src/integrations/codegraph-sync-autostart.ts');
           break;
         case 'update':
           printInfo('Updating codegraph with current changes...');
@@ -421,10 +421,10 @@ function executeTool(toolName: string, args: string[]): void {
     'health-check': 'src/core/health-check.ts',
     'maintenance-watchtower': 'src/core/maintenance-watchtower.ts',
     dashboard: 'src/ops/dashboard-start.ts',
-    'codegraph-sync': 'src/codegraph-sync-autostart.ts',
+    'codegraph-sync': 'src/integrations/codegraph-sync-autostart.ts',
     'engram-sync': 'src/knowledge/engram-auto-sync.ts',
     'session-autostart': 'src/core/session-autostart.ts',
-    'error-memory': 'src/error-memory.ts',
+    'error-memory': 'src/resilience/error-memory.ts',
     'learning-engine': 'src/ml/learning-engine.ts',
     'knowledge-acquisition': 'src/ml/knowledge-acquisition.ts',
     'stack-verify': 'src/ops/stack-verify.ts',

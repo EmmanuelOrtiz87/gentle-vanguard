@@ -15,7 +15,7 @@
     ".cline/config.json",
     ".claude/settings.json"
   ],
-  "mcpBridge": "src/mcp-bridge.ts",
+  "mcpBridge": "src/integrations/mcp-bridge.ts",
   "hooks": {
     "preToolCall": "src/pre-process-input.ts",
     "sessionStart": "scripts/utilities/session-autostart.cmd",

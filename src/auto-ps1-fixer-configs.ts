@@ -35,15 +35,15 @@ const PS1_TO_TS_MAP: Record<string, string> = {
 
   // Ops
   'scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1': 'src/orchestration/hybrid-executor.ts',
-  'scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1': 'src/aws-delegator.ts',
-  'scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1': 'src/azure-delegator.ts',
+  'scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1': 'src/integrations/aws-delegator.ts',
+  'scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1': 'src/integrations/azure-delegator.ts',
   'scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1': 'src/ops/checkpoint-manager.ts',
   'scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1': 'src/ops/snapshot-manager.ts',
   'scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1':
     'src/ops/rollback-orchestrator.ts',
   'scripts/utilities/ops/TRACING/tracing-instrument.ps1': 'src/monitor/tracing-instrument.ts',
   'scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1': 'src/event-sourcing.ts',
-  'scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1': 'src/saga-orchestrator.ts',
+  'scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1': 'src/resilience/saga-orchestrator.ts',
 
   // Engram
   'scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1': 'src/knowledge/engram-integrity-check.ts',
@@ -54,7 +54,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   // MCP
   'scripts/utilities/MCP/mcp-gateway.ps1': 'src/mcp-gateway.ts',
   'scripts/utilities/MCP/mcp-manager.ps1': 'src/mcp-manager.ts',
-  'scripts/mcp-bridge/mcp-bridge.ps1': 'src/mcp-bridge.ts',
+  'scripts/mcp-bridge/mcp-bridge.ps1': 'src/integrations/mcp-bridge.ts',
 
   // Dashboard
   'scripts/utilities/dashboard/dashboard-common.ps1': 'src/ops/dashboard-common.ts',

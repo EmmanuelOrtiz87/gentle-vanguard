@@ -28,8 +28,8 @@ import {
 } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { db as getDbSingleton } from './database/db';
-import { resolveDeploymentTenantContext } from './deployment-tenant-context';
+import { db as getDbSingleton } from '../database/db';
+import { resolveDeploymentTenantContext } from '../integrations/deployment-tenant-context';
 
 // ─── Semantic Search Helpers (reused from skill-router) ──────────────────────
 
@@ -876,7 +876,7 @@ function printUsage(): void {
 SHA256 Response Cache CLI (SQLite-backed)
 
 Usage:
-  npx tsx src/response-cache.ts <command> [options]
+  npx tsx src/resilience/response-cache.ts <command> [options]
 
 Commands:
   stats                    Show cache statistics
@@ -891,9 +891,9 @@ Options:
   --legacy                 Use legacy JSON files instead of SQLite
 
 Examples:
-  npx tsx src/response-cache.ts stats
-  npx tsx src/response-cache.ts cleanup
-  npx tsx src/response-cache.ts migrate
+  npx tsx src/resilience/response-cache.ts stats
+  npx tsx src/resilience/response-cache.ts cleanup
+  npx tsx src/resilience/response-cache.ts migrate
 `);
 }
 

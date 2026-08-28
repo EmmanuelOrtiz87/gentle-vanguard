@@ -10,7 +10,7 @@
 
 import { resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { ResponseCache } from './response-cache';
+import { ResponseCache } from './resilience/response-cache';
 import { runNpxTsxSync } from './core/run-command.js';
 
 interface PrivacyGatewayResponse {

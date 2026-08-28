@@ -10,7 +10,7 @@
  *   npx tsx src/post-mortem-trigger.ts --incident "DB down" --severity critical
  */
 
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { resolve, join } from 'path';
 

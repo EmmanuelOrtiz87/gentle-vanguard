@@ -7,7 +7,7 @@
  * REAL por HTTPS (patrón nativo, sin SDK ni CLI externos).
  *
  * Uso:
- *   npx tsx src/aws-delegator.ts --skill-id <id> --skill-input '{"k":"v"}' \
+ *   npx tsx src/integrations/aws-delegator.ts --skill-id <id> --skill-input '{"k":"v"}' \
  *     --function-url <https://...lambda-url...> [--aws-region us-east-1] \
  *     [--max-retries 3] [--record-metrics true] [--dry-run] [--quiet]
  *
@@ -19,7 +19,7 @@ import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { spawnSync } from 'child_process';
 import * as https from 'https';
-import { executeWithCircuit } from './circuit-breaker-v2';
+import { executeWithCircuit } from '../resilience/circuit-breaker-v2';
 
 const ROOT = resolve(process.cwd());
 const LOG_FILE = join(ROOT, '.session', 'aws-delegator.log');

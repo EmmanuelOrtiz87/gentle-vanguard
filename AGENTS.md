@@ -19,7 +19,7 @@ auto-heal, dashboard WS, Nexus DB (lazy steps). Log: `.runtime/autostart-detache
 ## Multi-Tool Integration (ZCode, Codex, MiniMax Code)
 
 - **Agentes**: 21 subagentes del stack sincronizados a `~/.zcode/agents/` vía
-  `npx tsx src/zcode-sync.ts --sync` (re-ejecutar tras editar `.opencode/agents/`).
+  `npx tsx src/integrations/zcode-sync.ts --sync` (re-ejecutar tras editar `.opencode/agents/`).
 - **Skills críticas** (19): `zcode-sync.ts --sync` las copia a las 3 herramientas —
   `~/.zcode/skills/`, `~/.codex/skills/`, `~/.minimax/agents/mavis/skills/` (pi-agent). Filtrar con
   `--tools zcode,codex,minimax`. NO copiar todas (~120): ZCode degrada el auto-trigger si se excede

@@ -189,10 +189,10 @@
       "stage": "post-commit",
       "enforced": true,
       "enforcer": "lefthook - codegraph-sync",
-      "tool": "src/codegraph-post-modification-sync.ts",
+      "tool": "src/integrations/codegraph-post-modification-sync.ts",
       "required": true,
       "description": "Sync codegraph index after commit",
-      "command": "npx tsx src/codegraph-post-modification-sync.ts -Trigger post-commit -Force",
+      "command": "npx tsx src/integrations/codegraph-post-modification-sync.ts -Trigger post-commit -Force",
       "failureAction": "warn"
     },
     {

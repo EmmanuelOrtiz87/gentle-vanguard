@@ -6,7 +6,7 @@
  * Reconstruido desde dist/src/azure-delegator.js (2026-08-12).
  *
  * Uso:
- *   npx tsx src/azure-delegator.ts --skill-id <id> --skill-input '{"k":"v"}' \
+ *   npx tsx src/integrations/azure-delegator.ts --skill-id <id> --skill-input '{"k":"v"}' \
  *     --function-url <https://...azurewebsites.net/api/...> \
  *     [--invocation-type RequestResponse|DryRun] [--max-retries 3] \
  *     [--record-metrics] [--quiet]
@@ -18,7 +18,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { executeWithCircuit } from './circuit-breaker-v2';
+import { executeWithCircuit } from '../resilience/circuit-breaker-v2';
 import { spawnSync } from 'child_process';
 import * as https from 'https';
 

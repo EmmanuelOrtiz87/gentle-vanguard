@@ -21,7 +21,7 @@ import {
   hashKey,
   DEFAULT_MAX_ATTEMPTS,
   ESCALATE_AFTER,
-} from '../../src/anti-loop-guard.ts';
+} from '../../src/resilience/anti-loop-guard.ts';
 
 // Isolate state per test by pointing the guard at a temp dir via cwd.
 // The guard uses process.cwd() for its state dir, so we run each test in a

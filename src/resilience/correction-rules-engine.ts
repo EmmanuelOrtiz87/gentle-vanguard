@@ -2,8 +2,8 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, rmSync, appendFileSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { runSync, runNpxTsxSync } from './core/run-command.js';
-import { getEffectiveProcessTimeout } from './core/timeout-config';
+import { runSync, runNpxTsxSync } from '../core/run-command.js';
+import { getEffectiveProcessTimeout } from '../core/timeout-config';
 
 const ROOT = resolve(process.cwd());
 

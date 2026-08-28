@@ -364,7 +364,7 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": true,
-      "mcpBridge": "npx tsx src/mcp-bridge.ts",
+      "mcpBridge": "npx tsx src/integrations/mcp-bridge.ts",
       "adaptiveProfile": "npx tsx src/orchestration/adaptive-opencode-profile.ts",
       "note": "Cline sin skill tool nativo — skills via MCP bridge. Uses opencode profile as baseline."
     },
@@ -376,7 +376,7 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": true,
-      "mcpBridge": "npx tsx src/mcp-bridge.ts",
+      "mcpBridge": "npx tsx src/integrations/mcp-bridge.ts",
       "adaptiveProfile": "npx tsx src/orchestration/adaptive-opencode-profile.ts",
       "note": "Cursor sin skill tool nativo — skills via MCP bridge. Uses opencode profile as baseline."
     },
@@ -388,7 +388,7 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": true,
-      "mcpBridge": "npx tsx src/mcp-bridge.ts",
+      "mcpBridge": "npx tsx src/integrations/mcp-bridge.ts",
       "adaptiveProfile": "npx tsx src/orchestration/adaptive-codex-windsurf-profile.ts",
       "note": "Windsurf sin skill tool nativo — skills via MCP bridge"
     },

@@ -7,8 +7,8 @@
 
 import { existsSync, statSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSync } from './core/run-command.js';
-import { getEffectiveProcessTimeout } from './core/timeout-config';
+import { runSync } from '../core/run-command.js';
+import { getEffectiveProcessTimeout } from '../core/timeout-config';
 import { pathToFileURL } from 'url';
 
 const ROOT = resolve(process.cwd());

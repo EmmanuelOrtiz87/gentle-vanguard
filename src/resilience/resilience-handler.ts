@@ -2,8 +2,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { pathToFileURL } from 'url';
-import { runSyncShell } from './core/run-command.js';
-import { loadConfigFile } from './core/config-loader.js';
+import { runSyncShell } from '../core/run-command.js';
+import { loadConfigFile } from '../core/config-loader.js';
 
 interface CircuitState {
   state: string;

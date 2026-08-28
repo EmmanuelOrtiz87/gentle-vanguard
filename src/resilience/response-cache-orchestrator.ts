@@ -6,8 +6,8 @@
  * Debe ser llamado antes de cada respuesta y después de cada respuesta.
  *
  * Uso:
- *   npx tsx src/response-cache-orchestrator.ts --before "input" --context "ctx"
- *   npx tsx src/response-cache-orchestrator.ts --after "input" "response" --tokens-saved 100
+ *   npx tsx src/resilience/response-cache-orchestrator.ts --before "input" --context "ctx"
+ *   npx tsx src/resilience/response-cache-orchestrator.ts --after "input" "response" --tokens-saved 100
  *
  * NOTA: Este es un script auxiliar. La integración real debe hacerse en:
  *   - src/session/session-autostart.ts (para activar el cache)
@@ -126,8 +126,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   }
 
   console.log('\nUso:');
-  console.log('  npx tsx src/response-cache-orchestrator.ts --before "input" --context "ctx"');
+  console.log('  npx tsx src/resilience/response-cache-orchestrator.ts --before "input" --context "ctx"');
   console.log(
-    '  npx tsx src/response-cache-orchestrator.ts --after "input" "response" --tokens-saved 100',
+    '  npx tsx src/resilience/response-cache-orchestrator.ts --after "input" "response" --tokens-saved 100',
   );
 }

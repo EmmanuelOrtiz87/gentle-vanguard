@@ -31,7 +31,7 @@ import {
   CompressionResult as OutputCompressionResult,
 } from '../compression/output-compression.js';
 import { enforceChatLevel, ChatLevelEnforcementResult, ChatLevel } from '../chat-level-enforcer.js';
-import { ResponseCache, generateCacheKey } from '../response-cache.js';
+import { ResponseCache, generateCacheKey } from '../resilience/response-cache.js';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 

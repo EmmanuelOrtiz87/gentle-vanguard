@@ -10,7 +10,7 @@ describe('sre-scripts', () => {
     assert.ok(existsSync(resolve(ROOT, 'src', 'monitor', 'enforce-error-budget.ts')));
   });
 
-  it('src/resilience-handler.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'resilience-handler.ts')));
+  it('src/resilience/resilience-handler.ts exists', () => {
+    assert.ok(existsSync(resolve(ROOT, 'src', 'resilience', 'resilience-handler.ts')));
   });
 });

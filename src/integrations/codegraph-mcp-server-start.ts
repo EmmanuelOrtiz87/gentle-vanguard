@@ -10,7 +10,7 @@ import { existsSync, writeFileSync, readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 
 const require = createRequire(import.meta.url);
 const PID_FILE = join(process.cwd(), '.runtime', 'codegraph-mcp-server.pid');

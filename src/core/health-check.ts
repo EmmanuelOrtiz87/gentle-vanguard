@@ -200,8 +200,8 @@ function checkOptimizationStack() {
   // No dedicated TS equivalent — check cross-workspace-validator as proxy
   writeCheck(
     'Cross-workspace validator (TS)',
-    exists('src/cross-workspace-validator.ts'),
-    'src/cross-workspace-validator.ts',
+    exists('src/integrations/cross-workspace-validator.ts'),
+    'src/integrations/cross-workspace-validator.ts',
   );
 }
 
@@ -345,7 +345,7 @@ async function checkDashboardV3() {
 
 function checkMcpBridge() {
   header('MCP Bridge');
-  writeCheck('mcp-bridge.ts exists', exists('src/mcp-bridge.ts'), 'src/mcp-bridge.ts');
+  writeCheck('mcp-bridge.ts exists', exists('src/integrations/mcp-bridge.ts'), 'src/integrations/mcp-bridge.ts');
   const configs = ['config/skill-mcp.json', 'config/mcp-bridge.json'];
   const found = configs.filter((c) => exists(c)).length;
   writeCheck('MCP configs present', found === configs.length, `${found} of ${configs.length}`);

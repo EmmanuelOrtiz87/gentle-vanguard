@@ -772,7 +772,7 @@ async function checkMcp() {
 
   payloadFileOk('mcp', 'skill-server.js', join(ROOT, 'dist/scripts/mcp/skill-server.js'), 'build');
   payloadFileOk('mcp', 'skill-server.ts', join(ROOT, 'scripts/mcp/skill-server.ts'), 'manual');
-  payloadFileOk('mcp', 'mcp-bridge.ts', join(ROOT, 'src/mcp-bridge.ts'), 'manual');
+  payloadFileOk('mcp', 'mcp-bridge.ts', join(ROOT, 'src/integrations/mcp-bridge.ts'), 'manual');
   payloadFileOk(
     'mcp',
     'mcp-bridge.ts (dashboard)',
@@ -1873,7 +1873,7 @@ async function autoHeal() {
   if (cgFail.length > 0) {
     if (!quiet) console.log('  [Heal] Restarting CodeGraph serve...');
     try {
-      // Delegate to the canonical daemon script (src/codegraph-mcp-server-start.ts).
+      // Delegate to the canonical daemon script (src/integrations/codegraph-mcp-server-start.ts).
       // It spawns `node codegraph.js serve --mcp` with an OPEN stdin pipe (keeping
       // the stdio MCP server alive) and writes the real server PID itself.
       //
@@ -1881,7 +1881,7 @@ async function autoHeal() {
       // would close stdin -> the server exits instantly, and a second instance
       // competing for the codegraph index lock can kill an already-running
       // daemon. Delegating to the daemon script avoids both failure modes.
-      const child = runNpxTsx(join(ROOT, 'src', 'codegraph-mcp-server-start.ts'), [], {
+      const child = runNpxTsx(join(ROOT, 'src', 'integrations', 'codegraph-mcp-server-start.ts'), [], {
         cwd: ROOT,
         stdio: 'ignore',
         detached: true,

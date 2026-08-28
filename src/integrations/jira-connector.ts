@@ -14,7 +14,7 @@
  *     --quiet         Minimal output
  */
 
-import { runSyncShell } from './core/run-command.js';
+import { runSyncShell } from '../core/run-command.js';
 import { writeFileSync } from 'fs';
 import { resolve } from 'path';
 

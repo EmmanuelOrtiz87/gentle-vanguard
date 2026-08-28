@@ -15,8 +15,8 @@ import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { writeFileSync } from 'fs';
 import { compressStructural, estimateTokens } from '../compression/structural-compression.js';
-import { executeWithCircuit } from '../circuit-breaker-v2';
-import { registerAttempt, detectLoop } from '../anti-loop-guard.js';
+import { executeWithCircuit } from '../resilience/circuit-breaker-v2';
+import { registerAttempt, detectLoop } from '../resilience/anti-loop-guard.js';
 import { evaluateFailure } from '../security/guardrail-orchestrator.js';
 
 interface AgentConfig {

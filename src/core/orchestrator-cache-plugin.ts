@@ -16,7 +16,7 @@
  *   3. Importar en src/session/session-autostart.ts (opcional pero recomendado)
  */
 
-import { ResponseCache } from '../response-cache.js';
+import { ResponseCache } from '../resilience/response-cache.js';
 import { pathToFileURL } from 'url';
 import { mkdirSync, appendFileSync } from 'fs';
 import { join, resolve } from 'path';

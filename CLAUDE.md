@@ -35,7 +35,7 @@ Canonical entry: `docs/agents/AGENTS.md`
 ## Break Glass
 
 If 3+ turns w/o completion, loop detected, or output truncated:
-`npx tsx src/self-diagnosis.ts --profile "<p>" --chat-level "<l>" --turn-count <N>` Override to
+`npx tsx src/resilience/self-diagnosis.ts --profile "<p>" --chat-level "<l>" --turn-count <N>` Override to
 `lleno`/`chat-balanced`. Notify: `[BREAK GLASS] motivo: {reason}`
 
 ## Response Profile

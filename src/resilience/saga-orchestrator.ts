@@ -19,7 +19,7 @@ import {
 } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { runSync, runNpxTsxSync } from './core/run-command.js';
+import { runSync, runNpxTsxSync } from '../core/run-command.js';
 import { randomBytes } from 'crypto';
 
 const ROOT = resolve(process.cwd());

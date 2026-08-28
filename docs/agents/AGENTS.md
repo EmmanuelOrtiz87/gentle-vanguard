@@ -46,7 +46,7 @@ Based on detection, load `config/orchestrator.json#toolProfiles.<name>`.
 
 If config prevents task completion (3+ turns, user complaint, loop, truncation):
 
-1. `src/self-diagnosis.ts -CurrentProfile "<p>" -CurrentChatLevel "<l>" -TurnCount <N>`
+1. `src/resilience/self-diagnosis.ts -CurrentProfile "<p>" -CurrentChatLevel "<l>" -TurnCount <N>`
 2. Override to `lleno`/`chat-balanced`
 3. Notify: `[BREAK GLASS] motivo: {reason}`
 

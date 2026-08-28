@@ -13,8 +13,8 @@ function main(): void {
 
   console.log('[INFO] Running post-merge sync...');
 
-  const validatorTs = resolve(repoRoot, 'src', 'cross-workspace-validator.ts');
-  const validatorPs1 = resolve(repoRoot, 'src/cross-workspace-validator.ts');
+  const validatorTs = resolve(repoRoot, 'src', 'integrations', 'cross-workspace-validator.ts');
+  const validatorPs1 = resolve(repoRoot, 'src/integrations/cross-workspace-validator.ts');
   if (existsSync(validatorTs)) {
     runSync('npx', ['tsx', validatorTs, '--fix'], { stdio: 'inherit' });
   } else if (existsSync(validatorPs1)) {
