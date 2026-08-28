@@ -4,6 +4,7 @@ import { extname, join, resolve } from 'path';
 import { analyzeInput, configureConnection, getConnectionStatus } from './atlassian';
 import { getReport, listReports, saveReport } from './reports';
 import { toDocx, toHtml, toMarkdown, toPdf, type ExportFormat } from './export';
+import { recordMetric, summarize as summarizeMetrics } from './metrics';
 
 const PORT = Number(process.env.GV_ANALYTICS_PORT || 4754);
 const APP_ROOT = resolve(process.cwd());
@@ -78,7 +79,12 @@ async function handleExport(req: IncomingMessage, res: ServerResponse, pathname:
   sendJson(res, 400, { error: `Unsupported format: ${format}` });
 }
 
-async function routeApi(req: IncomingMessage, res: ServerResponse, pathname: string) {
+async function routeApi(
+  req: IncomingMessage,
+  res: ServerResponse,
+  pathname: string,
+  llmMetaRef: { current: { llmSource?: string; llmCached?: boolean } } = { current: {} },
+) {
   try {
     if (req.method === 'GET' && pathname === '/api/connection/status') {
       sendJson(res, 200, await getConnectionStatus());
@@ -92,6 +98,8 @@ async function routeApi(req: IncomingMessage, res: ServerResponse, pathname: str
       const body = (await readBody(req)) as { mode?: 'url' | 'request'; input?: string };
       const report = await analyzeInput(body.mode || 'request', body.input || '');
       saveReport(report);
+      llmMetaRef.current.llmSource = report.llmSource ?? 'heuristic';
+      llmMetaRef.current.llmCached = report.llmCached === true;
       sendJson(res, 200, report);
       return;
     }
@@ -113,6 +121,13 @@ async function routeApi(req: IncomingMessage, res: ServerResponse, pathname: str
     }
     if (req.method === 'GET' && /^\/api\/reports\/[^/]+\/export$/.test(pathname)) {
       await handleExport(req, res, pathname);
+      return;
+    }
+    if (req.method === 'GET' && pathname === '/api/metrics') {
+      const url = new URL(req.url || '/', `http://${req.headers.host || '127.0.0.1'}`);
+      const hours = Number(url.searchParams.get('hours') || 24);
+      const safeHours = Math.min(Math.max(Number.isFinite(hours) ? hours : 24, 1), 168);
+      sendJson(res, 200, summarizeMetrics(safeHours));
       return;
     }
     sendJson(res, 404, { error: 'API route not found' });
@@ -151,7 +166,31 @@ function serveStatic(req: IncomingMessage, res: ServerResponse, pathname: string
 const server = createServer((req, res) => {
   const url = new URL(req.url || '/', `http://${req.headers.host || '127.0.0.1'}`);
   if (url.pathname.startsWith('/api/')) {
-    void routeApi(req, res, url.pathname);
+    const start = Date.now();
+    const pathname = url.pathname;
+    const llmMetaRef: { current: { llmSource?: string; llmCached?: boolean } } = { current: {} };
+    void routeApi(req, res, pathname, llmMetaRef)
+      .catch((error) => {
+        console.error(`[gv-analytics] api error on ${pathname}:`, error);
+        if (!res.headersSent) {
+          sendJson(res, 500, { error: error instanceof Error ? error.message : String(error) });
+        }
+      })
+      .finally(() => {
+        recordMetric({
+          endpoint: pathname,
+          status: res.statusCode,
+          durationMs: Date.now() - start,
+          llmSource:
+            (llmMetaRef.current.llmSource as
+              | 'agent'
+              | 'cache'
+              | 'fallback'
+              | 'heuristic'
+              | null) ?? null,
+          llmCached: llmMetaRef.current.llmCached,
+        });
+      });
     return;
   }
   serveStatic(req, res, url.pathname);
