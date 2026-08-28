@@ -22,6 +22,7 @@ import {
   Sun,
 } from 'lucide-react';
 import type { AnalyticsReport, ConnectionForm, ConnectionStatus, OAuthStatus } from './types';
+import { useT, LocaleSwitcher } from './i18n';
 
 interface ReportListItem {
   id: string;
@@ -57,6 +58,7 @@ async function readJson<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export function App() {
+  const { tt } = useT();
   const [status, setStatus] = useState<ConnectionStatus | null>(null);
   const [form, setForm] = useState<ConnectionForm>(emptyForm);
   const [input, setInput] = useState('');
@@ -100,7 +102,7 @@ export function App() {
     try {
       const next = await readJson<{ url: string; state: string }>('/api/oauth/start', { method: 'POST' });
       window.open(next.url, '_blank', 'noopener');
-      setMessage('Atlassian abierto en nueva pestana. Autoriza la app y vuelve aca.');
+      setMessage(tt('conn.oauthOpened'));
     } catch (error) {
       setMessage(error instanceof Error ? error.message : String(error));
     } finally {
@@ -114,7 +116,7 @@ export function App() {
     try {
       await readJson<{ ok: boolean }>('/api/oauth/disconnect', { method: 'POST' });
       await loadOauthStatus();
-      setMessage('Tokens OAuth eliminados del vault.');
+      setMessage(tt('conn.oauthRemoved'));
     } catch (error) {
       setMessage(error instanceof Error ? error.message : String(error));
     } finally {
@@ -204,7 +206,7 @@ export function App() {
       setForm(emptyForm);
       setEditingConnection(false);
       setTestResult(null);
-      setMessage('Conexion guardada y verificada.');
+      setMessage(tt('conn.saved'));
     } catch (error) {
       setMessage(error instanceof Error ? error.message : String(error));
     } finally {
@@ -225,7 +227,7 @@ export function App() {
       const next = await readJson<ConnectionStatus>('/api/connection/status');
       setTestResult(next);
       const allOk = next.jira.ok && next.confluence.ok && next.bitbucket.ok;
-      setMessage(allOk ? 'Conexion valida para los 3 servicios.' : 'Conexion parcial, revisa el detalle por servicio.');
+      setMessage(allOk ? tt('conn.validAll') : tt('conn.partial'));
     } catch (error) {
       setMessage(error instanceof Error ? error.message : String(error));
     } finally {
@@ -282,17 +284,17 @@ export function App() {
           <div className="brand">
             <img src="/logo.svg" alt="Gentle-Vanguard" />
             <span className="name">
-              Gentle<span>Vanguard</span> <small>Analytics</small>
+              Gentle<span>Vanguard</span> <small>{tt('brand.analytics')}</small>
             </span>
           </div>
-          <nav className="main-nav" aria-label="Secciones">
+          <nav className="main-nav" aria-label={tt('nav.sections')}>
             <button
               type="button"
               className={activeSection === 'conexion' ? 'active' : ''}
               onClick={() => scrollToSection('conexion')}
             >
               <span className="step">1</span>
-              Conexion
+              {tt('nav.connection')}
             </button>
             <button
               type="button"
@@ -300,7 +302,7 @@ export function App() {
               onClick={() => scrollToSection('analisis')}
             >
               <span className="step">2</span>
-              Analisis
+              {tt('nav.analysis')}
             </button>
             <button
               type="button"
@@ -308,7 +310,7 @@ export function App() {
               onClick={() => scrollToSection('reporte')}
             >
               <span className="step">3</span>
-              Reporte
+              {tt('nav.report')}
             </button>
             <button
               type="button"
@@ -316,23 +318,24 @@ export function App() {
               onClick={() => scrollToSection('evidencia')}
             >
               <span className="step">4</span>
-              Evidencia
+              {tt('nav.evidence')}
             </button>
           </nav>
           <div className={`system-state ${statusTone}`}>
             <span />
             {statusTone === 'ready'
-              ? 'Atlassian listo'
+              ? tt('state.ready')
               : statusTone === 'partial'
-                ? 'Conexion parcial'
-                : 'Sin conexion'}
+                ? tt('state.partial')
+                : tt('state.none')}
           </div>
+          <LocaleSwitcher />
           <button
             type="button"
             className="theme-toggle"
             onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
-            title={theme === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'}
-            aria-label="Cambiar tema"
+            title={theme === 'dark' ? tt('theme.toLight') : tt('theme.toDark')}
+            aria-label={tt('theme.toggle')}
           >
             {theme === 'dark' ? <Sun /> : <Moon />}
           </button>
@@ -346,11 +349,9 @@ export function App() {
             <div className="panel-heading">
               <KeyRound className="icon" />
               <div>
-                <h2>Conexion Atlassian</h2>
+                <h2>{tt('conn.title')}</h2>
                 <p>
-                  {connected
-                    ? 'Credenciales cargadas para esta ejecucion local.'
-                    : 'Configura la conexion una sola vez para operar.'}
+                  {connected ? tt('conn.loaded') : tt('conn.configure')}
                 </p>
               </div>
             </div>
@@ -358,21 +359,21 @@ export function App() {
             {connected && !editingConnection ? (
               <div className="connection-summary">
                 <div>
-                  <span>Site</span>
+                  <span>{tt('conn.site')}</span>
                   <strong>{status?.siteUrl || 'Atlassian Cloud'}</strong>
                 </div>
                 <div>
-                  <span>Bitbucket</span>
-                  <strong>{status?.bitbucketWorkspace || 'Workspace no definido'}</strong>
+                  <span>{tt('conn.bitbucket')}</span>
+                  <strong>{status?.bitbucketWorkspace || tt('conn.workspaceUndefined')}</strong>
                 </div>
                 <div className="connection-actions">
                   <button className="secondary-action" onClick={() => void loadStatus()} disabled={busy}>
                     <RefreshCw className={busy ? 'spin' : ''} />
-                    Revalidar
+                    {tt('conn.revalidate')}
                   </button>
                   <button className="secondary-action" onClick={() => setEditingConnection(true)}>
                     <Settings />
-                    Editar
+                    {tt('conn.edit')}
                   </button>
                 </div>
                 {oauth ? <OAuthCard oauth={oauth} busy={oauthBusy} onConnect={() => void startOauth()} onDisconnect={() => void disconnectOauth()} /> : null}
@@ -380,7 +381,7 @@ export function App() {
             ) : (
               <form onSubmit={(event) => void saveConnection(event)}>
                 <label>
-                  Site URL
+                  {tt('conn.siteUrl')}
                   <input
                     value={form.siteUrl}
                     onChange={(event) => setForm({ ...form, siteUrl: event.target.value })}
@@ -389,7 +390,7 @@ export function App() {
                   />
                 </label>
                 <label>
-                  Email
+                  {tt('conn.email')}
                   <input
                     value={form.email}
                     onChange={(event) => setForm({ ...form, email: event.target.value })}
@@ -398,7 +399,7 @@ export function App() {
                   />
                 </label>
                 <label>
-                  API token
+                  {tt('conn.apiToken')}
                   <input
                     value={form.apiToken}
                     onChange={(event) => setForm({ ...form, apiToken: event.target.value })}
@@ -408,7 +409,7 @@ export function App() {
                   />
                 </label>
                 <label>
-                  Bitbucket workspace
+                  {tt('conn.bitbucketWorkspace')}
                   <input
                     value={form.bitbucketWorkspace}
                     onChange={(event) => setForm({ ...form, bitbucketWorkspace: event.target.value })}
@@ -421,14 +422,14 @@ export function App() {
                     type="button"
                     onClick={() => void testConnection()}
                     disabled={testing || !form.siteUrl || !form.email || !form.apiToken}
-                    title="Probar credenciales sin guardar"
+                    title={tt('conn.test')}
                   >
                     {testing ? <Loader2 className="spin" /> : <Search />}
-                    Probar
+                    {tt('conn.test')}
                   </button>
                   <button className="primary-action" type="submit" disabled={busy}>
                     {busy ? <Loader2 className="spin" /> : <ShieldCheck />}
-                    Guardar y probar
+                    {tt('conn.saveAndTest')}
                   </button>
                 </div>
                 {testResult ? (
@@ -446,8 +447,8 @@ export function App() {
             <div className="panel-heading">
                 <Activity className="icon" />
               <div>
-                <h2>Estado</h2>
-                <p>{connected ? 'Sesion operativa sin exponer credenciales.' : 'Pendiente de conexion.'}</p>
+                <h2>{tt('status.title')}</h2>
+                <p>{connected ? tt('status.operational') : tt('status.pending')}</p>
               </div>
             </div>
             <ServiceLine label="Jira" service={status?.jira} />
@@ -459,12 +460,12 @@ export function App() {
             <div className="panel-heading">
               <History className="icon" />
               <div>
-                <h2>Historial</h2>
-                <p>Ultimos 5 reportes persistidos en Nexus, listos para retomar.</p>
+                <h2>{tt('history.title')}</h2>
+                <p>{tt('history.subtitle')}</p>
               </div>
             </div>
             {history.length === 0 ? (
-              <p className="history-empty">Sin reportes todavia.</p>
+              <p className="history-empty">{tt('history.empty')}</p>
             ) : (
               <ul className="history-list">
                 {history.map((item) => (
@@ -490,14 +491,14 @@ export function App() {
         <section className="main-column">
           <section className="analysis-board" id="analisis">
             <div className="board-toolbar">
-              <div className="mode-switch" role="tablist" aria-label="Modo de analisis">
+              <div className="mode-switch" role="tablist" aria-label={tt('analysis.mode')}>
                 <button className={mode === 'url' ? 'active' : ''} onClick={() => setMode('url')}>
                   <Network />
-                  URL
+                  {tt('analysis.url')}
                 </button>
                 <button className={mode === 'request' ? 'active' : ''} onClick={() => setMode('request')}>
                   <BookOpen />
-                  Pedido
+                  {tt('analysis.request')}
                 </button>
               </div>
               <div className="export-wrap">
@@ -505,15 +506,15 @@ export function App() {
                   className="secondary-action"
                   disabled={!report}
                   onClick={() => setExportOpen((open) => !open)}
-                  title="Exportar reporte"
+                  title={tt('analysis.export')}
                 >
                   <Download />
-                  Exportar
+                  {tt('analysis.export')}
                 </button>
                 {exportOpen && report && (
                   <div className="export-menu" role="menu">
                     <div className="export-template">
-                      <label htmlFor="export-template">Plantilla</label>
+                      <label htmlFor="export-template">{tt('analysis.template')}</label>
                       <select
                         id="export-template"
                         value={template}
@@ -553,11 +554,7 @@ export function App() {
             <textarea
               value={input}
               onChange={(event) => setInput(event.target.value)}
-              placeholder={
-                mode === 'url'
-                  ? 'Pega una URL de Jira, Confluence, Bitbucket, PR o repositorio...'
-                  : 'Pega el pedido funcional o tecnico para analizar impacto, frentes, roles y estimacion...'
-              }
+              placeholder={mode === 'url' ? tt('analysis.urlPlaceholder') : tt('analysis.requestPlaceholder')}
             />
 
             {message && (
@@ -569,7 +566,7 @@ export function App() {
 
             <button className="primary-action analyze" disabled={!canAnalyze} onClick={() => void analyze()}>
               {busy ? <Loader2 className="spin" /> : <Search />}
-              Analizar
+              {tt('analysis.run')}
             </button>
           </section>
 
@@ -582,69 +579,69 @@ export function App() {
 }
 
 function ServiceLine({ label, service }: { label: string; service?: { ok: boolean; message: string } }) {
+  const { tt } = useT();
   return (
     <div className="service-line">
       {service?.ok ? <CheckCircle2 className="ok" /> : <AlertTriangle className="warn" />}
       <span>{label}</span>
-      <strong>{service?.message || 'Pendiente'}</strong>
+      <strong>{service?.message || tt('status.pendingShort')}</strong>
     </div>
   );
 }
 
 function EmptyReport() {
+  const { tt } = useT();
   return (
     <section className="report-empty">
       <Braces />
-      <h2>Listo para interpretar una iniciativa</h2>
-      <p>
-        El primer analisis va a recuperar evidencia, detectar frentes de impacto y producir una
-        respuesta tecnica lista para evolucionar.
-      </p>
+      <h2>{tt('report.emptyTitle')}</h2>
+      <p>{tt('report.emptyBody')}</p>
     </section>
   );
 }
 
 function ReportView({ report }: { report: AnalyticsReport }) {
+  const { tt } = useT();
   return (
     <section className="report" id="reporte">
       <div className="report-header">
         <div>
-          <span className="eyebrow">Reporte {report.id}</span>
+          <span className="eyebrow">{tt('report.label')} {report.id}</span>
           <h2>{report.summary}</h2>
         </div>
         <time>{new Date(report.createdAt).toLocaleString()}</time>
       </div>
 
       <div className="metric-strip">
-        <Metric label="Complejidad" value={report.complexity.level} />
-        <Metric label="Delivery" value={`${report.estimate.deliveryHours}h`} />
-        <Metric label="QA" value={`${report.estimate.qaHours}h`} />
-        <Metric label="Confianza" value={report.estimate.confidence} />
+        <Metric label={tt('report.complexity')} value={report.complexity.level} />
+        <Metric label={tt('report.delivery')} value={`${report.estimate.deliveryHours}h`} />
+        <Metric label={tt('report.qa')} value={`${report.estimate.qaHours}h`} />
+        <Metric label={tt('report.confidence')} value={report.estimate.confidence} />
       </div>
 
       <LLMProvenance report={report} />
 
-      <ReportSection title="Estado actual" items={report.currentState} />
-      <ReportSection title="Solucion propuesta" items={report.proposedSolution} />
+      <ReportSection title={tt('report.currentState')} items={report.currentState} />
+      <ReportSection title={tt('report.proposedSolution')} items={report.proposedSolution} />
       <section className="report-section">
-        <h3>Frentes involucrados</h3>
+        <h3>{tt('report.fronts')}</h3>
         <ul className="fronts-list">
           {report.impactedFronts.map((front) => (
             <li key={front}>{front}</li>
           ))}
         </ul>
       </section>
-      <ReportSection title="Roles" items={report.roles} />
-      <ReportSection title="Escenarios QA" items={report.qaScenarios} />
-      <ReportSection title="Proximas acciones" items={report.nextActions} />
+      <ReportSection title={tt('report.roles')} items={report.roles} />
+      <ReportSection title={tt('report.qaScenarios')} items={report.qaScenarios} />
+      <ReportSection title={tt('report.nextActions')} items={report.nextActions} />
 
       <div className="diagram-grid">
-        <DiagramBlock label="Estado actual" content={report.diagrams.current} />
-        <DiagramBlock label="Estado propuesto" content={report.diagrams.proposed} />
+        <DiagramBlock label={tt('report.currentState')} content={report.diagrams.current} />
+        <DiagramBlock label={tt('report.proposedState')} content={report.diagrams.proposed} />
       </div>
 
       <section className="evidence-list" id="evidencia">
-        <h3>Evidencia</h3>
+        <h3>{tt('report.evidence')}</h3>
         {report.evidence.map((item) => (
           <article key={`${item.source}-${item.title}-${item.url || item.detail}`}>
             <strong>{item.source}</strong>
@@ -678,50 +675,48 @@ function OAuthCard({
   onConnect: () => void;
   onDisconnect: () => void;
 }) {
+  const { tt } = useT();
   return (
     <div className="oauth-card">
       <div className="oauth-heading">
-        <span>OAuth 2.0 (3LO)</span>
+        <span>{tt('oauth.title')}</span>
         <em className={oauth.connected ? 'oauth-on' : 'oauth-off'}>
-          {oauth.connected ? 'Conectado' : oauth.configured ? 'Listo para autorizar' : 'No configurado'}
+          {oauth.connected ? tt('oauth.connected') : oauth.configured ? tt('oauth.ready') : tt('oauth.notConfigured')}
         </em>
       </div>
       {oauth.connected ? (
         <>
           {typeof oauth.expiresAt === 'number' ? (
             <p className="oauth-detail">
-              Expira: {new Date(oauth.expiresAt).toLocaleString()}
+              {tt('oauth.expires')} {new Date(oauth.expiresAt).toLocaleString()}
             </p>
           ) : null}
           <div className="connection-actions">
             <button className="secondary-action" onClick={onDisconnect} disabled={busy}>
-              Desconectar
+              {tt('oauth.disconnect')}
             </button>
           </div>
         </>
       ) : (
         <>
           <p className="oauth-detail">
-            Callback local: <code>{oauth.redirectUri}</code>
+            {tt('oauth.callback')} <code>{oauth.redirectUri}</code>
           </p>
           <p className="oauth-detail">
-            Scopes: <code>{oauth.scopes.join(' ')}</code>
+            {tt('oauth.scopes')} <code>{oauth.scopes.join(' ')}</code>
           </p>
           {!oauth.configured ? (
-            <p className="oauth-detail muted">
-              Configurar <code>GVA_OAUTH_CLIENT_ID</code> y <code>GVA_OAUTH_CLIENT_SECRET</code>{' '}
-              en el entorno del server para habilitar OAuth.
-            </p>
+            <p className="oauth-detail muted">{tt('oauth.configureHint')}</p>
           ) : null}
           <div className="connection-actions">
             <button
               className="primary-action"
               onClick={onConnect}
               disabled={busy || !oauth.configured}
-              title="Abrir Atlassian para autorizar la app"
+              title={tt('oauth.connect')}
             >
               {busy ? <Loader2 className="spin" /> : <ShieldCheck />}
-              Conectar con Atlassian
+              {tt('oauth.connect')}
             </button>
           </div>
         </>
@@ -731,12 +726,13 @@ function OAuthCard({
 }
 
 function LLMProvenance({ report }: { report: AnalyticsReport }) {
+  const { tt } = useT();
   const source = report.llmSource ?? 'heuristic';
   const labelMap: Record<typeof source, string> = {
-    agent: 'Generado por LLM (sdd-explore)',
-    cache: 'Recuperado del cache LLM',
-    fallback: 'Fallback heuristico (LLM no disponible)',
-    heuristic: 'Heuristico local',
+    agent: tt('llm.agent'),
+    cache: tt('llm.cache'),
+    fallback: tt('llm.fallback'),
+    heuristic: tt('llm.heuristic'),
   };
   const detail =
     typeof report.llmDurationMs === 'number'
@@ -766,10 +762,11 @@ async function loadMermaid(): Promise<MermaidGlobal | null> {
 }
 
 function DiagramBlock({ label, content }: { label: string; content: string }) {
+  const { tt } = useT();
   const [copied, setCopied] = useState(false);
   const [mermaidHtml, setMermaidHtml] = useState<string | null>(null);
   const [mermaidError, setMermaidError] = useState<string | null>(null);
-  const text = content || 'Sin contenido.';
+  const text = content || tt('report.noContent');
   const isMermaid = /^\s*(```\s*)?(mermaid|graph|sequenceDiagram|flowchart|classDiagram|stateDiagram|erDiagram|gantt|pie|journey)/im.test(
     text,
   );
@@ -824,9 +821,9 @@ function DiagramBlock({ label, content }: { label: string; content: string }) {
           {label}
           {isMermaid ? <em className="mermaid-tag">mermaid</em> : null}
         </span>
-        <button type="button" onClick={() => void copy()} title="Copiar al portapapeles">
+        <button type="button" onClick={() => void copy()} title={tt('report.copy')}>
           <Copy />
-          {copied ? 'Copiado' : 'Copiar'}
+          {copied ? tt('report.copied') : tt('report.copy')}
         </button>
       </div>
       {mermaidHtml ? (
@@ -835,7 +832,7 @@ function DiagramBlock({ label, content }: { label: string; content: string }) {
         <pre>
           {text}
           {isMermaid && mermaidError ? (
-            <span className="mermaid-fallback"> (render mermaid: {mermaidError})</span>
+            <span className="mermaid-fallback"> ({tt('report.mermaidRender')} {mermaidError})</span>
           ) : null}
         </pre>
       )}
