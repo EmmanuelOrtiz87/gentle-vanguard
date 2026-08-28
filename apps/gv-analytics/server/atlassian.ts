@@ -105,6 +105,13 @@ async function testService(connection: StoredConnection, service: 'jira' | 'conf
   }
 }
 
+/** Masks a secret for display, showing only the last 4 chars (never the raw value). */
+function maskSecret(secret?: string): string | undefined {
+  if (!secret) return undefined;
+  const tail = secret.slice(-4);
+  return `••••${tail}`;
+}
+
 export async function getConnectionStatus(): Promise<ConnectionStatus> {
   const connection = loadConnection();
   if (!connection) {
@@ -129,23 +136,56 @@ export async function getConnectionStatus(): Promise<ConnectionStatus> {
     email: connection.email,
     bitbucketWorkspace: connection.bitbucketWorkspace,
     updatedAt: connection.updatedAt,
+    apiTokenSet: Boolean(connection.apiToken),
+    apiTokenMasked: maskSecret(connection.apiToken),
+    bitbucketApiTokenSet: Boolean(connection.bitbucketApiToken),
+    bitbucketApiTokenMasked: maskSecret(connection.bitbucketApiToken),
+  };
+}
+
+/** Builds a StoredConnection from a form, keeping existing tokens when a field is left blank. */
+function buildConnection(form: ConnectionForm): StoredConnection {
+  const existing = loadConnection();
+  const apiToken = form.apiToken.trim() || existing?.apiToken || '';
+  if (!form.siteUrl || !form.email || !apiToken) {
+    throw new Error('Site URL, email y API token son obligatorios.');
+  }
+  return {
+    siteUrl: cleanSiteUrl(form.siteUrl),
+    email: form.email.trim(),
+    apiToken,
+    bitbucketApiToken: form.bitbucketApiToken?.trim() || existing?.bitbucketApiToken || undefined,
+    bitbucketWorkspace: form.bitbucketWorkspace.trim(),
+    updatedAt: new Date().toISOString(),
   };
 }
 
 export async function configureConnection(form: ConnectionForm): Promise<ConnectionStatus> {
-  if (!form.siteUrl || !form.email || !form.apiToken) {
-    throw new Error('Site URL, email y API token son obligatorios.');
-  }
-  const connection: StoredConnection = {
-    siteUrl: cleanSiteUrl(form.siteUrl),
-    email: form.email.trim(),
-    apiToken: form.apiToken.trim(),
-    bitbucketApiToken: form.bitbucketApiToken?.trim() || undefined,
-    bitbucketWorkspace: form.bitbucketWorkspace.trim(),
-    updatedAt: new Date().toISOString(),
-  };
-  saveConnection(connection);
+  saveConnection(buildConnection(form));
   return getConnectionStatus();
+}
+
+/** Tests the provided credentials WITHOUT persisting them to the vault. */
+export async function testConnectionForm(form: ConnectionForm): Promise<ConnectionStatus> {
+  const connection = buildConnection(form);
+  const [jira, confluence, bitbucket] = await Promise.all([
+    testService(connection, 'jira'),
+    testService(connection, 'confluence'),
+    testService(connection, 'bitbucket'),
+  ]);
+  return {
+    configured: true,
+    jira,
+    confluence,
+    bitbucket,
+    siteUrl: connection.siteUrl,
+    email: connection.email,
+    bitbucketWorkspace: connection.bitbucketWorkspace,
+    apiTokenSet: Boolean(connection.apiToken),
+    apiTokenMasked: maskSecret(connection.apiToken),
+    bitbucketApiTokenSet: Boolean(connection.bitbucketApiToken),
+    bitbucketApiTokenMasked: maskSecret(connection.bitbucketApiToken),
+  };
 }
 
 function asRecord(value: unknown): Record<string, unknown> {

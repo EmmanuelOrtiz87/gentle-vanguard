@@ -7,6 +7,14 @@ export interface ConnectionStatus {
   email?: string;
   bitbucketWorkspace?: string;
   updatedAt?: string;
+  /** Whether the Jira/Confluence API token is stored (masked, never the raw value). */
+  apiTokenSet?: boolean;
+  /** Masked hint of the Jira/Confluence token (e.g. "••••1234"), for edit prefill. */
+  apiTokenMasked?: string;
+  /** Whether the Bitbucket API token is stored (masked, never the raw value). */
+  bitbucketApiTokenSet?: boolean;
+  /** Masked hint of the Bitbucket token (e.g. "••••1234"), for edit prefill. */
+  bitbucketApiTokenMasked?: string;
 }
 
 export interface ServiceStatus {

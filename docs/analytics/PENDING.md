@@ -76,6 +76,12 @@ Leyenda: `[ ]` pendiente · `[x]` hecho · `[~]` en curso · `[!]` riesgo.
   filtro por modo. i18n ampliado en en/es/pt-BR.
 - [x] **Storybook** — OMITIDO por decisión del usuario (componentes gv-analytics son
   internos de una sola app, no un design system; no hay infra Storybook en el repo).
+- [x] **UX/seguridad de conexión** — (a) "Probar" ahora usa `POST /api/connection/test`
+  que valida credenciales SIN persistir (solo "Guardar y probar" persiste); (b) "Editar"
+  precarga siteUrl/email/workspace desde la conexión guardada y muestra tokens enmascarados
+  (`apiTokenMasked`/`bitbucketApiTokenMasked`, p.ej. `••••771A`) con hint "dejar vacío para
+  mantener"; (c) `buildConnection` mantiene el token existente si el campo queda vacío;
+  (d) campos obligatorios marcados con `*` (siteUrl, email, apiToken).
 
 ## Estado verificado
 

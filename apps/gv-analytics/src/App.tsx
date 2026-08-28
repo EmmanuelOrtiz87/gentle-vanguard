@@ -184,12 +184,11 @@ export function App() {
     setTestResult(null);
     setMessage(null);
     try {
-      // Save first (the API does a test+save combo), then re-check.
-      await readJson<ConnectionStatus>('/api/connection', {
+      // Test-only endpoint: validates the credentials WITHOUT persisting them.
+      const next = await readJson<ConnectionStatus>('/api/connection/test', {
         method: 'POST',
         body: JSON.stringify(form),
       });
-      const next = await readJson<ConnectionStatus>('/api/connection/status');
       setTestResult(next);
       const allOk = next.jira.ok && next.confluence.ok && next.bitbucket.ok;
       setMessage(allOk ? tt('conn.validAll') : tt('conn.partial'));
@@ -198,6 +197,19 @@ export function App() {
     } finally {
       setTesting(false);
     }
+  };
+
+  // Prefill the edit form from the currently stored connection (tokens stay masked).
+  const editConnection = () => {
+    setForm({
+      siteUrl: status?.siteUrl || '',
+      email: status?.email || '',
+      apiToken: '',
+      bitbucketApiToken: '',
+      bitbucketWorkspace: status?.bitbucketWorkspace || '',
+    });
+    setEditingConnection(true);
+    setTestResult(null);
   };
 
   const analyze = async () => {
@@ -404,6 +416,7 @@ export function App() {
             oauthBusy={oauthBusy}
             onSave={saveConnection}
             onTest={testConnection}
+            onEdit={editConnection}
             onRevalidate={loadStatus}
             onOauthConnect={startOauth}
             onOauthDisconnect={disconnectOauth}
@@ -437,6 +450,7 @@ interface ConfigViewProps {
   oauthBusy: boolean;
   onSave: (event: React.FormEvent) => Promise<void>;
   onTest: () => Promise<void>;
+  onEdit: () => void;
   onRevalidate: () => Promise<void>;
   onOauthConnect: () => Promise<void>;
   onOauthDisconnect: () => Promise<void>;
@@ -456,6 +470,7 @@ function ConfigView({
   oauthBusy,
   onSave,
   onTest,
+  onEdit,
   onRevalidate,
   onOauthConnect,
   onOauthDisconnect,
@@ -487,7 +502,7 @@ function ConfigView({
                 <RefreshCw className={busy ? 'spin' : ''} />
                 {tt('conn.revalidate')}
               </button>
-              <button className="secondary-action" onClick={() => setEditingConnection(true)}>
+              <button className="secondary-action" onClick={onEdit}>
                 <Settings />
                 {tt('conn.edit')}
               </button>
@@ -504,7 +519,7 @@ function ConfigView({
         ) : (
           <form onSubmit={(event) => void onSave(event)}>
             <label>
-              {tt('conn.siteUrl')}
+              {tt('conn.siteUrl')} <span className="required" title={tt('conn.requiredHint')}>*</span>
               <input
                 value={form.siteUrl}
                 onChange={(event) => setForm({ ...form, siteUrl: event.target.value })}
@@ -513,7 +528,7 @@ function ConfigView({
               />
             </label>
             <label>
-              {tt('conn.email')}
+              {tt('conn.email')} <span className="required" title={tt('conn.requiredHint')}>*</span>
               <input
                 value={form.email}
                 onChange={(event) => setForm({ ...form, email: event.target.value })}
@@ -523,8 +538,15 @@ function ConfigView({
             </label>
 
             <fieldset className="token-group">
-              <legend>{tt('conn.apiToken')}</legend>
+              <legend>
+                {tt('conn.apiToken')} <span className="required" title={tt('conn.requiredHint')}>*</span>
+              </legend>
               <p className="field-hint">{tt('conn.tokenHint')}</p>
+              {status?.apiTokenSet ? (
+                <p className="token-loaded-hint">
+                  {tt('conn.tokenLoaded').replace('{masked}', status.apiTokenMasked || '')} · {tt('conn.keepExisting')}
+                </p>
+              ) : null}
               <input
                 value={form.apiToken}
                 onChange={(event) => setForm({ ...form, apiToken: event.target.value })}
@@ -537,10 +559,15 @@ function ConfigView({
             <fieldset className="token-group">
               <legend>{tt('conn.bitbucketApiToken')}</legend>
               <p className="field-hint">{tt('conn.bitbucketTokenHint')}</p>
+              {status?.bitbucketApiTokenSet ? (
+                <p className="token-loaded-hint">
+                  {tt('conn.tokenLoaded').replace('{masked}', status.bitbucketApiTokenMasked || '')} · {tt('conn.keepExisting')}
+                </p>
+              ) : null}
               <input
                 value={form.bitbucketApiToken}
                 onChange={(event) => setForm({ ...form, bitbucketApiToken: event.target.value })}
-                placeholder="Token Bitbucket"
+                placeholder="App Password de Bitbucket"
                 type="password"
                 autoComplete="current-password"
               />

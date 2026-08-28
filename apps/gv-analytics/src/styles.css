@@ -1200,6 +1200,18 @@ form input:focus {
   margin: 0;
   line-height: 1.4;
 }
+.required {
+  color: var(--gv-amber, #f4bb4f);
+  font-weight: 700;
+  margin-left: 2px;
+}
+.token-loaded-hint {
+  font-size: 11.5px;
+  color: var(--gv-cyan, #22d3ee);
+  margin: 0;
+  line-height: 1.4;
+  font-family: var(--mono);
+}
 .sub-field {
   margin-top: 4px;
 }

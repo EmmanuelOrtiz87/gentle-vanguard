@@ -2,7 +2,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'http';
 import { readFileSync, statSync } from 'fs';
 import { extname, join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { analyzeInput, configureConnection, getConnectionStatus } from './atlassian';
+import { analyzeInput, configureConnection, getConnectionStatus, testConnectionForm } from './atlassian';
 import { getReport, listReports, saveReport } from './reports';
 import { toDocx, toHtml, toMarkdown, toPdf, type ExportFormat } from './export';
 import { recordMetric, summarize as summarizeMetrics } from './metrics';
@@ -122,6 +122,11 @@ async function routeApi(
     }
     if (req.method === 'POST' && pathname === '/api/connection') {
       sendJson(res, 200, await configureConnection((await readBody(req)) as any));
+      return;
+    }
+    if (req.method === 'POST' && pathname === '/api/connection/test') {
+      // Tests the provided credentials WITHOUT persisting them to the vault.
+      sendJson(res, 200, await testConnectionForm((await readBody(req)) as any));
       return;
     }
     if (req.method === 'POST' && pathname === '/api/analyze') {
