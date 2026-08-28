@@ -21,7 +21,7 @@ import {
   ShieldCheck,
   Sun,
 } from 'lucide-react';
-import type { AnalyticsReport, ConnectionForm, ConnectionStatus } from './types';
+import type { AnalyticsReport, ConnectionForm, ConnectionStatus, OAuthStatus } from './types';
 
 interface ReportListItem {
   id: string;
@@ -69,10 +69,49 @@ export function App() {
   });
   const [testing, setTesting] = useState(false);
   const [testResult, setTestResult] = useState<ConnectionStatus | null>(null);
+  const [oauth, setOauth] = useState<OAuthStatus | null>(null);
+  const [oauthBusy, setOauthBusy] = useState(false);
 
   const loadStatus = async () => {
     const next = await readJson<ConnectionStatus>('/api/connection/status');
     setStatus(next);
+  };
+
+  const loadOauthStatus = async () => {
+    try {
+      const next = await readJson<OAuthStatus>('/api/oauth/status');
+      setOauth(next);
+    } catch (error) {
+      setOauth(null);
+    }
+  };
+
+  const startOauth = async () => {
+    setOauthBusy(true);
+    setMessage(null);
+    try {
+      const next = await readJson<{ url: string; state: string }>('/api/oauth/start', { method: 'POST' });
+      window.open(next.url, '_blank', 'noopener');
+      setMessage('Atlassian abierto en nueva pestana. Autoriza la app y vuelve aca.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : String(error));
+    } finally {
+      setOauthBusy(false);
+    }
+  };
+
+  const disconnectOauth = async () => {
+    setOauthBusy(true);
+    setMessage(null);
+    try {
+      await readJson<{ ok: boolean }>('/api/oauth/disconnect', { method: 'POST' });
+      await loadOauthStatus();
+      setMessage('Tokens OAuth eliminados del vault.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : String(error));
+    } finally {
+      setOauthBusy(false);
+    }
   };
 
   const loadHistory = async () => {
@@ -83,6 +122,7 @@ export function App() {
   useEffect(() => {
     void loadStatus().catch((error) => setMessage(error.message));
     void loadHistory().catch(() => undefined);
+    void loadOauthStatus().catch(() => undefined);
   }, []);
 
   useEffect(() => {
@@ -324,6 +364,7 @@ export function App() {
                     Editar
                   </button>
                 </div>
+                {oauth ? <OAuthCard oauth={oauth} busy={oauthBusy} onConnect={() => void startOauth()} onDisconnect={() => void disconnectOauth()} /> : null}
               </div>
             ) : (
               <form onSubmit={(event) => void saveConnection(event)}>
@@ -594,6 +635,69 @@ function Metric({ label, value }: { label: string; value: string }) {
     <div className="metric">
       <span>{label}</span>
       <strong>{value}</strong>
+    </div>
+  );
+}
+
+function OAuthCard({
+  oauth,
+  busy,
+  onConnect,
+  onDisconnect,
+}: {
+  oauth: OAuthStatus;
+  busy: boolean;
+  onConnect: () => void;
+  onDisconnect: () => void;
+}) {
+  return (
+    <div className="oauth-card">
+      <div className="oauth-heading">
+        <span>OAuth 2.0 (3LO)</span>
+        <em className={oauth.connected ? 'oauth-on' : 'oauth-off'}>
+          {oauth.connected ? 'Conectado' : oauth.configured ? 'Listo para autorizar' : 'No configurado'}
+        </em>
+      </div>
+      {oauth.connected ? (
+        <>
+          {typeof oauth.expiresAt === 'number' ? (
+            <p className="oauth-detail">
+              Expira: {new Date(oauth.expiresAt).toLocaleString()}
+            </p>
+          ) : null}
+          <div className="connection-actions">
+            <button className="secondary-action" onClick={onDisconnect} disabled={busy}>
+              Desconectar
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          <p className="oauth-detail">
+            Callback local: <code>{oauth.redirectUri}</code>
+          </p>
+          <p className="oauth-detail">
+            Scopes: <code>{oauth.scopes.join(' ')}</code>
+          </p>
+          {!oauth.configured ? (
+            <p className="oauth-detail muted">
+              Configurar <code>GVA_OAUTH_CLIENT_ID</code> y <code>GVA_OAUTH_CLIENT_SECRET</code>{' '}
+              en el entorno del server para habilitar OAuth.
+            </p>
+          ) : null}
+          <div className="connection-actions">
+            <button
+              className="primary-action"
+              onClick={onConnect}
+              disabled={busy || !oauth.configured}
+              title="Abrir Atlassian para autorizar la app"
+            >
+              {busy ? <Loader2 className="spin" /> : <ShieldCheck />}
+              Conectar con Atlassian
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

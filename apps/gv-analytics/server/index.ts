@@ -5,6 +5,20 @@ import { analyzeInput, configureConnection, getConnectionStatus } from './atlass
 import { getReport, listReports, saveReport } from './reports';
 import { toDocx, toHtml, toMarkdown, toPdf, type ExportFormat } from './export';
 import { recordMetric, summarize as summarizeMetrics } from './metrics';
+import {
+  buildAuthorizationUrl,
+  cancelPendingFlow,
+  clearOAuth,
+  consumePendingFlow,
+  exchangeCodeForTokens,
+  getActiveTokens,
+  getCallbackInfo,
+  getOAuthConfig,
+  isTokenValid,
+  persistTokensToVault,
+  REDIRECT_URI,
+  SCOPES,
+} from './oauth';
 
 const PORT = Number(process.env.GV_ANALYTICS_PORT || 4754);
 const APP_ROOT = resolve(process.cwd());
@@ -16,6 +30,14 @@ function sendJson(res: ServerResponse, status: number, body: unknown) {
     'Cache-Control': 'no-store',
   });
   res.end(JSON.stringify(body));
+}
+
+function sendHtml(res: ServerResponse, status: number, body: string) {
+  res.writeHead(status, {
+    'Content-Type': 'text/html; charset=utf-8',
+    'Cache-Control': 'no-store',
+  });
+  res.end(body);
 }
 
 function sendFile(
@@ -128,6 +150,100 @@ async function routeApi(
       const hours = Number(url.searchParams.get('hours') || 24);
       const safeHours = Math.min(Math.max(Number.isFinite(hours) ? hours : 24, 1), 168);
       sendJson(res, 200, summarizeMetrics(safeHours));
+      return;
+    }
+    if (req.method === 'GET' && pathname === '/api/oauth/status') {
+      const config = getOAuthConfig();
+      const tokens = getActiveTokens();
+      sendJson(res, 200, {
+        configured: Boolean(config),
+        redirectUri: REDIRECT_URI,
+        scopes: SCOPES.split(' '),
+        callback: getCallbackInfo(),
+        connected: isTokenValid(tokens),
+        expiresAt: tokens?.expiresAt ?? null,
+      });
+      return;
+    }
+    if (req.method === 'POST' && pathname === '/api/oauth/start') {
+      const config = getOAuthConfig();
+      if (!config) {
+        sendJson(res, 400, {
+          error:
+            'OAuth no configurado. Setear GVA_OAUTH_CLIENT_ID y GVA_OAUTH_CLIENT_SECRET, o registrar la app en Atlassian Developer Console con callback ' +
+            REDIRECT_URI,
+        });
+        return;
+      }
+      const flow = buildAuthorizationUrl(config.clientId);
+      sendJson(res, 200, { url: flow.url, state: flow.state });
+      return;
+    }
+    if (req.method === 'POST' && pathname === '/api/oauth/disconnect') {
+      clearOAuth();
+      sendJson(res, 200, { ok: true });
+      return;
+    }
+    if (req.method === 'GET' && pathname === '/oauth/callback') {
+      const url = new URL(req.url || '/', `http://${req.headers.host || '127.0.0.1'}`);
+      const code = url.searchParams.get('code');
+      const state = url.searchParams.get('state');
+      const errorParam = url.searchParams.get('error');
+      if (errorParam) {
+        sendHtml(
+          res,
+          400,
+          `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1>OAuth cancelado</h1><p>${errorParam}</p><p>Podes cerrar esta ventana y volver a la app.</p></body></html>`,
+        );
+        cancelPendingFlow();
+        return;
+      }
+      if (!code || !state) {
+        sendHtml(
+          res,
+          400,
+          `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1>Callback incompleto</h1><p>Faltan parametros code o state.</p></body></html>`,
+        );
+        return;
+      }
+      const flow = consumePendingFlow(state);
+      if (!flow) {
+        sendHtml(
+          res,
+          400,
+          `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1>State invalido o expirado</h1><p>Inicia el flujo OAuth nuevamente desde la app.</p></body></html>`,
+        );
+        return;
+      }
+      const config = getOAuthConfig();
+      if (!config || config.clientId !== flow.clientId) {
+        sendHtml(
+          res,
+          400,
+          `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1>Configuracion OAuth perdida</h1><p>Reintenta desde la app.</p></body></html>`,
+        );
+        return;
+      }
+      try {
+        const tokens = await exchangeCodeForTokens({
+          clientId: config.clientId,
+          clientSecret: config.clientSecret,
+          code,
+          codeVerifier: flow.codeVerifier,
+        });
+        persistTokensToVault(tokens);
+        sendHtml(
+          res,
+          200,
+          `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1 style="color:#4ade80">Conectado a Atlassian</h1><p>Ya podes cerrar esta ventana y volver a la app. Los tokens quedan guardados cifrados en el vault local.</p></body></html>`,
+        );
+      } catch (error) {
+        sendHtml(
+          res,
+          500,
+          `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1 style="color:#ee6d75">Error de OAuth</h1><pre>${(error as Error).message}</pre></body></html>`,
+        );
+      }
       return;
     }
     sendJson(res, 404, { error: 'API route not found' });

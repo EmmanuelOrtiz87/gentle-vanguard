@@ -2,12 +2,21 @@ import { createCipheriv, createDecipheriv, randomBytes, scryptSync } from 'crypt
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 
+export interface StoredOAuthTokens {
+  accessToken: string;
+  refreshToken?: string;
+  expiresAt: number;
+  scope: string;
+  cloudId?: string;
+}
+
 export interface StoredConnection {
   siteUrl: string;
   email: string;
   apiToken: string;
   bitbucketWorkspace: string;
   updatedAt: string;
+  oauth?: StoredOAuthTokens;
 }
 
 const ROOT = resolve(process.cwd(), '../..');

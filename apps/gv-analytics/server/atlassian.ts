@@ -22,6 +22,10 @@ function cleanSiteUrl(siteUrl: string): string {
 }
 
 function authHeader(connection: StoredConnection): string {
+  // OAuth bearer if available, otherwise Basic auth with email+apiToken.
+  if (connection.oauth?.accessToken) {
+    return `Bearer ${connection.oauth.accessToken}`;
+  }
   return `Basic ${Buffer.from(`${connection.email}:${connection.apiToken}`).toString('base64')}`;
 }
 

@@ -21,6 +21,15 @@ export interface ConnectionForm {
   bitbucketWorkspace: string;
 }
 
+export interface OAuthStatus {
+  configured: boolean;
+  redirectUri: string;
+  scopes: string[];
+  callback: { port: number; path: string; redirectUri: string };
+  connected: boolean;
+  expiresAt: number | null;
+}
+
 export interface AnalysisEvidence {
   source: 'jira' | 'confluence' | 'bitbucket' | 'input' | 'stack';
   title: string;
