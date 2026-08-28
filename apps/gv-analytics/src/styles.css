@@ -23,6 +23,47 @@
   --header-h: 62px;
 }
 
+:root[data-theme='light'] {
+  color-scheme: light;
+  --gv-bg: #f5f7fb;
+  --gv-bg-deep: #e7ecf3;
+  --gv-surface: #ffffff;
+  --gv-surface-raised: #f1f5f9;
+  --gv-text: #0f172a;
+  --gv-muted: #475569;
+  --gv-glass: rgba(255, 255, 255, 0.7);
+  --gv-glass-border: rgba(15, 23, 42, 0.1);
+  --gv-glow: rgba(34, 211, 238, 0.18);
+  --gv-amber: #d97706;
+  --gv-red: #dc2626;
+  --gv-green: #16a34a;
+}
+
+:root[data-theme='light'] body {
+  background: var(--gv-bg);
+  color: var(--gv-text);
+}
+
+:root[data-theme='light'] .grid-bg {
+  opacity: 0.4;
+}
+
+:root[data-theme='light'] .panel {
+  background: var(--gv-surface);
+  border-color: var(--gv-glass-border);
+}
+
+:root[data-theme='light'] .llm-badge,
+:root[data-theme='light'] .metric,
+:root[data-theme='light'] .diagram-block,
+:root[data-theme='light'] .topbar,
+:root[data-theme='light'] .analysis-board,
+:root[data-theme='light'] .left-rail,
+:root[data-theme='light'] .evidence-list article {
+  background: var(--gv-surface);
+  border-color: var(--gv-glass-border);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -219,6 +260,28 @@ textarea {
 }
 .system-state.partial span {
   background: var(--gv-amber);
+}
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid var(--gv-glass-border);
+  color: var(--gv-muted);
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.theme-toggle:hover {
+  color: var(--gv-text);
+  background: rgba(31, 41, 55, 0.6);
+  border-color: var(--gv-cyan);
+}
+.theme-toggle svg {
+  width: 16px;
+  height: 16px;
 }
 .system-state.pending {
   color: var(--gv-red);
@@ -976,4 +1039,29 @@ form input:focus {
   .report {
     padding: 18px;
   }
+}
+
+/* Connection form actions (Revalidar/Editar in connected view, Probar/Guardar in form view) */
+.connection-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.connection-actions button {
+  flex: 1 1 auto;
+  justify-content: center;
+}
+.test-result {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid var(--gv-glass-border);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+:root[data-theme='light'] .test-result {
+  background: var(--gv-surface-raised);
 }

@@ -13,11 +13,13 @@ import {
   History,
   KeyRound,
   Loader2,
+  Moon,
   Network,
   RefreshCw,
   Search,
   Settings,
   ShieldCheck,
+  Sun,
 } from 'lucide-react';
 import type { AnalyticsReport, ConnectionForm, ConnectionStatus } from './types';
 
@@ -60,6 +62,13 @@ export function App() {
   const [history, setHistory] = useState<ReportListItem[]>([]);
   const [exportOpen, setExportOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<'conexion' | 'analisis' | 'reporte' | 'evidencia'>('conexion');
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    if (typeof window === 'undefined') return 'dark';
+    const stored = window.localStorage.getItem('gv-analytics-theme');
+    return stored === 'light' ? 'light' : 'dark';
+  });
+  const [testing, setTesting] = useState(false);
+  const [testResult, setTestResult] = useState<ConnectionStatus | null>(null);
 
   const loadStatus = async () => {
     const next = await readJson<ConnectionStatus>('/api/connection/status');
@@ -75,6 +84,16 @@ export function App() {
     void loadStatus().catch((error) => setMessage(error.message));
     void loadHistory().catch(() => undefined);
   }, []);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    document.documentElement.dataset.theme = theme;
+    try {
+      window.localStorage.setItem('gv-analytics-theme', theme);
+    } catch {
+      /* localStorage may be disabled */
+    }
+  }, [theme]);
 
   // Scroll-spy para el stepper de la cabecera
   useEffect(() => {
@@ -133,11 +152,33 @@ export function App() {
       setStatus(next);
       setForm(emptyForm);
       setEditingConnection(false);
+      setTestResult(null);
       setMessage('Conexion guardada y verificada.');
     } catch (error) {
       setMessage(error instanceof Error ? error.message : String(error));
     } finally {
       setBusy(false);
+    }
+  };
+
+  const testConnection = async () => {
+    setTesting(true);
+    setTestResult(null);
+    setMessage(null);
+    try {
+      // Save first (the API does a test+save combo), then re-check.
+      await readJson<ConnectionStatus>('/api/connection', {
+        method: 'POST',
+        body: JSON.stringify(form),
+      });
+      const next = await readJson<ConnectionStatus>('/api/connection/status');
+      setTestResult(next);
+      const allOk = next.jira.ok && next.confluence.ok && next.bitbucket.ok;
+      setMessage(allOk ? 'Conexion valida para los 3 servicios.' : 'Conexion parcial, revisa el detalle por servicio.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : String(error));
+    } finally {
+      setTesting(false);
     }
   };
 
@@ -235,6 +276,15 @@ export function App() {
                 ? 'Conexion parcial'
                 : 'Sin conexion'}
           </div>
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
+            title={theme === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'}
+            aria-label="Cambiar tema"
+          >
+            {theme === 'dark' ? <Sun /> : <Moon />}
+          </button>
         </div>
       </header>
 
@@ -313,10 +363,29 @@ export function App() {
                     placeholder="workspace-slug"
                   />
                 </label>
-                <button className="primary-action" type="submit" disabled={busy}>
-                  {busy ? <Loader2 className="spin" /> : <ShieldCheck />}
-                  Guardar y probar
-                </button>
+                <div className="connection-actions">
+                  <button
+                    className="secondary-action"
+                    type="button"
+                    onClick={() => void testConnection()}
+                    disabled={testing || !form.siteUrl || !form.email || !form.apiToken}
+                    title="Probar credenciales sin guardar"
+                  >
+                    {testing ? <Loader2 className="spin" /> : <Search />}
+                    Probar
+                  </button>
+                  <button className="primary-action" type="submit" disabled={busy}>
+                    {busy ? <Loader2 className="spin" /> : <ShieldCheck />}
+                    Guardar y probar
+                  </button>
+                </div>
+                {testResult ? (
+                  <div className="test-result">
+                    <ServiceLine label="Jira" service={testResult.jira} />
+                    <ServiceLine label="Confluence" service={testResult.confluence} />
+                    <ServiceLine label="Bitbucket" service={testResult.bitbucket} />
+                  </div>
+                ) : null}
               </form>
             )}
           </section>
