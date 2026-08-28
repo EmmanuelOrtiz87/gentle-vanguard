@@ -42,6 +42,7 @@ const emptyForm: ConnectionForm = {
   siteUrl: '',
   email: '',
   apiToken: '',
+  bitbucketApiToken: '',
   bitbucketWorkspace: '',
 };
 
@@ -69,7 +70,7 @@ export function App() {
   const [editingConnection, setEditingConnection] = useState(false);
   const [history, setHistory] = useState<ReportListItem[]>([]);
   const [exportOpen, setExportOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState<'conexion' | 'analisis' | 'reporte' | 'evidencia'>('conexion');
+  const [view, setView] = useState<'operacion' | 'configuracion' | 'historial'>('operacion');
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     if (typeof window === 'undefined') return 'dark';
     const stored = window.localStorage.getItem('gv-analytics-theme');
@@ -147,42 +148,6 @@ export function App() {
       /* localStorage may be disabled */
     }
   }, [theme]);
-
-  // Scroll-spy para el stepper de la cabecera
-  useEffect(() => {
-    const ids: Array<'conexion' | 'analisis' | 'reporte' | 'evidencia'> = [
-      'conexion',
-      'analisis',
-      'reporte',
-      'evidencia',
-    ];
-    const elements = ids
-      .map((id) => ({ id, node: document.getElementById(id) }))
-      .filter((entry): entry is { id: typeof ids[number]; node: HTMLElement } => Boolean(entry.node));
-    if (elements.length === 0) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible[0]?.target) {
-          const match = elements.find((entry) => entry.node === visible[0].target);
-          if (match) setActiveSection(match.id);
-        }
-      },
-      { rootMargin: '-30% 0px -50% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] },
-    );
-    for (const entry of elements) observer.observe(entry.node);
-    return () => observer.disconnect();
-  }, [report]);
-
-  const scrollToSection = (id: 'conexion' | 'analisis' | 'reporte' | 'evidencia') => {
-    const node = document.getElementById(id);
-    if (node) {
-      node.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setActiveSection(id);
-    }
-  };
 
   const connected = Boolean(status?.configured);
   const canAnalyze = input.trim().length > 3 && !busy;
@@ -287,38 +252,30 @@ export function App() {
               Gentle<span>Vanguard</span> <small>{tt('brand.analytics')}</small>
             </span>
           </div>
-          <nav className="main-nav" aria-label={tt('nav.sections')}>
+          <nav className="main-nav view-tabs" aria-label={tt('nav.sections')}>
             <button
               type="button"
-              className={activeSection === 'conexion' ? 'active' : ''}
-              onClick={() => scrollToSection('conexion')}
+              className={view === 'operacion' ? 'active' : ''}
+              onClick={() => setView('operacion')}
             >
-              <span className="step">1</span>
-              {tt('nav.connection')}
+              <Network />
+              {tt('nav.operation')}
             </button>
             <button
               type="button"
-              className={activeSection === 'analisis' ? 'active' : ''}
-              onClick={() => scrollToSection('analisis')}
+              className={view === 'configuracion' ? 'active' : ''}
+              onClick={() => setView('configuracion')}
             >
-              <span className="step">2</span>
-              {tt('nav.analysis')}
+              <Settings />
+              {tt('nav.config')}
             </button>
             <button
               type="button"
-              className={activeSection === 'reporte' ? 'active' : ''}
-              onClick={() => scrollToSection('reporte')}
+              className={view === 'historial' ? 'active' : ''}
+              onClick={() => setView('historial')}
             >
-              <span className="step">3</span>
-              {tt('nav.report')}
-            </button>
-            <button
-              type="button"
-              className={activeSection === 'evidencia' ? 'active' : ''}
-              onClick={() => scrollToSection('evidencia')}
-            >
-              <span className="step">4</span>
-              {tt('nav.evidence')}
+              <History />
+              {tt('nav.history')}
             </button>
           </nav>
           <div className={`system-state ${statusTone}`}>
@@ -343,238 +300,413 @@ export function App() {
       </header>
 
       <main className="app-shell">
-      <section className="workspace-grid">
-        <aside className="left-rail">
-          <section className="panel compact" id="conexion">
-            <div className="panel-heading">
-              <KeyRound className="icon" />
-              <div>
-                <h2>{tt('conn.title')}</h2>
-                <p>
-                  {connected ? tt('conn.loaded') : tt('conn.configure')}
-                </p>
-              </div>
-            </div>
-
-            {connected && !editingConnection ? (
-              <div className="connection-summary">
-                <div>
-                  <span>{tt('conn.site')}</span>
-                  <strong>{status?.siteUrl || 'Atlassian Cloud'}</strong>
-                </div>
-                <div>
-                  <span>{tt('conn.bitbucket')}</span>
-                  <strong>{status?.bitbucketWorkspace || tt('conn.workspaceUndefined')}</strong>
-                </div>
-                <div className="connection-actions">
-                  <button className="secondary-action" onClick={() => void loadStatus()} disabled={busy}>
-                    <RefreshCw className={busy ? 'spin' : ''} />
-                    {tt('conn.revalidate')}
-                  </button>
-                  <button className="secondary-action" onClick={() => setEditingConnection(true)}>
-                    <Settings />
-                    {tt('conn.edit')}
-                  </button>
-                </div>
-                {oauth ? <OAuthCard oauth={oauth} busy={oauthBusy} onConnect={() => void startOauth()} onDisconnect={() => void disconnectOauth()} /> : null}
-              </div>
-            ) : (
-              <form onSubmit={(event) => void saveConnection(event)}>
-                <label>
-                  {tt('conn.siteUrl')}
-                  <input
-                    value={form.siteUrl}
-                    onChange={(event) => setForm({ ...form, siteUrl: event.target.value })}
-                    placeholder="https://tu-dominio.atlassian.net"
-                    autoComplete="url"
-                  />
-                </label>
-                <label>
-                  {tt('conn.email')}
-                  <input
-                    value={form.email}
-                    onChange={(event) => setForm({ ...form, email: event.target.value })}
-                    placeholder="nombre@empresa.com"
-                    autoComplete="username"
-                  />
-                </label>
-                <label>
-                  {tt('conn.apiToken')}
-                  <input
-                    value={form.apiToken}
-                    onChange={(event) => setForm({ ...form, apiToken: event.target.value })}
-                    placeholder="Token Atlassian"
-                    type="password"
-                    autoComplete="current-password"
-                  />
-                </label>
-                <label>
-                  {tt('conn.bitbucketWorkspace')}
-                  <input
-                    value={form.bitbucketWorkspace}
-                    onChange={(event) => setForm({ ...form, bitbucketWorkspace: event.target.value })}
-                    placeholder="workspace-slug"
-                  />
-                </label>
-                <div className="connection-actions">
-                  <button
-                    className="secondary-action"
-                    type="button"
-                    onClick={() => void testConnection()}
-                    disabled={testing || !form.siteUrl || !form.email || !form.apiToken}
-                    title={tt('conn.test')}
-                  >
-                    {testing ? <Loader2 className="spin" /> : <Search />}
-                    {tt('conn.test')}
-                  </button>
-                  <button className="primary-action" type="submit" disabled={busy}>
-                    {busy ? <Loader2 className="spin" /> : <ShieldCheck />}
-                    {tt('conn.saveAndTest')}
-                  </button>
-                </div>
-                {testResult ? (
-                  <div className="test-result">
-                    <ServiceLine label="Jira" service={testResult.jira} />
-                    <ServiceLine label="Confluence" service={testResult.confluence} />
-                    <ServiceLine label="Bitbucket" service={testResult.bitbucket} />
+        {view === 'operacion' && (
+          <section className="workspace-grid">
+            <section className="main-column">
+              <section className="analysis-board">
+                <div className="board-toolbar">
+                  <div className="mode-switch" role="tablist" aria-label={tt('analysis.mode')}>
+                    <button className={mode === 'url' ? 'active' : ''} onClick={() => setMode('url')}>
+                      <Network />
+                      {tt('analysis.url')}
+                    </button>
+                    <button className={mode === 'request' ? 'active' : ''} onClick={() => setMode('request')}>
+                      <BookOpen />
+                      {tt('analysis.request')}
+                    </button>
                   </div>
-                ) : null}
-              </form>
-            )}
-          </section>
-
-          <section className="panel compact">
-            <div className="panel-heading">
-                <Activity className="icon" />
-              <div>
-                <h2>{tt('status.title')}</h2>
-                <p>{connected ? tt('status.operational') : tt('status.pending')}</p>
-              </div>
-            </div>
-            <ServiceLine label="Jira" service={status?.jira} />
-            <ServiceLine label="Confluence" service={status?.confluence} />
-            <ServiceLine label="Bitbucket" service={status?.bitbucket} />
-          </section>
-
-          <section className="panel compact" id="historial">
-            <div className="panel-heading">
-              <History className="icon" />
-              <div>
-                <h2>{tt('history.title')}</h2>
-                <p>{tt('history.subtitle')}</p>
-              </div>
-            </div>
-            {history.length === 0 ? (
-              <p className="history-empty">{tt('history.empty')}</p>
-            ) : (
-              <ul className="history-list">
-                {history.map((item) => (
-                  <li key={item.id}>
+                  <div className="export-wrap">
                     <button
-                      className={report?.id === item.id ? 'active' : ''}
-                      onClick={() => void openReport(item.id)}
-                      disabled={busy}
-                      title={item.input.slice(0, 120)}
+                      className="secondary-action"
+                      disabled={!report}
+                      onClick={() => setExportOpen((open) => !open)}
+                      title={tt('analysis.export')}
                     >
-                      <span className="history-title">{item.summary || item.id}</span>
-                      <span className="history-meta">
-                        {item.mode} · {new Date(item.createdAt).toLocaleString()}
-                      </span>
+                      <Download />
+                      {tt('analysis.export')}
                     </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-        </aside>
+                    {exportOpen && report && (
+                      <div className="export-menu" role="menu">
+                        <div className="export-template">
+                          <label htmlFor="export-template">{tt('analysis.template')}</label>
+                          <select
+                            id="export-template"
+                            value={template}
+                            onChange={(event) => setTemplate(event.target.value)}
+                          >
+                            {templates.map((t) => (
+                              <option key={t.id} value={t.id}>
+                                {t.label}
+                              </option>
+                            ))}
+                          </select>
+                          <p className="export-template-desc">
+                            {templates.find((t) => t.id === template)?.description}
+                          </p>
+                        </div>
+                        <button role="menuitem" onClick={() => exportReport('pdf')}>
+                          <FileText />
+                          PDF
+                        </button>
+                        <button role="menuitem" onClick={() => exportReport('docx')}>
+                          <FileType2 />
+                          DOCX
+                        </button>
+                        <button role="menuitem" onClick={() => exportReport('html')}>
+                          <Braces />
+                          HTML
+                        </button>
+                        <button role="menuitem" onClick={() => exportReport('md')}>
+                          <FileCode2 />
+                          Markdown
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
 
-        <section className="main-column">
-          <section className="analysis-board" id="analisis">
-            <div className="board-toolbar">
-              <div className="mode-switch" role="tablist" aria-label={tt('analysis.mode')}>
-                <button className={mode === 'url' ? 'active' : ''} onClick={() => setMode('url')}>
-                  <Network />
-                  {tt('analysis.url')}
-                </button>
-                <button className={mode === 'request' ? 'active' : ''} onClick={() => setMode('request')}>
-                  <BookOpen />
-                  {tt('analysis.request')}
-                </button>
-              </div>
-              <div className="export-wrap">
-                <button
-                  className="secondary-action"
-                  disabled={!report}
-                  onClick={() => setExportOpen((open) => !open)}
-                  title={tt('analysis.export')}
-                >
-                  <Download />
-                  {tt('analysis.export')}
-                </button>
-                {exportOpen && report && (
-                  <div className="export-menu" role="menu">
-                    <div className="export-template">
-                      <label htmlFor="export-template">{tt('analysis.template')}</label>
-                      <select
-                        id="export-template"
-                        value={template}
-                        onChange={(event) => setTemplate(event.target.value)}
-                      >
-                        {templates.map((t) => (
-                          <option key={t.id} value={t.id}>
-                            {t.label}
-                          </option>
-                        ))}
-                      </select>
-                      <p className="export-template-desc">
-                        {templates.find((t) => t.id === template)?.description}
-                      </p>
-                    </div>
-                    <button role="menuitem" onClick={() => exportReport('pdf')}>
-                      <FileText />
-                      PDF
-                    </button>
-                    <button role="menuitem" onClick={() => exportReport('docx')}>
-                      <FileType2 />
-                      DOCX
-                    </button>
-                    <button role="menuitem" onClick={() => exportReport('html')}>
-                      <Braces />
-                      HTML
-                    </button>
-                    <button role="menuitem" onClick={() => exportReport('md')}>
-                      <FileCode2 />
-                      Markdown
-                    </button>
+                <textarea
+                  value={input}
+                  onChange={(event) => setInput(event.target.value)}
+                  placeholder={mode === 'url' ? tt('analysis.urlPlaceholder') : tt('analysis.requestPlaceholder')}
+                />
+
+                {message && (
+                  <div className="notice">
+                    <AlertTriangle />
+                    {message}
                   </div>
                 )}
-              </div>
-            </div>
 
-            <textarea
-              value={input}
-              onChange={(event) => setInput(event.target.value)}
-              placeholder={mode === 'url' ? tt('analysis.urlPlaceholder') : tt('analysis.requestPlaceholder')}
-            />
+                <button className="primary-action analyze" disabled={!canAnalyze} onClick={() => void analyze()}>
+                  {busy ? <Loader2 className="spin" /> : <Search />}
+                  {tt('analysis.run')}
+                </button>
+              </section>
 
-            {message && (
-              <div className="notice">
-                <AlertTriangle />
-                {message}
-              </div>
-            )}
-
-            <button className="primary-action analyze" disabled={!canAnalyze} onClick={() => void analyze()}>
-              {busy ? <Loader2 className="spin" /> : <Search />}
-              {tt('analysis.run')}
-            </button>
+              {report ? <ReportView report={report} /> : <EmptyReport />}
+            </section>
           </section>
+        )}
 
-          {report ? <ReportView report={report} /> : <EmptyReport />}
-        </section>
-      </section>
-    </main>
+        {view === 'configuracion' && (
+          <ConfigView
+            connected={connected}
+            status={status}
+            form={form}
+            setForm={setForm}
+            editingConnection={editingConnection}
+            setEditingConnection={setEditingConnection}
+            busy={busy}
+            testing={testing}
+            testResult={testResult}
+            oauth={oauth}
+            oauthBusy={oauthBusy}
+            onSave={saveConnection}
+            onTest={testConnection}
+            onRevalidate={loadStatus}
+            onOauthConnect={startOauth}
+            onOauthDisconnect={disconnectOauth}
+          />
+        )}
+
+        {view === 'historial' && (
+          <HistoryView
+            history={history}
+            activeId={report?.id}
+            busy={busy}
+            onOpen={openReport}
+          />
+        )}
+      </main>
     </>
+  );
+}
+
+interface ConfigViewProps {
+  connected: boolean;
+  status: ConnectionStatus | null;
+  form: ConnectionForm;
+  setForm: React.Dispatch<React.SetStateAction<ConnectionForm>>;
+  editingConnection: boolean;
+  setEditingConnection: React.Dispatch<React.SetStateAction<boolean>>;
+  busy: boolean;
+  testing: boolean;
+  testResult: ConnectionStatus | null;
+  oauth: OAuthStatus | null;
+  oauthBusy: boolean;
+  onSave: (event: React.FormEvent) => Promise<void>;
+  onTest: () => Promise<void>;
+  onRevalidate: () => Promise<void>;
+  onOauthConnect: () => Promise<void>;
+  onOauthDisconnect: () => Promise<void>;
+}
+
+function ConfigView({
+  connected,
+  status,
+  form,
+  setForm,
+  editingConnection,
+  setEditingConnection,
+  busy,
+  testing,
+  testResult,
+  oauth,
+  oauthBusy,
+  onSave,
+  onTest,
+  onRevalidate,
+  onOauthConnect,
+  onOauthDisconnect,
+}: ConfigViewProps) {
+  const { tt } = useT();
+  return (
+    <section className="workspace-grid config-grid">
+      <section className="panel compact">
+        <div className="panel-heading">
+          <KeyRound className="icon" />
+          <div>
+            <h2>{tt('conn.title')}</h2>
+            <p>{connected ? tt('conn.loaded') : tt('conn.configure')}</p>
+          </div>
+        </div>
+
+        {connected && !editingConnection ? (
+          <div className="connection-summary">
+            <div>
+              <span>{tt('conn.site')}</span>
+              <strong>{status?.siteUrl || 'Atlassian Cloud'}</strong>
+            </div>
+            <div>
+              <span>{tt('conn.bitbucket')}</span>
+              <strong>{status?.bitbucketWorkspace || tt('conn.workspaceUndefined')}</strong>
+            </div>
+            <div className="connection-actions">
+              <button className="secondary-action" onClick={() => void onRevalidate()} disabled={busy}>
+                <RefreshCw className={busy ? 'spin' : ''} />
+                {tt('conn.revalidate')}
+              </button>
+              <button className="secondary-action" onClick={() => setEditingConnection(true)}>
+                <Settings />
+                {tt('conn.edit')}
+              </button>
+            </div>
+            {oauth ? (
+              <OAuthCard
+                oauth={oauth}
+                busy={oauthBusy}
+                onConnect={() => void onOauthConnect()}
+                onDisconnect={() => void onOauthDisconnect()}
+              />
+            ) : null}
+          </div>
+        ) : (
+          <form onSubmit={(event) => void onSave(event)}>
+            <label>
+              {tt('conn.siteUrl')}
+              <input
+                value={form.siteUrl}
+                onChange={(event) => setForm({ ...form, siteUrl: event.target.value })}
+                placeholder="https://tu-dominio.atlassian.net"
+                autoComplete="url"
+              />
+            </label>
+            <label>
+              {tt('conn.email')}
+              <input
+                value={form.email}
+                onChange={(event) => setForm({ ...form, email: event.target.value })}
+                placeholder="nombre@empresa.com"
+                autoComplete="username"
+              />
+            </label>
+
+            <fieldset className="token-group">
+              <legend>{tt('conn.apiToken')}</legend>
+              <p className="field-hint">{tt('conn.tokenHint')}</p>
+              <input
+                value={form.apiToken}
+                onChange={(event) => setForm({ ...form, apiToken: event.target.value })}
+                placeholder="Token Atlassian (Jira + Confluence)"
+                type="password"
+                autoComplete="current-password"
+              />
+            </fieldset>
+
+            <fieldset className="token-group">
+              <legend>{tt('conn.bitbucketApiToken')}</legend>
+              <p className="field-hint">{tt('conn.bitbucketTokenHint')}</p>
+              <input
+                value={form.bitbucketApiToken}
+                onChange={(event) => setForm({ ...form, bitbucketApiToken: event.target.value })}
+                placeholder="Token Bitbucket"
+                type="password"
+                autoComplete="current-password"
+              />
+              <label className="sub-field">
+                {tt('conn.bitbucketWorkspace')}
+                <input
+                  value={form.bitbucketWorkspace}
+                  onChange={(event) => setForm({ ...form, bitbucketWorkspace: event.target.value })}
+                  placeholder="workspace-slug"
+                />
+              </label>
+            </fieldset>
+
+            <div className="connection-actions">
+              <button
+                className="secondary-action"
+                type="button"
+                onClick={() => void onTest()}
+                disabled={testing || !form.siteUrl || !form.email || !form.apiToken}
+                title={tt('conn.test')}
+              >
+                {testing ? <Loader2 className="spin" /> : <Search />}
+                {tt('conn.test')}
+              </button>
+              <button className="primary-action" type="submit" disabled={busy}>
+                {busy ? <Loader2 className="spin" /> : <ShieldCheck />}
+                {tt('conn.saveAndTest')}
+              </button>
+            </div>
+            {testResult ? (
+              <div className="test-result">
+                <ServiceLine label="Jira" service={testResult.jira} />
+                <ServiceLine label="Confluence" service={testResult.confluence} />
+                <ServiceLine label="Bitbucket" service={testResult.bitbucket} />
+              </div>
+            ) : null}
+          </form>
+        )}
+      </section>
+
+      <section className="panel compact">
+        <div className="panel-heading">
+          <Activity className="icon" />
+          <div>
+            <h2>{tt('status.title')}</h2>
+            <p>{connected ? tt('status.operational') : tt('status.pending')}</p>
+          </div>
+        </div>
+        <ServiceLine label="Jira" service={status?.jira} />
+        <ServiceLine label="Confluence" service={status?.confluence} />
+        <ServiceLine label="Bitbucket" service={status?.bitbucket} />
+      </section>
+    </section>
+  );
+}
+
+interface HistoryViewProps {
+  history: ReportListItem[];
+  activeId?: string;
+  busy: boolean;
+  onOpen: (id: string) => Promise<void>;
+}
+
+function HistoryView({ history, activeId, busy, onOpen }: HistoryViewProps) {
+  const { tt } = useT();
+  const [query, setQuery] = useState('');
+  const [modeFilter, setModeFilter] = useState('');
+
+  const modes = useMemo(() => Array.from(new Set(history.map((item) => item.mode))), [history]);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return history.filter((item) => {
+      if (modeFilter && item.mode !== modeFilter) return false;
+      if (!q) return true;
+      return (
+        item.summary.toLowerCase().includes(q) ||
+        item.id.toLowerCase().includes(q) ||
+        item.input.toLowerCase().includes(q)
+      );
+    });
+  }, [history, query, modeFilter]);
+
+  return (
+    <section className="history-view">
+      <div className="panel-heading history-heading">
+        <History className="icon" />
+        <div>
+          <h2>{tt('history.title')}</h2>
+          <p>{tt('history.subtitle')}</p>
+        </div>
+      </div>
+
+      <div className="history-filters">
+        <input
+          className="history-search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder={tt('history.search')}
+          aria-label={tt('history.search')}
+        />
+        <select
+          className="history-mode-filter"
+          value={modeFilter}
+          onChange={(event) => setModeFilter(event.target.value)}
+          aria-label={tt('history.columnMode')}
+        >
+          <option value="">{tt('history.columnMode')} — {tt('history.columnMode')}</option>
+          {modes.map((m) => (
+            <option key={m} value={m}>
+              {m}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {history.length === 0 ? (
+        <p className="history-empty">{tt('history.empty')}</p>
+      ) : filtered.length === 0 ? (
+        <p className="history-empty">{tt('history.noResults')}</p>
+      ) : (
+        <div className="history-table-wrap">
+          <table className="history-table">
+            <thead>
+              <tr>
+                <th>{tt('history.columnDate')}</th>
+                <th>{tt('history.columnTime')}</th>
+                <th>{tt('history.columnTitle')}</th>
+                <th>{tt('history.columnMode')}</th>
+                <th>{tt('history.columnId')}</th>
+                <th aria-label={tt('history.open')} />
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((item) => {
+                const date = new Date(item.createdAt);
+                return (
+                  <tr key={item.id} className={activeId === item.id ? 'active' : ''}>
+                    <td>{date.toLocaleDateString()}</td>
+                    <td>{date.toLocaleTimeString()}</td>
+                    <td className="history-title-cell" title={item.input.slice(0, 200)}>
+                      {item.summary || item.id}
+                    </td>
+                    <td>
+                      <span className="history-mode-badge">{item.mode}</span>
+                    </td>
+                    <td className="history-id-cell">{item.id}</td>
+                    <td>
+                      <button
+                        className="secondary-action history-open"
+                        onClick={() => void onOpen(item.id)}
+                        disabled={busy}
+                        title={tt('history.open')}
+                      >
+                        <Search />
+                        {tt('history.open')}
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </section>
   );
 }
 

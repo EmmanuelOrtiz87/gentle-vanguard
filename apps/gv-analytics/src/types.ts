@@ -17,7 +17,10 @@ export interface ServiceStatus {
 export interface ConnectionForm {
   siteUrl: string;
   email: string;
+  /** API token for Jira + Confluence (they share the same Atlassian token). */
   apiToken: string;
+  /** Separate API token for Bitbucket (different credential than Jira/Confluence). */
+  bitbucketApiToken: string;
   bitbucketWorkspace: string;
 }
 

@@ -13,7 +13,10 @@ export interface StoredOAuthTokens {
 export interface StoredConnection {
   siteUrl: string;
   email: string;
+  /** API token for Jira + Confluence (shared Atlassian token). */
   apiToken: string;
+  /** Separate API token for Bitbucket. Optional for backward-compat with old vaults. */
+  bitbucketApiToken?: string;
   bitbucketWorkspace: string;
   updatedAt: string;
   oauth?: StoredOAuthTokens;

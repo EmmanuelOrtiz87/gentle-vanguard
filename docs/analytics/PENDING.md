@@ -57,10 +57,25 @@ Leyenda: `[ ]` pendiente · `[x]` hecho · `[~]` en curso · `[!]` riesgo.
 
 - [x] **Theme switcher** (light/dark) — actualmente solo dark. Landed en `ab7b77ef`
   (toggle en cabecera, persistido en localStorage, tokens en `:root[data-theme='light']`).
-- [ ] **Widget en `apps/web-dashboard`** — vista de "últimos análisis" sin necesidad
-  de abrir gv-analytics. Tamaño: 1-2h.
-- [ ] **i18n en/pt/es** — siguiendo el patrón del dashboard actual. Tamaño: 2-3h.
-- [ ] **Storybook** para componentes UI del reporte. Tamaño: 1h.
+- [x] **Widget en `apps/web-dashboard`** — vista de "últimos análisis" sin necesidad
+  de abrir gv-analytics. Landed en `6086e8f5` (proxy `/gv-analytics` en Vite +
+  `useAnalyticsReports` con polling 15s + `AnalyticsWidget` con i18n en/es/pt-BR,
+  insertado en `Dashboard.tsx`; renderiza `null` si la API no responde).
+- [x] **i18n en/pt/es** — siguiendo el patrón del dashboard actual. Landed en
+  `cd5725ed` (`i18n.tsx` con ~70 claves en 3 idiomas + `LocaleProvider`/`useT`/
+  `LocaleSwitcher`; `App.tsx` refactorizado con `tt()` en todos los sub-componentes;
+  `main.tsx` envuelto con `LocaleProvider`; CSS para `.locale-switcher`).
+- [x] **Separar credenciales Atlassian + 3 pantallas** — decisión del usuario:
+  Jira/Confluence comparten un API token; Bitbucket usa un token + workspace
+  separados. Backend: `ConnectionForm`/`StoredConnection` con `bitbucketApiToken?`,
+  `tokenFor()` elige el token por servicio (Bitbucket → `bitbucketApiToken` con
+  fallback a `apiToken` para vaults viejos), `authHeader()` recibe el servicio.
+  Frontend: refactor a 3 pantallas con tabs (Operación / Configuración / Historial);
+  `ConfigView` con tokens separados en `fieldset` + Estado + OAuth; `HistoryView`
+  con tabla filtrable tipo Excel (fecha, hora, título, modo, id) con búsqueda +
+  filtro por modo. i18n ampliado en en/es/pt-BR.
+- [x] **Storybook** — OMITIDO por decisión del usuario (componentes gv-analytics son
+  internos de una sola app, no un design system; no hay infra Storybook en el repo).
 
 ## Estado verificado
 

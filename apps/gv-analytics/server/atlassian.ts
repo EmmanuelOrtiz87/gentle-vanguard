@@ -21,12 +21,25 @@ function cleanSiteUrl(siteUrl: string): string {
   return parsed.toString().replace(/\/$/, '');
 }
 
-function authHeader(connection: StoredConnection): string {
-  // OAuth bearer if available, otherwise Basic auth with email+apiToken.
+/**
+ * Selects the correct credential per service:
+ * - Jira + Confluence share the same Atlassian API token (`apiToken`).
+ * - Bitbucket uses a separate token (`bitbucketApiToken`), falling back to
+ *   `apiToken` for backward-compat with vaults saved before the split.
+ */
+function tokenFor(connection: StoredConnection, service: 'jira' | 'confluence' | 'bitbucket'): string {
+  if (service === 'bitbucket') {
+    return connection.bitbucketApiToken || connection.apiToken;
+  }
+  return connection.apiToken;
+}
+
+function authHeader(connection: StoredConnection, service: 'jira' | 'confluence' | 'bitbucket'): string {
+  // OAuth bearer if available, otherwise Basic auth with email + per-service token.
   if (connection.oauth?.accessToken) {
     return `Bearer ${connection.oauth.accessToken}`;
   }
-  return `Basic ${Buffer.from(`${connection.email}:${connection.apiToken}`).toString('base64')}`;
+  return `Basic ${Buffer.from(`${connection.email}:${tokenFor(connection, service)}`).toString('base64')}`;
 }
 
 async function atlassianFetch(connection: StoredConnection, options: AtlassianRequestOptions) {
@@ -41,7 +54,7 @@ async function atlassianFetch(connection: StoredConnection, options: AtlassianRe
   const response = await fetch(url, {
     headers: {
       Accept: 'application/json',
-      Authorization: authHeader(connection),
+      Authorization: authHeader(connection, options.service),
     },
   });
   if (!response.ok) {
@@ -62,7 +75,7 @@ async function atlassianTextFetch(connection: StoredConnection, options: Atlassi
   const response = await fetch(url, {
     headers: {
       Accept: 'text/plain, application/json',
-      Authorization: authHeader(connection),
+      Authorization: authHeader(connection, options.service),
     },
   });
   if (!response.ok) {
@@ -127,6 +140,7 @@ export async function configureConnection(form: ConnectionForm): Promise<Connect
     siteUrl: cleanSiteUrl(form.siteUrl),
     email: form.email.trim(),
     apiToken: form.apiToken.trim(),
+    bitbucketApiToken: form.bitbucketApiToken?.trim() || undefined,
     bitbucketWorkspace: form.bitbucketWorkspace.trim(),
     updatedAt: new Date().toISOString(),
   };
