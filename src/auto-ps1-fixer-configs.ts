@@ -34,7 +34,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/security/audit-pipeline.ps1': 'src/audit-pipeline.ts',
 
   // Ops
-  'scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1': 'src/hybrid-executor.ts',
+  'scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1': 'src/orchestration/hybrid-executor.ts',
   'scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1': 'src/aws-delegator.ts',
   'scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1': 'src/azure-delegator.ts',
   'scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1': 'src/checkpoint-manager.ts',
@@ -66,7 +66,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   // Utilities
   'scripts/utilities/lefthook-verify.ps1': 'src/lefthook-verify.ts',
   'scripts/utilities/validate-tool-configs.ps1': 'src/validate-tool-configs.ts',
-  'scripts/utilities/post-autostart-summary.ps1': 'src/post-autostart-summary.ts',
+  'scripts/utilities/post-autostart-summary.ps1': 'src/orchestration/post-autostart-summary.ts',
   'scripts/utilities/pre-process-input.ps1': 'src/pre-process-input.ts',
   'scripts/utilities/pre-compact-hook.ps1': 'src/pre-compact-hook.ts',
   'scripts/utilities/handoff-compress.ps1': 'src/handoff-compress.ts',
@@ -75,9 +75,9 @@ const PS1_TO_TS_MAP: Record<string, string> = {
 
   // Profiles
   'scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-opencode-profile.ps1':
-    'src/adaptive-opencode-profile.ts',
+    'src/orchestration/adaptive-opencode-profile.ts',
   'scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-codex-windsurf-profile.ps1':
-    'src/adaptive-codex-windsurf-profile.ts',
+    'src/orchestration/adaptive-codex-windsurf-profile.ts',
   'scripts/utilities/adaptive-claude-cline-profile.ps1': 'src/adaptive-claude-profile.ts',
 
   // Knowledge

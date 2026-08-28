@@ -12,17 +12,17 @@
  *      calls `--resume <agent> <task_id>` to bump the limit and re-dispatch.
  *
  * Usage:
- *   npx tsx src/adaptive-steps.ts --estimate "fix broken ps1 refs in 20 files"
- *   npx tsx src/adaptive-steps.ts --apply sdd-apply --steps 40
- *   npx tsx src/adaptive-steps.ts --resume sdd-apply --task_id ses_xxx
- *   npx tsx src/adaptive-steps.ts --status
- *   npx tsx src/adaptive-steps.ts --auto "task description"   # estimate + apply
+ *   npx tsx src/orchestration/adaptive-steps.ts --estimate "fix broken ps1 refs in 20 files"
+ *   npx tsx src/orchestration/adaptive-steps.ts --apply sdd-apply --steps 40
+ *   npx tsx src/orchestration/adaptive-steps.ts --resume sdd-apply --task_id ses_xxx
+ *   npx tsx src/orchestration/adaptive-steps.ts --status
+ *   npx tsx src/orchestration/adaptive-steps.ts --auto "task description"   # estimate + apply
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { normalizeSteps } from './security/opencode-guards.js';
+import { normalizeSteps } from '../security/opencode-guards.js';
 
 const ROOT = resolve(process.cwd());
 const OPENCODE_JSON = join(ROOT, 'opencode.json');

@@ -52,7 +52,7 @@ pre-push:
     audit-check:
       run: npx tsx src/infrastructure/siem-audit-bridge.ts --Scope quick
     orchestrator-auto-fix:
-      run: npx tsx src/orchestrate-auto-fix.ts --Fix
+      run: npx tsx src/orchestration/orchestrate-auto-fix.ts --Fix
     npm-audit:
       glob: 'package.json'
       run: npx tsx src/infrastructure/npm-audit-pre-push.ts --AuditLevel moderate

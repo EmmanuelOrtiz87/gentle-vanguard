@@ -106,7 +106,7 @@ async function checkDashboard(): Promise<void> {
 async function checkCore(): Promise<void> {
   header('Core');
   const checks = [
-    { name: 'Team Orchestrator (TS)', path: ['src', 'team-orchestrator.ts'] },
+    { name: 'Team Orchestrator (TS)', path: ['src', 'orchestration', 'team-orchestrator.ts'] },
     { name: 'Session Ref (TS)', path: ['src', 'session-reference-system.ts'] },
     { name: 'Skill Factory (TS)', path: ['src', 'skills', 'skill-factory.ts'] },
     { name: 'Skill registry exists', path: ['.atl', 'skill-registry.md'] },

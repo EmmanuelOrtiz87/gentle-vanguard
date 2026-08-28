@@ -22,7 +22,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { createRequire } from 'module';
-import type { DatabaseManager } from '../apps/web-dashboard/server/database/manager.js';
+import type { DatabaseManager } from '../../apps/web-dashboard/server/database/manager.js';
 
 const _require = createRequire(import.meta.url);
 

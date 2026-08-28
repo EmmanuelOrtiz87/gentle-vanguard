@@ -207,7 +207,7 @@
   "team_mode": {
     "enabled": false,
     "note": "team-mode.ps1 and dispatch-agent.ps1 were removed in cleanup — re-enable when TS equivalents are built",
-    "message_bus": "npx tsx src/agent-message-bus.ts",
+    "message_bus": "npx tsx src/orchestration/agent-message-bus.ts",
     "message_bus_note": "agent-message-bus.ts — pending migration",
     "max_members": 8,
     "runtime_dir": ".runtime/teams"
@@ -342,7 +342,7 @@
       "supportsMemTools": true,
       "detectFirst": true,
       "mandatoryStartup": "npx tsx src/session/session-autostart.ts",
-      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
+      "adaptiveProfile": "npx tsx src/orchestration/adaptive-opencode-profile.ts",
       "note": "CLAUDE.md is auto-loaded by OpenCode — contains immediate detect-tool.ts directive atop"
     },
     "claude-code": {
@@ -353,7 +353,7 @@
       "communicationLang": "es",
       "supportsSkillTool": true,
       "supportsMemTools": true,
-      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
+      "adaptiveProfile": "npx tsx src/orchestration/adaptive-opencode-profile.ts",
       "note": "Claude Code native — CLAUDE.md is auto-loaded. Uses opencode profile as baseline."
     },
     "cline": {
@@ -365,7 +365,7 @@
       "supportsSkillTool": false,
       "supportsMemTools": true,
       "mcpBridge": "npx tsx src/mcp-bridge.ts",
-      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
+      "adaptiveProfile": "npx tsx src/orchestration/adaptive-opencode-profile.ts",
       "note": "Cline sin skill tool nativo — skills via MCP bridge. Uses opencode profile as baseline."
     },
     "cursor": {
@@ -377,7 +377,7 @@
       "supportsSkillTool": false,
       "supportsMemTools": true,
       "mcpBridge": "npx tsx src/mcp-bridge.ts",
-      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
+      "adaptiveProfile": "npx tsx src/orchestration/adaptive-opencode-profile.ts",
       "note": "Cursor sin skill tool nativo — skills via MCP bridge. Uses opencode profile as baseline."
     },
     "windsurf": {
@@ -389,7 +389,7 @@
       "supportsSkillTool": false,
       "supportsMemTools": true,
       "mcpBridge": "npx tsx src/mcp-bridge.ts",
-      "adaptiveProfile": "npx tsx src/adaptive-codex-windsurf-profile.ts",
+      "adaptiveProfile": "npx tsx src/orchestration/adaptive-codex-windsurf-profile.ts",
       "note": "Windsurf sin skill tool nativo — skills via MCP bridge"
     },
     "codex": {
@@ -400,7 +400,7 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": false,
-      "adaptiveProfile": "npx tsx src/adaptive-codex-windsurf-profile.ts",
+      "adaptiveProfile": "npx tsx src/orchestration/adaptive-codex-windsurf-profile.ts",
       "note": "Codex — shares adaptive profile with Windsurf"
     },
     "continue-dev": {
@@ -411,7 +411,7 @@
       "communicationLang": "es",
       "supportsSkillTool": true,
       "supportsMemTools": true,
-      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
+      "adaptiveProfile": "npx tsx src/orchestration/adaptive-opencode-profile.ts",
       "note": "Continue.dev — uses opencode profile as baseline"
     },
     "copilot": {
@@ -422,7 +422,7 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": false,
-      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
+      "adaptiveProfile": "npx tsx src/orchestration/adaptive-opencode-profile.ts",
       "note": "GitHub Copilot — uses opencode profile as baseline"
     },
     "antigravity": {
@@ -433,7 +433,7 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": false,
-      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
+      "adaptiveProfile": "npx tsx src/orchestration/adaptive-opencode-profile.ts",
       "note": "Antigravity — uses opencode profile as baseline"
     },
     "claude-generic": {
@@ -444,7 +444,7 @@
       "communicationLang": "es",
       "supportsSkillTool": true,
       "supportsMemTools": true,
-      "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
+      "adaptiveProfile": "npx tsx src/orchestration/adaptive-opencode-profile.ts",
       "note": "Fallback for Claude variants — always prefer AGENTS.md"
     }
   },

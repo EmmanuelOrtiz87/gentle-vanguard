@@ -78,7 +78,7 @@ const HOOK_COMMANDS: Record<string, string[]> = {
     '--AuditLevel',
     'moderate',
   ],
-  'orchestrator-auto-fix': ['npx', 'tsx', 'src/orchestrate-auto-fix.ts', '--Fix'],
+  'orchestrator-auto-fix': ['npx', 'tsx', 'src/orchestration/orchestrate-auto-fix.ts', '--Fix'],
 };
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────

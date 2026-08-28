@@ -6,11 +6,11 @@
  * parallel Worker agents (child_process), and synthesizes results.
  *
  * Usage:
- *   npx tsx src/team-orchestrator.ts start --task "Build a React dashboard" --skills "react-19,api-design"
- *   npx tsx src/team-orchestrator.ts start --task "Security audit" --max-parallel 5
- *   npx tsx src/team-orchestrator.ts status
- *   npx tsx src/team-orchestrator.ts report
- *   npx tsx src/team-orchestrator.ts stop
+ *   npx tsx src/orchestration/team-orchestrator.ts start --task "Build a React dashboard" --skills "react-19,api-design"
+ *   npx tsx src/orchestration/team-orchestrator.ts start --task "Security audit" --max-parallel 5
+ *   npx tsx src/orchestration/team-orchestrator.ts status
+ *   npx tsx src/orchestration/team-orchestrator.ts report
+ *   npx tsx src/orchestration/team-orchestrator.ts stop
  */
 
 import {
@@ -24,7 +24,7 @@ import {
 } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { runSyncShell, runNpxTsxSync } from './core/run-command.js';
+import { runSyncShell, runNpxTsxSync } from '../core/run-command.js';
 import { randomBytes } from 'crypto';
 
 // ---- Types ----

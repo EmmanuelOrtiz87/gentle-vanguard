@@ -177,7 +177,7 @@ Gentle-Vanguard v4.0 Adaptive Steps assigns 24-80 steps dynamically:
 The system learns and adjusts.
 No more step exhaustion.
 
-Try it: \`npx tsx src/adaptive-steps.ts\`
+Try it: \`npx tsx src/orchestration/adaptive-steps.ts\`
 
 #AI #AdaptiveIntelligence`,
   },

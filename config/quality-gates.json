@@ -237,10 +237,10 @@
       "stage": "pre-push",
       "enforced": true,
       "enforcer": "lefthook - orchestrator-auto-fix",
-      "tool": "src/orchestrate-auto-fix.ts",
+      "tool": "src/orchestration/orchestrate-auto-fix.ts",
       "required": false,
       "description": "Auto-fix detected issues before push",
-      "command": "npx tsx src/orchestrate-auto-fix.ts -Fix",
+      "command": "npx tsx src/orchestration/orchestrate-auto-fix.ts -Fix",
       "failureAction": "warn"
     },
     {

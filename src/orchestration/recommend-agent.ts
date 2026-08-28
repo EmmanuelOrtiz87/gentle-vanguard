@@ -3,15 +3,15 @@
  * Recommend Agent — Auto-reassignment bridge for the orchestrator.
  *
  * Consults the adaptive routing table (.session/routing/routing-table.json),
- * built by src/adaptive-router.ts from historical execution data, and returns
+ * built by src/orchestration/adaptive-router.ts from historical execution data, and returns
  * the best agent for a task domain. Enables AUTOMATIC reassignment based on
  * learned performance instead of static/manual routing.
  *
  * Usage:
- *   npx tsx src/recommend-agent.ts --domain "code-review"
- *   npx tsx src/recommend-agent.ts --task "fix broken ps1 references" --topn 3
- *   npx tsx src/recommend-agent.ts --refresh        # rebuild routing table first
- *   npx tsx src/recommend-agent.ts --fallback-check # verify fallback logic
+ *   npx tsx src/orchestration/recommend-agent.ts --domain "code-review"
+ *   npx tsx src/orchestration/recommend-agent.ts --task "fix broken ps1 references" --topn 3
+ *   npx tsx src/orchestration/recommend-agent.ts --refresh        # rebuild routing table first
+ *   npx tsx src/orchestration/recommend-agent.ts --fallback-check # verify fallback logic
  *
  * Output (JSON): { domain, recommended, confidence, alternatives[], source }
  */
@@ -19,11 +19,11 @@
 import { existsSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { runNpxTsxSync } from './core/run-command.js';
+import { runNpxTsxSync } from '../core/run-command.js';
 import {
   DatabaseManager,
   DEFAULT_TENANT_ID,
-} from '../apps/web-dashboard/server/database/manager.js';
+} from '../../apps/web-dashboard/server/database/manager.js';
 
 const ROOT = resolve(process.cwd());
 const ROUTING_TABLE = join(ROOT, '.session', 'routing', 'routing-table.json');
@@ -349,7 +349,7 @@ function main(): void {
 
   if (refresh) {
     try {
-      runNpxTsxSync('src/adaptive-router.ts', ['--build', '--quiet'], {
+      runNpxTsxSync('src/orchestration/adaptive-router.ts', ['--build', '--quiet'], {
         cwd: ROOT,
         stdio: 'pipe',
         timeout: 30000,

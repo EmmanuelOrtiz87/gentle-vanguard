@@ -9,7 +9,7 @@
  * - Caching of exhausted models
  *
  * Usage:
- *   import { taskWithFallback } from './universal-task-wrapper.js';
+ *   import { taskWithFallback } from '../orchestration/universal-task-wrapper.js';
  *
  *   const result = await taskWithFallback({
  *     subagent_type: 'sdd-apply',
@@ -18,7 +18,7 @@
  *   });
  */
 
-import { runNpxTsx } from './core/run-command';
+import { runNpxTsx } from '../core/run-command';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
@@ -422,7 +422,7 @@ async function executeSubagent(
  * Legacy task() compatible interface
  *
  * Allows drop-in replacement:
- *   import { task } from './universal-task-wrapper.js';
+ *   import { task } from '../orchestration/universal-task-wrapper.js';
  *
  * Instead of OpenCode's task()
  */

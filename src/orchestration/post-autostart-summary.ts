@@ -8,7 +8,7 @@
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'fs';
 import { join } from 'path';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 
 interface Args {
   TimeZone?: string;

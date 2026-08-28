@@ -222,7 +222,7 @@
       {
         "id": "adaptive-opencode-profile",
         "enabled": true,
-        "script": "src/adaptive-opencode-profile.ts",
+        "script": "src/orchestration/adaptive-opencode-profile.ts",
         "args": "--mode Auto --timezone \"America/Argentina/Buenos_Aires\" --peak-start 9 --peak-end 15",
         "required": false,
         "description": "Intelligent temporary OpenCode optimization with automatic restore when normalized (TS)"
@@ -230,7 +230,7 @@
       {
         "id": "adaptive-codex-windsurf-profile",
         "enabled": true,
-        "script": "src/adaptive-codex-windsurf-profile.ts",
+        "script": "src/orchestration/adaptive-codex-windsurf-profile.ts",
         "args": "--mode Auto --timezone \"America/Argentina/Buenos_Aires\" --peak-start 9 --peak-end 15",
         "required": false,
         "description": "Intelligent temporary Codex/Windsurf optimization with automatic restore when normalized (TS)"
@@ -299,7 +299,7 @@
       {
         "id": "post-autostart-summary",
         "enabled": true,
-        "script": "src/post-autostart-summary.ts",
+        "script": "src/orchestration/post-autostart-summary.ts",
         "args": "-TimeZone \"Argentina Standard Time\" -PeakStart 9 -PeakEnd 15 -Region \"Argentina\"",
         "required": false,
         "description": "Generate startup-summary.json with peak hour, session ID, workspace state"
@@ -351,7 +351,7 @@
         "id": "post-autostart-consistency-check",
         "enabled": true,
         "lazy": true,
-        "script": "src/post-autostart-summary.ts",
+        "script": "src/orchestration/post-autostart-summary.ts",
         "args": "",
         "required": false,
         "description": "Refresca startup-summary.json como ultimo paso para asegurar datos actuales post-pipeline (lazy)"
@@ -522,7 +522,7 @@
         "id": "post-session-learning",
         "enabled": true,
         "lazy": true,
-        "script": "src/post-autostart-summary.ts",
+        "script": "src/orchestration/post-autostart-summary.ts",
         "args": "-FinalReportMode",
         "required": false,
         "description": "Generate final session report + auto-learned patterns for next session"
@@ -731,7 +731,7 @@
         "id": "adaptive-router",
         "enabled": true,
         "lazy": true,
-        "script": "src/adaptive-router.ts",
+        "script": "src/orchestration/adaptive-router.ts",
         "args": "--build --quiet",
         "required": false,
         "phase": 99,
@@ -741,7 +741,7 @@
         "id": "adaptive-steps",
         "enabled": true,
         "lazy": true,
-        "script": "src/adaptive-steps.ts",
+        "script": "src/orchestration/adaptive-steps.ts",
         "args": "--status",
         "required": false,
         "phase": 99,
@@ -1012,7 +1012,7 @@
         "id": "adaptive-router-build",
         "enabled": true,
         "lazy": true,
-        "script": "src/adaptive-router.ts",
+        "script": "src/orchestration/adaptive-router.ts",
         "args": "--build --quiet",
         "required": false,
         "description": "Rebuild adaptive routing table from historical skill-usage/delegations (9 domain agents + 10 high-priority overrides, cold-start seed)"

@@ -53,18 +53,18 @@ log('Timestamp: ' + TS, 'gray');
 // 1. Fix adaptive-common.ps1 - Get-DefaultState
 log('\n[1/6] Fix adaptive-common.ps1 Get-DefaultState...', 'yellow');
 patch(
-  'src/adaptive-common.ts',
+  'src/orchestration/adaptive-common.ts',
   'function Get-DefaultState {',
   "function Get-DefaultState {\n    return [pscustomobject]@{\n        optimizationActive = $false\n        normalStreak = 0\n        lastAction = 'none'\n        lastReason = 'none'\n        lastChangedAt = $null\n    }\n}",
 );
 
 // 2. Fix adaptive-opencode-profile.ps1 - remove Invoke-AdaptiveNotify calls
 log('[2/6] Fix adaptive-opencode-profile.ps1...', 'yellow');
-patch('src/adaptive-opencode-profile.ts', 'Invoke-AdaptiveNotify', '# AdaptiveNotify');
+patch('src/orchestration/adaptive-opencode-profile.ts', 'Invoke-AdaptiveNotify', '# AdaptiveNotify');
 
 // 3. Fix adaptive-codex-windsurf-profile.ps1 - remove Notify-Change calls
 log('[3/6] Fix adaptive-codex-windsurf-profile.ps1...', 'yellow');
-patch('src/adaptive-codex-windsurf-profile.ts', 'Notify-Change', '# NotifyChange');
+patch('src/orchestration/adaptive-codex-windsurf-profile.ts', 'Notify-Change', '# NotifyChange');
 
 // 4. Create recovery scripts directory
 log('[4/6] Create recovery infrastructure...', 'yellow');

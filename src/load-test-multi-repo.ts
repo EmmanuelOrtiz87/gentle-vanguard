@@ -110,7 +110,7 @@ const OPERATION_MAP: Record<string, OperationSpec> = {
     args: ['-Action', 'health', '-Quiet'],
   },
   recommend: {
-    script: 'src/recommend-agent.ts',
+    script: 'src/orchestration/recommend-agent.ts',
     args: ['--task', 'code review', '--topn', '3'],
   },
   'sdd-gate': {

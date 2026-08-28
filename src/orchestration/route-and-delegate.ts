@@ -13,8 +13,8 @@
  *   3. Persist routing hit to .session/routing/hits.jsonl (feedback loop)
  *
  * Usage:
- *   npx tsx src/route-and-delegate.ts --task "build a revenue forecast"
- *   npx tsx src/route-and-delegate.ts --task "audit gdpr compliance" --context "..." --topn 3
+ *   npx tsx src/orchestration/route-and-delegate.ts --task "build a revenue forecast"
+ *   npx tsx src/orchestration/route-and-delegate.ts --task "audit gdpr compliance" --context "..." --topn 3
  *
  * Output (JSON):
  *   { task, domain, recommended, confidence, source, compression: {taskSaved, ...}, delegation: {success, ...} }
@@ -25,11 +25,11 @@ import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { recommend } from './recommend-agent.js';
 import { delegateWithGuardrail, compressDelegationLossless } from './agent-delegator.js';
-import { resolveAgentTier } from './sdd/domain-tier.js';
+import { resolveAgentTier } from '../sdd/domain-tier.js';
 import {
   DatabaseManager,
   DEFAULT_TENANT_ID,
-} from '../apps/web-dashboard/server/database/manager.js';
+} from '../../apps/web-dashboard/server/database/manager.js';
 
 const ROOT = resolve(process.cwd());
 const HITS_FILE = join(ROOT, '.session', 'routing', 'hits.jsonl');

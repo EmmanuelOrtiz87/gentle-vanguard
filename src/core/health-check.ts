@@ -128,7 +128,7 @@ function checkMCP() {
 function checkTeamMode() {
   header('Team Mode');
   // TS equivalent
-  const tsScript = 'src/team-orchestrator.ts';
+  const tsScript = 'src/orchestration/team-orchestrator.ts';
   writeCheck('Team Orchestrator (TS)', exists(tsScript), tsScript);
   if (exists(tsScript)) {
     const r = runNpxTsxSync(tsScript, ['--task', 'health-check'], {

@@ -2,7 +2,7 @@
 
 import { existsSync } from 'fs';
 import { resolve, join } from 'path';
-import { runSync, runNpxTsxSync } from './core/run-command.js';
+import { runSync, runNpxTsxSync } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
 
 const ROOT = resolve(process.cwd());

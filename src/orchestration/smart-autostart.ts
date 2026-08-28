@@ -10,7 +10,7 @@
  * 4. Si inactiva: ejecuta autostart completo
  */
 
-import { runSync, runSyncShell } from './core/run-command.js';
+import { runSync, runSyncShell } from '../core/run-command.js';
 import { existsSync } from 'fs';
 import { join } from 'path';
 

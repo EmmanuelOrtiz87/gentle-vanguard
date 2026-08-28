@@ -167,8 +167,8 @@ aprendible en `.session/routing/routing-table.json` (17 dominios + overrides). A
 steps (máx 80) cuando un agente reporta "maximum steps reached".
 
 ```bash
-npx tsx src/adaptive-steps.ts --status
-npx tsx src/recommend-agent.ts --task "code review" --topn 3
+npx tsx src/orchestration/adaptive-steps.ts --status
+npx tsx src/orchestration/recommend-agent.ts --task "code review" --topn 3
 npm run delegate:run -- --task "audit gdpr compliance"
 ```
 

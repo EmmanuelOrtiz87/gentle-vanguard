@@ -10,7 +10,7 @@
  *   import { task } from 'opencode';
  *
  *   // A:
- *   import { task } from '../orchestrator-task-wrapper.js';
+ *   import { task } from '../orchestration/orchestrator-task-wrapper.js';
  *
  *   // Luego usar normalmente:
  *   const result = await task({
@@ -20,8 +20,8 @@
  *   });
  */
 
-import { GuardianAngel } from './gga.js';
-import type { GGADelegationOptions, GGADelegationResult } from './gga.js';
+import { GuardianAngel } from '../gga.js';
+import type { GGADelegationOptions, GGADelegationResult } from '../gga.js';
 
 // =============================================================================
 // TYPES - Compatibilidad con OpenCode task()
@@ -136,4 +136,4 @@ export {
   getCurrentProvider,
   getSwitchHistory,
   resetProviders,
-} from './gga.js';
+} from '../gga.js';

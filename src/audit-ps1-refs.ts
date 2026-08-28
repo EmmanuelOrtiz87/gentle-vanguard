@@ -31,7 +31,7 @@ const LEGACY_FALLBACK_FILES = new Set([
   'src/web/witr-wrapper.ts',
   'src/infrastructure/normative-audit-pipeline.ts',
   'src/karpathy-enforcer.ts',
-  'src/orchestrate-auto-fix.ts',
+  'src/orchestration/orchestrate-auto-fix.ts',
   'src/setup-complete.ts',
   'src/sync-to-public.ts',
   'src/validate-readme.ts',

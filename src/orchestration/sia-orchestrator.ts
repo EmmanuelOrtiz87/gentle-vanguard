@@ -2,7 +2,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync, copyFileSync } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { runSync, runNpxTsxSync } from './core/run-command.js';
+import { runSync, runNpxTsxSync } from '../core/run-command.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -636,7 +636,7 @@ function learningLoop(
     const dir = sessionDir(sessionId, outputDir);
     const targetPath = join(dir, `target-${i}.ps1`);
     const genResult = runNpxTsxSync(
-      'src/sia-orchestrator.ts',
+      'src/orchestration/sia-orchestrator.ts',
       ['--action', 'init', '--task-spec', 'placeholder'],
       {
         cwd: ROOT,

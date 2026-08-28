@@ -4,9 +4,9 @@
  * Demonstrates how the orchestrator would integrate with ModelBroker
  */
 
-import { ModelBroker } from './ml/model-broker.js';
+import { ModelBroker } from '../ml/model-broker.js';
 import { pathToFileURL } from 'url';
-import { runNpxTsxSync } from './core/run-command';
+import { runNpxTsxSync } from '../core/run-command';
 
 class OrchestratorWithModelBroker {
   private broker: ModelBroker;
@@ -155,8 +155,8 @@ Commands:
   switch-all-native                Switch all agents to native model (requires opencode restart)
   
 Examples:
-  npx tsx src/orchestrator-integration.ts test-delegation sdd-apply "Implement feature"
-  npx tsx tsx src/orchestrator-integration.ts status
+  npx tsx src/orchestration/orchestrator-integration.ts test-delegation sdd-apply "Implement feature"
+  npx tsx tsx src/orchestration/orchestrator-integration.ts status
 `);
   }
 }

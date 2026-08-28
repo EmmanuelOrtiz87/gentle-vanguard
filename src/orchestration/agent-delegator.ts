@@ -5,19 +5,19 @@
  * Replaces opencode task() which has model inheritance bugs.
  *
  * Usage:
- *   npx tsx src/agent-delegator.ts --agent sdd-apply --task "implement feature"
- *   npx tsx src/agent-delegator.ts --agent sdd-explore --prompt "Analyze requirements"
- *   npx tsx src/agent-delegator.ts --list
+ *   npx tsx src/orchestration/agent-delegator.ts --agent sdd-apply --task "implement feature"
+ *   npx tsx src/orchestration/agent-delegator.ts --agent sdd-explore --prompt "Analyze requirements"
+ *   npx tsx src/orchestration/agent-delegator.ts --list
  */
 
-import { runNpxTsx } from './core/run-command';
+import { runNpxTsx } from '../core/run-command';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { writeFileSync } from 'fs';
-import { compressStructural, estimateTokens } from './compression/structural-compression.js';
-import { executeWithCircuit } from './circuit-breaker-v2';
-import { registerAttempt, detectLoop } from './anti-loop-guard.js';
-import { evaluateFailure } from './security/guardrail-orchestrator.js';
+import { compressStructural, estimateTokens } from '../compression/structural-compression.js';
+import { executeWithCircuit } from '../circuit-breaker-v2';
+import { registerAttempt, detectLoop } from '../anti-loop-guard.js';
+import { evaluateFailure } from '../security/guardrail-orchestrator.js';
 
 interface AgentConfig {
   name: string;
@@ -672,7 +672,7 @@ Model: ${request.model || config.model}
 [ERROR]
 Native agent implementation not found at ${join(AGENTS_DIR, `${request.agent}.ts`)}.
 To enable this agent, create the agent implementation file:
-  npx tsx src/agent-delegator.ts --generate ${request.agent}
+  npx tsx src/orchestration/agent-delegator.ts --generate ${request.agent}
 Or register a native implementation in src/agents/.
 `;
 
@@ -803,8 +803,8 @@ Usage:
   --generate <name>         # Generate agent template
 
 Examples:
-  npx tsx src/agent-delegator.ts --agent sdd-apply --task "fix bug"
-  npx tsx src/agent-delegator.ts --generate my-agent
+  npx tsx src/orchestration/agent-delegator.ts --agent sdd-apply --task "fix bug"
+  npx tsx src/orchestration/agent-delegator.ts --generate my-agent
 
 Features:
   - Works with ANY AI tool (Claude, Cursor, etc.)
