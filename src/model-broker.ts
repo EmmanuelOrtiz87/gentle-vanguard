@@ -9,6 +9,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { pathToFileURL } from 'url';
 import { join } from 'path';
+import { evaluateFailure } from './guardrail-orchestrator.js';
 
 const ROOT = process.cwd();
 const REGISTRY_PATH = join(ROOT, 'config', 'model-health-registry.json');
@@ -279,6 +280,10 @@ class ModelBroker {
         error: errorMsg,
         attempted_model: finalModel,
       });
+
+      // Record the failure as a guardrail incident so the orchestrator learns
+      // from real model/provider failures (feeds the learning loop).
+      evaluateFailure({ error: errorMsg, source: `model-broker:${agentName}` });
 
       return {
         success: false,

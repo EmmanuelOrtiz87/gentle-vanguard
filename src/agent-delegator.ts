@@ -776,7 +776,9 @@ function main(): void {
       }
 
       void (async () => {
-        const result = await delegate({ agent: agentName, task });
+        // Use delegateWithGuardrail so CLI failures are classified, recorded as
+        // incidents, and surfaced with corrective guidance (not blind retry).
+        const result = await delegateWithGuardrail({ agent: agentName, task });
         console.log('\n=== Delegation Result ===\n');
         console.log(JSON.stringify(result, null, 2));
       })();

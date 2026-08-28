@@ -24,7 +24,7 @@ import { existsSync, mkdirSync, appendFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { recommend } from './recommend-agent.js';
-import { delegate, compressDelegationLossless } from './agent-delegator.js';
+import { delegateWithGuardrail, compressDelegationLossless } from './agent-delegator.js';
 import { resolveAgentTier } from './domain-tier.js';
 import {
   DatabaseManager,
@@ -123,7 +123,9 @@ async function main(): Promise<void> {
   // 2. Delegate natively — pass the M6 tier temperature override so the
   //    agent actually runs with the domain quality tier (premium: low temp /
   //    hallucination guard; fastCheap: higher temp), not the hardcoded default.
-  const result = await delegate({
+  //    Uses delegateWithGuardrail() so failures are classified, recorded as
+  //    incidents, and surfaced with corrective guidance instead of blind retry.
+  const result = await delegateWithGuardrail({
     agent: rec.recommended,
     task: taskC.applied ? taskC.text : task,
     context: contextC?.applied ? contextC.text : context,

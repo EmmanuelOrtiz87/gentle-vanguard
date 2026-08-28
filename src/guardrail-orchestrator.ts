@@ -102,6 +102,11 @@ const SIGNATURES: Record<Exclude<FailureCategory, 'unknown'>, RegExp[]> = {
     /expected an object/i,
     /field.*(missing|required)/i,
     /(cannot|failed to) (read|parse).*config/i,
+    // Real learning (2026-08-28): "Unknown agent: X" from the delegator is a
+    // config/delegation error (agent not registered), not an unclassifiable
+    // failure. Route it to config so it gets a corrective action.
+    /unknown agent/i,
+    /agent.*not (found|registered|configured)/i,
   ],
   network: [
     /ECONNREFUSED/i,

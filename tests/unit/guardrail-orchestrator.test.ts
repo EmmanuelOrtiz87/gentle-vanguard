@@ -37,6 +37,9 @@ test('classifyFailure: config errors', () => {
   assert.strictEqual(classifyFailure({ error: 'config file not found: foo.json' }), 'config');
   assert.strictEqual(classifyFailure({ error: 'invalid JSON in config' }), 'config');
   assert.strictEqual(classifyFailure({ error: 'field "agent" is missing' }), 'config');
+  // Real learning (2026-08-28): delegator "Unknown agent" errors are config.
+  assert.strictEqual(classifyFailure({ error: 'Unknown agent: api-and-interface-design' }), 'config');
+  assert.strictEqual(classifyFailure({ error: 'Agent foo not found in configuration' }), 'config');
 });
 
 test('classifyFailure: network errors', () => {
@@ -162,10 +165,11 @@ test('delegateWithGuardrail: unknown agent failure is classified and proceeds', 
   await withTempDir(async () => {
     const { delegateWithGuardrail } = await import('../../src/agent-delegator.ts');
     // Unknown agent -> delegate() fails with "Unknown agent" -> classified as
-    // 'unknown' -> action 'continue' -> proceed: true -> incident id attached.
+    // 'config' (agent not registered) -> action 'correct' -> proceed: true ->
+    // incident id attached.
     const result = await delegateWithGuardrail({ agent: 'nonexistent-agent', task: 'x' });
     assert.strictEqual(result.success, false);
-    assert.match(result.error || '', /GUARDRAIL:unknown/);
+    assert.match(result.error || '', /GUARDRAIL:config/);
     assert.match(result.error || '', /incident=/);
   });
 });
