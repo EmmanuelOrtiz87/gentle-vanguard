@@ -1,6 +1,7 @@
 import { createServer, type IncomingMessage, type ServerResponse } from 'http';
 import { readFileSync, statSync } from 'fs';
-import { extname, join, resolve } from 'path';
+import { extname, join, resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { analyzeInput, configureConnection, getConnectionStatus } from './atlassian';
 import { getReport, listReports, saveReport } from './reports';
 import { toDocx, toHtml, toMarkdown, toPdf, type ExportFormat } from './export';
@@ -20,8 +21,13 @@ import {
   SCOPES,
 } from './oauth';
 
+const CALLBACK_PATH = '/oauth/callback';
+
 const PORT = Number(process.env.GV_ANALYTICS_PORT || 4754);
-const APP_ROOT = resolve(process.cwd());
+// Resolve paths relative to this source file, not process.cwd(), so the API
+// works regardless of where the launcher spawned it from.
+const HERE = dirname(fileURLToPath(import.meta.url));
+const APP_ROOT = resolve(HERE, '..');
 const DIST_DIR = join(APP_ROOT, 'dist');
 
 function sendJson(res: ServerResponse, status: number, body: unknown) {
@@ -184,68 +190,6 @@ async function routeApi(
       sendJson(res, 200, { ok: true });
       return;
     }
-    if (req.method === 'GET' && pathname === '/oauth/callback') {
-      const url = new URL(req.url || '/', `http://${req.headers.host || '127.0.0.1'}`);
-      const code = url.searchParams.get('code');
-      const state = url.searchParams.get('state');
-      const errorParam = url.searchParams.get('error');
-      if (errorParam) {
-        sendHtml(
-          res,
-          400,
-          `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1>OAuth cancelado</h1><p>${errorParam}</p><p>Podes cerrar esta ventana y volver a la app.</p></body></html>`,
-        );
-        cancelPendingFlow();
-        return;
-      }
-      if (!code || !state) {
-        sendHtml(
-          res,
-          400,
-          `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1>Callback incompleto</h1><p>Faltan parametros code o state.</p></body></html>`,
-        );
-        return;
-      }
-      const flow = consumePendingFlow(state);
-      if (!flow) {
-        sendHtml(
-          res,
-          400,
-          `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1>State invalido o expirado</h1><p>Inicia el flujo OAuth nuevamente desde la app.</p></body></html>`,
-        );
-        return;
-      }
-      const config = getOAuthConfig();
-      if (!config || config.clientId !== flow.clientId) {
-        sendHtml(
-          res,
-          400,
-          `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1>Configuracion OAuth perdida</h1><p>Reintenta desde la app.</p></body></html>`,
-        );
-        return;
-      }
-      try {
-        const tokens = await exchangeCodeForTokens({
-          clientId: config.clientId,
-          clientSecret: config.clientSecret,
-          code,
-          codeVerifier: flow.codeVerifier,
-        });
-        persistTokensToVault(tokens);
-        sendHtml(
-          res,
-          200,
-          `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1 style="color:#4ade80">Conectado a Atlassian</h1><p>Ya podes cerrar esta ventana y volver a la app. Los tokens quedan guardados cifrados en el vault local.</p></body></html>`,
-        );
-      } catch (error) {
-        sendHtml(
-          res,
-          500,
-          `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1 style="color:#ee6d75">Error de OAuth</h1><pre>${(error as Error).message}</pre></body></html>`,
-        );
-      }
-      return;
-    }
     sendJson(res, 404, { error: 'API route not found' });
   } catch (error) {
     sendJson(res, 500, { error: error instanceof Error ? error.message : String(error) });
@@ -309,8 +253,84 @@ const server = createServer((req, res) => {
       });
     return;
   }
+  // OAuth callback is served on the same port as the API so a single
+  // registered redirect URI is enough. It must be handled BEFORE static
+  // serving, otherwise the SPA index.html would swallow it.
+  if (url.pathname === CALLBACK_PATH) {
+    void handleOAuthCallback(req, res, url);
+    return;
+  }
   serveStatic(req, res, url.pathname);
 });
+
+async function handleOAuthCallback(
+  req: IncomingMessage,
+  res: ServerResponse,
+  url: URL,
+): Promise<void> {
+  if (req.method !== 'GET') {
+    sendJson(res, 405, { error: 'Method not allowed' });
+    return;
+  }
+  const code = url.searchParams.get('code');
+  const state = url.searchParams.get('state');
+  const errorParam = url.searchParams.get('error');
+  if (errorParam) {
+    sendHtml(
+      res,
+      400,
+      `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1>OAuth cancelado</h1><p>${errorParam}</p><p>Podes cerrar esta ventana y volver a la app.</p></body></html>`,
+    );
+    cancelPendingFlow();
+    return;
+  }
+  if (!code || !state) {
+    sendHtml(
+      res,
+      400,
+      `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1>Callback incompleto</h1><p>Faltan parametros code o state.</p></body></html>`,
+    );
+    return;
+  }
+  const flow = consumePendingFlow(state);
+  if (!flow) {
+    sendHtml(
+      res,
+      400,
+      `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1>State invalido o expirado</h1><p>Inicia el flujo OAuth nuevamente desde la app.</p></body></html>`,
+    );
+    return;
+  }
+  const config = getOAuthConfig();
+  if (!config || config.clientId !== flow.clientId) {
+    sendHtml(
+      res,
+      400,
+      `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1>Configuracion OAuth perdida</h1><p>Reintenta desde la app.</p></body></html>`,
+    );
+    return;
+  }
+  try {
+    const tokens = await exchangeCodeForTokens({
+      clientId: config.clientId,
+      clientSecret: config.clientSecret,
+      code,
+      codeVerifier: flow.codeVerifier,
+    });
+    persistTokensToVault(tokens);
+    sendHtml(
+      res,
+      200,
+      `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1 style="color:#4ade80">Conectado a Atlassian</h1><p>Ya podes cerrar esta ventana y volver a la app. Los tokens quedan guardados cifrados en el vault local.</p></body></html>`,
+    );
+  } catch (error) {
+    sendHtml(
+      res,
+      500,
+      `<!doctype html><html><body style="font-family:system-ui;padding:40px;background:#0a0e17;color:#e5e7eb"><h1 style="color:#ee6d75">Error de OAuth</h1><pre>${(error as Error).message}</pre></body></html>`,
+    );
+  }
+}
 
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`Gentle-Vanguard Analytics API listening on http://127.0.0.1:${PORT}`);

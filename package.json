@@ -122,7 +122,7 @@
     "session:reference": "npx tsx src/session-reference-system.ts",
     "docker:build": "docker build -t gentle-vanguard .",
     "docker:test": "docker compose -f docker-compose.test.yml up --abort-on-container-exit",
-    "test:integration": "node --test tests/integration/api-health.test.js",
+    "test:integration": "node --test tests/integration/api-health.test.js tests/integration/gv-analytics-api.test.ts",
     "test:config": "node --test tests/config/*.test.ts",
     "test:research": "cd research/rlhf-dataset-search && python -m pytest ../../tests/research/test_search_datasets.py -v",
     "test:workflows": "node --test tests/workflows/*.test.ts",
