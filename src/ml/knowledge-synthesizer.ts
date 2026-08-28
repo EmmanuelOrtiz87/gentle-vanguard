@@ -23,7 +23,7 @@
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
 
 // ─── Types ────────────────────────────────────────────────────────────

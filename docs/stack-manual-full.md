@@ -528,7 +528,7 @@ Absorbe 5 estrategias de compresión de Headroom en TS puro, complementando la c
 `compressPrompt` usa `mode:'input'`; `compressOutput` usa `mode:'output'`. Config en
 `config/structural-compression.json`. Tests: `tests/unit/structural-compression.test.ts`.
 
-### Multi-perfiles por fase SDD (`src/model-profile-switcher.ts`)
+### Multi-perfiles por fase SDD (`src/ml/model-profile-switcher.ts`)
 
 Convención de gentle-ai absorbida nativamente. `config/model-router.json` sección `profiles` define
 perfiles `cheap`/`balanced`/`premium`, cada uno con temperature + hallucinationGuard por fase SDD

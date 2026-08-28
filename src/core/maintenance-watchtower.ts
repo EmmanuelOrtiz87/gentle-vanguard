@@ -675,7 +675,7 @@ async function checkMlEmbeddings() {
     addResult('ml-embeddings', 'embedding directory', 'FAIL', 'Not found', 'rebuild');
   }
 
-  const scripts = ['src/skills/skill-embedder.ts', 'src/ml-router.ts'];
+  const scripts = ['src/skills/skill-embedder.ts', 'src/ml/ml-router.ts'];
   for (const s of scripts) {
     const name = basename(s);
     addResult('ml-embeddings', name, fileExists(join(ROOT, s)) ? 'PASS' : 'FAIL', '', 'manual');

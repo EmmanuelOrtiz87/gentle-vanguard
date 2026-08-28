@@ -6,7 +6,7 @@
  * automáticamente reasigna todo el stack a usar opencode/deepseek-v4-flash-free
  * que es el único modelo gratuito y disponible.
  *
- * Uso: npx tsx src/model-enforcer.ts [--check] [--apply]
+ * Uso: npx tsx src/ml/model-enforcer.ts [--check] [--apply]
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';
@@ -224,9 +224,9 @@ function main(): void {
 Model Enforcer v1.0
 
 Uso:
-  npx tsx src/model-enforcer.ts --check    # Verificar estado actual
-  npx tsx src/model-enforcer.ts --apply     # Aplicar enforcement
-  npx tsx src/model-enforcer.ts --force     # Forzar reasignación
+  npx tsx src/ml/model-enforcer.ts --check    # Verificar estado actual
+  npx tsx src/ml/model-enforcer.ts --apply     # Aplicar enforcement
+  npx tsx src/ml/model-enforcer.ts --force     # Forzar reasignación
 
 Descripción:
   Garantiza que todo el stack use el modelo gratuito disponible

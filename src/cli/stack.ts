@@ -268,18 +268,18 @@ const COMMANDS: Command[] = [
       switch (action) {
         case 'status':
           printInfo('Checking learning engine status...');
-          runNpxTsx('src/learning-engine.ts', ['--status']);
+          runNpxTsx('src/ml/learning-engine.ts', ['--status']);
           break;
         case 'suggest':
           const domain = args[1];
           printInfo(
             domain ? `Getting suggestions for: ${domain}...` : 'Getting improvement suggestions...',
           );
-          runNpxTsx('src/learning-engine.ts', domain ? ['--suggest', domain] : ['--suggest']);
+          runNpxTsx('src/ml/learning-engine.ts', domain ? ['--suggest', domain] : ['--suggest']);
           break;
         case 'patterns':
           printInfo('Viewing learned patterns...');
-          runNpxTsx('src/learning-engine.ts', ['--patterns']);
+          runNpxTsx('src/ml/learning-engine.ts', ['--patterns']);
           break;
         default:
           printError(`Unknown action: ${action}`);
@@ -299,7 +299,7 @@ const COMMANDS: Command[] = [
         const source = sourceIndex > -1 ? args[sourceIndex + 1] : 'web';
 
         printInfo(`Acquiring knowledge from: ${url}...`);
-        runNpxTsx('src/knowledge-acquisition.ts', ['--fetch', url, '--source', source]);
+        runNpxTsx('src/ml/knowledge-acquisition.ts', ['--fetch', url, '--source', source]);
       } else {
         printError('Usage: stack knowledge acquire <url> [--source <name>]');
         process.exit(1);
@@ -425,8 +425,8 @@ function executeTool(toolName: string, args: string[]): void {
     'engram-sync': 'src/engram-auto-sync.ts',
     'session-autostart': 'src/core/session-autostart.ts',
     'error-memory': 'src/error-memory.ts',
-    'learning-engine': 'src/learning-engine.ts',
-    'knowledge-acquisition': 'src/knowledge-acquisition.ts',
+    'learning-engine': 'src/ml/learning-engine.ts',
+    'knowledge-acquisition': 'src/ml/knowledge-acquisition.ts',
     'stack-verify': 'src/stack-verify.ts',
     'security-scan': 'src/security/security-scan.ts',
   };

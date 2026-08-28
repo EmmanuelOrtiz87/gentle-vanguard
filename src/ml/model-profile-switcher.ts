@@ -10,10 +10,10 @@
  * value is the per-phase temperature/guard tuning.
  *
  * Usage:
- *   npx tsx src/model-profile-switcher.ts --list
- *   npx tsx src/model-profile-switcher.ts --set premium
- *   npx tsx src/model-profile-switcher.ts --set cheap --apply
- *   npx tsx src/model-profile-switcher.ts --status
+ *   npx tsx src/ml/model-profile-switcher.ts --list
+ *   npx tsx src/ml/model-profile-switcher.ts --set premium
+ *   npx tsx src/ml/model-profile-switcher.ts --set cheap --apply
+ *   npx tsx src/ml/model-profile-switcher.ts --status
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'fs';
@@ -150,8 +150,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     }
   } else {
     console.log('Usage:');
-    console.log('  npx tsx src/model-profile-switcher.ts --list');
-    console.log('  npx tsx src/model-profile-switcher.ts --set <profile> [--apply]');
-    console.log('  npx tsx src/model-profile-switcher.ts --status');
+    console.log('  npx tsx src/ml/model-profile-switcher.ts --list');
+    console.log('  npx tsx src/ml/model-profile-switcher.ts --set <profile> [--apply]');
+    console.log('  npx tsx src/ml/model-profile-switcher.ts --status');
   }
 }

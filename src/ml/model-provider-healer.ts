@@ -16,11 +16,11 @@
  *   modelo nativo opencode/deepseek-v4-flash-free vía model-switch.ts.
  *
  * Uso:
- *   npx tsx src/model-provider-healer.ts            # scan + auto-switch si aplica
- *   npx tsx src/model-provider-healer.ts --scan     # solo detectar (no cambia nada)
- *   npx tsx src/model-provider-healer.ts --status   # estado de salud actual
- *   npx tsx src/model-provider-healer.ts --clear    # limpiar estado de salud
- *   npx tsx src/model-provider-healer.ts --quiet    # minimo output (pipeline)
+ *   npx tsx src/ml/model-provider-healer.ts            # scan + auto-switch si aplica
+ *   npx tsx src/ml/model-provider-healer.ts --scan     # solo detectar (no cambia nada)
+ *   npx tsx src/ml/model-provider-healer.ts --status   # estado de salud actual
+ *   npx tsx src/ml/model-provider-healer.ts --clear    # limpiar estado de salud
+ *   npx tsx src/ml/model-provider-healer.ts --quiet    # minimo output (pipeline)
  */
 
 import {
@@ -37,8 +37,8 @@ import {
 } from 'fs';
 import { join, dirname, resolve } from 'path';
 import { homedir } from 'os';
-import { runNpxTsxSync } from './core/run-command.js';
-import { loadConfigFile } from './core/config-loader.js';
+import { runNpxTsxSync } from '../core/run-command.js';
+import { loadConfigFile } from '../core/config-loader.js';
 import { pathToFileURL } from 'url';
 
 const ROOT = resolve(process.cwd());

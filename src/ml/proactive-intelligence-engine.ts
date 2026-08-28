@@ -12,7 +12,7 @@
  * Generates contextual suggestions BEFORE user asks
  *
  * Usage:
- *   npx tsx src/proactive-intelligence-engine.ts [--analyze] [--suggest] [--apply]
+ *   npx tsx src/ml/proactive-intelligence-engine.ts [--analyze] [--suggest] [--apply]
  *
  * Integration:
  *   - session-autostart pipeline (lazy step)
@@ -23,7 +23,7 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 
 // ─── Types ────────────────────────────────────────────────────────────
 

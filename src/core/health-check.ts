@@ -255,7 +255,7 @@ function checkMlEmbeddings() {
     exists('src/skills/skill-embedder.ts'),
     'src/skills/skill-embedder.ts',
   );
-  writeCheck('ml-router.ts exists', exists('src/ml-router.ts'), 'src/ml-router.ts');
+  writeCheck('ml-router.ts exists', exists('src/ml/ml-router.ts'), 'src/ml/ml-router.ts');
 
   // Use skill-embeddings.json as primary source if available
   const primaryPath = hasSkillEmbeddings ? skillEmbeddingsPath : mlIndexPath;

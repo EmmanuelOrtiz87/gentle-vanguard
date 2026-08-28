@@ -49,7 +49,7 @@ VS Code, Copilot, Antigravity.
 
 | Componente       | Archivo(s)                                                                                                                                        | Estado    | Automatización            |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------------------------- |
-| ML Router        | `src/ml-router.ts`                                                                                                                                | ✅ Activo | Automático (pre-process)  |
+| ML Router        | `src/ml/ml-router.ts`                                                                                                                              | ✅ Activo | Automático (pre-process)  |
 | Skill embedder   | `src/skills/skill-embedder.ts`                                                                                                                    | ✅ Activo | Automático (reindex)      |
 | Context analyzer | `scripts/utilities/AUTO-DELEGATION/context-analyzer.ps1` <!-- REF-OBSOLETA: eliminado en migración PS1→TS; sin equivalente TS directo en src/ --> | ✅ Activo | Automático (sesión start) |
 
@@ -214,7 +214,7 @@ Activo | Manual |
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | --------- | -------------------------- |
 | Auto-norm learner  | `src/auto-norm-learner.ts`                                                                                                                | ⚠️ Activo | Manual (bajo demanda)      |
 | Auto-norm enforcer | `src/auto-norm-enforcer.ts`                                                                                                               | ✅ Activo | Automático (cada 5 turnos) |
-| Failure learning   | `src/learning-engine.ts` <!-- REF-OBSOLETA: scripts/adaptive/failure-learning-system.ps1 eliminado; candidato: src/learning-engine.ts --> | ⚠️ Activo | Manual                     |
+| Failure learning   | `src/ml/learning-engine.ts` <!-- REF-OBSOLETA: scripts/adaptive/failure-learning-system.ps1 eliminado; candidato: src/ml/learning-engine.ts --> | ⚠️ Activo | Manual                     |
 
 <!-- REF-OBSOLETA: scripts/adaptive/failure-learning-system.ps1 no tiene equivalente TS (migración PS1→TS) -->
 

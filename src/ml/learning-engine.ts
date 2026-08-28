@@ -6,15 +6,15 @@
  * Integrates with existing stack: error-memory, auto-norm-learner, knowledge-base
  *
  * Usage:
- *   npx tsx src/learning-engine.ts --status
- *   npx tsx src/learning-engine.ts --suggest [domain]
- *   npx tsx src/learning-engine.ts --learn <error-file>
- *   npx tsx src/learning-engine.ts --patterns
+ *   npx tsx src/ml/learning-engine.ts --status
+ *   npx tsx src/ml/learning-engine.ts --suggest [domain]
+ *   npx tsx src/ml/learning-engine.ts --learn <error-file>
+ *   npx tsx src/ml/learning-engine.ts --patterns
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 
 const ROOT = resolve(process.cwd());
 const LEARNING_DIR = join(ROOT, '.session', 'learning');
@@ -448,7 +448,7 @@ function handleLearn(errorFile?: string): void {
 function showHelp(): void {
   console.log('Learning Engine - Knowledge acquisition and improvement suggestions');
   console.log();
-  console.log('USAGE: npx tsx src/learning-engine.ts <command> [options]');
+  console.log('USAGE: npx tsx src/ml/learning-engine.ts <command> [options]');
   console.log();
   console.log('COMMANDS:');
   console.log('  --status              Show learning engine status');
@@ -458,9 +458,9 @@ function showHelp(): void {
   console.log('  --help                Show this help');
   console.log();
   console.log('EXAMPLES:');
-  console.log('  npx tsx src/learning-engine.ts --status');
-  console.log('  npx tsx src/learning-engine.ts --suggest architecture');
-  console.log('  npx tsx src/learning-engine.ts --learn error.json');
+  console.log('  npx tsx src/ml/learning-engine.ts --status');
+  console.log('  npx tsx src/ml/learning-engine.ts --suggest architecture');
+  console.log('  npx tsx src/ml/learning-engine.ts --learn error.json');
 }
 
 function main(): void {

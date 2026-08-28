@@ -286,7 +286,7 @@
       "activated": true,
       "risk": "high",
       "owner": "ops-agent",
-      "script": "src/predictive-governor.ts",
+      "script": "src/ml/predictive-governor.ts",
       "description": "Anticipates load, prewarms resources and adjusts budgets ahead of demand. High risk: can over-consume local resources.",
       "activationCriteria": [
         { "check": "tests", "required": true },
@@ -306,7 +306,7 @@
       "activated": true,
       "risk": "high",
       "owner": "orchestrator",
-      "script": "src/proactive-intelligence-engine.ts",
+      "script": "src/ml/proactive-intelligence-engine.ts",
       "description": "Anticipates user needs from usage patterns and context. High risk: autonomous actions require tight guardrails.",
       "activationCriteria": [
         { "check": "tests", "required": true },
@@ -406,7 +406,7 @@
       "activated": true,
       "risk": "high",
       "owner": "ops-agent",
-      "script": "src/fine-tuning-data-collector.ts",
+      "script": "src/ml/fine-tuning-data-collector.ts",
       "description": "Auto-collects session, engram and skill data into a fine-tuning dataset. High risk: data privacy and leakage.",
       "activationCriteria": [
         { "check": "tests", "required": true },

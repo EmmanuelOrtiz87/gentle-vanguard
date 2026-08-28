@@ -4,7 +4,7 @@
  * Demonstrates how the orchestrator would integrate with ModelBroker
  */
 
-import { ModelBroker } from './model-broker.js';
+import { ModelBroker } from './ml/model-broker.js';
 import { pathToFileURL } from 'url';
 import { runNpxTsxSync } from './core/run-command';
 

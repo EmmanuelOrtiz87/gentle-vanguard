@@ -8,7 +8,7 @@
  * 3. Cuota agotada en cualquier proveedor
  *
  * Uso con agentes:
- *   npx tsx src/model-fallback-runtime.ts --watch-agent sdd-apply
+ *   npx tsx src/ml/model-fallback-runtime.ts --watch-agent sdd-apply
  *   npm run model:fallback -- --action watch --agent sdd-apply
  */
 
@@ -317,10 +317,10 @@ function main() {
 Model Fallback Runtime v1.0
 
 Uso:
-  npx tsx src/model-fallback-runtime.ts --watch-agent <agent>   // Monitorear agente específico
-  npx tsx src/model-fallback-runtime.ts --switch-model <modelo> [razón] // Cambiar modelo
-  npx tsx src/model-fallback-runtime.ts --get-current            // Ver modelo actual
-  npx tsx src/model-fallback-runtime.ts --test-error            // Probar detección de error
+  npx tsx src/ml/model-fallback-runtime.ts --watch-agent <agent>   // Monitorear agente específico
+  npx tsx src/ml/model-fallback-runtime.ts --switch-model <modelo> [razón] // Cambiar modelo
+  npx tsx src/ml/model-fallback-runtime.ts --get-current            // Ver modelo actual
+  npx tsx src/ml/model-fallback-runtime.ts --test-error            // Probar detección de error
 
 Comando npm:
   npm run model:fallback -- --action watch --agent sdd-apply
@@ -364,7 +364,7 @@ function testErrorHandling(): void {
 
   if (nextModel) {
     console.log(
-      `\n📋 To switch: npx tsx src/model-fallback-runtime.ts --switch-model "${nextModel}" "Test switch"`,
+      `\n📋 To switch: npx tsx src/ml/model-fallback-runtime.ts --switch-model "${nextModel}" "Test switch"`,
     );
   }
 }

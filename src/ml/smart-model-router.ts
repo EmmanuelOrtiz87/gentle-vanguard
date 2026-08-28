@@ -277,9 +277,9 @@ Commands:
   health-check [id]  Check specific model health via ping
 
 Examples:
-  npx tsx src/smart-model-router.ts check
-  npx tsx src/smart-model-router.ts route opencode/deepseek-v4-flash-free
-  npx tsx src/smart-model-router.ts route opencode/deepseek-v4-flash-free "quota exceeded"
+  npx tsx src/ml/smart-model-router.ts check
+  npx tsx src/ml/smart-model-router.ts route opencode/deepseek-v4-flash-free
+  npx tsx src/ml/smart-model-router.ts route opencode/deepseek-v4-flash-free "quota exceeded"
 `);
   }
 }

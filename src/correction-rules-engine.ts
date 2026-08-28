@@ -207,7 +207,7 @@ function executeRule(rule: CorrectionRule, _score: number): CorrectionResult {
         break;
       }
       case 'ModelProviderUnsupported': {
-        const healer = join(ROOT, 'src', 'model-provider-healer.ts');
+        const healer = join(ROOT, 'src', 'ml', 'model-provider-healer.ts');
         if (existsSync(healer)) {
           const res = runNpxTsxSync(healer, ['--quiet'], {
             cwd: ROOT,

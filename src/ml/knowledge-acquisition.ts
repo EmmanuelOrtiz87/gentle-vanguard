@@ -6,14 +6,14 @@
  * Parses content and integrates into the stack's knowledge base
  *
  * Usage:
- *   npx tsx src/knowledge-acquisition.ts --fetch <url> [--source <name>]
- *   npx tsx src/knowledge-acquisition.ts --status
- *   npx tsx src/knowledge-acquisition.ts --help
+ *   npx tsx src/ml/knowledge-acquisition.ts --fetch <url> [--source <name>]
+ *   npx tsx src/ml/knowledge-acquisition.ts --status
+ *   npx tsx src/ml/knowledge-acquisition.ts --help
  */
 
 import { existsSync, mkdirSync, writeFileSync, readFileSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSync, runNpxTsxSync } from './core/run-command.js';
+import { runSync, runNpxTsxSync } from '../core/run-command.js';
 
 const ROOT = resolve(process.cwd());
 const KNOWLEDGE_DIR = join(ROOT, '.session', 'knowledge-cache');
@@ -247,7 +247,7 @@ function integrateIntoLearningEngine(entry: KnowledgeEntry): void {
   // Call learning engine to integrate
   try {
     runNpxTsxSync(
-      'src/learning-engine.ts',
+      'src/ml/learning-engine.ts',
       [
         '--integrate',
         JSON.stringify({
@@ -358,7 +358,7 @@ async function handleFetch(url: string, source: string): Promise<void> {
 function showHelp(): void {
   console.log('Knowledge Acquisition - Fetch and integrate external knowledge');
   console.log();
-  console.log('USAGE: npx tsx src/knowledge-acquisition.ts <command> [options]');
+  console.log('USAGE: npx tsx src/ml/knowledge-acquisition.ts <command> [options]');
   console.log();
   console.log('COMMANDS:');
   console.log('  --fetch <url>       Fetch and integrate knowledge from URL');
@@ -368,9 +368,9 @@ function showHelp(): void {
   console.log();
   console.log('EXAMPLES:');
   console.log(
-    '  npx tsx src/knowledge-acquisition.ts --fetch https://example.com/docs --source docs',
+    '  npx tsx src/ml/knowledge-acquisition.ts --fetch https://example.com/docs --source docs',
   );
-  console.log('  npx tsx src/knowledge-acquisition.ts --status');
+  console.log('  npx tsx src/ml/knowledge-acquisition.ts --status');
   console.log();
   console.log('NOTE: Content is cached in .session/knowledge-cache/');
   console.log('      and integrated with learning engine and Engram.');

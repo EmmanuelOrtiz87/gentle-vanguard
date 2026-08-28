@@ -109,7 +109,7 @@ When active, this skill:
 
 - Original: https://github.com/forrestchang/andrej-karpathy-skills
 - Andrej Karpathy's post: https://x.com/karpathy/status/2015883857489522876
-- Gentle-Vanguard integration: See src/learning-engine.ts, src/learning-engine.ts
+- Gentle-Vanguard integration: See src/ml/learning-engine.ts, src/ml/learning-engine.ts
 
 ## Usage
 

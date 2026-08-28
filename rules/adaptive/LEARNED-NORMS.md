@@ -291,7 +291,7 @@ stack no tenía ningún mecanismo que parseara errores de proveedor LLM de los l
 
 ### Solución Implementada
 
-1. **`src/model-provider-healer.ts`** (nuevo CLI): escanea logs de opencode (solo `level=ERROR`)
+1. **`src/ml/model-provider-healer.ts`** (nuevo CLI): escanea logs de opencode (solo `level=ERROR`)
    buscando firmas de error de proveedor (UnsupportedToolCalling, ModelNotFound, AuthFailure,
    RateLimit, ConnectionError, BadRequest). Cuando detecta un modelo fallando, lo marca `unhealthy`
    en `.runtime/model-health.json` con cooldown de 60min y auto-switch al modelo nativo

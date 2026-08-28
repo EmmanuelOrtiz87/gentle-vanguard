@@ -9,7 +9,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { pathToFileURL } from 'url';
 import { join } from 'path';
-import { evaluateFailure } from './security/guardrail-orchestrator.js';
+import { evaluateFailure } from '../security/guardrail-orchestrator.js';
 
 const ROOT = process.cwd();
 const REGISTRY_PATH = join(ROOT, 'config', 'model-health-registry.json');
@@ -332,7 +332,7 @@ async function main(): Promise<void> {
       const task = args.slice(2).join(' ');
 
       if (!agent || !task) {
-        console.error('Usage: tsx src/model-broker.ts delegate <agent> <task>');
+        console.error('Usage: tsx src/ml/model-broker.ts delegate <agent> <task>');
         process.exit(1);
       }
 
@@ -386,9 +386,9 @@ Commands:
   health                    Health report with statistics
 
 Examples:
-  npx tsx src/model-broker.ts delegate sdd-apply "Implement login feature"
-  npx tsx src/model-broker.ts status
-  npx tsx src/model-broker.ts health
+  npx tsx src/ml/model-broker.ts delegate sdd-apply "Implement login feature"
+  npx tsx src/ml/model-broker.ts status
+  npx tsx src/ml/model-broker.ts health
 `);
   }
 }

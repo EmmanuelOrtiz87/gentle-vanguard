@@ -131,7 +131,7 @@ function applyPromptCompression(input: string, skill: string): string {
 
 function getProactiveSuggestions(workspaceRoot: string): PIResponse | null {
   try {
-    const piePath = resolve(workspaceRoot, 'src/proactive-intelligence-engine.ts');
+    const piePath = resolve(workspaceRoot, 'src/ml/proactive-intelligence-engine.ts');
     const result = runNpxTsxSync(piePath, ['--suggest', '--quiet'], {
       cwd: workspaceRoot,
       timeout: 10000,

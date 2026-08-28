@@ -19,18 +19,18 @@
  *   const response = await wrapped(prompt, options);
  *
  * Or via CLI:
- *   npx tsx src/llm-call-wrapper.ts --prompt "..." --model "claude-3-5-sonnet"
+ *   npx tsx src/ml/llm-call-wrapper.ts --prompt "..." --model "claude-3-5-sonnet"
  */
 
 import { existsSync, writeFileSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { createHash } from 'crypto';
-import { compressPrompt } from './compression/prompt-compression.js';
-import { compressOutput } from './compression/output-compression.js';
-import { enforceChatLevel } from './chat-level-enforcer.js';
-import { ResponseCache } from './response-cache.js';
-import { runSync } from './core/run-command.js';
+import { compressPrompt } from '../compression/prompt-compression.js';
+import { compressOutput } from '../compression/output-compression.js';
+import { enforceChatLevel } from '../chat-level-enforcer.js';
+import { ResponseCache } from '../response-cache.js';
+import { runSync } from '../core/run-command.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -412,7 +412,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 
   if (!options.prompt) {
     console.error(
-      'Usage: npx tsx src/llm-call-wrapper.ts --prompt "..." [--model "..."] [--profile ultra|lleno|lite|simple] [--simulate]',
+      'Usage: npx tsx src/ml/llm-call-wrapper.ts --prompt "..." [--model "..."] [--profile ultra|lleno|lite|simple] [--simulate]',
     );
     process.exit(1);
   }

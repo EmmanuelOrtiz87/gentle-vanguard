@@ -11,9 +11,9 @@
  * - Sistema de alertas proactivas con múltiples canales
  *
  * Usage:
- *   npx tsx src/predictive-anomaly-detector.ts --monitor    # Modo monitoreo
- *   npx tsx src/predictive-anomaly-detector.ts --analyze    # Análisis único
- *   npx tsx src/predictive-anomaly-detector.ts --dashboard  # API para dashboard
+ *   npx tsx src/ml/predictive-anomaly-detector.ts --monitor    # Modo monitoreo
+ *   npx tsx src/ml/predictive-anomaly-detector.ts --analyze    # Análisis único
+ *   npx tsx src/ml/predictive-anomaly-detector.ts --dashboard  # API para dashboard
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';
