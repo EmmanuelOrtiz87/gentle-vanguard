@@ -93,4 +93,4 @@ jobs:
       - name: Update Grype DB
         run: grype db update
       - name: 'Scan SBOM (gate: fail on high+)'
-        run: npx tsx src/container-scan.ts scan --fail-on high --json
+        run: npx tsx src/security/container-scan.ts scan --fail-on high --json

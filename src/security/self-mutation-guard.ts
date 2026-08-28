@@ -9,9 +9,9 @@
  * schema keys, the guard FAILS and blocks the mutation.
  *
  * Usage:
- *   npx tsx src/self-mutation-guard.ts --check              # check all protected configs
- *   npx tsx src/self-mutation-guard.ts --check agents.json  # check one config
- *   npx tsx src/self-mutation-guard.ts --approve <file>     # stamp an approval (pre-write)
+ *   npx tsx src/security/self-mutation-guard.ts --check              # check all protected configs
+ *   npx tsx src/security/self-mutation-guard.ts --check agents.json  # check one config
+ *   npx tsx src/security/self-mutation-guard.ts --approve <file>     # stamp an approval (pre-write)
  *
  * Import:
  *   import { assertConfigIntegrity } from './self-mutation-guard.js';

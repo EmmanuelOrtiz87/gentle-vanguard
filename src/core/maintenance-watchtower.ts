@@ -993,13 +993,13 @@ async function checkSecurity() {
 async function checkSecretScanner() {
   if (!quiet) console.log('  [Secret Scanner] Checking...');
 
-  const scannerSrc = join(ROOT, 'src', 'secret-scanner.ts');
-  const scannerCli = join(ROOT, 'src', 'secret-scanner-cli.ts');
+  const scannerSrc = join(ROOT, 'src', 'security', 'secret-scanner.ts');
+  const scannerCli = join(ROOT, 'src', 'security', 'secret-scanner-cli.ts');
   const scannerCfg = join(ROOT, 'config', 'secret-scanner.json');
   const scannerTest = join(ROOT, 'tests', 'unit', 'secret-scanner.test.ts');
 
-  payloadFileOk('secret-scanner', 'module (src/secret-scanner.ts)', scannerSrc, 'manual', true);
-  payloadFileOk('secret-scanner', 'CLI (src/secret-scanner-cli.ts)', scannerCli, 'manual', true);
+  payloadFileOk('secret-scanner', 'module (src/security/secret-scanner.ts)', scannerSrc, 'manual', true);
+  payloadFileOk('secret-scanner', 'CLI (src/security/secret-scanner-cli.ts)', scannerCli, 'manual', true);
   payloadFileOk(
     'secret-scanner',
     'config (config/secret-scanner.json)',

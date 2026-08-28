@@ -8,9 +8,9 @@
  *   2  usage / runtime error
  *
  * Usage:
- *   npx tsx src/secret-scanner-cli.ts --scan <file|url> [options]
- *   npx tsx src/secret-scanner-cli.ts --dir <dir> [options]
- *   npx tsx src/secret-scanner-cli.ts --scan <file> --dir <dir> [options]
+ *   npx tsx src/security/secret-scanner-cli.ts --scan <file|url> [options]
+ *   npx tsx src/security/secret-scanner-cli.ts --dir <dir> [options]
+ *   npx tsx src/security/secret-scanner-cli.ts --scan <file> --dir <dir> [options]
  *
  * Options:
  *   --scan <path|url>    Scan a single file or URL
@@ -63,8 +63,8 @@ function printUsage(): void {
 Secret Scanner CLI — native secrets / API keys detector
 
 Usage:
-  npx tsx src/secret-scanner-cli.ts --scan <file|url> [options]
-  npx tsx src/secret-scanner-cli.ts --dir <dir> [options]
+  npx tsx src/security/secret-scanner-cli.ts --scan <file|url> [options]
+  npx tsx src/security/secret-scanner-cli.ts --dir <dir> [options]
 
 Options:
   --scan <path|url>    Scan a single file or URL

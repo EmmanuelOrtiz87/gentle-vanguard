@@ -16,12 +16,12 @@ const ROOT = resolve(process.cwd());
 
 // Files that are part of the pipeline and need fixing
 const CRITICAL_FILES = [
-  'src/security-initializer.ts',
+  'src/security/security-initializer.ts',
   'src/security/dependency-security-initializer.ts',
   'src/session-manager.ts',
   'src/session-reference-system.ts',
   'src/session-scoring.ts',
-  'src/safety-guardrails.ts',
+  'src/security/safety-guardrails.ts',
   'src/system-check.ts',
 ];
 

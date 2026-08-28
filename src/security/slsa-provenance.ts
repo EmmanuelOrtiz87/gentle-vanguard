@@ -7,8 +7,8 @@
  * SLSA Build L1 provenance generation without external tooling (cosign/slsa-verifier).
  *
  * Usage:
- *   npx tsx src/slsa-provenance.ts generate --artifacts sbom/gentle-vanguard-sbom.json
- *   npx tsx src/slsa-provenance.ts verify --file provenance/gentle-vanguard-provenance.json
+ *   npx tsx src/security/slsa-provenance.ts generate --artifacts sbom/gentle-vanguard-sbom.json
+ *   npx tsx src/security/slsa-provenance.ts verify --file provenance/gentle-vanguard-provenance.json
  */
 
 import { createHash } from 'crypto';
@@ -354,8 +354,8 @@ export function printHelp(): void {
 SLSA Provenance Generator (native TypeScript)
 
 Usage:
-  npx tsx src/slsa-provenance.ts generate [options]   # build provenance statement
-  npx tsx src/slsa-provenance.ts verify -f <file>     # validate an existing statement
+  npx tsx src/security/slsa-provenance.ts generate [options]   # build provenance statement
+  npx tsx src/security/slsa-provenance.ts verify -f <file>     # validate an existing statement
 
 Options:
   -a, --artifacts <files...>   Artifact files to attest (comma/space separated)

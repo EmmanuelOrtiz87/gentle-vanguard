@@ -599,7 +599,7 @@ function scanTechnicalDebt(): ValidationIssue[] {
     if (relPath.startsWith('src/dashboard-') || relPath === 'src/dashboard-common.ts') continue;
     if (relPath.startsWith('src/hooks/')) continue;
     // 🛡️ Skip security/mcp CLI tools — they use console.log as intended stdout
-    if (relPath === 'src/mcp/mcp-gateway.ts' || relPath === 'src/check-security.ts') continue;
+    if (relPath === 'src/mcp/mcp-gateway.ts' || relPath === 'src/security/check-security.ts') continue;
 
     for (const dp of deprecatedPatterns) {
       dp.pattern.lastIndex = 0;

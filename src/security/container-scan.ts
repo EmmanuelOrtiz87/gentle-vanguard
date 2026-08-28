@@ -10,11 +10,11 @@
  * para entornos sin Docker (rootfs/artifacts/directorios).
  *
  * Comandos:
- *   npx tsx src/container-scan.ts scan                  # escanear sbom.json (default)
- *   npx tsx src/container-scan.ts scan --sbom <path>    # escanear SBOM específico
- *   npx tsx src/container-scan.ts scan-dir <dir>        # SBOM del dir + escaneo
- *   npx tsx src/container-scan.ts status                # estado de la toolchain
- *   npx tsx src/container-scan.ts report                # reporte del último scan
+ *   npx tsx src/security/container-scan.ts scan                  # escanear sbom.json (default)
+ *   npx tsx src/security/container-scan.ts scan --sbom <path>    # escanear SBOM específico
+ *   npx tsx src/security/container-scan.ts scan-dir <dir>        # SBOM del dir + escaneo
+ *   npx tsx src/security/container-scan.ts status                # estado de la toolchain
+ *   npx tsx src/security/container-scan.ts report                # reporte del último scan
  *
  * Exit codes: 0 = sin vulnerabilidades al nivel exigido | 1 = vulns encontradas
  * | 2 = error de ejecución.
@@ -562,11 +562,11 @@ export function printScanHelp(): void {
 Container/Artifact Vulnerability Scanner (native TypeScript)
 
 Usage:
-  npx tsx src/container-scan.ts scan [--sbom <path>] [--fail-on <sev>] [--json]
-  npx tsx src/container-scan.ts scan-dir [<dir>] [--fail-on <sev>] [--json]
-  npx tsx src/container-scan.ts status
-  npx tsx src/container-scan.ts report
-  npx tsx src/container-scan.ts db-update
+  npx tsx src/security/container-scan.ts scan [--sbom <path>] [--fail-on <sev>] [--json]
+  npx tsx src/security/container-scan.ts scan-dir [<dir>] [--fail-on <sev>] [--json]
+  npx tsx src/security/container-scan.ts status
+  npx tsx src/security/container-scan.ts report
+  npx tsx src/security/container-scan.ts db-update
 
 Options:
   -s, --sbom <path>    SBOM file to scan (default: sbom.json)
@@ -599,7 +599,7 @@ export function runScanCli(): number {
   }
   if (cli.action === 'report') {
     if (!existsSync(LATEST_FILE)) {
-      console.error('No scan result found. Run: npx tsx src/container-scan.ts scan');
+      console.error('No scan result found. Run: npx tsx src/security/container-scan.ts scan');
       return 2;
     }
     const result = JSON.parse(readFileSync(LATEST_FILE, 'utf-8')) as ScanResult;

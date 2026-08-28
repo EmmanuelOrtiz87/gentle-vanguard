@@ -3,7 +3,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

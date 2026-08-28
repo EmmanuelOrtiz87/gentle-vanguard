@@ -207,9 +207,9 @@ function checkOptimizationStack() {
 
 function checkGateGuard() {
   header('GateGuard');
-  writeCheck('GateGuard (TS)', exists('src/gateguard-mcp.ts'), 'src/gateguard-mcp.ts');
-  if (exists('src/gateguard-mcp.ts')) {
-    const r = tryRunTs('src/gateguard-mcp.ts', ['--server', 'codegraph']);
+  writeCheck('GateGuard (TS)', exists('src/security/gateguard-mcp.ts'), 'src/security/gateguard-mcp.ts');
+  if (exists('src/security/gateguard-mcp.ts')) {
+    const r = tryRunTs('src/security/gateguard-mcp.ts', ['--server', 'codegraph']);
     if (r.status === 0) {
       const output = r.stdout.trim();
       const jsonMatch = output.match(/\{[\s\S]*\}/);

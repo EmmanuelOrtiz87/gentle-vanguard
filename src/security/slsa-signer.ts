@@ -15,9 +15,9 @@
  *   }
  *
  * Usage:
- *   npx tsx src/slsa-signer.ts genkey --out provenance/keys
- *   npx tsx src/slsa-signer.ts sign -f provenance/gentle-vanguard-provenance.json
- *   npx tsx src/slsa-signer.ts verify -f provenance/gentle-vanguard-provenance.json
+ *   npx tsx src/security/slsa-signer.ts genkey --out provenance/keys
+ *   npx tsx src/security/slsa-signer.ts sign -f provenance/gentle-vanguard-provenance.json
+ *   npx tsx src/security/slsa-signer.ts verify -f provenance/gentle-vanguard-provenance.json
  */
 
 import {
@@ -247,9 +247,9 @@ export function printSignerHelp(): void {
 SLSA Provenance Signer (native TypeScript, DSSE + Ed25519)
 
 Usage:
-  npx tsx src/slsa-signer.ts genkey --out <dir>            # generate key pair
-  npx tsx src/slsa-signer.ts sign -f <statement.json>      # sign a statement
-  npx tsx src/slsa-signer.ts verify -f <signed.json>       # verify a signed envelope
+  npx tsx src/security/slsa-signer.ts genkey --out <dir>            # generate key pair
+  npx tsx src/security/slsa-signer.ts sign -f <statement.json>      # sign a statement
+  npx tsx src/security/slsa-signer.ts verify -f <signed.json>       # verify a signed envelope
 
 Options:
   -f, --file <path>        Statement file (sign) or signed envelope (verify)
@@ -277,7 +277,7 @@ function runSign(cli: SignerCliArgs): boolean {
   }
   if (!existsSync(cli.keyFile)) {
     console.error(
-      `ERROR: private key not found: ${cli.keyFile}\n       Run: npx tsx src/slsa-signer.ts genkey --out provenance/keys`,
+      `ERROR: private key not found: ${cli.keyFile}\n       Run: npx tsx src/security/slsa-signer.ts genkey --out provenance/keys`,
     );
     return false;
   }

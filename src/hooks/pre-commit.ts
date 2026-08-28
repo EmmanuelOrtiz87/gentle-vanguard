@@ -27,7 +27,7 @@ const EXCLUDED_PATHS = new Set([
   'docs/reference/ARCHITECTURE.md',
   'src/hooks/pre-commit.ts',
   'src/hooks/pre-commit-privacy.ts',
-  'src/check-security.ts',
+  'src/security/check-security.ts',
   'src/cli/gv.ts',
   'skills/docker-devops-skill/SKILL.md',
   'skills/security-expert-skill/references/security-patterns.md',
@@ -95,8 +95,8 @@ function main(_args?: string[]): number {
 
   const checks = [
     {
-      ts: 'src/check-security.ts',
-      ps1: 'src/check-security.ts',
+      ts: 'src/security/check-security.ts',
+      ps1: 'src/security/check-security.ts',
       blocking: true,
       label: 'Security',
     },

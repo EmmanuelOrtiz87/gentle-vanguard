@@ -428,7 +428,7 @@ function executeTool(toolName: string, args: string[]): void {
     'learning-engine': 'src/learning-engine.ts',
     'knowledge-acquisition': 'src/knowledge-acquisition.ts',
     'stack-verify': 'src/stack-verify.ts',
-    'security-scan': 'src/security-scan.ts',
+    'security-scan': 'src/security/security-scan.ts',
   };
 
   const script = toolMap[toolName];

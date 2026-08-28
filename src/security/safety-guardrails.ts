@@ -247,7 +247,7 @@ function doRules(config: SafetyConfig): void {
 
 function printUsage(): void {
   console.log(`Usage:
-  npx tsx src/safety-guardrails.ts --action <validate|status|rules> [--agentId <id>] [--mutation <json>]`);
+  npx tsx src/security/safety-guardrails.ts --action <validate|status|rules> [--agentId <id>] [--mutation <json>]`);
 }
 
 function parseArgs(): { action: string; agentId: string; mutation: string } {

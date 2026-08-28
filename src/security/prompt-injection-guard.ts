@@ -223,7 +223,7 @@ function doPatterns(knownPatterns: string[]): void {
 
 function printUsage(): void {
   console.log(`Usage:
-  npx tsx src/prompt-injection-guard.ts --action <scan|sanitize|patterns> [--text <string>] [--strictness <low|medium|high>]`);
+  npx tsx src/security/prompt-injection-guard.ts --action <scan|sanitize|patterns> [--text <string>] [--strictness <low|medium|high>]`);
 }
 
 function parseArgs(): { action: string; text: string; strictness: string } {

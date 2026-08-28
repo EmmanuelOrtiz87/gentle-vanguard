@@ -20,7 +20,7 @@ hook execution needed.
 4. `mem_save` after every significant task
 5. CodeGraph -> `npm run graphify -- query "..."` before modifying code
 6. `mem_search "lessons learned"` at session start
-7. Review Workload Guard: `npx tsx src/workload-guard.ts` before multi-file impl >400 lines
+7. Review Workload Guard: `npx tsx src/security/workload-guard.ts` before multi-file impl >400 lines
 8. Tool output discipline: limit read/grep/bash results to 50 lines
 9. JSON validity: verify balanced quotes/braces/brackets before tool calls (see
    `rules/NORMATIVAS-JSON-CONSTRUCTION.md`)

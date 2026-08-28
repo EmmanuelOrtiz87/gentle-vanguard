@@ -32,7 +32,7 @@ function fixDependencySecurityChecker(): void {
 
 function fixSecurityInitializer(): void {
   step(2, 'security-initializer.ts');
-  const fp = path.join(ROOT, 'src', 'security-initializer.ts');
+  const fp = path.join(ROOT, 'src', 'security', 'security-initializer.ts');
   if (!fs.existsSync(fp)) {
     log('   ⚠️  File not found, skipping');
     return;

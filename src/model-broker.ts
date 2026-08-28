@@ -9,7 +9,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { pathToFileURL } from 'url';
 import { join } from 'path';
-import { evaluateFailure } from './guardrail-orchestrator.js';
+import { evaluateFailure } from './security/guardrail-orchestrator.js';
 
 const ROOT = process.cwd();
 const REGISTRY_PATH = join(ROOT, 'config', 'model-health-registry.json');

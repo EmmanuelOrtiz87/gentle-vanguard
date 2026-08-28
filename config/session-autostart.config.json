@@ -148,7 +148,7 @@
       {
         "id": "security-initializer",
         "enabled": true,
-        "script": "src/security-initializer.ts",
+        "script": "src/security/security-initializer.ts",
         "args": "",
         "required": false,
         "description": "Initialize enhanced security components (dependency checks, audit logging) (TS)"

@@ -4,16 +4,16 @@
  * Performs dependency scanning, code analysis, and compliance checks.
  *
  * Migrated from: skills/security-expert-skill/security-scan.ps1
- * Consolidates: src/check-security.ts, src/security-orchestrator.ts
+ * Consolidates: src/security/check-security.ts, src/security/security-orchestrator.ts
  *
  * Usage:
- *   npx tsx src/security-scan.ts [--scan <type>] [--output <file>]
+ *   npx tsx src/security/security-scan.ts [--scan <type>] [--output <file>]
  *     --scan <type>   Scan type: deps | code | compliance | all (default)
  *     --output <file> JSON output path
  *     --quiet         Minimal output
  */
 
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { existsSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 

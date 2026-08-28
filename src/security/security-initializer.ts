@@ -5,8 +5,8 @@
  * Ensures all security improvements are properly initialized
  */
 
-import { dependencySecurityEnforcer } from './security/dependency-security-enforcer';
-import { checkDependencySecurity } from './security/dependency-security-checker';
+import { dependencySecurityEnforcer } from './dependency-security-enforcer';
+import { checkDependencySecurity } from './dependency-security-checker';
 
 /**
  * Initialize security components

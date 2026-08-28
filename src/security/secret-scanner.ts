@@ -18,8 +18,8 @@
  *   - Redaction helper (first 4 + last 4 chars) and risk report builder.
  *
  * Usage:
- *   npx tsx src/secret-scanner-cli.ts --scan <file|url>
- *   npx tsx src/secret-scanner-cli.ts --dir <dir>
+ *   npx tsx src/security/secret-scanner-cli.ts --scan <file|url>
+ *   npx tsx src/security/secret-scanner-cli.ts --dir <dir>
  */
 
 import { existsSync, readFileSync } from 'node:fs';
@@ -1419,6 +1419,6 @@ export function buildReport(matches: SecretMatch[], options: ReportOptions = {})
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   // Re-exported via secret-scanner-cli.ts; direct execution prints usage.
-  console.error('Use: npx tsx src/secret-scanner-cli.ts --scan <file|url> [options]');
+  console.error('Use: npx tsx src/security/secret-scanner-cli.ts --scan <file|url> [options]');
   process.exit(2);
 }

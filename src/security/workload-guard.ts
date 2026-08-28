@@ -4,11 +4,11 @@
  * Prevents large unfocused changes. TS migration of review-workload-guard concept.
  *
  * Usage:
- *   npx tsx src/workload-guard.ts --files src/a.ts src/b.ts --lines 450
- *   npx tsx src/workload-guard.ts --diff (reads from git diff --stat)
+ *   npx tsx src/security/workload-guard.ts --files src/a.ts src/b.ts --lines 450
+ *   npx tsx src/security/workload-guard.ts --diff (reads from git diff --stat)
  */
 
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 

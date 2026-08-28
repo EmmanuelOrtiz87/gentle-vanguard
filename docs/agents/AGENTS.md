@@ -40,7 +40,7 @@ Based on detection, load `config/orchestrator.json#toolProfiles.<name>`.
 
 7. SDD Preflight: `sdd-preflight.ps1` before first SDD flow
    <!-- REF-OBSOLETA: sdd-preflight.ps1 eliminado en migración PS1→TS; solo queda scripts/.session/sdd-preflight.json (dato, no script) -->
-8. Review Workload Guard: `src/workload-guard.ts` before multi-file >400 lines
+8. Review Workload Guard: `src/security/workload-guard.ts` before multi-file >400 lines
 
 ## Break Glass
 

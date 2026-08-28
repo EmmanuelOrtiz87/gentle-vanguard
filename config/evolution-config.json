@@ -41,9 +41,9 @@
     "enabled": true,
     "layer": "v6.1",
     "configRef": "config/safety-layer.json",
-    "guardrailsScript": "src/safety-guardrails.ts",
+    "guardrailsScript": "src/security/safety-guardrails.ts",
     "scorerScript": "src/mutation-safety-scorer.ts",
-    "injectionGuardScript": "src/prompt-injection-guard.ts",
+    "injectionGuardScript": "src/security/prompt-injection-guard.ts",
     "blockOnViolation": true,
     "escalateMediumRisk": true
   },

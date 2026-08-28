@@ -265,7 +265,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Generate SBOM
-        run: npx tsx src/generate-sbom.ts --output sbom/gentle-vanguard-sbom.json --format json
+        run: npx tsx src/security/generate-sbom.ts --output sbom/gentle-vanguard-sbom.json --format json
 
       - name: Upload SBOM
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a

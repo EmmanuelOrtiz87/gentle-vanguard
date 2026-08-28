@@ -18,7 +18,7 @@ import {
   evaluateFailure,
   resolveIncident,
   getCategoryStats,
-} from '../../src/guardrail-orchestrator.ts';
+} from '../../src/security/guardrail-orchestrator.ts';
 
 // Isolate state per test by pointing the orchestrator at a temp dir via cwd.
 async function withTempDir(fn: () => void | Promise<void>): Promise<void> {

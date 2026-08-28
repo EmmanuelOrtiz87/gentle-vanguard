@@ -41,7 +41,7 @@ pre-commit:
       run: npx secretlint --secretlintrc .secretlintrc.json {staged_files} 2>&1
     secret-scanner:
       glob: '*.{ts,js,json,yml,yaml,md,env,toml,xml,py,ps1,sh,sql}'
-      run: npx tsx src/secret-scanner-cli.ts --scan {staged_files} --redact
+      run: npx tsx src/security/secret-scanner-cli.ts --scan {staged_files} --redact
 
 pre-push:
   commands:
@@ -77,8 +77,8 @@ pre-push:
     # canonical artifact) so the local copy must not go stale.
     container-scan:
       run:
-        npx tsx src/generate-sbom.ts --output sbom.json --format json && npx tsx
-        src/container-scan.ts scan --fail-on high --json
+        npx tsx src/security/generate-sbom.ts --output sbom.json --format json && npx tsx
+        src/security/container-scan.ts scan --fail-on high --json
     # Content operations validation (~3s) — catches broken content manifests
     # before CI does.
     content-validate:

@@ -20,7 +20,7 @@ Canonical entry: `docs/agents/AGENTS.md`
 6. CodeGraph -> MCP `codegraph` tools before modifying code (or
    `npx tsx src/retrieval/semantic-search.ts` for NL queries)
 7. `mem_search "lessons learned"` at session start
-8. Review Workload Guard (`npx tsx src/workload-guard.ts`) before multi-file impl >400 lines
+8. Review Workload Guard (`npx tsx src/security/workload-guard.ts`) before multi-file impl >400 lines
 9. Tool output discipline: limit read/grep/bash results to 50 lines
 10. JSON validity: verify balanced quotes/braces/brackets before tool calls (see
     `rules/NORMATIVAS-CODE-QUALITY.md`)

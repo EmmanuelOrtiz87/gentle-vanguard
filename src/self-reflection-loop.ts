@@ -19,7 +19,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import { join, resolve } from 'path';
 import { runSync } from './core/run-command.js';
 import { pathToFileURL } from 'url';
-import { assertConfigIntegrity } from './self-mutation-guard.js';
+import { assertConfigIntegrity } from './security/self-mutation-guard.js';
 
 // ─── Types ────────────────────────────────────────────────────────────
 

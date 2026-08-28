@@ -36,7 +36,7 @@ Run `AGENTS.md` — no shortcuts.
    sesiones.
 4. **CodeGraph** -> `codegraph_context` before modifying code
 5. **mem_search "lessons learned"** at session start 9. **Review Workload Guard** ->
-   `npx tsx src/workload-guard.ts` before multi-file impl
+   `npx tsx src/security/workload-guard.ts` before multi-file impl
 6. **Tool output discipline** -> limit read/grep/bash results; use `-First 30`, `Select-Object`,
    `head -50` on large output
 7. **JSON VALIDITY** -> Verify quotes/braces/brackets balanced BEFORE any tool call with JSON

@@ -22,7 +22,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { normalizeSteps } from './opencode-guards.js';
+import { normalizeSteps } from './security/opencode-guards.js';
 
 const ROOT = resolve(process.cwd());
 const OPENCODE_JSON = join(ROOT, 'opencode.json');

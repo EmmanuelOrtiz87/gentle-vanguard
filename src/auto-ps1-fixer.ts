@@ -20,7 +20,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   // Scripts de hooks
   'hooks/pre-commit.ps1': 'src/hooks/pre-commit.ts',
   'hooks/pre-commit-privacy.ps1': 'src/hooks/pre-commit-privacy.ts',
-  'scripts/hooks/check-security.ps1': 'src/check-security.ts',
+  'scripts/hooks/check-security.ps1': 'src/security/check-security.ts',
   'scripts/hooks/check-quality.ps1': 'src/hooks/check-quality.ts',
   'scripts/hooks/check-architecture.ps1': 'src/hooks/check-architecture.ts',
   'scripts/hooks/check-testing.ps1': 'src/hooks/check-testing.ts',
@@ -129,7 +129,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/run-tests-simple.ps1': 'src/run-tests-simple.ts',
 
   // Skills
-  'skills/docker-devops-skill/scripts/security-scan.ps1': 'src/security-scan.ts',
+  'skills/docker-devops-skill/scripts/security-scan.ps1': 'src/security/security-scan.ts',
   'skills/documentation-manager.ps1': 'src/documentation-manager.ts',
 
   // Review

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
  * SBOM Generator - Creates CycloneDX Software Bill of Materials
- * Usage: npx tsx src/generate-sbom.ts [--output path] [--format json|xml] [--validate]
+ * Usage: npx tsx src/security/generate-sbom.ts [--output path] [--format json|xml] [--validate]
  */
 
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { dirname, resolve } from 'path';
 

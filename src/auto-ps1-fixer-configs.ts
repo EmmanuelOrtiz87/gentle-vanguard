@@ -16,7 +16,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   // Hooks
   'hooks/pre-commit.ps1': 'src/hooks/pre-commit.ts',
   'hooks/pre-commit-privacy.ps1': 'src/hooks/pre-commit-privacy.ts',
-  'scripts/hooks/check-security.ps1': 'src/check-security.ts',
+  'scripts/hooks/check-security.ps1': 'src/security/check-security.ts',
   'scripts/hooks/check-sdd-gate.ps1': 'src/hooks/check-sdd-gate.ts',
   'scripts/hooks/lockfile-lint-pre-commit.ps1': 'src/hooks/lockfile-lint-pre-commit.ts',
   'scripts/hooks/npm-audit-pre-push.ps1': 'src/hooks/npm-audit-pre-push.ts',
