@@ -90,7 +90,47 @@ Hecho y verificado con build verde + typecheck verde:
 - **PENDING.md** — lista priorizada de 16 items con plan operativo por olas.
 - **Typecheck + build**: verde (`tsc --noEmit && vite build` → 2.12s, 162KB JS, 13KB CSS).
 
-Siguiente ola: P0 stack (wire opencode.json + daemon + cleanup 4754).
+### Avance 4 (2026-08-28, P0 stack integration)
+
+Landed en commit `a4b34c2c`. Integra gv-analytics al stack como first-class daemon:
+
+- `src/gv-analytics-launcher.ts` (single-shot, port 4754 cleanup, detached, pidfiles
+  en `.runtime/gv-analytics-{api,vite}.pid`, SIGINT/SIGTERM cleanup).
+- Scripts npm: `analytics:start | start:api | stop | build | dev`.
+- `opencode.json#mcp.gv-analytics-atlassian` habilitado.
+- `process-hygiene.ts`: 3 nuevas `DAEMON_CLASSES`; el match generico de `vite-server`
+  se reordeno despues de `gv-analytics-vite` para evitar falso positivo de duplicado.
+- `maintenance-watchtower.ts`: `checkGvAnalytics()` con 6 checks (build, API HTTP,
+  process, Vite dev, MCP registry, opencode.json wire). 6/6 PASS verificado.
+- Smoke test: launcher arranca, API responde, watchtower OK.
+
+### Avance 5 (2026-08-28, P1 LLM real + diagramas)
+
+Landed en commits `c7a13f6a` (LLM) y `020af3b5` (diagramas).
+
+- `apps/gv-analytics/server/llm.ts`: wrapper sobre `agent-delegator --agent sdd-explore`
+  con timeout 90s, extraccion de JSON (fenced + balanced brace scan), normalizacion de
+  shape, tabla `gv_analytics_llm_cache` (sha256 hash) en Nexus. Fallback heuristico
+  cuando el modelo no responde o devuelve JSON no parseable.
+- `apps/ggv-analytics/server/atlassian.ts`: `analyzeInput` ahora invoca
+  `enrichWithLLM` primero. Si retorna analisis, el reporte usa LLM output; si no,
+  cae al heuristico con `llmSource='heuristic'`.
+- `src/types.ts`: `AnalyticsReport` gana `llmSource | llmDurationMs | llmCached | llmNotes`.
+  `complexity.level` acepta `'critical'`.
+- UI: badge de proveniencia LLM (agent=cyan, cache=verde, fallback=ambar, heuristico=ambar)
+  con duracion. Bloques de diagramas con copy-to-clipboard y render mermaid on-demand
+  (CDN, fallback a texto). Tag "mermaid" cuando el contenido califica.
+- End-to-end: `POST /api/analyze` con pedido real de checkout Magento → `llmSource=agent`
+  en 5.4s. Cache hit <50ms.
+
+### Estado al cierre de ola
+
+- typecheck + build: verde
+- watchtower: 6/6 gv-analytics checks PASS
+- process-hygiene: gv-analytics-api + gv-analytics-vite healthy
+- P0 + P1: 100% done
+- P2: 0% (OAuth, validacion, templates, tests E2E, metricas)
+- P3: 0% (widget, i18n, theme, storybook)
 
 ### Notas para retomar
 

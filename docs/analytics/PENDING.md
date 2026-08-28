@@ -1,93 +1,85 @@
 # Gentle-Vanguard Analytics — Pendientes
 
-> Estado al 2026-08-28 (sesión actual). El app está funcional pero no integrado de forma
-> nativa al stack. Esta lista organiza el trabajo restante para dejar la app "lista" —
-> operacional, conectada al stack, con análisis LLM real y pulido de producto.
+> Estado al 2026-08-28 (sesión actual). El app está integrada al stack y produce
+> análisis con LLM real + fallback heurístico. Esta lista organiza el trabajo
+> restante para producto + cross-app.
 
-Leyenda: `[ ]` pendiente · `[x]` hecho · `[~]` en curso.
+Leyenda: `[ ]` pendiente · `[x]` hecho · `[~]` en curso · `[!]` riesgo.
 
 ## P0 — Operación del stack (debe estar antes de que otros la usen)
 
-- [x] **Commit del avance actual** — staged en PR con apps/gv-analytics + docs/analytics.
+- [x] **Commit del avance actual** — landed (4 commits: 432c01c5, a4b34c2c, c7a13f6a, 020af3b5).
 - [x] **Stepper en cabecera con scroll-spy** — 4 botones (Conexión → Análisis → Reporte →
-  Evidencia) muestran progreso y permiten salto suave. Botón activo se ilumina con el
-  gradiente de marca y badge numérico.
+  Evidencia) con badge numérico y gradiente de marca cuando la sección está activa.
 - [x] **Historial limitado a 5** — API `GET /api/reports` default `limit=5` (cap 25),
-  panel del sidebar dice "Últimos 5 reportes" y slicea en cliente.
-- [ ] **Wire MCP en `opencode.json#mcp`** — `gv-analytics-atlassian` ya está en
-  `config/mcp-registry.json` con `autoStart:false`. Falta decidir entrypoint y agregarlo a
-  `opencode.json` sin pisar overrides locales.
-- [ ] **Daemon del stack** — pidfile en `.runtime/gv-analytics.pid`, script `npm run`
-  en el package, integración a `process-hygiene.ts` y `maintenance-watchtower.ts` (96 checks).
-- [ ] **Cleanup automático del puerto 4754** — `dev` mata el puerto a mano con
-  `netstat`. Necesario: cleanup al cierre de sesión para no dejar zombies.
+  panel del sidebar muestra últimos 5.
+- [x] **Wire MCP en `opencode.json#mcp`** — `gv-analytics-atlassian` habilitado stdio.
+- [x] **Daemon del stack** — `src/gv-analytics-launcher.ts` con pidfiles en `.runtime/`,
+  scripts `analytics:start|start:api|stop|build|dev`, integrado a `process-hygiene.ts`
+  (3 nuevas DAEMON_CLASSES) y `maintenance-watchtower.ts` (6 checks en
+  `checkGvAnalytics`). Vite match reorderado para evitar falso positivo de duplicado.
+- [x] **Cleanup automático del puerto 4754** — launcher mata PID previo + fallback
+  `netstat -ano` para liberar el puerto antes del spawn.
 
 ## P1 — Análisis con LLM real (core del producto)
 
-- [ ] **Reemplazar heurística por model router** — `analyzeInput` hoy detecta frentes y
-  estima con reglas (regex catalog). Debe invocar el model router
-  (`config/model-router.json`) con perfiles cheap/balanced/premium y agentes BA/SAD/DEV/QA/DOC.
-- [ ] **Pipeline route-and-delegate** — invocar `npx tsx src/delegate/route-and-delegate.ts`
-  o equivalente con el contexto del ticket. El reporte debe componerse de outputs reales
-  de los subagentes, no strings hardcodeados.
-- [ ] **Cache de evidencia en Nexus** — mismo Jira/Confluence/Bitbucket no debería
-  re-fetchar en cada análisis. Tabla `gv_analytics_evidence_cache` con TTL.
-- [ ] **Diagramas diagram-design en el reporte** — el slice "diagramas" del reporte devuelve
-  strings. Usar `skills/diagram-design` (27 tipos) o equivalente para renderizar
-  visualmente el estado actual vs propuesto (HTML/SVG self-contained).
+- [x] **Reemplazar heurística por model router** — `analyzeInput` ahora invoca
+  `agent-delegator --agent sdd-explore` con prompt estructurado (JSON shape estricto).
+  Fallback heurístico se mantiene como graceful degradation.
+- [x] **Pipeline route-and-delegate** — `apps/gv-analytics/server/llm.ts` envuelve
+  agent-delegator con timeout 90s, extracción de JSON (fenced + balanced brace scan),
+  normalización de shape.
+- [x] **Cache LLM en Nexus** — tabla `gv_analytics_llm_cache` (hash sha256 de
+  input+evidence → payload JSON). Cache hits <50ms.
+- [x] **Diagramas renderizables** — bloques con copy-to-clipboard y render mermaid
+  on-demand (CDN, fallback a texto). Tag "mermaid" visible cuando aplica.
 
-## P2 — Producto / UX
+## P2 — Producto / UX (PRIORIDAD SIGUIENTE)
 
 - [ ] **OAuth 2.0 con callback local** — evolución del API token. Servidor de callback
   en `127.0.0.1`, persistencia cifrada AES-GCM en `.runtime/gv-analytics/`.
+  Tamaño: 3-4h. Dependencia: `vault.ts` ya tiene cifrado AES-GCM.
 - [ ] **Validación Atlassian mejorada** — feedback inmediato en la UI al pegar
   credenciales (status de Jira/Confluence/Bitbucket con un solo click).
+  Tamaño: 30min. Reutiliza `getConnectionStatus`.
 - [ ] **Templates de reporte** — formatos configurables (executive brief vs full SDD)
-  desde la UI sin tocar código.
-- [ ] **Tests E2E** — suite Playwright/Vitest que cubra: conexión, análisis,
-  persistencia, export PDF, export DOCX. Hoy solo hay smoke test manual documentado.
+  desde la UI sin tocar código. Tamaño: 1-2h.
+- [ ] **Tests E2E** — suite Vitest/Playwright que cubra: conexión, análisis,
+  persistencia, export PDF, export DOCX. Tamaño: 2-3h.
 - [ ] **Métricas de uso** — cuántas requests/min, qué proveedor de modelo responde,
-  latencia p50/p95. Tabla `gv_analytics_metrics` + dashboard widget.
+  latencia p50/p95. Tabla `gv_analytics_metrics` + dashboard widget. Tamaño: 1h.
 
 ## P3 — Cross-app / futuro
 
 - [ ] **Widget en `apps/web-dashboard`** — vista de "últimos análisis" sin necesidad
-  de abrir gv-analytics.
-- [ ] **i18n en/pt/es** — siguiendo el patrón del dashboard actual.
-- [ ] **Theme switcher** (light/dark) — actualmente solo dark.
-- [ ] **Storybook** para componentes UI del reporte.
+  de abrir gv-analytics. Tamaño: 1-2h.
+- [ ] **i18n en/pt/es** — siguiendo el patrón del dashboard actual. Tamaño: 2-3h.
+- [ ] **Theme switcher** (light/dark) — actualmente solo dark. Tamaño: 30min.
+- [ ] **Storybook** para componentes UI del reporte. Tamaño: 1h.
 
-## Riesgos identificados
+## Estado verificado
 
-- El reporte actual se ve completo en UI pero internamente es heurístico. Si el usuario
-  espera profundidad SDD real, hay que reemplazarlo antes de declararlo "MVP".
-- `mcp-registry.json` ya tiene el server con `autoStart:false`. Si lo prendemos sin
-  tener pidfile/daemon registrado, deja zombies cuando se cierre la sesión.
-- `docx` está como dep directa. Si se quiere aligerar el bundle del server, mover a
-  dependencia opcional.
-- Scroll-spy con `IntersectionObserver`: si el reporte es muy corto y todos los panels
-  caben en pantalla, la "sección activa" puede oscilar. Probado con rootMargin que
-  favorece la sección superior.
+- typecheck: verde (raíz + apps/gv-analytics)
+- build: verde (162KB JS / 15KB CSS gzipped)
+- watchtower health: 6/6 gv-analytics checks PASS
+- process-hygiene: gv-analytics-api + gv-analytics-vite healthy, no duplicates
+- end-to-end: POST /api/analyze con input real → `llmSource=agent` en 5.4s
+
+## Riesgos / Decisiones pendientes
+
+- [!] El LLM (opencode-go/gpt-5.6-luna via sdd-explore) responde con JSON parcial
+  (summary/complexity/estimate OK, listas textuales vacías). Mejora futura: prompt
+  engineering más estricto, retry en parse failure, o forzar JSON via system message.
+- [ ] docx está como dep directa. Si se quiere aligerar el bundle del server, mover a
+  dependencia opcional (lazy require).
+- [ ] El launcher usa `windowsHide:true` y procesos detached, alineado con la
+  normativa `procesos-ocultos` del stack.
 
 ## Comando de arranque
 
 ```bash
-cd apps/gv-analytics
-pnpm install
-pnpm dev   # vite :5174 + api :4754
+npm run analytics:start   # API :4754 + Vite :5174 con cleanup
+# o
+npm run analytics:start:api  # solo API
 ```
 
-## Plan operativo (sugerido)
-
-Por la magnitud del pendiente, propongo ejecutar en olas secuenciales para no diluir
-calidad:
-
-1. **Ola 1 (en curso)**: commit + stepper + history=5 — UX feedback directo, verde.
-2. **Ola 2 (P0)**: wire opencode.json + daemon + cleanup 4754 — integración stack.
-3. **Ola 3 (P1)**: model router + diagramas + cache — profundidad real.
-4. **Ola 4 (P2)**: OAuth + tests E2E + métricas — producto.
-5. **Ola 5 (P3)**: widget + i18n + theme + storybook — cross-app polish.
-
-Si en cualquier ola el stack no tiene la capacidad, se crea nativa o se busca en
-internet (Atlassian docs, diagram-design specs, OAuth 2.0 RFC 6749) y se absorbe
-en `apps/gv-analytics/server/` + `skills/` para que sea reutilizable.
