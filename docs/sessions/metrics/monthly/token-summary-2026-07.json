@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-08-28T04:55:44.322Z",
+  "generated_at": "2026-08-28T17:22:45.208Z",
   "period": "2026-07",
   "days": 28,
   "totals": {
-    "input": 631503053,
-    "output": 9839892,
-    "total": 641342945,
+    "input": 633204004,
+    "output": 10028524,
+    "total": 643232528,
     "cost": 10.535256299999999
   },
   "daily_avg": {
-    "input": 22553680,
-    "output": 351425,
-    "total": 22905105
+    "input": 22614429,
+    "output": 358162,
+    "total": 22972590
   },
   "by_day": [
     {
@@ -232,11 +232,11 @@
     },
     {
       "day": "2026-08-28",
-      "input": 288330,
-      "output": 2922,
-      "total": 291252,
+      "input": 1989281,
+      "output": 191554,
+      "total": 2180835,
       "cost": 0,
-      "sessions": 3
+      "sessions": 4
     }
   ],
   "by_model": [
@@ -277,9 +277,9 @@
     },
     {
       "model": "big-pickle",
-      "input": 8950757,
-      "output": 844714,
-      "total": 9795471,
+      "input": 10656318,
+      "output": 1032438,
+      "total": 11688756,
       "cost": 2.248670159999999
     },
     {
@@ -305,9 +305,9 @@
     },
     {
       "model": "MiniMax-M3",
-      "input": 372863,
-      "output": 18447,
-      "total": 391310,
+      "input": 368253,
+      "output": 19355,
+      "total": 387608,
       "cost": 0
     },
     {
