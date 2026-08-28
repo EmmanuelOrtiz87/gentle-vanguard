@@ -6,9 +6,9 @@
  * Expone métricas avanzadas de performance del stack.
  *
  * Usage:
- *   npx tsx src/performance-metrics-collector.ts --serve    # Iniciar servidor API
- *   npx tsx src/performance-metrics-collector.ts --collect  # Recolección única
- *   npx tsx src/performance-metrics-collector.ts --export    # Exportar métricas
+ *   npx tsx src/monitor/performance-metrics-collector.ts --serve    # Iniciar servidor API
+ *   npx tsx src/monitor/performance-metrics-collector.ts --collect  # Recolección única
+ *   npx tsx src/monitor/performance-metrics-collector.ts --export    # Exportar métricas
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';

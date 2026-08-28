@@ -7,11 +7,11 @@
  *   - CLI: list | --status | --validate <id> | --gate <id> [--run-checks]
  *
  * Usage:
- *   npx tsx src/module-maturity.ts list
- *   npx tsx src/module-maturity.ts --status
- *   npx tsx src/module-maturity.ts --validate session-pipeline
- *   npx tsx src/module-maturity.ts --validate predictive-governor --run-checks
- *   npx tsx src/module-maturity.ts --gate cross-workspace-mesh
+ *   npx tsx src/monitor/module-maturity.ts list
+ *   npx tsx src/monitor/module-maturity.ts --status
+ *   npx tsx src/monitor/module-maturity.ts --validate session-pipeline
+ *   npx tsx src/monitor/module-maturity.ts --validate predictive-governor --run-checks
+ *   npx tsx src/monitor/module-maturity.ts --gate cross-workspace-mesh
  *
  * Policy: core modules are the default daily path (no opt-in). Experimental modules
  * require opt-in activation and must satisfy the minimum governance gates (tests,

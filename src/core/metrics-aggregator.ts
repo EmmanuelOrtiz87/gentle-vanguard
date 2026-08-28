@@ -4,7 +4,7 @@
  * Centraliza la recolección de métricas desde:
  * - SessionContextLog (sesiones activas)
  * - session-metrics-tracker.ts (métricas en tiempo real)
- * - cost-tracker.ts (tracking de costos)
+ * - monitor/cost-tracker.ts (tracking de costos)
  * - token-tracker.ts (tracking de tokens)
  * - Database (métricas históricas)
  *

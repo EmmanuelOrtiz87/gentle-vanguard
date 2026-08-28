@@ -6,9 +6,9 @@
  * para prevenir problemas con modelos que no soportan compaction automático.
  *
  * USO:
- *   npx tsx src/compaction-monitor.ts --check
- *   npx tsx src/compaction-monitor.ts --status
- *   npx tsx src/compaction-monitor.ts --alert
+ *   npx tsx src/monitor/compaction-monitor.ts --check
+ *   npx tsx src/monitor/compaction-monitor.ts --status
+ *   npx tsx src/monitor/compaction-monitor.ts --alert
  *
  * THRESHOLDS:
  *   SOFT: 15,000 tokens (WARN)
@@ -273,7 +273,7 @@ function main(): void {
 Compaction Monitor - Context size monitoring for Gentle-Vanguard
 
 USAGE:
-  npx tsx src/compaction-monitor.ts [options]
+  npx tsx src/monitor/compaction-monitor.ts [options]
 
 OPTIONS:
   --check, -c    Check current status (default, JSON output)

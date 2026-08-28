@@ -230,7 +230,7 @@ export function runCleanup(
           try {
             const span = JSON.parse(line);
             if (span.name === 'session-start') {
-              const tracingScript = join(repoRoot, 'src/tracing-instrument.ts');
+              const tracingScript = join(repoRoot, 'src/monitor/tracing-instrument.ts');
               if (existsSync(tracingScript)) {
                 const result = runNpxTsxSync(
                   tracingScript,

@@ -2,8 +2,8 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync, copyFileSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSync } from './core/run-command.js';
-import { getTokenUsage } from './tokens/token-usage-reader.js';
+import { runSync } from '../core/run-command.js';
+import { getTokenUsage } from '../tokens/token-usage-reader.js';
 
 type Scope = 'full' | 'sessions' | 'token' | 'live' | 'git' | 'pr' | 'cost';
 

@@ -41,7 +41,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1': 'src/ops/snapshot-manager.ts',
   'scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1':
     'src/ops/rollback-orchestrator.ts',
-  'scripts/utilities/ops/TRACING/tracing-instrument.ps1': 'src/tracing-instrument.ts',
+  'scripts/utilities/ops/TRACING/tracing-instrument.ps1': 'src/monitor/tracing-instrument.ts',
   'scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1': 'src/event-sourcing.ts',
   'scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1': 'src/saga-orchestrator.ts',
 

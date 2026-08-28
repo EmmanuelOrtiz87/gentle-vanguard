@@ -11,16 +11,16 @@
  *   1 — any max_seconds exceeded, or any warn when alert_policy.warn_on_warn
  *
  * Usage:
- *   npx tsx src/perf-baseline-check.ts
- *   npx tsx src/perf-baseline-check.ts --report
- *   npx tsx src/perf-baseline-check.ts --duration=audit-check=1.5 --duration=npm-audit=3
- *   npx tsx src/perf-baseline-check.ts --baseline=/path/to/baseline.json --skip
+ *   npx tsx src/monitor/perf-baseline-check.ts
+ *   npx tsx src/monitor/perf-baseline-check.ts --report
+ *   npx tsx src/monitor/perf-baseline-check.ts --duration=audit-check=1.5 --duration=npm-audit=3
+ *   npx tsx src/monitor/perf-baseline-check.ts --baseline=/path/to/baseline.json --skip
  */
 
 import { existsSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 

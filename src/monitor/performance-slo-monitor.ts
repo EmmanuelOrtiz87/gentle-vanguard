@@ -4,13 +4,13 @@
  * Collects real-time metrics: latency, memory, disk usage.
  *
  * Usage:
- *   npx tsx src/performance-slo-monitor.ts
- *   npx tsx src/performance-slo-monitor.ts --json
- *   npx tsx src/performance-slo-monitor.ts --check-disk --json
- *   npx tsx src/performance-slo-monitor.ts --service agent_dispatch --ci-gate
+ *   npx tsx src/monitor/performance-slo-monitor.ts
+ *   npx tsx src/monitor/performance-slo-monitor.ts --json
+ *   npx tsx src/monitor/performance-slo-monitor.ts --check-disk --json
+ *   npx tsx src/monitor/performance-slo-monitor.ts --service agent_dispatch --ci-gate
  */
 
-import { runSync, runSyncShell } from './core/run-command.js';
+import { runSync, runSyncShell } from '../core/run-command.js';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { resolve } from 'path';
 import { request as httpRequest } from 'http';

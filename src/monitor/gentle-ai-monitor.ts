@@ -7,7 +7,7 @@
  * Generates actionable suggestions for Gentle-Vanguard.
  *
  * Usage:
- *   npx tsx src/gentle-ai-monitor.ts [--analyze-release]
+ *   npx tsx src/monitor/gentle-ai-monitor.ts [--analyze-release]
  */
 
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';

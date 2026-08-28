@@ -264,7 +264,7 @@
         "id": "metrics-collection",
         "enabled": true,
         "lazy": true,
-        "script": "src/metrics-collector.ts",
+        "script": "src/monitor/metrics-collector.ts",
         "args": "--scope full --quiet",
         "required": false,
         "description": "Auto-collect metrics after session start for live dashboard (TS)"
@@ -477,7 +477,7 @@
         "id": "tracing-init",
         "enabled": true,
         "lazy": true,
-        "script": "src/tracing-instrument.ts",
+        "script": "src/monitor/tracing-instrument.ts",
         "args": "-Action start -SpanName session-start -ServiceName gentle-vanguard -Quiet",
         "required": false,
         "description": "Initialize distributed tracing span for this session â€” sends OTLP to collector (Phase 1.3)"
@@ -530,7 +530,7 @@
       {
         "id": "cost-tracker-init",
         "enabled": true,
-        "script": "src/cost-tracker.ts",
+        "script": "src/monitor/cost-tracker.ts",
         "args": "--action status --quiet",
         "required": false,
         "description": "Initialize cost tracking and show daily budget status at session start (TS)"
@@ -584,7 +584,7 @@
         "id": "gentle-ai-monitor",
         "enabled": true,
         "lazy": true,
-        "script": "src/gentle-ai-monitor.ts",
+        "script": "src/monitor/gentle-ai-monitor.ts",
         "args": "--analyze-release",
         "required": false,
         "description": "Monitor gentle-ai releases without installation â€” analyzes and generates suggestions (alignment)"
@@ -791,7 +791,7 @@
         "id": "convergence-monitor",
         "enabled": true,
         "lazy": true,
-        "script": "src/convergence-monitor.ts",
+        "script": "src/monitor/convergence-monitor.ts",
         "args": "--quiet",
         "required": false,
         "phase": 99,
@@ -878,7 +878,7 @@
         "id": "cost-efficiency-score",
         "enabled": true,
         "lazy": true,
-        "script": "src/cost-efficiency-scorer.ts",
+        "script": "src/monitor/cost-efficiency-scorer.ts",
         "args": "score",
         "required": false,
         "description": "Calculate and record cost efficiency score for session"
@@ -1030,7 +1030,7 @@
         "id": "module-maturity-validate",
         "enabled": true,
         "lazy": true,
-        "script": "src/module-maturity.ts",
+        "script": "src/monitor/module-maturity.ts",
         "args": "--status",
         "required": false,
         "description": "Validate module maturity registry — surface gated experimental modules and deprecated entries at session start (Phase 1 maturity governance)"

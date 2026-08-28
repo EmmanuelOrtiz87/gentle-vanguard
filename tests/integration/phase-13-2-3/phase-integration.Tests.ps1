@@ -12,7 +12,7 @@ Describe "Phase 1.3 / 2 / 3 integration" {
 
     Context "Distributed tracing" {
         It "tracing-instrument source exists" {
-            Test-Path (Join-Path $script:repoRoot "src/tracing-instrument.ts") | Should -BeTrue
+            Test-Path (Join-Path $script:repoRoot "src/monitor/tracing-instrument.ts") | Should -BeTrue
         }
 
         It "tracing step configured in pipeline" {

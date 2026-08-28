@@ -217,7 +217,7 @@ function runCLI(): void {
     });
     console.log();
   } else {
-    console.log('Usage: npx tsx src/cost-efficiency-scorer.ts [score|leaderboard]');
+    console.log('Usage: npx tsx src/monitor/cost-efficiency-scorer.ts [score|leaderboard]');
   }
 }
 

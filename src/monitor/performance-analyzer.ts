@@ -3,9 +3,9 @@
  * performance-analyzer.ts — Analyze script performance and identify bottlenecks
  *
  * Usage:
- *   npx tsx src/performance-analyzer.ts --scan src/
- *   npx tsx src/performance-analyzer.ts --benchmark src/skills/skill-embedder.ts
- *   npx tsx src/performance-analyzer.ts --report
+ *   npx tsx src/monitor/performance-analyzer.ts --scan src/
+ *   npx tsx src/monitor/performance-analyzer.ts --benchmark src/skills/skill-embedder.ts
+ *   npx tsx src/monitor/performance-analyzer.ts --report
  *
  * Features:
  *   - Scan all TypeScript files and measure startup time
@@ -13,7 +13,7 @@
  *   - Generate performance report with recommendations
  */
 
-import { runNpxTsx } from './core/run-command';
+import { runNpxTsx } from '../core/run-command';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -252,7 +252,7 @@ async function benchmarkSingle(filePath: string): Promise<void> {
 
 async function showReport(): Promise<void> {
   if (!fs.existsSync(REPORT_FILE)) {
-    console.error('No report found. Run: npx tsx src/performance-analyzer.ts --scan');
+    console.error('No report found. Run: npx tsx src/monitor/performance-analyzer.ts --scan');
     process.exit(1);
   }
 
@@ -283,18 +283,18 @@ async function main(): Promise<void> {
 Performance Analyzer - Gentle-Vanguard
 
 Usage:
-  npx tsx src/performance-analyzer.ts --scan
+  npx tsx src/monitor/performance-analyzer.ts --scan
     Analyze all critical TypeScript files
 
-  npx tsx src/performance-analyzer.ts --benchmark <file>
+  npx tsx src/monitor/performance-analyzer.ts --benchmark <file>
     Benchmark a specific file (5 runs)
 
-  npx tsx src/performance-analyzer.ts --report
+  npx tsx src/monitor/performance-analyzer.ts --report
     Show last report
 
 Examples:
-  npx tsx src/performance-analyzer.ts --benchmark src/skills/skill-embedder.ts
-  npx tsx src/performance-analyzer.ts --scan
+  npx tsx src/monitor/performance-analyzer.ts --benchmark src/skills/skill-embedder.ts
+  npx tsx src/monitor/performance-analyzer.ts --scan
 `);
   }
 }

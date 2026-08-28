@@ -34,7 +34,7 @@ jobs:
           node -e "const fs=require('fs'); const c=JSON.parse(fs.readFileSync('config/stack-maturity.json','utf8')); if(c.policy?.experimentalModules!=='opt-in' || c.policy?.requireApprovalForExperimental!==true){console.error('Experimental policy not set to opt-in with required approvals'); process.exit(1);} if(!Array.isArray(c.governance?.requiredForExperimental)){console.error('Governance.requiredForExperimental missing'); process.exit(1);} console.log('Experimental policy and governance gates OK');"
 
       - name: Validate all experimental module gates
-        run: npx tsx src/module-maturity.ts --validate-all
+        run: npx tsx src/monitor/module-maturity.ts --validate-all
 
       - name: Optional security scan (best-effort)
         run: |

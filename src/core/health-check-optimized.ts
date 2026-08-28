@@ -119,7 +119,7 @@ async function checkSecurity(): Promise<void> {
   header('Security');
   const checks = [
     { name: 'GateGuard (TS)', path: ['src', 'trust-layer', 'result-gatekeeper.ts'] },
-    { name: 'Cost Tracking', path: ['src', 'cost-tracker.ts'] },
+    { name: 'Cost Tracking', path: ['src', 'monitor', 'cost-tracker.ts'] },
     { name: 'pnpm security normativa', path: ['rules', 'SECURITY.md'] },
   ];
   await checkFileBatch(checks);

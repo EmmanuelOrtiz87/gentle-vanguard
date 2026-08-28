@@ -175,7 +175,7 @@ function phasePreClose(reason: string): PhaseResult[] {
             const span = JSON.parse(line);
             if (span.name === 'session-start') {
               const r = runScript(
-                'src/tracing-instrument.ts',
+                'src/monitor/tracing-instrument.ts',
                 [
                   '-Action',
                   'end',

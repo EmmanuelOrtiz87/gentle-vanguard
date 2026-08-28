@@ -1300,7 +1300,7 @@ async function checkTracing() {
   addResult(
     'tracing',
     'instrumentation script',
-    fileExists(join(ROOT, 'src/tracing-instrument.ts')) ? 'PASS' : 'FAIL',
+    fileExists(join(ROOT, 'src/monitor/tracing-instrument.ts')) ? 'PASS' : 'FAIL',
     '',
     'verify',
   );

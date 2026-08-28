@@ -54,7 +54,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
     'src/ops/rollback-orchestrator.ts',
 
   // Tracing
-  'scripts/utilities/ops/TRACING/tracing-instrument.ps1': 'src/tracing-instrument.ts',
+  'scripts/utilities/ops/TRACING/tracing-instrument.ps1': 'src/monitor/tracing-instrument.ts',
 
   // Event sourcing
   'scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1': 'src/event-sourcing.ts',

@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "name": "module-maturity-config",
-  "description": "Maturity registry for stack modules: core vs experimental vs deprecated, opt-in policy, and governance activation gates. Consumed by src/module-maturity.ts and enforced by docs/governance/MODULE-ACTIVATION-WORKFLOW.md.",
+  "description": "Maturity registry for stack modules: core vs experimental vs deprecated, opt-in policy, and governance activation gates. Consumed by src/monitor/module-maturity.ts and enforced by docs/governance/MODULE-ACTIVATION-WORKFLOW.md.",
   "policy": {
     "coreDefault": true,
     "experimentalOptIn": true,
@@ -248,7 +248,7 @@
       "activated": true,
       "risk": "low",
       "owner": "ops-agent",
-      "script": "src/tracing-instrument.ts",
+      "script": "src/monitor/tracing-instrument.ts",
       "description": "OTLP distributed tracing (start/end/error spans) persisted to .telemetry/ with export to the local OTLP collector.",
       "activationCriteria": [
         { "check": "config-valid", "required": true },
@@ -346,7 +346,7 @@
       "activated": true,
       "risk": "medium",
       "owner": "orchestrator",
-      "script": "src/convergence-monitor.ts",
+      "script": "src/monitor/convergence-monitor.ts",
       "description": "Tracks whether the stack is converging, oscillating or diverging (stage #7 meta-monitoring).",
       "activationCriteria": [
         { "check": "tests", "required": true },
