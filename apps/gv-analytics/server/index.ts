@@ -20,6 +20,7 @@ import {
   REDIRECT_URI,
   SCOPES,
 } from './oauth';
+import { listTemplates } from './templates';
 
 const CALLBACK_PATH = '/oauth/callback';
 
@@ -82,26 +83,27 @@ async function handleExport(req: IncomingMessage, res: ServerResponse, pathname:
   }
   const url = new URL(req.url || '/', `http://${req.headers.host || '127.0.0.1'}`);
   const format = (url.searchParams.get('format') || 'md') as ExportFormat;
+  const template = url.searchParams.get('template');
   const safeId = report.id.replace(/[^A-Za-z0-9_-]/g, '');
   if (format === 'md') {
-    sendFile(res, toMarkdown(report), 'text/markdown; charset=utf-8', `gv-analytics-${safeId}.md`);
+    sendFile(res, toMarkdown(report, template), 'text/markdown; charset=utf-8', `gv-analytics-${safeId}.md`);
     return;
   }
   if (format === 'html') {
-    sendFile(res, toHtml(report), 'text/html; charset=utf-8', `gv-analytics-${safeId}.html`);
+    sendFile(res, toHtml(report, template), 'text/html; charset=utf-8', `gv-analytics-${safeId}.html`);
     return;
   }
   if (format === 'docx') {
     sendFile(
       res,
-      await toDocx(report),
+      await toDocx(report, template),
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       `gv-analytics-${safeId}.docx`,
     );
     return;
   }
   if (format === 'pdf') {
-    sendFile(res, await toPdf(report), 'application/pdf', `gv-analytics-${safeId}.pdf`);
+    sendFile(res, await toPdf(report, template), 'application/pdf', `gv-analytics-${safeId}.pdf`);
     return;
   }
   sendJson(res, 400, { error: `Unsupported format: ${format}` });
@@ -149,6 +151,10 @@ async function routeApi(
     }
     if (req.method === 'GET' && /^\/api\/reports\/[^/]+\/export$/.test(pathname)) {
       await handleExport(req, res, pathname);
+      return;
+    }
+    if (req.method === 'GET' && pathname === '/api/templates') {
+      sendJson(res, 200, { templates: listTemplates() });
       return;
     }
     if (req.method === 'GET' && pathname === '/api/metrics') {

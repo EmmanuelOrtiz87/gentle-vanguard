@@ -31,6 +31,12 @@ interface ReportListItem {
   input: string;
 }
 
+interface TemplateInfo {
+  id: string;
+  label: string;
+  description: string;
+}
+
 const emptyForm: ConnectionForm = {
   siteUrl: '',
   email: '',
@@ -71,6 +77,8 @@ export function App() {
   const [testResult, setTestResult] = useState<ConnectionStatus | null>(null);
   const [oauth, setOauth] = useState<OAuthStatus | null>(null);
   const [oauthBusy, setOauthBusy] = useState(false);
+  const [templates, setTemplates] = useState<TemplateInfo[]>([]);
+  const [template, setTemplate] = useState('sdd');
 
   const loadStatus = async () => {
     const next = await readJson<ConnectionStatus>('/api/connection/status');
@@ -123,6 +131,9 @@ export function App() {
     void loadStatus().catch((error) => setMessage(error.message));
     void loadHistory().catch(() => undefined);
     void loadOauthStatus().catch(() => undefined);
+    void readJson<{ templates: TemplateInfo[] }>('/api/templates')
+      .then((next) => setTemplates(next.templates))
+      .catch(() => undefined);
   }, []);
 
   useEffect(() => {
@@ -255,7 +266,7 @@ export function App() {
     if (!report) return;
     setExportOpen(false);
     window.open(
-      `/api/reports/${encodeURIComponent(report.id)}/export?format=${format}`,
+      `/api/reports/${encodeURIComponent(report.id)}/export?format=${format}&template=${encodeURIComponent(template)}`,
       '_blank',
       'noopener',
     );
@@ -501,6 +512,23 @@ export function App() {
                 </button>
                 {exportOpen && report && (
                   <div className="export-menu" role="menu">
+                    <div className="export-template">
+                      <label htmlFor="export-template">Plantilla</label>
+                      <select
+                        id="export-template"
+                        value={template}
+                        onChange={(event) => setTemplate(event.target.value)}
+                      >
+                        {templates.map((t) => (
+                          <option key={t.id} value={t.id}>
+                            {t.label}
+                          </option>
+                        ))}
+                      </select>
+                      <p className="export-template-desc">
+                        {templates.find((t) => t.id === template)?.description}
+                      </p>
+                    </div>
                     <button role="menuitem" onClick={() => exportReport('pdf')}>
                       <FileText />
                       PDF

@@ -13,52 +13,12 @@ import {
   TextRun,
 } from 'docx';
 import type { AnalyticsReport } from '../src/types';
+import { getTemplate, renderTemplateMarkdown } from './templates';
 
 export type ExportFormat = 'md' | 'html' | 'docx' | 'pdf';
 
-function sectionLines(title: string, items: string[]): string {
-  return [`## ${title}`, ...items.map((item) => `- ${item}`), ''].join('\n');
-}
-
-export function toMarkdown(report: AnalyticsReport): string {
-  const parts = [
-    `# ${report.summary}`,
-    '',
-    `Reporte: ${report.id} · ${new Date(report.createdAt).toISOString()} · modo ${report.mode}`,
-    '',
-    `**Entrada**: ${report.input}`,
-    `**Complejidad**: ${report.complexity.level} — ${report.complexity.rationale}`,
-    `**Estimación**: discovery ${report.estimate.discoveryHours}h · delivery ${report.estimate.deliveryHours}h · QA ${report.estimate.qaHours}h · confianza ${report.estimate.confidence}`,
-    '',
-    sectionLines('Estado actual', report.currentState),
-    sectionLines('Solución propuesta', report.proposedSolution),
-    sectionLines('Frentes involucrados', report.impactedFronts.map((front) => `**${front}**`)),
-    sectionLines('Roles', report.roles),
-    sectionLines('Escenarios QA', report.qaScenarios),
-    `## Diagramas`,
-    '',
-    `**Actual**`,
-    '',
-    '```text',
-    report.diagrams.current,
-    '```',
-    '',
-    `**Propuesto**`,
-    '',
-    '```text',
-    report.diagrams.proposed,
-    '```',
-    '',
-    sectionLines('Próximas acciones', report.nextActions),
-    `## Evidencia`,
-    '',
-    ...report.evidence.map(
-      (item) =>
-        `- **${item.source}** — ${item.title}${item.url ? ` ([link](${item.url}))` : ''}\n  ${item.detail.replace(/\n/g, '\n  ')}`,
-    ),
-    '',
-  ];
-  return parts.join('\n');
+export function toMarkdown(report: AnalyticsReport, templateId?: string | null): string {
+  return renderTemplateMarkdown(report, templateId);
 }
 
 function escapeHtml(value: string): string {
@@ -69,20 +29,64 @@ function escapeHtml(value: string): string {
     .replace(/"/g, '&quot;');
 }
 
-export function toHtml(report: AnalyticsReport): string {
-  const list = (items: string[]) =>
-    `<ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`;
-  const evidence = report.evidence
-    .map(
-      (item) => `
-      <article class="evidence">
-        <span class="tag">${escapeHtml(item.source)}</span>
-        <strong>${escapeHtml(item.title)}</strong>
-        ${item.url ? `<a href="${escapeHtml(item.url)}">${escapeHtml(item.url)}</a>` : ''}
-        <pre>${escapeHtml(item.detail)}</pre>
-      </article>`,
-    )
-    .join('');
+function inlineMarkdown(md: string): string {
+  return md
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+}
+
+function renderCodeFence(match: string, _p1: string, p2: string, _offset: number, _s: string): string {
+  return `<pre>${escapeHtml(p2)}</pre>`;
+}
+
+function markdownToHtml(md: string, report: AnalyticsReport): string {
+  const lines = md.split(/\r?\n/);
+  const out: string[] = [];
+  let inList = false;
+  let inPre = false;
+  for (const raw of lines) {
+    const line = raw;
+    if (line.startsWith('```')) {
+      if (inPre) {
+        out.push('</pre>');
+        inPre = false;
+      } else {
+        out.push('<pre>');
+        inPre = true;
+      }
+      continue;
+    }
+    if (inPre) {
+      out.push(escapeHtml(line));
+      continue;
+    }
+    if (line.startsWith('# ')) {
+      out.push(`<h1>${escapeHtml(line.slice(2))}</h1>`);
+    } else if (line.startsWith('## ')) {
+      out.push(`<h2>${escapeHtml(line.slice(3))}</h2>`);
+    } else if (line.startsWith('- ')) {
+      if (!inList) {
+        out.push('<ul>');
+        inList = true;
+      }
+      out.push(`<li>${inlineMarkdown(escapeHtml(line.slice(2)))}</li>`);
+    } else if (line.trim() === '') {
+      if (inList) {
+        out.push('</ul>');
+        inList = false;
+      }
+    } else {
+      if (inList) {
+        out.push('</ul>');
+        inList = false;
+      }
+      out.push(`<p>${inlineMarkdown(escapeHtml(line))}</p>`);
+    }
+  }
+  if (inList) out.push('</ul>');
+  if (inPre) out.push('</pre>');
+
   return `<!doctype html>
 <html lang="es">
 <head>
@@ -93,65 +97,33 @@ export function toHtml(report: AnalyticsReport): string {
   * { box-sizing: border-box; }
   body { margin: 0; font-family: 'Segoe UI', system-ui, sans-serif; background: #0d1117; color: #e6edf3; padding: 40px; }
   .doc { max-width: 880px; margin: 0 auto; }
-  header { border-bottom: 1px solid #1f2b3a; padding-bottom: 16px; margin-bottom: 24px; }
-  h1 { font-size: 22px; margin: 0 0 6px; color: #ffffff; }
+  h1 { font-size: 22px; color: #ffffff; }
   h2 { font-size: 15px; margin: 28px 0 10px; color: #00bfff; text-transform: uppercase; letter-spacing: .06em; }
-  .meta { color: #8b98a9; font-size: 12px; }
-  .metrics { display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0; }
-  .metric { background: #161c26; border: 1px solid #1f2b3a; border-radius: 8px; padding: 10px 14px; min-width: 110px; }
-  .metric span { display: block; font-size: 11px; color: #8b98a9; text-transform: uppercase; }
-  .metric strong { font-size: 16px; color: #00bfff; }
   ul { padding-left: 18px; margin: 8px 0; }
   li { margin: 4px 0; font-size: 13px; line-height: 1.5; }
-  pre { background: #10161f; border: 1px solid #1f2b3a; border-radius: 8px; padding: 12px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; }
-  .diagrams { display: grid; gap: 12px; }
-  .evidence { border: 1px solid #1f2b3a; border-radius: 8px; padding: 12px; margin: 10px 0; background: #121924; }
-  .evidence .tag { display: inline-block; background: rgba(0,191,255,.12); color: #00bfff; border-radius: 999px; font-size: 10px; padding: 2px 10px; margin-bottom: 6px; text-transform: uppercase; }
-  .evidence a { color: #a855f7; font-size: 12px; display: block; margin: 4px 0; word-break: break-all; }
+  p { font-size: 13px; line-height: 1.55; }
+  pre { background: #10161f; border: 1px solid #1f2b3a; border-radius: 8px; padding: 12px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; margin: 8px 0; }
+  code { font-family: 'Consolas', monospace; font-size: 12px; background: rgba(255,255,255,0.06); padding: 1px 4px; border-radius: 3px; }
   footer { margin-top: 32px; color: #5b6675; font-size: 11px; border-top: 1px solid #1f2b3a; padding-top: 12px; }
-  @media print {
-    body { background: #ffffff; color: #111418; padding: 0; }
-    h1 { color: #111418; } h2 { color: #0087b8; }
-    .metric, .evidence { background: #f4f7fa; border-color: #d7dee8; }
-    .metric strong { color: #0087b8; }
-    pre { background: #f4f7fa; border-color: #d7dee8; color: #111418; }
-    .evidence .tag { background: #e2f4fd; color: #0087b8; }
-  }
+  @media print { body { background: #ffffff; color: #111418; padding: 0; } h1, h2 { color: #111418; } pre { background: #f4f7fa; border-color: #d7dee8; } }
 </style>
 </head>
 <body>
 <div class="doc">
-  <header>
-    <h1>${escapeHtml(report.summary)}</h1>
-    <div class="meta">Gentle-Vanguard Analytics · Reporte ${escapeHtml(report.id)} · ${escapeHtml(new Date(report.createdAt).toLocaleString())} · modo ${escapeHtml(report.mode)}</div>
-    <div class="meta"><strong>Entrada:</strong> ${escapeHtml(report.input)}</div>
-  </header>
-  <div class="metrics">
-    <div class="metric"><span>Complejidad</span><strong>${escapeHtml(report.complexity.level)}</strong></div>
-    <div class="metric"><span>Discovery</span><strong>${report.estimate.discoveryHours}h</strong></div>
-    <div class="metric"><span>Delivery</span><strong>${report.estimate.deliveryHours}h</strong></div>
-    <div class="metric"><span>QA</span><strong>${report.estimate.qaHours}h</strong></div>
-    <div class="metric"><span>Confianza</span><strong>${escapeHtml(report.estimate.confidence)}</strong></div>
-  </div>
-  <h2>Estado actual</h2>${list(report.currentState)}
-  <h2>Solución propuesta</h2>${list(report.proposedSolution)}
-  <h2>Frentes involucrados</h2>${list(report.impactedFronts)}
-  <h2>Roles</h2>${list(report.roles)}
-  <h2>Escenarios QA</h2>${list(report.qaScenarios)}
-  <h2>Diagramas</h2>
-  <div class="diagrams">
-    <pre>Actual:\n${escapeHtml(report.diagrams.current)}</pre>
-    <pre>Propuesto:\n${escapeHtml(report.diagrams.proposed)}</pre>
-  </div>
-  <h2>Próximas acciones</h2>${list(report.nextActions)}
-  <h2>Evidencia</h2>${evidence}
-  <footer>Generado por Gentle-Vanguard Analytics — ${escapeHtml(report.complexity.rationale)}</footer>
+${out.join('\n')}
+<footer>Generado por Gentle-Vanguard Analytics</footer>
 </div>
 </body>
 </html>`;
 }
 
-export async function toDocx(report: AnalyticsReport): Promise<Buffer> {
+export function toHtml(report: AnalyticsReport, templateId?: string | null): string {
+  const md = renderTemplateMarkdown(report, templateId);
+  return markdownToHtml(md, report);
+}
+
+export async function toDocx(report: AnalyticsReport, templateId?: string | null): Promise<Buffer> {
+  const template = getTemplate(templateId);
   const heading = (text: string) =>
     new Paragraph({ text, heading: HeadingLevel.HEADING_2, spacing: { before: 320, after: 120 } });
   const bullets = (items: string[]) =>
@@ -164,71 +136,99 @@ export async function toDocx(report: AnalyticsReport): Promise<Buffer> {
         }),
     );
 
-  const doc = new Document({
-    styles: {
-      default: {
-        document: { run: { font: 'Calibri', size: 22 } },
-      },
-    },
-    sections: [
-      {
-        properties: {},
-        children: [
-          new Paragraph({
-            text: 'Gentle-Vanguard Analytics',
-            heading: HeadingLevel.TITLE,
-            alignment: AlignmentType.LEFT,
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `${report.summary}`,
-                bold: true,
-                size: 28,
-                color: '0D5C80',
-              }),
-            ],
-            spacing: { after: 80 },
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `Reporte ${report.id} · ${new Date(report.createdAt).toLocaleString()} · modo ${report.mode}`,
-                color: '777777',
-                size: 18,
-              }),
-              new TextRun({ text: `Entrada: ${report.input}`, break: 1, color: '555555', size: 18 }),
-              new TextRun({
-                text: `Complejidad: ${report.complexity.level} · Discovery ${report.estimate.discoveryHours}h · Delivery ${report.estimate.deliveryHours}h · QA ${report.estimate.qaHours}h · Confianza ${report.estimate.confidence}`,
-                break: 1,
-                color: '555555',
-                size: 18,
-              }),
-            ],
-            border: {
-              bottom: { style: BorderStyle.SINGLE, size: 4, color: 'DDDDDD' },
-            },
-            spacing: { after: 200 },
-          }),
-          heading('Estado actual'),
-          ...bullets(report.currentState),
-          heading('Solución propuesta'),
-          ...bullets(report.proposedSolution),
-          heading('Frentes involucrados'),
-          ...bullets(report.impactedFronts),
-          heading('Roles'),
-          ...bullets(report.roles),
-          heading('Escenarios QA'),
-          ...bullets(report.qaScenarios),
-          heading('Diagramas'),
+  const children: Paragraph[] = [
+    new Paragraph({
+      text: 'Gentle-Vanguard Analytics',
+      heading: HeadingLevel.TITLE,
+      alignment: AlignmentType.LEFT,
+    }),
+    new Paragraph({
+      children: [
+        new TextRun({ text: report.summary, bold: true, size: 28, color: '0D5C80' }),
+      ],
+      spacing: { after: 80 },
+    }),
+  ];
+
+  for (const section of template.sections) {
+    if (!section.visible) continue;
+    const title = section.title ?? section.id;
+    if (section.id === 'header') {
+      children.push(
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: `Reporte ${report.id} · ${new Date(report.createdAt).toLocaleString()} · modo ${report.mode} · template ${template.id}`,
+              color: '777777',
+              size: 18,
+            }),
+            new TextRun({ text: `Entrada: ${report.input}`, break: 1, color: '555555', size: 18 }),
+            ...(report.llmSource
+              ? [
+                  new TextRun({
+                    text: `Origen: ${report.llmSource}${report.llmCached ? ' (cache)' : ''} · ${(report.llmDurationMs ?? 0) / 1000}s`,
+                    break: 1,
+                    color: '555555',
+                    size: 18,
+                  }),
+                ]
+              : []),
+          ],
+          border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: 'DDDDDD' } },
+          spacing: { after: 200 },
+        }),
+      );
+    } else if (section.id === 'metrics') {
+      children.push(
+        heading(title),
+        new Paragraph({
+          children: [
+            new TextRun({ text: `Complejidad: ${report.complexity.level} — ${report.complexity.rationale}`, size: 20 }),
+          ],
+          spacing: { after: 60 },
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: `Estimacion: discovery ${report.estimate.discoveryHours}h · delivery ${report.estimate.deliveryHours}h · QA ${report.estimate.qaHours}h · confianza ${report.estimate.confidence}`,
+              size: 20,
+            }),
+          ],
+          spacing: { after: 120 },
+        }),
+      );
+    } else if (section.id === 'currentState') {
+      children.push(heading(title), ...bullets(report.currentState));
+    } else if (section.id === 'proposedSolution') {
+      children.push(heading(title), ...bullets(report.proposedSolution));
+    } else if (section.id === 'impactedFronts') {
+      children.push(
+        heading(title),
+        ...report.impactedFronts.map(
+          (front) => new Paragraph({ children: [new TextRun({ text: front, bold: true })], bullet: { level: 0 } }),
+        ),
+      );
+    } else if (section.id === 'roles') {
+      if (report.roles.length > 0) children.push(heading(title), ...bullets(report.roles));
+    } else if (section.id === 'qaScenarios') {
+      if (report.qaScenarios.length > 0) children.push(heading(title), ...bullets(report.qaScenarios));
+    } else if (section.id === 'nextActions') {
+      children.push(heading(title), ...bullets(report.nextActions));
+    } else if (section.id === 'diagrams') {
+      if (report.diagrams.current || report.diagrams.proposed) {
+        children.push(
+          heading(title),
           new Paragraph({ children: [new TextRun({ text: 'Actual', bold: true })] }),
           new Paragraph({ children: [new TextRun({ text: report.diagrams.current, font: 'Consolas', size: 18 })] }),
           new Paragraph({ children: [new TextRun({ text: 'Propuesto', bold: true })] }),
           new Paragraph({ children: [new TextRun({ text: report.diagrams.proposed, font: 'Consolas', size: 18 })] }),
-          heading('Próximas acciones'),
-          ...bullets(report.nextActions),
-          heading('Evidencia'),
-          ...report.evidence.flatMap((item) => [
+        );
+      }
+    } else if (section.id === 'evidence') {
+      if (report.evidence.length > 0) {
+        children.push(heading(title));
+        for (const item of report.evidence) {
+          children.push(
             new Paragraph({
               children: [
                 new TextRun({ text: `[${item.source}] `, bold: true, color: '0D5C80' }),
@@ -243,11 +243,23 @@ export async function toDocx(report: AnalyticsReport): Promise<Buffer> {
               children: [new TextRun({ text: item.detail, size: 18, color: '444444' })],
               indent: { left: 360 },
             }),
-          ]),
+          );
+        }
+      }
+    }
+  }
+
+  const doc = new Document({
+    styles: { default: { document: { run: { font: 'Calibri', size: 22 } } } },
+    sections: [
+      {
+        properties: {},
+        children: [
+          ...children,
           new Paragraph({
             children: [
               new TextRun({
-                text: `Generado por Gentle-Vanguard Analytics — ${report.complexity.rationale}`,
+                text: `Generado por Gentle-Vanguard Analytics · template ${template.id}`,
                 size: 16,
                 color: '888888',
               }),
@@ -276,7 +288,7 @@ function findChromium(): string | null {
   return null;
 }
 
-export async function toPdf(report: AnalyticsReport): Promise<Buffer> {
+export async function toPdf(report: AnalyticsReport, templateId?: string | null): Promise<Buffer> {
   const chromium = findChromium();
   if (!chromium) {
     throw new Error(
@@ -287,7 +299,7 @@ export async function toPdf(report: AnalyticsReport): Promise<Buffer> {
   const htmlPath = join(workDir, `${report.id}.html`);
   const pdfPath = join(workDir, `${report.id}.pdf`);
   try {
-    writeFileSync(htmlPath, toHtml(report), 'utf-8');
+    writeFileSync(htmlPath, toHtml(report, templateId), 'utf-8');
     const fileUrl = `file:///${htmlPath.replace(/\\/g, '/')}`;
     const result = spawnSync(
       chromium,

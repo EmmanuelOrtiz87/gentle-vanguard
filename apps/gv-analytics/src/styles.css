@@ -668,6 +668,36 @@ form input:focus {
   width: 15px;
   height: 15px;
 }
+.export-template {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(156, 163, 175, 0.12);
+}
+.export-template label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gv-muted);
+  margin-bottom: 6px;
+}
+.export-template select {
+  width: 100%;
+  padding: 8px 10px;
+  background: var(--gv-surface);
+  border: 1px solid var(--gv-glass-border);
+  border-radius: 8px;
+  color: var(--gv-text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.export-template-desc {
+  margin: 7px 0 0;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--gv-muted);
+}
 
 /* ---------- Reporte ---------- */
 .report {
