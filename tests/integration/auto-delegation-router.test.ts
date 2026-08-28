@@ -11,7 +11,7 @@ const ROOT = resolve(import.meta.dirname, '..', '..');
 
 describe('Auto-Delegation Router', () => {
   it('adaptive-router.ts --status runs successfully', () => {
-    const result = spawnSync('npx', ['tsx', 'src/adaptive-router.ts', '--status'], {
+    const result = spawnSync('npx', ['tsx', 'src/orchestration/adaptive-router.ts', '--status'], {
       cwd: ROOT,
       encoding: 'utf-8',
       timeout: 15000,

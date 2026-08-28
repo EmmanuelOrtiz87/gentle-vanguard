@@ -10,8 +10,8 @@ describe('utility-scripts', () => {
     assert.ok(existsSync(resolve(ROOT, 'src', 'validate-readme.ts')));
   });
 
-  it('src/validate-gitflow.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'validate-gitflow.ts')));
+  it('src/review/validate-gitflow.ts exists', () => {
+    assert.ok(existsSync(resolve(ROOT, 'src', 'review', 'validate-gitflow.ts')));
   });
 
   it('src/normative-audit-pipeline.ts exists', () => {

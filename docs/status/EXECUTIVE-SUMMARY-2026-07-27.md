@@ -53,7 +53,7 @@
 
 ### 5. Deterministic Test Framework
 
-- **Archivo:** `src/deterministic-test-framework.ts`
+- **Archivo:** `src/review/deterministic-test-framework.ts`
 - **Descripción:** Testing sin costo de API (patrón gentle-ai)
 - **Estado:** ✅ Implementado con 4 escenarios
 - **Documentación:** `docs/guides/DETERMINISTIC-TESTING.md`
@@ -142,7 +142,7 @@ Componentes OK:
 
 <!-- REF-OBSOLETA: src/cloud-metrics-collector.ts no existe (ruta migrada o eliminada) -->
 
-| Deterministic Tests | `npx tsx src/deterministic-test-framework.ts --list` | ✅ |
+| Deterministic Tests | `npx tsx src/review/deterministic-test-framework.ts --list` | ✅ |
 
 ---
 
@@ -151,7 +151,7 @@ Componentes OK:
 ### Nuevos (8 archivos)
 
 1. `src/auto-update-checker.ts`
-2. `src/deterministic-test-framework.ts`
+2. `src/review/deterministic-test-framework.ts`
 3. `src/cloud-metrics-collector.ts`
 
 <!-- REF-OBSOLETA: src/cloud-metrics-collector.ts no existe (ruta migrada o eliminada) -->
@@ -181,7 +181,7 @@ Componentes OK:
 
 <!-- REF-OBSOLETA: src/cloud-metrics-collector.ts no existe (ruta migrada o eliminada) -->
 
-9. `src/deterministic-test-framework.ts` — Corregidos imports
+9. `src/review/deterministic-test-framework.ts` — Corregidos imports
 10. `tests/unit/karpathy-guidelines.test.ts` — Corregida ruta
 
 ---

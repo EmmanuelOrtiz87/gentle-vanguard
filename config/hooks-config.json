@@ -44,7 +44,7 @@
     },
     "pre_commit": {
       "enabled": true,
-      "script": "src/pre-commit-validation.ts",
+      "script": "src/review/pre-commit-validation.ts",
       "timeout": 45000,
       "args": {
         "StagedFiles": "${staged_files}",

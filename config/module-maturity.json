@@ -366,7 +366,7 @@
       "activated": true,
       "risk": "high",
       "owner": "gov-agent",
-      "script": "src/review-lenses.ts",
+      "script": "src/review/review-lenses.ts",
       "description": "Review lenses, result gatekeeper, publication gates (TOCTOU prevention), findings ledger and compact state machine for review trust.",
       "activationCriteria": [
         { "check": "tests", "required": true },

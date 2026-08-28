@@ -110,7 +110,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   // Validators
   'scripts/utilities/WORKFLOW-ORCHESTRATION/validate-system-health.ps1':
     'src/validate-system-health.ts',
-  'scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1': 'src/pre-commit-validation.ts',
+  'scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1': 'src/review/pre-commit-validation.ts',
   'scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1': 'src/post-merge-sync.ts',
 
   // Bootstrap
@@ -235,7 +235,7 @@ function main(): void {
   // Archivos críticos a procesar (de audit-ps1-refs.ts)
   const criticalFiles = [
     // src/ - prioridad alta
-    'src/code-review.ts',
+    'src/review/code-review.ts',
     'src/complete-stack-fix.ts',
     'src/core/maintenance-watchtower.ts',
     'src/cross-workspace-validator.ts',

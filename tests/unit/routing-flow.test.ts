@@ -11,6 +11,6 @@ describe('routing-flow', () => {
   });
 
   it('src/adaptive-router.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'adaptive-router.ts')));
+    assert.ok(existsSync(resolve(ROOT, 'src', 'orchestration', 'adaptive-router.ts')));
   });
 });

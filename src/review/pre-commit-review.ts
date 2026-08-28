@@ -2,7 +2,7 @@
 
 import { existsSync, mkdirSync, writeFileSync, unlinkSync } from 'fs';
 import { join, resolve, dirname } from 'path';
-import { runSync, runNpxTsxSync } from './core/run-command.js';
+import { runSync, runNpxTsxSync } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
 
 interface SecretPattern {

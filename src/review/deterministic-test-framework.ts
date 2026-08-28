@@ -13,7 +13,7 @@
  * - Fast (milliseconds instead of seconds)
  *
  * Usage:
- *   npx tsx src/deterministic-test-framework.ts --scenario <name>
+ *   npx tsx src/review/deterministic-test-framework.ts --scenario <name>
  */
 
 import { createServer, IncomingMessage, ServerResponse } from 'http';
@@ -362,8 +362,8 @@ if (isMain) {
   }
 
   if (!scenario) {
-    console.log('Usage: npx tsx src/deterministic-test-framework.ts --scenario <name>');
-    console.log('       npx tsx src/deterministic-test-framework.ts --list');
+    console.log('Usage: npx tsx src/review/deterministic-test-framework.ts --scenario <name>');
+    console.log('       npx tsx src/review/deterministic-test-framework.ts --list');
     process.exit(1);
   }
 

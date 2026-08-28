@@ -49,7 +49,7 @@ C:/Workspace_local/gentle-vanguard/src/prompt-injection-guard.ts -Action sanitiz
 ### 4. Score mutation safety
 
 ```
-C:/Workspace_local/gentle-vanguard/src/mutation-safety-scorer.ts -Action score -AgentId "<agent>" -Mutation '{"strategy":"...","target":"...","changeCount":N}'
+C:/Workspace_local/gentle-vanguard/src/review/mutation-safety-scorer.ts -Action score -AgentId "<agent>" -Mutation '{"strategy":"...","target":"...","changeCount":N}'
 ```
 
 Returns 0.0-1.0 score. Below 0.5 requires human approval.
@@ -58,7 +58,7 @@ Returns 0.0-1.0 score. Below 0.5 requires human approval.
 
 - `C:/Workspace_local/gentle-vanguard/src/safety-guardrails.ts`
 - `C:/Workspace_local/gentle-vanguard/src/prompt-injection-guard.ts`
-- `C:/Workspace_local/gentle-vanguard/src/mutation-safety-scorer.ts`
+- `C:/Workspace_local/gentle-vanguard/src/review/mutation-safety-scorer.ts`
 - `config/safety-layer.json`
 - `apps/web-dashboard/server/websocket-server.ts` — `/api/safety` endpoint
 

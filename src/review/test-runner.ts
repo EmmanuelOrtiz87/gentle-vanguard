@@ -9,10 +9,10 @@
  *   - Unit tests (basic): npx tsx --test tests/unit/staged-review.test.ts  (8 tests)
  *   - Eval tests:         npx vitest run --config vitest.eval.config.ts (~5 tests, needs vitest)
  *
- * Usage: npx tsx src/test-runner.ts [--all] [--verbose]
+ * Usage: npx tsx src/review/test-runner.ts [--all] [--verbose]
  */
 
-import { runSyncShell } from './core/run-command.js';
+import { runSyncShell } from '../core/run-command.js';
 import { existsSync } from 'fs';
 
 interface Suite {

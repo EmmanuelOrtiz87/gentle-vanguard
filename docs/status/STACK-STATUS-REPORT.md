@@ -367,7 +367,7 @@ Maintenance Watchtower:
 | Prioridad   | Item                                                       | Estado actual                                                                                                                             |
 | ----------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | ✅ Completa | **Secretlint pre-commit**                                  | ✅ Integrado en los hooks                                                                                                                 |
-| ✅ Completa | **Coverage reporting (native TS runner + threshold gate)** | ✅ COMPLETADO (`src/coverage-runner.ts`, pre-push gate)                                                                                   |
+| ✅ Completa | **Coverage reporting (native TS runner + threshold gate)** | ✅ COMPLETADO (`src/review/coverage-runner.ts`, pre-push gate)                                                                                   |
 | 🔜 Alta     | **EditorConfig + Prettier CI check**                       | 📋 Planificado                                                                                                                            |
 | 🔜 Alta     | **Branch strategy / Release process docs**                 | 📋 Planificado                                                                                                                            |
 | 🏆 Media    | **`gentle-vanguard init` — project scaffolding**           | 📋 Planificado (v3.0)                                                                                                                     |

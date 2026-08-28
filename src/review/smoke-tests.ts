@@ -13,10 +13,10 @@
  *   - WebSocket server lifecycle
  *   - MCP bridge end-to-end
  *
- * Ejecutar: npx tsx src/smoke-tests.ts [--fail-fast] [--verbose]
+ * Ejecutar: npx tsx src/review/smoke-tests.ts [--fail-fast] [--verbose]
  */
 
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { existsSync, writeFileSync, mkdirSync, rmSync, readdirSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { createRequire } from 'module';

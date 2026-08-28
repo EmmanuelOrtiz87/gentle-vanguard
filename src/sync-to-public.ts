@@ -276,7 +276,7 @@ function syncFilesToBranch(opts: SyncOptions, targetDir: string): void {
     'src/installer-doctor.ts',
     'src/installer-bootstrap.ts',
     'src/core/run-command.ts',
-    'src/test-runner-optimized.ts',
+    'src/review/test-runner-optimized.ts',
     'src/mcp/fetch-server-native.ts',
     'src/web/web-crawler.ts',
     'src/npm-ci-check.ts',

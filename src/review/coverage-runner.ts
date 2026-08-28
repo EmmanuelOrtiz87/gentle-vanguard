@@ -8,17 +8,17 @@
  * reports. Replaces the old `npm run coverage` that only covered 2 JS files.
  *
  * Usage:
- *   npx tsx src/coverage-runner.ts                 # full suite + thresholds
- *   npx tsx src/coverage-runner.ts --quick         # core suites only
- *   npx tsx src/coverage-runner.ts --no-enforce    # report without failing
- *   npx tsx src/coverage-runner.ts --json          # JSON summary to stdout
+ *   npx tsx src/review/coverage-runner.ts                 # full suite + thresholds
+ *   npx tsx src/review/coverage-runner.ts --quick         # core suites only
+ *   npx tsx src/review/coverage-runner.ts --no-enforce    # report without failing
+ *   npx tsx src/review/coverage-runner.ts --json          # JSON summary to stdout
  */
 
 import { spawnSync } from 'child_process';
 import { existsSync, readFileSync, readdirSync, rmSync, mkdirSync, writeFileSync } from 'fs';
 import { resolve, dirname, relative } from 'path';
 import { fileURLToPath } from 'url';
-import { loadConfigFile } from './core/config-loader.js';
+import { loadConfigFile } from '../core/config-loader.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');

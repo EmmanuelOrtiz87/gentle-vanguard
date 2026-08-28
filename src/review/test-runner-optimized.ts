@@ -10,10 +10,10 @@
  *   - Better progress reporting
  *
  * Usage:
- *   npx tsx src/test-runner-optimized.ts [--all] [--quick] [--verbose] [--parallel 4]
+ *   npx tsx src/review/test-runner-optimized.ts [--all] [--quick] [--verbose] [--parallel 4]
  */
 
-import { run } from './core/run-command';
+import { run } from '../core/run-command';
 import { existsSync } from 'fs';
 import * as os from 'os';
 

@@ -64,10 +64,10 @@ fix: fixed the cache issue
 
 ## Pre-commit Validation
 
-Use `src/auto-code-review.ts` with commit-msg hook:
+Use `src/review/auto-code-review.ts` with commit-msg hook:
 
 ```powershell
-.\src/auto-code-review.ts install --commit-msg
+.\src/review/auto-code-review.ts install --commit-msg
 ```
 
 ## Usage

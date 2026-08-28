@@ -6,9 +6,9 @@
 
 import { existsSync, readFileSync, statSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
-import { getEffectiveProcessTimeout } from './core/timeout-config';
+import { getEffectiveProcessTimeout } from '../core/timeout-config';
 
 interface ReviewIssue {
   type: string;

@@ -2,7 +2,7 @@
 
 import { existsSync, readFileSync, mkdirSync, writeFileSync, readdirSync, statSync } from 'fs';
 import { join, resolve, dirname, basename } from 'path';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
 
 interface CodeIssue {

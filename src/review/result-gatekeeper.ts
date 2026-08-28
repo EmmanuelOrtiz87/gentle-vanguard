@@ -24,10 +24,10 @@
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
 import { createRequire } from 'module';
-import { loadConfigFile } from './core/config-loader.js';
+import { loadConfigFile } from '../core/config-loader.js';
 
 const _require = createRequire(import.meta.url);
 
@@ -47,7 +47,7 @@ let _db: DbManagerLike | null = null;
 function getDb(): DbManagerLike | null {
   if (!_db) {
     try {
-      const mod = _require('../apps/web-dashboard/server/database/manager');
+      const mod = _require('../../apps/web-dashboard/server/database/manager');
       _db = mod.DatabaseManager.getInstance();
     } catch {
       // SQLite not available — skip dual-write

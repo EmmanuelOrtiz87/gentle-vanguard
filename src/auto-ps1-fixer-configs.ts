@@ -88,7 +88,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
 
   // Workflow
   'scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1': 'src/cli/gv.ts',
-  'scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1': 'src/pre-commit-validation.ts',
+  'scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1': 'src/review/pre-commit-validation.ts',
   'scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1': 'src/post-merge-sync.ts',
 
   // Bootstrap

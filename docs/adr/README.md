@@ -200,7 +200,7 @@ Is there uncertainty or tradeoffs?
 
 **Related Code**:
 
-- `src/coverage-runner.ts` — Implements ADR-0006
+- `src/review/coverage-runner.ts` — Implements ADR-0006
 - `scripts/hooks/*.ps1` — Implements ADR-0001/ADR-0012 (original PowerShell hooks)
 - `$HOME\mcp-workspace/` — Implements ADR-0003
 

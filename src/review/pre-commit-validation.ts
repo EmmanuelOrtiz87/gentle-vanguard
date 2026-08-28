@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { statSync } from 'fs';
 
 function main(): void {

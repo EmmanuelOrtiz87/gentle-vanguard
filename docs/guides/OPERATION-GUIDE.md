@@ -87,7 +87,7 @@ pnpm run session:start
 | Herramienta             | Comando                                              | Descripción            |
 | ----------------------- | ---------------------------------------------------- | ---------------------- |
 | **Tests**               | `pnpm test`                                          | Ejecuta suite de tests |
-| **Deterministic Tests** | `npx tsx src/deterministic-test-framework.ts --list` | Tests sin costo de API |
+| **Deterministic Tests** | `npx tsx src/review/deterministic-test-framework.ts --list` | Tests sin costo de API |
 | **Coverage**            | `pnpm test:coverage`                                 | Reporte de cobertura   |
 
 ### Auto-Update
@@ -307,7 +307,7 @@ npx tsx src/cloud-metrics-collector.ts show
 npx tsx src/auto-update-checker.ts
 
 # Deterministic tests
-npx tsx src/deterministic-test-framework.ts --list
+npx tsx src/review/deterministic-test-framework.ts --list
 ```
 
 ### Estructura de Directorios

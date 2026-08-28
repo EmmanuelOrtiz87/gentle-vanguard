@@ -70,7 +70,7 @@ const KNOWN_RENAMES: Record<string, string> = {
   'token-usage-auto.ps1': 'src/tokens/token-usage-auto.ts',
   'invoke-cloud-agent.ps1': 'src/orchestration/hybrid-executor.ts',
   'analyze.ps1': 'src/orchestration/hybrid-executor.ts',
-  'invoke-ai-review.ps1': 'src/auto-code-review.ts',
+  'invoke-ai-review.ps1': 'src/review/auto-code-review.ts',
   'judgment-day-orchestrator.ps1': 'src/ml/learning-engine.ts',
   'failure-learning-system.ps1': 'src/ml/learning-engine.ts',
   'session-learning-capture.ps1': 'src/ml/learning-engine.ts',

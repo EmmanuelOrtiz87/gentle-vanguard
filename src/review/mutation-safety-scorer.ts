@@ -314,7 +314,7 @@ function doConfig(config: SafetyConfig): void {
 
 function printUsage(): void {
   console.log(`Usage:
-  npx tsx src/mutation-safety-scorer.ts --action <score|config> [--agentId <id>] [--mutation <json>]`);
+  npx tsx src/review/mutation-safety-scorer.ts --action <score|config> [--agentId <id>] [--mutation <json>]`);
 }
 
 function parseArgs(): { action: string; agentId: string; mutation: string } {

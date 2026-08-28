@@ -23,7 +23,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'fs';
 import { join, relative, resolve, extname } from 'path';
 import { pathToFileURL } from 'url';
-import { loadConfigFile } from './core/config-loader.js';
+import { loadConfigFile } from '../core/config-loader.js';
 
 // ─── Types ────────────────────────────────────────────────────────────
 

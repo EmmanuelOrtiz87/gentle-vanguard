@@ -199,7 +199,7 @@ Todo cambio de este plan debe respetar las definiciones base del stack:
 ### 2.2 Arquitectura (src/ — 452 archivos .ts, ~125.540 líneas)
 
 - **286 archivos (63%) sueltos en raíz de `src/`**; `src/logs/` vacío y `src/tools/` solo tiene un
-  .md (directorios muertos); `src/auto-code-review.ts` convive con
+  .md (directorios muertos); `src/review/auto-code-review.ts` convive con
   `src/autonomous-review/auto-code-review.ts`.
 - **Duplicación**: `parseArgs()` definido **29 veces**; `process.argv.slice(2)` en 227 archivos;
   `tokenize()` ×6; **BM25 duplicado con drift funcional** (`src/retrieval/retrieval-grader.ts:66` vs
