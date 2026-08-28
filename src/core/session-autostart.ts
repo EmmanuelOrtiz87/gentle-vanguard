@@ -449,6 +449,39 @@ function startLazyStep(step: PipelineStep): { success: boolean; error?: string }
   return { success: true };
 }
 
+// ─── Progress File Helper (GAP-004) ─────────────────────────────────────────
+// Writes a lightweight JSON progress file to .runtime/autostart-progress.json
+// so that any observer (CLI, health-check, watchtower) can poll the pipeline
+// state without reading the detached log file.
+const PROGRESS_PATH = join(resolve(process.cwd()), '.runtime', 'autostart-progress.json');
+
+interface AutostartProgress {
+  pid: number;
+  startedAt: string;
+  updatedAt: string;
+  status: 'running' | 'done' | 'failed';
+  currentPhase: number;
+  currentStep: string;
+  stepNum: number;
+  totalSteps: number;
+  lazyTotal: number;
+  lazyLaunched: number;
+  failed: string[];
+  requiredFailed: string[];
+  durationMs?: number;
+}
+
+let _progressBase: Partial<AutostartProgress> = {};
+
+function writeProgress(patch: Partial<AutostartProgress>): void {
+  try {
+    _progressBase = { ..._progressBase, ...patch, updatedAt: new Date().toISOString() };
+    writeFileSync(PROGRESS_PATH, JSON.stringify(_progressBase, null, 2), 'utf-8');
+  } catch {
+    /* best-effort — never block the pipeline */
+  }
+}
+
 async function main() {
   const sessionStartTime = new Date().toISOString();
 
@@ -538,6 +571,21 @@ async function main() {
     LOG.info(`[INFO] ${lazySteps.length} lazy steps deferred to background\n`);
   }
 
+  // Initialize progress file so observers can poll status immediately.
+  writeProgress({
+    pid: process.pid,
+    startedAt: sessionStartTime,
+    status: 'running',
+    currentPhase: 0,
+    currentStep: 'initializing',
+    stepNum: 0,
+    totalSteps,
+    lazyTotal: lazySteps.length,
+    lazyLaunched: 0,
+    failed: [],
+    requiredFailed: [],
+  });
+
   // Log pipeline configuration
   auditLog(
     'config.load',
@@ -565,6 +613,7 @@ async function main() {
     if (phaseNum === 0) {
       for (const step of phaseSteps) {
         stepNum++;
+        writeProgress({ currentPhase: phaseNum, currentStep: step.id, stepNum, failed, requiredFailed });
         const isRequired = step.required === true;
         const timeoutMs = isRequired
           ? (timeoutConfig.required_step_ms ?? timeoutConfig.session_autostart_step_ms)
@@ -578,10 +627,12 @@ async function main() {
           failed.push(step.id);
           if (isRequired) requiredFailed.push(step.id);
         }
+        writeProgress({ stepNum, failed: [...failed], requiredFailed: [...requiredFailed] });
         if (isRequired && !result.success) break;
       }
     } else {
       LOG.info(`--- Phase ${phaseNum} (${phaseSteps.length} steps in parallel) ---`);
+      writeProgress({ currentPhase: phaseNum, currentStep: `phase-${phaseNum}` });
       for (const step of phaseSteps) {
         stepNum++;
         LOG.info(`[${stepNum}/${totalSteps}] ${step.id}...`);
@@ -636,6 +687,7 @@ async function main() {
           LOG.info(`  [WARN] ${step.id} (lazy): ${result.error || 'Failed'}`);
         }
       }
+      writeProgress({ currentStep: `lazy-batch-${Math.floor(i / MAX_LAZY_CONCURRENCY) + 1}`, lazyLaunched: launched });
       // Small delay between batches to avoid overwhelming the OS
       if (i + MAX_LAZY_CONCURRENCY < lazySteps.length) {
         await new Promise((r) => setTimeout(r, 150));
@@ -653,6 +705,16 @@ async function main() {
   LOG.info(`Lazy steps:     ${lazySteps.length}`);
   LOG.info(`Steps failed:   ${failed.length}`);
   LOG.info(`Required fails: ${requiredFailed.length}`);
+
+  const finalStatus = requiredFailed.length > 0 ? 'failed' : 'done';
+  writeProgress({
+    status: finalStatus,
+    currentStep: 'complete',
+    stepNum,
+    failed: [...failed],
+    requiredFailed: [...requiredFailed],
+    durationMs: Date.now() - new Date(sessionStartTime).getTime(),
+  });
 
   if (requiredFailed.length > 0) {
     LOG.error(`[ERROR] Required steps failed: ${requiredFailed.join(', ')}`);

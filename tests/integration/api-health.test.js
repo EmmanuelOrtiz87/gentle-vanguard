@@ -86,16 +86,23 @@ describe('Dashboard API Health', { skip: skipReason }, () => {
   });
 });
 
+// Since a9ef23b4 the dashboard server uses a fail-closed CORS allowlist
+// (GV_DASHBOARD_CORS_ORIGINS, default localhost:5173/127.0.0.1:5173) instead
+// of reflecting '*' — the headers must be present but NOT wildcard.
 describe('CORS Headers', { skip: skipReason }, () => {
   it('returns CORS headers on GET requests', async () => {
     const res = await fetch(`${BASE_URL}/api/health`);
-    assert.equal(res.headers.get('access-control-allow-origin'), '*');
+    const origin = res.headers.get('access-control-allow-origin');
+    assert.ok(origin, 'access-control-allow-origin header missing');
+    assert.notEqual(origin, '*');
   });
 
   it('returns CORS headers on OPTIONS preflight', async () => {
     const res = await fetch(`${BASE_URL}/api/health`, { method: 'OPTIONS' });
     assert.equal(res.status, 204);
-    assert.equal(res.headers.get('access-control-allow-origin'), '*');
+    const origin = res.headers.get('access-control-allow-origin');
+    assert.ok(origin, 'access-control-allow-origin header missing');
+    assert.notEqual(origin, '*');
     assert.ok(res.headers.get('access-control-allow-methods').includes('GET'));
   });
 });

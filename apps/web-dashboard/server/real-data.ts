@@ -615,6 +615,43 @@ function buildDashboardDataFromAggregated(
   };
 }
 
+// Zero-filled operational metrics shape. Shared by the JSON and DB metric
+// paths so /api/metrics always exposes `operational` regardless of tenant scope.
+function defaultOperationalMetrics(): DashboardData['operational'] {
+  return {
+    velocity: {
+      commitsPerHour: 0,
+      filesModifiedPerSession: 0,
+      linesAdded: 0,
+      linesDeleted: 0,
+      avgTimeBetweenCommits: 0,
+    },
+    efficiency: {
+      avgToolLatency: 0,
+      successRate: 0,
+      fastestTool: 'No data',
+      slowestTool: 'No data',
+      responseTimeP95: 0,
+    },
+    productivity: {
+      skillsUsed: 0,
+      uniqueSkills: [],
+      agentsActive: 0,
+      tasksCompleted: 0,
+      sessionsCompleted: 0,
+    },
+    quality: {
+      buildSuccessRate: 0,
+      testPassRate: 0,
+      errorsDetected: 0,
+      autoCorrections: 0,
+      typeCheckFailures: 0,
+    },
+    totalOperations: 0,
+    lastUpdated: new Date().toISOString(),
+  } as DashboardData['operational'];
+}
+
 function getRealMetricsFromDb(tenantId = DEFAULT_TENANT_ID): DashboardData {
   const db = getDb();
   const snapshot = db.getLatestMetricSnapshot(tenantId);
@@ -1377,6 +1414,7 @@ function computeTenantScopedMetrics(tenantId: string): DashboardData {
   return {
     ...base,
     sessions: { ...base.sessions, total: sessionCount || base.sessions.total },
+    operational: OperationalMetricsTracker.calculateMetrics() || defaultOperationalMetrics(),
     tenantId,
     tenantName,
   };
