@@ -56,7 +56,7 @@
       {
         "id": "session-manager",
         "enabled": true,
-        "script": "src/session-cleanup-start.ts",
+        "script": "src/session/session-cleanup-start.ts",
         "args": "--quiet --skip-cache-flush --skip-compression",
         "required": true,
         "phase": 0,
@@ -66,7 +66,7 @@
         "id": "session-cleanup",
         "enabled": true,
         "lazy": true,
-        "script": "src/session-cleanup-start.ts",
+        "script": "src/session/session-cleanup-start.ts",
         "args": "-Quiet -SkipSessionInit -SkipCacheFlush",
         "required": false,
         "description": "Cleanup ligero al inicio (lazy): remueve sesiones stale >8h y cierra sesiones huerfanas. -SkipSessionInit impide regenerar la sesion que session-manager (phase 0) ya creo; -SkipCacheFlush evita resetear los caches de tokens que el daemon token-ingest esta escribiendo."
@@ -82,7 +82,7 @@
       {
         "id": "notifications",
         "enabled": true,
-        "script": "src/session-notification.ts",
+        "script": "src/session/session-notification.ts",
         "args": "--timezone \"America/Argentina/Buenos_Aires\" --peak-start 9 --peak-end 15 --region \"Argentina\"",
         "required": false,
         "description": "Time-based peak hour notifications (TS)"
@@ -180,7 +180,7 @@
       {
         "id": "session-metrics-start",
         "enabled": true,
-        "script": "src/session-metrics-tracker.ts",
+        "script": "src/session/session-metrics-tracker.ts",
         "args": "--action start",
         "required": false,
         "description": "Initialize session metrics tracking (tokens, tool calls, files) (TS)"
@@ -188,7 +188,7 @@
       {
         "id": "session-scoring",
         "enabled": true,
-        "script": "src/session-scoring.ts",
+        "script": "src/session/session-scoring.ts",
         "args": "-Action init",
         "required": false,
         "description": "Initialize quality scoring system with baseline metrics"
@@ -197,7 +197,7 @@
         "id": "session-close-orchestrator",
         "enabled": false,
         "lazy": true,
-        "script": "src/session-close-orchestrator.ts",
+        "script": "src/session/session-close-orchestrator.ts",
         "args": "--reason autostart-close",
         "required": false,
         "description": "DISABLED at autostart: running the close protocol at session START killed the freshly-started daemons (codegraph/timeout/dashboard). Session close must only run on real close (session-close-orchestrator.ts invoked explicitly)."
@@ -206,7 +206,7 @@
         "id": "session-close-validator",
         "enabled": false,
         "lazy": true,
-        "script": "src/session-close-validator.ts",
+        "script": "src/session/session-close-validator.ts",
         "args": "--mode quick --report",
         "required": false,
         "description": "DISABLED at autostart: pairs with the close orchestrator; validation of a close that never ran at startup is meaningless."

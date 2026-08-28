@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { runNpxTsxSync } from './core/run-command.js';
+import { runNpxTsxSync } from '../core/run-command.js';
 import { resolve } from 'path';
 
 interface CliArgs {
@@ -33,7 +33,7 @@ function run(): void {
     tsArgs.push('--quiet');
   }
 
-  const result = runNpxTsxSync('src/session-manager.ts', tsArgs, {
+  const result = runNpxTsxSync('src/session/session-manager.ts', tsArgs, {
     stdio: 'inherit',
     cwd: ROOT,
   });

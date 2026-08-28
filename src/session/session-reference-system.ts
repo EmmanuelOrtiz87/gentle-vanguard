@@ -3,7 +3,7 @@
 import { existsSync, readdirSync, rmSync, statSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
-import { runSync, runNpxTsxSync } from './core/run-command.js';
+import { runSync, runNpxTsxSync } from '../core/run-command.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -69,7 +69,7 @@ function restartSession(projectName: string, scriptsDir: string): boolean {
     return false;
   }
   const result = runNpxTsxSync(
-    'src/session-manager.ts',
+    'src/session/session-manager.ts',
     ['--mode', 'Manual', '--project', projectName],
     { stdio: 'inherit' },
   );

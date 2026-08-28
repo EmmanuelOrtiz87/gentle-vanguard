@@ -3,7 +3,7 @@
  * session-autostart.ts — Entry point for AGENTS.md compatibility
  *
  * The actual implementation lives at src/core/session-autostart.ts.
- * This file exists so the AGENTS.md command `npx tsx src/session-autostart.ts`
+ * This file exists so the AGENTS.md command `npx tsx src/session/session-autostart.ts`
  * resolves correctly.
  *
  * AUTO-ACTIVACIÓN DEL CACHE:

@@ -12,7 +12,7 @@ Antes de responder al usuario, ejecutar:
 npm run session:autostart:detached   # fire-and-forget, ~1.3s, pipeline completo en background
 ```
 
-Alternativa bloqueante: `npx tsx src/session-autostart.ts`. Es idempotente y no pide permiso. El
+Alternativa bloqueante: `npx tsx src/session/session-autostart.ts`. Es idempotente y no pide permiso. El
 pipeline inicializa: session ID, engram, security orchestrator, codegraph, token budget, watchtower
 auto-heal, dashboard WS, Nexus DB (lazy steps). Log: `.runtime/autostart-detached-*.log`.
 

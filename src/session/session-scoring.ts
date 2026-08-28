@@ -2,7 +2,7 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { db } from './database/db.js';
+import { db } from '../database/db.js';
 
 const ROOT = resolve(process.cwd());
 

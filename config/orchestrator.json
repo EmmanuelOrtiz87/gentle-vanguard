@@ -341,7 +341,7 @@
       "supportsSkillTool": true,
       "supportsMemTools": true,
       "detectFirst": true,
-      "mandatoryStartup": "npx tsx src/session-autostart.ts",
+      "mandatoryStartup": "npx tsx src/session/session-autostart.ts",
       "adaptiveProfile": "npx tsx src/adaptive-opencode-profile.ts",
       "note": "CLAUDE.md is auto-loaded by OpenCode — contains immediate detect-tool.ts directive atop"
     },

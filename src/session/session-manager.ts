@@ -11,14 +11,14 @@
  *   cleanup-start (START) ──→ [Session Active] ──→ close-orchestrator (END)
  *
  * Usage:
- *   npx tsx src/session-manager.ts                          # Full startup cleanup
- *   npx tsx src/session-manager.ts --lightweight             # Startup cleanup (alias)
- *   npx tsx src/session-manager.ts --mode AutoStart          # Legacy compat
- *   npx tsx src/session-manager.ts --quiet                   # Minimal output
+ *   npx tsx src/session/session-manager.ts                          # Full startup cleanup
+ *   npx tsx src/session/session-manager.ts --lightweight             # Startup cleanup (alias)
+ *   npx tsx src/session/session-manager.ts --mode AutoStart          # Legacy compat
+ *   npx tsx src/session/session-manager.ts --quiet                   # Minimal output
  */
 import { existsSync } from 'fs';
 import { join, resolve } from 'path';
-import { runNpxTsxSync } from './core/run-command.js';
+import { runNpxTsxSync } from '../core/run-command.js';
 
 const ROOT = resolve(process.cwd());
 

@@ -832,11 +832,11 @@ async function checkSessionPipeline() {
   if (!quiet) console.log('  [Session] Checking...');
 
   const scripts = [
-    'src/session-start-optimized.ts',
-    'src/session-manager.ts',
+    'src/session/session-start-optimized.ts',
+    'src/session/session-manager.ts',
     'src/pre-process-input.ts',
-    'src/session-start-optimized.ts',
-    'src/session-cleanup-start.ts',
+    'src/session/session-start-optimized.ts',
+    'src/session/session-cleanup-start.ts',
   ];
   for (const s of scripts) {
     const name = basename(s);

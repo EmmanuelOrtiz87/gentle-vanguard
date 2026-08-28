@@ -9,12 +9,12 @@ Describe "Gentle-Vanguard stack smoke" {
         if (-not $script:repoRoot) {
             throw "Could not resolve repo root from PSScriptRoot: $PSScriptRoot"
         }
-        $script:isPublicDistribution = -not (Test-Path (Join-Path $script:repoRoot "src/session-autostart.ts"))
+        $script:isPublicDistribution = -not (Test-Path (Join-Path $script:repoRoot "src/session/session-autostart.ts"))
     }
 
     Context "Core TypeScript entrypoints" {
         It "session-autostart.ts exists" {
-            $available = (Test-Path (Join-Path $script:repoRoot "src/session-autostart.ts")) -or
+            $available = (Test-Path (Join-Path $script:repoRoot "src/session/session-autostart.ts")) -or
                 (Test-Path (Join-Path $script:repoRoot "scripts/gentle-vanguard/bootstrap.ts"))
             $available | Should -BeTrue
         }

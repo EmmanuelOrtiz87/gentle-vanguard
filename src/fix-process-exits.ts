@@ -18,9 +18,9 @@ const ROOT = resolve(process.cwd());
 const CRITICAL_FILES = [
   'src/security/security-initializer.ts',
   'src/security/dependency-security-initializer.ts',
-  'src/session-manager.ts',
-  'src/session-reference-system.ts',
-  'src/session-scoring.ts',
+  'src/session/session-manager.ts',
+  'src/session/session-reference-system.ts',
+  'src/session/session-scoring.ts',
   'src/security/safety-guardrails.ts',
   'src/system-check.ts',
 ];

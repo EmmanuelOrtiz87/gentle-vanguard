@@ -10,8 +10,8 @@ import {
 } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { runNpxTsxSync } from './core/run-command.js';
-import { SessionContextLog } from './core/session-context-log.js';
+import { runNpxTsxSync } from '../core/run-command.js';
+import { SessionContextLog } from '../core/session-context-log.js';
 
 const ROOT = resolve(process.cwd());
 

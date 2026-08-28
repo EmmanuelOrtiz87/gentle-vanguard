@@ -215,7 +215,7 @@ export function getDetectedTool(): DetectedTool {
 export function getToolConfig(detectedTool: DetectedTool, configPath?: string): DetectedTool {
   const result = { ...detectedTool };
 
-  const sessionStartCmd = 'npx tsx src/session-autostart.ts';
+  const sessionStartCmd = 'npx tsx src/session/session-autostart.ts';
 
   result.instructions = {
     primaryEntryPoint: 'docs/AGENTS.md',

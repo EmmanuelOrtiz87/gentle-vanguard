@@ -23,12 +23,12 @@ const REPLACEMENTS: Replacement[] = [
   },
   {
     from: /scripts\/utilities\/session-manager\.ps1/g,
-    to: 'src/session-manager.ts',
+    to: 'src/session/session-manager.ts',
     description: 'Session manager',
   },
   {
     from: /scripts\/utilities\/session-autostart\.ps1/g,
-    to: 'src/session-autostart.ts',
+    to: 'src/session/session-autostart.ts',
     description: 'Session autostart',
   },
   {
@@ -118,7 +118,7 @@ const REPLACEMENTS: Replacement[] = [
   },
   {
     from: /scripts\/adaptive\/session-scoring\.ps1/g,
-    to: 'src/session-scoring.ts',
+    to: 'src/session/session-scoring.ts',
     description: 'Session scoring',
   },
   {

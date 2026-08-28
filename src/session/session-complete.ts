@@ -12,7 +12,7 @@
 import { existsSync, readFileSync, writeFileSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { runSync, runSyncShell, runNpxTsxSync } from './core/run-command.js';
+import { runSync, runSyncShell, runNpxTsxSync } from '../core/run-command.js';
 
 const ROOT = resolve(process.cwd());
 const SESSION_DIR = join(ROOT, '.session');
@@ -257,7 +257,7 @@ function isSharedProcess(pid: number): boolean {
 function runStackCleanup(): void {
   log('Running stack cleanup...');
 
-  const cleanupScript = join(ROOT, 'src/session-cleanup-start.ts');
+  const cleanupScript = join(ROOT, 'src/session/session-cleanup-start.ts');
   if (existsSync(cleanupScript)) {
     const result = runNpxTsxSync(cleanupScript, [], {
       cwd: ROOT,

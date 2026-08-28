@@ -13,7 +13,7 @@
  * Instalación:
  *   1. Agregar a opencode.json mcpServers
  *   2. Agregar a config/session-autostart.config.json como step
- *   3. Importar en src/session-autostart.ts (opcional pero recomendado)
+ *   3. Importar en src/session/session-autostart.ts (opcional pero recomendado)
  */
 
 import { ResponseCache } from '../response-cache.js';

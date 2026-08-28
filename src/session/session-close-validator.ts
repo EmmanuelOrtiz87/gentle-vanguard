@@ -12,17 +12,17 @@
  *   full  — deep + deuda técnica completa, dependencias estancadas
  *
  * Uso:
- *   npx tsx src/session-close-validator.ts --mode quick
- *   npx tsx src/session-close-validator.ts --mode deep --dry-run
- *   npx tsx src/session-close-validator.ts --mode full --auto-fix --report
- *   npx tsx src/session-close-validator.ts --verify (alias para --mode quick)
+ *   npx tsx src/session/session-close-validator.ts --mode quick
+ *   npx tsx src/session/session-close-validator.ts --mode deep --dry-run
+ *   npx tsx src/session/session-close-validator.ts --mode full --auto-fix --report
+ *   npx tsx src/session/session-close-validator.ts --verify (alias para --mode quick)
  */
 
 /* The import regex below is safe - it only parses TypeScript import statements, not user input */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync } from 'fs';
 import { join, resolve, relative } from 'path';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
 import {
   loadRegistry,
@@ -30,9 +30,9 @@ import {
   cleanUnregisteredTemps,
   listEntries,
   pruneRegistry,
-} from './temp-file-registry.js';
+} from '../temp-file-registry.js';
 
-import { extractRealImports, type ImportInfo } from './ast-import-parser.js';
+import { extractRealImports, type ImportInfo } from '../ast-import-parser.js';
 
 const ROOT = resolve(process.cwd());
 const SESSION_DIR = join(ROOT, '.session');
@@ -84,7 +84,7 @@ export interface ValidationReport {
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
-import { log as createLogger } from './utils/logger.js';
+import { log as createLogger } from '../utils/logger.js';
 
 const LOG = createLogger('VALIDATOR');
 
@@ -450,9 +450,9 @@ function findUnusedFiles(mode: ValidationMode): { files: string[]; issues: Valid
   // Get all .ts files that are NOT entry points or configs
   const allTs = getAllFiles(join(ROOT, 'src'), '.ts');
   const entryPoints = new Set([
-    'src/session-autostart.ts',
-    'src/session-close-orchestrator.ts',
-    'src/session-close-validator.ts',
+    'src/session/session-autostart.ts',
+    'src/session/session-close-orchestrator.ts',
+    'src/session/session-close-validator.ts',
     'src/temp-file-registry.ts',
   ]);
 
@@ -777,7 +777,7 @@ function main() {
 
   if (args.includes('--help') || args.includes('-h') || args.length === 0) {
     console.log(`
-Usage: npx tsx src/session-close-validator.ts --mode <mode> [options]
+Usage: npx tsx src/session/session-close-validator.ts --mode <mode> [options]
 
 Modes:
   quick   Cross-references, temp files, errors/warnings (rápido, siempre)

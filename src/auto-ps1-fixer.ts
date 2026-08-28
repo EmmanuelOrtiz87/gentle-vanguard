@@ -35,7 +35,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   // Scripts de adaptación
   'scripts/adaptive/karpathy-enforcer.ps1': 'src/karpathy-enforcer.ts',
   'scripts/adaptive/correction-rules-engine.ps1': 'src/correction-rules-engine.ts',
-  'scripts/adaptive/session-scoring.ps1': 'src/session-scoring.ts',
+  'scripts/adaptive/session-scoring.ps1': 'src/session/session-scoring.ts',
 
   // Scripts de seguridad
   'scripts/security/security-orchestrator.ps1': 'src/security/security-orchestrator.ts',
@@ -76,10 +76,10 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/dashboard/dashboard-ws-autostart.ps1': 'src/dashboard-ws-autostart.ts',
 
   // Session
-  'scripts/utilities/session/session-cleanup-start.ps1': 'src/session-cleanup-start.ts',
-  'scripts/utilities/session/session-notification.ps1': 'src/session-notification.ts',
-  'scripts/utilities/session/session-manager.ps1': 'src/session-manager.ts',
-  'scripts/utilities/session/session-metrics-tracker.ps1': 'src/session-metrics-tracker.ts',
+  'scripts/utilities/session/session-cleanup-start.ps1': 'src/session/session-cleanup-start.ts',
+  'scripts/utilities/session/session-notification.ps1': 'src/session/session-notification.ts',
+  'scripts/utilities/session/session-manager.ps1': 'src/session/session-manager.ts',
+  'scripts/utilities/session/session-metrics-tracker.ps1': 'src/session/session-metrics-tracker.ts',
 
   // Setup/Detect
   'scripts/utilities/setup/DETECT/detect-tool.ps1': 'src/detect-tool.ts',

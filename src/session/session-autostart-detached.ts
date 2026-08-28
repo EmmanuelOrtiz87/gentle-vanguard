@@ -30,10 +30,10 @@
  * USAGE
  * -----
  *   npm run session:autostart:detached
- *   npx tsx src/session-autostart-detached.ts [-- args...]
+ *   npx tsx src/session/session-autostart-detached.ts [-- args...]
  *
  * To run the autostart synchronously and wait for it, use the normal entry:
- *   npx tsx src/session-autostart.ts
+ *   npx tsx src/session/session-autostart.ts
  */
 
 import { spawn } from 'node:child_process';

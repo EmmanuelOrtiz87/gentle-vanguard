@@ -143,8 +143,8 @@ function checkSessionRef() {
   header('Session Reference System');
   writeCheck(
     'Session Ref (TS)',
-    exists('src/session-reference-system.ts'),
-    'src/session-reference-system.ts',
+    exists('src/session/session-reference-system.ts'),
+    'src/session/session-reference-system.ts',
   );
 }
 

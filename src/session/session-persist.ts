@@ -137,7 +137,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       break;
     }
     default: {
-      console.log('Usage: npx tsx src/session-persist.ts [check|touch|create]');
+      console.log('Usage: npx tsx src/session/session-persist.ts [check|touch|create]');
       console.log('  check  - Check if session is active');
       console.log('  touch  - Update activity timestamp');
       console.log('  create <id> - Create new session state');

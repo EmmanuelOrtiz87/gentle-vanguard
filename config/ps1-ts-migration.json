@@ -46,8 +46,8 @@
     },
     {
       "id": "session-scoring",
-      "script": "src/session-scoring.ts",
-      "target": "src/session-scoring.ts",
+      "script": "src/session/session-scoring.ts",
+      "target": "src/session/session-scoring.ts",
       "priority": "high",
       "status": "implemented",
       "migratedAt": "2026-07-10",
@@ -76,8 +76,8 @@
     },
     {
       "id": "session-cleanup-start",
-      "script": "src/session-cleanup-start.ts",
-      "target": "src/session-cleanup-start.ts",
+      "script": "src/session/session-cleanup-start.ts",
+      "target": "src/session/session-cleanup-start.ts",
       "priority": "high",
       "status": "implemented",
       "migratedAt": "2026-07-10",
@@ -232,8 +232,8 @@
     },
     {
       "id": "session-notification",
-      "script": "src/session-notification.ts",
-      "target": "src/session-notification.ts",
+      "script": "src/session/session-notification.ts",
+      "target": "src/session/session-notification.ts",
       "priority": "high",
       "status": "implemented",
       "migratedAt": "2026-07-17"
@@ -248,8 +248,8 @@
     },
     {
       "id": "session-metrics-tracker",
-      "script": "src/session-metrics-tracker.ts",
-      "target": "src/session-metrics-tracker.ts",
+      "script": "src/session/session-metrics-tracker.ts",
+      "target": "src/session/session-metrics-tracker.ts",
       "priority": "high",
       "status": "implemented",
       "migratedAt": "2026-07-17"
@@ -521,7 +521,7 @@
     "pre-commit-validation"
   ],
   "delegatedSteps": {
-    "session-manager": "src/session-cleanup-start.ts",
+    "session-manager": "src/session/session-cleanup-start.ts",
     "token-notification-init": "src/tokens/token-metrics-store.ts"
   },
   "completedWave14": [
@@ -728,16 +728,16 @@
     "Wave 24: migrate skill-auto-patch.ps1→TS, delete 9 obsolete PS1, dashboard build 0 errors"
   ],
   "tsFiles": [
-    "src/session-autostart.ts",
+    "src/session/session-autostart.ts",
     "src/health-check.ts",
     "src/maintenance-watchtower.ts",
     "src/security-orchestrator.ts",
     "src/hybrid-executor.ts",
     "src/checkpoint-manager.ts",
-    "src/session-scoring.ts",
+    "src/session/session-scoring.ts",
     "src/tokens/token-budget-guard.ts",
     "src/audit-pipeline.ts",
-    "src/session-cleanup-start.ts",
+    "src/session/session-cleanup-start.ts",
     "src/correction-rules-engine.ts",
     "src/tracing-instrument.ts",
     "src/event-sourcing.ts",
@@ -754,9 +754,9 @@
     "src/detect-tool.ts",
     "src/lefthook-verify.ts",
     "src/karpathy-enforcer.ts",
-    "src/session-notification.ts",
+    "src/session/session-notification.ts",
     "src/tokens/token-metrics-store.ts",
-    "src/session-metrics-tracker.ts",
+    "src/session/session-metrics-tracker.ts",
     "src/validate-tool-configs.ts",
     "src/adaptive-opencode-profile.ts",
     "src/engram-policy.ts",
@@ -819,7 +819,7 @@
     "src/ml/ft-data-collector.ts",
     "src/skill-factory.ts",
     "src/tokens/token-usage-auto.ts",
-    "src/session-reference-system.ts",
+    "src/session/session-reference-system.ts",
     "src/orchestrate-auto-fix.ts",
     "src/knowledge-base-autoinit.ts",
     "src/adaptive-mode-engine.ts",
@@ -844,8 +844,8 @@
     "src/hooks/commit-msg-session-track-hook.ts",
     "src/fix-configs.ts",
     "src/fix-typescript-errors.ts",
-    "src/session-manager.ts",
-    "src/session-start-optimized.ts",
+    "src/session/session-manager.ts",
+    "src/session/session-start-optimized.ts",
     "src/tokens/token-usage-notifier.ts",
     "src/normative-audit-pipeline.ts",
     "src/resilience-handler.ts",

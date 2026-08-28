@@ -706,7 +706,7 @@ async function main(): Promise<void> {
       header();
       console.log('Project scaffolding:\n');
       console.log('  Use the SDD workflow:');
-      console.log('    1. npx tsx src/session-autostart.ts');
+      console.log('    1. npx tsx src/session/session-autostart.ts');
       console.log('    2. Load skill: spec-driven-development, planning-and-task-breakdown');
       console.log('    3. Ask the orchestrator to create a new project\n');
       footer();

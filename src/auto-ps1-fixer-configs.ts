@@ -22,11 +22,11 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/hooks/npm-audit-pre-push.ps1': 'src/hooks/npm-audit-pre-push.ts',
 
   // Session
-  'scripts/utilities/session/session-manager.ps1': 'src/session-manager.ts',
-  'scripts/utilities/session/session-start-optimized.ps1': 'src/session-start-optimized.ts',
-  'scripts/utilities/session/session-cleanup-start.ps1': 'src/session-cleanup-start.ts',
-  'scripts/utilities/session/session-metrics-tracker.ps1': 'src/session-metrics-tracker.ts',
-  'scripts/utilities/session/session-notification.ps1': 'src/session-notification.ts',
+  'scripts/utilities/session/session-manager.ps1': 'src/session/session-manager.ts',
+  'scripts/utilities/session/session-start-optimized.ps1': 'src/session/session-start-optimized.ts',
+  'scripts/utilities/session/session-cleanup-start.ps1': 'src/session/session-cleanup-start.ts',
+  'scripts/utilities/session/session-metrics-tracker.ps1': 'src/session/session-metrics-tracker.ts',
+  'scripts/utilities/session/session-notification.ps1': 'src/session/session-notification.ts',
 
   // Security
   'scripts/security/security-orchestrator.ps1': 'src/security/security-orchestrator.ts',

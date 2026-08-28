@@ -321,7 +321,7 @@ function main(): void {
 
   console.log(`\n\x1b[32m[SUCCESS] Gentle-Vanguard Initialized and Verified!\x1b[0m`);
   console.log(
-    `\x1b[32mYou can now run 'npx tsx src/session-autostart.ts' to start your session.\x1b[0m`,
+    `\x1b[32mYou can now run 'npx tsx src/session/session-autostart.ts' to start your session.\x1b[0m`,
   );
 }
 

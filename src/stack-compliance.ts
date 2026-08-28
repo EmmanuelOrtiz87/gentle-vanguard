@@ -199,7 +199,7 @@ function checkSessionAutostart(): void {
   check(
     'session-autostart.cmd references TS',
     referencesTS,
-    referencesTS ? 'References src/session-autostart.ts' : 'References .ps1 (outdated)',
+    referencesTS ? 'References src/session/session-autostart.ts' : 'References .ps1 (outdated)',
     referencesTS ? 'PASS' : 'FAIL',
   );
 }

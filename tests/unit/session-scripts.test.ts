@@ -11,10 +11,10 @@ describe('session-scripts', () => {
   });
 
   it('src/session-cleanup-start.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'session-cleanup-start.ts')));
+    assert.ok(existsSync(resolve(ROOT, 'src', 'session', 'session-cleanup-start.ts')));
   });
 
   it('src/session-manager.ts exists', () => {
-    assert.ok(existsSync(resolve(ROOT, 'src', 'session-manager.ts')));
+    assert.ok(existsSync(resolve(ROOT, 'src', 'session', 'session-manager.ts')));
   });
 });

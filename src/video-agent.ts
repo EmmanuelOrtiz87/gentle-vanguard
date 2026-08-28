@@ -497,7 +497,7 @@ Examples:
           id: '1',
           title: 'Inicio de Sesión',
           description: 'Comenzamos una sesión de trabajo',
-          action: 'npx tsx src/session-autostart.ts',
+          action: 'npx tsx src/session/session-autostart.ts',
           duration: 2,
         },
         {

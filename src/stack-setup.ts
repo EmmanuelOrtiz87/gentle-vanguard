@@ -188,7 +188,7 @@ async function main(): Promise<void> {
 
   if (failed === 0) {
     console.log(C.green('\n  ✅ Stack is ready! Run: npm run stack:verify'));
-    console.log(C.dim('     Or start working: npx tsx src/session-autostart.ts\n'));
+    console.log(C.dim('     Or start working: npx tsx src/session/session-autostart.ts\n'));
   } else {
     console.log(C.yellow('\n  ⚠ Some steps had issues. Check output above.'));
     console.log(C.yellow('  Run: npm run stack:verify to check current state\n'));

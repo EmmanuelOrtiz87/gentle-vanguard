@@ -23,7 +23,7 @@ Based on detection, load `config/orchestrator.json#toolProfiles.<name>`.
 ### Phase A — Init
 
 0. `src/pre-process-input.ts -UserInput "<msg>" -WorkspaceRoot "."` BEFORE first response
-1. Run `src/session-start-optimized.ts` (autostart pipeline)
+1. Run `src/session/session-start-optimized.ts` (autostart pipeline)
 2. Read `scripts/.session/startup-summary.json`
 3. `todowrite` — create task list
 4. Report peak/off-peak, session ID, workspace state to user
@@ -99,7 +99,7 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 
 | Response cache | `src/pre-process-input.ts` — SHA256 cache, TTL 30min, -33-41% latency (flag
 `-DisableCache` to bypass) | | Lazy autostart | `config/session-autostart.config.json` — 6
-non-critical steps deferred post-pipeline | | In-process pipeline | `src/session-start-optimized.ts`
+non-critical steps deferred post-pipeline | | In-process pipeline | `src/session/session-start-optimized.ts`
 — removed `Start-Job`, runs `&` directo in-process |
 
 ## Token Notification (Auto-Hook — Every Turn)

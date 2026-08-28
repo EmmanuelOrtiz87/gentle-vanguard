@@ -9,11 +9,11 @@
  * o a demanda vía CLI.
  *
  * Uso:
- *   npx tsx src/session-close-orchestrator.ts
- *   npx tsx src/session-close-orchestrator.ts --reason "maintenance"
- *   npx tsx src/session-close-orchestrator.ts --verify
- *   npx tsx src/session-close-orchestrator.ts --validate --deep
- *   npx tsx src/session-close-orchestrator.ts --validate --full --auto-fix
+ *   npx tsx src/session/session-close-orchestrator.ts
+ *   npx tsx src/session/session-close-orchestrator.ts --reason "maintenance"
+ *   npx tsx src/session/session-close-orchestrator.ts --verify
+ *   npx tsx src/session/session-close-orchestrator.ts --validate --deep
+ *   npx tsx src/session/session-close-orchestrator.ts --validate --full --auto-fix
  */
 
 import {
@@ -26,10 +26,10 @@ import {
   unlinkSync,
 } from 'fs';
 import { join, resolve, relative } from 'path';
-import { runSync, runNpxTsxSync } from './core/run-command.js';
-import { runHygiene } from './core/process-hygiene.js';
+import { runSync, runNpxTsxSync } from '../core/run-command.js';
+import { runHygiene } from '../core/process-hygiene.js';
 import { pathToFileURL } from 'url';
-import { sessionEnd } from './engram-session-bridge.js';
+import { sessionEnd } from '../engram-session-bridge.js';
 
 // ─── Guardian Protection ────────────────────────────────────────────────────────
 // Importa protección contra cierres informales
@@ -43,7 +43,7 @@ type PhaseResult = { phase: string; status: 'PASS' | 'FAIL' | 'SKIP'; detail: st
 
 // ─── Helpers ────────────────────────────────────────────────────────────────────
 
-import { log as createLogger } from './utils/logger.js';
+import { log as createLogger } from '../utils/logger.js';
 
 const LOG = createLogger('CLOSE');
 
@@ -499,7 +499,7 @@ async function phasePersist(reason: string): Promise<PhaseResult[]> {
 
   // 2.2 Save session scoring
   const sr = runScript(
-    'src/session-scoring.ts',
+    'src/session/session-scoring.ts',
     [
       '-Action',
       'record',
@@ -980,7 +980,7 @@ async function phaseCleanup(skipDaemonKill = false): Promise<PhaseResult[]> {
   }
 
   // 5.5 Flush caches and reset
-  const cr = runScript('src/session-cleanup-start.ts', ['-SkipOrphanCleanup', '-Quiet'], 60000);
+  const cr = runScript('src/session/session-cleanup-start.ts', ['-SkipOrphanCleanup', '-Quiet'], 60000);
   results.push({
     phase: 'cache-flush',
     status: cr.status === 0 ? 'PASS' : 'FAIL',
@@ -1215,7 +1215,7 @@ async function main() {
     const autoFix = args.includes('--auto-fix');
     log(`Invoking session-close-validator (mode: ${validateMode})...`);
     const vr = runScript(
-      'src/session-close-validator.ts',
+      'src/session/session-close-validator.ts',
       [
         '--mode',
         validateMode,

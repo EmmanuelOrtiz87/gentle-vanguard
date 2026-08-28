@@ -20,7 +20,7 @@
       "activated": true,
       "risk": "low",
       "owner": "orchestrator",
-      "script": "src/session-autostart.ts",
+      "script": "src/session/session-autostart.ts",
       "description": "Idempotent session bootstrap pipeline (config/session-autostart.config.json) that initializes session state, security, tracing, dashboards and all lazy background daemons.",
       "activationCriteria": [
         { "check": "config-valid", "required": true },
@@ -458,7 +458,7 @@
       "activated": false,
       "risk": "low",
       "owner": "ops-agent",
-      "script": "src/session-cleanup-start.ts",
+      "script": "src/session/session-cleanup-start.ts",
       "description": "Deprecated: superseded by session-pipeline lazy daemons. Kept only for reference; do not re-enable.",
       "activationCriteria": []
     }

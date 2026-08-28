@@ -10,7 +10,7 @@
  *   npx tsx src/response-cache-orchestrator.ts --after "input" "response" --tokens-saved 100
  *
  * NOTA: Este es un script auxiliar. La integración real debe hacerse en:
- *   - src/session-autostart.ts (para activar el cache)
+ *   - src/session/session-autostart.ts (para activar el cache)
  *   - Cada respuesta del orchestrator debe usar ResponseCache class
  */
 

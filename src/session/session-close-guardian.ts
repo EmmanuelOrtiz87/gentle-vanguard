@@ -15,7 +15,7 @@
 import { existsSync, readFileSync, writeFileSync, appendFileSync } from 'fs';
 import { pathToFileURL } from 'url';
 import { join, resolve } from 'path';
-import { runNpxTsxSync } from './core/run-command.js';
+import { runNpxTsxSync } from '../core/run-command.js';
 
 const ROOT = resolve(process.cwd());
 const GUARDIAN_LOG = join(ROOT, '.session', 'guardian-warnings.log');
@@ -131,14 +131,14 @@ export function blockAndRedirect(reason: string): never {
   console.error(`║  Razón: ${reason.slice(0, 50).padEnd(50)} ║`);
   console.error('║                                                        ║');
   console.error('║  Use el orquestador oficial:                           ║');
-  console.error('║    npx tsx src/session-close-orchestrator.ts           ║');
+  console.error('║    npx tsx src/session/session-close-orchestrator.ts           ║');
   console.error('╚════════════════════════════════════════════════════════╝\n');
 
   // Ejecutar orquestador automáticamente
   console.log('Ejecutando orquestador oficial...\n');
 
   const result = runNpxTsxSync(
-    'src/session-close-orchestrator.ts',
+    'src/session/session-close-orchestrator.ts',
     ['--reason', 'redirected-from-informal'],
     {
       cwd: ROOT,
@@ -165,7 +165,7 @@ export function markWarning(warning: string, severity: 'LOW' | 'MEDIUM' | 'HIGH'
 
   console.warn(`\n[GUARDIAN] ⚠️  ${severity}: ${warning}`);
   console.warn('[GUARDIAN] Para completar correctamente, ejecute:');
-  console.warn('[GUARDIAN]   npx tsx src/session-close-orchestrator.ts\n');
+  console.warn('[GUARDIAN]   npx tsx src/session/session-close-orchestrator.ts\n');
 }
 
 /**

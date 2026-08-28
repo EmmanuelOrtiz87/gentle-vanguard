@@ -157,7 +157,7 @@ const COMMANDS: Command[] = [
           break;
         case 'close':
           printInfo('Closing session...');
-          runNpxTsx('src/session-close-orchestrator.ts');
+          runNpxTsx('src/session/session-close-orchestrator.ts');
           break;
         case 'status':
           printInfo('Checking session status...');
