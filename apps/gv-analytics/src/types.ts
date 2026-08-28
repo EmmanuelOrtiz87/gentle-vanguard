@@ -39,7 +39,7 @@ export interface AnalyticsReport {
   impactedFronts: string[];
   roles: string[];
   complexity: {
-    level: 'low' | 'medium' | 'high' | 'unknown';
+    level: 'low' | 'medium' | 'high' | 'critical' | 'unknown';
     rationale: string;
   };
   estimate: {
@@ -55,4 +55,9 @@ export interface AnalyticsReport {
   };
   evidence: AnalysisEvidence[];
   nextActions: string[];
+  /** LLM enrichment provenance. 'heuristic' means the rule-based fallback ran. */
+  llmSource?: 'cache' | 'agent' | 'fallback' | 'heuristic';
+  llmDurationMs?: number;
+  llmCached?: boolean;
+  llmNotes?: string;
 }

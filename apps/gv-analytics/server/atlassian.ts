@@ -5,6 +5,7 @@ import type {
   ConnectionStatus,
 } from '../src/types';
 import { loadConnection, saveConnection, type StoredConnection } from './vault';
+import { enrichWithLLM } from './llm';
 
 interface AtlassianRequestOptions {
   path: string;
@@ -555,13 +556,72 @@ export async function searchEvidence(query: string): Promise<AnalysisEvidence[]>
 export async function analyzeInput(mode: 'url' | 'request', input: string): Promise<AnalyticsReport> {  if (!input.trim()) throw new Error('El analisis necesita una URL o texto de pedido.');
 
   const remote = await gatherAtlassianEvidence(input);
+  const evidence = [...buildEvidence(input), ...remote.evidence];
+  const hasRemoteEvidence = remote.evidence.some((item) => item.source !== 'stack');
+
+  // Try the LLM path first. Falls back to the heuristic below on any error
+  // so the app never goes dark when the model is unreachable.
+  const evidenceCorpus = remote.text.join('\n\n').trim();
+  const llm = await enrichWithLLM(input, evidenceCorpus).catch((error) => ({
+    analysis: null,
+    cached: false,
+    durationMs: 0,
+    source: 'fallback' as const,
+    error: error instanceof Error ? error.message : String(error),
+  }));
+
+  if (llm.analysis) {
+    const a = llm.analysis;
+    return {
+      id: `GVA-${Date.now().toString(36).toUpperCase()}`,
+      createdAt: new Date().toISOString(),
+      mode,
+      input,
+      summary: a.summary,
+      currentState: a.currentState.length > 0 ? a.currentState : [
+        hasRemoteEvidence
+          ? 'Se recupero evidencia real desde Atlassian para complementar la lectura local.'
+          : 'Se detecto la entrada y se preparo una interpretacion local.',
+      ],
+      proposedSolution: a.proposedSolution.length > 0 ? a.proposedSolution : [
+        'Normalizar la entrada como caso de analisis trazable.',
+        'Relacionar ticket, documentacion y codigo antes de estimar.',
+      ],
+      impactedFronts: a.impactedFronts.length > 0 ? a.impactedFronts : detectFronts(evidenceCorpus),
+      roles: a.roles.length > 0 ? a.roles : ['Business Analyst', 'Developer', 'QA Analyst', 'Tech Lead'],
+      complexity: {
+        level: a.complexity.level,
+        rationale: a.complexity.rationale || 'Complejidad estimada por el agente BA a partir de la evidencia.',
+      },
+      estimate: {
+        discoveryHours: Math.max(4, Math.round(a.estimate.deliveryHours * 0.2)),
+        deliveryHours: a.estimate.deliveryHours,
+        qaHours: a.estimate.qaHours,
+        confidence: a.estimate.confidence,
+      },
+      qaScenarios: a.qaScenarios,
+      diagrams: {
+        current: a.diagrams.current || 'Sin diagrama actual (evidencia insuficiente).',
+        proposed: a.diagrams.proposed || 'Sin diagrama propuesto (evidencia insuficiente).',
+      },
+      evidence,
+      nextActions: a.nextActions.length > 0 ? a.nextActions : [
+        'Validar la lectura con el PO y el equipo tecnico.',
+        'Cargar credenciales Atlassian o una URL reconocible si la evidencia es pobre.',
+      ],
+      llmSource: llm.source,
+      llmDurationMs: llm.durationMs,
+      llmCached: llm.cached,
+      llmNotes: a.notes,
+    };
+  }
+
+  // Heuristic fallback.
   const analysisCorpus = [input, ...remote.text].join('\n');
   const fronts = detectFronts(analysisCorpus);
   const complexityLevel = fronts.length >= 6 ? 'high' : fronts.length >= 3 ? 'medium' : 'low';
   const deliveryHours = complexityLevel === 'high' ? 64 : complexityLevel === 'medium' ? 32 : 16;
   const qaHours = Math.ceil(deliveryHours * 0.45);
-  const evidence = [...buildEvidence(input), ...remote.evidence];
-  const hasRemoteEvidence = remote.evidence.some((item) => item.source !== 'stack');
 
   return {
     id: `GVA-${Date.now().toString(36).toUpperCase()}`,
@@ -616,5 +676,8 @@ export async function analyzeInput(mode: 'url' | 'request', input: string): Prom
         : 'Configurar credenciales Atlassian o pegar una URL reconocible para recuperar evidencia real.',
       'Conectar el pipeline de agentes BA/SAD/DEV/QA/DOC mediante el model router.',
     ],
+    llmSource: 'heuristic',
+    llmDurationMs: llm.durationMs,
+    llmNotes: llm.error,
   };
 }

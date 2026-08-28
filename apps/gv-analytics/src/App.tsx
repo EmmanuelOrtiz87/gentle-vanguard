@@ -483,6 +483,8 @@ function ReportView({ report }: { report: AnalyticsReport }) {
         <Metric label="Confianza" value={report.estimate.confidence} />
       </div>
 
+      <LLMProvenance report={report} />
+
       <ReportSection title="Estado actual" items={report.currentState} />
       <ReportSection title="Solucion propuesta" items={report.proposedSolution} />
       <section className="report-section">
@@ -522,6 +524,27 @@ function Metric({ label, value }: { label: string; value: string }) {
     <div className="metric">
       <span>{label}</span>
       <strong>{value}</strong>
+    </div>
+  );
+}
+
+function LLMProvenance({ report }: { report: AnalyticsReport }) {
+  const source = report.llmSource ?? 'heuristic';
+  const labelMap: Record<typeof source, string> = {
+    agent: 'Generado por LLM (sdd-explore)',
+    cache: 'Recuperado del cache LLM',
+    fallback: 'Fallback heuristico (LLM no disponible)',
+    heuristic: 'Heuristico local',
+  };
+  const detail =
+    typeof report.llmDurationMs === 'number'
+      ? `${(report.llmDurationMs / 1000).toFixed(1)}s`
+      : 'n/d';
+  return (
+    <div className={`llm-badge llm-${source}`}>
+      <strong>{labelMap[source]}</strong>
+      <span>{detail}</span>
+      {report.llmNotes ? <em>{report.llmNotes}</em> : null}
     </div>
   );
 }
