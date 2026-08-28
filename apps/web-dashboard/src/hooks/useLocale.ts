@@ -973,6 +973,9 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.check_skills_action': 'Check skills',
     'ui.review_logs_action': 'Review logs',
     'ui.analyze_action': 'Analyze',
+    'ui.analytics_widget_title': 'Latest analyses',
+    'ui.analytics_widget_open': 'Open analytics',
+    'ui.analytics_widget_empty': 'No analyses yet. Run an analysis in gv-analytics to see it here.',
   },
   es: {
     'ui.app_subtitle': 'Métricas y monitoreo en tiempo real',
@@ -1442,6 +1445,9 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.check_skills_action': 'Ver skills',
     'ui.review_logs_action': 'Revisar logs',
     'ui.analyze_action': 'Analizar',
+    'ui.analytics_widget_title': 'Últimos análisis',
+    'ui.analytics_widget_open': 'Abrir analytics',
+    'ui.analytics_widget_empty': 'Aún no hay análisis. Ejecuta un análisis en gv-analytics para verlo aquí.',
   },
   'pt-BR': {
     'ui.app_subtitle': 'Métricas e monitoramento em tempo real',
@@ -1907,6 +1913,9 @@ const UI_STRINGS: Record<Locale, Record<string, string>> = {
     'ui.check_skills_action': 'Verificar skills',
     'ui.review_logs_action': 'Revisar logs',
     'ui.analyze_action': 'Analisar',
+    'ui.analytics_widget_title': 'Últimas análises',
+    'ui.analytics_widget_open': 'Abrir analytics',
+    'ui.analytics_widget_empty': 'Ainda não há análises. Execute uma análise no gv-analytics para vê-la aqui.',
   },
 };
 
