@@ -1,7 +1,7 @@
 # NORMATIVA-SCRIPT-LIFECYCLE — Lifecycle de scripts
 
-**Estado:** Activa  
-**Aplica a:** scripts operacionales, launchers, comandos npm y pruebas de scripts  
+**Estado:** Activa
+**Aplica a:** scripts operacionales, launchers, comandos npm y pruebas de scripts
 **Autoridad:** complementa `rules/TYPESCRIPT-FIRST-POLICY.md` y
 `docs/operations/PS1-LEGACY-POLICY.md`.
 

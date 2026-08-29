@@ -1,8 +1,8 @@
 # Runbook de remediación manual de seguridad
 
-**Audiencia:** propietario del repositorio y administrador de GitHub  
+**Audiencia:** propietario del repositorio y administrador de GitHub
 **Alcance:** tareas manuales pendientes de credenciales, controles de GitHub y artefactos
-históricos.  
+históricos.
 **Última revisión:** 2026-08-29
 
 > **Regla de seguridad:** este documento no contiene secretos. Nunca pegues un PAT, token de
@@ -226,9 +226,9 @@ El siguiente patrón es intencionalmente manual. Sustituye la ruta **solo por un
 revisada**, no por una variable proveniente de entrada externa. Si la respuesta no coincide, no borra:
 
 ```cmd
-set /p CONFIRM=Escribe BORRAR-ARCHIVO para continuar: 
+set /p CONFIRM=Escribe BORRAR-ARCHIVO para continuar:
 if /I not "%CONFIRM%"=="BORRAR-ARCHIVO" echo Cancelado.& goto :eof
-set /p CONFIRM2=Confirma de nuevo la ruta y escribe BORRAR-ARCHIVO: 
+set /p CONFIRM2=Confirma de nuevo la ruta y escribe BORRAR-ARCHIVO:
 if /I not "%CONFIRM2%"=="BORRAR-ARCHIVO" echo Cancelado.& goto :eof
 del /f /q "RUTA_PREVIAMENTE_REVISADA"
 ```
