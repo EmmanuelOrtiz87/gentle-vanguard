@@ -259,7 +259,7 @@ npm run watchtower:health
 ### Session Start
 
 ```bash
-npx tsx src/session-autostart.ts
+npx tsx src/session/session-autostart.ts
 ```
 
 ### Backup

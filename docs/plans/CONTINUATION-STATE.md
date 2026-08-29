@@ -120,7 +120,7 @@ commit 078aace1). Buscar más: `grep -rn "require.main" src/ --include='*.ts'`.
 ## 6. Primeros 3 comandos de la próxima sesión
 
 ```bash
-npx tsx src/session-autostart.ts          # pipeline obligatorio
+npx tsx src/session/session-autostart.ts          # pipeline obligatorio
 npm run watchtower:health                 # debe dar 95/95 (si hay FAILs de daemon → §4.1)
 git log --oneline -5                      # confirmar que HEAD es ec94b6b8 o posterior
 ```

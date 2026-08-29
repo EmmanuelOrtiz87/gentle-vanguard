@@ -190,7 +190,7 @@ Do **NOT** invent skill paths or fake tool calls.
 ## 8. Session Lifecycle
 
 1. **Pre**: Run `src/tools/pre-process-input.ts` with first user message — MUST be before any response
-2. **Start**: Run `npx tsx src/session-autostart.ts` (TypeScript pipeline, 54 steps, idempotent)
+2. **Start**: Run `npx tsx src/session/session-autostart.ts` (TypeScript pipeline, 54 steps, idempotent)
 3. **Track**: Session ID pattern `session-YYYY-MM-DD-XX`, project `workspace_gentle_vanguard`
 4. **Analyze**: Read `scripts/.session/startup-summary.json` — report peak hour and warnings to user
 5. **Verify**: Run `agent-verify.ps1`

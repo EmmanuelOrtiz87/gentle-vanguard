@@ -42,7 +42,7 @@ mode, ES2022) Package Manager: pnpm 11.15.1 Runtime: Node.js 20+ Shell: PowerShe
 
 ## Critical Files
 
-- `src/session-autostart.ts` — session initialization
+- `src/session/session-autostart.ts` — session initialization
 - `src/core/maintenance-watchtower.ts` — health monitoring
 - `src/cli/gv.ts` — CLI entry point
 - `apps/web-dashboard/` — LLM observability dashboard

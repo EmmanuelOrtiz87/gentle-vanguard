@@ -50,7 +50,7 @@ seguro, extensible, zero-drama.**
 | 9   | `src/tracing-instrument.ts`             | —      | Media     | ✅ Done (`src/tracing-instrument.ts`)             |
 | 10  | `src/event-sourcing.ts`                 | —      | Media     | ✅ Done (`src/event-sourcing.ts`)                 |
 | 11  | `src/saga-orchestrator.ts`              | —      | Media     | ✅ Done (`src/saga-orchestrator.ts`)              |
-| 12  | `src/session-autostart.ts`              | —      | Baja      | ✅ Done (`src/session-autostart.ts`)              |
+| 12  | `src/session/session-autostart.ts`              | —      | Baja      | ✅ Done (`src/session/session-autostart.ts`)              |
 | 13  | `src/core/maintenance-watchtower.ts`    | —      | Baja      | ✅ Done (`src/core/maintenance-watchtower.ts`)    |
 
 ## Backlog — Mejoras Local-First

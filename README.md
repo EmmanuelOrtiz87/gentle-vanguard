@@ -46,7 +46,7 @@ npm run start
 Para iniciar una sesión del stack:
 
 ```bash
-npx tsx src/session-autostart.ts
+npx tsx src/session/session-autostart.ts
 ```
 
 Para verificar la instalación:
@@ -153,7 +153,7 @@ flowchart TD
 | Comando                            | Uso                             |
 | ---------------------------------- | ------------------------------- |
 | `npm run start`                    | Iniciar el dashboard            |
-| `npx tsx src/session-autostart.ts` | Inicializar una sesión completa |
+| `npx tsx src/session/session-autostart.ts` | Inicializar una sesión completa |
 | `npm run watchtower:health`        | Revisar salud del stack         |
 | `npm run process:hygiene`          | Detectar procesos basura (dry-run) |
 | `npm run process:reap`             | Limpiar procesos basura         |

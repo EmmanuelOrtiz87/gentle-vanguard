@@ -117,7 +117,7 @@ Los siguientes archivos fueron **eliminados** después de migración a TS:
 
 - `C:/Workspace_local/gentle-vanguard/src/tools/hashline.ts` → `src/tools/hashline.ts`
 - `C:/Workspace_local/gentle-vanguard/src/tools/pre-process-input.ts` → `src/tools/pre-process-input.ts`
-- `C:/Workspace_local/gentle-vanguard/src/session-start-optimized.ts` → `src/session-autostart.ts`
+- `C:/Workspace_local/gentle-vanguard/src/session-start-optimized.ts` → `src/session/session-autostart.ts`
 - `C:/Workspace_local/gentle-vanguard/src/core/maintenance-watchtower.ts` → `src/core/maintenance-watchtower.ts`
 
 ## Documentation

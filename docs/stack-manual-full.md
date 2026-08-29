@@ -12,7 +12,7 @@ inputs—not prerequisites for the local profile. See
 At the very beginning of every session, **before responding to the user**, run:
 
 ```bash
-npx tsx src/session-autostart.ts
+npx tsx src/session/session-autostart.ts
 ```
 
 This initializes the full autonomous stack: session ID, engram integrity, security orchestrator,
@@ -478,7 +478,7 @@ Los scripts PS1 core han sido migrados a TypeScript en `src/`:
 | PS1 Original                                      | TS Replacement                                                          | Comando                                            |
 | ------------------------------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------- |
 | `scripts/health-check/health-check.ps1`           | `src/core/health-check.ts`                                              | `npm run health:check`                             |
-| `scripts/utilities/session/session-autostart.ps1` | `src/session-autostart.ts` (wrapper de `src/core/session-autostart.ts`) | `npx tsx src/session-autostart.ts`                 |
+| `scripts/utilities/session/session-autostart.ps1` | `src/session/session-autostart.ts` (wrapper de `src/core/session-autostart.ts`) | `npx tsx src/session/session-autostart.ts`                 |
 | `scripts/maintenance/maintenance-watchtower.ps1`  | `src/core/maintenance-watchtower.ts`                                    | `npm run watchtower` / `npm run watchtower:health` |
 
 Los PS1 originales fueron eliminados tras verificar que las versiones TS cubren toda la

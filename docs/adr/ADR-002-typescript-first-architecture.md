@@ -46,7 +46,7 @@ incrementally following TypeScript-first patterns.
 | **Package Manager** | None / PowerShell Gallery | `pnpm` | | **Testing** | Pester | `node:test`
 via `tsx --test` | | **Type Safety** | Runtime checks | TypeScript compiler (`tsc --noEmit`) | |
 **Linting** | PSScriptAnalyzer | ESLint + security plugin | | **Autostart** |
-`session-autostart.ps1` | `npx tsx src/session-autostart.ts` |
+`session-autostart.ps1` | `npx tsx src/session/session-autostart.ts` |
 
 ### Migration Rules
 
@@ -103,4 +103,4 @@ Lint/coverage: ✅ Configured
 
 - `rules/TYPESCRIPT-FIRST-POLICY.md`
 - `config/orchestrator.json` — routing configuration
-- `src/session-autostart.ts` — entry point
+- `src/session/session-autostart.ts` — entry point
