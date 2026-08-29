@@ -683,8 +683,18 @@ async function checkMlEmbeddings() {
 
   if (fileExists(mlIndex)) {
     try {
-      const idx = readJson(mlIndex);
-      const cnt = Object.keys(idx).length;
+      const idx = readJson(mlIndex) as {
+        skills?: unknown[];
+        metadata?: { totalSkills?: number };
+      };
+      // El índice tiene claves top-level (version, generated, metadata,
+      // vocabulary, idf, skills) — contar Object.keys() daba 6 en vez de los
+      // skills reales. Fuente de verdad: metadata.totalSkills (o el array skills).
+      const cnt = Array.isArray(idx.skills)
+        ? idx.skills.length
+        : typeof idx.metadata?.totalSkills === 'number'
+          ? idx.metadata.totalSkills
+          : Object.keys(idx).length;
       addResult('ml-embeddings', 'index parseable', 'PASS', `${cnt} skills`, 'ok');
     } catch {
       addResult('ml-embeddings', 'index parseable', 'FAIL', 'Parse error', 'rebuild', true);
