@@ -19,7 +19,7 @@
  */
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
-import { join, resolve } from 'path';
+import { isAbsolute, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { createRequire } from 'module';
 import type { DatabaseManager } from '../../apps/web-dashboard/server/database/manager.js';
@@ -419,13 +419,29 @@ function collectDelegations(log: Logger): DelegationRecord[] {
     const lastEvent = (agentData.last_event as string) || null;
 
     if (total > 0) {
-      delegations.push({
-        agent: agentId,
-        domain: 'general',
-        success: successes > failures,
-        duration: avgDuration,
-        timestamp: lastEvent || now(),
-      });
+      // Emit one record per unit of work so computeAgentPerformance preserves
+      // the real success ratio (total/successes/failures) instead of collapsing
+      // the aggregate into a single binary record.
+      const successCount = Math.min(successes, total);
+      const failureCount = Math.max(0, total - successCount);
+      for (let i = 0; i < successCount; i++) {
+        delegations.push({
+          agent: agentId,
+          domain: 'general',
+          success: true,
+          duration: avgDuration,
+          timestamp: lastEvent || now(),
+        });
+      }
+      for (let i = 0; i < failureCount; i++) {
+        delegations.push({
+          agent: agentId,
+          domain: 'general',
+          success: false,
+          duration: avgDuration,
+          timestamp: lastEvent || now(),
+        });
+      }
     }
   }
 
@@ -887,7 +903,8 @@ function main(): void {
 
   // 1. Load config
   const config = loadJson<typeof DEFAULT_CONFIG>(ROUTING_CONFIG, DEFAULT_CONFIG);
-  const outputDir = join(ROOT, config.outputDir);
+  // outputDir puede ser relativo (config real) o absoluto (fallback DEFAULT_CONFIG)
+  const outputDir = isAbsolute(config.outputDir) ? config.outputDir : join(ROOT, config.outputDir);
   ensureDir(outputDir);
 
   // 2. Handle reset
