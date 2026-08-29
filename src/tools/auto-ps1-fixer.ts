@@ -3,6 +3,8 @@
  * PS1 Ref Fixer - Automated repair of broken PS1 references
  *
  * Usage: npx tsx src/tools/auto-ps1-fixer.ts [--dry-run] [--src-only]
+ * Runtime classification: maintenance-only; owner: platform-maintenance.
+ * Supported command: npx tsx src/tools/auto-ps1-fixer.ts --dry-run
  *
  * Strategy:
  * 1. Map PS1 paths to TS equivalents using known patterns
@@ -43,9 +45,11 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/security/audit-pipeline.ps1': 'src/audit-pipeline.ts',
 
   // Cloud connectors
-  'scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1': 'src/orchestration/hybrid-executor.ts',
+  'scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1':
+    'src/orchestration/hybrid-executor.ts',
   'scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1': 'src/integrations/aws-delegator.ts',
-  'scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1': 'src/integrations/azure-delegator.ts',
+  'scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1':
+    'src/integrations/azure-delegator.ts',
 
   // State persistence
   'scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1': 'src/ops/checkpoint-manager.ts',
@@ -58,12 +62,15 @@ const PS1_TO_TS_MAP: Record<string, string> = {
 
   // Event sourcing
   'scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1': 'src/tools/event-sourcing.ts',
-  'scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1': 'src/resilience/saga-orchestrator.ts',
+  'scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1':
+    'src/resilience/saga-orchestrator.ts',
 
   // Engram
-  'scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1': 'src/knowledge/engram-integrity-check.ts',
+  'scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1':
+    'src/knowledge/engram-integrity-check.ts',
   'scripts/utilities/memory/ENGRAM/engram-auto-sync.ps1': 'src/knowledge/engram-auto-sync.ts',
-  'scripts/utilities/memory/ENGRAM-RAG/engram-rag-reindex.ps1': 'src/knowledge/engram-rag-reindex.ts',
+  'scripts/utilities/memory/ENGRAM-RAG/engram-rag-reindex.ps1':
+    'src/knowledge/engram-rag-reindex.ts',
 
   // MCP
   'scripts/utilities/MCP/mcp-gateway.ps1': 'src/mcp-gateway.ts',
@@ -104,14 +111,18 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/adaptive-claude-cline-profile.ps1': 'src/adaptive-claude-profile.ts',
 
   // Knowledge base
-  'scripts/utilities/knowledge-base/knowledge-base-manager.ps1': 'src/knowledge/knowledge-base-manager.ts',
-  'scripts/utilities/knowledge-base/knowledge-base-sync.ps1': 'src/knowledge/knowledge-base-sync.ts',
+  'scripts/utilities/knowledge-base/knowledge-base-manager.ps1':
+    'src/knowledge/knowledge-base-manager.ts',
+  'scripts/utilities/knowledge-base/knowledge-base-sync.ps1':
+    'src/knowledge/knowledge-base-sync.ts',
 
   // Validators
   'scripts/utilities/WORKFLOW-ORCHESTRATION/validate-system-health.ps1':
     'src/validate-system-health.ts',
-  'scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1': 'src/review/pre-commit-validation.ts',
-  'scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1': 'src/infrastructure/post-merge-sync.ts',
+  'scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1':
+    'src/review/pre-commit-validation.ts',
+  'scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1':
+    'src/infrastructure/post-merge-sync.ts',
 
   // Bootstrap
   'scripts/gentle-vanguard/bootstrap.ps1': 'src/infrastructure/bootstrap.ts',

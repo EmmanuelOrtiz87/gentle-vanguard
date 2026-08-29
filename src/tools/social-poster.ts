@@ -305,19 +305,57 @@ async function publishGitHub(content: string, dryRun: boolean): Promise<PostResu
   return { success: true, platform: 'GitHub', filePath: filepath };
 }
 
+type CliOptions = {
+  platform: string | null;
+  templateName: string | null;
+  contentFile: string | null;
+  schedule: string | null;
+  dryRun: boolean;
+};
+
+function parseOptions(args: string[]): CliOptions {
+  const options: CliOptions = {
+    platform: null,
+    templateName: null,
+    contentFile: null,
+    schedule: null,
+    dryRun: false,
+  };
+
+  const aliases: Record<string, keyof Omit<CliOptions, 'dryRun'>> = {
+    platform: 'platform',
+    template: 'templateName',
+    contentfile: 'contentFile',
+    schedule: 'schedule',
+  };
+
+  for (let index = 0; index < args.length; index += 1) {
+    const argument = args[index];
+    if (argument === '--dryRun' || argument === '--dry-run' || argument === '-DryRun') {
+      options.dryRun = true;
+      continue;
+    }
+
+    if (!argument.startsWith('-')) continue;
+    const separator = argument.indexOf('=');
+    const rawKey =
+      separator === -1
+        ? argument.slice(argument.startsWith('--') ? 2 : 1)
+        : argument.slice(argument.startsWith('--') ? 2 : 1, separator);
+    const key = aliases[rawKey.toLowerCase()];
+    if (!key) continue;
+    const value = separator === -1 ? args[index + 1] : argument.slice(separator + 1);
+    if (separator === -1) index += 1;
+    if (value !== undefined) options[key] = value;
+  }
+
+  return options;
+}
+
 // Main execution
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
-
-  // Parse arguments
-  const platformArg = args.find((arg) => arg.startsWith('--platform='));
-  const templateArg = args.find((arg) => arg.startsWith('--template='));
-  const contentFileArg = args.find((arg) => arg.startsWith('--contentFile='));
-  const dryRun = args.includes('--dryRun') || args.includes('--dry-run');
-
-  const platform = platformArg ? platformArg.split('=')[1] : null;
-  const templateName = templateArg ? templateArg.split('=')[1] : null;
-  const contentFile = contentFileArg ? contentFileArg.split('=')[1] : null;
+  const { platform, templateName, contentFile, schedule, dryRun } = parseOptions(args);
 
   console.log('=== Gentle-Vanguard Social Poster v1.0 ===');
   console.log('');
@@ -326,13 +364,15 @@ async function main(): Promise<void> {
   if (!platform) {
     console.error('Error: --platform is required');
     console.log(
-      'Usage: npx tsx src/tools/social-poster.ts --platform=<platform> [--template=<name>] [--contentFile=<path>] [--dryRun]',
+      'Usage: npx tsx src/tools/social-poster.ts --platform <platform> [--template <name>] [--contentFile <path>] [--schedule <time>] [--dryRun]',
     );
     console.log('Platforms: LinkedIn, Twitter, GitHub, ProductHunt, DevTo, All');
     process.exit(1);
   }
 
   ensureDirectories();
+
+  if (schedule) console.log(`Schedule requested: ${schedule}`);
 
   let content = '';
 

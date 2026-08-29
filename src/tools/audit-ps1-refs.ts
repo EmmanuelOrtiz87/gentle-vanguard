@@ -13,10 +13,10 @@ const EXT = /\.ps1['"]/;
 // These files are migration inventories/repair tooling. Their strings are
 // data describing historical paths, not executable runtime dependencies.
 const MIGRATION_INVENTORIES = new Set([
-  path.join(ROOT, 'src', 'auto-ps1-fixer.ts'),
-  path.join(ROOT, 'src', 'auto-ps1-fixer-configs.ts'),
-  path.join(ROOT, 'src', 'tools', 'fix-skill-references.ts'),
-  path.join(ROOT, 'config', 'ps1-ts-migration.json'),
+  'src/tools/auto-ps1-fixer.ts',
+  'src/tools/auto-ps1-fixer-configs.ts',
+  'src/tools/fix-skill-references.ts',
+  'config/ps1-ts-migration.json',
 ]);
 
 // Historical fallback strings are retained only for migration diagnostics;
@@ -90,7 +90,8 @@ function walk(dir: string): void {
 }
 
 function analyzeFile(file: string): void {
-  if (MIGRATION_INVENTORIES.has(path.resolve(file))) return;
+  const relativeFile = path.relative(ROOT, path.resolve(file)).replace(/\\/g, '/');
+  if (MIGRATION_INVENTORIES.has(relativeFile)) return;
   let content: string;
   try {
     content = fs.readFileSync(file, 'utf-8');

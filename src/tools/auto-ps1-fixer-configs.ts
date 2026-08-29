@@ -5,6 +5,8 @@
  *
  * Strategy: Most config references are documentation/examples.
  * Only fix functional refs (command previews). Remove or update descriptive refs.
+ * Runtime classification: maintenance-only; owner: platform-maintenance.
+ * Supported command: npx tsx src/tools/auto-ps1-fixer-configs.ts --dry-run
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'fs';
@@ -34,21 +36,26 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/security/audit-pipeline.ps1': 'src/audit-pipeline.ts',
 
   // Ops
-  'scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1': 'src/orchestration/hybrid-executor.ts',
+  'scripts/utilities/ops/CLOUD-CONNECTORS/hybrid-executor.ps1':
+    'src/orchestration/hybrid-executor.ts',
   'scripts/utilities/ops/CLOUD-CONNECTORS/aws-delegator.ps1': 'src/integrations/aws-delegator.ts',
-  'scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1': 'src/integrations/azure-delegator.ts',
+  'scripts/utilities/ops/CLOUD-CONNECTORS/azure-delegator.ps1':
+    'src/integrations/azure-delegator.ts',
   'scripts/utilities/ops/STATE-PERSISTENCE/checkpoint-manager.ps1': 'src/ops/checkpoint-manager.ts',
   'scripts/utilities/ops/STATE-PERSISTENCE/snapshot-manager.ps1': 'src/ops/snapshot-manager.ts',
   'scripts/utilities/ops/STATE-PERSISTENCE/rollback-orchestrator.ps1':
     'src/ops/rollback-orchestrator.ts',
   'scripts/utilities/ops/TRACING/tracing-instrument.ps1': 'src/monitor/tracing-instrument.ts',
   'scripts/utilities/ops/ADVANCED-PATTERNS/event-sourcing.ps1': 'src/tools/event-sourcing.ts',
-  'scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1': 'src/resilience/saga-orchestrator.ts',
+  'scripts/utilities/ops/ADVANCED-PATTERNS/saga-orchestrator.ps1':
+    'src/resilience/saga-orchestrator.ts',
 
   // Engram
-  'scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1': 'src/knowledge/engram-integrity-check.ts',
+  'scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1':
+    'src/knowledge/engram-integrity-check.ts',
   'scripts/utilities/memory/ENGRAM/engram-auto-sync.ps1': 'src/knowledge/engram-auto-sync.ts',
-  'scripts/utilities/memory/ENGRAM-RAG/engram-rag-reindex.ps1': 'src/knowledge/engram-rag-reindex.ts',
+  'scripts/utilities/memory/ENGRAM-RAG/engram-rag-reindex.ps1':
+    'src/knowledge/engram-rag-reindex.ts',
   'scripts/utilities/ENGRAM/engram-policy.ps1': 'src/knowledge/engram-policy.ts',
 
   // MCP
@@ -81,15 +88,21 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/adaptive-claude-cline-profile.ps1': 'src/adaptive-claude-profile.ts',
 
   // Knowledge
-  'scripts/utilities/knowledge-base/knowledge-base-manager.ps1': 'src/knowledge/knowledge-base-manager.ts',
-  'scripts/utilities/knowledge-base/knowledge-base-sync.ps1': 'src/knowledge/knowledge-base-sync.ts',
-  'scripts/utilities/knowledge-base/knowledge-base-autoinit.ps1': 'src/knowledge/knowledge-base-autoinit.ts',
-  'scripts/utilities/knowledge-base/knowledge-base-init.ps1': 'src/knowledge/knowledge-base-init.ts',
+  'scripts/utilities/knowledge-base/knowledge-base-manager.ps1':
+    'src/knowledge/knowledge-base-manager.ts',
+  'scripts/utilities/knowledge-base/knowledge-base-sync.ps1':
+    'src/knowledge/knowledge-base-sync.ts',
+  'scripts/utilities/knowledge-base/knowledge-base-autoinit.ps1':
+    'src/knowledge/knowledge-base-autoinit.ts',
+  'scripts/utilities/knowledge-base/knowledge-base-init.ps1':
+    'src/knowledge/knowledge-base-init.ts',
 
   // Workflow
   'scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1': 'src/cli/gv.ts',
-  'scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1': 'src/review/pre-commit-validation.ts',
-  'scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1': 'src/infrastructure/post-merge-sync.ts',
+  'scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1':
+    'src/review/pre-commit-validation.ts',
+  'scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1':
+    'src/infrastructure/post-merge-sync.ts',
 
   // Bootstrap
   'scripts/gentle-vanguard/bootstrap.ps1': 'src/infrastructure/bootstrap.ts',

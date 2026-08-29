@@ -24,7 +24,7 @@
   el primer idioma detectado hace que el resto se omita (gotcha #3).
 - Después de editar: `node --check docs/presentations/assets/js/i18n.js` para sintaxis.
 - Estado sano: 208 claves por bloque (en/es/pt-BR), 0 duplicados. Verificar con
-  `scripts/dedupe-i18n.ps1 -DryRun` (reporta total y duplicados sin escribir).
+  `npm run presentations:maintenance -- dedupe-i18n --dry-run` (reporta total sin escribir).
 
 ## Editar un SVG de diagrama
 
@@ -39,7 +39,7 @@
 
 El validador estructural NO comprueba render. Para verificación visual/DOM en Chrome:
 
-```powershell
+```bash
 # 1. Servir con no-store (evita caché de modales i18n en recargas)
 npm run presentations:serve -- --port 8899 --no-browser --no-store
 
