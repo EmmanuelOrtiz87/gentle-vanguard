@@ -5,7 +5,8 @@
 ## Project Context
 
 Gentle-Vanguard is an AI-Powered Development Orchestrator platform. Language: TypeScript (strict
-mode, ES2022) Package Manager: pnpm 11.15.1 Runtime: Node.js 20+ Shell: PowerShell 7+
+mode, ES2022) Package Manager: pnpm 11.15.1 Runtime: Node.js 20+ Shell: CMD-first with
+Bash-compatible commands
 
 ## Architecture
 
@@ -53,4 +54,4 @@ mode, ES2022) Package Manager: pnpm 11.15.1 Runtime: Node.js 20+ Shell: PowerShe
 - No secrets in code, ever
 - Pre-commit hooks: secretlint, trufflehog
 - CI: gitleaks, trivy
-- use `bin/gv.ps1 secret` for credential management
+- use `npm run gv -- secret` for credential management

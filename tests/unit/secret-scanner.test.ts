@@ -286,7 +286,9 @@ describe('Secret Scanner — URL scanning', () => {
       assert.strictEqual(matches.length, 1);
       assert.strictEqual(matches[0].source, url);
     } finally {
-      server.close();
+      await new Promise<void>((resolveClose) => {
+        server.close(() => resolveClose());
+      });
     }
   });
 });

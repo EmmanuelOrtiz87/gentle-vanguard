@@ -12,10 +12,6 @@ on:
 
 permissions:
   contents: read
-  actions: read
-  checks: write
-  pull-requests: write
-  security-events: write
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -29,17 +25,18 @@ jobs:
   lint:
     name: Lint
     uses: ./.github/workflows/reusable-lint.yml
-    secrets: inherit
 
   test:
     name: Test
     uses: ./.github/workflows/reusable-test.yml
-    secrets: inherit
 
   security:
     name: Security
     uses: ./.github/workflows/reusable-security-scan.yml
-    secrets: inherit
+    permissions:
+      contents: read
+      pull-requests: read
+      security-events: write
 
   mcp-servers:
     name: MCP Servers Self-Test
@@ -257,13 +254,16 @@ jobs:
   docker:
     name: Docker
     uses: ./.github/workflows/reusable-docker.yml
-    secrets: inherit
+    permissions:
+      contents: read
     if: github.event_name == 'push'
 
   governance:
     name: Governance
     uses: ./.github/workflows/reusable-governance.yml
-    secrets: inherit
+    permissions:
+      contents: read
+      pull-requests: write
     if: github.event_name == 'push'
 
   sbom-generation:
@@ -289,7 +289,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Generate SBOM
-        run: npx tsx src/security/generate-sbom.ts --output sbom/gentle-vanguard-sbom.json --format json
+        run:
+          npx tsx src/security/generate-sbom.ts --output sbom/gentle-vanguard-sbom.json --format
+          json
 
       - name: Upload SBOM
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a

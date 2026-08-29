@@ -234,23 +234,8 @@ function countBySeverity(vulns: ScanVulnerability[]): Record<string, number> {
   return by;
 }
 
-/**
- * Allowlist of advisory IDs with NO available fix (patched version does not
- * exist in the registry). When EVERY blocking vulnerability is allowlisted, the
- * scan does not block. Mirrors the allowlist in npm-audit-pre-push.ts.
- *
- * image-size (GHSA-w3rx-r6r6-pgpr, GHSA-5p2g-fcmc-qvqq):
- *   - Affects image-size@<=2.0.2 (transitive via pptxgenjs, devDependency only)
- *   - Patched version is >=2.0.3, but that version is NOT published on npm
- *     (latest is 2.0.2). Overrides are therefore impossible.
- *   - DoS (CWE-835) in ICNS/JXL/HEIF parsers; only used at build time for
- *     presentation generation, not in production runtime.
- *   - REVISIT when image-size@>=2.0.3 is published, then remove from this list.
- */
-export const ALLOWLISTED_ADVISORIES = new Set<string>([
-  'GHSA-w3rx-r6r6-pgpr',
-  'GHSA-5p2g-fcmc-qvqq',
-]);
+/** Advisory IDs that are accepted only when explicitly added by policy. */
+export const ALLOWLISTED_ADVISORIES = new Set<string>();
 
 /**
  * Derive the semantic exit code from the parsed vulnerabilities, independent of

@@ -6,8 +6,7 @@ on:
 permissions:
   contents: read
   security-events: write
-  pull-requests: write
-  actions: read
+  pull-requests: read
 
 jobs:
   gitleaks:
@@ -22,6 +21,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_ENABLE_UPLOAD_ARTIFACT: 'false'
+
+  native-secret-gate:
+    name: Native Secret Gate (added lines)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
+        with:
+          version: '11.15.1'
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Scan added lines without printing values
+        env:
+          SCAN_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+          SCAN_HEAD: ${{ github.sha }}
+        run: pnpm exec tsx src/security/secret-scan-gate.ts --base "$SCAN_BASE" --head "$SCAN_HEAD"
 
   npm-audit:
     name: npm Audit
@@ -69,7 +90,7 @@ jobs:
           output: trivy-results.sarif
           options: --skip-version-check
       - name: Upload results
-        uses: github/codeql-action/upload-sarif@db488ddef3bf6cb639b32c2e9a7c0ea8271d28 # v4
+        uses: github/codeql-action/upload-sarif@fddeee1a7ece751b577e409a89057319e3172939 # v4
         with:
           sarif_file: trivy-results.sarif
         continue-on-error: true
@@ -88,9 +109,23 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Install Syft + Grype
         run: |
-          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
-          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 https://raw.githubusercontent.com/anchore/syft/af937d74c00c26374449e81aa4ff45ae2d668a33/install.sh | sh -s -- -b /usr/local/bin -v v1.51.1
+          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 https://raw.githubusercontent.com/anchore/grype/f6f2ce0a2293e65c97bf5468926cb0c9ddad822f/install.sh | sh -s -- -b /usr/local/bin -v v0.118.0
       - name: Update Grype DB
         run: grype db update
       - name: 'Scan SBOM (gate: fail on high+)'
         run: npx tsx src/security/container-scan.ts scan --fail-on high --json
+
+  dependency-review:
+    name: Dependency Review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@595b5aeba73380359d98a5e087f648dbb0edce1b # v4.7.3
+        with:
+          fail-on-severity: high
