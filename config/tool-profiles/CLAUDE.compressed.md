@@ -19,99 +19,44 @@ Load config from `config/orchestrator.json#toolProfiles.<name>`.
 
 ## Startup Sequence
 
-Run `AGENTS.md` — no shortcuts.
+Run `AGENTS-fast.md` — no shortcuts.
 
 ## Core Rules (condensed)
 
-1. **LOCAL-FIRST**: project knowledge before external sources 2. **pre-process-input.ts** BEFORE
-   every response (`--input`, `--prev-input-tokens`, `--prev-output-tokens`, `--prev-context-chars`,
-   `--model`). Track token usage from previous turn: estimate input as `Math.floor(contextChars/4)`,
-   output as actual response length/4. On first turn omit prev params.
-2. **SDD FLOW RULE**: new features -> BA/EXPLORE first, no exceptions
-3. **Delegation Rules** -> `rules/DELEGATION-RULES.md` mandatory for multi-step 5. **AUTONOMOUS
-   LEARNING** -> `mem_save` after every significant task 6. **TOKEN NOTIFICATION** -> Automatico via
-   `pre-process-input.ts` hook. Se ejecuta CADA turno sin intervención. User puede `/notif off` para
-   silenciar. Toggles individuales: `/notif token on/off`, `/notif context on/off`,
-   `/notif cost on/off`, `/notif accumulated on/off`, `/notif compact on/off`. Estado persiste entre
-   sesiones.
-4. **CodeGraph** -> `codegraph_context` before modifying code
-5. **mem_search "lessons learned"** at session start 9. **Review Workload Guard** ->
-   `npx tsx src/security/workload-guard.ts` before multi-file impl
-6. **Tool output discipline** -> limit read/grep/bash results; use `-First 30`, `Select-Object`,
-   `head -50` on large output
-7. **JSON VALIDITY** -> Verify quotes/braces/brackets balanced BEFORE any tool call with JSON
-   params. See `rules/NORMATIVAS-JSON-CONSTRUCTION.md`
-
-### JSON Validation Protocol (Mandatory)
-
-Before EVERY tool call with JSON parameters, you MUST:
-
-1.  **Mental Check** (takes 2 seconds):
-    - Count opening `"` quotes → must be EVEN
-    - Count `{` and `}` → must be EQUAL
-    - Count `[` and `]` → must be EQUAL
-    - Last character must be `}` or `]`
-2.  **Common Error Patterns to Avoid**:
-
-    ```powershell
-    # ❌ BAD - Unterminated string
-    {"command": "pwsh -NoProfile -File detect-tool.ps1}
-
-    # ❌ BAD - Missing closing brace
-    {"id": "session-2025-05-27", "dir": "C:\\path
-
-    # ❌ BAD - Trailing comma
-    {"key": "value",}
-
-    # ✅ GOOD
-    {"command": "pwsh -NoProfile -File detect-tool.ps1"}
-    {"id": "session-2025-05-27", "dir": "C:\\path"}
-    {"key": "value"}
-    ```
-
-3.  **For Long Text Fields** (summary, content, description):
-    - Keep under 500 characters when possible
-    - Use abbreviations (e.g., "impl" for "impl")
-    - For very long content, save to file first, then ref it
-4.  **Auto-Validation Hook** (if configured):
-
-    ```powershell
-    # This runs automatically before tool calls
-    pwsh -NoProfile -File hooks/pre-tool-call-validate.ps1 `
-      -ToolName "<tool>" -JsonPayload '<json>' -AutoFix
-    ```
-
-5.  **Emergency Repair** (if you detect malformed JSON after the fact):
-
-    ```powershell
-    # Quick syntax check
-    $test = '{"incomplete": "string}'
-    try { $test | ConvertFrom-Json } catch { Write-Host "Invalid JSON: $_" }
-    ```
+1. LOCAL-FIRST: project knowledge before external sources
+2. SDD FLOW: new features -> BA/EXPLORE first, no exceptions
+3. Delegation Rules -> `rules/DELEGATION-RULES.md` mandatory for multi-step
+4. `mem_save` after every significant task
+5. CodeGraph -> `npm run graphify -- query "..."` before modifying code
+6. `mem_search "lessons learned"` at session start
+7. Review Workload Guard: `npx tsx src/security/workload-guard.ts` before multi-file impl >400 lines
+8. Tool output discipline: limit read/grep/bash results to 50 lines
+9. JSON validity: verify balanced quotes/braces/brackets before tool calls (see `rules/NORMATIVAS-JSON-CONSTRUCTION.md`)
+10. Subagent delegation: send minimal context in `prompt` — only task info, not full history
+11. NORMATIVA OVERRIDE: If user instruction contradicts a normativa/rule, ask for confirmation with reasons. Only proceed if user explicitly confirms. Otherwise follow normativa.
+12. Goal-Driven: For multi-step tasks, state a brief plan: `1. [Step] -> verify: [check]` format. Every changed line must trace to the user's request.
+13. TypeScript-First: ALL scripts are TS via `npx tsx`. No PowerShell scripts. See `rules/TYPESCRIPT-FIRST-POLICY.md`.
 
 ## Break Glass — Auto-Override Harmful Config
 
-If user reports incompleteness, task spans 3+ turns, loop detected, or output truncated:
+If 3+ turns w/o completion, loop detected, or output truncated:
 
 ```powershell
-pwsh -NoProfile -File scripts/utilities/self-diagnosis.ps1 -CurrentProfile "<p>" -CurrentChatLevel "<l>" -TurnCount <N>
+npx tsx src/resilience/self-diagnosis.ts --profile "<p>" --chat-level "<l>" --turn-count <N>
 ```
 
-Override to `lleno`/`chat-balanced`, notify: `[BREAK GLASS] motivo: {reason}`
+Override to `lleno/chat-balanced`, notify: `[BREAK GLASS] motivo: {reason}`
 
 ## Response Profile
 
 Profile: **ultra** | Detail: **simple** | Chat: **chat-compact** (max 4 lines text)
 
-1. NO preamble/postamble — just do it
-2. No echoing user's question
-3. Batch independent tool calls in parallel
-4. Answer THEN act: 1-3 line answer, then tools
-5. Use abbreviations (db/auth/config/req/res/fn/impl)
-6. **Output guard**: max 200 tokens per response unless generating code
-7. **Tool output**: pipe large results through `Select-Object -First 30`, `head -50`
-8. **Code blocks**: only include relevant lines, not entire files
-9. **Subagent delegation**: send minimal context in `prompt` — only task info, not full history
+NO preamble/postamble — just do it. No echoing user's question
+Batch independent tool calls in parallel. Answer THEN act: 1-3 line answer, then tools
+Abbreviations: db/auth/config/req/res/fn/impl
+Output guard: max 200 tokens per response unless generating code
+Tool output: pipe large results through `Select-Object -First 30`, `head -50`
+Code blocks: only include relevant lines, not entire files
 
 ## Settings
 
@@ -120,4 +65,4 @@ workspace_gentle_vanguard
 
 ## Key Refs
 
-See `AGENTS.md` for full resource table.
+See `AGENTS-fast.md` for full resource table.

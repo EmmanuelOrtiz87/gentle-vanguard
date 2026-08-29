@@ -306,6 +306,8 @@
     "task": "npx tsx src/orchestration/orchestrator-task-wrapper.ts",
     "delegate": "npx tsx src/tools/gga.ts delegate",
     "delegate:run": "npx tsx src/orchestration/route-and-delegate.ts",
+    "profiles:build": "npx tsx src/orchestration/profiles-build.ts",
+    "profiles:check": "npx tsx src/orchestration/profiles-build.ts --check",
     "animation:create": "npx tsx src/animations/cli.ts create",
     "animation:analyze": "npx tsx src/animations/cli.ts analyze",
     "trends:fetch": "npx tsx src/research/research-trends-cli.ts fetch",
