@@ -55,6 +55,9 @@ export interface MetricSnapshot {
   mcp_calls: number;
   mcp_skills: number;
   health_status: string;
+  cache_hits?: number;
+  cache_misses?: number;
+  cache_hit_rate?: number;
 }
 
 export interface SessionRecord {

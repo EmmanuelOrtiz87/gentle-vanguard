@@ -576,6 +576,17 @@ const MIGRATIONS: Array<{ id: string; sql: string }> = [
         ON token_savings(tenant_id, category);
     `,
   },
+  {
+    id: '017_cache_telemetry',
+    sql: `
+      ALTER TABLE metric_snapshots ADD COLUMN cache_hits INTEGER DEFAULT 0;
+      ALTER TABLE metric_snapshots ADD COLUMN cache_misses INTEGER DEFAULT 0;
+      ALTER TABLE metric_snapshots ADD COLUMN cache_hit_rate REAL DEFAULT 0;
+      ALTER TABLE response_cache ADD COLUMN last_access TEXT;
+      CREATE INDEX IF NOT EXISTS idx_response_cache_last_access
+        ON response_cache(COALESCE(last_access, created_at));
+    `,
+  },
 ];
 
 export class MigrationRunner {

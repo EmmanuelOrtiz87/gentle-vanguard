@@ -535,6 +535,162 @@ function sqliteCleanup(): number {
   }
 }
 
+// ─── LRU Eviction (N6) ───────────────────────────────────────────────────────
+
+/** Touch an entry: update last_access so LRU eviction keeps recently-used entries. */
+function sqliteTouch(key: string): void {
+  const db = getDb();
+  if (!db) return;
+  try {
+    db.getDb()
+      .prepare("UPDATE response_cache SET last_access = datetime('now') WHERE key = ?")
+      .run(key);
+  } catch {
+    /* ignore */
+  }
+}
+
+/**
+ * LRU eviction: when entry count exceeds maxEntries, delete the least-recently
+ * accessed entries (fallback to created_at when last_access is NULL). Complements
+ * the TTL prune — entries with long TTL but no reuse get evicted first.
+ */
+function sqliteEvictLru(maxEntries: number): number {
+  const db = getDb();
+  if (!db) return 0;
+  try {
+    const row = db.getDb().prepare('SELECT COUNT(*) as c FROM response_cache').get() as
+      | { c: number }
+      | undefined;
+    const count = row?.c ?? 0;
+    if (count <= maxEntries) return 0;
+
+    const excess = count - maxEntries;
+    const result = db
+      .getDb()
+      .prepare(
+        `DELETE FROM response_cache WHERE key IN (
+           SELECT key FROM response_cache
+           ORDER BY COALESCE(last_access, created_at) ASC
+           LIMIT ?
+         )`,
+      )
+      .run(excess);
+    return result.changes;
+  } catch {
+    return 0;
+  }
+}
+
+// ─── Hourly Telemetry (N6) ───────────────────────────────────────────────────
+
+export interface HourlyCacheStats {
+  hour: string; // ISO hour bucket, e.g. 2026-08-29T14:00
+  hits: number;
+  misses: number;
+  hitRate: number;
+}
+
+/** In-memory rolling hourly buckets. Cleared after each recordCacheTelemetry(). */
+const hourlyBuckets = new Map<string, { hits: number; misses: number }>();
+
+function hourBucketKey(ts: number = Date.now()): string {
+  const d = new Date(ts);
+  d.setMinutes(0, 0, 0);
+  return d.toISOString();
+}
+
+function recordHit(): void {
+  const key = hourBucketKey();
+  const bucket = hourlyBuckets.get(key) ?? { hits: 0, misses: 0 };
+  bucket.hits++;
+  hourlyBuckets.set(key, bucket);
+}
+
+function recordMiss(): void {
+  const key = hourBucketKey();
+  const bucket = hourlyBuckets.get(key) ?? { hits: 0, misses: 0 };
+  bucket.misses++;
+  hourlyBuckets.set(key, bucket);
+}
+
+/**
+ * Persist hourly hit/miss buckets to Nexus metric_snapshots (cache_hits,
+ * cache_misses, cache_hit_rate) and clear the in-memory buckets.
+ * Returns the number of hour buckets written.
+ */
+export function recordCacheTelemetry(): number {
+  const db = getDb();
+  if (!db || hourlyBuckets.size === 0) return 0;
+
+  let written = 0;
+  const tenantId = resolveCacheTenantId();
+  const insert = db
+    .getDb()
+    .prepare(
+      `INSERT INTO metric_snapshots
+         (tenant_id, timestamp, tokens_used, tokens_limit, cost, sessions_total,
+          sessions_active, sessions_today, latency_avg, latency_p50, latency_p95,
+          commits, mcp_calls, mcp_skills, health_status, cache_hits, cache_misses, cache_hit_rate)
+       VALUES (?, ?, 0, 120000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'cache-telemetry', ?, ?, ?)`,
+    );
+
+  for (const [hour, bucket] of hourlyBuckets) {
+    const total = bucket.hits + bucket.misses;
+    const hitRate = total > 0 ? Math.round((bucket.hits / total) * 10000) / 100 : 0;
+    try {
+      insert.run(tenantId, hour, bucket.hits, bucket.misses, hitRate);
+      written++;
+    } catch {
+      /* ignore per-bucket failures */
+    }
+  }
+
+  hourlyBuckets.clear();
+  return written;
+}
+
+/** Aggregate hourly telemetry from metric_snapshots (read-only, for reports). */
+export function getCacheTelemetry(limit = 24): HourlyCacheStats[] {
+  const db = getDb();
+  if (!db) return [];
+  try {
+    const tenantId = resolveCacheTenantId();
+    const rows = db
+      .getDb()
+      .prepare(
+        `SELECT timestamp, cache_hits, cache_misses, cache_hit_rate
+         FROM metric_snapshots
+         WHERE tenant_id = ? AND health_status = 'cache-telemetry'
+         ORDER BY timestamp DESC LIMIT ?`,
+      )
+      .all(tenantId, limit) as Array<{
+      timestamp: string;
+      cache_hits: number;
+      cache_misses: number;
+      cache_hit_rate: number;
+    }>;
+    return rows.map((r) => ({
+      hour: r.timestamp,
+      hits: r.cache_hits,
+      misses: r.cache_misses,
+      hitRate: r.cache_hit_rate,
+    }));
+  } catch {
+    return [];
+  }
+}
+
+/** Check the latest hourly hit-rate against a threshold; returns true if below. */
+export function isCacheHitRateBelow(threshold = 0.5): boolean {
+  const telemetry = getCacheTelemetry(1);
+  if (telemetry.length === 0) return false;
+  const latest = telemetry[0];
+  const total = latest.hits + latest.misses;
+  if (total === 0) return false;
+  return latest.hits / total < threshold;
+}
+
 function sqliteCount(): number {
   const db = getDb();
   if (!db) return 0;
@@ -632,6 +788,8 @@ export class ResponseCache {
         this.stats.totalSavings += entry.tokensSaved;
         this.updateHitRate();
         this.saveStats();
+        recordHit();
+        sqliteTouch(entry.key);
         return { response: entry.response, tokensSaved: entry.tokensSaved };
       }
     } else {
@@ -664,6 +822,7 @@ export class ResponseCache {
     this.stats.misses++;
     this.updateHitRate();
     this.saveStats();
+    recordMiss();
     return null;
   }
 
@@ -683,6 +842,7 @@ export class ResponseCache {
 
     if (this.config.useSqlite) {
       sqliteSet(key, response, tokensSaved, ttlMinutes, input);
+      sqliteEvictLru(this.config.maxEntries);
       this.stats.entries = sqliteCount();
     } else {
       const entry: CacheEntry = {
@@ -751,6 +911,7 @@ export class ResponseCache {
 
     if (this.config.useSqlite) {
       cleaned = sqliteCleanup();
+      cleaned += sqliteEvictLru(this.config.maxEntries);
       this.stats.entries = sqliteCount();
     } else {
       cleaned = this.cleanupLegacy();
@@ -883,8 +1044,11 @@ Commands:
   get <input> [context]    Get cached response (test)
   set <input> <response>   Store response in cache (test)
   clear                    Clear all cache entries
-  cleanup                  Remove expired entries
+  cleanup                  Remove expired entries + LRU eviction
   migrate                  Migrate legacy JSON cache to SQLite
+  telemetry [hours]        Persist hourly hit/miss buckets to Nexus + show report
+  hitrate                  Show latest hourly hit-rate (alert check)
+  evict                    Force LRU eviction to maxEntries
   test                     Run cache tests
 
 Options:
@@ -965,6 +1129,47 @@ function runCLI(): void {
     case 'migrate': {
       const count = cache.migrateFromJson();
       console.log(`Migration complete: ${count} entries migrated to SQLite`);
+      break;
+    }
+
+    case 'telemetry': {
+      const written = recordCacheTelemetry();
+      const hours = parseInt(args[1] ?? '24', 10);
+      const report = getCacheTelemetry(hours);
+      console.log('\n=== Cache Telemetry (hourly) ===\n');
+      console.log(`Buckets persisted: ${written}`);
+      if (report.length === 0) {
+        console.log('No hourly telemetry recorded yet.');
+      } else {
+        for (const r of report) {
+          const total = r.hits + r.misses;
+          console.log(
+            `${r.hour}  hits=${r.hits}  misses=${r.misses}  hitRate=${r.hitRate}%  (total=${total})`,
+          );
+        }
+      }
+      const below = isCacheHitRateBelow(0.5);
+      console.log(`\nLatest hit-rate below 50%: ${below ? 'YES ⚠️' : 'no ✅'}`);
+      break;
+    }
+
+    case 'hitrate': {
+      const report = getCacheTelemetry(1);
+      if (report.length === 0) {
+        console.log('No hourly telemetry recorded yet. Run: npx tsx src/resilience/response-cache.ts telemetry');
+        break;
+      }
+      const latest = report[0];
+      const total = latest.hits + latest.misses;
+      const rate = total > 0 ? Math.round((latest.hits / total) * 10000) / 100 : 0;
+      console.log(`Latest hour (${latest.hour}): hitRate=${rate}% (${latest.hits} hits / ${total} total)`);
+      console.log(`Below 50% threshold: ${rate < 50 ? 'YES ⚠️' : 'no ✅'}`);
+      break;
+    }
+
+    case 'evict': {
+      const evicted = sqliteEvictLru(DEFAULT_CONFIG.maxEntries);
+      console.log(`LRU eviction: ${evicted} entries removed (maxEntries=${DEFAULT_CONFIG.maxEntries})`);
       break;
     }
 
