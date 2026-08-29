@@ -40,6 +40,9 @@ auto-heal, dashboard WS, Nexus DB (lazy steps). Log: `.runtime/autostart-detache
 
 Grafo de conocimiento nativo en `graphify-out/` (AST, sin LLM, determinista).
 
+**Roles de grafos (ADR-0020)**: CodeGraph (`.codegraph/`, MCP) = índice incremental post-hook para
+tooling MCP; graphify (`graphify-out/`) = grafo de análisis/query para agentes. No se fusionan.
+
 - Si falta `graphify-out/graph.json`: `npm run graphify -- build` primero.
 - Preguntas de código: `npm run graphify -- query "<pregunta>"` (siempre preferir query sobre
   path/explain para búsquedas).
