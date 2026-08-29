@@ -27,10 +27,6 @@ function inlineMarkdown(md: string): string {
     .replace(/\*([^*]+)\*/g, '<em>$1</em>');
 }
 
-function renderCodeFence(match: string, _p1: string, p2: string, _offset: number, _s: string): string {
-  return `<pre>${escapeHtml(p2)}</pre>`;
-}
-
 function markdownToHtml(md: string, report: AnalyticsReport): string {
   const lines = md.split(/\r?\n/);
   const out: string[] = [];
@@ -147,9 +143,7 @@ export async function toDocx(report: AnalyticsReport, templateId?: string | null
       alignment: AlignmentType.LEFT,
     }),
     new Paragraph({
-      children: [
-        new TextRun({ text: report.summary, bold: true, size: 28, color: '0D5C80' }),
-      ],
+      children: [new TextRun({ text: report.summary, bold: true, size: 28, color: '0D5C80' })],
       spacing: { after: 80 },
     }),
   ];
@@ -187,7 +181,10 @@ export async function toDocx(report: AnalyticsReport, templateId?: string | null
         heading(title),
         new Paragraph({
           children: [
-            new TextRun({ text: `Complejidad: ${report.complexity.level} — ${report.complexity.rationale}`, size: 20 }),
+            new TextRun({
+              text: `Complejidad: ${report.complexity.level} — ${report.complexity.rationale}`,
+              size: 20,
+            }),
           ],
           spacing: { after: 60 },
         }),
@@ -209,13 +206,18 @@ export async function toDocx(report: AnalyticsReport, templateId?: string | null
       children.push(
         heading(title),
         ...report.impactedFronts.map(
-          (front) => new Paragraph({ children: [new TextRun({ text: front, bold: true })], bullet: { level: 0 } }),
+          (front) =>
+            new Paragraph({
+              children: [new TextRun({ text: front, bold: true })],
+              bullet: { level: 0 },
+            }),
         ),
       );
     } else if (section.id === 'roles') {
       if (report.roles.length > 0) children.push(heading(title), ...bullets(report.roles));
     } else if (section.id === 'qaScenarios') {
-      if (report.qaScenarios.length > 0) children.push(heading(title), ...bullets(report.qaScenarios));
+      if (report.qaScenarios.length > 0)
+        children.push(heading(title), ...bullets(report.qaScenarios));
     } else if (section.id === 'nextActions') {
       children.push(heading(title), ...bullets(report.nextActions));
     } else if (section.id === 'diagrams') {
@@ -223,9 +225,13 @@ export async function toDocx(report: AnalyticsReport, templateId?: string | null
         children.push(
           heading(title),
           new Paragraph({ children: [new TextRun({ text: 'Actual', bold: true })] }),
-          new Paragraph({ children: [new TextRun({ text: report.diagrams.current, font: 'Consolas', size: 18 })] }),
+          new Paragraph({
+            children: [new TextRun({ text: report.diagrams.current, font: 'Consolas', size: 18 })],
+          }),
           new Paragraph({ children: [new TextRun({ text: 'Propuesto', bold: true })] }),
-          new Paragraph({ children: [new TextRun({ text: report.diagrams.proposed, font: 'Consolas', size: 18 })] }),
+          new Paragraph({
+            children: [new TextRun({ text: report.diagrams.proposed, font: 'Consolas', size: 18 })],
+          }),
         );
       }
     } else if (section.id === 'evidence') {
@@ -292,10 +298,7 @@ function findChromium(): string | null {
   return null;
 }
 
-export async function toPdf(
-  report: AnalyticsReport,
-  templateId?: string | null,
-): Promise<Buffer> {
+export async function toPdf(report: AnalyticsReport, templateId?: string | null): Promise<Buffer> {
   const chromium = findChromium();
   if (!chromium) {
     // No Chrome/Edge found — return the HTML export with a header that makes

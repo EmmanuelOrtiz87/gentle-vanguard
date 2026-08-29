@@ -54,4 +54,16 @@ window.GV_TRACKS = [
     title: 'Negocio y posicionamiento',
     desc: 'Cómo se monetiza y posiciona el stack: ofertas, pricing, go-to-market, marketing de servicios, casos de uso y el modelo de microemprendimiento.',
   },
+  {
+    id: 'casos-reales',
+    type: 'referencia',
+    title: 'Caso comparativo y medición',
+    desc: 'Cómo comparar un trabajo antes/después de Gentle-Vanguard sin inventar resultados: metodología, fuentes, costos, tokens, tiempo, organización y resolución.',
+  },
+  {
+    id: 'knowledge-base',
+    type: 'referencia',
+    title: 'Knowledge Base y grafos',
+    desc: 'Uso práctico de Obsidian, Engram, Nexus, CodeGraph y Graphify: roles, comandos, sincronización, autoridades y límites.',
+  },
 ];

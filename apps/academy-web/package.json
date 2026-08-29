@@ -1,0 +1,9 @@
+{
+  "name": "@gentle-vanguard/academy-web",
+  "private": true,
+  "version": "3.8.2",
+  "scripts": {
+    "dev": "python -m http.server 4173 -d .",
+    "preview": "python -m http.server 4173 -d ."
+  }
+}

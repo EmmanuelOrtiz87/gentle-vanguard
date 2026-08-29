@@ -470,8 +470,24 @@ export function getRealMetricsFromDb(tenantId = DEFAULT_TENANT_ID): DashboardDat
         }))
       : [];
 
-  // Total cost
-  const totalCost = snapshot?.cost ?? 0;
+  // Snapshots are the fast path, but the token ledger is the source of truth
+  // while the writer is catching up or after a zero-valued legacy snapshot.
+  let recentTokenTotals = { tokens: 0, cost: 0 };
+  try {
+    recentTokenTotals = db
+      .getDb()
+      .prepare(
+        `SELECT COALESCE(SUM(prompt_tokens + completion_tokens), 0) AS tokens,
+                COALESCE(SUM(cost), 0) AS cost
+         FROM token_usage
+         WHERE tenant_id = ? AND timestamp >= datetime('now', '-24 hours')`,
+      )
+      .get(tenantId) as typeof recentTokenTotals;
+  } catch {
+    // Token usage remains optional for older databases.
+  }
+  const totalTokens = snapshot?.tokens_used || recentTokenTotals.tokens || 0;
+  const totalCost = snapshot?.cost || recentTokenTotals.cost || 0;
 
   // Cost insights
   const costInsights = byModel
@@ -578,7 +594,7 @@ export function getRealMetricsFromDb(tenantId = DEFAULT_TENANT_ID): DashboardDat
     source: 'sqlite',
     sourceClassification: classifyDashboardSource({ source: 'database', tenantId }),
     tokens: {
-      used: snapshot?.tokens_used ?? 0,
+      used: totalTokens,
       limit: getConfiguredSessionTokenLimit(),
       cost: totalCost,
       byModel,

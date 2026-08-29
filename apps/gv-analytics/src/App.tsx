@@ -417,7 +417,11 @@ export function App() {
                   </div>
                 )}
 
-                <button className="primary-action analyze" disabled={!canAnalyze} onClick={() => void analyze()}>
+                <button
+                  className="primary-action analyze"
+                  disabled={!canAnalyze}
+                  onClick={() => void analyze()}
+                >
                   {busy ? <Loader2 className="spin" /> : <Search />}
                   {tt('analysis.run')}
                 </button>
@@ -438,7 +442,6 @@ export function App() {
             form={form}
             setForm={setForm}
             editingConnection={editingConnection}
-            setEditingConnection={setEditingConnection}
             busy={busy}
             testing={testing}
             testResult={testResult}
@@ -473,7 +476,6 @@ interface ConfigViewProps {
   form: ConnectionForm;
   setForm: React.Dispatch<React.SetStateAction<ConnectionForm>>;
   editingConnection: boolean;
-  setEditingConnection: React.Dispatch<React.SetStateAction<boolean>>;
   busy: boolean;
   testing: boolean;
   testResult: ConnectionStatus | null;
@@ -490,7 +492,6 @@ function ConfigView({
   form,
   setForm,
   editingConnection,
-  setEditingConnection,
   busy,
   testing,
   testResult,
@@ -523,7 +524,11 @@ function ConfigView({
               <strong>{status?.bitbucketWorkspace || tt('conn.workspaceUndefined')}</strong>
             </div>
             <div className="connection-actions">
-              <button className="secondary-action" onClick={() => void onRevalidate()} disabled={busy}>
+              <button
+                className="secondary-action"
+                onClick={() => void onRevalidate()}
+                disabled={busy}
+              >
                 <RefreshCw className={busy ? 'spin' : ''} />
                 {tt('conn.revalidate')}
               </button>
@@ -536,7 +541,10 @@ function ConfigView({
         ) : (
           <form onSubmit={(event) => void onSave(event)}>
             <label>
-              {tt('conn.siteUrl')} <span className="required" title={tt('conn.requiredHint')}>*</span>
+              {tt('conn.siteUrl')}{' '}
+              <span className="required" title={tt('conn.requiredHint')}>
+                *
+              </span>
               <input
                 value={form.siteUrl}
                 onChange={(event) => setForm({ ...form, siteUrl: event.target.value })}
@@ -545,7 +553,10 @@ function ConfigView({
               />
             </label>
             <label>
-              {tt('conn.email')} <span className="required" title={tt('conn.requiredHint')}>*</span>
+              {tt('conn.email')}{' '}
+              <span className="required" title={tt('conn.requiredHint')}>
+                *
+              </span>
               <input
                 value={form.email}
                 onChange={(event) => setForm({ ...form, email: event.target.value })}
@@ -556,12 +567,16 @@ function ConfigView({
 
             <fieldset className="token-group">
               <legend>
-                {tt('conn.apiToken')} <span className="required" title={tt('conn.requiredHint')}>*</span>
+                {tt('conn.apiToken')}{' '}
+                <span className="required" title={tt('conn.requiredHint')}>
+                  *
+                </span>
               </legend>
               <p className="field-hint">{tt('conn.tokenHint')}</p>
               {status?.apiTokenSet ? (
                 <p className="token-loaded-hint">
-                  {tt('conn.tokenLoaded').replace('{masked}', status.apiTokenMasked || '')} · {tt('conn.keepExisting')}
+                  {tt('conn.tokenLoaded').replace('{masked}', status.apiTokenMasked || '')} ·{' '}
+                  {tt('conn.keepExisting')}
                 </p>
               ) : null}
               <input
@@ -578,7 +593,8 @@ function ConfigView({
               <p className="field-hint">{tt('conn.bitbucketTokenHint')}</p>
               {status?.bitbucketApiTokenSet ? (
                 <p className="token-loaded-hint">
-                  {tt('conn.tokenLoaded').replace('{masked}', status.bitbucketApiTokenMasked || '')} · {tt('conn.keepExisting')}
+                  {tt('conn.tokenLoaded').replace('{masked}', status.bitbucketApiTokenMasked || '')}{' '}
+                  · {tt('conn.keepExisting')}
                 </p>
               ) : null}
               <input
@@ -674,7 +690,16 @@ function toLocalInputDate(iso: string): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
-function HistoryView({ history, activeId, busy, onOpen, onExport, onDelete, onDeleteBulk, notify }: HistoryViewProps) {
+function HistoryView({
+  history,
+  activeId,
+  busy,
+  onOpen,
+  onExport,
+  onDelete,
+  onDeleteBulk,
+  notify,
+}: HistoryViewProps) {
   const { tt } = useT();
   const [query, setQuery] = useState('');
   const [modeFilter, setModeFilter] = useState('');
@@ -938,7 +963,11 @@ function HistoryView({ history, activeId, busy, onOpen, onExport, onDelete, onDe
                       </td>
                       <td>
                         <span className="history-mode-badge">
-                          {item.mode === 'url' ? tt('analysis.url') : item.mode === 'request' ? tt('analysis.request') : item.mode}
+                          {item.mode === 'url'
+                            ? tt('analysis.url')
+                            : item.mode === 'request'
+                              ? tt('analysis.request')
+                              : item.mode}
                         </span>
                       </td>
                       <td className="history-id-cell">{item.id}</td>
@@ -1012,7 +1041,13 @@ function HistoryView({ history, activeId, busy, onOpen, onExport, onDelete, onDe
   );
 }
 
-function ServiceLine({ label, service }: { label: string; service?: { ok: boolean; message: string } }) {
+function ServiceLine({
+  label,
+  service,
+}: {
+  label: string;
+  service?: { ok: boolean; message: string };
+}) {
   const { tt } = useT();
   return (
     <div className="service-line">
@@ -1040,7 +1075,9 @@ function ReportView({ report }: { report: AnalyticsReport }) {
     <section className="report" id="reporte">
       <div className="report-header">
         <div>
-          <span className="eyebrow">{tt('report.label')} {report.id}</span>
+          <span className="eyebrow">
+            {tt('report.label')} {report.id}
+          </span>
           <h2>{report.summary}</h2>
         </div>
         <time>{new Date(report.createdAt).toLocaleString()}</time>
@@ -1140,9 +1177,10 @@ function DiagramBlock({ label, content }: { label: string; content: string }) {
   const [mermaidHtml, setMermaidHtml] = useState<string | null>(null);
   const [mermaidError, setMermaidError] = useState<string | null>(null);
   const text = content || tt('report.noContent');
-  const isMermaid = /^\s*(```\s*)?(mermaid|graph|sequenceDiagram|flowchart|classDiagram|stateDiagram|erDiagram|gantt|pie|journey)/im.test(
-    text,
-  );
+  const isMermaid =
+    /^\s*(```\s*)?(mermaid|graph|sequenceDiagram|flowchart|classDiagram|stateDiagram|erDiagram|gantt|pie|journey)/im.test(
+      text,
+    );
 
   useEffect(() => {
     let cancelled = false;
@@ -1205,7 +1243,10 @@ function DiagramBlock({ label, content }: { label: string; content: string }) {
         <pre>
           {text}
           {isMermaid && mermaidError ? (
-            <span className="mermaid-fallback"> ({tt('report.mermaidRender')} {mermaidError})</span>
+            <span className="mermaid-fallback">
+              {' '}
+              ({tt('report.mermaidRender')} {mermaidError})
+            </span>
           ) : null}
         </pre>
       )}

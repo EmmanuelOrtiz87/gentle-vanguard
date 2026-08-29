@@ -1,57 +1,86 @@
 # Gentle-Vanguard Academy
 
-Web educativa local-first con todo el contenido del stack: fundamentos, arquitectura, optimización,
-agentes, workflows, laboratorio práctico, negocio y glosario completo.
+Academy es el curso web local-first para aprender a operar y entender Gentle-Vanguard. Presenta
+fundamentos, arquitectura, agentes, workflows, laboratorio práctico, negocio y glosario a partir de
+la documentación vigente del repositorio.
 
-## Cómo ejecutarla
+## Propósito y público
 
-**Opción 1 — doble click (file://)**: abrir `index.html` en cualquier navegador. Funciona porque el
-contenido está embebido en JS (sin fetch, sin servidor).
+| Aspecto          | Definición                                                                                              |
+| ---------------- | ------------------------------------------------------------------------------------------------------- |
+| Propósito        | Convertir la arquitectura y las prácticas del stack en un recorrido de aprendizaje navegable.           |
+| Usuarios         | Desarrolladores, QA, analistas de negocio, operaciones, gobierno, documentación y nuevos colaboradores. |
+| Cliente objetivo | Equipos que necesitan capacitación interna reproducible sin depender de un servicio externo.            |
+| Entrega          | Sitio estático; no es un LMS ni gestiona matrículas, calificaciones o certificados.                     |
 
-**Opción 2 — servidor estático** (recomendada para compartir en la red local):
+## Capacidades actuales
+
+- Home, rutas de aprendizaje, índice de lecciones y navegación anterior/siguiente.
+- Buscador de lecciones y glosario; rutas `#/`, `#/track/:id`, `#/lesson/:track/:lesson` y
+  `#/glosario`.
+- Referencias nuevas: caso comparativo antes/después con métricas fechadas y límites, y uso de
+  Obsidian/Knowledge Base, Engram, Nexus, CodeGraph y Graphify.
+- Renderizado de un subconjunto Markdown embebido: títulos, énfasis, código, bloques, listas, citas,
+  tablas, separadores y resaltado.
+- Funcionamiento con `file://` o mediante un servidor estático local.
+
+No hay autenticación, perfiles, progreso persistente, evaluación, emisión de certificados, edición
+desde la interfaz ni sincronización remota.
+
+## Arquitectura y contenido
+
+Es una SPA vanilla sin build ni dependencias externas. El shell está en `index.html`, la
+presentación en `style.css`, el router/renderizador en `app.js` y los datos en `data/`. El curso
+documenta la arquitectura actual del stack: Obsidian como vault de conocimiento; Engram para memoria
+persistente; Nexus para datos operativos; CodeGraph para el índice incremental de tooling; y
+Graphify para análisis y consultas del grafo. Academy consume contenido publicado/embebido: no
+escribe directamente en esos sistemas.
+
+| Archivo             | Responsabilidad                    |
+| ------------------- | ---------------------------------- |
+| `index.html`        | Shell, navegación y carga de datos |
+| `style.css`         | Estilos y tokens visuales          |
+| `app.js`            | Router hash, búsqueda y renderer   |
+| `data/tracks.js`    | Registro de rutas                  |
+| `data/content-*.js` | Lecciones                          |
+| `data/glossary.js`  | Glosario                           |
+
+## Instalación y comandos
+
+No requiere dependencias ni build. Desde `apps/academy-web`:
 
 ```bash
-# desde la raíz del repo
-npx tsx src/dashboard-cmd-launcher.ts   # si el stack está corriendo (usa su entorno)
-# o cualquier static server:
-python -m http.server 4173 -d apps/academy-web
+pnpm dev          # servidor local de desarrollo
+pnpm preview      # servidor local para previsualización
 ```
 
-Sin build, sin dependencias externas, sin login, sin red: 100% local.
+También se puede ejecutar directamente con `python -m http.server 4173 -d .`.
 
-## Estructura
+Abrir `http://127.0.0.1:4173`. Para una revisión rápida también se puede abrir `index.html`
+directamente en el navegador.
 
-| Archivo             | Propósito                                                      |
-| ------------------- | -------------------------------------------------------------- |
-| `index.html`        | Shell (header, nav, footer, carga de datos)                    |
-| `style.css`         | Estilos con los brand tokens oficiales (14-BRAND-SYSTEM)       |
-| `app.js`            | SPA vanilla: hash router + renderer markdown-subset + buscador |
-| `assets/logo*.svg`  | Monograma y lockup oficiales                                   |
-| `data/tracks.js`    | Registro de rutas de aprendizaje                               |
-| `data/content-*.js` | Contenido por track (lecciones en markdown-subset embebido)    |
-| `data/glossary.js`  | Glosario (IA + técnico + negocio + términos propios)           |
+## Operación independiente
 
-## Markdown soportado en lecciones
+Academy puede servirse sin Dashboard, CMS, Analytics, Nexus o red externa. Para actualizarla, editar
+los archivos de `data/` y verificar manualmente las rutas principales en un navegador. El contenido
+debe mantenerse alineado con `AGENTS.md`, `docs/stack-manual-full.md` y las guías activas.
 
-`##` `###` · **bold** · `code` · bloques ``` · listas `-` y `1.` · `>` quote · tablas `| |` · `---`
-· `==resaltado gradiente==`. Sin imágenes ni links (por diseño: todo local, sin dependencias).
+## Importación y exportación
 
-## Rutas
+No existe importación/exportación de cursos desde la UI. El intercambio se realiza mediante cambios
+de archivos versionados en Git.
 
-- `#/` — home con las rutas de aprendizaje
-- `#/track/:id` — índice de lecciones del track
-- `#/lesson/:track/:lesson` — lección con sidebar, pager prev/next
-- `#/glosario` — diccionario con filtros alfabéticos
-- Buscador (tecla `/`): lecciones + glosario
+## Seguridad, límites y soporte
 
-## Actualizar contenido
+- Al ser estática y local-first, no maneja credenciales ni datos de usuario.
+- El renderer no está diseñado para contenido HTML arbitrario ni para material remoto.
+- Si se publica detrás de un servidor, el autenticador, TLS, cabeceras y control de acceso
+  pertenecen a esa infraestructura; no están implementados en Academy.
+- Soporte: revisar el contenido fuente y abrir una incidencia en el canal de mantenimiento del
+  repositorio con ruta, navegador y pasos de reproducción. No existe SLA comercial definido.
 
-Editar el `md` de la lección en `data/content-*.js` (o añadir lecciones al array). El contenido
-deriva del stack real (AGENTS.md, stack-manual, GLOSSARY.md, guides, normativas y el kit comercial)
-— al actualizar el stack, actualizar las lecciones afectadas en la misma pasada.
+## Criterios de comercialización
 
-## Publicación futura
-
-Cuando se desee exponer en un servidor con login: servir `apps/academy-web/` como estáticos tras el
-authenticador que se elija (el dashboard WS ya trae RBAC v1 deployment-scoped reutilizable). El
-perfil local-first no requiere nada de esto.
+**Apta como material de capacitación interna o demo estática.** Para venderla como producto
+educativo faltan, como mínimo, identidad y roles, progreso por usuario, evaluaciones, certificados,
+administración de contenidos y soporte/SLA. Estas capacidades no deben presentarse como disponibles.

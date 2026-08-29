@@ -587,6 +587,94 @@ const MIGRATIONS: Array<{ id: string; sql: string }> = [
         ON response_cache(COALESCE(last_access, created_at));
     `,
   },
+  {
+    id: '018_content_os',
+    sql: `
+      CREATE TABLE IF NOT EXISTS content_items (
+        id TEXT PRIMARY KEY,
+        tenant_id TEXT NOT NULL DEFAULT 'gentle-vanguard',
+        title TEXT NOT NULL,
+        brief TEXT NOT NULL DEFAULT '',
+        objective TEXT DEFAULT '',
+        voice TEXT DEFAULT '',
+        tags TEXT DEFAULT '[]',
+        status TEXT NOT NULL DEFAULT 'idea'
+          CHECK(status IN ('idea','draft','ready','scheduled','published','archived')),
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+      );
+
+      CREATE TABLE IF NOT EXISTS content_variants (
+        id TEXT PRIMARY KEY,
+        tenant_id TEXT NOT NULL DEFAULT 'gentle-vanguard',
+        item_id TEXT NOT NULL,
+        platform TEXT NOT NULL,
+        format TEXT NOT NULL DEFAULT 'text' CHECK(format IN ('text','image','text_image')),
+        body TEXT NOT NULL DEFAULT '',
+        image_prompt TEXT DEFAULT '',
+        image_path TEXT DEFAULT '',
+        spec_json TEXT DEFAULT '{}',
+        status TEXT NOT NULL DEFAULT 'generated'
+          CHECK(status IN ('generated','edited','approved','rejected','published')),
+        score REAL,
+        provider TEXT DEFAULT '',
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+        FOREIGN KEY (item_id) REFERENCES content_items(id) ON DELETE CASCADE
+      );
+
+      CREATE TABLE IF NOT EXISTS media_library (
+        id TEXT PRIMARY KEY,
+        tenant_id TEXT NOT NULL DEFAULT 'gentle-vanguard',
+        name TEXT NOT NULL,
+        path TEXT NOT NULL,
+        mime TEXT NOT NULL,
+        size INTEGER DEFAULT 0,
+        width INTEGER,
+        height INTEGER,
+        alt TEXT DEFAULT '',
+        source TEXT NOT NULL DEFAULT 'upload' CHECK(source IN ('upload','generated')),
+        created_at TEXT NOT NULL DEFAULT (datetime('now'))
+      );
+
+      CREATE TABLE IF NOT EXISTS calendar_slots (
+        id TEXT PRIMARY KEY,
+        tenant_id TEXT NOT NULL DEFAULT 'gentle-vanguard',
+        item_id TEXT NOT NULL,
+        variant_id TEXT,
+        platform TEXT NOT NULL,
+        scheduled_at TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'proposed'
+          CHECK(status IN ('proposed','confirmed','published','skipped')),
+        rationale TEXT DEFAULT '',
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+        FOREIGN KEY (item_id) REFERENCES content_items(id) ON DELETE CASCADE
+      );
+
+      CREATE TABLE IF NOT EXISTS publish_log (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        tenant_id TEXT NOT NULL DEFAULT 'gentle-vanguard',
+        variant_id TEXT NOT NULL,
+        platform TEXT NOT NULL,
+        mode TEXT NOT NULL DEFAULT 'assisted' CHECK(mode IN ('assisted','api','manual')),
+        action TEXT NOT NULL,
+        payload TEXT,
+        created_at TEXT NOT NULL DEFAULT (datetime('now'))
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_content_items_tenant_status
+        ON content_items(tenant_id, status, updated_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_content_variants_item
+        ON content_variants(item_id, platform);
+      CREATE INDEX IF NOT EXISTS idx_calendar_slots_item
+        ON calendar_slots(item_id, scheduled_at);
+      CREATE INDEX IF NOT EXISTS idx_calendar_slots_tenant_sched
+        ON calendar_slots(tenant_id, scheduled_at);
+      CREATE INDEX IF NOT EXISTS idx_publish_log_variant
+        ON publish_log(variant_id, created_at DESC);
+    `,
+  },
 ];
 
 export class MigrationRunner {

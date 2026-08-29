@@ -143,8 +143,6 @@ export function summarize(windowHours = 24): MetricsSummary {
     const status = Number(row.status);
     const duration = Number(row.duration_ms);
     const llmSource = row.llm_source ? String(row.llm_source) : null;
-    const llmCached = Number(row.llm_cached) === 1;
-
     if (endpoint === '/api/analyze') totals.analyzeRequests += 1;
     if (status >= 400) totals.errorCount += 1;
     if (llmSource === 'agent' || llmSource === 'cache') totals.llmHits += 1;
