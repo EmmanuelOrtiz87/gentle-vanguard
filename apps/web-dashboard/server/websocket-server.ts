@@ -58,7 +58,7 @@ import {
   resolveDeploymentTenantContext,
   validateTenantSelector,
   type DeploymentTenantContext,
-} from '../../../src/deployment-tenant-context.ts';
+} from '../../../src/integrations/deployment-tenant-context.ts';
 import {
   loadManifest,
   loadPlatformRegistry,
