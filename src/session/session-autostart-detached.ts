@@ -40,7 +40,7 @@ import { spawn } from 'node:child_process';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
 
-const ROOT = path.resolve(import.meta.dirname, '..');
+const ROOT = path.resolve(import.meta.dirname, '..', '..');
 const LOG_DIR = path.join(ROOT, '.runtime');
 
 // Per-run timestamped log: immune to EBUSY and keeps history.
@@ -72,7 +72,7 @@ const args = process.argv.slice(2);
 // daemons never inherit the caller's pipe either.
 const child = spawn(
   process.execPath,
-  ['--import', 'tsx', path.join(ROOT, 'src', 'session-autostart.ts'), ...args],
+  ['--import', 'tsx', path.join(ROOT, 'src', 'session', 'session-autostart.ts'), ...args],
   {
     cwd: ROOT,
     stdio: 'ignore',
