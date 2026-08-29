@@ -3,6 +3,7 @@ import { join } from 'path';
 import { guardianCheck, learnFromMistake } from '../session-close-guardian.js';
 import { PhaseResult, LOG, log, ok, warn, SESSION_DIR, runScript } from './helpers.js';
 import { isStartupClose } from './process.js';
+import { isAuthorizedAutomatedClose } from '../artifact-retention.js';
 import {
   phasePreClose,
   phasePreValidate,
@@ -53,7 +54,7 @@ export async function runCloseOrchestrator(reason = 'session-end'): Promise<Clos
     persist: await phasePersist(reason),
     backup: phaseBackup(),
     audit: phaseAudit(),
-    cleanup: await phaseCleanup(isStartup),
+    cleanup: await phaseCleanup(isStartup, isAuthorizedAutomatedClose(reason)),
     verify: phaseVerify(),
   };
 
@@ -138,7 +139,7 @@ export async function main() {
     // Run only the essential startup-cleanup phases
     phasePreClose(reason);
     await phasePersist(reason);
-    const cleanupResults = await phaseCleanup(isStartupClose(reason));
+    const cleanupResults = await phaseCleanup(isStartupClose(reason), false);
     const passed = cleanupResults.filter((r) => r.status === 'PASS').length;
     const failed = cleanupResults.filter((r) => r.status === 'FAIL').length;
     ok(`Lightweight cleanup: ${passed} pass, ${failed} fail`);

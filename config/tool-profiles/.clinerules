@@ -20,7 +20,7 @@ context:
     - "rules/**/*.md"           # All rules (small files)
     - "config/*.json"           # Config files (indexed)
     - "skills/*/SKILL.md"       # Skill definitions only
-    - "scripts/utilities/pre-process-input.ps1"  # Core router
+    - "src/tools/pre-process-input.ts"  # Core router
     - "AGENTS-fast.md"       # Canonical entry (completo: AGENTS.md)
     - ".clinerules"             # This file
 
@@ -53,7 +53,7 @@ context:
 # ============================================================================
 # PHASE 2: TRIGGER ROUTING (Route to correct agent/skill)
 # ============================================================================
-# Execute pre-process-input.ps1 BEFORE responding
+# Execute src/tools/pre-process-input.ts BEFORE responding
 # Format: "trigger_keyword" → "agent_code" → "skill_path"
 
 triggers:

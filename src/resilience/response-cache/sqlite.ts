@@ -260,7 +260,9 @@ export function sqliteTouch(key: string): void {
   if (!db) return;
   try {
     db.getDb()
-      .prepare("UPDATE response_cache SET last_access = datetime('now') WHERE key = ?")
+      .prepare(
+        "UPDATE response_cache SET last_access = strftime('%Y-%m-%d %H:%M:%f', 'now') WHERE key = ?",
+      )
       .run(key);
   } catch {
     /* ignore */

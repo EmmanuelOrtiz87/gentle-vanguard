@@ -224,29 +224,14 @@ function initializeEnvironment(installPath: string): void {
   writeSuccess('VS Code settings configured');
 
   if (platform() === 'win32') {
-    const psProfilePath = join(
-      homedir(),
-      'Documents',
-      'PowerShell',
-      'Microsoft.PowerShell_profile.ps1',
-    );
-    const psProfileDir = dirname(psProfilePath);
-    if (!existsSync(psProfileDir)) {
-      mkdirSync(psProfileDir, { recursive: true });
-    }
-    const profileContent = `# Gentle-Vanguard Environment
-$env:GENTLE_VANGUARD_ROOT = '${installPath}'
-Import-Module $env:GENTLE_VANGUARD_ROOT\\scripts\\utilities\\WORKFLOW-ORCHESTRATION\\gv.ps1 -ErrorAction SilentlyContinue
-Write-Host 'Gentle-Vanguard environment loaded' -ForegroundColor Green
-`;
-    appendFileSync(psProfilePath, profileContent + '\n', 'utf-8');
-    writeSuccess('PowerShell profile updated');
-  } else {
-    const shellProfile = join(homedir(), '.bashrc');
-    const profileContent = `\n# Gentle-Vanguard Environment\nexport GENTLE_VANGUARD_ROOT="${installPath}"\n`;
-    appendFileSync(shellProfile, profileContent, 'utf-8');
-    writeSuccess('Shell profile updated');
+    writeSuccess('Windows shell profiles unchanged; use the TypeScript CLI directly');
+    return;
   }
+
+  const shellProfile = join(homedir(), '.bashrc');
+  const profileContent = `\n# Gentle-Vanguard Environment\nexport GENTLE_VANGUARD_ROOT="${installPath}"\n`;
+  appendFileSync(shellProfile, profileContent, 'utf-8');
+  writeSuccess('Shell profile updated');
 }
 
 function runTests(installPath: string, skipTests: boolean): void {

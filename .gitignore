@@ -74,6 +74,9 @@ reports/stack-benchmark*.json
 reports/stack-benchmark*.jsonl
 reports/stack-live-observability-latest.json
 reports/startup-summary.json
+reports/coverage-summary.json
+reports/optimization/*.json
+logs/*-latest.*
 
 # Rate-limit and event-bus runtime state
 .event-bus/

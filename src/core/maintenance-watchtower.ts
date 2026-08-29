@@ -422,7 +422,7 @@ async function traceFindings() {
 
   if (!ensureWitrInstalled()) {
     console.log(
-      '  [witr] not available — run scripts/utilities/maintenance/witr-installer.ps1 to enable tracing',
+      '  [witr] not available — run src/web/witr-installer.ts to enable tracing',
     );
     return;
   }

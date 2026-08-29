@@ -2,7 +2,7 @@
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSync, runNpxTsxSync } from '../core/run-command.js';
+import { runNpxTsxSync } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
 
 function findProjectRoot(dir: string): string {
@@ -126,27 +126,12 @@ function getVaultStats(): { notes: number; sizeKB: number } {
 
 function runFullSync(quiet: boolean): boolean {
   const syncScriptTs = join(projectRoot, 'src', 'knowledge', 'knowledge-base-sync.ts');
-  const syncScriptPs1 = join(
-    projectRoot,
-    'scripts',
-    'utilities',
-    'knowledge-base',
-    'knowledge-base-sync.ps1',
-  );
-  const hasTs = existsSync(syncScriptTs);
-  if (hasTs || existsSync(syncScriptPs1)) {
+  if (existsSync(syncScriptTs)) {
     try {
-      if (hasTs) {
-        runNpxTsxSync(syncScriptTs, ['--mode', 'full', '--quiet'], {
-          cwd: projectRoot,
-          timeout: 60000,
-        });
-      } else {
-        runSync('pwsh', ['-NoProfile', syncScriptPs1, '-Mode', 'full', '-Quiet'], {
-          cwd: projectRoot,
-          timeout: 60000,
-        });
-      }
+      runNpxTsxSync(syncScriptTs, ['--mode', 'full', '--quiet'], {
+        cwd: projectRoot,
+        timeout: 60000,
+      });
       if (!quiet) console.log('[OK] Full sync completed');
       return true;
     } catch (e: unknown) {
@@ -154,7 +139,7 @@ function runFullSync(quiet: boolean): boolean {
       return false;
     }
   }
-  if (!quiet) console.log(`[ERROR] Sync script not found: ${syncScriptPs1}`);
+  if (!quiet) console.log(`[ERROR] Sync script not found: ${syncScriptTs}`);
   return false;
 }
 

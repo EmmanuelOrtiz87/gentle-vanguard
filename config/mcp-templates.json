@@ -15,7 +15,7 @@
       "name": "filesystem",
       "description": "File system access — read, write, search files via MCP",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "{path}"],
+      "args": ["-y", "@modelcontextprotocol/server-filesystem@2026.7.10", "{path}"],
       "defaultPath": ".",
       "transport": "stdio",
       "autoStart": true
@@ -24,7 +24,7 @@
       "name": "memory",
       "description": "Persistent knowledge graph — entities, relations via MCP",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "args": ["-y", "@modelcontextprotocol/server-memory@2026.7.4"],
       "defaultPath": null,
       "transport": "stdio",
       "autoStart": true
@@ -33,7 +33,7 @@
       "name": "browser",
       "description": "Headless browser automation — navigate, screenshot, extract via MCP",
       "command": "npx",
-      "args": ["-y", "@playwright/mcp"],
+      "args": ["-y", "@playwright/mcp@0.0.79"],
       "defaultPath": null,
       "transport": "stdio",
       "autoStart": false
@@ -51,7 +51,7 @@
       "name": "redis",
       "description": "Redis in-memory data store — keys, get, set, query via MCP",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-redis"],
+      "args": ["-y", "@modelcontextprotocol/server-redis@2025.4.25"],
       "defaultPath": null,
       "transport": "stdio",
       "autoStart": false
@@ -60,7 +60,7 @@
       "name": "postgres",
       "description": "PostgreSQL database — query tables, run SQL via MCP",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-postgres", "{path}"],
+      "args": ["-y", "@modelcontextprotocol/server-postgres@0.6.2", "{path}"],
       "defaultPath": "postgresql://localhost:5432/mcp",
       "transport": "stdio",
       "autoStart": false
@@ -69,7 +69,7 @@
       "name": "puppeteer",
       "description": "Headless Chrome — navigate, screenshot, PDF, extract via MCP",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer@2025.5.12"],
       "defaultPath": null,
       "transport": "stdio",
       "autoStart": false

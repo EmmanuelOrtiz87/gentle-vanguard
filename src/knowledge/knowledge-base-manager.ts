@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
  * Knowledge Base Manager — init, create-note, list, search, sync, stats, validate.
- * TS migration of scripts/utilities/knowledge-base/knowledge-base-manager.ps1
+ * Canonical TypeScript manager for the Obsidian-compatible vault.
  */
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSync } from '../core/run-command.js';
+import { runNpxTsxSync } from '../core/run-command.js';
 import { pathToFileURL } from 'url';
 
 type Action =
@@ -37,8 +37,7 @@ interface FolderConfig {
 interface VaultConfig {
   vault_path: string;
   folders: FolderConfig;
-  sync_enabled: boolean;
-  auto_archive_days: number;
+  sync: { enabled: boolean; auto_archive_days?: number };
 }
 
 interface VaultNote {
@@ -81,7 +80,8 @@ function log(msg: string, level: string = 'INFO'): void {
 function getVaultConfig(): VaultConfig {
   if (existsSync(configPath)) {
     try {
-      return JSON.parse(readFileSync(configPath, 'utf-8')) as VaultConfig;
+      const parsed = JSON.parse(readFileSync(configPath, 'utf-8')) as VaultConfig;
+      return parsed;
     } catch {
       // fall through to default
     }
@@ -98,8 +98,7 @@ function getVaultConfig(): VaultConfig {
       templates: '06-templates',
       archive: '07-archive',
     },
-    sync_enabled: true,
-    auto_archive_days: 30,
+    sync: { enabled: true, auto_archive_days: 30 },
   };
 }
 
@@ -111,8 +110,9 @@ function initializeVault(): void {
     log(`Created vault root: ${vaultPath}`);
   }
 
+  const configuredVaultPath = resolve(projectRoot, config.vault_path);
   for (const folder of Object.values(config.folders)) {
-    const folderPath = join(vaultPath, folder);
+    const folderPath = join(configuredVaultPath, folder);
     if (!existsSync(folderPath)) {
       mkdirSync(folderPath, { recursive: true });
       log(`Created folder: ${folder}`);
@@ -141,19 +141,19 @@ function initializeVault(): void {
       '',
       '```powershell',
       '# Create a new note',
-      'pwsh scripts\\utilities\\knowledge-base\\knowledge-base-manager.ps1 -Action create-note -NoteType project -Title "My Project"',
+      'pnpm kb:manager -- --action create-note --note-type project --title "My Project"',
       '',
       '# List all notes',
-      'pwsh scripts\\utilities\\knowledge-base\\knowledge-base-manager.ps1 -Action list',
+      'pnpm kb:manager -- --action list',
       '',
       '# Search notes',
-      'pwsh scripts\\utilities\\knowledge-base\\knowledge-base-manager.ps1 -Action search -Query "keyword"',
+      'pnpm kb:manager -- --action search --query "keyword"',
       '',
       '# Sync with Engram',
-      'pwsh scripts\\utilities\\knowledge-base\\knowledge-base-manager.ps1 -Action sync-engram',
+      'pnpm kb:manager -- --action sync-engram',
       '',
       '# Get stats',
-      'pwsh scripts\\utilities\\knowledge-base\\knowledge-base-manager.ps1 -Action stats',
+      'pnpm kb:manager -- --action stats',
       '```',
       '',
       '## Related',
@@ -205,7 +205,7 @@ function createNote(
   if (type) tagList.push(type);
   const tagsYaml = tagList.map((t) => `#${t}`).join(', ');
 
-  const templatePath = join(vaultPath, '06-templates', `${type}.md`);
+  const templatePath = join(vaultPath, config.folders.templates, `${type}.md`);
   let noteContent: string;
 
   if (existsSync(templatePath)) {
@@ -281,23 +281,16 @@ function searchNotes(query: string): VaultNote[] {
 }
 
 function syncEngramToVault(): void {
-  const engramCheck = runSync('where', ['engram']);
-
-  if (engramCheck.status !== 0) {
-    log('Engram not found in PATH', 'WARN');
-    return;
-  }
-
   try {
-    runSync(
-      'engram',
-      ['search', 'session_summary', '--project', 'gentle-vanguard', '--limit', '50'],
+    runNpxTsxSync(
+      join(projectRoot, 'src', 'knowledge', 'knowledge-base-sync.ts'),
+      ['--mode', 'full'],
       {
-        timeout: 30000,
-        windowsHide: true,
+        cwd: projectRoot,
+        timeout: 60000,
       },
     );
-    log('Synced session summaries from Engram', 'OK');
+    log('Engram and vault sync completed', 'OK');
   } catch (e: unknown) {
     log(`Failed to sync from Engram: ${e instanceof Error ? e.message : String(e)}`, 'ERROR');
   }

@@ -55,9 +55,6 @@ setTimeout(() => {
     process.exit(1);
   }
 
-  // Write PID file
-  fs.writeFileSync(PID_FILE, String(child.pid), 'utf-8');
-
   // Log output
   const logStream = fs.createWriteStream(LOG_FILE, { flags: 'a' });
   if (child.stdout) child.stdout.pipe(logStream);

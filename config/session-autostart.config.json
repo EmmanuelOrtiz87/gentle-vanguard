@@ -557,7 +557,7 @@
         "id": "knowledge-base-sync",
         "enabled": true,
         "lazy": true,
-        "script": "src/knowledge-base-sync.ts",
+        "script": "src/knowledge/knowledge-base-sync.ts",
         "args": "--mode session-summary --quiet",
         "required": false,
         "description": "Auto-sync Engram memory to Knowledge Base vault (session summary)"
@@ -566,7 +566,7 @@
         "id": "engram-auto-compact",
         "enabled": true,
         "lazy": true,
-        "script": "src/engram-auto-compact.ts",
+        "script": "src/knowledge/engram-auto-compact.ts",
         "args": "--quiet",
         "required": false,
         "description": "Auto-compact old engram observations (>90 days) (TS)"

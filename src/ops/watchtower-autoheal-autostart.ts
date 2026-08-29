@@ -16,9 +16,9 @@ import { existsSync } from 'fs';
 import { join, resolve } from 'path';
 import { runSync } from '../core/run-command.js';
 import { getEffectiveProcessTimeout } from '../core/timeout-config';
-import { pathToFileURL } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 
-const ROOT = resolve(process.cwd());
+const ROOT = resolve(fileURLToPath(new URL('../..', import.meta.url)));
 const args = process.argv.slice(2);
 const asJson = args.includes('--json') || args.includes('-AsJson');
 
@@ -62,7 +62,11 @@ function main(): void {
       },
     );
     if (run.error && run.status === null) throw run.error;
-    const summary = (run.stdout || '').split('\n').filter((l) => l.includes('PASS:')).pop() || '';
+    const summary =
+      (run.stdout || '')
+        .split('\n')
+        .filter((l) => l.includes('PASS:'))
+        .pop() || '';
     result('OK', `Watchtower autoheal completed${summary ? ` — ${summary.trim()}` : ''}`, {
       exitCode: run.status ?? 0,
       action: 'autoheal',

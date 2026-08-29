@@ -6,9 +6,9 @@
  * en TODAS las herramientas (OpenCode, Claude, Cline, Cursor, etc.)
  *
  * Flujo:
- *   1. session_start() → Inicia sesión explícitamente vía MCP
+ *   1. sessionStart() → Crea un identificador de sesión local
  *   2. Durante sesión → Usar mem_save, mem_search directamente
- *   3. session_end() → Cierra sesión explícitamente vía MCP + HTTP fallback
+ *   3. sessionEnd() → Persiste el resumen vía CLI + HTTP fallback
  *
  * NO depende del plugin OpenCode automático - funciona en todas las herramientas
  */
@@ -35,51 +35,16 @@ export interface SessionEndResult {
 }
 
 /**
- * Inicia una sesión en Engram explícitamente vía MCP
- * Funciona en TODAS las herramientas (no depende del plugin automático)
+ * Creates a local session identifier. The native CLI has no session-start command.
  */
 export function sessionStart(sessionId?: string): SessionStartResult {
   const sid = sessionId || `session-${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}`;
-
-  try {
-    // Llamada MCP explícita a engram_mem_session_start
-    const result = runSync(
-      'npx',
-      ['engram', 'mem', 'session_start', '--id', sid, '--project', PROJECT],
-      { timeout: 5000, cwd: process.cwd() },
-    );
-
-    if (result.status === 0 || result.status === null) {
-      console.log(`[ENGRAM] Session started: ${sid}`);
-      return { success: true, sessionId: sid };
-    }
-
-    // Fallback: intentar con MCP tool directamente
-    const mcpResult = runSync(
-      'node',
-      [
-        '-e',
-        `const c=require('child_process');c.spawnSync('npx',['engram','mem','session_start','--id','${sid}'],{stdio:'inherit',windowsHide:true})`,
-      ],
-      { timeout: 5000 },
-    );
-
-    if (mcpResult.status === 0) {
-      console.log(`[ENGRAM] Session started (MCP): ${sid}`);
-      return { success: true, sessionId: sid };
-    }
-
-    throw new Error(`Exit code: ${result.status}`);
-  } catch (error) {
-    const msg = error instanceof Error ? error.message : String(error);
-    console.warn(`[ENGRAM] Session start warning: ${msg}`);
-    // NO falla - la sesión continúa sin Engram
-    return { success: true, sessionId: sid, error: msg };
-  }
+  console.log(`[ENGRAM] Session started locally: ${sid}`);
+  return { success: true, sessionId: sid };
 }
 
 /**
- * Genera resumen de sesión vía MCP (mem_session_summary)
+ * Persists a session summary using the native Engram save contract.
  */
 export function sessionSummary(
   content: {
@@ -106,17 +71,17 @@ export function sessionSummary(
     ].join('\n');
 
     const result = runSync(
-      'npx',
+      'engram',
       [
-        'engram',
-        'mem',
-        'session_summary',
-        '--id',
-        sessionId,
-        '--content',
+        'save',
+        `Session summary: ${sessionId}`,
         summary,
+        '--type',
+        'session_summary',
         '--project',
         PROJECT,
+        '--scope',
+        'project',
       ],
       { timeout: 10000 },
     );
@@ -129,7 +94,7 @@ export function sessionSummary(
 }
 
 /**
- * Cierra sesión en Engram vía MCP + HTTP fallback
+ * Persists and closes a session via CLI + HTTP fallback.
  */
 export async function sessionEnd(
   sessionId: string,
@@ -151,16 +116,8 @@ export async function sessionEnd(
 
   // 2. Intentar cierre vía MCP explícito
   try {
-    const result = runSync(
-      'npx',
-      ['engram', 'mem', 'session_end', '--id', sessionId, '--project', PROJECT],
-      { timeout: 5000 },
-    );
-
-    if (result.status === 0) {
-      mcpSuccess = true;
-      console.log(`[ENGRAM] Session closed (MCP): ${sessionId}`);
-    }
+    if (!summary) mcpSuccess = sessionSummary({}, sessionId);
+    if (mcpSuccess) console.log(`[ENGRAM] Session persisted: ${sessionId}`);
   } catch (e) {
     error = String(e);
     console.warn(`[ENGRAM] MCP close warning: ${error}`);
@@ -185,7 +142,7 @@ export async function sessionEnd(
   }
 
   return {
-    success: success || true, // NO bloquea
+    success,
     sessionId,
     mcpSuccess,
     httpSuccess,

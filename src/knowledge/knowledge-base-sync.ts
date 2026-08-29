@@ -11,23 +11,56 @@
  * - Mantiene cross-references entre sesiones
  *
  * Usage:
- *   npx tsx src/knowledge-base-sync.ts --mode full
- *   npx tsx src/knowledge-base-sync.ts --mode export
- *   npx tsx src/knowledge-base-sync.ts --mode import
- *   npx tsx src/knowledge-base-sync.ts --mode session-summary
+ *   pnpm kb:sync -- --mode full
+ *   pnpm kb:sync -- --mode export
+ *   pnpm kb:sync -- --mode import
+ *   pnpm kb:sync -- --mode session-summary
  */
 
-import { existsSync, mkdirSync, writeFileSync, readFileSync, readdirSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync, readdirSync, rmSync } from 'fs';
 import { join, resolve } from 'path';
+import { tmpdir } from 'os';
 import { runSync } from '../core/run-command.js';
 import { createHash } from 'crypto';
+import { z } from 'zod';
 
-const ROOT = resolve(process.cwd());
-const VAULT_DIR = join(ROOT, 'knowledge-base');
-const SESSIONS_DIR = join(VAULT_DIR, '04-sessions');
-const INBOX_DIR = join(VAULT_DIR, '00-inbox');
+function findRoot(dir: string): string {
+  let current = resolve(dir);
+  for (let i = 0; i < 10; i++) {
+    if (existsSync(join(current, '.git'))) return current;
+    const parent = resolve(current, '..');
+    if (parent === current) break;
+    current = parent;
+  }
+  return resolve(dir);
+}
+
+const ROOT = findRoot(process.env.GENTLE_VANGUARD_BASE_DIR || process.cwd());
+const configPath = join(ROOT, 'config', 'knowledge-base-config.json');
+const config = JSON.parse(readFileSync(configPath, 'utf-8')) as {
+  vault_path: string;
+  folders: Record<string, string>;
+  sync?: { engram_project?: string };
+};
+const VAULT_DIR = resolve(ROOT, config.vault_path);
+const SESSIONS_DIR = join(VAULT_DIR, config.folders.sessions);
+const INBOX_DIR = join(VAULT_DIR, config.folders.inbox);
 const IMPORT_STATE_FILE = join(ROOT, '.runtime', 'kb-sync-imported.json');
-const ENGRAM_PROJECT = process.env.ENGRAM_PROJECT || 'gentle-vanguard';
+const ENGRAM_PROJECT =
+  process.env.ENGRAM_PROJECT || config.sync?.engram_project || 'gentle-vanguard';
+
+const exportedObservationSchema = z.object({
+  id: z.number(),
+  session_id: z.string().nullable().optional(),
+  title: z.string(),
+  content: z.string(),
+  type: z.string(),
+  created_at: z.string(),
+});
+const exportSchema = z.object({
+  observations: z.array(exportedObservationSchema),
+  sessions: z.array(z.object({ id: z.string(), project: z.string() })),
+});
 
 interface ImportState {
   [filepath: string]: { hash: string; engramId?: string; importedAt: string };
@@ -37,6 +70,7 @@ interface SyncOptions {
   mode: 'full' | 'export' | 'import' | 'session-summary';
   sessionId?: string;
   quiet?: boolean;
+  dryRun?: boolean;
 }
 
 function log(msg: string, level: 'INFO' | 'WARN' | 'ERROR' | 'SUCCESS' = 'INFO'): void {
@@ -67,14 +101,15 @@ function getTimestamp(): string {
  */
 async function exportFromEngram(
   _sessionId?: string,
+  dryRun = false,
 ): Promise<{ exported: number; errors: string[] }> {
   log('Exporting from Engram...', 'INFO');
   const errors: string[] = [];
   let exported = 0;
 
   try {
-    // Buscar observaciones recientes de Engram
-    const result = runSync('engram', ['search', '--limit', '50', '--json'], {
+    const exportFile = join(tmpdir(), `gentle-vanguard-engram-${process.pid}.json`);
+    const result = runSync('engram', ['export', exportFile], {
       timeout: 10000,
     });
 
@@ -83,56 +118,33 @@ async function exportFromEngram(
       return { exported: 0, errors: ['Engram CLI unavailable'] };
     }
 
-    let observations: Array<{
-      id: number;
-      title: string;
-      content: string;
-      type: string;
-      created_at: string;
-    }> = [];
-
     try {
-      observations = JSON.parse(result.stdout);
+      const data = exportSchema.parse(JSON.parse(readFileSync(exportFile, 'utf-8')));
+      const projectSessions = new Set(
+        data.sessions.filter((s) => s.project === ENGRAM_PROJECT).map((s) => s.id),
+      );
+      const observations = data.observations.filter(
+        (obs) => typeof obs.session_id === 'string' && projectSessions.has(obs.session_id),
+      );
+      if (!dryRun) ensureDir(INBOX_DIR);
+      for (const obs of observations) {
+        if (!['decision', 'architecture', 'bugfix', 'pattern'].includes(obs.type)) continue;
+        const filename = `engram-${obs.id}-${obs.type}.md`;
+        const filepath = join(INBOX_DIR, filename);
+        if (existsSync(filepath)) continue;
+        if (!dryRun) {
+          const content = `---\ncreated: ${obs.created_at.split('T')[0]}\ntags: [engram, ${obs.type}]\nengram_id: ${obs.id}\ntype: ${obs.type}\n---\n\n# ${obs.title}\n\n${obs.content}\n\n---\n*Imported from Engram on ${getToday()}*\n`;
+          writeFileSync(filepath, content, 'utf-8');
+        }
+        exported++;
+      }
+      log(`${dryRun ? 'Would export' : 'Exported'} ${exported} observations to inbox`, 'SUCCESS');
     } catch {
       log('Failed to parse Engram output', 'WARN');
       return { exported: 0, errors: ['Parse error'] };
+    } finally {
+      rmSync(exportFile, { force: true });
     }
-
-    ensureDir(INBOX_DIR);
-
-    for (const obs of observations) {
-      // Solo exportar observaciones de tipo decision, architecture, bugfix
-      if (!['decision', 'architecture', 'bugfix', 'pattern'].includes(obs.type)) {
-        continue;
-      }
-
-      const filename = `engram-${obs.id}-${obs.type}.md`;
-      const filepath = join(INBOX_DIR, filename);
-
-      if (existsSync(filepath)) {
-        continue; // Ya exportada
-      }
-
-      const content = `---
-created: ${obs.created_at.split('T')[0]}
-tags: [engram, ${obs.type}]
-engram_id: ${obs.id}
-type: ${obs.type}
----
-
-# ${obs.title}
-
-${obs.content}
-
----
-*Imported from Engram on ${getToday()}*
-`;
-
-      writeFileSync(filepath, content, 'utf-8');
-      exported++;
-    }
-
-    log(`Exported ${exported} observations to inbox`, 'SUCCESS');
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     log(`Export failed: ${msg}`, 'ERROR');
@@ -204,21 +216,28 @@ function saveToEngram(
  * Importa notas del vault a Engram
  * Usa `engram save` (integración real) con deduplicación por hash de contenido
  */
-async function importToEngram(): Promise<{ imported: number; skipped: number; errors: string[] }> {
+async function importToEngram(
+  dryRun = false,
+): Promise<{ imported: number; skipped: number; errors: string[] }> {
   log(`Importing from vault to Engram (project: ${ENGRAM_PROJECT})...`, 'INFO');
   const errors: string[] = [];
   let imported = 0;
   let skipped = 0;
 
   // Verificar que el CLI de engram esté disponible
-  const check = runSync('engram', ['--version'], { timeout: 5000 });
+  const check = runSync('engram', ['version'], { timeout: 5000 });
   if (check.status !== 0) {
     log('Engram CLI unavailable — cannot import', 'WARN');
     return { imported: 0, skipped: 0, errors: ['Engram CLI unavailable'] };
   }
 
   const state = loadImportState();
-  const folders = ['01-projects', '02-architecture', '03-skills', '05-research'];
+  const folders = [
+    config.folders.projects,
+    config.folders.architecture,
+    config.folders.skills,
+    config.folders.research,
+  ];
 
   for (const folder of folders) {
     const folderPath = join(VAULT_DIR, folder);
@@ -250,9 +269,10 @@ async function importToEngram(): Promise<{ imported: number; skipped: number; er
         const body = content.replace(/^---[\s\S]*?---\n?/, '').trim();
         const summary = body.slice(0, 2500);
 
-        const result = saveToEngram(title, summary);
+        const result = dryRun ? { ok: true } : saveToEngram(title, summary);
         if (result.ok) {
-          state[filepath] = { hash, engramId: result.id, importedAt: new Date().toISOString() };
+          if (!dryRun)
+            state[filepath] = { hash, engramId: result.id, importedAt: new Date().toISOString() };
           imported++;
         } else {
           errors.push(`Failed to import ${file}: ${result.error}`);
@@ -264,8 +284,11 @@ async function importToEngram(): Promise<{ imported: number; skipped: number; er
     }
   }
 
-  saveImportState(state);
-  log(`Imported ${imported} notes to Engram (${skipped} unchanged)`, 'SUCCESS');
+  if (!dryRun) saveImportState(state);
+  log(
+    `${dryRun ? 'Would import' : 'Imported'} ${imported} notes to Engram (${skipped} unchanged)`,
+    'SUCCESS',
+  );
   return { imported, skipped, errors };
 }
 
@@ -274,12 +297,13 @@ async function importToEngram(): Promise<{ imported: number; skipped: number; er
  */
 async function generateSessionSummary(
   sessionId?: string,
+  dryRun = false,
 ): Promise<{ path?: string; error?: string }> {
   const sid = sessionId || `session-${getToday().replace(/-/g, '')}`;
   log(`Generating session summary: ${sid}...`, 'INFO');
 
   try {
-    ensureDir(SESSIONS_DIR);
+    if (!dryRun) ensureDir(SESSIONS_DIR);
 
     // Buscar contexto de sesión actual
     const sessionDir = join(ROOT, '.session', 'context-log', sid);
@@ -317,8 +341,8 @@ ${sessionData || '*No session data available*'}
 *Auto-generated by knowledge-base-sync*
 `;
 
-    writeFileSync(summaryPath, summaryContent, 'utf-8');
-    log(`Session summary saved: ${summaryPath}`, 'SUCCESS');
+    if (!dryRun) writeFileSync(summaryPath, summaryContent, 'utf-8');
+    log(`${dryRun ? 'Would save' : 'Session summary saved'}: ${summaryPath}`, 'SUCCESS');
     return { path: summaryPath };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
@@ -333,16 +357,7 @@ ${sessionData || '*No session data available*'}
 function showStats(): void {
   log('Knowledge Base Stats:', 'INFO');
 
-  const folders = [
-    '00-inbox',
-    '01-projects',
-    '02-architecture',
-    '03-skills',
-    '04-sessions',
-    '05-research',
-    '06-templates',
-    '07-archive',
-  ];
+  const folders = Object.values(config.folders);
   let total = 0;
 
   for (const folder of folders) {
@@ -373,6 +388,8 @@ function parseArgs(): SyncOptions {
       opts.sessionId = args[++i];
     } else if (args[i] === '--quiet' || args[i] === '-q') {
       opts.quiet = true;
+    } else if (args[i] === '--dry-run') {
+      opts.dryRun = true;
     } else if (args[i] === '--stats') {
       showStats();
       process.exit(0);
@@ -381,19 +398,20 @@ function parseArgs(): SyncOptions {
 Knowledge Base Sync - Engram ↔ Vault
 
 Usage:
-  npx tsx src/knowledge-base-sync.ts [options]
+  pnpm kb:sync -- [options]
 
 Options:
   --mode, -m <mode>       Sync mode: full, export, import, session-summary (default: full)
   --session-id, -s <id>   Session ID for summary generation
   --stats                 Show vault statistics
   --quiet, -q             Suppress output
+  --dry-run               Preview changes without writing to the vault or Engram
   --help, -h              Show this help
 
 Examples:
-  npx tsx src/knowledge-base-sync.ts --mode full
-  npx tsx src/knowledge-base-sync.ts --mode session-summary --session-id session-2026-07-27
-  npx tsx src/knowledge-base-sync.ts --stats
+  pnpm kb:sync -- --mode full
+  pnpm kb:sync -- --mode session-summary --session-id session-2026-07-27
+  pnpm kb:sync -- --stats
 `);
       process.exit(0);
     }
@@ -405,24 +423,18 @@ Examples:
 async function main(): Promise<void> {
   const opts = parseArgs();
 
-  console.log('\n╔════════════════════════════════════════════════════════╗');
-  console.log('║     Knowledge Base Sync - Engram ↔ Vault             ║');
-  console.log('╚════════════════════════════════════════════════════════╝\n');
+  if (!opts.quiet)
+    console.log(`Knowledge Base Sync - Engram ↔ Vault${opts.dryRun ? ' (dry-run)' : ''}`);
 
   // Ensure vault exists
   if (!existsSync(VAULT_DIR)) {
     log('Vault not found. Creating structure...', 'WARN');
-    ensureDir(VAULT_DIR);
-    [
-      '00-inbox',
-      '01-projects',
-      '02-architecture',
-      '03-skills',
-      '04-sessions',
-      '05-research',
-      '06-templates',
-      '07-archive',
-    ].forEach(ensureDir);
+    if (!opts.dryRun) {
+      ensureDir(VAULT_DIR);
+      Object.values(config.folders)
+        .map((folder) => join(VAULT_DIR, folder))
+        .forEach(ensureDir);
+    }
   }
 
   const results: {
@@ -433,18 +445,19 @@ async function main(): Promise<void> {
 
   switch (opts.mode) {
     case 'export':
-      results.export = await exportFromEngram(opts.sessionId);
+      results.export = await exportFromEngram(opts.sessionId, opts.dryRun);
       break;
     case 'import':
-      results.import = await importToEngram();
+      results.import = await importToEngram(opts.dryRun);
       break;
     case 'session-summary':
-      results.summary = await generateSessionSummary(opts.sessionId);
+      results.summary = await generateSessionSummary(opts.sessionId, opts.dryRun);
       break;
     case 'full':
     default:
-      results.export = await exportFromEngram(opts.sessionId);
-      results.summary = await generateSessionSummary(opts.sessionId);
+      results.export = await exportFromEngram(opts.sessionId, opts.dryRun);
+      results.import = await importToEngram(opts.dryRun);
+      results.summary = await generateSessionSummary(opts.sessionId, opts.dryRun);
       break;
   }
 

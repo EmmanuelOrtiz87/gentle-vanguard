@@ -28,10 +28,29 @@ const PROFILES_DIR = join(ROOT, 'config', 'tool-profiles');
 const YAML_FILE = join(PROFILES_DIR, 'profiles.yaml');
 
 interface CanonicalProfile {
-  metadata: { name: string; version: string; description: string; canonicalEntry: string; fullReference: string };
+  metadata: {
+    name: string;
+    version: string;
+    description: string;
+    canonicalEntry: string;
+    fullReference: string;
+  };
   core_rules: Array<{ id: string; text: string }>;
-  response_profile: { profile: string; detail: string; chat: string; max_lines_text: number; rules: string[] };
-  settings: { temperature: number; max_tokens: number; cache: boolean; cache_key: boolean; language: string; engram_project: string };
+  response_profile: {
+    profile: string;
+    detail: string;
+    chat: string;
+    max_lines_text: number;
+    rules: string[];
+  };
+  settings: {
+    temperature: number;
+    max_tokens: number;
+    cache: boolean;
+    cache_key: boolean;
+    language: string;
+    engram_project: string;
+  };
   break_glass: { trigger: string; command: string; override_to: string; notify: string };
   key_refs: string[];
 }
@@ -154,17 +173,17 @@ Las reglas de este proyecto estan modularizadas en \`.cursor/rules/\` para mejor
 ## Fase 0: Tool Detection (PRIMERA accion)
 
 Ejecutar ANTES de cualquier accion:
-\`\`\`powershell
-$detected = pwsh -NoProfile -File scripts/utilities/detect-tool.ps1 -AsJson | ConvertFrom-Json
-$detected.name   # opencode|claude-code|cline|cursor|windsurf|unknown
-$detected.os.platform  # windows|linux|macos
+\`\`\`bash
+npx tsx src/core/detect-tool.ts --json
+# name: opencode|claude-code|cline|cursor|windsurf|unknown
+# os.platform: windows|linux|macos
 \`\`\`
 Cargar config desde \`config/orchestrator.json#toolProfiles.<name>\`.
 
 ## Startup Sequence
 
-1. \`pre-process-input.ps1 -UserInput "<msg>" -WorkspaceRoot "."\` BEFORE primera respuesta
-2. \`scripts/utilities/session-start-optimized.ps1\` (autostart pipeline con lazy loading)
+1. \`npx tsx src/tools/pre-process-input.ts --user-input "<msg>" --workspace-root "."\` BEFORE primera respuesta
+2. \`npx tsx src/session/session-start-optimized.ts\` (autostart pipeline con lazy loading)
 3. \`${p.metadata.canonicalEntry}\` — sin atajos (completo: \`${p.metadata.fullReference}\`)
 
 ## Reglas activas
@@ -229,7 +248,7 @@ context:
     - "rules/**/*.md"           # All rules (small files)
     - "config/*.json"           # Config files (indexed)
     - "skills/*/SKILL.md"       # Skill definitions only
-    - "scripts/utilities/pre-process-input.ps1"  # Core router
+    - "src/tools/pre-process-input.ts"  # Core router
     - "${p.metadata.canonicalEntry}"       # Canonical entry (completo: ${p.metadata.fullReference})
     - ".clinerules"             # This file
 
@@ -262,7 +281,7 @@ context:
 # ============================================================================
 # PHASE 2: TRIGGER ROUTING (Route to correct agent/skill)
 # ============================================================================
-# Execute pre-process-input.ps1 BEFORE responding
+# Execute src/tools/pre-process-input.ts BEFORE responding
 # Format: "trigger_keyword" → "agent_code" → "skill_path"
 
 triggers:
@@ -375,7 +394,9 @@ function main(): void {
 
   if (check) {
     if (drift) {
-      console.error('[FAIL] Drift detectado — ejecutar: npx tsx src/orchestration/profiles-build.ts');
+      console.error(
+        '[FAIL] Drift detectado — ejecutar: npx tsx src/orchestration/profiles-build.ts',
+      );
       process.exit(1);
     }
     console.log('[OK] Todos los tool-profiles sincronizados con profiles.yaml');

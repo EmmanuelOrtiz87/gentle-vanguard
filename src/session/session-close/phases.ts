@@ -19,6 +19,7 @@ import {
   getChangedFiles,
 } from './helpers.js';
 import { KILL_TARGETS, waitForProcess, killProcessByCommandLine } from './process.js';
+import { runArtifactRetention } from '../artifact-retention.js';
 
 // ─── Fases ──────────────────────────────────────────────────────────────────────
 
@@ -565,7 +566,10 @@ export function phaseAudit(): PhaseResult[] {
   return results;
 }
 
-export async function phaseCleanup(skipDaemonKill = false): Promise<PhaseResult[]> {
+export async function phaseCleanup(
+  skipDaemonKill = false,
+  retentionAuthorized = false,
+): Promise<PhaseResult[]> {
   const results: PhaseResult[] = [];
   log('=== FASE 5: CLEANUP ===');
 
@@ -691,6 +695,25 @@ export async function phaseCleanup(skipDaemonKill = false): Promise<PhaseResult[
       const msg = e instanceof Error ? e.message : String(e);
       warn(`Process hygiene sweep failed (non-blocking): ${msg}`);
     }
+  }
+
+  try {
+    const retention = runArtifactRetention({
+      workspaceRoot: ROOT,
+      apply: retentionAuthorized,
+      authorizedAutomatedClose: retentionAuthorized,
+    });
+    results.push({
+      phase: 'artifact-retention',
+      status: 'PASS',
+      detail: `${retention.mode}: ${retention.candidates.length} expired candidate(s), ${retention.deleted.length} deleted; audit ${retention.auditPath ?? 'not written'}`,
+    });
+  } catch (e: unknown) {
+    results.push({
+      phase: 'artifact-retention',
+      status: 'FAIL',
+      detail: e instanceof Error ? e.message : String(e),
+    });
   }
 
   // 5.4 Clean temp files (unregistered + stale registry entries)
