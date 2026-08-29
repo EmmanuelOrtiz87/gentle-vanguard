@@ -226,7 +226,7 @@ export function getToolConfig(detectedTool: DetectedTool, configPath?: string): 
     sessionLifecycle: 'rules/NORMATIVAS-SESSION.md',
     developmentStandards: 'rules/DEVELOPMENT-STANDARDS.md',
     sessionAutostart: sessionStartCmd,
-    preProcessHook: 'npx tsx src/pre-process-input.ts',
+    preProcessHook: 'npx tsx src/tools/pre-process-input.ts',
     responseProfile: 'ultra',
     communicationLang: 'es',
   };

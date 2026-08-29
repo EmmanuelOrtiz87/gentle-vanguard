@@ -90,7 +90,7 @@
       {
         "id": "auth-session",
         "enabled": false,
-        "script": "src/auth-session.ts",
+        "script": "src/security/auth-session.ts",
         "args": "",
         "required": false,
         "description": "Authenticate owner for restricted operations (TS)",
@@ -172,7 +172,7 @@
       {
         "id": "karpathy-guidelines",
         "enabled": true,
-        "script": "src/karpathy-enforcer.ts",
+        "script": "src/orchestration/karpathy-enforcer.ts",
         "args": "--trigger session-start --verbose",
         "required": false,
         "description": "Enforce Karpathy guidelines (Think, Simplicity, Surgical, Goal-Driven) (TS)"
@@ -360,7 +360,7 @@
         "id": "document-analysis-init",
         "enabled": true,
         "lazy": true,
-        "script": "src/document-analysis-init.ts",
+        "script": "src/tools/document-analysis-init.ts",
         "args": "--quiet",
         "required": false,
         "description": "Inicializar Document Analysis Skill - sidecar Python + conectores Jira/Confluence (TS)"
@@ -513,7 +513,7 @@
         "id": "auto-norm-learner",
         "enabled": true,
         "lazy": true,
-        "script": "src/auto-norm-learner.ts",
+        "script": "src/tools/auto-norm-learner.ts",
         "args": "--trigger=session-start --quiet",
         "required": false,
         "description": "Auto-learn norms from session patterns and update LEARNED-NORMS.md (meta-cognitive learning)"
@@ -811,7 +811,7 @@
         "id": "compact-state-init",
         "enabled": true,
         "lazy": true,
-        "script": "src/compact-state.ts",
+        "script": "src/tools/compact-state.ts",
         "args": "--gc --quiet",
         "required": false,
         "phase": 99,
@@ -887,7 +887,7 @@
         "id": "auto-optimization",
         "enabled": true,
         "lazy": true,
-        "script": "src/auto-optimizer.ts",
+        "script": "src/tools/auto-optimizer.ts",
         "args": "--mode auto",
         "required": false,
         "description": "Auto-optimize stack based on session metrics and learned patterns"
@@ -943,7 +943,7 @@
         "id": "chat-level-enforcer-init",
         "enabled": true,
         "lazy": true,
-        "script": "src/chat-level-enforcer.ts",
+        "script": "src/orchestration/chat-level-enforcer.ts",
         "args": "--status --quiet",
         "required": false,
         "phase": 99,
@@ -1039,7 +1039,7 @@
         "id": "plugin-registry-load",
         "enabled": true,
         "lazy": true,
-        "script": "src/plugin-manager.ts",
+        "script": "src/tools/plugin-manager.ts",
         "args": "list --quiet",
         "required": false,
         "description": "Load local-first plugin registry at session start — discovers plugins/ and ~/.gentle-vanguard/plugins, validates manifests, persists enabled state (non-blocking)"

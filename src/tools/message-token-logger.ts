@@ -5,7 +5,7 @@
  * `events` (event sourcing append-only, type='message.token_usage').
  *
  * Uso:
- *   npx tsx src/message-token-logger.ts \
+ *   npx tsx src/tools/message-token-logger.ts \
  *     --session-id <sid> --input <n> --output <n> [--turn <label>] \
  *     [--model <model>] [--cost <usd>] [--quiet]
  *

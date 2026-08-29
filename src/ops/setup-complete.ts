@@ -137,7 +137,7 @@ function installGentleVanguard(installPath: string, mode: SetupMode, skipHooks: 
     writeSuccess(`Created install directory: ${installPath}`);
   }
 
-  const repoRoot = resolve(__dirname, '..');
+  const repoRoot = resolve(__dirname, '..', '..');
   const gitDir = join(repoRoot, '.git');
   if (existsSync(gitDir)) {
     console.log('  Copying from current repository...');

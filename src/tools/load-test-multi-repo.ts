@@ -12,9 +12,9 @@
  * global lock (.runtime/session-autostart.lock) and only one instance may run.
  *
  * Usage:
- *   npx tsx src/load-test-multi-repo.ts --repos 5 --ops 3 --concurrency 3
- *   npx tsx src/load-test-multi-repo.ts --repos 3 --ops health-check,watchtower,recommend --json
- *   npx tsx src/load-test-multi-repo.ts --repos 5 --ops 3 --report .runtime/load-test-report.json
+ *   npx tsx src/tools/load-test-multi-repo.ts --repos 5 --ops 3 --concurrency 3
+ *   npx tsx src/tools/load-test-multi-repo.ts --repos 3 --ops health-check,watchtower,recommend --json
+ *   npx tsx src/tools/load-test-multi-repo.ts --repos 5 --ops 3 --report .runtime/load-test-report.json
  *
  * Flags:
  *   --repos N        number of temporary git repos (default 5)
@@ -32,12 +32,12 @@ import { tmpdir } from 'os';
 import { dirname, join, resolve } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { performance } from 'perf_hooks';
-import { runNpxTsx, runSync, type RunOptions } from './core/run-command.js';
+import { runNpxTsx, runSync, type RunOptions } from '../core/run-command.js';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 /** Stack root resolved from this module's location (cwd-independent). */
-const STACK_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const STACK_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const DEFAULT_OPS = ['health-check', 'watchtower', 'recommend'];
 const SUCCESS_THRESHOLD = 0.9;
 const OP_TIMEOUT_MS = 120000;

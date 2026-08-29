@@ -8,12 +8,12 @@ Canonical entry: `docs/agents/AGENTS.md`
 
 ## Pre-response Hook (every turn)
 
-`npx tsx src/pre-process-input.ts --input "<msg>" --workspace-root "."`
+`npx tsx src/tools/pre-process-input.ts --input "<msg>" --workspace-root "."`
 
 ## Core Rules
 
 1. LOCAL-FIRST: project knowledge before external sources
-2. `npx tsx src/pre-process-input.ts` BEFORE every response
+2. `npx tsx src/tools/pre-process-input.ts` BEFORE every response
 3. SDD FLOW: new features -> BA/EXPLORE first, no exceptions
 4. Delegation Rules -> `rules/DELEGATION-RULES.md` mandatory for multi-step
 5. `mem_save` after every significant task

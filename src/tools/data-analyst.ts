@@ -6,7 +6,7 @@
  * Supports CSV, JSON, and direct SQL queries to Nexus.
  *
  * Usage:
- *   npx tsx src/data-analyst.ts <command> [options]
+ *   npx tsx src/tools/data-analyst.ts <command> [options]
  *
  * Commands:
  *   describe <file>                   - Summary statistics

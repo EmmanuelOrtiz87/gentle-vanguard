@@ -51,7 +51,7 @@ interface CMSStorage {
 
 #### 1.2 Compilación Real de Video (con FFmpeg)
 
-**Ubicación**: `src/video-agent.ts`  
+**Ubicación**: `src/tools/video-agent.ts`  
 **Problema**: Solo genera frames HTML, no MP4  
 **Solución**:
 

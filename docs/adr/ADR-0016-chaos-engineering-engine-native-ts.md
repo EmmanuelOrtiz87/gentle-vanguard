@@ -32,7 +32,7 @@ structural-compression, coverage-runner, slsa-provenance, slsa-signer).
 
 ## Decision
 
-**Implementar un motor de Chaos Engineering nativo en TypeScript puro** (`src/chaos-engineering.ts`)
+**Implementar un motor de Chaos Engineering nativo en TypeScript puro** (`src/tools/chaos-engineering.ts`)
 que inyecta fallos controlados en componentes reales del stack, verifica la respuesta (detección,
 auto-heal, degradación graceful) y **siempre restaura el estado original** (try/finally + backup
 `.chaos-bak`).
@@ -110,7 +110,7 @@ npx tsx --test tests/unit/chaos-engineering.test.ts   # tests (10)
 - [Principles of Chaos Engineering](https://principlesofchaos.org/)
 - [LitmusChaos](https://litmuschaos.io/) / [Chaos Mesh](https://chaos-mesh.org/) — referencias de la
   normativa (no usadas directamente)
-- `src/chaos-engineering.ts` — implementación
+- `src/tools/chaos-engineering.ts` — implementación
 - `tests/unit/chaos-engineering.test.ts` — 10 tests
 
 ---

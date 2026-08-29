@@ -141,7 +141,7 @@ async function main() {
     case 'switch-all-native': {
       console.log('Running switch to native models...');
       // Hidden, shell-free spawn (raw execSync would flash a cmd.exe console).
-      runNpxTsxSync('src/opencode-switch-to-native.ts', [], { stdio: 'inherit' });
+      runNpxTsxSync('src/tools/opencode-switch-to-native.ts', [], { stdio: 'inherit' });
       break;
     }
 

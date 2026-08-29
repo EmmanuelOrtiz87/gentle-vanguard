@@ -3,7 +3,7 @@
 import { existsSync, writeFileSync, copyFileSync, unlinkSync } from 'fs';
 import { join, resolve, dirname, extname } from 'path';
 import { fileURLToPath } from 'url';
-import { runSync, runNpxTsxSync } from './core/run-command.js';
+import { runSync, runNpxTsxSync } from '../core/run-command.js';
 import * as readline from 'readline';
 import { tmpdir } from 'os';
 
@@ -63,11 +63,11 @@ function askConfirmation(prompt: string): Promise<boolean> {
 }
 
 function getCheckScriptPath(): string {
-  return join(__dirname, 'tools', 'check-version.ts');
+  return join(__dirname, 'check-version.ts');
 }
 
 function getProjectRoot(): string {
-  return resolve(__dirname, '..');
+  return resolve(__dirname, '../..');
 }
 
 function findExePath(projectRoot: string): string {

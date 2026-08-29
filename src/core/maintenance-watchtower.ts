@@ -834,7 +834,7 @@ async function checkSessionPipeline() {
   const scripts = [
     'src/session/session-start-optimized.ts',
     'src/session/session-manager.ts',
-    'src/pre-process-input.ts',
+    'src/tools/pre-process-input.ts',
     'src/session/session-start-optimized.ts',
     'src/session/session-cleanup-start.ts',
   ];

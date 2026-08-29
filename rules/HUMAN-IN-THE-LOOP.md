@@ -226,7 +226,7 @@ The dashboard shows:
 
 - `scripts/security/security-orchestrator.ps1`
 - `scripts/security/privacy-gateway.ps1`
-- `src/pre-process-input.ts`
+- `src/tools/pre-process-input.ts`
 - `config/security-policy.json`
 - `rules/NORMATIVAS-SECURITY-COMPLIANCE.md`
 - `rules/DELEGATION-RULES.md`

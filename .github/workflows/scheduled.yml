@@ -63,7 +63,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Run chaos experiments (safe restore guaranteed)
-        run: npx tsx src/chaos-engineering.ts run-all --json
+        run: npx tsx src/tools/chaos-engineering.ts run-all --json
       - name: Verify experiments passed
         run: |
           $results = Get-Content .session/chaos/results.json | ConvertFrom-Json

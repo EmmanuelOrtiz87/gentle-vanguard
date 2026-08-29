@@ -127,13 +127,13 @@ _No deprecated norms._
    - Recomendaciones automáticas
    - Estado: ✅ Funcionando
 
-4. **Auto-Optimizer** (`src/auto-optimizer.ts`)
+4. **Auto-Optimizer** (`src/tools/auto-optimizer.ts`)
    - Optimización automática basada en métricas de sesión
    - Modos: auto, analyze, dry-run
    - Reportes guardados en `reports/optimization/`
    - Estado: ✅ Funcionando
 
-5. **Pre-Process Input Cached** (`src/pre-process-input-cached.ts`)
+5. **Pre-Process Input Cached** (`src/tools/pre-process-input-cached.ts`)
    - Wrapper con Response Cache para pre-process-input
    - Reducción de tokens en procesamiento de input
    - Estado: ✅ Listo para integrar

@@ -5,7 +5,7 @@
 **BEFORE responding to ANY user input:**
 
 1. **Run trigger detection** - Execute:
-   `TypeScript -File src/pre-process-input.ts -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
+   `TypeScript -File src/tools/pre-process-input.ts -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
 2. **Parse output**:
    - If `TRIGGER_MATCH_FOUND` → Load indicated skill using `skill` tool BEFORE any other action
    - If `PLAN_MODE_REQUIRED` → Activate BA agent, load `sdd-lifecycle` skill

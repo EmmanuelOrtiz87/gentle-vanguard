@@ -67,7 +67,7 @@ time_estimate (hours, days, weeks), cost_estimate (usd), report_path, confidence
 - `sidecar/document_generator.py` — DOCX/XLSX/PPTX/PDF/MD output
 - `C:/Workspace_local/gentle-vanguard/src/jira-connector.ts` — Jira API connector
 - `C:/Workspace_local/gentle-vanguard/src/confluence-connector.ts` — Confluence REST connector
-- `src/document-analysis-init.ts` — main orchestrator script
+- `src/tools/document-analysis-init.ts` — main orchestrator script
 
 ## Examples
 

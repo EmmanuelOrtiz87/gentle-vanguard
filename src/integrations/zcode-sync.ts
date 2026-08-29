@@ -251,7 +251,7 @@ function main(): void {
   }
 }
 
-// CLI Guard pattern (normalizado para rutas Windows — ver src/auto-url-fix.ts)
+// CLI Guard pattern (normalizado para rutas Windows — ver src/tools/auto-url-fix.ts)
 if (
   process.argv[1] &&
   import.meta.url === new URL(`file://${process.argv[1].replace(/\\/g, '/')}`).href

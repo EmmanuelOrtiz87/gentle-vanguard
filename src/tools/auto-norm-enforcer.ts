@@ -8,7 +8,7 @@
 
 import { existsSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSyncShell } from './core/run-command.js';
+import { runSyncShell } from '../core/run-command.js';
 
 const ROOT = resolve(process.cwd());
 // const _LEARNED_NORMS = join(ROOT, 'rules', 'adaptive', 'LEARNED-NORMS.md'); // reserved

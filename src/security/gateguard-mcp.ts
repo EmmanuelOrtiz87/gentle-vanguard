@@ -77,7 +77,7 @@ function saveState(state: GateGuardState): void {
 }
 
 function getProjectRoot(): string {
-  return resolve(__dirname, '..');
+  return resolve(__dirname, '..', '..');
 }
 
 function sleep(ms: number): void {

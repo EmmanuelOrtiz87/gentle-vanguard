@@ -73,7 +73,7 @@ metadata:
 
 **Norm Enforcement:**
 
-- Add to C:/Workspace_local/gentle-vanguard/src/auto-norm-enforcer.ts as "karpathy-norms"
+- Add to C:/Workspace_local/gentle-vanguard/src/tools/auto-norm-enforcer.ts as "karpathy-norms"
 - Check: Is code minimal? Are changes surgical? Are goals defined?
 - Auto-fix: Suggest simplifications, remove orthogonal changes
 

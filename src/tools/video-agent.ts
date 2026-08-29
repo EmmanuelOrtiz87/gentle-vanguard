@@ -467,7 +467,7 @@ async function main() {
 Gentle-Vanguard Video Agent
 
 Usage:
-  npx tsx src/video-agent.ts [command] [options]
+  npx tsx src/tools/video-agent.ts [command] [options]
 
 Commands:
   demo [topic] [duration]     Create simulated demo
@@ -476,9 +476,9 @@ Commands:
   cleanup                     Clean temp directories
 
 Examples:
-  npx tsx src/video-agent.ts demo "Migration" 60
-  npx tsx src/video-agent.ts architecture src/arch-flow.json
-  npx tsx src/video-agent.ts record https://localhost:5173 30
+  npx tsx src/tools/video-agent.ts demo "Migration" 60
+  npx tsx src/tools/video-agent.ts architecture src/arch-flow.json
+  npx tsx src/tools/video-agent.ts record https://localhost:5173 30
 `);
     return;
   }

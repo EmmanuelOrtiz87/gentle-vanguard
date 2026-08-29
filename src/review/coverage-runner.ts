@@ -21,7 +21,7 @@ import { fileURLToPath } from 'url';
 import { loadConfigFile } from '../core/config-loader.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = resolve(__dirname, '..');
+const ROOT = resolve(__dirname, '..', '..');
 
 interface Thresholds {
   lines: number;

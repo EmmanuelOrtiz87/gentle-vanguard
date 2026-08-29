@@ -22,7 +22,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, '..');
+const ROOT = join(__dirname, '..', '..');
 const REPORT_PATH = join(ROOT, '.runtime', 'stack-compliance-report.json');
 const MODEL_ACTIVE_PATH = join(ROOT, '.runtime', 'model-active.json');
 

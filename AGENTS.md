@@ -129,7 +129,7 @@ npm run watchtower:health   # 96/96 PASS esperado
 ```
 
 CLI Guard: check anti-regresión del patrón roto
-`import.meta.url === \`file://${process.argv[1]}\``(ver`src/auto-url-fix.ts`).
+`import.meta.url === \`file://${process.argv[1]}\``(ver`src/tools/auto-url-fix.ts`).
 
 ## Nexus — DB operacional
 

@@ -12,7 +12,7 @@
   "configFiles": [".cursorrules", ".cursor/config.json"],
   "mcpBridge": "src/integrations/mcp-bridge.ts",
   "hooks": {
-    "preToolCall": "src/pre-process-input.ts",
+    "preToolCall": "src/tools/pre-process-input.ts",
     "sessionStart": "scripts/utilities/session-autostart.cmd",
     "sessionStartPlatform": {
       "windows": "scripts/utilities/session-autostart.cmd",

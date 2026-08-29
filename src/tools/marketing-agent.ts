@@ -506,7 +506,7 @@ async function main() {
 Gentle-Vanguard Marketing Agent
 
 Usage:
-  npx tsx src/marketing-agent.ts [options]
+  npx tsx src/tools/marketing-agent.ts [options]
 
 Options:
   --topic=<topic>       Topic to generate content about
@@ -520,8 +520,8 @@ Options:
   --help               Show this help
 
 Examples:
-  npx tsx src/marketing-agent.ts --topic="Migration TS" --platform=linkedin --lang=es
-  npx tsx src/marketing-agent.ts --template=launch --topic="v4.0" --multi-lang
+  npx tsx src/tools/marketing-agent.ts --topic="Migration TS" --platform=linkedin --lang=es
+  npx tsx src/tools/marketing-agent.ts --template=launch --topic="v4.0" --multi-lang
 `);
     return;
   }

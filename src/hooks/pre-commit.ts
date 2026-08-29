@@ -216,7 +216,7 @@ function main(_args?: string[]): number {
   const docHookTs = join(gitRoot, 'src', 'document-analysis-init.ts');
   if (existsSync(docHookTs)) {
     try {
-      const r = runNpxTsxSync('src/document-analysis-init.ts', [], { cwd: gitRoot });
+      const r = runNpxTsxSync('src/tools/document-analysis-init.ts', [], { cwd: gitRoot });
       if (r.status !== 0) {
         console.log('[WARN] Document analysis hook failed (non-blocking)');
       }

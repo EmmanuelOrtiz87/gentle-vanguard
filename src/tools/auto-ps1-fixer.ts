@@ -2,7 +2,7 @@
 /**
  * PS1 Ref Fixer - Automated repair of broken PS1 references
  *
- * Usage: npx tsx src/auto-ps1-fixer.ts [--dry-run] [--src-only]
+ * Usage: npx tsx src/tools/auto-ps1-fixer.ts [--dry-run] [--src-only]
  *
  * Strategy:
  * 1. Map PS1 paths to TS equivalents using known patterns
@@ -33,7 +33,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/hooks/npm-audit-pre-push.ps1': 'src/hooks/npm-audit-pre-push.ts',
 
   // Scripts de adaptación
-  'scripts/adaptive/karpathy-enforcer.ps1': 'src/karpathy-enforcer.ts',
+  'scripts/adaptive/karpathy-enforcer.ps1': 'src/orchestration/karpathy-enforcer.ts',
   'scripts/adaptive/correction-rules-engine.ps1': 'src/resilience/correction-rules-engine.ts',
   'scripts/adaptive/session-scoring.ps1': 'src/session/session-scoring.ts',
 
@@ -89,7 +89,7 @@ const PS1_TO_TS_MAP: Record<string, string> = {
   'scripts/utilities/validate-tool-configs.ps1': 'src/validate-tool-configs.ts',
   'scripts/utilities/post-autostart-summary.ps1': 'src/orchestration/post-autostart-summary.ts',
 
-  'scripts/utilities/pre-process-input.ps1': 'src/pre-process-input.ts',
+  'scripts/utilities/pre-process-input.ps1': 'src/tools/pre-process-input.ts',
   'scripts/utilities/pre-compact-hook.ps1': 'src/pre-compact-hook.ts',
   'scripts/utilities/handoff-compress.ps1': 'src/handoff-compress.ts',
 
@@ -248,7 +248,7 @@ function main(): void {
     'src/hooks/pre-commit.ts',
     'src/hooks/validate-readme-hook.ts',
     'src/infrastructure/normative-audit-pipeline.ts',
-    'src/karpathy-enforcer.ts',
+    'src/orchestration/karpathy-enforcer.ts',
     'src/knowledge/knowledge-base-autoinit.ts',
     'src/knowledge/knowledge-base-init.ts',
     'src/orchestration/orchestrate-auto-fix.ts',

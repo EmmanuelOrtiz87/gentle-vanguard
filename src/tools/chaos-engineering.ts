@@ -12,16 +12,16 @@
  * Normative: docs/governance/normatives/NORMATIVAS-CHAOS-ENGINEERING.md
  *
  * Usage:
- *   npx tsx src/chaos-engineering.ts list
- *   npx tsx src/chaos-engineering.ts run <experiment> [--dry-run]
- *   npx tsx src/chaos-engineering.ts run-all [--dry-run]
- *   npx tsx src/chaos-engineering.ts report
+ *   npx tsx src/tools/chaos-engineering.ts list
+ *   npx tsx src/tools/chaos-engineering.ts run <experiment> [--dry-run]
+ *   npx tsx src/tools/chaos-engineering.ts run-all [--dry-run]
+ *   npx tsx src/tools/chaos-engineering.ts report
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, copyFileSync } from 'fs';
 import { resolve, join } from 'path';
 import { spawnSync } from 'child_process';
-import { runSync } from './core/run-command';
+import { runSync } from '../core/run-command';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -51,7 +51,7 @@ export interface ChaosExperiment {
 // Constants
 // ---------------------------------------------------------------------------
 
-export const ROOT = resolve(import.meta.dirname, '..');
+export const ROOT = resolve(import.meta.dirname, '..', '..');
 export const RESULTS_DIR = join(ROOT, '.session', 'chaos');
 export const RESULTS_FILE = join(RESULTS_DIR, 'results.json');
 
@@ -342,10 +342,10 @@ export function printHelp(): void {
 Chaos Engineering Engine (native TypeScript)
 
 Usage:
-  npx tsx src/chaos-engineering.ts list                # list experiments
-  npx tsx src/chaos-engineering.ts run <name> [--dry-run]  # run one experiment
-  npx tsx src/chaos-engineering.ts run-all [--dry-run] # run all experiments
-  npx tsx src/chaos-engineering.ts report              # show last results
+  npx tsx src/tools/chaos-engineering.ts list                # list experiments
+  npx tsx src/tools/chaos-engineering.ts run <name> [--dry-run]  # run one experiment
+  npx tsx src/tools/chaos-engineering.ts run-all [--dry-run] # run all experiments
+  npx tsx src/tools/chaos-engineering.ts report              # show last results
 
 Experiments:
 ${EXPERIMENTS.map((e) => `  ${e.name.padEnd(28)} ${e.description}`).join('\n')}
@@ -393,7 +393,7 @@ if (isDirectRun) {
       const data = loadResults();
       if (!data) {
         console.log(
-          'No chaos experiment results yet. Run: npx tsx src/chaos-engineering.ts run-all',
+          'No chaos experiment results yet. Run: npx tsx src/tools/chaos-engineering.ts run-all',
         );
         break;
       }

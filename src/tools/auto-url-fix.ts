@@ -12,8 +12,8 @@
  * pathToFileURL(process.argv[1]).href` y añadir el import de pathToFileURL.
  *
  * Uso:
- *   npx tsx src/auto-url-fix.ts --dry-run   # mostrar qué se arreglaría
- *   npx tsx src/auto-url-fix.ts             # aplicar fixes
+ *   npx tsx src/tools/auto-url-fix.ts --dry-run   # mostrar qué se arreglaría
+ *   npx tsx src/tools/auto-url-fix.ts             # aplicar fixes
  */
 import { readFileSync, writeFileSync, readdirSync } from 'fs';
 import { join, relative, resolve } from 'path';

@@ -5,7 +5,7 @@ import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { runNpxTsxSync } from '../core/run-command.js';
 import { createRequire } from 'module';
-import { recordMessage } from '../message-token-logger.js';
+import { recordMessage } from '../tools/message-token-logger.js';
 import { readSessionState, saveSessionState } from '../core/session-context-log.js';
 
 const _require = createRequire(import.meta.url);

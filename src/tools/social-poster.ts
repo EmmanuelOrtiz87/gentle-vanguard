@@ -6,8 +6,8 @@
  * scheduling, and analytics tracking.
  *
  * @example
- * npx tsx src/social-poster.ts --platform LinkedIn --template launch
- * npx tsx src/social-poster.ts --platform All --contentFile post.md --schedule "9:00"
+ * npx tsx src/tools/social-poster.ts --platform LinkedIn --template launch
+ * npx tsx src/tools/social-poster.ts --platform All --contentFile post.md --schedule "9:00"
  *
  * @module social-poster
  * @version 1.0.0
@@ -326,7 +326,7 @@ async function main(): Promise<void> {
   if (!platform) {
     console.error('Error: --platform is required');
     console.log(
-      'Usage: npx tsx src/social-poster.ts --platform=<platform> [--template=<name>] [--contentFile=<path>] [--dryRun]',
+      'Usage: npx tsx src/tools/social-poster.ts --platform=<platform> [--template=<name>] [--contentFile=<path>] [--dryRun]',
     );
     console.log('Platforms: LinkedIn, Twitter, GitHub, ProductHunt, DevTo, All');
     process.exit(1);

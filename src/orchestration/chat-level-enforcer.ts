@@ -8,10 +8,10 @@
  * Break-glass override support
  *
  * Usage:
- *   npx tsx src/chat-level-enforcer.ts --level chat-compact --input "response"
- *   npx tsx src/chat-level-enforcer.ts --level chat-balanced --file response.txt
- *   npx tsx src/chat-level-enforcer.ts --profile ultra
- *   npx tsx src/chat-level-enforcer.ts --status
+ *   npx tsx src/orchestration/chat-level-enforcer.ts --level chat-compact --input "response"
+ *   npx tsx src/orchestration/chat-level-enforcer.ts --level chat-balanced --file response.txt
+ *   npx tsx src/orchestration/chat-level-enforcer.ts --profile ultra
+ *   npx tsx src/orchestration/chat-level-enforcer.ts --status
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';
@@ -21,7 +21,7 @@ import {
   getConfig as getOutputConfig,
   compressOutput,
   CompressionProfile,
-} from './compression/output-compression.js';
+} from '../compression/output-compression.js';
 
 // ─── Types ──────────────────────────────────────────────────────────────────────
 
@@ -536,11 +536,11 @@ function printUsage(): void {
 Chat Level Enforcer
 
 Usage:
-  npx tsx src/chat-level-enforcer.ts --level <chat-compact|chat-balanced|chat-detailed> [--input "text" | --file path]
-  npx tsx src/chat-level-enforcer.ts --profile <ultra|lleno|lite|simple> [--input "text"]
-  npx tsx src/chat-level-enforcer.ts --detect "task description"
-  npx tsx src/chat-level-enforcer.ts --status
-  npx tsx src/chat-level-enforcer.ts --break-glass "reason" [--input "text"]
+  npx tsx src/orchestration/chat-level-enforcer.ts --level <chat-compact|chat-balanced|chat-detailed> [--input "text" | --file path]
+  npx tsx src/orchestration/chat-level-enforcer.ts --profile <ultra|lleno|lite|simple> [--input "text"]
+  npx tsx src/orchestration/chat-level-enforcer.ts --detect "task description"
+  npx tsx src/orchestration/chat-level-enforcer.ts --status
+  npx tsx src/orchestration/chat-level-enforcer.ts --break-glass "reason" [--input "text"]
 
 Levels:
   chat-compact   - Essential info only (10 lines, 500 tokens)
@@ -567,9 +567,9 @@ Options:
   --quiet               Suppress extra output
 
 Examples:
-  npx tsx src/chat-level-enforcer.ts --level chat-compact --input "Hello world"
-  npx tsx src/chat-level-enforcer.ts --level chat-compact --level chat-balanced --input "Implement a feature"
-  npx tsx src/chat-level-enforcer.ts --break-glass "Task spans 3+ turns" --input "..."
+  npx tsx src/orchestration/chat-level-enforcer.ts --level chat-compact --input "Hello world"
+  npx tsx src/orchestration/chat-level-enforcer.ts --level chat-compact --level chat-balanced --input "Implement a feature"
+  npx tsx src/orchestration/chat-level-enforcer.ts --break-glass "Task spans 3+ turns" --input "..."
 `);
 }
 

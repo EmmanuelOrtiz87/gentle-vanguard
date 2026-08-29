@@ -52,7 +52,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run norm enforcer
-        run: npx tsx src/auto-norm-enforcer.ts --check
+        run: npx tsx src/tools/auto-norm-enforcer.ts --check
 
   sdd-gate:
     name: SDD Gate

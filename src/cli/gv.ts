@@ -413,8 +413,8 @@ function cmdFix(args: string[]): CommandResult {
   console.log(`[GV] Fixing PS1 references${dryRun ? ' (dry-run)' : ''}...`);
   try {
     const mode = args.includes('--configs')
-      ? 'src/auto-ps1-fixer-configs.ts'
-      : 'src/auto-ps1-fixer.ts';
+      ? 'src/tools/auto-ps1-fixer-configs.ts'
+      : 'src/tools/auto-ps1-fixer.ts';
     const cmd = dryRun ? `npx tsx ${mode} --dry-run` : `npx tsx ${mode}`;
     runSyncShell(cmd, { cwd: ROOT, stdio: 'inherit' });
     return { success: true, message: 'Fix completed' };

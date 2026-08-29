@@ -7,13 +7,13 @@ Version: 1.0.0
 
 ## 1. Pre-Processing Rule (MANDATORY)
 
-Every AI agent **MUST** run `src/pre-process-input.ts` before responding.
+Every AI agent **MUST** run `src/tools/pre-process-input.ts` before responding.
 
 The **first call** in a session MUST use the first user message as input. Subsequent calls MUST
 re-process each new user message before responding.
 
 ```TypeScript
-pwsh -NoProfile -ExecutionPolicy Bypass -File src/pre-process-input.ts `
+pwsh -NoProfile -ExecutionPolicy Bypass -File src/tools/pre-process-input.ts `
   -UserInput "<USER_INPUT>" -WorkspaceRoot "."
 ```
 
@@ -138,7 +138,7 @@ Operational requirements:
 
 1. Critical intents (session start/close, SDD start for new project/component, PR actions) must have
    trigger coverage in all three languages in `config/auto-delegation.json#keywordMappings`.
-2. The routing logic itself (`src/pre-process-input.ts`) uses English triggers as PRIMARY detection.
+2. The routing logic itself (`src/tools/pre-process-input.ts`) uses English triggers as PRIMARY detection.
    Multilingual patterns are SECONDARY — they map to the same English-based routing decisions.
 3. Regressions are blocked by automated matrix validation in
    `tests/e2e/routing-language-matrix.json` executed by `scripts/utilities/routing-quality-eval.ps1`
@@ -189,7 +189,7 @@ Do **NOT** invent skill paths or fake tool calls.
 
 ## 8. Session Lifecycle
 
-1. **Pre**: Run `src/pre-process-input.ts` with first user message — MUST be before any response
+1. **Pre**: Run `src/tools/pre-process-input.ts` with first user message — MUST be before any response
 2. **Start**: Run `npx tsx src/session-autostart.ts` (TypeScript pipeline, 54 steps, idempotent)
 3. **Track**: Session ID pattern `session-YYYY-MM-DD-XX`, project `workspace_gentle_vanguard`
 4. **Analyze**: Read `scripts/.session/startup-summary.json` — report peak hour and warnings to user
@@ -342,7 +342,7 @@ non-compliance.
 
 ```
 User input
-  └─ src/pre-process-input.ts
+  └─ src/tools/pre-process-input.ts
        ├─ TRIGGER_MATCH_FOUND → skill tool → domain agent
        ├─ PLAN_MODE_REQUIRED  → BA → sdd-lifecycle
        └─ NO_TRIGGER_MATCH    → default agent

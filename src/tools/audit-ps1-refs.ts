@@ -30,7 +30,7 @@ const LEGACY_FALLBACK_FILES = new Set([
   'src/tokens/token-usage-notifier.ts',
   'src/web/witr-wrapper.ts',
   'src/infrastructure/normative-audit-pipeline.ts',
-  'src/karpathy-enforcer.ts',
+  'src/orchestration/karpathy-enforcer.ts',
   'src/orchestration/orchestrate-auto-fix.ts',
   'src/ops/setup-complete.ts',
   'src/infrastructure/sync-to-public.ts',

@@ -14,13 +14,13 @@
  * ni inyectar estado en el proceso que lo gestiona.
  *
  * Uso:
- *   npx tsx src/plugin-manager.ts list
- *   npx tsx src/plugin-manager.ts --status
- *   npx tsx src/plugin-manager.ts install <git-url|path> [--user] [--name <dir>]
- *   npx tsx src/plugin-manager.ts remove <id> [--keep-files]
- *   npx tsx src/plugin-manager.ts enable <id>
- *   npx tsx src/plugin-manager.ts disable <id>
- *   npx tsx src/plugin-manager.ts hooks <event> [--json]
+ *   npx tsx src/tools/plugin-manager.ts list
+ *   npx tsx src/tools/plugin-manager.ts --status
+ *   npx tsx src/tools/plugin-manager.ts install <git-url|path> [--user] [--name <dir>]
+ *   npx tsx src/tools/plugin-manager.ts remove <id> [--keep-files]
+ *   npx tsx src/tools/plugin-manager.ts enable <id>
+ *   npx tsx src/tools/plugin-manager.ts disable <id>
+ *   npx tsx src/tools/plugin-manager.ts hooks <event> [--json]
  */
 
 import {
@@ -36,8 +36,8 @@ import {
 import { homedir } from 'os';
 import { basename, dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { runNpxTsxSync, runSync, type RunSyncResult } from './core/run-command.js';
-import { ROOT } from './core/repo-root';
+import { runNpxTsxSync, runSync, type RunSyncResult } from '../core/run-command.js';
+import { ROOT } from '../core/repo-root';
 
 // ─── Paths y config ──────────────────────────────────────────────────────────
 

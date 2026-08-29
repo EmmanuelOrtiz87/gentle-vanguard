@@ -12,8 +12,8 @@ Accepted
 
 El stack acumulaba capacidades de contenido dispersas y sin un flujo operativo unificado:
 
-- `src/marketing-agent.ts` — generación de copy multilingüe y por plataforma.
-- `src/social-poster.ts` — plantillas, plataformas y tracking básico.
+- `src/tools/marketing-agent.ts` — generación de copy multilingüe y por plataforma.
+- `src/tools/social-poster.ts` — plantillas, plataformas y tracking básico.
 - `docs/presentations/resources-index.html` — CMS local / punto de interacción humano.
 
 Cada pieza mantenía su propio modelo de contenido, sin una fuente de verdad común, sin estados

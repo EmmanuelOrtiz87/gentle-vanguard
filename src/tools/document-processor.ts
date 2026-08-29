@@ -6,7 +6,7 @@
  * Supports PDF, DOCX, TXT, CSV, JSON, HTML.
  *
  * Usage:
- *   npx tsx src/document-processor.ts <command> <file> [options]
+ *   npx tsx src/tools/document-processor.ts <command> <file> [options]
  *
  * Commands:
  *   extract <file> [--pages 1,3-5] [--ocr] [--format md|json|txt]
@@ -19,7 +19,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve, extname, basename, dirname } from 'path';
 import { pathToFileURL } from 'url';
-import { runSync } from './core/run-command.js';
+import { runSync } from '../core/run-command.js';
 
 // ─── Types ────────────────────────────────────────────────────────────
 

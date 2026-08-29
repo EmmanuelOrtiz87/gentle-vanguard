@@ -7,10 +7,10 @@
  * Solution: Truncate to last N messages + summarize older context
  *
  * Usage:
- *   npx tsx src/context-truncator.ts --history <json> --max-turns 10 --max-tokens 8000
- *   npx tsx src/context-truncator.ts --auto                    # Auto-apply from state
- *   npx tsx src/context-truncator.ts --monitor                 # Monitor and alert
- *   npx tsx src/context-truncator.ts --info                    # Show current context size
+ *   npx tsx src/tools/context-truncator.ts --history <json> --max-turns 10 --max-tokens 8000
+ *   npx tsx src/tools/context-truncator.ts --auto                    # Auto-apply from state
+ *   npx tsx src/tools/context-truncator.ts --monitor                 # Monitor and alert
+ *   npx tsx src/tools/context-truncator.ts --info                    # Show current context size
  */
 
 import { readFileSync, existsSync, mkdirSync, readdirSync } from 'fs';
@@ -279,9 +279,9 @@ function main(): void {
 Context Truncator — Sliding Window for Conversation History
 
 Usage:
-  npx tsx src/context-truncator.ts --info          # Show current context size
-  npx tsx src/context-truncator.ts --monitor       # Monitor and auto-truncate
-  npx tsx src/context-truncator.ts --config          # Show default config
+  npx tsx src/tools/context-truncator.ts --info          # Show current context size
+  npx tsx src/tools/context-truncator.ts --monitor       # Monitor and auto-truncate
+  npx tsx src/tools/context-truncator.ts --config          # Show default config
 
 Config (DEFAULT):
   maxTurns: ${DEFAULT_CONFIG.maxTurns}

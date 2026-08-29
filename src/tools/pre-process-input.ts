@@ -12,17 +12,17 @@
  * Works transversally: Claude, OpenCode, Cline, Cursor, or any LLM interface.
  *
  * Usage:
- *   npx tsx src/pre-process-input.ts --input "prompt text" [--skill react-19]
- *   npx tsx src/pre-process-input.ts --input "..." --workspace-root . --skill security-skill
- *   npx tsx src/pre-process-input.ts --input "..." --auto-optimize
+ *   npx tsx src/tools/pre-process-input.ts --input "prompt text" [--skill react-19]
+ *   npx tsx src/tools/pre-process-input.ts --input "..." --workspace-root . --skill security-skill
+ *   npx tsx src/tools/pre-process-input.ts --input "..." --auto-optimize
  */
 
 import { resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { compressPrompt } from './compression/prompt-compression.js';
-import { runNpxTsxSync } from './core/run-command.js';
+import { compressPrompt } from '../compression/prompt-compression.js';
+import { runNpxTsxSync } from '../core/run-command.js';
 // getOutputConfig imported for future use in budget-aware optimization
-import { enforceChatLevel, ChatLevel } from './chat-level-enforcer.js';
+import { enforceChatLevel, ChatLevel } from '../orchestration/chat-level-enforcer.js';
 
 // Proactive Intelligence integration
 interface ProactiveSuggestion {

@@ -134,7 +134,7 @@ interface CorrectionRule {
 jobs:
   enforce:
     steps:
-      - run: npx tsx src/auto-norm-enforcer.ts --check
+      - run: npx tsx src/tools/auto-norm-enforcer.ts --check
       - run: npx tsx src/config-diff-detector.ts --report
       - run: npx tsx src/auto-apply-safe.ts --apply
 ```
@@ -142,7 +142,7 @@ jobs:
 ## Referencias
 
 - `src/auto-apply-safe.ts` — Motor de auto-aplicación
-- `src/auto-norm-enforcer.ts` — Enforcer de normativas
+- `src/tools/auto-norm-enforcer.ts` — Enforcer de normativas
 - `src/correction-rules-engine.ts` — Reglas de corrección automática
 - `src/config-diff-detector.ts` — Detector de drift en configs
 - `rules/adaptive/LEARNED-NORMS.md` — Normas aprendidas automáticamente

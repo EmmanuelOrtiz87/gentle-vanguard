@@ -9,7 +9,7 @@ layer multi-herramienta | 436+ TS scripts | 263 skills | 23 CI/CD workflows
 
 ```
 Layer 5: AGENTES  — 21 agents (Orchestrator + 20 sub-agentes: BA, SAD, DEV, QA, OPS, GOV, DOC, etc.)
-Layer 4: COMANDOS — src/cli/gv.ts, src/pre-process-input.ts, src/core/detect-tool.ts | <!-- REF-OBSOLETA: pre-process-input.ps1 y detect-tool.ps1 eliminados; migrados a src/*.ts -->
+Layer 4: COMANDOS — src/cli/gv.ts, src/tools/pre-process-input.ts, src/core/detect-tool.ts | <!-- REF-OBSOLETA: pre-process-input.ps1 y detect-tool.ps1 eliminados; migrados a src/*.ts -->
 Layer 3: MCP      — scripts/mcp/skill-server.ts (MCP protocol), src/mcp/mcp-bridge.ts | <!-- REF-OBSOLETA: mcp-bridge.ps1 eliminado; migrado a src/mcp/mcp-bridge.ts -->
 Layer 2: SKILLS   — 263 skills (175 en skills/ + 88 en .opencode/skills)
 Layer 1: MEMORIA  — Engram persistent memory (tools/engram.exe v1.15.10)
@@ -29,7 +29,7 @@ VS Code, Copilot, Antigravity.
 | Bootstrap workspace | `src/bootstrap.ts`         | ✅ Activo | Manual (setup inicial)     |
 | CLI principal       | `src/cli/gv.ts`            | ✅ Activo | Manual                     |
 | Tool detection      | `src/core/detect-tool.ts`  | ✅ Activo | Automático (cada turno)    |
-| Pre-process hook    | `src/pre-process-input.ts` | ✅ Activo | Automático (cada turno)    |
+| Pre-process hook    | `src/tools/pre-process-input.ts` | ✅ Activo | Automático (cada turno)    |
 | Session manager     | `src/session-manager.ts`   | ✅ Activo | Automático (start/end)     |
 | Hashline integrity  | `src/tools/hashline.ts`          | ✅ Activo | Automático (snapshot hook) |
 
@@ -136,7 +136,7 @@ Activo | Automático (cada turno) |
 <!-- REF-OBSOLETA: scripts/security/encryption-manager.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
 | Input validator | `scripts/security/input-validator.ps1`
-<!-- REF-OBSOLETA: eliminado; validación en src/pre-process-input.ts --> | ✅ Activo | Automático
+<!-- REF-OBSOLETA: eliminado; validación en src/tools/pre-process-input.ts --> | ✅ Activo | Automático
 
 (pre-commit) |
 <!-- REF-OBSOLETA: scripts/security/input-validator.ps1 no tiene equivalente TS (migración PS1→TS) -->
@@ -212,8 +212,8 @@ Activo | Manual |
 
 | Componente         | Archivo(s)                                                                                                                                | Estado    | Automatización             |
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | --------- | -------------------------- |
-| Auto-norm learner  | `src/auto-norm-learner.ts`                                                                                                                | ⚠️ Activo | Manual (bajo demanda)      |
-| Auto-norm enforcer | `src/auto-norm-enforcer.ts`                                                                                                               | ✅ Activo | Automático (cada 5 turnos) |
+| Auto-norm learner  | `src/tools/auto-norm-learner.ts`                                                                                                                | ⚠️ Activo | Manual (bajo demanda)      |
+| Auto-norm enforcer | `src/tools/auto-norm-enforcer.ts`                                                                                                               | ✅ Activo | Automático (cada 5 turnos) |
 | Failure learning   | `src/ml/learning-engine.ts` <!-- REF-OBSOLETA: scripts/adaptive/failure-learning-system.ps1 eliminado; candidato: src/ml/learning-engine.ts --> | ⚠️ Activo | Manual                     |
 
 <!-- REF-OBSOLETA: scripts/adaptive/failure-learning-system.ps1 no tiene equivalente TS (migración PS1→TS) -->
@@ -241,7 +241,7 @@ Activo | Manual |
 | ⚠️ Activo | Event-driven |
 <!-- REF-OBSOLETA: scripts/adaptive/judgment-day-bridge.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
-| Karpathy enforcer | `src/karpathy-enforcer.ts` | ✅ Activo | Automático (pre-commit) | | Normative
+| Karpathy enforcer | `src/orchestration/karpathy-enforcer.ts` | ✅ Activo | Automático (pre-commit) | | Normative
 audit pipeline | `src/infrastructure/normative-audit-pipeline.ts` | ✅ Activo | Automático
 (pre-commit + CI) | | Event bus | `.event-bus/` (1 sub: judgment-day) | ✅ Activo | Event-driven |
 
@@ -250,7 +250,7 @@ audit pipeline | `src/infrastructure/normative-audit-pipeline.ts` | ✅ Activo |
 | Componente                 | Archivo(s)                                                                                                                                            | Estado    | Automatización          |
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------------------- |
 | System prompt optimization | `config/system-prompt-optimization.json` <!-- REF-OBSOLETA: scripts/utilities/PROMPT/ eliminado; configs JSON en config/ -->                          | ✅ Activo | Automático (pre-sesión) |
-| A/B testing prompts        | `src/ab-testing-framework.ts` <!-- REF-OBSOLETA: scripts/utilities/PROMPT/prompt-ab-testing.ps1 eliminado; candidato: src/ab-testing-framework.ts --> | ✅ Activo | Manual                  |
+| A/B testing prompts        | `src/tools/ab-testing-framework.ts` <!-- REF-OBSOLETA: scripts/utilities/PROMPT/prompt-ab-testing.ps1 eliminado; candidato: src/tools/ab-testing-framework.ts --> | ✅ Activo | Manual                  |
 
 <!-- REF-OBSOLETA: scripts/utilities/PROMPT/prompt-ab-testing.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
@@ -332,7 +332,7 @@ Manual |
 
 ```
 Usuario escribe mensaje
-  → src/pre-process-input.ts (cache SHA256, token notif, tool detection)
+  → src/tools/pre-process-input.ts (cache SHA256, token notif, tool detection)
   → src/session-start-optimized.ts (autostart pipeline)
   → ML router analiza input → recomienda skill
   → Engram context load (memorias previas)

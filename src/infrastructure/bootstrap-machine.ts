@@ -364,7 +364,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const GF_ROOT = join(__dirname, '..');
+const GF_ROOT = join(__dirname, '..', '..');
 const SkillsDir = join(GF_ROOT, 'skills');
 
 function getGfSkill(name: string): string | null {

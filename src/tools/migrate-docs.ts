@@ -18,7 +18,7 @@ const REPLACEMENTS: Replacement[] = [
   // Main patterns
   {
     from: /scripts\/utilities\/pre-process-input\.ps1/g,
-    to: 'src/pre-process-input.ts',
+    to: 'src/tools/pre-process-input.ts',
     description: 'Pre-process input hook',
   },
   {
@@ -113,7 +113,7 @@ const REPLACEMENTS: Replacement[] = [
   },
   {
     from: /scripts\/adaptive\/auto-norm-learner\.ps1/g,
-    to: 'src/auto-norm-learner.ts',
+    to: 'src/tools/auto-norm-learner.ts',
     description: 'Auto-norm learner',
   },
   {

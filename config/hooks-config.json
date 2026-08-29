@@ -5,7 +5,7 @@
     "pre_process": {
       "enabled": true,
       "mandatory": true,
-      "script": "src/pre-process-input.ts",
+      "script": "src/tools/pre-process-input.ts",
       "timeout": 30000,
       "args": {
         "UserInput": "${user_input}",

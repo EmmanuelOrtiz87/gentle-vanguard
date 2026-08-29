@@ -28,7 +28,7 @@ import { pathToFileURL } from 'url';
 import { createHash } from 'crypto';
 import { compressPrompt } from '../compression/prompt-compression.js';
 import { compressOutput } from '../compression/output-compression.js';
-import { enforceChatLevel } from '../chat-level-enforcer.js';
+import { enforceChatLevel } from '../orchestration/chat-level-enforcer.js';
 import { ResponseCache } from '../resilience/response-cache.js';
 import { runSync } from '../core/run-command.js';
 

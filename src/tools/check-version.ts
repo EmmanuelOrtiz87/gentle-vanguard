@@ -100,7 +100,7 @@ async function getLatestRelease(preRelease: boolean): Promise<GitHubRelease> {
 }
 
 function getProjectRoot(): string {
-  return resolve(__dirname, '..');
+  return resolve(__dirname, '..', '..');
 }
 
 async function main(): Promise<void> {

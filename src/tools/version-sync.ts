@@ -16,7 +16,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-const ROOT = join(import.meta.dirname, '..');
+const ROOT = join(import.meta.dirname, '..', '..');
 
 function readText(rel: string): string {
   return readFileSync(join(ROOT, rel), 'utf8');

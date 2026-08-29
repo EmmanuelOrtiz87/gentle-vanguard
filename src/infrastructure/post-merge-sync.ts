@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 function main(): void {
-  const repoRoot = resolve(__dirname, '..');
+  const repoRoot = resolve(__dirname, '..', '..');
 
   console.log('[INFO] Running post-merge sync...');
 
