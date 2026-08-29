@@ -556,6 +556,26 @@ const MIGRATIONS: Array<{ id: string; sql: string }> = [
         ON routing_rules(tenant_id, enabled, success_rate DESC, hit_count DESC);
     `,
   },
+  {
+    id: '016_token_savings',
+    sql: `
+      CREATE TABLE IF NOT EXISTS token_savings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        message_id TEXT,
+        session_id TEXT,
+        category TEXT,
+        saved_tokens INTEGER,
+        source TEXT,
+        created_at TEXT DEFAULT (datetime('now')),
+        tenant_id TEXT NOT NULL DEFAULT 'gentle-vanguard',
+        UNIQUE(message_id, category, tenant_id)
+      );
+      CREATE INDEX IF NOT EXISTS idx_token_savings_tenant_created
+        ON token_savings(tenant_id, created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_token_savings_tenant_category
+        ON token_savings(tenant_id, category);
+    `,
+  },
 ];
 
 export class MigrationRunner {
@@ -613,6 +633,25 @@ export class MigrationRunner {
             if (!columns.has('success_rate')) {
               this.db.exec(
                 'ALTER TABLE routing_rules ADD COLUMN success_rate REAL NOT NULL DEFAULT 0',
+              );
+            }
+          }
+          if (migration.id === '016_token_savings') {
+            const table = this.db
+              .prepare(
+                "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'token_savings'",
+              )
+              .get();
+            const column = table
+              ? this.db
+                  .prepare(
+                    "SELECT 1 FROM pragma_table_info('token_savings') WHERE name = 'tenant_id'",
+                  )
+                  .get()
+              : true;
+            if (table && !column) {
+              this.db.exec(
+                "ALTER TABLE token_savings ADD COLUMN tenant_id TEXT NOT NULL DEFAULT 'gentle-vanguard'",
               );
             }
           }

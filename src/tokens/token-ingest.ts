@@ -751,19 +751,10 @@ export function writeSavingsToNexus(
   try {
     const db = new Database(NEXUS_DB);
     try {
-      db.exec(`CREATE TABLE IF NOT EXISTS token_savings (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        message_id TEXT,
-        session_id TEXT,
-        category TEXT,
-        saved_tokens INTEGER,
-        source TEXT,
-        created_at TEXT DEFAULT (datetime('now')),
-        UNIQUE(message_id, category)
-      )`);
+      new MigrationRunner(db).runMigrations();
       const ins = db.prepare(
-        `INSERT OR IGNORE INTO token_savings (message_id, session_id, category, saved_tokens, source, created_at)
-         VALUES (?, ?, ?, ?, ?, ?)`,
+        `INSERT OR IGNORE INTO token_savings (message_id, session_id, category, saved_tokens, source, created_at, tenant_id)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
       );
       const tx = db.transaction(() => {
         for (const s of savings) {
@@ -775,6 +766,7 @@ export function writeSavingsToNexus(
             s.savedTokens,
             s.source,
             toSqliteDate(s.timeCreated),
+            process.env.GENTLE_TENANT_ID || 'gentle-vanguard',
           );
           if (info.changes > 0) inserted++;
         }
