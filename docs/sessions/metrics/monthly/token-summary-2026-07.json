@@ -1,27 +1,19 @@
 {
-  "generated_at": "2026-08-28T18:40:35.577Z",
+  "generated_at": "2026-08-29T04:12:27.497Z",
   "period": "2026-07",
   "days": 28,
   "totals": {
-    "input": 633338930,
-    "output": 10029151,
-    "total": 643368081,
+    "input": 558905364,
+    "output": 9878155,
+    "total": 568783519,
     "cost": 10.535256299999999
   },
   "daily_avg": {
-    "input": 22619248,
-    "output": 358184,
-    "total": 22977431
+    "input": 19960906,
+    "output": 352791,
+    "total": 20313697
   },
   "by_day": [
-    {
-      "day": "2026-07-30",
-      "input": 78776447,
-      "output": 710092,
-      "total": 79486539,
-      "cost": 0,
-      "sessions": 23
-    },
     {
       "day": "2026-07-31",
       "input": 42551773,
@@ -232,26 +224,34 @@
     },
     {
       "day": "2026-08-28",
-      "input": 2124207,
-      "output": 192181,
-      "total": 2316388,
+      "input": 3887976,
+      "output": 522912,
+      "total": 4410888,
       "cost": 0,
-      "sessions": 6
+      "sessions": 20
+    },
+    {
+      "day": "2026-08-29",
+      "input": 2579112,
+      "output": 228365,
+      "total": 2807477,
+      "cost": 0,
+      "sessions": 2
     }
   ],
   "by_model": [
     {
       "model": "kimi-2-5",
-      "input": 481871643,
-      "output": 2104216,
-      "total": 483975859,
+      "input": 405826278,
+      "output": 1766019,
+      "total": 407592297,
       "cost": 0
     },
     {
       "model": "deepseek-v4-flash-free",
-      "input": 90014203,
-      "output": 5417731,
-      "total": 95431934,
+      "input": 87283121,
+      "output": 5045836,
+      "total": 92328957,
       "cost": 0
     },
     {
@@ -260,6 +260,13 @@
       "output": 66736,
       "total": 18625710,
       "cost": 0
+    },
+    {
+      "model": "big-pickle",
+      "input": 15025415,
+      "output": 1591870,
+      "total": 16617285,
+      "cost": 2.248670159999999
     },
     {
       "model": "qwen3-coder-30b",
@@ -274,13 +281,6 @@
       "output": 121872,
       "total": 12102876,
       "cost": 0
-    },
-    {
-      "model": "big-pickle",
-      "input": 10682534,
-      "output": 1032774,
-      "total": 11715308,
-      "cost": 2.248670159999999
     },
     {
       "model": "gpt-5.6-luna",
@@ -378,11 +378,6 @@
       "cost": 0
     },
     {
-      "session_id": "ses_04c2fbf2fffemw5u76P6Z4G4Jh",
-      "total": 25880866,
-      "cost": 0
-    },
-    {
       "session_id": "ses_006dfc914ffePcViyOK5iGb2jG",
       "total": 25780450,
       "cost": 0
@@ -395,6 +390,11 @@
     {
       "session_id": "ses_0356359aaffe16veoXnJ1vHJ5t",
       "total": 22312530,
+      "cost": 0
+    },
+    {
+      "session_id": "ses_01d1dfe83ffeC8wm2Is2ZuQB2f",
+      "total": 20229883,
       "cost": 0
     }
   ]
