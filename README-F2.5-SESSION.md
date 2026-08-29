@@ -1,5 +1,8 @@
 # 🚀 F2.5 Refactor - Quick Reference Guide
 
+> **Historical record.** This document preserves the transition's traceability. F2.5 is not a
+> current version, phase, product, or topic and does not define the current Gentle-Vanguard product.
+
 **Session:** Resolver todos pendientes del stack local  
 **Status:** ✅ Documentation Complete & Committed  
 **Date:** 2026-08-29

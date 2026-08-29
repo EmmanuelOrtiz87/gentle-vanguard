@@ -13,6 +13,8 @@ const SERVER = fileURLToPath(
   new URL('../../apps/web-dashboard/server/websocket-server.ts', import.meta.url),
 );
 const DASHBOARD_TOKEN = 'test-dashboard-token-e2e-auth';
+const DASHBOARD_TENANT = 'gentle-vanguard';
+let dashboardSessionCookie = '';
 
 async function freePort(): Promise<number> {
   const probe = createServer();
@@ -27,29 +29,38 @@ async function freePort(): Promise<number> {
 
 function waitForServerReady(child: ChildProcess, maxWaitMs: number = 10000): Promise<void> {
   return new Promise((resolve, reject) => {
-    let output = '';
+    let stdout = '';
+    let stderr = '';
+    const diagnostics = () => `stdout:\n${stdout}\nstderr:\n${stderr}`;
     const timeout = setTimeout(() => {
       child.stdout?.off('data', onData);
-      reject(new Error(`Server startup timeout after ${maxWaitMs}ms. Output: ${output}`));
+      child.stderr?.off('data', onErrorData);
+      reject(new Error(`Server startup timeout after ${maxWaitMs}ms. ${diagnostics()}`));
     }, maxWaitMs);
 
     const onData = (chunk: Buffer) => {
-      output += chunk.toString();
-      if (output.includes('[WS] Server on port')) {
+      stdout += chunk.toString();
+      if (stdout.includes('[WS] Server on port')) {
         clearTimeout(timeout);
         child.stdout?.off('data', onData);
+        child.stderr?.off('data', onErrorData);
         resolve();
       }
     };
 
+    const onErrorData = (chunk: Buffer) => {
+      stderr += chunk.toString();
+    };
+
     child.stdout?.on('data', onData);
+    child.stderr?.on('data', onErrorData);
     child.once('error', (err) => {
       clearTimeout(timeout);
-      reject(err);
+      reject(new Error(`Dashboard server process error: ${err.message}. ${diagnostics()}`));
     });
     child.once('exit', (code) => {
       clearTimeout(timeout);
-      reject(new Error(`Dashboard server exited with code ${code}. Output: ${output}`));
+      reject(new Error(`Dashboard server exited with code ${code}. ${diagnostics()}`));
     });
   });
 }
@@ -62,6 +73,21 @@ function closeWebSocket(ws: WebSocket): Promise<void> {
     ws.once('close', () => {
       clearTimeout(timeout);
       resolve();
+    });
+  });
+}
+
+function authenticatedWebSocket(url: string, headers: Record<string, string> = {}): WebSocket {
+  return new WebSocket(url, {
+    headers: { Cookie: dashboardSessionCookie, ...headers },
+  });
+}
+
+function waitForRejectedWebSocket(ws: WebSocket): Promise<number> {
+  return new Promise((resolve, reject) => {
+    ws.once('unexpected-response', (_request, response) => resolve(response.statusCode));
+    ws.once('error', (error) => {
+      if (!String(error.message).includes('Unexpected server response')) reject(error);
     });
   });
 }
@@ -85,7 +111,7 @@ describe('Dashboard Auth Flow E2E', () => {
         WS_PORT: String(port),
         GV_DASHBOARD_TOKEN: DASHBOARD_TOKEN,
         GV_DASHBOARD_DEV_AUTH: '', // Production mode for auth testing
-        GENTLE_TENANT_ID: 'test-tenant-auth',
+        GENTLE_TENANT_ID: DASHBOARD_TENANT,
         GENTLE_VANGUARD_DB_DIR: dbDir,
         NODE_ENV: 'production',
       },
@@ -94,6 +120,15 @@ describe('Dashboard Auth Flow E2E', () => {
     });
 
     await waitForServerReady(child);
+    const login = await fetch(`${baseUrl}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ token: DASHBOARD_TOKEN }),
+    });
+    assert.equal(login.status, 200);
+    dashboardSessionCookie =
+      login.headers.get('set-cookie')?.match(/gv_dashboard_session=[^;]+/)?.[0] || '';
+    assert.ok(dashboardSessionCookie);
   });
 
   after(async () => {
@@ -112,58 +147,29 @@ describe('Dashboard Auth Flow E2E', () => {
 
   describe('WebSocket Connection & Authentication', () => {
     it('should reject connection without valid token', async () => {
-      const ws = new WebSocket(`${wsUrl}/ws?tenantId=test-tenant-auth`);
-      
-      try {
-        await once(ws, 'close');
-        // Connection should be rejected (unauthorized)
-        assert.ok(ws.readyState === WebSocket.CLOSED, 'Connection should be closed');
-      } finally {
-        await closeWebSocket(ws);
-      }
+      const ws = new WebSocket(`${wsUrl}/ws?tenantId=${DASHBOARD_TENANT}`);
+      assert.equal(await waitForRejectedWebSocket(ws), 401);
+      await closeWebSocket(ws);
     });
 
-    it('should accept connection with valid token in query param', async () => {
-      const ws = new WebSocket(
-        `${wsUrl}/ws?tenantId=test-tenant-auth&token=${DASHBOARD_TOKEN}`,
-      );
+    it('should reject token in query param', async () => {
+      const ws = new WebSocket(`${wsUrl}/ws?tenantId=${DASHBOARD_TENANT}&token=${DASHBOARD_TOKEN}`);
+
+      assert.equal(await waitForRejectedWebSocket(ws), 401);
+      await closeWebSocket(ws);
+    });
+
+    it('should accept connection with a valid session cookie in header', async () => {
+      const ws = authenticatedWebSocket(`${wsUrl}/ws?tenantId=${DASHBOARD_TENANT}`);
 
       await new Promise<void>((resolve, reject) => {
         const timeout = setTimeout(() => reject(new Error('Connection timeout')), 5000);
-        
+
         ws.once('open', () => {
           clearTimeout(timeout);
           resolve();
         });
-        
-        ws.once('error', (err) => {
-          clearTimeout(timeout);
-          reject(err);
-        });
-      });
 
-      try {
-        assert.ok(ws.readyState === WebSocket.OPEN, 'Connection should be open');
-      } finally {
-        await closeWebSocket(ws);
-      }
-    });
-
-    it('should accept connection with valid token in header', async () => {
-      const ws = new WebSocket(`${wsUrl}/ws?tenantId=test-tenant-auth`, {
-        headers: {
-          authorization: `Bearer ${DASHBOARD_TOKEN}`,
-        },
-      });
-
-      await new Promise<void>((resolve, reject) => {
-        const timeout = setTimeout(() => reject(new Error('Connection timeout')), 5000);
-        
-        ws.once('open', () => {
-          clearTimeout(timeout);
-          resolve();
-        });
-        
         ws.once('error', (err) => {
           clearTimeout(timeout);
           reject(err);
@@ -178,41 +184,27 @@ describe('Dashboard Auth Flow E2E', () => {
     });
 
     it('should reject connection with invalid token', async () => {
-      const ws = new WebSocket(
-        `${wsUrl}/ws?tenantId=test-tenant-auth&token=invalid-token`,
-      );
-
-      await new Promise<void>((resolve) => {
-        ws.once('close', () => resolve());
-        ws.once('error', () => resolve());
-        setTimeout(() => resolve(), 3000);
+      const ws = new WebSocket(`${wsUrl}/ws?tenantId=${DASHBOARD_TENANT}`, {
+        headers: { Cookie: 'gv_dashboard_session=invalid-token' },
       });
 
-      try {
-        assert.ok(
-          ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING,
-          'Connection should be closed or closing',
-        );
-      } finally {
-        await closeWebSocket(ws);
-      }
+      assert.equal(await waitForRejectedWebSocket(ws), 401);
+      await closeWebSocket(ws);
     });
   });
 
   describe('WebSocket Handshake', () => {
     it('should complete WebSocket upgrade handshake', async () => {
-      const ws = new WebSocket(
-        `${wsUrl}/ws?tenantId=test-tenant-auth&token=${DASHBOARD_TOKEN}`,
-      );
+      const ws = authenticatedWebSocket(`${wsUrl}/ws?tenantId=${DASHBOARD_TENANT}`);
 
       await new Promise<void>((resolve, reject) => {
         const timeout = setTimeout(() => reject(new Error('Handshake timeout')), 5000);
-        
+
         ws.once('open', () => {
           clearTimeout(timeout);
           resolve();
         });
-        
+
         ws.once('error', (err) => {
           clearTimeout(timeout);
           reject(err);
@@ -228,18 +220,16 @@ describe('Dashboard Auth Flow E2E', () => {
     });
 
     it('should send heartbeat/ping from server', async () => {
-      const ws = new WebSocket(
-        `${wsUrl}/ws?tenantId=test-tenant-auth&token=${DASHBOARD_TOKEN}`,
-      );
+      const ws = authenticatedWebSocket(`${wsUrl}/ws?tenantId=${DASHBOARD_TENANT}`);
 
       await new Promise<void>((resolve, reject) => {
         const timeout = setTimeout(() => reject(new Error('Open timeout')), 5000);
-        
+
         ws.once('open', () => {
           clearTimeout(timeout);
           resolve();
         });
-        
+
         ws.once('error', reject);
       });
 
@@ -264,9 +254,7 @@ describe('Dashboard Auth Flow E2E', () => {
     });
 
     it('should accept and respond to pong', async () => {
-      const ws = new WebSocket(
-        `${wsUrl}/ws?tenantId=test-tenant-auth&token=${DASHBOARD_TOKEN}`,
-      );
+      const ws = authenticatedWebSocket(`${wsUrl}/ws?tenantId=${DASHBOARD_TENANT}`);
 
       await new Promise<void>((resolve, reject) => {
         const timeout = setTimeout(() => reject(new Error('Open timeout')), 5000);
@@ -279,7 +267,7 @@ describe('Dashboard Auth Flow E2E', () => {
 
       try {
         ws.ping();
-        
+
         await new Promise<void>((resolve) => {
           const timeout = setTimeout(() => resolve(), 2000);
           ws.once('pong', () => {
@@ -297,9 +285,7 @@ describe('Dashboard Auth Flow E2E', () => {
 
   describe('Tenant Authorization', () => {
     it('should reject connection with mismatched tenant ID', async () => {
-      const ws = new WebSocket(
-        `${wsUrl}/ws?tenantId=different-tenant&token=${DASHBOARD_TOKEN}`,
-      );
+      const ws = authenticatedWebSocket(`${wsUrl}/ws?tenantId=different-tenant`);
 
       await new Promise<void>((resolve) => {
         const timeout = setTimeout(() => resolve(), 3000);
@@ -324,9 +310,7 @@ describe('Dashboard Auth Flow E2E', () => {
     });
 
     it('should accept connection with correct tenant ID', async () => {
-      const ws = new WebSocket(
-        `${wsUrl}/ws?tenantId=test-tenant-auth&token=${DASHBOARD_TOKEN}`,
-      );
+      const ws = authenticatedWebSocket(`${wsUrl}/ws?tenantId=${DASHBOARD_TENANT}`);
 
       await new Promise<void>((resolve, reject) => {
         const timeout = setTimeout(() => reject(new Error('Connection timeout')), 5000);
@@ -345,10 +329,8 @@ describe('Dashboard Auth Flow E2E', () => {
     });
 
     it('should handle tenant context in headers', async () => {
-      const ws = new WebSocket(`${wsUrl}/ws?tenantId=test-tenant-auth&token=${DASHBOARD_TOKEN}`, {
-        headers: {
-          'x-tenant-id': 'test-tenant-auth',
-        },
+      const ws = authenticatedWebSocket(`${wsUrl}/ws?tenantId=${DASHBOARD_TENANT}`, {
+        'x-tenant-id': DASHBOARD_TENANT,
       });
 
       await new Promise<void>((resolve, reject) => {
@@ -370,9 +352,7 @@ describe('Dashboard Auth Flow E2E', () => {
 
   describe('Session Management', () => {
     it('should maintain session across multiple messages', async () => {
-      const ws = new WebSocket(
-        `${wsUrl}/ws?tenantId=test-tenant-auth&token=${DASHBOARD_TOKEN}`,
-      );
+      const ws = authenticatedWebSocket(`${wsUrl}/ws?tenantId=${DASHBOARD_TENANT}`);
 
       await new Promise<void>((resolve, reject) => {
         const timeout = setTimeout(() => reject(new Error('Open timeout')), 5000);
@@ -407,9 +387,7 @@ describe('Dashboard Auth Flow E2E', () => {
     });
 
     it('should properly close session on client disconnect', async () => {
-      const ws = new WebSocket(
-        `${wsUrl}/ws?tenantId=test-tenant-auth&token=${DASHBOARD_TOKEN}`,
-      );
+      const ws = authenticatedWebSocket(`${wsUrl}/ws?tenantId=${DASHBOARD_TENANT}`);
 
       await new Promise<void>((resolve, reject) => {
         const timeout = setTimeout(() => reject(new Error('Open timeout')), 5000);
@@ -432,9 +410,7 @@ describe('Dashboard Auth Flow E2E', () => {
 
   describe('Error Handling', () => {
     it('should handle malformed messages gracefully', async () => {
-      const ws = new WebSocket(
-        `${wsUrl}/ws?tenantId=test-tenant-auth&token=${DASHBOARD_TOKEN}`,
-      );
+      const ws = authenticatedWebSocket(`${wsUrl}/ws?tenantId=${DASHBOARD_TENANT}`);
 
       await new Promise<void>((resolve, reject) => {
         const timeout = setTimeout(() => reject(new Error('Open timeout')), 5000);
@@ -466,9 +442,7 @@ describe('Dashboard Auth Flow E2E', () => {
     });
 
     it('should timeout idle connections', async () => {
-      const ws = new WebSocket(
-        `${wsUrl}/ws?tenantId=test-tenant-auth&token=${DASHBOARD_TOKEN}`,
-      );
+      const ws = authenticatedWebSocket(`${wsUrl}/ws?tenantId=${DASHBOARD_TENANT}`);
 
       await new Promise<void>((resolve, reject) => {
         const timeout = setTimeout(() => reject(new Error('Open timeout')), 5000);

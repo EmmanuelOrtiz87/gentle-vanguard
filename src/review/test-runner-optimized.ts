@@ -14,8 +14,9 @@
  */
 
 import { run } from '../core/run-command';
-import { existsSync } from 'fs';
+import { existsSync, mkdtempSync, readdirSync, rmSync } from 'fs';
 import * as os from 'os';
+import { join } from 'path';
 
 interface Suite {
   name: string;
@@ -24,7 +25,13 @@ interface Suite {
   required: boolean;
   timeout?: number;
   quick?: boolean; // Run in quick mode
+  exclusiveGroup?: string;
 }
+
+const UNIT_TEST_FILES = readdirSync('tests/unit')
+  .filter((file) => file.endsWith('.test.ts') && file !== 'secret-scanner.test.ts')
+  .sort()
+  .map((file) => `tests/unit/${file}`);
 
 // Core suites - always run
 const CORE_SUITES: Suite[] = [
@@ -49,11 +56,19 @@ const CORE_SUITES: Suite[] = [
 // Extended suites - run in normal mode
 const EXTENDED_SUITES: Suite[] = [
   {
-    name: 'Unit Tests (all)',
+    name: 'Secret Scanner Tests',
     cmd: 'npx',
-    args: ['tsx', '--test', 'tests/unit/*.test.ts'],
+    args: ['tsx', '--test', 'tests/unit/secret-scanner.test.ts'],
     required: true,
     timeout: 90_000,
+  },
+  {
+    name: 'Unit Tests (isolated from secret scanner)',
+    cmd: 'npx',
+    args: ['tsx', '--test', ...UNIT_TEST_FILES],
+    required: true,
+    timeout: 90_000,
+    exclusiveGroup: 'process-heavy',
   },
   {
     name: 'Security Tests',
@@ -61,6 +76,7 @@ const EXTENDED_SUITES: Suite[] = [
     args: ['tsx', '--test', 'tests/security/*.test.ts'],
     required: true,
     timeout: 90_000,
+    exclusiveGroup: 'process-heavy',
   },
   {
     name: 'Integration Tests',
@@ -117,20 +133,23 @@ function parseArgs(): RunOptions {
     all: args.includes('--all') || args.includes('-a'),
     quick: args.includes('--quick') || args.includes('-q'),
     verbose: args.includes('--verbose') || args.includes('-v'),
-    parallel: Math.min(parseInt(parallelArg || '4', 10), os.cpus().length),
+    parallel: Math.max(1, Math.min(parseInt(parallelArg || '4', 10) || 1, os.cpus().length)),
   };
 }
 
 function runSuite(
   suite: Suite,
   verbose: boolean,
+  env: NodeJS.ProcessEnv,
 ): Promise<{ name: string; passed: boolean; output: string; duration: number }> {
   return new Promise((resolve) => {
     const startTime = Date.now();
     const label = `[${suite.name}]`;
+    const runtimeDir = mkdtempSync(join(os.tmpdir(), 'gentle-vanguard-test-'));
 
     const child = run(suite.cmd, suite.args, {
       stdio: ['pipe', 'pipe', 'pipe'],
+      env: { ...env, GENTLE_VANGUARD_DB_DIR: runtimeDir },
     });
 
     let output = '';
@@ -140,13 +159,21 @@ function runSuite(
     child.stderr?.on('data', (data) => {
       output += data.toString();
     });
+    child.on('error', (error) => {
+      output += `\nRunner error: ${error.message}\n`;
+    });
+
+    const cleanup = (): void => {
+      rmSync(runtimeDir, { recursive: true, force: true });
+    };
 
     const timeout = setTimeout(() => {
       child.kill('SIGTERM');
+      cleanup();
       resolve({
         name: suite.name,
         passed: false,
-        output: 'TIMEOUT: Test exceeded time limit',
+        output: `TIMEOUT: Test exceeded time limit\nRuntime directory: ${runtimeDir}`,
         duration: Date.now() - startTime,
       });
     }, suite.timeout ?? 60_000);
@@ -155,12 +182,16 @@ function runSuite(
       clearTimeout(timeout);
       const duration = Date.now() - startTime;
       const passed = code === 0;
+      cleanup();
 
       if (verbose) {
         process.stdout.write(`${label} ${passed ? '✓ PASS' : '✗ FAIL'} (${duration}ms)\n`);
       }
 
-      resolve({ name: suite.name, passed, output, duration });
+      const diagnostic = passed
+        ? ''
+        : `\nExit code: ${code ?? 'null'}\nSignal: ${child.signalCode ?? 'none'}\nRuntime directory: ${runtimeDir}`;
+      resolve({ name: suite.name, passed, output: output + diagnostic, duration });
     });
   });
 }
@@ -169,6 +200,7 @@ async function runParallel(
   suites: Suite[],
   options: RunOptions,
   progressPrefix: string,
+  env: NodeJS.ProcessEnv,
 ): Promise<{ passed: number; failed: number; results: SuiteResult[] }> {
   const results: SuiteResult[] = [];
   let passed = 0;
@@ -190,12 +222,24 @@ async function runParallel(
   }
 
   const running: TrackablePromise[] = [];
+  const activeGroups = new Set<string>();
+
+  function canStart(suite: Suite): boolean {
+    return !suite.exclusiveGroup || !activeGroups.has(suite.exclusiveGroup);
+  }
+
+  function startableSuiteIndex(): number {
+    return queue.findIndex(canStart);
+  }
 
   while (queue.length > 0 || running.length > 0) {
     // Start new tasks up to parallel limit
     while (running.length < options.parallel && queue.length > 0) {
-      const suite = queue.shift()!;
-      const promise = runSuite(suite, options.verbose).then((result) => {
+      const index = startableSuiteIndex();
+      if (index === -1) break;
+      const suite = queue.splice(index, 1)[0];
+      if (suite.exclusiveGroup) activeGroups.add(suite.exclusiveGroup);
+      const promise = runSuite(suite, options.verbose, env).then((result) => {
         results.push(result);
         completed++;
 
@@ -214,6 +258,7 @@ async function runParallel(
             `\r${progressPrefix} ${completed}/${suites.length} (${passed}✓ ${failed}✗)`,
           );
         }
+        if (suite.exclusiveGroup) activeGroups.delete(suite.exclusiveGroup);
       });
       running.push(makeTrackable(promise));
     }
@@ -273,7 +318,12 @@ async function main(): Promise<void> {
   process.stdout.write(`└────────────────────────────────────────────────┘\n\n`);
 
   const startTime = Date.now();
-  const { passed, failed, results } = await runParallel(suitesToRun, options, 'Running:');
+  const { passed, failed, results } = await runParallel(
+    suitesToRun,
+    options,
+    'Running:',
+    process.env,
+  );
   const totalDuration = Date.now() - startTime;
 
   // Summary

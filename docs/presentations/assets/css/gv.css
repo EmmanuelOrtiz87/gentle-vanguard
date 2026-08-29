@@ -13,6 +13,26 @@
 
 /* --- 1. Design Tokens (OKLCH perceptual palette) ----------------------- */
 :root {
+  color-scheme: dark;
+  --gv-purple: #a78bfa;
+  --gv-cyan: #22d3ee;
+  --gv-cyan-deep: #06b6d4;
+  --gv-bg: #121212;
+  --gv-bg-deep: #0a0e17;
+  --gv-surface: #1f2937;
+  --gv-surface-raised: #273548;
+  --gv-text: #e5e7eb;
+  --gv-muted: #9ca3af;
+  --gv-glass: rgba(31, 41, 55, 0.6);
+  --gv-glass-border: rgba(167, 139, 250, 0.18);
+  --gv-gradient: linear-gradient(135deg, #a78bfa 0%, #22d3ee 100%);
+  --gv-glow: rgba(34, 211, 238, 0.35);
+  --gv-amber: #f4bb4f;
+  --gv-red: #ee6d75;
+  --gv-green: #4ade80;
+  --font: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
+  --header-h: 62px;
   /* Acentos funcionales */
   --p: #22d3ee; /* cyan primario (oklch ~0.78 0.14 210) */
   --pl: #67e8f9; /* cyan claro */
@@ -60,9 +80,9 @@ html {
 }
 
 body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
+  font-family: var(--font);
+  background: var(--gv-bg);
+  color: var(--gv-text);
   overflow-x: hidden;
   line-height: 1.6;
   text-rendering: optimizeLegibility;
@@ -71,7 +91,25 @@ body {
 
 code,
 .mono {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: var(--mono);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(167, 139, 250, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--gv-cyan);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.18);
 }
 
 ::selection {
@@ -199,11 +237,33 @@ p {
   background: oklch(0.8 0.14 210 / 0.08);
 }
 .nav-blur .navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-weight: 700;
   background: linear-gradient(135deg, var(--p), var(--a));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+.nav-blur .navbar-brand img.gv-logo {
+  width: auto;
+  height: 32px;
+  object-fit: contain;
+}
+.nav-blur .navbar-brand .gv-wordmark {
+  font-size: 0.9rem;
+  color: var(--gv-text);
+}
+.nav-blur .navbar-brand .gv-wordmark strong {
+  background: var(--gv-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.navbar-toggler {
+  border: 1px solid var(--gv-glass-border) !important;
+  border-radius: 10px;
 }
 
 /* --- 5. Hero ------------------------------------------------------------- */

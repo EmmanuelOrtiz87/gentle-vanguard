@@ -88,6 +88,17 @@ flowchart TB
 La arquitectura completa, los contratos y los diagramas ampliados están en
 [`docs/technical/STACK-DOCUMENTATION.md`](docs/technical/STACK-DOCUMENTATION.md).
 
+### Superficies canónicas del stack
+
+La arquitectura modular por dominios es parte nativa del stack actual; no es una edición, producto
+ni fase independiente. Las superficies tienen responsabilidades separadas:
+
+- **Academy:** `apps/academy-web` — aprendizaje y documentación educativa.
+- **Documentación formal:** `docs/presentations` — presentaciones y material formal publicado.
+- **Analytics:** `apps/gv-analytics` — aplicación nativa de análisis.
+- **CMS local-first:** `apps/content-cms` — superficie local-first para gestión de contenido.
+- **Dashboard:** `apps/web-dashboard` — observabilidad y operación en tiempo real.
+
 ## Agentes y capacidades
 
 El stack incluye **21 agentes** y **263 skills**. Los roles principales son:
@@ -110,8 +121,8 @@ capacidades necesarias. El **Chain-Delivery** conserva el contrato entre BA, SAD
 
 - **SDD Lifecycle**: Explore → Design → Implement → Verify.
 - **SDD Research Lane**: evidencia externa versionada ligada al caso (`.sdd/<feature>/RESEARCH/`).
-- **RDD (Receipt-Driven Development)**: revisión por riesgo con 4R, recibos ligados a Git SHA,
-  5 gates de entrega y kill-switch de emergencia (expira 24h).
+- **RDD (Receipt-Driven Development)**: revisión por riesgo con 4R, recibos ligados a Git SHA, 5
+  gates de entrega y kill-switch de emergencia (expira 24h).
 - **Review Workload Guard**: distribuye revisiones pendientes entre agentes.
 - **Skill Registry**: carga capacidades bajo demanda.
 - **Chain-Delivery**: conserva contratos entre fases.
@@ -150,21 +161,21 @@ flowchart TD
 
 ## Comandos frecuentes
 
-| Comando                            | Uso                             |
-| ---------------------------------- | ------------------------------- |
-| `npm run start`                    | Iniciar el dashboard            |
-| `npx tsx src/session/session-autostart.ts` | Inicializar una sesión completa |
-| `npm run watchtower:health`        | Revisar salud del stack         |
-| `npm run process:hygiene`          | Detectar procesos basura (dry-run) |
-| `npm run process:reap`             | Limpiar procesos basura         |
-| `npm run sdd:research -- run -f <feature> -q "q1;q2"` | Research lane SDD |
-| `npm run typecheck`                | Comprobar TypeScript            |
-| `npm run lint`                     | Ejecutar lint                   |
-| `npm test`                         | Ejecutar las pruebas            |
-| `npm run db:health`                | Revisar Nexus                   |
-| `npm run graphify -- query "..."`  | Consultar el grafo del código   |
-| `npx tsx src/guardrail-orchestrator.ts decide "<error>"` | Decidir acción ante un fallo |
-| `npx tsx src/guardrail-orchestrator.ts stats`            | Ver estadísticas de aprendizaje |
+| Comando                                                  | Uso                                |
+| -------------------------------------------------------- | ---------------------------------- |
+| `npm run start`                                          | Iniciar el dashboard               |
+| `npx tsx src/session/session-autostart.ts`               | Inicializar una sesión completa    |
+| `npm run watchtower:health`                              | Revisar salud del stack            |
+| `npm run process:hygiene`                                | Detectar procesos basura (dry-run) |
+| `npm run process:reap`                                   | Limpiar procesos basura            |
+| `npm run sdd:research -- run -f <feature> -q "q1;q2"`    | Research lane SDD                  |
+| `npm run typecheck`                                      | Comprobar TypeScript               |
+| `npm run lint`                                           | Ejecutar lint                      |
+| `npm test`                                               | Ejecutar las pruebas               |
+| `npm run db:health`                                      | Revisar Nexus                      |
+| `npm run graphify -- query "..."`                        | Consultar el grafo del código      |
+| `npx tsx src/guardrail-orchestrator.ts decide "<error>"` | Decidir acción ante un fallo       |
+| `npx tsx src/guardrail-orchestrator.ts stats`            | Ver estadísticas de aprendizaje    |
 
 ## Documentación
 
@@ -176,6 +187,7 @@ flowchart TD
 | [Arquitectura](docs/architecture/README.md)                      | Decisiones y límites del sistema      |
 | [Seguridad](docs/security/README.md)                             | Controles y prácticas de seguridad    |
 | [ADRs](docs/adr/README.md)                                       | Decisiones arquitectónicas            |
+| [Lifecycle de scripts](docs/guides/SCRIPT-LIFECYCLE.md)          | TS-only, CMD-first y legado            |
 | [Changelog](CHANGELOG.md)                                        | Historial de cambios                  |
 
 ## Development
@@ -190,8 +202,8 @@ npm run build
 ```
 
 El proyecto usa SDD: requisitos, diseño, implementación y verificación. Las contribuciones deben
-mantener las pruebas, la documentación y los controles de seguridad correspondientes. Para
-automatizaciones PowerShell también se puede ejecutar `Invoke-Pester`.
+mantener las pruebas, la documentación y los controles de seguridad correspondientes. Los tests se
+ejecutan con `node:test` mediante `tsx`; el runtime activo no requiere PowerShell.
 
 ## CI/CD Pipeline
 

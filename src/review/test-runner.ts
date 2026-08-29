@@ -37,6 +37,18 @@ const SUITES: Suite[] = [
     required: true,
   },
   {
+    name: 'Stack Smoke Tests',
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/smoke/*.test.ts'],
+    required: true,
+  },
+  {
+    name: 'Script Smoke Tests',
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/unit/scripts/*.test.ts'],
+    required: true,
+  },
+  {
     name: 'Unit Tests (all)',
     cmd: 'npx',
     args: ['tsx', '--test', 'tests/unit/*.test.ts'],
@@ -138,6 +150,12 @@ const SUITES: Suite[] = [
     name: 'Pre-Close Validator Integration',
     cmd: 'npx',
     args: ['tsx', '--test', 'tests/integration/pre-close-validator.test.ts'],
+    required: true,
+  },
+  {
+    name: 'Phase 1.3 / 2 / 3 Integration',
+    cmd: 'npx',
+    args: ['tsx', '--test', 'tests/integration/phase-13-2-3/phase-integration.test.ts'],
     required: true,
   },
 ];

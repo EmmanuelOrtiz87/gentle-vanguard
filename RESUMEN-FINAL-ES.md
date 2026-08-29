@@ -8,6 +8,9 @@
 ║                                                                               ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
+> **Registro histórico.** Conserva la trazabilidad de la transición. F2.5 no es una versión, fase,
+> producto ni tópico actual y no define el producto vigente de Gentle-Vanguard.
+
 RESUMEN EJECUTIVO (EN ESPAÑOL)
 ═════════════════════════════════════════════════════════════════════════════════
 

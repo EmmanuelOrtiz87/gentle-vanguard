@@ -1,7 +1,7 @@
 # 🔍 AUDITORÍA DE VALIDACIÓN DEL STACK
 ## Status Actual + Brecha + Plan de Ejecución
 **Fecha:** 29 Agosto 2026, 06:50 UTC-3  
-**Resultado Previo:** F2.5 COMPLETO (16+ splits, 147 commits)  
+**Resultado Previo:** modularidad por dominios integrada en el stack
 **Ahora:** Validando integridad + Documentando + Resolviendo gaps
 
 ---
@@ -33,7 +33,7 @@
 
 ### Crítico (Must-do)
 1. **Module Documentation** ← PENDIENTE
-   - 80+ nuevos módulos (F2.5 splits) sin README
+   - módulos por dominio sin README en algunos casos
    - JSDoc comments incompletos
    - MODULE-STRUCTURE.md NO EXISTE
    
@@ -44,7 +44,7 @@
 
 3. **CI Validation** ← PENDIENTE
    - 147 commits históricos no verificados en CI (WIP)
-   - Necesario: correr CI pipeline en main con F2.5
+   - Necesario: correr CI pipeline en main
 
 ### Alto (Should-do)
 4. **Dependency Graph** ← NO EXISTE
@@ -52,11 +52,11 @@
    - Sin detección de circular dependencies
 
 5. **Academy Update** ← NO EXISTE
-   - Lessons about F2.5 architecture
+   - Lessons about the current modular architecture
    - "How to navigate 80+ modules" guide
 
 6. **HTML Presentations** ← NO ACTUALIZADO
-   - Presentation files exist but pre-F2.5
+   - Presentation files need alignment with the current architecture
    - Diagrams, metrics no reflejados
 
 ### Medio (Nice-to-do)
@@ -86,7 +86,7 @@ Voy a usar este proceso para CADA tarea:
 ### PASO 1: GENERAR MÓDULO DOCUMENTACIÓN (Priority: CRÍTICO)
 
 ```bash
-# 1a. Descubrir estructura F2.5
+# 1a. Descubrir estructura modular actual
 find src -name "index.ts" -path "*/*/index.ts" | sort | uniq -c
 # Resultado: 80+ módulos nuevos
 
@@ -135,7 +135,7 @@ cat .github/workflows/ci.yml
 # - test:workflows
 # - e2e security
 
-# 3c. Mark: "All 147 F2.5 commits verified in CI"
+# 3c. Registrar la evidencia de CI del estado actual
 ```
 
 ---
@@ -161,12 +161,12 @@ npm run graphify -- verify
 
 ```bash
 # 5a. Update gentle-vanguard-academy/
-#   - New lesson: "Module Architecture (F2.5)"
+#   - Keep the lesson "Module Architecture" aligned with the current stack
 #   - Code before/after examples
 #   - Link to MODULE-STRUCTURE.md
 
 # 5b. Update README.md
-#   - F2.5 overview (200 words)
+#   - Current architecture overview
 #   - Architecture diagram
 #   - Link to GETTING-STARTED.md
 
@@ -184,7 +184,7 @@ npm run graphify -- verify
 find . -name "*.html" -type f | grep -E "(presentation|slide|deck)"
 
 # 6b. For each:
-#   - Update with F2.5 metrics
+#   - Update with verified current data only
 #   - Add before/after diagrams
 #   - Verify links work
 ```

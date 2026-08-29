@@ -49,7 +49,7 @@ npm run test:dashboard
 ```
 Tareas:
   [ ] Verify .github/workflows/ci.yml
-  [ ] Ensure all 147 F2.5 commits are included
+  [ ] Ensure the current modular architecture is covered
   [ ] Check TypeCheck job passes
   [ ] Check Lint job passes
   [ ] Check Test jobs pass
@@ -156,12 +156,12 @@ Tareas:
 
 ---
 
-### 7. Academy Update - F2.5 Splits Explained
+### 7. Academy — arquitectura modular nativa
 **ID:** `academy-update` | **Tokens:** 4,000 | **Depends-on:** module-docs
 
 ```
 Tareas:
-  [ ] Update gentle-vanguard-academy with F2.5 section
+  [ ] Keep the current architecture lesson aligned with native domain modules
   [ ] Create lesson: "Module Organization & Barrels"
   [ ] Create lesson: "How to navigate 80+ modules"
   [ ] Add code examples (before/after monolith)
@@ -221,7 +221,7 @@ Tareas:
 ```
 Tareas:
   [ ] Find all .html presentation files
-  [ ] Update with F2.5 impact metrics
+  [ ] Keep formal presentations aligned with the current architecture
   [ ] Add architecture diagrams (new structure)
   [ ] Show before/after compilation times
   [ ] Ensure all links still work
@@ -234,7 +234,7 @@ Tareas:
 
 ```
 Tareas:
-  [ ] Update root README.md with F2.5 overview
+  [ ] Keep root README.md aligned with the current architecture
   [ ] Update docs/GETTING-STARTED.md with new structure
   [ ] Update docs/stack-manual-full.md (architecture section)
   [ ] Verify all links + references still correct
@@ -243,15 +243,13 @@ Tareas:
 
 ---
 
-### 13. Changelog - F2.5 Detailed Entry
+### 13. Changelog — historical traceability only
 **ID:** `changelog-f25` | **Tokens:** 1,500 | **Depends-on:** module-docs
 
 ```
 Tareas:
-  [ ] Add comprehensive F2.5 section to CHANGELOG.md
-  [ ] List all 16+ major splits with line count changes
-  [ ] Document benefits + gotchas learned
-  [ ] Link to architecture ADRs
+  [ ] Keep implementation history in explicitly historical records
+  [ ] Ensure historical records state that the transition does not define the current product
 ```
 
 ---

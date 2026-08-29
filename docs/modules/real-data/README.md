@@ -3,7 +3,7 @@
 **Location:** `apps/web-dashboard/server/real-data/`  
 **Barrel Entry:** `apps/web-dashboard/server/real-data.ts` (17 lines)  
 **Status:** Dashboard Core  
-**Lines:** 1682 → 6 modules (F2.5 refactor)
+**Structure:** 6 native modules behind a thin barrel entry
 
 ---
 

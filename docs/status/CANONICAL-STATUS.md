@@ -2,7 +2,7 @@
 
 **Current package version:** `3.8.2`  
 **Source of truth:** [`package.json`](../../package.json)  
-**Last reviewed:** 2026-08-25
+**Last reviewed:** 2026-08-29
 
 This note identifies the current repository version without rewriting historical reports, release
 snapshots, roadmaps, or archived presentation material. Version claims in dated or historical
@@ -11,6 +11,15 @@ package version.
 
 For current operating guidance, start with the [documentation map](../README.md) and the
 [Getting Started guide](../getting-started/README.md).
+
+For the current improvement/documentation resume queue, see
+[Pending Review - 2026-08-29](PENDING-REVIEW-2026-08-29.md).
+
+## Definitive app exclusions
+
+`apps/doc-gentle` and `apps/discord-bot` are definitively deprecated and removed. They are not
+workspace members, build targets, commands, supported products, Academy content, demos, or roadmap
+items. Historical records may retain references when they describe the state recorded at that time.
 
 ## Official operating model
 
@@ -24,6 +33,17 @@ primary scope today:
   Local authentication does not claim OIDC, LDAP, SSO, or enterprise identity.
 - Cloud connectors, Kubernetes, image signing, CNI/NetworkPolicy, sandbox evidence, and external
   identity federation are preserved as opt-in promotion/federation paths.
+
+## Current stack surfaces
+
+The modular per-domain architecture is native to the current stack. It is not a separate version,
+phase, product, or topic. The canonical map is:
+
+- Academy: `apps/academy-web`
+- Formal documentation: `docs/presentations`
+- Analytics: `apps/gv-analytics`
+- CMS local-first: `apps/content-cms`
+- Dashboard: `apps/web-dashboard`
 
 ## External promotion boundary
 

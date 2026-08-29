@@ -85,7 +85,7 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
   `sbom.json`/`sbom/` (gitignored ahora, CI genera el canónico), fixtures de debug movidos a
   `tests/fixtures/`, governance audit a `docs/governance/`.
 - ✅ **F0.3** — Workspace pnpm real (`packages:` con `apps/web-dashboard` + `packages/*`;
-  discord-bot/doc-gentle quedan fuera por `deprecated:true`); lockfile único; `better-sqlite3` en
+  las apps retiradas quedan fuera del workspace); lockfile único; `better-sqlite3` en
   `dependencies` (raíz) y declarado en el dashboard; dashboard `3.3.3`→`3.8.2`.
 - ✅ **F0.4** — Dockerfile: usuario non-root `app` (chown completo), `pnpm rebuild --pending` para
   nativas (better-sqlite3/esbuild), pnpm global fuera del runner. Compose: sin `version:` obsoleta,
@@ -126,7 +126,7 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 - F1.3 changesets/release-please (version-sync.ts es el interino).
 - F1.5 subir umbral cobertura 30→40% (medir baseline full-mode primero).
 - F2.2 reorganización de `src/` por dominios (un PR por dominio, barriles de compatibilidad).
-- F2.3 codemod `console.*` → logger; F2.4 erradicar 218 `any`; F2.5 partir los 16 gigantes; F2.6
+- F2.3 codemod `console.*` → logger; F2.4 erradicar 218 `any`; consolidación modular nativa; F2.6
   ConfigService/DI; F2.8 CLI `gv` unificada.
 - F5 Sprints A-D comerciales (ver `GENTLE_VANGUARD_MASTER/00-EVOLUTION-ACTION-PLAN-2026-08.md`).
 
@@ -510,14 +510,14 @@ acumulativas; el workstream comercial (F5) corre en paralelo desde el día 1.
 - **Cuándo**: mes 3. **Aceptación**: `grep -rE ": any|as any" src/ | wc -l` = 0; lint sin warnings
   de any.
 
-**F2.5 — Partir los 16 gigantes**
+**Consolidación modular nativa — mantenimiento actual**
 
-- **Qué**: dividir con prioridad: `core/maintenance-watchtower.ts` (1.958 → checks por componente
-  como módulos), `server/websocket-server.ts` (1.722 → `routes/ + handlers/ + ws-hub/`),
-  `session-close-orchestrator.ts` (1.217 — además concentra 17 TODOs).
-- **Por qué**: archivos de 1.000+ líneas imposibilitan testeo unitario y review; el watchtower es el
-  corazón operativo del stack.
-- **Cuándo**: mes 3. **Aceptación**: ningún archivo >800 líneas; cobertura del watchtower ≥60%.
+- **Qué**: mantener la separación por dominios ya integrada en `src/` y en el servidor del dashboard;
+  documentar nuevos módulos detrás de entradas/barrels estables.
+- **Por qué**: la modularidad nativa mantiene ownership, testeo y revisión acotados sin introducir una
+  fase o producto separado.
+- **Cuándo**: mantenimiento continuo. **Aceptación**: imports estables, documentación alineada y
+  validaciones del stack verdes.
 
 **F2.6 — DI ligera + ConfigService**
 

@@ -44,7 +44,7 @@ que define un contrato de dominio `ContentJob` y un pipeline offline-first:
   `canTransition()`/`transition()` inmutable, validación contra registry, `packageJob()`
   idempotente, `saveManifest()`.
 - **`cli.ts`** — 8 comandos: list, validate, prepare, status, report, transition, export, help.
-- **`export-kit.ps1`** — exporta el kit offline ZIP en Windows.
+- **`src/content-operations/export-kit.ts`** — exporta el kit offline ZIP multiplataforma.
 - **Assets** — 21 PNGs dimensionados por plataforma en `docs/presentations/social-assets/`.
 
 ### Principios de diseño

@@ -1,5 +1,8 @@
 # Session Closure Summary - F2.5 Documentation & Validation
 
+> **Historical record.** This document preserves the transition's traceability. F2.5 is not a
+> current version, phase, product, or topic and does not define the current Gentle-Vanguard product.
+
 **Date:** 2026-08-29  
 **Duration:** ~7 hours  
 **Status:** ✅ CLOSED - Ready for Next Session  

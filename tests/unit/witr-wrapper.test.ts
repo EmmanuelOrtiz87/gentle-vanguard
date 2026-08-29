@@ -15,6 +15,7 @@ import {
   WITR_BIN_PATH,
   isWitrInstalled,
   ensureWitrInstalled,
+  sanitizeWitrOutput,
 } from '../../src/web/witr-wrapper.ts';
 
 describe('witr-wrapper constants', () => {
@@ -58,6 +59,44 @@ describe('witr-wrapper input validation', () => {
 
   it('traceContainer rejects empty names', async () => {
     await assert.rejects(() => witr.traceContainer(''), /Empty container name/);
+  });
+});
+
+describe('witr-wrapper secret redaction', () => {
+  it('removes sensitive structures and values from serialized output', () => {
+    const secretName = 'GH_TOKEN';
+    const secretValue = 'ghs_regression_secret_123';
+    const output = sanitizeWitrOutput({
+      Process: {
+        PID: 21360,
+        Command: 'node',
+        Cmdline: `node --token ${secretValue}`,
+        Env: [`${secretName}=${secretValue}`, `SAFE=value`],
+      },
+      Headers: { Authorization: `Bearer ${secretValue}` },
+      args: ['--password', secretValue],
+      query: { apiKey: secretValue },
+      Ancestry: [{ PID: 1, Command: 'init' }],
+    });
+
+    const serialized = JSON.stringify(output);
+    assert.ok(serialized);
+    assert.doesNotMatch(serialized, /GH_TOKEN|ghs_regression_secret_123|Authorization|Bearer/);
+    assert.doesNotMatch(serialized, /"Env"|"Headers"|"args"|"query"/);
+    assert.match(serialized, /"PID":21360/);
+    assert.match(serialized, /"Ancestry"/);
+  });
+
+  it('redacts sensitive assignments embedded in trace commands', () => {
+    const output = sanitizeWitrOutput({
+      command:
+        'node GH_TOKEN=secret-value --api-key another-secret Bearer bearer-secret ?token=query-secret',
+    });
+    assert.equal(JSON.stringify(output), '{"command":"node [REDACTED] [REDACTED] [REDACTED]"}');
+    assert.doesNotMatch(
+      JSON.stringify(output),
+      /secret-value|another-secret|bearer-secret|query-secret/,
+    );
   });
 });
 

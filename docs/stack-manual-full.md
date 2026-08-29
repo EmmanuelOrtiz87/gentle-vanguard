@@ -147,8 +147,9 @@ Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica
 
 ### Architecture
 
-- **96 checks** en **22 componentes** (incluye process-hygiene): dashboard-ws, codegraph, ml-embeddings, engram, mcp, session,
-  hooks, configs, tool-configs, security, governance, secret-scanner, cli-guard.
+- **96 checks** en **22 componentes** (incluye process-hygiene): dashboard-ws, codegraph,
+  ml-embeddings, engram, mcp, session, hooks, configs, tool-configs, security, governance,
+  secret-scanner, cli-guard.
 - **6 modos**: health, rebuild, report, autoheal, continuous, all.
 - **Pipeline integrado**: corre `-Action autoheal -Quiet` con `lazy: true` al inicio de sesión (no
   bloquea).
@@ -196,10 +197,10 @@ Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica
 
 ## guardrail-orchestrator — Framework de Resiliencia Unificado
 
-Punto central donde el orquestador (o cualquier agente) consulta **"¿qué hacer ante este fallo?"**
-y obtiene una decisión coherente + aprendizaje. Es el complemento del anti-loop guard: mientras el
-anti-loop detecta *bucles de razonamiento* (misma estrategia fallando repetidamente), el orquestador
-maneja *cualquier tipo de fallo* con una decisión de acción y un bucle de aprendizaje.
+Punto central donde el orquestador (o cualquier agente) consulta **"¿qué hacer ante este fallo?"** y
+obtiene una decisión coherente + aprendizaje. Es el complemento del anti-loop guard: mientras el
+anti-loop detecta _bucles de razonamiento_ (misma estrategia fallando repetidamente), el orquestador
+maneja _cualquier tipo de fallo_ con una decisión de acción y un bucle de aprendizaje.
 
 ### Filosofía
 
@@ -210,18 +211,18 @@ malos.
 
 ### Clasificación de fallos (10 categorías)
 
-| Categoría   | Firmas típicas                                   | Acción      | ¿Superficie al usuario? |
-| ----------- | ------------------------------------------------ | ----------- | ----------------------- |
-| `config`    | config not found/invalid, JSON malformado        | `correct`   | No                      |
-| `network`   | ECONNREFUSED, ETIMEDOUT, fetch failed            | `retry`     | No                      |
-| `model`     | model not found, 429, rate limit, provider error | `retry`     | No                      |
-| `db`        | SQLITE, database locked/corrupt, no such table   | `correct`   | No                      |
-| `git`       | merge conflict, push rejected, non-fast-forward  | `retry`     | Sí                      |
-| `security`  | prompt injection, blocked pattern, secret leaked | `block`     | Sí                      |
-| `resource`  | token budget, out of memory, workload limit      | `isolate`   | No                      |
-| `reasoning` | anti-loop, same strategy, max steps reached      | `escalate`  | Sí                      |
-| `quality`   | quality score, hallucination, lint/typecheck     | `correct`   | No                      |
-| `unknown`   | no clasificado                                   | `continue`  | Sí                      |
+| Categoría   | Firmas típicas                                   | Acción     | ¿Superficie al usuario? |
+| ----------- | ------------------------------------------------ | ---------- | ----------------------- |
+| `config`    | config not found/invalid, JSON malformado        | `correct`  | No                      |
+| `network`   | ECONNREFUSED, ETIMEDOUT, fetch failed            | `retry`    | No                      |
+| `model`     | model not found, 429, rate limit, provider error | `retry`    | No                      |
+| `db`        | SQLITE, database locked/corrupt, no such table   | `correct`  | No                      |
+| `git`       | merge conflict, push rejected, non-fast-forward  | `retry`    | Sí                      |
+| `security`  | prompt injection, blocked pattern, secret leaked | `block`    | Sí                      |
+| `resource`  | token budget, out of memory, workload limit      | `isolate`  | No                      |
+| `reasoning` | anti-loop, same strategy, max steps reached      | `escalate` | Sí                      |
+| `quality`   | quality score, hallucination, lint/typecheck     | `correct`  | No                      |
+| `unknown`   | no clasificado                                   | `continue` | Sí                      |
 
 ### Decisiones de acción
 
@@ -257,6 +258,7 @@ resolveIncident(guard.incident.id, 'retried successfully');
 ### Integración en el orquestador
 
 `src/agent-delegator.ts` expone `delegateWithGuardrail()` que envuelve `delegateWithAntiLoop()`:
+
 - Si la delegación falla, clasifica el fallo y registra un incidente.
 - Si el guardrail dice NO proceder (`block`/`isolate`/`escalate`), devuelve un resultado sintético
   con la guía correctiva en vez de dejar que el caller reintente a ciegas.
@@ -275,19 +277,19 @@ npx tsx src/guardrail-orchestrator.ts resolve <id> [res]   # marcar incidente re
 
 ### Guardrails existentes que el orquestador reutiliza (no duplica)
 
-| Guardrail                          | Rol                                                        |
-| ---------------------------------- | ---------------------------------------------------------- |
-| `anti-loop-guard.ts`               | Detecta bucles de razonamiento (3 → change_strategy, 5 → escalate) |
-| `correction-rules-engine.ts`       | Corrige config por scores de calidad                       |
-| `resilience-handler.ts`            | Timeout/retry/circuit-breaker/fallback por operación       |
-| `auto-escalation.ts`               | Escala por conteo de fallos (3/5/10)                       |
-| `safety-guardrails.ts`             | Evalúa mutaciones contra reglas constitucionales           |
-| `self-mutation-guard.ts`           | Protege contra auto-modificación no deseada                |
-| `prompt-injection-guard.ts`        | Protege contra inyección de prompts                        |
-| `workload-guard.ts` / `token-*-guard.ts` | Límites de recursos                                  |
-| `circuit-breaker-v2.ts`            | Circuit breakers por componente                            |
-| `self-healing-db.ts`               | Auto-reparación de la base de datos                        |
-| `session-close-guardian.ts`        | Guardián de cierre de sesión                               |
+| Guardrail                                | Rol                                                                |
+| ---------------------------------------- | ------------------------------------------------------------------ |
+| `anti-loop-guard.ts`                     | Detecta bucles de razonamiento (3 → change_strategy, 5 → escalate) |
+| `correction-rules-engine.ts`             | Corrige config por scores de calidad                               |
+| `resilience-handler.ts`                  | Timeout/retry/circuit-breaker/fallback por operación               |
+| `auto-escalation.ts`                     | Escala por conteo de fallos (3/5/10)                               |
+| `safety-guardrails.ts`                   | Evalúa mutaciones contra reglas constitucionales                   |
+| `self-mutation-guard.ts`                 | Protege contra auto-modificación no deseada                        |
+| `prompt-injection-guard.ts`              | Protege contra inyección de prompts                                |
+| `workload-guard.ts` / `token-*-guard.ts` | Límites de recursos                                                |
+| `circuit-breaker-v2.ts`                  | Circuit breakers por componente                                    |
+| `self-healing-db.ts`                     | Auto-reparación de la base de datos                                |
+| `session-close-guardian.ts`              | Guardián de cierre de sesión                                       |
 
 ### Tests
 
@@ -475,11 +477,11 @@ Los siguientes steps se agregaron al `config/session-autostart.config.json`:
 
 Los scripts PS1 core han sido migrados a TypeScript en `src/`:
 
-| PS1 Original                                      | TS Replacement                                                          | Comando                                            |
-| ------------------------------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------- |
-| `scripts/health-check/health-check.ps1`           | `src/core/health-check.ts`                                              | `npm run health:check`                             |
-| `scripts/utilities/session/session-autostart.ps1` | `src/session/session-autostart.ts` (wrapper de `src/core/session-autostart.ts`) | `npx tsx src/session/session-autostart.ts`                 |
-| `scripts/maintenance/maintenance-watchtower.ps1`  | `src/core/maintenance-watchtower.ts`                                    | `npm run watchtower` / `npm run watchtower:health` |
+| PS1 Original                                      | TS Replacement                                                                  | Comando                                            |
+| ------------------------------------------------- | ------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `scripts/health-check/health-check.ps1`           | `src/core/health-check.ts`                                                      | `npm run health:check`                             |
+| `scripts/utilities/session/session-autostart.ps1` | `src/session/session-autostart.ts` (wrapper de `src/core/session-autostart.ts`) | `npx tsx src/session/session-autostart.ts`         |
+| `scripts/maintenance/maintenance-watchtower.ps1`  | `src/core/maintenance-watchtower.ts`                                            | `npm run watchtower` / `npm run watchtower:health` |
 
 Los PS1 originales fueron eliminados tras verificar que las versiones TS cubren toda la
 funcionalidad. Los comandos `npm run` apuntan exclusivamente a las versiones TS.
@@ -618,8 +620,9 @@ npm run web:select -- --query "..." --deep-limit 3                      # top-N 
 ### witr trace (`src/web/witr-wrapper.ts` + `src/web/witr-cli.ts`)
 
 Wrapper TS del binario [witr](https://github.com/pranshuparmar/witr) — "Why Is This Running?". Traza
-procesos/puertos/archivos/contenedores hasta su cadena causal, con auto-install y redacción de
-secrets del entorno (`***REDACTED***` para claves).
+procesos/puertos/archivos/contenedores hasta su cadena causal, con auto-install y serialización
+segura. Los campos sensibles (entorno, headers, argumentos, query strings, tokens, passwords y keys)
+se omiten estructuralmente; los secretos embebidos en comandos se reemplazan antes de imprimir.
 
 ```bash
 npx tsx src/web/witr-cli.ts process <pid>

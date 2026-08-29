@@ -1,5 +1,5 @@
 # 📚 MODULE STRUCTURE — Gentle-Vanguard Architecture
-## Complete Index of 80+ Per-Domain Modules (F2.5)
+## Complete Index of Per-Domain Modules
 
 **Generated:** 2026-08-29  
 **Status:** Reference Documentation  
@@ -355,9 +355,9 @@ Pattern:
 
 ## 📖 REFERENCES
 
-**F2.5 Architecture Decision:**  
-- ADR: `docs/architecture/F2.5-refactor-rationale.md`
-- Commit pattern: "refactor(*): split NNNN-line X into per-domain modules"
+**Architecture note:** The per-domain module structure is native to the current stack. It is not a
+separate version, phase, product, or topic. Historical rationale remains in explicitly historical
+records that document the original transition.
 
 **Maintenance:**
 - Watchtower checks: `npm run watchtower:health`

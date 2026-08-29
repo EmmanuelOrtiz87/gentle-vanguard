@@ -3,7 +3,7 @@
 **Location:** `apps/web-dashboard/server/websocket-server/`  
 **Barrel Entry:** `apps/web-dashboard/server/websocket-server.ts` (18 lines)  
 **Status:** Dashboard Real-Time Core  
-**Lines:** 3004 → 18 modules (F2.5 refactor)
+**Structure:** 18 native modules behind a thin barrel entry
 
 ---
 

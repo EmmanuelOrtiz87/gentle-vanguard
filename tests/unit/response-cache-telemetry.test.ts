@@ -9,9 +9,7 @@ import {
   isCacheHitRateBelow,
 } from '../../src/resilience/response-cache';
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
-test('LRU eviction caps entries and preserves recently-touched keys', async () => {
+test('LRU eviction caps entries and preserves recently-touched keys', () => {
   const cache = new ResponseCache({ useSqlite: true, maxEntries: 3 });
   cache.clear();
 
@@ -19,11 +17,6 @@ test('LRU eviction caps entries and preserves recently-touched keys', async () =
   cache.set(`${base}1`, 'r1', 1);
   cache.set(`${base}2`, 'r2', 1);
   cache.set(`${base}3`, 'r3', 1);
-
-  // Ensure last_access of key 1 is strictly newer than created_at of keys 2/3
-  // (datetime('now') has second granularity). Sleep BEFORE the touch so the
-  // touch lands in a strictly newer second.
-  await sleep(1100);
 
   // Touch key 1 so it becomes the most-recently-used.
   assert.ok(cache.get(`${base}1`), 'key 1 should be a hit after set');

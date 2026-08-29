@@ -234,44 +234,9 @@ function convertSVGtoPNG(svgString): Promise<Blob> {
 
 | Producto       | Spec | Dev | Tests | Landing | Monetización | Prioridad |
 | -------------- | ---- | --- | ----- | ------- | ------------ | --------- |
-| **Doc-Gentle** | ✅   | ❌  | ❌    | ❌      | 📝           | 🔴 Alta   |
 | Gentle-Music   | ❌   | ❌  | ❌    | ❌      | ❌           | 🟡 Media  |
 | Stock-Vanguard | ❌   | ❌  | ❌    | ❌      | ❌           | 🟡 Media  |
 | Code-Gentle    | ❌   | ❌  | ❌    | ❌      | ❌           | 🟡 Media  |
-
-### 🔴 DOC-GENTLE - PLAN DE IMPLEMENTACIÓN
-
-#### Fase 1: MVP (2 semanas)
-
-- [ ] Setup proyecto React + Vite
-- [ ] Pantalla de upload PDF/DOCX
-- [ ] Integración básica Tesseract.js
-- [ ] Pantalla de resultado simple
-
-#### Fase 2: Core (2 semanas)
-
-- [ ] Sistema de chunking
-- [ ] Integración con modelo local (ollama/llama)
-- [ ] Q&A básico
-- [ ] Export de resumen
-
-#### Fase 3: Features (2 semanas)
-
-- [ ] Multi-documento
-- [ ] Historial
-- [ ] API endpoints
-- [ ] Auth simple
-
-#### Fase 4: Landing (1 semana)
-
-- [ ] Landing page
-- [ ] Pricing page
-- [ ] Demo video
-- [ ] Integrar con CMS
-
-**Total estimado**: 7 semanas para MVP completo
-
----
 
 ## 5. TESTS - PENDIENTES
 
@@ -376,15 +341,13 @@ describe('MarkdownViewer', () => {
 2. **Actualizar navegación** - En todas las páginas HTML
 3. **Export PNG** - Desde CMS
 4. **Tests básicos** - Para nuevos componentes
-5. **Doc-Gentle setup** - Iniciar implementación
 
 ### 🟡 IMPORTANTES (Mes siguiente)
 
 6. Compilación de video (FFmpeg)
 7. Records guardados
 8. Historial CMS
-9. Landing Doc-Gentle
-10. Responsive CMS
+9. Responsive CMS
 
 ### 🟢 MEJORAS (Futuro)
 
@@ -412,13 +375,11 @@ describe('MarkdownViewer', () => {
 - Commit cambios
 
 # Día 5:
-- Setup Doc-Gentle proyecto
-- Primer componente React
+- Verificar el estado de producción
 ```
 
 ### Próximo Mes:
 
-- Implementar Doc-Gentle MVP
 - Compilación de video
 - Deploy GitHub Pages
 - Crear demo video final
@@ -440,7 +401,6 @@ describe('MarkdownViewer', () => {
 2. Export formatos
 3. Navegación consistente
 4. Tests nuevos
-5. Doc-Gentle implementación
 
 ### 📈 Métricas Actuales:
 

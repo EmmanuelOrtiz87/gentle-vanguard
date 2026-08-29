@@ -3,7 +3,7 @@
 **Location:** `src/orchestration/adaptive-router/`  
 **Barrel Entry:** `src/orchestration/adaptive-router.ts` (26 lines)  
 **Status:** Core Orchestration  
-**Lines:** 997 → 7 modules (F2.5 refactor)
+**Structure:** 7 native modules behind a thin barrel entry
 
 ---
 
