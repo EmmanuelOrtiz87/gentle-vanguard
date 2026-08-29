@@ -59,4 +59,35 @@ export default [
       'security/detect-unsafe-regex': 'error',
     },
   },
+  {
+    // Dashboard server (F2.5 split): parsed WITHOUT type-aware rules because the
+    // root tsconfig excludes apps/web-dashboard (it has its own tsconfig, checked
+    // by `npm run build` = tsc && vite build inside the dashboard).
+    files: ['apps/web-dashboard/server/**/*.ts'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: 'module',
+      },
+    },
+    plugins: {
+      '@typescript-eslint': tsPlugin,
+      security: securityPlugin,
+    },
+    rules: {
+      'no-console': 'off',
+      'prefer-const': 'error',
+      'no-var': 'error',
+      eqeqeq: ['error', 'always'],
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/strict-boolean-expressions': 'off',
+      'security/detect-eval-with-expression': 'error',
+      'security/detect-no-csrf-before-method-override': 'error',
+      'security/detect-pseudoRandomBytes': 'error',
+      'security/detect-unsafe-regex': 'error',
+    },
+  },
 ];
