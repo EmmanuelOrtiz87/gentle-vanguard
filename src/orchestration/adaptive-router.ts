@@ -414,7 +414,6 @@ function collectDelegations(log: Logger): DelegationRecord[] {
     const agentData = data as Record<string, unknown>;
     const total = (agentData.total as number) || 0;
     const successes = (agentData.successes as number) || 0;
-    const failures = (agentData.failures as number) || 0;
     const avgDuration = (agentData.avg_duration as number) || 0;
     const lastEvent = (agentData.last_event as string) || null;
 

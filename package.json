@@ -308,6 +308,8 @@
     "delegate:run": "npx tsx src/orchestration/route-and-delegate.ts",
     "profiles:build": "npx tsx src/orchestration/profiles-build.ts",
     "profiles:check": "npx tsx src/orchestration/profiles-build.ts --check",
+    "prepush:gate": "npx tsx src/git/prepush-gate.ts",
+    "prepush:gate:force": "npx tsx src/git/prepush-gate.ts --force",
     "animation:create": "npx tsx src/animations/cli.ts create",
     "animation:analyze": "npx tsx src/animations/cli.ts analyze",
     "trends:fetch": "npx tsx src/research/research-trends-cli.ts fetch",
