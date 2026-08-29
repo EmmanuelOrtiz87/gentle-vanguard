@@ -81,7 +81,7 @@ scripts/.event-bus/
 
 # Session temp & local-only artifacts (NORMATIVA: no subir al repo)
 .session/
-session/
+/session/
 .local/
 
 # SDD Pipeline artifacts (NORMATIVA: no commitear artefactos de pipeline)
