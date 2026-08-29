@@ -82,7 +82,7 @@
   },
   "language": { "default": "es", "technicalTerms": "en" },
   "rules": [
-    "docs/AGENTS.md",
+    "AGENTS-fast.md",
     "rules/AI-NORMATIVES.md",
     "rules/DEVELOPMENT-STANDARDS.md",
     "rules/NORMATIVAS-CODIGO.md",

@@ -8,7 +8,7 @@
     "autoLoad": true
   },
   "capabilities": ["mcp", "skills", "subagents", "terminal", "hooks", "plugins"],
-  "configFiles": ["CLAUDE.md", ".claude/settings.json", "docs/AGENTS.md", "config/plugins.json"],
+  "configFiles": ["CLAUDE.md", ".claude/settings.json", "AGENTS-fast.md", "config/plugins.json"],
   "hooks": {
     "preToolCall": "src/tools/pre-process-input.ts",
     "sessionStart": "npm run session:autostart:detached",

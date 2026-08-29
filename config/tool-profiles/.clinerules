@@ -20,7 +20,7 @@ context:
     - "config/*.json"           # Config files (indexed)
     - "skills/*/SKILL.md"       # Skill definitions only
     - "scripts/utilities/pre-process-input.ps1"  # Core router
-    - "docs/AGENTS.md"          # Canonical entry
+    - "AGENTS-fast.md"       # Canonical entry (completo: AGENTS.md)
     - ".clinerules"             # This file
 
   # Exclude patterns (CRITICAL: prevents giant context)

@@ -16,7 +16,7 @@ Cargar config desde `config/orchestrator.json#toolProfiles.<name>`.
 
 1. `pre-process-input.ps1 -UserInput "<msg>" -WorkspaceRoot "."` BEFORE primera respuesta
 2. `scripts/utilities/session-start-optimized.ps1` (autostart pipeline con lazy loading)
-3. `docs/AGENTS.md#Mandatory-Startup-Sequence` — sin atajos
+3. `AGENTS-fast.md` — sin atajos (completo: `AGENTS.md`)
 
 ## Reglas activas
 

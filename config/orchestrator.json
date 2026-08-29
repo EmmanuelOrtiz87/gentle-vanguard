@@ -10,7 +10,7 @@
       "scriptArgs": "--config config/orchestrator.json --json",
       "fallbackTool": "opencode",
       "fallbackPromptFile": "CLAUDE.md",
-      "canonicalEntryPoint": "docs/AGENTS.md",
+      "canonicalEntryPoint": "AGENTS-fast.md",
       "note": "Detects tool at runtime and loads correct profile. OpenCode is the baseline default when no explicit runtime marker is present. Always use AGENTS.md over tool-specific files."
     },
     "preProcessing": {
@@ -335,7 +335,7 @@
     "opencode": {
       "promptFile": "CLAUDE.md",
       "configFile": "opencode.json",
-      "primaryEntryPoint": "docs/AGENTS.md",
+      "primaryEntryPoint": "AGENTS-fast.md",
       "responseProfile": "ultra",
       "communicationLang": "es",
       "supportsSkillTool": true,
@@ -348,7 +348,7 @@
     "claude-code": {
       "promptFile": "CLAUDE.md",
       "configFile": ".claude/settings.json",
-      "primaryEntryPoint": "docs/AGENTS.md",
+      "primaryEntryPoint": "AGENTS-fast.md",
       "responseProfile": "ultra",
       "communicationLang": "es",
       "supportsSkillTool": true,
@@ -359,7 +359,7 @@
     "cline": {
       "promptFile": ".clinerules",
       "configFile": ".clinerules",
-      "primaryEntryPoint": "docs/AGENTS.md",
+      "primaryEntryPoint": "AGENTS-fast.md",
       "responseProfile": "ultra",
       "communicationLang": "es",
       "supportsSkillTool": false,
@@ -371,7 +371,7 @@
     "cursor": {
       "promptFile": ".cursorrules",
       "configFile": ".cursorrules",
-      "primaryEntryPoint": "docs/AGENTS.md",
+      "primaryEntryPoint": "AGENTS-fast.md",
       "responseProfile": "ultra",
       "communicationLang": "es",
       "supportsSkillTool": false,
@@ -383,7 +383,7 @@
     "windsurf": {
       "promptFile": "CLAUDE.md",
       "configFile": ".windsurf/config.json",
-      "primaryEntryPoint": "docs/AGENTS.md",
+      "primaryEntryPoint": "AGENTS-fast.md",
       "responseProfile": "ultra",
       "communicationLang": "es",
       "supportsSkillTool": false,
@@ -395,7 +395,7 @@
     "codex": {
       "promptFile": "CLAUDE.md",
       "configFile": ".codex/config.toml",
-      "primaryEntryPoint": "docs/AGENTS.md",
+      "primaryEntryPoint": "AGENTS-fast.md",
       "responseProfile": "ultra",
       "communicationLang": "es",
       "supportsSkillTool": false,
@@ -406,7 +406,7 @@
     "continue-dev": {
       "promptFile": "CLAUDE.md",
       "configFile": ".continue/config.json",
-      "primaryEntryPoint": "docs/AGENTS.md",
+      "primaryEntryPoint": "AGENTS-fast.md",
       "responseProfile": "ultra",
       "communicationLang": "es",
       "supportsSkillTool": true,
@@ -417,7 +417,7 @@
     "copilot": {
       "promptFile": "CLAUDE.md",
       "configFile": ".continue/config.json",
-      "primaryEntryPoint": "docs/AGENTS.md",
+      "primaryEntryPoint": "AGENTS-fast.md",
       "responseProfile": "ultra",
       "communicationLang": "es",
       "supportsSkillTool": false,
@@ -428,7 +428,7 @@
     "antigravity": {
       "promptFile": "CLAUDE.md",
       "configFile": ".antigravity/config.json",
-      "primaryEntryPoint": "docs/AGENTS.md",
+      "primaryEntryPoint": "AGENTS-fast.md",
       "responseProfile": "ultra",
       "communicationLang": "es",
       "supportsSkillTool": false,
@@ -439,7 +439,7 @@
     "claude-generic": {
       "promptFile": "CLAUDE.md",
       "configFile": "",
-      "primaryEntryPoint": "docs/AGENTS.md",
+      "primaryEntryPoint": "AGENTS-fast.md",
       "responseProfile": "ultra",
       "communicationLang": "es",
       "supportsSkillTool": true,

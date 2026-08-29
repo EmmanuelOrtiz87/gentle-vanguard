@@ -1,6 +1,6 @@
 # gentle-vanguard — Entry Point for Claude-Compatible Tools
 
-**Loaded by**: OpenCode, Claude Code, Windsurf, Claude | Canonical entry: `AGENTS.md`
+**Loaded by**: OpenCode, Claude Code, Windsurf, Claude | Canonical entry: `AGENTS-fast.md` (completo: `AGENTS.md`)
 
 ## CRITICAL: First Action — Tool Detection
 

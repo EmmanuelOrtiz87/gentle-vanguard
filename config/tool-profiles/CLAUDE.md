@@ -1,6 +1,6 @@
 # gentle-vanguard — Entry Point
 
-Canonical entry: `AGENTS.md`
+Canonical entry: `AGENTS-fast.md` (comprimido) · Manual completo: `AGENTS.md`
 
 ## Tool Detection (turn 1)
 
