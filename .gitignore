@@ -74,6 +74,9 @@ reports/stack-benchmark*.json
 reports/stack-benchmark*.jsonl
 reports/stack-live-observability-latest.json
 reports/startup-summary.json
+reports/coverage-summary.json
+reports/optimization/*.json
+logs/*-latest.*
 
 # Rate-limit and event-bus runtime state
 .event-bus/
@@ -81,7 +84,7 @@ scripts/.event-bus/
 
 # Session temp & local-only artifacts (NORMATIVA: no subir al repo)
 .session/
-session/
+/session/
 .local/
 
 # SDD Pipeline artifacts (NORMATIVA: no commitear artefactos de pipeline)

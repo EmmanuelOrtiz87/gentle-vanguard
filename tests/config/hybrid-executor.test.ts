@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import { strict as assert } from 'node:assert';
-import { getProviderCatalog, getProviderOrder, selectProvider } from '../../src/hybrid-executor.ts';
+import { getProviderCatalog, getProviderOrder, selectProvider } from '../../src/orchestration/hybrid-executor.ts';
 
 describe('hybrid-executor.ts', () => {
   it('prefers the lowest-cost provider by default', () => {

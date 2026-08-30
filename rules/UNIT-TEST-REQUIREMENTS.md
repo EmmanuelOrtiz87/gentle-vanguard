@@ -31,7 +31,7 @@ garantizando cobertura suficiente para mantener la calidad y prevenir regresione
 
 <!-- REF-OBSOLETA: src/health-check.ts no existe (ruta migrada o eliminada) -->
 
-- `src/session-autostart.ts`
+- `src/session/session-autostart.ts`
 - `src/maintenance-watchtower.ts`
 
 <!-- REF-OBSOLETA: src/maintenance-watchtower.ts no existe (ruta migrada o eliminada) -->
@@ -50,7 +50,7 @@ Ejemplos:
 
 <!-- REF-OBSOLETA: src/health-check.ts no existe (ruta migrada o eliminada) -->
 
-- `src/session-autostart.ts` → `tests/unit/session-autostart.test.ts`
+- `src/session/session-autostart.ts` → `tests/unit/session-autostart.test.ts`
 - `src/maintenance-watchtower.ts` → `tests/unit/maintenance-watchtower.test.ts`
 
 <!-- REF-OBSOLETA: src/maintenance-watchtower.ts no existe (ruta migrada o eliminada) -->

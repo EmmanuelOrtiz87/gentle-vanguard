@@ -14,7 +14,7 @@
 | **Video Studio**    | ✅ 100% | `video-studio.html`       | Generación de videos con persistencia de proyectos |
 | **Social Post**     | ✅ 100% | `social-post.html`        | Generador de posts con templates y export          |
 | **Contract Viewer** | ✅ 100% | `contract-viewer.html`    | Gestión de contratos con estados                   |
-| **Product Pages**   | ✅ 100% | `product-doc-gentle.html` | Landing page comercial completa                    |
+| **Product Pages**   | ✅ 100% | `resources-index.html` | Catálogo de recursos y servicios                   |
 | **CMS Dashboard**   | ✅ 100% | `resources-index.html`    | Panel de control centralizado                      |
 | **CMS Exporter**    | ✅ 100% | `cms-exporter.js`         | Exportación ZIP de todo el proyecto                |
 | **Asset Manager**   | ✅ 100% | `asset-manager.js`        | Biblioteca de assets unificada                     |
@@ -210,7 +210,6 @@
 - `video-studio.html` - Instrucciones de compilación FFmpeg
 - `social-post.html` - Todo documentado
 - `contract-viewer.html` - Help integrado
-- `product-doc-gentle.html` - Landing completa
 - `cms-exporter.js` - Documentación JSDoc
 - `asset-manager.js` - Documentación JSDoc
 

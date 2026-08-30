@@ -48,6 +48,7 @@ import { ActivityTimeline } from './ActivityTimeline';
 import { SloPanel } from './SloPanel';
 import { DashboardRuntimeHealth } from './DashboardRuntimeHealth';
 import { ProcessHygienePanel } from './ProcessHygienePanel';
+import { AnalyticsWidget } from './AnalyticsWidget';
 import { InfoPopup } from './InfoPopup';
 import {
   LocaleContext,
@@ -112,10 +113,12 @@ function LiveDataStatus({
   connected,
   lastUpdated,
   source,
+  dataState,
 }: {
   connected: boolean;
   lastUpdated: number;
   source?: string;
+  dataState?: 'live' | 'stale' | 'error' | 'loading';
 }) {
   const { tt } = useT();
   const sourceLabel =
@@ -126,10 +129,22 @@ function LiveDataStatus({
         : 'native aggregator';
   const timeLabel =
     lastUpdated > 0 ? new Date(lastUpdated).toLocaleTimeString() : tt('ui.waiting_data');
+
+  // Dot color and label driven by explicit dataState when available.
+  const stateConfig: Record<string, { dotClass: string; label: string }> = {
+    live:    { dotClass: 'is-connected',    label: tt('ui.live_stream') },
+    stale:   { dotClass: 'is-stale',        label: tt('ui.data_stale') },
+    error:   { dotClass: 'is-reconnecting', label: tt('ui.recovery_polling') },
+    loading: { dotClass: 'is-reconnecting', label: tt('ui.waiting_data') },
+  };
+  const resolved = dataState ? stateConfig[dataState] : undefined;
+  const dotClass = resolved?.dotClass ?? (connected ? 'is-connected' : 'is-reconnecting');
+  const stateLabel = resolved?.label ?? (connected ? tt('ui.live_stream') : tt('ui.recovery_polling'));
+
   return (
     <div className="gv-live-status" role="status" aria-live="polite">
-      <span className={`gv-live-status-dot ${connected ? 'is-connected' : 'is-reconnecting'}`} />
-      <span>{connected ? tt('ui.live_stream') : tt('ui.recovery_polling')}</span>
+      <span className={`gv-live-status-dot ${dotClass}`} />
+      <span>{stateLabel}</span>
       <span className="gv-live-status-divider" aria-hidden="true" />
       <span>
         {tt('ui.source')}: {sourceLabel}
@@ -159,6 +174,7 @@ function DashboardInner() {
     dismissNotification,
     isOffline,
     lastUpdated,
+    dataState,
   } = useMetrics(useWebSocket, urlTenantId);
   const { session: agentSession, bridgeConnected, createSession } = useAgentStream();
   const { triggeredAlerts } = useAlerts();
@@ -288,11 +304,12 @@ function DashboardInner() {
       </header>
 
       <OfflineBanner isOffline={isOffline} lastUpdated={lastUpdated} />
-      <LiveDataStatus connected={wsConnected} lastUpdated={lastUpdated} source={data.source} />
+      <LiveDataStatus connected={wsConnected} lastUpdated={lastUpdated} source={data.source} dataState={dataState} />
 
       <main className="gv-dashboard-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <DashboardRuntimeHealth />
         <ProcessHygienePanel />
+        <AnalyticsWidget />
         {/* Row 1: Core KPIs */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {loading && lastUpdated === 0 ? (

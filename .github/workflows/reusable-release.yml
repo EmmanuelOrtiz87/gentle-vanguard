@@ -26,7 +26,7 @@ jobs:
           git log --oneline --no-decorate $(git describe --tags --abbrev=0 2>/dev/null || git rev-list --max-parents=0 HEAD)..HEAD >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           tag_name: ${{ inputs.tag }}
           body: ${{ steps.notes.outputs.notes }}
@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
       - name: Enable corepack (pnpm)
@@ -53,7 +53,7 @@ jobs:
       - name: Install postject (SEA injection)
         run: npm install -g postject
       - name: Build SEA launcher
-        run: npx tsx src/build-sea.ts --target launcher --skip-build
+        run: npx tsx src/infrastructure/build-sea.ts --target launcher --skip-build
         shell: pwsh
       - name: Prepare versioned asset
         shell: pwsh
@@ -64,7 +64,7 @@ jobs:
           Write-Output "Asset listo: $asset"
           Get-ChildItem build/gentle-vanguard-*.exe
       - name: Upload installer to release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           tag_name: ${{ inputs.tag }}
           files: build/gentle-vanguard-*.exe

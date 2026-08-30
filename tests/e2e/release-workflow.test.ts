@@ -3,7 +3,7 @@
  * E2E Test: Release Workflow
  *
  * Verifies the real release gates against throwaway git repositories:
- *   1. SDD gate (src/check-sdd-gate.ts) blocks an incomplete release on main
+ *   1. SDD gate (src/sdd/check-sdd-gate.ts) blocks an incomplete release on main
  *      and is bypassed by .sdd-exempt.
  *   2. RDD release gate (src/rdd/rdd-gates.ts) responds with a structured
  *      GateValidation even when it fails for lack of a receipt.

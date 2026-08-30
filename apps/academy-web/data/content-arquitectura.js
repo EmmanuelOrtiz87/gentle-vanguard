@@ -12,6 +12,11 @@ window.GV_CONTENT['arquitectura'] = {
 
 Antes de estudiar componentes individuales necesitas el mapa. Gentle-Vanguard se organiza en **seis planos funcionales** que cubren todo el ciclo de operar con agentes de IA:
 
+La modularidad por dominios es una capacidad nativa de la arquitectura actual, no una versión, fase,
+producto ni tópico separado. Sus superficies canónicas son: Academy (\`apps/academy-web\`),
+documentación formal (\`docs/presentations\`), Analytics (\`apps/gv-analytics\`), CMS futuro
+(\`apps/content-cms\`) y Dashboard (\`apps/web-dashboard\`).
+
 | Capa | Rol | Piezas clave |
 | --- | --- | --- |
 | CLI / orquestación | Coordinar la sesión y las tareas | \`src/\` (pipeline, adaptive steps, delegación) |

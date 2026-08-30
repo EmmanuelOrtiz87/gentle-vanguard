@@ -17,10 +17,6 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
       rel="stylesheet"
     />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="assets/css/gv.css?v=2.1" />
     <style>
       /* --- Estilos específicos de quickstart.html (complementan el design system) --- */
@@ -290,7 +286,7 @@
         <div>
           <span class="comment"># Run the autostart pipeline (MANDATORY first command)</span>
         </div>
-        <div><span class="prompt">$</span> npx tsx src/session-autostart.ts</div>
+        <div><span class="prompt">$</span> npx tsx src/session/session-autostart.ts</div>
       </div>
       <div class="d-flex justify-content-center mt-3">
         <span
@@ -316,7 +312,7 @@
           </thead>
           <tbody>
             <tr>
-              <td><code>npx tsx src/session-autostart.ts</code></td>
+              <td><code>npx tsx src/session/session-autostart.ts</code></td>
               <td>
                 Start session
                 <span
@@ -560,7 +556,7 @@
                   <code
                     class="text-info"
                     style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem"
-                    >npx tsx src/session-autostart.ts</code
+                    >npx tsx src/session/session-autostart.ts</code
                   ><br /><small class="text-secondary"
                     >This is the <strong class="text-warning">mandatory first command</strong> every
                     session</small

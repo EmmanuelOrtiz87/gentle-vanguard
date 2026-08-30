@@ -19,7 +19,7 @@ import {
   checkProviderHealth,
   getCurrentProvider,
   resetProviders,
-} from '../src/gga.js';
+} from '../src/tools/gga.js';
 
 // =============================================================================
 // TEST CONFIGURATION

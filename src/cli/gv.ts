@@ -184,13 +184,16 @@ function getSessionState(): {
     }
     const state = JSON.parse(readFileSync(SESSION_FILE, 'utf-8'));
     const lastActivity = new Date(state.lastActivity).getTime();
+    if (isNaN(lastActivity)) {
+      return { active: false, reason: 'Invalid lastActivity timestamp' };
+    }
+    // Session is valid while lastActivity is within the 30-minute window.
+    // We intentionally do NOT check a stored PID: createSession() records the
+    // PID of the short-lived CLI process (gv.ts itself), which dies seconds
+    // after writing the file. A process.kill(pid, 0) probe on that PID would
+    // always fail and mark the session inactive even when it is healthy.
     if (Date.now() - lastActivity > 30 * 60 * 1000) {
       return { active: false, reason: 'Session expired (>30min)' };
-    }
-    try {
-      process.kill(state.pid, 0);
-    } catch {
-      return { active: false, reason: 'Process not running' };
     }
     return { active: true, id: state.id, lastActivity: state.lastActivity };
   } catch {
@@ -201,9 +204,12 @@ function getSessionState(): {
 function createSession(id: string): void {
   const sessionDir = dirname(SESSION_FILE);
   if (!existsSync(sessionDir)) mkdirSync(sessionDir, { recursive: true });
+  // Note: we omit the `pid` field intentionally. The session lifecycle is
+  // tracked by lastActivity timestamp alone (see getSessionState). Storing
+  // the CLI process PID was misleading because that process exits immediately
+  // after writing this file, making the alive-check always fail.
   const state = {
     id,
-    pid: process.pid,
     startedAt: new Date().toISOString(),
     lastActivity: new Date().toISOString(),
   };
@@ -329,7 +335,7 @@ function cmdDashboard(args: string[]): CommandResult {
       cmdCleanup([]);
       try {
         console.log('[GV] Starting dashboard...');
-        const child = run('npx', ['tsx', 'src/dashboard-start.ts'], {
+        const child = run('npx', ['tsx', 'src/ops/dashboard-start.ts'], {
           detached: true,
           stdio: 'ignore',
           windowsHide: true,
@@ -351,7 +357,7 @@ function cmdDashboard(args: string[]): CommandResult {
     }
     case 'stop': {
       try {
-        runNpxTsxSync('src/dashboard-stop.ts', [], { cwd: ROOT, stdio: 'pipe' });
+        runNpxTsxSync('src/ops/dashboard-stop.ts', [], { cwd: ROOT, stdio: 'pipe' });
         return { success: true, message: 'Dashboard stopped' };
       } catch (e) {
         return { success: false, message: `Failed: ${e}` };
@@ -407,8 +413,8 @@ function cmdFix(args: string[]): CommandResult {
   console.log(`[GV] Fixing PS1 references${dryRun ? ' (dry-run)' : ''}...`);
   try {
     const mode = args.includes('--configs')
-      ? 'src/auto-ps1-fixer-configs.ts'
-      : 'src/auto-ps1-fixer.ts';
+      ? 'src/tools/auto-ps1-fixer-configs.ts'
+      : 'src/tools/auto-ps1-fixer.ts';
     const cmd = dryRun ? `npx tsx ${mode} --dry-run` : `npx tsx ${mode}`;
     runSyncShell(cmd, { cwd: ROOT, stdio: 'inherit' });
     return { success: true, message: 'Fix completed' };
@@ -527,7 +533,7 @@ export function buildReleaseReport(gates: GateProfile[]): ReleaseReport {
 
 export function selectReleaseGates(skipTests: boolean): GateSpec[] {
   const specs: GateSpec[] = [
-    { name: 'Homologation Gate', cmd: 'npx', args: ['tsx', 'src/check-sdd-gate.ts'] },
+    { name: 'Homologation Gate', cmd: 'npx', args: ['tsx', 'src/sdd/check-sdd-gate.ts'] },
     {
       name: 'RDD Release Gate',
       cmd: 'npx',
@@ -700,7 +706,7 @@ async function main(): Promise<void> {
       header();
       console.log('Project scaffolding:\n');
       console.log('  Use the SDD workflow:');
-      console.log('    1. npx tsx src/session-autostart.ts');
+      console.log('    1. npx tsx src/session/session-autostart.ts');
       console.log('    2. Load skill: spec-driven-development, planning-and-task-breakdown');
       console.log('    3. Ask the orchestrator to create a new project\n');
       footer();

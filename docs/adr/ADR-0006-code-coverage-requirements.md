@@ -80,7 +80,7 @@ Files excluded from coverage measurement (see `tests/coverage-config.json`):
 
 ### Implementation
 
-Coverage is measured with the **native TypeScript coverage runner** (`src/coverage-runner.ts`),
+Coverage is measured with the **native TypeScript coverage runner** (`src/review/coverage-runner.ts`),
 which executes the full test suite under c8 and enforces per-target thresholds:
 
 ```bash
@@ -131,7 +131,7 @@ CI workflow uploads coverage reports as artifacts.
 ## References
 
 - `tests/coverage-config.json` — threshold configuration
-- `src/coverage-runner.ts` — native coverage runner implementation
+- `src/review/coverage-runner.ts` — native coverage runner implementation
 - `tests/unit/coverage-runner.test.ts` — runner unit tests
 - `.github/workflows/ci.yml` — CI integration (coverage-report job)
 - ADR-0002 (TypeScript-First) — explains why the stack is TypeScript-native

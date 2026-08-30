@@ -21,10 +21,10 @@
       "stage": "pre-commit",
       "enforced": true,
       "enforcer": "lefthook - json-lint",
-      "tool": "src/json-lint.ts",
+      "tool": "src/tools/json-lint.ts",
       "required": true,
       "description": "Validate JSON syntax",
-      "command": "src/json-lint.ts",
+      "command": "src/tools/json-lint.ts",
       "failureAction": "block"
     },
     {
@@ -33,10 +33,10 @@
       "stage": "pre-commit",
       "enforced": true,
       "enforcer": "lefthook - workflow-lint",
-      "tool": "src/workflow-lint.ts",
+      "tool": "src/review/workflow-lint.ts",
       "required": true,
       "description": "Validate GitHub Actions workflow syntax",
-      "command": "src/workflow-lint.ts",
+      "command": "src/review/workflow-lint.ts",
       "failureAction": "block"
     },
     {
@@ -153,10 +153,10 @@
       "stage": "pre-commit",
       "enforced": true,
       "enforcer": "lefthook - skill-scan",
-      "tool": "src/scan-skill-hook.ts",
+      "tool": "src/knowledge/scan-skill-hook.ts",
       "required": true,
       "description": "Security scan for skill files",
-      "command": "npx tsx src/scan-skill-hook.ts -StagedFiles {staged_files}",
+      "command": "npx tsx src/knowledge/scan-skill-hook.ts -StagedFiles {staged_files}",
       "failureAction": "block"
     },
     {
@@ -189,10 +189,10 @@
       "stage": "post-commit",
       "enforced": true,
       "enforcer": "lefthook - codegraph-sync",
-      "tool": "src/codegraph-post-modification-sync.ts",
+      "tool": "src/integrations/codegraph-post-modification-sync.ts",
       "required": true,
       "description": "Sync codegraph index after commit",
-      "command": "npx tsx src/codegraph-post-modification-sync.ts -Trigger post-commit -Force",
+      "command": "npx tsx src/integrations/codegraph-post-modification-sync.ts -Trigger post-commit -Force",
       "failureAction": "warn"
     },
     {
@@ -216,7 +216,7 @@
       "tool": "audit-ps1-refs.ts",
       "required": true,
       "description": "Quick audit sweep before push",
-      "command": "npx tsx src/audit-ps1-refs.ts",
+      "command": "npx tsx src/tools/audit-ps1-refs.ts",
       "failureAction": "block"
     },
     {
@@ -237,10 +237,10 @@
       "stage": "pre-push",
       "enforced": true,
       "enforcer": "lefthook - orchestrator-auto-fix",
-      "tool": "src/orchestrate-auto-fix.ts",
+      "tool": "src/orchestration/orchestrate-auto-fix.ts",
       "required": false,
       "description": "Auto-fix detected issues before push",
-      "command": "npx tsx src/orchestrate-auto-fix.ts -Fix",
+      "command": "npx tsx src/orchestration/orchestrate-auto-fix.ts -Fix",
       "failureAction": "warn"
     },
     {
@@ -300,7 +300,7 @@
       "tool": "test-runner.ts",
       "required": true,
       "description": "TypeScript test suites via test-runner",
-      "command": "npx tsx src/test-runner.ts",
+      "command": "npx tsx src/review/test-runner.ts",
       "failureAction": "block"
     },
     {
@@ -333,10 +333,10 @@
       "stage": "governance",
       "enforced": false,
       "enforcer": "not enforced — script may not exist",
-      "tool": "src/check-sdd-gate.ts",
+      "tool": "src/sdd/check-sdd-gate.ts",
       "required": false,
       "description": "Validate SDD spec status for feature branches",
-      "command": "src/check-sdd-gate.ts",
+      "command": "src/sdd/check-sdd-gate.ts",
       "failureAction": "block"
     },
     {

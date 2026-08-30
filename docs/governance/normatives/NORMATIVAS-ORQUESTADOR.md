@@ -152,7 +152,7 @@ TODO commit DEBE pasar:
 
 - `main`: Requiere PR + 1 approval + status checks (tests, gitleaks, lint, format)
 - `develop`: Requiere PR + 1 approval (lighter rules)
-- Rulesets gestionados via `setup-branch-protection.ps1` usando `gh api`
+- Rulesets gestionados via `npx tsx src/tools/setup-branch-protection.ts` usando `gh api`
 - **MUST** ejecutar script después de crear nuevo repo
 
 ### 4.6 Skill Dependency Graph (config/skill-dependencies.json)
@@ -295,18 +295,18 @@ El orquestador **DEBE** conocer:
 
 ### Comandos Críticos
 
-| Comando                       | Propósito                              |
-| ----------------------------- | -------------------------------------- |
-| `mem_save`                    | Guardar aprendizaje INMEDIATAMENTE     |
-| `mem_search`                  | Buscar trabajo previo ANTES de empezar |
-| `mem_session_summary`         | Persistir sesión ANTES de terminar     |
-| `Restore-OrchestratorState`   | Recuperar estado tras compaction       |
-| `Save-OrchestratorState`      | Guardar estado para cross-session      |
-| `Invoke-AutoDelegate`         | Delegar a subagente con resilience     |
-| `Test-SkillDependencies`      | Verificar deps antes de ejecutar       |
-| `setup-branch-protection.ps1` | Configurar rulesets via API            |
-| `sync-to-public.ps1`          | Sincronizar repo privado → público     |
-| `gitleaks` (CI)               | Secret scanning automático en PRs      |
+| Comando                                | Propósito                              |
+| -------------------------------------- | -------------------------------------- |
+| `mem_save`                             | Guardar aprendizaje INMEDIATAMENTE     |
+| `mem_search`                           | Buscar trabajo previo ANTES de empezar |
+| `mem_session_summary`                  | Persistir sesión ANTES de terminar     |
+| `Restore-OrchestratorState`            | Recuperar estado tras compaction       |
+| `Save-OrchestratorState`               | Guardar estado para cross-session      |
+| `Invoke-AutoDelegate`                  | Delegar a subagente con resilience     |
+| `Test-SkillDependencies`               | Verificar deps antes de ejecutar       |
+| `src/tools/setup-branch-protection.ts` | Configurar rulesets via API            |
+| `sync-to-public.ps1`                   | Sincronizar repo privado → público     |
+| `gitleaks` (CI)                        | Secret scanning automático en PRs      |
 
 ### Formato de Comunicación
 

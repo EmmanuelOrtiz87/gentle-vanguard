@@ -1,0 +1,37 @@
+{
+  "name": "@gentle-vanguard/gv-analytics",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Independent Gentle-Vanguard Analytics app for Atlassian-driven delivery analysis.",
+  "scripts": {
+    "dev": "concurrently -n analytics-ui,analytics-api -c cyan,magenta \"vite --host 127.0.0.1 --port 5174\" \"node --import tsx server/index.ts\"",
+    "dev:client": "vite --host 127.0.0.1 --port 5174",
+    "dev:server": "node --import tsx server/index.ts",
+    "mcp": "node --import tsx server/mcp.ts",
+    "build": "tsc && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4174",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "better-sqlite3": "^13.0.3",
+    "concurrently": "^10.0.4",
+    "docx": "^9.7.1",
+    "lucide-react": "^0.294.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tsx": "^4.23.1",
+    "typescript": "^6.0.3",
+    "vite": "6.4.3",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^26.1.2",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7"
+  }
+}

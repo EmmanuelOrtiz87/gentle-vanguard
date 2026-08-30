@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Consolidar las capacidades existentes de `src/marketing-agent.ts`, `src/social-poster.ts` y
+Consolidar las capacidades existentes de `src/tools/marketing-agent.ts`, `src/tools/social-poster.ts` y
 `docs/presentations/resources-index.html` en un flujo operativo único para contenido.
 
 ```text
@@ -17,7 +17,7 @@ reutiliza los servicios existentes del stack.
 ### Componentes existentes reutilizados
 
 - `src/marketing-agent.ts`: generación de copy multilingüe y por plataforma.
-- `src/social-poster.ts`: plantillas, plataformas y tracking básico.
+- `src/tools/social-poster.ts`: plantillas, plataformas y tracking básico.
 - `docs/presentations/resources-index.html`: CMS local y punto de interacción humano.
 - `src/cli/gv.ts`: CLI principal.
 - health/watchtower, seguridad, auditoría, base de datos y dashboard: infraestructura transversal

@@ -7,7 +7,7 @@ import { spawn } from 'child_process';
 import { runSync } from '../../adapters/command-runner.js';
 
 const __filename = fileURLToPath(import.meta.url);
-const ROOT = resolve(dirname(__filename), '..');
+const ROOT = resolve(dirname(__filename), '../..');
 const REGISTRY_PATH = join(ROOT, 'config', 'mcp-registry.json');
 const LOCK_DIR = join(ROOT, '.runtime', 'mcp');
 const TEMPLATES_PATH = join(ROOT, 'config', 'mcp-templates.json');

@@ -6,9 +6,8 @@ Reglas fundamentales de operacion para todos los agentes en Gentle-Vanguard.
 
 Ejecutar ANTES de cualquier accion:
 
-```powershell
-$detected = pwsh -NoProfile -File scripts/utilities/detect-tool.ps1 -AsJson | ConvertFrom-Json
-$detected.name  # opencode|claude-code|cline|cursor|windsurf|unknown
+```bash
+npx tsx src/orchestration/agent-delegator.ts --detect --json
 ```
 
 Cargar config desde `config/orchestrator.json#toolProfiles.<name>`.
@@ -19,8 +18,8 @@ Cargar config desde `config/orchestrator.json#toolProfiles.<name>`.
 
 1. Ejecutar con `-UserInput` (no `-Prompt`):
 
-   ```powershell
-   pwsh -NoProfile -File scripts/utilities/pre-process-input.ps1 -UserInput "INPUT" -WorkspaceRoot "."
+   ```bash
+   npm run pre:process -- --user-input "INPUT" --workspace-root "."
    ```
 
 2. El script tiene **response cache** (SHA256, TTL 30min, -33-41% latency). Usar `-DisableCache`
@@ -40,8 +39,8 @@ Cargar config desde `config/orchestrator.json#toolProfiles.<name>`.
 
 ## Startup Sequence
 
-1. `pre-process-input.ps1` BEFORE primera respuesta
-2. `scripts/utilities/session-start-optimized.ps1` (autostart pipeline in-process, sin Start-Job)
+1. `npm run pre:process` BEFORE primera respuesta
+2. `npm run session:autostart:ts` (autostart pipeline in-process)
 3. Leer `scripts/.session/startup-summary.json`
 4. `todowrite` — crear task list
 5. `mem_search "lessons learned"`
@@ -72,7 +71,7 @@ Cursor no expone skill tool. Para emular:
 
 - **Contexto persistente**: `.engram-data/`
 - **Resumen de sesion**: `scripts/.session/startup-summary.json`
-- **Restaurar contexto**: `pwsh -NoProfile -File scripts/utilities/engram_mem_context.ps1`
+- **Restaurar contexto**: `npx tsx src/knowledge/engram-session-bridge.ts`
 - **Session logs**: `logs/` y `session/`
 
 ## Respuestas

@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "name": "module-maturity-config",
-  "description": "Maturity registry for stack modules: core vs experimental vs deprecated, opt-in policy, and governance activation gates. Consumed by src/module-maturity.ts and enforced by docs/governance/MODULE-ACTIVATION-WORKFLOW.md.",
+  "description": "Maturity registry for stack modules: core vs experimental vs deprecated, opt-in policy, and governance activation gates. Consumed by src/monitor/module-maturity.ts and enforced by docs/governance/MODULE-ACTIVATION-WORKFLOW.md.",
   "policy": {
     "coreDefault": true,
     "experimentalOptIn": true,
@@ -20,7 +20,7 @@
       "activated": true,
       "risk": "low",
       "owner": "orchestrator",
-      "script": "src/session-autostart.ts",
+      "script": "src/session/session-autostart.ts",
       "description": "Idempotent session bootstrap pipeline (config/session-autostart.config.json) that initializes session state, security, tracing, dashboards and all lazy background daemons.",
       "activationCriteria": [
         { "check": "config-valid", "required": true },
@@ -77,7 +77,7 @@
       "activated": true,
       "risk": "low",
       "owner": "ops-agent",
-      "script": "src/dashboard-start.ts",
+      "script": "src/ops/dashboard-start.ts",
       "description": "React/TypeScript/Vite SPA + WebSocket data pipeline (apps/web-dashboard/) with real metrics, traces, alerts and i18n.",
       "activationCriteria": [
         { "check": "config-valid", "required": true },
@@ -115,7 +115,7 @@
       "activated": true,
       "risk": "low",
       "owner": "session-agent",
-      "script": "src/engram-integrity-check.ts",
+      "script": "src/knowledge/engram-integrity-check.ts",
       "description": "Persistent cross-session memory via the engram MCP server, with integrity checks, auto-sync, reindex and compaction.",
       "activationCriteria": [
         { "check": "config-valid", "required": true },
@@ -191,7 +191,7 @@
       "activated": true,
       "risk": "medium",
       "owner": "gov-agent",
-      "script": "src/event-sourcing.ts",
+      "script": "src/tools/event-sourcing.ts",
       "description": "Append-only event store with SHA-256 hash-chaining (prevHash) for tamper-evident audit trails; append/project/snapshot/prune.",
       "activationCriteria": [
         { "check": "config-valid", "required": true },
@@ -210,7 +210,7 @@
       "activated": true,
       "risk": "low",
       "owner": "ops-agent",
-      "script": "src/checkpoint-manager.ts",
+      "script": "src/ops/checkpoint-manager.ts",
       "description": "Checkpoint create/list/diff/verify/prune, snapshots and dry-run rollback restoration for session state safety.",
       "activationCriteria": [
         { "check": "config-valid", "required": true },
@@ -248,7 +248,7 @@
       "activated": true,
       "risk": "low",
       "owner": "ops-agent",
-      "script": "src/tracing-instrument.ts",
+      "script": "src/monitor/tracing-instrument.ts",
       "description": "OTLP distributed tracing (start/end/error spans) persisted to .telemetry/ with export to the local OTLP collector.",
       "activationCriteria": [
         { "check": "config-valid", "required": true },
@@ -286,7 +286,7 @@
       "activated": true,
       "risk": "high",
       "owner": "ops-agent",
-      "script": "src/predictive-governor.ts",
+      "script": "src/ml/predictive-governor.ts",
       "description": "Anticipates load, prewarms resources and adjusts budgets ahead of demand. High risk: can over-consume local resources.",
       "activationCriteria": [
         { "check": "tests", "required": true },
@@ -306,7 +306,7 @@
       "activated": true,
       "risk": "high",
       "owner": "orchestrator",
-      "script": "src/proactive-intelligence-engine.ts",
+      "script": "src/ml/proactive-intelligence-engine.ts",
       "description": "Anticipates user needs from usage patterns and context. High risk: autonomous actions require tight guardrails.",
       "activationCriteria": [
         { "check": "tests", "required": true },
@@ -326,7 +326,7 @@
       "activated": true,
       "risk": "medium",
       "owner": "self-diag-agent",
-      "script": "src/root-cause-correlator.ts",
+      "script": "src/resilience/root-cause-correlator.ts",
       "description": "Cross-component failure correlation and cascade detection to speed up diagnosis of FAIL/WARN events.",
       "activationCriteria": [
         { "check": "tests", "required": true },
@@ -346,7 +346,7 @@
       "activated": true,
       "risk": "medium",
       "owner": "orchestrator",
-      "script": "src/convergence-monitor.ts",
+      "script": "src/monitor/convergence-monitor.ts",
       "description": "Tracks whether the stack is converging, oscillating or diverging (stage #7 meta-monitoring).",
       "activationCriteria": [
         { "check": "tests", "required": true },
@@ -366,7 +366,7 @@
       "activated": true,
       "risk": "high",
       "owner": "gov-agent",
-      "script": "src/review-lenses.ts",
+      "script": "src/review/review-lenses.ts",
       "description": "Review lenses, result gatekeeper, publication gates (TOCTOU prevention), findings ledger and compact state machine for review trust.",
       "activationCriteria": [
         { "check": "tests", "required": true },
@@ -406,7 +406,7 @@
       "activated": true,
       "risk": "high",
       "owner": "ops-agent",
-      "script": "src/fine-tuning-data-collector.ts",
+      "script": "src/ml/fine-tuning-data-collector.ts",
       "description": "Auto-collects session, engram and skill data into a fine-tuning dataset. High risk: data privacy and leakage.",
       "activationCriteria": [
         { "check": "tests", "required": true },
@@ -426,7 +426,7 @@
       "activated": true,
       "risk": "high",
       "owner": "ops-agent",
-      "script": "src/cross-workspace-validator.ts",
+      "script": "src/integrations/cross-workspace-validator.ts",
       "description": "Workspace discovery, manifest and task delegation across workspaces. High risk: cross-boundary access and federation auth.",
       "activationCriteria": [
         { "check": "tests", "required": true },
@@ -458,7 +458,7 @@
       "activated": false,
       "risk": "low",
       "owner": "ops-agent",
-      "script": "src/session-cleanup-start.ts",
+      "script": "src/session/session-cleanup-start.ts",
       "description": "Deprecated: superseded by session-pipeline lazy daemons. Kept only for reference; do not re-enable.",
       "activationCriteria": []
     }

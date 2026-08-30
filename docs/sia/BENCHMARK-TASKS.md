@@ -21,7 +21,7 @@ directorio, mostrando nombre, trigger principal, y source. Output en tabla forma
 **Spec**: Generar script TypeScript que valide un archivo JSON contra un schema dado, mostrando
 errores con ruta completa del campo fallido.
 
-**Expected**: `src/json-validator.ts`
+**Expected**: `src/tools/json-validator.ts`
 
 **Success criteria**:
 

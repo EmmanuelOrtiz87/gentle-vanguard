@@ -17,7 +17,7 @@
       "type": "builtin",
       "transport": "stdio",
       "command": "npx",
-      "args": ["engram", "mcp"],
+      "args": ["engram@0.0.1", "mcp"],
       "enabled": true,
       "autoStart": true,
       "description": "Persistent memory via Engram MCP"
@@ -27,7 +27,7 @@
       "type": "builtin",
       "transport": "stdio",
       "command": "npx",
-      "args": ["tsx", "src/mcp/mcp-lsp-server.ts"],
+      "args": ["tsx@4.23.1", "src/mcp/mcp-lsp-server.ts"],
       "enabled": true,
       "autoStart": true,
       "description": "TypeScript Language Service via MCP: go_to_definition, find_references, get_hover_info, get_completions, get_diagnostics, get_symbol_info, get_file_symbols"
@@ -37,7 +37,7 @@
       "type": "builtin",
       "transport": "stdio",
       "command": "npx",
-      "args": ["tsx", "src/mcp/fetch-server-native.ts"],
+      "args": ["tsx@4.23.1", "src/mcp/fetch-server-native.ts"],
       "enabled": true,
       "autoStart": false,
       "description": "Native web fetch and search for LLMs: fetch_url (Jina Reader), search_web (DDG/Bing)"
@@ -47,10 +47,20 @@
       "type": "builtin",
       "transport": "stdio",
       "command": "npx",
-      "args": ["tsx", "src/mcp/sequential-thinking-server.ts"],
+      "args": ["tsx@4.23.1", "src/mcp/sequential-thinking-server.ts"],
       "enabled": true,
       "autoStart": false,
       "description": "Sequential thinking chains: think_sequential, get_thought_chain, list_thought_chains, get_thought_summary"
+    },
+    {
+      "name": "gv-analytics-atlassian",
+      "type": "user",
+      "transport": "stdio",
+      "command": "node",
+      "args": ["--import", "tsx", "apps/gv-analytics/server/mcp.ts"],
+      "enabled": true,
+      "autoStart": false,
+      "description": "Gentle-Vanguard Analytics Atlassian MCP: connection status and delivery analysis"
     }
   ]
 }

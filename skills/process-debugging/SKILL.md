@@ -120,7 +120,7 @@ You now know a previous watchdog instance (via PM2) is still bound to the port. 
 - witr needs elevated privileges on some platforms to read other users' processes; run from an
   elevated shell if traces come back empty.
 - If witr is not installed, `ensureWitrInstalled()` auto-installs it via
-  `scripts/utilities/maintenance/witr-installer.ps1`. If that fails, run the installer manually.
+  `src/web/witr-installer.ts`. If that fails, run the installer manually.
 
 ## Integration with debugging-and-error-recovery
 
@@ -136,6 +136,9 @@ won't start", "file locked". Diagnose _who owns the resource_ before guessing at
 
 - `src/web/witr-wrapper.ts` — typed TS wrapper (`witr.traceProcess/Port/File/Container`)
 - `src/web/witr-cli.ts` — CLI front-end
-- `scripts/utilities/maintenance/witr-installer.ps1` — binary installer
+- Trace output is sanitized before serialization: environment, headers, arguments, queries, tokens,
+  passwords, keys, and embedded secret assignments are never emitted. Use causal links for process
+  diagnostics instead of inspecting raw process metadata.
+- `src/web/witr-installer.ts` — binary installer
 - `src/core/maintenance-watchtower.ts` — automatic FAIL/WARN → port trace integration
 - `.runtime/tools/witr/witr[.exe]` — installed binary location

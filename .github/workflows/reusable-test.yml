@@ -17,17 +17,11 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Run Pester tests
-        shell: pwsh
-        run: |
-          Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
-          Import-Module Pester -PassThru
-          Invoke-Pester -Path tests/unit/ -Passthru -Output Detailed
       - name: Run Node tests
         run: pnpm test
       - name: Run Go tests
@@ -105,7 +99,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
           cache: pnpm
@@ -119,15 +113,14 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - name: Install Pester
-        run: |
-          Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
-          Import-Module Pester -PassThru
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
       - name: Run integration tests for phases 1.3, 2, 3
-        run: |
-          Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
-          Import-Module Pester -PassThru
-          Invoke-Pester -Path tests/integration/phase-13-2-3/ -Passthru -Output Detailed
+        run: pnpm test:phase-integration
 
   smoke:
     name: Smoke Tests
@@ -135,15 +128,16 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - name: Install Pester
-        run: |
-          Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
-          Import-Module Pester -PassThru
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
       - name: Run stack smoke tests
-        run: |
-          Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
-          Import-Module Pester -PassThru
-          Invoke-Pester -Path tests/smoke/ -PassThru -Output Detailed
+        run: pnpm test:smoke
+      - name: Run script smoke tests
+        run: pnpm test:scripts-smoke
 
   coverage:
     name: Coverage
@@ -152,7 +146,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
           cache: pnpm

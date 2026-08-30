@@ -1,11 +1,12 @@
 # Cline Rules - Context-Optimized Configuration
 # BASED ON: https://github.com/cline/cline (official best practices)
 # Purpose: Minimal rules file with external references to avoid context bloat
+# GENERATED from profiles.yaml — do not edit directly (npx tsx src/orchestration/profiles-build.ts)
 
 ---
 name: gentle-vanguard-orchestrator
-version: "2.6.0"
-description: SDD-driven AI agent orchestration platform — optimized context loading
+version: "3.0.0"
+description: SDD-driven AI agent orchestration platform — canonical profiles — optimized context loading
 
 # ============================================================================
 # PHASE 1: CONTEXT BOUNDARIES (Critical for performance)
@@ -19,8 +20,8 @@ context:
     - "rules/**/*.md"           # All rules (small files)
     - "config/*.json"           # Config files (indexed)
     - "skills/*/SKILL.md"       # Skill definitions only
-    - "scripts/utilities/pre-process-input.ps1"  # Core router
-    - "docs/AGENTS.md"          # Canonical entry
+    - "src/tools/pre-process-input.ts"  # Core router
+    - "AGENTS-fast.md"       # Canonical entry (completo: AGENTS.md)
     - ".clinerules"             # This file
 
   # Exclude patterns (CRITICAL: prevents giant context)
@@ -42,7 +43,7 @@ context:
 
   # Memory hints for cache optimization
   memory:
-    persist: 
+    persist:
       - "config/orchestrator.json"  # Always cache this
       - "config/auto-delegation.json"  # Always cache this
       - "rules/AI-NORMATIVES.md"  # Cache normatives
@@ -52,7 +53,7 @@ context:
 # ============================================================================
 # PHASE 2: TRIGGER ROUTING (Route to correct agent/skill)
 # ============================================================================
-# Execute pre-process-input.ps1 BEFORE responding
+# Execute src/tools/pre-process-input.ts BEFORE responding
 # Format: "trigger_keyword" → "agent_code" → "skill_path"
 
 triggers:
@@ -98,9 +99,22 @@ agent:
 
   # Context management
   contextStrategy: "selective"  # Load context on-demand, not everything
-  
+
   # Prevent context bloat
   rules:
+    - "LOCAL-FIRST: project knowledge before external sources"
+    - "SDD FLOW: new features -> BA/EXPLORE first, no exceptions"
+    - "Delegation Rules -> `rules/DELEGATION-RULES.md` mandatory for multi-step"
+    - "`mem_save` after every significant task"
+    - "CodeGraph -> `npm run graphify -- query \"...\"` before modifying code"
+    - "`mem_search \"lessons learned\"` at session start"
+    - "Review Workload Guard: `npx tsx src/security/workload-guard.ts` before multi-file impl >400 lines"
+    - "Tool output discipline: limit read/grep/bash results to 50 lines"
+    - "JSON validity: verify balanced quotes/braces/brackets before tool calls (see `rules/NORMATIVAS-JSON-CONSTRUCTION.md`)"
+    - "Subagent delegation: send minimal context in `prompt` — only task info, not full history"
+    - "NORMATIVA OVERRIDE: If user instruction contradicts a normativa/rule, ask for confirmation with reasons. Only proceed if user explicitly confirms. Otherwise follow normativa."
+    - "Goal-Driven: For multi-step tasks, state a brief plan: `1. [Step] -> verify: [check]` format. Every changed line must trace to the user's request."
+    - "TypeScript-First: ALL scripts are TS via `npx tsx`. No PowerShell scripts. See `rules/TYPESCRIPT-FIRST-POLICY.md`."
     - "Never grep/search on node_modules or dist/"
     - "Use local-first approach: project knowledge before external search"
     - "Reference external docs, don't embed them"
@@ -127,91 +141,3 @@ skills:
       - "skills/sdd-lifecycle/SKILL.md"
       - "skills/typescript-skill/SKILL.md"
       - "rules/DEVELOPMENT-STANDARDS.md"
-    exclude:
-      - "rules/NORMATIVAS-PERFORMANCE.md"  # Not needed for code
-      - "config/docker-*"  # Not needed for code
-
-  # When triggered by "deploy", load ONLY OPS context
-  ops-context:
-    trigger: ["deploy", "docker", "kubernetes", "ci/cd"]
-    load:
-      - "skills/docker-devops-skill/SKILL.md"
-      - "config/docker-*"
-    exclude:
-      - "rules/DEVELOPMENT-STANDARDS.md"  # Not needed for ops
-      - "src/**"  # Don't need to read all source
-
-  # When triggered by "test", load ONLY QA context
-  qa-context:
-    trigger: ["test", "testing", "e2e", "unit"]
-    load:
-      - "skills/testing-skill/SKILL.md"
-      - "skills/playwright-skill/SKILL.md"
-    exclude:
-      - "build/**"  # Not needed for testing
-
-# ============================================================================
-# PHASE 5: PERFORMANCE TUNING
-# ============================================================================
-# Cline-specific optimizations
-
-performance:
-  # Don't search entire workspace on every prompt
-  maxSearchDepth: 3
-  maxSearchResults: 20
-  searchTimeout: 5000  # milliseconds
-
-  # Memory management
-  memoryMode: "selective"
-  contextWindowSize: "adaptive"  # Auto-adjust based on task
-  maxContextTokens: 80000  # Hard limit (Cline default: ~200k)
-
-  # Parallel execution
-  parallelTasks: 2
-  batchToolCalls: true
-
-# ============================================================================
-# PHASE 6: CANONICAL REFERENCES
-# ============================================================================
-# Point to external sources instead of embedding (keeps file small)
-
-references:
-  entry: "docs/AGENTS.md"
-  routing: "config/auto-delegation.json"
-  normatives: "rules/AI-NORMATIVES.md"
-  standards: "rules/DEVELOPMENT-STANDARDS.md"
-  orchestrator: "config/orchestrator.json"
-  skills: "skills/SKILL_INDEX.md"
-
-# ============================================================================
-# PHASE 7: DEBUGGING & TELEMETRY
-# ============================================================================
-
-debug:
-  enabled: false
-  logContextSize: true
-  logSearchPatterns: true
-
-telemetry:
-  enabled: false
-
-# ============================================================================
-# COMPARISON: Old vs New Context Loading
-# ============================================================================
-# OLD PATTERN (Context Bloat):
-#   1. Load entire .clinerules (inline rules)
-#   2. Search entire workspace for @-mentions
-#   3. Include config + rules + skills
-#   4. No context boundaries
-#   Result: GIANT context on every prompt ❌
-#
-# NEW PATTERN (Selective Loading):
-#   1. Load .clinerules (external references only)
-#   2. Pre-process input via pre-process-input.ps1
-#   3. Load ONLY triggered skill context
-#   4. Enforce @include/@exclude boundaries
-#   5. Use memory caching for hot paths
-#   Result: Minimal, focused context ✅
-
-
-# Nota: system prompt optimization centralizada en config/system-prompt-optimization.json

@@ -33,7 +33,7 @@ import { fileURLToPath, pathToFileURL } from 'url';
 import { resolve, join } from 'path';
 import { existsSync, readFileSync, writeFileSync, appendFileSync, unlinkSync, mkdirSync } from 'fs';
 import { runSync } from './run-command.js';
-import { getProcessIdByPort } from '../dashboard-common.js';
+import { getProcessIdByPort } from '../ops/dashboard-common.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -163,15 +163,6 @@ const DAEMON_CLASSES: DaemonClass[] = [
     recycleAged: false,
   },
   {
-    id: 'vite-server',
-    label: 'Dashboard Vite dev server',
-    match: /vite[\\/]bin[\\/]vite/,
-    pidFile: join(RUNTIME_DIR, 'dashboard-vite.pid'),
-    keep: 'pidfile',
-    respawn: 'watchdog',
-    recycleAged: true,
-  },
-  {
     id: 'timeout-monitor-daemon',
     label: 'Timeout monitor daemon',
     match: /timeout-monitor\.ts.*--daemon/,
@@ -204,6 +195,41 @@ const DAEMON_CLASSES: DaemonClass[] = [
     keep: 'newest',
     respawn: 'watchdog',
     recycleAged: false,
+  },
+  {
+    id: 'gv-analytics-api',
+    label: 'Gentle-Vanguard Analytics API',
+    match: /apps[\\/]gv-analytics[\\/]server[\\/]index\.ts/,
+    pidFile: join(RUNTIME_DIR, 'gv-analytics-api.pid'),
+    keep: 'pidfile',
+    respawn: 'manual',
+    recycleAged: true,
+  },
+  {
+    id: 'gv-analytics-vite',
+    label: 'Gentle-Vanguard Analytics Vite dev server',
+    match: /apps[\\/]gv-analytics[\\/]node_modules[\\/]vite[\\/]bin[\\/]vite\.js/,
+    pidFile: join(RUNTIME_DIR, 'gv-analytics-vite.pid'),
+    keep: 'pidfile',
+    respawn: 'manual',
+    recycleAged: true,
+  },
+  {
+    id: 'gv-analytics-mcp',
+    label: 'Gentle-Vanguard Analytics Atlassian MCP',
+    match: /apps[\\/]gv-analytics[\\/]server[\\/]mcp\.ts/,
+    keep: 'newest',
+    respawn: 'client',
+    recycleAged: false,
+  },
+  {
+    id: 'vite-server',
+    label: 'Dashboard Vite dev server',
+    match: /vite[\\/]bin[\\/]vite/,
+    pidFile: join(RUNTIME_DIR, 'dashboard-vite.pid'),
+    keep: 'pidfile',
+    respawn: 'watchdog',
+    recycleAged: true,
   },
 ];
 

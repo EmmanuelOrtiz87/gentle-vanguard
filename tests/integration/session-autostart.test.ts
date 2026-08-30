@@ -26,11 +26,11 @@ describe('Session Autostart', () => {
 
   it('session-autostart module chain resolves', () => {
     // Verify entry module exists and points to core
-    const entryPath = join(ROOT, 'src', 'session-autostart.ts');
+    const entryPath = join(ROOT, 'src', 'session', 'session-autostart.ts');
     assert.ok(existsSync(entryPath), 'Entry module session-autostart.ts exists');
 
     const entry = readFileSync(entryPath, 'utf-8');
-    assert.ok(entry.includes('./core/session-autostart'), 'Entry imports core module');
+    assert.ok(entry.includes('../core/session-autostart'), 'Entry imports core module');
 
     // Verify core module exists
     const corePath = join(ROOT, 'src', 'core', 'session-autostart.ts');

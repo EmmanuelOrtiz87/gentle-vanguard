@@ -8,6 +8,46 @@ window.GV_CONTENT = window.GV_CONTENT || {};
 window.GV_CONTENT['workflows'] = {
   lessons: [
     {
+      id: 'lifecycle-de-scripts-ts-only-cmd-first',
+      title: 'Lifecycle de scripts: una ruta, un owner, evidencia reproducible',
+      minutes: 10,
+      type: 'curso',
+      md: `## La regla operativa
+
+El stack mantiene la lógica operacional en **TypeScript/Node.js** y expone comandos que funcionan
+desde CMD sin depender de perfiles o módulos de PowerShell. La normativa completa está en
+\`rules/NORMATIVA-SCRIPT-LIFECYCLE.md\`; esta lección explica cómo leerla, no inventa un inventario
+de estado.
+
+## Estados y ownership
+
+Cada script debe clasificarse como \`active\`, \`wrapper\`, \`deprecated\`, \`archived\`,
+\`protected\` o \`candidate\`. El owner mantiene el contrato, callers, pruebas y destino del
+artefacto anterior. Un archivo histórico no es un comando soportado.
+
+## Migración reproducible
+
+1. Inventariar callers, comandos, workflows, tests y referencias documentales.
+2. Definir el contrato y crear una única implementación TS.
+3. Exponerla mediante \`package.json\` o un launcher CMD delgado.
+4. Actualizar callers y documentación en el mismo cambio.
+5. Ejecutar typecheck, lint, prueba focalizada y smoke desde CMD.
+6. Archivar/proteger o eliminar la ruta anterior solo después de verificar cero referencias
+   funcionales.
+
+En el repositorio, \`package.json\` muestra ejemplos reales como \`health:check\`,
+\`watchtower:health\`, \`session:autostart:detached\`, \`test:smoke\` y
+\`test:scripts-smoke\`. La presencia de una ruta TS no prueba por sí sola que una migración haya
+terminado: el estado se confirma con Git, callers y pruebas.
+
+## Puntos clave
+
+- Una capacidad tiene un entry point canónico; los wrappers no duplican lógica.
+- PowerShell puede aparecer como legado protegido o excepción explícita, no como dependencia implícita.
+- Recrear un script archivado requiere nuevo contrato, owner, pruebas y revisión.
+- No se mantienen duplicados activos sin uso justificado.`
+    },
+    {
       id: 'sdd-ciclo-end-to-end',
       title: 'El ciclo SDD end-to-end: BA → SAD → DEV → QA',
       minutes: 14,

@@ -76,14 +76,14 @@ npm run watchtower:health
 
 ```bash
 # Ver qué se arreglaría (dry-run)
-npx tsx src/auto-ps1-fixer.ts --dry-run
+npx tsx src/tools/auto-ps1-fixer.ts --dry-run
 
 # Aplicar correcciones
-npx tsx src/auto-ps1-fixer.ts
+npx tsx src/tools/auto-ps1-fixer.ts
 
 # Corregir configs
-npx tsx src/auto-ps1-fixer-configs.ts --dry-run
-npx tsx src/auto-ps1-fixer-configs.ts
+npx tsx src/tools/auto-ps1-fixer-configs.ts --dry-run
+npx tsx src/tools/auto-ps1-fixer-configs.ts
 ```
 
 ### Steps Adaptativos

@@ -1,4 +1,4 @@
-﻿{
+{
   "defaultMode": "light",
   "detailedOnStartup": false,
   "runDemoOnFull": false,
@@ -9,11 +9,11 @@
   "strictCompatibilityChecks": true,
   "optimization": {
     "handoffCompress": true,
-    "preCompactHook": "scripts/utilities/pre-compact-hook.ps1",
+    "preCompactHook": "src/pre-compact-hook.ts",
     "compressionRatio": 0.9,
     "adaptiveSkills": true,
     "tieredMemory": true,
-    "engramOptimization": "scripts/utilities/optimize-engram-usage.ps1",
+    "engramOptimization": "src/knowledge/optimize-engram-usage.ts",
     "autoEngramContext": true
   },
   "deprecated": {

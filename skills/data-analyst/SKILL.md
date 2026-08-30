@@ -47,7 +47,7 @@ visualizations.
 
 ```bash
 # Generate summary statistics
-npx tsx src/data-analyst.ts describe "data.csv"
+npx tsx src/tools/data-analyst.ts describe "data.csv"
 
 # Output: count, mean, std, min, 25%, 50%, 75%, max per column
 ```
@@ -56,7 +56,7 @@ npx tsx src/data-analyst.ts describe "data.csv"
 
 ```bash
 # Find correlations
-npx tsx src/data-analyst.ts correlate "data.json" --target revenue
+npx tsx src/tools/data-analyst.ts correlate "data.json" --target revenue
 
 # Output: correlation matrix, strongest predictors
 ```
@@ -65,7 +65,7 @@ npx tsx src/data-analyst.ts correlate "data.json" --target revenue
 
 ```bash
 # Time series analysis
-npx tsx src/data-analyst.ts trend "metrics.csv" --date date_column --value sales
+npx tsx src/tools/data-analyst.ts trend "metrics.csv" --date date_column --value sales
 
 # Output: trend direction, seasonality, growth rate
 ```
@@ -74,31 +74,31 @@ npx tsx src/data-analyst.ts trend "metrics.csv" --date date_column --value sales
 
 ```bash
 # Group by and aggregate
-npx tsx src/data-analyst.ts segment "transactions.csv" --by region --metric avg(amount)
+npx tsx src/tools/data-analyst.ts segment "transactions.csv" --by region --metric avg(amount)
 ```
 
 ### 5. Anomaly Detection
 
 ```bash
 # Find outliers
-npx tsx src/data-analyst.ts anomalies "metrics.csv" --column cpu_usage
+npx tsx src/tools/data-analyst.ts anomalies "metrics.csv" --column cpu_usage
 ```
 
 ## Visualization Generation
 
 ```bash
 # Simple charts (ASCII)
-npx tsx src/data-analyst.ts visualize "sales.csv" --type bar --column revenue
+npx tsx src/tools/data-analyst.ts visualize "sales.csv" --type bar --column revenue
 
 # Generate Vega-Lite spec
-npx tsx src/data-analyst.ts visualize "data.csv" --format vega --output chart.vl.json
+npx tsx src/tools/data-analyst.ts visualize "data.csv" --format vega --output chart.vl.json
 ```
 
 ## Report Generation
 
 ```bash
 # Full analysis report
-npx tsx src/data-analyst.ts report "metrics.csv" --type comprehensive
+npx tsx src/tools/data-analyst.ts report "metrics.csv" --type comprehensive
 
 # Sections: Summary, Statistics, Trends, Insights, Recommendations
 ```
@@ -107,10 +107,10 @@ npx tsx src/data-analyst.ts report "metrics.csv" --type comprehensive
 
 ```bash
 # Query Nexus database
-npx tsx src/data-analyst.ts query "SELECT * FROM metric_snapshots ORDER BY timestamp DESC LIMIT 100"
+npx tsx src/tools/data-analyst.ts query "SELECT * FROM metric_snapshots ORDER BY timestamp DESC LIMIT 100"
 
 # Analyze session metrics
-npx tsx src/data-analyst.ts query "SELECT date(timestamp) as day, avg(quality_score) FROM sessions GROUP BY day"
+npx tsx src/tools/data-analyst.ts query "SELECT date(timestamp) as day, avg(quality_score) FROM sessions GROUP BY day"
 ```
 
 ## Response Format
@@ -159,7 +159,7 @@ interface DataInsight {
 
 ```bash
 # Analyze session quality over time
-npx tsx src/data-analyst.ts query "SELECT * FROM sessions WHERE timestamp > date('now', '-7 days')" --analyze quality_score
+npx tsx src/tools/data-analyst.ts query "SELECT * FROM sessions WHERE timestamp > date('now', '-7 days')" --analyze quality_score
 
 Insights:
 - Quality declining on Fridays (avg -15%)
@@ -171,7 +171,7 @@ Insights:
 
 ```bash
 # Analyze token efficiency
-npx tsx src/data-analyst.ts query "SELECT * FROM token_usage ORDER BY timestamp" --trend
+npx tsx src/tools/data-analyst.ts query "SELECT * FROM token_usage ORDER BY timestamp" --trend
 
 Insights:
 - Usage increasing 5% week-over-week
@@ -183,7 +183,7 @@ Insights:
 
 ```bash
 # Analyze most modified files
-npx tsx src/data-analyst.ts query "SELECT * FROM audit_logs WHERE type LIKE '%file%'" --group-by path
+npx tsx src/tools/data-analyst.ts query "SELECT * FROM audit_logs WHERE type LIKE '%file%'" --group-by path
 
 Insights:
 - 80% of edits in /src/components/
@@ -228,7 +228,7 @@ Concrete usage drawn from this skill's own documentation:
 
 ```bash
 # Generate summary statistics
-npx tsx src/data-analyst.ts describe "data.csv"
+npx tsx src/tools/data-analyst.ts describe "data.csv"
 
 # Output: count, mean, std, min, 25%, 50%, 75%, max per column
 ```

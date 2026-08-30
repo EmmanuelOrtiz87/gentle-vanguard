@@ -105,7 +105,7 @@ each release.
 
 - 4 phases: BA Explore -> SAD Design -> DEV Implement -> QA Verify
 - Each phase has its own specialized agent (`sdd-explore`, `sdd-design`, `sdd-apply`, `sdd-verify`)
-- `src/pre-process-input.ts` analyzes every message and routes to the right phase
+- `src/tools/pre-process-input.ts` analyzes every message and routes to the right phase
 - `PLAN_MODE_REQUIRED` flag prevents jumping to implementation without exploration
 - SDD config enforces strict TDD per phase
 

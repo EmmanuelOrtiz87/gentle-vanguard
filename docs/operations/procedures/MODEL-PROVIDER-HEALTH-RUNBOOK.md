@@ -35,8 +35,8 @@ In this stack the error appeared for `littellmott-nuevo/kimi-2-5` during an inte
 npm run model:current
 npm run model:list
 npm run model:validate-provider
-npx tsx src/model-provider-healer.ts --status
-npx tsx src/model-provider-healer.ts --scan
+npx tsx src/ml/model-provider-healer.ts --status
+npx tsx src/ml/model-provider-healer.ts --scan
 ```
 
 Use this to switch back only after the proxy is fixed:
@@ -82,7 +82,7 @@ Before considering the provider fixed:
 
 ```bash
 npm run model:validate-provider
-npx tsx src/model-provider-healer.ts --status
+npx tsx src/ml/model-provider-healer.ts --status
 npm run health:check
 ```
 

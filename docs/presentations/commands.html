@@ -17,10 +17,6 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
       rel="stylesheet"
     />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="assets/css/gv.css?v=2.1" />
     <style>
       /* --- Estilos específicos de commands.html --- */
@@ -1198,11 +1194,11 @@
               </tr>
               <tr
                 data-command="final:resolution"
-                data-search="final:resolution resolución final del orquestador. src/final-resolution.ts"
+                data-search="final:resolution resolución final del orquestador. src/tools/final-resolution.ts"
               >
                 <td><code class="cmd-code">npm run final:resolution</code></td>
                 <td class="cmd-desc">Resolución final del orquestador.</td>
-                <td><span class="cmd-ref mono">src/final-resolution.ts</span></td>
+                <td><span class="cmd-ref mono">src/tools/final-resolution.ts</span></td>
               </tr>
               <tr
                 data-command="skill:factory"
@@ -1562,11 +1558,11 @@
               </tr>
               <tr
                 data-command="safety:mutation-scorer"
-                data-search="safety:mutation-scorer scorer de seguridad de mutaciones. src/mutation-safety-scorer.ts"
+                data-search="safety:mutation-scorer scorer de seguridad de mutaciones. src/review/mutation-safety-scorer.ts"
               >
                 <td><code class="cmd-code">npm run safety:mutation-scorer</code></td>
                 <td class="cmd-desc">Scorer de seguridad de mutaciones.</td>
-                <td><span class="cmd-ref mono">src/mutation-safety-scorer.ts</span></td>
+                <td><span class="cmd-ref mono">src/review/mutation-safety-scorer.ts</span></td>
               </tr>
               <tr
                 data-command="gateguard:mcp"
@@ -1666,19 +1662,19 @@
               </tr>
               <tr
                 data-command="findings:ledger"
-                data-search="findings:ledger ledger de hallazgos (audit trail de incidencias). src/findings-ledger.ts"
+                data-search="findings:ledger ledger de hallazgos (audit trail de incidencias). src/review/findings-ledger.ts"
               >
                 <td><code class="cmd-code">npm run findings:ledger</code></td>
                 <td class="cmd-desc">Ledger de hallazgos (audit trail de incidencias).</td>
-                <td><span class="cmd-ref mono">src/findings-ledger.ts</span></td>
+                <td><span class="cmd-ref mono">src/review/findings-ledger.ts</span></td>
               </tr>
               <tr
                 data-command="findings:gatekeeper"
-                data-search="findings:gatekeeper gatekeeper de resultados (bloquea hallazgos críticos). src/result-gatekeeper.ts"
+                data-search="findings:gatekeeper gatekeeper de resultados (bloquea hallazgos críticos). src/review/result-gatekeeper.ts"
               >
                 <td><code class="cmd-code">npm run findings:gatekeeper</code></td>
                 <td class="cmd-desc">Gatekeeper de resultados (bloquea hallazgos críticos).</td>
-                <td><span class="cmd-ref mono">src/result-gatekeeper.ts</span></td>
+                <td><span class="cmd-ref mono">src/review/result-gatekeeper.ts</span></td>
               </tr>
               <tr
                 data-command="rdd:start"
@@ -2107,35 +2103,35 @@
             <tbody>
               <tr
                 data-command="test"
-                data-search="test runner de tests del stack (optimizado). src/test-runner-optimized.ts"
+                data-search="test runner de tests del stack (optimizado). src/review/test-runner-optimized.ts"
               >
                 <td><code class="cmd-code">npm run test</code></td>
                 <td class="cmd-desc">Runner de tests del stack (optimizado).</td>
-                <td><span class="cmd-ref mono">src/test-runner-optimized.ts</span></td>
+                <td><span class="cmd-ref mono">src/review/test-runner-optimized.ts</span></td>
               </tr>
               <tr
                 data-command="test:optimized"
-                data-search="test:optimized runner de tests optimizado. src/test-runner-optimized.ts"
+                data-search="test:optimized runner de tests optimizado. src/review/test-runner-optimized.ts"
               >
                 <td><code class="cmd-code">npm run test:optimized</code></td>
                 <td class="cmd-desc">Runner de tests optimizado.</td>
-                <td><span class="cmd-ref mono">src/test-runner-optimized.ts</span></td>
+                <td><span class="cmd-ref mono">src/review/test-runner-optimized.ts</span></td>
               </tr>
               <tr
                 data-command="test:parallel"
-                data-search="test:parallel tests en paralelo (4 workers). src/test-runner-optimized.ts --parallel 4"
+                data-search="test:parallel tests en paralelo (4 workers). src/review/test-runner-optimized.ts --parallel 4"
               >
                 <td><code class="cmd-code">npm run test:parallel</code></td>
                 <td class="cmd-desc">Tests en paralelo (4 workers).</td>
-                <td><span class="cmd-ref mono">src/test-runner-optimized.ts --parallel 4</span></td>
+                <td><span class="cmd-ref mono">src/review/test-runner-optimized.ts --parallel 4</span></td>
               </tr>
               <tr
                 data-command="test:quick"
-                data-search="test:quick tests rápidos (modo --quick). src/test-runner-optimized.ts --quick"
+                data-search="test:quick tests rápidos (modo --quick). src/review/test-runner-optimized.ts --quick"
               >
                 <td><code class="cmd-code">npm run test:quick</code></td>
                 <td class="cmd-desc">Tests rápidos (modo --quick).</td>
-                <td><span class="cmd-ref mono">src/test-runner-optimized.ts --quick</span></td>
+                <td><span class="cmd-ref mono">src/review/test-runner-optimized.ts --quick</span></td>
               </tr>
               <tr
                 data-command="test:integration"
@@ -2200,19 +2196,19 @@
               </tr>
               <tr
                 data-command="lint:json"
-                data-search="lint:json validador de json (json-lint). src/json-lint.ts"
+                data-search="lint:json validador de json (json-lint). src/tools/json-lint.ts"
               >
                 <td><code class="cmd-code">npm run lint:json</code></td>
                 <td class="cmd-desc">Validador de JSON (json-lint).</td>
-                <td><span class="cmd-ref mono">src/json-lint.ts</span></td>
+                <td><span class="cmd-ref mono">src/tools/json-lint.ts</span></td>
               </tr>
               <tr
                 data-command="lint:workflows"
-                data-search="lint:workflows lint de workflows ci/cd (workflow-lint). src/workflow-lint.ts"
+                data-search="lint:workflows lint de workflows ci/cd (workflow-lint). src/review/workflow-lint.ts"
               >
                 <td><code class="cmd-code">npm run lint:workflows</code></td>
                 <td class="cmd-desc">Lint de workflows CI/CD (workflow-lint).</td>
-                <td><span class="cmd-ref mono">src/workflow-lint.ts</span></td>
+                <td><span class="cmd-ref mono">src/review/workflow-lint.ts</span></td>
               </tr>
               <tr
                 data-command="typecheck"
@@ -2248,11 +2244,11 @@
               </tr>
               <tr
                 data-command="eval:run"
-                data-search="eval:run runner de evaluaciones (eval-gates). src/eval-runner.ts"
+                data-search="eval:run runner de evaluaciones (eval-gates). src/review/eval-runner.ts"
               >
                 <td><code class="cmd-code">npm run eval:run</code></td>
                 <td class="cmd-desc">Runner de evaluaciones (eval-gates).</td>
-                <td><span class="cmd-ref mono">src/eval-runner.ts</span></td>
+                <td><span class="cmd-ref mono">src/review/eval-runner.ts</span></td>
               </tr>
               <tr
                 data-command="docker:build"
@@ -2735,11 +2731,11 @@
               </tr>
               <tr
                 data-command="update:check"
-                data-search="update:check comprueba versión del stack. src/check-version.ts"
+                data-search="update:check comprueba versión del stack. src/tools/check-version.ts"
               >
                 <td><code class="cmd-code">npm run update:check</code></td>
                 <td class="cmd-desc">Comprueba versión del stack.</td>
-                <td><span class="cmd-ref mono">src/check-version.ts</span></td>
+                <td><span class="cmd-ref mono">src/tools/check-version.ts</span></td>
               </tr>
               <tr
                 data-command="update:run"
@@ -2751,11 +2747,11 @@
               </tr>
               <tr
                 data-command="hashline"
-                data-search="hashline hasheo de líneas (integridad). src/hashline.ts"
+                data-search="hashline hasheo de líneas (integridad). src/tools/hashline.ts"
               >
                 <td><code class="cmd-code">npm run hashline</code></td>
                 <td class="cmd-desc">Hasheo de líneas (integridad).</td>
-                <td><span class="cmd-ref mono">src/hashline.ts</span></td>
+                <td><span class="cmd-ref mono">src/tools/hashline.ts</span></td>
               </tr>
               <tr
                 data-command="ft:collect"

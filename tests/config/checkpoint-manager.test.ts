@@ -7,7 +7,7 @@ import {
   createCheckpoint,
   listCheckpoints,
   verifyCheckpoint,
-} from '../../src/checkpoint-manager.ts';
+} from '../../src/ops/checkpoint-manager.ts';
 
 describe('checkpoint-manager.ts', () => {
   let tempRoot = '';

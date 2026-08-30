@@ -8,16 +8,13 @@ Comandos de compilación, prueba y linting para el proyecto.
 
 ## Test
 
-- `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/validation/run-tests.ps1` — test suite
-  completo
-- `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/agent-verify.ps1` — verificación
-  rápida
+- `npm test` — test suite completo
+- `npm run stack:verify` — verificación rápida
 
 ## Lint / Validate
 
 - Todos los JSONs se validan automáticamente via pre-commit hook (json-lint)
-- `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/validation/homologate-workspace.ps1` —
-  homologación
+- `npm run stack:verify -- --fix` — homologación homologación
 
 ## Typecheck
 
