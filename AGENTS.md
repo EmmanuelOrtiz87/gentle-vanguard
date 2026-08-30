@@ -12,14 +12,14 @@ Antes de responder al usuario, ejecutar:
 npm run session:autostart:detached   # fire-and-forget, ~1.3s, pipeline completo en background
 ```
 
-Alternativa bloqueante: `npx tsx src/session-autostart.ts`. Es idempotente y no pide permiso. El
+Alternativa bloqueante: `npx tsx src/session/session-autostart.ts`. Es idempotente y no pide permiso. El
 pipeline inicializa: session ID, engram, security orchestrator, codegraph, token budget, watchtower
 auto-heal, dashboard WS, Nexus DB (lazy steps). Log: `.runtime/autostart-detached-*.log`.
 
 ## Multi-Tool Integration (ZCode, Codex, MiniMax Code)
 
 - **Agentes**: 21 subagentes del stack sincronizados a `~/.zcode/agents/` vía
-  `npx tsx src/zcode-sync.ts --sync` (re-ejecutar tras editar `.opencode/agents/`).
+  `npx tsx src/integrations/zcode-sync.ts --sync` (re-ejecutar tras editar `.opencode/agents/`).
 - **Skills críticas** (19): `zcode-sync.ts --sync` las copia a las 3 herramientas —
   `~/.zcode/skills/`, `~/.codex/skills/`, `~/.minimax/agents/mavis/skills/` (pi-agent). Filtrar con
   `--tools zcode,codex,minimax`. NO copiar todas (~120): ZCode degrada el auto-trigger si se excede
@@ -40,6 +40,9 @@ auto-heal, dashboard WS, Nexus DB (lazy steps). Log: `.runtime/autostart-detache
 
 Grafo de conocimiento nativo en `graphify-out/` (AST, sin LLM, determinista).
 
+**Roles de grafos (ADR-0020)**: CodeGraph (`.codegraph/`, MCP) = índice incremental post-hook para
+tooling MCP; graphify (`graphify-out/`) = grafo de análisis/query para agentes. No se fusionan.
+
 - Si falta `graphify-out/graph.json`: `npm run graphify -- build` primero.
 - Preguntas de código: `npm run graphify -- query "<pregunta>"` (siempre preferir query sobre
   path/explain para búsquedas).
@@ -59,9 +62,9 @@ trazas reales.
 
 | Acción                          | Comando                                 |
 | ------------------------------- | --------------------------------------- |
-| Start full (WS + Vite + Chrome) | `npx tsx src/dashboard-start.ts`        |
-| Start WS only                   | `npx tsx src/dashboard-ws-autostart.ts` |
-| Stop                            | `npx tsx src/dashboard-stop.ts`         |
+| Start full (WS + Vite + Chrome) | `npx tsx src/ops/dashboard-start.ts`        |
+| Start WS only                   | `npx tsx src/ops/dashboard-ws-autostart.ts` |
+| Stop                            | `npx tsx src/ops/dashboard-stop.ts`         |
 
 - WS server: `server/websocket-server.ts` (puerto dinámico vía `Get-FreePort()`, persistido en
   `.runtime/dashboard-ports.json`), push cada 5s, REST `/api/metrics|traces|alerts|feedback|health`.
@@ -95,7 +98,7 @@ ventanas persistentes). Reglas:
   `start /B` con cadenas npx.
 - Tareas programadas (schtasks): acción `node.exe --import tsx` directa + principal S4U (oculto); si
   el registro S4U es denegado, fallback con wrapper wscript oculto
-  (`.runtime/codegraph-sync-hidden.vbs`, generado por `src/bootstrap.ts`).
+  (`.runtime/codegraph-sync-hidden.vbs`, generado por `src/infrastructure/bootstrap.ts`).
 - Test de regresión: `tests/unit/run-command-hidden.test.ts` — PID del hijo debe ser PID del script
   (falla si vuelve el nieto del CLI de tsx).
 
@@ -129,7 +132,7 @@ npm run watchtower:health   # 96/96 PASS esperado
 ```
 
 CLI Guard: check anti-regresión del patrón roto
-`import.meta.url === \`file://${process.argv[1]}\``(ver`src/auto-url-fix.ts`).
+`import.meta.url === \`file://${process.argv[1]}\``(ver`src/tools/auto-url-fix.ts`).
 
 ## Nexus — DB operacional
 
@@ -167,8 +170,8 @@ aprendible en `.session/routing/routing-table.json` (17 dominios + overrides). A
 steps (máx 80) cuando un agente reporta "maximum steps reached".
 
 ```bash
-npx tsx src/adaptive-steps.ts --status
-npx tsx src/recommend-agent.ts --task "code review" --topn 3
+npx tsx src/orchestration/adaptive-steps.ts --status
+npx tsx src/orchestration/recommend-agent.ts --task "code review" --topn 3
 npm run delegate:run -- --task "audit gdpr compliance"
 ```
 
@@ -186,7 +189,7 @@ npm run delegate:run -- --task "audit gdpr compliance"
   `mode:'input'` = lossless-only (protege razonamiento), `mode:'output'` = lossy OK.
 - **Perfiles SDD**: `npm run profile:list|status|apply -- <perfil>` (cheap/balanced/premium en
   `config/model-router.json`).
-- **Hash-chained audit** (`src/event-sourcing.ts`): eventos con prevHash+hash SHA-256; `verify`
+- **Hash-chained audit** (`src/tools/event-sourcing.ts`): eventos con prevHash+hash SHA-256; `verify`
   detecta manipulación.
 - **Skills adoptadas Fases 1-3 (2026-08-27)**: `frontend-design`, `canvas-design`, `theme-factory`,
   `doc-coauthoring` (anthropics/skills, Apache-2.0), `huashu-design` (alchaincyf/huashu-design, MIT, PPTX editable),

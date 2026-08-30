@@ -9,7 +9,7 @@ Integrate Content Operations into Gentle-Vanguard without creating a parallel fr
 Before coding, inspect:
 
 - `src/marketing-agent.ts`
-- `src/social-poster.ts`
+- `src/tools/social-poster.ts`
 - `docs/presentations/resources-index.html`
 - `src/cli/gv.ts`
 - health/watchtower

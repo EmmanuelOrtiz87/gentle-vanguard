@@ -42,6 +42,12 @@ describe('CI/CD Workflows', () => {
     assert.ok(existsSync(path), 'reusable-security-scan.yml should exist');
     const content = readFileSync(path, 'utf8');
     assert.ok(content.includes('gitleaks'), 'Should have gitleaks job');
+    assert.ok(content.includes('native-secret-gate'), 'Should have native added-line secret gate');
+    assert.ok(
+      content.includes('secret-scan-gate.ts'),
+      'Native gate should be reproducible locally',
+    );
+    assert.ok(content.includes('without printing values'), 'Secret output must not be printed');
     assert.ok(content.includes('secretlint'), 'Should have secretlint job');
     assert.ok(content.includes('trivy-action'), 'Should have trivy scan');
     // Gates must be real: no swallowed failures

@@ -33,7 +33,16 @@ server.tool(
     input: z.string().min(4).describe('Jira, Confluence, Bitbucket URL or request text.'),
   },
   async ({ mode, input }) => ({
-    content: [{ type: 'text', text: JSON.stringify(await analyzeInput(mode, input), null, 2) }],
+    content: [
+      {
+        type: 'text',
+        text: JSON.stringify(
+          await analyzeInput(mode === 'url' ? { url: input } : { request: input }),
+          null,
+          2,
+        ),
+      },
+    ],
   }),
 );
 

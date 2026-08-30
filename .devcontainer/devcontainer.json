@@ -8,9 +8,6 @@
     "ghcr.io/devcontainers/features/python:1": {
       "version": "3.12"
     },
-    "ghcr.io/devcontainers/features/powershell:1": {
-      "version": "7.4"
-    },
     "ghcr.io/devcontainers/features/node:1": {
       "version": "20"
     }
@@ -18,7 +15,6 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-vscode.powershell",
         "ms-python.python",
         "ms-python.vscode-pylance",
         "dbaeumer.vscode-eslint",
@@ -30,12 +26,7 @@
       "settings": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "eslint.validate": ["typescript", "javascript"],
-        "files.associations": {
-          "*.ps1": "powershell",
-          "*.psm1": "powershell",
-          "*.psd1": "powershell"
-        }
+        "eslint.validate": ["typescript", "javascript"]
       }
     }
   },

@@ -14,6 +14,9 @@
   "sync": {
     "enabled": true,
     "engram_sync": true,
+    "engram_project": "gentle-vanguard",
+    "modes": ["export", "import", "session-summary"],
+    "dry_run_supported": true,
     "auto_archive_days": 30,
     "session_sync": true
   },

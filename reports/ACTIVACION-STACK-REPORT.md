@@ -65,7 +65,7 @@ npx tsx src/adaptive-steps.ts --apply sia-agent --steps 35
 **Comando para activar modo auto completo**:
 
 ```bash
-npx tsx src/auto-optimizer.ts --mode auto
+npx tsx src/tools/auto-optimizer.ts --mode auto
 npx tsx src/cost-efficiency-scorer.ts score
 ```
 
@@ -114,7 +114,7 @@ npx tsx src/cost-efficiency-scorer.ts score
 npx tsx src/adaptive-steps.ts --auto "optimize all agents" --agent all
 
 # 2. Activar auto-optimization completo
-npx tsx src/auto-optimizer.ts --mode auto
+npx tsx src/tools/auto-optimizer.ts --mode auto
 
 # 3. Verificar cost efficiency actual
 npx tsx src/cost-efficiency-scorer.ts score
@@ -126,7 +126,7 @@ npm run token:status
 npx tsx src/response-cache.ts stats
 
 # 6. Forzar compactación de contexto
-npx tsx src/compact-state.ts --gc
+npx tsx src/tools/compact-state.ts --gc
 
 # 7. Activar todos los demonios lazy
 npm run session:autostart:detached

@@ -52,7 +52,7 @@ Automates daily Gentle-Vanguard tasks: status check, context tracking, audit, an
 ## Key Files
 
 - `src/engram-auto-sync.ts`
-- `src/compact-state.ts`
+- `src/tools/compact-state.ts`
 - `C:/Workspace_local/gentle-vanguard/src/cli/gv.ts`
 - `docs/audits/` - Audit reports
 

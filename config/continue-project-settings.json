@@ -55,8 +55,8 @@
   "gitflowCapabilities": {
     "branch": ["src/create-gitflow-branch.ts"],
     "pr": ["src/create-pull-request.ts"],
-    "hooks": ["src/pre-commit-validation.ts"],
-    "merge": ["src/post-merge-sync.ts"],
+    "hooks": ["src/review/pre-commit-validation.ts"],
+    "merge": ["src/infrastructure/post-merge-sync.ts"],
     "workflow": ["git-workflow-skill"],
     "commit": ["git-workflow-skill"],
     "conflict": ["git-workflow-skill"]
@@ -68,7 +68,7 @@
   "preProcessing": {
     "enabled": true,
     "mandatory": true,
-    "script": "src/pre-process-input.ts",
+    "script": "src/tools/pre-process-input.ts",
     "scriptArgs": {
       "UserInput": "USER_INPUT_HERE",
       "WorkspaceRoot": "."

@@ -12,7 +12,7 @@ Display the current stack status:
 5. Engram memory: `engram doctor --json`
 6. Git status: branch, last commit, dirty files
 7. Dashboard: WebSocket server status
-8. Active checkpoints: `npx tsx src/checkpoint-manager.ts list`
+8. Active checkpoints: `npx tsx src/ops/checkpoint-manager.ts list`
 
 Display as a structured status dashboard with component health indicators.
 

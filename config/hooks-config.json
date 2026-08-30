@@ -5,7 +5,7 @@
     "pre_process": {
       "enabled": true,
       "mandatory": true,
-      "script": "src/pre-process-input.ts",
+      "script": "src/tools/pre-process-input.ts",
       "timeout": 30000,
       "args": {
         "UserInput": "${user_input}",
@@ -25,7 +25,7 @@
     },
     "post_session": {
       "enabled": true,
-      "script": "src/generate-management-report.ts",
+      "script": "src/tools/generate-management-report.ts",
       "timeout": 60000,
       "args": {
         "SessionId": "${session_id}",
@@ -44,7 +44,7 @@
     },
     "pre_commit": {
       "enabled": true,
-      "script": "src/pre-commit-validation.ts",
+      "script": "src/review/pre-commit-validation.ts",
       "timeout": 45000,
       "args": {
         "StagedFiles": "${staged_files}",
@@ -62,7 +62,7 @@
     },
     "post_merge": {
       "enabled": true,
-      "script": "src/post-merge-sync.ts",
+      "script": "src/infrastructure/post-merge-sync.ts",
       "timeout": 60000,
       "args": {
         "MergeBranch": "${merge_branch}",

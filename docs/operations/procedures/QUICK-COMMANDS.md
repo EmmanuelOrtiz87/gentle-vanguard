@@ -8,7 +8,7 @@
 
 ```bash
 # Iniciar sesión completa (con pipeline de 100 steps)
-npx tsx src/session-autostart.ts
+npx tsx src/session/session-autostart.ts
 
 # Health check completo del stack
 npm run health:check

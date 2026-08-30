@@ -12,8 +12,8 @@ Accepted
 
 El stack acumulaba capacidades de contenido dispersas y sin un flujo operativo unificado:
 
-- `src/marketing-agent.ts` — generación de copy multilingüe y por plataforma.
-- `src/social-poster.ts` — plantillas, plataformas y tracking básico.
+- `src/tools/marketing-agent.ts` — generación de copy multilingüe y por plataforma.
+- `src/tools/social-poster.ts` — plantillas, plataformas y tracking básico.
 - `docs/presentations/resources-index.html` — CMS local / punto de interacción humano.
 
 Cada pieza mantenía su propio modelo de contenido, sin una fuente de verdad común, sin estados
@@ -44,7 +44,7 @@ que define un contrato de dominio `ContentJob` y un pipeline offline-first:
   `canTransition()`/`transition()` inmutable, validación contra registry, `packageJob()`
   idempotente, `saveManifest()`.
 - **`cli.ts`** — 8 comandos: list, validate, prepare, status, report, transition, export, help.
-- **`export-kit.ps1`** — exporta el kit offline ZIP en Windows.
+- **`src/content-operations/export-kit.ts`** — exporta el kit offline ZIP multiplataforma.
 - **Assets** — 21 PNGs dimensionados por plataforma en `docs/presentations/social-assets/`.
 
 ### Principios de diseño

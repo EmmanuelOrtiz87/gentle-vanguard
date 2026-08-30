@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
 
       - name: Check approvals
-        uses: actions/github-script@v9
+        uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         with:
           script: |
             const pr = await github.rest.pulls.get({owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.pull_request.number});
@@ -26,5 +26,15 @@ jobs:
               core.setFailed('Activation PR requires at least one approval.');
               return;
             }
-            // Create activation record issue
-            await github.rest.issues.create({owner: context.repo.owner, repo: context.repo.repo, title: `Activation record: ${pr.data.title}`, body: `PR #${pr.data.number} activated experimental module. Approvals: ${approvals.length}\n\nLink: ${pr.data.html_url}`});
+            // Keep the audit record in the workflow summary instead of creating
+            // an issue with a write-scoped token for every labeled PR.
+            await core.summary
+              .addHeading('Activation record')
+              .addTable([
+                [{data: 'Field', header: true}, {data: 'Value', header: true}],
+                ['PR', `#${pr.data.number}`],
+                ['Title', pr.data.title],
+                ['Approvals', String(approvals.length)],
+                ['URL', pr.data.html_url],
+              ])
+              .write();

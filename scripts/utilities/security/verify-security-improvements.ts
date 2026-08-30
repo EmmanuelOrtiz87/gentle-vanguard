@@ -26,7 +26,8 @@ async function verifySecurityImprovements() {
     console.log('1. Testing security orchestrator functions...');
 
     // Test sanitizeText
-    const testInput = 'My machine is DESKTOP-1 and token ghp_1234567890123456789012345678901234567';
+    const testToken = 'ghp_' + 'x'.repeat(36);
+    const testInput = `My machine is DESKTOP-1 and token ${testToken}`;
     const sanitized = sanitizeText(testInput, 'prompt');
     if (sanitized.includes('<MACHINE>') && sanitized.includes('<TOKEN>')) {
       console.log('   ✓ sanitizeText working correctly');

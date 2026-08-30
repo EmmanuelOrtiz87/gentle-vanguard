@@ -46,34 +46,34 @@ knowledge-base/
 
 ```powershell
 # Inicializar vault (solo si no existe)
-pwsh scripts\utilities\knowledge-base\knowledge-base-manager.ps1 -Action init
+pnpm kb:manager -- --action init
 
 # Ver estadísticas
-pwsh scripts\utilities\knowledge-base\knowledge-base-manager.ps1 -Action stats
+pnpm kb:manager -- --action stats
 
 # Validar estructura
-pwsh scripts\utilities\knowledge-base\knowledge-base-manager.ps1 -Action validate
+pnpm kb:manager -- --action validate
 
 # Listar todas las notas
-pwsh scripts\utilities\knowledge-base\knowledge-base-manager.ps1 -Action list
+pnpm kb:manager -- --action list
 
 # Buscar notas
-pwsh scripts\utilities\knowledge-base\knowledge-base-manager.ps1 -Action search -Query "keyword"
+pnpm kb:manager -- --action search --query "keyword"
 
 # Crear nota de proyecto
-pwsh scripts\utilities\knowledge-base\knowledge-base-manager.ps1 -Action create-note -NoteType project -Title "Mi Proyecto"
+pnpm kb:manager -- --action create-note --note-type project --title "Mi Proyecto"
 
 # Crear nota de sesión
-pwsh scripts\utilities\knowledge-base\knowledge-base-manager.ps1 -Action create-note -NoteType session -Title "session-2026-07-03"
+pnpm kb:manager -- --action create-note --note-type session --title "session-2026-07-03"
 
 # Sync completo (Engram + documentos + backup)
-pwsh scripts\utilities\knowledge-base\knowledge-base-sync.ps1 -Mode full
+pnpm kb:sync -- --mode full
 
 # Sync solo sesiones
-pwsh scripts\utilities\knowledge-base\knowledge-base-sync.ps1 -Mode sessions
+pnpm kb:sync -- --mode session-summary
 
 # Sync solo documentos
-pwsh scripts\utilities\knowledge-base\knowledge-base-sync.ps1 -Mode documents
+pnpm kb:sync -- --mode import
 ```
 
 ### Automation
@@ -86,8 +86,8 @@ El vault se sincroniza automáticamente al inicio de sesión via
   "id": "knowledge-base-sync",
   "enabled": true,
   "lazy": true,
-  "script": "scripts/utilities/knowledge-base/knowledge-base-sync.ps1",
-  "args": "-Mode full"
+    "script": "src/knowledge/knowledge-base-sync.ts",
+    "args": "--mode full"
 }
 ```
 
@@ -104,5 +104,5 @@ El vault se sincroniza automáticamente al inicio de sesión via
 - `docs/knowledge-base/ARCHITECTURE.md` - Arquitectura completa
 - `docs/knowledge-base/README.md` - Guía de uso detallada
 - `config/knowledge-base-config.json` - Configuración
-- `scripts/utilities/knowledge-base/knowledge-base-manager.ps1` - Manager
-- `scripts/utilities/knowledge-base/knowledge-base-sync.ps1` - Sync
+- `src/knowledge/knowledge-base-manager.ts` - Manager
+- `src/knowledge/knowledge-base-sync.ts` - Sync

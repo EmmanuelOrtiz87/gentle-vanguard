@@ -46,14 +46,14 @@ incrementally following TypeScript-first patterns.
 | **Package Manager** | None / PowerShell Gallery | `pnpm` | | **Testing** | Pester | `node:test`
 via `tsx --test` | | **Type Safety** | Runtime checks | TypeScript compiler (`tsc --noEmit`) | |
 **Linting** | PSScriptAnalyzer | ESLint + security plugin | | **Autostart** |
-`session-autostart.ps1` | `npx tsx src/session-autostart.ts` |
+`session-autostart.ps1` | `npx tsx src/session/session-autostart.ts` |
 
 ### Migration Rules
 
 1. **Feature Freeze**: No new PowerShell scripts after 2026-07-01
 2. **Critical Path First**: Session lifecycle, routing, and orchestration migrated first
 3. **Parity Testing**: Each TypeScript replacement must pass identical integration tests
-4. **Documentation Sync**: All references updated via `src/migrate-docs.ts`
+4. **Documentation Sync**: All references updated via `src/tools/migrate-docs.ts`
 5. **Archive**: Original PowerShell scripts archived in `archive/scripts/` for reference
 
 ## Consequences
@@ -77,7 +77,7 @@ via `tsx --test` | | **Type Safety** | Runtime checks | TypeScript compiler (`ts
 ### Mitigations
 
 - **Compat layer**: `npx tsx src/*.ts` provides semantic compatibility with old commands
-- **Documentation**: Automated migration via `src/migrate-docs.ts`
+- **Documentation**: Automated migration via `src/tools/migrate-docs.ts`
 - **Archive preserved**: Old scripts available in `archive/` for 12 months
 
 ## Migration Completion
@@ -96,11 +96,11 @@ Lint/coverage: ✅ Configured
 
 - **Supersedes**: ADR-0012 (PowerShell Language Choice)
 - **Related**: ADR-0004 (NPX Offline Hardening)
-- **Tools**: `src/migrate-docs.ts` for documentation synchronization
+- **Tools**: `src/tools/migrate-docs.ts` for documentation synchronization
 - **CI/CD**: `.github/workflows/ci.yml` — TypeScript-only pipeline
 
 ## References
 
 - `rules/TYPESCRIPT-FIRST-POLICY.md`
 - `config/orchestrator.json` — routing configuration
-- `src/session-autostart.ts` — entry point
+- `src/session/session-autostart.ts` — entry point

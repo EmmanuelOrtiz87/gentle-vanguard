@@ -25,7 +25,7 @@ important decisions exist.
 | Releases            | [releases/](releases/)                        | Release-specific evidence, notes, final release documentation.                             |
 | Research            | [research/](research/)                        | Curated research that supports stack decisions or capabilities.                            |
 | SDD                 | [sdd/](sdd/)                                  | Spec-driven development documents and templates.                                           |
-| Security            | [security/](security/)                        | Security policy, usage examples, hardening, dependency security support.                   |
+| Security            | [security/](security/)                        | Security policy, usage examples, hardening, dependency security support and manual remediation runbooks. |
 | Status              | [status/](status/)                            | [Canonical current status](status/CANONICAL-STATUS.md) and intentionally retained reports. |
 | Supplementary       | [supplementary/](supplementary/)              | Templates and supporting material that do not belong to a core area.                       |
 | Tasks and backlog   | [tasks/](tasks/) and [backlog/](backlog/)     | Current task/backlog tracking. Completed plans should not live here.                       |

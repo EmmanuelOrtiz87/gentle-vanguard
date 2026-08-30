@@ -16,7 +16,7 @@
   "preProcessing": {
     "enabled": true,
     "mandatory": true,
-    "script": "src/pre-process-input.ts",
+    "script": "src/tools/pre-process-input.ts",
     "scriptArgs": { "UserInput": "USER_INPUT_HERE", "WorkspaceRoot": "." },
     "adaptiveSteps": {
       "enabled": true,

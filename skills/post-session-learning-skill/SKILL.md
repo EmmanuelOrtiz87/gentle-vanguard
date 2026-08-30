@@ -26,7 +26,7 @@ AFTER completing significant work, before or during session closure:
 ### Step 1 — Collect Session Data
 
 ```powershell
-pwsh -NoProfile -File src/learning-engine.ts -Trigger close
+pwsh -NoProfile -File src/ml/learning-engine.ts -Trigger close
 ```
 
 This script reads:
@@ -120,5 +120,5 @@ engram_mem_save -title "Learning: {key finding}" -type "learning"
 Concrete usage drawn from this skill's own documentation:
 
 ```powershell
-pwsh -NoProfile -File src/learning-engine.ts -Trigger close
+pwsh -NoProfile -File src/ml/learning-engine.ts -Trigger close
 ```

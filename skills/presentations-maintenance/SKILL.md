@@ -35,7 +35,7 @@ diagramas SVG.
 
 ## Comandos rápidos
 
-```powershell
+```bash
 npm run presentations:serve          # Sirve la carpeta (puerto 3000, abre navegador)
 npm run presentations:serve -- --port 8899 --no-browser --no-store   # Modo verificación CDP (sin caché)
 npm run presentations:stop           # Detiene el servidor
@@ -77,9 +77,6 @@ el flag `--no-store` del servidor TS evita la caché de modales i18n en recargas
    `<td><span data-i18n="key">texto</span><span class="info-trigger" data-i18n-title="tip_*">i</span></td>`
 3. **Idempotencia de inserción de claves**: si se comprueba globalmente "ya existe la clave", la
    detección del primer idioma omite el resto → comprobar POR BLOQUE de idioma + script dedupe.
-4. **`$var:` en PowerShell** en interpolación rompe el parser → usar `${var}:`.
-5. **Escritura de archivos**: usar siempre `[System.IO.File]::WriteAllText` con BOM UTF-8 en PS para
-   no corromper los diccionarios.
 6. **Lightbox centrado**: NO poner `max-width:100%; max-height:100%` en `.gv-lightbox-img` (doble
    escalado navegador+JS). El JS `open()` usa `img.decode().then(afterLoad)` + `naturalWidth > 0`
    (las imágenes cacheadas pueden reportar `complete=true` con `naturalWidth=0`).
@@ -90,8 +87,6 @@ el flag `--no-store` del servidor TS evita la caché de modales i18n en recargas
 10. **Doble convención de bloques**: `i18n.js` declara bloques como `en: {`, `es: {`, `'pt-BR': {` (pt-BR CON comillas simples, los otros sin). `i18n-content.js` usa `__GV_CONTENT.en = {`, `__GV_CONTENT.es = {`, `__GV_CONTENT['pt-BR'] = {` (corchetes). Cualquier regex de extracción que asuma un solo formato romperá: al recorrer TODOS los bloques sobrescribe con el último (pt-BR); al buscar el fin de un bloque con el formato equivocado captura todo el resto del archivo. Extraer SIEMPRE el bloque `en` de forma delimitada (entre su apertura y el siguiente bloque).
 11. **ESM vs CommonJS**: el repo tiene `"type": "module"` en package.json → cualquier `.js` dentro del repo se trata como ES module y `require()` falla con "ReferenceError: require is not defined". Los scripts node que usan `require('ws')` deben llamarse `.cjs` (cdp-verify-final.cjs, cdp-verify-page.cjs). Fuera del repo (temp) pueden ser `.js`.
 12. **Hotspots SVG**: el lightbox carga el SVG inline (fetch) y delega clicks en `.gv-hotspot` (closest) → `__gvShowInfo(data-i18n-title)`. Los hotspots pueden ser `<g>` existentes (convertidos con `src/cli/validate-presentations.ts`) o `<rect>` transparentes inyectados (`src/cli/validate-presentations.ts`). El CSS `.gv-lightbox-svg .gv-hotspot` da fill transparente + hover púrpura.
-13. **`\n` literal en PS**: escribir `"\n"` en PowerShell NO crea un salto de línea real (backslash-n literal). Usar `` "`n" `` (backtick-n) o `[Environment]::NewLine`. Un `\n` literal dentro del XML SVG es texto inofensivo pero sucio.
-14. **`$args` es automático en PowerShell**: no usarlo como nombre de variable propia dentro de un script (colisiona con los argumentos posicionales del script). Usar `$passArgs` o splatting de hashtable `@{ param = valor }`.
 15. **CDP con `returnByValue`**: `Runtime.evaluate` con `returnByValue:true` + `awaitPromise:true` devuelve el objeto YA deserializado en `result.value` — NO hacer `JSON.parse` encima. Plantillas de string con interpolación de variables Node: usar `${var}` dentro del template literal, nunca concatenar con `' + var + '` (queda como texto literal en el navegador).
 16. **localStorage `gv-lang` persiste entre páginas CDP**: al navegar en una verificación, forzar el idioma base con `localStorage.setItem('gv-lang','en')` + click en `[data-lang="en"]` antes de evaluar EN.
 
@@ -113,22 +108,18 @@ el flag `--no-store` del servidor TS evita la caché de modales i18n en recargas
 | `references/common-tasks.md`      | Añadir info-triggers, claves i18n, editar SVG, CDP |
 | `references/troubleshooting.md`   | Errores típicos y soluciones                       |
 
-## Scripts nativos (carpeta `scripts/`)
+## Herramientas nativas
 
 Herramientas reutilizables, parametrizadas y probadas. Todas con `-DryRun` para ensayar sin escribir.
 
 | Script                    | Función                                              | Uso                                      |
 | ------------------------- | ---------------------------------------------------- | ---------------------------------------- |
-| `src/cli/validate-presentations.ts`         | Inserta claves `tip_*` desde JSON en i18n.js (por bloque) | `pwsh scripts/src/cli/validate-presentations.ts -DryRun` |
-| `src/cli/validate-presentations.ts`         | Elimina duplicados en un bloque de idioma            | `pwsh scripts/src/cli/validate-presentations.ts -Block en` |
-| `src/cli/validate-presentations.ts`   | Convierte tds de la Feature Matrix en span + trigger | `pwsh scripts/src/cli/validate-presentations.ts -DryRun` |
-| `src/cli/validate-presentations.ts`    | Homologa tds en TODAS las páginas (title fallback EN desde i18n-content.js) | `pwsh scripts/src/cli/validate-presentations.ts -Page health.html` |
-| `src/cli/validate-presentations.ts`          | Genera claves `tip_c_*` en 3 idiomas desde i18n-content.js (traducción automática de modales) | `pwsh scripts/src/cli/validate-presentations.ts -DryRun` |
+| `src/cli/presentations-maintenance.ts` | Inserta claves, homologa HTML/SVG, genera tips y deduplica i18n | `npm run presentations:maintenance -- <comando> --dry-run` |
 | `cdp-verify-final.cjs`    | Verificación en Chrome real (CDP), 6 checks (index.html) | `node scripts/cdp-verify-final.cjs --cdp 9225` |
 | `cdp-verify-page.cjs`     | Verificación genérica de info-triggers + modales EN/ES/PT en CUALQUIER página | `node scripts/cdp-verify-page.cjs --page=health.html` |
-| `src/cli/validate-presentations.ts`      | Convierte `<g class="gv-node">` → `gv-hotspot` + `data-i18n-title` en SVG | `pwsh scripts/src/cli/validate-presentations.ts -File architecture-layers.svg -DryRun` |
-| `src/cli/validate-presentations.ts`     | Inyecta rects `<rect class="gv-hotspot">` transparentes (zona clicable) antes de `</svg>` | `pwsh scripts/src/cli/validate-presentations.ts -DryRun` |
-| `src/cli/validate-presentations.ts`        | Aplana `svg-zones.json` → formato insert-tips y delega (87 claves en 3 idiomas) | `pwsh scripts/src/cli/validate-presentations.ts -DryRun` |
+| `presentations:maintenance homologate-svg` | Convierte nodos SVG en hotspots | `npm run presentations:maintenance -- homologate-svg --dry-run` |
+| `presentations:maintenance inject-hotspots` | Inyecta rects desde `svg-zones.json` | `npm run presentations:maintenance -- inject-hotspots --dry-run` |
+| `presentations:maintenance insert-zones` | Aplana zonas e inserta tips | `npm run presentations:maintenance -- insert-zones --dry-run` |
 | `cdp-verify-svg.cjs`      | Verifica SVG inline en lightbox (hotspots, viewBox, fit) | `node scripts/cdp-verify-svg.cjs` |
 | `cdp-verify-hotspot.cjs`  | Verifica click en hotspot → modal info (un SVG, idioma actual) | `node scripts/cdp-verify-hotspot.cjs` |
 | `cdp-verify-hotspot-multilang.cjs` | Verifica hotspot en los 3 idiomas (cambia con botones data-lang) | `node scripts/cdp-verify-hotspot-multilang.cjs` |
@@ -138,14 +129,14 @@ Herramientas reutilizables, parametrizadas y probadas. Todas con `-DryRun` para 
 | `tips-hs.json`            | Claves `tip_hs_*` de hotspots gv-node (en/es/pt-BR) | dato para `src/cli/validate-presentations.ts`               |
 | `svg-zones.json`          | Zonas hotspot de los 4 SVG: `{archivo: {tipKey: {rect, en, es, pt-BR}}}` | dato para `src/cli/validate-presentations.ts` + `src/cli/validate-presentations.ts` |
 
-Los scripts detectan el repo por defecto (paths relativos desde el cwd) y aceptan `-JsonPath`/`-JsPath`/`-HtmlPath`/`--origin`/`--page` explícitos. Se verificaron en seco: insert-tips idempotente (0 claves reinsertadas), dedupe 0 duplicados (353/bloque), homologate 0 filas restantes.
+La herramienta detecta el repo por defecto y acepta `--json-path`, `--js-path`, `--html-path`, `--page` y `--dry-run`. Los antiguos helpers de PowerShell fueron duplicados obsoletos y se eliminaron; esta CLI es el reemplazo único.
 
 ## Flujo completo de homologación multi-idioma
 
-1. `src/cli/validate-presentations.ts -DryRun` — ver alcance (tds sin trigger)
-2. `src/cli/validate-presentations.ts` — transforma tds → `span + info-trigger` (title fallback EN)
-3. `src/cli/validate-presentations.ts -DryRun` — ver claves `tip_c_*` a generar
-4. `src/cli/validate-presentations.ts` — inserta traducciones en los 3 bloques (modales multi-idioma)
+1. `npm run presentations:maintenance -- homologate-pages --dry-run` — ver alcance
+2. `npm run presentations:maintenance -- homologate-pages` — transforma tds → `span + info-trigger`
+3. `npm run presentations:maintenance -- gen-tips-c --dry-run` — ver claves `tip_c_*`
+4. `npm run presentations:maintenance -- gen-tips-c` — inserta traducciones en los 3 bloques
 5. `npm run presentations:validate` — 11/11 PASS esperado
 6. Verificación CDP en Chrome real (health/security-governance/quickstart): modales EN+ES traducidos
 
@@ -154,11 +145,11 @@ Los scripts detectan el repo por defecto (paths relativos desde el cwd) y acepta
 Los diagramas ampliados en el lightbox son clicables: cada zona (`data-i18n-title="tip_hs_*"`) abre
 el modal info multi-idioma vía `__gvShowInfo()`.
 
-1. **Definir zonas**: en `scripts/svg-zones.json` — `{ "<archivo>.svg": { "<tipKey>": { "rect": [x,y,w,h], "en": "..", "es": "..", "pt-BR": ".." } } }`.
+1. **Definir zonas**: en `.opencode/skills/presentations-maintenance/scripts/svg-zones.json` — `{ "<archivo>.svg": { "<tipKey>": { "rect": [x,y,w,h], "en": "..", "es": "..", "pt-BR": ".." } } }`.
    - Las coordenadas `rect` son del viewBox del SVG (obtenerlas del `<rect>`/`<circle>` existente del elemento).
    - Para `gv-node` existentes (architecture-layers) usar `src/cli/validate-presentations.ts` que añade la clase + atributo sin coordenadas.
-2. **Inyectar rects**: `pwsh scripts/src/cli/validate-presentations.ts -DryRun` → luego sin flag. Añade `<rect class="gv-hotspot" ... fill="transparent">` antes de `</svg>`. Idempotente.
-3. **Insertar claves i18n**: `pwsh scripts/src/cli/validate-presentations.ts -DryRun` → luego sin flag (87 claves = 29 zonas × 3 idiomas).
+2. **Inyectar rects**: `npm run presentations:maintenance -- inject-hotspots --dry-run` → luego sin flag. Añade `<rect class="gv-hotspot" ... fill="transparent">` antes de `</svg>`. Idempotente.
+3. **Insertar claves i18n**: `npm run presentations:maintenance -- insert-zones --dry-run` → luego sin flag.
 4. **Validar**: `node --check assets/js/i18n.js` + `npm run presentations:validate` (11/11 PASS).
 5. **Verificar CDP**: `node scripts/cdp-verify-hotspots-all.cjs` (4 diagramas × 3 idiomas, ALL PASS esperado).
    - Páginas: autonomy→executive-loop, agents-pipeline→pipeline-flow, operations-cloud→data-architecture, dashboard→stack-dashboard.
@@ -175,7 +166,7 @@ Purpose: Mantenimiento de la pantalla de inicio y el libro de presentaciones (do
 
 Concrete usage drawn from this skill's own documentation:
 
-```powershell
+```bash
 npm run presentations:serve          # Sirve la carpeta (puerto 3000, abre navegador)
 npm run presentations:serve -- --port 8899 --no-browser --no-store   # Modo verificación CDP (sin caché)
 npm run presentations:stop           # Detiene el servidor

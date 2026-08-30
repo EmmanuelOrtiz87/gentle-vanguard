@@ -2,7 +2,9 @@
 
 Convenciones de código para Gentle-Vanguard.
 
-## PowerShell
+## Shell
+
+Los launchers activos usan Node/TypeScript y comandos CMD-first. No se añaden scripts de PowerShell.
 
 - Usar cmdlets completos (`Get-ChildItem`, `Set-Content`, `Remove-Item`), NO alias (`ls`, `sc`,
   `rm`)

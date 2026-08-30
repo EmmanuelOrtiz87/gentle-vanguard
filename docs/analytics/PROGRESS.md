@@ -142,3 +142,35 @@ Get-Content -Raw docs/analytics/PROGRESS.md
 Get-Content -Raw docs/analytics/README.md
 Get-Content -Raw docs/analytics/PENDING.md
 ```
+
+### Avance 6 (2026-08-28, P2.3 report templates)
+
+Landed en commit `c223d3be`. Cierra el ultimo item de P2 (templates de reporte) y
+deja P0+P1+P2 al 100%.
+
+- `apps/gv-analytics/server/templates.ts` (nuevo): modelo `ReportTemplate` con
+  secciones visibles/ordenadas, `listTemplates()`, `getTemplate()`,
+  `renderTemplateMarkdown()`. 3 templates: `brief` (1 pagina ejecutiva, sin
+  diagramas/evidencia/roles), `sdd` (SDD canonico completo), `handoff` (dev-focused,
+  evidencia pesada, sin roles).
+- `apps/gv-analytics/server/export.ts`: `toMarkdown/toHtml/toDocx/toPdf` aceptan
+  `templateId` y delegan en el renderer de templates. Limpieza: se removio la
+  funcion muerta `renderLegacy()` + helper `sectionLines()`, y el import invalido
+  en medio del archivo (higiene ESM).
+- `apps/gv-analytics/server/index.ts`: `GET /api/templates` + parametro
+  `?template=` en las rutas de export.
+- `apps/gv-analytics/src/App.tsx`: selector de plantilla (dropdown + descripcion)
+  en el menu de exportacion; carga `/api/templates`; pasa `&template=` al export.
+- `apps/gv-analytics/src/styles.css`: estilos `.export-template` (tokens dark/light).
+
+Verificado end-to-end (server en 127.0.0.1:4754):
+- `GET /api/templates` → 200 con los 3 templates.
+- Export MD/HTML/DOCX/PDF con `brief`/`sdd`/`handoff` → todos 200.
+- typecheck + build verde; 11/11 tests de integracion PASS.
+
+### Estado al cierre de ola (Avance 6)
+
+- typecheck + build: verde
+- watchtower: 6/6 gv-analytics checks PASS
+- P0 + P1 + P2: 100% done
+- P3: theme switcher done (`ab7b77ef`); pendiente widget dashboard, i18n, storybook

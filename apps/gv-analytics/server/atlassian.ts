@@ -21,8 +21,25 @@ function cleanSiteUrl(siteUrl: string): string {
   return parsed.toString().replace(/\/$/, '');
 }
 
-function authHeader(connection: StoredConnection): string {
-  return `Basic ${Buffer.from(`${connection.email}:${connection.apiToken}`).toString('base64')}`;
+/**
+ * Selects the correct credential per service:
+ * - Jira + Confluence share the same Atlassian API token (`apiToken`).
+ * - Bitbucket uses a separate token (`bitbucketApiToken`), falling back to
+ *   `apiToken` for backward-compat with vaults saved before the split.
+ */
+function tokenFor(connection: StoredConnection, service: 'jira' | 'confluence' | 'bitbucket'): string {
+  if (service === 'bitbucket') {
+    return connection.bitbucketApiToken || connection.apiToken;
+  }
+  return connection.apiToken;
+}
+
+function authHeader(connection: StoredConnection, service: 'jira' | 'confluence' | 'bitbucket'): string {
+  // OAuth bearer if available, otherwise Basic auth with email + per-service token.
+  if (connection.oauth?.accessToken) {
+    return `Bearer ${connection.oauth.accessToken}`;
+  }
+  return `Basic ${Buffer.from(`${connection.email}:${tokenFor(connection, service)}`).toString('base64')}`;
 }
 
 async function atlassianFetch(connection: StoredConnection, options: AtlassianRequestOptions) {
@@ -37,7 +54,7 @@ async function atlassianFetch(connection: StoredConnection, options: AtlassianRe
   const response = await fetch(url, {
     headers: {
       Accept: 'application/json',
-      Authorization: authHeader(connection),
+      Authorization: authHeader(connection, options.service),
     },
   });
   if (!response.ok) {
@@ -58,7 +75,7 @@ async function atlassianTextFetch(connection: StoredConnection, options: Atlassi
   const response = await fetch(url, {
     headers: {
       Accept: 'text/plain, application/json',
-      Authorization: authHeader(connection),
+      Authorization: authHeader(connection, options.service),
     },
   });
   if (!response.ok) {
@@ -88,6 +105,13 @@ async function testService(connection: StoredConnection, service: 'jira' | 'conf
   }
 }
 
+/** Masks a secret for display, showing only the last 4 chars (never the raw value). */
+function maskSecret(secret?: string): string | undefined {
+  if (!secret) return undefined;
+  const tail = secret.slice(-4);
+  return `••••${tail}`;
+}
+
 export async function getConnectionStatus(): Promise<ConnectionStatus> {
   const connection = loadConnection();
   if (!connection) {
@@ -112,22 +136,68 @@ export async function getConnectionStatus(): Promise<ConnectionStatus> {
     email: connection.email,
     bitbucketWorkspace: connection.bitbucketWorkspace,
     updatedAt: connection.updatedAt,
+    apiTokenSet: Boolean(connection.apiToken),
+    apiTokenMasked: maskSecret(connection.apiToken),
+    bitbucketApiTokenSet: Boolean(connection.bitbucketApiToken),
+    bitbucketApiTokenMasked: maskSecret(connection.bitbucketApiToken),
+  };
+}
+
+/** Returns true when a value looks like a URL instead of a secret token. */
+function isUrlLike(value: string): boolean {
+  return /^https?:\/\//i.test(value.trim());
+}
+
+/** Builds a StoredConnection from a form, keeping existing tokens when a field is left blank. */
+function buildConnection(form: ConnectionForm): StoredConnection {
+  const existing = loadConnection();
+  const apiToken = form.apiToken.trim() || existing?.apiToken || '';
+  if (!form.siteUrl || !form.email || !apiToken) {
+    throw new Error('Site URL, email y API token son obligatorios.');
+  }
+  if (isUrlLike(apiToken)) {
+    throw new Error('El API token no puede ser una URL. Pega el token real (no la direccion del sitio).');
+  }
+  const bitbucketApiToken = form.bitbucketApiToken?.trim() || existing?.bitbucketApiToken || undefined;
+  if (bitbucketApiToken && isUrlLike(bitbucketApiToken)) {
+    throw new Error('El API token de Bitbucket no puede ser una URL. Pega el token real (no la direccion del sitio).');
+  }
+  return {
+    siteUrl: cleanSiteUrl(form.siteUrl),
+    email: form.email.trim(),
+    apiToken,
+    bitbucketApiToken,
+    bitbucketWorkspace: form.bitbucketWorkspace.trim(),
+    updatedAt: new Date().toISOString(),
   };
 }
 
 export async function configureConnection(form: ConnectionForm): Promise<ConnectionStatus> {
-  if (!form.siteUrl || !form.email || !form.apiToken) {
-    throw new Error('Site URL, email y API token son obligatorios.');
-  }
-  const connection: StoredConnection = {
-    siteUrl: cleanSiteUrl(form.siteUrl),
-    email: form.email.trim(),
-    apiToken: form.apiToken.trim(),
-    bitbucketWorkspace: form.bitbucketWorkspace.trim(),
-    updatedAt: new Date().toISOString(),
-  };
-  saveConnection(connection);
+  saveConnection(buildConnection(form));
   return getConnectionStatus();
+}
+
+/** Tests the provided credentials WITHOUT persisting them to the vault. */
+export async function testConnectionForm(form: ConnectionForm): Promise<ConnectionStatus> {
+  const connection = buildConnection(form);
+  const [jira, confluence, bitbucket] = await Promise.all([
+    testService(connection, 'jira'),
+    testService(connection, 'confluence'),
+    testService(connection, 'bitbucket'),
+  ]);
+  return {
+    configured: true,
+    jira,
+    confluence,
+    bitbucket,
+    siteUrl: connection.siteUrl,
+    email: connection.email,
+    bitbucketWorkspace: connection.bitbucketWorkspace,
+    apiTokenSet: Boolean(connection.apiToken),
+    apiTokenMasked: maskSecret(connection.apiToken),
+    bitbucketApiTokenSet: Boolean(connection.bitbucketApiToken),
+    bitbucketApiTokenMasked: maskSecret(connection.bitbucketApiToken),
+  };
 }
 
 function asRecord(value: unknown): Record<string, unknown> {
@@ -356,17 +426,26 @@ async function gatherBitbucketEvidence(
 }
 
 async function gatherAtlassianEvidence(
-  input: string,
+  inputs: string[],
 ): Promise<{ evidence: AnalysisEvidence[]; text: string[] }> {
   const connection = loadConnection();
-  if (!connection || !/^https?:\/\//i.test(input)) return { evidence: [], text: [] };
-  const collectors = await Promise.allSettled([
-    gatherJiraEvidence(connection, input),
-    gatherConfluenceEvidence(connection, input),
-    gatherBitbucketEvidence(connection, input),
-  ]);
   const evidence: AnalysisEvidence[] = [];
   const text: string[] = [];
+  if (!connection) return { evidence, text };
+
+  // Process every URL-like input (the URL field and any URL pasted in the request).
+  const urls = inputs
+    .map((input) => input.trim())
+    .filter((input) => /^https?:\/\//i.test(input));
+  if (urls.length === 0) return { evidence, text };
+
+  const collectors = await Promise.allSettled(
+    urls.flatMap((input) => [
+      gatherJiraEvidence(connection, input),
+      gatherConfluenceEvidence(connection, input),
+      gatherBitbucketEvidence(connection, input),
+    ]),
+  );
   for (const result of collectors) {
     if (result.status === 'fulfilled') {
       evidence.push(...result.value.evidence);
@@ -553,9 +632,17 @@ export async function searchEvidence(query: string): Promise<AnalysisEvidence[]>
   return evidence;
 }
 
-export async function analyzeInput(mode: 'url' | 'request', input: string): Promise<AnalyticsReport> {  if (!input.trim()) throw new Error('El analisis necesita una URL o texto de pedido.');
+export async function analyzeInput(options: { url?: string; request?: string }): Promise<AnalyticsReport> {
+  const url = (options.url || '').trim();
+  const request = (options.request || '').trim();
+  if (!url && !request) throw new Error('El analisis necesita una URL o texto de pedido.');
 
-  const remote = await gatherAtlassianEvidence(input);
+  // The report's primary input is the request text (or the URL when no request is given).
+  const input = request || url;
+  const mode: 'url' | 'request' = url && !request ? 'url' : 'request';
+
+  // Gather evidence from BOTH the URL field and any URL pasted in the request.
+  const remote = await gatherAtlassianEvidence([url, request]);
   const evidence = [...buildEvidence(input), ...remote.evidence];
   const hasRemoteEvidence = remote.evidence.some((item) => item.source !== 'stack');
 

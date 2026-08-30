@@ -32,7 +32,7 @@ pero le faltan cinco cosas que lo separan de un "producto de primer nivel":
    pública.
 
 El "CMS" más maduro es el **Marketplace de skills** (532 LOC, browse + publish + reviews). El
-`apps/doc-gentle/` está archivado (solo README) y `src/content-operations/` es CLI-only — la
+`src/content-operations/` es CLI-only — la
 oportunidad está en **elevar el Marketplace a CMS de primer nivel y construir una `ContentOpsPanel`
 web** sobre el engine existente.
 
@@ -176,8 +176,7 @@ pública-privada del plan ejecutivo).
 
 ### Track E · CMS / Marketplace (P0/P1)
 
-**El "CMS" más maduro es el Marketplace (skills). El doc-gentle está archivado; el
-content-operations es CLI. Plan en 3 carriles:**
+**El "CMS" más maduro es el Marketplace (skills). El content-operations es CLI. Plan en 3 carriles:**
 
 **E1. Marketplace — Browse & Discover (P0)**
 
@@ -226,13 +225,6 @@ content-operations es CLI. Plan en 3 carriles:**
 - "Publish" con un click + rollback.
 - Métricas por plataforma (LinkedIn / X / blog / newsletter) — clicks, reach, conversions.
 - **Ningún competidor tiene esto. Es nuestro "we invented content supply chain for LLM agents".**
-
-**E6. Doc-Gentle revival (P2 — opcional)**
-
-- Solo si se valida demanda: tomar el `document-processor` skill del root stack y envolverlo en una
-  UI web.
-- Demo: drag-and-drop PDF/DOCX/PNG → OCR → resumen → Q&A interactivo.
-- No competir con ChatPDF/Claude.ai; ser el caso de uso que muestra el stack en acción.
 
 ---
 
@@ -368,7 +360,6 @@ content-operations es CLI. Plan en 3 carriles:**
 
 ### Backlog (post v4.2)
 
-- Doc-Gentle revival (E6).
 - Forecasting (D8).
 - Anomaly detection cliente (D7).
 - Federation dashboard dedicado.

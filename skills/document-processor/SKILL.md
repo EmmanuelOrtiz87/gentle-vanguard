@@ -66,30 +66,30 @@ Document received
 
 ```bash
 # Extract all text
-npx tsx src/document-processor.ts extract "document.pdf"
+npx tsx src/tools/document-processor.ts extract "document.pdf"
 
 # Extract specific pages
-npx tsx src/document-processor.ts extract "document.pdf" --pages 1,5-10
+npx tsx src/tools/document-processor.ts extract "document.pdf" --pages 1,5-10
 
 # Extract with OCR fallback
-npx tsx src/document-processor.ts extract "scanned.pdf" --ocr
+npx tsx src/tools/document-processor.ts extract "scanned.pdf" --ocr
 ```
 
 ### 2. Table Extraction
 
 ```bash
 # Extract tables to CSV
-npx tsx src/document-processor.ts tables "report.pdf" --output tables.csv
+npx tsx src/tools/document-processor.ts tables "report.pdf" --output tables.csv
 
 # Extract tables to JSON
-npx tsx src/document-processor.ts tables "spreadsheet.xlsx" --format json
+npx tsx src/tools/document-processor.ts tables "spreadsheet.xlsx" --format json
 ```
 
 ### 3. Metadata Extraction
 
 ```bash
 # Get document metadata
-npx tsx src/document-processor.ts meta "document.pdf"
+npx tsx src/tools/document-processor.ts meta "document.pdf"
 
 # Output: author, creation date, modification date, page count, etc.
 ```
@@ -98,7 +98,7 @@ npx tsx src/document-processor.ts meta "document.pdf"
 
 ```bash
 # Generate executive summary
-npx tsx src/document-processor.ts summarize "long-document.pdf"
+npx tsx src/tools/document-processor.ts summarize "long-document.pdf"
 
 # Options: --max-length 500, --focus technical
 ```
@@ -160,7 +160,7 @@ interface TableData {
 ### Example 1: Extract PDF to Markdown
 
 ```bash
-$ npx tsx src/document-processor.ts extract "spec.pdf" --format md
+$ npx tsx src/tools/document-processor.ts extract "spec.pdf" --format md
 
 Output:
 # System Requirements Specification
@@ -175,7 +175,7 @@ Extracted text...
 ### Example 2: Analyze Contract
 
 ```bash
-$ npx tsx src/document-processor.ts analyze "contract.pdf" --focus clauses
+$ npx tsx src/tools/document-processor.ts analyze "contract.pdf" --focus clauses
 
 Key clauses found:
 - Term: 24 months
@@ -185,7 +185,7 @@ Key clauses found:
 
 ### Example 3: Batch Process
 
-```bash�$ npx tsx src/document-processor.ts batch "./documents/*.pdf" --output ./extracted/
+```bash�$ npx tsx src/tools/document-processor.ts batch "./documents/*.pdf" --output ./extracted/
 
 Processing: report1.pdf ✓
 Processing: report2.pdf ✓

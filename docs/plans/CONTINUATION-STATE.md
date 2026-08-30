@@ -35,7 +35,7 @@
    team-orchestrator, session-close-\*), ops (dashboard-\*, health-\*), content (content-operations
    ya está en src/content-operations/), review (code-review, auto-code-review vs
    src/autonomous-review/ colisión), ml/adaptive. **Usar el playbook §3.1.**
-2. **F2.5** — partir los 16 archivos >800 líneas, empezando por `src/core/maintenance-watchtower.ts`
+2. **Modularidad nativa** — mantener la separación por dominios y sus barrels estables
    (1.958 → checks por componente como módulos). Gate de regresión: watchtower 95/95 tras el split.
    Requiere sesión dedicada.
 3. **F2.3** — migrar `console.*` → logger SOLO en módulos library (los CLIs imprimen a stdout por
@@ -120,7 +120,7 @@ commit 078aace1). Buscar más: `grep -rn "require.main" src/ --include='*.ts'`.
 ## 6. Primeros 3 comandos de la próxima sesión
 
 ```bash
-npx tsx src/session-autostart.ts          # pipeline obligatorio
+npx tsx src/session/session-autostart.ts          # pipeline obligatorio
 npm run watchtower:health                 # debe dar 95/95 (si hay FAILs de daemon → §4.1)
 git log --oneline -5                      # confirmar que HEAD es ec94b6b8 o posterior
 ```

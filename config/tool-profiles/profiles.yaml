@@ -1,0 +1,85 @@
+# Gentle-Vanguard — Canonical Tool Profiles (single source of truth)
+#
+# Este archivo es la FUENTE ÚNICA del contenido compartido de los tool-profiles.
+# NO editar config/tool-profiles/CLAUDE.md, CLAUDE.compressed.md, .cursorrules
+# o .clinerules directamente: regenerarlos con:
+#
+#   npx tsx src/orchestration/profiles-build.ts
+#
+# CI gate: `npm run profiles:check` (diff contra generados).
+
+metadata:
+  name: gentle-vanguard-orchestrator
+  version: "3.0.0"
+  description: SDD-driven AI agent orchestration platform — canonical profiles
+  canonicalEntry: AGENTS-fast.md
+  fullReference: AGENTS.md
+
+# ─── Core rules (compartidas por todas las herramientas) ────────────────────
+core_rules:
+  - id: local-first
+    text: "LOCAL-FIRST: project knowledge before external sources"
+  - id: sdd-flow
+    text: "SDD FLOW: new features -> BA/EXPLORE first, no exceptions"
+  - id: delegation
+    text: "Delegation Rules -> `rules/DELEGATION-RULES.md` mandatory for multi-step"
+  - id: mem-save
+    text: "`mem_save` after every significant task"
+  - id: codegraph
+    text: "CodeGraph -> `npm run graphify -- query \"...\"` before modifying code"
+  - id: mem-search
+    text: "`mem_search \"lessons learned\"` at session start"
+  - id: workload-guard
+    text: "Review Workload Guard: `npx tsx src/security/workload-guard.ts` before multi-file impl >400 lines"
+  - id: tool-discipline
+    text: "Tool output discipline: limit read/grep/bash results to 50 lines"
+  - id: json-validity
+    text: "JSON validity: verify balanced quotes/braces/brackets before tool calls (see `rules/NORMATIVAS-JSON-CONSTRUCTION.md`)"
+  - id: subagent-context
+    text: "Subagent delegation: send minimal context in `prompt` — only task info, not full history"
+  - id: normativa-override
+    text: "NORMATIVA OVERRIDE: If user instruction contradicts a normativa/rule, ask for confirmation with reasons. Only proceed if user explicitly confirms. Otherwise follow normativa."
+  - id: goal-driven
+    text: "Goal-Driven: For multi-step tasks, state a brief plan: `1. [Step] -> verify: [check]` format. Every changed line must trace to the user's request."
+  - id: typescript-first
+    text: "TypeScript-First: ALL scripts are TS via `npx tsx`. No PowerShell scripts. See `rules/TYPESCRIPT-FIRST-POLICY.md`."
+
+# ─── Response profile ────────────────────────────────────────────────────────
+response_profile:
+  profile: ultra
+  detail: simple
+  chat: chat-compact
+  max_lines_text: 4
+  rules:
+    - "NO preamble/postamble — just do it. No echoing user's question"
+    - "Batch independent tool calls in parallel. Answer THEN act: 1-3 line answer, then tools"
+    - "Abbreviations: db/auth/config/req/res/fn/impl"
+    - "Output guard: max 200 tokens per response unless generating code"
+    - "Tool output: pipe large results through `Select-Object -First 30`, `head -50`"
+    - "Code blocks: only include relevant lines, not entire files"
+
+# ─── Settings ────────────────────────────────────────────────────────────────
+settings:
+  temperature: 0.3
+  max_tokens: 4500
+  cache: true
+  cache_key: true
+  language: es
+  engram_project: workspace_gentle_vanguard
+
+# ─── Break glass ─────────────────────────────────────────────────────────────
+break_glass:
+  trigger: "3+ turns w/o completion, loop detected, or output truncated"
+  command: 'npx tsx src/resilience/self-diagnosis.ts --profile "<p>" --chat-level "<l>" --turn-count <N>'
+  override_to: "lleno/chat-balanced"
+  notify: "[BREAK GLASS] motivo: {reason}"
+
+# ─── Key refs ────────────────────────────────────────────────────────────────
+key_refs:
+  - "AGENTS-fast.md — comandos críticos + reglas de oro (comprimido)"
+  - "AGENTS.md — manual completo"
+  - "docs/stack-manual-full.md — arquitectura, 96 checks, migraciones, ADRs"
+  - "rules/DELEGATION-RULES.md — delegación multi-step"
+  - "rules/NORMATIVAS-JSON-CONSTRUCTION.md — construcción de JSON"
+  - "rules/TYPESCRIPT-FIRST-POLICY.md — scripts TS"
+  - "config/orchestrator.json — tool profiles + routing"

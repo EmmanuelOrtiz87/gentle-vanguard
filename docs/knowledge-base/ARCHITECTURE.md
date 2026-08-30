@@ -10,8 +10,8 @@ philosophy.
 
 | Component         | Location                             | Purpose             | Status    |
 | ----------------- | ------------------------------------ | ------------------- | --------- |
-| Engram            | `$env:USERPROFILE\.engram\engram.db` | Session memory      | Active    |
-| Documents         | `docs-archive/` (78 .md)             | Historical docs     | Dispersed |
+| Engram            | Native `engram` CLI                  | Persistent memory   | Active    |
+| Vault             | `knowledge-base/`                    | Obsidian Markdown   | Active    |
 | Skills            | `skills/`                            | Skill registry      | Indexed   |
 | ML Embeddings     | `.atl/skill-embeddings.json`         | TF-IDF vectors      | Active    |
 | Document Analysis | `skills/document-analysis-skill/`    | PDF/DOCX processing | Active    |
@@ -56,7 +56,8 @@ knowledge-base/                    # Root vault
 
 - Engram continues as **session memory** (short-term)
 - Knowledge Base serves as **long-term knowledge**
-- Sync mechanism: Export Engram insights to vault
+- Sync mechanism: `engram export` → selected observations in `00-inbox/`; vault notes are persisted with `engram save`.
+- Sync is additive and never deletes vault notes. Use `--dry-run` before a write.
 
 ### 2. Document Analysis Integration
 
@@ -105,7 +106,7 @@ User Session
 
 ### Manual Sync
 
-- Use `knowledge-base-sync.ps1` script
+- Use `pnpm kb:sync -- --mode full`
 - Sync specific folders or full vault
 
 ## Search Strategy
@@ -135,8 +136,8 @@ User Session
 
 ## Related Files
 
-- `src/knowledge-base-manager.ts`
-- `src/knowledge-base-sync.ts`
+- `src/knowledge/knowledge-base-manager.ts`
+- `src/knowledge/knowledge-base-sync.ts`
 - `config/knowledge-base-config.json`
 - `docs/knowledge-base/README.md` for the current live documentation entry point.
 - `.archive/docs/stale-guides/knowledge-base-USAGE.md` for the archived legacy usage guide.

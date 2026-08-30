@@ -20,7 +20,7 @@
  * 视觉自由度优先的场景（动画、web component、CSS 渐变、复杂 SVG）
  * 应改用 export_deck_pdf.mjs / export_deck_stage_pdf.mjs 导出 PDF。
  *
- * 依赖：npm install playwright pptxgenjs sharp
+ * 依赖：在此 skill 目录单独安装 playwright、pptxgenjs y sharp；不属于根项目 runtime
  *
  * 按文件名排序（01-xxx.html → 02-xxx.html → ...）。
  */
@@ -71,7 +71,7 @@ async function main() {
     html2pptx = require(path.join(__dirname, 'html2pptx.js'));
   } catch (e) {
     console.error(`✗ 加载 html2pptx.js 失败：${e.message}`);
-    console.error(`  依赖缺失时请跑：npm install playwright pptxgenjs sharp`);
+    console.error(`  依赖缺失时请在 skills/huashu-design 单独安装：pnpm install`);
     process.exit(1);
   }
 

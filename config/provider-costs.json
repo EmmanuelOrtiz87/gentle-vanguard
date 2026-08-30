@@ -1,6 +1,6 @@
 {
   "version": "1.1.0",
-  "description": "Per-provider, per-model cost in USD per 1K tokens (input/output). Consumed by src/cost-tracker.ts and src/cost-efficiency-scorer.ts for cost-aware routing.",
+  "description": "Per-provider, per-model cost in USD per 1K tokens (input/output). Consumed by src/monitor/cost-tracker.ts and src/monitor/cost-efficiency-scorer.ts for cost-aware routing.",
   "providers": {
     "opencode": {
       "models": {

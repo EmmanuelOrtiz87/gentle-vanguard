@@ -11,7 +11,7 @@ const ROOT = resolve(import.meta.dirname, '..', '..');
 
 describe('Post-Session Learning', () => {
   it('post-autostart-summary.ts runs and produces output', () => {
-    const result = spawnSync('npx', ['tsx', 'src/post-autostart-summary.ts'], {
+    const result = spawnSync('npx', ['tsx', 'src/orchestration/post-autostart-summary.ts'], {
       cwd: ROOT,
       encoding: 'utf-8',
       timeout: 15000,

@@ -80,3 +80,27 @@ export function getReport(id: string): AnalyticsReport | null {
   if (!row) return null;
   return JSON.parse(String(row.report_json)) as AnalyticsReport;
 }
+
+export function deleteReport(id: string): boolean {
+  const result = getDb().prepare('DELETE FROM gv_analytics_reports WHERE id = ?').run(id);
+  return result.changes > 0;
+}
+
+export function deleteReports(ids: string[]): number {
+  if (ids.length === 0) return 0;
+  // Chunk to stay well under SQLite's bound-parameter limit.
+  let deleted = 0;
+  for (let i = 0; i < ids.length; i += 100) {
+    const chunk = ids.slice(i, i + 100);
+    const placeholders = chunk.map(() => '?').join(',');
+    const result = getDb()
+      .prepare(`DELETE FROM gv_analytics_reports WHERE id IN (${placeholders})`)
+      .run(...chunk);
+    deleted += result.changes;
+  }
+  return deleted;
+}
+
+export function deleteAllReports(): number {
+  return getDb().prepare('DELETE FROM gv_analytics_reports').run().changes;
+}

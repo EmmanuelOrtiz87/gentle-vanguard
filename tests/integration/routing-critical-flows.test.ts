@@ -67,7 +67,7 @@ describe('Routing Critical Flows', () => {
   describe('Input preprocessing', () => {
     it('sanitizes deployment request input', () => {
       const { stdout, status } = runCLI(
-        'src/pre-process-input.ts',
+        'src/tools/pre-process-input.ts',
         '--input',
         'deploy to kubernetes with docker and helm',
         '--workspace-root',
@@ -79,7 +79,7 @@ describe('Routing Critical Flows', () => {
 
     it('sanitizes reporting request input', () => {
       const { stdout, status } = runCLI(
-        'src/pre-process-input.ts',
+        'src/tools/pre-process-input.ts',
         '--input',
         'crear dashboard con metrics y reporte ejecutivo',
         '--workspace-root',
@@ -91,7 +91,7 @@ describe('Routing Critical Flows', () => {
 
     it('sanitizes new project request input', () => {
       const { stdout, status } = runCLI(
-        'src/pre-process-input.ts',
+        'src/tools/pre-process-input.ts',
         '--input',
         'pedi crear un nuevo proyecto',
         '--workspace-root',
