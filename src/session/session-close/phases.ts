@@ -20,6 +20,7 @@ import {
 } from './helpers.js';
 import { KILL_TARGETS, waitForProcess, killProcessByCommandLine } from './process.js';
 import { runArtifactRetention } from '../artifact-retention.js';
+import { generateReview4R, formatReview4R } from '../../rdd/rdd-4r-review.js';
 
 // ─── Fases ──────────────────────────────────────────────────────────────────────
 
@@ -562,6 +563,33 @@ export function phaseAudit(): PhaseResult[] {
     status: cg.status === 0 ? 'PASS' : 'SKIP',
     detail: cg.status === 0 ? 'CodeGraph synced' : 'Sync skipped',
   });
+
+  // 4.3 RDD 4R review (Risk, Readability, Reliability, Resilience)
+  // Auto-reviews changed code files for risk patterns before session close.
+  try {
+    const changedFiles = getChangedFiles();
+    const review = generateReview4R('session-close', [...changedFiles], 'session-close-orchestrator');
+    const critical = review.riskFindings.filter((f) => f.severity === 'critical').length;
+    const total = review.riskFindings.length + review.readabilityFindings.length +
+      review.reliabilityFindings.length + review.resilienceFindings.length;
+    results.push({
+      phase: 'rdd-4r-review',
+      status: critical === 0 ? 'PASS' : 'FAIL',
+      detail:
+        total === 0
+          ? '4R review: no findings'
+          : `4R review: ${total} finding(s), ${critical} critical (approved: ${review.approved})`,
+    });
+    if (total > 0) {
+      log(formatReview4R(review));
+    }
+  } catch (err) {
+    results.push({
+      phase: 'rdd-4r-review',
+      status: 'SKIP',
+      detail: `4R review skipped: ${err instanceof Error ? err.message : String(err)}`,
+    });
+  }
 
   return results;
 }
