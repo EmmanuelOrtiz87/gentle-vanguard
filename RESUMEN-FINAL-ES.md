@@ -72,23 +72,23 @@ QUÉ SE HIZO (TRANSFORMACIÓN ARQUITECTÓNICA)
 ═════════════════════════════════════════════════════════════════════════════════
 
 PROBLEMA ORIGINAL:
-  - 80+ archivos monolíticos de 800-3000 líneas cada uno
-  - TypeScript no puede paralelizar (archivos grandes bloquean)
-  - Cualquier cambio pequeño → diff grande → alto costo de revisión
-  - Compilación lenta (60s) = iteración lenta
-  - Alto consumo de tokens por revisiones complejas
+- 80+ archivos monolíticos de 800-3000 líneas cada uno
+- TypeScript no puede paralelizar (archivos grandes bloquean)
+- Cualquier cambio pequeño → diff grande → alto costo de revisión
+- Compilación lenta (60s) = iteración lenta
+- Alto consumo de tokens por revisiones complejas
 
 SOLUCIÓN IMPLEMENTADA:
 
 1. EXTRACCIÓN POR DOMINIOS
    Identificamos clusteres temáticos en cada monolito:
-   
+
    websocket-server.ts (3004L) → 18 módulos:
      - connection.ts (250L)       - Solo gestión de conexiones
      - message-handler.ts (200L)  - Solo ruteo de mensajes
      - metrics-stream.ts (180L)   - Solo stream de métricas
      - ... etc (14 módulos más especializados)
-   
+
    real-data.ts (1682L) → 6 módulos:
      - metrics.ts (931L)  - Cálculo de métricas
      - traces.ts (281L)   - Agregación de trazas
@@ -97,16 +97,16 @@ SOLUCIÓN IMPLEMENTADA:
 
 2. BARRELS DE RE-EXPORTACIÓN (0 BREAKING CHANGES)
    Cada módulo crea un barrel file que mantiene la API pública:
-   
+
    ANTES - Importar directamente:
      import { startServer } from './websocket-server';
-   
+
    DESPUÉS - Mismo import, pero internamente modularizado:
      // websocket-server.ts (18 líneas)
      export { ConnectionManager } from './websocket-server/connection';
      export { MessageHandler } from './websocket-server/message-handler';
      // ... re-exports de todos los módulos
-   
+
    RESULTADO: Callers no cambian nada, internos 100% modularizados
 
 3. VALIDACIÓN (CERO CAMBIOS BREAKING)
@@ -170,31 +170,31 @@ BENEFICIOS REALIZADOS
 ═════════════════════════════════════════════════════════════════════════════════
 
 ✅ COMPILACIÓN
-   - 60s → 15s (4x más rápido)
-   - Paralelización efectiva (8 workers)
-   - Feedback inmediato en desarrollo
+- 60s → 15s (4x más rápido)
+- Paralelización efectiva (8 workers)
+- Feedback inmediato en desarrollo
 
 ✅ TOKENS & COSTOS
-   - 8M → 3.2M tokens/año (60% reducción)
-   - $24K/año ahorrados en API
-   - ROI en 4.2 meses
+- 8M → 3.2M tokens/año (60% reducción)
+- $24K/año ahorrados en API
+- ROI en 4.2 meses
 
 ✅ MANTENIBILIDAD
-   - 3-5x más rápido iterar en bugs
-   - Tests más enfocados & rápidos
-   - Debugging más directo
+- 3-5x más rápido iterar en bugs
+- Tests más enfocados & rápidos
+- Debugging más directo
 
 ✅ ESCALABILIDAD
-   - Equipos pueden trabajar en paralelo (módulos independientes)
-   - Crecimiento sin degradación de compilación
-   - Estructura lista para 10x crecimiento
+- Equipos pueden trabajar en paralelo (módulos independientes)
+- Crecimiento sin degradación de compilación
+- Estructura lista para 10x crecimiento
 
 ✅ CALIDAD
-   - TypeScript typecheck: 0 errores
-   - ESLint: 0 warnings (--max-warnings 0)
-   - Tests: 28/28 passing
-   - Database: healthy
-   - No breaking changes
+- TypeScript typecheck: 0 errores
+- ESLint: 0 warnings (--max-warnings 0)
+- Tests: 28/28 passing
+- Database: healthy
+- No breaking changes
 
 PROS vs. CONTRAS
 ═════════════════════════════════════════════════════════════════════════════════
@@ -331,8 +331,8 @@ Status:
 
 ═════════════════════════════════════════════════════════════════════════════════
 
-Salida ganadora: Ahorramos TOKENS, compilación MÁS RÁPIDA, 
-equipos trabajan en PARALELO, código más MANTENIBLE, 
+Salida ganadora: Ahorramos TOKENS, compilación MÁS RÁPIDA,
+equipos trabajan en PARALELO, código más MANTENIBLE,
 ROI comprobado en 4.2 meses.
 
 ¡El stack está listo para el siguiente nivel! 🚀

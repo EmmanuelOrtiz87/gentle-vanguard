@@ -118,7 +118,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Validate workflows (gate)
-        run: pnpm dlx action-validator .github/workflows/*.yml
+        run: npx tsx src/review/workflow-lint.ts .github/workflows
       - name: Validate npm ci compliance
         run: npx tsx src/npm-ci-check.ts
 
