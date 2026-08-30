@@ -30,7 +30,7 @@
  */
 
 import { fileURLToPath, pathToFileURL } from 'url';
-import { resolve, join } from 'path';
+import { basename, resolve, join } from 'path';
 import { existsSync, readFileSync, writeFileSync, appendFileSync, unlinkSync, mkdirSync } from 'fs';
 import { runSync } from './run-command.js';
 import { getProcessIdByPort } from '../ops/dashboard-common.js';
@@ -407,8 +407,10 @@ function pickKeeper(cls: DaemonClass, instances: ProcessInfo[], snap: ProcessSna
   }
   if (keeperByPort) return keeperByPort;
 
-  if (cls.keep === 'pidfile' && cls.pidFile) {
-    const raw = snap.pidFiles.get(cls.pidFile);
+  if (cls.pidFile) {
+    const raw =
+      snap.pidFiles.get(cls.pidFile) ??
+      snap.pidFiles.get(join('.runtime', basename(cls.pidFile)));
     if (raw && /^\d+$/.test(raw)) {
       const byPid = instances.find((i) => i.pid === parseInt(raw, 10));
       if (byPid) return byPid;

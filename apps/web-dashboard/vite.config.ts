@@ -33,10 +33,21 @@ export default defineConfig({
     sourcemap: true,
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          charts: ['recharts'],
-          icons: ['lucide-react'],
+        manualChunks(id) {
+          const normalizedId = id.replaceAll('\\', '/');
+          if (
+            normalizedId.includes('/node_modules/react/') ||
+            normalizedId.includes('/node_modules/react-dom/') ||
+            normalizedId.includes('/node_modules/react-router-dom/')
+          ) {
+            return 'vendor';
+          }
+          if (normalizedId.includes('/node_modules/recharts/')) {
+            return 'charts';
+          }
+          if (normalizedId.includes('/node_modules/lucide-react/')) {
+            return 'icons';
+          }
         },
       },
     },
