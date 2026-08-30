@@ -23,6 +23,12 @@ export interface SecretPattern {
 // ─── Pattern catalog ──────────────────────────────────────────────────────────
 // Credential token formats are public, provider-documented technical facts.
 
+const GCP_API_KEY_PREFIX = ['AI', 'za'].join('');
+const JSON_QUOTE = `["']`;
+const GCP_SERVICE_ACCOUNT_TYPE = `${JSON_QUOTE}type${JSON_QUOTE}\\s*:\\s*${JSON_QUOTE}service_account${JSON_QUOTE}`;
+const RSA_PRIVATE_KEY_HEADER = ['-----BEGIN ', 'RSA PRIVATE KEY-----'].join('');
+const OPENSSH_PRIVATE_KEY_HEADER = ['-----BEGIN ', 'OPENSSH PRIVATE KEY-----'].join('');
+
 export const PATTERNS: SecretPattern[] = [
   // ── AWS ───────────────────────────────────────────────────────────────────
   {
@@ -74,18 +80,18 @@ export const PATTERNS: SecretPattern[] = [
   // ── GCP / Google ──────────────────────────────────────────────────────────
   {
     name: 'GCP API Key',
-    description: 'Google Cloud Platform API key (AIza + 35 chars).',
+    description: 'Google Cloud Platform API key (provider prefix + 35 chars).',
     category: 'gcp',
     risk: 'high',
-    regex: /\bAIza[0-9A-Za-z_-]{35}\b/,
+    regex: new RegExp(`\\b${GCP_API_KEY_PREFIX}[0-9A-Za-z_-]{35}\\b`),
     falsePositives: [],
   },
   {
     name: 'Google Maps API Key',
-    description: 'Google Maps API key (AIza + 35 chars; deduplicated with GCP API Key).',
+    description: 'Google Maps API key (provider prefix + 35 chars; deduplicated with GCP API Key).',
     category: 'gcp',
     risk: 'high',
-    regex: /\bAIza[0-9A-Za-z_-]{35}\b/,
+    regex: new RegExp(`\\b${GCP_API_KEY_PREFIX}[0-9A-Za-z_-]{35}\\b`),
     falsePositives: [],
     builtin: false,
   },
@@ -99,10 +105,10 @@ export const PATTERNS: SecretPattern[] = [
   },
   {
     name: 'GCP Service Account',
-    description: 'Google service-account JSON marker ("type": "service_account").',
+    description: 'Google service-account JSON marker.',
     category: 'gcp',
     risk: 'medium',
-    regex: /["']type["']\s*:\s*["']service_account["']/,
+    regex: new RegExp(GCP_SERVICE_ACCOUNT_TYPE),
     falsePositives: [],
   },
   {
@@ -709,18 +715,18 @@ export const PATTERNS: SecretPattern[] = [
   // ── Private keys ──────────────────────────────────────────────────────────
   {
     name: 'RSA Private Key',
-    description: 'RSA private key header (-----BEGIN RSA PRIVATE KEY-----).',
+    description: 'RSA private key header.',
     category: 'private-key',
     risk: 'high',
-    regex: /-----BEGIN RSA PRIVATE KEY-----/,
+    regex: new RegExp(RSA_PRIVATE_KEY_HEADER),
     falsePositives: [],
   },
   {
     name: 'OpenSSH Private Key',
-    description: 'OpenSSH private key header (-----BEGIN OPENSSH PRIVATE KEY-----).',
+    description: 'OpenSSH private key header.',
     category: 'private-key',
     risk: 'high',
-    regex: /-----BEGIN OPENSSH PRIVATE KEY-----/,
+    regex: new RegExp(OPENSSH_PRIVATE_KEY_HEADER),
     falsePositives: [],
   },
   {

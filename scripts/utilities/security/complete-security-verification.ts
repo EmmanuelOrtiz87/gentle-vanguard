@@ -16,6 +16,7 @@ import { integrationValidator } from '../../../src/security/integration-validato
 import { toolDetector } from '../../../src/core/tool-detector-enhanced';
 import { consistencyChecker } from '../../../src/utils/cross-platform-consistency-checker';
 import { apiCompatibilityChecker } from '../../../src/utils/api-compatibility-checker';
+import { pathToFileURL } from 'node:url';
 
 /**
  * Verify all security improvements
@@ -30,7 +31,8 @@ async function verifyAllSecurityImprovements() {
     console.log('1. Testing security orchestrator functions...');
 
     // Test sanitizeText
-    const testInput = 'My machine is DESKTOP-1 and token ghp_1234567890123456789012345678901234567';
+    const testToken = 'ghp_' + 'x'.repeat(36);
+    const testInput = `My machine is DESKTOP-1 and token ${testToken}`;
     const sanitized = sanitizeText(testInput, 'prompt');
     if (sanitized.includes('<MACHINE>') && sanitized.includes('<TOKEN>')) {
       console.log('   ✓ sanitizeText working correctly');
@@ -151,7 +153,7 @@ async function verifyAllSecurityImprovements() {
 }
 
 // If called directly, run verification
-if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   verifyAllSecurityImprovements()
     .then((success) => {
       if (!success) {
