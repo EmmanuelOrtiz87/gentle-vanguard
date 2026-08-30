@@ -12,10 +12,6 @@ on:
 
 permissions:
   contents: read
-  actions: read
-  checks: write
-  pull-requests: write
-  security-events: write
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -29,17 +25,18 @@ jobs:
   lint:
     name: Lint
     uses: ./.github/workflows/reusable-lint.yml
-    secrets: inherit
 
   test:
     name: Test
     uses: ./.github/workflows/reusable-test.yml
-    secrets: inherit
 
   security:
     name: Security
     uses: ./.github/workflows/reusable-security-scan.yml
-    secrets: inherit
+    permissions:
+      contents: read
+      pull-requests: read
+      security-events: write
 
   mcp-servers:
     name: MCP Servers Self-Test
@@ -119,6 +116,30 @@ jobs:
 
       - name: Verify VERSION/package.json/CHANGELOG alignment
         run: npm run version:check
+
+  profiles-sync:
+    name: Tool Profiles Sync Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify tool-profiles match profiles.yaml
+        run: pnpm profiles:check
 
   static-gates:
     name: Static Deployment and Artifact Gates
@@ -233,13 +254,16 @@ jobs:
   docker:
     name: Docker
     uses: ./.github/workflows/reusable-docker.yml
-    secrets: inherit
+    permissions:
+      contents: read
     if: github.event_name == 'push'
 
   governance:
     name: Governance
     uses: ./.github/workflows/reusable-governance.yml
-    secrets: inherit
+    permissions:
+      contents: read
+      pull-requests: write
     if: github.event_name == 'push'
 
   sbom-generation:
@@ -265,7 +289,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Generate SBOM
-        run: npx tsx src/generate-sbom.ts --output sbom/gentle-vanguard-sbom.json --format json
+        run:
+          npx tsx src/security/generate-sbom.ts --output sbom/gentle-vanguard-sbom.json --format
+          json
 
       - name: Upload SBOM
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a

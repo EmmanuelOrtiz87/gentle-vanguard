@@ -69,6 +69,23 @@ Limpieza de recursos temporales:
 - [ ] Limpiar sesiones huérfanas (>8 horas)
 - [ ] Compactar context-log
 - [ ] Cerrar dashboard WS watchdog (si es última sesión del día)
+- [ ] Auditar retención local de 30 días en modo dry-run; solo aplicar con
+      `GV_RETENTION_APPLY_AUTHORIZED=1` en cierre automatizado autorizado
+
+### Retención local de artefactos
+
+La retención automática usa `src/session/artifact-retention.ts` y `config/artifacts-retention.json`.
+Solo considera entradas declaradas en un `retention-manifest.json` válido, con `owner`, `createdAt`
+ISO confiable y `temporary: true`. El allowlist es `.runtime`, `.session`, `.telemetry`, `reports` y
+`.backups`. El denylist siempre prevalece e incluye `.archive`, `protected`, vault, snapshots,
+checkpoints, backups requeridos y el propio registro de auditoría. Archivos no manifestados, sin
+propietario/fecha confiable o fuera del allowlist se conservan.
+
+El modo predeterminado es dry-run y escribe un manifiesto de auditoría en
+`.runtime/retention-audit/`. También registra `artifact.retention` en Nexus y un resumen en Engram.
+El borrado real solo es posible durante el cierre automatizado `session-end` o `day-end-closure`
+cuando el proceso supervisor establece explícitamente `GV_RETENTION_APPLY_AUTHORIZED=1`. No se
+ejecuta borrado real durante desarrollo.
 
 ### Fase 6: VERIFY
 

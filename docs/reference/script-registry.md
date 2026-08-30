@@ -142,7 +142,7 @@ platform | Validates script placement, naming, and governance policy compliance 
 platform | Enforces SDD gate on PRs with branch-aware mandatory/advisory behavior |
 <!-- REF-OBSOLETA: scripts/diagnostics/validate-sdd-governance.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
-| src/validate-gitflow.ts <!-- REF-OBSOLETA: eliminado; migrado a src/validate-gitflow.ts --> |
+| src/review/validate-gitflow.ts <!-- REF-OBSOLETA: eliminado; migrado a src/review/validate-gitflow.ts --> |
 GitFlow Policy | B | manual | platform | Enforces branch naming, protected branch push policy, and
 expected PR base |
 

@@ -1,7 +1,7 @@
 # Knowledge Base - Gentle-Vanguard
 
-> **Version**: v3.4.0  
-> **Last Updated**: 2026-07-27
+> **Version**: 3.8.2
+> **Last Updated**: 2026-08-29
 
 ## Overview
 
@@ -26,23 +26,23 @@ knowledge-base/
 
 This vault is automatically synchronized with Engram memory:
 
-- **Session summaries** → `04-sessions/`
-- **Architecture decisions** → `02-architecture/`
-- **Research findings** → `05-research/`
+- **Engram observations** (`decision`, `architecture`, `bugfix`, `pattern`) → `00-inbox/`
+- **Vault notes** in `01-projects/`, `02-architecture/`, `03-skills/`, and `05-research/` → Engram
+- **Session summaries** → `04-sessions/` when explicitly requested with `session-summary`
 
 ## Usage
 
 Access via:
 
-- **CLI**: `npx tsx src/knowledge-base-sync.ts --stats`
-- **Automation**: Runs automatically at session start
-- **Manual**: `npx tsx src/knowledge-base-sync.ts --mode full`
+- **CLI**: `pnpm kb:sync -- --stats`
+- **Automation**: `src/knowledge/knowledge-base-sync.ts` is invoked by session autostart
+- **Manual**: `pnpm kb:sync -- --mode full`
+- **Safe preview**: `pnpm kb:sync -- --mode full --dry-run`
 
 ## Integration
 
-- **Engram**: Persistent memory across sessions
-- **Dashboard**: Real-time knowledge panel
-- **CodeGraph**: Semantic code navigation
+- **Engram**: Persistent memory across sessions; the sync uses the native `engram export` and `engram save` contracts
+- **Obsidian**: Local Markdown vault; sync never deletes existing notes
 
 ---
 

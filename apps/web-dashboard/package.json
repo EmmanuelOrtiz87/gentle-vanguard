@@ -8,6 +8,7 @@
     "dev:client": "vite",
     "prebuild": "pnpm --dir ../.. design:tokens -- --format css --output apps/web-dashboard/src/styles/generated-tokens.css",
     "build": "tsc && vite build",
+    "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",

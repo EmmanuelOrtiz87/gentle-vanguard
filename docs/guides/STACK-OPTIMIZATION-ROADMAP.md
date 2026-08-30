@@ -199,7 +199,7 @@ exit 0
 
 #### 2.1: Add Code Coverage Baseline
 
-> ✅ **COMPLETED** (2026-08-16) — `src/coverage-runner.ts` ejecuta el suite completo bajo c8 y
+> ✅ **COMPLETED** (2026-08-16) — `src/review/coverage-runner.ts` ejecuta el suite completo bajo c8 y
 > aplica los thresholds de `tests/coverage-config.json` (agregado 62.5% stmts + targets por módulo:
 > event-sourcing 65.8%, secret-scanner 94.4%, structural-compression 75.5%, security-orchestrator
 > 81.7%). Comandos: `npm run coverage` (gate, exit 1 si falla), `coverage:quick`, `coverage:report`.

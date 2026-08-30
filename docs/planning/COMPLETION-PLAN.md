@@ -75,7 +75,7 @@ ffmpeg.wasm
 ```javascript
 // Ejemplo: "Generate 5 banner variations"
 // Produce: variant_01.png, variant_02.png, etc.
-batchGenerate({ count: 5, seed: 'doc-gentle', variations: ['color', 'complexity', 'effects'] });
+batchGenerate({ count: 5, seed: 'gentle-vanguard', variations: ['color', 'complexity', 'effects'] });
 ```
 
 **Tiempo estimado**: 45 minutos **Complejidad**: Baja
@@ -92,7 +92,7 @@ batchGenerate({ count: 5, seed: 'doc-gentle', variations: ['color', 'complexity'
 localStorage.setItem(
   'studio-presets',
   JSON.stringify([
-    { name: 'Doc-Gentle Brand', template: 'neon-cyberpunk', palette: 'neon', complexity: 6 },
+    { name: 'Gentle-Vanguard Brand', template: 'neon-cyberpunk', palette: 'neon', complexity: 6 },
   ]),
 );
 ```
@@ -298,11 +298,10 @@ const contracts = [
 
 **Productos a mostrar**:
 
-1. Doc-Gentle - Documentación automatizada - $5,000-$10,000
-2. Gentle-AI Core - Stack completo - $15,000-$50,000
-3. Gentle-AI Training - Capacitación - $1,500/día
-4. Agente Custom - Desarrollo - $500/día
-5. Consulting Services - Consultoría - Cotización
+1. Gentle-AI Core - Stack completo - $15,000-$50,000
+2. Gentle-AI Training - Capacitación - $1,500/día
+3. Agente Custom - Desarrollo - $500/día
+4. Consulting Services - Consultoría - Cotización
 
 **Tiempo estimado**: 3-4 horas **Complejidad**: Media **Dependencias**: Image Studio (para assets)
 

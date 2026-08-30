@@ -18,7 +18,7 @@ import {
   evaluateFailure,
   resolveIncident,
   getCategoryStats,
-} from '../../src/guardrail-orchestrator.ts';
+} from '../../src/security/guardrail-orchestrator.ts';
 
 // Isolate state per test by pointing the orchestrator at a temp dir via cwd.
 async function withTempDir(fn: () => void | Promise<void>): Promise<void> {
@@ -171,7 +171,7 @@ test('resolveIncident: unknown id returns false', async () => {
 
 test('delegateWithGuardrail: unknown agent failure is classified and proceeds', async () => {
   await withTempDir(async () => {
-    const { delegateWithGuardrail } = await import('../../src/agent-delegator.ts');
+    const { delegateWithGuardrail } = await import('../../src/orchestration/agent-delegator.ts');
     // Unknown agent -> delegate() fails with "Unknown agent" -> classified as
     // 'config' (agent not registered) -> action 'correct' -> proceed: true ->
     // incident id attached.
@@ -184,8 +184,8 @@ test('delegateWithGuardrail: unknown agent failure is classified and proceeds', 
 
 test('delegateWithGuardrail: reasoning loop escalates and blocks retry', async () => {
   await withTempDir(async () => {
-    const { registerAttempt, ESCALATE_AFTER } = await import('../../src/anti-loop-guard.ts');
-    const { delegateWithGuardrail } = await import('../../src/agent-delegator.ts');
+    const { registerAttempt, ESCALATE_AFTER } = await import('../../src/resilience/anti-loop-guard.ts');
+    const { delegateWithGuardrail } = await import('../../src/orchestration/agent-delegator.ts');
     const goal = 'implement feature Z';
     const strategy = 'sdd-apply::implement feature Z';
     // Simulate enough failures to trigger escalation (5+).

@@ -127,13 +127,13 @@ _No deprecated norms._
    - Recomendaciones automáticas
    - Estado: ✅ Funcionando
 
-4. **Auto-Optimizer** (`src/auto-optimizer.ts`)
+4. **Auto-Optimizer** (`src/tools/auto-optimizer.ts`)
    - Optimización automática basada en métricas de sesión
    - Modos: auto, analyze, dry-run
    - Reportes guardados en `reports/optimization/`
    - Estado: ✅ Funcionando
 
-5. **Pre-Process Input Cached** (`src/pre-process-input-cached.ts`)
+5. **Pre-Process Input Cached** (`src/tools/pre-process-input-cached.ts`)
    - Wrapper con Response Cache para pre-process-input
    - Reducción de tokens en procesamiento de input
    - Estado: ✅ Listo para integrar
@@ -215,7 +215,7 @@ Multipliers: quality 1.1x, errorFree 1.1x, skillUsage 1.15x, cacheEfficiency 1.0
 
 #### Process.exit() Fixes
 
-- ✅ Creado `src/fix-process-exits.ts` - Script automatizado
+- ✅ Creado `src/tools/fix-process-exits.ts` - Script automatizado
 - ✅ Corregidos 13 process.exit() en archivos críticos
 - ✅ Archivos corregidos: security-initializer, dependency-security-initializer, session-manager,
   session-reference-system, session-scoring, safety-guardrails
@@ -291,7 +291,7 @@ stack no tenía ningún mecanismo que parseara errores de proveedor LLM de los l
 
 ### Solución Implementada
 
-1. **`src/model-provider-healer.ts`** (nuevo CLI): escanea logs de opencode (solo `level=ERROR`)
+1. **`src/ml/model-provider-healer.ts`** (nuevo CLI): escanea logs de opencode (solo `level=ERROR`)
    buscando firmas de error de proveedor (UnsupportedToolCalling, ModelNotFound, AuthFailure,
    RateLimit, ConnectionError, BadRequest). Cuando detecta un modelo fallando, lo marca `unhealthy`
    en `.runtime/model-health.json` con cooldown de 60min y auto-switch al modelo nativo

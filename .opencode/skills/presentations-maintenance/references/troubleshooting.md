@@ -47,12 +47,6 @@ la del primer idioma y omite los demás.
 **Fix**: ampliar viewBox (p. ej. 800×500 → 800×540) y reposicionar footer a y=523-535. Verificar
 balance de grupos `<g>`/`</g>` (12/12 en executive-loop, 19/19 en architecture-layers).
 
-## `$var:` rompe en PowerShell
-
-**Causa**: en interpolación, `$var:` se interpreta como variable con scope.
-
-**Fix**: `${var}:`.
-
 ## Validación estructural da FAIL en presentaciones que no he tocado
 
 El validador es estricto sobre restos del selector antiguo. Verificar que el HTML no tenga:

@@ -1,11 +1,11 @@
-﻿# CODEX.md - Local-First Policy
+# CODEX.md - Local-First Policy
 
 ## MANDATORY PRE-PROCESSING RULE (ALWAYS ACTIVE)
 
 **BEFORE responding to ANY user input:**
 
 1. **Run**:
-   `TypeScript -File src/pre-process-input.ts -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
+   `TypeScript -File src/tools/pre-process-input.ts -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
 2. **Parse output**:
    - `TRIGGER_MATCH_FOUND` → load skill BEFORE any other action
    - `PLAN_MODE_REQUIRED` → activate BA agent (confidence < 40)

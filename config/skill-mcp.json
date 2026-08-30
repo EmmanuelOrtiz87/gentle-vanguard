@@ -66,14 +66,14 @@
     {
       "name": "filesystem",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+      "args": ["-y", "@modelcontextprotocol/server-filesystem@2026.7.10", "."],
       "enabled": true,
       "description": "Filesystem access via MCP"
     },
     {
       "name": "memory",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "args": ["-y", "@modelcontextprotocol/server-memory@2026.7.4"],
       "enabled": true,
       "description": "Memory/Engram integration via MCP"
     }

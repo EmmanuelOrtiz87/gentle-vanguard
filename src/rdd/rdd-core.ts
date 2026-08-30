@@ -353,7 +353,7 @@ export function generateReleaseProvenance(workflow: RDDWorkflow): void {
     }
 
     runNpxTsxSync(
-      'src/slsa-provenance.ts',
+      'src/security/slsa-provenance.ts',
       ['generate', '-a', ...artifacts, '--invocation-id', `rdd-${workflow.workflowId}`],
       { cwd: ROOT },
     );
@@ -363,7 +363,7 @@ export function generateReleaseProvenance(workflow: RDDWorkflow): void {
     const privateKey = join(ROOT, '.runtime', 'provenance', 'private-key.pem');
     if (existsSync(privateKey)) {
       runNpxTsxSync(
-        'src/slsa-signer.ts',
+        'src/security/slsa-signer.ts',
         [
           'sign',
           '-f',

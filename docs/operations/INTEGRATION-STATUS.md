@@ -18,7 +18,7 @@
 - CLI completo en `src/content-operations/cli.ts` (8 comandos: list, validate, prepare, status,
   report, transition, export, help) con filtros `--date/--platform/--id/--status`.
 - Unit coverage en `tests/unit/content-operations.test.ts` — **15 tests PASS**.
-- Offline export script at `scripts/content-operations/export-kit.ps1`.
+- Offline export implementation at `src/content-operations/export-kit.ts`.
 - Architecture and implementation directives (docs/operations/).
 - Assets reales del calendario en `docs/presentations/social-assets/` (21 PNGs).
 - npm scripts: `content:list`, `content:validate`, `content:prepare`, `content:status`,
@@ -46,7 +46,7 @@ npx tsx src/content-operations/cli.ts export    # ZIP offline generado
 The stack already contains:
 
 - `src/marketing-agent.ts`
-- `src/social-poster.ts`
+- `src/tools/social-poster.ts`
 - `docs/presentations/resources-index.html`
 - `src/cli/gv.ts`
 - dashboard, health/watchtower, security, audit and database infrastructure
@@ -61,7 +61,7 @@ The content workflow must remain useful without network access:
 npx tsx src/content-operations/cli.ts list --date=2026-08-18
 npx tsx src/content-operations/cli.ts validate
 npx tsx src/content-operations/cli.ts prepare --date=2026-08-18
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/content-operations/export-kit.ps1
+npx tsx src/content-operations/export-kit.ts
 ```
 
 Remote publication is intentionally out of scope until each provider adapter has been implemented

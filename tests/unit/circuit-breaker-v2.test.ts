@@ -8,7 +8,7 @@ const STATE_FILE = join(ROOT, '.runtime', 'circuit-breaker-v2', 'state.json');
 const namespace = `__test_v2_${Date.now()}_`;
 const stateNames: string[] = [];
 
-const modulePromise = import('../../src/circuit-breaker-v2.ts');
+const modulePromise = import('../../src/resilience/circuit-breaker-v2.ts');
 
 function writeCircuit(name: string, overrides: Record<string, unknown> = {}): void {
   const state = existsSync(STATE_FILE) ? JSON.parse(readFileSync(STATE_FILE, 'utf8')) : {};

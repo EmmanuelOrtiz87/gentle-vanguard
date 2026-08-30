@@ -2,28 +2,40 @@
   "version": "1.0.0",
   "description": "Artifact retention policy for Gentle-Vanguard v2.1+",
   "defaultMaxRepo": 1,
-  "defaultMaxLocal": 14,
+  "defaultMaxLocal": 30,
+  "mode": "dry-run",
+  "applyAuthorization": "GV_RETENTION_APPLY_AUTHORIZED=1 set only by the authorized automated session close",
+  "allowlist": [".runtime", ".session", ".telemetry", "reports", ".backups"],
+  "denylist": [
+    ".archive",
+    "protected",
+    ".session/snapshots",
+    ".session/checkpoints",
+    ".runtime/backups",
+    ".runtime/retention-audit",
+    "vault"
+  ],
   "categories": {
     "audits": {
       "maxRepo": 3,
-      "maxLocal": 14,
+      "maxLocal": 30,
       "description": "Keep last 3 audit reports in repo for trend visibility with lower storage cost"
     },
     "sessions": {
       "maxRepo": 1,
-      "maxLocal": 14,
+      "maxLocal": 30,
       "description": "Keep only latest session-start file in repo, archive rest"
     },
     "code-reviews": {
       "maxRepo": 1,
-      "maxLocal": 14,
+      "maxLocal": 30,
       "description": "Keep only latest code review in repo"
     }
   },
   "automation": {
     "triggerOn": ["end-session", "day-end-closure"],
     "_manualCommand": "DEPRECATED: rotate-artifacts.ps1 removed in Wave 24 migration",
-    "_note": "Artifact rotation now handled by src/session-close-orchestrator.ts",
+    "_note": "Artifact rotation now handled by src/session/session-close-orchestrator.ts",
     "ciIntegration": true
   }
 }

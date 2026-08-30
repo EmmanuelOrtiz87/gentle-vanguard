@@ -2,11 +2,13 @@
 
 Organized by category:
 
-| Category    | Directory            | Pattern                   | Count |
-| ----------- | -------------------- | ------------------------- | ----- |
-| Unit        | `tests/unit/`        | `*.tests.ps1`             | 22    |
-| Integration | `tests/integration/` | `*.integration.tests.ps1` | 3     |
-| Security    | `tests/security/`    | `*.security.tests.ps1`    | 2     |
-| Performance | `tests/performance/` | `*.perf.tests.ps1`        | 1     |
+| Category    | Directory            | Pattern     | Count     |
+| ----------- | -------------------- | ----------- | --------- |
+| Unit        | `tests/unit/`        | `*.test.ts` | node:test |
+| Integration | `tests/integration/` | `*.test.ts` | node:test |
+| Security    | `tests/security/`    | `*.test.ts` | node:test |
+| Smoke       | `tests/smoke/`       | `*.test.ts` | node:test |
 
-Run all: `.\scripts\run-tests-simple.ps1`
+Run all: `npm test`
+
+Smoke tests: `npm run test:smoke` and `npm run test:scripts-smoke`.

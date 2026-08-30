@@ -199,10 +199,10 @@
       "label": "High Cache Miss Rate",
       "metric": "cache.missRate",
       "threshold": 0.5,
-      "severity": "info",
+      "severity": "warning",
       "unit": "%",
-      "enabled": false,
-      "description": "Más del 50% de cache misses — posible bottleneck"
+      "enabled": true,
+      "description": "Más del 50% de cache misses — hit-rate por hora por debajo del umbral (Fase 6 N6)"
     },
     "pipeline_step_slow": {
       "label": "Slow Pipeline Step",

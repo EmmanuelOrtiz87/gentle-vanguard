@@ -175,7 +175,7 @@ npx tsx src/convergence-monitor.ts --report
 npx tsx src/adaptive-steps.ts --status
 
 # Ver auto-optimization
-npx tsx src/auto-optimizer.ts --mode analyze
+npx tsx src/tools/auto-optimizer.ts --mode analyze
 npx tsx src/cost-efficiency-scorer.ts score
 
 # Health general

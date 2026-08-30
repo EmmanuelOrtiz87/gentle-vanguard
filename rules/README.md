@@ -8,6 +8,10 @@ Purpose:
 2. Let orchestrator workflows load custom guidance during session/context generation.
 3. Keep custom behavior versioned with the repository.
 
+The normative script lifecycle is documented in
+[`NORMATIVA-SCRIPT-LIFECYCLE.md`](NORMATIVA-SCRIPT-LIFECYCLE.md); it governs TS-only/CMD-first
+entry points, ownership, inventory, migration, testing and legacy handling.
+
 ## Structure
 
 `rules/custom/technical/`:

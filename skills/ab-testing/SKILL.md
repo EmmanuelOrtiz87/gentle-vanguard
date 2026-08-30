@@ -21,7 +21,7 @@ metadata:
 
 # AB Testing Framework
 
-`src/ab-testing-framework.ts` — stores experiments, assignments, and results in
+`src/tools/ab-testing-framework.ts` — stores experiments, assignments, and results in
 `.session/experiments/`.
 
 ## API Reference
@@ -66,8 +66,8 @@ if (winner && significant) console.log(`Winner: ${winner}`);
 ## CLI
 
 ```bash
-npx tsx src/ab-testing-framework.ts list
-npx tsx src/ab-testing-framework.ts evaluate <experiment-id>
+npx tsx src/tools/ab-testing-framework.ts list
+npx tsx src/tools/ab-testing-framework.ts evaluate <experiment-id>
 ```
 
 ## Integration with Session Scoring

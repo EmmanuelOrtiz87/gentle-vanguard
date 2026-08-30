@@ -42,11 +42,11 @@ Full examples in [references/detail.md](references/detail.md).
 
 | Script                          | Purpose                                               |
 | ------------------------------- | ----------------------------------------------------- |
-| `src/codegraph-mcp-server-start.ts` | FTS5 + fuzzy synonym matching with relevance scoring  |
-| `src/codegraph-post-modification-sync.ts`          | Layer detection, complexity tags, metadata enrichment |
+| `src/integrations/codegraph-mcp-server-start.ts` | FTS5 + fuzzy synonym matching with relevance scoring  |
+| `src/integrations/codegraph-post-modification-sync.ts`          | Layer detection, complexity tags, metadata enrichment |
 
 Synonym map: auth, error, config, db, api, test, ui, cache, net (5-10 terms each). Usage:
-`.\scripts\codegraph\src/codegraph-mcp-server-start.ts -Query "where is auth handled"`.
+`.\scripts\codegraph\src/integrations/codegraph-mcp-server-start.ts -Query "where is auth handled"`.
 
 ## Configuration
 

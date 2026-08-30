@@ -1,9 +1,8 @@
 packages:
-  # Active workspace members only. apps/discord-bot and apps/doc-gentle are
-  # deprecated:true placeholders excluded from the workspace (they resolve
-  # @gentle-vanguard/core via the legacy bootstrap symlink).
+  # Active workspace members only.
   - 'apps/gv-analytics'
   - 'apps/web-dashboard'
+  - 'apps/content-cms'
   - 'packages/*'
 
 allowBuilds:

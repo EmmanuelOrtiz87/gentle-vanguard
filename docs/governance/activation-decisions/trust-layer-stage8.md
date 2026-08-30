@@ -7,7 +7,7 @@
 
 ## Proposal
 
-Activar el módulo `trust-layer-stage8` (src/review-lenses.ts) bajo el workflow de activación de
+Activar el módulo `trust-layer-stage8` (src/review/review-lenses.ts) bajo el workflow de activación de
 módulos experimentales (Fase 1 de madurez). Capa de confianza stage #8: lentes de revisión de código
 (security, quality, correctness) con detección de secrets hardcodeados, eval/ Invoke-Expression y
 SQL por concatenación.

@@ -140,7 +140,7 @@
 
 ### Model Provider Healing
 
-- **Auto-Healing**: `src/model-provider-healer.ts` — detects unhealthy models
+- **Auto-Healing**: `src/ml/model-provider-healer.ts` — detects unhealthy models
   (UnsupportedToolCalling, ModelNotFound, AuthFailure, RateLimit, ConnectionError, BadRequest) and
   auto-switches to fallback
 - **Health State**: `config/model-health.json` + `.runtime/model-health.json` with cooldown

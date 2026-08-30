@@ -13,7 +13,7 @@
       "name": "event-sourcing-critical",
       "threshold": 60,
       "tests": ["tests/unit/event-sourcing-hashchain.test.ts"],
-      "source": ["src/event-sourcing.ts"]
+      "source": ["src/tools/event-sourcing.ts"]
     },
     {
       "name": "secret-scanner",

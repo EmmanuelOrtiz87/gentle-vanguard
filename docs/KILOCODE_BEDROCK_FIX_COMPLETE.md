@@ -1,4 +1,4 @@
-# KiloCode Bedrock Fix - Complete Solution
+# KiloCode Bedrock Fix - Opt-in Solution
 
 # Version: 2.0.0
 
@@ -20,23 +20,30 @@ We've created a multi-layer fix that ensures `drop_params: true` is applied at e
 
 ### Files Created
 
-| File                            | Purpose                                | Location                                                           |
-| ------------------------------- | -------------------------------------- | ------------------------------------------------------------------ |
-| `~/.config/litellm/config.yaml` | LiteLLM master config with drop_params | `%USERPROFILE%\.config\litellm\config.yaml`                        |
-| `KiloCode config.json`          | KiloCode-specific settings             | `%APPDATA%\Code\User\globalStorage\kilocode.kilo-code\config.json` |
-| `fix-kilocode-bedrock.ps1`      | Automated configuration script         | `gentle-vanguard/scripts/`                                         |
-| `launch-vscode-bedrock-fix.cmd` | Launcher script with env vars          | `gentle-vanguard/scripts/`                                         |
-| `kilocode-bedrock-fix.reg`      | Windows registry fix                   | `gentle-vanguard/scripts/`                                         |
+| File                              | Purpose                                | Location                                                           |
+| --------------------------------- | -------------------------------------- | ------------------------------------------------------------------ |
+| `~/.config/litellm/config.yaml`   | LiteLLM master config with drop_params | `%USERPROFILE%\.config\litellm\config.yaml`                        |
+| `KiloCode config.json`            | KiloCode-specific settings             | `%APPDATA%\Code\User\globalStorage\kilocode.kilo-code\config.json` |
+| `src/cli/fix-kilocode-bedrock.ts` | Dry-run-by-default configuration CLI   | Repository source                                                  |
 
 ## 🚀 Immediate Action Required
 
-### Step 1: Apply the Fix (COMPLETED ✅)
+### Step 1: Review and apply the fix
 
-The PowerShell script has already:
+The CLI makes no changes by default. Review the planned paths first:
 
-- Created the LiteLLM config
-- Created the KiloCode config
-- Set environment variables
+```powershell
+npx tsx src/cli/fix-kilocode-bedrock.ts
+```
+
+Apply only after explicit confirmation:
+
+```powershell
+npx tsx src/cli/fix-kilocode-bedrock.ts --apply
+```
+
+The apply mode always asks for confirmation. Existing files are renamed to a timestamped `.bak-*`
+file before replacement. No credentials or keys are written.
 
 ### Step 2: Restart VSCode Properly
 
@@ -62,24 +69,7 @@ The PowerShell script has already:
 
 ## 🔧 If the Error Persists
 
-### Option A: Use the Registry Fix
-
-1. Double-click `kilocode-bedrock-fix.reg`
-2. Click "Yes" to import
-3. **Restart your computer**
-4. Test KiloCode again
-
-### Option B: Use the Launcher Script
-
-Instead of opening VSCode normally, use:
-
-```
-C:\Workspace_local\gentle-vanguard\scripts\launch-vscode-bedrock-fix.cmd
-```
-
-This script launches VSCode with the correct environment variables pre-set.
-
-### Option C: Use a Different Model
+### Option A: Use a Different Model
 
 In KiloCode settings, change the model to:
 
@@ -175,7 +165,7 @@ This fix makes KiloCode compatible with:
 
 ## 🎯 Next Steps
 
-1. ✅ Apply the fix (done)
+1. ⏳ Review and explicitly apply the fix
 2. ⏳ Restart VSCode completely
 3. ⏳ Test KiloCode
 4. (Optional) Apply registry fix for persistence
@@ -185,16 +175,16 @@ This fix makes KiloCode compatible with:
 | Problem                  | Solution                                                 |
 | ------------------------ | -------------------------------------------------------- |
 | Still getting error      | Restart computer after applying registry fix             |
-| Config file not found    | Run the PowerShell script again as admin                 |
+| Config file not found    | Run the TypeScript CLI and review its dry-run paths      |
 | Different model error    | Change model in KiloCode settings to one from the config |
-| Environment vars not set | Run `launch-vscode-bedrock-fix.cmd` instead              |
+| Environment vars not set | Re-run the TypeScript CLI with `--apply` and confirm     |
 
 ## 🔒 Security Notes
 
-- The registry file only sets environment variables (safe)
+- The CLI changes user configuration only after `--apply` and confirmation
 - No passwords or keys are stored
 - All config files are local to your machine
-- You can remove the fixes by deleting the files and registry entries
+- Timestamped backups are created before existing files are replaced
 
 ## 🎉 Expected Result
 

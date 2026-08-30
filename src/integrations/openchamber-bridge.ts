@@ -178,7 +178,7 @@ export async function getStatus(): Promise<StackStatus> {
     config: existsSync(join(STACK_ROOT, 'config', 'orchestrator.json')),
     healthCheck: existsSync(join(STACK_ROOT, 'src', 'health-check.ts')),
     cacheHook: existsSync(join(STACK_ROOT, 'src', 'core', 'cache-hook-system.ts')),
-    responseCache: existsSync(join(STACK_ROOT, 'src', 'response-cache.ts')),
+    responseCache: existsSync(join(STACK_ROOT, 'src', 'resilience', 'response-cache.ts')),
     nexusDb: existsSync(join(STACK_ROOT, '.runtime', 'gentle-vanguard.db')),
   };
 

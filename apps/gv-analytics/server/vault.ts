@@ -1,17 +1,34 @@
 import { createCipheriv, createDecipheriv, randomBytes, scryptSync } from 'crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { dirname, join, resolve } from 'path';
+import { fileURLToPath } from 'url';
+
+export interface StoredOAuthTokens {
+  accessToken: string;
+  refreshToken?: string;
+  expiresAt: number;
+  scope: string;
+  cloudId?: string;
+}
 
 export interface StoredConnection {
   siteUrl: string;
   email: string;
+  /** API token for Jira + Confluence (shared Atlassian token). */
   apiToken: string;
+  /** Separate API token for Bitbucket. Optional for backward-compat with old vaults. */
+  bitbucketApiToken?: string;
   bitbucketWorkspace: string;
   updatedAt: string;
+  oauth?: StoredOAuthTokens;
 }
 
-const ROOT = resolve(process.cwd(), '../..');
-const RUNTIME_DIR = join(ROOT, '.runtime', 'gv-analytics');
+// Resolve the repo root deterministically from this file's location
+// (apps/gv-analytics/server/vault.ts -> repo root), independent of cwd.
+// Previously used process.cwd() which silently moved the vault to C:\ when
+// the server was launched from the repo root.
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+const RUNTIME_DIR = join(REPO_ROOT, '.runtime', 'gv-analytics');
 const VAULT_FILE = join(RUNTIME_DIR, 'atlassian-connection.vault');
 const KEY_FILE = join(RUNTIME_DIR, 'vault.key');
 

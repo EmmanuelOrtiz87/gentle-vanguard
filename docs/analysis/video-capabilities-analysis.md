@@ -116,7 +116,7 @@ Output MP4/WebM
 
 ## Propuesta: Video Agent TypeScript
 
-### Ubicación: `src/video-agent.ts`
+### Ubicación: `src/tools/video-agent.ts`
 
 ### Features:
 

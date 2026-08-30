@@ -38,9 +38,9 @@ drift", "run tests autonomous", "restore from backup". Auto-triggers from sessio
 
 1. **Backup Orchestrator**: `src/backup-engram.ts -Action restore` (start) or
    `-Action backup` (close)
-2. **Norm Enforcer**: `C:/Workspace_local/gentle-vanguard/src/auto-norm-enforcer.ts -Trigger <event> -AutoFix` — creates missing dirs,
+2. **Norm Enforcer**: `C:/Workspace_local/gentle-vanguard/src/tools/auto-norm-enforcer.ts -Trigger <event> -AutoFix` — creates missing dirs,
    applies standards
-3. **Norm Learner**: `C:/Workspace_local/gentle-vanguard/src/auto-norm-learner.ts -Trigger <event>` — extracts patterns from Engram,
+3. **Norm Learner**: `C:/Workspace_local/gentle-vanguard/src/tools/auto-norm-learner.ts -Trigger <event>` — extracts patterns from Engram,
    promotes to `rules/custom/`
 4. **Doc-Drift Detector**: `src/core/health-check.ts -Trigger <event>` — compares code vs doc
    timestamps, auto-delegates fixes

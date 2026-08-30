@@ -8,19 +8,19 @@ Canonical entry: `docs/agents/AGENTS.md`
 
 ## Pre-response Hook (every turn)
 
-`npx tsx src/pre-process-input.ts --input "<msg>" --workspace-root "."`
+`npx tsx src/tools/pre-process-input.ts --input "<msg>" --workspace-root "."`
 
 ## Core Rules
 
 1. LOCAL-FIRST: project knowledge before external sources
-2. `npx tsx src/pre-process-input.ts` BEFORE every response
+2. `npx tsx src/tools/pre-process-input.ts` BEFORE every response
 3. SDD FLOW: new features -> BA/EXPLORE first, no exceptions
 4. Delegation Rules -> `rules/DELEGATION-RULES.md` mandatory for multi-step
 5. `mem_save` after every significant task
 6. CodeGraph -> MCP `codegraph` tools before modifying code (or
    `npx tsx src/retrieval/semantic-search.ts` for NL queries)
 7. `mem_search "lessons learned"` at session start
-8. Review Workload Guard (`npx tsx src/workload-guard.ts`) before multi-file impl >400 lines
+8. Review Workload Guard (`npx tsx src/security/workload-guard.ts`) before multi-file impl >400 lines
 9. Tool output discipline: limit read/grep/bash results to 50 lines
 10. JSON validity: verify balanced quotes/braces/brackets before tool calls (see
     `rules/NORMATIVAS-CODE-QUALITY.md`)
@@ -35,7 +35,7 @@ Canonical entry: `docs/agents/AGENTS.md`
 ## Break Glass
 
 If 3+ turns w/o completion, loop detected, or output truncated:
-`npx tsx src/self-diagnosis.ts --profile "<p>" --chat-level "<l>" --turn-count <N>` Override to
+`npx tsx src/resilience/self-diagnosis.ts --profile "<p>" --chat-level "<l>" --turn-count <N>` Override to
 `lleno`/`chat-balanced`. Notify: `[BREAK GLASS] motivo: {reason}`
 
 ## Response Profile

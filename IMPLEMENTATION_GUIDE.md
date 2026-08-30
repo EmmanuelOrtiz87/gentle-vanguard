@@ -10,12 +10,12 @@ Model delegation failures due to:
 
 ## SOLUCIÓN IMPLEMENTADA:
 
-### 1. **`src/opencode-switch-to-native.ts`**
+### 1. **`src/tools/opencode-switch-to-native.ts`**
 
 - Cambia TODOS los agentes a `opencode/big-pickle` (modelo nativo garantizado)
-- **Comando**: `npx tsx src/opencode-switch-to-native.ts`
+- **Comando**: `npx tsx src/tools/opencode-switch-to-native.ts`
 
-### 2. **`src/model-broker.ts`**
+### 2. **`src/ml/model-broker.ts`**
 
 - Inteligente delegation con auto-fallback
 - Verifica health del modelo configurado
@@ -47,7 +47,7 @@ User Request → Orchestrator → ModelBroker.delegate()
 
 ```bash
 # Esto arregla el problema inmediato
-npx tsx src/opencode-switch-to-native.ts
+npx tsx src/tools/opencode-switch-to-native.ts
 ```
 
 ### Paso 2: Testear el sistema
@@ -116,13 +116,13 @@ Para integrar completamente, modificar el `orchestrator` en `opencode.json`:
 
 ```bash
 # 1. Cambiar a modelos nativos
-npx tsx src/opencode-switch-to-native.ts
+npx tsx src/tools/opencode-switch-to-native.ts
 
 # 2. Verificar status
-npx tsx src/model-broker.ts status
+npx tsx src/ml/model-broker.ts status
 
 # 3. Testear delegación con fallback
-npx tsx src/model-broker.ts delegate sdd-apply "Implement complex feature"
+npx tsx src/ml/model-broker.ts delegate sdd-apply "Implement complex feature"
 
 # 4. Ver logs
 Get-Content .runtime/logs/model-broker.log
