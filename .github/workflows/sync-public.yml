@@ -107,7 +107,7 @@ jobs:
 
           # --- Run sync script (TS version after PS1→TS migration) ---
           Write-Output "::group::Sync files"
-          npx tsx "$privateRepo\src\sync-to-public.ts" --private-repo $privateRepo --public-repo $publicDir --public-repo-slug $publicRepoSlug --skip-push
+          npx tsx "$privateRepo\src\infrastructure\sync-to-public.ts" --private-repo $privateRepo --public-repo $publicDir --public-repo-slug $publicRepoSlug --skip-push
           Write-Output "::endgroup::"
 
           # --- Commit and push ---
