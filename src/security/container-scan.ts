@@ -24,7 +24,7 @@
 
 import { spawnSync } from 'child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync } from 'fs';
-import { join, resolve } from 'path';
+import { delimiter, join, resolve } from 'path';
 
 const ROOT = process.cwd();
 const SCAN_DIR = join(ROOT, '.session', 'container-scan');
@@ -110,8 +110,25 @@ function runTool(
 }
 
 function toolAvailable(command: string): boolean {
+  // 1. Fast PATH lookup — deterministic, no process spawn, immune to
+  //    `--version` quirks (stdout vs stderr, slow first-run, network probes).
+  //    Observed on CI: freshly installed syft/grype returned non-zero/empty
+  //    from `--version` (network update check), causing a false "no toolchain"
+  //    fallback even though the binaries were present in PATH.
+  const pathDirs = (process.env.PATH ?? '').split(delimiter).filter(Boolean);
+  const exts = process.platform === 'win32' ? ['', '.exe', '.cmd', '.bat'] : [''];
+  for (const dir of pathDirs) {
+    for (const ext of exts) {
+      try {
+        if (existsSync(join(dir, command + ext))) return true;
+      } catch {
+        /* ignore unreadable PATH entries */
+      }
+    }
+  }
+  // 2. Fallback: --version probe (accept stdout OR stderr)
   const res = runTool(command, ['--version'], 15000);
-  return res.code === 0 && res.stdout.length > 0;
+  return res.code === 0 && (res.stdout.length > 0 || res.stderr.length > 0);
 }
 
 export interface ToolchainStatus {
@@ -411,7 +428,11 @@ export function scanArtifacts(options: ScanOptions = {}): ScanResult {
     bySeverity: countBySeverity([]),
     durationSeconds: 0,
     exitCode: 2,
-    rawOutput: 'No scanner toolchain available (syft/grype/trivy) and no SBOM found.',
+    rawOutput:
+      'No scanner toolchain available (syft/grype/trivy) and no SBOM found. ' +
+      `Toolchain: syft=${toolAvailable('syft')} grype=${toolAvailable('grype')} ` +
+      `trivy=${toolAvailable('trivy')} docker=${toolAvailable('docker')} ` +
+      `sbom.json=${existsSync(DEFAULT_SBOM)}`,
   };
   saveResult(result);
   return result;

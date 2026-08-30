@@ -118,6 +118,8 @@ jobs:
           curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 https://raw.githubusercontent.com/anchore/grype/f6f2ce0a2293e65c97bf5468926cb0c9ddad822f/install.sh | sh -s -- -b /usr/local/bin -v v0.118.0
       - name: Update Grype DB
         run: grype db update
+      - name: Generate SBOM
+        run: npx tsx src/security/generate-sbom.ts --output sbom.json --format cyclonedx
       - name: 'Scan SBOM (gate: fail on high+)'
         run: npx tsx src/security/container-scan.ts scan --fail-on high --json
 
