@@ -103,12 +103,19 @@ function preflight(intent: DeliveryIntent): { ok: boolean; message: string; targ
 
 // ─── Review (deterministic + AI advisory) ────────────────────────────────────
 
-async function runReview(intent: DeliveryIntent, cls: ReturnType<typeof classifyDiff>): Promise<{ findings: string[]; blocked: boolean }> {
+async function runReview(
+  intent: DeliveryIntent,
+  cls: ReturnType<typeof classifyDiff>,
+): Promise<{ findings: string[]; blocked: boolean }> {
   const findings: string[] = [];
   let blocked = false;
 
   // Deterministic review: secret scan on change paths
-  const secretGate = await runDeliveryGate({ stage: 'pre-commit', quiet: true, only: 'secret-scanner' });
+  const secretGate = await runDeliveryGate({
+    stage: 'pre-commit',
+    quiet: true,
+    only: 'secret-scanner',
+  });
   if (secretGate.blocked) {
     findings.push('Secret scan blocked: potential secrets in staged changes');
     blocked = true;
@@ -134,12 +141,24 @@ async function runFlow(intent: DeliveryIntent, opts: DeliveryOptions): Promise<D
   // Preflight
   const pre = preflight(intent);
   if (!pre.ok) {
-    return { runId: intent.runId ?? 'unknown', state: 'blocked', exitCode: 3, message: pre.message };
+    return {
+      runId: intent.runId ?? 'unknown',
+      state: 'blocked',
+      exitCode: 3,
+      message: pre.message,
+    };
   }
 
   const sm = new DeliveryStateMachine(intent, pre.targetSha);
   const runId = sm.runId;
-  sm.update({ worktreePath: join(ROOT, '.session', 'delivery-worktrees', intent.branchName ?? `delivery-${runId.slice(-8)}`) });
+  sm.update({
+    worktreePath: join(
+      ROOT,
+      '.session',
+      'delivery-worktrees',
+      intent.branchName ?? `delivery-${runId.slice(-8)}`,
+    ),
+  });
 
   if (opts.dryRun) {
     console.log(`[DRY-RUN] Would run delivery ${runId} for target ${intent.target}`);
@@ -160,16 +179,32 @@ async function runFlow(intent: DeliveryIntent, opts: DeliveryOptions): Promise<D
   // Review
   const review = await runReview(intent, cls);
   if (review.blocked) {
-    sm.transition('blocked', 'orchestrator', { reason: 'Review blocked', findings: review.findings });
-    return { runId, state: 'blocked', exitCode: 6, message: `Review blocked: ${review.findings.join('; ')}` };
+    sm.transition('blocked', 'orchestrator', {
+      reason: 'Review blocked',
+      findings: review.findings,
+    });
+    return {
+      runId,
+      state: 'blocked',
+      exitCode: 6,
+      message: `Review blocked: ${review.findings.join('; ')}`,
+    };
   }
   sm.transition('reviewed', 'orchestrator', { findings: review.findings });
 
   // Stage (allowlist only)
   const stageResult = stagePaths(intent.changePaths);
   if (!stageResult.ok) {
-    sm.transition('blocked', 'orchestrator', { reason: 'Staging failed', error: stageResult.stderr });
-    return { runId, state: 'blocked', exitCode: 3, message: `Staging failed: ${stageResult.stderr}` };
+    sm.transition('blocked', 'orchestrator', {
+      reason: 'Staging failed',
+      error: stageResult.stderr,
+    });
+    return {
+      runId,
+      state: 'blocked',
+      exitCode: 3,
+      message: `Staging failed: ${stageResult.stderr}`,
+    };
   }
   sm.transition('staged', 'orchestrator', { paths: intent.changePaths });
 
@@ -179,12 +214,25 @@ async function runFlow(intent: DeliveryIntent, opts: DeliveryOptions): Promise<D
     const gStage = stagePaths(group.paths);
     if (!gStage.ok) {
       sm.transition('blocked', 'orchestrator', { reason: `Staging group ${group.scope} failed` });
-      return { runId, state: 'blocked', exitCode: 3, message: `Staging group ${group.scope} failed` };
+      return {
+        runId,
+        state: 'blocked',
+        exitCode: 3,
+        message: `Staging group ${group.scope} failed`,
+      };
     }
     const c = commit(group.message);
     if (!c.ok) {
-      sm.transition('blocked', 'orchestrator', { reason: `Commit ${group.scope} failed`, error: c.stderr });
-      return { runId, state: 'blocked', exitCode: 3, message: `Commit ${group.scope} failed: ${c.stderr}` };
+      sm.transition('blocked', 'orchestrator', {
+        reason: `Commit ${group.scope} failed`,
+        error: c.stderr,
+      });
+      return {
+        runId,
+        state: 'blocked',
+        exitCode: 3,
+        message: `Commit ${group.scope} failed: ${c.stderr}`,
+      };
     }
     commitShas.push(currentSha());
   }
@@ -195,8 +243,16 @@ async function runFlow(intent: DeliveryIntent, opts: DeliveryOptions): Promise<D
   const branchName = intent.branchName ?? `delivery/${runId.slice(-8)}-${intent.target}`;
   const wt = createWorktree(branchName, pre.targetSha);
   if (!wt.ok) {
-    sm.transition('blocked', 'orchestrator', { reason: 'Worktree creation failed', error: wt.error });
-    return { runId, state: 'blocked', exitCode: 5, message: `Worktree creation failed: ${wt.error}` };
+    sm.transition('blocked', 'orchestrator', {
+      reason: 'Worktree creation failed',
+      error: wt.error,
+    });
+    return {
+      runId,
+      state: 'blocked',
+      exitCode: 5,
+      message: `Worktree creation failed: ${wt.error}`,
+    };
   }
   sm.update({ branch: branchName, worktreePath: wt.path });
   sm.transition('branched', 'orchestrator', { branch: branchName });
@@ -267,7 +323,10 @@ async function runFlow(intent: DeliveryIntent, opts: DeliveryOptions): Promise<D
   }
 
   // No gh available — local-only
-  sm.transition('pushed', 'orchestrator', { branch: branchName, note: 'gh not available; local-only' });
+  sm.transition('pushed', 'orchestrator', {
+    branch: branchName,
+    note: 'gh not available; local-only',
+  });
   return {
     runId,
     state: 'pushed',
@@ -280,7 +339,9 @@ function pollChecks(prNumber: number, repo: string, maxAttempts: number): Record
   let checks: Record<string, string> = {};
   for (let i = 0; i < maxAttempts; i++) {
     checks = getPrChecks(prNumber, repo);
-    const pending = Object.values(checks).filter((s) => s === 'pending' || s === 'in_progress' || s === 'queued');
+    const pending = Object.values(checks).filter(
+      (s) => s === 'pending' || s === 'in_progress' || s === 'queued',
+    );
     if (pending.length === 0) break;
     // Wait 10s between polls
     try {
@@ -297,7 +358,12 @@ function pollChecks(prNumber: number, repo: string, maxAttempts: number): Record
 function resumeFlow(runId: string, _opts: DeliveryOptions): DeliveryResult {
   const cp = loadCheckpoint(runId);
   if (!cp) {
-    return { runId, state: 'blocked', exitCode: 3, message: `No checkpoint found for run ${runId}` };
+    return {
+      runId,
+      state: 'blocked',
+      exitCode: 3,
+      message: `No checkpoint found for run ${runId}`,
+    };
   }
 
   // Verify integrity
@@ -307,7 +373,12 @@ function resumeFlow(runId: string, _opts: DeliveryOptions): DeliveryResult {
   }
   const integrity = sm.verifyIntegrity();
   if (!integrity.valid) {
-    return { runId, state: 'blocked', exitCode: 6, message: `Event chain integrity broken at event ${integrity.brokenAt}` };
+    return {
+      runId,
+      state: 'blocked',
+      exitCode: 6,
+      message: `Event chain integrity broken at event ${integrity.brokenAt}`,
+    };
   }
 
   // Verify workspace hash unchanged
@@ -322,7 +393,13 @@ function resumeFlow(runId: string, _opts: DeliveryOptions): DeliveryResult {
   }
 
   console.log(`[RESUME] Run ${runId} at state ${cp.state}`);
-  return { runId, state: cp.state, exitCode: 0, message: `Resumed at state ${cp.state}`, checkpoint: cp };
+  return {
+    runId,
+    state: cp.state,
+    exitCode: 0,
+    message: `Resumed at state ${cp.state}`,
+    checkpoint: cp,
+  };
 }
 
 // ─── Status ──────────────────────────────────────────────────────────────────
@@ -330,7 +407,12 @@ function resumeFlow(runId: string, _opts: DeliveryOptions): DeliveryResult {
 function statusFlow(runId: string): DeliveryResult {
   const cp = loadCheckpoint(runId);
   if (!cp) {
-    return { runId, state: 'blocked', exitCode: 3, message: `No checkpoint found for run ${runId}` };
+    return {
+      runId,
+      state: 'blocked',
+      exitCode: 3,
+      message: `No checkpoint found for run ${runId}`,
+    };
   }
   console.log(`\n=== DELIVERY STATUS: ${runId} ===`);
   console.log(`State: ${cp.state}`);
@@ -342,7 +424,8 @@ function statusFlow(runId: string): DeliveryResult {
   if (cp.checkSnapshot) {
     console.log('\nChecks:');
     for (const [name, state] of Object.entries(cp.checkSnapshot)) {
-      const icon = state === 'pass' ? '✅' : state === 'fail' ? '❌' : state === 'pending' ? '⏳' : '⏭️';
+      const icon =
+        state === 'pass' ? '✅' : state === 'fail' ? '❌' : state === 'pending' ? '⏳' : '⏭️';
       console.log(`  ${icon} ${name}: ${state}`);
     }
   }
@@ -354,10 +437,20 @@ function statusFlow(runId: string): DeliveryResult {
 function approveFlow(runId: string, purpose: string): DeliveryResult {
   const cp = loadCheckpoint(runId);
   if (!cp) {
-    return { runId, state: 'blocked', exitCode: 3, message: `No checkpoint found for run ${runId}` };
+    return {
+      runId,
+      state: 'blocked',
+      exitCode: 3,
+      message: `No checkpoint found for run ${runId}`,
+    };
   }
   if (cp.state !== 'awaiting_approval' && cp.state !== 'checks_passed') {
-    return { runId, state: cp.state, exitCode: 2, message: `Cannot approve from state ${cp.state}` };
+    return {
+      runId,
+      state: cp.state,
+      exitCode: 2,
+      message: `Cannot approve from state ${cp.state}`,
+    };
   }
   if (purpose !== 'merge' && purpose !== 'promotion') {
     return { runId, state: cp.state, exitCode: 2, message: `Invalid purpose: ${purpose}` };
@@ -388,7 +481,12 @@ function approveFlow(runId: string, purpose: string): DeliveryResult {
     return { runId, state: 'merged', exitCode: 0, message: `PR #${cp.prNumber} merged` };
   }
 
-  return { runId, state: cp.state, exitCode: 2, message: 'Cannot approve without GitHub available' };
+  return {
+    runId,
+    state: cp.state,
+    exitCode: 2,
+    message: 'Cannot approve without GitHub available',
+  };
 }
 
 // ─── Rollback ────────────────────────────────────────────────────────────────
@@ -396,7 +494,12 @@ function approveFlow(runId: string, purpose: string): DeliveryResult {
 function rollbackFlow(runId: string, scope: string, confirm: boolean): DeliveryResult {
   const cp = loadCheckpoint(runId);
   if (!cp) {
-    return { runId, state: 'blocked', exitCode: 3, message: `No checkpoint found for run ${runId}` };
+    return {
+      runId,
+      state: 'blocked',
+      exitCode: 3,
+      message: `No checkpoint found for run ${runId}`,
+    };
   }
   if (!confirm) {
     return { runId, state: cp.state, exitCode: 2, message: 'Rollback requires --confirm' };
@@ -416,7 +519,11 @@ function rollbackFlow(runId: string, scope: string, confirm: boolean): DeliveryR
       // Delete remote branch (via gh)
       if (cp.branch && ghAvailable()) {
         try {
-          execSync(`git push origin --delete ${cp.branch}`, { cwd: ROOT, windowsHide: true, encoding: 'utf-8' });
+          execSync(`git push origin --delete ${cp.branch}`, {
+            cwd: ROOT,
+            windowsHide: true,
+            encoding: 'utf-8',
+          });
         } catch {
           /* branch may not exist */
         }
@@ -429,7 +536,11 @@ function rollbackFlow(runId: string, scope: string, confirm: boolean): DeliveryR
       // Close PR
       if (cp.prNumber && ghAvailable()) {
         try {
-          execSync(`gh pr close ${cp.prNumber}`, { cwd: ROOT, windowsHide: true, encoding: 'utf-8' });
+          execSync(`gh pr close ${cp.prNumber}`, {
+            cwd: ROOT,
+            windowsHide: true,
+            encoding: 'utf-8',
+          });
         } catch {
           /* PR may already be closed */
         }
@@ -439,7 +550,13 @@ function rollbackFlow(runId: string, scope: string, confirm: boolean): DeliveryR
       return { runId, state: 'rolled_back', exitCode: 0, message: 'PR closed' };
     }
     case 'promotion': {
-      return { runId, state: cp.state, exitCode: 2, message: 'Promotion rollback requires manual intervention and human selection of previous artifact' };
+      return {
+        runId,
+        state: cp.state,
+        exitCode: 2,
+        message:
+          'Promotion rollback requires manual intervention and human selection of previous artifact',
+      };
     }
     default:
       return { runId, state: cp.state, exitCode: 2, message: `Invalid scope: ${scope}` };
@@ -474,7 +591,9 @@ function main(): void {
       }
       const opts: DeliveryOptions = {
         dryRun: args.includes('--dry-run'),
-        review: args.includes('--review') ? (args[args.indexOf('--review') + 1] as DeliveryOptions['review']) : 'ai+human',
+        review: args.includes('--review')
+          ? (args[args.indexOf('--review') + 1] as DeliveryOptions['review'])
+          : 'ai+human',
         resume: args.includes('--resume'),
         keepWorktree: args.includes('--keep-worktree'),
         yes: args.includes('--yes'),

@@ -35,7 +35,11 @@ function runGit(args: string[], cwd: string = ROOT, timeoutMs = 60_000): GitResu
   };
 }
 
-export function gitStatus(cwd: string = ROOT): { clean: boolean; dirty: string[]; untracked: string[] } {
+export function gitStatus(cwd: string = ROOT): {
+  clean: boolean;
+  dirty: string[];
+  untracked: string[];
+} {
   const r = runGit(['status', '--porcelain'], cwd);
   const lines = r.stdout.split('\n').filter(Boolean);
   const dirty: string[] = [];
@@ -68,7 +72,11 @@ export function fetchRemote(remote = 'origin', cwd: string = ROOT): GitResult {
   return runGit(['fetch', remote, '--prune'], cwd, 120_000);
 }
 
-export function createWorktree(branch: string, baseSha: string, cwd: string = ROOT): { path: string; ok: boolean; error?: string } {
+export function createWorktree(
+  branch: string,
+  baseSha: string,
+  cwd: string = ROOT,
+): { path: string; ok: boolean; error?: string } {
   const worktreePath = join(ROOT, '.session', 'delivery-worktrees', branch);
   if (existsSync(worktreePath)) {
     // Already exists — verify it's on the right base
@@ -173,7 +181,18 @@ export function createPr(opts: {
   base: string;
   repo?: string;
 }): { ok: boolean; prNumber?: number; url?: string; error?: string } {
-  const args = ['pr', 'create', '--title', opts.title, '--body', opts.body, '--head', opts.head, '--base', opts.base];
+  const args = [
+    'pr',
+    'create',
+    '--title',
+    opts.title,
+    '--body',
+    opts.body,
+    '--head',
+    opts.head,
+    '--base',
+    opts.base,
+  ];
   if (opts.repo) args.push('--repo', opts.repo);
   const r = runGh(args, 120_000);
   if (!r.ok) return { ok: false, error: r.stderr };
@@ -183,7 +202,10 @@ export function createPr(opts: {
   return { ok: true, prNumber, url: r.stdout };
 }
 
-export function findPrByMarker(marker: string, repo?: string): { ok: boolean; prNumber?: number; error?: string } {
+export function findPrByMarker(
+  marker: string,
+  repo?: string,
+): { ok: boolean; prNumber?: number; error?: string } {
   const args = ['pr', 'list', '--search', marker, '--json', 'number', '--jq', '.[0].number'];
   if (repo) args.push('--repo', repo);
   const r = runGh(args);
@@ -193,7 +215,15 @@ export function findPrByMarker(marker: string, repo?: string): { ok: boolean; pr
 }
 
 export function getPrChecks(prNumber: number, repo?: string): Record<string, string> {
-  const args = ['pr', 'checks', String(prNumber), '--json', 'name,state', '--jq', '.[] | "\(.name)=\(.state)"'];
+  const args = [
+    'pr',
+    'checks',
+    String(prNumber),
+    '--json',
+    'name,state',
+    '--jq',
+    '.[] | "\(.name)=\(.state)"',
+  ];
   if (repo) args.push('--repo', repo);
   const r = runGh(args);
   const result: Record<string, string> = {};
@@ -212,7 +242,11 @@ export function mergePr(prNumber: number, repo?: string): { ok: boolean; error?:
   return r.ok ? { ok: true } : { ok: false, error: r.stderr };
 }
 
-export function requestReviewers(prNumber: number, reviewers: string[], repo?: string): { ok: boolean; error?: string } {
+export function requestReviewers(
+  prNumber: number,
+  reviewers: string[],
+  repo?: string,
+): { ok: boolean; error?: string } {
   const args = ['pr', 'edit', String(prNumber), '--add-reviewer', reviewers.join(',')];
   if (repo) args.push('--repo', repo);
   const r = runGh(args);

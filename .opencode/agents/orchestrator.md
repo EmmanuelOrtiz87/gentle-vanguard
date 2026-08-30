@@ -42,6 +42,7 @@ If `opencode/big-pickle` is unavailable:
 3. Never report failure without attempting fallback
 
 ### Model Config Files (all must agree)
+
 - `opencode.json` — platform agent model bindings (primary source)
 - `config/model-router.json` — per-agent temperature/guard bindings
 - `config/model-fallback.json` — fallback chains per agent

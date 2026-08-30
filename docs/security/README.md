@@ -7,5 +7,6 @@ Generated scan outputs and one-off audit artifacts belong in `reports/` or `.arc
 
 ## Runbooks
 
-- [Manual de remediación manual](MANUAL-REMEDIATION-RUNBOOK.md): revocación/rotación de credenciales,
-  controles de GitHub, publicación segura, validación de alertas y clasificación de históricos.
+- [Manual de remediación manual](MANUAL-REMEDIATION-RUNBOOK.md): revocación/rotación de
+  credenciales, controles de GitHub, publicación segura, validación de alertas y clasificación de
+  históricos.

@@ -3,6 +3,7 @@
 A comprehensive guide to lifecycle and campaign emails. Use this as an audit checklist and implementation reference.
 
 ## Contents
+
 - Onboarding Emails (new users series, new customers series, key onboarding step reminder, new user invite)
 - Retention Emails (upgrade to paid, upgrade to higher plan, ask for review, offer support proactively, product usage report, NPS survey, referral program)
 - Billing Emails (switch to annual, failed payment recovery, cancellation survey, upcoming renewal reminder)
@@ -14,6 +15,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ## Onboarding Emails
 
 ### New Users Series
+
 **Trigger**: User signs up (free or trial)
 **Goal**: Activate user, drive to aha moment
 **Typical sequence**: 5-7 emails over 14 days
@@ -31,6 +33,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### New Customers Series
+
 **Trigger**: User converts to paid
 **Goal**: Reinforce purchase decision, drive adoption, reduce early churn
 **Typical sequence**: 3-5 emails over 14 days
@@ -46,6 +49,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### Key Onboarding Step Reminder
+
 **Trigger**: User hasn't completed critical setup step after X time
 **Goal**: Nudge completion of high-value action
 **Format**: Single email or 2-3 email mini-sequence
@@ -64,6 +68,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### New User Invite
+
 **Trigger**: Existing user invites teammate
 **Goal**: Activate the invited user
 **Recipient**: The person being invited
@@ -83,6 +88,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ## Retention Emails
 
 ### Upgrade to Paid
+
 **Trigger**: Free user shows engagement, or trial ending
 **Goal**: Convert free to paid
 **Typical sequence**: 3-5 emails
@@ -102,6 +108,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### Upgrade to Higher Plan
+
 **Trigger**: User approaching plan limits or using features available on higher tier
 **Goal**: Upsell to next tier
 **Format**: Single email or 2-3 email sequence
@@ -121,6 +128,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### Ask for Review
+
 **Trigger**: Customer milestone (30/60/90 days, key achievement, support resolution)
 **Goal**: Generate social proof on G2, Capterra, app stores
 **Format**: Single email
@@ -141,6 +149,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### Offer Support Proactively
+
 **Trigger**: Signs of struggle (drop in usage, failed actions, error encounters)
 **Goal**: Save at-risk user, improve experience
 **Format**: Single email
@@ -161,6 +170,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### Product Usage Report
+
 **Trigger**: Time-based (weekly, monthly, quarterly)
 **Goal**: Demonstrate value, drive engagement, reduce churn
 **Format**: Single email, recurring
@@ -182,6 +192,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### NPS Survey
+
 **Trigger**: Time-based (quarterly) or event-based (post-milestone)
 **Goal**: Measure satisfaction, identify promoters and detractors
 **Format**: Single email
@@ -200,6 +211,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### Referral Program
+
 **Trigger**: Customer milestone, promoter NPS score, or campaign
 **Goal**: Generate referrals
 **Format**: Single email or periodic reminders
@@ -221,6 +233,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ## Billing Emails
 
 ### Switch to Annual
+
 **Trigger**: Monthly subscriber at renewal time or campaign
 **Goal**: Convert monthly to annual (improve LTV, reduce churn)
 **Format**: Single email or 2-email sequence
@@ -240,6 +253,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### Failed Payment Recovery
+
 **Trigger**: Payment fails
 **Goal**: Recover revenue, retain customer
 **Typical sequence**: 3-4 emails over 7-14 days
@@ -261,6 +275,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### Cancellation Survey
+
 **Trigger**: User cancels subscription
 **Goal**: Learn why, opportunity to save
 **Format**: Single email (immediate)
@@ -281,6 +296,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### Upcoming Renewal Reminder
+
 **Trigger**: X days before renewal (14 or 30 days typical)
 **Goal**: No surprise charges, opportunity to expand
 **Format**: Single email
@@ -299,6 +315,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ## Usage Emails
 
 ### Daily/Weekly/Monthly Summary
+
 **Trigger**: Time-based
 **Goal**: Drive engagement, demonstrate value
 **Format**: Single email, recurring
@@ -320,6 +337,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### Key Event or Milestone Notifications
+
 **Trigger**: Specific achievement or event
 **Goal**: Celebrate, drive continued engagement
 **Format**: Single email per event
@@ -342,6 +360,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ## Win-Back Emails
 
 ### Expired Trials
+
 **Trigger**: Trial ended without conversion
 **Goal**: Convert or re-engage
 **Typical sequence**: 3-4 emails over 30 days
@@ -360,6 +379,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### Cancelled Customers
+
 **Trigger**: Time after cancellation (30, 60, 90 days)
 **Goal**: Win back churned customers
 **Typical sequence**: 2-3 emails spread over 90 days
@@ -382,6 +402,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ## Campaign Emails
 
 ### Monthly Roundup / Newsletter
+
 **Trigger**: Time-based (monthly)
 **Goal**: Engagement, brand presence, content distribution
 **Format**: Single email, recurring
@@ -403,6 +424,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### Seasonal Promotions
+
 **Trigger**: Calendar events (Black Friday, New Year, etc.)
 **Goal**: Drive conversions with timely offer
 **Format**: Campaign burst (2-4 emails)
@@ -422,6 +444,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### Product Updates
+
 **Trigger**: New feature release
 **Goal**: Adoption, engagement, demonstrate momentum
 **Format**: Single email per major release
@@ -440,6 +463,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### Industry News Roundup
+
 **Trigger**: Time-based (weekly or monthly)
 **Goal**: Thought leadership, engagement, brand value
 **Format**: Curated newsletter
@@ -455,6 +479,7 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 ---
 
 ### Pricing Update
+
 **Trigger**: Price change announcement
 **Goal**: Transparent communication, minimize churn
 **Format**: Single email (or sequence for major changes)
@@ -479,12 +504,14 @@ A comprehensive guide to lifecycle and campaign emails. Use this as an audit che
 Use this to audit your current email program:
 
 ### Onboarding
+
 - [ ] New users series
 - [ ] New customers series
 - [ ] Key onboarding step reminders
 - [ ] New user invite sequence
 
 ### Retention
+
 - [ ] Upgrade to paid sequence
 - [ ] Upgrade to higher plan triggers
 - [ ] Ask for review (timed properly)
@@ -494,21 +521,25 @@ Use this to audit your current email program:
 - [ ] Referral program emails
 
 ### Billing
+
 - [ ] Switch to annual campaign
 - [ ] Failed payment recovery sequence
 - [ ] Cancellation survey
 - [ ] Upcoming renewal reminders
 
 ### Usage
+
 - [ ] Daily/weekly/monthly summaries
 - [ ] Key event notifications
 - [ ] Milestone celebrations
 
 ### Win-Back
+
 - [ ] Expired trial sequence
 - [ ] Cancelled customer sequence
 
 ### Campaigns
+
 - [ ] Monthly roundup / newsletter
 - [ ] Seasonal promotion calendar
 - [ ] Product update announcements

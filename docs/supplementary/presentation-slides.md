@@ -93,7 +93,8 @@ each release.
 
 **Title:** Self-Optimizing Configuration **Key Points:**
 
-- Adaptive profiles for opencode, claude-cline, cursor, codex-windsurf, continue-copilot, antigravity
+- Adaptive profiles for opencode, claude-cline, cursor, codex-windsurf, continue-copilot,
+  antigravity
 - Auto-detect peak hours and token pressure
 - Automatically switches to optimized config during peak, restores when normalized
 - Shared DRY module eliminates duplication

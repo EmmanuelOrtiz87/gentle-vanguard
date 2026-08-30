@@ -148,6 +148,7 @@ await fetch(await assertSafeUrl(req.body.webhookUrl), { redirect: 'error' });
 ```
 
 The `range() !== 'unicast'` check covers loopback, link-local `169.254.169.254` (cloud metadata, the
+
 # 1 SSRF target), private, and unique-local ranges across IPv4 and IPv6.
 
 **Caveat — this still has a TOCTOU gap.** `fetch` resolves DNS again after the check, so an attacker

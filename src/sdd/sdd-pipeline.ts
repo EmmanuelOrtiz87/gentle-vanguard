@@ -237,7 +237,8 @@ function main(): void {
             // scope decisions can cite it — and make its absence visible when
             // questions were left unanswered (fail-visible, not fail-closed:
             // research is optional by design).
-            let researchNote = '**Research evidence**: none declared (optional lane — run `npm run sdd:research -- run -f <feature> -q "..."` after EXPLORE)';
+            let researchNote =
+              '**Research evidence**: none declared (optional lane — run `npm run sdd:research -- run -f <feature> -q "..."` after EXPLORE)';
             try {
               const rj = join(sddDir, 'RESEARCH', 'research.json');
               if (existsSync(rj)) {

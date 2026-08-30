@@ -25,6 +25,7 @@
 **问题**：单纯的 cinematic 默认是黑屏 + 一个 ▶ 按钮，用户翻到这页如果没点，什么都看不到。
 
 **解决**：
+
 ```
 DEFAULT 状态 (永远显示)：完整静态 workflow dashboard
   └── 观众一眼看清这个 skill / 工作流怎么跑
@@ -208,6 +209,7 @@ let t = frozenT !== null ? frozenT : (elapsed % T.DURATION);
 用户点过 iframe 后，焦点在 iframe 里，父窗口的 ←/→ 键盘事件收不到。
 
 **修复**：
+
 ```js
 iframe.addEventListener('load', () => {
   // 注入键盘转发器

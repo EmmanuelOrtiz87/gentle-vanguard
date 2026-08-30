@@ -9,7 +9,9 @@
 
 ## Overview
 
-The WebSocket Server manages bidirectional real-time communication between the dashboard and the Gentle-Vanguard backend. It handles 30+ message types, maintains 100+ concurrent connections, and ensures data consistency via acks and retries.
+The WebSocket Server manages bidirectional real-time communication between the dashboard and the
+Gentle-Vanguard backend. It handles 30+ message types, maintains 100+ concurrent connections, and
+ensures data consistency via acks and retries.
 
 **Key Responsibility:** Reliable real-time observability streaming with recovery.
 
@@ -63,46 +65,52 @@ Ready for messages
 
 ## Message Types (30+)
 
-| Category | Messages |
-|----------|----------|
-| **Metrics** | metric:cpu, metric:memory, metric:latency, metric:throughput |
-| **Traces** | trace:new, trace:complete, trace:error |
-| **Alerts** | alert:trigger, alert:resolve, alert:acknowledge |
-| **Sessions** | session:started, session:ended, session:error |
-| **Config** | config:reload, config:update |
-| **Feedback** | feedback:submit, feedback:ack |
-| **Control** | ping, pong, reconnect, close |
+| Category     | Messages                                                     |
+| ------------ | ------------------------------------------------------------ |
+| **Metrics**  | metric:cpu, metric:memory, metric:latency, metric:throughput |
+| **Traces**   | trace:new, trace:complete, trace:error                       |
+| **Alerts**   | alert:trigger, alert:resolve, alert:acknowledge              |
+| **Sessions** | session:started, session:ended, session:error                |
+| **Config**   | config:reload, config:update                                 |
+| **Feedback** | feedback:submit, feedback:ack                                |
+| **Control**  | ping, pong, reconnect, close                                 |
 
 ---
 
 ## Key Features
 
 ### 1. **Multi-Tenant Isolation** (tenant-manager.ts)
+
 - Clients can only see their tenant's data
 - Row-level security on all streams
 - Audit logging per tenant
 
 ### 2. **Rate Limiting** (rate-limiter.ts)
+
 - Per-client: 1000 msg/s
 - Per-tenant: 100k msg/s
 - Circuit breaker on burst
 
 ### 3. **Automatic Retries** (retry-queue.ts)
+
 - Unacked messages queued for 30s
 - Exponential backoff
 - Fallback to polling if WS fails
 
 ### 4. **Compression** (compression.ts)
+
 - DEFLATE compression on >1KB messages
 - Reduces bandwidth 70-80%
 - Transparent to client
 
 ### 5. **Heartbeat & Reconnect** (heartbeat.ts, reconnect.ts)
+
 - Ping every 30s
 - Timeout: 60s
 - Reconnect preserves session state
 
 ### 6. **State Snapshots** (state-cache.ts)
+
 - On reconnect, send full state (metrics, last 100 traces, current alerts)
 - Prevents UI desync
 - <500ms overhead per reconnect
@@ -111,14 +119,14 @@ Ready for messages
 
 ## Performance Targets
 
-| Metric | Target |
-|--------|--------|
-| Message latency | <50ms (p95) |
-| Connection setup | <500ms |
-| Concurrent connections | 100+ |
-| Throughput | 10k msg/s |
+| Metric                 | Target                 |
+| ---------------------- | ---------------------- |
+| Message latency        | <50ms (p95)            |
+| Connection setup       | <500ms                 |
+| Concurrent connections | 100+                   |
+| Throughput             | 10k msg/s              |
 | Bandwidth (compressed) | <2Mbps per 100 clients |
-| Memory per client | ~5MB |
+| Memory per client      | ~5MB                   |
 
 ---
 
@@ -173,6 +181,7 @@ npm run ws:stop
 ## Monitoring
 
 **Metrics exposed:**
+
 - Active connections
 - Messages/sec
 - Error rate (%)
@@ -186,19 +195,20 @@ npm run ws:stop
 
 ## Error Handling
 
-| Error | Action |
-|-------|--------|
-| Auth failure | Close (1008) + retry with new token |
-| Rate limit | 429 + backoff 5-60s |
-| Tenant mismatch | Drop connection (1003) |
-| Malformed message | Log + continue (no close) |
-| Network timeout | Retry (heartbeat detects) |
+| Error             | Action                              |
+| ----------------- | ----------------------------------- |
+| Auth failure      | Close (1008) + retry with new token |
+| Rate limit        | 429 + backoff 5-60s                 |
+| Tenant mismatch   | Drop connection (1003)              |
+| Malformed message | Log + continue (no close)           |
+| Network timeout   | Retry (heartbeat detects)           |
 
 ---
 
 ## Integration
 
 **Connects to:**
+
 - Authentication (auth.ts ← Session DB)
 - Real-data pipeline (metrics-stream ← real-data/)
 - Alerts (alerts-stream ← alerts system)
@@ -206,6 +216,7 @@ npm run ws:stop
 - Tenant system (tenant-manager)
 
 **Used by:**
+
 - `apps/web-dashboard` (React client)
 - External monitoring tools (WebSocket client libs)
 
@@ -214,6 +225,7 @@ npm run ws:stop
 ## Test Coverage
 
 **Location:** `tests/e2e/dashboard-websocket/`
+
 - `connection.test.ts` - Connect/auth/close
 - `message-flow.test.ts` - Send/recv/ack
 - `reconnection.test.ts` - State recovery
@@ -227,18 +239,21 @@ npm run ws:stop
 ## Troubleshooting
 
 **Q: Connections drop frequently**
+
 ```bash
 npm run ws:status
 # Check heartbeat interval, network latency
 ```
 
 **Q: Memory growing unbounded**
+
 ```bash
 npm run ws:memory-profile
 # Check state-cache size, message queue
 ```
 
 **Q: High latency**
+
 ```bash
 npm run ws:latency-report
 # Check compression ratio, throughput
@@ -249,4 +264,3 @@ npm run ws:latency-report
 **See:** `docs/modules/MODULE-STRUCTURE.md`  
 **Dashboard:** `apps/web-dashboard/`  
 **Tests:** `tests/e2e/dashboard-websocket/*.test.ts`
-

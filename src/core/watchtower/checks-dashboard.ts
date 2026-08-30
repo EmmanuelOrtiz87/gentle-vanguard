@@ -133,7 +133,9 @@ export async function checkGvAnalytics() {
     'gv-analytics',
     'build (dist/index.html)',
     fileExists(join(appDir, 'dist/index.html')) ? 'PASS' : 'WARN',
-    fileExists(join(appDir, 'dist/index.html')) ? '' : 'Run: pnpm --filter @gentle-vanguard/gv-analytics build',
+    fileExists(join(appDir, 'dist/index.html'))
+      ? ''
+      : 'Run: pnpm --filter @gentle-vanguard/gv-analytics build',
     'ok',
   );
 
@@ -172,7 +174,13 @@ export async function checkGvAnalytics() {
       addResult('gv-analytics', 'Vite dev server', 'WARN', `PID ${pid} stale`, 'verify');
     }
   } else {
-    addResult('gv-analytics', 'Vite dev server', 'PASS', 'Not in dev mode (use built artifacts)', 'ok');
+    addResult(
+      'gv-analytics',
+      'Vite dev server',
+      'PASS',
+      'Not in dev mode (use built artifacts)',
+      'ok',
+    );
   }
 
   // 5. MCP server registered
@@ -191,10 +199,22 @@ export async function checkGvAnalytics() {
         found ? 'ok' : 'verify',
       );
     } catch {
-      addResult('gv-analytics', 'MCP registration (mcp-registry.json)', 'FAIL', 'Invalid JSON', 'verify');
+      addResult(
+        'gv-analytics',
+        'MCP registration (mcp-registry.json)',
+        'FAIL',
+        'Invalid JSON',
+        'verify',
+      );
     }
   } else {
-    addResult('gv-analytics', 'MCP registration (mcp-registry.json)', 'WARN', 'Registry not found', 'verify');
+    addResult(
+      'gv-analytics',
+      'MCP registration (mcp-registry.json)',
+      'WARN',
+      'Registry not found',
+      'verify',
+    );
   }
 
   // 6. OpenCode config integration
@@ -207,11 +227,19 @@ export async function checkGvAnalytics() {
         'gv-analytics',
         'OpenCode MCP wire (opencode.json)',
         found ? 'PASS' : 'WARN',
-        found ? 'gv-analytics-atlassian enabled' : 'Add gv-analytics-atlassian to opencode.json#mcp',
+        found
+          ? 'gv-analytics-atlassian enabled'
+          : 'Add gv-analytics-atlassian to opencode.json#mcp',
         found ? 'ok' : 'verify',
       );
     } catch {
-      addResult('gv-analytics', 'OpenCode MCP wire (opencode.json)', 'FAIL', 'Invalid JSON', 'verify');
+      addResult(
+        'gv-analytics',
+        'OpenCode MCP wire (opencode.json)',
+        'FAIL',
+        'Invalid JSON',
+        'verify',
+      );
     }
   }
 }

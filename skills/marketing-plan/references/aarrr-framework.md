@@ -40,11 +40,13 @@ For every client, one or two AARRR stages will be the binding constraint. The pl
 **Decision rules:**
 
 ### If you don't have any users → start with Acquisition
+
 - Pre-launch / day-0 / waitlist stage
 - No funnel data exists
 - Leverage = building the first 100 users
 
 ### If you have users but they bounce → start with Activation
+
 - Signups happen but activation rate is low
 - App Store conversion is poor
 - Onboarding completion is broken
@@ -52,12 +54,14 @@ For every client, one or two AARRR stages will be the binding constraint. The pl
 - Leverage = bridging signup to first felt value
 
 ### If activation works but users churn → start with Retention
+
 - Month 1 retention is below category norms
 - Activated users stop using within 7–14 days
 - LTV is short
 - Leverage = lifecycle, deepening engagement, churn prevention
 
 ### If retention is strong but growth is slow → start with Referral / Revenue
+
 - Retained users love the product but don't share
 - Inbound referrals come in unstructured
 - Pricing hasn't been pressure-tested
@@ -65,6 +69,7 @@ For every client, one or two AARRR stages will be the binding constraint. The pl
 - Leverage = WOM mechanics + pricing optimization (these often cluster)
 
 ### If everything works at small scale → start with Acquisition (scaling)
+
 - Funnel is healthy
 - Question is just "more"
 - This is the "post-fit" scaling problem

@@ -185,7 +185,13 @@ export async function checkProcessHygiene() {
   const reportsOnly = findings.filter((f) => f.action === 'report');
 
   if (actionable.length === 0 && reportsOnly.length === 0) {
-    addResult('process-hygiene', 'orphan/duplicate sweep', 'PASS', 'no orphans, duplicates or stale PID files', 'ok');
+    addResult(
+      'process-hygiene',
+      'orphan/duplicate sweep',
+      'PASS',
+      'no orphans, duplicates or stale PID files',
+      'ok',
+    );
     return;
   }
 

@@ -138,8 +138,9 @@ Operational requirements:
 
 1. Critical intents (session start/close, SDD start for new project/component, PR actions) must have
    trigger coverage in all three languages in `config/auto-delegation.json#keywordMappings`.
-2. The routing logic itself (`src/tools/pre-process-input.ts`) uses English triggers as PRIMARY detection.
-   Multilingual patterns are SECONDARY — they map to the same English-based routing decisions.
+2. The routing logic itself (`src/tools/pre-process-input.ts`) uses English triggers as PRIMARY
+   detection. Multilingual patterns are SECONDARY — they map to the same English-based routing
+   decisions.
 3. Regressions are blocked by automated matrix validation in
    `tests/e2e/routing-language-matrix.json` executed by `scripts/utilities/routing-quality-eval.ps1`
    <!-- REF-OBSOLETA: routing-quality-eval.ps1 eliminado en migración PS1→TS; sin equivalente TS en src/ -->.
@@ -189,8 +190,10 @@ Do **NOT** invent skill paths or fake tool calls.
 
 ## 8. Session Lifecycle
 
-1. **Pre**: Run `src/tools/pre-process-input.ts` with first user message — MUST be before any response
-2. **Start**: Run `npx tsx src/session/session-autostart.ts` (TypeScript pipeline, 54 steps, idempotent)
+1. **Pre**: Run `src/tools/pre-process-input.ts` with first user message — MUST be before any
+   response
+2. **Start**: Run `npx tsx src/session/session-autostart.ts` (TypeScript pipeline, 54 steps,
+   idempotent)
 3. **Track**: Session ID pattern `session-YYYY-MM-DD-XX`, project `workspace_gentle_vanguard`
 4. **Analyze**: Read `scripts/.session/startup-summary.json` — report peak hour and warnings to user
 5. **Verify**: Run `agent-verify.ps1`

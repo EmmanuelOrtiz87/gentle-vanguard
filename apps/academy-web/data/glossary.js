@@ -5,7 +5,7 @@ window.GV_GLOSSARY = [
   {
     term: '4R',
     cat: 'stack',
-    def: "Las cuatro lentes de la revisión de alto riesgo (Tier 2) del protocolo RDD: RISK (seguridad y comportamiento peligroso), READABILITY (claridad y mantenibilidad), RELIABILITY (correctitud y casos borde) y RESILIENCE (modos de fallo y recuperación). Implementación: src/rdd/rdd-4r-review.ts; cada lente emite findings con severidad critical/required/nit/optional/info.",
+    def: 'Las cuatro lentes de la revisión de alto riesgo (Tier 2) del protocolo RDD: RISK (seguridad y comportamiento peligroso), READABILITY (claridad y mantenibilidad), RELIABILITY (correctitud y casos borde) y RESILIENCE (modos de fallo y recuperación). Implementación: src/rdd/rdd-4r-review.ts; cada lente emite findings con severidad critical/required/nit/optional/info.',
   },
   {
     term: 'Adaptive steps',
@@ -45,7 +45,7 @@ window.GV_GLOSSARY = [
   {
     term: 'BDD',
     cat: 'ia',
-    def: "Behavior-Driven Development: formular el comportamiento esperado en escenarios verificables y legibles (formato clásico Gherkin: Dado/Cuando/Entonces). En Gentle-Vanguard, los criterios de aceptación de la fase SPEC del ciclo SDD son escenarios BDD que sdd-verify convierte en contratos ejecutables.",
+    def: 'Behavior-Driven Development: formular el comportamiento esperado en escenarios verificables y legibles (formato clásico Gherkin: Dado/Cuando/Entonces). En Gentle-Vanguard, los criterios de aceptación de la fase SPEC del ciclo SDD son escenarios BDD que sdd-verify convierte en contratos ejecutables.',
   },
   {
     term: 'BM25',
@@ -385,7 +385,7 @@ window.GV_GLOSSARY = [
   {
     term: 'RDD',
     cat: 'stack',
-    def: "Receipt-Driven Development: protocolo nativo de revisión y entrega del stack. Clasifica el riesgo de un cambio por evidencia (auth, esquema de DB, APIs externas, breaking changes — no por tamaño), orquesta revisión por tiers (0/1/4 lentes), emite un recibo ligado al Git SHA del candidato congelado y valida 5 gates de entrega (post-apply, pre-commit, pre-push, pre-pr, release). Kill switch de emergencia con expiración 24h. Implementación: src/rdd/.",
+    def: 'Receipt-Driven Development: protocolo nativo de revisión y entrega del stack. Clasifica el riesgo de un cambio por evidencia (auth, esquema de DB, APIs externas, breaking changes — no por tamaño), orquesta revisión por tiers (0/1/4 lentes), emite un recibo ligado al Git SHA del candidato congelado y valida 5 gates de entrega (post-apply, pre-commit, pre-push, pre-pr, release). Kill switch de emergencia con expiración 24h. Implementación: src/rdd/.',
   },
   {
     term: 'Response cache',
@@ -520,7 +520,7 @@ window.GV_GLOSSARY = [
   {
     term: 'TDD',
     cat: 'ia',
-    def: "Test-Driven Development: escribir primero el test que falla (rojo), implementar lo mínimo para que pase (verde) y refactorear con el test como red de seguridad. En el ciclo SDD del stack opera dentro de la fase APPLY: el test ancla al agente al contrato de la tarea y convierte el cumplimiento en evidencia mecánica.",
+    def: 'Test-Driven Development: escribir primero el test que falla (rojo), implementar lo mínimo para que pase (verde) y refactorear con el test como red de seguridad. En el ciclo SDD del stack opera dentro de la fase APPLY: el test ancla al agente al contrato de la tarea y convierte el cumplimiento en evidencia mecánica.',
   },
   {
     term: 'Temperatura',

@@ -90,10 +90,7 @@ function parseLlmJson(raw: string): LlmJson | null {
   }
 }
 
-async function callOpenAiCompatible(
-  system: string,
-  user: string,
-): Promise<string> {
+async function callOpenAiCompatible(system: string, user: string): Promise<string> {
   const baseUrl = process.env.CONTENT_LLM_BASE_URL;
   const apiKey = process.env.CONTENT_LLM_API_KEY ?? '';
   const model = process.env.CONTENT_LLM_MODEL ?? 'gpt-4o-mini';
@@ -148,7 +145,9 @@ export function templateVariant(brief: GenerateBrief, spec: PlatformSpec): Gener
     core,
     '',
     `— ${brief.objective ? `Objetivo: ${brief.objective}. ` : ''}Borrador generado por GV Content OS (plantilla); editar antes de aprobar.`,
-    spec.hashtagOptimal ? Array.from({ length: spec.hashtagOptimal }, (_, i) => `#tag${i + 1}`).join(' ') : '',
+    spec.hashtagOptimal
+      ? Array.from({ length: spec.hashtagOptimal }, (_, i) => `#tag${i + 1}`).join(' ')
+      : '',
   ]
     .filter(Boolean)
     .join('\n')

@@ -304,10 +304,12 @@ window.DECK_MANIFEST = [
 3. **缩略图分辨率别太低**：画廊缩略图 < 1000px，hover 放大后发虚。默认 1600px。
 
 **为画廊生成缩略图**：用 `scripts/gen_deck_thumbs.mjs`（playwright 截每页 + sharp 降采样）：
+
 ```bash
 npm install playwright sharp
 node gen_deck_thumbs.mjs --slides slides --out thumbs --width 1600
 ```
+
 然后给 MANIFEST 每项加 `thumb: "thumbs/<同名>.jpg"`。网格模式忽略 thumb（始终 iframe），只有画廊模式用它。
 
 ### 单页验证（这是多文件架构的杀手级优势）

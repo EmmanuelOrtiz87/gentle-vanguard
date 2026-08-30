@@ -43,7 +43,6 @@ metadata:
 「One thousand no's for every yes」不是口号，是工作方式：
 候选要多，交付要少。
 
-
 ## 使用前提
 
 这个skill专为「用HTML做视觉产出」的场景设计，不是给任何HTML任务用的万能勺。适用场景：
@@ -350,7 +349,6 @@ HTML文件的开头先写下你的assumptions + reasoning + placeholders，**尽
 6. **交付前 Playwright 跑 3 项点击测试**（进详情 / 关键标注点 / tab 切换），`pageerror` 为 0 再交付
 7. **品位锚点**：衬线 display（Newsreader/Source Serif/EB Garamond）+ `-apple-system` body；一个有温度的底色 + 单 accent 贯穿；留一处「值得截图」的 120% 细节签名
 
-
 ## 工作流程
 
 ### 标准流程（用TaskCreate追踪）
@@ -569,7 +567,6 @@ Skill 路径引用均采用**相对本 skill 根目录**的形式（`references/
 ## Skill 推广水印（仅动画产出）
 
 **只在动画产出**（HTML 动画 → MP4 / GIF）默认带「**Created by Huashu-Design**」水印；**幻灯片 / 信息图 / 原型 / 网页一律不加**——加了干扰使用。第三方品牌的非官方致敬动画前缀「非官方出品 · 」防 IP 争议；用户说不要就移除。JSX 水印模板见 `references/video-export.md` 末节。
-
 
 ## 版本自检（静默）
 

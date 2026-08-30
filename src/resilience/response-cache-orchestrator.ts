@@ -126,7 +126,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   }
 
   console.log('\nUso:');
-  console.log('  npx tsx src/resilience/response-cache-orchestrator.ts --before "input" --context "ctx"');
+  console.log(
+    '  npx tsx src/resilience/response-cache-orchestrator.ts --before "input" --context "ctx"',
+  );
   console.log(
     '  npx tsx src/resilience/response-cache-orchestrator.ts --after "input" "response" --tokens-saved 100',
   );

@@ -23,9 +23,11 @@
 - **动画里出现的每个字符，都必须在你选定的字体里存在**
 - 常见稀有字符黑名单：`␣ ␀ ␐ ␋ ␨ ↩ ⏎ ⌘ ⌥ ⌃ ⇧ ␦ ␖ ␛`
 - 要表达「空格 / 回车 / 制表符」这类元字符，用 **CSS 构造的语义盒子**：
+
   ```html
   <span class="space-key">Space</span>
   ```
+
   ```css
   .space-key {
     display: inline-flex;
@@ -38,6 +40,7 @@
     text-transform: uppercase;
   }
   ```
+
 - Emoji 也要验证：某些 emoji 在 Noto Emoji 以外字体会 fallback 成灰色方框，最好用 `emoji` font-family 或 SVG
 
 ## 3. 数据驱动的 Grid/Flex 模板
@@ -47,12 +50,15 @@
 **规则**：
 - 当 count 从 JS 数组来（`TOKENS.length`），CSS 模板也应该数据驱动
 - 方案 A：用 CSS 变量从 JS 注入
+
   ```js
   el.style.setProperty('--cols', N);
   ```
+
   ```css
   .grid { grid-template-columns: 80px repeat(var(--cols), 1fr); }
   ```
+
 - 方案 B：用 `grid-auto-flow: column` 让浏览器自动扩展
 - **禁用「固定数字 +  JS 常量」的组合**，N 改了 CSS 不会同步更新
 
@@ -62,6 +68,7 @@
 
 **规则**：
 - 连续切换场景时，fade out 和 fade in 要**交叉重叠**，不是前一个完全消失再开始下一个
+
   ```js
   // 差：
   if (t >= 19) hideZoom('zoom1');      // 19.0s out
@@ -71,6 +78,7 @@
   if (t >= 18.6) hideZoom('zoom1');    // 提前 0.4s 开始 fade out
   if (t >= 18.6) showZoom('zoom2');    // 同时 fade in（cross-fade）
   ```
+
 - 或者用一个「锚点元素」（如主句子）作为场景之间的视觉连接，zoom 切换期间它短暂回显
 - 配 CSS transition 的 duration 算清楚，避免 transition 还没结束就触发下一个
 
@@ -81,15 +89,19 @@
 **规则**：
 - `render(t)` 函数理想上是 **pure function**：给定 t 输出唯一 DOM 状态
 - 如果必须用副作用（如 class 切换），用 `fired` set 配合显式 reset：
+
   ```js
   const fired = new Set();
   function fireOnce(key, fn) { if (!fired.has(key)) { fired.add(key); fn(); } }
   function reset() { fired.clear(); /* 清所有 .show class */ }
   ```
+
 - 暴露 `window.__seek(t)` 供 Playwright / 调试用：
+
   ```js
   window.__seek = (t) => { reset(); render(t); };
   ```
+
 - 动画相关的 setTimeout 不要跨越 >1 秒，否则 seek 回跳时会乱套
 
 ## 6. 字体加载前测量 = 测错
@@ -98,6 +110,7 @@
 
 **规则**：
 - 任何依赖 DOM 测量（`getBoundingClientRect`、`offsetWidth`）的布局代码，**必须**包在 `document.fonts.ready.then()` 里
+
   ```js
   document.fonts.ready.then(() => {
     requestAnimationFrame(() => {
@@ -106,6 +119,7 @@
     });
   });
   ```
+
 - 额外的 `requestAnimationFrame` 给浏览器一帧时间提交 layout
 - 如果用 Google Fonts CDN，`<link rel="preconnect">` 加速首次加载
 
@@ -127,9 +141,11 @@
 
 **规则**：
 - 任何多进程可能共用的临时目录，命名必须带 **PID 或随机后缀**：
+
   ```js
   const TMP_DIR = path.join(DIR, '.video-tmp-' + Date.now() + '-' + process.pid);
   ```
+
 - 如果确实想多文件并行，用 shell 的 `&` + `wait` 而不是在一个 node 脚本里 fork
 - 批量录多个 HTML 时，保守做法：**串行**运行（2 个以内可并行，3 个以上老实排队）
 
@@ -141,9 +157,11 @@
 - HTML 里给人类用的「chrome 元素」（progress bar / replay button / footer / masthead / counter / phase labels）和视频内容本体分开管理
 - **约定 class 名** `.no-record`：任何带这个 class 的元素，录屏脚本自动隐藏
 - 脚本端（`render-video.js`）默认注入 CSS 隐藏常见 chrome class 名：
+
   ```
   .progress .counter .phases .replay .masthead .footer .no-record [data-role="chrome"]
   ```
+
 - 用 Playwright 的 `addInitScript` 注入（会在每次 navigate 前生效，reload 也稳）
 - 想看原样 HTML（带 chrome）时加 `--keep-chrome` flag
 
@@ -158,6 +176,7 @@
 - ffmpeg `-ss trim` 只能裁 Playwright 的一点点 startup latency（~0.3s），**不能**用来掩盖 warmup 帧；源头要干净
 - 录制 context 关闭 = webm 文件写入磁盘，这是 Playwright 的约束
 - 相关代码模式：
+
   ```js
   // Phase 1: warmup (throwaway)
   const warmupCtx = await browser.newContext({ viewport });
@@ -277,10 +296,12 @@ window.__seek = (t) => { fired.clear(); time = t; lastTick = null; render(t); };
 3. **额外**：`__ready` 之后主动 `page.evaluate(() => window.__seek && window.__seek(0))`，把 HTML 可能的 time 偏差强制归零——这是第二道防线，对付不严格遵守 starter 模板的 HTML
 
 **验证方法**：导出 MP4 后
+
 ```bash
 ffmpeg -i video.mp4 -ss 0 -vframes 1 frame-0.png
 ffmpeg -i video.mp4 -ss $DURATION-0.1 -vframes 1 frame-end.png
 ```
+
 首帧必须是动画 t=0 的初始状态（不是中段，不是黑），末帧必须是动画终态（不是第二轮 loop 的某个时刻）。
 
 **参考实现**：`assets/animations.jsx` 的 Stage 组件、`scripts/render-video.js` 都已按此协议实现。手写 HTML 必须套 starter tick 模板——每一行都是防过具体 bug。
@@ -294,11 +315,13 @@ ffmpeg -i video.mp4 -ss $DURATION-0.1 -vframes 1 frame-end.png
 **规则**：
 
 1. **录制脚本**：在 `addInitScript` 里注入 `window.__recording = true`（先于 page goto）：
+
    ```js
    await recordCtx.addInitScript(() => { window.__recording = true; });
    ```
 
 2. **Stage 组件**：识别这个信号，强制 loop=false：
+
    ```js
    const effectiveLoop = (typeof window !== 'undefined' && window.__recording) ? false : loop;
    // ...
@@ -326,6 +349,7 @@ ffmpeg -i video.mp4 -ss $DURATION-0.1 -vframes 1 frame-end.png
 - 加 `-profile:v high -level 4.0` 提升 H.264 通用兼容性
 
 **`convert-formats.sh` 已默认改成兼容模式**。如果你需要插帧高质量，加 `--minterpolate` flag：
+
 ```bash
 bash convert-formats.sh input.mp4 --minterpolate
 ```

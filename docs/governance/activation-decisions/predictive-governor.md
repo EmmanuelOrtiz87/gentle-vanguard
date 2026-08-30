@@ -7,9 +7,9 @@
 
 ## Proposal
 
-Activar el módulo `predictive-governor` (src/ml/predictive-governor.ts) bajo el workflow de activación
-de módulos experimentales (Fase 1 de madurez). Gobernador predictivo de recursos: anticipa carga
-basándose en patrones de uso, precalienta recursos y ajusta presupuestos de tokens.
+Activar el módulo `predictive-governor` (src/ml/predictive-governor.ts) bajo el workflow de
+activación de módulos experimentales (Fase 1 de madurez). Gobernador predictivo de recursos:
+anticipa carga basándose en patrones de uso, precalienta recursos y ajusta presupuestos de tokens.
 
 - Scope: planificación anticipada de recursos (CPU/tokens/budgets) para la pipeline de sesión.
 - Impact: mejora la eficiencia de costos; no toca el core de sesión.

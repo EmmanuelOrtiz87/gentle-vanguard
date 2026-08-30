@@ -613,7 +613,13 @@ async function main() {
     if (phaseNum === 0) {
       for (const step of phaseSteps) {
         stepNum++;
-        writeProgress({ currentPhase: phaseNum, currentStep: step.id, stepNum, failed, requiredFailed });
+        writeProgress({
+          currentPhase: phaseNum,
+          currentStep: step.id,
+          stepNum,
+          failed,
+          requiredFailed,
+        });
         const isRequired = step.required === true;
         const timeoutMs = isRequired
           ? (timeoutConfig.required_step_ms ?? timeoutConfig.session_autostart_step_ms)
@@ -687,7 +693,10 @@ async function main() {
           LOG.info(`  [WARN] ${step.id} (lazy): ${result.error || 'Failed'}`);
         }
       }
-      writeProgress({ currentStep: `lazy-batch-${Math.floor(i / MAX_LAZY_CONCURRENCY) + 1}`, lazyLaunched: launched });
+      writeProgress({
+        currentStep: `lazy-batch-${Math.floor(i / MAX_LAZY_CONCURRENCY) + 1}`,
+        lazyLaunched: launched,
+      });
       // Small delay between batches to avoid overwhelming the OS
       if (i + MAX_LAZY_CONCURRENCY < lazySteps.length) {
         await new Promise((r) => setTimeout(r, 150));

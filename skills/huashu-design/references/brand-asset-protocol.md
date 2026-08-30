@@ -73,6 +73,7 @@
 
 按成功率递减：
 0. **图标聚合源（知名数字产品/SaaS/AI 工具首选，命中率最高）**：
+
    ```bash
    unset ALL_PROXY HTTP_PROXY HTTPS_PROXY all_proxy http_proxy https_proxy   # 清代理，否则 TLS 易炸
    # svgl —— AI/开发者品牌覆盖最全（Claude/Cursor/OpenAI/Copilot/Anthropic/Vercel…），含 light/dark + wordmark
@@ -80,19 +81,26 @@
    # simpleicons —— 单色 glyph，可直接按品牌色上色
    curl -o logo.svg "https://cdn.simpleicons.org/<slug>/<hexcolor>"
    ```
+
 1. 独立 SVG/PNG 文件 / 官方 brand 页（如 `<brand>.com/brand`、`/press`）：
+
    ```bash
    curl -A "Mozilla/5.0" -L -o assets/<brand>-brand/logo.svg "<official-logo-url>"
    ```
+
 2. 官网 HTML 全文提取 inline SVG：
+
    ```bash
    curl -A "Mozilla/5.0" -L https://<brand>.com -o assets/<brand>-brand/homepage.html
    # 然后 grep <svg>...</svg> 提取 logo 节点
    ```
+
 3. **Google favicon 服务（站点真实 mark 兜底，几乎不失败）**：
+
    ```bash
    curl -o logo.png "https://www.google.com/s2/favicons?domain=<brand-domain>&sz=256"   # 256px 官方站点图标
    ```
+
 4. 官方社交媒体 avatar（最后手段）：GitHub/Twitter/LinkedIn 的公司头像通常是 400×400 或 800×800 透明底 PNG
 
 下载后**逐个核对**：`file <logo>` 确认是真 SVG/PNG（不是 106 字节占位或 HTML 空壳），`head -c 90 <logo.svg>` 看是否 `<svg`。
@@ -247,4 +255,3 @@ curl -A "Mozilla/5.0" -L "<hero-image-url>" -o assets/<brand>-brand/product-hero
 | 不做协议的代价 | 做出没识别度的通用动画 → 用户返工 1-2 小时，甚至重做 |
 
 **这是稳定性最便宜的投资**。尤其对商单/发布会/重要客户项目，30 分钟的资产协议是保命钱。
-

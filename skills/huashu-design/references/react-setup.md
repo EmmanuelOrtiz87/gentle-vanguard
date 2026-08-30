@@ -52,6 +52,7 @@ HTML里加载方式：
 ### 规矩1：styles 对象必须用唯一命名
 
 **错误**（多组件时必炸）：
+
 ```jsx
 // components.jsx
 const styles = { button: {...}, card: {...} };
@@ -77,6 +78,7 @@ const sidebarStyles = {
 ```
 
 **或者用inline styles**（小组件推荐）：
+
 ```jsx
 <div style={{ padding: 16, background: '#111' }}>...</div>
 ```
@@ -108,6 +110,7 @@ Object.assign(window, {
 `scrollIntoView`会把整个HTML容器往上推，搞坏web harness的布局。**永远不要用**。
 
 替代方案：
+
 ```js
 // 滚到容器内某个位置
 container.scrollTop = targetElement.offsetTop;
@@ -128,6 +131,7 @@ container.scrollTo({
 ### 选项A：不真调，用mock
 
 Demo场景推荐。写一个假helper，返回预设的response：
+
 ```jsx
 window.claude = {
   async complete(prompt) {
@@ -267,6 +271,7 @@ window.claude = {
 ```
 
 HTML里按顺序加载：
+
 ```html
 <script type="text/babel" src="src/primitives.jsx"></script>
 <script type="text/babel" src="src/components.jsx"></script>

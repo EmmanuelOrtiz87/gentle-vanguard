@@ -7,9 +7,9 @@
 
 ## Proposal
 
-Activar el módulo `proactive-intelligence` (src/ml/proactive-intelligence-engine.ts) bajo el workflow
-de activación de módulos experimentales (Fase 1 de madurez). Motor de inteligencia proactiva:
-anticipa necesidades del usuario basándose en patrones de uso y contexto de sesión.
+Activar el módulo `proactive-intelligence` (src/ml/proactive-intelligence-engine.ts) bajo el
+workflow de activación de módulos experimentales (Fase 1 de madurez). Motor de inteligencia
+proactiva: anticipa necesidades del usuario basándose en patrones de uso y contexto de sesión.
 
 - Scope: sugerencias proactivas y anticipación de acciones para el orquestador.
 - Impact: mejora la experiencia del usuario; no toca el core de sesión.

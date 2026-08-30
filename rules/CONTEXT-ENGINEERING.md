@@ -257,7 +257,7 @@ When delegating via `task` tool, the prompt sent to subagents MUST follow:
 | Orchestrator Config     | `config/orchestrator.json`         |
 | Context Efficiency      | `config/context-efficiency.json`   |
 | Compaction Config       | `opencode.json#compaction`         |
-| Pre-process Caching     | `src/tools/pre-process-input.ts`         |
+| Pre-process Caching     | `src/tools/pre-process-input.ts`   |
 | Pre-Compact Hook        | `src/pre-compact-hook.ts`          |
 
 <!-- REF-OBSOLETA: src/pre-compact-hook.ts no existe (ruta migrada o eliminada) -->

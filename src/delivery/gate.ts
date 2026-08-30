@@ -337,7 +337,14 @@ export async function runDeliveryGate(opts: {
   } else if (!opts.quiet) {
     console.log(`\n=== DELIVERY GATE (${stage}) ===`);
     for (const r of results) {
-      const icon = r.status === 'pass' ? '✅' : r.status === 'fail' ? '❌' : r.status === 'skipped' ? '⏭️' : '⏳';
+      const icon =
+        r.status === 'pass'
+          ? '✅'
+          : r.status === 'fail'
+            ? '❌'
+            : r.status === 'skipped'
+              ? '⏭️'
+              : '⏳';
       console.log(`${icon} ${r.name.padEnd(28)} ${r.status.padEnd(8)} ${r.durationMs}ms`);
       if (r.detail) console.log(`   ${r.detail.split('\n').slice(0, 3).join('\n   ')}`);
     }
@@ -386,7 +393,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   if (args.includes('--stage') && args[args.indexOf('--stage') + 1] === 'release-clean') {
     const status = gitStatus();
     if (!status.clean) {
-      console.error(`Worktree not clean. Dirty: ${status.dirty.join(', ')}. Untracked: ${status.untracked.join(', ')}`);
+      console.error(
+        `Worktree not clean. Dirty: ${status.dirty.join(', ')}. Untracked: ${status.untracked.join(', ')}`,
+      );
       process.exit(1);
     }
     console.log('Worktree clean');
@@ -396,7 +405,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   // Collect changed paths for classification
   let changedPaths: string[] = [];
   try {
-    const base = process.env.GITHUB_BASE_REF ? `origin/${process.env.GITHUB_BASE_REF}` : 'origin/main';
+    const base = process.env.GITHUB_BASE_REF
+      ? `origin/${process.env.GITHUB_BASE_REF}`
+      : 'origin/main';
     changedPaths = diffNameOnly(base, 'HEAD');
   } catch {
     changedPaths = [];

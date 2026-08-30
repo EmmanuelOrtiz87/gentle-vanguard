@@ -19,12 +19,7 @@ import {
   statSync,
 } from 'fs';
 import { join, resolve } from 'path';
-import {
-  DeliveryCheckpoint,
-  DeliveryEvent,
-  DeliveryIntent,
-  DeliveryState,
-} from './types.js';
+import { DeliveryCheckpoint, DeliveryEvent, DeliveryIntent, DeliveryState } from './types.js';
 
 const ROOT = resolve(import.meta.dirname, '..', '..');
 const DELIVERY_DIR = join(ROOT, '.session', 'delivery');
@@ -47,7 +42,20 @@ const TRANSITIONS: Record<DeliveryState, DeliveryState[]> = {
   merged: ['promoted', 'blocked', 'rolled_back'],
   promoted: [],
   rolled_back: [],
-  blocked: ['planned', 'preflighted', 'reviewed', 'classified', 'staged', 'committed', 'branched', 'pushed', 'pr_open', 'checks_passed', 'awaiting_approval', 'merged'],
+  blocked: [
+    'planned',
+    'preflighted',
+    'reviewed',
+    'classified',
+    'staged',
+    'committed',
+    'branched',
+    'pushed',
+    'pr_open',
+    'checks_passed',
+    'awaiting_approval',
+    'merged',
+  ],
 };
 
 // ─── Hashing ─────────────────────────────────────────────────────────────────
@@ -160,7 +168,11 @@ export function loadEvents(runId: string): DeliveryEvent[] {
     .filter((e): e is DeliveryEvent => e !== null);
 }
 
-export function verifyEventChain(runId: string): { valid: boolean; count: number; brokenAt?: number } {
+export function verifyEventChain(runId: string): {
+  valid: boolean;
+  count: number;
+  brokenAt?: number;
+} {
   const events = loadEvents(runId);
   let prevHash: string | null = null;
   for (let i = 0; i < events.length; i++) {
@@ -213,7 +225,10 @@ export class DeliveryStateMachine {
       },
       updatedAt: new Date().toISOString(),
     };
-    this.emit('delivery.started', 'orchestrator', { summary: intent.summary, target: intent.target });
+    this.emit('delivery.started', 'orchestrator', {
+      summary: intent.summary,
+      target: intent.target,
+    });
   }
 
   static resume(runId: string): DeliveryStateMachine | null {
@@ -252,9 +267,16 @@ export class DeliveryStateMachine {
     return TRANSITIONS[this.checkpoint.state]?.includes(to) ?? false;
   }
 
-  transition(to: DeliveryState, actor: DeliveryEvent['actor'], payload: Record<string, unknown> = {}): boolean {
+  transition(
+    to: DeliveryState,
+    actor: DeliveryEvent['actor'],
+    payload: Record<string, unknown> = {},
+  ): boolean {
     if (!this.canTransition(to)) {
-      this.emit('delivery.blocked', actor, { ...payload, reason: `Invalid transition ${this.checkpoint.state} → ${to}` });
+      this.emit('delivery.blocked', actor, {
+        ...payload,
+        reason: `Invalid transition ${this.checkpoint.state} → ${to}`,
+      });
       return false;
     }
     this.checkpoint.state = to;
@@ -270,8 +292,13 @@ export class DeliveryStateMachine {
     saveCheckpoint(this.checkpoint);
   }
 
-  private emit(type: string, actor: DeliveryEvent['actor'], payload: Record<string, unknown>): void {
-    const prevHash = this.eventChain.length > 0 ? this.eventChain[this.eventChain.length - 1].hash : null;
+  private emit(
+    type: string,
+    actor: DeliveryEvent['actor'],
+    payload: Record<string, unknown>,
+  ): void {
+    const prevHash =
+      this.eventChain.length > 0 ? this.eventChain[this.eventChain.length - 1].hash : null;
     const event: DeliveryEvent = {
       eventId: randomUUID(),
       runId: this.checkpoint.runId,

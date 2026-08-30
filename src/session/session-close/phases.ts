@@ -568,10 +568,17 @@ export function phaseAudit(): PhaseResult[] {
   // Auto-reviews changed code files for risk patterns before session close.
   try {
     const changedFiles = getChangedFiles();
-    const review = generateReview4R('session-close', [...changedFiles], 'session-close-orchestrator');
+    const review = generateReview4R(
+      'session-close',
+      [...changedFiles],
+      'session-close-orchestrator',
+    );
     const critical = review.riskFindings.filter((f) => f.severity === 'critical').length;
-    const total = review.riskFindings.length + review.readabilityFindings.length +
-      review.reliabilityFindings.length + review.resilienceFindings.length;
+    const total =
+      review.riskFindings.length +
+      review.readabilityFindings.length +
+      review.reliabilityFindings.length +
+      review.resilienceFindings.length;
     results.push({
       phase: 'rdd-4r-review',
       status: critical === 0 ? 'PASS' : 'FAIL',

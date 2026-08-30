@@ -171,6 +171,7 @@ Without good instrumentation, flying blind. Need both leading and lagging indica
 Not all agencies are created equal. Ranked from most appropriate for early-stage to least:
 
 ### Individual contractors
+
 - **Most flexible** — adapt quickly to changing requirements
 - **Direct relationship** — no account-management layer
 - **Often most cost-effective** — pay for pure expertise
@@ -179,6 +180,7 @@ Not all agencies are created equal. Ranked from most appropriate for early-stage
 For most pre-Series-A companies, this is the right answer for nearly all outsourced work.
 
 ### Small niche agencies
+
 - **Specialized expertise** — deep knowledge in specific areas
 - **Personal attention** — often working directly with senior team
 - **Often founder-led** — experienced practitioners calling the shots
@@ -186,6 +188,7 @@ For most pre-Series-A companies, this is the right answer for nearly all outsour
 - **Best for** specialized needs with some complexity (full SEO program, lifecycle email program, brand identity work)
 
 ### Small generalist agencies
+
 - **Broader capabilities** — handle multiple needs
 - **More resources** — team approach to problems
 - **Multiple skill sets** — cross-functional
@@ -193,6 +196,7 @@ For most pre-Series-A companies, this is the right answer for nearly all outsour
 - **Best for** companies needing broader support and willing to pay for the simplicity of fewer relationships
 
 ### Large agencies (not recommended for most startups)
+
 - Long contracts, high minimums, junior account teams, slow turnaround
 - Useful only when the brand spend is large enough to command senior attention
 

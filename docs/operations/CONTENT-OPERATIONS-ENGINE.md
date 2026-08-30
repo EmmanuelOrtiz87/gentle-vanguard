@@ -2,8 +2,9 @@
 
 ## Objetivo
 
-Consolidar las capacidades existentes de `src/tools/marketing-agent.ts`, `src/tools/social-poster.ts` y
-`docs/presentations/resources-index.html` en un flujo operativo único para contenido.
+Consolidar las capacidades existentes de `src/tools/marketing-agent.ts`,
+`src/tools/social-poster.ts` y `docs/presentations/resources-index.html` en un flujo operativo único
+para contenido.
 
 ```text
 Plan → Manifest → Validate → Package → Review → Approve → Publish → Measure → Learn

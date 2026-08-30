@@ -4,7 +4,7 @@ import type { MetricSnapshot } from '../manager';
 export class MetricsRepo {
   constructor(private db: Database.Database) {}
 
-insertMetricSnapshot(tenantId: string, data: Partial<MetricSnapshot>): void {
+  insertMetricSnapshot(tenantId: string, data: Partial<MetricSnapshot>): void {
     this.db
       .prepare(
         `INSERT INTO metric_snapshots 

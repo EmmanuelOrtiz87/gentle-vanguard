@@ -24,13 +24,13 @@ VS Code, Copilot, Antigravity.
 
 ### 2.1 Core / Bootstrap
 
-| Componente          | Archivo(s)                 | Estado    | Automatización             |
-| ------------------- | -------------------------- | --------- | -------------------------- |
-| Bootstrap workspace | `src/bootstrap.ts`         | ✅ Activo | Manual (setup inicial)     |
-| CLI principal       | `src/cli/gv.ts`            | ✅ Activo | Manual                     |
-| Tool detection      | `src/core/detect-tool.ts`  | ✅ Activo | Automático (cada turno)    |
+| Componente          | Archivo(s)                       | Estado    | Automatización             |
+| ------------------- | -------------------------------- | --------- | -------------------------- |
+| Bootstrap workspace | `src/bootstrap.ts`               | ✅ Activo | Manual (setup inicial)     |
+| CLI principal       | `src/cli/gv.ts`                  | ✅ Activo | Manual                     |
+| Tool detection      | `src/core/detect-tool.ts`        | ✅ Activo | Automático (cada turno)    |
 | Pre-process hook    | `src/tools/pre-process-input.ts` | ✅ Activo | Automático (cada turno)    |
-| Session manager     | `src/session-manager.ts`   | ✅ Activo | Automático (start/end)     |
+| Session manager     | `src/session-manager.ts`         | ✅ Activo | Automático (start/end)     |
 | Hashline integrity  | `src/tools/hashline.ts`          | ✅ Activo | Automático (snapshot hook) |
 
 ### 2.2 Memoria Persistente (Engram)
@@ -49,7 +49,7 @@ VS Code, Copilot, Antigravity.
 
 | Componente       | Archivo(s)                                                                                                                                        | Estado    | Automatización            |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------------------------- |
-| ML Router        | `src/ml/ml-router.ts`                                                                                                                              | ✅ Activo | Automático (pre-process)  |
+| ML Router        | `src/ml/ml-router.ts`                                                                                                                             | ✅ Activo | Automático (pre-process)  |
 | Skill embedder   | `src/skills/skill-embedder.ts`                                                                                                                    | ✅ Activo | Automático (reindex)      |
 | Context analyzer | `scripts/utilities/AUTO-DELEGATION/context-analyzer.ps1` <!-- REF-OBSOLETA: eliminado en migración PS1→TS; sin equivalente TS directo en src/ --> | ✅ Activo | Automático (sesión start) |
 
@@ -210,8 +210,8 @@ Activo | Manual |
 
 ### 2.9 Sistema Adaptativo / Auto-aprendizaje
 
-| Componente         | Archivo(s)                                                                                                                                | Estado    | Automatización             |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | --------- | -------------------------- |
+| Componente         | Archivo(s)                                                                                                                                      | Estado    | Automatización             |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------- | -------------------------- |
 | Auto-norm learner  | `src/tools/auto-norm-learner.ts`                                                                                                                | ⚠️ Activo | Manual (bajo demanda)      |
 | Auto-norm enforcer | `src/tools/auto-norm-enforcer.ts`                                                                                                               | ✅ Activo | Automático (cada 5 turnos) |
 | Failure learning   | `src/ml/learning-engine.ts` <!-- REF-OBSOLETA: scripts/adaptive/failure-learning-system.ps1 eliminado; candidato: src/ml/learning-engine.ts --> | ⚠️ Activo | Manual                     |
@@ -241,15 +241,16 @@ Activo | Manual |
 | ⚠️ Activo | Event-driven |
 <!-- REF-OBSOLETA: scripts/adaptive/judgment-day-bridge.ps1 no tiene equivalente TS (migración PS1→TS) -->
 
-| Karpathy enforcer | `src/orchestration/karpathy-enforcer.ts` | ✅ Activo | Automático (pre-commit) | | Normative
-audit pipeline | `src/infrastructure/normative-audit-pipeline.ts` | ✅ Activo | Automático
-(pre-commit + CI) | | Event bus | `.event-bus/` (1 sub: judgment-day) | ✅ Activo | Event-driven |
+| Karpathy enforcer | `src/orchestration/karpathy-enforcer.ts` | ✅ Activo | Automático (pre-commit)
+| | Normative audit pipeline | `src/infrastructure/normative-audit-pipeline.ts` | ✅ Activo |
+Automático (pre-commit + CI) | | Event bus | `.event-bus/` (1 sub: judgment-day) | ✅ Activo |
+Event-driven |
 
 ### 2.10 Prompts / Contexto
 
-| Componente                 | Archivo(s)                                                                                                                                            | Estado    | Automatización          |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------------------- |
-| System prompt optimization | `config/system-prompt-optimization.json` <!-- REF-OBSOLETA: scripts/utilities/PROMPT/ eliminado; configs JSON en config/ -->                          | ✅ Activo | Automático (pre-sesión) |
+| Componente                 | Archivo(s)                                                                                                                                                        | Estado    | Automatización          |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------------------- |
+| System prompt optimization | `config/system-prompt-optimization.json` <!-- REF-OBSOLETA: scripts/utilities/PROMPT/ eliminado; configs JSON en config/ -->                                      | ✅ Activo | Automático (pre-sesión) |
 | A/B testing prompts        | `src/tools/ab-testing-framework.ts` <!-- REF-OBSOLETA: scripts/utilities/PROMPT/prompt-ab-testing.ps1 eliminado; candidato: src/tools/ab-testing-framework.ts --> | ✅ Activo | Manual                  |
 
 <!-- REF-OBSOLETA: scripts/utilities/PROMPT/prompt-ab-testing.ps1 no tiene equivalente TS (migración PS1→TS) -->
@@ -367,7 +368,7 @@ Maintenance Watchtower:
 | Prioridad   | Item                                                       | Estado actual                                                                                                                             |
 | ----------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | ✅ Completa | **Secretlint pre-commit**                                  | ✅ Integrado en los hooks                                                                                                                 |
-| ✅ Completa | **Coverage reporting (native TS runner + threshold gate)** | ✅ COMPLETADO (`src/review/coverage-runner.ts`, pre-push gate)                                                                                   |
+| ✅ Completa | **Coverage reporting (native TS runner + threshold gate)** | ✅ COMPLETADO (`src/review/coverage-runner.ts`, pre-push gate)                                                                            |
 | 🔜 Alta     | **EditorConfig + Prettier CI check**                       | 📋 Planificado                                                                                                                            |
 | 🔜 Alta     | **Branch strategy / Release process docs**                 | 📋 Planificado                                                                                                                            |
 | 🏆 Media    | **`gentle-vanguard init` — project scaffolding**           | 📋 Planificado (v3.0)                                                                                                                     |

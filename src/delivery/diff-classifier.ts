@@ -113,13 +113,7 @@ const RULES: ClassRule[] = [
   },
   {
     cls: 'docs',
-    patterns: [
-      /\.md$/,
-      /^docs\//,
-      /^knowledge-base\//,
-      /^README\.md$/,
-      /^AGENTS\.md$/,
-    ],
+    patterns: [/\.md$/, /^docs\//, /^knowledge-base\//, /^README\.md$/, /^AGENTS\.md$/],
     risk: 10,
   },
 ];

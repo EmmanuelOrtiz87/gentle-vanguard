@@ -32,10 +32,10 @@ structural-compression, coverage-runner, slsa-provenance, slsa-signer).
 
 ## Decision
 
-**Implementar un motor de Chaos Engineering nativo en TypeScript puro** (`src/tools/chaos-engineering.ts`)
-que inyecta fallos controlados en componentes reales del stack, verifica la respuesta (detección,
-auto-heal, degradación graceful) y **siempre restaura el estado original** (try/finally + backup
-`.chaos-bak`).
+**Implementar un motor de Chaos Engineering nativo en TypeScript puro**
+(`src/tools/chaos-engineering.ts`) que inyecta fallos controlados en componentes reales del stack,
+verifica la respuesta (detección, auto-heal, degradación graceful) y **siempre restaura el estado
+original** (try/finally + backup `.chaos-bak`).
 
 ### Principios de diseño
 

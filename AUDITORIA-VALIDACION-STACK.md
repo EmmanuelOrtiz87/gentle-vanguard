@@ -1,25 +1,30 @@
 # 🔍 AUDITORÍA DE VALIDACIÓN DEL STACK
+
 ## Status Actual + Brecha + Plan de Ejecución
+
 **Fecha:** 29 Agosto 2026, 06:50 UTC-3  
-**Resultado Previo:** modularidad por dominios integrada en el stack
-**Ahora:** Validando integridad + Documentando + Resolviendo gaps
+**Resultado Previo:** modularidad por dominios integrada en el stack **Ahora:** Validando
+integridad + Documentando + Resolviendo gaps
 
 ---
 
 ## ✅ QUÉ FUNCIONA (VALIDADO)
 
 ### Tests
+
 - ✅ `test:config` — 24/24 PASS
 - ✅ `test:workflows` — 4/4 PASS
 - ✅ `dashboard-security.test.ts` E2E — 5/5 PASS
 
 ### Verificaciones
+
 - ✅ TypeCheck (tsc --noEmit) — EXIT 0
 - ✅ Lint (eslint) — EXIT 0, --max-warnings 0
 - ✅ Database health — 29 tables, 17 migrations, HEALTHY
 - ✅ Prettier — Formatting clean
 
 ### Stack Components
+
 - ✅ Nexus DB (operational)
 - ✅ Dashboard WS server (auth + RBAC + sessions)
 - ✅ Watchtower health checks
@@ -32,11 +37,12 @@
 ## ⚠️ QUÉ FALTA / ESTÁ INCOMPLETO
 
 ### Crítico (Must-do)
+
 1. **Module Documentation** ← PENDIENTE
    - módulos por dominio sin README en algunos casos
    - JSDoc comments incompletos
    - MODULE-STRUCTURE.md NO EXISTE
-   
+
 2. **Unit Tests Coverage** ← PENDIENTE
    - Baseline coverage unknown (no report generado)
    - Módulos críticos (token-ingest, adaptive-router, etc.) sin tests
@@ -47,6 +53,7 @@
    - Necesario: correr CI pipeline en main
 
 ### Alto (Should-do)
+
 4. **Dependency Graph** ← NO EXISTE
    - Sin visualización de módulos
    - Sin detección de circular dependencies
@@ -60,6 +67,7 @@
    - Diagrams, metrics no reflejados
 
 ### Medio (Nice-to-do)
+
 7. **Nexus Indices** ← Pendiente optimización
    - Schema OK, pero indices de query performance
    - Proyección: 10x query speedup
@@ -73,6 +81,7 @@
 ## 📋 PLAN DE EJECUCIÓN (RIGUROSO)
 
 Voy a usar este proceso para CADA tarea:
+
 1. **Discover** — ¿Qué existe actualmente?
 2. **Document** — Documentar lo que existe
 3. **Test** — Crear/run tests para validar
@@ -98,8 +107,8 @@ find src -name "index.ts" -path "*/*/index.ts" | sort | uniq -c
 # 1c. Crear MODULE-STRUCTURE.md con índice
 ```
 
-**Archivo a crear:** `docs/modules/MODULE-STRUCTURE.md`
-**Archivos a update:** `docs/modules/{feature}/README.md` × 80+
+**Archivo a crear:** `docs/modules/MODULE-STRUCTURE.md` **Archivos a update:**
+`docs/modules/{feature}/README.md` × 80+
 
 ---
 
@@ -215,6 +224,7 @@ time "SELECT COUNT(*) FROM metrics WHERE session_id = ?"
 ### PASO 1 EN EJECUCIÓN: Module Documentation
 
 Comandos:
+
 ```bash
 cd C:\Workspace_local\gentle-vanguard
 
@@ -232,6 +242,7 @@ Get-ChildItem -Path "src" -Recurse -Name "index.ts" | Where-Object {$_ -match "\
 ## ✅ VALIDACIÓN FINAL
 
 Cada paso culmina en:
+
 ```bash
 npm run typecheck       # EXIT 0
 npm run lint            # EXIT 0, --max-warnings 0
@@ -260,8 +271,7 @@ npm run watchtower:health  # 96/96 CHECK
 
 ## 🎯 OBJETIVO FINAL
 
-Al terminar:
-✅ 0 gaps — todo documentado  
+Al terminar: ✅ 0 gaps — todo documentado  
 ✅ 0 warnings — lint/typecheck perfect  
 ✅ 0 incompletos — 80+ módulos con README  
 ✅ Sincronizado — todo interconectado  
@@ -272,4 +282,3 @@ Al terminar:
 ---
 
 **COMIENZA FASE 1 AHORA:**
-

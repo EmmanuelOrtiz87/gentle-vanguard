@@ -45,8 +45,8 @@ Instead:
 2. **Document this ADR** as the authoritative record of the decision.
 3. **Do NOT** add fake call sites, mock integrations, or "presence without integration" wiring.
 4. **Future integration path** (when/if the stack gains its own LLM call path, e.g., an MCP server
-   or a local model gateway): connect `wrapLLMCall`/`orchestratorWithCache` at that point, with
-   real traffic flowing through them and measurable cache-hit savings.
+   or a local model gateway): connect `wrapLLMCall`/`orchestratorWithCache` at that point, with real
+   traffic flowing through them and measurable cache-hit savings.
 
 ## Consequences
 

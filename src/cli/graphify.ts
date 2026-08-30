@@ -227,7 +227,9 @@ function update(target: string, json: boolean): void {
   runBuild({ quiet: json });
   status(json);
   if (!json) {
-    console.log('CodeGraph freshness is handled separately by src/integrations/codegraph-sync-autostart.ts.');
+    console.log(
+      'CodeGraph freshness is handled separately by src/integrations/codegraph-sync-autostart.ts.',
+    );
   }
 }
 

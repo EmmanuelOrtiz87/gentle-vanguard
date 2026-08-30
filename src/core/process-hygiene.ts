@@ -62,7 +62,13 @@ export type FindingAction = 'kill' | 'clean-pidfile' | 'recycle' | 'report';
 export interface HygieneFinding {
   pid: number;
   name: string;
-  kind: 'duplicate-daemon' | 'hung-oneshot' | 'aged-daemon' | 'stale-pidfile' | 'headless-chrome' | 'unknown-repo-process';
+  kind:
+    | 'duplicate-daemon'
+    | 'hung-oneshot'
+    | 'aged-daemon'
+    | 'stale-pidfile'
+    | 'headless-chrome'
+    | 'unknown-repo-process';
   action: FindingAction;
   reason: string;
   ageHours: number;
@@ -389,13 +395,19 @@ function classifyDaemon(cmdline: string): DaemonClass | null {
   return null;
 }
 
-function pickKeeper(cls: DaemonClass, instances: ProcessInfo[], snap: ProcessSnapshot): ProcessInfo | null {
+function pickKeeper(
+  cls: DaemonClass,
+  instances: ProcessInfo[],
+  snap: ProcessSnapshot,
+): ProcessInfo | null {
   if (instances.length === 0) return null;
   const portsFile = join(RUNTIME_DIR, 'dashboard-ports.json');
   let keeperByPort: ProcessInfo | undefined;
   if (cls.port) {
     try {
-      const ports: { wsPort?: number; vitePort?: number } = JSON.parse(readFileSync(portsFile, 'utf-8'));
+      const ports: { wsPort?: number; vitePort?: number } = JSON.parse(
+        readFileSync(portsFile, 'utf-8'),
+      );
       const port = ports[cls.port];
       if (typeof port === 'number' && port > 0) {
         const owner = snap.portOwners.get(port);
@@ -409,8 +421,7 @@ function pickKeeper(cls: DaemonClass, instances: ProcessInfo[], snap: ProcessSna
 
   if (cls.pidFile) {
     const raw =
-      snap.pidFiles.get(cls.pidFile) ??
-      snap.pidFiles.get(join('.runtime', basename(cls.pidFile)));
+      snap.pidFiles.get(cls.pidFile) ?? snap.pidFiles.get(join('.runtime', basename(cls.pidFile)));
     if (raw && /^\d+$/.test(raw)) {
       const byPid = instances.find((i) => i.pid === parseInt(raw, 10));
       if (byPid) return byPid;
@@ -429,7 +440,10 @@ export function analyzeProcesses(
   snap: ProcessSnapshot,
   opts: HygieneOptions = DEFAULT_OPTIONS,
   now = Date.now(),
-): { findings: HygieneFinding[]; keptHealthy: { classId: string; pid: number; ageHours: number }[] } {
+): {
+  findings: HygieneFinding[];
+  keptHealthy: { classId: string; pid: number; ageHours: number }[];
+} {
   const findings: HygieneFinding[] = [];
   const keptHealthy: { classId: string; pid: number; ageHours: number }[] = [];
   const selfPid = process.pid;
@@ -500,7 +514,9 @@ export function analyzeProcesses(
   }
 
   // 2. Hung one-shots: repo scripts with no daemon class, dead parent, stale
-  const daemonPids = new Set(snap.repoProcesses.filter((i) => classifyDaemon(i.cmdline)).map((i) => i.pid));
+  const daemonPids = new Set(
+    snap.repoProcesses.filter((i) => classifyDaemon(i.cmdline)).map((i) => i.pid),
+  );
   for (const info of unclassified) {
     const age = ageHours(info, now);
     const parentAlive = snap.livePids.has(info.ppid);
@@ -663,8 +679,16 @@ function printHuman(result: HygieneResult): void {
   }
   for (const f of result.findings) {
     const icon =
-      f.action === 'report' ? 'ℹ' : f.action === 'clean-pidfile' ? '🧹' : result.mode === 'apply' ? '☠' : '!';
-    console.log(`  ${icon} [${f.kind}] PID ${f.pid || '-'} (${f.ageHours.toFixed(1)}h) — ${f.reason}`);
+      f.action === 'report'
+        ? 'ℹ'
+        : f.action === 'clean-pidfile'
+          ? '🧹'
+          : result.mode === 'apply'
+            ? '☠'
+            : '!';
+    console.log(
+      `  ${icon} [${f.kind}] PID ${f.pid || '-'} (${f.ageHours.toFixed(1)}h) — ${f.reason}`,
+    );
     if (f.cmdline && f.kind !== 'stale-pidfile') console.log(`      ${f.cmdline}`);
   }
   for (const k of result.keptHealthy) {
@@ -691,13 +715,16 @@ async function main(): Promise<number> {
     apply,
     recycleAged: !noRecycle,
     minAgeMin: minAgeIdx >= 0 ? parseInt(args[minAgeIdx + 1], 10) || 15 : DEFAULT_OPTIONS.minAgeMin,
-    maxAgeHours: maxAgeIdx >= 0 ? parseFloat(args[maxAgeIdx + 1]) || 24 : DEFAULT_OPTIONS.maxAgeHours,
+    maxAgeHours:
+      maxAgeIdx >= 0 ? parseFloat(args[maxAgeIdx + 1]) || 24 : DEFAULT_OPTIONS.maxAgeHours,
   });
 
   if (json) console.log(JSON.stringify(result, null, 2));
   else if (!quiet) printHuman(result);
   else if (result.findings.length > 0) {
-    console.log(`[process-hygiene] ${result.findings.length} finding(s), killed=${result.killed.length}`);
+    console.log(
+      `[process-hygiene] ${result.findings.length} finding(s), killed=${result.killed.length}`,
+    );
   }
 
   // dry-run with actionable findings → non-zero so callers can detect dirt

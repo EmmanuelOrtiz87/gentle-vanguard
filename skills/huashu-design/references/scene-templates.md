@@ -20,6 +20,7 @@
 **推荐风格**：01 Pentagram / 11 Build / 12 Sagmeister / 18 Kenya Hara / 07 Field.io
 
 **场景提示词模板**：
+
 ```
 [风格DNA插入此处]
 - Article cover image for WeChat subscription
@@ -48,6 +49,7 @@
 **推荐风格**：根据文章调性选择，常用 01/04/10/17/18
 
 **场景提示词模板**：
+
 ```
 [风格DNA插入此处]
 - Article illustration, concept visualization
@@ -75,6 +77,7 @@
 **推荐风格**：04 Fathom / 10 Müller-Brockmann / 02 Stamen / 17 Takram
 
 **场景提示词模板**：
+
 ```
 [风格DNA插入此处]
 - Infographic / data visualization
@@ -103,6 +106,7 @@
 **推荐风格**：01 Pentagram / 10 Müller-Brockmann / 11 Build / 18 Kenya Hara / 04 Fathom
 
 **场景提示词模板**：
+
 ```
 [风格DNA插入此处]
 - Presentation slide design, 16:9
@@ -132,6 +136,7 @@
 **推荐风格**：10 Müller-Brockmann / 04 Fathom / 03 Information Architects / 17 Takram / 19 Irma Boom
 
 **场景提示词模板**：
+
 ```
 [风格DNA插入此处]
 - PDF document / white paper design
@@ -161,6 +166,7 @@
 **推荐风格**：05 Locomotive / 01 Pentagram / 11 Build / 08 Resn / 06 Active Theory
 
 **场景提示词模板**：
+
 ```
 [风格DNA插入此处]
 - Landing page / product website
@@ -189,6 +195,7 @@
 **推荐风格**：17 Takram / 11 Build / 03 Information Architects / 01 Pentagram
 
 **场景提示词模板**：
+
 ```
 [风格DNA插入此处]
 - Mobile app UI design
@@ -217,6 +224,7 @@
 **推荐风格**：12 Sagmeister / 11 Build / 20 Neo Shen / 09 Experimental Jetset
 
 **场景提示词模板**：
+
 ```
 [风格DNA插入此处]
 - Social media image for Xiaohongshu (RED)
