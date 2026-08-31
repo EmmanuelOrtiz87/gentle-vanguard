@@ -162,6 +162,12 @@ textarea {
   height: 32px;
   width: auto;
 }
+/* The canonical logo asset is apps/academy-web/assets/logo.svg; this Vite app serves a local copy. */
+.gv-brand-logo {
+  height: 32px;
+  width: auto;
+  display: block;
+}
 .brand .name {
   font-size: 18px;
   font-weight: 800;

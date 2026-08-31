@@ -193,9 +193,7 @@ export default function App() {
       <header className="gv-topbar">
         <div className="gv-topbar-inner">
           <div className="gv-brand">
-            <span className="mark" aria-hidden="true">
-              GV
-            </span>
+            <img src="/logo.svg" alt="Gentle-Vanguard" className="gv-brand-logo" />
             <span className="name">
               Gentle<span>Vanguard</span> <small>{t('contentStudio')}</small>
             </span>

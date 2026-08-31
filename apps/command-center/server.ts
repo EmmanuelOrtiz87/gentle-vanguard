@@ -492,6 +492,14 @@ export function createCommandCenterServer(controller = createAppsController(), r
       res.end(readFileSync(new URL('./public/widget.js', import.meta.url), 'utf8'));
       return;
     }
+    if (url.pathname === '/logo.svg' && req.method === 'GET') {
+      res.writeHead(200, {
+        'Content-Type': 'image/svg+xml',
+        'Cache-Control': 'no-store',
+      });
+      res.end(readFileSync(new URL('./public/logo.svg', import.meta.url), 'utf8'));
+      return;
+    }
     if (url.pathname === '/gv-design-system.css' && req.method === 'GET') {
       res.writeHead(200, {
         'Content-Type': 'text/css; charset=utf-8',

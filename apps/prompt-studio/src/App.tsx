@@ -297,7 +297,7 @@ export default function App() {
       <header className="gv-topbar">
         <div className="gv-topbar-inner">
           <div className="gv-brand">
-            <span className="ps-mark">GV</span>
+            <img src="/logo.svg" alt="Gentle-Vanguard" className="gv-brand-logo" />
             <span>
               <strong>Gentle-Vanguard</strong>
               <small className="block text-slate-400 text-xs">

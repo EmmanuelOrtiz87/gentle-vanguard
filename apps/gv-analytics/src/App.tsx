@@ -265,7 +265,7 @@ export function App() {
       <header className="topbar">
         <div className="topbar-inner">
           <div className="brand">
-            <img src="/logo.svg" alt="Gentle-Vanguard" />
+            <img src="/logo.svg" alt="Gentle-Vanguard" className="gv-brand-logo" />
             <span className="name">
               Gentle<span>Vanguard</span> <small>{tt('brand.analytics')}</small>
             </span>

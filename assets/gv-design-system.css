@@ -116,6 +116,12 @@
     background 0.15s,
     color 0.15s;
 }
+/* Official asset: apps/academy-web/assets/logo.svg. Static apps serve a local copy; Vite apps import this layer. */
+.gv-brand-logo {
+  height: 32px;
+  width: auto;
+  display: block;
+}
 .gv-icon-btn:hover:not(:disabled) {
   color: var(--gv-text);
   background: var(--gv-border);

@@ -184,6 +184,12 @@
   gap: 10px;
   min-width: max-content;
 }
+/* Official asset: apps/academy-web/assets/logo.svg; this Vite app serves a local copy. */
+.gv-brand-logo {
+  height: 32px;
+  width: auto;
+  display: block;
+}
 .gv-brand-mark {
   width: 34px;
   height: 34px;

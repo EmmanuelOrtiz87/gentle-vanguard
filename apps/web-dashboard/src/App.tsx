@@ -74,9 +74,7 @@ function Navigation() {
     <nav className="gv-topbar">
       <div className="gv-topbar-inner">
         <div className="gv-brand-row">
-          <span className="gv-brand-mark" aria-hidden="true">
-            Gv
-          </span>
+          <img src="/logo.svg" alt="Gentle-Vanguard" className="gv-brand-logo" />
           <div className="gv-brand-copy">
             <span className="gv-brand-name">
               Gentle<span>Vanguard</span>
