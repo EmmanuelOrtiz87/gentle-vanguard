@@ -18,6 +18,7 @@ import { compressStructural, estimateTokens } from '../compression/structural-co
 import { executeWithCircuit } from '../resilience/circuit-breaker-v2';
 import { registerAttempt, detectLoop } from '../resilience/anti-loop-guard.js';
 import { evaluateFailure } from '../security/guardrail-orchestrator.js';
+import { moderateInputHeuristic } from '../security/guardrails/input-moderation.js';
 import { log } from '../utils/logger.js';
 
 const logger = log('AGENT-DELEGATOR');
@@ -406,6 +407,13 @@ function loadAgents(): Record<string, AgentConfig> {
  */
 export async function delegate(request: DelegationRequest): Promise<DelegationResult> {
   const startTime = Date.now();
+  // F3.2 soft WARN — input moderation (heuristic, <5ms, never blocks)
+  const mod = moderateInputHeuristic(request.task);
+  if (mod.blocked) {
+    logger.warn(
+      `[GUARDRAIL:INPUT] soft WARN blocked:true reason=${mod.reason} rail=${mod.rail} — proceeding (soft WARN, ADR-0023)`,
+    );
+  }
   const agents = loadAgents();
   const agentConfig = agents[request.agent];
 
