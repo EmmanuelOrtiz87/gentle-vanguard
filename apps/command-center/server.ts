@@ -258,6 +258,12 @@ export function createAppsController(options: AppsControllerOptions = {}) {
       ...APPS_REGISTRY[4],
       processes: () => [
         {
+          name: 'api',
+          port: 5177,
+          pidFile: ownPidPath(root, 'prompts', 'api'),
+          start: () => ts(appRoot(root, 'prompt-studio'), 'server/server.ts'),
+        },
+        {
           name: 'vite',
           port: 5176,
           pidFile: ownPidPath(root, 'prompts', 'vite'),
@@ -472,10 +478,14 @@ export async function startServer(): Promise<void> {
   }
   const server = createCommandCenterServer(createAppsController({ root }));
   mkdirSync(runtimeDir(root), { recursive: true });
-  writeFileSync(join(runtimeDir(root), 'command-center.pid'), String(process.pid));
+  // CC_PID_FILE: tests/smoke run their own server instance — without this
+  // override they would clobber the production pidfile (write + SIGTERM unlink).
+  const pidFile =
+    process.env.CC_PID_FILE ?? join(runtimeDir(root), 'command-center.pid');
+  writeFileSync(pidFile, String(process.pid));
   const cleanup = () => {
     try {
-      unlinkSync(join(runtimeDir(root), 'command-center.pid'));
+      unlinkSync(pidFile);
     } catch {}
     server.close(() => process.exit(0));
   };

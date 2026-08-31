@@ -3,8 +3,14 @@ import { spawn } from 'node:child_process';
 import { request } from 'node:http';
 
 const port = 18090;
+const pidFile = '.runtime/command-center-smoke.pid';
 const child = spawn(process.execPath, ['--import', 'tsx', 'apps/command-center/server.ts'], {
-  env: { ...process.env, CC_PORT: String(port) },
+      env: {
+        ...process.env,
+        CC_PORT: String(port),
+        // Isolated pidfile — never touch the production command-center.pid.
+        CC_PID_FILE: pidFile,
+      },
   stdio: 'ignore',
   windowsHide: true,
 });
