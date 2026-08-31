@@ -8,6 +8,26 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ## ⚡ Registro de progreso
 
+### Ejecutado — Sesión 11 (2026-08-31, ronda 2 OPTIMIZACIÓN: loops de auto-aprendizaje vivos)
+
+- ✅ **Session-id bridge** (commit `babf25ee`): namespaces unificados vía tabla `session_id_aliases`
+  (matching temporal sin adivinar en ambigüedad, confianzas; forward aliases al ingest desde
+  session-current.json). Backfill: **98.6% de atribución — 1.21B tokens (99.8%) ahora unibles a
+  sesiones del repo (antes: 0)**. Eval con joins alias-aware.
+- ✅ **Feedback + skill_usage vivos** (commit `9cf0f1af`): outcome-feedback deriva up/down en el
+  cierre SOLO de señales reales (inconcluso no escribe); skill-usage-recorder en matchSkill/
+  getSkillContent + backfill desde evidencia real (.atl/skill-stats.json, 32 filas). Dashboard
+  POST /api/feedback verificado correcto y compatible.
+- ✅ **Routing económico activo** (commit `3e95d2eb`): `resolveBudgetAwareModel()` — con uso diario
+  >umbral (soft 100%), las rutas internas (subagent/delegation/research) bajan solas al perfil
+  cheap (mimo-v2.5-free hoy); **el modelo interactivo JAMÁS se toca**; decisiones logueadas
+  (JSONL + eventos Nexus); kill-switch GV_BUDGET_ROUTING=0. **DEJADO ACTIVO** — con el uso actual
+  (170%) ya está degradando rutas internas. Docs: docs/reference/BUDGET-ROUTING.md.
+- ✅ **Fix señal muerta de feedback en eval** (commit `483e4e3f`): el lector consultaba tipos que el
+  CHECK del esquema nunca permite ('positive'...); ahora incluye 'up'/'down'.
+- Nota: `traces.session_id` es NULL en todas las filas (629) — el puente no puede atribuir trazas
+  retroactivamente; los writers de trazas deberían empezar a registrar session id (follow-up).
+
 ### Ejecutado — Sesión 10 (2026-08-31, ronda de OPTIMIZACIÓN: despertar capacidades dormidas)
 
 - ✅ **Session lifecycle reparado** (commit `fa7dc363`): causa raíz de múltiples capacidades dormidas
