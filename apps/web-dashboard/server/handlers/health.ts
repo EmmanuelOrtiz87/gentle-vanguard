@@ -5,6 +5,7 @@ import type { URL } from 'url';
 import { getResilienceConfig } from '@gentle-vanguard/core/resilience-bridge';
 import { getGlobalHealth } from '../global-health-api.ts';
 import { ROOT, STACK_VERSION } from '../shared.ts';
+import { runSync } from '@gentle-vanguard/core/run-command.js';
 import {
   clients,
   dashboardTelemetry,
@@ -188,6 +189,59 @@ export async function healthHandler(
     }
     res.writeHead(200, headers);
     res.end(JSON.stringify({ success: report !== null, data: report }));
+    return true;
+  }
+
+  if (url.pathname === '/api/loop-guard') {
+    const guardFile = join(ROOT, 'src/core/orchestrator-loop-guard.ts');
+    const testFile = join(ROOT, 'tests/unit/orchestrator-loop-guard.test.ts');
+    const metricsFile = join(ROOT, 'config/stack-metrics.json');
+    const resumeLog = join(ROOT, '.runtime', 'adaptive-steps-resume.log');
+    const guardModule = existsSync(guardFile);
+    const guardTests = existsSync(testFile);
+    const liveMetrics = existsSync(metricsFile);
+    let selfTest = false;
+    let selfTestDetail = 'not run';
+    try {
+      const r = runSync('npx', ['tsx', 'src/core/orchestrator-loop-guard.ts'], {
+        timeout: 5000,
+        cwd: ROOT,
+      });
+      const out = (r.stdout ?? '').toString();
+      selfTest = out.includes('intent-loop') || out.includes('"break": true');
+      selfTestDetail = selfTest ? 'intent-loop detection works' : 'unexpected output';
+    } catch {
+      selfTestDetail = 'failed to run';
+    }
+    const resumeLogEntries: { taskId: string; count: number; isLoop: boolean }[] = [];
+    try {
+      if (existsSync(resumeLog)) {
+        const lines = readFileSync(resumeLog, 'utf-8').split('\n').filter(Boolean).slice(-10);
+        const counts = new Map<string, number>();
+        for (const l of lines) counts.set(l.trim(), (counts.get(l.trim()) ?? 0) + 1);
+        for (const [taskId, count] of counts.entries()) {
+          resumeLogEntries.push({ taskId, count, isLoop: count >= 3 });
+        }
+      }
+    } catch {}
+    const watchtowerStatus =
+      guardModule && guardTests && liveMetrics && selfTest ? 'ok' : 'degraded';
+    res.writeHead(200, headers);
+    res.end(
+      JSON.stringify({
+        success: true,
+        data: {
+          timestamp: new Date().toISOString(),
+          guardModule,
+          guardTests,
+          liveMetrics,
+          selfTest,
+          selfTestDetail,
+          resumeLog: resumeLogEntries,
+          watchtowerStatus,
+        },
+      }),
+    );
     return true;
   }
 
