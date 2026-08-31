@@ -11,6 +11,9 @@ import {
   Star,
   Pencil,
   Search,
+  Languages,
+  Moon,
+  Sun,
 } from 'lucide-react';
 import { useT, type Locale } from './i18n';
 
@@ -112,6 +115,7 @@ export default function App() {
   const [theme, setTheme] = useState(() =>
     localStorage.getItem('gv-cc-theme') === 'light' ? 'light' : 'dark',
   );
+  const [showLangSelector, setShowLangSelector] = useState(false);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -308,22 +312,47 @@ export default function App() {
           </nav>
           <div className="gv-system-state">{t('systemState')}</div>
           <div className="ps-controls">
-            <select
-              className="gv-btn gv-btn-ghost"
-              aria-label={t('language')}
-              value={locale}
-              onChange={(e) => setLocale(e.target.value as Locale)}
-            >
-              <option value="es">ES</option>
-              <option value="en">EN</option>
-            </select>
+            <div className="gv-lang-dropdown">
+              <button
+                type="button"
+                className="gv-icon-btn"
+                aria-label={t('language')}
+                title={t('language')}
+                onClick={() => setShowLangSelector((current) => !current)}
+              >
+                <Languages className="w-5 h-5" aria-hidden="true" />
+              </button>
+              {showLangSelector && (
+                <>
+                  <div className="fixed inset-0 z-10" onClick={() => setShowLangSelector(false)} />
+                  <div className="gv-lang-dropdown-menu">
+                    {(['es', 'en'] as const).map((value) => (
+                      <button
+                        type="button"
+                        key={value}
+                        aria-current={locale === value ? 'true' : undefined}
+                        onClick={() => {
+                          setLocale(value);
+                          setShowLangSelector(false);
+                        }}
+                      >
+                        <span>{value === 'es' ? '🇪🇸' : '🇬🇧'}</span>
+                        <span>{value === 'es' ? 'Español' : 'English'}</span>
+                        {locale === value && <Check className="gv-lang-check" size={15} />}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
             <button
               type="button"
-              className="gv-btn gv-btn-ghost"
+              className="gv-icon-btn gv-theme-toggle"
               aria-label={theme === 'dark' ? t('light') : t('dark')}
+              title={theme === 'dark' ? t('light') : t('dark')}
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             >
-              {theme === 'dark' ? '☀' : '🌙'}
+              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
           </div>
         </div>

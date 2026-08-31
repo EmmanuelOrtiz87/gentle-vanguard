@@ -235,10 +235,10 @@ function DashboardInner() {
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <div className="relative">
+              <div className="relative gv-lang-dropdown">
                 <button
                   onClick={() => setShowLangSelector(!showLangSelector)}
-                  className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                  className="gv-icon-btn p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                   title="Language / Idioma / Idioma"
                 >
                   <Languages className="w-5 h-5" />
@@ -249,7 +249,7 @@ function DashboardInner() {
                       className="fixed inset-0 z-10"
                       onClick={() => setShowLangSelector(false)}
                     />
-                    <div className="absolute right-0 mt-2 z-20 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 min-w-[180px]">
+                    <div className="gv-lang-dropdown-menu absolute right-0 mt-2 z-20 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 min-w-[180px]">
                       {locales.map((l) => (
                         <button
                           key={l}
@@ -274,7 +274,7 @@ function DashboardInner() {
               </div>
               <button
                 onClick={() => setUseWebSocket(!useWebSocket)}
-                className={`p-2 rounded-lg transition-colors ${
+                className={`gv-icon-btn p-2 rounded-lg transition-colors ${
                   useWebSocket
                     ? 'bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400'
                     : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
@@ -286,13 +286,13 @@ function DashboardInner() {
               <button
                 onClick={refetch}
                 disabled={loading}
-                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
+                className="gv-icon-btn p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
               >
                 <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
               </button>
               <button
                 onClick={toggleDarkMode}
-                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                className="gv-icon-btn gv-theme-toggle p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               >
                 {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </button>

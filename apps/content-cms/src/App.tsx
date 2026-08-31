@@ -14,7 +14,21 @@ import {
 } from './domain';
 import { contentStore } from './storage';
 import ContentOS from './contentos';
-import { Calendar, Download, Eye, FileText, Image, Pencil, Plus, Save, Upload } from 'lucide-react';
+import {
+  Calendar,
+  Check,
+  Download,
+  Eye,
+  FileText,
+  Image,
+  Languages,
+  Moon,
+  Pencil,
+  Plus,
+  Save,
+  Sun,
+  Upload,
+} from 'lucide-react';
 import { useT } from './i18n';
 
 type Tab = 'content-os' | 'studio';
@@ -43,6 +57,7 @@ export default function App() {
   const [preview, setPreview] = useState(false);
   const [filter, setFilter] = useState<'all' | 'draft' | 'published'>('all');
   const [message, setMessage] = useState(() => t('ready'));
+  const [showLangSelector, setShowLangSelector] = useState(false);
   const importRef = useRef<HTMLInputElement>(null);
   const visibleItems = useMemo(
     () => (filter === 'all' ? state.items : state.items.filter((item) => item.status === filter)),
@@ -200,27 +215,58 @@ export default function App() {
             {state.items.length} {t('items')}
           </div>
           <div className="locale-controls">
-            <select
-              aria-label={t('language')}
-              value={locale}
-              onChange={(event) => setLocale(event.target.value as 'es' | 'en')}
-            >
-              <option value="es">{t('es')}</option>
-              <option value="en">{t('en')}</option>
-            </select>
+            <div className="gv-lang-dropdown">
+              <button
+                type="button"
+                className="gv-icon-btn"
+                aria-label={t('language')}
+                title={t('language')}
+                onClick={() => setShowLangSelector((current) => !current)}
+              >
+                <Languages size={18} aria-hidden="true" />
+              </button>
+              {showLangSelector && (
+                <>
+                  <div className="fixed inset-0 z-10" onClick={() => setShowLangSelector(false)} />
+                  <div className="gv-lang-dropdown-menu">
+                    {(['es', 'en'] as const).map((value) => (
+                      <button
+                        type="button"
+                        key={value}
+                        aria-current={locale === value ? 'true' : undefined}
+                        onClick={() => {
+                          setLocale(value);
+                          setShowLangSelector(false);
+                        }}
+                      >
+                        <span>{value === 'es' ? '🇪🇸' : '🇬🇧'}</span>
+                        <span>{t(value)}</span>
+                        {locale === value && <Check className="gv-lang-check" size={15} />}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
             <button
-              className="gv-btn gv-btn-ghost"
+              className="gv-icon-btn gv-theme-toggle"
               aria-label={t('theme')}
+              title={theme === 'dark' ? t('light') : t('dark')}
               onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
             >
-              {theme === 'dark' ? '☀' : '🌙'}
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
           </div>
           <div className="top-actions">
             {tab === 'studio' && (
               <>
-                <button className="gv-btn gv-btn-ghost" onClick={() => importRef.current?.click()}>
-                  <Upload size={16} aria-hidden="true" /> {t('importJson')}
+                <button
+                  className="gv-icon-btn"
+                  title={t('importJson')}
+                  aria-label={t('importJson')}
+                  onClick={() => importRef.current?.click()}
+                >
+                  <Upload size={18} aria-hidden="true" />
                 </button>
                 <input
                   ref={importRef}
@@ -229,11 +275,21 @@ export default function App() {
                   accept="application/json"
                   onChange={importJson}
                 />
-                <button className="gv-btn gv-btn-ghost" onClick={() => downloadJson(state.items)}>
-                  <Download size={16} aria-hidden="true" /> {t('exportJson')}
+                <button
+                  className="gv-icon-btn"
+                  title={t('exportJson')}
+                  aria-label={t('exportJson')}
+                  onClick={() => downloadJson(state.items)}
+                >
+                  <Download size={18} aria-hidden="true" />
                 </button>
-                <button className="gv-btn gv-btn-primary" onClick={startNew}>
-                  <Plus size={16} aria-hidden="true" /> {t('newContent')}
+                <button
+                  className="gv-icon-btn"
+                  title={t('newContent')}
+                  aria-label={t('newContent')}
+                  onClick={startNew}
+                >
+                  <Plus size={18} aria-hidden="true" />
                 </button>
               </>
             )}

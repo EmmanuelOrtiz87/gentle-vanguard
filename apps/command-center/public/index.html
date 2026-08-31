@@ -72,9 +72,40 @@
       body {
         margin: 0;
         min-height: 100vh;
-        background: radial-gradient(circle at 80% 0%, var(--bg-glow) 0, var(--bg) 38%);
+        background: var(--bg);
         color: var(--text);
         font-family: var(--font);
+      }
+      .gv-grid-bg {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(168, 85, 247, 0.045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 191, 255, 0.045) 1px, transparent 1px);
+        background-size: 48px 48px;
+      }
+      .gv-glow-a,
+      .gv-glow-b {
+        position: fixed;
+        z-index: -1;
+        border-radius: 50%;
+        pointer-events: none;
+      }
+      .gv-glow-a {
+        width: 720px;
+        height: 720px;
+        top: -340px;
+        right: -220px;
+        background: radial-gradient(circle, rgba(168, 85, 247, 0.16), transparent 65%);
+      }
+      .gv-glow-b {
+        width: 640px;
+        height: 640px;
+        bottom: -320px;
+        left: -200px;
+        background: radial-gradient(circle, rgba(0, 191, 255, 0.13), transparent 65%);
       }
       main {
         max-width: 1180px;
@@ -157,6 +188,85 @@
         gap: 8px;
         margin-left: auto;
         flex-wrap: wrap;
+      }
+      .gv-icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        padding: 8px;
+        border: 0;
+        border-radius: 9px;
+        color: var(--muted);
+        background: var(--icon);
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .gv-icon-btn:hover:not(:disabled) {
+        color: var(--text);
+        background: var(--border);
+      }
+      .gv-icon-btn:focus-visible,
+      .gv-lang-dropdown-menu button:focus-visible {
+        outline: 3px solid var(--primary-light);
+        outline-offset: 2px;
+      }
+      .gv-lang-dropdown {
+        position: relative;
+      }
+      .gv-lang-dropdown-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        z-index: 60;
+        min-width: 168px;
+        padding: 4px;
+        border: 1px solid var(--glass-border);
+        border-radius: 10px;
+        background: var(--surface);
+        box-shadow: 0 12px 30px #0007;
+      }
+      .gv-lang-dropdown-menu button {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        gap: 8px;
+        padding: 9px 10px;
+        border: 0;
+        border-radius: 7px;
+        color: var(--text);
+        background: transparent;
+        font: 600 13px var(--font);
+        text-align: left;
+        cursor: pointer;
+      }
+      .gv-lang-dropdown-menu button:hover,
+      .gv-lang-dropdown-menu button[aria-current='true'] {
+        background: #00bfff1f;
+      }
+      .gv-lang-check {
+        margin-left: auto;
+        color: var(--primary);
+      }
+      #start-all,
+      #stop-all {
+        padding: 8px;
+        border: 0;
+        color: var(--muted);
+        background: var(--icon);
+      }
+      #start-all:hover:not(:disabled),
+      #stop-all:hover:not(:disabled) {
+        color: var(--text);
+        background: var(--border);
+      }
+      .refresh {
+        padding: 8px;
+        border: 0;
+        background: var(--icon);
       }
       .section-heading {
         margin-bottom: 20px;
@@ -413,6 +523,9 @@
   </head>
   <body>
     <main>
+      <div class="gv-grid-bg"></div>
+      <div class="gv-glow-a"></div>
+      <div class="gv-glow-b"></div>
       <header class="gv-topbar">
         <div class="topbar-inner">
           <div class="brand">
@@ -426,24 +539,60 @@
             <span id="running-state">0</span> <span data-i18n="runningApps"></span>
           </div>
           <div class="header-actions">
-            <button id="start-all" onclick="preset('start-all')" data-i18n="startAll"></button>
+            <button
+              id="start-all"
+              class="gv-icon-btn"
+              title="Arrancar todo"
+              aria-label="Arrancar todo"
+              onclick="preset('start-all')"
+            >
+              ⏻
+            </button>
             <button
               id="stop-all"
-              class="preset-stop"
+              class="gv-icon-btn preset-stop"
+              title="Detener todo"
+              aria-label="Detener todo"
               onclick="preset('stop-all')"
-              data-i18n="stopAll"
-            ></button>
-            <select id="lang" aria-label="Idioma">
-              <option value="es">ES</option>
-              <option value="en">EN</option>
-            </select>
-            <button id="theme" type="button" aria-label="Cambiar tema">☀</button>
+            >
+              ⏹
+            </button>
+            <div class="gv-lang-dropdown">
+              <button
+                id="language-toggle"
+                class="gv-icon-btn"
+                type="button"
+                aria-label="Idioma"
+                title="Idioma"
+              >
+                文A
+              </button>
+              <div id="language-menu" class="gv-lang-dropdown-menu" hidden>
+                <button type="button" data-lang="es">
+                  <span>🇪🇸</span><span>Español</span><span class="gv-lang-check"></span>
+                </button>
+                <button type="button" data-lang="en">
+                  <span>🇬🇧</span><span>English</span><span class="gv-lang-check"></span>
+                </button>
+              </div>
+            </div>
             <button
-              class="refresh"
+              id="theme"
+              class="gv-icon-btn"
+              type="button"
+              aria-label="Cambiar tema"
+              title="Cambiar tema"
+            >
+              ☀
+            </button>
+            <button
+              class="gv-icon-btn refresh"
               id="refresh"
               aria-label="Actualizar aplicaciones"
-              data-i18n="refresh"
-            ></button>
+              title="Actualizar aplicaciones"
+            >
+              ↻
+            </button>
           </div>
         </div>
       </header>
@@ -545,9 +694,26 @@
         document.querySelectorAll('[data-i18n]').forEach((node) => {
           node.textContent = t(node.dataset.i18n);
         });
-        document.querySelector('#lang').value = lang;
+        document.querySelectorAll('[data-lang]').forEach((button) => {
+          const active = button.dataset.lang === lang;
+          button.setAttribute('aria-current', active ? 'true' : 'false');
+          button.querySelector('.gv-lang-check').textContent = active ? '✓' : '';
+        });
         document.querySelector('#theme').textContent = theme === 'dark' ? '☀' : '🌙';
         document.querySelector('#theme').setAttribute('aria-label', t('theme'));
+        document.querySelector('#theme').setAttribute('title', t('theme'));
+        document
+          .querySelector('#language-toggle')
+          .setAttribute('aria-label', lang === 'es' ? 'Idioma' : 'Language');
+        document
+          .querySelector('#language-toggle')
+          .setAttribute('title', lang === 'es' ? 'Idioma' : 'Language');
+        document.querySelector('#start-all').setAttribute('aria-label', t('startAll'));
+        document.querySelector('#start-all').setAttribute('title', t('startAll'));
+        document.querySelector('#stop-all').setAttribute('aria-label', t('stopAll'));
+        document.querySelector('#stop-all').setAttribute('title', t('stopAll'));
+        document.querySelector('#refresh').setAttribute('aria-label', t('refresh'));
+        document.querySelector('#refresh').setAttribute('title', t('refresh'));
       }
       const labels = {
         running: () => t('running'),
@@ -639,17 +805,29 @@
       // Bootstrap: initial load + 5s polling (matches the footer promise).
       // Without this the script only defines functions and the grid stays at
       // "Cargando aplicaciones…" forever — no error, no render.
-      document.querySelector('#lang').addEventListener('change', (event) => {
-        lang = event.target.value;
-        localStorage.setItem('gv-cc-lang', lang);
-        applyPreferences();
-        void load();
+      document.querySelector('#language-toggle').addEventListener('click', () => {
+        const menu = document.querySelector('#language-menu');
+        menu.hidden = !menu.hidden;
+      });
+      document.querySelectorAll('[data-lang]').forEach((button) => {
+        button.addEventListener('click', () => {
+          lang = button.dataset.lang;
+          localStorage.setItem('gv-cc-lang', lang);
+          applyPreferences();
+          document.querySelector('#language-menu').hidden = true;
+          void load();
+        });
+      });
+      document.addEventListener('click', (event) => {
+        if (!event.target.closest('.gv-lang-dropdown'))
+          document.querySelector('#language-menu').hidden = true;
       });
       document.querySelector('#theme').addEventListener('click', () => {
         theme = theme === 'dark' ? 'light' : 'dark';
         localStorage.setItem('gv-cc-theme', theme);
         applyPreferences();
       });
+      document.querySelector('#refresh').addEventListener('click', () => void load());
       applyPreferences();
       void load();
       setInterval(() => void load(), 5000);

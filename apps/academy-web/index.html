@@ -67,14 +67,23 @@
           <span class="kbd">/</span>
         </div>
         <div class="academy-controls">
-          <select id="language-select" class="gv-btn gv-btn-ghost" aria-label="Idioma">
-            <option value="es">ES</option>
-            <option value="en">EN</option>
-          </select>
+          <div class="gv-lang-dropdown">
+            <button id="language-toggle" class="gv-icon-btn" type="button" aria-label="Idioma">
+              <span aria-hidden="true">文A</span>
+            </button>
+            <div id="language-menu" class="gv-lang-dropdown-menu" hidden>
+              <button type="button" data-locale="es">
+                <span>🇪🇸</span><span>Español</span><span class="gv-lang-check">✓</span>
+              </button>
+              <button type="button" data-locale="en">
+                <span>🇬🇧</span><span>English</span><span class="gv-lang-check"></span>
+              </button>
+            </div>
+          </div>
           <button
             id="theme-toggle"
             type="button"
-            class="gv-btn gv-btn-ghost"
+            class="gv-icon-btn gv-theme-toggle"
             aria-label="Cambiar tema"
           >
             ☀

@@ -69,6 +69,68 @@
   gap: 8px;
   flex-shrink: 0;
 }
+.gv-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border: 0;
+  border-radius: 9px;
+  color: var(--gv-muted);
+  background: var(--color-surface-icon);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.gv-icon-btn:hover {
+  color: var(--gv-text);
+  background: var(--color-border);
+}
+.gv-icon-btn:focus-visible,
+.gv-lang-dropdown-menu button:focus-visible {
+  outline: 3px solid var(--color-primary-light);
+  outline-offset: 2px;
+}
+.gv-lang-dropdown {
+  position: relative;
+}
+.gv-lang-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 60;
+  min-width: 168px;
+  padding: 4px;
+  border: 1px solid var(--gv-glass-border);
+  border-radius: 10px;
+  background: var(--gv-surface);
+  box-shadow: 0 12px 30px rgba(13, 17, 23, 0.45);
+}
+.gv-lang-dropdown-menu button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 7px;
+  color: var(--gv-text);
+  background: transparent;
+  font: 600 13px var(--font);
+  text-align: left;
+  cursor: pointer;
+}
+.gv-lang-dropdown-menu button:hover,
+.gv-lang-dropdown-menu button[aria-current='true'] {
+  background: rgba(var(--color-primary-rgb), 0.12);
+}
+.gv-lang-dropdown-menu .gv-lang-check {
+  margin-left: auto;
+  color: var(--color-primary);
+}
 .academy-controls select {
   appearance: auto;
   padding: 7px 10px;

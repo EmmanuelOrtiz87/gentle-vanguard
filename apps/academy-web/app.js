@@ -14,6 +14,7 @@
       close: 'Cerrar ✕',
       light: 'Activar tema claro',
       dark: 'Activar tema oscuro',
+      language: 'Idioma',
       home: 'Inicio',
       fundamentals: 'Fundamentos',
       architecture: 'Arquitectura',
@@ -35,6 +36,7 @@
       close: 'Close ✕',
       light: 'Enable light theme',
       dark: 'Enable dark theme',
+      language: 'Language',
       home: 'Home',
       fundamentals: 'Fundamentals',
       architecture: 'Architecture',
@@ -78,11 +80,31 @@
     localStorage.setItem('gv-cc-theme', next);
     updateThemeButton();
   });
-  document.getElementById('language-select').value = locale;
-  document.getElementById('language-select').addEventListener('change', (e) => {
-    setLocale(e.target.value);
-    updateThemeButton();
+  const languageToggle = document.getElementById('language-toggle');
+  const languageMenu = document.getElementById('language-menu');
+  const updateLanguageMenu = () => {
+    languageToggle.setAttribute('aria-label', t('language'));
+    languageMenu.querySelectorAll('[data-locale]').forEach((button) => {
+      const active = button.dataset.locale === locale;
+      button.setAttribute('aria-current', active ? 'true' : 'false');
+      button.querySelector('.gv-lang-check').textContent = active ? '✓' : '';
+    });
+  };
+  languageToggle.addEventListener('click', () => {
+    languageMenu.hidden = !languageMenu.hidden;
   });
+  languageMenu.querySelectorAll('[data-locale]').forEach((button) => {
+    button.addEventListener('click', () => {
+      setLocale(button.dataset.locale);
+      languageMenu.hidden = true;
+      updateLanguageMenu();
+      updateThemeButton();
+    });
+  });
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.gv-lang-dropdown')) languageMenu.hidden = true;
+  });
+  updateLanguageMenu();
 
   const CONTENT = window.GV_CONTENT || {};
   const TRACKS = window.GV_TRACKS || [];
