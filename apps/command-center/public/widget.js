@@ -12,7 +12,7 @@
   };
   const style = document.createElement('style');
   style.textContent =
-    '.gv-cc-widget{position:fixed;right:18px;bottom:18px;z-index:9999;border:1px solid #1e3a5f;border-radius:999px;padding:9px 13px;background:#121a2a;color:#fff;box-shadow:0 8px 24px #0008;font:600 13px Segoe UI,system-ui,sans-serif;cursor:pointer}.gv-cc-widget:disabled{opacity:.6;cursor:wait}.gv-cc-widget .gv-cc-dot{display:inline-block;width:9px;height:9px;margin-right:8px;border-radius:50%;background:#6b7280}.gv-cc-widget .gv-cc-power{margin-right:6px;color:#4dcfff}.gv-cc-widget.gv-cc-running .gv-cc-dot{background:#22c55e}.gv-cc-widget.gv-cc-partial .gv-cc-dot{background:#f59e0b}';
+    '.gv-cc-widget{position:fixed;right:18px;bottom:18px;z-index:9999;border:1px solid #1e3a5f;border-radius:999px;padding:9px 13px;background:#121a2a;color:#fff;box-shadow:0 8px 24px #0008;font:600 13px Segoe UI,system-ui,sans-serif;cursor:pointer}.gv-cc-widget:disabled{opacity:.6;cursor:wait}.gv-cc-widget .gv-cc-dot{display:inline-block;width:9px;height:9px;margin-right:8px;border-radius:50%;background:#6b7280}.gv-cc-widget .gv-cc-power{margin-right:6px;color:#4dcfff}.gv-cc-widget.gv-cc-running .gv-cc-dot{background:#22c55e}.gv-cc-widget.gv-cc-partial .gv-cc-dot{background:#f59e0b}.gv-cc-widget.gv-cc-armed{border-color:#f59e0b;color:#fde68a}.gv-cc-widget.gv-cc-error{border-color:#ef4444;color:#fecaca}';
   document.head.appendChild(style);
   const button = document.createElement('button');
   button.type = 'button';
@@ -49,8 +49,26 @@
       console.warn('[GV CC widget] Command Center no disponible', error);
     }
   };
+  // Two-click stop (arm → "¿Seguro?" → execute): confirm() dialogs can be
+  // suppressed by browsers ("prevent more dialogs") or extensions, silently
+  // returning false — which made the widget look dead with no visible error.
+  let armed = false;
+  let armTimer = null;
+  const disarm = () => {
+    armed = false;
+    if (armTimer) clearTimeout(armTimer);
+    button.classList.remove('gv-cc-armed');
+    button.querySelector('.gv-cc-name').textContent = names[appId] || appId;
+  };
   button.addEventListener('click', async () => {
-    if (current === 'running' && !confirm('¿Detener esta aplicación?')) return;
+    if (current === 'running' && !armed) {
+      armed = true;
+      button.classList.add('gv-cc-armed');
+      button.querySelector('.gv-cc-name').textContent = '¿Seguro? Click de nuevo';
+      armTimer = setTimeout(disarm, 3000);
+      return;
+    }
+    disarm();
     button.disabled = true;
     try {
       const response = await fetch(
@@ -60,6 +78,10 @@
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       update(await response.json());
     } catch (error) {
+      // Surface the failure visually — never only in the console.
+      button.classList.add('gv-cc-error');
+      button.title = `Error: ${error && error.message ? error.message : String(error)}`;
+      setTimeout(() => button.classList.remove('gv-cc-error'), 2500);
       console.warn('[GV CC widget] No se pudo cambiar el estado', error);
       await poll();
     } finally {
