@@ -93,9 +93,10 @@ jobs:
         run: npx tsx --test tests/e2e/*.test.ts
 
   phase-connectors:
-    name: Phase 1.2 Cloud Connector Tests
+    name: Phase 1.2 Cloud Connector Tests (disabled — local-only mode, ADR-0017)
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    if: false # disabled — Cloud Connector is opt-in (CLOUD_CONNECTOR_ENABLED != true). Enable by removing this line when activating AWS/Azure.
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
