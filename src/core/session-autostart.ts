@@ -17,6 +17,7 @@ import { printBanner } from '../cli/banner.js';
 import { newAuditEvent, saveAuditEvent } from '../infrastructure/audit-pipeline.js';
 import { sessionStart } from '../knowledge/engram-session-bridge.js';
 import { ProcessLock } from './process-lock-manager.js';
+import { getConfigService } from '../config/config-service.js';
 
 const LOG = createLogger('SESSION-AUTOSTART');
 
@@ -536,6 +537,20 @@ async function main() {
   );
 
   if (!process.env.GV_QUIET) printBanner('Session Autostart');
+
+  // Config validation (F2.6): typed zod check of startup-critical env vars.
+  // Local-first (ADR-0017): missing optional vars NEVER hard-fail here —
+  // only malformed values (bad types) produce a WARN summary.
+  try {
+    const result = getConfigService().validate({ mode: 'local' });
+    if (result.ok) {
+      LOG.info(`[CONFIG] ${result.summary}`);
+    } else {
+      LOG.warn(`[CONFIG] ${result.summary}`);
+    }
+  } catch (err) {
+    LOG.warn(`[CONFIG] validation could not run: ${err instanceof Error ? err.message : String(err)}`);
+  }
 
   // Iniciar sesión explícitamente (funciona en TODAS las herramientas, no depende del plugin automático)
   const sessionId = `session-${sessionStartTime.replace(/[:.]/g, '-').slice(0, 19)}`;
