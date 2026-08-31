@@ -397,13 +397,16 @@ textarea {
   line-height: 1.75;
   white-space: normal;
 }
-footer {
-  display: flex;
-  justify-content: space-between;
+.gv-footer {
+  display: block;
+  text-align: center;
   color: var(--gv-muted);
   border-top: 1px solid var(--gv-border);
-  padding: 15px 4vw;
-  font-size: 10px;
+  padding: 28px 24px;
+  font: 12px var(--gv-font-mono);
+}
+.gv-footer strong {
+  color: var(--gv-text-brand);
 }
 .gv-btn:disabled,
 input:disabled,

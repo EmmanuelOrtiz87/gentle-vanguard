@@ -3,6 +3,8 @@ import type { Locale } from './metric-catalog';
 export const UI_STRINGS: Record<Locale, Record<string, string>> = {
   en: {
     'ui.app_subtitle': 'Real-time metrics and monitoring',
+    'ui.local_stack': 'Local stack',
+    'ui.dashboard_footer': 'Dashboard observability',
     'ui.ws_connected': 'WS Connected',
     'ui.ws_reconnecting': 'WS Reconnecting...',
     'ui.alerts_suffix': 'alert(s)',
@@ -484,6 +486,8 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
   },
   es: {
     'ui.app_subtitle': 'Métricas y monitoreo en tiempo real',
+    'ui.local_stack': 'Stack local',
+    'ui.dashboard_footer': 'Observabilidad del dashboard',
     'ui.ws_connected': 'WS Conectado',
     'ui.ws_reconnecting': 'WS Reconectando...',
     'ui.alerts_suffix': 'alerta(s)',
@@ -974,6 +978,8 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
   },
   'pt-BR': {
     'ui.app_subtitle': 'Métricas e monitoramento em tempo real',
+    'ui.local_stack': 'Stack local',
+    'ui.dashboard_footer': 'Observabilidade do dashboard',
     'ui.ws_connected': 'WS Conectado',
     'ui.ws_reconnecting': 'WS Reconectando...',
     'ui.alerts_suffix': 'alerta(s)',

@@ -42,6 +42,7 @@ const PageLoader = () => (
 
 function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { tt } = useT();
 
   // Grouped navigation rows: operations first, then build & govern.
   const navRows = [
@@ -83,9 +84,7 @@ function Navigation() {
             <span className="gv-brand-name">Gentle Vanguard</span>
             <span className="gv-brand-product">Stack operations</span>
           </div>
-          <div className="gv-live-state">
-            <span className="gv-live-dot" /> Local stack
-          </div>
+          <div className="gv-system-state">{tt('ui.local_stack')}</div>
           <TenantSelector />
           <button
             onClick={() => setMenuOpen(!menuOpen)}
@@ -240,6 +239,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 }
 
 function App() {
+  const { tt } = useT();
   return (
     <BrowserRouter>
       <ErrorBoundary>
@@ -269,6 +269,9 @@ function App() {
                 </Suspense>
               </div>
             </main>
+            <footer className="gv-footer">
+              <strong>Gentle-Vanguard</strong> · {tt('ui.dashboard_footer')} — v3.8.2 · 2026
+            </footer>
           </div>
         </AuthGate>
       </ErrorBoundary>

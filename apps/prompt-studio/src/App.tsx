@@ -306,6 +306,7 @@ export default function App() {
             {tabBtn('library', t('library'), Library)}
             {tabBtn('guides', t('guides'), BookOpen)}
           </nav>
+          <div className="gv-system-state">{t('systemState')}</div>
           <div className="ps-controls">
             <select
               className="gv-btn gv-btn-ghost"
@@ -332,7 +333,7 @@ export default function App() {
         {tab === 'create' && (
           <div className="gv-panel gv-view-fade p-5">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-slate-100">
+              <h2 className="gv-section-title">
                 {editingId ? t('editPrompt') : t('createPrompt')}
               </h2>
               <div className="flex gap-2">
@@ -510,8 +511,8 @@ export default function App() {
 
         {tab === 'library' && (
           <div className="gv-panel gv-view-fade p-5">
-            <h2 className="text-xl font-bold text-slate-100 mb-1">{t('library')}</h2>
-            <p className="text-sm text-slate-400 mb-4">{t('libraryHelp')}</p>
+            <h2 className="gv-section-title">{t('library')}</h2>
+            <p className="gv-section-sub mb-4">{t('libraryHelp')}</p>
             <form
               className="flex gap-2 mb-4"
               onSubmit={(e) => {
@@ -636,7 +637,7 @@ export default function App() {
         {tab === 'guides' && (
           <div className="gv-panel gv-view-fade p-6 space-y-8">
             <div>
-              <h2 className="text-xl font-bold text-slate-100 mb-2">{t('guideAgents')}</h2>
+              <h2 className="gv-section-title mb-2">{t('guideAgents')}</h2>
               <ol className="list-decimal list-inside space-y-2 text-sm text-slate-300">
                 <li>
                   <strong>Copiar y pegar</strong>: todo prompt generado funciona en cualquier chat
@@ -657,7 +658,7 @@ export default function App() {
               </ol>
             </div>
             <div>
-              <h2 className="text-xl font-bold text-slate-100 mb-2">{t('guideGems')}</h2>
+              <h2 className="gv-section-title mb-2">{t('guideGems')}</h2>
               <p className="text-sm text-slate-400 mb-3">
                 Una Gema es un asistente reutilizable de Gemini con instrucciones y conocimiento
                 propios. Tu prompt del Studio es exactamente lo que una Gema necesita.
@@ -693,7 +694,7 @@ export default function App() {
               </ol>
             </div>
             <div>
-              <h2 className="text-xl font-bold text-slate-100 mb-2">{t('patterns')}</h2>
+              <h2 className="gv-section-title mb-2">{t('patterns')}</h2>
               <ul className="list-disc list-inside space-y-2 text-sm text-slate-300">
                 <li>
                   <strong>Criterios medibles</strong>: «sin vulnerabilidades alta/media» mejor que
@@ -718,8 +719,7 @@ export default function App() {
       </main>
 
       <footer className="gv-footer">
-        <span>{t('localLibrary')}</span>
-        <span>{t('footer')}</span>
+        <strong>Gentle-Vanguard</strong> · {t('footerTagline')} — v3.8.2 · 2026
       </footer>
     </div>
   );

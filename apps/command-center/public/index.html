@@ -79,14 +79,120 @@
       main {
         max-width: 1180px;
         margin: auto;
-        padding: 42px 24px 64px;
+        padding: 38px 24px 48px;
       }
       header {
         display: flex;
-        align-items: flex-end;
+        align-items: center;
         justify-content: space-between;
         gap: 20px;
-        margin-bottom: 32px;
+        margin-bottom: 30px;
+      }
+      .gv-topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        margin: 0 -24px 32px;
+        padding: 0 24px;
+        background: color-mix(in srgb, var(--bg) 88%, transparent);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--glass-border);
+      }
+      .topbar-inner {
+        max-width: 1180px;
+        min-height: 62px;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+        color: var(--text);
+        font:
+          800 18px 'Orbitron',
+          var(--font);
+        white-space: nowrap;
+      }
+      .mark {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border: 1px solid var(--primary);
+        color: var(--primary);
+        font: 800 11px var(--font);
+      }
+      .brand small {
+        display: block;
+        color: var(--muted);
+        font: 600 11px var(--font);
+      }
+      .system-state {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border: 1.5px solid color-mix(in srgb, var(--primary) 50%, transparent);
+        border-radius: 999px;
+        color: var(--primary);
+        font: 700 12px var(--mono);
+        white-space: nowrap;
+      }
+      .system-state::before {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+        box-shadow: 0 0 8px currentColor;
+        content: '';
+      }
+      .header-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-left: auto;
+        flex-wrap: wrap;
+      }
+      .section-heading {
+        margin-bottom: 20px;
+      }
+      .section-title {
+        margin: 0;
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+      }
+      .section-sub {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .stats {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin: 0 0 22px;
+      }
+      .hstat {
+        min-width: 150px;
+        padding: 13px 16px;
+        border: 1px solid var(--glass-border);
+        border-radius: 14px;
+        background: var(--glass);
+      }
+      .hstat strong {
+        display: block;
+        color: var(--primary);
+        font: 800 20px var(--mono);
+      }
+      .hstat span {
+        color: var(--muted);
+        font-size: 11px;
       }
       h1 {
         margin: 0;
@@ -268,6 +374,19 @@
         margin-top: 28px;
         text-align: right;
       }
+      .gv-footer {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 28px 24px;
+        border-top: 1px solid var(--glass-border);
+        color: var(--muted);
+        text-align: center;
+        font: 12px var(--mono);
+      }
+      .gv-footer strong {
+        color: var(--primary);
+        font-family: 'Orbitron', var(--font);
+      }
       @media (max-width: 600px) {
         main {
           padding: 28px 15px;
@@ -294,36 +413,60 @@
   </head>
   <body>
     <main>
-      <header>
-        <div>
-          <h1 data-i18n="title"></h1>
-          <p data-i18n="subtitle"></p>
-        </div>
-        <div class="header-actions">
-          <select id="lang" aria-label="Idioma">
-            <option value="es">ES</option>
-            <option value="en">EN</option>
-          </select>
-          <button id="theme" type="button" aria-label="Cambiar tema">☀</button>
-          <button
-            class="refresh"
-            id="refresh"
-            aria-label="Actualizar aplicaciones"
-            data-i18n="refresh"
-          ></button>
+      <header class="gv-topbar">
+        <div class="topbar-inner">
+          <div class="brand">
+            <span class="mark" aria-hidden="true">GV</span
+            ><span
+              >Gentle<span style="color: var(--primary)">Vanguard</span
+              ><small data-i18n="appName"></small
+            ></span>
+          </div>
+          <div class="system-state">
+            <span id="running-state">0</span> <span data-i18n="runningApps"></span>
+          </div>
+          <div class="header-actions">
+            <button id="start-all" onclick="preset('start-all')" data-i18n="startAll"></button>
+            <button
+              id="stop-all"
+              class="preset-stop"
+              onclick="preset('stop-all')"
+              data-i18n="stopAll"
+            ></button>
+            <select id="lang" aria-label="Idioma">
+              <option value="es">ES</option>
+              <option value="en">EN</option>
+            </select>
+            <button id="theme" type="button" aria-label="Cambiar tema">☀</button>
+            <button
+              class="refresh"
+              id="refresh"
+              aria-label="Actualizar aplicaciones"
+              data-i18n="refresh"
+            ></button>
+          </div>
         </div>
       </header>
-      <div class="presets" aria-label="Presets">
-        <button id="start-all" onclick="preset('start-all')" data-i18n="startAll"></button>
-        <button id="stop-all" class="preset-stop" onclick="preset('stop-all')">
-          <span data-i18n="stopAll"></span>
-        </button>
+      <div class="section-heading">
+        <h1 class="section-title" data-i18n="appsTitle"></h1>
+        <p class="section-sub" data-i18n="appsSubtitle"></p>
+      </div>
+      <div class="stats" aria-label="Stack status">
+        <div class="hstat">
+          <strong id="running-count">0</strong><span data-i18n="runningApps"></span>
+        </div>
+        <div class="hstat">
+          <strong id="stopped-count">0</strong><span data-i18n="stoppedApps"></span>
+        </div>
+        <div class="hstat"><strong>5s</strong><span data-i18n="polling"></span></div>
       </div>
       <div id="error" class="notice" role="alert" hidden></div>
       <section id="apps" class="grid view-fade" aria-live="polite">
         <div class="empty" data-i18n="loading"></div>
       </section>
-      <div class="meta" data-i18n="meta"></div>
+      <footer class="gv-footer">
+        <strong>Gentle-Vanguard</strong> · <span data-i18n="footerTagline"></span> — v3.8.2 · 2026
+      </footer>
     </main>
     <script>
       // Surface ANY unexpected error in the UI — a silent failure here would
@@ -340,6 +483,13 @@
       const I18N = {
         es: {
           title: 'Gentle-Vanguard — Command Center',
+          appName: 'Command Center',
+          appsTitle: 'Aplicaciones del stack',
+          appsSubtitle: 'Controla el ciclo de vida de cada aplicación desde un solo lugar.',
+          runningApps: 'en ejecución',
+          stoppedApps: 'detenidas',
+          polling: 'actualización automática',
+          footerTagline: 'Control de ciclo de vida de apps',
           subtitle: 'Inicia, detén y abre las aplicaciones del stack bajo demanda.',
           refresh: '↻ Actualizar',
           startAll: '⏻ Arrancar todo',
@@ -360,6 +510,13 @@
         },
         en: {
           title: 'Gentle-Vanguard — Command Center',
+          appName: 'Command Center',
+          appsTitle: 'Stack applications',
+          appsSubtitle: 'Control the lifecycle of every application from one place.',
+          runningApps: 'running',
+          stoppedApps: 'stopped',
+          polling: 'automatic refresh',
+          footerTagline: 'App lifecycle control',
           subtitle: 'Start, stop, and open stack applications on demand.',
           refresh: '↻ Refresh',
           startAll: '⏻ Start all',
@@ -421,6 +578,10 @@
       }
       function render(apps) {
         window.currentApps = apps;
+        const running = apps.filter((app) => app.status === 'running').length;
+        document.querySelector('#running-state').textContent = running;
+        document.querySelector('#running-count').textContent = running;
+        document.querySelector('#stopped-count').textContent = apps.length - running;
         const grid = document.querySelector('#apps');
         grid.classList.remove('view-fade');
         void grid.offsetWidth;

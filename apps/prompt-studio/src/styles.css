@@ -66,3 +66,18 @@ body {
   align-items: center;
   gap: 8px;
 }
+.gv-section-title {
+  margin: 0;
+  color: var(--gv-text);
+  font: 800 26px var(--gv-font-body);
+  letter-spacing: -0.01em;
+}
+.gv-section-sub {
+  margin-top: 6px;
+  color: var(--gv-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.gv-footer strong {
+  color: var(--gv-text-brand);
+}

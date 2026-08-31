@@ -277,6 +277,12 @@
   font: 800 26px var(--gv-font-body);
   letter-spacing: -0.01em;
 }
+.gv-section-sub {
+  margin: 6px 0 0;
+  color: var(--gv-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
 .gv-view-fade {
   animation: viewIn 0.28s ease both;
 }
@@ -292,6 +298,7 @@
 }
 .gv-footer {
   padding: 24px;
+  border-top: 1px solid var(--gv-glass-border);
   color: var(--gv-muted);
   text-align: center;
   font: 12px var(--gv-font-mono);

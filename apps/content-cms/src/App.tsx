@@ -197,7 +197,6 @@ export default function App() {
             </button>
           </nav>
           <div className="gv-system-state ready">
-            <span />
             {state.items.length} {t('items')}
           </div>
           <div className="locale-controls">
@@ -251,7 +250,7 @@ export default function App() {
             <div className="side-heading">
               <div>
                 <span className="eyebrow">{t('library')}</span>
-                <h1>{t('content')}</h1>
+                <h1 className="gv-section-title">{t('content')}</h1>
               </div>
               <span className="count">{state.items.length}</span>
             </div>
@@ -298,7 +297,10 @@ export default function App() {
             <div className="workspace-header">
               <div>
                 <span className="eyebrow">{selectedId ? t('editEntry') : t('newEntry')}</span>
-                <h2>{preview ? t('preview') : form.title || t('content')}</h2>
+                <h2 className="gv-section-title">
+                  {preview ? t('preview') : form.title || t('content')}
+                </h2>
+                <p className="gv-section-sub">{t('contentStudio')}</p>
               </div>
               <div className="view-toggle" role="group" aria-label="Modo de edición">
                 <button
@@ -498,9 +500,8 @@ export default function App() {
           </section>
         </main>
       )}
-      <footer>
-        <span>{tab === 'content-os' ? t('contentOsFooter') : t('localPersistence')}</span>
-        <span>Gentle-Vanguard / MVP CMS</span>
+      <footer className="gv-footer">
+        <strong>Gentle-Vanguard</strong> · {t('footerTagline')} — {t('footerVersion')}
       </footer>
     </div>
   );
