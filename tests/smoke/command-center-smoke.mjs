@@ -33,10 +33,12 @@ try {
   }
   const apps = await get('/api/apps');
   assert.equal(apps.status, 200);
-  assert.deepEqual(
-    apps.body.map((app) => app.id),
-    ['dashboard', 'analytics', 'cms', 'academy'],
-  );
+  // Presence check, not exact equality: parallel sessions keep registering
+  // new apps (e.g. prompts) — the smoke only guarantees the core four exist.
+  const ids = apps.body.map((app) => app.id);
+  for (const core of ['dashboard', 'analytics', 'cms', 'academy']) {
+    assert.ok(ids.includes(core), `registry missing core app: ${core}`);
+  }
   const academyWasRunning = apps.body.find((app) => app.id === 'academy').status === 'running';
   const start = await get('/api/apps/academy/start', 'POST');
   assert.equal(start.status, 200);
