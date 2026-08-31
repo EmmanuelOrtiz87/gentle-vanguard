@@ -24,6 +24,7 @@
  *   cache       Cache management (stub — use Nexus DB instead)
  *   session     Manage session lifecycle (start|stop|status)
  *   dashboard   Control dashboard (start|stop|restart|status)
+ *   cc          Command Center: app lifecycle (start|stop|status)
  *   cleanup     Kill zombie processes
  *   status      Show complete stack status
  *   fix         Fix PS1 references (--configs, --dry-run)
@@ -93,6 +94,7 @@ COMMANDS:
   cache       Cache management (Nexus DB)
   session     Manage session lifecycle (start|stop|status)
   dashboard   Control dashboard (start|stop|restart|status)
+  cc          Command Center: app lifecycle (start|stop|status)
   cleanup     Kill zombie processes
   status      Show complete stack status
   fix         Fix PS1 references (--configs, --dry-run)
@@ -395,6 +397,75 @@ function cmdDashboard(args: string[]): CommandResult {
         message: running
           ? 'Dashboard running: http://localhost:5173 (WS: 8080)'
           : 'Dashboard not running',
+      };
+    }
+  }
+}
+
+function ccPort(): number {
+  try {
+    const ports = JSON.parse(
+      readFileSync(join(RUNTIME_DIR, 'command-center-ports.json'), 'utf-8'),
+    ) as { ccPort?: number };
+    if (ports.ccPort) return ports.ccPort;
+  } catch {}
+  return Number(process.env.CC_PORT ?? 8090);
+}
+
+function isCcRunning(): boolean {
+  const r = runSync('curl', ['-s', `http://127.0.0.1:${ccPort()}/api/health`], {
+    timeout: 2000,
+    stdio: 'pipe',
+  });
+  return r.status === 0;
+}
+
+function cmdCc(args: string[]): CommandResult {
+  const subcmd = args[0] || 'status';
+  switch (subcmd) {
+    case 'start': {
+      if (isCcRunning()) {
+        return {
+          success: true,
+          message: `Command Center already running on http://127.0.0.1:${ccPort()}/`,
+        };
+      }
+      try {
+        const child = run(process.execPath, ['--import', 'tsx', 'src/ops/command-center/start.ts'], {
+          detached: true,
+          stdio: 'ignore',
+          windowsHide: true,
+          cwd: ROOT,
+        });
+        child.unref();
+        return { success: true, message: `Command Center starting on http://127.0.0.1:${ccPort()}/` };
+      } catch (e) {
+        return { success: false, message: `Failed: ${e}` };
+      }
+    }
+    case 'stop': {
+      try {
+        const pidFile = join(RUNTIME_DIR, 'command-center.pid');
+        if (!existsSync(pidFile)) return { success: false, message: 'Command Center not running (no pidfile)' };
+        const pid = Number(readFileSync(pidFile, 'utf-8').trim());
+        if (!pid || Number.isNaN(pid)) return { success: false, message: 'Command Center pidfile corrupt' };
+        if (process.platform === 'win32')
+          runSync('taskkill', ['/pid', String(pid), '/t', '/f'], { timeout: 8000, stdio: 'ignore' });
+        else process.kill(pid, 'SIGTERM');
+        unlinkSync(pidFile);
+        return { success: true, message: `Command Center stopped (PID ${pid})` };
+      } catch (e) {
+        return { success: false, message: `Failed: ${e}` };
+      }
+    }
+    case 'status':
+    default: {
+      const running = isCcRunning();
+      return {
+        success: running,
+        message: running
+          ? `Command Center running: http://127.0.0.1:${ccPort()}/`
+          : 'Command Center not running',
       };
     }
   }
@@ -811,6 +882,13 @@ async function main(): Promise<void> {
 
     case 'dashboard': {
       const r = cmdDashboard(args.slice(1));
+      if (r.message) console.log(r.message);
+      process.exit(r.success ? 0 : 1);
+      break;
+    }
+
+    case 'cc': {
+      const r = cmdCc(args.slice(1));
       if (r.message) console.log(r.message);
       process.exit(r.success ? 0 : 1);
       break;

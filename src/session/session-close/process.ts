@@ -9,7 +9,8 @@ export interface KillTarget {
 
 export const KILL_TARGETS: KillTarget[] = [
   { name: 'CodeGraph MCP', matcher: 'codegraph.*mcp', required: true },
-  // Dashboard WS persists between sessions; its Apps Control Panel owns lifecycle.
+  // Dashboard WS persists between sessions; the standalone Command Center
+  // (src/ops/command-center) owns app lifecycle — see DAEMON_CLASSES.
   { name: 'Timeout Daemon', matcher: 'timeout-monitor.*daemon', required: true },
   // Optional daemon: the token-ingest --watch loop survives the close today and
   // keeps appending to .runtime/token-ingest.log. Not required → SKIP if it was

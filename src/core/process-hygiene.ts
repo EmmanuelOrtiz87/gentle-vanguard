@@ -141,6 +141,15 @@ const DAEMON_CLASSES: DaemonClass[] = [
     recycleAged: true,
   },
   {
+    id: 'command-center',
+    label: 'Command Center daemon',
+    match: /command-center[\\/]server\.ts/,
+    pidFile: join(RUNTIME_DIR, 'command-center.pid'),
+    keep: 'pidfile',
+    respawn: 'autostart',
+    recycleAged: true,
+  },
+  {
     id: 'ws-watchdog',
     label: 'Dashboard WS watchdog',
     match: /dashboard-ws-autostart\.ts/,

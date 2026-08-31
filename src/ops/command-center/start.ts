@@ -60,8 +60,13 @@ function openBrowser(url: string): void {
   } catch {}
 }
 const p = port();
-if (await health(p)) openBrowser(`http://127.0.0.1:${p}/`);
-else {
+// --no-browser: only ensure the server is running (used by session autostart,
+// where popping a browser tab on every session start would be intrusive).
+const openUi = !process.argv.includes('--no-browser');
+if (await health(p)) {
+  if (openUi) openBrowser(`http://127.0.0.1:${p}/`);
+  else console.log(`[CC] already running on http://127.0.0.1:${p}/`);
+} else {
   const child = spawn(
     process.execPath,
     ['--import', 'tsx', join(root, 'src/ops/command-center/server.ts')],
@@ -76,5 +81,6 @@ else {
   child.unref();
   for (let i = 0; i < 30 && !(await health(p)); i++)
     await new Promise((done) => setTimeout(done, 300));
-  openBrowser(`http://127.0.0.1:${p}/`);
+  if (openUi) openBrowser(`http://127.0.0.1:${p}/`);
+  else console.log(`[CC] started on http://127.0.0.1:${p}/`);
 }
