@@ -118,6 +118,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^6.1.1
         version: 6.1.1(vite@8.2.2(@types/node@26.2.0)(esbuild@0.25.12)(jiti@1.21.7)(tsx@4.23.1))
+      lucide-react:
+        specifier: ^0.294.0
+        version: 0.294.0(react@18.3.1)
       react:
         specifier: ^18.3.1
         version: 18.3.1

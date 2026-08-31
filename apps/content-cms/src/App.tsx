@@ -14,6 +14,7 @@ import {
 } from './domain';
 import { contentStore } from './storage';
 import ContentOS from './contentos';
+import { Calendar, Download, Eye, FileText, Image, Pencil, Plus, Save, Upload } from 'lucide-react';
 
 type Tab = 'content-os' | 'studio';
 
@@ -163,7 +164,9 @@ export default function App() {
     <div className="app-shell">
       <header className="topbar">
         <div className="brand">
-          <span className="mark">GV</span>
+          <span className="mark" aria-hidden="true">
+            GV
+          </span>
           <span>
             <strong>Gentle-Vanguard</strong>
             <small>Content OS · local-first</small>
@@ -174,18 +177,18 @@ export default function App() {
             className={tab === 'content-os' ? 'button' : 'button ghost'}
             onClick={() => setTab('content-os')}
           >
-            Content OS
+            <FileText size={16} aria-hidden="true" /> Content OS
           </button>
           <button
             className={tab === 'studio' ? 'button' : 'button ghost'}
             onClick={() => setTab('studio')}
           >
-            Studio (legacy)
+            <Pencil size={16} aria-hidden="true" /> Studio (legacy)
           </button>
           {tab === 'studio' && (
             <>
               <button className="button ghost" onClick={() => importRef.current?.click()}>
-                Importar JSON
+                <Upload size={16} aria-hidden="true" /> Importar JSON
               </button>
               <input
                 ref={importRef}
@@ -195,10 +198,10 @@ export default function App() {
                 onChange={importJson}
               />
               <button className="button ghost" onClick={() => downloadJson(state.items)}>
-                Exportar JSON
+                <Download size={16} aria-hidden="true" /> Exportar JSON
               </button>
               <button className="button primary" onClick={startNew}>
-                + Nuevo contenido
+                <Plus size={16} aria-hidden="true" /> Nuevo contenido
               </button>
             </>
           )}
@@ -207,247 +210,254 @@ export default function App() {
       {tab === 'content-os' ? (
         <ContentOS />
       ) : (
-      <main className="layout">
-        <aside className="sidebar">
-          <div className="side-heading">
-            <div>
-              <span className="eyebrow">Biblioteca</span>
-              <h1>Contenido</h1>
+        <main className="layout">
+          <aside className="sidebar">
+            <div className="side-heading">
+              <div>
+                <span className="eyebrow">Biblioteca</span>
+                <h1>Contenido</h1>
+              </div>
+              <span className="count">{state.items.length}</span>
             </div>
-            <span className="count">{state.items.length}</span>
-          </div>
-          <div className="filters" role="group" aria-label="Filtrar por estado">
-            {(['all', 'draft', 'published'] as const).map((value) => (
-              <button
-                key={value}
-                className={filter === value ? 'filter active' : 'filter'}
-                onClick={() => setFilter(value)}
-              >
-                {value === 'all' ? 'Todo' : value === 'draft' ? 'Borradores' : 'Publicados'}{' '}
-                <span>
-                  {value === 'all'
-                    ? state.items.length
-                    : state.items.filter((item) => item.status === value).length}
-                </span>
-              </button>
-            ))}
-          </div>
-          <div className="item-list">
-            {visibleItems.map((item) => (
-              <button
-                className={item.id === selectedId ? 'item selected' : 'item'}
-                key={item.id}
-                onClick={() => select(item)}
-              >
-                <span className={`status-dot ${item.status}`} />
-                <span className="item-copy">
-                  <strong>{item.title || 'Sin título'}</strong>
-                  <small>/{item.slug || 'sin-slug'}</small>
-                </span>
-                <span className="item-date">
-                  {new Date(item.updatedAt).toLocaleDateString('es-ES', {
-                    day: '2-digit',
-                    month: 'short',
-                  })}
-                </span>
-              </button>
-            ))}
-            {!visibleItems.length && <p className="empty">Aún no hay contenido aquí.</p>}
-          </div>
-        </aside>
-        <section className="workspace">
-          <div className="workspace-header">
-            <div>
-              <span className="eyebrow">{selectedId ? 'Editar entrada' : 'Nueva entrada'}</span>
-              <h2>{preview ? 'Vista previa' : form.title || 'Da forma a una idea'}</h2>
-            </div>
-            <div className="view-toggle" role="group" aria-label="Modo de edición">
-              <button
-                className={!preview ? 'toggle active' : 'toggle'}
-                onClick={() => setPreview(false)}
-              >
-                Editor
-              </button>
-              <button
-                className={preview ? 'toggle active' : 'toggle'}
-                onClick={() => setPreview(true)}
-              >
-                Preview
-              </button>
-            </div>
-          </div>
-          {preview ? (
-            <article className="preview">
-              <div className="preview-meta">
-                <span className={`badge ${form.status}`}>
-                  {form.status === 'published' ? 'Publicado' : 'Borrador'}
-                </span>
-                {form.tags.map((tag) => (
-                  <span className="tag" key={tag}>
-                    {tag}
+            <div className="filters" role="group" aria-label="Filtrar por estado">
+              {(['all', 'draft', 'published'] as const).map((value) => (
+                <button
+                  key={value}
+                  className={filter === value ? 'filter active' : 'filter'}
+                  onClick={() => setFilter(value)}
+                >
+                  {value === 'all' ? 'Todo' : value === 'draft' ? 'Borradores' : 'Publicados'}{' '}
+                  <span>
+                    {value === 'all'
+                      ? state.items.length
+                      : state.items.filter((item) => item.status === value).length}
                   </span>
-                ))}
+                </button>
+              ))}
+            </div>
+            <div className="item-list">
+              {visibleItems.map((item) => (
+                <button
+                  className={item.id === selectedId ? 'item selected' : 'item'}
+                  key={item.id}
+                  onClick={() => select(item)}
+                >
+                  <span className={`status-dot ${item.status}`} />
+                  <span className="item-copy">
+                    <strong>{item.title || 'Sin título'}</strong>
+                    <small>/{item.slug || 'sin-slug'}</small>
+                  </span>
+                  <span className="item-date">
+                    {new Date(item.updatedAt).toLocaleDateString('es-ES', {
+                      day: '2-digit',
+                      month: 'short',
+                    })}
+                  </span>
+                </button>
+              ))}
+              {!visibleItems.length && <p className="empty">Aún no hay contenido aquí.</p>}
+            </div>
+          </aside>
+          <section className="workspace">
+            <div className="workspace-header">
+              <div>
+                <span className="eyebrow">{selectedId ? 'Editar entrada' : 'Nueva entrada'}</span>
+                <h2>{preview ? 'Vista previa' : form.title || 'Da forma a una idea'}</h2>
               </div>
-              <h3>{form.title || 'Sin título'}</h3>
-              {form.coverUrl && isSafeUrl(form.coverUrl) && <img src={form.coverUrl} alt="" />}
-              {form.excerpt && <p className="lead">{form.excerpt}</p>}
-              <div className="body-copy">
-                {form.body.split('\n').map((line, index) => (
-                  <p key={`${line}-${index}`}>{line || ' '}</p>
-                ))}
-              </div>
-            </article>
-          ) : (
-            <div className="editor card">
-              <label>
-                Título
-                <input
-                  value={form.title}
-                  onChange={(event) => update('title', event.target.value)}
-                  placeholder="Ej. Cómo trabajamos mejor"
-                />
-              </label>
-              <div className="two-col">
-                <label>
-                  Slug
-                  <input
-                    value={form.slug}
-                    onChange={(event) =>
-                      update('slug', event.target.value.toLowerCase().replace(/\s+/g, '-'))
-                    }
-                    placeholder="como-trabajamos-mejor"
-                  />
-                </label>
-                <label>
-                  Estado
-                  <select
-                    value={form.status}
-                    onChange={(event) =>
-                      update('status', event.target.value as ContentDraft['status'])
-                    }
-                  >
-                    <option value="draft">Borrador</option>
-                    <option value="published">Publicado</option>
-                  </select>
-                </label>
-              </div>
-              <div className="asset-panel">
-                <div className="asset-heading">
-                  <span>Assets locales</span>
-                  <span className="hint">máx. 10 MB · PNG/JPEG/WebP/GIF/AVIF · SVG bloqueado</span>
-                </div>
-                <input
-                  className="asset-input"
-                  type="file"
-                  accept="image/png,image/jpeg,image/webp,image/gif,image/avif"
-                  onChange={addAsset}
-                  disabled={!selectedId}
-                />
-                {(form.assets ?? []).map((asset, index) => (
-                  <div className="asset-row" key={asset.id}>
-                    <img src={asset.localUrl} alt={asset.alt} />
-                    <input
-                      aria-label={`Alt ${asset.name}`}
-                      value={asset.alt}
-                      onChange={(event) =>
-                        update(
-                          'assets',
-                          (form.assets ?? []).map((entry, i) =>
-                            i === index ? { ...entry, alt: event.target.value } : entry,
-                          ),
-                        )
-                      }
-                    />
-                    <span>
-                      {asset.name} · {(asset.size / 1024).toFixed(0)} KB
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <label>
-                Resumen
-                <textarea
-                  rows={3}
-                  value={form.excerpt}
-                  onChange={(event) => update('excerpt', event.target.value)}
-                  placeholder="Una frase que invite a seguir leyendo"
-                />
-              </label>
-              <label>
-                Cuerpo
-                <textarea
-                  className="body-input"
-                  rows={12}
-                  value={form.body}
-                  onChange={(event) => update('body', event.target.value)}
-                  placeholder="Escribe el contenido estructurado…"
-                />
-              </label>
-              <div className="two-col">
-                <label>
-                  URL de portada <span className="hint">(http/https)</span>
-                  <input
-                    type="url"
-                    value={form.coverUrl}
-                    onChange={(event) => update('coverUrl', event.target.value)}
-                    placeholder="https://…"
-                  />
-                </label>
-                <label>
-                  Etiquetas <span className="hint">(separadas por coma)</span>
-                  <input
-                    value={form.tags.join(', ')}
-                    onChange={(event) =>
-                      update(
-                        'tags',
-                        event.target.value
-                          .split(',')
-                          .map((tag) => tag.trim())
-                          .filter(Boolean),
-                      )
-                    }
-                    placeholder="guía, producto"
-                  />
-                </label>
-              </div>
-              <div className="editor-footer">
-                <span className="message" role="status">
-                  {message}
-                </span>
-                <button className="button primary" onClick={save}>
-                  Guardar {form.status === 'published' ? 'y publicar' : 'borrador'}
+              <div className="view-toggle" role="group" aria-label="Modo de edición">
+                <button
+                  className={!preview ? 'toggle active' : 'toggle'}
+                  onClick={() => setPreview(false)}
+                >
+                  <Pencil size={16} aria-hidden="true" /> Editor
+                </button>
+                <button
+                  className={preview ? 'toggle active' : 'toggle'}
+                  onClick={() => setPreview(true)}
+                >
+                  <Eye size={16} aria-hidden="true" /> Preview
                 </button>
               </div>
             </div>
-          )}
-          {selectedId && (
-            <section className="history card">
-              <div className="asset-heading">
-                <span>Historial inmutable</span>
-                <span className="hint">
-                  {state.versions.filter((version) => version.contentId === selectedId).length}{' '}
-                  versiones · publicación auditable
-                </span>
-              </div>
-              {state.versions
-                .filter((version) => version.contentId === selectedId)
-                .slice()
-                .reverse()
-                .map((version) => (
-                  <div className="history-row" key={version.id}>
-                    <span>
-                      v{version.number} · {version.reason}
+            {preview ? (
+              <article className="preview">
+                <div className="preview-meta">
+                  <span className={`badge ${form.status}`}>
+                    {form.status === 'published' ? 'Publicado' : 'Borrador'}
+                  </span>
+                  {form.tags.map((tag) => (
+                    <span className="tag" key={tag}>
+                      {tag}
                     </span>
-                    <small>{new Date(version.createdAt).toLocaleString('es-ES')}</small>
-                    <button className="button ghost" onClick={() => restoreVersion(version.id)}>
-                      Restaurar
-                    </button>
+                  ))}
+                </div>
+                <h3>{form.title || 'Sin título'}</h3>
+                {form.coverUrl && isSafeUrl(form.coverUrl) && <img src={form.coverUrl} alt="" />}
+                {form.excerpt && <p className="lead">{form.excerpt}</p>}
+                <div className="body-copy">
+                  {form.body.split('\n').map((line, index) => (
+                    <p key={`${line}-${index}`}>{line || ' '}</p>
+                  ))}
+                </div>
+              </article>
+            ) : (
+              <div className="editor card">
+                <label>
+                  Título
+                  <input
+                    value={form.title}
+                    onChange={(event) => update('title', event.target.value)}
+                    placeholder="Ej. Cómo trabajamos mejor"
+                  />
+                </label>
+                <div className="two-col">
+                  <label>
+                    Slug
+                    <input
+                      value={form.slug}
+                      onChange={(event) =>
+                        update('slug', event.target.value.toLowerCase().replace(/\s+/g, '-'))
+                      }
+                      placeholder="como-trabajamos-mejor"
+                    />
+                  </label>
+                  <label>
+                    Estado
+                    <select
+                      value={form.status}
+                      onChange={(event) =>
+                        update('status', event.target.value as ContentDraft['status'])
+                      }
+                    >
+                      <option value="draft">Borrador</option>
+                      <option value="published">Publicado</option>
+                    </select>
+                  </label>
+                </div>
+                <div className="asset-panel">
+                  <div className="asset-heading">
+                    <span>
+                      <Image size={16} aria-hidden="true" /> Assets locales
+                    </span>
+                    <span className="hint">
+                      máx. 10 MB · PNG/JPEG/WebP/GIF/AVIF · SVG bloqueado
+                    </span>
                   </div>
-                ))}
-            </section>
-          )}
-        </section>
-      </main>
+                  <input
+                    className="asset-input"
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp,image/gif,image/avif"
+                    onChange={addAsset}
+                    disabled={!selectedId}
+                  />
+                  {(form.assets ?? []).map((asset, index) => (
+                    <div className="asset-row" key={asset.id}>
+                      <img src={asset.localUrl} alt={asset.alt} />
+                      <input
+                        aria-label={`Alt ${asset.name}`}
+                        value={asset.alt}
+                        onChange={(event) =>
+                          update(
+                            'assets',
+                            (form.assets ?? []).map((entry, i) =>
+                              i === index ? { ...entry, alt: event.target.value } : entry,
+                            ),
+                          )
+                        }
+                      />
+                      <span>
+                        {asset.name} · {(asset.size / 1024).toFixed(0)} KB
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <label>
+                  Resumen
+                  <textarea
+                    rows={3}
+                    value={form.excerpt}
+                    onChange={(event) => update('excerpt', event.target.value)}
+                    placeholder="Una frase que invite a seguir leyendo"
+                  />
+                </label>
+                <label>
+                  Cuerpo
+                  <textarea
+                    className="body-input"
+                    rows={12}
+                    value={form.body}
+                    onChange={(event) => update('body', event.target.value)}
+                    placeholder="Escribe el contenido estructurado…"
+                  />
+                </label>
+                <div className="two-col">
+                  <label>
+                    URL de portada <span className="hint">(http/https)</span>
+                    <input
+                      type="url"
+                      value={form.coverUrl}
+                      onChange={(event) => update('coverUrl', event.target.value)}
+                      placeholder="https://…"
+                    />
+                  </label>
+                  <label>
+                    Etiquetas <span className="hint">(separadas por coma)</span>
+                    <input
+                      value={form.tags.join(', ')}
+                      onChange={(event) =>
+                        update(
+                          'tags',
+                          event.target.value
+                            .split(',')
+                            .map((tag) => tag.trim())
+                            .filter(Boolean),
+                        )
+                      }
+                      placeholder="guía, producto"
+                    />
+                  </label>
+                </div>
+                <div className="editor-footer">
+                  <span className="message" role="status">
+                    {message}
+                  </span>
+                  <button className="button primary" onClick={save}>
+                    <Save size={16} aria-hidden="true" /> Guardar{' '}
+                    {form.status === 'published' ? 'y publicar' : 'borrador'}
+                  </button>
+                </div>
+              </div>
+            )}
+            {selectedId && (
+              <section className="history card">
+                <div className="asset-heading">
+                  <span>
+                    <Calendar size={16} aria-hidden="true" /> Historial inmutable
+                  </span>
+                  <span className="hint">
+                    {state.versions.filter((version) => version.contentId === selectedId).length}{' '}
+                    versiones · publicación auditable
+                  </span>
+                </div>
+                {state.versions
+                  .filter((version) => version.contentId === selectedId)
+                  .slice()
+                  .reverse()
+                  .map((version) => (
+                    <div className="history-row" key={version.id}>
+                      <span>
+                        v{version.number} · {version.reason}
+                      </span>
+                      <small>{new Date(version.createdAt).toLocaleString('es-ES')}</small>
+                      <button className="button ghost" onClick={() => restoreVersion(version.id)}>
+                        Restaurar
+                      </button>
+                    </div>
+                  ))}
+              </section>
+            )}
+          </section>
+        </main>
       )}
       <footer>
         <span>
