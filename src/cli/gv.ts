@@ -32,6 +32,7 @@
  *   metrics     Show live stack metrics (F4.1, from config/stack-metrics.json)
  *   web         Web research (search|scrape|crawl) via native crawler
  *   eval        Continuous evaluation over real Nexus traces (F3.1; --gate)
+ *   skill       Skill plugins: list|install|enable|disable|deprecate|remove|verify
  *   help        Show this help
  */
 
@@ -100,6 +101,8 @@ COMMANDS:
   metrics     Show live stack metrics (config/stack-metrics.json)
   web         Web research (search|scrape|crawl) via native crawler
   eval        Continuous evaluation over real Nexus traces (--gate to fail on regression)
+  skill       Skill plugins (list|install|enable|disable|deprecate|remove|verify)
+  telemetry   Unified correlation timeline session/trace/tokens (--session <id>)
   help        Show this help
 
 EXAMPLES:
@@ -490,6 +493,8 @@ export const COMMANDS = [
   'metrics',
   'web',
   'eval',
+  'skill',
+  'telemetry',
   'help',
 ] as const;
 
@@ -915,6 +920,51 @@ async function main(): Promise<void> {
         console.error(`[EVAL] FAILED: ${e instanceof Error ? e.message : String(e)}`);
         process.exit(1);
       }
+      break;
+    }
+
+    case 'telemetry': {
+      const tArgs = args.slice(1);
+      if (tArgs.length === 0 || tArgs.includes('--help')) {
+        console.log('Usage: gv telemetry --session <id> | --trace <id> [--from --to --no-tokens --json]');
+        console.log('  Unified correlation timeline: session_id ↔ trace_id ↔ token usage (F3.6).');
+        process.exit(0);
+      }
+      try {
+        const r = runSync('npx', ['tsx', 'src/telemetry/correlation-cli.ts', ...tArgs], {
+          timeout: 60000,
+          cwd: ROOT,
+        });
+        const out = (r.stdout ?? '').toString().trim();
+        if (out) console.log(out);
+        if (r.stderr) console.error((r.stderr ?? '').toString().trim());
+        process.exit(r.status ?? 0);
+      } catch (e) {
+        console.error(`[TELEMETRY] FAILED: ${e instanceof Error ? e.message : String(e)}`);
+        process.exit(1);
+      }
+      break;
+    }
+
+    case 'skill': {
+      // Skill plugin lifecycle (F3.4) — delegates to src/plugins/skill-cli.ts
+      // via runNpxTsxSync (in-process tsx loader: no shell, no .cmd shim,
+      // windowsHide enforced per AGENTS.md procesos-ocultos).
+      const skillArgs = args.slice(1);
+      if (skillArgs.length === 0) {
+        console.log(
+          'Usage: gv skill <list|install|enable|disable|deprecate|remove|verify|get> [args] [--json]',
+        );
+        process.exit(1);
+      }
+      const r = runNpxTsxSync('src/plugins/skill-cli.ts', skillArgs, {
+        cwd: ROOT,
+        timeout: 180000,
+      });
+      const out = (r.stdout ?? '').toString().trim();
+      if (out) console.log(out);
+      if (r.stderr) console.error((r.stderr ?? '').toString().trim());
+      process.exit(r.status ?? 0);
       break;
     }
 
