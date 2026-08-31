@@ -21,9 +21,10 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
   restantes en `src/` están en código CLI por diseño (shebang, `src/cli/`, bloques main() con
   stdout parseable) — la superficie library está 100% en logger estructurado. tsc 0, eslint 0,
   test:config 24/24, test:workflows 4/4.
-- 🔲 **F2.7 en curso**: 8 componentes con tests → meta ≥16 (batch de 9 tests en vuelo:
-  ActivityTimeline, AppsControlPanel, AuditPanel, ErrorBoundary, GuardrailsPanel, LoopGuardPanel,
-  NotificationToast, SessionTable, TokenUsagePanel).
+- ✅ **F2.7 COMPLETADO — meta ≥16 superada**: 17 componentes con tests (9 archivos nuevos, 32
+  tests: ActivityTimeline, AppsControlPanel, AuditPanel, ErrorBoundary, GuardrailsPanel,
+  LoopGuardPanel, NotificationToast, SessionTable, TokenUsagePanel). Suite dashboard 97/97, build
+  exit 0. Pendiente opcional: alineación de versiones via `catalog:` pnpm.
 
 ### Ejecutado — Sesión 7 (2026-08-31, anti-loop nativo + métricas vivas + gv potentiation)
 
