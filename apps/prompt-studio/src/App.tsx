@@ -1,10 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Sparkles, Copy, Check, Wand2 } from 'lucide-react';
 
-interface PromptStudioProps {
-  className?: string;
-}
-
 const TASK_TYPES = [
   { id: 'review', label: 'Code review' },
   { id: 'feature', label: 'Feature build' },
@@ -34,7 +30,7 @@ const EXAMPLE = {
   tone: 'Direct, technical, no filler',
 };
 
-export function PromptStudio({ className = '' }: PromptStudioProps) {
+function PromptStudio() {
   const [type, setType] = useState<string>('review');
   const [role, setRole] = useState('');
   const [goal, setGoal] = useState('');
@@ -44,10 +40,7 @@ export function PromptStudio({ className = '' }: PromptStudioProps) {
   const [tone, setTone] = useState('');
   const [copied, setCopied] = useState(false);
 
-  const taskLabel = useMemo(
-    () => TASK_TYPES.find((x) => x.id === type)?.label ?? '',
-    [type],
-  );
+  const taskLabel = useMemo(() => TASK_TYPES.find((x) => x.id === type)?.label ?? '', [type]);
 
   const prompt = useMemo(() => {
     const crit = criteria
@@ -122,16 +115,16 @@ export function PromptStudio({ className = '' }: PromptStudioProps) {
     'w-full rounded-lg bg-slate-900/70 border border-slate-600/50 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-cyan-400/60 transition-colors';
 
   return (
-    <div className={`gv-panel p-5 ${className}`} data-testid="prompt-studio">
+    <div className="gv-panel p-5" data-testid="prompt-studio">
       <header className="mb-4">
         <div className="flex items-center gap-2 text-cyan-300 text-xs font-semibold tracking-widest uppercase">
           <Sparkles className="w-4 h-4" /> Interactive tool
         </div>
         <h2 className="text-xl font-bold text-slate-100 mt-1">Prompt Studio</h2>
         <p className="text-sm text-slate-400 mt-1 max-w-2xl">
-          Build structured professional prompts (role, task, context, acceptance criteria,
-          output format, verification) and copy them to any model. Runs entirely in your
-          browser — nothing leaves the machine.
+          Build structured professional prompts (role, task, context, acceptance criteria, output
+          format, verification) and copy them to any model. Runs entirely in your browser — nothing
+          leaves the machine.
         </p>
       </header>
 
@@ -200,12 +193,7 @@ export function PromptStudio({ className = '' }: PromptStudioProps) {
             <label className="block text-xs font-semibold text-slate-300 mb-1" htmlFor="ps-format">
               Output format
             </label>
-            <select
-              id="ps-format"
-              className={inputCls}
-              value={format}
-              onChange={(e) => setFormat(e.target.value)}
-            >
+            <select id="ps-format" className={inputCls} value={format} onChange={(e) => setFormat(e.target.value)}>
               {OUTPUT_FORMATS.map((f) => (
                 <option key={f} value={f}>
                   {f}
@@ -260,4 +248,35 @@ export function PromptStudio({ className = '' }: PromptStudioProps) {
   );
 }
 
-export default PromptStudio;
+export default function App() {
+  return (
+    <div className="app-shell">
+      <header className="topbar">
+        <div className="brand">
+          <span className="mark">GV</span>
+          <span>
+            <strong>Gentle-Vanguard</strong>
+            <small className="block text-slate-400 text-xs">Prompt Studio · local-first</small>
+          </span>
+        </div>
+        <a
+          className="text-xs text-cyan-300 hover:text-cyan-200"
+          href="/apps"
+          onClick={(e) => {
+            e.preventDefault();
+            window.close();
+          }}
+        >
+          ← Apps Control
+        </a>
+      </header>
+      <main className="flex-1 w-full max-w-6xl mx-auto p-6">
+        <PromptStudio />
+      </main>
+      <footer>
+        <span>100% local — nada sale de tu máquina</span>
+        <span>Gentle-Vanguard / Prompt Studio</span>
+      </footer>
+    </div>
+  );
+}

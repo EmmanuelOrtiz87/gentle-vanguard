@@ -13,7 +13,6 @@ import {
   Cpu,
   Library,
   Globe,
-  Workflow,
   ShieldCheck,
   UserCog,
   CircleDollarSign,
@@ -33,7 +32,6 @@ const SessionTimeline = lazy(() => import('./components/SessionTimeline'));
 const MCPServers = lazy(() => import('./components/MCPServers'));
 const KnowledgePanel = lazy(() => import('./components/KnowledgePanel'));
 const MultiRepoView = lazy(() => import('./components/MultiRepoView'));
-const ContentOpsPanel = lazy(() => import('./components/ContentOpsPanel'));
 const AuditPanel = lazy(() => import('./components/AuditPanel'));
 const AdminPanel = lazy(() => import('./components/AdminPanel'));
 const CostPanel = lazy(() => import('./components/CostPanel'));
@@ -64,7 +62,6 @@ function Navigation() {
       group: 'Build & govern',
       links: [
         { to: '/marketplace', icon: Store, label: 'Marketplace' },
-        { to: '/content-operations', icon: Workflow, label: 'Content Ops' },
         { to: '/audit', icon: ShieldCheck, label: 'Audit' },
         { to: '/admin', icon: UserCog, label: 'Admin' },
         { to: '/docs', icon: BookOpen, label: 'Docs' },
@@ -259,7 +256,6 @@ function App() {
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/tracing" element={<TracingDashboard />} />
                     <Route path="/marketplace" element={<Marketplace />} />
-                    <Route path="/content-operations" element={<ContentOpsPanel />} />
                     <Route path="/audit" element={<AuditPanel />} />
                     <Route path="/admin" element={<AdminPanel />} />
                     <Route path="/docs" element={<InteractiveDocs />} />

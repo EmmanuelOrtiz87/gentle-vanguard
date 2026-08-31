@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { APPS_REGISTRY, createAppsController } from '../../src/ops/command-center/server.ts';
+import { APPS_REGISTRY, createAppsController } from '../../apps/command-center/server.ts';
 
 const roots: string[] = [];
 afterEach(() => {

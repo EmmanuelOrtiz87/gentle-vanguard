@@ -63,17 +63,13 @@ const p = port();
 // --no-browser: only ensure the server is running (used by session autostart,
 // where popping a browser tab on every session start would be intrusive).
 const openUi = !process.argv.includes('--no-browser');
-// Cache-bust the tab URL: a browser that cached an older iteration of the
-// single-file UI would otherwise keep showing it despite no-store on fresh
-// fetches (the stale entry has no validators, so it can live long).
-const uiUrl = `http://127.0.0.1:${p}/?v=${Date.now()}`;
 if (await health(p)) {
-  if (openUi) openBrowser(uiUrl);
+  if (openUi) openBrowser(`http://127.0.0.1:${p}/`);
   else console.log(`[CC] already running on http://127.0.0.1:${p}/`);
 } else {
   const child = spawn(
     process.execPath,
-    ['--import', 'tsx', join(root, 'src/ops/command-center/server.ts')],
+    ['--import', 'tsx', join(root, 'apps/command-center/server.ts')],
     {
       cwd: root,
       detached: true,
@@ -85,6 +81,6 @@ if (await health(p)) {
   child.unref();
   for (let i = 0; i < 30 && !(await health(p)); i++)
     await new Promise((done) => setTimeout(done, 300));
-  if (openUi) openBrowser(uiUrl);
+  if (openUi) openBrowser(`http://127.0.0.1:${p}/`);
   else console.log(`[CC] started on http://127.0.0.1:${p}/`);
 }

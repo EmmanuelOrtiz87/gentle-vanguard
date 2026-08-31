@@ -3,12 +3,12 @@ import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from '
 import { join, resolve } from 'node:path';
 import { connect } from 'node:net';
 import { request } from 'node:http';
-import { spawn as nodeSpawn, type ChildProcess, type SpawnOptions } from 'node:child_process';
+import { spawn as nodeSpawn, spawnSync, type ChildProcess, type SpawnOptions } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
-import { getFreePort } from '../dashboard-common';
+import { getFreePort } from '../../src/ops/dashboard-common';
 
 export type AppStatus = 'running' | 'stopped' | 'partial';
-export type AppId = 'dashboard' | 'analytics' | 'cms' | 'academy';
+export type AppId = 'dashboard' | 'analytics' | 'cms' | 'academy' | 'prompts';
 export interface AppProcess {
   name: string;
   pid: number | null;
@@ -36,6 +36,8 @@ interface AppDefinition {
   name: string;
   description: string;
   url: string;
+  /** PIDs to kill BEFORE the servers — watchdogs respawn them otherwise. */
+  watchdogPidFiles?: string[];
   processes: () => ProcessDefinition[];
 }
 export interface AppsControllerOptions {
@@ -84,6 +86,28 @@ export function probePort(port: number): Promise<boolean> {
   });
 }
 
+/** PID listening on 127.0.0.1:<port>, or 0. Port-owner fallback for stop(). */
+export function portOwner(port: number): number {
+  if (process.platform !== 'win32') return 0;
+  try {
+    const r = spawnSync(
+      'powershell',
+      [
+        '-NoProfile',
+        '-Command',
+        `@(Get-NetTCPConnection -LocalPort ${port} -State Listen -ErrorAction SilentlyContinue | ` +
+          `Where-Object { $_.LocalAddress -eq '127.0.0.1' -or $_.LocalAddress -eq '0.0.0.0' } | ` +
+          `Select-Object -First 1).OwningProcess`,
+      ],
+      { windowsHide: true, encoding: 'utf8', timeout: 5000 },
+    );
+    const pid = Number((r.stdout ?? '').trim());
+    return pid && Number.isInteger(pid) ? pid : 0;
+  } catch {
+    return 0;
+  }
+}
+
 export const APPS_REGISTRY = [
   {
     id: 'dashboard' as const,
@@ -115,6 +139,13 @@ export const APPS_REGISTRY = [
     server: 'python -m http.server 4173',
     url: 'http://127.0.0.1:4173',
   },
+  {
+    id: 'prompts' as const,
+    name: 'Prompt Studio',
+    description: 'Generador de prompts profesionales (extraído de Academy/dashboard)',
+    client: 'vite',
+    url: 'http://127.0.0.1:5176',
+  },
 ] as const;
 
 export function createAppsController(options: AppsControllerOptions = {}) {
@@ -144,6 +175,10 @@ export function createAppsController(options: AppsControllerOptions = {}) {
   const definitions = (): AppDefinition[] => [
     {
       ...APPS_REGISTRY[0],
+      watchdogPidFiles: [
+        join(runtimeDir(root), 'dashboard-ws-watchdog.pid'),
+        join(runtimeDir(root), 'dashboard-vite-watchdog.pid'),
+      ],
       processes: () => [
         {
           name: 'server',
@@ -182,6 +217,12 @@ export function createAppsController(options: AppsControllerOptions = {}) {
       ...APPS_REGISTRY[2],
       processes: () => [
         {
+          name: 'api',
+          port: 3787,
+          pidFile: ownPidPath(root, 'cms', 'api'),
+          start: () => ts(appRoot(root, 'content-cms'), 'server/server.ts'),
+        },
+        {
           name: 'vite',
           port: 5175,
           pidFile: ownPidPath(root, 'cms', 'vite'),
@@ -210,6 +251,17 @@ export function createAppsController(options: AppsControllerOptions = {}) {
               ],
               { cwd: root, stdio: 'ignore', detached: true, windowsHide: true },
             ),
+        },
+      ],
+    },
+    {
+      ...APPS_REGISTRY[4],
+      processes: () => [
+        {
+          name: 'vite',
+          port: 5176,
+          pidFile: ownPidPath(root, 'prompts', 'vite'),
+          start: () => vite(appRoot(root, 'prompt-studio'), 5176),
         },
       ],
     },
@@ -280,14 +332,40 @@ export function createAppsController(options: AppsControllerOptions = {}) {
   async function stop(id: string): Promise<{ status: number; body: unknown }> {
     const def = find(id);
     if (!def) return { status: 404, body: { error: 'app-not-found' } };
-    for (const item of def.processes()) {
-      if (!existsSync(item.pidFile)) continue;
-      let pid = 0;
+    // 1. Watchdogs first — they respawn the servers within seconds, which made
+    //    stop() look like a no-op for the dashboard.
+    for (const wdFile of def.watchdogPidFiles ?? []) {
       try {
-        pid = Number(readFileSync(item.pidFile, 'utf8').trim());
+        if (!existsSync(wdFile)) continue;
+        const wdPid = Number(readFileSync(wdFile, 'utf8').trim());
+        if (wdPid && isAlive(wdPid))
+          spawn('taskkill', ['/pid', String(wdPid), '/t', '/f'], {
+            windowsHide: true,
+            stdio: 'ignore',
+          });
+        unlinkSync(wdFile);
       } catch {
-        /* stale */
+        /* best effort */
       }
+    }
+    // 2. Kill each process: own pidfile → legacy pidfiles → port-owner fallback
+    //    (processes started by other launchers may have no pidfile at all).
+    for (const item of def.processes()) {
+      let pid = 0;
+      for (const candidate of [item.pidFile, ...(item.legacyPidFiles ?? [])]) {
+        try {
+          if (!existsSync(candidate)) continue;
+          const value = Number(readFileSync(candidate, 'utf8').trim());
+          if (value && isAlive(value)) {
+            pid = value;
+            break;
+          }
+          unlinkSync(candidate);
+        } catch {
+          /* stale */
+        }
+      }
+      if (!pid) pid = await portOwner(item.port);
       if (pid && isAlive(pid)) {
         try {
           process.kill(pid, 'SIGTERM');
@@ -300,10 +378,12 @@ export function createAppsController(options: AppsControllerOptions = {}) {
             stdio: 'ignore',
           });
       }
-      try {
-        unlinkSync(item.pidFile);
-      } catch {
-        /* already removed */
+      for (const candidate of [item.pidFile, ...(item.legacyPidFiles ?? [])]) {
+        try {
+          if (existsSync(candidate)) unlinkSync(candidate);
+        } catch {
+          /* already removed */
+        }
       }
       const deadline = Date.now() + 3000;
       while (Date.now() < deadline && (await probe(item.port))) {

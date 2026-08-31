@@ -21,7 +21,6 @@ import { knowledgeHandler } from './handlers/knowledge.ts';
 import { meshHandler } from './handlers/mesh.ts';
 import { agentHandler } from './handlers/agent.ts';
 import { marketplaceHandler } from './handlers/marketplace.ts';
-import { contentOperationsHandler } from './handlers/content-operations.ts';
 import { costsHandler } from './handlers/costs.ts';
 
 const otelPipeline = getOtelPipeline();
@@ -149,7 +148,6 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
     if (await meshHandler(req, res, url, ctx, headers)) return;
     if (await agentHandler(req, res, url, ctx, headers)) return;
     if (await marketplaceHandler(req, res, url, ctx, headers)) return;
-    if (await contentOperationsHandler(req, res, url, ctx, headers)) return;
     if (await costsHandler(req, res, url, ctx, headers)) return;
 
     res.writeHead(404, headers);

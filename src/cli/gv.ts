@@ -420,6 +420,15 @@ function isCcRunning(): boolean {
   return r.status === 0;
 }
 
+function pidFileExistsAlive(pid: number): boolean {
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function cmdCc(args: string[]): CommandResult {
   const subcmd = args[0] || 'status';
   switch (subcmd) {
@@ -431,7 +440,7 @@ function cmdCc(args: string[]): CommandResult {
         };
       }
       try {
-        const child = run(process.execPath, ['--import', 'tsx', 'src/ops/command-center/start.ts'], {
+        const child = run(process.execPath, ['--import', 'tsx', 'apps/command-center/start.ts'], {
           detached: true,
           stdio: 'ignore',
           windowsHide: true,
@@ -446,13 +455,32 @@ function cmdCc(args: string[]): CommandResult {
     case 'stop': {
       try {
         const pidFile = join(RUNTIME_DIR, 'command-center.pid');
-        if (!existsSync(pidFile)) return { success: false, message: 'Command Center not running (no pidfile)' };
-        const pid = Number(readFileSync(pidFile, 'utf-8').trim());
-        if (!pid || Number.isNaN(pid)) return { success: false, message: 'Command Center pidfile corrupt' };
+        let pid = 0;
+        if (existsSync(pidFile)) {
+          pid = Number(readFileSync(pidFile, 'utf-8').trim());
+          if (!pid || Number.isNaN(pid)) pid = 0;
+        }
+        if (!pid && isCcRunning()) {
+          // Pidfile lost (e.g. kill/start race) — find the listener on the CC port.
+          const r = runSync(
+            'powershell',
+            [
+              '-NoProfile',
+              '-Command',
+              `@(Get-NetTCPConnection -LocalPort ${ccPort()} -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1).OwningProcess`,
+            ],
+            { timeout: 5000, stdio: 'pipe' },
+          );
+          pid = Number((r.stdout ?? '').trim());
+        }
+        if (!pid || !pidFileExistsAlive(pid)) {
+          if (existsSync(pidFile)) unlinkSync(pidFile);
+          return { success: false, message: 'Command Center not running' };
+        }
         if (process.platform === 'win32')
           runSync('taskkill', ['/pid', String(pid), '/t', '/f'], { timeout: 8000, stdio: 'ignore' });
         else process.kill(pid, 'SIGTERM');
-        unlinkSync(pidFile);
+        if (existsSync(pidFile)) unlinkSync(pidFile);
         return { success: true, message: `Command Center stopped (PID ${pid})` };
       } catch (e) {
         return { success: false, message: `Failed: ${e}` };

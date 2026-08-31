@@ -1048,7 +1048,7 @@
     "id": "command-center",
     "enabled": true,
     "lazy": true,
-    "script": "src/ops/command-center/start.ts",
+    "script": "apps/command-center/start.ts",
     "args": "--no-browser",
     "required": false,
     "description": "Command Center standalone (puerto 8090): lifecycle on-demand de las apps construidas (dashboard/analytics/cms/academy). Idempotente — si ya esta vivo no re-ejecuta; --no-browser evita poppear tab en cada sesion"

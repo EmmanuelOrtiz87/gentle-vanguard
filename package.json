@@ -172,7 +172,7 @@
     "cms:dev": "cd apps/content-cms && pnpm dev",
     "cms:test": "cd apps/content-cms && pnpm test",
     "dashboard:server": "npx tsx apps/web-dashboard/server/websocket-server.ts",
-    "cc:start": "node --import tsx src/ops/command-center/start.ts",
+    "cc:start": "node --import tsx apps/command-center/start.ts",
     "cc:server": "node --import tsx src/ops/command-center/server.ts",
     "dashboard:start": "npx tsx src/ops/dashboard-cmd-launcher.ts",
     "dashboard:legacy": "npx tsx src/ops/quick-start.ts",

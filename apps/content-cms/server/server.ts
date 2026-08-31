@@ -19,6 +19,15 @@ import { DatabaseManager, DEFAULT_TENANT_ID } from '../../web-dashboard/server/d
 import type { ContentVariantRecord } from '../../web-dashboard/server/database/repositories/ContentOSRepo';
 import { resolveGenerator, GenerateBrief } from './generator';
 import { PLATFORM_SPECS, ContentFormat, MVP_PLATFORM_IDS, recommendSlot } from './platform-specs';
+import {
+  loadManifest,
+  loadPlatformRegistry,
+  packageJob,
+  saveManifest,
+  transition,
+  validate as validateContentJob,
+  type Status,
+} from '../../../src/content-operations/engine';
 
 const PORT = Number(process.env.CONTENT_OS_PORT ?? 3787);
 const MEDIA_DIR = resolve(ROOT, '.runtime', 'content-os', 'media');
@@ -475,6 +484,87 @@ function createContentOSHandler(db: DatabaseManager) {
         )
         .all(tenant);
       json(res, 200, { entries: rows });
+      return;
+    }
+
+    // ── Content Operations Engine (ADR-0018) — moved from web-dashboard (Sesión 13) ──
+    if (path === '/api/content-operations' && req.method === 'GET') {
+      const jobs = loadManifest(ROOT);
+      const registry = loadPlatformRegistry(ROOT);
+      const validation = jobs.map((job) => ({
+        id: job.id,
+        errors: validateContentJob(job, registry),
+      }));
+      const byStatus = jobs.reduce<Record<string, number>>((counts, job) => {
+        counts[job.status] = (counts[job.status] || 0) + 1;
+        return counts;
+      }, {});
+      const byPlatform = jobs.reduce<Record<string, number>>((counts, job) => {
+        counts[job.platform] = (counts[job.platform] || 0) + 1;
+        return counts;
+      }, {});
+      const byDate = jobs.reduce<Record<string, number>>((counts, job) => {
+        counts[job.date] = (counts[job.date] || 0) + 1;
+        return counts;
+      }, {});
+      json(res, 200, { success: true, data: { jobs, byStatus, byPlatform, byDate, validation } });
+      return;
+    }
+
+    if (path === '/api/content-operations' && req.method === 'POST') {
+      const body = (await readBody(req)) as { id?: string; action?: string; to?: Status } | null;
+      try {
+        if (!body?.id) throw new Error('Content job not found');
+        const jobs = loadManifest(ROOT);
+        const index = jobs.findIndex((job) => job.id === body.id);
+        if (index < 0) throw new Error('Content job not found');
+        const job = jobs[index];
+        const registry = loadPlatformRegistry(ROOT);
+        const errors = validateContentJob(job, registry);
+        if (body.action === 'transition') {
+          if (!body.to) throw new Error('Target status is required');
+          const updated = transition(job, body.to);
+          jobs[index] = updated;
+          saveManifest(ROOT, jobs);
+          json(res, 200, { success: true, data: updated });
+          return;
+        }
+        if (body.action === 'package') {
+          if (errors.length) throw new Error(`Validation failed: ${errors.join('; ')}`);
+          const output = packageJob(ROOT, job);
+          json(res, 200, { success: true, data: { id: job.id, output, status: 'REVIEW' } });
+          return;
+        }
+        throw new Error('Unsupported content operation');
+      } catch (err) {
+        json(res, 400, { success: false, error: err instanceof Error ? err.message : 'Invalid content operation' });
+        return;
+      }
+    }
+
+    const opsJobMatch = path.match(/^\/api\/content-operations\/([A-Za-z0-9._-]+)$/);
+    if (opsJobMatch && req.method === 'GET') {
+      const job = loadManifest(ROOT).find((item) => item.id === opsJobMatch[1]);
+      if (!job) {
+        json(res, 404, { success: false, error: 'Content job not found' });
+        return;
+      }
+      const packagePath = join(ROOT, '.runtime', 'content-operations', job.date, job.platform, job.id);
+      const captionPath = join(packagePath, 'caption.txt');
+      const publicationPath = join(packagePath, 'publication.json');
+      json(res, 200, {
+        success: true,
+        data: {
+          job,
+          validation: validateContentJob(job, loadPlatformRegistry(ROOT)),
+          packaged: existsSync(publicationPath),
+          output: existsSync(publicationPath) ? packagePath : null,
+          caption: existsSync(captionPath) ? readFileSync(captionPath, 'utf8') : null,
+          publication: existsSync(publicationPath)
+            ? JSON.parse(readFileSync(publicationPath, 'utf8'))
+            : null,
+        },
+      });
       return;
     }
 
