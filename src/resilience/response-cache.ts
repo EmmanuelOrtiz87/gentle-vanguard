@@ -23,6 +23,7 @@ export * from './response-cache/semantic';
 export * from './response-cache/sqlite';
 export * from './response-cache/telemetry';
 export * from './response-cache/cache';
+export * from './response-cache/cached';
 export * from './response-cache/cli';
 
 // Run CLI if called directly
