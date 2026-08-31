@@ -283,3 +283,4 @@ update-manifest.json
 .test-results/
 # Runtime logs (local only)
 logs/
+apps/
