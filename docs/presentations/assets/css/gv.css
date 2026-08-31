@@ -14,29 +14,29 @@
 /* --- 1. Design Tokens (OKLCH perceptual palette) ----------------------- */
 :root {
   color-scheme: dark;
-  --gv-purple: #a78bfa;
-  --gv-cyan: #22d3ee;
+  --gv-purple: #a855f7;
+  --gv-cyan: #00bfff;
   --gv-cyan-deep: #06b6d4;
-  --gv-bg: #121212;
-  --gv-bg-deep: #0a0e17;
-  --gv-surface: #1f2937;
-  --gv-surface-raised: #273548;
-  --gv-text: #e5e7eb;
-  --gv-muted: #9ca3af;
+  --gv-bg: #0d1117;
+  --gv-bg-deep: #020618;
+  --gv-surface: #1a2035;
+  --gv-surface-raised: #2a2d3a;
+  --gv-text: #ffffff;
+  --gv-muted: #6b7280;
   --gv-glass: rgba(31, 41, 55, 0.6);
-  --gv-glass-border: rgba(167, 139, 250, 0.18);
-  --gv-gradient: linear-gradient(135deg, #a78bfa 0%, #22d3ee 100%);
-  --gv-glow: rgba(34, 211, 238, 0.35);
-  --gv-amber: #f4bb4f;
-  --gv-red: #ee6d75;
-  --gv-green: #4ade80;
+  --gv-glass-border: rgba(168, 85, 247, 0.18);
+  --gv-gradient: linear-gradient(135deg, #a855f7 0%, #00bfff 100%);
+  --gv-glow: rgba(0, 191, 255, 0.35);
+  --gv-amber: #f59e0b;
+  --gv-red: #ef4444;
+  --gv-green: #22c55e;
   --font: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --mono: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
   --header-h: 62px;
   /* Acentos funcionales */
-  --p: #22d3ee; /* cyan primario (oklch ~0.78 0.14 210) */
+  --p: #00bfff; /* cyan primario (oklch ~0.78 0.14 210) */
   --pl: #67e8f9; /* cyan claro */
-  --a: #a78bfa; /* purple acento */
+  --a: #a855f7; /* purple acento */
   --ok: #34d399; /* verde éxito */
   --wn: #fbbf24; /* amber warning */
   --er: #f87171; /* rojo error */
@@ -254,6 +254,12 @@ p {
 .nav-blur .navbar-brand .gv-wordmark {
   font-size: 0.9rem;
   color: var(--gv-text);
+}
+/* Brand wordmark uses the official GV display font (assets/tokens.json → typography.displayFont) */
+.nav-blur .navbar-brand .gv-wordmark,
+.nav-blur .navbar-brand .gv-wordmark strong {
+  font-family: 'Orbitron', 'Rajdhani', 'Share Tech Mono', monospace;
+  letter-spacing: 0.02em;
 }
 .nav-blur .navbar-brand .gv-wordmark strong {
   background: var(--gv-gradient);
