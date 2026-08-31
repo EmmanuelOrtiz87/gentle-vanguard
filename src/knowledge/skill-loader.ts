@@ -12,6 +12,9 @@
 
 import { readdirSync, readFileSync, existsSync } from 'fs';
 import { join } from 'path';
+import { log } from '../utils/logger.js';
+
+const logger = log('SKILL-LOADER');
 
 interface Skill {
   name: string;
@@ -108,7 +111,7 @@ function parseFrontmatter(content: string): { frontmatter: SkillFrontmatter; bod
  */
 export function loadSkills(): Skill[] {
   if (!existsSync(SKILLS_DIR)) {
-    console.error(`Skills directory not found: ${SKILLS_DIR}`);
+    logger.error(`Skills directory not found: ${SKILLS_DIR}`);
     return [];
   }
 
@@ -136,7 +139,7 @@ export function loadSkills(): Skill[] {
 
       skills.push(skill);
     } catch (error) {
-      console.error(`Failed to load skill ${entry.name}:`, error);
+      logger.error(`Failed to load skill ${entry.name}:`, error);
     }
   }
 

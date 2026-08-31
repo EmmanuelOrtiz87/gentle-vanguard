@@ -8,6 +8,19 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ## ⚡ Registro de progreso
 
+### Ejecutado — Sesión 5 (2026-08-31, F2.4 completado a 0 `any` + PR #172)
+
+- ✅ **PR #172 MERGED** a `main` (bypass admin, CI 100% verde incluido Production Gate); merge
+  commit `67fe87a9`. PR #171 cerrado como supersedido. Rama local reseteada a `origin/main`.
+- ✅ **F2.4 COMPLETADO — 0 `any` en `src/`** (objetivo del plan: 0). Erradicados los últimos 38
+  `any` en 23 archivos (commit `3fe142a0`): interfaces de dominio reales (`AlertActions`,
+  `GraphNode`, `CacheHookSystem`, `CacheModule`, `StackConfig`, `ReceiptFinding`, `AgentConfig`),
+  resultados de better-sqlite3 tipados, `DatabaseManager` lazy-load tipado, `unknown` + narrowing en
+  catch/deepMerge/getTimeout, anotaciones redundantes eliminadas. Typecheck + lint pasan.
+- ✅ **Watchtower**: 102 PASS / 2 WARN / 0 FAIL (24 componentes).
+- 🔲 **F2.3 en curso**: migrar `console.*` → logger en módulos library (5.331 `console.*` en src/;
+  ~120 en ~23 archivos library reales; CLIs conservan `console.*` por diseño).
+
 ### Ejecutado — Sesión 4 (2026-08-22, dominios ×8 + tipado -84% + skills)
 
 - ✅ **F2.2: 8 dominios completados** (35 archivos fuera de la raíz): `src/tokens/` (13),
