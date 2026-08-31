@@ -312,6 +312,9 @@ export function runSloChecks(options: { json?: boolean; ciGate?: boolean; output
     exitCode = 1;
     console.error(`[PERF-SLO] ❌ CI GATE BLOCKED: ${failed} SLO failure(s)`);
   }
+  // Library mode: signal failure without killing the process (unblocks lint:
+  // exitCode was assigned but never read after the process.exit refactor).
+  process.exitCode = exitCode;
 
   if (args.json) {
     console.log(JSON.stringify(report, null, 2));
