@@ -1,7 +1,6 @@
 # NORMATIVA-SCRIPT-LIFECYCLE — Lifecycle de scripts
 
-**Estado:** Activa
-**Aplica a:** scripts operacionales, launchers, comandos npm y pruebas de scripts
+**Estado:** Activa **Aplica a:** scripts operacionales, launchers, comandos npm y pruebas de scripts
 **Autoridad:** complementa `rules/TYPESCRIPT-FIRST-POLICY.md` y
 `docs/operations/PS1-LEGACY-POLICY.md`.
 
@@ -18,8 +17,8 @@ pruebas ejecutables y una decisión explícita sobre el artefacto anterior.
 2. **CMD-first para invocación.** Los comandos documentados funcionan desde CMD y no requieren
    perfiles, módulos, aliases o semántica de PowerShell. Un launcher `.cmd` solo puede delegar al
    entry point TS; no puede duplicar su lógica.
-3. **PowerShell no es dependencia.** `pwsh` solo aparece por excepción explícita y documentada,
-   con motivo, caller, owner y fecha de revisión.
+3. **PowerShell no es dependencia.** `pwsh` solo aparece por excepción explícita y documentada, con
+   motivo, caller, owner y fecha de revisión.
 4. **Un entry point por capacidad.** Un alias o wrapper delega al entry point canónico. No se
    mantienen dos implementaciones activas para la misma capacidad.
 5. **Evidencia antes de afirmar estado.** Inventarios y reportes distinguen archivos rastreados,
@@ -28,14 +27,14 @@ pruebas ejecutables y una decisión explícita sobre el artefacto anterior.
 
 ## 3. Estados e inventario
 
-| Estado | Significado | ¿Se puede ejecutar? |
-| --- | --- | --- |
-| `active` | Entry point canónico soportado y probado | Sí |
-| `wrapper` | Fachada que delega a `active` | Sí, como compatibilidad |
-| `deprecated` | Visible durante transición, con reemplazo y fecha | Solo si la guía lo indica |
-| `archived` | Histórico, fuera del runtime | No |
-| `protected` | Histórico sensible/cifrado, fuera del runtime | No |
-| `candidate` | Hallazgo sin decisión todavía | No se publica como soportado |
+| Estado       | Significado                                       | ¿Se puede ejecutar?          |
+| ------------ | ------------------------------------------------- | ---------------------------- |
+| `active`     | Entry point canónico soportado y probado          | Sí                           |
+| `wrapper`    | Fachada que delega a `active`                     | Sí, como compatibilidad      |
+| `deprecated` | Visible durante transición, con reemplazo y fecha | Solo si la guía lo indica    |
+| `archived`   | Histórico, fuera del runtime                      | No                           |
+| `protected`  | Histórico sensible/cifrado, fuera del runtime     | No                           |
+| `candidate`  | Hallazgo sin decisión todavía                     | No se publica como soportado |
 
 El inventario mínimo contiene ruta, estado, capacidad, entry point canónico, comandos soportados,
 callers conocidos, owner, pruebas, fecha de revisión y destino del reemplazo. Debe estar versionado
@@ -58,8 +57,8 @@ identificable, el script permanece `candidate` y no puede promocionarse a `activ
 
 - El comando soportado se registra en `package.json` o en un launcher `.cmd` versionado.
 - La documentación indica propósito, entradas, salida y errores relevantes.
-- `npx tsx <ruta.ts>` es la forma bloqueante para scripts TS. `node --import tsx <ruta.ts>` es válida
-  para launchers/daemons cuando el proceso debe ser el hijo real.
+- `npx tsx <ruta.ts>` es la forma bloqueante para scripts TS. `node --import tsx <ruta.ts>` es
+  válida para launchers/daemons cuando el proceso debe ser el hijo real.
 - No se documentan `.ps1` archivados, rutas inexistentes, `dist/` no producido por su flujo ni
   helpers privados como si fueran API.
 - Un cambio de ruta actualiza callers, `package.json`, guías, Academy y workflows afectados.
@@ -95,13 +94,13 @@ reintentar.
 
 ## 8. Pruebas y deprecación
 
-| Gate | Evidencia |
-| --- | --- |
-| Parseo/tipos | `npm run typecheck` pasa |
-| Calidad | `npm run lint` pasa |
+| Gate           | Evidencia                                                   |
+| -------------- | ----------------------------------------------------------- |
+| Parseo/tipos   | `npm run typecheck` pasa                                    |
+| Calidad        | `npm run lint` pasa                                         |
 | Comportamiento | prueba focalizada, por ejemplo `npm run test:scripts-smoke` |
-| Contrato | comando soportado ejecutado desde CMD |
-| Referencias | búsqueda de callers y rutas antiguas |
+| Contrato       | comando soportado ejecutado desde CMD                       |
+| Referencias    | búsqueda de callers y rutas antiguas                        |
 
 La deprecación declara reemplazo, versión/fecha de inicio, owner y fecha de retirada. Durante la
 transición el deprecated path solo puede ser wrapper o mensaje explícito; no recibe funcionalidad

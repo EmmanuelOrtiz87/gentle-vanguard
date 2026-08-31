@@ -105,6 +105,7 @@ Don't ask the user to copy/paste data that can be pulled directly.
 For every gap in the materials, ask the user. The minimum intake covers ten topics:
 
 #### Intake 1 — Client overview
+
 - What does the company do, in one sentence (founder's words)?
 - What's the primary product?
 - What other products / SKUs / tiers exist?
@@ -112,6 +113,7 @@ For every gap in the materials, ask the user. The minimum intake covers ten topi
 - If beta: throttling? GA timeline?
 
 #### Intake 2 — ICP
+
 - Who are you for, in one sentence?
 - What do they say they want?
 - What do they actually want?
@@ -119,11 +121,13 @@ For every gap in the materials, ask the user. The minimum intake covers ten topi
 - Demographics / firmographics: who fits the ICP exactly?
 
 #### Intake 3 — Funnel state today
+
 - What are the current funnel numbers? (signups, activations, paid, retention)
 - What's the funnel *shape* — is it bottle-necked at top, middle, or bottom?
 - What's the biggest leak?
 
 #### Intake 4 — Funding state
+
 - Current round (pre-seed / seed / Series A / etc.)?
 - Total raised to date?
 - Current burn / runway?
@@ -132,6 +136,7 @@ For every gap in the materials, ask the user. The minimum intake covers ten topi
 - Permission to mention fCMO engagement in pitches?
 
 #### Intake 5 — Team
+
 - Founders and what each owns (product, marketing, sales, etc.)?
 - Other roles on the team and their marketing surface area?
 - Advisors who touch marketing?
@@ -140,6 +145,7 @@ For every gap in the materials, ask the user. The minimum intake covers ten topi
 - For the team's current marketing owner (if there is one): is the shape π-shaped (two deep skill sets), T-shaped (one deep, broad), or tactical-only? See `team-and-agency-model.md` for the framework that informs Section 11 RACI and the first-hire recommendation in Section 9.
 
 #### Intake 6 — Budget
+
 - Current monthly marketing spend, broken down: paid acquisition, tools, retainers, headcount?
 - Budget tier this maps to (see `funding-stage-unlocks.md`)?
 - What budget unlocks when the next round closes?
@@ -147,6 +153,7 @@ For every gap in the materials, ask the user. The minimum intake covers ten topi
 - ARPC, annual retention rate (or churn rate), so the budget math in `budget-planning.md` can be applied to Section 8 (Revenue) and Section 10 (12-month outlook).
 
 #### Intake 7 — Channels currently active
+
 - Acquisition: organic SEO, paid search, paid social, content, social, partnerships, events, PR, ambassadors, etc. — for each, status (live / paused / never tried)
 - Activation: onboarding state, signup flow, paywall, first-session experience, app store listing
 - Retention: lifecycle email state, in-app upsells, churn cohort
@@ -154,6 +161,7 @@ For every gap in the materials, ask the user. The minimum intake covers ten topi
 - Revenue: pricing structure, plan mix, recent experiments
 
 #### Intake 8 — Already done
+
 What past work should this plan acknowledge?
 - Major launches and dates
 - PR moments and who covered
@@ -164,12 +172,14 @@ What past work should this plan acknowledge?
 - Past advisors / fractionals
 
 #### Intake 9 — In-flight and stuck
+
 - What's drafted but not shipped? Why?
 - What's been "almost ready" for months?
 - What's blocking each?
 - What's broken or actively harmful?
 
 #### Intake 10 — Strategic posture
+
 - The most important thing to fix this quarter (founder's read)
 - The most important thing to ignore this quarter (founder's read)
 - What investors / board are asking about most

@@ -28,6 +28,10 @@ describe('Dashboard API Health', { skip: skipReason }, () => {
     assert.equal(body.type, 'metrics');
     assert.ok(body.data);
     assert.ok(body.data.tokens);
+    assert.equal(typeof body.data.tokens.used, 'number');
+    assert.equal(typeof body.data.tokens.limit, 'number');
+    assert.equal(typeof body.data.tokens.cost, 'number');
+    assert.ok(Array.isArray(body.data.tokens.byModel));
     assert.ok(body.data.sessions);
     assert.ok(body.data.git);
     assert.ok(body.data.health);

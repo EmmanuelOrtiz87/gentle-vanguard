@@ -45,21 +45,25 @@ Before creating a sequence, understand:
 ## Core Principles
 
 ### 1. One Email, One Job
+
 - Each email has one primary purpose
 - One main CTA per email
 - Don't try to do everything
 
 ### 2. Value Before Ask
+
 - Lead with usefulness
 - Build trust through content
 - Earn the right to sell
 
 ### 3. Relevance Over Volume
+
 - Fewer, better emails win
 - Segment for relevance
 - Quality > frequency
 
 ### 4. Clear Path Forward
+
 - Every email moves them somewhere
 - Links should do something useful
 - Make next steps obvious
@@ -69,6 +73,7 @@ Before creating a sequence, understand:
 ## Email Sequence Strategy
 
 ### Sequence Length
+
 - Welcome: 3-7 emails
 - Lead nurture: 5-10 emails
 - Onboarding: 5-10 emails
@@ -80,6 +85,7 @@ Depends on:
 - Relationship stage
 
 ### Timing/Delays
+
 - Welcome email: Immediately
 - Early sequence: 1-2 days apart
 - Nurture: 2-4 days apart
@@ -91,6 +97,7 @@ Consider:
 - Time zones: Send at local time
 
 ### Subject Line Strategy
+
 - Clear > Clever
 - Specific > Vague
 - Benefit or curiosity-driven
@@ -105,6 +112,7 @@ Consider:
 - Story tease: "The mistake I made with [topic]"
 
 ### Preview Text
+
 - Extends the subject line
 - ~90-140 characters
 - Don't repeat subject line
@@ -115,6 +123,7 @@ Consider:
 ## Sequence Types Overview
 
 ### Welcome Sequence (Post-Signup)
+
 **Length**: 5-7 emails over 12-14 days
 **Goal**: Activate, build trust, convert
 
@@ -128,6 +137,7 @@ Key emails:
 7. Conversion (day 12-14)
 
 ### Lead Nurture Sequence (Pre-Sale)
+
 **Length**: 6-8 emails over 2-3 weeks
 **Goal**: Build trust, demonstrate expertise, convert
 
@@ -142,6 +152,7 @@ Key emails:
 8. Direct offer (day 19-21)
 
 ### Re-Engagement Sequence
+
 **Length**: 3-4 emails over 2 weeks
 **Trigger**: 30-60 days of inactivity
 **Goal**: Win back or clean list
@@ -153,6 +164,7 @@ Key emails:
 4. Last chance (stay or unsubscribe)
 
 ### Onboarding Sequence (Product Users)
+
 **Length**: 5-7 emails over 14 days
 **Goal**: Activate, drive to aha moment, upgrade
 **Note**: Coordinate with in-app onboarding—email supports, doesn't duplicate
@@ -173,12 +185,14 @@ Key emails:
 ## Email Types by Category
 
 ### Onboarding Emails
+
 - New users series
 - New customers series
 - Key onboarding step reminders
 - New user invites
 
 ### Retention Emails
+
 - Upgrade to paid
 - Upgrade to higher plan
 - Ask for review
@@ -188,21 +202,25 @@ Key emails:
 - Referral program
 
 ### Billing Emails
+
 - Switch to annual
 - Failed payment recovery
 - Cancellation survey
 - Upcoming renewal reminders
 
 ### Usage Emails
+
 - Daily/weekly/monthly summaries
 - Key event notifications
 - Milestone celebrations
 
 ### Win-Back Emails
+
 - Expired trials
 - Cancelled customers
 
 ### Campaign Emails
+
 - Monthly roundup / newsletter
 - Seasonal promotions
 - Product updates
@@ -216,6 +234,7 @@ Key emails:
 ## Email Copy Guidelines
 
 ### Structure
+
 1. **Hook**: First line grabs attention
 2. **Context**: Why this matters to them
 3. **Value**: The useful content
@@ -223,6 +242,7 @@ Key emails:
 5. **Sign-off**: Human, warm close
 
 ### Formatting
+
 - Short paragraphs (1-3 sentences)
 - White space between sections
 - Bullet points for scanability
@@ -230,17 +250,20 @@ Key emails:
 - Mobile-first (most read on phone)
 
 ### Tone
+
 - Conversational, not formal
 - First-person (I/we) and second-person (you)
 - Active voice
 - Read it out loud—does it sound human?
 
 ### Length
+
 - 50-125 words for transactional
 - 150-300 words for educational
 - 300-500 words for story-driven
 
 ### CTA Guidelines
+
 - Buttons for primary actions
 - Links for secondary actions
 - One clear primary CTA per email
@@ -253,6 +276,7 @@ Key emails:
 ## Output Format
 
 ### Sequence Overview
+
 ```
 Sequence Name: [Name]
 Trigger: [What starts the sequence]
@@ -263,6 +287,7 @@ Exit Conditions: [When they leave the sequence]
 ```
 
 ### For Each Email
+
 ```
 Email [#]: [Name/Purpose]
 Send: [Timing]
@@ -274,6 +299,7 @@ Segment/Conditions: [If applicable]
 ```
 
 ### Metrics Plan
+
 What to measure and benchmarks
 
 ---

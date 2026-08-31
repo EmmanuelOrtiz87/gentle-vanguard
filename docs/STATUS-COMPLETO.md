@@ -8,16 +8,16 @@
 
 ### Herramientas Implementadas y Funcionales
 
-| Herramienta         | Estado  | Archivo                   | Funcionalidad                                      |
-| ------------------- | ------- | ------------------------- | -------------------------------------------------- |
-| **Image Studio**    | ✅ 100% | `image-studio.html`       | Generación nativa de imágenes con persistencia     |
-| **Video Studio**    | ✅ 100% | `video-studio.html`       | Generación de videos con persistencia de proyectos |
-| **Social Post**     | ✅ 100% | `social-post.html`        | Generador de posts con templates y export          |
-| **Contract Viewer** | ✅ 100% | `contract-viewer.html`    | Gestión de contratos con estados                   |
+| Herramienta         | Estado  | Archivo                | Funcionalidad                                      |
+| ------------------- | ------- | ---------------------- | -------------------------------------------------- |
+| **Image Studio**    | ✅ 100% | `image-studio.html`    | Generación nativa de imágenes con persistencia     |
+| **Video Studio**    | ✅ 100% | `video-studio.html`    | Generación de videos con persistencia de proyectos |
+| **Social Post**     | ✅ 100% | `social-post.html`     | Generador de posts con templates y export          |
+| **Contract Viewer** | ✅ 100% | `contract-viewer.html` | Gestión de contratos con estados                   |
 | **Product Pages**   | ✅ 100% | `resources-index.html` | Catálogo de recursos y servicios                   |
-| **CMS Dashboard**   | ✅ 100% | `resources-index.html`    | Panel de control centralizado                      |
-| **CMS Exporter**    | ✅ 100% | `cms-exporter.js`         | Exportación ZIP de todo el proyecto                |
-| **Asset Manager**   | ✅ 100% | `asset-manager.js`        | Biblioteca de assets unificada                     |
+| **CMS Dashboard**   | ✅ 100% | `resources-index.html` | Panel de control centralizado                      |
+| **CMS Exporter**    | ✅ 100% | `cms-exporter.js`      | Exportación ZIP de todo el proyecto                |
+| **Asset Manager**   | ✅ 100% | `asset-manager.js`     | Biblioteca de assets unificada                     |
 
 ---
 

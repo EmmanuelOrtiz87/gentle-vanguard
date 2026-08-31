@@ -14,9 +14,7 @@ test('metrics writer reads recent Nexus tokens and cost with SQLite datetime cut
       timestamp TEXT NOT NULL
     )
   `);
-  const insert = db.prepare(
-    'INSERT INTO token_usage VALUES (?, ?, ?, ?, ?)',
-  );
+  const insert = db.prepare('INSERT INTO token_usage VALUES (?, ?, ?, ?, ?)');
   insert.run('gentle-vanguard', 100, 25, 0.5, '2026-08-29 12:00:00');
   insert.run('gentle-vanguard', 50, 10, 0.2, '2026-08-28 11:59:59');
   insert.run('other-tenant', 900, 100, 9, '2026-08-29 12:00:00');

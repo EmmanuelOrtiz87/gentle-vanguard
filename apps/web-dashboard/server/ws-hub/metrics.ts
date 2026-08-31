@@ -2,7 +2,14 @@ import { existsSync, readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { getGlobalHealth } from '../global-health-api.ts';
 import { getOtelPipeline } from '../otel-pipeline.ts';
-import { getRealMetrics, getMetricHistory, getTenantScopedMetrics } from '../real-data.ts';
+import {
+  defaultOperationalMetrics,
+  getRealMetrics,
+  getMetricHistory,
+  getTenantScopedMetrics,
+  getConfiguredSessionTokenLimit,
+} from '../real-data.ts';
+import type { DashboardData } from '../../src/types/dashboard.ts';
 import { readJson, ROOT } from '../shared.ts';
 import { clients, deploymentTenant, STATS_PATH } from './context.ts';
 
@@ -20,9 +27,18 @@ export function loadStats() {
 
 export function generateMetrics(tenantId?: string) {
   const effectiveTenantId = tenantId ?? deploymentTenant.tenantId;
-  const real = effectiveTenantId ? getTenantScopedMetrics(effectiveTenantId) : getRealMetrics();
+  const real = (
+    effectiveTenantId ? getTenantScopedMetrics(effectiveTenantId) : getRealMetrics()
+  ) as Partial<DashboardData> | undefined;
   return {
     ...real,
+    tokens: real?.tokens ?? {
+      used: 0,
+      limit: getConfiguredSessionTokenLimit(),
+      cost: 0,
+      byModel: [],
+    },
+    operational: real?.operational ?? defaultOperationalMetrics(),
     globalHealth: getGlobalHealth(),
     tenantScope: deploymentTenant.configured
       ? { type: deploymentTenant.scopeLabel, tenantId: deploymentTenant.tenantId }

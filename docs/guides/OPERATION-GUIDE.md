@@ -55,13 +55,13 @@ pnpm run session:start
 
 ### Core
 
-| Herramienta       | Comando                            | Descripción                       |
-| ----------------- | ---------------------------------- | --------------------------------- |
-| **Health Check**  | `npm run health:check`             | Verifica estado de 81 componentes |
-| **Watchtower**    | `npm run watchtower:health`        | Monitoreo continuo del stack      |
+| Herramienta       | Comando                                    | Descripción                       |
+| ----------------- | ------------------------------------------ | --------------------------------- |
+| **Health Check**  | `npm run health:check`                     | Verifica estado de 81 componentes |
+| **Watchtower**    | `npm run watchtower:health`                | Monitoreo continuo del stack      |
 | **Session Start** | `npx tsx src/session/session-autostart.ts` | Inicializa pipeline de sesión     |
-| **Type Check**    | `npm run typecheck`                | Valida TypeScript                 |
-| **Lint**          | `npm run lint`                     | ESLint en todo el código          |
+| **Type Check**    | `npm run typecheck`                        | Valida TypeScript                 |
+| **Lint**          | `npm run lint`                             | ESLint en todo el código          |
 
 ### Dashboard
 
@@ -84,11 +84,11 @@ pnpm run session:start
 
 ### Testing
 
-| Herramienta             | Comando                                              | Descripción            |
-| ----------------------- | ---------------------------------------------------- | ---------------------- |
-| **Tests**               | `pnpm test`                                          | Ejecuta suite de tests |
+| Herramienta             | Comando                                                     | Descripción            |
+| ----------------------- | ----------------------------------------------------------- | ---------------------- |
+| **Tests**               | `pnpm test`                                                 | Ejecuta suite de tests |
 | **Deterministic Tests** | `npx tsx src/review/deterministic-test-framework.ts --list` | Tests sin costo de API |
-| **Coverage**            | `pnpm test:coverage`                                 | Reporte de cobertura   |
+| **Coverage**            | `pnpm test:coverage`                                        | Reporte de cobertura   |
 
 ### Auto-Update
 

@@ -9,8 +9,8 @@ Purpose:
 3. Keep custom behavior versioned with the repository.
 
 The normative script lifecycle is documented in
-[`NORMATIVA-SCRIPT-LIFECYCLE.md`](NORMATIVA-SCRIPT-LIFECYCLE.md); it governs TS-only/CMD-first
-entry points, ownership, inventory, migration, testing and legacy handling.
+[`NORMATIVA-SCRIPT-LIFECYCLE.md`](NORMATIVA-SCRIPT-LIFECYCLE.md); it governs TS-only/CMD-first entry
+points, ownership, inventory, migration, testing and legacy handling.
 
 ## Structure
 

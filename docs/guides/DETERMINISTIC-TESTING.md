@@ -52,11 +52,11 @@ Un test con estas propiedades eventualmente se desactiva.
 
 ### Componentes
 
-| Componente  | Archivo                               | Descripción                          |
-| ----------- | ------------------------------------- | ------------------------------------ |
+| Componente  | Archivo                                      | Descripción                          |
+| ----------- | -------------------------------------------- | ------------------------------------ |
 | Framework   | `src/review/deterministic-test-framework.ts` | Servidor HTTP fixture + runner       |
-| Escenarios  | `SCENARIOS` object                    | Secuencias scripteadas de tool calls |
-| Validadores | `validate` functions                  | Verifican requests del agente        |
+| Escenarios  | `SCENARIOS` object                           | Secuencias scripteadas de tool calls |
+| Validadores | `validate` functions                         | Verifican requests del agente        |
 
 ---
 

@@ -7,7 +7,6 @@ metadata:
   upstream: anthropics/skills
   license: Apache-2.0
 
-
 # Doc Co-Authoring Workflow
 
 This skill provides a structured workflow for guiding users through collaborative document creation. Act as an active guide, walking users through three stages: Context Gathering, Refinement & Structure, and Reader Testing.

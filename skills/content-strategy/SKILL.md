@@ -20,23 +20,27 @@ If `.agents/product-marketing.md` exists (or `.claude/product-marketing.md`, or 
 Gather this context (ask if not provided):
 
 ### 1. Business Context
+
 - What does the company do?
 - Who is the ideal customer?
 - What's the primary goal for content? (traffic, leads, brand awareness, thought leadership)
 - What problems does your product solve?
 
 ### 2. Customer Research
+
 - What questions do customers ask before buying?
 - What objections come up in sales calls?
 - What topics appear repeatedly in support tickets?
 - What language do customers use to describe their problems?
 
 ### 3. Current State
+
 - Do you have existing content? What's working?
 - What resources do you have? (writers, budget, time)
 - What content formats can you produce? (written, video, audio)
 
 ### 4. Competitive Landscape
+
 - Who are your main competitors?
 - What content gaps exist in your market?
 
@@ -90,12 +94,14 @@ Formula: [persona] + [use-case]. Targets long-tail keywords.
 
 **Hub and Spoke**
 Hub = comprehensive overview. Spokes = related subtopics.
+
 ```
 /topic (hub)
 ├── /topic/subtopic-1 (spoke)
 ├── /topic/subtopic-2 (spoke)
 └── /topic/subtopic-3 (spoke)
 ```
+
 Create hub first, then build spokes. Interlink strategically.
 
 **Note:** Most content works fine under `/blog`. Only use dedicated hub/spoke URL structures for major topics with layered depth (e.g., Atlassian's `/agile` guide). For typical blog posts, `/blog/post-title` is sufficient.
@@ -194,6 +200,7 @@ Good pillars should:
 Map topics to the buyer's journey using proven keyword modifiers:
 
 ### Awareness Stage
+
 Modifiers: "what is," "how to," "guide to," "introduction to"
 
 Example: If customers ask about project management basics:
@@ -202,6 +209,7 @@ Example: If customers ask about project management basics:
 - "How to Run a Standup Meeting"
 
 ### Consideration Stage
+
 Modifiers: "best," "top," "vs," "alternatives," "comparison"
 
 Example: If customers evaluate multiple tools:
@@ -210,6 +218,7 @@ Example: If customers evaluate multiple tools:
 - "Basecamp Alternatives"
 
 ### Decision Stage
+
 Modifiers: "pricing," "reviews," "demo," "trial," "buy"
 
 Example: If pricing comes up in sales calls:
@@ -218,6 +227,7 @@ Example: If pricing comes up in sales calls:
 - "[Product] Reviews"
 
 ### Implementation Stage
+
 Modifiers: "templates," "examples," "tutorial," "how to use," "setup"
 
 Example: If support tickets show implementation struggles:
@@ -311,24 +321,28 @@ Extract from customer-facing teams:
 Score each idea on four factors:
 
 ### 1. Customer Impact (40%)
+
 - How frequently did this topic come up in research?
 - What percentage of customers face this challenge?
 - How emotionally charged was this pain point?
 - What's the potential LTV of customers with this need?
 
 ### 2. Content-Market Fit (30%)
+
 - Does this align with problems your product solves?
 - Can you offer unique insights from customer research?
 - Do you have customer stories to support this?
 - Will this naturally lead to product interest?
 
 ### 3. Search Potential (20%)
+
 - What's the monthly search volume?
 - How competitive is this topic?
 - Are there related long-tail opportunities?
 - Is search interest growing or declining?
 
 ### 4. Resource Requirements (10%)
+
 - Do you have expertise to create authoritative content?
 - What additional research is needed?
 - What assets (graphics, data, examples) will you need?
@@ -396,11 +410,13 @@ For the full distribution spine—the Content Distribution Flywheel, platform ha
 When creating a content strategy, provide:
 
 ### 1. Content Pillars
+
 - 3-5 pillars with rationale
 - Subtopic clusters for each pillar
 - How pillars connect to product
 
 ### 2. Priority Topics
+
 For each recommended piece:
 - Topic/title
 - Searchable, shareable, or both
@@ -409,6 +425,7 @@ For each recommended piece:
 - Why this topic (customer research backing)
 
 ### 3. Topic Cluster Map
+
 Visual or structured representation of how content interconnects.
 
 ---

@@ -80,8 +80,9 @@ Files excluded from coverage measurement (see `tests/coverage-config.json`):
 
 ### Implementation
 
-Coverage is measured with the **native TypeScript coverage runner** (`src/review/coverage-runner.ts`),
-which executes the full test suite under c8 and enforces per-target thresholds:
+Coverage is measured with the **native TypeScript coverage runner**
+(`src/review/coverage-runner.ts`), which executes the full test suite under c8 and enforces
+per-target thresholds:
 
 ```bash
 npm run coverage        # full run + threshold enforcement (CI gate)

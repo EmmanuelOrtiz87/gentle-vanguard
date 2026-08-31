@@ -52,9 +52,13 @@ function log(scope: string, message: string): void {
 
 function isPortInUse(port: number): Promise<boolean> {
   return new Promise((resolvePort) => {
-    const req = http.get(`http://127.0.0.1:${port}/api/connection/status`, { timeout: 2000 }, (res) => {
-      resolvePort(Boolean(res.statusCode) && res.statusCode! < 500);
-    });
+    const req = http.get(
+      `http://127.0.0.1:${port}/api/connection/status`,
+      { timeout: 2000 },
+      (res) => {
+        resolvePort(Boolean(res.statusCode) && res.statusCode! < 500);
+      },
+    );
     req.on('error', () => resolvePort(false));
     req.on('timeout', () => {
       req.destroy();
@@ -113,7 +117,9 @@ async function freePort(port: number): Promise<void> {
       const pid = Number(parts[parts.length - 1]);
       if (Number.isFinite(pid) && pid > 0) {
         await new Promise<void>((doneKill) => {
-          execFile('taskkill', ['/PID', String(pid), '/F', '/T'], { windowsHide: true }, () => doneKill());
+          execFile('taskkill', ['/PID', String(pid), '/F', '/T'], { windowsHide: true }, () =>
+            doneKill(),
+          );
         });
         log('cleanup', `freed port ${port} from PID ${pid}`);
       }
@@ -130,17 +136,13 @@ function spawnDetached(
   pidFile: string,
   cwd: string = ROOT,
 ): number {
-  const child = spawn(
-    process.execPath,
-    ['--import', 'tsx', script],
-    {
-      cwd,
-      env: { ...process.env, ...env },
-      stdio: 'ignore',
-      detached: true,
-      windowsHide: true,
-    },
-  );
+  const child = spawn(process.execPath, ['--import', 'tsx', script], {
+    cwd,
+    env: { ...process.env, ...env },
+    stdio: 'ignore',
+    detached: true,
+    windowsHide: true,
+  });
   if (!child.pid) {
     throw new Error(`${scope} failed to spawn`);
   }
@@ -158,7 +160,12 @@ function registerCleanup(): void {
         if (existsSync(pidFile)) {
           const pid = Number(readFileSync(pidFile, 'utf-8').trim());
           if (Number.isFinite(pid)) {
-            execFile('taskkill', ['/PID', String(pid), '/F', '/T'], { windowsHide: true }, () => undefined);
+            execFile(
+              'taskkill',
+              ['/PID', String(pid), '/F', '/T'],
+              { windowsHide: true },
+              () => undefined,
+            );
           }
           unlinkSync(pidFile);
         }
@@ -185,13 +192,7 @@ async function main(): Promise<void> {
     // cwd must be APP_DIR: vite resolves vite.config.ts (port 5174, root=dist
     // proxy targets) relative to the process cwd. With the repo root as cwd it
     // fell back to defaults (port 5173, wrong root) and the UI never came up.
-    spawnDetached(
-      'vite',
-      viteScript,
-      { GV_ANALYTICS_PORT: String(PORT) },
-      VITE_PID,
-      APP_DIR,
-    );
+    spawnDetached('vite', viteScript, { GV_ANALYTICS_PORT: String(PORT) }, VITE_PID, APP_DIR);
   }
 
   // Verify API is up before exiting the launcher.

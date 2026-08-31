@@ -13,6 +13,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 ## The 17 sections (scored 0–5 each)
 
 ### 1. Positioning
+
 **What's scored:** Clarity of category claim, differentiation, alignment across surfaces (homepage, app store, pitch deck, founder messaging).
 
 **Score guide:**
@@ -24,6 +25,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 **Maps to AARRR:** Cross-cutting — feeds every stage.
 
 ### 2. Customer research
+
 **What's scored:** Depth and recency of customer research, ICP clarity, voice-of-customer capture.
 
 **Score guide:**
@@ -35,6 +37,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 **Maps to AARRR:** Cross-cutting — feeds especially Acquisition (channel choice) and Activation (onboarding voice).
 
 ### 3. Homepage
+
 **What's scored:** Headline clarity, voice alignment, conversion architecture, mobile experience.
 
 **Score guide:**
@@ -46,6 +49,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 **Maps to AARRR:** Acquisition + Activation.
 
 ### 4. Sales / product pages
+
 **What's scored:** Existence and quality of dedicated product / pricing / feature pages. Are SKUs documented? Is pricing scannable? Are upsells visible?
 
 **Score guide:**
@@ -57,6 +61,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 **Maps to AARRR:** Acquisition + Revenue.
 
 ### 5. Conversion pages
+
 **What's scored:** Landing pages for specific campaigns, channels, or use cases. `/partner`, `/science`, `/ambassadors`, `/eye-mask` types of pages.
 
 **Score guide:**
@@ -68,6 +73,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 **Maps to AARRR:** Acquisition + Activation.
 
 ### 6. Competitor comparison
+
 **What's scored:** Existence of "vs. {competitor}" pages, comparison content. Does the brand acknowledge alternatives, or pretend they don't exist?
 
 **Score guide:**
@@ -79,6 +85,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 **Maps to AARRR:** Acquisition (consideration-stage SEO + sales enablement).
 
 ### 7. Resources / content
+
 **What's scored:** Blog, knowledge base, science page, whitepapers, research, founder essays, podcast.
 
 **Score guide:**
@@ -90,6 +97,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 **Maps to AARRR:** Acquisition.
 
 ### 8. Onboarding
+
 **What's scored:** New user onboarding (in-app + email). Time-to-value, completion rate, brand-voice alignment.
 
 **Score guide:**
@@ -101,6 +109,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 **Maps to AARRR:** Activation.
 
 ### 9. Email lifecycle
+
 **What's scored:** Existence and quality of lifecycle email programs. Welcome / onboarding / post-purchase / lapsed / win-back.
 
 **Score guide:**
@@ -112,6 +121,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 **Maps to AARRR:** Retention (+ Activation for onboarding emails).
 
 ### 10. Sales material
+
 **What's scored:** Sales decks, one-pagers, demos, case studies, pricing sheets. (For B2B / hybrid companies — for pure D2C, this can be marked N/A or scored low without implication.)
 
 **Score guide:**
@@ -123,6 +133,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 **Maps to AARRR:** Acquisition + Revenue (B2B).
 
 ### 11. Messaging
+
 **What's scored:** Voice, tone, vocabulary, message hierarchy across surfaces. Is the brand voice documented, consistent, distinctive?
 
 **Score guide:**
@@ -134,6 +145,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 **Maps to AARRR:** Cross-cutting.
 
 ### 12. Pricing
+
 **What's scored:** Pricing structure clarity, packaging logic, recent pressure-testing, listed vs. effective price reconciliation.
 
 **Score guide:**
@@ -145,6 +157,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 **Maps to AARRR:** Revenue.
 
 ### 13. CRO (conversion rate optimization)
+
 **What's scored:** Test cadence, instrumentation, A/B history, statistical rigor.
 
 **Score guide:**
@@ -156,6 +169,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 **Maps to AARRR:** Cross-cutting (most impactful at Activation + Revenue).
 
 ### 14. GTM launches
+
 **What's scored:** Quality of past launch executions. Product launches, feature launches, campaign launches.
 
 **Score guide:**
@@ -167,6 +181,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 **Maps to AARRR:** Acquisition + Activation.
 
 ### 15. Ads (paid)
+
 **What's scored:** Paid acquisition state. Active campaigns, channels, CAC tracking, creative quality.
 
 **Score guide:**
@@ -180,6 +195,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 **Note:** For pre-seed clients with no paid budget, score this 0 *without* treating it as a weakness — it reflects the funding stage, not a marketing failure.
 
 ### 16. SEO
+
 **What's scored:** Organic search performance. Domain rating, ranking keywords, organic traffic, content cluster strategy.
 
 **Score guide:**
@@ -191,6 +207,7 @@ Either way, the output is the same: a 17-row scored table, a total out of 85, an
 **Maps to AARRR:** Acquisition.
 
 ### 17. Internationalization
+
 **What's scored:** Geographic expansion, language localization, region-specific pricing.
 
 **Score guide:**
@@ -214,26 +231,31 @@ The total matters less than the *shape*. After the scoring table, write a 2–4 
 ## Common shapes
 
 ### "Strong voice / messaging, weak distribution"
+
 - High: Positioning (#1), Customer research (#2), Messaging (#11)
 - Low: SEO (#16), Ads (#15), GTM launches (#14)
 - Translation: The founder is a strong storyteller but distribution hasn't caught up. Plan emphasizes Acquisition + paid layer prep.
 
 ### "Strong acquisition, weak conversion"
+
 - High: SEO (#16), Resources (#7), Ads (#15)
 - Low: Homepage (#3), Onboarding (#8), Conversion pages (#5), Pricing (#12)
 - Translation: Traffic comes in but doesn't convert. Plan emphasizes Activation + Revenue.
 
 ### "Strong conversion, weak retention"
+
 - High: Onboarding (#8), Homepage (#3), Pricing (#12)
 - Low: Email lifecycle (#9), CRO (#13)
 - Translation: Users sign up and pay but churn. Plan emphasizes Retention.
 
 ### "Strong product, weak everything-else"
+
 - High: only Positioning (#1) and Customer research (#2) — the founder knows the customer
 - Low: everything operational
 - Translation: Pre-marketing stage. Plan is foundation-heavy. First quarter is bedrock fixes.
 
 ### "Strong recent revenue, weak compounding"
+
 - High: Ads (#15), Sales material (#10), Pricing (#12)
 - Low: SEO (#16), Resources (#7), Referral mechanics
 - Translation: Performance marketing carries the business. Plan emphasizes building compounding channels before paid scales further.

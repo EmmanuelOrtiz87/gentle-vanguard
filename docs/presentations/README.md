@@ -8,7 +8,8 @@ Current presentation material. Older versions belong outside live docs.
 - [_config.yml](_config.yml)
 - [agents-pipeline.html](agents-pipeline.html)
 - [architecture.html](architecture.html)
-- [case-study-before-after.html](case-study-before-after.html) — caso comparativo reproducible, fuentes y límites
+- [case-study-before-after.html](case-study-before-after.html) — caso comparativo reproducible,
+  fuentes y límites
 - [autonomy.html](autonomy.html)
 - [commands.html](commands.html)
 - [contract-viewer.html](contract-viewer.html)

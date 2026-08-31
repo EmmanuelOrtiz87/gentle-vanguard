@@ -55,32 +55,42 @@ export interface MediaRecord {
 
 export interface ContentOSRepo {
   // Items
-  createItem(tenantId: string, data: Partial<ContentItemRecord> & { id: string; title: string }): void;
-  getItem(id: string, tenantId: string): ContentItemRecord | null;
-  listItems(
+  createItem(
     tenantId: string,
-    filter?: { status?: string; limit?: number },
-  ): ContentItemRecord[];
+    data: Partial<ContentItemRecord> & { id: string; title: string },
+  ): void;
+  getItem(id: string, tenantId: string): ContentItemRecord | null;
+  listItems(tenantId: string, filter?: { status?: string; limit?: number }): ContentItemRecord[];
   updateItem(
     id: string,
     tenantId: string,
-    patch: Partial<Pick<ContentItemRecord, 'title' | 'brief' | 'objective' | 'voice' | 'tags' | 'status'>>,
+    patch: Partial<
+      Pick<ContentItemRecord, 'title' | 'brief' | 'objective' | 'voice' | 'tags' | 'status'>
+    >,
   ): void;
   deleteItem(id: string, tenantId: string): void;
 
   // Variants
-  createVariant(tenantId: string, data: Omit<ContentVariantRecord, 'created_at' | 'updated_at'>): void;
+  createVariant(
+    tenantId: string,
+    data: Omit<ContentVariantRecord, 'created_at' | 'updated_at'>,
+  ): void;
   getVariant(id: string, tenantId: string): ContentVariantRecord | null;
   listVariantsByItem(itemId: string, tenantId: string): ContentVariantRecord[];
   updateVariant(
     id: string,
     tenantId: string,
-    patch: Partial<Pick<ContentVariantRecord, 'body' | 'image_prompt' | 'image_path' | 'status' | 'score'>>,
+    patch: Partial<
+      Pick<ContentVariantRecord, 'body' | 'image_prompt' | 'image_path' | 'status' | 'score'>
+    >,
   ): void;
 
   // Calendar
   createSlot(tenantId: string, data: Omit<CalendarSlotRecord, 'created_at' | 'updated_at'>): void;
-  listSlots(tenantId: string, filter?: { from?: string; to?: string; platform?: string }): CalendarSlotRecord[];
+  listSlots(
+    tenantId: string,
+    filter?: { from?: string; to?: string; platform?: string },
+  ): CalendarSlotRecord[];
   updateSlot(
     id: string,
     tenantId: string,
@@ -105,7 +115,10 @@ export interface ContentOSRepo {
 export class SqliteContentOSRepo implements ContentOSRepo {
   constructor(private db: Database.Database) {}
 
-  createItem(tenantId: string, data: Partial<ContentItemRecord> & { id: string; title: string }): void {
+  createItem(
+    tenantId: string,
+    data: Partial<ContentItemRecord> & { id: string; title: string },
+  ): void {
     this.db
       .prepare(
         `INSERT INTO content_items (id, tenant_id, title, brief, objective, voice, tags, status)
@@ -131,7 +144,10 @@ export class SqliteContentOSRepo implements ContentOSRepo {
     );
   }
 
-  listItems(tenantId: string, filter: { status?: string; limit?: number } = {}): ContentItemRecord[] {
+  listItems(
+    tenantId: string,
+    filter: { status?: string; limit?: number } = {},
+  ): ContentItemRecord[] {
     const limit = filter.limit ?? 100;
     if (filter.status) {
       return this.db
@@ -148,14 +164,18 @@ export class SqliteContentOSRepo implements ContentOSRepo {
   updateItem(
     id: string,
     tenantId: string,
-    patch: Partial<Pick<ContentItemRecord, 'title' | 'brief' | 'objective' | 'voice' | 'tags' | 'status'>>,
+    patch: Partial<
+      Pick<ContentItemRecord, 'title' | 'brief' | 'objective' | 'voice' | 'tags' | 'status'>
+    >,
   ): void {
     const keys = Object.keys(patch).filter((k) => k !== 'id');
     if (!keys.length) return;
     const sets = keys.map((k) => `${k} = ?`).join(', ');
     const values = keys.map((k) => (patch as Record<string, unknown>)[k]);
     this.db
-      .prepare(`UPDATE content_items SET ${sets}, updated_at = datetime('now') WHERE id = ? AND tenant_id = ?`)
+      .prepare(
+        `UPDATE content_items SET ${sets}, updated_at = datetime('now') WHERE id = ? AND tenant_id = ?`,
+      )
       .run(...values, id, tenantId);
   }
 
@@ -163,7 +183,10 @@ export class SqliteContentOSRepo implements ContentOSRepo {
     this.db.prepare('DELETE FROM content_items WHERE id = ? AND tenant_id = ?').run(id, tenantId);
   }
 
-  createVariant(tenantId: string, data: Omit<ContentVariantRecord, 'created_at' | 'updated_at'>): void {
+  createVariant(
+    tenantId: string,
+    data: Omit<ContentVariantRecord, 'created_at' | 'updated_at'>,
+  ): void {
     this.db
       .prepare(
         `INSERT INTO content_variants
@@ -196,14 +219,18 @@ export class SqliteContentOSRepo implements ContentOSRepo {
 
   listVariantsByItem(itemId: string, tenantId: string): ContentVariantRecord[] {
     return this.db
-      .prepare('SELECT * FROM content_variants WHERE item_id = ? AND tenant_id = ? ORDER BY platform')
+      .prepare(
+        'SELECT * FROM content_variants WHERE item_id = ? AND tenant_id = ? ORDER BY platform',
+      )
       .all(itemId, tenantId) as ContentVariantRecord[];
   }
 
   updateVariant(
     id: string,
     tenantId: string,
-    patch: Partial<Pick<ContentVariantRecord, 'body' | 'image_prompt' | 'image_path' | 'status' | 'score'>>,
+    patch: Partial<
+      Pick<ContentVariantRecord, 'body' | 'image_prompt' | 'image_path' | 'status' | 'score'>
+    >,
   ): void {
     const keys = Object.keys(patch);
     if (!keys.length) return;

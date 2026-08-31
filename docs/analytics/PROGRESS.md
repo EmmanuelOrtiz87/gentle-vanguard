@@ -26,8 +26,8 @@
 
 ### Decisiones
 
-- La UI no controla OpenCode directamente. La app invoca una capa backend local de
-  Gentle-Vanguard, y esa capa usa el model router/agentes/OpenCode por detras.
+- La UI no controla OpenCode directamente. La app invoca una capa backend local de Gentle-Vanguard,
+  y esa capa usa el model router/agentes/OpenCode por detras.
 - El primer corte no escribe en Atlassian. Las acciones write quedan bloqueadas hasta incorporar
   aprobacion humana y auditoria.
 - Los secretos no se guardan en archivos versionados.
@@ -45,12 +45,12 @@
 Hecho y verificado con build verde + smoke test end-to-end:
 
 - **Persistencia Nexus**: nueva tabla `gv_analytics_reports` en `.runtime/gentle-vanguard.db`
-  (SQLite WAL, `apps/gv-analytics/server/reports.ts`). Cada `POST /api/analyze` persiste el
-  reporte. Endpoints nuevos: `GET /api/reports` (historial), `GET /api/reports/:id`.
+  (SQLite WAL, `apps/gv-analytics/server/reports.ts`). Cada `POST /api/analyze` persiste el reporte.
+  Endpoints nuevos: `GET /api/reports` (historial), `GET /api/reports/:id`.
 - **Exportacion**: `server/export.ts` genera MD, HTML (tema claro para impresion), DOCX (libreria
   `docx`) y PDF (Chrome/Edge headless `--print-to-pdf`, `windowsHide`). Endpoint:
-  `GET /api/reports/:id/export?format=md|html|docx|pdf`. Smoke test OK: PDF real de 102KB con
-  firma `%PDF-1.4`.
+  `GET /api/reports/:id/export?format=md|html|docx|pdf`. Smoke test OK: PDF real de 102KB con firma
+  `%PDF-1.4`.
 - **MCP enriquecido** (`server/mcp.ts` v0.2.0, 6 tools): `gv_atlassian_jira_issue` (issue completo
   con comentarios), `gv_atlassian_confluence_page`, `gv_atlassian_bitbucket_pr` (con diff),
   `gv_atlassian_search` (Jira + Confluence) + las 2 originales. `analyzeInput` ahora tambien trae
@@ -58,8 +58,8 @@ Hecho y verificado con build verde + smoke test end-to-end:
 - **UI**: menu de exportacion (PDF/DOCX/HTML/MD) y panel de historial clickable en el aside.
 - **Re-tema marca GV**: paleta migrada de verde a tokens Academy/14-BRAND-SYSTEM (cyan `#22d3ee`,
   violeta `#a78bfa`, bg `#0a0e17`, superficies `#1f2937`, gradiente 135deg violeta->cyan).
-- Deps agregadas al package.json del app: `better-sqlite3`, `docx`,
-  `@modelcontextprotocol/sdk`, `zod` (antes venian por hoisting).
+- Deps agregadas al package.json del app: `better-sqlite3`, `docx`, `@modelcontextprotocol/sdk`,
+  `zod` (antes venian por hoisting).
 
 Bugs corregidos en el camino:
 
@@ -81,12 +81,12 @@ Bugs corregidos en el camino:
 
 Hecho y verificado con build verde + typecheck verde:
 
-- **Stepper en cabecera con scroll-spy** — los 4 enlaces pasivos se convirtieron en
-  botones paso-a-paso (1 Conexion / 2 Analisis / 3 Reporte / 4 Evidencia) con badge
-  numerico y gradiente de marca cuando la seccion esta activa. `IntersectionObserver`
-  actualiza el estado segun scroll (`rootMargin: -30% 0px -50% 0px`).
-- **Historial limitado a 5** — `GET /api/reports` default `limit=5` con cap 25,
-  panel lateral ahora dice "Ultimos 5 reportes persistidos en Nexus".
+- **Stepper en cabecera con scroll-spy** — los 4 enlaces pasivos se convirtieron en botones
+  paso-a-paso (1 Conexion / 2 Analisis / 3 Reporte / 4 Evidencia) con badge numerico y gradiente de
+  marca cuando la seccion esta activa. `IntersectionObserver` actualiza el estado segun scroll
+  (`rootMargin: -30% 0px -50% 0px`).
+- **Historial limitado a 5** — `GET /api/reports` default `limit=5` con cap 25, panel lateral ahora
+  dice "Ultimos 5 reportes persistidos en Nexus".
 - **PENDING.md** — lista priorizada de 16 items con plan operativo por olas.
 - **Typecheck + build**: verde (`tsc --noEmit && vite build` → 2.12s, 162KB JS, 13KB CSS).
 
@@ -94,34 +94,33 @@ Hecho y verificado con build verde + typecheck verde:
 
 Landed en commit `a4b34c2c`. Integra gv-analytics al stack como first-class daemon:
 
-- `src/gv-analytics-launcher.ts` (single-shot, port 4754 cleanup, detached, pidfiles
-  en `.runtime/gv-analytics-{api,vite}.pid`, SIGINT/SIGTERM cleanup).
+- `src/gv-analytics-launcher.ts` (single-shot, port 4754 cleanup, detached, pidfiles en
+  `.runtime/gv-analytics-{api,vite}.pid`, SIGINT/SIGTERM cleanup).
 - Scripts npm: `analytics:start | start:api | stop | build | dev`.
 - `opencode.json#mcp.gv-analytics-atlassian` habilitado.
-- `process-hygiene.ts`: 3 nuevas `DAEMON_CLASSES`; el match generico de `vite-server`
-  se reordeno despues de `gv-analytics-vite` para evitar falso positivo de duplicado.
-- `maintenance-watchtower.ts`: `checkGvAnalytics()` con 6 checks (build, API HTTP,
-  process, Vite dev, MCP registry, opencode.json wire). 6/6 PASS verificado.
+- `process-hygiene.ts`: 3 nuevas `DAEMON_CLASSES`; el match generico de `vite-server` se reordeno
+  despues de `gv-analytics-vite` para evitar falso positivo de duplicado.
+- `maintenance-watchtower.ts`: `checkGvAnalytics()` con 6 checks (build, API HTTP, process, Vite
+  dev, MCP registry, opencode.json wire). 6/6 PASS verificado.
 - Smoke test: launcher arranca, API responde, watchtower OK.
 
 ### Avance 5 (2026-08-28, P1 LLM real + diagramas)
 
 Landed en commits `c7a13f6a` (LLM) y `020af3b5` (diagramas).
 
-- `apps/gv-analytics/server/llm.ts`: wrapper sobre `agent-delegator --agent sdd-explore`
-  con timeout 90s, extraccion de JSON (fenced + balanced brace scan), normalizacion de
-  shape, tabla `gv_analytics_llm_cache` (sha256 hash) en Nexus. Fallback heuristico
-  cuando el modelo no responde o devuelve JSON no parseable.
-- `apps/ggv-analytics/server/atlassian.ts`: `analyzeInput` ahora invoca
-  `enrichWithLLM` primero. Si retorna analisis, el reporte usa LLM output; si no,
-  cae al heuristico con `llmSource='heuristic'`.
+- `apps/gv-analytics/server/llm.ts`: wrapper sobre `agent-delegator --agent sdd-explore` con timeout
+  90s, extraccion de JSON (fenced + balanced brace scan), normalizacion de shape, tabla
+  `gv_analytics_llm_cache` (sha256 hash) en Nexus. Fallback heuristico cuando el modelo no responde
+  o devuelve JSON no parseable.
+- `apps/ggv-analytics/server/atlassian.ts`: `analyzeInput` ahora invoca `enrichWithLLM` primero. Si
+  retorna analisis, el reporte usa LLM output; si no, cae al heuristico con `llmSource='heuristic'`.
 - `src/types.ts`: `AnalyticsReport` gana `llmSource | llmDurationMs | llmCached | llmNotes`.
   `complexity.level` acepta `'critical'`.
-- UI: badge de proveniencia LLM (agent=cyan, cache=verde, fallback=ambar, heuristico=ambar)
-  con duracion. Bloques de diagramas con copy-to-clipboard y render mermaid on-demand
-  (CDN, fallback a texto). Tag "mermaid" cuando el contenido califica.
-- End-to-end: `POST /api/analyze` con pedido real de checkout Magento → `llmSource=agent`
-  en 5.4s. Cache hit <50ms.
+- UI: badge de proveniencia LLM (agent=cyan, cache=verde, fallback=ambar, heuristico=ambar) con
+  duracion. Bloques de diagramas con copy-to-clipboard y render mermaid on-demand (CDN, fallback a
+  texto). Tag "mermaid" cuando el contenido califica.
+- End-to-end: `POST /api/analyze` con pedido real de checkout Magento → `llmSource=agent` en 5.4s.
+  Cache hit <50ms.
 
 ### Estado al cierre de ola
 
@@ -145,25 +144,24 @@ Get-Content -Raw docs/analytics/PENDING.md
 
 ### Avance 6 (2026-08-28, P2.3 report templates)
 
-Landed en commit `c223d3be`. Cierra el ultimo item de P2 (templates de reporte) y
-deja P0+P1+P2 al 100%.
+Landed en commit `c223d3be`. Cierra el ultimo item de P2 (templates de reporte) y deja P0+P1+P2 al
+100%.
 
-- `apps/gv-analytics/server/templates.ts` (nuevo): modelo `ReportTemplate` con
-  secciones visibles/ordenadas, `listTemplates()`, `getTemplate()`,
-  `renderTemplateMarkdown()`. 3 templates: `brief` (1 pagina ejecutiva, sin
-  diagramas/evidencia/roles), `sdd` (SDD canonico completo), `handoff` (dev-focused,
-  evidencia pesada, sin roles).
-- `apps/gv-analytics/server/export.ts`: `toMarkdown/toHtml/toDocx/toPdf` aceptan
-  `templateId` y delegan en el renderer de templates. Limpieza: se removio la
-  funcion muerta `renderLegacy()` + helper `sectionLines()`, y el import invalido
-  en medio del archivo (higiene ESM).
-- `apps/gv-analytics/server/index.ts`: `GET /api/templates` + parametro
-  `?template=` en las rutas de export.
-- `apps/gv-analytics/src/App.tsx`: selector de plantilla (dropdown + descripcion)
-  en el menu de exportacion; carga `/api/templates`; pasa `&template=` al export.
+- `apps/gv-analytics/server/templates.ts` (nuevo): modelo `ReportTemplate` con secciones
+  visibles/ordenadas, `listTemplates()`, `getTemplate()`, `renderTemplateMarkdown()`. 3 templates:
+  `brief` (1 pagina ejecutiva, sin diagramas/evidencia/roles), `sdd` (SDD canonico completo),
+  `handoff` (dev-focused, evidencia pesada, sin roles).
+- `apps/gv-analytics/server/export.ts`: `toMarkdown/toHtml/toDocx/toPdf` aceptan `templateId` y
+  delegan en el renderer de templates. Limpieza: se removio la funcion muerta `renderLegacy()` +
+  helper `sectionLines()`, y el import invalido en medio del archivo (higiene ESM).
+- `apps/gv-analytics/server/index.ts`: `GET /api/templates` + parametro `?template=` en las rutas de
+  export.
+- `apps/gv-analytics/src/App.tsx`: selector de plantilla (dropdown + descripcion) en el menu de
+  exportacion; carga `/api/templates`; pasa `&template=` al export.
 - `apps/gv-analytics/src/styles.css`: estilos `.export-template` (tokens dark/light).
 
 Verificado end-to-end (server en 127.0.0.1:4754):
+
 - `GET /api/templates` → 200 con los 3 templates.
 - Export MD/HTML/DOCX/PDF con `brief`/`sdd`/`handoff` → todos 200.
 - typecheck + build verde; 11/11 tests de integracion PASS.

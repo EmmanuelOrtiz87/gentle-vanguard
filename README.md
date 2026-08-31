@@ -187,7 +187,7 @@ flowchart TD
 | [Arquitectura](docs/architecture/README.md)                      | Decisiones y límites del sistema      |
 | [Seguridad](docs/security/README.md)                             | Controles y prácticas de seguridad    |
 | [ADRs](docs/adr/README.md)                                       | Decisiones arquitectónicas            |
-| [Lifecycle de scripts](docs/guides/SCRIPT-LIFECYCLE.md)          | TS-only, CMD-first y legado            |
+| [Lifecycle de scripts](docs/guides/SCRIPT-LIFECYCLE.md)          | TS-only, CMD-first y legado           |
 | [Changelog](CHANGELOG.md)                                        | Historial de cambios                  |
 
 ## Development

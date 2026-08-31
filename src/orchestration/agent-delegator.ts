@@ -462,9 +462,7 @@ export async function delegate(request: DelegationRequest): Promise<DelegationRe
  * @returns A DelegationResult, or a synthetic result describing the loop verdict
  *          when the guard blocks the delegation.
  */
-export async function delegateWithAntiLoop(
-  request: DelegationRequest,
-): Promise<DelegationResult> {
+export async function delegateWithAntiLoop(request: DelegationRequest): Promise<DelegationResult> {
   const strategy = `${request.agent}::${request.task}`;
 
   // Check for an existing loop BEFORE delegating.
@@ -507,9 +505,7 @@ export async function delegateWithAntiLoop(
  * @returns A DelegationResult, or a synthetic result describing the guardrail
  *          decision when the failure should not be blindly retried.
  */
-export async function delegateWithGuardrail(
-  request: DelegationRequest,
-): Promise<DelegationResult> {
+export async function delegateWithGuardrail(request: DelegationRequest): Promise<DelegationResult> {
   const result = await delegateWithAntiLoop(request);
 
   // Success — nothing to guard.

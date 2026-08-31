@@ -230,7 +230,10 @@ function runDelegator(prompt: string): Promise<{ ok: boolean; output: string; er
       resolve(result);
     };
 
-    const timer = setTimeout(() => finish({ ok: false, output: '', error: 'timeout' }), DELEGATION_TIMEOUT_MS);
+    const timer = setTimeout(
+      () => finish({ ok: false, output: '', error: 'timeout' }),
+      DELEGATION_TIMEOUT_MS,
+    );
 
     child.stdout.on('data', (chunk: Buffer) => stdout.push(chunk));
     child.stderr.on('data', (chunk: Buffer) => stderr.push(chunk));
@@ -288,7 +291,8 @@ function ensureNumber(value: unknown, fallback: number): number {
 }
 
 function ensureLevel(value: unknown): LLMAnalysis['complexity']['level'] {
-  if (value === 'low' || value === 'medium' || value === 'high' || value === 'critical') return value;
+  if (value === 'low' || value === 'medium' || value === 'high' || value === 'critical')
+    return value;
   return 'medium';
 }
 
@@ -299,16 +303,16 @@ function ensureConfidence(value: unknown): LLMAnalysis['estimate']['confidence']
 
 function ensureStringList(value: unknown): string[] {
   if (Array.isArray(value)) {
-    return value.map((item) => String(item)).filter((item) => item.length > 0).slice(0, 20);
+    return value
+      .map((item) => String(item))
+      .filter((item) => item.length > 0)
+      .slice(0, 20);
   }
   if (typeof value === 'string' && value.length > 0) return [value];
   return [];
 }
 
-export async function enrichWithLLM(
-  input: string,
-  evidence: string,
-): Promise<LLMEnrichment> {
+export async function enrichWithLLM(input: string, evidence: string): Promise<LLMEnrichment> {
   ensureRuntimeDir();
   const start = Date.now();
   const hash = hashInput(input, evidence);
@@ -395,9 +399,9 @@ export async function enrichWithLLM(
     }
 
     // Partial response: log and retry if attempts remain.
-    const emptyFields = REQUIRED_LIST_FIELDS.filter(
-      (f) => !(analysis[f] as string[]).length,
-    ).join(', ');
+    const emptyFields = REQUIRED_LIST_FIELDS.filter((f) => !(analysis[f] as string[]).length).join(
+      ', ',
+    );
     console.warn(
       `[gv-analytics] LLM attempt ${attempt}/${DELEGATION_MAX_RETRIES}: partial JSON — empty fields: ${emptyFields}`,
     );

@@ -1,5 +1,7 @@
 # 🎯 PLAN DE EJECUCIÓN — PENDIENTES DEL STACK
+
 ## Gentle-Vanguard Local Workspace
+
 **Fecha:** 29 Agosto 2026 | **Status:** Iniciado  
 **Usuario:** Emmanuel Ortiz  
 **Objetivo:** Resolver todos los pendientes sin gaps, warnings, simulaciones, incompletos
@@ -12,17 +14,18 @@
 **Tokens Estimados:** ~77,500  
 **Duración Estimada:** 2-3 semanas (parallelizable en 1 semana con focus)
 
-| Prioridad | Count | Tokens | Timeline |
-|-----------|-------|--------|----------|
-| 🔴 CRÍTICO | 4 | 22,000 | Semana 1 |
-| 🟠 ALTO | 7 | 34,000 | Semana 1-2 |
-| 🟡 MEDIO | 7 | 21,500 | Semana 2-3 |
+| Prioridad  | Count | Tokens | Timeline   |
+| ---------- | ----- | ------ | ---------- |
+| 🔴 CRÍTICO | 4     | 22,000 | Semana 1   |
+| 🟠 ALTO    | 7     | 34,000 | Semana 1-2 |
+| 🟡 MEDIO   | 7     | 21,500 | Semana 2-3 |
 
 ---
 
 ## 🔴 FASE 1: CRÍTICOS (Semana 1)
 
 ### 1. Dashboard E2E Tests - Auth Flow
+
 **ID:** `dash-e2e-auth` | **Tokens:** 8,000 | **Blocker:** NO (puede parallelizar)
 
 ```
@@ -36,6 +39,7 @@ Tareas:
 ```
 
 **Verificación:**
+
 ```bash
 npm run test:dashboard
 # Esperado: ✅ All tests pass, 0 failures
@@ -44,6 +48,7 @@ npm run test:dashboard
 ---
 
 ### 2. Validate CI Pipeline - 147 Commits
+
 **ID:** `validate-ci-147` | **Tokens:** 3,000 | **Blocker:** NO
 
 ```
@@ -57,6 +62,7 @@ Tareas:
 ```
 
 **Verificación:**
+
 ```bash
 npm run typecheck  # Exit 0
 npm run lint       # Exit 0, --max-warnings 0
@@ -66,9 +72,11 @@ npm run test:config && npm run test:workflows  # Exit 0
 ---
 
 ### 3. Module Documentation - All 80+ Splits
+
 **ID:** `module-docs` | **Tokens:** 6,000 | **Depends-on:** dash-e2e-auth (para entender scope)
 
 Major modules to document:
+
 - ✅ real-data/ (6 modules)
 - ✅ websocket-server/ (18 modules)
 - ✅ maintenance-watchtower/ (15 modules)
@@ -80,7 +88,7 @@ Major modules to document:
 - ✅ humanizer/ (5 modules)
 - ✅ adaptive-router/ (7 modules)
 - ✅ workload-guard/ (4 modules)
-- + 5 más
+- - 5 más
 
 ```
 Tareas:
@@ -92,6 +100,7 @@ Tareas:
 ```
 
 **Verificación:**
+
 ```bash
 # Cada módulo debe tener:
 # 1. JSDoc @module comment
@@ -102,7 +111,9 @@ Tareas:
 ---
 
 ### 4. Full TypeCheck & Lint - Zero Warnings
-**ID:** `typecheck-pass` | **Tokens:** 2,000 | **Depends-on:** module-docs (puede ejecutarse en paralelo)
+
+**ID:** `typecheck-pass` | **Tokens:** 2,000 | **Depends-on:** module-docs (puede ejecutarse en
+paralelo)
 
 ```
 Tareas:
@@ -118,9 +129,11 @@ Tareas:
 ## 🟠 FASE 2: ALTOS (Semana 1-2)
 
 ### 5. Unit Tests - Critical Modules
+
 **ID:** `unit-tests-critical` | **Tokens:** 12,000 | **Depends-on:** module-docs
 
 Target modules:
+
 - `src/tokens/token-ingest/` (4 modules)
 - `src/orchestration/adaptive-router/` (7 modules)
 - `src/security/secret-scanner/` (6 modules)
@@ -136,6 +149,7 @@ Tareas:
 ```
 
 **Verificación:**
+
 ```bash
 npm run test:coverage
 # Esperado: Overall coverage ≥60% (target 80% on critical modules)
@@ -144,6 +158,7 @@ npm run test:coverage
 ---
 
 ### 6. Dependency Graph Visualization
+
 **ID:** `dependency-graph` | **Tokens:** 5,000 | **Blocker:** NO
 
 ```
@@ -157,6 +172,7 @@ Tareas:
 ---
 
 ### 7. Academy — arquitectura modular nativa
+
 **ID:** `academy-update` | **Tokens:** 4,000 | **Depends-on:** module-docs
 
 ```
@@ -171,6 +187,7 @@ Tareas:
 ---
 
 ### 8. Nexus DB - Indices + Optimization
+
 **ID:** `nexus-indexes` | **Tokens:** 7,000 | **Blocker:** NO
 
 ```
@@ -186,6 +203,7 @@ Tareas:
 ---
 
 ### 9. Process Hygiene - Production Validation
+
 **ID:** `process-hygiene-prod` | **Tokens:** 4,000 | **Blocker:** NO
 
 ```
@@ -202,6 +220,7 @@ Tareas:
 ## 🟡 FASE 3: MEDIUM (Semana 2-3)
 
 ### 10. Dashboard WebSocket Health
+
 **ID:** `dashboard-ws-health` | **Tokens:** 5,000 | **Depends-on:** None
 
 ```
@@ -216,6 +235,7 @@ Tareas:
 ---
 
 ### 11. HTML Presentations Update
+
 **ID:** `html-presentations` | **Tokens:** 3,000 | **Depends-on:** module-docs
 
 ```
@@ -230,6 +250,7 @@ Tareas:
 ---
 
 ### 12. README Synchronization
+
 **ID:** `readme-sync` | **Tokens:** 2,000 | **Depends-on:** module-docs
 
 ```
@@ -244,6 +265,7 @@ Tareas:
 ---
 
 ### 13. Changelog — historical traceability only
+
 **ID:** `changelog-f25` | **Tokens:** 1,500 | **Depends-on:** module-docs
 
 ```
@@ -255,6 +277,7 @@ Tareas:
 ---
 
 ### 14. GraphQL Update - Code Graph
+
 **ID:** `graphify-update` | **Tokens:** 2,000 | **Depends-on:** None
 
 ```
@@ -268,6 +291,7 @@ Tareas:
 ---
 
 ### 15. Watchtower Health Checks - Updated
+
 **ID:** `watchtower-health` | **Tokens:** 2,000 | **Depends-on:** None
 
 ```
@@ -281,6 +305,7 @@ Tareas:
 ---
 
 ### 16. Token Ingest - Real Data Collection
+
 **ID:** `token-ingest-test` | **Tokens:** 3,000 | **Depends-on:** None
 
 ```
@@ -295,6 +320,7 @@ Tareas:
 ---
 
 ### 17. Test Coverage Report
+
 **ID:** `test-coverage` | **Tokens:** 3,000 | **Depends-on:** unit-tests-critical
 
 ```
@@ -309,6 +335,7 @@ Tareas:
 ---
 
 ### 18. Lint Pass - Zero Warnings
+
 **ID:** `lint-pass` | **Tokens:** 1,000 | **Depends-on:** module-docs (parallelizable)
 
 ```
@@ -356,6 +383,7 @@ FINAL:
 ## ✅ CRITERIOS DE ÉXITO (NO PARCIALIDADES)
 
 ### Cada tarea debe cumplir:
+
 1. ✅ **Completitud:** 100% de requisitos implementados
 2. ✅ **Sin Warnings:** 0 errores, 0 advertencias en cualquier verificación
 3. ✅ **Integración:** Todas las piezas conectadas (no componentes aislados)
@@ -366,6 +394,7 @@ FINAL:
 8. ✅ **Git:** Commits limpios, descriptivos, sin WIP
 
 ### Verificación Final (Antes de dar por completo):
+
 ```bash
 npm run typecheck       # Exit 0, no errors
 npm run lint            # Exit 0, --max-warnings 0
@@ -405,4 +434,3 @@ Al completar este plan, el stack local será:
 **INICIO:** 2026-08-29 06:47 UTC-3  
 **STATUS:** 🟢 INICIADO  
 **PRÓXIMO PASO:** Comenzar Phase 1 Critical Tasks
-

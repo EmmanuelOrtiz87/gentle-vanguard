@@ -27,14 +27,20 @@ function cleanSiteUrl(siteUrl: string): string {
  * - Bitbucket uses a separate token (`bitbucketApiToken`), falling back to
  *   `apiToken` for backward-compat with vaults saved before the split.
  */
-function tokenFor(connection: StoredConnection, service: 'jira' | 'confluence' | 'bitbucket'): string {
+function tokenFor(
+  connection: StoredConnection,
+  service: 'jira' | 'confluence' | 'bitbucket',
+): string {
   if (service === 'bitbucket') {
     return connection.bitbucketApiToken || connection.apiToken;
   }
   return connection.apiToken;
 }
 
-function authHeader(connection: StoredConnection, service: 'jira' | 'confluence' | 'bitbucket'): string {
+function authHeader(
+  connection: StoredConnection,
+  service: 'jira' | 'confluence' | 'bitbucket',
+): string {
   // OAuth bearer if available, otherwise Basic auth with email + per-service token.
   if (connection.oauth?.accessToken) {
     return `Bearer ${connection.oauth.accessToken}`;
@@ -84,12 +90,19 @@ async function atlassianTextFetch(connection: StoredConnection, options: Atlassi
   return response.text();
 }
 
-async function testService(connection: StoredConnection, service: 'jira' | 'confluence' | 'bitbucket') {
+async function testService(
+  connection: StoredConnection,
+  service: 'jira' | 'confluence' | 'bitbucket',
+) {
   try {
     if (service === 'jira') {
       await atlassianFetch(connection, { service, path: '/rest/api/3/myself' });
     } else if (service === 'confluence') {
-      await atlassianFetch(connection, { service, path: '/wiki/api/v2/spaces', query: { limit: '1' } });
+      await atlassianFetch(connection, {
+        service,
+        path: '/wiki/api/v2/spaces',
+        query: { limit: '1' },
+      });
     } else if (connection.bitbucketWorkspace) {
       await atlassianFetch(connection, {
         service,
@@ -156,11 +169,16 @@ function buildConnection(form: ConnectionForm): StoredConnection {
     throw new Error('Site URL, email y API token son obligatorios.');
   }
   if (isUrlLike(apiToken)) {
-    throw new Error('El API token no puede ser una URL. Pega el token real (no la direccion del sitio).');
+    throw new Error(
+      'El API token no puede ser una URL. Pega el token real (no la direccion del sitio).',
+    );
   }
-  const bitbucketApiToken = form.bitbucketApiToken?.trim() || existing?.bitbucketApiToken || undefined;
+  const bitbucketApiToken =
+    form.bitbucketApiToken?.trim() || existing?.bitbucketApiToken || undefined;
   if (bitbucketApiToken && isUrlLike(bitbucketApiToken)) {
-    throw new Error('El API token de Bitbucket no puede ser una URL. Pega el token real (no la direccion del sitio).');
+    throw new Error(
+      'El API token de Bitbucket no puede ser una URL. Pega el token real (no la direccion del sitio).',
+    );
   }
   return {
     siteUrl: cleanSiteUrl(form.siteUrl),
@@ -236,15 +254,17 @@ function extractConfluencePageId(input: string): string | null {
   }
 }
 
-function extractBitbucketParts(input: string):
-  | { workspace: string; repo: string; pullRequestId?: string }
-  | null {
+function extractBitbucketParts(
+  input: string,
+): { workspace: string; repo: string; pullRequestId?: string } | null {
   try {
     const url = new URL(input);
     if (!/bitbucket\.org$/i.test(url.hostname)) return null;
     const parts = url.pathname.split('/').filter(Boolean);
     if (parts.length < 2) return null;
-    const pullRequestIndex = parts.findIndex((part) => part === 'pull-requests' || part === 'pullrequests');
+    const pullRequestIndex = parts.findIndex(
+      (part) => part === 'pull-requests' || part === 'pullrequests',
+    );
     return {
       workspace: parts[0],
       repo: parts[1],
@@ -317,7 +337,8 @@ async function collectJiraRelatedEvidence(
     if (!asString(target.key)) continue;
     evidence.push({
       source: 'jira',
-      title: `Vinculado ${asString(target.key)} ${asString(asRecord(target.fields).summary)}`.trim(),
+      title:
+        `Vinculado ${asString(target.key)} ${asString(asRecord(target.fields).summary)}`.trim(),
       url: `${connection.siteUrl}/browse/${asString(target.key)}`,
       detail: `Relacion: ${asString(record.type && asRecord(record.type).inward) || 'link'}. Estado: ${deepText(asRecord(target.fields).status) || 'n/d'}.`,
     });
@@ -408,7 +429,9 @@ async function gatherBitbucketEvidence(
     const diff = await atlassianTextFetch(connection, {
       service: 'bitbucket',
       path: `/repositories/${encodeURIComponent(parts.workspace)}/${encodeURIComponent(parts.repo)}/pullrequests/${encodeURIComponent(parts.pullRequestId)}/diff`,
-    }).catch((error) => `Diff no disponible: ${error instanceof Error ? error.message : String(error)}`);
+    }).catch(
+      (error) => `Diff no disponible: ${error instanceof Error ? error.message : String(error)}`,
+    );
     const title = `PR #${parts.pullRequestId} ${asString(pullRequest.title)}`.trim();
     const detail = [deepText(pullRequest.description), diff.slice(0, 2200)]
       .filter(Boolean)
@@ -434,9 +457,7 @@ async function gatherAtlassianEvidence(
   if (!connection) return { evidence, text };
 
   // Process every URL-like input (the URL field and any URL pasted in the request).
-  const urls = inputs
-    .map((input) => input.trim())
-    .filter((input) => /^https?:\/\//i.test(input));
+  const urls = inputs.map((input) => input.trim()).filter((input) => /^https?:\/\//i.test(input));
   if (urls.length === 0) return { evidence, text };
 
   const collectors = await Promise.allSettled(
@@ -500,7 +521,9 @@ function buildEvidence(input: string, linkedTitle?: string): AnalysisEvidence[] 
 export function requireConnection(): StoredConnection {
   const connection = loadConnection();
   if (!connection) {
-    throw new Error('Conexion Atlassian no configurada. Configurala desde la app antes de usar esta herramienta.');
+    throw new Error(
+      'Conexion Atlassian no configurada. Configurala desde la app antes de usar esta herramienta.',
+    );
   }
   return connection;
 }
@@ -538,7 +561,9 @@ export async function fetchJiraIssue(keyOrUrl: string): Promise<string> {
 
 export async function fetchConfluencePage(pageIdOrUrl: string): Promise<string> {
   const connection = requireConnection();
-  const pageId = extractConfluencePageId(pageIdOrUrl) || (/^\d+$/.test(pageIdOrUrl.trim()) ? pageIdOrUrl.trim() : null);
+  const pageId =
+    extractConfluencePageId(pageIdOrUrl) ||
+    (/^\d+$/.test(pageIdOrUrl.trim()) ? pageIdOrUrl.trim() : null);
   if (!pageId) throw new Error('No se detecto un pageId de Confluence.');
   const page = asRecord(
     await atlassianFetch(connection, {
@@ -555,7 +580,11 @@ export async function fetchConfluencePage(pageIdOrUrl: string): Promise<string> 
   ].join('\n');
 }
 
-export async function fetchBitbucketPullRequest(workspace: string, repo: string, prId: string): Promise<string> {
+export async function fetchBitbucketPullRequest(
+  workspace: string,
+  repo: string,
+  prId: string,
+): Promise<string> {
   const connection = requireConnection();
   const pullRequest = asRecord(
     await atlassianFetch(connection, {
@@ -589,7 +618,11 @@ export async function searchEvidence(query: string): Promise<AnalysisEvidence[]>
     atlassianFetch(connection, {
       service: 'jira',
       path: '/rest/api/3/search',
-      query: { jql: `text ~ "${trimmed.replace(/"/g, '')}" ORDER BY updated DESC`, maxResults: '5', fields: 'summary,status' },
+      query: {
+        jql: `text ~ "${trimmed.replace(/"/g, '')}" ORDER BY updated DESC`,
+        maxResults: '5',
+        fields: 'summary,status',
+      },
     }),
     atlassianFetch(connection, {
       service: 'confluence',
@@ -632,7 +665,10 @@ export async function searchEvidence(query: string): Promise<AnalysisEvidence[]>
   return evidence;
 }
 
-export async function analyzeInput(options: { url?: string; request?: string }): Promise<AnalyticsReport> {
+export async function analyzeInput(options: {
+  url?: string;
+  request?: string;
+}): Promise<AnalyticsReport> {
   const url = (options.url || '').trim();
   const request = (options.request || '').trim();
   if (!url && !request) throw new Error('El analisis necesita una URL o texto de pedido.');
@@ -665,20 +701,29 @@ export async function analyzeInput(options: { url?: string; request?: string }):
       mode,
       input,
       summary: a.summary,
-      currentState: a.currentState.length > 0 ? a.currentState : [
-        hasRemoteEvidence
-          ? 'Se recupero evidencia real desde Atlassian para complementar la lectura local.'
-          : 'Se detecto la entrada y se preparo una interpretacion local.',
-      ],
-      proposedSolution: a.proposedSolution.length > 0 ? a.proposedSolution : [
-        'Normalizar la entrada como caso de analisis trazable.',
-        'Relacionar ticket, documentacion y codigo antes de estimar.',
-      ],
+      currentState:
+        a.currentState.length > 0
+          ? a.currentState
+          : [
+              hasRemoteEvidence
+                ? 'Se recupero evidencia real desde Atlassian para complementar la lectura local.'
+                : 'Se detecto la entrada y se preparo una interpretacion local.',
+            ],
+      proposedSolution:
+        a.proposedSolution.length > 0
+          ? a.proposedSolution
+          : [
+              'Normalizar la entrada como caso de analisis trazable.',
+              'Relacionar ticket, documentacion y codigo antes de estimar.',
+            ],
       impactedFronts: a.impactedFronts.length > 0 ? a.impactedFronts : detectFronts(evidenceCorpus),
-      roles: a.roles.length > 0 ? a.roles : ['Business Analyst', 'Developer', 'QA Analyst', 'Tech Lead'],
+      roles:
+        a.roles.length > 0 ? a.roles : ['Business Analyst', 'Developer', 'QA Analyst', 'Tech Lead'],
       complexity: {
         level: a.complexity.level,
-        rationale: a.complexity.rationale || 'Complejidad estimada por el agente BA a partir de la evidencia.',
+        rationale:
+          a.complexity.rationale ||
+          'Complejidad estimada por el agente BA a partir de la evidencia.',
       },
       estimate: {
         discoveryHours: Math.max(4, Math.round(a.estimate.deliveryHours * 0.2)),
@@ -692,10 +737,13 @@ export async function analyzeInput(options: { url?: string; request?: string }):
         proposed: a.diagrams.proposed || 'Sin diagrama propuesto (evidencia insuficiente).',
       },
       evidence,
-      nextActions: a.nextActions.length > 0 ? a.nextActions : [
-        'Validar la lectura con el PO y el equipo tecnico.',
-        'Cargar credenciales Atlassian o una URL reconocible si la evidencia es pobre.',
-      ],
+      nextActions:
+        a.nextActions.length > 0
+          ? a.nextActions
+          : [
+              'Validar la lectura con el PO y el equipo tecnico.',
+              'Cargar credenciales Atlassian o una URL reconocible si la evidencia es pobre.',
+            ],
       llmSource: llm.source,
       llmDurationMs: llm.durationMs,
       llmCached: llm.cached,

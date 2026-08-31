@@ -18,34 +18,41 @@ Don't default to "ARR" or "MRR" alone. Those are outcomes, not norths. Pick some
 ## North-star patterns by business model
 
 ### B2B SaaS (subscription)
+
 - **Net Revenue Retention (NRR)** — keeps existing customers + expansion in focus
 - Alternative: "Logo retention × expansion ARR"
 - Why: ARR alone hides churn / lets gross-add growth mask product fit problems
 
 ### D2C consumer app (subscription)
+
 - **Blended LTV / blended CAC** — keeps unit economics honest as paid layer scales
 - Alternative: "Day-35 paid users from cohort × LTV"
 - Why: monthly subscription metrics are volatile; cohort × LTV smooths it
 
 ### Hybrid hardware + software (e.g., Quietude)
+
 - **Blended LTV / blended CAC across hardware + software** — captures the wedge thesis
 - Alternative: "Hardware-buyers-to-subscriber conversion × blended margin"
 - Why: hardware revenue isn't free (cost to make); subscription revenue isn't expensive to acquire if hardware funds it
 
 ### Marketplace (two-sided)
+
 - **Liquidity ratio × take-rate** — captures both sides + monetization
 - Alternative: "Monthly transacting users × take-rate × repeat frequency"
 - Why: GMV alone doesn't capture whether the marketplace is becoming a habit
 
 ### Developer tool / open source
+
 - **Weekly active developers × paid-conversion** — captures both adoption and monetization
 - Alternative: "Weekly active orgs × seats per org × ARPU"
 
 ### Content / media business
+
 - **Daily active readers / listeners × ad revenue per session** — captures both reach and monetization
 - Alternative: "Subscriber count × retention × ARPU"
 
 ### Commerce (DTC, non-subscription)
+
 - **Repeat purchase rate × AOV × frequency** — captures monetization layered on quality of customer
 - Alternative: "Customer LTV / CAC × payback period"
 
@@ -54,6 +61,7 @@ Don't default to "ARR" or "MRR" alone. Those are outcomes, not norths. Pick some
 After the north star, every plan needs leading indicators per AARRR stage. These move faster than the north star and trigger investigations.
 
 ### Acquisition leading indicators
+
 - Organic visits/month, total + per pillar (SEO health)
 - App Store / Play Store visit-to-install rate (ASO health)
 - Founder-led social channel growth → email subscriber conversion (LinkedIn / X / Substack funnels)
@@ -62,6 +70,7 @@ After the north star, every plan needs leading indicators per AARRR stage. These
 - Paid CAC by channel (when paid is firing)
 
 ### Activation leading indicators
+
 - Day 1 / Day 7 / Day 35 → paid conversion rate
 - Onboarding session-completion rate
 - First key-action completion (post-signup activation event)
@@ -69,6 +78,7 @@ After the north star, every plan needs leading indicators per AARRR stage. These
 - Trial → paid conversion rate
 
 ### Retention leading indicators
+
 - Day 30 / Day 60 / Day 90 retention
 - Monthly churn rate (gross + net)
 - Lifecycle email engagement (open / click / unsubscribe by flow)
@@ -76,6 +86,7 @@ After the north star, every plan needs leading indicators per AARRR stage. These
 - Win-back / reactivation rate
 
 ### Referral leading indicators
+
 - Ambassador-attributed new subs (via Dub or similar)
 - Share-after-value moment rate (% of users sharing)
 - Two-sided referral completion rate
@@ -83,6 +94,7 @@ After the north star, every plan needs leading indicators per AARRR stage. These
 - NPS score (if surveyed)
 
 ### Revenue leading indicators
+
 - ARPU by cohort
 - Annual plan adoption %
 - Cohort LTV by source
@@ -95,18 +107,21 @@ After the north star, every plan needs leading indicators per AARRR stage. These
 The plan should specify three rhythms:
 
 ### Weekly (operational sync)
+
 - **Who:** fCMO ↔ founder (CEO usually)
 - **Duration:** 30 min
 - **Format:** AARRR scoreboard (current vs. last week numbers across the leading indicators) + this week's ships + blockers
 - **Output:** Action items, decisions made
 
 ### Monthly (metrics review)
+
 - **Who:** fCMO + founder + extended team (CXO, product lead, designer if applicable)
 - **Duration:** 60–90 min
 - **Format:** Full metrics review + comparison against quarterly KPI targets + qualitative learnings + idea bank reprioritization
 - **Output:** Possible plan adjustments, hire decisions
 
 ### Quarterly (plan recalibration)
+
 - **Who:** fCMO + founders + key advisors
 - **Duration:** 2–3 hours
 - **Format:** Full plan review against 90-day and 12-month outcomes, channel-level analysis, funding-stage transition check, recalibration of next 90 days

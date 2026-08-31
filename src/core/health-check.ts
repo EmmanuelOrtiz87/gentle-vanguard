@@ -207,7 +207,11 @@ function checkOptimizationStack() {
 
 function checkGateGuard() {
   header('GateGuard');
-  writeCheck('GateGuard (TS)', exists('src/security/gateguard-mcp.ts'), 'src/security/gateguard-mcp.ts');
+  writeCheck(
+    'GateGuard (TS)',
+    exists('src/security/gateguard-mcp.ts'),
+    'src/security/gateguard-mcp.ts',
+  );
   if (exists('src/security/gateguard-mcp.ts')) {
     const r = tryRunTs('src/security/gateguard-mcp.ts', ['--server', 'codegraph']);
     if (r.status === 0) {
@@ -248,7 +252,11 @@ function checkMlEmbeddings() {
   // ml-index.json passes if it exists OR if the primary skill-embeddings.json
   // is present (they serve the same purpose; absence of ml-index alone is not
   // a failure because the skill-embedder generates skill-embeddings.json).
-  writeCheck('ml-index.json exists', hasMlIndex || hasSkillEmbeddings, '.atl/ml-index.json (alias for skill-embeddings.json)');
+  writeCheck(
+    'ml-index.json exists',
+    hasMlIndex || hasSkillEmbeddings,
+    '.atl/ml-index.json (alias for skill-embeddings.json)',
+  );
   writeCheck('skill-embeddings.json exists', hasSkillEmbeddings, '.atl/skill-embeddings.json');
   writeCheck(
     'skill-embedder.ts exists',
@@ -345,7 +353,11 @@ async function checkDashboardV3() {
 
 function checkMcpBridge() {
   header('MCP Bridge');
-  writeCheck('mcp-bridge.ts exists', exists('src/integrations/mcp-bridge.ts'), 'src/integrations/mcp-bridge.ts');
+  writeCheck(
+    'mcp-bridge.ts exists',
+    exists('src/integrations/mcp-bridge.ts'),
+    'src/integrations/mcp-bridge.ts',
+  );
   const configs = ['config/skill-mcp.json', 'config/mcp-bridge.json'];
   const found = configs.filter((c) => exists(c)).length;
   writeCheck('MCP configs present', found === configs.length, `${found} of ${configs.length}`);

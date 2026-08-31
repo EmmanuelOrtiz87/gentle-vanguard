@@ -165,6 +165,7 @@ async function walkDir(
   dir: string,
   rules: IgnoreRule[],
   skipDirs: ReadonlySet<string>,
+  skipDirPaths: readonly string[],
   out: string[],
 ): Promise<void> {
   const localRules = [...rules];
@@ -186,8 +187,10 @@ async function walkDir(
     const full = join(dir, entry.name);
     if (entry.isDirectory()) {
       if (skipDirs.has(entry.name)) continue;
+      const fullLower = full.replace(/\\/g, '/').toLowerCase();
+      if (skipDirPaths.some((p) => fullLower.endsWith(`/${p}`))) continue;
       if (isIgnored(full, localRules)) continue;
-      await walkDir(full, localRules, skipDirs, out);
+      await walkDir(full, localRules, skipDirs, skipDirPaths, out);
     } else if (entry.isFile()) {
       if (isIgnored(full, localRules)) continue;
       out.push(full);
@@ -195,7 +198,11 @@ async function walkDir(
   }
 }
 
-async function expandPaths(paths: string[], skipDirs: ReadonlySet<string>): Promise<string[]> {
+async function expandPaths(
+  paths: string[],
+  skipDirs: ReadonlySet<string>,
+  skipDirPaths: readonly string[],
+): Promise<string[]> {
   const files: string[] = [];
   for (const path of paths) {
     let st;
@@ -205,7 +212,7 @@ async function expandPaths(paths: string[], skipDirs: ReadonlySet<string>): Prom
       continue; // unreadable / missing path is skipped
     }
     if (st.isDirectory()) {
-      await walkDir(path, [], skipDirs, files);
+      await walkDir(path, [], skipDirs, skipDirPaths, files);
     } else if (st.isFile()) {
       files.push(path);
     }
@@ -219,8 +226,16 @@ export async function scanFiles(
 ): Promise<SecretMatch[]> {
   const cfg = loadConfig();
   const maxSizeBytes = options.maxFileSizeBytes ?? Math.max(1, cfg.maxFileSizeMB) * 1024 * 1024;
-  const extraSkip = new Set((options.skipDirs ?? []).map((d) => d.toLowerCase()));
-  const skipDirs = new Set([...cfg.skipDirs.map((d) => d.toLowerCase()), ...extraSkip]);
+  const rawSkip = [
+    ...cfg.skipDirs.map((d) => d.toLowerCase()),
+    ...(options.skipDirs ?? []).map((d) => d.toLowerCase()),
+  ];
+  // Directory-name matching (e.g. "node_modules") vs path-suffix matching (e.g. "public/skills").
+  const skipDirs = new Set(rawSkip.filter((d) => !d.includes('/') && !d.includes('\\')));
+  const skipDirPaths = rawSkip
+    .filter((d) => d.includes('/') || d.includes('\\'))
+    .map((d) => d.replace(/\\/g, '/').replace(/^\/+|\/+$/g, ''))
+    .filter((d) => d.length > 0);
   const ignoreExt = new Set([
     ...cfg.ignoreExtensions,
     ...(options.ignoreExtensions ?? []).map((e) =>
@@ -235,7 +250,7 @@ export async function scanFiles(
     patterns: options.patterns,
   };
 
-  const files = await expandPaths(paths, skipDirs);
+  const files = await expandPaths(paths, skipDirs, skipDirPaths);
   const results: SecretMatch[] = [];
 
   const ignoreFileSet = new Set(cfg.ignoreFiles.map((f) => f.replace(/\\/g, '/').toLowerCase()));

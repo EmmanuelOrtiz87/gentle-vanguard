@@ -10,35 +10,35 @@ npm run session:autostart:detached   # fire-and-forget, ~1.3s, pipeline completo
 ```
 
 Idempotente, no pide permiso. Inicializa: session ID, engram, security orchestrator, codegraph,
-token budget, watchtower auto-heal, dashboard WS, Nexus DB. Log: `.runtime/autostart-detached-*.log`.
-Si el pipeline ya corre (lock), usar `--force` para bypass.
+token budget, watchtower auto-heal, dashboard WS, Nexus DB. Log:
+`.runtime/autostart-detached-*.log`. Si el pipeline ya corre (lock), usar `--force` para bypass.
 
 ## Comandos críticos
 
-| Acción | Comando |
-| ------ | ------- |
-| Grafo de código (query) | `npm run graphify -- query "<pregunta>"` |
-| Grafo (build/update) | `npm run graphify -- build` / `npm run graphify -- update .` |
-| Nodo exacto | `npm run graphify -- explain "<node_id>"` |
-| Watchtower health | `npm run watchtower:health` (96/96 PASS esperado) |
-| Watchtower autoheal | `npx tsx src/core/maintenance-watchtower.ts -Action autoheal -Quiet` |
-| Nexus DB init/health | `npm run db:init && npm run db:health` |
-| Token ingest/status | `npm run token:ingest` / `npm run token:status` |
-| Token trace | `npm run token:trace` |
-| Process hygiene (dry) | `npm run process:hygiene` |
-| Process reap (real) | `npm run process:reap` |
-| Dashboard full | `npx tsx src/ops/dashboard-start.ts` |
-| Dashboard WS only | `npx tsx src/ops/dashboard-ws-autostart.ts` |
-| Dashboard stop | `npx tsx src/ops/dashboard-stop.ts` |
-| Secret scan | `npm run scan:secrets -- --scan .` |
-| Typecheck | `npx tsc --noEmit` |
-| Adaptive steps status | `npx tsx src/orchestration/adaptive-steps.ts --status` |
-| Recommend agent | `npx tsx src/orchestration/recommend-agent.ts --task "<t>" --topn 3` |
-| Delegate | `npm run delegate:run -- --task "<t>"` |
-| SDD research | `npm run sdd:research -- run -f <feature> -q "q1;q2"` |
-| Web research select | `npm run web:select -- --query "..." [--deep]` |
-| Profiles | `npm run profile:list|status|apply -- <perfil>` |
-| ZCode sync | `npx tsx src/integrations/zcode-sync.ts --sync` |
+| Acción                  | Comando                                                              |
+| ----------------------- | -------------------------------------------------------------------- |
+| Grafo de código (query) | `npm run graphify -- query "<pregunta>"`                             |
+| Grafo (build/update)    | `npm run graphify -- build` / `npm run graphify -- update .`         |
+| Nodo exacto             | `npm run graphify -- explain "<node_id>"`                            |
+| Watchtower health       | `npm run watchtower:health` (96/96 PASS esperado)                    |
+| Watchtower autoheal     | `npx tsx src/core/maintenance-watchtower.ts -Action autoheal -Quiet` |
+| Nexus DB init/health    | `npm run db:init && npm run db:health`                               |
+| Token ingest/status     | `npm run token:ingest` / `npm run token:status`                      |
+| Token trace             | `npm run token:trace`                                                |
+| Process hygiene (dry)   | `npm run process:hygiene`                                            |
+| Process reap (real)     | `npm run process:reap`                                               |
+| Dashboard full          | `npx tsx src/ops/dashboard-start.ts`                                 |
+| Dashboard WS only       | `npx tsx src/ops/dashboard-ws-autostart.ts`                          |
+| Dashboard stop          | `npx tsx src/ops/dashboard-stop.ts`                                  |
+| Secret scan             | `npm run scan:secrets -- --scan .`                                   |
+| Typecheck               | `npx tsc --noEmit`                                                   |
+| Adaptive steps status   | `npx tsx src/orchestration/adaptive-steps.ts --status`               |
+| Recommend agent         | `npx tsx src/orchestration/recommend-agent.ts --task "<t>" --topn 3` |
+| Delegate                | `npm run delegate:run -- --task "<t>"`                               |
+| SDD research            | `npm run sdd:research -- run -f <feature> -q "q1;q2"`                |
+| Web research select     | `npm run web:select -- --query "..." [--deep]`                       |
+| Profiles                | `npm run profile:list \| status \| apply -- <perfil>`                |
+| ZCode sync              | `npx tsx src/integrations/zcode-sync.ts --sync`                      |
 
 ## Reglas de oro
 
@@ -46,7 +46,7 @@ Si el pipeline ya corre (lock), usar `--force` para bypass.
    `src/core/run-command.ts`. NUNCA `npx tsx` directo (relanza como nieto con ventana), ni
    `exec/execSync` con strings, ni `cmd /k`, ni `start /B`. Daemons:
    `spawn(process.execPath, ['--import','tsx', script], {stdio:'ignore', detached:true, windowsHide:true})`
-   + `child.unref()`. Test de regresión: `tests/unit/run-command-hidden.test.ts`.
+   - `child.unref()`. Test de regresión: `tests/unit/run-command-hidden.test.ts`.
 2. **process-hygiene**: daemons detached sobreviven a su padre POR DISEÑO. El reaper clasifica por
    shape (duplicados, one-shots colgados >15min, daemons >24h, pidfiles stale). Daemons nuevos DEBEN
    escribir `.runtime/<name>.pid` al arrancar y limpiarlo en SIGTERM/SIGINT.
@@ -66,7 +66,8 @@ Si el pipeline ya corre (lock), usar `--force` para bypass.
 
 - TypeScript core en `src/` (468 files, strict mode), 112 scripts en `scripts/`.
 - Pipeline de sesión: 53 steps con lazy background execution.
-- Dashboard: React/TS/Vite + WebSocket real-time (puerto dinámico en `.runtime/dashboard-ports.json`).
+- Dashboard: React/TS/Vite + WebSocket real-time (puerto dinámico en
+  `.runtime/dashboard-ports.json`).
 - MCP: codegraph (symbol intelligence), engram (memoria persistente).
 - Nexus: SQLite WAL `.runtime/gentle-vanguard.db`, 23 tablas, singleton
   `apps/web-dashboard/server/database/manager.ts`.
@@ -89,8 +90,8 @@ Si el pipeline ya corre (lock), usar `--force` para bypass.
 - **Web crawler dual-provider**: Firecrawl → Jina Reader + DuckDuckGo + Bing RSS.
 - **witr**: traza causal de procesos/puertos (`process|port`).
 - **Research trends**: GitHub/HN/SO/Dev.to/Reddit → TrendReport.
-- **v4.0 infra**: tracing (`.telemetry/`, OTLP), checkpoints/snapshots/rollback (`.session/`),
-  event sourcing + saga, health API (7 componentes).
+- **v4.0 infra**: tracing (`.telemetry/`, OTLP), checkpoints/snapshots/rollback (`.session/`), event
+  sourcing + saga, health API (7 componentes).
 
 ## Reglas rápidas
 

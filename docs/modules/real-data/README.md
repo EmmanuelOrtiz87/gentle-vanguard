@@ -9,7 +9,8 @@
 
 ## Overview
 
-The Real-Data Pipeline processes and streams live metrics, traces, alerts, and feedback to the dashboard UI. It's the compute-heavy core of observability.
+The Real-Data Pipeline processes and streams live metrics, traces, alerts, and feedback to the
+dashboard UI. It's the compute-heavy core of observability.
 
 **Key Responsibility:** Transform raw telemetry into structured, queryable observability data.
 
@@ -33,6 +34,7 @@ real-data/
 ## Metrics Module (931L)
 
 **Computes:**
+
 - CPU usage (process, system)
 - Memory (heap, RSS, external)
 - Latency (p50, p95, p99)
@@ -42,14 +44,14 @@ real-data/
 - Token usage (in/out)
 
 **Updates:** Every 5 seconds (configurable)  
-**Retention:** 7 days (configurable)  
+**Retention:** 7 days (configurable)
 
 ```typescript
 import { computeMetrics } from './real-data/metrics';
 
 const metrics = await computeMetrics({
   timeWindow: '5m',
-  percentiles: [50, 95, 99]
+  percentiles: [50, 95, 99],
 });
 ```
 
@@ -58,6 +60,7 @@ const metrics = await computeMetrics({
 ## Traces Module (281L)
 
 **Captures:**
+
 - Request lifecycle (start → end)
 - Span hierarchy (parent/child)
 - Timing breakdowns
@@ -72,6 +75,7 @@ const metrics = await computeMetrics({
 ## Alerts Module (256L)
 
 **Evaluates:**
+
 - Threshold violations (CPU > 80%)
 - Anomalies (deviation from baseline)
 - Error rate spikes
@@ -80,6 +84,7 @@ const metrics = await computeMetrics({
 - Database issues
 
 **Actions:**
+
 - Log to Nexus
 - Push to dashboard (WebSocket)
 - Trigger webhooks
@@ -90,12 +95,13 @@ const metrics = await computeMetrics({
 ## Response Cache (128L)
 
 **Caches:**
+
 - Computed metrics (5m TTL)
 - Aggregated traces (1h TTL)
 - Alert history (7d TTL)
 
 **Invalidation:** On new data arrival  
-**Storage:** Nexus DB + in-memory cache  
+**Storage:** Nexus DB + in-memory cache
 
 ---
 
@@ -108,10 +114,10 @@ import { streamMetrics } from './real-data';
 
 // WebSocket server sends every 5s
 const metricsStream = streamMetrics({
-  interval: 5000,      // 5 seconds
+  interval: 5000, // 5 seconds
   onData: (metrics) => {
     ws.send(JSON.stringify({ type: 'metrics', data: metrics }));
-  }
+  },
 });
 ```
 
@@ -154,6 +160,7 @@ curl http://localhost:3000/api/traces?sessionId=abc123&limit=100
 ## Integration
 
 **Sources:**
+
 - ProcessMetrics (OS stats)
 - RequestLogger (HTTP)
 - ErrorHandler (exceptions)
@@ -161,6 +168,7 @@ curl http://localhost:3000/api/traces?sessionId=abc123&limit=100
 - SessionManager (lifecycle)
 
 **Destinations:**
+
 - Dashboard (WebSocket)
 - Nexus DB (persistence)
 - Alerts system
@@ -171,6 +179,7 @@ curl http://localhost:3000/api/traces?sessionId=abc123&limit=100
 ## Test Coverage
 
 **Location:** `tests/unit/real-data/`
+
 - `metrics.test.ts` - Computation accuracy
 - `traces.test.ts` - Span aggregation
 - `alerts.test.ts` - Rule evaluation
@@ -183,4 +192,3 @@ curl http://localhost:3000/api/traces?sessionId=abc123&limit=100
 **See:** `docs/modules/MODULE-STRUCTURE.md`  
 **Dashboard:** `apps/web-dashboard/`  
 **Tests:** `tests/unit/real-data/*.test.ts`
-

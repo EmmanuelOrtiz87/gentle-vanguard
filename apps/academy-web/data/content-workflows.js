@@ -45,7 +45,7 @@ terminado: el estado se confirma con Git, callers y pruebas.
 - Una capacidad tiene un entry point canónico; los wrappers no duplican lógica.
 - PowerShell puede aparecer como legado protegido o excepción explícita, no como dependencia implícita.
 - Recrear un script archivado requiere nuevo contrato, owner, pruebas y revisión.
-- No se mantienen duplicados activos sin uso justificado.`
+- No se mantienen duplicados activos sin uso justificado.`,
     },
     {
       id: 'sdd-ciclo-end-to-end',

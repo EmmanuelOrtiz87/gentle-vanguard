@@ -36,6 +36,7 @@ A strong launch isn't about a single moment. It's about:
 Structure your launch marketing across three channel types. Everything should ultimately lead back to owned channels.
 
 ### Owned Channels
+
 You own the channel (though not the audience). Direct access without algorithms or platform rules.
 
 **Examples:**
@@ -60,6 +61,7 @@ You own the channel (though not the audience). Direct access without algorithms 
 Built demand through an invite-only waitlist and one-on-one onboarding sessions. Every new user got a 30-minute live demo. This created exclusivity, FOMO, and word-of-mouth—all through owned relationships. Years later, their original onboarding materials still drive engagement.
 
 ### Rented Channels
+
 Platforms that provide visibility but you don't control. Algorithms shift, rules change, pay-to-play increases.
 
 **Examples:**
@@ -84,6 +86,7 @@ Hacked virality through Twitter, YouTube, and Reddit where productivity enthusia
 Rented channels give speed, not stability. Capture momentum by bringing users into your owned ecosystem.
 
 ### Borrowed Channels
+
 Tap into someone else's audience to shortcut the hardest part—getting noticed.
 
 **Examples:**
@@ -138,6 +141,7 @@ Pass the gate, then run the phases below.
 Launching isn't a one-day event. It's a phased process that builds momentum.
 
 ### Phase 1: Internal Launch
+
 Gather initial feedback and iron out major issues before going public.
 
 **Actions:**
@@ -148,6 +152,7 @@ Gather initial feedback and iron out major issues before going public.
 **Goal:** Validate core functionality with friendly users.
 
 ### Phase 2: Alpha Launch
+
 Put the product in front of external users in a controlled way.
 
 **Actions:**
@@ -159,6 +164,7 @@ Put the product in front of external users in a controlled way.
 **Goal:** First external validation and initial waitlist building.
 
 ### Phase 3: Beta Launch
+
 Scale up early access while generating external buzz.
 
 **Actions:**
@@ -175,6 +181,7 @@ Scale up early access while generating external buzz.
 **Goal:** Build buzz and refine product with broader feedback.
 
 ### Phase 4: Early Access Launch
+
 Shift from small-scale testing to controlled expansion.
 
 **Actions:**
@@ -190,6 +197,7 @@ Shift from small-scale testing to controlled expansion.
 **Goal:** Validate at scale and prepare for full launch.
 
 ### Phase 5: Full Launch
+
 Open the floodgates.
 
 **Actions:**
@@ -215,11 +223,13 @@ Open the floodgates.
 Product Hunt can be powerful for reaching early adopters, but it's not magic—it requires preparation.
 
 ### Pros
+
 - Exposure to tech-savvy early adopter audience
 - Credibility bump (especially if Product of the Day)
 - Potential PR coverage and backlinks
 
 ### Cons
+
 - Very competitive to rank well
 - Short-lived traffic spikes
 - Requires significant pre-launch planning
@@ -285,6 +295,7 @@ Add dedicated sections about the new feature/product across your site.
 Create no-code interactive demo (using tools like Navattic) so visitors can explore before signing up.
 
 ### Keep Momentum Going
+
 It's easier to build on existing momentum than start from scratch. Every touchpoint reinforces the launch.
 
 ---
@@ -331,6 +342,7 @@ Even small changelog updates remind customers your product is evolving. This bui
 ## Launch Checklist
 
 ### Pre-Launch
+
 - [ ] Landing page with clear value proposition
 - [ ] Email capture / waitlist signup
 - [ ] Early access list built
@@ -343,6 +355,7 @@ Even small changelog updates remind customers your product is evolving. This bui
 - [ ] Analytics/tracking in place
 
 ### Launch Day
+
 - [ ] Announcement email to list
 - [ ] Blog post published
 - [ ] Social posts scheduled and posted
@@ -353,6 +366,7 @@ Even small changelog updates remind customers your product is evolving. This bui
 - [ ] Monitor for issues and feedback
 
 ### Post-Launch
+
 - [ ] Onboarding email sequence active
 - [ ] Follow-up with engaged prospects
 - [ ] Roundup email includes announcement

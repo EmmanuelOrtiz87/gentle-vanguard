@@ -6,14 +6,12 @@
 > Stack: React 18 · Vite 5 · Tailwind 3 · Recharts · Lucide · react-router 7 · ws 8 · better-sqlite3
 > · root stack `gentle-vanguard@3.8.2`
 >
-> Lectura objetivo: CTO, líder técnico, equipo de marketing y developer relations.
-
-> **Estado de ejecución 2026-08-23:** Dashboard y CMS ya tienen shell visual unificado, datos
-> reales, histórico temporal, Marketplace install/uninstall/versionado/gobernanza/migraciones y
-> Content Operations con filtros, calendario, preview, tabla y Kanban. El autostart de sesión
-> ejecuta pasos TypeScript sin `cmd.exe`. Los puntos marcados como futuros debajo requieren trabajo
-> adicional de producto o infraestructura y no deben interpretarse como funcionalidades ya
-> entregadas.
+> Lectura objetivo: CTO, líder técnico, equipo de marketing y developer relations. **Estado de
+> ejecución 2026-08-23:** Dashboard y CMS ya tienen shell visual unificado, datos reales, histórico
+> temporal, Marketplace install/uninstall/versionado/gobernanza/migraciones y Content Operations con
+> filtros, calendario, preview, tabla y Kanban. El autostart de sesión ejecuta pasos TypeScript sin
+> `cmd.exe`. Los puntos marcados como futuros debajo requieren trabajo adicional de producto o
+> infraestructura y no deben interpretarse como funcionalidades ya entregadas.
 
 ---
 
@@ -32,9 +30,8 @@ pero le faltan cinco cosas que lo separan de un "producto de primer nivel":
    pública.
 
 El "CMS" más maduro es el **Marketplace de skills** (532 LOC, browse + publish + reviews). El
-`src/content-operations/` es CLI-only — la
-oportunidad está en **elevar el Marketplace a CMS de primer nivel y construir una `ContentOpsPanel`
-web** sobre el engine existente.
+`src/content-operations/` es CLI-only — la oportunidad está en **elevar el Marketplace a CMS de
+primer nivel y construir una `ContentOpsPanel` web** sobre el engine existente.
 
 Estas dos superficies combinadas (dashboard + marketplace + content ops) son el mejor caballo de
 batalla del stack: muestran observabilidad profunda, IA trabajando en vivo, y un supply-chain de
@@ -176,7 +173,8 @@ pública-privada del plan ejecutivo).
 
 ### Track E · CMS / Marketplace (P0/P1)
 
-**El "CMS" más maduro es el Marketplace (skills). El content-operations es CLI. Plan en 3 carriles:**
+**El "CMS" más maduro es el Marketplace (skills). El content-operations es CLI. Plan en 3
+carriles:**
 
 **E1. Marketplace — Browse & Discover (P0)**
 

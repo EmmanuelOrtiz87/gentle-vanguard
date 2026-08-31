@@ -1,9 +1,9 @@
 # Gentle-Vanguard — UI Standard del Ecosistema (Apps)
 
 > Registro oficial del estandar visual para toda aplicacion del ecosistema Gentle-Vanguard
-> (dashboard, academy, analytics, y las que vengan). Version 1.0.0 · 2026-08-28.
-> Fuente de referencia viva: `apps/academy-web/style.css` + `apps/academy-web/assets/logo.svg`.
-> Aplicacion de referencia implementada: `apps/gv-analytics`.
+> (dashboard, academy, analytics, y las que vengan). Version 1.0.0 · 2026-08-28. Fuente de
+> referencia viva: `apps/academy-web/style.css` + `apps/academy-web/assets/logo.svg`. Aplicacion de
+> referencia implementada: `apps/gv-analytics`.
 
 ## Regla de oro
 
@@ -16,22 +16,22 @@ identidad. Este documento es contrato: si una app no cumple, se considera sin br
 ```css
 :root {
   color-scheme: dark;
-  --gv-purple: #a78bfa;      /* acento secundario, titulos de seccion */
-  --gv-cyan: #22d3ee;        /* acento primario, links, foco, datos */
+  --gv-purple: #a78bfa; /* acento secundario, titulos de seccion */
+  --gv-cyan: #22d3ee; /* acento primario, links, foco, datos */
   --gv-cyan-deep: #06b6d4;
-  --gv-bg: #121212;          /* fondo base */
-  --gv-bg-deep: #0a0e17;     /* fondo profundo, inputs, code */
-  --gv-surface: #1f2937;     /* superficie */
+  --gv-bg: #121212; /* fondo base */
+  --gv-bg-deep: #0a0e17; /* fondo profundo, inputs, code */
+  --gv-surface: #1f2937; /* superficie */
   --gv-surface-raised: #273548; /* superficie elevada (menus, dropdowns) */
   --gv-text: #e5e7eb;
   --gv-muted: #9ca3af;
-  --gv-glass: rgba(31, 41, 55, 0.6);          /* panel glass */
+  --gv-glass: rgba(31, 41, 55, 0.6); /* panel glass */
   --gv-glass-border: rgba(167, 139, 250, 0.18);
   --gv-gradient: linear-gradient(135deg, #a78bfa 0%, #22d3ee 100%);
   --gv-glow: rgba(34, 211, 238, 0.35);
-  --gv-amber: #f4bb4f;  /* warning */
-  --gv-red: #ee6d75;    /* error / pendiente */
-  --gv-green: #4ade80;  /* ok */
+  --gv-amber: #f4bb4f; /* warning */
+  --gv-red: #ee6d75; /* error / pendiente */
+  --gv-green: #4ade80; /* ok */
   --font: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --mono: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
   --header-h: 62px;
@@ -59,37 +59,37 @@ Tres capas fijas en todo body de app:
 
 ## 4. Header
 
-- Sticky, `background: rgba(18,18,18,.88)`, `backdrop-filter: blur(14px)`,
-  border-bottom `var(--gv-glass-border)`.
-- Contenido: brand (logo+wordmark) · nav (links 13.5px/600 muted, hover bg
-  `rgba(31,41,55,.7)`) · status pill (mono, borde 1.5px, punto de estado con glow si ok).
+- Sticky, `background: rgba(18,18,18,.88)`, `backdrop-filter: blur(14px)`, border-bottom
+  `var(--gv-glass-border)`.
+- Contenido: brand (logo+wordmark) · nav (links 13.5px/600 muted, hover bg `rgba(31,41,55,.7)`) ·
+  status pill (mono, borde 1.5px, punto de estado con glow si ok).
 - Mobile: nav colapsa debajo del header con border-top.
 
 ## 5. Componentes base
 
-| Componente | Receta |
-| --- | --- |
-| Panel/card | glass + blur(10px) + border glass-border + radius 18px |
-| Boton primario | pill 999px, gradiente, texto `#0a0e17`, hover: translateY(-1px) + shadow `0 8px 30px var(--gv-glow)` |
-| Boton fantasma | pill, border 1.5px `rgba(34,211,238,.5)`, hover bg cyan 8% |
-| Inputs/textarea | bg `rgba(10,14,23,.75)`, border `rgba(156,163,175,.25)`, radius 10-12px, focus cyan 55% |
-| Chips/badges | pill, uppercase 11-12px/700, gradiente (curso primario) o borde cyan/violeta |
-| Metricas/stat | glass card, numero mono 22-26px con gradiente clip-text |
-| Dropdown/menu | `--gv-surface-raised`, border glass-border, radius 14px, shadow `0 20px 60px rgba(0,0,0,.55)` |
-| Scrollbar | thumb `--gv-surface-raised` radius 8px, hover cyan 40% |
-| Animacion de vista | `viewIn` 0.28s (opacity 0->1, translateY 8px->0); respetar `prefers-reduced-motion` |
-| Hover de filas | `translateX(3px)` + border cyan 45% (listas tipo lesson-row) |
-| Eyebrow | 12-13px, uppercase, letter-spacing .18-.22em, cyan o violeta, weight 600-700 |
+| Componente         | Receta                                                                                               |
+| ------------------ | ---------------------------------------------------------------------------------------------------- |
+| Panel/card         | glass + blur(10px) + border glass-border + radius 18px                                               |
+| Boton primario     | pill 999px, gradiente, texto `#0a0e17`, hover: translateY(-1px) + shadow `0 8px 30px var(--gv-glow)` |
+| Boton fantasma     | pill, border 1.5px `rgba(34,211,238,.5)`, hover bg cyan 8%                                           |
+| Inputs/textarea    | bg `rgba(10,14,23,.75)`, border `rgba(156,163,175,.25)`, radius 10-12px, focus cyan 55%              |
+| Chips/badges       | pill, uppercase 11-12px/700, gradiente (curso primario) o borde cyan/violeta                         |
+| Metricas/stat      | glass card, numero mono 22-26px con gradiente clip-text                                              |
+| Dropdown/menu      | `--gv-surface-raised`, border glass-border, radius 14px, shadow `0 20px 60px rgba(0,0,0,.55)`        |
+| Scrollbar          | thumb `--gv-surface-raised` radius 8px, hover cyan 40%                                               |
+| Animacion de vista | `viewIn` 0.28s (opacity 0->1, translateY 8px->0); respetar `prefers-reduced-motion`                  |
+| Hover de filas     | `translateX(3px)` + border cyan 45% (listas tipo lesson-row)                                         |
+| Eyebrow            | 12-13px, uppercase, letter-spacing .18-.22em, cyan o violeta, weight 600-700                         |
 
 ## 6. Tipografia
 
-| Rol | Fuente | Peso | Nota |
-| --- | --- | --- | --- |
-| Body | Inter | 400 | line-height 1.65 |
-| Titulos | Inter | 800-900 | letter-spacing -0.01em a -0.025em |
-| Nav/labels | Inter | 600-700 | 13-13.5px |
-| Datos/mono | JetBrains Mono | 600-700 | ids, metricas, metadata, code |
-| Palabra destacada | gradiente clip-text | 800 | keywords de marca |
+| Rol               | Fuente              | Peso    | Nota                              |
+| ----------------- | ------------------- | ------- | --------------------------------- |
+| Body              | Inter               | 400     | line-height 1.65                  |
+| Titulos           | Inter               | 800-900 | letter-spacing -0.01em a -0.025em |
+| Nav/labels        | Inter               | 600-700 | 13-13.5px                         |
+| Datos/mono        | JetBrains Mono      | 600-700 | ids, metricas, metadata, code     |
+| Palabra destacada | gradiente clip-text | 800     | keywords de marca                 |
 
 ## 7. Semantica de estado
 

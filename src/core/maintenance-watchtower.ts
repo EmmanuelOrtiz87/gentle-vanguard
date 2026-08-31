@@ -75,7 +75,9 @@ async function autoHeal() {
     try {
       const res = await runHygiene({ apply: true, recycleAged: false });
       const remaining = res.findings.filter(
-        (f) => f.action !== 'report' && !(res.killed.includes(f.pid) || res.cleanedFiles.includes(f.cmdline)),
+        (f) =>
+          f.action !== 'report' &&
+          !(res.killed.includes(f.pid) || res.cleanedFiles.includes(f.cmdline)),
       );
       if (remaining.length === 0) {
         addResult(
@@ -87,11 +89,23 @@ async function autoHeal() {
         );
         healed++;
       } else {
-        addResult('process-hygiene', 'autoheal', 'FAIL', `${remaining.length} finding(s) survived the reap`, 'manual');
+        addResult(
+          'process-hygiene',
+          'autoheal',
+          'FAIL',
+          `${remaining.length} finding(s) survived the reap`,
+          'manual',
+        );
         failed++;
       }
     } catch (e: unknown) {
-      addResult('process-hygiene', 'autoheal', 'FAIL', `reap failed: ${e instanceof Error ? e.message : String(e)}`, 'manual');
+      addResult(
+        'process-hygiene',
+        'autoheal',
+        'FAIL',
+        `reap failed: ${e instanceof Error ? e.message : String(e)}`,
+        'manual',
+      );
       failed++;
     }
   }
@@ -216,12 +230,16 @@ async function autoHeal() {
       // would close stdin -> the server exits instantly, and a second instance
       // competing for the codegraph index lock can kill an already-running
       // daemon. Delegating to the daemon script avoids both failure modes.
-      const child = runNpxTsx(join(ROOT, 'src', 'integrations', 'codegraph-mcp-server-start.ts'), [], {
-        cwd: ROOT,
-        stdio: 'ignore',
-        detached: true,
-        windowsHide: true,
-      });
+      const child = runNpxTsx(
+        join(ROOT, 'src', 'integrations', 'codegraph-mcp-server-start.ts'),
+        [],
+        {
+          cwd: ROOT,
+          stdio: 'ignore',
+          detached: true,
+          windowsHide: true,
+        },
+      );
       child.unref();
       // Give the daemon time to boot (npx+tsx resolution + server start).
       // The stdio MCP server does NOT open a TCP port, so liveness must be
@@ -421,9 +439,7 @@ async function traceFindings() {
   if (findings.length === 0) return;
 
   if (!ensureWitrInstalled()) {
-    console.log(
-      '  [witr] not available — run src/web/witr-installer.ts to enable tracing',
-    );
+    console.log('  [witr] not available — run src/web/witr-installer.ts to enable tracing');
     return;
   }
 

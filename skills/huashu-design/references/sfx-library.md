@@ -116,50 +116,65 @@ assets/sfx/
 ## 按场景推荐搭配
 
 ### 💻 Terminal 交互演示
+
 ```
 type (0.5s) → enter (0.5s) → command-execute (0.5s) → output-appear (0.6s)
 ```
+
 循环元素：`cursor-blink` 作为 idle 时的环境音。
 
 ### 🃏 卡片选择流程
+
 ```
 hover-subtle (0.5s, UI悬停) → click-soft (0.5s, 点击) → card-snap (0.5s, 定位)
 ```
+
 或进阶版：`card-flip` 做前后面切换。
 
 ### 🤖 AI 生成全流程
+
 ```
 generate-start (0.8s, 启动) → ai-process (1.2s, 处理) → sparkle (0.8s, 闪现) → complete-done (0.8s, 完成)
 ```
+
 错误时用 `error-tone` 替代 `complete-done`。
 
 ### 🎬 Logo Reveal（品牌时刻）
+
 ```
 whoosh-fast (0.6s, 铺垫) → logo-reveal-v2 (1.5s, 落点) → sparkle (0.8s, 尾韵)
 ```
+
 简版：`whoosh → logo-reveal`（直接 v7b 两件套）。
 
 ### 📱 UI 交互演示（移动端）
+
 ```
 tap-finger (0.5s, 点击) → slide-in (0.6s, 面板滑入) → toggle-on (0.5s, 开关)
 ```
+
 完成后：`success-chime` 或 `notification-pop`。
 
 ### 📊 数据可视化/仪表盘
+
 ```
 loading-tick (0.5s, 节拍) × N → complete-done (0.8s, 数据到位) → achievement (1.5s, 惊艳落点)
 ```
 
 ### 🎯 表单提交流程
+
 ```
 click-soft (0.5s) → loading-tick ×2 (1.0s) → success-chime (1.0s)
 ```
+
 失败分支：`error-tone (0.7s)`。
 
 ### 🪄 Magic Transform 场景
+
 ```
 whoosh-fast (0.6s) → transform (1.0s) → sparkle (0.8s)
 ```
+
 适合：元素变形、效果前后对比、"AI 重写"等演示。
 
 ---
@@ -167,11 +182,13 @@ whoosh-fast (0.6s) → transform (1.0s) → sparkle (0.8s)
 ## 使用规范
 
 ### 音量建议（来自 apple-gallery-showcase.md 音频双轨制）
+
 - **SFX 主轨**：`1.0`（不做衰减）
 - **BGM 背景轨**：`0.4 ~ 0.5`（SFX 明显穿透）
 - **多 SFX 叠加**：用 `amix=inputs=N:duration=longest:normalize=0` 保留动态范围
 
 ### ffmpeg 拼接模板
+
 ```bash
 # 单 SFX 对齐时间点：
 ffmpeg -i video.mp4 -itsoffset 2.5 -i sfx/ui/click.mp3 \
@@ -188,6 +205,7 @@ ffmpeg -i video.mp4 \
 ```
 
 ### 选型决策树
+
 1. **有 tactile 动作**（打字/点击/滑动）→ `keyboard/` or `ui/`
 2. **元素进场/出场** → `transition/`
 3. **容器层操作**（卡片/模态） → `container/`
@@ -198,6 +216,7 @@ ffmpeg -i video.mp4 \
 8. **命令行/代码演示** → `terminal/`
 
 ### 避免叠音堆积
+
 - 同一个时间点 `max 2 个 SFX` 并发
 - BGM 降到 0.3 以下时可以放 3 个
 - 品牌 impact 时清空其他 SFX（留空 0.2s 再落点）
@@ -222,5 +241,6 @@ ffmpeg -i video.mp4 \
 ---
 
 ## 详见
+
 - 音频双轨制与 ffmpeg 拼接：`apple-gallery-showcase.md`
 - 原始生成脚本：`/tmp/gen_sfx_batch.sh`（一次性批量生成器）

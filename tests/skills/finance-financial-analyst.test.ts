@@ -9,7 +9,7 @@ import { strict as assert } from 'node:assert';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 
-const skillPath = join('.opencode/skills/finance-financial-analyst/SKILL.md');
+const skillPath = join('skills/finance-financial-analyst/SKILL.md');
 
 test('finance-financial-analyst - SKILL.md exists', () => {
   assert(existsSync(skillPath), 'SKILL.md must exist');

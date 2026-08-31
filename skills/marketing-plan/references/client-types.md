@@ -5,6 +5,7 @@ The 13-section plan structure stays consistent across client types. What changes
 ## Archetype 1 — B2B SaaS
 
 ### Core characteristics
+
 - Subscription revenue
 - Often higher ACV ($1K–$100K+ per year)
 - Sales-assisted or self-serve depending on tier
@@ -40,12 +41,14 @@ The 13-section plan structure stays consistent across client types. What changes
 - Tier upgrades, seat expansion, usage-based add-ons
 
 ### Skills emphasis
+
 - `cold-email`, `programmatic-seo`, `competitors`, `seo-audit`, `ai-seo`
 - `ads` weighted toward LinkedIn + Google
 - `emails` for trial nurture + lifecycle
 - `pricing` for tier optimization
 
 ### Tier-1 budget priority
+
 - SEO + content > everything else
 - Founder-led LinkedIn channel
 - Customer.io / Mailchimp for nurture
@@ -56,6 +59,7 @@ The 13-section plan structure stays consistent across client types. What changes
 ## Archetype 2 — D2C Consumer App (Subscription)
 
 ### Core characteristics
+
 - Lower ACV ($5–$30/mo typically)
 - High volume, lower margin per user
 - App Store / Play Store as the primary acquisition surface
@@ -93,12 +97,14 @@ The 13-section plan structure stays consistent across client types. What changes
 - In-app upsells
 
 ### Skills emphasis
+
 - `onboarding`, `paywalls`, `emails`
 - `ads`, `ad-creative` (heavy creative iteration)
 - `referrals`
 - `pricing` for annual default + tier consolidation
 
 ### Tier-1 budget priority
+
 - ASO first (highest organic leverage)
 - Onboarding rebuild
 - Lifecycle email shipping
@@ -109,6 +115,7 @@ The 13-section plan structure stays consistent across client types. What changes
 ## Archetype 3 — Hybrid Hardware + Software
 
 ### Core characteristics
+
 - Physical product + software companion (e.g., Quietude's eye mask + app)
 - Hardware as a distribution wedge (lower price, easier first purchase)
 - Software as the LTV (recurring revenue)
@@ -143,6 +150,7 @@ The 13-section plan structure stays consistent across client types. What changes
 - Annual plan default for software
 
 ### Skills emphasis
+
 - `seo-audit` for Shopify product pages
 - `emails` for both hardware post-purchase and software lifecycle
 - `referrals` with gifting layer
@@ -150,6 +158,7 @@ The 13-section plan structure stays consistent across client types. What changes
 - `ads` with creative-heavy Meta presence
 
 ### Tier-1 budget priority
+
 - Shopify product page optimization
 - Hardware post-purchase lifecycle ship
 - Bundle strategy formalization
@@ -160,6 +169,7 @@ The 13-section plan structure stays consistent across client types. What changes
 ## Archetype 4 — Marketplace
 
 ### Core characteristics
+
 - Two-sided product (supply + demand)
 - Network effects matter
 - Liquidity is the critical early metric
@@ -194,12 +204,14 @@ The 13-section plan structure stays consistent across client types. What changes
 - Lead-gen vs. transaction-fee monetization
 
 ### Skills emphasis
+
 - `programmatic-seo` for city pages, vertical pages
 - `cold-email` for supply-side recruitment
 - `referrals` for both sides
 - `pricing` for take-rate decisions
 
 ### Tier-1 budget priority
+
 - Programmatic SEO build for one side
 - Cold outbound to seed supply (or demand, whichever is bottleneck)
 - Lifecycle email for both sides
@@ -209,6 +221,7 @@ The 13-section plan structure stays consistent across client types. What changes
 ## Archetype 5 — Developer Tool / Open Source
 
 ### Core characteristics
+
 - Technical buyer (developer or eng leader)
 - High bar for content quality (developers are skeptical)
 - DevRel matters more than traditional marketing
@@ -243,12 +256,14 @@ The 13-section plan structure stays consistent across client types. What changes
 - Support / SLA upsells
 
 ### Skills emphasis
+
 - `programmatic-seo` for docs
 - Less emphasis on traditional `ads`
 - Heavy `content-strategy` + technical content
 - `cold-email` to engineering leads at target companies
 
 ### Tier-1 budget priority
+
 - Docs + technical content production
 - DevRel (founder doing talks)
 - GitHub presence
@@ -259,6 +274,7 @@ The 13-section plan structure stays consistent across client types. What changes
 ## Archetype 6 — Deep-Tech / Scientific / Clinical
 
 ### Core characteristics
+
 - Long sales cycles
 - Heavy credibility burden (must prove the science)
 - Highly informed buyers (academics, clinicians, researchers)
@@ -293,12 +309,14 @@ The 13-section plan structure stays consistent across client types. What changes
 - Compliance / certification upsells
 
 ### Skills emphasis
+
 - Light traditional marketing
 - Heavy `product-marketing`, `sales-enablement`, `pricing`
 - `cold-email` to specific researchers / practitioners
 - PR + investor marketing
 
 ### Tier-1 budget priority
+
 - Academic outreach + conference speaking
 - Investor backchannel for institutional warm intros
 - Pilot deployment with key customers
@@ -309,6 +327,7 @@ The 13-section plan structure stays consistent across client types. What changes
 ## Archetype 7 — Commerce / DTC (non-subscription)
 
 ### Core characteristics
+
 - Physical or digital products sold transactionally
 - Average Order Value matters
 - Repeat purchase rate is the key retention metric
@@ -342,12 +361,14 @@ The 13-section plan structure stays consistent across client types. What changes
 - Subscription option for repeat purchases
 
 ### Skills emphasis
+
 - `ads` + `ad-creative` (heavy weight)
 - `emails` for post-purchase + abandoned cart
 - `referrals` with gifting
 - `pricing` for bundles + subscription option
 
 ### Tier-1 budget priority
+
 - Shopify storefront optimization
 - Email lifecycle ship
 - Influencer / UGC seeding

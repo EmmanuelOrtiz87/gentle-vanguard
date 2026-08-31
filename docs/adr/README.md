@@ -43,6 +43,8 @@ Each ADR is immutable once accepted. Updates create new ADRs (ADR-0011, etc).
 | **[ADR-0017](ADR-0017-local-first-operating-model.md)**                        | Local-First Operating Model           | ✅ Accepted   | Aug 2026 | Local operation is primary; server/SaaS is opt-in promotion/federation                    |
 | **[ADR-0019](ADR-0019-container-artifact-vulnerability-scanner-native-ts.md)** | Container/Artifact Scanner            | ✅ Accepted   | Aug 2026 | Native TS Syft+Grype+Trivy vulnerability scanning without Docker (SBOM/rootfs)            |
 | **[ADR-0018](ADR-0018-content-operations-engine-native-ts.md)**                | Content Operations Engine             | ✅ Accepted   | Aug 2026 | Native TS offline-first content pipeline (manifest + state machine + CLI, 21 jobs reales) |
+| **[ADR-0022](ADR-0022-automated-delivery-orchestrator.md)**                    | Automated Delivery Orchestrator       | 📝 Proposed   | Aug 2026 | Resumable local-first delivery through GitHub with approval-gated merge and promotion     |
+| **[ADR-0023](ADR-0023-response-cache-capability-without-integration.md)**      | Response Cache (no integration point) | ✅ Accepted   | Aug 2026 | Cache is real but not in LLM path; documented honestly, no forced wiring                  |
 
 ---
 

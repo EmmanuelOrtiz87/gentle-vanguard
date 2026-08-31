@@ -36,7 +36,10 @@ export function getOffset(
   return sf.getPositionOfLineAndCharacter(Math.max(0, line - 1), Math.max(0, col - 1));
 }
 
-export function getLineColFromPosition(sf: ts.SourceFile, pos: number): { line: number; col: number } {
+export function getLineColFromPosition(
+  sf: ts.SourceFile,
+  pos: number,
+): { line: number; col: number } {
   const lc = sf.getLineAndCharacterOfPosition(pos);
   return { line: lc.line + 1, col: lc.character + 1 };
 }

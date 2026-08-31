@@ -12,9 +12,9 @@ Antes de responder al usuario, ejecutar:
 npm run session:autostart:detached   # fire-and-forget, ~1.3s, pipeline completo en background
 ```
 
-Alternativa bloqueante: `npx tsx src/session/session-autostart.ts`. Es idempotente y no pide permiso. El
-pipeline inicializa: session ID, engram, security orchestrator, codegraph, token budget, watchtower
-auto-heal, dashboard WS, Nexus DB (lazy steps). Log: `.runtime/autostart-detached-*.log`.
+Alternativa bloqueante: `npx tsx src/session/session-autostart.ts`. Es idempotente y no pide
+permiso. El pipeline inicializa: session ID, engram, security orchestrator, codegraph, token budget,
+watchtower auto-heal, dashboard WS, Nexus DB (lazy steps). Log: `.runtime/autostart-detached-*.log`.
 
 ## Multi-Tool Integration (ZCode, Codex, MiniMax Code)
 
@@ -60,8 +60,8 @@ tooling MCP; graphify (`graphify-out/`) = grafo de análisis/query para agentes.
 Observabilidad LLM en `apps/web-dashboard/` (React/TS/Vite). **Sin mock data** — todo deriva de
 trazas reales.
 
-| Acción                          | Comando                                 |
-| ------------------------------- | --------------------------------------- |
+| Acción                          | Comando                                     |
+| ------------------------------- | ------------------------------------------- |
 | Start full (WS + Vite + Chrome) | `npx tsx src/ops/dashboard-start.ts`        |
 | Start WS only                   | `npx tsx src/ops/dashboard-ws-autostart.ts` |
 | Stop                            | `npx tsx src/ops/dashboard-stop.ts`         |
@@ -107,8 +107,9 @@ ventanas persistentes). Reglas:
 `src/core/process-hygiene.ts` — detección y limpieza de basura de procesos. Los daemons detached
 sobreviven a su padre POR DISEÑO, así que "padre muerto" NO identifica basura; el reaper clasifica
 por shape: daemons duplicados (keeper = pidfile/port owner), one-shots colgados (padre muerto
->15min), daemons envejecidos (>24h adoptados de sesiones previas, solo si autostart los re-spawnea),
-pidfiles stale y chrome headless residual.
+
+> 15min), daemons envejecidos (>24h adoptados de sesiones previas, solo si autostart los
+> re-spawnea), pidfiles stale y chrome headless residual.
 
 ```bash
 npm run process:hygiene   # dry-run (exit 1 si hay basura)
@@ -189,19 +190,20 @@ npm run delegate:run -- --task "audit gdpr compliance"
   `mode:'input'` = lossless-only (protege razonamiento), `mode:'output'` = lossy OK.
 - **Perfiles SDD**: `npm run profile:list|status|apply -- <perfil>` (cheap/balanced/premium en
   `config/model-router.json`).
-- **Hash-chained audit** (`src/tools/event-sourcing.ts`): eventos con prevHash+hash SHA-256; `verify`
-  detecta manipulación.
+- **Hash-chained audit** (`src/tools/event-sourcing.ts`): eventos con prevHash+hash SHA-256;
+  `verify` detecta manipulación.
 - **Skills adoptadas Fases 1-3 (2026-08-27)**: `frontend-design`, `canvas-design`, `theme-factory`,
-  `doc-coauthoring` (anthropics/skills, Apache-2.0), `huashu-design` (alchaincyf/huashu-design, MIT, PPTX editable),
-  `ui-taste` (Leonxlnx/taste-skill, MIT, gate transversal anti-slop), `brand-guidelines-gv` (re-skin tokens GV) +
-  familia marketing `copywriting`, `product-marketing`, `cro`, `marketing-plan`, `launch`, `emails`,
-  `marketing-psychology`, `content-strategy` (coreyhaines31/marketingskills, MIT) — en `skills/` con
-  atribución en frontmatter (`source: external-adopted`). Plan: `docs/reference/SKILL-UPGRADE-SHORTLIST-2026-08.md`.
+  `doc-coauthoring` (anthropics/skills, Apache-2.0), `huashu-design` (alchaincyf/huashu-design, MIT,
+  PPTX editable), `ui-taste` (Leonxlnx/taste-skill, MIT, gate transversal anti-slop),
+  `brand-guidelines-gv` (re-skin tokens GV) + familia marketing `copywriting`, `product-marketing`,
+  `cro`, `marketing-plan`, `launch`, `emails`, `marketing-psychology`, `content-strategy`
+  (coreyhaines31/marketingskills, MIT) — en `skills/` con atribución en frontmatter
+  (`source: external-adopted`). Plan: `docs/reference/SKILL-UPGRADE-SHORTLIST-2026-08.md`.
 - **CRAG retrieval grader** (`src/retrieval/retrieval-grader.ts`): BM25 + keyword-fallback.
-- **SDD research lane** (`npm run sdd:research -- run -f <feature> -q "q1;q2" [--deep]`):
-  evidencia externa versionada (`gentle-vanguard.sdd-research/v1`) ligada al caso SDD — busca,
-  gradea BM25 y persiste `.sdd/<feature>/RESEARCH/{artifact.md,research.json}`; PROPOSE la
-  cita automáticamente. Comando ZCode: `/sdd-research`. Retención RDD:
+- **SDD research lane** (`npm run sdd:research -- run -f <feature> -q "q1;q2" [--deep]`): evidencia
+  externa versionada (`gentle-vanguard.sdd-research/v1`) ligada al caso SDD — busca, gradea BM25 y
+  persiste `.sdd/<feature>/RESEARCH/{artifact.md,research.json}`; PROPOSE la cita automáticamente.
+  Comando ZCode: `/sdd-research`. Retención RDD:
   `npx tsx src/rdd/rdd-core.ts prune --retention-days=30` (lazy en autostart).
 - **Web crawler dual-provider** (`src/web/web-crawler-cli.ts`): Firecrawl → Jina Reader +
   DuckDuckGo + Bing RSS. GOTCHA: Jina bloquea UA de navegador; decodificar `uddg` de DDG; Bing solo

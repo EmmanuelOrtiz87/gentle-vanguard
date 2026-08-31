@@ -604,7 +604,9 @@ async function main(): Promise<void> {
     console.log('  SLACK_WEBHOOK_URL     Slack webhook URL');
     console.log('');
     console.log('Examples:');
-    console.log('  npx tsx src/monitor/multi-channel-alert.ts --send "Server down" --severity critical');
+    console.log(
+      '  npx tsx src/monitor/multi-channel-alert.ts --send "Server down" --severity critical',
+    );
     console.log('  npx tsx src/monitor/multi-channel-alert.ts --test');
     console.log('  npx tsx src/monitor/multi-channel-alert.ts --demo');
   }

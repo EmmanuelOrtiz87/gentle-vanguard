@@ -311,7 +311,9 @@ function main(): void {
     const strategy = args[args.indexOf('--strategy') + 1];
     const outcome = (args[args.indexOf('--outcome') + 1] || 'failed') as AttemptOutcome;
     if (!goal || !strategy) {
-      console.error('Usage: anti-loop-guard register --goal "..." --strategy "..." [--outcome failed|success]');
+      console.error(
+        'Usage: anti-loop-guard register --goal "..." --strategy "..." [--outcome failed|success]',
+      );
       process.exit(2);
     }
     printVerdict(registerAttempt(goal, strategy, outcome));
