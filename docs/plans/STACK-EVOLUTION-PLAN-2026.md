@@ -8,6 +8,23 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ## ⚡ Registro de progreso
 
+### Ejecutado — Sesión 8 (2026-08-31, Apps Control Panel + F2.3 cierre de scope library)
+
+- ✅ **Apps Control Panel** (commit `7b80dc68`): `apps-control-api.ts` + `AppsControlPanel`
+  (ruta `/apps`) para lifecycle de dashboard/analytics/cms/academy desde la UI. Dashboard WS ahora
+  persiste entre sesiones (el panel es dueño del lifecycle; session-close ya no lo mata). MCP
+  `gv-analytics-atlassian` registrado en `opencode.json` (pendiente de gv-analytics cerrado).
+- ✅ **F2.3 batch 2 — scope library CERRADO** (commit `9e5f091c`): codemod mejorado (archivos
+  mixtos library+CLI ya no se saltan enteros; fix de reporte multiArg; SKIP ampliado con los
+  reversions batch-1) + 9 multi-arg migrados a mano (ResilienceManager, session-context-log,
+  response-cache/sqlite, event-sourcing-api). **Conclusión de fase**: los ~5.400 `console.*`
+  restantes en `src/` están en código CLI por diseño (shebang, `src/cli/`, bloques main() con
+  stdout parseable) — la superficie library está 100% en logger estructurado. tsc 0, eslint 0,
+  test:config 24/24, test:workflows 4/4.
+- 🔲 **F2.7 en curso**: 8 componentes con tests → meta ≥16 (batch de 9 tests en vuelo:
+  ActivityTimeline, AppsControlPanel, AuditPanel, ErrorBoundary, GuardrailsPanel, LoopGuardPanel,
+  NotificationToast, SessionTable, TokenUsagePanel).
+
 ### Ejecutado — Sesión 7 (2026-08-31, anti-loop nativo + métricas vivas + gv potentiation)
 
 - ✅ **F4.1 live metrics (single source of truth)**: `config/stack-metrics.json` creado (199 skills,
@@ -183,8 +200,9 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 - F1.3 changesets/release-please (version-sync.ts es el interino).
 - F1.5 subir umbral cobertura 30→40% (medir baseline full-mode primero).
 - F2.2 reorganización de `src/` por dominios (un PR por dominio, barriles de compatibilidad).
-- F2.3 codemod `console.*` → logger; F2.4 erradicar 218 `any`; consolidación modular nativa; F2.6
-  ConfigService/DI; F2.8 CLI `gv` unificada.
+- F2.3 ✅ cerrado (scope library completo; console.* restantes = CLI por diseño); F2.4 ✅ 0 `any`;
+  consolidación modular nativa (mantenimiento); F2.6 ConfigService/DI; F2.8 ✅ CLI `gv` unificada;
+  F2.7 en curso (tests dashboard).
 - F5 Sprints A-D comerciales (ver `GENTLE_VANGUARD_MASTER/00-EVOLUTION-ACTION-PLAN-2026-08.md`).
 
 ---
