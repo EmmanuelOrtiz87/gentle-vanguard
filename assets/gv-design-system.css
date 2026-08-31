@@ -215,6 +215,26 @@
 .gv-brand span {
   color: var(--gv-primary);
 }
+.gv-mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--gv-primary);
+  color: var(--gv-primary);
+  font: 800 11px var(--gv-font-body);
+}
+.gv-wordmark {
+  color: var(--gv-text);
+}
+.gv-wordmark span {
+  color: var(--gv-primary);
+}
+.gv-brand small {
+  display: block;
+  color: var(--gv-muted);
+  font: 600 11px var(--gv-font-body);
+}
 .gv-view-tabs {
   display: flex;
   flex: 1;

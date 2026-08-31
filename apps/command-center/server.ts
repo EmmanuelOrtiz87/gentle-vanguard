@@ -441,7 +441,7 @@ function validHost(host: string | undefined): boolean {
   const hostname = host.replace(/^\[/, '').split(']')[0].split(':')[0].toLowerCase();
   return hostname === '127.0.0.1' || hostname === 'localhost' || hostname === '::1';
 }
-export function createCommandCenterServer(controller = createAppsController()) {
+export function createCommandCenterServer(controller = createAppsController(), root = rootDefault) {
   return createHttpServer(async (req, res) => {
     if (!validHost(req.headers.host)) return json(res, 400, { error: 'invalid-host' });
     const url = new URL(req.url ?? '/', 'http://127.0.0.1');
@@ -490,6 +490,14 @@ export function createCommandCenterServer(controller = createAppsController()) {
         ...corsHeaders(origin),
       });
       res.end(readFileSync(new URL('./public/widget.js', import.meta.url), 'utf8'));
+      return;
+    }
+    if (url.pathname === '/gv-design-system.css' && req.method === 'GET') {
+      res.writeHead(200, {
+        'Content-Type': 'text/css; charset=utf-8',
+        'Cache-Control': 'no-store',
+      });
+      res.end(readFileSync(join(root, 'assets', 'gv-design-system.css'), 'utf8'));
       return;
     }
     if (url.pathname === '/' || url.pathname === '/index.html') {
@@ -547,7 +555,7 @@ export async function startServer(): Promise<void> {
       JSON.stringify({ ccPort: port, updated: new Date().toISOString() }, null, 2),
     );
   }
-  const server = createCommandCenterServer(createAppsController({ root }));
+  const server = createCommandCenterServer(createAppsController({ root }), root);
   mkdirSync(runtimeDir(root), { recursive: true });
   // CC_PID_FILE: tests/smoke run their own server instance — without this
   // override they would clobber the production pidfile (write + SIGTERM unlink).

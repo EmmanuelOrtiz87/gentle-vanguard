@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Gentle-Vanguard — Command Center</title>
+    <link rel="stylesheet" href="/gv-design-system.css" />
     <style>
       :root {
         --primary: #00bfff;
@@ -112,145 +113,6 @@
         margin: auto;
         padding: 38px 24px 48px;
       }
-      header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 20px;
-        margin-bottom: 30px;
-      }
-      .gv-topbar {
-        position: sticky;
-        top: 0;
-        z-index: 20;
-        margin: 0 -24px 32px;
-        padding: 0 24px;
-        background: color-mix(in srgb, var(--bg) 88%, transparent);
-        backdrop-filter: blur(14px);
-        border-bottom: 1px solid var(--glass-border);
-      }
-      .topbar-inner {
-        max-width: 1180px;
-        min-height: 62px;
-        margin: auto;
-        display: flex;
-        align-items: center;
-        gap: 16px;
-      }
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-shrink: 0;
-        color: var(--text);
-        font:
-          800 18px 'Orbitron',
-          var(--font);
-        white-space: nowrap;
-      }
-      .mark {
-        display: grid;
-        place-items: center;
-        width: 36px;
-        height: 36px;
-        border: 1px solid var(--primary);
-        color: var(--primary);
-        font: 800 11px var(--font);
-      }
-      .brand small {
-        display: block;
-        color: var(--muted);
-        font: 600 11px var(--font);
-      }
-      .system-state {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 12px;
-        border: 1.5px solid color-mix(in srgb, var(--primary) 50%, transparent);
-        border-radius: 999px;
-        color: var(--primary);
-        font: 700 12px var(--mono);
-        white-space: nowrap;
-      }
-      .system-state::before {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: currentColor;
-        box-shadow: 0 0 8px currentColor;
-        content: '';
-      }
-      .header-actions {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 8px;
-        margin-left: auto;
-        flex-wrap: wrap;
-      }
-      .gv-icon-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
-        padding: 8px;
-        border: 0;
-        border-radius: 9px;
-        color: var(--muted);
-        background: var(--icon);
-        cursor: pointer;
-        transition:
-          background 0.15s,
-          color 0.15s;
-      }
-      .gv-icon-btn:hover:not(:disabled) {
-        color: var(--text);
-        background: var(--border);
-      }
-      .gv-icon-btn:focus-visible,
-      .gv-lang-dropdown-menu button:focus-visible {
-        outline: 3px solid var(--primary-light);
-        outline-offset: 2px;
-      }
-      .gv-lang-dropdown {
-        position: relative;
-      }
-      .gv-lang-dropdown-menu {
-        position: absolute;
-        top: calc(100% + 8px);
-        right: 0;
-        z-index: 60;
-        min-width: 168px;
-        padding: 4px;
-        border: 1px solid var(--glass-border);
-        border-radius: 10px;
-        background: var(--surface);
-        box-shadow: 0 12px 30px #0007;
-      }
-      .gv-lang-dropdown-menu button {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        gap: 8px;
-        padding: 9px 10px;
-        border: 0;
-        border-radius: 7px;
-        color: var(--text);
-        background: transparent;
-        font: 600 13px var(--font);
-        text-align: left;
-        cursor: pointer;
-      }
-      .gv-lang-dropdown-menu button:hover,
-      .gv-lang-dropdown-menu button[aria-current='true'] {
-        background: #00bfff1f;
-      }
-      .gv-lang-check {
-        margin-left: auto;
-        color: var(--primary);
-      }
       #start-all,
       #stop-all {
         padding: 8px;
@@ -270,6 +132,9 @@
       }
       .section-heading {
         margin-bottom: 20px;
+      }
+      .gv-topbar + .section-heading {
+        margin-top: 32px;
       }
       .section-title {
         margin: 0;
@@ -309,10 +174,6 @@
         color: var(--primary);
         font-size: clamp(25px, 4vw, 42px);
         letter-spacing: -0.03em;
-      }
-      header p {
-        margin: 8px 0 0;
-        color: var(--muted);
       }
       button {
         font: inherit;
@@ -365,6 +226,14 @@
         display: flex;
         gap: 9px;
         margin: -12px 0 20px;
+      }
+      .cc-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-left: auto;
+        flex-wrap: wrap;
       }
       .preset-stop {
         border-color: var(--danger-border);
@@ -527,18 +396,17 @@
       <div class="gv-glow-a"></div>
       <div class="gv-glow-b"></div>
       <header class="gv-topbar">
-        <div class="topbar-inner">
-          <div class="brand">
-            <span class="mark" aria-hidden="true">GV</span
-            ><span
-              >Gentle<span style="color: var(--primary)">Vanguard</span
-              ><small data-i18n="appName"></small
+        <div class="gv-topbar-inner">
+          <div class="gv-brand">
+            <span class="gv-mark" aria-hidden="true">Gv</span>
+            <span class="gv-wordmark"
+              >Gentle<span>Vanguard</span> <small data-i18n="appName"></small
             ></span>
           </div>
-          <div class="system-state">
+          <div class="gv-system-state ready">
             <span id="running-state">0</span> <span data-i18n="runningApps"></span>
           </div>
-          <div class="header-actions">
+          <div class="cc-actions">
             <button
               id="start-all"
               class="gv-icon-btn"
@@ -722,6 +590,8 @@
       };
       let busy = '';
       let presetBusy = false;
+      let lastSnapshot = '';
+      const cardNodes = new Map();
       const esc = (s) =>
         String(s).replace(
           /[&<>"']/g,
@@ -743,22 +613,104 @@
         e.hidden = false;
       }
       function render(apps) {
+        const snapshot = JSON.stringify(apps);
+        if (snapshot === lastSnapshot) return;
+        lastSnapshot = snapshot;
         window.currentApps = apps;
         const running = apps.filter((app) => app.status === 'running').length;
         document.querySelector('#running-state').textContent = running;
         document.querySelector('#running-count').textContent = running;
         document.querySelector('#stopped-count').textContent = apps.length - running;
         const grid = document.querySelector('#apps');
-        grid.classList.remove('view-fade');
-        void grid.offsetWidth;
-        grid.classList.add('view-fade');
-        grid.innerHTML =
-          apps
-            .map(
-              (a) =>
-                `<article class="card"><div class="card-top"><div><h2>${esc(a.name)}</h2><p class="description">${esc(a.description)}</p></div><span class="badge ${a.status}">${labels[a.status]()}</span></div><div class="processes">${a.processes.map((p) => `<div class="process"><span>${esc(p.name)}</span><span class="${p.alive ? 'up' : 'down'}">${p.alive ? 'PID ' + (p.pid || '—') + ' · Port ' + p.port : 'Port ' + p.port + ' · Offline'}</span></div>`).join('')}</div><div class="actions"><button class="power" ${busy || presetBusy ? 'disabled' : ''} onclick="toggle('${a.id}','${a.status}')" aria-label="${a.status === 'running' ? t('stop') : t('start')} ${esc(a.name)}">⏻ ${a.status === 'running' ? t('stop') : t('start')}</button><button class="open" onclick="window.open('${a.url}','_blank','noopener,noreferrer')" aria-label="${t('open')} ${esc(a.name)}">↗ ${t('open')}</button></div></article>`,
-            )
-            .join('') || `<div class="empty">${t('empty')}</div>`;
+        const seen = new Set();
+        apps.forEach((app) => {
+          seen.add(app.id);
+          let card = cardNodes.get(app.id);
+          if (!card) {
+            card = createCard(app);
+            cardNodes.set(app.id, card);
+            grid.append(card.node);
+          }
+          updateCard(card, app);
+        });
+        cardNodes.forEach((card, id) => {
+          if (!seen.has(id)) {
+            card.node.remove();
+            cardNodes.delete(id);
+          }
+        });
+        const empty = grid.querySelector('.empty');
+        if (apps.length === 0 && !empty) {
+          const node = document.createElement('div');
+          node.className = 'empty';
+          node.textContent = t('empty');
+          grid.append(node);
+        } else if (apps.length > 0 && empty) {
+          empty.remove();
+        }
+      }
+      function createCard(app) {
+        const node = document.createElement('article');
+        node.className = 'card';
+        const top = document.createElement('div');
+        top.className = 'card-top';
+        const copy = document.createElement('div');
+        const title = document.createElement('h2');
+        const description = document.createElement('p');
+        description.className = 'description';
+        copy.append(title, description);
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        top.append(copy, badge);
+        const processes = document.createElement('div');
+        processes.className = 'processes';
+        const actions = document.createElement('div');
+        actions.className = 'actions';
+        const power = document.createElement('button');
+        power.className = 'power';
+        const open = document.createElement('button');
+        open.className = 'open';
+        actions.append(power, open);
+        node.append(top, processes, actions);
+        return { node, title, description, badge, processes, power, open, processNodes: new Map() };
+      }
+      function updateCard(card, app) {
+        card.title.textContent = app.name;
+        card.description.textContent = app.description;
+        card.badge.className = 'badge ' + app.status;
+        card.badge.textContent = labels[app.status]();
+        const seen = new Set();
+        app.processes.forEach((process) => {
+          seen.add(process.name);
+          let line = card.processNodes.get(process.name);
+          if (!line) {
+            line = { node: document.createElement('div'), value: document.createElement('span') };
+            line.node.className = 'process';
+            const name = document.createElement('span');
+            name.textContent = process.name;
+            line.node.append(name, line.value);
+            card.processNodes.set(process.name, line);
+            card.processes.append(line.node);
+          }
+          line.value.className = process.alive ? 'up' : 'down';
+          line.value.textContent = process.alive
+            ? 'PID ' + (process.pid || '—') + ' · Port ' + process.port
+            : 'Port ' + process.port + ' · Offline';
+        });
+        card.processNodes.forEach((line, name) => {
+          if (!seen.has(name)) {
+            line.node.remove();
+            card.processNodes.delete(name);
+          }
+        });
+        const action = app.status === 'running' ? t('stop') : t('start');
+        card.power.disabled = Boolean(busy || presetBusy);
+        card.power.textContent = '⏻ ' + action;
+        card.power.setAttribute('aria-label', action + ' ' + app.name);
+        card.power.onclick = () => void toggle(app.id, app.status);
+        card.open.textContent = '↗ ' + t('open');
+        card.open.setAttribute('aria-label', t('open') + ' ' + app.name);
+        card.open.onclick = () => window.open(app.url, '_blank', 'noopener,noreferrer');
       }
       async function toggle(id, status) {
         if (status === 'running' && !confirm(t('stopConfirm'))) return;
