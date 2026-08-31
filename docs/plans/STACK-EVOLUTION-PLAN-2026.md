@@ -8,6 +8,26 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ## ⚡ Registro de progreso
 
+### Ejecutado — Sesión 14 (2026-08-31, DI 12/12 + benchmark alpackaai absorbido)
+
+- ✅ **DI batch final (12/12)**: los 4 módulos restantes sin efectos al importarlos —
+  `db-init.ts` (librería `initDb()` con resultado tipado), `post-mortem-trigger.ts`
+  (`runPostMortem()`), `performance-slo-monitor.ts` (`runSloChecks()` → `SLOReport`) y
+  `cli/backlog.ts` (DB eager → `getBacklog()` lazy). Entrada CLI protegida con guard
+  `pathToFileURL` (patrón anti-regresión de `src/tools/auto-url-fix.ts`); servicios
+  `postMortem` y `sloMonitor` registrados en el contenedor. Verificado: tsc limpio,
+  container tests 16/16, CLIs standalone operativos, imports side-effect free.
+  Nota: `npm run test:optimized` marca FAIL en suites vitest (command-center,
+  orchestrator-loop-guard) por ejecutarlas con `node --test` — falso positivo preexistente;
+  bajo vitest real pasan 11/11.
+- ✅ **Benchmark alpackaai.xyz absorbido** (`docs/reference/PROMPT-LIBRARY-BENCHMARK.md`):
+  530 prompts, 8 categorías por audiencia, freemium, títulos outcome-driven. Nativo en
+  `apps/prompt-studio`: taxonomía `CATEGORIES` + columna `category` (migración idempotente)
+  + facet con conteos en `GET /api/prompts` + filtro `?category=` + chips y badge en UI.
+  Circuito verificado en vivo (POST → filtro → facet → delete). Gemas sigue pendiente de la
+  doc del usuario (video B7BY3TugqPA).
+- CMS F2 UI: tomado por agente paralelo (fuera de scope aquí).
+
 ### Ejecutado — Sesión 13 (2026-08-31, extracción de apps: Prompt Studio + content-ops al CMS)
 
 - ✅ **apps/prompt-studio** (commit `a3373aec`): generador de prompts como app standalone

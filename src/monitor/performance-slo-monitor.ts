@@ -13,6 +13,7 @@
 import { runSync, runSyncShell } from '../core/run-command.js';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { resolve } from 'path';
+import { pathToFileURL } from 'url';
 import { request as httpRequest } from 'http';
 
 interface SLODefinition {
@@ -25,7 +26,7 @@ interface SLODefinition {
   message: string;
 }
 
-interface SLOReport {
+export interface SLOReport {
   timestamp: string;
   passed: boolean;
   checks: SLODefinition[];
@@ -220,8 +221,12 @@ function saveMetricsSnapshot(snapshot: MetricSnapshot): void {
   }
 }
 
-function main(): void {
+/** Library entry: run SLO checks, persist snapshot + report, return the report (no process exit). */
+export function runSloChecks(options: { json?: boolean; ciGate?: boolean; output?: string } = {}): SLOReport {
   const args = parseArgs();
+  if (options.ciGate !== undefined) args.ciGate = options.ciGate;
+  if (options.json !== undefined) args.json = options.json;
+  if (options.output !== undefined) args.output = options.output;
   const checks: SLODefinition[] = [];
 
   // Measure metrics
@@ -310,7 +315,7 @@ function main(): void {
 
   if (args.json) {
     console.log(JSON.stringify(report, null, 2));
-    process.exit(exitCode);
+    return report;
   }
 
   // Pretty output
@@ -369,7 +374,16 @@ function main(): void {
     /* dashboard WS unavailable — non-fatal */
   }
 
-  process.exit(exitCode);
+  return report;
 }
 
-main();
+// CLI entry — guard keeps imports side-effect free when loaded as a library.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main();
+}
+
+function main(): void {
+  const report = runSloChecks();
+  const failed = report.overall.failed;
+  process.exit(failed > 0 ? 1 : 0);
+}

@@ -13,6 +13,18 @@ const TASK_TYPES = [
   { id: 'research', label: 'Research' },
 ] as const;
 
+// Taxonomía de categorías (benchmark alpackaai.xyz — docs/reference/PROMPT-LIBRARY-BENCHMARK.md)
+const CATEGORIES = [
+  'Desarrollo',
+  'Negocios',
+  'Marketing / Redes',
+  'Educación',
+  'E-commerce',
+  'Finanzas',
+  'Empleo',
+  'Imagen',
+] as const;
+
 const OUTPUT_FORMATS = [
   'Findings report with severity levels and evidence per finding',
   'Complete ready-to-apply code, comments only where needed',
@@ -35,6 +47,7 @@ interface PromptRow {
   id: string;
   title: string;
   type: string;
+  category?: string;
   role: string;
   goal: string;
   context: string;
@@ -72,10 +85,13 @@ export default function App() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saveTitle, setSaveTitle] = useState('');
   const [saveTags, setSaveTags] = useState('');
+  const [saveCategory, setSaveCategory] = useState<string>('');
   const [status, setStatus] = useState('');
 
   // library state
   const [prompts, setPrompts] = useState<PromptRow[]>([]);
+  const [categories, setCategories] = useState<{ category: string; count: number }[]>([]);
+  const [categoryFilter, setCategoryFilter] = useState<string>('');
   const [query, setQuery] = useState('');
   const [libStatus, setLibStatus] = useState('');
 
@@ -100,15 +116,24 @@ export default function App() {
     return L.join('\n');
   }, [taskLabel, role, goal, context, criteria, format, tone]);
 
-  const refresh = useCallback(async (q = query) => {
-    try {
-      const d = await api<{ prompts: PromptRow[] }>(`/api/prompts${q ? `?q=${encodeURIComponent(q)}` : ''}`);
-      setPrompts(d.prompts ?? []);
-      setLibStatus('');
-    } catch {
-      setLibStatus('Sin conexión al servidor local (:5177).');
-    }
-  }, [query]);
+  const refresh = useCallback(
+    async (q = query, cat = categoryFilter) => {
+      try {
+        const params = new URLSearchParams();
+        if (q) params.set('q', q);
+        if (cat) params.set('category', cat);
+        const d = await api<{ prompts: PromptRow[]; categories?: { category: string; count: number }[] }>(
+          `/api/prompts${params.toString() ? `?${params}` : ''}`,
+        );
+        setPrompts(d.prompts ?? []);
+        setCategories(d.categories ?? []);
+        setLibStatus('');
+      } catch {
+        setLibStatus('Sin conexión al servidor local (:5177).');
+      }
+    },
+    [query, categoryFilter],
+  );
 
   useEffect(() => {
     if (tab === 'library') void refresh();
@@ -128,7 +153,7 @@ export default function App() {
 
   const save = async () => {
     const title = saveTitle.trim() || goal.trim().slice(0, 60) || 'Prompt sin título';
-    const payload = { title, type, role, goal, context, criteria, format, tone, body: prompt, tags: saveTags.trim() };
+    const payload = { title, type, category: saveCategory, role, goal, context, criteria, format, tone, body: prompt, tags: saveTags.trim() };
     try {
       if (editingId) {
         await api(`/api/prompts/${editingId}`, { method: 'PUT', body: JSON.stringify(payload) });
@@ -138,6 +163,7 @@ export default function App() {
         setStatus(`Guardado en la biblioteca: ${title}`);
       }
       setSaveTitle(''); setSaveTags('');
+      void refresh(query, categoryFilter);
     } catch {
       setStatus('Error al guardar — ¿está el servidor en :5177?');
     }
@@ -148,7 +174,7 @@ export default function App() {
     setType(p.type || 'review'); setRole(p.role ?? ''); setGoal(p.goal ?? '');
     setContext(p.context ?? ''); setCriteria(p.criteria ?? '');
     setFormat(p.format || OUTPUT_FORMATS[0]); setTone(p.tone ?? '');
-    setSaveTitle(p.title); setSaveTags(p.tags ?? '');
+    setSaveTitle(p.title); setSaveTags(p.tags ?? ''); setSaveCategory(p.category ?? '');
     setTab('create');
     setStatus(`Editando: ${p.title}`);
   };
@@ -156,7 +182,7 @@ export default function App() {
   const newPrompt = () => {
     setEditingId(null);
     setRole(''); setGoal(''); setContext(''); setCriteria(''); setTone('');
-    setSaveTitle(''); setSaveTags(''); setType('review'); setFormat(OUTPUT_FORMATS[0]);
+    setSaveTitle(''); setSaveTags(''); setSaveCategory(''); setType('review'); setFormat(OUTPUT_FORMATS[0]);
     setStatus('Nuevo prompt.');
   };
 
@@ -271,6 +297,10 @@ export default function App() {
                     placeholder="Título para la biblioteca (opcional)" />
                   <input className={`${inputCls} w-44`} value={saveTags} onChange={(e) => setSaveTags(e.target.value)}
                     placeholder="etiquetas, separadas, por coma" />
+                  <select className={`${inputCls} w-40`} value={saveCategory} onChange={(e) => setSaveCategory(e.target.value)} aria-label="Categoría">
+                    <option value="">Sin categoría</option>
+                    {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                  </select>
                   <button type="button" onClick={save}
                     className="inline-flex items-center gap-2 rounded-full border border-emerald-400/50 px-4 py-2 text-sm font-semibold text-emerald-200 hover:bg-emerald-400/10">
                     <Save className="w-4 h-4" /> {editingId ? 'Actualizar' : 'Guardar'}
@@ -302,6 +332,21 @@ export default function App() {
                 Buscar
               </button>
             </form>
+            {categories.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                <button type="button" onClick={() => { setCategoryFilter(''); void refresh(query, ''); }}
+                  className={`text-[11px] px-3 py-1 rounded-full border ${!categoryFilter ? 'bg-cyan-400/15 text-cyan-200 border-cyan-400/40' : 'text-slate-400 border-slate-700 hover:border-slate-500'}`}>
+                  Todas
+                </button>
+                {categories.map((c) => (
+                  <button key={c.category} type="button"
+                    onClick={() => { setCategoryFilter(c.category); void refresh(query, c.category); }}
+                    className={`text-[11px] px-3 py-1 rounded-full border ${categoryFilter === c.category ? 'bg-cyan-400/15 text-cyan-200 border-cyan-400/40' : 'text-slate-400 border-slate-700 hover:border-slate-500'}`}>
+                    {c.category} <span className="opacity-60">{c.count}</span>
+                  </button>
+                ))}
+              </div>
+            )}
             {libStatus && <p className="text-xs text-amber-300 mb-2">{libStatus}</p>}
             <div className="grid gap-3 md:grid-cols-2">
               {prompts.map((p) => (
@@ -323,6 +368,9 @@ export default function App() {
                   </div>
                   <p className="text-xs text-slate-400 mt-1 line-clamp-2 font-mono">{p.body.slice(0, 140)}…</p>
                   <div className="flex flex-wrap gap-1 mt-2">
+                    {p.category && (
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-violet-400/10 text-violet-300 border border-violet-400/20">{p.category}</span>
+                    )}
                     {p.tags.split(',').filter(Boolean).map((t) => (
                       <span key={t} className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-400/10 text-cyan-300 border border-cyan-400/20">{t.trim()}</span>
                     ))}

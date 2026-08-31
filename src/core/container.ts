@@ -18,15 +18,9 @@
  *                            same shared instance map, so both return the same object)
  *
  * NOT migrated (deliberate, do not "fix" without a plan):
- *   - src/database/db-init.ts               — calls main() unconditionally at import
- *                                             (CLI side effects: schema DDL); wiring it
- *                                             into the container would mutate the DB on
- *                                             any resolve.
- *   - src/cli/backlog.ts                    — calls main() unconditionally at import AND
- *                                             grabs DatabaseManager.getInstance() eagerly
- *                                             at module top-level (not lazy).
- *   - src/resilience/post-mortem-trigger.ts — calls main() unconditionally at import.
- *   - src/monitor/performance-slo-monitor.ts — calls main() unconditionally at import.
+ *   (none — batch 3, 2026-08-31, migrated the last four CLI/monitor modules
+ *   by extracting side-effect-free library entries + CLI entry guards:
+ *   pathToFileURL pattern, per src/tools/auto-url-fix.ts regression rule)
  */
 import { getConfigService, ConfigService, createTestConfig } from '../config/config-service.js';
 import { db } from '../database/db.js';
@@ -39,6 +33,8 @@ import * as tokenTracker from '../tokens/token-tracker.js';
 import * as skillUsageTracker from '../skills/skill-usage-tracker.js';
 import * as adaptiveRouter from '../orchestration/adaptive-router/index.js';
 import { SessionMetricsTracker, getAllLiveMetrics } from './session-metrics-tracker.js';
+import { runPostMortem } from '../resilience/post-mortem-trigger.js';
+import { runSloChecks } from '../monitor/performance-slo-monitor.js';
 
 export interface Container {
   /** Register a lazy factory. Factories run at most once per container. */
@@ -170,6 +166,20 @@ function registerBatch2Services(c: Container): void {
     destroy: (sessionId: string) => SessionMetricsTracker.destroy(sessionId),
     liveMetrics: () => getAllLiveMetrics(),
   }));
+  c.register('postMortem', (cc) => {
+    void cc;
+    return {
+      /** Library entry (CLI still works standalone via its entry guard). */
+      run: runPostMortem,
+    };
+  });
+  c.register('sloMonitor', (cc) => {
+    void cc;
+    return {
+      /** Library entry (CLI still works standalone via its entry guard). */
+      run: runSloChecks,
+    };
+  });
 }
 
 /**

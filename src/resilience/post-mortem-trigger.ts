@@ -13,8 +13,9 @@
 import { runSync } from '../core/run-command.js';
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { resolve, join } from 'path';
+import { pathToFileURL } from 'url';
 
-interface PostMortemResult {
+export interface PostMortemResult {
   timestamp: string;
   trigger: 'auto-heal' | 'manual' | 'scheduled';
   incident?: string;
@@ -223,8 +224,15 @@ function recordIncident(result: PostMortemResult): void {
   }
 }
 
-function main(): void {
-  const args = parseArgs();
+/** Library entry: build the post-mortem result without process-level side effects. */
+export function runPostMortem(
+  overrides: {
+    trigger?: 'auto-heal' | 'manual' | 'scheduled';
+    incident?: string;
+  } = {},
+  options: { json?: boolean; exit?: boolean } = {},
+): PostMortemResult {
+  const args = { ...parseArgs(), ...overrides };
 
   const healResults = readHealResults();
   const diagnosis = runSelfDiagnosis();
@@ -271,9 +279,12 @@ function main(): void {
   const reportFile = join(reportDir, `post-mortem-${Date.now()}.json`);
   writeFileSync(reportFile, JSON.stringify(result, null, 2));
 
-  if (args.json) {
+  if (options.json || args.json) {
     console.log(JSON.stringify(result, null, 2));
-    process.exit(result.severity === 'critical' ? 2 : result.severity === 'warning' ? 1 : 0);
+    if (options.exit !== false) {
+      process.exit(result.severity === 'critical' ? 2 : result.severity === 'warning' ? 1 : 0);
+    }
+    return result;
   }
 
   // Pretty output
@@ -303,6 +314,16 @@ function main(): void {
       console.log(`    → ${r}`);
     }
   }
+
+  return result;
 }
 
-main();
+// CLI entry — guard keeps imports side-effect free when loaded as a library.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main();
+}
+
+function main(): void {
+  const result = runPostMortem();
+  process.exit(result.severity === 'critical' ? 2 : result.severity === 'warning' ? 1 : 0);
+}

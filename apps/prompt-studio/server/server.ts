@@ -57,8 +57,15 @@ CREATE TRIGGER IF NOT EXISTS prompts_ad AFTER DELETE ON prompts BEGIN
   VALUES ('delete', old.rowid, old.title, old.body, old.tags, old.role, old.goal);
 END;
 `);
+// Migración ligera: categoría de taxonomía (benchmark alpackaai — docs/reference/PROMPT-LIBRARY-BENCHMARK.md)
+{
+  const cols = db.prepare(`PRAGMA table_info(prompts)`).all() as { name: string }[];
+  if (!cols.some((c) => c.name === 'category')) {
+    db.exec(`ALTER TABLE prompts ADD COLUMN category TEXT DEFAULT ''`);
+  }
+}
 
-const FIELDS = ['title', 'type', 'role', 'goal', 'context', 'criteria', 'format', 'tone', 'body', 'tags'] as const;
+const FIELDS = ['title', 'type', 'category', 'role', 'goal', 'context', 'criteria', 'format', 'tone', 'body', 'tags'] as const;
 type PromptRow = Record<string, unknown> & { id: string };
 
 function json(res: ServerResponse, status: number, data: unknown): void {
@@ -112,6 +119,7 @@ async function handler(req: IncomingMessage, res: ServerResponse): Promise<void>
 
   if (req.method === 'GET' && path === '/api/prompts') {
     const q = url.searchParams.get('q')?.trim() ?? '';
+    const category = url.searchParams.get('category')?.trim() ?? '';
     let rows: PromptRow[];
     if (q) {
       const fts = toFtsQuery(q);
@@ -125,6 +133,12 @@ async function handler(req: IncomingMessage, res: ServerResponse): Promise<void>
       } else {
         rows = [];
       }
+    } else if (category) {
+      rows = db
+        .prepare(
+          `SELECT * FROM prompts WHERE category = ? ORDER BY favorite DESC, updated_at DESC LIMIT 200`,
+        )
+        .all(category) as PromptRow[];
     } else {
       rows = db
         .prepare(
@@ -132,7 +146,12 @@ async function handler(req: IncomingMessage, res: ServerResponse): Promise<void>
         )
         .all() as PromptRow[];
     }
-    json(res, 200, { prompts: rows });
+    const categories = db
+      .prepare(
+        `SELECT category, COUNT(*) as count FROM prompts WHERE category != '' GROUP BY category ORDER BY count DESC`,
+      )
+      .all() as { category: string; count: number }[];
+    json(res, 200, { prompts: rows, categories });
     return;
   }
 
