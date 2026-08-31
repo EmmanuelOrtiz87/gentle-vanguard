@@ -73,6 +73,29 @@ trazas reales.
 - Build verification: `cd apps/web-dashboard && npm run build` (debe salir 0 sin errores TS).
 - i18n en/pt/es, 8 alert rules en `config/dashboard-alerts.json`.
 
+## command-center
+
+Panel de control **standalone** en `apps/command-center/` (Node puro, cero deps, cero build) —
+ciclo de vida on-demand de las apps construidas: dashboard, analytics, cms, academy, prompts.
+Docs completas: `apps/command-center/README.md`.
+
+| Acción                | Comando / URL                                    |
+| --------------------- | ------------------------------------------------ |
+| UI                    | `http://127.0.0.1:8090/`                         |
+| Start (abre browser)  | `npm run cc:start`                               |
+| CLI                   | `npx tsx src/cli/gv.ts cc start\|stop\|status`   |
+| Automático            | Lazy step `command-center` del autostart (`--no-browser`) |
+
+- API: `GET /api/apps`, `POST /api/apps/:id/start|stop` — idempotentes; `partial` = arranca solo
+  lo que falta. Bind loopback-only (ADR-0017), rechaza Host ajeno, UI con `no-store` + error
+  surfacing global.
+- Estado: pidfile propio → legacy pidfiles → port probe; stop con fallback por dueño de puerto y
+  **watchdogs del dashboard se matan primero**. Pidfile: `.runtime/command-center.pid` (env
+  `CC_PID_FILE` para tests). Puerto 8090 (env `CC_PORT`, persistido en
+  `.runtime/command-center-ports.json`).
+- Persiste entre sesiones (no lo toca el close); clase daemon `command-center` en `DAEMON_CLASSES`
+  (protegido del reaper). Smoke: `node tests/smoke/command-center-smoke.mjs`.
+
 ### Modelo operativo
 
 Gentle-Vanguard es **LOCAL-FIRST / SERVER-OPTIONAL** (ADR-0017). CLI/orquestación, SQLite/Nexus,
