@@ -585,7 +585,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
       const parts = buildCmd.split(' ').filter(Boolean);
       const cmd = parts[0];
       const args = parts.slice(1);
-      const r = runSync(cmd, args, { cwd: serverDir, stdio: 'inherit' as any, timeout: 120000 });
+      const r = runSync(cmd, args, { cwd: serverDir, stdio: 'inherit', timeout: 120000 });
       if (r.status !== 0) throw new Error(r.error?.message || r.stderr || 'build failed');
     } catch {
       err(`build failed for ${name}`);

@@ -11,20 +11,19 @@ import { join } from 'path';
 const ROOT = process.cwd();
 const OPENCODE_PATH = join(ROOT, 'opencode.json');
 
+interface AgentConfig {
+  description: string;
+  mode: string;
+  model?: string;
+  provider?: string;
+  litellm_settings?: Record<string, unknown>;
+  steps?: number;
+  [key: string]: unknown;
+}
+
 interface OpencodeConfig {
-  agent: Record<
-    string,
-    {
-      description: string;
-      mode: string;
-      model?: string;
-      provider?: string;
-      litellm_settings?: Record<string, any>;
-      steps?: number;
-      [key: string]: any;
-    }
-  >;
-  [key: string]: any;
+  agent: Record<string, AgentConfig>;
+  [key: string]: unknown;
 }
 
 function main(): void {
@@ -50,7 +49,7 @@ function main(): void {
         if (!agentConfig.litellm_settings) {
           agentConfig.litellm_settings = {};
         }
-        agentConfig.litellm_settings.drop_params = true;
+        (agentConfig.litellm_settings as Record<string, boolean>).drop_params = true;
 
         updatedCount++;
       }
