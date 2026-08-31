@@ -338,7 +338,12 @@ export function createCommandCenterServer(controller = createAppsController()) {
       return json(res, result.status, result.body);
     }
     if (url.pathname === '/' || url.pathname === '/index.html') {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      // no-store: the UI is a single evolving file — a stale cached copy would
+      // silently break the page (apps never render, no visible error).
+      res.writeHead(200, {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'no-store',
+      });
       res.end(readFileSync(new URL('./public/index.html', import.meta.url), 'utf8'));
       return;
     }

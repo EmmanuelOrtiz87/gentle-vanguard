@@ -217,6 +217,17 @@
       <div class="meta">Actualización automática cada 5 segundos · solo loopback</div>
     </main>
     <script>
+      // Surface ANY unexpected error in the UI — a silent failure here would
+      // leave the grid stuck at "Cargando aplicaciones…" with no visible cause.
+      window.onerror = function (msg, src, line) {
+        try {
+          show(String(msg) + ' (' + String(src).split('/').pop() + ':' + line + ')');
+        } catch {}
+        return false;
+      };
+      window.addEventListener('unhandledrejection', function (ev) {
+        show(ev.reason && ev.reason.message ? ev.reason.message : String(ev.reason));
+      });
       const labels = { running: 'En ejecución', stopped: 'Detenida', partial: 'Parcial' };
       let busy = '';
       const esc = (s) =>
