@@ -22,11 +22,15 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
   fallback para cada patrón.
 - ✅ **F2.8 CLI `gv` potentiation**: `src/cli/gv.ts` v8.0 → 27 comandos
   (+`loop-guard`, +`metrics`, +`web`). `gv loop-guard`, `gv metrics`, `gv web search|scrape|health`
-  operativos y verificados. Watchtower 102/104 PASS, tsc 0, eslint 0, metrics-verify PASS.
-- ✅ **PR #174 creado** (`feat/stack-potentiation-loop-guard-metrics` → `main`, commit `02eaea3a`)
-  con bypass admin (ruleset 21824110). PR #173 ya MERGED a `main` (`965d7c41`).
-- 🔲 **Pendiente F2.8/F4.1 wiring**: cablear guard en watchtower component + `adaptive-steps.ts`
-  resume flow (soft WARN) + pre-commit hook para `metrics-verify`.
+  operativos y verificados. Watchtower 102/104 → 106/108 PASS tras wiring, tsc 0, eslint 0,
+  metrics-verify PASS. `gv web health` fix (runSync stdout) + `gv web search` nativo Jina+DDG+Bing.
+- ✅ **PR #174 MERGED** (`feat/stack-potentiation-loop-guard-metrics` → `main`, `388964d7`) y **PR
+  #175 MERGED** (`fix/gv-web-watchtower-wiring` → `main`, `c5561bad`) con bypass admin (ruleset
+  21824110). PR #173 ya MERGED (`965d7c41`). Commit Lint ahora PASS (body <100 chars).
+- ✅ **Wiring completado (F2.8/F4.1)**: `checkLoopGuard` cableado en `checks-infra.ts` +
+  `maintenance-watchtower.ts` (25 comps, 108 checks, 106 PASS, `loop-guard: OK`) +
+  `adaptive-steps.ts` resume loop detection (`.runtime/adaptive-steps-resume.log`, WARN +
+  `loopGuard` JSON) + `.lefthook.yml` `metrics-check` pre-commit para `config/stack-metrics.json`.
 
 ### Ejecutado — Sesión 6 (2026-08-31, F2.3 batch 1: 22 módulos library → logger)
 
