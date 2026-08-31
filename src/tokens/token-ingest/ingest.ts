@@ -24,6 +24,7 @@ import {
   writeCompressionSavings,
   updateStackSession,
   writeObservabilityReport,
+  writeForwardAliases,
   log,
   RUNTIME_DIR,
   NEXUS_DB,
@@ -97,8 +98,42 @@ export function ingestOnce(): {
     );
   }
 
+  // Forward-write del session-id bridge: alias de los ids ingeridos con
+  // actividad reciente hacia la sesión activa del repo (best-effort).
+  const recordForward = (opencodeTxns: TransactionUsage[]): void => {
+    const lastActivity = new Map<
+      string,
+      { aliasId: string; lastActivityMs: number; source: string }
+    >();
+    for (const src of extraSources) {
+      for (const s of src.data.sessions) {
+        const cur = lastActivity.get(s.sessionId);
+        if (!cur || s.timeUpdated > cur.lastActivityMs) {
+          lastActivity.set(s.sessionId, {
+            aliasId: s.sessionId,
+            lastActivityMs: s.timeUpdated,
+            source: src.name.toLowerCase(),
+          });
+        }
+      }
+    }
+    for (const t of opencodeTxns) {
+      const cur = lastActivity.get(t.sessionId);
+      if (!cur || t.timeCreated > cur.lastActivityMs) {
+        lastActivity.set(t.sessionId, {
+          aliasId: t.sessionId,
+          lastActivityMs: t.timeCreated,
+          source: 'opencode',
+        });
+      }
+    }
+    const aliased = writeForwardAliases([...lastActivity.values()]);
+    if (aliased > 0) log(`Session-id bridge: ${aliased} alias forward registrados`);
+  };
+
   if (rows.length === 0) {
     log(`Sin sesiones nuevas desde time_updated=${since}`);
+    recordForward([]);
     return { source: dbPath, sessions: 0, inserted: 0, updated: 0 };
   }
   const { inserted, updated } = writeToNexus(rows);
@@ -113,6 +148,7 @@ export function ingestOnce(): {
   if (liveDeltas.size > 0) {
     log(`Live-metrics actualizadas para ${liveDeltas.size} sesión(es) con deltas reales`);
   }
+  recordForward(txns);
   const savings = txns.map((t) => ({
     sessionId: t.sessionId,
     messageId: t.messageId,

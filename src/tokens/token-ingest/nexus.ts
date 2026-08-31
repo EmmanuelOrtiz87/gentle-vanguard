@@ -4,6 +4,7 @@ import { TokenRepo } from '../../../apps/web-dashboard/server/database/repositor
 import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync, statSync } from 'fs';
 import { join, resolve } from 'path';
 import { SessionUsage, TransactionUsage } from './readers.js';
+import { recordForwardAliases } from '../../session/session-id-bridge.js';
 import { log as createLogger } from '../../utils/logger.js';
 const logger = createLogger('TOKENS-TOKEN-INGEST-NEXUS');
 
@@ -341,6 +342,28 @@ export function statMtime(p: string): number {
   try {
     return statSync(p).mtimeMs;
   } catch {
+    return 0;
+  }
+}
+
+/**
+ * Forward-write del session-id bridge: si hay sesión activa del repo
+ * (.session/session-current.json), registra alias (session_id ↔ ses_*) para
+ * los alias-ids con actividad reciente. Best-effort, no rompe la ingesta.
+ */
+export function writeForwardAliases(
+  activity: Array<{ aliasId: string; lastActivityMs: number; source: string }>,
+): number {
+  if (!existsSync(NEXUS_DB) || activity.length === 0) return 0;
+  try {
+    const db = new Database(NEXUS_DB);
+    try {
+      return recordForwardAliases(db, activity);
+    } finally {
+      db.close();
+    }
+  } catch (e) {
+    log(`Forward alias write error: ${e instanceof Error ? e.message : String(e)}`);
     return 0;
   }
 }
