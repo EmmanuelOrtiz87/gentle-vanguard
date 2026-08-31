@@ -610,13 +610,14 @@ export async function phaseCleanup(
   const results: PhaseResult[] = [];
   log('=== FASE 5: CLEANUP ===');
 
-  // 5.1 Kill child processes (CodeGraph MCP, Dashboard WS, Timeout Daemon).
+  // 5.1 Kill child processes (CodeGraph MCP and Timeout Daemon).
   // When running at SESSION STARTUP (reason 'autostart-close' / 'startup-cleanup')
   // this MUST be skipped: the daemons were just started by the autostart pipeline
   // and killing them would defeat the purpose of the session (see close reports
   // with reason=autostart-close that killed the freshly-booted codegraph daemon).
   if (!skipDaemonKill) {
-    // 5.1 Kill child processes (CodeGraph MCP, Dashboard WS, Timeout Daemon)
+    // 5.1 Kill child processes (CodeGraph MCP and Timeout Daemon). Dashboard WS
+    // persists between sessions and is managed by the Apps Control Panel.
     const DAEMON_WAIT_MS = 10000; // give lazy daemons time to finish booting
     for (const target of KILL_TARGETS) {
       const phase = `kill-${target.name.toLowerCase().replace(/\s+/g, '-')}`;

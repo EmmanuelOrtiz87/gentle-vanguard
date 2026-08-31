@@ -9,7 +9,7 @@ export interface KillTarget {
 
 export const KILL_TARGETS: KillTarget[] = [
   { name: 'CodeGraph MCP', matcher: 'codegraph.*mcp', required: true },
-  { name: 'Dashboard WS', matcher: 'websocket-server', required: false },
+  // Dashboard WS persists between sessions; its Apps Control Panel owns lifecycle.
   { name: 'Timeout Daemon', matcher: 'timeout-monitor.*daemon', required: true },
   // Optional daemon: the token-ingest --watch loop survives the close today and
   // keeps appending to .runtime/token-ingest.log. Not required → SKIP if it was

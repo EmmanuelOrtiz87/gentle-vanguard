@@ -99,7 +99,7 @@
       {
         "id": "engram-policy",
         "enabled": true,
-        "script": "src/engram-policy.ts",
+        "script": "src/knowledge/engram-policy.ts",
         "args": "",
         "required": true,
         "description": "Verify Engram is installed and running (TS)"
@@ -115,7 +115,7 @@
       {
         "id": "engram-integrity",
         "enabled": true,
-        "script": "src/engram-integrity-check.ts",
+        "script": "src/knowledge/engram-integrity-check.ts",
         "args": "-Mode status -Quiet",
         "required": false,
         "description": "Verify Engram integrity (SHA256 + SQLite + chunks) with auto-sync"

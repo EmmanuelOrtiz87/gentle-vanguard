@@ -35,6 +35,7 @@ const MultiRepoView = lazy(() => import('./components/MultiRepoView'));
 const ContentOpsPanel = lazy(() => import('./components/ContentOpsPanel'));
 const AuditPanel = lazy(() => import('./components/AuditPanel'));
 const AdminPanel = lazy(() => import('./components/AdminPanel'));
+const AppsControlPanel = lazy(() => import('./components/AppsControlPanel'));
 
 const PageLoader = () => (
   <div className="flex items-center justify-center h-screen">
@@ -47,14 +48,20 @@ function Navigation() {
 
   // Grouped navigation rows: operations first, then build & govern.
   const navRows = [
-    { group: 'Operate', links: [
+    {
+      group: 'Operate',
+      links: [
         { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
         { to: '/tracing', icon: Activity, label: 'Tracing' },
         { to: '/timeline', icon: History, label: 'Timeline' },
         { to: '/tasks', icon: ListTodo, label: 'Tasks' },
         { to: '/agents', icon: Bot, label: 'Agents' },
-    ]},
-    { group: 'Build & govern', links: [
+        { to: '/apps', icon: LayoutDashboard, label: 'Apps' },
+      ],
+    },
+    {
+      group: 'Build & govern',
+      links: [
         { to: '/marketplace', icon: Store, label: 'Marketplace' },
         { to: '/content-operations', icon: Workflow, label: 'Content Ops' },
         { to: '/audit', icon: ShieldCheck, label: 'Audit' },
@@ -63,14 +70,20 @@ function Navigation() {
         { to: '/mcp', icon: Cpu, label: 'MCP' },
         { to: '/knowledge', icon: Library, label: 'Knowledge' },
         { to: '/multi-repo', icon: Globe, label: 'Multi-repo' },
-    ]},
+      ],
+    },
   ];
 
   return (
     <nav className="gv-topbar">
       <div className="gv-topbar-inner">
         <div className="gv-brand-row">
-          <img src="/logo-gv.svg" alt="Gentle-Vanguard" className="gv-brand-logo" aria-hidden="true" />
+          <img
+            src="/logo-gv.svg"
+            alt="Gentle-Vanguard"
+            className="gv-brand-logo"
+            aria-hidden="true"
+          />
           <div className="gv-brand-copy">
             <span className="gv-brand-name">Gentle Vanguard</span>
             <span className="gv-brand-product">Stack operations</span>
@@ -104,22 +117,24 @@ function Navigation() {
               </div>
             ))}
           </div>
-        {menuOpen && (
-          <div className="gv-mobile-nav lg:hidden">
-            {navRows.flatMap((row) => row.links).map((l) => (
-              <NavLink
-                key={l.to}
-                to={l.to}
-                onClick={() => setMenuOpen(false)}
-                end={l.to === '/'}
-                className={({ isActive }) => `gv-nav-link ${isActive ? 'is-active' : ''}`}
-              >
-                <l.icon className="w-4 h-4" />
-                {l.label}
-              </NavLink>
-            ))}
-          </div>
-        )}
+          {menuOpen && (
+            <div className="gv-mobile-nav lg:hidden">
+              {navRows
+                .flatMap((row) => row.links)
+                .map((l) => (
+                  <NavLink
+                    key={l.to}
+                    to={l.to}
+                    onClick={() => setMenuOpen(false)}
+                    end={l.to === '/'}
+                    className={({ isActive }) => `gv-nav-link ${isActive ? 'is-active' : ''}`}
+                  >
+                    <l.icon className="w-4 h-4" />
+                    {l.label}
+                  </NavLink>
+                ))}
+            </div>
+          )}
         </div>
       </div>
     </nav>
@@ -253,6 +268,7 @@ function App() {
                     <Route path="/mcp" element={<MCPServers />} />
                     <Route path="/knowledge" element={<KnowledgePanel />} />
                     <Route path="/multi-repo" element={<MultiRepoView />} />
+                    <Route path="/apps" element={<AppsControlPanel />} />
                   </Routes>
                 </Suspense>
               </div>
