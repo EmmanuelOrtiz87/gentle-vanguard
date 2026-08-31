@@ -106,3 +106,22 @@ export function isCacheHitRateBelow(threshold = 0.5): boolean {
   if (total === 0) return false;
   return latest.hits / total < threshold;
 }
+
+/** Lifetime token savings recorded by cached() hits (token_savings, category response-cache). */
+export function getLifetimeSavings(): { hits: number; tokensSaved: number } {
+  const db = getDb();
+  if (!db) return { hits: 0, tokensSaved: 0 };
+  try {
+    const tenantId = resolveCacheTenantId();
+    const row = db
+      .getDb()
+      .prepare(
+        `SELECT COUNT(*) as hits, COALESCE(SUM(saved_tokens), 0) as tokens_saved
+         FROM token_savings WHERE tenant_id = ? AND category = 'response-cache'`,
+      )
+      .get(tenantId) as { hits: number; tokens_saved: number } | undefined;
+    return { hits: row?.hits ?? 0, tokensSaved: row?.tokens_saved ?? 0 };
+  } catch {
+    return { hits: 0, tokensSaved: 0 };
+  }
+}

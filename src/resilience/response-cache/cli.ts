@@ -1,6 +1,11 @@
 import { ResponseCache } from './cache';
 import { DEFAULT_CONFIG, sqliteEvictLru } from './sqlite';
-import { getCacheTelemetry, isCacheHitRateBelow, recordCacheTelemetry } from './telemetry';
+import {
+  getCacheTelemetry,
+  getLifetimeSavings,
+  isCacheHitRateBelow,
+  recordCacheTelemetry,
+} from './telemetry';
 
 // ─── CLI Interface ──────────────────────────────────────────────────────────────
 
@@ -43,6 +48,7 @@ export function runCLI(): void {
   switch (command) {
     case 'stats': {
       const stats = cache.getStats();
+      const savings = getLifetimeSavings();
       console.log('\n=== Response Cache Statistics ===\n');
       console.log(`Storage:         ${useLegacy ? 'JSON files' : 'SQLite'}`);
       console.log(`Cache Hits:      ${stats.hits}`);
@@ -51,6 +57,10 @@ export function runCLI(): void {
       console.log(`Total Savings:   ${stats.totalSavings} tokens`);
       console.log(`Active Entries:  ${stats.entries}`);
       console.log(`Expired Removed: ${stats.expired}`);
+      console.log(
+        `cached() Savings (token_savings): ${savings.tokensSaved} tokens across ${savings.hits} recorded hits`,
+      );
+      console.log(`Cache Bypassed:  ${process.env.GV_CACHE_DISABLED === '1' ? 'YES (GV_CACHE_DISABLED=1)' : 'no'}`);
       console.log('\nExpected Impact: 33-41% latency reduction');
       console.log('                 25-35% token cost reduction\n');
       break;

@@ -33,6 +33,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { runSync } from '../core/run-command.js';
 import { createWebCrawler, type SearchResult } from '../web/web-crawler.js';
 import { gradeRetrieval } from '../retrieval/retrieval-grader.js';
+import { cached } from '../resilience/response-cache/cached.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -238,41 +239,58 @@ async function researchQuestion(
   confidence: number;
   sources: ResearchSource[];
 }> {
-  const crawler = createWebCrawler();
-  const search = await crawler.search(question, opts.limit);
-  const texts = search.map((r) => `${r.title}\n${r.description ?? ''}`);
-  const graded = gradeRetrieval(question, texts, { threshold: opts.threshold });
+  // Response cache: same (question, opts) recurs across sessions/re-runs; the
+  // search + BM25 grade pipeline is deterministic and network-bound, so the
+  // 24h exact cache skips the search (and deep scrapes) entirely. Note: cached
+  // sources keep their original fetchedAt — that IS the fetch time of evidence.
+  const { value } = await cached(
+    {
+      context: 'sdd-research',
+      input: JSON.stringify({ question, ...opts }),
+    },
+    async () => {
+      const crawler = createWebCrawler();
+      const search = await crawler.search(question, opts.limit);
+      const texts = search.map((r) => `${r.title}\n${r.description ?? ''}`);
+      const graded = gradeRetrieval(question, texts, { threshold: opts.threshold });
 
-  let sources: ResearchSource[] = search.map((r, i) =>
-    toResearchSource(r, graded.chunks[i]?.score ?? 0, graded.chunks[i]?.relevant ?? false),
-  );
+      let sources: ResearchSource[] = search.map((r, i) =>
+        toResearchSource(r, graded.chunks[i]?.score ?? 0, graded.chunks[i]?.relevant ?? false),
+      );
 
-  if (opts.deep && search.length > 0) {
-    const deepTargets = sources
-      .slice()
-      .sort((a, b) => b.score - a.score)
-      .slice(0, opts.deepLimit);
-    for (const target of deepTargets) {
-      try {
-        const scraped = await crawler.scrape(target.url);
-        const deepGraded = gradeRetrieval(question, [(scraped.markdown ?? '').slice(0, 20_000)], {
-          threshold: opts.threshold,
-        });
-        target.deepScore = round2(deepGraded.chunks[0]?.score ?? 0);
-      } catch {
-        // deep scrape is best-effort — snippet score stands
+      if (opts.deep && search.length > 0) {
+        const deepTargets = sources
+          .slice()
+          .sort((a, b) => b.score - a.score)
+          .slice(0, opts.deepLimit);
+        for (const target of deepTargets) {
+          try {
+            const scraped = await crawler.scrape(target.url);
+            const deepGraded = gradeRetrieval(
+              question,
+              [(scraped.markdown ?? '').slice(0, 20_000)],
+              { threshold: opts.threshold },
+            );
+            target.deepScore = round2(deepGraded.chunks[0]?.score ?? 0);
+          } catch {
+            // deep scrape is best-effort — snippet score stands
+          }
+        }
+        sources = sources.sort((a, b) => (b.deepScore ?? b.score) - (a.deepScore ?? a.score));
+      } else {
+        sources = sources.sort((a, b) => b.score - a.score);
       }
-    }
-    sources = sources.sort((a, b) => (b.deepScore ?? b.score) - (a.deepScore ?? a.score));
-  } else {
-    sources = sources.sort((a, b) => b.score - a.score);
-  }
 
-  return {
-    verdict: graded.verdict === 'relevant' ? 'relevant' : 'corrective',
-    confidence: graded.averageScore ?? 0,
-    sources,
-  };
+      return {
+        verdict: (graded.verdict === 'relevant' ? 'relevant' : 'corrective') as
+          | 'relevant'
+          | 'corrective',
+        confidence: graded.averageScore ?? 0,
+        sources,
+      };
+    },
+  );
+  return value;
 }
 
 // ─── Persistence ──────────────────────────────────────────────────────────────
