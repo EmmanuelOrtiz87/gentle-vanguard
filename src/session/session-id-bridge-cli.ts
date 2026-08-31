@@ -13,6 +13,7 @@ import {
   NEXUS_DB,
   aliasStats,
   backfillAliases,
+  backfillTraces,
   ensureAliasTable,
 } from './session-id-bridge.js';
 
@@ -20,9 +21,9 @@ const args = process.argv.slice(2);
 const has = (f: string): boolean => args.includes(f);
 
 function main(): void {
-  if (!has('--backfill') && !has('--stats')) {
+  if (!has('--backfill') && !has('--backfill-traces') && !has('--stats')) {
     console.log(
-      'Uso: session-id-bridge-cli --backfill [--apply] [--tolerance-min N] | --stats',
+      'Uso: session-id-bridge-cli --backfill [--apply] [--tolerance-min N] | --backfill-traces [--apply] | --stats',
     );
     process.exit(1);
   }
@@ -49,6 +50,28 @@ function main(): void {
       );
       return;
     }
+    // --backfill-traces
+    if (has('--backfill-traces')) {
+      const apply = has('--apply');
+      const res = backfillTraces(db, { apply });
+      const mode = apply ? 'APPLY' : 'DRY-RUN';
+      console.log(`════════ TRACE SESSION BACKFILL — ${mode} ════════`);
+      console.log(
+        `traces con session_id NULL: ${res.totalNullTraces} | matched: ${res.matched.length} | aplicados: ${res.applied}`,
+      );
+      console.log(
+        `omitidos: ambiguos=${res.skippedAmbiguous} sin-ventana=${res.skippedNoWindow}`,
+      );
+      if (res.matched.length > 0) {
+        console.log('\nMuestra (primeros 15):');
+        for (const m of res.matched.slice(0, 15)) {
+          console.log(`  ${m.spanId.slice(0, 32).padEnd(32)} → ${m.sessionId}`);
+        }
+        if (!apply) console.log('\n(re-ejecutar con --apply para persistir)');
+      }
+      return;
+    }
+
     // --backfill
     const tolIdx = args.indexOf('--tolerance-min');
     const toleranceMs = tolIdx >= 0 ? Number(args[tolIdx + 1] ?? 2) * 60_000 : 2 * 60_000;

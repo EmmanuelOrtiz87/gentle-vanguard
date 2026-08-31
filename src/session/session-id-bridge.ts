@@ -257,6 +257,111 @@ export function backfillAliases(
   };
 }
 
+/* ── Backfill de traces.session_id (ventana inter-creación) ── */
+
+export interface TraceBackfillOptions {
+  /** apply (true) or dry-run (false, default) */
+  apply?: boolean;
+  /** tolerance in ms around session created_at for window edges (default 2 min) */
+  toleranceMs?: number;
+  /** windows shorter than this (ms) are treated as ambiguous (default 60s) */
+  minWindowMs?: number;
+}
+
+export interface TraceBackfillResult {
+  totalNullTraces: number;
+  matched: Array<{ spanId: string; sessionId: string; startTimeMs: number; windowMs: number }>;
+  applied: number;
+  skippedAmbiguous: number;
+  skippedNoWindow: number;
+}
+
+/**
+ * Backfill de traces.session_id NULL usando la misma heurística de ventana
+ * inter-creación que backfillAliases: cada trace (por start_time, epoch ms)
+ * pertenece a la última sesión creada <= start_time (+tolerancia). Nunca se
+ * adivina en ambigüedad (ventanas indestructibles / gaps < minWindowMs).
+ */
+export function backfillTraces(
+  db: Database.Database,
+  opts: TraceBackfillOptions = {},
+): TraceBackfillResult {
+  const toleranceMs = opts.toleranceMs ?? 2 * 60_000;
+  const minWindowMs = opts.minWindowMs ?? 60_000;
+  const now = Date.now();
+
+  const sessions = (
+    db.prepare(`SELECT id, created_at FROM sessions ORDER BY created_at ASC`).all() as Array<{
+      id: string;
+      created_at: string | null;
+    }>
+  )
+    .map((s) => ({ id: s.id, at: s.created_at ? Date.parse(s.created_at) : NaN }))
+    .filter((s) => Number.isFinite(s.at));
+
+  const traces = db
+    .prepare(
+      `SELECT span_id, start_time FROM traces WHERE session_id IS NULL OR session_id = ''`,
+    )
+    .all() as Array<{ span_id: string; start_time: number | string }>;
+
+  const result: TraceBackfillResult = {
+    totalNullTraces: traces.length,
+    matched: [],
+    applied: 0,
+    skippedAmbiguous: 0,
+    skippedNoWindow: 0,
+  };
+
+  const update = opts.apply
+    ? db.prepare(`UPDATE traces SET session_id = ? WHERE span_id = ? AND (session_id IS NULL OR session_id = '')`)
+    : null;
+
+  const applyTx = db.transaction(() => {
+    for (const m of result.matched) {
+      if (update) result.applied += update.run(m.sessionId, m.spanId).changes;
+    }
+  });
+
+  for (const t of traces) {
+    const ts = typeof t.start_time === 'number' ? t.start_time : Date.parse(t.start_time);
+    if (!Number.isFinite(ts)) {
+      result.skippedAmbiguous++;
+      continue;
+    }
+    let idx = -1;
+    for (let i = 0; i < sessions.length; i++) {
+      if (sessions[i].at <= ts + toleranceMs) idx = i;
+      else break;
+    }
+    if (idx < 0) {
+      result.skippedNoWindow++;
+      continue;
+    }
+    const cand = sessions[idx];
+    const prev = idx > 0 ? sessions[idx - 1] : null;
+    const next = idx + 1 < sessions.length ? sessions[idx + 1] : null;
+    if (ts < cand.at && prev && cand.at - prev.at < minWindowMs) {
+      result.skippedAmbiguous++;
+      continue;
+    }
+    if (next && next.at - cand.at < minWindowMs) {
+      result.skippedAmbiguous++;
+      continue;
+    }
+    const windowEnd = next ? next.at : Math.max(now, ts);
+    const windowMs = windowEnd - cand.at;
+    if (windowMs < minWindowMs) {
+      result.skippedAmbiguous++;
+      continue;
+    }
+    result.matched.push({ spanId: t.span_id, sessionId: cand.id, startTimeMs: ts, windowMs });
+  }
+
+  if (opts.apply && result.matched.length > 0) applyTx();
+  return result;
+}
+
 /** Lee la sesión activa del repo desde .session/session-current.json (marker del autostart). */
 export function currentRepoSessionId(repoRoot: string = ROOT): string | null {
   try {
