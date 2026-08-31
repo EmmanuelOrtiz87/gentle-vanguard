@@ -34,7 +34,15 @@
  *   acknowledge(`rdd:${id}`, token); // exact → burns; wrong/replay → typed refusal
  */
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync, rmSync, renameSync } from 'fs';
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  writeFileSync,
+  rmSync,
+  renameSync,
+  readdirSync,
+} from 'fs';
 import { join, resolve } from 'path';
 import { randomBytes, timingSafeEqual } from 'crypto';
 import { canonicalPath } from './path-identity.js';
@@ -306,6 +314,118 @@ export function nextTransition(workflowId: string): ContinuationEnvelope | null 
     }
   }
   return null;
+}
+
+/**
+ * All active continuations, newest first — the "what do I run now?" surface
+ * for the dashboard and operators with more than one live transaction.
+ * Corrupt records are skipped, never thrown.
+ */
+export function listActiveContinuations(): ContinuationEnvelope[] {
+  const index = loadIndex();
+  const out: ContinuationEnvelope[] = [];
+  for (const key of Object.keys(index)) {
+    const file = join(contDir(), `${key.replace(/[^a-zA-Z0-9_-]+/g, '_')}.json`);
+    if (!existsSync(file)) continue;
+    try {
+      const env: ContinuationEnvelope = JSON.parse(readFileSync(file, 'utf-8'));
+      if (env.status === 'active') out.push(env);
+    } catch {
+      /* skip corrupt record */
+    }
+  }
+  return out.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+}
+
+/**
+ * Retention for continuation records (lesson from gentle-ai #1656: lineages
+ * accumulate with no retention policy):
+ *   - RESOLVED envelopes older than the window are deleted.
+ *   - ACTIVE envelopes older than the window are closed honestly (status
+ *     flips to resolved) — a transaction nobody re-entered in N days is dead,
+ *     not pending — and kept for audit until the next pass.
+ *   - Pending acks older than the window are burned (removed): an
+ *     acknowledgement nobody delivered in N days will never arrive.
+ * `dir` is injectable for unit tests via setContinuationBaseDir.
+ */
+export interface ContinuationPruneResult {
+  prunedResolved: number;
+  closedStaleActive: number;
+  burnedStaleAcks: number;
+  retentionDays: number;
+}
+
+export function pruneContinuations(retentionDays = 30): ContinuationPruneResult {
+  const result: ContinuationPruneResult = {
+    prunedResolved: 0,
+    closedStaleActive: 0,
+    burnedStaleAcks: 0,
+    retentionDays,
+  };
+  const cutoff = Date.now() - retentionDays * 24 * 3_600_000;
+  if (existsSync(contDir())) {
+    for (const f of readdirSync(contDir())) {
+      if (!f.endsWith('.json') || f === 'index.json') continue;
+      const p = join(contDir(), f);
+      try {
+        const env: ContinuationEnvelope = JSON.parse(readFileSync(p, 'utf-8'));
+        const created = new Date(env.createdAt).getTime();
+        if (isNaN(created) || created >= cutoff) continue;
+        if (env.status === 'resolved') {
+          rmSync(p, { force: true });
+          result.prunedResolved++;
+        } else if (env.status === 'active') {
+          env.status = 'resolved';
+          atomicWrite(p, JSON.stringify(env, null, 2));
+          result.closedStaleActive++;
+        }
+      } catch {
+        /* unreadable files are never deleted blindly */
+      }
+    }
+  }
+  if (existsSync(ackDir())) {
+    for (const f of readdirSync(ackDir())) {
+      if (!f.endsWith('.json')) continue;
+      const p = join(ackDir(), f);
+      try {
+        const pending: AckPending = JSON.parse(readFileSync(p, 'utf-8'));
+        const created = new Date(pending.createdAt).getTime();
+        if (isNaN(created) || created >= cutoff) continue;
+        rmSync(p, { force: true });
+        result.burnedStaleAcks++;
+      } catch {
+        /* unreadable acks are never deleted blindly */
+      }
+    }
+  }
+  // Rebuild the index from surviving records so it never points at pruned
+  // files (the one durable owner stays consistent with its own index).
+  if (existsSync(contDir())) {
+    const index = loadIndex();
+    const rebuilt: Record<string, string> = {};
+    for (const key of Object.keys(index)) {
+      const file = join(contDir(), `${key.replace(/[^a-zA-Z0-9_-]+/g, '_')}.json`);
+      if (existsSync(file)) rebuilt[key] = index[key];
+    }
+    saveIndex(rebuilt);
+  }
+  return result;
+}
+
+/** All pending acknowledgements, oldest first (dashboard surface). */
+export function listPendingAcks(): AckPending[] {
+  if (!existsSync(ackDir())) return [];
+  const out: AckPending[] = [];
+  for (const f of readdirSync(ackDir())) {
+    if (!f.endsWith('.json')) continue;
+    try {
+      out.push(JSON.parse(readFileSync(join(ackDir(), f), 'utf-8')));
+    } catch {
+      /* skip corrupt record */
+    }
+  }
+  return out.sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
 }
 
 // ─── Ack-before-burn (gentle-vanguard.ack/v1) ─────────────────────────────────

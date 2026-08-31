@@ -23,6 +23,7 @@ import {
   stageAck,
   getPendingAck,
   acknowledge,
+  pruneContinuations,
   type AckResult,
 } from '../core/continuation.js';
 import { refusal, describe as describeRefusal, type TypedRefusal } from '../core/typed-refusal.js';
@@ -490,6 +491,16 @@ export async function runWorkflow(
       `Prune: ${res.pruned.length} eliminado(s), ${res.kept.length} retenido(s) (>${days}d)${res.pruned.length > 0 ? ` — ${res.pruned.join(', ')}` : ''}`,
       'SUCCESS',
     );
+    // Continuations and staged acks share the retention window: resolved
+    // records are deleted, stale actives are closed honestly, undelivered
+    // acks burn (a token nobody delivered in N days never arrives).
+    const cont = pruneContinuations(days);
+    if (cont.prunedResolved + cont.closedStaleActive + cont.burnedStaleAcks > 0) {
+      log(
+        `Continuations: ${cont.prunedResolved} pruned, ${cont.closedStaleActive} closed-stale, ${cont.burnedStaleAcks} acks burned (>${days}d)`,
+        'SUCCESS',
+      );
+    }
     return null;
   }
 

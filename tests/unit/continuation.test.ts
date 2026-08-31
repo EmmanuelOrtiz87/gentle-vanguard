@@ -16,7 +16,7 @@
 
 import { test, beforeEach, after } from 'node:test';
 import assert from 'node:assert';
-import { mkdtempSync, rmSync, existsSync, readFileSync } from 'node:fs';
+import { mkdtempSync, rmSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import {
@@ -24,6 +24,9 @@ import {
   getContinuation,
   resolveContinuation,
   nextTransition,
+  listActiveContinuations,
+  listPendingAcks,
+  pruneContinuations,
   stageAck,
   getPendingAck,
   acknowledge,
@@ -192,4 +195,53 @@ test('describe renders the refusal block without paths', () => {
   assert.match(text, /REFUSED \[replay\] ack\.replayed/);
   assert.match(text, /run: npx tsx/);
   assert.ok(!text.match(/[A-Z]:\\\\/), 'no absolute paths in refusal text');
+});
+
+test('listActiveContinuations + listPendingAcks: dashboard surface', () => {
+  recordContinuation({ workflowId: 'w-list', operation: 'op.a', command: 'cmd-a', root: process.cwd() });
+  stageAck('rdd.w-list', 'rev-1');
+  const actives = listActiveContinuations();
+  assert.ok(actives.some((e) => e.binding.workflowId === 'w-list' && e.command === 'cmd-a'));
+  const acks = listPendingAcks();
+  assert.ok(acks.some((a) => a.resource === 'rdd.w-list'));
+});
+
+test('pruneContinuations: resolved deleted, stale actives closed, stale acks burned, index rebuilt', () => {
+  // fresh active + fresh ack — must survive a 30d prune
+  recordContinuation({ workflowId: 'w-fresh', operation: 'op', command: 'cmd-fresh', root: process.cwd() });
+  const freshAck = stageAck('rdd.w-fresh', 'rev-fresh');
+
+  // old resolved → deleted; old active → closed honestly; old ack → burned
+  const old = new Date(Date.now() - 40 * 24 * 3_600_000).toISOString();
+  // Same sanitization recordContinuation applies to `workflowId::operation`
+  const contFile = (workflowId: string, op: string) =>
+    join(dir, 'continuations', `${`${workflowId}::${op}`.replace(/[^a-zA-Z0-9_-]+/g, '_')}.json`);
+
+  const oldResolved = recordContinuation({ workflowId: 'w-old-r', operation: 'op', command: 'cmd-old-r', root: process.cwd() });
+  oldResolved.status = 'resolved';
+  oldResolved.createdAt = old;
+  writeFileSync(contFile('w-old-r', 'op'), JSON.stringify(oldResolved, null, 2), 'utf-8');
+  const oldActive = recordContinuation({ workflowId: 'w-old-a', operation: 'op', command: 'cmd-old-a', root: process.cwd() });
+  oldActive.createdAt = old;
+  writeFileSync(contFile('w-old-a', 'op'), JSON.stringify(oldActive, null, 2), 'utf-8');
+  writeFileSync(
+    join(dir, 'acks', 'rdd.w-old-ack.json'),
+    JSON.stringify({ resource: 'rdd.w-old-ack', token: 'ack-x', revision: 'r', createdAt: old }, null, 2),
+    'utf-8',
+  );
+
+  const res = pruneContinuations(30);
+  assert.equal(res.prunedResolved, 1);
+  assert.equal(res.closedStaleActive, 1);
+  assert.equal(res.burnedStaleAcks, 1);
+
+  // fresh survived
+  assert.ok(listActiveContinuations().some((e) => e.binding.workflowId === 'w-fresh'));
+  assert.ok(getPendingAck('rdd.w-fresh'));
+  assert.equal(getPendingAck('rdd.w-fresh')?.token, freshAck.token);
+
+  // stale active is closed, not deleted
+  const closed = getContinuation({ workflowId: 'w-old-a', operation: 'op' });
+  assert.ok(closed);
+  assert.equal(closed.status, 'resolved');
 });

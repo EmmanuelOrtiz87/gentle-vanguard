@@ -48,6 +48,7 @@ import { ActivityTimeline } from './ActivityTimeline';
 import { SloPanel } from './SloPanel';
 import { DashboardRuntimeHealth } from './DashboardRuntimeHealth';
 import { ProcessHygienePanel } from './ProcessHygienePanel';
+import { ContinuationsPanel } from './ContinuationsPanel';
 import { LoopGuardPanel } from './LoopGuardPanel';
 import { GuardrailsPanel } from './GuardrailsPanel';
 import { AnalyticsWidget } from './AnalyticsWidget';
@@ -312,6 +313,7 @@ function DashboardInner() {
       <main className="gv-dashboard-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <DashboardRuntimeHealth />
         <ProcessHygienePanel />
+        <ContinuationsPanel />
         <LoopGuardPanel />
         <GuardrailsPanel />
         <AnalyticsWidget />
