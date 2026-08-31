@@ -8,10 +8,18 @@
 // This file keeps only the orchestration: autoHeal, report generation, arg
 // parsing, check scheduling, witr tracing and the CLI entry point.
 
-import { readFileSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import Database from 'better-sqlite3';
 import { runNpxTsx } from './run-command';
 import { runHygiene } from './process-hygiene';
+import {
+  sweepStaleSessions,
+  resolveSweepDbPath,
+  DEFAULT_STALE_HOURS,
+  DEFAULT_PROTECT_HOURS,
+  DEFAULT_IDLE_WINDOW_DAYS,
+} from '../session/stale-session-sweeper';
 import { witr, ensureWitrInstalled } from '../web/witr-wrapper';
 import {
   results,
@@ -110,6 +118,49 @@ async function autoHeal() {
       );
       failed++;
     }
+  }
+
+  // Stale session sweep — sessions whose status never transitions to terminal
+  // (the close orchestrator does not update the sessions table) starve the
+  // continuous-eval dataset and the learnable routing table. Idempotent and
+  // gated by staleness heuristics; live sessions (<2h) are never touched.
+  if (!quiet) console.log('  [Heal] Sweeping stale sessions...');
+  try {
+    const sweepDbPath = resolveSweepDbPath();
+    if (existsSync(sweepDbPath)) {
+      const sweepDb = new Database(sweepDbPath);
+      try {
+        const sweep = sweepStaleSessions(sweepDb, {
+          staleHours: DEFAULT_STALE_HOURS,
+          protectHours: DEFAULT_PROTECT_HOURS,
+          idleWindowDays: DEFAULT_IDLE_WINDOW_DAYS,
+          apply: true,
+          dbPath: sweepDbPath,
+          syncContextLog: true,
+          repoRoot: ROOT,
+        });
+        addResult(
+          'gentle-vanguard-db',
+          'autoheal',
+          'PASS',
+          `stale-session sweep: ${sweep.counts.idle} idle / ${sweep.counts.completed} completed / ` +
+            `${sweep.counts.abandoned} abandoned (${sweep.remainingActive} active remaining)`,
+          'ok',
+        );
+        healed++;
+      } finally {
+        sweepDb.close();
+      }
+    }
+  } catch (e: unknown) {
+    addResult(
+      'gentle-vanguard-db',
+      'autoheal',
+      'FAIL',
+      `stale-session sweep failed: ${e instanceof Error ? e.message : String(e)}`,
+      'manual',
+    );
+    failed++;
   }
 
   if (needsRestart.length === 0 && needsStart.length === 0) {
