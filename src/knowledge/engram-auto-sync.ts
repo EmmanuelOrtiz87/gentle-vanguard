@@ -13,7 +13,7 @@
 
 import { existsSync, writeFileSync, mkdirSync, unlinkSync, statSync } from 'fs';
 import { join, resolve } from 'path';
-import { runSyncShell } from '../core/run-command.js';
+import { runNpxTsxSync } from '../core/run-command.js';
 
 interface Args {
   Mode?: 'check' | 'sync' | 'monitor';
@@ -35,7 +35,6 @@ function parseArgs(argv: string[]): Args {
 
 const ROOT = resolve(process.env.GENTLE_VANGUARD_BASE_DIR || process.cwd());
 const integrityScriptTs = join(ROOT, 'src', 'knowledge', 'engram-integrity-check.ts');
-const integrityScript = integrityScriptTs;
 const engramDataDir = join(ROOT, '.engram-data');
 const dbPath = join(engramDataDir, 'engram.db');
 const checksumPath = join(ROOT, '.engram', 'checksums.sha256');
@@ -66,18 +65,14 @@ function getChecksumLastModified(): Date | null {
 }
 
 function runIntegrityScript(mode: string): number {
-  const script = integrityScript;
-  const isTs = script.endsWith('.ts');
-  const cmd = isTs
-    ? `npx tsx "${script}" -Mode ${mode} -Quiet`
-    : `& "${script}" -Mode ${mode} -Quiet`;
-  try {
-    const r = runSyncShell(cmd, { cwd: ROOT, stdio: 'pipe' });
-    return r.status ?? 1;
-  } catch (e: unknown) {
-    const err = e as { status?: number };
-    return err.status ?? 1;
-  }
+  // Array-form spawn via runNpxTsxSync (procesos-ocultos compliant): the old
+  // runSyncShell + `npx tsx` string routed through cmd.exe and made the exit
+  // code path fragile.
+  const r = runNpxTsxSync(integrityScriptTs, ['-Mode', mode, '-Quiet'], {
+    cwd: ROOT,
+    stdio: 'pipe',
+  });
+  return r.status ?? 1;
 }
 
 function checkSynchronization(): boolean {
@@ -97,9 +92,13 @@ function checkSynchronization(): boolean {
   }
 
   if (dbTime && checksumTime && dbTime > checksumTime) {
+    // The engram DB is written live on every mem_save, so it is ALWAYS newer
+    // than the checksums during an active session. Failing here made the sync
+    // useless exactly when it matters — regenerate instead (that is the tool's
+    // purpose), then fall through to verification.
     const diffSec = Math.round((dbTime.getTime() - checksumTime.getTime()) / 1000);
-    log(`DB modified ${diffSec}s after checksums`, 'WARN');
-    return false;
+    log(`DB modified ${diffSec}s after checksums — regenerating`, 'WARN');
+    if (!syncChecksums()) return false;
   }
 
   const exitCode = runIntegrityScript('check');
