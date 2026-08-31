@@ -30,11 +30,12 @@ desde la interfaz ni sincronización remota.
 ## Arquitectura y contenido
 
 Es una SPA vanilla sin build ni dependencias externas. El shell está en `index.html`, la
-presentación en `style.css`, el router/renderizador en `app.js` y los datos en `data/`. El curso
-documenta la arquitectura actual del stack: Obsidian como vault de conocimiento; Engram para memoria
-persistente; Nexus para datos operativos; CodeGraph para el índice incremental de tooling; y
-Graphify para análisis y consultas del grafo. Academy consume contenido publicado/embebido: no
-escribe directamente en esos sistemas.
+presentación en `style.css`, el router/renderizador en `app.js` y los datos en `data/`. La app usa
+`gv-design-system.css` como snapshot local del sistema visual compartido. El curso documenta la
+arquitectura actual del stack: Obsidian como vault de conocimiento; Engram para memoria persistente;
+Nexus para datos operativos; CodeGraph para el índice incremental de tooling; y Graphify para
+análisis y consultas del grafo. Academy consume contenido publicado/embebido: no escribe
+directamente en esos sistemas.
 
 | Archivo             | Responsabilidad                    |
 | ------------------- | ---------------------------------- |
@@ -56,8 +57,12 @@ pnpm preview      # servidor local para previsualización
 
 También se puede ejecutar directamente con `python -m http.server 4173 -d .`.
 
-Abrir `http://127.0.0.1:4173`. Para una revisión rápida también se puede abrir `index.html`
-directamente en el navegador.
+Abrir `http://127.0.0.1:4173`. En operación normal, Academy se inicia bajo demanda desde Command
+Center (`http://127.0.0.1:8090`), no como parte de un arranque total automático. Para una revisión
+rápida también se puede abrir `index.html` directamente en el navegador.
+
+La interfaz tiene español por defecto, selector es/en y tema claro/oscuro. El generador de prompts
+fue extraído de Academy y ahora vive como Prompt Studio standalone.
 
 ## Operación independiente
 

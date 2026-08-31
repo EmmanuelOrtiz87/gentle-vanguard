@@ -294,6 +294,40 @@
         </div>
       </section>
 
+      <section class="fade-in" id="command-center">
+        <div class="section-title">
+          <div class="display-4 mb-2">🎛️</div>
+          <h2>Command Center</h2>
+          <p>
+            Panel standalone en <code>http://127.0.0.1:8090</code> para iniciar, detener y consultar
+            las apps construidas de forma idempotente.
+          </p>
+        </div>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="section-card">
+              <code>npm run cc:start</code>
+              <p class="mb-0 mt-2">Inicia la UI del Command Center.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="section-card">
+              <code>npm run cc:server</code>
+              <p class="mb-0 mt-2">Sirve la API/UI sin abrir el navegador.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="section-card">
+              <code>npx tsx src/cli/gv.ts cc start|stop|status</code>
+              <p class="mb-0 mt-2">Controla el ciclo de vida desde la CLI.</p>
+            </div>
+          </div>
+        </div>
+        <p class="text-muted mt-3 mb-0">
+          Las apps se ejecutan on-demand y permanecen activas entre sesiones si están sanas.
+        </p>
+      </section>
+
       <section class="fade-in" id="cmd-session">
         <div class="section-title">
           <div class="display-4 mb-2"><i class="bi bi-play-circle"></i></div>
@@ -554,10 +588,12 @@
               </tr>
               <tr
                 data-command="watchtower"
-                data-search="watchtower orquestador central de salud: 95 checks en 13 componentes. agents.md · maintenance-watchtower"
+                data-search="watchtower orquestador central de salud: 113 checks en 22 componentes. agents.md · maintenance-watchtower"
               >
                 <td><code class="cmd-code">npm run watchtower</code></td>
-                <td class="cmd-desc">Orquestador central de salud: 95 checks en 13 componentes.</td>
+                <td class="cmd-desc">
+                  Orquestador central de salud: 113 checks en 22 componentes.
+                </td>
                 <td><span class="cmd-ref mono">AGENTS.md · maintenance-watchtower</span></td>
               </tr>
               <tr

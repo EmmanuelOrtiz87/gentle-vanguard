@@ -116,6 +116,7 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
 
 /** Preview fiel por red: reproduce proporciones y gramática visual de cada plataforma. */
 function VariantPreview({ variant }: { variant: Variant }) {
+  const { t } = useT();
   const color = platformColor(variant.platform);
   const isVertical = variant.spec.aspect === '9:16';
   const isSquare = variant.spec.aspect === '1:1';
@@ -175,7 +176,7 @@ function VariantPreview({ variant }: { variant: Variant }) {
           <div style={{ color, fontWeight: 600, marginBottom: 4 }}>
             {variant.spec.imageSize.width}×{variant.spec.imageSize.height}
           </div>
-          {variant.image_prompt ? variant.image_prompt.slice(0, 120) : 'sin prompt de imagen'}
+          {variant.image_prompt ? variant.image_prompt.slice(0, 120) : t('noMedia')}
         </div>
       )}
       <div
@@ -190,7 +191,7 @@ function VariantPreview({ variant }: { variant: Variant }) {
       </div>
       {overLimit && (
         <div style={{ padding: '0 12px 10px', color: 'var(--color-error)', fontSize: 11 }}>
-          <AlertTriangle size={14} aria-hidden="true" /> excede el límite de{' '}
+          <AlertTriangle size={14} aria-hidden="true" /> {t('exceedsLimit')}{' '}
           {variant.spec.charLimit} caracteres
         </div>
       )}
@@ -238,11 +239,9 @@ export default function ContentOS() {
       setSelectedItem((prev) =>
         prev ? (itemsRes.items.find((i) => i.id === prev.id) ?? null) : null,
       );
-      setStatus('Conectado al Content OS (Nexus).');
+      setStatus(t('connected'));
     } catch (err) {
-      setStatus(
-        `Sin conexión al servidor (${(err as Error).message}). Arrancá: node --import tsx apps/content-cms/server/server.ts`,
-      );
+      setStatus(`${t('offline')} (${(err as Error).message}). ${t('startServer')}`);
     }
   }, []);
 
@@ -256,19 +255,17 @@ export default function ContentOS() {
 
   async function generate(): Promise<void> {
     if (!brief.trim() || !platforms.length) {
-      setStatus('Escribí un brief y elegí al menos una red.');
+      setStatus(t('briefRequired'));
       return;
     }
     setBusy(true);
-    setStatus('Generando variantes…');
+    setStatus(t('generating'));
     try {
       const out = await api<{ itemId: string; provider: string }>('/api/generate', {
         method: 'POST',
         body: JSON.stringify({ brief, objective, title, platforms, format, schedule }),
       });
-      setStatus(
-        `Generado con provider "${out.provider}". Revisá y aprobá cada variante (gate humano).`,
-      );
+      setStatus(`${t('generatedWith')} "${out.provider}". ${t('reviewGate')}`);
       await refresh();
       const fresh = await api<{ item: Item }>(`/api/items/${out.itemId}`);
       setSelectedItem(fresh.item);
@@ -298,7 +295,7 @@ export default function ContentOS() {
         `Copiado al portapapeles (${PLATFORM_LABELS[variant.platform]}). Listo para pegar en la red.`,
       );
     } catch {
-      setStatus('No se pudo copiar al portapapeles.');
+      setStatus(t('copyFailed'));
     }
   }
 
@@ -441,7 +438,7 @@ export default function ContentOS() {
       <div
         style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}
         role="tablist"
-        aria-label="Secciones Content OS"
+        aria-label={t('contentSections')}
       >
         {(['crear', 'calendario', 'medios'] as const).map((v) => (
           <button
@@ -455,8 +452,8 @@ export default function ContentOS() {
             {v === 'crear'
               ? t('newContent')
               : v === 'calendario'
-                ? `calendario (${slots.length})`
-                : `medios (${media.length})`}
+                ? `${t('calendar')} (${slots.length})`
+                : `${t('media')} (${media.length})`}
           </button>
         ))}
       </div>
@@ -469,20 +466,20 @@ export default function ContentOS() {
             </h2>
             <input
               className="content-os-input"
-              placeholder={`${t('title')} (opcional)`}
+              placeholder={`${t('title')} (${t('optional')})`}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
             <textarea
               className="content-os-input"
               style={{ minHeight: 90 }}
-              placeholder="Contale la necesidad en lenguaje natural: qué publicar, para quién, con qué objetivo…"
+              placeholder={t('briefPlaceholder')}
               value={brief}
               onChange={(e) => setBrief(e.target.value)}
             />
             <input
               className="content-os-input"
-              placeholder="Objetivo de negocio (ej: captar estudiantes, vender servicios)"
+              placeholder={t('objectivePlaceholder')}
               value={objective}
               onChange={(e) => setObjective(e.target.value)}
             />
@@ -509,9 +506,9 @@ export default function ContentOS() {
                 className="content-os-input"
                 style={{ width: 'auto' }}
               >
-                <option value="text">Solo texto</option>
-                <option value="image">Solo imagen</option>
-                <option value="text_image">Texto + imagen</option>
+                <option value="text">{t('textOnly')}</option>
+                <option value="image">{t('imageOnly')}</option>
+                <option value="text_image">{t('textImage')}</option>
               </select>
               <label style={{ fontSize: 13 }}>
                 <input
@@ -519,14 +516,14 @@ export default function ContentOS() {
                   checked={schedule}
                   onChange={(e) => setSchedule(e.target.checked)}
                 />{' '}
-                proponer horarios en calendario
+                {t('suggestSchedule')}
               </label>
               <button
                 className="gv-btn gv-btn-primary"
                 disabled={busy}
                 onClick={() => void generate()}
               >
-                {busy ? 'Generando…' : t('newContent')}
+                {busy ? t('generating') : t('newContent')}
               </button>
             </div>
           </section>
@@ -588,13 +585,13 @@ export default function ContentOS() {
                               style={{ marginLeft: 'auto' }}
                               onClick={() => void saveEdit(v)}
                             >
-                              guardar edición
+                              {t('saveEdit')}
                             </button>
                             <button
                               className="gv-btn gv-btn-ghost"
                               onClick={() => setEditingVariant(null)}
                             >
-                              cancelar
+                              {t('cancel')}
                             </button>
                           </div>
                         </div>
@@ -605,26 +602,26 @@ export default function ContentOS() {
                             disabled={v.status === 'approved'}
                             onClick={() => void approveVariant(v)}
                           >
-                            {v.status === 'approved' ? '✓ aprobado' : 'aprobar'}
+                            {v.status === 'approved' ? `✓ ${t('approved')}` : t('approve')}
                           </button>
                           <button className="gv-btn gv-btn-ghost" onClick={() => void copy(v)}>
-                            copiar
+                            {t('copy')}
                           </button>
                           <button className="gv-btn gv-btn-ghost" onClick={() => startEdit(v)}>
-                            editar
+                            {t('edit')}
                           </button>
                           <button
                             className="gv-btn gv-btn-ghost"
                             onClick={() => void proposeSlot(v)}
                           >
-                            proponer slot
+                            {t('suggestSlot')}
                           </button>
                           {v.status !== 'rejected' && (
                             <button
                               className="gv-btn gv-btn-danger"
                               onClick={() => void act(v, 'reject')}
                             >
-                              descartar
+                              {t('discard')}
                             </button>
                           )}
                         </div>
@@ -638,14 +635,16 @@ export default function ContentOS() {
                           color: 'var(--color-text-muted)',
                         }}
                       >
-                        <span>media:</span>
+                        <span>{t('media')}:</span>
                         <select
                           value={mediaId ?? ''}
                           className="content-os-input"
                           style={{ width: 'auto', fontSize: 12, padding: '4px 8px' }}
                           onChange={(e) => void attachMedia(v, e.target.value)}
                         >
-                          <option value="">{mediaId ? 'quitar adjunto' : '— adjuntar —'}</option>
+                          <option value="">
+                            {mediaId ? t('removeAttachment') : `— ${t('attach')} —`}
+                          </option>
                           {media.map((m) => (
                             <option key={m.id} value={m.id}>
                               {m.name} {m.alt ? '(alt ✓)' : '(sin alt)'}
@@ -668,7 +667,7 @@ export default function ContentOS() {
             className="gv-section-title"
             style={{ display: 'flex', alignItems: 'center', gap: 10 }}
           >
-            Calendario
+            {t('calendar')}
             <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>
               ({slots.length} slots)
             </span>
@@ -678,14 +677,14 @@ export default function ContentOS() {
                 style={{ padding: '4px 10px' }}
                 onClick={() => setCalView('month')}
               >
-                mes
+                {t('calendarMonth')}
               </button>
               <button
                 className={`gv-btn ${calView === 'week' ? 'gv-btn-primary' : 'gv-btn-ghost'}`}
                 style={{ padding: '4px 10px' }}
                 onClick={() => setCalView('week')}
               >
-                semana
+                {t('calendarWeek')}
               </button>
               <button
                 className="gv-btn gv-btn-ghost"
@@ -701,7 +700,7 @@ export default function ContentOS() {
                 style={{ padding: '4px 10px' }}
                 onClick={() => setCalAnchor(new Date())}
               >
-                hoy
+                {t('today')}
               </button>
               <button
                 className="gv-btn gv-btn-ghost"
@@ -842,7 +841,7 @@ export default function ContentOS() {
                     style={{ marginLeft: 'auto', padding: '4px 10px' }}
                     onClick={() => setSelectedSlotId(null)}
                   >
-                    cerrar
+                    {t('close')}
                   </button>
                 </div>
                 {item && (
@@ -880,7 +879,7 @@ export default function ContentOS() {
                       className="gv-btn gv-btn-success"
                       onClick={() => void slotTransition(slot, 'confirmed')}
                     >
-                      confirmar (aprobar)
+                      {t('approve')} ({t('approved')})
                     </button>
                   )}
                   {slot.status === 'confirmed' && (
@@ -888,7 +887,7 @@ export default function ContentOS() {
                       className="gv-btn gv-btn-accent"
                       onClick={() => void slotTransition(slot, 'published')}
                     >
-                      marcar publicado
+                      {t('publish')}
                     </button>
                   )}
                   {(slot.status === 'proposed' || slot.status === 'confirmed') && (
@@ -896,7 +895,7 @@ export default function ContentOS() {
                       className="gv-btn gv-btn-danger"
                       onClick={() => void slotTransition(slot, 'skipped')}
                     >
-                      rechazar
+                      {t('discard')}
                     </button>
                   )}
                   {slot.status === 'skipped' && (
@@ -904,7 +903,7 @@ export default function ContentOS() {
                       className="gv-btn gv-btn-ghost"
                       onClick={() => void slotTransition(slot, 'proposed')}
                     >
-                      volver a proponer
+                      {t('suggestSlot')}
                     </button>
                   )}
                   {variant && (
@@ -912,7 +911,7 @@ export default function ContentOS() {
                       className="gv-btn gv-btn-ghost"
                       onClick={() => void proposeSlot(variant)}
                     >
-                      proponer otro horario
+                      {t('suggestSlot')}
                     </button>
                   )}
                   <button
@@ -922,7 +921,7 @@ export default function ContentOS() {
                       setSelectedSlotId(null);
                     }}
                   >
-                    eliminar slot
+                    {t('delete')} slot
                   </button>
                 </div>
               </div>
@@ -938,7 +937,7 @@ export default function ContentOS() {
               className="gv-section-title"
               style={{ display: 'flex', gap: 10, alignItems: 'center' }}
             >
-              Biblioteca de medios
+              {t('mediaLibrary')}
               <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>
                 ({media.length})
               </span>
@@ -956,9 +955,7 @@ export default function ContentOS() {
               />
             </div>
             {media.length === 0 && (
-              <div style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>
-                Sin medios aún (png/jpeg/webp, máx 10MB).
-              </div>
+              <div style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>{t('noMedia')}</div>
             )}
             <div
               style={{
@@ -1001,7 +998,7 @@ export default function ContentOS() {
                       className="content-os-input"
                       style={{ fontSize: 12, padding: '4px 8px' }}
                       defaultValue={m.alt}
-                      placeholder="alt text (accesibilidad)"
+                      placeholder={t('accessibilityAlt')}
                       onBlur={(e) => {
                         if (e.target.value !== m.alt) void saveAlt(m, e.target.value);
                       }}
@@ -1013,8 +1010,8 @@ export default function ContentOS() {
                         disabled={!selectedItem?.variants.length}
                         title={
                           uses
-                            ? `adjuntado a ${uses} variante(s)`
-                            : 'adjuntar a la primera variante del item seleccionado'
+                            ? `${t('attach')} · ${uses} ${t('variants')}`
+                            : `${t('attach')} a la primera ${t('variants')} del item seleccionado`
                         }
                         onClick={() => {
                           const target = selectedItem?.variants.find(
@@ -1023,14 +1020,14 @@ export default function ContentOS() {
                           if (target) void attachMedia(target, m.id);
                         }}
                       >
-                        {uses ? `✓ en ${uses} variante(s)` : 'adjuntar'}
+                        {uses ? `✓ ${uses} ${t('variants')}` : t('attach')}
                       </button>
                       <button
                         className="gv-btn gv-btn-ghost"
                         style={{ padding: '4px 10px', fontSize: 12 }}
                         onClick={() => void deleteMedia(m)}
                       >
-                        eliminar
+                        {t('delete')}
                       </button>
                     </div>
                   </div>
@@ -1075,7 +1072,9 @@ export default function ContentOS() {
 
       {view === 'crear' && items.length > 0 && (
         <section className="panel" style={{ display: 'grid', gap: 6 }}>
-          <h2 className="gv-section-title">Historial ({items.length})</h2>
+          <h2 className="gv-section-title">
+            {t('history')} ({items.length})
+          </h2>
           {items.map((i) => (
             <button
               key={i.id}
@@ -1094,7 +1093,7 @@ export default function ContentOS() {
             >
               <strong>{i.title}</strong>{' '}
               <span style={{ color: 'var(--color-text-muted)' }}>
-                · {i.status} · {i.variants.length} variantes
+                · {i.status} · {i.variants.length} {t('variants')}
               </span>
             </button>
           ))}
