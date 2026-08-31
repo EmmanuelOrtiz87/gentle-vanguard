@@ -110,8 +110,10 @@
 .gv-app-shell {
   position: relative;
   isolation: isolate;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  background: var(--dash-ink);
+  background: transparent;
 }
 .gv-grid-bg,
 .gv-glow-a,
@@ -187,11 +189,15 @@
   height: 34px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(54, 214, 194, 0.65);
-  color: var(--dash-teal);
-  font-size: 11px;
+  border: 1px solid rgba(168, 85, 247, 0.55);
+  background: var(--dash-brand-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0;
+  font-family: Orbitron, Rajdhani, 'Share Tech Mono', monospace;
 }
 .gv-brand-copy {
   display: grid;
@@ -199,17 +205,22 @@
 }
 .gv-brand-name {
   color: var(--dash-text);
-  font-size: 13px;
-  font-weight: 750;
-  letter-spacing: 0;
-  text-transform: uppercase;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
   font-family: Orbitron, Rajdhani, 'Share Tech Mono', monospace;
+}
+.gv-brand-name span {
+  background: var(--dash-brand-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 .gv-brand-product {
   color: var(--dash-muted);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 600;
 }
 .gv-live-state {
   display: inline-flex;
@@ -251,7 +262,12 @@
   align-items: center;
   gap: 3px;
   margin-left: auto;
+  min-width: 0;
+  scrollbar-width: none;
   overflow-x: auto;
+}
+.gv-nav-links::-webkit-scrollbar {
+  display: none;
 }
 .gv-nav-link {
   display: inline-flex;
@@ -294,8 +310,9 @@
   gap: 4px;
 }
 .gv-main {
+  flex: 1;
   min-height: calc(100vh - 72px);
-  background: var(--dash-ink);
+  background: transparent;
 }
 .gv-route-frame {
   max-width: 1500px;
@@ -425,39 +442,12 @@
   }
 }
 
-/* ---- Grouped navigation rows + official brand accents (UI-STANDARD) ---- */
-.gv-nav-rows {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-}
-.gv-nav-row {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  flex-wrap: wrap;
-}
-.gv-nav-group-label {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--dash-muted);
-  opacity: 0.75;
-  margin-right: 8px;
-  min-width: 96px;
-  text-align: right;
-}
-.gv-topbar .gv-nav-link.is-active {
-  box-shadow: inset 0 -2px 0 #22d3ee;
-}
 .gv-live-dot {
   background: var(--dash-brand-gradient);
 }
-.gv-brand-logo {
-  height: 34px;
-  width: auto;
-  display: block;
+.dark .gv-app-shell,
+.dark .gv-main {
+  background: transparent;
 }
 
 .dark .bg-blue-600,

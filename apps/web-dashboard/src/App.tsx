@@ -74,62 +74,58 @@ function Navigation() {
     <nav className="gv-topbar">
       <div className="gv-topbar-inner">
         <div className="gv-brand-row">
-          <img
-            src="/logo-gv.svg"
-            alt="Gentle-Vanguard"
-            className="gv-brand-logo"
-            aria-hidden="true"
-          />
+          <span className="gv-brand-mark" aria-hidden="true">
+            Gv
+          </span>
           <div className="gv-brand-copy">
-            <span className="gv-brand-name">Gentle Vanguard</span>
-            <span className="gv-brand-product">Stack operations</span>
+            <span className="gv-brand-name">
+              Gentle<span>Vanguard</span>
+            </span>
+            <span className="gv-brand-product">Dashboard</span>
           </div>
-          <div className="gv-system-state">{tt('ui.local_stack')}</div>
-          <TenantSelector />
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="gv-menu-button lg:hidden"
-            aria-label="Open navigation"
-          >
-            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-          <div className="gv-nav-links gv-nav-rows hidden lg:flex">
-            {navRows.map((row) => (
-              <div className="gv-nav-row" key={row.group}>
-                <span className="gv-nav-group-label">{row.group}</span>
-                {row.links.map((l) => (
-                  <NavLink
-                    key={l.to}
-                    to={l.to}
-                    end={l.to === '/'}
-                    className={({ isActive }) => `gv-nav-link ${isActive ? 'is-active' : ''}`}
-                  >
-                    <l.icon className="w-4 h-4" />
-                    {l.label}
-                  </NavLink>
-                ))}
-              </div>
-            ))}
-          </div>
-          {menuOpen && (
-            <div className="gv-mobile-nav lg:hidden">
-              {navRows
-                .flatMap((row) => row.links)
-                .map((l) => (
-                  <NavLink
-                    key={l.to}
-                    to={l.to}
-                    onClick={() => setMenuOpen(false)}
-                    end={l.to === '/'}
-                    className={({ isActive }) => `gv-nav-link ${isActive ? 'is-active' : ''}`}
-                  >
-                    <l.icon className="w-4 h-4" />
-                    {l.label}
-                  </NavLink>
-                ))}
-            </div>
-          )}
         </div>
+        <nav className="gv-nav-links hidden lg:flex" aria-label="Dashboard sections">
+          {navRows
+            .flatMap((row) => row.links)
+            .map((l) => (
+              <NavLink
+                key={l.to}
+                to={l.to}
+                end={l.to === '/'}
+                className={({ isActive }) => `gv-nav-link ${isActive ? 'is-active' : ''}`}
+              >
+                <l.icon className="w-4 h-4" aria-hidden="true" />
+                {l.label}
+              </NavLink>
+            ))}
+        </nav>
+        <div className="gv-system-state">{tt('ui.local_stack')}</div>
+        <TenantSelector />
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="gv-menu-button lg:hidden"
+          aria-label="Open navigation"
+        >
+          {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+        {menuOpen && (
+          <div className="gv-mobile-nav lg:hidden">
+            {navRows
+              .flatMap((row) => row.links)
+              .map((l) => (
+                <NavLink
+                  key={l.to}
+                  to={l.to}
+                  onClick={() => setMenuOpen(false)}
+                  end={l.to === '/'}
+                  className={({ isActive }) => `gv-nav-link ${isActive ? 'is-active' : ''}`}
+                >
+                  <l.icon className="w-4 h-4" />
+                  {l.label}
+                </NavLink>
+              ))}
+          </div>
+        )}
       </div>
     </nav>
   );
@@ -239,7 +235,6 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 }
 
 function App() {
-  const { tt } = useT();
   return (
     <BrowserRouter>
       <ErrorBoundary>
@@ -270,7 +265,7 @@ function App() {
               </div>
             </main>
             <footer className="gv-footer">
-              <strong>Gentle-Vanguard</strong> · {tt('ui.dashboard_footer')} — v3.8.2 · 2026
+              <strong>GentleVanguard</strong> · Stack Operations — v3.8.2 · 2026
             </footer>
           </div>
         </AuthGate>
