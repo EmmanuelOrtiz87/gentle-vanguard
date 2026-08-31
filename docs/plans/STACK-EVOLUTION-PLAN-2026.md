@@ -8,6 +8,26 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ## ⚡ Registro de progreso
 
+### Ejecutado — Sesión 10 (2026-08-31, ronda de OPTIMIZACIÓN: despertar capacidades dormidas)
+
+- ✅ **Session lifecycle reparado** (commit `fa7dc363`): causa raíz de múltiples capacidades dormidas
+  — no existía ningún writer de estado terminal y el metrics-writer resucitaba 'active' desde
+  .state.json stale. Sweeper clasifica idle/completed/abandoned (piso duro de 2h), wired al
+  autoheal del watchtower. Backfill: 424 zombies → 359 abandoned / 60 idle / 9 protegidos.
+- ✅ **Response cache cableado** (commit `91ce4d9d`): estaba a 0 filas (capacidad dormida). Wrapper
+  `cached()` (exacto SHA256 + semántico TF-IDF, TTL 24h, bypass por env) en web-research-select y
+  sdd-research; hits registran ahorro en token_savings. Demo real: misma query en 0.27s, 538
+  tokens ahorrados, cero red.
+- ✅ **Eval endurecido** (commit `fc18a31b`): abandoned cuenta como negativo SOLO con actividad
+  (fantasmas de autostart excluidos); dataset vacío = corrida no persistida + gate neutro (no
+  envenena baseline).
+- 🔲 **Limitación conocida (follow-up prioritario)**: namespaces de IDs de sesión divididos —
+  `sessions` usa `session-*`/`gv-sesion-*` y `traces`/`token_transactions` usan `ses_*` (0 joins).
+  Unificar (o puentear) desbloquearía dataset del eval, coste por sesión real y enriquecimiento del
+  routing table. También: `feedback` y `skill_usage` siguen a 0 filas (nadie los escribe aún).
+- Decisión de routing pendiente del usuario: presupuesto diario al 147% (7.3M/5M); panel /costs
+  estima ~84% de ahorro rutando a glm-5.3-flash.
+
 ### Ejecutado — Sesión 9 (2026-08-31, FASE 3 COMPLETA en paralelo: F3.3-F3.6)
 
 - ✅ **F3.3 ports & adapters** (commit `5d638c68`, ADR-0024): `src/ports/` con StoragePort
