@@ -4,12 +4,94 @@
 (function () {
   'use strict';
 
+  const I18N = {
+    es: {
+      advancedTech: 'Advanced Technology Solutions',
+      localAcademy: 'Academia local-first',
+      derivedContent: 'Contenido derivado del stack real (v3.8.2)',
+      search: 'Buscar lecciones y términos…',
+      menu: 'Menú',
+      close: 'Cerrar ✕',
+      light: 'Activar tema claro',
+      dark: 'Activar tema oscuro',
+      home: 'Inicio',
+      fundamentals: 'Fundamentos',
+      architecture: 'Arquitectura',
+      optimization: 'Optimización',
+      agents: 'Agentes',
+      workflows: 'Workflows',
+      prompts: 'Prompts',
+      laboratory: 'Laboratorio',
+      business: 'Negocio',
+      demo: 'Demo',
+      glossary: 'Glosario',
+    },
+    en: {
+      advancedTech: 'Advanced Technology Solutions',
+      localAcademy: 'Local-first academy',
+      derivedContent: 'Content derived from the real stack (v3.8.2)',
+      search: 'Search lessons and terms…',
+      menu: 'Menu',
+      close: 'Close ✕',
+      light: 'Enable light theme',
+      dark: 'Enable dark theme',
+      home: 'Home',
+      fundamentals: 'Fundamentals',
+      architecture: 'Architecture',
+      optimization: 'Optimization',
+      agents: 'Agents',
+      workflows: 'Workflows',
+      prompts: 'Prompts',
+      laboratory: 'Laboratory',
+      business: 'Business',
+      demo: 'Demo',
+      glossary: 'Glossary',
+    },
+  };
+  let locale = localStorage.getItem('gv-cc-lang') === 'en' ? 'en' : 'es';
+  const t = (key) => I18N[locale][key] || I18N.es[key] || key;
+  const setLocale = (next) => {
+    locale = next === 'en' ? 'en' : 'es';
+    localStorage.setItem('gv-cc-lang', locale);
+    document.documentElement.lang = locale;
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      el.textContent = t(el.dataset.i18n);
+    });
+    document.querySelectorAll('#main-nav a[data-i18n-key]').forEach((el) => {
+      el.textContent = t(el.dataset.i18nKey);
+    });
+    document.getElementById('search-input').placeholder = t('search');
+    document.getElementById('burger').setAttribute('aria-label', t('menu'));
+    document.getElementById('modal-close').textContent = t('close');
+  };
+  const theme = localStorage.getItem('gv-cc-theme') === 'light' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = theme;
+  const themeButton = document.getElementById('theme-toggle');
+  const updateThemeButton = () => {
+    const light = document.documentElement.dataset.theme === 'light';
+    themeButton.textContent = light ? '🌙' : '☀';
+    themeButton.setAttribute('aria-label', light ? t('dark') : t('light'));
+  };
+  themeButton.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem('gv-cc-theme', next);
+    updateThemeButton();
+  });
+  document.getElementById('language-select').value = locale;
+  document.getElementById('language-select').addEventListener('change', (e) => {
+    setLocale(e.target.value);
+    updateThemeButton();
+  });
+
   const CONTENT = window.GV_CONTENT || {};
   const TRACKS = window.GV_TRACKS || [];
   const GLOSSARY = window.GV_GLOSSARY || [];
   const FILES = window.GV_FILES || {};
   const app = document.getElementById('app');
   document.getElementById('foot-year').textContent = new Date().getFullYear();
+  setLocale(locale);
+  updateThemeButton();
 
   /* ---------- Diagrams (inline SVG, brand tokens) ---------- */
   // GV token: color.primary / color.accent

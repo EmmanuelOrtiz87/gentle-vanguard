@@ -42,6 +42,42 @@
   --header-h: 62px;
 }
 
+:root[data-theme='light'] {
+  --color-background: #f5f7fb;
+  --color-surface: #ffffff;
+  --color-surface-icon: #f1f5f9;
+  --color-circuit: #dbe5f0;
+  --color-text-primary: #0f172a;
+  --color-text-brand: #0055bb;
+  --color-text-muted: #475569;
+  --color-border: #cbd5e1;
+  --color-selected: #0891b2;
+  --color-background-rgb: 245, 247, 251;
+  --color-surface-rgb: 255, 255, 255;
+  --color-text-muted-rgb: 71, 85, 105;
+  --gv-bg: var(--color-background);
+  --gv-bg-deep: var(--color-background);
+  --gv-surface: var(--color-surface);
+  --gv-surface-raised: var(--color-surface-icon);
+  --gv-text: var(--color-text-primary);
+  --gv-muted: var(--color-text-muted);
+}
+
+.academy-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.academy-controls select {
+  appearance: auto;
+  padding: 7px 10px;
+}
+.academy-controls .gv-btn {
+  font-size: 13px;
+  padding: 7px 11px;
+}
+
 * {
   margin: 0;
   padding: 0;
