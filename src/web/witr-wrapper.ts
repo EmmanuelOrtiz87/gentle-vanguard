@@ -146,6 +146,16 @@ export function isWitrInstalled(): boolean {
   return existsSync(WITR_BIN_PATH);
 }
 
+export function isWitrCompatible(): boolean {
+  if (!isWitrInstalled()) return false;
+  try {
+    const result = runSync(WITR_BIN_PATH, ['--version'], { timeout: 30_000 });
+    return result.status === 0 && Boolean((result.stdout || result.stderr).trim());
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Install witr via the TypeScript installer if the binary is missing.
  * Returns true when witr is available afterwards.

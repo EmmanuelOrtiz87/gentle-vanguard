@@ -80,13 +80,14 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
   `releases/latest-version.json` reparado contra el release real v3.8.2 del repo público (sha256
   `6adbee59…ba75` verificado descargando el binario); `RELEASE-v4.0.0.md` y `ARCHITECTURE-STATUS.md`
   archivados en `docs/releases/` como snapshots fechados.
-- ✅ **F0.1b** — `src/tools/version-sync.ts` + `npm run version:check` + job `version-sync` en CI (gate).
+- ✅ **F0.1b** — `src/tools/version-sync.ts` + `npm run version:check` + job `version-sync` en CI
+  (gate).
 - ✅ **F0.2** — Purgados del índice: `.pnpm-store/`, `.local/root-files-20260812/` (15 archivos),
   `sbom.json`/`sbom/` (gitignored ahora, CI genera el canónico), fixtures de debug movidos a
   `tests/fixtures/`, governance audit a `docs/governance/`.
-- ✅ **F0.3** — Workspace pnpm real (`packages:` con `apps/web-dashboard` + `packages/*`;
-  las apps retiradas quedan fuera del workspace); lockfile único; `better-sqlite3` en
-  `dependencies` (raíz) y declarado en el dashboard; dashboard `3.3.3`→`3.8.2`.
+- ✅ **F0.3** — Workspace pnpm real (`packages:` con `apps/web-dashboard` + `packages/*`; las apps
+  retiradas quedan fuera del workspace); lockfile único; `better-sqlite3` en `dependencies` (raíz) y
+  declarado en el dashboard; dashboard `3.3.3`→`3.8.2`.
 - ✅ **F0.4** — Dockerfile: usuario non-root `app` (chown completo), `pnpm rebuild --pending` para
   nativas (better-sqlite3/esbuild), pnpm global fuera del runner. Compose: sin `version:` obsoleta,
   imágenes observabilidad pineadas (jaeger 1.62.0, prometheus v2.53.0, otel 0.108.0), comandos de
@@ -512,10 +513,10 @@ acumulativas; el workstream comercial (F5) corre en paralelo desde el día 1.
 
 **Consolidación modular nativa — mantenimiento actual**
 
-- **Qué**: mantener la separación por dominios ya integrada en `src/` y en el servidor del dashboard;
-  documentar nuevos módulos detrás de entradas/barrels estables.
-- **Por qué**: la modularidad nativa mantiene ownership, testeo y revisión acotados sin introducir una
-  fase o producto separado.
+- **Qué**: mantener la separación por dominios ya integrada en `src/` y en el servidor del
+  dashboard; documentar nuevos módulos detrás de entradas/barrels estables.
+- **Por qué**: la modularidad nativa mantiene ownership, testeo y revisión acotados sin introducir
+  una fase o producto separado.
 - **Cuándo**: mantenimiento continuo. **Aceptación**: imports estables, documentación alineada y
   validaciones del stack verdes.
 

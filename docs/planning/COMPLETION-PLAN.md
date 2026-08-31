@@ -75,7 +75,11 @@ ffmpeg.wasm
 ```javascript
 // Ejemplo: "Generate 5 banner variations"
 // Produce: variant_01.png, variant_02.png, etc.
-batchGenerate({ count: 5, seed: 'gentle-vanguard', variations: ['color', 'complexity', 'effects'] });
+batchGenerate({
+  count: 5,
+  seed: 'gentle-vanguard',
+  variations: ['color', 'complexity', 'effects'],
+});
 ```
 
 **Tiempo estimado**: 45 minutos **Complejidad**: Baja

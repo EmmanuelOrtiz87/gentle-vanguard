@@ -18,14 +18,15 @@
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
-import { join, resolve } from 'path';
+import { dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 
 const ROOT = resolve(process.cwd());
-const STATE_DIR = join(ROOT, '.runtime', 'circuit-breaker-v2');
-const STATE_FILE = join(STATE_DIR, 'state.json');
+const DEFAULT_STATE_FILE = join(ROOT, '.runtime', 'circuit-breaker-v2', 'state.json');
 
-mkdirSync(STATE_DIR, { recursive: true });
+function getStateFile(): string {
+  return resolve(process.env.GV_CIRCUIT_BREAKER_STATE_FILE?.trim() || DEFAULT_STATE_FILE);
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────────
 type CircuitState = 'CLOSED' | 'OPEN' | 'HALF_OPEN';
@@ -130,16 +131,19 @@ function log(level: string, message: string, meta?: Record<string, unknown>): vo
 
 // ─── State Management ───────────────────────────────────────────────────────────────
 function loadState(): Record<string, CircuitState_v2> {
+  const stateFile = getStateFile();
   try {
-    if (existsSync(STATE_FILE)) {
-      return JSON.parse(readFileSync(STATE_FILE, 'utf-8'));
+    if (existsSync(stateFile)) {
+      return JSON.parse(readFileSync(stateFile, 'utf-8'));
     }
   } catch {}
   return {};
 }
 
 function saveState(state: Record<string, CircuitState_v2>): void {
-  writeFileSync(STATE_FILE, JSON.stringify(state, null, 2), 'utf-8');
+  const stateFile = getStateFile();
+  mkdirSync(dirname(stateFile), { recursive: true });
+  writeFileSync(stateFile, JSON.stringify(state, null, 2), 'utf-8');
 }
 
 /** Resolve config by exact name, then by prefix ("agent_delegation:BA" → agent_delegation), then generic fallback. */
@@ -266,6 +270,7 @@ function recordSuccess(circuit: CircuitState_v2): CircuitState_v2 {
   const previousState = circuit.state;
 
   if (circuit.state === 'HALF_OPEN') {
+    circuit.halfOpenCalls = Math.max(0, circuit.halfOpenCalls - 1);
     if (circuit.metrics.consecutiveSuccesses >= circuit.config.successThreshold) {
       circuit.state = 'CLOSED';
       circuit.halfOpenCalls = 0;
@@ -307,6 +312,7 @@ function recordFailure(circuit: CircuitState_v2): CircuitState_v2 {
       );
     }
   } else if (circuit.state === 'HALF_OPEN') {
+    circuit.halfOpenCalls = Math.max(0, circuit.halfOpenCalls - 1);
     circuit.state = 'OPEN';
     circuit.openedAt = now;
     circuit.halfOpenCalls = 0;

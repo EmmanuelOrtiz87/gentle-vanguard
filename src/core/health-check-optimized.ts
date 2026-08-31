@@ -145,7 +145,9 @@ async function checkMlEmbeddings(): Promise<void> {
 
 async function checkEngramRag(): Promise<void> {
   header('Engram RAG');
-  const checks = [{ name: 'engram-rag-reindex.ts exists', path: ['src', 'knowledge', 'engram-rag-reindex.ts'] }];
+  const checks = [
+    { name: 'engram-rag-reindex.ts exists', path: ['src', 'knowledge', 'engram-rag-reindex.ts'] },
+  ];
   await checkFileBatch(checks);
 }
 
@@ -173,7 +175,10 @@ async function checkLefthook(): Promise<void> {
 
 async function checkCrossWorkspace(): Promise<void> {
   header('Cross-Workspace');
-  writeCheck('Cross-workspace validator (TS)', exists('src', 'integrations', 'cross-workspace-validator.ts'));
+  writeCheck(
+    'Cross-workspace validator (TS)',
+    exists('src', 'integrations', 'cross-workspace-validator.ts'),
+  );
 }
 
 // Main execution with parallel categories

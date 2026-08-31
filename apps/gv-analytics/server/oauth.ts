@@ -23,7 +23,9 @@ import { loadConnection, saveConnection, type StoredConnection } from './vault';
 const AUTH_BASE = 'https://auth.atlassian.com';
 const TOKEN_URL = `${AUTH_BASE}/oauth/token`;
 const ACCESSIBLE_RESOURCES_URL = 'https://api.atlassian.com/oauth/token/accessible-resources';
-const CALLBACK_PORT = Number(process.env.GV_OAUTH_CALLBACK_PORT || process.env.GV_ANALYTICS_PORT || 4754);
+const CALLBACK_PORT = Number(
+  process.env.GV_OAUTH_CALLBACK_PORT || process.env.GV_ANALYTICS_PORT || 4754,
+);
 const CALLBACK_PATH = '/oauth/callback';
 const REDIRECT_URI = `http://127.0.0.1:${CALLBACK_PORT}${CALLBACK_PATH}`;
 const SCOPES = [
@@ -81,7 +83,11 @@ export function getOAuthConfig(): OAuthConfig | null {
   return null;
 }
 
-export function buildAuthorizationUrl(clientId: string): { url: string; state: string; verifier: string } {
+export function buildAuthorizationUrl(clientId: string): {
+  url: string;
+  state: string;
+  verifier: string;
+} {
   const { verifier, challenge } = generatePkcePair();
   const state = base64Url(randomBytes(24));
   pendingFlow = { state, codeVerifier: verifier, createdAt: Date.now(), clientId };
@@ -155,7 +161,11 @@ export async function exchangeCodeForTokens(args: {
       headers: { Authorization: `Bearer ${tokens.accessToken}`, Accept: 'application/json' },
     });
     if (resResponse.ok) {
-      const resources = (await resResponse.json()) as Array<{ id: string; url: string; name: string }>;
+      const resources = (await resResponse.json()) as Array<{
+        id: string;
+        url: string;
+        name: string;
+      }>;
       if (resources.length > 0) {
         tokens.cloudId = resources[0].id;
       }

@@ -1,10 +1,9 @@
 # Pending Review - 2026-08-29
 
-**Scope:** improvement and documentation tasks to resume after session start.
-**Status:** verified snapshot, not a historical backlog dump.
-**Primary sources:** git status, `docs/analytics/PENDING.md`, `docs/analytics/PROGRESS.md`,
-`docs/analysis/PENDING-AUDIT.md`, `docs/tasks/`, `docs/backlog/items.json`, and presentation shell
-checks.
+**Scope:** improvement and documentation tasks to resume after session start. **Status:** verified
+snapshot, not a historical backlog dump. **Primary sources:** git status,
+`docs/analytics/PENDING.md`, `docs/analytics/PROGRESS.md`, `docs/analysis/PENDING-AUDIT.md`,
+`docs/tasks/`, `docs/backlog/items.json`, and presentation shell checks.
 
 ## Current Baseline
 

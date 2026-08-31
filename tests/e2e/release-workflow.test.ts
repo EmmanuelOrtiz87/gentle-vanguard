@@ -23,7 +23,7 @@ import { runNpxTsxSync } from '../../src/core/run-command.ts';
 import type { DeliveryGate, GateValidation } from '../../src/rdd/rdd-gates.ts';
 
 const ROOT = resolve(import.meta.dirname, '..', '..');
-const SDD_GATE_SCRIPT = join(ROOT, 'src', 'check-sdd-gate.ts');
+const SDD_GATE_SCRIPT = join(ROOT, 'src', 'sdd', 'check-sdd-gate.ts');
 const RDD_GATES_SCRIPT = join(ROOT, 'src', 'rdd', 'rdd-gates.ts');
 
 const RDD_GATE_ORDER: DeliveryGate[] = [

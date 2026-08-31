@@ -20,22 +20,26 @@ If `.agents/product-marketing.md` exists (or `.claude/product-marketing.md`, or 
 Gather this context (ask if not provided):
 
 ### 1. Page Purpose
+
 - What type of page? (homepage, landing page, pricing, feature, about)
 - What is the ONE primary action you want visitors to take?
 
 ### 2. Audience
+
 - Who is the ideal customer?
 - What problem are they trying to solve?
 - What objections or hesitations do they have?
 - What language do they use to describe their problem?
 
 ### 3. Product/Offer
+
 - What are you selling or offering?
 - What makes it different from alternatives?
 - What's the key transformation or outcome?
 - Any proof points (numbers, testimonials, case studies)?
 
 ### 4. Context
+
 - Where is traffic coming from? (ads, organic, email)
 - What do visitors already know before arriving?
 
@@ -44,21 +48,26 @@ Gather this context (ask if not provided):
 ## Copywriting Principles
 
 ### Clarity Over Cleverness
+
 If you have to choose between clear and creative, choose clear. Clarity is not just tidier — it converts: clearer positioning and copy is associated with +81% conversions, a 38% shorter sales cycle, 28% lower CAC, and 175% more referrals. When a reader has to decode your line, you've lost them.
 
 **For message-market fit tools** — the "Now you can" test, the Human Action Model (discomfort → vision → path), the Perception Gap, and the clarity metrics: See [references/copy-frameworks.md](references/copy-frameworks.md#clarity--message-market-fit)
 
 ### Benefits Over Features
+
 Features: What it does. Benefits: What that means for the customer.
 
 ### Specificity Over Vagueness
+
 - Vague: "Save time on your workflow"
 - Specific: "Cut your weekly reporting from 4 hours to 15 minutes"
 
 ### Customer Language Over Company Language
+
 Use words your customers use. Mirror voice-of-customer from reviews, interviews, support tickets.
 
 ### One Idea Per Section
+
 Each section should advance one argument. Build a logical flow down the page.
 
 ---
@@ -89,6 +98,7 @@ For thorough line-by-line review, use the **copy-editing** skill after your draf
 ## Best Practices
 
 ### Be Direct
+
 Get to the point. Don't bury the value in qualifications.
 
 ❌ Slack lets you share files instantly, from documents to images, directly in your conversations
@@ -96,14 +106,17 @@ Get to the point. Don't bury the value in qualifications.
 ✅ Need to share a screenshot? Send as many documents, images, and audio files as your heart desires.
 
 ### Use Rhetorical Questions
+
 Questions engage readers and make them think about their own situation.
 - "Hate returning stuff to Amazon?"
 - "Tired of chasing approvals?"
 
 ### Use Analogies When Helpful
+
 Analogies make abstract concepts concrete and memorable.
 
 ### Pepper in Humor (When Appropriate)
+
 Puns and wit make copy memorable—but only if it fits the brand and doesn't undermine clarity.
 
 ---
@@ -177,26 +190,31 @@ Examples:
 ## Page-Specific Guidance
 
 ### Homepage
+
 - Serve multiple audiences without being generic
 - Lead with broadest value proposition
 - Provide clear paths for different visitor intents
 
 ### Landing Page
+
 - Single message, single CTA
 - Match headline to ad/traffic source
 - Complete argument on one page
 
 ### Pricing Page
+
 - Help visitors choose the right plan
 - Address "which is right for me?" anxiety
 - Make recommended plan obvious
 
 ### Feature Page
+
 - Connect feature → benefit → outcome
 - Show use cases and examples
 - Clear path to try or buy
 
 ### About Page
+
 - Tell the story of why you exist
 - Connect mission to customer benefit
 - Still include a CTA
@@ -229,22 +247,26 @@ Maintain consistency, but adjust intensity:
 When writing copy, provide:
 
 ### Page Copy
+
 Organized by section:
 - Headline, Subheadline, CTA
 - Section headers and body copy
 - Secondary CTAs
 
 ### Annotations
+
 For key elements, explain:
 - Why you made this choice
 - What principle it applies
 
 ### Alternatives
+
 For headlines and CTAs, provide 2-3 options:
 - Option A: [copy] — [rationale]
 - Option B: [copy] — [rationale]
 
 ### Meta Content (if relevant)
+
 - Page title (for SEO)
 - Meta description
 

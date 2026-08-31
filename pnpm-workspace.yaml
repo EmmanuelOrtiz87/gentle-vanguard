@@ -4,6 +4,7 @@ packages:
   - 'apps/web-dashboard'
   - 'apps/content-cms'
   - 'packages/*'
+  - 'src/core'
 
 allowBuilds:
   better-sqlite3: true

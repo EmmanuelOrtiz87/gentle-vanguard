@@ -1,9 +1,8 @@
 # Runbook de remediación manual de seguridad
 
-**Audiencia:** propietario del repositorio y administrador de GitHub
-**Alcance:** tareas manuales pendientes de credenciales, controles de GitHub y artefactos
-históricos.
-**Última revisión:** 2026-08-29
+**Audiencia:** propietario del repositorio y administrador de GitHub **Alcance:** tareas manuales
+pendientes de credenciales, controles de GitHub y artefactos históricos. **Última revisión:**
+2026-08-29
 
 > **Regla de seguridad:** este documento no contiene secretos. Nunca pegues un PAT, token de
 > Telegram o valor detectado en un issue, PR, terminal compartida, captura o log. Los comandos de
@@ -15,10 +14,10 @@ históricos.
 1. Trabaja en una sesión de administrador autenticada y en el repositorio correcto.
 2. Crea una nota privada de evidencias con fecha, proveedor, **referencia no secreta** (archivo,
    línea, tipo de credencial), acción y resultado.
-3. No modifiques código funcional para cerrar este runbook. Los cambios de documentación/configuración
-   deben ir en una rama y PR separados.
-4. Si un hallazgo parece activo, trátalo como comprometido: revoca primero, rota después y revisa
-   el registro de auditoría del proveedor.
+3. No modifiques código funcional para cerrar este runbook. Los cambios de
+   documentación/configuración deben ir en una rama y PR separados.
+4. Si un hallazgo parece activo, trátalo como comprometido: revoca primero, rota después y revisa el
+   registro de auditoría del proveedor.
 
 ### Preflight local (CMD-first, solo lectura)
 
@@ -46,12 +45,12 @@ procedimiento, rota la credencial y elimina el log/captura inseguro según la po
 2. Revisa **Fine-grained tokens** y **Tokens (classic)**. Revoca cada PAT histórico o no
    identificado con **Revoke**; confirma solo después de verificar que no es necesario para otro
    servicio.
-3. Selecciona **Generate new token** (preferir *Fine-grained*), limita propietario, repositorios,
+3. Selecciona **Generate new token** (preferir _Fine-grained_), limita propietario, repositorios,
    permisos mínimos y expiración corta. Genera, copia el valor solo al gestor de secretos y no lo
    vuelvas a mostrar.
 4. Actualiza el consumidor autorizado (por ejemplo, el secreto `PAT_SYNC` de Actions) desde
-   **Repository → Settings → Secrets and variables → Actions**. Usa **Update**, no lo escribas en
-   un archivo del checkout.
+   **Repository → Settings → Secrets and variables → Actions**. Usa **Update**, no lo escribas en un
+   archivo del checkout.
 5. En **Settings → Applications → Authorized OAuth Apps / GitHub Apps**, revoca integraciones
    históricas que ya no tengan owner.
 
@@ -94,9 +93,9 @@ git log --all --oneline -- .
 git grep -n -I -E "PAT|TOKEN|SECRET|API_KEY|BOT[ _-]?TOKEN" -- .
 ```
 
-3. Para cada hallazgo, revoca en el proveedor correspondiente, rota por un valor nuevo en el
-   gestor de secretos, invalida sesiones asociadas y revisa auditoría/uso. Para un proveedor
-   desconocido: deshabilita el servicio o identidad afectada y escala como incidente privado.
+3. Para cada hallazgo, revoca en el proveedor correspondiente, rota por un valor nuevo en el gestor
+   de secretos, invalida sesiones asociadas y revisa auditoría/uso. Para un proveedor desconocido:
+   deshabilita el servicio o identidad afectada y escala como incidente privado.
 4. Elimina la referencia del árbol mediante un cambio revisable; no reescribas historia ni uses una
    allowlist para ocultar un secreto real sin aprobación del owner y plan de remediación histórica.
 5. Vuelve a ejecutar el escáner local y valida también las alertas de GitHub (sección 4).
@@ -179,8 +178,8 @@ obtener la aprobación requerida y usar **Squash and merge**. No hagas push dire
    copies el secreto.
 3. **Security → Dependabot alerts:** confirma que los avisos críticos/altos tienen actualización,
    excepción documentada o owner/fecha.
-4. Revisa **Actions**: los workflows de seguridad terminan correctamente y los checks aparecen
-   como obligatorios en el ruleset.
+4. Revisa **Actions**: los workflows de seguridad terminan correctamente y los checks aparecen como
+   obligatorios en el ruleset.
 5. Crea una rama de prueba sin contenido sensible para confirmar que PR, aprobación y checks son
    requisitos; no pruebes insertando un token real.
 
@@ -198,8 +197,8 @@ bloquea la publicación y requiere triage.
 
 ## 5. Clasificar y, solo con confirmación, eliminar artefactos históricos
 
-La normativa vigente establece que `.archive/` es histórico no ejecutable y `protected/*.ps1.enc`
-es histórico sensible/cifrado: no se descifra, invoca ni incorpora al runtime. `.backups/` contiene
+La normativa vigente establece que `.archive/` es histórico no ejecutable y `protected/*.ps1.enc` es
+histórico sensible/cifrado: no se descifra, invoca ni incorpora al runtime. `.backups/` contiene
 respaldos y no es documentación publicable. El valor predeterminado es conservar/archivar; borrar
 requiere demostrar que no existe obligación de auditoría, recuperación, compatibilidad o retención.
 Referencias: [`rules/NORMATIVA-SCRIPT-LIFECYCLE.md`](../../rules/NORMATIVA-SCRIPT-LIFECYCLE.md) y
@@ -223,7 +222,8 @@ retención cumplida y revisión del owner. Nunca borres para ocultar un hallazgo
 ### Borrado con doble confirmación explícita
 
 El siguiente patrón es intencionalmente manual. Sustituye la ruta **solo por una lista previamente
-revisada**, no por una variable proveniente de entrada externa. Si la respuesta no coincide, no borra:
+revisada**, no por una variable proveniente de entrada externa. Si la respuesta no coincide, no
+borra:
 
 ```cmd
 set /p CONFIRM=Escribe BORRAR-ARCHIVO para continuar:
@@ -233,9 +233,9 @@ if /I not "%CONFIRM2%"=="BORRAR-ARCHIVO" echo Cancelado.& goto :eof
 del /f /q "RUTA_PREVIAMENTE_REVISADA"
 ```
 
-Para un directorio completo, usa `rmdir /s /q` solo con la misma doble confirmación y únicamente
-si el owner aprobó explícitamente el borrado del directorio. No uses comodines amplios ni ejecutes
-este patrón sobre `protected/` o respaldos sin una decisión formal de retención.
+Para un directorio completo, usa `rmdir /s /q` solo con la misma doble confirmación y únicamente si
+el owner aprobó explícitamente el borrado del directorio. No uses comodines amplios ni ejecutes este
+patrón sobre `protected/` o respaldos sin una decisión formal de retención.
 
 ## Checklist de cierre
 

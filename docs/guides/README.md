@@ -27,7 +27,7 @@ New to Gentle-Vanguard? Start here:
 | Guide                                                                      | Purpose                                                         |
 | -------------------------------------------------------------------------- | --------------------------------------------------------------- |
 | **[SCRIPT-NORMALIZATION-STANDARDS.md](SCRIPT-NORMALIZATION-STANDARDS.md)** | Script normalization and best practices                         |
-| **[SCRIPT-LIFECYCLE.md](SCRIPT-LIFECYCLE.md)**                             | TS-only/CMD-first lifecycle, ownership and legacy handling       |
+| **[SCRIPT-LIFECYCLE.md](SCRIPT-LIFECYCLE.md)**                             | TS-only/CMD-first lifecycle, ownership and legacy handling      |
 | **[COMPATIBILITY-MATRIX.md](COMPATIBILITY-MATRIX.md)**                     | AI tool integration (Claude, Cline, etc.)                       |
 | **[TOKEN-CONTEXT-STANDARDS.md](TOKEN-CONTEXT-STANDARDS.md)**               | Token budgets and efficiency modes                              |
 | **[TOKEN-AUTOPILOT-OPERATIONS.md](TOKEN-AUTOPILOT-OPERATIONS.md)**         | Hard/balanced token autopilot operations and quick commands     |

@@ -9,7 +9,9 @@
 
 ## Overview
 
-The Adaptive Router intelligently routes tasks to the best-fit agent based on task complexity, workload, agent performance, and learned delegation patterns. It replaces static agent assignment with ML-driven routing.
+The Adaptive Router intelligently routes tasks to the best-fit agent based on task complexity,
+workload, agent performance, and learned delegation patterns. It replaces static agent assignment
+with ML-driven routing.
 
 **Key Responsibility:** Dynamic task-to-agent matching with continuous performance optimization.
 
@@ -56,14 +58,14 @@ Task Input
 
 ## Task Complexity Signals
 
-| Signal | Weight | Source |
-|--------|--------|--------|
-| LOC (lines of code) | 15% | Code analysis |
-| Cyclomatic complexity | 20% | AST parsing |
-| External dependencies | 15% | Dependency graph |
-| File count | 10% | glob analysis |
-| Test coverage gap | 15% | Coverage report |
-| Prior success rate | 25% | Routing table history |
+| Signal                | Weight | Source                |
+| --------------------- | ------ | --------------------- |
+| LOC (lines of code)   | 15%    | Code analysis         |
+| Cyclomatic complexity | 20%    | AST parsing           |
+| External dependencies | 15%    | Dependency graph      |
+| File count            | 10%    | glob analysis         |
+| Test coverage gap     | 15%    | Coverage report       |
+| Prior success rate    | 25%    | Routing table history |
 
 **Result:** Complexity score 0-100
 
@@ -72,6 +74,7 @@ Task Input
 ## Agent Profiles (21 built-in)
 
 **Core Agents:**
+
 1. `explore` - Codebase research & discovery
 2. `task` - Execute commands (build, test, lint)
 3. `general-purpose` - Full-capability multi-step
@@ -79,14 +82,10 @@ Task Input
 5. `research` - External research & verification
 6. `security-review` - Security vulnerability hunting
 
-**Specialized Agents:**
-7. `frontend-design` - React/UI/CSS
-8. `backend-api` - Node/Express/gRPC
-9. `database-expert` - SQL/migrations
-10. `devops-engineer` - CI/CD/infrastructure
-11. `performance-tuning` - Optimization
-12. `documentation-writer` - Docs & ADRs
-13-21. ... (skill-specific, role-based)
+**Specialized Agents:** 7. `frontend-design` - React/UI/CSS 8. `backend-api` - Node/Express/gRPC 9.
+`database-expert` - SQL/migrations 10. `devops-engineer` - CI/CD/infrastructure 11.
+`performance-tuning` - Optimization 12. `documentation-writer` - Docs & ADRs 13-21. ...
+(skill-specific, role-based)
 
 ---
 
@@ -131,19 +130,19 @@ const score = computeScore({
     complexity: 8,
     externalDeps: ['axios', 'lodash'],
     fileCount: 12,
-    testGap: 15
+    testGap: 15,
   },
   agentProfile: {
     id: 'code-review',
     skills: ['typescript', 'testing', 'performance'],
     successRate: 0.94,
-    avgComplexityHandled: 6.5
+    avgComplexityHandled: 6.5,
   },
   workload: {
     queueDepth: 2,
     currentMemory: 850,
-    maxMemory: 2000
-  }
+    maxMemory: 2000,
+  },
 });
 
 // Returns: { score: 87, reasoning: "Good fit, moderate workload" }
@@ -179,9 +178,9 @@ Next similar task uses updated routing
 ```json
 {
   "routing": {
-    "strategy": "ml-adaptive",  // "static", "round-robin", "ml-adaptive"
+    "strategy": "ml-adaptive", // "static", "round-robin", "ml-adaptive"
     "confidence_threshold": 0.75,
-    "auto_escalation_threshold": 0.40,
+    "auto_escalation_threshold": 0.4,
     "learning_enabled": true
   },
   "agents": [
@@ -213,7 +212,7 @@ const result = await route({
   type: 'code-review',
   description: 'Review PR for security issues',
   codeLines: 350,
-  priority: 'high'
+  priority: 'high',
 });
 
 console.log(`Routed to: ${result.agent}`);
@@ -240,30 +239,33 @@ npm run route:reset
 
 ## Performance Metrics
 
-| Metric | Target |
-|--------|--------|
-| Routing decision latency | <50ms |
-| Learning update latency | <100ms |
-| Routing accuracy | >90% |
-| Success rate of recommendations | >85% |
-| Escalation rate | <5% |
+| Metric                          | Target |
+| ------------------------------- | ------ |
+| Routing decision latency        | <50ms  |
+| Learning update latency         | <100ms |
+| Routing accuracy                | >90%   |
+| Success rate of recommendations | >85%   |
+| Escalation rate                 | <5%    |
 
 ---
 
 ## Integration Points
 
 **Input:**
+
 - Task description + metadata
 - Code analysis (complexity, lines, deps)
 - Agent workload (queue depth, memory)
 - Session history
 
 **Output:**
+
 - Recommended agent + confidence
 - Alternative agents (fallback chain)
 - Routing decision → logging/audit
 
 **Feedback Loop:**
+
 - Task success/failure
 - Agent metrics (time, resources)
 - Human feedback (preferred agent)
@@ -273,6 +275,7 @@ npm run route:reset
 ## Test Coverage
 
 **Location:** `tests/unit/adaptive-router/`
+
 - `scoring.test.ts` - Score computation accuracy
 - `routing-table.test.ts` - Persistence & learning
 - `integration.test.ts` - End-to-end routing
@@ -285,6 +288,7 @@ npm run route:reset
 ## Troubleshooting
 
 **Q: Routing decisions are poor**
+
 ```bash
 npm run route:reset
 npm run route:retrain
@@ -292,12 +296,14 @@ npm run route:retrain
 ```
 
 **Q: Specific task type always fails**
+
 ```bash
 npm run route:stats --type "task-type"
 # Shows success rate by agent
 ```
 
 **Q: Route escalation rate high**
+
 ```bash
 # Increase confidence threshold:
 npm run config:update -- --key routing.confidence_threshold --value 0.50
@@ -318,4 +324,3 @@ npm run config:update -- --key routing.confidence_threshold --value 0.50
 **See:** `docs/modules/MODULE-STRUCTURE.md`  
 **Configuration:** `config/model-router.json`  
 **Tests:** `tests/unit/adaptive-router/*.test.ts`
-

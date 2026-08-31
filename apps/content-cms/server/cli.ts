@@ -16,13 +16,18 @@ const flag = (name: string): string | undefined => {
 async function main(): Promise<void> {
   if (command === 'platforms') {
     for (const spec of Object.values(PLATFORM_SPECS)) {
-      console.log(`${spec.id.padEnd(10)} ${spec.name.padEnd(22)} ${spec.charLimit} chars, img ${spec.imageSize.width}x${spec.imageSize.height}, best ${spec.bestTimes.join('/')}`);
+      console.log(
+        `${spec.id.padEnd(10)} ${spec.name.padEnd(22)} ${spec.charLimit} chars, img ${spec.imageSize.width}x${spec.imageSize.height}, best ${spec.bestTimes.join('/')}`,
+      );
     }
     return;
   }
   if (command === 'generate') {
     const briefText = args[1];
-    if (!briefText) throw new Error('usage: generate "<brief>" --platforms linkedin,x [--format text_image] [--title t] [--objective o]');
+    if (!briefText)
+      throw new Error(
+        'usage: generate "<brief>" --platforms linkedin,x [--format text_image] [--title t] [--objective o]',
+      );
     const brief: GenerateBrief = {
       title: flag('title') ?? briefText.slice(0, 60),
       brief: briefText,
@@ -32,7 +37,9 @@ async function main(): Promise<void> {
       format: (flag('format') as ContentFormat) ?? 'text',
     };
     const generator = resolveGenerator(flag('provider'));
-    console.error(`[content-os] provider=${generator.provider} platforms=${brief.platforms.join(',')}`);
+    console.error(
+      `[content-os] provider=${generator.provider} platforms=${brief.platforms.join(',')}`,
+    );
     const variants = await generator.generate(brief);
     for (const v of variants) {
       console.log(`\n=== ${v.platform} (${v.format}, score=${v.score ?? '—'}) ===`);

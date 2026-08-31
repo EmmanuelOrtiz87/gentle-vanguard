@@ -20,8 +20,17 @@ export type TemplateId = 'brief' | 'sdd' | 'handoff';
 
 export interface TemplateSection {
   /** Stable id used by the renderers. */
-  id: 'header' | 'metrics' | 'currentState' | 'proposedSolution' | 'impactedFronts' |
-    'roles' | 'qaScenarios' | 'nextActions' | 'diagrams' | 'evidence';
+  id:
+    | 'header'
+    | 'metrics'
+    | 'currentState'
+    | 'proposedSolution'
+    | 'impactedFronts'
+    | 'roles'
+    | 'qaScenarios'
+    | 'nextActions'
+    | 'diagrams'
+    | 'evidence';
   /** Optional heading override (defaults to the id in Spanish). */
   title?: string;
   /** Hide this section if false. */
@@ -56,7 +65,8 @@ export const TEMPLATES: Record<TemplateId, ReportTemplate> = {
   sdd: {
     id: 'sdd',
     label: 'SDD completo',
-    description: 'Documento SDD canonico: estado actual, propuesta, frentes, roles, QA, diagramas, evidencia.',
+    description:
+      'Documento SDD canonico: estado actual, propuesta, frentes, roles, QA, diagramas, evidencia.',
     sections: [
       { id: 'header', visible: true },
       { id: 'metrics', visible: true },
@@ -73,7 +83,8 @@ export const TEMPLATES: Record<TemplateId, ReportTemplate> = {
   handoff: {
     id: 'handoff',
     label: 'Dev handoff',
-    description: 'Para developers: estimacion + escenarios QA + evidencia enlazada. Sin roles ni diagramas.',
+    description:
+      'Para developers: estimacion + escenarios QA + evidencia enlazada. Sin roles ni diagramas.',
     sections: [
       { id: 'header', visible: true },
       { id: 'metrics', visible: true, title: 'Estimacion' },
@@ -105,7 +116,10 @@ export interface RenderedTemplate {
   markdown: string;
 }
 
-export function renderTemplateMarkdown(report: AnalyticsReport, templateId?: string | null): string {
+export function renderTemplateMarkdown(
+  report: AnalyticsReport,
+  templateId?: string | null,
+): string {
   const template = getTemplate(templateId);
   const out: string[] = [];
   for (const section of template.sections) {
@@ -115,21 +129,23 @@ export function renderTemplateMarkdown(report: AnalyticsReport, templateId?: str
       case 'header':
         out.push(`# ${report.summary}`);
         out.push('');
-        out.push(`Reporte: ${report.id} · ${new Date(report.createdAt).toISOString()} · modo ${report.mode} · template ${template.id}`);
+        out.push(
+          `Reporte: ${report.id} · ${new Date(report.createdAt).toISOString()} · modo ${report.mode} · template ${template.id}`,
+        );
         out.push('');
         out.push(`**Entrada**: ${report.input}`);
         if (report.llmSource) {
           const cached = report.llmCached ? ' (cache)' : '';
-          out.push(`**Origen**: ${report.llmSource}${cached} · ${(report.llmDurationMs ?? 0) / 1000}s`);
+          out.push(
+            `**Origen**: ${report.llmSource}${cached} · ${(report.llmDurationMs ?? 0) / 1000}s`,
+          );
         }
         out.push('');
         break;
       case 'metrics':
         out.push(`## ${title}`);
         out.push('');
-        out.push(
-          `- **Complejidad**: ${report.complexity.level} — ${report.complexity.rationale}`,
-        );
+        out.push(`- **Complejidad**: ${report.complexity.level} — ${report.complexity.rationale}`);
         out.push(
           `- **Estimacion**: discovery ${report.estimate.discoveryHours}h · delivery ${report.estimate.deliveryHours}h · QA ${report.estimate.qaHours}h · confianza ${report.estimate.confidence}`,
         );

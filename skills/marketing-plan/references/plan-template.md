@@ -48,18 +48,23 @@ The Quietude plan (see `references/example-quietude.md`) is the canonical refere
 **Structure:**
 
 ### What {Company} is, in one sentence
+
 Pulled from positioning doc / seed deck / founder language.
 
 ### The category we're claiming
+
 Is the company creating a new category, redefining an existing one, or competing in a defined category? Name it. State the category-defining frame in 2–3 sentences. Reference the source (founder's words, ICP doc, etc.).
 
 ### Who we're for (ICP, distilled)
+
 Demographics / firmographics + stated problem vs. real problem + what they're actually buying. Tight, 4–6 bullets.
 
 ### The business model logic
+
 How does the company make money? What's the customer-acquisition unit economics theory? What's the compounding channel thesis (if any)? Pulled from seed deck / financial model / founder narrative.
 
 ### Brand voice (the non-negotiable)
+
 If the client has documented voice rules, list them. YES / NO vocabulary. CTA rules. Tone. Core method (initiatory, explanatory, narrative, etc.). Every other section of the plan must respect these.
 
 **Voice notes:**
@@ -77,6 +82,7 @@ If the client has documented voice rules, list them. YES / NO vocabulary. CTA ru
 **Structure:**
 
 ### Team composition (marketing surface area)
+
 Table of every person with marketing surface area:
 
 | Person | Role | Marketing surface area |
@@ -85,6 +91,7 @@ Table of every person with marketing surface area:
 Be honest about gaps. If there's no dedicated marketing hire yet, name when one becomes necessary and what role (see `references/team-and-agency-model.md` — first hire should be π-shaped strategist titled Manager or Lead, not VP/CMO).
 
 ### Marketing budget (current)
+
 - Paid acquisition: $X/mo
 - Tooling stack: list with estimated cost
 - Retainers / fCMO: list
@@ -95,9 +102,11 @@ Be honest about gaps. If there's no dedicated marketing hire yet, name when one 
 State the funding-stage tier this maps to (see `references/funding-stage-unlocks.md`). Implication: what 90-day plan must produce *without* lever pulls that require future budget.
 
 ### Phase of SaaS growth
+
 Name the current phase: $0–10K ARR / $10K–100K / $100K–1M / $1M–$10M / $10M+. Each phase has its own binding constraint and dominant growth pattern (see `references/growth-patterns.md`). Section 10 sequences the move into the next phase.
 
 ### What's already done (acknowledge, then build on)
+
 Table:
 
 | Asset | Status | Marketing leverage |
@@ -106,6 +115,7 @@ Table:
 This is where past launches, PR moments, content pillars, certifications, notable users get acknowledged. **Critical**: don't write a plan that ignores work the team is proud of.
 
 ### What's in-flight (drafted but not shipped)
+
 Table:
 
 | Item | Status | Blocker |
@@ -114,6 +124,7 @@ Table:
 Be honest about blockers. Where the blocker is "no time" or "no decision," that goes to Section 13's open decisions.
 
 ### What's stuck (and needs to unstick this quarter)
+
 Table:
 
 | Issue | Cost of inaction | Action |
@@ -122,6 +133,7 @@ Table:
 Stuck things are the most leverage-positive places to focus the first weeks of the 90-day plan.
 
 ### Audit rubric snapshot
+
 17-section scored snapshot using the embedded current-state rubric. See `references/current-state-rubric.md` for the full rubric and scoring guides.
 
 If a prior scored audit exists, paste those scores in. Otherwise score from available materials and note "scored from materials" under the heading.
@@ -149,9 +161,11 @@ If a prior scored audit exists, paste those scores in. Otherwise score from avai
 **Structure:**
 
 ### Current state
+
 Brief. What's working today, what's not, what the data shows about channel mix.
 
 ### The plan
+
 Numbered "Moves." Each move is a paragraph (3–6 sentences) describing the channel, the thesis, and the specific work. Common moves:
 
 - **Move 1 — SEO (and content)** — Reference the SEO plan if one exists (`seo/plan.md`). Otherwise: keyword research, pillar/spoke structure, content cadence.
@@ -164,12 +178,15 @@ Numbered "Moves." Each move is a paragraph (3–6 sentences) describing the chan
 - **Move 8 — Paid layer (when budget unlocks)** — Apple Search Ads, Meta, LinkedIn, Google. Held until specified funding stage.
 
 ### 90-day acquisition moves
+
 Week-by-week breakdown of the ships in the first quarter.
 
 ### 12-month acquisition outlook
+
 Quarter-by-quarter outcome state (Q1 / Q2 / Q3 / Q4).
 
 ### Skills + tools
+
 - **Skills:** list relevant marketing-skills repo skills (`seo-audit`, `ai-seo`, `ads`, `social`, `competitors`, etc.)
 - **MCPs / APIs:** list connections (Ahrefs API, GA4 MCP, Typefully MCP, Stripe MCP for LTV math, etc.)
 
@@ -191,6 +208,7 @@ Quarter-by-quarter outcome state (Q1 / Q2 / Q3 / Q4).
 - Paywall + pricing review (often Activation × Revenue)
 
 ### Skills + tools
+
 `onboarding`, `signup`, `paywalls`, `copywriting`, `marketing-website-design`, `ab-testing`, etc.
 
 ---
@@ -211,6 +229,7 @@ Quarter-by-quarter outcome state (Q1 / Q2 / Q3 / Q4).
 - Annual plan default tests (cross-references to Revenue)
 
 ### Skills + tools
+
 `emails`, `churn-prevention`, `copywriting`, `paywalls`, etc.
 
 ---
@@ -231,6 +250,7 @@ Quarter-by-quarter outcome state (Q1 / Q2 / Q3 / Q4).
 - Gifting flows (for consumer / hardware)
 
 ### Skills + tools
+
 `referrals`, `social`, `emails` (for ambassador lifecycle), `copywriting`, etc.
 
 ---
@@ -252,6 +272,7 @@ Quarter-by-quarter outcome state (Q1 / Q2 / Q3 / Q4).
 - Long-term value pools (data licensing, enterprise expansion) — flagged not executed in 12-month plan
 
 ### Unit economics
+
 Required table:
 
 | Metric | Value | Note |
@@ -265,6 +286,7 @@ Required table:
 These feed the budget math in Section 10. If any of these are unknown, flag in Section 13 as top open decision.
 
 ### Skills + tools
+
 `pricing`, `paywalls`, `sales-enablement`, `revops`, `ab-testing`, etc.
 
 ---
@@ -278,18 +300,22 @@ These feed the budget math in Section 10. If any of these are unknown, flag in S
 **Structure:** Four 2–3-week sprints:
 
 ### Weeks 1–2 — Unblock
+
 Highest-confidence, lowest-cost changes. Removing things that are broken.
 
 | Move | Stage | Owner |
 |---|---|---|
 
 ### Weeks 3–4 — Foundation
+
 Pillar/foundational work. Domain consolidation. First content. First flows shipping. First tests live.
 
 ### Weeks 5–8 — Velocity
+
 Compounding work begins. Content cadence. Repeat tests. Channel scaling.
 
 ### Weeks 9–12 — Compound
+
 Second-order moves. Layered tactics. 90-day review prep.
 
 ---
@@ -334,6 +360,7 @@ State explicitly:
 **Structure:**
 
 ### The thesis
+
 1–2 paragraphs explaining the principle: small team + marketing-skills library + MCP integrations = output of a larger team.
 
 ### Skills mapped to AARRR stages
@@ -353,6 +380,7 @@ State explicitly:
 |---|---|---|
 
 ### A concrete example
+
 Pick one operational moment that proves the stack works (e.g., "Customer.io MCP let the non-technical founder draft a flow live on the kickoff call"). Anchor the abstract claim in a specific event.
 
 ### Capability unlocks by funding stage
@@ -390,6 +418,7 @@ Pull from `references/funding-stage-unlocks.md`.
 **Structure:**
 
 ### Intro paragraph
+
 Explain the cross-reference: Sections 4–8 prescribe what's *being done*. This section maps what's *possible*.
 
 ### Status legend
@@ -408,12 +437,17 @@ By status (Now / Q2 / Q3+ / Q4+ / Skip), tables of relevant marketing-ideas by n
 |---|---|---|
 
 ### 12.2 Activation ideas
+
 ### 12.3 Retention ideas
+
 ### 12.4 Referral ideas
+
 ### 12.5 Revenue ideas
+
 ### 12.6 Cross-cutting / brand foundation ideas
 
 ### Idea-bank summary
+
 - Counts per AARRR stage
 - Counts skipped, with rationale
 - What the plan covers as a % of the available tactical surface area

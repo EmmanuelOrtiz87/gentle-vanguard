@@ -54,13 +54,7 @@ export type FailureCategory =
   | 'quality'
   | 'unknown';
 
-export type GuardAction =
-  | 'retry'
-  | 'correct'
-  | 'escalate'
-  | 'isolate'
-  | 'continue'
-  | 'block';
+export type GuardAction = 'retry' | 'correct' | 'escalate' | 'isolate' | 'continue' | 'block';
 
 export interface GuardDecision {
   category: FailureCategory;
@@ -204,7 +198,7 @@ const CATEGORY_ORDER: Exclude<FailureCategory, 'unknown'>[] = [
 
 export function classifyFailure(input: ClassifyInput): FailureCategory {
   const message =
-    typeof input.error === 'string' ? input.error : input.error?.message ?? String(input.error);
+    typeof input.error === 'string' ? input.error : (input.error?.message ?? String(input.error));
   for (const category of CATEGORY_ORDER) {
     for (const re of SIGNATURES[category]) {
       if (re.test(message)) return category;
@@ -411,14 +405,13 @@ export function evaluateFailure(
     category,
     action: decision.action,
     source: input.source ?? 'unknown',
-    error: typeof input.error === 'string' ? input.error : input.error?.message ?? String(input.error),
+    error:
+      typeof input.error === 'string' ? input.error : (input.error?.message ?? String(input.error)),
     resolved: opts.resolved ?? false,
     resolution: opts.resolution,
   });
   const proceed =
-    decision.action === 'retry' ||
-    decision.action === 'correct' ||
-    decision.action === 'continue';
+    decision.action === 'retry' || decision.action === 'correct' || decision.action === 'continue';
   return { decision, category, incident, proceed };
 }
 

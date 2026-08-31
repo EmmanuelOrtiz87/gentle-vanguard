@@ -138,18 +138,22 @@ This also helps the founder mid-raise: showing what the round buys is investor-n
 ## How to apply tier logic in a plan
 
 ### Section 3 (Current state)
+
 - State the client's current tier explicitly: "Current tier: pre-seed / bootstrapped per Tier 1."
 
 ### Section 4–8 (AARRR sections)
+
 - Note tier-dependent moves: "Paid layer (Tier 2 unlock — held until seed close)"
 - For Tier 1 plans: every move must be executable at current budget tier OR explicitly flagged as future
 - For Tier 2+ plans: moves can assume the tier's capability
 
 ### Section 10 (12-month outlook)
+
 - Each quarter names the tier that's active: "Q2 — Months 4–6 (post seed close). Funding state: Tier 2."
 - Tier transitions trigger plan recalibration moments
 
 ### Section 11 (Marketing operations stack)
+
 - Use the table in `references/ops-stack-mapping.md` capability-unlocks section
 - Make it client-specific: "Today (Tier 1): {client's current capability}. After seed close (Tier 2): + {what changes}."
 
@@ -158,29 +162,35 @@ This also helps the founder mid-raise: showing what the round buys is investor-n
 The standard tiers assume a typical software / SaaS / consumer app. Adjust for category:
 
 ### Consumer apps (D2C)
+
 - Higher paid acquisition floor — apps need to test CAC against download cost benchmarks (~$2-10 install + 5-15% trial conversion benchmark)
 - Tier 2 starts effectively at $10–20K/mo paid (otherwise can't get statistically meaningful reads at app-install CPMs)
 
 ### B2B SaaS
+
 - Lower paid acquisition floor — LinkedIn / Google Ads can produce signal at $3–5K/mo
 - More weight on content + sales enablement budget
 - Often add a sales hire before a content hire
 
 ### Hybrid hardware + software
+
 - Hardware revenue can self-fund some marketing (the eye-mask wedge pattern)
 - Paid budget should track blended CAC across hardware sales + app subs
 - Shopify-side optimization is a Tier 1 priority (cheap leverage)
 
 ### Deep-tech / scientific / clinical
+
 - PR + investor marketing carries more weight than paid
 - Conference speaking + academic publishing > Meta ads
 - Tier 1 can produce significant traction without paid
 
 ### Marketplace / two-sided
+
 - Each side has its own AARRR funnel — budget splits accordingly
 - Supply-side acquisition often dominates early; demand-side dominates after liquidity
 
 ### Open source / developer tools
+
 - DevRel + community + content > paid
 - GitHub stars / npm installs are the activation event
 - Paid layer often delayed until Series A

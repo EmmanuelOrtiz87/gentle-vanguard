@@ -21,6 +21,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join, resolve } from 'path';
 import { load as loadYaml } from 'js-yaml';
+import prettier from 'prettier';
 import { pathToFileURL } from 'url';
 
 const ROOT = resolve(import.meta.dirname, '..', '..');
@@ -369,13 +370,20 @@ const TARGETS: Array<{ file: string; render: (p: CanonicalProfile) => string }> 
   { file: '.clinerules', render: renderClineRules },
 ];
 
-function main(): void {
+async function formatGenerated(file: string, content: string): Promise<string> {
+  if (!file.endsWith('.md')) return content;
+  const filepath = join(PROFILES_DIR, file);
+  const config = (await prettier.resolveConfig(filepath)) ?? {};
+  return prettier.format(content, { ...config, filepath, parser: 'markdown' });
+}
+
+async function main(): Promise<void> {
   const check = process.argv.includes('--check');
   const profile = loadProfile();
   let drift = false;
 
   for (const target of TARGETS) {
-    const generated = target.render(profile);
+    const generated = await formatGenerated(target.file, target.render(profile));
     const outPath = join(PROFILES_DIR, target.file);
 
     if (check) {
@@ -404,5 +412,5 @@ function main(): void {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  main();
+  void main();
 }

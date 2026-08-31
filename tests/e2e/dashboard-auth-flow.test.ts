@@ -69,7 +69,11 @@ function closeWebSocket(ws: WebSocket): Promise<void> {
   if (ws.readyState === WebSocket.CLOSED) return Promise.resolve();
   ws.close();
   return new Promise((resolve) => {
-    const timeout = setTimeout(() => resolve(), 1000);
+    const timeout = setTimeout(() => {
+      // Graceful close handshake not completed in time — force-terminate so the
+      // connection reaches CLOSED deterministically (observed on CI/slow servers).
+      if (ws.readyState !== WebSocket.CLOSED) ws.terminate();
+    }, 1000);
     ws.once('close', () => {
       clearTimeout(timeout);
       resolve();

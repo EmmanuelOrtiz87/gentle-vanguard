@@ -2,7 +2,6 @@
 
 > 从 SKILL.md 下沉的完整版。SKILL.md 保留 7 条硬规则速查，本文件是每条规则的展开：架构选型、取图渠道与代码、AppPhone JSX 骨架、ios_frame 三步用法、品位锚点全表。
 
-
 做 iOS/Android/移动 app 原型时（触发：「app 原型」「iOS mockup」「移动应用」「做个 app」），下面四条**覆盖**通用 placeholder 原则——app 原型是 demo 现场，静态摆拍和米白占位卡没有说服力。
 
 ### 0. 架构选型（必先决定）

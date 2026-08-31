@@ -39,8 +39,20 @@ export async function checkSecretScanner() {
   const scannerCfg = join(ROOT, 'config', 'secret-scanner.json');
   const scannerTest = join(ROOT, 'tests', 'unit', 'secret-scanner.test.ts');
 
-  payloadFileOk('secret-scanner', 'module (src/security/secret-scanner.ts)', scannerSrc, 'manual', true);
-  payloadFileOk('secret-scanner', 'CLI (src/security/secret-scanner-cli.ts)', scannerCli, 'manual', true);
+  payloadFileOk(
+    'secret-scanner',
+    'module (src/security/secret-scanner.ts)',
+    scannerSrc,
+    'manual',
+    true,
+  );
+  payloadFileOk(
+    'secret-scanner',
+    'CLI (src/security/secret-scanner-cli.ts)',
+    scannerCli,
+    'manual',
+    true,
+  );
   payloadFileOk(
     'secret-scanner',
     'config (config/secret-scanner.json)',

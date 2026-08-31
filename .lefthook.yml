@@ -4,7 +4,8 @@
 post-commit:
   commands:
     codegraph-sync:
-      run: npx tsx src/integrations/codegraph-post-modification-sync.ts --Trigger post-commit --Force
+      run:
+        npx tsx src/integrations/codegraph-post-modification-sync.ts --Trigger post-commit --Force
     hashline-snapshot:
       run: npx tsx src/infrastructure/hashline-snapshot-hook.ts
 

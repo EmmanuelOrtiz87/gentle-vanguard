@@ -56,7 +56,7 @@ async function runTest(name: string, fn: () => Promise<void>): Promise<void> {
 // Test 1: Session autostart functionality
 async function testSessionAutostart() {
   // Verify session autostart script exists
-  const autostartPath = join(process.cwd(), 'src', 'session-autostart.ts');
+  const autostartPath = join(process.cwd(), 'src', 'session', 'session-autostart.ts');
   assert(existsSync(autostartPath), 'session-autostart.ts should exist');
 
   // Runtime artifact: created by session-autostart on real sessions — skip on fresh checkouts.
@@ -72,8 +72,8 @@ async function testHealthCheck() {
   assert(existsSync(healthPath), 'health-check.ts should exist');
 
   // Check that key components are detectable
-  const mcpPath = join(process.cwd(), 'dist', 'scripts', 'mcp', 'skill-server.js');
-  assert(existsSync(mcpPath), 'MCP skill server should be built');
+  const mcpPath = join(process.cwd(), 'scripts', 'mcp', 'skill-server.ts');
+  assert(existsSync(mcpPath), 'MCP skill server source should exist');
 }
 
 // Test 3: Watchtower health status
@@ -143,7 +143,7 @@ async function testTokenBudget() {
 
 // Test 9: MCP bridge
 async function testMcpBridge() {
-  const mcpBridgePath = join(process.cwd(), 'src', 'mcp-bridge.ts');
+  const mcpBridgePath = join(process.cwd(), 'src', 'mcp', 'mcp-bridge.ts');
   assert(existsSync(mcpBridgePath), 'MCP bridge should exist');
 
   // Verify MCP config

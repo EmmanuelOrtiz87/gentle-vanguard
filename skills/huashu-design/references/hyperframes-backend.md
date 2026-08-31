@@ -49,6 +49,7 @@ cd 项目名 && npm install
 1. **包容器**：外套 `#root` 带合成 data 属性；整个 `.stage` 作为唯一 clip 最省事（`class="stage clip"` + data-start/duration/track-index）；`.stage` 从 fixed 居中改 absolute inset:0，html/body 定死 1920×1080
 2. **删自驱**：rAF tick 循环、fitStage/resize 监听、replay 按钮、`__ready/__setTime/__seek` 协议全删（渲染器不需要）
 3. **挂代理 tween**（核心 12 行）：
+
    ```js
    const proxy = { t: 0 };
    const tl = gsap.timeline({ paused: true });
@@ -58,6 +59,7 @@ cd 项目名 && npm install
    window.__timelines["main"] = tl;
    render(0);   // 必须：timeline 停在 t=0 时 onUpdate 不触发，不补这句首帧可能未初始化
    ```
+
 4. **扫 transition**：全文搜 `transition:` 声明。CSS transition + class 切换走墙钟，逐帧 seek 下不确定，必须改成 render(t) 里对 t 的纯函数（lerp）
 
 ## 校验与渲染

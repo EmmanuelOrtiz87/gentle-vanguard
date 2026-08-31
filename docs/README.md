@@ -6,31 +6,31 @@ important decisions exist.
 
 ## Documentation Map
 
-| Area                | Path                                          | Purpose                                                                                    |
-| ------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Agent runtime       | [agents/](agents/)                            | Agent bootstrap, AI behavior rules, tool-specific local-first guidance, prompt behavior.   |
-| Architecture        | [architecture/](architecture/)                | System architecture, topology, workflows, project structure, architecture diagrams.        |
-| Decisions           | [adr/](adr/)                                  | Architecture decision records and durable technical decisions.                             |
-| Dashboard           | [dashboard/](dashboard/)                      | Dashboard behavior, executive view, observability UI documentation.                        |
-| Governance          | [governance/](governance/)                    | Normatives, policies, contribution rules, code review standards, compliance guidance.      |
-| Getting started     | [getting-started/](getting-started/)          | Installation, prerequisites, developer setup, stack setup.                                 |
-| Guides              | [guides/](guides/)                            | Operational and development guides that are still useful day to day.                       |
-| Incidents           | [incidents/](incidents/)                      | Lessons learned and incident writeups worth preserving.                                    |
-| Knowledge base      | [knowledge-base/](knowledge-base/)            | Knowledge-base architecture and usage documentation.                                       |
-| Marketing and brand | [brand/](brand/) and [marketing/](marketing/) | Brand assets, launch copy, social material, external messaging.                            |
-| Operations          | [operations/](operations/)                    | Runbooks, CI/CD docs, operating procedures, command references.                            |
-| Presentations       | [presentations/](presentations/)              | Current presentation material. Older versions belong outside live docs.                    |
-| Product             | [product/](product/)                          | Manifesto, requirements, design, roadmap, product-facing documentation.                    |
-| Reference           | [reference/](reference/)                      | Stable technical references and implementation contracts.                                  |
-| Releases            | [releases/](releases/)                        | Release-specific evidence, notes, final release documentation.                             |
-| Research            | [research/](research/)                        | Curated research that supports stack decisions or capabilities.                            |
-| SDD                 | [sdd/](sdd/)                                  | Spec-driven development documents and templates.                                           |
+| Area                | Path                                          | Purpose                                                                                                  |
+| ------------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Agent runtime       | [agents/](agents/)                            | Agent bootstrap, AI behavior rules, tool-specific local-first guidance, prompt behavior.                 |
+| Architecture        | [architecture/](architecture/)                | System architecture, topology, workflows, project structure, architecture diagrams.                      |
+| Decisions           | [adr/](adr/)                                  | Architecture decision records and durable technical decisions.                                           |
+| Dashboard           | [dashboard/](dashboard/)                      | Dashboard behavior, executive view, observability UI documentation.                                      |
+| Governance          | [governance/](governance/)                    | Normatives, policies, contribution rules, code review standards, compliance guidance.                    |
+| Getting started     | [getting-started/](getting-started/)          | Installation, prerequisites, developer setup, stack setup.                                               |
+| Guides              | [guides/](guides/)                            | Operational and development guides that are still useful day to day.                                     |
+| Incidents           | [incidents/](incidents/)                      | Lessons learned and incident writeups worth preserving.                                                  |
+| Knowledge base      | [knowledge-base/](knowledge-base/)            | Knowledge-base architecture and usage documentation.                                                     |
+| Marketing and brand | [brand/](brand/) and [marketing/](marketing/) | Brand assets, launch copy, social material, external messaging.                                          |
+| Operations          | [operations/](operations/)                    | Runbooks, CI/CD docs, operating procedures, command references.                                          |
+| Presentations       | [presentations/](presentations/)              | Current presentation material. Older versions belong outside live docs.                                  |
+| Product             | [product/](product/)                          | Manifesto, requirements, design, roadmap, product-facing documentation.                                  |
+| Reference           | [reference/](reference/)                      | Stable technical references and implementation contracts.                                                |
+| Releases            | [releases/](releases/)                        | Release-specific evidence, notes, final release documentation.                                           |
+| Research            | [research/](research/)                        | Curated research that supports stack decisions or capabilities.                                          |
+| SDD                 | [sdd/](sdd/)                                  | Spec-driven development documents and templates.                                                         |
 | Security            | [security/](security/)                        | Security policy, usage examples, hardening, dependency security support and manual remediation runbooks. |
-| Status              | [status/](status/)                            | [Canonical current status](status/CANONICAL-STATUS.md) and intentionally retained reports. |
-| Supplementary       | [supplementary/](supplementary/)              | Templates and supporting material that do not belong to a core area.                       |
-| Tasks and backlog   | [tasks/](tasks/) and [backlog/](backlog/)     | Current task/backlog tracking. Completed plans should not live here.                       |
-| Technical manual    | [technical/](technical/)                      | Multi-part technical manual and stack documentation.                                       |
-| Use cases           | [use-cases/](use-cases/)                      | Representative examples and usage scenarios.                                               |
+| Status              | [status/](status/)                            | [Canonical current status](status/CANONICAL-STATUS.md) and intentionally retained reports.               |
+| Supplementary       | [supplementary/](supplementary/)              | Templates and supporting material that do not belong to a core area.                                     |
+| Tasks and backlog   | [tasks/](tasks/) and [backlog/](backlog/)     | Current task/backlog tracking. Completed plans should not live here.                                     |
+| Technical manual    | [technical/](technical/)                      | Multi-part technical manual and stack documentation.                                                     |
+| Use cases           | [use-cases/](use-cases/)                      | Representative examples and usage scenarios.                                                             |
 
 ## Retention Rules
 

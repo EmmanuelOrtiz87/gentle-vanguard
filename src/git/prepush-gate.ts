@@ -235,7 +235,9 @@ async function runChecks(checks: GateCheck[], concurrency = 4): Promise<CheckRes
 
 function printSummary(results: CheckResult[], totalMs: number): void {
   const passed = results.filter((r) => r.status === 'pass').length;
-  console.log(`\n=== Pre-push gate: ${passed}/${results.length} passed in ${(totalMs / 1000).toFixed(1)}s ===`);
+  console.log(
+    `\n=== Pre-push gate: ${passed}/${results.length} passed in ${(totalMs / 1000).toFixed(1)}s ===`,
+  );
   for (const r of results) {
     const icon = r.status === 'pass' ? '✅' : r.status === 'fail' ? '❌' : '⚠️';
     console.log(`${icon} ${r.name} (${(r.durationMs / 1000).toFixed(1)}s)`);
@@ -265,9 +267,13 @@ async function main(): Promise<void> {
     if (hit) {
       const elapsed = ((Date.now() - start) / 1000).toFixed(2);
       if (json) {
-        console.log(JSON.stringify({ warmCache: true, treeHash, elapsedSec: elapsed, checks: hit.checks }));
+        console.log(
+          JSON.stringify({ warmCache: true, treeHash, elapsedSec: elapsed, checks: hit.checks }),
+        );
       } else {
-        console.log(`[prepush-gate] Warm cache hit (${elapsed}s) — tree unchanged since green run at ${hit.timestamp}. Skipping ${CHECKS.length} checks.`);
+        console.log(
+          `[prepush-gate] Warm cache hit (${elapsed}s) — tree unchanged since green run at ${hit.timestamp}. Skipping ${CHECKS.length} checks.`,
+        );
       }
       process.exit(0);
     }

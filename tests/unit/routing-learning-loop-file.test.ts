@@ -107,7 +107,10 @@ describe('routing learning loop (file-based E2E)', () => {
       assert.equal(rec.status, 0, `recommend-agent failed: ${rec.stdout}`);
       const result = parseJsonOutput(rec.stdout);
       assert.equal(result.recommended, 'test-agent-e2e');
-      assert.ok(['routing-table', 'override'].includes(result.source), `source inesperado: ${result.source}`);
+      assert.ok(
+        ['routing-table', 'override'].includes(result.source),
+        `source inesperado: ${result.source}`,
+      );
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
@@ -124,8 +127,20 @@ describe('routing learning loop (file-based E2E)', () => {
         JSON.stringify(
           {
             agents: {
-              'agent-a': { total: 5, successes: 5, failures: 0, avg_duration: 100, last_event: new Date().toISOString() },
-              'agent-b': { total: 5, successes: 1, failures: 4, avg_duration: 200, last_event: new Date().toISOString() },
+              'agent-a': {
+                total: 5,
+                successes: 5,
+                failures: 0,
+                avg_duration: 100,
+                last_event: new Date().toISOString(),
+              },
+              'agent-b': {
+                total: 5,
+                successes: 1,
+                failures: 4,
+                avg_duration: 200,
+                last_event: new Date().toISOString(),
+              },
             },
             summary: { total_delegations: 10 },
           },

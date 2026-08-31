@@ -101,7 +101,8 @@ function createContentOSHandler(db: DatabaseManager) {
     }
 
     if (req.method === 'POST' && path === '/api/generate') {
-      const body = (await readBody(req)) as Partial<GenerateBrief> & { schedule?: boolean } | null;
+      const body = (await readBody(req)) as
+        (Partial<GenerateBrief> & { schedule?: boolean }) | null;
       if (!body?.brief || !body.brief.trim()) {
         json(res, 400, { error: 'brief es obligatorio' });
         return;
@@ -152,7 +153,12 @@ function createContentOSHandler(db: DatabaseManager) {
             provider: v.provider,
           });
           created.push(vid);
-          db.insertEvent('content_os.variant_generated', { itemId, variantId: vid, platform: v.platform, provider: v.provider });
+          db.insertEvent('content_os.variant_generated', {
+            itemId,
+            variantId: vid,
+            platform: v.platform,
+            provider: v.provider,
+          });
         }
         const proposedSlots = body.schedule
           ? platforms.map((p) => {
@@ -303,7 +309,9 @@ export function startServer(opts: { port?: number } = {}): void {
   });
   const port = opts.port ?? PORT;
   server.listen(port, '127.0.0.1', () => {
-    console.log(`[content-os] REST en http://127.0.0.1:${port} (Nexus: ${ROOT}/.runtime/gentle-vanguard.db)`);
+    console.log(
+      `[content-os] REST en http://127.0.0.1:${port} (Nexus: ${ROOT}/.runtime/gentle-vanguard.db)`,
+    );
   });
   const stop = (): void => {
     server.close();

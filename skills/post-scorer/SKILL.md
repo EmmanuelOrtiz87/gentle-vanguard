@@ -34,7 +34,7 @@ Read about-me.md and voice.md from the project if they exist. If missing, note i
 
 ### Performance data
 
-Check for cached LinkedIn data in the project or outputs folder. Look for files matching *-all-posts.json or *-posts.txt.
+Check for cached LinkedIn data in the project or outputs folder. Look for files matching *-all-posts.json or*-posts.txt.
 
 If cached data exists, use it. If not, ask the user:
 

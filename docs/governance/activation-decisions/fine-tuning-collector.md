@@ -7,9 +7,9 @@
 
 ## Proposal
 
-Activar el módulo `fine-tuning-collector` (src/ml/fine-tuning-data-collector.ts) — recolecta datos de
-conversación/sesión para fine-tuning futuro. Local-first: escribe a disco local (`.session/`), sin
-envío a cloud.
+Activar el módulo `fine-tuning-collector` (src/ml/fine-tuning-data-collector.ts) — recolecta datos
+de conversación/sesión para fine-tuning futuro. Local-first: escribe a disco local (`.session/`),
+sin envío a cloud.
 
 - Scope: recolección de datos de sesión para entrenamiento.
 - Impact: genera datasets locales; no afecta la ejecución de sesiones.

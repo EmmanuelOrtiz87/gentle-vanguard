@@ -9,7 +9,7 @@ import { strict as assert } from 'node:assert';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 
-const skillPath = join('.opencode/skills/marketing-content-writer/SKILL.md');
+const skillPath = join('skills/marketing-content-writer/SKILL.md');
 
 /**
  * SDD Step: Verify Skill File Structure

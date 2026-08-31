@@ -2,8 +2,20 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'http';
 import { readFileSync, statSync } from 'fs';
 import { extname, join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { analyzeInput, configureConnection, getConnectionStatus, testConnectionForm } from './atlassian';
-import { deleteAllReports, deleteReport, deleteReports, getReport, listReports, saveReport } from './reports';
+import {
+  analyzeInput,
+  configureConnection,
+  getConnectionStatus,
+  testConnectionForm,
+} from './atlassian';
+import {
+  deleteAllReports,
+  deleteReport,
+  deleteReports,
+  getReport,
+  listReports,
+  saveReport,
+} from './reports';
 import { toDocx, toHtml, toMarkdown, toPdf, type ExportFormat } from './export';
 import { recordMetric, summarize as summarizeMetrics } from './metrics';
 import {
@@ -86,11 +98,21 @@ async function handleExport(req: IncomingMessage, res: ServerResponse, pathname:
   const template = url.searchParams.get('template');
   const safeId = report.id.replace(/[^A-Za-z0-9_-]/g, '');
   if (format === 'md') {
-    sendFile(res, toMarkdown(report, template), 'text/markdown; charset=utf-8', `gv-analytics-${safeId}.md`);
+    sendFile(
+      res,
+      toMarkdown(report, template),
+      'text/markdown; charset=utf-8',
+      `gv-analytics-${safeId}.md`,
+    );
     return;
   }
   if (format === 'html') {
-    sendFile(res, toHtml(report, template), 'text/html; charset=utf-8', `gv-analytics-${safeId}.html`);
+    sendFile(
+      res,
+      toHtml(report, template),
+      'text/html; charset=utf-8',
+      `gv-analytics-${safeId}.html`,
+    );
     return;
   }
   if (format === 'docx') {
@@ -103,7 +125,7 @@ async function handleExport(req: IncomingMessage, res: ServerResponse, pathname:
     return;
   }
   if (format === 'pdf') {
-    const pdfBuf = await toPdf(report, template) as Buffer & { pdfFallbackHtml?: true };
+    const pdfBuf = (await toPdf(report, template)) as Buffer & { pdfFallbackHtml?: true };
     if (pdfBuf.pdfFallbackHtml) {
       // Chrome not available — serve the HTML export with a clear warning header
       // so the client knows what happened.
@@ -111,7 +133,8 @@ async function handleExport(req: IncomingMessage, res: ServerResponse, pathname:
         'Content-Type': 'text/html; charset=utf-8',
         'Content-Disposition': `attachment; filename="gv-analytics-${safeId}.html"`,
         'Cache-Control': 'no-store',
-        'X-GV-PDF-Fallback': 'Chrome not found — serving HTML instead. Set GV_ANALYTICS_CHROME to enable PDF.',
+        'X-GV-PDF-Fallback':
+          'Chrome not found — serving HTML instead. Set GV_ANALYTICS_CHROME to enable PDF.',
       });
       res.end(pdfBuf);
       return;
@@ -289,12 +312,8 @@ const server = createServer((req, res) => {
           status: res.statusCode,
           durationMs: Date.now() - start,
           llmSource:
-            (llmMetaRef.current.llmSource as
-              | 'agent'
-              | 'cache'
-              | 'fallback'
-              | 'heuristic'
-              | null) ?? null,
+            (llmMetaRef.current.llmSource as 'agent' | 'cache' | 'fallback' | 'heuristic' | null) ??
+            null,
           llmCached: llmMetaRef.current.llmCached,
         });
       });

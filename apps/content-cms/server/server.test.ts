@@ -4,7 +4,8 @@ import { resolveGenerator, templateVariant, LlmGenerator, GenerateBrief } from '
 
 const brief: GenerateBrief = {
   title: 'Lanzamiento GV Content OS',
-  brief: 'Anunciamos el CMS social nativo local-first del stack: genera variantes por red con specs, calendario y gate humano.',
+  brief:
+    'Anunciamos el CMS social nativo local-first del stack: genera variantes por red con specs, calendario y gate humano.',
   objective: 'captar estudiantes y empresas',
   voice: '',
   platforms: ['linkedin', 'x', 'instagram'],

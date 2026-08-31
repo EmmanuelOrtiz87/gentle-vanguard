@@ -64,7 +64,7 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 | Strict TDD enforcement   | `rules/SDD-STRICT-TDD.md`                                                |
 | Per-phase model routing  | `rules/PER-PHASE-MODEL-ROUTING.md`                                       |
 | Dependency automation    | `renovate.json` (Renovate) + `.github/dependabot.yml` (Dependabot)       |
-| Pre-processing hook      | `src/tools/pre-process-input.ts`                                               |
+| Pre-processing hook      | `src/tools/pre-process-input.ts`                                         |
 | SDD FLOW                 | New feature -> BA/EXPLORE, no exceptions                                 |
 | Delegation Rules         | `rules/DELEGATION-RULES.md`                                              |
 
@@ -77,7 +77,7 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 | Rule                                | Description                                                                                                                                                                       |
 | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **NO custom props in tool configs** | Never add non-standard properties to `opencode.json`, `.cursorrules`, `.windsurf/config.json`, etc. Tools reject unknown props at startup. Use `config/*.json` for custom config. |
-| **Validate before deploy**          | Run `src/tools/validate-opencode-config.ts` before any change to `opencode.json`                                                                                                        |
+| **Validate before deploy**          | Run `src/tools/validate-opencode-config.ts` before any change to `opencode.json`                                                                                                  |
 | **Separate config per concern**     | Prompt optimization → `config/system-prompt-optimization.json`. Never inline into tool configs.                                                                                   |
 
 ## Context Optimization
@@ -99,8 +99,8 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 
 | Response cache | `src/tools/pre-process-input.ts` — SHA256 cache, TTL 30min, -33-41% latency (flag
 `-DisableCache` to bypass) | | Lazy autostart | `config/session-autostart.config.json` — 6
-non-critical steps deferred post-pipeline | | In-process pipeline | `src/session/session-start-optimized.ts`
-— removed `Start-Job`, runs `&` directo in-process |
+non-critical steps deferred post-pipeline | | In-process pipeline |
+`src/session/session-start-optimized.ts` — removed `Start-Job`, runs `&` directo in-process |
 
 ## Token Notification (Auto-Hook — Every Turn)
 
@@ -167,7 +167,7 @@ See `docs/operations/procedures/QUICK-COMMANDS.md` for full list.
 | PR Labeler CI                | `.github/workflows/labeler.yml`                                                                                                                     |
 | OpenAPI Validate CI          | `.github/workflows/openapi-validate.yml` <!-- REF-OBSOLETA: workflow no existe -->                                                                  |
 | Devcontainer                 | `.devcontainer/devcontainer.json`                                                                                                                   |
-| JSON Validator               | `src/tools/json-validator.ts`                                                                                                                             |
+| JSON Validator               | `src/tools/json-validator.ts`                                                                                                                       |
 | JSON Construction            | `rules/NORMATIVAS-JSON-CONSTRUCTION.md` <!-- REF-OBSOLETA: rules/NORMATIVAS-JSON-CONSTRUCTION.md no existe -->                                      |
 | **Feedback Collector**       | `src/feedback/feedback-collector.ts` <!-- REF-OBSOLETA: src/feedback/ no existe; feedback migrado a Nexus -->                                       |
 

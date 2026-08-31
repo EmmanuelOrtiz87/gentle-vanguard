@@ -9,9 +9,12 @@
 
 ## Overview
 
-The Maintenance Watchtower is the operational health monitoring and auto-healing system for Gentle-Vanguard. It performs 96 comprehensive checks across 22 stack components and can auto-heal detected issues.
+The Maintenance Watchtower is the operational health monitoring and auto-healing system for
+Gentle-Vanguard. It performs 96 comprehensive checks across 22 stack components and can auto-heal
+detected issues.
 
-**Key Responsibility:** Ensure stack health, detect degradation, auto-heal when possible, and report anomalies.
+**Key Responsibility:** Ensure stack health, detect degradation, auto-heal when possible, and report
+anomalies.
 
 ---
 
@@ -44,21 +47,23 @@ maintenance-watchtower/
 **Run:** `npm run watchtower:health`
 
 ### Categories
+
 - Database (12 checks)
-- Processes (8 checks)  
+- Processes (8 checks)
 - Dashboard (8 checks)
 - Security (10 checks)
 - Configuration (8 checks)
 - Routing (6 checks)
 - Skills (8 checks)
 - Stack (8 checks)
-- + 20 more across components
+- - 20 more across components
 
 ---
 
 ## Auto-Healing
 
 Automatically fixes:
+
 - Orphaned/duplicate processes
 - Stale lock files
 - Database issues (WAL checkpoint)
@@ -73,10 +78,9 @@ Automatically fixes:
 
 **Runs:** Lazy on session start, periodic (30m default), on watchtower calls  
 **Reports:** Nexus DB, alerts, CLI, logs  
-**Monitoring:** Dashboard real-time health widget  
+**Monitoring:** Dashboard real-time health widget
 
 ---
 
 **See:** `docs/modules/MODULE-STRUCTURE.md` for full architecture  
 **Tests:** `tests/unit/watchtower/*.test.ts`
-

@@ -211,29 +211,34 @@ button.cta {
 给不同类型的设计加什么tweaks：
 
 ### 通用
+
 - 主色（color picker）
 - 字号（slider 12-24px）
 - 字型（select：display font vs body font）
 - 暗黑模式（toggle）
 
 ### 幻灯片deck
+
 - 主题（light/dark/brand）
 - 背景样式（solid/gradient/image）
 - 字体对比（更装饰 vs 更克制）
 - 信息密度（minimal/standard/dense）
 
 ### 产品原型
+
 - 布局变体（layout A / B / C）
 - 交互速度（animation speed 0.5x-2x）
 - 数据量（mock数据条数 5/20/100）
 - 状态（empty/loading/success/error）
 
 ### 动画
+
 - 速度（0.5x-2x）
 - 循环（once/loop/ping-pong）
 - Easing（linear/easeOut/spring）
 
 ### Landing page
+
 - Hero风格（image/gradient/pattern/solid）
 - CTA文案（几种变体）
 - 结构（single column / two column / sidebar）

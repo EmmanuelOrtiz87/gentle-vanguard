@@ -60,7 +60,11 @@ patch(
 
 // 2. Fix adaptive-opencode-profile.ps1 - remove Invoke-AdaptiveNotify calls
 log('[2/6] Fix adaptive-opencode-profile.ps1...', 'yellow');
-patch('src/orchestration/adaptive-opencode-profile.ts', 'Invoke-AdaptiveNotify', '# AdaptiveNotify');
+patch(
+  'src/orchestration/adaptive-opencode-profile.ts',
+  'Invoke-AdaptiveNotify',
+  '# AdaptiveNotify',
+);
 
 // 3. Fix adaptive-codex-windsurf-profile.ps1 - remove Notify-Change calls
 log('[3/6] Fix adaptive-codex-windsurf-profile.ps1...', 'yellow');

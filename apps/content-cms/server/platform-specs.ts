@@ -29,7 +29,8 @@ export const PLATFORM_SPECS: Record<string, PlatformSpec> = {
     aspect: '1.91:1',
     imageSize: { width: 1200, height: 627 },
     tone: 'profesional, experto, orientado a valor de negocio',
-    hookStyle: 'primera línea = insight o dato que genera curiosidad (es lo único visible antes del "ver más")',
+    hookStyle:
+      'primera línea = insight o dato que genera curiosidad (es lo único visible antes del "ver más")',
     supportsImage: true,
     bestTimes: ['07:30', '12:00', '17:30'],
     notes: 'Lunes-jueves mayor alcance. Evitar hashtags excesivos. Carruseles (PDF) rinden bien.',

@@ -63,13 +63,13 @@ local-first operation with enterprise-grade observability.
 The modular, per-domain architecture is native to the current stack. It is an implementation
 property, not a separate version, phase, product, or topic. The canonical surfaces are:
 
-| Surface | Location | Responsibility |
-| --- | --- | --- |
-| Academy | `apps/academy-web` | Educational documentation and learning paths |
-| Formal documentation | `docs/presentations` | Published presentations and formal material |
-| Analytics | `apps/gv-analytics` | Native analytics application |
-| CMS local-first | `apps/content-cms` | Local-first content-management application |
-| Dashboard | `apps/web-dashboard` | Live operations and observability |
+| Surface              | Location             | Responsibility                               |
+| -------------------- | -------------------- | -------------------------------------------- |
+| Academy              | `apps/academy-web`   | Educational documentation and learning paths |
+| Formal documentation | `docs/presentations` | Published presentations and formal material  |
+| Analytics            | `apps/gv-analytics`  | Native analytics application                 |
+| CMS local-first      | `apps/content-cms`   | Local-first content-management application   |
+| Dashboard            | `apps/web-dashboard` | Live operations and observability            |
 
 ### 1. Session Management
 

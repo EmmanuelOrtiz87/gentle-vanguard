@@ -72,6 +72,7 @@ bash add-music.sh <input.mp4> [--mood=<name>] [--music=<path>] [--out=<path>]
 - 传错 mood 名会列出所有可用选项，不会静默失败
 
 **典型流水线**（动画导出三件套 + 配乐）：
+
 ```bash
 node render-video.js animation.html                        # 录屏
 bash convert-formats.sh animation.mp4                      # 派生 60fps + GIF
