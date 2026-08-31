@@ -276,6 +276,11 @@
           await load();
         }
       }
+      // Bootstrap: initial load + 5s polling (matches the footer promise).
+      // Without this the script only defines functions and the grid stays at
+      // "Cargando aplicaciones…" forever — no error, no render.
+      void load();
+      setInterval(() => void load(), 5000);
     </script>
   </body>
 </html>
