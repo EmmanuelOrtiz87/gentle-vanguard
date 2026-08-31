@@ -12,22 +12,23 @@
   document.getElementById('foot-year').textContent = new Date().getFullYear();
 
   /* ---------- Diagrams (inline SVG, brand tokens) ---------- */
+  // GV token: color.primary / color.accent
   const D = {
     box: (x, y, w, label, sub, accent) => `
-      <rect x="${x}" y="${y}" width="${w}" height="52" rx="10" fill="rgba(31,41,55,.85)"
-        stroke="${accent || 'rgba(167,139,250,.45)'}" stroke-width="1.4"/>
-      <text x="${x + w / 2}" y="${sub ? y + 22 : y + 31}" text-anchor="middle" fill="#E5E7EB"
+      <rect x="${x}" y="${y}" width="${w}" height="52" rx="10" fill="rgba(26,32,53,.85)"
+        stroke="${accent || 'rgba(168,85,247,.45)'}" stroke-width="1.4"/>
+      <text x="${x + w / 2}" y="${sub ? y + 22 : y + 31}" text-anchor="middle" fill="#FFFFFF"
         font-family="Inter,sans-serif" font-size="13" font-weight="700">${label}</text>
       ${
         sub
-          ? `<text x="${x + w / 2}" y="${y + 40}" text-anchor="middle" fill="#9CA3AF"
+          ? `<text x="${x + w / 2}" y="${y + 40}" text-anchor="middle" fill="#6B7280"
         font-family="Inter,sans-serif" font-size="10.5">${sub}</text>`
           : ''
       }`,
     arrow: (x1, y1, x2, y2, accent) => `
       <defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-        <path d="M0,0 L8,4 L0,8 z" fill="${accent || '#22D3EE'}"/></marker></defs>
-      <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${accent || '#22D3EE'}"
+         <path d="M0,0 L8,4 L0,8 z" fill="${accent || '#00BFFF'}"/></marker></defs>
+       <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${accent || '#00BFFF'}"
         stroke-width="1.6" marker-end="url(#ah)" opacity=".8"/>`,
     wrap: (w, h, inner) =>
       `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img">${inner}</svg>`,
@@ -39,19 +40,19 @@
         760,
         250,
         [
-          D.box(10, 95, 130, 'CLI / UX', 'gv, comandos, hooks', '#A78BFA'),
+          D.box(10, 95, 130, 'CLI / UX', 'gv, comandos, hooks', '#A855F7'),
           D.arrow(140, 121, 178, 121),
           D.box(180, 95, 130, 'Orquestación', 'SDD · routing · delegación'),
           D.arrow(310, 121, 348, 121),
-          D.box(350, 95, 130, 'Agentes', '21 subagentes · skills', '#A78BFA'),
+          D.box(350, 95, 130, 'Agentes', '21 subagentes · skills', '#A855F7'),
           D.box(350, 15, 130, 'Memoria', 'Engram'),
           D.box(350, 175, 130, 'Grafo', 'CodeGraph / graphify'),
-          D.arrow(415, 67, 415, 95, '#A78BFA'),
-          D.arrow(415, 147, 415, 175, '#A78BFA'),
+          D.arrow(415, 67, 415, 95, '#A855F7'),
+          D.arrow(415, 147, 415, 175, '#A855F7'),
           D.arrow(480, 121, 518, 121),
           D.box(520, 95, 120, 'Nexus', 'SQLite 27 tablas'),
-          D.box(660, 60, 90, 'Watchtower', '97 checks', '#22D3EE'),
-          D.box(660, 135, 90, 'Dashboard', 'WS + Vite', '#22D3EE'),
+          D.box(660, 60, 90, 'Watchtower', '97 checks', '#00BFFF'),
+          D.box(660, 135, 90, 'Dashboard', 'WS + Vite', '#00BFFF'),
         ].join(''),
       ),
     'sdd-cycle': () =>
@@ -66,11 +67,11 @@
           D.box(330, 60, 120, 'DEV · Construir', 'implementación'),
           D.arrow(450, 86, 488, 86),
           D.box(490, 60, 120, 'QA · Verificar', 'validación'),
-          D.arrow(550, 60, 550, 20, '#A78BFA'),
-          D.arrow(550, 20, 70, 20, '#A78BFA'),
-          D.arrow(70, 20, 70, 60, '#A78BFA'),
-          `<text x="310" y="15" text-anchor="middle" fill="#A78BFA" font-family="Inter" font-size="11" font-weight="700">gates en CI: nada avanza sin verificación</text>`,
-          `<text x="310" y="150" text-anchor="middle" fill="#9CA3AF" font-family="Inter" font-size="11">cada fase deja artefactos versionados · el ciclo nunca salta pasos</text>`,
+          D.arrow(550, 60, 550, 20, '#A855F7'),
+          D.arrow(550, 20, 70, 20, '#A855F7'),
+          D.arrow(70, 20, 70, 60, '#A855F7'),
+          `<text x="310" y="15" text-anchor="middle" fill="#A855F7" font-family="Inter" font-size="11" font-weight="700">gates en CI: nada avanza sin verificación</text>`,
+          `<text x="310" y="150" text-anchor="middle" fill="#6B7280" font-family="Inter" font-size="11">cada fase deja artefactos versionados · el ciclo nunca salta pasos</text>`,
         ].join(''),
       ),
     'tokens-pipeline': () =>
@@ -85,14 +86,14 @@
           D.arrow(140, 46, 210, 100),
           D.arrow(140, 106, 210, 106),
           D.arrow(140, 146, 210, 112),
-          D.box(212, 75, 140, 'token-ingest', 'consolidación', '#A78BFA'),
+          D.box(212, 75, 140, 'token-ingest', 'consolidación', '#A855F7'),
           D.arrow(352, 100, 410, 100),
           D.box(412, 40, 150, 'Nexus', 'token_usage'),
           D.box(412, 110, 150, 'Nexus', 'transactions · savings'),
           D.arrow(562, 65, 620, 65),
           D.arrow(562, 136, 620, 136),
-          D.box(622, 40, 130, 'Dashboard', 'costo en vivo', '#22D3EE'),
-          D.box(622, 110, 130, 'Budget guard', '5M/3M alertas', '#22D3EE'),
+          D.box(622, 40, 130, 'Dashboard', 'costo en vivo', '#00BFFF'),
+          D.box(622, 110, 130, 'Budget guard', '5M/3M alertas', '#00BFFF'),
         ].join(''),
       ),
     'routing-loop': () =>
@@ -102,15 +103,15 @@
         [
           D.box(10, 55, 130, 'Tarea', 'texto del usuario'),
           D.arrow(140, 81, 178, 81),
-          D.box(180, 55, 130, 'recommend', 'ranking de agentes', '#A78BFA'),
+          D.box(180, 55, 130, 'recommend', 'ranking de agentes', '#A855F7'),
           D.arrow(310, 81, 348, 81),
           D.box(350, 55, 120, 'Agente', 'ejecución'),
           D.arrow(470, 81, 508, 81),
           D.box(510, 55, 130, 'Outcome', '¿éxito? ¿fallo?'),
-          D.arrow(575, 107, 245, 107, '#A78BFA'),
-          D.arrow(245, 107, 245, 95, '#A78BFA'),
-          `<text x="410" y="135" text-anchor="middle" fill="#A78BFA" font-family="Inter" font-size="11" font-weight="700">recordRoutingOutcome → routing_rules (success_count / success_rate por tenant)</text>`,
-          `<text x="410" y="150" text-anchor="middle" fill="#9CA3AF" font-family="Inter" font-size="11">la próxima recomendación ya aprendió de este resultado</text>`,
+          D.arrow(575, 107, 245, 107, '#A855F7'),
+          D.arrow(245, 107, 245, 95, '#A855F7'),
+          `<text x="410" y="135" text-anchor="middle" fill="#A855F7" font-family="Inter" font-size="11" font-weight="700">recordRoutingOutcome → routing_rules (success_count / success_rate por tenant)</text>`,
+          `<text x="410" y="150" text-anchor="middle" fill="#6B7280" font-family="Inter" font-size="11">la próxima recomendación ya aprendió de este resultado</text>`,
         ].join(''),
       ),
     'cache-flow': () =>
@@ -120,14 +121,14 @@
         [
           D.box(10, 55, 130, 'Request', 'prompt + contexto'),
           D.arrow(140, 81, 178, 81),
-          D.box(180, 40, 140, 'SHA-256', 'clave de caché', '#A78BFA'),
-          D.box(350, 15, 150, 'HIT → respuesta', 'costo 0 · instantáneo', '#22D3EE'),
+          D.box(180, 40, 140, 'SHA-256', 'clave de caché', '#A855F7'),
+          D.box(350, 15, 150, 'HIT → respuesta', 'costo 0 · instantáneo', '#00BFFF'),
           D.box(350, 105, 150, 'MISS → modelo', 'se paga el token'),
-          D.arrow(320, 65, 350, 41, '#22D3EE'),
-          D.arrow(320, 95, 350, 119, '#F87171'),
+          D.arrow(320, 65, 350, 41, '#00BFFF'),
+          D.arrow(320, 95, 350, 119, '#EF4444'),
           D.arrow(500, 131, 560, 131),
           D.box(562, 105, 150, 'guardar en caché', 'TTL 30 min'),
-          `<text x="380" y="152" text-anchor="middle" fill="#9CA3AF" font-family="Inter" font-size="11">impacto medido: 25–41% de requests servidas sin gastar tokens</text>`,
+          `<text x="380" y="152" text-anchor="middle" fill="#6B7280" font-family="Inter" font-size="11">impacto medido: 25–41% de requests servidas sin gastar tokens</text>`,
         ].join(''),
       ),
     tenancy: () =>
@@ -137,13 +138,13 @@
         [
           D.box(10, 70, 150, 'Repositorios', 'metrics · traces · backlog'),
           D.arrow(160, 96, 198, 96),
-          D.box(200, 70, 140, 'WHERE tenant_id = ?', 'en SQL, no en memoria', '#A78BFA'),
+          D.box(200, 70, 140, 'WHERE tenant_id = ?', 'en SQL, no en memoria', '#A855F7'),
           D.arrow(340, 96, 378, 96),
           D.box(380, 20, 160, 'Tenant A', 've solo sus datos'),
           D.box(380, 70, 160, 'Tenant B', 've solo sus datos'),
           D.box(380, 120, 160, 'system-wide', 'provenance explícita'),
-          D.box(590, 70, 150, 'RBAC v1', 'viewer<operator<admin', '#22D3EE'),
-          `<text x="380" y="172" text-anchor="middle" fill="#9CA3AF" font-family="Inter" font-size="11">aislamiento verificable por SQL + membresía por principal + auditoría de accesos</text>`,
+          D.box(590, 70, 150, 'RBAC v1', 'viewer<operator<admin', '#00BFFF'),
+          `<text x="380" y="172" text-anchor="middle" fill="#6B7280" font-family="Inter" font-size="11">aislamiento verificable por SQL + membresía por principal + auditoría de accesos</text>`,
         ].join(''),
       ),
   };
