@@ -32,6 +32,7 @@ import {
   checkEngram,
   checkMcp,
   checkLoopGuard,
+  checkGuardrails,
 } from './watchtower/checks-infra';
 import {
   checkSessionPipeline,
@@ -404,6 +405,7 @@ async function runAllChecks() {
     checkModelHealth,
     checkWebCrawler,
     checkLoopGuard,
+    checkGuardrails,
   ];
   // Parallelized with Promise.allSettled — each check is I/O-bound (file reads, HTTP, DB)
   const settled = await Promise.allSettled(
