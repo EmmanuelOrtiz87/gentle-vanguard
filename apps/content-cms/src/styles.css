@@ -52,6 +52,15 @@
   --gv-amber: #d97706;
   --gv-red: #dc2626;
   --gv-green: #16a34a;
+  --color-background: #f5f7fb;
+  --color-surface: #ffffff;
+  --color-surface-icon: #f1f5f9;
+  --color-text-primary: #0f172a;
+  --color-text-brand: #0055bb;
+  --color-text-muted: #475569;
+  --color-border: #cbd5e1;
+  --color-primary: #0055bb;
+  --color-primary-light: #4dcfff;
 }
 :root[data-theme='light'] .grid-bg {
   opacity: 0.4;
@@ -227,6 +236,16 @@ button {
 .top-actions {
   gap: 10px;
   flex-wrap: wrap;
+}
+.locale-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.locale-controls select {
+  width: auto;
+  margin: 0;
+  padding: 8px 9px;
 }
 .button {
   display: inline-flex;

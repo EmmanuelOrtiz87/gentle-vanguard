@@ -5,6 +5,7 @@
  */
 import { useCallback, useEffect, useState } from 'react';
 import { AlertTriangle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useT } from './i18n';
 
 const API = 'http://127.0.0.1:3787';
 
@@ -198,6 +199,7 @@ function VariantPreview({ variant }: { variant: Variant }) {
 }
 
 export default function ContentOS() {
+  const { t } = useT();
   const [brief, setBrief] = useState('');
   const [objective, setObjective] = useState('');
   const [title, setTitle] = useState('');
@@ -210,7 +212,7 @@ export default function ContentOS() {
   const [media, setMedia] = useState<Media[]>([]);
   const [publishLog, setPublishLog] = useState<PublishEntry[]>([]);
   const [busy, setBusy] = useState(false);
-  const [status, setStatus] = useState('Servidor local: esperando verificación…');
+  const [status, setStatus] = useState(`Servidor local: ${t('ready')}`);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [editingVariant, setEditingVariant] = useState<string | null>(null);
   const [editBody, setEditBody] = useState('');
@@ -451,7 +453,7 @@ export default function ContentOS() {
             onClick={() => setView(v)}
           >
             {v === 'crear'
-              ? 'crear'
+              ? t('newContent')
               : v === 'calendario'
                 ? `calendario (${slots.length})`
                 : `medios (${media.length})`}
@@ -462,10 +464,12 @@ export default function ContentOS() {
       {view === 'crear' && (
         <>
           <section className="panel" style={{ display: 'grid', gap: 12 }}>
-            <h2 className="gv-section-title">Brief → contenido multi-red</h2>
+            <h2 className="gv-section-title">
+              {t('contentOs')} → {t('content')}
+            </h2>
             <input
               className="content-os-input"
-              placeholder="Título (opcional)"
+              placeholder={`${t('title')} (opcional)`}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -522,7 +526,7 @@ export default function ContentOS() {
                 disabled={busy}
                 onClick={() => void generate()}
               >
-                {busy ? 'Generando…' : 'Generar'}
+                {busy ? 'Generando…' : t('newContent')}
               </button>
             </div>
           </section>

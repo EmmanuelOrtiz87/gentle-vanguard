@@ -4,7 +4,6 @@ import {
   LayoutDashboard,
   Activity,
   Store,
-  BookOpen,
   Bot,
   ListTodo,
   History,
@@ -25,7 +24,6 @@ import { useT } from './hooks/useLocale';
 const Dashboard = lazy(() => import('./components/Dashboard'));
 const TracingDashboard = lazy(() => import('./components/TracingDashboard'));
 const Marketplace = lazy(() => import('./components/Marketplace'));
-const InteractiveDocs = lazy(() => import('./components/InteractiveDocs'));
 const AgentChat = lazy(() => import('./components/AgentChat'));
 const TaskControl = lazy(() => import('./components/TaskControl'));
 const SessionTimeline = lazy(() => import('./components/SessionTimeline'));
@@ -64,7 +62,6 @@ function Navigation() {
         { to: '/marketplace', icon: Store, label: 'Marketplace' },
         { to: '/audit', icon: ShieldCheck, label: 'Audit' },
         { to: '/admin', icon: UserCog, label: 'Admin' },
-        { to: '/docs', icon: BookOpen, label: 'Docs' },
         { to: '/mcp', icon: Cpu, label: 'MCP' },
         { to: '/knowledge', icon: Library, label: 'Knowledge' },
         { to: '/multi-repo', icon: Globe, label: 'Multi-repo' },
@@ -258,7 +255,6 @@ function App() {
                     <Route path="/marketplace" element={<Marketplace />} />
                     <Route path="/audit" element={<AuditPanel />} />
                     <Route path="/admin" element={<AdminPanel />} />
-                    <Route path="/docs" element={<InteractiveDocs />} />
                     <Route path="/agents" element={<AgentChat />} />
                     <Route path="/tasks" element={<TasksPage />} />
                     <Route path="/timeline" element={<TimelinePage />} />

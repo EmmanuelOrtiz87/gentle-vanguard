@@ -1,0 +1,313 @@
+/*
+ * Gentle-Vanguard Design System
+ *
+ * Canonical shared layer for web surfaces. Import this file before an app's
+ * local stylesheet and use gv-* classes for shell primitives. App styles may
+ * add layout, but must not redefine these shared tokens.
+ *
+ * Expected structure:
+ *   <header class="gv-topbar"><div class="gv-topbar-inner">...</div></header>
+ *   <main>...</main>
+ *   <footer class="gv-footer">Gentle-Vanguard — App name · vX.Y</footer>
+ * The footer is intentionally muted and centered. Analytics is the visual
+ * reference for the shell; this prefixed layer avoids collisions during F2.
+ * Breakpoints: 640px mobile, 1024px tablet, desktop above 1024px.
+ */
+:root {
+  color-scheme: dark;
+  --gv-primary: #00bfff;
+  --gv-primary-light: #4dcfff;
+  --gv-primary-dark: #0055bb;
+  --gv-accent: #a855f7;
+  --gv-accent-teal: #06b6d4;
+  --gv-bg: #0d1117;
+  --gv-surface: #1a2035;
+  --gv-surface-icon: #2a2d3a;
+  --gv-circuit: #1a3050;
+  --gv-text: #ffffff;
+  --gv-text-brand: #00bfff;
+  --gv-muted: #6b7280;
+  --gv-border: #1e3a5f;
+  --gv-success: #22c55e;
+  --gv-warning: #f59e0b;
+  --gv-error: #ef4444;
+  --gv-selected: #4dcfff;
+  --gv-font-display: Orbitron, Rajdhani, 'Share Tech Mono', monospace;
+  --gv-font-body: Inter, 'Segoe UI', system-ui, sans-serif;
+  --gv-font-mono: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
+  --gv-glass: rgba(26, 32, 53, 0.72);
+  --gv-glass-border: rgba(77, 207, 255, 0.2);
+  --gv-gradient: linear-gradient(135deg, #a855f7 0%, #00bfff 100%);
+  --gv-header-height: 62px;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --gv-bg: #f5f7fb;
+  --gv-surface: #ffffff;
+  --gv-surface-icon: #f1f5f9;
+  --gv-circuit: #dbe5f0;
+  --gv-text: #0f172a;
+  --gv-text-brand: #0055bb;
+  --gv-muted: #475569;
+  --gv-border: #cbd5e1;
+  --gv-selected: #0891b2;
+  --gv-glass: rgba(255, 255, 255, 0.7);
+  --gv-glass-border: rgba(15, 23, 42, 0.1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.gv-grid-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(168, 85, 247, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 191, 255, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.gv-glow-a,
+.gv-glow-b {
+  position: fixed;
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.gv-glow-a {
+  width: 720px;
+  height: 720px;
+  top: -340px;
+  right: -220px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.16), transparent 65%);
+}
+.gv-glow-b {
+  width: 640px;
+  height: 640px;
+  bottom: -320px;
+  left: -200px;
+  background: radial-gradient(circle, rgba(0, 191, 255, 0.13), transparent 65%);
+}
+
+.gv-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(13, 17, 23, 0.88);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--gv-glass-border);
+}
+.gv-topbar-inner {
+  max-width: 1180px;
+  min-height: var(--gv-header-height);
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.gv-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  color: var(--gv-text);
+  font: 800 18px var(--gv-font-display);
+  white-space: nowrap;
+}
+.gv-brand span {
+  color: var(--gv-primary);
+}
+.gv-view-tabs {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+.gv-view-tabs button,
+.gv-view-tabs a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  color: var(--gv-muted);
+  background: transparent;
+  font: 600 13.5px var(--gv-font-body);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.gv-view-tabs button:hover,
+.gv-view-tabs a:hover,
+.gv-view-tabs .active {
+  color: var(--gv-text);
+  border-color: rgba(0, 191, 255, 0.45);
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(0, 191, 255, 0.18));
+  box-shadow: 0 0 0 1px rgba(0, 191, 255, 0.15) inset;
+}
+.gv-system-state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border: 1.5px solid rgba(0, 191, 255, 0.5);
+  border-radius: 999px;
+  color: var(--gv-primary);
+  font: 700 12.5px var(--gv-font-mono);
+}
+.gv-system-state::before {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+  content: '';
+}
+.gv-panel {
+  padding: 20px 22px;
+  border: 1px solid var(--gv-glass-border);
+  border-radius: 18px;
+  background: var(--gv-glass);
+  backdrop-filter: blur(10px);
+  transition:
+    box-shadow 0.15s,
+    border-color 0.15s;
+}
+.gv-panel:hover {
+  border-color: rgba(0, 191, 255, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 191, 255, 0.08);
+}
+
+.gv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border: 1.5px solid var(--gv-border);
+  border-radius: 999px;
+  color: var(--gv-text);
+  background: transparent;
+  font: 700 13.5px var(--gv-font-body);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.gv-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: var(--gv-primary);
+  box-shadow: 0 0 18px rgba(0, 191, 255, 0.2);
+}
+.gv-btn-primary {
+  border-color: transparent;
+  color: #061018;
+  background: linear-gradient(135deg, var(--gv-accent), var(--gv-primary));
+}
+.gv-btn-ghost {
+  color: var(--gv-muted);
+}
+.gv-btn-success {
+  color: #052e16;
+  border-color: transparent;
+  background: var(--gv-success);
+}
+.gv-btn-danger {
+  color: #fff;
+  border-color: transparent;
+  background: var(--gv-error);
+}
+.gv-btn-accent {
+  color: #fff;
+  border-color: transparent;
+  background: var(--gv-accent);
+}
+.gv-btn:disabled,
+.gv-btn-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.gv-btn:focus-visible,
+.gv-view-tabs button:focus-visible,
+.gv-view-tabs a:focus-visible {
+  outline: 3px solid var(--gv-primary-light);
+  outline-offset: 2px;
+}
+.gv-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border-radius: 999px;
+  color: var(--gv-muted);
+  background: var(--gv-surface-icon);
+  font: 700 11px var(--gv-font-mono);
+}
+.gv-badge-success {
+  color: var(--gv-success);
+  background: color-mix(in srgb, var(--gv-success) 16%, transparent);
+}
+.gv-badge-warning {
+  color: var(--gv-warning);
+  background: color-mix(in srgb, var(--gv-warning) 16%, transparent);
+}
+.gv-badge-error {
+  color: var(--gv-error);
+  background: color-mix(in srgb, var(--gv-error) 16%, transparent);
+}
+.gv-section-title {
+  margin: 0;
+  color: var(--gv-text);
+  font: 800 15.5px var(--gv-font-display);
+  letter-spacing: -0.01em;
+}
+.gv-footer {
+  padding: 24px;
+  color: var(--gv-muted);
+  text-align: center;
+  font: 12px var(--gv-font-mono);
+}
+
+@media (max-width: 1024px) {
+  .gv-topbar-inner {
+    flex-wrap: wrap;
+  }
+  .gv-view-tabs {
+    order: 3;
+    flex-basis: 100%;
+  }
+}
+@media (max-width: 640px) {
+  .gv-topbar-inner {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .gv-view-tabs {
+    width: 100%;
+  }
+  .gv-view-tabs > * {
+    flex: 1;
+    justify-content: center;
+  }
+  .gv-system-state {
+    align-self: flex-start;
+  }
+  .gv-glow-a {
+    width: 480px;
+    height: 480px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

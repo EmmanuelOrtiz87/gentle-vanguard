@@ -21,6 +21,43 @@
         --error: #ef4444;
         --font: 'Inter', 'Segoe UI', system-ui, sans-serif;
         --mono: 'JetBrains Mono', 'Cascadia Code', monospace;
+        --bg-glow: #102b45;
+        --card: #121a2aee;
+        --description: #aab4c6;
+        --notice-text: #fecaca;
+        --notice-bg: #3b1418;
+        --badge-running-bg: #14532d;
+        --badge-running-text: #bbf7d0;
+        --badge-stopped-bg: #334155;
+        --badge-stopped-text: #cbd5e1;
+        --badge-partial-bg: #78350f;
+        --badge-partial-text: #fde68a;
+        --danger-border: #7f1d1d;
+        --shadow-color: #0003;
+        --divider: #ffffff12;
+      }
+      :root[data-theme='light'] {
+        color-scheme: light;
+        --bg: #f5f7fb;
+        --surface: #fff;
+        --icon: #f1f5f9;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: #cbd5e1;
+        --bg-glow: #dbeafe;
+        --card: #ffffffee;
+        --description: #475569;
+        --notice-text: #b91c1c;
+        --notice-bg: #fee2e2;
+        --badge-running-bg: #dcfce7;
+        --badge-running-text: #166534;
+        --badge-stopped-bg: #e2e8f0;
+        --badge-stopped-text: #334155;
+        --badge-partial-bg: #fef3c7;
+        --badge-partial-text: #92400e;
+        --danger-border: #b91c1c;
+        --shadow-color: #0002;
+        --divider: #0f172a12;
       }
       * {
         box-sizing: border-box;
@@ -28,7 +65,7 @@
       body {
         margin: 0;
         min-height: 100vh;
-        background: radial-gradient(circle at 80% 0%, #102b45 0, #0d1117 38%);
+        background: radial-gradient(circle at 80% 0%, var(--bg-glow) 0, var(--bg) 38%);
         color: var(--text);
         font-family: var(--font);
       }
@@ -66,7 +103,7 @@
       }
       button:hover:not(:disabled) {
         border-color: var(--primary);
-        box-shadow: 0 0 18px #00bfff33;
+        box-shadow: 0 0 18px color-mix(in srgb, var(--primary) 20%, transparent);
       }
       button:focus-visible {
         outline: 3px solid var(--primary-light);
@@ -85,13 +122,13 @@
         margin: -12px 0 20px;
       }
       .preset-stop {
-        border-color: #7f1d1d;
+        border-color: var(--danger-border);
       }
       .notice {
         padding: 12px 15px;
         border: 1px solid var(--error);
-        color: #fecaca;
-        background: #3b1418;
+        color: var(--notice-text);
+        background: var(--notice-bg);
         border-radius: 8px;
         margin-bottom: 20px;
       }
@@ -101,11 +138,11 @@
         gap: 18px;
       }
       .card {
-        background: linear-gradient(145deg, #1a2035ee, #121a2aee);
+        background: var(--card);
         border: 1px solid var(--border);
         border-radius: 14px;
         padding: 22px;
-        box-shadow: 0 14px 30px #0003;
+        box-shadow: 0 14px 30px var(--shadow-color);
       }
       .card-top {
         display: flex;
@@ -118,7 +155,7 @@
       }
       .description {
         margin: 0;
-        color: #aab4c6;
+        color: var(--description);
         font-size: 14px;
         line-height: 1.5;
       }
@@ -131,23 +168,23 @@
         text-transform: uppercase;
       }
       .running {
-        color: #bbf7d0;
-        background: #14532d;
+        color: var(--badge-running-text);
+        background: var(--badge-running-bg);
       }
       .stopped {
-        color: #cbd5e1;
-        background: #334155;
+        color: var(--badge-stopped-text);
+        background: var(--badge-stopped-bg);
       }
       .partial {
-        color: #fde68a;
-        background: #78350f;
+        color: var(--badge-partial-text);
+        background: var(--badge-partial-bg);
       }
       .processes {
         margin: 22px 0 18px;
         padding-top: 14px;
-        border-top: 1px solid #ffffff12;
+        border-top: 1px solid var(--divider);
         font: 12px var(--mono);
-        color: #aab4c6;
+        color: var(--description);
       }
       .process {
         display: flex;
@@ -211,24 +248,34 @@
     <main>
       <header>
         <div>
-          <h1>Gentle-Vanguard — Command Center</h1>
-          <p>Inicia, detén y abre las aplicaciones del stack bajo demanda.</p>
+          <h1 data-i18n="title"></h1>
+          <p data-i18n="subtitle"></p>
         </div>
-        <button class="refresh" id="refresh" aria-label="Actualizar aplicaciones">
-          ↻ Actualizar
-        </button>
+        <div class="header-actions">
+          <select id="lang" aria-label="Idioma">
+            <option value="es">ES</option>
+            <option value="en">EN</option>
+          </select>
+          <button id="theme" type="button" aria-label="Cambiar tema">☀</button>
+          <button
+            class="refresh"
+            id="refresh"
+            aria-label="Actualizar aplicaciones"
+            data-i18n="refresh"
+          ></button>
+        </div>
       </header>
       <div class="presets" aria-label="Presets">
-        <button id="start-all" onclick="preset('start-all')">⏻ Arrancar todo</button>
+        <button id="start-all" onclick="preset('start-all')" data-i18n="startAll"></button>
         <button id="stop-all" class="preset-stop" onclick="preset('stop-all')">
-          ⏹ Detener todo
+          <span data-i18n="stopAll"></span>
         </button>
       </div>
       <div id="error" class="notice" role="alert" hidden></div>
       <section id="apps" class="grid" aria-live="polite">
-        <div class="empty">Cargando aplicaciones…</div>
+        <div class="empty" data-i18n="loading"></div>
       </section>
-      <div class="meta">Actualización automática cada 5 segundos · solo loopback</div>
+      <div class="meta" data-i18n="meta"></div>
     </main>
     <script>
       // Surface ANY unexpected error in the UI — a silent failure here would
@@ -242,7 +289,66 @@
       window.addEventListener('unhandledrejection', function (ev) {
         show(ev.reason && ev.reason.message ? ev.reason.message : String(ev.reason));
       });
-      const labels = { running: 'En ejecución', stopped: 'Detenida', partial: 'Parcial' };
+      const I18N = {
+        es: {
+          title: 'Gentle-Vanguard — Command Center',
+          subtitle: 'Inicia, detén y abre las aplicaciones del stack bajo demanda.',
+          refresh: '↻ Actualizar',
+          startAll: '⏻ Arrancar todo',
+          stopAll: '⏹ Detener todo',
+          loading: 'Cargando aplicaciones…',
+          empty: 'No hay aplicaciones registradas.',
+          meta: 'Actualización automática cada 5 segundos · solo loopback',
+          running: 'En ejecución',
+          stopped: 'Detenida',
+          partial: 'Parcial',
+          stopConfirm: '¿Detener esta aplicación?',
+          stopMany: '¿Detener {n} aplicaciones en ejecución?',
+          start: 'Iniciar',
+          stop: 'Detener',
+          open: 'Abrir',
+          error: 'No se pudieron cargar las aplicaciones: ',
+          theme: 'Cambiar tema',
+        },
+        en: {
+          title: 'Gentle-Vanguard — Command Center',
+          subtitle: 'Start, stop, and open stack applications on demand.',
+          refresh: '↻ Refresh',
+          startAll: '⏻ Start all',
+          stopAll: '⏹ Stop all',
+          loading: 'Loading applications…',
+          empty: 'No applications registered.',
+          meta: 'Automatic refresh every 5 seconds · loopback only',
+          running: 'Running',
+          stopped: 'Stopped',
+          partial: 'Partial',
+          stopConfirm: 'Stop this application?',
+          stopMany: 'Stop {n} running applications?',
+          start: 'Start',
+          stop: 'Stop',
+          open: 'Open',
+          error: 'Could not load applications: ',
+          theme: 'Change theme',
+        },
+      };
+      let lang = localStorage.getItem('gv-cc-lang') === 'en' ? 'en' : 'es';
+      let theme = localStorage.getItem('gv-cc-theme') === 'light' ? 'light' : 'dark';
+      const t = (key) => I18N[lang][key] || I18N.es[key] || key;
+      function applyPreferences() {
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.lang = lang;
+        document.querySelectorAll('[data-i18n]').forEach((node) => {
+          node.textContent = t(node.dataset.i18n);
+        });
+        document.querySelector('#lang').value = lang;
+        document.querySelector('#theme').textContent = theme === 'dark' ? '☀' : '🌙';
+        document.querySelector('#theme').setAttribute('aria-label', t('theme'));
+      }
+      const labels = {
+        running: () => t('running'),
+        stopped: () => t('stopped'),
+        partial: () => t('partial'),
+      };
       let busy = '';
       let presetBusy = false;
       const esc = (s) =>
@@ -262,7 +368,7 @@
       }
       function show(message) {
         const e = document.querySelector('#error');
-        e.textContent = 'No se pudieron cargar las aplicaciones: ' + message;
+        e.textContent = t('error') + message;
         e.hidden = false;
       }
       function render(apps) {
@@ -271,12 +377,12 @@
           apps
             .map(
               (a) =>
-                `<article class="card"><div class="card-top"><div><h2>${esc(a.name)}</h2><p class="description">${esc(a.description)}</p></div><span class="badge ${a.status}">${labels[a.status]}</span></div><div class="processes">${a.processes.map((p) => `<div class="process"><span>${esc(p.name)}</span><span class="${p.alive ? 'up' : 'down'}">${p.alive ? 'PID ' + (p.pid || '—') + ' · Puerto ' + p.port : 'Puerto ' + p.port + ' · Sin conexión'}</span></div>`).join('')}</div><div class="actions"><button class="power" ${busy || presetBusy ? 'disabled' : ''} onclick="toggle('${a.id}','${a.status}')" aria-label="${a.status === 'running' ? 'Detener' : 'Iniciar'} ${esc(a.name)}">⏻ ${a.status === 'running' ? 'Detener' : 'Iniciar'}</button><button class="open" onclick="window.open('${a.url}','_blank','noopener,noreferrer')" aria-label="Abrir ${esc(a.name)}">↗ Abrir</button></div></article>`,
+                `<article class="card"><div class="card-top"><div><h2>${esc(a.name)}</h2><p class="description">${esc(a.description)}</p></div><span class="badge ${a.status}">${labels[a.status]()}</span></div><div class="processes">${a.processes.map((p) => `<div class="process"><span>${esc(p.name)}</span><span class="${p.alive ? 'up' : 'down'}">${p.alive ? 'PID ' + (p.pid || '—') + ' · Port ' + p.port : 'Port ' + p.port + ' · Offline'}</span></div>`).join('')}</div><div class="actions"><button class="power" ${busy || presetBusy ? 'disabled' : ''} onclick="toggle('${a.id}','${a.status}')" aria-label="${a.status === 'running' ? t('stop') : t('start')} ${esc(a.name)}">⏻ ${a.status === 'running' ? t('stop') : t('start')}</button><button class="open" onclick="window.open('${a.url}','_blank','noopener,noreferrer')" aria-label="${t('open')} ${esc(a.name)}">↗ ${t('open')}</button></div></article>`,
             )
-            .join('') || '<div class="empty">No hay aplicaciones registradas.</div>';
+            .join('') || `<div class="empty">${t('empty')}</div>`;
       }
       async function toggle(id, status) {
-        if (status === 'running' && !confirm('¿Detener esta aplicación?')) return;
+        if (status === 'running' && !confirm(t('stopConfirm'))) return;
         busy = id;
         try {
           const r = await fetch(
@@ -298,7 +404,7 @@
             .then((r) => r.json())
             .catch(() => []);
           const running = apps.filter((app) => app.status === 'running').length;
-          if (!confirm('¿Detener ' + running + ' aplicaciones en ejecución?')) return;
+          if (!confirm(t('stopMany').replace('{n}', running))) return;
         }
         presetBusy = true;
         document.querySelector('#start-all').disabled = true;
@@ -320,6 +426,18 @@
       // Bootstrap: initial load + 5s polling (matches the footer promise).
       // Without this the script only defines functions and the grid stays at
       // "Cargando aplicaciones…" forever — no error, no render.
+      document.querySelector('#lang').addEventListener('change', (event) => {
+        lang = event.target.value;
+        localStorage.setItem('gv-cc-lang', lang);
+        applyPreferences();
+        void load();
+      });
+      document.querySelector('#theme').addEventListener('click', () => {
+        theme = theme === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('gv-cc-theme', theme);
+        applyPreferences();
+      });
+      applyPreferences();
       void load();
       setInterval(() => void load(), 5000);
     </script>

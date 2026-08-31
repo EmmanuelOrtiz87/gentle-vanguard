@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, type ChangeEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
 import {
   createId,
   addVersion,
@@ -15,6 +15,7 @@ import {
 import { contentStore } from './storage';
 import ContentOS from './contentos';
 import { Calendar, Download, Eye, FileText, Image, Pencil, Plus, Save, Upload } from 'lucide-react';
+import { useT } from './i18n';
 
 type Tab = 'content-os' | 'studio';
 
@@ -31,18 +32,27 @@ function downloadJson(items: ContentItem[]): void {
 }
 
 export default function App() {
+  const { locale, setLocale, t } = useT();
+  const [theme, setTheme] = useState<'dark' | 'light'>(() =>
+    localStorage.getItem('gv-cms-theme') === 'light' ? 'light' : 'dark',
+  );
   const [tab, setTab] = useState<Tab>('content-os');
   const [state, setState] = useState(() => contentStore.load());
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [form, setForm] = useState<ContentDraft>(emptyContent());
   const [preview, setPreview] = useState(false);
   const [filter, setFilter] = useState<'all' | 'draft' | 'published'>('all');
-  const [message, setMessage] = useState('Listo para crear contenido.');
+  const [message, setMessage] = useState(() => t('ready'));
   const importRef = useRef<HTMLInputElement>(null);
   const visibleItems = useMemo(
     () => (filter === 'all' ? state.items : state.items.filter((item) => item.status === filter)),
     [filter, state.items],
   );
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem('gv-cms-theme', theme);
+  }, [theme]);
 
   function select(item: ContentItem): void {
     setSelectedId(item.id);
@@ -172,7 +182,7 @@ export default function App() {
               GV
             </span>
             <span className="name">
-              Gentle<span>Vanguard</span> <small>Content Studio</small>
+              Gentle<span>Vanguard</span> <small>{t('contentStudio')}</small>
             </span>
           </div>
           <nav className="main-nav view-tabs" aria-label="Secciones del CMS">
@@ -180,21 +190,38 @@ export default function App() {
               className={tab === 'content-os' ? 'active' : ''}
               onClick={() => setTab('content-os')}
             >
-              <FileText size={16} aria-hidden="true" /> Content OS
+              <FileText size={16} aria-hidden="true" /> {t('contentOs')}
             </button>
             <button className={tab === 'studio' ? 'active' : ''} onClick={() => setTab('studio')}>
-              <Pencil size={16} aria-hidden="true" /> Studio (legacy)
+              <Pencil size={16} aria-hidden="true" /> {t('legacy')}
             </button>
           </nav>
           <div className="system-state ready">
             <span />
-            {state.items.length} items
+            {state.items.length} {t('items')}
+          </div>
+          <div className="locale-controls">
+            <select
+              aria-label={t('language')}
+              value={locale}
+              onChange={(event) => setLocale(event.target.value as 'es' | 'en')}
+            >
+              <option value="es">{t('es')}</option>
+              <option value="en">{t('en')}</option>
+            </select>
+            <button
+              className="button ghost"
+              aria-label={t('theme')}
+              onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
+            >
+              {theme === 'dark' ? '☀' : '🌙'}
+            </button>
           </div>
           <div className="top-actions">
             {tab === 'studio' && (
               <>
                 <button className="button ghost" onClick={() => importRef.current?.click()}>
-                  <Upload size={16} aria-hidden="true" /> Importar JSON
+                  <Upload size={16} aria-hidden="true" /> {t('importJson')}
                 </button>
                 <input
                   ref={importRef}
@@ -204,10 +231,10 @@ export default function App() {
                   onChange={importJson}
                 />
                 <button className="button ghost" onClick={() => downloadJson(state.items)}>
-                  <Download size={16} aria-hidden="true" /> Exportar JSON
+                  <Download size={16} aria-hidden="true" /> {t('exportJson')}
                 </button>
                 <button className="button primary" onClick={startNew}>
-                  <Plus size={16} aria-hidden="true" /> Nuevo contenido
+                  <Plus size={16} aria-hidden="true" /> {t('newContent')}
                 </button>
               </>
             )}
@@ -221,8 +248,8 @@ export default function App() {
           <aside className="sidebar">
             <div className="side-heading">
               <div>
-                <span className="eyebrow">Biblioteca</span>
-                <h1>Contenido</h1>
+                <span className="eyebrow">{t('library')}</span>
+                <h1>{t('content')}</h1>
               </div>
               <span className="count">{state.items.length}</span>
             </div>
@@ -233,7 +260,7 @@ export default function App() {
                   className={filter === value ? 'filter active' : 'filter'}
                   onClick={() => setFilter(value)}
                 >
-                  {value === 'all' ? 'Todo' : value === 'draft' ? 'Borradores' : 'Publicados'}{' '}
+                  {value === 'all' ? t('all') : value === 'draft' ? t('drafts') : t('published')}{' '}
                   <span>
                     {value === 'all'
                       ? state.items.length
@@ -262,27 +289,27 @@ export default function App() {
                   </span>
                 </button>
               ))}
-              {!visibleItems.length && <p className="empty">Aún no hay contenido aquí.</p>}
+              {!visibleItems.length && <p className="empty">{t('noContent')}</p>}
             </div>
           </aside>
           <section className="workspace">
             <div className="workspace-header">
               <div>
-                <span className="eyebrow">{selectedId ? 'Editar entrada' : 'Nueva entrada'}</span>
-                <h2>{preview ? 'Vista previa' : form.title || 'Da forma a una idea'}</h2>
+                <span className="eyebrow">{selectedId ? t('editEntry') : t('newEntry')}</span>
+                <h2>{preview ? t('preview') : form.title || t('content')}</h2>
               </div>
               <div className="view-toggle" role="group" aria-label="Modo de edición">
                 <button
                   className={!preview ? 'toggle active' : 'toggle'}
                   onClick={() => setPreview(false)}
                 >
-                  <Pencil size={16} aria-hidden="true" /> Editor
+                  <Pencil size={16} aria-hidden="true" /> {t('editor')}
                 </button>
                 <button
                   className={preview ? 'toggle active' : 'toggle'}
                   onClick={() => setPreview(true)}
                 >
-                  <Eye size={16} aria-hidden="true" /> Preview
+                  <Eye size={16} aria-hidden="true" /> {t('preview')}
                 </button>
               </div>
             </div>
@@ -290,7 +317,7 @@ export default function App() {
               <article className="preview panel">
                 <div className="preview-meta">
                   <span className={`badge ${form.status}`}>
-                    {form.status === 'published' ? 'Publicado' : 'Borrador'}
+                    {form.status === 'published' ? t('publishedStatus') : t('draft')}
                   </span>
                   {form.tags.map((tag) => (
                     <span className="tag" key={tag}>
@@ -467,11 +494,7 @@ export default function App() {
         </main>
       )}
       <footer>
-        <span>
-          {tab === 'content-os'
-            ? 'Content OS · Nexus + generación asistida · gate humano'
-            : 'Persistencia local · sin backend ni publicación remota'}
-        </span>
+        <span>{tab === 'content-os' ? t('contentOsFooter') : t('localPersistence')}</span>
         <span>Gentle-Vanguard / MVP CMS</span>
       </footer>
     </div>
