@@ -172,12 +172,12 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <div className="grid-bg" />
-      <div className="glow-a" />
-      <div className="glow-b" />
-      <header className="topbar">
-        <div className="topbar-inner">
-          <div className="brand">
+      <div className="gv-grid-bg" />
+      <div className="gv-glow-a" />
+      <div className="gv-glow-b" />
+      <header className="gv-topbar">
+        <div className="gv-topbar-inner">
+          <div className="gv-brand">
             <span className="mark" aria-hidden="true">
               GV
             </span>
@@ -185,7 +185,7 @@ export default function App() {
               Gentle<span>Vanguard</span> <small>{t('contentStudio')}</small>
             </span>
           </div>
-          <nav className="main-nav view-tabs" aria-label="Secciones del CMS">
+          <nav className="gv-main-nav gv-view-tabs" aria-label="Secciones del CMS">
             <button
               className={tab === 'content-os' ? 'active' : ''}
               onClick={() => setTab('content-os')}
@@ -196,7 +196,7 @@ export default function App() {
               <Pencil size={16} aria-hidden="true" /> {t('legacy')}
             </button>
           </nav>
-          <div className="system-state ready">
+          <div className="gv-system-state ready">
             <span />
             {state.items.length} {t('items')}
           </div>
@@ -210,7 +210,7 @@ export default function App() {
               <option value="en">{t('en')}</option>
             </select>
             <button
-              className="button ghost"
+              className="gv-btn gv-btn-ghost"
               aria-label={t('theme')}
               onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
             >
@@ -220,7 +220,7 @@ export default function App() {
           <div className="top-actions">
             {tab === 'studio' && (
               <>
-                <button className="button ghost" onClick={() => importRef.current?.click()}>
+                <button className="gv-btn gv-btn-ghost" onClick={() => importRef.current?.click()}>
                   <Upload size={16} aria-hidden="true" /> {t('importJson')}
                 </button>
                 <input
@@ -230,10 +230,10 @@ export default function App() {
                   accept="application/json"
                   onChange={importJson}
                 />
-                <button className="button ghost" onClick={() => downloadJson(state.items)}>
+                <button className="gv-btn gv-btn-ghost" onClick={() => downloadJson(state.items)}>
                   <Download size={16} aria-hidden="true" /> {t('exportJson')}
                 </button>
-                <button className="button primary" onClick={startNew}>
+                <button className="gv-btn gv-btn-primary" onClick={startNew}>
                   <Plus size={16} aria-hidden="true" /> {t('newContent')}
                 </button>
               </>
@@ -314,7 +314,7 @@ export default function App() {
               </div>
             </div>
             {preview ? (
-              <article className="preview panel">
+              <article className="preview gv-panel">
                 <div className="preview-meta">
                   <span className={`badge ${form.status}`}>
                     {form.status === 'published' ? t('publishedStatus') : t('draft')}
@@ -335,7 +335,7 @@ export default function App() {
                 </div>
               </article>
             ) : (
-              <div className="editor card panel">
+              <div className="editor card gv-panel">
                 <label>
                   Título
                   <input
@@ -455,7 +455,7 @@ export default function App() {
                   <span className="message" role="status">
                     {message}
                   </span>
-                  <button className="button primary" onClick={save}>
+                  <button className="gv-btn gv-btn-primary" onClick={save}>
                     <Save size={16} aria-hidden="true" /> Guardar{' '}
                     {form.status === 'published' ? 'y publicar' : 'borrador'}
                   </button>
@@ -463,7 +463,7 @@ export default function App() {
               </div>
             )}
             {selectedId && (
-              <section className="history card panel">
+              <section className="history card gv-panel">
                 <div className="asset-heading">
                   <span>
                     <Calendar size={16} aria-hidden="true" /> Historial inmutable
@@ -483,7 +483,10 @@ export default function App() {
                         v{version.number} · {version.reason}
                       </span>
                       <small>{new Date(version.createdAt).toLocaleString('es-ES')}</small>
-                      <button className="button ghost" onClick={() => restoreVersion(version.id)}>
+                      <button
+                        className="gv-btn gv-btn-ghost"
+                        onClick={() => restoreVersion(version.id)}
+                      >
                         Restaurar
                       </button>
                     </div>

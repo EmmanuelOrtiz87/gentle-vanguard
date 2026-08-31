@@ -125,7 +125,7 @@ function VariantPreview({ variant }: { variant: Variant }) {
   return (
     <div
       style={{
-        border: '1px solid var(--color-border)',
+        border: '1px solid var(--gv-border)',
         borderRadius: 12,
         background: 'var(--gv-glass)',
         overflow: 'hidden',
@@ -140,9 +140,9 @@ function VariantPreview({ variant }: { variant: Variant }) {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '8px 12px',
-          borderBottom: '1px solid var(--color-border)',
+          borderBottom: '1px solid var(--gv-border)',
           fontSize: 12,
-          color: 'var(--color-text-muted)',
+          color: 'var(--gv-muted)',
         }}
       >
         <strong style={{ color: platformColor(variant.platform) }}>
@@ -150,8 +150,8 @@ function VariantPreview({ variant }: { variant: Variant }) {
         </strong>
         <span>
           {variant.body.length}/{variant.spec.charLimit} · {variant.spec.aspect}
-          {variant.score != null && ` · score ${variant.score}`}
-          {variant.provider === 'template' && ' · plantilla'}
+          {variant.score != null && ` · ${t('score')} ${variant.score}`}
+          {variant.provider === 'template' && ` · ${t('template')}`}
         </span>
       </div>
       {variant.format !== 'text' && (
@@ -161,13 +161,13 @@ function VariantPreview({ variant }: { variant: Variant }) {
             borderRadius: 8,
             aspectRatio: String(imgRatio),
             maxHeight: 220,
-            background: `linear-gradient(135deg, var(--color-background) 0%, ${color}22 100%)`,
+            background: `linear-gradient(135deg, var(--gv-bg) 0%, ${color}22 100%)`,
             border: `1px dashed ${color}55`,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            color: 'var(--color-text-muted)',
+            color: 'var(--gv-muted)',
             fontSize: 11,
             textAlign: 'center',
             padding: 8,
@@ -184,15 +184,15 @@ function VariantPreview({ variant }: { variant: Variant }) {
           padding: '4px 12px 12px',
           whiteSpace: 'pre-wrap',
           fontSize: 13,
-          color: 'var(--color-text-primary)',
+          color: 'var(--gv-text)',
         }}
       >
         {variant.body}
       </div>
       {overLimit && (
-        <div style={{ padding: '0 12px 10px', color: 'var(--color-error)', fontSize: 11 }}>
+        <div style={{ padding: '0 12px 10px', color: 'var(--gv-error)', fontSize: 11 }}>
           <AlertTriangle size={14} aria-hidden="true" /> {t('exceedsLimit')}{' '}
-          {variant.spec.charLimit} caracteres
+          {variant.spec.charLimit} {t('characters')}
         </div>
       )}
     </div>
@@ -213,7 +213,7 @@ export default function ContentOS() {
   const [media, setMedia] = useState<Media[]>([]);
   const [publishLog, setPublishLog] = useState<PublishEntry[]>([]);
   const [busy, setBusy] = useState(false);
-  const [status, setStatus] = useState(`Servidor local: ${t('ready')}`);
+  const [status, setStatus] = useState(`${t('localServer')}: ${t('ready')}`);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [editingVariant, setEditingVariant] = useState<string | null>(null);
   const [editBody, setEditBody] = useState('');
@@ -270,7 +270,7 @@ export default function ContentOS() {
       const fresh = await api<{ item: Item }>(`/api/items/${out.itemId}`);
       setSelectedItem(fresh.item);
     } catch (err) {
-      setStatus(`Error: ${(err as Error).message}`);
+      setStatus(`${t('errorPrefix')}: ${(err as Error).message}`);
     } finally {
       setBusy(false);
     }
@@ -284,16 +284,14 @@ export default function ContentOS() {
       });
       await refresh();
     } catch (err) {
-      setStatus(`Error: ${(err as Error).message}`);
+      setStatus(`${t('errorPrefix')}: ${(err as Error).message}`);
     }
   }
 
   async function copy(variant: Variant): Promise<void> {
     try {
       await navigator.clipboard.writeText(variant.body);
-      setStatus(
-        `Copiado al portapapeles (${PLATFORM_LABELS[variant.platform]}). Listo para pegar en la red.`,
-      );
+      setStatus(`${t('copied')} (${PLATFORM_LABELS[variant.platform]}). ${t('readyToPaste')}`);
     } catch {
       setStatus(t('copyFailed'));
     }
@@ -311,10 +309,10 @@ export default function ContentOS() {
         body: JSON.stringify({ body: editBody }),
       });
       setEditingVariant(null);
-      setStatus('Variante editada (pasa a "edited"); revisá antes de aprobar.');
+      setStatus(t('editedReview'));
       await refresh();
     } catch (err) {
-      setStatus(`Error: ${(err as Error).message}`);
+      setStatus(`${t('errorPrefix')}: ${(err as Error).message}`);
     }
   }
 
@@ -325,11 +323,11 @@ export default function ContentOS() {
         body: JSON.stringify({ status: 'approved' }),
       });
       setStatus(
-        `Variante ${PLATFORM_LABELS[variant.platform]} aprobada → export asistido registrado en publish_log (publicación sigue manual).`,
+        `${t('variantApproved')} ${PLATFORM_LABELS[variant.platform]} → ${t('assistedExport')}`,
       );
       await refresh();
     } catch (err) {
-      setStatus(`Error: ${(err as Error).message}`);
+      setStatus(`${t('errorPrefix')}: ${(err as Error).message}`);
     }
   }
 
@@ -345,11 +343,11 @@ export default function ContentOS() {
         }),
       });
       setStatus(
-        `Slot propuesto para ${PLATFORM_LABELS[variant.platform]}: ${new Date(out.scheduledAt).toLocaleString('es')}`,
+        `${t('slotProposed')} ${PLATFORM_LABELS[variant.platform]}: ${new Date(out.scheduledAt).toLocaleString('es')}`,
       );
       await refresh();
     } catch (err) {
-      setStatus(`Error: ${(err as Error).message}`);
+      setStatus(`${t('errorPrefix')}: ${(err as Error).message}`);
     }
   }
 
@@ -361,7 +359,7 @@ export default function ContentOS() {
       });
       await refresh();
     } catch (err) {
-      setStatus(`Error: ${(err as Error).message}`);
+      setStatus(`${t('errorPrefix')}: ${(err as Error).message}`);
     }
   }
 
@@ -376,7 +374,7 @@ export default function ContentOS() {
       });
       await refresh();
     } catch (err) {
-      setStatus(`Error: ${(err as Error).message}`);
+      setStatus(`${t('errorPrefix')}: ${(err as Error).message}`);
     }
   }
 
@@ -391,12 +389,12 @@ export default function ContentOS() {
 
   async function uploadMedia(file: File): Promise<void> {
     setBusy(true);
-    setStatus('Subiendo imagen…');
+    setStatus(t('uploading'));
     try {
       const dataUrl = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => resolve(String(reader.result));
-        reader.onerror = () => reject(new Error('no se pudo leer el archivo'));
+        reader.onerror = () => reject(new Error(t('readFileFailed')));
         reader.readAsDataURL(file);
       });
       const name = file.name.replace(/\.[a-z0-9]+$/i, '');
@@ -404,10 +402,10 @@ export default function ContentOS() {
         method: 'POST',
         body: JSON.stringify({ dataUrl, mime: file.type, name, alt: '', source: 'upload' }),
       });
-      setStatus(`Media "${name}" subido (${out.mediaId}). Completa el alt text (accesibilidad).`);
+      setStatus(`${t('mediaUploaded')} "${name}" (${out.mediaId}). ${t('completeAlt')}`);
       await refresh();
     } catch (err) {
-      setStatus(`Error: ${(err as Error).message}`);
+      setStatus(`${t('errorPrefix')}: ${(err as Error).message}`);
     } finally {
       setBusy(false);
     }
@@ -418,7 +416,7 @@ export default function ContentOS() {
       await api(`/api/media/${m.id}`, { method: 'PATCH', body: JSON.stringify({ alt }) });
       await refresh();
     } catch (err) {
-      setStatus(`Error: ${(err as Error).message}`);
+      setStatus(`${t('errorPrefix')}: ${(err as Error).message}`);
     }
   }
 
@@ -427,13 +425,13 @@ export default function ContentOS() {
       await api(`/api/media/${m.id}`, { method: 'DELETE' });
       await refresh();
     } catch (err) {
-      setStatus(`Error: ${(err as Error).message}`);
+      setStatus(`${t('errorPrefix')}: ${(err as Error).message}`);
     }
   }
 
   return (
     <div className="content-os-shell" style={{ display: 'grid', gap: 16 }}>
-      <div style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>{status}</div>
+      <div style={{ fontSize: 13, color: 'var(--gv-muted)' }}>{status}</div>
 
       <div
         style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}
@@ -460,7 +458,7 @@ export default function ContentOS() {
 
       {view === 'crear' && (
         <>
-          <section className="panel" style={{ display: 'grid', gap: 12 }}>
+          <section className="gv-panel" style={{ display: 'grid', gap: 12 }}>
             <h2 className="gv-section-title">
               {t('contentOs')} → {t('content')}
             </h2>
@@ -532,7 +530,7 @@ export default function ContentOS() {
             <section style={{ display: 'grid', gap: 10 }}>
               <h2 className="gv-section-title">
                 {selectedItem.title}{' '}
-                <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>
+                <span style={{ color: 'var(--gv-muted)', fontSize: 12 }}>
                   · {selectedItem.status}
                 </span>
               </h2>
@@ -556,7 +554,7 @@ export default function ContentOS() {
                           style={{
                             width: '100%',
                             borderRadius: 8,
-                            border: '1px solid var(--color-border)',
+                            border: '1px solid var(--gv-border)',
                           }}
                         />
                       )}
@@ -573,8 +571,8 @@ export default function ContentOS() {
                               style={{
                                 color:
                                   editBody.length > v.spec.charLimit
-                                    ? 'var(--color-error)'
-                                    : 'var(--color-text-muted)',
+                                    ? 'var(--gv-error)'
+                                    : 'var(--gv-muted)',
                                 fontSize: 12,
                               }}
                             >
@@ -632,7 +630,7 @@ export default function ContentOS() {
                           gap: 6,
                           alignItems: 'center',
                           fontSize: 12,
-                          color: 'var(--color-text-muted)',
+                          color: 'var(--gv-muted)',
                         }}
                       >
                         <span>{t('media')}:</span>
@@ -647,7 +645,7 @@ export default function ContentOS() {
                           </option>
                           {media.map((m) => (
                             <option key={m.id} value={m.id}>
-                              {m.name} {m.alt ? '(alt ✓)' : '(sin alt)'}
+                              {m.name} {m.alt ? `(${t('altPresent')})` : `(${t('altMissing')})`}
                             </option>
                           ))}
                         </select>
@@ -662,14 +660,14 @@ export default function ContentOS() {
       )}
 
       {view === 'calendario' && (
-        <section className="panel" style={{ display: 'grid', gap: 8 }}>
+        <section className="gv-panel" style={{ display: 'grid', gap: 8 }}>
           <h2
             className="gv-section-title"
             style={{ display: 'flex', alignItems: 'center', gap: 10 }}
           >
             {t('calendar')}
-            <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>
-              ({slots.length} slots)
+            <span style={{ color: 'var(--gv-muted)', fontSize: 12 }}>
+              ({slots.length} {t('slotsCount')})
             </span>
             <span style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
               <button
@@ -727,7 +725,7 @@ export default function ContentOS() {
                     return new Date(w.getTime() - w.getDay() * dayMs);
                   })();
             const days = calView === 'month' ? 42 : 7;
-            const WEEKDAYS = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
+            const WEEKDAYS = t('weekdays').split('|');
             return (
               <div
                 style={{
@@ -735,7 +733,7 @@ export default function ContentOS() {
                   gridTemplateColumns: 'repeat(7, 1fr)',
                   gap: 4,
                   background: 'var(--gv-glass)',
-                  border: '1px solid var(--color-border)',
+                  border: '1px solid var(--gv-border)',
                   borderRadius: 12,
                   padding: 10,
                 }}
@@ -743,7 +741,7 @@ export default function ContentOS() {
                 {WEEKDAYS.map((d) => (
                   <div
                     key={d}
-                    style={{ fontSize: 11, color: 'var(--color-text-muted)', textAlign: 'center' }}
+                    style={{ fontSize: 11, color: 'var(--gv-muted)', textAlign: 'center' }}
                   >
                     {d}
                   </div>
@@ -759,7 +757,7 @@ export default function ContentOS() {
                       key={dayKey + i}
                       style={{
                         minHeight: calView === 'month' ? 72 : 260,
-                        border: `1px solid ${isToday ? 'var(--color-primary)' : 'var(--color-border)'}`,
+                        border: `1px solid ${isToday ? 'var(--gv-primary)' : 'var(--gv-border)'}`,
                         borderRadius: 8,
                         padding: 4,
                         display: 'grid',
@@ -769,9 +767,7 @@ export default function ContentOS() {
                         background: isToday ? 'rgba(0, 191, 255, 0.05)' : 'transparent',
                       }}
                     >
-                      <div style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>
-                        {day.getDate()}
-                      </div>
+                      <div style={{ fontSize: 11, color: 'var(--gv-muted)' }}>{day.getDate()}</div>
                       {daySlots.map((s) => {
                         const selected = selectedSlotId === s.id;
                         return (
@@ -821,7 +817,7 @@ export default function ContentOS() {
               <div
                 style={{
                   background: 'var(--gv-glass)',
-                  border: '1px solid var(--color-border)',
+                  border: '1px solid var(--gv-border)',
                   borderRadius: 12,
                   padding: 14,
                   display: 'grid',
@@ -832,7 +828,7 @@ export default function ContentOS() {
                   <strong style={{ color: platformColor(slot.platform), fontSize: 14 }}>
                     {PLATFORM_LABELS[slot.platform] ?? slot.platform}
                   </strong>
-                  <span style={{ color: 'var(--color-text-primary)', fontSize: 13 }}>
+                  <span style={{ color: 'var(--gv-text)', fontSize: 13 }}>
                     {new Date(slot.scheduled_at).toLocaleString('es')}
                   </span>
                   <span className={`gv-status-badge gv-status-${slot.status}`}>{slot.status}</span>
@@ -845,19 +841,20 @@ export default function ContentOS() {
                   </button>
                 </div>
                 {item && (
-                  <div style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
-                    item: <span style={{ color: 'var(--color-text-primary)' }}>{item.title}</span>
+                  <div style={{ fontSize: 12, color: 'var(--gv-muted)' }}>
+                    {t('itemLabel')}: <span style={{ color: 'var(--gv-text)' }}>{item.title}</span>
                     {variant && (
                       <>
-                        {' · '}variante {variant.platform} ({variant.status})
+                        {' · '}
+                        {t('variantLabel')} {variant.platform} ({variant.status})
                         <div
                           style={{
                             marginTop: 6,
                             padding: 8,
-                            border: '1px solid var(--color-border)',
+                            border: '1px solid var(--gv-border)',
                             borderRadius: 8,
                             whiteSpace: 'pre-wrap',
-                            color: 'var(--color-text-primary)',
+                            color: 'var(--gv-text)',
                             maxHeight: 120,
                             overflow: 'auto',
                           }}
@@ -869,8 +866,8 @@ export default function ContentOS() {
                   </div>
                 )}
                 {slot.rationale && (
-                  <div style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
-                    rationale: {slot.rationale}
+                  <div style={{ fontSize: 12, color: 'var(--gv-muted)' }}>
+                    {t('rationale')}: {slot.rationale}
                   </div>
                 )}
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -921,7 +918,7 @@ export default function ContentOS() {
                       setSelectedSlotId(null);
                     }}
                   >
-                    {t('delete')} slot
+                    {t('deleteSlot')}
                   </button>
                 </div>
               </div>
@@ -932,15 +929,13 @@ export default function ContentOS() {
 
       {view === 'medios' && (
         <>
-          <section className="panel" style={{ display: 'grid', gap: 8 }}>
+          <section className="gv-panel" style={{ display: 'grid', gap: 8 }}>
             <h2
               className="gv-section-title"
               style={{ display: 'flex', gap: 10, alignItems: 'center' }}
             >
               {t('mediaLibrary')}
-              <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>
-                ({media.length})
-              </span>
+              <span style={{ color: 'var(--gv-muted)', fontSize: 12 }}>({media.length})</span>
             </h2>
             <div>
               <input
@@ -955,7 +950,7 @@ export default function ContentOS() {
               />
             </div>
             {media.length === 0 && (
-              <div style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>{t('noMedia')}</div>
+              <div style={{ color: 'var(--gv-muted)', fontSize: 13 }}>{t('noMedia')}</div>
             )}
             <div
               style={{
@@ -972,7 +967,7 @@ export default function ContentOS() {
                     key={m.id}
                     style={{
                       background: 'var(--gv-glass)',
-                      border: '1px solid var(--color-border)',
+                      border: '1px solid var(--gv-border)',
                       borderRadius: 12,
                       padding: 10,
                       display: 'grid',
@@ -985,12 +980,12 @@ export default function ContentOS() {
                       style={{
                         width: '100%',
                         borderRadius: 8,
-                        border: '1px solid var(--color-border)',
+                        border: '1px solid var(--gv-border)',
                       }}
                     />
-                    <div style={{ fontSize: 13, color: 'var(--color-text-primary)' }}>
+                    <div style={{ fontSize: 13, color: 'var(--gv-text)' }}>
                       {m.name}{' '}
-                      <span style={{ color: 'var(--color-text-muted)', fontSize: 11 }}>
+                      <span style={{ color: 'var(--gv-muted)', fontSize: 11 }}>
                         · {(m.size / 1024).toFixed(0)} KB
                       </span>
                     </div>
@@ -1011,7 +1006,7 @@ export default function ContentOS() {
                         title={
                           uses
                             ? `${t('attach')} · ${uses} ${t('variants')}`
-                            : `${t('attach')} a la primera ${t('variants')} del item seleccionado`
+                            : `${t('attach')} ${t('attachToFirst')} ${t('variants')} ${t('itemLabel')} seleccionado`
                         }
                         onClick={() => {
                           const target = selectedItem?.variants.find(
@@ -1037,9 +1032,9 @@ export default function ContentOS() {
           </section>
 
           {publishLog.length > 0 && (
-            <section className="panel" style={{ display: 'grid', gap: 6 }}>
+            <section className="gv-panel" style={{ display: 'grid', gap: 6 }}>
               <h2 className="gv-section-title">
-                Export asistido / publish_log ({publishLog.length})
+                {t('assistedExport')} ({publishLog.length})
               </h2>
               {publishLog.map((p) => (
                 <div
@@ -1049,18 +1044,18 @@ export default function ContentOS() {
                     gap: 10,
                     padding: '6px 12px',
                     background: 'var(--gv-glass)',
-                    border: '1px solid var(--color-border)',
+                    border: '1px solid var(--gv-border)',
                     borderRadius: 8,
                     fontSize: 12,
-                    color: 'var(--color-text-primary)',
+                    color: 'var(--gv-text)',
                   }}
                 >
                   <span style={{ color: platformColor(p.platform), fontWeight: 600 }}>
                     {PLATFORM_LABELS[p.platform] ?? p.platform}
                   </span>
-                  <span style={{ color: 'var(--color-text-muted)' }}>{p.mode}</span>
+                  <span style={{ color: 'var(--gv-muted)' }}>{p.mode}</span>
                   <span>{p.action}</span>
-                  <span style={{ marginLeft: 'auto', color: 'var(--color-text-muted)' }}>
+                  <span style={{ marginLeft: 'auto', color: 'var(--gv-muted)' }}>
                     {p.variant_id} · {p.created_at}
                   </span>
                 </div>
@@ -1071,7 +1066,7 @@ export default function ContentOS() {
       )}
 
       {view === 'crear' && items.length > 0 && (
-        <section className="panel" style={{ display: 'grid', gap: 6 }}>
+        <section className="gv-panel" style={{ display: 'grid', gap: 6 }}>
           <h2 className="gv-section-title">
             {t('history')} ({items.length})
           </h2>
@@ -1083,16 +1078,16 @@ export default function ContentOS() {
                 textAlign: 'left',
                 background:
                   selectedItem?.id === i.id ? 'rgba(0, 191, 255, 0.13)' : 'var(--gv-glass)',
-                border: '1px solid var(--color-border)',
+                border: '1px solid var(--gv-border)',
                 borderRadius: 8,
                 padding: '8px 12px',
-                color: 'var(--color-text-primary)',
+                color: 'var(--gv-text)',
                 cursor: 'pointer',
                 fontSize: 13,
               }}
             >
               <strong>{i.title}</strong>{' '}
-              <span style={{ color: 'var(--color-text-muted)' }}>
+              <span style={{ color: 'var(--gv-muted)' }}>
                 · {i.status} · {i.variants.length} {t('variants')}
               </span>
             </button>
