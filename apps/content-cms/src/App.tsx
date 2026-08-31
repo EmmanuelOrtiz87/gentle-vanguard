@@ -242,9 +242,11 @@ export default function App() {
         </div>
       </header>
       {tab === 'content-os' ? (
-        <ContentOS />
+        <div className="gv-view-fade">
+          <ContentOS />
+        </div>
       ) : (
-        <main className="layout">
+        <main className="layout gv-view-fade">
           <aside className="sidebar">
             <div className="side-heading">
               <div>

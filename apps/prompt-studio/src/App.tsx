@@ -330,7 +330,7 @@ export default function App() {
 
       <main className="flex-1 w-full max-w-6xl mx-auto p-6">
         {tab === 'create' && (
-          <div className="gv-panel p-5">
+          <div className="gv-panel gv-view-fade p-5">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-slate-100">
                 {editingId ? t('editPrompt') : t('createPrompt')}
@@ -509,7 +509,7 @@ export default function App() {
         )}
 
         {tab === 'library' && (
-          <div className="gv-panel p-5">
+          <div className="gv-panel gv-view-fade p-5">
             <h2 className="text-xl font-bold text-slate-100 mb-1">{t('library')}</h2>
             <p className="text-sm text-slate-400 mb-4">{t('libraryHelp')}</p>
             <form
@@ -634,7 +634,7 @@ export default function App() {
         )}
 
         {tab === 'guides' && (
-          <div className="gv-panel p-6 space-y-8">
+          <div className="gv-panel gv-view-fade p-6 space-y-8">
             <div>
               <h2 className="text-xl font-bold text-slate-100 mb-2">{t('guideAgents')}</h2>
               <ol className="list-decimal list-inside space-y-2 text-sm text-slate-300">

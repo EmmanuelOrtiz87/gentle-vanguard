@@ -13,6 +13,36 @@ body {
   box-shadow: 0 0 40px rgba(0, 191, 255, 0.06);
 }
 
+.app-shell main button[class*='rounded-full'] {
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 15.5px;
+  padding: 13px 26px;
+  transition:
+    transform 0.12s,
+    box-shadow 0.12s;
+}
+
+.app-shell main button[class*='bg-gradient-to-r'] {
+  color: var(--gv-bg);
+  background: var(--gv-gradient);
+}
+
+.app-shell main button[class*='bg-gradient-to-r']:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 30px var(--gv-glow);
+}
+
+.app-shell main button[class*='border-cyan-400'] {
+  color: var(--gv-text);
+  border: 1.5px solid rgba(var(--gv-primary-rgb), 0.5);
+  background: none;
+}
+
+.app-shell main button[class*='border-cyan-400']:hover:not(:disabled) {
+  background: rgba(var(--gv-primary-rgb), 0.08);
+}
+
 .app-shell {
   min-height: 100vh;
   display: flex;

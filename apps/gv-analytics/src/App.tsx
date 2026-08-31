@@ -319,7 +319,7 @@ export function App() {
 
       <main className="app-shell">
         {view === 'operacion' && (
-          <section className="operacion-split">
+          <section className="operacion-split view-fade">
             {/* ── Panel izquierdo: formulario fijo ── */}
             <aside className="operacion-form-panel">
               <section className="analysis-board">
@@ -436,34 +436,38 @@ export function App() {
         )}
 
         {view === 'configuracion' && (
-          <ConfigView
-            connected={connected}
-            status={status}
-            form={form}
-            setForm={setForm}
-            editingConnection={editingConnection}
-            busy={busy}
-            testing={testing}
-            testResult={testResult}
-            onSave={saveConnection}
-            onTest={testConnection}
-            onEdit={editConnection}
-            onCancelEdit={cancelEdit}
-            onRevalidate={loadStatus}
-          />
+          <div className="view-fade">
+            <ConfigView
+              connected={connected}
+              status={status}
+              form={form}
+              setForm={setForm}
+              editingConnection={editingConnection}
+              busy={busy}
+              testing={testing}
+              testResult={testResult}
+              onSave={saveConnection}
+              onTest={testConnection}
+              onEdit={editConnection}
+              onCancelEdit={cancelEdit}
+              onRevalidate={loadStatus}
+            />
+          </div>
         )}
 
         {view === 'historial' && (
-          <HistoryView
-            history={history}
-            activeId={report?.id}
-            busy={busy}
-            onOpen={openReport}
-            onExport={exportReport}
-            onDelete={deleteReportById}
-            onDeleteBulk={deleteReportsBulk}
-            notify={setMessage}
-          />
+          <div className="view-fade">
+            <HistoryView
+              history={history}
+              activeId={report?.id}
+              busy={busy}
+              onOpen={openReport}
+              onExport={exportReport}
+              onDelete={deleteReportById}
+              onDeleteBulk={deleteReportsBulk}
+              notify={setMessage}
+            />
+          </div>
         )}
       </main>
     </>

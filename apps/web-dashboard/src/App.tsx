@@ -250,7 +250,7 @@ function App() {
             <div className="gv-glow-b" aria-hidden="true" />
             <Navigation />
             <main className="gv-main">
-              <div className="gv-route-frame">
+              <div className="gv-route-frame gv-view-fade">
                 <Suspense fallback={<PageLoader />}>
                   <Routes>
                     <Route path="/" element={<Dashboard />} />

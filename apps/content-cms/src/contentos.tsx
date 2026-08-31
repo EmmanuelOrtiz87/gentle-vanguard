@@ -444,7 +444,7 @@ export default function ContentOS() {
             role="tab"
             aria-selected={view === v}
             className={`gv-btn ${view === v ? 'gv-btn-primary' : 'gv-btn-ghost'}`}
-            style={{ padding: '6px 16px', textTransform: 'capitalize' }}
+            style={{ textTransform: 'capitalize' }}
             onClick={() => setView(v)}
           >
             {v === 'crear'

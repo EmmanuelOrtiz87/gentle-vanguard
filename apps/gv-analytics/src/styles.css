@@ -2,19 +2,20 @@
    Registro del estándar visual del ecosistema: docs/brand/UI-STANDARD-ECOSYSTEM.md */
 :root {
   color-scheme: dark;
-  --gv-purple: #a78bfa;
-  --gv-cyan: #22d3ee;
+  --gv-purple: #a855f7;
+  --gv-cyan: #00bfff;
   --gv-cyan-deep: #06b6d4;
-  --gv-bg: #121212;
-  --gv-bg-deep: #0a0e17;
-  --gv-surface: #1f2937;
-  --gv-surface-raised: #273548;
-  --gv-text: #e5e7eb;
-  --gv-muted: #9ca3af;
-  --gv-glass: rgba(31, 41, 55, 0.6);
-  --gv-glass-border: rgba(167, 139, 250, 0.18);
-  --gv-gradient: linear-gradient(135deg, #a78bfa 0%, #22d3ee 100%);
-  --gv-glow: rgba(34, 211, 238, 0.35);
+  --gv-bg: #0d1117;
+  --gv-bg-deep: #0d1117;
+  --gv-surface: #1a2035;
+  --gv-surface-raised: #2a2d3a;
+  --gv-text: #ffffff;
+  --gv-muted: #6b7280;
+  --gv-glass: rgba(26, 32, 53, 0.6);
+  --gv-glass-border: rgba(168, 85, 247, 0.18);
+  --gv-gradient: linear-gradient(135deg, #a855f7 0%, #00bfff 100%);
+  --gv-glow: rgba(0, 191, 255, 0.35);
+  --gv-bg-rgb: 13, 17, 23;
   --gv-amber: #f4bb4f;
   --gv-red: #ee6d75;
   --gv-green: #4ade80;
@@ -33,7 +34,8 @@
   --gv-muted: #475569;
   --gv-glass: rgba(255, 255, 255, 0.7);
   --gv-glass-border: rgba(15, 23, 42, 0.1);
-  --gv-glow: rgba(34, 211, 238, 0.18);
+  --gv-glow: rgba(8, 145, 178, 0.18);
+  --gv-bg-rgb: 245, 247, 251;
   --gv-amber: #d97706;
   --gv-red: #dc2626;
   --gv-green: #16a34a;
@@ -137,7 +139,7 @@ textarea {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(18, 18, 18, 0.88);
+  background: rgba(var(--gv-bg-rgb), 0.88);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--gv-glass-border);
 }
@@ -392,11 +394,16 @@ textarea {
   backdrop-filter: blur(10px);
   border: 1px solid var(--gv-glass-border);
   border-radius: 18px;
-  padding: 20px 22px;
+  padding: 22px 24px;
   transition: all 0.18s;
 }
 .panel.compact {
   padding: 18px 20px;
+}
+.panel:hover {
+  transform: translateY(-3px);
+  border-color: rgba(0, 191, 255, 0.45);
+  box-shadow: 0 14px 40px rgba(13, 17, 23, 0.5);
 }
 .panel-heading {
   display: flex;
@@ -456,12 +463,12 @@ form input:focus {
   justify-content: center;
   gap: 8px;
   font-weight: 700;
-  font-size: 14.5px;
-  padding: 11px 22px;
+  font-size: 15.5px;
+  padding: 13px 26px;
   border-radius: 999px;
   border: none;
   cursor: pointer;
-  color: #0a0e17;
+  color: var(--gv-bg);
   background: var(--gv-gradient);
   transition:
     transform 0.12s,

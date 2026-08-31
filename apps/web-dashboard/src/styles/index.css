@@ -24,6 +24,10 @@
     --dash-success: #16a34a;
     --dash-warning: #a95e12;
     --dash-error: #dc2626;
+    --dash-glass: rgba(255, 255, 255, 0.7);
+    --dash-glass-border: rgba(15, 23, 42, 0.1);
+    --dash-brand-gradient: linear-gradient(135deg, #a855f7 0%, #00bfff 100%);
+    --dash-glow: rgba(8, 145, 178, 0.18);
   }
 
   :root.dark {
@@ -44,6 +48,10 @@
     --dash-success: #22c55e;
     --dash-warning: #f59e0b;
     --dash-error: #ef4444;
+    --dash-glass: rgba(26, 32, 53, 0.6);
+    --dash-glass-border: rgba(168, 85, 247, 0.18);
+    --dash-brand-gradient: linear-gradient(135deg, #a855f7 0%, #00bfff 100%);
+    --dash-glow: rgba(0, 191, 255, 0.35);
   }
 
   html {
@@ -76,10 +84,17 @@
 @layer components {
   .card {
     @apply p-6;
-    background: var(--dash-panel);
-    border: 1px solid var(--dash-line);
-    border-radius: 8px;
-    box-shadow: 0 14px 35px var(--dash-shadow);
+    background: var(--dash-glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--dash-glass-border);
+    border-radius: 18px;
+    transition: all 0.18s;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0, 191, 255, 0.45);
+    box-shadow: 0 14px 40px rgba(13, 17, 23, 0.5);
   }
 
   .metric-value {
@@ -144,7 +159,7 @@
   top: 0;
   z-index: 40;
   background: var(--dash-topbar);
-  border-bottom: 1px solid var(--dash-line);
+  border-bottom: 1px solid var(--dash-glass-border);
   backdrop-filter: blur(14px);
 }
 .gv-topbar,
@@ -393,11 +408,6 @@
   min-width: 96px;
   text-align: right;
 }
-:root {
-  --dash-brand-from: #a78bfa;
-  --dash-brand-to: #22d3ee;
-  --dash-brand-gradient: linear-gradient(135deg, #a78bfa 0%, #22d3ee 100%);
-}
 .gv-topbar .gv-nav-link.is-active {
   box-shadow: inset 0 -2px 0 #22d3ee;
 }
@@ -411,8 +421,36 @@
 }
 
 .dark .bg-blue-600,
-.dark .hover\:bg-blue-700:hover {
-  background-color: var(--dash-primary) !important;
+.dark .hover\:bg-blue-700:hover,
+.dark .bg-primary {
+  color: var(--dash-ink) !important;
+  background: var(--dash-brand-gradient) !important;
+  border-radius: 999px;
+  font-weight: 700;
+  padding: 13px 26px;
+  transition:
+    transform 0.12s,
+    box-shadow 0.12s;
+}
+.dark .bg-blue-600:hover,
+.dark .bg-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 30px var(--dash-glow);
+}
+
+.gv-view-fade {
+  animation: viewIn 0.28s ease both;
+}
+
+@keyframes viewIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 .dark .text-blue-500,
 .dark .text-blue-600,
