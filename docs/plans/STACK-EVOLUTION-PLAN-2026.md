@@ -8,6 +8,24 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ## ⚡ Registro de progreso
 
+### Ejecutado — Sesión 6 (2026-08-31, F2.3 batch 1: 22 módulos library → logger)
+
+- ✅ **F2.3 batch 1 — 22 módulos library migrados a logger estructurado** (commit `3b839d64`):
+  watchtower checks (config/dashboard/data/infra/security/context/rebuild), ResilienceManager,
+  session-context-log, session-metrics-tracker, response-cache (cache/sqlite), research-trends/fetch,
+  smart-task-wrapper, model-error-interceptor, knowledge-synthesizer/config, language-service,
+  token-ingest/nexus, session-close/phases, event-sourcing-api, adaptive-router/config.
+- ✅ **Codemod `scripts/codemod-console-to-logger.ts` creado y corregido**: maneja imports
+  multilínea, aliasing de colisiones `log`, y se añadió `scripts/*.ts` al tsconfig para que quede
+  lint-clean. Reutilizable para futuros batches de F2.3.
+- ✅ **CLIs conservan `console.*` por diseño**: revertidas las migraciones en secciones CLI
+  (`main()`/`cli()`) que producen stdout parseable (JSON/status): version-sync, setup-branch-
+  protection, complete-stack-fix, rescue-database, zcode-sync, post-edit-graphify, delivery/gate,
+  adaptive-router/index, static-gates, deployment-prerequisites, credentials-inventory,
+  knowledge-synthesizer/index.
+- ✅ Typecheck + lint + 6/6 suites de test en verde.
+- 🔲 **F2.3 en curso**: quedan ~5.000 `console.*` en src/ para próximos batches (usar el codemod).
+
 ### Ejecutado — Sesión 5 (2026-08-31, F2.4 completado a 0 `any` + PR #172)
 
 - ✅ **PR #172 MERGED** a `main` (bypass admin, CI 100% verde incluido Production Gate); merge
