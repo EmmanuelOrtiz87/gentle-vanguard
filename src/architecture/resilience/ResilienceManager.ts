@@ -166,7 +166,7 @@ export class ResilienceManager {
       logger.warn('Failover to secondary tier completed successfully');
       return true;
     } catch (error) {
-      console.error('Failover to secondary tier failed:', String(error));
+      logger.error(`Failover to secondary tier failed: ${String(error)}`);
       return false;
     }
   }
@@ -200,7 +200,7 @@ export class ResilienceManager {
       logger.warn('Failover to tertiary tier completed successfully');
       return true;
     } catch (error) {
-      console.error('Failover to tertiary tier failed:', String(error));
+      logger.error(`Failover to tertiary tier failed: ${String(error)}`);
       return false;
     }
   }
@@ -255,7 +255,7 @@ export class ResilienceManager {
           await this.failoverToSecondary();
         }
       } catch (err) {
-        console.error('Primary tier monitor error:', err);
+        logger.error(`Primary tier monitor error: ${String(err)}`);
       }
     }, 5000);
 
@@ -268,7 +268,7 @@ export class ResilienceManager {
           await this.failoverToTertiary();
         }
       } catch (err) {
-        console.error('Secondary tier monitor error:', err);
+        logger.error(`Secondary tier monitor error: ${String(err)}`);
       }
     }, 10000);
 

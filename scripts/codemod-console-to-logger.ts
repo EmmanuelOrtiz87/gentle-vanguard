@@ -37,6 +37,12 @@ const SKIP = new Set([
   'src/tools/setup-branch-protection.ts', // CLI runner
   'src/tools/version-sync.ts', // CLI runner
   'src/zcode-hooks/post-edit-graphify.ts', // CLI runner
+  // Batch 1 reverts: CLI sections produce parseable stdout (see plan registry)
+  'src/ci/deployment-prerequisites.ts',
+  'src/ci/static-gates.ts',
+  'src/delivery/gate.ts',
+  'src/integrations/zcode-sync.ts',
+  'src/security/credentials-inventory.ts',
 ]);
 
 // CLI files by convention (keep console.* by design)
@@ -98,21 +104,6 @@ function modulePrefix(file: string): string {
     .replace(/^-|-$/g, '');
 }
 
-// Detect CLI files by structure: a file that ends with a direct-execution block
-// (main()/cli() invoked via process.argv[1], import.meta.url, or .catch) is a CLI
-// entry point and must keep console.* by design (stdout is parsed).
-function isCliFileByContent(lines: string[]): boolean {
-  const text = lines.join('\n');
-  return (
-    /process\.argv\[1\]/.test(text) ||
-    /import\.meta\.url\s*===/.test(text) ||
-    /isMainModule/.test(text) ||
-    /main\(\)\.catch\(/.test(text) ||
-    /cli\(\)\.catch\(/.test(text) ||
-    /if\s*\(\s*isMainModule\s*\)/.test(text)
-  );
-}
-
 function migrateFile(file: string): FileReport {
   const report: FileReport = { file, replaced: 0, multiArg: 0, skipped: [] };
   const rel = relative(ROOT, file).replace(/\\/g, '/');
@@ -127,7 +118,12 @@ function migrateFile(file: string): FileReport {
     report.skipped.push('cli-shebang');
     return report;
   }
-  if (isCliFileByContent(lines)) {
+  // Mixed library+CLI files are NOT skipped wholesale: the inCliSection logic
+  // below migrates only the lines before the CLI entry block. A file is skipped
+  // only when the CLI marker appears before any console.* (pure CLI runner).
+  const firstConsole = lines.findIndex((l) => /console\.(log|warn|error|info|debug)/.test(l));
+  const firstCliMarker = lines.findIndex((l) => isCliSection(l));
+  if (firstCliMarker !== -1 && (firstConsole === -1 || firstCliMarker < firstConsole)) {
     report.skipped.push('cli-by-content');
     return report;
   }
@@ -163,6 +159,7 @@ function migrateFile(file: string): FileReport {
     }
   }
 
+  report.multiArg = multiArg;
   if (replacements.length === 0) {
     report.skipped.push('no-library-console');
     return report;

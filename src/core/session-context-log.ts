@@ -122,7 +122,7 @@ export function readSessionState(sessionId: string): SessionState | null {
     const content = fs.readFileSync(statePath, 'utf-8');
     return JSON.parse(content) as SessionState;
   } catch (err) {
-    console.error(`[SessionContextLog] Error reading ${sessionId}:`, err);
+    logger.error(`[SessionContextLog] Error reading ${sessionId}: ${String(err)}`);
     return null;
   }
 }
@@ -146,7 +146,7 @@ export function listSessions(): string[] {
         return fs.existsSync(statePath);
       });
   } catch (err) {
-    console.error('[SessionContextLog] Error listing sessions:', err);
+    logger.error(`[SessionContextLog] Error listing sessions: ${String(err)}`);
     return [];
   }
 }

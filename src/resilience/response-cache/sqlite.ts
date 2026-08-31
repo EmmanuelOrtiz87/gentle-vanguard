@@ -60,7 +60,7 @@ function ensureTokensColumn(): void {
         .run();
       logger.info('[response-cache] Added tokens_saved column to response_cache table');
     } catch (e2) {
-      console.warn('[response-cache] Could not add tokens_saved column:', (e2 as Error).message);
+      logger.warn(`[response-cache] Could not add tokens_saved column: ${(e2 as Error).message}`);
     }
   }
 }
@@ -226,7 +226,7 @@ export function sqliteSet(
         .run(key, response, inputText, inputEmbedding, expiresAt, key, tokensSaved);
     }
   } catch (e) {
-    console.warn('[response-cache] SQLite write failed:', (e as Error).message);
+    logger.warn(`[response-cache] SQLite write failed: ${(e as Error).message}`);
   }
 }
 

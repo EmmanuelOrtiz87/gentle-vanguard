@@ -59,7 +59,7 @@ export async function appendEvent(options: AppendEventOptions): Promise<void> {
     });
 
     child.on('error', (err) => {
-      if (!quiet) console.error('Failed to spawn event-sourcing.ts:', err);
+      if (!quiet) logger.error(`Failed to spawn event-sourcing.ts: ${String(err)}`);
       resolve(); // Fail silently - event sourcing is best-effort
     });
   });
