@@ -90,7 +90,9 @@ jobs:
     name: Commit Lint
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    if: github.event_name == 'pull_request'
+    # Dependabot commits use its own format (chore(deps)(deps): ...) that is not
+    # conventional-commits compliant — linting them blocks every deps PR.
+    if: github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]'
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
