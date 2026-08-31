@@ -36,7 +36,7 @@ const CostPanel = lazy(() => import('./components/CostPanel'));
 
 const PageLoader = () => (
   <div className="flex items-center justify-center h-screen">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
   </div>
 );
 
@@ -231,7 +231,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
           autoComplete="current-password"
         />
         {error && <p className="text-sm text-red-600">{error}</p>}
-        <button className="w-full rounded bg-blue-600 p-2 text-white" type="submit">
+        <button className="w-full rounded bg-primary p-2 text-white" type="submit">
           Sign in
         </button>
       </form>
@@ -245,6 +245,9 @@ function App() {
       <ErrorBoundary>
         <AuthGate>
           <div className="gv-app-shell">
+            <div className="gv-grid-bg" aria-hidden="true" />
+            <div className="gv-glow-a" aria-hidden="true" />
+            <div className="gv-glow-b" aria-hidden="true" />
             <Navigation />
             <main className="gv-main">
               <div className="gv-route-frame">

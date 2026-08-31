@@ -150,7 +150,7 @@ function LiveDataStatus({
 }
 
 function DashboardInner() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('gv-cc-theme') !== 'light');
   const [useWebSocket, setUseWebSocket] = useState(true);
   const [searchParams] = useSearchParams();
   const urlTenantId = searchParams.get('tenantId') || undefined;
@@ -189,9 +189,13 @@ function DashboardInner() {
     }
   }, [bridgeConnected]);
 
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', darkMode);
+    localStorage.setItem('gv-cc-theme', darkMode ? 'dark' : 'light');
+  }, [darkMode]);
+
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    document.documentElement.classList.toggle('dark');
+    setDarkMode((current) => !current);
   };
 
   const globalHealthData = data.globalHealth;
