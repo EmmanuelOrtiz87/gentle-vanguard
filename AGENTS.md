@@ -96,6 +96,22 @@ Docs completas: `apps/command-center/README.md`.
 - Persiste entre sesiones (no lo toca el close); clase daemon `command-center` en `DAEMON_CLASSES`
   (protegido del reaper). Smoke: `node tests/smoke/command-center-smoke.mjs`.
 
+## design-system (marca GV)
+
+Sistema canónico en `assets/gv-design-system.css` — fuente única de estilos compartidos:
+tokens dark/light (`--gv-*`), shell (`.gv-grid-bg/.gv-glow-a/b/.gv-topbar/.gv-view-tabs/.gv-panel`),
+controles (`.gv-btn` pill gradiente, `.gv-icon-btn`, `.gv-lang-dropdown`), `.gv-view-fade`
+(transición de vista 0.28s), `.gv-footer`, breakpoints 640/1024px.
+
+- **Logo oficial**: `logo.svg` (monograma gradiente + glow) — copia en `public/` de cada app,
+  `<img class="gv-brand-logo">` a 32px. Wordmark "Gentle**Vanguard**" en Orbitron (displayFont).
+- **Reglas**: prefijo `--gv-*` RESERVADO al canónico (apps usan su propio prefijo, ej. `--dash-*`);
+  apps vanilla/estáticas sirven el canónico por ruta o snapshot documentado — nunca redefinir `.gv-*`.
+- **Referencia visual viva**: analytics + academy. i18n es default + selector; tema con clave global
+  `localStorage gv-cc-theme` / `gv-cc-lang`.
+- Validación visual: `chrome --headless=new --screenshot` + leer la imagen (los checks de valores
+  CSS no detectan diferencias de composición).
+
 ### Modelo operativo
 
 Gentle-Vanguard es **LOCAL-FIRST / SERVER-OPTIONAL** (ADR-0017). CLI/orquestación, SQLite/Nexus,
