@@ -67,6 +67,8 @@
     "watchtower:health": "npx tsx src/core/maintenance-watchtower.ts --action health",
     "session:autostart:ts": "npx tsx src/session/session-autostart.ts",
     "session:autostart:detached": "node --import tsx src/session/session-autostart-detached.ts",
+    "session:sweep": "npx tsx src/session/stale-session-sweeper.ts --apply",
+    "session:sweep:dry-run": "npx tsx src/session/stale-session-sweeper.ts",
     "retention:dry-run": "npx tsx src/session/artifact-retention.ts",
     "checkpoint:create": "npx tsx src/ops/checkpoint-manager.ts create",
     "checkpoint:list": "npx tsx src/ops/checkpoint-manager.ts list",

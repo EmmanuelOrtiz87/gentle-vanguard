@@ -24,6 +24,15 @@ function argValue(args: string[], name: string): string | undefined {
 
 function printHuman(result: EvalRunResult): void {
   const { dataset, scores, trend, gate, runId } = result;
+  if (runId === null) {
+    console.log(
+      `[EVAL] No labeled sessions with activity yet — run skipped (not persisted, gate neutral).`,
+    );
+    console.log(
+      `[EVAL] The dataset grows as sessions close with terminal status + recorded activity.`,
+    );
+    return;
+  }
   console.log(`[EVAL] Continuous eval run #${runId}`);
   console.log(`[EVAL] Dataset: ${dataset.items.length} sessions (${dataset.positives} positive / ${dataset.negatives} negative)`);
   console.log(`[EVAL] Scores:`);

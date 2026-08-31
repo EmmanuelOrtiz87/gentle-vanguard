@@ -119,7 +119,7 @@ interface SessionRow {
 }
 
 const POSITIVE_SESSION_STATUSES = new Set(['completed', 'success', 'succeeded']);
-const NEGATIVE_SESSION_STATUSES = new Set(['failed', 'error', 'aborted']);
+const NEGATIVE_SESSION_STATUSES = new Set(['failed', 'error', 'aborted', 'abandoned']);
 
 /**
  * Builds the golden dataset from Nexus:
@@ -142,7 +142,7 @@ export function buildGoldenDataset(
     .prepare(
       `SELECT s.id, s.status, s.tokens_used, s.created_at, s.updated_at
        FROM sessions s
-       WHERE s.status IN ('completed','success','succeeded','failed','error','aborted')
+       WHERE s.status IN ('completed','success','succeeded','failed','error','aborted','abandoned')
        ORDER BY s.updated_at DESC
        LIMIT ?`,
     )
@@ -199,8 +199,14 @@ export function buildGoldenDataset(
       label = 'positive';
     }
 
-    // Sessions still 'active'/'idle' without any signal are skipped (no label).
-    if (label === null) continue;
+    // Sessions without any signal are skipped (no label). Ghost sessions swept to
+    // 'abandoned' with zero recorded activity are NOT failures — they are autostart
+    // artifacts with no data, so counting them would permanently tank the score.
+    const hasActivity =
+      (s.tokens_used ?? 0) > 0 || positiveFeedback + negativeFeedback > 0 || errorTraces > 0;
+    if (label === null || (label === 'negative' && s.status === 'abandoned' && !hasActivity)) {
+      continue;
+    }
 
     const tok = (
       db
@@ -417,7 +423,11 @@ export function runContinuousEval(
   const trend = computeTrend(scores.aggregateScore, previous);
   const thresholdPercent = opts.gateThresholdPercent ?? 5;
   const gateResult = evaluateGate(trend, thresholdPercent);
-  const runId = persistRun(db, scores, trend);
+  // Empty dataset = no signal. A midpoint aggregate (0.5) would poison the trend
+  // baseline, so the run is NOT persisted and the gate stays neutral.
+  const hasData = dataset.items.length > 0;
+  const runId = hasData ? persistRun(db, scores, trend) : null;
+  const gate = hasData ? gateResult : { passed: true, reason: 'no data — run skipped' as const };
 
   return {
     dataset,
@@ -425,9 +435,9 @@ export function runContinuousEval(
     trend,
     gate: {
       enabled: Boolean(opts.gate),
-      passed: gateResult.passed,
+      passed: gate.passed,
       thresholdPercent,
-      reason: gateResult.reason,
+      reason: gate.reason,
     },
     runId,
   };
