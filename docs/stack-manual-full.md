@@ -147,9 +147,11 @@ Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica
 
 ### Architecture
 
-- **96 checks** en **22 componentes** (incluye process-hygiene): dashboard-ws, codegraph,
-  ml-embeddings, engram, mcp, session, hooks, configs, tool-configs, security, governance,
-  secret-scanner, cli-guard.
+- **108 checks** en **25 componentes** (incluye process-hygiene + loop-guard + web-crawler):
+  dashboard-ws, codegraph, ml-embeddings, engram, mcp, session, hooks, configs, tool-configs,
+  security, governance, secret-scanner, cli-guard, hidden-spawns, cloud-connectors, tracing,
+  state-persistence, audit, gentle-vanguard-db, model-provider-health, web-crawler, loop-guard,
+  process-hygiene. _Live: `config/stack-metrics.json` (`gv metrics`)._
 - **6 modos**: health, rebuild, report, autoheal, continuous, all.
 - **Pipeline integrado**: corre `-Action autoheal -Quiet` con `lazy: true` al inicio de sesión (no
   bloquea).
@@ -159,7 +161,7 @@ Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica
 
 | Action     | Command                                  | Description                      |
 | ---------- | ---------------------------------------- | -------------------------------- |
-| health     | `-Action health`                         | 96 checks, 22 componentes        |
+| health     | `-Action health`                         | 108 checks, 25 componentes       |
 | rebuild    | `-Action rebuild`                        | health + rebuild ML/RAG indices  |
 | autoheal   | `-Action autoheal`                       | health + restart procesos caídos |
 | report     | `-Action report -OutputFile status.json` | JSON export                      |
@@ -182,7 +184,8 @@ Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica
 
 ### Estabilidad comprobada
 
-- **96/96 PASS — 0 WARN — 0 FAIL — 0 SKIP** (todos los componentes OK)
+- **106/108 PASS — 2 WARN — 0 FAIL — 0 SKIP** (loop-guard + web-crawler añadidos; 25 comps. Live:
+  `config/stack-metrics.json`)
 - Dashboard WS API 200 OK, watchdog con auto-restart (10 intentos)
 - CodeGraph: 133 files, 1410 nodes, 1763 edges
 - Puertos dinámicos con `Get-FreePort()` en `src/dashboard-common.ts`
@@ -326,8 +329,8 @@ npm run scan:secrets -- --scan . --json        # output JSON
   relevantes: ts/js/json/yml/yaml/md/env/toml/xml/py/ps1/sh/sql). Complementa a trufflehog y
   secretlint. Verificar con `npx lefthook validate`.
 - **Watchtower**: componente `secret-scanner` en `src/core/maintenance-watchtower.ts`
-  (`checkSecretScanner` — valida módulo, CLI, config y tests). Se ejecuta con `-Action health` (95
-  checks, 22 componentes). Verificado 96/96 PASS.
+  (`checkSecretScanner` — valida módulo, CLI, config y tests). Se ejecuta con `-Action health` (108
+  checks, 25 componentes). Verificado 106/108 PASS (2 WARN: dashboard-ws transient).
 - **Routing de subagentes**: `config/subagent-mapping.json` registra las skills absorbidas por rol:
   - **DEV**: DevSecOps (devsecops-scanning, secret-scanning gitleaks, secrets CI/CD, SBOM,
     dependency-confusion, supply-chain CI/CD)
