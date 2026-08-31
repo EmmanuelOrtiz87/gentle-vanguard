@@ -16,6 +16,7 @@ import {
   Workflow,
   ShieldCheck,
   UserCog,
+  CircleDollarSign,
 } from 'lucide-react';
 import { useSharedState } from './hooks/useSharedState';
 import { TenantSelector } from './components/TenantSelector';
@@ -35,7 +36,7 @@ const MultiRepoView = lazy(() => import('./components/MultiRepoView'));
 const ContentOpsPanel = lazy(() => import('./components/ContentOpsPanel'));
 const AuditPanel = lazy(() => import('./components/AuditPanel'));
 const AdminPanel = lazy(() => import('./components/AdminPanel'));
-const AppsControlPanel = lazy(() => import('./components/AppsControlPanel'));
+const CostPanel = lazy(() => import('./components/CostPanel'));
 
 const PageLoader = () => (
   <div className="flex items-center justify-center h-screen">
@@ -56,7 +57,7 @@ function Navigation() {
         { to: '/timeline', icon: History, label: 'Timeline' },
         { to: '/tasks', icon: ListTodo, label: 'Tasks' },
         { to: '/agents', icon: Bot, label: 'Agents' },
-        { to: '/apps', icon: LayoutDashboard, label: 'Apps' },
+        { to: '/costs', icon: CircleDollarSign, label: 'Costs' },
       ],
     },
     {
@@ -268,7 +269,7 @@ function App() {
                     <Route path="/mcp" element={<MCPServers />} />
                     <Route path="/knowledge" element={<KnowledgePanel />} />
                     <Route path="/multi-repo" element={<MultiRepoView />} />
-                    <Route path="/apps" element={<AppsControlPanel />} />
+                    <Route path="/costs" element={<CostPanel />} />
                   </Routes>
                 </Suspense>
               </div>

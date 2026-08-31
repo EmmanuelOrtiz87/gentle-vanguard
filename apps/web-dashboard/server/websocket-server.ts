@@ -22,7 +22,7 @@ import { meshHandler } from './handlers/mesh.ts';
 import { agentHandler } from './handlers/agent.ts';
 import { marketplaceHandler } from './handlers/marketplace.ts';
 import { contentOperationsHandler } from './handlers/content-operations.ts';
-import { appsControlHandler } from './apps-control-api.ts';
+import { costsHandler } from './handlers/costs.ts';
 
 const otelPipeline = getOtelPipeline();
 let metricsWriterStarted = false;
@@ -150,7 +150,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
     if (await agentHandler(req, res, url, ctx, headers)) return;
     if (await marketplaceHandler(req, res, url, ctx, headers)) return;
     if (await contentOperationsHandler(req, res, url, ctx, headers)) return;
-    if (await appsControlHandler(req, res, url, ctx, headers)) return;
+    if (await costsHandler(req, res, url, ctx, headers)) return;
 
     res.writeHead(404, headers);
     res.end(JSON.stringify({ error: 'Not found' }));
