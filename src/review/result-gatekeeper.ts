@@ -56,6 +56,14 @@ function getDb(): DbManagerLike | null {
   return _db;
 }
 
+/**
+ * DI injection point (STACK-EVOLUTION-PLAN F2.6 batch 2).
+ * Container-injected db handle takes precedence over the lazy require().
+ */
+export function setGatekeeperDb(handle: DbManagerLike | null): void {
+  _db = handle;
+}
+
 // ─── Types ────────────────────────────────────────────────────────────
 
 type ContractStatus = 'pass' | 'fail' | 'skip' | 'error';

@@ -31,6 +31,14 @@ export function getDb(): DatabaseManager | null {
   return _db;
 }
 
+/**
+ * DI injection point (STACK-EVOLUTION-PLAN F2.6 batch 2).
+ * Container-injected db handle takes precedence over the lazy require().
+ */
+export function setAdaptiveRouterDb(handle: DatabaseManager | null): void {
+  _db = handle;
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────
 
 export function parseArgs(argv: string[]): RouterArgs {

@@ -63,6 +63,16 @@ function getDb(): DatabaseManager | null {
   return _db;
 }
 
+/**
+ * DI injection point (STACK-EVOLUTION-PLAN F2.6 batch 2).
+ * The container resolves `db` and injects it here; when set it takes
+ * precedence over the legacy lazy require() path. Legacy standalone CLI
+ * usage keeps working unchanged (getDb falls back to the require chain).
+ */
+export function setErrorMemoryDb(handle: DatabaseManager | null): void {
+  _db = handle;
+}
+
 // ---- Tokenizer (matches skill-router.ts) ----
 
 const STOP_WORDS = new Set([

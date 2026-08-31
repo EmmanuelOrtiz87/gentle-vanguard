@@ -42,6 +42,14 @@ function getDb(): DatabaseManager | null {
   return _db;
 }
 
+/**
+ * DI injection point (STACK-EVOLUTION-PLAN F2.6 batch 2).
+ * Container-injected db handle takes precedence over the lazy require().
+ */
+export function setEventSourcingDb(handle: DatabaseManager | null): void {
+  _db = handle;
+}
+
 const ROOT = resolve(process.cwd());
 const EVENT_STORE_DIR = join(ROOT, '.session', 'event-store');
 const SNAPSHOT_DIR = join(ROOT, '.session', 'event-snapshots');

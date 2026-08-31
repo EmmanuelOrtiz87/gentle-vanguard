@@ -1,24 +1,44 @@
 /**
  * Minimal DI container (STACK-EVOLUTION-PLAN F2.6) — factories, no framework.
  *
- * Pilot wiring (this batch): ConfigService, token budget guard, database (db()).
- * Remaining singletons to migrate in later batches:
- *   - src/database/db-init.ts            (getInstance)
- *   - src/tokens/token-tracker.ts        (getInstance)
- *   - src/skills/skill-usage-tracker.ts  (getInstance)
- *   - src/monitor/performance-slo-monitor.ts (getInstance)
- *   - src/orchestration/adaptive-router/index.ts (getInstance)
- *   - src/resilience/error-memory.ts     (getInstance)
- *   - src/resilience/post-mortem-trigger.ts (getInstance)
- *   - src/review/result-gatekeeper.ts    (getInstance)
- *   - src/core/session-metrics-tracker.ts (getInstance)
- *   - src/tools/event-sourcing.ts        (getInstance)
- *   - src/cli/backlog.ts                 (getInstance)
- * Do NOT refactor them all at once — wire incrementally per plan F2.6+.
+ * Pilot wiring (batch 1): ConfigService, token budget guard, database (db()).
+ *
+ * Batch 2 migrations (registered below, lazily; legacy module paths still work
+ * unchanged — the container injects its `db` resolution into each module via a
+ * setter, so modules keep their lazy-require fallback when run standalone):
+ *   - errorMemory          → src/resilience/error-memory.ts (db injection + API ns)
+ *   - resultGatekeeper     → src/review/result-gatekeeper.ts (db injection + API ns)
+ *   - eventSourcing        → src/tools/event-sourcing.ts (db injection + API ns)
+ *   - tokenTracker         → src/tokens/token-tracker.ts (db injection + API ns)
+ *   - skillUsageTracker    → src/skills/skill-usage-tracker.ts (db injection + API ns)
+ *   - adaptiveRouter       → src/orchestration/adaptive-router/index.ts (db injection + API ns)
+ *   - sessionMetrics       → src/core/session-metrics-tracker.ts (façade over the
+ *                            per-session getInstance() map — container is the
+ *                            resolution point; legacy getInstance() delegates to the
+ *                            same shared instance map, so both return the same object)
+ *
+ * NOT migrated (deliberate, do not "fix" without a plan):
+ *   - src/database/db-init.ts               — calls main() unconditionally at import
+ *                                             (CLI side effects: schema DDL); wiring it
+ *                                             into the container would mutate the DB on
+ *                                             any resolve.
+ *   - src/cli/backlog.ts                    — calls main() unconditionally at import AND
+ *                                             grabs DatabaseManager.getInstance() eagerly
+ *                                             at module top-level (not lazy).
+ *   - src/resilience/post-mortem-trigger.ts — calls main() unconditionally at import.
+ *   - src/monitor/performance-slo-monitor.ts — calls main() unconditionally at import.
  */
-import { getConfigService, ConfigService } from '../config/config-service.js';
+import { getConfigService, ConfigService, createTestConfig } from '../config/config-service.js';
 import { db } from '../database/db.js';
 import { runGuard } from '../tokens/token-budget-guard.js';
+import type { DatabaseManager } from '../../apps/web-dashboard/server/database/manager.js';
+import * as errorMemory from '../resilience/error-memory.js';
+import * as resultGatekeeper from '../review/result-gatekeeper.js';
+import * as eventSourcing from '../tools/event-sourcing.js';
+import * as tokenTracker from '../tokens/token-tracker.js';
+import * as skillUsageTracker from '../skills/skill-usage-tracker.js';
+import * as adaptiveRouter from '../orchestration/adaptive-router/index.js';
+import { SessionMetricsTracker, getAllLiveMetrics } from './session-metrics-tracker.js';
 
 export interface Container {
   /** Register a lazy factory. Factories run at most once per container. */
@@ -109,5 +129,82 @@ export function createAppContainer(): Container {
       },
     };
   });
+  registerBatch2Services(c);
+  return c;
+}
+
+/**
+ * Batch 2 (F2.6) service registrations. Each factory injects the container's
+ * `db` resolution into the module (the module keeps a lazy-require fallback for
+ * standalone CLI use) and returns the module's public API namespace, memoized.
+ * Shared with createTestContainer() so tests can swap `config`/`db` for stubs.
+ */
+function registerBatch2Services(c: Container): void {
+  c.register('errorMemory', (cc) => {
+    errorMemory.setErrorMemoryDb(cc.resolve<DatabaseManager>('db'));
+    return errorMemory;
+  });
+  c.register('resultGatekeeper', (cc) => {
+    resultGatekeeper.setGatekeeperDb(cc.resolve<DatabaseManager>('db'));
+    return resultGatekeeper;
+  });
+  c.register('eventSourcing', (cc) => {
+    eventSourcing.setEventSourcingDb(cc.resolve<DatabaseManager>('db'));
+    return eventSourcing;
+  });
+  c.register('tokenTracker', (cc) => {
+    tokenTracker.setTokenTrackerDb(cc.resolve<DatabaseManager>('db'));
+    return tokenTracker;
+  });
+  c.register('skillUsageTracker', (cc) => {
+    skillUsageTracker.setSkillUsageDb(cc.resolve<DatabaseManager>('db'));
+    return skillUsageTracker;
+  });
+  c.register('adaptiveRouter', (cc) => {
+    adaptiveRouter.setAdaptiveRouterDb(cc.resolve<DatabaseManager>('db'));
+    return adaptiveRouter;
+  });
+  c.register('sessionMetrics', () => ({
+    /** Same instance map as the legacy SessionMetricsTracker.getInstance(). */
+    forSession: (sessionId: string) => SessionMetricsTracker.getInstance(sessionId),
+    destroy: (sessionId: string) => SessionMetricsTracker.destroy(sessionId),
+    liveMetrics: () => getAllLiveMetrics(),
+  }));
+}
+
+/**
+ * Test container: same service registrations as the app container, but `config`
+ * and `db` are stubs (createTestConfig + an inert fake db) so dependents resolve
+ * without touching the filesystem or the real DatabaseManager singleton.
+ * Fresh container per test = full isolation.
+ */
+export function createTestContainer(): Container {
+  const c = createContainer();
+  c.registerValue('config', createTestConfig());
+  c.registerValue(
+    'db',
+    {} as DatabaseManager, // inert stub: batch-2 factories only inject the handle
+  );
+  c.register('tokenBudgetGuard', (cc) => {
+    const config = cc.resolve<ConfigService>('config');
+    const quiet = config.get('GV_QUIET');
+    return {
+      check(task: string, risk: string, chars: number) {
+        return runGuard({
+          mode: 'pre-task',
+          task,
+          risk,
+          chars,
+          actualPrompt: 0,
+          actualCompletion: 0,
+          record: false,
+          strict: false,
+          asJson: true,
+          quiet,
+        });
+      },
+    };
+  });
+  registerBatch2Services(c);
   return c;
 }
