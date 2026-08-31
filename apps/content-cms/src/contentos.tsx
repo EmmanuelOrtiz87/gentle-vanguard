@@ -105,6 +105,20 @@ function platformColor(id: string): string {
   return PALETTE[h % PALETTE.length];
 }
 
+/** Color semántico por estado de slot (F2): proposed → azure, confirmed → verde, skipped → rojo, published → púrpura. */
+const SLOT_STATUS_COLORS: Record<string, string> = {
+  proposed: AZURE,
+  approved: '#2EA043',
+  confirmed: '#2EA043',
+  rejected: '#F85149',
+  skipped: '#F85149',
+  published: '#A855F7',
+};
+
+function slotStatusColor(status: string): string {
+  return SLOT_STATUS_COLORS[status] ?? MUTED;
+}
+
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API}${path}`, {
     ...init,
@@ -209,6 +223,8 @@ export default function ContentOS() {
   const [editBody, setEditBody] = useState('');
   const [calView, setCalView] = useState<'month' | 'week'>('month');
   const [calAnchor, setCalAnchor] = useState(() => new Date());
+  const [view, setView] = useState<'crear' | 'calendario' | 'medios'>('crear');
+  const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
 
   const refresh = useCallback(async () => {
     try {
@@ -347,7 +363,10 @@ export default function ContentOS() {
     }
   }
 
-  async function slotTransition(slot: Slot, next: 'confirmed' | 'rejected' | 'proposed'): Promise<void> {
+  async function slotTransition(
+    slot: Slot,
+    next: 'confirmed' | 'skipped' | 'published' | 'proposed',
+  ): Promise<void> {
     try {
       await api(`/api/slots/${slot.id}`, {
         method: 'PATCH',
@@ -436,6 +455,25 @@ export default function ContentOS() {
     <div style={{ display: 'grid', gap: 16 }}>
       <div style={{ fontSize: 13, color: MUTED }}>{status}</div>
 
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }} role="tablist" aria-label="Secciones Content OS">
+        {(['crear', 'calendario', 'medios'] as const).map((v) => (
+          <button
+            key={v}
+            role="tab"
+            aria-selected={view === v}
+            style={{
+              ...btn(view === v ? AZURE : BORDER),
+              padding: '6px 16px',
+              textTransform: 'capitalize',
+            }}
+            onClick={() => setView(v)}
+          >
+            {v === 'crear' ? 'crear' : v === 'calendario' ? `calendario (${slots.length})` : `medios (${media.length})`}
+          </button>
+        ))}
+      </div>
+
+      {view === 'crear' && (<>
       <section style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 16, display: 'grid', gap: 12 }}>
         <h2 style={{ margin: 0, fontSize: 16, color: TEXT }}>Brief → contenido multi-red</h2>
         <input
@@ -577,7 +615,9 @@ export default function ContentOS() {
           </div>
         </section>
       )}
+      </>)}
 
+      {view === 'calendario' && (
       <section style={{ display: 'grid', gap: 8 }}>
         <h2 style={{ margin: 0, fontSize: 15, color: TEXT, display: 'flex', alignItems: 'center', gap: 10 }}>
           Calendario
@@ -667,19 +707,28 @@ export default function ContentOS() {
                   >
                     <div style={{ fontSize: 11, color: MUTED }}>{day.getDate()}</div>
                     {daySlots.map((s) => {
-                      const color = platformColor(s.platform);
+                      const color = slotStatusColor(s.status);
+                      const selected = selectedSlotId === s.id;
                       return (
                         <div
                           key={s.id}
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => setSelectedSlotId(selected ? null : s.id)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') setSelectedSlotId(selected ? null : s.id);
+                          }}
                           style={{
                             fontSize: 11,
                             borderRadius: 6,
                             padding: '3px 6px',
-                            border: `1px solid ${color}55`,
-                            background: color + (s.status === 'confirmed' ? '33' : '14'),
+                            border: `1px solid ${selected ? color : color + '55'}`,
+                            boxShadow: selected ? `0 0 0 1px ${color}` : 'none',
+                            background: color + (s.status === 'confirmed' || s.status === 'approved' ? '33' : '14'),
                             color: TEXT,
                             display: 'grid',
                             gap: 3,
+                            cursor: 'pointer',
                           }}
                           title={s.rationale}
                         >
@@ -687,35 +736,7 @@ export default function ContentOS() {
                             {new Date(s.scheduled_at).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' })}{' '}
                             {PLATFORM_LABELS[s.platform] ?? s.platform}
                           </span>
-                          <span style={{ fontSize: 10, color: s.status === 'confirmed' ? '#2EA043' : MUTED }}>
-                            {s.status}
-                          </span>
-                          <span style={{ display: 'flex', gap: 4 }}>
-                            {s.status === 'proposed' && (
-                              <>
-                                <button
-                                  style={{ ...btn('#2EA043'), padding: '1px 6px', fontSize: 10 }}
-                                  onClick={() => void slotTransition(s, 'confirmed')}
-                                >
-                                  ✓
-                                </button>
-                                <button
-                                  style={{ ...btn(BORDER), padding: '1px 6px', fontSize: 10 }}
-                                  onClick={() => void slotTransition(s, 'rejected')}
-                                >
-                                  ✕
-                                </button>
-                              </>
-                            )}
-                            {s.status !== 'rejected' && (
-                              <button
-                                style={{ ...btn(BORDER), padding: '1px 6px', fontSize: 10 }}
-                                onClick={() => void deleteSlot(s)}
-                              >
-                                🗑
-                              </button>
-                            )}
-                          </span>
+                          <span style={{ fontSize: 10, color }}>{s.status}</span>
                         </div>
                       );
                     })}
@@ -725,8 +746,122 @@ export default function ContentOS() {
             </div>
           );
         })()}
+        {(() => {
+          const slot = slots.find((s) => s.id === selectedSlotId) ?? null;
+          if (!slot) return null;
+          const item = items.find((i) => i.id === slot.item_id) ?? null;
+          const variant = item?.variants.find((v) => v.id === slot.variant_id) ?? null;
+          const color = slotStatusColor(slot.status);
+          return (
+            <div
+              style={{
+                background: CARD,
+                border: `1px solid ${color}66`,
+                borderRadius: 12,
+                padding: 14,
+                display: 'grid',
+                gap: 8,
+              }}
+            >
+              <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                <strong style={{ color: platformColor(slot.platform), fontSize: 14 }}>
+                  {PLATFORM_LABELS[slot.platform] ?? slot.platform}
+                </strong>
+                <span style={{ color: TEXT, fontSize: 13 }}>
+                  {new Date(slot.scheduled_at).toLocaleString('es')}
+                </span>
+                <span
+                  style={{
+                    color,
+                    fontSize: 11,
+                    border: `1px solid ${color}55`,
+                    borderRadius: 999,
+                    padding: '1px 8px',
+                  }}
+                >
+                  {slot.status}
+                </span>
+                <button
+                  style={{ ...btn(BORDER), marginLeft: 'auto', padding: '4px 10px' }}
+                  onClick={() => setSelectedSlotId(null)}
+                >
+                  cerrar
+                </button>
+              </div>
+              {item && (
+                <div style={{ fontSize: 12, color: MUTED }}>
+                  item: <span style={{ color: TEXT }}>{item.title}</span>
+                  {variant && (
+                    <>
+                      {' · '}variante {variant.platform} ({variant.status})
+                      <div
+                        style={{
+                          marginTop: 6,
+                          padding: 8,
+                          border: `1px solid ${BORDER}`,
+                          borderRadius: 8,
+                          whiteSpace: 'pre-wrap',
+                          color: TEXT,
+                          maxHeight: 120,
+                          overflow: 'auto',
+                        }}
+                      >
+                        {variant.body}
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+              {slot.rationale && <div style={{ fontSize: 12, color: MUTED }}>rationale: {slot.rationale}</div>}
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {slot.status === 'proposed' && (
+                  <button
+                    style={btn('#2EA043')}
+                    onClick={() => void slotTransition(slot, 'confirmed')}
+                  >
+                    confirmar (aprobar)
+                  </button>
+                )}
+                {slot.status === 'confirmed' && (
+                  <button
+                    style={{ ...btn('#A855F7'), color: DARK }}
+                    onClick={() => void slotTransition(slot, 'published')}
+                  >
+                    marcar publicado
+                  </button>
+                )}
+                {(slot.status === 'proposed' || slot.status === 'confirmed') && (
+                  <button style={btn(BORDER)} onClick={() => void slotTransition(slot, 'skipped')}>
+                    rechazar
+                  </button>
+                )}
+                {slot.status === 'skipped' && (
+                  <button style={btn(BORDER)} onClick={() => void slotTransition(slot, 'proposed')}>
+                    volver a proponer
+                  </button>
+                )}
+                {variant && (
+                  <button style={btn(BORDER)} onClick={() => void proposeSlot(variant)}>
+                    proponer otro horario
+                  </button>
+                )}
+                <button
+                  style={{ ...btn(BORDER), color: '#F85149' }}
+                  onClick={() => {
+                    void deleteSlot(slot);
+                    setSelectedSlotId(null);
+                  }}
+                >
+                  eliminar slot
+                </button>
+              </div>
+            </div>
+          );
+        })()}
       </section>
+      )}
 
+      {view === 'medios' && (<>
       <section style={{ display: 'grid', gap: 8 }}>
         <h2 style={{ margin: 0, fontSize: 15, color: TEXT, display: 'flex', gap: 10, alignItems: 'center' }}>
           Biblioteca de medios
@@ -828,7 +963,9 @@ export default function ContentOS() {
         </section>
       )}
 
-      {items.length > 0 && (
+      </>)}
+
+      {view === 'crear' && items.length > 0 && (
         <section style={{ display: 'grid', gap: 6 }}>
           <h2 style={{ margin: 0, fontSize: 15, color: TEXT }}>Historial ({items.length})</h2>
           {items.map((i) => (

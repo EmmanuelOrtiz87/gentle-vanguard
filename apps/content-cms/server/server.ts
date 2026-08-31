@@ -63,11 +63,20 @@ export function mediaRefFromPath(imagePath: string): string | null {
   return imagePath.startsWith('media:') ? imagePath.slice(6) : null;
 }
 
+// Estados válidos según CHECK de calendar_slots: proposed|confirmed|published|skipped
 const SLOT_TRANSITIONS: Record<string, Set<string>> = {
-  proposed: new Set(['confirmed', 'rejected']),
-  confirmed: new Set(['proposed', 'rejected']),
-  rejected: new Set(['proposed']),
+  proposed: new Set(['confirmed', 'skipped']),
+  confirmed: new Set(['proposed', 'published', 'skipped']),
+  published: new Set(),
+  skipped: new Set(['proposed']),
 };
+
+/** Valida una transición de estado de slot; null = válida, string = mensaje de error. */
+export function validateSlotTransition(from: string, to: string): string | null {
+  if (from === to) return null;
+  const allowed = SLOT_TRANSITIONS[from] ?? new Set();
+  return allowed.has(to) ? null : `transición inválida: ${from} → ${to}`;
+}
 
 function createContentOSHandler(db: DatabaseManager) {
   return async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
@@ -326,12 +335,10 @@ function createContentOSHandler(db: DatabaseManager) {
         json(res, 404, { error: 'slot no encontrado' });
         return;
       }
-      if (body.status && body.status !== current.status) {
-        const allowed = SLOT_TRANSITIONS[current.status] ?? new Set();
-        if (!allowed.has(body.status)) {
-          json(res, 409, {
-            error: `transición inválida: ${current.status} → ${body.status}`,
-          });
+      if (body.status) {
+        const invalid = validateSlotTransition(current.status, body.status);
+        if (invalid) {
+          json(res, 409, { error: invalid });
           return;
         }
       }

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { PLATFORM_SPECS, getSpec, recommendSlot, MVP_PLATFORM_IDS } from './platform-specs';
 import { resolveGenerator, templateVariant, LlmGenerator, GenerateBrief } from './generator';
+import { mediaRefFromPath, validateSlotTransition } from './server';
 
 const brief: GenerateBrief = {
   title: 'Lanzamiento GV Content OS',
@@ -90,5 +91,40 @@ describe('generator', () => {
     expect(resolveGenerator().provider).toBe('template');
     if (prevUrl) process.env.CONTENT_LLM_BASE_URL = prevUrl;
     if (prevKey) process.env.GEMINI_API_KEY = prevKey;
+  });
+});
+
+describe('slot transitions (F2 calendario)', () => {
+  it('permite proposed → confirmed y proposed → skipped', () => {
+    expect(validateSlotTransition('proposed', 'confirmed')).toBeNull();
+    expect(validateSlotTransition('proposed', 'skipped')).toBeNull();
+  });
+
+  it('permite volver atrás y publicar: confirmed → proposed|published|skipped, skipped → proposed', () => {
+    expect(validateSlotTransition('confirmed', 'proposed')).toBeNull();
+    expect(validateSlotTransition('confirmed', 'published')).toBeNull();
+    expect(validateSlotTransition('confirmed', 'skipped')).toBeNull();
+    expect(validateSlotTransition('skipped', 'proposed')).toBeNull();
+  });
+
+  it('rechaza saltos inválidos (estados fuera del CHECK de calendar_slots)', () => {
+    expect(validateSlotTransition('proposed', 'rejected')).toMatch(/transición inválida/);
+    expect(validateSlotTransition('skipped', 'confirmed')).toMatch(/transición inválida/);
+    expect(validateSlotTransition('published', 'proposed')).toMatch(/transición inválida/);
+  });
+
+  it('idempotencia: mismo estado es no-op válido', () => {
+    expect(validateSlotTransition('confirmed', 'confirmed')).toBeNull();
+  });
+});
+
+describe('mediaRefFromPath (convención media:<id>)', () => {
+  it('extrae el id de una referencia media:<id>', () => {
+    expect(mediaRefFromPath('media:cm-123-abc')).toBe('cm-123-abc');
+  });
+
+  it('devuelve null para rutas normales o vacías', () => {
+    expect(mediaRefFromPath('assets/hero.png')).toBeNull();
+    expect(mediaRefFromPath('')).toBeNull();
   });
 });
