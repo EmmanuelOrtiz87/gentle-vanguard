@@ -413,7 +413,7 @@
         <div class="hero-ctas">
           <a class="btn btn-primary" href="#/track/fundamentos">Comenzar por los fundamentos</a>
           <a class="btn btn-ghost" href="#/demo">Ver las demos</a>
-          <a class="btn btn-ghost" href="#/generador">Generador de prompts</a>
+          <a class="btn btn-ghost" href="http://127.0.0.1:5176" target="_blank" rel="noopener">Prompt Studio</a>
         </div>
         <div class="hero-stats">
           <div class="hstat"><div class="n" data-count="7">0</div><div class="l">rutas</div></div>
@@ -549,12 +549,6 @@
           <p>La web que estás viendo es la tercera demo: SPA vanilla, cero dependencias externas, branding tokenizado y contenido derivado del stack real. Los mismos principios que enseñamos, aplicados.</p>
           <div class="shot-note">file:// — doble click y funciona</div></div>
         </div>
-        <div class="demo-card">
-          <img src="${(window.GV_IMG || {})['generator'] || ''}" alt="Generador de prompts" loading="lazy">
-          <div class="dc-body"><h3>Generador de prompts — demo interactiva</h3>
-          <p>Aplicación funcional construida con el stack: tipificación de tarea, campos guiados y construcción en vivo de un prompt profesional con criterios de aceptación y verificación. Probala acá: <a href="#/generador" style="color:var(--gv-cyan)">abrir el generador →</a></p>
-          <div class="shot-note">100% cliente · cero dependencias</div></div>
-        </div>
       </div>
       <blockquote style="margin-top:28px">¿Querés una demo de algo específico construido con el stack (una web, un análisis, una automatización)? Es exactamente el trabajo que Gentle-Vanguard hace en minutos, no semanas — <a href="#/track/negocio" style="color:var(--gv-cyan)">conocé la oferta</a>.</blockquote>
       </div>`;
@@ -579,132 +573,6 @@
       task: 'Investigar el tema y sintetizar hallazgos accionables',
     },
   };
-
-  function viewGenerator() {
-    const opts = Object.entries(GEN_TEMPLATES)
-      .map(([k, v]) => `<option value="${k}">${v.label}</option>`)
-      .join('');
-    app.innerHTML = `<div class="view-fade">
-      <div class="view-header">
-        <div class="eyebrow">Demo interactiva · prompt engineering</div>
-        <h1>Generador de prompts</h1>
-        <p class="desc">Completá los campos y obtené un prompt profesional estructurado (rol, tarea, contexto, formato, restricciones, verificación) listo para copiar a cualquier modelo. Los mismos principios del <a href="#/track/prompts" style="color:var(--gv-cyan)">track de prompts</a>, aplicados.</p>
-      </div>
-      <div class="gen-layout">
-        <div class="gen-panel">
-          <h3>1 · Configurá tu prompt</h3>
-          <div class="field"><label>Tipo de tarea</label><select id="g-type">${opts}</select></div>
-          <div class="field"><label>Rol del asistente <small>(quién debe ser)</small></label>
-            <input id="g-role" type="text" value="Ingeniero de software senior, especialista en calidad y arquitectura"></div>
-          <div class="field"><label>Objetivo / tarea <small>(una frase concreta)</small></label>
-            <input id="g-goal" type="text" placeholder="Ej: review del módulo de pagos antes de liberar a producción"></div>
-          <div class="field"><label>Contexto <small>(repo, stack, restricciones de negocio)</small></label>
-            <textarea id="g-ctx" placeholder="Ej: monorepo TypeScript + React, tests con vitest, no romper API pública…"></textarea></div>
-          <div class="field"><label>Criterios de aceptación <small>(uno por línea)</small></label>
-            <textarea id="g-criteria" placeholder="Ej: sin vulnerabilidades high&#10;cubre casos borde&#10;mantiene estilo del repo"></textarea></div>
-          <div class="field"><label>Formato de salida</label>
-            <select id="g-format">
-              <option value="Informe con secciones y severidades (crítico/alto/medio/bajo) con evidencia y recomendación por hallazgo">Informe con severidades</option>
-              <option value="Código completo listo para aplicar, con comentarios solo donde el código no lo explica">Código listo</option>
-              <option value="Plan paso a paso numerado con dependencias y riesgos">Plan paso a paso</option>
-              <option value="Documento markdown con secciones, tabla de decisiones y trade-offs">Documento markdown</option>
-              <option value="JSON estricto con el schema indicado en el contexto, sin texto extra">JSON estricto</option>
-            </select></div>
-          <div class="field"><label>Tono / estilo <small>(opcional)</small></label>
-            <input id="g-tone" type="text" placeholder="Ej: directo, técnico, sin relleno"></div>
-          <div class="gen-actions">
-            <button class="btn btn-primary" id="g-build">Construir prompt</button>
-            <button class="btn btn-ghost" id="g-fill">Cargar ejemplo</button>
-          </div>
-          <div class="gen-tip">Todo se procesa en tu navegador — nada sale de tu máquina.</div>
-        </div>
-        <div class="gen-panel gen-output">
-          <h3>2 · Tu prompt</h3>
-          <pre id="g-out">Completá los campos y presioná “Construir prompt”. El resultado aparece aquí, listo para copiar.</pre>
-          <div class="gen-actions">
-            <button class="btn btn-primary" id="g-copy">Copiar</button>
-          </div>
-          <div class="gen-tip" id="g-copied" style="color:var(--gv-cyan)"></div>
-        </div>
-      </div></div>`;
-
-    const $ = (id) => document.getElementById(id);
-    function build() {
-      const t = GEN_TEMPLATES[$('g-type').value];
-      const role = $('g-role').value.trim() || 'Asistente experto';
-      const goal = $('g-goal').value.trim() || '[COMPLETAR: describí la tarea concreta]';
-      const ctx = $('g-ctx').value.trim();
-      const crit = $('g-criteria')
-        .value.trim()
-        .split('\n')
-        .map((s) => s.trim())
-        .filter(Boolean);
-      const fmt = $('g-format').value;
-      const tone = $('g-tone').value.trim();
-      const L = [];
-      L.push(`# Rol`);
-      L.push(`Actuá como ${role}. Tu objetivo: ${goal}.`);
-      L.push(``);
-      L.push(`# Tarea`);
-      L.push(
-        t.task +
-          '. Trabajá sobre la información provista; si algo esencial falta, formulá UNA lista breve de preguntas antes de ejecutar.',
-      );
-      if (ctx) {
-        L.push('');
-        L.push('# Contexto');
-        L.push(ctx);
-      }
-      if (crit.length) {
-        L.push('');
-        L.push('# Criterios de aceptación');
-        L.push('La respuesta es correcta solo si:');
-        crit.forEach((c) => L.push(`- ${c}`));
-      }
-      L.push('');
-      L.push('# Formato de salida');
-      L.push(fmt + '.');
-      if (tone) {
-        L.push('');
-        L.push('# Estilo');
-        L.push(tone + '.');
-      }
-      L.push('');
-      L.push('# Verificación');
-      L.push(
-        'Antes de responder, revisá tu borrador contra los criterios de aceptación y corregilo. Mostrá solo la versión final.',
-      );
-      $('g-out').textContent = L.join('\n');
-      $('g-copied').textContent = '';
-    }
-    $('g-build').addEventListener('click', build);
-    $('g-fill').addEventListener('click', () => {
-      $('g-type').value = 'review';
-      $('g-goal').value = 'Review del módulo de checkout antes de liberar a producción';
-      $('g-ctx').value =
-        'Monorepo TypeScript + React 18. Tests con vitest. El módulo maneja pagos con Stripe. No podemos romper la API pública ni los contratos existentes. Está en apps/web/src/checkout/.';
-      $('g-criteria').value =
-        'Sin vulnerabilidades high ni medium\nCubre casos de error y timeouts\nSeñala deuda técnica encontrada\nRespeta el estilo del repo';
-      $('g-tone').value = 'Directo, técnico, sin relleno';
-      build();
-    });
-    $('g-copy').addEventListener('click', async () => {
-      const txt = $('g-out').textContent;
-      try {
-        await navigator.clipboard.writeText(txt);
-        $('g-copied').textContent = '✓ Copiado al portapapeles';
-      } catch {
-        const ta = document.createElement('textarea');
-        ta.value = txt;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        ta.remove();
-        $('g-copied').textContent = '✓ Copiado';
-      }
-      setTimeout(() => ($('g-copied').textContent = ''), 2200);
-    });
-  }
 
   function viewGlossary() {
     const letters = [...new Set(GLOSSARY.map((g) => g.term[0].toUpperCase()))].sort();
@@ -765,9 +633,6 @@
     } else if (parts[0] === 'demo') {
       viewDemo();
       setActive('demo');
-    } else if (parts[0] === 'generador') {
-      viewGenerator();
-      setActive('generador');
     } else viewNotFound();
     bindEffects();
   }
