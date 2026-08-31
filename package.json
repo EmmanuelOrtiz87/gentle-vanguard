@@ -110,6 +110,7 @@
     "audit:siem": "npx tsx src/infrastructure/siem-audit-bridge.ts",
     "eval:run": "npx tsx src/review/eval-runner.ts",
     "eval:continuous": "npx tsx src/eval/continuous-eval-cli.ts",
+    "session:bridge": "npx tsx src/session/session-id-bridge-cli.ts",
     "eval:gate": "npx tsx src/eval/continuous-eval-cli.ts --gate",
     "eval:continuous:test": "npx tsx --test tests/unit/continuous-eval.test.ts",
     "skill:plugins": "npx tsx src/plugins/skill-cli.ts",

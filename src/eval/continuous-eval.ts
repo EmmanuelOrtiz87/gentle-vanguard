@@ -17,6 +17,7 @@
 import { join, resolve } from 'path';
 import { existsSync } from 'fs';
 import Database from 'better-sqlite3';
+import { aliasTableExists, sessionPlusAliasIds } from '../session/session-id-bridge.js';
 
 /* ── Types ── */
 
@@ -164,32 +165,38 @@ export function buildGoldenDataset(
   const sessions = [...byId.values()];
 
   const items: GoldenItem[] = [];
+  // Session-id bridge: traces/token_transactions usan ids de herramienta
+  // (ses_*) distintos de sessions.id; resolvemos ambos namespaces vía alias.
+  const useAliases = aliasTableExists(db);
 
   for (const s of sessions) {
+    const ids = useAliases ? sessionPlusAliasIds(db, s.id) : [s.id];
+    const ph = ids.map(() => '?').join(',');
+
     const positiveFeedback = (
       db
         .prepare(
           `SELECT COUNT(*) AS c FROM feedback WHERE trace_id IN
-             (SELECT trace_id FROM traces WHERE session_id = ?)
-           AND type IN ('positive','thumbs_up','upvote','like')`,
+             (SELECT trace_id FROM traces WHERE session_id IN (${ph}))
+           AND type IN ('up','positive','thumbs_up','upvote','like')`,
         )
-        .get(s.id) as { c: number }
+        .get(...ids) as { c: number }
     ).c;
 
     const negativeFeedback = (
       db
         .prepare(
           `SELECT COUNT(*) AS c FROM feedback WHERE trace_id IN
-             (SELECT trace_id FROM traces WHERE session_id = ?)
-           AND type IN ('negative','thumbs_down','downvote','dislike')`,
+             (SELECT trace_id FROM traces WHERE session_id IN (${ph}))
+           AND type IN ('down','negative','thumbs_down','downvote','dislike')`,
         )
-        .get(s.id) as { c: number }
+        .get(...ids) as { c: number }
     ).c;
 
     const errorTraces = (
       db
-        .prepare(`SELECT COUNT(*) AS c FROM traces WHERE session_id = ? AND status = 'error'`)
-        .get(s.id) as { c: number }
+        .prepare(`SELECT COUNT(*) AS c FROM traces WHERE session_id IN (${ph}) AND status = 'error'`)
+        .get(...ids) as { c: number }
     ).c;
 
     let label: 'positive' | 'negative' | null = null;
@@ -212,16 +219,16 @@ export function buildGoldenDataset(
       db
         .prepare(
           `SELECT COALESCE(SUM(input_tokens + output_tokens), 0) AS t
-           FROM token_transactions WHERE session_id = ?`,
+           FROM token_transactions WHERE session_id IN (${ph})`,
         )
-        .get(s.id) as { t: number }
+        .get(...ids) as { t: number }
     ).t;
 
     const traceStats = db
       .prepare(
-        `SELECT MAX(duration) AS maxDur, COUNT(*) AS c FROM traces WHERE session_id = ?`,
+        `SELECT MAX(duration) AS maxDur, COUNT(*) AS c FROM traces WHERE session_id IN (${ph})`,
       )
-      .get(s.id) as { maxDur: number | null; c: number };
+      .get(...ids) as { maxDur: number | null; c: number };
 
     let durationMs = traceStats.maxDur ?? 0;
     if ((!durationMs || traceStats.c === 0) && s.created_at && s.updated_at) {
