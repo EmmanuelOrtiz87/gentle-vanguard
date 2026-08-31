@@ -8,7 +8,7 @@
  */
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { randomUUID } from 'crypto';
-import { mkdirSync, writeFileSync } from 'fs';
+import { mkdirSync, writeFileSync, readFileSync, unlinkSync, existsSync } from 'fs';
 import { join, resolve } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 
@@ -48,6 +48,17 @@ async function readBody(req: IncomingMessage): Promise<unknown> {
 function variantToJson(v: ContentVariantRecord): Record<string, unknown> {
   return { ...v, spec: JSON.parse(v.spec_json || '{}'), spec_json: undefined };
 }
+
+/** Media id de referencia `media:<id>` en variant.image_path (attach sin migrar schema). */
+export function mediaRefFromPath(imagePath: string): string | null {
+  return imagePath.startsWith('media:') ? imagePath.slice(6) : null;
+}
+
+const SLOT_TRANSITIONS: Record<string, Set<string>> = {
+  proposed: new Set(['confirmed', 'rejected']),
+  confirmed: new Set(['proposed', 'rejected']),
+  rejected: new Set(['proposed']),
+};
 
 function createContentOSHandler(db: DatabaseManager) {
   return async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
@@ -201,10 +212,35 @@ function createContentOSHandler(db: DatabaseManager) {
         if (key in body) patch[key] = body[key];
       }
       if ('imagePrompt' in body) patch.image_prompt = body.imagePrompt;
+      if (body.media_id === '') {
+        patch.image_path = ''; // desadjuntar
+      }
+      if (typeof body.media_id === 'string' && body.media_id) {
+        // Adjuntar media de la biblioteca: la referencia vive en image_path como `media:<id>`
+        const media = repo
+          .listMedia(tenant)
+          .find((m) => m.id === body.media_id);
+        if (!media) {
+          json(res, 404, { error: 'media no encontrado' });
+          return;
+        }
+        patch.image_path = `media:${media.id}`;
+      }
       repo.updateVariant(id, tenant, patch);
       if (patch.status === 'approved') {
         const variant = repo.getVariant(id, tenant);
-        if (variant) repo.logPublish(tenant, id, variant.platform, 'assisted', 'approved');
+        if (variant) {
+          // Export asistido (patrón export-kit): snapshot del cuerpo aprobado en publish_log,
+          // publicación queda gated al humano (sin APIs de red — ADR-0021).
+          const mediaId = mediaRefFromPath(variant.image_path);
+          repo.logPublish(tenant, id, variant.platform, 'assisted', 'approved', {
+            body: variant.body,
+            imagePrompt: variant.image_prompt,
+            mediaId,
+            exportedAt: new Date().toISOString(),
+          });
+          db.insertEvent('content_os.variant_approved', { variantId: id, platform: variant.platform });
+        }
       }
       json(res, 200, { variant: repo.getVariant(id, tenant) });
       return;
@@ -230,6 +266,34 @@ function createContentOSHandler(db: DatabaseManager) {
       return;
     }
 
+    if (req.method === 'POST' && path === '/api/slots/recommend') {
+      const body = (await readBody(req)) as Record<string, unknown> | null;
+      const platform = typeof body?.platform === 'string' ? body.platform : '';
+      const itemId = typeof body?.item_id === 'string' ? body.item_id : '';
+      if (!itemId || !platform) {
+        json(res, 400, { error: 'item_id y platform son obligatorios' });
+        return;
+      }
+      const rec = recommendSlot(platform);
+      if (!rec) {
+        json(res, 400, { error: `plataforma desconocida: ${platform}` });
+        return;
+      }
+      const variantId = typeof body?.variant_id === 'string' && body.variant_id ? body.variant_id : null;
+      const sid = `cs-${Date.now()}-${randomUUID().slice(0, 6)}`;
+      repo.createSlot(tenant, {
+        id: sid,
+        item_id: itemId,
+        variant_id: variantId,
+        platform,
+        scheduled_at: rec.scheduledAt,
+        status: 'proposed',
+        rationale: rec.rationale,
+      });
+      json(res, 201, { slotId: sid, scheduledAt: rec.scheduledAt, rationale: rec.rationale });
+      return;
+    }
+
     if (req.method === 'GET' && path === '/api/slots') {
       json(res, 200, {
         slots: repo.listSlots(tenant, {
@@ -248,9 +312,43 @@ function createContentOSHandler(db: DatabaseManager) {
         json(res, 400, { error: 'body inválido' });
         return;
       }
-      repo.updateSlot(id, tenant, body);
+      const current = repo.listSlots(tenant).find((s) => s.id === id);
+      if (!current) {
+        json(res, 404, { error: 'slot no encontrado' });
+        return;
+      }
+      if (body.status && body.status !== current.status) {
+        const allowed = SLOT_TRANSITIONS[current.status] ?? new Set();
+        if (!allowed.has(body.status)) {
+          json(res, 409, {
+            error: `transición inválida: ${current.status} → ${body.status}`,
+          });
+          return;
+        }
+      }
+      const patch: Record<string, unknown> = {};
+      for (const key of ['status', 'scheduled_at', 'variant_id']) {
+        if (key in body) patch[key] = body[key];
+      }
+      repo.updateSlot(id, tenant, patch);
+      if (patch.status === 'confirmed') {
+        db.insertEvent('content_os.slot_confirmed', { slotId: id, platform: current.platform });
+      }
       const slot = repo.listSlots(tenant).find((s) => s.id === id) ?? null;
       json(res, 200, { slot });
+      return;
+    }
+
+    if (req.method === 'DELETE' && path.startsWith('/api/slots/')) {
+      const id = path.split('/')[3];
+      const result = db.database
+        .prepare('DELETE FROM calendar_slots WHERE id = ? AND tenant_id = ?')
+        .run(id, tenant);
+      if (!result.changes) {
+        json(res, 404, { error: 'slot no encontrado' });
+        return;
+      }
+      json(res, 200, { deleted: id });
       return;
     }
 
@@ -291,6 +389,92 @@ function createContentOSHandler(db: DatabaseManager) {
         source: (body.source as string) === 'generated' ? 'generated' : 'upload',
       });
       json(res, 201, { mediaId: id, path: filePath });
+      return;
+    }
+
+    if (req.method === 'GET' && /^\/api\/media\/[^/]+\/file$/.test(path)) {
+      const id = path.split('/')[3];
+      const media = repo.listMedia(tenant).find((m) => m.id === id);
+      if (!media || !existsSync(media.path)) {
+        json(res, 404, { error: 'media no encontrado' });
+        return;
+      }
+      const bytes = readFileSync(media.path);
+      res.writeHead(200, {
+        'content-type': media.mime,
+        'content-length': bytes.length,
+        'access-control-allow-origin': '*',
+        'cache-control': 'no-store',
+      });
+      res.end(bytes);
+      return;
+    }
+
+    if (
+      (req.method === 'PATCH' || req.method === 'DELETE') &&
+      path.startsWith('/api/media/')
+    ) {
+      const id = path.split('/')[3];
+      const media = repo.listMedia(tenant).find((m) => m.id === id);
+      if (!media) {
+        json(res, 404, { error: 'media no encontrado' });
+        return;
+      }
+      if (req.method === 'PATCH') {
+        const body = (await readBody(req)) as Record<string, unknown> | null;
+        const alt = typeof body?.alt === 'string' ? body.alt : null;
+        const name = typeof body?.name === 'string' ? body.name : null;
+        if (alt === null && name === null) {
+          json(res, 400, { error: 'alt o name requeridos' });
+          return;
+        }
+        if (alt !== null && !alt.trim()) {
+          json(res, 400, { error: 'alt text no puede quedar vacío (accesibilidad)' });
+          return;
+        }
+        const sets: string[] = [];
+        const values: unknown[] = [];
+        if (alt !== null) {
+          sets.push('alt = ?');
+          values.push(alt.trim());
+        }
+        if (name !== null && name.trim()) {
+          sets.push('name = ?');
+          values.push(name.trim());
+        }
+        db.database
+          .prepare(`UPDATE media_library SET ${sets.join(', ')} WHERE id = ? AND tenant_id = ?`)
+          .run(...values, id, tenant);
+        json(res, 200, { media: repo.listMedia(tenant).find((m) => m.id === id) });
+        return;
+      }
+      // DELETE: no permitir borrar media adjuntado a una variante
+      const attached = db.database
+        .prepare('SELECT COUNT(*) AS n FROM content_variants WHERE tenant_id = ? AND image_path = ?')
+        .get(tenant, `media:${id}`) as { n: number };
+      if (attached.n > 0) {
+        json(res, 409, { error: `media adjuntado a ${attached.n} variante(s); desadjuntá primero` });
+        return;
+      }
+      db.database
+        .prepare('DELETE FROM media_library WHERE id = ? AND tenant_id = ?')
+        .run(id, tenant);
+      try {
+        if (existsSync(media.path)) unlinkSync(media.path);
+      } catch {
+        // best-effort: el registro ya se borró
+      }
+      json(res, 200, { deleted: id });
+      return;
+    }
+
+    if (req.method === 'GET' && path === '/api/publish-log') {
+      const rows = db.database
+        .prepare(
+          'SELECT * FROM publish_log WHERE tenant_id = ? ORDER BY created_at DESC LIMIT 50',
+        )
+        .all(tenant);
+      json(res, 200, { entries: rows });
       return;
     }
 

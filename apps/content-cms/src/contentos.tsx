@@ -26,6 +26,7 @@ interface Variant {
   format: string;
   body: string;
   image_prompt: string;
+  image_path: string;
   status: string;
   score: number | null;
   provider: string;
@@ -41,13 +42,39 @@ interface Item {
   variants: Variant[];
 }
 
+/** Media adjunto a una variante vía image_path = `media:<id>` (convención F2). */
+function attachedMediaId(variant: Variant): string | null {
+  return variant.image_path?.startsWith('media:') ? variant.image_path.slice(6) : null;
+}
+
 interface Slot {
   id: string;
   item_id: string;
+  variant_id: string | null;
   platform: string;
   scheduled_at: string;
   status: string;
   rationale: string;
+}
+
+interface Media {
+  id: string;
+  name: string;
+  path: string;
+  mime: string;
+  size: number;
+  alt: string;
+  source: string;
+  created_at: string;
+}
+
+interface PublishEntry {
+  id: number;
+  variant_id: string;
+  platform: string;
+  mode: string;
+  action: string;
+  created_at: string;
 }
 
 const DARK = '#0D1117';
@@ -173,21 +200,31 @@ export default function ContentOS() {
   const [specs, setSpecs] = useState<Record<string, PlatformSpec>>({});
   const [items, setItems] = useState<Item[]>([]);
   const [slots, setSlots] = useState<Slot[]>([]);
+  const [media, setMedia] = useState<Media[]>([]);
+  const [publishLog, setPublishLog] = useState<PublishEntry[]>([]);
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState('Servidor local: esperando verificación…');
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [editingVariant, setEditingVariant] = useState<string | null>(null);
+  const [editBody, setEditBody] = useState('');
+  const [calView, setCalView] = useState<'month' | 'week'>('month');
+  const [calAnchor, setCalAnchor] = useState(() => new Date());
 
   const refresh = useCallback(async () => {
     try {
-      const [{ platforms: specMap }, { items: list }, { slots: slotList }] = await Promise.all([
+      const [specRes, itemsRes, slotsRes, mediaRes, logRes] = await Promise.all([
         api<{ platforms: Record<string, PlatformSpec> }>('/api/platforms'),
         api<{ items: Item[] }>('/api/items'),
         api<{ slots: Slot[] }>('/api/slots'),
+        api<{ media: Media[] }>('/api/media'),
+        api<{ entries: PublishEntry[] }>('/api/publish-log'),
       ]);
-      setSpecs(specMap);
-      setItems(list);
-      setSlots(slotList);
-      setSelectedItem((prev) => (prev ? list.find((i) => i.id === prev.id) ?? null : null));
+      setSpecs(specRes.platforms);
+      setItems(itemsRes.items);
+      setSlots(slotsRes.slots);
+      setMedia(mediaRes.media);
+      setPublishLog(logRes.entries);
+      setSelectedItem((prev) => (prev ? itemsRes.items.find((i) => i.id === prev.id) ?? null : null));
       setStatus('Conectado al Content OS (Nexus).');
     } catch (err) {
       setStatus(`Sin conexión al servidor (${(err as Error).message}). Arrancá: node --import tsx apps/content-cms/server/server.ts`);
@@ -243,6 +280,133 @@ export default function ContentOS() {
       setStatus(`Copiado al portapapeles (${PLATFORM_LABELS[variant.platform]}). Listo para pegar en la red.`);
     } catch {
       setStatus('No se pudo copiar al portapapeles.');
+    }
+  }
+
+  function startEdit(variant: Variant): void {
+    setEditingVariant(variant.id);
+    setEditBody(variant.body);
+  }
+
+  async function saveEdit(variant: Variant): Promise<void> {
+    try {
+      await api(`/api/variants/${variant.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ body: editBody }),
+      });
+      setEditingVariant(null);
+      setStatus('Variante editada (pasa a "edited"); revisá antes de aprobar.');
+      await refresh();
+    } catch (err) {
+      setStatus(`Error: ${(err as Error).message}`);
+    }
+  }
+
+  async function approveVariant(variant: Variant): Promise<void> {
+    try {
+      await api(`/api/variants/${variant.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: 'approved' }),
+      });
+      setStatus(
+        `Variante ${PLATFORM_LABELS[variant.platform]} aprobada → export asistido registrado en publish_log (publicación sigue manual).`,
+      );
+      await refresh();
+    } catch (err) {
+      setStatus(`Error: ${(err as Error).message}`);
+    }
+  }
+
+  async function proposeSlot(variant: Variant): Promise<void> {
+    if (!selectedItem) return;
+    try {
+      const out = await api<{ scheduledAt: string }>('/api/slots/recommend', {
+        method: 'POST',
+        body: JSON.stringify({
+          item_id: selectedItem.id,
+          variant_id: variant.id,
+          platform: variant.platform,
+        }),
+      });
+      setStatus(`Slot propuesto para ${PLATFORM_LABELS[variant.platform]}: ${new Date(out.scheduledAt).toLocaleString('es')}`);
+      await refresh();
+    } catch (err) {
+      setStatus(`Error: ${(err as Error).message}`);
+    }
+  }
+
+  async function attachMedia(variant: Variant, mediaId: string): Promise<void> {
+    try {
+      await api(`/api/variants/${variant.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ media_id: mediaId }),
+      });
+      await refresh();
+    } catch (err) {
+      setStatus(`Error: ${(err as Error).message}`);
+    }
+  }
+
+  async function slotTransition(slot: Slot, next: 'confirmed' | 'rejected' | 'proposed'): Promise<void> {
+    try {
+      await api(`/api/slots/${slot.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: next }),
+      });
+      await refresh();
+    } catch (err) {
+      setStatus(`Error: ${(err as Error).message}`);
+    }
+  }
+
+  async function deleteSlot(slot: Slot): Promise<void> {
+    try {
+      await api(`/api/slots/${slot.id}`, { method: 'DELETE' });
+      await refresh();
+    } catch (err) {
+      setStatus(`Error: ${(err as Error).message}`);
+    }
+  }
+
+  async function uploadMedia(file: File): Promise<void> {
+    setBusy(true);
+    setStatus('Subiendo imagen…');
+    try {
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result));
+        reader.onerror = () => reject(new Error('no se pudo leer el archivo'));
+        reader.readAsDataURL(file);
+      });
+      const name = file.name.replace(/\.[a-z0-9]+$/i, '');
+      const out = await api<{ mediaId: string }>('/api/media', {
+        method: 'POST',
+        body: JSON.stringify({ dataUrl, mime: file.type, name, alt: '', source: 'upload' }),
+      });
+      setStatus(`Media "${name}" subido (${out.mediaId}). Completa el alt text (accesibilidad).`);
+      await refresh();
+    } catch (err) {
+      setStatus(`Error: ${(err as Error).message}`);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function saveAlt(m: Media, alt: string): Promise<void> {
+    try {
+      await api(`/api/media/${m.id}`, { method: 'PATCH', body: JSON.stringify({ alt }) });
+      await refresh();
+    } catch (err) {
+      setStatus(`Error: ${(err as Error).message}`);
+    }
+  }
+
+  async function deleteMedia(m: Media): Promise<void> {
+    try {
+      await api(`/api/media/${m.id}`, { method: 'DELETE' });
+      await refresh();
+    } catch (err) {
+      setStatus(`Error: ${(err as Error).message}`);
     }
   }
 
@@ -335,64 +499,334 @@ export default function ContentOS() {
             <span style={{ color: MUTED, fontSize: 12 }}>· {selectedItem.status}</span>
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
-            {selectedItem.variants.map((v) => (
-              <div key={v.id} style={{ display: 'grid', gap: 8 }}>
-                <VariantPreview variant={v} />
-                <div style={{ display: 'flex', gap: 6 }}>
-                  <button
-                    style={btn(v.status === 'approved' ? '#2EA043' : BORDER)}
-                    disabled={v.status === 'approved'}
-                    onClick={() => void act(v, 'approve')}
-                  >
-                    {v.status === 'approved' ? '✓ aprobado' : 'aprobar'}
-                  </button>
-                  <button style={btn(BORDER)} onClick={() => void copy(v)}>
-                    copiar
-                  </button>
-                  {v.status !== 'rejected' && (
-                    <button style={btn(BORDER)} onClick={() => void act(v, 'reject')}>
-                      descartar
-                    </button>
+            {selectedItem.variants.map((v) => {
+              const mediaId = attachedMediaId(v);
+              const attached = mediaId ? media.find((m) => m.id === mediaId) ?? null : null;
+              return (
+                <div key={v.id} style={{ display: 'grid', gap: 8 }}>
+                  <VariantPreview variant={v} />
+                  {attached && (
+                    <img
+                      src={`${API}/api/media/${attached.id}/file`}
+                      alt={attached.alt || attached.name}
+                      style={{ width: '100%', borderRadius: 8, border: `1px solid ${BORDER}` }}
+                    />
                   )}
+                  {editingVariant === v.id ? (
+                    <div style={{ display: 'grid', gap: 6 }}>
+                      <textarea
+                        style={{ ...inputStyle, minHeight: 120, fontSize: 13 }}
+                        value={editBody}
+                        onChange={(e) => setEditBody(e.target.value)}
+                      />
+                      <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                        <span style={{ color: editBody.length > v.spec.charLimit ? '#F85149' : MUTED, fontSize: 12 }}>
+                          {editBody.length}/{v.spec.charLimit}
+                        </span>
+                        <button style={{ ...btn(AZURE), marginLeft: 'auto' }} onClick={() => void saveEdit(v)}>
+                          guardar edición
+                        </button>
+                        <button style={btn(BORDER)} onClick={() => setEditingVariant(null)}>
+                          cancelar
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                      <button
+                        style={btn(v.status === 'approved' ? '#2EA043' : BORDER)}
+                        disabled={v.status === 'approved'}
+                        onClick={() => void approveVariant(v)}
+                      >
+                        {v.status === 'approved' ? '✓ aprobado' : 'aprobar'}
+                      </button>
+                      <button style={btn(BORDER)} onClick={() => void copy(v)}>
+                        copiar
+                      </button>
+                      <button style={btn(BORDER)} onClick={() => startEdit(v)}>
+                        editar
+                      </button>
+                      <button style={btn(BORDER)} onClick={() => void proposeSlot(v)}>
+                        proponer slot
+                      </button>
+                      {v.status !== 'rejected' && (
+                        <button style={btn(BORDER)} onClick={() => void act(v, 'reject')}>
+                          descartar
+                        </button>
+                      )}
+                    </div>
+                  )}
+                  <div style={{ display: 'flex', gap: 6, alignItems: 'center', fontSize: 12, color: MUTED }}>
+                    <span>media:</span>
+                    <select
+                      value={mediaId ?? ''}
+                      style={{ ...inputStyle, width: 'auto', fontSize: 12, padding: '4px 8px' }}
+                      onChange={(e) => void attachMedia(v, e.target.value)}
+                    >
+                      <option value="">{mediaId ? 'quitar adjunto' : '— adjuntar —'}</option>
+                      {media.map((m) => (
+                        <option key={m.id} value={m.id}>
+                          {m.name} {m.alt ? '(alt ✓)' : '(sin alt)'}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}
 
       <section style={{ display: 'grid', gap: 8 }}>
-        <h2 style={{ margin: 0, fontSize: 15, color: TEXT }}>
-          Calendario propuesto{' '}
+        <h2 style={{ margin: 0, fontSize: 15, color: TEXT, display: 'flex', alignItems: 'center', gap: 10 }}>
+          Calendario
           <span style={{ color: MUTED, fontSize: 12 }}>({slots.length} slots)</span>
+          <span style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
+            <button
+              style={{ ...btn(calView === 'month' ? AZURE : BORDER), padding: '4px 10px' }}
+              onClick={() => setCalView('month')}
+            >
+              mes
+            </button>
+            <button
+              style={{ ...btn(calView === 'week' ? AZURE : BORDER), padding: '4px 10px' }}
+              onClick={() => setCalView('week')}
+            >
+              semana
+            </button>
+            <button
+              style={{ ...btn(BORDER), padding: '4px 10px' }}
+              onClick={() => setCalAnchor(new Date(calAnchor.getFullYear(), calAnchor.getMonth() - 1, 1))}
+            >
+              ‹
+            </button>
+            <button style={{ ...btn(BORDER), padding: '4px 10px' }} onClick={() => setCalAnchor(new Date())}>
+              hoy
+            </button>
+            <button
+              style={{ ...btn(BORDER), padding: '4px 10px' }}
+              onClick={() => setCalAnchor(new Date(calAnchor.getFullYear(), calAnchor.getMonth() + 1, 1))}
+            >
+              ›
+            </button>
+          </span>
         </h2>
-        {slots.length === 0 && <div style={{ color: MUTED, fontSize: 13 }}>Sin slots aún.</div>}
-        {slots.map((s) => (
-          <div
-            key={s.id}
-            style={{
-              display: 'flex',
-              gap: 10,
-              alignItems: 'baseline',
-              padding: '8px 12px',
-              background: CARD,
-              border: `1px solid ${BORDER}`,
-              borderRadius: 8,
-              fontSize: 13,
-              color: TEXT,
-            }}
-          >
-            <span style={{ color: platformColor(s.platform), fontWeight: 600 }}>
-              {PLATFORM_LABELS[s.platform] ?? s.platform}
-            </span>
-            <span>{new Date(s.scheduled_at).toLocaleString('es')}</span>
-            <span style={{ color: MUTED, fontSize: 12 }}>{s.rationale.split('.')[0]}</span>
-            <span style={{ marginLeft: 'auto', color: s.status === 'confirmed' ? '#2EA043' : MUTED }}>
-              {s.status}
-            </span>
-          </div>
-        ))}
+        {(() => {
+          const dayMs = 86_400_000;
+          const startOfGrid =
+            calView === 'month'
+              ? (() => {
+                  const first = new Date(calAnchor.getFullYear(), calAnchor.getMonth(), 1);
+                  return new Date(first.getTime() - first.getDay() * dayMs);
+                })()
+              : (() => {
+                  const w = new Date(calAnchor);
+                  w.setHours(0, 0, 0, 0);
+                  return new Date(w.getTime() - w.getDay() * dayMs);
+                })();
+          const days = calView === 'month' ? 42 : 7;
+          const WEEKDAYS = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
+          return (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(7, 1fr)',
+                gap: 4,
+                background: CARD,
+                border: `1px solid ${BORDER}`,
+                borderRadius: 12,
+                padding: 10,
+              }}
+            >
+              {WEEKDAYS.map((d) => (
+                <div key={d} style={{ fontSize: 11, color: MUTED, textAlign: 'center' }}>
+                  {d}
+                </div>
+              ))}
+              {Array.from({ length: days }, (_, i) => {
+                const day = new Date(startOfGrid.getTime() + i * dayMs);
+                const dayKey = day.toISOString().slice(0, 10);
+                const daySlots = slots.filter((s) => s.scheduled_at.slice(0, 10) === dayKey);
+                const isCurrentMonth = day.getMonth() === calAnchor.getMonth();
+                const isToday = dayKey === new Date().toISOString().slice(0, 10);
+                return (
+                  <div
+                    key={dayKey + i}
+                    style={{
+                      minHeight: calView === 'month' ? 72 : 260,
+                      border: `1px solid ${isToday ? AZURE + '66' : BORDER}`,
+                      borderRadius: 8,
+                      padding: 4,
+                      display: 'grid',
+                      gap: 3,
+                      alignContent: 'start',
+                      opacity: isCurrentMonth || calView === 'week' ? 1 : 0.4,
+                      background: isToday ? AZURE + '0d' : 'transparent',
+                    }}
+                  >
+                    <div style={{ fontSize: 11, color: MUTED }}>{day.getDate()}</div>
+                    {daySlots.map((s) => {
+                      const color = platformColor(s.platform);
+                      return (
+                        <div
+                          key={s.id}
+                          style={{
+                            fontSize: 11,
+                            borderRadius: 6,
+                            padding: '3px 6px',
+                            border: `1px solid ${color}55`,
+                            background: color + (s.status === 'confirmed' ? '33' : '14'),
+                            color: TEXT,
+                            display: 'grid',
+                            gap: 3,
+                          }}
+                          title={s.rationale}
+                        >
+                          <span style={{ color, fontWeight: 600 }}>
+                            {new Date(s.scheduled_at).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' })}{' '}
+                            {PLATFORM_LABELS[s.platform] ?? s.platform}
+                          </span>
+                          <span style={{ fontSize: 10, color: s.status === 'confirmed' ? '#2EA043' : MUTED }}>
+                            {s.status}
+                          </span>
+                          <span style={{ display: 'flex', gap: 4 }}>
+                            {s.status === 'proposed' && (
+                              <>
+                                <button
+                                  style={{ ...btn('#2EA043'), padding: '1px 6px', fontSize: 10 }}
+                                  onClick={() => void slotTransition(s, 'confirmed')}
+                                >
+                                  ✓
+                                </button>
+                                <button
+                                  style={{ ...btn(BORDER), padding: '1px 6px', fontSize: 10 }}
+                                  onClick={() => void slotTransition(s, 'rejected')}
+                                >
+                                  ✕
+                                </button>
+                              </>
+                            )}
+                            {s.status !== 'rejected' && (
+                              <button
+                                style={{ ...btn(BORDER), padding: '1px 6px', fontSize: 10 }}
+                                onClick={() => void deleteSlot(s)}
+                              >
+                                🗑
+                              </button>
+                            )}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })()}
       </section>
+
+      <section style={{ display: 'grid', gap: 8 }}>
+        <h2 style={{ margin: 0, fontSize: 15, color: TEXT, display: 'flex', gap: 10, alignItems: 'center' }}>
+          Biblioteca de medios
+          <span style={{ color: MUTED, fontSize: 12 }}>({media.length})</span>
+        </h2>
+        <div>
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            disabled={busy}
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) void uploadMedia(file);
+              e.target.value = '';
+            }}
+          />
+        </div>
+        {media.length === 0 && <div style={{ color: MUTED, fontSize: 13 }}>Sin medios aún (png/jpeg/webp, máx 10MB).</div>}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
+          {media.map((m) => {
+            const uses = selectedItem?.variants.filter((v) => attachedMediaId(v) === m.id).length ?? 0;
+            return (
+              <div
+                key={m.id}
+                style={{
+                  background: CARD,
+                  border: `1px solid ${BORDER}`,
+                  borderRadius: 12,
+                  padding: 10,
+                  display: 'grid',
+                  gap: 8,
+                }}
+              >
+                <img
+                  src={`${API}/api/media/${m.id}/file`}
+                  alt={m.alt || m.name}
+                  style={{ width: '100%', borderRadius: 8, border: `1px solid ${BORDER}` }}
+                />
+                <div style={{ fontSize: 13, color: TEXT }}>
+                  {m.name} <span style={{ color: MUTED, fontSize: 11 }}>· {(m.size / 1024).toFixed(0)} KB</span>
+                </div>
+                <input
+                  style={{ ...inputStyle, fontSize: 12, padding: '4px 8px' }}
+                  defaultValue={m.alt}
+                  placeholder="alt text (accesibilidad)"
+                  onBlur={(e) => {
+                    if (e.target.value !== m.alt) void saveAlt(m, e.target.value);
+                  }}
+                />
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <button
+                    style={{ ...btn(uses ? '#2EA043' : BORDER), padding: '4px 10px', fontSize: 12 }}
+                    disabled={!selectedItem?.variants.length}
+                    title={uses ? `adjuntado a ${uses} variante(s)` : 'adjuntar a la primera variante del item seleccionado'}
+                    onClick={() => {
+                      const target = selectedItem?.variants.find((v) => attachedMediaId(v) !== m.id);
+                      if (target) void attachMedia(target, m.id);
+                    }}
+                  >
+                    {uses ? `✓ en ${uses} variante(s)` : 'adjuntar'}
+                  </button>
+                  <button style={{ ...btn(BORDER), padding: '4px 10px', fontSize: 12 }} onClick={() => void deleteMedia(m)}>
+                    eliminar
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {publishLog.length > 0 && (
+        <section style={{ display: 'grid', gap: 6 }}>
+          <h2 style={{ margin: 0, fontSize: 15, color: TEXT }}>Export asistido / publish_log ({publishLog.length})</h2>
+          {publishLog.map((p) => (
+            <div
+              key={p.id}
+              style={{
+                display: 'flex',
+                gap: 10,
+                padding: '6px 12px',
+                background: CARD,
+                border: `1px solid ${BORDER}`,
+                borderRadius: 8,
+                fontSize: 12,
+                color: TEXT,
+              }}
+            >
+              <span style={{ color: platformColor(p.platform), fontWeight: 600 }}>
+                {PLATFORM_LABELS[p.platform] ?? p.platform}
+              </span>
+              <span style={{ color: MUTED }}>{p.mode}</span>
+              <span>{p.action}</span>
+              <span style={{ marginLeft: 'auto', color: MUTED }}>
+                {p.variant_id} · {p.created_at}
+              </span>
+            </div>
+          ))}
+        </section>
+      )}
 
       {items.length > 0 && (
         <section style={{ display: 'grid', gap: 6 }}>
