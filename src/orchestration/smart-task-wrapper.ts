@@ -6,6 +6,8 @@
 
 import { readFileSync } from 'fs';
 import { join } from 'path';
+const logger = log('ORCHESTRATION-SMART-TASK-WRAPPER');
+import { log } from '../utils/logger.js';
 
 const ROOT = process.cwd();
 
@@ -35,7 +37,7 @@ export async function smartTask(
     currentModel = 'opencode/deepseek-v4-flash-free'; // Default
   }
 
-  console.log(`[smartTask] Executing ${options.subagent_type} with model: ${currentModel}`);
+  logger.info(`[smartTask] Executing ${options.subagent_type} with model: ${currentModel}`);
 
   // Try native task first
   try {
@@ -49,7 +51,7 @@ export async function smartTask(
     return { success: true, output: result };
   } catch (error) {
     const errorStr = String(error);
-    console.error(`[smartTask] Error: ${errorStr}`);
+    logger.error(`[smartTask] Error: ${errorStr}`);
 
     // Check if error is model-related
     if (

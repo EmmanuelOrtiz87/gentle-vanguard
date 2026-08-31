@@ -7,11 +7,13 @@ import { readFileSync, readdirSync } from 'fs';
 import { join, relative } from 'path';
 import { addResult, quiet, ROOT, RUNTIME_DIR, SESSION_DIR } from './context';
 import { fileExists, readJson, payloadFileOk } from './helpers';
+const logger = log('CORE-WATCHTOWER-CHECKS-SECURITY');
+import { log } from '../../utils/logger.js';
 
 // ─── Component: Security ────────────────────────────────────────────────────
 
 export async function checkSecurity() {
-  if (!quiet) console.log('  [Security] Checking...');
+  if (!quiet) logger.info('  [Security] Checking...');
 
   const secFiles = [
     'config/owner-auth.json.enc',
@@ -32,7 +34,7 @@ export async function checkSecurity() {
 // ─── Component: Secret Scanner (absorbed knowledge, ADR-010) ─────────────────
 
 export async function checkSecretScanner() {
-  if (!quiet) console.log('  [Secret Scanner] Checking...');
+  if (!quiet) logger.info('  [Secret Scanner] Checking...');
 
   const scannerSrc = join(ROOT, 'src', 'security', 'secret-scanner.ts');
   const scannerCli = join(ROOT, 'src', 'security', 'secret-scanner-cli.ts');
@@ -92,7 +94,7 @@ export async function checkSecretScanner() {
 // ─── Component: CLI Guard (Windows pathToFileURL) ────────────────────────────
 
 export async function checkCliGuard() {
-  if (!quiet) console.log('  [CLI Guard] Checking...');
+  if (!quiet) logger.info('  [CLI Guard] Checking...');
 
   // Detecta el patrón roto `import.meta.url === \`file://${process.argv[1]}\``
   // que NO normaliza rutas Windows (backslashes) → main() nunca se ejecuta.

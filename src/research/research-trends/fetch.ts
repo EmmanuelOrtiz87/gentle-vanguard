@@ -21,6 +21,8 @@ import {
   normalizeTrend,
   scrapeTrendingPages,
 } from './sources.js';
+import { log } from '../../utils/logger.js';
+const logger = log('RESEARCH-RESEARCH-TRENDS-FETCH');
 
 // ─── Main fetch entry ─────────────────────────────────────────────────────────
 
@@ -65,7 +67,7 @@ export async function fetchTrends(options: FetchOptions = {}): Promise<FetchResu
       all.push(...trends);
     } catch (e) {
       // A single source failing should not kill the whole report.
-      console.warn(`[research-trends] ${source} source failed: ${(e as Error).message}`);
+      logger.warn(`[research-trends] ${source} source failed: ${(e as Error).message}`);
     }
   }
 
@@ -101,7 +103,7 @@ export async function fetchTrends(options: FetchOptions = {}): Promise<FetchResu
         }
       }
     } catch (e) {
-      console.warn(`[research-trends] Firecrawl trending scrape failed: ${(e as Error).message}`);
+      logger.warn(`[research-trends] Firecrawl trending scrape failed: ${(e as Error).message}`);
     }
   }
 

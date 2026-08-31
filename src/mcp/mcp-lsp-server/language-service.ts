@@ -3,6 +3,8 @@ import * as ts from 'typescript';
 import { existsSync, readFileSync } from 'fs';
 import { resolve, join, dirname, isAbsolute } from 'path';
 import { ROOT, basename } from './position.js';
+import { log as createLogger } from '../../utils/logger.js';
+const logger = createLogger('MCP-MCP-LSP-SERVER-LANGUAGE-SERVICE');
 
 // ── Configuration ────────────────────────────────────────────────────────────
 
@@ -31,7 +33,7 @@ export function log(
 ): void {
   const timestamp = new Date().toISOString();
   const metaStr = meta ? ' ' + JSON.stringify(meta) : '';
-  console.error(`[${timestamp}] [${level}] [mcp-lsp] ${msg}${metaStr}`);
+  logger.error(`[${timestamp}] [${level}] [mcp-lsp] ${msg}${metaStr}`);
 }
 
 // ── TypeScript LanguageService ───────────────────────────────────────────────

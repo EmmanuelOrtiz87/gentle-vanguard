@@ -168,8 +168,10 @@ async function main(): Promise<void> {
           failed++;
         }
       }
-    } catch (err: any) {
-      console.log(C.red(`  ✘ ${step.name} — Error: ${err.message}`));
+    } catch (err: unknown) {
+      console.log(
+        C.red(`  ✘ ${step.name} — Error: ${err instanceof Error ? err.message : String(err)}`),
+      );
       if (step.critical) {
         console.log(C.red(`\n  ✘ Critical step failed. Aborting.`));
         process.exit(1);

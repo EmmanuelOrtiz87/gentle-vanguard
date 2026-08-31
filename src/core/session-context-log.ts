@@ -37,6 +37,8 @@ import * as fs from 'fs';
 import { pathToFileURL } from 'url';
 import * as path from 'path';
 import { ROOT } from './repo-root';
+const logger = log('CORE-SESSION-CONTEXT-LOG');
+import { log } from '../utils/logger.js';
 
 // ─── Paths ───────────────────────────────────────────────────────────────
 
@@ -103,7 +105,7 @@ export function saveSessionState(state: SessionState): void {
   // Guardar estado
   fs.writeFileSync(statePath, JSON.stringify(state, null, 2), 'utf-8');
 
-  console.log(`[SessionContextLog] Saved: ${state.sessionId}`);
+  logger.info(`[SessionContextLog] Saved: ${state.sessionId}`);
 }
 
 /**

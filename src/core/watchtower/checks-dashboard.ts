@@ -5,11 +5,13 @@ import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { addResult, quiet, ROOT, RUNTIME_DIR } from './context';
 import { fileExists, readJson, testHttp, testPort, getPidByPort } from './helpers';
+const logger = log('CORE-WATCHTOWER-CHECKS-DASHBOARD');
+import { log } from '../../utils/logger.js';
 
 // ─── Component: Dashboard WS ────────────────────────────────────────────────
 
 export async function checkDashboardWs() {
-  if (!quiet) console.log('  [Dashboard WS] Checking...');
+  if (!quiet) logger.info('  [Dashboard WS] Checking...');
 
   let wsPort = 8080;
   const portsFile = join(RUNTIME_DIR, 'dashboard-ports.json');
@@ -121,7 +123,7 @@ export async function checkDashboardWs() {
 // ─── Component: GV Analytics ─────────────────────────────────────────────────
 
 export async function checkGvAnalytics() {
-  if (!quiet) console.log('  [GV Analytics] Checking...');
+  if (!quiet) logger.info('  [GV Analytics] Checking...');
 
   const apiPort = Number(process.env.GV_ANALYTICS_PORT || 4754);
   const apiPidFile = join(RUNTIME_DIR, 'gv-analytics-api.pid');

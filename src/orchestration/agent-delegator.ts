@@ -18,6 +18,9 @@ import { compressStructural, estimateTokens } from '../compression/structural-co
 import { executeWithCircuit } from '../resilience/circuit-breaker-v2';
 import { registerAttempt, detectLoop } from '../resilience/anti-loop-guard.js';
 import { evaluateFailure } from '../security/guardrail-orchestrator.js';
+import { log } from '../utils/logger.js';
+
+const logger = log('AGENT-DELEGATOR');
 
 interface AgentConfig {
   name: string;
@@ -84,7 +87,7 @@ function boundDelegationInput(text: string, maxChars: number, label: string): st
   if (text.length <= maxChars) return text;
   const head = Math.floor(maxChars * 0.72);
   const tail = maxChars - head;
-  console.warn(
+  logger.warn(
     `[agent-delegator] ${label} bounded: ${text.length} -> ${maxChars} chars (head/tail preserved)`,
   );
   return `${text.slice(0, head)}\n\n[...${label} middle omitted by budget guard...]\n\n${text.slice(-tail)}`;
@@ -373,7 +376,7 @@ function loadAgents(): Record<string, AgentConfig> {
       const config = JSON.parse(readFileSync(CONFIG_PATH, 'utf-8'));
       agents = { ...agents, ...config.agents };
     } catch {
-      console.warn('Failed to load config/agents.json, using defaults');
+      logger.warn('Failed to load config/agents.json, using defaults');
     }
   }
 
@@ -391,7 +394,7 @@ function loadAgents(): Record<string, AgentConfig> {
       config.model = effectiveModel;
     }
 
-    console.log(`[agent-delegator] Model override applied: ${effectiveModel}`);
+    logger.info(`[agent-delegator] Model override applied: ${effectiveModel}`);
   }
 
   return agents;
@@ -559,7 +562,7 @@ async function runNativeAgent(
     const envModel = process.env.AGENT_MODEL || process.env.FORCE_MODEL;
     if (envModel) {
       model = envModel;
-      console.log(`[agent-delegator] Using environment model: ${model}`);
+      logger.info(`[agent-delegator] Using environment model: ${model}`);
     }
 
     // Lossless compression of task/context (defense in depth): the original
@@ -573,12 +576,12 @@ async function runNativeAgent(
     const contextCompressed = boundedContext ? compressDelegationLossless(boundedContext) : null;
 
     if (taskCompressed.applied) {
-      console.log(
+      logger.info(
         `[agent-delegator] compressed task: ${taskCompressed.originalChars} -> ${taskCompressed.compressedChars} chars (ratio ${taskCompressed.ratio.toFixed(3)})`,
       );
     }
     if (contextCompressed?.applied) {
-      console.log(
+      logger.info(
         `[agent-delegator] compressed context: ${contextCompressed.originalChars} -> ${contextCompressed.compressedChars} chars (ratio ${contextCompressed.ratio.toFixed(3)})`,
       );
     }

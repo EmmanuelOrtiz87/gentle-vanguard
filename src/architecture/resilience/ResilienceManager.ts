@@ -1,3 +1,5 @@
+const logger = log('ARCHITECTURE-RESILIENCE-RESILIENCEMANAGER');
+import { log } from '../../utils/logger.js';
 /**
  * Resilience Manager - Multi-Tier Resilience Pattern Implementation
  * Manages primary, secondary, and tertiary execution tiers
@@ -141,7 +143,7 @@ export class ResilienceManager {
    */
   async failoverToSecondary(): Promise<boolean> {
     try {
-      console.warn('Initiating failover to secondary tier...');
+      logger.warn('Initiating failover to secondary tier...');
 
       // Sync state from primary to secondary
       await this.syncState('primary', 'secondary');
@@ -161,7 +163,7 @@ export class ResilienceManager {
       this.activeTier = 'secondary';
       this.metrics.failoverCount++;
 
-      console.warn('Failover to secondary tier completed successfully');
+      logger.warn('Failover to secondary tier completed successfully');
       return true;
     } catch (error) {
       console.error('Failover to secondary tier failed:', String(error));
@@ -175,7 +177,7 @@ export class ResilienceManager {
    */
   async failoverToTertiary(): Promise<boolean> {
     try {
-      console.warn('Initiating failover to tertiary tier...');
+      logger.warn('Initiating failover to tertiary tier...');
 
       // Sync state from secondary to tertiary
       await this.syncState('secondary', 'tertiary');
@@ -195,7 +197,7 @@ export class ResilienceManager {
       this.activeTier = 'tertiary';
       this.metrics.failoverCount++;
 
-      console.warn('Failover to tertiary tier completed successfully');
+      logger.warn('Failover to tertiary tier completed successfully');
       return true;
     } catch (error) {
       console.error('Failover to tertiary tier failed:', String(error));
@@ -211,7 +213,7 @@ export class ResilienceManager {
   private async syncState(fromTier: string, toTier: string): Promise<void> {
     const state = this.stateSync.get(fromTier);
     this.stateSync.set(toTier, state ?? {});
-    console.warn(`State synced from ${fromTier} to ${toTier}`);
+    logger.warn(`State synced from ${fromTier} to ${toTier}`);
   }
 
   /**
@@ -242,14 +244,14 @@ export class ResilienceManager {
    * Start resilience monitoring
    */
   startMonitoring(): void {
-    console.warn('Starting resilience monitoring...');
+    logger.warn('Starting resilience monitoring...');
 
     // Monitor primary tier
     setInterval(async () => {
       try {
         const status = await this.checkTierHealth('primary');
         if (!status.isHealthy && this.activeTier === 'primary') {
-          console.warn('Primary tier unhealthy, initiating failover...');
+          logger.warn('Primary tier unhealthy, initiating failover...');
           await this.failoverToSecondary();
         }
       } catch (err) {
@@ -262,7 +264,7 @@ export class ResilienceManager {
       try {
         const status = await this.checkTierHealth('secondary');
         if (!status.isHealthy && this.activeTier === 'secondary') {
-          console.warn('Secondary tier unhealthy, initiating failover...');
+          logger.warn('Secondary tier unhealthy, initiating failover...');
           await this.failoverToTertiary();
         }
       } catch (err) {
@@ -270,7 +272,7 @@ export class ResilienceManager {
       }
     }, 10000);
 
-    console.warn('Resilience monitoring started');
+    logger.warn('Resilience monitoring started');
   }
 }
 

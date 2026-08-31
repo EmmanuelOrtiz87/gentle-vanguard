@@ -43,7 +43,7 @@ const child = runNpxTsx('src/core/timeout-monitor.ts', ['--daemon', '--interval'
 });
 
 // Error handler
-child.on('error', (err: any) => {
+child.on('error', (err: Error) => {
   console.error('[MONITOR-DAEMON] Spawn error:', err.message);
   process.exit(1);
 });

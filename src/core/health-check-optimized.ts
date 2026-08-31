@@ -50,7 +50,7 @@ function exists(...parts: string[]): boolean {
   return getCached(key, () => fs.existsSync(path.resolve(ROOT, ...parts)));
 }
 
-function readJsonCached(...parts: string[]): any {
+function readJsonCached(...parts: string[]): unknown {
   const key = `json:${parts.join('/')}`;
   return getCached(key, () => {
     try {
@@ -153,7 +153,10 @@ async function checkEngramRag(): Promise<void> {
 
 async function checkConfig(): Promise<void> {
   header('Config');
-  const modelRouter = readJsonCached('config', 'model-router.json');
+  const modelRouter = readJsonCached('config', 'model-router.json') as Record<
+    string,
+    unknown
+  > | null;
   writeCheck('model-router.json exists', modelRouter !== null);
   writeCheck('costTracking section present', modelRouter?.costTracking !== undefined);
   writeCheck('routingPolicy section present', modelRouter?.routingPolicy !== undefined);

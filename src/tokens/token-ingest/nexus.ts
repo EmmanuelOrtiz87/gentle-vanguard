@@ -4,6 +4,8 @@ import { TokenRepo } from '../../../apps/web-dashboard/server/database/repositor
 import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync, statSync } from 'fs';
 import { join, resolve } from 'path';
 import { SessionUsage, TransactionUsage } from './readers.js';
+import { log as createLogger } from '../../utils/logger.js';
+const logger = createLogger('TOKENS-TOKEN-INGEST-NEXUS');
 
 export const ROOT = resolve(process.cwd());
 export const RUNTIME_DIR = join(ROOT, '.runtime');
@@ -14,7 +16,7 @@ export const LOG_FILE = join(RUNTIME_DIR, 'token-ingest.log');
 
 export function log(msg: string): void {
   const line = `[${new Date().toISOString()}] ${msg}`;
-  console.log(line);
+  logger.info(line);
   try {
     mkdirSync(RUNTIME_DIR, { recursive: true });
     appendFileSync(LOG_FILE, line + '\n', 'utf-8');

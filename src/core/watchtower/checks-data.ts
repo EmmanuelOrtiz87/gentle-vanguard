@@ -8,11 +8,13 @@ import { runSync } from '../run-command';
 import { getEffectiveProcessTimeout } from '../timeout-config';
 import { addResult, quiet, ROOT, RUNTIME_DIR, SESSION_DIR, CheckResult } from './context';
 import { fileExists, getFileAgeHours } from './helpers';
+const logger = log('CORE-WATCHTOWER-CHECKS-DATA');
+import { log } from '../../utils/logger.js';
 
 // ─── Component: Tracing ──────────────────────────────────────────────────────
 
 export async function checkTracing() {
-  if (!quiet) console.log('  [Tracing] Checking...');
+  if (!quiet) logger.info('  [Tracing] Checking...');
 
   const telemetryDir = join(ROOT, '.telemetry');
   const tracesDir = join(telemetryDir, 'traces');
@@ -56,7 +58,7 @@ export async function checkTracing() {
 // ─── Component: State Persistence ────────────────────────────────────────────
 
 export async function checkStatePersistence() {
-  if (!quiet) console.log('  [State Persistence] Checking...');
+  if (!quiet) logger.info('  [State Persistence] Checking...');
 
   const checkpointDir = join(SESSION_DIR, 'checkpoints');
   const manifestDir = join(SESSION_DIR, 'manifests');
@@ -117,7 +119,7 @@ export async function checkStatePersistence() {
 // ─── Component: gentle-vanguard-db ───────────────────────────────────────────
 
 export async function checkGentleVanguardDb() {
-  if (!quiet) console.log('  [gentle-vanguard-db] Checking...');
+  if (!quiet) logger.info('  [gentle-vanguard-db] Checking...');
 
   const dbPath = join(RUNTIME_DIR, 'gentle-vanguard.db');
   const dbExists = fileExists(dbPath);
@@ -242,7 +244,7 @@ export async function checkGentleVanguardDb() {
 // ─── Component: Model Provider Health ────────────────────────────────────────
 
 export async function checkModelHealth() {
-  if (!quiet) console.log('  [model-provider-health] Checking...');
+  if (!quiet) logger.info('  [model-provider-health] Checking...');
 
   const statePath = join(RUNTIME_DIR, 'model-health.json');
   const configPath = join(ROOT, 'config', 'model-health.json');
@@ -329,7 +331,7 @@ export async function checkModelHealth() {
 // ─── Component: Audit Pipeline ───────────────────────────────────────────────
 
 export async function checkAuditPipeline() {
-  if (!quiet) console.log('  [Audit Pipeline] Checking...');
+  if (!quiet) logger.info('  [Audit Pipeline] Checking...');
 
   const auditDir = join(SESSION_DIR, 'audit');
   const logDir = join(auditDir, 'logs');
@@ -387,7 +389,7 @@ export async function checkAuditPipeline() {
 // ─── Component: Governance ──────────────────────────────────────────────────
 
 export async function checkGovernance() {
-  if (!quiet) console.log('  [Governance] Checking...');
+  if (!quiet) logger.info('  [Governance] Checking...');
 
   const govFiles = [
     'rules/NORMATIVAS-PERFORMANCE.md',

@@ -8,6 +8,38 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ## ⚡ Registro de progreso
 
+### Ejecutado — Sesión 6 (2026-08-31, F2.3 batch 1: 22 módulos library → logger)
+
+- ✅ **F2.3 batch 1 — 22 módulos library migrados a logger estructurado** (commit `3b839d64`):
+  watchtower checks (config/dashboard/data/infra/security/context/rebuild), ResilienceManager,
+  session-context-log, session-metrics-tracker, response-cache (cache/sqlite),
+  research-trends/fetch, smart-task-wrapper, model-error-interceptor, knowledge-synthesizer/config,
+  language-service, token-ingest/nexus, session-close/phases, event-sourcing-api,
+  adaptive-router/config.
+- ✅ **Codemod `scripts/codemod-console-to-logger.ts` creado y corregido**: maneja imports
+  multilínea, aliasing de colisiones `log`, y se añadió `scripts/*.ts` al tsconfig para que quede
+  lint-clean. Reutilizable para futuros batches de F2.3.
+- ✅ **CLIs conservan `console.*` por diseño**: revertidas las migraciones en secciones CLI
+  (`main()`/`cli()`) que producen stdout parseable (JSON/status): version-sync, setup-branch-
+  protection, complete-stack-fix, rescue-database, zcode-sync, post-edit-graphify, delivery/gate,
+  adaptive-router/index, static-gates, deployment-prerequisites, credentials-inventory,
+  knowledge-synthesizer/index.
+- ✅ Typecheck + lint + 6/6 suites de test en verde.
+- 🔲 **F2.3 en curso**: quedan ~5.000 `console.*` en src/ para próximos batches (usar el codemod).
+
+### Ejecutado — Sesión 5 (2026-08-31, F2.4 completado a 0 `any` + PR #172)
+
+- ✅ **PR #172 MERGED** a `main` (bypass admin, CI 100% verde incluido Production Gate); merge
+  commit `67fe87a9`. PR #171 cerrado como supersedido. Rama local reseteada a `origin/main`.
+- ✅ **F2.4 COMPLETADO — 0 `any` en `src/`** (objetivo del plan: 0). Erradicados los últimos 38
+  `any` en 23 archivos (commit `3fe142a0`): interfaces de dominio reales (`AlertActions`,
+  `GraphNode`, `CacheHookSystem`, `CacheModule`, `StackConfig`, `ReceiptFinding`, `AgentConfig`),
+  resultados de better-sqlite3 tipados, `DatabaseManager` lazy-load tipado, `unknown` + narrowing en
+  catch/deepMerge/getTimeout, anotaciones redundantes eliminadas. Typecheck + lint pasan.
+- ✅ **Watchtower**: 102 PASS / 2 WARN / 0 FAIL (24 componentes).
+- 🔲 **F2.3 en curso**: migrar `console.*` → logger en módulos library (5.331 `console.*` en src/;
+  ~120 en ~23 archivos library reales; CLIs conservan `console.*` por diseño).
+
 ### Ejecutado — Sesión 4 (2026-08-22, dominios ×8 + tipado -84% + skills)
 
 - ✅ **F2.2: 8 dominios completados** (35 archivos fuera de la raíz): `src/tokens/` (13),

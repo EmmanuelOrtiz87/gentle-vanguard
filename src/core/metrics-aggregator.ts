@@ -17,6 +17,9 @@ import * as path from 'path';
 import { ROOT } from './repo-root';
 import { getAllSessionStates, SessionState } from './session-context-log';
 import { getAllLiveMetrics } from './session-metrics-tracker';
+import { log } from '../utils/logger.js';
+
+const logger = log('METRICS-AGGREGATOR');
 
 // ─── Fuentes de datos ─────────────────────────────────────────────────────────
 
@@ -281,7 +284,7 @@ export function recordMetricEvent(event: {
     }
   } catch (err) {
     // Log silencioso
-    console.error('[MetricsAggregator] Error updating context log:', err);
+    logger.error('[MetricsAggregator] Error updating context log:', err);
   }
 }
 
