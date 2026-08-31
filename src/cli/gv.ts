@@ -28,6 +28,9 @@
  *   status      Show complete stack status
  *   fix         Fix PS1 references (--configs, --dry-run)
  *   release     Run release gates with per-gate profiling (--skip-tests, --json)
+ *   loop-guard  Check orchestrator loop-guard health (anti-loop)
+ *   metrics     Show live stack metrics (F4.1, from config/stack-metrics.json)
+ *   web         Web research (search|scrape|crawl) via native crawler
  *   help        Show this help
  */
 
@@ -54,6 +57,14 @@ function footer(): void {
   console.log('');
   console.log("Run 'npx tsx src/cli/gv.ts help' for usage.");
   console.log('');
+}
+
+function getLiveMetrics(): Record<string, unknown> {
+  try {
+    const p = join(ROOT, 'config', 'stack-metrics.json');
+    if (existsSync(p)) return JSON.parse(readFileSync(p, 'utf-8'));
+  } catch {}
+  return {};
 }
 
 function showHelp(): void {
@@ -84,6 +95,9 @@ COMMANDS:
   status      Show complete stack status
   fix         Fix PS1 references (--configs, --dry-run)
   release     Run release gates with per-gate profiling (--skip-tests, --json)
+  loop-guard  Check orchestrator loop-guard health
+  metrics     Show live stack metrics (config/stack-metrics.json)
+  web         Web research (search|scrape|crawl) via native crawler
   help        Show this help
 
 EXAMPLES:
@@ -470,6 +484,9 @@ export const COMMANDS = [
   'status',
   'fix',
   'release',
+  'loop-guard',
+  'metrics',
+  'web',
   'help',
 ] as const;
 
@@ -819,6 +836,46 @@ async function main(): Promise<void> {
         printReleaseReport(report);
       }
       process.exit(report.exitCode);
+      break;
+    }
+
+    case 'loop-guard': {
+      header();
+      const r = runSync('npx', ['tsx', 'src/core/orchestrator-loop-guard.ts'], {
+        timeout: 5000,
+        cwd: ROOT,
+      });
+      console.log((r.stdout ?? '').toString());
+      if (r.status !== 0) console.log('Loop-guard: no loop detected (self-test passed)');
+      else console.log('Loop-guard self-test indicates break condition (review output)');
+      footer();
+      process.exit(r.status === 0 ? 0 : 1);
+      break;
+    }
+
+    case 'metrics': {
+      header();
+      const m = getLiveMetrics() as Record<string, unknown>;
+      if (Object.keys(m).length === 0) {
+        console.log('No metrics file found at config/stack-metrics.json');
+      } else {
+        console.log(JSON.stringify(m, null, 2));
+      }
+      footer();
+      break;
+    }
+
+    case 'web': {
+      const qIdx = args.indexOf('--query');
+      const query = qIdx >= 0 ? args[qIdx + 1] : args.slice(1).join(' ');
+      if (!query) {
+        console.log(
+          'Usage: gv web search --query "..." | gv web scrape --url <url> | gv web health',
+        );
+        process.exit(1);
+      }
+      const webArgs = args.slice(1);
+      runCommandExit('npx', ['tsx', 'src/web/web-crawler-cli.ts', ...webArgs], 'WEB');
       break;
     }
 
