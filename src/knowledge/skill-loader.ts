@@ -13,8 +13,31 @@
 import { readdirSync, readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { log } from '../utils/logger.js';
+import { recordSkillUsage, readCurrentSessionId } from './skill-usage-recorder.js';
 
 const logger = log('SKILL-LOADER');
+
+// Usage recording is ON for library consumers and OFF for the CLI paths below
+// (main() disables it so stdout-only invocations never touch the DB).
+let usageRecordingEnabled = true;
+
+/** Disable skill usage recording (used by the CLI entrypoint). */
+export function setSkillUsageRecording(enabled: boolean): void {
+  usageRecordingEnabled = enabled;
+}
+
+function recordUsage(skillName: string, source: string): void {
+  if (!usageRecordingEnabled) return;
+  try {
+    recordSkillUsage({
+      skillId: skillName,
+      sessionId: readCurrentSessionId(),
+      source, // provenance only — not persisted (schema has no source column)
+    });
+  } catch {
+    /* failure-tolerant: never break the match/serve path */
+  }
+}
 
 interface Skill {
   name: string;
@@ -155,6 +178,7 @@ export function matchSkill(input: string, skills: Skill[]): Skill | null {
   // Exact match on name
   for (const skill of skills) {
     if (skill.name.toLowerCase() === normalized) {
+      recordUsage(skill.name, 'skill-loader:match');
       return skill;
     }
   }
@@ -162,6 +186,7 @@ export function matchSkill(input: string, skills: Skill[]): Skill | null {
   // Match on aliases
   for (const skill of skills) {
     if (skill.aliases.some((alias) => alias.toLowerCase() === normalized)) {
+      recordUsage(skill.name, 'skill-loader:match');
       return skill;
     }
   }
@@ -169,6 +194,7 @@ export function matchSkill(input: string, skills: Skill[]): Skill | null {
   // Match on triggers
   for (const skill of skills) {
     if (skill.triggers.some((trigger) => normalized.includes(trigger.toLowerCase()))) {
+      recordUsage(skill.name, 'skill-loader:match');
       return skill;
     }
   }
@@ -179,6 +205,7 @@ export function matchSkill(input: string, skills: Skill[]): Skill | null {
       skill.name.toLowerCase().includes(normalized) ||
       normalized.includes(skill.name.toLowerCase())
     ) {
+      recordUsage(skill.name, 'skill-loader:match');
       return skill;
     }
   }
@@ -196,13 +223,17 @@ export function getSkillContent(name: string, skills: Skill[]): string | null {
       s.aliases.some((a) => a.toLowerCase() === name.toLowerCase()),
   );
 
-  return skill ? skill.content : null;
+  const content = skill ? skill.content : null;
+  if (skill) recordUsage(skill.name, 'skill-loader:load');
+  return content;
 }
 
 /**
  * CLI interface
  */
 function main(): void {
+  // CLI paths are stdout-only: never record usage from here.
+  setSkillUsageRecording(false);
   const args = process.argv.slice(2);
   const command = args[0];
 

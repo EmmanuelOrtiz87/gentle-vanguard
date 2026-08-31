@@ -21,6 +21,7 @@ import {
 import { KILL_TARGETS, waitForProcess, killProcessByCommandLine } from './process.js';
 import { runArtifactRetention } from '../artifact-retention.js';
 import { generateReview4R, formatReview4R } from '../../rdd/rdd-4r-review.js';
+import { captureOutcomeFeedback, OUTCOME_FEEDBACK_SOURCE } from '../outcome-feedback.js';
 import { log as createLogger } from '../../utils/logger.js';
 const logger = createLogger('SESSION-SESSION-CLOSE-PHASES');
 
@@ -460,6 +461,36 @@ export async function phasePersist(reason: string): Promise<PhaseResult[]> {
       status: tm.status === 0 ? 'PASS' : 'SKIP',
       detail: tm.status === 0 ? 'Metrics stored' : 'Token metrics store skipped',
     });
+  }
+
+  // 2.5 Derive outcome feedback (auto-outcome) from REAL session signals and
+  // write it into the Nexus `feedback` table. Honest signals only: conclusive
+  // positive/negative outcome → one row; inconclusive → nothing. Failure of
+  // this step must never fail the close.
+  try {
+    const { createRequire } = await import('module');
+    const req = createRequire(import.meta.url);
+    const mod = req('../../apps/web-dashboard/server/database/manager') as {
+      DatabaseManager: { getInstance: () => { getDb: () => import('better-sqlite3').Database } };
+    };
+    const db = mod.DatabaseManager.getInstance().getDb();
+    const failedPhaseCount = results.filter((r) => r.status === 'FAIL').length;
+    const fb = captureOutcomeFeedback(db, sessionId, { failedPhaseCount });
+    results.push({
+      phase: 'outcome-feedback',
+      status: fb.written ? 'PASS' : 'SKIP',
+      detail: fb.written
+        ? `Auto feedback '${fb.type}' recorded (${OUTCOME_FEEDBACK_SOURCE}: ${fb.reason})`
+        : `No auto feedback (${fb.reason})`,
+    });
+    if (fb.written) ok(`Outcome feedback recorded: ${fb.type}`);
+  } catch (e: unknown) {
+    results.push({
+      phase: 'outcome-feedback',
+      status: 'SKIP',
+      detail: `Outcome feedback skipped: ${e instanceof Error ? e.message : 'Unknown error'}`,
+    });
+    warn('Outcome feedback capture failed (non-blocking)');
   }
 
   return results;
