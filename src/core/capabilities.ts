@@ -90,6 +90,24 @@ const REGISTRY: ContractDescriptor[] = [
     description:
       'Source-backed SDD research lane: questions, grants, sources, claim mappings, uncertainty (mirrors gentle-ai v2.5.0-rc.1 shape).',
   },
+  {
+    contract: 'gentle-vanguard.session-close/v1',
+    protocol: '1.0',
+    operations: [
+      'pre-close',
+      'pre-validate',
+      'persist',
+      'backup',
+      'audit',
+      'cleanup',
+      'verify',
+      'ack',
+      'receive',
+    ],
+    status: 'stable',
+    description:
+      'Session close lifecycle. The terminal report is staged with a pending acknowledgement (ack-before-burn): PASS closes are auto-filed on next-session receipt, failed/warned closes escalate and stay pending until reviewed.',
+  },
 ];
 
 export function listContracts(filter?: { status?: ContractDescriptor['status'] }): ContractDescriptor[] {

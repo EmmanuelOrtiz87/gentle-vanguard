@@ -124,6 +124,13 @@ stdout vacío).
 
 ## Próximos pasos naturales (backlog)
 
+- ~~Panel "what do I run now" en el dashboard~~ — HECHO (ContinuationsPanel +
+  `GET /api/continuations`, i18n en/es/pt).
+- ~~Ack-before-burn para `session-close`~~ — HECHO (`session-close/close-ack.ts`:
+  el reporte terminal se emite staged; el inicio de la siguiente sesión lo
+  recibe — auto-quema PASS intactos, escratacha FAIL/WARNINGS/missing-report y
+  los deja pendientes hasta revisión; CLI `--pending`/`--ack`/`--receive`;
+  contrato `gentle-vanguard.session-close/v1` registrado).
+- ~~Retention de continuations/acks~~ — HECHO (`pruneContinuations()` cableado
+  al prune del RDD, lazy en autostart).
 - Registrar más contratos nativos en `capabilities.ts` a medida que se estabilicen.
-- `nextTransition` en el dashboard (panel "what do I run now").
-- Ack-before-burn para `session-close` (transición terminal del ciclo de sesión).

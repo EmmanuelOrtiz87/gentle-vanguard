@@ -5,6 +5,13 @@ import { PhaseResult, LOG, log, ok, warn, SESSION_DIR, runScript } from './helpe
 import { isStartupClose } from './process.js';
 import { isAuthorizedAutomatedClose } from '../artifact-retention.js';
 import {
+  stageCloseAck,
+  closeAckCommand,
+  acknowledgeClose,
+  receivePendingCloses,
+} from './close-ack.js';
+import { listPendingAcks } from '../../core/continuation.js';
+import {
   phasePreClose,
   phasePreValidate,
   phasePersist,
@@ -130,6 +137,56 @@ export async function main() {
     );
   }
 
+  // ─── Ack-before-burn CLI ───────────────────────────────────────────────────
+  if (args.includes('--ack')) {
+    const flag = (name: string): string | undefined => {
+      const i = args.findIndex((a) => a === `--${name}` || a.startsWith(`--${name}=`));
+      if (i < 0) return undefined;
+      const a = args[i];
+      return a.includes('=') ? a.split('=').slice(1).join('=') : args[i + 1];
+    };
+    const resource = flag('resource');
+    const token = flag('token');
+    if (!resource || !token) {
+      LOG.error('--ack requires --resource and --token (both --x=v and --x v forms accepted)');
+      process.exit(1);
+    }
+    const result = acknowledgeClose(resource, token);
+    if (result.ok) {
+      ok(`Acknowledged — close authority burned (${resource})`);
+      process.exit(0);
+    }
+    warn(`REFUSED [${result.refusal.kind}] ${result.refusal.code}: ${result.refusal.message}`);
+    process.exit(1);
+  }
+
+  if (args.includes('--receive')) {
+    // Host-side receipt: what the next session start does with pending closes.
+    const received = receivePendingCloses();
+    if (received.length === 0) log('No pending close acknowledgements');
+    for (const r of received) {
+      const icon = r.action === 'filed' ? '✅' : '⚠️';
+      log(`  ${icon} ${r.resource} — ${r.detail}`);
+      if (r.action === 'surfaced' && r.reportFile) log(`     report: ${r.reportFile}`);
+    }
+    process.exit(received.some((r) => r.action === 'surfaced') ? 1 : 0);
+  }
+
+  if (args.includes('--pending')) {
+    // Operator-side: after reviewing a failed close, get the exact token to
+    // burn it. Only session.close.* records are listed.
+    const pending = listPendingAcks().filter((p) => p.resource.startsWith('session.close.'));
+    if (pending.length === 0) {
+      log('No pending close acknowledgements');
+      process.exit(0);
+    }
+    for (const p of pending) {
+      log(`${p.resource}  (${p.revision}, staged ${p.createdAt})`);
+      log(`  ${closeAckCommand(p.resource)} --token=${p.token}`);
+    }
+    process.exit(0);
+  }
+
   // Lightweight mode for session-start cleanup (skip pre-validate, backup, audit, verify)
   if (args.includes('--lightweight') || args.includes('-l')) {
     let reason = 'startup-cleanup';
@@ -170,12 +227,21 @@ export async function main() {
 
   // Write report
   mkdirSync(SESSION_DIR, { recursive: true });
-  const reportFile = join(
-    SESSION_DIR,
-    `close-report-${new Date().toISOString().slice(0, 16).replace(/[:-]/g, '')}.json`,
-  );
+  const reportId = new Date().toISOString().slice(0, 16).replace(/[:-]/g, '');
+  const reportFile = join(SESSION_DIR, `close-report-${reportId}.json`);
   writeFileSync(reportFile, JSON.stringify(report, null, 2));
   ok(`Report written to ${reportFile}`);
+
+  // Ack-before-burn (gentle-vanguard.session-close/v1): the terminal close
+  // result is staged, not presumed received. The NEXT session start receives
+  // it (auto-files PASS, escalates FAIL/WARNINGS); the ack command burns it
+  // exactly. A crashed close leaves a discoverable pending trace, not silence.
+  const pendingClose = stageCloseAck(reportId, report.overall);
+  log(`Close staged (${report.overall}) — ${pendingClose.resource}`);
+  if (report.overall !== 'PASS') {
+    warn('This close needs review — acknowledge after reviewing the report:');
+    warn(`  ${closeAckCommand(pendingClose.resource)} --token=${pendingClose.token}`);
+  }
 
   // If --validate, run deep validator as spawned process (non-blocking if lazy)
   if (args.includes('--validate')) {

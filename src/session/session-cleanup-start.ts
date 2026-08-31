@@ -12,6 +12,7 @@ import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { runNpxTsxSync } from '../core/run-command.js';
 import { SessionContextLog } from '../core/session-context-log.js';
+import { receivePendingCloses, closeAckCommand } from './session-close/close-ack.js';
 
 const ROOT = resolve(process.cwd());
 
@@ -204,6 +205,26 @@ export function runCleanup(
     removeStaleSessions(sessionDir);
     removeStaleSessions(sessionDir2);
     ok('Orphan cleanup done');
+  }
+
+  // Receive the previous session's close (ack-before-burn): PASS closes are
+  // acknowledged on receipt and filed; failed/warned closes stay pending and
+  // are surfaced here — the staged ack is the escalation trace.
+  if (!opts.quiet) {
+    try {
+      const received = receivePendingCloses();
+      for (const r of received) {
+        if (r.action === 'filed') {
+          ok(`Previous close received: ${r.detail}`);
+        } else {
+          warn(`${r.detail}`);
+          if (r.reportFile) warn(`  report: ${r.reportFile}`);
+          warn(`  after review: ${closeAckCommand(r.resource)} --token=<from-report-step>`);
+        }
+      }
+    } catch {
+      /* close-ack unavailable (exotic contexts) — never block session start */
+    }
   }
 
   if (!skipSessionInit && !opts.skipCacheFlush && sessionData) {
