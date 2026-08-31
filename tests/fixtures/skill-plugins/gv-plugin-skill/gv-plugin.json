@@ -1,0 +1,10 @@
+{
+  "name": "gv-manifest-skill",
+  "version": "2.1.3",
+  "description": "Fixture skill declared via a gv-plugin.json manifest with network permission.",
+  "source": "https://example.com/gv-manifest-skill",
+  "license": "Apache-2.0",
+  "permissions": ["network"],
+  "entrypoint": "SKILL.md",
+  "metadata": { "author": "Test Author" }
+}
