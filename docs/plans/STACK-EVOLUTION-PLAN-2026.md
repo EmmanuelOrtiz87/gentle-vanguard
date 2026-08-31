@@ -10,6 +10,20 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ### Ejecutado — Sesión 8 (2026-08-31, Apps Control Panel + F2.3 cierre de scope library)
 
+- ✅ **F2.6 COMPLETADO — ConfigService + DI ligera** (commit `ba46332f`): `src/config/config-service.ts`
+  (30 vars críticas de arranque, zod, modo local nunca hard-fail / strict para promoción cloud,
+  `createTestConfig()`), `src/core/container.ts` (`createContainer()` sin framework, 3 pilotos:
+  config/db/tokenBudgetGuard; 11 singletons restantes documentados para batches futuros), wiring de
+  validación en session-autostart (WARN no bloqueante). 25/25 tests nuevos.
+- ✅ **F3.1 COMPLETADO — evaluación continua** (commit `ce1f1c5c`): `src/eval/continuous-eval.ts`
+  sobre trazas reales de Nexus (dataset dorado sessions/feedback/traces, scoring determinista
+  0.5/0.3/0.2, tendencia vs run previo, gate -5%), tabla `eval_runs`, `npm run eval:continuous` /
+  `eval:gate` + `gv eval`. 9/9 tests; corrida real verificada (aggregate 1.0, gate PASS). Nota: solo
+  2 sesiones con estado terminal en Nexus — el dataset crecerá al cerrar sesiones correctamente.
+- ✅ **CMS Content OS F1 CERRADO** (commit `40eac83a`): backend+repo+generator ya existían
+  (sesión paralela); gaps cerrados: `ContentOS` montado de verdad en la UI (tab principal, studio
+  legacy relegado a tab) y API del Content OS (puerto 3787) integrada al Apps Control Panel.
+  Verificado en vivo: health/platforms/items/slots OK, 34/34 tests.
 - ✅ **Apps Control Panel** (commit `7b80dc68`): `apps-control-api.ts` + `AppsControlPanel`
   (ruta `/apps`) para lifecycle de dashboard/analytics/cms/academy desde la UI. Dashboard WS ahora
   persiste entre sesiones (el panel es dueño del lifecycle; session-close ya no lo mata). MCP
@@ -202,7 +216,8 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 - F1.5 subir umbral cobertura 30→40% (medir baseline full-mode primero).
 - F2.2 reorganización de `src/` por dominios (un PR por dominio, barriles de compatibilidad).
 - F2.3 ✅ cerrado (scope library completo; console.* restantes = CLI por diseño); F2.4 ✅ 0 `any`;
-  consolidación modular nativa (mantenimiento); F2.6 ConfigService/DI; F2.8 ✅ CLI `gv` unificada;
+  consolidación modular nativa (mantenimiento); F2.6 ✅ ConfigService/DI (pilotos; 11 singletons
+  restantes); F2.8 ✅ CLI `gv` unificada;
   F2.7 en curso (tests dashboard).
 - F5 Sprints A-D comerciales (ver `GENTLE_VANGUARD_MASTER/00-EVOLUTION-ACTION-PLAN-2026-08.md`).
 
