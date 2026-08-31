@@ -182,24 +182,31 @@ export default function App() {
           >
             Studio (legacy)
           </button>
-          <button className="button ghost" onClick={() => importRef.current?.click()}>
-            Importar JSON
-          </button>
-          <input
-            ref={importRef}
-            className="visually-hidden"
-            type="file"
-            accept="application/json"
-            onChange={importJson}
-          />
-          <button className="button ghost" onClick={() => downloadJson(state.items)}>
-            Exportar JSON
-          </button>
-          <button className="button primary" onClick={startNew}>
-            + Nuevo contenido
-          </button>
+          {tab === 'studio' && (
+            <>
+              <button className="button ghost" onClick={() => importRef.current?.click()}>
+                Importar JSON
+              </button>
+              <input
+                ref={importRef}
+                className="visually-hidden"
+                type="file"
+                accept="application/json"
+                onChange={importJson}
+              />
+              <button className="button ghost" onClick={() => downloadJson(state.items)}>
+                Exportar JSON
+              </button>
+              <button className="button primary" onClick={startNew}>
+                + Nuevo contenido
+              </button>
+            </>
+          )}
         </div>
       </header>
+      {tab === 'content-os' ? (
+        <ContentOS />
+      ) : (
       <main className="layout">
         <aside className="sidebar">
           <div className="side-heading">
@@ -441,8 +448,13 @@ export default function App() {
           )}
         </section>
       </main>
+      )}
       <footer>
-        <span>Persistencia local · sin backend ni publicación remota</span>
+        <span>
+          {tab === 'content-os'
+            ? 'Content OS · Nexus + generación asistida · gate humano'
+            : 'Persistencia local · sin backend ni publicación remota'}
+        </span>
         <span>Gentle-Vanguard / MVP CMS</span>
       </footer>
     </div>

@@ -187,6 +187,12 @@ export function createAppsController(options: AppsControlOptions = {}) {
       ...APPS_REGISTRY[2],
       processes: () => [
         {
+          name: 'api',
+          port: 3787,
+          pidFile: pidPath(root, 'cms', 'api'),
+          start: () => ts(appRoot('content-cms'), 'server/server.ts'),
+        },
+        {
           name: 'vite',
           port: 5175,
           pidFile: pidPath(root, 'cms', 'vite'),
