@@ -31,6 +31,7 @@
  *   loop-guard  Check orchestrator loop-guard health (anti-loop)
  *   metrics     Show live stack metrics (F4.1, from config/stack-metrics.json)
  *   web         Web research (search|scrape|crawl) via native crawler
+ *   eval        Continuous evaluation over real Nexus traces (F3.1; --gate)
  *   help        Show this help
  */
 
@@ -98,6 +99,7 @@ COMMANDS:
   loop-guard  Check orchestrator loop-guard health
   metrics     Show live stack metrics (config/stack-metrics.json)
   web         Web research (search|scrape|crawl) via native crawler
+  eval        Continuous evaluation over real Nexus traces (--gate to fail on regression)
   help        Show this help
 
 EXAMPLES:
@@ -487,6 +489,7 @@ export const COMMANDS = [
   'loop-guard',
   'metrics',
   'web',
+  'eval',
   'help',
 ] as const;
 
@@ -884,6 +887,32 @@ async function main(): Promise<void> {
         process.exit(r.status ?? 0);
       } catch (e) {
         console.error(`[WEB] FAILED: ${e instanceof Error ? e.message : String(e)}`);
+        process.exit(1);
+      }
+      break;
+    }
+
+    case 'eval': {
+      const evalArgs = args.slice(1);
+      if (evalArgs.length === 0 || evalArgs.includes('--help')) {
+        console.log(
+          'Usage: gv eval [--gate] [--threshold N] [--limit N] [--json] [--db PATH]',
+        );
+        console.log('  Runs continuous evaluation over real Nexus traces (F3.1).');
+        console.log('  --gate exits 1 if the aggregate score regresses beyond --threshold % (default 5).');
+        process.exit(0);
+      }
+      try {
+        const r = runSync('npx', ['tsx', 'src/eval/continuous-eval-cli.ts', ...evalArgs], {
+          timeout: 120000,
+          cwd: ROOT,
+        });
+        const out = (r.stdout ?? '').toString().trim();
+        if (out) console.log(out);
+        if (r.stderr) console.error((r.stderr ?? '').toString().trim());
+        process.exit(r.status ?? 0);
+      } catch (e) {
+        console.error(`[EVAL] FAILED: ${e instanceof Error ? e.message : String(e)}`);
         process.exit(1);
       }
       break;
