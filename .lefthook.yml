@@ -43,6 +43,9 @@ pre-commit:
     secret-scanner:
       glob: '*.{ts,js,json,yml,yaml,md,env,toml,xml,py,ps1,sh,sql}'
       run: npx tsx src/security/secret-scanner-cli.ts --scan {staged_files} --redact
+    metrics-check:
+      glob: 'config/stack-metrics.json'
+      run: npx tsx src/tools/metrics-verify.ts {staged_files}
 
 pre-push:
   commands:

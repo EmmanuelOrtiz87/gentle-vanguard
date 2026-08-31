@@ -866,16 +866,26 @@ async function main(): Promise<void> {
     }
 
     case 'web': {
-      const qIdx = args.indexOf('--query');
-      const query = qIdx >= 0 ? args[qIdx + 1] : args.slice(1).join(' ');
-      if (!query) {
+      const webArgs = args.slice(1);
+      if (webArgs.length === 0) {
         console.log(
           'Usage: gv web search --query "..." | gv web scrape --url <url> | gv web health',
         );
         process.exit(1);
       }
-      const webArgs = args.slice(1);
-      runCommandExit('npx', ['tsx', 'src/web/web-crawler-cli.ts', ...webArgs], 'WEB');
+      try {
+        const r = runSync('npx', ['tsx', 'src/web/web-crawler-cli.ts', ...webArgs], {
+          timeout: 30000,
+          cwd: ROOT,
+        });
+        const out = (r.stdout ?? '').toString().trim();
+        if (out) console.log(out);
+        if (r.stderr) console.error((r.stderr ?? '').toString().trim());
+        process.exit(r.status ?? 0);
+      } catch (e) {
+        console.error(`[WEB] FAILED: ${e instanceof Error ? e.message : String(e)}`);
+        process.exit(1);
+      }
       break;
     }
 

@@ -19,7 +19,7 @@
  *   npx tsx src/orchestration/adaptive-steps.ts --auto "task description"   # estimate + apply
  */
 
-import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync, appendFileSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { normalizeSteps } from '../security/opencode-guards.js';
@@ -27,6 +27,7 @@ import { normalizeSteps } from '../security/opencode-guards.js';
 const ROOT = resolve(process.cwd());
 const OPENCODE_JSON = join(ROOT, 'opencode.json');
 const AGENTS_DIR = join(ROOT, '.opencode', 'agents');
+const RESUME_LOG = join(ROOT, '.runtime', 'adaptive-steps-resume.log');
 
 // Baseline steps per agent role (used as floor when estimating)
 const BASELINE: Record<string, number> = {
@@ -141,6 +142,29 @@ function status(): void {
   }
 }
 
+function checkResumeLoop(taskId: string): { isLoop: boolean; count: number } {
+  try {
+    if (!existsSync(RESUME_LOG)) return { isLoop: false, count: 0 };
+    const lines = readFileSync(RESUME_LOG, 'utf-8').split('\n').filter(Boolean).slice(-10);
+    const same = lines.filter((l) => l.trim() === taskId).length;
+    return { isLoop: same >= 2, count: same };
+  } catch {
+    return { isLoop: false, count: 0 };
+  }
+}
+
+function recordResume(taskId: string): void {
+  try {
+    mkdirSync(join(ROOT, '.runtime'), { recursive: true });
+    appendFileSync(RESUME_LOG, `${taskId}\n`, 'utf-8');
+    // keep last 50 lines
+    const lines = readFileSync(RESUME_LOG, 'utf-8').split('\n').filter(Boolean);
+    if (lines.length > 50) {
+      writeFileSync(RESUME_LOG, lines.slice(-50).join('\n') + '\n', 'utf-8');
+    }
+  } catch {}
+}
+
 function parseArgs(argv: string[]): Record<string, string> {
   const args: Record<string, string> = {};
   for (let i = 2; i < argv.length; i++) {
@@ -192,6 +216,14 @@ function main(): void {
 
   if (args.resume && args.task_id) {
     // Reactive: bump the agent's limit and report the task_id to resume with
+    // Loop-guard (ADR-0022): detect repeated resume on same task_id (≥3× = loop)
+    const loop = checkResumeLoop(args.task_id);
+    if (loop.isLoop) {
+      console.error(
+        `[adaptive-steps] WARN loop-guard: task_id=${args.task_id} resumed ${loop.count + 1}x — possible infinite loop. Consider asking for clarification or changing task description.`,
+      );
+    }
+    recordResume(args.task_id);
     const agent = args.resume;
     const current = currentSteps(agent);
     const bumped = Math.min(current + 20, 80);
@@ -203,7 +235,8 @@ function main(): void {
           previousSteps: current,
           task_id: args.task_id,
           action: 'resume',
-          note: `Re-dispatch with task_id=${args.task_id} and steps=${bumped}`,
+          loopGuard: loop.isLoop ? { isLoop: true, count: loop.count + 1 } : { isLoop: false },
+          note: `Re-dispatch with task_id=${args.task_id} and steps=${bumped}${loop.isLoop ? ' — loop-guard triggered' : ''}`,
         },
         null,
         2,
