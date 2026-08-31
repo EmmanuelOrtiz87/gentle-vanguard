@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "description": "Single source of truth for live stack metrics (F4.1). Generated values must be verified via `gv info` or `npm run watchtower:health`. Do not hardcode these numbers in docs — cite this file.",
-  "generated": "2026-08-31T00:00:00Z",
+  "generated": "2026-08-31T06:16:00Z",
   "source": "config/stack-metrics.json",
   "metrics": {
     "skills": {
@@ -24,9 +24,9 @@
       "verifiedBy": "watchtower:health + sqlite sqlite_master"
     },
     "watchtower": {
-      "checks": 104,
-      "components": 24,
-      "status": "102 PASS / 2 WARN / 0 FAIL",
+      "checks": 108,
+      "components": 25,
+      "status": "106 PASS / 2 WARN / 0 FAIL",
       "verifiedBy": "npm run watchtower:health"
     },
     "graphify": {
