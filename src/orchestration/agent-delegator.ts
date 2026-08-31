@@ -407,9 +407,25 @@ function loadAgents(): Record<string, AgentConfig> {
  */
 export async function delegate(request: DelegationRequest): Promise<DelegationResult> {
   const startTime = Date.now();
-  // F3.2 soft WARN — input moderation (heuristic, <5ms, never blocks)
+  // F3.2 guardrail — input moderation (heuristic, <5ms). softWarn=true → WARN + proceed, false → hard BLOCK.
   const mod = moderateInputHeuristic(request.task);
   if (mod.blocked) {
+    try {
+      const cfg = JSON.parse(
+        readFileSync(join(process.cwd(), 'config', 'guardrails.json'), 'utf-8'),
+      );
+      if (cfg.softWarn === false) {
+        logger.error(
+          `[GUARDRAIL:INPUT] hard BLOCK blocked:true reason=${mod.reason} rail=${mod.rail} — rejected (hard block)`,
+        );
+        return {
+          success: false,
+          error: `[GUARDRAIL:INPUT] hard BLOCK reason=${mod.reason} rail=${mod.rail} — human escalation required (ADR-0023)`,
+          duration: Date.now() - startTime,
+          model: 'unknown',
+        };
+      }
+    } catch {}
     logger.warn(
       `[GUARDRAIL:INPUT] soft WARN blocked:true reason=${mod.reason} rail=${mod.rail} — proceeding (soft WARN, ADR-0023)`,
     );
