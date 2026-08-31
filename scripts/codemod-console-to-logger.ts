@@ -28,6 +28,15 @@ const DRY_RUN = process.argv.includes('--dry-run');
 const SKIP = new Set([
   'src/core/auto-token-tracker.ts', // intercepts console.log on purpose
   'src/utils/logger.ts', // the logger itself
+  // CLI entry points that keep console.* by design (stdout is parsed):
+  // direct-execution scripts without a main()/process.argv[1] signature.
+  'src/ml/knowledge-synthesizer/index.ts', // CLI runner
+  'src/ops/rescue-database.ts', // CLI runner
+  'src/orchestration/adaptive-router/index.ts', // CLI runner
+  'src/tools/complete-stack-fix.ts', // CLI runner
+  'src/tools/setup-branch-protection.ts', // CLI runner
+  'src/tools/version-sync.ts', // CLI runner
+  'src/zcode-hooks/post-edit-graphify.ts', // CLI runner
 ]);
 
 // CLI files by convention (keep console.* by design)
@@ -55,7 +64,7 @@ function isCliSection(line: string): boolean {
     line.includes('process.argv[1]') ||
     line.includes('import.meta.url ===') ||
     line.includes('isMainModule') ||
-    line.includes("main().catch") ||
+    line.includes('main().catch') ||
     line.includes('if (isMainModule)')
   );
 }
@@ -83,7 +92,25 @@ function relImport(fromFile: string): string {
 
 function modulePrefix(file: string): string {
   const rel = relative(SRC, file).replace(/\\/g, '/').replace(/\.ts$/, '');
-  return rel.toUpperCase().replace(/[^A-Z0-9]+/g, '-').replace(/^-|-$/g, '');
+  return rel
+    .toUpperCase()
+    .replace(/[^A-Z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+// Detect CLI files by structure: a file that ends with a direct-execution block
+// (main()/cli() invoked via process.argv[1], import.meta.url, or .catch) is a CLI
+// entry point and must keep console.* by design (stdout is parsed).
+function isCliFileByContent(lines: string[]): boolean {
+  const text = lines.join('\n');
+  return (
+    /process\.argv\[1\]/.test(text) ||
+    /import\.meta\.url\s*===/.test(text) ||
+    /isMainModule/.test(text) ||
+    /main\(\)\.catch\(/.test(text) ||
+    /cli\(\)\.catch\(/.test(text) ||
+    /if\s*\(\s*isMainModule\s*\)/.test(text)
+  );
 }
 
 function migrateFile(file: string): FileReport {
@@ -98,6 +125,10 @@ function migrateFile(file: string): FileReport {
   const hasShebang = lines[0]?.startsWith('#!');
   if (hasShebang) {
     report.skipped.push('cli-shebang');
+    return report;
+  }
+  if (isCliFileByContent(lines)) {
+    report.skipped.push('cli-by-content');
     return report;
   }
 

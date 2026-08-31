@@ -421,7 +421,9 @@ function handleSignatureHelp(filePath: string, line: number, col: number) {
   const resolved = resolveFilePath(filePath);
   const offset = getOffset(cache.service, resolved, line, col);
 
-  const sigs = cache.service.getSignatureHelpItems(resolved, offset, { triggerReason: { kind: 'invoked' } });
+  const sigs = cache.service.getSignatureHelpItems(resolved, offset, {
+    triggerReason: { kind: 'invoked' },
+  });
 
   if (!sigs) {
     return { found: false, message: 'No signature help at position' };

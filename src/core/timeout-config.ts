@@ -316,16 +316,19 @@ function loadConfigFromDisk(): TimeoutConfig {
   }
 }
 
-function deepMerge(target: Record<string, unknown>, source: Record<string, unknown>): Record<string, unknown> {
+function deepMerge(
+  target: Record<string, unknown>,
+  source: Record<string, unknown>,
+): Record<string, unknown> {
   const result: Record<string, unknown> = { ...target };
   for (const key of Object.keys(source)) {
     if (key === '$schema') continue;
     const srcVal = source[key];
     if (srcVal && typeof srcVal === 'object' && !Array.isArray(srcVal)) {
       result[key] = deepMerge(
-        (result[key] && typeof result[key] === 'object' && !Array.isArray(result[key])
+        result[key] && typeof result[key] === 'object' && !Array.isArray(result[key])
           ? (result[key] as Record<string, unknown>)
-          : {}),
+          : {},
         srcVal as Record<string, unknown>,
       );
     } else if (srcVal !== undefined) {

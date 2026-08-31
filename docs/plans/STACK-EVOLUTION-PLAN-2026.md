@@ -12,9 +12,10 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 - ✅ **F2.3 batch 1 — 22 módulos library migrados a logger estructurado** (commit `3b839d64`):
   watchtower checks (config/dashboard/data/infra/security/context/rebuild), ResilienceManager,
-  session-context-log, session-metrics-tracker, response-cache (cache/sqlite), research-trends/fetch,
-  smart-task-wrapper, model-error-interceptor, knowledge-synthesizer/config, language-service,
-  token-ingest/nexus, session-close/phases, event-sourcing-api, adaptive-router/config.
+  session-context-log, session-metrics-tracker, response-cache (cache/sqlite),
+  research-trends/fetch, smart-task-wrapper, model-error-interceptor, knowledge-synthesizer/config,
+  language-service, token-ingest/nexus, session-close/phases, event-sourcing-api,
+  adaptive-router/config.
 - ✅ **Codemod `scripts/codemod-console-to-logger.ts` creado y corregido**: maneja imports
   multilínea, aliasing de colisiones `log`, y se añadió `scripts/*.ts` al tsconfig para que quede
   lint-clean. Reutilizable para futuros batches de F2.3.

@@ -153,7 +153,10 @@ async function checkEngramRag(): Promise<void> {
 
 async function checkConfig(): Promise<void> {
   header('Config');
-  const modelRouter = readJsonCached('config', 'model-router.json') as Record<string, unknown> | null;
+  const modelRouter = readJsonCached('config', 'model-router.json') as Record<
+    string,
+    unknown
+  > | null;
   writeCheck('model-router.json exists', modelRouter !== null);
   writeCheck('costTracking section present', modelRouter?.costTracking !== undefined);
   writeCheck('routingPolicy section present', modelRouter?.routingPolicy !== undefined);

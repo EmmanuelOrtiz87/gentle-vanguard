@@ -144,7 +144,9 @@ export function checkDependencySecurity(): DependencySecurityResult {
     } catch (error: unknown) {
       // Try the next package manager if available
       if (attempt.source === 'npm') {
-        issues.push(`Audit command failed: ${error instanceof Error ? error.message : 'unknown error'}`);
+        issues.push(
+          `Audit command failed: ${error instanceof Error ? error.message : 'unknown error'}`,
+        );
         recommendations.push(
           'Ensure pnpm/npm is installed and the registry is reachable, then re-run the audit',
         );

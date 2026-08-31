@@ -89,7 +89,8 @@ function boundDelegationInput(text: string, maxChars: number, label: string): st
   const tail = maxChars - head;
   logger.warn(
     `[agent-delegator] ${label} bounded: ${text.length} -> ${maxChars} chars (head/tail preserved)`,
-  );  return `${text.slice(0, head)}\n\n[...${label} middle omitted by budget guard...]\n\n${text.slice(-tail)}`;
+  );
+  return `${text.slice(0, head)}\n\n[...${label} middle omitted by budget guard...]\n\n${text.slice(-tail)}`;
 }
 
 /**

@@ -287,8 +287,7 @@ export function validateGate(gate: DeliveryGate, receiptId?: string): GateValida
       }
 
       // Verify no critical findings
-      const criticalCount =
-        receipt.findings?.filter((f) => f.severity === 'critical').length || 0;
+      const criticalCount = receipt.findings?.filter((f) => f.severity === 'critical').length || 0;
 
       if (criticalCount > 0) {
         errors.push(`${criticalCount} critical findings must be resolved before release`);
