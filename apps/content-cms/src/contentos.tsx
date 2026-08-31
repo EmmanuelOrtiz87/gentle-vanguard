@@ -464,7 +464,7 @@ export default function ContentOS() {
   });
 
   return (
-    <div style={{ display: 'grid', gap: 16 }}>
+    <div className="content-os-shell" style={{ display: 'grid', gap: 16 }}>
       <div style={{ fontSize: 13, color: MUTED }}>{status}</div>
 
       <div
@@ -496,6 +496,7 @@ export default function ContentOS() {
       {view === 'crear' && (
         <>
           <section
+            className="panel"
             style={{
               background: CARD,
               border: `1px solid ${BORDER}`,
@@ -675,7 +676,7 @@ export default function ContentOS() {
       )}
 
       {view === 'calendario' && (
-        <section style={{ display: 'grid', gap: 8 }}>
+        <section className="panel" style={{ display: 'grid', gap: 8 }}>
           <h2
             style={{
               margin: 0,
@@ -950,7 +951,7 @@ export default function ContentOS() {
 
       {view === 'medios' && (
         <>
-          <section style={{ display: 'grid', gap: 8 }}>
+          <section className="panel" style={{ display: 'grid', gap: 8 }}>
             <h2
               style={{
                 margin: 0,
@@ -1058,7 +1059,7 @@ export default function ContentOS() {
           </section>
 
           {publishLog.length > 0 && (
-            <section style={{ display: 'grid', gap: 6 }}>
+            <section className="panel" style={{ display: 'grid', gap: 6 }}>
               <h2 style={{ margin: 0, fontSize: 15, color: TEXT }}>
                 Export asistido / publish_log ({publishLog.length})
               </h2>
@@ -1092,7 +1093,7 @@ export default function ContentOS() {
       )}
 
       {view === 'crear' && items.length > 0 && (
-        <section style={{ display: 'grid', gap: 6 }}>
+        <section className="panel" style={{ display: 'grid', gap: 6 }}>
           <h2 style={{ margin: 0, fontSize: 15, color: TEXT }}>Historial ({items.length})</h2>
           {items.map((i) => (
             <button

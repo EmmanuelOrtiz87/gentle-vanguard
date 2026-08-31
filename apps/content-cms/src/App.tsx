@@ -162,49 +162,56 @@ export default function App() {
 
   return (
     <div className="app-shell">
+      <div className="grid-bg" />
+      <div className="glow-a" />
+      <div className="glow-b" />
       <header className="topbar">
-        <div className="brand">
-          <span className="mark" aria-hidden="true">
-            GV
-          </span>
-          <span>
-            <strong>Gentle-Vanguard</strong>
-            <small>Content OS · local-first</small>
-          </span>
-        </div>
-        <div className="top-actions">
-          <button
-            className={tab === 'content-os' ? 'button' : 'button ghost'}
-            onClick={() => setTab('content-os')}
-          >
-            <FileText size={16} aria-hidden="true" /> Content OS
-          </button>
-          <button
-            className={tab === 'studio' ? 'button' : 'button ghost'}
-            onClick={() => setTab('studio')}
-          >
-            <Pencil size={16} aria-hidden="true" /> Studio (legacy)
-          </button>
-          {tab === 'studio' && (
-            <>
-              <button className="button ghost" onClick={() => importRef.current?.click()}>
-                <Upload size={16} aria-hidden="true" /> Importar JSON
-              </button>
-              <input
-                ref={importRef}
-                className="visually-hidden"
-                type="file"
-                accept="application/json"
-                onChange={importJson}
-              />
-              <button className="button ghost" onClick={() => downloadJson(state.items)}>
-                <Download size={16} aria-hidden="true" /> Exportar JSON
-              </button>
-              <button className="button primary" onClick={startNew}>
-                <Plus size={16} aria-hidden="true" /> Nuevo contenido
-              </button>
-            </>
-          )}
+        <div className="topbar-inner">
+          <div className="brand">
+            <span className="mark" aria-hidden="true">
+              GV
+            </span>
+            <span className="name">
+              Gentle<span>Vanguard</span> <small>Content Studio</small>
+            </span>
+          </div>
+          <nav className="main-nav view-tabs" aria-label="Secciones del CMS">
+            <button
+              className={tab === 'content-os' ? 'active' : ''}
+              onClick={() => setTab('content-os')}
+            >
+              <FileText size={16} aria-hidden="true" /> Content OS
+            </button>
+            <button className={tab === 'studio' ? 'active' : ''} onClick={() => setTab('studio')}>
+              <Pencil size={16} aria-hidden="true" /> Studio (legacy)
+            </button>
+          </nav>
+          <div className="system-state ready">
+            <span />
+            {state.items.length} items
+          </div>
+          <div className="top-actions">
+            {tab === 'studio' && (
+              <>
+                <button className="button ghost" onClick={() => importRef.current?.click()}>
+                  <Upload size={16} aria-hidden="true" /> Importar JSON
+                </button>
+                <input
+                  ref={importRef}
+                  className="visually-hidden"
+                  type="file"
+                  accept="application/json"
+                  onChange={importJson}
+                />
+                <button className="button ghost" onClick={() => downloadJson(state.items)}>
+                  <Download size={16} aria-hidden="true" /> Exportar JSON
+                </button>
+                <button className="button primary" onClick={startNew}>
+                  <Plus size={16} aria-hidden="true" /> Nuevo contenido
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </header>
       {tab === 'content-os' ? (
@@ -280,7 +287,7 @@ export default function App() {
               </div>
             </div>
             {preview ? (
-              <article className="preview">
+              <article className="preview panel">
                 <div className="preview-meta">
                   <span className={`badge ${form.status}`}>
                     {form.status === 'published' ? 'Publicado' : 'Borrador'}
@@ -301,7 +308,7 @@ export default function App() {
                 </div>
               </article>
             ) : (
-              <div className="editor card">
+              <div className="editor card panel">
                 <label>
                   Título
                   <input
@@ -429,7 +436,7 @@ export default function App() {
               </div>
             )}
             {selectedId && (
-              <section className="history card">
+              <section className="history card panel">
                 <div className="asset-heading">
                   <span>
                     <Calendar size={16} aria-hidden="true" /> Historial inmutable
