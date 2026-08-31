@@ -17,11 +17,13 @@ import {
   isCodeGraphRecentlyBooted,
   payloadFileOk,
 } from './helpers';
+import { log } from '../../utils/logger.js';
+const logger = log('CORE-WATCHTOWER-CHECKS-INFRA');
 
 // ─── Component: CodeGraph ───────────────────────────────────────────────────
 
 export async function checkCodeGraph() {
-  if (!quiet) console.log('  [CodeGraph] Checking...');
+  if (!quiet) logger.info('  [CodeGraph] Checking...');
 
   const cgDir = join(ROOT, '.codegraph');
   const indexOk = fileExists(join(cgDir, 'codegraph.db'));
@@ -109,7 +111,7 @@ export async function checkCodeGraph() {
 // ─── Component: Timeout Daemon ────────────────────────────────────────────────
 
 export async function checkTimeoutDaemon() {
-  if (!quiet) console.log('  [Timeout Daemon] Checking...');
+  if (!quiet) logger.info('  [Timeout Daemon] Checking...');
 
   // The timeout/performance monitor daemon is started by session-autostart
   // (start-monitor-daemon.ts -> timeout-monitor.ts --daemon). It must be alive
@@ -176,7 +178,7 @@ export async function checkTimeoutDaemon() {
  * Runs in dry-run here — autoHeal() applies the reap when findings exist.
  */
 export async function checkProcessHygiene() {
-  if (!quiet) console.log('  [Process Hygiene] Scanning for orphans/duplicates...');
+  if (!quiet) logger.info('  [Process Hygiene] Scanning for orphans/duplicates...');
 
   const opts = { ...DEFAULT_OPTIONS, apply: false };
   const snap = await buildSnapshot();
@@ -212,7 +214,7 @@ export async function checkProcessHygiene() {
 // ─── Component: ML Embeddings ────────────────────────────────────────────────
 
 export async function checkMlEmbeddings() {
-  if (!quiet) console.log('  [ML Embeddings] Checking...');
+  if (!quiet) logger.info('  [ML Embeddings] Checking...');
 
   const mlIndex = join(ROOT, '.atl/skill-embeddings.json');
   const mlDir = join(ROOT, '.atl/ml-embeddings');
@@ -284,7 +286,7 @@ export async function checkMlEmbeddings() {
 // ─── Component: Engram ───────────────────────────────────────────────────────
 
 export async function checkEngram() {
-  if (!quiet) console.log('  [Engram] Checking...');
+  if (!quiet) logger.info('  [Engram] Checking...');
 
   const ragReindexTs = join(ROOT, 'src', 'knowledge', 'engram-rag-reindex.ts');
   addResult('engram', 'reindex script', fileExists(ragReindexTs) ? 'PASS' : 'FAIL', '', 'manual');
@@ -357,7 +359,7 @@ export async function checkEngram() {
 // ─── Component: MCP ─────────────────────────────────────────────────────────
 
 export async function checkMcp() {
-  if (!quiet) console.log('  [MCP] Checking...');
+  if (!quiet) logger.info('  [MCP] Checking...');
 
   payloadFileOk('mcp', 'skill-server.js', join(ROOT, 'dist/scripts/mcp/skill-server.js'), 'build');
   payloadFileOk('mcp', 'skill-server.ts', join(ROOT, 'scripts/mcp/skill-server.ts'), 'manual');

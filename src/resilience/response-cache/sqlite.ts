@@ -5,6 +5,8 @@ import { db as getDbSingleton } from '../../database/db';
 import { resolveDeploymentTenantContext } from '../../integrations/deployment-tenant-context';
 import type { CacheEntry, CacheConfig } from './cache';
 import { computeTfIdfVector, getSemEmbeddings, semanticCacheLookup, semTokenize } from './semantic';
+const logger = log('RESILIENCE-RESPONSE-CACHE-SQLITE');
+import { log } from '../../utils/logger.js';
 
 const ROOT = resolve(process.cwd());
 export const LEGACY_DIR = join(ROOT, '.session', 'response-cache');
@@ -56,7 +58,7 @@ function ensureTokensColumn(): void {
         .getDb()
         .prepare('ALTER TABLE response_cache ADD COLUMN tokens_saved INTEGER DEFAULT 0')
         .run();
-      console.log('[response-cache] Added tokens_saved column to response_cache table');
+      logger.info('[response-cache] Added tokens_saved column to response_cache table');
     } catch (e2) {
       console.warn('[response-cache] Could not add tokens_saved column:', (e2 as Error).message);
     }
@@ -144,7 +146,7 @@ export function sqliteGet(key: string, input?: string): CacheEntry | null {
     if (input) {
       const semantic = semanticCacheLookup(input);
       if (semantic) {
-        console.log(
+        logger.info(
           `[response-cache] Semantic cache HIT: "${input.substring(0, 60)}..." → "${semantic.key.substring(0, 16)}" (sim: ${(semantic.similarity * 100).toFixed(0)}%)`,
         );
         return {

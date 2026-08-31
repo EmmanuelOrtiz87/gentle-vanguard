@@ -6,11 +6,13 @@ import { runSync } from '../run-command';
 import { getEffectiveProcessTimeout } from '../timeout-config';
 import { addResult, quiet, ROOT } from './context';
 import { fileExists } from './helpers';
+const logger = log('CORE-WATCHTOWER-REBUILD');
+import { log } from '../../utils/logger.js';
 
 // ─── Rebuild Actions ────────────────────────────────────────────────────────
 
 export async function rebuildMlEmbeddings() {
-  if (!quiet) console.log('  [Rebuild] ML Embeddings...');
+  if (!quiet) logger.info('  [Rebuild] ML Embeddings...');
   const skillEmbedder = join(ROOT, 'src/skills/skill-embedder.ts');
   if (fileExists(skillEmbedder)) {
     try {
@@ -36,7 +38,7 @@ export async function rebuildMlEmbeddings() {
 }
 
 export async function reindexEngramRag() {
-  if (!quiet) console.log('  [Rebuild] Engram RAG...');
+  if (!quiet) logger.info('  [Rebuild] Engram RAG...');
   const ragReindexTs = join(ROOT, 'src', 'knowledge', 'engram-rag-reindex.ts');
   const ragReindexPs1 = join(ROOT, 'src/knowledge/engram-rag-reindex.ts');
   const hasTs = fileExists(ragReindexTs);

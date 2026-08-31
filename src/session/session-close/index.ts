@@ -94,7 +94,7 @@ export async function runCloseOrchestrator(reason = 'session-end'): Promise<Clos
 
   for (const r of allResults) {
     const icon = r.status === 'PASS' ? '✅' : r.status === 'FAIL' ? '❌' : '⏭️';
-    console.log(`  ${icon} [${r.phase}] ${r.detail}`);
+    log(`  ${icon} [${r.phase}] ${r.detail}`);
   }
 
   if (overall === 'FAIL') {

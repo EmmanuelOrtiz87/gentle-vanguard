@@ -16,6 +16,8 @@ import {
   sqliteTouch,
 } from './sqlite';
 import { recordHit, recordMiss } from './telemetry';
+const logger = log('RESILIENCE-RESPONSE-CACHE-CACHE');
+import { log } from '../../utils/logger.js';
 
 export interface CacheEntry {
   key: string;
@@ -294,7 +296,7 @@ export class ResponseCache {
    */
   migrateFromJson(): number {
     if (!existsSync(LEGACY_DIR)) {
-      console.log('[response-cache] No legacy cache directory found');
+      logger.info('[response-cache] No legacy cache directory found');
       return 0;
     }
 
@@ -336,7 +338,7 @@ export class ResponseCache {
     };
 
     walkDir(LEGACY_DIR);
-    console.log(`[response-cache] Migrated ${migrated} entries from JSON to SQLite`);
+    logger.info(`[response-cache] Migrated ${migrated} entries from JSON to SQLite`);
     return migrated;
   }
 }

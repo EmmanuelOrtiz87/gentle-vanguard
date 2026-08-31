@@ -1,5 +1,7 @@
 import { existsSync, mkdirSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
+const logger = log('ORCHESTRATION-ADAPTIVE-ROUTER-CONFIG');
+import { log } from '../../utils/logger.js';
 
 // ─── Constants ────────────────────────────────────────────────────────
 
@@ -68,7 +70,7 @@ export interface Logger {
 
 export function getLogger(quiet: boolean): Logger {
   return (msg: string) => {
-    if (!quiet) console.log(msg);
+    if (!quiet) logger.info(msg);
   };
 }
 

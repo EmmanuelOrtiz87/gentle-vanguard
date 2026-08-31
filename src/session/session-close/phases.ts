@@ -21,6 +21,8 @@ import {
 import { KILL_TARGETS, waitForProcess, killProcessByCommandLine } from './process.js';
 import { runArtifactRetention } from '../artifact-retention.js';
 import { generateReview4R, formatReview4R } from '../../rdd/rdd-4r-review.js';
+import { log as createLogger } from '../../utils/logger.js';
+const logger = createLogger('SESSION-SESSION-CLOSE-PHASES');
 
 // ─── Fases ──────────────────────────────────────────────────────────────────────
 
@@ -433,18 +435,18 @@ export async function phasePersist(reason: string): Promise<PhaseResult[]> {
         status: tm.status === 0 ? 'PASS' : 'SKIP',
         detail: `Metrics stored — ${seg}`,
       });
-      console.log('');
-      console.log('══════════════════════════════════════════════════════');
-      console.log('  SESSION TOKEN SUMMARY');
-      console.log('══════════════════════════════════════════════════════');
-      console.log(`  Session:    ${summary.session_id}`);
-      console.log(`  Input:      ${Number(summary.input_tokens ?? 0).toLocaleString()} tokens`);
-      console.log(`  Output:     ${Number(summary.output_tokens ?? 0).toLocaleString()} tokens`);
-      console.log(`  Total:      ${Number(summary.total_tokens ?? 0).toLocaleString()} tokens`);
-      console.log(`  Cost:       $${Number(summary.cost_usd ?? 0).toFixed(4)} USD`);
-      console.log(`  Source:     ${summary.source}`);
-      console.log('══════════════════════════════════════════════════════');
-      console.log('');
+      logger.info('');
+      logger.info('══════════════════════════════════════════════════════');
+      logger.info('  SESSION TOKEN SUMMARY');
+      logger.info('══════════════════════════════════════════════════════');
+      logger.info(`  Session:    ${summary.session_id}`);
+      logger.info(`  Input:      ${Number(summary.input_tokens ?? 0).toLocaleString()} tokens`);
+      logger.info(`  Output:     ${Number(summary.output_tokens ?? 0).toLocaleString()} tokens`);
+      logger.info(`  Total:      ${Number(summary.total_tokens ?? 0).toLocaleString()} tokens`);
+      logger.info(`  Cost:       $${Number(summary.cost_usd ?? 0).toFixed(4)} USD`);
+      logger.info(`  Source:     ${summary.source}`);
+      logger.info('══════════════════════════════════════════════════════');
+      logger.info('');
     } catch {
       results.push({
         phase: 'token-metrics',

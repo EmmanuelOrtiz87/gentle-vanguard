@@ -7,11 +7,13 @@ import { runSync } from '../run-command';
 import { getEffectiveProcessTimeout } from '../timeout-config';
 import { addResult, quiet, ROOT } from './context';
 import { fileExists, payloadFileOk } from './helpers';
+const logger = log('CORE-WATCHTOWER-CHECKS-CONFIG');
+import { log } from '../../utils/logger.js';
 
 // ─── Component: Session Pipeline ────────────────────────────────────────────
 
 export async function checkSessionPipeline() {
-  if (!quiet) console.log('  [Session] Checking...');
+  if (!quiet) logger.info('  [Session] Checking...');
 
   const scripts = [
     'src/session/session-start-optimized.ts',
@@ -37,7 +39,7 @@ export async function checkSessionPipeline() {
 // ─── Component: Git Hooks ───────────────────────────────────────────────────
 
 export async function checkHooks() {
-  if (!quiet) console.log('  [Hooks] Checking...');
+  if (!quiet) logger.info('  [Hooks] Checking...');
 
   addResult(
     'hooks',
@@ -67,7 +69,7 @@ export async function checkHooks() {
 // ─── Component: Configs ─────────────────────────────────────────────────────
 
 export async function checkConfigs() {
-  if (!quiet) console.log('  [Configs] Checking...');
+  if (!quiet) logger.info('  [Configs] Checking...');
 
   const configs = [
     'config/orchestrator.json',
@@ -126,7 +128,7 @@ export async function checkConfigs() {
 // ─── Component: Tool Configs ────────────────────────────────────────────────
 
 export async function checkToolConfigs() {
-  if (!quiet) console.log('  [Tool Configs] Checking...');
+  if (!quiet) logger.info('  [Tool Configs] Checking...');
 
   const files = [
     'CLAUDE.md',

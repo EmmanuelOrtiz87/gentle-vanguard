@@ -9,6 +9,8 @@
 // reporting and tracing.
 
 import { join, resolve } from 'path';
+const logger = log('CORE-WATCHTOWER-CONTEXT');
+import { log } from '../../utils/logger.js';
 
 export const ROOT = resolve(process.cwd());
 export const RUNTIME_DIR = join(ROOT, '.runtime');
@@ -58,7 +60,7 @@ export function addResult(
   });
   if (!quiet || status !== 'PASS') {
     const icons: Record<string, string> = { PASS: '  ', WARN: '  ', FAIL: '  ', SKIP: '  ' };
-    console.log(
+    logger.info(
       `${icons[status]}[${component}] ${check}: ${status}${detail ? ' - ' + detail : ''}`,
     );
   }

@@ -6,6 +6,8 @@
  */
 
 import { runNpxTsx } from '../core/run-command';
+const logger = log('TOOLS-EVENT-SOURCING-API');
+import { log } from '../utils/logger.js';
 
 interface AppendEventOptions {
   aggregateId: string;
@@ -48,10 +50,10 @@ export async function appendEvent(options: AppendEventOptions): Promise<void> {
 
     child.on('close', (code) => {
       if (code === 0) {
-        if (!quiet) console.log(stdout);
+        if (!quiet) logger.info(stdout);
         resolve();
       } else {
-        if (!quiet) console.error(stderr);
+        if (!quiet) logger.error(stderr);
         reject(new Error(`Event sourcing failed with code ${code}`));
       }
     });

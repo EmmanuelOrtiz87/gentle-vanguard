@@ -7,6 +7,8 @@
 
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
+const logger = log('ML-MODEL-ERROR-INTERCEPTOR');
+import { log } from '../utils/logger.js';
 
 const ROOT = process.cwd();
 const REGISTRY_PATH = join(ROOT, 'config', 'model-health-registry.json');
@@ -150,7 +152,7 @@ export function wrapTaskWithFallback(originalTask: Function): Function {
       const result = await interceptTaskError(context);
 
       if (result.retry && result.newModel) {
-        console.error(result.message);
+        logger.error(result.message);
         // Retry with new model would require session restart
         // Cannot dynamically switch without restart in this architecture
         throw new Error(
