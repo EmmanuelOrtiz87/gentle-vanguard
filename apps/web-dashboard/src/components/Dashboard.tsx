@@ -48,16 +48,10 @@ import { ActivityTimeline } from './ActivityTimeline';
 import { SloPanel } from './SloPanel';
 import { DashboardRuntimeHealth } from './DashboardRuntimeHealth';
 import { ProcessHygienePanel } from './ProcessHygienePanel';
+import { LoopGuardPanel } from './LoopGuardPanel';
 import { AnalyticsWidget } from './AnalyticsWidget';
 import { InfoPopup } from './InfoPopup';
-import {
-  LocaleContext,
-  useLocale,
-  useT,
-  LOCALE_NAMES,
-  LOCALE_FLAGS,
-  t,
-} from '../hooks/useLocale';
+import { LocaleContext, useLocale, useT, LOCALE_NAMES, LOCALE_FLAGS, t } from '../hooks/useLocale';
 import { useStackTables } from '../hooks/useStackTables';
 import type { Locale } from '../hooks/useLocale';
 import type { ModelCost, CostInsight } from '../types/dashboard';
@@ -122,24 +116,21 @@ function LiveDataStatus({
 }) {
   const { tt } = useT();
   const sourceLabel =
-    source === 'sqlite'
-      ? 'SQLite'
-      : source === 'json'
-        ? 'JSON fallback'
-        : 'native aggregator';
+    source === 'sqlite' ? 'SQLite' : source === 'json' ? 'JSON fallback' : 'native aggregator';
   const timeLabel =
     lastUpdated > 0 ? new Date(lastUpdated).toLocaleTimeString() : tt('ui.waiting_data');
 
   // Dot color and label driven by explicit dataState when available.
   const stateConfig: Record<string, { dotClass: string; label: string }> = {
-    live:    { dotClass: 'is-connected',    label: tt('ui.live_stream') },
-    stale:   { dotClass: 'is-stale',        label: tt('ui.data_stale') },
-    error:   { dotClass: 'is-reconnecting', label: tt('ui.recovery_polling') },
+    live: { dotClass: 'is-connected', label: tt('ui.live_stream') },
+    stale: { dotClass: 'is-stale', label: tt('ui.data_stale') },
+    error: { dotClass: 'is-reconnecting', label: tt('ui.recovery_polling') },
     loading: { dotClass: 'is-reconnecting', label: tt('ui.waiting_data') },
   };
   const resolved = dataState ? stateConfig[dataState] : undefined;
   const dotClass = resolved?.dotClass ?? (connected ? 'is-connected' : 'is-reconnecting');
-  const stateLabel = resolved?.label ?? (connected ? tt('ui.live_stream') : tt('ui.recovery_polling'));
+  const stateLabel =
+    resolved?.label ?? (connected ? tt('ui.live_stream') : tt('ui.recovery_polling'));
 
   return (
     <div className="gv-live-status" role="status" aria-live="polite">
@@ -225,7 +216,9 @@ function DashboardInner() {
               </h1>
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                 {tt('ui.app_subtitle')}
-                {wsConnected && <span className="ml-2 text-green-500">● {tt('ui.ws_connected')}</span>}
+                {wsConnected && (
+                  <span className="ml-2 text-green-500">● {tt('ui.ws_connected')}</span>
+                )}
                 {!wsConnected && useWebSocket && (
                   <span className="ml-2 text-yellow-500">● {tt('ui.ws_reconnecting')}</span>
                 )}
@@ -304,11 +297,17 @@ function DashboardInner() {
       </header>
 
       <OfflineBanner isOffline={isOffline} lastUpdated={lastUpdated} />
-      <LiveDataStatus connected={wsConnected} lastUpdated={lastUpdated} source={data.source} dataState={dataState} />
+      <LiveDataStatus
+        connected={wsConnected}
+        lastUpdated={lastUpdated}
+        source={data.source}
+        dataState={dataState}
+      />
 
       <main className="gv-dashboard-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <DashboardRuntimeHealth />
         <ProcessHygienePanel />
+        <LoopGuardPanel />
         <AnalyticsWidget />
         {/* Row 1: Core KPIs */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

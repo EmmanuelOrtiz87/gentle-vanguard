@@ -20,6 +20,24 @@ import { ProcessLock } from './process-lock-manager.js';
 
 const LOG = createLogger('SESSION-AUTOSTART');
 
+// ─── Loop-Guard soft check (ADR-0022, F4.1) ─────────────────────────────────
+async function checkLoopGuardSoft(): Promise<void> {
+  try {
+    const r = runSync('npx', ['tsx', 'src/core/orchestrator-loop-guard.ts'], {
+      timeout: 5000,
+      cwd: ROOT,
+    });
+    const out = (r.stdout ?? '').toString();
+    if (out.includes('intent-loop') || out.includes('"break": true')) {
+      LOG.info('[LOOP-GUARD] Soft check: intent-loop detection works (self-test PASS)');
+    } else {
+      LOG.warn('[LOOP-GUARD] Soft check: unexpected self-test output — verify guard');
+    }
+  } catch {
+    LOG.warn('[LOOP-GUARD] Soft check: self-test failed to run — verify guard module');
+  }
+}
+
 // ─── Auto-Checkpoint Helper ──────────────────────────────────────────────
 async function createAutoCheckpoint(): Promise<void> {
   try {
@@ -484,6 +502,10 @@ function writeProgress(patch: Partial<AutostartProgress>): void {
 
 async function main() {
   const sessionStartTime = new Date().toISOString();
+
+  // Loop-guard soft check (ADR-0022): runs before lock so every turn gets a signal,
+  // but never blocks the pipeline — soft WARN only.
+  await checkLoopGuardSoft();
 
   // Lock check: only run once per OS user session
   if (!checkLock()) {
