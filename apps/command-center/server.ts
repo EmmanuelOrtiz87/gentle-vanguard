@@ -3,7 +3,12 @@ import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from '
 import { join, resolve } from 'node:path';
 import { connect } from 'node:net';
 import { request } from 'node:http';
-import { spawn as nodeSpawn, spawnSync, type ChildProcess, type SpawnOptions } from 'node:child_process';
+import {
+  spawn as nodeSpawn,
+  spawnSync,
+  type ChildProcess,
+  type SpawnOptions,
+} from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import { getFreePort } from '../../src/ops/dashboard-common';
 
@@ -405,6 +410,32 @@ function json(res: ServerResponse, status: number, body: unknown): void {
   res.writeHead(status, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
   res.end(JSON.stringify(body));
 }
+function loopbackOrigin(origin: string | undefined): string | undefined {
+  if (!origin) return undefined;
+  try {
+    const parsed = new URL(origin);
+    return ['127.0.0.1', 'localhost', '::1'].includes(parsed.hostname) ? origin : undefined;
+  } catch {
+    return undefined;
+  }
+}
+function corsHeaders(origin: string | undefined): Record<string, string> {
+  const allowed = loopbackOrigin(origin);
+  return allowed ? { 'Access-Control-Allow-Origin': allowed, Vary: 'Origin' } : {};
+}
+function writeJson(
+  res: ServerResponse,
+  status: number,
+  body: unknown,
+  origin: string | undefined,
+): void {
+  res.writeHead(status, {
+    'Content-Type': 'application/json',
+    'Cache-Control': 'no-store',
+    ...corsHeaders(origin),
+  });
+  res.end(JSON.stringify(body));
+}
 function validHost(host: string | undefined): boolean {
   if (!host) return false;
   const hostname = host.replace(/^\[/, '').split(']')[0].split(':')[0].toLowerCase();
@@ -414,14 +445,52 @@ export function createCommandCenterServer(controller = createAppsController()) {
   return createHttpServer(async (req, res) => {
     if (!validHost(req.headers.host)) return json(res, 400, { error: 'invalid-host' });
     const url = new URL(req.url ?? '/', 'http://127.0.0.1');
+    const origin = req.headers.origin;
+    if (url.pathname.startsWith('/api/') && req.method === 'OPTIONS') {
+      res.writeHead(204, {
+        ...corsHeaders(origin),
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Max-Age': '600',
+      });
+      res.end();
+      return;
+    }
     if (url.pathname === '/api/health' && req.method === 'GET')
-      return json(res, 200, { ok: true, app: 'command-center' });
+      return writeJson(res, 200, { ok: true, app: 'command-center' }, origin);
     if (url.pathname === '/api/apps' && req.method === 'GET')
-      return json(res, 200, await controller.list());
+      return writeJson(res, 200, await controller.list(), origin);
     const match = url.pathname.match(/^\/api\/apps\/([^/]+)\/(start|stop)$/);
     if (match && req.method === 'POST') {
       const result = await controller[match[2] as 'start' | 'stop'](decodeURIComponent(match[1]));
-      return json(res, result.status, result.body);
+      return writeJson(res, result.status, result.body, origin);
+    }
+    const preset = url.pathname.match(/^\/api\/presets\/(start-all|stop-all)$/);
+    if (preset && req.method === 'POST') {
+      const action = preset[1] === 'start-all' ? 'start' : 'stop';
+      const apps = await controller.list();
+      const results: Array<{ id: AppId; status: AppStatus }> = [];
+      for (const app of apps) {
+        const shouldAct = action === 'start' ? app.status !== 'running' : app.status !== 'stopped';
+        if (shouldAct) {
+          const result = await controller[action](app.id);
+          if (result.status >= 400) return writeJson(res, result.status, result.body, origin);
+          const finalApp = result.body as AppInfo;
+          results.push({ id: app.id, status: finalApp.status });
+        } else {
+          results.push({ id: app.id, status: app.status });
+        }
+      }
+      return writeJson(res, 200, { results }, origin);
+    }
+    if (url.pathname === '/widget.js' && req.method === 'GET') {
+      res.writeHead(200, {
+        'Content-Type': 'text/javascript; charset=utf-8',
+        'Cache-Control': 'no-store',
+        ...corsHeaders(origin),
+      });
+      res.end(readFileSync(new URL('./public/widget.js', import.meta.url), 'utf8'));
+      return;
     }
     if (url.pathname === '/' || url.pathname === '/index.html') {
       // no-store: the UI is a single evolving file — a stale cached copy would
@@ -433,7 +502,9 @@ export function createCommandCenterServer(controller = createAppsController()) {
       res.end(readFileSync(new URL('./public/index.html', import.meta.url), 'utf8'));
       return;
     }
-    json(res, 404, { error: 'not-found' });
+    return url.pathname.startsWith('/api/')
+      ? writeJson(res, 404, { error: 'not-found' }, origin)
+      : json(res, 404, { error: 'not-found' });
   });
 }
 
@@ -480,8 +551,7 @@ export async function startServer(): Promise<void> {
   mkdirSync(runtimeDir(root), { recursive: true });
   // CC_PID_FILE: tests/smoke run their own server instance — without this
   // override they would clobber the production pidfile (write + SIGTERM unlink).
-  const pidFile =
-    process.env.CC_PID_FILE ?? join(runtimeDir(root), 'command-center.pid');
+  const pidFile = process.env.CC_PID_FILE ?? join(runtimeDir(root), 'command-center.pid');
   writeFileSync(pidFile, String(process.pid));
   const cleanup = () => {
     try {

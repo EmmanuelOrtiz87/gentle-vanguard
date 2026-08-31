@@ -5,22 +5,31 @@ import { request } from 'node:http';
 const port = 18090;
 const pidFile = '.runtime/command-center-smoke.pid';
 const child = spawn(process.execPath, ['--import', 'tsx', 'apps/command-center/server.ts'], {
-      env: {
-        ...process.env,
-        CC_PORT: String(port),
-        // Isolated pidfile — never touch the production command-center.pid.
-        CC_PID_FILE: pidFile,
-      },
+  env: {
+    ...process.env,
+    CC_PORT: String(port),
+    // Isolated pidfile — never touch the production command-center.pid.
+    CC_PID_FILE: pidFile,
+  },
   stdio: 'ignore',
   windowsHide: true,
 });
-const get = (path, method = 'GET') =>
+const get = (path, method = 'GET', headers = {}) =>
   new Promise((resolve, reject) => {
-    const req = request({ host: '127.0.0.1', port, path, method }, (res) => {
-      let body = '';
-      res.on('data', (chunk) => (body += chunk));
-      res.on('end', () => resolve({ status: res.statusCode, body: JSON.parse(body) }));
-    });
+    const req = request(
+      { host: '127.0.0.1', port, path, method, headers, timeout: 120000 },
+      (res) => {
+        let body = '';
+        res.on('data', (chunk) => (body += chunk));
+        res.on('end', () => {
+          let parsed = body;
+          try {
+            parsed = JSON.parse(body);
+          } catch {}
+          resolve({ status: res.statusCode, headers: res.headers, body: parsed });
+        });
+      },
+    );
     req.on('error', reject);
     req.end();
   });
@@ -54,6 +63,16 @@ try {
   const dashboard = await get('/api/apps/dashboard/start', 'POST');
   assert.equal(dashboard.status, 200);
   assert.notEqual(dashboard.status, 409);
+  const widget = await get('/widget.js');
+  assert.equal(widget.status, 200);
+  assert.match(widget.headers['content-type'], /^text\/javascript; charset=utf-8$/);
+  assert.match(widget.body, /data-app/);
+  const options = await get('/api/apps', 'OPTIONS', { Origin: 'http://127.0.0.1:5173' });
+  assert.equal(options.status, 204);
+  assert.equal(options.headers['access-control-allow-origin'], 'http://127.0.0.1:5173');
+  const preset = await get('/api/presets/start-all', 'POST');
+  assert.equal(preset.status, 200);
+  assert.ok(Array.isArray(preset.body.results));
   console.log('command-center smoke: PASS');
 } finally {
   child.kill('SIGTERM');

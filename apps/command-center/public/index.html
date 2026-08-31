@@ -79,6 +79,14 @@
       .refresh {
         white-space: nowrap;
       }
+      .presets {
+        display: flex;
+        gap: 9px;
+        margin: -12px 0 20px;
+      }
+      .preset-stop {
+        border-color: #7f1d1d;
+      }
       .notice {
         padding: 12px 15px;
         border: 1px solid var(--error);
@@ -210,6 +218,12 @@
           ↻ Actualizar
         </button>
       </header>
+      <div class="presets" aria-label="Presets">
+        <button id="start-all" onclick="preset('start-all')">⏻ Arrancar todo</button>
+        <button id="stop-all" class="preset-stop" onclick="preset('stop-all')">
+          ⏹ Detener todo
+        </button>
+      </div>
       <div id="error" class="notice" role="alert" hidden></div>
       <section id="apps" class="grid" aria-live="polite">
         <div class="empty">Cargando aplicaciones…</div>
@@ -230,6 +244,7 @@
       });
       const labels = { running: 'En ejecución', stopped: 'Detenida', partial: 'Parcial' };
       let busy = '';
+      let presetBusy = false;
       const esc = (s) =>
         String(s).replace(
           /[&<>"']/g,
@@ -251,11 +266,12 @@
         e.hidden = false;
       }
       function render(apps) {
+        window.currentApps = apps;
         document.querySelector('#apps').innerHTML =
           apps
             .map(
               (a) =>
-                `<article class="card"><div class="card-top"><div><h2>${esc(a.name)}</h2><p class="description">${esc(a.description)}</p></div><span class="badge ${a.status}">${labels[a.status]}</span></div><div class="processes">${a.processes.map((p) => `<div class="process"><span>${esc(p.name)}</span><span class="${p.alive ? 'up' : 'down'}">${p.alive ? 'PID ' + (p.pid || '—') + ' · Puerto ' + p.port : 'Puerto ' + p.port + ' · Sin conexión'}</span></div>`).join('')}</div><div class="actions"><button class="power" ${busy === a.id ? 'disabled' : ''} onclick="toggle('${a.id}','${a.status}')" aria-label="${a.status === 'running' ? 'Detener' : 'Iniciar'} ${esc(a.name)}">⏻ ${a.status === 'running' ? 'Detener' : 'Iniciar'}</button><button class="open" onclick="window.open('${a.url}','_blank','noopener,noreferrer')" aria-label="Abrir ${esc(a.name)}">↗ Abrir</button></div></article>`,
+                `<article class="card"><div class="card-top"><div><h2>${esc(a.name)}</h2><p class="description">${esc(a.description)}</p></div><span class="badge ${a.status}">${labels[a.status]}</span></div><div class="processes">${a.processes.map((p) => `<div class="process"><span>${esc(p.name)}</span><span class="${p.alive ? 'up' : 'down'}">${p.alive ? 'PID ' + (p.pid || '—') + ' · Puerto ' + p.port : 'Puerto ' + p.port + ' · Sin conexión'}</span></div>`).join('')}</div><div class="actions"><button class="power" ${busy || presetBusy ? 'disabled' : ''} onclick="toggle('${a.id}','${a.status}')" aria-label="${a.status === 'running' ? 'Detener' : 'Iniciar'} ${esc(a.name)}">⏻ ${a.status === 'running' ? 'Detener' : 'Iniciar'}</button><button class="open" onclick="window.open('${a.url}','_blank','noopener,noreferrer')" aria-label="Abrir ${esc(a.name)}">↗ Abrir</button></div></article>`,
             )
             .join('') || '<div class="empty">No hay aplicaciones registradas.</div>';
       }
@@ -273,6 +289,31 @@
           show(e.message);
         } finally {
           busy = '';
+          await load();
+        }
+      }
+      async function preset(name) {
+        if (name === 'stop-all') {
+          const apps = await fetch('/api/apps')
+            .then((r) => r.json())
+            .catch(() => []);
+          const running = apps.filter((app) => app.status === 'running').length;
+          if (!confirm('¿Detener ' + running + ' aplicaciones en ejecución?')) return;
+        }
+        presetBusy = true;
+        document.querySelector('#start-all').disabled = true;
+        document.querySelector('#stop-all').disabled = true;
+        render(window.currentApps || []);
+        try {
+          const r = await fetch('/api/presets/' + name, { method: 'POST' });
+          if (!r.ok) throw Error('HTTP ' + r.status);
+          await load();
+        } catch (e) {
+          show(e.message);
+        } finally {
+          presetBusy = false;
+          document.querySelector('#start-all').disabled = false;
+          document.querySelector('#stop-all').disabled = false;
           await load();
         }
       }
