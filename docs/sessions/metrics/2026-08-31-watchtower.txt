@@ -1,0 +1,174 @@
+
+> watchtower:health
+> npx tsx src/core/maintenance-watchtower.ts --action health
+
+===============================================
+ [MW] Maintenance Watchtower (v2.0.0)
+    Action: health | Force: false | Interval: 60s
+===============================================
+[36m06:39:27.973 [CORE-WATCHTOWER-CHECKS-DASHBOARD][0m  [Dashboard WS] Checking... 
+[36m06:39:27.976 [CORE-WATCHTOWER-CHECKS-INFRA][0m  [CodeGraph] Checking... 
+[36m06:39:27.977 [CORE-WATCHTOWER-CONTEXT][0m  [codegraph] index database: PASS 
+[36m06:39:27.979 [CORE-WATCHTOWER-CHECKS-DASHBOARD][0m  [GV Analytics] Checking... 
+[36m06:39:27.979 [CORE-WATCHTOWER-CONTEXT][0m  [gv-analytics] build (dist/index.html): PASS 
+[36m06:39:27.979 [CORE-WATCHTOWER-CHECKS-INFRA][0m  [Timeout Daemon] Checking... 
+[36m06:39:28.669 [CORE-WATCHTOWER-CONTEXT][0m  [timeout-daemon] daemon process: PASS - process detected 
+[36m06:39:28.669 [CORE-WATCHTOWER-CHECKS-INFRA][0m  [Process Hygiene] Scanning for orphans/duplicates... 
+[36m06:39:29.382 [CORE-WATCHTOWER-CHECKS-INFRA][0m  [ML Embeddings] Checking... 
+[36m06:39:29.382 [CORE-WATCHTOWER-CONTEXT][0m  [ml-embeddings] skill-embeddings.json freshness: PASS - 31.4 hours 
+[36m06:39:29.401 [CORE-WATCHTOWER-CONTEXT][0m  [ml-embeddings] embedding files: PASS - 419 files 
+[36m06:39:29.402 [CORE-WATCHTOWER-CONTEXT][0m  [ml-embeddings] skill-embedder.ts: PASS 
+[36m06:39:29.402 [CORE-WATCHTOWER-CONTEXT][0m  [ml-embeddings] ml-router.ts: PASS 
+[36m06:39:29.431 [CORE-WATCHTOWER-CONTEXT][0m  [ml-embeddings] index parseable: PASS - 419 skills 
+[36m06:39:29.432 [CORE-WATCHTOWER-CHECKS-INFRA][0m  [Engram] Checking... 
+[36m06:39:29.432 [CORE-WATCHTOWER-CONTEXT][0m  [engram] reindex script: PASS 
+[36m06:39:29.432 [CORE-WATCHTOWER-CONTEXT][0m  [engram] reindex freshness: PASS - 60.0 hours (auto-reindex enabled) 
+[36m06:39:29.435 [CORE-WATCHTOWER-CONTEXT][0m  [engram] engram directory: PASS 
+[36m06:39:29.987 [CORE-WATCHTOWER-CONTEXT][0m  [engram] doctor: PASS - MCP server active (skip to avoid deadlock) 
+[36m06:39:29.988 [CORE-WATCHTOWER-CHECKS-INFRA][0m  [MCP] Checking... 
+[36m06:39:29.988 [CORE-WATCHTOWER-CONTEXT][0m  [mcp] skill-server.js: PASS 
+[36m06:39:29.988 [CORE-WATCHTOWER-CONTEXT][0m  [mcp] skill-server.ts: PASS 
+[36m06:39:29.988 [CORE-WATCHTOWER-CONTEXT][0m  [mcp] mcp-bridge.ts: PASS 
+[36m06:39:29.988 [CORE-WATCHTOWER-CONTEXT][0m  [mcp] mcp-bridge.ts (dashboard): PASS 
+[36m06:39:29.989 [CORE-WATCHTOWER-CONTEXT][0m  [mcp] config files: PASS - 3 of 3 
+[36m06:39:32.127 [CORE-WATCHTOWER-CONTEXT][0m  [mcp] bridge health: PASS - bridge verified 
+[36m06:39:32.128 [CORE-WATCHTOWER-CONTEXT][0m  [mcp] mcp-registry.json: PASS 
+[36m06:39:32.128 [CORE-WATCHTOWER-CONTEXT][0m  [mcp] mcp-manager.ts: PASS 
+[36m06:39:32.128 [CORE-WATCHTOWER-CONTEXT][0m  [mcp] mcp-gateway.ts: PASS 
+[36m06:39:32.128 [CORE-WATCHTOWER-CONTEXT][0m  [mcp] mcp-gateway-api.ts (dashboard): PASS 
+[36m06:39:32.128 [CORE-WATCHTOWER-CONTEXT][0m  [mcp] mcp-templates.json: PASS 
+[36m06:39:32.128 [CORE-WATCHTOWER-CHECKS-CONFIG][0m  [Session] Checking... 
+[36m06:39:32.129 [CORE-WATCHTOWER-CONTEXT][0m  [session] session-start-optimized.ts: PASS 
+[36m06:39:32.129 [CORE-WATCHTOWER-CONTEXT][0m  [session] session-manager.ts: PASS 
+[36m06:39:32.129 [CORE-WATCHTOWER-CONTEXT][0m  [session] pre-process-input.ts: PASS 
+[36m06:39:32.129 [CORE-WATCHTOWER-CONTEXT][0m  [session] session-start-optimized.ts: PASS 
+[36m06:39:32.129 [CORE-WATCHTOWER-CONTEXT][0m  [session] session-cleanup-start.ts: PASS 
+[36m06:39:32.129 [CORE-WATCHTOWER-CONTEXT][0m  [session] autostart config: PASS 
+[36m06:39:32.129 [CORE-WATCHTOWER-CHECKS-CONFIG][0m  [Hooks] Checking... 
+[36m06:39:32.129 [CORE-WATCHTOWER-CONTEXT][0m  [hooks] .lefthook.yml: PASS 
+[36m06:39:32.448 [CORE-WATCHTOWER-CONTEXT][0m  [hooks] lefthook validate: PASS 
+[36m06:39:32.448 [CORE-WATCHTOWER-CHECKS-CONFIG][0m  [Configs] Checking... 
+[36m06:39:32.449 [CORE-WATCHTOWER-CONTEXT][0m  [configs] config/orchestrator.json: PASS 
+[36m06:39:32.450 [CORE-WATCHTOWER-CONTEXT][0m  [configs] config/auto-delegation.json: PASS 
+[36m06:39:32.451 [CORE-WATCHTOWER-CONTEXT][0m  [configs] config/session-autostart.config.json: PASS 
+[36m06:39:32.451 [CORE-WATCHTOWER-CONTEXT][0m  [configs] config/security-policy.json: PASS 
+[36m06:39:32.451 [CORE-WATCHTOWER-CONTEXT][0m  [configs] config/trusted-users-policy.json: PASS 
+[36m06:39:32.452 [CORE-WATCHTOWER-CONTEXT][0m  [configs] config/security-privacy.json: PASS 
+[36m06:39:32.452 [CORE-WATCHTOWER-CONTEXT][0m  [configs] config/sre-error-budgets.json: PASS 
+[36m06:39:32.452 [CORE-WATCHTOWER-CONTEXT][0m  [configs] config/dashboard-alerts.json: PASS 
+[36m06:39:32.452 [CORE-WATCHTOWER-CONTEXT][0m  [configs] opencode.json: PASS 
+[36m06:39:32.453 [CORE-WATCHTOWER-CONTEXT][0m  [configs] renovate.json: PASS 
+[36m06:39:32.456 [CORE-WATCHTOWER-CHECKS-CONFIG][0m  [Tool Configs] Checking... 
+[36m06:39:32.456 [CORE-WATCHTOWER-CONTEXT][0m  [tool-configs] CLAUDE.md: PASS 
+[36m06:39:32.456 [CORE-WATCHTOWER-CONTEXT][0m  [tool-configs] AGENTS.md: PASS 
+[36m06:39:32.456 [CORE-WATCHTOWER-CONTEXT][0m  [tool-configs] .clinerules: PASS 
+[36m06:39:32.456 [CORE-WATCHTOWER-CONTEXT][0m  [tool-configs] .cursorrules: PASS 
+[36m06:39:32.456 [CORE-WATCHTOWER-CONTEXT][0m  [tool-configs] SECURITY.md: PASS 
+[36m06:39:32.457 [CORE-WATCHTOWER-CONTEXT][0m  [tool-configs] .nvmrc: PASS 
+[36m06:39:32.457 [CORE-WATCHTOWER-CONTEXT][0m  [tool-configs] .node-version: PASS 
+[36m06:39:32.457 [CORE-WATCHTOWER-CONTEXT][0m  [tool-configs] .windsurf/config.json: PASS 
+[36m06:39:32.457 [CORE-WATCHTOWER-CHECKS-SECURITY][0m  [Security] Checking... 
+[36m06:39:32.457 [CORE-WATCHTOWER-CONTEXT][0m  [security] config/owner-auth.json.enc: PASS 
+[36m06:39:32.457 [CORE-WATCHTOWER-CONTEXT][0m  [security] config/owner-auth.json.integrity: PASS 
+[36m06:39:32.457 [CORE-WATCHTOWER-CONTEXT][0m  [security] src/security/privacy-gateway.ts: PASS 
+[36m06:39:32.457 [CORE-WATCHTOWER-CONTEXT][0m  [security] src/security/security-orchestrator.ts: PASS 
+[36m06:39:32.457 [CORE-WATCHTOWER-CONTEXT][0m  [security] SECURITY.md: PASS 
+[36m06:39:32.457 [CORE-WATCHTOWER-CONTEXT][0m  [security] .github/CODEOWNERS: PASS 
+[36m06:39:32.457 [CORE-WATCHTOWER-CONTEXT][0m  [security] renovate.json: PASS 
+[36m06:39:32.458 [CORE-WATCHTOWER-CHECKS-SECURITY][0m  [Secret Scanner] Checking... 
+[36m06:39:32.458 [CORE-WATCHTOWER-CONTEXT][0m  [secret-scanner] module (src/security/secret-scanner.ts): PASS 
+[36m06:39:32.458 [CORE-WATCHTOWER-CONTEXT][0m  [secret-scanner] CLI (src/security/secret-scanner-cli.ts): PASS 
+[36m06:39:32.459 [CORE-WATCHTOWER-CONTEXT][0m  [secret-scanner] config (config/secret-scanner.json): PASS 
+[36m06:39:32.459 [CORE-WATCHTOWER-CONTEXT][0m  [secret-scanner] tests (tests/unit/secret-scanner.test.ts): PASS 
+[36m06:39:32.460 [CORE-WATCHTOWER-CONTEXT][0m  [secret-scanner] patterns mode: PASS - patterns=all 
+[36m06:39:32.460 [CORE-WATCHTOWER-CHECKS-SECURITY][0m  [CLI Guard] Checking... 
+[36m06:39:32.521 [CORE-WATCHTOWER-CONTEXT][0m  [cli-guard] pathToFileURL guard: PASS - No broken CLI guards found 
+  [Hidden Spawns] Checking invisible-execution invariants...
+[36m06:39:33.039 [CORE-WATCHTOWER-CONTEXT][0m  [hidden-spawns] invisible execution: PASS - No visible-spawn patterns found 
+  [Cloud Connectors] Checking...
+[36m06:39:33.040 [CORE-WATCHTOWER-CONTEXT][0m  [cloud-connectors] mode: PASS - Local-only mode (no cloud dependencies) 
+[36m06:39:33.040 [CORE-WATCHTOWER-CONTEXT][0m  [cloud-connectors] local metrics: PASS - No local metrics yet (will be created on first use) 
+[36m06:39:33.040 [CORE-WATCHTOWER-CONTEXT][0m  [cloud-connectors] cloud scripts: PASS - Cloud scripts removed (local-only stack) 
+[36m06:39:33.040 [CORE-WATCHTOWER-CHECKS-DATA][0m  [Tracing] Checking... 
+[36m06:39:33.040 [CORE-WATCHTOWER-CONTEXT][0m  [tracing] trace files: PASS - 52 trace file(s) 
+[36m06:39:33.041 [CORE-WATCHTOWER-CONTEXT][0m  [tracing] prometheus metrics: PASS - last export 1.5 hrs ago 
+[36m06:39:33.041 [CORE-WATCHTOWER-CONTEXT][0m  [tracing] instrumentation script: PASS 
+[36m06:39:33.041 [CORE-WATCHTOWER-CHECKS-DATA][0m  [State Persistence] Checking... 
+[36m06:39:33.041 [CORE-WATCHTOWER-CONTEXT][0m  [state-persistence] checkpoints: PASS - 3 checkpoint(s) 
+[36m06:39:33.041 [CORE-WATCHTOWER-CONTEXT][0m  [state-persistence] manifests: PASS - 3 manifest(s) 
+[36m06:39:33.042 [CORE-WATCHTOWER-CONTEXT][0m  [state-persistence] snapshots: PASS - 0 snapshot(s) 
+[36m06:39:33.042 [CORE-WATCHTOWER-CONTEXT][0m  [state-persistence] scripts: PASS - All 3 scripts present 
+[36m06:39:33.042 [CORE-WATCHTOWER-CHECKS-DATA][0m  [Audit Pipeline] Checking... 
+[36m06:39:33.053 [CORE-WATCHTOWER-CONTEXT][0m  [audit] log files: PASS - 8 file(s), 351 events 
+[36m06:39:33.053 [CORE-WATCHTOWER-CONTEXT][0m  [audit] index: PASS - Available 
+[36m06:39:33.053 [CORE-WATCHTOWER-CONTEXT][0m  [audit] pipeline script: PASS 
+[36m06:39:33.054 [CORE-WATCHTOWER-CONTEXT][0m  [audit] security configs: PASS - RBAC + CSP present 
+[36m06:39:33.054 [CORE-WATCHTOWER-CHECKS-DATA][0m  [Governance] Checking... 
+[36m06:39:33.054 [CORE-WATCHTOWER-CONTEXT][0m  [governance] rules/NORMATIVAS-PERFORMANCE.md: PASS 
+[36m06:39:33.054 [CORE-WATCHTOWER-CONTEXT][0m  [governance] rules/SDD-STRICT-TDD.md: PASS 
+[36m06:39:33.054 [CORE-WATCHTOWER-CONTEXT][0m  [governance] rules/PER-PHASE-MODEL-ROUTING.md: PASS 
+[36m06:39:33.054 [CORE-WATCHTOWER-CONTEXT][0m  [governance] openspec/config.yaml: PASS 
+[36m06:39:33.054 [CORE-WATCHTOWER-CONTEXT][0m  [governance] rules/NORMATIVA-PNPM-SECURITY.md: PASS 
+[36m06:39:33.055 [CORE-WATCHTOWER-CHECKS-DATA][0m  [gentle-vanguard-db] Checking... 
+[36m06:39:33.055 [CORE-WATCHTOWER-CONTEXT][0m  [gentle-vanguard-db] database file: PASS - 18.38 MB 
+[36m06:39:33.055 [CORE-WATCHTOWER-CONTEXT][0m  [gentle-vanguard-db] WAL file: PASS - 0.41 MB 
+[36m06:39:33.300 [CORE-WATCHTOWER-CONTEXT][0m  [gentle-vanguard-db] integrity check: PASS - ok 
+[36m06:39:35.459 [CORE-WATCHTOWER-CONTEXT][0m  [gentle-vanguard-db] size: PASS - 33 tables, 74221 rows 
+[36m06:39:35.459 [CORE-WATCHTOWER-CHECKS-DATA][0m  [model-provider-health] Checking... 
+[36m06:39:35.460 [CORE-WATCHTOWER-CONTEXT][0m  [model-provider-health] config: PASS - model-health.json present 
+[36m06:39:35.460 [CORE-WATCHTOWER-CONTEXT][0m  [model-provider-health] state: PASS - No models tracked 
+[36m06:39:35.460 [CORE-WATCHTOWER-CONTEXT][0m  [model-provider-health] active model: PASS - opencode-go/gpt-5.6-luna 
+  [Web Crawler] Checking...
+[36m06:39:35.460 [CORE-WATCHTOWER-CONTEXT][0m  [web-crawler] config file: PASS 
+[36m06:39:35.460 [CORE-WATCHTOWER-CONTEXT][0m  [web-crawler] provider ready: PASS - Fallback activo (Jina Reader + DDG HTML + Bing RSS), sin API key 
+[36m06:39:35.461 [CORE-WATCHTOWER-CONTEXT][0m  [web-crawler] cache directory: PASS - Ready 
+[36m06:39:35.461 [CORE-WATCHTOWER-CHECKS-INFRA][0m  [Loop-Guard] Checking... 
+[36m06:39:35.461 [CORE-WATCHTOWER-CONTEXT][0m  [loop-guard] guard module: PASS - src/core/orchestrator-loop-guard.ts present 
+[36m06:39:35.461 [CORE-WATCHTOWER-CONTEXT][0m  [loop-guard] guard tests: PASS - 5 tests present 
+[36m06:39:35.461 [CORE-WATCHTOWER-CONTEXT][0m  [loop-guard] live metrics: PASS - config/stack-metrics.json present 
+[36m06:39:37.375 [CORE-WATCHTOWER-CONTEXT][0m  [loop-guard] self-test: PASS - intent-loop detection works 
+[36m06:39:37.432 [CORE-WATCHTOWER-CONTEXT][0m  [process-hygiene] orphan/duplicate sweep: PASS - no orphans, duplicates or stale PID files 
+[36m06:39:37.439 [CORE-WATCHTOWER-CONTEXT][0m  [configs] schema validation (8 schemas): PASS 
+[36m06:39:37.860 [CORE-WATCHTOWER-CONTEXT][0m  [codegraph] server process: PASS - PID 34092 running 
+[36m06:39:37.860 [CORE-WATCHTOWER-CONTEXT][0m  [gv-analytics] API HTTP (port 4754): WARN - Not running — start with: npm run analytics:start 
+[36m06:39:37.861 [CORE-WATCHTOWER-CONTEXT][0m  [gv-analytics] API process: WARN - No pidfile, API not responding 
+[36m06:39:37.861 [CORE-WATCHTOWER-CONTEXT][0m  [gv-analytics] Vite dev server: PASS - Not in dev mode (use built artifacts) 
+[36m06:39:37.861 [CORE-WATCHTOWER-CONTEXT][0m  [gv-analytics] MCP registration (mcp-registry.json): PASS - gv-analytics-atlassian registered 
+[36m06:39:37.861 [CORE-WATCHTOWER-CONTEXT][0m  [gv-analytics] OpenCode MCP wire (opencode.json): PASS - gv-analytics-atlassian enabled 
+[36m06:39:37.866 [CORE-WATCHTOWER-CONTEXT][0m  [dashboard-ws] HTTP API (port 8080): PASS - Responding 
+[36m06:39:37.868 [CORE-WATCHTOWER-CONTEXT][0m  [dashboard-ws] watchdog process: PASS - PID 35796 running 
+[36m06:39:37.922 [CORE-WATCHTOWER-CONTEXT][0m  [dashboard-ws] WS server process: PASS - PID 16956 running 
+[36m06:39:37.922 [CORE-WATCHTOWER-CONTEXT][0m  [dashboard-ws] build (dist/index.html): PASS 
+
+  [witr] tracing causal chain for failing components...
+  [witr] trace port 4754 failed: witr could not trace port 4754 (binary missing or query failed)
+
+=======================================
+  PASS: 106 | WARN: 2 | FAIL: 0 | SKIP: 0 | Total: 108
+      codegraph: OK
+      gv-analytics: OK
+      timeout-daemon: OK
+      ml-embeddings: OK
+      engram: OK
+      mcp: OK
+      session: OK
+      hooks: OK
+      configs: OK
+      tool-configs: OK
+      security: OK
+      secret-scanner: OK
+      cli-guard: OK
+      hidden-spawns: OK
+      cloud-connectors: OK
+      tracing: OK
+      state-persistence: OK
+      audit: OK
+      governance: OK
+      gentle-vanguard-db: OK
+      model-provider-health: OK
+      web-crawler: OK
+      loop-guard: OK
+      process-hygiene: OK
+      dashboard-ws: OK
+=======================================
+===============================================

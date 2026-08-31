@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Single source of truth for live stack metrics (F4.1). Generated values must be verified via `gv info` or `npm run watchtower:health`. Do not hardcode these numbers in docs — cite this file.",
+  "generated": "2026-08-31T06:16:00Z",
+  "source": "config/stack-metrics.json",
+  "metrics": {
+    "skills": {
+      "count": 199,
+      "location": "skills/",
+      "verifiedBy": "Get-ChildItem skills -Directory | Measure-Object"
+    },
+    "src": {
+      "tsFiles": 551,
+      "tests": 161,
+      "domains": 50,
+      "verifiedBy": "Get-ChildItem src -Recurse -Filter *.ts"
+    },
+    "nexus": {
+      "tables": 33,
+      "rows": 73777,
+      "sizeMB": 18.27,
+      "migrations": 18,
+      "dbPath": ".runtime/gentle-vanguard.db",
+      "verifiedBy": "watchtower:health + sqlite sqlite_master"
+    },
+    "watchtower": {
+      "checks": 108,
+      "components": 25,
+      "status": "106 PASS / 2 WARN / 0 FAIL",
+      "verifiedBy": "npm run watchtower:health"
+    },
+    "graphify": {
+      "outDir": "graphify-out/",
+      "verifiedBy": "npm run graphify -- status"
+    },
+    "version": {
+      "source": "VERSION",
+      "verifiedBy": "npm run version:check"
+    }
+  },
+  "policy": {
+    "rule": "No hardcoded counts in docs. All docs must cite config/stack-metrics.json or run `gv info` for live values.",
+    "adr": "ADR-0022 and F4.1"
+  }
+}

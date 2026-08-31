@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-08-31T06:39:41.774Z",
+  "session_id": "session-20260831T0509",
+  "session": {
+    "used": 0,
+    "limit": 3000000,
+    "remaining": 3000000,
+    "pct": 0
+  },
+  "daily": {
+    "used": 2082067,
+    "limit": 5000000,
+    "remaining": 2917933,
+    "pct": 42
+  },
+  "breakdown": {
+    "input": 0,
+    "output": 0,
+    "total": 0
+  },
+  "compact": {
+    "total": 10,
+    "latest": {
+      "id": "compaction-1787875435909-ofg1",
+      "timestamp": "2026-08-28T00:03:56.598Z",
+      "summaryFile": "C:\\Workspace_local\\gentle-vanguard\\.session\\compacted\\compaction-1787875435909-ofg1.md",
+      "originalTokens": 2024753,
+      "summaryTokens": 19982,
+      "tokenReduction": 2004771,
+      "reductionPct": 99,
+      "fileCount": 268
+    },
+    "tokens_before": 2024753,
+    "tokens_after": 19982,
+    "tokens_saved": 2004771
+  }
+}
