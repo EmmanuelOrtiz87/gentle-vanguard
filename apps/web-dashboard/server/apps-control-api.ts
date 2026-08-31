@@ -148,13 +148,16 @@ export function createAppsController(options: AppsControlOptions = {}) {
         {
           name: 'server',
           port: options.readDashboardPort?.() ?? readPort(root),
-          pidFile: pidPath(root, 'dashboard', 'server'),
+          // Real pidfile written by src/ops/dashboard-ws-autostart.ts (the
+          // app-dashboard-server.pid name is never written by any launcher).
+          pidFile: join(runtimeDir(root), 'dashboard-ws.pid'),
           start: () => process as unknown as ChildProcess,
         },
         {
           name: 'vite',
           port: 5173,
-          pidFile: pidPath(root, 'dashboard', 'vite'),
+          // Real pidfile written by the vite watchdog (dashboard-start flow).
+          pidFile: join(runtimeDir(root), 'dashboard-vite.pid'),
           start: () => process as unknown as ChildProcess,
         },
       ],
@@ -236,6 +239,10 @@ export function createAppsController(options: AppsControlOptions = {}) {
       } catch {
         pid = null;
       }
+      // Self app: this API runs INSIDE the dashboard server, so a successful
+      // request is proof the server is alive even if no pidfile was written
+      // (e.g. manual foreground start). Port probe below still applies.
+      if (pid === null && def.self && item.name === 'server') pid = process.pid;
       const alive =
         pid !== null && Number.isInteger(pid) && isAlive(pid) && (await probe(item.port));
       if (!alive && existsSync(item.pidFile))
