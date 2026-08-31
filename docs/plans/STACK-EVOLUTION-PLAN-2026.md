@@ -8,6 +8,22 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ## ⚡ Registro de progreso
 
+### Ejecutado — Sesión 12 (2026-08-31, ronda 3: circuito de trazas + DI batch 2 + CMS F2 parcial)
+
+- ✅ **Traces con session_id** (commit `367f4295`): resolver (contexto de correlación > alias map >
+  session-current; NULL si no resuelve, nunca rompe) + bridge write en TraceRepo + modo
+  `--backfill-traces` en el CLI: **616/630 trazas NULL atribuidas (97.8%)**. Último circuito de datos
+  muerto, cerrado. (Agente interrumpido por límite de uso; completado a mano.)
+- ✅ **F2.6 batch 2** (commit `95118416`): 7 singletons más al contenedor DI (errorMemory,
+  resultGatekeeper, eventSourcing, tokenTracker, skillUsageTracker, adaptiveRouter,
+  sessionMetrics) con delegación legacy; `createTestContainer()`; 4 saltados documentados
+  (main() incondicional al import). Total DI: 10/12.
+- ✅ **CMS F2 parcial** (commit `1781cc3f`): `POST /api/slots/recommend` con heurísticas por red
+  (verificado en vivo), convención `media:<id>` y tipos en UI. Pendiente próxima sesión: vistas de
+  calendario y biblioteca de medios en la UI + retiro legacy marketing-agent/social-poster.
+- Todo pusheado a origin/main. Nota operativa: 2 agentes cayeron por límite de uso de 5h
+  (reset 01:54); su trabajo parcial fue verificado, completado y commiteado.
+
 ### Ejecutado — Sesión 11 (2026-08-31, ronda 2 OPTIMIZACIÓN: loops de auto-aprendizaje vivos)
 
 - ✅ **Session-id bridge** (commit `babf25ee`): namespaces unificados vía tabla `session_id_aliases`
