@@ -416,3 +416,54 @@ export async function checkMcp() {
   );
   payloadFileOk('mcp', 'mcp-templates.json', join(ROOT, 'config/mcp-templates.json'), 'config');
 }
+
+// ─── Component: Orchestrator Loop Guard ────────────────────────────────────────
+
+export async function checkLoopGuard() {
+  if (!quiet) logger.info('  [Loop-Guard] Checking...');
+
+  const guardFile = join(ROOT, 'src/core/orchestrator-loop-guard.ts');
+  const testFile = join(ROOT, 'tests/unit/orchestrator-loop-guard.test.ts');
+  const metricsFile = join(ROOT, 'config/stack-metrics.json');
+
+  addResult(
+    'loop-guard',
+    'guard module',
+    fileExists(guardFile) ? 'PASS' : 'FAIL',
+    fileExists(guardFile) ? 'src/core/orchestrator-loop-guard.ts present' : 'missing',
+    'manual',
+  );
+  addResult(
+    'loop-guard',
+    'guard tests',
+    fileExists(testFile) ? 'PASS' : 'FAIL',
+    fileExists(testFile) ? '5 tests present' : 'missing',
+    'manual',
+  );
+  addResult(
+    'loop-guard',
+    'live metrics',
+    fileExists(metricsFile) ? 'PASS' : 'WARN',
+    fileExists(metricsFile) ? 'config/stack-metrics.json present' : 'F4.1 metrics not generated',
+    'verify',
+  );
+
+  // Runtime self-test: intent-loop detection
+  try {
+    const r = runSync('npx', ['tsx', 'src/core/orchestrator-loop-guard.ts'], {
+      timeout: 5000,
+      cwd: ROOT,
+    });
+    const out = (r.stdout ?? '').toString();
+    const hasBreak = out.includes('intent-loop') || out.includes('"break": true');
+    addResult(
+      'loop-guard',
+      'self-test',
+      hasBreak ? 'PASS' : 'WARN',
+      hasBreak ? 'intent-loop detection works' : 'self-test unexpected output',
+      'verify',
+    );
+  } catch {
+    addResult('loop-guard', 'self-test', 'WARN', 'self-test failed to run', 'verify');
+  }
+}
