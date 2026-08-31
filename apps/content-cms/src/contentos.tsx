@@ -78,13 +78,6 @@ interface PublishEntry {
   created_at: string;
 }
 
-const DARK = '#0D1117';
-const AZURE = '#00BFFF';
-const CARD = 'linear-gradient(145deg, #1A2035EE, #121A2AEE)';
-const BORDER = '#1E3A5F';
-const TEXT = '#FFFFFF';
-const MUTED = '#6B7280';
-
 const PLATFORM_LABELS: Record<string, string> = {
   linkedin: 'LinkedIn',
   x: 'X',
@@ -107,17 +100,8 @@ function platformColor(id: string): string {
 }
 
 /** Color semántico por estado de slot (F2): proposed → azure, confirmed → verde, skipped → rojo, published → púrpura. */
-const SLOT_STATUS_COLORS: Record<string, string> = {
-  proposed: AZURE,
-  approved: '#22C55E',
-  confirmed: '#22C55E',
-  rejected: '#EF4444',
-  skipped: '#EF4444',
-  published: '#A855F7',
-};
-
-function slotStatusColor(status: string): string {
-  return SLOT_STATUS_COLORS[status] ?? MUTED;
+function slotStatusClass(status: string): string {
+  return `content-os-slot-${status}`;
 }
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
@@ -139,9 +123,9 @@ function VariantPreview({ variant }: { variant: Variant }) {
   return (
     <div
       style={{
-        border: `1px solid ${BORDER}`,
+        border: '1px solid var(--color-border)',
         borderRadius: 12,
-        background: CARD,
+        background: 'var(--gv-glass)',
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
@@ -154,9 +138,9 @@ function VariantPreview({ variant }: { variant: Variant }) {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '8px 12px',
-          borderBottom: `1px solid ${BORDER}`,
+          borderBottom: '1px solid var(--color-border)',
           fontSize: 12,
-          color: MUTED,
+          color: 'var(--color-text-muted)',
         }}
       >
         <strong style={{ color: platformColor(variant.platform) }}>
@@ -175,13 +159,13 @@ function VariantPreview({ variant }: { variant: Variant }) {
             borderRadius: 8,
             aspectRatio: String(imgRatio),
             maxHeight: 220,
-            background: `linear-gradient(135deg, ${DARK} 0%, ${color}22 100%)`,
+            background: `linear-gradient(135deg, var(--color-background) 0%, ${color}22 100%)`,
             border: `1px dashed ${color}55`,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            color: MUTED,
+            color: 'var(--color-text-muted)',
             fontSize: 11,
             textAlign: 'center',
             padding: 8,
@@ -193,11 +177,18 @@ function VariantPreview({ variant }: { variant: Variant }) {
           {variant.image_prompt ? variant.image_prompt.slice(0, 120) : 'sin prompt de imagen'}
         </div>
       )}
-      <div style={{ padding: '4px 12px 12px', whiteSpace: 'pre-wrap', fontSize: 13, color: TEXT }}>
+      <div
+        style={{
+          padding: '4px 12px 12px',
+          whiteSpace: 'pre-wrap',
+          fontSize: 13,
+          color: 'var(--color-text-primary)',
+        }}
+      >
         {variant.body}
       </div>
       {overLimit && (
-        <div style={{ padding: '0 12px 10px', color: '#F85149', fontSize: 11 }}>
+        <div style={{ padding: '0 12px 10px', color: 'var(--color-error)', fontSize: 11 }}>
           <AlertTriangle size={14} aria-hidden="true" /> excede el límite de{' '}
           {variant.spec.charLimit} caracteres
         </div>
@@ -441,31 +432,9 @@ export default function ContentOS() {
     }
   }
 
-  const inputStyle: React.CSSProperties = {
-    width: '100%',
-    boxSizing: 'border-box',
-    background: DARK,
-    border: `1px solid ${BORDER}`,
-    borderRadius: 8,
-    color: TEXT,
-    padding: '8px 10px',
-    fontSize: 14,
-    fontFamily: 'inherit',
-  };
-  const btn = (bg: string): React.CSSProperties => ({
-    background: bg,
-    color: bg === AZURE ? DARK : TEXT,
-    border: 'none',
-    borderRadius: 8,
-    padding: '8px 14px',
-    fontSize: 13,
-    fontWeight: 600,
-    cursor: 'pointer',
-  });
-
   return (
     <div className="content-os-shell" style={{ display: 'grid', gap: 16 }}>
-      <div style={{ fontSize: 13, color: MUTED }}>{status}</div>
+      <div style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>{status}</div>
 
       <div
         style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}
@@ -477,11 +446,8 @@ export default function ContentOS() {
             key={v}
             role="tab"
             aria-selected={view === v}
-            style={{
-              ...btn(view === v ? AZURE : BORDER),
-              padding: '6px 16px',
-              textTransform: 'capitalize',
-            }}
+            className={`gv-btn ${view === v ? 'gv-btn-primary' : 'gv-btn-ghost'}`}
+            style={{ padding: '6px 16px', textTransform: 'capitalize' }}
             onClick={() => setView(v)}
           >
             {v === 'crear'
@@ -495,32 +461,23 @@ export default function ContentOS() {
 
       {view === 'crear' && (
         <>
-          <section
-            className="panel"
-            style={{
-              background: CARD,
-              border: `1px solid ${BORDER}`,
-              borderRadius: 12,
-              padding: 16,
-              display: 'grid',
-              gap: 12,
-            }}
-          >
-            <h2 style={{ margin: 0, fontSize: 16, color: TEXT }}>Brief → contenido multi-red</h2>
+          <section className="panel" style={{ display: 'grid', gap: 12 }}>
+            <h2 className="gv-section-title">Brief → contenido multi-red</h2>
             <input
-              style={inputStyle}
+              className="content-os-input"
               placeholder="Título (opcional)"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
             <textarea
-              style={{ ...inputStyle, minHeight: 90 }}
+              className="content-os-input"
+              style={{ minHeight: 90 }}
               placeholder="Contale la necesidad en lenguaje natural: qué publicar, para quién, con qué objetivo…"
               value={brief}
               onChange={(e) => setBrief(e.target.value)}
             />
             <input
-              style={inputStyle}
+              className="content-os-input"
               placeholder="Objetivo de negocio (ej: captar estudiantes, vender servicios)"
               value={objective}
               onChange={(e) => setObjective(e.target.value)}
@@ -530,10 +487,10 @@ export default function ContentOS() {
                 <button
                   key={p}
                   onClick={() => togglePlatform(p)}
+                  className="gv-btn gv-btn-ghost"
                   style={{
-                    ...btn('transparent'),
-                    border: `1px solid ${platforms.includes(p) ? platformColor(p) : BORDER}`,
-                    color: platforms.includes(p) ? platformColor(p) : MUTED,
+                    borderColor: platforms.includes(p) ? platformColor(p) : undefined,
+                    color: platforms.includes(p) ? platformColor(p) : undefined,
                     padding: '4px 10px',
                   }}
                 >
@@ -545,13 +502,14 @@ export default function ContentOS() {
               <select
                 value={format}
                 onChange={(e) => setFormat(e.target.value as typeof format)}
-                style={{ ...inputStyle, width: 'auto' }}
+                className="content-os-input"
+                style={{ width: 'auto' }}
               >
                 <option value="text">Solo texto</option>
                 <option value="image">Solo imagen</option>
                 <option value="text_image">Texto + imagen</option>
               </select>
-              <label style={{ color: MUTED, fontSize: 13 }}>
+              <label style={{ fontSize: 13 }}>
                 <input
                   type="checkbox"
                   checked={schedule}
@@ -559,7 +517,11 @@ export default function ContentOS() {
                 />{' '}
                 proponer horarios en calendario
               </label>
-              <button style={btn(AZURE)} disabled={busy} onClick={() => void generate()}>
+              <button
+                className="gv-btn gv-btn-primary"
+                disabled={busy}
+                onClick={() => void generate()}
+              >
                 {busy ? 'Generando…' : 'Generar'}
               </button>
             </div>
@@ -567,9 +529,11 @@ export default function ContentOS() {
 
           {selectedItem && (
             <section style={{ display: 'grid', gap: 10 }}>
-              <h2 style={{ margin: 0, fontSize: 15, color: TEXT }}>
+              <h2 className="gv-section-title">
                 {selectedItem.title}{' '}
-                <span style={{ color: MUTED, fontSize: 12 }}>· {selectedItem.status}</span>
+                <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>
+                  · {selectedItem.status}
+                </span>
               </h2>
               <div
                 style={{
@@ -588,32 +552,44 @@ export default function ContentOS() {
                         <img
                           src={`${API}/api/media/${attached.id}/file`}
                           alt={attached.alt || attached.name}
-                          style={{ width: '100%', borderRadius: 8, border: `1px solid ${BORDER}` }}
+                          style={{
+                            width: '100%',
+                            borderRadius: 8,
+                            border: '1px solid var(--color-border)',
+                          }}
                         />
                       )}
                       {editingVariant === v.id ? (
                         <div style={{ display: 'grid', gap: 6 }}>
                           <textarea
-                            style={{ ...inputStyle, minHeight: 120, fontSize: 13 }}
+                            className="content-os-input"
+                            style={{ minHeight: 120, fontSize: 13 }}
                             value={editBody}
                             onChange={(e) => setEditBody(e.target.value)}
                           />
                           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
                             <span
                               style={{
-                                color: editBody.length > v.spec.charLimit ? '#F85149' : MUTED,
+                                color:
+                                  editBody.length > v.spec.charLimit
+                                    ? 'var(--color-error)'
+                                    : 'var(--color-text-muted)',
                                 fontSize: 12,
                               }}
                             >
                               {editBody.length}/{v.spec.charLimit}
                             </span>
                             <button
-                              style={{ ...btn(AZURE), marginLeft: 'auto' }}
+                              className="gv-btn gv-btn-primary"
+                              style={{ marginLeft: 'auto' }}
                               onClick={() => void saveEdit(v)}
                             >
                               guardar edición
                             </button>
-                            <button style={btn(BORDER)} onClick={() => setEditingVariant(null)}>
+                            <button
+                              className="gv-btn gv-btn-ghost"
+                              onClick={() => setEditingVariant(null)}
+                            >
                               cancelar
                             </button>
                           </div>
@@ -621,23 +597,29 @@ export default function ContentOS() {
                       ) : (
                         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                           <button
-                            style={btn(v.status === 'approved' ? '#2EA043' : BORDER)}
+                            className={`gv-btn ${v.status === 'approved' ? 'gv-btn-success' : 'gv-btn-ghost'}`}
                             disabled={v.status === 'approved'}
                             onClick={() => void approveVariant(v)}
                           >
                             {v.status === 'approved' ? '✓ aprobado' : 'aprobar'}
                           </button>
-                          <button style={btn(BORDER)} onClick={() => void copy(v)}>
+                          <button className="gv-btn gv-btn-ghost" onClick={() => void copy(v)}>
                             copiar
                           </button>
-                          <button style={btn(BORDER)} onClick={() => startEdit(v)}>
+                          <button className="gv-btn gv-btn-ghost" onClick={() => startEdit(v)}>
                             editar
                           </button>
-                          <button style={btn(BORDER)} onClick={() => void proposeSlot(v)}>
+                          <button
+                            className="gv-btn gv-btn-ghost"
+                            onClick={() => void proposeSlot(v)}
+                          >
                             proponer slot
                           </button>
                           {v.status !== 'rejected' && (
-                            <button style={btn(BORDER)} onClick={() => void act(v, 'reject')}>
+                            <button
+                              className="gv-btn gv-btn-danger"
+                              onClick={() => void act(v, 'reject')}
+                            >
                               descartar
                             </button>
                           )}
@@ -649,13 +631,14 @@ export default function ContentOS() {
                           gap: 6,
                           alignItems: 'center',
                           fontSize: 12,
-                          color: MUTED,
+                          color: 'var(--color-text-muted)',
                         }}
                       >
                         <span>media:</span>
                         <select
                           value={mediaId ?? ''}
-                          style={{ ...inputStyle, width: 'auto', fontSize: 12, padding: '4px 8px' }}
+                          className="content-os-input"
+                          style={{ width: 'auto', fontSize: 12, padding: '4px 8px' }}
                           onChange={(e) => void attachMedia(v, e.target.value)}
                         >
                           <option value="">{mediaId ? 'quitar adjunto' : '— adjuntar —'}</option>
@@ -678,32 +661,31 @@ export default function ContentOS() {
       {view === 'calendario' && (
         <section className="panel" style={{ display: 'grid', gap: 8 }}>
           <h2
-            style={{
-              margin: 0,
-              fontSize: 15,
-              color: TEXT,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-            }}
+            className="gv-section-title"
+            style={{ display: 'flex', alignItems: 'center', gap: 10 }}
           >
             Calendario
-            <span style={{ color: MUTED, fontSize: 12 }}>({slots.length} slots)</span>
+            <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>
+              ({slots.length} slots)
+            </span>
             <span style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
               <button
-                style={{ ...btn(calView === 'month' ? AZURE : BORDER), padding: '4px 10px' }}
+                className={`gv-btn ${calView === 'month' ? 'gv-btn-primary' : 'gv-btn-ghost'}`}
+                style={{ padding: '4px 10px' }}
                 onClick={() => setCalView('month')}
               >
                 mes
               </button>
               <button
-                style={{ ...btn(calView === 'week' ? AZURE : BORDER), padding: '4px 10px' }}
+                className={`gv-btn ${calView === 'week' ? 'gv-btn-primary' : 'gv-btn-ghost'}`}
+                style={{ padding: '4px 10px' }}
                 onClick={() => setCalView('week')}
               >
                 semana
               </button>
               <button
-                style={{ ...btn(BORDER), padding: '4px 10px' }}
+                className="gv-btn gv-btn-ghost"
+                style={{ padding: '4px 10px' }}
                 onClick={() =>
                   setCalAnchor(new Date(calAnchor.getFullYear(), calAnchor.getMonth() - 1, 1))
                 }
@@ -711,13 +693,15 @@ export default function ContentOS() {
                 <ChevronLeft size={16} aria-hidden="true" />
               </button>
               <button
-                style={{ ...btn(BORDER), padding: '4px 10px' }}
+                className="gv-btn gv-btn-ghost"
+                style={{ padding: '4px 10px' }}
                 onClick={() => setCalAnchor(new Date())}
               >
                 hoy
               </button>
               <button
-                style={{ ...btn(BORDER), padding: '4px 10px' }}
+                className="gv-btn gv-btn-ghost"
+                style={{ padding: '4px 10px' }}
                 onClick={() =>
                   setCalAnchor(new Date(calAnchor.getFullYear(), calAnchor.getMonth() + 1, 1))
                 }
@@ -747,14 +731,17 @@ export default function ContentOS() {
                   display: 'grid',
                   gridTemplateColumns: 'repeat(7, 1fr)',
                   gap: 4,
-                  background: CARD,
-                  border: `1px solid ${BORDER}`,
+                  background: 'var(--gv-glass)',
+                  border: '1px solid var(--color-border)',
                   borderRadius: 12,
                   padding: 10,
                 }}
               >
                 {WEEKDAYS.map((d) => (
-                  <div key={d} style={{ fontSize: 11, color: MUTED, textAlign: 'center' }}>
+                  <div
+                    key={d}
+                    style={{ fontSize: 11, color: 'var(--color-text-muted)', textAlign: 'center' }}
+                  >
                     {d}
                   </div>
                 ))}
@@ -769,19 +756,20 @@ export default function ContentOS() {
                       key={dayKey + i}
                       style={{
                         minHeight: calView === 'month' ? 72 : 260,
-                        border: `1px solid ${isToday ? AZURE + '66' : BORDER}`,
+                        border: `1px solid ${isToday ? 'var(--color-primary)' : 'var(--color-border)'}`,
                         borderRadius: 8,
                         padding: 4,
                         display: 'grid',
                         gap: 3,
                         alignContent: 'start',
                         opacity: isCurrentMonth || calView === 'week' ? 1 : 0.4,
-                        background: isToday ? AZURE + '0d' : 'transparent',
+                        background: isToday ? 'rgba(0, 191, 255, 0.05)' : 'transparent',
                       }}
                     >
-                      <div style={{ fontSize: 11, color: MUTED }}>{day.getDate()}</div>
+                      <div style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>
+                        {day.getDate()}
+                      </div>
                       {daySlots.map((s) => {
-                        const color = slotStatusColor(s.status);
                         const selected = selectedSlotId === s.id;
                         return (
                           <div
@@ -793,30 +781,25 @@ export default function ContentOS() {
                               if (e.key === 'Enter' || e.key === ' ')
                                 setSelectedSlotId(selected ? null : s.id);
                             }}
+                            className={`content-os-slot ${slotStatusClass(s.status)}${selected ? ' selected' : ''}`}
                             style={{
                               fontSize: 11,
                               borderRadius: 6,
                               padding: '3px 6px',
-                              border: `1px solid ${selected ? color : color + '55'}`,
-                              boxShadow: selected ? `0 0 0 1px ${color}` : 'none',
-                              background:
-                                color +
-                                (s.status === 'confirmed' || s.status === 'approved' ? '33' : '14'),
-                              color: TEXT,
                               display: 'grid',
                               gap: 3,
                               cursor: 'pointer',
                             }}
                             title={s.rationale}
                           >
-                            <span style={{ color, fontWeight: 600 }}>
+                            <span style={{ fontWeight: 600 }}>
                               {new Date(s.scheduled_at).toLocaleTimeString('es', {
                                 hour: '2-digit',
                                 minute: '2-digit',
                               })}{' '}
                               {PLATFORM_LABELS[s.platform] ?? s.platform}
                             </span>
-                            <span style={{ fontSize: 10, color }}>{s.status}</span>
+                            <span style={{ fontSize: 10 }}>{s.status}</span>
                           </div>
                         );
                       })}
@@ -831,12 +814,11 @@ export default function ContentOS() {
             if (!slot) return null;
             const item = items.find((i) => i.id === slot.item_id) ?? null;
             const variant = item?.variants.find((v) => v.id === slot.variant_id) ?? null;
-            const color = slotStatusColor(slot.status);
             return (
               <div
                 style={{
-                  background: CARD,
-                  border: `1px solid ${color}66`,
+                  background: 'var(--gv-glass)',
+                  border: '1px solid var(--color-border)',
                   borderRadius: 12,
                   padding: 14,
                   display: 'grid',
@@ -847,30 +829,21 @@ export default function ContentOS() {
                   <strong style={{ color: platformColor(slot.platform), fontSize: 14 }}>
                     {PLATFORM_LABELS[slot.platform] ?? slot.platform}
                   </strong>
-                  <span style={{ color: TEXT, fontSize: 13 }}>
+                  <span style={{ color: 'var(--color-text-primary)', fontSize: 13 }}>
                     {new Date(slot.scheduled_at).toLocaleString('es')}
                   </span>
-                  <span
-                    style={{
-                      color,
-                      fontSize: 11,
-                      border: `1px solid ${color}55`,
-                      borderRadius: 999,
-                      padding: '1px 8px',
-                    }}
-                  >
-                    {slot.status}
-                  </span>
+                  <span className={`gv-status-badge gv-status-${slot.status}`}>{slot.status}</span>
                   <button
-                    style={{ ...btn(BORDER), marginLeft: 'auto', padding: '4px 10px' }}
+                    className="gv-btn gv-btn-ghost"
+                    style={{ marginLeft: 'auto', padding: '4px 10px' }}
                     onClick={() => setSelectedSlotId(null)}
                   >
                     cerrar
                   </button>
                 </div>
                 {item && (
-                  <div style={{ fontSize: 12, color: MUTED }}>
-                    item: <span style={{ color: TEXT }}>{item.title}</span>
+                  <div style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
+                    item: <span style={{ color: 'var(--color-text-primary)' }}>{item.title}</span>
                     {variant && (
                       <>
                         {' · '}variante {variant.platform} ({variant.status})
@@ -878,10 +851,10 @@ export default function ContentOS() {
                           style={{
                             marginTop: 6,
                             padding: 8,
-                            border: `1px solid ${BORDER}`,
+                            border: '1px solid var(--color-border)',
                             borderRadius: 8,
                             whiteSpace: 'pre-wrap',
-                            color: TEXT,
+                            color: 'var(--color-text-primary)',
                             maxHeight: 120,
                             overflow: 'auto',
                           }}
@@ -893,12 +866,14 @@ export default function ContentOS() {
                   </div>
                 )}
                 {slot.rationale && (
-                  <div style={{ fontSize: 12, color: MUTED }}>rationale: {slot.rationale}</div>
+                  <div style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
+                    rationale: {slot.rationale}
+                  </div>
                 )}
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                   {slot.status === 'proposed' && (
                     <button
-                      style={btn('#2EA043')}
+                      className="gv-btn gv-btn-success"
                       onClick={() => void slotTransition(slot, 'confirmed')}
                     >
                       confirmar (aprobar)
@@ -906,7 +881,7 @@ export default function ContentOS() {
                   )}
                   {slot.status === 'confirmed' && (
                     <button
-                      style={{ ...btn('#A855F7'), color: DARK }}
+                      className="gv-btn gv-btn-accent"
                       onClick={() => void slotTransition(slot, 'published')}
                     >
                       marcar publicado
@@ -914,7 +889,7 @@ export default function ContentOS() {
                   )}
                   {(slot.status === 'proposed' || slot.status === 'confirmed') && (
                     <button
-                      style={btn(BORDER)}
+                      className="gv-btn gv-btn-danger"
                       onClick={() => void slotTransition(slot, 'skipped')}
                     >
                       rechazar
@@ -922,19 +897,22 @@ export default function ContentOS() {
                   )}
                   {slot.status === 'skipped' && (
                     <button
-                      style={btn(BORDER)}
+                      className="gv-btn gv-btn-ghost"
                       onClick={() => void slotTransition(slot, 'proposed')}
                     >
                       volver a proponer
                     </button>
                   )}
                   {variant && (
-                    <button style={btn(BORDER)} onClick={() => void proposeSlot(variant)}>
+                    <button
+                      className="gv-btn gv-btn-ghost"
+                      onClick={() => void proposeSlot(variant)}
+                    >
                       proponer otro horario
                     </button>
                   )}
                   <button
-                    style={{ ...btn(BORDER), color: '#F85149' }}
+                    className="gv-btn gv-btn-danger"
                     onClick={() => {
                       void deleteSlot(slot);
                       setSelectedSlotId(null);
@@ -953,17 +931,13 @@ export default function ContentOS() {
         <>
           <section className="panel" style={{ display: 'grid', gap: 8 }}>
             <h2
-              style={{
-                margin: 0,
-                fontSize: 15,
-                color: TEXT,
-                display: 'flex',
-                gap: 10,
-                alignItems: 'center',
-              }}
+              className="gv-section-title"
+              style={{ display: 'flex', gap: 10, alignItems: 'center' }}
             >
               Biblioteca de medios
-              <span style={{ color: MUTED, fontSize: 12 }}>({media.length})</span>
+              <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>
+                ({media.length})
+              </span>
             </h2>
             <div>
               <input
@@ -978,7 +952,7 @@ export default function ContentOS() {
               />
             </div>
             {media.length === 0 && (
-              <div style={{ color: MUTED, fontSize: 13 }}>
+              <div style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>
                 Sin medios aún (png/jpeg/webp, máx 10MB).
               </div>
             )}
@@ -996,8 +970,8 @@ export default function ContentOS() {
                   <div
                     key={m.id}
                     style={{
-                      background: CARD,
-                      border: `1px solid ${BORDER}`,
+                      background: 'var(--gv-glass)',
+                      border: '1px solid var(--color-border)',
                       borderRadius: 12,
                       padding: 10,
                       display: 'grid',
@@ -1007,16 +981,21 @@ export default function ContentOS() {
                     <img
                       src={`${API}/api/media/${m.id}/file`}
                       alt={m.alt || m.name}
-                      style={{ width: '100%', borderRadius: 8, border: `1px solid ${BORDER}` }}
+                      style={{
+                        width: '100%',
+                        borderRadius: 8,
+                        border: '1px solid var(--color-border)',
+                      }}
                     />
-                    <div style={{ fontSize: 13, color: TEXT }}>
+                    <div style={{ fontSize: 13, color: 'var(--color-text-primary)' }}>
                       {m.name}{' '}
-                      <span style={{ color: MUTED, fontSize: 11 }}>
+                      <span style={{ color: 'var(--color-text-muted)', fontSize: 11 }}>
                         · {(m.size / 1024).toFixed(0)} KB
                       </span>
                     </div>
                     <input
-                      style={{ ...inputStyle, fontSize: 12, padding: '4px 8px' }}
+                      className="content-os-input"
+                      style={{ fontSize: 12, padding: '4px 8px' }}
                       defaultValue={m.alt}
                       placeholder="alt text (accesibilidad)"
                       onBlur={(e) => {
@@ -1025,11 +1004,8 @@ export default function ContentOS() {
                     />
                     <div style={{ display: 'flex', gap: 6 }}>
                       <button
-                        style={{
-                          ...btn(uses ? '#2EA043' : BORDER),
-                          padding: '4px 10px',
-                          fontSize: 12,
-                        }}
+                        className={`gv-btn ${uses ? 'gv-btn-success' : 'gv-btn-ghost'}`}
+                        style={{ padding: '4px 10px', fontSize: 12 }}
                         disabled={!selectedItem?.variants.length}
                         title={
                           uses
@@ -1046,7 +1022,8 @@ export default function ContentOS() {
                         {uses ? `✓ en ${uses} variante(s)` : 'adjuntar'}
                       </button>
                       <button
-                        style={{ ...btn(BORDER), padding: '4px 10px', fontSize: 12 }}
+                        className="gv-btn gv-btn-ghost"
+                        style={{ padding: '4px 10px', fontSize: 12 }}
                         onClick={() => void deleteMedia(m)}
                       >
                         eliminar
@@ -1060,7 +1037,7 @@ export default function ContentOS() {
 
           {publishLog.length > 0 && (
             <section className="panel" style={{ display: 'grid', gap: 6 }}>
-              <h2 style={{ margin: 0, fontSize: 15, color: TEXT }}>
+              <h2 className="gv-section-title">
                 Export asistido / publish_log ({publishLog.length})
               </h2>
               {publishLog.map((p) => (
@@ -1070,19 +1047,19 @@ export default function ContentOS() {
                     display: 'flex',
                     gap: 10,
                     padding: '6px 12px',
-                    background: CARD,
-                    border: `1px solid ${BORDER}`,
+                    background: 'var(--gv-glass)',
+                    border: '1px solid var(--color-border)',
                     borderRadius: 8,
                     fontSize: 12,
-                    color: TEXT,
+                    color: 'var(--color-text-primary)',
                   }}
                 >
                   <span style={{ color: platformColor(p.platform), fontWeight: 600 }}>
                     {PLATFORM_LABELS[p.platform] ?? p.platform}
                   </span>
-                  <span style={{ color: MUTED }}>{p.mode}</span>
+                  <span style={{ color: 'var(--color-text-muted)' }}>{p.mode}</span>
                   <span>{p.action}</span>
-                  <span style={{ marginLeft: 'auto', color: MUTED }}>
+                  <span style={{ marginLeft: 'auto', color: 'var(--color-text-muted)' }}>
                     {p.variant_id} · {p.created_at}
                   </span>
                 </div>
@@ -1094,24 +1071,25 @@ export default function ContentOS() {
 
       {view === 'crear' && items.length > 0 && (
         <section className="panel" style={{ display: 'grid', gap: 6 }}>
-          <h2 style={{ margin: 0, fontSize: 15, color: TEXT }}>Historial ({items.length})</h2>
+          <h2 className="gv-section-title">Historial ({items.length})</h2>
           {items.map((i) => (
             <button
               key={i.id}
               onClick={() => setSelectedItem(i)}
               style={{
                 textAlign: 'left',
-                background: selectedItem?.id === i.id ? AZURE + '22' : CARD,
-                border: `1px solid ${BORDER}`,
+                background:
+                  selectedItem?.id === i.id ? 'rgba(0, 191, 255, 0.13)' : 'var(--gv-glass)',
+                border: '1px solid var(--color-border)',
                 borderRadius: 8,
                 padding: '8px 12px',
-                color: TEXT,
+                color: 'var(--color-text-primary)',
                 cursor: 'pointer',
                 fontSize: 13,
               }}
             >
               <strong>{i.title}</strong>{' '}
-              <span style={{ color: MUTED }}>
+              <span style={{ color: 'var(--color-text-muted)' }}>
                 · {i.status} · {i.variants.length} variantes
               </span>
             </button>
