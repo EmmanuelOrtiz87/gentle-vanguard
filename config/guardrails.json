@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Guardrails config F3.2 — input/output/tool rails, soft WARN first",
+  "softWarn": true,
+  "input": {
+    "rail": "llama-guard-heuristic",
+    "model": "heuristic-stub (pluggable Llama Guard 3)",
+    "blockedPatterns": 12,
+    "failOpen": true
+  },
+  "output": {
+    "rail": "selfcheck-heuristic",
+    "failOpen": true
+  },
+  "tool": {
+    "allowlist": ["read", "write", "edit", "bash", "grep", "glob"],
+    "rateLimitPerMinute": 60
+  },
+  "fallback": "human escalation on hard block (ADR-0023)",
+  "adr": "ADR-0023"
+}
