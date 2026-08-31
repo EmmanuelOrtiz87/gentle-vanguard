@@ -8,6 +8,23 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ## ⚡ Registro de progreso
 
+### Ejecutado — Sesión 13 (2026-08-31, extracción de apps: Prompt Studio + content-ops al CMS)
+
+- ✅ **apps/prompt-studio** (commit `a3373aec`): generador de prompts como app standalone
+  (Vite+React+Tailwind, marca GV, 100% client-side). Consolida el PromptStudio.tsx del dashboard
+  (que estaba HUÉRFANO — nadie lo montaba) con el generador demo de Academy (que se conserva como
+  material didáctico del curso). Puerto 5176, registrada en el Command Center con lifecycle
+  completo verificado (start/stop/serve en vivo).
+- ✅ **Content-ops fuera del dashboard**: el engine (ADR-0018) es la máquina de estados de
+  operación y el CMS (ADR-0021) la superficie de creación — el panel del dashboard era una tercera
+  superficie duplicada. Handler migrado al server del CMS (puerto 3787, verificado con jobs
+  reales); ContentOpsPanel y PromptStudio eliminados del dashboard (95/95 tests, build verde).
+  El dashboard queda como pura observabilidad.
+- ✅ **Command Center**: 'prompts' registrada + cms ahora incluye su proceso api (:3787, se había
+  perdido en la extracción del panel a app). Fix de ruta stale src/ops en start.ts.
+- Arquitectura resultante: 6 apps (dashboard/analytics/cms/academy/prompts/command-center), cada
+  una con un dominio claro, todas lifecycle-adas desde el Command Center.
+
 ### Ejecutado — Sesión 12 (2026-08-31, ronda 3: circuito de trazas + DI batch 2 + CMS F2 parcial)
 
 - ✅ **Traces con session_id** (commit `367f4295`): resolver (contexto de correlación > alias map >
