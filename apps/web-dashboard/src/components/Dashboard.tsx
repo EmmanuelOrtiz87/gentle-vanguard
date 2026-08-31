@@ -49,6 +49,7 @@ import { SloPanel } from './SloPanel';
 import { DashboardRuntimeHealth } from './DashboardRuntimeHealth';
 import { ProcessHygienePanel } from './ProcessHygienePanel';
 import { LoopGuardPanel } from './LoopGuardPanel';
+import { GuardrailsPanel } from './GuardrailsPanel';
 import { AnalyticsWidget } from './AnalyticsWidget';
 import { InfoPopup } from './InfoPopup';
 import { LocaleContext, useLocale, useT, LOCALE_NAMES, LOCALE_FLAGS, t } from '../hooks/useLocale';
@@ -308,6 +309,7 @@ function DashboardInner() {
         <DashboardRuntimeHealth />
         <ProcessHygienePanel />
         <LoopGuardPanel />
+        <GuardrailsPanel />
         <AnalyticsWidget />
         {/* Row 1: Core KPIs */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
