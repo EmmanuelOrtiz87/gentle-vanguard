@@ -19,6 +19,7 @@ import { executeWithCircuit } from '../resilience/circuit-breaker-v2';
 import { registerAttempt, detectLoop } from '../resilience/anti-loop-guard.js';
 import { evaluateFailure } from '../security/guardrail-orchestrator.js';
 import { moderateInputHeuristic } from '../security/guardrails/input-moderation.js';
+import { resolveBudgetAwareModel } from '../tokens/budget-aware-routing.js';
 import { log } from '../utils/logger.js';
 
 const logger = log('AGENT-DELEGATOR');
@@ -588,6 +589,13 @@ async function runNativeAgent(
       model = envModel;
       logger.info(`[agent-delegator] Using environment model: ${model}`);
     }
+
+    // Budget-aware routing: when the daily token budget exceeds the soft/hard
+    // threshold, INTERNAL delegation model resolution is downgraded to the
+    // cheap profile (free-tier fallback model). Opt-out: routingDowngrade
+    // .enabled=false in config/token-budget-guard.json or GV_BUDGET_ROUTING=0.
+    // The interactive/main session model is never touched by this hook.
+    model = resolveBudgetAwareModel('subagent', model);
 
     // Lossless compression of task/context (defense in depth): the original
     // request stays intact for logging; only the spawned command uses the

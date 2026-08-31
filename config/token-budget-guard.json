@@ -4,6 +4,14 @@
   "description": "Token budget configuration — SINGLE SOURCE OF TRUTH. This file is the authoritative config for all token budgeting across the stack.",
   "last_updated": "2026-08-20",
 
+  "routingDowngrade": {
+    "enabled": true,
+    "softThresholdPct": 100,
+    "hardThresholdPct": 150,
+    "downgradeProfile": "cheap",
+    "applyTo": ["subagent", "delegation", "research"]
+  },
+
   "tokenBudget": {
     "version": "2.0.0",
     "limits": {
