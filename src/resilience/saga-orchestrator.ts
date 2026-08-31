@@ -21,6 +21,7 @@ import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { runSync, runNpxTsxSync } from '../core/run-command.js';
 import { randomBytes } from 'crypto';
+import { isWithinRoot } from '../core/path-identity.js';
 
 const ROOT = resolve(process.cwd());
 const SAGA_DIR = join(ROOT, '.session', 'sagas');
@@ -31,7 +32,7 @@ let quiet = false;
 // ─── Security: Path traversal validation ─────────────────────────────────────
 function safePath(userPath: string, allowedBase: string): string | null {
   const resolved = resolve(allowedBase, userPath);
-  if (!resolved.startsWith(allowedBase)) return null;
+  if (!isWithinRoot(resolved, allowedBase)) return null;
   return resolved;
 }
 

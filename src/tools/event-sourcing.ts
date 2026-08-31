@@ -24,6 +24,7 @@ import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 import { randomBytes, createHash } from 'crypto';
 import { createRequire } from 'module';
+import { isWithinRoot } from '../core/path-identity.js';
 import type { DatabaseManager } from '../../apps/web-dashboard/server/database/manager.js';
 
 const _require = createRequire(import.meta.url);
@@ -59,7 +60,7 @@ let quiet = false;
 // ─── Security: Path traversal validation ─────────────────────────────────────
 function safePath(userPath: string, allowedBase: string): string | null {
   const resolved = resolve(allowedBase, userPath);
-  if (!resolved.startsWith(allowedBase)) return null;
+  if (!isWithinRoot(resolved, allowedBase)) return null;
   return resolved;
 }
 

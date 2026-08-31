@@ -3,6 +3,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { runSync } from '../core/run-command.js';
+import { recordContinuation, nextTransition } from '../core/continuation.js';
 
 type PhaseName =
   'INIT' | 'EXPLORE' | 'PROPOSE' | 'SPEC' | 'TASKS' | 'DESIGN' | 'APPLY' | 'VERIFY' | 'ARCHIVE';
@@ -142,6 +143,25 @@ function parseArgs(): PipelineOptions {
       case '-n':
         opts.dryRun = true;
         break;
+      case '--next':
+        {
+          // "What do I run now?" — replay the published continuation verbatim
+          // (gentle-vanguard.continuation/v1), never reconstruct from prose.
+          const feature = args[++i] ?? '';
+          if (!feature) {
+            console.error('\x1b[31m--next requires the feature name\x1b[0m');
+            process.exit(1);
+          }
+          const env = nextTransition(`sdd-${feature}`);
+          if (!env) {
+            console.log(`no active continuation for feature '${feature}'`);
+            process.exit(0);
+          }
+          console.log(`operation: ${env.operation}  (v${env.version})`);
+          console.log(`run verbatim:\n  ${env.command}`);
+          process.exit(0);
+        }
+        break;
       case '--help':
       case '-h':
         console.log(`SDD Pipeline — Spec-Driven Development Lifecycle Orchestrator
@@ -154,6 +174,7 @@ Options:
   --description, -d <desc>    Feature description (required)
   --phase, -p <phase>         Specific phase to run (optional, runs all if omitted)
   --dry-run, -n               Show what would be done without executing
+  --next <feature>            Print the verbatim next-phase command (continuation replay)
   --help, -h                  Show this help
 
 Phases:
@@ -315,6 +336,28 @@ function main(): void {
     const gatePath = join(sddDir, `gate-${p}.json`);
     return existsSync(gatePath);
   });
+
+  // Machine-executable re-entry (gentle-vanguard.continuation/v1): publish the
+  // verbatim next-phase command after a passing phase — the operator never
+  // reconstructs it from prose (absorbed from gentle-ai v2.5.0-rc.3).
+  const lastPhase = phasesToRun[phasesToRun.length - 1];
+  const lastGateOk = existsSync(join(sddDir, `gate-${lastPhase}.json`));
+  const nextIdx = PHASE_ORDER.indexOf(lastPhase) + 1;
+  if (!opts.dryRun && lastGateOk && nextIdx < PHASE_ORDER.length) {
+    const nextPhase = PHASE_ORDER[nextIdx];
+    const command = `npx tsx src/sdd/sdd-pipeline.ts --feature ${opts.feature} --description "${opts.description}" --phase ${nextPhase}`;
+    recordContinuation({
+      workflowId: `sdd-${opts.feature}`,
+      operation: `sdd.${nextPhase.toLowerCase()}`,
+      args: { feature: opts.feature, phase: nextPhase },
+      command,
+      revision: runGit(['rev-parse', '--short', 'HEAD'], root) !== 'unknown'
+        ? runGit(['rev-parse', '--short', 'HEAD'], root)
+        : undefined,
+      root,
+    });
+    console.log(`\x1b[36m[NEXT] Run verbatim to continue:\n  ${command}\x1b[0m`);
+  }
 
   console.log(`\n=== SDD Pipeline Complete ===`);
   console.log(`Feature: ${opts.feature}`);
