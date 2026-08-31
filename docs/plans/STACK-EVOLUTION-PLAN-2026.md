@@ -8,6 +8,34 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ## ⚡ Registro de progreso
 
+### Ejecutado — Sesión 9 (2026-08-31, FASE 3 COMPLETA en paralelo: F3.3-F3.6)
+
+- ✅ **F3.3 ports & adapters** (commit `5d638c68`, ADR-0024): `src/ports/` con StoragePort
+  (InMemory + SqliteDisk, suite de contratos idéntica = demo del swap), QueuePort (at-least-once
+  con ack/nack/visibility-timeout), TracingPort (Noop + OTLP/JSON nativo sobre HTTP, cero deps) y
+  `resolvePorts()` por config (GV_STORAGE/GV_QUEUE/GV_TRACING). Camino a Postgres/Redis documentado.
+  32/32 tests.
+- ✅ **F3.4 plugin architecture skills** (commit `9f19927f`): `src/plugins/` con manifest zod
+  (gv-plugin.json o frontmatter SKILL.md real), registry con ciclo install→verify→enable→deprecate
+  + hash SHA-256 anti-tamper, instalación desde dir local/git/tarball con secret-scan del stack
+  (80 patrones) que rechaza si halla secrets. `gv skill <list|install|...>` operativo. 12/12 tests.
+- ✅ **F3.5 dashboard ejecutivo de costes** (commit `2a9d0d3f`): `/costs` en dashboard con
+  pricing de 20 modelos reales (config/model-pricing.json), proyección mensual, presupuesto vs
+  token-budget-guard, top sesiones e insight de routing. **Datos reales: 709.7M tokens/30d =
+  $413.63, proyección $737.85, presupuesto diario en HARD (624%), glm-5.3-flash recortaría ~84%**
+  — primera decisión de routing documentada con datos (criterio de aceptación de F3.5 cumplido).
+- ✅ **F3.6 correlación OTel unificada** (commit `54277331`): `withCorrelation()` via
+  AsyncLocalStorage; eventos trace/metric/log/token a JSONL con ids OTLP; bridge en logger
+  (backwards-compat); `queryCorrelation()` une JSONL + token_transactions en una línea de tiempo;
+  `gv telemetry --session <id>`. Promoción a collector OTLP real documentada. 6/6 tests.
+- ✅ **Wiring** (commit `372d5a33`): `gv skill` + `gv telemetry` + npm scripts
+  (skill:plugins, telemetry:correlation, ports:test, etc.).
+- ✅ **F1.3 resuelto como NATIVO** (decisión): version-sync.ts es la implementación definitiva
+  interina; no se adopta changesets (native-first, ADR-0017). **F1.5 ya aplicado**
+  (tests/coverage-config.json 40/40/30/40).
+- Nota: fix de import fuera de convención en `src/ops/command-center/server.ts` (WIP sesión
+  paralela, no commiteado aquí).
+
 ### Ejecutado — Sesión 8 (2026-08-31, Apps Control Panel + F2.3 cierre de scope library)
 
 - ✅ **F2.6 COMPLETADO — ConfigService + DI ligera** (commit `ba46332f`): `src/config/config-service.ts`
@@ -212,8 +240,10 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ### Pendiente inmediato (siguiente sesión)
 
-- F1.3 changesets/release-please (version-sync.ts es el interino).
-- F1.5 subir umbral cobertura 30→40% (medir baseline full-mode primero).
+- F1.3 ✅ resuelto como NATIVO (decisión 2026-08-31): version-sync.ts es la implementación
+  definitiva interina — no se adopta changesets/release-please (principio native-first, ADR-0017);
+  revisar solo si el repo pasa a multi-package releases.
+- F1.5 ✅ ya aplicado (tests/coverage-config.json: 40/40/30/40, baseline 62% agregado src/).
 - F2.2 reorganización de `src/` por dominios (un PR por dominio, barriles de compatibilidad).
 - F2.3 ✅ cerrado (scope library completo; console.* restantes = CLI por diseño); F2.4 ✅ 0 `any`;
   consolidación modular nativa (mantenimiento); F2.6 ✅ ConfigService/DI (pilotos; 11 singletons
