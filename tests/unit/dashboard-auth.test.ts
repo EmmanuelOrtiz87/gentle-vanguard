@@ -61,7 +61,7 @@ describe('DashboardAuth', () => {
 
     try {
       const { DatabaseManager } =
-        await import('../../apps/web-dashboard/server/database/manager.ts');
+        await import('../../src/database/nexus//manager.ts');
       const firstManager = DatabaseManager.getInstance();
       const firstAuth = new DashboardAuth({
         token: 'secret',

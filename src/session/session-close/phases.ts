@@ -470,7 +470,7 @@ export async function phasePersist(reason: string): Promise<PhaseResult[]> {
   try {
     const { createRequire } = await import('module');
     const req = createRequire(import.meta.url);
-    const mod = req('../../apps/web-dashboard/server/database/manager') as {
+    const mod = req('../../database/nexus//manager') as {
       DatabaseManager: { getInstance: () => { getDb: () => import('better-sqlite3').Database } };
     };
     const db = mod.DatabaseManager.getInstance().getDb();

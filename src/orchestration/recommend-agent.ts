@@ -23,7 +23,7 @@ import { runNpxTsxSync } from '../core/run-command.js';
 import {
   DatabaseManager,
   DEFAULT_TENANT_ID,
-} from '../../apps/web-dashboard/server/database/manager.js';
+} from '../database/nexus//manager.js';
 
 const ROOT = resolve(process.cwd());
 const ROUTING_TABLE = join(ROOT, '.session', 'routing', 'routing-table.json');

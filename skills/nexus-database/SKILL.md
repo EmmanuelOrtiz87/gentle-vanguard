@@ -86,7 +86,7 @@ npm run db:prune:backup
 
 ## DatabaseManager API
 
-The `DatabaseManager` singleton (`apps/web-dashboard/server/database/manager.ts`) is the
+The `DatabaseManager` singleton (`src/database/nexus/manager.ts`) is the
 authoritative interface for all Nexus operations:
 
 | Method                 | Purpose                                      |

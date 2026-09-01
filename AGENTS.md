@@ -177,7 +177,7 @@ CLI Guard: check anti-regresión del patrón roto
 ## Nexus — DB operacional
 
 SQLite WAL en `.runtime/gentle-vanguard.db`, 23 tablas, singleton DatabaseManager
-(`apps/web-dashboard/server/database/manager.ts`). Converge: métricas, sesiones, trazas, eventos,
+(`src/database/nexus/manager.ts`). Converge: métricas, sesiones, trazas, eventos,
 alertas, feedback, response cache, skills, tokens, routing, scoring.
 
 ```bash

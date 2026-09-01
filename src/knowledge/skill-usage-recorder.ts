@@ -33,7 +33,7 @@ let _provider: DbProvider | null | undefined;
 function resolveDb(): Database | null {
   if (_provider !== undefined) return _provider ? _provider.getDb() : null;
   try {
-    const mod = _require('../../apps/web-dashboard/server/database/manager') as {
+    const mod = _require('../database/nexus//manager') as {
       DatabaseManager: { getInstance: () => DbProvider };
     };
     _provider = mod.DatabaseManager.getInstance();
@@ -178,7 +178,7 @@ skill-loader match/serve point; never throws.`);
   const statsPath = join(process.cwd(), '.atl', 'skill-stats.json');
   let db: Database;
   try {
-    const mod = _require('../../apps/web-dashboard/server/database/manager') as {
+    const mod = _require('../database/nexus//manager') as {
       DatabaseManager: { getInstance: () => DbProvider };
     };
     db = mod.DatabaseManager.getInstance().getDb();

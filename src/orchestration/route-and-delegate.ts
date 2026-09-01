@@ -29,7 +29,7 @@ import { resolveAgentTier } from '../sdd/domain-tier.js';
 import {
   DatabaseManager,
   DEFAULT_TENANT_ID,
-} from '../../apps/web-dashboard/server/database/manager.js';
+} from '../database/nexus//manager.js';
 
 const ROOT = resolve(process.cwd());
 const HITS_FILE = join(ROOT, '.session', 'routing', 'hits.jsonl');

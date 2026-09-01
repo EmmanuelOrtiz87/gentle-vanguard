@@ -731,7 +731,7 @@ de tokens, reglas de ruteo y session scoring.
 
 ### Architecture
 
-**Arquitectura**: Singleton `DatabaseManager` en `apps/web-dashboard/server/database/manager.ts` con
+**Arquitectura**: Singleton `DatabaseManager` en `src/database/nexus/manager.ts` con
 migraciones automáticas (WAL mode, foreign keys ON). Importable desde cualquier script del stack.
 
 #### Migration 001 - Initial Schema (Core operacional)

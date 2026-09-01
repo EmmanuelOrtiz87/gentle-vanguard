@@ -21,12 +21,12 @@
 import {
   DatabaseManager,
   DEFAULT_TENANT_ID,
-} from '../../apps/web-dashboard/server/database/manager';
+} from '../database/nexus//manager';
 import { pathToFileURL } from 'url';
 import type {
   BacklogItem,
   BacklogRepo,
-} from '../../apps/web-dashboard/server/database/repositories/BacklogRepo';
+} from '../database/nexus//repositories/BacklogRepo';
 
 // ─── Resolve (lazy: DatabaseManager is a heavy better-sqlite3 singleton;
 //      importing this module must stay side-effect free) ─────────────
