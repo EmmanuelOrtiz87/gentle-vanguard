@@ -25,7 +25,6 @@
     "docs:html:normalize": "npx tsx src/tools/normalize-doc-html.ts",
     "docs:html:shell": "npx tsx src/tools/normalize-doc-shell.ts",
     "docs:diagrams:normalize": "npx tsx src/tools/normalize-doc-diagrams.ts",
-    "prepare": "pnpm lefthook install",
     "coverage": "npx tsx src/review/coverage-runner.ts",
     "coverage:quick": "npx tsx src/review/coverage-runner.ts --quick",
     "coverage:report": "npx tsx src/review/coverage-runner.ts --no-enforce",

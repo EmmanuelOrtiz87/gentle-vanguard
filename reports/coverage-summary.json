@@ -1,5 +1,5 @@
 {
-  "duration": "4.0",
+  "duration": "18.9",
   "testsPassed": true,
   "coverageProduced": true,
   "thresholds": {
@@ -11,18 +11,18 @@
   "targets": [
     {
       "name": "src/ (aggregate)",
-      "statements": 78.3,
-      "lines": 78.3,
-      "functions": 85.2,
-      "branches": 64.3,
+      "statements": 60.2,
+      "lines": 60.2,
+      "functions": 56.4,
+      "branches": 68,
       "passed": true
     },
     {
-      "name": "event-sourcing-critical (not loaded)",
-      "statements": 0,
-      "lines": 0,
-      "functions": 0,
-      "branches": 0,
+      "name": "event-sourcing-critical",
+      "statements": 66.5,
+      "lines": 66.5,
+      "functions": 77.3,
+      "branches": 64.5,
       "passed": true
     },
     {
@@ -34,19 +34,19 @@
       "passed": true
     },
     {
-      "name": "structural-compression (not loaded)",
-      "statements": 0,
-      "lines": 0,
-      "functions": 0,
-      "branches": 0,
+      "name": "structural-compression",
+      "statements": 74.3,
+      "lines": 74.3,
+      "functions": 83.3,
+      "branches": 70.9,
       "passed": true
     },
     {
       "name": "security-orchestrator",
-      "statements": 75.9,
-      "lines": 75.9,
+      "statements": 81.7,
+      "lines": 81.7,
       "functions": 100,
-      "branches": 73.1,
+      "branches": 75.7,
       "passed": true
     }
   ],

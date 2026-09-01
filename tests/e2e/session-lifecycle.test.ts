@@ -88,11 +88,12 @@ async function testWatchtowerHealth() {
   }
 }
 
-// Test 4: Dashboard WebSocket server
+// Test 4: Dashboard WebSocket server (local-first app — skipped when apps/ absent, e.g. CI)
 async function testDashboardWs() {
-  // Verify dashboard exists
   const dashboardPath = join(process.cwd(), 'apps', 'web-dashboard');
-  assert(existsSync(dashboardPath), 'Web dashboard should exist');
+  if (!existsSync(dashboardPath)) {
+    throw new SkipError('web-dashboard not present (local-first app, decoupled from stack repo)');
+  }
 
   // Verify server script exists
   const serverPath = join(dashboardPath, 'server', 'websocket-server.ts');

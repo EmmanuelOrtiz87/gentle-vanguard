@@ -1,6 +1,12 @@
 # ADR-0022: Automated Delivery Orchestrator (Local-First + GitHub)
 
-**Status**: Proposed **Date**: August 30, 2026 **Scope**: Gentle-Vanguard repository delivery
+## Status
+
+Proposed
+
+## Date
+
+2026-08-30
 
 ## Context
 

@@ -1,6 +1,12 @@
 # ADR-0023: Response Cache — Capability Without Current Integration Point
 
-**Status**: Accepted **Date**: August 30, 2026 **Scope**: Gentle-Vanguard LLM call path
+## Status
+
+Accepted
+
+## Date
+
+2026-08-30
 
 ## Context
 

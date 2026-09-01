@@ -1,6 +1,12 @@
 # ADR-0020: CodeGraph vs graphify — roles explícitos de grafos de código
 
-Date: 2026-08-29 Status: Accepted
+## Status
+
+Accepted
+
+## Date
+
+2026-08-29
 
 ## Context
 

@@ -1,9 +1,18 @@
 # ADR-0024: Puertos hexagonales para dependencias de infraestructura
 
-**Estado**: Accepted **Fecha**: 2026-08-31 **Scope**: `src/ports/` — item F3.3 de
-`docs/plans/STACK-EVOLUTION-PLAN-2026.md`
+## Status
 
-## Contexto
+Accepted
+
+## Date
+
+2026-08-31
+
+## Context
+
+(Scope: `src/ports/` — item F3.3 de `docs/plans/STACK-EVOLUTION-PLAN-2026.md`)
+
+## Context-Original
 
 Gentle-Vanguard es local-first (ADR-0017): SQLite en `.runtime/`, colas en el propio proceso,
 telemetría a archivos locales bajo `.telemetry/`. Ese modelo funciona para una instancia, pero el
@@ -14,7 +23,7 @@ en los módulos consumidores: cambiar de store o de cola implicaría tocar cada 
 El patrón hexagonal (ports & adapters) invierte esa dependencia: el dominio depende de interfaces
 (puertos) y los adaptadores concretos se resuelven por configuración.
 
-## Decisión
+## Decision — Puertos hexagonales (Decisión)
 
 Se crea el módulo `src/ports/` con tres puertos mínimos y honestos (solo las operaciones que el
 stack realmente usa), un adaptador local-first por defecto y una fábrica `resolvePorts()` que

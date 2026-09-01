@@ -10,13 +10,3 @@ updates:
     schedule:
       interval: monthly
     open-pull-requests-limit: 10
-  - package-ecosystem: npm
-    directory: /apps/web-dashboard
-    schedule:
-      interval: monthly
-    open-pull-requests-limit: 5
-  - package-ecosystem: npm
-    directory: /apps/gv-analytics
-    schedule:
-      interval: monthly
-    open-pull-requests-limit: 5
