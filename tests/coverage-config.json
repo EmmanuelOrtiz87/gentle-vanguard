@@ -12,48 +12,29 @@
     {
       "name": "event-sourcing-critical",
       "threshold": 60,
-      "tests": [
-        "tests/unit/event-sourcing-hashchain.test.ts"
-      ],
-      "source": [
-        "src/tools/event-sourcing.ts"
-      ]
+      "tests": ["tests/unit/event-sourcing-hashchain.test.ts"],
+      "source": ["src/tools/event-sourcing.ts"]
     },
     {
       "name": "secret-scanner",
       "threshold": 70,
-      "tests": [
-        "tests/unit/secret-scanner.test.ts"
-      ],
-      "source": [
-        "src/secret-scanner.ts"
-      ]
+      "tests": ["tests/unit/secret-scanner.test.ts"],
+      "source": ["src/secret-scanner.ts"]
     },
     {
       "name": "structural-compression",
       "threshold": 60,
-      "tests": [
-        "tests/unit/structural-compression.test.ts"
-      ],
-      "source": [
-        "src/compression/structural-compression.ts"
-      ]
+      "tests": ["tests/unit/structural-compression.test.ts"],
+      "source": ["src/compression/structural-compression.ts"]
     },
     {
       "name": "security-orchestrator",
       "threshold": 60,
-      "tests": [
-        "tests/security/security-orchestrator.test.ts"
-      ],
-      "source": [
-        "src/security/security-orchestrator.ts"
-      ]
+      "tests": ["tests/security/security-orchestrator.test.ts"],
+      "source": ["src/security/security-orchestrator.ts"]
     }
   ],
-  "include": [
-    "src/**/*.ts",
-    "scripts/**/*.ts"
-  ],
+  "include": ["src/**/*.ts", "scripts/**/*.ts"],
   "exclude": [
     "src/**/*.d.ts",
     "src/**/*.test.ts",
@@ -64,10 +45,7 @@
     "apps/web-dashboard/dist/**"
   ],
   "outputDir": "coverage",
-  "reportFormats": [
-    "text",
-    "lcovonly"
-  ],
+  "reportFormats": ["text", "lcovonly"],
   "_notes": {
     "thresholds": "Starting low (30%) and raising by 5% each month",
     "target_2026_Q3": {
