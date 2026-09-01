@@ -1,27 +1,19 @@
 {
-  "generated_at": "2026-08-31T15:53:44.888Z",
+  "generated_at": "2026-09-01T00:29:37.821Z",
   "period": "2026-08",
-  "days": 28,
+  "days": 27,
   "totals": {
-    "input": 497333798,
-    "output": 11320780,
-    "total": 508654578,
-    "cost": 19.146027829999998
+    "input": 497759269,
+    "output": 11450452,
+    "total": 509209721,
+    "cost": 22.029731414999997
   },
   "daily_avg": {
-    "input": 17761921,
-    "output": 404314,
-    "total": 18166235
+    "input": 18435528,
+    "output": 424091,
+    "total": 18859619
   },
   "by_day": [
-    {
-      "day": "2026-08-02",
-      "input": 1382683,
-      "output": 137670,
-      "total": 1520353,
-      "cost": 0,
-      "sessions": 3
-    },
     {
       "day": "2026-08-03",
       "input": 19431820,
@@ -216,11 +208,11 @@
     },
     {
       "day": "2026-08-29",
-      "input": 5809188,
-      "output": 1394452,
-      "total": 7203640,
+      "input": 5775062,
+      "output": 1394006,
+      "total": 7169068,
       "cost": 3.64738645,
-      "sessions": 74
+      "sessions": 73
     },
     {
       "day": "2026-08-30",
@@ -232,55 +224,55 @@
     },
     {
       "day": "2026-08-31",
-      "input": 9181784,
-      "output": 420831,
-      "total": 9602615,
-      "cost": 3.12336085,
-      "sessions": 33
+      "input": 11024064,
+      "output": 688619,
+      "total": 11712683,
+      "cost": 6.007064434999998,
+      "sessions": 58
     }
   ],
   "by_model": [
     {
       "model": "kimi-2-5",
-      "input": 363747183,
-      "output": 1616951,
-      "total": 365364134,
+      "input": 362947338,
+      "output": 1499933,
+      "total": 364447271,
       "cost": 0
     },
     {
       "model": "deepseek-v4-flash-free",
-      "input": 84543764,
-      "output": 4760610,
-      "total": 89304374,
+      "input": 84206145,
+      "output": 4740893,
+      "total": 88947038,
       "cost": 0
     },
     {
       "model": "big-pickle",
-      "input": 20345171,
-      "output": 2798893,
-      "total": 23144064,
+      "input": 20385233,
+      "output": 2799097,
+      "total": 23184330,
       "cost": 5.066973399999999
     },
     {
       "model": "GLM-5.3",
-      "input": 14238309,
-      "output": 136900,
-      "total": 14375209,
+      "input": 14470390,
+      "output": 137670,
+      "total": 14608060,
       "cost": 0
     },
     {
       "model": "glm-5.3-flash",
-      "input": 6626605,
-      "output": 229285,
-      "total": 6855890,
-      "cost": 0.7750805699999997
+      "input": 8087540,
+      "output": 316424,
+      "total": 8403964,
+      "cost": 2.2171529249999984
     },
     {
       "model": "gpt-5.6-luna",
-      "input": 1752652,
-      "output": 1248184,
-      "total": 3000836,
-      "cost": 12.43257938
+      "input": 1754703,
+      "output": 1427537,
+      "total": 3182240,
+      "cost": 13.87421061
     },
     {
       "model": "qwen3-coder-30b",
@@ -298,16 +290,16 @@
     },
     {
       "model": "codex",
-      "input": 857834,
-      "output": 4258,
-      "total": 862092,
+      "input": 612615,
+      "output": 3323,
+      "total": 615938,
       "cost": 0
     },
     {
       "model": "MiniMax-M3",
-      "input": 368253,
-      "output": 19355,
-      "total": 387608,
+      "input": 368291,
+      "output": 19641,
+      "total": 387932,
       "cost": 0
     },
     {
@@ -319,9 +311,9 @@
     },
     {
       "model": "GLM-5.3-Flash",
-      "input": 172738,
-      "output": 1774,
-      "total": 174512,
+      "input": 245725,
+      "output": 1364,
+      "total": 247089,
       "cost": 0
     },
     {
