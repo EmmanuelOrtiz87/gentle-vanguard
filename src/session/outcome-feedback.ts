@@ -123,8 +123,7 @@ export function captureOutcomeFeedback(
   const session = db
     .prepare(`SELECT id, status, tokens_used FROM sessions WHERE id = ? AND tenant_id = ?`)
     .get(sessionId, tenantId) as
-    | { id: string; status: string | null; tokens_used: number | null }
-    | undefined;
+    { id: string; status: string | null; tokens_used: number | null } | undefined;
 
   if (!session) {
     return { written: false, reason: `session ${sessionId} not found in Nexus` };
@@ -162,7 +161,10 @@ export function captureOutcomeFeedback(
 
   const trace = findSessionTrace(db, sessionId, tenantId);
   if (!trace) {
-    return { written: false, reason: `no trace found for session ${sessionId} — cannot link feedback` };
+    return {
+      written: false,
+      reason: `no trace found for session ${sessionId} — cannot link feedback`,
+    };
   }
 
   db.prepare(

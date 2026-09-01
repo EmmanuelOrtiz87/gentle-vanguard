@@ -251,7 +251,8 @@ const DAEMON_CLASSES: DaemonClass[] = [
     label: 'Content CMS Vite dev server',
     // Tolerates the npm bin shim path (`node_modules\.bin\..\vite\bin\vite.js`)
     // used when the dev server is started via npm script instead of the CC.
-    match: /apps[\\/]content-cms[\\/](node_modules[\\/]\.bin[\\/]\.\.[\\/])?node_modules[\\/]vite[\\/]bin[\\/]vite\.js/,
+    match:
+      /apps[\\/]content-cms[\\/](node_modules[\\/]\.bin[\\/]\.\.[\\/])?node_modules[\\/]vite[\\/]bin[\\/]vite\.js/,
     pidFile: join(RUNTIME_DIR, 'app-cms-vite.pid'),
     keep: 'pidfile',
     respawn: 'client',

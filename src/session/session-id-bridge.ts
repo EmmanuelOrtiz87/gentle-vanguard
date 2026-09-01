@@ -115,7 +115,9 @@ export function collectAliasIds(
     }
   };
   for (const r of db
-    .prepare(`SELECT session_id, MIN(created_at) mn, MAX(created_at) mx FROM token_transactions GROUP BY session_id`)
+    .prepare(
+      `SELECT session_id, MIN(created_at) mn, MAX(created_at) mx FROM token_transactions GROUP BY session_id`,
+    )
     .all() as Array<{ session_id: string; mn: string; mx: string }>) {
     const f = parseLocalSqlite(r.mn);
     const l = parseLocalSqlite(r.mx);
@@ -124,7 +126,9 @@ export function collectAliasIds(
   if (includeTraces) {
     try {
       for (const r of db
-        .prepare(`SELECT session_id, MIN(start_time) mn, MAX(start_time) mx FROM traces WHERE session_id IS NOT NULL AND session_id != '' GROUP BY session_id`)
+        .prepare(
+          `SELECT session_id, MIN(start_time) mn, MAX(start_time) mx FROM traces WHERE session_id IS NOT NULL AND session_id != '' GROUP BY session_id`,
+        )
         .all() as Array<{ session_id: string; mn: string | number; mx: string | number }>) {
         const f = typeof r.mn === 'number' ? r.mn : Date.parse(r.mn);
         const l = typeof r.mx === 'number' ? r.mx : Date.parse(r.mx);
@@ -141,17 +145,15 @@ export function collectAliasIds(
  * Backfill heurístico: ventana inter-creación. Devuelve candidatos (dry-run)
  * o los aplica. Nunca adivina en ambigüedad.
  */
-export function backfillAliases(
-  db: Database.Database,
-  opts: BackfillOptions = {},
-): BackfillResult {
+export function backfillAliases(db: Database.Database, opts: BackfillOptions = {}): BackfillResult {
   const toleranceMs = opts.toleranceMs ?? 2 * 60_000;
   const minWindowMs = opts.minWindowMs ?? 60_000;
 
   const sessions = (
-    db
-      .prepare(`SELECT id, created_at FROM sessions ORDER BY created_at ASC`)
-      .all() as Array<{ id: string; created_at: string | null }>
+    db.prepare(`SELECT id, created_at FROM sessions ORDER BY created_at ASC`).all() as Array<{
+      id: string;
+      created_at: string | null;
+    }>
   )
     .map((s) => ({ id: s.id, at: s.created_at ? Date.parse(s.created_at) : NaN }))
     .filter((s) => Number.isFinite(s.at));
@@ -160,9 +162,10 @@ export function backfillAliases(
   const already = new Set(
     aliasTableExists(db)
       ? (
-          db
-            .prepare(`SELECT session_id, alias_id FROM session_id_aliases`)
-            .all() as Array<{ session_id: string; alias_id: string }>
+          db.prepare(`SELECT session_id, alias_id FROM session_id_aliases`).all() as Array<{
+            session_id: string;
+            alias_id: string;
+          }>
         ).map((r) => `${r.session_id}=>${r.alias_id}`)
       : [],
   );
@@ -216,9 +219,7 @@ export function backfillAliases(
     }
     // confianza: ventana amplia y actividad contenida en la ventana
     const contained = range.last < windowEnd;
-    const confidence = Number(
-      (contained ? (windowMs > 30 * 60_000 ? 0.9 : 0.75) : 0.6).toFixed(2),
-    );
+    const confidence = Number((contained ? (windowMs > 30 * 60_000 ? 0.9 : 0.75) : 0.6).toFixed(2));
     candidates.push({
       aliasId,
       sessionId: cand.id,
@@ -240,8 +241,13 @@ export function backfillAliases(
     );
     const tx = db.transaction(() => {
       for (const c of candidates) {
-        applied += ins.run(c.sessionId, c.aliasId, c.source, c.confidence, new Date().toISOString())
-          .changes;
+        applied += ins.run(
+          c.sessionId,
+          c.aliasId,
+          c.source,
+          c.confidence,
+          new Date().toISOString(),
+        ).changes;
       }
     });
     tx();
@@ -300,9 +306,7 @@ export function backfillTraces(
     .filter((s) => Number.isFinite(s.at));
 
   const traces = db
-    .prepare(
-      `SELECT span_id, start_time FROM traces WHERE session_id IS NULL OR session_id = ''`,
-    )
+    .prepare(`SELECT span_id, start_time FROM traces WHERE session_id IS NULL OR session_id = ''`)
     .all() as Array<{ span_id: string; start_time: number | string }>;
 
   const result: TraceBackfillResult = {
@@ -314,7 +318,9 @@ export function backfillTraces(
   };
 
   const update = opts.apply
-    ? db.prepare(`UPDATE traces SET session_id = ? WHERE span_id = ? AND (session_id IS NULL OR session_id = '')`)
+    ? db.prepare(
+        `UPDATE traces SET session_id = ? WHERE span_id = ? AND (session_id IS NULL OR session_id = '')`,
+      )
     : null;
 
   const applyTx = db.transaction(() => {
@@ -433,8 +439,12 @@ export interface AliasStats {
 export function aliasStats(db: Database.Database): AliasStats | null {
   if (!aliasTableExists(db)) return null;
   const total = db.prepare(`SELECT COUNT(*) c FROM session_id_aliases`).get() as { c: number };
-  const distinctSessions = db.prepare(`SELECT COUNT(DISTINCT session_id) c FROM session_id_aliases`).get() as { c: number };
-  const distinctAliasIds = db.prepare(`SELECT COUNT(DISTINCT alias_id) c FROM session_id_aliases`).get() as { c: number };
+  const distinctSessions = db
+    .prepare(`SELECT COUNT(DISTINCT session_id) c FROM session_id_aliases`)
+    .get() as { c: number };
+  const distinctAliasIds = db
+    .prepare(`SELECT COUNT(DISTINCT alias_id) c FROM session_id_aliases`)
+    .get() as { c: number };
   const bySource = db
     .prepare(
       `SELECT source, COUNT(*) n, AVG(confidence) avgConfidence FROM session_id_aliases GROUP BY source ORDER BY n DESC`,
@@ -453,7 +463,9 @@ export function aliasStats(db: Database.Database): AliasStats | null {
         .get() as { s: number }
     ).s;
     totalTxnTokens = (
-      db.prepare(`SELECT COALESCE(SUM(input_tokens + output_tokens), 0) s FROM token_transactions`).get() as { s: number }
+      db
+        .prepare(`SELECT COALESCE(SUM(input_tokens + output_tokens), 0) s FROM token_transactions`)
+        .get() as { s: number }
     ).s;
   } catch {
     /* token_transactions missing */
@@ -462,7 +474,11 @@ export function aliasStats(db: Database.Database): AliasStats | null {
     totalAliases: total.c,
     distinctSessions: distinctSessions.c,
     distinctAliasIds: distinctAliasIds.c,
-    bySource: bySource.map((r) => ({ source: r.source, n: r.n, avgConfidence: Number((r.avgConfidence ?? 0).toFixed(2)) })),
+    bySource: bySource.map((r) => ({
+      source: r.source,
+      n: r.n,
+      avgConfidence: Number((r.avgConfidence ?? 0).toFixed(2)),
+    })),
     attributedTokens: attributedTokens,
     totalTxnTokens: totalTxnTokens,
   };
@@ -472,10 +488,7 @@ export function aliasStats(db: Database.Database): AliasStats | null {
  * SQL helper para joins enriquecidos: devuelve los ids alias conocidos para
  * una sesión (o solo la sesión si la tabla no existe / no hay alias).
  */
-export function sessionPlusAliasIds(
-  db: Database.Database,
-  sessionId: string,
-): string[] {
+export function sessionPlusAliasIds(db: Database.Database, sessionId: string): string[] {
   if (!aliasTableExists(db)) return [sessionId];
   const rows = db
     .prepare(`SELECT alias_id FROM session_id_aliases WHERE session_id = ?`)

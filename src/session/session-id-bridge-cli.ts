@@ -41,7 +41,9 @@ function main(): void {
         return;
       }
       console.log('════════ SESSION ID ALIASES ════════');
-      console.log(`aliases: ${s.totalAliases} | sesiones: ${s.distinctSessions} | alias-ids: ${s.distinctAliasIds}`);
+      console.log(
+        `aliases: ${s.totalAliases} | sesiones: ${s.distinctSessions} | alias-ids: ${s.distinctAliasIds}`,
+      );
       for (const b of s.bySource) {
         console.log(`  [${b.source}] n=${b.n} avgConfidence=${b.avgConfidence}`);
       }
@@ -59,9 +61,7 @@ function main(): void {
       console.log(
         `traces con session_id NULL: ${res.totalNullTraces} | matched: ${res.matched.length} | aplicados: ${res.applied}`,
       );
-      console.log(
-        `omitidos: ambiguos=${res.skippedAmbiguous} sin-ventana=${res.skippedNoWindow}`,
-      );
+      console.log(`omitidos: ambiguos=${res.skippedAmbiguous} sin-ventana=${res.skippedNoWindow}`);
       if (res.matched.length > 0) {
         console.log('\nMuestra (primeros 15):');
         for (const m of res.matched.slice(0, 15)) {

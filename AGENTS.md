@@ -75,20 +75,20 @@ trazas reales.
 
 ## command-center
 
-Panel de control **standalone** en `apps/command-center/` (Node puro, cero deps, cero build) —
-ciclo de vida on-demand de las apps construidas: dashboard, analytics, cms, academy, prompts.
-Docs completas: `apps/command-center/README.md`.
+Panel de control **standalone** en `apps/command-center/` (Node puro, cero deps, cero build) — ciclo
+de vida on-demand de las apps construidas: dashboard, analytics, cms, academy, prompts. Docs
+completas: `apps/command-center/README.md`.
 
-| Acción                | Comando / URL                                    |
-| --------------------- | ------------------------------------------------ |
-| UI                    | `http://127.0.0.1:8090/`                         |
-| Start (abre browser)  | `npm run cc:start`                               |
-| CLI                   | `npx tsx src/cli/gv.ts cc start\|stop\|status`   |
-| Automático            | Lazy step `command-center` del autostart (`--no-browser`) |
+| Acción               | Comando / URL                                             |
+| -------------------- | --------------------------------------------------------- |
+| UI                   | `http://127.0.0.1:8090/`                                  |
+| Start (abre browser) | `npm run cc:start`                                        |
+| CLI                  | `npx tsx src/cli/gv.ts cc start\|stop\|status`            |
+| Automático           | Lazy step `command-center` del autostart (`--no-browser`) |
 
-- API: `GET /api/apps`, `POST /api/apps/:id/start|stop` — idempotentes; `partial` = arranca solo
-  lo que falta. Bind loopback-only (ADR-0017), rechaza Host ajeno, UI con `no-store` + error
-  surfacing global.
+- API: `GET /api/apps`, `POST /api/apps/:id/start|stop` — idempotentes; `partial` = arranca solo lo
+  que falta. Bind loopback-only (ADR-0017), rechaza Host ajeno, UI con `no-store` + error surfacing
+  global.
 - Estado: pidfile propio → legacy pidfiles → port probe; stop con fallback por dueño de puerto y
   **watchdogs del dashboard se matan primero**. Pidfile: `.runtime/command-center.pid` (env
   `CC_PID_FILE` para tests). Puerto 8090 (env `CC_PORT`, persistido en
@@ -98,15 +98,16 @@ Docs completas: `apps/command-center/README.md`.
 
 ## design-system (marca GV)
 
-Sistema canónico en `assets/gv-design-system.css` — fuente única de estilos compartidos:
-tokens dark/light (`--gv-*`), shell (`.gv-grid-bg/.gv-glow-a/b/.gv-topbar/.gv-view-tabs/.gv-panel`),
+Sistema canónico en `assets/gv-design-system.css` — fuente única de estilos compartidos: tokens
+dark/light (`--gv-*`), shell (`.gv-grid-bg/.gv-glow-a/b/.gv-topbar/.gv-view-tabs/.gv-panel`),
 controles (`.gv-btn` pill gradiente, `.gv-icon-btn`, `.gv-lang-dropdown`), `.gv-view-fade`
 (transición de vista 0.28s), `.gv-footer`, breakpoints 640/1024px.
 
 - **Logo oficial**: `logo.svg` (monograma gradiente + glow) — copia en `public/` de cada app,
   `<img class="gv-brand-logo">` a 32px. Wordmark "Gentle**Vanguard**" en Orbitron (displayFont).
 - **Reglas**: prefijo `--gv-*` RESERVADO al canónico (apps usan su propio prefijo, ej. `--dash-*`);
-  apps vanilla/estáticas sirven el canónico por ruta o snapshot documentado — nunca redefinir `.gv-*`.
+  apps vanilla/estáticas sirven el canónico por ruta o snapshot documentado — nunca redefinir
+  `.gv-*`.
 - **Referencia visual viva**: analytics + academy. i18n es default + selector; tema con clave global
   `localStorage gv-cc-theme` / `gv-cc-lang`.
 - Validación visual: `chrome --headless=new --screenshot` + leer la imagen (los checks de valores
@@ -177,8 +178,8 @@ CLI Guard: check anti-regresión del patrón roto
 ## Nexus — DB operacional
 
 SQLite WAL en `.runtime/gentle-vanguard.db`, 23 tablas, singleton DatabaseManager
-(`src/database/nexus/manager.ts`). Converge: métricas, sesiones, trazas, eventos,
-alertas, feedback, response cache, skills, tokens, routing, scoring.
+(`src/database/nexus/manager.ts`). Converge: métricas, sesiones, trazas, eventos, alertas, feedback,
+response cache, skills, tokens, routing, scoring.
 
 ```bash
 npm run db:init && npm run db:health   # verificación rápida

@@ -105,9 +105,7 @@ test('downgrade decision is logged to the JSONL decision log', () => {
   const resolved = resolveBudgetAwareModel('research', MODEL, state);
   assert.equal(resolved, CHEAP);
   const last = readLastDecisions(3);
-  const row = last.find(
-    (r) => r.path === 'research' && r.from === MODEL && r.to === CHEAP,
-  );
+  const row = last.find((r) => r.path === 'research' && r.from === MODEL && r.to === CHEAP);
   assert.ok(row, 'decision row found in budget-routing-decisions.jsonl');
   assert.ok(typeof row.ts === 'string' && row.ts);
   assert.ok(typeof row.usagePct === 'number' && (row.usagePct as number) >= 150);

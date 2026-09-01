@@ -549,7 +549,9 @@ async function main() {
       LOG.warn(`[CONFIG] ${result.summary}`);
     }
   } catch (err) {
-    LOG.warn(`[CONFIG] validation could not run: ${err instanceof Error ? err.message : String(err)}`);
+    LOG.warn(
+      `[CONFIG] validation could not run: ${err instanceof Error ? err.message : String(err)}`,
+    );
   }
 
   // Iniciar sesión explícitamente (funciona en TODAS las herramientas, no depende del plugin automático)

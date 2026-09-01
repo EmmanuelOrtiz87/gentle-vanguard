@@ -83,7 +83,10 @@ export function receivePendingCloses(reportDir: string = SESSION_DIR): ReceivedC
   const out: ReceivedClose[] = [];
   for (const pending of listPendingAcks()) {
     if (!pending.resource.startsWith(CLOSE_PREFIX)) continue;
-    const reportFile = join(reportDir, `close-report-${pending.resource.slice(CLOSE_PREFIX.length)}.json`);
+    const reportFile = join(
+      reportDir,
+      `close-report-${pending.resource.slice(CLOSE_PREFIX.length)}.json`,
+    );
     let overall = pending.revision; // staged revision carries overall
     let intact = false;
     try {

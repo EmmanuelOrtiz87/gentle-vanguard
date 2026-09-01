@@ -200,8 +200,7 @@ export function getBudgetRoutingState(overrides?: {
 
   const usedTokensToday = overrides?.usedTokensToday ?? getUsedTokensToday();
   const dailyBudget = loadDailyBudget();
-  const usagePct =
-    dailyBudget > 0 ? Math.round((usedTokensToday / dailyBudget) * 10000) / 100 : 0;
+  const usagePct = dailyBudget > 0 ? Math.round((usedTokensToday / dailyBudget) * 10000) / 100 : 0;
 
   let tier: BudgetTier = 'ok';
   if (usagePct >= cfg.hardThresholdPct) tier = 'hard';
@@ -228,9 +227,10 @@ function recordNexusEvent(decision: RoutingDecision): void {
     const Database = _require('better-sqlite3');
     const db = new Database(NEXUS_DB_PATH);
     try {
-      db
-        .prepare('INSERT INTO events (type, payload) VALUES (?, ?)')
-        .run('budget.routing_downgrade', JSON.stringify({ event: 'budget.routing_downgrade', ...decision }));
+      db.prepare('INSERT INTO events (type, payload) VALUES (?, ?)').run(
+        'budget.routing_downgrade',
+        JSON.stringify({ event: 'budget.routing_downgrade', ...decision }),
+      );
     } finally {
       db.close();
     }

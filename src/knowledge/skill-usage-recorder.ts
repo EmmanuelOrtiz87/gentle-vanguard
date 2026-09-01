@@ -191,7 +191,9 @@ skill-loader match/serve point; never throws.`);
     dryRun: args.includes('--dry-run'),
   });
   if (result.skipped) {
-    console.log('[INFO] No skill usage evidence found (.atl/skill-stats.json) — nothing backfilled.');
+    console.log(
+      '[INFO] No skill usage evidence found (.atl/skill-stats.json) — nothing backfilled.',
+    );
   } else {
     console.log(
       `[OK] ${args.includes('--dry-run') ? 'Would backfill' : 'Backfilled'} ${result.skills} skill(s) from real stats evidence.`,

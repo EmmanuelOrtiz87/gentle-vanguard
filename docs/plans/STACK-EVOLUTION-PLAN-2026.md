@@ -10,22 +10,21 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ### Ejecutado — Sesión 14 (2026-08-31, DI 12/12 + benchmark alpackaai absorbido)
 
-- ✅ **DI batch final (12/12)**: los 4 módulos restantes sin efectos al importarlos —
-  `db-init.ts` (librería `initDb()` con resultado tipado), `post-mortem-trigger.ts`
-  (`runPostMortem()`), `performance-slo-monitor.ts` (`runSloChecks()` → `SLOReport`) y
-  `cli/backlog.ts` (DB eager → `getBacklog()` lazy). Entrada CLI protegida con guard
-  `pathToFileURL` (patrón anti-regresión de `src/tools/auto-url-fix.ts`); servicios
-  `postMortem` y `sloMonitor` registrados en el contenedor. Verificado: tsc limpio,
-  container tests 16/16, CLIs standalone operativos, imports side-effect free.
-  Nota: `npm run test:optimized` marca FAIL en suites vitest (command-center,
-  orchestrator-loop-guard) por ejecutarlas con `node --test` — falso positivo preexistente;
-  bajo vitest real pasan 11/11.
-- ✅ **Benchmark alpackaai.xyz absorbido** (`docs/reference/PROMPT-LIBRARY-BENCHMARK.md`):
-  530 prompts, 8 categorías por audiencia, freemium, títulos outcome-driven. Nativo en
+- ✅ **DI batch final (12/12)**: los 4 módulos restantes sin efectos al importarlos — `db-init.ts`
+  (librería `initDb()` con resultado tipado), `post-mortem-trigger.ts` (`runPostMortem()`),
+  `performance-slo-monitor.ts` (`runSloChecks()` → `SLOReport`) y `cli/backlog.ts` (DB eager →
+  `getBacklog()` lazy). Entrada CLI protegida con guard `pathToFileURL` (patrón anti-regresión de
+  `src/tools/auto-url-fix.ts`); servicios `postMortem` y `sloMonitor` registrados en el contenedor.
+  Verificado: tsc limpio, container tests 16/16, CLIs standalone operativos, imports side-effect
+  free. Nota: `npm run test:optimized` marca FAIL en suites vitest (command-center,
+  orchestrator-loop-guard) por ejecutarlas con `node --test` — falso positivo preexistente; bajo
+  vitest real pasan 11/11.
+- ✅ **Benchmark alpackaai.xyz absorbido** (`docs/reference/PROMPT-LIBRARY-BENCHMARK.md`): 530
+  prompts, 8 categorías por audiencia, freemium, títulos outcome-driven. Nativo en
   `apps/prompt-studio`: taxonomía `CATEGORIES` + columna `category` (migración idempotente)
-  + facet con conteos en `GET /api/prompts` + filtro `?category=` + chips y badge en UI.
-  Circuito verificado en vivo (POST → filtro → facet → delete). Gemas sigue pendiente de la
-  doc del usuario (video B7BY3TugqPA).
+  - facet con conteos en `GET /api/prompts` + filtro `?category=` + chips y badge en UI. Circuito
+    verificado en vivo (POST → filtro → facet → delete). Gemas sigue pendiente de la doc del usuario
+    (video B7BY3TugqPA).
 - CMS F2 UI: tomado por agente paralelo (fuera de scope aquí).
 
 ### Ejecutado — Sesión 13 (2026-08-31, extracción de apps: Prompt Studio + content-ops al CMS)
@@ -33,33 +32,33 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 - ✅ **apps/prompt-studio** (commit `a3373aec`): generador de prompts como app standalone
   (Vite+React+Tailwind, marca GV, 100% client-side). Consolida el PromptStudio.tsx del dashboard
   (que estaba HUÉRFANO — nadie lo montaba) con el generador demo de Academy (que se conserva como
-  material didáctico del curso). Puerto 5176, registrada en el Command Center con lifecycle
-  completo verificado (start/stop/serve en vivo).
-- ✅ **Content-ops fuera del dashboard**: el engine (ADR-0018) es la máquina de estados de
-  operación y el CMS (ADR-0021) la superficie de creación — el panel del dashboard era una tercera
-  superficie duplicada. Handler migrado al server del CMS (puerto 3787, verificado con jobs
-  reales); ContentOpsPanel y PromptStudio eliminados del dashboard (95/95 tests, build verde).
-  El dashboard queda como pura observabilidad.
+  material didáctico del curso). Puerto 5176, registrada en el Command Center con lifecycle completo
+  verificado (start/stop/serve en vivo).
+- ✅ **Content-ops fuera del dashboard**: el engine (ADR-0018) es la máquina de estados de operación
+  y el CMS (ADR-0021) la superficie de creación — el panel del dashboard era una tercera superficie
+  duplicada. Handler migrado al server del CMS (puerto 3787, verificado con jobs reales);
+  ContentOpsPanel y PromptStudio eliminados del dashboard (95/95 tests, build verde). El dashboard
+  queda como pura observabilidad.
 - ✅ **Command Center**: 'prompts' registrada + cms ahora incluye su proceso api (:3787, se había
   perdido en la extracción del panel a app). Fix de ruta stale src/ops en start.ts.
-- Arquitectura resultante: 6 apps (dashboard/analytics/cms/academy/prompts/command-center), cada
-  una con un dominio claro, todas lifecycle-adas desde el Command Center.
+- Arquitectura resultante: 6 apps (dashboard/analytics/cms/academy/prompts/command-center), cada una
+  con un dominio claro, todas lifecycle-adas desde el Command Center.
 
 ### Ejecutado — Sesión 12 (2026-08-31, ronda 3: circuito de trazas + DI batch 2 + CMS F2 parcial)
 
 - ✅ **Traces con session_id** (commit `367f4295`): resolver (contexto de correlación > alias map >
   session-current; NULL si no resuelve, nunca rompe) + bridge write en TraceRepo + modo
-  `--backfill-traces` en el CLI: **616/630 trazas NULL atribuidas (97.8%)**. Último circuito de datos
-  muerto, cerrado. (Agente interrumpido por límite de uso; completado a mano.)
+  `--backfill-traces` en el CLI: **616/630 trazas NULL atribuidas (97.8%)**. Último circuito de
+  datos muerto, cerrado. (Agente interrumpido por límite de uso; completado a mano.)
 - ✅ **F2.6 batch 2** (commit `95118416`): 7 singletons más al contenedor DI (errorMemory,
-  resultGatekeeper, eventSourcing, tokenTracker, skillUsageTracker, adaptiveRouter,
-  sessionMetrics) con delegación legacy; `createTestContainer()`; 4 saltados documentados
-  (main() incondicional al import). Total DI: 10/12.
+  resultGatekeeper, eventSourcing, tokenTracker, skillUsageTracker, adaptiveRouter, sessionMetrics)
+  con delegación legacy; `createTestContainer()`; 4 saltados documentados (main() incondicional al
+  import). Total DI: 10/12.
 - ✅ **CMS F2 parcial** (commit `1781cc3f`): `POST /api/slots/recommend` con heurísticas por red
   (verificado en vivo), convención `media:<id>` y tipos en UI. Pendiente próxima sesión: vistas de
   calendario y biblioteca de medios en la UI + retiro legacy marketing-agent/social-poster.
-- Todo pusheado a origin/main. Nota operativa: 2 agentes cayeron por límite de uso de 5h
-  (reset 01:54); su trabajo parcial fue verificado, completado y commiteado.
+- Todo pusheado a origin/main. Nota operativa: 2 agentes cayeron por límite de uso de 5h (reset
+  01:54); su trabajo parcial fue verificado, completado y commiteado.
 
 ### Ejecutado — Sesión 11 (2026-08-31, ronda 2 OPTIMIZACIÓN: loops de auto-aprendizaje vivos)
 
@@ -69,13 +68,13 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
   sesiones del repo (antes: 0)**. Eval con joins alias-aware.
 - ✅ **Feedback + skill_usage vivos** (commit `9cf0f1af`): outcome-feedback deriva up/down en el
   cierre SOLO de señales reales (inconcluso no escribe); skill-usage-recorder en matchSkill/
-  getSkillContent + backfill desde evidencia real (.atl/skill-stats.json, 32 filas). Dashboard
-  POST /api/feedback verificado correcto y compatible.
+  getSkillContent + backfill desde evidencia real (.atl/skill-stats.json, 32 filas). Dashboard POST
+  /api/feedback verificado correcto y compatible.
 - ✅ **Routing económico activo** (commit `3e95d2eb`): `resolveBudgetAwareModel()` — con uso diario
-  >umbral (soft 100%), las rutas internas (subagent/delegation/research) bajan solas al perfil
-  cheap (mimo-v2.5-free hoy); **el modelo interactivo JAMÁS se toca**; decisiones logueadas
-  (JSONL + eventos Nexus); kill-switch GV_BUDGET_ROUTING=0. **DEJADO ACTIVO** — con el uso actual
-  (170%) ya está degradando rutas internas. Docs: docs/reference/BUDGET-ROUTING.md.
+  > umbral (soft 100%), las rutas internas (subagent/delegation/research) bajan solas al perfil
+  > cheap (mimo-v2.5-free hoy); **el modelo interactivo JAMÁS se toca**; decisiones logueadas
+  > (JSONL + eventos Nexus); kill-switch GV_BUDGET_ROUTING=0. **DEJADO ACTIVO** — con el uso actual
+  > (170%) ya está degradando rutas internas. Docs: docs/reference/BUDGET-ROUTING.md.
 - ✅ **Fix señal muerta de feedback en eval** (commit `483e4e3f`): el lector consultaba tipos que el
   CHECK del esquema nunca permite ('positive'...); ahora incluye 'up'/'down'.
 - Nota: `traces.session_id` es NULL en todas las filas (629) — el puente no puede atribuir trazas
@@ -83,14 +82,14 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ### Ejecutado — Sesión 10 (2026-08-31, ronda de OPTIMIZACIÓN: despertar capacidades dormidas)
 
-- ✅ **Session lifecycle reparado** (commit `fa7dc363`): causa raíz de múltiples capacidades dormidas
-  — no existía ningún writer de estado terminal y el metrics-writer resucitaba 'active' desde
-  .state.json stale. Sweeper clasifica idle/completed/abandoned (piso duro de 2h), wired al
+- ✅ **Session lifecycle reparado** (commit `fa7dc363`): causa raíz de múltiples capacidades
+  dormidas — no existía ningún writer de estado terminal y el metrics-writer resucitaba 'active'
+  desde .state.json stale. Sweeper clasifica idle/completed/abandoned (piso duro de 2h), wired al
   autoheal del watchtower. Backfill: 424 zombies → 359 abandoned / 60 idle / 9 protegidos.
 - ✅ **Response cache cableado** (commit `91ce4d9d`): estaba a 0 filas (capacidad dormida). Wrapper
   `cached()` (exacto SHA256 + semántico TF-IDF, TTL 24h, bypass por env) en web-research-select y
-  sdd-research; hits registran ahorro en token_savings. Demo real: misma query en 0.27s, 538
-  tokens ahorrados, cero red.
+  sdd-research; hits registran ahorro en token_savings. Demo real: misma query en 0.27s, 538 tokens
+  ahorrados, cero red.
 - ✅ **Eval endurecido** (commit `fc18a31b`): abandoned cuenta como negativo SOLO con actividad
   (fantasmas de autostart excluidos); dataset vacío = corrida no persistida + gate neutro (no
   envenena baseline).
@@ -104,25 +103,25 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 ### Ejecutado — Sesión 9 (2026-08-31, FASE 3 COMPLETA en paralelo: F3.3-F3.6)
 
 - ✅ **F3.3 ports & adapters** (commit `5d638c68`, ADR-0024): `src/ports/` con StoragePort
-  (InMemory + SqliteDisk, suite de contratos idéntica = demo del swap), QueuePort (at-least-once
-  con ack/nack/visibility-timeout), TracingPort (Noop + OTLP/JSON nativo sobre HTTP, cero deps) y
+  (InMemory + SqliteDisk, suite de contratos idéntica = demo del swap), QueuePort (at-least-once con
+  ack/nack/visibility-timeout), TracingPort (Noop + OTLP/JSON nativo sobre HTTP, cero deps) y
   `resolvePorts()` por config (GV_STORAGE/GV_QUEUE/GV_TRACING). Camino a Postgres/Redis documentado.
   32/32 tests.
 - ✅ **F3.4 plugin architecture skills** (commit `9f19927f`): `src/plugins/` con manifest zod
   (gv-plugin.json o frontmatter SKILL.md real), registry con ciclo install→verify→enable→deprecate
-  + hash SHA-256 anti-tamper, instalación desde dir local/git/tarball con secret-scan del stack
-  (80 patrones) que rechaza si halla secrets. `gv skill <list|install|...>` operativo. 12/12 tests.
-- ✅ **F3.5 dashboard ejecutivo de costes** (commit `2a9d0d3f`): `/costs` en dashboard con
-  pricing de 20 modelos reales (config/model-pricing.json), proyección mensual, presupuesto vs
+  - hash SHA-256 anti-tamper, instalación desde dir local/git/tarball con secret-scan del stack (80
+    patrones) que rechaza si halla secrets. `gv skill <list|install|...>` operativo. 12/12 tests.
+- ✅ **F3.5 dashboard ejecutivo de costes** (commit `2a9d0d3f`): `/costs` en dashboard con pricing
+  de 20 modelos reales (config/model-pricing.json), proyección mensual, presupuesto vs
   token-budget-guard, top sesiones e insight de routing. **Datos reales: 709.7M tokens/30d =
-  $413.63, proyección $737.85, presupuesto diario en HARD (624%), glm-5.3-flash recortaría ~84%**
-  — primera decisión de routing documentada con datos (criterio de aceptación de F3.5 cumplido).
+  $413.63, proyección $737.85, presupuesto diario en HARD (624%), glm-5.3-flash recortaría ~84%** —
+  primera decisión de routing documentada con datos (criterio de aceptación de F3.5 cumplido).
 - ✅ **F3.6 correlación OTel unificada** (commit `54277331`): `withCorrelation()` via
   AsyncLocalStorage; eventos trace/metric/log/token a JSONL con ids OTLP; bridge en logger
   (backwards-compat); `queryCorrelation()` une JSONL + token_transactions en una línea de tiempo;
   `gv telemetry --session <id>`. Promoción a collector OTLP real documentada. 6/6 tests.
-- ✅ **Wiring** (commit `372d5a33`): `gv skill` + `gv telemetry` + npm scripts
-  (skill:plugins, telemetry:correlation, ports:test, etc.).
+- ✅ **Wiring** (commit `372d5a33`): `gv skill` + `gv telemetry` + npm scripts (skill:plugins,
+  telemetry:correlation, ports:test, etc.).
 - ✅ **F1.3 resuelto como NATIVO** (decisión): version-sync.ts es la implementación definitiva
   interina; no se adopta changesets (native-first, ADR-0017). **F1.5 ya aplicado**
   (tests/coverage-config.json 40/40/30/40).
@@ -131,35 +130,36 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 
 ### Ejecutado — Sesión 8 (2026-08-31, Apps Control Panel + F2.3 cierre de scope library)
 
-- ✅ **F2.6 COMPLETADO — ConfigService + DI ligera** (commit `ba46332f`): `src/config/config-service.ts`
-  (30 vars críticas de arranque, zod, modo local nunca hard-fail / strict para promoción cloud,
-  `createTestConfig()`), `src/core/container.ts` (`createContainer()` sin framework, 3 pilotos:
-  config/db/tokenBudgetGuard; 11 singletons restantes documentados para batches futuros), wiring de
-  validación en session-autostart (WARN no bloqueante). 25/25 tests nuevos.
+- ✅ **F2.6 COMPLETADO — ConfigService + DI ligera** (commit `ba46332f`):
+  `src/config/config-service.ts` (30 vars críticas de arranque, zod, modo local nunca hard-fail /
+  strict para promoción cloud, `createTestConfig()`), `src/core/container.ts` (`createContainer()`
+  sin framework, 3 pilotos: config/db/tokenBudgetGuard; 11 singletons restantes documentados para
+  batches futuros), wiring de validación en session-autostart (WARN no bloqueante). 25/25 tests
+  nuevos.
 - ✅ **F3.1 COMPLETADO — evaluación continua** (commit `ce1f1c5c`): `src/eval/continuous-eval.ts`
   sobre trazas reales de Nexus (dataset dorado sessions/feedback/traces, scoring determinista
   0.5/0.3/0.2, tendencia vs run previo, gate -5%), tabla `eval_runs`, `npm run eval:continuous` /
   `eval:gate` + `gv eval`. 9/9 tests; corrida real verificada (aggregate 1.0, gate PASS). Nota: solo
   2 sesiones con estado terminal en Nexus — el dataset crecerá al cerrar sesiones correctamente.
-- ✅ **CMS Content OS F1 CERRADO** (commit `40eac83a`): backend+repo+generator ya existían
-  (sesión paralela); gaps cerrados: `ContentOS` montado de verdad en la UI (tab principal, studio
-  legacy relegado a tab) y API del Content OS (puerto 3787) integrada al Apps Control Panel.
-  Verificado en vivo: health/platforms/items/slots OK, 34/34 tests.
-- ✅ **Apps Control Panel** (commit `7b80dc68`): `apps-control-api.ts` + `AppsControlPanel`
-  (ruta `/apps`) para lifecycle de dashboard/analytics/cms/academy desde la UI. Dashboard WS ahora
+- ✅ **CMS Content OS F1 CERRADO** (commit `40eac83a`): backend+repo+generator ya existían (sesión
+  paralela); gaps cerrados: `ContentOS` montado de verdad en la UI (tab principal, studio legacy
+  relegado a tab) y API del Content OS (puerto 3787) integrada al Apps Control Panel. Verificado en
+  vivo: health/platforms/items/slots OK, 34/34 tests.
+- ✅ **Apps Control Panel** (commit `7b80dc68`): `apps-control-api.ts` + `AppsControlPanel` (ruta
+  `/apps`) para lifecycle de dashboard/analytics/cms/academy desde la UI. Dashboard WS ahora
   persiste entre sesiones (el panel es dueño del lifecycle; session-close ya no lo mata). MCP
   `gv-analytics-atlassian` registrado en `opencode.json` (pendiente de gv-analytics cerrado).
-- ✅ **F2.3 batch 2 — scope library CERRADO** (commit `9e5f091c`): codemod mejorado (archivos
-  mixtos library+CLI ya no se saltan enteros; fix de reporte multiArg; SKIP ampliado con los
-  reversions batch-1) + 9 multi-arg migrados a mano (ResilienceManager, session-context-log,
+- ✅ **F2.3 batch 2 — scope library CERRADO** (commit `9e5f091c`): codemod mejorado (archivos mixtos
+  library+CLI ya no se saltan enteros; fix de reporte multiArg; SKIP ampliado con los reversions
+  batch-1) + 9 multi-arg migrados a mano (ResilienceManager, session-context-log,
   response-cache/sqlite, event-sourcing-api). **Conclusión de fase**: los ~5.400 `console.*`
-  restantes en `src/` están en código CLI por diseño (shebang, `src/cli/`, bloques main() con
-  stdout parseable) — la superficie library está 100% en logger estructurado. tsc 0, eslint 0,
-  test:config 24/24, test:workflows 4/4.
-- ✅ **F2.7 COMPLETADO — meta ≥16 superada**: 17 componentes con tests (9 archivos nuevos, 32
-  tests: ActivityTimeline, AppsControlPanel, AuditPanel, ErrorBoundary, GuardrailsPanel,
-  LoopGuardPanel, NotificationToast, SessionTable, TokenUsagePanel). Suite dashboard 97/97, build
-  exit 0. Pendiente opcional: alineación de versiones via `catalog:` pnpm.
+  restantes en `src/` están en código CLI por diseño (shebang, `src/cli/`, bloques main() con stdout
+  parseable) — la superficie library está 100% en logger estructurado. tsc 0, eslint 0, test:config
+  24/24, test:workflows 4/4.
+- ✅ **F2.7 COMPLETADO — meta ≥16 superada**: 17 componentes con tests (9 archivos nuevos, 32 tests:
+  ActivityTimeline, AppsControlPanel, AuditPanel, ErrorBoundary, GuardrailsPanel, LoopGuardPanel,
+  NotificationToast, SessionTable, TokenUsagePanel). Suite dashboard 97/97, build exit 0. Pendiente
+  opcional: alineación de versiones via `catalog:` pnpm.
 
 ### Ejecutado — Sesión 7 (2026-08-31, anti-loop nativo + métricas vivas + gv potentiation)
 
@@ -340,8 +340,7 @@ comercial) **Tipo:** Plan de acción estratégico y táctico — el qué, el por
 - F2.2 reorganización de `src/` por dominios (un PR por dominio, barriles de compatibilidad).
 - F2.3 ✅ cerrado (scope library completo; console.* restantes = CLI por diseño); F2.4 ✅ 0 `any`;
   consolidación modular nativa (mantenimiento); F2.6 ✅ ConfigService/DI (pilotos; 11 singletons
-  restantes); F2.8 ✅ CLI `gv` unificada;
-  F2.7 en curso (tests dashboard).
+  restantes); F2.8 ✅ CLI `gv` unificada; F2.7 en curso (tests dashboard).
 - F5 Sprints A-D comerciales (ver `GENTLE_VANGUARD_MASTER/00-EVOLUTION-ACTION-PLAN-2026-08.md`).
 
 ---

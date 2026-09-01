@@ -1,6 +1,12 @@
 # ADR-0017: Local-First Operating Model
 
-Date: 2026-08-25 Status: Accepted
+## Status
+
+Accepted
+
+## Date
+
+2026-08-25
 
 ## Context
 

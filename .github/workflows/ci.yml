@@ -69,6 +69,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Install Syft + Grype (container-scan gate toolchain)
+        run: |
+          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 https://raw.githubusercontent.com/anchore/syft/af937d74c00c26374449e81aa4ff45ae2d668a33/install.sh | sh -s -- -b /usr/local/bin -v v1.51.1
+          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 https://raw.githubusercontent.com/anchore/grype/f6f2ce0a2293e65c97bf5468926cb0c9ddad822f/install.sh | sh -s -- -b /usr/local/bin -v v0.118.0
+          grype db update
+
       - name: Run unified delivery gate (pre-pr)
         run: pnpm delivery:gate:pr
 

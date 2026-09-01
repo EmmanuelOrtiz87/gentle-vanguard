@@ -151,13 +151,12 @@ function classifySession(
 
   const lastTrace = (
     db
-      .prepare(
-        `SELECT MAX(COALESCE(start_time, 0)) AS t FROM traces WHERE session_id = ?`,
-      )
+      .prepare(`SELECT MAX(COALESCE(start_time, 0)) AS t FROM traces WHERE session_id = ?`)
       .get(s.id) as { t: number | null }
   ).t;
   // traces.start_time is epoch ms in Nexus; guard against epoch-seconds.
-  const lastTraceMs = lastTrace && lastTrace > 0 ? (lastTrace < 1e12 ? lastTrace * 1000 : lastTrace) : 0;
+  const lastTraceMs =
+    lastTrace && lastTrace > 0 ? (lastTrace < 1e12 ? lastTrace * 1000 : lastTrace) : 0;
 
   const lastTx = (
     db
@@ -181,15 +180,19 @@ function classifySession(
     db.prepare(`SELECT COUNT(*) AS c FROM traces WHERE session_id = ?`).get(s.id) as { c: number }
   ).c;
   const txCount = (
-    db
-      .prepare(`SELECT COUNT(*) AS c FROM token_transactions WHERE session_id = ?`)
-      .get(s.id) as { c: number }
+    db.prepare(`SELECT COUNT(*) AS c FROM token_transactions WHERE session_id = ?`).get(s.id) as {
+      c: number;
+    }
   ).c;
   const meaningful =
     (s.tokens_used ?? 0) > 0 || (s.message_count ?? 0) > 0 || traceCount > 0 || txCount > 0;
 
   return meaningful
-    ? { id: s.id, newStatus: 'completed', reason: 'no recent activity, meaningful lifetime activity' }
+    ? {
+        id: s.id,
+        newStatus: 'completed',
+        reason: 'no recent activity, meaningful lifetime activity',
+      }
     : { id: s.id, newStatus: 'abandoned', reason: 'no recent activity, no meaningful activity' };
 }
 
@@ -227,7 +230,9 @@ export function sweepStaleSessions(
   ).c;
   const protectedCount = Math.max(0, allActive - candidates.length);
 
-  const decisions: SweepDecision[] = candidates.map((s) => classifySession(db, s, now, idleWindowMs));
+  const decisions: SweepDecision[] = candidates.map((s) =>
+    classifySession(db, s, now, idleWindowMs),
+  );
 
   let syncedContextLogs = 0;
 
@@ -243,8 +248,11 @@ export function sweepStaleSessions(
         // Stamp sweep provenance into metadata (best-effort, non-fatal).
         try {
           const meta = JSON.parse(
-            (db.prepare(`SELECT metadata FROM sessions WHERE id = ?`).get(d.id) as { metadata: string })
-              .metadata || '{}',
+            (
+              db.prepare(`SELECT metadata FROM sessions WHERE id = ?`).get(d.id) as {
+                metadata: string;
+              }
+            ).metadata || '{}',
           ) as Record<string, unknown>;
           meta.swept = { at: new Date(now).toISOString(), from: 'active', to: d.newStatus };
           db.prepare(`UPDATE sessions SET metadata = ? WHERE id = ?`).run(
@@ -334,7 +342,8 @@ async function main(): Promise<number> {
         `${summary.counts.abandoned} -> abandoned`,
     );
     console.log(`[SWEEP] remaining active: ${summary.remainingActive}`);
-    if (opts.apply) console.log(`[SWEEP] context-log state files synced: ${summary.syncedContextLogs}`);
+    if (opts.apply)
+      console.log(`[SWEEP] context-log state files synced: ${summary.syncedContextLogs}`);
     console.log(`[SWEEP] report: ${reportPath}`);
     return 0;
   } finally {

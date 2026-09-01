@@ -400,5 +400,6 @@
     "better-sqlite3": "^13.0.3",
     "glob": "^13.0.6",
     "zod": "^4.4.3"
-  }
+  },
+  "prepare": "lefthook install || echo \"lefthook skipped (no git context)\""
 }
