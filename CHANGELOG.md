@@ -6,7 +6,8 @@
 
 ### Hitos
 
-- Absorción gentle-ai v2.5.0: continuations end-to-end, ack-before-burn, path-identity, typed refusals, capabilities.
+- Absorción gentle-ai v2.5.0: continuations end-to-end, ack-before-burn, path-identity, typed
+  refusals, capabilities.
 - Design system GV v1 (css canonico, re-skin 6 apps, logo oficial, i18n es/en/pt dual-theme).
 - Apps local-first desacopladas del repo del stack (git propio por producto).
 - Nexus DB movido a `src/database/nexus/` (stack-tracked; dashboard usa re-export shims).
