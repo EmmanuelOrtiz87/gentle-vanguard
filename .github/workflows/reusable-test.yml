@@ -16,8 +16,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
-      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7 # v6
         with:
           node-version: '22'
           cache: pnpm
@@ -62,8 +62,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
-      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
-      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7 # v6
         with:
           node-version: '22'
           cache: pnpm
@@ -78,8 +78,8 @@ jobs:
     if: false # disabled — Cloud Connector is opt-in (CLOUD_CONNECTOR_ENABLED != true). Enable by removing this line when activating AWS/Azure.
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
-      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7 # v6
         with:
           node-version: '22'
           cache: pnpm
@@ -93,8 +93,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
-      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7 # v6
         with:
           node-version: '22'
           cache: pnpm
@@ -108,8 +108,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
-      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7 # v6
         with:
           node-version: '22'
           cache: pnpm
@@ -125,14 +125,14 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
-      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7 # v6
         with:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm coverage
-      - uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5
+      - uses: codecov/codecov-action@v7 # v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/lcov.info
