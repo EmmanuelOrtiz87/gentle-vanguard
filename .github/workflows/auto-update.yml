@@ -16,6 +16,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   generate-manifest:
@@ -108,12 +109,27 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - name: Update releases/latest-version.json in repo
+      - name: Update releases/latest-version.json via PR
+        # Direct pushes to main from GITHUB_TOKEN are blocked by the branch
+        # ruleset — publish through a short-lived PR with auto-merge instead.
         run: |
           mkdir -p releases
           cp /tmp/latest-version.json releases/latest-version.json
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          BRANCH="chore/auto-manifest-${{ steps.version.outputs.version }}"
+          git checkout -b "$BRANCH"
           git add releases/latest-version.json
-          git diff --cached --quiet || git commit -m "chore: update latest-version.json to v${{ steps.version.outputs.version }}"
-          git push
+          if git diff --cached --quiet; then
+            echo "No manifest changes — skipping PR"
+            exit 0
+          fi
+          git commit -m "chore: update latest-version.json to v${{ steps.version.outputs.version }}"
+          git push origin "$BRANCH"
+          gh pr create --title "chore: update latest-version.json to v${{ steps.version.outputs.version }}" \
+            --body "Automated manifest update for release ${{ steps.version.outputs.tag }}." \
+            --base main --head "$BRANCH"
+          gh pr merge "$BRANCH" --auto --squash --delete-branch || \
+            echo "::warning::Auto-merge not immediately possible — PR left for review"
+        env:
+          GH_TOKEN: ${{ github.token }}
