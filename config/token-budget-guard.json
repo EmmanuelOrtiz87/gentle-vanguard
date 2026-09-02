@@ -2,7 +2,7 @@
   "$schema": "./token-budget-guard-schema.json",
   "version": "3.0.0",
   "description": "Token budget configuration — SINGLE SOURCE OF TRUTH. This file is the authoritative config for all token budgeting across the stack.",
-  "last_updated": "2026-09-01",
+  "last_updated": "2026-09-02",
 
   "routingDowngrade": {
     "enabled": true,
@@ -15,7 +15,7 @@
   "tokenBudget": {
     "version": "3.0.0",
     "limits": {
-      "daily": 5000000,
+      "daily": 8000000,
       "perSession": 3000000,
       "perAgent": 100000,
       "softThreshold": 70,
