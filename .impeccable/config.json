@@ -1,0 +1,38 @@
+{
+  "$schema": "https://impeccable.style/schemas/config.json",
+  "version": "1.0.0",
+  "description": "Gentle-Vanguard design linter config. Combines impeccable anti-pattern detection with brand waivers for Gentle-Vanguard signature patterns. See ADR-0026. NOTE: CLI v4.1.2 reads detector.ignoreRules, detector.ignoreFiles, detector.ignoreValues, and detector.designSystem.enabled. For per-line/per-file waivers, use inline `impeccable-disable` comments in the source.",
+  "detector": {
+    "designSystem": {
+      "enabled": true,
+      "path": "packages/gv-design-system/src/tokens/tokens.json"
+    },
+    "ignoreFiles": [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/.next/**",
+      "**/.vite/**",
+      "**/coverage/**",
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/*.spec.ts",
+      "**/*.spec.tsx",
+      "**/migrations/**",
+      "**/__snapshots__/**",
+      "**/.runtime/**"
+    ],
+    "ignoreRules": [],
+    "ignoreValues": [
+      "inter",
+      "Inter, 'Segoe UI', system-ui, sans-serif",
+      "Orbitron, 'Rajdhani', 'Share Tech Mono', monospace",
+      "JetBrains Mono, 'Cascadia Code', Consolas, monospace",
+      "#a78bfa",
+      "#22d3ee",
+      "#121212",
+      "#0a0e17",
+      "linear-gradient(135deg, #a78bfa 0%, #22d3ee 100%)"
+    ]
+  }
+}

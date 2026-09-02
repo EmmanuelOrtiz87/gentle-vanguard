@@ -1,0 +1,47 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - img "Gentle-Vanguard" [ref=e7]
+          - generic [ref=e8]: GentleVanguard Analytics
+        - navigation "Secciones" [ref=e9]:
+          - button "Operación" [ref=e10] [cursor=pointer]
+          - button "Configuración" [active] [ref=e16] [cursor=pointer]
+          - button "Historial" [ref=e20] [cursor=pointer]
+        - generic [ref=e25]: Atlassian listo
+        - combobox "Language / Idioma / Idioma" [ref=e27] [cursor=pointer]:
+          - option "🇬🇧 English"
+          - option "🇪🇸 Español" [selected]
+          - option "🇧🇷 Português (Brasil)"
+        - button "Cambiar tema" [ref=e28] [cursor=pointer]
+    - main [ref=e35]:
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e84]:
+            - heading "Conexión Atlassian" [level=2] [ref=e85]
+            - paragraph [ref=e86]: Credenciales cargadas para esta ejecución local.
+          - generic [ref=e87]:
+            - generic [ref=e88]:
+              - generic [ref=e89]: "Site:"
+              - strong [ref=e90]: https://dtvott.atlassian.net
+            - generic [ref=e91]:
+              - generic [ref=e92]: "Bitbucket:"
+              - strong [ref=e93]: directvla
+            - generic [ref=e94]:
+              - button "Revalidar" [ref=e95] [cursor=pointer]
+              - button "Editar" [ref=e101] [cursor=pointer]
+        - generic [ref=e105]:
+          - generic [ref=e109]:
+            - heading "Estado" [level=2] [ref=e110]
+            - paragraph [ref=e111]: Sesión operativa sin exponer credenciales.
+          - generic [ref=e112]:
+            - generic [ref=e116]: Jira
+            - strong [ref=e117]: OK
+          - generic [ref=e118]:
+            - generic [ref=e122]: Confluence
+            - strong [ref=e123]: OK
+          - generic [ref=e124]:
+            - generic [ref=e128]: Bitbucket
+            - strong [ref=e129]: OK
+  - button "Detener Analytics" [ref=e75] [cursor=pointer]: ⏻Analytics

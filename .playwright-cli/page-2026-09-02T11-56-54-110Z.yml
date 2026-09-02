@@ -1,0 +1,183 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - img "Gentle-Vanguard" [ref=e7]
+          - generic [ref=e8]: GentleVanguard Analytics
+        - navigation "Secciones" [ref=e9]:
+          - button "Operación" [ref=e10] [cursor=pointer]
+          - button "Configuración" [ref=e16] [cursor=pointer]
+          - button "Historial" [active] [ref=e20] [cursor=pointer]
+        - generic [ref=e25]: Atlassian listo
+        - combobox "Language / Idioma / Idioma" [ref=e27] [cursor=pointer]:
+          - option "🇬🇧 English"
+          - option "🇪🇸 Español" [selected]
+          - option "🇧🇷 Português (Brasil)"
+        - button "Cambiar tema" [ref=e28] [cursor=pointer]
+    - main [ref=e35]:
+      - generic [ref=e131]:
+        - generic [ref=e137]:
+          - heading "Historial" [level=2] [ref=e138]
+          - paragraph [ref=e139]: 9 de 9 reportes persistidos en Nexus.
+        - generic [ref=e140]:
+          - textbox "Buscar..." [ref=e141]
+          - combobox "Modo" [ref=e142]:
+            - option "Todos los modos" [selected]
+            - option "Pedido"
+          - generic [ref=e143]:
+            - generic [ref=e144]: Desde
+            - textbox "Desde" [ref=e145]
+          - generic [ref=e146]:
+            - generic [ref=e147]: Hasta
+            - textbox "Hasta" [ref=e148]
+          - button "Invertir orden por fecha" [ref=e149] [cursor=pointer]: Más recientes primero
+          - button "Limpiar filtros" [ref=e152] [cursor=pointer]
+        - generic [ref=e153]:
+          - generic [ref=e154]: Marcá filas con el checkbox para eliminarlas en lote.
+          - button "Eliminar todo" [ref=e155] [cursor=pointer]
+        - table [ref=e160]:
+          - rowgroup [ref=e161]:
+            - row [ref=e162]:
+              - columnheader [ref=e163]:
+                - checkbox "Seleccionar todas las filas de esta página" [ref=e164] [cursor=pointer]
+              - columnheader "Fecha" [ref=e165]
+              - columnheader "Hora" [ref=e166]
+              - columnheader "Título" [ref=e167]
+              - columnheader "Modo" [ref=e168]
+              - columnheader "ID" [ref=e169]
+              - columnheader "Exportar" [ref=e170]
+              - columnheader "Abrir reporte" [ref=e171]
+              - columnheader "Eliminar reporte" [ref=e172]
+          - rowgroup [ref=e173]:
+            - row [ref=e174]:
+              - cell [ref=e175]:
+                - checkbox "Seleccionar fila GVA-MTCYDU0J" [ref=e176] [cursor=pointer]
+              - cell "28/8/2026" [ref=e177]
+              - cell "09:54:04" [ref=e178]
+              - cell "Analisis LLM" [ref=e179]
+              - cell "Pedido" [ref=e180]
+              - cell "GVA-MTCYDU0J" [ref=e182]
+              - cell [ref=e183]:
+                - button "Exportar" [ref=e184] [cursor=pointer]
+              - cell [ref=e188]:
+                - button "Abrir reporte" [ref=e189] [cursor=pointer]
+              - cell [ref=e193]:
+                - button "Eliminar reporte GVA-MTCYDU0J" [ref=e194] [cursor=pointer]
+            - row [ref=e198]:
+              - cell [ref=e199]:
+                - checkbox "Seleccionar fila GVA-MTCYDOV6" [ref=e200] [cursor=pointer]
+              - cell "28/8/2026" [ref=e201]
+              - cell "09:53:57" [ref=e202]
+              - cell "Analisis LLM" [ref=e203]
+              - cell "Pedido" [ref=e204]
+              - cell "GVA-MTCYDOV6" [ref=e206]
+              - cell [ref=e207]:
+                - button "Exportar" [ref=e208] [cursor=pointer]
+              - cell [ref=e212]:
+                - button "Abrir reporte" [ref=e213] [cursor=pointer]
+              - cell [ref=e217]:
+                - button "Eliminar reporte GVA-MTCYDOV6" [ref=e218] [cursor=pointer]
+            - row [ref=e222]:
+              - cell [ref=e223]:
+                - checkbox "Seleccionar fila GVA-MTCYDM6K" [ref=e224] [cursor=pointer]
+              - cell "28/8/2026" [ref=e225]
+              - cell "09:53:54" [ref=e226]
+              - cell "Analisis LLM" [ref=e227]
+              - cell "Pedido" [ref=e228]
+              - cell "GVA-MTCYDM6K" [ref=e230]
+              - cell [ref=e231]:
+                - button "Exportar" [ref=e232] [cursor=pointer]
+              - cell [ref=e236]:
+                - button "Abrir reporte" [ref=e237] [cursor=pointer]
+              - cell [ref=e241]:
+                - button "Eliminar reporte GVA-MTCYDM6K" [ref=e242] [cursor=pointer]
+            - row [ref=e246]:
+              - cell [ref=e247]:
+                - checkbox "Seleccionar fila GVA-MTCYDAB1" [ref=e248] [cursor=pointer]
+              - cell "28/8/2026" [ref=e249]
+              - cell "09:53:38" [ref=e250]
+              - cell "Analisis LLM" [ref=e251]
+              - cell "Pedido" [ref=e252]
+              - cell "GVA-MTCYDAB1" [ref=e254]
+              - cell [ref=e255]:
+                - button "Exportar" [ref=e256] [cursor=pointer]
+              - cell [ref=e260]:
+                - button "Abrir reporte" [ref=e261] [cursor=pointer]
+              - cell [ref=e265]:
+                - button "Eliminar reporte GVA-MTCYDAB1" [ref=e266] [cursor=pointer]
+            - row [ref=e270]:
+              - cell [ref=e271]:
+                - checkbox "Seleccionar fila GVA-MTCYAQB7" [ref=e272] [cursor=pointer]
+              - cell "28/8/2026" [ref=e273]
+              - cell "09:51:39" [ref=e274]
+              - cell "Analisis LLM" [ref=e275]
+              - cell "Pedido" [ref=e276]
+              - cell "GVA-MTCYAQB7" [ref=e278]
+              - cell [ref=e279]:
+                - button "Exportar" [ref=e280] [cursor=pointer]
+              - cell [ref=e284]:
+                - button "Abrir reporte" [ref=e285] [cursor=pointer]
+              - cell [ref=e289]:
+                - button "Eliminar reporte GVA-MTCYAQB7" [ref=e290] [cursor=pointer]
+            - row [ref=e294]:
+              - cell [ref=e295]:
+                - checkbox "Seleccionar fila GVA-MTCXYRVP" [ref=e296] [cursor=pointer]
+              - cell "28/8/2026" [ref=e297]
+              - cell "09:42:21" [ref=e298]
+              - cell "Analisis LLM" [ref=e299]
+              - cell "Pedido" [ref=e300]
+              - cell "GVA-MTCXYRVP" [ref=e302]
+              - cell [ref=e303]:
+                - button "Exportar" [ref=e304] [cursor=pointer]
+              - cell [ref=e308]:
+                - button "Abrir reporte" [ref=e309] [cursor=pointer]
+              - cell [ref=e313]:
+                - button "Eliminar reporte GVA-MTCXYRVP" [ref=e314] [cursor=pointer]
+            - row [ref=e318]:
+              - cell [ref=e319]:
+                - checkbox "Seleccionar fila GVA-MTCXAT9E" [ref=e320] [cursor=pointer]
+              - cell "28/8/2026" [ref=e321]
+              - cell "09:23:43" [ref=e322]
+              - cell "Analisis LLM" [ref=e323]
+              - cell "Pedido" [ref=e324]
+              - cell "GVA-MTCXAT9E" [ref=e326]
+              - cell [ref=e327]:
+                - button "Exportar" [ref=e328] [cursor=pointer]
+              - cell [ref=e332]:
+                - button "Abrir reporte" [ref=e333] [cursor=pointer]
+              - cell [ref=e337]:
+                - button "Eliminar reporte GVA-MTCXAT9E" [ref=e338] [cursor=pointer]
+            - row [ref=e342]:
+              - cell [ref=e343]:
+                - checkbox "Seleccionar fila GVA-MTCGPCRL" [ref=e344] [cursor=pointer]
+              - cell "28/8/2026" [ref=e345]
+              - cell "01:39:08" [ref=e346]
+              - cell "Analisis inicial de requerimiento" [ref=e347]
+              - cell "Pedido" [ref=e348]
+              - cell "GVA-MTCGPCRL" [ref=e350]
+              - cell [ref=e351]:
+                - button "Exportar" [ref=e352] [cursor=pointer]
+              - cell [ref=e356]:
+                - button "Abrir reporte" [ref=e357] [cursor=pointer]
+              - cell [ref=e361]:
+                - button "Eliminar reporte GVA-MTCGPCRL" [ref=e362] [cursor=pointer]
+            - row [ref=e366]:
+              - cell [ref=e367]:
+                - checkbox "Seleccionar fila GVA-MTCGA4AK" [ref=e368] [cursor=pointer]
+              - cell "28/8/2026" [ref=e369]
+              - cell "01:27:17" [ref=e370]
+              - cell "Analisis inicial de requerimiento" [ref=e371]
+              - cell "Pedido" [ref=e372]
+              - cell "GVA-MTCGA4AK" [ref=e374]
+              - cell [ref=e375]:
+                - button "Exportar" [ref=e376] [cursor=pointer]
+              - cell [ref=e380]:
+                - button "Abrir reporte" [ref=e381] [cursor=pointer]
+              - cell [ref=e385]:
+                - button "Eliminar reporte GVA-MTCGA4AK" [ref=e386] [cursor=pointer]
+        - generic [ref=e390]:
+          - button "Anterior" [disabled] [ref=e391]
+          - generic [ref=e394]: Página 1 de 1
+          - button "Siguiente" [disabled] [ref=e395]
+  - button "Detener Analytics" [ref=e75] [cursor=pointer]: ⏻Analytics

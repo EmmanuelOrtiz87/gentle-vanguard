@@ -1,0 +1,188 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: GentleVanguard Design System v2
+      - navigation [ref=e7]:
+        - link "Tokens" [ref=e8] [cursor=pointer]:
+          - /url: "#tokens"
+        - link "Buttons" [ref=e9] [cursor=pointer]:
+          - /url: "#buttons"
+        - link "Cards" [ref=e10] [cursor=pointer]:
+          - /url: "#cards"
+        - link "Inputs" [ref=e11] [cursor=pointer]:
+          - /url: "#inputs"
+        - link "Text" [ref=e12] [cursor=pointer]:
+          - /url: "#text"
+        - link "Tags" [ref=e13] [cursor=pointer]:
+          - /url: "#tags"
+        - link "IconButtons" [ref=e14] [cursor=pointer]:
+          - /url: "#iconbuttons"
+        - link "Stacks" [ref=e15] [cursor=pointer]:
+          - /url: "#stacks"
+      - generic [ref=e16]: v2.0.0-alpha.1
+  - main [ref=e19]:
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - paragraph [ref=e22]: GV Design System
+        - heading "Native design language for the entire ecosystem" [level=1] [ref=e23]
+        - paragraph [ref=e24]:
+          - text: Consolidates 4 divergent legacy design systems into 1 source of truth. Dark-first, accessible (WCAG 2.2), anti-AI-slop by default. Built on the v1.0.0 standard (
+          - code [ref=e25]: docs/brand/UI-STANDARD-ECOSYSTEM.md
+          - text: ).
+        - generic [ref=e26]:
+          - generic [ref=e27]: v2.0.0-alpha.1
+          - generic [ref=e28]: Dark-first
+          - generic [ref=e29]: WCAG 2.2
+          - generic [ref=e30]: 7 React components
+          - generic [ref=e31]: No bounce-easing
+      - generic [ref=e32]:
+        - heading "Tokens" [level=2] [ref=e33]
+        - paragraph [ref=e34]:
+          - text: The full palette, type scale, spacing, radius, and motion. All CSS custom properties are available in
+          - code [ref=e35]: :root
+          - text: for any consumer.
+        - heading "Primary palette" [level=3] [ref=e36]
+        - generic [ref=e37]:
+          - generic [ref=e40]:
+            - code [ref=e41]: "--gv-purple"
+            - generic [ref=e42]: "#a78bfa"
+          - generic [ref=e45]:
+            - code [ref=e46]: "--gv-purple-deep"
+            - generic [ref=e47]: "#7c3aed"
+          - generic [ref=e50]:
+            - code [ref=e51]: "--gv-cyan"
+            - generic [ref=e52]: "#22d3ee"
+          - generic [ref=e55]:
+            - code [ref=e56]: "--gv-cyan-deep"
+            - generic [ref=e57]: "#06b6d4"
+        - heading "Surface palette" [level=3] [ref=e58]
+        - generic [ref=e59]:
+          - generic [ref=e62]:
+            - code [ref=e63]: "--gv-bg"
+            - generic [ref=e64]: "#121212"
+          - generic [ref=e67]:
+            - code [ref=e68]: "--gv-bg-deep"
+            - generic [ref=e69]: "#0a0e17"
+          - generic [ref=e72]:
+            - code [ref=e73]: "--gv-surface"
+            - generic [ref=e74]: "#1f2937"
+          - generic [ref=e77]:
+            - code [ref=e78]: "--gv-surface-raised"
+            - generic [ref=e79]: "#273548"
+        - heading "Signature gradient" [level=3] [ref=e80]
+        - generic [ref=e83]:
+          - code [ref=e84]: "--gv-gradient"
+          - generic [ref=e85]: "linear-gradient(135deg, #a78bfa 0%, #22d3ee 100%)"
+      - generic [ref=e86]:
+        - heading "Buttons" [level=2] [ref=e87]
+        - paragraph [ref=e88]: Pill-shaped, 4 variants × 3 sizes. Always WCAG 2.2 compliant.
+        - heading "Variants" [level=3] [ref=e89]
+        - generic [ref=e90]:
+          - button "Save" [ref=e91] [cursor=pointer]
+          - button "Cancel" [ref=e93] [cursor=pointer]
+          - button "Skip" [ref=e95] [cursor=pointer]
+          - button "Delete" [ref=e97] [cursor=pointer]
+          - button "Disabled" [disabled] [ref=e99]
+          - button "Loading"
+        - heading "Sizes" [level=3] [ref=e101]
+        - generic [ref=e102]:
+          - button "Small" [ref=e103] [cursor=pointer]
+          - button "Medium" [ref=e105] [cursor=pointer]
+          - button "Large" [ref=e107] [cursor=pointer]
+      - generic [ref=e109]:
+        - heading "Cards" [level=2] [ref=e110]
+        - paragraph [ref=e111]: Glass (default brand), solid, outline. Optional padding + interactive states.
+        - generic [ref=e112]:
+          - generic [ref=e113]:
+            - heading "Glass card" [level=3] [ref=e114]
+            - paragraph [ref=e115]: The default brand surface. Uses backdrop-filter blur + violet border for depth. Best for content cards in main flows.
+          - generic [ref=e116]:
+            - heading "Solid card" [level=3] [ref=e117]
+            - paragraph [ref=e118]: Flat surface with no transparency. Use when stacking many cards or when contrast is critical.
+          - generic [ref=e119]:
+            - heading "Outline card" [level=3] [ref=e120]
+            - paragraph [ref=e121]: Transparent with strong violet border. Use for secondary content or when you want minimal visual weight.
+        - heading "Interactive" [level=3] [ref=e122]
+        - generic [ref=e123] [cursor=pointer]:
+          - heading "Clickable card" [level=3] [ref=e124]
+          - paragraph [ref=e125]: Hover or focus to see the lift + cyan focus ring.
+      - generic [ref=e126]:
+        - heading "Inputs" [level=2] [ref=e127]
+        - paragraph [ref=e128]: Form controls with built-in label, hint, error, success, and icons.
+        - generic [ref=e129]:
+          - generic [ref=e130]:
+            - generic [ref=e131]: Email
+            - textbox "Email" [ref=e133]:
+              - /placeholder: you@example.com
+              - text: emma@gentle-vanguard.dev
+            - generic [ref=e134]: We never share your email.
+          - generic [ref=e135]:
+            - generic [ref=e136]: Password
+            - textbox "Password" [invalid] [ref=e138]:
+              - /placeholder: ••••••••
+              - text: abc
+            - alert [ref=e139]: Password must be at least 8 characters.
+          - generic [ref=e140]:
+            - generic [ref=e141]: Username
+            - textbox "Username" [ref=e143]:
+              - /placeholder: username
+              - text: emmaortiz
+            - generic [ref=e144]: Username is available.
+          - generic [ref=e145]:
+            - generic [ref=e146]: Search
+            - searchbox "Search" [ref=e148]
+      - generic [ref=e149]:
+        - heading "Text" [level=2] [ref=e150]
+        - paragraph [ref=e151]:
+          - text: Type scale. Use the
+          - code [ref=e152]: Text
+          - text: component in React, or the class names in plain HTML.
+        - generic [ref=e153]:
+          - paragraph [ref=e154]: Display 2 — Vanguard
+          - heading "Heading 1 — Dashboard" [level=1] [ref=e155]
+          - heading "Heading 2 — Section" [level=2] [ref=e156]
+          - heading "Heading 3 — Card title" [level=3] [ref=e157]
+          - paragraph [ref=e158]: Body — A primary paragraph of text with relaxed line-height (1.65) and 16px size.
+          - paragraph [ref=e159]: Body small — Captions and metadata.
+          - paragraph [ref=e160]: Eyebrow — Section label
+          - paragraph [ref=e161]: 99.9%
+          - paragraph [ref=e162]: npm install @gentle-vanguard/design-system
+      - generic [ref=e163]:
+        - heading "Tags" [level=2] [ref=e164]
+        - paragraph [ref=e165]: Status indicators, categories, metadata. Uppercase pill shape.
+        - generic [ref=e166]:
+          - generic [ref=e167]: Primary
+          - generic [ref=e168]: Secondary
+          - generic [ref=e169]: Active
+          - generic [ref=e170]: Pending
+          - generic [ref=e171]: Failed
+          - generic [ref=e172]: Draft
+          - generic [ref=e173]: Beta
+          - generic [ref=e174]: v2
+      - generic [ref=e175]:
+        - heading "IconButtons" [level=2] [ref=e176]
+        - paragraph [ref=e177]:
+          - text: Square icon-only buttons. Always with
+          - code [ref=e178]: aria-label
+          - text: .
+        - generic [ref=e179]:
+          - button "Search" [ref=e180] [cursor=pointer]
+          - button "Add" [ref=e185] [cursor=pointer]
+          - button "Close" [ref=e188] [cursor=pointer]
+          - button "Disabled" [disabled] [ref=e193]
+      - generic [ref=e197]:
+        - heading "Stacks" [level=2] [ref=e198]
+        - paragraph [ref=e199]:
+          - text: Flexbox primitive with token-based gap. Use the
+          - code [ref=e200]: Stack
+          - text: component in React, or the class names in plain HTML.
+        - generic [ref=e201]:
+          - heading "Row stack with align center, justify between" [level=3] [ref=e202]
+          - generic [ref=e203]:
+            - generic [ref=e206]:
+              - strong [ref=e207]: Gentle-Vanguard
+              - generic [ref=e208]: Native AI cognitive development
+            - generic [ref=e209]:
+              - generic [ref=e210]: Online
+              - generic [ref=e211]: v2.0.0-alpha.1
+      - generic [ref=e212]: "Gentle-Vanguard — Design System v2.0.0-alpha.1 · See ADR-0026 · Source: packages/gv-design-system"

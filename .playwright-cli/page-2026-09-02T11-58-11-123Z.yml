@@ -1,0 +1,105 @@
+- generic [ref=f1e1]:
+  - generic [ref=f1e3]:
+    - banner [ref=f1e4]:
+      - generic [ref=f1e5]:
+        - generic [ref=f1e6]:
+          - img "Gentle-Vanguard" [ref=f1e7]
+          - generic [ref=f1e8]:
+            - text: GentleVanguard
+            - generic [ref=f1e9]: Content Studio
+        - navigation "Secciones del CMS" [ref=f1e10]:
+          - button "Content OS" [ref=f1e11] [cursor=pointer]
+          - button "Studio (legacy)" [ref=f1e15] [cursor=pointer]
+        - generic [ref=f1e19]: 0 items
+        - generic [ref=f1e20]:
+          - button "Idioma" [ref=f1e22] [cursor=pointer]
+          - button "Cambiar tema" [ref=f1e27] [cursor=pointer]
+    - generic [ref=f1e155]:
+      - generic [ref=f1e156]: Conectado al Content OS (Nexus).
+      - tablist "Secciones Content OS" [ref=f1e157]:
+        - tab "Nuevo contenido" [ref=f1e158] [cursor=pointer]
+        - tab "Calendario (6)" [active] [selected] [ref=f1e159] [cursor=pointer]
+        - tab "Medios (0)" [ref=f1e160] [cursor=pointer]
+      - generic [ref=f1e196]:
+        - heading "Calendario (6 slots) mes semana hoy" [level=2] [ref=f1e197]:
+          - text: Calendario
+          - generic [ref=f1e198]: (6 slots)
+          - generic [ref=f1e199]:
+            - button "mes" [ref=f1e200] [cursor=pointer]
+            - button "semana" [ref=f1e201] [cursor=pointer]
+            - button [ref=f1e202] [cursor=pointer]
+            - button "hoy" [ref=f1e205] [cursor=pointer]
+            - button [ref=f1e206] [cursor=pointer]
+        - generic [ref=f1e209]:
+          - generic [ref=f1e210]: dom
+          - generic [ref=f1e211]: lun
+          - generic [ref=f1e212]: mar
+          - generic [ref=f1e213]: mié
+          - generic [ref=f1e214]: jue
+          - generic [ref=f1e215]: vie
+          - generic [ref=f1e216]: sáb
+          - generic [ref=f1e217]: "30"
+          - generic [ref=f1e219]: "31"
+          - generic [ref=f1e221]:
+            - generic [ref=f1e222]: "1"
+            - button "07:30 LinkedIn proposed" [ref=f1e223] [cursor=pointer]:
+              - generic [ref=f1e224]: 07:30 LinkedIn
+              - generic [ref=f1e225]: proposed
+            - button "07:30 LinkedIn proposed" [ref=f1e226] [cursor=pointer]:
+              - generic [ref=f1e227]: 07:30 LinkedIn
+              - generic [ref=f1e228]: proposed
+            - button "08:00 X proposed" [ref=f1e229] [cursor=pointer]:
+              - generic [ref=f1e230]: 08:00 X
+              - generic [ref=f1e231]: proposed
+            - button "08:00 X proposed" [ref=f1e232] [cursor=pointer]:
+              - generic [ref=f1e233]: 08:00 X
+              - generic [ref=f1e234]: proposed
+            - button "10:00 Threads proposed" [ref=f1e235] [cursor=pointer]:
+              - generic [ref=f1e236]: 10:00 Threads
+              - generic [ref=f1e237]: proposed
+            - button "11:00 Instagram proposed" [ref=f1e238] [cursor=pointer]:
+              - generic [ref=f1e239]: 11:00 Instagram
+              - generic [ref=f1e240]: proposed
+          - generic [ref=f1e241]: "2"
+          - generic [ref=f1e243]: "3"
+          - generic [ref=f1e245]: "4"
+          - generic [ref=f1e247]: "5"
+          - generic [ref=f1e249]: "6"
+          - generic [ref=f1e251]: "7"
+          - generic [ref=f1e253]: "8"
+          - generic [ref=f1e255]: "9"
+          - generic [ref=f1e257]: "10"
+          - generic [ref=f1e259]: "11"
+          - generic [ref=f1e261]: "12"
+          - generic [ref=f1e263]: "13"
+          - generic [ref=f1e265]: "14"
+          - generic [ref=f1e267]: "15"
+          - generic [ref=f1e269]: "16"
+          - generic [ref=f1e271]: "17"
+          - generic [ref=f1e273]: "18"
+          - generic [ref=f1e275]: "19"
+          - generic [ref=f1e277]: "20"
+          - generic [ref=f1e279]: "21"
+          - generic [ref=f1e281]: "22"
+          - generic [ref=f1e283]: "23"
+          - generic [ref=f1e285]: "24"
+          - generic [ref=f1e287]: "25"
+          - generic [ref=f1e289]: "26"
+          - generic [ref=f1e291]: "27"
+          - generic [ref=f1e293]: "28"
+          - generic [ref=f1e295]: "29"
+          - generic [ref=f1e297]: "30"
+          - generic [ref=f1e299]: "1"
+          - generic [ref=f1e301]: "2"
+          - generic [ref=f1e303]: "3"
+          - generic [ref=f1e305]: "4"
+          - generic [ref=f1e307]: "5"
+          - generic [ref=f1e309]: "6"
+          - generic [ref=f1e311]: "7"
+          - generic [ref=f1e313]: "8"
+          - generic [ref=f1e315]: "9"
+          - generic [ref=f1e317]: "10"
+    - contentinfo [ref=f1e76]:
+      - strong [ref=f1e77]: Gentle-Vanguard
+      - text: · Content Studio — v3.8.2 · 2026
+  - button "Detener CMS" [ref=f1e78] [cursor=pointer]: ⏻CMS
