@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-09-02T11:52:31.618Z",
+  "generated_at": "2026-09-02T12:51:41.778Z",
   "period": "2026-08",
   "days": 28,
   "totals": {
-    "input": 553634933,
-    "output": 11763714,
-    "total": 565398647,
+    "input": 555512667,
+    "output": 11782320,
+    "total": 567294987,
     "cost": 22.029731414999997
   },
   "daily_avg": {
-    "input": 19772676,
-    "output": 420133,
-    "total": 20192809
+    "input": 19839738,
+    "output": 420797,
+    "total": 20260535
   },
   "by_day": [
     {
@@ -224,19 +224,19 @@
     },
     {
       "day": "2026-09-01",
-      "input": 71859576,
-      "output": 517200,
-      "total": 72376776,
+      "input": 71768075,
+      "output": 517107,
+      "total": 72285182,
       "cost": 0,
-      "sessions": 31
+      "sessions": 30
     },
     {
       "day": "2026-09-02",
-      "input": 3448403,
-      "output": 125144,
-      "total": 3573547,
+      "input": 5417638,
+      "output": 143843,
+      "total": 5561481,
       "cost": 0,
-      "sessions": 4
+      "sessions": 5
     }
   ],
   "by_model": [
@@ -263,16 +263,16 @@
     },
     {
       "model": "big-pickle",
-      "input": 23936890,
-      "output": 2939905,
-      "total": 26876795,
+      "input": 25457353,
+      "output": 2956987,
+      "total": 28414340,
       "cost": 5.066973399999999
     },
     {
       "model": "GLM-5.3",
-      "input": 16308131,
-      "output": 149317,
-      "total": 16457448,
+      "input": 16665402,
+      "output": 150841,
+      "total": 16816243,
       "cost": 0
     },
     {
