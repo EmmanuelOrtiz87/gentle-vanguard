@@ -15,32 +15,33 @@
  */
 :root {
   color-scheme: dark;
-  --gv-primary: #00bfff;
-  --gv-primary-light: #4dcfff;
-  --gv-primary-dark: #0055bb;
-  --gv-accent: #a855f7;
-  --gv-accent-teal: #06b6d4;
-  --gv-bg: #0d1117;
-  --gv-surface: #1a2035;
-  --gv-surface-icon: #2a2d3a;
-  --gv-circuit: #1a3050;
-  --gv-text: #ffffff;
-  --gv-text-brand: #00bfff;
-  --gv-muted: #6b7280;
-  --gv-border: #1e3a5f;
-  --gv-success: #22c55e;
-  --gv-warning: #f59e0b;
-  --gv-error: #ef4444;
-  --gv-selected: #4dcfff;
-  --gv-bg-rgb: 13, 17, 23;
-  --gv-primary-rgb: 0, 191, 255;
-  --gv-glow: rgba(0, 191, 255, 0.35);
-  --gv-font-display: Orbitron, Rajdhani, 'Share Tech Mono', monospace;
-  --gv-font-body: Inter, 'Segoe UI', system-ui, sans-serif;
-  --gv-font-mono: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
-  --gv-glass: rgba(26, 32, 53, 0.6);
-  --gv-glass-border: rgba(168, 85, 247, 0.18);
-  --gv-gradient: linear-gradient(135deg, #a855f7 0%, #00bfff 100%);
+  /* v2 Premium tokens — docs/brand/TOKENS-v2.json (values only; structure frozen) */
+  --gv-primary: #22d3ee;
+  --gv-primary-light: #67e8f9;
+  --gv-primary-dark: #0891b2;
+  --gv-accent: #a78bfa;
+  --gv-accent-teal: #0891b2;
+  --gv-bg: #0f1115;
+  --gv-surface: #1a1f2a;
+  --gv-surface-icon: #252b38;
+  --gv-circuit: #1a1f2a;
+  --gv-text: #e8eef4;
+  --gv-text-brand: #a78bfa;
+  --gv-muted: #8b95a8;
+  --gv-border: rgba(167, 139, 250, 0.24);
+  --gv-success: #4ade80;
+  --gv-warning: #f4bb4f;
+  --gv-error: #ee6d75;
+  --gv-selected: #67e8f9;
+  --gv-bg-rgb: 15, 17, 21;
+  --gv-primary-rgb: 34, 211, 238;
+  --gv-glow: rgba(34, 211, 238, 0.35);
+  --gv-font-display: 'Space Grotesk', 'Orbitron', sans-serif;
+  --gv-font-body: 'Inter', 'Inter Variable', system-ui, -apple-system, sans-serif;
+  --gv-font-mono: 'JetBrains Mono NL', 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
+  --gv-glass: rgba(26, 31, 42, 0.72);
+  --gv-glass-border: rgba(167, 139, 250, 0.24);
+  --gv-gradient: linear-gradient(135deg, #a78bfa 0%, color-mix(in srgb, #a78bfa 50%, #22d3ee) 50%, #22d3ee 100%);
   --gv-header-height: 62px;
 }
 
@@ -51,7 +52,7 @@
   --gv-surface-icon: #f1f5f9;
   --gv-circuit: #dbe5f0;
   --gv-text: #0f172a;
-  --gv-text-brand: #0055bb;
+  --gv-text-brand: #7c3aed;
   --gv-muted: #475569;
   --gv-border: #cbd5e1;
   --gv-selected: #0891b2;

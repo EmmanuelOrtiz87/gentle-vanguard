@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" width="360" height="240" role="img" aria-label="Gentle Vanguard GV monogram (mono light)">
+  <!-- OFFICIAL mono-light variant. Base: assets/logo.svg -->
+  <path d="M 128 50 A 62 62 0 1 0 150 116 L 112 116" fill="none" stroke="#F4F7FB" stroke-width="17" stroke-linecap="round"/>
+  <path d="M 196 96 L 228 170 L 260 108" fill="none" stroke="#F4F7FB" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 247 100 L 264 92 L 262 110" fill="none" stroke="#22D3EE" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
