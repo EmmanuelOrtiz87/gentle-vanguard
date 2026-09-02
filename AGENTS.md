@@ -121,6 +121,9 @@ controles (`.gv-btn` pill gradiente, `.gv-icon-btn`, `.gv-lang-dropdown`), `.gv-
 
 ### design-system v2 — paquete monorepo (ADR-0026)
 
+> Normativa oficial: `rules/NORMATIVA-DESIGN-SYSTEM.md` (qué es oficial, dónde vive, cómo se
+> versiona). El paquete se versiona en ESTE repo (excepción al ignore de packages/).
+
 `packages/gv-design-system/` v2.0.0 es la **consolidación** de los 4 design systems
 divergentes del stack. Source of truth (tokens del paquete): `packages/gv-design-system/src/tokens/tokens.json`.
 Adopta los tokens **v2 Premium oficiales** (`docs/brand/TOKENS-v2.json`: bg `#0F1115`, purple `#a78bfa`,

@@ -1,0 +1,137 @@
+/*
+ * Button — Gentle-Vanguard v2
+ * BEM-style: .gv-btn is the block; --primary, --sm, etc. are modifiers.
+ * Pill shape, gradient for primary, ghost for secondary, danger red.
+ */
+
+.gv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gv-space-2);
+  padding: 0 var(--gv-space-5);
+  height: 36px;
+  border: 1.5px solid transparent;
+  border-radius: var(--gv-radius-pill);
+  background: var(--gv-gradient);
+  color: var(--gv-text-inverse);
+  font: var(--gv-weight-semibold) var(--gv-size-base) / var(--gv-lineHeight-snug) var(--gv-font-body);
+  letter-spacing: var(--gv-letterSpacing-wide);
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  /* impeccable-disable bounce-easing: this is a brand signature button, not a bouncy one. Easing is gv-ease-out, not bounce. */
+  transition:
+    transform var(--gv-duration-fast) var(--gv-ease-out),
+    box-shadow var(--gv-duration-fast) var(--gv-ease-out),
+    background var(--gv-duration-fast) var(--gv-ease-out),
+    opacity var(--gv-duration-fast) var(--gv-ease-out);
+}
+
+.gv-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--gv-elev-glow);
+}
+
+.gv-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.gv-btn:focus-visible {
+  outline: 3px solid var(--gv-cyan);
+  outline-offset: 2px;
+}
+
+.gv-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* === Variants === */
+
+.gv-btn--secondary {
+  background: transparent;
+  color: var(--gv-cyan);
+  border-color: var(--gv-border-accent-strong);
+}
+
+.gv-btn--secondary:hover:not(:disabled) {
+  background: rgba(34, 211, 238, 0.08);
+  box-shadow: none;
+}
+
+.gv-btn--ghost {
+  background: transparent;
+  color: var(--gv-text);
+  border-color: transparent;
+}
+
+.gv-btn--ghost:hover:not(:disabled) {
+  background: var(--gv-surface-raised);
+  box-shadow: none;
+}
+
+.gv-btn--danger {
+  background: var(--gv-red);
+  color: var(--gv-text);
+}
+
+.gv-btn--danger:hover:not(:disabled) {
+  box-shadow: 0 8px 30px rgba(238, 109, 117, 0.35);
+}
+
+/* === Sizes === */
+
+.gv-btn--sm {
+  height: 28px;
+  padding: 0 var(--gv-space-3);
+  font-size: var(--gv-size-sm);
+}
+
+.gv-btn--md {
+  height: 36px;
+  padding: 0 var(--gv-space-5);
+}
+
+.gv-btn--lg {
+  height: 44px;
+  padding: 0 var(--gv-space-6);
+  font-size: var(--gv-size-md);
+}
+
+.gv-btn--full {
+  width: 100%;
+}
+
+/* === Loading === */
+
+.gv-btn--loading {
+  pointer-events: none;
+}
+
+.gv-btn__spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: gv-btn-spin 0.8s linear infinite;
+}
+
+.gv-btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gv-btn__icon svg {
+  width: var(--gv-icon-size, 16px);
+  height: var(--gv-icon-size, 16px);
+}
+
+@keyframes gv-btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

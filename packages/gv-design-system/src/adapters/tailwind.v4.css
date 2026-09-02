@@ -1,0 +1,127 @@
+/*
+ * Gentle-Vanguard Design System v2 — Tailwind v4 Bridge
+ *
+ * Maps the gv-design-system v2 tokens into Tailwind v4's @theme namespace.
+ * Import this in apps that use Tailwind v4 (e.g. apps/prompt-studio) to get
+ * the gv-* palette as Tailwind utilities: bg-gv-bg, text-gv-cyan, etc.
+ *
+ * Usage in app CSS (Tailwind v4):
+ *   @import '@gentle-vanguard/design-system/tokens.css';
+ *   @import '@gentle-vanguard/design-system/adapters/tailwind.v4.css';
+ *
+ * Then in your markup:
+ *   <div class="bg-gv-bg text-gv-text border-gv-border rounded-gv-lg p-gv-4">
+ *     <button class="bg-gv-cyan text-gv-bg-deep">Action</button>
+ *   </div>
+ */
+
+@theme {
+  /* === COLORS === */
+  --color-gv-purple: var(--gv-purple);
+  --color-gv-purple-deep: var(--gv-purple-deep);
+  --color-gv-purple-soft: var(--gv-purple-soft);
+  --color-gv-cyan: var(--gv-cyan);
+  --color-gv-cyan-deep: var(--gv-cyan-deep);
+  --color-gv-cyan-soft: var(--gv-cyan-soft);
+  --color-gv-bg: var(--gv-bg);
+  --color-gv-bg-deep: var(--gv-bg-deep);
+  --color-gv-surface: var(--gv-surface);
+  --color-gv-surface-raised: var(--gv-surface-raised);
+  --color-gv-surface-overlay: var(--gv-surface-overlay);
+  --color-gv-text: var(--gv-text);
+  --color-gv-muted: var(--gv-muted);
+  --color-gv-text-inverse: var(--gv-text-inverse);
+  --color-gv-amber: var(--gv-amber);
+  --color-gv-red: var(--gv-red);
+  --color-gv-green: var(--gv-green);
+  --color-gv-info: var(--gv-info);
+  --color-gv-border: var(--gv-border);
+  --color-gv-border-accent: var(--gv-border-accent);
+  --color-gv-border-accent-strong: var(--gv-border-accent-strong);
+
+  /* === TYPOGRAPHY === */
+  --font-gv-display: var(--gv-font-display);
+  --font-gv-body: var(--gv-font-body);
+  --font-gv-mono: var(--gv-font-mono);
+  --text-gv-xs: var(--gv-size-xs);
+  --text-gv-sm: var(--gv-size-sm);
+  --text-gv-base: var(--gv-size-base);
+  --text-gv-md: var(--gv-size-md);
+  --text-gv-lg: var(--gv-size-lg);
+  --text-gv-xl: var(--gv-size-xl);
+  --text-gv-2xl: var(--gv-size-2xl);
+  --text-gv-3xl: var(--gv-size-3xl);
+  --text-gv-4xl: var(--gv-size-4xl);
+  --text-gv-5xl: var(--gv-size-5xl);
+
+  /* === SPACING === */
+  --spacing-gv-1: var(--gv-space-1);
+  --spacing-gv-2: var(--gv-space-2);
+  --spacing-gv-3: var(--gv-space-3);
+  --spacing-gv-4: var(--gv-space-4);
+  --spacing-gv-5: var(--gv-space-5);
+  --spacing-gv-6: var(--gv-space-6);
+  --spacing-gv-8: var(--gv-space-8);
+  --spacing-gv-10: var(--gv-space-10);
+  --spacing-gv-12: var(--gv-space-12);
+  --spacing-gv-16: var(--gv-space-16);
+  --spacing-gv-20: var(--gv-space-20);
+  --spacing-gv-24: var(--gv-space-24);
+
+  /* === RADIUS === */
+  --radius-gv-sm: var(--gv-radius-sm);
+  --radius-gv-md: var(--gv-radius-md);
+  --radius-gv-lg: var(--gv-radius-lg);
+  --radius-gv-xl: var(--gv-radius-xl);
+  --radius-gv-2xl: var(--gv-radius-2xl);
+  --radius-gv-pill: var(--gv-radius-pill);
+
+  /* === SHADOWS === */
+  --shadow-gv-sm: var(--gv-elev-sm);
+  --shadow-gv-md: var(--gv-elev-md);
+  --shadow-gv-lg: var(--gv-elev-lg);
+  --shadow-gv-xl: var(--gv-elev-xl);
+  --shadow-gv-glow: var(--gv-elev-glow);
+
+  /* === ANIMATION === */
+  --animate-gv-viewIn: viewIn 0.28s ease-out forwards;
+  --animate-gv-fadeIn: fadeIn 0.2s ease-out forwards;
+  --animate-gv-slideUp: slideUp 0.28s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  --animate-gv-scaleIn: scaleIn 0.15s ease-out forwards;
+}
+
+/* === ANIMATION KEYFRAMES (Tailwind v4 inlines these) === */
+@keyframes gv-viewIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes gv-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes gv-slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes gv-scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

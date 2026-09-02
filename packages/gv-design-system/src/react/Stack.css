@@ -1,0 +1,9 @@
+/*
+ * Stack — Gentle-Vanguard v2
+ * Just a marker class for BEM consistency. Most styling is inline (gap, direction, etc).
+ * This file is kept so the component has a CSS companion and the bundler includes it.
+ */
+
+.gv-stack {
+  box-sizing: border-box;
+}

@@ -1,0 +1,206 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gv-space-2);
+  padding: 0 var(--gv-space-5);
+  height: 36px;
+  border: 1.5px solid transparent;
+  border-radius: var(--gv-radius-pill);
+  background: var(--gv-gradient);
+  color: var(--gv-text-inverse);
+  font: 600 0.875rem / 1.35 var(--gv-font-body);
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: all 0.15s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--gv-cyan);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Variants */
+.btn--primary {
+  background: var(--gv-gradient);
+  color: var(--gv-text-inverse);
+  border-color: transparent;
+}
+
+.btn--primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--gv-elev-glow);
+}
+
+.btn--secondary {
+  background: transparent;
+  color: var(--gv-cyan);
+  border-color: var(--gv-border-accent-strong);
+}
+
+.btn--secondary:hover:not(:disabled) {
+  background: rgba(34, 211, 238, 0.08);
+  box-shadow: none;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--gv-text);
+  border-color: transparent;
+}
+
+.btn--ghost:hover:not(:disabled) {
+  background: var(--gv-surface-raised);
+  box-shadow: none;
+}
+
+.btn--danger {
+  background: var(--gv-red);
+  color: var(--gv-text);
+}
+
+.btn--danger:hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(238, 109, 117, 0.35);
+}
+
+.btn--success {
+  background: var(--gv-green);
+  color: var(--gv-text-inverse);
+}
+
+.btn--success:hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.35);
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--gv-cyan);
+  border-color: var(--gv-border-accent-strong);
+}
+
+.btn--outline:hover:not(:disabled) {
+  background: rgba(34, 211, 238, 0.08);
+  box-shadow: none;
+}
+
+/* Sizes */
+.btn--sm {
+  height: 28px;
+  padding: 0 var(--gv-space-3);
+  font-size: 0.8125rem;
+}
+
+.btn--md {
+  height: 36px;
+  padding: 0 var(--gv-space-5);
+  font-size: 0.875rem;
+}
+
+.btn--lg {
+  height: 44px;
+  padding: 0 var(--gv-space-6);
+  font-size: 1rem;
+}
+
+.btn--xl {
+  height: 52px;
+  padding: 0 var(--gv-space-8);
+  font-size: 1.125rem;
+}
+
+.btn--fullWidth {
+  width: 100%;
+}
+
+/* Loading state */
+.btn--loading {
+  pointer-events: none;
+  color: transparent;
+}
+
+.spinner {
+  display: inline-flex;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  color: var(--gv-text-inverse);
+}
+
+.spinner svg {
+  width: 18px;
+  height: 18px;
+  animation: gv-btn-spin 0.8s linear infinite;
+}
+
+.spinnerPath {
+  stroke: currentColor;
+}
+
+@keyframes gv-btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Icons */
+.iconLeft,
+.iconRight {
+  display: inline-flex;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.iconLeft svg,
+.iconRight svg {
+  width: 1em;
+  height: 1em;
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/* Full width */
+.btn--fullWidth {
+  width: 100%;
+}
+
+/* Focus visible for all variants */
+.btn:focus-visible {
+  outline: 3px solid var(--gv-cyan);
+  outline-offset: 2px;
+}
+
+/* Disabled state */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Active press state */
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+  transition-duration: 50ms;
+}
+
+/* Focus visible for all */
+.btn:focus-visible {
+  outline: 3px solid var(--gv-cyan);
+  outline-offset: 2px;
+}

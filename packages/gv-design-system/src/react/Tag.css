@@ -1,0 +1,77 @@
+/*
+ * Tag — Gentle-Vanguard v2
+ * Pill-shaped label, uppercase, monospace-ish feel.
+ */
+
+.gv-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gv-space-2);
+  padding: 0 var(--gv-space-3);
+  height: 22px;
+  border-radius: var(--gv-radius-pill);
+  font: var(--gv-weight-bold) 0.6875rem / 1 var(--gv-font-body);
+  letter-spacing: var(--gv-letterSpacing-wider);
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.gv-tag--sm {
+  height: 18px;
+  padding: 0 var(--gv-space-2);
+  font-size: 0.625rem;
+}
+
+.gv-tag--md {
+  height: 22px;
+  padding: 0 var(--gv-space-3);
+  font-size: 0.6875rem;
+}
+
+/* === Variants === */
+
+.gv-tag--primary {
+  background: var(--gv-gradient);
+  color: var(--gv-text-inverse);
+}
+
+.gv-tag--secondary {
+  background: transparent;
+  color: var(--gv-cyan);
+  border: 1px solid var(--gv-border-accent-strong);
+}
+
+.gv-tag--success {
+  background: rgba(74, 222, 128, 0.15);
+  color: var(--gv-green);
+  border: 1px solid rgba(74, 222, 128, 0.35);
+}
+
+.gv-tag--warning {
+  background: rgba(244, 187, 79, 0.15);
+  color: var(--gv-amber);
+  border: 1px solid rgba(244, 187, 79, 0.35);
+}
+
+.gv-tag--error {
+  background: rgba(238, 109, 117, 0.15);
+  color: var(--gv-red);
+  border: 1px solid rgba(238, 109, 117, 0.35);
+}
+
+.gv-tag--neutral {
+  background: var(--gv-surface-raised);
+  color: var(--gv-muted);
+  border: 1px solid var(--gv-border);
+}
+
+.gv-tag__icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.gv-tag__icon svg {
+  width: 10px;
+  height: 10px;
+}

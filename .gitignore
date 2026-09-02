@@ -17,6 +17,8 @@ bin/*
 !bin/*.ps1
 obj/
 dist/
+# Exception: official design system dist is tracked (NORMATIVA-DESIGN-SYSTEM.md — avoids stale-dist drift)
+!packages/gv-design-system/dist/
 build/*
 !build/*.ps1
 !build/*.ts
@@ -146,7 +148,9 @@ graphify-out/
 # Dependencies
 node_modules/
 .pnpm-store/
-packages/
+# Packages are local-only EXCEPT the official design system (rules/NORMATIVA-DESIGN-SYSTEM.md)
+packages/*
+!packages/gv-design-system/
 vendor/
 
 # Test coverage

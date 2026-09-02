@@ -1,0 +1,140 @@
+/*
+ * Text — Gentle-Vanguard v2
+ * Type scale + colors. Use this for ALL text rendering.
+ */
+
+.gv-text {
+  margin: 0;
+  font-family: var(--gv-font-body);
+  line-height: var(--gv-lineHeight-normal);
+}
+
+/* === Variants === */
+
+.gv-text--display-1 {
+  font-family: var(--gv-font-display);
+  font-size: var(--gv-size-5xl);
+  font-weight: var(--gv-weight-bold);
+  line-height: var(--gv-lineHeight-tight);
+  letter-spacing: var(--gv-letterSpacing-wider);
+  text-transform: uppercase;
+}
+
+.gv-text--display-2 {
+  font-family: var(--gv-font-display);
+  font-size: var(--gv-size-4xl);
+  font-weight: var(--gv-weight-bold);
+  line-height: var(--gv-lineHeight-tight);
+  letter-spacing: var(--gv-letterSpacing-wider);
+  text-transform: uppercase;
+}
+
+.gv-text--heading-1 {
+  font-family: var(--gv-font-body);
+  font-size: var(--gv-size-3xl);
+  font-weight: var(--gv-weight-extrabold);
+  line-height: var(--gv-lineHeight-snug);
+  letter-spacing: var(--gv-letterSpacing-snug);
+}
+
+.gv-text--heading-2 {
+  font-family: var(--gv-font-body);
+  font-size: var(--gv-size-2xl);
+  font-weight: var(--gv-weight-extrabold);
+  line-height: var(--gv-lineHeight-snug);
+  letter-spacing: var(--gv-letterSpacing-snug);
+}
+
+.gv-text--heading-3 {
+  font-family: var(--gv-font-body);
+  font-size: var(--gv-size-xl);
+  font-weight: var(--gv-weight-bold);
+  line-height: var(--gv-lineHeight-snug);
+}
+
+.gv-text--body {
+  font-family: var(--gv-font-body);
+  font-size: var(--gv-size-md);
+  font-weight: var(--gv-weight-regular);
+  line-height: var(--gv-lineHeight-relaxed);
+}
+
+.gv-text--body-sm {
+  font-family: var(--gv-font-body);
+  font-size: var(--gv-size-sm);
+  font-weight: var(--gv-weight-regular);
+  line-height: var(--gv-lineHeight-relaxed);
+}
+
+.gv-text--caption {
+  font-family: var(--gv-font-body);
+  font-size: var(--gv-size-xs);
+  font-weight: var(--gv-weight-regular);
+  line-height: var(--gv-lineHeight-normal);
+  letter-spacing: var(--gv-letterSpacing-wide);
+}
+
+.gv-text--eyebrow {
+  font-family: var(--gv-font-body);
+  font-size: var(--gv-size-xs);
+  font-weight: var(--gv-weight-bold);
+  line-height: var(--gv-lineHeight-normal);
+  letter-spacing: var(--gv-letterSpacing-widest);
+  text-transform: uppercase;
+}
+
+.gv-text--code {
+  font-family: var(--gv-font-mono);
+  font-size: var(--gv-size-sm);
+  font-weight: var(--gv-weight-regular);
+  line-height: var(--gv-lineHeight-relaxed);
+  background: var(--gv-bg-deep);
+  padding: 2px var(--gv-space-2);
+  border-radius: var(--gv-radius-sm);
+  border: 1px solid var(--gv-border);
+}
+
+.gv-text--metric {
+  font-family: var(--gv-font-mono);
+  font-size: var(--gv-size-3xl);
+  font-weight: var(--gv-weight-bold);
+  line-height: var(--gv-lineHeight-tight);
+  letter-spacing: var(--gv-letterSpacing-tight);
+}
+
+/* === Colors === */
+
+.gv-text--primary {
+  color: var(--gv-text);
+}
+.gv-text--muted {
+  color: var(--gv-muted);
+}
+.gv-text--accent {
+  color: var(--gv-cyan);
+}
+.gv-text--success {
+  color: var(--gv-green);
+}
+.gv-text--warning {
+  color: var(--gv-amber);
+}
+.gv-text--error {
+  color: var(--gv-red);
+}
+/* impeccable-disable gradient-text: brand wordmark 'Vanguard' + metric accents use intentional gradient text per DESIGN.md §2.5 */
+.gv-text--gradient {
+  background: var(--gv-gradient-text);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* === Truncate === */
+
+.gv-text--truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

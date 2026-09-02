@@ -1,0 +1,60 @@
+/*
+ * Card — Gentle-Vanguard v2
+ * Glass variant uses backdrop-filter + violet border (brand signature).
+ * Interactive variant adds hover lift + cyan focus.
+ */
+
+.gv-card {
+  position: relative;
+  border-radius: var(--gv-radius-xl);
+  transition:
+    transform var(--gv-duration-fast) var(--gv-ease-out),
+    box-shadow var(--gv-duration-fast) var(--gv-ease-out),
+    border-color var(--gv-duration-fast) var(--gv-ease-out);
+}
+
+.gv-card--glass {
+  background: var(--gv-surface-overlay);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--gv-border-accent);
+  box-shadow: var(--gv-elev-md);
+}
+
+.gv-card--solid {
+  background: var(--gv-surface);
+  border: 1px solid var(--gv-border);
+}
+
+.gv-card--outline {
+  background: transparent;
+  border: 1.5px solid var(--gv-border-accent);
+}
+
+.gv-card--p-none {
+  padding: 0;
+}
+.gv-card--p-sm {
+  padding: var(--gv-space-3);
+}
+.gv-card--p-md {
+  padding: var(--gv-space-5);
+}
+.gv-card--p-lg {
+  padding: var(--gv-space-8);
+}
+
+.gv-card--interactive {
+  cursor: pointer;
+}
+
+.gv-card--interactive:hover {
+  transform: translateY(-2px);
+  border-color: var(--gv-border-accent-strong);
+  box-shadow: var(--gv-elev-lg);
+}
+
+.gv-card--interactive:focus-visible {
+  outline: 3px solid var(--gv-cyan);
+  outline-offset: 2px;
+}
