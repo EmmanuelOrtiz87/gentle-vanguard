@@ -117,7 +117,7 @@ Every component is a `.tsx` + `.css` pair. The CSS class names are the **public 
 ```
 
 This means:
-- The same CSS classes work in **plain HTML** (e.g. the static catalog at `apps/gv-design-system-catalog/`).
+- The same CSS classes work in **plain HTML** (e.g. Design Hub at `apps/design-hub/`).
 - The same CSS classes work in **React** (the library).
 - The same CSS classes can be **copied** into any other framework (Svelte, Vue, etc).
 
@@ -383,7 +383,7 @@ The DS is opinionated about what NOT to use. These rules are baked into:
 1. **The tokens themselves** — no `bounce-easing` token (deleted; DESIGN.md §7.2 documents this).
 2. **The CSS classes** — no `cubic-bezier(0.34, 1.56, 0.64, 1)` anywhere in the components.
 3. **The audit baseline** — `impeccable detect packages/gv-design-system/src` returns 0 issues. The DS itself is AI-slop-free.
-4. **The catalog** — `apps/gv-design-system-catalog/` demonstrates the correct visual execution. Any new app following the catalog should pass the same audit.
+4. **Design Hub** — `apps/design-hub/` demonstrates the correct visual execution. Any new app following the hub should pass the same audit.
 
 ---
 

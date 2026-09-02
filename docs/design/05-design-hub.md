@@ -1,7 +1,7 @@
 # Design Hub — Documentación integral
 
 > App: `apps/design-hub` v2.0.0 | Puerto **8095** | Local-first, HTML/CSS/JS vanilla, cero deps, cero build.
-> Estado: Production Ready (2026-09-01). Reemplaza y depreca `gv-design-system-catalog` y `gv-design-studio`.
+> Estado: Production Ready (2026-09-01). Reemplazó y eliminó a `gv-design-system-catalog` y `gv-design-studio`.
 
 ## 1. Documentación de negocio
 
@@ -23,10 +23,10 @@ ver, comparar, editar, exportar y aprobar el sistema de diseño (tokens, compone
 | Devs de apps | Tokens exportables + componentes copiables → adopción rápida v2 |
 | Marketing | Asset generator (logos, favicons, banners OG) sin herramientas externas |
 
-### Deprecaciones habilitadas
-- `gv-design-system-catalog` → Tokens + Components del hub (DEPRECATED.md en su raíz).
-- `gv-design-studio` → Token Editor del hub.
-- Ambas quedaron comentadas en `apps/command-center/server.ts`.
+### Deprecaciones ejecutadas
+- `gv-design-system-catalog` → Tokens + Components del hub. App eliminada (etapa 4, 2026-09-02).
+- `gv-design-studio` → Token Editor del hub. App eliminada (etapa 4, 2026-09-02).
+- Sus entradas comentadas fueron removidas de `apps/command-center/server.ts`.
 
 ## 2. Documentación funcional
 

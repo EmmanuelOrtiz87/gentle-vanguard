@@ -4,6 +4,7 @@
 > Version: 2.0.0  
 > Date: 2026-09-01  
 > Scope: Academy web, all Gentle-Vanguard apps, marketing materials, documentation  
+> Decision: `BRAND-DECISION-2026-09-01.md` (v2 Premium + logo v1 = official) · Visual reference: Design Hub `apps/design-hub/` (:8095) · Tokens package: `packages/gv-design-system/` v2.0.0 (official since 2026-09-02)  
 
 ---
 

@@ -16,17 +16,17 @@ Datos REALES verificados contra el código. Usar para actualizar docs/presentati
 - Migraciones DB: **hasta 016_token_savings**
 - Tablas Nexus: **23**
 
-## Apps (10, desacopladas del repo del stack — local-first, git propio)
+## Apps (8, desacopladas del repo del stack — local-first, git propio)
 1. academy-web (@gentle-vanguard/academy-web)
 2. archify (@gentle-vanguard/archify)
 3. command-center (@gentle-vanguard/command-center) — puerto 8090, solo visual para prender/apagar apps
 4. content-cms (@gentle-vanguard/content-cms)
 5. design-hub (@gentle-vanguard/design-hub)
 6. gv-analytics (@gentle-vanguard/gv-analytics)
-7. gv-design-studio (@gentle-vanguard/design-studio)
-8. gv-design-system-catalog (@gentle-vanguard/design-system-catalog)
-9. prompt-studio (@gentle-vanguard/prompt-studio)
-10. web-dashboard (@gentle-vanguard/web-dashboard)
+7. prompt-studio (@gentle-vanguard/prompt-studio)
+8. web-dashboard (@gentle-vanguard/web-dashboard)
+
+(gv-design-studio y gv-design-system-catalog: eliminadas 2026-09-02, reemplazadas por design-hub)
 
 ## Packages (2)
 - @gentle-vanguard/design-system (packages/gv-design-system) — tokens v2.0.0-alpha.1, 7 componentes React, MCP server, 3 CLIs

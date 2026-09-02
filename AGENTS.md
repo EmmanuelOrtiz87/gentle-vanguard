@@ -121,21 +121,23 @@ controles (`.gv-btn` pill gradiente, `.gv-icon-btn`, `.gv-lang-dropdown`), `.gv-
 
 ### design-system v2 — paquete monorepo (ADR-0026)
 
-`packages/gv-design-system/` v2.0.0-alpha.1 es la **consolidación** de los 4 design systems
+`packages/gv-design-system/` v2.0.0 es la **consolidación** de los 4 design systems
 divergentes del stack. Source of truth (tokens del paquete): `packages/gv-design-system/src/tokens/tokens.json`.
-Adopta la paleta de `docs/brand/UI-STANDARD-ECOSYSTEM.md` v1.0.0 (#a78bfa / #22d3ee / #121212).
-Reemplaza gradualmente `assets/gv-design-system.css` (legacy v1).
+Adopta los tokens **v2 Premium oficiales** (`docs/brand/TOKENS-v2.json`: bg `#0F1115`, purple `#a78bfa`,
+cyan `#22d3ee`, Space Grotesk) — Official since 2026-09-02 (etapa 3 del plan de migración).
+`assets/gv-design-system.css` (legacy v1) está **congelado**; nuevo trabajo usa el paquete.
 
 > **CANON DE MARCA (importante):** La fuente canónica de marca del stack es **v2 Premium** en
 > `docs/brand/` (`BRAND-DECISION-2026-09-01.md` + `TOKENS-v2.json` + `BRAND-KIT.md`): bg `#0F1115`,
-> display **Space Grotesk**. El paquete alpha `#121212`/Orbitron aquí es **histórico/deprecado** para
-> marca; su valor es como library de componentes React (Button/Card/etc.). Para cualquier material de
-> marca (HTML/PDF/PPT/Word) usar `docs/brand/BRAND-KIT.md`.
+> display **Space Grotesk**. Desde 2026-09-02 el paquete `gv-design-system` sirve exactamente ese canon
+> (tokens + componentes React). Para cualquier material de marca (HTML/PDF/PPT/Word) usar
+> `docs/brand/BRAND-KIT.md`.
 >
 > **Migración 2026-09-02**: TODAS las apps activas ya corren v2 Premium + logo oficial (etapa 2 del
 > plan `docs/design/06-migration-plan-v2-premium.md`: dashboard, analytics, cms, academy,
 > prompt-studio, archify, command-center, design-hub). `gv-design-studio` y
-> `gv-design-system-catalog` están deprecadas (reemplazadas por Design Hub).
+> `gv-design-system-catalog` fueron eliminadas del repo (etapa 4, 2026-09-02; reemplazadas por
+> Design Hub).
 
 - **Tokens**: json (SoT) + css (custom props) + ts (types) + tailwind.v4.css + tailwind.v3.cjs.
   Validar: `npx tsx packages/gv-design-system/src/cli/build-tokens.ts`.
@@ -145,7 +147,8 @@ Reemplaza gradualmente `assets/gv-design-system.css` (legacy v1).
   `get_design_md`, `list_brand_waivers`). Registrado en `config/mcp-registry.json`. Launch:
   `npx tsx packages/gv-design-system/src/mcp/server.ts`. Cross-agent (opencode, codex, copilot).
 - **3 CLIs**: `audit` (wraps impeccable), `sync` (regenera tokens en consumers), `build-tokens`
-  (validador). Path resolution via `import.meta.url` (NO `process.cwd()`).
+  (valida + regenera css/ts/tailwind/figma desde el JSON). Path resolution via `import.meta.url`
+  (NO `process.cwd()`).
 - **Design Hub** `apps/design-hub/` (puerto 8095) — app nativa oficial que unifica el catalog
   visual (tokens + 7 componentes con tokens reales), el design studio interactivo y el comparador
   v1/v2. Serve con `python -m http.server 8095 --directory apps/design-hub` y valida con
@@ -159,7 +162,6 @@ Reemplaza gradualmente `assets/gv-design-system.css` (legacy v1).
   sin decorative grids (except brand atmosphere), sin em-dash overuse, sin long line length,
   sin tiny text (<11px). DS core: `impeccable detect packages/gv-design-system/src` → 0 issues.
 - **Doc canonical**: `packages/gv-design-system/DESIGN.md` (20 secciones, Google spec). Leer primero.
-- **Catalog screenshot baseline**: `gv-catalog-final.png` (165KB, 0 console errors).
 
 ### Modelo operativo
 

@@ -25,11 +25,28 @@ Patrón por app: swap de custom properties de tema → logo oficial → grep de 
 - [x] `command-center` (:8090): `assets/gv-design-system.css` — custom properties `--gv-*` actualizadas a v2 (clases intactas); widget.js tokens v2; reiniciado. Captura grid OK.
 - Verificación global: grep de 9 hex v1 en CSS activo = 0 en todas las apps; capturas en `.runtime/*-v2-*.png` (muestreo de píxeles: 0 azul v1).
 
-## Etapa 3 — Design system canónico y docs oficiales
-- [ ] `packages/gv-design-system` v2.0.0: tokens v2 oficiales + logo oficial en assets/README; regenerar css/ts/tailwind.
-- [ ] `assets/gv-design-system.css` (legacy v1): congelar; docs apuntan al paquete.
-- [ ] AGENTS.md / docs/brand/BRAND-GUIDELINES-v2.md: logo oficial, decisión, links a Design Hub.
-- [ ] Catalog del paquete (apps/gv-design-system-catalog) ya deprecado → mantenido solo por el hub.
+## Etapa 3 — Design system canónico y docs oficiales ✅ 2026-09-02
+- [x] `packages/gv-design-system` v2.0.0: `src/tokens/tokens.json` mapeado al canon v2 (solo valores,
+      esquema/nombres `--gv-*` congelados + `meta.version` 2.0.0 y `meta.canon` →
+      `docs/brand/TOKENS-v2.json`; adiciones canon: gold, bg-elevated, glass/glassBorder,
+      text secondary/disabled, monoAccent, epic, smooth/outExpo — sin bounce). `build-tokens.ts`
+      reescrito como CLI valida+regenera (cierra el gap de docs/design/03): src css/ts + dist
+      css/ts/tailwind/figma/css-modules. Fixes: ya no se emite `--gv-$schema` (claves reservadas
+      excluidas) y `dist/tokens.ts` inválido reemplazado por TS válido; `dist/` sin `#121212`
+      (Orbitron solo como fallback de Space Grotesk). README: status oficial + logo oficial
+      (`assets/logo.svg`). `package.json` → 2.0.0 (fix `build:tokens` → `src/cli/build-tokens.ts`;
+      `scripts/build-tokens.mjs` ahora delega). MCP verificado por JSON-RPC stdio: `list_tokens`
+      sirve v2 (#0f1115/#151921/#1a1f2a/#0891b2/gold) y `get_design_md` sirve el DESIGN.md actualizado
+      (nota "Official since 2026-09-02 (BRAND-DECISION-2026-09-01)"); `sync.ts` re-mapeado al esquema
+      real del JSON. Verificación: builds 0 err `gv-analytics` + `content-cms` (CSS construido sin
+      #121212), `impeccable detect src/tokens/` → 0 issues, tsc sin errores nuevos (los de
+      `src/components/*` son preexistentes).
+- [x] `assets/gv-design-system.css` (legacy v1): congelado con header FROZEN que apunta al paquete
+      canónico (sobrevive solo para shell primitives de apps estáticas: command-center, content-cms).
+- [x] AGENTS.md / docs/brand/BRAND-GUIDELINES-v2.md: sección design-system v2 actualizada al canon
+      oficial (fuera el "#121212/alpha deprecado"); guidelines con link a Design Hub + decisión.
+- [x] Catalog del paquete: `apps/gv-design-system-catalog` ya no existe en el repo (eliminado previo);
+      la referencia visual viva es el Design Hub (`apps/design-hub/`, :8095).
 
 ## Etapa 4 — Limpieza y cierre
 - [ ] Borrar CSS v1 no referenciado tras migración (por app, con grep de verificación).

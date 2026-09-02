@@ -1,6 +1,13 @@
 /*
  * Gentle-Vanguard Design System
  *
+ * FROZEN (legacy v1 layer, 2026-09-02): custom props were re-valued to the v2 Premium
+ * canon in etapa 2, but this file no longer evolves. The canonical design system is the
+ * package `packages/gv-design-system/` (tokens v2.0.0 + React components + MCP); new work
+ * consumes the package. This layer remains only for shell primitives (gv-topbar, gv-footer,
+ * gv-btn, grid atmosphere) in static/vanilla apps (command-center, content-cms).
+ * Canon: docs/brand/TOKENS-v2.json · Decision: docs/brand/BRAND-DECISION-2026-09-01.md.
+ *
  * Canonical shared layer for web surfaces. Import this file before an app's
  * local stylesheet and use gv-* classes for shell primitives. App styles may
  * add layout, but must not redefine these shared tokens.
