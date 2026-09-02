@@ -287,7 +287,7 @@ update-manifest.json
 .test-results/
 # Runtime logs (local only)
 logs/
-apps/
+/apps/
 
 # Local app backups (artifacts, never commit)
 backups/

@@ -84,6 +84,7 @@ export interface ContentOSRepo {
       Pick<ContentVariantRecord, 'body' | 'image_prompt' | 'image_path' | 'status' | 'score'>
     >,
   ): void;
+  deleteVariantsByItem(itemId: string, tenantId: string): void;
 
   // Calendar
   createSlot(tenantId: string, data: Omit<CalendarSlotRecord, 'created_at' | 'updated_at'>): void;
@@ -96,6 +97,7 @@ export interface ContentOSRepo {
     tenantId: string,
     patch: Partial<Pick<CalendarSlotRecord, 'status' | 'scheduled_at' | 'variant_id'>>,
   ): void;
+  deleteSlotsByItem(itemId: string, tenantId: string): void;
 
   // Media
   createMedia(tenantId: string, data: Omit<MediaRecord, 'created_at'>): void;
@@ -180,7 +182,18 @@ export class SqliteContentOSRepo implements ContentOSRepo {
   }
 
   deleteItem(id: string, tenantId: string): void {
-    this.db.prepare('DELETE FROM content_items WHERE id = ? AND tenant_id = ?').run(id, tenantId);
+    // Cascade explícito (sin FK en schema): variants y slots mueren con su item.
+    // publish_log se conserva como audit trail append-only.
+    const tx = this.db.transaction(() => {
+      this.db
+        .prepare('DELETE FROM calendar_slots WHERE item_id = ? AND tenant_id = ?')
+        .run(id, tenantId);
+      this.db
+        .prepare('DELETE FROM content_variants WHERE item_id = ? AND tenant_id = ?')
+        .run(id, tenantId);
+      this.db.prepare('DELETE FROM content_items WHERE id = ? AND tenant_id = ?').run(id, tenantId);
+    });
+    tx();
   }
 
   createVariant(
@@ -245,6 +258,12 @@ export class SqliteContentOSRepo implements ContentOSRepo {
       .run(...values, wasEdit ? 1 : 0, id, tenantId);
   }
 
+  deleteVariantsByItem(itemId: string, tenantId: string): void {
+    this.db
+      .prepare('DELETE FROM content_variants WHERE item_id = ? AND tenant_id = ?')
+      .run(itemId, tenantId);
+  }
+
   createSlot(tenantId: string, data: Omit<CalendarSlotRecord, 'created_at' | 'updated_at'>): void {
     this.db
       .prepare(
@@ -300,6 +319,12 @@ export class SqliteContentOSRepo implements ContentOSRepo {
         `UPDATE calendar_slots SET ${sets}, updated_at = datetime('now') WHERE id = ? AND tenant_id = ?`,
       )
       .run(...values, id, tenantId);
+  }
+
+  deleteSlotsByItem(itemId: string, tenantId: string): void {
+    this.db
+      .prepare('DELETE FROM calendar_slots WHERE item_id = ? AND tenant_id = ?')
+      .run(itemId, tenantId);
   }
 
   createMedia(tenantId: string, data: Omit<MediaRecord, 'created_at'>): void {
