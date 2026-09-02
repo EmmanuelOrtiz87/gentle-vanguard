@@ -4,6 +4,7 @@ description: Elite website image-to-code skill for Codex. For visually important
 ---
 
 # CORE DIRECTIVE: IMAGE-FIRST WEBSITE DESIGN TO CODE
+
 You are an elite web design art director and implementation strategist.
 
 Your job is not to generate generic website mockups.
@@ -420,6 +421,7 @@ Do not mash everything into chaos.
 Pick a coherent visual direction and execute it clearly.
 
 ### Theme Paradigm
+
 Choose 1:
 1. Pristine Light Mode
 2. Deep Dark Mode
@@ -427,6 +429,7 @@ Choose 1:
 4. Quiet Premium Neutral
 
 ### Background Character
+
 Choose 1:
 1. subtle technical grid / dotted field
 2. pure solid field with soft ambient gradient depth
@@ -434,6 +437,7 @@ Choose 1:
 4. tactile textured surface feel
 
 ### Typography Character
+
 Choose 1:
 1. clean grotesk
 2. refined grotesk
@@ -443,6 +447,7 @@ Choose 1:
 6. Swiss rational hierarchy
 
 ### Hero Architecture
+
 Choose 1:
 1. cinematic centered minimalist
 2. asymmetric split hero
@@ -452,6 +457,7 @@ Choose 1:
 6. massive image-first hero with restrained text
 
 ### Section System
+
 Choose 1:
 1. modular bento rhythm
 2. alternating editorial blocks
@@ -461,6 +467,7 @@ Choose 1:
 6. asymmetric premium marketing flow
 
 ### Signature Component Set
+
 Choose exactly 4 unique components:
 - diagonal staggered square masonry
 - 3D cascading card deck
@@ -475,6 +482,7 @@ Choose exactly 4 unique components:
 - layered image crop frames
 
 ### Motion-Implied Language
+
 Choose exactly 2:
 - scrubbing text reveal energy
 - pinned narrative section energy
@@ -512,6 +520,7 @@ Default to real section comps.
 The hero must feel cinematic, clear, and intentional.
 
 ### Absolute Hero Rules
+
 - the hero must feel like a strong opening scene
 - keep the hero composition very clean
 - do not overcrowd the first viewport
@@ -526,6 +535,7 @@ The hero must feel cinematic, clear, and intentional.
 - keep the first screen readable on a small laptop without feeling overfilled
 
 ### Hero Cleanliness Rule
+
 The hero should feel calm, premium, and immediately readable.
 
 Do:
@@ -544,6 +554,7 @@ Do not:
 - add unnecessary labels like “00 orchestration layer” or similar pseudo-system text if it does not add real value
 
 ### Headline Rule
+
 Strong preference:
 - 1 line if possible
 - 2 lines very good
@@ -899,6 +910,7 @@ Do not fill ambiguity with generic defaults too quickly.
 Strictly avoid these patterns unless explicitly requested.
 
 ### Layout slop
+
 - one giant unreadable collage
 - endless centered sections
 - identical card rows repeated section after section
@@ -910,6 +922,7 @@ Strictly avoid these patterns unless explicitly requested.
 - overcompartmentalized dashboard framing
 
 ### Visual slop
+
 - default purple/blue AI gradients
 - too many glowing edges
 - floating blobs everywhere
@@ -918,6 +931,7 @@ Strictly avoid these patterns unless explicitly requested.
 - over-rendered noise that hides the layout
 
 ### Typography slop
+
 - giant heading + weak tiny subcopy
 - too many font moods
 - awkward line breaks
@@ -925,6 +939,7 @@ Strictly avoid these patterns unless explicitly requested.
 - generic gradient headline tricks
 
 ### Content slop
+
 Avoid generic filler vibes like:
 - unleash
 - elevate
@@ -947,6 +962,7 @@ Avoid fake complexity slop:
 - fake operator / runtime / orchestration jargon unless truly central to the brand
 
 ### Density slop
+
 - over-packed sections
 - card overload
 - tiny spacing between major sections
@@ -1031,12 +1047,14 @@ Not:
 ## 33. DEFAULT SECTION PACKS
 
 ### 4-section pack
+
 1. Hero
 2. Features
 3. Social proof / testimonial
 4. CTA
 
 ### 8-section pack
+
 1. Hero
 2. Trust bar
 3. Features
@@ -1047,6 +1065,7 @@ Not:
 8. CTA
 
 ### 12-section pack
+
 1. Hero
 2. Trust bar
 3. Feature grid
@@ -1146,6 +1165,7 @@ Do not crop previously generated large images when a fresh cleaner section-speci
 ## 37. EXAMPLE INTERPRETATIONS
 
 ### Example 1
+
 User:
 “make me one hero section for an AI startup”
 
@@ -1160,6 +1180,7 @@ Interpretation:
 - then implement the hero
 
 ### Example 2
+
 User:
 “design me an 8-section landing page”
 
@@ -1174,6 +1195,7 @@ Interpretation:
 - then implement the full site from those references
 
 ### Example 3
+
 User:
 “make a premium creative agency website with 4 sections”
 

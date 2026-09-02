@@ -79,9 +79,11 @@ Score against the loaded platform reference(s), including their slop tests. **Ch
 **Rating bands**: 18-20 Excellent (minor polish), 14-17 Good (address weak dimensions), 10-13 Acceptable (significant work needed), 6-9 Poor (major overhaul), 0-5 Critical (fundamental issues)
 
 ### Platform Conformance Verdict
+
 **Start here.** Pass/fail: does this read as a native app or a ported website? List specific violations. Be brutally honest.
 
 ### Executive Summary
+
 - Audit Health Score: **??/20** ([rating band])
 - Total issues found (count by severity: P0/P1/P2/P3)
 - Top 3-5 critical issues

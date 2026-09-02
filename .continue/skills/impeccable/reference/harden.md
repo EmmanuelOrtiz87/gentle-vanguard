@@ -37,6 +37,7 @@ Systematically improve resilience:
 ### Text Overflow & Wrapping
 
 **Long text handling**:
+
 ```css
 /* Single line with ellipsis */
 .truncate {
@@ -62,6 +63,7 @@ Systematically improve resilience:
 ```
 
 **Flex/Grid overflow**:
+
 ```css
 /* Prevent flex items from overflowing */
 .flex-item {
@@ -99,6 +101,7 @@ Systematically improve resilience:
 ```
 
 **RTL (Right-to-Left) support**:
+
 ```css
 /* Use logical properties */
 margin-inline-start: 1rem; /* Not margin-left */
@@ -116,6 +119,7 @@ border-inline-end: 1px solid; /* Not border-right */
 - Handle different scripts (Latin, Cyrillic, Arabic, etc.)
 
 **Date/Time formatting**:
+
 ```javascript
 // ✅ Use Intl API for proper formatting
 new Intl.DateTimeFormat('en-US').format(date); // 1/15/2024
@@ -128,6 +132,7 @@ new Intl.NumberFormat('en-US', {
 ```
 
 **Pluralization**:
+
 ```javascript
 // ❌ Bad: Assumes English pluralization
 `${count} item${count !== 1 ? 's' : ''}`
@@ -233,6 +238,7 @@ t('items', { count }) // Handles complex plural rules
 - Rate limiting
 
 **Constraint handling**:
+
 ```html
 <!-- Set clear constraints -->
 <input 
@@ -281,6 +287,7 @@ t('items', { count }) // Handles complex plural rules
 - Abort pending requests on unmount
 
 **Throttling & Debouncing**:
+
 ```javascript
 // Debounce search input
 const debouncedSearch = debounce(handleSearch, 300);
