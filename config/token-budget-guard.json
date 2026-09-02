@@ -15,7 +15,7 @@
   "tokenBudget": {
     "version": "3.0.0",
     "limits": {
-      "daily": 8000000,
+      "daily": 10000000,
       "perSession": 3000000,
       "perAgent": 100000,
       "softThreshold": 70,
