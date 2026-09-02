@@ -274,35 +274,44 @@ The board should have rhythm:
 Use this if no layout is specified:
 
 ## 1. Logo Cover
+
 Large logo and wordmark.  
 Minimal title.  
 Strong negative space.
 
 ## 2. Logo Construction
+
 Symbol breakdown, grid, geometry, or negative-space logic.  
 Show why the mark exists.
 
 ## 3. Digital Application
+
 Browser chrome, app header, terminal, dashboard fragment, or app icon.
 
 ## 4. Brand Essence
+
 One short tagline.  
 Large readable typography.  
 Sparse composition.
 
 ## 5. Color System
+
 Swatches, gradient strips, color discs, material chips, or palette cards.
 
 ## 6. Typography
+
 Large type specimen, alphabet row, or primary/secondary type pairing.
 
 ## 7. Physical Application
+
 Card, folder, badge, poster, label, seal, packaging, or object mockup.
 
 ## 8. Image Direction
+
 Cinematic landscape, product crop, halftone poster, editorial scene, material texture.
 
 ## 9. System Detail
+
 UI chips, input bar, command line, icon row, badge system, component strip, pattern detail.
 
 ---
