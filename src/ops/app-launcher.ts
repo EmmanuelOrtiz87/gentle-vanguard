@@ -11,7 +11,45 @@
 
 import { spawn } from 'node:child_process';
 import { resolve } from 'node:path';
-import { createAppsController, type AppInfo, type AppId } from '../../apps/command-center/server.js';
+
+// apps/ está desacoplada (gitignored — ver NORMATIVA-DESIGN-SYSTEM / apps-desacopladas):
+// el import del server del Command Center debe ser OPCIONAL para que tsc/CI pasen sin apps/.
+// Specifier no-literal => TS no lo resuelve estáticamente; se resuelve en runtime.
+const CC_SERVER_MODULE = '../../apps/command-center/server.js';
+
+export type AppId = string;
+export interface AppProcessInfo {
+  name: string;
+  port: number;
+  pid: number | null;
+  alive: boolean;
+}
+export interface AppInfo {
+  id: AppId;
+  name: string;
+  url: string;
+  status: string;
+  processes: AppProcessInfo[];
+}
+interface AppsController {
+  list(): Promise<AppInfo[]>;
+  start(id: AppId): Promise<{ status: number; body: unknown }>;
+  stop(id: AppId): Promise<{ status: number; body: unknown }>;
+}
+
+async function loadController(root: string): Promise<AppsController> {
+  try {
+    const mod = (await import(CC_SERVER_MODULE)) as {
+      createAppsController: (opts: { root: string }) => AppsController;
+    };
+    return mod.createAppsController({ root });
+  } catch {
+    throw new Error(
+      'Command Center no disponible (apps/command-center/server.ts no encontrado). ' +
+        'apps/ está desacoplada del repo — clona/verifica la carpeta apps/ para operar apps.',
+    );
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Paths
@@ -47,7 +85,7 @@ export async function launchApp(
   id: AppId,
   opts: { browser?: boolean } = {},
 ): Promise<void> {
-  const controller = createAppsController({ root: ROOT });
+  const controller = await loadController(ROOT);
   const browser = opts.browser ?? true;
 
   console.log(`\n[GV] ▶  Iniciando ${id}…`);
@@ -65,7 +103,7 @@ export async function launchApp(
   // Hacemos un wait extra para asegurar readiness del puerto.
   if (info.status !== 'running') {
     // Volvemos a inspeccionar hasta que esté running o timeout
-    const controller2 = createAppsController({ root: ROOT });
+    const controller2 = await loadController(ROOT);
     let latest = info;
     const deadline = Date.now() + 20_000;
     while (Date.now() < deadline) {
@@ -84,7 +122,7 @@ export async function launchApp(
   }
 
   // Estado final
-  const finalController = createAppsController({ root: ROOT });
+  const finalController = await loadController(ROOT);
   const finalList = await finalController.list();
   const finalApp = finalList.find((a) => a.id === id) ?? info;
 
@@ -112,7 +150,7 @@ export async function launchApp(
 // stopApp — stop de una app por ID
 // ---------------------------------------------------------------------------
 export async function stopApp(id: AppId): Promise<void> {
-  const controller = createAppsController({ root: ROOT });
+  const controller = await loadController(ROOT);
 
   console.log(`\n[GV] ■  Deteniendo ${id}…`);
 
