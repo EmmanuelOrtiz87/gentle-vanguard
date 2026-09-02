@@ -24,7 +24,7 @@
     </linearGradient>
     <linearGradient id="barBlue" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#22d3ee"/>
-      <stop offset="100%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0891b2"/>
     </linearGradient>
     <linearGradient id="barPurple" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#a78bfa"/>
@@ -64,7 +64,7 @@
 
   <!-- ===== LEFT: DATA SOURCES ===== -->
   <g filter="url(#shadow)">
-    <rect x="30" y="80" width="200" height="280" rx="10" fill="#111827" stroke="#1e3a5f" stroke-width="1"/>
+    <rect x="30" y="80" width="200" height="280" rx="10" fill="#151921" stroke="#1e3a5f" stroke-width="1"/>
     <rect x="30" y="80" width="200" height="280" rx="10" fill="url(#srcGrad)"/>
   </g>
 
@@ -109,7 +109,7 @@
 
   <!-- ===== MIDDLE: BACKEND ===== -->
   <g filter="url(#shadow)">
-    <rect x="340" y="80" width="220" height="280" rx="10" fill="#111827" stroke="#1e3a5f" stroke-width="1"/>
+    <rect x="340" y="80" width="220" height="280" rx="10" fill="#151921" stroke="#1e3a5f" stroke-width="1"/>
     <rect x="340" y="80" width="220" height="280" rx="10" fill="url(#midGrad)"/>
   </g>
 
@@ -139,7 +139,7 @@
 
   <!-- ===== RIGHT TOP: FRONTEND ===== -->
   <g filter="url(#shadow)">
-    <rect x="600" y="80" width="270" height="170" rx="10" fill="#111827" stroke="#1e3a5f" stroke-width="1"/>
+    <rect x="600" y="80" width="270" height="170" rx="10" fill="#151921" stroke="#1e3a5f" stroke-width="1"/>
     <rect x="600" y="80" width="270" height="170" rx="10" fill="url(#frontGrad)"/>
   </g>
 
@@ -173,7 +173,7 @@
 
   <!-- ===== RIGHT BOTTOM: HTTP FALLBACK ===== -->
   <g filter="url(#shadow)">
-    <rect x="600" y="275" width="270" height="85" rx="10" fill="#111827" stroke="#1e3a5f" stroke-width="1"/>
+    <rect x="600" y="275" width="270" height="85" rx="10" fill="#151921" stroke="#1e3a5f" stroke-width="1"/>
     <rect x="600" y="275" width="270" height="85" rx="10" fill="url(#fallbackGrad)"/>
   </g>
 
@@ -191,7 +191,7 @@
 
   <!-- ===== BOTTOM: WATCHDOG ===== -->
   <g filter="url(#shadow)">
-    <rect x="340" y="380" width="530" height="40" rx="8" fill="#111827" stroke="#ee6d75" stroke-width="0.5" stroke-opacity="0.5"/>
+    <rect x="340" y="380" width="530" height="40" rx="8" fill="#151921" stroke="#ee6d75" stroke-width="0.5" stroke-opacity="0.5"/>
     <rect x="340" y="380" width="530" height="40" rx="8" fill="#ee6d75" fill-opacity="0.03"/>
   </g>
   <rect x="350" y="388" width="18" height="24" rx="4" fill="#ee6d75" fill-opacity="0.15"/>

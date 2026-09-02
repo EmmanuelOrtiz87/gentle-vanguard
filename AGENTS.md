@@ -324,6 +324,10 @@ npm run delegate:run -- --task "audit gdpr compliance"
 
 ## Reglas rápidas
 
+- **Scripts = TS o bash, nada más** (NORM-TS-001): lógica del stack en TypeScript vía
+  `run-command.ts`; ciclo de vida de apps con sus `apps/<app>/start.sh|stop.sh` nativos
+  (operables sin command-center). PS1/CMD solo en excepciones sancionadas por la norma
+  (installer Pester, shims para herramientas externas). Prohibido crear .ps1/.bat nuevos.
 - `$var:` en PowerShell strings → escribir `${var}:` (parser error si no).
 - Graphify CLI = `npm run graphify --` local; NO instalar el paquete npm `graphify@1.0.0` (no
   relacionado).

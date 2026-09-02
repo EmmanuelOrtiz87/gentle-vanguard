@@ -26,6 +26,8 @@
       nav_patterns: 'Patterns',
       nav_health: 'Health',
       nav_diagrams: 'Diagrams',
+      nav_case: 'Case Study',
+      nav_knowledge: 'Knowledge',
       /* Títulos de sección — index */
       sec_architecture: 'System Architecture',
       sec_components: 'Stack Components',
@@ -564,6 +566,8 @@
       nav_patterns: 'Patrones',
       nav_health: 'Salud',
       nav_diagrams: 'Diagramas',
+      nav_case: 'Caso',
+      nav_knowledge: 'Knowledge',
       /* Títulos de sección — index */
       sec_architecture: 'Arquitectura del Sistema',
       sec_components: 'Componentes del Stack',
@@ -1103,6 +1107,8 @@
       nav_patterns: 'Padrões',
       nav_health: 'Saúde',
       nav_diagrams: 'Diagramas',
+      nav_case: 'Caso',
+      nav_knowledge: 'Knowledge',
       /* Títulos de sección — index */
       sec_architecture: 'Arquitetura do Sistema',
       sec_components: 'Componentes da Stack',
