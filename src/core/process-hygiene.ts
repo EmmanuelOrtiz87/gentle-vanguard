@@ -285,7 +285,8 @@ const DAEMON_CLASSES: DaemonClass[] = [
   {
     id: 'prompts-vite',
     label: 'Prompt Studio Vite dev server',
-    match: /apps[\\/]prompt-studio[\\/](node_modules[\\/]\.bin[\\/]\.\.[\\/])?node_modules[\\/]vite[\\/]bin[\\/]vite\.js/,
+    match:
+      /apps[\\/]prompt-studio[\\/](node_modules[\\/]\.bin[\\/]\.\.[\\/])?node_modules[\\/]vite[\\/]bin[\\/]vite\.js/,
     relativeMatch: /vite[\\/]bin[\\/]vite\.js/,
     pidFile: join(RUNTIME_DIR, 'app-prompts-vite.pid'),
     keep: 'pidfile',
@@ -305,7 +306,8 @@ const DAEMON_CLASSES: DaemonClass[] = [
   {
     id: 'archify-vite',
     label: 'Archify Vite dev server',
-    match: /apps[\\/]archify[\\/](node_modules[\\/]\.bin[\\/]\.\.[\\/])?node_modules[\\/]vite[\\/]bin[\\/]vite\.js/,
+    match:
+      /apps[\\/]archify[\\/](node_modules[\\/]\.bin[\\/]\.\.[\\/])?node_modules[\\/]vite[\\/]bin[\\/]vite\.js/,
     relativeMatch: /vite[\\/]bin[\\/]vite\.js/,
     pidFile: join(RUNTIME_DIR, 'app-archify-vite.pid'),
     keep: 'pidfile',
@@ -517,8 +519,7 @@ function classifyDaemon(
     if (c.match.test(cmdline)) return c;
     // Ambiguous relative shape: only the pidfile owner may claim the class.
     if (c.relativeMatch?.test(cmdline) && c.pidFile) {
-      const raw =
-        pidFiles.get(c.pidFile) ?? pidFiles.get(join('.runtime', basename(c.pidFile)));
+      const raw = pidFiles.get(c.pidFile) ?? pidFiles.get(join('.runtime', basename(c.pidFile)));
       if (raw && /^\d+$/.test(raw) && parseInt(raw, 10) === pid) return c;
     }
   }

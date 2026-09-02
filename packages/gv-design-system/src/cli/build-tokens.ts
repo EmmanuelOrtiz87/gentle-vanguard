@@ -166,7 +166,7 @@ function generateTokensCss(tokens: Json): string {
     .map((k) => `  --gv-space-${k}: ${String(spacing[k])};`);
   const breakpoints = tokens.breakpoints as Json;
   const bpLines = Object.keys(breakpoints).map(
-    (k) => `  --gv-breakpoint-${kebab(k)}: ${String(breakpoints[k])};`
+    (k) => `  --gv-breakpoint-${kebab(k)}: ${String(breakpoints[k])};`,
   );
 
   const section = (title: string, lines: string[]): string =>
@@ -174,33 +174,56 @@ function generateTokensCss(tokens: Json): string {
 
   const body = [
     section('PRIMARY', [
-      v('--gv-purple'), v('--gv-purple-deep'), v('--gv-purple-soft'),
-      v('--gv-cyan'), v('--gv-cyan-deep'), v('--gv-cyan-soft'), v('--gv-gold'),
+      v('--gv-purple'),
+      v('--gv-purple-deep'),
+      v('--gv-purple-soft'),
+      v('--gv-cyan'),
+      v('--gv-cyan-deep'),
+      v('--gv-cyan-soft'),
+      v('--gv-gold'),
     ]),
     section('SURFACE', [
-      v('--gv-bg'), v('--gv-bg-elevated'), v('--gv-bg-deep'), v('--gv-surface'),
-      v('--gv-surface-raised'), v('--gv-surface-overlay'),
-      v('--gv-glass'), v('--gv-glass-border'),
+      v('--gv-bg'),
+      v('--gv-bg-elevated'),
+      v('--gv-bg-deep'),
+      v('--gv-surface'),
+      v('--gv-surface-raised'),
+      v('--gv-surface-overlay'),
+      v('--gv-glass'),
+      v('--gv-glass-border'),
     ]),
     section('TEXT', [
-      v('--gv-text'), v('--gv-text-secondary'), v('--gv-muted'),
-      v('--gv-text-disabled'), v('--gv-text-inverse'),
+      v('--gv-text'),
+      v('--gv-text-secondary'),
+      v('--gv-muted'),
+      v('--gv-text-disabled'),
+      v('--gv-text-inverse'),
     ]),
     section('FEEDBACK', [v('--gv-amber'), v('--gv-red'), v('--gv-green'), v('--gv-info')]),
     section('BORDER', [v('--gv-border'), v('--gv-border-accent'), v('--gv-border-accent-strong')]),
     section('GLOW', [v('--gv-glow-purple'), v('--gv-glow-cyan')]),
     section('GRADIENT', [v('--gv-gradient'), v('--gv-gradient-subtle'), v('--gv-gradient-text')]),
     section('TYPOGRAPHY', [
-      v('--gv-font-display'), v('--gv-font-body'), v('--gv-font-mono'), v('--gv-font-mono-accent'),
+      v('--gv-font-display'),
+      v('--gv-font-body'),
+      v('--gv-font-mono'),
+      v('--gv-font-mono-accent'),
     ]),
     section('SPACING', spacingLines),
     section('RADIUS', [
-      v('--gv-radius-sm'), v('--gv-radius-md'), v('--gv-radius-lg'),
-      v('--gv-radius-xl'), v('--gv-radius-2xl'), v('--gv-radius-pill'),
+      v('--gv-radius-sm'),
+      v('--gv-radius-md'),
+      v('--gv-radius-lg'),
+      v('--gv-radius-xl'),
+      v('--gv-radius-2xl'),
+      v('--gv-radius-pill'),
     ]),
     section('ELEVATION', [
-      v('--gv-elev-sm'), v('--gv-elev-md'), v('--gv-elev-lg'),
-      v('--gv-elev-xl'), v('--gv-elev-glow'),
+      v('--gv-elev-sm'),
+      v('--gv-elev-md'),
+      v('--gv-elev-lg'),
+      v('--gv-elev-xl'),
+      v('--gv-elev-glow'),
     ]),
     [
       '  /* === MOTION === */',
@@ -217,8 +240,13 @@ function generateTokensCss(tokens: Json): string {
     ].join('\n'),
     section('BREAKPOINTS (used in @media)', bpLines),
     section('Z-INDEX', [
-      v('--gv-z-base'), v('--gv-z-raised'), v('--gv-z-sticky'), v('--gv-z-overlay'),
-      v('--gv-z-modal'), v('--gv-z-toast'), v('--gv-z-max'),
+      v('--gv-z-base'),
+      v('--gv-z-raised'),
+      v('--gv-z-sticky'),
+      v('--gv-z-overlay'),
+      v('--gv-z-modal'),
+      v('--gv-z-toast'),
+      v('--gv-z-max'),
     ]),
     section('LAYOUT', [v('--gv-header-height'), v('--gv-content-max-width')]),
   ].join('\n\n');
@@ -549,7 +577,9 @@ function generateTailwindConfig(tokens: Json): string {
   }
   const fontFamily: Record<string, string[]> = {};
   for (const [k, v] of Object.entries((tokens.typography as Json).fontFamily as Json)) {
-    fontFamily[kebab(k)] = String(v).split(',').map((f) => f.trim().replace(/['"]/g, ''));
+    fontFamily[kebab(k)] = String(v)
+      .split(',')
+      .map((f) => f.trim().replace(/['"]/g, ''));
   }
   return `/** @type {import('tailwindcss').Config} */
 /* GENERATED from src/tokens/tokens.json by src/cli/build-tokens.ts — do not edit by hand. */
@@ -582,8 +612,15 @@ function generateFigmaTokens(tokens: Json): string {
     $version: '0.1.0',
     $metadata: {
       tokenSetOrder: [
-        'color', 'surface', 'typography', 'spacing',
-        'radius', 'shadow', 'transition', 'breakpoints', 'zIndex',
+        'color',
+        'surface',
+        'typography',
+        'spacing',
+        'radius',
+        'shadow',
+        'transition',
+        'breakpoints',
+        'zIndex',
       ],
       tokenSetVersion: tokens.version,
       canon: (tokens.meta as Json).canon,
@@ -597,7 +634,11 @@ function generateFigmaTokens(tokens: Json): string {
   for (const [group, values] of Object.entries(tokens.color as Json)) {
     figma[group] = {};
     for (const [k, v] of Object.entries(values as Json)) {
-      (figma[group] as Json)[k] = { $type: 'color', $value: v, $description: `color.${group}.${k}` };
+      (figma[group] as Json)[k] = {
+        $type: 'color',
+        $value: v,
+        $description: `color.${group}.${k}`,
+      };
     }
   }
   figma.surfaceSet = {};
@@ -608,42 +649,53 @@ function generateFigmaTokens(tokens: Json): string {
     fontFamilies: Object.fromEntries(
       Object.entries((tokens.typography as Json).fontFamily as Json).map(([k, v]) => [
         k,
-        { $type: 'fontFamilies', $value: String(v).split(',').map((f) => f.trim().replace(/['"]/g, '')) },
-      ])
+        {
+          $type: 'fontFamilies',
+          $value: String(v)
+            .split(',')
+            .map((f) => f.trim().replace(/['"]/g, '')),
+        },
+      ]),
     ),
     fontWeights: Object.fromEntries(
       Object.entries((tokens.typography as Json).weight as Json).map(([k, v]) => [
         k,
         { $type: 'fontWeight', $value: v },
-      ])
+      ]),
     ),
     fontSizes: Object.fromEntries(
       Object.entries((tokens.typography as Json).size as Json).map(([k, v]) => [
         k,
         { $type: 'fontSize', $value: v },
-      ])
+      ]),
     ),
     lineHeights: Object.fromEntries(
       Object.entries((tokens.typography as Json).lineHeight as Json).map(([k, v]) => [
         k,
         { $type: 'lineHeight', $value: v },
-      ])
+      ]),
     ),
   };
   figma.spacing = Object.fromEntries(
-    Object.entries(tokens.spacing as Json).map(([k, v]) => [k, { $type: 'spacing', $value: v }])
+    Object.entries(tokens.spacing as Json).map(([k, v]) => [k, { $type: 'spacing', $value: v }]),
   );
   figma.borderRadius = Object.fromEntries(
-    Object.entries(tokens.radius as Json).map(([k, v]) => [k, { $type: 'borderRadius', $value: v }])
+    Object.entries(tokens.radius as Json).map(([k, v]) => [
+      k,
+      { $type: 'borderRadius', $value: v },
+    ]),
   );
   figma.shadow = Object.fromEntries(
-    Object.entries(tokens.shadow as Json).map(([k, v]) => [k, { $type: 'boxShadow', $value: v }])
+    Object.entries(tokens.shadow as Json).map(([k, v]) => [k, { $type: 'boxShadow', $value: v }]),
   );
   figma.breakpoints = Object.fromEntries(
-    Object.entries(tokens.breakpoints as Json).map(([k, v]) => [k, { $type: 'breakpoint', $value: v }])
+    Object.entries(tokens.breakpoints as Json).map(([k, v]) => [
+      k,
+      { $type: 'breakpoint', $value: v },
+    ]),
   );
   figma.zIndex = Object.fromEntries(
-    Object.entries(tokens.zIndex as Json).map(([k, v]) => [k, { $type: 'zIndex', $value: v }])
+    Object.entries(tokens.zIndex as Json).map(([k, v]) => [k, { $type: 'zIndex', $value: v }]),
   );
   return JSON.stringify(figma, null, 2);
 }
@@ -670,8 +722,17 @@ function validate(tokens: Json): string[] {
   const errors: string[] = [];
 
   const requiredKeys = [
-    'color', 'surface', 'typography', 'spacing', 'radius',
-    'shadow', 'transition', 'breakpoints', 'zIndex', 'motion', 'meta',
+    'color',
+    'surface',
+    'typography',
+    'spacing',
+    'radius',
+    'shadow',
+    'transition',
+    'breakpoints',
+    'zIndex',
+    'motion',
+    'meta',
   ];
   for (const k of requiredKeys) {
     if (!tokens[k]) errors.push(`Missing required top-level key: ${k}`);
@@ -717,9 +778,16 @@ function validate(tokens: Json): string[] {
     }
   }
   const tsPaths = [
-    'color.brand.gold', 'color.surface.elevated', 'color.surface.glass', 'color.surface.glassBorder',
-    'color.text.secondary', 'color.text.disabled', 'typography.fontFamily.monoAccent',
-    'motion.durations.epic', 'motion.easings.smooth', 'motion.easings.outExpo',
+    'color.brand.gold',
+    'color.surface.elevated',
+    'color.surface.glass',
+    'color.surface.glassBorder',
+    'color.text.secondary',
+    'color.text.disabled',
+    'typography.fontFamily.monoAccent',
+    'motion.durations.epic',
+    'motion.easings.smooth',
+    'motion.easings.outExpo',
   ];
   for (const p of tsPaths) {
     if (getPath(tokens, p) === undefined) errors.push(`TS mapping cannot resolve: ${p}`);
@@ -740,15 +808,17 @@ function main() {
   const raw = readFileSync(TOKENS_JSON, 'utf-8');
   const tokens = JSON.parse(raw) as Json;
 
-  console.log(`📦 Version: ${String(tokens.version)} · Canon: ${String((tokens.meta as Json).canon)}`);
+  console.log(
+    `📦 Version: ${String(tokens.version)} · Canon: ${String((tokens.meta as Json).canon)}`,
+  );
   console.log(`📦 Mode: ${String(tokens.mode)}`);
   console.log(
     `🎨 Colors: ${Object.keys((tokens.color as Json).brand ?? {}).length} brand, ` +
-      `${Object.keys((tokens.color as Json).feedback ?? {}).length} feedback`
+      `${Object.keys((tokens.color as Json).feedback ?? {}).length} feedback`,
   );
   console.log(
     `🔤 Typography: ${Object.keys((tokens.typography as Json).fontFamily ?? {}).length} families, ` +
-      `${Object.keys((tokens.typography as Json).size ?? {}).length} sizes`
+      `${Object.keys((tokens.typography as Json).size ?? {}).length} sizes`,
   );
   console.log('');
 
@@ -776,7 +846,9 @@ function main() {
   writeFileSync(join(DIST, 'css-modules.d.ts'), generateCssModulesTypes(css));
   writeFileSync(join(DIST, 'tokens.json'), JSON.stringify(tokens, null, 2) + '\n');
   console.log('✅ dist/tokens.css, components.css, tokens.ts regenerated');
-  console.log('✅ dist/tailwind.config.ts, figma-tokens.json, css-modules.d.ts, tokens.json regenerated');
+  console.log(
+    '✅ dist/tailwind.config.ts, figma-tokens.json, css-modules.d.ts, tokens.json regenerated',
+  );
 
   console.log('');
   console.log('ℹ️  Next: `impeccable detect src/tokens/` (anti-slop regression) and');

@@ -81,10 +81,7 @@ export function openBrowser(url: string): void {
 // ---------------------------------------------------------------------------
 // launchApp — start de una app por ID
 // ---------------------------------------------------------------------------
-export async function launchApp(
-  id: AppId,
-  opts: { browser?: boolean } = {},
-): Promise<void> {
+export async function launchApp(id: AppId, opts: { browser?: boolean } = {}): Promise<void> {
   const controller = await loadController(ROOT);
   const browser = opts.browser ?? true;
 
@@ -174,7 +171,9 @@ export async function stopApp(id: AppId): Promise<void> {
   console.log(`\n[GV] Estado final — ${after.name}:`);
   for (const p of after.processes) {
     const icon = p.alive ? '⚠' : '✓';
-    console.log(`     ${icon} ${p.name.padEnd(8)} :${p.port}  ${p.alive ? 'aún activo' : 'detenido'}`);
+    console.log(
+      `     ${icon} ${p.name.padEnd(8)} :${p.port}  ${p.alive ? 'aún activo' : 'detenido'}`,
+    );
   }
 
   if (after.status === 'stopped') {

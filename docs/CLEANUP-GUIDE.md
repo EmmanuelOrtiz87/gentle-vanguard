@@ -21,10 +21,10 @@ Before running cleanup, verify:
 
 ## 🗑️ Apps to Remove
 
-| App | Replaced By | Files | Status |
-|-----|-------------|-------|--------|
-| `apps/gv-design-studio` | Design Hub | ~47 | Ready to delete |
-| `apps/gv-design-system-catalog` | Design Hub | ~5 | Ready to delete |
+| App                             | Replaced By | Files | Status          |
+| ------------------------------- | ----------- | ----- | --------------- |
+| `apps/gv-design-studio`         | Design Hub  | ~47   | Ready to delete |
+| `apps/gv-design-system-catalog` | Design Hub  | ~5    | Ready to delete |
 
 ---
 
@@ -100,11 +100,13 @@ git checkout HEAD -- apps/gv-design-system-catalog
 ## 📁 What Was Already Migrated
 
 **From `apps/gv-design-system-catalog/`**:
+
 - ✅ Token display → `Design Hub > Token Editor`
 - ✅ Component catalog → `Design Hub > Components`
 - ✅ Logo files → `apps/design-hub/public/assets/`
 
 **From `apps/gv-design-studio/`**:
+
 - ✅ Token editing → `Design Hub > Token Editor`
 - ✅ Asset generation → `Design Hub > Asset Generator`
 - ✅ Visual comparison → `Design Hub > Visual Comparison`
@@ -144,6 +146,7 @@ apps/
 ## 📞 Support
 
 If something breaks:
+
 1. Check Design Hub status: `npm run status`
 2. Restart Command Center
 3. Restore from backup if needed

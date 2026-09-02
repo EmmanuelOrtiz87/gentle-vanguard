@@ -93,22 +93,22 @@ function loadConfig(): GuardConfig {
   };
 
   // Priority 1: token-budget-guard.json (single source of truth, v3) — via unified loader
-  const primary = loadConfigFile<{ 
-    tokenBudget?: { 
-      limits?: Record<string, number>; 
-      enforcement?: { 
-        mode?: string; 
+  const primary = loadConfigFile<{
+    tokenBudget?: {
+      limits?: Record<string, number>;
+      enforcement?: {
+        mode?: string;
         adaptiveModes?: Record<string, AdaptiveModeConfig>;
       };
     };
   }>('token-budget-guard');
-  
+
   const tb = primary.data?.tokenBudget;
   if (tb) {
     config.daily_budget_tokens = tb.limits?.daily ?? config.daily_budget_tokens;
     config.soft_threshold_pct = tb.limits?.softThreshold ?? config.soft_threshold_pct;
     config.hard_threshold_pct = tb.limits?.hardThreshold ?? config.hard_threshold_pct;
-    
+
     // Load adaptive mode configuration
     if (tb.enforcement?.mode) {
       config.enforcement_mode = tb.enforcement.mode as 'soft' | 'adaptive';

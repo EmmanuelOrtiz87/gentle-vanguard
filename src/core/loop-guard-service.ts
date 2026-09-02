@@ -1,25 +1,25 @@
 #!/usr/bin/env node
 /**
  * Loop Guard Service - Persisted loop detection for session-based workflows
- * 
+ *
  * This service provides a persistent loop guard that survives across turns
  * within the same session. It integrates with OrchestratorLoopGuard and
  * persists state to session-current.json.
- * 
+ *
  * Usage:
  *   npx tsx src/core/loop-guard-service.ts record-intent "my intent"
  *   npx tsx src/core/loop-guard-service.ts record-tool "read" '{"filePath": "foo.ts"}'
  *   npx tsx src/core/loop-guard-service.ts check
  *   npx tsx src/core/loop-guard-service.ts snapshot
  *   npx tsx src/core/loop-guard-service.ts reset
- * 
+ *
  * Integration in workflows:
  *   import { LoopGuardService } from './loop-guard-service.js';
  *   const guard = new LoopGuardService(sessionDir);
  *   guard.recordIntent('my intent text');
  *   guard.recordToolCall('read', '{"filePath": "foo.ts"}');
  *   const verdict = guard.shouldBreak();
- *   if (verdict.break) { 
+ *   if (verdict.break) {
  *     // handle loop detection
  *     console.log('Loop detected:', verdict.kind);
  *   }
@@ -29,7 +29,7 @@
  *   guard.recordIntent('analyze requirements');
  *   guard.recordToolCall('read', '{"filePath": "src/main.ts"}');
  *   const verdict = guard.shouldBreak();
- *   if (verdict.break) { 
+ *   if (verdict.break) {
  *     console.log('Loop detected:', verdict.kind);
  *   }
  */
@@ -198,7 +198,12 @@ export class LoopGuardService {
   /**
    * Get statistics
    */
-  getStats(): { totalBreaks: number; intentCount: number; toolCount: number; stepsStalled: number } {
+  getStats(): {
+    totalBreaks: number;
+    intentCount: number;
+    toolCount: number;
+    stepsStalled: number;
+  } {
     return {
       totalBreaks: this.state.breakCount,
       intentCount: this.state.intents.length,

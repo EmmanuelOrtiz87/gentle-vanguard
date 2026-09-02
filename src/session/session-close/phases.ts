@@ -174,23 +174,23 @@ export function phasePreValidate(): PhaseResult[] {
   const changedFiles = getChangedFiles();
   const hasChanges = changedFiles.size > 0;
 
-  // 1b.1 Lightweight cross-reference scan 
-  // OPTIMIZATION: Only scan changed files if there are changes, 
+  // 1b.1 Lightweight cross-reference scan
+  // OPTIMIZATION: Only scan changed files if there are changes,
   // otherwise do a quick sanity check on key files
   try {
     let srcFiles: string[];
-    
+
     if (hasChanges) {
       // FAST PATH: Only scan changed .ts files
       srcFiles = Array.from(changedFiles)
-        .filter(f => f.endsWith('.ts'))
-        .map(f => join(ROOT, f));
+        .filter((f) => f.endsWith('.ts'))
+        .map((f) => join(ROOT, f));
     } else {
       // No changes - do a quick scan of recently modified files only
       // (not ALL files - that's too slow)
       srcFiles = getAllFiles(join(ROOT, 'src'), '.ts').slice(0, 50); // Limit to 50 files
     }
-    
+
     let brokenImports = 0;
     let totalImports = 0;
 
@@ -366,18 +366,22 @@ export async function phasePersist(reason: string): Promise<PhaseResult[]> {
   // Ahora usa intent capturado al inicio de la sesión para un resumen más útil
   const sessionData = readSessionData();
   const sessionId = String(sessionData.sessionId || sessionData.id || 'unknown');
-  
+
   // Get captured intent for better summary
   const capturedIntent = getSessionIntent();
-  
+
   const summary = {
     // Use captured goal from session start, not generic "Session completed"
-    goal: capturedIntent?.goal 
-      ? capturedIntent.goal 
-      : (sessionData.goal ? String(sessionData.goal) : `Session completed with reason: ${reason}`),
+    goal: capturedIntent?.goal
+      ? capturedIntent.goal
+      : sessionData.goal
+        ? String(sessionData.goal)
+        : `Session completed with reason: ${reason}`,
     discoveries: Array.isArray(sessionData.discoveries)
       ? sessionData.discoveries.map((d: unknown) => String(d))
-      : (capturedIntent ? [`Domain: ${capturedIntent.domain}`, `Intent: ${capturedIntent.intent}`] : ['Session completed']),
+      : capturedIntent
+        ? [`Domain: ${capturedIntent.domain}`, `Intent: ${capturedIntent.intent}`]
+        : ['Session completed'],
     accomplished: Array.isArray(sessionData.accomplished)
       ? sessionData.accomplished.map((a: unknown) => String(a))
       : [`Session ${reason} completed`],
@@ -709,16 +713,17 @@ export async function phaseCleanup(
     // 5.1 Kill child processes (CodeGraph MCP and Timeout Daemon). Dashboard WS
     // persists between sessions and is managed by the Apps Control Panel.
     const DAEMON_WAIT_MS = 10000; // give lazy daemons time to finish booting
-    
+
     // Build list of targets: use inventory if available, otherwise fallback to KILL_TARGETS
-    const targetsToKill = inventory?.daemonsStarted && inventory.daemonsStarted.length > 0
-      ? KILL_TARGETS.filter(t => inventory.daemonsStarted.includes(t.name) || t.required)
-      : KILL_TARGETS;
-    
+    const targetsToKill =
+      inventory?.daemonsStarted && inventory.daemonsStarted.length > 0
+        ? KILL_TARGETS.filter((t) => inventory.daemonsStarted.includes(t.name) || t.required)
+        : KILL_TARGETS;
+
     if (inventory?.daemonsStarted && inventory.daemonsStarted.length > 0) {
       log(`[INVENTORY] Selective close: targeting daemons ${inventory.daemonsStarted.join(', ')}`);
     }
-    
+
     for (const target of targetsToKill) {
       const phase = `kill-${target.name.toLowerCase().replace(/\s+/g, '-')}`;
       try {
@@ -933,9 +938,10 @@ export async function phaseCleanup(
   results.push({
     phase: 'session-retention',
     status: 'PASS',
-    detail: retentionResult.kept > 0 
-      ? `Retention: ${retentionResult.removed} removed, ${retentionResult.kept} kept`
-      : 'Retention: no cleanup needed',
+    detail:
+      retentionResult.kept > 0
+        ? `Retention: ${retentionResult.removed} removed, ${retentionResult.kept} kept`
+        : 'Retention: no cleanup needed',
   });
 
   return results;

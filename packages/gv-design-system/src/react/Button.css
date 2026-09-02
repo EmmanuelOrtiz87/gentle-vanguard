@@ -15,7 +15,8 @@
   border-radius: var(--gv-radius-pill);
   background: var(--gv-gradient);
   color: var(--gv-text-inverse);
-  font: var(--gv-weight-semibold) var(--gv-size-base) / var(--gv-lineHeight-snug) var(--gv-font-body);
+  font: var(--gv-weight-semibold) var(--gv-size-base) / var(--gv-lineHeight-snug)
+    var(--gv-font-body);
   letter-spacing: var(--gv-letterSpacing-wide);
   text-decoration: none;
   cursor: pointer;

@@ -679,19 +679,19 @@ Tests: `tests/unit/design-tokens.test.ts`.
 
 Normativa completa: `rules/NORMATIVA-DESIGN-SYSTEM.md`. Resumen operativo:
 
-- **Canon**: `docs/brand/BRAND-DECISION-2026-09-01.md` → `BRAND-KIT.md` → `TOKENS-v2.json`.
-  Diseño = v2 Premium (bg `#0F1115`, purple `#a78bfa`, cyan `#22d3ee`, Space Grotesk);
-  logo = monograma v1 con gradiente v2 (`assets/logo.svg` + mono/icon en `assets/`).
-- **Paquete** `packages/gv-design-system/` v2.0.0 (src+dist versionados en ESTE repo, excepción
-  al ignore): tokens consumibles, 7 componentes React, MCP server. Regenerar:
+- **Canon**: `docs/brand/BRAND-DECISION-2026-09-01.md` → `BRAND-KIT.md` → `TOKENS-v2.json`. Diseño =
+  v2 Premium (bg `#0F1115`, purple `#a78bfa`, cyan `#22d3ee`, Space Grotesk); logo = monograma v1
+  con gradiente v2 (`assets/logo.svg` + mono/icon en `assets/`).
+- **Paquete** `packages/gv-design-system/` v2.0.0 (src+dist versionados en ESTE repo, excepción al
+  ignore): tokens consumibles, 7 componentes React, MCP server. Regenerar:
   `npx tsx packages/gv-design-system/src/cli/build-tokens.ts`.
 - **CLI/visual**: `config/brand.json` (siempre regenerado desde el canon) → `npm run gv:tokens`.
-- **Herramienta visual**: Design Hub (`apps/design-hub`, :8095) — token editor, componentes,
-  assets, docs; experimentos en `src/labs/`. Apps desacopladas: cada app copia sus assets
-  (snapshot) y tiene `apps/<app>/start.sh|stop.sh` nativos.
+- **Herramienta visual**: Design Hub (`apps/design-hub`, :8095) — token editor, componentes, assets,
+  docs; experimentos en `src/labs/`. Apps desacopladas: cada app copia sus assets (snapshot) y tiene
+  `apps/<app>/start.sh|stop.sh` nativos.
 - `assets/gv-design-system.css` (clases `.gv-*`) CONGELADO en clases; solo `--gv-*` actualizables.
-- Ciclo de cambio de marca: editar `TOKENS-v2.json` → regenerar (build-tokens + gv:tokens) →
-  espejo del hub (`apps/design-hub/public/tokens/`) → commits (root + apps repo).
+- Ciclo de cambio de marca: editar `TOKENS-v2.json` → regenerar (build-tokens + gv:tokens) → espejo
+  del hub (`apps/design-hub/public/tokens/`) → commits (root + apps repo).
 
 ### Planning Templates (`src/planning/planning-templates.ts` + `src/planning/planning-templates.ts`)
 

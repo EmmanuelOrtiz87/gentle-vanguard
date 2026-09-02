@@ -1,92 +1,93 @@
 - generic [ref=f1e1]:
-  - generic [ref=f1e3]:
-    - banner [ref=f1e4]:
-      - generic [ref=f1e5]:
-        - generic [ref=f1e6]:
-          - img "Gentle-Vanguard" [ref=f1e7]
-          - generic [ref=f1e8]:
-            - text: GentleVanguard
-            - generic [ref=f1e9]: Content Studio
-        - navigation "Secciones del CMS" [ref=f1e10]:
-          - button "Content OS" [ref=f1e11] [cursor=pointer]
-          - button "Studio (legacy)" [active] [ref=f1e15] [cursor=pointer]
-        - generic [ref=f1e19]: 0 items
-        - generic [ref=f1e20]:
-          - button "Idioma" [ref=f1e22] [cursor=pointer]
-          - button "Cambiar tema" [ref=f1e27] [cursor=pointer]
-        - generic [ref=f1e80]:
-          - button "Importar JSON" [ref=f1e81] [cursor=pointer]
-          - button "Choose File" [ref=f1e85]
-          - button "Exportar JSON" [ref=f1e86] [cursor=pointer]
-          - button "Nuevo contenido" [ref=f1e90] [cursor=pointer]
-    - main [ref=f1e92]:
-      - complementary [ref=f1e93]:
-        - generic [ref=f1e94]:
-          - generic [ref=f1e95]:
-            - text: Biblioteca
-            - heading "Contenido" [level=1] [ref=f1e96]
-          - generic [ref=f1e97]: "0"
-        - group "Filtrar por estado" [ref=f1e98]:
-          - button "Todo 0" [ref=f1e99] [cursor=pointer]:
-            - text: Todo
-            - generic [ref=f1e100]: "0"
-          - button "Borradores 0" [ref=f1e101] [cursor=pointer]:
-            - text: Borradores
-            - generic [ref=f1e102]: "0"
-          - button "Publicados 0" [ref=f1e103] [cursor=pointer]:
-            - text: Publicados
-            - generic [ref=f1e104]: "0"
-        - paragraph [ref=f1e106]: Aún no hay contenido aquí.
-      - generic [ref=f1e107]:
-        - generic [ref=f1e108]:
-          - generic [ref=f1e109]:
-            - text: Nueva entrada
-            - heading "Contenido" [level=2] [ref=f1e110]
-            - paragraph [ref=f1e111]: Content Studio
-          - group "Modo de edición" [ref=f1e112]:
-            - button "Editor" [ref=f1e113] [cursor=pointer]
-            - button "Vista previa" [ref=f1e117] [cursor=pointer]
-        - generic [ref=f1e121]:
-          - generic [ref=f1e122]:
-            - text: Título
-            - textbox "Título" [ref=f1e123]:
-              - /placeholder: Ej. Cómo trabajamos mejor
-          - generic [ref=f1e124]:
-            - generic [ref=f1e125]:
-              - text: Slug
-              - textbox "Slug" [ref=f1e126]:
-                - /placeholder: como-trabajamos-mejor
-            - generic [ref=f1e127]:
-              - text: Estado
-              - combobox "Estado" [ref=f1e128]:
-                - option "Borrador" [selected]
-                - option "Publicado"
-          - generic [ref=f1e129]:
-            - generic [ref=f1e130]:
-              - generic [ref=f1e131]: Assets locales
-              - generic [ref=f1e136]: máx. 10 MB · PNG/JPEG/WebP/GIF/AVIF · SVG bloqueado
-            - button "Choose File" [disabled] [ref=f1e137]
-          - generic [ref=f1e138]:
-            - text: Resumen
-            - textbox "Resumen" [ref=f1e139]:
-              - /placeholder: Una frase que invite a seguir leyendo
-          - generic [ref=f1e140]:
-            - text: Cuerpo
-            - textbox "Cuerpo" [ref=f1e141]:
-              - /placeholder: Escribe el contenido estructurado…
-          - generic [ref=f1e142]:
-            - generic [ref=f1e143]:
-              - text: URL de portada (http/https)
-              - textbox "URL de portada (http/https)" [ref=f1e144]:
-                - /placeholder: https://…
-            - generic [ref=f1e145]:
-              - text: Etiquetas (separadas por coma)
-              - textbox "Etiquetas (separadas por coma)" [ref=f1e146]:
-                - /placeholder: guía, producto
-          - generic [ref=f1e147]:
-            - status [ref=f1e148]: Listo para crear contenido.
-            - button "Guardar borrador" [ref=f1e149] [cursor=pointer]
-    - contentinfo [ref=f1e76]:
-      - strong [ref=f1e77]: Gentle-Vanguard
-      - text: · Content Studio — v3.8.2 · 2026
-  - button "Detener CMS" [ref=f1e78] [cursor=pointer]: ⏻CMS
+    - generic [ref=f1e3]:
+        - banner [ref=f1e4]:
+            - generic [ref=f1e5]:
+                - generic [ref=f1e6]:
+                    - img "Gentle-Vanguard" [ref=f1e7]
+                    - generic [ref=f1e8]:
+                        - text: GentleVanguard
+                        - generic [ref=f1e9]: Content Studio
+                - navigation "Secciones del CMS" [ref=f1e10]:
+                    - button "Content OS" [ref=f1e11] [cursor=pointer]
+                    - button "Studio (legacy)" [active] [ref=f1e15] [cursor=pointer]
+                - generic [ref=f1e19]: 0 items
+                - generic [ref=f1e20]:
+                    - button "Idioma" [ref=f1e22] [cursor=pointer]
+                    - button "Cambiar tema" [ref=f1e27] [cursor=pointer]
+                - generic [ref=f1e80]:
+                    - button "Importar JSON" [ref=f1e81] [cursor=pointer]
+                    - button "Choose File" [ref=f1e85]
+                    - button "Exportar JSON" [ref=f1e86] [cursor=pointer]
+                    - button "Nuevo contenido" [ref=f1e90] [cursor=pointer]
+        - main [ref=f1e92]:
+            - complementary [ref=f1e93]:
+                - generic [ref=f1e94]:
+                    - generic [ref=f1e95]:
+                        - text: Biblioteca
+                        - heading "Contenido" [level=1] [ref=f1e96]
+                    - generic [ref=f1e97]: '0'
+                - group "Filtrar por estado" [ref=f1e98]:
+                    - button "Todo 0" [ref=f1e99] [cursor=pointer]:
+                        - text: Todo
+                        - generic [ref=f1e100]: '0'
+                    - button "Borradores 0" [ref=f1e101] [cursor=pointer]:
+                        - text: Borradores
+                        - generic [ref=f1e102]: '0'
+                    - button "Publicados 0" [ref=f1e103] [cursor=pointer]:
+                        - text: Publicados
+                        - generic [ref=f1e104]: '0'
+                - paragraph [ref=f1e106]: Aún no hay contenido aquí.
+            - generic [ref=f1e107]:
+                - generic [ref=f1e108]:
+                    - generic [ref=f1e109]:
+                        - text: Nueva entrada
+                        - heading "Contenido" [level=2] [ref=f1e110]
+                        - paragraph [ref=f1e111]: Content Studio
+                    - group "Modo de edición" [ref=f1e112]:
+                        - button "Editor" [ref=f1e113] [cursor=pointer]
+                        - button "Vista previa" [ref=f1e117] [cursor=pointer]
+                - generic [ref=f1e121]:
+                    - generic [ref=f1e122]:
+                        - text: Título
+                        - textbox "Título" [ref=f1e123]:
+                            - /placeholder: Ej. Cómo trabajamos mejor
+                    - generic [ref=f1e124]:
+                        - generic [ref=f1e125]:
+                            - text: Slug
+                            - textbox "Slug" [ref=f1e126]:
+                                - /placeholder: como-trabajamos-mejor
+                        - generic [ref=f1e127]:
+                            - text: Estado
+                            - combobox "Estado" [ref=f1e128]:
+                                - option "Borrador" [selected]
+                                - option "Publicado"
+                    - generic [ref=f1e129]:
+                        - generic [ref=f1e130]:
+                            - generic [ref=f1e131]: Assets locales
+                            - generic [ref=f1e136]:
+                                máx. 10 MB · PNG/JPEG/WebP/GIF/AVIF · SVG bloqueado
+                        - button "Choose File" [disabled] [ref=f1e137]
+                    - generic [ref=f1e138]:
+                        - text: Resumen
+                        - textbox "Resumen" [ref=f1e139]:
+                            - /placeholder: Una frase que invite a seguir leyendo
+                    - generic [ref=f1e140]:
+                        - text: Cuerpo
+                        - textbox "Cuerpo" [ref=f1e141]:
+                            - /placeholder: Escribe el contenido estructurado…
+                    - generic [ref=f1e142]:
+                        - generic [ref=f1e143]:
+                            - text: URL de portada (http/https)
+                            - textbox "URL de portada (http/https)" [ref=f1e144]:
+                                - /placeholder: https://…
+                        - generic [ref=f1e145]:
+                            - text: Etiquetas (separadas por coma)
+                            - textbox "Etiquetas (separadas por coma)" [ref=f1e146]:
+                                - /placeholder: guía, producto
+                    - generic [ref=f1e147]:
+                        - status [ref=f1e148]: Listo para crear contenido.
+                        - button "Guardar borrador" [ref=f1e149] [cursor=pointer]
+        - contentinfo [ref=f1e76]:
+            - strong [ref=f1e77]: Gentle-Vanguard
+            - text: · Content Studio — v3.8.2 · 2026
+    - button "Detener CMS" [ref=f1e78] [cursor=pointer]: ⏻CMS

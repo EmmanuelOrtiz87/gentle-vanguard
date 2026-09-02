@@ -510,13 +510,14 @@ async function main() {
 
   // ─── Session Validation (NEW) ───────────────────────────────────────────────
   // Smart validation before proceeding: detect existing sessions, nested starts, etc.
-  let sessionValidationResult: { valid: boolean; recommendation: string; message: string } | null = null;
+  let sessionValidationResult: { valid: boolean; recommendation: string; message: string } | null =
+    null;
   try {
     const { validateSession } = await import('../session/session-validator.js');
     sessionValidationResult = await validateSession();
-    
+
     LOG.info(`[SESSION-VALIDATOR] ${sessionValidationResult.message}`);
-    
+
     // Handle different scenarios
     if (sessionValidationResult.recommendation === 'reuse') {
       LOG.info('[SESSION-VALIDATOR] Reusing existing session - lightweight init only');

@@ -48,7 +48,12 @@
   --gv-font-mono: 'JetBrains Mono NL', 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
   --gv-glass: rgba(26, 31, 42, 0.72);
   --gv-glass-border: rgba(167, 139, 250, 0.24);
-  --gv-gradient: linear-gradient(135deg, #a78bfa 0%, color-mix(in srgb, #a78bfa 50%, #22d3ee) 50%, #22d3ee 100%);
+  --gv-gradient: linear-gradient(
+    135deg,
+    #a78bfa 0%,
+    color-mix(in srgb, #a78bfa 50%, #22d3ee) 50%,
+    #22d3ee 100%
+  );
   --gv-header-height: 62px;
 }
 

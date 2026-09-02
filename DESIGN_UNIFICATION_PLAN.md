@@ -1,26 +1,30 @@
 # Plan Maestro: Unificación Total del Design System Gentle-Vanguard v3.0 "Premium Commercial"
 
-> **Objetivo**: Unificar TODAS las apps bajo un **Design System v3.0 "Premium Commercial"** único, coherente, accesible (WCAG 2.2 AA), y de calidad enterprise. Academy como inspiración visual, elevado a nivel **comercial premium 10000%**.
+> **Objetivo**: Unificar TODAS las apps bajo un **Design System v3.0 "Premium Commercial"** único,
+> coherente, accesible (WCAG 2.2 AA), y de calidad enterprise. Academy como inspiración visual,
+> elevado a nivel **comercial premium 10000%**.
 
 ---
 
 ## 🎯 Estado Actual (Fragmentación Crítica)
 
-| App | Design System Actual | Problemas |
-|---|---|---|
-| **web-dashboard** | Styles propio (`src/styles/`) + gv-design-system.css (legacy v1) | Fragmentado, no usa DS v2 |
-| **gv-analytics** | @gentle-vanguard/design-system/tokens.css (v2 alpha) + custom | v2 alpha, tokens divergentes |
-| **content-cms** | gv-design-system.css (legacy v1) + styles.css propio | Legacy v1, no v2 |
-| **academy-web** | Fork local v2 con colores custom (`--color-primary: #22d3ee`) | Fork divergente, no usa tokens.json SoT |
-| **prompt-studio** | styles.css propio + gv-design-system.css (legacy) | Legacy v1 |
-| **archify** | gv-design-system.css (legacy) + styles.css propio | Legacy v1 |
-| **command-center** | Sirve gv-design-system.css (legacy) en ruta | Legacy v1, vanilla |
-| **gv-design-system-catalog** | tokens.css (v2) + styles.css propio | Demo v2 alpha |
+| App                          | Design System Actual                                             | Problemas                               |
+| ---------------------------- | ---------------------------------------------------------------- | --------------------------------------- |
+| **web-dashboard**            | Styles propio (`src/styles/`) + gv-design-system.css (legacy v1) | Fragmentado, no usa DS v2               |
+| **gv-analytics**             | @gentle-vanguard/design-system/tokens.css (v2 alpha) + custom    | v2 alpha, tokens divergentes            |
+| **content-cms**              | gv-design-system.css (legacy v1) + styles.css propio             | Legacy v1, no v2                        |
+| **academy-web**              | Fork local v2 con colores custom (`--color-primary: #22d3ee`)    | Fork divergente, no usa tokens.json SoT |
+| **prompt-studio**            | styles.css propio + gv-design-system.css (legacy)                | Legacy v1                               |
+| **archify**                  | gv-design-system.css (legacy) + styles.css propio                | Legacy v1                               |
+| **command-center**           | Sirve gv-design-system.css (legacy) en ruta                      | Legacy v1, vanilla                      |
+| **gv-design-system-catalog** | tokens.css (v2) + styles.css propio                              | Demo v2 alpha                           |
 
 **Tokens divergentes detectados**:
+
 - `--gv-primary`: `#00bfff` (legacy) vs `#a78bfa` (v2 purple) vs `#22d3ee` (academy cyan)
 - `--gv-bg`: `#0d1117` (legacy) vs `#121212` (v2/academy)
-- `--gv-gradient`: `135deg #a855f7→#00bfff` (legacy) vs `135deg #a78bfa→#22d3ee` (v2) vs custom academy
+- `--gv-gradient`: `135deg #a855f7→#00bfff` (legacy) vs `135deg #a78bfa→#22d3ee` (v2) vs custom
+  academy
 - `--gv-font-display`: Orbitron (legacy/v2) vs custom academy
 
 ---
@@ -32,14 +36,16 @@
 1. **Single Source of Truth**: `packages/gv-design-system/src/tokens/tokens.json` (ÚNICO SoT)
 2. **Dark-First, Light-Ready**: Modo oscuro por defecto, light mode perfecto
 3. **WCAG 2.2 AA**: Contraste, focus visible, motion reduction, semántica
-4. **Anti-AI-Slop**: Sin bounce-easing, sin cream+terracotta, sin near-black+acid-green, tipografía editorial
+4. **Anti-AI-Slop**: Sin bounce-easing, sin cream+terracotta, sin near-black+acid-green, tipografía
+   editorial
 5. **Micro-interacciones Premium**: Spring physics, stagger, hover lift, focus rings, loading states
 6. **Motion Choreography**: Stagger, easing curves (cubic-bezier premium), reduced-motion respect
 7. **Tipografía Editorial**: Orbitron (display) + Inter (body) + JetBrains Mono (mono) — clamp fluid
 8. **Glassmorphism Premium**: Backdrop-filter, bordes sutiles, sombras en capas, depth tokens
-8. **Brand Identity**: Purple (#a78bfa) + Cyan (#22d3ee) gradient como firma, #121212 bg profundo
-9. **Component Library Premium**: 7+ componentes React + CSS vanilla (Button, Card, Input, Tag, Stack, Text, IconButton, Avatar, Badge, Tooltip, Modal, Tabs, Table, DataViz)
-10. **Developer Experience**: TypeScript strict, Storybook, visual regression, a11y testing
+9. **Brand Identity**: Purple (#a78bfa) + Cyan (#22d3ee) gradient como firma, #121212 bg profundo
+10. **Component Library Premium**: 7+ componentes React + CSS vanilla (Button, Card, Input, Tag,
+    Stack, Text, IconButton, Avatar, Badge, Tooltip, Modal, Tabs, Table, DataViz)
+11. **Developer Experience**: TypeScript strict, Storybook, visual regression, a11y testing
 
 ### Paleta v3.0 "Premium Commercial" (Locked)
 
@@ -103,12 +109,50 @@
       "body": "'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif",
       "mono": "'JetBrains Mono', 'Cascadia Code', Consolas, monospace"
     },
-    "size": { "xs": "0.75rem", "sm": "0.8125rem", "base": "0.875rem", "md": "1rem", "lg": "1.125rem", "xl": "1.25rem", "2xl": "1.5rem", "3xl": "1.875rem", "4xl": "2.25rem", "5xl": "3rem" },
-    "weight": { "regular": 400, "medium": 500, "semibold": 600, "bold": 700, "extrabold": 800, "black": 900 },
+    "size": {
+      "xs": "0.75rem",
+      "sm": "0.8125rem",
+      "base": "0.875rem",
+      "md": "1rem",
+      "lg": "1.125rem",
+      "xl": "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem",
+      "5xl": "3rem"
+    },
+    "weight": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700,
+      "extrabold": 800,
+      "black": 900
+    },
     "lineHeight": { "tight": 1.2, "snug": 1.35, "normal": 1.5, "relaxed": 1.65, "loose": 1.8 }
   },
-  "spacing": { "0": "0", "1": "0.25rem", "2": "0.5rem", "3": "0.75rem", "4": "1rem", "5": "1.25rem", "6": "1.5rem", "8": "2rem", "10": "2.5rem", "12": "3rem", "16": "4rem" },
-  "radius": { "none": "0", "sm": "0.25rem", "md": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+  "spacing": {
+    "0": "0",
+    "1": "0.25rem",
+    "2": "0.5rem",
+    "3": "0.75rem",
+    "4": "1rem",
+    "5": "1.25rem",
+    "6": "1.5rem",
+    "8": "2rem",
+    "10": "2.5rem",
+    "12": "3rem",
+    "16": "4rem"
+  },
+  "radius": {
+    "none": "0",
+    "sm": "0.25rem",
+    "md": "0.375rem",
+    "lg": "0.5rem",
+    "xl": "0.75rem",
+    "2xl": "1rem",
+    "full": "9999px"
+  },
   "shadow": {
     "xs": "0 1px 2px rgba(0,0,0,0.05)",
     "sm": "0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06)",
@@ -142,6 +186,7 @@
 ## 🚀 Fases de Ejecución
 
 ### FASE 1: Consolidar Design System v3.0 "Locked" (Día 1)
+
 - [ ] **Lock tokens.json v3.0** en `packages/gv-design-system/src/tokens/tokens.json`
 - [ ] Generar build artifacts: `tokens.css`, `tokens.ts`, `tailwind.config.ts`, `figma-tokens.json`
 - [ ] Crear `packages/gv-design-system/src/index.ts` export barrel
@@ -149,25 +194,28 @@
 - [ ] Validar con `impeccable detect` → 0 issues
 
 ### FASE 2: Component Library Premium v3 (Día 2-3)
+
 Crear en `packages/gv-design-system/src/components/`:
-| Componente | Variantes | Estados | Premium Features |
-|---|---|---|---|
-| **Button** | primary, secondary, ghost, danger, success, outline | default, hover, focus, active, loading, disabled | spinner, ripple, spring press |
-| **Card** | glass, solid, outline, elevated | default, hover, focus, interactive, selected | lift, glow, backdrop-filter |
-| **Input** | text, email, password, search, textarea, select | default, focus, error, success, disabled, loading | icon left/right, clearable, password toggle |
-| **Tag/Badge** | primary, secondary, success, warning, error, neutral | default, removable, clickable | sizes sm/md/lg, gradient primary |
-| **Stack** (Row/Column) | gap tokens, align, justify, wrap | responsive gaps | gap tokens, responsive |
-| **Text/Typography** | display-1/2, heading-1/2/3, body, body-sm, eyebrow, metric, code, gradient | gradient text, metric, code | clamp fluid, gradient text |
-| **Button** | primary, secondary, ghost, danger, outline | loading, disabled, icon-left/right | spinner, icon position |
-| **IconButton** | default, primary, ghost, danger | sizes sm/md/lg | aria-label required |
-| **Avatar** | sizes sm/md/lg/xl, fallback initials, status ring | online/offline/busy | status ring, fallback gradient |
-| **Tooltip** | positions, delay, arrow | animated | spring, portal |
-| **Modal/Dialog** | sizes sm/md/lg/xl/full, backdrop, focus trap | animated | spring, focus trap, scroll lock |
-| **Tabs** | default, underline, pills, card | animated indicator | spring indicator, keyboard nav |
-| **Table** | sortable, selectable, pagination, sticky header | loading, empty, row click | virtualized, sticky cols |
-| **DataViz** (Charts) | Line, Bar, Area, Donut, Sparkline | tooltip, legend, animation | spring, gradient fills |
+
+| Componente             | Variantes                                                                  | Estados                                           | Premium Features                            |
+| ---------------------- | -------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------- |
+| **Button**             | primary, secondary, ghost, danger, success, outline                        | default, hover, focus, active, loading, disabled  | spinner, ripple, spring press               |
+| **Card**               | glass, solid, outline, elevated                                            | default, hover, focus, interactive, selected      | lift, glow, backdrop-filter                 |
+| **Input**              | text, email, password, search, textarea, select                            | default, focus, error, success, disabled, loading | icon left/right, clearable, password toggle |
+| **Tag/Badge**          | primary, secondary, success, warning, error, neutral                       | default, removable, clickable                     | sizes sm/md/lg, gradient primary            |
+| **Stack** (Row/Column) | gap tokens, align, justify, wrap                                           | responsive gaps                                   | gap tokens, responsive                      |
+| **Text/Typography**    | display-1/2, heading-1/2/3, body, body-sm, eyebrow, metric, code, gradient | gradient text, metric, code                       | clamp fluid, gradient text                  |
+| **Button**             | primary, secondary, ghost, danger, outline                                 | loading, disabled, icon-left/right                | spinner, icon position                      |
+| **IconButton**         | default, primary, ghost, danger                                            | sizes sm/md/lg                                    | aria-label required                         |
+| **Avatar**             | sizes sm/md/lg/xl, fallback initials, status ring                          | online/offline/busy                               | status ring, fallback gradient              |
+| **Tooltip**            | positions, delay, arrow                                                    | animated                                          | spring, portal                              |
+| **Modal/Dialog**       | sizes sm/md/lg/xl/full, backdrop, focus trap                               | animated                                          | spring, focus trap, scroll lock             |
+| **Tabs**               | default, underline, pills, card                                            | animated indicator                                | spring indicator, keyboard nav              |
+| **Table**              | sortable, selectable, pagination, sticky header                            | loading, empty, row click                         | virtualized, sticky cols                    |
+| **DataViz** (Charts)   | Line, Bar, Area, Donut, Sparkline                                          | tooltip, legend, animation                        | spring, gradient fills                      |
 
 **Entregables**:
+
 - `packages/gv-design-system/src/components/` (React + CSS modules)
 - `packages/gv-design-system/src/index.ts` (barrel export)
 - `packages/gv-design-system/src/components.css` (CSS vanilla fallback)
@@ -176,20 +224,21 @@ Crear en `packages/gv-design-system/src/components/`:
 
 ### FASE 3: Migrar TODAS las Apps (Día 4-5)
 
-| App | Estado Actual | Acción |
-|---|---|---|
-| **web-dashboard** | Fragmentado | Re-escribir UI con DS v3 components |
-| **gv-analytics** | v2 alpha + custom | Migrar a DS v3 components |
-| **content-cms** | Legacy v1 | Re-escribir con DS v3 |
-| **academy-web** | Fork v2 custom | **REFERENCIA VISUAL** → Migrar a DS v3, elevar a premium |
-| **prompt-studio** | Legacy v1 | Migrar a DS v3 |
-| **archify** | Legacy v1 + custom | Ya migrado a DS v3 parcial → completar |
-| **command-center** | Legacy v1 vanilla | Migrar a DS v3 (vanilla CSS) |
-| **gv-design-system-catalog** | v2 alpha demo | **REEMPLAZAR** por Showcase Premium v3 |
+| App                          | Estado Actual      | Acción                                                   |
+| ---------------------------- | ------------------ | -------------------------------------------------------- |
+| **web-dashboard**            | Fragmentado        | Re-escribir UI con DS v3 components                      |
+| **gv-analytics**             | v2 alpha + custom  | Migrar a DS v3 components                                |
+| **content-cms**              | Legacy v1          | Re-escribir con DS v3                                    |
+| **academy-web**              | Fork v2 custom     | **REFERENCIA VISUAL** → Migrar a DS v3, elevar a premium |
+| **prompt-studio**            | Legacy v1          | Migrar a DS v3                                           |
+| **archify**                  | Legacy v1 + custom | Ya migrado a DS v3 parcial → completar                   |
+| **command-center**           | Legacy v1 vanilla  | Migrar a DS v3 (vanilla CSS)                             |
+| **gv-design-system-catalog** | v2 alpha demo      | **REEMPLAZAR** por Showcase Premium v3                   |
 
 ### FASE 4: Academy Premium - La Referencia Visual (Día 5-6)
 
 Transformar Academy en **la vitrina premium** del design system:
+
 - Hero premium con gradient text animado
 - Sidebar navigation premium con iconos, badges, progress
 - Lesson cards premium con progress rings, hover lift
@@ -202,6 +251,7 @@ Transformar Academy en **la vitrina premium** del design system:
 ### FASE 5: Design System Showcase Premium (Día 6)
 
 Reemplazar `gv-design-system-catalog` por **Showcase Premium v3**:
+
 - Interactive playground con todos los componentes
 - Token visualizer con copy-to-clipboard
 - Theme builder (color picker, preview)
@@ -225,19 +275,19 @@ Reemplazar `gv-design-system-catalog` por **Showcase Premium v3**:
 
 ## 📦 Entregables Finales
 
-| Entregable | Ubicación |
-|---|---|
-| **Tokens v3 Locked** | `packages/gv-design-system/src/tokens/tokens.json` |
-| **CSS Tokens** | `packages/gv-design-system/tokens.css` (generated) |
-| **React Components** | `packages/gv-design-system/src/components/` |
-| **CSS Vanilla** | `packages/gv-design-system/components.css` |
-| **Tokens CSS** | `packages/gv-design-system/tokens.css` |
-| **TypeScript Types** | `packages/gv-design-system/src/tokens/tokens.ts` |
-| **Tailwind Config** | `packages/gv-design-system/tailwind.config.ts` |
-| **Showcase Premium** | `apps/gv-design-system-showcase/` (reemplaza catalog) |
-| **Academy Premium** | `apps/academy-web/` (migrated + premium) |
-| **All Apps Migrated** | `apps/*/src/` using `@gentle-vanguard/design-system` |
-| **Documentation** | `DESIGN.md`, `COMPONENTS.md`, `TOKENS.md`, `MIGRATION.md` |
+| Entregable            | Ubicación                                                 |
+| --------------------- | --------------------------------------------------------- |
+| **Tokens v3 Locked**  | `packages/gv-design-system/src/tokens/tokens.json`        |
+| **CSS Tokens**        | `packages/gv-design-system/tokens.css` (generated)        |
+| **React Components**  | `packages/gv-design-system/src/components/`               |
+| **CSS Vanilla**       | `packages/gv-design-system/components.css`                |
+| **Tokens CSS**        | `packages/gv-design-system/tokens.css`                    |
+| **TypeScript Types**  | `packages/gv-design-system/src/tokens/tokens.ts`          |
+| **Tailwind Config**   | `packages/gv-design-system/tailwind.config.ts`            |
+| **Showcase Premium**  | `apps/gv-design-system-showcase/` (reemplaza catalog)     |
+| **Academy Premium**   | `apps/academy-web/` (migrated + premium)                  |
+| **All Apps Migrated** | `apps/*/src/` using `@gentle-vanguard/design-system`      |
+| **Documentation**     | `DESIGN.md`, `COMPONENTS.md`, `TOKENS.md`, `MIGRATION.md` |
 
 ---
 

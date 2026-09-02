@@ -201,7 +201,7 @@ export async function runCleanup(
   try {
     const validation = await validateSession();
     log(`[SESSION-VALIDATOR] ${validation.message}`);
-    
+
     if (validation.recommendation === 'cleanup-first') {
       log('[SESSION-VALIDATOR] Running cleanup before session init...');
       // Clean stale sessions first
@@ -222,14 +222,14 @@ export async function runCleanup(
     const init = initSessionData();
     sessionData = init.sessionData;
     ok(`Session initialized: ${init.sid}`);
-    
+
     // Register session resources placeholder - will be populated during session
     try {
       registerResource('cache', 'session-init');
     } catch {
       // Non-blocking
     }
-    
+
     // Capture session intent if provided (from user's first prompt)
     if (opts.captureIntent) {
       try {
@@ -425,7 +425,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         break;
     }
   }
-  runCleanup(opts).catch(e => {
+  runCleanup(opts).catch((e) => {
     console.error('Cleanup failed:', e);
     process.exit(1);
   });

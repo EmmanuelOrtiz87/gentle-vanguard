@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
  * Guardrails Status - Verificación de todos los guardrails del stack
- * 
+ *
  * Muestra el estado de todos los sistemas de protección activos.
- * 
+ *
  * Uso:
  *   npx tsx src/core/guardrails-status.ts
  *   npx tsx src/core/guardrails-status.ts --json
@@ -36,16 +36,26 @@ interface GuardrailsReport {
 /**
  * Verificar un guardrail individual
  */
-function checkGuardrail(name: string, category: GuardrailCheck['category'], checkFn: () => { status: GuardrailCheck['status']; message: string; details?: string }): GuardrailCheck {
+function checkGuardrail(
+  name: string,
+  category: GuardrailCheck['category'],
+  checkFn: () => { status: GuardrailCheck['status']; message: string; details?: string },
+): GuardrailCheck {
   try {
     const result = checkFn();
-    return { name, category, status: result.status, message: result.message, details: result.details };
+    return {
+      name,
+      category,
+      status: result.status,
+      message: result.message,
+      details: result.details,
+    };
   } catch (e) {
-    return { 
-      name, 
-      category, 
-      status: 'UNKNOWN', 
-      message: `Error: ${e instanceof Error ? e.message : String(e)}` 
+    return {
+      name,
+      category,
+      status: 'UNKNOWN',
+      message: `Error: ${e instanceof Error ? e.message : String(e)}`,
     };
   }
 }
@@ -55,52 +65,62 @@ function checkGuardrail(name: string, category: GuardrailCheck['category'], chec
  */
 function runSecurityChecks(): GuardrailCheck[] {
   const checks: GuardrailCheck[] = [];
-  
+
   // 1. Secret Scanner
-  checks.push(checkGuardrail('Secret Scanner', 'security', () => {
-    const path = join(ROOT, 'src', 'security', 'secret-scanner.ts');
-    return {
-      status: existsSync(path) ? 'OK' : 'FAIL',
-      message: existsSync(path) ? 'Module exists' : 'Module missing',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('Secret Scanner', 'security', () => {
+      const path = join(ROOT, 'src', 'security', 'secret-scanner.ts');
+      return {
+        status: existsSync(path) ? 'OK' : 'FAIL',
+        message: existsSync(path) ? 'Module exists' : 'Module missing',
+      };
+    }),
+  );
+
   // 2. Security Orchestrator
-  checks.push(checkGuardrail('Security Orchestrator', 'security', () => {
-    const path = join(ROOT, 'src', 'security', 'security-orchestrator.ts');
-    return {
-      status: existsSync(path) ? 'OK' : 'FAIL',
-      message: existsSync(path) ? 'Module exists' : 'Module missing',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('Security Orchestrator', 'security', () => {
+      const path = join(ROOT, 'src', 'security', 'security-orchestrator.ts');
+      return {
+        status: existsSync(path) ? 'OK' : 'FAIL',
+        message: existsSync(path) ? 'Module exists' : 'Module missing',
+      };
+    }),
+  );
+
   // 3. Prompt Injection Guard
-  checks.push(checkGuardrail('Prompt Injection Guard', 'security', () => {
-    const path = join(ROOT, 'src', 'security', 'prompt-injection-guard.ts');
-    return {
-      status: existsSync(path) ? 'OK' : 'FAIL',
-      message: existsSync(path) ? 'Module exists' : 'Module missing',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('Prompt Injection Guard', 'security', () => {
+      const path = join(ROOT, 'src', 'security', 'prompt-injection-guard.ts');
+      return {
+        status: existsSync(path) ? 'OK' : 'FAIL',
+        message: existsSync(path) ? 'Module exists' : 'Module missing',
+      };
+    }),
+  );
+
   // 4. Safety Guardrails
-  checks.push(checkGuardrail('Safety Guardrails', 'security', () => {
-    const path = join(ROOT, 'src', 'security', 'safety-guardrails.ts');
-    return {
-      status: existsSync(path) ? 'OK' : 'FAIL',
-      message: existsSync(path) ? 'Module exists' : 'Module missing',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('Safety Guardrails', 'security', () => {
+      const path = join(ROOT, 'src', 'security', 'safety-guardrails.ts');
+      return {
+        status: existsSync(path) ? 'OK' : 'FAIL',
+        message: existsSync(path) ? 'Module exists' : 'Module missing',
+      };
+    }),
+  );
+
   // 5. Gitleaks config
-  checks.push(checkGuardrail('Gitleaks Config', 'security', () => {
-    const path = join(ROOT, '.gitleaks.toml');
-    return {
-      status: existsSync(path) ? 'OK' : 'WARN',
-      message: existsSync(path) ? 'Config found' : 'Using default rules',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('Gitleaks Config', 'security', () => {
+      const path = join(ROOT, '.gitleaks.toml');
+      return {
+        status: existsSync(path) ? 'OK' : 'WARN',
+        message: existsSync(path) ? 'Config found' : 'Using default rules',
+      };
+    }),
+  );
+
   return checks;
 }
 
@@ -109,52 +129,62 @@ function runSecurityChecks(): GuardrailCheck[] {
  */
 function runPerformanceChecks(): GuardrailCheck[] {
   const checks: GuardrailCheck[] = [];
-  
+
   // 1. Token Budget Guard
-  checks.push(checkGuardrail('Token Budget Guard', 'performance', () => {
-    const path = join(ROOT, 'config', 'token-budget-guard.json');
-    return {
-      status: existsSync(path) ? 'OK' : 'FAIL',
-      message: existsSync(path) ? 'Config exists' : 'Config missing',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('Token Budget Guard', 'performance', () => {
+      const path = join(ROOT, 'config', 'token-budget-guard.json');
+      return {
+        status: existsSync(path) ? 'OK' : 'FAIL',
+        message: existsSync(path) ? 'Config exists' : 'Config missing',
+      };
+    }),
+  );
+
   // 2. Process Hygiene
-  checks.push(checkGuardrail('Process Hygiene', 'performance', () => {
-    const path = join(ROOT, 'src', 'core', 'process-hygiene.ts');
-    return {
-      status: existsSync(path) ? 'OK' : 'FAIL',
-      message: existsSync(path) ? 'Module exists' : 'Module missing',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('Process Hygiene', 'performance', () => {
+      const path = join(ROOT, 'src', 'core', 'process-hygiene.ts');
+      return {
+        status: existsSync(path) ? 'OK' : 'FAIL',
+        message: existsSync(path) ? 'Module exists' : 'Module missing',
+      };
+    }),
+  );
+
   // 3. Loop Guard
-  checks.push(checkGuardrail('Loop Guard', 'performance', () => {
-    const path = join(ROOT, 'src', 'core', 'loop-guard-service.ts');
-    return {
-      status: existsSync(path) ? 'OK' : 'FAIL',
-      message: existsSync(path) ? 'Module exists + persisted' : 'Module missing',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('Loop Guard', 'performance', () => {
+      const path = join(ROOT, 'src', 'core', 'loop-guard-service.ts');
+      return {
+        status: existsSync(path) ? 'OK' : 'FAIL',
+        message: existsSync(path) ? 'Module exists + persisted' : 'Module missing',
+      };
+    }),
+  );
+
   // 4. Timeout Monitor
-  checks.push(checkGuardrail('Timeout Monitor', 'performance', () => {
-    const path = join(ROOT, 'src', 'core', 'timeout-monitor.ts');
-    return {
-      status: existsSync(path) ? 'OK' : 'FAIL',
-      message: existsSync(path) ? 'Module exists' : 'Module missing',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('Timeout Monitor', 'performance', () => {
+      const path = join(ROOT, 'src', 'core', 'timeout-monitor.ts');
+      return {
+        status: existsSync(path) ? 'OK' : 'FAIL',
+        message: existsSync(path) ? 'Module exists' : 'Module missing',
+      };
+    }),
+  );
+
   // 5. Token Ingest
-  checks.push(checkGuardrail('Token Ingest', 'performance', () => {
-    const path = join(ROOT, 'src', 'tokens', 'token-ingest.ts');
-    return {
-      status: existsSync(path) ? 'OK' : 'FAIL',
-      message: existsSync(path) ? 'Module exists' : 'Module missing',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('Token Ingest', 'performance', () => {
+      const path = join(ROOT, 'src', 'tokens', 'token-ingest.ts');
+      return {
+        status: existsSync(path) ? 'OK' : 'FAIL',
+        message: existsSync(path) ? 'Module exists' : 'Module missing',
+      };
+    }),
+  );
+
   return checks;
 }
 
@@ -163,34 +193,40 @@ function runPerformanceChecks(): GuardrailCheck[] {
  */
 function runQualityChecks(): GuardrailCheck[] {
   const checks: GuardrailCheck[] = [];
-  
+
   // TypeScript check
-  checks.push(checkGuardrail('TypeScript Config', 'quality', () => {
-    const path = join(ROOT, 'tsconfig.json');
-    return {
-      status: existsSync(path) ? 'OK' : 'FAIL',
-      message: existsSync(path) ? 'Config exists' : 'Missing tsconfig.json',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('TypeScript Config', 'quality', () => {
+      const path = join(ROOT, 'tsconfig.json');
+      return {
+        status: existsSync(path) ? 'OK' : 'FAIL',
+        message: existsSync(path) ? 'Config exists' : 'Missing tsconfig.json',
+      };
+    }),
+  );
+
   // Lint config
-  checks.push(checkGuardrail('ESLint Config', 'quality', () => {
-    const path = join(ROOT, '.eslintrc.json');
-    return {
-      status: existsSync(path) ? 'OK' : 'WARN',
-      message: existsSync(path) ? 'Config exists' : 'Using defaults',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('ESLint Config', 'quality', () => {
+      const path = join(ROOT, '.eslintrc.json');
+      return {
+        status: existsSync(path) ? 'OK' : 'WARN',
+        message: existsSync(path) ? 'Config exists' : 'Using defaults',
+      };
+    }),
+  );
+
   // Test config
-  checks.push(checkGuardrail('Test Config', 'quality', () => {
-    const path = join(ROOT, 'tests');
-    return {
-      status: existsSync(path) ? 'OK' : 'WARN',
-      message: existsSync(path) ? 'Test suite exists' : 'No tests found',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('Test Config', 'quality', () => {
+      const path = join(ROOT, 'tests');
+      return {
+        status: existsSync(path) ? 'OK' : 'WARN',
+        message: existsSync(path) ? 'Test suite exists' : 'No tests found',
+      };
+    }),
+  );
+
   return checks;
 }
 
@@ -199,58 +235,68 @@ function runQualityChecks(): GuardrailCheck[] {
  */
 function runArchitecturalChecks(): GuardrailCheck[] {
   const checks: GuardrailCheck[] = [];
-  
+
   // Session Validator
-  checks.push(checkGuardrail('Session Validator', 'architectural', () => {
-    const path = join(ROOT, 'src', 'session', 'session-validator.ts');
-    return {
-      status: existsSync(path) ? 'OK' : 'FAIL',
-      message: existsSync(path) ? 'Module exists' : 'Module missing',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('Session Validator', 'architectural', () => {
+      const path = join(ROOT, 'src', 'session', 'session-validator.ts');
+      return {
+        status: existsSync(path) ? 'OK' : 'FAIL',
+        message: existsSync(path) ? 'Module exists' : 'Module missing',
+      };
+    }),
+  );
+
   // Stale Session Sweeper
-  checks.push(checkGuardrail('Stale Session Sweeper', 'architectural', () => {
-    const path = join(ROOT, 'src', 'session', 'stale-session-sweeper.ts');
-    return {
-      status: existsSync(path) ? 'OK' : 'FAIL',
-      message: existsSync(path) ? 'Module exists' : 'Module missing',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('Stale Session Sweeper', 'architectural', () => {
+      const path = join(ROOT, 'src', 'session', 'stale-session-sweeper.ts');
+      return {
+        status: existsSync(path) ? 'OK' : 'FAIL',
+        message: existsSync(path) ? 'Module exists' : 'Module missing',
+      };
+    }),
+  );
+
   // Session Retention
-  checks.push(checkGuardrail('Session Retention', 'architectural', () => {
-    const path = join(ROOT, 'src', 'session', 'session-retention.ts');
-    return {
-      status: existsSync(path) ? 'OK' : 'FAIL',
-      message: existsSync(path) ? 'Module exists' : 'Module missing',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('Session Retention', 'architectural', () => {
+      const path = join(ROOT, 'src', 'session', 'session-retention.ts');
+      return {
+        status: existsSync(path) ? 'OK' : 'FAIL',
+        message: existsSync(path) ? 'Module exists' : 'Module missing',
+      };
+    }),
+  );
+
   // Watchtower
-  checks.push(checkGuardrail('Maintenance Watchtower', 'architectural', () => {
-    const path = join(ROOT, 'src', 'core', 'maintenance-watchtower.ts');
-    return {
-      status: existsSync(path) ? 'OK' : 'FAIL',
-      message: existsSync(path) ? 'Module exists' : 'Module missing',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('Maintenance Watchtower', 'architectural', () => {
+      const path = join(ROOT, 'src', 'core', 'maintenance-watchtower.ts');
+      return {
+        status: existsSync(path) ? 'OK' : 'FAIL',
+        message: existsSync(path) ? 'Module exists' : 'Module missing',
+      };
+    }),
+  );
+
   // Nexus DB
-  checks.push(checkGuardrail('Nexus DB', 'architectural', () => {
-    const path = join(ROOT, '.runtime', 'gentle-vanguard.db');
-    if (!existsSync(path)) {
-      return { status: 'WARN', message: 'DB not initialized yet' };
-    }
-    try {
-      const stats = require('fs').statSync(path);
-      const sizeMB = (stats.size / 1024 / 1024).toFixed(2);
-      return { status: 'OK', message: `DB exists (${sizeMB} MB)` };
-    } catch {
-      return { status: 'OK', message: 'DB exists' };
-    }
-  }));
-  
+  checks.push(
+    checkGuardrail('Nexus DB', 'architectural', () => {
+      const path = join(ROOT, '.runtime', 'gentle-vanguard.db');
+      if (!existsSync(path)) {
+        return { status: 'WARN', message: 'DB not initialized yet' };
+      }
+      try {
+        const stats = require('fs').statSync(path);
+        const sizeMB = (stats.size / 1024 / 1024).toFixed(2);
+        return { status: 'OK', message: `DB exists (${sizeMB} MB)` };
+      } catch {
+        return { status: 'OK', message: 'DB exists' };
+      }
+    }),
+  );
+
   return checks;
 }
 
@@ -259,44 +305,52 @@ function runArchitecturalChecks(): GuardrailCheck[] {
  */
 function runMCPChecks(): GuardrailCheck[] {
   const checks: GuardrailCheck[] = [];
-  
+
   // MCP Registry
-  checks.push(checkGuardrail('MCP Registry', 'mcp', () => {
-    const path = join(ROOT, 'config', 'mcp-registry.json');
-    return {
-      status: existsSync(path) ? 'OK' : 'FAIL',
-      message: existsSync(path) ? 'Registry exists' : 'Missing',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('MCP Registry', 'mcp', () => {
+      const path = join(ROOT, 'config', 'mcp-registry.json');
+      return {
+        status: existsSync(path) ? 'OK' : 'FAIL',
+        message: existsSync(path) ? 'Registry exists' : 'Missing',
+      };
+    }),
+  );
+
   // MCP Execution Policy
-  checks.push(checkGuardrail('MCP Execution Policy', 'mcp', () => {
-    const path = join(ROOT, 'config', 'mcp-execution-policy.json');
-    return {
-      status: existsSync(path) ? 'OK' : 'WARN',
-      message: existsSync(path) ? 'Policy exists' : 'Missing (optional)',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('MCP Execution Policy', 'mcp', () => {
+      const path = join(ROOT, 'config', 'mcp-execution-policy.json');
+      return {
+        status: existsSync(path) ? 'OK' : 'WARN',
+        message: existsSync(path) ? 'Policy exists' : 'Missing (optional)',
+      };
+    }),
+  );
+
   // MCP Lifecycle Policy
-  checks.push(checkGuardrail('MCP Lifecycle Policy', 'mcp', () => {
-    const path = join(ROOT, 'config', 'mcp-lifecycle-policy.json');
-    return {
-      status: existsSync(path) ? 'OK' : 'WARN',
-      message: existsSync(path) ? 'Policy exists' : 'Missing (optional)',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('MCP Lifecycle Policy', 'mcp', () => {
+      const path = join(ROOT, 'config', 'mcp-lifecycle-policy.json');
+      return {
+        status: existsSync(path) ? 'OK' : 'WARN',
+        message: existsSync(path) ? 'Policy exists' : 'Missing (optional)',
+      };
+    }),
+  );
+
   // MCP Skill available (audit)
-  checks.push(checkGuardrail('MCP Audit Skill', 'mcp', () => {
-    // Skill is in user's agents folder, not in repo
-    return {
-      status: 'OK',
-      message: 'Skill available (external)',
-      details: 'Use: auditing-mcp-servers-for-tool-poisoning skill',
-    };
-  }));
-  
+  checks.push(
+    checkGuardrail('MCP Audit Skill', 'mcp', () => {
+      // Skill is in user's agents folder, not in repo
+      return {
+        status: 'OK',
+        message: 'Skill available (external)',
+        details: 'Use: auditing-mcp-servers-for-tool-poisoning skill',
+      };
+    }),
+  );
+
   return checks;
 }
 
@@ -311,13 +365,13 @@ function generateReport(): GuardrailsReport {
     ...runArchitecturalChecks(),
     ...runMCPChecks(),
   ];
-  
+
   return {
     timestamp: new Date().toISOString(),
     total: allChecks.length,
-    ok: allChecks.filter(c => c.status === 'OK').length,
-    warn: allChecks.filter(c => c.status === 'WARN').length,
-    fail: allChecks.filter(c => c.status === 'FAIL').length,
+    ok: allChecks.filter((c) => c.status === 'OK').length,
+    warn: allChecks.filter((c) => c.status === 'WARN').length,
+    fail: allChecks.filter((c) => c.status === 'FAIL').length,
     checks: allChecks,
   };
 }
@@ -326,20 +380,20 @@ function generateReport(): GuardrailsReport {
  * Print report to console
  */
 function printReport(report: GuardrailsReport, category?: string): void {
-  const filtered = category 
-    ? report.checks.filter(c => c.category === category)
-    : report.checks;
-  
+  const filtered = category ? report.checks.filter((c) => c.category === category) : report.checks;
+
   console.log('\n🛡️  GUARDRAILS STATUS\n');
   console.log(`Timestamp: ${report.timestamp}`);
-  console.log(`Total: ${report.total} | ✅ OK: ${report.ok} | ⚠️  WARN: ${report.warn} | ❌ FAIL: ${report.fail}\n`);
-  
+  console.log(
+    `Total: ${report.total} | ✅ OK: ${report.ok} | ⚠️  WARN: ${report.warn} | ❌ FAIL: ${report.fail}\n`,
+  );
+
   const categories = ['security', 'performance', 'quality', 'architectural', 'mcp'] as const;
-  
+
   for (const cat of categories) {
-    const catChecks = filtered.filter(c => c.category === cat);
+    const catChecks = filtered.filter((c) => c.category === cat);
     if (catChecks.length === 0) continue;
-    
+
     const catEmoji = {
       security: '🔒',
       performance: '⚡',
@@ -347,10 +401,10 @@ function printReport(report: GuardrailsReport, category?: string): void {
       architectural: '🏗️',
       mcp: '🔌',
     }[cat];
-    
+
     console.log(`${catEmoji} ${cat.toUpperCase()}`);
     console.log('─'.repeat(50));
-    
+
     for (const check of catChecks) {
       const statusIcon = {
         OK: '✅',
@@ -358,7 +412,7 @@ function printReport(report: GuardrailsReport, category?: string): void {
         FAIL: '❌',
         UNKNOWN: '❓',
       }[check.status];
-      
+
       console.log(`  ${statusIcon} ${check.name}: ${check.message}`);
       if (check.details) {
         console.log(`       └─ ${check.details}`);
@@ -372,16 +426,16 @@ function printReport(report: GuardrailsReport, category?: string): void {
 function main(): void {
   const args = process.argv.slice(2);
   const jsonFlag = args.includes('--json');
-  const category = args.find(a => a.startsWith('--category='))?.split('=')[1];
-  
+  const category = args.find((a) => a.startsWith('--category='))?.split('=')[1];
+
   const report = generateReport();
-  
+
   if (jsonFlag) {
     console.log(JSON.stringify(report, null, 2));
   } else {
     printReport(report, category);
   }
-  
+
   // Exit with error if any critical failures
   if (report.fail > 0) {
     console.log(`\n⚠️  ${report.fail} guardrail(s) FAILED - action required!`);

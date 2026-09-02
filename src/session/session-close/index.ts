@@ -1,7 +1,16 @@
 import { mkdirSync, writeFileSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { guardianCheck, learnFromMistake } from '../session-close-guardian.js';
-import { PhaseResult, LOG, log, ok, warn, SESSION_DIR, runScript, getChangedFiles } from './helpers.js';
+import {
+  PhaseResult,
+  LOG,
+  log,
+  ok,
+  warn,
+  SESSION_DIR,
+  runScript,
+  getChangedFiles,
+} from './helpers.js';
 import { isStartupClose } from './process.js';
 import { isAuthorizedAutomatedClose } from '../artifact-retention.js';
 import {
@@ -50,9 +59,12 @@ export interface CloseOptions {
   skipVerify?: boolean;
 }
 
-export async function runCloseOrchestrator(reason = 'session-end', options: CloseOptions = {}): Promise<CloseReport> {
+export async function runCloseOrchestrator(
+  reason = 'session-end',
+  options: CloseOptions = {},
+): Promise<CloseReport> {
   const { fastClose = false, skipBackup = false, skipAudit = false, skipVerify = false } = options;
-  
+
   log('═══════════════════════════════════════════');
   log('  SESSION CLOSE ORCHESTRATOR v2.0');
   log(`  Reason: ${reason}`);
@@ -150,7 +162,7 @@ function shouldUseFastClose(args: string[]): boolean {
     const startTime = new Date(data.startTime || data.sessionStartTime || Date.now()).getTime();
     const sessionDuration = Date.now() - startTime;
     const shortSession = sessionDuration < 2 * 60 * 1000; // < 2 minutes
-    
+
     if (shortSession && args.includes('--auto-fast')) {
       const changedFiles = getChangedFiles();
       return changedFiles.size === 0;
@@ -163,7 +175,7 @@ function shouldUseFastClose(args: string[]): boolean {
 
 export async function main() {
   const args = process.argv.slice(2);
-  
+
   // Check for fast close mode
   isFastClose = shouldUseFastClose(args);
   if (isFastClose) {
@@ -264,7 +276,7 @@ export async function main() {
 
   let reason = 'session-end';
   const closeOptions: CloseOptions = {};
-  
+
   // Parse close options
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--reason' && i + 1 < args.length) {
@@ -288,7 +300,7 @@ export async function main() {
       const startTime = new Date(data.startTime || data.sessionStartTime || Date.now()).getTime();
       const sessionDuration = Date.now() - startTime;
       const shortSession = sessionDuration < 2 * 60 * 1000; // < 2 minutes
-      
+
       if (shortSession) {
         const changedFiles = getChangedFiles();
         if (changedFiles.size === 0) {

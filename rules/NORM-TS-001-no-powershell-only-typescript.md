@@ -311,14 +311,15 @@ npx tsx watch src/script.ts
 Jerarquía de lenguajes para TODO script nuevo del stack — aplica a cualquier agente, herramienta,
 plugin o proceso que opere sobre este repositorio:
 
-1. **TypeScript (preferido)** para lógica del stack: `node --import tsx` vía `runNpxTsx` /
-   `runSync` de `src/core/run-command.ts` (NUNCA el CLI de tsx ni npx directo — ver
-   "procesos-ocultos" en AGENTS.md).
+1. **TypeScript (preferido)** para lógica del stack: `node --import tsx` vía `runNpxTsx` / `runSync`
+   de `src/core/run-command.ts` (NUNCA el CLI de tsx ni npx directo — ver "procesos-ocultos" en
+   AGENTS.md).
 2. **Bash (.sh)** para ciclo de vida por app: cada app tiene `apps/<app>/start.sh|stop.sh`
-   (idempotentes, pidfile en `.runtime/`, fallback netstat). Es la vía soportada para operar
-   apps sin command-center.
+   (idempotentes, pidfile en `.runtime/`, fallback netstat). Es la vía soportada para operar apps
+   sin command-center.
 
 **Excepciones sancionadas (únicas)**:
+
 - `build/installer-payload/tests/smoke/*.Tests.ps1` — Pester en contexto de instalador
   Windows-native.
 - Shims `.cmd`/.ps1 explícitamente documentados como puente para herramientas EXTERNAS que solo
@@ -326,9 +327,9 @@ plugin o proceso que opere sobre este repositorio:
   Antigravity/Cursor; debe ser node-direct, sin cadena npx.cmd).
 - `.archive/` y `.backups/` son solo-lectura históricos.
 
-**Prohibido además**: .bat/.cmd de arranque del stack, PowerShell para automatización, y
-cualquier spawn visible en Windows (windowsHide obligatorio — regla de oro de procesos-ocultos).
-Los 12 `scripts/apps/*/start|stop.ps1` (2026-09-01, sin callers) fueron eliminados el 2026-09-02;
+**Prohibido además**: .bat/.cmd de arranque del stack, PowerShell para automatización, y cualquier
+spawn visible en Windows (windowsHide obligatorio — regla de oro de procesos-ocultos). Los 12
+`scripts/apps/*/start|stop.ps1` (2026-09-01, sin callers) fueron eliminados el 2026-09-02;
 `scripts/common/Logger.psm1` archivado.
 
 ---

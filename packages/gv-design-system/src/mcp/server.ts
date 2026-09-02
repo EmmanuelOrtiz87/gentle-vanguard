@@ -24,10 +24,7 @@
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { execSync } from 'node:child_process';
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve, join, dirname } from 'node:path';
@@ -80,7 +77,7 @@ const server = new Server(
     capabilities: {
       tools: {},
     },
-  }
+  },
 );
 
 // === Tool definitions ===
@@ -96,7 +93,16 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         properties: {
           category: {
             type: 'string',
-            enum: ['color', 'typography', 'spacing', 'radius', 'elevation', 'motion', 'zIndex', 'all'],
+            enum: [
+              'color',
+              'typography',
+              'spacing',
+              'radius',
+              'elevation',
+              'motion',
+              'zIndex',
+              'all',
+            ],
             description: 'Token category to return',
             default: 'all',
           },
@@ -216,7 +222,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     tokens,
                   },
                   null,
-                  2
+                  2,
                 ),
               },
             ],
@@ -232,7 +238,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                   values: tokens[input.category as keyof typeof tokens] ?? null,
                 },
                 null,
-                2
+                2,
               ),
             },
           ],
@@ -252,7 +258,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const lines = source.split('\n');
         // Extract the interface (lines between `export interface` and closing `}`)
         const startIdx = lines.findIndex((l) => l.includes('export interface'));
-        const propsInterface = startIdx >= 0 ? lines.slice(startIdx).join('\n') : '/* props not found */';
+        const propsInterface =
+          startIdx >= 0 ? lines.slice(startIdx).join('\n') : '/* props not found */';
         return {
           content: [
             {
@@ -265,9 +272,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'audit_design': {
         const input = AuditDesignInput.parse(args);
-        const target = input.target.startsWith('/') || input.target.match(/^[a-z]:\\/i)
-          ? input.target
-          : join(REPO_ROOT, input.target);
+        const target =
+          input.target.startsWith('/') || input.target.match(/^[a-z]:\\/i)
+            ? input.target
+            : join(REPO_ROOT, input.target);
         const args2 = ['detect', target, input.json ? '--json' : '--quiet'];
         if (input.scope) {
           args2.push('--scope', input.scope);

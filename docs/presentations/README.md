@@ -1,7 +1,7 @@
 # Presentations
 
-Material de presentación actual del stack Gentle-Vanguard v4.0.0. Versiones antiguas quedan fuera
-de la documentación viva.
+Material de presentación actual del stack Gentle-Vanguard v4.0.0. Versiones antiguas quedan fuera de
+la documentación viva.
 
 ## Contenido
 
@@ -37,8 +37,8 @@ de la documentación viva.
 ## Diseño
 
 Todas las páginas usan el design system oficial v2.0 (`assets/css/gv.css`), alineado con
-`packages/gv-design-system/src/tokens/tokens.json` (v2.0.0-alpha.1, ADR-0026) y la decisión de
-marca oficial (`docs/brand/BRAND-DECISION-2026-09-01.md` — v2 Premium; v3 Kinetic archivada):
+`packages/gv-design-system/src/tokens/tokens.json` (v2.0.0-alpha.1, ADR-0026) y la decisión de marca
+oficial (`docs/brand/BRAND-DECISION-2026-09-01.md` — v2 Premium; v3 Kinetic archivada):
 
 - Paleta: `#a78bfa` (purple) / `#22d3ee` (cyan) / `#121212` (bg)
 - Gradiente oficial: `linear-gradient(135deg, #a78bfa 0%, #22d3ee 100%)`

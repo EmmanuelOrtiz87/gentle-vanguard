@@ -25,7 +25,9 @@ const REPO_ROOT = resolve(DS_ROOT, '..', '..');
 
 const args = argv.slice(2);
 if (args.length === 0) {
-  console.error('Usage: npx tsx src/cli/audit.ts <path> [--json] [--scope <type|layout|color|motion>]');
+  console.error(
+    'Usage: npx tsx src/cli/audit.ts <path> [--json] [--scope <type|layout|color|motion>]',
+  );
   process.exit(1);
 }
 
@@ -34,9 +36,8 @@ const json = args.includes('--json');
 const scopeFlag = args.indexOf('--scope');
 const scope = scopeFlag >= 0 ? args[scopeFlag + 1] : null;
 
-const targetPath = target.startsWith('/') || target.match(/^[a-z]:\\/i)
-  ? target
-  : resolve(REPO_ROOT, target);
+const targetPath =
+  target.startsWith('/') || target.match(/^[a-z]:\\/i) ? target : resolve(REPO_ROOT, target);
 
 const cmd = ['npx', 'impeccable', 'detect', targetPath, json ? '--json' : '--quiet'];
 if (scope) cmd.push('--scope', scope);

@@ -23,8 +23,8 @@
   --gv-cyan: #22d3ee;
   --gv-cyan-deep: #0891b2;
   --gv-cyan-soft: #67e8f9;
-  --gv-bg: #0F1115;
-  --gv-bg-deep: #090C11;
+  --gv-bg: #0f1115;
+  --gv-bg-deep: #090c11;
   --gv-surface: #1a1f2a;
   --gv-surface-raised: #252b38;
   --gv-text: #e8eef4;
@@ -32,7 +32,11 @@
   --gv-glass: rgba(26, 31, 42, 0.6);
   --gv-glass-border: rgba(167, 139, 250, 0.24);
   --gv-gradient: linear-gradient(135deg, #a78bfa 0%, #22d3ee 100%);
-  --gv-gradient-subtle: linear-gradient(135deg, rgba(167, 139, 250, 0.18) 0%, rgba(34, 211, 238, 0.18) 100%);
+  --gv-gradient-subtle: linear-gradient(
+    135deg,
+    rgba(167, 139, 250, 0.18) 0%,
+    rgba(34, 211, 238, 0.18) 100%
+  );
   --gv-glow: rgba(34, 211, 238, 0.45);
   --gv-amber: #f4bb4f;
   --gv-red: #ee6d75;

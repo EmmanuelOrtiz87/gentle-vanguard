@@ -5,7 +5,11 @@
     "tokens": "docs/brand/TOKENS-v2.json",
     "brandKit": "docs/brand/BRAND-KIT.md",
     "logoOfficial": "assets/logo.svg",
-    "logoVariants": ["assets/logo-mono-light.svg", "assets/logo-mono-dark.svg", "assets/logo-icon.svg"]
+    "logoVariants": [
+      "assets/logo-mono-light.svg",
+      "assets/logo-mono-dark.svg",
+      "assets/logo-icon.svg"
+    ]
   },
   "name": "Gentle-Vanguard",
   "displayName": "GENTLE-VANGUARD",

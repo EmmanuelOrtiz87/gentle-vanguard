@@ -87,10 +87,9 @@ completas: `apps/command-center/README.md`.
 | Automático           | Lazy step `command-center` del autostart (`--no-browser`) |
 
 - API: `GET /api/apps`, `POST /api/apps/:id/start|stop`, `GET /api/apps/:id/logs?process=&lines=`
-  (stdout+stderr por proceso en `.runtime/cc-logs/`, fd directo sin pipes) — idempotentes;
-  `partial` = arranca solo lo
-  que falta. Bind loopback-only (ADR-0017), rechaza Host ajeno, UI con `no-store` + error surfacing
-  global.
+  (stdout+stderr por proceso en `.runtime/cc-logs/`, fd directo sin pipes) — idempotentes; `partial`
+  = arranca solo lo que falta. Bind loopback-only (ADR-0017), rechaza Host ajeno, UI con
+  `no-store` + error surfacing global.
 - Estado: pidfile propio → legacy pidfiles → port probe; stop con fallback por dueño de puerto y
   **watchdogs del dashboard se matan primero**. Pidfile: `.runtime/command-center.pid` (env
   `CC_PID_FILE` para tests). Puerto 8090 (env `CC_PORT`, persistido en

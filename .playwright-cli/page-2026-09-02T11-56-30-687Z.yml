@@ -1,42 +1,54 @@
 - generic [active] [ref=e1]:
-  - generic [ref=e2]:
-    - banner [ref=e4]:
-      - generic [ref=e5]:
-        - generic [ref=e6]:
-          - img "Gentle-Vanguard" [ref=e7]
-          - generic [ref=e8]: GentleVanguard Analytics
-        - navigation "Secciones" [ref=e9]:
-          - button "Operación" [ref=e10] [cursor=pointer]
-          - button "Configuración" [ref=e16] [cursor=pointer]
-          - button "Historial" [ref=e20] [cursor=pointer]
-        - generic [ref=e25]: Sin conexión
-        - combobox "Language / Idioma / Idioma" [ref=e27] [cursor=pointer]:
-          - option "🇬🇧 English"
-          - option "🇪🇸 Español" [selected]
-          - option "🇧🇷 Português (Brasil)"
-        - button "Cambiar tema" [ref=e28] [cursor=pointer]
-    - main [ref=e35]:
-      - generic [ref=e36]:
-        - complementary [ref=e37]:
-          - generic [ref=e38]:
-            - button "Exportar" [disabled] [ref=e41]
-            - generic [ref=e45]:
-              - generic [ref=e46]:
-                - generic [ref=e47]:
-                  - text: URL
-                  - generic [ref=e53]: (opcional)
-                - textbox "URL" [ref=e54]:
-                  - /placeholder: Pega una URL de repositorio, PR, Jira o Confluence de Bitbucket para traer evidencia real...
-                - paragraph [ref=e55]: URL de Atlassian — recupera evidencia real (issues de Jira, páginas de Confluence, PRs de Bitbucket). Podés dejarlo vacío si solo tenés descripción de texto.
-              - generic [ref=e56]:
-                - generic [ref=e57]:
-                  - text: Pedido
-                  - generic [ref=e61]: (opcional)
-                - textbox "Pedido" [ref=e62]:
-                  - /placeholder: Describe el pedido funcional o técnico, pega la descripción de un ticket de Jira, o una URL de Jira. Se combina con la URL de arriba para un análisis completo...
-                - paragraph [ref=e63]: Descripción libre del requerimiento o iniciativa. También puede incluir una URL — ambos campos se combinan en el análisis.
-            - button "Analizar" [disabled] [ref=e64]
-        - generic [ref=e69]:
-          - heading "Listo para interpretar una iniciativa" [level=2] [ref=e73]
-          - paragraph [ref=e74]: El primer análisis va a recuperar evidencia, detectar frentes de impacto y producir una respuesta técnica lista para evolucionar.
-  - button "Detener Analytics" [ref=e75] [cursor=pointer]: ⏻Analytics
+    - generic [ref=e2]:
+        - banner [ref=e4]:
+            - generic [ref=e5]:
+                - generic [ref=e6]:
+                    - img "Gentle-Vanguard" [ref=e7]
+                    - generic [ref=e8]: GentleVanguard Analytics
+                - navigation "Secciones" [ref=e9]:
+                    - button "Operación" [ref=e10] [cursor=pointer]
+                    - button "Configuración" [ref=e16] [cursor=pointer]
+                    - button "Historial" [ref=e20] [cursor=pointer]
+                - generic [ref=e25]: Sin conexión
+                - combobox "Language / Idioma / Idioma" [ref=e27] [cursor=pointer]:
+                    - option "🇬🇧 English"
+                    - option "🇪🇸 Español" [selected]
+                    - option "🇧🇷 Português (Brasil)"
+                - button "Cambiar tema" [ref=e28] [cursor=pointer]
+        - main [ref=e35]:
+            - generic [ref=e36]:
+                - complementary [ref=e37]:
+                    - generic [ref=e38]:
+                        - button "Exportar" [disabled] [ref=e41]
+                        - generic [ref=e45]:
+                            - generic [ref=e46]:
+                                - generic [ref=e47]:
+                                    - text: URL
+                                    - generic [ref=e53]: (opcional)
+                                - textbox "URL" [ref=e54]:
+                                    - /placeholder:
+                                        Pega una URL de repositorio, PR, Jira o Confluence de
+                                        Bitbucket para traer evidencia real...
+                                - paragraph [ref=e55]:
+                                    URL de Atlassian — recupera evidencia real (issues de Jira,
+                                    páginas de Confluence, PRs de Bitbucket). Podés dejarlo vacío si
+                                    solo tenés descripción de texto.
+                            - generic [ref=e56]:
+                                - generic [ref=e57]:
+                                    - text: Pedido
+                                    - generic [ref=e61]: (opcional)
+                                - textbox "Pedido" [ref=e62]:
+                                    - /placeholder:
+                                        Describe el pedido funcional o técnico, pega la descripción
+                                        de un ticket de Jira, o una URL de Jira. Se combina con la
+                                        URL de arriba para un análisis completo...
+                                - paragraph [ref=e63]:
+                                    Descripción libre del requerimiento o iniciativa. También puede
+                                    incluir una URL — ambos campos se combinan en el análisis.
+                        - button "Analizar" [disabled] [ref=e64]
+                - generic [ref=e69]:
+                    - heading "Listo para interpretar una iniciativa" [level=2] [ref=e73]
+                    - paragraph [ref=e74]:
+                        El primer análisis va a recuperar evidencia, detectar frentes de impacto y
+                        producir una respuesta técnica lista para evolucionar.
+    - button "Detener Analytics" [ref=e75] [cursor=pointer]: ⏻Analytics

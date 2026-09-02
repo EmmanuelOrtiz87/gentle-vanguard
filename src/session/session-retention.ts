@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 /**
  * Session Retention Manager
- * 
+ *
  * Gestiona la retención de archivos de sesión, checkpoints y backups
  * según políticas definidas:
  * - Máximo 10 sesiones históricas (configurable)
  * - Máximo 5 checkpoints por sesión
  * - Máximo 3 backups rotativos
  * - Cleanup automático de archivos temporales
- * 
+ *
  * Uso:
  *   npx tsx src/session/session-retention.ts prune
  *   npx tsx src/session/session-retention.ts status
@@ -65,8 +65,8 @@ function getSessionFiles(): SessionInfo[] {
   if (!existsSync(sessionDir)) return [];
 
   const files = readdirSync(sessionDir)
-    .filter(f => f.startsWith('session-') && f.endsWith('.json') && f !== 'session-current.json')
-    .map(f => {
+    .filter((f) => f.startsWith('session-') && f.endsWith('.json') && f !== 'session-current.json')
+    .map((f) => {
       const fp = join(sessionDir, f);
       const stats = statSync(fp);
       let score: number | undefined;
@@ -97,8 +97,8 @@ function getCheckpoints(): string[] {
   if (!existsSync(ckptDir)) return [];
 
   return readdirSync(ckptDir)
-    .filter(f => f.startsWith('ckpt-'))
-    .map(f => join(ckptDir, f))
+    .filter((f) => f.startsWith('ckpt-'))
+    .map((f) => join(ckptDir, f))
     .sort()
     .reverse();
 }
@@ -111,8 +111,8 @@ function getBackups(): string[] {
   if (!existsSync(backupDir)) return [];
 
   return readdirSync(backupDir)
-    .filter(f => f.endsWith('.db') || f.endsWith('.zip') || f.endsWith('.tar.gz'))
-    .map(f => join(backupDir, f))
+    .filter((f) => f.endsWith('.db') || f.endsWith('.zip') || f.endsWith('.tar.gz'))
+    .map((f) => join(backupDir, f))
     .sort()
     .reverse();
 }
@@ -125,8 +125,8 @@ function getCloseReports(): string[] {
   if (!existsSync(sessionDir)) return [];
 
   return readdirSync(sessionDir)
-    .filter(f => f.startsWith('close-report-') && f.endsWith('.json'))
-    .map(f => join(sessionDir, f))
+    .filter((f) => f.startsWith('close-report-') && f.endsWith('.json'))
+    .map((f) => join(sessionDir, f))
     .sort()
     .reverse();
 }
@@ -166,8 +166,8 @@ function pruneSessions(dryRun: boolean): { removed: number; kept: number } {
   const thirtyDaysAgo = now - CONFIG.sessionAgeThresholdDays * 24 * 60 * 60 * 1000;
 
   // Separate sessions by score
-  const highScoreSessions = sessions.filter(s => (s.score || 0) >= CONFIG.highScoreThreshold);
-  const normalSessions = sessions.filter(s => (s.score || 0) < CONFIG.highScoreThreshold);
+  const highScoreSessions = sessions.filter((s) => (s.score || 0) >= CONFIG.highScoreThreshold);
+  const normalSessions = sessions.filter((s) => (s.score || 0) < CONFIG.highScoreThreshold);
 
   // Determine how many to keep
   const keepHighScore = Math.min(highScoreSessions.length, CONFIG.extraHighScoreSessions + 5);
@@ -177,10 +177,10 @@ function pruneSessions(dryRun: boolean): { removed: number; kept: number } {
   const keepList = [
     ...highScoreSessions.slice(0, keepHighScore),
     ...normalSessions.slice(0, keepNormal),
-  ].map(s => s.path);
+  ].map((s) => s.path);
 
   // Add sessions from last 30 days regardless of count
-  const recentSessions = sessions.filter(s => s.mtime > thirtyDaysAgo);
+  const recentSessions = sessions.filter((s) => s.mtime > thirtyDaysAgo);
   for (const s of recentSessions) {
     if (!keepList.includes(s.path)) {
       keepList.push(s.path);
@@ -188,7 +188,7 @@ function pruneSessions(dryRun: boolean): { removed: number; kept: number } {
   }
 
   // Sessions to remove
-  const toRemove = sessions.filter(s => !keepList.includes(s.path));
+  const toRemove = sessions.filter((s) => !keepList.includes(s.path));
 
   let removed = 0;
   for (const session of toRemove) {
@@ -308,9 +308,9 @@ function pruneCloseReports(dryRun: boolean): { removed: number; kept: number } {
 function cleanOldTempFiles(dryRun: boolean): { removed: number; kept: number } {
   const tempFiles = getTempFiles();
   const oneWeekAgo = 7 * 24 * 60 * 60 * 1000;
-  
-  const oldTemps = tempFiles.filter(t => t.age > oneWeekAgo && t.status === 'temporary');
-  
+
+  const oldTemps = tempFiles.filter((t) => t.age > oneWeekAgo && t.status === 'temporary');
+
   let removed = 0;
   for (const temp of oldTemps) {
     if (dryRun) {
@@ -372,7 +372,9 @@ function printStatus() {
   for (const s of sessions.slice(0, 5)) {
     const date = new Date(s.mtime).toISOString().slice(0, 16).replace('T', ' ');
     const score = s.score !== undefined ? `score: ${s.score}` : 'no score';
-    console.log(`  ${date} — ${s.filename.split('-').slice(1).join('-').replace('.json', '')} [${score}]`);
+    console.log(
+      `  ${date} — ${s.filename.split('-').slice(1).join('-').replace('.json', '')} [${score}]`,
+    );
   }
   if (sessions.length > 5) {
     console.log(`  ... and ${sessions.length - 5} more`);

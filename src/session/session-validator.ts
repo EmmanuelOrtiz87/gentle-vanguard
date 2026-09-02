@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
  * Session Validator - Validaciones inteligentes de sesión
- * 
+ *
  * Proporciona validaciones para el ciclo de vida de sesión:
  * - Verificar si existe sesión activa (archivo + Nexus)
  * - Detectar inicio dentro de sesión existente
  * - Registrar recursos iniciados para cierre selectivo
  * - Validar consistencia entre archivo y Nexus
- * 
+ *
  * Uso:
  *   npx tsx src/session/session-validator.ts check
  *   npx tsx src/session/session-validator.ts register-resource --type daemon --name "codegraph-mcp"
@@ -89,7 +89,7 @@ function checkNexusActiveSession(): boolean {
  */
 export async function validateSession(): Promise<ValidationResult> {
   const sessionData = readSessionFile();
-  
+
   const validation: SessionValidation = {
     hasActiveSession: false,
     sessionFileExists: false,
@@ -104,25 +104,26 @@ export async function validateSession(): Promise<ValidationResult> {
   // 1. Check session file
   if (sessionData) {
     validation.sessionFileExists = true;
-    validation.sessionId = sessionData.sessionId as string || sessionData.id as string;
+    validation.sessionId = (sessionData.sessionId as string) || (sessionData.id as string);
     validation.status = sessionData.status as string;
-    
-    const startTime = sessionData.startTime 
+
+    const startTime = sessionData.startTime
       ? new Date(sessionData.startTime as string).getTime()
       : Date.now();
     validation.sessionAge = Math.floor((Date.now() - startTime) / 60000);
-    
+
     // Check if active
-    if (validation.status === 'active' && validation.sessionAge < 120) { // < 2 hours
+    if (validation.status === 'active' && validation.sessionAge < 120) {
+      // < 2 hours
       validation.hasActiveSession = true;
     }
-    
+
     // Check if same agent (check environment or tool)
     const currentAgent = process.env.GENTLE_VANGUARD_SESSION_ID;
     if (currentAgent && currentAgent === validation.sessionId) {
       validation.isSameAgent = true;
     }
-    
+
     // Check if nested (started within existing session)
     const parentSession = sessionData.parentSessionId;
     if (parentSession) {
@@ -292,22 +293,24 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const command = args[0];
 
   if (command === 'check') {
-    void validateSession().then(result => {
+    void validateSession().then((result) => {
       console.log(JSON.stringify(result, null, 2));
       process.exit(result.valid ? 0 : 1);
     });
   } else if (command === 'register-resource') {
     const typeIndex = args.indexOf('--type');
     const nameIndex = args.indexOf('--name');
-    
+
     if (typeIndex === -1 || nameIndex === -1) {
-      console.error('Usage: register-resource --type <daemon|skill|lazyStep|cache|checkpoint> --name <name>');
+      console.error(
+        'Usage: register-resource --type <daemon|skill|lazyStep|cache|checkpoint> --name <name>',
+      );
       process.exit(1);
     }
-    
+
     const type = args[typeIndex + 1] as 'daemon' | 'skill' | 'lazyStep' | 'cache' | 'checkpoint';
     const name = args[nameIndex + 1];
-    
+
     const success = registerResource(type, name);
     process.exit(success ? 0 : 1);
   } else if (command === 'get-inventory') {
@@ -315,7 +318,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     console.log(JSON.stringify(inventory, null, 2));
     process.exit(0);
   } else if (command === 'validate-close') {
-    void validateClose().then(result => {
+    void validateClose().then((result) => {
       console.log(JSON.stringify(result, null, 2));
       process.exit(result.safe ? 0 : 1);
     });
@@ -330,7 +333,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     console.log('');
     console.log('Examples:');
     console.log('  npx tsx src/session/session-validator.ts check');
-    console.log('  npx tsx src/session/session-validator.ts register-resource --type daemon --name "codegraph-mcp"');
+    console.log(
+      '  npx tsx src/session/session-validator.ts register-resource --type daemon --name "codegraph-mcp"',
+    );
     console.log('  npx tsx src/session/session-validator.ts get-inventory');
     process.exit(1);
   }

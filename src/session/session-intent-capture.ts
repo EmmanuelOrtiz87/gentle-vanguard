@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
  * Session Intent Capture
- * 
+ *
  * Extrae y captura el objetivo/intención del usuario al inicio de la sesión.
  * Esto permite que el resumen de sesión sea más útil para futuras referencias.
- * 
+ *
  * Patrones detectados:
  * - Implementación: "implement X", "add Y", "create Z"
  * - Investigación: "research", "investigate", "find information about"
@@ -61,22 +61,39 @@ const INTENT_PATTERNS = {
 
 // Keywords that indicate file mentions
 const FILE_KEYWORDS = [
-  'in', 'at', 'to', 'from', 'inside', 'within', 'under',
-  'the file', 'the code', 'the module', 'the function',
-  'src/', 'lib/', 'apps/', 'packages/', 'config/', '.ts', '.js', '.tsx', '.jsx',
+  'in',
+  'at',
+  'to',
+  'from',
+  'inside',
+  'within',
+  'under',
+  'the file',
+  'the code',
+  'the module',
+  'the function',
+  'src/',
+  'lib/',
+  'apps/',
+  'packages/',
+  'config/',
+  '.ts',
+  '.js',
+  '.tsx',
+  '.jsx',
 ];
 
 // Domain keywords for classification
 const DOMAIN_KEYWORDS: Record<string, string[]> = {
-  'security': ['security', 'auth', 'password', 'token', 'encryption', 'vulnerability', 'cve'],
-  'performance': ['performance', 'optimize', 'speed', 'latency', 'cache', 'memory'],
-  'database': ['database', 'db', 'sql', 'query', 'migration', 'schema'],
-  'api': ['api', 'endpoint', 'rest', 'graphql', 'http', 'request', 'response'],
-  'frontend': ['ui', 'component', 'react', 'vue', 'css', 'style', 'design'],
-  'backend': ['server', 'service', 'lambda', 'function', 'backend', 'api'],
-  'devops': ['deploy', 'docker', 'kubernetes', 'ci/cd', 'pipeline', 'infrastructure'],
-  'testing': ['test', 'spec', 'mock', 'coverage', 'unittest', 'e2e'],
-  'documentation': ['doc', 'readme', 'comment', 'spec', 'guide', 'manual'],
+  security: ['security', 'auth', 'password', 'token', 'encryption', 'vulnerability', 'cve'],
+  performance: ['performance', 'optimize', 'speed', 'latency', 'cache', 'memory'],
+  database: ['database', 'db', 'sql', 'query', 'migration', 'schema'],
+  api: ['api', 'endpoint', 'rest', 'graphql', 'http', 'request', 'response'],
+  frontend: ['ui', 'component', 'react', 'vue', 'css', 'style', 'design'],
+  backend: ['server', 'service', 'lambda', 'function', 'backend', 'api'],
+  devops: ['deploy', 'docker', 'kubernetes', 'ci/cd', 'pipeline', 'infrastructure'],
+  testing: ['test', 'spec', 'mock', 'coverage', 'unittest', 'e2e'],
+  documentation: ['doc', 'readme', 'comment', 'spec', 'guide', 'manual'],
 };
 
 export interface SessionIntent {
@@ -92,7 +109,7 @@ export interface SessionIntent {
  */
 export function extractIntent(userPrompt: string): SessionIntent {
   const trimmed = userPrompt.trim();
-  
+
   // Detect primary intent
   let detectedIntent = 'general';
   for (const [intent, patterns] of Object.entries(INTENT_PATTERNS)) {
@@ -109,7 +126,7 @@ export function extractIntent(userPrompt: string): SessionIntent {
   let domain = 'general';
   const lowerPrompt = trimmed.toLowerCase();
   for (const [d, keywords] of Object.entries(DOMAIN_KEYWORDS)) {
-    if (keywords.some(kw => lowerPrompt.includes(kw))) {
+    if (keywords.some((kw) => lowerPrompt.includes(kw))) {
       domain = d;
       break;
     }
@@ -202,7 +219,7 @@ export function getSessionIntent(): SessionIntent | null {
 // CLI
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const args = process.argv.slice(2);
-  
+
   if (args[0] === 'extract' && args[1]) {
     // Extract intent from provided prompt
     const intent = extractIntent(args.slice(1).join(' '));

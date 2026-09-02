@@ -1,9 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": [
-      "ES2022"
-    ],
+    "lib": ["ES2022"],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
@@ -23,9 +21,7 @@
     "sourceMap": false,
     "outDir": "./dist",
     "rootDir": ".",
-    "types": [
-      "node"
-    ]
+    "types": ["node"]
   },
   "include": [
     "adapters/**/*.ts",
@@ -42,12 +38,5 @@
     "src/**/*.ts",
     "scripts/apps/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "build",
-    "coverage",
-    "templates",
-    "src/convergence"
-  ]
+  "exclude": ["node_modules", "dist", "build", "coverage", "templates", "src/convergence"]
 }

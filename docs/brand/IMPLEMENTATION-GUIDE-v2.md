@@ -1,7 +1,6 @@
 # Gentle-Vanguard Academy v2.0 — Implementation Guide
 
-> **Quick-start guide for implementing the v2.0 design system**
-> Version: 2.0.0  
+> **Quick-start guide for implementing the v2.0 design system** Version: 2.0.0  
 > Last updated: 2026-09-01
 
 ---
@@ -54,11 +53,15 @@ In `<body>`, verify these elements exist (usually already present):
 ```html
 <body>
   <!-- These create the atmosphere -->
-  <div class="gv-grid-bg"></div>       <!-- Grid background -->
-  <div class="gv-glow-a"></div>        <!-- Purple animated glow -->
-  <div class="gv-glow-b"></div>        <!-- Cyan animated glow -->
-  <div class="gv-noise-overlay"></div> <!-- Subtle film grain -->
-  
+  <div class="gv-grid-bg"></div>
+  <!-- Grid background -->
+  <div class="gv-glow-a"></div>
+  <!-- Purple animated glow -->
+  <div class="gv-glow-b"></div>
+  <!-- Cyan animated glow -->
+  <div class="gv-noise-overlay"></div>
+  <!-- Subtle film grain -->
+
   <!-- Your existing content -->
   <header class="gv-topbar">...</header>
   <main id="app">...</main>
@@ -113,18 +116,18 @@ academy-style-v2.css
 ### Button Primary v2
 
 ```html
-<button class="gv-btn-primary-v2">
-  Get Started
-</button>
+<button class="gv-btn-primary-v2">Get Started</button>
 
 <!-- With icon -->
 <button class="gv-btn-primary-v2">
-  <svg>...</svg> <!-- Icon -->
+  <svg>...</svg>
+  <!-- Icon -->
   Get Started
 </button>
 ```
 
 **Features**:
+
 - Gradient background (purple → cyan)
 - Specular highlight (top-left)
 - Shine sweep on hover
@@ -133,12 +136,11 @@ academy-style-v2.css
 ### Button Secondary
 
 ```html
-<button class="gv-btn-secondary-v2">
-  Learn More
-</button>
+<button class="gv-btn-secondary-v2">Learn More</button>
 ```
 
 **Features**:
+
 - Pill outline (cyan)
 - Subtle fill on hover
 - Translates up 1px on hover
@@ -160,6 +162,7 @@ academy-style-v2.css
 ```
 
 **Features**:
+
 - 20px radius (was 18px)
 - Gradient border effect
 - Shine on hover
@@ -181,12 +184,13 @@ academy-style-v2.css
 ### Input Field v2
 
 ```html
-<input type="text" class="gv-input-v2" placeholder="Search...">
+<input type="text" class="gv-input-v2" placeholder="Search..." />
 
 <textarea class="gv-input-v2" placeholder="Description..."></textarea>
 ```
 
 **Features**:
+
 - Deep background (#090C11)
 - Focus glow animation
 - Blue focus ring
@@ -199,6 +203,7 @@ academy-style-v2.css
 ```
 
 **Features**:
+
 - Monospace font (Space Mono)
 - Uppercase
 - Wide letter-spacing
@@ -214,6 +219,7 @@ academy-style-v2.css
 ```
 
 **Features**:
+
 - Gradient text
 - Tabular numbers
 - Monospace label
@@ -230,10 +236,10 @@ Edit `academy-tokens-v2.css`:
 :root {
   /* Change primary accent */
   --gv-cyan: #00d4ff;
-  
+
   /* Change purple */
   --gv-purple: #b794f6;
-  
+
   /* Change background */
   --gv-bg: #0a0c10;
 }
@@ -260,7 +266,10 @@ To use custom fonts, edit tokens:
 Or load via Google Fonts CDN in `<head>`:
 
 ```html
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link
+  href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+/>
 ```
 
 ---
@@ -269,27 +278,27 @@ Or load via Google Fonts CDN in `<head>`:
 
 ### v1 → v2 Changes
 
-| Element | v1 | v2 | Notes |
-|---------|----|-----|-------|
-| **Background** | `#121212` | `#0F1115` | Darker, richer |
-| **Text primary** | `#e5e7eb` | `#e8eef4` | Warmer |
-| **Text muted** | `#9ca3af` | `#8b95a8` | Cooler |
-| **Card radius** | 18px | 20px | Slightly rounder |
-| **Header height** | 62px | 64px | Slightly taller |
-| **Grid mask** | None | Radial fade | Grid fades at edges |
-| **Glows** | Static | Animated | Breathing animations |
-| **Shine effect** | None | Yes | Card hover shine |
-| **Noise texture** | None | 2.5% opacity | Film grain overlay |
+| Element           | v1        | v2           | Notes                |
+| ----------------- | --------- | ------------ | -------------------- |
+| **Background**    | `#121212` | `#0F1115`    | Darker, richer       |
+| **Text primary**  | `#e5e7eb` | `#e8eef4`    | Warmer               |
+| **Text muted**    | `#9ca3af` | `#8b95a8`    | Cooler               |
+| **Card radius**   | 18px      | 20px         | Slightly rounder     |
+| **Header height** | 62px      | 64px         | Slightly taller      |
+| **Grid mask**     | None      | Radial fade  | Grid fades at edges  |
+| **Glows**         | Static    | Animated     | Breathing animations |
+| **Shine effect**  | None      | Yes          | Card hover shine     |
+| **Noise texture** | None      | 2.5% opacity | Film grain overlay   |
 
 ### Common Class Mappings
 
-| v1 Class | v2 Class | Notes |
-|----------|----------|-------|
-| `.btn-primary` | `.gv-btn-primary-v2` | New shine effect |
-| `.btn-ghost` | `.gv-btn-secondary-v2` | Renamed |
-| `.track-card` | `.track-card` | Adds v2 features automatically |
-| `.lesson-row` | `.lesson-row` | Enhanced interactions |
-| `.hstat` | `.hstat` | Uses new `.n` and `.l` structure |
+| v1 Class       | v2 Class               | Notes                            |
+| -------------- | ---------------------- | -------------------------------- |
+| `.btn-primary` | `.gv-btn-primary-v2`   | New shine effect                 |
+| `.btn-ghost`   | `.gv-btn-secondary-v2` | Renamed                          |
+| `.track-card`  | `.track-card`          | Adds v2 features automatically   |
+| `.lesson-row`  | `.lesson-row`          | Enhanced interactions            |
+| `.hstat`       | `.hstat`               | Uses new `.n` and `.l` structure |
 
 ### Breaking Changes
 
@@ -335,6 +344,7 @@ Or load via Google Fonts CDN in `<head>`:
 ### GPU Usage
 
 The following use GPU:
+
 - Grid background (fixed layer)
 - Glow animations (transform + opacity)
 - Card hover (transform)
@@ -379,8 +389,8 @@ filter: blur(10px); /* Expensive! */
   /* Current: 0.18 opacity in gradient, adjust: */
   background: radial-gradient(
     circle,
-    rgba(167, 139, 250, 0.12) 0%,  /* Reduce for dimmer */
-    transparent 70%
+    rgba(167, 139, 250, 0.12) 0%,
+    /* Reduce for dimmer */ transparent 70%
   );
 }
 ```
@@ -420,12 +430,14 @@ filter: blur(10px); /* Expensive! */
 ### Hero Section
 
 **v1:**
+
 - Static hero
 - Basic gradient text
 - Standard cards
 - No atmosphere
 
 **v2:**
+
 - Animated underline on "G"
 - Grid with fade mask
 - Breathing glows
@@ -435,12 +447,14 @@ filter: blur(10px); /* Expensive! */
 ### Button
 
 **v1:**
+
 ```css
 background: linear-gradient(...);
 transition: transform 0.12s;
 ```
 
 **v2:**
+
 ```css
 background: linear-gradient(...);
 /* + Specular highlight (top) */
@@ -496,6 +510,7 @@ background: linear-gradient(...);
 ## Support
 
 For issues or questions:
+
 1. Check this guide's Troubleshooting section
 2. Review brand guidelines for detailed specs
 3. Reference tokens file for exact values
@@ -503,7 +518,7 @@ For issues or questions:
 
 ---
 
-*"Good design is as little design as possible."* — Dieter Rams
+_"Good design is as little design as possible."_ — Dieter Rams
 
 **Version**: 2.0.0  
 **Last Updated**: 2026-09-01  
