@@ -46,6 +46,12 @@ pre-commit:
     metrics-check:
       glob: 'config/stack-metrics.json'
       run: npx tsx src/tools/metrics-verify.ts {staged_files}
+    design-lint:
+      glob: '{apps/*/src/**/*.{css,tsx,jsx},apps/*/style.css,apps/*/*.css,assets/*.css,packages/gv-design-system/src/**/*.{css,tsx}}'
+      run: npx impeccable detect --no-config --json --quiet {staged_files} 2>&1 || true
+      # The `|| true` makes the hook non-blocking for now; we want findings as advisory.
+      # Promote to blocking when the team is ready (set in .impeccable/config.json).
+      # See ADR-0026 §"Plan de implementación" Fase 1.
 
 pre-push:
   commands:

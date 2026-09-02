@@ -61,6 +61,16 @@
       "enabled": true,
       "autoStart": false,
       "description": "Gentle-Vanguard Analytics Atlassian MCP: connection status and delivery analysis"
+    },
+    {
+      "name": "gv-design-system",
+      "type": "user",
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["tsx", "packages/gv-design-system/src/mcp/server.ts"],
+      "enabled": true,
+      "autoStart": false,
+      "description": "Gentle-Vanguard design system v2: tokens, components, audit. Tools: list_tokens, get_component, audit_design, sync_design, get_design_md, list_brand_waivers. ADR-0026."
     }
   ]
 }

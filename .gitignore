@@ -284,3 +284,6 @@ update-manifest.json
 # Runtime logs (local only)
 logs/
 apps/
+
+# Local app backups (artifacts, never commit)
+backups/

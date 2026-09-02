@@ -2,6 +2,52 @@
 
 > Bitácora de cambios. Cada entrada documenta: qué se hizo, por qué, y qué impacto tuvo en el stack.
 
+## v1.0.1 — 2026-09-01
+
+### Cambios
+
+| # | Tipo | Componente | Descripción |
+|---|------|------------|-------------|
+| 1 | Feature | `oc-keyring probe` | Comando nuevo. Hace probe directo al API de OpenCode con cada key configurada y reporta status por modelo (200/401/429) con el mensaje real del error. Distingue entre `FreeUsageLimitError`, `GoUsageLimitError`, `CreditsError`, `ModelError`. |
+| 2 | Feature | `oc-keyring validate` | Atajo al script `oc-keyring-validate.ps1` que valida JSON files, vault, auth.json, opencode.json, y CLI recognition. |
+| 3 | Docs | Nueva estructura | Movidos los 3 docs sueltos a `docs/operations/oc-keyring/`. Agregados `troubleshooting.md`, `alternatives.md`, `business-context.md`, `incidents/2026-09-01-zen-free-rate-limit.md`, `incidents/README.md`. |
+| 4 | Docs | `ADR-0025-oc-keyring-multi-account-rotation.md` | Architecture Decision Record formal con el decision-tree completo. |
+| 5 | Docs | `README.md` en `docs/operations/oc-keyring/` | Índice navegable de toda la documentación. |
+| 6 | Incident | `incidents/2026-09-01-zen-free-rate-limit.md` | Post-mortem completo del incidente del 2026-09-01 07:50 GMT-3. |
+| 7 | Engram | `#3572` (incident) | Registrado el incidente en engram con análisis de causa raíz. |
+
+### Por qué este release
+
+El 2026-09-01 a las 07:50 GMT-3, el owner reportó que los modelos free de
+Zen daban error en ambas cuentas. La investigación reveló que el problema
+NO era de oc-keyring, sino de OpenCode:
+
+- **Free models**: rate limit global (per IP, no per account)
+- **Paid models**: sin balance cargado en Zen
+- **Go models**: monthly cap agotado en ambas cuentas
+
+El comando `probe` se agregó para que en el futuro, ante un error genérico
+de "Provider error" del cliente de OpenCode, se pueda diagnosticar
+directamente en segundos sin tener que abrir un issue ni adivinar.
+
+### Lecciones
+
+1. El probe directo al API reveló el problema en 2 minutos. Sin él,
+   hubiéramos estado adivinando.
+2. El rate limit de free models en OpenCode es compartido (per IP),
+   no por cuenta. Rotar entre cuentas NO ayuda.
+3. Los paid models y Go tienen cuentas independientes; rotar SÍ ayuda
+   cuando una cuenta se queda sin cupo.
+4. El cliente de OpenCode Desktop muestra "Provider error" para
+   cualquier fallo, ocultando el código HTTP real. El `probe` resuelve
+   eso mostrando el error exacto.
+
+### Compatibilidad
+
+- 100% backwards compatible con v1.0.0.
+- Nuevos comandos son aditivos (no cambian comportamiento existente).
+- `opencode.json` y `auth.json` no se modifican.
+
 ## v1.0.0 — 2026-08-31
 
 ### Resumen ejecutivo

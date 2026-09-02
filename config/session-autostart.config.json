@@ -20,6 +20,7 @@
         "script": "src/core/process-hygiene.ts",
         "args": "--apply --quiet",
         "required": false,
+        "critical": true,
         "phase": 1,
         "skipOnFailure": true,
         "timeout": 30000,
@@ -33,6 +34,7 @@
         "script": "src/ml/model-enforcer.ts",
         "args": "--apply",
         "required": true,
+        "critical": true,
         "phase": 0,
         "description": "Enforce free model (opencode/mimo-v2.5-free) when credits exhausted"
       },
@@ -50,6 +52,7 @@
         "script": "src/infrastructure/bootstrap-symlink.ts",
         "args": "",
         "required": true,
+        "critical": true,
         "phase": 0,
         "description": "Auto-create @gentle-vanguard/core symlink for module resolution"
       },
@@ -59,6 +62,7 @@
         "script": "src/session/session-cleanup-start.ts",
         "args": "--quiet --skip-cache-flush --skip-compression",
         "required": true,
+        "critical": true,
         "phase": 0,
         "description": "Initialize session ID and create session file (TS)"
       },
@@ -70,6 +74,16 @@
         "args": "-Quiet -SkipSessionInit -SkipCacheFlush",
         "required": false,
         "description": "Cleanup ligero al inicio (lazy): remueve sesiones stale >8h y cierra sesiones huerfanas. -SkipSessionInit impide regenerar la sesion que session-manager (phase 0) ya creo; -SkipCacheFlush evita resetear los caches de tokens que el daemon token-ingest esta escribiendo."
+      },
+      {
+        "id": "session-retention",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/session/session-retention.ts",
+        "args": "prune",
+        "required": false,
+        "phase": 95,
+        "description": "Session retention - prune old sessions, checkpoints, backups according to retention policy (max 10 sessions, 5 checkpoints, 3 backups)"
       },
       {
         "id": "github-bypass",
@@ -102,6 +116,7 @@
         "script": "src/knowledge/engram-policy.ts",
         "args": "",
         "required": true,
+        "critical": true,
         "description": "Verify Engram is installed and running (TS)"
       },
       {
@@ -1079,5 +1094,16 @@
     "maxAgeHours": 24,
     "statusesToClean": ["active", "orphaned", "ended"],
     "description": "Clean up sessions left in 'active' status after maxAgeHours (crash recovery)"
+  },
+  "retention": {
+    "enabled": true,
+    "maxSessionFiles": 10,
+    "maxCheckpointsPerSession": 5,
+    "maxBackups": 3,
+    "maxCloseReports": 20,
+    "sessionAgeThresholdDays": 30,
+    "highScoreThreshold": 80,
+    "extraHighScoreSessions": 5,
+    "description": "Session retention policies - automatic cleanup to prevent disk bloat"
   }
 }

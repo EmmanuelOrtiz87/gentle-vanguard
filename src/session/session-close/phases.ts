@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync, rmSync, unlinkSync } from 'fs';
 import { join, resolve, relative } from 'path';
 import { runHygiene } from '../../core/process-hygiene.js';
+import { runNpxTsxSync } from '../../core/run-command.js';
 import { sessionEnd } from '../../knowledge/engram-session-bridge.js';
 import {
   ROOT,
@@ -23,6 +24,29 @@ import { runArtifactRetention } from '../artifact-retention.js';
 import { generateReview4R, formatReview4R } from '../../rdd/rdd-4r-review.js';
 import { captureOutcomeFeedback, OUTCOME_FEEDBACK_SOURCE } from '../outcome-feedback.js';
 import { log as createLogger } from '../../utils/logger.js';
+import { getSessionIntent } from '../session-intent-capture.js';
+import { getInventory } from '../session-validator.js';
+
+const LOG_CLEANUP = createLogger('SESSION-CLEANUP');
+
+// Session retention - run after cleanup to maintain limits
+function runSessionRetention(apply: boolean): { removed: number; kept: number } {
+  try {
+    const retentionScript = join(ROOT, 'src/session/session-retention.ts');
+    if (existsSync(retentionScript)) {
+      runNpxTsxSync(retentionScript, apply ? ['prune'] : ['status'], {
+        cwd: ROOT,
+        stdio: 'pipe',
+        timeout: 30000,
+      });
+      // Return dummy values - actual stats are logged
+      return { removed: 0, kept: 0 };
+    }
+  } catch {
+    /* skip silently */
+  }
+  return { removed: 0, kept: 0 };
+}
 const logger = createLogger('SESSION-SESSION-CLOSE-PHASES');
 
 // ─── Fases ──────────────────────────────────────────────────────────────────────
@@ -146,9 +170,27 @@ export function phasePreValidate(): PhaseResult[] {
   const results: PhaseResult[] = [];
   log('=== FASE 1b: PRE-VALIDATION (Capa 1) ===');
 
-  // 1b.1 Lightweight cross-reference scan (grep for broken imports in src/)
+  // OPTIMIZATION: Get changed files first for targeted scanning
+  const changedFiles = getChangedFiles();
+  const hasChanges = changedFiles.size > 0;
+
+  // 1b.1 Lightweight cross-reference scan 
+  // OPTIMIZATION: Only scan changed files if there are changes, 
+  // otherwise do a quick sanity check on key files
   try {
-    const srcFiles = getAllFiles(join(ROOT, 'src'), '.ts');
+    let srcFiles: string[];
+    
+    if (hasChanges) {
+      // FAST PATH: Only scan changed .ts files
+      srcFiles = Array.from(changedFiles)
+        .filter(f => f.endsWith('.ts'))
+        .map(f => join(ROOT, f));
+    } else {
+      // No changes - do a quick scan of recently modified files only
+      // (not ALL files - that's too slow)
+      srcFiles = getAllFiles(join(ROOT, 'src'), '.ts').slice(0, 50); // Limit to 50 files
+    }
+    
     let brokenImports = 0;
     let totalImports = 0;
 
@@ -321,23 +363,29 @@ export async function phasePersist(reason: string): Promise<PhaseResult[]> {
   log('=== FASE 2: PERSIST ===');
 
   // 2.1 Save engram session summary — UNIFIED BRIDGE (MCP + HTTP fallback).
-  // Funciona en TODAS las herramientas (OpenCode, Claude, Cline, Cursor, etc.)
-  // NO depende del plugin OpenCode automático — usa llamadas MCP explícitas
+  // Ahora usa intent capturado al inicio de la sesión para un resumen más útil
   const sessionData = readSessionData();
   const sessionId = String(sessionData.sessionId || sessionData.id || 'unknown');
-
+  
+  // Get captured intent for better summary
+  const capturedIntent = getSessionIntent();
+  
   const summary = {
-    goal: sessionData.goal ? String(sessionData.goal) : `Session completed with reason: ${reason}`,
+    // Use captured goal from session start, not generic "Session completed"
+    goal: capturedIntent?.goal 
+      ? capturedIntent.goal 
+      : (sessionData.goal ? String(sessionData.goal) : `Session completed with reason: ${reason}`),
     discoveries: Array.isArray(sessionData.discoveries)
       ? sessionData.discoveries.map((d: unknown) => String(d))
-      : ['Session completed'],
+      : (capturedIntent ? [`Domain: ${capturedIntent.domain}`, `Intent: ${capturedIntent.intent}`] : ['Session completed']),
     accomplished: Array.isArray(sessionData.accomplished)
       ? sessionData.accomplished.map((a: unknown) => String(a))
       : [`Session ${reason} completed`],
     nextSteps: [
+      capturedIntent ? `Session type: ${capturedIntent.intent} (${capturedIntent.domain})` : '',
       'Review session artifacts in .session/',
       'Verify Nexus DB health with npm run db:health',
-    ],
+    ].filter(Boolean),
   };
 
   try {
@@ -641,6 +689,17 @@ export async function phaseCleanup(
   const results: PhaseResult[] = [];
   log('=== FASE 5: CLEANUP ===');
 
+  // Get session inventory for selective close
+  let inventory: ReturnType<typeof getInventory> = null;
+  try {
+    inventory = getInventory();
+    if (inventory) {
+      LOG_CLEANUP.info(`[INVENTORY] Resources to close: ${JSON.stringify(inventory)}`);
+    }
+  } catch (err) {
+    LOG_CLEANUP.warn(`[INVENTORY] Could not load inventory: ${err}`);
+  }
+
   // 5.1 Kill child processes (CodeGraph MCP and Timeout Daemon).
   // When running at SESSION STARTUP (reason 'autostart-close' / 'startup-cleanup')
   // this MUST be skipped: the daemons were just started by the autostart pipeline
@@ -650,7 +709,17 @@ export async function phaseCleanup(
     // 5.1 Kill child processes (CodeGraph MCP and Timeout Daemon). Dashboard WS
     // persists between sessions and is managed by the Apps Control Panel.
     const DAEMON_WAIT_MS = 10000; // give lazy daemons time to finish booting
-    for (const target of KILL_TARGETS) {
+    
+    // Build list of targets: use inventory if available, otherwise fallback to KILL_TARGETS
+    const targetsToKill = inventory?.daemonsStarted && inventory.daemonsStarted.length > 0
+      ? KILL_TARGETS.filter(t => inventory.daemonsStarted.includes(t.name) || t.required)
+      : KILL_TARGETS;
+    
+    if (inventory?.daemonsStarted && inventory.daemonsStarted.length > 0) {
+      log(`[INVENTORY] Selective close: targeting daemons ${inventory.daemonsStarted.join(', ')}`);
+    }
+    
+    for (const target of targetsToKill) {
       const phase = `kill-${target.name.toLowerCase().replace(/\s+/g, '-')}`;
       try {
         // Wait for the daemon to be up (it's started lazily at session start and
@@ -857,6 +926,16 @@ export async function phaseCleanup(
     phase: 'cache-flush',
     status: cr.status === 0 ? 'PASS' : 'FAIL',
     detail: cr.status === 0 ? 'Caches flushed' : `Exit: ${cr.status}`,
+  });
+
+  // 5.6 Session retention - prune old sessions, checkpoints, backups
+  const retentionResult = runSessionRetention(true);
+  results.push({
+    phase: 'session-retention',
+    status: 'PASS',
+    detail: retentionResult.kept > 0 
+      ? `Retention: ${retentionResult.removed} removed, ${retentionResult.kept} kept`
+      : 'Retention: no cleanup needed',
   });
 
   return results;

@@ -13,6 +13,7 @@ import { pathToFileURL } from 'url';
 import { runNpxTsxSync } from '../core/run-command.js';
 import { SessionContextLog } from '../core/session-context-log.js';
 import { receivePendingCloses, closeAckCommand } from './session-close/close-ack.js';
+import { validateSession, registerResource } from './session-validator.js';
 
 const ROOT = resolve(process.cwd());
 
@@ -100,6 +101,12 @@ function initSessionData(): { sid: string; sessionData: Record<string, unknown> 
     cacheHits: 0,
     cacheMisses: 0,
     qualityScore: 100,
+    // NEW: Goal/Intent tracking for better session memory
+    goal: '',
+    intent: '',
+    initialPrompt: '',
+    mentionedFiles: [],
+    domain: '', // e.g., 'implementation', 'research', 'review', 'debugging'
   };
 
   // Create session-current.json for downstream components - ALWAYS
@@ -172,7 +179,7 @@ function flushCaches(sessionDir: string, sessionData: Record<string, unknown>): 
   console.log(`[CLEANUP] Session saved to context-log: ${sessionData.sessionId}`);
 }
 
-export function runCleanup(
+export async function runCleanup(
   opts: {
     workspaceRoot?: string;
     skipOrphanCleanup?: boolean;
@@ -180,13 +187,30 @@ export function runCleanup(
     skipCompression?: boolean;
     skipSessionInit?: boolean;
     quiet?: boolean;
+    captureIntent?: string;
   } = {},
-): boolean {
+): Promise<boolean> {
   const repoRoot = opts.workspaceRoot ?? ROOT;
   const sessionDir = join(repoRoot, '.session');
   const sessionDir2 = join(repoRoot, 'session');
   const skipSessionInit = opts.skipSessionInit ?? false;
   let sessionData: Record<string, unknown> | null = null;
+
+  // ─── Session Validation (NEW) ───────────────────────────────────────────────
+  // Validate session state before proceeding - detect nested sessions, zombies, etc.
+  try {
+    const validation = await validateSession();
+    log(`[SESSION-VALIDATOR] ${validation.message}`);
+    
+    if (validation.recommendation === 'cleanup-first') {
+      log('[SESSION-VALIDATOR] Running cleanup before session init...');
+      // Clean stale sessions first
+      removeStaleSessions(sessionDir);
+      removeStaleSessions(sessionDir2);
+    }
+  } catch (e) {
+    warn(`Session validation failed (non-blocking): ${e}`);
+  }
 
   // Initialize session data - ALWAYS unless the caller requests a pure cleanup
   // pass (skipSessionInit). The lazy autostart `session-cleanup` step uses this
@@ -198,6 +222,27 @@ export function runCleanup(
     const init = initSessionData();
     sessionData = init.sessionData;
     ok(`Session initialized: ${init.sid}`);
+    
+    // Register session resources placeholder - will be populated during session
+    try {
+      registerResource('cache', 'session-init');
+    } catch {
+      // Non-blocking
+    }
+    
+    // Capture session intent if provided (from user's first prompt)
+    if (opts.captureIntent) {
+      try {
+        // Dynamic import para evitar dependencia circular
+        const intentModule = await import('./session-intent-capture.js');
+        const intent = intentModule.extractIntent(opts.captureIntent);
+        const sessionFile = join(sessionDir, 'session-current.json');
+        intentModule.updateSessionWithIntent(sessionFile, intent);
+        log(`Intent captured: ${intent.intent} (${intent.domain})`);
+      } catch (e) {
+        warn(`Failed to capture intent: ${e}`);
+      }
+    }
   }
 
   if (!opts.skipOrphanCleanup) {
@@ -374,7 +419,14 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       case '-Quiet':
         opts.quiet = true;
         break;
+      case '-CaptureIntent':
+        // Capture the rest of the args as the user prompt
+        opts.captureIntent = args.slice(i + 1).join(' ');
+        break;
     }
   }
-  runCleanup(opts);
+  runCleanup(opts).catch(e => {
+    console.error('Cleanup failed:', e);
+    process.exit(1);
+  });
 }

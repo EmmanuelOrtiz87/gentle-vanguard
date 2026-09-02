@@ -103,8 +103,14 @@ dark/light (`--gv-*`), shell (`.gv-grid-bg/.gv-glow-a/b/.gv-topbar/.gv-view-tabs
 controles (`.gv-btn` pill gradiente, `.gv-icon-btn`, `.gv-lang-dropdown`), `.gv-view-fade`
 (transición de vista 0.28s), `.gv-footer`, breakpoints 640/1024px.
 
-- **Logo oficial**: `logo.svg` (monograma gradiente + glow) — copia en `public/` de cada app,
-  `<img class="gv-brand-logo">` a 32px. Wordmark "Gentle**Vanguard**" en Orbitron (displayFont).
+- **Logo oficial (v2.1)**: `assets/logo.svg` = monograma **v1** (mejor visibilidad) con gradiente
+  **v2** #A78BFA→#22D3EE + variantes `logo-mono-light/dark.svg` y `logo-icon.svg` (favicon 16px).
+  Copia en `public/` de cada app, `<img class="gv-brand-logo">` a 32px. Wordmark
+  "Gentle**Vanguard**" en Space Grotesk (displayFont oficial — ver `docs/brand/BRAND-KIT.md`).
+- **Design Hub** (`apps/design-hub`, :8095): app oficial para gestionar el sistema de diseño
+  (token editor con Save/Cancel/history, componentes, assets, docs). Experimentos de comparación
+  v1/v2/v3 en `src/labs/` (no son parte del sistema oficial). Doc integral:
+  `docs/design/05-design-hub.md`.
 - **Reglas**: prefijo `--gv-*` RESERVADO al canónico (apps usan su propio prefijo, ej. `--dash-*`);
   apps vanilla/estáticas sirven el canónico por ruta o snapshot documentado — nunca redefinir
   `.gv-*`.
@@ -112,6 +118,48 @@ controles (`.gv-btn` pill gradiente, `.gv-icon-btn`, `.gv-lang-dropdown`), `.gv-
   `localStorage gv-cc-theme` / `gv-cc-lang`.
 - Validación visual: `chrome --headless=new --screenshot` + leer la imagen (los checks de valores
   CSS no detectan diferencias de composición).
+
+### design-system v2 — paquete monorepo (ADR-0026)
+
+`packages/gv-design-system/` v2.0.0-alpha.1 es la **consolidación** de los 4 design systems
+divergentes del stack. Source of truth (tokens del paquete): `packages/gv-design-system/src/tokens/tokens.json`.
+Adopta la paleta de `docs/brand/UI-STANDARD-ECOSYSTEM.md` v1.0.0 (#a78bfa / #22d3ee / #121212).
+Reemplaza gradualmente `assets/gv-design-system.css` (legacy v1).
+
+> **CANON DE MARCA (importante):** La fuente canónica de marca del stack es **v2 Premium** en
+> `docs/brand/` (`BRAND-DECISION-2026-09-01.md` + `TOKENS-v2.json` + `BRAND-KIT.md`): bg `#0F1115`,
+> display **Space Grotesk**. El paquete alpha `#121212`/Orbitron aquí es **histórico/deprecado** para
+> marca; su valor es como library de componentes React (Button/Card/etc.). Para cualquier material de
+> marca (HTML/PDF/PPT/Word) usar `docs/brand/BRAND-KIT.md`.
+>
+> **Migración 2026-09-02**: TODAS las apps activas ya corren v2 Premium + logo oficial (etapa 2 del
+> plan `docs/design/06-migration-plan-v2-premium.md`: dashboard, analytics, cms, academy,
+> prompt-studio, archify, command-center, design-hub). `gv-design-studio` y
+> `gv-design-system-catalog` están deprecadas (reemplazadas por Design Hub).
+
+- **Tokens**: json (SoT) + css (custom props) + ts (types) + tailwind.v4.css + tailwind.v3.cjs.
+  Validar: `npx tsx packages/gv-design-system/src/cli/build-tokens.ts`.
+- **7 React components** (Button, Card, Input, Stack, Text, Tag, IconButton) con TS strict,
+  WCAG 2.2. Import path: `@gentle-vanguard/design-system` o `/react`.
+- **MCP server** (stdio, 6 tools: `list_tokens`, `get_component`, `audit_design`, `sync_design`,
+  `get_design_md`, `list_brand_waivers`). Registrado en `config/mcp-registry.json`. Launch:
+  `npx tsx packages/gv-design-system/src/mcp/server.ts`. Cross-agent (opencode, codex, copilot).
+- **3 CLIs**: `audit` (wraps impeccable), `sync` (regenera tokens en consumers), `build-tokens`
+  (validador). Path resolution via `import.meta.url` (NO `process.cwd()`).
+- **Design Hub** `apps/design-hub/` (puerto 8095) — app nativa oficial que unifica el catalog
+  visual (tokens + 7 componentes con tokens reales), el design studio interactivo y el comparador
+  v1/v2. Serve con `python -m http.server 8095 --directory apps/design-hub` y valida con
+  `playwright-cli`. Reemplaza a `gv-design-system-catalog` y `gv-design-studio` (eliminadas).
+- **Skill cross-tool** `.agents/skills/gv-design-system/SKILL.md` (9KB). Install via
+  `npx skills add` (vercel-labs/agent-skills). Carga para opencode, codex, copilot, antigravity, claude code.
+- **Audit baseline**: `npx tsx packages/gv-design-system/src/cli/audit.ts <path>`.
+  Config en `.impeccable/config.json` (flat ignoreValues). Brand waivers inline en CSS con
+  `impeccable-disable <rule>: <reason>`.
+- **Anti-AI-slop** baked-in: sin bounce-easing, sin cream+terracotta, sin near-black+acid-green,
+  sin decorative grids (except brand atmosphere), sin em-dash overuse, sin long line length,
+  sin tiny text (<11px). DS core: `impeccable detect packages/gv-design-system/src` → 0 issues.
+- **Doc canonical**: `packages/gv-design-system/DESIGN.md` (20 secciones, Google spec). Leer primero.
+- **Catalog screenshot baseline**: `gv-catalog-final.png` (165KB, 0 console errors).
 
 ### Modelo operativo
 

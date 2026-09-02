@@ -78,11 +78,21 @@
           "type": "object",
           "properties": {
             "mode": {
-              "enum": ["soft", "hard", "disabled"],
-              "description": "Enforcement mode"
+              "enum": ["soft", "hard", "adaptive", "disabled"],
+              "description": "Enforcement mode (adaptive = thresholds per level in adaptiveModes)"
             },
             "requireEngram": { "type": "boolean" },
-            "nonBlocking": { "type": "boolean" }
+            "nonBlocking": { "type": "boolean" },
+            "adaptiveModes": {
+              "type": "object",
+              "properties": {
+                "soft": { "type": "object" },
+                "warn": { "type": "object" },
+                "strict": { "type": "object" },
+                "emergency": { "type": "object" }
+              },
+              "description": "Per-level thresholds & actions for adaptive enforcement mode"
+            }
           }
         },
         "notifications": {

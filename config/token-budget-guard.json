@@ -1,8 +1,8 @@
 {
   "$schema": "./token-budget-guard-schema.json",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Token budget configuration — SINGLE SOURCE OF TRUTH. This file is the authoritative config for all token budgeting across the stack.",
-  "last_updated": "2026-08-20",
+  "last_updated": "2026-09-01",
 
   "routingDowngrade": {
     "enabled": true,
@@ -13,7 +13,7 @@
   },
 
   "tokenBudget": {
-    "version": "2.0.0",
+    "version": "3.0.0",
     "limits": {
       "daily": 5000000,
       "perSession": 3000000,
@@ -29,9 +29,31 @@
       "metricsPath": "docs/sessions/metrics/token-guard-usage.csv"
     },
     "enforcement": {
-      "mode": "soft",
+      "mode": "adaptive",
       "requireEngram": false,
-      "nonBlocking": true
+      "nonBlocking": true,
+      "adaptiveModes": {
+        "soft": {
+          "thresholdPct": 70,
+          "action": "log_only",
+          "description": "Normal operation - logs usage"
+        },
+        "warn": {
+          "thresholdPct": 85,
+          "action": "notify",
+          "description": "Notifications + banner displayed"
+        },
+        "strict": {
+          "thresholdPct": 95,
+          "action": "block_new_tasks",
+          "description": "Blocks new subagent delegations"
+        },
+        "emergency": {
+          "thresholdPct": 100,
+          "action": "critical_only",
+          "description": "Only critical operations allowed"
+        }
+      }
     },
     "notifications": {
       "enabled": true,

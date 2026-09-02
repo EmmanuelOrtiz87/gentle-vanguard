@@ -508,6 +508,46 @@ async function main() {
   // but never blocks the pipeline — soft WARN only.
   await checkLoopGuardSoft();
 
+  // ─── Session Validation (NEW) ───────────────────────────────────────────────
+  // Smart validation before proceeding: detect existing sessions, nested starts, etc.
+  let sessionValidationResult: { valid: boolean; recommendation: string; message: string } | null = null;
+  try {
+    const { validateSession } = await import('../session/session-validator.js');
+    sessionValidationResult = await validateSession();
+    
+    LOG.info(`[SESSION-VALIDATOR] ${sessionValidationResult.message}`);
+    
+    // Handle different scenarios
+    if (sessionValidationResult.recommendation === 'reuse') {
+      LOG.info('[SESSION-VALIDATOR] Reusing existing session - lightweight init only');
+      // For reuse: just update timestamp, don't run full pipeline
+    } else if (sessionValidationResult.recommendation === 'cleanup-first') {
+      LOG.warn(`[SESSION-VALIDATOR] ${sessionValidationResult.message} - running cleanup first`);
+      // Run cleanup before proceeding
+      runNpxTsxSync('src/session/session-cleanup-start.ts', ['-Quiet'], { timeout: 60000 });
+    }
+    // 'proceed' = normal startup
+  } catch (err) {
+    LOG.warn(`[SESSION-VALIDATOR] Validation failed (non-blocking): ${err}`);
+    sessionValidationResult = null; // Allow startup to continue
+  }
+
+  // Pre-start checkpoint: create checkpoint BEFORE pipeline runs (for rollback capability)
+  try {
+    const { registerResource } = await import('../session/session-validator.js');
+    const r = runNpxTsxSync(
+      'src/ops/checkpoint-manager.ts',
+      ['create', '--label', 'pre-session-start'],
+      { timeout: 30000 },
+    );
+    if (r.status === 0) {
+      registerResource('checkpoint', 'pre-session-start');
+      LOG.info('[CHECKPOINT] Pre-start checkpoint created for rollback safety');
+    }
+  } catch (err) {
+    LOG.warn(`[CHECKPOINT] Pre-start checkpoint failed (non-blocking): ${err}`);
+  }
+
   // Lock check: only run once per OS user session
   if (!checkLock()) {
     auditLog(
@@ -728,6 +768,13 @@ async function main() {
         } else if (result.success) {
           launched++;
           LOG.info(`  [OK] ${step.id} (lazy started)`);
+          // Register this lazy step in session inventory for selective close
+          try {
+            const { registerResource } = await import('../session/session-validator.js');
+            registerResource('lazyStep', step.id);
+          } catch (err) {
+            LOG.warn(`[INVENTORY] Failed to register lazyStep ${step.id}: ${err}`);
+          }
         } else {
           LOG.info(`  [WARN] ${step.id} (lazy): ${result.error || 'Failed'}`);
         }

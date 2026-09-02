@@ -15,8 +15,8 @@
       "opencode_subagents": ["sdd-design", "sdd-explore"],
       "primary_subagent": "sdd-design",
       "fallback": "general",
-      "skills": ["architecture-governance", "api-design-skill", "database-relational-skill"],
-      "triggers": ["architecture", "design", "sdd", "api design", "database schema"]
+      "skills": ["architecture-governance", "api-design-skill", "database-relational-skill", "impeccable", "brand-design-systems", "design-engineering", "ui-taste", "modern-web-design", "diagram-design"],
+      "triggers": ["architecture", "design", "sdd", "api design", "database schema", "impeccable", "design system", "brand design", "typography", "color palette"]
     },
     "DEV": {
       "name": "Developer",
@@ -45,6 +45,7 @@
       "skills": [
         "testing-skill",
         "playwright",
+        "playwright-cli",
         "conducting-api-security-testing",
         "testing-api-security-with-owasp-top-10",
         "testing-websocket-api-security",
@@ -52,7 +53,7 @@
         "testing-for-system-prompt-leakage",
         "testing-prompt-injection-in-rag-pipelines"
       ],
-      "triggers": ["test", "testing", "qa", "validation", "quality", "judgment day"]
+      "triggers": ["test", "testing", "qa", "validation", "quality", "judgment day", "playwright", "browser test", "visual regression"]
     },
     "OPS": {
       "name": "DevOps",

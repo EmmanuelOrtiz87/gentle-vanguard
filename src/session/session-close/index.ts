@@ -1,7 +1,7 @@
-import { mkdirSync, writeFileSync } from 'fs';
+import { mkdirSync, writeFileSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { guardianCheck, learnFromMistake } from '../session-close-guardian.js';
-import { PhaseResult, LOG, log, ok, warn, SESSION_DIR, runScript } from './helpers.js';
+import { PhaseResult, LOG, log, ok, warn, SESSION_DIR, runScript, getChangedFiles } from './helpers.js';
 import { isStartupClose } from './process.js';
 import { isAuthorizedAutomatedClose } from '../artifact-retention.js';
 import {
@@ -43,10 +43,20 @@ export interface CloseReport {
   overall: 'PASS' | 'PASS_WITH_WARNINGS' | 'FAIL';
 }
 
-export async function runCloseOrchestrator(reason = 'session-end'): Promise<CloseReport> {
+export interface CloseOptions {
+  fastClose?: boolean;
+  skipBackup?: boolean;
+  skipAudit?: boolean;
+  skipVerify?: boolean;
+}
+
+export async function runCloseOrchestrator(reason = 'session-end', options: CloseOptions = {}): Promise<CloseReport> {
+  const { fastClose = false, skipBackup = false, skipAudit = false, skipVerify = false } = options;
+  
   log('═══════════════════════════════════════════');
   log('  SESSION CLOSE ORCHESTRATOR v2.0');
   log(`  Reason: ${reason}`);
+  if (fastClose) log('  Mode: FAST CLOSE (optimized)');
   log('═══════════════════════════════════════════');
 
   // Run pre-validation (Capa 1 — always)
@@ -55,14 +65,18 @@ export async function runCloseOrchestrator(reason = 'session-end'): Promise<Clos
   const isStartup = isStartupClose(reason);
   if (isStartup) log('[STARTUP] Skipping daemon-kill phase (autostart-close)');
 
+  // FAST CLOSE: Skip phases that aren't necessary
   const phases = {
     preClose: phasePreClose(reason),
     preValidate: preValidateResults,
     persist: await phasePersist(reason),
-    backup: phaseBackup(),
-    audit: phaseAudit(),
+    // FAST CLOSE: Skip backup if no significant changes
+    backup: fastClose || skipBackup ? [] : phaseBackup(),
+    // FAST CLOSE: Skip audit for quick closes
+    audit: fastClose || skipAudit ? [] : phaseAudit(),
     cleanup: await phaseCleanup(isStartup, isAuthorizedAutomatedClose(reason)),
-    verify: phaseVerify(),
+    // FAST CLOSE: Skip verify for quick closes
+    verify: fastClose || skipVerify ? [] : phaseVerify(),
   };
 
   const allResults = [
@@ -123,8 +137,38 @@ export async function runCloseOrchestrator(reason = 'session-end'): Promise<Clos
 
 // ─── CLI ────────────────────────────────────────────────────────────────────────
 
+// Fast close flag - optimized path for quick session end
+let isFastClose = false;
+
+// Detect if we should use fast close (no changes detected)
+function shouldUseFastClose(args: string[]): boolean {
+  if (args.includes('--fast') || args.includes('-f')) return true;
+  // Auto-detect: if session was very short (< 2 min) and no files changed
+  const sessionFile = join(SESSION_DIR, 'session-current.json');
+  try {
+    const data = JSON.parse(readFileSync(sessionFile, 'utf-8'));
+    const startTime = new Date(data.startTime || data.sessionStartTime || Date.now()).getTime();
+    const sessionDuration = Date.now() - startTime;
+    const shortSession = sessionDuration < 2 * 60 * 1000; // < 2 minutes
+    
+    if (shortSession && args.includes('--auto-fast')) {
+      const changedFiles = getChangedFiles();
+      return changedFiles.size === 0;
+    }
+  } catch {
+    // ignore
+  }
+  return false;
+}
+
 export async function main() {
   const args = process.argv.slice(2);
+  
+  // Check for fast close mode
+  isFastClose = shouldUseFastClose(args);
+  if (isFastClose) {
+    LOG.info('[FAST-CLOSE] Using optimized close path');
+  }
 
   // ─── Guardian Protection ────────────────────────────────────────────────────
   // Detect previous informal close attempts before proceeding with the official
@@ -219,11 +263,45 @@ export async function main() {
   }
 
   let reason = 'session-end';
+  const closeOptions: CloseOptions = {};
+  
+  // Parse close options
   for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--reason' && i + 1 < args.length) reason = args[++i];
+    if (args[i] === '--reason' && i + 1 < args.length) {
+      reason = args[++i];
+    } else if (args[i] === '--fast' || args[i] === '-f') {
+      closeOptions.fastClose = true;
+    } else if (args[i] === '--skip-backup') {
+      closeOptions.skipBackup = true;
+    } else if (args[i] === '--skip-audit') {
+      closeOptions.skipAudit = true;
+    } else if (args[i] === '--skip-verify') {
+      closeOptions.skipVerify = true;
+    }
   }
 
-  const report = await runCloseOrchestrator(reason);
+  // Auto-detect fast close for short sessions with no changes
+  if (args.includes('--auto-fast')) {
+    const sessionFile = join(SESSION_DIR, 'session-current.json');
+    try {
+      const data = JSON.parse(readFileSync(sessionFile, 'utf-8'));
+      const startTime = new Date(data.startTime || data.sessionStartTime || Date.now()).getTime();
+      const sessionDuration = Date.now() - startTime;
+      const shortSession = sessionDuration < 2 * 60 * 1000; // < 2 minutes
+      
+      if (shortSession) {
+        const changedFiles = getChangedFiles();
+        if (changedFiles.size === 0) {
+          closeOptions.fastClose = true;
+          LOG.info('[AUTO-FAST] Short session with no changes detected - using fast close');
+        }
+      }
+    } catch {
+      // ignore - use default close
+    }
+  }
+
+  const report = await runCloseOrchestrator(reason, closeOptions);
 
   // Write report
   mkdirSync(SESSION_DIR, { recursive: true });
