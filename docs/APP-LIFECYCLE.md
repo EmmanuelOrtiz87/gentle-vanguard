@@ -31,10 +31,13 @@ Los scripts detectan el project root (`../../` desde la app), escriben/leen pidf
   / `dashboard-stop.ts`, que gestionan watchdogs) y command-center (`apps/command-center/start.ts`
   / `src/cli/gv.ts cc stop`) reutilizan los mecanismos existentes del monorepo en vez de
   duplicarlos.
-- **Apps deprecadas** (gv-design-studio, gv-design-system-catalog): sin scripts a propósito.
+- **Apps eliminadas** (gv-design-studio, gv-design-system-catalog): borradas del repo en la etapa 4
+  del plan `docs/design/06-migration-plan-v2-premium.md` (reemplazadas por Design Hub).
 - **Puerto dinámico del WS del dashboard**: ver `.runtime/dashboard-ports.json` (default 8080).
 - **Fallback de stop**: si el pidfile no existe o el PID ya murió, `stop.sh` localiza el dueño del
   puerto vía `netstat -ano` y lo termina con `taskkill //F //T` (incluye hijos).
-- Bug conocido (no bloqueante): el API de gv-analytics crashea con `ERR_HTTP_HEADERS_SENT` si se
-  hace `GET /` directamente contra el puerto 4754 (bug de `serveStatic` en
-  `apps/gv-analytics/server/index.ts`); la UI vía Vite :5174 funciona normalmente.
+- Fix (2026-09-01): `GET /` directo contra el puerto 4754 del API de gv-analytics ya no crashea con
+  `ERR_HTTP_HEADERS_SENT` (`serveStatic` escribía headers dos veces al faltar `dist/`).
+  `apps/gv-analytics/server/index.ts` ahora lee el body antes de escribir headers y guarda el
+  fallback con `res.headersSent`: sirve `dist/index.html` (200) o un 404 JSON limpio si falta el
+  build, sin tumbar el proceso. La UI vía Vite :5174 sigue igual.
