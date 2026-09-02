@@ -34,6 +34,7 @@ function makeState(used: number, extra: Partial<BudgetRoutingState> = {}): Budge
   const state = getBudgetRoutingState({
     usedTokensToday: used,
     configOverride: { ...BASE_CONFIG },
+    dailyBudgetOverride: 5_000_000,
   });
   return Object.assign(state, { enabled: true, ...extra });
 }
@@ -90,6 +91,7 @@ test('env GV_BUDGET_ROUTING=0 disables routing', () => {
     const state = getBudgetRoutingState({
       usedTokensToday: 7_500_000,
       configOverride: { ...BASE_CONFIG },
+      dailyBudgetOverride: 5_000_000,
     });
     assert.equal(state.enabled, false);
     assert.equal(state.disabledByEnv, true);

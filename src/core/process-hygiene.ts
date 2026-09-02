@@ -393,6 +393,22 @@ function isRepoScoped(cmdline: string): boolean {
 const repoRootPatternCache = repoRootPattern();
 
 /** Tab-delimited lines: pid \t ppid \t name \t createdIso \t cmdline */
+/**
+ * Pidfile lookup tolerant to path-separator differences (Windows `\` vs POSIX `/`)
+ * and to absolute-vs-relative keys. Order: exact path → separator-normalized →
+ * basename under .runtime.
+ */
+function pidValueFor(pidFiles: Map<string, string>, pidFile: string): string | undefined {
+  const exact = pidFiles.get(pidFile);
+  if (exact !== undefined) return exact;
+  const norm = (p: string): string => p.replace(/\\/g, '/');
+  const wanted = norm(pidFile);
+  for (const [k, v] of pidFiles) {
+    if (norm(k) === wanted || norm(k).endsWith('/' + basename(wanted))) return v;
+  }
+  return undefined;
+}
+
 function scanProcesses(pidFiles: Map<string, string>): {
   repoProcesses: ProcessInfo[];
   livePids: Set<number>;
@@ -519,7 +535,7 @@ function classifyDaemon(
     if (c.match.test(cmdline)) return c;
     // Ambiguous relative shape: only the pidfile owner may claim the class.
     if (c.relativeMatch?.test(cmdline) && c.pidFile) {
-      const raw = pidFiles.get(c.pidFile) ?? pidFiles.get(join('.runtime', basename(c.pidFile)));
+      const raw = pidValueFor(pidFiles, c.pidFile);
       if (raw && /^\d+$/.test(raw) && parseInt(raw, 10) === pid) return c;
     }
   }
@@ -551,8 +567,7 @@ function pickKeeper(
   if (keeperByPort) return keeperByPort;
 
   if (cls.pidFile) {
-    const raw =
-      snap.pidFiles.get(cls.pidFile) ?? snap.pidFiles.get(join('.runtime', basename(cls.pidFile)));
+    const raw = pidValueFor(snap.pidFiles, cls.pidFile);
     if (raw && /^\d+$/.test(raw)) {
       const byPid = instances.find((i) => i.pid === parseInt(raw, 10));
       if (byPid) return byPid;
