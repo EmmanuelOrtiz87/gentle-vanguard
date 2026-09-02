@@ -1,53 +1,60 @@
 {
-  "_comment": "Gentle-Vanguard Brand Identity System — source of truth for all visual assets",
+  "_comment": "Gentle-Vanguard Brand Identity System — brand/visual assets config (CLI colors, banners, social). CANON: docs/brand/BRAND-DECISION-2026-09-01.md — v2 Premium + logo v1 monogram. Full design tokens: docs/brand/TOKENS-v2.json. Official logo assets: assets/logo.svg (root).",
+  "_canon": {
+    "decision": "docs/brand/BRAND-DECISION-2026-09-01.md",
+    "tokens": "docs/brand/TOKENS-v2.json",
+    "brandKit": "docs/brand/BRAND-KIT.md",
+    "logoOfficial": "assets/logo.svg",
+    "logoVariants": ["assets/logo-mono-light.svg", "assets/logo-mono-dark.svg", "assets/logo-icon.svg"]
+  },
   "name": "Gentle-Vanguard",
   "displayName": "GENTLE-VANGUARD",
   "tagline": "ADVANCED TECHNOLOGY SOLUTIONS",
   "subtitleCLI": "-- NATIVE AI COGNITIVE DEVELOPMENT ECOSYSTEM --",
 
   "colors": {
-    "primary": "#00BFFF",
-    "primaryLight": "#4DCFFF",
-    "primaryDark": "#0055BB",
-    "accent": "#A855F7",
-    "accentTeal": "#06B6D4",
-    "background": "#0D1117",
-    "surface": "#1A2035",
-    "surfaceIcon": "#2A2D3A",
-    "circuit": "#1A3050",
-    "textPrimary": "#FFFFFF",
-    "textBrand": "#00BFFF",
-    "textMuted": "#6B7280",
-    "border": "#1E3A5F",
-    "success": "#22C55E",
-    "warning": "#F59E0B",
-    "error": "#EF4444",
-    "selected": "#4DCFFF"
+    "primary": "#22D3EE",
+    "primaryLight": "#67E8F9",
+    "primaryDark": "#0891B2",
+    "accent": "#A78BFA",
+    "accentTeal": "#0891B2",
+    "background": "#0F1115",
+    "surface": "#151921",
+    "surfaceIcon": "#1A1F2A",
+    "circuit": "#252B38",
+    "textPrimary": "#E8EEF4",
+    "textBrand": "#22D3EE",
+    "textMuted": "#8B95A8",
+    "border": "#252B38",
+    "success": "#4ADE80",
+    "warning": "#F4BB4F",
+    "error": "#EE6D75",
+    "selected": "#67E8F9"
   },
 
   "gradients": {
     "logoPrimary": {
-      "from": "#4DCFFF",
-      "to": "#0055BB",
-      "direction": "vertical",
-      "use": "Main GV monogram logo"
+      "from": "#A78BFA",
+      "to": "#22D3EE",
+      "direction": "diagonal",
+      "use": "Official GV monogram (v1 form, v2 gradient) — assets/logo.svg"
     },
     "logoIcon": {
-      "from": "#A855F7",
-      "to": "#06B6D4",
+      "from": "#A78BFA",
+      "to": "#22D3EE",
       "direction": "diagonal",
-      "use": "Favicon / minimalist icon variant"
+      "use": "Favicon / icon variant — assets/logo-icon.svg"
     },
     "githubHeader": {
-      "from": "#A855F7",
-      "to": "#06B6D4",
+      "from": "#A78BFA",
+      "to": "#22D3EE",
       "direction": "diagonal",
       "use": "GitHub repository header logo"
     }
   },
 
   "typography": {
-    "displayFont": "Orbitron, Rajdhani, 'Share Tech Mono', monospace",
+    "displayFont": "'Space Grotesk', Orbitron, sans-serif",
     "bodyFont": "'Inter', 'Segoe UI', sans-serif",
     "monoFont": "'JetBrains Mono', 'Cascadia Code', monospace",
     "weight": {
@@ -56,15 +63,17 @@
       "body": 400
     },
     "letterSpacing": {
-      "display": "0.1em",
-      "heading": "0.05em"
+      "display": "-0.02em",
+      "heading": "0.01em"
     }
   },
 
   "logo": {
-    "primary": "docs/brand/assets/logo-primary.svg",
-    "icon": "docs/brand/assets/logo-icon.svg",
-    "favicon": "docs/brand/assets/favicon.svg",
+    "primary": "assets/logo.svg",
+    "icon": "assets/logo-icon.svg",
+    "favicon": "assets/logo-icon.svg",
+    "monoLight": "assets/logo-mono-light.svg",
+    "monoDark": "assets/logo-mono-dark.svg",
     "bannerDocs": "docs/brand/assets/banner-docs.svg",
     "bannerGithub": "docs/brand/assets/banner-github.svg"
   },
@@ -89,16 +98,16 @@
   },
 
   "cli": {
-    "bannerColor": "#00BFFF",
-    "subtitleColor": "#6B7280",
-    "successColor": "#22C55E",
-    "errorColor": "#EF4444",
-    "warningColor": "#F59E0B",
-    "selectedColor": "#4DCFFF",
-    "overrideColor": "#F59E0B",
-    "mutedColor": "#6B7280"
+    "bannerColor": "#22D3EE",
+    "subtitleColor": "#8B95A8",
+    "successColor": "#4ADE80",
+    "errorColor": "#EE6D75",
+    "warningColor": "#F4BB4F",
+    "selectedColor": "#67E8F9",
+    "overrideColor": "#F4BB4F",
+    "mutedColor": "#8B95A8"
   },
 
-  "version": "1.0.0",
-  "updatedAt": "2026-05-18"
+  "version": "2.0.0",
+  "updatedAt": "2026-09-02"
 }

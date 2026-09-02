@@ -389,12 +389,18 @@ The logo evolves from generic circle+arrow to **node-network + forward motion**:
 
 ### 8.2 Logo Variants
 
+> **ACTUALIZACIÓN 2026-09-01 (decisión del propietario):** el logo oficial es el **monograma v1**
+> (mejor visibilidad y lectura) con el gradiente v2 (#A78BFA→#22D3EE). Los archivos `*-v2.svg`
+> de esta sección (node-network) quedan como **históricos/no oficiales**. Fuente operativa:
+> `assets/logo.svg` (raíz del repo). Ver `BRAND-DECISION-2026-09-01.md`.
+
 | Variant | File | Size | Usage |
 |---------|------|------|-------|
-| Primary | `logo-v2.svg` | Scalable | Headers, documents |
-| Icon | `logo-icon-v2.svg` | 32-64px | Favicon, app icon |
-| Wordmark | `wordmark-v2.svg` | Scalable | Marketing materials |
-| Mono | `logo-mono-v2.svg` | Scalable | Single-color contexts |
+| Primary (OFICIAL) | `assets/logo.svg` | Scalable | Headers, documents |
+| Icon (OFICIAL) | `assets/logo-icon.svg` | 16-64px | Favicon, app icon |
+| Mono light (OFICIAL) | `assets/logo-mono-light.svg` | Scalable | Single-color on dark |
+| Mono dark (OFICIAL) | `assets/logo-mono-dark.svg` | Scalable | Single-color on light |
+| Histórico v2 network | `docs/brand/assets/logo-v2.svg` | — | NO usar (rechazado) |
 
 ### 8.3 Logo Spacing Rules
 

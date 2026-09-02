@@ -1,50 +1,50 @@
 /* Gentle-Vanguard Design Tokens */
 /* Auto-generated from config/brand.json — DO NOT EDIT DIRECTLY */
-/* Generated: 2026-09-02T11:52:26.663Z */
+/* Generated: 2026-09-02T12:42:28.577Z */
 
 :root {
-  --gv-color-primary: #00BFFF;
-  --gv-color-primary-light: #4DCFFF;
-  --gv-color-primary-dark: #0055BB;
-  --gv-color-accent: #A855F7;
-  --gv-color-accent-teal: #06B6D4;
-  --gv-color-background: #0D1117;
-  --gv-color-surface: #1A2035;
-  --gv-color-surface-icon: #2A2D3A;
-  --gv-color-circuit: #1A3050;
-  --gv-color-text-primary: #FFFFFF;
-  --gv-color-text-brand: #00BFFF;
-  --gv-color-text-muted: #6B7280;
-  --gv-color-border: #1E3A5F;
-  --gv-color-success: #22C55E;
-  --gv-color-warning: #F59E0B;
-  --gv-color-error: #EF4444;
-  --gv-color-selected: #4DCFFF;
+  --gv-color-primary: #22D3EE;
+  --gv-color-primary-light: #67E8F9;
+  --gv-color-primary-dark: #0891B2;
+  --gv-color-accent: #A78BFA;
+  --gv-color-accent-teal: #0891B2;
+  --gv-color-background: #0F1115;
+  --gv-color-surface: #151921;
+  --gv-color-surface-icon: #1A1F2A;
+  --gv-color-circuit: #252B38;
+  --gv-color-text-primary: #E8EEF4;
+  --gv-color-text-brand: #22D3EE;
+  --gv-color-text-muted: #8B95A8;
+  --gv-color-border: #252B38;
+  --gv-color-success: #4ADE80;
+  --gv-color-warning: #F4BB4F;
+  --gv-color-error: #EE6D75;
+  --gv-color-selected: #67E8F9;
 
   /* CLI Theme */
-  --gv-cli-banner-color: #00BFFF;
-  --gv-cli-subtitle-color: #6B7280;
-  --gv-cli-success-color: #22C55E;
-  --gv-cli-error-color: #EF4444;
-  --gv-cli-warning-color: #F59E0B;
-  --gv-cli-selected-color: #4DCFFF;
-  --gv-cli-override-color: #F59E0B;
-  --gv-cli-muted-color: #6B7280;
+  --gv-cli-banner-color: #22D3EE;
+  --gv-cli-subtitle-color: #8B95A8;
+  --gv-cli-success-color: #4ADE80;
+  --gv-cli-error-color: #EE6D75;
+  --gv-cli-warning-color: #F4BB4F;
+  --gv-cli-selected-color: #67E8F9;
+  --gv-cli-override-color: #F4BB4F;
+  --gv-cli-muted-color: #8B95A8;
 
   /* Typography */
-  --gv-font-display: Orbitron, Rajdhani, 'Share Tech Mono', monospace;
+  --gv-font-display: 'Space Grotesk', Orbitron, sans-serif;
   --gv-font-body: 'Inter', 'Segoe UI', sans-serif;
   --gv-font-mono: 'JetBrains Mono', 'Cascadia Code', monospace;
   --gv-font-weight-display: 700;
   --gv-font-weight-heading: 600;
   --gv-font-weight-body: 400;
-  --gv-letter-spacing-display: 0.1em;
-  --gv-letter-spacing-heading: 0.05em;
+  --gv-letter-spacing-display: -0.02em;
+  --gv-letter-spacing-heading: 0.01em;
 
   /* Gradients */
-  --gv-gradient-logo-primary: linear-gradient(to bottom, #4DCFFF, #0055BB);
-  --gv-gradient-logo-icon: linear-gradient(135deg, #A855F7, #06B6D4);
-  --gv-gradient-github-header: linear-gradient(135deg, #A855F7, #06B6D4);
+  --gv-gradient-logo-primary: linear-gradient(135deg, #A78BFA, #22D3EE);
+  --gv-gradient-logo-icon: linear-gradient(135deg, #A78BFA, #22D3EE);
+  --gv-gradient-github-header: linear-gradient(135deg, #A78BFA, #22D3EE);
 
   /* Brand */
   --gv-brand-name: "GENTLE-VANGUARD";

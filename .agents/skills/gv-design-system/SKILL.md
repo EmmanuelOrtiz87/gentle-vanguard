@@ -6,20 +6,27 @@ version: 2.0.0-alpha.1
 
 # Gentle-Vanguard Design System v2
 
-Native design system for the Gentle-Vanguard ecosystem. Source of truth: `packages/gv-design-system/` in the monorepo. Cross-tool compatible (opencode, codex, copilot, antigravity, etc) via vercel-labs/agent-skills install.
+Native design system for the Gentle-Vanguard ecosystem. Cross-tool compatible (opencode, codex, copilot, antigravity, etc) via vercel-labs/agent-skills install.
+
+> **CANON DE MARCA (2026-09-01):** el diseño oficial es **v2 Premium** (bg `#0F1115`, purple
+> `#a78bfa`, cyan `#22d3ee`, Space Grotesk display) con **logo v1 monogram** (gradiente v2).
+> Fuentes canónicas: `docs/brand/BRAND-DECISION-2026-09-01.md` → `docs/brand/BRAND-KIT.md` →
+> `docs/brand/TOKENS-v2.json`. Logo operativo: `assets/logo.svg` (+ mono/icon en `assets/`).
+> Herramienta oficial: Design Hub (`apps/design-hub`, :8095). El paquete `packages/gv-design-system`
+> es SOLO library de componentes React; su tema `#121212`/Orbitron está deprecado para marca.
 
 ## When to use this skill
 
-- Building or refactoring ANY UI in `apps/*/` (gv-analytics, academy-web, content-cms, prompt-studio, archify, web-dashboard when migrated).
+- Building or refactoring ANY UI in `apps/*/` (gv-analytics, academy-web, content-cms, prompt-studio, archify, web-dashboard).
 - Generating landing pages, dashboards, forms, settings panels, modals, tables, lists.
 - Reviewing/auditing existing UI for brand compliance.
-- Migrating from legacy tokens (`#00bfff`, `#a855f7`, `#0d1117`) to v2 (`#22d3ee`, `#a78bfa`, `#121212`).
+- Migrating from legacy tokens (`#00bfff`, `#a855f7`, `#0d1117`, alpha `#121212`) to v2 Premium (`#22d3ee`, `#a78bfa`, `#0f1115` — full set in `docs/brand/TOKENS-v2.json`).
 - Producing designs that avoid AI slop (purple gradients on dark, cream/terracotta, decorative grids, bounce easing, em-dash overuse).
 
 ## Setup
 
-1. Read `packages/gv-design-system/DESIGN.md` first — it is the canonical reference for the entire ecosystem. Internalize: identity, colors, typography, components, anti-patterns, theming.
-2. If MCP `gv-design-system` is available, prefer it for token/component queries. Otherwise use the npm package: `import { tokens, Button, Card } from '@gentle-vanguard/design-system'`.
+1. Read `docs/brand/BRAND-KIT.md` first — it is the operational entry point for the official brand. For deep component reference: `packages/gv-design-system/DESIGN.md`.
+2. If MCP `gv-design-system` is available, prefer it for component queries. For official tokens use `docs/brand/TOKENS-v2.json` (the package theme is historic for brand).
 3. After generating or modifying UI, run `impeccable detect <path>` to catch anti-patterns.
 
 ## Core principles (apply unconditionally)
