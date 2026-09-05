@@ -53,10 +53,26 @@ Posicionamiento: _"resultados de nivel experto sin escribir nada desde cero"_.
   `?category=`, chips de filtro en la UI de biblioteca y badge violeta en cada card.
 - Circuito verificado en vivo: POST con categoría → filtro → facet → delete.
 
-## 4. Pendiente (no bloqueante)
+## 4. Evolución v4 (2026-09-05) — de biblioteca a Gem Manager nativo
 
-- Contenido: precargar 10-20 prompts GV de alta calidad por categoría (los nuestros, no copiados de
-  Alpacka) para que el facet no nazca vacío — mejor desde uso real primero.
-- Gemas: sigue esperando la doc del usuario (video B7BY3TugqPA) para ampliar la guía.
+Con la evolución v4, Prompt Studio absorbe el siguiente nivel de las herramientas de referencia
+(prompts.chat: librería navegable con detalle; alpackaai: títulos outcome-driven + freemium) y lo
+supera con capacidades de plataforma:
+
+1. **Pool por defecto curado de 12 gemas GV** (títulos outcome-driven, una por categoría benchmark)
+   — la biblioteca ya no nace vacía ni depende del usuario (pendiente histórico §4 resuelto).
+2. **Gemas como asistentes reutilizables** con modelo propio + chat operativo nativo (Gemini API,
+   `system_instruction`).
+3. **Convertir prompt → gema** en un clic (el generador estructurado alimenta las instrucciones).
+4. **Login con Google (OAuth)** opcional y **API key de Gemini** opcional — todo local-first sin
+   nada de esto.
+5. Research Gemas Gemini (no hay API pública de CRUD): documentado en
+   `docs/reference/PROMPT-STUDIO-GEMS.md` con el diseño local-first + conector Google.
+
+## 5. Pendiente (no bloqueante)
+
+- Ampliar pool a 8-10 gemas por categoría con uso real.
+- Export/import de gemas como plantillas JSON (alternativa robusta al sync frágil por cookies).
+- OAuth completo (redirect con client ID) para login Google sin pegar token manual.
 - Si algún día se comercializa la biblioteca, el patrón freemium del benchmark ya está documentado
   aquí (F5 MASTER).
