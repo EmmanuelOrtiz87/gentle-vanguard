@@ -79,7 +79,7 @@ CREATE TABLE gem_versions (      -- historial snapshot inmutable
 | Constructor de CV anti-ATS | Empleo | CV genérico → CV que pasa filtros |
 | Director de imagen AI | Imagen | idea visual → prompt de imagen reutilizable |
 
-## 4. API REST nueva (server.ts)
+## 4. API REST v4.1 (server.ts)
 
 | Endpoint | Método | Descripción |
 | -------- | ------ | ----------- |
@@ -87,44 +87,80 @@ CREATE TABLE gem_versions (      -- historial snapshot inmutable
 | `/api/gems` | POST | crear (origin local/imported) |
 | `/api/gems/:id` | GET/PUT/DELETE | leer/editar/eliminar (defaults → 403) |
 | `/api/gems/:id/duplicate` | POST | copiar una predefinida a local editable |
-| `/api/gems/:id/chat` | POST | chat con `system_instruction` de la gema |
+| `/api/gems/:id/chat` | POST | chat con `system_instruction` de la gema — `{ provider: 'stack' \| 'gemini', message }` |
 | `/api/gems/:id/versions[/:vid][/restore]` | GET/POST | historial + restore |
+| `/api/gems/import-gemini` | POST | import real de tus gemas de Google (`__Secure-1PSID` cookie) — experimental |
 | `/api/auth/status` | GET | sesión Google activa |
 | `/api/auth/google` | POST | verificar ID token (`tokeninfo`) → sesión |
 | `/api/auth/logout` | POST | cerrar sesión |
-| `/api/gemini/status` | GET | ¿hay API key de Gemini configurada? |
-| `/api/gemini/key` | POST | guardar API key (`.runtime/prompt-studio/gemini-key.json`) |
+| `/api/gemini/status` | GET | key configurada + `{ keyConfigured, keyValid, models[] }` (valida en vivo) |
+| `/api/gemini/key` | POST | guardar API key — **valida** contra la API antes de aceptarla (400 si inválida) |
 
 Regla de integridad: las gemas `origin='default'` **no** pueden editarse ni eliminarse (403 con
 mensaje "duplicala primero"). El historial versiona `name/instructions/description/category/tags/model`.
 
-## 5. UI (v4)
+### Chat multi-proveedor (v4.1)
 
-- Pestaña "Guías" **eliminada** (reemplazada por "Gemas"). Las guías de uso quedan implícitas en
-  la ayuda de la vista y en el flujo de conversión prompt→gema.
-- Vista **Gemas**: conectores (estado Google + estado API key Gemini), búsqueda libre, chips de
-  origen (Todas/Tuyas/Pool) y categoría, editor (crear/editar), lista con badges de origen,
-  acciones por origen (default: duplicar; local: editar/eliminar), **chat nativo** embebido
-  con la gema seleccionada.
+| Proveedor | Mecanismo | Requisito |
+| --------- | --------- | --------- |
+| `stack` | `opencode run -m opencode/big-pickle --format json` (binario real winget/pnpm) | ninguno |
+| `gemini` | API de Gemini con `system_instruction` de la gema | API key (validada en vivo) |
+
+**Fallback de modelos Gemini**: si el modelo de la gema responde 404/503 (retirado o sobrecarga),
+se reintenta automáticamente con la cadena verificada:
+`gemini-flash-lite-latest` → `gemini-flash-latest` → `gemini-pro-latest` → `gemini-3.6-flash`.
+> ⚠️ Verificado 2026-09-05: Google **retiró** `gemini-2.0-flash`, `gemini-2.5-flash` y
+> `gemini-2.5-flash-lite` (404). El pool usa `gemini-flash-lite-latest` (estable, 200).
+
+## 5. UI (v4.1)
+
+- Pestaña "Guías" **eliminada** (reemplazada por "Gemas").
+- **Vista Gemas**:
+  - **Conectores**: selector de proveedor de chat (Modelo del stack big-pickle / Gemini con
+    validación en vivo y contador de modelos), estado de la API key con feedback real
+    (`✅ X modelos` / `❌ rechazada`), e **"Importar mis gemas de Google"** (cookie, con estado
+    de progreso y resultado).
+  - **Filtros de dos filas etiquetadas**: "Origen" (Todas/Tuyas/Pool/Importadas) y "Categoría"
+    (con su propio "Todas") — sin duplicados, combinables entre sí.
+  - **Cards clickeables** → **modal de detalle** con el prompt completo (instrucciones), badges
+    y acciones: **Probar en chat**, **Duplicar/Editar**, **Eliminar** (no-defaults).
+  - **Chat embebido (Gem Space)**: historial, toggle Stack/Gemini, etiqueta del provider/modelo
+    en cada respuesta, mensaje vacío contextual, estados de error.
 - **Convertir prompt actual en gema**: desde el creador, un botón abre el editor de gema
   precargado con el prompt generado (instrucciones = prompt).
 
-## 6. Seguridad / privacidad
+## 6. Import real de gemas de Google (v4.1, experimental)
 
-- `auth.json` y `gemini-key.json` viven en `.runtime/prompt-studio/` (gitignored).
+Protocolo reverse-engineered (port de `HanaokaYuzu/Gemini-API`, Apache-2.0) — **no es API oficial**:
+
+1. `GET https://gemini.google.com/app` con cookie `__Secure-1PSID` → extrae el access token
+   `SNlM0e` (regex `"SNlM0e":\s*"(.*?)"`) + build label/session id/language.
+2. `POST https://gemini.google.com/_/BardChatUi/data/batchexecute` con `f.req` para
+   `LIST_BOTS` (`CNgdBe`): system hidden (`[4,...]`) + custom (`[2,...]`), headers JSPB + cookies.
+3. Parse de la respuesta length-prefixed (`)]}'` + frames); cada gem: `[id, [name, description], [prompt]]`.
+4. Inserción local con `origin='imported'` + `google_id` real + categorización por nombre.
+
+**Limitación**: depende de la cookie de sesión (caducable). Para el resto de operaciones
+(el chat, el CRUD) la app es 100% local. Como no hay API oficial, la UI lo marca como
+experimental.
+
+## 7. Seguridad / privacidad
+
+- `auth.json`, `gemini-key.json` viven en `.runtime/prompt-studio/` (gitignored).
 - La API key y el ID token **nunca** van al repo ni al bundle del frontend.
-- El login con Google solo identifica (email/name/picture) — no da acceso a datos de Gemini web.
-- Todo el CRUD es local; sin llamadas externas salvo el chat (si hay API key) y la verificación
-  del ID token.
+- La cookie `__Secure-1PSID` se envía solo al server local para el import; no se persiste.
+- Todo el CRUD es local; las únicas llamadas externas son el chat (Gemini API o binario
+  opencode local) y la verificación de key.
 
-## 7. Pendiente / siguiente nivel
+## 8. Pendiente / siguiente nivel
 
-- Sync bidireccional real con la cuenta Gemini (cookies) — documentado como opción frágil;
-  preferir export/import de gemas como plantillas JSON.
+- Sync bidireccional (push) de gemas locales hacia la cuenta Gemini aprovechando el mismo
+  protocolo `CREATE_BOT`/`UPDATE_BOT_METADATA`/`DELETE_BOT` ya documentado.
+- Export/import de gemas como plantillas JSON (alternativa robusta a la cookie de sesión).
 - Ampliar pool: 8-10 gemas más por categoría usando uso real.
 - OAuth completo (flujo redirect con client ID configurable) para login sin pegar token manual.
 
-## 8. Referencias
+## 9. Referencias
 
 - Benchmark original: `docs/reference/PROMPT-LIBRARY-BENCHMARK.md`
 - Código: `apps/prompt-studio/server/server.ts`, `apps/prompt-studio/src/App.tsx`,

@@ -69,7 +69,25 @@ supera con capacidades de plataforma:
 5. Research Gemas Gemini (no hay API pública de CRUD): documentado en
    `docs/reference/PROMPT-STUDIO-GEMS.md` con el diseño local-first + conector Google.
 
-## 5. Pendiente (no bloqueante)
+## 5. Evolución v4.1 (2026-09-05) — Gem Space embebido + feedback real
+
+Iteración basada en el uso real de la pantalla de Gemas:
+
+1. **Chat multi-proveedor dentro de la app**: cada gema se usa en un chat embebido (Gem Space)
+   con el **modelo del stack** (`opencode run -m big-pickle`, sin requisitos) o **Gemini** (API
+   key validada en vivo). Respuestas etiquetadas con proveedor + modelo usado.
+2. **Validación de API key en vivo**: al guardar la key se comprueba contra la API de Gemini
+   (feedback `✅`/`❌`); el estado muestra los modelos disponibles.
+3. **Import real de gemas de Google** (experimental, cookie de sesión): lista tus gemas
+   (incluidas las predefinidas ocultas) y las importa localmente — el usuario ya no necesita
+   salir de la app para ver lo que tiene en Gemini.
+4. **UX corregida**: dos filas de filtros etiquetadas (Origen + Categoría), cards clickeables →
+   modal de detalle con el prompt completo y acciones, chat prominente con toggle de proveedor.
+5. **Fallback de modelos Gemini**: ante 404/503 reintenta modelos estables verificados
+   (`gemini-flash-lite-latest` → `gemini-flash-latest` → `gemini-pro-latest` → `gemini-3.6-flash`).
+   ⚠️ Google retiró 2.0/2.5-flash en esta fecha.
+
+## 6. Pendiente (no bloqueante)
 
 - Ampliar pool a 8-10 gemas por categoría con uso real.
 - Export/import de gemas como plantillas JSON (alternativa robusta al sync frágil por cookies).
