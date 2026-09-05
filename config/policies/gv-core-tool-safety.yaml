@@ -1,0 +1,40 @@
+apiVersion: v1
+name: gv-core-tool-safety
+defaultAction: deny
+rules:
+  - name: block-destructive-fs
+    condition: action.type in ['delete', 'truncate', 'drop', 'rm', 'remove']
+    action: deny
+    priority: 100
+    description: "Destructive filesystem operations require explicit human approval."
+  - name: block-credential-access
+    condition: action.target matches '(^|/)(\.env|credentials|secrets|id_rsa|id_ed25519)(/|$)'
+    action: deny
+    priority: 90
+    description: "Access to credential files is denied by default."
+  - name: require-approval-send
+    condition: action.type in ['send_email', 'send_message', 'publish', 'deploy']
+    action: require_approval
+    priority: 80
+    approvers: ["owner"]
+    description: "External communication and deployment require owner approval."
+  - name: block-network-egress-unless-allowed
+    condition: action.type == 'network_egress' and action.target not in ['api.openai.com', 'api.anthropic.com', 'api.github.com']
+    action: deny
+    priority: 70
+    description: "Network egress to unknown hosts is denied."
+  - name: mcp-allowlist
+    condition: action.type == 'mcp_tool' and action.tool not in ['list_skills', 'get_skill', 'search_skills', 'list_tokens', 'get_component', 'audit_design', 'go_to_definition', 'find_references', 'get_hover_info', 'get_completions', 'get_diagnostics', 'get_symbol_info', 'get_file_symbols', 'fetch_url', 'search_web', 'think_sequential', 'get_thought_chain', 'list_thought_chains', 'get_thought_summary']
+    action: deny
+    priority: 60
+    description: "Only allowlisted MCP tools may be invoked."
+  - name: mcp-allow
+    condition: action.type == 'mcp_tool'
+    action: allow
+    priority: 55
+    description: "Allowlisted MCP tools may proceed."
+  - name: allow-safe-read
+    condition: action.type == 'read'
+    action: allow
+    priority: 10
+    description: "Non-credential reads are allowed (credential deny wins by priority)."

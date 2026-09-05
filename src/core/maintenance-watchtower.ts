@@ -55,6 +55,7 @@ import {
   checkHiddenSpawns,
   checkCloudConnectors,
   checkWebCrawler,
+  checkAgentGovernance,
 } from './watchtower/checks-security';
 import {
   checkTracing,
@@ -455,6 +456,7 @@ async function runAllChecks() {
     checkGentleVanguardDb,
     checkModelHealth,
     checkWebCrawler,
+    checkAgentGovernance,
     checkLoopGuard,
     checkGuardrails,
   ];

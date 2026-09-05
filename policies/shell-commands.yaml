@@ -1,0 +1,109 @@
+# Example Policy — Shell Command Security
+# 
+# This policy demonstrates the Policy Engine's capability to enforce
+# security constraints on shell command execution.
+# 
+# USAGE:
+#   const safeShell = govern(shellTool, { policyPath: 'policies/shell-commands.yaml' });
+#   safeShell({ cmd: 'ls' });  // ← Allowed
+#   safeShell({ cmd: 'rm -rf /' });  // ← Denied
+
+apiVersion: governance.toolkit/v1
+kind: Policy
+metadata:
+  name: shell-commands
+  namespace: production
+  labels:
+    tier: critical
+    team: platform
+spec:
+  defaultAction: deny
+  rules:
+    # Block dangerous recursive deletes
+    - name: block-recursive-delete-root
+      condition: "action.type == 'shell_exec' && params.cmd matches '/rm\\s+-rf\\s+\\/?$/'"
+      action: deny
+      description: "Prevent recursive deletion of root filesystem"
+      priority: 100
+
+    # Block deletion of system directories
+    - name: block-system-delete
+      condition: "action.type == 'shell_exec' && params.cmd matches '/rm.*\\/(etc|usr|bin|sbin|lib|boot)/'"
+      action: deny
+      description: "Prevent deletion of system directories"
+      priority: 100
+
+    # Block SSH key access
+    - name: block-ssh-keys
+      condition: "action.type == 'shell_exec' && params.cmd matches '/\\.ssh\\/id_/'"
+      action: deny
+      description: "Prevent access to SSH private keys"
+      priority: 100
+
+    # Block credential file access
+    - name: block-credentials
+      condition: "action.type == 'shell_exec' && params.cmd matches '/\\.(env|config|password|secret)/'"
+      action: deny
+      description: "Prevent access to credential files"
+      priority: 100
+
+    # Allow read operations
+    - name: allow-read-commands
+      condition: "action.type == 'shell_exec' && params.cmd matches '/^(ls|cat|head|tail|grep|find|wc)/'"
+      action: allow
+      description: "Allow safe read commands"
+      priority: 50
+
+    # Allow git operations (but not force-push)
+    - name: allow-git-safe
+      condition: "action.type == 'shell_exec' && params.cmd matches '/^git\\s+(status|log|diff|show|branch|checkout|pull|fetch)/'"
+      action: allow
+      description: "Allow safe git commands"
+      priority: 40
+
+    # Require approval for destructive git
+    - name: require-approval-git-push-force
+      condition: "action.type == 'shell_exec' && params.cmd matches '/git.*push.*-f|force/'"
+      action: require_approval
+      description: "Force push requires approval"
+      approvers:
+        - "senior-dev"
+        - "team-lead"
+      priority: 90
+
+    # Allow npm/yarn safe commands
+    - name: allow-npm-safe
+      condition: "action.type == 'shell_exec' && params.cmd matches '/^(npm|yarn|pnpm)\\s+(install|run|test|build|lint|typecheck)/'"
+      action: allow
+      description: "Allow safe package manager commands"
+      priority: 30
+
+    # Block npm script injection
+    - name: block-npm-script-injection
+      condition: "action.type == 'shell_exec' && params.cmd matches '/npm.*--unsafe|NODE_OPTIONS.*-e|npm.*\`/'"
+      action: deny
+      description: "Prevent npm script injection"
+      priority: 100
+
+    # Allow common dev tools
+    - name: allow-dev-tools
+      condition: "action.type == 'shell_exec' && params.cmd matches '/^(node|npx|tsx|tsc|eslint|prettier|vitest|jest)/'"
+      action: allow
+      description: "Allow development tools"
+      priority: 20
+
+    # Require approval for commands with sudo
+    - name: require-approval-sudo
+      condition: "action.type == 'shell_exec' && params.cmd matches '/^sudo\\s/'"
+      action: require_approval
+      description: "Sudo commands require approval"
+      approvers:
+        - "ops-team"
+      priority: 80
+
+    # Audit network commands (allow but log)
+    - name: audit-network-commands
+      condition: "action.type == 'shell_exec' && params.cmd matches '/^(curl|wget|nc|netcat|telnet|ssh|scp)/'"
+      action: audit
+      description: "Network commands are audited"
+      priority: 10

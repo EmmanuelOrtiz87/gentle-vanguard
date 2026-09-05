@@ -244,6 +244,67 @@ export async function checkHiddenSpawns() {
   }
 }
 
+// ─── Component: Agent Governance (ADR-0027/0028/0029) ────────────────────────
+
+export async function checkAgentGovernance() {
+  if (!quiet) logger.info('  [Agent Governance] Checking...');
+
+  // Policy Engine (ADR-0027)
+  const policySrc = join(ROOT, 'src', 'security', 'policy-engine', 'policy-engine.ts');
+  const policyCfg = join(ROOT, 'config', 'policy-engine.json');
+  const policySchema = join(ROOT, 'config', 'policy-engine.schema.json');
+  const policyTest = join(ROOT, 'tests', 'unit', 'policy-engine.test.ts');
+  payloadFileOk('agent-governance', 'policy engine (src)', policySrc, 'manual', true);
+  payloadFileOk('agent-governance', 'policy config', policyCfg, 'manual', true);
+  payloadFileOk('agent-governance', 'policy schema', policySchema, 'manual', true);
+  payloadFileOk('agent-governance', 'policy tests', policyTest, 'manual', true);
+
+  // MCP Security Gateway (ADR-0028)
+  const mcpSecSrc = join(ROOT, 'src', 'mcp', 'security-gateway', 'mcp-security-gateway.ts');
+  const mcpSecTest = join(ROOT, 'tests', 'unit', 'mcp-security-gateway.test.ts');
+  payloadFileOk('agent-governance', 'mcp security gateway (src)', mcpSecSrc, 'manual', true);
+  payloadFileOk('agent-governance', 'mcp security gateway tests', mcpSecTest, 'manual', true);
+
+  // OWASP Agentic Top 10 (ADR-0029)
+  const owaspSrc = join(ROOT, 'src', 'security', 'owasp', 'owasp-agentic-top10.ts');
+  const owaspTest = join(ROOT, 'tests', 'unit', 'owasp-agentic-top10.test.ts');
+  payloadFileOk('agent-governance', 'owasp mapping (src)', owaspSrc, 'manual', true);
+  payloadFileOk('agent-governance', 'owasp mapping tests', owaspTest, 'manual', true);
+
+  // Integration facade
+  const facadeSrc = join(ROOT, 'src', 'security', 'agent-governance-integration.ts');
+  const facadeTest = join(ROOT, 'tests', 'unit', 'agent-governance-integration.test.ts');
+  payloadFileOk('agent-governance', 'integration facade (src)', facadeSrc, 'manual', true);
+  payloadFileOk('agent-governance', 'integration facade tests', facadeTest, 'manual', true);
+
+  // OWASP coverage from the last generated report (if present)
+  const owaspReport = join(RUNTIME_DIR, 'owasp-agentic-top10.json');
+  if (fileExists(owaspReport)) {
+    try {
+      const report = readJson(owaspReport) as { overallCoverage?: number; strictPass?: boolean };
+      if (typeof report.overallCoverage === 'number') {
+        addResult(
+          'agent-governance',
+          'owasp coverage',
+          report.overallCoverage >= 80 ? 'PASS' : 'WARN',
+          `coverage=${report.overallCoverage}% (strict threshold 80%)`,
+          'manual',
+        );
+      }
+    } catch {
+      addResult('agent-governance', 'owasp coverage', 'FAIL', 'Invalid report JSON', 'manual');
+    }
+  } else {
+    addResult(
+      'agent-governance',
+      'owasp coverage',
+      'WARN',
+      'Report not generated yet (run npm run owasp:top10 -- report)',
+      'manual',
+    );
+  }
+}
+
 // ─── Component: Cloud Connectors ────────────────────────────────────────────
 // NOTE: Cloud connectors deprecated - stack operates in local-only mode
 // This check now verifies local execution mode without cloud dependencies

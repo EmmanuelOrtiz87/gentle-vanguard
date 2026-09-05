@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Policy Engine Configuration",
+  "type": "object",
+  "required": ["version", "defaultAction", "failClosed", "policies"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "type": "string" },
+    "description": { "type": "string" },
+    "defaultAction": { "enum": ["allow", "deny"] },
+    "failClosed": { "type": "boolean" },
+    "policies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "rules"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "defaultAction": { "enum": ["allow", "deny"] },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "condition", "action"],
+              "properties": {
+                "id": { "type": "string" },
+                "name": { "type": "string" },
+                "condition": { "type": "string" },
+                "action": { "enum": ["allow", "deny", "require_approval"] },
+                "approvers": { "type": "array", "items": { "type": "string" } },
+                "severity": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+                "description": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

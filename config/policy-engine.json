@@ -1,0 +1,66 @@
+{
+  "$schema": "./policy-engine.schema.json",
+  "version": "1.0.0",
+  "description": "Deterministic fail-closed policy engine for Gentle-Vanguard agent operations (ADR-0027).",
+  "defaultAction": "deny",
+  "failClosed": true,
+  "policies": [
+    {
+      "id": "gv-core-tool-safety",
+      "name": "Core Tool Safety",
+      "description": "Baseline guardrails for destructive and sensitive tool operations.",
+      "defaultAction": "allow",
+      "rules": [
+        {
+          "id": "block-destructive-fs",
+          "name": "Block destructive filesystem ops",
+          "condition": "action.type in ['delete', 'truncate', 'drop', 'rm', 'remove']",
+          "action": "deny",
+          "severity": "CRITICAL",
+          "description": "Destructive filesystem operations require explicit human approval."
+        },
+        {
+          "id": "block-credential-access",
+          "name": "Block credential file access",
+          "condition": "action.target matches '(^|/)(\\.env|credentials|secrets|id_rsa|id_ed25519)(/|$)'",
+          "action": "deny",
+          "severity": "CRITICAL",
+          "description": "Access to credential files is denied by default."
+        },
+        {
+          "id": "require-approval-send",
+          "name": "Require approval for external sends",
+          "condition": "action.type in ['send_email', 'send_message', 'publish', 'deploy']",
+          "action": "require_approval",
+          "approvers": ["owner"],
+          "severity": "HIGH",
+          "description": "External communication and deployment require owner approval."
+        },
+        {
+          "id": "block-network-egress-unless-allowed",
+          "name": "Block network egress unless explicitly allowed",
+          "condition": "action.type == 'network_egress' and action.target not in ['api.openai.com', 'api.anthropic.com', 'api.github.com']",
+          "action": "deny",
+          "severity": "HIGH",
+          "description": "Network egress to unknown hosts is denied."
+        }
+      ]
+    },
+    {
+      "id": "gv-mcp-tool-policy",
+      "name": "MCP Tool Policy",
+      "description": "Governance for MCP tool invocations.",
+      "defaultAction": "allow",
+      "rules": [
+        {
+          "id": "mcp-allowlist",
+          "name": "MCP tool allowlist",
+          "condition": "action.type == 'mcp_tool' and action.tool not in ['list_skills', 'get_skill', 'search_skills', 'list_tokens', 'get_component', 'audit_design', 'go_to_definition', 'find_references', 'get_hover_info', 'get_completions', 'get_diagnostics', 'get_symbol_info', 'get_file_symbols', 'fetch_url', 'search_web', 'think_sequential', 'get_thought_chain', 'list_thought_chains', 'get_thought_summary']",
+          "action": "deny",
+          "severity": "HIGH",
+          "description": "Only allowlisted MCP tools may be invoked."
+        }
+      ]
+    }
+  ]
+}
