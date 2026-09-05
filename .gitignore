@@ -287,6 +287,13 @@ update-manifest.json
 .test-results/
 # Runtime logs (local only)
 logs/
+
+# Playwright CLI page captures (session runtime artifacts — never commit)
+.playwright-cli/
+
+# Ad-hoc feature screenshots at repo root (validation artifacts — never commit)
+/archify-*.png
+/gv-catalog-*.png
 /apps/
 
 # Local app backups (artifacts, never commit)

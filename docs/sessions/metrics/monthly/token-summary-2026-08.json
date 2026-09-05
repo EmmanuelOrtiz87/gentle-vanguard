@@ -1,43 +1,19 @@
 {
-  "generated_at": "2026-09-02T16:02:13.321Z",
+  "generated_at": "2026-09-05T06:40:40.716Z",
   "period": "2026-08",
   "days": 28,
   "totals": {
-    "input": 558024780,
-    "output": 11864607,
-    "total": 569889387,
-    "cost": 22.029731414999997
+    "input": 505405971,
+    "output": 11472599,
+    "total": 516878570,
+    "cost": 22.862396505
   },
   "daily_avg": {
-    "input": 19929456,
-    "output": 423736,
-    "total": 20353192
+    "input": 18050213,
+    "output": 409736,
+    "total": 18459949
   },
   "by_day": [
-    {
-      "day": "2026-08-04",
-      "input": 86352696,
-      "output": 418958,
-      "total": 86771654,
-      "cost": 0,
-      "sessions": 26
-    },
-    {
-      "day": "2026-08-05",
-      "input": 7308426,
-      "output": 37357,
-      "total": 7345783,
-      "cost": 0,
-      "sessions": 1
-    },
-    {
-      "day": "2026-08-06",
-      "input": 70388709,
-      "output": 842819,
-      "total": 71231528,
-      "cost": 0,
-      "sessions": 34
-    },
     {
       "day": "2026-08-07",
       "input": 2491293,
@@ -216,11 +192,11 @@
     },
     {
       "day": "2026-08-31",
-      "input": 11023569,
-      "output": 688309,
-      "total": 11711878,
+      "input": 11003098,
+      "output": 687681,
+      "total": 11690779,
       "cost": 6.007064434999998,
-      "sessions": 56
+      "sessions": 55
     },
     {
       "day": "2026-09-01",
@@ -232,26 +208,57 @@
     },
     {
       "day": "2026-09-02",
-      "input": 7929751,
-      "output": 226130,
-      "total": 8155881,
+      "input": 32859247,
+      "output": 264638,
+      "total": 33123885,
       "cost": 0,
-      "sessions": 17
+      "sessions": 20
+    },
+    {
+      "day": "2026-09-03",
+      "input": 83166392,
+      "output": 583429,
+      "total": 83749821,
+      "cost": 0,
+      "sessions": 18
+    },
+    {
+      "day": "2026-09-04",
+      "input": 2687490,
+      "output": 160344,
+      "total": 2847834,
+      "cost": 0.8326650900000002,
+      "sessions": 12
+    },
+    {
+      "day": "2026-09-05",
+      "input": 668115,
+      "output": 125473,
+      "total": 793588,
+      "cost": 0,
+      "sessions": 2
     }
   ],
   "by_model": [
     {
       "model": "kimi-2-5",
-      "input": 362592309,
-      "output": 1520936,
-      "total": 364113245,
+      "input": 221030345,
+      "output": 1295006,
+      "total": 222325351,
       "cost": 0
     },
     {
+      "model": "big-pickle",
+      "input": 106225363,
+      "output": 3455294,
+      "total": 109680657,
+      "cost": 5.066973399999999
+    },
+    {
       "model": "deepseek-v4-flash-free",
-      "input": 82131314,
-      "output": 4492976,
-      "total": 86624290,
+      "input": 63763413,
+      "output": 3639608,
+      "total": 67403021,
       "cost": 0
     },
     {
@@ -262,17 +269,10 @@
       "cost": 0
     },
     {
-      "model": "big-pickle",
-      "input": 26704990,
-      "output": 3018853,
-      "total": 29723843,
-      "cost": 5.066973399999999
-    },
-    {
       "model": "GLM-5.3",
-      "input": 17929878,
-      "output": 171262,
-      "total": 18101140,
+      "input": 42576479,
+      "output": 190007,
+      "total": 42766486,
       "cost": 0
     },
     {
@@ -304,10 +304,24 @@
       "cost": 0
     },
     {
+      "model": "qwen3.8-max",
+      "input": 2053525,
+      "output": 122405,
+      "total": 2175930,
+      "cost": 0.8326650900000002
+    },
+    {
       "model": "deepseek-v3-2",
       "input": 1944818,
       "output": 12428,
       "total": 1957246,
+      "cost": 0
+    },
+    {
+      "model": "muse-spark-1.3-contributor-free",
+      "input": 1090623,
+      "output": 108665,
+      "total": 1199288,
       "cost": 0
     },
     {
@@ -319,9 +333,9 @@
     },
     {
       "model": "MiniMax-M3",
-      "input": 382155,
-      "output": 22973,
-      "total": 405128,
+      "input": 382389,
+      "output": 24157,
+      "total": 406546,
       "cost": 0
     },
     {
@@ -351,29 +365,17 @@
       "output": 359,
       "total": 53008,
       "cost": 0
-    },
-    {
-      "model": "gpt-4o",
-      "input": 300,
-      "output": 150,
-      "total": 450,
-      "cost": 0
     }
   ],
   "top_sessions": [
     {
-      "session_id": "ses_032ab08e0ffeKQlGiaWDFdxsfc",
-      "total": 49728832,
+      "session_id": "ses_f9ad3333dffe69XmgefEAyDacD",
+      "total": 78191975,
       "cost": 0
     },
     {
       "session_id": "ses_013919151ffeTyngU07tbWGhc9",
       "total": 34383919,
-      "cost": 0
-    },
-    {
-      "session_id": "ses_02ca82551ffe14Iw8DDgNYZScs",
-      "total": 33898565,
       "cost": 0
     },
     {
@@ -397,18 +399,23 @@
       "cost": 0
     },
     {
+      "session_id": "sess_a7c9b156-c8b1-479d-8cf5-0f26bc838fbc",
+      "total": 24874090,
+      "cost": 0
+    },
+    {
       "session_id": "ses_0207f0f8fffe1PdQfs2EEdI5vq",
       "total": 23248530,
       "cost": 0
     },
     {
-      "session_id": "ses_0356359aaffe16veoXnJ1vHJ5t",
-      "total": 22312530,
+      "session_id": "ses_01d1dfe83ffeC8wm2Is2ZuQB2f",
+      "total": 20229883,
       "cost": 0
     },
     {
-      "session_id": "ses_01d1dfe83ffeC8wm2Is2ZuQB2f",
-      "total": 20229883,
+      "session_id": "ses_011fa1c94ffeTv1GVHiDsJKlGA",
+      "total": 18042750,
       "cost": 0
     }
   ]
