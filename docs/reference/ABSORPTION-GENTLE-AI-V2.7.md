@@ -85,6 +85,13 @@ El orchestrator ahora puede ajustar el presupuesto de steps de una tarea delegad
 del diff actual: `low` → +0, `standard` → +8 (sdd-verify), `high` → +16 (rdd-4r-review). Se
 combina con `recommend-agent --risk-aware` para una delegación completa consciente del riesgo.
 
+### 7. `smallest-route-router` — risk-aware verification automática
+
+El routing orgánico (direct/delegated/sdd) ahora clasifica el diff actual automáticamente y
+agrega `verification` a la `RouteAnalysis` para rutas que tocan código (delegated/sdd/
+collaborative): `low` → `none`, `standard` → `sdd-verify`, `high` → `rdd-4r-review`. El
+orchestrator no necesita flags: la verificación post-apply se decide sola por risk tier.
+
 ## Verificación en vivo (todo ejecutado)
 
 | Verificación | Resultado |
