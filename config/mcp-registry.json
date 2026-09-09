@@ -71,6 +71,16 @@
       "enabled": true,
       "autoStart": false,
       "description": "Gentle-Vanguard design system v2: tokens, components, audit. Tools: list_tokens, get_component, audit_design, sync_design, get_design_md, list_brand_waivers. ADR-0026."
+    },
+    {
+      "name": "context7",
+      "type": "external",
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["@upstash/context7-mcp"],
+      "enabled": true,
+      "autoStart": false,
+      "description": "Context7 MCP (absorbido de Gentle-AI v2.7.0): documentación en vivo de frameworks y librerías (React, Next.js, FastAPI, LangChain, etc.). Tools: resolve-library-id, get-library-docs, search-packges. Requiere red; opt-in."
     }
   ]
 }

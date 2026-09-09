@@ -45,7 +45,15 @@ enriquece la recomendación:
 
 Solo aplica a dominios de código (`code-apply`, `code-review`, `testing`, `general`).
 
-### 3. Bug crítico corregido: `\u005c` en regex literales de `risk-classifier.ts`
+### 3. Context7 MCP — docs de frameworks en vivo (componente opcional)
+
+Lección: el agente necesita documentación actualizada de frameworks sin salir del flujo.
+
+Nativo: server `context7` registrado en `config/mcp-registry.json` (type `external`,
+`npx @upstash/context7-mcp`, `autoStart: false` — opt-in, requiere red). Complementa a
+codegraph (símbolos del repo) con docs externas en vivo (React, Next.js, FastAPI, LangChain…).
+
+### 4. Bug crítico corregido: `\u005c` en regex literales de `risk-classifier.ts`
 
 **21 ocurrencias** de `\u005c` (escape de barra invertida) dentro de regex literales rompían todos
 los patrones:
@@ -60,7 +68,7 @@ los patrones:
 pero **NO se combina con la letra siguiente** — `\u005cs` es `\` + `s` (matchea la secuencia
 literal `\s`), no el whitespace `\s`. Para whitespace real hay que escribir `\s` directo.
 
-### 4. Bug corregido: suma vs max en `categoryScores`
+### 5. Bug corregido: suma vs max en `categoryScores`
 
 El comentario decía "Take max category risk (not sum)" pero el código **sumaba** los scores por
 categoría (`categoryScores[cat] += CATEGORY_RISK[cat]`). Un diff con 9 archivos que mencionan
@@ -70,6 +78,12 @@ peligrosa presente, no por cuántos archivos la comparten.
 Además se refinaron los patrones de auth para reducir falsos positivos: `/token/i` → específicos
 (`access_token`, `api_token`, `refresh_token`, `csrf_token`, `bearer`), quitados `/permission/i`,
 `/role/i`, `/session/i` (→ `session_id/token/key`).
+
+### 6. `adaptive-steps --risk-aware` — presupuesto de steps según risk tier
+
+El orchestrator ahora puede ajustar el presupuesto de steps de una tarea delegada según el riesgo
+del diff actual: `low` → +0, `standard` → +8 (sdd-verify), `high` → +16 (rdd-4r-review). Se
+combina con `recommend-agent --risk-aware` para una delegación completa consciente del riesgo.
 
 ## Verificación en vivo (todo ejecutado)
 
@@ -90,7 +104,6 @@ Además se refinaron los patrones de auth para reducir falsos positivos: `/token
   nuestro SDD ya persiste artifacts en `.sdd/`. Backlog.
 - **Skill registry dinámico** (`skill-registry refresh`) — escaneo de skills + convenciones;
   nuestro stack tiene `src/plugins/skill-cli.ts`. Backlog.
-- **Context7 MCP** — docs de frameworks en vivo; nuestro stack tiene codegraph MCP. Backlog.
 - **Freeze expansion policy / cross-repo root continuity** — refinamientos del lifecycle RDD que
   nuestro `rdd-core.ts` ya cubre en su modelo.
 
