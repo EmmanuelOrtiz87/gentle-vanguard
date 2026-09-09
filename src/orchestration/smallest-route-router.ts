@@ -27,6 +27,7 @@
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
+import { classifyRisk } from '../rdd/risk-classifier.js';
 
 // =============================================================================
 // TYPES
@@ -61,6 +62,16 @@ export interface RouteAnalysis {
     estimatedFiles: number;
     complexity: 'low' | 'medium' | 'high';
     ambiguity: number;
+  };
+
+  /** Risk-aware verification (absorbido de Gentle-AI v2.7.0): qué verificación
+   *  post-apply exige el risk tier del diff actual. Solo presente cuando el
+   *  cambio toca código (no docs/config puros). */
+  verification?: {
+    tier: 'low' | 'standard' | 'high';
+    score: number;
+    action: 'none' | 'sdd-verify' | 'rdd-4r-review';
+    rationale: string;
   };
 }
 
@@ -252,6 +263,25 @@ export class SmallestRouteRouter {
       },
     };
 
+    // Risk-aware verification: clasifica el diff actual y decide la verificación
+    // post-apply (low → none, standard → sdd-verify, high → rdd-4r-review).
+    // Solo aplica a rutas que tocan código (delegated/sdd/collaborative).
+    if (analysis.route !== 'direct') {
+      try {
+        const c = classifyRisk(false);
+        if (c.tier !== 'low' || c.score > 0) {
+          analysis.verification = {
+            tier: c.tier,
+            score: c.score,
+            action: c.tier === 'high' ? 'rdd-4r-review' : c.tier === 'standard' ? 'sdd-verify' : 'none',
+            rationale: c.rationale,
+          };
+        }
+      } catch {
+        // Sin diff o sin repo: no hay verificación que calcular
+      }
+    }
+
     // Log for learning
     this.logRoutingDecision(analysis, request);
 
@@ -262,18 +292,21 @@ export class SmallestRouteRouter {
    * Recommend next action based on route
    */
   recommend(route: RouteAnalysis): string {
+    const verification = route.verification
+      ? ` Verification post-apply: ${route.verification.action} (risk ${route.verification.tier}, score ${route.verification.score}).`
+      : '';
     switch (route.route) {
       case 'direct':
-        return `Execute directly: ${route.reason}. Estimated ${route.steps} steps.`;
+        return `Execute directly: ${route.reason}. Estimated ${route.steps} steps.${verification}`;
 
       case 'delegated':
-        return `Delegate to agent: ${route.reason}. Use smartTask() with appropriate agent. Estimated ${route.steps} steps.`;
+        return `Delegate to agent: ${route.reason}. Use smartTask() with appropriate agent. Estimated ${route.steps} steps.${verification}`;
 
       case 'sdd':
-        return `Use SDD workflow: ${route.reason}. Run 'npm run sdd:run' or propose SDD phases. Estimated ${route.steps} steps.`;
+        return `Use SDD workflow: ${route.reason}. Run 'npm run sdd:run' or propose SDD phases. Estimated ${route.steps} steps.${verification}`;
 
       case 'collaborative':
-        return `Collaborative approach: ${route.reason}. Multiple agents may be needed. Estimated ${route.steps} steps.`;
+        return `Collaborative approach: ${route.reason}. Multiple agents may be needed. Estimated ${route.steps} steps.${verification}`;
 
       default:
         return `Unknown route. Defaulting to delegated.`;
