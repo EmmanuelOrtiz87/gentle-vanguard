@@ -1,7 +1,7 @@
 {
-  "version": "2.1.0",
-  "description": "Model fallback chains for agent dispatch. Primary inherits the orchestrator session model (opencode/muse-spark-1.3-contributor-free). Agent frontmatter no longer pins a model — dynamic inheritance prevents retired-model breakage. Free-tier chain (mimo-v2.5-free, hy3-free) covers quota exhaustion.",
-  "lastModified": "2026-08-24Tinheritance",
+  "version": "2.2.0",
+  "description": "Model fallback chains for agent dispatch. Primary inherits the orchestrator session model (opencode/ling-3.0-flash-fin-free). Agent frontmatter no longer pins a model — dynamic inheritance prevents retired-model breakage. Free-tier chain (nemotron-3.5-lightning-free, mimo-v2.5-free) covers quota exhaustion. Updated 2026-09-09: deepseek-v4-flash-free retired (Model is unavailable); ling-3.0-flash-fin-free verified OK.",
+  "lastModified": "2026-09-09T00:00:00Z",
   "modifiedBy": "orchestrator",
   "global": {
     "enabled": true,
@@ -11,72 +11,72 @@
   },
   "agentFallbacks": {
     "ORCHESTRATOR": {
-      "primary": "opencode/muse-spark-1.3-contributor-free",
-      "chain": ["opencode/mimo-v2.5-free", "ollama/llama3", "lm-studio2/qwen2.5"],
+      "primary": "opencode/ling-3.0-flash-fin-free",
+      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "opencode/big-pickle"],
       "providerPriority": ["opencode", "ollama", "lm-studio2"]
     },
     "BA": {
-      "primary": "opencode/muse-spark-1.3-contributor-free",
-      "chain": ["opencode/mimo-v2.5-free", "hy3-free", "ollama/qwen2.5"],
+      "primary": "opencode/ling-3.0-flash-fin-free",
+      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "SAD": {
-      "primary": "opencode/muse-spark-1.3-contributor-free",
-      "chain": ["opencode/mimo-v2.5-free", "hy3-free", "ollama/qwen2.5"],
+      "primary": "opencode/ling-3.0-flash-fin-free",
+      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "DEV": {
-      "primary": "opencode/muse-spark-1.3-contributor-free",
-      "chain": ["opencode/mimo-v2.5-free", "hy3-free", "ollama/qwen2.5"],
+      "primary": "opencode/ling-3.0-flash-fin-free",
+      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "QA": {
-      "primary": "opencode/muse-spark-1.3-contributor-free",
-      "chain": ["opencode/mimo-v2.5-free", "hy3-free", "ollama/qwen2.5"],
+      "primary": "opencode/ling-3.0-flash-fin-free",
+      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "OPS": {
-      "primary": "opencode/muse-spark-1.3-contributor-free",
-      "chain": ["opencode/mimo-v2.5-free", "hy3-free", "ollama/qwen2.5"],
+      "primary": "opencode/ling-3.0-flash-fin-free",
+      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "GOV": {
-      "primary": "opencode/muse-spark-1.3-contributor-free",
-      "chain": ["opencode/mimo-v2.5-free", "hy3-free", "ollama/qwen2.5"],
+      "primary": "opencode/ling-3.0-flash-fin-free",
+      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "DOC": {
-      "primary": "opencode/muse-spark-1.3-contributor-free",
-      "chain": ["ollama/qwen2.5", "ollama/llama3"],
+      "primary": "opencode/ling-3.0-flash-fin-free",
+      "chain": ["opencode/nemotron-3.5-lightning-free", "ollama/qwen2.5", "ollama/llama3"],
       "providerPriority": ["opencode", "ollama"]
     },
     "SESSION": {
-      "primary": "opencode/muse-spark-1.3-contributor-free",
-      "chain": ["ollama/qwen2.5"],
+      "primary": "opencode/ling-3.0-flash-fin-free",
+      "chain": ["opencode/nemotron-3.5-lightning-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "PREMORTEM": {
-      "primary": "opencode/muse-spark-1.3-contributor-free",
-      "chain": ["opencode/mimo-v2.5-free", "hy3-free", "ollama/qwen2.5"],
+      "primary": "opencode/ling-3.0-flash-fin-free",
+      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "MKT": {
-      "primary": "opencode/muse-spark-1.3-contributor-free",
-      "chain": ["ollama/qwen2.5", "ollama/llama3"],
+      "primary": "opencode/ling-3.0-flash-fin-free",
+      "chain": ["opencode/nemotron-3.5-lightning-free", "ollama/qwen2.5", "ollama/llama3"],
       "providerPriority": ["opencode", "ollama"]
     },
     "SALES": {
-      "primary": "opencode/muse-spark-1.3-contributor-free",
-      "chain": ["ollama/qwen2.5"],
+      "primary": "opencode/ling-3.0-flash-fin-free",
+      "chain": ["opencode/nemotron-3.5-lightning-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     },
     "FINANCE": {
-      "primary": "opencode/muse-spark-1.3-contributor-free",
-      "chain": ["opencode/mimo-v2.5-free", "hy3-free", "ollama/qwen2.5"],
+      "primary": "opencode/ling-3.0-flash-fin-free",
+      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5"],
       "providerPriority": ["opencode", "ollama"]
     }
   },
-  "universalFallbacks": ["opencode/mimo-v2.5-free", "ollama/qwen2.5", "ollama/llama3"],
+  "universalFallbacks": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5", "ollama/llama3"],
   "agentTypeFallback": {
     "description": "When a specific agent type fails, use the integrated universal fallback agents.",
     "rule": "Try general first, then explore for analysis tasks.",
