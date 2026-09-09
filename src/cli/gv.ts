@@ -1154,6 +1154,51 @@ async function main(): Promise<void> {
       break;
     }
 
+    case 'rdd': {
+      // Receipt-Driven Development (RDD) — native review lifecycle.
+      // Absorbed from Gentle-AI v2.7.0 gap analysis: expone el risk
+      // assessment standalone (equivalente a `gentle-ai review assess --json`)
+      // y el ciclo completo (classify → review 4R → gates).
+      const rddArgs = args.slice(1);
+      const sub = rddArgs[0] || 'help';
+      const rest = rddArgs.slice(1);
+      if (sub === 'help' || sub === '--help' || rddArgs.length === 0) {
+        console.log('Usage: gv rdd <assess|classify|explain|factors|review|gates> [options]');
+        console.log('');
+        console.log('  assess    Risk assessment del cambio actual (JSON) — equivalente a');
+        console.log('            `gentle-ai review assess --json` (v2.7.0).');
+        console.log('  classify  Clasificar cambios actuales (default del classifier).');
+        console.log('  explain   Explicar la clasificación de riesgo en detalle.');
+        console.log('  factors   Listar factores de riesgo archivo por archivo.');
+        console.log('  review    Ejecutar review 4R (rdd-4r-review).');
+        console.log('  gates     Validar gates de delivery (post-apply/pre-commit/pre-push/pre-pr/release).');
+        console.log('');
+        console.log('Options:');
+        console.log('  --staged   Solo cambios staged');
+        console.log('  --json     Salida JSON (assess/classify)');
+        console.log('  --lens     Lens específica para review (security|maintainability|reliability|resilience)');
+        console.log('');
+        console.log('Exit codes (assess/classify): 0=low · 1=standard · 2=high');
+        process.exit(0);
+      }
+      try {
+        let script = 'src/rdd/risk-classifier.ts';
+        let action = sub;
+        if (sub === 'assess') action = 'classify'; // assess = classify con --json
+        if (sub === 'review') script = 'src/rdd/rdd-4r-review.ts';
+        if (sub === 'gates') script = 'src/rdd/rdd-gates.ts';
+        const r = runNpxTsxSync(script, [action, ...rest], { cwd: ROOT, timeout: 180000 });
+        const out = (r.stdout ?? '').toString().trim();
+        if (out) console.log(out);
+        if (r.stderr) console.error((r.stderr ?? '').toString().trim());
+        process.exit(r.status ?? 0);
+      } catch (e) {
+        console.error(`[RDD] FAILED: ${e instanceof Error ? e.message : String(e)}`);
+        process.exit(1);
+      }
+      break;
+    }
+
     default:
       console.error(`Unknown command: ${command}`);
       showHelp();
