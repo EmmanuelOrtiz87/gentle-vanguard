@@ -142,6 +142,7 @@ function sync() {
       execSync('pnpm link ../../packages/gv-design-system', {
         cwd: c.path,
         stdio: 'pipe',
+        windowsHide: true,
       });
       console.log(`✅ Linked: ${c.name}`);
     } catch (err) {
