@@ -202,18 +202,18 @@ Scaffold and store a plan in `.session/sdd-pipeline/plans/`:
 
 ```bash
 # Create a plan from a template
-npx tsx src/planning/planning-templates.ts --plan --type feature --name user-auth \
+node --import tsx src/planning/planning-templates.ts --plan --type feature --name user-auth \
   --title "User Authentication" --problem "..." --out-of-scope "admin UI" \
   --constraints "Node 20, must not break OAuth"
 
 # Refactoring / bug-fix variants
-npx tsx src/planning/planning-templates.ts --plan --type refactor --name api-v2 ...
-npx tsx src/planning/planning-templates.ts --plan --type bugfix --name auth-timeout ...
+node --import tsx src/planning/planning-templates.ts --plan --type refactor --name api-v2 ...
+node --import tsx src/planning/planning-templates.ts --plan --type bugfix --name auth-timeout ...
 
 # Manage stored plans
-npx tsx src/planning/planning-templates.ts --list
-npx tsx src/planning/planning-templates.ts --show user-auth
+node --import tsx src/planning/planning-templates.ts --list
+node --import tsx src/planning/planning-templates.ts --show user-auth
 
 # Link a plan to a todo task
-npx tsx src/planning/planning-templates.ts --link user-auth T3
+node --import tsx src/planning/planning-templates.ts --link user-auth T3
 ```

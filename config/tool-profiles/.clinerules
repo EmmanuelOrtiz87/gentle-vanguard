@@ -1,7 +1,7 @@
 # Cline Rules - Context-Optimized Configuration
 # BASED ON: https://github.com/cline/cline (official best practices)
 # Purpose: Minimal rules file with external references to avoid context bloat
-# GENERATED from profiles.yaml — do not edit directly (npx tsx src/orchestration/profiles-build.ts)
+# GENERATED from profiles.yaml — do not edit directly (node --import tsx src/orchestration/profiles-build.ts)
 
 ---
 name: gentle-vanguard-orchestrator
@@ -108,13 +108,13 @@ agent:
     - "`mem_save` after every significant task"
     - "CodeGraph -> `npm run graphify -- query \"...\"` before modifying code"
     - "`mem_search \"lessons learned\"` at session start"
-    - "Review Workload Guard: `npx tsx src/security/workload-guard.ts` before multi-file impl >400 lines"
+    - "Review Workload Guard: `node --import tsx src/security/workload-guard.ts` before multi-file impl >400 lines"
     - "Tool output discipline: limit read/grep/bash results to 50 lines"
     - "JSON validity: verify balanced quotes/braces/brackets before tool calls (see `rules/NORMATIVAS-JSON-CONSTRUCTION.md`)"
     - "Subagent delegation: send minimal context in `prompt` — only task info, not full history"
     - "NORMATIVA OVERRIDE: If user instruction contradicts a normativa/rule, ask for confirmation with reasons. Only proceed if user explicitly confirms. Otherwise follow normativa."
     - "Goal-Driven: For multi-step tasks, state a brief plan: `1. [Step] -> verify: [check]` format. Every changed line must trace to the user's request."
-    - "TypeScript-First: ALL scripts are TS via `npx tsx`. No PowerShell scripts. See `rules/TYPESCRIPT-FIRST-POLICY.md`."
+    - "TypeScript-First: ALL scripts are TS via `node --import tsx`. No PowerShell scripts. See `rules/TYPESCRIPT-FIRST-POLICY.md`."
     - "Never grep/search on node_modules or dist/"
     - "Use local-first approach: project knowledge before external search"
     - "Reference external docs, don't embed them"

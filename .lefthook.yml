@@ -1,18 +1,21 @@
-# lefthook.yml v3.1 — Git hooks for Gentle-Vanguard (PS1→TS)
+# lefthook.yml v3.2 — Git hooks for Gentle-Vanguard (PS1→TS)
 # All hooks migrated from PowerShell to TypeScript
+# v3.2 (2026-09-09): `npx tsx` → `node --import tsx` — el CLI de tsx relanza el
+# script como proceso NIETO sin windowsHide (consolas visibles / ventanas
+# fantasmas). node --import tsx corre el script EN el proceso spawned (oculto).
 
 post-commit:
   commands:
     codegraph-sync:
       run:
-        npx tsx src/integrations/codegraph-post-modification-sync.ts --Trigger post-commit --Force
+        node --import tsx src/integrations/codegraph-post-modification-sync.ts --Trigger post-commit --Force
     hashline-snapshot:
-      run: npx tsx src/infrastructure/hashline-snapshot-hook.ts
+      run: node --import tsx src/infrastructure/hashline-snapshot-hook.ts
 
 post-merge:
   commands:
     codegraph-sync:
-      run: npx tsx src/integrations/codegraph-post-modification-sync.ts --Trigger post-merge --Force
+      run: node --import tsx src/integrations/codegraph-post-modification-sync.ts --Trigger post-merge --Force
     post-merge-install:
       glob: 'package.json'
       run: pnpm install --ignore-scripts
@@ -21,22 +24,22 @@ pre-commit:
   commands:
     opencode-validation:
       glob: '*.json'
-      run: npx tsx src/hooks/pre-commit-opencode-validation.ts {staged_files}
+      run: node --import tsx src/hooks/pre-commit-opencode-validation.ts {staged_files}
     json-lint:
       glob: '*.json'
-      run: npx tsx src/tools/json-lint.ts {staged_files}
+      run: node --import tsx src/tools/json-lint.ts {staged_files}
     workflow-lint:
       glob: '.github/workflows/*.{yml,yaml}'
-      run: npx tsx src/review/workflow-lint.ts {staged_files}
+      run: node --import tsx src/review/workflow-lint.ts {staged_files}
     lockfile-lint:
       glob: 'package-lock.json'
-      run: npx tsx src/infrastructure/lockfile-lint-pre-commit.ts
+      run: node --import tsx src/infrastructure/lockfile-lint-pre-commit.ts
     # trufflehog removed 2026-08-22: it ran with --fail=false AND `|| exit 0`
     # (never blocked anything). Secret coverage is provided by secretlint +
     # secret-scanner here, and gitleaks in CI.
     skill-scan:
       glob: '{.opencode/,}skills/*/SKILL.md'
-      run: npx tsx src/knowledge/scan-skill-hook.ts --StagedFiles '{staged_files}'
+      run: node --import tsx src/knowledge/scan-skill-hook.ts --StagedFiles '{staged_files}'
     secretlint:
       glob: '*.{json,yml,yaml,md,env,toml,xml}'
       run: npx secretlint --secretlintrc .secretlintrc.json {staged_files} 2>&1 || true
@@ -45,12 +48,12 @@ pre-commit:
       # en el repo — ver docs/adr/ (endurecimiento de seguridad al escalar).
     secret-scanner:
       glob: '*.{ts,js,json,yml,yaml,md,env,toml,xml,py,ps1,sh,sql}'
-      run: npx tsx src/security/secret-scanner-cli.ts --scan {staged_files} 2>&1 || true
+      run: node --import tsx src/security/secret-scanner-cli.ts --scan {staged_files} 2>&1 || true
       # ADVISORY (2026-09-06): idem — reporta sin bloquear; sin --redact para no
       # mutar staged files en modo no-bloqueante.
     metrics-check:
       glob: 'config/stack-metrics.json'
-      run: npx tsx src/tools/metrics-verify.ts {staged_files}
+      run: node --import tsx src/tools/metrics-verify.ts {staged_files}
     design-lint:
       glob: '{apps/*/src/**/*.{css,tsx,jsx},apps/*/style.css,apps/*/*.css,assets/*.css,packages/gv-design-system/src/**/*.{css,tsx}}'
       run: npx impeccable detect --no-config --json --quiet {staged_files} 2>&1 || true
@@ -63,13 +66,13 @@ pre-push:
     # Composite parallel gate (Fase 6 N8) — replaces the 12 sequential checks.
     # Runs all checks concurrently (bounded pool) with a tree-hash cache: if
     # nothing changed since the last green run, the gate skips in <5s.
-    # Force a full re-run with: npx tsx src/git/prepush-gate.ts --force
+    # Force a full re-run with: node --import tsx src/git/prepush-gate.ts --force
     prepush-gate:
-      run: npx tsx src/git/prepush-gate.ts
+      run: node --import tsx src/git/prepush-gate.ts
 
 commit-msg:
   commands:
     commitlint:
-      run: npx tsx src/hooks/commitlint.ts {1}
+      run: node --import tsx src/hooks/commitlint.ts {1}
     commit-msg-session-track:
-      run: npx tsx src/hooks/commit-msg-session-track-hook.ts --CommitMsgFile {1}
+      run: node --import tsx src/hooks/commit-msg-session-track-hook.ts --CommitMsgFile {1}

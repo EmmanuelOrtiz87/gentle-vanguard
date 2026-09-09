@@ -9,9 +9,9 @@ Run BEFORE any action:
 
 ```bash
 # Tool detection via TypeScript
-npx tsx src/detect-tool.ts --json | jq -r '.name'  # opencode|claude-code|cline|cursor|windsurf|unknown
-npx tsx src/detect-tool.ts --json | jq -r '.os.platform'  # windows|linux|macos
-npx tsx src/detect-tool.ts --json | jq -r '.os.shell'  # powershell|bash|zsh
+node --import tsx src/detect-tool.ts --json | jq -r '.name'  # opencode|claude-code|cline|cursor|windsurf|unknown
+node --import tsx src/detect-tool.ts --json | jq -r '.os.platform'  # windows|linux|macos
+node --import tsx src/detect-tool.ts --json | jq -r '.os.shell'  # powershell|bash|zsh
 ```
 
 Load config from `config/orchestrator.json#toolProfiles.<name>`.
@@ -30,7 +30,7 @@ Run `AGENTS-fast.md` — no shortcuts.
 4. `mem_save` after every significant task
 5. CodeGraph -> `npm run graphify -- query "..."` before modifying code
 6. `mem_search "lessons learned"` at session start
-7. Review Workload Guard: `npx tsx src/security/workload-guard.ts` before multi-file impl >400 lines
+7. Review Workload Guard: `node --import tsx src/security/workload-guard.ts` before multi-file impl >400 lines
 8. Tool output discipline: limit read/grep/bash results to 50 lines
 9. JSON validity: verify balanced quotes/braces/brackets before tool calls (see
    `rules/NORMATIVAS-JSON-CONSTRUCTION.md`)
@@ -39,7 +39,7 @@ Run `AGENTS-fast.md` — no shortcuts.
     reasons. Only proceed if user explicitly confirms. Otherwise follow normativa.
 12. Goal-Driven: For multi-step tasks, state a brief plan: `1. [Step] -> verify: [check]` format.
     Every changed line must trace to the user's request.
-13. TypeScript-First: ALL scripts are TS via `npx tsx`. No PowerShell scripts. See
+13. TypeScript-First: ALL scripts are TS via `node --import tsx`. No PowerShell scripts. See
     `rules/TYPESCRIPT-FIRST-POLICY.md`.
 
 ## Break Glass — Auto-Override Harmful Config
@@ -47,7 +47,7 @@ Run `AGENTS-fast.md` — no shortcuts.
 If 3+ turns w/o completion, loop detected, or output truncated:
 
 ```powershell
-npx tsx src/resilience/self-diagnosis.ts --profile "<p>" --chat-level "<l>" --turn-count <N>
+node --import tsx src/resilience/self-diagnosis.ts --profile "<p>" --chat-level "<l>" --turn-count <N>
 ```
 
 Override to `lleno/chat-balanced`, notify: `[BREAK GLASS] motivo: {reason}`

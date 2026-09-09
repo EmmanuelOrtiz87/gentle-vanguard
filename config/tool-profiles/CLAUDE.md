@@ -20,7 +20,7 @@ hook execution needed.
 4. `mem_save` after every significant task
 5. CodeGraph -> `npm run graphify -- query "..."` before modifying code
 6. `mem_search "lessons learned"` at session start
-7. Review Workload Guard: `npx tsx src/security/workload-guard.ts` before multi-file impl >400 lines
+7. Review Workload Guard: `node --import tsx src/security/workload-guard.ts` before multi-file impl >400 lines
 8. Tool output discipline: limit read/grep/bash results to 50 lines
 9. JSON validity: verify balanced quotes/braces/brackets before tool calls (see
    `rules/NORMATIVAS-JSON-CONSTRUCTION.md`)
@@ -29,13 +29,13 @@ hook execution needed.
     reasons. Only proceed if user explicitly confirms. Otherwise follow normativa.
 12. Goal-Driven: For multi-step tasks, state a brief plan: `1. [Step] -> verify: [check]` format.
     Every changed line must trace to the user's request.
-13. TypeScript-First: ALL scripts are TS via `npx tsx`. No PowerShell scripts. See
+13. TypeScript-First: ALL scripts are TS via `node --import tsx`. No PowerShell scripts. See
     `rules/TYPESCRIPT-FIRST-POLICY.md`.
 
 ## Break Glass
 
 If 3+ turns w/o completion, loop detected, or output truncated:
-`npx tsx src/resilience/self-diagnosis.ts --profile "<p>" --chat-level "<l>" --turn-count <N>`
+`node --import tsx src/resilience/self-diagnosis.ts --profile "<p>" --chat-level "<l>" --turn-count <N>`
 Override to `lleno/chat-balanced`. Notify: `[BREAK GLASS] motivo: {reason}`
 
 ## Response Profile

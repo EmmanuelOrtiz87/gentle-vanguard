@@ -72,7 +72,7 @@
       "tool": "pre-commit-opencode-validation.ts",
       "required": true,
       "description": "Validate opencode configuration compliance",
-      "command": "npx tsx src/hooks/pre-commit-opencode-validation.ts",
+      "command": "node --import tsx src/hooks/pre-commit-opencode-validation.ts",
       "failureAction": "block"
     },
     {
@@ -84,7 +84,7 @@
       "tool": "validate-tool-configs.ts",
       "required": true,
       "description": "Validate tool configuration files",
-      "command": "npx tsx src/core/validate-tool-configs.ts -Quiet",
+      "command": "node --import tsx src/core/validate-tool-configs.ts -Quiet",
       "failureAction": "block"
     },
     {
@@ -96,7 +96,7 @@
       "tool": "normative-audit-hook.ts",
       "required": true,
       "description": "Enforce normative compliance against rules/",
-      "command": "npx tsx src/hooks/normative-audit-hook.ts",
+      "command": "node --import tsx src/hooks/normative-audit-hook.ts",
       "failureAction": "block"
     },
     {
@@ -108,7 +108,7 @@
       "tool": "karpathy-enforcer-hook.ts",
       "required": true,
       "description": "Enforce Karpathy coding guidelines",
-      "command": "npx tsx src/hooks/karpathy-enforcer-hook.ts",
+      "command": "node --import tsx src/hooks/karpathy-enforcer-hook.ts",
       "failureAction": "block"
     },
     {
@@ -120,7 +120,7 @@
       "tool": "markdown-accent-check-hook.ts",
       "required": true,
       "description": "Check for accent/internationalization issues in markdown",
-      "command": "npx tsx src/hooks/markdown-accent-check-hook.ts -StagedFiles {staged_files}",
+      "command": "node --import tsx src/hooks/markdown-accent-check-hook.ts -StagedFiles {staged_files}",
       "failureAction": "block"
     },
     {
@@ -132,7 +132,7 @@
       "tool": "emoji-detector-hook.ts",
       "required": true,
       "description": "Detect emoji usage in PowerShell scripts",
-      "command": "npx tsx src/hooks/emoji-detector-hook.ts -StagedFiles {staged_files}",
+      "command": "node --import tsx src/hooks/emoji-detector-hook.ts -StagedFiles {staged_files}",
       "failureAction": "block"
     },
     {
@@ -144,7 +144,7 @@
       "tool": "sensitive-files-check-hook.ts",
       "required": true,
       "description": "Check for sensitive files being committed",
-      "command": "npx tsx src/hooks/sensitive-files-check-hook.ts -StagedFiles {staged_files}",
+      "command": "node --import tsx src/hooks/sensitive-files-check-hook.ts -StagedFiles {staged_files}",
       "failureAction": "block"
     },
     {
@@ -156,7 +156,7 @@
       "tool": "src/knowledge/scan-skill-hook.ts",
       "required": true,
       "description": "Security scan for skill files",
-      "command": "npx tsx src/knowledge/scan-skill-hook.ts -StagedFiles {staged_files}",
+      "command": "node --import tsx src/knowledge/scan-skill-hook.ts -StagedFiles {staged_files}",
       "failureAction": "block"
     },
     {
@@ -168,7 +168,7 @@
       "tool": "commitlint.ts",
       "required": true,
       "description": "Validate commit message format",
-      "command": "npx tsx src/hooks/commitlint.ts {1}",
+      "command": "node --import tsx src/hooks/commitlint.ts {1}",
       "failureAction": "block"
     },
     {
@@ -180,7 +180,7 @@
       "tool": "commit-msg-session-track-hook.ts",
       "required": true,
       "description": "Track sessions via commit messages",
-      "command": "npx tsx src/hooks/commit-msg-session-track-hook.ts -CommitMsgFile {1}",
+      "command": "node --import tsx src/hooks/commit-msg-session-track-hook.ts -CommitMsgFile {1}",
       "failureAction": "warn"
     },
     {
@@ -192,7 +192,7 @@
       "tool": "src/integrations/codegraph-post-modification-sync.ts",
       "required": true,
       "description": "Sync codegraph index after commit",
-      "command": "npx tsx src/integrations/codegraph-post-modification-sync.ts -Trigger post-commit -Force",
+      "command": "node --import tsx src/integrations/codegraph-post-modification-sync.ts -Trigger post-commit -Force",
       "failureAction": "warn"
     },
     {
@@ -204,7 +204,7 @@
       "tool": "hashline-snapshot-hook.ts",
       "required": false,
       "description": "Snapshot hashline after commit",
-      "command": "npx tsx src/infrastructure/hashline-snapshot-hook.ts",
+      "command": "node --import tsx src/infrastructure/hashline-snapshot-hook.ts",
       "failureAction": "warn"
     },
     {
@@ -216,7 +216,7 @@
       "tool": "audit-ps1-refs.ts",
       "required": true,
       "description": "Quick audit sweep before push",
-      "command": "npx tsx src/tools/audit-ps1-refs.ts",
+      "command": "node --import tsx src/tools/audit-ps1-refs.ts",
       "failureAction": "block"
     },
     {
@@ -228,7 +228,7 @@
       "tool": "npm-audit-pre-push.ts",
       "required": true,
       "description": "Check dependency vulnerabilities",
-      "command": "npx tsx src/infrastructure/npm-audit-pre-push.ts -AuditLevel moderate",
+      "command": "node --import tsx src/infrastructure/npm-audit-pre-push.ts -AuditLevel moderate",
       "failureAction": "warn"
     },
     {
@@ -240,7 +240,7 @@
       "tool": "src/orchestration/orchestrate-auto-fix.ts",
       "required": false,
       "description": "Auto-fix detected issues before push",
-      "command": "npx tsx src/orchestration/orchestrate-auto-fix.ts -Fix",
+      "command": "node --import tsx src/orchestration/orchestrate-auto-fix.ts -Fix",
       "failureAction": "warn"
     },
     {
@@ -300,7 +300,7 @@
       "tool": "test-runner.ts",
       "required": true,
       "description": "TypeScript test suites via test-runner",
-      "command": "npx tsx src/review/test-runner.ts",
+      "command": "node --import tsx src/review/test-runner.ts",
       "failureAction": "block"
     },
     {
