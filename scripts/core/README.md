@@ -14,7 +14,7 @@ Scripts for installing and maintaining the gentle-vanguard.
 | `npm run bootstrap:machine`          | `src/bootstrap-machine.ts`   | Install gentle-vanguard globally on machine       |
 | `npm run bootstrap:run`              | `src/bootstrap.ts`           | Bootstrap workspace                               |
 | `npm run setup:complete`             | `src/setup-complete.ts`      | Full stack setup (tools, hooks, env, validation)  |
-| `npx tsx src/setup-multi-machine.ts` | `src/setup-multi-machine.ts` | Clone and bootstrap repos on a new PC             |
+| `node --import tsx src/setup-multi-machine.ts` | `src/setup-multi-machine.ts` | Clone and bootstrap repos on a new PC             |
 
 ## PC Migration
 
@@ -30,5 +30,5 @@ npm run bootstrap:machine
 npm run setup:complete
 
 # Update everything
-npx tsx src/cli/gv.ts update-all
+node --import tsx src/cli/gv.ts update-all
 ```

@@ -229,7 +229,7 @@ PROJECT_ROOT="$SCRIPT_DIR"
 # Detect what we're running with
 if command -v npx &> /dev/null && [ -f "$PROJECT_ROOT/src/cli/gv.ts" ]; then
     # Native TypeScript CLI
-    npx tsx "$PROJECT_ROOT/src/cli/gv.ts" "$@"
+    node --import tsx "$PROJECT_ROOT/src/cli/gv.ts" "$@"
 elif [ -f "$PROJECT_ROOT/scripts/utilities/gv.sh" ]; then
     # Fall back to bash version
     bash "$PROJECT_ROOT/scripts/utilities/gv.sh" "$@"
