@@ -8,16 +8,17 @@
 
 1. **Llega** por el link que le compartiste (WhatsApp, email, bio de red social, QR impreso).
 2. **Explora** el catálogo: 20 cursos, 20 ebooks, 12 toolkits — con precio por tier.
-3. **Marca interés**: botón "Me interesa" (producto) o "Solicitar" (plan) — la página recuerda qué
-   le gustó.
-4. **Deja sus datos**: nombre + email + audiencia (persona/estudiante/empresa). Quedan en SU
-   dispositivo y —si abre el link desde tu máquina— también sincronizan al CRM.
-5. **Contacta con 1 click**: la página abre WhatsApp (**542645452221**) con el mensaje ya escrito
-   (producto + sus datos) y solo aprieta "enviar". Alternativa: botón de email a
-   `gentlevanguard@gmail.com`.
+3. **Contacta por WhatsApp en 1 click desde el producto**: cada tarjeta y plan tiene
+   "💬 Me interesa" que abre WhatsApp (**542645452221**) con el mensaje ya escrito
+   ("Hola! Me interesa: \<producto\> (precio)") — cero fricción, sin formularios.
+4. **Canal email (opcional)**: en la sección "Solicitá el material" hay DOS caminos a elección:
+   **WhatsApp directo** o **dejar nombre + email + audiencia** y enviar por email a
+   `gentlevanguard@gmail.com`. Nadie está forzado a un solo canal.
+5. Si dejó sus datos en el formulario web, quedan en SU dispositivo y —si abre el link desde tu
+   máquina— también sincronizan al CRM.
 
 **Regla de oro**: el canal real de captura para tráfico público es **WhatsApp y el email** — el
-formulario web solo redacta el mensaje. Por eso cada interacción termina en tu chat.
+cliente elige. El botón de cada producto abre WhatsApp directo; el email es la vía formal.
 
 ## 2. Cómo difundir la landing
 
