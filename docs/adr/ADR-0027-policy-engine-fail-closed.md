@@ -6,16 +6,16 @@ accepted
 
 - **Date**: 2026-09-03
 - **Author**: mavis (root) — sesión del usuario
-- **Relacionado**: ADR-0028 (MCP Security Gateway), ADR-0029 (OWASP Agentic Top 10),
-  ADR-0017 (local-first), `src/security/guardrail-orchestrator.ts`,
+- **Relacionado**: ADR-0028 (MCP Security Gateway), ADR-0029 (OWASP Agentic Top 10), ADR-0017
+  (local-first), `src/security/guardrail-orchestrator.ts`,
   `src/security/guardrails/input-moderation.ts`
 
 ---
 
 ## Context
 
-El stack gentle-vanguard tiene guardrails **reactivos y heurísticos**: `input-moderation.ts`
-(12 patrones stub, `failOpen`) y `guardrail-orchestrator.ts` (clasifica fallos *después* de que
+El stack gentle-vanguard tiene guardrails **reactivos y heurísticos**: `input-moderation.ts` (12
+patrones stub, `failOpen`) y `guardrail-orchestrator.ts` (clasifica fallos _después_ de que
 ocurren). Ninguno evalúa una acción **antes** de ejecutarse contra un conjunto de políticas
 declarativas, y ninguno es **fail-closed** (por defecto permiten si no hay match).
 
@@ -28,14 +28,13 @@ send, etc).
 
 Crear un **Policy Engine determinista fail-closed** (`src/security/policy-engine/`):
 
-1. **Config declarativa** en `config/policy-engine.json` (v1.0.0) + `config/policy-engine.schema.json`
-   (JsonSchema draft-07). Dos políticas iniciales: `gv-core-tool-safety` (4 reglas) y
-   `gv-mcp-tool-policy` (1 regla allowlist).
+1. **Config declarativa** en `config/policy-engine.json` (v1.0.0) +
+   `config/policy-engine.schema.json` (JsonSchema draft-07). Dos políticas iniciales:
+   `gv-core-tool-safety` (4 reglas) y `gv-mcp-tool-policy` (1 regla allowlist).
 2. **Lenguaje de condiciones restringido** — SIN `eval()`: `in`, `not in`, `==`, `!=`, `matches`
-   (regex), `and`, `or`, agrupación con paréntesis. Parser determinista en
-   `evaluateCondition()`.
-3. **Fail-closed**: si ninguna política permite explícitamente una acción, se DENIEGA. `defaultAction:
-   deny`, `failClosed: true`.
+   (regex), `and`, `or`, agrupación con paréntesis. Parser determinista en `evaluateCondition()`.
+3. **Fail-closed**: si ninguna política permite explícitamente una acción, se DENIEGA.
+   `defaultAction: deny`, `failClosed: true`.
 4. **Tres veredictos**: `allow`, `deny`, `require_approval` (acciones de alto riesgo requieren
    aprobación humana).
 5. **API programática** `PolicyEngine.evaluate(action, policyId?)` + CLI (`evaluate`, `list`).
@@ -69,7 +68,8 @@ Crear un **Policy Engine determinista fail-closed** (`src/security/policy-engine
 
 ## Alternativas consideradas
 
-1. **No hacer nada** — mantener guardrails reactivos. ❌ Rejected: no hay gate preventivo fail-closed.
+1. **No hacer nada** — mantener guardrails reactivos. ❌ Rejected: no hay gate preventivo
+   fail-closed.
 2. **Usar OPA/Cedar (externo)** — motor de políticas completo. ❌ Rejected: contradice ADR-0017
    (local-first, cero deps externas), overkill para el subconjunto necesario.
 3. **Usar `eval()` para condiciones** — simple pero inseguro. ❌ Rejected: riesgo de inyección.
@@ -77,8 +77,8 @@ Crear un **Policy Engine determinista fail-closed** (`src/security/policy-engine
 ## Métricas de éxito
 
 - `npm run policy:engine:test` → 13/13 pass.
-- `npx tsx src/security/policy-engine/policy-engine.ts evaluate --action '{"type":"delete",...}'`
-  → `denied: true`, exit 1.
+- `npx tsx src/security/policy-engine/policy-engine.ts evaluate --action '{"type":"delete",...}'` →
+  `denied: true`, exit 1.
 - `tsc --noEmit` y `eslint` limpios.
 
 ## Referencias

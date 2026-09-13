@@ -9,9 +9,9 @@ Run BEFORE any action:
 
 ```bash
 # Tool detection via TypeScript
-node --import tsx src/detect-tool.ts --json | jq -r '.name'  # opencode|claude-code|cline|cursor|windsurf|unknown
-node --import tsx src/detect-tool.ts --json | jq -r '.os.platform'  # windows|linux|macos
-node --import tsx src/detect-tool.ts --json | jq -r '.os.shell'  # powershell|bash|zsh
+npx tsx src/detect-tool.ts --json | jq -r '.name'  # opencode|claude-code|cline|cursor|windsurf|unknown
+npx tsx src/detect-tool.ts --json | jq -r '.os.platform'  # windows|linux|macos
+npx tsx src/detect-tool.ts --json | jq -r '.os.shell'  # powershell|bash|zsh
 ```
 
 Load config from `config/orchestrator.json#toolProfiles.<name>`.
@@ -30,7 +30,8 @@ Run `AGENTS-fast.md` — no shortcuts.
 4. `mem_save` after every significant task
 5. CodeGraph -> `npm run graphify -- query "..."` before modifying code
 6. `mem_search "lessons learned"` at session start
-7. Review Workload Guard: `node --import tsx src/security/workload-guard.ts` before multi-file impl >400 lines
+7. Review Workload Guard: `node --import tsx src/security/workload-guard.ts` before multi-file
+   impl >400 lines
 8. Tool output discipline: limit read/grep/bash results to 50 lines
 9. JSON validity: verify balanced quotes/braces/brackets before tool calls (see
    `rules/NORMATIVAS-JSON-CONSTRUCTION.md`)

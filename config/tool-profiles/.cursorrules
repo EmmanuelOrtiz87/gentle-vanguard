@@ -6,7 +6,7 @@ Las reglas de este proyecto estan modularizadas en `.cursor/rules/` para mejor m
 
 Ejecutar ANTES de cualquier accion:
 ```bash
-node --import tsx src/core/detect-tool.ts --json
+npx tsx src/core/detect-tool.ts --json
 # name: opencode|claude-code|cline|cursor|windsurf|unknown
 # os.platform: windows|linux|macos
 ```
@@ -14,8 +14,8 @@ Cargar config desde `config/orchestrator.json#toolProfiles.<name>`.
 
 ## Startup Sequence
 
-1. `node --import tsx src/tools/pre-process-input.ts --user-input "<msg>" --workspace-root "."` BEFORE primera respuesta
-2. `node --import tsx src/session/session-start-optimized.ts` (autostart pipeline con lazy loading)
+1. `npx tsx src/tools/pre-process-input.ts --user-input "<msg>" --workspace-root "."` BEFORE primera respuesta
+2. `npx tsx src/session/session-start-optimized.ts` (autostart pipeline con lazy loading)
 3. `AGENTS-fast.md` — sin atajos (completo: `AGENTS.md`)
 
 ## Reglas activas

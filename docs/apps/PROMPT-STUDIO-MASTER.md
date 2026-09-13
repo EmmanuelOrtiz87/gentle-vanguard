@@ -121,7 +121,7 @@ finanzas personales, CV/empleo e imagen AI. Los flujos estrella:
 1. **Importar desde mi navegador** → verifica si el navegador propio del stack ya tiene tu
    sesión de Google (~10–15s).
 2. Sin sesión → **Abrir ventana de login** → formulario normal de Google (email + contraseña
-   + 2FA) → al ver Gemini con tu cuenta, **cerrá esa ventana**.
+   - 2FA) → al ver Gemini con tu cuenta, **cerrá esa ventana**.
 3. La app detecta la sesión automáticamente (cada 15s) y **importa solo** tus gemas custom con
    instrucciones completas (RPC de detalle; el listado de Google trae el prompt truncado).
 4. Alternativa avanzada: cookie manual `__Secure-1PSID` (colapsada).

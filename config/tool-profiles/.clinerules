@@ -1,7 +1,7 @@
 # Cline Rules - Context-Optimized Configuration
 # BASED ON: https://github.com/cline/cline (official best practices)
 # Purpose: Minimal rules file with external references to avoid context bloat
-# GENERATED from profiles.yaml — do not edit directly (node --import tsx src/orchestration/profiles-build.ts)
+# GENERATED from profiles.yaml — do not edit directly (npx tsx src/orchestration/profiles-build.ts)
 
 ---
 name: gentle-vanguard-orchestrator
