@@ -26,7 +26,7 @@ another app-local token set or another topbar implementation.
 | Design Hub     | Vanilla `gv-*` shell                          | Uses generated shared shell snapshot                         | Shared shell adapter applied                |
 | Command Center | Vanilla `gv-*` shell embedded in `index.html` | Legacy inline aliases remain for app widgets                 | Shared shell endpoint applied               |
 | GV Analytics   | React + CSS shell                             | Local content selectors remain                               | Shared shell primitives applied             |
-| Content Studio    | React + CSS shell                             | Local workspace layout remains                               | Shared shell plus CMS workspace applied     |
+| Content Studio | React + CSS shell                             | Local workspace layout remains                               | Shared shell plus CMS workspace applied     |
 | Prompt Studio  | React + Tailwind shell                        | Utility-level content styling remains                        | Shared shell bridge applied                 |
 | Archify        | React + `ar-*` workspace shell                | Domain controls remain app-specific                          | Shared topbar shell applied                 |
 | Academy        | Static reference shell                        | Strongest current shell reference, but legacy file ownership | Extract stable shell into package           |

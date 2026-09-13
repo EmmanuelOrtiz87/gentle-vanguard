@@ -14,7 +14,7 @@ superficie.
 | Command Center | ✅           | ✅        | ✅              | ✅                   | ✅          | ✅ (es/en)    | **✅ HOMOLOGADA**                     |
 | Archify        | ✅           | ✅        | ✅              | ✅                   | parcial     | ✅            | **✅ HOMOLOGADA**                     |
 | Prompt Studio  | ✅           | ✅        | ✅              | ✅ (toast unificado) | ✅ (Ctrl+K) | ✅            | **✅ HOMOLOGADA** (sesión 3)          |
-| Content Studio  | ✅           | ✅        | ✅              | ✅                   | parcial     | ✅            | **✅ HOMOLOGADA** (sesión 3)          |
+| Content Studio | ✅           | ✅        | ✅              | ✅                   | parcial     | ✅            | **✅ HOMOLOGADA** (sesión 3)          |
 | gv-analytics   | ✅           | ✅        | ✅              | parcial              | parcial     | ✅            | **✅ HOMOLOGADA** (sesión 3)          |
 | Design Hub     | ✅           | ✅        | ✅              | parcial              | parcial     | ✅            | **✅ HOMOLOGADA** (sesión 3)          |
 

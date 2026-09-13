@@ -437,7 +437,7 @@ esto, compartilo con alguien que lo necesite. Nos vemos."
 | **Marketing**  | Stack (skills copywriting, content-strategy, marketing-plan) | Generar captions, calendarios, ideas de contenido                |
 | **Producción** | Stack (Prompt Studio + agentes de IA)                        | Generar imágenes, guiones, edición de video                      |
 | **Ventas/CRM** | App CRM Studio                                               | Leads, pipeline, seguimiento, sesiones                           |
-| **Contenido**  | Academy + Content Studio                                        | Cursos, ebooks, material, publicación multi-red                  |
+| **Contenido**  | Academy + Content Studio                                     | Cursos, ebooks, material, publicación multi-red                  |
 | **Finanzas**   | Vos + CRM                                                    | Cobros, control, gestión (Mercado Pago, PayPal, cripto)          |
 
 ### 7.2 Flujo de lead → venta (diario)

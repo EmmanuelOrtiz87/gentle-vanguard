@@ -3,8 +3,9 @@
 Fecha: 2026-09-06 · Estado: aceptado · App: `apps/content-cms` v3.8.2+
 
 > **Nota de renombrado (2026-09-13)**: la app se comercializa y referencia como **Content Studio**
-> (nombre canónico en UI, i18n, index.html y README). "Content CMS" queda como nombre histórico
-> de este ADR y como id técnico de carpeta (`apps/content-cms`). Ver `docs/apps/HOMOLOGACION-UX-2026-09-06.md`.
+> (nombre canónico en UI, i18n, index.html y README). "Content CMS" queda como nombre histórico de
+> este ADR y como id técnico de carpeta (`apps/content-cms`). Ver
+> `docs/apps/HOMOLOGACION-UX-2026-09-06.md`.
 
 ## Status
 

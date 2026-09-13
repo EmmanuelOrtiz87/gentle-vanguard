@@ -190,21 +190,21 @@ Decisión: **MANTENER**. Hallazgos y acciones:
   existe trabajo de apps sin backup.
 - **Rama dependabot absorbida eliminada** (`security/dependency-updates-vite-vitest-sharp`,
   cherry-pick 258f3608 ya en develop) + su worktree removido.
-- **CI en verde** (primer green en main desde 2026-09-03). Cadena de causas resueltas:
-  (1) markdownlint en docs/sdd, .agents y brand (auto-fix), (2) prettier en
+- **CI en verde** (primer green en main desde 2026-09-03). Cadena de causas resueltas: (1)
+  markdownlint en docs/sdd, .agents y brand (auto-fix), (2) prettier en
   `policies/shell-commands.yaml` y ADR-0027, (3) headers Status/Context/Decision en
-  ADR-0030/0031/0032, (4) falso positivo S3 en nota engram, (5) format:fix canónico de 209
-  archivos (desbloquea Format Check), (6) tool-profiles regenerados desde profiles.yaml (sync
-  check), (7) `AcademyCRMRepo.ts` era huérfano sin commit y rompía build:mcp — trackeado.
-  Blindaje: `policies/` y `config/policies/` en `.prettierignore` (el parser YAML casero del
-  PolicyEngine consume esos archivos; prettier no debe reescribirlos).
+  ADR-0030/0031/0032, (4) falso positivo S3 en nota engram, (5) format:fix canónico de 209 archivos
+  (desbloquea Format Check), (6) tool-profiles regenerados desde profiles.yaml (sync check), (7)
+  `AcademyCRMRepo.ts` era huérfano sin commit y rompía build:mcp — trackeado. Blindaje: `policies/`
+  y `config/policies/` en `.prettierignore` (el parser YAML casero del PolicyEngine consume esos
+  archivos; prettier no debe reescribirlos).
 
 ## Known issue abierto (2026-09-13)
 
 - **Las apps se detienen tras `git push`**: el prepush gate corre `orchestrate-auto-fix --Fix`,
   `coverage:quick` y `perf:baseline:check`; tras cada push se observa el árbol de apps parado
-  (reinicio vía CC en segundos, sin pérdida de datos). Investigar cuál de esos checks toca el
-  ciclo de vida de las apps y aislarlo. Vigilancia: watchtower `apps-registry` lo reporta.
+  (reinicio vía CC en segundos, sin pérdida de datos). Investigar cuál de esos checks toca el ciclo
+  de vida de las apps y aislarlo. Vigilancia: watchtower `apps-registry` lo reporta.
 
 ## Fuentes
 
