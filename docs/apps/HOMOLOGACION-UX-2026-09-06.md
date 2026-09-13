@@ -14,7 +14,7 @@ superficie.
 | Command Center | ✅           | ✅        | ✅              | ✅                   | ✅          | ✅ (es/en)    | **✅ HOMOLOGADA**                     |
 | Archify        | ✅           | ✅        | ✅              | ✅                   | parcial     | ✅            | **✅ HOMOLOGADA**                     |
 | Prompt Studio  | ✅           | ✅        | ✅              | ✅ (toast unificado) | ✅ (Ctrl+K) | ✅            | **✅ HOMOLOGADA** (sesión 3)          |
-| Content CMS    | ✅           | ✅        | ✅              | ✅                   | parcial     | ✅            | **✅ HOMOLOGADA** (sesión 3)          |
+| Content Studio  | ✅           | ✅        | ✅              | ✅                   | parcial     | ✅            | **✅ HOMOLOGADA** (sesión 3)          |
 | gv-analytics   | ✅           | ✅        | ✅              | parcial              | parcial     | ✅            | **✅ HOMOLOGADA** (sesión 3)          |
 | Design Hub     | ✅           | ✅        | ✅              | parcial              | parcial     | ✅            | **✅ HOMOLOGADA** (sesión 3)          |
 
@@ -24,7 +24,7 @@ superficie.
   ahora salen como `.ps-toast` glass con barra de acento gradiente, en lugar de texto inline),
   spotlight radial en las cards de gemas y de la biblioteca (`.ps-spotlight`, verificado 16 cards en
   la tab Gemas), guard reduced-motion. tsc + build verdes.
-- **Content CMS**: spotlight en `.gv-glass-card` (historial, medios, settings — listener delegado
+- **Content Studio**: spotlight en `.gv-glass-card` (historial, medios, settings — listener delegado
   único en `contentos.tsx`), reveal escalonado puro-CSS en `.item-list` (nth-child, sin JS),
   hover-zoom en imágenes de medios con cursor zoom-in. tsc + build verdes (toasts semánticos y
   reduced-motion ya existían de v3.9.0).
@@ -79,7 +79,7 @@ glass, footer mono, `gv-cc-theme` / `gv-cc-lang`, bind loopback, sin dependencia
    vocabulario, prefijo de app), toasts en generación, lightbox en previews.
 3. **Prompt Studio**: unificar toasts (hoy dispersos), spotlight en cards de gemas, blur-up en
    previews, celebración sobria al exportar backup.
-4. **Content CMS**: spotlight en cards de historial/medios, blur-up en medios, stagger en
+4. **Content Studio**: spotlight en cards de historial/medios, blur-up en medios, stagger en
    calendario.
 5. **Dashboard**: toasts en admin/RBAC, copy-code en exports JSON, stagger en metric cards,
    back-to-top.
