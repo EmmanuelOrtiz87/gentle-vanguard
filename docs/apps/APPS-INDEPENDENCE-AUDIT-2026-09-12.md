@@ -132,6 +132,20 @@ Vigente (no bloqueante):
 - Nuevo comando ZCode **`/apps`** (`.zcode/commands/apps.md`): estado y ciclo de vida de las
   9 apps desde el chat (start/stop/logs vía CC).
 
+## Ronda 3 — seguridad de dependencias cerrada
+
+- **vitest 3 → 4.1.11** (absorción de la rama dependabot
+  `security/dependency-updates-vite-vitest-sharp`, cherry-pick 258f3608): **222 tests en verde**
+  en las 8 suites (root 6, dashboard 104, cms 62, archify 19, crm 15, prompts 7, CC 6,
+  analytics 3).
+- `pnpm audit`: **0 vulnerabilidades** — allowlist de GHSA-82fw-gwwq-j7x9 eliminada del
+  prepush gate. hono ya estaba en 4.13.5.
+- Los `package.json` de content-cms/web-dashboard ya declaraban `vitest ^4.1.11`; el resto de
+  apps resuelve hoisted desde el root.
+- Recuperación operativa: 4 archivos de apps que solo vivían en disco (package.json de
+  cms/analytics/dashboard + vite.config del dashboard) fueron re-trackeados en el repo anidado
+  con sus versiones reales — ya no pueden perderse en un `git rm` del root.
+
 ## Fuentes
 
 - Auditoría paralela de 3 agentes (grupos A/B/C) sobre apps/, `rules/` y CC — 2026-09-12.
