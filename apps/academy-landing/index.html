@@ -139,7 +139,7 @@ footer a { color: var(--cyan); }
   <div class="cta-row">
     <a class="btn btn-primary" href="#lead">Solicitar material</a>
     <button type="button" class="btn btn-ghost" id="hero-whatsapp">💬 Contactar por WhatsApp</button>
-    <a class="btn btn-ghost" href="../academy-web/index.html">Explorar la Academy →</a>
+    <a class="btn btn-ghost local-only" href="../academy-web/index.html">Explorar la Academy →</a>
   </div>
   <div class="stats">
     <div class="stat"><div class="n">20</div><div class="l">Cursos</div></div>
@@ -543,7 +543,7 @@ footer a { color: var(--cyan); }
 </section>
 
 <footer>
-  <p>Gentle-Vanguard Academy — Material de IA listo para entregar · <button type="button" class="link-btn" id="footer-whatsapp">💬 WhatsApp</button> · <a href="../academy-web/index.html">Abrir la Academy</a></p>
+  <p>Gentle-Vanguard Academy — Material de IA listo para entregar · <button type="button" class="link-btn" id="footer-whatsapp">💬 WhatsApp</button> · <a class="local-only" href="../academy-web/index.html">Abrir la Academy</a></p>
   <p style="margin-top:8px; opacity:.6">100% local-first · Sin dependencias · Datos en tu máquina</p>
 </footer>
 
@@ -621,6 +621,11 @@ document.getElementById('interest-clear').addEventListener('click', function() {
 document.getElementById('hero-whatsapp').addEventListener('click', openWhatsApp);
 document.getElementById('footer-whatsapp').addEventListener('click', openWhatsApp);
 if (CONTACT.email) document.getElementById('send-email').style.display = 'inline-flex';
+// En hosting público (Pages) la Academy local no existe — ocultamos los links que
+// apuntan a ../academy-web; en localhost y file:// siguen visibles.
+if (location.protocol !== 'file:' && !/^(localhost|127.0.0.1)$/.test(location.hostname)) {
+  document.querySelectorAll('.local-only').forEach(function (el) { el.style.display = 'none'; });
+}
 
 document.getElementById('lead-form').addEventListener('submit', async function(e) {
   e.preventDefault();
