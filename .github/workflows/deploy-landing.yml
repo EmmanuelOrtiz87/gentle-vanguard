@@ -1,0 +1,64 @@
+name: Deploy Academy Landing
+
+# Deploya la landing pública de Academy a GitHub Pages.
+# Requiere: Settings → Pages → Source: GitHub Actions.
+# La URL final es https://<owner>.github.io/<repo>/ (o dominio custom).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/academy-landing/**'
+      - 'apps/academy-web/data/**'
+      - 'apps/academy-web/scripts/build-landing.mjs'
+      - '.github/workflows/deploy-landing.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Regenerar landing (catálogo embebido + covers + SEO)
+        run: node apps/academy-web/scripts/build-landing.mjs
+        env:
+          ACADEMY_LANDING_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+
+      - name: Copiar covers de Academy (rutas relativas)
+        run: |
+          # La landing referencia ../academy-web/... para el CTA; copiamos
+          # lo mínimo para que funcione standalone en Pages
+          mkdir -p _site/academy-landing
+          cp -r apps/academy-landing/* _site/academy-landing/
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
