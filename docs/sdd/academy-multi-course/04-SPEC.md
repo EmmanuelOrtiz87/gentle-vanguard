@@ -15,6 +15,7 @@ build, dependencias, ni backends (modelo LOCAL-FIRST / ADR-0017).
 ## Scope
 
 ### Incluido
+
 1. Registro de cursos (`data/courses.js`) con carga de manifests JSON.
 2. Estructura `data/courses/<curso>/` con `course.json` + tracks + content + glossary + i18n.
 3. Migración completa de los 12 tracks + 11 archivos de contenido + glosario de
@@ -30,6 +31,7 @@ build, dependencias, ni backends (modelo LOCAL-FIRST / ADR-0017).
 11. Chained PRs (PR 1 estructura+migración, PR 2 refactor app.js, PR 3 contenido IA).
 
 ### Excluido (fuera de scope)
+
 1. Auth, pagos, certificados, evaluaciones, matrículas (NO es un LMS).
 2. Backend, sync remoto, sync entre devices.
 3. Editor de contenido desde la UI.
@@ -89,23 +91,27 @@ build, dependencias, ni backends (modelo LOCAL-FIRST / ADR-0017).
 ## Acceptance criteria
 
 ### AC1 — Catálogo de cursos
+
 - ✅ Al abrir `#/`, se ven cards de los cursos disponibles (mínimo 1: gentle-vanguard).
 - ✅ Cada card tiene: id, título, descripción, número de tracks, duración estimada.
 - ✅ Click en una card navega a `#/course/<cid>`.
 
 ### AC2 — Selector de curso
+
 - ✅ El topbar tiene un dropdown con la lista de cursos disponibles.
 - ✅ El curso activo está marcado con un check (✓).
 - ✅ Cambiar de curso navega a `#/course/<nuevo-cid>` y persiste en
   `localStorage gv-academy-active-course`.
 
 ### AC3 — Navegación dentro de un curso
+
 - ✅ `#/course/gentle-vanguard` muestra los 12 tracks.
 - ✅ `#/course/gentle-vanguard/track/fundamentos` muestra la home del track.
 - ✅ `#/course/gentle-vanguard/lesson/fundamentos/que-es-gentle-vanguard` muestra la lección.
 - ✅ Botones prev/next funcionan entre lecciones del mismo curso.
 
 ### AC4 — Compatibilidad legacy
+
 - ✅ `#/track/fundamentos` redirige a `#/course/gentle-vanguard/track/fundamentos`.
 - ✅ `#/lesson/fundamentos/que-es-gentle-vanguard` redirige a
   `#/course/gentle-vanguard/lesson/fundamentos/que-es-gentle-vanguard`.
@@ -114,35 +120,41 @@ build, dependencias, ni backends (modelo LOCAL-FIRST / ADR-0017).
 - ✅ Smoke test: navegar las 12 URLs legacy + 3 URLs nuevas sin error.
 
 ### AC5 — Búsqueda
+
 - ✅ El input de búsqueda solo busca en el curso activo.
 - ✅ Resultados muestran: track, lección, término del glosario, todos scoped al curso.
 - ✅ Mensaje "sin resultados" si no hay matches.
 
 ### AC6 — Progreso por curso
+
 - ✅ Marcar una lección como completada persiste en
   `localStorage gv-academy-progress-<courseId>`.
 - ✅ Usuarios existentes (con keys legacy) tienen su progreso migrado la primera vez.
 - ✅ El progreso NO se comparte entre cursos (un curso no afecta al otro).
 
 ### AC7 — Glosario por curso
+
 - ✅ `#/course/gentle-vanguard/glosario` muestra el glosario de gentle-vanguard.
 - ✅ Filtro vivo funciona.
 - ✅ Términos del glosario están categorizados (`ia|tecnico|negocio|stack` u otros
   válidos para el curso).
 
 ### AC8 — i18n
+
 - ✅ Selector es/en/pt funciona.
 - ✅ Los tracks del curso activo se traducen correctamente.
 - ✅ Las keys de UI de academy (home, search, etc.) se traducen.
 - ✅ i18n de academy-web sigue en `app.js`; i18n de tracks vive en el curso.
 
 ### AC9 — DS v2 sin cambios
+
 - ✅ `academy-tokens-v2.css`, `academy-atmosphere-v2.css`, `academy-style-v2.css`,
   `academy-components-v2.css`, `academy-layout.css`, `academy-motion.css` no se
   modifican.
 - ✅ Auditoría impecable: 0 nuevos findings.
 
 ### AC10 — Smoke test completo
+
 - ✅ `npm run dev` arranca sin errores.
 - ✅ 12 puntos del checklist de EXPLORE se cumplen.
 - ✅ No hay warnings en DevTools console.
@@ -151,6 +163,7 @@ build, dependencias, ni backends (modelo LOCAL-FIRST / ADR-0017).
 ## BDD scenarios (resumen)
 
 ### Escenario 1: Usuario nuevo visita academy
+
 ```
 Given un usuario que abre academy-web por primera vez
 When carga la página
@@ -161,6 +174,7 @@ And puede navegar lecciones
 ```
 
 ### Escenario 2: Usuario cambia de curso
+
 ```
 Given un usuario navegando en el curso gentle-vanguard
 When hace click en el selector de curso y elige "IA — Fundamentos"
@@ -170,6 +184,7 @@ And el selector persiste su elección para la próxima sesión
 ```
 
 ### Escenario 3: URL legacy redirige
+
 ```
 Given un usuario con un bookmark a #/track/fundamentos
 When hace click en el bookmark o pega la URL
@@ -178,6 +193,7 @@ And ve la página de Fundamentos sin error
 ```
 
 ### Escenario 4: Búsqueda con scope
+
 ```
 Given un usuario en el curso IA — Fundamentos
 When escribe "prompting" en el buscador
@@ -186,6 +202,7 @@ And no ve resultados de gentle-vanguard
 ```
 
 ### Escenario 5: Progreso por curso
+
 ```
 Given un usuario que completó 5 lecciones de gentle-vanguard
 When cambia a IA — Fundamentos
@@ -194,6 +211,7 @@ And al volver a gentle-vanguard, sus 5 lecciones siguen marcadas
 ```
 
 ### Escenario 6: i18n de tracks
+
 ```
 Given un usuario con locale "en"
 When navega a un track de gentle-vanguard

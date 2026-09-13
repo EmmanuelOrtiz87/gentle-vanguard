@@ -123,6 +123,7 @@ window.GV_COURSE_I18N['gentle-vanguard'] = {
 ## Cambios en `app.js`
 
 ### Estado global (agregar)
+
 ```js
 const state = {
   courseId: localStorage.getItem('gv-academy-active-course') || null,
@@ -134,6 +135,7 @@ const state = {
 ```
 
 ### Router (refactor)
+
 ```js
 // Antes:
 // #/ → home (catálogo de tracks)
@@ -157,6 +159,7 @@ const state = {
 ```
 
 ### Carga de curso (nueva)
+
 ```js
 async function loadCourse(courseId) {
   // 1. Buscar el curso en window.GV_COURSES.
@@ -170,6 +173,7 @@ async function loadCourse(courseId) {
 ```
 
 ### Selector de curso (nueva)
+
 ```js
 function renderCourseSelector() {
   // Renderiza un <select> o dropdown en el topbar.
@@ -180,12 +184,14 @@ function renderCourseSelector() {
 ```
 
 ### Búsqueda (refactor)
+
 ```js
 // Antes: busca en CONTENT (todos los tracks) + GLOSSARY (global).
 // Después: busca en window.GV_CURRENT_COURSE.content + window.GV_CURRENT_COURSE.glossary.
 ```
 
 ### Progreso (refactor)
+
 ```js
 // Antes: localStorage keys 'gv-academy-progress' (o similar).
 // Después: localStorage key 'gv-academy-progress-<courseId>'.

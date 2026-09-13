@@ -11,6 +11,7 @@ Recomendación al final.
 Selector de curso en topbar (dropdown). URLs explícitas con redirects legacy.
 
 **Estructura:**
+
 ```
 data/
 ├── courses.js                        # registry plano
@@ -49,6 +50,7 @@ que describe metadata, orden, idioma, dependencias, y dónde encontrar tracks/co
 glossary/i18n. `data/courses.js` carga los manifests y el app.js los usa.
 
 **Estructura:**
+
 ```
 data/
 ├── courses.js                        # registry que importa manifests
@@ -70,6 +72,7 @@ data/
 ```
 
 **Manifest ejemplo (`course.json`):**
+
 ```json
 {
   "id": "ia-fundamentos",
@@ -111,6 +114,7 @@ data/
 un mini-parser. Reemplaza `content-*.js` por `*.md` con metadata.
 
 **Estructura:**
+
 ```
 data/
 ├── courses/
@@ -161,6 +165,7 @@ Justificación:
 ## Plan de ejecución (Opción B, con chained PRs)
 
 ### PR 1 — Estructura + migración (~250-350 líneas)
+
 **Objetivo**: crear la estructura `data/courses/` y mover el contenido de gentle-vanguard
 sin cambiar comportamiento.
 
@@ -175,6 +180,7 @@ sin cambiar comportamiento.
 6. **Verificación**: `npm run dev` + smoke test manual. No debe haber cambio visible.
 
 ### PR 2 — Refactor app.js para multi-curso (~300-400 líneas)
+
 **Objetivo**: router y navegación conscientes de "curso", selector en topbar.
 
 1. Refactor `app.js`: el router pasa a usar `state.courseId` además de trackId.
@@ -187,6 +193,7 @@ sin cambiar comportamiento.
 8. **Verificación**: smoke test completo (12 puntos del checklist de EXPLORE).
 
 ### PR 3 — Contenido IA Fundamentos (después, aparte)
+
 **Objetivo**: curso nuevo `ia-fundamentos` con track semilla.
 
 1. Crear `data/courses/ia-fundamentos/` con `course.json`, `tracks.js`, contenido

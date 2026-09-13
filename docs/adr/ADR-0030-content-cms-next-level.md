@@ -2,6 +2,12 @@
 
 Fecha: 2026-09-06 · Estado: aceptado · App: `apps/content-cms` v3.8.2+
 
+## Status
+
+Accepted — implementado (Content CMS v3.9.0, 2026-09-06).
+
+## Context
+
 > **Addendum v3.9.0 (2026-09-06)** — Auditoría full + pass de calidad al estándar del stack:
 > (1) fix de i18n (contexto React `I18nProvider`, propagación real a todas las tabs + locale pt +
 > panels des-hardcodeados); (2) tab **Publicar** con UI de conectores (assisted/api + token local
@@ -17,7 +23,7 @@ Fecha: 2026-09-06 · Estado: aceptado · App: `apps/content-cms` v3.8.2+
 
 El CMS era Studio legacy (localStorage) + Content OS `:3787` con generator/template, 10 plataformas, calendario y media. El usuario pidió llevarlo a otro nivel absorbiendo `MoneyPrinterTurbo` (video-IA) y `social-media-skills` (17 skills), más Settings IA estilo Archify y Gemini estilo Prompt-Studio, 100% local-first.
 
-## Decisión
+## Decision
 
 1. **Settings IA unificado** (`server/settings.ts`, `.runtime/content-os/settings.json`): provider `template|stack(muse-spark)|gemini|openai`, secrets redactados, env > archivo > template, validación Gemini viva. UI tab Settings IA.
 2. **Skills deterministas v1 + puente IA** (`server/skills.ts`, 8 skills): voice-builder, hook-generator x6, post-formatter PAS/AIDA/BAB/STAR/SLAY, content-matrix 32, reels-scripting, post-scorer 0-100, graphic-designer, youtube-thumbnail. `Mejorar con IA` vía `/api/generate` con provider Settings + gate humano.

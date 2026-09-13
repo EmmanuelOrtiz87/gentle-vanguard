@@ -14,28 +14,35 @@
 **Workload guard**: <400 líneas ✅.
 
 ### T1.1 — Crear estructura de carpetas
+
 - **Acción**: crear `apps/academy-web/data/courses/gentle-vanguard/`.
 - **Acción**: crear `apps/academy-web/data/shared/`.
 - **AC**: `Get-ChildItem apps/academy-web/data/courses/gentle-vanguard/` muestra la carpeta vacía.
 
 ### T1.2 — Mover archivos de contenido (11 archivos)
+
 - **Acción**: mover `data/content-*.js` (11 archivos) a `data/courses/gentle-vanguard/`.
 - **AC**: `Get-ChildItem data/courses/gentle-vanguard/content-*.js | Measure-Object` = 11.
 
 ### T1.3 — Mover tracks.js
+
 - **Acción**: mover `data/tracks.js` a `data/courses/gentle-vanguard/tracks.js`.
 - **AC**: archivo existe en nueva ubicación, no existe en la vieja.
 
 ### T1.4 — Mover glossary.js
+
 - **Acción**: mover `data/glossary.js` a `data/courses/gentle-vanguard/glossary.js`.
 - **AC**: archivo existe en nueva ubicación.
 
 ### T1.5 — Mover demo-images.js y files.js
+
 - **Acción**: mover `data/demo-images.js` y `data/files.js` a `data/shared/`.
 - **AC**: archivos existen en `data/shared/`.
 
 ### T1.6 — Crear `course.json` para gentle-vanguard
+
 - **Acción**: crear `data/courses/gentle-vanguard/course.json` con:
+
   ```json
   {
     "id": "gentle-vanguard",
@@ -54,10 +61,13 @@
     "version": "4.0.0"
   }
   ```
+
 - **AC**: archivo parseable como JSON válido (test: `node -e "JSON.parse(require('fs').readFileSync('apps/academy-web/data/courses/gentle-vanguard/course.json'))"` exit 0).
 
 ### T1.7 — Crear `i18n.js` para gentle-vanguard
+
 - **Acción**: extraer las keys de tracks de `app.js` I18N y crear `data/courses/gentle-vanguard/i18n.js`:
+
   ```js
   window.GV_COURSE_I18N = window.GV_COURSE_I18N || {};
   window.GV_COURSE_I18N['gentle-vanguard'] = {
@@ -79,10 +89,13 @@
     pt: { /* ... */ }
   };
   ```
+
 - **AC**: keys presentes para es/en/pt, mismas que en `app.js` I18N.
 
 ### T1.8 — Crear shims legacy en `data/`
+
 - **Acción**: crear `data/tracks.js` con:
+
   ```js
   // LEGACY SHIM (will be removed in PR 2). See data/courses/gentle-vanguard/tracks.js.
   (function () {
@@ -91,24 +104,30 @@
     document.head.appendChild(s);
   })();
   ```
+
 - **Acción**: crear shims similares para `data/content-*.js` y `data/glossary.js` (12 shims).
 - **AC**: cargar `#/` en el navegador NO debe romper; smoke test manual de 3 tracks + glosario.
 
 ### T1.9 — Crear `data/courses.js` registry
+
 - **Acción**: crear `apps/academy-web/data/courses.js`:
+
   ```js
   // Registry de cursos. Para agregar uno nuevo, agregar entrada acá.
   window.GV_COURSES = [
     { id: 'gentle-vanguard', path: 'data/courses/gentle-vanguard/' }
   ];
   ```
+
 - **AC**: archivo existe, parseable, accesible vía `window.GV_COURSES` después de cargarlo en `index.html`.
 
 ### T1.10 — Cargar `data/courses.js` en `index.html`
+
 - **Acción**: agregar `<script src="data/courses.js"></script>` en `index.html` (antes de `app.js`).
 - **AC**: smoke test manual; `window.GV_COURSES` está definido en consola.
 
 ### T1.11 — Smoke test PR 1
+
 - **Acción**: ejecutar `npm run dev` desde `apps/academy-web/`.
 - **Acción**: abrir `http://127.0.0.1:4173/` en navegador.
 - **AC**:
@@ -121,7 +140,9 @@
   - ✅ DevTools console: 0 errores, 0 warnings nuevos.
 
 ### T1.12 — Commit
+
 - **Acción**: commit con mensaje:
+
   ```
   refactor(academy-web): estructura data/courses/ + shims legacy (PR 1/2)
   
@@ -144,13 +165,16 @@
 **Workload guard**: <400 líneas ✅ (con review de las moves de PR 1 ya commiteadas).
 
 ### T2.1 — Agregar `state.courseId` y carga de curso
+
 - **Acción**: en `app.js`, agregar al estado global:
+
   ```js
   const state = {
     courseId: localStorage.getItem('gv-academy-active-course') || null,
     // ...
   };
   ```
+
 - **Acción**: implementar `loadCourse(courseId)` que:
   1. Busca en `window.GV_COURSES`.
   2. Fetch `course.json` (async).
@@ -160,6 +184,7 @@
 - **AC**: `console.log(window.GV_CURRENT_COURSE)` después de `loadCourse('gentle-vanguard')` muestra tracks, content, glossary, i18n.
 
 ### T2.2 — Refactor del router
+
 - **Acción**: actualizar el parser de hash para reconocer:
   - `#/` → view='courses'
   - `#/courses` → view='courses'
@@ -171,6 +196,7 @@
 - **AC**: navegar entre las 6 vistas funciona, sin error en consola.
 
 ### T2.3 — Implementar redirects legacy
+
 - **Acción**: en el parser de hash, antes de procesar la vista, detectar URLs legacy y redirigir:
   - `#/track/:tid` → `location.replace('#/course/gentle-vanguard/track/' + tid)`
   - `#/lesson/:tid/:lid` → `location.replace('#/course/gentle-vanguard/lesson/' + tid + '/' + lid)`
@@ -178,15 +204,18 @@
 - **AC**: navegar a 5 URLs legacy redirige correctamente sin romper el botón "atrás" (verificar history API).
 
 ### T2.4 — Renderizar home como catálogo de cursos
+
 - **Acción**: cuando `view='courses'`, renderizar cards de `window.GV_COURSES`.
 - **Acción**: para cada curso, leer su manifest (lazy) y mostrar: id, título, descripción, número de tracks, horas estimadas.
 - **AC**: `#/` muestra al menos 1 card (gentle-vanguard) con metadata correcta.
 
 ### T2.5 — Renderizar course home
+
 - **Acción**: cuando `view='course-home'`, llamar `loadCourse(courseId)` y luego renderizar la lista de tracks del curso activo.
 - **AC**: `#/course/gentle-vanguard` muestra los 12 tracks con sus lecciones contadas.
 
 ### T2.6 — Agregar selector de curso en topbar
+
 - **Acción**: en `index.html`, agregar `<div class="gv-course-selector">` con `<button id="course-toggle">` y `<ul id="course-menu" hidden>`.
 - **Acción**: en `app.js`, implementar `renderCourseSelector()` que:
   1. Lista los cursos de `window.GV_COURSES`.
@@ -196,6 +225,7 @@
 - **AC**: el selector aparece en el topbar, funciona el cambio de curso, persiste entre recargas.
 
 ### T2.7 — Refactor búsqueda con scope
+
 - **Acción**: en `app.js`, función de búsqueda, cambiar:
   - Antes: `Object.values(CONTENT).flatMap(...)` + `GLOSSARY`.
   - Después: `Object.values(window.GV_CURRENT_COURSE.content).flatMap(...)` +
@@ -203,6 +233,7 @@
 - **AC**: búsqueda en gentle-vanguard solo muestra resultados de gentle-vanguard; búsqueda en IA solo muestra resultados de IA.
 
 ### T2.8 — Refactor progreso con scope
+
 - **Acción**: cambiar keys localStorage:
   - Antes: `gv-academy-progress-<trackId>` (asumiendo) o similar.
   - Después: `gv-academy-progress-<courseId>-<trackId>` o `gv-academy-progress-<courseId>` (objeto con track completions).
@@ -210,31 +241,38 @@
 - **AC**: marcar lección en gentle-vanguard no afecta progreso de IA; al volver a gentle-vanguard, el progreso se mantiene.
 
 ### T2.9 — Refactor i18n
+
 - **Acción**: en `app.js`, función `t(key)`, primero buscar en `I18N[locale]`, luego en `window.GV_CURRENT_COURSE.i18n[locale]`, luego fallback a `I18N.es`.
 - **Acción**: eliminar las keys de tracks de `I18N` en `app.js` (ahora viven en el manifest del curso).
 - **AC**: cambiar locale actualiza los tracks del curso activo.
 
 ### T2.10 — Eliminar shims legacy
+
 - **Acción**: eliminar los 12 shims creados en T1.8 (`data/tracks.js`, `data/content-*.js`, `data/glossary.js`).
 - **AC**: `Get-ChildItem apps/academy-web/data/*.js` solo muestra `courses.js` y los de `shared/`.
 
 ### T2.11 — Bump de versión
+
 - **Acción**: `package.json` versión 3.8.2 → 4.0.0.
 - **Acción**: `STACK_VERSION` en `app.js` v3.9.0 → v4.0.0.
 - **AC**: visible en la UI (footer o home).
 
 ### T2.12 — Actualizar README
+
 - **Acción**: actualizar la descripción principal y agregar sección "Cursos disponibles".
 - **AC**: el README refleja el modelo multi-curso.
 
 ### T2.13 — Smoke test PR 2 (completo)
+
 - **Acción**: ejecutar los 12 puntos del checklist de EXPLORE.
 - **AC**: todos los AC1-AC10 de SPEC.md se cumplen.
 - **AC**: 0 errores, 0 warnings en DevTools console.
 - **AC**: DevTools Network: total JS transferido < 200KB.
 
 ### T2.14 — Commit + push
+
 - **Acción**: commit con mensaje:
+
   ```
   feat(academy-web): multi-curso con selector y manifests (PR 2/2)
   

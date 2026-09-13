@@ -18,6 +18,7 @@ Esta normativa establece los procedimientos automáticos y manuales para mantene
 ## 2. Alcance
 
 ### Documentos cubiertos
+
 - ✅ Academy (`apps/academy-web/data/`)
 - ✅ Docs técnicos (`docs/`)
 - ✅ Presentaciones (`docs/presentations/`)
@@ -25,6 +26,7 @@ Esta normativa establece los procedimientos automáticos y manuales para mantene
 - ✅ READMEs (`*/README.md`)
 
 ### Cambios que disparan actualización
+
 1. Nueva feature implementada
 2. Cambio de API pública
 3. Nuevo agente o subagente
@@ -92,12 +94,14 @@ Cuando se implementa una feature del nivel de:
 
 1. **Código** → Implementar con tests
 2. **Documentación técnica** → Crear en `docs/`
+
    ```
    docs/
    └── COMPONENT-NAME.md
    ```
 
 3. **Academy** → Agregar lección(es) al track correspondiente
+
    ```javascript
    // apps/academy-web/data/content-[track].js
    {
@@ -110,6 +114,7 @@ Cuando se implementa una feature del nivel de:
    ```
 
 4. **Presentación** → Crear slides en `docs/presentations/`
+
    ```
    docs/presentations/
    └── [YYYYMMDD]-feature-name.md

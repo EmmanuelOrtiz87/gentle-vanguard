@@ -1,4 +1,5 @@
 # Gentle Vanguard — GV App Asset System
+
 ## Nueva identidad visual · SVG Master Pack
 
 Este paquete contiene la **versión vectorial SVG** del símbolo `GV` de Gentle Vanguard, trazado a partir de la nueva identidad visual suministrada.

@@ -33,6 +33,7 @@ This document maps Gentle-Vanguard's security controls to the OWASP Agentic AI T
 | **Indirect Injection Scanning** | `.opencode/skills/detecting-indirect-prompt-injection` | ✅ EXISTING |
 
 ### Evidence
+
 ```typescript
 // Policy Engine - Structurally impossible to bypass
 const safeTool = govern(dangerousTool, { policyPath: 'policies/shell.yaml' });

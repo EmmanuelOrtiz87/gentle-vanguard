@@ -29,6 +29,7 @@ Decisiones de oficio (lo que lo hace parecer diseño humano, no AI-slop):
 ## Archivos
 
 ### Assets (out/)
+
 - `mark-gradient.svg` / `mark-mono-light.svg` / `mark-mono-dark.svg` — marca principal
 - `mark-small.svg` / `mark-small-gradient.svg` — variante óptica ≤32px
 - `mark-construction.svg` — sheet de construcción (grid, círculos, ejes, cotas)
@@ -38,10 +39,12 @@ Decisiones de oficio (lo que lo hace parecer diseño humano, no AI-slop):
 - `lockup-horizontal.svg` — lockup horizontal con wordmark
 
 ### Deck de presentación (8 paneles individuales 1440×1800)
+
 `gv-01-hero.png` … `gv-08-applications.png` — La Marca · El Emblema · El Simbolismo ·
 La Construcción · Los Elementos · El Color · La Tipografía · Aplicaciones.
 
 ### Fuente
+
 `fonts/space-grotesk.css` + woff2 locales (font oficial de marca, OFL).
 
 ## Regenerar

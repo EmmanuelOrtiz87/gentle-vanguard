@@ -48,6 +48,7 @@ npx tsx src/tools/validate-opencode-config.ts --config ~/.config/opencode/openco
 ```
 
 Detecta el **anti-patrón SDK** que rompió `muse-spark-1.2-contributor-free`:
+
 ```
 WARN: provider.opencode-zen-A.models.muse-spark-1.2-contributor-free.npm = "@ai-sdk/openai"
 differs from parent npm "@ai-sdk/openai-compatible". Mixing @ai-sdk/openai and
@@ -60,6 +61,7 @@ Si lo ves en CI, rechazar el commit.
 ### `oc-keyring` — rotación de cuentas (existente)
 
 Sigue manejando `opencode-zen-A/B` y `opencode-go-A/B` automáticamente. Status:
+
 ```
 zen   active = A    provider id = opencode-zen-A
 go    active = A    provider id = opencode-go-A

@@ -83,6 +83,7 @@ window.GV_CONTENT['gentle-vanguard'].lessons.push({ id: 'que-es-gv', ... });
 ```
 
 Y `glossary.js`:
+
 ```js
 // Antes:
 window.GV_GLOSSARY = [ { term: '...', ... }, ... ];
@@ -93,6 +94,7 @@ window.GV_GLOSSARY['gentle-vanguard'] = [ { term: '...', ... }, ... ];
 ```
 
 Y `tracks.js`:
+
 ```js
 // Antes:
 window.GV_TRACKS = [ { id: 'fundamentos', ... }, ... ];

@@ -54,22 +54,28 @@ assets/
 ## Assets recomendados
 
 ### App
+
 `icons/app-icon-dark.svg`
 
 ### Logo principal
+
 `logos/logo-horizontal.svg`
 
 ### Símbolo aislado
+
 `icons/gv-master-gradient.svg`
 
 ### Favicon
+
 `icons/favicon.svg`
 
 ### Android
+
 `icons/android-foreground.svg`
 `icons/android-background.svg`
 
 ### UI con color controlado por CSS
+
 `icons/gv-currentColor.svg`
 
 ## Paleta

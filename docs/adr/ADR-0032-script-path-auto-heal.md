@@ -2,13 +2,17 @@
 
 Fecha: 2026-09-06 · Estado: aceptado · Componentes: `session-autostart`, `script-path-heal`, `maintenance-watchtower`
 
-## Contexto
+## Status
+
+Accepted — implementado (session-autostart sin warnings, 2026-09-06).
+
+## Context
 
 Las migraciones PS1→TS movieron scripts a carpetas de dominio (`src/knowledge/`, `src/ops/`, `skills/`, …), pero `config/session-autostart.config.json` conservó rutas top-level legacy (`src/<name>.ts`). Resultado: 3 lazy steps (`knowledge-base-init`, `engram-auto-reindex`, `engram-auto-update`) emitían `[WARN] Script not found` en **cada arranque** de sesión y **nunca ejecutaban** su funcionalidad — un gap silencioso de operación (KB sin init, RAG sin reindex, updates sin check). El usuario exigió: arranque sin warnings/gaps, y que el stack se auto-evalúe y auto-repare de forma nativa (auto-mejora), no que un humano persiga warnings uno a uno.
 
 Además, la validación manual reveló que estados de trabajo previos podían quedar sin persistir (edición multi-archivo reportada como aplicada pero ausente en disco) — reforzando la necesidad de monitoreo proactivo de integridad.
 
-## Decisión
+## Decision
 
 1. **Módulo puro y testeable** `src/core/script-path-heal.ts` (side-effect-free; todo IO vía opciones):
    - `indexScriptPaths(root, dir)` — índice basename→ruta relativa de todos los `.ts` bajo `src/`, single-pass, profundidad máx. 8, separadores normalizados `/`.

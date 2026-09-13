@@ -2,11 +2,15 @@
 
 Fecha: 2026-09-06 · Estado: aceptado · Apps: `apps/academy-web` (v4) + roadmap de adopción para todas las apps
 
-## Contexto
+## Status
+
+Accepted — implementado (Academy v4 + homologación 8/8 apps, 2026-09-06).
+
+## Context
 
 Academy (v2, 2026-09-01) tenía la base del canon v2 Premium (tokens, atmósfera, glass cards) pero se quedó atrás frente a las apps trabajadas recientemente (Prompt Studio v4.6, CMS v3.9.0): sin capa de motion, sin toasts, sin lightbox, sin navegación por teclado en búsqueda, i18n solo es/en, contenido desactualizado (v3.8.2, "27 tablas" cuando Nexus tiene 37) y capturas de demo obsoletas. No existía un vocabulario de efectos **oficial y reutilizable** — cada app inventaba los suyos, y la homologación UX/CX pedida para command-center, prompt-studio, archify, CMS, dashboard y design-hub no tenía estándar escrito al cual remitir.
 
-## Decisión
+## Decision
 
 1. **Academy v4** (`apps/academy-web`): nueva capa CSS `academy-motion.css` (carga al final: tokens → atmosphere → style → components → layout → motion) + `app.js` v4 con: spotlight-card con seguimiento de puntero, reveal-stagger (`--reveal-i`), sistema de toasts glass con `aria-live`, lightbox de imágenes con navegación ← → / Escape, back-to-top con anillo de progreso de scroll, Ctrl+K + ↑↓/Enter en búsqueda con badges y conteo, mini-TOC con scroll-spy por IntersectionObserver, copy-code con fallback `execCommand`, continue-learning banner (localStorage `gv-academy-last`), glosario con filtro vivo + contador, blur-up de imágenes, breadcrumbs, celebración sobria de track completo, i18n **es/en/pt**, keyboard ← → para paginar lecciones.
 2. **Diagramas SVG vivos**: helper con gradientes por instancia (ids únicos), nodos con hover-glow, aristas con `dash-flow` animado, corrección factual (Nexus **37 tablas** verificado en `sqlite_master`) y 4 diagramas nuevos: `session-pipeline`, `watchtower-loop`, `apps-map`, `memory-sync`.
