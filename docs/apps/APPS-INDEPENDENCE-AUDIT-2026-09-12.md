@@ -146,6 +146,20 @@ Vigente (no bloqueante):
   cms/analytics/dashboard + vite.config del dashboard) fueron re-trackeados en el repo anidado
   con sus versiones reales — ya no pueden perderse en un `git rm` del root.
 
+## Decisión academy-landing (2026-09-13)
+
+El usuario cuestionó su origen: **se creó el 2026-09-10** como pieza pública del funnel
+comercial de Academy pedido en esa sesión (landing → leads → dashboard → CRM; engram
+#3850/#3862/#3864). Decisión: **MANTENER**. Hallazgos y acciones:
+
+- El deploy a GitHub Pages **nunca se activó** (Pages sin configurar en el repo, API 404) y el
+  workflow `deploy-landing.yml` estaba sin commitear → **commiteado** en esta ronda.
+- Para activarla de verdad: **Settings → Pages → Source: GitHub Actions** (1 click) y push a
+  main con cambios en `apps/academy-landing/**`. URL resultante:
+  `https://<owner>.github.io/<repo>/academy-landing/`.
+- La landing es estática, stateless y auto-generada (`apps/academy-web/scripts/build-landing.mjs`
+  desde el catálogo); costo de mantenimiento cero.
+
 ## Fuentes
 
 - Auditoría paralela de 3 agentes (grupos A/B/C) sobre apps/, `rules/` y CC — 2026-09-12.
