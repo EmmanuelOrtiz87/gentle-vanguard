@@ -183,6 +183,22 @@ Decisión: **MANTENER**. Hallazgos y acciones:
   :4174) → el sweep los clasificaba como basura y los mataba. Añadidas las 3 clases; el dry-run
   ahora los reporta healthy.
 
+## Pendientes cerrados (2026-09-13, tarde)
+
+- **Backup del repo anidado de apps**: creado `EmmanuelOrtiz87/gentle-vanguard-apps` (privado),
+  remote `origin` conectado, `master` pusheado con el WIP de sesiones previas commiteado. Ya no
+  existe trabajo de apps sin backup.
+- **Rama dependabot absorbida eliminada** (`security/dependency-updates-vite-vitest-sharp`,
+  cherry-pick 258f3608 ya en develop) + su worktree removido.
+- **CI en verde** (primer green en main desde 2026-09-03). Cadena de causas resueltas:
+  (1) markdownlint en docs/sdd, .agents y brand (auto-fix), (2) prettier en
+  `policies/shell-commands.yaml` y ADR-0027, (3) headers Status/Context/Decision en
+  ADR-0030/0031/0032, (4) falso positivo S3 en nota engram, (5) format:fix canónico de 209
+  archivos (desbloquea Format Check), (6) tool-profiles regenerados desde profiles.yaml (sync
+  check), (7) `AcademyCRMRepo.ts` era huérfano sin commit y rompía build:mcp — trackeado.
+  Blindaje: `policies/` y `config/policies/` en `.prettierignore` (el parser YAML casero del
+  PolicyEngine consume esos archivos; prettier no debe reescribirlos).
+
 ## Fuentes
 
 - Auditoría paralela de 3 agentes (grupos A/B/C) sobre apps/, `rules/` y CC — 2026-09-12.
