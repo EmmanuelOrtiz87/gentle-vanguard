@@ -1,16 +1,16 @@
 # Playbook comercial — Landing de Academy con clientes
 
-> Cómo usar `https://emmanuelortiz87.github.io/gentle-vanguard/academy-landing/` para captar,
-> registrar y hacer seguimiento de clientes. QR listo para imprimir:
-> `docs/marketing/assets/landing-qr.png` (apunta a la landing).
+> Cómo usar `https://emmanuelortiz87.github.io/gentle-vanguard/` para captar, registrar y hacer
+> seguimiento de clientes. QR listo para imprimir: `docs/marketing/assets/landing-qr.png` (apunta a
+> la landing).
 
 ## 1. El flujo del cliente (lo que él vive)
 
 1. **Llega** por el link que le compartiste (WhatsApp, email, bio de red social, QR impreso).
 2. **Explora** el catálogo: 20 cursos, 20 ebooks, 12 toolkits — con precio por tier.
-3. **Contacta por WhatsApp en 1 click desde el producto**: cada tarjeta y plan tiene
-   "💬 Me interesa" que abre WhatsApp (**542645452221**) con el mensaje ya escrito
-   ("Hola! Me interesa: \<producto\> (precio)") — cero fricción, sin formularios.
+3. **Contacta por WhatsApp en 1 click desde el producto**: cada tarjeta y plan tiene "💬 Me
+   interesa" que abre WhatsApp (**542645452221**) con el mensaje ya escrito ("Hola! Me interesa:
+   \<producto\> (precio)") — cero fricción, sin formularios.
 4. **Canal email (opcional)**: en la sección "Solicitá el material" hay DOS caminos a elección:
    **WhatsApp directo** o **dejar nombre + email + audiencia** y enviar por email a
    `gentlevanguard@gmail.com`. Nadie está forzado a un solo canal.

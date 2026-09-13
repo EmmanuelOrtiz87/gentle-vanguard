@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://emmanuelortiz87.github.io/gentle-vanguard/academy-landing/sitemap.xml
+Sitemap: https://emmanuelortiz87.github.io/gentle-vanguard/sitemap.xml

@@ -30,6 +30,10 @@ jobs:
 
       - name: Preparar sitio (landing ya committeada y regenerada localmente)
         run: |
+          # La landing es la RAÍZ del sitio Pages (https://owner.github.io/repo/).
+          # Se conserva también el subpath /academy-landing/ por links ya compartidos.
+          mkdir -p _site
+          cp -r apps/academy-landing/* _site/
           mkdir -p _site/academy-landing
           cp -r apps/academy-landing/* _site/academy-landing/
 
