@@ -7,7 +7,9 @@
 ## 1. El flujo del cliente (lo que él vive)
 
 1. **Llega** por el link que le compartiste (WhatsApp, email, bio de red social, QR impreso).
-2. **Explora** el catálogo: 20 cursos, 20 ebooks, 12 toolkits — con precio por tier.
+2. **Explora** el catálogo por pestañas: Destacados · Cursos · Manuales Premium · Micro-Ebooks ·
+   Toolkits (20 cursos, 20 ebooks, 12 toolkits — con precio por tier). Un click por categoría, sin
+   scroll infinito.
 3. **Contacta por WhatsApp en 1 click desde el producto**: cada tarjeta y plan tiene "💬 Me
    interesa" que abre WhatsApp (**542645452221**) con el mensaje ya escrito ("Hola! Me interesa:
    \<producto\> (precio)") — cero fricción, sin formularios.
