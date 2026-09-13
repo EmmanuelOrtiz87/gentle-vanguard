@@ -65,12 +65,13 @@ con el stack encendido.
 
 ## 5. Mantener la landing viva
 
-| Acción                    | Cómo                                                                                                |
-| ------------------------- | --------------------------------------------------------------------------------------------------- |
-| Agregar/cambiar productos | Editar manifests en `apps/academy-web/data/` → `node scripts/build-landing.mjs` (desde academy-web) |
-| Publicar                  | Commit + push a `main` → GitHub Pages deploya solo (~1 min)                                         |
-| Ver estado del deploy     | GitHub → Actions → "Deploy Academy Landing"                                                         |
-| Cambiar contacto          | `CONTACT` en `build-landing.mjs` (landing) y `data/store/pricing.json` (academy-web)                |
+| Acción                    | Cómo                                                                                                                                                                                                                                             |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Agregar/cambiar productos | Editar manifests en `apps/academy-web/data/` → `node scripts/build-landing.mjs` (desde academy-web)                                                                                                                                              |
+| Publicar                  | Commit + push a `main` → GitHub Pages deploya solo (~1 min)                                                                                                                                                                                      |
+| Ver estado del deploy     | GitHub → Actions → "Deploy Academy Landing"                                                                                                                                                                                                      |
+| Cambiar contacto          | `CONTACT` en `build-landing.mjs` (landing) y `data/store/pricing.json` (academy-web)                                                                                                                                                             |
+| Cambiar precios           | FUENTE ÚNICA: los precios del CRM (Configuración) son la referencia. Reflejarlos en `resolveTierLabel` (build-landing.mjs) y `data/store/pricing.json`. Los links de MercadoPago se crean a mano con el mismo precio (en ARS al cambio del día). |
 
 ## 6. Métricas — las 3 capas
 
@@ -107,4 +108,5 @@ agrega el snippet al generador cuando se active.
   usuario de GitHub. Guía completa: `docs/marketing/DOMINIO-PROPIO-GUIA.md`.
 - **Testimonios**: sección social-proof con 2-3 casos reales.
 - **Checkout real**: hoy el cierre es manual por WhatsApp; un botón de pago (MercadoPago Payment
-  Link) por producto eliminaría fricción.
+  Link por producto, en ARS) eliminaría fricción. Los links que generes se conectan a cada card
+  junto al price-tag.
