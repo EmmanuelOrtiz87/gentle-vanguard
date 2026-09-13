@@ -1,6 +1,6 @@
 # Gentle-Vanguard — Stack Manual (Slim)
 
-> Manual completo: `docs/stack-manual-full.md` (arquitectura, 96 checks, migraciones, ADRs). Este
+> Manual completo: `docs/stack-manual-full.md` (arquitectura, 154 checks, migraciones, ADRs). Este
 > archivo es la versión de bajo contexto para inyección diaria. Cargar el manual completo solo
 > cuando la tarea lo requiera.
 
@@ -221,11 +221,11 @@ npm run process:reap      # limpia de verdad
 
 ## maintenance-watchtower
 
-Orquestador de health/auto-healing: **96 checks / 22 componentes**, 6 modos (health, rebuild,
+Orquestador de health/auto-healing: **154 checks / 29 componentes** (incl. apps-registry: vigila las 9 apps vía CC), 6 modos (health, rebuild,
 report, autoheal, continuous, all). Corre `autoheal -Quiet` lazy al inicio de sesión.
 
 ```bash
-npm run watchtower:health   # 96/96 PASS esperado
+npm run watchtower:health   # full PASS esperado (WARN/FAIL solo si hay basura real)
 ```
 
 CLI Guard: check anti-regresión del patrón roto
