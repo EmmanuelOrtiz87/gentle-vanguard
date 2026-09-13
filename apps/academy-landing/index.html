@@ -886,8 +886,24 @@ footer a { color: var(--cyan); }
 // whatsappPhone (número internacional sin +) activa prefill directo en wa.me/<phone>?text=.
 // Si estuviera vacío se abre whatsappUrl (link de negocio) y el mensaje viaja copiado.
 // email activa el envío por mailto desde el formulario.
+// Métricas: endpoint de captura (Apps Script → Google Sheet). Vacío = sin
+// tracking (cero tráfico externo). Ver docs/marketing/LANDING-PLAYBOOK.md.
+var TRACK_URL = "";
 var CONTACT = {"whatsappUrl":"https://wa.me/message/YHVWXB5AZR4EJ1","whatsappPhone":"542645452221","email":"gentlevanguard@gmail.com"};
 var interest = null;
+
+function track(event, data) {
+  if (!TRACK_URL) return;
+  try {
+    fetch(TRACK_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(Object.assign({ event: event, ts: new Date().toISOString() }, data || {})),
+      keepalive: true,
+    });
+  } catch (e) { /* métricas best-effort, nunca bloquean */ }
+}
 
 function buildMessage() {
   var name = document.getElementById('lead-name') ? document.getElementById('lead-name').value.trim() : '';
@@ -919,6 +935,7 @@ function hint(msg) {
 }
 function openWhatsApp() {
   var msg = buildMessage();
+  track('whatsapp_open', { interest: interest || null });
   if (CONTACT.whatsappPhone) {
     window.open('https://wa.me/' + CONTACT.whatsappPhone + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
     hint('');
@@ -930,9 +947,15 @@ function openWhatsApp() {
 }
 function sendEmail() {
   var msg = buildMessage();
+  track('email_send', { interest: interest || null });
   var subject = 'Academy GV: ' + (interest || 'solicitud de información');
   window.location.href = 'mailto:' + CONTACT.email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(msg);
 }
+// Métrica de navegación: qué categorías mira la gente
+document.getElementById('tabbar').addEventListener('click', function(e) {
+  var tab = e.target && e.target.closest ? e.target.closest('.tab') : null;
+  if (tab) track('tab_view', { category: tab.textContent.trim() });
+});
 
 // Navegación por pestañas: una categoría visible a la vez (Destacados default)
 var tabbar = document.getElementById('tabbar');
@@ -954,7 +977,16 @@ document.addEventListener('click', function(e) {
   if (interest) {
     document.getElementById('interest-text').textContent = 'Interés: ' + interest;
     document.getElementById('interest-chip').style.display = 'flex';
+    track('plan_interest', { interest: interest });
   }
+});
+// Tarjetas de producto: click en "Me interesa" abre WhatsApp directo → métrica
+document.addEventListener('click', function(e) {
+  var el = e.target && e.target.closest ? e.target.closest('.btn-interest[href*="wa.me"]') : null;
+  if (!el) return;
+  var product = '';
+  try { product = decodeURIComponent((el.href.split('text=')[1] || '').replace(/\+/g, ' ')); } catch (e2) { product = el.getAttribute('data-product') || ''; }
+  track('product_wa', { product: product });
 });
 document.getElementById('interest-clear').addEventListener('click', function() {
   interest = null;
@@ -972,6 +1004,7 @@ document.getElementById('lead-form').addEventListener('submit', async function(e
   var audience = document.getElementById('lead-audience').value;
   if (!name || !email) return;
   var lead = { name: name, email: email, audience: audience, interest: interest, ts: Date.now() };
+  track('form_lead', { name: name, email: email, audience: audience, interest: interest || null });
   var sent = false;
   try {
     // Best-effort: si el stack corre en esta máquina, el lead sincroniza al CRM.

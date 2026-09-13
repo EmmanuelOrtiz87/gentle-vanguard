@@ -72,12 +72,39 @@ con el stack encendido.
 | Ver estado del deploy     | GitHub → Actions → "Deploy Academy Landing"                                                         |
 | Cambiar contacto          | `CONTACT` en `build-landing.mjs` (landing) y `data/store/pricing.json` (academy-web)                |
 
-## 6. Próximas mejoras sugeridas (no bloqueantes)
+## 6. Métricas — las 3 capas
+
+**Capa 1 — Interés (gratis, ya instrumentado, falta activar el receptor)**
+
+La landing ya emite eventos (`track()`): click en "Me interesa" de cada producto (`product_wa`),
+selección de plan (`plan_interest`), apertura de WhatsApp (`whatsapp_open`), envío de formulario
+(`form_lead` con nombre/email/audiencia) y navegación por pestañas (`tab_view`). Llegan a un
+**Google Sheet** vía Apps Script:
+
+1. Crear un Google Sheet → Extensiones → Apps Script → pegar
+   `docs/marketing/captura-leads-apps-script.gs` → Deploy como Web app (acceso: Anyone) → copiar la
+   URL.
+2. Pegar esa URL en `TRACK_URL` (generador `build-landing.mjs`) → regenerar + deploy.
+
+Desde ese momento la hoja "Leads" muestra en vivo: qué productos generan interés, cuántos
+formularios llegan y los datos de contacto — **aunque el cliente no envíe el WhatsApp**.
+
+**Capa 2 — Contactos y conversión (CRM)**
+
+Cuando el cliente escribe por WhatsApp o email: cargarlo en CRM Studio (contacto + deal). El
+pipeline (`lead → contacted → quoted → sold → paid`) y el reporte de cierre por período
+(`GET /api/crm/close-report/{desde}/{hasta}`) dan la métrica de negocio: leads contactados,
+propuestas, ventas e ingresos.
+
+**Capa 3 — Tráfico del sitio (opcional, requiere cuenta externa)**
+
+Visitas, origen y dispositivo: Cloudflare Web Analytics (gratis, un `<script>`) o GoatCounter. Se
+agrega el snippet al generador cuando se active.
+
+## 7. Próximas mejoras sugeridas (no bloqueantes)
 
 - **Dominio propio** (ej. `academy.tudominio.com`): más profesional y estable ante cambios de
-  usuario de GitHub. Se configura en Settings → Pages → Custom domain.
-- **Métricas de visitas**: sumar un contador privado (GoatCounter/Umami self-host) para saber
-  tráfico y conversión.
+  usuario de GitHub. Guía completa: `docs/marketing/DOMINIO-PROPIO-GUIA.md`.
 - **Testimonios**: sección social-proof con 2-3 casos reales.
 - **Checkout real**: hoy el cierre es manual por WhatsApp; un botón de pago (MercadoPago Payment
   Link) por producto eliminaría fricción.
