@@ -199,6 +199,13 @@ Decisión: **MANTENER**. Hallazgos y acciones:
   Blindaje: `policies/` y `config/policies/` en `.prettierignore` (el parser YAML casero del
   PolicyEngine consume esos archivos; prettier no debe reescribirlos).
 
+## Known issue abierto (2026-09-13)
+
+- **Las apps se detienen tras `git push`**: el prepush gate corre `orchestrate-auto-fix --Fix`,
+  `coverage:quick` y `perf:baseline:check`; tras cada push se observa el árbol de apps parado
+  (reinicio vía CC en segundos, sin pérdida de datos). Investigar cuál de esos checks toca el
+  ciclo de vida de las apps y aislarlo. Vigilancia: watchtower `apps-registry` lo reporta.
+
 ## Fuentes
 
 - Auditoría paralela de 3 agentes (grupos A/B/C) sobre apps/, `rules/` y CC — 2026-09-12.
