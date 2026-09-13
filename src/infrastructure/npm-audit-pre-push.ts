@@ -35,7 +35,10 @@ const BLOCK_LEVELS: Record<AuditLevel, AuditLevel[]> = {
   low: ['critical', 'high', 'moderate', 'low'],
 };
 
-const ALLOWLISTED_ADVISORIES = new Set<string>();
+// Advisory GHSA-82fw-gwwq-j7x9 (vitest/@vitest/mocker, moderate, dev-only):
+// el parche exige vitest >=4.1.11 (upgrade mayor 3→4). Pendiente de migración
+// de suites; revisar en la próxima ventana de mantenimiento.
+const ALLOWLISTED_ADVISORIES = new Set<string>(['GHSA-82fw-gwwq-j7x9']);
 
 function parseArgs(): { auditLevel: AuditLevel; verbose: boolean } {
   const args = process.argv.slice(2);
