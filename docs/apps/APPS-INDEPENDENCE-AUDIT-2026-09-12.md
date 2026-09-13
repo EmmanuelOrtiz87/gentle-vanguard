@@ -159,6 +159,17 @@ comercial de Academy pedido en esa sesión (landing → leads → dashboard → 
   `https://<owner>.github.io/<repo>/academy-landing/`.
 - La landing es estática, stateless y auto-generada (`apps/academy-web/scripts/build-landing.mjs`
   desde el catálogo); costo de mantenimiento cero.
+- **Conversión self-contained (2026-09-13)**: la landing ya no depende del stack para convertir —
+  botones "Me interesa"/"Solicitar" marcan el producto, el form registra el lead (localStorage +
+  sync best-effort) y abre WhatsApp (`wa.me/message/YHVWXB5AZR4EJ1`) con el mensaje compuesto
+  copiado al portapapeles (los links `wa.me/message/` no aceptan prefill; si se configura
+  `whatsappPhone` el prefill es directo). Botón de email (mailto) listo, se activa configurando
+  un email real en `CONTACT` (hoy: placeholder `.local` sin usar). Verificado end-to-end en
+  browser: interés → form → registro → WhatsApp con mensaje completo.
+- **Landing trackeada en el ROOT repo** (`.gitignore`: `/apps/*` + `!/apps/academy-landing/`) —
+  el workflow de Pages la deploya desde aquí. GOTCHA: con `core.untrackedCache=true`, un
+  directorio con cero entradas en el index puede quedar invisible para `git add`/`git status`
+  hasta sembrar una entrada (p. ej. `git update-index --cacheinfo`).
 
 ## Fuentes
 
