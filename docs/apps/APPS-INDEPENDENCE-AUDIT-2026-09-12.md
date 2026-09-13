@@ -150,7 +150,7 @@ Vigente (no bloqueante):
 
 El usuario cuestionó su origen: **se creó el 2026-09-10** como pieza pública del funnel
 comercial de Academy pedido en esa sesión (landing → leads → dashboard → CRM; engram
-#3850/#3862/#3864). Decisión: **MANTENER**. Hallazgos y acciones:
+# 3850/#3862/#3864). Decisión: **MANTENER**. Hallazgos y acciones:
 
 - El deploy a GitHub Pages **nunca se activó** (Pages sin configurar en el repo, API 404) y el
   workflow `deploy-landing.yml` estaba sin commitear → **commiteado** en esta ronda.
