@@ -42,3 +42,4 @@ test-agent-broken.json
 tests/fixtures/**
 policies/
 config/policies/
+apps/academy-landing/**
