@@ -171,6 +171,21 @@ comercial de Academy pedido en esa sesión (landing → leads → dashboard → 
   directorio con cero entradas en el index puede quedar invisible para `git add`/`git status`
   hasta sembrar una entrada (p. ej. `git update-index --cacheinfo`).
 
+## Contacto real + fix del reaper (2026-09-13)
+
+- **Contacto oficial conectado en todo el funnel**: WhatsApp `542645452221` (prefill directo
+  `wa.me/<phone>?text=` — ya no hace falta copiar/pegar) y `gentlevanguard@gmail.com`.
+  - Landing: objeto `CONTACT` del generador con ambos datos; botón "Enviar por Email" activo.
+  - academy-web: `data/store/pricing.json` contact con phone+email reales (regenerado
+    `pricing.js`); los botones de compra de productos ahora EXISTEN — `purchaseLink` en app.js
+    estaba definido pero jamás cableado; se añadió `buyButtonHtml` a los heroes de ebook,
+    toolkit y paquete con evento `buy_intent` al CRM (verificado: click → evento #31 en
+    `crm_events` + WhatsApp con producto y precio en el mensaje).
+- **Fix del reaper (causa de muertes silenciosas del CRM y la landing)**: `DAEMON_CLASSES` en
+  `src/core/process-hygiene.ts` no registraba academy-crm (server+vite) ni academy-landing
+  (http :4174) → el sweep los clasificaba como basura y los mataba. Añadidas las 3 clases;
+  el dry-run ahora los reporta healthy.
+
 ## Fuentes
 
 - Auditoría paralela de 3 agentes (grupos A/B/C) sobre apps/, `rules/` y CC — 2026-09-12.

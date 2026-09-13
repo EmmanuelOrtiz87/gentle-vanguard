@@ -335,6 +335,36 @@ const DAEMON_CLASSES: DaemonClass[] = [
     recycleAged: false,
   },
   {
+    id: 'app-academy-crm-server',
+    label: 'CRM Studio API server (:4792)',
+    match: /apps[\\/]academy-crm[\\/]server[\\/]server\.ts/,
+    relativeMatch: /server[\\/]server\.ts/,
+    pidFile: join(RUNTIME_DIR, 'app-academy-crm-server.pid'),
+    keep: 'pidfile',
+    respawn: 'client',
+    recycleAged: false,
+  },
+  {
+    id: 'app-academy-crm-vite',
+    label: 'CRM Studio Vite dev server (:4791)',
+    match:
+      /apps[\\/]academy-crm[\\/](node_modules[\\/]\.bin[\\/]\.\.[\\/])?node_modules[\\/]vite[\\/]bin[\\/]vite\.js/,
+    relativeMatch: /vite[\\/]bin[\\/]vite\.js/,
+    pidFile: join(RUNTIME_DIR, 'app-academy-crm-vite.pid'),
+    keep: 'pidfile',
+    respawn: 'client',
+    recycleAged: false,
+  },
+  {
+    id: 'app-academy-landing-http',
+    label: 'Academy Landing static server (python http.server :4174)',
+    match: /http\.server[ ]+4174\b/,
+    pidFile: join(RUNTIME_DIR, 'app-academy-landing-http.pid'),
+    keep: 'pidfile',
+    respawn: 'manual',
+    recycleAged: false,
+  },
+  {
     id: 'vite-server',
     label: 'Dashboard Vite dev server',
     // Dashboard-only: with one vite per app (analytics/cms/prompts have their
