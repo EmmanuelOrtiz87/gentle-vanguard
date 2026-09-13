@@ -84,12 +84,14 @@ section { padding: 60px 20px; }
 .section-sub { text-align: center; color: var(--text-2); font-size: 14px; margin-bottom: 40px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 18px; }
 .card {
+  position: relative;
   background: var(--glass); border: 1px solid var(--border); border-radius: var(--radius);
   padding: 18px; display: flex; flex-direction: column; gap: 8px;
   transition: border-color .2s, transform .2s;
 }
 .card:hover { border-color: rgba(34,211,238,0.4); transform: translateY(-3px); }
 .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+.price-tag { position: absolute; top: 30px; right: 30px; z-index: 2; background: linear-gradient(90deg,#a78bfa,#22d3ee); color: #0a0c10; font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: 999px; }
 .card h3 { font-size: 16px; font-weight: 700; }
 .card p { font-size: 13px; color: var(--text-2); flex: 1; }
 .card .meta { font-size: 11px; color: var(--text-2); opacity: .8; }
@@ -182,187 +184,210 @@ footer a { color: var(--cyan); }
   <p class="section-sub">Selección curada de nuestros productos más solicitados</p>
   <div class="grid"><div class="card">
     <img src="covers/50-prompts-emprendedores.svg" alt="50 Prompts para Emprendedores" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 29</div>
     <div class="badge-row"><span class="badge badge-micro">MICRO EBOOK</span></div>
     <h3>50 Prompts para Emprendedores</h3>
     <p>50 prompts listos para usar en tu negocio hoy mismo</p>
     <div class="meta">32 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%2050%20Prompts%20para%20Emprendedores%20(USD%2010)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%2050%20Prompts%20para%20Emprendedores%20(USD%2029)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/excel-ia.svg" alt="Excel + IA" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 29</div>
     <div class="badge-row"><span class="badge badge-micro">MICRO EBOOK</span></div>
     <h3>Excel + IA</h3>
     <p>Fórmulas, análisis de datos y automatización con IA</p>
     <div class="meta">36 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Excel%20%2B%20IA%20(USD%2010)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Excel%20%2B%20IA%20(USD%2029)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-marketing.svg" alt="IA para Marketing" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 29</div>
     <div class="badge-row"><span class="badge badge-micro">MICRO EBOOK</span></div>
     <h3>IA para Marketing</h3>
     <p>Estrategia, contenido y campañas que convierten</p>
     <div class="meta">34 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Marketing%20(USD%2010)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Marketing%20(USD%2029)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-administracion.svg" alt="Manual Práctico de IA para Administración" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para Administración</h3>
     <p>Gestión, procesos y productividad administrativa con IA — de 0 a profesional</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Administraci%C3%B3n%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Administraci%C3%B3n%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-docentes.svg" alt="Manual Práctico de IA para Docentes" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para Docentes</h3>
     <p>Planificación, evaluación y contenido educativo con IA — de 0 a profesional</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Docentes%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Docentes%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-emprendedores.svg" alt="Manual Práctico de IA para Emprendedores" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para Emprendedores</h3>
     <p>Idea, producto, marketing, ventas y crecimiento con IA — de 0 a profesional</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Emprendedores%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Emprendedores%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-estudiantes.svg" alt="Manual Práctico de IA para Estudiantes" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para Estudiantes</h3>
     <p>Estudiá más inteligente, no más difícil — IA al servicio del aprendizaje</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Estudiantes%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Estudiantes%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-finanzas.svg" alt="Manual Práctico de IA para Finanzas" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para Finanzas</h3>
     <p>Análisis, presupuestos, proyecciones y control con IA — de 0 a profesional</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Finanzas%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Finanzas%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-legal.svg" alt="Manual Práctico de IA para Legal" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para Legal</h3>
     <p>Contratos, compliance, investigación y gestión legal con IA — de 0 a profesional</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Legal%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Legal%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-marketing.svg" alt="Manual Práctico de IA para Marketing" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para Marketing</h3>
     <p>Estrategia, contenido, campañas y analítica con IA — de 0 a profesional</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Marketing%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Marketing%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-profesionales.svg" alt="Manual Práctico de Inteligencia Artificial para Profesionales" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de Inteligencia Artificial para Profesionales</h3>
     <p>Conceptos, herramientas, prompts, casos, ejercicios, plantillas y workflows</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20Inteligencia%20Artificial%20para%20Profesionales%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20Inteligencia%20Artificial%20para%20Profesionales%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-rrhh.svg" alt="Manual Práctico de IA para RRHH" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para RRHH</h3>
     <p>Reclutamiento, desarrollo y retención de talento con IA — de 0 a profesional</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20RRHH%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20RRHH%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-ventas.svg" alt="Manual Práctico de IA para Ventas" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para Ventas</h3>
     <p>Prospección, pitch, objeciones y cierre con IA — de 0 a profesional</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Ventas%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Ventas%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-administracion-pro.svg" alt="IA para Administración Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Administración Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Administraci%C3%B3n%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Administraci%C3%B3n%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-docentes-pro.svg" alt="IA para Docentes Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Docentes Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Docentes%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Docentes%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-emprendedores-pro.svg" alt="IA para Emprendedores Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Emprendedores Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Emprendedores%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Emprendedores%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-estudiantes-pro.svg" alt="IA para Estudiantes Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Estudiantes Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Estudiantes%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Estudiantes%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-finanzas-pro.svg" alt="IA para Finanzas Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Finanzas Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Finanzas%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Finanzas%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-legal-pro.svg" alt="IA para Legal Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Legal Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Legal%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Legal%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-marketing-pro.svg" alt="IA para Marketing Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Marketing Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Marketing%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Marketing%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-profesionales.svg" alt="IA para Profesionales" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Profesionales</h3>
     <p>Kit completo: curso + manual premium + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Profesionales%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Profesionales%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-rrhh-pro.svg" alt="IA para RRHH Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para RRHH Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20RRHH%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20RRHH%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-ventas-pro.svg" alt="IA para Ventas Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Ventas Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Ventas%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Ventas%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div></div>
 </section>
 
@@ -536,83 +561,93 @@ footer a { color: var(--cyan); }
   <p class="section-sub">80-150 páginas: conceptos, herramientas, prompts, casos, ejercicios, plantillas y workflows</p>
   <div class="grid"><div class="card">
     <img src="covers/manual-ia-administracion.svg" alt="Manual Práctico de IA para Administración" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para Administración</h3>
     <p>Gestión, procesos y productividad administrativa con IA — de 0 a profesional</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Administraci%C3%B3n%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Administraci%C3%B3n%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-docentes.svg" alt="Manual Práctico de IA para Docentes" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para Docentes</h3>
     <p>Planificación, evaluación y contenido educativo con IA — de 0 a profesional</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Docentes%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Docentes%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-emprendedores.svg" alt="Manual Práctico de IA para Emprendedores" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para Emprendedores</h3>
     <p>Idea, producto, marketing, ventas y crecimiento con IA — de 0 a profesional</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Emprendedores%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Emprendedores%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-estudiantes.svg" alt="Manual Práctico de IA para Estudiantes" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para Estudiantes</h3>
     <p>Estudiá más inteligente, no más difícil — IA al servicio del aprendizaje</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Estudiantes%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Estudiantes%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-finanzas.svg" alt="Manual Práctico de IA para Finanzas" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para Finanzas</h3>
     <p>Análisis, presupuestos, proyecciones y control con IA — de 0 a profesional</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Finanzas%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Finanzas%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-legal.svg" alt="Manual Práctico de IA para Legal" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para Legal</h3>
     <p>Contratos, compliance, investigación y gestión legal con IA — de 0 a profesional</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Legal%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Legal%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-marketing.svg" alt="Manual Práctico de IA para Marketing" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para Marketing</h3>
     <p>Estrategia, contenido, campañas y analítica con IA — de 0 a profesional</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Marketing%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Marketing%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-profesionales.svg" alt="Manual Práctico de Inteligencia Artificial para Profesionales" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de Inteligencia Artificial para Profesionales</h3>
     <p>Conceptos, herramientas, prompts, casos, ejercicios, plantillas y workflows</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20Inteligencia%20Artificial%20para%20Profesionales%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20Inteligencia%20Artificial%20para%20Profesionales%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-rrhh.svg" alt="Manual Práctico de IA para RRHH" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para RRHH</h3>
     <p>Reclutamiento, desarrollo y retención de talento con IA — de 0 a profesional</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20RRHH%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20RRHH%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/manual-ia-ventas.svg" alt="Manual Práctico de IA para Ventas" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-premium">EBOOK PREMIUM</span></div>
     <h3>Manual Práctico de IA para Ventas</h3>
     <p>Prospección, pitch, objeciones y cierre con IA — de 0 a profesional</p>
     <div class="meta">120 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Ventas%20(USD%2015)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Manual%20Pr%C3%A1ctico%20de%20IA%20para%20Ventas%20(USD%2049)">💬 Me interesa</a>
   </div></div>
 </section>
 
@@ -621,83 +656,93 @@ footer a { color: var(--cyan); }
   <p class="section-sub">20-40 páginas para dominar un tema en una tarde</p>
   <div class="grid"><div class="card">
     <img src="covers/50-prompts-emprendedores.svg" alt="50 Prompts para Emprendedores" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 29</div>
     <div class="badge-row"><span class="badge badge-micro">MICRO EBOOK</span></div>
     <h3>50 Prompts para Emprendedores</h3>
     <p>50 prompts listos para usar en tu negocio hoy mismo</p>
     <div class="meta">32 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%2050%20Prompts%20para%20Emprendedores%20(USD%2010)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%2050%20Prompts%20para%20Emprendedores%20(USD%2029)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/chatgpt-docentes.svg" alt="ChatGPT para Docentes" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 29</div>
     <div class="badge-row"><span class="badge badge-micro">MICRO EBOOK</span></div>
     <h3>ChatGPT para Docentes</h3>
     <p>Planificá clases, creá actividades y ahorrá horas de trabajo</p>
     <div class="meta">34 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20ChatGPT%20para%20Docentes%20(USD%2010)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20ChatGPT%20para%20Docentes%20(USD%2029)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/excel-ia.svg" alt="Excel + IA" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 29</div>
     <div class="badge-row"><span class="badge badge-micro">MICRO EBOOK</span></div>
     <h3>Excel + IA</h3>
     <p>Fórmulas, análisis de datos y automatización con IA</p>
     <div class="meta">36 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Excel%20%2B%20IA%20(USD%2010)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Excel%20%2B%20IA%20(USD%2029)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-administracion.svg" alt="IA para Administración" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 29</div>
     <div class="badge-row"><span class="badge badge-micro">MICRO EBOOK</span></div>
     <h3>IA para Administración</h3>
     <p>Automatizá tareas administrativas y ganá horas por semana</p>
     <div class="meta">30 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Administraci%C3%B3n%20(USD%2010)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Administraci%C3%B3n%20(USD%2029)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-estudiantes.svg" alt="IA para Estudiantes" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 29</div>
     <div class="badge-row"><span class="badge badge-micro">MICRO EBOOK</span></div>
     <h3>IA para Estudiantes</h3>
     <p>Estudiá más inteligente, no más difícil</p>
     <div class="meta">32 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Estudiantes%20(USD%2010)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Estudiantes%20(USD%2029)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-finanzas.svg" alt="IA para Finanzas" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 29</div>
     <div class="badge-row"><span class="badge badge-micro">MICRO EBOOK</span></div>
     <h3>IA para Finanzas</h3>
     <p>Analizá, proyectá y controlá tus números con IA</p>
     <div class="meta">34 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Finanzas%20(USD%2010)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Finanzas%20(USD%2029)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-marketing.svg" alt="IA para Marketing" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 29</div>
     <div class="badge-row"><span class="badge badge-micro">MICRO EBOOK</span></div>
     <h3>IA para Marketing</h3>
     <p>Estrategia, contenido y campañas que convierten</p>
     <div class="meta">34 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Marketing%20(USD%2010)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Marketing%20(USD%2029)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-rrhh.svg" alt="IA para RRHH" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 29</div>
     <div class="badge-row"><span class="badge badge-micro">MICRO EBOOK</span></div>
     <h3>IA para RRHH</h3>
     <p>Reclutá, desarrollá y retené talento con IA</p>
     <div class="meta">32 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20RRHH%20(USD%2010)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20RRHH%20(USD%2029)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-ventas.svg" alt="IA para Ventas" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 29</div>
     <div class="badge-row"><span class="badge badge-micro">MICRO EBOOK</span></div>
     <h3>IA para Ventas</h3>
     <p>Prospectá, vendé y cerrá más con IA</p>
     <div class="meta">32 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Ventas%20(USD%2010)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Ventas%20(USD%2029)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/notebooklm-guia.svg" alt="Guía Práctica de NotebookLM" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 29</div>
     <div class="badge-row"><span class="badge badge-micro">MICRO EBOOK</span></div>
     <h3>Guía Práctica de NotebookLM</h3>
     <p>Tu asistente de investigación con tus propias fuentes</p>
     <div class="meta">28 páginas</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Gu%C3%ADa%20Pr%C3%A1ctica%20de%20NotebookLM%20(USD%2010)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20Gu%C3%ADa%20Pr%C3%A1ctica%20de%20NotebookLM%20(USD%2029)">💬 Me interesa</a>
   </div></div>
 </section>
 
@@ -706,99 +751,111 @@ footer a { color: var(--cyan); }
   <p class="section-sub">Prompts + plantillas + emails + automatizaciones + casos, listos para aplicar</p>
   <div class="grid"><div class="card">
     <img src="covers/ia-administracion-pro.svg" alt="IA para Administración Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Administración Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Administraci%C3%B3n%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Administraci%C3%B3n%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-docentes.svg" alt="IA para Docentes" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Docentes</h3>
     <p>Kit completo: curso + ebook + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Docentes%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Docentes%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-docentes-pro.svg" alt="IA para Docentes Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Docentes Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Docentes%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Docentes%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-emprendedores-pro.svg" alt="IA para Emprendedores Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Emprendedores Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Emprendedores%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Emprendedores%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-estudiantes.svg" alt="IA para Estudiantes" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Estudiantes</h3>
     <p>Kit completo: curso + ebook + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Estudiantes%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Estudiantes%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-estudiantes-pro.svg" alt="IA para Estudiantes Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Estudiantes Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Estudiantes%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Estudiantes%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-finanzas-pro.svg" alt="IA para Finanzas Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Finanzas Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Finanzas%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Finanzas%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-legal-pro.svg" alt="IA para Legal Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Legal Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Legal%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Legal%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-marketing-pro.svg" alt="IA para Marketing Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Marketing Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Marketing%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Marketing%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-profesionales.svg" alt="IA para Profesionales" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Profesionales</h3>
     <p>Kit completo: curso + manual premium + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Profesionales%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Profesionales%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-rrhh-pro.svg" alt="IA para RRHH Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para RRHH Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20RRHH%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20RRHH%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div>
 <div class="card">
     <img src="covers/ia-ventas-pro.svg" alt="IA para Ventas Pro" loading="lazy" onerror="this.style.display='none'">
+    <div class="price-tag">USD 49</div>
     <div class="badge-row"><span class="badge badge-toolkit">TOOLKIT</span></div>
     <h3>IA para Ventas Pro</h3>
     <p>Kit premium: curso + manual + 50 prompts + plantillas + emails + automatizaciones + casos prácticos</p>
     <div class="meta">curso + ebook + prompts + plantillas + emails + automatizaciones + casos</div>
-    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Ventas%20Pro%20(USD%2025)">💬 Me interesa</a>
+    <a class="btn btn-primary btn-interest" target="_blank" rel="noopener" href="https://wa.me/542645452221?text=Hola!%20Me%20interesa%3A%20IA%20para%20Ventas%20Pro%20(USD%2049)">💬 Me interesa</a>
   </div></div>
 </section>
 
@@ -878,6 +935,7 @@ footer a { color: var(--cyan); }
 
 <footer>
   <p>Gentle-Vanguard Academy — Material de IA listo para entregar · <button type="button" class="link-btn" id="footer-whatsapp">💬 WhatsApp</button></p>
+  <p style="margin-top:8px">Precios en USD. Los pagos se procesan en pesos argentinos al tipo de cambio del día.</p>
   <p style="margin-top:8px; opacity:.6">100% local-first · Sin dependencias · Datos en tu máquina</p>
 </footer>
 
