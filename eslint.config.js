@@ -14,6 +14,8 @@ export default [
       '*.js',
       'src/v5.0-Convergence/**',
       'src/convergence/**',
+      // Scripts one-off fuera del proyecto tsconfig (parserOptions.project no los cubre)
+      'scripts/social-unfollow/**',
     ],
   },
   {
