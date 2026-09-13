@@ -9,8 +9,6 @@ on:
     branches: [main]
     paths:
       - 'apps/academy-landing/**'
-      - 'apps/academy-web/data/**'
-      - 'apps/academy-web/scripts/build-landing.mjs'
       - '.github/workflows/deploy-landing.yml'
   workflow_dispatch:
 
@@ -30,21 +28,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Regenerar landing (catálogo embebido + covers + SEO)
-        run: node apps/academy-web/scripts/build-landing.mjs
-        env:
-          # El sitio se publica en el subpath /academy-landing/ del project site
-          ACADEMY_LANDING_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/academy-landing
-
-      - name: Copiar covers de Academy (rutas relativas)
+      - name: Preparar sitio (landing ya committeada y regenerada localmente)
         run: |
-          # La landing referencia ../academy-web/... para el CTA; copiamos
-          # lo mínimo para que funcione standalone en Pages
           mkdir -p _site/academy-landing
           cp -r apps/academy-landing/* _site/academy-landing/
 
