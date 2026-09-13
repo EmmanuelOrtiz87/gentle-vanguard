@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gentle-vanguard.github.io/academy-landing/sitemap.xml
