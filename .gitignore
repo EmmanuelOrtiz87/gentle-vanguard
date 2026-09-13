@@ -294,7 +294,10 @@ logs/
 # Ad-hoc feature screenshots at repo root (validation artifacts — never commit)
 /archify-*.png
 /gv-catalog-*.png
-/apps/
+/apps/*
+# academy-landing vive en ESTE repo: el workflow de GitHub Pages
+# (.github/workflows/deploy-landing.yml) la deploya desde acá.
+!/apps/academy-landing/
 
 # Local app backups (artifacts, never commit)
 backups/
