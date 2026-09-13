@@ -22,7 +22,6 @@
 > oficial de Gentle-Vanguard. Monograma GV geométrico integrado y **centrado** (canvas 1024×1024,
 > safe area 15-20%). Assets en `assets/brand/gentle-vanguard/v2/`. Ver
 > `docs/adr/ADR-0033-nueva-identidad-marca-v3.md`.
-
 > **Regla de oro:** Todo material nuevo de marca (doc, presentación, PDF, PPT, Word, app, banner,
 > logo) usa la paleta y tipografía v2 Premium que se detalla abajo.
 
